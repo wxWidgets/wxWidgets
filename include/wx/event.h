@@ -45,6 +45,7 @@ class WXDLLIMPEXP_FWD_BASE wxEventFilter;
 #if wxUSE_GUI
     class WXDLLIMPEXP_FWD_CORE wxDC;
     class WXDLLIMPEXP_FWD_CORE wxMenu;
+    class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
     class WXDLLIMPEXP_FWD_CORE wxWindow;
     class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 #endif // wxUSE_GUI
@@ -1845,7 +1846,7 @@ public:
     int GetClickCount() const { return m_clickCount; }
 
     // Find the logical position of the event given the DC
-    wxPoint GetLogicalPosition(const wxDC& dc) const;
+    wxPoint GetLogicalPosition(const wxReadOnlyDC& dc) const;
 
     // Get wheel rotation, positive or negative indicates direction of
     // rotation.  Current devices all send an event when rotation is equal to

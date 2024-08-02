@@ -20,6 +20,7 @@
 #include "wx/pen.h"
 
 class WXDLLIMPEXP_FWD_CORE wxClientDC;
+class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
 class WXDLLIMPEXP_FWD_AUI wxAuiPaneInfo;
 
 enum wxAuiToolBarStyle
@@ -326,12 +327,12 @@ public:
                          int state) = 0;
 
     virtual wxSize GetLabelSize(
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 
     virtual wxSize GetToolSize(
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 
@@ -417,12 +418,12 @@ public:
                 int state) override;
 
     virtual wxSize GetLabelSize(
-                wxDC& dc,
+                wxReadOnlyDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item) override;
 
     virtual wxSize GetToolSize(
-                wxDC& dc,
+                wxReadOnlyDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item) override;
 
@@ -700,11 +701,7 @@ protected:
     bool m_overflowVisible;
 
     // This function is only kept for compatibility, don't use in the new code.
-    bool RealizeHelper(wxClientDC& dc, bool horizontal)
-    {
-        RealizeHelper(dc, horizontal ? wxHORIZONTAL : wxVERTICAL);
-        return true;
-    }
+    bool RealizeHelper(wxClientDC& dc, bool horizontal);
 
     static bool IsPaneValid(long style, const wxAuiPaneInfo& pane);
     bool IsPaneValid(long style) const;
@@ -717,7 +714,7 @@ private:
     // Common part of OnLeaveWindow() and OnCaptureLost().
     void DoResetMouseState();
 
-    wxSize RealizeHelper(wxClientDC& dc, wxOrientation orientation);
+    wxSize RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation);
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiToolBar);

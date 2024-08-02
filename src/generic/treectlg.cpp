@@ -220,7 +220,7 @@ public:
 
     // sets the items font for the specified DC if it uses any special font or
     // simply returns false otherwise
-    bool SetFont(wxGenericTreeCtrl *control, wxDC& dc) const
+    bool SetFont(wxGenericTreeCtrl *control, wxReadOnlyDC& dc) const
     {
         wxFont font;
 
@@ -250,7 +250,7 @@ public:
     // calculate and cache the item size using either the provided DC (which is
     // supposed to have wxGenericTreeCtrl::m_normalFont selected into it!) or a
     // wxClientDC on the control window
-    void CalculateSize(wxGenericTreeCtrl *control, wxDC& dc)
+    void CalculateSize(wxGenericTreeCtrl *control, wxReadOnlyDC& dc)
         { DoCalculateSize(control, dc, true /* dc uses normal font */); }
     void CalculateSize(wxGenericTreeCtrl *control);
 
@@ -320,7 +320,7 @@ private:
     // if dcUsesNormalFont is true, the current dc font must be the normal tree
     // control font
     void DoCalculateSize(wxGenericTreeCtrl *control,
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          bool dcUsesNormalFont);
 
     // since there can be very many of these, we save size by chosing
@@ -841,13 +841,13 @@ void wxGenericTreeItem::CalculateSize(wxGenericTreeCtrl* control)
     if ( m_width != 0 )
         return;
 
-    wxClientDC dc(control);
+    wxInfoDC dc(control);
     DoCalculateSize(control, dc, false /* normal font not used */);
 }
 
 void
 wxGenericTreeItem::DoCalculateSize(wxGenericTreeCtrl* control,
-                                   wxDC& dc,
+                                   wxReadOnlyDC& dc,
                                    bool dcUsesNormalFont)
 {
     if ( m_width != 0 ) // Size known, nothing to do
@@ -2398,7 +2398,7 @@ void wxGenericTreeCtrl::SortChildren(const wxTreeItemId& itemId)
 
 void wxGenericTreeCtrl::CalculateLineHeight()
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     m_lineHeight = dc.GetCharHeight() + FromDIP(4);
 
     if ( HasImages() )
@@ -3981,7 +3981,7 @@ void wxGenericTreeCtrl::OnInternalIdle()
 
 void
 wxGenericTreeCtrl::CalculateLevel(wxGenericTreeItem *item,
-                                  wxDC &dc,
+                                  wxReadOnlyDC &dc,
                                   int level,
                                   int &y )
 {
@@ -4023,12 +4023,10 @@ void wxGenericTreeCtrl::CalculatePositions()
     if ( !m_anchor )
         return;
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     PrepareDC( dc );
 
     dc.SetFont( m_normalFont );
-
-    dc.SetPen( m_dottedPen );
 
     int y = 2;
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion

@@ -716,7 +716,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 }
 
 // Is the tab visible?
-bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd)
+bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* dc, wxWindow* wnd)
 {
     if (!dc || !dc->IsOk())
         return false;
@@ -833,7 +833,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
 // Make the tab visible if it wasn't already
 void wxAuiTabContainer::MakeTabVisible(int tabPage, wxWindow* win)
 {
-    wxClientDC dc(win);
+    wxInfoDC dc(win);
     if (!IsTabVisible(tabPage, GetTabOffset(), & dc, win))
     {
         int i;

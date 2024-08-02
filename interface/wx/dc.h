@@ -113,92 +113,182 @@ struct wxFontMetrics
 
 
 /**
-    @class wxDC
+    Base class for device context not providing any drawing functions.
 
-    A wxDC is a @e "device context" onto which graphics and text can be drawn.
-    It is intended to represent different output devices and offers a common
-    abstract API for drawing on any of them.
+    Objects of this class can't be created directly, please see wxDC for the
+    description of how to create objects of the derived classes.
 
-    wxWidgets offers an alternative drawing API based on the modern drawing
-    backends GDI+, CoreGraphics, Cairo and Direct2D. See wxGraphicsContext,
-    wxGraphicsRenderer and related classes. There is also a wxGCDC linking
-    the APIs by offering the wxDC API on top of a wxGraphicsContext.
-
-    wxDC is an abstract base class and cannot be created directly.
-    Use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or
-    wxPrinterDC. Notice that device contexts which are associated with windows
-    (i.e. wxClientDC, wxWindowDC and wxPaintDC) use the window font and colours
-    by default (starting with wxWidgets 2.9.0) but the other device context
-    classes use system-default values so you always must set the appropriate
-    fonts and colours before using them.
-
-    In addition to the versions of the methods documented below, there
-    are also versions which accept single wxPoint parameter instead
-    of the two wxCoord ones or wxPoint and wxSize instead of the four
-    wxCoord parameters.
-
-    Beginning with wxWidgets 2.9.0 the entire wxDC code has been
-    reorganized. All platform dependent code (actually all drawing code)
-    has been moved into backend classes which derive from a common
-    wxDCImpl class. The user-visible classes such as wxClientDC and
-    wxPaintDC merely forward all calls to the backend implementation.
-
-
-    @section dc_units Device and logical units
-
-    In the wxDC context there is a distinction between @e logical units and @e device units.
-
-    @b Device units are the units native to the particular device; e.g. for a screen,
-    a device unit is a @e pixel. For a printer, the device unit is defined by the
-    resolution of the printer (usually given in @c DPI: dot-per-inch).
-
-    All wxDC functions use instead @b logical units, unless where explicitly
-    stated. Logical units are arbitrary units mapped to device units using
-    the current mapping mode (see wxDC::SetMapMode).
-
-    This mechanism allows reusing the same code which prints on e.g. a window
-    on the screen to print on e.g. a paper.
-
-
-    @section dc_alpha_support Support for Transparency / Alpha Channel
-
-    In general wxDC methods don't support alpha transparency and the alpha
-    component of wxColour is simply ignored and you need to use wxGraphicsContext
-    for full transparency support. There are, however, a few exceptions: first,
-    under macOS and GTK+ 3 colours with alpha channel are supported in all the normal
-    wxDC-derived classes as they use wxGraphicsContext internally. Second,
-    under all platforms wxSVGFileDC also fully supports alpha channel. In both
-    of these cases the instances of wxPen or wxBrush that are built from
-    wxColour use the colour's alpha values when stroking or filling.
-
-
-    @section dc_transform_support Support for Transformation Matrix
-
-    On some platforms (currently under MSW, GTK+ 3, macOS) wxDC has support for
-    applying an arbitrary affine transformation matrix to its coordinate system
-    (since 3.1.1 this feature is also supported by wxGCDC in all ports).
-    Call CanUseTransformMatrix() to check if this support is available and then
-    call SetTransformMatrix() if it is. If the transformation matrix is not
-    supported, SetTransformMatrix() always simply returns @c false and doesn't
-    do anything.
-
-    This feature is only available when @c wxUSE_DC_TRANSFORM_MATRIX build
-    option is enabled.
-
-
-    @library{wxcore}
-    @category{dc,gdi}
-
-    @see @ref overview_dc, wxGraphicsContext, wxDCFontChanger, wxDCTextColourChanger,
-         wxDCPenChanger, wxDCBrushChanger, wxDCClipper
-
-    @todo Precise definition of default/initial state.
-    @todo Pixelwise definition of operations (e.g. last point of a line not
-          drawn).
-*/
-class wxDC : public wxObject
+    @since 3.3.0
+ */
+class wxReadOnlyDC : public wxObject
 {
 public:
+    /**
+        Returns @true if the DC is ok to use.
+    */
+    bool IsOk() const;
+
+    /**
+        @name query capabilities
+    */
+    ///@{
+
+    /**
+       Does the DC support drawing bitmaps?
+    */
+    bool CanDrawBitmap() const;
+
+    /**
+       Does the DC support calculating the size required to draw text?
+    */
+    bool CanGetTextExtent() const;
+
+    ///@}
+
+
+    /**
+        Returns the factor used for converting logical pixels to physical ones.
+
+        Returns the same value as wxWindow::GetDPIScaleFactor() for the
+        device contexts associated with a window and the same value as
+        wxBitmap::GetScaleFactor() for the associated bitmap for wxMemoryDC.
+
+        @note Beware that since wxWidgets 3.1.6, this function does _not_ return the same value as
+        wxWindow::GetContentScaleFactor() for the device contexts associated
+        with the window. Unlike wxWindow method, it always returns the
+        effective scale factor instead of always returning 1 on platforms where
+        logical pixels are the same as physical ones, such as MSW.
+
+        @since 2.9.5
+     */
+    double GetContentScaleFactor() const;
+
+    /**
+        Returns the depth (number of bits/pixel) of this DC.
+
+        @see wxDisplayDepth()
+    */
+    int GetDepth() const;
+
+    /**
+        Returns the current device origin.
+
+        @see SetDeviceOrigin()
+    */
+    wxPoint GetDeviceOrigin() const;
+
+    /**
+        Gets the current mapping mode for the device context.
+
+        @see SetMapMode()
+    */
+    wxMappingMode GetMapMode() const;
+
+    /**
+        Returns the resolution of the device in pixels per inch.
+    */
+    wxSize GetPPI() const;
+
+    /**
+        Convert DPI-independent pixel values to the value in pixels appropriate
+        for the DC.
+
+        See wxWindow::FromDIP(const wxSize& sz) for more info about converting
+        device independent pixel values.
+
+        @since 3.1.7
+     */
+    wxSize FromDIP(const wxSize& sz) const;
+
+    /// @overload
+    wxPoint FromDIP(const wxPoint& pt) const;
+
+    /**
+        Convert DPI-independent value in pixels to the value in pixels
+        appropriate for the DC.
+
+        This is the same as FromDIP(const wxSize& sz) overload, but assumes
+        that the resolution is the same in horizontal and vertical directions.
+
+        @since 3.1.7
+     */
+    int FromDIP(int d) const;
+
+    /**
+        Convert pixel values of the current DC to DPI-independent pixel values.
+
+        See wxWindow::ToDIP(const wxSize& sz) for more info about converting
+        device independent pixel values.
+
+        @since 3.1.7
+     */
+    wxSize ToDIP(const wxSize& sz) const;
+
+    /// @overload
+    wxPoint ToDIP(const wxPoint& pt) const;
+
+    /**
+        Convert pixel values of the current DC to DPI-independent pixel values.
+
+        This is the same as ToDIP(const wxSize& sz) overload, but assumes
+        that the resolution is the same in horizontal and vertical directions.
+
+        @since 3.1.7
+     */
+    int ToDIP(int d) const;
+
+    /**
+        Gets the horizontal and vertical extent of this device context in @e device units.
+        It can be used to scale graphics to fit the page.
+
+        For example, if @e maxX and @e maxY represent the maximum horizontal
+        and vertical 'pixel' values used in your application, the following
+        code will scale the graphic to fit on the printer page:
+
+        @code
+        wxCoord w, h;
+        dc.GetSize(&w, &h);
+        double scaleX = (double)(maxX / w);
+        double scaleY = (double)(maxY / h);
+        dc.SetUserScale(min(scaleX, scaleY),min(scaleX, scaleY));
+        @endcode
+
+        @beginWxPerlOnly
+        In wxPerl there are two methods instead of a single overloaded
+        method:
+        - GetSize(): returns a Wx::Size object.
+        - GetSizeWH(): returns a 2-element list (width, height).
+        @endWxPerlOnly
+    */
+    void GetSize(wxCoord* width, wxCoord* height) const;
+
+    /**
+        @overload
+    */
+    wxSize GetSize() const;
+
+    /**
+        Returns the horizontal and vertical resolution in millimetres.
+    */
+    void GetSizeMM(wxCoord* width, wxCoord* height) const;
+
+    /**
+        @overload
+    */
+    wxSize GetSizeMM() const;
+
+    /**
+        Gets the current user scale factor.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no arguments and return a two
+        element array (x, y).
+        @endWxPerlOnly
+
+        @see SetUserScale()
+    */
+    void GetUserScale(double* x, double* y) const;
+
     /**
         @name Coordinate conversion functions
     */
@@ -352,8 +442,471 @@ public:
     */
     wxSize LogicalToDeviceRel(const wxSize& dim) const;
 
+    /**
+        Sets the x and y axis orientation (i.e.\ the direction from lowest to
+        highest values on the axis). The default orientation is x axis from
+        left to right and y axis from top down.
+
+        @param xLeftRight
+            True to set the x axis orientation to the natural left to right
+            orientation, @false to invert it.
+        @param yBottomUp
+            True to set the y axis orientation to the natural bottom up
+            orientation, @false to invert it.
+    */
+    void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
+
+    /**
+        Sets the device origin (i.e.\ the origin in pixels after scaling has
+        been applied). This function may be useful in Windows printing
+        operations for placing a graphic on a page.
+    */
+    void SetDeviceOrigin(wxCoord x, wxCoord y);
+
+    /**
+        The mapping mode of the device context defines the unit of measurement
+        used to convert @e logical units to @e device units.
+
+        Note that in X, text drawing isn't handled consistently with the mapping mode;
+        a font is always specified in point size. However, setting the user scale (see
+        SetUserScale()) scales the text appropriately. In Windows, scalable
+        TrueType fonts are always used; in X, results depend on availability of
+        fonts, but usually a reasonable match is found.
+
+        The coordinate origin is always at the top left of the screen/printer.
+
+        Drawing to a Windows printer device context uses the current mapping
+        mode, but mapping mode is currently ignored for PostScript output.
+    */
+    void SetMapMode(wxMappingMode mode);
+
+    /**
+        Sets the user scaling factor, useful for applications which require
+        'zooming'.
+    */
+    void SetUserScale(double xScale, double yScale);
+
+    /**
+        Set the scale to use for translating wxDC coordinates to the physical
+        pixels.
+
+        The effect of calling this function is similar to that of calling
+        SetUserScale().
+     */
+    void SetLogicalScale(double x, double y);
+
+    /**
+        Return the scale set by the last call to SetLogicalScale().
+     */
+    void GetLogicalScale(double *x, double *y) const;
+
+    /**
+        Change the offset used for translating wxDC coordinates.
+
+        @see SetLogicalOrigin(), SetDeviceOrigin()
+     */
+    void SetLogicalOrigin(wxCoord x, wxCoord y);
+
+    /**
+        Return the coordinates of the logical point (0, 0).
+
+        @see SetLogicalOrigin()
+     */
+    void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
+
+    /// @overload
+    wxPoint GetLogicalOrigin() const;
+
     ///@}
 
+    /**
+        @name Transformation matrix
+
+        See the notes about the availability of these functions in the class
+        documentation.
+    */
+    ///@{
+
+    /**
+        Check if the use of transformation matrix is supported by the current
+        system.
+
+        This function returns @true for MSW and GTK+ 3 platforms and since
+        3.1.1 also for wxGCDC in all ports.
+
+        @since 2.9.2
+    */
+    bool CanUseTransformMatrix() const;
+
+    /**
+        Set the transformation matrix.
+
+        If transformation matrix is supported on the current system, the
+        specified @a matrix will be used to transform between wxDC and physical
+        coordinates. Otherwise the function returns @false and doesn't change
+        the coordinate mapping.
+
+        @since 2.9.2
+    */
+    bool SetTransformMatrix(const wxAffineMatrix2D& matrix);
+
+    /**
+        Return the transformation matrix used by this device context.
+
+        By default the transformation matrix is the identity matrix.
+
+        @since 2.9.2
+    */
+    wxAffineMatrix2D GetTransformMatrix() const;
+
+    /**
+        Revert the transformation matrix to identity matrix.
+
+        @since 2.9.2
+    */
+    void ResetTransformMatrix();
+
+    ///@}
+
+
+    /**
+        @name Text/character extent functions
+    */
+    ///@{
+
+    /**
+        Gets the character height of the currently set font.
+    */
+    wxCoord GetCharHeight() const;
+
+    /**
+        Gets the average character width of the currently set font.
+    */
+    wxCoord GetCharWidth() const;
+
+    /**
+        Returns the various font characteristics.
+
+        This method allows retrieving some of the font characteristics not
+        returned by GetTextExtent(), notably internal leading and average
+        character width.
+
+        Currently this method returns correct results only under wxMSW, in the
+        other ports the internal leading will always be 0 and the average
+        character width will be computed as the width of the character 'x'.
+
+        @since 2.9.2
+     */
+    wxFontMetrics GetFontMetrics() const;
+
+    /**
+        Gets the dimensions of the string using the currently selected font.
+        @a string is the text string to measure, @e heightLine, if non @NULL,
+        is where to store the height of a single line.
+
+        The text extent is set in the given @a w and @a h pointers.
+
+        If the optional parameter @a font is specified and valid, then it is
+        used for the text extent calculation, otherwise the currently selected
+        font is used.
+
+        If @a string is empty, its horizontal extent is 0 but, for convenience
+        when using this function for allocating enough space for a possibly
+        multi-line string, its vertical extent is the same as the height of an
+        empty line of text. Please note that this behaviour differs from that
+        of GetTextExtent().
+
+        @note This function works with both single-line and multi-line strings.
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as
+        GetMultiLineTextExtent(string, font = undef) returning a
+        3-element list (width, height, line_height)
+        @endWxPerlOnly
+
+        @see wxFont, SetFont(), GetPartialTextExtents(), GetTextExtent()
+    */
+    void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
+                                wxCoord* h,
+                                wxCoord* heightLine = nullptr,
+                                const wxFont* font = nullptr) const;
+    /**
+        Gets the dimensions of the string using the currently selected font.
+        @a string is the text string to measure.
+
+        @return The text extent as a wxSize object.
+
+        @note This function works with both single-line and multi-line strings.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+
+        @see wxFont, SetFont(), GetPartialTextExtents(), GetTextExtent()
+    */
+    wxSize GetMultiLineTextExtent(const wxString& string) const;
+
+    /**
+        Fills the @a widths array with the widths from the beginning of @a text
+        to the corresponding character of @a text. The generic version simply
+        builds a running total of the widths of each character using
+        GetTextExtent(), however if the various platforms have a native API
+        function that is faster or more accurate than the generic
+        implementation then it should be used instead.
+
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a text parameter and
+        returns the widths as a list of integers.
+        @endWxPerlOnly
+
+        @see GetMultiLineTextExtent(), GetTextExtent()
+    */
+    bool GetPartialTextExtents(const wxString& text,
+                               wxArrayInt& widths) const;
+
+    /**
+        Gets the dimensions of the string using the currently selected font.
+        @a string is the text string to measure, @a descent is the dimension
+        from the baseline of the font to the bottom of the descender, and
+        @a externalLeading is any extra vertical space added to the font by the
+        font designer (usually is zero).
+
+        The text extent is returned in @a w and @a h pointers or as a wxSize
+        object depending on which version of this function is used.
+
+        If the optional parameter @a font is specified and valid, then it is
+        used for the text extent calculation. Otherwise the currently selected
+        font is.
+
+        If @a string is empty, its extent is 0 in both directions, as expected.
+
+        @note This function only works with single-line strings.
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as GetTextExtent(string,
+        font = undef) returning a 4-element list (width, height,
+        descent, externalLeading)
+        @endWxPerlOnly
+
+        @see wxFont, SetFont(), GetPartialTextExtents(),
+             GetMultiLineTextExtent()
+    */
+    void GetTextExtent(const wxString& string, wxCoord* w, wxCoord* h,
+                       wxCoord* descent = nullptr,
+                       wxCoord* externalLeading = nullptr,
+                       const wxFont* font = nullptr) const;
+
+    /**
+        @overload
+
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
+    wxSize GetTextExtent(const wxString& string) const;
+
+    ///@}
+
+    /**
+        Gets the current font.
+
+        Notice that even although each device context object has some default font
+        after creation, this method would return a ::wxNullFont initially and only
+        after calling SetFont() a valid font is returned.
+    */
+    const wxFont& GetFont() const;
+
+    /**
+        Gets the current layout direction of the device context. On platforms
+        where RTL layout is supported, the return value will either be
+        @c wxLayout_LeftToRight or @c wxLayout_RightToLeft. If RTL layout is
+        not supported, the return value will be @c wxLayout_Default.
+
+        @see SetLayoutDirection()
+    */
+    wxLayoutDirection GetLayoutDirection() const;
+
+    /**
+        Sets the current font for the DC.
+
+        The @a font parameter should be valid, although in wxMSW port (only)
+        the argument ::wxNullFont is also accepted and resets the device
+        context font to the default value used by the system (which is not
+        generally useful).
+
+        @see wxFont
+    */
+    void SetFont(const wxFont& font);
+
+    /**
+        Sets the current layout direction for the device context.
+
+        @param dir
+           May be either @c wxLayout_Default, @c wxLayout_LeftToRight or
+           @c wxLayout_RightToLeft.
+
+        @see GetLayoutDirection()
+    */
+    void SetLayoutDirection(wxLayoutDirection dir);
+};
+
+/**
+    @class wxDC
+
+    A wxDC is a @e "device context" onto which graphics and text can be drawn.
+    It is intended to represent different output devices and offers a common
+    abstract API for drawing on any of them.
+
+    wxDC also provides functions for coordinate transformation and computing
+    text metrics and extends that are inherited from its base class wxReadOnlyDC.
+
+    wxWidgets offers an alternative drawing API based on the modern drawing
+    backends GDI+, CoreGraphics, Cairo and Direct2D. See wxGraphicsContext,
+    wxGraphicsRenderer and related classes. There is also a wxGCDC linking
+    the APIs by offering the wxDC API on top of a wxGraphicsContext.
+
+    wxDC is an abstract base class and cannot be created directly.
+    Use wxPaintDC for drawing on screen, wxMemoryDC for off-screen drawing or
+    wxPrinterDC for printing (the remaining drawing contexts wxClientDC,
+    wxWindowDC and wxScreenDC are deprecated and don't work on all platforms
+    any longer). Notice that wxPaintDC uses the window font and colours
+    by default (starting with wxWidgets 2.9.0) but the other device context
+    classes use system-default values so you always must set the appropriate
+    fonts and colours before using them.
+
+    In addition to the classes listed above, you can use wxInfoDC which can
+    only provide information about the device context but not draw on it. This
+    class is useful when you need a device context associated with a window
+    outside of the paint event handler, i.e. when wxPaintDC can't be used.
+
+    In addition to the versions of the methods documented below, there
+    are also versions which accept single wxPoint parameter instead
+    of the two wxCoord ones or wxPoint and wxSize instead of the four
+    wxCoord parameters.
+
+    Beginning with wxWidgets 2.9.0 the entire wxDC code has been
+    reorganized. All platform dependent code (actually all drawing code)
+    has been moved into backend classes which derive from a common
+    wxDCImpl class. The user-visible classes such as wxClientDC and
+    wxPaintDC merely forward all calls to the backend implementation.
+
+    In wxWidgets 3.3.0 the new wxReadOnlyDC class was extracted from wxDC: it
+    contains all the functions that don't actually draw on the device context,
+    but just return information about it. This class should be rarely used
+    directly, but some function that used to take wxDC argument but didn't need
+    to modify it, now accept wxReadOnlyDC instead to make this fact explicit,
+    and such functions can now also be called with wxInfoDC objects as
+    arguments.
+
+
+    @section dc_units Device and logical units
+
+    In the wxDC context there is a distinction between @e logical units and @e device units.
+
+    @b Device units are the units native to the particular device; e.g. for a screen,
+    a device unit is a @e pixel. For a printer, the device unit is defined by the
+    resolution of the printer (usually given in @c DPI: dot-per-inch).
+
+    All wxDC functions use instead @b logical units, unless where explicitly
+    stated. Logical units are arbitrary units mapped to device units using
+    the current mapping mode (see wxDC::SetMapMode).
+
+    This mechanism allows reusing the same code which prints on e.g. a window
+    on the screen to print on e.g. a paper.
+
+
+    @section dc_alpha_support Support for Transparency / Alpha Channel
+
+    In general wxDC methods don't support alpha transparency and the alpha
+    component of wxColour is simply ignored and you need to use wxGraphicsContext
+    for full transparency support. There are, however, a few exceptions: first,
+    under macOS and GTK+ 3 colours with alpha channel are supported in all the normal
+    wxDC-derived classes as they use wxGraphicsContext internally. Second,
+    under all platforms wxSVGFileDC also fully supports alpha channel. In both
+    of these cases the instances of wxPen or wxBrush that are built from
+    wxColour use the colour's alpha values when stroking or filling.
+
+
+    @section dc_transform_support Support for Transformation Matrix
+
+    On some platforms (currently under MSW, GTK+ 3, macOS) wxDC has support for
+    applying an arbitrary affine transformation matrix to its coordinate system
+    (since 3.1.1 this feature is also supported by wxGCDC in all ports).
+    Call CanUseTransformMatrix() to check if this support is available and then
+    call SetTransformMatrix() if it is. If the transformation matrix is not
+    supported, SetTransformMatrix() always simply returns @c false and doesn't
+    do anything.
+
+    This feature is only available when @c wxUSE_DC_TRANSFORM_MATRIX build
+    option is enabled.
+
+
+    @library{wxcore}
+    @category{dc,gdi}
+
+    @see @ref overview_dc, wxGraphicsContext, wxDCFontChanger, wxDCTextColourChanger,
+         wxDCPenChanger, wxDCBrushChanger, wxDCClipper
+
+    @todo Precise definition of default/initial state.
+    @todo Pixelwise definition of operations (e.g. last point of a line not
+          drawn).
+*/
+class wxDC : public wxReadOnlyDC
+{
+public:
+    /**
+        Gets the current logical function.
+
+        @see SetLogicalFunction()
+    */
+    wxRasterOperationMode GetLogicalFunction() const;
+
+    /**
+        Gets in @a colour the colour at the specified location.
+
+        This method isn't available for wxPostScriptDC or wxMetafileDC nor for
+        any DC in wxOSX port and simply returns @false there.
+
+        @note Setting a pixel can be done using DrawPoint().
+
+        @note This method shouldn't be used with wxPaintDC as accessing the DC
+        while drawing can result in unexpected results, notably in wxGTK.
+    */
+    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
+
+    /**
+        Sets the current logical function for the device context.
+
+        @note This function is not fully supported in all ports, due to the
+        limitations of the underlying drawing model. Notably, @c wxINVERT which
+        was commonly used for drawing rubber bands or other moving outlines in
+        the past, is not, and will not, be supported by wxGTK3 and wxMac. The
+        suggested alternative is to draw temporarily objects normally and
+        refresh the (affected part of the) window to remove them later.
+
+        It determines how a @e source pixel (from a pen or brush colour, or source
+        device context if using Blit()) combines with a @e destination pixel in
+        the current device context.
+        Text drawing is not affected by this function.
+
+        See ::wxRasterOperationMode enumeration values for more info.
+
+        The default is @c wxCOPY, which simply draws with the current colour.
+        The others combine the current colour and the background using a logical
+        operation.
+    */
+    void SetLogicalFunction(wxRasterOperationMode function);
+
+    /**
+        If this is a window DC or memory DC, assigns the given palette to the
+        window or bitmap associated with the DC. If the argument is
+        ::wxNullPalette, the current palette is selected out of the device
+        context, and the original palette restored.
+
+        @see wxPalette
+    */
+    void SetPalette(const wxPalette& palette);
 
 
     /**
@@ -957,146 +1510,6 @@ public:
 
 
     /**
-        @name Text/character extent functions
-    */
-    ///@{
-
-    /**
-        Gets the character height of the currently set font.
-    */
-    wxCoord GetCharHeight() const;
-
-    /**
-        Gets the average character width of the currently set font.
-    */
-    wxCoord GetCharWidth() const;
-
-    /**
-        Returns the various font characteristics.
-
-        This method allows retrieving some of the font characteristics not
-        returned by GetTextExtent(), notably internal leading and average
-        character width.
-
-        Currently this method returns correct results only under wxMSW, in the
-        other ports the internal leading will always be 0 and the average
-        character width will be computed as the width of the character 'x'.
-
-        @since 2.9.2
-     */
-    wxFontMetrics GetFontMetrics() const;
-
-    /**
-        Gets the dimensions of the string using the currently selected font.
-        @a string is the text string to measure, @e heightLine, if non @NULL,
-        is where to store the height of a single line.
-
-        The text extent is set in the given @a w and @a h pointers.
-
-        If the optional parameter @a font is specified and valid, then it is
-        used for the text extent calculation, otherwise the currently selected
-        font is used.
-
-        If @a string is empty, its horizontal extent is 0 but, for convenience
-        when using this function for allocating enough space for a possibly
-        multi-line string, its vertical extent is the same as the height of an
-        empty line of text. Please note that this behaviour differs from that
-        of GetTextExtent().
-
-        @note This function works with both single-line and multi-line strings.
-
-        @beginWxPerlOnly
-        In wxPerl this method is implemented as
-        GetMultiLineTextExtent(string, font = undef) returning a
-        3-element list (width, height, line_height)
-        @endWxPerlOnly
-
-        @see wxFont, SetFont(), GetPartialTextExtents(), GetTextExtent()
-    */
-    void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
-                                wxCoord* h,
-                                wxCoord* heightLine = nullptr,
-                                const wxFont* font = nullptr) const;
-    /**
-        Gets the dimensions of the string using the currently selected font.
-        @a string is the text string to measure.
-
-        @return The text extent as a wxSize object.
-
-        @note This function works with both single-line and multi-line strings.
-
-        @beginWxPerlOnly
-        Not supported by wxPerl.
-        @endWxPerlOnly
-
-        @see wxFont, SetFont(), GetPartialTextExtents(), GetTextExtent()
-    */
-    wxSize GetMultiLineTextExtent(const wxString& string) const;
-
-    /**
-        Fills the @a widths array with the widths from the beginning of @a text
-        to the corresponding character of @a text. The generic version simply
-        builds a running total of the widths of each character using
-        GetTextExtent(), however if the various platforms have a native API
-        function that is faster or more accurate than the generic
-        implementation then it should be used instead.
-
-        @beginWxPerlOnly
-        In wxPerl this method only takes the @a text parameter and
-        returns the widths as a list of integers.
-        @endWxPerlOnly
-
-        @see GetMultiLineTextExtent(), GetTextExtent()
-    */
-    bool GetPartialTextExtents(const wxString& text,
-                               wxArrayInt& widths) const;
-
-    /**
-        Gets the dimensions of the string using the currently selected font.
-        @a string is the text string to measure, @a descent is the dimension
-        from the baseline of the font to the bottom of the descender, and
-        @a externalLeading is any extra vertical space added to the font by the
-        font designer (usually is zero).
-
-        The text extent is returned in @a w and @a h pointers or as a wxSize
-        object depending on which version of this function is used.
-
-        If the optional parameter @a font is specified and valid, then it is
-        used for the text extent calculation. Otherwise the currently selected
-        font is.
-
-        If @a string is empty, its extent is 0 in both directions, as expected.
-
-        @note This function only works with single-line strings.
-
-        @beginWxPerlOnly
-        In wxPerl this method is implemented as GetTextExtent(string,
-        font = undef) returning a 4-element list (width, height,
-        descent, externalLeading)
-        @endWxPerlOnly
-
-        @see wxFont, SetFont(), GetPartialTextExtents(),
-             GetMultiLineTextExtent()
-    */
-    void GetTextExtent(const wxString& string, wxCoord* w, wxCoord* h,
-                       wxCoord* descent = nullptr,
-                       wxCoord* externalLeading = nullptr,
-                       const wxFont* font = nullptr) const;
-
-    /**
-        @overload
-
-
-        @beginWxPerlOnly
-        Not supported by wxPerl.
-        @endWxPerlOnly
-    */
-    wxSize GetTextExtent(const wxString& string) const;
-
-    ///@}
-
-
-    /**
         @name Text properties functions
     */
     ///@{
@@ -1107,25 +1520,6 @@ public:
         @see SetBackgroundMode()
     */
     int GetBackgroundMode() const;
-
-    /**
-        Gets the current font.
-
-        Notice that even although each device context object has some default font
-        after creation, this method would return a ::wxNullFont initially and only
-        after calling SetFont() a valid font is returned.
-    */
-    const wxFont& GetFont() const;
-
-    /**
-        Gets the current layout direction of the device context. On platforms
-        where RTL layout is supported, the return value will either be
-        @c wxLayout_LeftToRight or @c wxLayout_RightToLeft. If RTL layout is
-        not supported, the return value will be @c wxLayout_Default.
-
-        @see SetLayoutDirection()
-    */
-    wxLayoutDirection GetLayoutDirection() const;
 
     /**
         Gets the current text background colour.
@@ -1155,18 +1549,6 @@ public:
     void SetBackgroundMode(int mode);
 
     /**
-        Sets the current font for the DC.
-
-        The @a font parameter should be valid, although in wxMSW port (only)
-        the argument ::wxNullFont is also accepted and resets the device
-        context font to the default value used by the system (which is not
-        generally useful).
-
-        @see wxFont
-    */
-    void SetFont(const wxFont& font);
-
-    /**
         Sets the current text background colour for the DC.
     */
     void SetTextBackground(const wxColour& colour);
@@ -1178,17 +1560,6 @@ public:
              monochrome bitmap.
     */
     void SetTextForeground(const wxColour& colour);
-
-    /**
-        Sets the current layout direction for the device context.
-
-        @param dir
-           May be either @c wxLayout_Default, @c wxLayout_LeftToRight or
-           @c wxLayout_RightToLeft.
-
-        @see GetLayoutDirection()
-    */
-    void SetLayoutDirection(wxLayoutDirection dir);
 
     ///@}
 
@@ -1510,319 +1881,6 @@ public:
     void CopyAttributes(const wxDC& dc);
 
     /**
-        Returns the factor used for converting logical pixels to physical ones.
-
-        Returns the same value as wxWindow::GetDPIScaleFactor() for the
-        device contexts associated with a window and the same value as
-        wxBitmap::GetScaleFactor() for the associated bitmap for wxMemoryDC.
-
-        @note Beware that since wxWidgets 3.1.6, this function does _not_ return the same value as
-        wxWindow::GetContentScaleFactor() for the device contexts associated
-        with the window. Unlike wxWindow method, it always returns the
-        effective scale factor instead of always returning 1 on platforms where
-        logical pixels are the same as physical ones, such as MSW.
-
-        @since 2.9.5
-     */
-    double GetContentScaleFactor() const;
-
-    /**
-        Returns the depth (number of bits/pixel) of this DC.
-
-        @see wxDisplayDepth()
-    */
-    int GetDepth() const;
-
-    /**
-        Returns the current device origin.
-
-        @see SetDeviceOrigin()
-    */
-    wxPoint GetDeviceOrigin() const;
-
-    /**
-        Gets the current logical function.
-
-        @see SetLogicalFunction()
-    */
-    wxRasterOperationMode GetLogicalFunction() const;
-
-    /**
-        Gets the current mapping mode for the device context.
-
-        @see SetMapMode()
-    */
-    wxMappingMode GetMapMode() const;
-
-    /**
-        Gets in @a colour the colour at the specified location.
-
-        This method isn't available for wxPostScriptDC or wxMetafileDC nor for
-        any DC in wxOSX port and simply returns @false there.
-
-        @note Setting a pixel can be done using DrawPoint().
-
-        @note This method shouldn't be used with wxPaintDC as accessing the DC
-        while drawing can result in unexpected results, notably in wxGTK.
-    */
-    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
-
-    /**
-        Returns the resolution of the device in pixels per inch.
-    */
-    wxSize GetPPI() const;
-
-    /**
-        Convert DPI-independent pixel values to the value in pixels appropriate
-        for the DC.
-
-        See wxWindow::FromDIP(const wxSize& sz) for more info about converting
-        device independent pixel values.
-
-        @since 3.1.7
-     */
-    wxSize FromDIP(const wxSize& sz) const;
-
-    /// @overload
-    wxPoint FromDIP(const wxPoint& pt) const;
-
-    /**
-        Convert DPI-independent value in pixels to the value in pixels
-        appropriate for the DC.
-
-        This is the same as FromDIP(const wxSize& sz) overload, but assumes
-        that the resolution is the same in horizontal and vertical directions.
-
-        @since 3.1.7
-     */
-    int FromDIP(int d) const;
-
-    /**
-        Convert pixel values of the current DC to DPI-independent pixel values.
-
-        See wxWindow::ToDIP(const wxSize& sz) for more info about converting
-        device independent pixel values.
-
-        @since 3.1.7
-     */
-    wxSize ToDIP(const wxSize& sz) const;
-
-    /// @overload
-    wxPoint ToDIP(const wxPoint& pt) const;
-
-    /**
-        Convert pixel values of the current DC to DPI-independent pixel values.
-
-        This is the same as ToDIP(const wxSize& sz) overload, but assumes
-        that the resolution is the same in horizontal and vertical directions.
-
-        @since 3.1.7
-     */
-    int ToDIP(int d) const;
-
-    /**
-        Gets the horizontal and vertical extent of this device context in @e device units.
-        It can be used to scale graphics to fit the page.
-
-        For example, if @e maxX and @e maxY represent the maximum horizontal
-        and vertical 'pixel' values used in your application, the following
-        code will scale the graphic to fit on the printer page:
-
-        @code
-        wxCoord w, h;
-        dc.GetSize(&w, &h);
-        double scaleX = (double)(maxX / w);
-        double scaleY = (double)(maxY / h);
-        dc.SetUserScale(min(scaleX, scaleY),min(scaleX, scaleY));
-        @endcode
-
-        @beginWxPerlOnly
-        In wxPerl there are two methods instead of a single overloaded
-        method:
-        - GetSize(): returns a Wx::Size object.
-        - GetSizeWH(): returns a 2-element list (width, height).
-        @endWxPerlOnly
-    */
-    void GetSize(wxCoord* width, wxCoord* height) const;
-
-    /**
-        @overload
-    */
-    wxSize GetSize() const;
-
-    /**
-        Returns the horizontal and vertical resolution in millimetres.
-    */
-    void GetSizeMM(wxCoord* width, wxCoord* height) const;
-
-    /**
-        @overload
-    */
-    wxSize GetSizeMM() const;
-
-    /**
-        Gets the current user scale factor.
-
-        @beginWxPerlOnly
-        In wxPerl this method takes no arguments and return a two
-        element array (x, y).
-        @endWxPerlOnly
-
-        @see SetUserScale()
-    */
-    void GetUserScale(double* x, double* y) const;
-
-    /**
-        Returns @true if the DC is ok to use.
-    */
-    bool IsOk() const;
-
-    /**
-        Sets the x and y axis orientation (i.e.\ the direction from lowest to
-        highest values on the axis). The default orientation is x axis from
-        left to right and y axis from top down.
-
-        @param xLeftRight
-            True to set the x axis orientation to the natural left to right
-            orientation, @false to invert it.
-        @param yBottomUp
-            True to set the y axis orientation to the natural bottom up
-            orientation, @false to invert it.
-    */
-    void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-
-    /**
-        Sets the device origin (i.e.\ the origin in pixels after scaling has
-        been applied). This function may be useful in Windows printing
-        operations for placing a graphic on a page.
-    */
-    void SetDeviceOrigin(wxCoord x, wxCoord y);
-
-    /**
-        Sets the current logical function for the device context.
-
-        @note This function is not fully supported in all ports, due to the
-        limitations of the underlying drawing model. Notably, @c wxINVERT which
-        was commonly used for drawing rubber bands or other moving outlines in
-        the past, is not, and will not, be supported by wxGTK3 and wxMac. The
-        suggested alternative is to draw temporarily objects normally and
-        refresh the (affected part of the) window to remove them later.
-
-        It determines how a @e source pixel (from a pen or brush colour, or source
-        device context if using Blit()) combines with a @e destination pixel in
-        the current device context.
-        Text drawing is not affected by this function.
-
-        See ::wxRasterOperationMode enumeration values for more info.
-
-        The default is @c wxCOPY, which simply draws with the current colour.
-        The others combine the current colour and the background using a logical
-        operation.
-    */
-    void SetLogicalFunction(wxRasterOperationMode function);
-
-    /**
-        The mapping mode of the device context defines the unit of measurement
-        used to convert @e logical units to @e device units.
-
-        Note that in X, text drawing isn't handled consistently with the mapping mode;
-        a font is always specified in point size. However, setting the user scale (see
-        SetUserScale()) scales the text appropriately. In Windows, scalable
-        TrueType fonts are always used; in X, results depend on availability of
-        fonts, but usually a reasonable match is found.
-
-        The coordinate origin is always at the top left of the screen/printer.
-
-        Drawing to a Windows printer device context uses the current mapping
-        mode, but mapping mode is currently ignored for PostScript output.
-    */
-    void SetMapMode(wxMappingMode mode);
-
-    /**
-        If this is a window DC or memory DC, assigns the given palette to the
-        window or bitmap associated with the DC. If the argument is
-        ::wxNullPalette, the current palette is selected out of the device
-        context, and the original palette restored.
-
-        @see wxPalette
-    */
-    void SetPalette(const wxPalette& palette);
-
-    /**
-        Sets the user scaling factor, useful for applications which require
-        'zooming'.
-    */
-    void SetUserScale(double xScale, double yScale);
-
-
-    /**
-        @name Transformation matrix
-
-        See the notes about the availability of these functions in the class
-        documentation.
-    */
-    ///@{
-
-    /**
-        Check if the use of transformation matrix is supported by the current
-        system.
-
-        This function returns @true for MSW and GTK+ 3 platforms and since
-        3.1.1 also for wxGCDC in all ports.
-
-        @since 2.9.2
-    */
-    bool CanUseTransformMatrix() const;
-
-    /**
-        Set the transformation matrix.
-
-        If transformation matrix is supported on the current system, the
-        specified @a matrix will be used to transform between wxDC and physical
-        coordinates. Otherwise the function returns @false and doesn't change
-        the coordinate mapping.
-
-        @since 2.9.2
-    */
-    bool SetTransformMatrix(const wxAffineMatrix2D& matrix);
-
-    /**
-        Return the transformation matrix used by this device context.
-
-        By default the transformation matrix is the identity matrix.
-
-        @since 2.9.2
-    */
-    wxAffineMatrix2D GetTransformMatrix() const;
-
-    /**
-        Revert the transformation matrix to identity matrix.
-
-        @since 2.9.2
-    */
-    void ResetTransformMatrix();
-
-    ///@}
-
-
-    /**
-        @name query capabilities
-    */
-    ///@{
-
-    /**
-       Does the DC support drawing bitmaps?
-    */
-    bool CanDrawBitmap() const;
-
-    /**
-       Does the DC support calculating the size required to draw text?
-    */
-    bool CanGetTextExtent() const;
-
-    ///@}
-
-    /**
        Returns a value that can be used as a handle to the native drawing
        context, if this wxDC has something that could be thought of in that
        way.  (Not all of them do.)
@@ -1845,37 +1903,6 @@ public:
 
 
     /**
-        Set the scale to use for translating wxDC coordinates to the physical
-        pixels.
-
-        The effect of calling this function is similar to that of calling
-        SetUserScale().
-     */
-    void SetLogicalScale(double x, double y);
-
-    /**
-        Return the scale set by the last call to SetLogicalScale().
-     */
-    void GetLogicalScale(double *x, double *y) const;
-
-    /**
-        Change the offset used for translating wxDC coordinates.
-
-        @see SetLogicalOrigin(), SetDeviceOrigin()
-     */
-    void SetLogicalOrigin(wxCoord x, wxCoord y);
-
-    ///@{
-    /**
-        Return the coordinates of the logical point (0, 0).
-
-        @see SetLogicalOrigin()
-     */
-    void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
-    wxPoint GetLogicalOrigin() const;
-    ///@}
-
-    /**
        If supported by the platform and the @a wxDC implementation, this method
        will return the @a wxGraphicsContext associated with the DC. Otherwise
        @NULL is returned.
@@ -1891,6 +1918,25 @@ public:
 
 };
 
+
+/**
+    Class used for querying the window device context.
+
+    This class can be used to retrieve information about the window device
+    context, including its coordinate system and text extents.
+
+    Unlike wxPaintDC, objects of this class can be created at any time.
+ */
+class wxInfoDC : public wxReadOnlyDC
+{
+public:
+    /**
+        Create the information device context associated with the given window.
+
+        @param win Valid, i.e. non-@NULL, window pointer.
+     */
+    explicit wxInfoDC(wxWindow* win);
+};
 
 
 /**

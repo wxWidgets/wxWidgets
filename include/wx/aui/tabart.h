@@ -32,6 +32,7 @@ class wxAuiNotebookPage;
 class wxAuiNotebookPageArray;
 class wxWindow;
 class wxDC;
+class wxReadOnlyDC;
 
 
 // tab art class
@@ -85,7 +86,7 @@ public:
                          wxRect* outRect) = 0;
 
     virtual wxSize GetTabSize(
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          wxWindow* wnd,
                          const wxString& caption,
                          const wxBitmapBundle& bitmap,
@@ -174,7 +175,7 @@ public:
                  wxWindow* wnd) override;
 
     wxSize GetTabSize(
-                 wxDC& dc,
+                 wxReadOnlyDC& dc,
                  wxWindow* wnd,
                  const wxString& caption,
                  const wxBitmapBundle& bitmap,
@@ -277,7 +278,7 @@ public:
                  wxWindow* wnd) override;
 
     wxSize GetTabSize(
-                 wxDC& dc,
+                 wxReadOnlyDC& dc,
                  wxWindow* wnd,
                  const wxString& caption,
                  const wxBitmapBundle& bitmap,

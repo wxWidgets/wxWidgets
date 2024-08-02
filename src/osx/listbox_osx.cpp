@@ -254,7 +254,7 @@ wxSize wxListBox::DoGetBestSize() const
     int lbHeight;
 
     {
-        wxClientDC dc(const_cast<wxListBox*>(this));
+        wxInfoDC dc(const_cast<wxListBox*>(this));
         dc.SetFont(GetFont());
 
         // Find the widest line

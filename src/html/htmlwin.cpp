@@ -969,7 +969,6 @@ wxString wxHtmlWindow::DoSelectionToText(wxHtmlSelection *sel)
     if ( !sel )
         return wxEmptyString;
 
-    wxClientDC dc(this);
     wxString text;
 
     wxHtmlTerminalCellsInterator i(sel->GetFromCell(), sel->GetToCell());

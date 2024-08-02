@@ -31,6 +31,10 @@
 #include "wx/aui/auibar.h"
 #include "wx/aui/framemanager.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+#endif
+
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #endif
@@ -542,7 +546,7 @@ void wxAuiGenericToolBarArt::DrawControlLabel(
 }
 
 wxSize wxAuiGenericToolBarArt::GetLabelSize(
-                                        wxDC& dc,
+                                        wxReadOnlyDC& dc,
                                         wxWindow* WXUNUSED(wnd),
                                         const wxAuiToolBarItem& item)
 {
@@ -565,7 +569,7 @@ wxSize wxAuiGenericToolBarArt::GetLabelSize(
 }
 
 wxSize wxAuiGenericToolBarArt::GetToolSize(
-                                        wxDC& dc,
+                                        wxReadOnlyDC& dc,
                                         wxWindow* wnd,
                                         const wxAuiToolBarItem& item)
 {
@@ -1883,7 +1887,7 @@ bool wxAuiToolBar::GetToolBarFits() const
 
 bool wxAuiToolBar::Realize()
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     if (!dc.IsOk())
         return false;
 
@@ -1931,7 +1935,7 @@ bool wxAuiToolBar::Realize()
     return true;
 }
 
-wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, wxOrientation orientation)
+wxSize wxAuiToolBar::RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation)
 {
     // Remove old sizer before adding any controls in this tool bar, which are
     // elements of this sizer, to the new sizer below.
@@ -2134,6 +2138,13 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, wxOrientation orientation)
     return m_sizer->GetMinSize();
 }
 
+bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
+{
+    RealizeHelper(static_cast<wxReadOnlyDC&>(dc),
+                  horizontal ? wxHORIZONTAL : wxVERTICAL);
+    return true;
+}
+
 int wxAuiToolBar::GetOverflowState() const
 {
     return m_overflowState;
@@ -2165,7 +2176,7 @@ wxRect wxAuiToolBar::GetOverflowRect() const
 
 wxSize wxAuiToolBar::GetLabelSize(const wxString& label)
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
 
     int tx, ty;
     int textWidth = 0, textHeight = 0;

@@ -177,6 +177,11 @@ Changes in behaviour which may result in build errors
 - wxGTK wxDirButton::Create() doesn't have unused "wildcard" parameter any
   longer, please just remove it from your code if you used it.
 
+- Several functions now take wxReadOnlyDC instead of wxDC as argument. While
+  any code calling these functions keeps compiling and working, classes that
+  override these functions must be updated to use the new argument type too.
+  Simply replacing wxDC with wxReadOnlyDC should be sufficient.
+
 
 3.3.0: (released 2022-??-??)
 ----------------------------

@@ -52,7 +52,7 @@ public:
 protected:
     // calc the string extent for given string/font
     wxSize DoGetBestSize(const wxGridCellAttr& attr,
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          const wxString& text);
 };
 
@@ -381,7 +381,7 @@ public:
 
 private:
     wxArrayString GetTextLines( wxGrid& grid,
-                                wxDC& dc,
+                                wxReadOnlyDC& dc,
                                 const wxGridCellAttr& attr,
                                 const wxRect& rect,
                                 int row, int col);
@@ -391,7 +391,7 @@ private:
     // Break a single logical line of text into several physical lines, all of
     // which are added to the lines array. The lines are broken at maxWidth and
     // the dc is used for measuring text extent only.
-    void BreakLine(wxDC& dc,
+    void BreakLine(wxReadOnlyDC& dc,
                    const wxString& logicalLine,
                    wxCoord maxWidth,
                    wxArrayString& lines);
@@ -401,7 +401,7 @@ private:
     // is returned in line output parameter.
     //
     // Returns the width of the last line.
-    wxCoord BreakWord(wxDC& dc,
+    wxCoord BreakWord(wxReadOnlyDC& dc,
                       const wxString& word,
                       wxCoord maxWidth,
                       wxArrayString& lines,

@@ -488,7 +488,7 @@ int wxAuiGtkTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
     return 2 * GetBorderWidth(wnd);
 }
 
-wxSize wxAuiGtkTabArt::GetTabSize(wxDC& dc,
+wxSize wxAuiGtkTabArt::GetTabSize(wxReadOnlyDC& dc,
                               wxWindow* wnd,
                               const wxString& caption,
                               const wxBitmapBundle& bitmap,

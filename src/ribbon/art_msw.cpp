@@ -1991,7 +1991,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
         DrawPanelBorder(dc, true_rect, m_panel_hover_border_pen, m_panel_hover_border_gradient_pen);
 }
 
-wxRect wxRibbonMSWArtProvider::GetPanelExtButtonArea(wxDC& WXUNUSED(dc),
+wxRect wxRibbonMSWArtProvider::GetPanelExtButtonArea(wxReadOnlyDC& WXUNUSED(dc),
                         const wxRibbonPanel* WXUNUSED(wnd),
                         wxRect rect)
 {
@@ -2871,7 +2871,7 @@ void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
 }
 
 void wxRibbonMSWArtProvider::GetBarTabWidth(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* WXUNUSED(wnd),
                         const wxString& label,
                         const wxBitmap& bitmap,
@@ -2919,7 +2919,7 @@ void wxRibbonMSWArtProvider::GetBarTabWidth(
 }
 
 int wxRibbonMSWArtProvider::GetTabCtrlHeight(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* WXUNUSED(wnd),
                         const wxRibbonPageTabInfoArray& pages)
 {
@@ -2955,7 +2955,7 @@ int wxRibbonMSWArtProvider::GetTabCtrlHeight(
 }
 
 wxSize wxRibbonMSWArtProvider::GetScrollButtonMinimumSize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         wxWindow* WXUNUSED(wnd),
                         long WXUNUSED(style))
 {
@@ -2963,7 +2963,7 @@ wxSize wxRibbonMSWArtProvider::GetScrollButtonMinimumSize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetPanelSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize client_size,
                         wxPoint* client_offset)
@@ -2989,7 +2989,7 @@ wxSize wxRibbonMSWArtProvider::GetPanelSize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetPanelClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset)
@@ -3017,7 +3017,7 @@ wxSize wxRibbonMSWArtProvider::GetPanelClientSize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetGallerySize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         const wxRibbonGallery* WXUNUSED(wnd),
                         wxSize client_size)
 {
@@ -3030,7 +3030,7 @@ wxSize wxRibbonMSWArtProvider::GetGallerySize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         const wxRibbonGallery* WXUNUSED(wnd),
                         wxSize size,
                         wxPoint* client_offset,
@@ -3091,7 +3091,7 @@ wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
 }
 
 wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         const wxRibbonPage* WXUNUSED(wnd),
                         wxSize page_old_size,
                         wxSize page_new_size)
@@ -3135,7 +3135,7 @@ wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
 }
 
 bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
@@ -3261,7 +3261,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
 }
 
 wxCoord wxRibbonMSWArtProvider::GetButtonBarButtonTextWidth(
-                        wxDC& dc, const wxString& label,
+                        wxReadOnlyDC& dc, const wxString& label,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size)
 {
@@ -3302,7 +3302,7 @@ wxCoord wxRibbonMSWArtProvider::GetButtonBarButtonTextWidth(
 }
 
 wxSize wxRibbonMSWArtProvider::GetMinimisedPanelMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize* desired_bitmap_size,
                         wxDirection* expanded_panel_direction)
@@ -3341,7 +3341,7 @@ wxSize wxRibbonMSWArtProvider::GetMinimisedPanelMinimumSize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetToolSize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         wxWindow* WXUNUSED(wnd),
                         wxSize bitmap_size,
                         wxRibbonButtonKind kind,

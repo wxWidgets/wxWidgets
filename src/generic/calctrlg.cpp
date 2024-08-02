@@ -743,7 +743,7 @@ void wxGenericCalendarCtrl::DoGetSize(int *width, int *height) const
 
 void wxGenericCalendarCtrl::RecalcGeometry()
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
 
     dc.SetFont(GetFont());
 

@@ -439,7 +439,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
     base->min_size_class = wxRIBBON_BUTTONBAR_BUTTON_SMALL;
     base->max_size_class = wxRIBBON_BUTTONBAR_BUTTON_LARGE;
 
-    wxClientDC temp_dc(this);
+    wxInfoDC temp_dc(this);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
@@ -531,7 +531,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertHybridButton(
 }
 
 void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
-        wxRibbonButtonBarButtonState size, wxDC& dc)
+        wxRibbonButtonBarButtonState size, wxReadOnlyDC& dc)
 {
     wxRibbonButtonBarButtonSizeInfo& info = button->sizes[size];
     if(m_art)
@@ -680,7 +680,7 @@ void wxRibbonButtonBar::SetButtonText(int button_id, const wxString& label)
         return;
     base->label = label;
 
-    wxClientDC temp_dc(this);
+    wxInfoDC temp_dc(this);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
@@ -697,7 +697,7 @@ void wxRibbonButtonBar::SetButtonTextMinWidth(int button_id,
     base->text_min_width[0] = 0;
     base->text_min_width[1] = min_width_medium;
     base->text_min_width[2] = min_width_large;
-    wxClientDC temp_dc(this);
+    wxInfoDC temp_dc(this);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
@@ -710,7 +710,7 @@ void wxRibbonButtonBar::SetButtonTextMinWidth(
     wxRibbonButtonBarButtonBase* base = GetItemById(button_id);
     if(base == nullptr)
         return;
-    wxClientDC temp_dc(this);
+    wxInfoDC temp_dc(this);
     base->text_min_width[wxRIBBON_BUTTONBAR_BUTTON_MEDIUM] =
         m_art->GetButtonBarButtonTextWidth(
         temp_dc, label, base->kind, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
@@ -770,7 +770,7 @@ void wxRibbonButtonBar::SetArtProvider(wxRibbonArtProvider* art)
     if (!art)
         return;
 
-    wxClientDC temp_dc(this);
+    wxInfoDC temp_dc(this);
     size_t btn_count = m_buttons.Count();
     size_t btn_i;
     for(btn_i = 0; btn_i < btn_count; ++btn_i)

@@ -200,52 +200,76 @@ public:
                       int row, int col,
                       bool isSelected) = 0;
 
-    // get the preferred size of the cell for its contents
-    virtual wxSize GetBestSize(wxGrid& grid,
-                               wxGridCellAttr& attr,
-                               wxDC& dc,
-                               int row, int col) = 0;
+    // get the preferred size of the cell for its contents: this function must
+    // be overridden by all derived classes, it's not pure virtual only due to
+    // backwards-compatibility concerns.
+    virtual wxSize GetPreferredSize(wxGrid& grid,
+                                    wxGridCellAttr& attr,
+                                    wxReadOnlyDC& dc,
+                                    int row, int col);
 
     // Get the preferred height for a given width. Override this method if the
     // renderer computes height as function of its width, as is the case of the
     // standard wxGridCellAutoWrapStringRenderer, for example.
     // and vice versa
-    virtual int GetBestHeight(wxGrid& grid,
-                              wxGridCellAttr& attr,
-                              wxDC& dc,
-                              int row, int col,
-                              int WXUNUSED(width))
+    virtual int GetPreferredHeight(wxGrid& grid,
+                                   wxGridCellAttr& attr,
+                                   wxReadOnlyDC& dc,
+                                   int row, int col,
+                                   int WXUNUSED(width))
     {
-        return GetBestSize(grid, attr, dc, row, col).GetHeight();
+        return GetPreferredSize(grid, attr, dc, row, col).GetHeight();
     }
 
     // Get the preferred width for a given height, this is the symmetric
-    // version of GetBestHeight().
-    virtual int GetBestWidth(wxGrid& grid,
-                             wxGridCellAttr& attr,
-                             wxDC& dc,
-                             int row, int col,
-                             int WXUNUSED(height))
+    // version of GetPreferredHeight().
+    virtual int GetPreferredWidth(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxReadOnlyDC& dc,
+                                  int row, int col,
+                                  int WXUNUSED(height))
     {
-        return GetBestSize(grid, attr, dc, row, col).GetWidth();
+        return GetPreferredSize(grid, attr, dc, row, col).GetWidth();
     }
 
 
-    // Unlike GetBestSize(), this functions is optional: it is used when
+    // Unlike GetPreferredSize(), this functions is optional: it is used when
     // auto-sizing columns to determine the best width without iterating over
     // all cells in this column, if possible.
     //
     // If it isn't, return wxDefaultSize as the base class version does by
     // default.
-    virtual wxSize GetMaxBestSize(wxGrid& WXUNUSED(grid),
-                                  wxGridCellAttr& WXUNUSED(attr),
-                                  wxDC& WXUNUSED(dc))
+    virtual wxSize GetMaxSize(wxGrid& WXUNUSED(grid),
+                              wxGridCellAttr& WXUNUSED(attr),
+                              wxReadOnlyDC& WXUNUSED(dc))
     {
         return wxDefaultSize;
     }
 
     // create a new object which is the copy of this one
     virtual wxGridCellRenderer *Clone() const = 0;
+
+
+    // These functions still exist for compatibility and are the ones actually
+    // called by wxGrid, but new code should implement the new functions using
+    // "Preferred" in their names instead, to which these ones forward.
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+    virtual int GetBestHeight(wxGrid& grid,
+                              wxGridCellAttr& attr,
+                              wxDC& dc,
+                              int row, int col,
+                              int width);
+    virtual int GetBestWidth(wxGrid& grid,
+                             wxGridCellAttr& attr,
+                             wxDC& dc,
+                             int row, int col,
+                             int height);
+    virtual wxSize GetMaxBestSize(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc);
 
 protected:
     // set the text colours before drawing
@@ -1719,7 +1743,7 @@ public:
     //
     void StringToLines( const wxString& value, wxArrayString& lines ) const;
 
-    void GetTextBoxSize( const wxDC& dc,
+    void GetTextBoxSize( const wxReadOnlyDC& dc,
                          const wxArrayString& lines,
                          long *width, long *height ) const;
 

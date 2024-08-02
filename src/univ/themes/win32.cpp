@@ -2481,7 +2481,7 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
                                                      const wxMenu& menu) const
 {
     // prepare the dc: for now we draw all the items with the system font
-    wxClientDC dc(win);
+    wxInfoDC dc(win);
     dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // the height of a normal item

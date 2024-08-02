@@ -92,7 +92,7 @@ wxInputHandler *wxAnyButton::GetStdInputHandler(wxInputHandler *handlerDef)
 
 wxSize wxAnyButton::DoGetBestClientSize() const
 {
-    wxClientDC dc(wxConstCast(this, wxAnyButton));
+    wxInfoDC dc(wxConstCast(this, wxAnyButton));
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 

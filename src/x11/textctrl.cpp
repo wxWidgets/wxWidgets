@@ -233,7 +233,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     else
         m_sourceFont = GetFont();
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     dc.SetFont( m_sourceFont );
     m_lineHeight = dc.GetCharHeight();
     m_charWidth = dc.GetCharWidth();
@@ -859,7 +859,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 
     m_sourceFont = font;
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     dc.SetFont( m_sourceFont );
     m_lineHeight = dc.GetCharHeight();
     m_charWidth = dc.GetCharWidth();

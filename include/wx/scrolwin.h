@@ -85,8 +85,24 @@ public:
     // Override this function to draw the graphic (or just process EVT_PAINT)
     virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
 
-    // change the DC origin according to the scroll position.
-    virtual void DoPrepareDC(wxDC& dc) = 0;
+    // Set up the DC according to the scroll position.
+    //
+    // For historical reasons, we have DoPrepareDC() but new code should
+    // implement DoPrepareReadOnlyDC() instead, which ought to be pure virtual
+    // if it hasn't been added later.
+    virtual void DoPrepareReadOnlyDC(wxReadOnlyDC& WXUNUSED(dc))
+    {
+        // If DoPrepareDC() is overridden in the derived class, this function
+        // won't be called at all unless PrepareReadOnlyDC() is explicitly
+        // called.
+        //
+        // But if DoPrepareDC() is not overridden, this one must be.
+        wxFAIL_MSG("Must be overridden if DoPrepareDC() is not.");
+    }
+
+    // This function continues to exist for compatibility but delegates to
+    // DoPrepareReadOnlyDC() now.
+    virtual void DoPrepareDC(wxDC& dc);
 
     // Simple accessor for the window that is really being scrolled.
     wxWindow *GetTargetWindow() const { return m_targetWindow; }
@@ -218,7 +234,7 @@ public:
     void SetTargetRect(const wxRect& rect) { m_rectToScroll = rect; }
     wxRect GetTargetRect() const { return m_rectToScroll; }
 
-    virtual void DoPrepareDC(wxDC& dc) override;
+    virtual void DoPrepareReadOnlyDC(wxReadOnlyDC& dc) override;
 
     // are we generating the autoscroll events?
     bool IsAutoScrolling() const { return m_timerAutoScroll != nullptr; }
@@ -354,7 +370,9 @@ protected:
 // methods to corresponding wxScrollHelper methods
 #define WX_FORWARD_TO_SCROLL_HELPER()                                         \
 public:                                                                       \
+    virtual void PrepareReadOnlyDC(wxReadOnlyDC& dc) override { DoPrepareReadOnlyDC(dc); }          \
     virtual void PrepareDC(wxDC& dc) override { DoPrepareDC(dc); }          \
+    void PrepareDC(wxReadOnlyDC& dc) { DoPrepareReadOnlyDC(dc); }           \
     virtual bool Layout() override { return ScrollLayout(); }               \
     virtual bool CanScroll(int orient) const override                       \
         { return IsScrollbarShown(orient); }                                  \

@@ -47,7 +47,7 @@ public:
                             const wxSize& required_bmp_size) override;
     int GetBorderWidth(wxWindow* wnd) override;
     int GetAdditionalBorderSpace(wxWindow* wnd) override;
-    virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
+    virtual wxSize GetTabSize(wxReadOnlyDC& dc, wxWindow* wnd, const wxString& caption,
                               const wxBitmapBundle& bitmap, bool active,
                               int close_button_state, int* x_extent) override;
 };

@@ -676,7 +676,7 @@ int wxAuiGenericTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
     return 0;
 }
 
-wxSize wxAuiGenericTabArt::GetTabSize(wxDC& dc,
+wxSize wxAuiGenericTabArt::GetTabSize(wxReadOnlyDC& dc,
                                       wxWindow* wnd,
                                       const wxString& caption,
                                       const wxBitmapBundle& bitmap,
@@ -847,7 +847,7 @@ int wxAuiGenericTabArt::GetBestTabCtrlSize(wxWindow* wnd,
                                            const wxAuiNotebookPageArray& pages,
                                            const wxSize& requiredBmp_size)
 {
-    wxClientDC dc(wnd);
+    wxInfoDC dc(wnd);
     dc.SetFont(m_measuringFont);
 
     // sometimes a standard bitmap size needs to be enforced, especially
@@ -1222,7 +1222,7 @@ int wxAuiSimpleTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
     return 0;
 }
 
-wxSize wxAuiSimpleTabArt::GetTabSize(wxDC& dc,
+wxSize wxAuiSimpleTabArt::GetTabSize(wxReadOnlyDC& dc,
                                      wxWindow* wnd,
                                      const wxString& caption,
                                      const wxBitmapBundle& WXUNUSED(bitmap),
@@ -1370,7 +1370,7 @@ int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd,
                                           const wxAuiNotebookPageArray& WXUNUSED(pages),
                                           const wxSize& WXUNUSED(requiredBmp_size))
 {
-    wxClientDC dc(wnd);
+    wxInfoDC dc(wnd);
     dc.SetFont(m_measuringFont);
     int x_ext = 0;
     wxSize s = GetTabSize(dc,

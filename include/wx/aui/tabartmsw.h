@@ -57,7 +57,7 @@ public:
         wxWindow* wnd) override;
 
     wxSize GetTabSize(
-        wxDC& dc,
+        wxReadOnlyDC& dc,
         wxWindow* wnd,
         const wxString& caption,
         const wxBitmapBundle& bitmap,
@@ -82,7 +82,7 @@ private:
     wxSize m_tabSize;
     int m_maxTabHeight;
 
-    void InitSizes(wxWindow* wnd, wxDC& dc);
+    void InitSizes(wxWindow* wnd, wxReadOnlyDC& dc);
 
     bool IsThemed() const;
 };

@@ -67,7 +67,7 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     info.shown = true;
     // info.rect not set (intentional)
 
-    wxClientDC dcTemp(this);
+    wxInfoDC dcTemp(this);
     wxString label;
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
         label = page->GetLabel();
@@ -153,7 +153,7 @@ bool wxRibbonBar::Realize()
 {
     bool status = true;
 
-    wxClientDC dcTemp(this);
+    wxInfoDC dcTemp(this);
     int sep = m_art->GetMetric(wxRIBBON_ART_TAB_SEPARATION_SIZE);
     size_t numtabs = m_pages.GetCount();
     bool firstVisible = true;
@@ -561,7 +561,7 @@ void wxRibbonBar::RecalculateTabSizes()
             m_tab_scroll_buttons_shown = true;
         }
         {
-            wxClientDC temp_dc(this);
+            wxInfoDC temp_dc(this);
             int right_button_pos = GetClientSize().GetWidth() - m_tab_margin_right - m_tab_scroll_right_button_rect.GetWidth();
             if ( right_button_pos < m_tab_margin_left )
                 right_button_pos = m_tab_margin_left;
@@ -1143,7 +1143,7 @@ void wxRibbonBar::ScrollTabBar(int amount)
     if(show_right != (m_tab_scroll_right_button_rect.GetWidth() != 0) ||
         show_left != (m_tab_scroll_left_button_rect.GetWidth() != 0))
     {
-        wxClientDC temp_dc(this);
+        wxInfoDC temp_dc(this);
         if(show_left)
         {
             m_tab_scroll_left_button_rect.SetWidth(m_art->GetScrollButtonMinimumSize(temp_dc, this, wxRIBBON_SCROLL_BTN_LEFT | wxRIBBON_SCROLL_BTN_NORMAL | wxRIBBON_SCROLL_BTN_FOR_TABS).GetWidth());

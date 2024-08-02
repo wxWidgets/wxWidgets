@@ -1294,7 +1294,7 @@ wxSize wxDataViewTextRenderer::GetSize() const
         if ( m_markupText )
         {
             wxDataViewCtrl* const view = GetView();
-            wxClientDC dc(view);
+            wxInfoDC dc(view);
             if ( GetAttr().HasFont() )
                 dc.SetFont(GetAttr().GetEffectiveFont(view->GetFont()));
 

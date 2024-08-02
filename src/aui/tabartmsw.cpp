@@ -261,7 +261,7 @@ int wxAuiMSWTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
         return wxAuiGenericTabArt::GetAdditionalBorderSpace(wnd);
 }
 
-wxSize wxAuiMSWTabArt::GetTabSize(wxDC& dc,
+wxSize wxAuiMSWTabArt::GetTabSize(wxReadOnlyDC& dc,
     wxWindow* wnd,
     const wxString& caption,
     const wxBitmapBundle& bitmap,
@@ -428,7 +428,7 @@ int wxAuiMSWTabArt::GetBestTabCtrlSize(wxWindow* wnd,
     return wxAuiGenericTabArt::GetBestTabCtrlSize(wnd, pages, requiredBmp_size);
 }
 
-void wxAuiMSWTabArt::InitSizes(wxWindow* wnd, wxDC& WXUNUSED(dc))
+void wxAuiMSWTabArt::InitSizes(wxWindow* wnd, wxReadOnlyDC& WXUNUSED(dc))
 {
     // Borrow close button from tooltip (best fit on various backgrounds)
     wxUxThemeHandle hTooltipTheme(wnd, L"Tooltip");

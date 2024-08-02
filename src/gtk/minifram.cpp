@@ -334,7 +334,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     m_miniTitle = 0;
     if (style & wxCAPTION)
     {
-        wxClientDC dc(this);
+        wxInfoDC dc(this);
         dc.SetFont(*wxSMALL_FONT);
         m_miniTitle = wxMax(dc.GetTextExtent("X").y, 16);
     }

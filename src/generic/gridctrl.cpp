@@ -390,7 +390,7 @@ wxGridCellAutoWrapStringRenderer::Draw(wxGrid& grid,
 
 wxArrayString
 wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
-                                               wxDC& dc,
+                                               wxReadOnlyDC& dc,
                                                const wxGridCellAttr& attr,
                                                const wxRect& rect,
                                                int row, int col)
@@ -429,7 +429,7 @@ wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
 }
 
 void
-wxGridCellAutoWrapStringRenderer::BreakLine(wxDC& dc,
+wxGridCellAutoWrapStringRenderer::BreakLine(wxReadOnlyDC& dc,
                                             const wxString& logicalLine,
                                             wxCoord maxWidth,
                                             wxArrayString& lines)
@@ -482,7 +482,7 @@ wxGridCellAutoWrapStringRenderer::BreakLine(wxDC& dc,
 
 
 wxCoord
-wxGridCellAutoWrapStringRenderer::BreakWord(wxDC& dc,
+wxGridCellAutoWrapStringRenderer::BreakWord(wxReadOnlyDC& dc,
                                             const wxString& word,
                                             wxCoord maxWidth,
                                             wxArrayString& lines,
@@ -601,7 +601,7 @@ wxGridCellAutoWrapStringRenderer::GetBestWidth(wxGrid& grid,
 // ----------------------------------------------------------------------------
 
 wxSize wxGridCellStringRenderer::DoGetBestSize(const wxGridCellAttr& attr,
-                                               wxDC& dc,
+                                               wxReadOnlyDC& dc,
                                                const wxString& text)
 {
     dc.SetFont(attr.GetFont());

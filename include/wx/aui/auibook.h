@@ -171,7 +171,7 @@ public:
     void SetTabOffset(size_t offset);
 
     // Is the tab visible?
-    bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
+    bool IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* dc, wxWindow* wnd);
 
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
