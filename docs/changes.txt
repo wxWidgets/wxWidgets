@@ -398,7 +398,6 @@ wxGTK:
 wxMSW:
 
 - Fix MSVS warning about redundant "const" in wx/itemid.h (#23590).
-- Fix spurious memory leak reports when using static CRT.
 
 wxOSX:
 
