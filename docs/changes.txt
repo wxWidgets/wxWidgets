@@ -280,6 +280,7 @@ wxMSW:
 - More Windows Server versions in wxGetOsDescription() (PB, #24598, #24603).
 - Fix using wx/wxprec.h with vcpkg (Maarten Bent, #24353, #24632).
 - Fix wxNotebook size calculation in high DPI (#24606).
+- Fix crash when using static wx libraries in a DLL (#24730).
 
 wxOSX:
 
@@ -417,7 +418,6 @@ All:
 - Don't use invalid iterator in wxString in UTF-8 build (Ian Day, #23305).
 - Fix wrong description for some languages (Ulrich Telle, #23419).
 - Fix infinite loop in wxFTP::GetFilesList() (#23519).
-- Fix memory leak when using wx from non-wx threads (Antti Nietosvaara, #23535).
 - Use grep instead of fgrep and egrep in makefiles/scripts (#23537).
 - Use /etc/os-release if lsb_release isn't available (Scott Talbert, #23712).
 - Add wxUILocale::GetMonthName() and GetWeekDayName() (Ulrich Telle, #23556).
