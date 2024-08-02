@@ -745,6 +745,10 @@ char *wxInputStream::AllocSpaceWBack(size_t needed_size)
     // get number of bytes left from previous wback buffer
     size_t toget = m_wbacksize - m_wbackcur;
 
+    // do not allocate 0 bytes, it is suspicious
+    if (needed_size + toget == 0)
+        return nullptr;
+
     // allocate a buffer large enough to hold prev + new data
     char *temp_b = (char *)malloc(needed_size + toget);
 
