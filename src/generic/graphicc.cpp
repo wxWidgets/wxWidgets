@@ -3086,14 +3086,44 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
 
         ApplyFont(layout, font);
         pango_layout_set_text(layout, data, data.length());
-        PangoLayoutIter* iter = pango_layout_get_iter(layout);
-        PangoRectangle rect;
-        do {
-            pango_layout_iter_get_cluster_extents(iter, nullptr, &rect);
-            w += rect.width;
+
+        // Number of Unicode characters in the the text
+        int num_chars = pango_layout_get_character_count(layout);
+
+        if (num_chars) {
+            // Get attributes for each character
+            const PangoLogAttr* attrs = pango_layout_get_log_attrs_readonly(layout, nullptr);
+
+            PangoLayoutIter* iter = pango_layout_get_iter(layout);
+            PangoRectangle rect;
+            int char_index = 0;
+            int byte_index = 0;
+            while (pango_layout_iter_next_char(iter)) {
+                // We need to know the last byte_index for later, so always get it
+                byte_index = pango_layout_iter_get_index(iter);
+                if (!attrs[++char_index].is_cursor_position)
+                    continue;
+                pango_layout_index_to_pos(layout, byte_index, &rect);
+                if (rect.width < 0) {
+                    w = rect.x + rect.width;
+                } else {
+                    w = rect.x;
+                }
+                widths.Add(PANGO_PIXELS(w));
+            }
+
+            // From the num_chars check, we know at least one character exists,
+            // therefore add the position behind the last character as well
+            pango_layout_index_to_pos(layout, byte_index, &rect);
+            if (rect.width < 0) {
+                w = rect.x;
+            } else {
+                w = rect.x + rect.width;
+            }
             widths.Add(PANGO_PIXELS(w));
-        } while (pango_layout_iter_next_cluster(iter));
-        pango_layout_iter_free(iter);
+
+            pango_layout_iter_free(iter);
+        }
     }
     size_t i = widths.GetCount();
     const size_t len = text.length();
