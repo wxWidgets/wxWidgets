@@ -33,6 +33,7 @@ bool wxCairoInit();
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
+    #include "wx/log.h"
     #include "wx/window.h"
 #endif
 
@@ -3086,14 +3087,58 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
 
         ApplyFont(layout, font);
         pango_layout_set_text(layout, data, data.length());
-        PangoLayoutIter* iter = pango_layout_get_iter(layout);
-        PangoRectangle rect;
-        do {
-            pango_layout_iter_get_cluster_extents(iter, nullptr, &rect);
-            w += rect.width;
+
+        // Check if we have any Unicode characters in the text.
+        if (const gint num_chars = pango_layout_get_character_count(layout))
+        {
+            // Get attributes for each character.
+            gint num_attrs = 0;
+            const PangoLogAttr* const
+                attrs = pango_layout_get_log_attrs_readonly(layout, &num_attrs);
+
+            PangoLayoutIter* iter = pango_layout_get_iter(layout);
+
+            PangoRectangle rect;
+            int byte_index = 0;
+
+            // We start at index 1 because the index 0 corresponds to the
+            // position before the first character.
+            for (int char_index = 1; pango_layout_iter_next_char(iter); ++char_index)
+            {
+                if (char_index >= num_attrs)
+                {
+                    // This should never happen, but don't crash if it does.
+                    wxLogDebug("Unexpected Pango chars/attrs mismatch: %d/%d",
+                               num_chars, num_attrs);
+                    break;
+                }
+
+                // We need to know the last byte_index for later, so always get it
+                byte_index = pango_layout_iter_get_index(iter);
+                if (!attrs[char_index].is_cursor_position)
+                    continue;
+
+                pango_layout_index_to_pos(layout, byte_index, &rect);
+                if (rect.width < 0)
+                    w = rect.x + rect.width;
+                else
+                    w = rect.x;
+
+                widths.Add(PANGO_PIXELS(w));
+            }
+
+            // From the num_chars check, we know at least one character exists,
+            // therefore add the position behind the last character as well
+            pango_layout_index_to_pos(layout, byte_index, &rect);
+            if (rect.width < 0)
+                w = rect.x;
+            else
+                w = rect.x + rect.width;
+
             widths.Add(PANGO_PIXELS(w));
-        } while (pango_layout_iter_next_cluster(iter));
-        pango_layout_iter_free(iter);
+
+            pango_layout_iter_free(iter);
+        }
     }
     size_t i = widths.GetCount();
     const size_t len = text.length();
