@@ -275,6 +275,7 @@ wxGTK:
 - Fix wxListBox minimum size regression in 3.2.5 (#24551).
 - Fix wxBitmapComboBox bitmaps scaling in high DPI (#24563).
 - Allow positioning wxDialog at specified position, at least under X11 (#24552).
+- Fix incorrect handling of ligatures in wxStyledTextCtrl (Funami580, #13168).
 
 wxMSW:
 
