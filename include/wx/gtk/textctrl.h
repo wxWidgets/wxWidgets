@@ -59,7 +59,7 @@ public:
     virtual void GetSelection(long* from, long* to) const override;
 
     virtual void Remove(long from, long to) override;
-
+    virtual void SetMaxLength(unsigned long length) override;
     virtual void MarkDirty() override;
     virtual void DiscardEdits() override;
 
@@ -132,6 +132,12 @@ public:
     bool SetFont(const wxFont& font) override;
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
+
+    // In GTK only single line text control properly handles max
+    // text length. This function will prevent to enter more
+    // than maximum number of characters in the multiline text
+    // control
+    void GTKHandleMaxLength(wxString &text);
 
     GtkWidget* GetConnectWidget() override;
 
@@ -227,7 +233,7 @@ private:
 
     bool m_modified;
     bool m_dontMarkDirty;
-
+    
     int         m_countUpdatesToIgnore;
 
     // Our text buffer. Convenient, and holds the buffer while using
