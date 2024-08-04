@@ -479,13 +479,12 @@ bool MyApp::OnInit()
     file_menu->Append(TEXT_LOAD, "&Load file\tCtrl-O",
                       "Load the sample file into text control");
 
-    if ( wxTextCtrl::IsRTFSupported() )
-    {
+#ifdef wxHAS_TEXTCTRL_RTF
         file_menu->Append(TEXT_SAVE_RTF, "&Save file as RTF",
             "Save the text control contents to file");
         file_menu->Append(TEXT_LOAD_RTF, "&Load RTF file",
             "Load the sample file into text control");
-    }
+#endif
 
     file_menu->AppendSeparator();
     file_menu->Append(TEXT_RICH_TEXT_TEST, "Show Rich Text Editor");
@@ -534,11 +533,10 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_SELECT, "&Select characters 4 to 8\tCtrl-I");
     menuText->Append(TEXT_SET, "&Set the first text zone value\tCtrl-E");
     menuText->Append(TEXT_CHANGE, "&Change the first text zone value\tShift-Ctrl-E");
-    if ( wxTextCtrl::IsRTFSupported() )
-    {
+#ifdef wxHAS_TEXTCTRL_RTF
         menuText->AppendSeparator();
         menuText->Append(TEXT_SET_RTF, "Set the rich text zone value from rich text formatted content");
-    }
+#endif
     menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
     menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");

@@ -718,6 +718,8 @@ public :
     virtual bool CanClipMaxLength() const { return false; }
     virtual void SetMaxLength(unsigned long WXUNUSED(len)) {}
 
+    virtual bool IsRTFSupported() { return false; }
+
     virtual bool CanForceUpper() { return false; }
     virtual void ForceUpper() {}
 

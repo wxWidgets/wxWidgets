@@ -931,16 +931,6 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
     return true;
 }
 
-// static
-bool wxTextAreaBase::IsRTFSupported()
-{
-#ifdef wxHAS_TEXTCTRL_RTF
-    return true;
-#else
-    return false;
-#endif
-}
-
 wxString wxTextAreaBase::GetRTFValue() const
 {
     wxFAIL_MSG("Not implemented for the current platform.");

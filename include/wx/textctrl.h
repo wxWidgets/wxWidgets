@@ -103,10 +103,10 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl file types
 // ----------------------------------------------------------------------------
 
-// For now only wxOSX supports RTF in wxTextCtrl.
-#ifdef __WXOSX__
+// wxOSX and wxMSW support RTF in wxTextCtrl.
+#if defined(__WXOSX__) || (defined(__WXMSW__) && wxUSE_RICHEDIT)
     #define wxHAS_TEXTCTRL_RTF
-#endif // __WXOSX__
+#endif
 
 enum wxTextCtrlFileType
 {
@@ -691,7 +691,7 @@ public:
     virtual void SetValue(const wxString& value) = 0;
 
     // Returns whether the RTF-related functions below can be used.
-    static bool IsRTFSupported();
+    virtual bool IsRTFSupported() { return false; }
 
     // Base class implementations simply assert, if IsRTFSupported() returns
     // true, the port must override these functions to really implement them.
