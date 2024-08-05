@@ -3531,6 +3531,10 @@ struct WXDLLIMPEXP_BASE wxEventTableEntry : public wxEventTableEntryBase
     // and so it will have the correct value when it is needed
     const int& m_eventType;
 
+#if wxABI_VERSION >= 30206
+    wxDECLARE_DEFAULT_COPY_CTOR(wxEventTableEntry)
+#endif // wxABI_VERSION >= 3.2.6
+
 private:
     wxDECLARE_NO_ASSIGN_CLASS(wxEventTableEntry);
 };
