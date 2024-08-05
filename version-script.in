@@ -30,6 +30,7 @@
 @WX_VERSION_TAG@.6 {
     extern "C++" {
         "AddAvailableCatalog(const wxString&, wxLanguage)";
+        "wxEventTableEntry::wxEventTableEntry(const wxEventTableEntry&)";
         "wxSystemSettingsNative::SelectLightDark";
     };
 };
