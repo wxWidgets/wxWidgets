@@ -812,6 +812,12 @@ size_t wxInputStream::Ungetch(const void *buf, size_t bufsize)
         return 0;
     }
 
+    if ( !bufsize )
+    {
+        // nothing to do
+        return 0;
+    }
+
     char *ptrback = AllocSpaceWBack(bufsize);
     if (!ptrback)
         return 0;

@@ -40,12 +40,7 @@
 class wxStreamTempInputBuffer
 {
 public:
-    wxStreamTempInputBuffer()
-    {
-        m_stream = nullptr;
-        m_buffer = nullptr;
-        m_size = 0;
-    }
+    wxStreamTempInputBuffer() = default;
 
     // call to associate a stream with this buffer, otherwise nothing happens
     // at all
@@ -120,13 +115,13 @@ public:
 
 private:
     // the stream we're buffering, if nullptr we don't do anything at all
-    wxPipeInputStream *m_stream;
+    wxPipeInputStream *m_stream = nullptr;
 
     // the buffer of size m_size (nullptr if m_size == 0)
-    void *m_buffer;
+    void *m_buffer = nullptr;
 
     // the size of the buffer
-    size_t m_size;
+    size_t m_size = 0;
 
     wxDECLARE_NO_COPY_CLASS(wxStreamTempInputBuffer);
 };
