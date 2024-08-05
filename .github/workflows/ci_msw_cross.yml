@@ -245,7 +245,7 @@ jobs:
           excluded_tests+=('~wxFileSystemWatcher::EventCreate')
 
           # The test fails (even with wxTEST_RUNNER-related changes) and hangs.
-          excluded_tests+=('~ExecTestCase')
+          excluded_tests+=('~[exec]')
 
           # Wine WinHTTP implementations seems buggy, there are many errors.
           excluded_tests+=('~[webrequest]')
@@ -265,7 +265,7 @@ jobs:
           excluded_gui_tests+=('~ComboBoxTestCase') # TextChangeEvents
           excluded_gui_tests+=('~DatePickerCtrlTestCase') # Range
           excluded_gui_tests+=('~wxEnhMetaFileDC::GetTextExtent')
-          excluded_gui_tests+=('~ExecTestCase')
+          excluded_gui_tests+=('~[exec]')
           excluded_gui_tests+=('~wxFont::GetSet')
           excluded_gui_tests+=('~GraphicsPathTestCaseGDIPlus')
           excluded_gui_tests+=('~ImageList*')
