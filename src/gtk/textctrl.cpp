@@ -544,7 +544,8 @@ wx_insert_text_callback(GtkTextBuffer* buffer,
 }
 
 
-// And an "after" version used for detecting URLs in the text.
+// And an "after" version used for detecting URLs in the text, applying custom
+// styles and enforcing max length limit.
 static void
 au_insert_text_callback(GtkTextBuffer *buffer,
                         GtkTextIter *end,
@@ -559,6 +560,28 @@ au_insert_text_callback(GtkTextBuffer *buffer,
     {
         wxGtkTextApplyTagsFromAttr(win->GetHandle(), buffer, win->GetDefaultStyle(),
                                    &start, end);
+    }
+
+    const auto maxlen = win->GTKGetMaxLength();
+    if ( maxlen > 0 )
+    {
+        const auto count = gtk_text_buffer_get_char_count( buffer );
+        if ( count > maxlen )
+        {
+            // Trim the extraneous characters.
+            int toTrim = count - maxlen;
+            GtkTextIter offset;
+            gtk_text_buffer_get_iter_at_offset(
+                buffer,
+                &offset,
+                gtk_text_iter_get_offset( end ) - toTrim
+            );
+            gtk_text_buffer_delete( buffer, &offset, end );
+
+            // And notify the application about hitting the limit.
+            win->IgnoreNextTextUpdate();
+            win->SendMaxLenEvent();
+        }
     }
 
     if ( !len || !(win->GetWindowStyleFlag() & wxTE_AUTO_URL) )
@@ -884,7 +907,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
         g_signal_connect(m_buffer, "insert_text",
                          G_CALLBACK(wx_insert_text_callback), this);
 
-        // Needed for wxTE_AUTO_URL and applying custom styles
+        // Needed for wxTE_AUTO_URL, applying custom styles and max length
+        // limit support.
         g_signal_connect_after(m_buffer, "insert_text",
                                G_CALLBACK(au_insert_text_callback), this);
     }
@@ -911,6 +935,18 @@ GtkEditable *wxTextCtrl::GetEditable() const
     wxCHECK_MSG( IsSingleLine(), nullptr, "shouldn't be called for multiline" );
 
     return GTK_EDITABLE(m_text);
+}
+
+void wxTextCtrl::SetMaxLength(unsigned long length)
+{
+    if ( IsMultiLine() )
+    {
+        m_maxlen = length;
+    }
+    else
+    {
+        wxTextEntry::SetMaxLength( length );
+    }
 }
 
 GtkEntry *wxTextCtrl::GetEntry() const
@@ -1226,6 +1262,12 @@ static gboolean afterLayout(void* data)
 void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
+
+    // Disable max length check, it shouldn't prevent the program itself from
+    // making the text as long as it wants.
+    const auto maxlenOrig = m_maxlen;
+    m_maxlen = 0;
+    wxON_BLOCK_EXIT_SET( m_maxlen, maxlenOrig );
 
     if ( text.empty() )
     {

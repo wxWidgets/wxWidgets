@@ -60,6 +60,7 @@ public:
 
     virtual void Remove(long from, long to) override;
 
+    virtual void SetMaxLength(unsigned long length) override;
     virtual void MarkDirty() override;
     virtual void DiscardEdits() override;
 
@@ -166,6 +167,8 @@ public:
     void GTKOnTextChanged() override;
     void GTKAfterLayout();
 
+    int GTKGetMaxLength() const { return m_maxlen; }
+
 protected:
     // overridden wxWindow virtual methods
     virtual wxSize DoGetBestSize() const override;
@@ -233,6 +236,9 @@ private:
     bool m_dontMarkDirty;
 
     int         m_countUpdatesToIgnore;
+
+    // Length set by SetMaxLength() or 0 if there is no limit.
+    int m_maxlen = 0;
 
     // Our text buffer. Convenient, and holds the buffer while using
     // a dummy one when frozen
