@@ -410,8 +410,6 @@ public:
         event is sent to notify the program about it (giving it the possibility
         to show an explanatory message, for example) and the extra input is discarded.
 
-        @note this function may only be used with single line text controls under wxGTK
-        and wxQt ports.
     */
     virtual void SetMaxLength(unsigned long len);
 
@@ -482,7 +480,7 @@ public:
             @c wxTE_PASSWORD style.
 
         @remarks Hints can be used for single line text controls under all
-            platforms, but only MSW and GTK+ 2 support them for multi-line text
+            platforms, but only MSW and GTK+ support them for multi-line text
             controls, they are ignored for them under the other platforms.
 
         @since 2.9.0

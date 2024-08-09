@@ -28,7 +28,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
-
+#include <string.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/threads.h"
@@ -560,6 +560,28 @@ au_insert_text_callback(GtkTextBuffer *buffer,
         wxGtkTextApplyTagsFromAttr(win->GetHandle(), buffer, win->GetDefaultStyle(),
                                    &start, end);
     }
+    auto maxlen = win->GTKGetMaxLength();
+    auto count = gtk_text_buffer_get_char_count( buffer );
+    if( maxlen > 0 && count > maxlen && win->IsMaxLengthAllowed() )
+    {
+        GtkTextIter offset;
+        int trim_len = count - maxlen;
+        gtk_text_buffer_get_iter_at_offset( buffer, &offset, gtk_text_iter_get_offset( end ) - trim_len );
+        // This function is connected using g_signal_connect_after() call, therefore
+        // direct buffer modification is required.
+        // Using g_signal_connect() doesn't work as the text is still being entered
+        // probably because the signal is documented as "Run Last". For exactly same
+        // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
+        // the handler that does not connected after
+        gtk_text_buffer_delete( buffer, &offset, end );
+#if GTK_CHECK_VERSION( 3, 0, 0 )
+        gtk_text_iter_assign( end, &offset );
+#endif
+        wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
+        event.SetEventObject( win );
+        event.SetString( win->GetValue() );
+        win->HandleWindowEvent( event );
+    }
 
     if ( !len || !(win->GetWindowStyleFlag() & wxTE_AUTO_URL) )
         return;
@@ -684,7 +706,6 @@ void wxTextCtrl::Init()
 {
     m_dontMarkDirty =
     m_modified = false;
-
     m_countUpdatesToIgnore = 0;
 
     SetUpdateFont(false);
@@ -797,8 +818,11 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // new, empty control, see https://github.com/wxWidgets/wxWidgets/issues/11409
         gtk_entry_get_text((GtkEntry*)m_text);
 
+#ifndef __WXGTK3__
         if (style & wxNO_BORDER)
             gtk_entry_set_has_frame((GtkEntry*)m_text, FALSE);
+#endif
+
     }
     g_object_ref(m_widget);
 
@@ -873,7 +897,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
             g_signal_connect (m_buffer, "apply_tag",
                               G_CALLBACK (au_apply_tag_callback), nullptr);
 
-            // Check for URLs in the initial string passed to Create
+            // Check for URLs in the initial string sed to Create
             gtk_text_buffer_get_start_iter(m_buffer, &start);
             gtk_text_buffer_get_end_iter(m_buffer, &end);
             au_check_range(&start, &end);
@@ -911,6 +935,17 @@ GtkEditable *wxTextCtrl::GetEditable() const
     wxCHECK_MSG( IsSingleLine(), nullptr, "shouldn't be called for multiline" );
 
     return GTK_EDITABLE(m_text);
+}
+
+void wxTextCtrl::SetMaxLength(unsigned long length)
+{
+    if( HasFlag( wxTE_MULTILINE ) )
+    {
+        m_maxlen = length;
+        m_maxLengthAllowed = true;
+    }
+    else
+        wxTextEntry::SetMaxLength( length );
 }
 
 GtkEntry *wxTextCtrl::GetEntry() const
@@ -1226,12 +1261,14 @@ static gboolean afterLayout(void* data)
 void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
-
+    auto old = m_maxLengthAllowed;
+    m_maxLengthAllowed = false;
     if ( text.empty() )
     {
         // We don't need to actually do anything, but we still need to generate
         // an event expected from this call.
         SendTextUpdatedEvent(this);
+        m_maxLengthAllowed = old;
         return;
     }
 
@@ -1252,10 +1289,11 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( !IsMultiLine() )
     {
         wxTextEntry::WriteText(text);
+        m_maxLengthAllowed = old;
         return;
     }
-
-    const wxScopedCharBuffer buffer(text.utf8_str());
+    auto temp = text;
+    const wxScopedCharBuffer buffer(temp.utf8_str());
 
     // First remove the selection if there is one
     gtk_text_buffer_delete_selection(m_buffer, false, true);
@@ -1293,6 +1331,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         m_afterLayoutId =
             g_idle_add_full(GTK_TEXT_VIEW_PRIORITY_VALIDATE + 1, afterLayout, this, nullptr);
     }
+    m_maxLengthAllowed = old;
 }
 
 wxString wxTextCtrl::GetLineText( long lineNo ) const
@@ -1766,7 +1805,10 @@ void wxTextCtrl::Paste()
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
 
     if ( IsMultiLine() )
+    {
         g_signal_emit_by_name (m_text, "paste-clipboard");
+        auto value = GetValue();
+    }
     else
         wxTextEntry::Paste();
 }
@@ -2225,13 +2267,24 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     //multiline
     else
     {
+        // add space for vertical scrollbar
+        if ( m_scrollBar[1] && !(m_windowStyle & wxTE_NO_VSCROLL) )
+            tsize.IncBy(GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[1])).x + 3, 0);
+
         // height
         if ( ylen <= 0 )
+        {
             tsize.y = 1 + cHeight * wxMax(wxMin(GetNumberOfLines(), 10), 2);
+            // add space for horizontal scrollbar
+            if ( m_scrollBar[0] && (m_windowStyle & wxHSCROLL) )
+                tsize.IncBy(0, GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[0])).y + 3);
+        }
 
-        GtkRequisition req;
-        gtk_widget_get_preferred_size(m_widget, &req, nullptr);
-        tsize.IncTo(wxSize(req.width, req.height));
+        if ( !HasFlag(wxBORDER_NONE) )
+        {
+            // hardcode borders, margins, etc
+            tsize.IncBy(5, 4);
+        }
     }
 
     // We should always use at least the specified height if it's valid.

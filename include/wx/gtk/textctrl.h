@@ -59,7 +59,7 @@ public:
     virtual void GetSelection(long* from, long* to) const override;
 
     virtual void Remove(long from, long to) override;
-
+    virtual void SetMaxLength(unsigned long length) override;
     virtual void MarkDirty() override;
     virtual void DiscardEdits() override;
 
@@ -165,6 +165,7 @@ public:
 
     void GTKOnTextChanged() override;
     void GTKAfterLayout();
+    bool IsMaxLengthAllowed() const { return m_maxLengthAllowed; }
 
 protected:
     // overridden wxWindow virtual methods
@@ -199,7 +200,7 @@ protected:
     void GTKSetActivatesDefault();
     void GTKSetWrapMode();
     void GTKSetJustification();
-
+    
 private:
     void Init();
 
@@ -237,7 +238,7 @@ private:
     // Our text buffer. Convenient, and holds the buffer while using
     // a dummy one when frozen
     GtkTextBuffer *m_buffer;
-
+    bool m_maxLengthAllowed = false;
     GtkTextMark* m_showPositionDefer;
     GSList* m_anonymousMarkList;
     unsigned m_afterLayoutId;
