@@ -149,11 +149,11 @@
     know when it is usable.
 
 
-    __Mac OS X Platform__
+    __macOS Platform__
 
-    OS X 10.13 or above is required.
+    macOS 10.13 or above is required.
 
-    Due to the application bundle structure on OS X, wxWebviewChromium is a
+    Due to the application bundle structure on macOS, wxWebviewChromium is a
     little more complicated than on Windows/Linux platforms as extra helper
     applications for executing separate Chromium processes(renderer, plugin,
     etc) are required.
