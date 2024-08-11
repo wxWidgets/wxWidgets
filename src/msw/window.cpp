@@ -1673,6 +1673,20 @@ void wxWindowMSW::SetupColours()
         SetBackgroundColour(GetParent()->GetBackgroundColour());
 }
 
+/* static */ wxVisualAttributes
+wxWindowMSW::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attrs = wxWindowBase::GetClassDefaultAttributes(variant);
+
+    // For weird historical reasons, the default background colour for windows
+    // does _not_ use wxSYS_COLOUR_WINDOW but wxSYS_COLOUR_BTNFACE, however
+    // this colour is not appropriate in the dark mode, so override it there.
+    if ( wxMSWDarkMode::IsActive() )
+        attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
+    return attrs;
+}
+
 bool wxWindowMSW::IsMouseInWindow() const
 {
     // get the mouse position
