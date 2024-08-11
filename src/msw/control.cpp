@@ -239,19 +239,14 @@ wxBorder wxControl::GetDefaultBorder() const
 }
 
 /* static */ wxVisualAttributes
-wxControl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+wxControl::GetClassDefaultAttributes(wxWindowVariant variant)
 {
-    wxVisualAttributes attrs;
-
-    // old school (i.e. not "common") controls use the standard dialog font
-    // by default
-    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    wxVisualAttributes attrs = wxWindow::GetClassDefaultAttributes(variant);
 
     // most, or at least many, of the controls use the same colours as the
     // buttons -- others will have to override this (and possibly simply call
     // GetCompositeControlsDefaultAttributes() from their versions)
     attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
-    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
 
     return attrs;
 }
