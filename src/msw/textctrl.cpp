@@ -1164,7 +1164,7 @@ wxString wxTextCtrl::GetRTFValue() const
     // RTF readers.
     ::SendMessage(GetHwnd(), EM_STREAMOUT,
         (WPARAM)(SF_RTF | SFF_PLAINRTF), (LPARAM)&es);
-    return wxString(buffer.c_str(), *wxConvCurrent);
+    return wxString::FromUTF8(buffer);
 }
 
 void wxTextCtrl::SetRTFValue(const wxString& val)
@@ -1177,16 +1177,17 @@ void wxTextCtrl::SetRTFValue(const wxString& val)
 
     // Setting from Unicode will fail if control is read-only
     // (this is an undocumented "feature"), so we need to toggle that temporarily.
-    const bool isReadOnly = (::GetWindowLong(GetHwnd(), GWL_STYLE) & ES_READONLY) != 0;
-    if (isReadOnly)
+    const bool
+        isReadOnly = (::GetWindowLong(GetHwnd(), GWL_STYLE) & ES_READONLY) != 0;
+    if ( isReadOnly )
     {
         ::SendMessage(GetHwnd(), EM_SETREADONLY, FALSE, 0);
     }
 
     ::SendMessage(GetHwnd(), EM_SETTEXTEX, (WPARAM)&textInfo,
-        (LPARAM)static_cast<const wchar_t*>(val));
+        (LPARAM)static_cast<const wchar_t*>(val.wc_str()));
 
-    if (isReadOnly)
+    if ( isReadOnly )
     {
         ::SendMessage(GetHwnd(), EM_SETREADONLY, TRUE, 0);
     }
