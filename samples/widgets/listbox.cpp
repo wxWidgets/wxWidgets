@@ -335,57 +335,57 @@ void ListboxWidgetsPage::CreateContent()
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(sizerMiddleBox, ListboxPage_Add, "&Add this string");
     m_textAdd = new wxTextCtrl(sizerMiddleBox, ListboxPage_AddText, "test item \t0");
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textAdd, 1, wxLEFT, 5);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerRow->Add(btn, 0, wxRIGHT, FromDIP(5));
+    sizerRow->Add(m_textAdd, 1, wxLEFT, FromDIP(5));
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_AddSeveral, "&Insert a few strings");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_AddMany, "Add &many strings");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(sizerMiddleBox, ListboxPage_Change, "C&hange current");
     m_textChange = new wxTextCtrl(sizerMiddleBox, ListboxPage_ChangeText, wxEmptyString);
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textChange, 1, wxLEFT, 5);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerRow->Add(btn, 0, wxRIGHT, FromDIP(5));
+    sizerRow->Add(m_textChange, 1, wxLEFT, FromDIP(5));
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, FromDIP(5));
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(sizerMiddleBox, ListboxPage_EnsureVisible, "Make item &visible");
     m_textEnsureVisible = new wxTextCtrl(sizerMiddleBox, ListboxPage_EnsureVisibleText, wxEmptyString);
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textEnsureVisible, 1, wxLEFT, 5);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerRow->Add(btn, 0, wxRIGHT, FromDIP(5));
+    sizerRow->Add(m_textEnsureVisible, 1, wxLEFT, FromDIP(5));
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, FromDIP(5));
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(sizerMiddleBox, ListboxPage_Delete, "&Delete this item");
     m_textDelete = new wxTextCtrl(sizerMiddleBox, ListboxPage_DeleteText, wxEmptyString);
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textDelete, 1, wxLEFT, 5);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerRow->Add(btn, 0, wxRIGHT, FromDIP(5));
+    sizerRow->Add(m_textDelete, 1, wxLEFT, FromDIP(5));
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_DeleteSel, "Delete &selection");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_Clear, "&Clear");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_MoveUp, "Move item &up");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_MoveDown, "Move item &down");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_GetTopItem, "Get top item");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_GetCountPerPage, "Get count per page");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_ContainerTests, "Run &tests");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, FromDIP(5));
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
@@ -398,9 +398,9 @@ void ListboxWidgetsPage::CreateContent()
     m_sizerLbox = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), FromDIP(10));
+    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, FromDIP(10));
+    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), FromDIP(10));
 
     // final initializations
     Reset();

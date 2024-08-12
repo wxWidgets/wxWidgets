@@ -150,15 +150,15 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
     subsizer->Add(new wxStaticText(this, wxID_ANY, "Client:"), 0, wxALIGN_CENTER_VERTICAL);
-    subsizer->Add(choice, 1, wxLEFT, 5);
-    sizer->Add(subsizer, 0, wxALL | wxEXPAND, 10);
+    subsizer->Add(choice, 1, wxLEFT, FromDIP(5));
+    sizer->Add(subsizer, 0, wxALL | wxEXPAND, FromDIP(10));
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
 
     m_list = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(250, 300),
                             wxLC_REPORT | wxSUNKEN_BORDER);
     m_list->AppendColumn("wxArtID");
-    subsizer->Add(m_list, 0, wxEXPAND | wxRIGHT, 10);
+    subsizer->Add(m_list, 0, wxEXPAND | wxRIGHT, FromDIP(10));
 
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);
 

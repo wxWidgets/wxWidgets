@@ -884,9 +884,9 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(statbarTop, 0, wxGROW);
     sizerTop->Add(-1, 10, 1, wxGROW);
-    sizerTop->Add(text, 0, wxCENTRE | wxRIGHT | wxLEFT, 20);
+    sizerTop->Add(text, 0, wxCENTRE | wxRIGHT | wxLEFT, FromDIP(20));
     sizerTop->Add(-1, 10, 1, wxGROW);
-    sizerTop->Add(btn, 0, wxCENTRE | wxRIGHT | wxLEFT, 20);
+    sizerTop->Add(btn, 0, wxCENTRE | wxRIGHT | wxLEFT, FromDIP(20));
     sizerTop->Add(-1, 10, 1, wxGROW);
     sizerTop->Add(statbarBottom, 0, wxGROW);
 

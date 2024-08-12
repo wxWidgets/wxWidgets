@@ -502,22 +502,22 @@ void TextWidgetsPage::CreateContent()
     wxStaticBox* const sizerMiddleUpBox = sizerMiddleUp->GetStaticBox();
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Set, "&Set text value");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Add, "&Append text");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Insert, "&Insert text");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Load, "&Load file");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Clear, "&Clear");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_StreamRedirector, "St&ream redirection");
-    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
+    sizerMiddleUp->Add(btn, wxSizerFlags().Expand().Border(wxALL, FromDIP(1)));
 
     wxStaticBoxSizer *sizerMiddleDown = new wxStaticBoxSizer(wxVERTICAL, this, "&Info:");
     wxStaticBox* const sizerMiddleDownBox = sizerMiddleDown->GetStaticBox();
@@ -532,19 +532,19 @@ void TextWidgetsPage::CreateContent()
                     "Current pos:",
                     m_textPosCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxRIGHT, 5);
+                  0, wxRIGHT, FromDIP(5));
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     "Col:",
                     m_textColCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxLEFT | wxRIGHT, 5);
+                  0, wxLEFT | wxRIGHT, FromDIP(5));
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     "Row:",
                     m_textRowCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxLEFT, 5);
+                  0, wxLEFT, FromDIP(5));
     sizerMiddleDown->Add(sizerRow, wxSizerFlags().Border(wxALL, FromDIP(5)));
 
     m_textLineLast = CreateInfoText(sizerMiddleDownBox);
