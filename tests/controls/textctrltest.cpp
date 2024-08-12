@@ -1573,7 +1573,7 @@ And there is a mispeled word)");
     CHECK(results.m_end == 251);
 
     // Edge cases
-    // last word 
+    // last word
     results = text->SearchText(wxTextSearch(L"word").Direction(wxTextSearchDirection::Up).MatchCase().MatchWholeWord());
     CHECK(results);
     CHECK(results.m_start == 494);
