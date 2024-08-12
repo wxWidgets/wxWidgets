@@ -1813,7 +1813,7 @@ public:
 
         @onlyfor{wxmsw}
     */
-    wxTextSearchResult SearchText(const wxTextSearch& search) const
+    wxTextSearchResult SearchText(const wxTextSearch& search) const;
 
     /**
         Finds the position of the character at the specified point.
