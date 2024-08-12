@@ -155,16 +155,16 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     html -> SetInitialSize(wxSize(html -> GetInternalRepresentation() -> GetWidth(),
                                   html -> GetInternalRepresentation() -> GetHeight()));
 
-    topsizer -> Add(html, 1, wxALL, 10);
+    topsizer -> Add(html, 1, wxALL, FromDIP(10));
 
 #if wxUSE_STATLINE
-    topsizer -> Add(new wxStaticLine(&dlg, wxID_ANY), 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+    topsizer -> Add(new wxStaticLine(&dlg, wxID_ANY), 0, wxEXPAND | wxLEFT | wxRIGHT, FromDIP(10));
 #endif // wxUSE_STATLINE
 
     wxButton *bu1 = new wxButton(&dlg, wxID_OK, _("OK"));
     bu1 -> SetDefault();
 
-    topsizer -> Add(bu1, 0, wxALL | wxALIGN_RIGHT, 15);
+    topsizer -> Add(bu1, 0, wxALL | wxALIGN_RIGHT, FromDIP(15));
 
     dlg.SetSizer(topsizer);
     topsizer -> Fit(&dlg);

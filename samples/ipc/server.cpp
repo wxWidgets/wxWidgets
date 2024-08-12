@@ -98,7 +98,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     wxButton *btn;
 
     btn = new wxButton(panel, ID_START, "&Start Server");
-    sizerCmds->Add(btn, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizerCmds->Add(btn, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, FromDIP(5));
 
     const wxString choices[] = { IPC_SERVICE, "..." };
     wxChoice * const choice = new wxChoice
@@ -108,17 +108,17 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
                                     wxDefaultPosition, wxSize(100, -1),
                                     WXSIZEOF(choices), choices
                                   );
-    sizerCmds->Add(choice, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizerCmds->Add(choice, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, FromDIP(5));
 
     btn = new wxButton(panel, ID_DISCONNECT, "&Disconnect Client");
-    sizerCmds->Add(btn, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizerCmds->Add(btn, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, FromDIP(5));
     sizerCmds->AddSpacer(20);
 
     btn = new wxButton( panel, ID_ADVISE, "&Advise");
-    sizerCmds->Add(btn, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizerCmds->Add(btn, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, FromDIP(5));
     sizerCmds->AddSpacer(20);
 
-    sizerMain->Add(sizerCmds, wxSizerFlags().Expand().Border(wxALL, 5));
+    sizerMain->Add(sizerCmds, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
     wxStaticBoxSizer * const
         sizerLog = new wxStaticBoxSizer(wxVERTICAL, panel, "Server &log");
@@ -131,9 +131,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
                                     wxDefaultPosition, wxSize(500, 140),
                                     wxTE_MULTILINE
                                  );
-    sizerLog->Add(textLog, wxSizerFlags(1).Expand().Border(wxALL, 5));
+    sizerLog->Add(textLog, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
 
-    sizerMain->Add(sizerLog, wxSizerFlags(1).Expand().Border(wxALL, 5));
+    sizerMain->Add(sizerLog, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
 
     panel->SetSizer(sizerMain);
     sizerMain->SetSizeHints(panel);

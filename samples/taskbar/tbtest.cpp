@@ -89,7 +89,7 @@ MyDialog::MyDialog(const wxString& title)
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
 
     wxSizerFlags flags;
-    flags.Border(wxALL, 10);
+    flags.Border(wxALL, FromDIP(10));
 
     sizerTop->Add(new wxStaticText
                       (

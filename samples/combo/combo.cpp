@@ -896,9 +896,9 @@ MyFrame::MyFrame(const wxString& title)
 
     comboCustom->SetPopupControl(new ListViewComboPopup());
 
-    rowSizer->Add( fsc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    rowSizer->Add( comboCustom, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, 5));
+    rowSizer->Add( fsc, 1, wxALIGN_CENTER_VERTICAL|wxALL, FromDIP(4) );
+    rowSizer->Add( comboCustom, 1, wxALIGN_CENTER_VERTICAL|wxALL, FromDIP(4) );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
 
     // Make sure GetFeatures is implemented
@@ -910,10 +910,10 @@ MyFrame::MyFrame(const wxString& title)
     colSizer = new wxBoxSizer( wxVERTICAL );
 
     colSizer->AddSpacer(8);
-    colSizer->Add( new wxStaticText(panel, wxID_ANY, "Log Messages:"), 0, wxTOP|wxLEFT, 3 );
-    colSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border(wxALL, 3));
+    colSizer->Add( new wxStaticText(panel, wxID_ANY, "Log Messages:"), 0, wxTOP|wxLEFT, FromDIP(3) );
+    colSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(3)));
 
-    topRowSizer->Add( colSizer, wxSizerFlags(1).Expand().Border(wxALL, 2));
+    topRowSizer->Add( colSizer, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(2)));
     topSizer->Add( topRowSizer, wxSizerFlags(1).Expand());
 
     panel->SetSizer( topSizer );

@@ -382,9 +382,9 @@ MyFrame::MyFrame(const wxString& title)
     logger->DisableTimestamp();
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( button1, wxSizerFlags().Expand().Border(wxALL, 5));
-    topSizer->Add( button2, wxSizerFlags().Expand().Border(wxALL, 5));
-    topSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border(wxALL, 5));
+    topSizer->Add( button1, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
+    topSizer->Add( button2, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
+    topSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
 
     panel->SetSizer( topSizer );
 
@@ -471,10 +471,10 @@ MyDialog::MyDialog(const wxString& title)
     wxButton *okButton = new wxButton( panel, wxID_OK, "OK", wxPoint(20,200) );
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( button1, 0, wxALL, 5 );
-    topSizer->Add( button2, 0, wxALL, 5 );
+    topSizer->Add( button1, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    topSizer->Add( button2, wxSizerFlags().Border(wxALL, FromDIP(5)));
     topSizer->AddSpacer(40);
-    topSizer->Add( okButton, 0, wxALL, 5 );
+    topSizer->Add( okButton, wxSizerFlags().Border(wxALL, FromDIP(5)));
 
     panel->SetSizerAndFit( topSizer );
 }

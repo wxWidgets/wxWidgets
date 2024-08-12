@@ -171,21 +171,21 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
         m_sizes->Append( wxString::Format("%d x %d", *p, *p ) );
     }
     m_sizes->SetSelection(0);
-    subsub->Add(m_sizes, 0, wxALL, 4);
+    subsub->Add(m_sizes, 0, wxALL, FromDIP(4));
 
     m_text = new wxStaticText(this, wxID_ANY, "Size: 333x333");
-    subsub->Add(m_text, 0, wxALL, 4);
+    subsub->Add(m_text, 0, wxALL, FromDIP(4));
 
     m_canvas = new wxStaticBitmap(this, wxID_ANY, wxBitmap(null_xpm));
     subsub->Add(m_canvas);
     subsub->Add(256, 256);
-    subsizer->Add(subsub, 1, wxLEFT, 4 );
+    subsizer->Add(subsub, 1, wxLEFT, FromDIP(4));
 
-    sizer->Add(subsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 10);
+    sizer->Add(subsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, FromDIP(10));
 
     wxButton *ok = new wxButton(this, wxID_OK, "Close");
     ok->SetDefault();
-    sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, 10);
+    sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, FromDIP(10));
 
     SetSizerAndFit(sizer);
 

@@ -299,7 +299,7 @@ void ToggleWidgetsPage::CreateContent()
     sizerLeft->AddSpacer(5);
 
     wxButton *btn = new wxButton(sizerLeftBox, TogglePage_Reset, "&Reset");
-    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, 15));
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, FromDIP(15)));
 
     // middle pane
     wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Operations");
@@ -319,11 +319,11 @@ void ToggleWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft,
-                  wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), 10));
+                  wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), FromDIP(10)));
     sizerTop->Add(sizerMiddle,
-                  wxSizerFlags(1).Expand().Border(wxALL, 10));
+                  wxSizerFlags(1).Expand().Border(wxALL, FromDIP(10)));
     sizerTop->Add(m_sizerToggle,
-                  wxSizerFlags(1).Expand().Border((wxALL & ~wxRIGHT), 10));
+                  wxSizerFlags(1).Expand().Border((wxALL & ~wxRIGHT), FromDIP(10)));
 
     // do create the main control
     Reset();

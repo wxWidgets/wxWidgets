@@ -186,15 +186,15 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     item1->Add( item2, 1, wxALIGN_CENTER|wxALL, 5 );
 
-    item0->Add( item1, wxSizerFlags().Expand().Border(wxALL, 5) );
+    item0->Add( item1, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)) );
 
     wxStaticBox *item14 = new wxStaticBox( this, -1, "Client log" );
     wxStaticBoxSizer *item13 = new wxStaticBoxSizer( item14, wxVERTICAL );
 
-    wxTextCtrl *item15 = new wxTextCtrl( this, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
-    item13->Add( item15, wxSizerFlags(1).Expand().Border(wxALL, 5) );
+    wxTextCtrl *item15 = new wxTextCtrl( this, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500, 140), wxTE_MULTILINE );
+    item13->Add( item15, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)) );
 
-    item0->Add( item13, wxSizerFlags(0).Expand().Border(wxALL, 5) );
+    item0->Add( item13, wxSizerFlags(0).Expand().Border(wxALL, FromDIP(5)) );
 
     this->SetSizer( item0 );
     item0->SetSizeHints( this );

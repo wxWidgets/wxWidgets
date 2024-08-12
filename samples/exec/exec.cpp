@@ -1460,13 +1460,13 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
 
     wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
     sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_Send, "&Send"), 0, wxALL, 5);
+        Add(new wxButton(panel, Exec_Btn_Send, "&Send"), wxSizerFlags().Border(wxALL, FromDIP(5)));
     sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_SendFile, "&File..."), 0, wxALL, 5);
+        Add(new wxButton(panel, Exec_Btn_SendFile, "&File..."), wxSizerFlags().Border(wxALL, FromDIP(5)));
     sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_Get, "&Get"), 0, wxALL, 5);
+        Add(new wxButton(panel, Exec_Btn_Get, "&Get"), wxSizerFlags().Border(wxALL, FromDIP(5)));
     sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_Close, "&Close"), 0, wxALL, 5);
+        Add(new wxButton(panel, Exec_Btn_Close, "&Close"), wxSizerFlags().Border(wxALL, FromDIP(5)));
 
     sizerTop->Add(sizerBtns, 0, wxCENTRE | wxALL, 5);
     sizerTop->Add(m_textIn, 1, wxGROW | wxALL, 5);

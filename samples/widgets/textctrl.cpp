@@ -545,7 +545,7 @@ void TextWidgetsPage::CreateContent()
                     m_textRowCur, "", nullptr, sizerMiddleDownBox
                   ),
                   0, wxLEFT, 5);
-    sizerMiddleDown->Add(sizerRow, 0, wxALL, 5);
+    sizerMiddleDown->Add(sizerRow, wxSizerFlags().Border(wxALL, FromDIP(5)));
 
     m_textLineLast = CreateInfoText(sizerMiddleDownBox);
     m_textPosLast = CreateInfoText(sizerMiddleDownBox);
@@ -559,7 +559,7 @@ void TextWidgetsPage::CreateContent()
                           m_textPosLast,
                           sizerMiddleDownBox
                         ),
-                        0, wxALL, 5
+                        wxSizerFlags().Border(wxALL, FromDIP(5))
                      );
 
     m_textSelFrom = CreateInfoText(sizerMiddleDownBox);
@@ -574,7 +574,7 @@ void TextWidgetsPage::CreateContent()
                           m_textSelTo,
                           sizerMiddleDownBox
                         ),
-                        0, wxALL, 5
+                        wxSizerFlags().Border(wxALL, FromDIP(5))
                      );
 
     m_textRange = new wxTextCtrl(sizerMiddleDownBox, wxID_ANY, wxEmptyString,
@@ -588,7 +588,7 @@ void TextWidgetsPage::CreateContent()
                           m_textRange,
                           "", nullptr, sizerMiddleDownBox
                         ),
-                        0, wxALL, 5
+                        wxSizerFlags().Border(wxALL, FromDIP(5))
                      );
 
     sizerMiddleDown->Add

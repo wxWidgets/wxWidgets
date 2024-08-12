@@ -1774,10 +1774,10 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
     dialog.SetSizer(boxSizer);
 
     wxHtmlWindow* win = new wxHtmlWindow(& dialog, wxID_ANY, wxDefaultPosition, wxSize(500, 400), wxSUNKEN_BORDER);
-    boxSizer->Add(win, 1, wxALL, 5);
+    boxSizer->Add(win, 1, wxALL, FromDIP(5));
 
     wxButton* cancelButton = new wxButton(& dialog, wxID_CANCEL, "&Close");
-    boxSizer->Add(cancelButton, 0, wxALL|wxCENTRE, 5);
+    boxSizer->Add(cancelButton, 0, wxALL|wxCENTRE, FromDIP(5));
 
     wxString text;
     wxStringOutputStream strStream(& text);
