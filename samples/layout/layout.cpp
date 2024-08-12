@@ -158,7 +158,7 @@ MyFrame::MyFrame()
                 wxSizerFlags().Align(wxGROW | wxALIGN_CENTER_VERTICAL));
     topsizer->Add(
         gridsizer,
-        wxSizerFlags().Proportion(1).Expand().Border(wxALL, 10));
+        wxSizerFlags(1).Expand().Border(wxALL, 10));
 
 
 #if wxUSE_STATLINE
@@ -385,8 +385,8 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
 
     // add both columns to grid sizer
     wxGridSizer *sizerTop = new wxGridSizer(2, 0, 20);
-    sizerTop->Add(sizerCol1, 1, wxEXPAND);
-    sizerTop->Add(sizerCol2, 1, wxEXPAND);
+    sizerTop->Add(sizerCol1, wxSizerFlags(1).Expand());
+    sizerTop->Add(sizerCol2, wxSizerFlags(1).Expand());
 
     p->SetSizer(sizerTop);
     sizerTop->SetSizeHints(this);
@@ -711,10 +711,10 @@ MyWrapSizerFrame::MyWrapSizerFrame(wxFrame* parent)
     wxSizer *horzBoxSizer = new wxBoxSizer(wxHORIZONTAL);
     bottomSizer->Add( horzBoxSizer, 100, wxEXPAND );
     horzBoxSizer->Add( new wxListBox(this,wxID_ANY,wxPoint(0,0),wxSize(70,70)), 0, wxEXPAND|wxSHAPED );
-    horzBoxSizer->Add( 10,10 );
+    horzBoxSizer->Add( 10, 10 );
     horzBoxSizer->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
 
-    root->Add( bottomSizer, 1, wxEXPAND | wxALL, 5 );
+    root->Add( bottomSizer, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
     // Set sizer for window
     SetSizerAndFit( root );

@@ -3715,8 +3715,8 @@ MyModelessDialog::MyModelessDialog(wxWindow *parent)
     wxCheckBox *check = new wxCheckBox(this, wxID_ANY, "Should be disabled");
     check->Disable();
 
-    sizerTop->Add(btn, 1, wxEXPAND | wxALL, 5);
-    sizerTop->Add(check, 1, wxEXPAND | wxALL, 5);
+    sizerTop->Add(btn, wxSizerFlags(1).Expand().Border(wxALL, 5));
+    sizerTop->Add(check, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
     SetSizerAndFit(sizerTop);
 }

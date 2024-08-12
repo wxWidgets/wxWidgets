@@ -1026,23 +1026,23 @@ DnDFrame::DnDFrame()
 #endif // wxUSE_DRAG_AND_DROP
 
     wxBoxSizer *sizer_top = new wxBoxSizer( wxHORIZONTAL );
-    sizer_top->Add(m_ctrlFile, 1, wxEXPAND );
-    sizer_top->Add(m_ctrlText, 1, wxEXPAND );
+    sizer_top->Add(m_ctrlFile, wxSizerFlags(1).Expand());
+    sizer_top->Add(m_ctrlText, wxSizerFlags(1).Expand());
 
     wxBoxSizer *sizerDirCtrl = new wxBoxSizer(wxVERTICAL);
     sizerDirCtrl->Add(new wxStaticText(this, wxID_ANY, "Drag files from here"),
                       wxSizerFlags().Centre().Border());
     sizerDirCtrl->Add(m_ctrlDir, wxSizerFlags(1).Expand());
-    sizer_top->Add(sizerDirCtrl, 1, wxEXPAND );
+    sizer_top->Add(sizerDirCtrl, wxSizerFlags(1).Expand());
 
     // make all columns of reasonable minimal size
     for ( unsigned n = 0; n < sizer_top->GetChildren().size(); n++ )
         sizer_top->SetItemMinSize(n, 200, 300);
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
-    sizer->Add(sizer_top, 1, wxEXPAND );
+    sizer->Add(sizer_top, wxSizerFlags(1).Expand());
 #if wxUSE_LOG
-    sizer->Add(m_ctrlLog, 1, wxEXPAND);
+    sizer->Add(m_ctrlLog, wxSizerFlags(1).Expand());
     sizer->SetItemMinSize(m_ctrlLog, 450, 200);
 #endif // wxUSE_LOG
     sizer->AddSpacer(50);

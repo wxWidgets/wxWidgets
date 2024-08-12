@@ -290,118 +290,118 @@ public:
     {
         //wxBoxSizer* vert = new wxBoxSizer(wxVERTICAL);
 
-        //vert->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        //vert->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
 
         wxBoxSizer* s1 = new wxBoxSizer(wxHORIZONTAL);
         m_border_size = new wxSpinCtrl(this, ID_PaneBorderSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
-        s1->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s1->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s1->Add(new wxStaticText(this, wxID_ANY, "Pane Border Size:"));
         s1->Add(m_border_size);
-        s1->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s1->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s1->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
         //vert->Add(s1, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
         wxBoxSizer* s2 = new wxBoxSizer(wxHORIZONTAL);
         m_sash_size = new wxSpinCtrl(this, ID_SashSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
-        s2->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s2->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s2->Add(new wxStaticText(this, wxID_ANY, "Sash Size:"));
         s2->Add(m_sash_size);
-        s2->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s2->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s2->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
         //vert->Add(s2, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
         wxBoxSizer* s3 = new wxBoxSizer(wxHORIZONTAL);
         m_caption_size = new wxSpinCtrl(this, ID_CaptionSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
-        s3->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s3->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s3->Add(new wxStaticText(this, wxID_ANY, "Caption Size:"));
         s3->Add(m_caption_size);
-        s3->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s3->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s3->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
         //vert->Add(s3, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
-        //vert->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        //vert->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
 
 
         wxBitmap b = CreateColorBitmap(*wxBLACK);
 
         wxBoxSizer* s4 = new wxBoxSizer(wxHORIZONTAL);
         m_background_color = new wxBitmapButton(this, ID_BackgroundColor, b, wxDefaultPosition, FromDIP(wxSize(50,25)));
-        s4->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s4->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s4->Add(new wxStaticText(this, wxID_ANY, "Background Color:"));
         s4->Add(m_background_color);
-        s4->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s4->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s4->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s5 = new wxBoxSizer(wxHORIZONTAL);
         m_sash_color = new wxBitmapButton(this, ID_SashColor, b, wxDefaultPosition, wxSize(50,25));
-        s5->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s5->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s5->Add(new wxStaticText(this, wxID_ANY, "Sash Color:"));
         s5->Add(m_sash_color);
-        s5->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s5->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s5->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s6 = new wxBoxSizer(wxHORIZONTAL);
         m_inactive_caption_color = new wxBitmapButton(this, ID_InactiveCaptionColor, b, wxDefaultPosition, wxSize(50,25));
-        s6->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s6->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s6->Add(new wxStaticText(this, wxID_ANY, "Normal Caption:"));
         s6->Add(m_inactive_caption_color);
-        s6->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s6->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s6->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s7 = new wxBoxSizer(wxHORIZONTAL);
         m_inactive_caption_gradient_color = new wxBitmapButton(this, ID_InactiveCaptionGradientColor, b, wxDefaultPosition, wxSize(50,25));
-        s7->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s7->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s7->Add(new wxStaticText(this, wxID_ANY, "Normal Caption Gradient:"));
         s7->Add(m_inactive_caption_gradient_color);
-        s7->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s7->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s7->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s8 = new wxBoxSizer(wxHORIZONTAL);
         m_inactive_caption_text_color = new wxBitmapButton(this, ID_InactiveCaptionTextColor, b, wxDefaultPosition, wxSize(50,25));
-        s8->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s8->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s8->Add(new wxStaticText(this, wxID_ANY, "Normal Caption Text:"));
         s8->Add(m_inactive_caption_text_color);
-        s8->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s8->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s8->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s9 = new wxBoxSizer(wxHORIZONTAL);
         m_active_caption_color = new wxBitmapButton(this, ID_ActiveCaptionColor, b, wxDefaultPosition, wxSize(50,25));
-        s9->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s9->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s9->Add(new wxStaticText(this, wxID_ANY, "Active Caption:"));
         s9->Add(m_active_caption_color);
-        s9->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s9->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s9->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s10 = new wxBoxSizer(wxHORIZONTAL);
         m_active_caption_gradient_color = new wxBitmapButton(this, ID_ActiveCaptionGradientColor, b, wxDefaultPosition, wxSize(50,25));
-        s10->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s10->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s10->Add(new wxStaticText(this, wxID_ANY, "Active Caption Gradient:"));
         s10->Add(m_active_caption_gradient_color);
-        s10->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s10->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s10->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s11 = new wxBoxSizer(wxHORIZONTAL);
         m_active_caption_text_color = new wxBitmapButton(this, ID_ActiveCaptionTextColor, b, wxDefaultPosition, wxSize(50,25));
-        s11->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s11->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s11->Add(new wxStaticText(this, wxID_ANY, "Active Caption Text:"));
         s11->Add(m_active_caption_text_color);
-        s11->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s11->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s11->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s12 = new wxBoxSizer(wxHORIZONTAL);
         m_border_color = new wxBitmapButton(this, ID_BorderColor, b, wxDefaultPosition, wxSize(50,25));
-        s12->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s12->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s12->Add(new wxStaticText(this, wxID_ANY, "Border Color:"));
         s12->Add(m_border_color);
-        s12->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s12->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s12->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s13 = new wxBoxSizer(wxHORIZONTAL);
         m_gripper_color = new wxBitmapButton(this, ID_GripperColor, b, wxDefaultPosition, wxSize(50,25));
-        s13->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s13->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s13->Add(new wxStaticText(this, wxID_ANY, "Gripper Color:"));
         s13->Add(m_gripper_color);
-        s13->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s13->Add(FromDIP(1), FromDIP(1), wxSizerFlags(1).Expand());
         s13->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxGridSizer* grid_sizer = new wxGridSizer(2);
@@ -415,7 +415,7 @@ public:
         grid_sizer->Add(s8);  grid_sizer->Add(s11);
 
         wxBoxSizer* cont_sizer = new wxBoxSizer(wxVERTICAL);
-        cont_sizer->Add(grid_sizer, 1, wxEXPAND | wxALL, FromDIP(5));
+        cont_sizer->Add(grid_sizer, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
         SetSizer(cont_sizer);
         GetSizer()->SetSizeHints(this);
 

@@ -654,7 +654,7 @@ MyFrame::MyFrame(const wxString& title)
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
                    "OwnerDrawnComboBox with owner-drawn items:"), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -674,7 +674,7 @@ MyFrame::MyFrame(const wxString& title)
 
     rowSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
     rowSizer->AddStretchSpacer(1);
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
 
 
@@ -685,7 +685,7 @@ MyFrame::MyFrame(const wxString& title)
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,
                    "OwnerDrawnComboBox with owner-drawn items and button on the left:"), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -713,7 +713,7 @@ MyFrame::MyFrame(const wxString& title)
 
     rowSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
     rowSizer->AddStretchSpacer(1);
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
 
     //
@@ -727,7 +727,7 @@ MyFrame::MyFrame(const wxString& title)
                    1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,"Tree Ctrl wxComboCtrl:"), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     cc = new wxComboCtrlWithCustomPopupAnim();
@@ -796,7 +796,7 @@ MyFrame::MyFrame(const wxString& title)
 
     rowSizer->Add( gcc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
 #if wxUSE_IMAGE
     wxInitAllImageHandlers();
@@ -810,7 +810,7 @@ MyFrame::MyFrame(const wxString& title)
                    "OwnerDrawnComboBox with simple dropbutton graphics:"), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
 
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -850,7 +850,7 @@ MyFrame::MyFrame(const wxString& title)
 
     rowSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
     rowSizer->Add( odc2, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 #endif
 
 
@@ -863,7 +863,7 @@ MyFrame::MyFrame(const wxString& title)
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
 
 
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     wxFileSelectorCombo* fsc;
@@ -898,7 +898,7 @@ MyFrame::MyFrame(const wxString& title)
 
     rowSizer->Add( fsc, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
     rowSizer->Add( comboCustom, 1, wxALIGN_CENTER_VERTICAL|wxALL, 4 );
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
+    colSizer->Add( rowSizer, wxSizerFlags().Expand().Border(wxALL, 5));
 
 
     // Make sure GetFeatures is implemented
@@ -911,10 +911,10 @@ MyFrame::MyFrame(const wxString& title)
 
     colSizer->AddSpacer(8);
     colSizer->Add( new wxStaticText(panel, wxID_ANY, "Log Messages:"), 0, wxTOP|wxLEFT, 3 );
-    colSizer->Add( m_logWin, 1, wxEXPAND|wxALL, 3 );
+    colSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border(wxALL, 3));
 
-    topRowSizer->Add( colSizer, 1, wxEXPAND|wxALL, 2 );
-    topSizer->Add( topRowSizer, 1, wxEXPAND );
+    topRowSizer->Add( colSizer, wxSizerFlags(1).Expand().Border(wxALL, 2));
+    topSizer->Add( topRowSizer, wxSizerFlags(1).Expand());
 
     panel->SetSizer( topSizer );
     topSizer->SetSizeHints( panel );

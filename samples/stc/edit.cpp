@@ -866,7 +866,7 @@ EditProperties::EditProperties (Edit *edit,
     wxStaticBoxSizer *textinfos = new wxStaticBoxSizer (
                      new wxStaticBox (this, wxID_ANY, _("Information")),
                      wxVERTICAL);
-    textinfos->Add (textinfo, 0, wxEXPAND);
+    textinfos->Add (textinfo, wxSizerFlags().Expand());
     textinfos->Add (0, 6);
 
     // statistic
@@ -900,7 +900,7 @@ EditProperties::EditProperties (Edit *edit,
     wxStaticBoxSizer *statistics = new wxStaticBoxSizer (
                      new wxStaticBox (this, wxID_ANY, _("Statistics")),
                      wxVERTICAL);
-    statistics->Add (statistic, 0, wxEXPAND);
+    statistics->Add (statistic, wxSizerFlags().Expand());
     statistics->Add (0, 6);
 
     // total pane

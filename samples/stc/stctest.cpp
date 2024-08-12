@@ -704,7 +704,7 @@ AppAbout::AppAbout (wxWindow *parent,
     wxBitmap bitmap = wxBitmap(wxICON (sample));
     aboutpane->Add (new wxStaticBitmap (this, wxID_ANY, bitmap),
                     0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 20);
-    aboutpane->Add (aboutinfo, 1, wxEXPAND);
+    aboutpane->Add (aboutinfo, wxSizerFlags(1).Expand());
     aboutpane->Add (60, 0);
 
     // about complete
@@ -714,7 +714,7 @@ AppAbout::AppAbout (wxWindow *parent,
     appname->SetFont (wxFontInfo(24).Bold());
     totalpane->Add (appname, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT, 40);
     totalpane->Add (0, 10);
-    totalpane->Add (aboutpane, 0, wxEXPAND | wxALL, 4);
+    totalpane->Add (aboutpane, wxSizerFlags().Expand().Border(wxALL, FromDIP(4)));
     totalpane->Add (new wxStaticText(this, wxID_ANY, APP_DESCR),
                     0, wxALIGN_CENTER | wxALL, 10);
     wxButton *okButton = new wxButton (this, wxID_OK, _("OK"));
@@ -854,7 +854,7 @@ public:
         MinimalEditor* editor = new MinimalEditor(this);
         editor->SetFont(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
         wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-        sizer->Add(editor, 1, wxEXPAND);
+        sizer->Add(editor, wxSizerFlags(1).Expand());
         SetSizer(sizer);
         editor->SetText(
            "<xml>\n"

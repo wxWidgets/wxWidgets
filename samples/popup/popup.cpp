@@ -132,11 +132,11 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
                                    "<- Test Mouse ->");
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( text, 0, wxALL, 5 );
-    topSizer->Add( m_button, 0, wxALL, 5 );
-    topSizer->Add( m_spinCtrl, 0, wxALL, 5 );
+    topSizer->Add( text, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    topSizer->Add( m_button, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    topSizer->Add( m_spinCtrl, wxSizerFlags().Border(wxALL, FromDIP(5)));
     topSizer->Add( new wxTextCtrl(m_panel, wxID_ANY, "Try to type here"),
-                   0, wxEXPAND|wxALL, 5 );
+                   wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
     topSizer->Add( m_mouseText, 0, wxCENTRE|wxALL, 5 );
 
     if ( scrolled )
@@ -382,9 +382,9 @@ MyFrame::MyFrame(const wxString& title)
     logger->DisableTimestamp();
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( button1, 0, wxALL, 5 );
-    topSizer->Add( button2, 0, wxALL, 5 );
-    topSizer->Add( m_logWin, 1, wxEXPAND|wxALL, 5 );
+    topSizer->Add( button1, wxSizerFlags().Expand().Border(wxALL, 5));
+    topSizer->Add( button2, wxSizerFlags().Expand().Border(wxALL, 5));
+    topSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
     panel->SetSizer( topSizer );
 

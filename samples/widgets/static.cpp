@@ -305,7 +305,7 @@ void StaticWidgetsPage::CreateContent()
     m_textBox = new wxTextCtrl(sizerMiddleBox, wxID_ANY, wxEmptyString);
     wxButton *b1 = new wxButton(sizerMiddleBox, wxID_ANY, "Change &box label");
     b1->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonBoxText, this);
-    sizerMiddle->Add(m_textBox, 0, wxEXPAND|wxALL, 5);
+    sizerMiddle->Add(m_textBox, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
     sizerMiddle->Add(b1, 0, wxLEFT|wxBOTTOM, 5);
 
     m_textLabel = new wxTextCtrl(sizerMiddleBox, wxID_ANY, wxEmptyString,
@@ -313,7 +313,7 @@ void StaticWidgetsPage::CreateContent()
                                  wxTE_MULTILINE|wxHSCROLL);
     wxButton *b2 = new wxButton(sizerMiddleBox, wxID_ANY, "Change &text label");
     b2->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonLabelText, this);
-    sizerMiddle->Add(m_textLabel, 0, wxEXPAND|wxALL, 5);
+    sizerMiddle->Add(m_textLabel, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
     sizerMiddle->Add(b2, 0, wxLEFT|wxBOTTOM, 5);
 
 #if wxUSE_MARKUP
@@ -323,7 +323,7 @@ void StaticWidgetsPage::CreateContent()
 
     wxButton *b3 = new wxButton(sizerMiddleBox, wxID_ANY, "Change decorated text label");
     b3->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonLabelWithMarkupText, this);
-    sizerMiddle->Add(m_textLabelWithMarkup, 0, wxEXPAND|wxALL, 5);
+    sizerMiddle->Add(m_textLabelWithMarkup, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
     sizerMiddle->Add(b3, 0, wxLEFT|wxBOTTOM, 5);
 
     m_chkGreen = CreateCheckBoxAndAddToSizer(sizerMiddle,

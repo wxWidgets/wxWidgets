@@ -420,9 +420,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_btnDynamic = new wxButton(panel, Event_Dynamic, "&Dynamic button");
     sizer->Add(m_btnDynamic, centreY);
 
-    mainSizer->Add(sizer, 1, wxEXPAND);
-    mainSizer->Add(new wxStaticLine(panel), 0, wxEXPAND);
-    mainSizer->Add(new wxStaticLine(panel), 0, wxEXPAND);
+    mainSizer->Add(sizer, wxSizerFlags(1).Expand());
+    mainSizer->Add(new wxStaticLine(panel), wxSizerFlags().Expand());
+    mainSizer->Add(new wxStaticLine(panel), wxSizerFlags().Expand());
 
     m_testBtn = new MyEvtTestButton(panel, "Test Event Handlers Execution Order");
 

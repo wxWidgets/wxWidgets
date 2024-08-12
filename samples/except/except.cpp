@@ -618,15 +618,15 @@ MyDialog::MyDialog(wxFrame *parent)
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 
     sizerTop->Add(new wxButton(this, Except_ThrowInt, "Throw &int"),
-                  0, wxEXPAND | wxALL, 5);
+                  wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
     sizerTop->Add(new wxButton(this, Except_ThrowObject, "Throw &object"),
-                  0, wxEXPAND | wxALL, 5);
+                  wxSizerFlags().Expand().Border(wxALL, FromDIP(5));
     sizerTop->Add(new wxButton(this, Except_ThrowUnhandled, "Throw &unhandled"),
-                  0, wxEXPAND | wxALL, 5);
+                  wxSizerFlags().Expand().Border(wxALL, FromDIP(5));
     sizerTop->Add(new wxButton(this, Except_Crash, "&Crash"),
-                  0, wxEXPAND | wxALL, 5);
+                  wxSizerFlags().Expand().Border(wxALL, FromDIP(5));
     sizerTop->Add(new wxButton(this, wxID_CANCEL, "&Cancel"),
-                  0, wxEXPAND | wxALL, 5);
+                  wxSizerFlags().Expand().Border(wxALL, FromDIP(5));
 
     SetSizerAndFit(sizerTop);
 }

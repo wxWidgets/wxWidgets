@@ -234,8 +234,8 @@ MyFrame::MyFrame(const wxString& title)
         new wxStaticBoxSizer(wxVERTICAL, panel, "SetThumbnailTooltip");
     m_textCtrl = new wxTextCtrl(panel, wxID_ANY);
     wxButton *btn = new wxButton(panel, ThumbnailTooltipSetBtn, "Set");
-    sttSizer->Add(m_textCtrl, 1, wxEXPAND | wxALL, 2);
-    sttSizer->Add(btn, 1, wxEXPAND | wxALL, 2);
+    sttSizer->Add(m_textCtrl, wxSizerFlags(1).Expand().Border(wxALL, 2));
+    sttSizer->Add(btn, wxSizerFlags(1).Expand().Border(wxALL, 2));
 
     // SetProgressState section.
     wxStaticBoxSizer *spsSizer =
@@ -251,7 +251,7 @@ MyFrame::MyFrame(const wxString& title)
     m_stateChoice = new wxChoice(panel, ProgressStateChoice,
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(choices), choices);
-    spsSizer->Add(m_stateChoice, 0, wxALL | wxGROW, 5);
+    spsSizer->Add(m_stateChoice, wxSizerFlags().Expand().Border(wxALL, 5));
 
     // SetOverlayIcon section.
     wxStaticBoxSizer *soiSizer =
@@ -260,8 +260,8 @@ MyFrame::MyFrame(const wxString& title)
         new wxButton(panel, SetOverlayIconBtn, "Set Overlay Icon");
     wxButton *clearOverlayIconBtn =
         new wxButton(panel, ClearOverlayIconBtn, "Clear Overlay Icon");
-    soiSizer->Add(setOverlayIconBtn, 1, wxEXPAND | wxALL, 2);
-    soiSizer->Add(clearOverlayIconBtn, 1, wxEXPAND | wxALL, 2);
+    soiSizer->Add(setOverlayIconBtn, wxSizerFlags(1).Expand().Border(wxALL, 2));
+    soiSizer->Add(clearOverlayIconBtn, wxSizerFlags(1).Expand().Border(wxALL, 2));
 
     // SetThumbnailClip section.
     wxStaticBoxSizer *stcSizer =
@@ -271,8 +271,8 @@ MyFrame::MyFrame(const wxString& title)
     wxButton *restoreThumbnailClipBtn =
         new wxButton(panel, RestoreThumbnailClipBtn,
                      "Restore Thumbnail Clip");
-    stcSizer->Add(setThumbnailClipBtn, 1, wxEXPAND | wxALL, 2);
-    stcSizer->Add(restoreThumbnailClipBtn, 1, wxEXPAND | wxALL, 2);
+    stcSizer->Add(setThumbnailClipBtn, wxSizerFlags(1).Expand().Border(wxALL, 2));
+    stcSizer->Add(restoreThumbnailClipBtn, wxSizerFlags(1).Expand().Border(wxALL, 2));
 
     // Thumbnail Toolbar Buttons section.
     wxStaticBoxSizer *ttbSizer =
@@ -282,16 +282,16 @@ MyFrame::MyFrame(const wxString& title)
     wxButton *showThumbnailToolbarBtn =
         new wxButton(panel, RemoveThumbBarButtonBtn,
                      "Remove Last ThumbBar Button");
-    ttbSizer->Add(addThumbBarButtonBtn, 1, wxEXPAND | wxALL, 2);
-    ttbSizer->Add(showThumbnailToolbarBtn, 1, wxEXPAND | wxALL, 2);
+    ttbSizer->Add(addThumbBarButtonBtn, wxSizerFlags(1).Expand().Border(wxALL, 2));
+    ttbSizer->Add(showThumbnailToolbarBtn, wxSizerFlags(1).Expand().Border(wxALL, 2));
 
-    gs->Add(spvSizer, 0, wxEXPAND);
-    gs->Add(m_visibilityRadioBox, 0, wxEXPAND);
-    gs->Add(sttSizer, 0, wxEXPAND);
-    gs->Add(spsSizer, 0, wxEXPAND);
-    gs->Add(soiSizer, 0, wxEXPAND);
-    gs->Add(stcSizer, 0, wxEXPAND);
-    gs->Add(ttbSizer, 0, wxEXPAND);
+    gs->Add(spvSizer, wxSizerFlags().Expand());
+    gs->Add(m_visibilityRadioBox, wxSizerFlags().Expand());
+    gs->Add(sttSizer, wxSizerFlags().Expand());
+    gs->Add(spsSizer, wxSizerFlags().Expand());
+    gs->Add(soiSizer, wxSizerFlags().Expand());
+    gs->Add(stcSizer, wxSizerFlags().Expand());
+    gs->Add(ttbSizer, wxSizerFlags().Expand());
 
     wxStaticText *text = new wxStaticText(
         panel, wxID_ANY, "Welcome to wxTaskBarButton sample");
