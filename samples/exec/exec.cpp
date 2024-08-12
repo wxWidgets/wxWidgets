@@ -1456,17 +1456,17 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
     m_textErr->SetEditable(false);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-    sizerTop->Add(m_textOut, 0, wxGROW | wxALL, 5);
+    sizerTop->Add(m_textOut, wxSizerFlags().Expand().Border(wxALL));
 
     wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
     sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_Send, "&Send"), wxSizerFlags().Border(wxALL, FromDIP(5)));
+        Add(new wxButton(panel, Exec_Btn_Send, "&Send"), wxSizerFlags().Border(wxALL));
     sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_SendFile, "&File..."), wxSizerFlags().Border(wxALL, FromDIP(5)));
+        Add(new wxButton(panel, Exec_Btn_SendFile, "&File..."), wxSizerFlags().Border(wxALL));
     sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_Get, "&Get"), wxSizerFlags().Border(wxALL, FromDIP(5)));
+        Add(new wxButton(panel, Exec_Btn_Get, "&Get"), wxSizerFlags().Border(wxALL));
     sizerBtns->
-        Add(new wxButton(panel, Exec_Btn_Close, "&Close"), wxSizerFlags().Border(wxALL, FromDIP(5)));
+        Add(new wxButton(panel, Exec_Btn_Close, "&Close"), wxSizerFlags().Border(wxALL));
 
     sizerTop->Add(sizerBtns, 0, wxCENTRE | wxALL, 5);
     sizerTop->Add(m_textIn, 1, wxGROW | wxALL, 5);

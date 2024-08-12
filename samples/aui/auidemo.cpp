@@ -415,7 +415,7 @@ public:
         grid_sizer->Add(s8);  grid_sizer->Add(s11);
 
         wxBoxSizer* cont_sizer = new wxBoxSizer(wxVERTICAL);
-        cont_sizer->Add(grid_sizer, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
+        cont_sizer->Add(grid_sizer, wxSizerFlags(1).Expand().Border(wxALL));
         SetSizer(cont_sizer);
         GetSizer()->SetSizeHints(this);
 

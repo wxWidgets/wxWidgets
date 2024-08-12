@@ -319,11 +319,11 @@ void ToggleWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft,
-                  wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), FromDIP(10)));
+                  wxSizerFlags(0).Expand().DoubleBorder((wxALL & ~wxLEFT)));
     sizerTop->Add(sizerMiddle,
-                  wxSizerFlags(1).Expand().Border(wxALL, FromDIP(10)));
+                  wxSizerFlags(1).Expand().DoubleBorder(wxALL));
     sizerTop->Add(m_sizerToggle,
-                  wxSizerFlags(1).Expand().Border((wxALL & ~wxRIGHT), FromDIP(10)));
+                  wxSizerFlags(1).Expand().DoubleBorder((wxALL & ~wxRIGHT)));
 
     // do create the main control
     Reset();

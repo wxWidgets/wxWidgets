@@ -425,7 +425,7 @@ void TextWidgetsPage::CreateContent()
                                       WXSIZEOF(modes), modes,
                                       1, wxRA_SPECIFY_COLS);
 
-    sizerLeft->Add(m_radioTextLines, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioTextLines, wxSizerFlags().Expand().Border(wxALL));
     sizerLeft->AddSpacer(5);
 
     m_chkPassword = CreateCheckBoxAndAddToSizer(
@@ -462,7 +462,7 @@ void TextWidgetsPage::CreateContent()
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(wrap), wrap,
                                  1, wxRA_SPECIFY_COLS);
-    sizerLeft->Add(m_radioWrap, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioWrap, wxSizerFlags().Expand().Border(wxALL));
 
     static const wxString halign[] =
     {
@@ -474,7 +474,7 @@ void TextWidgetsPage::CreateContent()
     m_radioAlign = new wxRadioBox(sizerLeftBox, wxID_ANY, "&Text alignment",
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(halign), halign, 1);
-    sizerLeft->Add(m_radioAlign, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioAlign, wxSizerFlags().Expand().Border(wxALL));
 
 #ifdef __WXMSW__
     static const wxString kinds[] =
@@ -490,7 +490,7 @@ void TextWidgetsPage::CreateContent()
                                  1, wxRA_SPECIFY_COLS);
 
     sizerLeft->AddSpacer(5);
-    sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioKind, wxSizerFlags().Expand().Border(wxALL));
 #endif // __WXMSW__
 
     wxButton *btn = new wxButton(sizerLeftBox, TextPage_Reset, "&Reset");
@@ -532,20 +532,20 @@ void TextWidgetsPage::CreateContent()
                     "Current pos:",
                     m_textPosCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxRIGHT, FromDIP(5));
+                  wxSizerFlags().Border(wxRIGHT));
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     "Col:",
                     m_textColCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxLEFT | wxRIGHT, FromDIP(5));
+                  wxSizerFlags().Border(wxLEFT | wxRIGHT));
     sizerRow->Add(CreateTextWithLabelSizer
                   (
                     "Row:",
                     m_textRowCur, "", nullptr, sizerMiddleDownBox
                   ),
-                  0, wxLEFT, FromDIP(5));
-    sizerMiddleDown->Add(sizerRow, wxSizerFlags().Border(wxALL, FromDIP(5)));
+                  wxSizerFlags().Border(wxLEFT));
+    sizerMiddleDown->Add(sizerRow, wxSizerFlags().Border(wxALL));
 
     m_textLineLast = CreateInfoText(sizerMiddleDownBox);
     m_textPosLast = CreateInfoText(sizerMiddleDownBox);
@@ -559,7 +559,7 @@ void TextWidgetsPage::CreateContent()
                           m_textPosLast,
                           sizerMiddleDownBox
                         ),
-                        wxSizerFlags().Border(wxALL, FromDIP(5))
+                        wxSizerFlags().Border(wxALL)
                      );
 
     m_textSelFrom = CreateInfoText(sizerMiddleDownBox);
@@ -574,7 +574,7 @@ void TextWidgetsPage::CreateContent()
                           m_textSelTo,
                           sizerMiddleDownBox
                         ),
-                        wxSizerFlags().Border(wxALL, FromDIP(5))
+                        wxSizerFlags().Border(wxALL)
                      );
 
     m_textRange = new wxTextCtrl(sizerMiddleDownBox, wxID_ANY, wxEmptyString,
@@ -588,7 +588,7 @@ void TextWidgetsPage::CreateContent()
                           m_textRange,
                           "", nullptr, sizerMiddleDownBox
                         ),
-                        wxSizerFlags().Border(wxALL, FromDIP(5))
+                        wxSizerFlags().Border(wxALL)
                      );
 
     sizerMiddleDown->Add

@@ -176,14 +176,14 @@ void DirPickerWidgetsPage::CreateContent()
 
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
-    m_sizer->Add(1, 1, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5))); // spacer
-    m_sizer->Add(m_dirPicker, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
-    m_sizer->Add(1, 1, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5))); // spacer
+    m_sizer->Add(1, 1, wxSizerFlags(1).Expand().Border(wxALL)); // spacer
+    m_sizer->Add(m_dirPicker, wxSizerFlags().Expand().Border(wxALL));
+    m_sizer->Add(1, 1, wxSizerFlags(1).Expand().Border(wxALL)); // spacer
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(sizerLeft, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
-    sz->Add(m_sizer, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
+    sz->Add(sizerLeft, wxSizerFlags().Expand().Border(wxALL));
+    sz->Add(m_sizer, wxSizerFlags(1).Expand().Border(wxALL));
 
     SetSizer(sz);
 }
@@ -218,7 +218,7 @@ void DirPickerWidgetsPage::RecreatePicker()
 {
     m_sizer->Remove(1);
     CreatePicker();
-    m_sizer->Insert(1, m_dirPicker, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
+    m_sizer->Insert(1, m_dirPicker, wxSizerFlags().Expand().Border(wxALL));
 
     m_sizer->Layout();
 }

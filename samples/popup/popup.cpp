@@ -132,11 +132,11 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
                                    "<- Test Mouse ->");
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( text, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    topSizer->Add( m_button, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    topSizer->Add( m_spinCtrl, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    topSizer->Add( text, wxSizerFlags().Border(wxALL));
+    topSizer->Add( m_button, wxSizerFlags().Border(wxALL));
+    topSizer->Add( m_spinCtrl, wxSizerFlags().Border(wxALL));
     topSizer->Add( new wxTextCtrl(m_panel, wxID_ANY, "Try to type here"),
-                   wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
+                   wxSizerFlags().Expand().Border(wxALL));
     topSizer->Add( m_mouseText, 0, wxCENTRE|wxALL, 5 );
 
     if ( scrolled )
@@ -382,9 +382,9 @@ MyFrame::MyFrame(const wxString& title)
     logger->DisableTimestamp();
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( button1, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
-    topSizer->Add( button2, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
-    topSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
+    topSizer->Add( button1, wxSizerFlags().Expand().Border(wxALL));
+    topSizer->Add( button2, wxSizerFlags().Expand().Border(wxALL));
+    topSizer->Add( m_logWin, wxSizerFlags(1).Expand().Border(wxALL));
 
     panel->SetSizer( topSizer );
 
@@ -471,10 +471,10 @@ MyDialog::MyDialog(const wxString& title)
     wxButton *okButton = new wxButton( panel, wxID_OK, "OK", wxPoint(20,200) );
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( button1, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    topSizer->Add( button2, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    topSizer->Add( button1, wxSizerFlags().Border(wxALL));
+    topSizer->Add( button2, wxSizerFlags().Border(wxALL));
     topSizer->AddSpacer(40);
-    topSizer->Add( okButton, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    topSizer->Add( okButton, wxSizerFlags().Border(wxALL));
 
     panel->SetSizerAndFit( topSizer );
 }

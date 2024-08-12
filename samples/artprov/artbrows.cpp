@@ -150,7 +150,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
     subsizer->Add(new wxStaticText(this, wxID_ANY, "Client:"), 0, wxALIGN_CENTER_VERTICAL);
-    subsizer->Add(choice, 1, wxLEFT, FromDIP(5));
+    subsizer->Add(choice, wxSizerFlags(1).Border(wxLEFT));
     sizer->Add(subsizer, 0, wxALL | wxEXPAND, FromDIP(10));
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);

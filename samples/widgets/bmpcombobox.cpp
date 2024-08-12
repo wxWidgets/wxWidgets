@@ -324,7 +324,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     sizerStyle->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 3);
 
     sizerLeft->Add(sizerStyle, wxSizerFlags().Expand());
-    sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioKind, wxSizerFlags().Expand().Border(wxALL));
 
     // left pane - other options
     wxStaticBoxSizer *sizerOptions = new wxStaticBoxSizer(wxVERTICAL, this, "Demo options");
@@ -396,7 +396,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     m_combobox->SetPopupMaxHeight(600);
 #endif
 
-    sizerRight->Add(m_combobox, 0, wxGROW | wxALL, 5);
+    sizerRight->Add(m_combobox, wxSizerFlags().Expand().Border(wxALL));
     sizerRight->SetMinSize(150, 0);
     m_sizerCombo = sizerRight; // save it to modify it later
 
@@ -488,7 +488,7 @@ void BitmapComboBoxWidgetsPage::CreateCombo()
         delete bmp;
     }
 
-    m_sizerCombo->Add(m_combobox, 0, wxGROW | wxALL, 5);
+    m_sizerCombo->Add(m_combobox, wxSizerFlags().Expand().Border(wxALL));
     m_sizerCombo->Layout();
 
     // Allow changing height in order to demonstrate flexible

@@ -251,7 +251,7 @@ MyFrame::MyFrame(const wxString& title)
     m_stateChoice = new wxChoice(panel, ProgressStateChoice,
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(choices), choices);
-    spsSizer->Add(m_stateChoice, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
+    spsSizer->Add(m_stateChoice, wxSizerFlags().Expand().Border(wxALL));
 
     // SetOverlayIcon section.
     wxStaticBoxSizer *soiSizer =

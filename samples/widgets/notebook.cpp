@@ -217,9 +217,9 @@ void BookWidgetsPage::CreateContent()
                                    wxDefaultPosition, wxDefaultSize,
                                    orientations, 1, wxRA_SPECIFY_COLS);
 
-    sizerLeft->Add(m_chkImages, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border(wxALL, FromDIP(5))); // spacer
-    sizerLeft->Add(m_radioOrient, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    sizerLeft->Add(m_chkImages, wxSizerFlags().Border(wxALL));
+    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border(wxALL)); // spacer
+    sizerLeft->Add(m_radioOrient, wxSizerFlags().Border(wxALL));
 
     wxButton *btn = new wxButton(sizerLeftBox, BookPage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);

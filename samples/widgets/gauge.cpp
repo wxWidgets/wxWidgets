@@ -313,7 +313,7 @@ void GaugeWidgetsPage::CreateGauge()
     m_gauge->SetValue(val);
 
     if ( flags & wxGA_VERTICAL )
-        m_sizerGauge->Add(m_gauge, 0, wxGROW | wxALL, 5);
+        m_sizerGauge->Add(m_gauge, wxSizerFlags().Expand().Border(wxALL));
     else
         m_sizerGauge->Add(m_gauge, 1, wxCENTRE | wxALL, 5);
 

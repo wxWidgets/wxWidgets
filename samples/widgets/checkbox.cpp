@@ -189,7 +189,7 @@ void CheckBoxWidgetsPage::CreateContent()
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(kinds), kinds,
                                  1);
-    sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioKind, wxSizerFlags().Expand().Border(wxALL));
     wxButton *btn = new wxButton(sizerLeftBox, CheckboxPage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
@@ -202,14 +202,14 @@ void CheckBoxWidgetsPage::CreateContent()
                                                      wxID_ANY,
                                                      &m_textLabel,
                                                      sizerMiddleBox),
-                     0, wxALL | wxGROW, 5);
+                     wxSizerFlags().Expand().Border(wxALL));
     sizerMiddle->Add(new wxButton(sizerMiddleBox, CheckboxPage_Check, "&Check it"),
-                     0, wxALL | wxGROW, 5);
+                     wxSizerFlags().Expand().Border(wxALL));
     sizerMiddle->Add(new wxButton(sizerMiddleBox, CheckboxPage_Uncheck, "&Uncheck it"),
-                     0, wxALL | wxGROW, 5);
+                     wxSizerFlags().Expand().Border(wxALL));
     sizerMiddle->Add(new wxButton(sizerMiddleBox, CheckboxPage_PartCheck,
                                   "Put in &3rd state"),
-                     0, wxALL | wxGROW, 5);
+                     wxSizerFlags().Expand().Border(wxALL));
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);

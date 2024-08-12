@@ -315,13 +315,13 @@ MyDialog::MyDialog(wxFrame *parent)
     wxSizer *sz = new wxBoxSizer(wxVERTICAL);
     sz->Add(new wxStaticText(this, -1,
         "This dialog allows you to test the wxCollapsiblePane control"),
-        wxSizerFlags().Border(wxALL, FromDIP(5)));
+        wxSizerFlags().Border(wxALL));
     sz->Add(new wxButton(this, PANEDLG_TOGGLESTATUS_BTN, "Change status"),
-        wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
+        wxSizerFlags(1).Expand().Border(wxALL));
 
     m_collPane = new wxCollapsiblePane(this, -1, "Click here for a surprise");
-    sz->Add(m_collPane, wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
-    sz->Add(new wxTextCtrl(this, -1, "just a test"), wxSizerFlags().Expand().Border(wxALL, FromDIP(5)));
+    sz->Add(m_collPane, wxSizerFlags().Expand().Border(wxALL));
+    sz->Add(new wxTextCtrl(this, -1, "just a test"), wxSizerFlags().Expand().Border(wxALL));
     sz->AddSpacer(10);
     sz->Add(new wxButton(this, wxID_OK), 0, wxALIGN_RIGHT|wxALL, FromDIP(5));
 

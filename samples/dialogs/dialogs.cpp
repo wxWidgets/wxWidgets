@@ -3715,8 +3715,8 @@ MyModelessDialog::MyModelessDialog(wxWindow *parent)
     wxCheckBox *check = new wxCheckBox(this, wxID_ANY, "Should be disabled");
     check->Disable();
 
-    sizerTop->Add(btn, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
-    sizerTop->Add(check, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
+    sizerTop->Add(btn, wxSizerFlags(1).Expand().Border(wxALL));
+    sizerTop->Add(check, wxSizerFlags(1).Expand().Border(wxALL));
 
     SetSizerAndFit(sizerTop);
 }
@@ -3834,29 +3834,29 @@ StdButtonSizerDialog::StdButtonSizerDialog(wxWindow *parent)
 
     m_chkboxNoDefault = new wxCheckBox(this, wxID_ANY, "No Default");
 
-    sizer1->Add(m_radiobtnOk, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    sizer1->Add(m_radiobtnYes, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    sizer1->Add(m_radiobtnOk, wxSizerFlags().Border(wxALL));
+    sizer1->Add(m_radiobtnYes, wxSizerFlags().Border(wxALL));
 
     sizer->Add(sizerInside1, 0, 0, 0);
-    sizerInside1->Add(m_chkboxAffirmativeButton, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    sizerInside1->Add(sizer1, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    sizerInside1->Add(m_chkboxAffirmativeButton, wxSizerFlags().Border(wxALL));
+    sizerInside1->Add(sizer1, wxSizerFlags().Border(wxALL));
     sizerInside1->SetItemMinSize(sizer1, sizer1Box->GetBestSize());    // to prevent wrapping of static box label
 
-    sizer2->Add(m_radiobtnCancel, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    sizer2->Add(m_radiobtnClose, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    sizer2->Add(m_radiobtnCancel, wxSizerFlags().Border(wxALL));
+    sizer2->Add(m_radiobtnClose, wxSizerFlags().Border(wxALL));
 
     sizer->Add(sizerInside2, 0, 0, 0);
-    sizerInside2->Add(m_chkboxDismissButton, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    sizerInside2->Add(sizer2, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    sizerInside2->Add(m_chkboxDismissButton, wxSizerFlags().Border(wxALL));
+    sizerInside2->Add(sizer2, wxSizerFlags().Border(wxALL));
     sizerInside2->SetItemMinSize(sizer2, sizer2Box->GetBestSize());    // to prevent wrapping of static box label
 
-    sizerTop->Add(sizer, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    sizerTop->Add(sizer, wxSizerFlags().Border(wxALL));
 
-    sizer3->Add(m_chkboxNo, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    sizer3->Add(m_chkboxHelp, wxSizerFlags().Border(wxALL, FromDIP(5)));
-    sizer3->Add(m_chkboxApply, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    sizer3->Add(m_chkboxNo, wxSizerFlags().Border(wxALL));
+    sizer3->Add(m_chkboxHelp, wxSizerFlags().Border(wxALL));
+    sizer3->Add(m_chkboxApply, wxSizerFlags().Border(wxALL));
 
-    sizerTop->Add(sizer3, wxSizerFlags().Border(wxALL, FromDIP(5)));
+    sizerTop->Add(sizer3, wxSizerFlags().Border(wxALL));
 
     sizerTop->Add(m_chkboxNoDefault, 0, wxLEFT|wxRIGHT, FromDIP(10));
 
@@ -4067,7 +4067,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     itemSizer8->Add(checkBox6, 0, wxALL|wxALIGN_CENTER_VERTICAL, FromDIP(5));
     item0->Add(itemSizer8, 0, wxGROW|wxALL, 0);
 
-    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)) );
+    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL) );
 
     panel->SetSizerAndFit(topSizer);
 
@@ -4125,7 +4125,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, FromDIP(5));
 #endif
 
-    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)) );
+    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL) );
     topSizer->AddSpacer(5);
 
     panel->SetSizerAndFit(topSizer);

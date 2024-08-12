@@ -130,7 +130,7 @@ MyFrame::MyFrame()
     // 2) top: create wxTextCtrl with minimum size (100x60)
     topsizer->Add(
         new wxTextCtrl( p, wxID_ANY, "My text (wxEXPAND).", wxDefaultPosition, wxSize(100, 60), wxTE_MULTILINE),
-        wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
+        wxSizerFlags(1).Expand().Border(wxALL));
 
     // 2.5) Gratuitous test of wxStaticBoxSizers
     wxBoxSizer *statsizer = new wxStaticBoxSizer(
@@ -140,7 +140,7 @@ MyFrame::MyFrame()
         wxSizerFlags().Border(wxALL, FromDIP(30)));
     topsizer->Add(
         statsizer,
-        wxSizerFlags(1).Expand().Border(wxALL, FromDIP(10)));
+        wxSizerFlags(1).Expand().DoubleBorder(wxALL));
 
     // 2.7) And a test of wxGridSizer
     wxGridSizer *gridsizer = new wxGridSizer(2, 5, 5);
@@ -158,7 +158,7 @@ MyFrame::MyFrame()
                 wxSizerFlags().Align(wxGROW | wxALIGN_CENTER_VERTICAL));
     topsizer->Add(
         gridsizer,
-        wxSizerFlags(1).Expand().Border(wxALL, FromDIP(10)));
+        wxSizerFlags(1).Expand().DoubleBorder(wxALL));
 
 
 #if wxUSE_STATLINE
@@ -605,7 +605,7 @@ MySimpleSizerFrame::MySimpleSizerFrame(wxFrame* parent)
     m_target = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 80, wxDefaultCoord ) );
     main_sizer->Add( m_target, 1, wxALL, 5 );
 
-    main_sizer->Add( new wxStaticText( this, wxID_ANY, "Set alternating sizes using F4 and F5" ), wxSizerFlags().Border(wxALL, FromDIP(5)) );
+    main_sizer->Add( new wxStaticText( this, wxID_ANY, "Set alternating sizes using F4 and F5" ), wxSizerFlags().Border(wxALL) );
 
     SetSizer( main_sizer);
 
@@ -714,7 +714,7 @@ MyWrapSizerFrame::MyWrapSizerFrame(wxFrame* parent)
     horzBoxSizer->Add( 10, 10 );
     horzBoxSizer->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
 
-    root->Add( bottomSizer, wxSizerFlags(1).Expand().Border(wxALL, FromDIP(5)));
+    root->Add( bottomSizer, wxSizerFlags(1).Expand().Border(wxALL));
 
     // Set sizer for window
     SetSizerAndFit( root );
