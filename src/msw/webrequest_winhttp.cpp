@@ -237,10 +237,7 @@ wxWebRequestWinHTTP::wxWebRequestWinHTTP(wxWebSession& session,
                                          int id):
     wxWebRequestImpl(session, sessionImpl, handler, id),
     m_sessionImpl(sessionImpl),
-    m_url(url),
-    m_connect(nullptr),
-    m_request(nullptr),
-    m_dataWritten(0)
+    m_url(url)
 {
 }
 
@@ -662,8 +659,7 @@ wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
 // wxWebSessionWinHTTP
 //
 
-wxWebSessionWinHTTP::wxWebSessionWinHTTP():
-    m_handle(nullptr)
+wxWebSessionWinHTTP::wxWebSessionWinHTTP()
 {
 }
 

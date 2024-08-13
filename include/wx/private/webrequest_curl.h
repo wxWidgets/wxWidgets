@@ -85,9 +85,9 @@ private:
 
     wxWebSessionCURL& m_sessionImpl;
 
-    CURL* m_handle;
+    CURL* m_handle = nullptr;
     char m_errorBuffer[CURL_ERROR_SIZE];
-    struct curl_slist *m_headerList;
+    struct curl_slist *m_headerList = nullptr;
     wxObjectDataPtr<wxWebResponseCURL> m_response;
     wxObjectDataPtr<wxWebAuthChallengeCURL> m_authChallenge;
     wxFileOffset m_bytesSent;
@@ -176,9 +176,9 @@ private:
     TransferSet m_activeTransfers;
     CurlSocketMap m_activeSockets;
 
-    SocketPoller* m_socketPoller;
+    SocketPoller* m_socketPoller = nullptr;
     wxTimer m_timeoutTimer;
-    CURLM* m_handle;
+    CURLM* m_handle = nullptr;
 
     static int ms_activeSessions;
     static unsigned int ms_runtimeVersion;

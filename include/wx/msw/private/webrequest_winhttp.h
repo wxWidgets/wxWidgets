@@ -101,12 +101,12 @@ private:
 
     wxWebSessionWinHTTP& m_sessionImpl;
     wxString m_url;
-    HINTERNET m_connect;
-    HINTERNET m_request;
+    HINTERNET m_connect = nullptr;
+    HINTERNET m_request = nullptr;
     wxObjectDataPtr<wxWebResponseWinHTTP> m_response;
     wxObjectDataPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
     wxMemoryBuffer m_dataWriteBuffer;
-    wxFileOffset m_dataWritten;
+    wxFileOffset m_dataWritten = 0;
 
     void SendRequest();
 
@@ -154,7 +154,7 @@ public:
     }
 
 private:
-    HINTERNET m_handle;
+    HINTERNET m_handle = nullptr;
 
     bool Open();
 

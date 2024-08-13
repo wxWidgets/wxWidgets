@@ -109,11 +109,11 @@ public:
 
 protected:
     wxString m_method;
-    wxWebRequest::Storage m_storage;
+    wxWebRequest::Storage m_storage = wxWebRequest::Storage_Memory;
     wxWebRequestHeaderMap m_headers;
-    wxFileOffset m_dataSize;
+    wxFileOffset m_dataSize = 0;
     std::unique_ptr<wxInputStream> m_dataStream;
-    bool m_peerVerifyDisabled;
+    bool m_peerVerifyDisabled = false;
 
     wxWebRequestImpl(wxWebSession& session,
                      wxWebSessionImpl& sessionImpl,
@@ -141,12 +141,12 @@ private:
     wxWebSession& m_session;
     wxEvtHandler* const m_handler;
     const int m_id;
-    wxWebRequest::State m_state;
-    wxFileOffset m_bytesReceived;
+    wxWebRequest::State m_state = wxWebRequest::State_Idle;
+    wxFileOffset m_bytesReceived = 0;
     wxCharBuffer m_dataText;
 
     // Initially false, set to true after the first call to Cancel().
-    bool m_cancelled;
+    bool m_cancelled = false;
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestImpl);
 };

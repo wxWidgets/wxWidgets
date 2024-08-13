@@ -64,16 +64,10 @@ wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session,
                                    wxWebSessionImpl& sessionImpl,
                                    wxEvtHandler* handler,
                                    int id)
-    : m_storage(wxWebRequest::Storage_Memory),
-      m_headers(sessionImpl.GetHeaders()),
-      m_dataSize(0),
-      m_peerVerifyDisabled(false),
+    : m_headers(sessionImpl.GetHeaders()),
       m_session(session),
       m_handler(handler),
-      m_id(id),
-      m_state(wxWebRequest::State_Idle),
-      m_bytesReceived(0),
-      m_cancelled(false)
+      m_id(id)
 {
 }
 

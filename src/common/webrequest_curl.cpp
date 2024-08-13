@@ -235,8 +235,6 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
     wxWebRequestImpl(session, sessionImpl, handler, id),
     m_sessionImpl(sessionImpl)
 {
-    m_headerList = nullptr;
-
     m_handle = curl_easy_init();
     if ( !m_handle )
     {
@@ -888,7 +886,6 @@ int wxWebSessionCURL::ms_activeSessions = 0;
 unsigned int wxWebSessionCURL::ms_runtimeVersion = 0;
 
 wxWebSessionCURL::wxWebSessionCURL() :
-    m_handle(nullptr)
 {
     // Initialize CURL globally if no sessions are active
     if ( ms_activeSessions == 0 )
