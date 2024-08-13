@@ -69,8 +69,8 @@ public:
 
         @return @true if the call succeeded, @false otherwise (the default).
     */
-    virtual bool Create(wxBitmap* bitmap, const void* data, wxBitmapType type,
-                        int width, int height, int depth = 1);
+    bool Create(wxBitmap* bitmap, const void* data, wxBitmapType type,
+                int width, int height, int depth = 1);
 
     /**
         Gets the file extension associated with this handler.
@@ -455,12 +455,12 @@ public:
 
         @return @true if the creation was successful.
     */
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         @overload
     */
-    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Create a bitmap compatible with the given DC, inheriting its magnification factor
@@ -593,7 +593,7 @@ public:
 
         This overload depends on the @a type of data.
 
-    virtual bool Create(const void* data, int type, int width,
+    bool Create(const void* data, int type, int width,
                         int height, int depth = -1);
 
         NOTE: leave this undoc for the same reason of the relative ctor.

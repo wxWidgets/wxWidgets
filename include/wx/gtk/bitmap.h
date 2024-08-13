@@ -80,8 +80,8 @@ public:
     wxBitmap(GdkPixbuf* pixbuf, int depth = 0);
     explicit wxBitmap(const wxCursor& cursor);
 
-    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) override;
-    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) override
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) final;
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) final
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 #ifdef __WXGTK3__
     bool Create(int width, int height, const wxDC& dc);
