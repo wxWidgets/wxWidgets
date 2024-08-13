@@ -211,29 +211,21 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[];
 
-class WXDLLIMPEXP_NET wxWebSession
+// Common base class for synchronous and asynchronous web sessions.
+class WXDLLIMPEXP_NET wxWebSessionBase
 {
 public:
     // Default ctor creates an invalid session object, only IsOpened() can be
     // called on it.
-    wxWebSession();
+    wxWebSessionBase();
 
-    wxWebSession(const wxWebSession& other);
-    wxWebSession& operator=(const wxWebSession& other);
-    ~wxWebSession();
-
-    // Objects of this class can't be created directly, use the following
-    // factory functions to get access to them.
-    static wxWebSession& GetDefault();
-
-    static wxWebSession New(const wxString& backend = wxString());
+    wxWebSessionBase(const wxWebSessionBase& other);
+    wxWebSessionBase& operator=(const wxWebSessionBase& other);
+    ~wxWebSessionBase();
 
     // Can be used to check if the given backend is available without actually
     // creating a session using it.
     static bool IsBackendAvailable(const wxString& backend);
-
-    wxWebRequest
-    CreateRequest(wxEvtHandler* handler, const wxString& url, int id = wxID_ANY);
 
     wxVersionInfo GetLibraryVersionInfo();
 
@@ -256,9 +248,42 @@ private:
 
     static void InitFactoryMap();
 
-    explicit wxWebSession(const wxWebSessionImplPtr& impl);
+protected:
+    // This function handles empty backend string correctly, i.e. returns the
+    // default backend in this case.
+    //
+    // The returned pointer should not be deleted by the caller.
+    //
+    // If the specified backend is not found, returns a null pointer.
+    static wxWebSessionFactory* FindFactory(const wxString& backend);
+
+    explicit wxWebSessionBase(const wxWebSessionImplPtr& impl);
 
     wxWebSessionImplPtr m_impl;
+};
+
+class WXDLLIMPEXP_NET wxWebSession : public wxWebSessionBase
+{
+public:
+    wxWebSession() = default;
+
+    wxWebSession(const wxWebSession& other) = default;
+    wxWebSession& operator=(const wxWebSession& other) = default;
+
+    // Objects of this class can't be created directly, use the following
+    // factory functions to get access to them.
+    static wxWebSession& GetDefault();
+
+    static wxWebSession New(const wxString& backend = wxString());
+
+    wxWebRequest
+    CreateRequest(wxEvtHandler* handler, const wxString& url, int id = wxID_ANY);
+
+private:
+    explicit wxWebSession(const wxWebSessionImplPtr& impl)
+        : wxWebSessionBase(impl)
+    {
+    }
 };
 
 class WXDLLIMPEXP_NET wxWebRequestEvent : public wxEvent

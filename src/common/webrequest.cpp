@@ -875,21 +875,22 @@ wxString wxWebSessionImpl::GetTempDir() const
 }
 
 //
-// wxWebSession
+// wxWebSessionBase and wxWebSession
 //
 
-wxWebSession::wxWebSession() = default;
+wxWebSessionBase::wxWebSessionBase() = default;
 
-wxWebSession::wxWebSession(const wxWebSessionImplPtr& impl)
+wxWebSessionBase::wxWebSessionBase(const wxWebSessionImplPtr& impl)
     : m_impl(impl)
 {
 }
 
-wxWebSession::wxWebSession(const wxWebSession& other) = default;
+wxWebSessionBase::wxWebSessionBase(const wxWebSessionBase& other) = default;
 
-wxWebSession& wxWebSession::operator=(const wxWebSession& other) = default;
+wxWebSessionBase&
+wxWebSessionBase::operator=(const wxWebSessionBase& other) = default;
 
-wxWebSession::~wxWebSession() = default;
+wxWebSessionBase::~wxWebSessionBase() = default;
 
 // static
 wxWebSession& wxWebSession::GetDefault()
@@ -901,7 +902,7 @@ wxWebSession& wxWebSession::GetDefault()
 }
 
 // static
-wxWebSession wxWebSession::New(const wxString& backendOrig)
+wxWebSessionFactory* wxWebSessionBase::FindFactory(const wxString& backendOrig)
 {
     if ( gs_factoryMap.empty() )
         InitFactoryMap();
@@ -921,19 +922,27 @@ wxWebSession wxWebSession::New(const wxString& backendOrig)
         }
     }
 
-    const auto factory = gs_factoryMap.find(backend);
+    const auto it = gs_factoryMap.find(backend);
 
+    return it != gs_factoryMap.end() ? it->second.get() : nullptr;
+}
+
+// static
+wxWebSession wxWebSession::New(const wxString& backend)
+{
     wxWebSessionImplPtr impl;
-    if ( factory != gs_factoryMap.end() )
-        impl = factory->second->Create();
+
+    auto* const factory = FindFactory(backend);
+    if ( factory )
+        impl = factory->Create();
 
     return wxWebSession(impl);
 }
 
 // static
 void
-wxWebSession::RegisterFactory(const wxString& backend,
-                              wxWebSessionFactory* factory)
+wxWebSessionBase::RegisterFactory(const wxString& backend,
+                                  wxWebSessionFactory* factory)
 {
     // Ensure that the pointer is always freed.
     std::unique_ptr<wxWebSessionFactory> ptr{factory};
@@ -945,7 +954,7 @@ wxWebSession::RegisterFactory(const wxString& backend,
 }
 
 // static
-void wxWebSession::InitFactoryMap()
+void wxWebSessionBase::InitFactoryMap()
 {
 #if wxUSE_WEBREQUEST_WINHTTP
     RegisterFactory(wxWebSessionBackendWinHTTP, new wxWebSessionFactoryWinHTTP());
@@ -959,7 +968,7 @@ void wxWebSession::InitFactoryMap()
 }
 
 // static
-bool wxWebSession::IsBackendAvailable(const wxString& backend)
+bool wxWebSessionBase::IsBackendAvailable(const wxString& backend)
 {
     if ( gs_factoryMap.empty() )
         InitFactoryMap();
@@ -976,50 +985,50 @@ wxWebSession::CreateRequest(wxEvtHandler* handler, const wxString& url, int id)
     return wxWebRequest(m_impl->CreateRequest(*this, handler, url, id));
 }
 
-wxVersionInfo wxWebSession::GetLibraryVersionInfo()
+wxVersionInfo wxWebSessionBase::GetLibraryVersionInfo()
 {
     wxCHECK_IMPL( wxVersionInfo() );
 
     return m_impl->GetLibraryVersionInfo();
 }
 
-void wxWebSession::AddCommonHeader(const wxString& name, const wxString& value)
+void wxWebSessionBase::AddCommonHeader(const wxString& name, const wxString& value)
 {
     wxCHECK_IMPL_VOID();
 
     m_impl->AddCommonHeader(name, value);
 }
 
-void wxWebSession::SetTempDir(const wxString& dir)
+void wxWebSessionBase::SetTempDir(const wxString& dir)
 {
     wxCHECK_IMPL_VOID();
 
     m_impl->SetTempDir(dir);
 }
 
-wxString wxWebSession::GetTempDir() const
+wxString wxWebSessionBase::GetTempDir() const
 {
     wxCHECK_IMPL( wxString() );
 
     return m_impl->GetTempDir();
 }
 
-bool wxWebSession::IsOpened() const
+bool wxWebSessionBase::IsOpened() const
 {
     return m_impl.get() != nullptr;
 }
 
-void wxWebSession::Close()
+void wxWebSessionBase::Close()
 {
     m_impl.reset(nullptr);
 }
 
-wxWebSessionHandle wxWebSession::GetNativeHandle() const
+wxWebSessionHandle wxWebSessionBase::GetNativeHandle() const
 {
     return m_impl ? m_impl->GetNativeHandle() : nullptr;
 }
 
-bool wxWebSession::EnablePersistentStorage(bool enable)
+bool wxWebSessionBase::EnablePersistentStorage(bool enable)
 {
     return m_impl->EnablePersistentStorage(enable);
 }

@@ -885,7 +885,7 @@ SocketPollerImpl* SocketPollerImpl::Create(wxEvtHandler* hndlr)
 int wxWebSessionCURL::ms_activeSessions = 0;
 unsigned int wxWebSessionCURL::ms_runtimeVersion = 0;
 
-wxWebSessionCURL::wxWebSessionCURL() :
+wxWebSessionCURL::wxWebSessionCURL()
 {
     // Initialize CURL globally if no sessions are active
     if ( ms_activeSessions == 0 )
