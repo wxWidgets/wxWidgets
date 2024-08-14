@@ -231,9 +231,24 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
                                    const wxString & url,
                                    int id):
     wxWebRequestImpl(session, sessionImpl, handler, id),
-    m_sessionImpl(sessionImpl)
+    m_sessionCURL(&sessionImpl),
+    m_handle(curl_easy_init())
 {
-    m_handle = curl_easy_init();
+
+    DoStartPrepare(url);
+}
+
+wxWebRequestCURL::wxWebRequestCURL(wxWebSessionSyncCURL& sessionImpl,
+                                   const wxString& url) :
+    wxWebRequestImpl(sessionImpl),
+    m_sessionCURL(nullptr),
+    m_handle(sessionImpl.GetHandle())
+{
+    DoStartPrepare(url);
+}
+
+void wxWebRequestCURL::DoStartPrepare(const wxString& url)
+{
     if ( !m_handle )
     {
         wxStrlcpy(m_errorBuffer, "libcurl initialization failed", CURL_ERROR_SIZE);
@@ -282,15 +297,21 @@ wxWebRequestCURL::~wxWebRequestCURL()
     if ( m_headerList )
         curl_slist_free_all(m_headerList);
 
-    m_sessionImpl.RequestHasTerminated(this);
+    if ( IsAsync() )
+    {
+        m_sessionCURL->RequestHasTerminated(this);
+
+        curl_easy_cleanup(m_handle);
+    }
 }
 
-void wxWebRequestCURL::Start()
+wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
 {
     m_response.reset(new wxWebResponseCURL(*this));
 
-    if ( !CheckResult(m_response->InitFileStorage()) )
-        return;
+    const auto result = m_response->InitFileStorage();
+    if ( !result )
+        return result;
 
     if ( m_dataSize )
     {
@@ -337,6 +358,31 @@ void wxWebRequestCURL::Start()
     if ( IsPeerVerifyDisabled() )
         curl_easy_setopt(m_handle, CURLOPT_SSL_VERIFYPEER, 0);
 
+    return Result::Ok();
+}
+
+wxWebRequest::Result wxWebRequestCURL::Execute()
+{
+    const auto result = DoFinishPrepare();
+    if ( result.state == wxWebRequest::State_Failed )
+        return result;
+
+    const CURLcode err = curl_easy_perform(m_handle);
+    if ( err != CURLE_OK )
+    {
+        // This ensures that DoHandleCompletion() returns failure and uses
+        // libcurl error message.
+        m_response.reset(nullptr);
+    }
+
+    return DoHandleCompletion();
+}
+
+void wxWebRequestCURL::Start()
+{
+    if ( !CheckResult(DoFinishPrepare()) )
+        return;
+
     StartRequest();
 }
 
@@ -344,7 +390,7 @@ bool wxWebRequestCURL::StartRequest()
 {
     m_bytesSent = 0;
 
-    if ( !m_sessionImpl.StartRequest(*this) )
+    if ( !m_sessionCURL->StartRequest(*this) )
     {
         SetState(wxWebRequest::State_Failed);
         return false;
@@ -355,7 +401,7 @@ bool wxWebRequestCURL::StartRequest()
 
 void wxWebRequestCURL::DoCancel()
 {
-    m_sessionImpl.CancelRequest(this);
+    m_sessionCURL->CancelRequest(this);
 }
 
 wxWebRequest::Result wxWebRequestCURL::DoHandleCompletion()
@@ -440,7 +486,13 @@ void wxWebAuthChallengeCURL::SetCredentials(const wxWebCredentials& cred)
     curl_easy_setopt(m_request.GetHandle(),
         (GetSource() == wxWebAuthChallenge::Source_Proxy) ? CURLOPT_PROXYUSERPWD : CURLOPT_USERPWD,
         authStr.utf8_str().data());
-    m_request.StartRequest();
+
+    // Asynchronous requests must be resumed automatically, as control flow
+    // doesn't get back to the program and if we didn't this, nothing at all
+    // would happen next, but for the synchronous ones we count on the
+    // application code to just call Execute() again.
+    if ( m_request.IsAsync() )
+        m_request.StartRequest();
 }
 
 //
@@ -889,13 +941,14 @@ SocketPollerImpl* SocketPollerImpl::Create(wxEvtHandler* hndlr)
 #endif
 
 //
-// wxWebSessionCURL
+// wxWebSessionBaseCURL
 //
 
-int wxWebSessionCURL::ms_activeSessions = 0;
-unsigned int wxWebSessionCURL::ms_runtimeVersion = 0;
+int wxWebSessionBaseCURL::ms_activeSessions = 0;
+unsigned int wxWebSessionBaseCURL::ms_runtimeVersion = 0;
 
-wxWebSessionCURL::wxWebSessionCURL()
+wxWebSessionBaseCURL::wxWebSessionBaseCURL(Mode mode)
+    : wxWebSessionImpl(mode)
 {
     // Initialize CURL globally if no sessions are active
     if ( ms_activeSessions == 0 )
@@ -912,7 +965,58 @@ wxWebSessionCURL::wxWebSessionCURL()
     }
 
     ms_activeSessions++;
+}
 
+wxWebSessionBaseCURL::~wxWebSessionBaseCURL()
+{
+    // Global CURL cleanup if this is the last session
+    --ms_activeSessions;
+    if ( ms_activeSessions == 0 )
+        curl_global_cleanup();
+}
+
+//
+// wxWebSessionSyncCURL
+//
+
+wxWebSessionSyncCURL::wxWebSessionSyncCURL()
+    : wxWebSessionBaseCURL(Mode::Sync)
+{
+}
+
+wxWebSessionSyncCURL::~wxWebSessionSyncCURL()
+{
+    if ( m_handle )
+        curl_easy_cleanup(m_handle);
+}
+
+wxWebRequestImplPtr
+wxWebSessionSyncCURL::CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
+                                        const wxString& url)
+{
+    if ( !m_handle )
+    {
+        // Allocate it the first time we need it and keep it later.
+        m_handle = curl_easy_init();
+    }
+    else
+    {
+        // But when reusing it subsequently, we must reset all the previously
+        // set options to prevent the settings from one request from applying
+        // to the subsequent ones.
+        curl_easy_reset(m_handle);
+    }
+
+    return wxWebRequestImplPtr(new wxWebRequestCURL(*this, url));
+}
+
+//
+// wxWebSessionCURL
+//
+
+wxWebSessionCURL::wxWebSessionCURL()
+    : wxWebSessionBaseCURL(Mode::Async)
+{
     m_socketPoller = new SocketPoller(this);
     m_timeoutTimer.SetOwner(this);
     Bind(wxEVT_TIMER, &wxWebSessionCURL::TimeoutNotification, this);
@@ -926,11 +1030,6 @@ wxWebSessionCURL::~wxWebSessionCURL()
 
     if ( m_handle )
         curl_multi_cleanup(m_handle);
-
-    // Global CURL cleanup if this is the last session
-    --ms_activeSessions;
-    if ( ms_activeSessions == 0 )
-        curl_global_cleanup();
 }
 
 wxWebRequestImplPtr
@@ -998,11 +1097,9 @@ void wxWebSessionCURL::RequestHasTerminated(wxWebRequestCURL* request)
     // If this transfer is currently active, stop it.
     CURL* curl = request->GetHandle();
     StopActiveTransfer(curl);
-
-    curl_easy_cleanup(curl);
 }
 
-wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
+wxVersionInfo wxWebSessionBaseCURL::GetLibraryVersionInfo()
 {
     const curl_version_info_data* vi = curl_version_info(CURLVERSION_NOW);
     wxString desc = wxString::Format("libcurl/%s", vi->version);
@@ -1015,9 +1112,9 @@ wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
         desc);
 }
 
-bool wxWebSessionCURL::CurlRuntimeAtLeastVersion(unsigned int major,
-                                                 unsigned int minor,
-                                                 unsigned int patch)
+bool wxWebSessionBaseCURL::CurlRuntimeAtLeastVersion(unsigned int major,
+                                                     unsigned int minor,
+                                                     unsigned int patch)
 {
     return (ms_runtimeVersion >= CURL_VERSION_BITS(major, minor, patch));
 }
