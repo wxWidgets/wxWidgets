@@ -36,6 +36,11 @@
 // test entirely.
 static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://nghttp2.org/httpbin";
 
+// Note: WX_TEST_WEBREQUEST_URL_SELF_SIGNED is another environment variable
+// used by this test to test SSL connections to a self-signed server. It can be
+// set to https://self-signed.badssl.com/ or any other self-signed server to
+// enable the corresponding tests.
+
 class RequestFixture : public wxTimer
 {
 public:
