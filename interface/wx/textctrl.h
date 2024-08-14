@@ -1174,6 +1174,8 @@ struct wxTextSearch
 
     /**
        Whether the search should match case (i.e., be case sensitive).
+
+       By default, this is @c false; search will be case insensitive.
      */
     wxTextSearch& MatchCase(const bool matchCase = true)
     {
@@ -1183,6 +1185,8 @@ struct wxTextSearch
 
     /**
        Whether the search should match the whole word.
+
+       By default, this is @c false; searching will not match by whole word.
      */
     wxTextSearch& MatchWholeWord(const bool matchWholeWord = true)
     {
@@ -1192,6 +1196,8 @@ struct wxTextSearch
 
     /**
        Whether the search should go up or down in the text control.
+
+       By default, search will go downward.
      */
     wxTextSearch& Direction(const wxTextSearchDirection direction)
     {

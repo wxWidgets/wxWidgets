@@ -656,7 +656,7 @@ struct wxTextSearch
 
     wxString              m_searchValue;
     long                  m_startingPosition = -1;
-    bool                  m_matchCase = true;
+    bool                  m_matchCase = false;
     bool                  m_wholeWord = false;
     wxTextSearchDirection m_direction = wxTextSearchDirection::Down;
 };

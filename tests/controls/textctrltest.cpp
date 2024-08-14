@@ -1516,6 +1516,12 @@ And there is a mispeled word)");
     results = text->SearchText(wxTextSearch(L"window").Direction(wxTextSearchDirection::Down).MatchCase());
     CHECK_FALSE(results); // case is different
 
+    // ignore case
+    results = text->SearchText(wxTextSearch(L"window").Direction(wxTextSearchDirection::Down).MatchCase(false));
+    CHECK(results);
+    CHECK(results.m_start == 38);
+    CHECK(results.m_end == 44);
+
     results = text->SearchText(wxTextSearch(L"Window").Direction(wxTextSearchDirection::Down).MatchCase());
     CHECK(results);
     CHECK(results.m_start == 38);
