@@ -92,8 +92,6 @@ private:
     wxObjectDataPtr<wxWebAuthChallengeCURL> m_authChallenge;
     wxFileOffset m_bytesSent;
 
-    void DestroyHeaderList();
-
     wxDECLARE_NO_COPY_CLASS(wxWebRequestCURL);
 };
 

@@ -283,7 +283,9 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
 
 wxWebRequestCURL::~wxWebRequestCURL()
 {
-    DestroyHeaderList();
+    if ( m_headerList )
+        curl_slist_free_all(m_headerList);
+
     m_sessionImpl.RequestHasTerminated(this);
 }
 
@@ -395,15 +397,6 @@ size_t wxWebRequestCURL::CURLOnRead(char* buffer, size_t size)
     }
     else
         return 0;
-}
-
-void wxWebRequestCURL::DestroyHeaderList()
-{
-    if ( m_headerList )
-    {
-        curl_slist_free_all(m_headerList);
-        m_headerList = nullptr;
-    }
 }
 
 wxFileOffset wxWebRequestCURL::GetBytesSent() const
