@@ -384,10 +384,10 @@ wxWebRequestBase::wxWebRequestBase(const wxWebRequestImplPtr& impl)
 {
 }
 
-wxWebRequestBase::wxWebRequestBase(const wxWebRequestBase& other) = default;
+wxWebRequestBase::wxWebRequestBase(const wxWebRequestBase&) = default;
 
 wxWebRequestBase&
-wxWebRequestBase::operator=(const wxWebRequestBase& other) = default;
+wxWebRequestBase::operator=(const wxWebRequestBase&) = default;
 
 wxWebRequestBase::~wxWebRequestBase() = default;
 
@@ -554,10 +554,10 @@ wxWebAuthChallenge::wxWebAuthChallenge(const wxWebAuthChallengeImplPtr& impl)
 {
 }
 
-wxWebAuthChallenge::wxWebAuthChallenge(const wxWebAuthChallenge& other) = default;
+wxWebAuthChallenge::wxWebAuthChallenge(const wxWebAuthChallenge&) = default;
 
 wxWebAuthChallenge&
-wxWebAuthChallenge::operator=(const wxWebAuthChallenge& other) = default;
+wxWebAuthChallenge::operator=(const wxWebAuthChallenge&) = default;
 
 wxWebAuthChallenge::~wxWebAuthChallenge() = default;
 
@@ -786,9 +786,9 @@ wxWebResponse::wxWebResponse(const wxWebResponseImplPtr& impl)
 {
 }
 
-wxWebResponse::wxWebResponse(const wxWebResponse& other) = default;
+wxWebResponse::wxWebResponse(const wxWebResponse&) = default;
 
-wxWebResponse& wxWebResponse::operator=(const wxWebResponse& other) = default;
+wxWebResponse& wxWebResponse::operator=(const wxWebResponse&) = default;
 
 wxWebResponse::~wxWebResponse() = default;
 
@@ -909,10 +909,10 @@ wxWebSessionBase::wxWebSessionBase(const wxWebSessionImplPtr& impl)
 {
 }
 
-wxWebSessionBase::wxWebSessionBase(const wxWebSessionBase& other) = default;
+wxWebSessionBase::wxWebSessionBase(const wxWebSessionBase&) = default;
 
 wxWebSessionBase&
-wxWebSessionBase::operator=(const wxWebSessionBase& other) = default;
+wxWebSessionBase::operator=(const wxWebSessionBase&) = default;
 
 wxWebSessionBase::~wxWebSessionBase() = default;
 
