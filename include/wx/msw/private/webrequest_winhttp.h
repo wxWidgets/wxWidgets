@@ -36,8 +36,6 @@ public:
 
     bool ReadData();
 
-    bool ReportAvailableData(DWORD dataLen);
-
 private:
     HINTERNET m_requestHandle;
     wxFileOffset m_contentLength;

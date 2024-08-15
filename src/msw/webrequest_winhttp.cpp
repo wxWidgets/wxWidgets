@@ -267,8 +267,8 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
         case WINHTTP_CALLBACK_STATUS_READ_COMPLETE:
             if ( dwStatusInformationLength > 0 )
             {
-                if ( !m_response->ReportAvailableData(dwStatusInformationLength)
-                        && !WasCancelled() )
+                m_response->ReportDataReceived(dwStatusInformationLength);
+                if ( !m_response->ReadData() && !WasCancelled() )
                     SetFailedWithLastError("Reading data");
             }
             else
@@ -575,12 +575,6 @@ bool wxWebResponseWinHTTP::ReadData()
                 m_readSize,
                 nullptr    // [out] bytes read, must be null in async mode
              ) == TRUE;
-}
-
-bool wxWebResponseWinHTTP::ReportAvailableData(DWORD dataLen)
-{
-    ReportDataReceived(dataLen);
-    return ReadData();
 }
 
 //

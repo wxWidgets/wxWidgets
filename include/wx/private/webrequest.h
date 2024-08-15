@@ -210,6 +210,8 @@ public:
     // opened.
     wxNODISCARD wxWebRequest::Result InitFileStorage();
 
+    void ReportDataReceived(size_t sizeReceived);
+
 protected:
     wxWebRequestImpl& m_request;
     size_t m_readSize;
@@ -217,8 +219,6 @@ protected:
     explicit wxWebResponseImpl(wxWebRequestImpl& request);
 
     void* GetDataBuffer(size_t sizeNeeded);
-
-    void ReportDataReceived(size_t sizeReceived);
 
     // This function can optionally be called to preallocate the read buffer,
     // if the total amount of data to be downloaded is known in advance.
