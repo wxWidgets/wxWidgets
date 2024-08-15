@@ -260,10 +260,8 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
     switch ( dwInternetStatus )
     {
         case WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE:
-            if ( m_dataSize )
-                WriteData();
-            else
-                CreateResponse();
+            // If there is no data to write, this will call CreateResponse().
+            WriteData();
             break;
 
         case WINHTTP_CALLBACK_STATUS_READ_COMPLETE:
