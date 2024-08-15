@@ -122,8 +122,6 @@ wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
 
     // Have curl call the progress callback.
     curl_easy_setopt(GetHandle(), CURLOPT_NOPROGRESS, 0L);
-
-    Init();
 }
 
 size_t wxWebResponseCURL::CURLOnWrite(void* buffer, size_t size)
@@ -290,6 +288,9 @@ wxWebRequestCURL::~wxWebRequestCURL()
 void wxWebRequestCURL::Start()
 {
     m_response.reset(new wxWebResponseCURL(*this));
+
+    if ( !CheckResult(m_response->InitFileStorage()) )
+        return;
 
     if ( m_dataSize )
     {

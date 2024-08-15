@@ -342,9 +342,8 @@ void wxWebRequestWinHTTP::CreateResponse()
     }
 
     m_response.reset(new wxWebResponseWinHTTP(*this));
-    // wxWebResponseWinHTTP ctor could have changed the state if its
-    // initialization failed, so check for this.
-    if ( GetState() == wxWebRequest::State_Failed )
+
+    if ( !CheckResult(m_response->InitFileStorage()) )
         return;
 
     int status = m_response->GetStatus();
@@ -527,8 +526,6 @@ wxWebResponseWinHTTP::wxWebResponseWinHTTP(wxWebRequestWinHTTP& request):
 
     wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: receiving %llu bytes",
                &request, m_contentLength);
-
-    Init();
 }
 
 wxString wxWebResponseWinHTTP::GetURL() const

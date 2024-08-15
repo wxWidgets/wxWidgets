@@ -222,6 +222,9 @@ void wxWebRequestURLSession::Start()
 
     m_response.reset(new wxWebResponseURLSession(*this, m_task));
 
+    if ( !CheckResult(m_response->InitFileStorage()) )
+        return;
+
     SetState(wxWebRequest::State_Active);
     [m_task resume];
 }
@@ -306,8 +309,6 @@ wxWebResponseURLSession::wxWebResponseURLSession(wxWebRequestURLSession& request
     wxWebResponseImpl(request)
 {
     m_task = [task retain];
-
-    Init();
 }
 
 wxWebResponseURLSession::~wxWebResponseURLSession()

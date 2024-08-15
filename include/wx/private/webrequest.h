@@ -204,15 +204,17 @@ public:
 
     virtual wxString GetDataFile() const;
 
+    // Open data file if necessary, i.e. if using wxWebRequest::Storage_File.
+    //
+    // Returns result with State_Failed if the file is needed but couldn't be
+    // opened.
+    wxNODISCARD wxWebRequest::Result InitFileStorage();
+
 protected:
     wxWebRequestImpl& m_request;
     size_t m_readSize;
 
     explicit wxWebResponseImpl(wxWebRequestImpl& request);
-
-    // Called from derived class ctor to finish initialization which can't be
-    // performed in ctor itself as it needs to use pure virtual method.
-    void Init();
 
     void* GetDataBuffer(size_t sizeNeeded);
 

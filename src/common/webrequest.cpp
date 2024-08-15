@@ -592,27 +592,47 @@ wxWebResponseImpl::~wxWebResponseImpl()
         wxRemoveFile(m_file.GetName());
 }
 
-void wxWebResponseImpl::Init()
+wxWebRequest::Result wxWebResponseImpl::InitFileStorage()
 {
     if ( m_request.GetStorage() == wxWebRequest::Storage_File )
     {
         wxFileName tmpPrefix;
         tmpPrefix.AssignDir(m_request.GetSession().GetTempDir());
-        if ( GetContentLength() > 0 )
+
+        const auto neededSize = GetContentLength();
+        if ( neededSize > 0 )
         {
             // Check available disk space
             wxLongLong freeSpace;
             if ( wxGetDiskSpace(tmpPrefix.GetFullPath(), nullptr, &freeSpace) &&
-                GetContentLength() > freeSpace )
+                    neededSize > freeSpace )
             {
-                m_request.SetState(wxWebRequest::State_Failed, _("Not enough free disk space for download."));
-                return;
+                return wxWebRequest::Result::Error
+                    (
+                        wxString::Format
+                        (
+                         _("Not enough free disk space for download: %llu needed but only %llu available."),
+                         neededSize, freeSpace
+                        )
+                    );
             }
         }
 
         tmpPrefix.SetName("wxd");
-        wxFileName::CreateTempFileName(tmpPrefix.GetFullPath(), &m_file);
+        if ( wxFileName::CreateTempFileName(tmpPrefix.GetFullPath(), &m_file).empty() )
+        {
+            return wxWebRequest::Result::Error
+                (
+                    wxString::Format
+                    (
+                     _("Failed to create temporary file in %s"),
+                     tmpPrefix.GetFullPath()
+                    )
+                );
+        }
     }
+
+    return wxWebRequest::Result::Ok();
 }
 
 wxString wxWebResponseImpl::GetMimeType() const
