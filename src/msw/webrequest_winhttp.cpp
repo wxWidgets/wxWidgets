@@ -441,39 +441,70 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
 {
     Result result;
 
-    // Note that this is more than an optimization: we need to reuse the same
-    // request if we had previously set credentials for it for authentication
-    // to succeed.
-    if ( !m_request )
-    {
-        result = DoPrepareRequest();
-        if ( !result )
-            return result;
-    }
-
-    result = SendRequest();
+    result = DoPrepareRequest();
     if ( !result )
         return result;
 
-    // Write request data, if any.
-    while ( m_dataWritten < m_dataSize )
+    // This loop executes at most twice: once for the initial request and then
+    // possibly another time if we need to authenticate.
+    for ( ;; )
     {
-        DWORD written = 0;
-
-        result = DoWriteData(&written);
+        result = SendRequest();
         if ( !result )
             return result;
 
-        if ( !written )
-            break;
+        // Write request data, if any.
+        while ( m_dataWritten < m_dataSize )
+        {
+            DWORD written = 0;
 
-        m_dataWritten += written;
+            result = DoWriteData(&written);
+            if ( !result )
+                return result;
+
+            if ( !written )
+                break;
+
+            m_dataWritten += written;
+        }
+
+        // Check the response.
+        result = CreateResponse();
+        if ( !result )
+            return result;
+
+        result = InitAuthIfNeeded();
+        if ( !result )
+            return result;
+
+        if ( result.state == wxWebRequest::State_Unauthorized )
+        {
+            // We need to authenticate, but we can only do it if we had the
+            // credentials in the URL and haven't tried using them yet.
+            if ( !m_tryCredentialsFromURL )
+                return result;
+
+            // Ensure we don't try them again, even if we fail.
+            m_tryCredentialsFromURL = false;
+
+            result = m_authChallenge->DoSetCredentials(m_credentialsFromURL);
+            if ( !result )
+                return result;
+
+            // We have set the credentials successfully, so we can try again.
+            //
+            // Ensure that we write all the data again if we have any.
+            if ( m_dataStream )
+            {
+                m_dataStream->SeekI(0);
+                m_dataWritten = 0;
+            }
+
+            continue;
+        }
+
+        break;
     }
-
-    // Check the response.
-    result = CreateResponse();
-    if ( !result )
-        return result;
 
     // Read the response data.
     for ( ;; )
@@ -761,8 +792,8 @@ bool wxWebAuthChallengeWinHTTP::Init()
     return m_selectedScheme != 0;
 }
 
-void
-wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
+wxWebRequest::Result
+wxWebAuthChallengeWinHTTP::DoSetCredentials(const wxWebCredentials& cred)
 {
     if ( !wxWinHTTP::WinHttpSetCredentials
             (
@@ -774,23 +805,24 @@ wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
                 wxRESERVED_PARAM
             ) )
     {
-        m_request.SetFailedWithLastError("Setting credentials");
+        return m_request.FailWithLastError("Setting credentials");
+    }
+
+    return wxWebRequest::Result::Ok();
+}
+
+void
+wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
+{
+    if ( !m_request.CheckResult(DoSetCredentials(cred)) )
         return;
-    }
 
-    // Asynchronous requests must be resumed automatically, as control flow
-    // doesn't get back to the program and if we didn't this, nothing at all
-    // would happen next, but for the synchronous ones we count on the
-    // application code to just call Execute() again.
-    if ( m_request.IsAsync() )
-    {
-        // We can be called when the request is still active if we didn't switch to
-        // unauthorized state because we're using the credentials from the URL.
-        if ( m_request.GetState() != wxWebRequest::State_Active )
-            m_request.SetState(wxWebRequest::State_Active);
+    // We can be called when the request is still active if we didn't switch to
+    // unauthorized state because we're using the credentials from the URL.
+    if ( m_request.GetState() != wxWebRequest::State_Active )
+        m_request.SetState(wxWebRequest::State_Active);
 
-        m_request.CheckResult(m_request.SendRequest());
-    }
+    m_request.CheckResult(m_request.SendRequest());
 }
 
 
