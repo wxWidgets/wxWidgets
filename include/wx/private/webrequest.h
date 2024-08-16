@@ -57,6 +57,9 @@ class wxWebRequestImpl : public wxRefCounterMT
 public:
     using Result = wxWebRequest::Result;
 
+    // Return true if this is an async request, false if it's synchronous.
+    bool IsAsync() const { return m_session != nullptr; }
+
     virtual ~wxWebRequestImpl() = default;
 
     void SetHeader(const wxString& name, const wxString& value)
@@ -72,9 +75,16 @@ public:
 
     wxWebRequest::Storage GetStorage() const { return m_storage; }
 
+    // This method is called to execute the request in a synchronous way.
+    virtual Result Execute() = 0;
+
+    // This method is called to start execution of an asynchronous request.
+    //
     // Precondition for this method checked by caller: current state is idle.
     virtual void Start() = 0;
 
+    // This method can be called to cancel execution of an asynchronous request.
+    //
     // Precondition for this method checked by caller: not idle and not already
     // cancelled.
     void Cancel();
@@ -85,7 +95,11 @@ public:
 
     int GetId() const { return m_id; }
 
-    wxWebSession& GetSession() const { return m_session; }
+    // This one is only valid for async requests.
+    wxWebSession& GetSession() const { return *m_session; }
+
+    // This one can be always called.
+    wxWebSessionImpl& GetSessionImpl() const { return m_sessionImpl; }
 
     wxWebRequest::State GetState() const { return m_state; }
 
@@ -117,10 +131,14 @@ protected:
     std::unique_ptr<wxInputStream> m_dataStream;
     bool m_peerVerifyDisabled = false;
 
+    // Ctor for async requests.
     wxWebRequestImpl(wxWebSession& session,
                      wxWebSessionImpl& sessionImpl,
                      wxEvtHandler* handler,
                      int id);
+
+    // Ctor for sync requests.
+    explicit wxWebRequestImpl(wxWebSessionImpl& sessionImpl);
 
     bool WasCancelled() const { return m_cancelled; }
 
@@ -166,8 +184,10 @@ private:
     // SetState() when leaving it.
     void ProcessStateEvent(wxWebRequest::State state, const wxString& failMsg);
 
+    wxWebSessionImpl& m_sessionImpl;
 
-    wxWebSession& m_session;
+    // These parameters are only valid for async requests.
+    wxWebSession* const m_session;
     wxEvtHandler* const m_handler;
     const int m_id;
     wxWebRequest::State m_state = wxWebRequest::State_Idle;
@@ -251,6 +271,7 @@ class wxWebSessionFactory
 {
 public:
     virtual wxWebSessionImpl* Create() = 0;
+    virtual wxWebSessionImpl* CreateSync() = 0;
 
     virtual bool Initialize() { return true; }
 
@@ -264,13 +285,30 @@ public:
 class wxWebSessionImpl : public wxRefCounterMT
 {
 public:
+    // This session class can be used either synchronously or asynchronously,
+    // but the mode must be chosen at the time of the object creation and
+    // cannot be changed later.
+    enum class Mode
+    {
+        Async,
+        Sync
+    };
+
     virtual ~wxWebSessionImpl() = default;
+
+    // Only one of these functions is actually implemented in async/sync
+    // session implementation classes respectively. This is ugly, but allows to
+    // add support for sync requests/sessions without completely rewriting
+    // wxWebRequest code.
 
     virtual wxWebRequestImplPtr
     CreateRequest(wxWebSession& session,
                   wxEvtHandler* handler,
                   const wxString& url,
                   int id) = 0;
+
+    virtual wxWebRequestImplPtr
+    CreateRequestSync(wxWebSessionSync& session, const wxString& url) = 0;
 
     virtual wxVersionInfo GetLibraryVersionInfo() = 0;
 
@@ -288,11 +326,15 @@ public:
     virtual bool EnablePersistentStorage(bool WXUNUSED(enable)) { return false; }
 
 protected:
-    wxWebSessionImpl();
+    explicit wxWebSessionImpl(Mode mode);
+
+    bool IsAsync() const { return m_mode == Mode::Async; }
 
 private:
     // Make it a friend to allow accessing our m_headers.
     friend class wxWebRequest;
+
+    const Mode m_mode;
 
     wxWebRequestHeaderMap m_headers;
     wxString m_tempDir;

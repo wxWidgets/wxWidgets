@@ -65,14 +65,26 @@ wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session,
                                    wxEvtHandler* handler,
                                    int id)
     : m_headers(sessionImpl.GetHeaders()),
-      m_session(session),
+      m_sessionImpl(sessionImpl),
+      m_session(&session),
       m_handler(handler),
       m_id(id)
 {
 }
 
+wxWebRequestImpl::wxWebRequestImpl(wxWebSessionImpl& sessionImpl)
+    : m_headers(sessionImpl.GetHeaders()),
+      m_sessionImpl(sessionImpl),
+      m_session(nullptr),
+      m_handler(nullptr),
+      m_id(wxID_NONE)
+{
+}
+
 void wxWebRequestImpl::Cancel()
 {
+    wxASSERT( IsAsync() );
+
     if ( m_cancelled )
     {
         // Nothing to do, don't even assert -- it's ok to call Cancel()
@@ -444,6 +456,13 @@ wxWebRequestBase::Storage wxWebRequestBase::GetStorage() const
     return m_impl->GetStorage();
 }
 
+wxWebRequestSync::Result wxWebRequestSync::Execute() const
+{
+    wxCHECK_IMPL( wxWebRequestSync::Result::Error("Invalid session object") );
+
+    return m_impl->Execute();
+}
+
 void wxWebRequest::Start()
 {
     wxCHECK_IMPL_VOID();
@@ -599,7 +618,7 @@ wxWebRequest::Result wxWebResponseImpl::InitFileStorage()
     if ( m_request.GetStorage() == wxWebRequest::Storage_File )
     {
         wxFileName tmpPrefix;
-        tmpPrefix.AssignDir(m_request.GetSession().GetTempDir());
+        tmpPrefix.AssignDir(m_request.GetSessionImpl().GetTempDir());
 
         const auto neededSize = GetContentLength();
         if ( neededSize > 0 )
@@ -740,6 +759,11 @@ void wxWebResponseImpl::ReportDataReceived(size_t sizeReceived)
             break;
 
         case wxWebRequest::Storage_None:
+            // We don't use events for synchronous requests, so just throw the
+            // data away. This is not very useful, but what else can we do.
+            if ( !m_request.IsAsync() )
+                break;
+
             m_request.IncRef();
             const wxWebRequestImplPtr request(&m_request);
 
@@ -880,11 +904,14 @@ namespace
 {
 
 wxWebSession gs_defaultSession;
+wxWebSessionSync gs_defaultSessionSync;
+
 std::unordered_map<wxString, std::unique_ptr<wxWebSessionFactory>> gs_factoryMap;
 
 } // anonymous namespace
 
-wxWebSessionImpl::wxWebSessionImpl()
+wxWebSessionImpl::wxWebSessionImpl(Mode mode)
+    : m_mode(mode)
 {
     // Initialize the user-Agent header with a reasonable default
     AddCommonHeader("User-Agent", wxString::Format("%s/1 wxWidgets/%d.%d.%d",
@@ -901,7 +928,7 @@ wxString wxWebSessionImpl::GetTempDir() const
 }
 
 //
-// wxWebSessionBase and wxWebSession
+// wxWebSessionBase and its derived wxWebSession and wxWebSessionSync classes
 //
 
 wxWebSessionBase::wxWebSessionBase() = default;
@@ -925,6 +952,15 @@ wxWebSession& wxWebSession::GetDefault()
         gs_defaultSession = wxWebSession::New();
 
     return gs_defaultSession;
+}
+
+// static
+wxWebSessionSync& wxWebSessionSync::GetDefault()
+{
+    if ( !gs_defaultSessionSync.IsOpened() )
+        gs_defaultSessionSync = wxWebSessionSync::New();
+
+    return gs_defaultSessionSync;
 }
 
 // static
@@ -963,6 +999,18 @@ wxWebSession wxWebSession::New(const wxString& backend)
         impl = factory->Create();
 
     return wxWebSession(impl);
+}
+
+// static
+wxWebSessionSync wxWebSessionSync::New(const wxString& backend)
+{
+    wxWebSessionImplPtr impl;
+
+    auto* const factory = FindFactory(backend);
+    if ( factory )
+        impl = factory->CreateSync();
+
+    return wxWebSessionSync(impl);
 }
 
 // static
@@ -1009,6 +1057,14 @@ wxWebSession::CreateRequest(wxEvtHandler* handler, const wxString& url, int id)
     wxCHECK_IMPL( wxWebRequest() );
 
     return wxWebRequest(m_impl->CreateRequest(*this, handler, url, id));
+}
+
+wxWebRequestSync
+wxWebSessionSync::CreateRequest(const wxString& url)
+{
+    wxCHECK_IMPL( wxWebRequestSync() );
+
+    return wxWebRequestSync(m_impl->CreateRequestSync(*this, url));
 }
 
 wxVersionInfo wxWebSessionBase::GetLibraryVersionInfo()
