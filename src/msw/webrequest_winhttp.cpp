@@ -317,6 +317,39 @@ void wxWebRequestWinHTTP::WriteData()
         if ( !CheckResult(CreateResponse()) )
             return;
 
+        const auto result = InitAuthIfNeeded();
+        switch ( result.state )
+        {
+            case wxWebRequest::State_Unauthorized:
+                // Check if we can use the credentials from the URL.
+                if ( m_tryCredentialsFromURL )
+                {
+                    m_tryCredentialsFromURL = false;
+
+                    m_authChallenge->SetCredentials(m_credentialsFromURL);
+                    return;
+                }
+
+                // Otherwise just switch to this state and let the application
+                // call SetCredentials() later.
+                wxFALLTHROUGH;
+
+            case wxWebRequest::State_Failed:
+                // In case of any other error, we can't continue.
+                HandleResult(result);
+                return;
+
+            case wxWebRequest::State_Active:
+                // Continue normally.
+                break;
+
+            case wxWebRequest::State_Idle:
+            case wxWebRequest::State_Completed:
+            case wxWebRequest::State_Cancelled:
+                wxFAIL_MSG("Unexpected state");
+                break;
+        }
+
         // Start reading the response, even in unauthorized case.
         if ( !m_response->ReadData() )
             SetFailedWithLastError("Reading data");
@@ -483,12 +516,26 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
     urlComps.dwStructSize = sizeof(urlComps);
     urlComps.dwSchemeLength =
     urlComps.dwHostNameLength =
+    urlComps.dwUserNameLength =
+    urlComps.dwPasswordLength =
     urlComps.dwUrlPathLength =
     urlComps.dwExtraInfoLength = (DWORD)-1;
 
     if ( !wxWinHTTP::WinHttpCrackUrl(m_url.wc_str(), m_url.length(), 0, &urlComps) )
     {
         return FailWithLastError("Parsing URL");
+    }
+
+    // If we have auth in the URL, remember them but we can't use them yet
+    // because we don't yet know which authentication scheme the server uses.
+    if ( urlComps.dwUserNameLength )
+    {
+        m_credentialsFromURL = wxWebCredentials
+            (
+                wxString(urlComps.lpszUserName, urlComps.dwUserNameLength),
+                wxSecretValue(wxString(urlComps.lpszPassword, urlComps.dwPasswordLength))
+            );
+        m_tryCredentialsFromURL = true;
     }
 
     // Open a connection
@@ -737,7 +784,10 @@ wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
     // application code to just call Execute() again.
     if ( m_request.IsAsync() )
     {
-        m_request.SetState(wxWebRequest::State_Active);
+        // We can be called when the request is still active if we didn't switch to
+        // unauthorized state because we're using the credentials from the URL.
+        if ( m_request.GetState() != wxWebRequest::State_Active )
+            m_request.SetState(wxWebRequest::State_Active);
 
         m_request.CheckResult(m_request.SendRequest());
     }

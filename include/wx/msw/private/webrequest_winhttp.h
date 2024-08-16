@@ -51,6 +51,8 @@ public:
 
     bool Init();
 
+    wxWebRequest::Result DoSetCredentials(const wxWebCredentials& cred);
+
     void SetCredentials(const wxWebCredentials& cred) override;
 
 private:
@@ -125,6 +127,12 @@ private:
     wxObjectDataPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
     wxMemoryBuffer m_dataWriteBuffer;
     wxFileOffset m_dataWritten = 0;
+
+    // Store authentication information from the URL, if any, as well as a flag
+    // which is reset after the first attempt to use it, so that we don't try
+    // to do it an infinite loop.
+    wxWebCredentials m_credentialsFromURL;
+    bool m_tryCredentialsFromURL = false;
 
     wxNODISCARD Result SendRequest();
 
