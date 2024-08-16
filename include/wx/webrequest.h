@@ -149,6 +149,47 @@ public:
         Storage_None
     };
 
+    struct Result
+    {
+        static Result Ok(State state = State_Active)
+        {
+            Result result;
+            result.state = state;
+            return result;
+        }
+
+        static Result Cancelled()
+        {
+            Result result;
+            result.state = State_Cancelled;
+            return result;
+        }
+
+        static Result Error(const wxString& error)
+        {
+            Result result;
+            result.state = State_Failed;
+            result.error = error;
+            return result;
+        }
+
+        static Result Unauthorized(const wxString& error)
+        {
+            Result result;
+            result.state = State_Unauthorized;
+            result.error = error;
+            return result;
+        }
+
+        bool operator!() const
+        {
+            return state == State_Failed;
+        }
+
+        State state = State_Idle;
+        wxString error;
+    };
+
     bool IsOk() const { return m_impl.get() != nullptr; }
 
     void SetHeader(const wxString& name, const wxString& value);

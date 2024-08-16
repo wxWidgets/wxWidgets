@@ -55,6 +55,8 @@ private:
 class wxWebRequestImpl : public wxRefCounterMT
 {
 public:
+    using Result = wxWebRequest::Result;
+
     virtual ~wxWebRequestImpl() = default;
 
     void SetHeader(const wxString& name, const wxString& value)
@@ -125,6 +127,26 @@ protected:
     // Call SetState() with either State_Failed or State_Completed appropriate
     // for the response status.
     void SetFinalStateFromStatus();
+
+    // Unconditionally call SetState() with the parameters corresponding to the
+    // given result.
+    void HandleResult(const Result& result)
+    {
+        SetState(result.state, result.error);
+    }
+
+    // Call SetState() if the result is an error (State_Failed) and return
+    // false in this case, otherwise just return true.
+    bool CheckResult(const Result& result)
+    {
+        if ( !result )
+        {
+            HandleResult(result);
+            return false;
+        }
+
+        return true;
+    }
 
 private:
     // Called from public Cancel() at most once per object.
