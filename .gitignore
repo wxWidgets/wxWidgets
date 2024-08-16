@@ -101,6 +101,23 @@
 /build/osx/setup/cocoa/include/wx/setup.h
 /build/osx/setup/iphone/include/wx/setup.h
 
+# Mingw build artifacts
+/build/tools/mingw/logs/*.log
+/build/tools/mingw/output
+
+# CMake build artifacts
+/build/.cmake
+/build/CMake*
+/build/libs/**/cmake_*.*
+/build/**/*.cmake
+/build/**/*-unicode-3.3
+/build/build.ninja
+/build/wx-config
+/build/compile_commands.json
+
+# msw gcc artifacts
+/build/lib/gcc_dll/mswu*
+
 # /demos/
 /demos/*/*.sln
 /demos/*/*c*_msw
