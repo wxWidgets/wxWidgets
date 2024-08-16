@@ -142,6 +142,8 @@ private:
 
     wxNODISCARD Result CreateResponse();
 
+    wxNODISCARD Result InitAuthIfNeeded();
+
     // Return error result with the error message built from the name of the
     // operation and WinHTTP error code.
     wxNODISCARD Result Fail(const wxString& operation, DWORD errorCode);

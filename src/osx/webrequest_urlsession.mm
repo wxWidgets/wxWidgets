@@ -290,23 +290,7 @@ wxWebRequest::Result wxWebRequestURLSession::Execute()
     if ( taskResult.data )
         m_response->HandleData(taskResult.data);
 
-    result = GetResultAfterCompletion(taskResult.error);
-
-    if ( result.state == wxWebRequest::State_Unauthorized )
-    {
-        // We don't seem to have access to any information about the
-        // authentication challenge, so just do what we can.
-        m_authChallenge.reset(
-            new wxWebAuthChallengeURLSession(
-                m_response->GetStatus() == 407
-                    ? wxWebAuthChallenge::Source_Proxy
-                    : wxWebAuthChallenge::Source_Server,
-                    *this
-            )
-        );
-    }
-
-    return result;
+    return GetResultAfterCompletion(taskResult.error);
 }
 
 void wxWebRequestURLSession::Start()

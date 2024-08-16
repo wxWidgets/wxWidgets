@@ -490,7 +490,7 @@ wxWebResponse wxWebRequestBase::GetResponse() const
     return wxWebResponse(m_impl->GetResponse());
 }
 
-wxWebAuthChallenge wxWebRequestBase::GetAuthChallenge() const
+wxWebAuthChallenge wxWebRequest::GetAuthChallenge() const
 {
     wxCHECK_IMPL( wxWebAuthChallenge() );
 

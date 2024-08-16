@@ -71,16 +71,33 @@ protected:
         CreateAbs(baseURL + subURL);
     }
 
+    void
+    CreateWithAuth(const wxString& relURL,
+                   const wxString& user,
+                   const wxString& password)
+    {
+        wxString schema;
+        wxString rest;
+        if ( baseURL.StartsWith("https://", &rest) )
+        {
+            schema = "https";
+        }
+        else if ( baseURL.StartsWith("http://", &rest) )
+        {
+            schema = "http";
+        }
+        else
+        {
+            FAIL("Base URL must be an HTTP(S) one: " << baseURL);
+        }
+
+        CreateAbs(wxString::Format("%s://%s:%s@%s%s",
+                                   schema, user, password, rest, relURL));
+    }
+
     virtual void CreateAbs(const wxString& url) = 0;
 
     virtual wxWebRequestBase& GetRequest() = 0;
-
-    // Precondition: we must have an auth challenge.
-    void UseCredentials(const wxString& user, const wxString& password)
-    {
-        GetRequest().GetAuthChallenge().SetCredentials(
-            wxWebCredentials(user, wxSecretValue(password)));
-    }
 
     // Check that the response is a JSON object containing a key "pi" with the
     // expected value.
@@ -213,6 +230,13 @@ public:
             CHECK( statusFromEvent == requiredStatus );
             CHECK( request.GetResponse().GetStatus() == requiredStatus );
         }
+    }
+
+    // Precondition: we must have an auth challenge.
+    void UseCredentials(const wxString& user, const wxString& password)
+    {
+        request.GetAuthChallenge().SetCredentials(
+            wxWebCredentials(user, wxSecretValue(password)));
     }
 
     wxEventLoop loop;
@@ -845,16 +869,17 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/basic-auth/wxtest/wxwidgets");
-    CHECK_FALSE( Execute() );
-    CHECK( state == wxWebRequest::State_Unauthorized );
-    CHECK( response.GetStatus() == 401 );
-
-    REQUIRE( request.GetAuthChallenge().IsOk() );
+    SECTION("No password")
+    {
+        Create("/basic-auth/wxtest/wxwidgets");
+        CHECK_FALSE( Execute() );
+        CHECK( state == wxWebRequest::State_Unauthorized );
+        CHECK( response.GetStatus() == 401 );
+    }
 
     SECTION("Good password")
     {
-        UseCredentials("wxtest", "wxwidgets");
+        CreateWithAuth("/basic-auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
@@ -865,7 +890,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Bad password")
     {
-        UseCredentials("wxtest", "foobar");
+        CreateWithAuth("/basic-auth/wxtest/wxwidgets", "wxtest", "foobar");
         CHECK_FALSE( Execute() );
         CHECK( response.GetStatus() == 401 );
         CHECK( state == wxWebRequest::State_Unauthorized );
@@ -878,16 +903,17 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/digest-auth/auth/wxtest/wxwidgets");
-    CHECK_FALSE( Execute() );
-    CHECK( state == wxWebRequest::State_Unauthorized );
-    CHECK( response.GetStatus() == 401 );
-
-    REQUIRE( request.GetAuthChallenge().IsOk() );
+    SECTION("No password")
+    {
+        Create("/digest-auth/auth/wxtest/wxwidgets");
+        CHECK_FALSE( Execute() );
+        CHECK( state == wxWebRequest::State_Unauthorized );
+        CHECK( response.GetStatus() == 401 );
+    }
 
     SECTION("Good password")
     {
-        UseCredentials("wxtest", "wxwidgets");
+        CreateWithAuth("/digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
@@ -898,7 +924,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Bad password")
     {
-        UseCredentials("foo", "bar");
+        CreateWithAuth("/digest-auth/auth/wxtest/wxwidgets", "foo", "bar");
         CHECK_FALSE( Execute() );
         CHECK( response.GetStatus() == 401 );
         CHECK( state == wxWebRequest::State_Unauthorized );

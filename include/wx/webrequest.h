@@ -80,7 +80,7 @@ public:
 
 private:
     // Ctor is used by wxWebRequest only.
-    friend class wxWebRequestBase;
+    friend class wxWebRequest;
     explicit wxWebAuthChallenge(const wxWebAuthChallengeImplPtr& impl);
 
     wxWebAuthChallengeImplPtr m_impl;
@@ -206,8 +206,6 @@ public:
 
     wxWebResponse GetResponse() const;
 
-    wxWebAuthChallenge GetAuthChallenge() const;
-
     wxFileOffset GetBytesSent() const;
 
     wxFileOffset GetBytesExpectedToSend() const;
@@ -242,6 +240,8 @@ public:
     void Start();
 
     void Cancel();
+
+    wxWebAuthChallenge GetAuthChallenge() const;
 
     int GetId() const;
 

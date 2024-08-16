@@ -400,10 +400,11 @@ wxWebRequest::Result wxWebRequestWinHTTP::CreateResponse()
 
     m_response.reset(new wxWebResponseWinHTTP(*this));
 
-    const auto result = m_response->InitFileStorage();
-    if ( !result )
-        return result;
+    return m_response->InitFileStorage();
+}
 
+wxWebRequest::Result wxWebRequestWinHTTP::InitAuthIfNeeded()
+{
     int status = m_response->GetStatus();
     if ( status == HTTP_STATUS_DENIED || status == HTTP_STATUS_PROXY_AUTH_REQ )
     {
@@ -519,12 +520,7 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
         m_response->ReportDataReceived(bytesRead);
     }
 
-    // If we need to authenticate, we already have the appropriate result
-    // returned by CreateResponse().
-    if ( result.state == wxWebRequest::State_Unauthorized )
-        return result;
-
-    // Otherwise we're done.
+    // We're done.
     return GetResultFromHTTPStatus(m_response);
 }
 

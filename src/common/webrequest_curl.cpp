@@ -411,9 +411,14 @@ wxWebRequest::Result wxWebRequestCURL::DoHandleCompletion()
     if ( !m_response || m_response->GetStatus() == 0 )
         return Result::Error(GetError());
 
-    const auto result = GetResultFromHTTPStatus(m_response);
+    return GetResultFromHTTPStatus(m_response);
+}
 
-    if ( result.state == wxWebRequest::State_Unauthorized )
+void wxWebRequestCURL::HandleCompletion()
+{
+    HandleResult(DoHandleCompletion());
+
+    if ( GetState() == wxWebRequest::State_Unauthorized )
     {
         m_authChallenge.reset(
             new wxWebAuthChallengeCURL(
@@ -424,13 +429,6 @@ wxWebRequest::Result wxWebRequestCURL::DoHandleCompletion()
             )
         );
     }
-
-    return result;
-}
-
-void wxWebRequestCURL::HandleCompletion()
-{
-    HandleResult(DoHandleCompletion());
 }
 
 wxString wxWebRequestCURL::GetError() const

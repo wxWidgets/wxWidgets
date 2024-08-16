@@ -499,18 +499,8 @@ public:
     }
     @endcode
 
-    To handle authentication, check for State_Unauthorized state too and set
-    credentials in this case, e.g.:
-    @code
-    if ( result.state == wxWebRequestSync::State_Unauthorized )
-    {
-        request.GetAuthChallenge().SetCredentials("me", wxSecretValue("let me in"));
-
-        // Unlike with the asynchronous requests, Execute() must be called
-        // again manually.
-        result = request.Execute();
-    }
-    @endcode
+    To handle authentication with this class the username and password must be
+    specified in the URL itself and wxWebAuthChallenge is not used with it.
 
     @see wxWebRequest
 
@@ -528,11 +518,9 @@ public:
         State_Idle,
 
         /**
-            The request is currently unauthorized.
+            The request is unauthorized.
 
-            Calling GetAuthChallenge() returns a challenge object with further
-            details and calling SetCredentials() on this object and Execute()
-            again will retry the request using these credentials.
+            Use an URL with the username and password to access this resource.
         */
         State_Unauthorized,
 
@@ -683,12 +671,6 @@ public:
         returns @c false.
     */
     wxWebResponse GetResponse() const;
-
-    /**
-        Returns the current authentication challenge object while the request
-        is in @c State_Unauthorized.
-    */
-    wxWebAuthChallenge GetAuthChallenge() const;
 
     /** @name Request options
         Methods that set options before starting the request
