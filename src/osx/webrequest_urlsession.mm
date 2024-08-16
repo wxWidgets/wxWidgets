@@ -79,22 +79,8 @@
     wxUnusedVar(session);
 
     wxWebRequestURLSession* request = [self requestForTask:task];
-    if (error)
-    {
-        wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: didCompleteWithError, error=%s",
-                   request, wxCFStringRefFromGet([error description]).AsString());
 
-        if ( error.code == NSURLErrorCancelled )
-            request->SetState(wxWebRequest::State_Cancelled);
-        else
-            request->SetState(wxWebRequest::State_Failed, wxCFStringRefFromGet(error.localizedDescription).AsString());
-    }
-    else
-    {
-        wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: completed successfully", request);
-
-        request->HandleCompletion();
-    }
+    request->HandleCompletion(error);
 
     // After the task is completed it no longer needs to be mapped
     [m_requests removeObjectForKey:task];
@@ -176,12 +162,21 @@ wxWebRequestURLSession::wxWebRequestURLSession(wxWebSession& session,
 {
 }
 
+wxWebRequestURLSession::wxWebRequestURLSession(wxWebSessionURLSession& sessionImpl,
+                                               const wxString& url)
+    : wxWebRequestImpl(sessionImpl),
+      m_sessionImpl(sessionImpl),
+      m_url(url)
+{
+}
+
 wxWebRequestURLSession::~wxWebRequestURLSession()
 {
     [m_task release];
 }
 
-void wxWebRequestURLSession::Start()
+wxWebRequest::Result
+wxWebRequestURLSession::DoPrepare(void (^completionHandler)(NSData*, NSURLResponse*, NSError*))
 {
     wxString method = m_method;
     if ( method.empty() )
@@ -206,24 +201,123 @@ void wxWebRequestURLSession::Start()
 
         // Create NSData from memory buffer, passing it ownership of the data.
         NSData* data = [NSData dataWithBytesNoCopy:buf length:m_dataSize];
-        m_task = [[m_sessionImpl.GetSession() uploadTaskWithRequest:req fromData:data] retain];
+        m_task = [[m_sessionImpl.GetSession() uploadTaskWithRequest:req fromData:data
+                   completionHandler:completionHandler] retain];
     }
     else
     {
         // Create data task
-        m_task = [[m_sessionImpl.GetSession() dataTaskWithRequest:req] retain];
+        m_task = [[m_sessionImpl.GetSession() dataTaskWithRequest:req
+                   completionHandler:completionHandler] retain];
     }
+
+    m_response.reset(new wxWebResponseURLSession(*this, m_task));
+
+    const auto result = m_response->InitFileStorage();
+    if ( !result )
+        return result;
 
     wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: start \"%s %s\"",
                this, method, m_url);
 
+    return Result::Ok();
+}
+
+wxWebRequest::Result wxWebRequestURLSession::Execute()
+{
+    // Define the variables used inside the completion handler.
+    __block class Semaphore
+    {
+    public:
+        Semaphore()
+            : m_sem(dispatch_semaphore_create(0))
+        {
+        }
+
+        ~Semaphore()
+        {
+            dispatch_release(m_sem);
+        }
+
+        void Signal()
+        {
+            dispatch_semaphore_signal(m_sem);
+        }
+
+        void Wait()
+        {
+            dispatch_semaphore_wait(m_sem, DISPATCH_TIME_FOREVER);
+        }
+
+    private:
+        dispatch_semaphore_t m_sem;
+    } sem;
+
+    __block struct TaskResult
+    {
+        NSData* data = nil;
+        NSError* error = nil;
+
+        ~TaskResult()
+        {
+            [data release];
+            [error release];
+        }
+    } taskResult;
+
+    // Initialize the task with the completion handler that will wake us up
+    // after copying the result into local variables.
+    auto result = DoPrepare(^(NSData* data, NSURLResponse* response, NSError* error) {
+        taskResult.data = [data retain];
+
+        // We can ignore response as we already have it in m_task anyhow.
+
+        taskResult.error = [error retain];
+
+        sem.Signal();
+    });
+
+    if ( !result )
+        return result;
+
+    // Do run the task now.
+    [m_task resume];
+
+    // Block until it completes.
+    sem.Wait();
+
+    // Process the results.
+    if ( taskResult.data )
+        m_response->HandleData(taskResult.data);
+
+    result = GetResultAfterCompletion(taskResult.error);
+
+    if ( result.state == wxWebRequest::State_Unauthorized )
+    {
+        // We don't seem to have access to any information about the
+        // authentication challenge, so just do what we can.
+        m_authChallenge.reset(
+            new wxWebAuthChallengeURLSession(
+                m_response->GetStatus() == 407
+                    ? wxWebAuthChallenge::Source_Proxy
+                    : wxWebAuthChallenge::Source_Server,
+                    *this
+            )
+        );
+    }
+
+    return result;
+}
+
+void wxWebRequestURLSession::Start()
+{
+    // Prepare the request without a completion handler, we're using the
+    // delegate in the async case.
+    if ( !CheckResult(DoPrepare(nil)) )
+        return;
+
     // The session delegate needs to know which task is wrapped in which request
     [m_sessionImpl.GetDelegate() registerRequest:this task:m_task];
-
-    m_response.reset(new wxWebResponseURLSession(*this, m_task));
-
-    if ( !CheckResult(m_response->InitFileStorage()) )
-        return;
 
     SetState(wxWebRequest::State_Active);
     [m_task resume];
@@ -234,17 +328,29 @@ void wxWebRequestURLSession::DoCancel()
     [m_task cancel];
 }
 
-void wxWebRequestURLSession::HandleCompletion()
+void wxWebRequestURLSession::HandleCompletion(WX_NSError error)
 {
-    switch ( m_response->GetStatus() )
-    {
-        case 401:
-        case 407:
-            SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
-            break;
+    HandleResult(GetResultAfterCompletion(error));
+}
 
-        default:
-            SetFinalStateFromStatus();
+wxWebRequest::Result
+wxWebRequestURLSession::GetResultAfterCompletion(WX_NSError error)
+{
+    if (error)
+    {
+        wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: didCompleteWithError, error=%s",
+                   this, wxCFStringRefFromGet([error description]).AsString());
+
+        if ( error.code == NSURLErrorCancelled )
+            return Result::Cancelled();
+        else
+            return Result::Error(wxCFStringRefFromGet(error.localizedDescription).AsString());
+    }
+    else
+    {
+        wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: completed without error", this);
+
+        return GetResultFromHTTPStatus(m_response);
     }
 }
 
@@ -296,7 +402,8 @@ void wxWebAuthChallengeURLSession::SetCredentials(const wxWebCredentials& cred)
 
     [m_cred retain];
 
-    m_request.Start();
+    if ( m_request.IsAsync() )
+        m_request.Start();
 }
 
 
@@ -363,9 +470,18 @@ wxString wxWebResponseURLSession::GetSuggestedFileName() const
 // wxWebSessionURLSession
 //
 
-wxWebSessionURLSession::wxWebSessionURLSession()
+wxWebSessionURLSession::wxWebSessionURLSession(Mode mode)
+    : wxWebSessionImpl(mode)
 {
-    m_delegate = [[wxWebSessionDelegate alloc] initWithSession:this];
+    switch ( mode )
+    {
+        case Mode::Async:
+            m_delegate = [[wxWebSessionDelegate alloc] initWithSession:this];
+            break;
+
+        case Mode::Sync:
+            m_delegate = nil;
+    }
 }
 
 wxWebSessionURLSession::~wxWebSessionURLSession()
@@ -380,7 +496,20 @@ wxWebSessionURLSession::CreateRequest(wxWebSession& session,
                                       const wxString& url,
                                       int winid)
 {
+    wxCHECK_MSG( IsAsync(), wxWebRequestImplPtr(),
+                 "This method should not be called for synchronous sessions" );
+
     return wxWebRequestImplPtr(new wxWebRequestURLSession(session, *this, handler, url, winid));
+}
+
+wxWebRequestImplPtr
+wxWebSessionURLSession::CreateRequestSync(wxWebSessionSync& session,
+                                          const wxString& url)
+{
+    wxCHECK_MSG( !IsAsync(), wxWebRequestImplPtr(),
+                 "This method should not be called for asynchronous sessions" );
+
+    return wxWebRequestImplPtr{new wxWebRequestURLSession{*this, url}};
 }
 
 wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo()
