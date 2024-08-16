@@ -500,6 +500,40 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::BasicInURL", "[net][webrequest][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    CreateWithAuth("/basic-auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
+    Run();
+
+    CHECK( request.GetState() == wxWebRequest::State_Completed );
+
+    const auto& response = request.GetResponse();
+    CHECK( response.GetStatus() == 200 );
+    CHECK_THAT( response.AsString().utf8_string(),
+                Catch::Contains(R"("authorized": true)") );
+}
+
+TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::DigestInURL", "[net][webrequest][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    CreateWithAuth("/digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
+    Run();
+
+    CHECK( request.GetState() == wxWebRequest::State_Completed );
+
+    const auto& response = request.GetResponse();
+    CHECK( response.GetStatus() == 200 );
+    CHECK_THAT( response.AsString().utf8_string(),
+                Catch::Contains(R"("authorized": true)") );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Cancel", "[net][webrequest]")
 {
     if ( !InitBaseURL() )
