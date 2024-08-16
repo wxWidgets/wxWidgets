@@ -76,7 +76,7 @@ public:
     wxWebRequest::Storage GetStorage() const { return m_storage; }
 
     // This method is called to execute the request in a synchronous way.
-    virtual Result Execute() { return Result::Error("Not implemented"); }
+    virtual Result Execute() = 0;
 
     // This method is called to start execution of an asynchronous request.
     //
@@ -271,7 +271,7 @@ class wxWebSessionFactory
 {
 public:
     virtual wxWebSessionImpl* Create() = 0;
-    virtual wxWebSessionImpl* CreateSync() { return nullptr; }
+    virtual wxWebSessionImpl* CreateSync() = 0;
 
     virtual bool Initialize() { return true; }
 
@@ -308,7 +308,7 @@ public:
                   int id) = 0;
 
     virtual wxWebRequestImplPtr
-    CreateRequestSync(wxWebSessionSync& session, const wxString& url) { return wxWebRequestImplPtr{}; }
+    CreateRequestSync(wxWebSessionSync& session, const wxString& url) = 0;
 
     virtual wxVersionInfo GetLibraryVersionInfo() = 0;
 
@@ -326,7 +326,7 @@ public:
     virtual bool EnablePersistentStorage(bool WXUNUSED(enable)) { return false; }
 
 protected:
-    explicit wxWebSessionImpl(Mode mode = Mode::Async);
+    explicit wxWebSessionImpl(Mode mode);
 
     bool IsAsync() const { return m_mode == Mode::Async; }
 
