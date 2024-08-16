@@ -261,6 +261,27 @@ private:
     }
 };
 
+class WXDLLIMPEXP_NET wxWebRequestSync : public wxWebRequestBase
+{
+public:
+    wxWebRequestSync() = default;
+    wxWebRequestSync(const wxWebRequestSync& other) = default;
+    wxWebRequestSync& operator=(const wxWebRequestSync& other) = default;
+
+    // Possible return values for the state here are State_Completed,
+    // State_Failed and State_Unauthorized.
+    Result Execute() const;
+
+private:
+    friend class wxWebSessionSync;
+
+    explicit wxWebRequestSync(const wxWebRequestImplPtr& impl)
+        : wxWebRequestBase(impl)
+    {
+    }
+};
+
+
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[];
@@ -316,6 +337,8 @@ protected:
     wxWebSessionImplPtr m_impl;
 };
 
+// Web session class for using asynchronous web requests, suitable for use in
+// the main thread of GUI applications.
 class WXDLLIMPEXP_NET wxWebSession : public wxWebSessionBase
 {
 public:
@@ -335,6 +358,31 @@ public:
 
 private:
     explicit wxWebSession(const wxWebSessionImplPtr& impl)
+        : wxWebSessionBase(impl)
+    {
+    }
+};
+
+// Web session class for using synchronous web requests, suitable for use in
+// background worker threads.
+class WXDLLIMPEXP_NET wxWebSessionSync : public wxWebSessionBase
+{
+public:
+    wxWebSessionSync() = default;
+
+    wxWebSessionSync(const wxWebSessionSync& other) = default;
+    wxWebSessionSync& operator=(const wxWebSessionSync& other) = default;
+
+    // Objects of this class can't be created directly, use the following
+    // factory functions to get access to them.
+    static wxWebSessionSync& GetDefault();
+
+    static wxWebSessionSync New(const wxString& backend = wxString());
+
+    wxWebRequestSync CreateRequest(const wxString& url);
+
+private:
+    explicit wxWebSessionSync(const wxWebSessionImplPtr& impl)
         : wxWebSessionBase(impl)
     {
     }
