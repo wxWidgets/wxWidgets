@@ -124,9 +124,16 @@ protected:
 
     bool WasCancelled() const { return m_cancelled; }
 
+    // Get wxWebRequest::State and, optionally, error message corresponding to
+    // the given response (response must be valid here).
+    static Result GetResultFromHTTPStatus(const wxWebResponseImplPtr& response);
+
     // Call SetState() with either State_Failed or State_Completed appropriate
     // for the response status.
-    void SetFinalStateFromStatus();
+    void SetFinalStateFromStatus()
+    {
+        HandleResult(GetResultFromHTTPStatus(GetResponse()));
+    }
 
     // Unconditionally call SetState() with the parameters corresponding to the
     // given result.

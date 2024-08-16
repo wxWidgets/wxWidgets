@@ -358,24 +358,33 @@ void wxWebRequestCURL::DoCancel()
     m_sessionImpl.CancelRequest(this);
 }
 
+wxWebRequest::Result wxWebRequestCURL::DoHandleCompletion()
+{
+    // This is a special case, we want to use libcurl error message if there is
+    // no response at all.
+    if ( !m_response || m_response->GetStatus() == 0 )
+        return Result::Error(GetError());
+
+    const auto result = GetResultFromHTTPStatus(m_response);
+
+    if ( result.state == wxWebRequest::State_Unauthorized )
+    {
+        m_authChallenge.reset(
+            new wxWebAuthChallengeCURL(
+                m_response->GetStatus() == 407
+                    ? wxWebAuthChallenge::Source_Proxy
+                    : wxWebAuthChallenge::Source_Server,
+                    *this
+            )
+        );
+    }
+
+    return result;
+}
+
 void wxWebRequestCURL::HandleCompletion()
 {
-    int status = m_response ? m_response->GetStatus() : 0;
-
-    if ( status == 0 )
-    {
-        SetState(wxWebRequest::State_Failed, GetError());
-    }
-    else if ( status == 401 || status == 407 )
-    {
-        m_authChallenge.reset(new wxWebAuthChallengeCURL(
-            (status == 407) ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
-        SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
-    }
-    else
-    {
-        SetFinalStateFromStatus();
-    }
+    HandleResult(DoHandleCompletion());
 }
 
 wxString wxWebRequestCURL::GetError() const

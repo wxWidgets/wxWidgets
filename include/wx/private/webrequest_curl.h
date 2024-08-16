@@ -81,6 +81,10 @@ public:
     size_t CURLOnRead(char* buffer, size_t size);
 
 private:
+    // Convert the status of the completed request to our result structure and,
+    // if necessary, initialize m_authChallenge.
+    wxWebRequest::Result DoHandleCompletion();
+
     void DoCancel() override;
 
     wxWebSessionCURL& m_sessionImpl;

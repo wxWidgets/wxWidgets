@@ -86,23 +86,25 @@ void wxWebRequestImpl::Cancel()
     DoCancel();
 }
 
-void wxWebRequestImpl::SetFinalStateFromStatus()
+// static
+wxWebRequestSync::Result
+wxWebRequestImpl::GetResultFromHTTPStatus(const wxWebResponseImplPtr& resp)
 {
-    const wxWebResponseImplPtr& resp = GetResponse();
-    if ( !resp || resp->GetStatus() >= 400 )
-    {
-        wxString err;
-        if ( resp )
-        {
-            err.Printf(_("Error: %s (%d)"),
-                       resp->GetStatusText(), resp->GetStatus());
-        }
+    wxCHECK( resp, wxWebRequest::Result::Error("No response object") );
 
-        SetState(wxWebRequest::State_Failed, err);
+    const int status = resp->GetStatus();
+
+    if ( status == 401 || status == 407 )
+    {
+        return wxWebRequest::Result::Unauthorized(resp->GetStatusText());
+    }
+    else if ( status >= 400 )
+    {
+        return wxWebRequest::Result::Error(wxString::Format(_("Error: %s (%d)"), resp->GetStatusText(), status));
     }
     else
     {
-        SetState(wxWebRequest::State_Completed);
+        return wxWebRequest::Result::Ok(wxWebRequest::State_Completed);
     }
 }
 
