@@ -1239,6 +1239,20 @@ bool wxFileDialog::AddShortcut(const wxString& directory, int flags)
 
 int wxFileDialog::ShowModal()
 {
+    if ( wxMSWIsOnSecureScreen() )
+    {
+        // Opening a file dialog from secure desktop allows access to the host
+        // file system as administrator, which shouldn't be allowed.
+        wxMessageBox
+        (
+            _("Access to the file system is not allowed from secure desktop."),
+            _("Security warning"),
+            wxICON_ERROR
+        );
+
+        return wxID_CANCEL;
+    }
+
     WX_HOOK_MODAL_DIALOG();
 
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());

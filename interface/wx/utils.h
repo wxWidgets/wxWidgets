@@ -1692,3 +1692,24 @@ int wxHexToDec(const wxString& buf);
 */
 int wxHexToDec(const char* buf);
 ///@}
+
+
+/**
+    Check if the current desktop is the secure desktop.
+
+    Secure desktop is the desktop that is used for UAC prompts and sign-in
+    screens and runs at system level i.e. as administrator. Using this
+    function can be helpful to ensure that privileged operations are not
+    allowed when running on this desktop.
+
+    @note This function is only available under MSW.
+
+    @return
+        @true if the current desktop is the secure desktop.
+
+    @library{wxcore}
+    @header{wx/utils.h}
+
+    @since 3.3.0
+*/
+bool wxMSWIsOnSecureScreen();
