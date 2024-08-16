@@ -909,6 +909,17 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
+    const auto& versionInfo = wxWebSession::GetDefault().GetLibraryVersionInfo();
+    if ( versionInfo.GetName() == "libcurl" && !versionInfo.AtLeast(7, 60) )
+    {
+        // This test fails under Ubuntu 18.04 which uses libcurl 7.58 with GnuTLS.
+        // It's not clear whether it does it because libcurl is too old or
+        // because of using GnuTLS instead of OpenSSL used elsewhere, but for
+        // now just skip it.
+        WARN("Skipping Digest auth test because it's known to fail with old libcurl");
+        return;
+    }
+
     SECTION("No password")
     {
         Create("/digest-auth/auth/wxtest/wxwidgets");
