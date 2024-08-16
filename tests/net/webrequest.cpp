@@ -41,17 +41,10 @@ static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://nghttp2.org/httpbin
 // set to https://self-signed.badssl.com/ or any other self-signed server to
 // enable the corresponding tests.
 
-class RequestFixture : public wxTimer
+// Common base for sync and async tests fixtures.
+class BaseRequestFixture
 {
-public:
-    RequestFixture()
-    {
-        expectedFileSize = 0;
-        dataSize = 0;
-        stateFromEvent = wxWebRequest::State_Idle;
-        statusFromEvent = 0;
-    }
-
+protected:
     // All tests should call this function first and skip the test entirely if
     // it returns false, as this indicates that web requests tests are disabled.
     bool InitBaseURL()
@@ -78,11 +71,65 @@ public:
         CreateAbs(baseURL + subURL);
     }
 
-    void CreateAbs(const wxString& url)
+    virtual void CreateAbs(const wxString& url) = 0;
+
+    virtual wxWebRequestBase& GetRequest() = 0;
+
+    // Precondition: we must have an auth challenge.
+    void UseCredentials(const wxString& user, const wxString& password)
+    {
+        GetRequest().GetAuthChallenge().SetCredentials(
+            wxWebCredentials(user, wxSecretValue(password)));
+    }
+
+    // Check that the response is a JSON object containing a key "pi" with the
+    // expected value.
+    void CheckExpectedJSON(const wxString& response)
+    {
+        // We ought to really parse the returned JSON object, but to keep things as
+        // simple as possible for now we just treat it as a string.
+        INFO("Response: " << response);
+
+        const char* expectedKey = "\"pi\":";
+        size_t pos = response.find(expectedKey);
+        REQUIRE( pos != wxString::npos );
+
+        pos += strlen(expectedKey);
+
+        // There may, or not, be a space after it.
+        // And the value may be returned in an array.
+        while ( wxIsspace(response[pos]) || response[pos] == '[' )
+            pos++;
+
+        const char* expectedValue = "\"3.14159265358979323\"";
+        REQUIRE( response.compare(pos, strlen(expectedValue), expectedValue) == 0 );
+    }
+
+private:
+    wxString baseURL;
+};
+
+class RequestFixture : public wxTimer, public BaseRequestFixture
+{
+public:
+    RequestFixture()
+    {
+        expectedFileSize = 0;
+        dataSize = 0;
+        stateFromEvent = wxWebRequest::State_Idle;
+        statusFromEvent = 0;
+    }
+
+    void CreateAbs(const wxString& url) override
     {
         request = wxWebSession::GetDefault().CreateRequest(this, url);
         Bind(wxEVT_WEBREQUEST_STATE, &RequestFixture::OnRequestState, this);
         Bind(wxEVT_WEBREQUEST_DATA, &RequestFixture::OnData, this);
+    }
+
+    wxWebRequestBase& GetRequest() override
+    {
+        return request;
     }
 
     void OnRequestState(wxWebRequestEvent& evt)
@@ -168,14 +215,6 @@ public:
         }
     }
 
-    // Precondition: we must have an auth challenge.
-    void UseCredentials(const wxString& user, const wxString& password)
-    {
-        request.GetAuthChallenge().SetCredentials(
-            wxWebCredentials(user, wxSecretValue(password)));
-    }
-
-    wxString baseURL;
     wxEventLoop loop;
     wxWebRequest request;
     wxWebRequest::State stateFromEvent;
@@ -257,24 +296,7 @@ TEST_CASE_METHOD(RequestFixture,
     Create("/get?pi=3.14159265358979323");
     Run();
 
-    // We ought to really parse the returned JSON object, but to keep things as
-    // simple as possible for now we just treat it as a string.
-    const wxString& response = request.GetResponse().AsString();
-    INFO("Response: " << response);
-
-    const char* expectedKey = "\"pi\":";
-    size_t pos = response.find(expectedKey);
-    REQUIRE( pos != wxString::npos );
-
-    pos += strlen(expectedKey);
-
-    // There may, or not, be a space after it.
-    // And the value may be returned in an array.
-    while ( wxIsspace(response[pos]) || response[pos] == '[' )
-        pos++;
-
-    const char* expectedValue = "\"3.14159265358979323\"";
-    REQUIRE( response.compare(pos, strlen(expectedValue), expectedValue) == 0 );
+    CheckExpectedJSON( request.GetResponse().AsString() );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -512,6 +534,325 @@ TEST_CASE_METHOD(RequestFixture,
     CHECK( statusFromEvent == 200 );
     CHECK( responseStringFromEvent == "Still alive!" );
 }
+
+class SyncRequestFixture : public BaseRequestFixture
+{
+public:
+    void CreateAbs(const wxString& url) override
+    {
+        request = wxWebSessionSync::GetDefault().CreateRequest(url);
+    }
+
+    wxWebRequestBase& GetRequest() override
+    {
+        return request;
+    }
+
+    bool Execute(const wxString& url)
+    {
+        Create(url);
+        return Execute();
+    }
+
+    bool Execute()
+    {
+        const auto result = request.Execute();
+
+        response = request.GetResponse();
+        state = result.state;
+        error = result.error;
+
+        switch ( state )
+        {
+            case wxWebRequest::State_Idle:
+            case wxWebRequest::State_Active:
+            case wxWebRequest::State_Cancelled:
+                wxFAIL_MSG("Unexpected state");
+                wxFALLTHROUGH;
+
+            case wxWebRequest::State_Failed:
+            case wxWebRequest::State_Unauthorized:
+                break;
+
+            case wxWebRequest::State_Completed:
+                return true;
+        }
+
+        return false;
+    }
+
+    wxWebRequestSync request;
+    wxWebResponse response;
+    wxWebRequest::State state = wxWebRequest::State_Idle;
+    wxString error;
+};
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::Bytes", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    REQUIRE( Execute(wxString::Format("/bytes/%d", 65536)) );
+
+    CHECK( response.GetStatus() == 200 );
+    CHECK( response.GetContentLength() == 65536 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::Simple", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    // Note that the session may be initialized on demand, so don't check the
+    // native handle before actually using it.
+    wxWebSessionSync& session = wxWebSessionSync::GetDefault();
+    REQUIRE( session.IsOpened() );
+
+    // Request is not initialized yet.
+    CHECK( !request.IsOk() );
+    CHECK( !request.GetNativeHandle() );
+
+    REQUIRE( Execute("/status/200") );
+    CHECK( request.IsOk() );
+    CHECK( request.GetNativeHandle() );
+    CHECK( session.GetNativeHandle() );
+
+    CHECK( response.GetStatus() == 200 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::String", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    REQUIRE( Execute("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==") );
+
+    CHECK( response.AsString() == "The quick brown fox jumps over the lazy dog" );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::Header", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    REQUIRE( Execute("/response-headers?freeform=wxWidgets%20works!") );
+
+    CHECK( response.GetHeader("freeform") == "wxWidgets works!" );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::Param", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    REQUIRE( Execute("/get?pi=3.14159265358979323") );
+
+    CheckExpectedJSON( response.AsString() );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::File", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    wxInt64 expectedFileSize = 99 * 1024;
+    Create(wxString::Format("/bytes/%lld", expectedFileSize));
+    request.SetStorage(wxWebRequest::Storage_File);
+
+    REQUIRE( Execute() );
+
+    CHECK( request.GetBytesReceived() == expectedFileSize );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Get::None", "[net][webrequest][sync][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    int processingSize = 99 * 1024;
+    Create(wxString::Format("/bytes/%d", processingSize));
+    request.SetStorage(wxWebRequest::Storage_None);
+
+    REQUIRE( Execute() );
+
+    CHECK( request.GetBytesReceived() == processingSize );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Error::HTTP", "[net][webrequest][sync][error]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    CHECK_FALSE( Execute("/status/404") );
+
+    CHECK( response.GetStatus() == 404 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Error::Body", "[net][webrequest][sync][error]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    CHECK_FALSE( Execute("/status/418") );
+
+    CHECK( response.GetStatus() == 418 );
+    CHECK_THAT( response.AsString().utf8_string(), Catch::Contains("teapot") );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Error::Connect", "[net][webrequest][sync][error]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    CreateAbs("http://127.0.0.1:51234");
+    CHECK( !Execute() );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::SSL::Error", "[net][webrequest][sync][error]")
+{
+    wxString selfsignedURL;
+    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &selfsignedURL) )
+    {
+        WARN("Skipping because WX_TEST_WEBREQUEST_URL_SELF_SIGNED is not set.");
+        return;
+    }
+
+    if (!InitBaseURL())
+        return;
+
+    CreateAbs(selfsignedURL);
+    CHECK( !Execute() );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::SSL::Ignore", "[net][webrequest][sync]")
+{
+    wxString selfsignedURL;
+    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &selfsignedURL) )
+    {
+        WARN("Skipping because WX_TEST_WEBREQUEST_URL_SELF_SIGNED is not set.");
+        return;
+    }
+
+    if (!InitBaseURL())
+        return;
+
+    // For some reason this test sporadically fails under AppVeyor, so don't
+    // run it there.
+#ifdef __WINDOWS__
+    if ( IsAutomaticTest() )
+    {
+        WARN("Skipping DisablePeerVerify() test known to sporadically fail.");
+        return;
+    }
+#endif // __WINDOWS__
+
+    CreateAbs(selfsignedURL);
+    request.DisablePeerVerify();
+
+    REQUIRE( Execute() );
+    CHECK( response.GetStatus() == 200 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Post", "[net][webrequest][sync]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/post");
+    request.SetData("app=WebRequestSample&version=1", "application/x-www-form-urlencoded");
+    REQUIRE( Execute() );
+    CHECK( response.GetStatus() == 200 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Put", "[net][webrequest][sync]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/put");
+    std::unique_ptr<wxInputStream> is(new wxFileInputStream("horse.png"));
+    REQUIRE( is->IsOk() );
+
+    request.SetData(is.release(), "image/png");
+    request.SetMethod("PUT");
+    REQUIRE( Execute() );
+    CHECK( response.GetStatus() == 200 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Auth::Basic", "[net][webrequest][sync][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/basic-auth/wxtest/wxwidgets");
+    CHECK_FALSE( Execute() );
+    CHECK( state == wxWebRequest::State_Unauthorized );
+    CHECK( response.GetStatus() == 401 );
+
+    REQUIRE( request.GetAuthChallenge().IsOk() );
+
+    SECTION("Good password")
+    {
+        UseCredentials("wxtest", "wxwidgets");
+        CHECK( Execute() );
+        CHECK( response.GetStatus() == 200 );
+        CHECK( state == wxWebRequest::State_Completed );
+    }
+
+    SECTION("Bad password")
+    {
+        UseCredentials("wxtest", "foobar");
+        CHECK_FALSE( Execute() );
+        CHECK( response.GetStatus() == 401 );
+        CHECK( state == wxWebRequest::State_Unauthorized );
+    }
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Auth::Digest", "[net][webrequest][sync][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/digest-auth/auth/wxtest/wxwidgets");
+    CHECK_FALSE( Execute() );
+    CHECK( state == wxWebRequest::State_Unauthorized );
+    CHECK( response.GetStatus() == 401 );
+
+    REQUIRE( request.GetAuthChallenge().IsOk() );
+
+    SECTION("Good password")
+    {
+        UseCredentials("wxtest", "wxwidgets");
+        CHECK( Execute() );
+        CHECK( response.GetStatus() == 200 );
+        CHECK( state == wxWebRequest::State_Completed );
+    }
+
+    SECTION("Bad password")
+    {
+        UseCredentials("foo", "bar");
+        CHECK_FALSE( Execute() );
+        CHECK( response.GetStatus() == 401 );
+        CHECK( state == wxWebRequest::State_Unauthorized );
+    }
+}
+
 
 // This test is not run by default and has to be explicitly selected to run.
 TEST_CASE_METHOD(RequestFixture,
