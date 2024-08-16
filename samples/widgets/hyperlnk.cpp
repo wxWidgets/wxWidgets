@@ -177,11 +177,11 @@ void HyperlinkWidgetsPage::CreateContent()
                                       WXSIZEOF(alignments), alignments);
     m_radioAlignMode->SetSelection(1);  // start with "centre" selected since
                                         // wxHL_DEFAULT_STYLE contains wxHL_ALIGN_CENTRE
-    sizerLeft->Add(m_radioAlignMode, 0, wxALL|wxGROW, 5);
+    sizerLeft->Add(m_radioAlignMode, wxSizerFlags().Expand().Border(wxALL));
 
     m_checkGeneric = new wxCheckBox(sizerLeftBox, wxID_ANY, "Use generic version",
                                     wxDefaultPosition, wxDefaultSize);
-    sizerLeft->Add(m_checkGeneric, 0, wxALL|wxGROW, 5);
+    sizerLeft->Add(m_checkGeneric, wxSizerFlags().Expand().Border(wxALL));
 
     // right pane
     wxSizer *szHyperlinkLong = new wxBoxSizer(wxVERTICAL);
@@ -231,7 +231,7 @@ void HyperlinkWidgetsPage::CreateContent()
     szHyperlinkLong->Add(0, 0, 1, wxCENTRE);
     szHyperlinkLong->Add(szHyperlink, 0, wxCENTRE|wxGROW);
     szHyperlinkLong->Add(0, 0, 1, wxCENTRE);
-    szHyperlinkLong->Add(m_hyperlinkLong, 0, wxGROW);
+    szHyperlinkLong->Add(m_hyperlinkLong, wxSizerFlags().Expand());
     szHyperlinkLong->Add(0, 0, 1, wxCENTRE);
 
 

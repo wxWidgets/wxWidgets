@@ -1605,7 +1605,7 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     m_radio = new wxRadioBox( this, wxID_ANY, "&Shape",
                               wxDefaultPosition, wxDefaultSize, 4, choices, 4,
                               wxRA_SPECIFY_COLS );
-    shapesSizer->Add( m_radio, 0, wxGROW|wxALL, 5 );
+    shapesSizer->Add( m_radio, wxSizerFlags().Expand().Border(wxALL));
     topSizer->Add( shapesSizer, 0, wxALL, 2 );
 
     // attributes
@@ -1640,9 +1640,9 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     xywhSizer->Add( m_textH, 1, wxGROW|wxALL, 2 );
 
     wxButton* col = new wxButton( this, Button_Colour, "&Colour..." );
-    attrSizer->Add( xywhSizer, 1, wxGROW );
+    attrSizer->Add( xywhSizer, wxSizerFlags(1).Expand());
     attrSizer->Add( col, 0, wxALL|wxALIGN_CENTRE_VERTICAL, 2 );
-    topSizer->Add( attrSizer, 0, wxGROW|wxALL, 5 );
+    topSizer->Add( attrSizer, wxSizerFlags().Expand().Border(wxALL));
 
     // buttons
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );

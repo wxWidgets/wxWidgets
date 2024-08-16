@@ -541,7 +541,7 @@ void StaticWidgetsPage::CreateStatic()
                                   isVert ? wxLI_VERTICAL : wxLI_HORIZONTAL);
 #endif // wxUSE_STATLINE
 
-    m_sizerStatBox->Add(m_statText, 0, wxGROW);
+    m_sizerStatBox->Add(m_statText, wxSizerFlags().Expand());
 #if wxUSE_STATLINE
     m_sizerStatBox->Add(m_statLine, 0, wxGROW | wxTOP | wxBOTTOM, 10);
 #endif // wxUSE_STATLINE
@@ -557,7 +557,7 @@ void StaticWidgetsPage::CreateStatic()
     NotifyWidgetRecreation(m_statLine);
 #endif
 
-    m_sizerStatic->Add(m_sizerStatBox, 0, wxGROW);
+    m_sizerStatic->Add(m_sizerStatBox, wxSizerFlags().Expand());
 
     m_sizerStatic->Layout();
 

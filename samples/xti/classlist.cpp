@@ -111,7 +111,7 @@ void ClassListDialog::CreateControls()
     itemBoxSizer2->Add(m_pClassCountText, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
     wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer5, 1, wxGROW, 5);
+    itemBoxSizer2->Add(itemBoxSizer5, wxSizerFlags(1).Expand().Border(wxALL));
 
     m_pChoiceBook = new wxChoicebook( this, ID_LISTMODE, wxDefaultPosition, wxDefaultSize, wxCHB_DEFAULT );
 
@@ -122,7 +122,7 @@ void ClassListDialog::CreateControls()
 
     wxArrayString m_pRawListBoxStrings;
     m_pRawListBox = new wxListBox( itemPanel7, ID_LISTBOX, wxDefaultPosition, wxDefaultSize, m_pRawListBoxStrings, wxLB_SINGLE );
-    itemBoxSizer8->Add(m_pRawListBox, 1, wxGROW, 5);
+    itemBoxSizer8->Add(m_pRawListBox, wxSizerFlags(1).Expand().Border(wxALL));
 
     m_pChoiceBook->AddPage(itemPanel7, _("Raw list"));
 
@@ -133,7 +133,7 @@ void ClassListDialog::CreateControls()
 
     wxArrayString m_pSizeListBoxStrings;
     m_pSizeListBox = new wxListBox( itemPanel13, ID_LISTBOX, wxDefaultPosition, wxDefaultSize, m_pSizeListBoxStrings, wxLB_SINGLE );
-    itemBoxSizer14->Add(m_pSizeListBox, 1, wxGROW, 5);
+    itemBoxSizer14->Add(m_pSizeListBox, wxSizerFlags(1).Expand().Border(wxALL));
 
     m_pChoiceBook->AddPage(itemPanel13, _("Classes by size"));
 
@@ -143,19 +143,19 @@ void ClassListDialog::CreateControls()
     itemPanel10->SetSizer(itemBoxSizer11);
 
     m_pParentTreeCtrl = new wxTreeCtrl( itemPanel10, ID_TREECTRL, wxDefaultPosition, wxSize(100, 100), wxTR_HAS_BUTTONS |wxTR_SINGLE );
-    itemBoxSizer11->Add(m_pParentTreeCtrl, 1, wxGROW, 5);
+    itemBoxSizer11->Add(m_pParentTreeCtrl, wxSizerFlags(1).Expand().Border(wxALL));
 
     m_pChoiceBook->AddPage(itemPanel10, _("Classes by parent"));
 
 
-    itemBoxSizer5->Add(m_pChoiceBook, 0, wxGROW|wxALL, 5);
+    itemBoxSizer5->Add(m_pChoiceBook, wxSizerFlags().Expand().Border(wxALL));
 
     m_pTextCtrl = new wxTextCtrl( this, ID_TEXTCTRL, "", wxDefaultPosition, wxSize(500, -1), wxTE_MULTILINE|wxTE_READONLY );
-    itemBoxSizer5->Add(m_pTextCtrl, 3, wxGROW|wxALL, 5);
+    itemBoxSizer5->Add(m_pTextCtrl, wxSizerFlags(3).Expand().Border(wxALL));
 
     wxStdDialogButtonSizer* itemStdDialogButtonSizer17 = new wxStdDialogButtonSizer;
 
-    itemBoxSizer2->Add(itemStdDialogButtonSizer17, 0, wxGROW|wxALL, 5);
+    itemBoxSizer2->Add(itemStdDialogButtonSizer17, wxSizerFlags().Expand().Border(wxALL));
     wxButton* itemButton18 = new wxButton( this, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
     itemStdDialogButtonSizer17->AddButton(itemButton18);
 

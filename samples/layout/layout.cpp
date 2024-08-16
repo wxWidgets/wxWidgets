@@ -407,7 +407,7 @@ MyNotebookWithSizerDialog::MyNotebookWithSizerDialog(wxWindow *parent, const wxS
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     wxNotebook *notebook = new wxNotebook( this, wxID_ANY );
-    topsizer->Add( notebook, 1, wxGROW );
+    topsizer->Add( notebook, wxSizerFlags(1).Expand());
 
     wxButton *button = new wxButton( this, wxID_OK, "OK" );
     topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
@@ -422,10 +422,10 @@ MyNotebookWithSizerDialog::MyNotebookWithSizerDialog(wxWindow *parent, const wxS
 
     wxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
 
-    wxTextCtrl *text = new wxTextCtrl( panel, wxID_ANY, "TextLine 1.", wxDefaultPosition, wxSize(250,wxDefaultCoord) );
-    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
-    text = new wxTextCtrl( panel, wxID_ANY, "TextLine 2.", wxDefaultPosition, wxSize(250,wxDefaultCoord) );
-    panelsizer->Add( text, 0, wxGROW|wxALL, 30 );
+    wxTextCtrl *text = new wxTextCtrl( panel, wxID_ANY, "TextLine 1.", wxDefaultPosition, wxSize(250, wxDefaultCoord) );
+    panelsizer->Add( text, wxSizerFlags().Expand().Border(wxALL, FromDIP(30)));
+    text = new wxTextCtrl( panel, wxID_ANY, "TextLine 2.", wxDefaultPosition, wxSize(250, wxDefaultCoord) );
+    panelsizer->Add( text, wxSizerFlags().Expand().Border(wxALL, FromDIP(30)));
     wxButton *button2 = new wxButton( panel, wxID_ANY, "Hallo" );
     panelsizer->Add( button2, 0, wxALIGN_RIGHT | wxLEFT|wxRIGHT|wxBOTTOM, 30 );
 
@@ -664,7 +664,7 @@ MyNestedSizerFrame::MyNestedSizerFrame(wxFrame* parent)
     main_sizer->Add( new wxStaticText( this, -1, "Hello outside" ), 0, wxALIGN_CENTER );
 
     m_target = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 80, wxDefaultCoord ) );
-    main_sizer->Add( m_target, 1, wxALL|wxGROW, 5 );
+    main_sizer->Add( m_target, wxSizerFlags(1).Expand().Border(wxALL));
 
     SetSizerAndFit( main_sizer);
 }

@@ -153,7 +153,7 @@ void DirPickerWidgetsPage::CreateContent()
     m_chkDirMustExist = CreateCheckBoxAndAddToSizer(sizerStyle, "Dir must exist", wxID_ANY, sizerStyleBox);
     m_chkDirChangeDir = CreateCheckBoxAndAddToSizer(sizerStyle, "Change working dir", wxID_ANY, sizerStyleBox);
     m_chkSmall = CreateCheckBoxAndAddToSizer(sizerStyle, "&Small version", wxID_ANY, sizerStyleBox);
-    sizerLeft->Add(sizerStyle, 0, wxALL|wxGROW, 5);
+    sizerLeft->Add(sizerStyle, wxSizerFlags().Expand().Border(wxALL));
 
     sizerLeft->Add(CreateSizerWithTextAndButton
                  (

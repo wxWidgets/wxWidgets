@@ -3927,7 +3927,7 @@ void StdButtonSizerDialog::OnEvent(wxCommandEvent& WXUNUSED(event))
     }
 
     m_buttonsSizer = CreateStdDialogButtonSizer(flags);
-    GetSizer()->Add(m_buttonsSizer, 0, wxGROW|wxALL, 5);
+    GetSizer()->Add(m_buttonsSizer, wxSizerFlags().Expand().Border(wxALL));
 
     Layout();
     GetSizer()->SetSizeHints(this);

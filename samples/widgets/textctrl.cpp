@@ -603,7 +603,7 @@ void TextWidgetsPage::CreateContent()
                      );
 
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
-    sizerMiddle->Add(sizerMiddleUp, 0, wxGROW);
+    sizerMiddle->Add(sizerMiddleUp, wxSizerFlags().Expand());
     sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
 
     // right pane

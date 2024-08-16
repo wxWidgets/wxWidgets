@@ -262,8 +262,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
 
     wxSizer *sz = new wxBoxSizer(wxVERTICAL);
-    sz->Add(m_Html, 3, wxGROW);
-    sz->Add(text, 1, wxGROW);
+    sz->Add(m_Html, wxSizerFlags(3).Expand());
+    sz->Add(text, wxSizerFlags(1).Expand());
     SetSizer(sz);
 }
 

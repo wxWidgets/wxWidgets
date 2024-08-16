@@ -673,7 +673,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
     m_ctrl[Page_Music]->SetMinSize(wxSize(-1, 200));
-    firstPanelSz->Add(m_ctrl[Page_Music], 1, wxGROW|wxALL, 5);
+    firstPanelSz->Add(m_ctrl[Page_Music], wxSizerFlags(1).Expand().Border(wxALL));
     firstPanelSz->Add(button_sizer);
     firstPanelSz->Add(sizerCurrent);
     firstPanel->SetSizerAndFit(firstPanelSz);
@@ -701,7 +701,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                    wxSizerFlags().Centre().DoubleBorder());
 
     wxSizer *secondPanelSz = new wxBoxSizer( wxVERTICAL );
-    secondPanelSz->Add(m_ctrl[Page_List], 1, wxGROW|wxALL, 5);
+    secondPanelSz->Add(m_ctrl[Page_List], wxSizerFlags(1).Expand().Border(wxALL));
     secondPanelSz->Add(button_sizer2);
     secondPanelSz->Add(sortSizer);
     secondPanel->SetSizerAndFit(secondPanelSz);
@@ -715,7 +715,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     BuildDataViewCtrl(thirdPanel, Page_ListStore);
 
     wxSizer *thirdPanelSz = new wxBoxSizer( wxVERTICAL );
-    thirdPanelSz->Add(m_ctrl[Page_ListStore], 1, wxGROW|wxALL, 5);
+    thirdPanelSz->Add(m_ctrl[Page_ListStore], wxSizerFlags(1).Expand().Border(wxALL));
     thirdPanel->SetSizerAndFit(thirdPanelSz);
 
 
@@ -733,7 +733,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_CONTAINER_ITEM, "Add Container"), 0, wxALL, 10 );
 
     wxSizer *fourthPanelSz = new wxBoxSizer( wxVERTICAL );
-    fourthPanelSz->Add(m_ctrl[Page_TreeStore], 1, wxGROW|wxALL, 5);
+    fourthPanelSz->Add(m_ctrl[Page_TreeStore], wxSizerFlags(1).Expand().Border(wxALL));
     fourthPanelSz->Add(button_sizer4);
     fourthPanel->SetSizerAndFit(fourthPanelSz);
 
@@ -783,7 +783,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     BuildDataViewCtrl(seventhPanel, Page_HasValue);
 
     wxSizer *seventhPanelSz = new wxBoxSizer( wxVERTICAL );
-    seventhPanelSz->Add(m_ctrl[Page_HasValue], 1, wxGROW|wxALL, 5);
+    seventhPanelSz->Add(m_ctrl[Page_HasValue], wxSizerFlags(1).Expand().Border(wxALL));
     seventhPanel->SetSizerAndFit(seventhPanelSz);
 
     // complete GUI
@@ -799,8 +799,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    mainSizer->Add( m_notebook, 1, wxGROW );
-    mainSizer->Add( m_log, 0, wxGROW );
+    mainSizer->Add( m_notebook, wxSizerFlags(1).Expand());
+    mainSizer->Add( m_log, wxSizerFlags().Expand());
 
     SetSizerAndFit(mainSizer);
 
@@ -1406,7 +1406,7 @@ void MyFrame::OnStyleChange( wxCommandEvent& WXUNUSED(event) )
     BuildDataViewCtrl((wxPanel*)m_notebook->GetPage(nPanel),
         nPanel, style, flags);
 
-    sz->Prepend(m_ctrl[nPanel], 1, wxGROW|wxALL, 5);
+    sz->Prepend(m_ctrl[nPanel], wxSizerFlags(1).Expand().Border(wxALL));
     sz->Layout();
 }
 

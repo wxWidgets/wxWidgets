@@ -882,13 +882,13 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
     statbarBottom->SetStatusText("in a dialog", 1);
 
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-    sizerTop->Add(statbarTop, 0, wxGROW);
-    sizerTop->Add(-1, 10, 1, wxGROW);
+    sizerTop->Add(statbarTop, wxSizerFlags().Expand());
+    sizerTop->Add(-1, 10, wxSizerFlags(1).Expand());
     sizerTop->Add(text, 0, wxCENTRE | wxRIGHT | wxLEFT, FromDIP(20));
-    sizerTop->Add(-1, 10, 1, wxGROW);
+    sizerTop->Add(-1, 10, wxSizerFlags(1).Expand());
     sizerTop->Add(btn, 0, wxCENTRE | wxRIGHT | wxLEFT, FromDIP(20));
-    sizerTop->Add(-1, 10, 1, wxGROW);
-    sizerTop->Add(statbarBottom, 0, wxGROW);
+    sizerTop->Add(-1, 10, wxSizerFlags(1).Expand());
+    sizerTop->Add(statbarBottom, wxSizerFlags().Expand());
 
     SetSizerAndFit(sizerTop);
 }

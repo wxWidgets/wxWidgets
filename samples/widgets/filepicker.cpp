@@ -167,7 +167,7 @@ void FilePickerWidgetsPage::CreateContent()
     m_radioFilePickerMode = new wxRadioBox(this, wxID_ANY, "wxFilePicker mode",
                                            wxDefaultPosition, wxDefaultSize,
                                            WXSIZEOF(mode), mode);
-    leftSizer->Add(m_radioFilePickerMode, 0, wxALL|wxGROW, 5);
+    leftSizer->Add(m_radioFilePickerMode, wxSizerFlags().Expand().Border(wxALL));
 
     wxStaticBoxSizer *styleSizer = new wxStaticBoxSizer(wxVERTICAL, this, "&FilePicker style");
     wxStaticBox* const styleSizerBox = styleSizer->GetStaticBox();
@@ -178,7 +178,7 @@ void FilePickerWidgetsPage::CreateContent()
     m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(styleSizer, "Change working dir", wxID_ANY, styleSizerBox);
     m_chkSmall = CreateCheckBoxAndAddToSizer(styleSizer, "&Small version", wxID_ANY, styleSizerBox);
 
-    leftSizer->Add(styleSizer, 0, wxALL|wxGROW, 5);
+    leftSizer->Add(styleSizer, wxSizerFlags().Expand().Border(wxALL));
 
     leftSizer->Add(CreateSizerWithTextAndButton
                  (
@@ -211,8 +211,8 @@ void FilePickerWidgetsPage::CreateContent()
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(leftSizer, 0, wxGROW|wxALL, 5);
-    sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
+    sz->Add(leftSizer, wxSizerFlags().Expand().Border(wxALL));
+    sz->Add(m_sizer, wxSizerFlags(1).Expand().Border(wxALL));
 
     SetSizer(sz);
 }
