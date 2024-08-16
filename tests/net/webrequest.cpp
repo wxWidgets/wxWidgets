@@ -858,6 +858,23 @@ TEST_CASE_METHOD(SyncRequestFixture,
 }
 
 
+static void DumpResponse(const wxWebResponse& response)
+{
+    REQUIRE( response.IsOk() );
+    WARN("URL: " << response.GetURL() << "\n" <<
+         "Status: " << response.GetStatus()
+                    << " (" << response.GetStatusText() << ")\n" <<
+         "Body length: " << response.GetContentLength() << "\n" <<
+         "Body: " << response.AsString() << "\n");
+
+    // Also show the value of the given header if requested.
+    wxString header;
+    if ( wxGetEnv("WX_TEST_WEBREQUEST_HEADER", &header) )
+    {
+        WARN("Header " << header << ": " << response.GetHeader(header));
+    }
+}
+
 // This test is not run by default and has to be explicitly selected to run.
 TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Manual", "[.]")
@@ -876,20 +893,28 @@ TEST_CASE_METHOD(RequestFixture,
     RunLoopWithTimeout();
 
     CHECK( request.GetState() == wxWebRequest::State_Completed );
-    wxWebResponse response = request.GetResponse();
-    REQUIRE( response.IsOk() );
-    WARN("URL: " << response.GetURL() << "\n" <<
-         "Status: " << response.GetStatus()
-                    << " (" << response.GetStatusText() << ")\n" <<
-         "Body length: " << response.GetContentLength() << "\n" <<
-         "Body: " << response.AsString() << "\n");
 
-    // Also show the value of the given header if requested.
-    wxString header;
-    if ( wxGetEnv("WX_TEST_WEBREQUEST_HEADER", &header) )
+    DumpResponse(request.GetResponse());
+}
+
+// A sync version of the pseudo-test above.
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Manual", "[.]")
+{
+    // Allow getting 8-bit strings from the environment correctly.
+    setlocale(LC_ALL, "");
+
+    wxString url;
+    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &url) )
     {
-        WARN("Header " << header << ": " << response.GetHeader(header));
+        FAIL("Specify WX_TEST_WEBREQUEST_URL");
     }
+
+    CreateAbs(url);
+
+    CHECK( Execute() );
+
+    DumpResponse(request.GetResponse());
 }
 
 using wxWebRequestHeaderMap = std::unordered_map<wxString, wxString>;
