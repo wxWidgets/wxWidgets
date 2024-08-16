@@ -377,34 +377,38 @@ void wxWebRequestImpl::ProcessStateEvent(wxWebRequest::State state, const wxStri
 // wxWebRequest
 //
 
-wxWebRequest::wxWebRequest() = default;
+wxWebRequestBase::wxWebRequestBase() = default;
 
-wxWebRequest::wxWebRequest(const wxWebRequestImplPtr& impl)
+wxWebRequestBase::wxWebRequestBase(const wxWebRequestImplPtr& impl)
     : m_impl(impl)
 {
 }
 
-wxWebRequest::wxWebRequest(const wxWebRequest& other) = default;
+wxWebRequestBase::wxWebRequestBase(const wxWebRequestBase& other) = default;
 
-wxWebRequest& wxWebRequest::operator=(const wxWebRequest& other) = default;
+wxWebRequestBase&
+wxWebRequestBase::operator=(const wxWebRequestBase& other) = default;
 
-wxWebRequest::~wxWebRequest() = default;
+wxWebRequestBase::~wxWebRequestBase() = default;
 
-void wxWebRequest::SetHeader(const wxString& name, const wxString& value)
+void wxWebRequestBase::SetHeader(const wxString& name, const wxString& value)
 {
     wxCHECK_IMPL_VOID();
 
     m_impl->SetHeader(name, value);
 }
 
-void wxWebRequest::SetMethod(const wxString& method)
+void wxWebRequestBase::SetMethod(const wxString& method)
 {
     wxCHECK_IMPL_VOID();
 
     m_impl->SetMethod(method);
 }
 
-void wxWebRequest::SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv)
+void
+wxWebRequestBase::SetData(const wxString& text,
+                          const wxString& contentType,
+                          const wxMBConv& conv)
 {
     wxCHECK_IMPL_VOID();
 
@@ -412,9 +416,9 @@ void wxWebRequest::SetData(const wxString& text, const wxString& contentType, co
 }
 
 bool
-wxWebRequest::SetData(wxInputStream* dataStream,
-                      const wxString& contentType,
-                      wxFileOffset dataSize)
+wxWebRequestBase::SetData(wxInputStream* dataStream,
+                          const wxString& contentType,
+                          wxFileOffset dataSize)
 {
     // Ensure that the stream is destroyed even we return below.
     std::unique_ptr<wxInputStream> streamPtr(dataStream);
@@ -424,14 +428,14 @@ wxWebRequest::SetData(wxInputStream* dataStream,
     return m_impl->SetData(streamPtr, contentType, dataSize);
 }
 
-void wxWebRequest::SetStorage(Storage storage)
+void wxWebRequestBase::SetStorage(Storage storage)
 {
     wxCHECK_IMPL_VOID();
 
     m_impl->SetStorage(storage);
 }
 
-wxWebRequest::Storage wxWebRequest::GetStorage() const
+wxWebRequestBase::Storage wxWebRequestBase::GetStorage() const
 {
     wxCHECK_IMPL( Storage_None );
 
@@ -458,14 +462,14 @@ void wxWebRequest::Cancel()
     m_impl->Cancel();
 }
 
-wxWebResponse wxWebRequest::GetResponse() const
+wxWebResponse wxWebRequestBase::GetResponse() const
 {
     wxCHECK_IMPL( wxWebResponse() );
 
     return wxWebResponse(m_impl->GetResponse());
 }
 
-wxWebAuthChallenge wxWebRequest::GetAuthChallenge() const
+wxWebAuthChallenge wxWebRequestBase::GetAuthChallenge() const
 {
     wxCHECK_IMPL( wxWebAuthChallenge() );
 
@@ -493,45 +497,45 @@ wxWebRequest::State wxWebRequest::GetState() const
     return m_impl->GetState();
 }
 
-wxFileOffset wxWebRequest::GetBytesSent() const
+wxFileOffset wxWebRequestBase::GetBytesSent() const
 {
     wxCHECK_IMPL( wxInvalidOffset );
 
     return m_impl->GetBytesSent();
 }
 
-wxFileOffset wxWebRequest::GetBytesExpectedToSend() const
+wxFileOffset wxWebRequestBase::GetBytesExpectedToSend() const
 {
     wxCHECK_IMPL( wxInvalidOffset );
 
     return m_impl->GetBytesExpectedToSend();
 }
 
-wxFileOffset wxWebRequest::GetBytesReceived() const
+wxFileOffset wxWebRequestBase::GetBytesReceived() const
 {
     wxCHECK_IMPL( wxInvalidOffset );
 
     return m_impl->GetBytesReceived();
 }
 
-wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
+wxFileOffset wxWebRequestBase::GetBytesExpectedToReceive() const
 {
     wxCHECK_IMPL( wxInvalidOffset );
 
     return m_impl->GetBytesExpectedToReceive();
 }
 
-wxWebRequestHandle wxWebRequest::GetNativeHandle() const
+wxWebRequestHandle wxWebRequestBase::GetNativeHandle() const
 {
     return m_impl ? m_impl->GetNativeHandle() : nullptr;
 }
 
-void wxWebRequest::DisablePeerVerify(bool disable)
+void wxWebRequestBase::DisablePeerVerify(bool disable)
 {
     m_impl->DisablePeerVerify(disable);
 }
 
-bool wxWebRequest::IsPeerVerifyDisabled() const
+bool wxWebRequestBase::IsPeerVerifyDisabled() const
 {
     return m_impl->IsPeerVerifyDisabled();
 }

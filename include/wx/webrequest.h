@@ -80,7 +80,7 @@ public:
 
 private:
     // Ctor is used by wxWebRequest only.
-    friend class wxWebRequest;
+    friend class wxWebRequestBase;
     explicit wxWebAuthChallenge(const wxWebAuthChallengeImplPtr& impl);
 
     wxWebAuthChallengeImplPtr m_impl;
@@ -121,7 +121,7 @@ public:
 protected:
     // Ctor is used by wxWebRequest and implementation classes to create public
     // objects from the existing implementation pointers.
-    friend class wxWebRequest;
+    friend class wxWebRequestBase;
     friend class wxWebRequestImpl;
     friend class wxWebResponseImpl;
     explicit wxWebResponse(const wxWebResponseImplPtr& impl);
@@ -129,7 +129,7 @@ protected:
     wxWebResponseImplPtr m_impl;
 };
 
-class WXDLLIMPEXP_NET wxWebRequest
+class WXDLLIMPEXP_NET wxWebRequestBase
 {
 public:
     enum State
@@ -149,11 +149,6 @@ public:
         Storage_None
     };
 
-    wxWebRequest();
-    wxWebRequest(const wxWebRequest& other);
-    wxWebRequest& operator=(const wxWebRequest& other);
-    ~wxWebRequest();
-
     bool IsOk() const { return m_impl.get() != nullptr; }
 
     void SetHeader(const wxString& name, const wxString& value);
@@ -168,19 +163,9 @@ public:
 
     Storage GetStorage() const;
 
-    void Start();
-
-    void Cancel();
-
     wxWebResponse GetResponse() const;
 
     wxWebAuthChallenge GetAuthChallenge() const;
-
-    int GetId() const;
-
-    wxWebSession& GetSession() const;
-
-    State GetState() const;
 
     wxFileOffset GetBytesSent() const;
 
@@ -196,15 +181,43 @@ public:
 
     bool IsPeerVerifyDisabled() const;
 
+protected:
+    wxWebRequestBase();
+    explicit wxWebRequestBase(const wxWebRequestImplPtr& impl);
+    wxWebRequestBase(const wxWebRequestBase& other);
+    wxWebRequestBase& operator=(const wxWebRequestBase& other);
+    ~wxWebRequestBase();
+
+    wxWebRequestImplPtr m_impl;
+};
+
+class WXDLLIMPEXP_NET wxWebRequest : public wxWebRequestBase
+{
+public:
+    wxWebRequest() = default;
+    wxWebRequest(const wxWebRequest& other) = default;
+    wxWebRequest& operator=(const wxWebRequest& other) = default;
+
+    void Start();
+
+    void Cancel();
+
+    int GetId() const;
+
+    wxWebSession& GetSession() const;
+
+    State GetState() const;
+
 private:
     // Ctor is used by wxWebSession and implementation classes to create
     // wxWebRequest objects from the existing implementation pointers.
     friend class wxWebSession;
     friend class wxWebRequestImpl;
     friend class wxWebResponseImpl;
-    explicit wxWebRequest(const wxWebRequestImplPtr& impl);
-
-    wxWebRequestImplPtr m_impl;
+    explicit wxWebRequest(const wxWebRequestImplPtr& impl)
+        : wxWebRequestBase(impl)
+    {
+    }
 };
 
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[];
