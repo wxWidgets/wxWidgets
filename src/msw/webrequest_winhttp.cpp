@@ -241,6 +241,14 @@ wxWebRequestWinHTTP::wxWebRequestWinHTTP(wxWebSession& session,
 {
 }
 
+wxWebRequestWinHTTP::wxWebRequestWinHTTP(wxWebSessionWinHTTP& sessionImpl,
+                                         const wxString& url)
+    : wxWebRequestImpl(sessionImpl),
+      m_sessionImpl(sessionImpl),
+      m_url(url)
+{
+}
+
 wxWebRequestWinHTTP::~wxWebRequestWinHTTP()
 {
     if ( m_request )
@@ -304,16 +312,31 @@ wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
 
 void wxWebRequestWinHTTP::WriteData()
 {
-    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: writing data", this);
+    if ( m_dataWritten == m_dataSize )
+    {
+        if ( !CheckResult(CreateResponse()) )
+            return;
+
+        // Start reading the response, even in unauthorized case.
+        if ( !m_response->ReadData() )
+            SetFailedWithLastError("Reading data");
+
+        return;
+    }
+
+    CheckResult(DoWriteData());
+}
+
+wxWebRequest::Result wxWebRequestWinHTTP::DoWriteData(DWORD* numWritten)
+{
+    wxASSERT( m_dataWritten < m_dataSize );
 
     int dataWriteSize = wxWEBREQUEST_BUFFER_SIZE;
     if ( m_dataWritten + dataWriteSize > m_dataSize )
         dataWriteSize = m_dataSize - m_dataWritten;
-    if ( !dataWriteSize )
-    {
-        CreateResponse();
-        return;
-    }
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: writing data [%llx; %x]",
+               this, m_dataWritten, dataWriteSize);
 
     m_dataWriteBuffer.Clear();
     void* buffer = m_dataWriteBuffer.GetWriteBuf(dataWriteSize);
@@ -324,27 +347,29 @@ void wxWebRequestWinHTTP::WriteData()
                 m_request,
                 m_dataWriteBuffer.GetData(),
                 dataWriteSize,
-                nullptr    // [out] bytes written, must be null in async mode
+                numWritten // [out] bytes written, must be null in async mode
             ) )
     {
-        SetFailedWithLastError("Writing data");
+        return FailWithLastError("Writing data");
     }
+
+    return Result::Ok();
 }
 
-void wxWebRequestWinHTTP::CreateResponse()
+wxWebRequest::Result wxWebRequestWinHTTP::CreateResponse()
 {
     wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: creating response", this);
 
     if ( !wxWinHTTP::WinHttpReceiveResponse(m_request, nullptr) )
     {
-        SetFailedWithLastError("Receiving response");
-        return;
+        return FailWithLastError("Receiving response");
     }
 
     m_response.reset(new wxWebResponseWinHTTP(*this));
 
-    if ( !CheckResult(m_response->InitFileStorage()) )
-        return;
+    const auto result = m_response->InitFileStorage();
+    if ( !result )
+        return result;
 
     int status = m_response->GetStatus();
     if ( status == HTTP_STATUS_DENIED || status == HTTP_STATUS_PROXY_AUTH_REQ )
@@ -358,28 +383,88 @@ void wxWebRequestWinHTTP::CreateResponse()
             ));
 
         if ( m_authChallenge->Init() )
-            SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
+            return Result::Unauthorized(m_response->GetStatusText());
         else
-            SetFailedWithLastError("Initializing authentication challenge");
+            return FailWithLastError("Initializing authentication challenge");
     }
-    else
-    {
-        // Start reading the response
-        if ( !m_response->ReadData() )
-            SetFailedWithLastError("Reading response data");
-    }
+
+    return Result::Ok();
 }
 
-void wxWebRequestWinHTTP::SetFailed(const wxString& operation, DWORD errorCode)
+wxWebRequest::Result
+wxWebRequestWinHTTP::Fail(const wxString& operation, DWORD errorCode)
 {
-    wxString failMessage = wxMSWFormatMessage(errorCode,
-                                              GetModuleHandle(TEXT("WINHTTP")));
-    SetState(wxWebRequest::State_Failed,
-             wxString::Format("%s failed with error %08x (%s)",
-                              operation, errorCode, failMessage));
+    wxString failMessage = wxString::Format(
+        "%s failed with error %08x (%s)",
+        operation,
+        errorCode,
+        wxMSWFormatMessage(errorCode, GetModuleHandle(TEXT("WINHTTP")))
+    );
+
+    return Result::Error(failMessage);
 }
 
-void wxWebRequestWinHTTP::Start()
+wxWebRequest::Result wxWebRequestWinHTTP::Execute()
+{
+    Result result;
+
+    // Note that this is more than an optimization: we need to reuse the same
+    // request if we had previously set credentials for it for authentication
+    // to succeed.
+    if ( !m_request )
+    {
+        result = DoPrepareRequest();
+        if ( !result )
+            return result;
+    }
+
+    result = SendRequest();
+    if ( !result )
+        return result;
+
+    // Write request data, if any.
+    while ( m_dataWritten < m_dataSize )
+    {
+        DWORD written = 0;
+
+        result = DoWriteData(&written);
+        if ( !result )
+            return result;
+
+        if ( !written )
+            break;
+
+        m_dataWritten += written;
+    }
+
+    // Check the response.
+    result = CreateResponse();
+    if ( !result )
+        return result;
+
+    // Read the response data.
+    for ( ;; )
+    {
+        DWORD bytesRead = 0;
+        if ( !m_response->ReadData(&bytesRead) )
+            return FailWithLastError("Reading data");
+
+        if ( !bytesRead )
+            break;
+
+        m_response->ReportDataReceived(bytesRead);
+    }
+
+    // If we need to authenticate, we already have the appropriate result
+    // returned by CreateResponse().
+    if ( result.state == wxWebRequest::State_Unauthorized )
+        return result;
+
+    // Otherwise we're done.
+    return GetResultFromHTTPStatus(m_response);
+}
+
+wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
 {
     wxString method;
     if ( !m_method.empty() )
@@ -403,8 +488,7 @@ void wxWebRequestWinHTTP::Start()
 
     if ( !wxWinHTTP::WinHttpCrackUrl(m_url.wc_str(), m_url.length(), 0, &urlComps) )
     {
-        SetFailedWithLastError("Parsing URL");
-        return;
+        return FailWithLastError("Parsing URL");
     }
 
     // Open a connection
@@ -417,8 +501,7 @@ void wxWebRequestWinHTTP::Start()
                 );
     if ( m_connect == nullptr )
     {
-        SetFailedWithLastError("Connecting");
-        return;
+        return FailWithLastError("Connecting");
     }
 
     wxString objectName(urlComps.lpszUrlPath, urlComps.dwUrlPathLength);
@@ -440,9 +523,26 @@ void wxWebRequestWinHTTP::Start()
                   );
     if ( m_request == nullptr )
     {
-        SetFailedWithLastError("Opening request");
-        return;
+        return FailWithLastError("Opening request");
     }
+
+    if ( IsPeerVerifyDisabled() )
+    {
+        wxWinHTTPSetOption(m_request, WINHTTP_OPTION_SECURITY_FLAGS,
+            SECURITY_FLAG_IGNORE_CERT_CN_INVALID |
+            SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |
+            SECURITY_FLAG_IGNORE_UNKNOWN_CA |
+            SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE
+        );
+    }
+
+    return Result::Ok();
+}
+
+void wxWebRequestWinHTTP::Start()
+{
+    if ( !CheckResult(DoPrepareRequest()) )
+        return;
 
     // Register callback
     if ( wxWinHTTP::WinHttpSetStatusCallback
@@ -460,20 +560,12 @@ void wxWebRequestWinHTTP::Start()
         return;
     }
 
-    if ( IsPeerVerifyDisabled() )
-    {
-        wxWinHTTPSetOption(m_request, WINHTTP_OPTION_SECURITY_FLAGS,
-            SECURITY_FLAG_IGNORE_CERT_CN_INVALID |
-            SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |
-            SECURITY_FLAG_IGNORE_UNKNOWN_CA |
-            SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE
-        );
-    }
+    SetState(wxWebRequest::State_Active);
 
-    SendRequest();
+    CheckResult(SendRequest());
 }
 
-void wxWebRequestWinHTTP::SendRequest()
+wxWebRequest::Result wxWebRequestWinHTTP::SendRequest()
 {
     // Combine all headers to a string
     wxString allHeaders;
@@ -487,8 +579,6 @@ void wxWebRequestWinHTTP::SendRequest()
     if ( m_dataSize )
         m_dataWritten = 0;
 
-    SetState(wxWebRequest::State_Active);
-
     // Send request
     if ( !wxWinHTTP::WinHttpSendRequest
             (
@@ -499,9 +589,10 @@ void wxWebRequestWinHTTP::SendRequest()
                 (DWORD_PTR)this
             ) )
     {
-        SetFailedWithLastError("Sending request");
-        return;
+        return FailWithLastError("Sending request");
     }
+
+    return Result::Ok();
 }
 
 void wxWebRequestWinHTTP::DoCancel()
@@ -564,7 +655,7 @@ wxString wxWebResponseWinHTTP::GetStatusText() const
     return wxWinHTTPQueryHeaderString(m_requestHandle, WINHTTP_QUERY_STATUS_TEXT);
 }
 
-bool wxWebResponseWinHTTP::ReadData()
+bool wxWebResponseWinHTTP::ReadData(DWORD* bytesRead)
 {
     wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: reading data", &m_request);
 
@@ -573,7 +664,7 @@ bool wxWebResponseWinHTTP::ReadData()
                 m_requestHandle,
                 GetDataBuffer(m_readSize),
                 m_readSize,
-                nullptr    // [out] bytes read, must be null in async mode
+                bytesRead    // [out] bytes read, must be null in async mode
              ) == TRUE;
 }
 
@@ -640,7 +731,16 @@ wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
         return;
     }
 
-    m_request.SendRequest();
+    // Asynchronous requests must be resumed automatically, as control flow
+    // doesn't get back to the program and if we didn't this, nothing at all
+    // would happen next, but for the synchronous ones we count on the
+    // application code to just call Execute() again.
+    if ( m_request.IsAsync() )
+    {
+        m_request.SetState(wxWebRequest::State_Active);
+
+        m_request.CheckResult(m_request.SendRequest());
+    }
 }
 
 
@@ -648,7 +748,8 @@ wxWebAuthChallengeWinHTTP::SetCredentials(const wxWebCredentials& cred)
 // wxWebSessionWinHTTP
 //
 
-wxWebSessionWinHTTP::wxWebSessionWinHTTP()
+wxWebSessionWinHTTP::wxWebSessionWinHTTP(Mode mode)
+    : wxWebSessionImpl(mode)
 {
 }
 
@@ -671,13 +772,17 @@ bool wxWebSessionWinHTTP::Open()
     else
         accessType = WINHTTP_ACCESS_TYPE_DEFAULT_PROXY;
 
+    DWORD flags = 0;
+    if ( IsAsync() )
+        flags |= WINHTTP_FLAG_ASYNC;
+
     m_handle = wxWinHTTP::WinHttpOpen
                  (
                     GetHeaders().find("User-Agent")->second.wc_str(),
                     accessType,
                     WINHTTP_NO_PROXY_NAME,
                     WINHTTP_NO_PROXY_BYPASS,
-                    WINHTTP_FLAG_ASYNC
+                    flags
                  );
     if ( !m_handle )
     {
@@ -712,6 +817,9 @@ wxWebSessionWinHTTP::CreateRequest(wxWebSession& session,
                                    const wxString& url,
                                    int id)
 {
+    wxCHECK_MSG( IsAsync(), wxWebRequestImplPtr(),
+                 "This method should not be called for synchronous sessions" );
+
     if ( !m_handle )
     {
         if ( !Open() )
@@ -720,6 +828,22 @@ wxWebSessionWinHTTP::CreateRequest(wxWebSession& session,
 
     return wxWebRequestImplPtr(
         new wxWebRequestWinHTTP(session, *this, handler, url, id));
+}
+
+wxWebRequestImplPtr
+wxWebSessionWinHTTP::CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
+                                       const wxString& url)
+{
+    wxCHECK_MSG( !IsAsync(), wxWebRequestImplPtr(),
+                 "This method should not be called for asynchronous sessions" );
+
+    if ( !m_handle )
+    {
+        if ( !Open() )
+            return wxWebRequestImplPtr();
+    }
+
+    return wxWebRequestImplPtr{new wxWebRequestWinHTTP{*this, url}};
 }
 
 wxVersionInfo wxWebSessionWinHTTP::GetLibraryVersionInfo()

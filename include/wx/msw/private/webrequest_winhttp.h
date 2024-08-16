@@ -34,7 +34,7 @@ public:
 
     wxString GetStatusText() const override;
 
-    bool ReadData();
+    bool ReadData(DWORD* bytesRead = nullptr);
 
 private:
     HINTERNET m_requestHandle;
@@ -64,13 +64,20 @@ private:
 class wxWebRequestWinHTTP : public wxWebRequestImpl
 {
 public:
+    // Ctor for asynchronous requests.
     wxWebRequestWinHTTP(wxWebSession& session,
                         wxWebSessionWinHTTP& sessionImpl,
                         wxEvtHandler* handler,
                         const wxString& url,
                         int id);
 
+    // Ctor for synchronous requests.
+    wxWebRequestWinHTTP(wxWebSessionWinHTTP& sessionImpl,
+                        const wxString& url);
+
     ~wxWebRequestWinHTTP();
+
+    wxWebRequest::Result Execute() override;
 
     void Start() override;
 
@@ -97,6 +104,19 @@ public:
 private:
     void DoCancel() override;
 
+    // Initialize m_connect and m_request. This is always synchronous.
+    wxNODISCARD Result DoPrepareRequest();
+
+    // Write next chunk of data to the request.
+    //
+    // Precondition: m_dataWritten < m_dataSize.
+    //
+    // Fills the output parameter with the number of bytes written in
+    // synchronous mode. In asynchronous mode, the number of bytes written is
+    // returned later and this argument must be null.
+    wxNODISCARD Result DoWriteData(DWORD* bytesWritten = nullptr);
+
+
     wxWebSessionWinHTTP& m_sessionImpl;
     wxString m_url;
     HINTERNET m_connect = nullptr;
@@ -106,20 +126,34 @@ private:
     wxMemoryBuffer m_dataWriteBuffer;
     wxFileOffset m_dataWritten = 0;
 
-    void SendRequest();
+    wxNODISCARD Result SendRequest();
 
+    // Write data, if any, and call CreateResponse() if there is nothing left
+    // to write.
     void WriteData();
 
-    void CreateResponse();
+    wxNODISCARD Result CreateResponse();
 
-    // Set the state to State_Failed with the error string including the
-    // provided description of the operation and the error message for this
-    // error code.
-    void SetFailed(const wxString& operation, DWORD errorCode);
+    // Return error result with the error message built from the name of the
+    // operation and WinHTTP error code.
+    wxNODISCARD Result Fail(const wxString& operation, DWORD errorCode);
+
+    // Call Fail() with the error message built from the given operation
+    // description and the last error code.
+    wxNODISCARD Result FailWithLastError(const wxString& operation)
+    {
+        return Fail(operation, ::GetLastError());
+    }
+
+    // These functions can only be used for asynchronous requests.
+    void SetFailed(const wxString& operation, DWORD errorCode)
+    {
+        return HandleResult(Fail(operation, errorCode));
+    }
 
     void SetFailedWithLastError(const wxString& operation)
     {
-        SetFailed(operation, ::GetLastError());
+        return HandleResult(FailWithLastError(operation));
     }
 
     friend class wxWebAuthChallengeWinHTTP;
@@ -130,7 +164,7 @@ private:
 class wxWebSessionWinHTTP : public wxWebSessionImpl
 {
 public:
-    wxWebSessionWinHTTP();
+    explicit wxWebSessionWinHTTP(Mode mode);
 
     ~wxWebSessionWinHTTP();
 
@@ -141,6 +175,10 @@ public:
                   wxEvtHandler* handler,
                   const wxString& url,
                   int id) override;
+
+    wxWebRequestImplPtr
+    CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
+                      const wxString& WXUNUSED(url)) override;
 
     wxVersionInfo GetLibraryVersionInfo() override;
 
@@ -164,7 +202,12 @@ class wxWebSessionFactoryWinHTTP : public wxWebSessionFactory
 public:
     wxWebSessionImpl* Create() override
     {
-        return new wxWebSessionWinHTTP();
+        return new wxWebSessionWinHTTP(wxWebSessionImpl::Mode::Async);
+    }
+
+    wxWebSessionImpl* CreateSync() override
+    {
+        return new wxWebSessionWinHTTP(wxWebSessionImpl::Mode::Sync);
     }
 
     bool Initialize() override
