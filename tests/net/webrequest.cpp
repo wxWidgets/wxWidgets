@@ -451,8 +451,12 @@ TEST_CASE_METHOD(RequestFixture,
     {
         UseCredentials("wxtest", "wxwidgets");
         RunLoopWithTimeout();
-        CHECK( request.GetResponse().GetStatus() == 200 );
         CHECK( request.GetState() == wxWebRequest::State_Completed );
+
+        const auto& response = request.GetResponse();
+        CHECK( response.GetStatus() == 200 );
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(R"("authorized": true)") );
     }
 
     SECTION("Bad password")
@@ -478,8 +482,12 @@ TEST_CASE_METHOD(RequestFixture,
     {
         UseCredentials("wxtest", "wxwidgets");
         RunLoopWithTimeout();
-        CHECK( request.GetResponse().GetStatus() == 200 );
         CHECK( request.GetState() == wxWebRequest::State_Completed );
+
+        const auto& response = request.GetResponse();
+        CHECK( response.GetStatus() == 200 );
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(R"("authorized": true)") );
     }
 
     SECTION("Bad password")
@@ -816,6 +824,9 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
+
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(R"("authorized": true)") );
     }
 
     SECTION("Bad password")
@@ -846,6 +857,9 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
+
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(R"("authorized": true)") );
     }
 
     SECTION("Bad password")
