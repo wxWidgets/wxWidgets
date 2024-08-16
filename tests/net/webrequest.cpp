@@ -253,6 +253,12 @@ public:
 // default buffer size works correctly.
 constexpr int DOWNLOAD_BYTES = 99999;
 
+// Substring used to check that we got the expected response after
+// authenticating successfully. It is so weird because httpbin and go-httpbin
+// use different strings for this: one uses "authenticated" while the other
+// ones uses "authorized", so we use a substring common to both of them.
+constexpr char AUTHORIZED_SUBSTRING[] = R"(ed": true)";
+
 TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::Bytes", "[net][webrequest][get]")
 {
@@ -480,7 +486,7 @@ TEST_CASE_METHOD(RequestFixture,
         const auto& response = request.GetResponse();
         CHECK( response.GetStatus() == 200 );
         CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(R"("authorized": true)") );
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
     }
 
     SECTION("Bad password")
@@ -511,7 +517,7 @@ TEST_CASE_METHOD(RequestFixture,
         const auto& response = request.GetResponse();
         CHECK( response.GetStatus() == 200 );
         CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(R"("authorized": true)") );
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
     }
 
     SECTION("Bad password")
@@ -537,7 +543,7 @@ TEST_CASE_METHOD(RequestFixture,
     const auto& response = request.GetResponse();
     CHECK( response.GetStatus() == 200 );
     CHECK_THAT( response.AsString().utf8_string(),
-                Catch::Contains(R"("authorized": true)") );
+                Catch::Contains(AUTHORIZED_SUBSTRING) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -554,7 +560,7 @@ TEST_CASE_METHOD(RequestFixture,
     const auto& response = request.GetResponse();
     CHECK( response.GetStatus() == 200 );
     CHECK_THAT( response.AsString().utf8_string(),
-                Catch::Contains(R"("authorized": true)") );
+                Catch::Contains(AUTHORIZED_SUBSTRING) );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -885,7 +891,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( state == wxWebRequest::State_Completed );
 
         CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(R"("authorized": true)") );
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
     }
 
     SECTION("Bad password")
@@ -919,7 +925,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( state == wxWebRequest::State_Completed );
 
         CHECK_THAT( response.AsString().utf8_string(),
-                    Catch::Contains(R"("authorized": true)") );
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
     }
 
     SECTION("Bad password")
