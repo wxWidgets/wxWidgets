@@ -225,17 +225,21 @@ public:
     wxString errorDescription;
 };
 
+// Download more than 64KiB bytes to test that downloading more than the
+// default buffer size works correctly.
+constexpr int DOWNLOAD_BYTES = 99999;
+
 TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::Bytes", "[net][webrequest][get]")
 {
     if ( !InitBaseURL() )
         return;
 
-    Create("/bytes/65536");
+    Create(wxString::Format("/bytes/%d", DOWNLOAD_BYTES));
     Run();
-    CHECK( request.GetResponse().GetContentLength() == 65536 );
-    CHECK( request.GetBytesExpectedToReceive() == 65536 );
-    CHECK( request.GetBytesReceived() == 65536 );
+    CHECK( request.GetResponse().GetContentLength() == DOWNLOAD_BYTES );
+    CHECK( request.GetBytesExpectedToReceive() == DOWNLOAD_BYTES );
+    CHECK( request.GetBytesReceived() == DOWNLOAD_BYTES );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -593,10 +597,10 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    REQUIRE( Execute(wxString::Format("/bytes/%d", 65536)) );
+    REQUIRE( Execute(wxString::Format("/bytes/%d", DOWNLOAD_BYTES)) );
 
     CHECK( response.GetStatus() == 200 );
-    CHECK( response.GetContentLength() == 65536 );
+    CHECK( response.GetContentLength() == DOWNLOAD_BYTES );
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
