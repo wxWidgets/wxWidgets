@@ -38,6 +38,9 @@ static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://nghttp2.org/httpbin
 
 // Other environment variables used by this test:
 //
+// - WX_TEST_WEBREQUEST_USE_BADSSL: setting this to 1 is equivalent to setting
+//   all the variables below to their example values using badssl.com.
+//
 // - WX_TEST_WEBREQUEST_URL_SELF_SIGNED: set to https://self-signed.badssl.com/
 //   or any other server using self-signed certificate to test disabling SSL
 //   certificate trust chain verification.
@@ -73,6 +76,58 @@ protected:
         }
 
         return baseURL != "0";
+    }
+
+    enum class BadSSLKind
+    {
+        SelfSigned,
+        Expired,
+        BadHost
+    };
+
+    // Return true if the test is enabled by setting the corresponding
+    // environment variable, false if it should be skipped.
+    bool GetBadSSLURL(BadSSLKind kind, wxString* url) const
+    {
+        const auto useBadSSL = [](const char* badSSLURL, wxString* url)
+        {
+            wxString s;
+            if ( !wxGetEnv("WX_TEST_WEBREQUEST_USE_BADSSL", &s) || s != "1" )
+                return false;
+
+            *url = badSSLURL;
+
+            return true;
+        };
+
+        switch ( kind )
+        {
+            case BadSSLKind::SelfSigned:
+                if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", url) )
+                    return true;
+
+                if ( useBadSSL("https://self-signed.badssl.com/", url) )
+                    return true;
+                break;
+
+            case BadSSLKind::Expired:
+                if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_EXPIRED", url) )
+                    return true;
+
+                if ( useBadSSL("https://expired.badssl.com/", url) )
+                    return true;
+                break;
+
+            case BadSSLKind::BadHost:
+                if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_BADHOST", url) )
+                    return true;
+
+                if ( useBadSSL("https://wrong.host.badssl.com/", url) )
+                    return true;
+                break;
+        }
+
+        return false;
     }
 
     void Create(const wxString& subURL)
@@ -434,7 +489,7 @@ TEST_CASE_METHOD(RequestFixture,
 {
     wxString url;
 
-    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &url) )
+    if ( GetBadSSLURL(BadSSLKind::SelfSigned, &url) )
     {
         INFO("Testing self-signed certificate at " << url);
 
@@ -446,7 +501,7 @@ TEST_CASE_METHOD(RequestFixture,
         Run(wxWebRequest::State_Completed, 200);
     }
 
-    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_EXPIRED", &url) )
+    if ( GetBadSSLURL(BadSSLKind::Expired, &url) )
     {
         INFO("Testing expired certificate at " << url);
 
@@ -458,7 +513,7 @@ TEST_CASE_METHOD(RequestFixture,
         Run(wxWebRequest::State_Completed, 200);
     }
 
-    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_BADHOST", &url) )
+    if ( GetBadSSLURL(BadSSLKind::BadHost, &url) )
     {
         INFO("Testing certificate with bad host at " << url);
 
@@ -846,7 +901,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     wxString url;
 
-    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &url) )
+    if ( GetBadSSLURL(BadSSLKind::SelfSigned, &url) )
     {
         INFO("Testing self-signed certificate at " << url);
 
@@ -860,7 +915,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
     }
 
-    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_EXPIRED", &url) )
+    if ( GetBadSSLURL(BadSSLKind::Expired, &url) )
     {
         INFO("Testing expired certificate at " << url);
 
@@ -873,7 +928,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 200 );
     }
 
-    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_BADHOST", &url) )
+    if ( GetBadSSLURL(BadSSLKind::BadHost, &url) )
     {
         INFO("Testing certificate with bad host at " << url);
 
