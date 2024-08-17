@@ -25,6 +25,9 @@
     #include "wx/translation.h"
 #endif
 
+// Buffer size used for writing/reading data to/from the network.
+constexpr int wxWEBREQUEST_BUFFER_SIZE = 64 * 1024;
+
 // Helper class used to dynamically load the required symbols from winhttp.dll
 class wxWinHTTP
 {
@@ -740,8 +743,8 @@ bool wxWebResponseWinHTTP::ReadData(DWORD* bytesRead)
     return wxWinHTTP::WinHttpReadData
              (
                 m_requestHandle,
-                GetDataBuffer(m_readSize),
-                m_readSize,
+                GetDataBuffer(wxWEBREQUEST_BUFFER_SIZE),
+                wxWEBREQUEST_BUFFER_SIZE,
                 bytesRead    // [out] bytes read, must be null in async mode
              ) == TRUE;
 }
