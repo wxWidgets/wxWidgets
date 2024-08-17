@@ -1153,4 +1153,11 @@ TEST_CASE("WebRequestUtils", "[net][webrequest]")
     CHECK( params["boundary"] == "MIME_boundary_01234567" );
 }
 
+// This is not a real test, run it to see the version of the library used.
+TEST_CASE("WebRequest::Version", "[.]")
+{
+    const auto& info = wxWebSession::GetDefault().GetLibraryVersionInfo();
+    WARN("Using " << info.GetName() << " backend (" << info.ToString() << ")");
+}
+
 #endif // wxUSE_WEBREQUEST
