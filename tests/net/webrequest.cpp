@@ -990,6 +990,7 @@ TEST_CASE_METHOD(RequestFixture,
     request.Start();
     RunLoopWithTimeout();
 
+    INFO("Error: \"" << errorDescription << "\"");
     CHECK( request.GetState() == wxWebRequest::State_Completed );
 
     DumpResponse(request.GetResponse());
@@ -1001,7 +1002,10 @@ TEST_CASE_METHOD(SyncRequestFixture,
 {
     InitManualRequest();
 
-    CHECK( Execute() );
+    if ( !Execute() )
+    {
+        FAIL_CHECK("Error: \"" << error << "\"");
+    }
 
     DumpResponse(request.GetResponse());
 }
