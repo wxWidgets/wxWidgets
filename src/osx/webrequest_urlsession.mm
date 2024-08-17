@@ -181,9 +181,7 @@ wxWebRequestURLSession::~wxWebRequestURLSession()
 wxWebRequest::Result
 wxWebRequestURLSession::DoPrepare(void (^completionHandler)(NSData*, NSURLResponse*, NSError*))
 {
-    wxString method = m_method;
-    if ( method.empty() )
-        method = m_dataSize ? wxASCII_STR("POST") : wxASCII_STR("GET");
+    const wxString method = GetHTTPMethod();
 
     NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:
                                 [NSURL URLWithString:wxCFStringRef(m_url).AsNSString()]];

@@ -139,6 +139,10 @@ protected:
 
     bool WasCancelled() const { return m_cancelled; }
 
+    // Get the HTTP method to use: this will be m_method if it's non-empty,
+    // POST is we have any data to send, and GET otherwise.
+    wxString GetHTTPMethod() const;
+
     // Get wxWebRequest::State and, optionally, error message corresponding to
     // the given response (response must be valid here).
     static Result GetResultFromHTTPStatus(const wxWebResponseImplPtr& response);

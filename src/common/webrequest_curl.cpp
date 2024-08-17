@@ -313,36 +313,35 @@ wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
     if ( !result )
         return result;
 
-    if ( m_dataSize )
-    {
-        if ( m_method.empty() || m_method.CmpNoCase("POST") == 0 )
-        {
-            curl_easy_setopt(m_handle, CURLOPT_POSTFIELDSIZE_LARGE,
-                static_cast<curl_off_t>(m_dataSize));
-            curl_easy_setopt(m_handle, CURLOPT_POST, 1L);
-        }
-        else if ( m_method.CmpNoCase("PUT") == 0 )
-        {
-            curl_easy_setopt(m_handle, CURLOPT_UPLOAD, 1L);
-            curl_easy_setopt(m_handle, CURLOPT_INFILESIZE_LARGE,
-                static_cast<curl_off_t>(m_dataSize));
-        }
-        else
-        {
-            wxFAIL_MSG(wxString::Format(
-                "Supplied data is ignored when using method %s", m_method
-            ));
-        }
-    }
+    const wxString method = GetHTTPMethod();
 
-    if ( m_method.CmpNoCase("HEAD") == 0 )
+    if ( method.CmpNoCase("GET") == 0 )
+    {
+        // Nothing to do, libcurl defaults to GET. We could explicitly set
+        // CURLOPT_HTTPGET option to 1, but this would be useless, as we always
+        // reset the handle after making a request anyhow and curl_easy_reset()
+        // already resets the method to GET.
+    }
+    else if ( method.CmpNoCase("POST") == 0 )
+    {
+        curl_easy_setopt(m_handle, CURLOPT_POSTFIELDSIZE_LARGE,
+            static_cast<curl_off_t>(m_dataSize));
+        curl_easy_setopt(m_handle, CURLOPT_POST, 1L);
+    }
+    else if ( method.CmpNoCase("PUT") == 0 )
+    {
+        curl_easy_setopt(m_handle, CURLOPT_UPLOAD, 1L);
+        curl_easy_setopt(m_handle, CURLOPT_INFILESIZE_LARGE,
+            static_cast<curl_off_t>(m_dataSize));
+    }
+    else if ( method.CmpNoCase("HEAD") == 0 )
     {
         curl_easy_setopt(m_handle, CURLOPT_NOBODY, 1L);
     }
-    else if ( !m_method.empty() )
+    else
     {
         curl_easy_setopt(m_handle, CURLOPT_CUSTOMREQUEST,
-            static_cast<const char*>(m_method.mb_str()));
+            static_cast<const char*>(method.mb_str()));
     }
 
     for ( wxWebRequestHeaderMap::const_iterator it = m_headers.begin();

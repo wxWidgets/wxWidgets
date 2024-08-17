@@ -529,13 +529,7 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
 
 wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
 {
-    wxString method;
-    if ( !m_method.empty() )
-        method = m_method;
-    else if ( m_dataSize )
-        method = "POST";
-    else
-        method = "GET";
+    const wxString method = GetHTTPMethod();
 
     wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: start \"%s %s\"",
                this, method, m_url);

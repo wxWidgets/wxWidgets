@@ -563,6 +563,17 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Delete", "[net][webrequest]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/delete");
+    request.SetMethod("DELETE");
+    Run();
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Auth::Basic", "[net][webrequest][auth]")
 {
     if ( !InitBaseURL() )
@@ -970,6 +981,18 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     request.SetData(is.release(), "image/png");
     request.SetMethod("PUT");
+    REQUIRE( Execute() );
+    CHECK( response.GetStatus() == 200 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::Delete", "[net][webrequest][sync]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("/delete");
+    request.SetMethod("DELETE");
     REQUIRE( Execute() );
     CHECK( response.GetStatus() == 200 );
 }
