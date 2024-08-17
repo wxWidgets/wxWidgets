@@ -494,12 +494,7 @@ void wxWebAuthChallengeCURL::SetCredentials(const wxWebCredentials& cred)
         (GetSource() == wxWebAuthChallenge::Source_Proxy) ? CURLOPT_PROXYUSERPWD : CURLOPT_USERPWD,
         authStr.utf8_str().data());
 
-    // Asynchronous requests must be resumed automatically, as control flow
-    // doesn't get back to the program and if we didn't this, nothing at all
-    // would happen next, but for the synchronous ones we count on the
-    // application code to just call Execute() again.
-    if ( m_request.IsAsync() )
-        m_request.StartRequest();
+    m_request.StartRequest();
 }
 
 //

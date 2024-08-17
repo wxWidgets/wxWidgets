@@ -387,8 +387,7 @@ void wxWebAuthChallengeURLSession::SetCredentials(const wxWebCredentials& cred)
 
     [m_cred retain];
 
-    if ( m_request.IsAsync() )
-        m_request.Start();
+    m_request.Start();
 }
 
 
