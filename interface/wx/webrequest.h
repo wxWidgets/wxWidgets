@@ -786,6 +786,8 @@ public:
         This can be used to connect to self signed servers or other invalid
         SSL connections. Disabling verification makes the communication
         insecure.
+
+        Please notice that this function currently has no effect under macOS.
     */
     void DisablePeerVerify(bool disable = true);
 
