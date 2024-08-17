@@ -122,6 +122,21 @@ protected:
         REQUIRE( response.compare(pos, strlen(expectedValue), expectedValue) == 0 );
     }
 
+    // Special helper for "manual" tests taking the URL from the environment.
+    void InitManualRequest()
+    {
+        // Allow getting 8-bit strings from the environment correctly.
+        setlocale(LC_ALL, "");
+
+        wxString url;
+        if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &url) )
+        {
+            FAIL("Specify WX_TEST_WEBREQUEST_URL");
+        }
+
+        CreateAbs(url);
+    }
+
 private:
     wxString baseURL;
 };
@@ -970,16 +985,8 @@ static void DumpResponse(const wxWebResponse& response)
 TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Manual", "[.]")
 {
-    // Allow getting 8-bit strings from the environment correctly.
-    setlocale(LC_ALL, "");
+    InitManualRequest();
 
-    wxString url;
-    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &url) )
-    {
-        FAIL("Specify WX_TEST_WEBREQUEST_URL");
-    }
-
-    CreateAbs(url);
     request.Start();
     RunLoopWithTimeout();
 
@@ -992,16 +999,7 @@ TEST_CASE_METHOD(RequestFixture,
 TEST_CASE_METHOD(SyncRequestFixture,
                  "WebRequest::Sync::Manual", "[.]")
 {
-    // Allow getting 8-bit strings from the environment correctly.
-    setlocale(LC_ALL, "");
-
-    wxString url;
-    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL", &url) )
-    {
-        FAIL("Specify WX_TEST_WEBREQUEST_URL");
-    }
-
-    CreateAbs(url);
+    InitManualRequest();
 
     CHECK( Execute() );
 
