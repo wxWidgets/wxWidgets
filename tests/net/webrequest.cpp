@@ -36,10 +36,19 @@
 // test entirely.
 static const char* WX_TEST_WEBREQUEST_URL_DEFAULT = "https://nghttp2.org/httpbin";
 
-// Note: WX_TEST_WEBREQUEST_URL_SELF_SIGNED is another environment variable
-// used by this test to test SSL connections to a self-signed server. It can be
-// set to https://self-signed.badssl.com/ or any other self-signed server to
-// enable the corresponding tests.
+// Other environment variables used by this test:
+//
+// - WX_TEST_WEBREQUEST_URL_SELF_SIGNED: set to https://self-signed.badssl.com/
+//   or any other server using self-signed certificate to test disabling SSL
+//   certificate trust chain verification.
+//
+// - WX_TEST_WEBREQUEST_URL_EXPIRED: set to https://expired.badssl.com/ or any
+//   other server using expired certificate to test disabling SSL certificate
+//   date validity verification.
+//
+// - WX_TEST_WEBREQUEST_URL_BADHOST: set to https://wrong.host.badssl.com/ or
+//   any other server using certificate with wrong host name to test disabling
+//   SSL host name verification.
 
 // Common base for sync and async tests fixtures.
 class BaseRequestFixture
@@ -135,6 +144,15 @@ protected:
         }
 
         CreateAbs(url);
+
+        wxString insecure;
+        if ( wxGetEnv("WX_TEST_WEBREQUEST_INSECURE", &insecure) )
+        {
+            int flags = 0;
+            REQUIRE( insecure.ToInt(&flags) );
+
+            GetRequest().MakeInsecure(flags);
+        }
     }
 
 private:
@@ -414,46 +432,53 @@ TEST_CASE_METHOD(RequestFixture,
 TEST_CASE_METHOD(RequestFixture,
     "WebRequest::SSL::Error", "[net][webrequest][error]")
 {
-    wxString selfsignedURL;
-    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &selfsignedURL) )
+    wxString url;
+
+    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &url) )
     {
-        WARN("Skipping because WX_TEST_WEBREQUEST_URL_SELF_SIGNED is not set.");
-        return;
+        INFO("Testing self-signed certificate at " << url);
+
+        CreateAbs(url);
+        Run(wxWebRequest::State_Failed, 0);
+
+        CreateAbs(url);
+        request.DisablePeerVerify();
+        Run(wxWebRequest::State_Completed, 200);
     }
 
-    if (!InitBaseURL())
-        return;
-
-    CreateAbs(selfsignedURL);
-    Run(wxWebRequest::State_Failed, 0);
-}
-
-TEST_CASE_METHOD(RequestFixture,
-    "WebRequest::SSL::Ignore", "[net][webrequest]")
-{
-    wxString selfsignedURL;
-    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &selfsignedURL) )
+    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_EXPIRED", &url) )
     {
-        WARN("Skipping because WX_TEST_WEBREQUEST_URL_SELF_SIGNED is not set.");
-        return;
+        INFO("Testing expired certificate at " << url);
+
+        CreateAbs(url);
+        Run(wxWebRequest::State_Failed, 0);
+
+        CreateAbs(url);
+        request.MakeInsecure(wxWebRequest::Ignore_Certificate);
+        Run(wxWebRequest::State_Completed, 200);
     }
 
-    if (!InitBaseURL())
-        return;
-
-    // For some reason this test sporadically fails under AppVeyor, so don't
-    // run it there.
-#ifdef __WINDOWS__
-    if ( IsAutomaticTest() )
+    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_BADHOST", &url) )
     {
-        WARN("Skipping DisablePeerVerify() test known to sporadically fail.");
-        return;
-    }
-#endif // __WINDOWS__
+        INFO("Testing certificate with bad host at " << url);
 
-    CreateAbs(selfsignedURL);
-    request.DisablePeerVerify();
-    Run(wxWebRequest::State_Completed, 200);
+        CreateAbs(url);
+        Run(wxWebRequest::State_Failed, 0);
+
+        // Currently disabling certificate verification also disables host name
+        // verification in NSURLSession backend, so skip this test with it.
+        if ( wxWebSession::GetDefault().GetLibraryVersionInfo().GetName()
+                != "URLSession" )
+        {
+            CreateAbs(url);
+            request.MakeInsecure(wxWebRequest::Ignore_Certificate);
+            Run(wxWebRequest::State_Failed, 0);
+        }
+
+        CreateAbs(url);
+        request.MakeInsecure(wxWebRequest::Ignore_Host);
+        Run(wxWebRequest::State_Completed, 200);
+    }
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -812,48 +837,58 @@ TEST_CASE_METHOD(SyncRequestFixture,
 TEST_CASE_METHOD(SyncRequestFixture,
                  "WebRequest::Sync::SSL::Error", "[net][webrequest][sync][error]")
 {
-    wxString selfsignedURL;
-    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &selfsignedURL) )
+    if ( wxWebSession::GetDefault().GetLibraryVersionInfo().GetName()
+            == "URLSession" )
     {
-        WARN("Skipping because WX_TEST_WEBREQUEST_URL_SELF_SIGNED is not set.");
+        WARN("Disabling SSL verification is not supported with URLSession backend");
         return;
     }
 
-    if (!InitBaseURL())
-        return;
+    wxString url;
 
-    CreateAbs(selfsignedURL);
-    CHECK( !Execute() );
-}
-
-TEST_CASE_METHOD(SyncRequestFixture,
-                 "WebRequest::Sync::SSL::Ignore", "[net][webrequest][sync]")
-{
-    wxString selfsignedURL;
-    if ( !wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &selfsignedURL) )
+    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_SELF_SIGNED", &url) )
     {
-        WARN("Skipping because WX_TEST_WEBREQUEST_URL_SELF_SIGNED is not set.");
-        return;
+        INFO("Testing self-signed certificate at " << url);
+
+        CreateAbs(url);
+        CHECK( !Execute() );
+
+        CreateAbs(url);
+        request.DisablePeerVerify();
+
+        REQUIRE( Execute() );
+        CHECK( response.GetStatus() == 200 );
     }
 
-    if (!InitBaseURL())
-        return;
-
-    // For some reason this test sporadically fails under AppVeyor, so don't
-    // run it there.
-#ifdef __WINDOWS__
-    if ( IsAutomaticTest() )
+    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_EXPIRED", &url) )
     {
-        WARN("Skipping DisablePeerVerify() test known to sporadically fail.");
-        return;
+        INFO("Testing expired certificate at " << url);
+
+        CreateAbs(url);
+        CHECK( !Execute() );
+
+        CreateAbs(url);
+        request.MakeInsecure(wxWebRequest::Ignore_Certificate);
+        REQUIRE( Execute() );
+        CHECK( response.GetStatus() == 200 );
     }
-#endif // __WINDOWS__
 
-    CreateAbs(selfsignedURL);
-    request.DisablePeerVerify();
+    if ( wxGetEnv("WX_TEST_WEBREQUEST_URL_BADHOST", &url) )
+    {
+        INFO("Testing certificate with bad host at " << url);
 
-    REQUIRE( Execute() );
-    CHECK( response.GetStatus() == 200 );
+        CreateAbs(url);
+        CHECK( !Execute() );
+
+        CreateAbs(url);
+        request.MakeInsecure(wxWebRequest::Ignore_Certificate);
+        CHECK( !Execute() );
+
+        CreateAbs(url);
+        request.MakeInsecure(wxWebRequest::Ignore_Host);
+        REQUIRE( Execute() );
+        CHECK( response.GetStatus() == 200 );
+    }
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,

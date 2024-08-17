@@ -138,7 +138,10 @@
     }
     else if ( authMethod == NSURLAuthenticationMethodServerTrust )
     {
-        if (request->IsPeerVerifyDisabled())
+        // We don't have any way to check if the certificate is valid and the
+        // host name is not or vice versa, so just skip all the checks if we're
+        // configured to skip any of them.
+        if (request->GetSecurityFlags() != 0)
             completionHandler(NSURLSessionAuthChallengeUseCredential,
                               [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
     }

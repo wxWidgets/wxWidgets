@@ -416,18 +416,66 @@ public:
     void SetStorage(Storage storage);
 
     /**
+        Flags for disabling security features.
+
+        @since 3.3.0
+     */
+    enum
+    {
+        /**
+            Disable SSL certificate verification.
+
+            This can be used to accept self-signed or expired certificates.
+         */
+        Ignore_Certificate = 1,
+
+        /**
+            Disable host name verification.
+
+            This can be used to accept a valid certificate for a different host
+            than the one it was issued for.
+         */
+        Ignore_Host = 2,
+
+        /**
+            Disable all security checks for maximum insecurity.
+         */
+        Ignore_All = Ignore_Certificate | Ignore_Host
+    };
+
+    /**
+        Make connection insecure by disabling security checks.
+
+        Don't use this function unless absolutely necessary as disabling the
+        security checks makes the communication insecure by allowing
+        man-in-the-middle attacks.
+
+        By default, all security checks are enabled. Passing 0 as @a flags
+        (re-)enables all security checks and makes the connection secure again.
+
+        Please note that under macOS this function always disables all the
+        security checks if any of them is disabled, i.e. it is not possible to
+        skip just the certificate or just the host name verification.
+
+        @since 3.3.0
+     */
+    void MakeInsecure(int flags = Ignore_All);
+
+    /**
         Disable SSL certificate verification.
 
         This can be used to connect to self signed servers or other invalid
         SSL connections. Disabling verification makes the communication
         insecure.
+
+        @see MakeInsecure()
     */
     void DisablePeerVerify(bool disable = true);
 
     /**
         Return @true if SSL certificate verification has been disabled.
 
-        @see DisablePeerVerify()
+        @see DisablePeerVerify(), GetSecurityFlags()
     */
     bool IsPeerVerifyDisabled() const;
     ///@}
@@ -781,6 +829,50 @@ public:
     void SetStorage(Storage storage);
 
     /**
+        Flags for disabling security features.
+
+        @since 3.3.0
+     */
+    enum
+    {
+        /**
+            Disable SSL certificate verification.
+
+            This can be used to accept self-signed or expired certificates.
+         */
+        Ignore_Certificate = 1,
+
+        /**
+            Disable host name verification.
+
+            This can be used to accept a valid certificate for a different host
+            than the one it was issued for.
+         */
+        Ignore_Host = 2,
+
+        /**
+            Disable all security checks for maximum insecurity.
+         */
+        Ignore_All = Ignore_Certificate | Ignore_Host
+    };
+
+    /**
+        Make connection insecure by disabling security checks.
+
+        Don't use this function unless absolutely necessary as disabling the
+        security checks makes the communication insecure by allowing
+        man-in-the-middle attacks.
+
+        By default, all security checks are enabled. Passing 0 as @a flags
+        (re-)enables all security checks and makes the connection secure again.
+
+        Please notice that this function currently has no effect under macOS.
+
+        @since 3.3.0
+     */
+    void MakeInsecure(int flags = Ignore_All);
+
+    /**
         Disable SSL certificate verification.
 
         This can be used to connect to self signed servers or other invalid
@@ -788,13 +880,15 @@ public:
         insecure.
 
         Please notice that this function currently has no effect under macOS.
+
+        @see MakeInsecure()
     */
     void DisablePeerVerify(bool disable = true);
 
     /**
         Return @true if SSL certificate verification has been disabled.
 
-        @see DisablePeerVerify()
+        @see DisablePeerVerify(), GetSecurityFlags()
     */
     bool IsPeerVerifyDisabled() const;
     ///@}

@@ -551,14 +551,14 @@ wxWebRequestHandle wxWebRequestBase::GetNativeHandle() const
     return m_impl ? m_impl->GetNativeHandle() : nullptr;
 }
 
-void wxWebRequestBase::DisablePeerVerify(bool disable)
+void wxWebRequestBase::MakeInsecure(int flags)
 {
-    m_impl->DisablePeerVerify(disable);
+    m_impl->MakeInsecure(flags);
 }
 
-bool wxWebRequestBase::IsPeerVerifyDisabled() const
+int wxWebRequestBase::GetSecurityFlags() const
 {
-    return m_impl->IsPeerVerifyDisabled();
+    return m_impl->GetSecurityFlags();
 }
 
 

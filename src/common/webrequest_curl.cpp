@@ -355,8 +355,11 @@ wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
     }
     curl_easy_setopt(m_handle, CURLOPT_HTTPHEADER, m_headerList);
 
-    if ( IsPeerVerifyDisabled() )
+    const int securityFlags = GetSecurityFlags();
+    if ( securityFlags & wxWebRequest::Ignore_Certificate )
         curl_easy_setopt(m_handle, CURLOPT_SSL_VERIFYPEER, 0);
+    if ( securityFlags & wxWebRequest::Ignore_Host )
+        curl_easy_setopt(m_handle, CURLOPT_SSL_VERIFYHOST, 0);
 
     return Result::Ok();
 }

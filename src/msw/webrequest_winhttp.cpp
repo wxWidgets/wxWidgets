@@ -600,14 +600,18 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
         return FailWithLastError("Opening request");
     }
 
-    if ( IsPeerVerifyDisabled() )
+    if ( int flags = GetSecurityFlags() )
     {
-        wxWinHTTPSetOption(m_request, WINHTTP_OPTION_SECURITY_FLAGS,
-            SECURITY_FLAG_IGNORE_CERT_CN_INVALID |
-            SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |
-            SECURITY_FLAG_IGNORE_UNKNOWN_CA |
-            SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE
-        );
+        DWORD optValue = 0;
+
+        if ( flags & wxWebRequest::Ignore_Certificate )
+            optValue |= SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |
+                        SECURITY_FLAG_IGNORE_UNKNOWN_CA |
+                        SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE;
+        if ( flags & wxWebRequest::Ignore_Host )
+            optValue |= SECURITY_FLAG_IGNORE_CERT_CN_INVALID;
+
+        wxWinHTTPSetOption(m_request, WINHTTP_OPTION_SECURITY_FLAGS, optValue);
     }
 
     return Result::Ok();

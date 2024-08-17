@@ -113,9 +113,9 @@ public:
 
     virtual wxWebRequestHandle GetNativeHandle() const = 0;
 
-    void DisablePeerVerify(bool disable) { m_peerVerifyDisabled = disable; }
+    void MakeInsecure(int flags) { m_securityFlags = flags; }
 
-    bool IsPeerVerifyDisabled() const { return m_peerVerifyDisabled; }
+    int GetSecurityFlags() const { return m_securityFlags; }
 
     void SetState(wxWebRequest::State state, const wxString& failMsg = wxString());
 
@@ -129,7 +129,7 @@ protected:
     wxWebRequestHeaderMap m_headers;
     wxFileOffset m_dataSize = 0;
     std::unique_ptr<wxInputStream> m_dataStream;
-    bool m_peerVerifyDisabled = false;
+    int m_securityFlags = 0;
 
     // Ctor for async requests.
     wxWebRequestImpl(wxWebSession& session,

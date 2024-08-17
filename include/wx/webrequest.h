@@ -216,9 +216,25 @@ public:
 
     wxWebRequestHandle GetNativeHandle() const;
 
-    void DisablePeerVerify(bool disable = true);
+    enum
+    {
+        Ignore_Certificate = 1,
+        Ignore_Host = 2,
+        Ignore_All = Ignore_Certificate | Ignore_Host
+    };
 
-    bool IsPeerVerifyDisabled() const;
+    void MakeInsecure(int flags = Ignore_All);
+    int GetSecurityFlags() const;
+
+    void DisablePeerVerify(bool disable = true)
+    {
+        MakeInsecure(disable ? Ignore_Certificate : 0);
+    }
+
+    bool IsPeerVerifyDisabled() const
+    {
+        return (GetSecurityFlags() & Ignore_Certificate) != 0;
+    }
 
 protected:
     wxWebRequestBase();
