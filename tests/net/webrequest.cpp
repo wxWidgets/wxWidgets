@@ -569,8 +569,13 @@ TEST_CASE_METHOD(RequestFixture,
         return;
 
     Create("/delete");
+    request.SetData(R"({"bloordyblop": 17})", "application/json");
     request.SetMethod("DELETE");
     Run();
+
+    const wxString& response = request.GetResponse().AsString();
+    CHECK_THAT( response.utf8_string(),
+                Catch::Contains(R"("bloordyblop": 17)") );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -992,9 +997,13 @@ TEST_CASE_METHOD(SyncRequestFixture,
         return;
 
     Create("/delete");
+    request.SetData(R"({"bloordyblop": 17})", "application/json");
     request.SetMethod("DELETE");
     REQUIRE( Execute() );
+
     CHECK( response.GetStatus() == 200 );
+    CHECK_THAT( response.AsString().utf8_string(),
+                Catch::Contains(R"("bloordyblop": 17)") );
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,

@@ -328,20 +328,27 @@ wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
             static_cast<curl_off_t>(m_dataSize));
         curl_easy_setopt(m_handle, CURLOPT_POST, 1L);
     }
-    else if ( method == "PUT" )
-    {
-        curl_easy_setopt(m_handle, CURLOPT_UPLOAD, 1L);
-        curl_easy_setopt(m_handle, CURLOPT_INFILESIZE_LARGE,
-            static_cast<curl_off_t>(m_dataSize));
-    }
     else if ( method == "HEAD" )
     {
         curl_easy_setopt(m_handle, CURLOPT_NOBODY, 1L);
     }
-    else
+    else if ( method != "PUT" || m_dataSize == 0 )
     {
         curl_easy_setopt(m_handle, CURLOPT_CUSTOMREQUEST,
             static_cast<const char*>(method.mb_str()));
+    }
+    //else: PUT will be used by default if we have any data to send (and if we
+    //      don't, which should never happen but is nevertheless formally
+    //      allowed, we've set it as custom request above).
+
+    // POST is handled specially by libcurl, but for everything else, including
+    // PUT as well as any other method, such as e.g. DELETE, we need to
+    // explicitly request uploading the data, if any.
+    if ( m_dataSize && method != "POST" )
+    {
+        curl_easy_setopt(m_handle, CURLOPT_UPLOAD, 1L);
+        curl_easy_setopt(m_handle, CURLOPT_INFILESIZE_LARGE,
+            static_cast<curl_off_t>(m_dataSize));
     }
 
     for ( wxWebRequestHeaderMap::const_iterator it = m_headers.begin();
