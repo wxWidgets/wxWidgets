@@ -141,6 +141,8 @@ protected:
 
     // Get the HTTP method to use: this will be m_method if it's non-empty,
     // POST is we have any data to send, and GET otherwise.
+    //
+    // Returned string is always in upper case.
     wxString GetHTTPMethod() const;
 
     // Get wxWebRequest::State and, optionally, error message corresponding to

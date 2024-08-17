@@ -101,7 +101,7 @@ void wxWebRequestImpl::Cancel()
 wxString wxWebRequestImpl::GetHTTPMethod() const
 {
     if ( !m_method.empty() )
-        return m_method;
+        return m_method.Upper();
 
     return m_dataSize ? wxASCII_STR("POST") : wxASCII_STR("GET");
 }
