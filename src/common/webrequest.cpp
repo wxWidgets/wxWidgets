@@ -1102,6 +1102,13 @@ wxString wxWebSessionBase::GetTempDir() const
     return m_impl->GetTempDir();
 }
 
+bool wxWebSessionBase::SetProxy(const wxWebProxy& proxy)
+{
+    wxCHECK_IMPL( false );
+
+    return m_impl->SetProxy(proxy);
+}
+
 bool wxWebSessionBase::IsOpened() const
 {
     return m_impl.get() != nullptr;

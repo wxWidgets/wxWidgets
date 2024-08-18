@@ -321,6 +321,10 @@ public:
 
     wxString GetTempDir() const;
 
+    virtual bool SetProxy(const wxWebProxy& proxy)
+        { m_proxy = proxy; return true; }
+    const wxWebProxy& GetProxy() const { return m_proxy; }
+
     const wxWebRequestHeaderMap& GetHeaders() const { return m_headers; }
 
     virtual wxWebSessionHandle GetNativeHandle() const = 0;
@@ -340,6 +344,8 @@ private:
 
     wxWebRequestHeaderMap m_headers;
     wxString m_tempDir;
+    wxWebProxy m_proxy{wxWebProxy::Default()};
+
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionImpl);
 };

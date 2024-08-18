@@ -298,6 +298,45 @@ private:
 };
 
 
+// Describe the proxy to be used by the web session.
+class wxWebProxy
+{
+public:
+    static wxWebProxy FromURL(const wxString& url)
+    {
+        return wxWebProxy(Type::URL, url);
+    }
+
+    static wxWebProxy Disable() { return wxWebProxy(Type::Disabled); }
+    static wxWebProxy Default() { return wxWebProxy(Type::Default); }
+
+    enum class Type
+    {
+        URL,
+        Disabled,
+        Default
+    };
+
+    Type GetType() const { return m_type; }
+
+    const wxString& GetURL() const
+    {
+        wxASSERT( m_type == Type::URL );
+        return m_url;
+    }
+
+private:
+    wxWebProxy(Type type, const wxString& url = wxString{})
+        : m_type(type), m_url(url)
+    {
+    }
+
+    // These fields never change but can't be const because we want these
+    // objects to be copyable/assignable.
+    Type m_type;
+    wxString m_url;
+};
+
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[];
@@ -324,6 +363,8 @@ public:
 
     void SetTempDir(const wxString& dir);
     wxString GetTempDir() const;
+
+    bool SetProxy(const wxWebProxy& proxy);
 
     bool IsOpened() const;
 

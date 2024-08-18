@@ -356,9 +356,32 @@ void wxWebRequestCURL::DoStartPrepare(const wxString& url)
 
         wxGCC_WARNING_RESTORE(deprecated-declarations)
     }
+
+    // Configure proxy settings.
+    const wxWebProxy& proxy = GetSessionImpl().GetProxy();
+    bool usingProxy = true;
+    switch ( proxy.GetType() )
+    {
+        case wxWebProxy::Type::URL:
+            wxCURLSetOpt(m_handle, CURLOPT_PROXY, proxy.GetURL());
+            break;
+
+        case wxWebProxy::Type::Disabled:
+            // This is a special value disabling use of proxy.
+            wxCURLSetOpt(m_handle, CURLOPT_PROXY, "");
+            usingProxy = false;
+            break;
+
+        case wxWebProxy::Type::Default:
+            // Nothing to do, libcurl will use the standard http_proxy and
+            // other similar environment variables by default.
+            break;
+    }
+
     // Enable all supported authentication methods
     wxCURLSetOpt(m_handle, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-    wxCURLSetOpt(m_handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
+    if ( usingProxy )
+        wxCURLSetOpt(m_handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 }
 
 wxWebRequestCURL::~wxWebRequestCURL()
