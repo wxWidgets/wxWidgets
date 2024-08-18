@@ -2725,6 +2725,7 @@ void wxWindowBase::UpdateWindowUI(long flags)
 {
     wxUpdateUIEvent event(GetId());
     event.SetEventObject(this);
+    DoPrepareUpdateWindowUI(event);
 
     if ( GetEventHandler()->ProcessEvent(event) )
     {
