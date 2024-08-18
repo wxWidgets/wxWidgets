@@ -228,6 +228,8 @@ public:
     void CreateAbs(const wxString& url) override
     {
         request = wxWebSession::GetDefault().CreateRequest(this, url);
+        REQUIRE( request.IsOk() );
+
         Bind(wxEVT_WEBREQUEST_STATE, &RequestFixture::OnRequestState, this);
         Bind(wxEVT_WEBREQUEST_DATA, &RequestFixture::OnData, this);
     }
@@ -728,6 +730,7 @@ public:
     void CreateAbs(const wxString& url) override
     {
         request = wxWebSessionSync::GetDefault().CreateRequest(url);
+        REQUIRE( request.IsOk() );
     }
 
     wxWebRequestBase& GetRequest() override
