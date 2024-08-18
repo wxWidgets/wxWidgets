@@ -419,10 +419,14 @@ wxWebRequest::Result wxWebRequestWinHTTP::InitAuthIfNeeded()
                 *this
             ));
 
-        if ( m_authChallenge->Init() )
-            return Result::Unauthorized(m_response->GetStatusText());
-        else
+        if ( !m_authChallenge->Init() )
             return FailWithLastError("Initializing authentication challenge");
+
+        wxLogTrace(wxTRACE_WEBREQUEST,
+                   "Request %p: authentication required (%s)",
+                   this, m_response->GetStatusText());
+
+        return Result::Unauthorized(m_response->GetStatusText());
     }
 
     return Result::Ok();
