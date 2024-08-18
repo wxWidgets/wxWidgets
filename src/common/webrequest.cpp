@@ -1119,6 +1119,8 @@ wxWebSessionHandle wxWebSessionBase::GetNativeHandle() const
 
 bool wxWebSessionBase::EnablePersistentStorage(bool enable)
 {
+    wxCHECK_IMPL( false );
+
     return m_impl->EnablePersistentStorage(enable);
 }
 
