@@ -692,10 +692,19 @@ wxWebResponseWinHTTP::wxWebResponseWinHTTP(wxWebRequestWinHTTP& request):
         wxWinHTTPQueryHeaderString(m_requestHandle, WINHTTP_QUERY_CONTENT_LENGTH);
     if ( contentLengthStr.empty() ||
             !contentLengthStr.ToLongLong(&m_contentLength) )
+    {
         m_contentLength = -1;
 
-    wxLogTrace(wxTRACE_WEBREQUEST, "Request %p: receiving %llu bytes",
-               &request, m_contentLength);
+        wxLogTrace(wxTRACE_WEBREQUEST,
+                   "Request %p: receiving response without content length",
+                   &request);
+    }
+    else
+    {
+        wxLogTrace(wxTRACE_WEBREQUEST,
+                   "Request %p: receiving %llu bytes",
+                   &request, m_contentLength);
+    }
 }
 
 wxString wxWebResponseWinHTTP::GetURL() const
