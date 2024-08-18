@@ -505,11 +505,8 @@ wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo()
 
 bool wxWebSessionURLSession::EnablePersistentStorage(bool enable)
 {
-    if (m_session)
-    {
-        wxFAIL_MSG("Persistent storage can only be enabled before the first request is made.");
-        return false;
-    }
+    wxCHECK_MSG( !(enable && m_session), false,
+                 "Persistent storage can only be enabled before the first request is made" );
 
     m_persistentStorageEnabled = enable;
     return true;
