@@ -144,6 +144,41 @@ wxWinHTTP::WinHttpOpen_t wxWinHTTP::WinHttpOpen;
 #define WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2 0x00000800
 #endif
 
+namespace
+{
+
+// Wrapper initializing URL_COMPONENTS struct.
+struct wxURLComponents : URL_COMPONENTS
+{
+    wxURLComponents()
+    {
+        wxZeroMemory(*this);
+        dwStructSize = sizeof(URL_COMPONENTS);
+        dwSchemeLength =
+        dwHostNameLength =
+        dwUserNameLength =
+        dwPasswordLength =
+        dwUrlPathLength =
+        dwExtraInfoLength = (DWORD)-1;
+    }
+
+    bool HasCredentials() const
+    {
+        return dwUserNameLength > 0;
+    }
+
+    wxWebCredentials GetCredentials() const
+    {
+        return wxWebCredentials
+               (
+                wxString(lpszUserName, dwUserNameLength),
+                wxSecretValue(wxString(lpszPassword, dwPasswordLength))
+               );
+    }
+};
+
+} // anonymous namespace
+
 // Helper functions
 
 static wxString wxWinHTTPQueryHeaderString(HINTERNET hRequest, DWORD dwInfoLevel,
@@ -539,16 +574,7 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
                this, method, m_url);
 
     // Parse the URL
-    URL_COMPONENTS urlComps;
-    wxZeroMemory(urlComps);
-    urlComps.dwStructSize = sizeof(urlComps);
-    urlComps.dwSchemeLength =
-    urlComps.dwHostNameLength =
-    urlComps.dwUserNameLength =
-    urlComps.dwPasswordLength =
-    urlComps.dwUrlPathLength =
-    urlComps.dwExtraInfoLength = (DWORD)-1;
-
+    wxURLComponents urlComps;
     if ( !wxWinHTTP::WinHttpCrackUrl(m_url.wc_str(), m_url.length(), 0, &urlComps) )
     {
         return FailWithLastError("Parsing URL");
@@ -556,13 +582,9 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
 
     // If we have auth in the URL, remember them but we can't use them yet
     // because we don't yet know which authentication scheme the server uses.
-    if ( urlComps.dwUserNameLength )
+    if ( urlComps.HasCredentials() )
     {
-        m_credentialsFromURL = wxWebCredentials
-            (
-                wxString(urlComps.lpszUserName, urlComps.dwUserNameLength),
-                wxSecretValue(wxString(urlComps.lpszPassword, urlComps.dwPasswordLength))
-            );
+        m_credentialsFromURL = urlComps.GetCredentials();
         m_tryCredentialsFromURL = true;
     }
 
