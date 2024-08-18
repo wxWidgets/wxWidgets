@@ -2428,6 +2428,13 @@ public:
     void Check(bool check);
 
     /**
+        For wxCheckBox with wxCHK_3STATE:  Set the UI element state.
+
+        @since 3.3.0
+    */
+    void Set3StateValue(wxCheckBoxState check);
+
+    /**
         Enable or disable the UI element.
     */
     void Enable(bool enable);
@@ -2436,6 +2443,13 @@ public:
         Returns @true if the UI element should be checked.
     */
     bool GetChecked() const;
+
+    /**
+        Return the state a wxCheckBox with wxCHK_3STATE should display
+
+        @since 3.3.0
+    */
+    wxCheckBoxState Get3StateValue() const;
 
     /**
         Returns @true if the UI element should be enabled.
@@ -2463,6 +2477,28 @@ public:
     bool IsCheckable() const;
 
     /**
+        Returns @true if the UI element supports wxCheckboxState.
+
+        For the event handlers that can be used for multiple items, not all of
+        which support wxCheckboxState, this method can be useful to determine whether
+        to call Set3StateValue() on the event object or not, i.e. the main use case for
+        this method is:
+        @code
+        void MyWindow::OnUpdateUI(wxUpdateUIEvent& event)
+        {
+            ....
+            if ( event.Is3State() )
+                event.Set3StateValue(...some condition...);
+            else if ( event.IsCheckable() )
+                event.Check(...some condition...);
+        }
+        @endcode
+
+        @since 3.3.0
+    */
+    bool Is3State() const;
+
+    /**
         Static function returning a value specifying how wxWidgets will send update
         events: to all windows, or only to those which specify that they will process
         the events.
@@ -2472,7 +2508,7 @@ public:
     static wxUpdateUIMode GetMode();
 
     /**
-        Returns @true if the application has called Check().
+        Returns @true if the application has called Check() or SetSet3StateValue().
         For wxWidgets internal use only.
     */
     bool GetSetChecked() const;
