@@ -468,6 +468,7 @@ void wxWidgetIPhoneImpl::ReleaseMouse()
 
 wxInt32 wxWidgetIPhoneImpl::GetValue() const
 {
+    return 0;
 }
 
 void wxWidgetIPhoneImpl::SetValue( wxInt32 v )
