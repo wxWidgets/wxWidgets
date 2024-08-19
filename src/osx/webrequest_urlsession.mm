@@ -268,7 +268,7 @@ wxWebRequest::Result wxWebRequestURLSession::Execute()
 
     // Initialize the task with the completion handler that will wake us up
     // after copying the result into local variables.
-    auto result = DoPrepare(^(NSData* data, NSURLResponse* response, NSError* error) {
+    auto result = DoPrepare(^(NSData* data, NSURLResponse*, NSError* error) {
         taskResult.data = [data retain];
 
         // We can ignore response as we already have it in m_task anyhow.
@@ -490,7 +490,7 @@ wxWebSessionURLSession::CreateRequest(wxWebSession& session,
 }
 
 wxWebRequestImplPtr
-wxWebSessionURLSession::CreateRequestSync(wxWebSessionSync& session,
+wxWebSessionURLSession::CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
                                           const wxString& url)
 {
     wxCHECK_MSG( !IsAsync(), wxWebRequestImplPtr(),
