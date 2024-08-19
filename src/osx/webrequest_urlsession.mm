@@ -437,7 +437,10 @@ wxString wxWebResponseURLSession::GetHeader(const wxString& name) const
 int wxWebResponseURLSession::GetStatus() const
 {
     NSHTTPURLResponse* httpResp = (NSHTTPURLResponse*) m_task.response;
-    return httpResp.statusCode;
+
+    // Cast is safe as HTTP status codes are always in integer range but
+    // necessary to avoid a warning about long-to-int truncation under iOS.
+    return static_cast<int>(httpResp.statusCode);
 }
 
 wxString wxWebResponseURLSession::GetStatusText() const
