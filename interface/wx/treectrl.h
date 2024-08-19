@@ -177,17 +177,6 @@
 
     See also @ref overview_windowstyles.
 
-    @b Win32 @b notes:
-
-    wxTreeCtrl class uses the standard common treeview control under Win32
-    implemented in the system library comctl32.dll. Some versions of this
-    library are known to have bugs with handling the tree control colours: the
-    usual symptom is that the expanded items leave black (or otherwise
-    incorrectly coloured) background behind them, especially for the controls
-    using non-default background colour. The recommended solution is to upgrade
-    the comctl32.dll to a newer version: see
-    http://www.microsoft.com/downloads/details.aspx?familyid=cb2cf3a2-8025-4e8f-8511-9b476a8d35d2
-
     @library{wxcore}
     @category{ctrl}
     @appearance{treectrl}
