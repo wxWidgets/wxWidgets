@@ -28,6 +28,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
+
 #include <string.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
@@ -706,6 +707,7 @@ void wxTextCtrl::Init()
 {
     m_dontMarkDirty =
     m_modified = false;
+    
     m_countUpdatesToIgnore = 0;
 
     SetUpdateFont(false);
@@ -897,7 +899,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
             g_signal_connect (m_buffer, "apply_tag",
                               G_CALLBACK (au_apply_tag_callback), nullptr);
 
-            // Check for URLs in the initial string sed to Create
+            // Check for URLs in the initial string passed to Create
             gtk_text_buffer_get_start_iter(m_buffer, &start);
             gtk_text_buffer_get_end_iter(m_buffer, &end);
             au_check_range(&start, &end);
@@ -1292,8 +1294,6 @@ void wxTextCtrl::WriteText( const wxString &text )
         m_maxLengthAllowed = old;
         return;
     }
-    auto temp = text;
-    const wxScopedCharBuffer buffer(temp.utf8_str());
 
     // First remove the selection if there is one
     gtk_text_buffer_delete_selection(m_buffer, false, true);
@@ -1305,7 +1305,7 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     const bool insertIsEnd = gtk_text_iter_is_end(&iter) != 0;
 
-    gtk_text_buffer_insert( m_buffer, &iter, buffer, buffer.length() );
+    gtk_text_buffer_insert( m_buffer, &iter, text, text.length() );
 
     GtkAdjustment* adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_widget));
 
@@ -1804,13 +1804,7 @@ void wxTextCtrl::Paste()
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
 
-    if ( IsMultiLine() )
-    {
-        g_signal_emit_by_name (m_text, "paste-clipboard");
-        auto value = GetValue();
-    }
-    else
-        wxTextEntry::Paste();
+    wxTextEntry::Paste();
 }
 
 // If the return values from and to are the same, there is no
