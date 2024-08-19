@@ -160,7 +160,7 @@ public :
     void GetSize( int &width, int &height ) const override;
 
     void GetContentArea( int &left , int &top , int &width , int &height ) const override;
-    bool SetShape(const wxRegion& region);
+    bool SetShape(const wxRegion& region) override;
 
     virtual void SetTitle( const wxString& title ) override;
 
