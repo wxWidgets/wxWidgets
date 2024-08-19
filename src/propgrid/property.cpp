@@ -86,7 +86,7 @@ void wxPGCellRenderer::DrawEditorValue( wxDC& dc, const wxRect& rect,
     {
         wxRect rect2(rect);
         rect2.Offset(xOffset, yOffset);
-        rect2.height -= yOffset;
+        rect2.height -= yOffset * 2;
         editor->DrawValue( dc, rect2, property, text );
     }
     else
