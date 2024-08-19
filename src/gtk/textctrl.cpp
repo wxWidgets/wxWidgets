@@ -707,7 +707,7 @@ void wxTextCtrl::Init()
 {
     m_dontMarkDirty =
     m_modified = false;
-    
+
     m_countUpdatesToIgnore = 0;
 
     SetUpdateFont(false);
