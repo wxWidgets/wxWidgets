@@ -1096,6 +1096,9 @@ public:
     }
     @endcode
 
+    @note Support for specifying the proxy is not implemented under iOS due to
+        the platform limitations.
+
     @since 3.3.0
 
     @library{wxnet}

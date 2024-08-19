@@ -472,7 +472,9 @@ wxWebSessionURLSession::~wxWebSessionURLSession()
 {
     [m_session release];
     [m_delegate release];
+#if !wxOSX_USE_IPHONE
     [m_proxyURL release];
+#endif // !wxOSX_USE_IPHONE
 }
 
 wxWebRequestImplPtr
@@ -506,6 +508,10 @@ wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo()
 
 bool wxWebSessionURLSession::SetProxy(const wxWebProxy& proxy)
 {
+#if wxOSX_USE_IPHONE
+    // Setting the proxy doesn't seem to be supported under iOS.
+    return false;
+#else // !wxOSX_USE_IPHONE
     wxCHECK_MSG( !m_session, false,
                  "Proxy must be set before the first request is made" );
 
@@ -581,6 +587,7 @@ bool wxWebSessionURLSession::SetProxy(const wxWebProxy& proxy)
     }
 
     return wxWebSessionImpl::SetProxy(proxy);
+#endif // wxOSX_USE_IPHONE/!wxOSX_USE_IPHONE
 }
 
 bool wxWebSessionURLSession::EnablePersistentStorage(bool enable)
@@ -600,6 +607,7 @@ WX_NSURLSession wxWebSessionURLSession::GetSession()
              [NSURLSessionConfiguration defaultSessionConfiguration] :
              [NSURLSessionConfiguration ephemeralSessionConfiguration];
 
+#if !wxOSX_USE_IPHONE
         switch ( GetProxy().GetType() )
         {
             case wxWebProxy::Type::URL:
@@ -608,6 +616,8 @@ WX_NSURLSession wxWebSessionURLSession::GetSession()
                         (NSString*)kCFNetworkProxiesHTTPEnable: @YES,
                         (NSString*)kCFNetworkProxiesHTTPProxy: m_proxyURL.host,
                         (NSString*)kCFNetworkProxiesHTTPPort: m_proxyURL.port,
+                        // These constants are not available under iOS, and
+                        // apparently HTTPS requests can't be proxied there.
                         (NSString*)kCFNetworkProxiesHTTPSEnable: @YES,
                         (NSString*)kCFNetworkProxiesHTTPSProxy: m_proxyURL.host,
                         (NSString*)kCFNetworkProxiesHTTPSPort: m_proxyURL.port,
@@ -626,6 +636,7 @@ WX_NSURLSession wxWebSessionURLSession::GetSession()
                 // Nothing to do, system proxy will be used by default.
                 break;
         }
+#endif // !wxOSX_USE_IPHONE
 
         m_session = [[NSURLSession sessionWithConfiguration:config delegate:m_delegate delegateQueue:nil] retain];
     }
