@@ -255,6 +255,10 @@ All:
 
 - Avoid trailing space in `wx-config --c[xx]flags` (Tobiasz Laskowski, #24812).
 
+All (GUI):
+
+- Improve wxPropGrid checkboxes in high DPI (Alex Shvartzkop, #24650, #24651).
+
 wxOSX:
 
 - Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
