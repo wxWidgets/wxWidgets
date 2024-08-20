@@ -25,6 +25,7 @@
 class wxWebRequestCURL;
 class wxWebResponseCURL;
 class wxWebSessionCURL;
+class wxWebSessionSyncCURL;
 class SocketPoller;
 
 class wxWebAuthChallengeCURL : public wxWebAuthChallengeImpl
@@ -44,13 +45,21 @@ private:
 class wxWebRequestCURL : public wxWebRequestImpl
 {
 public:
+    // Ctor for async requests: creates a new libcurl handle and owns it.
     wxWebRequestCURL(wxWebSession& session,
                      wxWebSessionCURL& sessionImpl,
                      wxEvtHandler* handler,
                      const wxString& url,
                      int id);
 
+    // Ctor for sync requests: uses the libcurl handle from the session and
+    // doesn't own it.
+    wxWebRequestCURL(wxWebSessionSyncCURL& sessionImpl,
+                     const wxString& url);
+
     ~wxWebRequestCURL();
+
+    wxWebRequest::Result Execute() override;
 
     void Start() override;
 
@@ -81,18 +90,32 @@ public:
     size_t CURLOnRead(char* buffer, size_t size);
 
 private:
+    // Common initialization for sync and async requests performed when the
+    // request is created.
+    void DoStartPrepare(const wxString& url);
+
+    // This function is again common for sync and async requests, but is called
+    // right before starting, or executing, the request.
+    //
+    // If it returns result with State_Failed, the request should be aborted.
+    wxWebRequest::Result DoFinishPrepare();
+
+    // Convert the status of the completed request to our result structure and,
+    // if necessary, initialize m_authChallenge.
+    wxWebRequest::Result DoHandleCompletion();
+
     void DoCancel() override;
 
-    wxWebSessionCURL& m_sessionImpl;
+    // This is only used for async requests.
+    wxWebSessionCURL* const m_sessionCURL;
 
-    CURL* m_handle;
+    // This pointer is only owned by this object when using async requests.
+    CURL* const m_handle;
     char m_errorBuffer[CURL_ERROR_SIZE];
-    struct curl_slist *m_headerList;
+    struct curl_slist *m_headerList = nullptr;
     wxObjectDataPtr<wxWebResponseCURL> m_response;
     wxObjectDataPtr<wxWebAuthChallengeCURL> m_authChallenge;
     wxFileOffset m_bytesSent;
-
-    void DestroyHeaderList();
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestCURL);
 };
@@ -129,7 +152,59 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebResponseCURL);
 };
 
-class wxWebSessionCURL : public wxWebSessionImpl, public wxEvtHandler
+// Common base class for synchronous and asynchronous sessions.
+class wxWebSessionBaseCURL : public wxWebSessionImpl
+{
+public:
+    explicit wxWebSessionBaseCURL(Mode mode);
+    ~wxWebSessionBaseCURL();
+
+    wxVersionInfo GetLibraryVersionInfo() override;
+
+    static bool CurlRuntimeAtLeastVersion(unsigned int, unsigned int,
+                                          unsigned int);
+
+protected:
+    static int ms_activeSessions;
+    static unsigned int ms_runtimeVersion;
+};
+
+// Sync session implementation uses libcurl "easy" API.
+class wxWebSessionSyncCURL : public wxWebSessionBaseCURL
+{
+public:
+    wxWebSessionSyncCURL();
+    ~wxWebSessionSyncCURL();
+
+    wxWebRequestImplPtr
+    CreateRequest(wxWebSession& WXUNUSED(session),
+                  wxEvtHandler* WXUNUSED(handler),
+                  const wxString& WXUNUSED(url),
+                  int WXUNUSED(id)) override
+    {
+        wxFAIL_MSG("This method should not be called for synchronous sessions");
+
+        return wxWebRequestImplPtr{};
+    }
+
+    wxWebRequestImplPtr
+    CreateRequestSync(wxWebSessionSync& session, const wxString& url) override;
+
+    wxWebSessionHandle GetNativeHandle() const override
+    {
+        return (wxWebSessionHandle)m_handle;
+    }
+
+    CURL* GetHandle() const { return m_handle; }
+
+private:
+    CURL* m_handle = nullptr;
+
+    wxDECLARE_NO_COPY_CLASS(wxWebSessionSyncCURL);
+};
+
+// Async session implementation uses libcurl "multi" API.
+class wxWebSessionCURL : public wxWebSessionBaseCURL, public wxEvtHandler
 {
 public:
     wxWebSessionCURL();
@@ -142,7 +217,14 @@ public:
                   const wxString& url,
                   int id = wxID_ANY) override;
 
-    wxVersionInfo GetLibraryVersionInfo() override;
+    wxWebRequestImplPtr
+    CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
+                      const wxString& WXUNUSED(url)) override
+    {
+        wxFAIL_MSG("This method should not be called for asynchronous sessions");
+
+        return wxWebRequestImplPtr{};
+    }
 
     wxWebSessionHandle GetNativeHandle() const override
     {
@@ -154,9 +236,6 @@ public:
     void CancelRequest(wxWebRequestCURL* request);
 
     void RequestHasTerminated(wxWebRequestCURL* request);
-
-    static bool CurlRuntimeAtLeastVersion(unsigned int, unsigned int,
-                                          unsigned int);
 
 private:
     static int TimerCallback(CURLM*, long, void*);
@@ -178,12 +257,9 @@ private:
     TransferSet m_activeTransfers;
     CurlSocketMap m_activeSockets;
 
-    SocketPoller* m_socketPoller;
+    SocketPoller* m_socketPoller = nullptr;
     wxTimer m_timeoutTimer;
-    CURLM* m_handle;
-
-    static int ms_activeSessions;
-    static unsigned int ms_runtimeVersion;
+    CURLM* m_handle = nullptr;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionCURL);
 };
@@ -192,7 +268,14 @@ class wxWebSessionFactoryCURL : public wxWebSessionFactory
 {
 public:
     wxWebSessionImpl* Create() override
-    { return new wxWebSessionCURL(); }
+    {
+        return new wxWebSessionCURL();
+    }
+
+    wxWebSessionImpl* CreateSync() override
+    {
+        return new wxWebSessionSyncCURL();
+    }
 };
 
 #endif // wxUSE_WEBREQUEST_CURL

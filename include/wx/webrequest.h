@@ -121,7 +121,7 @@ public:
 protected:
     // Ctor is used by wxWebRequest and implementation classes to create public
     // objects from the existing implementation pointers.
-    friend class wxWebRequest;
+    friend class wxWebRequestBase;
     friend class wxWebRequestImpl;
     friend class wxWebResponseImpl;
     explicit wxWebResponse(const wxWebResponseImplPtr& impl);
@@ -129,7 +129,7 @@ protected:
     wxWebResponseImplPtr m_impl;
 };
 
-class WXDLLIMPEXP_NET wxWebRequest
+class WXDLLIMPEXP_NET wxWebRequestBase
 {
 public:
     enum State
@@ -149,10 +149,46 @@ public:
         Storage_None
     };
 
-    wxWebRequest();
-    wxWebRequest(const wxWebRequest& other);
-    wxWebRequest& operator=(const wxWebRequest& other);
-    ~wxWebRequest();
+    struct Result
+    {
+        static Result Ok(State state = State_Active)
+        {
+            Result result;
+            result.state = state;
+            return result;
+        }
+
+        static Result Cancelled()
+        {
+            Result result;
+            result.state = State_Cancelled;
+            return result;
+        }
+
+        static Result Error(const wxString& error)
+        {
+            Result result;
+            result.state = State_Failed;
+            result.error = error;
+            return result;
+        }
+
+        static Result Unauthorized(const wxString& error)
+        {
+            Result result;
+            result.state = State_Unauthorized;
+            result.error = error;
+            return result;
+        }
+
+        bool operator!() const
+        {
+            return state == State_Failed;
+        }
+
+        State state = State_Idle;
+        wxString error;
+    };
 
     bool IsOk() const { return m_impl.get() != nullptr; }
 
@@ -168,19 +204,7 @@ public:
 
     Storage GetStorage() const;
 
-    void Start();
-
-    void Cancel();
-
     wxWebResponse GetResponse() const;
-
-    wxWebAuthChallenge GetAuthChallenge() const;
-
-    int GetId() const;
-
-    wxWebSession& GetSession() const;
-
-    State GetState() const;
 
     wxFileOffset GetBytesSent() const;
 
@@ -192,9 +216,54 @@ public:
 
     wxWebRequestHandle GetNativeHandle() const;
 
-    void DisablePeerVerify(bool disable = true);
+    enum
+    {
+        Ignore_Certificate = 1,
+        Ignore_Host = 2,
+        Ignore_All = Ignore_Certificate | Ignore_Host
+    };
 
-    bool IsPeerVerifyDisabled() const;
+    void MakeInsecure(int flags = Ignore_All);
+    int GetSecurityFlags() const;
+
+    void DisablePeerVerify(bool disable = true)
+    {
+        MakeInsecure(disable ? Ignore_Certificate : 0);
+    }
+
+    bool IsPeerVerifyDisabled() const
+    {
+        return (GetSecurityFlags() & Ignore_Certificate) != 0;
+    }
+
+protected:
+    wxWebRequestBase();
+    explicit wxWebRequestBase(const wxWebRequestImplPtr& impl);
+    wxWebRequestBase(const wxWebRequestBase& other);
+    wxWebRequestBase& operator=(const wxWebRequestBase& other);
+    ~wxWebRequestBase();
+
+    wxWebRequestImplPtr m_impl;
+};
+
+class WXDLLIMPEXP_NET wxWebRequest : public wxWebRequestBase
+{
+public:
+    wxWebRequest() = default;
+    wxWebRequest(const wxWebRequest& other) = default;
+    wxWebRequest& operator=(const wxWebRequest& other) = default;
+
+    void Start();
+
+    void Cancel();
+
+    wxWebAuthChallenge GetAuthChallenge() const;
+
+    int GetId() const;
+
+    wxWebSession& GetSession() const;
+
+    State GetState() const;
 
 private:
     // Ctor is used by wxWebSession and implementation classes to create
@@ -202,38 +271,52 @@ private:
     friend class wxWebSession;
     friend class wxWebRequestImpl;
     friend class wxWebResponseImpl;
-    explicit wxWebRequest(const wxWebRequestImplPtr& impl);
-
-    wxWebRequestImplPtr m_impl;
+    explicit wxWebRequest(const wxWebRequestImplPtr& impl)
+        : wxWebRequestBase(impl)
+    {
+    }
 };
+
+class WXDLLIMPEXP_NET wxWebRequestSync : public wxWebRequestBase
+{
+public:
+    wxWebRequestSync() = default;
+    wxWebRequestSync(const wxWebRequestSync& other) = default;
+    wxWebRequestSync& operator=(const wxWebRequestSync& other) = default;
+
+    // Possible return values for the state here are State_Completed,
+    // State_Failed and State_Unauthorized.
+    Result Execute() const;
+
+private:
+    friend class wxWebSessionSync;
+
+    explicit wxWebRequestSync(const wxWebRequestImplPtr& impl)
+        : wxWebRequestBase(impl)
+    {
+    }
+};
+
 
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[];
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[];
 
-class WXDLLIMPEXP_NET wxWebSession
+// Common base class for synchronous and asynchronous web sessions.
+class WXDLLIMPEXP_NET wxWebSessionBase
 {
 public:
     // Default ctor creates an invalid session object, only IsOpened() can be
     // called on it.
-    wxWebSession();
+    wxWebSessionBase();
 
-    wxWebSession(const wxWebSession& other);
-    wxWebSession& operator=(const wxWebSession& other);
-    ~wxWebSession();
-
-    // Objects of this class can't be created directly, use the following
-    // factory functions to get access to them.
-    static wxWebSession& GetDefault();
-
-    static wxWebSession New(const wxString& backend = wxString());
+    wxWebSessionBase(const wxWebSessionBase& other);
+    wxWebSessionBase& operator=(const wxWebSessionBase& other);
+    ~wxWebSessionBase();
 
     // Can be used to check if the given backend is available without actually
     // creating a session using it.
     static bool IsBackendAvailable(const wxString& backend);
-
-    wxWebRequest
-    CreateRequest(wxEvtHandler* handler, const wxString& url, int id = wxID_ANY);
 
     wxVersionInfo GetLibraryVersionInfo();
 
@@ -256,9 +339,69 @@ private:
 
     static void InitFactoryMap();
 
-    explicit wxWebSession(const wxWebSessionImplPtr& impl);
+protected:
+    // This function handles empty backend string correctly, i.e. returns the
+    // default backend in this case.
+    //
+    // The returned pointer should not be deleted by the caller.
+    //
+    // If the specified backend is not found, returns a null pointer.
+    static wxWebSessionFactory* FindFactory(const wxString& backend);
+
+    explicit wxWebSessionBase(const wxWebSessionImplPtr& impl);
 
     wxWebSessionImplPtr m_impl;
+};
+
+// Web session class for using asynchronous web requests, suitable for use in
+// the main thread of GUI applications.
+class WXDLLIMPEXP_NET wxWebSession : public wxWebSessionBase
+{
+public:
+    wxWebSession() = default;
+
+    wxWebSession(const wxWebSession& other) = default;
+    wxWebSession& operator=(const wxWebSession& other) = default;
+
+    // Objects of this class can't be created directly, use the following
+    // factory functions to get access to them.
+    static wxWebSession& GetDefault();
+
+    static wxWebSession New(const wxString& backend = wxString());
+
+    wxWebRequest
+    CreateRequest(wxEvtHandler* handler, const wxString& url, int id = wxID_ANY);
+
+private:
+    explicit wxWebSession(const wxWebSessionImplPtr& impl)
+        : wxWebSessionBase(impl)
+    {
+    }
+};
+
+// Web session class for using synchronous web requests, suitable for use in
+// background worker threads.
+class WXDLLIMPEXP_NET wxWebSessionSync : public wxWebSessionBase
+{
+public:
+    wxWebSessionSync() = default;
+
+    wxWebSessionSync(const wxWebSessionSync& other) = default;
+    wxWebSessionSync& operator=(const wxWebSessionSync& other) = default;
+
+    // Objects of this class can't be created directly, use the following
+    // factory functions to get access to them.
+    static wxWebSessionSync& GetDefault();
+
+    static wxWebSessionSync New(const wxString& backend = wxString());
+
+    wxWebRequestSync CreateRequest(const wxString& url);
+
+private:
+    explicit wxWebSessionSync(const wxWebSessionImplPtr& impl)
+        : wxWebSessionBase(impl)
+    {
+    }
 };
 
 class WXDLLIMPEXP_NET wxWebRequestEvent : public wxEvent
