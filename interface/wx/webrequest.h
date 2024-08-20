@@ -368,7 +368,7 @@ public:
             ...
             return;
         }
-        request.SetData(stream.release(), "application/octet-stream")
+        request.SetData(stream, "application/octet-stream")
         @endcode
 
         @param dataStream
@@ -388,6 +388,10 @@ public:
             dataSize is not specified and the attempt to determine stream size
             failed; @true in all the other cases.
     */
+    bool SetData(std::unique_ptr<wxInputStream> dataStream,
+        const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+
+    /// @overload
     bool SetData(wxInputStream* dataStream,
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
@@ -781,7 +785,7 @@ public:
             ...
             return;
         }
-        request.SetData(stream.release(), "application/octet-stream")
+        request.SetData(stream, "application/octet-stream")
         @endcode
 
         @param dataStream
@@ -801,6 +805,10 @@ public:
             dataSize is not specified and the attempt to determine stream size
             failed; @true in all the other cases.
     */
+    bool SetData(std::unique_ptr<wxInputStream> dataStream,
+        const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+
+    /// @overload
     bool SetData(wxInputStream* dataStream,
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 

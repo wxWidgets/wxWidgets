@@ -66,7 +66,7 @@ public:
 
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
-    bool SetData(std::unique_ptr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+    bool SetData(std::unique_ptr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     void SetStorage(wxWebRequest::Storage storage) { m_storage = storage; }
 

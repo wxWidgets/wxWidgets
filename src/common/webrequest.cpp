@@ -134,15 +134,15 @@ void wxWebRequestImpl::SetData(const wxString& text, const wxString& contentType
 
     std::unique_ptr<wxInputStream>
         stream(new wxMemoryInputStream(m_dataText, m_dataText.length()));
-    SetData(stream, contentType);
+    SetData(std::move(stream), contentType);
 }
 
 bool
-wxWebRequestImpl::SetData(std::unique_ptr<wxInputStream>& dataStream,
+wxWebRequestImpl::SetData(std::unique_ptr<wxInputStream> dataStream,
                           const wxString& contentType,
                           wxFileOffset dataSize)
 {
-    m_dataStream.reset(dataStream.release());
+    m_dataStream = std::move(dataStream);
 
     if ( m_dataStream )
     {
@@ -438,16 +438,13 @@ wxWebRequestBase::SetData(const wxString& text,
 }
 
 bool
-wxWebRequestBase::SetData(wxInputStream* dataStream,
+wxWebRequestBase::SetData(std::unique_ptr<wxInputStream> dataStream,
                           const wxString& contentType,
                           wxFileOffset dataSize)
 {
-    // Ensure that the stream is destroyed even we return below.
-    std::unique_ptr<wxInputStream> streamPtr(dataStream);
-
     wxCHECK_IMPL( false );
 
-    return m_impl->SetData(streamPtr, contentType, dataSize);
+    return m_impl->SetData(std::move(dataStream), contentType, dataSize);
 }
 
 void wxWebRequestBase::SetStorage(Storage storage)

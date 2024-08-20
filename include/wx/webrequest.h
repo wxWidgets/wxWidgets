@@ -41,6 +41,8 @@ private:
 #include "wx/stream.h"
 #include "wx/versioninfo.h"
 
+#include <memory>
+
 class wxWebResponse;
 class wxWebSession;
 class wxWebSessionFactory;
@@ -198,7 +200,12 @@ public:
 
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
-    bool SetData(wxInputStream* dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+    bool SetData(std::unique_ptr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+
+    bool SetData(wxInputStream* dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset)
+    {
+        return SetData(std::unique_ptr<wxInputStream>(dataStream), contentType, dataSize);
+    }
 
     void SetStorage(Storage storage);
 
