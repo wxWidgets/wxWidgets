@@ -1803,8 +1803,10 @@ void wxTextCtrl::Copy()
 void wxTextCtrl::Paste()
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
-
-    wxTextEntry::Paste();
+    if( IsMultiLine() )
+        g_signal_emit_by_name (m_text, "paste-clipboard");
+    else
+        wxTextEntry::Paste();
 }
 
 // If the return values from and to are the same, there is no
