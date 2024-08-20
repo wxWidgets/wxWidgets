@@ -1074,7 +1074,7 @@ wxWebSessionSync::CreateRequest(const wxString& url)
     return wxWebRequestSync(m_impl->CreateRequestSync(*this, url));
 }
 
-wxVersionInfo wxWebSessionBase::GetLibraryVersionInfo()
+wxVersionInfo wxWebSessionBase::GetLibraryVersionInfo() const
 {
     wxCHECK_IMPL( wxVersionInfo() );
 

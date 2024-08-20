@@ -195,7 +195,7 @@ public:
     CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
                       const wxString& WXUNUSED(url)) override;
 
-    wxVersionInfo GetLibraryVersionInfo() override;
+    wxVersionInfo GetLibraryVersionInfo() const override;
 
     bool SetProxy(const wxWebProxy& proxy) override;
 

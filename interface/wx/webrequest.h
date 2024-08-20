@@ -1196,7 +1196,7 @@ public:
         Retrieve the version information about the implementation library used
         by this session.
     */
-    virtual wxVersionInfo GetLibraryVersionInfo();
+    virtual wxVersionInfo GetLibraryVersionInfo() const;
 
     /**
         Sets a request header in every wxWebRequest created from this session
@@ -1363,7 +1363,7 @@ public:
         Retrieve the version information about the implementation library used
         by this session.
     */
-    virtual wxVersionInfo GetLibraryVersionInfo();
+    virtual wxVersionInfo GetLibraryVersionInfo() const;
 
     /**
         Sets a request header in every wxWebRequestSync created from this

@@ -312,7 +312,7 @@ public:
     virtual wxWebRequestImplPtr
     CreateRequestSync(wxWebSessionSync& session, const wxString& url) = 0;
 
-    virtual wxVersionInfo GetLibraryVersionInfo() = 0;
+    virtual wxVersionInfo GetLibraryVersionInfo() const = 0;
 
     void AddCommonHeader(const wxString& name, const wxString& value)
         { m_headers[name] = value; }

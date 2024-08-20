@@ -1192,7 +1192,7 @@ void wxWebSessionCURL::RequestHasTerminated(wxWebRequestCURL* request)
     StopActiveTransfer(curl);
 }
 
-wxVersionInfo wxWebSessionBaseCURL::GetLibraryVersionInfo()
+wxVersionInfo wxWebSessionBaseCURL::GetLibraryVersionInfo() const
 {
     const curl_version_info_data* vi = curl_version_info(CURLVERSION_NOW);
     wxString desc = wxString::Format("libcurl/%s", vi->version);

@@ -168,7 +168,7 @@ public:
     CreateRequestSync(wxWebSessionSync& session,
                       const wxString& url) override;
 
-    wxVersionInfo GetLibraryVersionInfo() override;
+    wxVersionInfo GetLibraryVersionInfo() const override;
 
     wxWebSessionHandle GetNativeHandle() const override
     {

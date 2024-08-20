@@ -357,7 +357,7 @@ public:
     // creating a session using it.
     static bool IsBackendAvailable(const wxString& backend);
 
-    wxVersionInfo GetLibraryVersionInfo();
+    wxVersionInfo GetLibraryVersionInfo() const;
 
     void AddCommonHeader(const wxString& name, const wxString& value);
 
