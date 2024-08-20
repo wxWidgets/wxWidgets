@@ -1,0 +1,1 @@
+wxAll: Add support for setting the proxy to use in wxWebRequest (#24762).
