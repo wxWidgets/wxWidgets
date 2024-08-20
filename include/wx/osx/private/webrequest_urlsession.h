@@ -15,6 +15,7 @@
 #include "wx/private/webrequest.h"
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSError);
+DECLARE_WXCOCOA_OBJC_CLASS(NSURLComponents);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLCredential);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSession);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSessionTask);
@@ -174,6 +175,8 @@ public:
         return (wxWebSessionHandle)m_session;
     }
 
+    bool SetProxy(const wxWebProxy& proxy) override;
+
     bool EnablePersistentStorage(bool enable) override;
 
     WX_NSURLSession GetSession();
@@ -183,6 +186,9 @@ public:
 private:
     WX_NSURLSession m_session = nullptr;
     WX_wxWebSessionDelegate m_delegate;
+#if !wxOSX_USE_IPHONE
+    WX_NSURLComponents m_proxyURL = nullptr;
+#endif // !wxOSX_USE_IPHONE
     bool m_persistentStorageEnabled = false;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionURLSession);

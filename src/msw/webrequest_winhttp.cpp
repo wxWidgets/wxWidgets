@@ -49,6 +49,7 @@ public:
         wxLOAD_FUNC(WinHttpCloseHandle)
         wxLOAD_FUNC(WinHttpReceiveResponse)
         wxLOAD_FUNC(WinHttpCrackUrl)
+        wxLOAD_FUNC(WinHttpCreateUrl)
         wxLOAD_FUNC(WinHttpConnect)
         wxLOAD_FUNC(WinHttpOpenRequest)
         wxLOAD_FUNC(WinHttpSetStatusCallback)
@@ -78,6 +79,8 @@ public:
     static WinHttpReceiveResponse_t WinHttpReceiveResponse;
     typedef BOOL(WINAPI* WinHttpCrackUrl_t)(LPCWSTR, DWORD, DWORD, LPURL_COMPONENTS);
     static WinHttpCrackUrl_t WinHttpCrackUrl;
+    typedef BOOL(WINAPI* WinHttpCreateUrl_t)(LPURL_COMPONENTS, DWORD, LPWSTR, LPDWORD);
+    static WinHttpCreateUrl_t WinHttpCreateUrl;
     typedef HINTERNET(WINAPI* WinHttpConnect_t)(HINTERNET, LPCWSTR, INTERNET_PORT, DWORD);
     static WinHttpConnect_t WinHttpConnect;
     typedef HINTERNET(WINAPI* WinHttpOpenRequest_t)(HINTERNET, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR*, DWORD);
@@ -107,6 +110,7 @@ wxWinHTTP::WinHttpWriteData_t wxWinHTTP::WinHttpWriteData;
 wxWinHTTP::WinHttpCloseHandle_t wxWinHTTP::WinHttpCloseHandle;
 wxWinHTTP::WinHttpReceiveResponse_t wxWinHTTP::WinHttpReceiveResponse;
 wxWinHTTP::WinHttpCrackUrl_t wxWinHTTP::WinHttpCrackUrl;
+wxWinHTTP::WinHttpCreateUrl_t wxWinHTTP::WinHttpCreateUrl;
 wxWinHTTP::WinHttpConnect_t wxWinHTTP::WinHttpConnect;
 wxWinHTTP::WinHttpOpenRequest_t wxWinHTTP::WinHttpOpenRequest;
 wxWinHTTP::WinHttpSetStatusCallback_t wxWinHTTP::WinHttpSetStatusCallback;
@@ -143,6 +147,41 @@ wxWinHTTP::WinHttpOpen_t wxWinHTTP::WinHttpOpen;
 #ifndef WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2
 #define WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2 0x00000800
 #endif
+
+namespace
+{
+
+// Wrapper initializing URL_COMPONENTS struct.
+struct wxURLComponents : URL_COMPONENTS
+{
+    wxURLComponents()
+    {
+        wxZeroMemory(*this);
+        dwStructSize = sizeof(URL_COMPONENTS);
+        dwSchemeLength =
+        dwHostNameLength =
+        dwUserNameLength =
+        dwPasswordLength =
+        dwUrlPathLength =
+        dwExtraInfoLength = (DWORD)-1;
+    }
+
+    bool HasCredentials() const
+    {
+        return dwUserNameLength > 0;
+    }
+
+    wxWebCredentials GetCredentials() const
+    {
+        return wxWebCredentials
+               (
+                wxString(lpszUserName, dwUserNameLength),
+                wxSecretValue(wxString(lpszPassword, dwPasswordLength))
+               );
+    }
+};
+
+} // anonymous namespace
 
 // Helper functions
 
@@ -240,7 +279,8 @@ wxWebRequestWinHTTP::wxWebRequestWinHTTP(wxWebSession& session,
                                          int id):
     wxWebRequestImpl(session, sessionImpl, handler, id),
     m_sessionImpl(sessionImpl),
-    m_url(url)
+    m_url(url),
+    m_tryProxyCredentials(sessionImpl.HasProxyCredentials())
 {
 }
 
@@ -248,7 +288,8 @@ wxWebRequestWinHTTP::wxWebRequestWinHTTP(wxWebSessionWinHTTP& sessionImpl,
                                          const wxString& url)
     : wxWebRequestImpl(sessionImpl),
       m_sessionImpl(sessionImpl),
-      m_url(url)
+      m_url(url),
+      m_tryProxyCredentials(sessionImpl.HasProxyCredentials())
 {
 }
 
@@ -324,13 +365,36 @@ void wxWebRequestWinHTTP::WriteData()
         switch ( result.state )
         {
             case wxWebRequest::State_Unauthorized:
-                // Check if we can use the credentials from the URL.
-                if ( m_tryCredentialsFromURL )
+                switch ( m_authChallenge->GetSource() )
                 {
-                    m_tryCredentialsFromURL = false;
+                    case wxWebAuthChallenge::Source_Proxy:
+                        if ( m_tryProxyCredentials )
+                        {
+                            m_tryProxyCredentials = false;
 
-                    m_authChallenge->SetCredentials(m_credentialsFromURL);
-                    return;
+                            m_authChallenge->SetCredentials(
+                                m_sessionImpl.GetProxyCredentials()
+                            );
+                            return;
+                        }
+                        break;
+
+                    case wxWebAuthChallenge::Source_Server:
+                        // Check if we can use the credentials from the URL.
+                        if ( m_tryCredentialsFromURL )
+                        {
+                            m_tryCredentialsFromURL = false;
+
+                            // We may need to retry proxy credentials if we get
+                            // redirected, as we'd need to authenticate with
+                            // the proxy again in this case.
+                            if ( m_sessionImpl.HasProxyCredentials() )
+                                m_tryProxyCredentials = true;
+
+                            m_authChallenge->SetCredentials(m_credentialsFromURL);
+                            return;
+                        }
+                        break;
                 }
 
                 // Otherwise just switch to this state and let the application
@@ -453,8 +517,10 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
     if ( !result )
         return result;
 
-    // This loop executes at most twice: once for the initial request and then
-    // possibly another time if we need to authenticate.
+    // This loop executes until we exhaust all authentication possibilities: we
+    // may need to authenticate with the proxy first and then with the server
+    // and we even may need to authenticate with the proxy again after failing
+    // connecting to the server the first time.
     for ( ;; )
     {
         result = SendRequest();
@@ -485,33 +551,65 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
         if ( !result )
             return result;
 
-        if ( result.state == wxWebRequest::State_Unauthorized )
+        if ( result.state != wxWebRequest::State_Unauthorized )
+            break;
+
+        switch ( m_authChallenge->GetSource() )
         {
-            // We need to authenticate, but we can only do it if we had the
-            // credentials in the URL and haven't tried using them yet.
-            if ( !m_tryCredentialsFromURL )
-                return result;
+            case wxWebAuthChallenge::Source_Proxy:
+                if ( !m_tryProxyCredentials )
+                    return result;
 
-            // Ensure we don't try them again, even if we fail.
-            m_tryCredentialsFromURL = false;
+                // Don't try the same credentials again unless we manage to
+                // connect to the server in the meanwhile (see below).
+                m_tryProxyCredentials = false;
 
-            result = m_authChallenge->DoSetCredentials(m_credentialsFromURL);
-            if ( !result )
-                return result;
+                result = m_authChallenge->DoSetCredentials(
+                            m_sessionImpl.GetProxyCredentials()
+                        );
+                if ( !result )
+                    return result;
 
-            // We have set the credentials successfully, so we can try again.
-            //
-            // Ensure that we write all the data again if we have any.
-            if ( m_dataStream )
-            {
-                m_dataStream->SeekI(0);
-                m_dataWritten = 0;
-            }
+                wxLogTrace(wxTRACE_WEBREQUEST,
+                           "Request %p: retrying with proxy credentials",
+                           this);
+                break;
 
-            continue;
+            case wxWebAuthChallenge::Source_Server:
+                // We need to authenticate, but we can only do it if we had the
+                // credentials in the URL and haven't tried using them yet.
+                if ( !m_tryCredentialsFromURL )
+                    return result;
+
+                // Ensure we don't try them again, even if we fail.
+                m_tryCredentialsFromURL = false;
+
+                result = m_authChallenge->DoSetCredentials(m_credentialsFromURL);
+                if ( !result )
+                    return result;
+
+                wxLogTrace(wxTRACE_WEBREQUEST,
+                           "Request %p: retrying with credentials from URL",
+                           this);
+
+                // We have set the credentials successfully, so we can try
+                // again, but we may need to re-authenticate with the proxy
+                // now, so allow trying the proxy credentials again if we had
+                // any in the first place.
+                if ( m_sessionImpl.HasProxyCredentials() )
+                    m_tryProxyCredentials = true;
+
+                // Ensure that we write all the data again if we have any.
+                if ( m_dataStream )
+                {
+                    m_dataStream->SeekI(0);
+                    m_dataWritten = 0;
+                }
+
+                break;
         }
 
-        break;
+        continue;
     }
 
     // Read the response data.
@@ -539,16 +637,7 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
                this, method, m_url);
 
     // Parse the URL
-    URL_COMPONENTS urlComps;
-    wxZeroMemory(urlComps);
-    urlComps.dwStructSize = sizeof(urlComps);
-    urlComps.dwSchemeLength =
-    urlComps.dwHostNameLength =
-    urlComps.dwUserNameLength =
-    urlComps.dwPasswordLength =
-    urlComps.dwUrlPathLength =
-    urlComps.dwExtraInfoLength = (DWORD)-1;
-
+    wxURLComponents urlComps;
     if ( !wxWinHTTP::WinHttpCrackUrl(m_url.wc_str(), m_url.length(), 0, &urlComps) )
     {
         return FailWithLastError("Parsing URL");
@@ -556,13 +645,9 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
 
     // If we have auth in the URL, remember them but we can't use them yet
     // because we don't yet know which authentication scheme the server uses.
-    if ( urlComps.dwUserNameLength )
+    if ( urlComps.HasCredentials() )
     {
-        m_credentialsFromURL = wxWebCredentials
-            (
-                wxString(urlComps.lpszUserName, urlComps.dwUserNameLength),
-                wxSecretValue(wxString(urlComps.lpszPassword, urlComps.dwPasswordLength))
-            );
+        m_credentialsFromURL = urlComps.GetCredentials();
         m_tryCredentialsFromURL = true;
     }
 
@@ -858,11 +943,29 @@ bool wxWebSessionWinHTTP::Initialize()
 
 bool wxWebSessionWinHTTP::Open()
 {
-    DWORD accessType;
-    if ( wxCheckOsVersion(6, 3) )
-        accessType = WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY;
-    else
-        accessType = WINHTTP_ACCESS_TYPE_DEFAULT_PROXY;
+    DWORD accessType = 0;
+
+    const wchar_t* proxyName = WINHTTP_NO_PROXY_NAME;
+
+    const wxWebProxy& proxy = GetProxy();
+    switch ( proxy.GetType() )
+    {
+        case wxWebProxy::Type::URL:
+            accessType = WINHTTP_ACCESS_TYPE_NAMED_PROXY;
+            proxyName = m_proxyURLWithoutCredentials.wc_str();
+            break;
+
+        case wxWebProxy::Type::Disabled:
+            accessType = WINHTTP_ACCESS_TYPE_NO_PROXY;
+            break;
+
+        case wxWebProxy::Type::Default:
+            if ( wxCheckOsVersion(6, 3) )
+                accessType = WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY;
+            else
+                accessType = WINHTTP_ACCESS_TYPE_DEFAULT_PROXY;
+            break;
+    }
 
     DWORD flags = 0;
     if ( IsAsync() )
@@ -872,7 +975,7 @@ bool wxWebSessionWinHTTP::Open()
                  (
                     GetHeaders().find("User-Agent")->second.wc_str(),
                     accessType,
-                    WINHTTP_NO_PROXY_NAME,
+                    proxyName,
                     WINHTTP_NO_PROXY_BYPASS,
                     flags
                  );
@@ -945,5 +1048,65 @@ wxVersionInfo wxWebSessionWinHTTP::GetLibraryVersionInfo()
     return wxVersionInfo("WinHTTP", verMaj, verMin, verMicro);
 }
 
+bool wxWebSessionWinHTTP::SetProxy(const wxWebProxy& proxy)
+{
+    wxCHECK_MSG( !m_handle, false,
+                 "Proxy must be set before the first request is made" );
+
+    // Extract proxy credentials if they are present in the URL as WinHTTP
+    // doesn't handle them and we have to do everything ourselves.
+    if ( proxy.GetType() == wxWebProxy::Type::URL )
+    {
+        const wxString& url = proxy.GetURL();
+        wxURLComponents urlComps;
+        if ( !wxWinHTTP::WinHttpCrackUrl(url.wc_str(), url.length(), 0, &urlComps) )
+        {
+            wxLogTrace(wxTRACE_WEBREQUEST, "Invalid proxy URL: \"%s\"", url);
+            return false;
+        }
+
+        if ( urlComps.HasCredentials() )
+        {
+            // We're going to need these credentials later, if we have them.
+            m_proxyCredentials = urlComps.GetCredentials();
+
+            // Moreover, WinHttpOpen() doesn't accept credentials in the proxy
+            // string, so we need to create an URL without them.
+            urlComps.dwUserNameLength =
+            urlComps.dwPasswordLength = 0;
+            urlComps.lpszUserName =
+            urlComps.lpszPassword = nullptr;
+
+            wxWCharBuffer buf(url.length());
+            DWORD len = buf.length();
+            if ( !wxWinHTTP::WinHttpCreateUrl(&urlComps, 0, buf.data(), &len) )
+            {
+                wxLogTrace(wxTRACE_WEBREQUEST,
+                           "Failed to recreate proxy URL for \"%s\"", url);
+                return false;
+            }
+
+            // We need to shrink the buffer to its effective length to avoid
+            // having NUL bytes at the end of the string.
+            buf.shrink(len);
+
+            m_proxyURLWithoutCredentials = buf;
+        }
+        else // No credentials in the proxy URL, just store it as is.
+        {
+            m_proxyURLWithoutCredentials = url;
+        }
+
+        // Final step: WinHttpOpen() doesn't accept trailing slashes in the URL
+        // neither (it just fails with ERROR_INVALID_PARAMETER), so remove them.
+        while ( m_proxyURLWithoutCredentials.Last() == '/' )
+            m_proxyURLWithoutCredentials.RemoveLast();
+
+        wxLogTrace(wxTRACE_WEBREQUEST, "Proxy URL: %s -> %s",
+                   url, m_proxyURLWithoutCredentials);
+    }
+
+    return wxWebSessionImpl::SetProxy(proxy);
+}
 
 #endif // wxUSE_WEBREQUEST_WINHTTP

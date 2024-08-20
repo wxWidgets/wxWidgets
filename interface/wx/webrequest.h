@@ -1079,6 +1079,69 @@ public:
 };
 
 /**
+    @class wxWebProxy
+
+    Object describing the proxy settings to be used by the session.
+
+    An object of this type can be created using one of the factory functions
+    documented below and passed to wxWebSession::SetProxy() or
+    wxWebSessionSync::SetProxy() to use non-default proxy settings.
+
+    For example:
+    @code
+    auto& session = wxWebSession::GetDefault();
+    if ( !session.SetProxy(wxWebProxy::FromURL("http://proxy.example.com:8080")) )
+    {
+        // proxy couldn't be set, maybe try with another one?
+    }
+    @endcode
+
+    @note Support for specifying the proxy is not implemented under iOS due to
+        the platform limitations.
+
+    @since 3.3.0
+
+    @library{wxnet}
+    @category{net}
+ */
+class wxWebProxy
+{
+public:
+    /**
+        Use the specified proxy for all requests.
+
+        The @a url may contain the schema (supported schemas depend on the
+        backend, but "http" and "https" are always supported) and the port
+        number, but "http" and backend-dependent port number will be used by
+        default if they are not specified.
+
+        It may also contain username and password to be used for authenticating
+        with the proxy, except under macOS.
+
+        Backend-specific notes:
+
+        - WinHTTP: only "http" and "https" schemas are supported, the default
+          port numbers are 80 and 443, respectively.
+        - NSURLSession: Same as for WinHTTP with the added limitation that the
+          URL may not contain the username and password nor the path, i.e. it
+          is limited to just the host name and port.
+        - CURL: all schemas supported by libcurl are supported, which also
+          includes "socks4" and "socks5", the default port is 1080.
+     */
+    static wxWebProxy FromURL(const wxString& url);
+
+    /**
+        Disable use of the proxy even if one is configured.
+
+        Try to always use direct connection to the server, even if the system,
+        or user account, is configured to use a proxy.
+     */
+    static wxWebProxy Disable();
+
+    static wxWebProxy Default();
+};
+
+/**
     @class wxWebSession
 
     Session allows creating wxWebRequest objects used for the actual HTTP
@@ -1162,6 +1225,21 @@ public:
         @see SetTempDir()
     */
     wxString GetTempDir() const;
+
+    /**
+        Set the proxy to use for all requests initiated by this session.
+
+        By default, the system default proxy settings are used but this
+        function can be called _before_ creating the first request to override
+        them.
+
+        @return @true if the proxy was set successfully, @false otherwise (this
+            may indicate unsupported URL schema or that the function was called
+            after creating the first request).
+
+        @since 3.3.0
+     */
+    bool SetProxy(const wxWebProxy& proxy);
 
     /**
         Returns the default session
@@ -1314,6 +1392,17 @@ public:
         @see SetTempDir()
     */
     wxString GetTempDir() const;
+
+    /**
+        Set the proxy to use for all requests initiated by this session.
+
+        By default, the system default proxy settings are used but this
+        function can be called _before_ creating the first request to override
+        them.
+
+        @since 3.3.0
+     */
+    void SetProxy(const wxWebProxy& proxy);
 
     /**
         Returns the default session

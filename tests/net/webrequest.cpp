@@ -161,6 +161,8 @@ protected:
 
     virtual void CreateAbs(const wxString& url) = 0;
 
+    virtual wxWebSessionBase& GetSession() = 0;
+
     virtual wxWebRequestBase& GetRequest() = 0;
 
     // Check that the response is a JSON object containing a key "pi" with the
@@ -198,6 +200,20 @@ protected:
             FAIL("Specify WX_TEST_WEBREQUEST_URL");
         }
 
+        wxString proxyURL;
+        if ( wxGetEnv("WX_TEST_WEBREQUEST_PROXY", &proxyURL) )
+        {
+            wxWebProxy proxy = wxWebProxy::Default();
+
+            // Interpret some values specially.
+            if ( proxyURL == "0" )
+                proxy = wxWebProxy::Disable();
+            else if ( proxyURL != "1" )
+                proxy = wxWebProxy::FromURL(proxyURL);
+
+            REQUIRE( GetSession().SetProxy(proxy) );
+        }
+
         CreateAbs(url);
 
         wxString insecure;
@@ -232,6 +248,11 @@ public:
 
         Bind(wxEVT_WEBREQUEST_STATE, &RequestFixture::OnRequestState, this);
         Bind(wxEVT_WEBREQUEST_DATA, &RequestFixture::OnData, this);
+    }
+
+    wxWebSessionBase& GetSession() override
+    {
+        return wxWebSession::GetDefault();
     }
 
     wxWebRequestBase& GetRequest() override
@@ -731,6 +752,11 @@ public:
     {
         request = wxWebSessionSync::GetDefault().CreateRequest(url);
         REQUIRE( request.IsOk() );
+    }
+
+    wxWebSessionBase& GetSession() override
+    {
+        return wxWebSessionSync::GetDefault();
     }
 
     wxWebRequestBase& GetRequest() override

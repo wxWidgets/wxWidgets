@@ -134,6 +134,11 @@ private:
     wxWebCredentials m_credentialsFromURL;
     bool m_tryCredentialsFromURL = false;
 
+    // Proxy credentials (if any) are stored in the session, but we need store
+    // the same flag for them as for the server credentials here.
+    bool m_tryProxyCredentials = false;
+
+
     wxNODISCARD Result SendRequest();
 
     // Write data, if any, and call CreateResponse() if there is nothing left
@@ -192,6 +197,8 @@ public:
 
     wxVersionInfo GetLibraryVersionInfo() override;
 
+    bool SetProxy(const wxWebProxy& proxy) override;
+
     HINTERNET GetHandle() const { return m_handle; }
 
     wxWebSessionHandle GetNativeHandle() const override
@@ -199,10 +206,24 @@ public:
         return (wxWebSessionHandle)GetHandle();
     }
 
+    // Used by wxWebRequestWinHTTP to get the proxy credentials.
+    bool HasProxyCredentials() const
+    {
+        return !m_proxyCredentials.GetUser().empty();
+    }
+
+    const wxWebCredentials& GetProxyCredentials() const
+    {
+        return m_proxyCredentials;
+    }
+
 private:
     HINTERNET m_handle = nullptr;
 
     bool Open();
+
+    wxWebCredentials m_proxyCredentials;
+    wxString m_proxyURLWithoutCredentials;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionWinHTTP);
 };

@@ -475,6 +475,9 @@ wxWebSessionURLSession::~wxWebSessionURLSession()
 {
     [m_session release];
     [m_delegate release];
+#if !wxOSX_USE_IPHONE
+    [m_proxyURL release];
+#endif // !wxOSX_USE_IPHONE
 }
 
 wxWebRequestImplPtr
@@ -506,6 +509,90 @@ wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo()
     return wxVersionInfo("URLSession", verMaj, verMin, verMicro);
 }
 
+bool wxWebSessionURLSession::SetProxy(const wxWebProxy& proxy)
+{
+#if wxOSX_USE_IPHONE
+    // Setting the proxy doesn't seem to be supported under iOS.
+    return false;
+#else // !wxOSX_USE_IPHONE
+    wxCHECK_MSG( !m_session, false,
+                 "Proxy must be set before the first request is made" );
+
+    if ( proxy.GetType() == wxWebProxy::Type::URL )
+    {
+        const wxString& url = proxy.GetURL();
+
+        m_proxyURL = [NSURLComponents componentsWithString: wxCFStringRef(url).AsNSString()];
+        if ( !m_proxyURL )
+        {
+            wxLogTrace(wxTRACE_WEBREQUEST,
+                       "Failed to parse proxy URL \"%s\"",
+                       url);
+
+            return false;
+        }
+
+        if ( m_proxyURL.path.length )
+        {
+            // There doesn't seem to be any place to specify the path in the
+            // proxy configuration dictionary.
+            wxLogTrace(wxTRACE_WEBREQUEST,
+                       "Proxy URL \"%s\" with path is not supported",
+                       url);
+
+            [m_proxyURL release];
+            m_proxyURL = nil;
+
+            return false;
+        }
+
+        if ( m_proxyURL.user.length )
+        {
+            // Some places mention using kCFProxyUsernameKey and
+            // kCFProxyPasswordKey for this, but these keys don't work (at
+            // least under macOS 14.4) and result in an exception being thrown
+            // when constructing the proxy configuration dictionary and there
+            // doesn't seem to be any other place to specify them.
+            wxLogTrace(wxTRACE_WEBREQUEST,
+                       "Credentials in proxy URL (%s) not supported",
+                       url);
+
+            [m_proxyURL release];
+            m_proxyURL = nil;
+
+            return false;
+        }
+
+        bool isHTTPS;
+        if ( [m_proxyURL.scheme isEqualToString: @"http"] )
+            isHTTPS = false;
+        else if ( [m_proxyURL.scheme isEqualToString: @"https"] )
+            isHTTPS = true;
+        else
+        {
+            wxLogTrace(wxTRACE_WEBREQUEST,
+                       "Unsupported scheme \"%s\" in proxy URL (%s)",
+                       wxCFStringRef(m_proxyURL.scheme).AsString(), url);
+
+            return false;
+        }
+
+        if ( !m_proxyURL.port )
+        {
+            m_proxyURL.port = isHTTPS ? @(443) : @(80);
+        }
+
+        wxLogTrace(wxTRACE_WEBREQUEST,
+                   "Using proxy %s://%s:%d",
+                   wxCFStringRef(m_proxyURL.scheme).AsString(),
+                   wxCFStringRef(m_proxyURL.host).AsString(),
+                   m_proxyURL.port.intValue);
+    }
+
+    return wxWebSessionImpl::SetProxy(proxy);
+#endif // wxOSX_USE_IPHONE/!wxOSX_USE_IPHONE
+}
+
 bool wxWebSessionURLSession::EnablePersistentStorage(bool enable)
 {
     wxCHECK_MSG( !(enable && m_session), false,
@@ -522,6 +609,38 @@ WX_NSURLSession wxWebSessionURLSession::GetSession()
         NSURLSessionConfiguration* config = (m_persistentStorageEnabled) ?
              [NSURLSessionConfiguration defaultSessionConfiguration] :
              [NSURLSessionConfiguration ephemeralSessionConfiguration];
+
+#if !wxOSX_USE_IPHONE
+        switch ( GetProxy().GetType() )
+        {
+            case wxWebProxy::Type::URL:
+                {
+                    config.connectionProxyDictionary = @{
+                        (NSString*)kCFNetworkProxiesHTTPEnable: @YES,
+                        (NSString*)kCFNetworkProxiesHTTPProxy: m_proxyURL.host,
+                        (NSString*)kCFNetworkProxiesHTTPPort: m_proxyURL.port,
+                        // These constants are not available under iOS, and
+                        // apparently HTTPS requests can't be proxied there.
+                        (NSString*)kCFNetworkProxiesHTTPSEnable: @YES,
+                        (NSString*)kCFNetworkProxiesHTTPSProxy: m_proxyURL.host,
+                        (NSString*)kCFNetworkProxiesHTTPSPort: m_proxyURL.port,
+                    };
+                }
+                break;
+
+            case wxWebProxy::Type::Disabled:
+                config.connectionProxyDictionary = @{
+                    (NSString*)kCFNetworkProxiesHTTPEnable: @NO,
+                    (NSString*)kCFNetworkProxiesHTTPSEnable: @NO,
+                };
+                break;
+
+            case wxWebProxy::Type::Default:
+                // Nothing to do, system proxy will be used by default.
+                break;
+        }
+#endif // !wxOSX_USE_IPHONE
+
         m_session = [[NSURLSession sessionWithConfiguration:config delegate:m_delegate delegateQueue:nil] retain];
     }
 
