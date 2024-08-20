@@ -1,0 +1,1 @@
+wxAll: Add synchronous (blocking) version of wxWebRequest (#24760).
