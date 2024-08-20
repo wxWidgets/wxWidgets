@@ -5902,11 +5902,21 @@ public:
     */
     void SetRowAttr(int row, wxGridCellAttr* attr);
 
-
+    /**
+        Returns an array of row labels within the given region.
+    */
     wxArrayInt CalcRowLabelsExposed( const wxRegion& reg,
                                      wxGridWindow *gridWindow = NULL) const;
+
+    /**
+        Returns an array of column labels within the given region.
+    */
     wxArrayInt CalcColLabelsExposed( const wxRegion& reg,
                                      wxGridWindow *gridWindow = NULL) const;
+
+    /**
+        Returns an array of (visible) cells within the given region.
+    */
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
                                             wxGridWindow *gridWindow = NULL) const;
 
