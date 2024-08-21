@@ -1175,10 +1175,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 #ifdef HAVE_X11_XKBLIB_H
                 XkbStateRec state;
                 XkbGetState(dpy, XkbUseCoreKbd, &state);
-                XkbDescPtr xkb = XkbGetMap(dpy, XkbAllComponentsMask, XkbUseCoreKbd);
-                XkbGetNames(dpy, XkbGroupNamesMask, xkb);
                 KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, state.group, 0);
-                XkbFreeKeyboard(xkb, XkbAllComponentsMask, True);
 #else
                 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
                 KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
@@ -1520,14 +1517,12 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
 
         AdjustCharEventKeyCodes(event);
 
-        if (data.Len() == 1)
+        if ((std::next(pstr) == data.end()) && !key_up_waiting && !event.m_keyCode)
         {
-            // only one char received, can apply "wait-for-keyup" hack
-            if (!key_up_waiting) {
-                last_char_event = event;
-                key_up_waiting = true;
-                return false;
-            }
+            // last iteration
+            last_char_event = event;
+            key_up_waiting = true;
+            return false;
         }
 
         if ( HandleWindowEvent(event) )
@@ -1572,7 +1567,7 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
         last_char_event.m_keyCode = event.m_keyCode;
         win->HandleWindowEvent(last_char_event);
         key_up_waiting = false;
-    };
+    }
 
     return win->GTKProcessEvent(event);
 }
