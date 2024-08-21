@@ -276,6 +276,7 @@ wxGTK:
 - Fix wxBitmapComboBox bitmaps scaling in high DPI (#24563).
 - Allow positioning wxDialog at specified position, at least under X11 (#24552).
 - Fix incorrect handling of ligatures in wxStyledTextCtrl (Funami580, #13168).
+- Fix using wrong keyboard layout in key events (Ivan Sorokin, #24772).
 
 wxMSW:
 
