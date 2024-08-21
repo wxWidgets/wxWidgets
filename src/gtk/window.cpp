@@ -1526,7 +1526,7 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
             if (!key_up_waiting) {
                 last_char_event = event;
                 key_up_waiting = true;
-                return true;
+                return false;
             }
         }
 
