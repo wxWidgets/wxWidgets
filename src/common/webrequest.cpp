@@ -923,6 +923,34 @@ wxWebSessionImpl::wxWebSessionImpl(Mode mode)
         wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER));
 }
 
+wxWebSessionImpl::~wxWebSessionImpl() = default;
+
+bool wxWebSessionImpl::SetBaseURL(const wxString& url)
+{
+    // For things to work as expected, i.e. append relative URLs to the base
+    // one without replacing its last component, it must end with a slash.
+    wxString urlWithSlash = url;
+    if ( !urlWithSlash.EndsWith("/") )
+        urlWithSlash += '/';
+
+    m_baseURL.reset(new wxURI());
+    if ( !m_baseURL->Create(urlWithSlash) || m_baseURL->IsReference() )
+    {
+        m_baseURL.reset();
+        return false;
+    }
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Using base URL: %s (%s)",
+               url, m_baseURL->BuildURI());
+
+    return true;
+}
+
+const wxURI* wxWebSessionImpl::GetBaseURL() const
+{
+    return m_baseURL ? m_baseURL.get() : nullptr;
+}
+
 wxString wxWebSessionImpl::GetTempDir() const
 {
     if ( m_tempDir.empty() )
@@ -1055,12 +1083,29 @@ bool wxWebSessionBase::IsBackendAvailable(const wxString& backend)
     return factory != gs_factoryMap.end();
 }
 
+wxString wxWebSessionBase::GetFullURL(const wxString& url) const
+{
+    const wxURI* const baseURL = m_impl->GetBaseURL();
+
+    // If we don't have a base URL, just return the original URL.
+    if ( !baseURL )
+        return url;
+
+    wxURI absURL(url);
+    absURL.Resolve(*baseURL);
+
+    wxLogTrace(wxTRACE_WEBREQUEST, "Relative URL: %s -> %s",
+               url, absURL.BuildURI());
+
+    return absURL.BuildURI();
+}
+
 wxWebRequest
 wxWebSession::CreateRequest(wxEvtHandler* handler, const wxString& url, int id)
 {
     wxCHECK_IMPL( wxWebRequest() );
 
-    return wxWebRequest(m_impl->CreateRequest(*this, handler, url, id));
+    return wxWebRequest(m_impl->CreateRequest(*this, handler, GetFullURL(url), id));
 }
 
 wxWebRequestSync
@@ -1068,7 +1113,7 @@ wxWebSessionSync::CreateRequest(const wxString& url)
 {
     wxCHECK_IMPL( wxWebRequestSync() );
 
-    return wxWebRequestSync(m_impl->CreateRequestSync(*this, url));
+    return wxWebRequestSync(m_impl->CreateRequestSync(*this, GetFullURL(url)));
 }
 
 wxVersionInfo wxWebSessionBase::GetLibraryVersionInfo() const
@@ -1076,6 +1121,13 @@ wxVersionInfo wxWebSessionBase::GetLibraryVersionInfo() const
     wxCHECK_IMPL( wxVersionInfo() );
 
     return m_impl->GetLibraryVersionInfo();
+}
+
+bool wxWebSessionBase::SetBaseURL(const wxString& url)
+{
+    wxCHECK_IMPL( false );
+
+    return m_impl->SetBaseURL(url);
 }
 
 void wxWebSessionBase::AddCommonHeader(const wxString& name, const wxString& value)

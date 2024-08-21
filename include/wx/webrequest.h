@@ -366,6 +366,8 @@ public:
 
     wxVersionInfo GetLibraryVersionInfo() const;
 
+    bool SetBaseURL(const wxString& url);
+
     void AddCommonHeader(const wxString& name, const wxString& value);
 
     void SetTempDir(const wxString& dir);
@@ -397,6 +399,10 @@ protected:
     static wxWebSessionFactory* FindFactory(const wxString& backend);
 
     explicit wxWebSessionBase(const wxWebSessionImplPtr& impl);
+
+    // Return the absolute URL combining the provided one with the base URL if
+    // it's relative.
+    wxString GetFullURL(const wxString& url) const;
 
     wxWebSessionImplPtr m_impl;
 };
