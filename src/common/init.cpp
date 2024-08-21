@@ -481,7 +481,7 @@ int wxEntryReal(int& argc, wxChar **argv)
         if ( !wxTheApp->CallOnInit() )
         {
             // don't call OnExit() if OnInit() failed
-            return -1;
+            return wxTheApp->GetErrorExitCode();
         }
 
         // ensure that OnExit() is called if OnInit() had succeeded

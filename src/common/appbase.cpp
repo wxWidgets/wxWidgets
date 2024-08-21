@@ -264,6 +264,20 @@ void wxAppConsoleBase::CleanUp()
     wxDELETE(m_mainLoop);
 }
 
+// The error code to return if OnInit() fails: this is a wxApp member variable
+// in 3.3, but this would break ABI in 3.2, so use a global for it instead.
+static int gs_errorExitCode = -1;
+
+void wxAppConsoleBase::SetErrorExitCode(int code)
+{
+    gs_errorExitCode = code;
+}
+
+int wxAppConsoleBase::GetErrorExitCode() const
+{
+    return gs_errorExitCode;
+}
+
 // ----------------------------------------------------------------------------
 // OnXXX() callbacks
 // ----------------------------------------------------------------------------

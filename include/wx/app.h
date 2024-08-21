@@ -136,6 +136,12 @@ public:
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
 
+    // Allows to set a custom process exit code if OnInit() returns false.
+#if wxABI_VERSION >= 30207
+    void SetErrorExitCode(int code);
+    int GetErrorExitCode() const;
+#endif // wxABI_VERSION >= 3.2.7
+
 
     // application info: name, description, vendor
     // -------------------------------------------

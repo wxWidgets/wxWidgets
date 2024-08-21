@@ -26,6 +26,14 @@
 # build/bakefiles/version.bkl to indicate that new APIs have been added and
 # rebake!
 
+# public symbols added in 3.2.7 (please keep in alphabetical order):
+@WX_VERSION_TAG@.7 {
+    extern "C++" {
+        "wxAppConsoleBase::SetErrorExitCode";
+        "wxAppConsoleBase::GetErrorExitCode";
+    };
+};
+
 # public symbols added in 3.2.6 (please keep in alphabetical order):
 @WX_VERSION_TAG@.6 {
     extern "C++" {
