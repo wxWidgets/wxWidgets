@@ -1170,7 +1170,9 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                 wxLogTrace(TRACE_KEYS, wxT("\t-> keycode %d"), keycode);
 
 #ifdef HAVE_X11_XKBLIB_H
-                KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, 0, 0);
+                XkbStateRec state;
+                XkbGetState(dpy, XkbUseCoreKbd, &state);
+                KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, state.group, 0);
 #else
                 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
                 KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
