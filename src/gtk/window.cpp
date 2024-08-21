@@ -239,6 +239,9 @@ int          g_lastButtonNumber = 0;
 
 static wxWindowGTK* g_windowUnderMouse = nullptr;
 
+wxKeyEvent last_char_event( wxEVT_CHAR );
+bool key_up_waiting = false;
+
 namespace wxGTKImpl
 {
 
@@ -1170,7 +1173,12 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                 wxLogTrace(TRACE_KEYS, wxT("\t-> keycode %d"), keycode);
 
 #ifdef HAVE_X11_XKBLIB_H
-                KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, 0, 0);
+                XkbStateRec state;
+                XkbGetState(dpy, XkbUseCoreKbd, &state);
+                XkbDescPtr xkb = XkbGetMap(dpy, XkbAllComponentsMask, XkbUseCoreKbd);
+                XkbGetNames(dpy, XkbGroupNamesMask, xkb);
+                KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, state.group, 0);
+                XkbFreeKeyboard(xkb, XkbAllComponentsMask, True);
 #else
                 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
                 KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
@@ -1449,7 +1457,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         {
             wxKeyEvent eventChar(wxEVT_CHAR, event);
 
-            if ( !AdjustCharEventKeyCodes(eventChar) )
+            if ( !AdjustCharEventKeyCodes(eventChar) && key_code)
             {
                 // use Unicode values
                 eventChar.m_keyCode = key_code;
@@ -1512,6 +1520,14 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
 
         AdjustCharEventKeyCodes(event);
 
+        if (data.Len() == 1) { // only one char received, can apply "wait-for-keyup" hack
+            if (!key_up_waiting) {
+                last_char_event = event;
+                key_up_waiting = true;
+                return true;
+            }
+        }
+
         if ( HandleWindowEvent(event) )
             processed = true;
     }
@@ -1548,6 +1564,12 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
 
     wxKeyEvent event( wxEVT_KEY_UP );
     wxTranslateGTKKeyEventToWx(event, win, gdk_event);
+
+    if ( key_up_waiting ) {
+        last_char_event.m_keyCode = event.m_keyCode;
+        win->HandleWindowEvent(last_char_event);
+        key_up_waiting = false;
+    };
 
     return win->GTKProcessEvent(event);
 }
