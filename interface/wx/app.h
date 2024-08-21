@@ -388,8 +388,24 @@ public:
         that the function returns @true.
 
         Notice that if you want to use the command line processing provided by
-        wxWidgets you have to call the base class version in the derived class
-        OnInit().
+        wxWidgets (see OnInitCmdLine() and OnCmdLineParsed() functions) you
+        have to call the base class version in the derived class OnInit(),
+        e.g.:
+
+        @code
+        bool MyApp::OnInit() {
+            if ( !wxApp::OnInit() ) {
+                // The most likely reason for the error here is that incorrect
+                // command line arguments have been specified, so just exit:
+                // error message has already been given.
+                return false;
+            }
+
+            // Perform any additional initialization here.
+
+            return true;
+        }
+        @endcode
 
         Return @true to continue processing, @false to exit the application
         immediately.
