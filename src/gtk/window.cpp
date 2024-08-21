@@ -1520,7 +1520,9 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
 
         AdjustCharEventKeyCodes(event);
 
-        if (data.Len() == 1) { // only one char received, can apply "wait-for-keyup" hack
+        if (data.Len() == 1)
+        {
+            // only one char received, can apply "wait-for-keyup" hack
             if (!key_up_waiting) {
                 last_char_event = event;
                 key_up_waiting = true;
@@ -1565,7 +1567,8 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
     wxKeyEvent event( wxEVT_KEY_UP );
     wxTranslateGTKKeyEventToWx(event, win, gdk_event);
 
-    if ( key_up_waiting ) {
+    if ( key_up_waiting )
+    {
         last_char_event.m_keyCode = event.m_keyCode;
         win->HandleWindowEvent(last_char_event);
         key_up_waiting = false;
