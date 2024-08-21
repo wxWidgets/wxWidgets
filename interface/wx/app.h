@@ -408,7 +408,8 @@ public:
         @endcode
 
         Return @true to continue processing, @false to exit the application
-        immediately.
+        immediately. In the latter case, you may want to call SetErrorExitCode()
+        to set the process exit code to use when the application terminates.
     */
     virtual bool OnInit();
 
@@ -784,6 +785,29 @@ public:
         @since 2.9.5
      */
     void SetCLocale();
+
+    /**
+        Sets the error code to use in case of exit on error.
+
+        This function is mostly useful to customize the error code returned by
+        the application when it exits due to OnInit() returning @false and can
+        be called from OnInit() itself or other virtual functions called from
+        it, for example OnCmdLineError().
+
+        By default, the exit code depends on the compiler being used, e.g. it
+        is @c 255 with typical Unix compilers (gcc, clang) and @c 127 with
+        MSVC, so it is recommended to call this function to set a consistent
+        exit code, e.g. @c 2 which is a de facto standard exit code if command
+        line parsing fails.
+
+        SetErrorExitCode() can be overridden by the application to perform
+        additional actions, but the overridden version should call the base
+        class version to update the value returned by GetErrorExitCode() and
+        actually used when exiting the application.
+
+        @since 3.3.0
+     */
+    virtual void SetErrorExitCode(int code);
 
     /**
         Number of command line arguments (after environment-specific processing).

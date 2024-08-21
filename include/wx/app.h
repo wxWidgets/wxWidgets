@@ -135,6 +135,10 @@ public:
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
 
+    // Allows to set a custom process exit code if OnInit() returns false.
+    virtual void SetErrorExitCode(int code) { m_exitCode = code; }
+    int GetErrorExitCode() const { return m_exitCode; }
+
 
     // application info: name, description, vendor
     // -------------------------------------------
@@ -537,6 +541,10 @@ private:
     // flag set to true at the end of wxApp ctor, call WXAppConstructed() to
     // set it
     bool m_fullyConstructed = false;
+
+    // Exit code to use if OnInit() returns false.
+    int m_exitCode = -1;
+
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
