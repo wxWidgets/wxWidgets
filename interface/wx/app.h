@@ -410,14 +410,23 @@ public:
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
 
     /**
-        This virtual function is where the execution of a program written in wxWidgets
-        starts. The default implementation just enters the main loop and starts
-        handling the events until it terminates, either because ExitMainLoop() has
-        been explicitly called or because the last frame has been deleted and
-        GetExitOnFrameDelete() flag is @true (this is the default).
+        Virtual function executing the application's main event loop.
 
-        The return value of this function becomes the exit code of the program, so it
-        should return 0 in case of successful termination.
+        For the GUI applications, it is typically not necessary to override
+        this function, as the default implementation, which enters the main
+        event loop and dispatches all events until ExitMainLoop() is called
+        (either explicitly or because the last top level window was closed),
+        rarely needs to be customized.
+
+        For the console applications not using event loops, this function can
+        be used as the equivalent of the traditional @c main() function by
+        putting most of the program logic here.
+
+        The return value of this function becomes the exit code of the program,
+        so it should return 0 in case of successful termination.
+
+        Note that this function is not called at all if OnInit() had returned
+        @false.
     */
     virtual int OnRun();
 
