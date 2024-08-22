@@ -136,12 +136,14 @@ public:
     virtual void Exit();
 
     // Allows to set a custom process exit code if a fatal error happens.
-    // This code is -1 by default, but can be changed if necessary.
+    // This code is 255 by default, but can be changed if necessary, notably
+    // set to -1 (which still maps to 255 under most systems, but to 127 when
+    // using MSVC) if compatibility with the previous wx versions is important.
     static void SetFatalErrorExitCode(int code) { ms_fatalErrorExitCode = code; }
     static int GetFatalErrorExitCode() { return ms_fatalErrorExitCode; }
 
     // Allows to set a custom process exit code if OnInit() returns false.
-    // By default, this exit code is -1, as for the fatal errors.
+    // By default, this exit code is 255, as for the fatal errors.
     virtual void SetErrorExitCode(int code) { m_exitCode = code; }
     int GetErrorExitCode() const { return m_exitCode; }
 

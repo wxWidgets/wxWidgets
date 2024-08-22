@@ -794,11 +794,16 @@ public:
         be called from OnInit() itself or other virtual functions called from
         it, for example OnCmdLineError().
 
-        By default, the exit code depends on the compiler being used, e.g. it
-        is @c 255 with typical Unix compilers (gcc, clang) and @c 127 with
-        MSVC, so it is recommended to call this function to set a consistent
-        exit code, e.g. @c 2 which is a de facto standard exit code if command
-        line parsing fails.
+        By default, the exit code is @c 255 which indicates a generic error,
+        so it is may be useful to call this function to set a more precise exit
+        code, e.g. @c 2 which is a de facto standard exit code if command line
+        parsing fails.
+
+        Please also note that in the previous versions of wxWidgets this exit
+        code was @c -1, which corresponds to either @c 255 or @c 127 depending
+        on the platform and compiler used, so you may want to call this
+        function with @c -1 argument if you need to preserve compatibility with
+        the old behaviour.
 
         SetErrorExitCode() can be overridden by the application to perform
         additional actions, but the overridden version should call the base
@@ -817,11 +822,15 @@ public:
         If the program can't continue due to a fatal error, such as receiving
         an unhandled exception or failing to initialize the graphical
         environment for the GUI applications, it terminates with the default
-        fatal error exit code which is @c -1.
+        fatal error exit code which is @c 255.
 
         This function can be used to change this default value to something
-        else. Notice that it has to be called as early as possible to take
-        effect even during the early application initialization, e.g.
+        else, e.g. @c -1 which used to be returned in the previous versions of
+        wxWidgets (and corresponds to either @c 255 or @c 127 depending on the
+        platform and compiler used) if compatibility is important.
+
+        Notice that it has to be called as early as possible to take effect
+        even during the early application initialization, e.g.
 
         @code
         struct FatalErrorCodeInitializer {
