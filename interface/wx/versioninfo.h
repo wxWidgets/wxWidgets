@@ -63,6 +63,17 @@ public:
     bool AtLeast(int major, int minor = 0, int micro = 0) const;
 
     /**
+        Return true if there is actually at least some version information.
+
+        For the default-constructed object, this function returns @false,
+        allowing to distinguish it from any object filled with the version
+        information.
+
+        @since 3.3.0
+     */
+    bool IsOk() const;
+
+    /**
         Get the name of the object (library).
 
         @return Name string.

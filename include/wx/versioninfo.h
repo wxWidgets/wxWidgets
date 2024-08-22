@@ -61,6 +61,12 @@ public:
         return m_micro >= micro;
     }
 
+    // Return true if this version object actually has any version information.
+    bool IsOk() const
+    {
+        return AtLeast(0) || !m_name.empty() || !m_description.empty();
+    }
+
     const wxString& GetName() const { return m_name; }
 
     int GetMajor() const { return m_major; }
