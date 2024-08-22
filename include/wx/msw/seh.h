@@ -24,8 +24,7 @@
     #define wxSEH_HANDLE(rc)                                                  \
         __except ( wxGlobalSEHandler(GetExceptionInformation()) )             \
         {                                                                     \
-            /* use the same exit code as abort() */                           \
-            ::ExitProcess(3);                                                 \
+            ::ExitProcess(rc);                                                \
         }
 
 #else // wxUSE_ON_FATAL_EXCEPTION
