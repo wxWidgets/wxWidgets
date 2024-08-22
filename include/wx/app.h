@@ -135,7 +135,13 @@ public:
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
 
+    // Allows to set a custom process exit code if a fatal error happens.
+    // This code is -1 by default, but can be changed if necessary.
+    static void SetFatalErrorExitCode(int code) { ms_fatalErrorExitCode = code; }
+    static int GetFatalErrorExitCode() { return ms_fatalErrorExitCode; }
+
     // Allows to set a custom process exit code if OnInit() returns false.
+    // By default, this exit code is -1, as for the fatal errors.
     virtual void SetErrorExitCode(int code) { m_exitCode = code; }
     int GetErrorExitCode() const { return m_exitCode; }
 
@@ -542,8 +548,12 @@ private:
     // set it
     bool m_fullyConstructed = false;
 
+    // Exit code to use if a fatal error occurs when the application object
+    // doesn't exist yet or is already destroyed.
+    static int ms_fatalErrorExitCode;
+
     // Exit code to use if OnInit() returns false.
-    int m_exitCode = -1;
+    int m_exitCode = ms_fatalErrorExitCode;
 
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;

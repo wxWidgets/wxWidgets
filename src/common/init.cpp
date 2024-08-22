@@ -550,7 +550,7 @@ int wxEntryReal(int& argc, wxChar **argv)
         // flush any log messages explaining why we failed
         delete wxLog::SetActiveTarget(nullptr);
 #endif
-        return -1;
+        return wxApp::GetFatalErrorExitCode();
     }
 
     wxTRY
@@ -574,7 +574,10 @@ int wxEntryReal(int& argc, wxChar **argv)
         // app execution
         return wxTheApp->OnRun();
     }
-    wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
+    wxCATCH_ALL(
+        wxTheApp->OnUnhandledException();
+        return wxApp::GetFatalErrorExitCode();
+    )
 }
 
 // as with wxEntryStart, we provide an ANSI wrapper

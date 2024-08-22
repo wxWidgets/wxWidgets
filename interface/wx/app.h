@@ -805,9 +805,44 @@ public:
         class version to update the value returned by GetErrorExitCode() and
         actually used when exiting the application.
 
+        @see SetFatalErrorExitCode()
+
         @since 3.3.0
      */
     virtual void SetErrorExitCode(int code);
+
+    /**
+        Allows to set a custom process exit code if a fatal error happens.
+
+        If the program can't continue due to a fatal error, such as receiving
+        an unhandled exception or failing to initialize the graphical
+        environment for the GUI applications, it terminates with the default
+        fatal error exit code which is @c -1.
+
+        This function can be used to change this default value to something
+        else. Notice that it has to be called as early as possible to take
+        effect even during the early application initialization, e.g.
+
+        @code
+        struct FatalErrorCodeInitializer {
+            FatalErrorCodeInitializer() {
+                wxApp::SetFatalErrorExitCode(3); // same as abort()
+            }
+        };
+
+        // Create a global variable to call SetFatalErrorExitCode() in its ctor.
+        static FatalErrorCodeInitializer s_fatalErrorCodeInitializer;
+        @endcode
+
+        Note that this function doesn't change the exit code returned if
+        OnInit() returns @false, so if you change the default value of this
+        exit code you may want to call SetErrorExitCode() to change the other
+        one too.
+
+        @since 3.3.0
+     */
+    static void SetFatalErrorExitCode(int code);
+
 
     /**
         Number of command line arguments (after environment-specific processing).
