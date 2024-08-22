@@ -167,13 +167,13 @@ public:
 /**
     Pops up a directory selector dialog. The arguments have the same meaning
     as those of wxDirDialog::wxDirDialog(). The message is displayed at the
-    top, and the default_path, if specified, is set as the initial selection.
+    top, and the @a defaultPath, if specified, is set as the initial selection.
 
     The application must check for an empty return value (if the user pressed
     Cancel). For example:
 
     @code
-    const wxString& dir = wxDirSelector("Choose a folder");
+    const wxString dir = wxDirSelector("Choose a folder");
     if ( !dir.empty() )
     {
         ...
@@ -183,8 +183,8 @@ public:
     @header{wx/dirdlg.h}
 */
 wxString wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
-                       const wxString& default_path = wxEmptyString,
-                       long style = 0,
+                       const wxString& defaultPath = wxEmptyString,
+                       long style = wxDD_DEFAULT_STYLE,
                        const wxPoint& pos = wxDefaultPosition,
                        wxWindow* parent = nullptr);
 
