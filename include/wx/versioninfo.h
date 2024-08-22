@@ -13,6 +13,16 @@
 #include "wx/string.h"
 
 // ----------------------------------------------------------------------------
+// wxVersionContext: defines which version information to retrieve
+// ----------------------------------------------------------------------------
+
+enum class wxVersionContext
+{
+    RunTime,        // Version used during run-time.
+    BuildTime       // Version that the application was built with.
+};
+
+// ----------------------------------------------------------------------------
 // wxVersionInfo: represents version information
 // ----------------------------------------------------------------------------
 

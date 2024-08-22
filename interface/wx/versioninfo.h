@@ -6,6 +6,24 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Defines the context in which the version information is requested.
+
+    Elements of this enum can be used to select between getting the compile- or
+    run-time wxVersionInfo object for the components supporting this.
+
+    @since 3.3.0
+ */
+enum class wxVersionContext
+{
+    /// Ask for the version used during run-time.
+    RunTime,
+
+    /// Ask for the version that the application was built with.
+    BuildTime
+};
+
+
+/**
     @class wxVersionInfo
 
     wxVersionInfo contains version information.

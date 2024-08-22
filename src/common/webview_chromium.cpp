@@ -1959,16 +1959,30 @@ public:
         return true;
     }
 
-    virtual wxVersionInfo GetVersionInfo() override
+    virtual wxVersionInfo GetVersionInfo(wxVersionContext context) override
     {
-        return {
-            "CEF",
-            CEF_VERSION_MAJOR,
-            CEF_VERSION_MINOR,
-            CEF_VERSION_PATCH,
-            CEF_COMMIT_NUMBER,
-            CEF_VERSION
-        };
+        wxString version;
+        int major, minor, micro, build;
+        switch ( context )
+        {
+            case wxVersionContext::RunTime:
+                major = cef_version_info(0);
+                minor = cef_version_info(1);
+                micro = cef_version_info(2);
+                build = cef_version_info(3);
+                break;
+
+            case wxVersionContext::BuildTime:
+                major = CEF_VERSION_MAJOR;
+                minor = CEF_VERSION_MINOR;
+                micro = CEF_VERSION_PATCH;
+                build = CEF_COMMIT_NUMBER;
+
+                version = CEF_VERSION;
+                break;
+        }
+
+        return {"CEF", major, minor, micro, build, version};
     }
 
     virtual wxWebViewConfiguration CreateConfiguration() override

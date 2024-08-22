@@ -625,9 +625,17 @@ public:
     /**
         Retrieve the version information about this backend implementation.
 
-        @since 3.1.5
+        @param context
+            The context in which the version information is requested, by
+            default it is the run-time version. Currently only GTK WebKit and
+            CEF backends support returning compile-time version information,
+            all the other backends return an empty wxVersionInfo object in this
+            case.
+
+        @since 3.1.5 (@a context parameter was added in 3.3.0)
     */
-    virtual wxVersionInfo GetVersionInfo();
+    virtual wxVersionInfo
+    GetVersionInfo(wxVersionContext context = wxVersionContext::RunTime);
 
     /**
         Create a wxWebViewConfiguration object for wxWebView instances
@@ -1088,9 +1096,23 @@ public:
     /**
         Retrieve the version information about the backend implementation.
 
-        @since 3.1.5
+        @param backend
+            The name of the backend to retrieve the version information for,
+            can be left unspecified to use the default backend.
+        @param context
+            The context in which the version information is requested, by
+            default it is the run-time version. Currently only GTK WebKit and
+            CEF backends support returning compile-time version information,
+            all the other backends return an empty wxVersionInfo object in this
+            case.
+
+        @since 3.1.5 (@a context parameter was added in 3.3.0)
     */
-    static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxWebViewBackendDefault);
+    static wxVersionInfo
+    GetBackendVersionInfo(
+        const wxString& backend = wxWebViewBackendDefault,
+        wxVersionContext context = wxVersionContext::RunTime
+    );
 
     /**
         Create a new wxWebViewConfiguration object.

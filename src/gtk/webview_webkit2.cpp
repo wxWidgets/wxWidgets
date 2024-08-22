@@ -801,10 +801,26 @@ private:
 // wxWebViewFactoryWebKit
 //-----------------------------------------------------------------------------
 
-wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
+wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo(wxVersionContext context)
 {
-    return wxVersionInfo("webkit2", webkit_get_major_version(),
-        webkit_get_minor_version(), webkit_get_micro_version());
+    int major, minor, micro;
+
+    switch ( context )
+    {
+        case wxVersionContext::RunTime:
+            major = webkit_get_major_version();
+            minor = webkit_get_minor_version();
+            micro = webkit_get_micro_version();
+            break;
+
+        case wxVersionContext::BuildTime:
+            major = WEBKIT_MAJOR_VERSION;
+            minor = WEBKIT_MINOR_VERSION;
+            micro = WEBKIT_MICRO_VERSION;
+            break;
+    }
+
+    return wxVersionInfo("webkit2", major, minor, micro);
 }
 
 wxWebViewConfiguration wxWebViewFactoryWebKit::CreateConfiguration()
