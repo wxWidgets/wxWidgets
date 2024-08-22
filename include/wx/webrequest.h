@@ -41,6 +41,8 @@ private:
 #include "wx/stream.h"
 #include "wx/versioninfo.h"
 
+#include <memory>
+
 class wxWebResponse;
 class wxWebSession;
 class wxWebSessionFactory;
@@ -198,7 +200,12 @@ public:
 
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
-    bool SetData(wxInputStream* dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+    bool SetData(std::unique_ptr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+
+    bool SetData(wxInputStream* dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset)
+    {
+        return SetData(std::unique_ptr<wxInputStream>(dataStream), contentType, dataSize);
+    }
 
     void SetStorage(Storage storage);
 
@@ -357,7 +364,9 @@ public:
     // creating a session using it.
     static bool IsBackendAvailable(const wxString& backend);
 
-    wxVersionInfo GetLibraryVersionInfo();
+    wxVersionInfo GetLibraryVersionInfo() const;
+
+    bool SetBaseURL(const wxString& url);
 
     void AddCommonHeader(const wxString& name, const wxString& value);
 
@@ -390,6 +399,10 @@ protected:
     static wxWebSessionFactory* FindFactory(const wxString& backend);
 
     explicit wxWebSessionBase(const wxWebSessionImplPtr& impl);
+
+    // Return the absolute URL combining the provided one with the base URL if
+    // it's relative.
+    wxString GetFullURL(const wxString& url) const;
 
     wxWebSessionImplPtr m_impl;
 };

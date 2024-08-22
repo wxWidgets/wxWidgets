@@ -17,6 +17,8 @@
 #include <memory>
 #include <unordered_map>
 
+class WXDLLIMPEXP_FWD_BASE wxURI;
+
 using wxWebRequestHeaderMap = std::unordered_map<wxString, wxString>;
 
 // Trace mask used for the messages in wxWebRequest code.
@@ -66,7 +68,7 @@ public:
 
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
-    bool SetData(std::unique_ptr<wxInputStream>& dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+    bool SetData(std::unique_ptr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     void SetStorage(wxWebRequest::Storage storage) { m_storage = storage; }
 
@@ -296,7 +298,7 @@ public:
         Sync
     };
 
-    virtual ~wxWebSessionImpl() = default;
+    virtual ~wxWebSessionImpl();
 
     // Only one of these functions is actually implemented in async/sync
     // session implementation classes respectively. This is ugly, but allows to
@@ -312,7 +314,10 @@ public:
     virtual wxWebRequestImplPtr
     CreateRequestSync(wxWebSessionSync& session, const wxString& url) = 0;
 
-    virtual wxVersionInfo GetLibraryVersionInfo() = 0;
+    virtual wxVersionInfo GetLibraryVersionInfo() const = 0;
+
+    bool SetBaseURL(const wxString& url);
+    const wxURI* GetBaseURL() const;
 
     void AddCommonHeader(const wxString& name, const wxString& value)
         { m_headers[name] = value; }
@@ -342,6 +347,7 @@ private:
 
     const Mode m_mode;
 
+    std::unique_ptr<wxURI> m_baseURL;
     wxWebRequestHeaderMap m_headers;
     wxString m_tempDir;
     wxWebProxy m_proxy{wxWebProxy::Default()};

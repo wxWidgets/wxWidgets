@@ -1041,7 +1041,7 @@ wxWebSessionWinHTTP::CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
     return wxWebRequestImplPtr{new wxWebRequestWinHTTP{*this, url}};
 }
 
-wxVersionInfo wxWebSessionWinHTTP::GetLibraryVersionInfo()
+wxVersionInfo wxWebSessionWinHTTP::GetLibraryVersionInfo() const
 {
     int verMaj, verMin, verMicro;
     wxGetOsVersion(&verMaj, &verMin, &verMicro);

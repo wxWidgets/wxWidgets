@@ -502,7 +502,7 @@ wxWebSessionURLSession::CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
     return wxWebRequestImplPtr{new wxWebRequestURLSession{*this, url}};
 }
 
-wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo()
+wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo() const
 {
     int verMaj, verMin, verMicro;
     wxGetOsVersion(&verMaj, &verMin, &verMicro);

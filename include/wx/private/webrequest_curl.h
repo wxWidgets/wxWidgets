@@ -159,7 +159,7 @@ public:
     explicit wxWebSessionBaseCURL(Mode mode);
     ~wxWebSessionBaseCURL();
 
-    wxVersionInfo GetLibraryVersionInfo() override;
+    wxVersionInfo GetLibraryVersionInfo() const override;
 
     static bool CurlRuntimeAtLeastVersion(unsigned int, unsigned int,
                                           unsigned int);

@@ -368,7 +368,7 @@ public:
             ...
             return;
         }
-        request.SetData(stream.release(), "application/octet-stream")
+        request.SetData(stream, "application/octet-stream")
         @endcode
 
         @param dataStream
@@ -388,6 +388,10 @@ public:
             dataSize is not specified and the attempt to determine stream size
             failed; @true in all the other cases.
     */
+    bool SetData(std::unique_ptr<wxInputStream> dataStream,
+        const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+
+    /// @overload
     bool SetData(wxInputStream* dataStream,
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
@@ -781,7 +785,7 @@ public:
             ...
             return;
         }
-        request.SetData(stream.release(), "application/octet-stream")
+        request.SetData(stream, "application/octet-stream")
         @endcode
 
         @param dataStream
@@ -801,6 +805,10 @@ public:
             dataSize is not specified and the attempt to determine stream size
             failed; @true in all the other cases.
     */
+    bool SetData(std::unique_ptr<wxInputStream> dataStream,
+        const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+
+    /// @overload
     bool SetData(wxInputStream* dataStream,
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
@@ -1179,6 +1187,14 @@ public:
         window, the request must be cancelled before the window can be closed
         and destroyed.
 
+        If SetBaseURL() had been called before this function, the @a url can be
+        relative, e.g. with @c https://foo.com/api as the base URL, passing the
+        following values would result in using these full URLs:
+
+        - @c get would become @c https://foo.com/api/get
+        - @c /root would become @c https://foo.com/root
+        - @c https://bar.org/ would remain unchanged
+
         @param handler
             The handler object to notify, must be non-null.
         @param url
@@ -1196,7 +1212,7 @@ public:
         Retrieve the version information about the implementation library used
         by this session.
     */
-    virtual wxVersionInfo GetLibraryVersionInfo();
+    virtual wxVersionInfo GetLibraryVersionInfo() const;
 
     /**
         Sets a request header in every wxWebRequest created from this session
@@ -1212,6 +1228,24 @@ public:
         @param value String value of the header
     */
     void AddCommonHeader(const wxString& name, const wxString& value);
+
+    /**
+        Sets the base URL for all requests using non-absolute URLs.
+
+        If this function is called and returns @true, the @a url will be used
+        as the base for all the requests created by the subsequent calls to
+        CreateRequest() with relative URLs. This is especially useful when
+        using some web API which typically uses a common root URL for all its
+        endpoints.
+
+        @param url An absolute URL, i.e. including the scheme and the host.
+        @return @true if the base URL was set successfully, @false otherwise
+            (this happens if the URL couldn't be parsed successfully or was not
+            an absolute one).
+
+        @since 3.3.0
+     */
+    bool SetBaseURL(const wxString& url);
 
     /**
         Override the default temporary directory that may be used by the
@@ -1351,6 +1385,14 @@ public:
     /**
         Create a new synchronous request for the specified URL.
 
+        If SetBaseURL() had been called before this function, the @a url can be
+        relative, e.g. with @c https://foo.com/api as the base URL, passing the
+        following values would result in using these full URLs:
+
+        - @c get would become @c https://foo.com/api/get
+        - @c /root would become @c https://foo.com/root
+        - @c https://bar.org/ would remain unchanged
+
         @param url
             The URL of the HTTP resource for this request
         @return
@@ -1363,7 +1405,7 @@ public:
         Retrieve the version information about the implementation library used
         by this session.
     */
-    virtual wxVersionInfo GetLibraryVersionInfo();
+    virtual wxVersionInfo GetLibraryVersionInfo() const;
 
     /**
         Sets a request header in every wxWebRequestSync created from this
@@ -1379,6 +1421,22 @@ public:
         @param value String value of the header
     */
     void AddCommonHeader(const wxString& name, const wxString& value);
+
+    /**
+        Sets the base URL for all requests using non-absolute URLs.
+
+        If this function is called and returns @true, the @a url will be used
+        as the base for all the requests created by the subsequent calls to
+        CreateRequest() with relative URLs. This is especially useful when
+        using some web API which typically uses a common root URL for all its
+        endpoints.
+
+        @param url An absolute URL, i.e. including the scheme and the host.
+        @return @true if the base URL was set successfully, @false otherwise
+            (this happens if the URL couldn't be parsed successfully or was not
+            an absolute one).
+     */
+    bool SetBaseURL(const wxString& url);
 
     /**
         Override the default temporary directory that may be used by the

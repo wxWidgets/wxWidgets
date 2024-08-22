@@ -63,6 +63,9 @@ protected:
     {
         if ( wxGetEnv("WX_TEST_WEBREQUEST_URL", &baseURL) )
         {
+            if ( baseURL == "0" )
+                return false;
+
             static bool s_shown = false;
             if ( !s_shown )
             {
@@ -75,7 +78,9 @@ protected:
             baseURL = WX_TEST_WEBREQUEST_URL_DEFAULT;
         }
 
-        return baseURL != "0";
+        REQUIRE( GetSession().SetBaseURL(baseURL) );
+
+        return true;
     }
 
     enum class BadSSLKind
@@ -130,11 +135,6 @@ protected:
         return false;
     }
 
-    void Create(const wxString& subURL)
-    {
-        CreateAbs(baseURL + subURL);
-    }
-
     void
     CreateWithAuth(const wxString& relURL,
                    const wxString& user,
@@ -155,11 +155,11 @@ protected:
             FAIL("Base URL must be an HTTP(S) one: " << baseURL);
         }
 
-        CreateAbs(wxString::Format("%s://%s:%s@%s%s",
-                                   schema, user, password, rest, relURL));
+        Create(wxString::Format("%s://%s:%s@%s/%s",
+                                schema, user, password, rest, relURL));
     }
 
-    virtual void CreateAbs(const wxString& url) = 0;
+    virtual void Create(const wxString& url) = 0;
 
     virtual wxWebSessionBase& GetSession() = 0;
 
@@ -214,7 +214,7 @@ protected:
             REQUIRE( GetSession().SetProxy(proxy) );
         }
 
-        CreateAbs(url);
+        Create(url);
 
         wxString insecure;
         if ( wxGetEnv("WX_TEST_WEBREQUEST_INSECURE", &insecure) )
@@ -241,7 +241,7 @@ public:
         statusFromEvent = 0;
     }
 
-    void CreateAbs(const wxString& url) override
+    void Create(const wxString& url) override
     {
         request = wxWebSession::GetDefault().CreateRequest(this, url);
         REQUIRE( request.IsOk() );
@@ -376,7 +376,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create(wxString::Format("/bytes/%d", DOWNLOAD_BYTES));
+    Create(wxString::Format("bytes/%d", DOWNLOAD_BYTES));
     Run();
     CHECK( request.GetResponse().GetContentLength() == DOWNLOAD_BYTES );
     CHECK( request.GetBytesExpectedToReceive() == DOWNLOAD_BYTES );
@@ -398,7 +398,7 @@ TEST_CASE_METHOD(RequestFixture,
     CHECK( !request.IsOk() );
     CHECK( !request.GetNativeHandle() );
 
-    Create("/status/200");
+    Create("status/200");
     CHECK( request.IsOk() );
     CHECK( session.GetNativeHandle() );
 
@@ -416,7 +416,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
+    Create("base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
     Run();
     CHECK( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
 }
@@ -427,7 +427,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/response-headers?freeform=wxWidgets%20works!");
+    Create("response-headers?freeform=wxWidgets%20works!");
     Run();
     CHECK( request.GetResponse().GetHeader("freeform") == "wxWidgets works!" );
 }
@@ -438,7 +438,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/get?pi=3.14159265358979323");
+    Create("get?pi=3.14159265358979323");
     Run();
 
     CheckExpectedJSON( request.GetResponse().AsString() );
@@ -451,7 +451,7 @@ TEST_CASE_METHOD(RequestFixture,
         return;
 
     expectedFileSize = 99 * 1024;
-    Create(wxString::Format("/bytes/%lld", expectedFileSize));
+    Create(wxString::Format("bytes/%lld", expectedFileSize));
     request.SetStorage(wxWebRequest::Storage_File);
     Run();
     CHECK( request.GetBytesReceived() == expectedFileSize );
@@ -464,7 +464,7 @@ TEST_CASE_METHOD(RequestFixture,
         return;
 
     int processingSize = 99 * 1024;
-    Create(wxString::Format("/bytes/%d", processingSize));
+    Create(wxString::Format("bytes/%d", processingSize));
     request.SetStorage(wxWebRequest::Storage_None);
     Run();
     CHECK( request.GetBytesReceived() == processingSize );
@@ -477,7 +477,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/status/404");
+    Create("status/404");
     Run(wxWebRequest::State_Failed, 404);
 }
 
@@ -487,7 +487,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/status/418");
+    Create("status/418");
     Run(wxWebRequest::State_Failed, 0);
 
     CHECK( request.GetResponse().GetStatus() == 418 );
@@ -503,7 +503,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    CreateAbs("http://127.0.0.1:51234");
+    Create("http://127.0.0.1:51234");
     Run(wxWebRequest::State_Failed, 0);
 }
 
@@ -516,10 +516,10 @@ TEST_CASE_METHOD(RequestFixture,
     {
         INFO("Testing self-signed certificate at " << url);
 
-        CreateAbs(url);
+        Create(url);
         Run(wxWebRequest::State_Failed, 0);
 
-        CreateAbs(url);
+        Create(url);
         request.DisablePeerVerify();
         Run(wxWebRequest::State_Completed, 200);
     }
@@ -528,10 +528,10 @@ TEST_CASE_METHOD(RequestFixture,
     {
         INFO("Testing expired certificate at " << url);
 
-        CreateAbs(url);
+        Create(url);
         Run(wxWebRequest::State_Failed, 0);
 
-        CreateAbs(url);
+        Create(url);
         request.MakeInsecure(wxWebRequest::Ignore_Certificate);
         Run(wxWebRequest::State_Completed, 200);
     }
@@ -540,7 +540,7 @@ TEST_CASE_METHOD(RequestFixture,
     {
         INFO("Testing certificate with bad host at " << url);
 
-        CreateAbs(url);
+        Create(url);
         Run(wxWebRequest::State_Failed, 0);
 
         // Currently disabling certificate verification also disables host name
@@ -548,12 +548,12 @@ TEST_CASE_METHOD(RequestFixture,
         if ( wxWebSession::GetDefault().GetLibraryVersionInfo().GetName()
                 != "URLSession" )
         {
-            CreateAbs(url);
+            Create(url);
             request.MakeInsecure(wxWebRequest::Ignore_Certificate);
             Run(wxWebRequest::State_Failed, 0);
         }
 
-        CreateAbs(url);
+        Create(url);
         request.MakeInsecure(wxWebRequest::Ignore_Host);
         Run(wxWebRequest::State_Completed, 200);
     }
@@ -565,7 +565,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/post");
+    Create("post");
     request.SetData("app=WebRequestSample&version=1", "application/x-www-form-urlencoded");
     Run();
 }
@@ -576,7 +576,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/put");
+    Create("put");
     std::unique_ptr<wxInputStream> is(new wxFileInputStream("horse.png"));
     REQUIRE( is->IsOk() );
 
@@ -591,7 +591,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/delete");
+    Create("delete");
     request.SetData(R"({"bloordyblop": 17})", "application/json");
     request.SetMethod("DELETE");
     Run();
@@ -607,7 +607,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/basic-auth/wxtest/wxwidgets");
+    Create("basic-auth/wxtest/wxwidgets");
     Run(wxWebRequest::State_Unauthorized, 401);
     REQUIRE( request.GetAuthChallenge().IsOk() );
 
@@ -638,7 +638,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/digest-auth/auth/wxtest/wxwidgets");
+    Create("digest-auth/auth/wxtest/wxwidgets");
     Run(wxWebRequest::State_Unauthorized, 401);
     REQUIRE( request.GetAuthChallenge().IsOk() );
 
@@ -669,7 +669,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    CreateWithAuth("/basic-auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
+    CreateWithAuth("basic-auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
     Run();
 
     CHECK( request.GetState() == wxWebRequest::State_Completed );
@@ -686,7 +686,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    CreateWithAuth("/digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
+    CreateWithAuth("digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
     Run();
 
     CHECK( request.GetState() == wxWebRequest::State_Completed );
@@ -703,7 +703,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/delay/10");
+    Create("delay/10");
     request.Start();
     request.Cancel();
     RunLoopWithTimeout();
@@ -731,7 +731,7 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/base64/U3RpbGwgYWxpdmUh");
+    Create("base64/U3RpbGwgYWxpdmUh");
     request.Start();
 
     // Destroy the original request: this shouldn't prevent it from running to
@@ -748,7 +748,7 @@ TEST_CASE_METHOD(RequestFixture,
 class SyncRequestFixture : public BaseRequestFixture
 {
 public:
-    void CreateAbs(const wxString& url) override
+    void Create(const wxString& url) override
     {
         request = wxWebSessionSync::GetDefault().CreateRequest(url);
         REQUIRE( request.IsOk() );
@@ -809,7 +809,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    REQUIRE( Execute(wxString::Format("/bytes/%d", DOWNLOAD_BYTES)) );
+    REQUIRE( Execute(wxString::Format("bytes/%d", DOWNLOAD_BYTES)) );
 
     CHECK( response.GetStatus() == 200 );
     CHECK( response.GetContentLength() == DOWNLOAD_BYTES );
@@ -830,7 +830,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     CHECK( !request.IsOk() );
     CHECK( !request.GetNativeHandle() );
 
-    REQUIRE( Execute("/status/200") );
+    REQUIRE( Execute("status/200") );
     CHECK( request.IsOk() );
     CHECK( request.GetNativeHandle() );
     CHECK( session.GetNativeHandle() );
@@ -844,7 +844,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    REQUIRE( Execute("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==") );
+    REQUIRE( Execute("base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==") );
 
     CHECK( response.AsString() == "The quick brown fox jumps over the lazy dog" );
 }
@@ -855,7 +855,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    REQUIRE( Execute("/response-headers?freeform=wxWidgets%20works!") );
+    REQUIRE( Execute("response-headers?freeform=wxWidgets%20works!") );
 
     CHECK( response.GetHeader("freeform") == "wxWidgets works!" );
 }
@@ -866,7 +866,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    REQUIRE( Execute("/get?pi=3.14159265358979323") );
+    REQUIRE( Execute("get?pi=3.14159265358979323") );
 
     CheckExpectedJSON( response.AsString() );
 }
@@ -878,7 +878,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         return;
 
     wxInt64 expectedFileSize = 99 * 1024;
-    Create(wxString::Format("/bytes/%lld", expectedFileSize));
+    Create(wxString::Format("bytes/%lld", expectedFileSize));
     request.SetStorage(wxWebRequest::Storage_File);
 
     REQUIRE( Execute() );
@@ -893,7 +893,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
         return;
 
     int processingSize = 99 * 1024;
-    Create(wxString::Format("/bytes/%d", processingSize));
+    Create(wxString::Format("bytes/%d", processingSize));
     request.SetStorage(wxWebRequest::Storage_None);
 
     REQUIRE( Execute() );
@@ -907,7 +907,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    CHECK_FALSE( Execute("/status/404") );
+    CHECK_FALSE( Execute("status/404") );
 
     CHECK( response.GetStatus() == 404 );
 }
@@ -918,7 +918,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    CHECK_FALSE( Execute("/status/418") );
+    CHECK_FALSE( Execute("status/418") );
 
     CHECK( response.GetStatus() == 418 );
     CHECK_THAT( response.AsString().utf8_string(), Catch::Contains("teapot") );
@@ -930,7 +930,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    CreateAbs("http://127.0.0.1:51234");
+    Create("http://127.0.0.1:51234");
     CHECK( !Execute() );
 }
 
@@ -950,10 +950,10 @@ TEST_CASE_METHOD(SyncRequestFixture,
     {
         INFO("Testing self-signed certificate at " << url);
 
-        CreateAbs(url);
+        Create(url);
         CHECK( !Execute() );
 
-        CreateAbs(url);
+        Create(url);
         request.DisablePeerVerify();
 
         REQUIRE( Execute() );
@@ -964,10 +964,10 @@ TEST_CASE_METHOD(SyncRequestFixture,
     {
         INFO("Testing expired certificate at " << url);
 
-        CreateAbs(url);
+        Create(url);
         CHECK( !Execute() );
 
-        CreateAbs(url);
+        Create(url);
         request.MakeInsecure(wxWebRequest::Ignore_Certificate);
         REQUIRE( Execute() );
         CHECK( response.GetStatus() == 200 );
@@ -977,14 +977,14 @@ TEST_CASE_METHOD(SyncRequestFixture,
     {
         INFO("Testing certificate with bad host at " << url);
 
-        CreateAbs(url);
+        Create(url);
         CHECK( !Execute() );
 
-        CreateAbs(url);
+        Create(url);
         request.MakeInsecure(wxWebRequest::Ignore_Certificate);
         CHECK( !Execute() );
 
-        CreateAbs(url);
+        Create(url);
         request.MakeInsecure(wxWebRequest::Ignore_Host);
         REQUIRE( Execute() );
         CHECK( response.GetStatus() == 200 );
@@ -997,7 +997,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/post");
+    Create("post");
     request.SetData("app=WebRequestSample&version=1", "application/x-www-form-urlencoded");
     REQUIRE( Execute() );
     CHECK( response.GetStatus() == 200 );
@@ -1009,7 +1009,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/put");
+    Create("put");
     std::unique_ptr<wxInputStream> is(new wxFileInputStream("horse.png"));
     REQUIRE( is->IsOk() );
 
@@ -1025,7 +1025,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("/delete");
+    Create("delete");
     request.SetData(R"({"bloordyblop": 17})", "application/json");
     request.SetMethod("DELETE");
     REQUIRE( Execute() );
@@ -1043,7 +1043,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("No password")
     {
-        Create("/basic-auth/wxtest/wxwidgets");
+        Create("basic-auth/wxtest/wxwidgets");
         CHECK_FALSE( Execute() );
         CHECK( state == wxWebRequest::State_Unauthorized );
         CHECK( response.GetStatus() == 401 );
@@ -1051,7 +1051,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Good password")
     {
-        CreateWithAuth("/basic-auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
+        CreateWithAuth("basic-auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
@@ -1062,7 +1062,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Bad password")
     {
-        CreateWithAuth("/basic-auth/wxtest/wxwidgets", "wxtest", "foobar");
+        CreateWithAuth("basic-auth/wxtest/wxwidgets", "wxtest", "foobar");
         CHECK_FALSE( Execute() );
         CHECK( response.GetStatus() == 401 );
         CHECK( state == wxWebRequest::State_Unauthorized );
@@ -1088,7 +1088,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("No password")
     {
-        Create("/digest-auth/auth/wxtest/wxwidgets");
+        Create("digest-auth/auth/wxtest/wxwidgets");
         CHECK_FALSE( Execute() );
         CHECK( state == wxWebRequest::State_Unauthorized );
         CHECK( response.GetStatus() == 401 );
@@ -1096,7 +1096,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Good password")
     {
-        CreateWithAuth("/digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
+        CreateWithAuth("digest-auth/auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
@@ -1107,7 +1107,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Bad password")
     {
-        CreateWithAuth("/digest-auth/auth/wxtest/wxwidgets", "foo", "bar");
+        CreateWithAuth("digest-auth/auth/wxtest/wxwidgets", "foo", "bar");
         CHECK_FALSE( Execute() );
         CHECK( response.GetStatus() == 401 );
         CHECK( state == wxWebRequest::State_Unauthorized );
