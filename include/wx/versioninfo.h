@@ -73,16 +73,24 @@ public:
         return HasDescription() ? GetDescription() : GetVersionString();
     }
 
-    wxString GetVersionString() const
+    wxString GetNumericVersionString() const
     {
         wxString str;
-        str << m_name << ' ' << GetMajor() << '.' << GetMinor();
+        str << GetMajor() << '.' << GetMinor();
         if ( GetMicro() || GetRevision() )
         {
             str << '.' << GetMicro();
             if ( GetRevision() )
                 str << '.' << GetRevision();
         }
+
+        return str;
+    }
+
+    wxString GetVersionString() const
+    {
+        wxString str;
+        str << m_name << ' ' << GetNumericVersionString();
 
         return str;
     }

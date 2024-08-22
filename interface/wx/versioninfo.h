@@ -114,11 +114,27 @@ public:
     wxString ToString() const;
 
     /**
+        Get the string representation of only numeric version components.
+
+        The micro and revision components of the version are ignored/not used
+        if they are both zero. If the revision component is non-zero all four
+        parts will be used even if the micro component is zero.
+
+        @return The version string in the form "major.minor[.micro[.revision]]".
+
+        @since 3.3.0
+     */
+    wxString GetNumericVersionString() const;
+
+    /**
         Get the string representation.
 
         The micro and revision components of the version are ignored/not used
         if they are both zero. If the revision component is non-zero all four
         parts will be used even if the micro component is zero.
+
+        Note that this function includes the name of the object this version is
+        defined for, if this is undesired, use GetNumericVersionString() instead.
 
         @return The version string in the form "name major.minor[.micro[.revision]]".
     */
