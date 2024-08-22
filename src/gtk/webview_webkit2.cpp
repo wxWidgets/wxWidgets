@@ -803,7 +803,9 @@ private:
 
 wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo(wxVersionContext context)
 {
-    int major, minor, micro;
+    int major = 0,
+        minor = 0,
+        micro = 0;
 
     switch ( context )
     {
