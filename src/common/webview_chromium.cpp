@@ -315,6 +315,9 @@ struct ImplData
     // These flags are used when destroying wxWebViewChromium, see its dtor.
     bool m_calledDoClose = false;
     bool m_calledOnBeforeClose = false;
+
+    // This can be changed by the application and affects popup menus.
+    bool m_enableDevTools = false;
 };
 
 // ----------------------------------------------------------------------------
@@ -330,6 +333,18 @@ class ClientHandler : public CefClient,
     public CefRequestHandler,
     public CefResourceRequestHandler
 {
+private:
+    // Custom context menu commands
+    enum class CustomMenuId
+    {
+        // The first ID value is completely arbitrary, just don't start
+        // directly at MENU_ID_USER_FIRST as application might want to add its
+        // own items in this range.
+        SHOW_DEVTOOLS = MENU_ID_USER_FIRST + 500,
+        CLOSE_DEVTOOLS,
+        INSPECT_ELEMENT
+    };
+
 public:
     // Ctor must be given a backpointer to wxWebView which must remain valid
     // for the entire lifetime of this object.
@@ -476,6 +491,10 @@ public:
     }
 
 private:
+    void ShowDevTools(CefRefPtr<CefBrowser> browser,
+        const CefPoint& inspect_element_at);
+    void CloseDevTools(CefRefPtr<CefBrowser> browser);
+
     CefRefPtr<CefBrowser> m_browser;
     wxWebViewChromium& m_webview;
     int m_browserId;
@@ -1249,6 +1268,16 @@ bool wxWebViewChromium::SetProxy(const wxString& proxy)
     return true;
 }
 
+void wxWebViewChromium::EnableAccessToDevTools(bool enable)
+{
+    m_implData->m_enableDevTools = enable;
+}
+
+bool wxWebViewChromium::IsAccessToDevToolsEnabled() const
+{
+    return m_implData->m_enableDevTools;
+}
+
 wxString wxWebViewChromium::GetPageSource() const
 {
     return m_pageSource;
@@ -1552,16 +1581,57 @@ void ClientHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> WXUNUSED(browser),
                                         CefRefPtr<CefMenuModel> model)
 {
     if(!m_webview.IsContextMenuEnabled())
+    {
         model->Clear();
+        return;
+    }
+
+    // Add DevTools items to all context menus if enabled.
+    if ( m_webview.IsAccessToDevToolsEnabled() )
+    {
+        // Add a separator if the menu already has items.
+        if ( model->GetCount() )
+            model->AddSeparator();
+
+        const auto addMenuItem = [model](CustomMenuId id, const wxString& label)
+        {
+            model->AddItem(static_cast<int>(id), label.utf8_string());
+        };
+
+        addMenuItem(CustomMenuId::SHOW_DEVTOOLS, _("Show DevTools"));
+        addMenuItem(CustomMenuId::CLOSE_DEVTOOLS, _("Close DevTools"));
+
+        // Note that if we add support for "Chrome" style, as opposed to using
+        // the "Alloy" style we use now, we should stop doing this as "Chrome"
+        // style already has "Inspect" menu item in its default context menu.
+        model->AddSeparator();
+        addMenuItem(CustomMenuId::INSPECT_ELEMENT, _("Inspect"));
+    }
 }
 
-bool ClientHandler::OnContextMenuCommand(CefRefPtr<CefBrowser> WXUNUSED(browser),
+bool ClientHandler::OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
                                          CefRefPtr<CefFrame> WXUNUSED(frame),
-                                         CefRefPtr<CefContextMenuParams> WXUNUSED(params),
-                                         int WXUNUSED(command_id),
+                                         CefRefPtr<CefContextMenuParams> params,
+                                         int command_id,
                                          CefContextMenuHandler::EventFlags WXUNUSED(event_flags))
 {
-    return false;
+    switch ( static_cast<CustomMenuId>(command_id) )
+    {
+        case CustomMenuId::SHOW_DEVTOOLS:
+            ShowDevTools(browser, CefPoint{});
+            break;
+        case CustomMenuId::CLOSE_DEVTOOLS:
+            CloseDevTools(browser);
+            break;
+        case CustomMenuId::INSPECT_ELEMENT:
+            ShowDevTools(browser, CefPoint{params->GetXCoord(), params->GetYCoord()});
+            break;
+        default:
+            // Allow default handling, if any.
+            return false;
+    }
+
+    return true;
 }
 
 void ClientHandler::OnContextMenuDismissed(CefRefPtr<CefBrowser> WXUNUSED(browser),
@@ -1791,6 +1861,18 @@ CefRefPtr<CefResourceHandler> ClientHandler::GetResourceHandler(
         return {};
 
     return m_resourceManager->GetResourceHandler(browser, frame, request);
+}
+
+void
+ClientHandler::ShowDevTools(CefRefPtr<CefBrowser> browser,
+                            const CefPoint& inspect_element_at)
+{
+    browser->GetHost()->ShowDevTools({}, {}, {}, inspect_element_at);
+}
+
+void ClientHandler::CloseDevTools(CefRefPtr<CefBrowser> browser)
+{
+    browser->GetHost()->CloseDevTools();
 }
 
 bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,
