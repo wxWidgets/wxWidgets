@@ -915,8 +915,6 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
 
     wxControl::SetWindowStyleFlag(style);
 
-    m_windowStyle = style;
-
     if (m_art)
     {
         SetArtFlags();
