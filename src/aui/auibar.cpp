@@ -912,6 +912,8 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
     wxCHECK_RET(IsPaneValid(style),
                 "window settings and pane settings are incompatible");
 
+    const auto oldBgStyle = m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND;
+
     wxControl::SetWindowStyleFlag(style);
 
     if (m_art)
@@ -934,6 +936,13 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
     else
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_BOTTOM);
+
+    wxControl::SetWindowStyleFlag(style);
+
+    const auto newBgStyle = m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND;
+
+    if ( newBgStyle != oldBgStyle )
+        UpdateBackgroundBitmap(GetClientSize());
 }
 
 wxSize wxAuiToolBar::DoGetBestSize() const
@@ -2306,6 +2315,9 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 
     m_sizer->SetDimension(0, 0, x, y);
 
+    // We need to update the bitmap if the size has changed.
+    UpdateBackgroundBitmap(wxSize(x, y));
+
     Refresh(false);
 
     // idle events aren't sent while user is resizing frame (why?),
@@ -2415,6 +2427,22 @@ void wxAuiToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
     Refresh();
 }
 
+void wxAuiToolBar::UpdateBackgroundBitmap(const wxSize& size)
+{
+    m_backgroundBitmap.Create(size);
+
+    wxMemoryDC dc(m_backgroundBitmap);
+
+    wxRect rect{size};
+
+    if (m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND)
+        m_art->DrawPlainBackground(dc, this, rect);
+    else
+        m_art->DrawBackground(dc, this, rect);
+
+    SetBackgroundBitmap(m_backgroundBitmap);
+}
+
 void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxAutoBufferedPaintDC dc(this);
@@ -2423,10 +2451,7 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     bool horizontal = m_orientation == wxHORIZONTAL;
 
-    if (m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND)
-        m_art->DrawPlainBackground(dc, this, cli_rect);
-    else
-        m_art->DrawBackground(dc, this, cli_rect);
+    dc.DrawBitmap(m_backgroundBitmap, 0, 0);
 
     int gripperSize = m_art->GetElementSize(wxAUI_TBART_GRIPPER_SIZE);
     int overflowSize = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);
