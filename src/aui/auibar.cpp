@@ -825,7 +825,6 @@ wxBEGIN_EVENT_TABLE(wxAuiToolBar, wxControl)
     EVT_SIZE(wxAuiToolBar::OnSize)
     EVT_IDLE(wxAuiToolBar::OnIdle)
     EVT_DPI_CHANGED(wxAuiToolBar::OnDPIChanged)
-    EVT_ERASE_BACKGROUND(wxAuiToolBar::OnEraseBackground)
     EVT_PAINT(wxAuiToolBar::OnPaint)
     EVT_LEFT_DOWN(wxAuiToolBar::OnLeftDown)
     EVT_LEFT_DCLICK(wxAuiToolBar::OnLeftDown)
@@ -2512,11 +2511,6 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         wxRect dropDownRect = GetOverflowRect();
         m_art->DrawOverflowButton(dc, this, dropDownRect, m_overflowState);
     }
-}
-
-void wxAuiToolBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
-{
-    // empty
 }
 
 void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
