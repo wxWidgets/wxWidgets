@@ -62,10 +62,6 @@ public:
     // have default value
     int GetBorder() const;
 
-    // hide the pages which we temporarily "show" when they're added to this
-    // sizer (see Insert())
-    void HidePages();
-
 private:
     wxSize SiblingSize(wxSizerItem *child);
 
@@ -172,27 +168,11 @@ wxSizerItem *wxWizardSizer::Insert(size_t index, wxSizerItem *item)
 {
     m_owner->m_usingSizer = true;
 
-    if ( item->IsWindow() )
-    {
-        // we must pretend that the window is shown as otherwise it wouldn't be
-        // taken into account for the layout -- but avoid really showing it, so
-        // just set the internal flag instead of calling wxWindow::Show()
-        item->GetWindow()->wxWindowBase::Show();
-    }
+    // We want to take account of the pages for the layout even when
+    // they're hidden, so always add the corresponding flag.
+    item->SetFlag(item->GetFlag() | wxRESERVE_SPACE_EVEN_IF_HIDDEN);
 
     return wxSizer::Insert(index, item);
-}
-
-void wxWizardSizer::HidePages()
-{
-    for ( wxSizerItemList::compatibility_iterator node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxSizerItem * const item = node->GetData();
-        if ( item->IsWindow() )
-            item->GetWindow()->wxWindowBase::Show(false);
-    }
 }
 
 void wxWizardSizer::RecalcSizes()
@@ -558,10 +538,6 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         if ( m_usingSizer )
         {
             m_sizerBmpAndPage->Add(m_sizerPage, flags);
-
-            // now that our layout is computed correctly, hide the pages
-            // artificially shown in wxWizardSizer::Insert() back again
-            m_sizerPage->HidePages();
         }
     }
 
