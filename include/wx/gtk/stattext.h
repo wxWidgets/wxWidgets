@@ -33,6 +33,8 @@ public:
                 long style = 0,
                 const wxString &name = wxASCII_STR(wxStaticTextNameStr) );
 
+    virtual ~wxStaticText();
+
     void SetLabel( const wxString &label ) wxOVERRIDE;
 
     bool SetFont( const wxFont &font ) wxOVERRIDE;
