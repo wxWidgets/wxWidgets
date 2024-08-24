@@ -35,7 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B6297CE8-FE98-4F59-9D80-EB7D17932DAC}</ProjectGuid>
+    <ProjectGuid>{3E314FDD-BE00-4DC2-83B2-EB3CAB3960D3}</ProjectGuid>
   </PropertyGroup>
   <Import Project="..\..\build\msw\wx_config.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
