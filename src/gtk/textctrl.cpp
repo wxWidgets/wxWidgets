@@ -1264,14 +1264,14 @@ void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
 
-    auto oldFlag = m_maxLengthAllowed;
+    auto oldMaxLengthAllowed = m_maxLengthAllowed;
     m_maxLengthAllowed = false;
     if ( text.empty() )
     {
         // We don't need to actually do anything, but we still need to generate
         // an event expected from this call.
         SendTextUpdatedEvent(this);
-        m_maxLengthAllowed = oldFlag;
+        m_maxLengthAllowed = oldMaxLengthAllowed;
         return;
     }
 
@@ -1292,7 +1292,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( !IsMultiLine() )
     {
         wxTextEntry::WriteText(text);
-        m_maxLengthAllowed = oldFlag;
+        m_maxLengthAllowed = oldMaxLengthAllowed;
         return;
     }
 
@@ -1334,7 +1334,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         m_afterLayoutId =
             g_idle_add_full(GTK_TEXT_VIEW_PRIORITY_VALIDATE + 1, afterLayout, this, nullptr);
     }
-    m_maxLengthAllowed = oldFlag;
+    m_maxLengthAllowed = oldMaxLengthAllowed;
 }
 
 wxString wxTextCtrl::GetLineText( long lineNo ) const
@@ -2267,10 +2267,6 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     //multiline
     else
     {
-        // add space for vertical scrollbar
-        if ( m_scrollBar[1] && !(m_windowStyle & wxTE_NO_VSCROLL) )
-            tsize.IncBy(GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[1])).x + 3, 0);
-
         // height
         if ( ylen <= 0 )
         {
@@ -2280,11 +2276,6 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
                 tsize.IncBy(0, GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[0])).y + 3);
         }
 
-        if ( !HasFlag(wxBORDER_NONE) )
-        {
-            // hardcode borders, margins, etc
-            tsize.IncBy(5, 4);
-        }
     }
 
     // We should always use at least the specified height if it's valid.
