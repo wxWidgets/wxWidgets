@@ -862,9 +862,10 @@ MyFrame::MyFrame(wxWindow* parent,
     tb4->AddTool(ID_SampleItem+29, "Item 8", tb4_bmp1);
     tb4->SetToolDropDown(ID_DropDownToolbarItem, true);
     tb4->SetCustomOverflowItems(prepend_items, append_items);
+    tb4->AddControl(new wxStaticText(tb4, wxID_ANY, "Choose wisely: "));
     wxChoice* choice = new wxChoice(tb4, ID_SampleItem+35);
-    choice->AppendString("One choice");
-    choice->AppendString("Another choice");
+    choice->AppendString("Good choice");
+    choice->AppendString("Better choice");
     tb4->AddControl(choice);
     tb4->Realize();
 

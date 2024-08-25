@@ -16,6 +16,7 @@
 
 #include "wx/bmpbndl.h"
 #include "wx/control.h"
+#include "wx/custombgwin.h"
 #include "wx/sizer.h"
 #include "wx/pen.h"
 
@@ -461,7 +462,7 @@ protected:
 
 
 
-class WXDLLIMPEXP_AUI wxAuiToolBar : public wxControl
+class WXDLLIMPEXP_AUI wxAuiToolBar : public wxCustomBackgroundWindow<wxControl>
 {
 public:
     wxAuiToolBar() { Init(); }
@@ -657,7 +658,6 @@ protected: // handlers
     void OnIdle(wxIdleEvent& evt);
     void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnPaint(wxPaintEvent& evt);
-    void OnEraseBackground(wxEraseEvent& evt);
     void OnLeftDown(wxMouseEvent& evt);
     void OnLeftUp(wxMouseEvent& evt);
     void OnRightDown(wxMouseEvent& evt);
@@ -715,6 +715,10 @@ private:
     void DoResetMouseState();
 
     wxSize RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation);
+
+    void UpdateBackgroundBitmap(const wxSize& size);
+
+    wxBitmap m_backgroundBitmap;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiToolBar);
