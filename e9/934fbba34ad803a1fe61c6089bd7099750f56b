@@ -1,0 +1,1 @@
+wxMSW: Fix background of wxStaticText in wxAuiToolbar (#24765).
