@@ -29,7 +29,6 @@
 #include <sys/stat.h>
 #include <ctype.h>
 
-#include <string.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/threads.h"
@@ -575,8 +574,9 @@ au_insert_text_callback(GtkTextBuffer *buffer,
         // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
         // the handler that does not connected after
         gtk_text_buffer_delete( buffer, &offset, end );
-#if GTK_CHECK_VERSION( 3, 0, 0 )
-        gtk_text_iter_assign( end, &offset );
+#if GTK_CHECK_VERSION( 3, 2, 0 )
+        if( wx_is_at_least_gtk3(2) )
+            gtk_text_iter_assign( end, &offset );
 #endif
         wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
         event.SetEventObject( win );
@@ -1263,14 +1263,15 @@ static gboolean afterLayout(void* data)
 void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
-    auto old = m_maxLengthAllowed;
+
+    auto oldFlag = m_maxLengthAllowed;
     m_maxLengthAllowed = false;
     if ( text.empty() )
     {
         // We don't need to actually do anything, but we still need to generate
         // an event expected from this call.
         SendTextUpdatedEvent(this);
-        m_maxLengthAllowed = old;
+        m_maxLengthAllowed = oldFlag;
         return;
     }
 
@@ -1291,9 +1292,11 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( !IsMultiLine() )
     {
         wxTextEntry::WriteText(text);
-        m_maxLengthAllowed = old;
+        m_maxLengthAllowed = oldFlag;
         return;
     }
+
+    const wxScopedCharBuffer buffer(text.utf8_str());
 
     // First remove the selection if there is one
     gtk_text_buffer_delete_selection(m_buffer, false, true);
@@ -1305,7 +1308,7 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     const bool insertIsEnd = gtk_text_iter_is_end(&iter) != 0;
 
-    gtk_text_buffer_insert( m_buffer, &iter, text, text.length() );
+    gtk_text_buffer_insert( m_buffer, &iter, buffer, buffer.length() );
 
     GtkAdjustment* adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_widget));
 
@@ -1331,7 +1334,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         m_afterLayoutId =
             g_idle_add_full(GTK_TEXT_VIEW_PRIORITY_VALIDATE + 1, afterLayout, this, nullptr);
     }
-    m_maxLengthAllowed = old;
+    m_maxLengthAllowed = oldFlag;
 }
 
 wxString wxTextCtrl::GetLineText( long lineNo ) const
@@ -1803,7 +1806,8 @@ void wxTextCtrl::Copy()
 void wxTextCtrl::Paste()
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
-    if( IsMultiLine() )
+
+    if ( IsMultiLine() )
         g_signal_emit_by_name (m_text, "paste-clipboard");
     else
         wxTextEntry::Paste();
