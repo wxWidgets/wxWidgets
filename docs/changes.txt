@@ -27,6 +27,10 @@ Changes in behaviour not resulting in compilation errors
 - wxMSW doesn't support versions of Microsoft Windows before Windows 7. If you
   need Windows XP or Vista support, please use wxWidgets 3.2.
 
+- Default exit code in case of fatal error is now consistently 255, including
+  when using MSVC for which it was 127 previously. Use wxApp::SetErrorExitCode()
+  and wxApp::SetFatalErrorExitCode() to change this to old value if needed.
+
 - wxGLCanvas doesn't use multi-sampling by default any longer, please use
   wxGLAttributes::Samplers(1).SampleBuffers(4) explicitly if you need to keep
   using the same attributes that were previously used by default.
