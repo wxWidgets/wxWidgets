@@ -141,6 +141,7 @@ public:
     MyTextCtrl    *m_readonly;
     MyTextCtrl    *m_limited;
     MyTextCtrl    *m_limitedMultiline;
+
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_horizontal;
 
