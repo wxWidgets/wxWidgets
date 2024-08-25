@@ -568,15 +568,24 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
 
     wxString cwd = wxGetCwd();
     wxSetWorkingDirectory(parOutputPath);
-    int execres = wxExecute(wxT("zip -9 -j ") +
-                            wxString(flagVerbose ? wxT("\"") : wxT("-q \"")) +
+    int execres;
+    execres = wxExecute(wxT("zip -9 -j ") +
+                        wxString(flagVerbose ? wxT("\"") : wxT("-q \"")) +
+                        parOutput + wxT("\" ") + files,
+                        wxEXEC_BLOCK);
+    if (execres == -1)
+    {
+        wxLogError(wxT("Unable to execute zip program. Make sure it is in the path. Using 7z."));
+        execres = wxExecute(wxT("7z a -tzip -mx9 -r- ") +
+                            wxString(flagVerbose ? wxT("\"") : wxT("-bso0 \"")) +
                             parOutput + wxT("\" ") + files,
                             wxEXEC_BLOCK);
+    }
     wxSetWorkingDirectory(cwd);
     if (execres == -1)
     {
-        wxLogError(wxT("Unable to execute zip program. Make sure it is in the path."));
-        wxLogError(wxT("You can download it at http://www.cdrom.com/pub/infozip/"));
+        wxLogError(wxT("Unable to execute zip or 7z program. Make sure they are in the path."));
+        wxLogError(wxT("You can download them at http://www.cdrom.com/pub/infozip/ or https://www.7-zip.org/download.html"));
         retCode = 1;
         return;
     }
