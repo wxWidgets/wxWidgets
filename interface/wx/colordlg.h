@@ -158,8 +158,8 @@ wxEventType wxEVT_COLOUR_CHANGED;
 
     @header{wx/colordlg.h}
 */
-wxColour wxGetColourFromUser(wxWindow* parent,
-                             const wxColour& colInit,
+wxColour wxGetColourFromUser(wxWindow* parent = nullptr,
+                             const wxColour& colInit = wxNullColour,
                              const wxString& caption = wxEmptyString,
                              wxColourData* data = nullptr);
 
