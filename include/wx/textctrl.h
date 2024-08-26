@@ -612,17 +612,17 @@ private:
 // Search features for wxTextCtrl
 // ----------------------------------------------------------------------------
 
-enum class wxTextSearchDirection
-{
-    Down,
-    Up
-};
-
 // search options
 // --------------
 struct wxTextSearch
 {
     explicit wxTextSearch(const wxString& text = wxString{}) : m_searchValue(text) {}
+
+    enum class Direction
+    {
+        Down,
+        Up
+    };
 
     wxTextSearch& SearchValue(const wxString& value)
     {
@@ -642,7 +642,7 @@ struct wxTextSearch
         return *this;
     }
 
-    wxTextSearch& Direction(const wxTextSearchDirection direction)
+    wxTextSearch& Direction(const Direction direction)
     {
         m_direction = direction;
         return *this;
@@ -658,7 +658,7 @@ struct wxTextSearch
     long                  m_startingPosition = -1;
     bool                  m_matchCase = false;
     bool                  m_wholeWord = false;
-    wxTextSearchDirection m_direction = wxTextSearchDirection::Down;
+    Direction m_direction = Direction::Down;
 };
 
 // results from a search operation
