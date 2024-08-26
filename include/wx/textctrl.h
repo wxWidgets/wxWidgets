@@ -622,7 +622,7 @@ enum class wxTextSearchDirection
 // --------------
 struct wxTextSearch
 {
-    wxTextSearch(const wxString& text) : m_searchValue(text) {}
+    explicit wxTextSearch(const wxString& text = wxString{}) : m_searchValue(text) {}
 
     wxTextSearch& SearchValue(const wxString& value)
     {
