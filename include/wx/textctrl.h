@@ -642,7 +642,7 @@ struct wxTextSearch
         return *this;
     }
 
-    wxTextSearch& Direction(const Direction direction)
+    wxTextSearch& Direction(const wxTextSearch::Direction direction)
     {
         m_direction = direction;
         return *this;
@@ -658,7 +658,7 @@ struct wxTextSearch
     long                  m_startingPosition = -1;
     bool                  m_matchCase = false;
     bool                  m_wholeWord = false;
-    Direction m_direction = Direction::Down;
+    wxTextSearch::Direction m_direction = wxTextSearch::Direction::Down;
 };
 
 // results from a search operation
