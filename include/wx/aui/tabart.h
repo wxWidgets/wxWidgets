@@ -57,6 +57,9 @@ public:
     virtual void SetColour(const wxColour& colour) = 0;
     virtual void SetActiveColour(const wxColour& colour) = 0;
 
+    virtual wxFont GetNormalFont() const = 0;
+    virtual wxFont GetSelectedFont() const = 0;
+
     virtual void DrawBorder(
                  wxDC& dc,
                  wxWindow* wnd,
@@ -137,6 +140,9 @@ public:
     void SetMeasuringFont(const wxFont& font) override;
     void SetColour(const wxColour& colour) override;
     void SetActiveColour(const wxColour& colour) override;
+
+    wxFont GetNormalFont() const override;
+    wxFont GetSelectedFont() const override;
 
     void DrawBorder(
                  wxDC& dc,
@@ -240,6 +246,9 @@ public:
     void SetMeasuringFont(const wxFont& font) override;
     void SetColour(const wxColour& colour) override;
     void SetActiveColour(const wxColour& colour) override;
+
+    wxFont GetNormalFont() const override;
+    wxFont GetSelectedFont() const override;
 
     void DrawBorder(
                  wxDC& dc,
