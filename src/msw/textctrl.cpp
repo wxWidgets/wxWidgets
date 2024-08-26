@@ -1202,9 +1202,15 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
 {
     // set up the flags
     WPARAM flags = 0;
-    if (search.m_direction == wxTextSearchDirection::Down)
+    switch ( search.m_direction )
     {
-        flags |= FR_DOWN;
+        case wxTextSearchDirection::Down:
+            flags |= FR_DOWN;
+            break;
+            
+        case wxTextSearchDirection::Up:
+            // Nothing to do this is (surprisingly) the default.
+            break;
     }
     if (search.m_wholeWord)
     {
