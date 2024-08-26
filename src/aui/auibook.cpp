@@ -1799,6 +1799,8 @@ wxAuiNotebook::~wxAuiNotebook()
 void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
     m_tabs.SetArtProvider(art);
+    m_selectedFont = art->GetSelectedFont();
+    m_normalFont = art->GetNormalFont();
 
     // Update the height and do nothing else if it did something but otherwise
     // (i.e. if the new art provider uses the same height as the old one) we
