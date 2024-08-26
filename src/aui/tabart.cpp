@@ -920,6 +920,16 @@ void wxAuiGenericTabArt::SetActiveColour(const wxColour& colour)
     m_activeColour = colour;
 }
 
+wxFont wxAuiGenericTabArt::GetNormalFont() const
+{
+    return m_normalFont;
+}
+
+wxFont wxAuiGenericTabArt::GetSelectedFont() const
+{
+    return m_selectedFont;
+}
+
 // -- wxAuiSimpleTabArt class implementation --
 
 wxAuiSimpleTabArt::wxAuiSimpleTabArt()
@@ -1396,6 +1406,16 @@ void wxAuiSimpleTabArt::SetSelectedFont(const wxFont& font)
 void wxAuiSimpleTabArt::SetMeasuringFont(const wxFont& font)
 {
     m_measuringFont = font;
+}
+
+wxFont wxAuiSimpleTabArt::GetNormalFont() const
+{
+    return m_normalFont;
+}
+
+wxFont wxAuiSimpleTabArt::GetSelectedFont() const
+{
+    return m_selectedFont;
 }
 
 #endif // wxUSE_AUI
