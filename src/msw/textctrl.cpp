@@ -1207,7 +1207,7 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
         case wxTextSearchDirection::Down:
             flags |= FR_DOWN;
             break;
-            
+
         case wxTextSearchDirection::Up:
             // Nothing to do this is (surprisingly) the default.
             break;
