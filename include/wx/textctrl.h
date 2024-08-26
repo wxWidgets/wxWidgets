@@ -630,7 +630,7 @@ struct wxTextSearch
         return *this;
     }
 
-    wxTextSearch& MatchCase(const bool matchCase = true)
+    wxTextSearch& MatchCase(bool matchCase = true)
     {
         m_matchCase = matchCase;
         return *this;
