@@ -1129,18 +1129,6 @@ public:
 };
 
 /**
-    One of the following values can be passed to wxTextSearch::Direction() to
-    control direction when searching a wxTextCtrl.
-
-    @since 3.3.0
-*/
-enum class wxTextSearchDirection
-{
-    Down,
-    Up
-};
-
-/**
     Search options for wxTextCtrl::SearchText().
 
     This is a builder class, where property functions can be
@@ -1149,7 +1137,7 @@ enum class wxTextSearchDirection
     @code
     wxTextSearchResult result =
         textctrl->SearchText(wxTextSearch(L"Institutional Research").
-            Direction(wxTextSearchDirection::Down).
+            Direction(wxTextSearch::Direction::Down).
             MatchCase().
             MatchWholeWord());
     @endcode
@@ -1162,6 +1150,18 @@ struct wxTextSearch
        The string to search for.
      */
     wxTextSearch(const wxString& text) : m_searchValue(text) {}
+
+    /**
+        One of the following values can be passed to wxTextSearch::Direction() to
+        control direction when searching a wxTextCtrl.
+
+        @since 3.3.0
+    */
+    enum class Direction
+    {
+        Down,
+        Up
+    };
 
     /**
        The string to search for.
@@ -1199,7 +1199,7 @@ struct wxTextSearch
 
        By default, search will go downward.
      */
-    wxTextSearch& Direction(const wxTextSearchDirection direction)
+    wxTextSearch& Direction(const wxTextSearch::Direction direction)
     {
         m_direction = direction;
         return *this;
@@ -1220,7 +1220,7 @@ struct wxTextSearch
     long                  m_startingPosition = -1;
     bool                  m_matchCase = true;
     bool                  m_wholeWord = false;
-    wxTextSearchDirection m_direction = wxTextSearchDirection::Down;
+    Direction m_direction = Direction::Down;
 };
 
 /** Result from wxTextCtrl::SearchText(), specifying the range of the found text.
