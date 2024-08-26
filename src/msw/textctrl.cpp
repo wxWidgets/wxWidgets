@@ -1204,11 +1204,11 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
     WPARAM flags = 0;
     switch ( search.m_direction )
     {
-        case wxTextSearchDirection::Down:
+        case wxTextSearch::Direction::Down:
             flags |= FR_DOWN;
             break;
 
-        case wxTextSearchDirection::Up:
+        case wxTextSearch::Direction::Up:
             // Nothing to do this is (surprisingly) the default.
             break;
     }
@@ -1226,8 +1226,8 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
         // user-provided start
         search.m_startingPosition :
         // if going down, then start from 0; otherwise, start from end
-        (search.m_direction == wxTextSearchDirection::Down) ? 0 : GetLastPosition();
-    if (search.m_direction == wxTextSearchDirection::Down)
+        (search.m_direction == wxTextSearch::Direction::Down) ? 0 : GetLastPosition();
+    if (search.m_direction == wxTextSearch::Direction::Down)
     {
         // go to the end of the text
         findText.chrg.cpMax = -1;
