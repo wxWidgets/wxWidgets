@@ -1137,7 +1137,7 @@ public:
     @code
     wxTextSearchResult result =
         textctrl->SearchText(wxTextSearch(L"Institutional Research").
-            Direction(wxTextSearch::Direction::Down).
+            SearchDirection(wxTextSearch::Direction::Down).
             MatchCase().
             MatchWholeWord());
     @endcode
@@ -1152,7 +1152,7 @@ struct wxTextSearch
     wxTextSearch(const wxString& text) : m_searchValue(text) {}
 
     /**
-        One of the following values can be passed to wxTextSearch::Direction() to
+        One of the following values can be passed to wxTextSearch::SearchDirection() to
         control direction when searching a wxTextCtrl.
 
         @since 3.3.0
@@ -1199,7 +1199,7 @@ struct wxTextSearch
 
        By default, search will go downward.
      */
-    wxTextSearch& Direction(const wxTextSearch::Direction direction)
+    wxTextSearch& SearchDirection(const wxTextSearch::Direction direction)
     {
         m_direction = direction;
         return *this;
