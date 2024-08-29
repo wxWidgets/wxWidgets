@@ -1568,6 +1568,10 @@ void wxTextCtrl::GTKOnTextChanged()
     if ( IgnoreTextUpdate() )
         return;
 
+    auto count = gtk_text_buffer_get_char_count( m_buffer );
+    if( m_maxlen > 0 && count >= m_maxlen && IsMaxLengthAllowed() )
+        return;
+
     if ( MarkDirtyOnChange() )
         MarkDirty();
 
