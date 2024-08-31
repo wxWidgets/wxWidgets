@@ -362,24 +362,6 @@ bool WebApp::OnInit()
         "<p><a href='memory:page1.htm'>Page 1</a> was better.</p></body>");
     wxMemoryFSHandler::AddFile("test.css", "h1 {color: red;}");
 
-    // Set log target which only logs debugging messages in the usual way: all
-    // the rest will be shown in wxLogWindow created by WebFrame.
-    class DebugOnlyLog : public wxLog
-    {
-    public:
-        DebugOnlyLog() = default;
-
-    protected:
-        void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) override
-        {
-            // Ignore all non-debug/trace messages.
-            if ( level == wxLOG_Debug || level == wxLOG_Trace )
-                wxLog::DoLogTextAtLevel(level, msg);
-        }
-    };
-
-    delete wxLog::SetActiveTarget(new DebugOnlyLog);
-
     WebFrame *frame = new WebFrame(m_url, WebFrame::Main);
     frame->Show();
 
@@ -548,7 +530,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
         m_log_textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_RICH2);
         m_log_textCtrl->SetMinSize(FromDIP(wxSize(100, 100)));
         topsizer->Add(m_log_textCtrl, wxSizerFlags().Expand().Proportion(0));
-        wxLog::SetActiveTarget(new wxLogTextCtrl(m_log_textCtrl));
+        delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_log_textCtrl));
 
         // Log backend information
         wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
