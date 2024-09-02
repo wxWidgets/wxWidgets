@@ -32,26 +32,26 @@ installation instructions.
 
 
 
-Changes since 3.2.4
+Changes since 3.2.5
 -------------------
 
-This release contains more than a hundred fixes and improvements for all
-platforms. Some of the most important ones are:
+This release contains multiple bug fixes, including some regressions, as well
+as improvements to the CMake build system. Some of the most important changes:
 
-- Support macOS 14 Sonoma (#23916, #24054, #24067, #24073, #24515).
-- Wayland-related fixes in wxGTK: clipboard (#24391), OpenGL (#24076, #24395)
-  and other (#24021, #24050, #24051).
-- Fix crash when using wxApp in console wxGTK programs (#24081).
-- Support for dates after 2038 in wxDateTime (#24464).
+- Fix resource leak in wxBitmapBundle in some circumstances (#24703).
+- Fix crash when using static wx libraries in a Windows DLL (#24730).
+- Fix possible crash during drag-and-drop in wxGTK (#24677).
+- Fix wxDatePickerCtrl being unusable in some locales in wxGTK (#24533).
+- Fix regression in focus handling under macOS 14+ (#24605, #24667).
+- Fix regression in wxTranslations introduced in 3.2.3 (#24297).
 
 Other changes include:
 
-- Fix support for using Chinese (zh-Hans-CN) locale under macOS (#24396).
-- Fix alpha channel in bitmaps loaded from SVG in wxGTK (#24064).
-- wxGenericListCtrl improvements (#24292, #24293, #24311, #24312, #24332).
-- wxGrid improvements (#24247, #24286).
-- More high DPI fixes in wxMSW (#24283, #24196, #24456).
-- Avoid new gcc 14 warnings in the headers (#24502).
+- High DPI fixes for wxBitmapComboBox (#24563), wxDataViewCtrl (#24648),
+  wxNotebook (#24606), wxPropertyGrid (#24607), wxWizard (#24743).
+- Improve wxSlider appearance under macOS (#24532, #24539).
+- Correctly use current keyboard layout in key events in wxGTK (#24772).
+- Fix handling of ligatures in wxStyledTextCtrl in wxGTK (#13168).
 
 
 Please see the full change log for more details:
