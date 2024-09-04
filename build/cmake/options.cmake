@@ -84,6 +84,8 @@ set(wxBUILD_INSTALL_ARCHIVE_DIR "" CACHE PATH "override default sub-directory to
 mark_as_advanced(wxBUILD_INSTALL_ARCHIVE_DIR)
 wx_option(wxBUILD_INSTALL_PLATFORM_SUBDIR "platform specific sub-directory (MSVC-naming)" ON)
 mark_as_advanced(wxBUILD_INSTALL_PLATFORM_SUBDIR)
+wx_option(wxBUILD_INSTALL_PDB "install pdb files in the runtime direcotry (MSVC)" OFF)
+mark_as_advanced(wxBUILD_INSTALL_PDB)
 
 
 # STL options

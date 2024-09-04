@@ -497,6 +497,11 @@ macro(wx_add_library name)
             RUNTIME DESTINATION "${runtime_dir}"
             BUNDLE DESTINATION Applications/wxWidgets
         )
+
+        if(wxBUILD_SHARED AND MSVC AND wxBUILD_INSTALL_PDB)
+            wx_install(FILES $<TARGET_PDB_FILE:${name}> DESTINATION "${runtime_dir}")
+        endif()
+
         wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     endif()
 endmacro()
