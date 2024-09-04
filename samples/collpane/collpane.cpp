@@ -322,7 +322,7 @@ MyDialog::MyDialog(wxFrame *parent)
     m_collPane = new wxCollapsiblePane(this, -1, "Click here for a surprise");
     sz->Add(m_collPane, wxSizerFlags().Expand().Border(wxALL));
     sz->Add(new wxTextCtrl(this, -1, "just a test"), wxSizerFlags().Expand().Border(wxALL));
-    sz->AddSpacer(10);
+    sz->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
     sz->Add(new wxButton(this, wxID_OK), 0, wxALIGN_RIGHT|wxALL, FromDIP(5));
 
     // now add test controls in the collapsible pane

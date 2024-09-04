@@ -99,7 +99,7 @@ void ClassListDialog::CreateControls()
     itemBoxSizer2->Add(filters, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
     filters->Add(new wxCheckBox(this, ID_SHOW_ONLY_XTI,
                                 "Show only classes with eXtended infos"));
-    filters->AddSpacer(10);
+    filters->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
     filters->Add(new wxCheckBox(this, ID_SHOW_PROPERTIES_RECURSIVELY,
                                 "Show properties of parent classes"));
 

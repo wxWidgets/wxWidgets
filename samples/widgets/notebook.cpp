@@ -234,49 +234,49 @@ void BookWidgetsPage::CreateContent()
                                                     &text,
                                                     sizerMidleBox);
     text->SetEditable(false);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndLabel("Current selection: ",
                                            BookPage_CurSelectText,
                                            &text,
                                            sizerMidleBox);
     text->SetEditable(false);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(BookPage_SelectPage,
                                             "&Select page",
                                             BookPage_SelectText,
                                             &m_textSelect,
                                             sizerMidleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     btn = new wxButton(sizerMidleBox, BookPage_AddPage, "&Add page");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(BookPage_InsertPage,
                                             "&Insert page at",
                                             BookPage_InsertText,
                                             &m_textInsert,
                                             sizerMidleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(BookPage_RemovePage,
                                             "&Remove page",
                                             BookPage_RemoveText,
                                             &m_textRemove,
                                             sizerMidleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     btn = new wxButton(sizerMidleBox, BookPage_DeleteAll, "&Delete All");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, wxSizerFlags().Expand().Border());
 
     // right pane
     m_sizerBook = new wxBoxSizer(wxHORIZONTAL);
 
     // the 3 panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
-    sizerTop->Add(m_sizerBook, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(sizerMiddle, wxSizerFlags().Expand().DoubleBorder());
+    sizerTop->Add(m_sizerBook, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     RecreateBook();
 
@@ -395,7 +395,7 @@ void BookWidgetsPage::RecreateBook()
         }
     }
 
-    m_sizerBook->Add(m_book, 1, wxGROW | wxALL, 5);
+    m_sizerBook->Add(m_book, wxSizerFlags(1).Expand().Border());
     m_sizerBook->SetMinSize(150, 0);
     m_sizerBook->Layout();
 }

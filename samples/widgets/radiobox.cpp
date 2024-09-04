@@ -223,7 +223,7 @@ void RadioWidgetsPage::CreateContent()
     btn = new wxButton(sizerleftBox, RadioPage_Update, "&Update");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border());
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     btn = new wxButton(sizerleftBox, RadioPage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, FromDIP(15)));

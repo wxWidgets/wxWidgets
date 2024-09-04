@@ -307,7 +307,7 @@ void SliderWidgetsPage::CreateContent()
     m_chkSelectRange->SetToolTip("\"Select range\" is only supported \nin wxMSW");
 #endif // wxUSE_TOOLTIPS
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     wxButton *btn = new wxButton(sizerLeftBox, SliderPage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, FromDIP(15)));

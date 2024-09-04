@@ -270,7 +270,7 @@ void ButtonWidgetsPage::CreateContent()
 
     m_chkDisable = CreateCheckBoxAndAddToSizer(sizerLeft, "Disable", wxID_ANY, sizerLeftBox);
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     wxStaticBoxSizer *sizerUseLabels =
         new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox,
@@ -287,7 +287,7 @@ void ButtonWidgetsPage::CreateContent()
         "&Disabled (broken image icon)", wxID_ANY, sizerUseLabelsBox);
     sizerLeft->Add(sizerUseLabels, wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
 
     static const wxString dirs[] =
     {
@@ -318,7 +318,7 @@ void ButtonWidgetsPage::CreateContent()
     sizerImageMargins->Add(sizerImageMarginsRow, wxSizerFlags().Border().Centre());
     sizerLeft->Add(sizerImageMargins, wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(15);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder() * 3);
 
     // should be in sync with enums Button[HV]Align!
     static const wxString halign[] =
@@ -345,7 +345,7 @@ void ButtonWidgetsPage::CreateContent()
     sizerLeft->Add(m_radioHAlign, wxSizerFlags().Expand().Border());
     sizerLeft->Add(m_radioVAlign, wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     wxButton *btn = new wxButton(sizerLeftBox, ButtonPage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder(wxALL));

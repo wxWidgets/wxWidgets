@@ -1469,8 +1469,8 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
         Add(new wxButton(panel, Exec_Btn_Close, "&Close"), wxSizerFlags().Border(wxALL));
 
     sizerTop->Add(sizerBtns, 0, wxCENTRE | wxALL, 5);
-    sizerTop->Add(m_textIn, 1, wxGROW | wxALL, 5);
-    sizerTop->Add(m_textErr, 1, wxGROW | wxALL, 5);
+    sizerTop->Add(m_textIn, wxSizerFlags(1).Expand().Border());
+    sizerTop->Add(m_textErr, wxSizerFlags(1).Expand().Border());
 
     panel->SetSizer(sizerTop);
     sizerTop->Fit(this);

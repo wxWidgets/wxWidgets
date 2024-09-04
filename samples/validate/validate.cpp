@@ -360,13 +360,13 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
-    mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
+    mainsizer->Add(flexgridsizer, wxSizerFlags(1).Expand().DoubleBorder());
 
     mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, "Pick a color",
                                     wxDefaultPosition, wxDefaultSize,
                                     3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
                                     wxGenericValidator(&g_data.m_radiobox_choice)),
-                   0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
+                   wxSizerFlags().Expand().DoubleBorder(wxLEFT|wxBOTTOM|wxRIGHT));
 
     mainsizer->Add( numSizer, wxSizerFlags().Expand().DoubleBorder() );
 

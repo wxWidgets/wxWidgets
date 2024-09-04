@@ -241,7 +241,7 @@ void ToggleWidgetsPage::CreateContent()
     m_chkUseBitmapClass->SetValue(true);
 
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     wxStaticBoxSizer *sizerUseLabels =
         new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox,
@@ -258,7 +258,7 @@ void ToggleWidgetsPage::CreateContent()
         "&Disabled (broken image icon)", wxID_ANY, sizerUseLabelsBox);
     sizerLeft->Add(sizerUseLabels, wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
 
     static const wxString dirs[] =
     {
@@ -268,7 +268,7 @@ void ToggleWidgetsPage::CreateContent()
                                      wxDefaultPosition, wxDefaultSize,
                                      WXSIZEOF(dirs), dirs);
     sizerLeft->Add(m_radioImagePos, wxSizerFlags().Expand().Border());
-    sizerLeft->AddSpacer(15);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder() * 3);
 
     // should be in sync with enums Toggle[HV]Align!
     static const wxString halign[] =
@@ -296,10 +296,10 @@ void ToggleWidgetsPage::CreateContent()
     sizerLeft->Add(m_radioVAlign, wxSizerFlags().Expand().Border());
 #endif // wxHAS_BITMAPTOGGLEBUTTON
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     wxButton *btn = new wxButton(sizerLeftBox, TogglePage_Reset, "&Reset");
-    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, FromDIP(15)));
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, wxSizerFlags::GetDefaultBorder() * 3));
 
     // middle pane
     wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Operations");

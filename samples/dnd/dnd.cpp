@@ -1045,7 +1045,7 @@ DnDFrame::DnDFrame()
     sizer->Add(m_ctrlLog, wxSizerFlags(1).Expand());
     sizer->SetItemMinSize(m_ctrlLog, 450, 200);
 #endif // wxUSE_LOG
-    sizer->AddSpacer(50);
+    sizer->AddSpacer(wxSizerFlags::GetDefaultBorder() * 10);
 
     // copy data by default but allow moving it as well
     m_moveByDefault = false;
@@ -1618,26 +1618,26 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     st = new wxStaticText( this, wxID_ANY, "Position &X:" );
     m_textX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxGROW|wxALL, 2 );
-    xywhSizer->Add( m_textX, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( st, wxSizerFlags(1).Expand().Border(2));
+    xywhSizer->Add( m_textX, wxSizerFlags(1).Expand().Border(2));
 
     st = new wxStaticText( this, wxID_ANY, "Size &width:" );
     m_textW = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
-    xywhSizer->Add( st, 1, wxGROW|wxALL, 2 );
-    xywhSizer->Add( m_textW, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( st, wxSizerFlags(1).Expand().Border(2));
+    xywhSizer->Add( m_textW, wxSizerFlags(1).Expand().Border(2));
 
     st = new wxStaticText( this, wxID_ANY, "&Y:" );
     m_textY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
     xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 );
-    xywhSizer->Add( m_textY, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( m_textY, wxSizerFlags(1).Expand().Border(2));
 
     st = new wxStaticText( this, wxID_ANY, "&height:" );
     m_textH = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                               wxSize( 30, 20 ) );
     xywhSizer->Add( st, 1, wxALL|wxALIGN_RIGHT, 2 );
-    xywhSizer->Add( m_textH, 1, wxGROW|wxALL, 2 );
+    xywhSizer->Add( m_textH, wxSizerFlags(1).Expand().Border(2));
 
     wxButton* col = new wxButton( this, Button_Colour, "&Colour..." );
     attrSizer->Add( xywhSizer, wxSizerFlags(1).Expand());

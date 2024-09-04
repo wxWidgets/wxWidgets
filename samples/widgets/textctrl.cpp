@@ -426,7 +426,7 @@ void TextWidgetsPage::CreateContent()
                                       1, wxRA_SPECIFY_COLS);
 
     sizerLeft->Add(m_radioTextLines, wxSizerFlags().Expand().Border(wxALL));
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     m_chkPassword = CreateCheckBoxAndAddToSizer(
                         sizerLeft, "&Password control", TextPage_Password, sizerLeftBox
@@ -448,7 +448,7 @@ void TextWidgetsPage::CreateContent()
                         TextPage_NoVertScrollbar, sizerLeftBox
                     );
     m_chkFilename->Disable(); // not implemented yet
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
     static const wxString wrap[] =
     {
@@ -489,7 +489,7 @@ void TextWidgetsPage::CreateContent()
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
 
-    sizerLeft->AddSpacer(5);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder());
     sizerLeft->Add(m_radioKind, wxSizerFlags().Expand().Border(wxALL));
 #endif // __WXMSW__
 
@@ -614,9 +614,9 @@ void TextWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the upper part of the window
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
-    sizerTop->Add(m_sizerText, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(sizerMiddle, wxSizerFlags().Expand().DoubleBorder());
+    sizerTop->Add(m_sizerText, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     SetSizer(sizerTop);
 }

@@ -751,7 +751,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
         wxSizerFlags().DoubleBorder());
 
     wxSizer *fifthPanelSz = new wxBoxSizer(wxVERTICAL);
-    fifthPanelSz->Add(m_ctrl[Page_VarHeight], 1, wxGROW | wxALL, 5);
+    fifthPanelSz->Add(m_ctrl[Page_VarHeight], wxSizerFlags(1).Expand().Border());
     fifthPanelSz->Add(button_sizer5);
     fifthPanel->SetSizerAndFit(fifthPanelSz);
 

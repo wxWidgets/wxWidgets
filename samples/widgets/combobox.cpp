@@ -290,7 +290,7 @@ void ComboboxWidgetsPage::CreateContent()
     m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeftBottom, "Process &Enter", wxID_ANY, sizerLeftBottomBox);
 
     sizerLeftBottom->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
-    sizerLeftBottom->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+    sizerLeftBottom->Add(m_radioKind, wxSizerFlags().Expand().Border());
 
     wxButton *btn = new wxButton(sizerLeftBottomBox, ComboPage_Reset, "&Reset");
     sizerLeftBottom->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -298,7 +298,7 @@ void ComboboxWidgetsPage::CreateContent()
 
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
     sizerLeft->Add(sizerLeftTop);
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
     sizerLeft->Add(sizerLeftBottom, wxSizerFlags().Expand());
 
     // middle pane
@@ -401,9 +401,9 @@ void ComboboxWidgetsPage::CreateContent()
     m_sizerCombo = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(sizerMiddle, wxSizerFlags(1).Expand().DoubleBorder());
+    sizerTop->Add(sizerRight, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     // final initializations
     Reset();
