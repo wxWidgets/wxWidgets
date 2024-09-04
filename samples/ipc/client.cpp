@@ -126,8 +126,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
 
-    wxBoxSizer *item1 = new wxBoxSizer( wxHORIZONTAL );
-
     wxGridSizer *item2 = new wxGridSizer( 4, 0, 0 );
 
     wxButton *item3 = new wxButton( this, ID_START, "Connect to server", wxDefaultPosition, wxDefaultSize, 0 );
@@ -184,9 +182,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item1->Add( item2, 1, wxALIGN_CENTER|wxALL, 5 );
-
-    item0->Add( item1, wxSizerFlags().Expand().Border(wxALL, 5) );
+    item0->Add( item2, wxSizerFlags().Expand().Border(wxALL, 5) );
 
     wxStaticBox *item14 = new wxStaticBox( this, -1, "Client log" );
     wxStaticBoxSizer *item13 = new wxStaticBoxSizer( item14, wxVERTICAL );
