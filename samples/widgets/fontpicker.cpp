@@ -142,7 +142,7 @@ void FontPickerWidgetsPage::CreateContent()
     m_chkFontTextCtrl = CreateCheckBoxAndAddToSizer(styleSizer, "With textctrl", wxID_ANY, styleSizerBox);
     m_chkFontDescAsLabel = CreateCheckBoxAndAddToSizer(styleSizer, "Font desc as btn label", wxID_ANY, styleSizerBox);
     m_chkFontUseFontForLabel = CreateCheckBoxAndAddToSizer(styleSizer, "Use font for label", wxID_ANY, styleSizerBox);
-    leftSizer->Add(styleSizer, 0, wxALL|wxGROW, 5);
+    leftSizer->Add(styleSizer, wxSizerFlags().Expand().Border(wxALL));
 
     leftSizer->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -161,8 +161,8 @@ void FontPickerWidgetsPage::CreateContent()
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(leftSizer, 0, wxGROW|wxALL, 5);
-    sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
+    sz->Add(leftSizer, wxSizerFlags().Expand().Border(wxALL));
+    sz->Add(m_sizer, wxSizerFlags(1).Expand().Border(wxALL));
 
     SetSizer(sz);
 }

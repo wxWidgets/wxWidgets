@@ -893,7 +893,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxToolBar* toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                        wxNO_BORDER|wxTB_FLAT|wxTB_NODIVIDER|wxTB_NOALIGN);
 
-    sizer->Add(toolBar, 0, wxEXPAND);
+    sizer->Add(toolBar, wxSizerFlags().Expand());
 
     toolBar->AddTool(wxID_OPEN, wxEmptyString, wxBitmap(open_xpm), _("Open"));
     toolBar->AddTool(wxID_SAVEAS, wxEmptyString, wxBitmap(save_xpm), _("Save"));
@@ -925,7 +925,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     toolBar->Realize();
 
     wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE);
-    sizer->Add(splitter, 1, wxEXPAND);
+    sizer->Add(splitter, wxSizerFlags(1).Expand());
 
     m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL/*|wxWANTS_CHARS*/);
     wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
@@ -1774,10 +1774,10 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
     dialog.SetSizer(boxSizer);
 
     wxHtmlWindow* win = new wxHtmlWindow(& dialog, wxID_ANY, wxDefaultPosition, wxSize(500, 400), wxSUNKEN_BORDER);
-    boxSizer->Add(win, 1, wxALL, 5);
+    boxSizer->Add(win, 1, wxALL, FromDIP(5));
 
     wxButton* cancelButton = new wxButton(& dialog, wxID_CANCEL, "&Close");
-    boxSizer->Add(cancelButton, 0, wxALL|wxCENTRE, 5);
+    boxSizer->Add(cancelButton, 0, wxALL|wxCENTRE, FromDIP(5));
 
     wxString text;
     wxStringOutputStream strStream(& text);

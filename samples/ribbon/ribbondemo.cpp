@@ -389,7 +389,7 @@ MyFrame::MyFrame()
         sizer_panelsizer_v->Add(sizer_panelcombo, 0, wxALL|wxEXPAND, 2);
         sizer_panelsizer_v->Add(sizer_panelcombo2, 0, wxALL|wxEXPAND, 2);
         sizer_panelsizer_v->AddStretchSpacer(1);
-        sizer_panelsizer_h->Add(bar, 0, wxEXPAND);
+        sizer_panelsizer_h->Add(bar, wxSizerFlags().Expand());
         sizer_panelsizer_h->Add(sizer_panelsizer_v, 0);
         sizer_panel->SetSizer(sizer_panelsizer_h);
 
@@ -513,8 +513,8 @@ MyFrame::MyFrame()
 
     wxSizer *s = new wxBoxSizer(wxVERTICAL);
 
-    s->Add(m_ribbon, 0, wxEXPAND);
-    s->Add(m_logwindow, 1, wxEXPAND);
+    s->Add(m_ribbon, wxSizerFlags().Expand());
+    s->Add(m_logwindow, wxSizerFlags(1).Expand());
     s->Add(m_togglePanels, wxSizerFlags().Border());
 
     SetSizer(s);

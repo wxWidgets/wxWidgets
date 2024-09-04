@@ -146,7 +146,7 @@ void EditableListboxWidgetsPage::CreateContent()
     m_lbox = new wxEditableListBox(this, EditableListboxPage_Listbox,
                                     _("Match these wildcards:"),
                                     wxDefaultPosition, wxDefaultSize, 0);
-    sizerRight->Add(m_lbox, 1, wxGROW | wxALL, 5);
+    sizerRight->Add(m_lbox, wxSizerFlags(1).Expand().Border());
     sizerRight->SetMinSize(150, 0);
     m_sizerLbox = sizerRight; // save it to modify it later
 
@@ -201,7 +201,7 @@ void EditableListboxWidgetsPage::CreateLbox()
     NotifyWidgetRecreation(m_lbox);
 
     m_lbox->SetStrings(items);
-    m_sizerLbox->Add(m_lbox, 1, wxGROW | wxALL, 5);
+    m_sizerLbox->Add(m_lbox, wxSizerFlags(1).Expand().Border());
     m_sizerLbox->Layout();
 }
 

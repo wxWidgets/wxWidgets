@@ -158,7 +158,7 @@ void HeaderCtrlWidgetsPage::CreateContent()
                2, wxRA_SPECIFY_COLS);
         sizerCol->Add(m_colSettings[i].rbAlignments, wxSizerFlags().Expand().Border());
         ResetColumnStyle(i);
-        sizerTop->AddSpacer(15);
+        sizerTop->AddSpacer(wxSizerFlags::GetDefaultBorder() * 3);
         sizerTop->Add(sizerCol, wxSizerFlags().Expand());
     }
 

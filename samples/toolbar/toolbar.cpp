@@ -722,9 +722,9 @@ MyFrame::MyFrame()
     m_panel->SetSizer(sizer);
 #if USE_UNMANAGED_TOOLBAR
     if (m_extraToolBar)
-        sizer->Add(m_extraToolBar, 0, wxEXPAND, 0);
+        sizer->Add(m_extraToolBar, wxSizerFlags().Expand());
 #endif
-    sizer->Add(m_textWindow, 1, wxEXPAND, 0);
+    sizer->Add(m_textWindow, wxSizerFlags(1).Expand());
 
     SetInitialSize(FromDIP(wxSize(650, 350)));
 }

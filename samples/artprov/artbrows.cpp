@@ -150,15 +150,15 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
     subsizer->Add(new wxStaticText(this, wxID_ANY, "Client:"), 0, wxALIGN_CENTER_VERTICAL);
-    subsizer->Add(choice, 1, wxLEFT, 5);
-    sizer->Add(subsizer, 0, wxALL | wxEXPAND, 10);
+    subsizer->Add(choice, wxSizerFlags(1).Border(wxLEFT));
+    sizer->Add(subsizer, 0, wxALL | wxEXPAND, FromDIP(10));
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
 
     m_list = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(250, 300),
                             wxLC_REPORT | wxSUNKEN_BORDER);
     m_list->AppendColumn("wxArtID");
-    subsizer->Add(m_list, 0, wxEXPAND | wxRIGHT, 10);
+    subsizer->Add(m_list, 0, wxEXPAND | wxRIGHT, FromDIP(10));
 
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);
 
@@ -171,21 +171,21 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
         m_sizes->Append( wxString::Format("%d x %d", *p, *p ) );
     }
     m_sizes->SetSelection(0);
-    subsub->Add(m_sizes, 0, wxALL, 4);
+    subsub->Add(m_sizes, 0, wxALL, FromDIP(4));
 
     m_text = new wxStaticText(this, wxID_ANY, "Size: 333x333");
-    subsub->Add(m_text, 0, wxALL, 4);
+    subsub->Add(m_text, 0, wxALL, FromDIP(4));
 
     m_canvas = new wxStaticBitmap(this, wxID_ANY, wxBitmap(null_xpm));
     subsub->Add(m_canvas);
     subsub->Add(256, 256);
-    subsizer->Add(subsub, 1, wxLEFT, 4 );
+    subsizer->Add(subsub, 1, wxLEFT, FromDIP(4));
 
-    sizer->Add(subsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 10);
+    sizer->Add(subsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, FromDIP(10));
 
     wxButton *ok = new wxButton(this, wxID_OK, "Close");
     ok->SetDefault();
-    sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, 10);
+    sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, FromDIP(10));
 
     SetSizerAndFit(sizer);
 

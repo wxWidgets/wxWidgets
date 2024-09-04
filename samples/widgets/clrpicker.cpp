@@ -148,7 +148,7 @@ void ColourPickerWidgetsPage::CreateContent()
     m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(styleSizer, "With textctrl", wxID_ANY, styleSizerBox);
     m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(styleSizer, "With label", wxID_ANY, styleSizerBox);
     m_chkColourShowAlpha = CreateCheckBoxAndAddToSizer(styleSizer, "With opacity", wxID_ANY, styleSizerBox);
-    boxleft->Add(styleSizer, 0, wxALL|wxGROW, 5);
+    boxleft->Add(styleSizer, wxSizerFlags().Expand().Border(wxALL));
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -167,8 +167,8 @@ void ColourPickerWidgetsPage::CreateContent()
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(boxleft, 0, wxGROW|wxALL, 5);
-    sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
+    sz->Add(boxleft, wxSizerFlags().Expand().Border(wxALL));
+    sz->Add(m_sizer, wxSizerFlags(1).Expand().Border(wxALL));
 
     SetSizer(sz);
 }

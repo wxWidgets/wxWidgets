@@ -1701,14 +1701,14 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
     sizerTop->Add(new wxStaticText(this, wxID_ANY, "Just some extra text:"),
                   wxSizerFlags().Centre().Border());
     sizerTop->Add(m_text, wxSizerFlags(1).Centre().Border());
-    sizerTop->AddSpacer(10);
+    sizerTop->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
     sizerTop->Add(choiceSize, wxSizerFlags().Centre().Border(wxRIGHT));
     sizerTop->Add(m_radioPortrait, wxSizerFlags().Centre().Border());
     sizerTop->Add(m_radioLandscape, wxSizerFlags().Centre().Border());
     sizerTop->Add(m_cb, wxSizerFlags().Centre().Border());
-    sizerTop->AddSpacer(5);
+    sizerTop->AddSpacer(wxSizerFlags::GetDefaultBorder());
     sizerTop->Add(m_btn, wxSizerFlags().Centre().Border());
-    sizerTop->AddSpacer(5);
+    sizerTop->AddSpacer(wxSizerFlags::GetDefaultBorder());
     sizerTop->Add(m_label, wxSizerFlags(1).Centre().Border());
 
     SetSizerAndFit(sizerTop);
@@ -3715,8 +3715,8 @@ MyModelessDialog::MyModelessDialog(wxWindow *parent)
     wxCheckBox *check = new wxCheckBox(this, wxID_ANY, "Should be disabled");
     check->Disable();
 
-    sizerTop->Add(btn, 1, wxEXPAND | wxALL, 5);
-    sizerTop->Add(check, 1, wxEXPAND | wxALL, 5);
+    sizerTop->Add(btn, wxSizerFlags(1).Expand().Border(wxALL));
+    sizerTop->Add(check, wxSizerFlags(1).Expand().Border(wxALL));
 
     SetSizerAndFit(sizerTop);
 }
@@ -3834,31 +3834,31 @@ StdButtonSizerDialog::StdButtonSizerDialog(wxWindow *parent)
 
     m_chkboxNoDefault = new wxCheckBox(this, wxID_ANY, "No Default");
 
-    sizer1->Add(m_radiobtnOk, 0, wxALL, 5);
-    sizer1->Add(m_radiobtnYes, 0, wxALL, 5);
+    sizer1->Add(m_radiobtnOk, wxSizerFlags().Border(wxALL));
+    sizer1->Add(m_radiobtnYes, wxSizerFlags().Border(wxALL));
 
     sizer->Add(sizerInside1, 0, 0, 0);
-    sizerInside1->Add(m_chkboxAffirmativeButton, 0, wxALL, 5);
-    sizerInside1->Add(sizer1, 0, wxALL, 5);
+    sizerInside1->Add(m_chkboxAffirmativeButton, wxSizerFlags().Border(wxALL));
+    sizerInside1->Add(sizer1, wxSizerFlags().Border(wxALL));
     sizerInside1->SetItemMinSize(sizer1, sizer1Box->GetBestSize());    // to prevent wrapping of static box label
 
-    sizer2->Add(m_radiobtnCancel, 0, wxALL, 5);
-    sizer2->Add(m_radiobtnClose, 0, wxALL, 5);
+    sizer2->Add(m_radiobtnCancel, wxSizerFlags().Border(wxALL));
+    sizer2->Add(m_radiobtnClose, wxSizerFlags().Border(wxALL));
 
     sizer->Add(sizerInside2, 0, 0, 0);
-    sizerInside2->Add(m_chkboxDismissButton, 0, wxALL, 5);
-    sizerInside2->Add(sizer2, 0, wxALL, 5);
+    sizerInside2->Add(m_chkboxDismissButton, wxSizerFlags().Border(wxALL));
+    sizerInside2->Add(sizer2, wxSizerFlags().Border(wxALL));
     sizerInside2->SetItemMinSize(sizer2, sizer2Box->GetBestSize());    // to prevent wrapping of static box label
 
-    sizerTop->Add(sizer, 0, wxALL, 5);
+    sizerTop->Add(sizer, wxSizerFlags().Border(wxALL));
 
-    sizer3->Add(m_chkboxNo, 0, wxALL, 5);
-    sizer3->Add(m_chkboxHelp, 0, wxALL, 5);
-    sizer3->Add(m_chkboxApply, 0, wxALL, 5);
+    sizer3->Add(m_chkboxNo, wxSizerFlags().Border(wxALL));
+    sizer3->Add(m_chkboxHelp, wxSizerFlags().Border(wxALL));
+    sizer3->Add(m_chkboxApply, wxSizerFlags().Border(wxALL));
 
-    sizerTop->Add(sizer3, 0, wxALL, 5);
+    sizerTop->Add(sizer3, wxSizerFlags().Border(wxALL));
 
-    sizerTop->Add(m_chkboxNoDefault, 0, wxLEFT|wxRIGHT, 10);
+    sizerTop->Add(m_chkboxNoDefault, 0, wxLEFT|wxRIGHT, FromDIP(10));
 
     EnableDisableControls();
 
@@ -3927,7 +3927,7 @@ void StdButtonSizerDialog::OnEvent(wxCommandEvent& WXUNUSED(event))
     }
 
     m_buttonsSizer = CreateStdDialogButtonSizer(flags);
-    GetSizer()->Add(m_buttonsSizer, 0, wxGROW|wxALL, 5);
+    GetSizer()->Add(m_buttonsSizer, wxSizerFlags().Expand().Border(wxALL));
 
     Layout();
     GetSizer()->SetSizeHints(this);
@@ -4036,7 +4036,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     wxCheckBox* checkBox3 = new wxCheckBox(panel, ID_LOAD_LAST_PROJECT, "&Load last project on startup", wxDefaultPosition, wxDefaultSize);
     checkBox3->SetValidator(wxGenericValidator(&m_settingsData.m_loadLastOnStartup));
     itemSizer3->Add(checkBox3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    item0->Add(itemSizer3, 0, wxGROW|wxALL, 0);
+    item0->Add(itemSizer3, wxSizerFlags().Expand());
 
     //// AUTOSAVE
 
@@ -4052,22 +4052,22 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     spinCtrl12->SetValidator(wxGenericValidator(&m_settingsData.m_autoSaveInterval));
 #endif
 
-    itemSizer12->Add(checkBox12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    itemSizer12->Add(checkBox12, 0, wxALL|wxALIGN_CENTER_VERTICAL, FromDIP(5));
 #if wxUSE_SPINCTRL
-    itemSizer12->Add(spinCtrl12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    itemSizer12->Add(spinCtrl12, 0, wxALL|wxALIGN_CENTER_VERTICAL, FromDIP(5));
 #endif
-    itemSizer12->Add(new wxStaticText(panel, wxID_STATIC, minsLabel), 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    item0->Add(itemSizer12, 0, wxGROW|wxALL, 0);
+    itemSizer12->Add(new wxStaticText(panel, wxID_STATIC, minsLabel), 0, wxALL|wxALIGN_CENTER_VERTICAL, FromDIP(5));
+    item0->Add(itemSizer12, wxSizerFlags().Expand());
 
     //// TOOLTIPS
 
     wxBoxSizer* itemSizer8 = new wxBoxSizer( wxHORIZONTAL );
     wxCheckBox* checkBox6 = new wxCheckBox(panel, ID_SHOW_TOOLTIPS, "Show &tooltips", wxDefaultPosition, wxDefaultSize);
     checkBox6->SetValidator(wxGenericValidator(&m_settingsData.m_showToolTips));
-    itemSizer8->Add(checkBox6, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
-    item0->Add(itemSizer8, 0, wxGROW|wxALL, 0);
+    itemSizer8->Add(checkBox6, 0, wxALL|wxALIGN_CENTER_VERTICAL, FromDIP(5));
+    item0->Add(itemSizer8, wxSizerFlags().Expand());
 
-    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL, 5) );
+    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL) );
 
     panel->SetSizerAndFit(topSizer);
 
@@ -4089,7 +4089,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     wxRadioBox* projectOrGlobal = new wxRadioBox(panel, ID_APPLY_SETTINGS_TO, "&Apply settings to:",
         wxDefaultPosition, wxDefaultSize, 2, globalOrProjectChoices);
     projectOrGlobal->SetValidator(wxGenericValidator(&m_settingsData.m_applyTo));
-    item0->Add(projectOrGlobal, 0, wxGROW|wxALL, 5);
+    item0->Add(projectOrGlobal, wxSizerFlags().Expand().Border());
 
     projectOrGlobal->SetSelection(0);
 
@@ -4100,18 +4100,18 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
 
     wxStaticBoxSizer* styleSizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Background style:");
     wxStaticBox* const styleSizerBox = styleSizer->GetStaticBox();
-    item0->Add(styleSizer, 0, wxGROW|wxALL, 5);
+    item0->Add(styleSizer, wxSizerFlags().Expand().Border());
 
     wxBoxSizer* itemSizer2 = new wxBoxSizer( wxHORIZONTAL );
 
     wxChoice* choice2 = new wxChoice(styleSizerBox, ID_BACKGROUND_STYLE, wxDefaultPosition, wxDefaultSize, backgroundStyleChoices);
     choice2->SetValidator(wxGenericValidator(&m_settingsData.m_bgStyle));
 
-    itemSizer2->Add(new wxStaticText(styleSizerBox, wxID_ANY, "&Window:"), 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    itemSizer2->Add(new wxStaticText(styleSizerBox, wxID_ANY, "&Window:"), 0, wxALL|wxALIGN_CENTER_VERTICAL, FromDIP(5));
     itemSizer2->Add(5, 5, 1, wxALL, 0);
-    itemSizer2->Add(choice2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+    itemSizer2->Add(choice2, 0, wxALL|wxALIGN_CENTER_VERTICAL, FromDIP(5));
 
-    styleSizer->Add(itemSizer2, 0, wxGROW|wxALL, 5);
+    styleSizer->Add(itemSizer2, wxSizerFlags().Expand().Border());
 
 #if wxUSE_SPINCTRL
     //// FONT SIZE SELECTION
@@ -4120,12 +4120,12 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
 
     wxSpinCtrl* spinCtrl = new wxSpinCtrl(itemSizer5->GetStaticBox(), ID_FONT_SIZE, wxEmptyString);
     spinCtrl->SetValidator(wxGenericValidator(&m_settingsData.m_titleFontSize));
-    itemSizer5->Add(spinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    itemSizer5->Add(spinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, FromDIP(5));
 
-    item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, 5);
+    item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, FromDIP(5));
 #endif
 
-    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL, 5) );
+    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL) );
     topSizer->AddSpacer(5);
 
     panel->SetSizerAndFit(topSizer);

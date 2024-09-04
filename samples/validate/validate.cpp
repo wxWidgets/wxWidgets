@@ -249,7 +249,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     m_text = new wxTextCtrl(this, VALIDATE_TEXT);
     m_text->SetToolTip("wxTextValidator not set");
     m_text->SetHint("Enter some text here, please...");
-    flexgridsizer->Add(m_text, 1, wxGROW);
+    flexgridsizer->Add(m_text, wxSizerFlags(1).Expand());
 
     // Make it possible to change the wxTextValidator for m_text at runtime.
     wxButton* const button =
@@ -261,7 +261,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                         wxDefaultPosition, wxDefaultSize,
                         3, g_listbox_choices, wxLB_MULTIPLE,
                         wxGenericValidator(&g_data.m_listbox_choices)),
-                       1, wxGROW);
+                       wxSizerFlags(1).Expand());
 
     m_combobox = new wxComboBox(this, VALIDATE_COMBO, wxEmptyString,
                                 wxDefaultPosition, wxDefaultSize,
@@ -360,13 +360,13 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
-    mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
+    mainsizer->Add(flexgridsizer, wxSizerFlags(1).Expand().DoubleBorder());
 
     mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, "Pick a color",
                                     wxDefaultPosition, wxDefaultSize,
                                     3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
                                     wxGenericValidator(&g_data.m_radiobox_choice)),
-                   0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
+                   wxSizerFlags().Expand().DoubleBorder(wxLEFT|wxBOTTOM|wxRIGHT));
 
     mainsizer->Add( numSizer, wxSizerFlags().Expand().DoubleBorder() );
 
@@ -491,7 +491,7 @@ TextValidatorDialog::TextValidatorDialog(wxWindow *parent, wxTextCtrl* txtCtrl)
     // Set the main sizer.
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
-    mainsizer->Add(fgSizer, wxSizerFlags(1).Border(wxALL, 10).Expand());
+    mainsizer->Add(fgSizer, wxSizerFlags(1).DoubleBorder(wxALL).Expand());
 
     mainsizer->Add(CreateButtonSizer(wxOK | wxCANCEL),
                    wxSizerFlags().Expand().DoubleBorder());

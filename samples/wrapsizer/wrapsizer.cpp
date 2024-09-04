@@ -132,7 +132,7 @@ WrapSizerFrame::WrapSizerFrame()
     sizerBottomBox->Add(new wxListBox(sizerBottom->GetStaticBox(), wxID_ANY,
                                         wxPoint(0, 0), wxSize(70, 70)),
                         wxSizerFlags().Expand().Shaped());
-    sizerBottomBox->AddSpacer(10);
+    sizerBottomBox->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
     sizerBottomBox->Add(new wxCheckBox(sizerBottom->GetStaticBox(), wxID_ANY,
                                         "A much longer option..."),
                         wxSizerFlags(100).Border());

@@ -1237,7 +1237,7 @@ void WebFrame::OnViewTextRequest(wxCommandEvent& WXUNUSED(evt))
                                       wxTE_READONLY);
 #endif // wxUSE_STC/!wxUSE_STC
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(text, 1, wxEXPAND);
+    sizer->Add(text, wxSizerFlags(1).Expand());
     textViewDialog.SetSizer(sizer);
     textViewDialog.ShowModal();
 }
@@ -1645,6 +1645,6 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
 #endif // wxUSE_STC/!wxUSE_STC
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(text, 1, wxEXPAND);
+    sizer->Add(text, wxSizerFlags(1).Expand());
     SetSizer(sizer);
 }

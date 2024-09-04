@@ -184,7 +184,7 @@ void DatePickerWidgetsPage::CreateContent()
 
     m_textCur->SetMinSize(wxSize(GetTextExtent("  9999-99-99  ").x, -1));
 
-    sizerMiddle->AddSpacer(10);
+    sizerMiddle->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
 
     sizerMiddle->Add(CreateSizerWithTextAndLabel
                      (
@@ -203,7 +203,7 @@ void DatePickerWidgetsPage::CreateContent()
     sizerMiddle->Add(new wxButton(this, DatePickerPage_SetRange, "Set &range"),
                      wxSizerFlags().Centre().Border());
 
-    sizerMiddle->AddSpacer(10);
+    sizerMiddle->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
 
     sizerMiddle->Add(CreateSizerWithTextAndLabel
                      (

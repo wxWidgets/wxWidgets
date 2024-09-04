@@ -708,7 +708,7 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
         sz->Add(new wxTextCtrl(panel, wxID_ANY, str.GetString(),
                                wxDefaultPosition, wxDefaultSize,
                                wxTE_MULTILINE|wxTE_READONLY|wxTE_DONTWRAP),
-                1, wxGROW|wxALL, 5);
+                wxSizerFlags(1).Expand());
         sz->Add(new wxButton(panel, wxID_OK), 0, wxALIGN_RIGHT|wxALL, 5);
         panel->SetSizerAndFit(sz);
         dlg3.ShowModal();

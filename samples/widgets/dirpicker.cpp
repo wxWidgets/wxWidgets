@@ -153,7 +153,7 @@ void DirPickerWidgetsPage::CreateContent()
     m_chkDirMustExist = CreateCheckBoxAndAddToSizer(sizerStyle, "Dir must exist", wxID_ANY, sizerStyleBox);
     m_chkDirChangeDir = CreateCheckBoxAndAddToSizer(sizerStyle, "Change working dir", wxID_ANY, sizerStyleBox);
     m_chkSmall = CreateCheckBoxAndAddToSizer(sizerStyle, "&Small version", wxID_ANY, sizerStyleBox);
-    sizerLeft->Add(sizerStyle, 0, wxALL|wxGROW, 5);
+    sizerLeft->Add(sizerStyle, wxSizerFlags().Expand().Border(wxALL));
 
     sizerLeft->Add(CreateSizerWithTextAndButton
                  (
@@ -163,7 +163,7 @@ void DirPickerWidgetsPage::CreateContent()
                     &m_textInitialDir
                  ), wxSizerFlags().Expand().Border());
 
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
 
     sizerLeft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -176,14 +176,14 @@ void DirPickerWidgetsPage::CreateContent()
 
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
-    m_sizer->Add(m_dirPicker, 0, wxEXPAND|wxALL, 5);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
+    m_sizer->Add(1, 1, wxSizerFlags(1).Expand().Border(wxALL)); // spacer
+    m_sizer->Add(m_dirPicker, wxSizerFlags().Expand().Border(wxALL));
+    m_sizer->Add(1, 1, wxSizerFlags(1).Expand().Border(wxALL)); // spacer
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(sizerLeft, 0, wxGROW|wxALL, 5);
-    sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
+    sz->Add(sizerLeft, wxSizerFlags().Expand().Border(wxALL));
+    sz->Add(m_sizer, wxSizerFlags(1).Expand().Border(wxALL));
 
     SetSizer(sz);
 }
@@ -218,7 +218,7 @@ void DirPickerWidgetsPage::RecreatePicker()
 {
     m_sizer->Remove(1);
     CreatePicker();
-    m_sizer->Insert(1, m_dirPicker, 0, wxEXPAND|wxALL, 5);
+    m_sizer->Insert(1, m_dirPicker, wxSizerFlags().Expand().Border(wxALL));
 
     m_sizer->Layout();
 }

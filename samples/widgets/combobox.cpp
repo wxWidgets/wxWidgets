@@ -290,7 +290,7 @@ void ComboboxWidgetsPage::CreateContent()
     m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeftBottom, "Process &Enter", wxID_ANY, sizerLeftBottomBox);
 
     sizerLeftBottom->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
-    sizerLeftBottom->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+    sizerLeftBottom->Add(m_radioKind, wxSizerFlags().Expand().Border());
 
     wxButton *btn = new wxButton(sizerLeftBottomBox, ComboPage_Reset, "&Reset");
     sizerLeftBottom->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -298,7 +298,7 @@ void ComboboxWidgetsPage::CreateContent()
 
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
     sizerLeft->Add(sizerLeftTop);
-    sizerLeft->AddSpacer(10);
+    sizerLeft->AddSpacer(wxSizerFlags::GetDefaultBorder() * 2);
     sizerLeft->Add(sizerLeftBottom, wxSizerFlags().Expand());
 
     // middle pane
@@ -313,7 +313,7 @@ void ComboboxWidgetsPage::CreateContent()
                                             &m_textCur,
                                             sizerMiddleBox);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border(wxALL));
 
     wxTextCtrl *text;
     sizerRow = CreateSizerWithTextAndLabel("Insertion Point",
@@ -322,64 +322,64 @@ void ComboboxWidgetsPage::CreateContent()
                                            sizerMiddleBox);
     text->SetEditable(false);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border(wxALL));
 
     sizerRow = CreateSizerWithTextAndButton(ComboPage_Insert,
                                             "&Insert this string",
                                             ComboPage_InsertText,
                                             &m_textInsert,
                                             sizerMiddleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border(wxALL));
 
     sizerRow = CreateSizerWithTextAndButton(ComboPage_Add,
                                             "&Add this string",
                                             ComboPage_AddText,
                                             &m_textAdd,
                                             sizerMiddleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border(wxALL));
 
     sizerRow = CreateSizerWithTextAndButton(ComboPage_SetFirst,
                                             "Change &1st string",
                                             ComboPage_SetFirstText,
                                             &m_textSetFirst,
                                             sizerMiddleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border(wxALL));
 
     btn = new wxButton(sizerMiddleBox, ComboPage_AddSeveral, "&Append a few strings");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, wxSizerFlags().Expand().Border(wxALL));
 
     btn = new wxButton(sizerMiddleBox, ComboPage_AddMany, "Append &many strings");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, wxSizerFlags().Expand().Border(wxALL));
 
     sizerRow = CreateSizerWithTextAndButton(ComboPage_Change,
                                             "C&hange current",
                                             ComboPage_ChangeText,
                                             &m_textChange,
                                             sizerMiddleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border(wxALL));
 
     sizerRow = CreateSizerWithTextAndButton(ComboPage_Delete,
                                             "&Delete this item",
                                             ComboPage_DeleteText,
                                             &m_textDelete,
                                             sizerMiddleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border(wxALL));
 
     btn = new wxButton(sizerMiddleBox, ComboPage_DeleteSel, "Delete &selection");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, wxSizerFlags().Expand().Border(wxALL));
 
     btn = new wxButton(sizerMiddleBox, ComboPage_Clear, "&Clear");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, wxSizerFlags().Expand().Border(wxALL));
 
     sizerRow = CreateSizerWithTextAndButton(ComboPage_SetValue,
                                             "SetValue",
                                             ComboPage_SetValueText,
                                             &m_textSetValue,
                                             sizerMiddleBox);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border(wxALL));
 
     btn = new wxButton(sizerMiddleBox, ComboPage_ContainerTests, "Run &tests");
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(btn, wxSizerFlags().Expand().Border(wxALL));
 
 
 
@@ -389,21 +389,21 @@ void ComboboxWidgetsPage::CreateContent()
                                 wxDefaultPosition, wxDefaultSize,
                                 0, nullptr,
                                 0);
-    sizerRight->Add(m_combobox, 0, wxGROW | wxALL, 5);
+    sizerRight->Add(m_combobox, wxSizerFlags().Expand().Border(wxALL));
     m_combobox1 = new wxComboBox( this, ComboPage_Dynamic );
     m_combobox1->Append( "Dynamic ComboBox Test - Click me!" );
     m_combobox1->SetSelection( 0 );
     sizerRight->Add( 20, 20, 0, wxEXPAND, 0 );
-    sizerRight->Add( m_combobox1, 0, wxGROW | wxALL, 5 );
+    sizerRight->Add( m_combobox1, wxSizerFlags().Expand().Border(wxALL));
     m_combobox1->Bind( wxEVT_COMBOBOX_DROPDOWN, &ComboboxWidgetsPage::OnPopup, this );
     m_combobox1->Bind( wxEVT_COMBOBOX_CLOSEUP, &ComboboxWidgetsPage::OnDismiss, this );
     sizerRight->SetMinSize(150, 0);
     m_sizerCombo = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(sizerMiddle, wxSizerFlags(1).Expand().DoubleBorder());
+    sizerTop->Add(sizerRight, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     // final initializations
     Reset();

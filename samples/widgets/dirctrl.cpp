@@ -226,9 +226,9 @@ void DirCtrlWidgetsPage::CreateContent()
     );
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(m_radioStdPath, 0, wxGROW | wxALL , 10);
-    sizerTop->Add(m_dirCtrl, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder(wxALL & ~wxLEFT));
+    sizerTop->Add(m_radioStdPath, wxSizerFlags().Expand().DoubleBorder());
+    sizerTop->Add(m_dirCtrl, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~wxRIGHT));
 
     SetSizer(sizerTop);
 

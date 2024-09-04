@@ -98,13 +98,13 @@ MyDllFrame::MyDllFrame(wxWindow *parent, const wxString& label)
                            wxThread::GetCurrentId()
                        )
                    ),
-               wxSizerFlags(1).Expand().Border(wxALL, 10)
+               wxSizerFlags(1).Expand().DoubleBorder(wxALL)
            );
 
     sizer->Add
            (
                new wxButton(p, wxID_ABOUT, "Show info"),
-               wxSizerFlags(0).Right().Border(wxALL, 10)
+               wxSizerFlags(0).Right().DoubleBorder(wxALL)
            );
 
     p->SetSizerAndFit(sizer);
