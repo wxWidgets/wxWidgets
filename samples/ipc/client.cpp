@@ -189,7 +189,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     wxStaticBoxSizer * const
         sizerLog = new wxStaticBoxSizer(wxVERTICAL, panel, "Client log");
 
-    wxTextCtrl * const textLog = new wxTextCtrl( panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
+    wxTextCtrl * const textLog = new wxTextCtrl( sizerLog->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
     sizerLog->Add( textLog, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
     sizerMain->Add( sizerLog, wxSizerFlags(1).Expand().Border(wxALL, 5) );
