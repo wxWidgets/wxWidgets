@@ -126,74 +126,75 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     wxPanel * const panel = new wxPanel(this);
 
-    wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer *sizerMain = new wxBoxSizer( wxVERTICAL );
 
-    wxGridSizer *item2 = new wxGridSizer( 4, 0, 0 );
+    wxGridSizer *sizerCmds = new wxGridSizer( 4, 0, 0 );
 
-    wxButton *item3 = new wxButton( panel, ID_START, "Connect to server", wxDefaultPosition, wxDefaultSize, 0 );
-    item2->Add( item3, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxButton *btnConnect = new wxButton( panel, ID_START, "Connect to server", wxDefaultPosition, wxDefaultSize, 0 );
+    sizerCmds->Add( btnConnect, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxChoice *item5 = new wxChoice( panel, ID_HOSTNAME, wxDefaultPosition, wxSize(100,-1), 2, strs5, 0 );
-    item2->Add( item5, 0, wxALIGN_CENTER|wxALL, 5 );
+    wxChoice *choiceHost = new wxChoice( panel, ID_HOSTNAME, wxDefaultPosition, wxSize(100,-1), 2, strs5, 0 );
+    sizerCmds->Add( choiceHost, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxChoice *item4 = new wxChoice( panel, ID_SERVERNAME, wxDefaultPosition, wxSize(100,-1), 2, strs4, 0 );
-    item2->Add( item4, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxChoice *choiceServer = new wxChoice( panel, ID_SERVERNAME, wxDefaultPosition, wxSize(100,-1), 2, strs4, 0 );
+    sizerCmds->Add( choiceServer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxChoice *item6 = new wxChoice( panel, ID_TOPIC, wxDefaultPosition, wxSize(100,-1), 2, strs6, 0 );
-    item2->Add( item6, 0, wxALIGN_CENTER|wxALL, 5 );
+    wxChoice *choiceTopic = new wxChoice( panel, ID_TOPIC, wxDefaultPosition, wxSize(100,-1), 2, strs6, 0 );
+    sizerCmds->Add( choiceTopic, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item7 = new wxButton( panel, ID_DISCONNECT, "Disconnect ", wxDefaultPosition, wxDefaultSize, 0 );
-    item2->Add( item7, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxButton *btnDisconnect = new wxButton( panel, ID_DISCONNECT, "Disconnect ", wxDefaultPosition, wxDefaultSize, 0 );
+    sizerCmds->Add( btnDisconnect, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item8 = new wxButton( panel, ID_STARTADVISE, "StartAdvise", wxDefaultPosition, wxDefaultSize, 0 );
-    item2->Add( item8, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxButton *btnStartAdvise = new wxButton( panel, ID_STARTADVISE, "StartAdvise", wxDefaultPosition, wxDefaultSize, 0 );
+    sizerCmds->Add( btnStartAdvise, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxButton *item9 = new wxButton( panel, ID_STOPADVISE, "StopAdvise", wxDefaultPosition, wxDefaultSize, 0 );
-    item2->Add( item9, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxButton *btnStopAdvise = new wxButton( panel, ID_STOPADVISE, "StopAdvise", wxDefaultPosition, wxDefaultSize, 0 );
+    sizerCmds->Add( btnStopAdvise, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item10 = new wxButton( panel, ID_EXECUTE, "Execute", wxDefaultPosition, wxDefaultSize, 0 );
-    item2->Add( item10, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxButton *btnExecute = new wxButton( panel, ID_EXECUTE, "Execute", wxDefaultPosition, wxDefaultSize, 0 );
+    sizerCmds->Add( btnExecute, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item11 = new wxButton( panel, ID_POKE, "Poke", wxDefaultPosition, wxDefaultSize, 0 );
-    item2->Add( item11, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxButton *btnPoke = new wxButton( panel, ID_POKE, "Poke", wxDefaultPosition, wxDefaultSize, 0 );
+    sizerCmds->Add( btnPoke, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item12 = new wxButton( panel, ID_REQUEST, "Request", wxDefaultPosition, wxDefaultSize, 0 );
-    item2->Add( item12, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxButton *btnRequest = new wxButton( panel, ID_REQUEST, "Request", wxDefaultPosition, wxDefaultSize, 0 );
+    sizerCmds->Add( btnRequest, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
+    sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    item0->Add( item2, wxSizerFlags().Expand().Border(wxALL, 5) );
+    sizerMain->Add( sizerCmds, wxSizerFlags().Expand().Border(wxALL, 5) );
 
-    wxStaticBoxSizer *item13 = new wxStaticBoxSizer(wxVERTICAL, panel, "Client log");
+    wxStaticBoxSizer *
+        sizerLog = new wxStaticBoxSizer(wxVERTICAL, panel, "Client log");
 
-    wxTextCtrl *item15 = new wxTextCtrl( panel, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
-    item13->Add( item15, wxSizerFlags(1).Expand().Border(wxALL, 5) );
+    wxTextCtrl *textLog = new wxTextCtrl( panel, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
+    sizerLog->Add( textLog, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
-    item0->Add( item13, wxSizerFlags(1).Expand().Border(wxALL, 5) );
+    sizerMain->Add( sizerLog, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
-    panel->SetSizer( item0 );
+    panel->SetSizer( sizerMain );
     SetClientSize( panel->GetBestSize() );
 
     // status
