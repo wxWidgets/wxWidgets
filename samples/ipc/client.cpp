@@ -184,8 +184,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     item0->Add( item2, wxSizerFlags().Expand().Border(wxALL, 5) );
 
-    wxStaticBox *item14 = new wxStaticBox( this, -1, "Client log" );
-    wxStaticBoxSizer *item13 = new wxStaticBoxSizer( item14, wxVERTICAL );
+    wxStaticBoxSizer *item13 = new wxStaticBoxSizer(wxVERTICAL, this, "Client log");
 
     wxTextCtrl *item15 = new wxTextCtrl( this, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
     item13->Add( item15, wxSizerFlags(1).Expand().Border(wxALL, 5) );
