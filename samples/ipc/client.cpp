@@ -189,7 +189,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     wxStaticBoxSizer * const
         sizerLog = new wxStaticBoxSizer(wxVERTICAL, panel, "Client log");
 
-    wxTextCtrl * const textLog = new wxTextCtrl( panel, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
+    wxTextCtrl * const textLog = new wxTextCtrl( panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
     sizerLog->Add( textLog, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
     sizerMain->Add( sizerLog, wxSizerFlags(1).Expand().Border(wxALL, 5) );
@@ -202,7 +202,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     GetServername()->SetSelection(0);
     GetHostname()->SetSelection(0);
     GetTopic()->SetSelection(0);
-    wxLogTextCtrl *logWindow = new wxLogTextCtrl(GetLog());
+    wxLogTextCtrl *logWindow = new wxLogTextCtrl(textLog);
     delete wxLog::SetActiveTarget(logWindow);
     wxLogMessage("Click on Connect to connect to the server");
     EnableControls();
