@@ -202,11 +202,8 @@ public:
     const wxSockAddressImpl& GetPeer() const { return m_peer; }
 
     wxSocketError GetError() const { return m_error; }
+    void SetError(wxSocketError error) { m_error = error; }
     bool IsOk() const { return m_error == wxSOCKET_NOERROR; }
-
-    // get the error code corresponding to the last operation
-    virtual wxSocketError GetLastError() const = 0;
-
 
     // creating/closing the socket
     // --------------------------
@@ -306,7 +303,6 @@ public:
 
     wxSockAddressImpl m_local,
                       m_peer;
-    wxSocketError m_error;
 
     bool m_stream;
     bool m_establishing;
@@ -321,6 +317,11 @@ protected:
 
     // get the associated socket flags
     wxSocketFlags GetSocketFlags() const { return m_wxsocket->GetFlags(); }
+
+    // get the error code corresponding to the last operation
+    virtual wxSocketError GetLastError() = 0;
+
+    wxSocketError m_error;
 
     // true if we're a listening stream socket
     bool m_server;

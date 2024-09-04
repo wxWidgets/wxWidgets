@@ -55,15 +55,17 @@
 // wxSocketImpl implementation
 // ============================================================================
 
-wxSocketError wxSocketImplUnix::GetLastError() const
+wxSocketError wxSocketImplUnix::GetLastError()
 {
     switch ( errno )
     {
         case 0:
-            return wxSOCKET_NOERROR;
+            m_error = wxSOCKET_NOERROR;
+	    break;
 
         case ENOTSOCK:
-            return wxSOCKET_INVSOCK;
+            m_error = wxSOCKET_INVSOCK;
+	    break;
 
         // unfortunately EAGAIN only has the "would block" meaning for read(),
         // not for connect() for which it means something rather different but
@@ -79,11 +81,13 @@ wxSocketError wxSocketImplUnix::GetLastError() const
     #endif
 #endif // EWOULDBLOCK
         case EINPROGRESS:
-            return wxSOCKET_WOULDBLOCK;
+            m_error = wxSOCKET_WOULDBLOCK;
+	    break;
 
         default:
-            return wxSOCKET_IOERR;
+            m_error = wxSOCKET_IOERR;
     }
+    return m_error;
 }
 
 void wxSocketImplUnix::DoEnableEvents(int flags, bool enable)

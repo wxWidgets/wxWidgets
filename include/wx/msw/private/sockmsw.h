@@ -47,7 +47,7 @@ public:
 
     virtual ~wxSocketImplMSW();
 
-    virtual wxSocketError GetLastError() const wxOVERRIDE;
+    virtual wxSocketError GetLastError() wxOVERRIDE;
 
     virtual void ReenableEvents(wxSocketEventFlags WXUNUSED(flags)) wxOVERRIDE
     {

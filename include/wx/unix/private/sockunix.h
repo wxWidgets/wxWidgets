@@ -36,7 +36,7 @@ public:
         m_fds[1] = -1;
     }
 
-    virtual wxSocketError GetLastError() const wxOVERRIDE;
+    virtual wxSocketError GetLastError() wxOVERRIDE;
 
     virtual void ReenableEvents(wxSocketEventFlags flags) wxOVERRIDE
     {

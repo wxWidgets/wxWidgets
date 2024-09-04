@@ -531,17 +531,26 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     ReenableEvents(wxSOCKET_INPUT_FLAG);
 
     if ( fd == INVALID_SOCKET )
+    {
+	GetLastError();
         return NULL;
+    }
 
     wxScopeGuard closeSocket = wxMakeGuard(wxCloseSocket, fd);
 
     wxSocketManager * const manager = wxSocketManager::Get();
     if ( !manager )
+    {
+	GetLastError();
         return NULL;
+    }
 
     wxSocketImpl * const sock = manager->CreateSocket(wxsocket);
     if ( !sock )
+    {
+	GetLastError();
         return NULL;
+    }
 
     // Ownership of the socket now passes to wxSocketImpl object.
     closeSocket.Dismiss();
@@ -925,7 +934,7 @@ bool wxSocketBase::Destroy()
 
 void wxSocketBase::SetError(wxSocketError error)
 {
-    m_impl->m_error = error;
+    m_impl->SetError(error);
 }
 
 wxSocketError wxSocketBase::LastError() const
@@ -1003,7 +1012,7 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
                             : 0;
         if ( ret == -1 )
         {
-            if ( m_impl->GetLastError() == wxSOCKET_WOULDBLOCK )
+            if ( m_impl->GetError() == wxSOCKET_WOULDBLOCK )
             {
                 // if we don't want to wait, just return immediately
                 if ( m_flags & wxSOCKET_NOWAIT_READ )
@@ -1218,7 +1227,7 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
         const int ret = m_impl->Write(buffer, nbytes);
         if ( ret == -1 )
         {
-            if ( m_impl->GetLastError() == wxSOCKET_WOULDBLOCK )
+            if ( m_impl->GetError() == wxSOCKET_WOULDBLOCK )
             {
                 if ( m_flags & wxSOCKET_NOWAIT_WRITE )
                     break;
@@ -1946,7 +1955,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 
     if ( !sock.m_impl )
     {
-        SetError(m_impl->GetLastError());
+        SetError(m_impl->GetError());
 
         return false;
     }
