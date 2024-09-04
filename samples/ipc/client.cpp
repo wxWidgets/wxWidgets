@@ -190,7 +190,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     wxTextCtrl *item15 = new wxTextCtrl( this, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
     item13->Add( item15, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
-    item0->Add( item13, wxSizerFlags(0).Expand().Border(wxALL, 5) );
+    item0->Add( item13, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
     this->SetSizer( item0 );
     item0->SetSizeHints( this );
