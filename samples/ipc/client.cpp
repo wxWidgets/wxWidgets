@@ -124,23 +124,25 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
         IPC_TOPIC, "..."
     };
 
+    wxPanel * const panel = new wxPanel(this);
+
     wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
 
     wxGridSizer *item2 = new wxGridSizer( 4, 0, 0 );
 
-    wxButton *item3 = new wxButton( this, ID_START, "Connect to server", wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item3 = new wxButton( panel, ID_START, "Connect to server", wxDefaultPosition, wxDefaultSize, 0 );
     item2->Add( item3, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxChoice *item5 = new wxChoice( this, ID_HOSTNAME, wxDefaultPosition, wxSize(100,-1), 2, strs5, 0 );
+    wxChoice *item5 = new wxChoice( panel, ID_HOSTNAME, wxDefaultPosition, wxSize(100,-1), 2, strs5, 0 );
     item2->Add( item5, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxChoice *item4 = new wxChoice( this, ID_SERVERNAME, wxDefaultPosition, wxSize(100,-1), 2, strs4, 0 );
+    wxChoice *item4 = new wxChoice( panel, ID_SERVERNAME, wxDefaultPosition, wxSize(100,-1), 2, strs4, 0 );
     item2->Add( item4, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxChoice *item6 = new wxChoice( this, ID_TOPIC, wxDefaultPosition, wxSize(100,-1), 2, strs6, 0 );
+    wxChoice *item6 = new wxChoice( panel, ID_TOPIC, wxDefaultPosition, wxSize(100,-1), 2, strs6, 0 );
     item2->Add( item6, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item7 = new wxButton( this, ID_DISCONNECT, "Disconnect ", wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item7 = new wxButton( panel, ID_DISCONNECT, "Disconnect ", wxDefaultPosition, wxDefaultSize, 0 );
     item2->Add( item7, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
@@ -149,17 +151,17 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item8 = new wxButton( this, ID_STARTADVISE, "StartAdvise", wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item8 = new wxButton( panel, ID_STARTADVISE, "StartAdvise", wxDefaultPosition, wxDefaultSize, 0 );
     item2->Add( item8, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxButton *item9 = new wxButton( this, ID_STOPADVISE, "StopAdvise", wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item9 = new wxButton( panel, ID_STOPADVISE, "StopAdvise", wxDefaultPosition, wxDefaultSize, 0 );
     item2->Add( item9, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item10 = new wxButton( this, ID_EXECUTE, "Execute", wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item10 = new wxButton( panel, ID_EXECUTE, "Execute", wxDefaultPosition, wxDefaultSize, 0 );
     item2->Add( item10, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
@@ -168,7 +170,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item11 = new wxButton( this, ID_POKE, "Poke", wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item11 = new wxButton( panel, ID_POKE, "Poke", wxDefaultPosition, wxDefaultSize, 0 );
     item2->Add( item11, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
@@ -177,22 +179,22 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    wxButton *item12 = new wxButton( this, ID_REQUEST, "Request", wxDefaultPosition, wxDefaultSize, 0 );
+    wxButton *item12 = new wxButton( panel, ID_REQUEST, "Request", wxDefaultPosition, wxDefaultSize, 0 );
     item2->Add( item12, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     item2->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
     item0->Add( item2, wxSizerFlags().Expand().Border(wxALL, 5) );
 
-    wxStaticBoxSizer *item13 = new wxStaticBoxSizer(wxVERTICAL, this, "Client log");
+    wxStaticBoxSizer *item13 = new wxStaticBoxSizer(wxVERTICAL, panel, "Client log");
 
-    wxTextCtrl *item15 = new wxTextCtrl( this, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
+    wxTextCtrl *item15 = new wxTextCtrl( panel, ID_LOG, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
     item13->Add( item15, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
     item0->Add( item13, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
-    this->SetSizer( item0 );
-    item0->SetSizeHints( this );
+    panel->SetSizer( item0 );
+    SetClientSize( panel->GetBestSize() );
 
     // status
     m_client = nullptr;
