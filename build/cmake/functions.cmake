@@ -21,6 +21,12 @@ else()
 endif()
 
 
+# List of libraries added via wx_add_library() to use for wx-config
+# and headers added via wx_append_sources() to use for install.
+set(wxLIB_TARGETS)
+set(wxINSTALL_HEADERS)
+
+
 # This function adds a list of headers to a variable while prepending
 # include/ to the path
 macro(wx_add_headers src_var)
@@ -52,6 +58,14 @@ macro(wx_append_sources src_var source_base_name)
     endif()
     if(DEFINED ${source_base_name}_HDR)
         wx_add_headers(${src_var} ${${source_base_name}_HDR})
+
+        list(APPEND wxINSTALL_HEADERS ${${source_base_name}_HDR})
+        set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
+    endif()
+
+    if(DEFINED ${source_base_name}_RSC)
+        list(APPEND wxINSTALL_HEADERS ${${source_base_name}_RSC})
+        set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
     endif()
 endmacro()
 
@@ -436,8 +450,6 @@ macro(wx_get_install_dir artifact default)
     endif()
 endmacro()
 
-# List of libraries added via wx_add_library() to use for wx-config
-set(wxLIB_TARGETS)
 
 # Add a wxWidgets library
 # wx_add_library(<target_name> [IS_BASE;IS_PLUGIN;IS_MONO] <src_files>...)
