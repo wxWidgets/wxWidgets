@@ -62,6 +62,11 @@ macro(wx_append_sources src_var source_base_name)
         list(APPEND wxINSTALL_HEADERS ${${source_base_name}_HDR})
         set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
     endif()
+
+    if(DEFINED ${source_base_name}_RSC)
+        list(APPEND wxINSTALL_HEADERS ${${source_base_name}_RSC})
+        set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
+    endif()
 endmacro()
 
 # Add prefix to list of items
