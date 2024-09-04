@@ -421,6 +421,21 @@ function(wx_set_target_properties target_name)
     wx_set_common_target_properties(${target_name})
 endfunction()
 
+macro(wx_get_install_dir artifact default)
+    string(TOUPPER ${artifact} artifact_upper)
+    if(wxBUILD_INSTALL_${artifact_upper}_DIR)
+        set(${artifact}_dir "${wxBUILD_INSTALL_${artifact_upper}_DIR}")
+    else()
+        set(${artifact}_dir ${default})
+    endif()
+    if(wxBUILD_INSTALL_PLATFORM_SUBDIR)
+        if(${artifact}_dir)
+            wx_string_append(${artifact}_dir ${GEN_EXPR_DIR})
+        endif()
+        wx_string_append(${artifact}_dir "${wxPLATFORM_LIB_DIR}")
+    endif()
+endmacro()
+
 # List of libraries added via wx_add_library() to use for wx-config
 set(wxLIB_TARGETS)
 
@@ -466,17 +481,22 @@ macro(wx_add_library name)
         # Setup install
         if(MSYS OR CYGWIN)
             # configure puts the .dll in the bin directory
-            set(runtime_dir "bin")
+            set(runtime_default_dir "bin")
         else()
-            set(runtime_dir "lib")
+            set(runtime_default_dir "lib")
         endif()
+
+        wx_get_install_dir(library "lib")
+        wx_get_install_dir(archive "lib")
+        wx_get_install_dir(runtime "${runtime_default_dir}")
+
         wx_install(TARGETS ${name}
             EXPORT wxWidgetsTargets
-            LIBRARY DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
-            ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
-            RUNTIME DESTINATION "${runtime_dir}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+            LIBRARY DESTINATION "${library_dir}"
+            ARCHIVE DESTINATION "${archive_dir}"
+            RUNTIME DESTINATION "${runtime_dir}"
             BUNDLE DESTINATION Applications/wxWidgets
-            )
+        )
         wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     endif()
 endmacro()
