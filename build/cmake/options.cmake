@@ -76,6 +76,16 @@ wx_option(wxBUILD_PIC "Enable position independent code (PIC)." ON)
 mark_as_advanced(wxBUILD_PIC)
 wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 
+set(wxBUILD_INSTALL_RUNTIME_DIR "" CACHE PATH "override default sub-directory to install runtime files")
+mark_as_advanced(wxBUILD_INSTALL_RUNTIME_DIR)
+set(wxBUILD_INSTALL_LIBRARY_DIR "" CACHE PATH "override default sub-directory to install library files")
+mark_as_advanced(wxBUILD_INSTALL_LIBRARY_DIR)
+set(wxBUILD_INSTALL_ARCHIVE_DIR "" CACHE PATH "override default sub-directory to install archive files")
+mark_as_advanced(wxBUILD_INSTALL_ARCHIVE_DIR)
+wx_option(wxBUILD_INSTALL_PLATFORM_SUBDIR "platform specific sub-directory (MSVC-naming)" ON)
+mark_as_advanced(wxBUILD_INSTALL_PLATFORM_SUBDIR)
+
+
 # STL options
 wx_option(wxUSE_STD_IOSTREAM "use standard C++ streams" ON)
 wx_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON)
