@@ -1005,6 +1005,25 @@ void wxWebViewWebKit::EnableAccessToDevTools(bool enable)
     webkit_settings_set_enable_developer_extras(settings, enable);
 }
 
+bool wxWebViewWebKit::ShowDevTools()
+{
+    // If we don't enable access to dev tools, the inspector is simply not
+    // shown.
+    EnableAccessToDevTools();
+
+    WebKitWebInspector* const
+        inspector = webkit_web_view_get_inspector(m_web_view);
+    if ( !inspector )
+    {
+        wxLogDebug("Unexpectedly failed to obtain WebKit inspector.");
+        return false;
+    }
+
+    webkit_web_inspector_show(inspector);
+
+    return true;
+}
+
 bool wxWebViewWebKit::IsAccessToDevToolsEnabled() const
 {
     WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);

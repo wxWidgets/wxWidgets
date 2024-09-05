@@ -1345,6 +1345,18 @@ void wxWebViewEdge::EnableAccessToDevTools(bool enable)
         m_impl->m_pendingAccessToDevToolsEnabled = enable ? 1 : 0;
 }
 
+bool wxWebViewEdge::ShowDevTools()
+{
+    const HRESULT hr = m_impl->m_webView->OpenDevToolsWindow();
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("ICoreWebView2::OpenDevToolsWindow", hr);
+        return false;
+    }
+
+    return true;
+}
+
 bool wxWebViewEdge::IsAccessToDevToolsEnabled() const
 {
     wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());

@@ -196,6 +196,7 @@ public:
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
     void OnEnableDevTools(wxCommandEvent& evt);
+    void OnShowDevTools(wxCommandEvent& evt);
     void OnEnableBrowserAcceleratorKeys(wxCommandEvent& evt);
 
 private:
@@ -708,8 +709,9 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     m_tools_menu->AppendSubMenu(handlers, _("Handler Examples"));
 
     m_context_menu = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Context Menu"));
-    m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
     m_browser_accelerator_keys = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Browser Accelerator Keys"));
+    m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
+    auto* const show_dev_tools = m_tools_menu->Append(wxID_ANY, _("Show Dev Tools"));
 
     if (m_flags & Main)
     {
@@ -822,6 +824,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     Bind(wxEVT_MENU, &WebFrame::OnFind, this, m_find->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableContextMenu, this, m_context_menu->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableDevTools, this, m_dev_tools->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnShowDevTools, this, show_dev_tools->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableBrowserAcceleratorKeys, this, m_browser_accelerator_keys->GetId());
 
     //Connect the idle events
@@ -997,6 +1000,12 @@ void WebFrame::OnEnableContextMenu(wxCommandEvent& evt)
 void WebFrame::OnEnableDevTools(wxCommandEvent& evt)
 {
     m_browser->EnableAccessToDevTools(evt.IsChecked());
+}
+
+void WebFrame::OnShowDevTools(wxCommandEvent& WXUNUSED(evt))
+{
+    if ( !m_browser->ShowDevTools() )
+        wxLogWarning("Failed to show development tools window");
 }
 
 void WebFrame::OnEnableBrowserAcceleratorKeys(wxCommandEvent& evt)

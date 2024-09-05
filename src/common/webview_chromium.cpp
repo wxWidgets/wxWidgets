@@ -490,8 +490,19 @@ public:
         return host->GetWindowHandle();
     }
 
+    // Open the dev tools window.
+    bool ShowDevTools()
+    {
+        if ( !m_browser )
+            return false;
+
+        DoShowDevTools(m_browser, CefPoint{});
+
+        return true;
+    }
+
 private:
-    void ShowDevTools(CefRefPtr<CefBrowser> browser,
+    void DoShowDevTools(CefRefPtr<CefBrowser> browser,
         const CefPoint& inspect_element_at);
     void CloseDevTools(CefRefPtr<CefBrowser> browser);
 
@@ -1273,6 +1284,11 @@ void wxWebViewChromium::EnableAccessToDevTools(bool enable)
     m_implData->m_enableDevTools = enable;
 }
 
+bool wxWebViewChromium::ShowDevTools()
+{
+    return m_clientHandler->ShowDevTools();
+}
+
 bool wxWebViewChromium::IsAccessToDevToolsEnabled() const
 {
     return m_implData->m_enableDevTools;
@@ -1618,13 +1634,13 @@ bool ClientHandler::OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
     switch ( static_cast<CustomMenuId>(command_id) )
     {
         case CustomMenuId::SHOW_DEVTOOLS:
-            ShowDevTools(browser, CefPoint{});
+            DoShowDevTools(browser, CefPoint{});
             break;
         case CustomMenuId::CLOSE_DEVTOOLS:
             CloseDevTools(browser);
             break;
         case CustomMenuId::INSPECT_ELEMENT:
-            ShowDevTools(browser, CefPoint{params->GetXCoord(), params->GetYCoord()});
+            DoShowDevTools(browser, CefPoint{params->GetXCoord(), params->GetYCoord()});
             break;
         default:
             // Allow default handling, if any.
@@ -1864,8 +1880,8 @@ CefRefPtr<CefResourceHandler> ClientHandler::GetResourceHandler(
 }
 
 void
-ClientHandler::ShowDevTools(CefRefPtr<CefBrowser> browser,
-                            const CefPoint& inspect_element_at)
+ClientHandler::DoShowDevTools(CefRefPtr<CefBrowser> browser,
+                              const CefPoint& inspect_element_at)
 {
     browser->GetHost()->ShowDevTools({}, {}, {}, inspect_element_at);
 }

@@ -235,6 +235,7 @@ public:
         m_showMenu = enable;
     }
     virtual void EnableAccessToDevTools(bool WXUNUSED(enable) = true) { }
+    virtual bool ShowDevTools() { return false; }
     virtual void EnableBrowserAcceleratorKeys(bool WXUNUSED(enable) = true) { }
     virtual bool AreBrowserAcceleratorKeysEnabled() const { return false;  }
     virtual wxString GetCurrentTitle() const = 0;

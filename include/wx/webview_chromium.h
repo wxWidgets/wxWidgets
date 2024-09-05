@@ -77,6 +77,7 @@ public:
     virtual bool SetProxy(const wxString& proxy) override;
 
     virtual void EnableAccessToDevTools(bool enable) override;
+    virtual bool ShowDevTools() override;
     virtual bool IsAccessToDevToolsEnabled() const override;
 
     virtual wxString GetPageSource() const override;
