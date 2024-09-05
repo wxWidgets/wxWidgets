@@ -47,8 +47,6 @@ public:
 
     virtual ~wxSocketImplMSW();
 
-    virtual wxSocketError GetLastError() wxOVERRIDE;
-
     virtual void ReenableEvents(wxSocketEventFlags WXUNUSED(flags)) wxOVERRIDE
     {
         // notifications are never disabled in this implementation, there is no
@@ -82,6 +80,9 @@ public:
             wxSocketManager::Get()->Install_Callback(this);
         }
     }
+
+protected:
+    virtual void UpdateLastError() = 0;
 
 private:
     virtual void DoClose() wxOVERRIDE;

@@ -285,26 +285,25 @@ void wxSocketImplMSW::DoClose()
     wxCloseSocket(m_fd);
 }
 
-wxSocketError wxSocketImplMSW::GetLastError()
+void wxSocketImplMSW::UpdateLastError()
 {
     switch ( WSAGetLastError() )
     {
         case 0:
             m_error = wxSOCKET_NOERROR;
-	    break;
+            return;
 
         case WSAENOTSOCK:
             m_error = wxSOCKET_INVSOCK;
-	    break;
+            return;
 
         case WSAEWOULDBLOCK:
             m_error = wxSOCKET_WOULDBLOCK;
-	    break;
+            return;
 
         default:
             m_error = wxSOCKET_IOERR;
     }
-    return m_error;
 }
 
 #endif  // wxUSE_SOCKETS

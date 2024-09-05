@@ -318,8 +318,8 @@ protected:
     // get the associated socket flags
     wxSocketFlags GetSocketFlags() const { return m_wxsocket->GetFlags(); }
 
-    // get the error code corresponding to the last operation
-    virtual wxSocketError GetLastError() = 0;
+    // update the error code to correspond to the outcome of the last operation
+    virtual void UpdateLastError() = 0;
 
     wxSocketError m_error;
 

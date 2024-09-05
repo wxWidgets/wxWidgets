@@ -460,7 +460,8 @@ wxSocketError wxSocketImpl::CreateClient(bool wait)
     int rc = connect(m_fd, m_peer.GetAddr(), m_peer.GetLen());
     if ( rc == SOCKET_ERROR )
     {
-        wxSocketError err = GetLastError();
+        UpdateLastError();
+        wxSocketError err = GetError();
         if ( err == wxSOCKET_WOULDBLOCK )
         {
             m_establishing = true;
@@ -532,7 +533,7 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
 
     if ( fd == INVALID_SOCKET )
     {
-	GetLastError();
+        UpdateLastError();
         return NULL;
     }
 
@@ -541,14 +542,14 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     wxSocketManager * const manager = wxSocketManager::Get();
     if ( !manager )
     {
-	GetLastError();
+        UpdateLastError();
         return NULL;
     }
 
     wxSocketImpl * const sock = manager->CreateSocket(wxsocket);
     if ( !sock )
     {
-	GetLastError();
+        UpdateLastError();
         return NULL;
     }
 
@@ -742,8 +743,16 @@ int wxSocketImpl::Read(void *buffer, int size)
     int ret = m_stream ? RecvStream(buffer, size)
                        : RecvDgram(buffer, size);
 
-    m_error = ret == SOCKET_ERROR ? GetLastError() : wxSOCKET_NOERROR;
-
+    if (ret == SOCKET_ERROR)
+    {
+        UpdateLastError();
+        m_error = GetError();
+    }
+    else
+    {
+        m_error = wxSOCKET_NOERROR;
+    }
+    
     return ret;
 }
 
@@ -758,7 +767,15 @@ int wxSocketImpl::Write(const void *buffer, int size)
     int ret = m_stream ? SendStream(buffer, size)
                        : SendDgram(buffer, size);
 
-    m_error = ret == SOCKET_ERROR ? GetLastError() : wxSOCKET_NOERROR;
+    if (ret == SOCKET_ERROR)
+    {
+        UpdateLastError();
+        m_error = GetError();
+    }
+    else
+    {
+        m_error = wxSOCKET_NOERROR;
+    }
 
     return ret;
 }

@@ -36,8 +36,6 @@ public:
         m_fds[1] = -1;
     }
 
-    virtual wxSocketError GetLastError() wxOVERRIDE;
-
     virtual void ReenableEvents(wxSocketEventFlags flags) wxOVERRIDE
     {
         // Events are only ever used for non-blocking sockets.
@@ -73,6 +71,9 @@ public:
     virtual void OnWriteWaiting() wxOVERRIDE;
     virtual void OnExceptionWaiting() wxOVERRIDE;
     virtual bool IsOk() const wxOVERRIDE { return m_fd != INVALID_SOCKET; }
+
+protected:
+    virtual void UpdateLastError() = 0;
 
 private:
     virtual void DoClose() wxOVERRIDE
