@@ -82,7 +82,7 @@ public:
     }
 
 protected:
-    virtual void UpdateLastError() = 0;
+    virtual void UpdateLastError();
 
 private:
     virtual void DoClose() wxOVERRIDE;

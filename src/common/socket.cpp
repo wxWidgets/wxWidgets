@@ -752,7 +752,7 @@ int wxSocketImpl::Read(void *buffer, int size)
     {
         m_error = wxSOCKET_NOERROR;
     }
-    
+
     return ret;
 }
 

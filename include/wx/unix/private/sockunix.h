@@ -73,7 +73,7 @@ public:
     virtual bool IsOk() const wxOVERRIDE { return m_fd != INVALID_SOCKET; }
 
 protected:
-    virtual void UpdateLastError() = 0;
+    virtual void UpdateLastError();
 
 private:
     virtual void DoClose() wxOVERRIDE
