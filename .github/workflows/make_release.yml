@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
@@ -43,7 +43,7 @@ jobs:
         # https://github.com/softprops/action-gh-release/pull/255 fixing
         # updating the body of the draft releases. We should replace the SHA-1
         # with a tag when an upstream release including this fix is made.
-        uses: vadz/action-gh-release@4c1f6af6e1a4dbfc4691427d2822c34374d558a2
+        uses: vadz/action-gh-release@f54a467f83ac3b6dd60e37cfb7283f35ae8e2ed2
         id: create_release
         with:
           name: wxWidgets ${{ inputs.version }}
@@ -62,7 +62,7 @@ jobs:
       # because it can't be downloaded from a draft release without
       # impersonating the same user and I don't know how to do it.
       - name: Upload Release Archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wxWidgets-${{ inputs.version }}-source-archive
           path: distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}.zip
@@ -75,10 +75,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Release Archive
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: wxWidgets-${{ inputs.version }}-source-archive
 
@@ -110,7 +110,7 @@ jobs:
             type ..\..\..\checksums
 
       - name: Add Files to the Release
-        uses: vadz/action-gh-release@4c1f6af6e1a4dbfc4691427d2822c34374d558a2
+        uses: vadz/action-gh-release@f54a467f83ac3b6dd60e37cfb7283f35ae8e2ed2
         with:
           name: wxWidgets ${{ inputs.version }}
           body_path: checksums
