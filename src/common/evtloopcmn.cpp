@@ -20,6 +20,7 @@
 
 #include "wx/scopeguard.h"
 #include "wx/apptrait.h"
+#include "wx/sysopt.h"
 #include "wx/private/eventloopsourcesmanager.h"
 
 // Counts currently existing event loops.
