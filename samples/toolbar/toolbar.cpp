@@ -250,6 +250,7 @@ enum
     ID_COMBO = 1000,
     ID_3CHECK,
     ID_UI_2CHECK_UPDATED,
+    ID_UI_3CHECK_UPDATED,
 };
 
 // ----------------------------------------------------------------------------
@@ -312,6 +313,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
                   MyFrame::OnUpdateToggleHorzText)
     EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED,
+                  MyFrame::OnCheckboxUpdateUI)
+    EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED,
                   MyFrame::OnCheckboxUpdateUI)
 wxEND_EVENT_TABLE()
 
@@ -497,7 +500,14 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                                                     wxCHK_2STATE);
         checkbox2->SetMinSize(checkbox2->GetSizeFromText(checkbox2->GetLabelText()));
         checkbox2->Disable();
-        toolBar->AddControl(checkbox2, "Checkbox2 UI Updated");
+        toolBar->AddControl(checkbox2, "2Checkbox UI Updated");
+        wxCheckBox* checkbox3 = new wxCheckBox(toolBar, ID_UI_3CHECK_UPDATED,
+                                                    "",
+                                                    wxDefaultPosition, wxDefaultSize,
+                                                    wxCHK_3STATE);
+        checkbox3->SetMinSize(checkbox3->GetSizeFromText(checkbox3->GetLabelText()));
+        checkbox3->Disable();
+        toolBar->AddControl(checkbox3, "3Checkbox UI Updated");
 #endif
     }
 #endif // USE_CONTROLS_IN_TOOLBAR
@@ -1038,14 +1048,21 @@ void MyFrame::OnCheckboxUpdateUI(wxUpdateUIEvent& evt)
     wxToolBar* tbar = GetToolBar();
     wxWindow* wnd = tbar->FindWindow(ID_3CHECK);
     wxCheckBox* src = wxCheckCast<wxCheckBox>(wnd);
-    if (src->Get3StateValue() != wxCHK_UNDETERMINED)
+    if (!evt.Is3State())
     {
-        evt.Show(true);
-        evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
+        if (src->Get3StateValue() != wxCHK_UNDETERMINED)
+        {
+            evt.Show(true);
+            evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
+        }
+        else
+        {
+            evt.Show(false);
+        }
     }
     else
     {
-        evt.Show(false);
+        evt.Set3StateValue(src->Get3StateValue());
     }
 #endif
 }

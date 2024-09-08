@@ -106,6 +106,7 @@ class MyFrame : public wxFrame
         ID_NotebookDeleteTab,
         ID_3CHECK,
         ID_UI_2CHECK_UPDATED,
+        ID_UI_3CHECK_UPDATED,
 
         ID_SampleItem,
 
@@ -666,6 +667,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUINOTEBOOK_PAGE_CLOSED(wxID_ANY, MyFrame::OnNotebookPageClosed)
     EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnNotebookPageChanging)
     EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
+    EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
 wxEND_EVENT_TABLE()
 
 
@@ -889,12 +891,19 @@ MyFrame::MyFrame(wxWindow* parent,
     checkbox1->SetMinSize(checkbox1->GetSizeFromText(checkbox1->GetLabelText()));
     tb4->AddControl(checkbox1);
     wxCheckBox* checkbox2 = new wxCheckBox(tb4, ID_UI_2CHECK_UPDATED,
-                                                "Checkbox UI Updated",
+                                                "2Checkbox UI Updated",
                                                 wxDefaultPosition, wxDefaultSize,
                                                 wxCHK_2STATE);
     checkbox2->SetMinSize(checkbox2->GetSizeFromText(checkbox2->GetLabelText()));
     checkbox2->Disable();
     tb4->AddControl(checkbox2);
+    wxCheckBox* checkbox3 = new wxCheckBox(tb4, ID_UI_3CHECK_UPDATED,
+                                                "3Checkbox UI Updated",
+                                                wxDefaultPosition, wxDefaultSize,
+                                                wxCHK_3STATE);
+    checkbox3->SetMinSize(checkbox3->GetSizeFromText(checkbox3->GetLabelText()));
+    checkbox3->Disable();
+    tb4->AddControl(checkbox3);
 #endif
     tb4->Realize();
 
@@ -1395,14 +1404,21 @@ void MyFrame::OnCheckboxUpdateUI(wxUpdateUIEvent& evt)
     wxWindow* tb4 = m_mgr.GetPane("tb4").window;
     wxWindow* wnd = tb4->FindWindow(ID_3CHECK);
     wxCheckBox* src = wxCheckCast<wxCheckBox>(wnd);
-    if (src->Get3StateValue() != wxCHK_UNDETERMINED)
+    if (!evt.Is3State())
     {
-        evt.Show(true);
-        evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
+        if (src->Get3StateValue() != wxCHK_UNDETERMINED)
+        {
+            evt.Show(true);
+            evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
+        }
+        else
+        {
+            evt.Show(false);
+        }
     }
     else
     {
-        evt.Show(false);
+        evt.Set3StateValue(src->Get3StateValue());
     }
 #endif
 }

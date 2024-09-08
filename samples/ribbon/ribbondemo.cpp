@@ -83,6 +83,7 @@ public:
         ID_UI_CHANGE_TEXT_UPDATED,
         ID_3CHECK,
         ID_UI_2CHECK_UPDATED,
+        ID_UI_3CHECK_UPDATED,
         ID_REMOVE_PAGE,
         ID_HIDE_PAGES,
         ID_SHOW_PAGES,
@@ -209,6 +210,7 @@ EVT_UPDATE_UI(ID_UI_ENABLE_UPDATED, MyFrame::OnEnableUpdateUI)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_CHECK, MyFrame::OnCheck)
 EVT_UPDATE_UI(ID_UI_CHECK_UPDATED, MyFrame::OnCheckUpdateUI)
 EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
+EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_CHANGE_TEXT1, MyFrame::OnChangeText1)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_CHANGE_TEXT2, MyFrame::OnChangeText2)
 EVT_UPDATE_UI(ID_UI_CHANGE_TEXT_UPDATED, MyFrame::OnChangeTextUpdateUI)
@@ -462,6 +464,13 @@ MyFrame::MyFrame()
         checkbox2->SetMinSize(checkbox2->GetSizeFromText(checkbox2->GetLabelText()));
         checkbox2->Disable();
         sizer->Add(checkbox2, 0, wxALL | wxEXPAND);
+        wxCheckBox* checkbox3 = new wxCheckBox(panel, ID_UI_3CHECK_UPDATED,
+                                                    "3Checkbox UI Updated",
+                                                    wxDefaultPosition, wxDefaultSize,
+                                                    wxCHK_3STATE);
+        checkbox3->SetMinSize(checkbox3->GetSizeFromText(checkbox3->GetLabelText()));
+        checkbox3->Disable();
+        sizer->Add(checkbox3, 0, wxALL | wxEXPAND);
 #endif
 
         //Also set the general disabled text colour:
@@ -770,14 +779,21 @@ void MyFrame::OnCheckboxUpdateUI(wxUpdateUIEvent& evt)
     wxWindow* parent = cb->GetParent();
     wxWindow* wnd = parent->FindWindow(ID_3CHECK);
     wxCheckBox* src = wxCheckCast<wxCheckBox>(wnd);
-    if (src->Get3StateValue() != wxCHK_UNDETERMINED)
+    if (!evt.Is3State())
     {
-        evt.Show(true);
-        evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
+        if (src->Get3StateValue() != wxCHK_UNDETERMINED)
+        {
+            evt.Show(true);
+            evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
+        }
+        else
+        {
+            evt.Show(false);
+        }
     }
     else
     {
-        evt.Show(false);
+        evt.Set3StateValue(src->Get3StateValue());
     }
 #endif
 }
