@@ -253,6 +253,8 @@ protected:
     int m_exitcode;
 
 private:
+    void Loop();
+
     // process all already pending events and dispatch a new one (blocking
     // until it appears in the event queue if necessary)
     //

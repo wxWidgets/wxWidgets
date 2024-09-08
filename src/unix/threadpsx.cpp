@@ -793,6 +793,16 @@ public:
 #endif // wxHAVE_PTHREAD_CLEANUP
 
 private:
+    static void CallThreadEntryWithoutExceptionHandling(wxThreadInternal *pthread,
+                                                        wxThread *thread)
+    {
+        pthread->m_exitcode = thread->Entry();
+
+        wxLogTrace(TRACE_THREADS,
+                   wxT("Thread %p Entry() returned %lu."),
+                   THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+    }
+
     pthread_t     m_threadId;   // id of the thread
     wxThreadState m_state;      // see wxThreadState enum
     int           m_prio;       // in wxWidgets units: from 0 to 100
@@ -881,11 +891,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 
         wxTRY
         {
-            pthread->m_exitcode = thread->Entry();
-
-            wxLogTrace(TRACE_THREADS,
-                       wxT("Thread %p Entry() returned %lu."),
-                       THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+            CallThreadEntryWithoutExceptionHandling(pthread, thread);
         }
 #ifndef wxNO_EXCEPTIONS
 #ifdef HAVE_ABI_FORCEDUNWIND
