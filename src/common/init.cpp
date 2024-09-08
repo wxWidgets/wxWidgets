@@ -29,6 +29,7 @@
 #include "wx/atomic.h"
 
 #include "wx/except.h"
+#include "wx/sysopt.h"
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
@@ -575,6 +576,10 @@ int wxEntryReal(int& argc, wxChar **argv)
         return wxApp::GetFatalErrorExitCode();
     }
 
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        return DoEntryReal();
+    }
     wxTRY
     {
         return DoEntryReal();

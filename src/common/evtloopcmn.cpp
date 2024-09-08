@@ -20,6 +20,7 @@
 
 #include "wx/scopeguard.h"
 #include "wx/apptrait.h"
+#include "wx/sysopt.h"
 #include "wx/private/eventloopsourcesmanager.h"
 
 // Counts currently existing event loops.
@@ -342,6 +343,11 @@ int wxEventLoopManual::DoRun()
     // wxModalEventLoop depends on this (so we can't just use ON_BLOCK_EXIT or
     // something similar here)
 #if wxUSE_EXCEPTIONS
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        Loop();
+        return m_exitcode;
+    }
     for ( ;; )
     {
         try

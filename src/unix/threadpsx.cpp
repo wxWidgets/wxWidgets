@@ -27,6 +27,7 @@
 
 #include "wx/thread.h"
 #include "wx/except.h"
+#include "wx/sysopt.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -889,6 +890,11 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
                    wxT("Thread %p about to enter its Entry()."),
                    THR_ID(pthread));
 
+        if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+        {
+            CallThreadEntryWithoutExceptionHandling(pthread, thread);
+        }
+        else
         wxTRY
         {
             CallThreadEntryWithoutExceptionHandling(pthread, thread);
@@ -1740,6 +1746,11 @@ void wxThread::Exit(ExitCode status)
     // might deadlock if, for example, it signals a condition in OnExit() (a
     // common case) while the main thread calls any of functions entering
     // m_critsect on us (almost all of them do)
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        OnExit();
+    }
+    else
     wxTRY
     {
         OnExit();

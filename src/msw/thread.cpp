@@ -38,6 +38,7 @@
 
 #include "wx/except.h"
 #include "wx/dynlib.h"
+#include "wx/sysopt.h"
 
 // must have this symbol defined to get _beginthread/_endthread declarations
 #ifndef _MT
@@ -503,9 +504,13 @@ private:
 /* static */
 void wxThreadInternal::DoThreadOnExit(wxThread *thread)
 {
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        return thread->OnExit();
+    }
     wxTRY
     {
-        thread->OnExit();
+        return thread->OnExit();
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 }
@@ -532,15 +537,17 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 {
     wxON_BLOCK_EXIT1(DoThreadOnExit, thread);
 
-    THREAD_RETVAL rc = THREAD_ERROR_EXIT;
-
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        return DoThreadStartWithoutExceptionHandling(thread);
+    }
     wxTRY
     {
-        rc = DoThreadStartWithoutExceptionHandling(thread);
+        return DoThreadStartWithoutExceptionHandling(thread);
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
-    return rc;
+    return THREAD_ERROR_EXIT;
 }
 
 /* static */
