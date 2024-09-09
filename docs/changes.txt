@@ -251,6 +251,10 @@ Changes in behaviour which may result in build errors
 3.2.7: (released 2025-??-??)
 ----------------------------
 
+wxOSX:
+
+- Fix regression in GetPreferredUILanguage() in some cases (#24804).
+
 
 3.2.6: (released 2024-09-09)
 ----------------------------
