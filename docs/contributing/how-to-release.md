@@ -143,7 +143,7 @@ Update https://www.wxwidgets.org:
   an hour for the next scheduled site rebuild to happen).
 
 Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
-to wx-users.
+to wx-users using the standard "Announcing wxWidgets $VERSION release" subject.
 
 Submit a link to https://www.reddit.com/r/cpp or r/programming (depending on
 the release importance).
