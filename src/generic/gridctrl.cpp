@@ -825,7 +825,7 @@ wxString wxGridCellFloatRenderer::GetString(const wxGrid& grid, int row, int col
 
     if ( hasDouble )
     {
-        if ( !m_format )
+        if ( m_format.empty() )
         {
             if ( m_width == -1 )
             {
@@ -894,7 +894,7 @@ wxSize wxGridCellFloatRenderer::GetBestSize(wxGrid& grid,
 
 void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 {
-    if ( !params )
+    if ( params.empty() )
     {
         // reset to defaults
         SetWidth(-1);

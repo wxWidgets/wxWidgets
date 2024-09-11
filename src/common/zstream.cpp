@@ -244,7 +244,7 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
 
     default:
       wxString msg(m_inflate->msg, *wxConvCurrent);
-      if (!msg)
+      if (msg.empty())
         msg = wxString::Format(_("zlib error %d"), err);
       wxLogError(_("Can't read from inflate stream: %s"), msg);
       m_lasterror = wxSTREAM_READ_ERROR;
@@ -419,7 +419,7 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
   if (err != Z_OK) {
     m_lasterror = wxSTREAM_WRITE_ERROR;
     wxString msg(m_deflate->msg, *wxConvCurrent);
-    if (!msg)
+    if (msg.empty())
       msg = wxString::Format(_("zlib error %d"), err);
     wxLogError(_("Can't write to deflate stream: %s"), msg);
   }

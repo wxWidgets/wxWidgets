@@ -701,7 +701,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
 
     // get the default ISP if none given
     wxString entryName(nameOfISP);
-    if ( !entryName )
+    if ( entryName.empty() )
     {
         wxArrayString names;
         size_t count = GetISPNames(names);
@@ -737,7 +737,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
 
                     delete [] strings;
 
-                    if ( !entryName )
+                    if ( entryName.empty() )
                     {
                         // cancelled by user
                         return false;
@@ -751,7 +751,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
     wxStrlcpy(rasDialParams.szEntryName, entryName.c_str(), RAS_MaxEntryName);
 
     // do we have the username and password?
-    if ( !username || !password )
+    if ( username.empty() || password.empty() )
     {
         BOOL gotPassword;
         DWORD dwRet = ms_pfnRasGetEntryDialParams
