@@ -253,6 +253,7 @@ Changes in behaviour which may result in build errors
 
 wxOSX:
 
+- Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
 - Fix regression in GetPreferredUILanguage() in some cases (#24804).
 
 

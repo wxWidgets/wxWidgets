@@ -4151,6 +4151,13 @@ void wxWidgetCocoaImpl::UseClippingView(bool clip)
             [(NSClipView*)m_osxClipView setDrawsBackground: NO];
             [m_osxView addSubview:m_osxClipView];
 
+            // add tracking for this clipview as well
+
+            NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited|NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect;
+            NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: NSZeroRect options: options owner: m_osxClipView userInfo: nil];
+            [m_osxClipView addTrackingArea: area];
+            [area release];
+
             wxWidgetImpl::Associate( m_osxClipView, this ) ;
 
             // TODO check for additional subwindows which might have to be moved to the clip view ?
