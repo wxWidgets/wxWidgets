@@ -1452,8 +1452,6 @@ wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 
 /*  wxALWAYS_SHOW_SB: instead of hiding the scrollbar when it is not needed, */
 /*  disable it - but still show (see also wxLB_ALWAYS_SB style) */
-/*  */
-/*  NB: as this style is only supported by wxUniversal and wxMSW so far */
 #define wxALWAYS_SHOW_SB        0x00800000
 
 /*  Clip children when painting, which reduces flicker in e.g. frames and */
