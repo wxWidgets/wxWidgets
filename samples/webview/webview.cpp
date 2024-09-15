@@ -533,8 +533,32 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
         delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_log_textCtrl));
 
         // Log backend information
-        wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
-            wxWebView::GetBackendVersionInfo(backend).ToString());
+
+        const auto formatVersion = [](const char* context,
+                                      const wxVersionInfo& version) {
+            wxString str;
+
+            if ( version.IsOk() )
+            {
+                str.Printf(", %s version=%s",
+                           context, version.GetNumericVersionString());
+
+                if ( version.HasDescription() )
+                    str += wxString::Format(" (%s)", version.GetDescription());
+            }
+
+            return str;
+        };
+
+        const auto versionRunTime = formatVersion("run-time", wxWebView::GetBackendVersionInfo(backend));
+        const auto versionBuildTime = formatVersion("build-time", wxWebView::GetBackendVersionInfo(
+            backend, wxVersionContext::BuildTime
+        ));
+
+        wxLogMessage("Backend: %s%s%s",
+                     m_browser->GetClassInfo()->GetClassName(),
+                     versionRunTime,
+                     versionBuildTime);
 
         // Chromium backend can't be used immediately after creation, so wait
         // until the browser is created before calling GetUserAgent(), but we

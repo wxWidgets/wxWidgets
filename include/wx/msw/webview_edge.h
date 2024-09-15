@@ -143,7 +143,7 @@ public:
         return new wxWebViewEdge(parent, id, url, pos, size, style, name);
     }
     virtual bool IsAvailable() override;
-    virtual wxVersionInfo GetVersionInfo() override;
+    virtual wxVersionInfo GetVersionInfo(wxVersionContext context) override;
     virtual wxWebViewConfiguration CreateConfiguration() override;
 };
 
