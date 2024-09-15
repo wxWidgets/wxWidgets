@@ -78,6 +78,7 @@ public:
     virtual bool IsBusy() const override;
 #if wxUSE_WEBVIEW_WEBKIT2
     virtual void EnableAccessToDevTools(bool enable = true) override;
+    virtual bool ShowDevTools() override;
     virtual bool IsAccessToDevToolsEnabled() const override;
     virtual bool SetUserAgent(const wxString& userAgent) override;
     virtual bool SetProxy(const wxString& proxy) override;

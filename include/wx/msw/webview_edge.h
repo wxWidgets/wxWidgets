@@ -86,6 +86,7 @@ public:
     virtual bool IsContextMenuEnabled() const override;
 
     virtual void EnableAccessToDevTools(bool enable = true) override;
+    virtual bool ShowDevTools() override;
     virtual bool IsAccessToDevToolsEnabled() const override;
 
     virtual void EnableBrowserAcceleratorKeys(bool enable = true) override;
