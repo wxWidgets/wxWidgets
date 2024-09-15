@@ -248,6 +248,10 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
+3.2.7: (released 2025-??-??)
+----------------------------
+
+
 3.2.6: (released 2024-09-09)
 ----------------------------
 
