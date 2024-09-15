@@ -464,6 +464,28 @@ long wxUpdateUIEvent::sm_updateInterval = 0;
 
 wxUpdateUIMode wxUpdateUIEvent::sm_updateMode = wxUPDATE_UI_PROCESS_ALL;
 
+void wxUpdateUIEvent::Set3StateValue(wxCheckBoxState check)
+{
+    wxASSERT_MSG(IsCheckable(), "Shouldn't be called if non-checkable");
+    wxASSERT_MSG(Is3State() || check != wxCHK_UNDETERMINED, "Is3State() not enabled");
+
+    m_3checked = check;
+    m_setChecked = true;
+}
+
+void wxUpdateUIEvent::DisallowCheck()
+{
+    wxASSERT_MSG(!GetSetChecked(), "SetCheck() or Set3StateValue() has already been called");
+
+    m_isCheckable = false;
+}
+
+void wxUpdateUIEvent::Allow3rdState(bool b /*= true*/)
+{
+    wxASSERT_MSG(b || Get3StateValue() != wxCHK_UNDETERMINED, "wxCHK_UNDETERMINED already set");
+    m_is3State = b;
+}
+
 // Can we update?
 bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
 {

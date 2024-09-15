@@ -2926,7 +2926,7 @@ public:
     wxUpdateUIEvent(wxWindowID commandId = 0)
         : wxCommandEvent(wxEVT_UPDATE_UI, commandId)
     {
-        m_checked =
+        m_3checked = wxCHK_UNCHECKED;
         m_enabled =
         m_shown =
         m_setEnabled =
@@ -2934,10 +2934,11 @@ public:
         m_setText =
         m_setChecked = false;
         m_isCheckable = true;
+        m_is3State = false;
     }
     wxUpdateUIEvent(const wxUpdateUIEvent& event)
         : wxCommandEvent(event),
-          m_checked(event.m_checked),
+          m_3checked(event.m_3checked),
           m_enabled(event.m_enabled),
           m_shown(event.m_shown),
           m_setEnabled(event.m_setEnabled),
@@ -2945,10 +2946,12 @@ public:
           m_setText(event.m_setText),
           m_setChecked(event.m_setChecked),
           m_isCheckable(event.m_isCheckable),
+          m_is3State(event.m_is3State),
           m_text(event.m_text)
     { }
 
-    bool GetChecked() const { return m_checked; }
+    bool GetChecked() const { return Get3StateValue() != wxCHK_UNCHECKED; }
+    wxCheckBoxState Get3StateValue() const { return m_3checked; }
     bool GetEnabled() const { return m_enabled; }
     bool GetShown() const { return m_shown; }
     wxString GetText() const { return m_text; }
@@ -2957,14 +2960,18 @@ public:
     bool GetSetEnabled() const { return m_setEnabled; }
     bool GetSetShown() const { return m_setShown; }
 
-    void Check(bool check) { m_checked = check; m_setChecked = true; }
+    void Check(bool check) { Set3StateValue(check ? wxCHK_CHECKED : wxCHK_UNCHECKED); }
+    void Set3StateValue(wxCheckBoxState check);
     void Enable(bool enable) { m_enabled = enable; m_setEnabled = true; }
     void Show(bool show) { m_shown = show; m_setShown = true; }
     void SetText(const wxString& text) { m_text = text; m_setText = true; }
 
     // A flag saying if the item can be checked. True by default.
     bool IsCheckable() const { return m_isCheckable; }
-    void DisallowCheck() { m_isCheckable = false; }
+    void DisallowCheck();
+    // A flag saying if the item can be wxCHK_UNDETERMINED. False by default.
+    bool Is3State() const { return m_is3State; }
+    void Allow3rdState(bool b = true);
 
     // Sets the interval between updates in milliseconds.
     // Set to -1 to disable updates, or to 0 to update as frequently as possible.
@@ -2991,7 +2998,7 @@ public:
     virtual wxEvent *Clone() const override { return new wxUpdateUIEvent(*this); }
 
 protected:
-    bool          m_checked;
+    wxCheckBoxState m_3checked;
     bool          m_enabled;
     bool          m_shown;
     bool          m_setEnabled;
@@ -2999,6 +3006,7 @@ protected:
     bool          m_setText;
     bool          m_setChecked;
     bool          m_isCheckable;
+    bool          m_is3State;
     wxString      m_text;
 #if wxUSE_LONGLONG
     static wxLongLong       sm_lastUpdate;
