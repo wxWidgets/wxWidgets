@@ -501,7 +501,7 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
                            const wxString& strLocal, const wxString& strGlobal,
                            long style,
                            const wxMBConv& conv)
-            : wxConfigBase(( !appName && wxTheApp ) ? wxTheApp->GetAppName() : appName,
+            : wxConfigBase(( appName.empty() && wxTheApp ) ? wxTheApp->GetAppName() : appName,
                            vendorName,
                            strLocal, strGlobal,
                            style),
@@ -1135,7 +1135,7 @@ bool wxFileConfig::DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
 
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 {
-  if ( !IsDirty() || !m_fnLocalFile.GetFullPath() )
+  if ( !IsDirty() || m_fnLocalFile.GetFullPath().empty() )
     return true;
 
   // Create the directory containing the file if it doesn't exist. Although we
@@ -2168,7 +2168,7 @@ static wxString FilterInValue(const wxString& str)
 // quote the string before writing it to file
 static wxString FilterOutValue(const wxString& str)
 {
-   if ( !str )
+   if ( str.empty() )
       return str;
 
   wxString strResult;

@@ -861,7 +861,7 @@ bool wxShell(const wxString& command)
     if ( !shell )
         shell = wxT("\\COMMAND.COM");
 
-    if ( !command )
+    if ( command.empty() )
     {
         // just the shell
         cmd = shell;
