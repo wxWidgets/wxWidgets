@@ -64,6 +64,7 @@ public:
     bool GTKIsUpperCase() const { return m_isUpperCase; }
 
     int GTKGetMaxLength() const { return m_maxlen; }
+
     // Called from "changed" signal handler (or, possibly, slightly later, when
     // coalescing several "changed" signals into a single event) for GtkEntry.
     //
