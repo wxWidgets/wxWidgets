@@ -251,6 +251,10 @@ Changes in behaviour which may result in build errors
 3.2.7: (released 2025-??-??)
 ----------------------------
 
+All:
+
+- Avoid trailing space in `wx-config --c[xx]flags` (Tobiasz Laskowski, #24812).
+
 wxOSX:
 
 - Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
