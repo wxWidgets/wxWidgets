@@ -562,7 +562,7 @@ au_insert_text_callback(GtkTextBuffer *buffer,
     }
     auto maxlen = win->GTKGetMaxLength();
     auto count = gtk_text_buffer_get_char_count( buffer );
-    if( maxlen > 0 && count > maxlen && win->IsMaxLengthAllowed() )
+    if( maxlen > 0 && count > maxlen )
     {
         GtkTextIter offset;
         int trim_len = count - maxlen;
@@ -819,12 +819,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // work around probable bug in GTK+ 2.18 when calling WriteText on a
         // new, empty control, see https://github.com/wxWidgets/wxWidgets/issues/11409
         gtk_entry_get_text((GtkEntry*)m_text);
-
-#ifndef __WXGTK3__
-        if (style & wxNO_BORDER)
-            gtk_entry_set_has_frame((GtkEntry*)m_text, FALSE);
-#endif
-
     }
     g_object_ref(m_widget);
 
@@ -941,10 +935,9 @@ GtkEditable *wxTextCtrl::GetEditable() const
 
 void wxTextCtrl::SetMaxLength(unsigned long length)
 {
-    if( HasFlag( wxTE_MULTILINE ) )
+    if( IsMultiLine() )
     {
         m_maxlen = length;
-        m_maxLengthAllowed = true;
     }
     else
         wxTextEntry::SetMaxLength( length );
@@ -1264,14 +1257,15 @@ void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
 
-    auto oldMaxLengthAllowed = m_maxLengthAllowed;
-    m_maxLengthAllowed = false;
+    auto old_maxlen = m_maxlen;
+    m_maxlen = 0;
+    wxON_BLOCK_EXIT_SET( m_maxlen, old_maxlen );
+
     if ( text.empty() )
     {
         // We don't need to actually do anything, but we still need to generate
         // an event expected from this call.
         SendTextUpdatedEvent(this);
-        m_maxLengthAllowed = oldMaxLengthAllowed;
         return;
     }
 
@@ -1292,7 +1286,6 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( !IsMultiLine() )
     {
         wxTextEntry::WriteText(text);
-        m_maxLengthAllowed = oldMaxLengthAllowed;
         return;
     }
 
@@ -1334,7 +1327,6 @@ void wxTextCtrl::WriteText( const wxString &text )
         m_afterLayoutId =
             g_idle_add_full(GTK_TEXT_VIEW_PRIORITY_VALIDATE + 1, afterLayout, this, nullptr);
     }
-    m_maxLengthAllowed = oldMaxLengthAllowed;
 }
 
 wxString wxTextCtrl::GetLineText( long lineNo ) const
@@ -1567,10 +1559,12 @@ void wxTextCtrl::GTKOnTextChanged()
 {
     if ( IgnoreTextUpdate() )
         return;
-
-    auto count = gtk_text_buffer_get_char_count( m_buffer );
-    if( m_maxlen > 0 && count >= m_maxlen && IsMaxLengthAllowed() )
-        return;
+    if( IsMultiLine() )
+    {
+        auto count = gtk_text_buffer_get_char_count( m_buffer );
+        if( m_maxlen > 0 && count >= m_maxlen )
+            return;
+    }
 
     if ( MarkDirtyOnChange() )
         MarkDirty();

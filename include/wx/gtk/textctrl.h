@@ -162,7 +162,6 @@ public:
 
     void GTKOnTextChanged() override;
     void GTKAfterLayout();
-    bool IsMaxLengthAllowed() const { return m_maxLengthAllowed; }
 
 protected:
     // overridden wxWindow virtual methods
@@ -236,7 +235,6 @@ private:
     // a dummy one when frozen
     GtkTextBuffer *m_buffer;
 
-    bool m_maxLengthAllowed = false;
     GtkTextMark* m_showPositionDefer;
     GSList* m_anonymousMarkList;
     unsigned m_afterLayoutId;
