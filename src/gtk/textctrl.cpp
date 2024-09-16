@@ -2272,7 +2272,7 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
         GtkRequisition req;
         gtk_widget_get_preferred_size(m_widget, &req, nullptr);
         tsize.IncTo(wxSize(req.width, req.height));
-}
+    }
 
     // We should always use at least the specified height if it's valid.
     if ( ylen > tsize.y )
