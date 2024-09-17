@@ -767,13 +767,11 @@ wxVector<wxString> wxUILocale::GetPreferredUILanguages()
             if ( ident.IsEmpty() )
             {
                 wxLogTrace(TRACE_I18N, "Invalid language code '%s' in WXLANGUAGE", tok);
-                continue;
             }
 
             if ( !wxUILocale::FindLanguageInfo(ident.GetLanguage()) )
             {
                 wxLogTrace(TRACE_I18N, "Unknown language in '%s' in WXLANGUAGE", tok);
-                continue;
             }
 
             preferred.push_back(ident.GetTag());
