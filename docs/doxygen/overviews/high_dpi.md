@@ -320,13 +320,16 @@ The behaviour of the application when running on a high-DPI display depends on
 the values in its [manifest][msw-manifest]. You may either use your own
 manifest, in which case you need to define the `dpiAware` (for compatibility
 with older OS versions) and `dpiAwareness` (for proper per-monitor DPI support)
-in it, or simply include `wx/msw/wx.rc` from your resource file to use the
-manifest provided by wxWidgets and predefine `wxUSE_DPI_AWARE_MANIFEST` to
-opt-in into [high DPI support][msw-highdpi]: define it as `1` for minimal DPI
-awareness and `2` for full, per-monitor DPI awareness supported by Windows 10
-version 1703 or later.
+in it, or use a manifest provided by wxWidgets in one of the ways explained in
+the [manifests documentation](@ref msw_manifest).
 
-[msw-manifest]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
+Note that `wx_dpi_aware_pmv2.manifest` file and `wxUSE_DPI_AWARE_MANIFEST=2`
+documented there correspond to full, per-monitor DPI awareness supported by
+Windows 10 version 1703 or later. It is also possible to use
+`wx_dpi_aware.manifest` and set `wxUSE_DPI_AWARE_MANIFEST=1` to enable minimal
+support for system DPI, see [MSDN documentation][msw-highdpi] for more
+information about different levels of DPI awareness.
+
 [msw-highdpi]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
 
 macOS                               {#high_dpi_platform_mac}
