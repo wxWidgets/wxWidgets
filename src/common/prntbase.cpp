@@ -906,6 +906,7 @@ wxBEGIN_EVENT_TABLE(wxPreviewCanvas, wxScrolledWindow)
     EVT_PAINT(wxPreviewCanvas::OnPaint)
     EVT_CHAR(wxPreviewCanvas::OnChar)
     EVT_IDLE(wxPreviewCanvas::OnIdle)
+    EVT_DPI_CHANGED(wxPreviewCanvas::OnDPIChanged)
     EVT_SYS_COLOUR_CHANGED(wxPreviewCanvas::OnSysColourChanged)
 #if wxUSE_MOUSEWHEEL
     EVT_MOUSEWHEEL(wxPreviewCanvas::OnMouseWheel)
@@ -940,7 +941,7 @@ wxScrolledWindow(parent, wxID_ANY, pos, size, style | wxFULL_REPAINT_ON_RESIZE, 
 
     // Use some reasonable default size for this window, roughly proportional
     // to the paper sheet.
-    SetInitialSize(wxSize(600, 750));
+    SetInitialSize(FromDIP(wxSize(600, 750)));
 }
 
 wxPreviewCanvas::~wxPreviewCanvas()
@@ -982,6 +983,16 @@ void wxPreviewCanvas::OnIdle(wxIdleEvent& event)
     }
 
     s_inIdle = false;
+}
+
+void wxPreviewCanvas::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    if ( m_printPreview )
+    {
+        m_printPreview->WXUpdateOnDPIChanged();
+    }
+
+    event.Skip();
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -1944,6 +1955,11 @@ void wxPrintPreviewBase::CalcRects(wxPreviewCanvas *canvas, wxRect& pageRect, wx
     float screenPrintableWidth = zoomScale * m_pageWidth * m_previewScaleX;
     float screenPrintableHeight = zoomScale * m_pageHeight * m_previewScaleY;
 
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    screenPrintableWidth *= canvas->GetDPIScaleFactor();
+    screenPrintableHeight *= canvas->GetDPIScaleFactor();
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+
     wxRect devicePaperRect = m_previewPrintout->GetPaperRectPixels();
     wxCoord devicePrintableWidth, devicePrintableHeight;
     m_previewPrintout->GetPageSizePixels(&devicePrintableWidth, &devicePrintableHeight);
@@ -2095,7 +2111,9 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
     if (!m_previewBitmap)
     {
-        m_previewBitmap = new wxBitmap(pageRect.width, pageRect.height);
+        m_previewBitmap = new wxBitmap();
+        m_previewBitmap->CreateWithLogicalSize( pageRect.width, pageRect.height,
+                                        m_previewCanvas->GetDPIScaleFactor() );
 
         if (!m_previewBitmap || !m_previewBitmap->IsOk())
         {
@@ -2133,7 +2151,7 @@ bool wxPrintPreviewBase::DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc)
     CalcRects(canvas, pageRect, paperRect);
 
     // Draw shadow, allowing for 1-pixel border AROUND the actual paper
-    wxCoord shadowOffset = 4;
+    wxCoord shadowOffset = dc.FromDIP(4);
 
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxBLACK_BRUSH);
@@ -2144,10 +2162,11 @@ bool wxPrintPreviewBase::DrawBlankPage(wxPreviewCanvas *canvas, wxDC& dc)
         shadowOffset, paperRect.height);
 
     // Draw blank page allowing for 1-pixel border AROUND the actual paper
-    dc.SetPen(*wxBLACK_PEN);
+    dc.SetPen(wxPen(*wxBLACK, dc.FromDIP(1), wxPENSTYLE_SOLID));
     dc.SetBrush(*wxWHITE_BRUSH);
-    dc.DrawRectangle(paperRect.x - 1, paperRect.y - 1,
-        paperRect.width + 2, paperRect.height + 2);
+    wxCoord borderOffset = wxRound(dc.GetPen().GetWidth() / 2.0);
+    dc.DrawRectangle(paperRect.x - borderOffset, paperRect.y - borderOffset,
+        paperRect.width + 2*borderOffset, paperRect.height + 2*borderOffset);
 
     return true;
 }
@@ -2186,6 +2205,19 @@ bool wxPrintPreviewBase::IsOk() const
 { return m_isOk; }
 void wxPrintPreviewBase::SetOk(bool ok)
 { m_isOk = ok; }
+
+void wxPrintPreviewBase::WXUpdateOnDPIChanged()
+{
+    InvalidatePreviewBitmap();
+    UpdatePageRendering();
+
+    if (m_previewCanvas)
+    {
+        AdjustScrollbars(m_previewCanvas);
+
+        m_previewCanvas->Refresh();
+    }
+}
 
 //----------------------------------------------------------------------------
 // wxPrintPreview
@@ -2324,6 +2356,11 @@ bool wxPrintPreview::IsOk() const
 void wxPrintPreview::SetOk(bool ok)
 {
     m_pimpl->SetOk( ok );
+}
+
+void wxPrintPreview::WXUpdateOnDPIChanged()
+{
+    m_pimpl->WXUpdateOnDPIChanged();
 }
 
 bool wxPrintPreview::Print(bool interactive)
