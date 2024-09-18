@@ -1952,13 +1952,8 @@ void wxPrintPreviewBase::CalcRects(wxPreviewCanvas *canvas, wxRect& pageRect, wx
     canvas->GetSize(&canvasWidth, &canvasHeight);
 
     float zoomScale = m_currentZoom / 100.0f;
-    float screenPrintableWidth = zoomScale * m_pageWidth * m_previewScaleX;
-    float screenPrintableHeight = zoomScale * m_pageHeight * m_previewScaleY;
-
-#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
-    screenPrintableWidth *= canvas->GetDPIScaleFactor();
-    screenPrintableHeight *= canvas->GetDPIScaleFactor();
-#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+    float screenPrintableWidth = zoomScale * canvas->FromDIP(m_pageWidth) * m_previewScaleX;
+    float screenPrintableHeight = zoomScale * canvas->FromDIP(m_pageHeight) * m_previewScaleY;
 
     wxRect devicePaperRect = m_previewPrintout->GetPaperRectPixels();
     wxCoord devicePrintableWidth, devicePrintableHeight;
