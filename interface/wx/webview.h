@@ -775,19 +775,18 @@ public:
     @class wxWebView
 
     This control may be used to render web (HTML / CSS / JavaScript) documents.
-    It is designed to allow the creation of multiple backends for each port,
-    although currently just one is available. It differs from wxHtmlWindow in
-    that each backend is actually a full rendering engine, Internet Explorer or Edge on MSW and
-    WebKit on macOS and GTK. This allows the correct viewing of complex pages with
-    JavaScript and CSS.
+    It is designed to allow the creation of multiple backends for each port.
+    It differs from wxHtmlWindow in that each backend is actually a full web
+    engine, provided by a 3rd party (e.g., WebView2 on MSW or WebKit on macOS and GTK).
+    This allows the correct viewing of complex pages with JavaScript and CSS.
 
     @section backend_descriptions Backend Descriptions
 
     This class supports using multiple backends, corresponding to different
-    implementations of the same functionality. Under macOS and Unix platforms
-    only a single, WebKit-based, backend is currently provided, but under MSW
-    both the legacy IE backend and the new Edge backend exist. Backends are
-    identified by their names, documented in the backend descriptions below.
+    implementations of the same functionality. wxWebViewChrome is available
+    on all three major platforms and each platform also has its own default
+    native backend. Backends are identified by their names, documented in
+    the backend descriptions below.
 
     @subsection wxWEBVIEW_BACKEND_IE wxWEBVIEW_BACKEND_IE (MSW)
 
@@ -811,9 +810,9 @@ public:
 
     The Edge backend uses Microsoft's
     <a href="https://docs.microsoft.com/en-us/microsoft-edge/hosting/webview2">Edge WebView2</a>.
-    It is available for Windows 7 and newer.
+    It is available for Windows 7 (newer versions require Windows 10+) and newer.
 
-    This backend does not support custom schemes. When using handlers see
+    This backend does not support custom schemes. When using handlers, see
     wxWebViewHandler::SetVirtualHost() for more details on how to access
     handler provided URLs.
 
@@ -839,7 +838,7 @@ public:
       to static link the loader and remove the dependency on @c WebView2Loader.dll
       at runtime.
 
-    If enabled and available at runtime Edge will be selected as the default
+    If enabled and available at runtime, Edge will be selected as the default
     backend. If you require the IE backend use @c wxWebViewBackendIE when
     using wxWebView::New().
 
@@ -886,7 +885,7 @@ public:
     class.
 
     This backend has full support for custom schemes and virtual file
-    systems on macOS 10.13+. In order to use handlers two-step creation has to be used
+    systems on macOS 10.13+. In order to use handlers, two-step creation has to be used
     and RegisterHandler() has to be called before Create().
 
     Starting with macOS 10.11 and iOS 9 an application cannot create unsecure
@@ -1005,8 +1004,8 @@ public:
         Creation function for two-step creation.
 
         Please note that the object creation may be asynchronous when using
-        some backends (currently this is the case only for wxWebViewChromium)
-        and the object is not really created until wxEVT_WEBVIEW_CREATED event
+        some backends (e.g., wxWebViewEdge or wxWebViewChromium)
+        and the object is not really created until @c wxEVT_WEBVIEW_CREATED event
         is received, so any non-trivial calls to its member functions should be
         delayed until then.
     */
@@ -1021,7 +1020,7 @@ public:
     /**
         Factory function to create a new wxWebView with two-step creation,
         wxWebView::Create should be called on the returned object.
-        @param backend The backend web rendering engine to use.
+        @param backend The backend to use.
         @return The created wxWebView.
         @since 2.9.5
      */
@@ -1048,9 +1047,10 @@ public:
         @param url Initial URL to load
         @param pos Position of the control
         @param size Size of the control
-        @param backend The backend web rendering engine to use.
-                       @c wxWebViewBackendDefault, @c wxWebViewBackendIE and
-                       @c wxWebViewBackendWebKit are predefined where appropriate.
+        @param backend The backend web engine to use.
+                       @c wxWebViewBackendDefault and other backend names constants
+                       in format @c wxWebViewBackend<Name> (e.g., @c wxWebViewBackendWebKit)
+                       are predefined where appropriate. See @ref backend_descriptions "Backend descriptions".
         @param style
             Window style. For generic window styles, please see wxWindow.
         @param name Window name.
@@ -1135,7 +1135,7 @@ public:
     /**
         Return the pointer to the native backend used by this control.
 
-        This method can be used to retrieve the pointer to the native rendering
+        This method can be used to retrieve the pointer to the native web
         engine used by this control. The return value needs to be down-casted
         to the appropriate type depending on the backend:
         <table>
@@ -1237,7 +1237,7 @@ public:
 
         @note The Edge backend does not support custom schemes, but the
               handler is available as a virtual host under
-              %https://scheme.wxsite to customize this virtual host call
+              `https://scheme.wxsite`. To customize this virtual host call
               wxWebViewHandler::SetVirtualHost() before registering the
               handler.
     */
@@ -1383,9 +1383,9 @@ public:
           was received). A script tag inside the page HTML is required in order
           to run JavaScript.
 
-        Also notice that under MSW converting JavaScript objects to JSON is not
-        supported in the default emulation mode. wxWebView implements its own
-        object-to-JSON conversion as a fallback for this case, however it is
+        Also notice that with the IE backend converting JavaScript objects to
+        JSON is not supported in the default emulation mode, it implements
+        its own object-to-JSON conversion as a fallback for this case, however it is
         not as full-featured, well-tested or performing as the implementation
         of this functionality in the browser control itself, so it is
         recommended to use MSWSetEmulationLevel() to change emulation
@@ -1453,7 +1453,7 @@ public:
         @see RemoveScriptMessageHandler()
 
         @note The Edge backend only supports a single message handler and
-            the IE backend does not support script message handlers.
+            the Chromium and IE backends do not support script message handlers.
 
         @since 3.1.5
     */
@@ -1476,7 +1476,7 @@ public:
 
         @param javascript The JavaScript code to add.
         @param injectionTime Specifies when the script will be executed.
-        @return Returns true if the script was added successfully.
+        @return @true if the script was added successfully.
 
         @note Please note that this is unsupported by the IE backend and
             the Edge backend does only support wxWEBVIEW_INJECT_AT_DOCUMENT_START.
@@ -1771,9 +1771,9 @@ public:
     */
 
     /**
-        Retrieve whether the current HTML engine supports a zoom type.
+        Retrieve whether a zoom type is supported.
         @param type The zoom type to test.
-        @return Whether this type of zoom is supported by this HTML engine
+        @return @true if this type of zoom is supported by this backend
                 (and thus can be set through SetZoomType()).
     */
     virtual bool CanSetZoomType(wxWebViewZoomType type) const = 0;
@@ -1795,7 +1795,7 @@ public:
 
     /**
         Get how the zoom factor is currently interpreted.
-        @return How the zoom factor is currently interpreted by the HTML engine.
+        @return How the zoom factor is currently interpreted by the backend.
     */
     virtual wxWebViewZoomType GetZoomType() const = 0;
 
@@ -1820,8 +1820,8 @@ public:
         /**
         Set how to interpret the zoom factor.
         @param zoomType How the zoom factor should be interpreted by the
-                        HTML engine.
-        @note invoke    CanSetZoomType() first, some HTML renderers may not
+                        backend.
+        @note invoke    CanSetZoomType() first, some backends may not
                         support all zoom types.
     */
     virtual void SetZoomType(wxWebViewZoomType zoomType) = 0;
@@ -2038,7 +2038,7 @@ public:
     wxWebViewWindowFeatures* GetTargetWindowFeatures() const;
 
     /**
-        Returns true the script execution failed. Only valid for events of type
+        Returns @true the script execution failed. Only valid for events of type
         @c wxEVT_WEBVIEW_SCRIPT_RESULT
 
         @since 3.1.6
@@ -2046,7 +2046,7 @@ public:
     bool IsError() const;
 
     /**
-        Returns true if the navigation target is the main frame. Only valid
+        Returns @true if the navigation target is the main frame. Only valid
         for events of type @c wxEVT_WEBVIEW_NAVIGATING
 
         @note This is only available with the macOS and the Edge backend.
