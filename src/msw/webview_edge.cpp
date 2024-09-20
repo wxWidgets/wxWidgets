@@ -850,6 +850,7 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     m_initialized = true;
     UpdateBounds();
     m_webViewController->put_IsVisible(true);
+    m_ctrl->NotifyWebViewCreated();
 
     // Connect and handle the various WebView events
     m_webView->add_NavigationStarting(
@@ -1082,8 +1083,6 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Bind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
-
-    NotifyWebViewCreated();
 
     LoadURL(url);
     return true;
