@@ -57,7 +57,9 @@ enum wxScrollbarVisibility
     set to the size requested by the sizer and the scrollbars will be assigned
     for each orientation according to the need for them and the scrolling
     increment set by SetScrollRate().  As above, scrolling is only enabled in
-    orientations with a non-zero increment.
+    orientations with a non-zero increment. Note that if you add or remove any
+    elements to the sizer, you need to call wxSizer::FitInside() to adjust the
+    virtual size to the new contents.
 
     As with all windows, an application can draw onto a wxScrolled using a
     @ref overview_dc "device context".
