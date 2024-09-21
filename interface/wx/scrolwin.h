@@ -61,7 +61,8 @@ enum wxScrollbarVisibility
     of the scrolled area controlled by a sizer by calling
     wxWindow::SetVirtualSizeHints(). (Calling SetScrollbars() has analogous
     effects in wxWidgets 2.4 -- in later versions it may not continue to
-    override the sizer.)
+    override the sizer.). If you add elements to the sizer (or remove any)
+    later then call sizer->FitInside(this) afterwards to update the scroll bars.
 
     Note that if maximum size hints are still supported by
     wxWindow::SetVirtualSizeHints(), use them at your own dire risk. They may
