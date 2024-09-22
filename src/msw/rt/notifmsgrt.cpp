@@ -49,7 +49,7 @@ class wxToastEventHandler :
     public Microsoft::WRL::Implements<DesktopToastActivatedEventHandler, DesktopToastDismissedEventHandler, DesktopToastFailedEventHandler>
 {
 public:
-    wxToastEventHandler(wxToastNotifMsgImpl* toastImpl) :
+    explicit wxToastEventHandler(wxToastNotifMsgImpl* toastImpl) :
         m_impl(toastImpl)
     {
 
