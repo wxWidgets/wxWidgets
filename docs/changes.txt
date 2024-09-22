@@ -262,6 +262,7 @@ All (GUI):
 wxMSW:
 
 - Improve print preview in high DPI (taler21, #24815).
+- Fix events generated when toast-based notifications are dismissed (#24320).
 
 wxOSX:
 
