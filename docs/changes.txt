@@ -259,6 +259,10 @@ All (GUI):
 
 - Improve wxPropGrid checkboxes in high DPI (Alex Shvartzkop, #24650, #24651).
 
+wxMSW:
+
+- Improve print preview in high DPI (taler21, #24815).
+
 wxOSX:
 
 - Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
