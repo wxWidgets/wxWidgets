@@ -1198,6 +1198,57 @@ void wxTextCtrl::SetRTFValue(const wxString& val)
     SetInsertionPoint(0);
 }
 
+wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
+{
+    // set up the flags
+    WPARAM flags = 0;
+    switch ( search.m_direction )
+    {
+        case wxTextSearch::Direction::Down:
+            flags |= FR_DOWN;
+            break;
+
+        case wxTextSearch::Direction::Up:
+            // Nothing to do this is (surprisingly) the default.
+            break;
+    }
+    if (search.m_wholeWord)
+    {
+        flags |= FR_WHOLEWORD;
+    }
+    if (search.m_matchCase)
+    {
+        flags |= FR_MATCHCASE;
+    }
+
+    FINDTEXTEX findText;
+    findText.chrg.cpMin = (search.m_startingPosition != -1) ?
+        // user-provided start
+        search.m_startingPosition :
+        // if going down, then start from 0; otherwise, start from end
+        (search.m_direction == wxTextSearch::Direction::Down) ? 0 : GetLastPosition();
+    if (search.m_direction == wxTextSearch::Direction::Down)
+    {
+        // go to the end of the text
+        findText.chrg.cpMax = -1;
+    }
+    else
+    {
+        // will search from the start of the selection and upward
+        // to the start of the text
+        findText.chrg.cpMax = 0;
+    }
+
+    findText.lpstrText = search.m_searchValue.wc_str();
+
+    if (SendMessage(GetHwnd(), EM_FINDTEXTEXW, flags, (LPARAM)&findText) == -1)
+    {
+        return wxTextSearchResult();
+    }
+
+    return wxTextSearchResult{ findText.chrgText.cpMin, findText.chrgText.cpMax };
+}
+
 #endif // wxUSE_RICHEDIT
 
 void wxTextCtrl::WriteText(const wxString& value)
