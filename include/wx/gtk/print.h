@@ -295,16 +295,17 @@ protected:
     void SetPrintData(const wxPrintData& data);
 
 private:
+    // Call cairo_set_source_rgba() if necessary.
+    void SetSourceColour(const wxColour& col);
+
     wxPrintData             m_printData;
     PangoContext           *m_context;
     PangoLayout            *m_layout;
     PangoFontDescription   *m_fontdesc;
     cairo_t                *m_cairo;
 
-    unsigned char           m_currentRed;
-    unsigned char           m_currentGreen;
-    unsigned char           m_currentBlue;
-    unsigned char           m_currentAlpha;
+    // Last colour passed to cairo_set_source_rgba().
+    wxColour                m_currentSourceColour;
 
     GtkPrintContext        *m_gpc;
     int                     m_resolution;

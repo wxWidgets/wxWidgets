@@ -1262,11 +1262,6 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
     m_DEV2PS = 72.0 / (double)m_resolution;
 #endif
 
-    m_currentRed = 0;
-    m_currentBlue = 0;
-    m_currentGreen = 0;
-    m_currentAlpha = 0;
-
     m_signX = 1;  // default x-axis left to right.
     m_signY = 1;  // default y-axis bottom up -> top down.
 }
@@ -1293,6 +1288,30 @@ void* wxGtkPrinterDCImpl::GetCairoContext() const
 void* wxGtkPrinterDCImpl::GetHandle() const
 {
     return GetCairoContext();
+}
+
+namespace
+{
+
+void DoSetSourceColour(cairo_t* cr, const wxColour& col)
+{
+    cairo_set_source_rgba( cr,
+                           col.Red() / 255.0,
+                           col.Green() / 255.0,
+                           col.Blue() / 255.0,
+                           col.Alpha() / 255.0 );
+}
+
+} // anonymous namespace
+
+void wxGtkPrinterDCImpl::SetSourceColour(const wxColour& col)
+{
+    if ( col == m_currentSourceColour )
+        return;
+
+    DoSetSourceColour(m_cairo, col);
+
+    m_currentSourceColour = col;
 }
 
 bool wxGtkPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
@@ -1861,27 +1880,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
     if (m_textForegroundColour.IsOk())
-    {
-        unsigned char red = m_textForegroundColour.Red();
-        unsigned char blue = m_textForegroundColour.Blue();
-        unsigned char green = m_textForegroundColour.Green();
-        unsigned char alpha = m_textForegroundColour.Alpha();
-
-        if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue && alpha == m_currentAlpha))
-        {
-            double redPS = (double)(red) / 255.0;
-            double bluePS = (double)(blue) / 255.0;
-            double greenPS = (double)(green) / 255.0;
-            double alphaPS = (double)(alpha) / 255.0;
-
-            cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
-
-            m_currentRed = red;
-            m_currentBlue = blue;
-            m_currentGreen = green;
-            m_currentAlpha = alpha;
-        }
-    }
+        SetSourceColour(m_textForegroundColour);
 
     // Draw layout.
     cairo_move_to (m_cairo, xx, yy);
@@ -1898,18 +1897,8 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     if ( m_backgroundMode == wxBRUSHSTYLE_SOLID )
     {
-        unsigned char red = m_textBackgroundColour.Red();
-        unsigned char blue = m_textBackgroundColour.Blue();
-        unsigned char green = m_textBackgroundColour.Green();
-        unsigned char alpha = m_textBackgroundColour.Alpha();
-
-        double redPS = (double)(red) / 255.0;
-        double bluePS = (double)(blue) / 255.0;
-        double greenPS = (double)(green) / 255.0;
-        double alphaPS = (double)(alpha) / 255.0;
-
         cairo_save(m_cairo);
-        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
+        DoSetSourceColour(m_cairo, m_textBackgroundColour);
         cairo_rectangle(m_cairo, 0, 0, w, h);   // still in cairo units
         cairo_fill(m_cairo);
         cairo_restore(m_cairo);
@@ -2019,25 +2008,7 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
         default:            cairo_set_line_join (m_cairo, CAIRO_LINE_JOIN_ROUND); break;
     }
 
-    unsigned char red = m_pen.GetColour().Red();
-    unsigned char blue = m_pen.GetColour().Blue();
-    unsigned char green = m_pen.GetColour().Green();
-    unsigned char alpha = m_pen.GetColour().Alpha();
-
-    if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue && alpha == m_currentAlpha))
-    {
-        double redPS = (double)(red) / 255.0;
-        double bluePS = (double)(blue) / 255.0;
-        double greenPS = (double)(green) / 255.0;
-        double alphaPS = (double)(alpha) / 255.0;
-
-        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
-
-        m_currentRed = red;
-        m_currentBlue = blue;
-        m_currentGreen = green;
-        m_currentAlpha = alpha;
-    }
+    SetSourceColour(m_pen.GetColour());
 }
 
 void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
@@ -2048,34 +2019,12 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
 
     if (m_brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT)
     {
-        cairo_set_source_rgba( m_cairo, 0, 0, 0, 0 );
-        m_currentRed = 0;
-        m_currentBlue = 0;
-        m_currentGreen = 0;
-        m_currentAlpha = 0;
+        SetSourceColour(wxColour(0, 0, 0, 0));
         return;
     }
 
     // Brush colour.
-    unsigned char red = m_brush.GetColour().Red();
-    unsigned char blue = m_brush.GetColour().Blue();
-    unsigned char green = m_brush.GetColour().Green();
-    unsigned char alpha = m_brush.GetColour().Alpha();
-
-    double redPS = (double)(red) / 255.0;
-    double bluePS = (double)(blue) / 255.0;
-    double greenPS = (double)(green) / 255.0;
-    double alphaPS = (double)(alpha) / 255.0;
-
-    if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue && alpha == m_currentAlpha))
-    {
-        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
-
-        m_currentRed = red;
-        m_currentBlue = blue;
-        m_currentGreen = green;
-        m_currentAlpha = alpha;
-    }
+    SetSourceColour(m_brush.GetColour());
 
     if (m_brush.IsHatch())
     {
@@ -2121,7 +2070,7 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
                 wxFAIL_MSG("Couldn't get hatch style from wxBrush.");
         }
 
-        cairo_set_source_rgba(cr, redPS, greenPS, bluePS, alphaPS);
+        DoSetSourceColour(cr, m_brush.GetColour());
         cairo_stroke (cr);
 
         cairo_destroy(cr);
