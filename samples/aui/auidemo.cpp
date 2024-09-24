@@ -1230,13 +1230,19 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
         {
             wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
 
+            wxAuiTabArt* art = nullptr;
             if (id == ID_NotebookArtGloss)
             {
-                nb->SetArtProvider(new wxAuiDefaultTabArt);
+                art = new wxAuiDefaultTabArt;
             }
             else if (id == ID_NotebookArtSimple)
             {
-                nb->SetArtProvider(new wxAuiSimpleTabArt);
+                art = new wxAuiSimpleTabArt;
+            }
+
+            if (art)
+            {
+                nb->SetArtProvider(art);
             }
 
 
