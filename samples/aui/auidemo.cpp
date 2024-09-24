@@ -180,7 +180,6 @@ private:
     wxArrayString m_perspectives;
     wxMenu* m_perspectives_menu;
     long m_notebook_style;
-    long m_notebook_theme;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -687,7 +686,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // set up default notebook style
     m_notebook_style = wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER;
-    m_notebook_theme = 0;
 
     // create menu
     wxMenuBar* mb = new wxMenuBar;
@@ -1235,12 +1233,10 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
             if (id == ID_NotebookArtGloss)
             {
                 nb->SetArtProvider(new wxAuiDefaultTabArt);
-                m_notebook_theme = 0;
             }
-             else if (id == ID_NotebookArtSimple)
+            else if (id == ID_NotebookArtSimple)
             {
                 nb->SetArtProvider(new wxAuiSimpleTabArt);
-                m_notebook_theme = 1;
             }
 
 
