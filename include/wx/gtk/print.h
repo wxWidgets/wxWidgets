@@ -312,6 +312,8 @@ private:
     double                  m_PS2DEV;
     double                  m_DEV2PS;
 
+    friend class wxGtkPrinterDCContextSaver;
+
     wxDECLARE_DYNAMIC_CLASS(wxGtkPrinterDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxGtkPrinterDCImpl);
 };

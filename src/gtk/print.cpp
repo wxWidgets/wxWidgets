@@ -1214,6 +1214,27 @@ bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 // wxGtkPrinterDC
 //-----------------------------------------------------------------------------
 
+// Helper class for saving/restoring Cairo context in its ctor/dtor.
+class wxGtkPrinterDCContextSaver
+{
+public:
+    explicit wxGtkPrinterDCContextSaver(const wxGtkPrinterDCImpl* impl)
+        : m_impl(impl)
+    {
+        cairo_save( m_impl->m_cairo );
+    }
+
+    ~wxGtkPrinterDCContextSaver()
+    {
+        cairo_restore( m_impl->m_cairo );
+    }
+
+private:
+    const wxGtkPrinterDCImpl* const m_impl;
+
+    wxDECLARE_NO_COPY_CLASS(wxGtkPrinterDCContextSaver);
+};
+
 #define wxCAIRO_SCALE 1
 
 #if wxCAIRO_SCALE
@@ -1512,7 +1533,7 @@ void wxGtkPrinterDCImpl::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,w
 
 void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
-    cairo_save( m_cairo );
+    wxGtkPrinterDCContextSaver saver(this);
 
     cairo_new_path(m_cairo);
 
@@ -1529,8 +1550,6 @@ void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
 
     SetBrush( m_brush );
     cairo_fill( m_cairo );
-
-    cairo_restore( m_cairo );
 
     CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 }
@@ -1577,7 +1596,8 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, const wxPoint points[],
 {
     if (n==0) return;
 
-    cairo_save(m_cairo);
+    wxGtkPrinterDCContextSaver saver(this);
+
     if (fillStyle == wxWINDING_RULE)
         cairo_set_fill_rule( m_cairo, CAIRO_FILL_RULE_WINDING);
     else
@@ -1609,8 +1629,6 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     }
 
     CalcBoundingBox( x, y );
-
-    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
@@ -1705,7 +1723,7 @@ void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCo
     width--;
     height--;
 
-    cairo_save (m_cairo);
+    wxGtkPrinterDCContextSaver saver(this);
 
     cairo_new_path(m_cairo);
 
@@ -1726,8 +1744,6 @@ void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCo
     }
 
     CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
-
-    cairo_restore (m_cairo);
 }
 
 #if wxUSE_SPLINES
@@ -1836,7 +1852,7 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
         bmpSource.SetMask(nullptr);
 #endif
 
-    cairo_save(m_cairo);
+    wxGtkPrinterDCContextSaver saver(this);
 
     // Prepare to draw the image.
     cairo_translate(m_cairo, x, y);
@@ -1858,8 +1874,6 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
 #endif
 
     CalcBoundingBox(0, 0, bw, bh);
-
-    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
@@ -1885,7 +1899,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
     // Draw layout.
     cairo_move_to (m_cairo, xx, yy);
 
-    cairo_save( m_cairo );
+    wxGtkPrinterDCContextSaver saver(this);
 
     if (fabs(angle) > 0.00001)
         cairo_rotate( m_cairo, angle*DEG2RAD );
@@ -1897,17 +1911,15 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     if ( m_backgroundMode == wxBRUSHSTYLE_SOLID )
     {
-        cairo_save(m_cairo);
+        wxGtkPrinterDCContextSaver saver2(this);
+
         DoSetSourceColour(m_cairo, m_textBackgroundColour);
         cairo_rectangle(m_cairo, 0, 0, w, h);   // still in cairo units
         cairo_fill(m_cairo);
-        cairo_restore(m_cairo);
     }
 
     pango_cairo_update_layout (m_cairo, m_layout);
     pango_cairo_show_layout (m_cairo, m_layout);
-
-    cairo_restore( m_cairo );
 
     if (setAttrs)
     {
@@ -1923,11 +1935,10 @@ void wxGtkPrinterDCImpl::Clear()
 // Clear does nothing for printing, but keep the code
 // for later reuse
 /*
-    cairo_save(m_cairo);
+    wxGtkPrinterDCContextSaver saver(this);
     cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
     SetBrush(m_backgroundBrush);
     cairo_paint(m_cairo);
-    cairo_restore(m_cairo);
 */
 }
 
@@ -2102,13 +2113,13 @@ void wxGtkPrinterDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 
 void wxGtkPrinterDCImpl::SetBackground( const wxBrush& brush )
 {
+    wxGtkPrinterDCContextSaver saver(this);
+
     m_backgroundBrush = brush;
-    cairo_save(m_cairo);
     cairo_set_operator (m_cairo, CAIRO_OPERATOR_DEST_OVER);
 
     SetBrush(m_backgroundBrush);
     cairo_paint(m_cairo);
-    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::SetBackgroundMode(int mode)
@@ -2201,7 +2212,8 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
         return;
     }
 
-    cairo_save( m_cairo );
+    wxGtkPrinterDCContextSaver saver(this);
+
     cairo_scale(m_cairo, m_scaleX, m_scaleY);
 
     // Set layout's text
@@ -2242,8 +2254,6 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
         PangoFontDescription *desc = theFont->GetNativeFontInfo()->description;
         pango_font_description_set_size(desc, oldSize);
     }
-
-    cairo_restore( m_cairo );
 }
 
 bool wxGtkPrinterDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
@@ -2254,7 +2264,8 @@ bool wxGtkPrinterDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayIn
     int w = 0;
     if ( data.length() > 0 )
     {
-        cairo_save(m_cairo);
+        wxGtkPrinterDCContextSaver saver(this);
+
         cairo_scale(m_cairo, m_scaleX, m_scaleY);
 
         pango_layout_set_text(m_layout, data, data.length());
@@ -2267,8 +2278,6 @@ bool wxGtkPrinterDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayIn
             widths.Add(PANGO_PIXELS(w));
         } while (pango_layout_iter_next_cluster(iter));
         pango_layout_iter_free(iter);
-
-       cairo_restore(m_cairo);
     }
     size_t i = widths.GetCount();
     const size_t len = text.length();
