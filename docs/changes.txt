@@ -275,6 +275,7 @@ wxGTK:
 
 - Fix copy-pasting text under more Wayland compositors (Weston, kwin) (#24701).
 - Fix unwanted "All pages" selection in the printing dialog (#24868).
+- Fix size of wxDataViewCustomRenderer which was ignored in some cases (#24227).
 
 wxMSW:
 
