@@ -1564,6 +1564,15 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
 
     wxSize size = cell->GetSize();
 
+    // Somehow returning 0 or negative width prevents the returned height from
+    // being taken into account at all, even if we return strictly positive
+    // width from later calls to GetSize(), meaning that it's enough to return
+    // 0 from it once to completely break the layout for the entire lifetime of
+    // the control.
+    //
+    // As this is completely unexpected, forcefully prevent this from happening
+    size.IncTo(wxSize(1, 1));
+
     wxDataViewCtrl * const ctrl = cell->GetOwner()->GetOwner();
 
     // Uniform row height, if specified, overrides the value returned by the
