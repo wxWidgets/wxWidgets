@@ -305,7 +305,7 @@ private:
     cairo_t                *m_cairo;
 
     // Last colour passed to cairo_set_source_rgba().
-    wxColour                m_currentSourceColour;
+    mutable wxColour        m_currentSourceColour;
 
     GtkPrintContext        *m_gpc;
     int                     m_resolution;

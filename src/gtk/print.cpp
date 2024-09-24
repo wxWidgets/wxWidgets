@@ -1219,18 +1219,27 @@ class wxGtkPrinterDCContextSaver
 {
 public:
     explicit wxGtkPrinterDCContextSaver(const wxGtkPrinterDCImpl* impl)
-        : m_impl(impl)
+        : m_impl(impl),
+          m_origSourceColour(impl->m_currentSourceColour)
     {
         cairo_save( m_impl->m_cairo );
     }
 
     ~wxGtkPrinterDCContextSaver()
     {
+        // Because the source colour corresponds to the actual colour used by
+        // Cairo, we need to reset it if it was changed (which is quite
+        // possible as SetPen() and SetBrush(), called from the implementation
+        // of other functions, do it) when restoring the context, otherwise it
+        // wouldn't match the actually used colour any longer.
+        m_impl->m_currentSourceColour = m_origSourceColour;
+
         cairo_restore( m_impl->m_cairo );
     }
 
 private:
     const wxGtkPrinterDCImpl* const m_impl;
+    const wxColour m_origSourceColour;
 
     wxDECLARE_NO_COPY_CLASS(wxGtkPrinterDCContextSaver);
 };
@@ -1913,7 +1922,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
     {
         wxGtkPrinterDCContextSaver saver2(this);
 
-        DoSetSourceColour(m_cairo, m_textBackgroundColour);
+        SetSourceColour(m_textBackgroundColour);
         cairo_rectangle(m_cairo, 0, 0, w, h);   // still in cairo units
         cairo_fill(m_cairo);
     }
