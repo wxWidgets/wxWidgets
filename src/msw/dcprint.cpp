@@ -55,6 +55,11 @@
     #define wxUSE_PS_PRINTING 0
 #endif
 
+// See the comment in wx/msw/dc.cpp before the definition of the macros with
+// the same names for the explanation.
+#define XLOG2DEV(x) ((x) + (m_deviceOriginX / m_scaleX))
+#define YLOG2DEV(y) ((y) + (m_deviceOriginY / m_scaleY))
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -410,7 +415,7 @@ void wxPrinterDCImpl::DoDrawBitmap(const wxBitmap& bmp,
         height = bmp.GetHeight();
 
     if ( !(::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB) ||
-            !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, x, y) )
+            !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, XLOG2DEV(x), YLOG2DEV(y)) )
     {
         // no support for StretchDIBits() or an error occurred if we got here
         wxMemoryDC memDC;
@@ -454,9 +459,9 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                 if (cref)
                 {
                     HBRUSH brush = ::CreateSolidBrush(::GetPixel(dcSrc, x, y));
-                    rect.left = xdest + x;
+                    rect.left = XLOG2DEV(xdest) + x;
                     rect.right = rect.left + 1;
-                    rect.top = ydest + y;
+                    rect.top = YLOG2DEV(ydest) + y;
                     rect.bottom = rect.top + 1;
                     ::FillRect(GetHdc(), &rect, brush);
                     ::DeleteObject(brush);
@@ -467,7 +472,7 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
     else // no mask
     {
         if ( !(::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB) ||
-                !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, xdest, ydest) )
+                !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, XLOG2DEV(xdest), YLOG2DEV(ydest)) )
         {
             // no support for StretchDIBits
 
@@ -483,14 +488,14 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     COLORREF col = ::GetPixel(dcSrc, x, y);
                     HBRUSH brush = ::CreateSolidBrush( col );
 
-                    rect.left = xdest + x;
-                    rect.top = ydest + y;
+                    rect.left = XLOG2DEV(xdest) + x;
+                    rect.top = YLOG2DEV(ydest) + y;
                     while( (x + 1 < width) &&
                                 (::GetPixel(dcSrc, x + 1, y) == col ) )
                     {
                         ++x;
                     }
-                    rect.right = xdest + x + 1;
+                    rect.right = XLOG2DEV(xdest) + x + 1;
                     rect.bottom = rect.top + 1;
                     ::FillRect((HDC) m_hDC, &rect, brush);
                     ::DeleteObject(brush);
