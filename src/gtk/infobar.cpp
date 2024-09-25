@@ -28,6 +28,7 @@
 
 #include "wx/vector.h"
 #include "wx/stockitem.h"
+#include "wx/tooltip.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/messagetype.h"
@@ -194,6 +195,10 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
         gtk_info_bar_set_message_type(GTK_INFO_BAR(m_widget), type);
     gtk_label_set_text(GTK_LABEL(m_impl->m_label), msg.utf8_str());
     gtk_label_set_ellipsize(GTK_LABEL(m_impl->m_label), PANGO_ELLIPSIZE_MIDDLE);
+
+#if wxUSE_TOOLTIPS
+    wxToolTip::GTKApply(m_impl->m_label, msg.utf8_str());
+#endif
 
     if ( !IsShown() )
         Show();
