@@ -486,8 +486,6 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 {
     wxHTTPStream *inp_stream;
 
-    wxString new_path;
-
     m_lastError = wxPROTO_CONNERR;  // all following returns share this type of error
     if (!m_addr)
         return NULL;
