@@ -35,6 +35,13 @@ public:
     // implementation only
     virtual int QtGetEventType() const override { return wxEVT_BUTTON; }
 
+protected:
+    virtual bool DoGetAuthNeeded() const override;
+    virtual void DoSetAuthNeeded(bool show) override;
+
+    // true if the UAC symbol is shown. Always false under non-Windows platforms.
+    bool m_authNeeded = false;
+
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
