@@ -235,6 +235,9 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
     // use SetLabelText() to ensure that "&" come through correctly
     m_text->SetLabelText(msg);
 
+    // in case it doesn't fit in the window, show the full message as a tooltip
+    m_text->SetToolTip(msg);
+
     // then show this entire window if not done yet
     if ( !IsShown() )
     {
