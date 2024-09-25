@@ -166,7 +166,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_LOG_DIALOG
 #if wxUSE_INFOBAR
     EVT_MENU(DIALOGS_INFOBAR_SIMPLE,                MyFrame::InfoBarSimple)
-    EVT_MENU(DIALOGS_INFOBAR_SIMPLE_WRAPPED,        MyFrame::InfoBarSimpleWrapped)
     EVT_MENU(DIALOGS_INFOBAR_ADVANCED,              MyFrame::InfoBarAdvanced)
 #endif // wxUSE_INFOBAR
 
@@ -580,7 +579,6 @@ bool MyApp::OnInit()
 
     #if wxUSE_INFOBAR
        info_menu->Append(DIALOGS_INFOBAR_SIMPLE, "Simple &info bar\tCtrl-I");
-       info_menu->Append(DIALOGS_INFOBAR_SIMPLE_WRAPPED, "Simple info bar with wrapped text");
        info_menu->Append(DIALOGS_INFOBAR_ADVANCED, "&Advanced info bar\tShift-Ctrl-I");
     #endif // wxUSE_INFOBAR
 
@@ -948,11 +946,6 @@ void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
                      (
                       wxString::Format("Message #%d in the info bar.", ++s_count)
                      );
-}
-
-void MyFrame::InfoBarSimpleWrapped(wxCommandEvent &WXUNUSED(event))
-{
-    m_infoBarSimple->ShowMessage( "This is very very long message to try the label wrapping on the info bar" );
 }
 
 void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))
