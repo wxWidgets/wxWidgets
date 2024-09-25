@@ -942,10 +942,24 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
 {
     static int s_count = 0;
-    m_infoBarSimple->ShowMessage
-                     (
-                      wxString::Format("Message #%d in the info bar.", ++s_count)
-                     );
+
+    wxString msg;
+    if ( ++s_count % 2 )
+    {
+        msg.Printf("Short message #%d in the info bar.", s_count);
+    }
+    else
+    {
+        msg.Printf("A very, very, very, very long message #%d showing what "
+                   "happens when a message is too long to fit in the info bar "
+                   "and has to be either wrapped or ellipsized because it's "
+                   "just too long to fit in the available space (unless "
+                   "you have a humongously wide monitor, in which case, "
+                   "congratulations, you've managed to break this test).",
+                   s_count);
+    }
+
+    m_infoBarSimple->ShowMessage(msg);
 }
 
 void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))

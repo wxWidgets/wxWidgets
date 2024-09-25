@@ -193,6 +193,7 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     if ( wxGTKImpl::ConvertMessageTypeFromWX(flags, &type) )
         gtk_info_bar_set_message_type(GTK_INFO_BAR(m_widget), type);
     gtk_label_set_text(GTK_LABEL(m_impl->m_label), msg.utf8_str());
+    gtk_label_set_ellipsize(GTK_LABEL(m_impl->m_label), PANGO_ELLIPSIZE_MIDDLE);
 
     if ( !IsShown() )
         Show();
