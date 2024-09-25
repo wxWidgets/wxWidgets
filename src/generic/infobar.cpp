@@ -87,8 +87,8 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     //     and being preceded by a spacer
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add(m_icon, wxSizerFlags().Centre().Border());
-    sizer->Add(m_text, wxSizerFlags().Centre());
-    sizer->AddStretchSpacer();
+    sizer->Add(m_text, wxSizerFlags().Proportion(1).Centre());
+    sizer->AddSpacer(0); // This spacer only exists for compatibility.
     sizer->Add(m_button, wxSizerFlags().Centre().Border());
     SetSizer(sizer);
 
