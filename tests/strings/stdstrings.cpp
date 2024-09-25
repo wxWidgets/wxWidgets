@@ -228,7 +228,7 @@ TEST_CASE("StdString::AssignOp", "[stdstring]")
 
 TEST_CASE("StdString::Compare", "[stdstring]")
 {
-    wxString s1, s2, s3, s4, s5, s6, s7, s8;
+    wxString s1, s2, s3, s4, s5, s6;
 
     s1 = wxT("abcdefgh");
     s2 = wxT("abcdefgh");
@@ -250,14 +250,12 @@ TEST_CASE("StdString::Compare", "[stdstring]")
 
 TEST_CASE("StdString::Erase", "[stdstring]")
 {
-    wxString s1, s2, s3, s4, s5, s6, s7;
+    wxString s1, s2, s3, s4, s7;
 
     s1 = wxT("abcdefgh");
     s2 = wxT("abcdefgh");
     s3 = wxT("abc");
     s4 = wxT("abcdefghi");
-    s5 = wxT("aaa");
-    s6 = wxT("zzz");
     s7 = wxT("zabcdefg");
 
     s1.erase(1, 1);

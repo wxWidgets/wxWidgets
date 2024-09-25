@@ -365,15 +365,12 @@ static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc,
         for (ssize_t iMounted = mounted.GetCount()-1; iMounted >= 0 && iList >= 0; iMounted--)
         {
             int compare;
-            wxString all(list[iList]);
-            wxString mount(mounted[iMounted]);
 
             while (compare =
                      wxStricmp(list[iList].c_str(), mounted[iMounted].c_str()),
                    compare > 0 && iList >= 0)
             {
                 iList--;
-                all = list[iList];
             }
 
 

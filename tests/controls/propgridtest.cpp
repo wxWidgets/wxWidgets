@@ -827,9 +827,6 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         dt2.SetYear(dt2.GetYear() - 10);
 #endif
 
-        wxColour colWithAlpha(1, 128, 254, 100);
-        wxString colWithAlphaStr(colWithAlpha.GetAsString(wxC2S_CSS_SYNTAX));
-
         pgManager->SetPropertyValue("StringProperty", "Text1");
         pgManager->SetPropertyValue("IntProperty", 1024);
         pgManager->SetPropertyValue("FloatProperty", 1024.0000000001);

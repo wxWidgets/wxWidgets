@@ -515,7 +515,6 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::GlibcMisc1", "[vsnprintf]")
 TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::GlibcMisc2", "[vsnprintf]")
 {
     int prec;
-    wxString test_format;
 
     prec = 0;
     CMP("3", "%.*g", prec, 3.3);

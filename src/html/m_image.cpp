@@ -72,7 +72,7 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
 wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype t, wxString &incoords, double pixel_scale )
 {
     int i;
-    wxString x = incoords, y;
+    wxString x = incoords;
 
     type = t;
     while ((i = x.Find( ',' )) != wxNOT_FOUND)

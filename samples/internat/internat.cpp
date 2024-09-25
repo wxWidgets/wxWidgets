@@ -569,7 +569,6 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
     {
         wxLayoutDirection layout = uiLocale.GetLayoutDirection();
         wxString strLayout = (layout == wxLayout_RightToLeft) ? "RTL" : "LTR";
-        wxString strLocale = uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE);
         wxLogMessage(_("Locale \"%s\" is available.\nIdentifier: %s; Layout: %s\nEnglish name: %s\nLocalized name: %s"),
                      s_locale, uiLocale.GetName(), strLayout,
                      uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_ENGLISH),
