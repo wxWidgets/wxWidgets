@@ -74,7 +74,9 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     // the icon is not shown unless it's assigned a valid bitmap
     m_icon = new wxStaticBitmap(this, wxID_ANY, wxNullBitmap);
 
-    m_text = new wxStaticText(this, wxID_ANY, wxString());
+    m_text = new wxStaticText(this, wxID_ANY, wxString(),
+                              wxDefaultPosition, wxDefaultSize,
+                              wxST_ELLIPSIZE_MIDDLE);
     m_text->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
 
     m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
