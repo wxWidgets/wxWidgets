@@ -1906,12 +1906,8 @@ wxBitmap LoadBitmapFromFS(wxXmlResourceHandlerImpl* impl,
 
 // forward declaration
 template <typename T>
-T
-ParseStringInPixels(wxXmlResourceHandlerImpl* impl,
-                   const wxString& param,
-                   const wxString& str,
-                   const T& defaultValue,
-                   wxWindow *windowToUse = nullptr);
+inline
+bool XRCConvertFromAbsValue(const wxString& s, T& value);
 
 } // anonymous namespace
 
@@ -2019,9 +2015,17 @@ wxXmlResourceHandlerImpl::GetBitmapBundle(const wxXmlNode* node,
         else
         {
 #ifdef wxHAS_SVG
-            wxSize svgDefaultSize = ParseStringInPixels(this, node->GetName(),
-                                                        svgDefaultSizeAttr,
-                                                        wxDefaultSize);
+            wxSize svgDefaultSize;
+            if ( !XRCConvertFromAbsValue(svgDefaultSizeAttr, svgDefaultSize) )
+            {
+                ReportParamError
+                (
+                     node->GetName(),
+                     wxString::Format("cannot parse \"%s\" as SVG size",
+                                      svgDefaultSizeAttr)
+                );
+                return bitmapBundle;
+            }
 #if wxUSE_FILESYSTEM
             wxFSFile* fsfile = GetCurFileSystem().OpenFile(paramValue, wxFS_READ | wxFS_SEEKABLE);
             if (fsfile == nullptr)
