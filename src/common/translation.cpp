@@ -121,51 +121,7 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
     wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
     LogTraceArray(" - system preferred languages", preferred);
 
-    wxString langNoMatchRegion;
-    for ( wxVector<wxString>::const_iterator j = preferred.begin();
-          j != preferred.end();
-          ++j )
-    {
-        // try exact match first:
-        if (available.Index(*j, /*bCase=*/false) != wxNOT_FOUND)
-            return *j;
-
-        // try looking up as a POSIX locale:
-        wxLocaleIdent localeId = wxLocaleIdent::FromTag(*j);
-        wxString lang = localeId.GetTag(wxLOCALE_TAGTYPE_POSIX);
-
-        if (available.Index(lang, /*bCase=*/false) != wxNOT_FOUND)
-            return lang;
-
-        size_t pos = lang.find('_');
-        if (pos != wxString::npos)
-        {
-            lang = lang.substr(0, pos);
-            if (available.Index(lang, /*bCase=*/false) != wxNOT_FOUND)
-                return lang;
-        }
-
-        if (langNoMatchRegion.empty())
-        {
-            // lang now holds only the language
-            // check for an available language with potentially non-matching region
-            for ( wxArrayString::const_iterator k = available.begin();
-                  k != available.end();
-                  ++k )
-            {
-                if ((*k).Lower().StartsWith(lang.Lower()))
-                {
-                    langNoMatchRegion = *k;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!langNoMatchRegion.empty())
-        return langNoMatchRegion;
-
-    return wxString();
+    return wxLocaleIdent::GetBestMatch(preferred, available, wxString());
 }
 
 } // anonymous namespace

@@ -40,6 +40,16 @@ public:
     // and region separated by dashes.
     static wxLocaleIdent FromTag(const wxString& tag);
 
+    // Add likely subtags to a given locale identifier.
+    static wxLocaleIdent AddLikelySubtags(const wxLocaleIdent& localeIdent);
+
+    // Remove likely subtags from a given locale identifier, favor region.
+    static wxLocaleIdent RemoveLikelySubtags(const wxLocaleIdent& localeIdent, bool favorRegion = true);
+
+    // Find the best match between desired and supported languages/locales.
+    static wxString GetBestMatch(const wxArrayString& desired, const wxArrayString& supported, const wxString& defaultTag);
+    static wxString GetBestMatch(const wxString& desired, const wxArrayString& supported, const wxString& defaultTag);
+
     // Default ctor creates an empty, invalid identifier.
     wxLocaleIdent() = default;
 
@@ -237,6 +247,21 @@ public:
     // couldn't be found.
     static wxString GetScriptAliasFromName(const wxString& scriptName);
     static wxString GetScriptNameFromAlias(const wxString& scriptAlias);
+
+    // These three methods are for internal use only.
+    // The new algorithm for determine the best translation language
+    // uses them 
+    // First one expands a locale tag using most likely subtags for script
+    // and region. The method returns an empty string, if a matching tag
+    // couldn't be found.
+    // Second one determines the matching distance between locale tags.
+    // The method returns -1, if no match was found.
+    // Third one determines whether 2 regions belong to the same region
+    // group of the given language. The method returns false, if no
+    // region group is defined for the given language.
+    static wxString GetLikelySubtags(const wxString & fromTag);
+    static int GetMatchDistance(const wxString& desired, const wxString& supported);
+    static bool SameRegionGroup(const wxString& language, const wxString& desiredRegion, const wxString& supportedRegion);
 
 private:
     // This ctor is private and exists only for implementation reasons.
