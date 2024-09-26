@@ -2060,7 +2060,10 @@ public:
     virtual wxVersionInfo GetVersionInfo(wxVersionContext context) override
     {
         wxString version;
-        int major, minor, micro, build;
+        int major wxDUMMY_INITIALIZE(0),
+            minor wxDUMMY_INITIALIZE(0),
+            micro wxDUMMY_INITIALIZE(0),
+            build wxDUMMY_INITIALIZE(0);
         switch ( context )
         {
             case wxVersionContext::RunTime:
