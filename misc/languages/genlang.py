@@ -10,6 +10,48 @@ import os
 import string
 import sys
 
+def ReadRegionGroupTable():
+    regiongrouptable = []
+    try:
+        f = open('misc/languages/regiongrouptabl.txt')
+    except:
+        print("Did you run the script from top-level wxWidgets directory?")
+        raise
+
+    for i in f.readlines():
+        ispl = i.split()
+        regiongrouptable.append((ispl[0], ispl[1]))
+    f.close()
+    return regiongrouptable
+
+def ReadMatchingTable():
+    matchingtable = []
+    try:
+        f = open('misc/languages/matchingtabl.txt')
+    except:
+        print("Did you run the script from top-level wxWidgets directory?")
+        raise
+
+    for i in f.readlines():
+        ispl = i.split()
+        matchingtable.append((ispl[0], ispl[1], ispl[2]))
+    f.close()
+    return matchingtable
+
+def ReadLikelyTable():
+    likelytable = []
+    try:
+        f = open('misc/languages/likelytabl.txt')
+    except:
+        print("Did you run the script from top-level wxWidgets directory?")
+        raise
+
+    for i in f.readlines():
+        ispl = i.split()
+        likelytable.append((ispl[0], ispl[1]))
+    f.close()
+    return likelytable
+
 def ReadScriptTable():
     scripttable = []
     try:
@@ -54,7 +96,7 @@ def ReadTable():
 
 
 # Kind may be "include" or "interface".
-def WriteEnum(f, table, synonymtable, scripttable, kind = 'include'):
+def WriteEnum(f, table, synonymtable, scripttable, likelytable, matchingtable, regiongrouptable, kind = 'include'):
    f.write("""
 enum wxLanguage
 {
@@ -105,7 +147,25 @@ enum wxLanguage
    output += '};\n\n'
    f.write(output)
 
-def WriteTable(f, table, synonymtable, scripttable):
+def WriteTable(f, table, synonymtable, scripttable, likelytable, matchingtable, regiongrouptable):
+   regiongrptable = ''
+   for i in regiongrouptable:
+       rg_language = '"%s"' % i[0]
+       rg_country = '"%s"' % i[1]
+       regiongrptable += '    { %-8s %s },\n' % (rg_language+',', rg_country)
+
+   matchtable = ''
+   for i in matchingtable:
+       matchkey = '"%s:%s"' % (i[0], i[1])
+       matchval = '%3s' % i[2]
+       matchtable += '    { %-20s %s },\n' % (matchkey+',', matchval)
+
+   tagtable = ''
+   for i in likelytable:
+       tagfrom = '"%s"' % i[0]
+       tagto = '"%s"' % i[1]
+       tagtable += '    { %-11s %s },\n' % (tagfrom+',', tagto)
+
    sctable = ''
    for i in scripttable:
        scname = '"%s"' % i[0]
@@ -180,6 +240,42 @@ tabScriptData[] =
     { nullptr, nullptr }
 };
 
+// Data table for likely subtags
+static const struct likelyData_t
+{
+    const char* tagfrom;
+    const char* tagto;
+}
+tabLikelyData[] =
+{
+%s
+    { nullptr, nullptr }
+};
+
+// Data table for matching languages
+static const struct matchData_t
+{
+    const char* matchkey;
+    int matchval;
+}
+tabMatchData[] =
+{
+%s
+    { nullptr, 0 }
+};
+
+// Data table for region groups
+static const struct regionGroupData_t
+{
+    const char* language;
+    const char* country;
+}
+regionGroupData[] =
+{
+%s
+    { nullptr, nullptr }
+};
+
 void wxUILocale::InitLanguagesDB()
 {
     wxLanguageInfo info;
@@ -188,26 +284,54 @@ void wxUILocale::InitLanguagesDB()
     // Known languages
     for (j = 0; tabLangData[j].wxlang != 0; ++j)
     {
-      info.Language = tabLangData[j].wxlang;
-      info.LocaleTag = tabLangData[j].bcp47tag;
-      info.CanonicalName = tabLangData[j].canonical;
-      info.CanonicalRef = tabLangData[j].canonicalref;
-      info.LayoutDirection = tabLangData[j].layout;
-      info.Description = wxString::FromUTF8(tabLangData[j].desc);
-      info.DescriptionNative = wxString::FromUTF8(tabLangData[j].descnative);
-      SETWINLANG(info, winlang, winsublang)
-      AddLanguage(info);
+        info.Language = tabLangData[j].wxlang;
+        info.LocaleTag = tabLangData[j].bcp47tag;
+        info.CanonicalName = tabLangData[j].canonical;
+        info.CanonicalRef = tabLangData[j].canonicalref;
+        info.LayoutDirection = tabLangData[j].layout;
+        info.Description = wxString::FromUTF8(tabLangData[j].desc);
+        info.DescriptionNative = wxString::FromUTF8(tabLangData[j].descnative);
+        SETWINLANG(info, winlang, winsublang)
+        AddLanguage(info);
     }
 
     // Known language scripts
     for (j = 0; tabScriptData[j].scname; ++j)
     {
-      gs_scmap_name2alias[tabScriptData[j].scname] = tabScriptData[j].scalias;
-      gs_scmap_alias2name[tabScriptData[j].scalias] = tabScriptData[j].scname;
+        gs_scmap_name2alias[tabScriptData[j].scname] = tabScriptData[j].scalias;
+        gs_scmap_alias2name[tabScriptData[j].scalias] = tabScriptData[j].scname;
+    }
+
+    // Known likely subtags
+    for (j = 0; tabLikelyData[j].tagfrom; ++j)
+    {
+        gs_likely_subtags_map[tabLikelyData[j].tagfrom] = tabLikelyData[j].tagto;
+    }
+
+    // Known matching language tags
+    for (j = 0; tabMatchData[j].matchkey; ++j)
+    {
+        gs_matching_tags_map[tabMatchData[j].matchkey] = tabMatchData[j].matchval;
+    }
+
+    // Known region groups
+    wxString langPrev;
+    wxString lang;
+    std::unordered_set<wxString>* regionGroup = nullptr;
+    for (j = 0; regionGroupData[j].language; ++j)
+    {
+        lang = regionGroupData[j].language;
+        if (!langPrev.IsSameAs(lang))
+        {
+            langPrev = lang;
+            gs_region_groups_map[lang] = std::unordered_set<wxString>();
+            regionGroup = &gs_region_groups_map[lang];
+        }
+        regionGroup->insert(regionGroupData[j].country);
     }
 }
 
-""" % (lngtable,sctable))
+""" % (lngtable,sctable,tagtable,matchtable,regiongrptable))
 
 
 def ReplaceGeneratedPartOfFile(fname, func):
@@ -230,7 +354,7 @@ def ReplaceGeneratedPartOfFile(fname, func):
                 print('Unexpected starting comment.')
             betweenBeginAndEnd = 1
             fout.write(l)
-            func(fout, table, synonymtable, scripttable)
+            func(fout, table, synonymtable, scripttable, likelytable,matchingtable,regiongrouptable)
         elif l == '// --- --- --- generated code ends here --- --- ---\n':
             if not betweenBeginAndEnd:
                 print('End comment found before the starting one?')
@@ -255,6 +379,9 @@ def ReplaceGeneratedPartOfFile(fname, func):
 table = ReadTable()
 scripttable = ReadScriptTable()
 synonymtable = ReadSynonymTable()
+likelytable = ReadLikelyTable()
+matchingtable = ReadMatchingTable()
+regiongrouptable = ReadRegionGroupTable()
 ReplaceGeneratedPartOfFile('include/wx/language.h', WriteEnum)
-ReplaceGeneratedPartOfFile('interface/wx/language.h', lambda f, table, synonymtable, scripttable: WriteEnum(f, table, synonymtable, scripttable, 'interface'))
+ReplaceGeneratedPartOfFile('interface/wx/language.h', lambda f, table, synonymtable, scripttable, likelytable, matchingtable, regiongrouptable: WriteEnum(f, table, synonymtable, scripttable, likelytable, matchingtable, regiongrouptable, 'interface'))
 ReplaceGeneratedPartOfFile('src/common/languageinfo.cpp', WriteTable)

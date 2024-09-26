@@ -366,12 +366,13 @@ fo1:write("insert into win_localetable values ('sr-Cyrl-YU', 'sr_YU@cyrillic', '
 fo1:write("insert into win_localetable values ('sr-Latn-YU', 'sr_YU@latin', 'wxLANGUAGE_SERBIAN_LATIN_YU', '-', '-', 'Serbian (Latin)', 'Serbian (Latin)', '', 'Latn;', '', '', '', 'LTR', '0x1a', '0x02', 'srpski (latinica)', 'srpski', 'Srbija', 'srpski (latinica)', 'srpski', 'Srbija');\n")
 fo1:write("insert into win_localetable values ('sh', 'sh', 'wxLANGUAGE_SERBO_CROATIAN', '-', '-', 'Serbo-Croatian', 'Serbo-Croatian', '', '', '', '', '', 'LTR', '-', '-', 'srpskohrvatski', 'srpskohrvatski', '', 'srpskohrvatski', 'srpskohrvatski', '');\n")
 
-fo1:write("insert into win_localetable values ('tl-PH', 'tl_PH', 'wxLANGUAGE_TAGALOG', '-', '-', 'Tagalog', 'Tagalog', 'Philippines', '', '', '', '', 'LTR', '-', '-', 'Tagalog', 'Tagalog', 'Pilipinas ', 'Tagalog', 'Tagalog', 'Pilipinas');\n")
+fo1:write("insert into win_localetable values ('tl', 'tl', 'wxLANGUAGE_TAGALOG', '-', '-', 'Tagalog', 'Tagalog', '', 'Latn;', 'PHL', '', '', 'LTR', '-', '-', 'Tagalog', 'Tagalog', '', 'Tagalog', 'Tagalog', '');\n")
+fo1:write("insert into win_localetable values ('tl-PH', 'tl_PH', 'wxLANGUAGE_TAGALOG_PHILIPPINES', '-', '-', 'Tagalog (Philippines)', 'Tagalog', 'Philippines', 'Latn;', 'PHL', '', '', 'LTR', '-', '-', 'Tagalog (Pilipinas)', 'Tagalog', 'Pilipinas', 'Tagalog (Pilipinas)', 'Tagalog', 'Pilipinas');\n")
 fo1:write("insert into win_localetable values ('tw', 'tw', 'wxLANGUAGE_TWI', '-', '-', 'Twi', 'Twi', '', '', '', '', '', 'LTR', '-', '-', 'Twi', 'Twi', 'Ghana', 'Twi', 'Twi', 'Ghana');\n")
 fo1:write("insert into win_localetable values ('za', 'za', 'wxLANGUAGE_ZHUANG', '-', '-', 'Zhuang', 'Zhuang', '', '', '', '', '', 'LTR', '-', '-', 'Zhuang', 'Zhuang', 'China', 'Zhuang', 'Zhuang', 'China');\n")
 
 -- Update count to reflect manual entries (needs to be updated, if entries are added or removed)
-count = count + 23
+count = count + 24
 print("Number of locales=" .. count)
 
 fo1:write('commit;\n')

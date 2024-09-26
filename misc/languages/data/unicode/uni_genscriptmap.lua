@@ -30,6 +30,7 @@ fo2:write('delete from uni_scriptmap;\nbegin;\n')
 -- Names and order of data columns
 -- Code|N°|English Name|Nom français|Alias|Age|Date
 
+noalias = 0
 count = 0
 for line in io.lines(codeFileName) do
   rem = string.sub(line,1,1)
@@ -45,7 +46,12 @@ for line in io.lines(codeFileName) do
 
     scname = scname:gsub("'", "''")
     if scalias == "" then
-      scalias = "-"
+      if sctag == "Hans" or sctag == "Hant" then
+        scalias = sctag
+      else
+        noalias = noalias + 1
+        scalias = "-"
+      end
     end
 
     fo2:write("insert into uni_scriptmap values ('" .. sctag .. "', '" .. scname .. "', '" .. scalias .. "');\n")
@@ -53,6 +59,7 @@ for line in io.lines(codeFileName) do
   end
 end
 print("Number of script mappings=" .. count)
+print("Number of missing aliases=" .. noalias)
 
 fo2:write('commit;\n')
 fo2:close()
