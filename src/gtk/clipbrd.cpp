@@ -524,6 +524,9 @@ bool wxClipboard::SetSelectionOwner(bool set)
 
 void wxClipboard::AddSupportedTarget(GdkAtom atom)
 {
+    wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"),
+        wxGtkString(gdk_atom_name(atom)).c_str());
+
     gtk_selection_add_target
     (
         m_clipboardWidget,
@@ -705,9 +708,6 @@ bool wxClipboard::AddData( wxDataObject *data )
             }
         }
 #endif // __WXGTK3__
-
-        wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"),
-                   format.GetId());
 
         AddSupportedTarget(format);
     }
