@@ -2946,7 +2946,7 @@ bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     int x = GET_X_LPARAM(msgf->lParam),
                         y = GET_Y_LPARAM(msgf->lParam);
 
-                    HandleMouseEvent(msg, x, y, flags, ::GetMessageExtraInfo());
+                    HandleMouseEvent(msg, x, y, flags);
                 }
             }
 
