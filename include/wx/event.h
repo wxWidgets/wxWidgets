@@ -1968,8 +1968,7 @@ private:
 class wxTouchSequenceId : public wxItemId<void*>
 {
 public:
-    wxTouchSequenceId() : wxItemId<void*>() { }
-    explicit wxTouchSequenceId(void* pItem) : wxItemId<void*>(pItem) { }
+    using wxItemId::wxItemId;
 };
 
 class WXDLLIMPEXP_CORE wxMultiTouchEvent : public wxEvent
