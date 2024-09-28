@@ -527,10 +527,10 @@ bool wxClipboard::SetSelectionOwner(bool set)
     return rc;
 }
 
+// This function is unused in 3.2 and preserved just in the (very unlikely)
+// case somebody managed to call this private function from their code.
 void wxClipboard::AddSupportedTarget(GdkAtom atom)
 {
-    wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"), wxAtomName(atom));
-
     gtk_selection_add_target
     (
         m_clipboardWidget,
@@ -679,9 +679,11 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxDataFormatArray formats(count);
     data->GetAllFormats(formats.get());
 
+    wxVector<wxString> atomNames;
+
     // always provide TIMESTAMP as a target, see comments in selection_handler
     // for explanation
-    AddSupportedTarget(g_timestampAtom);
+    atomNames.push_back("TIMESTAMP");
 
 #ifdef __WXGTK3__
     bool addedUTF8Text = false;
@@ -713,8 +715,30 @@ bool wxClipboard::AddData( wxDataObject *data )
         }
 #endif // __WXGTK3__
 
-        AddSupportedTarget(format);
+        atomNames.push_back(wxAtomName(format));
     }
+
+    wxVector<GtkTargetEntry> targets(atomNames.size());
+    wxVector<GtkTargetEntry>::iterator target = targets.begin();
+    for ( size_t i = 0; i < atomNames.size(); i++ )
+    {
+        const wxString& name = atomNames[i];
+
+        wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"), name);
+
+        target->target = const_cast<char*>((const char*)name.utf8_str());
+        target->flags = 0;
+        target->info = 0;
+        ++target;
+    }
+
+    gtk_selection_add_targets
+    (
+        m_clipboardWidget,
+        GTKGetClipboardAtom(),
+        &targets[0],
+        targets.size()
+    );
 
     if ( !m_idSelectionGetHandler )
     {
