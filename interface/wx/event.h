@@ -3991,6 +3991,9 @@ public:
 class wxMultiTouchEvent : public wxEvent
 {
 public:
+    /**
+        Constructor only used by wxWidgets itself.
+    */
     wxMultiTouchEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL);
 
     /**
@@ -3999,29 +4002,14 @@ public:
     const wxPoint2DDouble& GetPosition() const;
 
     /**
-        Sets the position where the event took effect, in client coordinates.
-    */
-    void SetPosition(const wxPoint2DDouble& pos);
-
-    /**
         Returns @true if the event is a primary (mouse pointer emulating) event.
     */
     bool IsPrimary() const;
 
     /**
-        Sets if the event is a primary (mouse pointer emulating) event.
-    */
-    void SetPrimary(bool primary);
-
-    /**
         Returns the ID of the touch. This allows to track the move of an specific touch point.
     */
     const wxTouchSequenceId& GetSequenceId() const;
-
-    /**
-        Sets the ID of the touch. This allows to track the move of an specific touch point.
-    */
-    void SetSequenceId(const wxTouchSequenceId& sequence);
 };
 
 /** @class wxGestureEvent
