@@ -3508,12 +3508,10 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         break;
 
         case WM_TOUCH:
-        {
-            HandleTouch(wParam, lParam);
-            // Let DefWindowProc handle the touch events too
-            processed = false;
-        }
-        break;
+            // We consider this event to be processed if all touch events were
+            // handled, otherwise we still pass them to DefWindowProc().
+            processed = HandleTouch(wParam, lParam);
+            break;
 #endif // WM_GESTURE
 
         // CTLCOLOR messages are sent by children to query the parent for their
@@ -6247,6 +6245,7 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
         return false;
     }
 
+    bool allHandled = true;
     for ( const auto& input : info )
     {
         // hundredths of a pixel of physical screen coordinates
@@ -6262,7 +6261,10 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
         else if ( input.dwFlags & TOUCHEVENTF_UP )
             type = wxEVT_TOUCH_END;
         else
+        {
+            allHandled = false;
             continue;
+        }
 
         wxMultiTouchEvent event( GetId(), type);
 
@@ -6270,10 +6272,11 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
         event.SetPosition(pos);
         event.SetSequenceId(wxTouchSequenceId(wxUIntToPtr(input.dwID + 1)));
         event.SetPrimary( (input.dwFlags & TOUCHEVENTF_PRIMARY) != 0 );
-        HandleWindowEvent(event);
+        if ( !HandleWindowEvent(event) )
+            allHandled = false;
     }
 
-    return true;
+    return allHandled;
 }
 
 #endif // WM_GESTURE
