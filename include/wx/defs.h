@@ -273,7 +273,7 @@ typedef short int WXTYPE;
     #define wxNODISCARD [[nodiscard]]
 #elif defined(__VISUALC__)
     #define wxNODISCARD _Check_return_
-#elif defined(__clang__) || defined(__GNUCC__)
+#elif defined(__clang__) || defined(__GNUC__)
     #define wxNODISCARD __attribute__ ((warn_unused_result))
 #else
     #define wxNODISCARD
