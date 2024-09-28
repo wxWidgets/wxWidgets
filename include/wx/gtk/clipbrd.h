@@ -98,9 +98,6 @@ private:
     // set or unset selection ownership
     bool SetSelectionOwner(bool set = true);
 
-    // add atom to the list of supported targets
-    void AddSupportedTarget(GdkAtom atom);
-
     // get the atom corresponding to the given format if it's supported
     GdkAtom DoGetTarget(const wxDataFormat& format);
 

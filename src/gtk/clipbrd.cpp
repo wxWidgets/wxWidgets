@@ -525,19 +525,6 @@ bool wxClipboard::SetSelectionOwner(bool set)
     return rc;
 }
 
-void wxClipboard::AddSupportedTarget(GdkAtom atom)
-{
-    wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"), wxAtomName(atom));
-
-    gtk_selection_add_target
-    (
-        m_clipboardWidget,
-        GTKGetClipboardAtom(),
-        atom,
-        0 // info (same as client data) unused
-    );
-}
-
 bool wxClipboard::IsSupportedAsync(wxEvtHandler *sink)
 {
     if (m_sink.get())
@@ -677,9 +664,11 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxDataFormatArray formats(count);
     data->GetAllFormats(formats.get());
 
+    std::vector<wxString> atomNames;
+
     // always provide TIMESTAMP as a target, see comments in selection_handler
     // for explanation
-    AddSupportedTarget(g_timestampAtom);
+    atomNames.push_back("TIMESTAMP");
 
 #ifdef __WXGTK3__
     bool addedUTF8Text = false;
@@ -711,8 +700,28 @@ bool wxClipboard::AddData( wxDataObject *data )
         }
 #endif // __WXGTK3__
 
-        AddSupportedTarget(format);
+        atomNames.push_back(wxAtomName(format));
     }
+
+    std::vector<GtkTargetEntry> targets(atomNames.size());
+    auto target = targets.begin();
+    for ( const auto& name: atomNames )
+    {
+        wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"), name);
+
+        target->target = const_cast<char*>((const char*)name.utf8_str());
+        target->flags = 0;
+        target->info = 0;
+        ++target;
+    }
+
+    gtk_selection_add_targets
+    (
+        m_clipboardWidget,
+        GTKGetClipboardAtom(),
+        targets.data(),
+        targets.size()
+    );
 
     if ( !m_idSelectionGetHandler )
     {
