@@ -460,8 +460,7 @@ wxSocketError wxSocketImpl::CreateClient(bool wait)
     int rc = connect(m_fd, m_peer.GetAddr(), m_peer.GetLen());
     if ( rc == SOCKET_ERROR )
     {
-        wxSocketError err = GetLastError();
-        if ( err == wxSOCKET_WOULDBLOCK )
+        if ( UpdateLastError() == wxSOCKET_WOULDBLOCK )
         {
             m_establishing = true;
 
@@ -469,14 +468,12 @@ wxSocketError wxSocketImpl::CreateClient(bool wait)
             // wxSOCKET_WOULDBLOCK to the caller)
             if ( wait )
             {
-                err = SelectWithTimeout(wxSOCKET_CONNECTION_FLAG)
-                        ? wxSOCKET_NOERROR
-                        : wxSOCKET_TIMEDOUT;
+                m_error = SelectWithTimeout(wxSOCKET_CONNECTION_FLAG)
+                            ? wxSOCKET_NOERROR
+                            : wxSOCKET_TIMEDOUT;
                 m_establishing = false;
             }
         }
-
-        m_error = err;
     }
     else // connected
     {
@@ -531,17 +528,26 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     ReenableEvents(wxSOCKET_INPUT_FLAG);
 
     if ( fd == INVALID_SOCKET )
+    {
+        UpdateLastError();
         return nullptr;
+    }
 
     wxScopeGuard closeSocket = wxMakeGuard(wxCloseSocket, fd);
 
     wxSocketManager * const manager = wxSocketManager::Get();
     if ( !manager )
+    {
+        UpdateLastError();
         return nullptr;
+    }
 
     wxSocketImpl * const sock = manager->CreateSocket(wxsocket);
     if ( !sock )
+    {
+        UpdateLastError();
         return nullptr;
+    }
 
     // Ownership of the socket now passes to wxSocketImpl object.
     closeSocket.Dismiss();
@@ -733,7 +739,10 @@ int wxSocketImpl::Read(void *buffer, int size)
     int ret = m_stream ? RecvStream(buffer, size)
                        : RecvDgram(buffer, size);
 
-    m_error = ret == SOCKET_ERROR ? GetLastError() : wxSOCKET_NOERROR;
+    if ( ret == SOCKET_ERROR )
+        UpdateLastError();
+    else
+        m_error = wxSOCKET_NOERROR;
 
     return ret;
 }
@@ -749,7 +758,10 @@ int wxSocketImpl::Write(const void *buffer, int size)
     int ret = m_stream ? SendStream(buffer, size)
                        : SendDgram(buffer, size);
 
-    m_error = ret == SOCKET_ERROR ? GetLastError() : wxSOCKET_NOERROR;
+    if ( ret == SOCKET_ERROR )
+        UpdateLastError();
+    else
+        m_error = wxSOCKET_NOERROR;
 
     return ret;
 }
@@ -1003,7 +1015,7 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
                             : 0;
         if ( ret == -1 )
         {
-            if ( m_impl->GetLastError() == wxSOCKET_WOULDBLOCK )
+            if ( m_impl->GetError() == wxSOCKET_WOULDBLOCK )
             {
                 // if we don't want to wait, just return immediately
                 if ( m_flags & wxSOCKET_NOWAIT_READ )
@@ -1218,7 +1230,7 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
         const int ret = m_impl->Write(buffer, nbytes);
         if ( ret == -1 )
         {
-            if ( m_impl->GetLastError() == wxSOCKET_WOULDBLOCK )
+            if ( m_impl->GetError() == wxSOCKET_WOULDBLOCK )
             {
                 if ( m_flags & wxSOCKET_NOWAIT_WRITE )
                     break;
@@ -1946,8 +1958,6 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 
     if ( !sock.m_impl )
     {
-        SetError(m_impl->GetLastError());
-
         return false;
     }
 

@@ -385,7 +385,7 @@ bool wxPlatform::Is(int platform)
 bool wxGetEmailAddress(wxChar *address, int maxSize)
 {
     wxString email = wxGetEmailAddress();
-    if ( !email )
+    if ( email.empty() )
         return false;
 
     wxStrlcpy(address, email.t_str(), maxSize);

@@ -140,7 +140,7 @@ void wxFileTypeImpl::Init(const wxString& strFileType, const wxString& ext)
     m_ext << ext;
 
     m_strFileType = strFileType;
-    if ( !strFileType ) {
+    if ( strFileType.empty() ) {
         m_strFileType = m_ext.AfterFirst('.') + wxT("_auto_file");
     }
 

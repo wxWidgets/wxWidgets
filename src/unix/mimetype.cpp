@@ -68,7 +68,7 @@ public:
        {
           wxString t = tok.GetNextToken();
           t.MakeLower();
-          if ((!!t) && (t.Find( "comment" ) != 0) && (t.Find( "#" ) != 0) && (t.Find( "generic" ) != 0))
+          if (!t.empty() && (t.Find( "comment" ) != 0) && (t.Find( "#" ) != 0) && (t.Find( "generic" ) != 0))
              m_text.Add( t );
        }
        return true;

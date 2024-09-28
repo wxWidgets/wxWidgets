@@ -86,6 +86,7 @@ public:
     virtual bool IsContextMenuEnabled() const override;
 
     virtual void EnableAccessToDevTools(bool enable = true) override;
+    virtual bool ShowDevTools() override;
     virtual bool IsAccessToDevToolsEnabled() const override;
 
     virtual void EnableBrowserAcceleratorKeys(bool enable = true) override;
@@ -143,7 +144,7 @@ public:
         return new wxWebViewEdge(parent, id, url, pos, size, style, name);
     }
     virtual bool IsAvailable() override;
-    virtual wxVersionInfo GetVersionInfo() override;
+    virtual wxVersionInfo GetVersionInfo(wxVersionContext context) override;
     virtual wxWebViewConfiguration CreateConfiguration() override;
 };
 

@@ -254,12 +254,13 @@ TEST_CASE("wxTranslations::AddCatalog", "[translations]")
     SECTION("All")
     {
         auto available = trans.GetAvailableTranslations(domain);
-        REQUIRE( available.size() == 3 );
+        REQUIRE( available.size() == 4 );
 
         available.Sort();
         CHECK( available[0] == "en_GB" );
         CHECK( available[1] == "fr" );
         CHECK( available[2] == "ja" );
+        CHECK( available[3] == "xart-dothraki" );
     }
 
     SECTION("French")
@@ -341,6 +342,20 @@ TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
         wxSetEnv("WXLANGUAGE", "fr:en:cs");
         CHECK( trans.GetBestTranslation(domain) == "fr" );
         CHECK( trans.GetBestAvailableTranslation(domain) == "fr" );
+    }
+
+    SECTION("PassthroughUnknown")
+    {
+        // Check that even a language not known to wx (in this case, made up)
+        // will be correctly served if it is known to the OS and has available
+        // translation.
+        //
+        // Notice that this would normally be x-art-dothraki, but we
+        // intentionally use an incorrect code to be future-proof and
+        // explicitly test for unrecognized passthrough even if wx starts fully
+        // understanding language tags.
+        wxSetEnv("WXLANGUAGE", "xart-dothraki:en:fr");
+        CHECK( trans.GetBestTranslation(domain) == "xart-dothraki" );
     }
 }
 

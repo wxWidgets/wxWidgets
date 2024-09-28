@@ -55,7 +55,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxEnhMetaFile, wxObject);
 
 // we must pass nullptr if the string is empty to metafile functions
 static inline const wxChar *GetMetaFileName(const wxString& fn)
-    { return !fn ? nullptr : wxMSW_CONV_LPCTSTR(fn); }
+    { return fn.empty() ? nullptr : wxMSW_CONV_LPCTSTR(fn); }
 
 // ============================================================================
 // implementation

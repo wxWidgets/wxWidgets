@@ -177,7 +177,7 @@ void wxSocketImplUnix::OnReadWaiting()
                 wxFALLTHROUGH;
 
             case -1:
-                if ( GetLastError() == wxSOCKET_WOULDBLOCK )
+                if ( UpdateLastError() == wxSOCKET_WOULDBLOCK )
                 {
                     // just a spurious wake up
                     EnableEvents(wxSOCKET_INPUT_FLAG);

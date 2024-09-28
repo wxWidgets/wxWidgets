@@ -105,7 +105,7 @@ bool wxFTP::Connect(const wxSockAddress& addr, bool WXUNUSED(wait))
         return false;
     }
 
-    if ( !m_username )
+    if ( m_username.empty() )
     {
         m_lastError = wxPROTO_CONNERR;
         return false;

@@ -401,7 +401,7 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t size)
 static wxString wxMakeShellCommand(const wxString& command)
 {
     wxString cmd;
-    if ( !command )
+    if ( command.empty() )
     {
         // just an interactive shell
         cmd = wxT("xterm");
@@ -911,7 +911,7 @@ wxString wxGetUserHome( const wxString &user )
 {
     struct passwd *who = (struct passwd *) nullptr;
 
-    if ( !user )
+    if ( user.empty() )
     {
         wxChar *ptr;
 

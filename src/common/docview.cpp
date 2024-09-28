@@ -396,7 +396,7 @@ bool wxDocument::SaveAs()
 
 bool wxDocument::OnSaveDocument(const wxString& file)
 {
-    if ( !file )
+    if ( file.empty() )
         return false;
 
     if ( !DoSaveDocument(file) )

@@ -97,8 +97,8 @@ public:
 
     @header{wx/fontdlg.h}
 */
-wxFont wxGetFontFromUser(wxWindow* parent,
-                         const wxFont& fontInit,
+wxFont wxGetFontFromUser(wxWindow* parent = nullptr,
+                         const wxFont& fontInit = wxNullFont,
                          const wxString& caption = wxEmptyString);
 
 ///@}

@@ -629,7 +629,7 @@ void wxGridCellTextEditor::HandleReturn( wxKeyEvent&
 
 void wxGridCellTextEditor::SetParameters(const wxString& params)
 {
-    if ( !params )
+    if ( params.empty() )
     {
         // reset to default
         m_maxChars = 0;
@@ -884,7 +884,7 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
 
 void wxGridCellNumberEditor::SetParameters(const wxString& params)
 {
-    if ( !params )
+    if ( params.empty() )
     {
         // reset to default
         m_min =
@@ -1038,7 +1038,7 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
 
 void wxGridCellFloatEditor::SetParameters(const wxString& params)
 {
-    if ( !params )
+    if ( params.empty() )
     {
         // reset to default
         m_width =
@@ -1118,7 +1118,7 @@ void wxGridCellFloatEditor::SetParameters(const wxString& params)
 
 wxString wxGridCellFloatEditor::GetString()
 {
-    if ( !m_format )
+    if ( m_format.empty() )
     {
         if ( m_precision == -1 && m_width != -1)
         {
@@ -1577,7 +1577,7 @@ void wxGridCellChoiceEditor::Reset()
 
 void wxGridCellChoiceEditor::SetParameters(const wxString& params)
 {
-    if ( !params )
+    if ( params.empty() )
     {
         // what can we do?
         return;

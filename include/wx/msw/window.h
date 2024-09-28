@@ -289,6 +289,14 @@ public:
     // Setup background and foreground colours correctly
     virtual void SetupColours();
 
+    virtual wxVisualAttributes GetDefaultAttributes() const override
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     // ------------------------------------------------------------------------
     // helpers for message handlers: these perform the same function as the
     // message crackers from <windowsx.h> - they unpack WPARAM and LPARAM into

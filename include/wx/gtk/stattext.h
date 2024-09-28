@@ -61,6 +61,9 @@ private:
 
     void GTKDoSetLabel(GTKLabelSetter setter, const wxString& label);
 
+    // If our font has been changed, we compute the best size ourselves because
+    // GTK doesn't always do it correctly, see DoGetBestSize().
+    bool m_computeOurOwnBestSize = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };

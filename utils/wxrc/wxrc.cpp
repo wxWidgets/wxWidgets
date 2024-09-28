@@ -300,7 +300,7 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
         parOutput = wxFileName(parOutput).GetAbsolutePath();
         parOutputPath = wxPathOnly(parOutput);
     }
-    if (!parOutputPath) parOutputPath = wxT(".");
+    if (parOutputPath.empty()) parOutputPath = wxT(".");
 
     if (!cmdline.Found("n", &parFuncname))
         parFuncname = wxT("InitXmlResource");
@@ -901,7 +901,7 @@ void XmlResApp::OutputGettext()
         fout.Write("_(\"" + i->str + "\");\n");
     }
 
-    if (!parOutput) fout.Detach();
+    if (parOutput.empty()) fout.Detach();
 }
 
 

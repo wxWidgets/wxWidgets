@@ -136,7 +136,7 @@ public:
         else
             return nullptr;
     }
-    virtual wxVersionInfo GetVersionInfo() override;
+    virtual wxVersionInfo GetVersionInfo(wxVersionContext context) override;
     virtual wxWebViewConfiguration CreateConfiguration() override;
 };
 

@@ -30,6 +30,7 @@
 #include "wx/filedlg.h"
 #include "wx/colordlg.h"
 #include "wx/srchctrl.h"
+#include "wx/checkbox.h"
 
 // If this is 1, the sample will test an extra toolbar identical to the
 // main one, but not managed by the frame. This can test subtle differences
@@ -155,6 +156,8 @@ public:
     void OnUpdateToggleRadioBtn(wxUpdateUIEvent& event)
         { event.Enable( m_tbar != nullptr ); }
 
+    void OnCheckboxUpdateUI(wxUpdateUIEvent& evt);
+
 private:
     void DoEnablePrint();
     void DoDeletePrint();
@@ -244,7 +247,10 @@ enum
     IDM_TOOLBAR_TOGGLERADIOBTN2,
     IDM_TOOLBAR_TOGGLERADIOBTN3,
 
-    ID_COMBO = 1000
+    ID_COMBO = 1000,
+    ID_3CHECK,
+    ID_UI_2CHECK_UPDATED,
+    ID_UI_3CHECK_UPDATED,
 };
 
 // ----------------------------------------------------------------------------
@@ -306,6 +312,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
                         MyFrame::OnUpdateToggleRadioBtn)
     EVT_UPDATE_UI(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
                   MyFrame::OnUpdateToggleHorzText)
+    EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED,
+                  MyFrame::OnCheckboxUpdateUI)
+    EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED,
+                  MyFrame::OnCheckboxUpdateUI)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -390,6 +400,12 @@ void MyFrame::RecreateToolbar()
 
 void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 {
+    // If using wxUPDATE_UI_PROCESS_ALL (the default),
+    // some of the problems handling controls in toolbar
+    // are masked by the calls to wxCheckBox::UpdateWindowUI()
+    wxUpdateUIEvent::SetMode(wxUPDATE_UI_PROCESS_SPECIFIED);
+    toolBar->SetExtraStyle(toolBar->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
+
     // Set up toolbar
     enum
     {
@@ -470,6 +486,29 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         combo->Append("in a");
         combo->Append("toolbar");
         toolBar->AddControl(combo, "Combo Label");
+
+#if wxUSE_CHECKBOX
+        wxCheckBox* checkbox1 = new wxCheckBox(toolBar, ID_3CHECK,
+                                                    "",
+                                                    wxDefaultPosition, wxDefaultSize,
+                                                    wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
+        checkbox1->SetMinSize(checkbox1->GetSizeFromText(checkbox1->GetLabelText()));
+        toolBar->AddControl(checkbox1, "Checkbox");
+        wxCheckBox* checkbox2 = new wxCheckBox(toolBar, ID_UI_2CHECK_UPDATED,
+                                                    "",
+                                                    wxDefaultPosition, wxDefaultSize,
+                                                    wxCHK_2STATE);
+        checkbox2->SetMinSize(checkbox2->GetSizeFromText(checkbox2->GetLabelText()));
+        checkbox2->Disable();
+        toolBar->AddControl(checkbox2, "2Checkbox UI Updated");
+        wxCheckBox* checkbox3 = new wxCheckBox(toolBar, ID_UI_3CHECK_UPDATED,
+                                                    "",
+                                                    wxDefaultPosition, wxDefaultSize,
+                                                    wxCHK_3STATE);
+        checkbox3->SetMinSize(checkbox3->GetSizeFromText(checkbox3->GetLabelText()));
+        checkbox3->Disable();
+        toolBar->AddControl(checkbox3, "3Checkbox UI Updated");
+#endif
     }
 #endif // USE_CONTROLS_IN_TOOLBAR
 
@@ -999,6 +1038,33 @@ void MyFrame::OnUpdateToggleHorzText(wxUpdateUIEvent& event)
     event.Enable( tbar &&
                     tbar->HasFlag(wxTB_TEXT) &&
                         !tbar->HasFlag(wxTB_NOICONS) );
+}
+
+// copy state from user-controllable checkbox to disabled checkbox
+void MyFrame::OnCheckboxUpdateUI(wxUpdateUIEvent& evt)
+{
+#if wxUSE_CHECKBOX
+    wxASSERT(evt.IsCheckable());
+    wxToolBar* tbar = GetToolBar();
+    wxWindow* wnd = tbar->FindWindow(ID_3CHECK);
+    wxCheckBox* src = wxCheckCast<wxCheckBox>(wnd);
+    if (!evt.Is3State())
+    {
+        if (src->Get3StateValue() != wxCHK_UNDETERMINED)
+        {
+            evt.Show(true);
+            evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
+        }
+        else
+        {
+            evt.Show(false);
+        }
+    }
+    else
+    {
+        evt.Set3StateValue(src->Get3StateValue());
+    }
+#endif
 }
 
 void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))

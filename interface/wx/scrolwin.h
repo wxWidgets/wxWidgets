@@ -57,21 +57,9 @@ enum wxScrollbarVisibility
     set to the size requested by the sizer and the scrollbars will be assigned
     for each orientation according to the need for them and the scrolling
     increment set by SetScrollRate().  As above, scrolling is only enabled in
-    orientations with a non-zero increment.  You can influence the minimum size
-    of the scrolled area controlled by a sizer by calling
-    wxWindow::SetVirtualSizeHints(). (Calling SetScrollbars() has analogous
-    effects in wxWidgets 2.4 -- in later versions it may not continue to
-    override the sizer.)
-
-    Note that if maximum size hints are still supported by
-    wxWindow::SetVirtualSizeHints(), use them at your own dire risk. They may
-    or may not have been removed for 2.4, but it really only makes sense to set
-    minimum size hints here.  We should probably replace
-    wxWindow::SetVirtualSizeHints() with wxWindow::SetMinVirtualSize() or
-    similar and remove it entirely in future.
-
-    @todo review docs for this class replacing SetVirtualSizeHints() with
-          SetMinClientSize().
+    orientations with a non-zero increment. Note that if you add or remove any
+    elements to the sizer, you need to call wxSizer::FitInside() to adjust the
+    virtual size to the new contents.
 
     As with all windows, an application can draw onto a wxScrolled using a
     @ref overview_dc "device context".

@@ -222,7 +222,7 @@ bool wxDirData::Read(wxString *filename)
         {
             filespec += wxT('\\');
         }
-        if ( !m_filespec )
+        if ( m_filespec.empty() )
             filespec += wxT("*.*");
         else
             filespec += m_filespec;

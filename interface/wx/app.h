@@ -388,11 +388,28 @@ public:
         that the function returns @true.
 
         Notice that if you want to use the command line processing provided by
-        wxWidgets you have to call the base class version in the derived class
-        OnInit().
+        wxWidgets (see OnInitCmdLine() and OnCmdLineParsed() functions) you
+        have to call the base class version in the derived class OnInit(),
+        e.g.:
+
+        @code
+        bool MyApp::OnInit() {
+            if ( !wxApp::OnInit() ) {
+                // The most likely reason for the error here is that incorrect
+                // command line arguments have been specified, so just exit:
+                // error message has already been given.
+                return false;
+            }
+
+            // Perform any additional initialization here.
+
+            return true;
+        }
+        @endcode
 
         Return @true to continue processing, @false to exit the application
-        immediately.
+        immediately. In the latter case, you may want to call SetErrorExitCode()
+        to set the process exit code to use when the application terminates.
     */
     virtual bool OnInit();
 
@@ -410,14 +427,23 @@ public:
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
 
     /**
-        This virtual function is where the execution of a program written in wxWidgets
-        starts. The default implementation just enters the main loop and starts
-        handling the events until it terminates, either because ExitMainLoop() has
-        been explicitly called or because the last frame has been deleted and
-        GetExitOnFrameDelete() flag is @true (this is the default).
+        Virtual function executing the application's main event loop.
 
-        The return value of this function becomes the exit code of the program, so it
-        should return 0 in case of successful termination.
+        For the GUI applications, it is typically not necessary to override
+        this function, as the default implementation, which enters the main
+        event loop and dispatches all events until ExitMainLoop() is called
+        (either explicitly or because the last top level window was closed),
+        rarely needs to be customized.
+
+        For the console applications not using event loops, this function can
+        be used as the equivalent of the traditional @c main() function by
+        putting most of the program logic here.
+
+        The return value of this function becomes the exit code of the program,
+        so it should return 0 in case of successful termination.
+
+        Note that this function is not called at all if OnInit() had returned
+        @false.
     */
     virtual int OnRun();
 
@@ -759,6 +785,73 @@ public:
         @since 2.9.5
      */
     void SetCLocale();
+
+    /**
+        Sets the error code to use in case of exit on error.
+
+        This function is mostly useful to customize the error code returned by
+        the application when it exits due to OnInit() returning @false and can
+        be called from OnInit() itself or other virtual functions called from
+        it, for example OnCmdLineError().
+
+        By default, the exit code is @c 255 which indicates a generic error,
+        so it is may be useful to call this function to set a more precise exit
+        code, e.g. @c 2 which is a de facto standard exit code if command line
+        parsing fails.
+
+        Please also note that in the previous versions of wxWidgets this exit
+        code was @c -1, which corresponds to either @c 255 or @c 127 depending
+        on the platform and compiler used, so you may want to call this
+        function with @c -1 argument if you need to preserve compatibility with
+        the old behaviour.
+
+        SetErrorExitCode() can be overridden by the application to perform
+        additional actions, but the overridden version should call the base
+        class version to update the value returned by GetErrorExitCode() and
+        actually used when exiting the application.
+
+        @see SetFatalErrorExitCode()
+
+        @since 3.3.0
+     */
+    virtual void SetErrorExitCode(int code);
+
+    /**
+        Allows to set a custom process exit code if a fatal error happens.
+
+        If the program can't continue due to a fatal error, such as receiving
+        an unhandled exception or failing to initialize the graphical
+        environment for the GUI applications, it terminates with the default
+        fatal error exit code which is @c 255.
+
+        This function can be used to change this default value to something
+        else, e.g. @c -1 which used to be returned in the previous versions of
+        wxWidgets (and corresponds to either @c 255 or @c 127 depending on the
+        platform and compiler used) if compatibility is important.
+
+        Notice that it has to be called as early as possible to take effect
+        even during the early application initialization, e.g.
+
+        @code
+        struct FatalErrorCodeInitializer {
+            FatalErrorCodeInitializer() {
+                wxApp::SetFatalErrorExitCode(3); // same as abort()
+            }
+        };
+
+        // Create a global variable to call SetFatalErrorExitCode() in its ctor.
+        static FatalErrorCodeInitializer s_fatalErrorCodeInitializer;
+        @endcode
+
+        Note that this function doesn't change the exit code returned if
+        OnInit() returns @false, so if you change the default value of this
+        exit code you may want to call SetErrorExitCode() to change the other
+        one too.
+
+        @since 3.3.0
+     */
+    static void SetFatalErrorExitCode(int code);
+
 
     /**
         Number of command line arguments (after environment-specific processing).

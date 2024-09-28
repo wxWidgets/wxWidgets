@@ -112,6 +112,8 @@ wxAppConsole *wxAppConsoleBase::ms_appInstance = nullptr;
 
 wxAppInitializerFunction wxAppConsoleBase::ms_appInitFn = nullptr;
 
+int wxAppConsoleBase::ms_fatalErrorExitCode = 255;
+
 wxSocketManager *wxAppTraitsBase::ms_manager = nullptr;
 
 WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;

@@ -37,12 +37,12 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
 
     @beginStyleTable
     @style{wxDD_DEFAULT_STYLE}
-           Equivalent to a combination of wxDEFAULT_DIALOG_STYLE and
-           wxRESIZE_BORDER.
+           Equivalent to a combination of @c wxDEFAULT_DIALOG_STYLE and
+           @c wxRESIZE_BORDER.
     @style{wxDD_DIR_MUST_EXIST}
            The dialog will allow the user to choose only an existing folder.
            When this style is not given, a "Create new directory" button is
-           added to the dialog (on Windows) or some other way is provided to
+           added to the dialog or some other way is provided to
            the user to type the name of a new folder.
     @style{wxDD_CHANGE_DIR}
            Change the current working directory to the directory chosen by the
@@ -50,36 +50,21 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
            This flag cannot be used with the @c wxDD_MULTIPLE style.
     @style{wxDD_MULTIPLE}
            Allow the user to select multiple directories.
-           This flag is only available since wxWidgets 3.1.4
+           This flag is only available since wxWidgets 3.1.4.
     @style{wxDD_SHOW_HIDDEN}
            Show hidden and system folders.
-           This flag is only available since wxWidgets 3.1.4
+           This flag is only available since wxWidgets 3.1.4.
     @endStyleTable
 
-    Notice that @c wxRESIZE_BORDER has special side effect under Windows
-    where two different directory selection dialogs are available and this
-    style also implicitly selects the new version as the old one always has
-    fixed size. As the new version is almost always preferable, it is
-    recommended that @c wxRESIZE_BORDER style be always used.
-    This is the case if the dialog is created with the default style value but
-    if you need to use any additional styles you should still specify @c
-    wxDD_DEFAULT_STYLE unless you explicitly need to use the old dialog version
-    under Windows. E.g. do
-    @code
-        wxDirDialog dlg(nullptr, "Choose input directory", "",
-                        wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
-    @endcode
-    instead of just using @c wxDD_DIR_MUST_EXIST style alone.
-
-    @remarks MacOS 10.11+ does not display a title bar on the dialog. Use SetMessage()
+    @remarks macOS 10.11+ does not display a title bar on the dialog. Use SetMessage()
              to change the string displayed to the user at the top of the dialog after creation.
-             The SetTitle() method is provided for compatibility with pre-10.11 MacOS versions
+             The SetTitle() method is provided for compatibility with pre-10.11 macOS versions
              that do still support displaying the title bar.
 
     @library{wxcore}
     @category{cmndlg}
 
-    @see @ref overview_cmndlg_dir, wxFileDialog
+    @see @ref overview_cmndlg_dir, ::wxDirSelector(), wxDirPickerCtrl, wxFileDialog
 */
 class wxDirDialog : public wxDialog
 {
@@ -94,7 +79,7 @@ public:
         @param defaultPath
             The default path, or the empty string.
         @param style
-            The dialog style. See wxDirDialog
+            The dialog style, see @c wxDD_* styles for more info.
         @param pos
             Dialog position. Ignored under Windows.
         @param size
@@ -149,8 +134,8 @@ public:
     virtual void SetPath(const wxString& path);
 
     /**
-        Shows the dialog, returning wxID_OK if the user pressed OK, and
-        wxID_CANCEL otherwise.
+        Shows the dialog, returning @c wxID_OK if the user pressed OK, and
+        @c wxID_CANCEL otherwise.
     */
     int ShowModal();
 };
@@ -167,13 +152,13 @@ public:
 /**
     Pops up a directory selector dialog. The arguments have the same meaning
     as those of wxDirDialog::wxDirDialog(). The message is displayed at the
-    top, and the default_path, if specified, is set as the initial selection.
+    top, and the @a defaultPath, if specified, is set as the initial selection.
 
     The application must check for an empty return value (if the user pressed
     Cancel). For example:
 
     @code
-    const wxString& dir = wxDirSelector("Choose a folder");
+    const wxString dir = wxDirSelector("Choose a folder");
     if ( !dir.empty() )
     {
         ...
@@ -183,8 +168,8 @@ public:
     @header{wx/dirdlg.h}
 */
 wxString wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
-                       const wxString& default_path = wxEmptyString,
-                       long style = 0,
+                       const wxString& defaultPath = wxEmptyString,
+                       long style = wxDD_DEFAULT_STYLE,
                        const wxPoint& pos = wxDefaultPosition,
                        wxWindow* parent = nullptr);
 

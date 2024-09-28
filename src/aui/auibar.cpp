@@ -825,7 +825,6 @@ wxBEGIN_EVENT_TABLE(wxAuiToolBar, wxControl)
     EVT_SIZE(wxAuiToolBar::OnSize)
     EVT_IDLE(wxAuiToolBar::OnIdle)
     EVT_DPI_CHANGED(wxAuiToolBar::OnDPIChanged)
-    EVT_ERASE_BACKGROUND(wxAuiToolBar::OnEraseBackground)
     EVT_PAINT(wxAuiToolBar::OnPaint)
     EVT_LEFT_DOWN(wxAuiToolBar::OnLeftDown)
     EVT_LEFT_DCLICK(wxAuiToolBar::OnLeftDown)
@@ -896,7 +895,6 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     return true;
 }
@@ -913,9 +911,9 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
     wxCHECK_RET(IsPaneValid(style),
                 "window settings and pane settings are incompatible");
 
-    wxControl::SetWindowStyleFlag(style);
+    const auto oldBgStyle = m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND;
 
-    m_windowStyle = style;
+    wxControl::SetWindowStyleFlag(style);
 
     if (m_art)
     {
@@ -937,6 +935,13 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
     else
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_BOTTOM);
+
+    wxControl::SetWindowStyleFlag(style);
+
+    const auto newBgStyle = m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND;
+
+    if ( newBgStyle != oldBgStyle )
+        UpdateBackgroundBitmap(GetClientSize());
 }
 
 wxSize wxAuiToolBar::DoGetBestSize() const
@@ -2207,60 +2212,67 @@ void wxAuiToolBar::DoIdleUpdate()
         if (item.m_toolId == -1)
             continue;
 
-        wxUpdateUIEvent evt(item.m_toolId);
-        evt.SetEventObject(this);
-
-        if ( !item.CanBeToggled() )
-            evt.DisallowCheck();
-
-        if (handler->ProcessEvent(evt))
+        if (item.GetKind() != wxITEM_CONTROL)
         {
-            if (evt.GetSetEnabled())
-            {
-                bool is_enabled;
-                if (item.m_window)
-                    is_enabled = item.m_window->IsThisEnabled();
-                else
-                    is_enabled = (item.m_state & wxAUI_BUTTON_STATE_DISABLED) ? false : true;
+            wxUpdateUIEvent evt(item.m_toolId);
+            evt.SetEventObject(this);
 
-                bool new_enabled = evt.GetEnabled();
-                if (new_enabled != is_enabled)
+            if ( !item.CanBeToggled() )
+                evt.DisallowCheck();
+
+            if (handler->ProcessEvent(evt))
+            {
+                if (evt.GetSetEnabled())
                 {
+                    bool is_enabled;
                     if (item.m_window)
-                    {
-                        item.m_window->Enable(new_enabled);
-                    }
+                        is_enabled = item.m_window->IsThisEnabled();
                     else
+                        is_enabled = (item.m_state & wxAUI_BUTTON_STATE_DISABLED) ? false : true;
+
+                    bool new_enabled = evt.GetEnabled();
+                    if (new_enabled != is_enabled)
                     {
-                        if (new_enabled)
-                            item.m_state &= ~wxAUI_BUTTON_STATE_DISABLED;
+                        if (item.m_window)
+                        {
+                            item.m_window->Enable(new_enabled);
+                        }
                         else
-                            item.m_state |= wxAUI_BUTTON_STATE_DISABLED;
+                        {
+                            if (new_enabled)
+                                item.m_state &= ~wxAUI_BUTTON_STATE_DISABLED;
+                            else
+                                item.m_state |= wxAUI_BUTTON_STATE_DISABLED;
+                        }
+                        need_refresh = true;
                     }
-                    need_refresh = true;
                 }
-            }
 
-            if (evt.GetSetChecked())
-            {
-                // make sure we aren't checking an item that can't be
-                if (item.m_kind != wxITEM_CHECK && item.m_kind != wxITEM_RADIO)
-                    continue;
-
-                bool is_checked = (item.m_state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
-                bool new_checked = evt.GetChecked();
-
-                if (new_checked != is_checked)
+                if (evt.GetSetChecked())
                 {
-                    if (new_checked)
-                        item.m_state |= wxAUI_BUTTON_STATE_CHECKED;
-                    else
-                        item.m_state &= ~wxAUI_BUTTON_STATE_CHECKED;
+                    // make sure we aren't checking an item that can't be
+                    if (item.m_kind != wxITEM_CHECK && item.m_kind != wxITEM_RADIO)
+                        continue;
 
-                    need_refresh = true;
+                    bool is_checked = (item.m_state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
+                    bool new_checked = evt.GetChecked();
+
+                    if (new_checked != is_checked)
+                    {
+                        if (new_checked)
+                            item.m_state |= wxAUI_BUTTON_STATE_CHECKED;
+                        else
+                            item.m_state &= ~wxAUI_BUTTON_STATE_CHECKED;
+
+                        need_refresh = true;
+                    }
                 }
-            }
 
+            }
+        }
+        else
+        {
+            item.GetWindow()->UpdateWindowUI();
         }
     }
 
@@ -2308,6 +2320,9 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     }
 
     m_sizer->SetDimension(0, 0, x, y);
+
+    // We need to update the bitmap if the size has changed.
+    UpdateBackgroundBitmap(wxSize(x, y));
 
     Refresh(false);
 
@@ -2418,18 +2433,29 @@ void wxAuiToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
     Refresh();
 }
 
+void wxAuiToolBar::UpdateBackgroundBitmap(const wxSize& size)
+{
+    m_backgroundBitmap.Create(size);
+
+    wxMemoryDC dc(m_backgroundBitmap);
+
+    wxRect rect{size};
+
+    if (m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND)
+        m_art->DrawPlainBackground(dc, this, rect);
+    else
+        m_art->DrawBackground(dc, this, rect);
+
+    SetBackgroundBitmap(m_backgroundBitmap);
+}
+
 void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
-    wxAutoBufferedPaintDC dc(this);
+    wxPaintDC dc(this);
     wxRect cli_rect(wxPoint(0,0), GetClientSize());
 
 
     bool horizontal = m_orientation == wxHORIZONTAL;
-
-    if (m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND)
-        m_art->DrawPlainBackground(dc, this, cli_rect);
-    else
-        m_art->DrawBackground(dc, this, cli_rect);
 
     int gripperSize = m_art->GetElementSize(wxAUI_TBART_GRIPPER_SIZE);
     int overflowSize = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);
@@ -2514,11 +2540,6 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         wxRect dropDownRect = GetOverflowRect();
         m_art->DrawOverflowButton(dc, this, dropDownRect, m_overflowState);
     }
-}
-
-void wxAuiToolBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
-{
-    // empty
 }
 
 void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)

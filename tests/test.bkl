@@ -443,6 +443,7 @@
     <wx-data id="en_GB" template="catalog"/>
     <wx-data id="fr" template="catalog"/>
     <wx-data id="ja" template="catalog"/>
+    <wx-data id="xart-dothraki" template="catalog"/>
 
 
     <fragment format="autoconf">

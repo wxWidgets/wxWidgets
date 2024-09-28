@@ -31,3 +31,4 @@ expressions</em> (BRE). EREs are roughly those of the traditional @e egrep,
     makefile.unx</code> in the sample directory to build it.
     bool AtLeast(int major, int minor = 0, int micro = 0) const
     bool AtLeast(int major, int minor = 0, int micro = 0) const;
+        return AtLeast(0) || !m_name.empty() || !m_description.empty();

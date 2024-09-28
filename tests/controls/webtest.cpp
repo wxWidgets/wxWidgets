@@ -387,7 +387,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 
         result = "";
         CHECK(!m_browser->RunScript("int main() { return 0; }", &result));
-        CHECK(!result);
+        CHECK(result.empty());
 
         CHECK(m_browser->RunScript("function a() { return eval(\"function b() { \
             return eval(\\\"function c() { return eval(\\\\\\\"function d() { \

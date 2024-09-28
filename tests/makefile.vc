@@ -808,7 +808,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -886,6 +886,10 @@ fr:
 ja: 
 	if not exist $(OBJS)\intl\ja mkdir $(OBJS)\intl\ja
 	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\ja\%f copy .\intl\ja\%f $(OBJS)\intl\ja
+
+xart-dothraki: 
+	if not exist $(OBJS)\intl\xart-dothraki mkdir $(OBJS)\intl\xart-dothraki
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\xart-dothraki\%f copy .\intl\xart-dothraki\%f $(OBJS)\intl\xart-dothraki
 
 $(OBJS)\test_test.res: .\..\tests\test.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_10)  $(__TARGET_CPU_COMPFLAG_p_10) /d __WXMSW__ $(__WXUNIV_DEFINE_p_10) $(__DEBUG_DEFINE_p_10) $(__NDEBUG_DEFINE_p_10) $(__EXCEPTIONS_DEFINE_p_10) $(__RTTI_DEFINE_p_10) $(__THREAD_DEFINE_p_10) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_2) /i . $(__DLLFLAG_p_10) /d _CONSOLE /d wxUSE_GUI=0 /i .\..\samples /i .\..\3rdparty\catch\single_include .\..\tests\test.rc

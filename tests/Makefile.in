@@ -467,7 +467,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-image-sample data-images en_GB fr ja
+all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
 
 install: 
 
@@ -640,6 +640,18 @@ ja:
 	fi; \
 	case "$$x" in ?*) \
 	cp -pRf $(srcdir)/intl/ja/$$f ./intl/ja ;; \
+	esac; \
+	done
+
+xart-dothraki: 
+	@mkdir -p ./intl/xart-dothraki
+	@for f in internat.po internat.mo; do \
+	if test ! -f ./intl/xart-dothraki/$$f -a ! -d ./intl/xart-dothraki/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/intl/xart-dothraki/$$f -newer ./intl/xart-dothraki/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/intl/xart-dothraki/$$f ./intl/xart-dothraki ;; \
 	esac; \
 	done
 
@@ -1301,4 +1313,5 @@ failtest_allheaders:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
 .PHONY: all install uninstall clean distclean test_gui_bundle \
-	test_allheaders_bundle data data-image-sample data-images en_GB fr ja
+	test_allheaders_bundle data data-image-sample data-images en_GB fr ja \
+	xart-dothraki

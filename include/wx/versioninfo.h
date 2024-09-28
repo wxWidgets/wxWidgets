@@ -13,6 +13,16 @@
 #include "wx/string.h"
 
 // ----------------------------------------------------------------------------
+// wxVersionContext: defines which version information to retrieve
+// ----------------------------------------------------------------------------
+
+enum class wxVersionContext
+{
+    RunTime,        // Version used during run-time.
+    BuildTime       // Version that the application was built with.
+};
+
+// ----------------------------------------------------------------------------
 // wxVersionInfo: represents version information
 // ----------------------------------------------------------------------------
 
@@ -61,6 +71,12 @@ public:
         return m_micro >= micro;
     }
 
+    // Return true if this version object actually has any version information.
+    bool IsOk() const
+    {
+        return AtLeast(0) || !m_name.empty() || !m_description.empty();
+    }
+
     const wxString& GetName() const { return m_name; }
 
     int GetMajor() const { return m_major; }
@@ -73,16 +89,24 @@ public:
         return HasDescription() ? GetDescription() : GetVersionString();
     }
 
-    wxString GetVersionString() const
+    wxString GetNumericVersionString() const
     {
         wxString str;
-        str << m_name << ' ' << GetMajor() << '.' << GetMinor();
+        str << GetMajor() << '.' << GetMinor();
         if ( GetMicro() || GetRevision() )
         {
             str << '.' << GetMicro();
             if ( GetRevision() )
                 str << '.' << GetRevision();
         }
+
+        return str;
+    }
+
+    wxString GetVersionString() const
+    {
+        wxString str;
+        str << m_name << ' ' << GetNumericVersionString();
 
         return str;
     }

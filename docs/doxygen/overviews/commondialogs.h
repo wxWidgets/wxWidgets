@@ -182,8 +182,8 @@ description for each, such as:
 
 Classes: wxDirDialog
 
-This dialog shows a directory selector dialog, allowing the user to select a
-single directory.
+This dialog shows a directory selector dialog, allowing the user to select
+one or multiple directories.
 
 
 

@@ -33,11 +33,11 @@ bool wxNativeEncodingInfo::FromString( const wxString& s )
     wxStringTokenizer tokenizer(s, wxT(";"));
 
     facename = tokenizer.GetNextToken();
-    if ( !facename )
+    if ( facename.empty() )
         return false;
 
     wxString tmp = tokenizer.GetNextToken();
-    if ( !tmp )
+    if ( tmp.empty() )
     {
         // default charset
         charset = 0;

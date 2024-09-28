@@ -774,7 +774,7 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
         else if (wxFileExists( wxT("/usr/sbin/ping") ))
             m_PingPath = wxT("/usr/sbin/ping");
 #endif
-        if (!m_PingPath)
+        if (m_PingPath.empty())
         {
             m_CanUsePing = 0;
         }

@@ -514,7 +514,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja xart-dothraki
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -585,6 +585,10 @@ fr:
 ja: 
 	if not exist $(OBJS)\intl\ja mkdir $(OBJS)\intl\ja
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\ja\%%f copy .\intl\ja\%%f $(OBJS)\intl\ja
+
+xart-dothraki: 
+	if not exist $(OBJS)\intl\xart-dothraki mkdir $(OBJS)\intl\xart-dothraki
+	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\xart-dothraki\%%f copy .\intl\xart-dothraki\%%f $(OBJS)\intl\xart-dothraki
 
 $(OBJS)\test_test_rc.o: ./../tests/test.rc
 	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_10) $(__DEBUG_DEFINE_p_10) $(__NDEBUG_DEFINE_p_10) $(__EXCEPTIONS_DEFINE_p_10) $(__RTTI_DEFINE_p_10) $(__THREAD_DEFINE_p_10) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_10) --define wxUSE_GUI=0 --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
@@ -1213,7 +1217,7 @@ $(OBJS)\test_allheaders_allheaders.o: ./allheaders.cpp
 $(OBJS)\test_allheaders_testableframe.o: ./testableframe.cpp
 	$(CXX) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean data data-image-sample data-images en_GB fr ja
+.PHONY: all clean data data-image-sample data-images en_GB fr ja xart-dothraki
 
 
 SHELL := $(COMSPEC)

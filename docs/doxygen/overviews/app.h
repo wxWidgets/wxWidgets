@@ -11,13 +11,14 @@
 
 @tableofcontents
 
-A wxWidgets application does not have a @e main procedure; the equivalent is
-the wxApp::OnInit member defined for a class derived from wxApp.
+A wxWidgets application does not have a @e main function; the equivalent, i.e.
+the entry point where the execution of the program begins, is the
+wxApp::OnInit() member function defined in a class derived from wxApp (this
+class is typically specified using wxIMPLEMENT_APP() macro).
 
-@e OnInit will usually create a top window as a bare minimum. Unlike in earlier
-versions of wxWidgets, OnInit does not return a frame. Instead it returns a
-boolean value which indicates whether processing should continue (@true) or not
-(@false).
+@e OnInit usually creates the main application window and returns @true.
+If it returns @false, the application will exit immediately, without starting
+to run.
 
 Note that the program's command line arguments, represented by @e argc and
 @e argv, are available from within wxApp member functions.
@@ -38,7 +39,7 @@ An example of defining an application follows:
 class DerivedApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() override;
 };
 
 wxIMPLEMENT_APP(DerivedApp);

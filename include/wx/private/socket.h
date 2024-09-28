@@ -204,10 +204,6 @@ public:
     wxSocketError GetError() const { return m_error; }
     bool IsOk() const { return m_error == wxSOCKET_NOERROR; }
 
-    // get the error code corresponding to the last operation
-    virtual wxSocketError GetLastError() const = 0;
-
-
     // creating/closing the socket
     // --------------------------
 
@@ -322,10 +318,18 @@ protected:
     // get the associated socket flags
     wxSocketFlags GetSocketFlags() const { return m_wxsocket->GetFlags(); }
 
+    // set m_error to the outcome of the last operation and return it
+    wxSocketError UpdateLastError() { m_error = GetLastError(); return m_error; }
+
     // true if we're a listening stream socket
     bool m_server;
 
 private:
+    // get the error code corresponding to the last operation
+    //
+    // this is private because it's only used by UpdateLastError()
+    virtual wxSocketError GetLastError() const = 0;
+
     // called by Close() if we have a valid m_fd
     virtual void DoClose() = 0;
 

@@ -54,6 +54,7 @@ public:
 
         wxUpdateUIEvent event( GetId() );
         event.SetEventObject(this);
+        DoPrepareUpdateWindowUI(event);
 
         if (GetEventHandler()->ProcessEvent(event) )
         {

@@ -803,6 +803,10 @@ WXDLLIMPEXP_CORE bool wxYield();
 // Like wxYield, but fails silently if the yield is recursive.
 WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
 
+#ifdef __WINDOWS__
+WXDLLIMPEXP_CORE bool wxMSWIsOnSecureScreen();
+#endif // __WINDOWS__
+
 // ----------------------------------------------------------------------------
 // Windows resources access
 // ----------------------------------------------------------------------------

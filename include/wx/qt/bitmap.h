@@ -34,9 +34,9 @@ public:
 
     static void InitStandardHandlers();
 
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) override;
-    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) override;
-    virtual bool Create(int width, int height, const wxDC& dc);
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) final;
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) final;
+    bool Create(int width, int height, const wxDC& dc);
 
     virtual void SetScaleFactor(double scale);
     virtual double GetScaleFactor() const;

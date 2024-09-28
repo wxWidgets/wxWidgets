@@ -1535,7 +1535,7 @@ int wxXmlResourceHandlerImpl::GetStyle(const wxString& param, int defaults)
 {
     wxString s = GetParamValue(param);
 
-    if (!s) return defaults;
+    if (s.empty()) return defaults;
 
     wxStringTokenizer tkn(s, wxT("| \t\n"), wxTOKEN_STRTOK);
     int style = 0;

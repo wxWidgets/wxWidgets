@@ -10,6 +10,12 @@
 #ifndef WX_COMIMPL_H
 #define WX_COMIMPL_H
 
+// DO NOT USE THIS HEADER.
+//
+// This header is only preserved for compatibility and the helpers defined here
+// are obsolete and shouldn't be used in any new code and don't work correctly
+// with classes inheriting from IUnknown more than once.
+
 #include "wx/defs.h"
 
 #include "wx/msw/wrapwin.h"

@@ -1002,7 +1002,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename, wxWindow *parent)
     // get the file name
     // -----------------
     wxString filename = wxSaveFileSelector(wxT("log"), wxT("txt"), wxT("log.txt"), parent);
-    if ( !filename ) {
+    if ( filename.empty() ) {
         // cancelled
         return -1;
     }

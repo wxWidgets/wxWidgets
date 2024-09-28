@@ -12,7 +12,7 @@
 #define ID_START         10000
 #define ID_DISCONNECT    10001
 #define ID_STARTADVISE    10002
-#define ID_LOG          10003
+
 #define ID_SERVERNAME    10004
 #define ID_STOPADVISE    10005
 #define ID_POKE            10006
@@ -58,7 +58,6 @@ protected:
     wxButton* GetRequest()  { return (wxButton*) FindWindow( ID_REQUEST ); }
     wxButton* GetPoke()  { return (wxButton*) FindWindow( ID_POKE ); }
     wxButton* GetExecute()  { return (wxButton*) FindWindow( ID_EXECUTE ); }
-    wxTextCtrl* GetLog()  { return (wxTextCtrl*) FindWindow( ID_LOG ); }
 
     MyClient         *m_client;
 
