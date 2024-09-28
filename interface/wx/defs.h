@@ -1860,6 +1860,16 @@ template <typename T> void wxDELETEA(T*& array);
 #define wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(name)
 
 /**
+    Expands to the "warn_unused" attribute (also known as [[gnu::warn_unused]])
+    on compilers supporting it (GCC and Clang), otherwise to nothing.
+
+    @header{wx/defs.h}
+
+    @since 3.3.0
+*/
+#define wxWARN_UNUSED __attribute__((warn_unused))
+
+/**
     Swaps the contents of two variables.
 
     This is similar to std::swap() but can be used even on the platforms where
