@@ -430,11 +430,10 @@ wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArray
     static int defaultRegionDistance = wxUILocale::GetMatchDistance("*-*-*", "*-*-*");
     static int defaultRegionGroupDistance = wxUILocale::GetMatchDistance("*-*-*", "*-*-*");
     static int defaultDemotion = wxUILocale::GetMatchDistance("en-*-*", "en-*-*");
+    static int threshold = defaultScriptDistance;
 
-    // Arrays of locale identifiers associated with the given locale tags
-    std::vector<wxLocaleIdent> desiredLocales;
-    std::vector<wxLocaleIdent> desiredLocalesMax;
-    std::vector<wxLocaleIdent> supportedLocales;
+    // Maximized locale identifiers associated with the given desired and supported locale tags
+    wxLocaleIdent desiredLocaleMax;
     std::vector<wxLocaleIdent> supportedLocalesMax;
 
     // Indexes of best match
@@ -451,11 +450,10 @@ wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArray
     for (size_t j = 0; j < desired.size(); ++j)
     {
         // Determine maximized desired locale identifiers
-        desiredLocales.push_back(wxLocaleIdent::FromTag(desired[j]));
-        desiredLocalesMax.push_back(AddLikelySubtags(desiredLocales[j]));
-        desiredLanguage = desiredLocalesMax[j].GetLanguage();
-        desiredScript = desiredLocalesMax[j].GetScript();
-        desiredRegion = desiredLocalesMax[j].GetRegion();
+        desiredLocaleMax = AddLikelySubtags(wxLocaleIdent::FromTag(desired[j]));
+        desiredLanguage = desiredLocaleMax.GetLanguage();
+        desiredScript = desiredLocaleMax.GetScript();
+        desiredRegion = desiredLocaleMax.GetRegion();
 
         for (size_t k = 0; k < supported.size(); ++k)
         {
@@ -479,8 +477,7 @@ wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArray
             // Determine maximized supported locale identifiers
             if (j == 0)
             {
-                supportedLocales.push_back(wxLocaleIdent::FromTag(supported[k]));
-                supportedLocalesMax.push_back(AddLikelySubtags(supportedLocales[k]));
+                supportedLocalesMax.push_back(AddLikelySubtags(wxLocaleIdent::FromTag(supported[k])));
             }
             supportedLanguage = supportedLocalesMax[k].GetLanguage();
             supportedScript = supportedLocalesMax[k].GetScript();
@@ -539,7 +536,7 @@ wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArray
             }
 
             // Check whether better match was found
-            if (distance < bestDistance)
+            if (distance < threshold && distance < bestDistance)
             {
                 bestDistance = distance;
                 bestDesired = j;
