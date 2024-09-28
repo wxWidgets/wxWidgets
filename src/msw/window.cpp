@@ -3482,7 +3482,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-#ifdef WM_GESTURE
         case WM_GESTURE:
         {
             HGESTUREINFO hGestureInfo = reinterpret_cast<HGESTUREINFO>(lParam);
@@ -3561,7 +3560,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // handled, otherwise we still pass them to DefWindowProc().
             processed = HandleTouch(wParam, lParam);
             break;
-#endif // WM_GESTURE
 
         // CTLCOLOR messages are sent by children to query the parent for their
         // colors
@@ -6183,7 +6181,6 @@ void wxWindowMSW::GenerateMouseLeave()
     (void)HandleWindowEvent(event);
 }
 
-#ifdef WM_GESTURE
 // ---------------------------------------------------------------------------
 // Gesture events
 // ---------------------------------------------------------------------------
@@ -6364,8 +6361,6 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
 
     return allHandled;
 }
-
-#endif // WM_GESTURE
 
 // ---------------------------------------------------------------------------
 // keyboard handling
