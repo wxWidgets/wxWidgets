@@ -341,6 +341,18 @@ typedef short int WXTYPE;
     #define wxFALLTHROUGH ((void)0)
 #endif
 
+/* wxWARN_UNUSED is used as an attribute to a class, stating that unused instances
+   should be warned about (in case such warnings are enabled in the first place) */
+
+#ifdef __has_cpp_attribute
+    #if __has_cpp_attribute(warn_unused)
+        #define wxWARN_UNUSED __attribute__((warn_unused))
+    #endif
+#endif
+#ifndef wxWARN_UNUSED
+    #define wxWARN_UNUSED
+#endif
+
 /* these macros are obsolete, use the standard C++ casts directly now */
 #define wx_static_cast(t, x) static_cast<t>(x)
 #define wx_const_cast(t, x) const_cast<t>(x)
