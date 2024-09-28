@@ -6325,37 +6325,41 @@ bool wxWindowMSW::HandlePressAndTap(const wxPoint& pt, WXDWORD flags)
 bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
 {
     const unsigned count = LOWORD(wParam);
+    const HTOUCHINPUT hTouchInput = (HTOUCHINPUT)lParam;
     wxVector<TOUCHINPUT> info(count);
-    if (::GetTouchInputInfo((HTOUCHINPUT)lParam, count, &info[0], sizeof(TOUCHINPUT)))
+    if ( !::GetTouchInputInfo(hTouchInput, count, &info[0], sizeof(TOUCHINPUT)) )
     {
-        for ( const auto& input : info )
-        {
-            // hundredths of a pixel of physical screen coordinates
-            wxPoint2DDouble pt(input.x / 100.0, input.y / 100.0);
-            wxPoint ref = pt.GetFloor();
-            wxPoint2DDouble pos = ScreenToClient(ref) + (pt - ref);
-
-            wxEventType type;
-            if ( input.dwFlags & TOUCHEVENTF_DOWN )
-                type = wxEVT_TOUCH_BEGIN;
-            else if ( input.dwFlags & TOUCHEVENTF_MOVE )
-                type = wxEVT_TOUCH_MOVE;
-            else if ( input.dwFlags & TOUCHEVENTF_UP )
-                type = wxEVT_TOUCH_END;
-            else
-                continue;
-
-            wxMultiTouchEvent event( GetId(), type);
-
-            event.SetEventObject( this );
-            event.SetPosition(pos);
-            event.SetSequenceId(wxTouchSequenceId(wxUIntToPtr(input.dwID + 1)));
-            event.SetPrimary( (input.dwFlags & TOUCHEVENTF_PRIMARY) != 0 );
-            HandleWindowEvent(event);
-        }
-        return true;
+        wxLogLastError(wxT("GetTouchInputInfo"));
+        return false;
     }
-    return false;
+
+    for ( const auto& input : info )
+    {
+        // hundredths of a pixel of physical screen coordinates
+        wxPoint2DDouble pt(input.x / 100.0, input.y / 100.0);
+        wxPoint ref = pt.GetFloor();
+        wxPoint2DDouble pos = ScreenToClient(ref) + (pt - ref);
+
+        wxEventType type;
+        if ( input.dwFlags & TOUCHEVENTF_DOWN )
+            type = wxEVT_TOUCH_BEGIN;
+        else if ( input.dwFlags & TOUCHEVENTF_MOVE )
+            type = wxEVT_TOUCH_MOVE;
+        else if ( input.dwFlags & TOUCHEVENTF_UP )
+            type = wxEVT_TOUCH_END;
+        else
+            continue;
+
+        wxMultiTouchEvent event( GetId(), type);
+
+        event.SetEventObject( this );
+        event.SetPosition(pos);
+        event.SetSequenceId(wxTouchSequenceId(wxUIntToPtr(input.dwID + 1)));
+        event.SetPrimary( (input.dwFlags & TOUCHEVENTF_PRIMARY) != 0 );
+        HandleWindowEvent(event);
+    }
+
+    return true;
 }
 
 #endif // WM_GESTURE
