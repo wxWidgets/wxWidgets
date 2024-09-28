@@ -28,7 +28,6 @@
 #include "wx/private/bmpbndl.h"
 
 #include "wx/evtloop.h"
-#include "wx/vector.h"
 
 #if wxUSE_CARET
     #include "wx/caret.h"
@@ -44,6 +43,8 @@
 #endif
 
 #include <objc/objc-runtime.h>
+
+#include <vector>
 
 #define TRACE_FOCUS "focus"
 #define TRACE_KEYS  "keyevent"
@@ -1192,7 +1193,7 @@ void wxOSX_touchesEnded(NSView* self, SEL WXUNUSED(_cmd), NSEvent *event)
 void wxOSX_touchesCancel(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl == NULL )
+    if ( impl == nullptr )
         return;
 
     impl->TouchesCancel(event);
@@ -1756,7 +1757,7 @@ private:
     unsigned int m_touchCount;
     unsigned int m_lastTouchTime;
     bool m_rawTouchEvents;
-    wxVector<NSObject*> m_touchIDs;
+    std::vector<NSObject*> m_touchIDs;
 
     // Used to keep track of the touch corresponding to "press" in Press and Tap gesture
     NSTouch* m_initialTouch;
@@ -2230,21 +2231,21 @@ void* wxCocoaGesturesImpl::GetTouchID(NSObject* id, wxEventType type)
     for(size_t i = 0; i < m_touchIDs.size(); i++)
     {
         NSObject* other = m_touchIDs[i];
-        if (other == NULL)
+        if (other == nullptr)
             continue;
         if ([id isEqual:other])
         {
             if (type == wxEVT_TOUCH_END || type == wxEVT_TOUCH_CANCEL)
             {
                 [other release];
-                m_touchIDs[i] = NULL;
+                m_touchIDs[i] = nullptr;
             }
             return wxUIntToPtr(i);
          }
     }
     for(size_t i = 0; i < m_touchIDs.size(); i++)
     {
-        if (m_touchIDs[i] == NULL)
+        if (m_touchIDs[i] == nullptr)
         {
             m_touchIDs[i] = [id copy];
             return wxUIntToPtr(i);
@@ -2269,7 +2270,7 @@ void wxCocoaGesturesImpl::RawTouchEvent(NSEvent* event, wxEventType type, NSTouc
         wxMultiTouchEvent wxevent(m_win->GetId(), type);
         wxevent.SetEventObject(m_win);
         wxevent.SetSequenceId(wxTouchSequenceId(GetTouchID([touch identity], type)));
-        wxevent.SetPrimary(wxevent.GetSequenceId().GetID() == NULL);
+        wxevent.SetPrimary(wxevent.GetSequenceId().GetID() == nullptr);
 
         NSRect locationInWindow = NSZeroRect;
         locationInWindow.origin = [touch normalizedPosition];
