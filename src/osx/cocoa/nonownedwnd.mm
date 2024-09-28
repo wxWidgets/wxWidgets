@@ -52,7 +52,7 @@ wxRect wxFromNSRect( NSView* parent, const NSRect& rect )
 NSPoint wxToNSPoint( NSView* parent, const wxPoint& p )
 {
     NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
-    int x = p.x;
+    int x = p.x ;
     int y = p.y;
     if ( parent == nullptr || ![ parent isFlipped ] )
         y = (int)(frame.size.height - ( p.y ));
@@ -66,7 +66,7 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
     int y = (int)p.y;
     if ( parent == nullptr || ![ parent isFlipped ] )
         y = (int)(frame.size.height - ( p.y ));
-    return wxPoint(x, y);
+    return wxPoint( x, y);
 }
 
 NSPoint wxToNSPointF( NSView* parent, const wxPoint2DDouble& p )
