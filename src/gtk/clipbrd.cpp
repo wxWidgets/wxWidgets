@@ -48,6 +48,11 @@ static GdkAtom  g_timestampAtom   = nullptr;
 // This is defined in src/gtk/dataobj.cpp.
 extern bool wxGTKIsSameFormat(GdkAtom atom1, GdkAtom atom2);
 
+static wxString wxAtomName(GdkAtom atom)
+{
+    return wxString::FromAscii(wxGtkString(gdk_atom_name(atom)));
+}
+
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
 // (there will be a *lot* of them!)
@@ -294,9 +299,9 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     wxLogTrace(TRACE_CLIPBOARD,
                wxT("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s timestamp=%u"),
                format.GetId(),
-               wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_target(selection_data)))),
-               wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_data_type(selection_data)))),
-               wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_selection(selection_data)))),
+               wxAtomName(gtk_selection_data_get_target(selection_data)),
+               wxAtomName(gtk_selection_data_get_data_type(selection_data)),
+               wxAtomName(gtk_selection_data_get_selection(selection_data)),
                timestamp
                );
 
@@ -522,8 +527,7 @@ bool wxClipboard::SetSelectionOwner(bool set)
 
 void wxClipboard::AddSupportedTarget(GdkAtom atom)
 {
-    wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"),
-        wxGtkString(gdk_atom_name(atom)).c_str());
+    wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"), wxAtomName(atom));
 
     gtk_selection_add_target
     (
