@@ -2996,8 +2996,7 @@ bool wxTextCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             InitMouseEvent(evtMouse,
                                            GET_X_LPARAM(enlink->lParam),
                                            GET_Y_LPARAM(enlink->lParam),
-                                           enlink->wParam,
-                                           ::GetMessageExtraInfo());
+                                           enlink->wParam);
 
                             wxTextUrlEvent event(m_windowId, evtMouse,
                                                  enlink->chrg.cpMin,
