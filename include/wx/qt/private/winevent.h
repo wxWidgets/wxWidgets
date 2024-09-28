@@ -392,10 +392,19 @@ protected:
 
             switch (tp.state())
             {
-            case Qt::TouchPointPressed:  evtype = wxEVT_TOUCH_BEGIN;  break;
-            case Qt::TouchPointMoved:    evtype = wxEVT_TOUCH_MOVE;   break;
-            case Qt::TouchPointReleased: evtype = wxEVT_TOUCH_END;    break;
-            default: continue;
+                case Qt::TouchPointPressed:
+                    evtype = wxEVT_TOUCH_BEGIN;
+                    break;
+
+                case Qt::TouchPointMoved:
+                    evtype = wxEVT_TOUCH_MOVE;
+                    break;
+                case Qt::TouchPointReleased:
+                    evtype = wxEVT_TOUCH_END;
+                    break;
+
+                default:
+                    continue;
             }
 
             wxMultiTouchEvent evt(win->GetId(), evtype);
