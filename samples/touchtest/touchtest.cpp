@@ -11,6 +11,8 @@
 #include "wx/wx.h"
 #include "wx/dcbuffer.h"
 
+#include <array>
+
 // Define a new application
 class wxMyApp: public wxApp
 {
@@ -31,9 +33,9 @@ private:
         wxPoint2DDouble last;
         wxPen pen;
     };
-    TouchState m_TouchPoints[TOUCH_POINTS];
-    wxTouchSequenceId m_MouseId;
-    wxBitmap m_Bitmap;
+    std::array<TouchState, TOUCH_POINTS> m_touchPoints;
+    wxTouchSequenceId m_mouseId = wxUIntToPtr(0xFFFFFFFF);
+    wxBitmap m_backingBitmap;
 
     int FindIndexOfTouchId(const wxTouchSequenceId& id);
 
@@ -42,8 +44,7 @@ private:
     void DrawEnd(const wxTouchSequenceId& id, wxPoint2DDouble pos);
 
 public:
-    MyFrame(wxFrame *parent, const wxString& title,
-        const wxPoint& pos, const wxSize& size, const long style);
+    MyFrame(wxFrame *parent, const wxString& title);
 
     void OnTouchBegin(wxMultiTouchEvent& event);
     void OnTouchMove(wxMultiTouchEvent& event);
@@ -67,9 +68,7 @@ bool wxMyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    wxFrame* frame = new MyFrame(nullptr, "Multi-touch Test", wxDefaultPosition,
-        wxDefaultSize, wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
-    SetTopWindow(frame);
+    wxFrame* frame = new MyFrame(nullptr, "Multi-touch Test");
     frame->CenterOnScreen();
     frame->Show(true);
 
@@ -90,31 +89,31 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 wxEND_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
-    const wxSize& size, const long style)
-    : wxFrame(parent, wxID_ANY, title, pos, size, style),
-    m_MouseId(wxUIntToPtr(0xFFFFFFFF))
+MyFrame::MyFrame(wxFrame *parent, const wxString& title)
+    : wxFrame(parent, wxID_ANY, title,
+              wxDefaultPosition, wxDefaultSize,
+              wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL)
 {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetClientSize(FromDIP(wxSize(800, 600)));
 
-    m_TouchPoints[0].pen = wxPen(*wxBLACK, 2);
-    m_TouchPoints[1].pen = wxPen(*wxBLUE, 2);
-    m_TouchPoints[2].pen = wxPen(*wxCYAN, 2);
-    m_TouchPoints[3].pen = wxPen(*wxGREEN, 2);
-    m_TouchPoints[4].pen = wxPen(*wxYELLOW, 2);
-    m_TouchPoints[5].pen = wxPen(*wxRED, 2);
-    m_TouchPoints[6].pen = wxPen(*wxLIGHT_GREY, 2);
-    m_TouchPoints[7].pen = wxPen(*wxBLACK, 2, wxPENSTYLE_DOT_DASH);
-    m_TouchPoints[8].pen = wxPen(*wxBLUE, 2, wxPENSTYLE_DOT_DASH);
-    m_TouchPoints[9].pen = wxPen(*wxCYAN, 2, wxPENSTYLE_DOT_DASH);
-    m_TouchPoints[10].pen = wxPen(*wxGREEN, 2, wxPENSTYLE_DOT_DASH);
-    m_TouchPoints[11].pen = wxPen(*wxRED, 2, wxPENSTYLE_DOT_DASH);
-    m_TouchPoints[12].pen = wxPen(*wxBLACK, 2, wxPENSTYLE_DOT);
-    m_TouchPoints[13].pen = wxPen(*wxYELLOW, 2, wxPENSTYLE_DOT);
-    m_TouchPoints[14].pen = wxPen(*wxBLUE, 2, wxPENSTYLE_DOT);
-    m_TouchPoints[15].pen = wxPen(*wxRED, 2, wxPENSTYLE_DOT);
-    m_TouchPoints[16].pen = wxPen(*wxLIGHT_GREY, 2, wxPENSTYLE_DOT);
+    m_touchPoints[0].pen = wxPen(*wxBLACK, 2);
+    m_touchPoints[1].pen = wxPen(*wxBLUE, 2);
+    m_touchPoints[2].pen = wxPen(*wxCYAN, 2);
+    m_touchPoints[3].pen = wxPen(*wxGREEN, 2);
+    m_touchPoints[4].pen = wxPen(*wxYELLOW, 2);
+    m_touchPoints[5].pen = wxPen(*wxRED, 2);
+    m_touchPoints[6].pen = wxPen(*wxLIGHT_GREY, 2);
+    m_touchPoints[7].pen = wxPen(*wxBLACK, 2, wxPENSTYLE_DOT_DASH);
+    m_touchPoints[8].pen = wxPen(*wxBLUE, 2, wxPENSTYLE_DOT_DASH);
+    m_touchPoints[9].pen = wxPen(*wxCYAN, 2, wxPENSTYLE_DOT_DASH);
+    m_touchPoints[10].pen = wxPen(*wxGREEN, 2, wxPENSTYLE_DOT_DASH);
+    m_touchPoints[11].pen = wxPen(*wxRED, 2, wxPENSTYLE_DOT_DASH);
+    m_touchPoints[12].pen = wxPen(*wxBLACK, 2, wxPENSTYLE_DOT);
+    m_touchPoints[13].pen = wxPen(*wxYELLOW, 2, wxPENSTYLE_DOT);
+    m_touchPoints[14].pen = wxPen(*wxBLUE, 2, wxPENSTYLE_DOT);
+    m_touchPoints[15].pen = wxPen(*wxRED, 2, wxPENSTYLE_DOT);
+    m_touchPoints[16].pen = wxPen(*wxLIGHT_GREY, 2, wxPENSTYLE_DOT);
 
     wxMenu *file_menu = new wxMenu;
 
@@ -139,15 +138,15 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxAutoBufferedPaintDC dc(this);
-    dc.DrawBitmap(m_Bitmap, 0, 0);
+    dc.DrawBitmap(m_backingBitmap, 0, 0);
 }
 
 void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     wxSize size = GetClientSize();
-    m_Bitmap = wxBitmap(size.x, size.y, 24);
+    m_backingBitmap = wxBitmap(size.x, size.y, 24);
 
-    wxMemoryDC dc(m_Bitmap);
+    wxMemoryDC dc(m_backingBitmap);
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
 
@@ -157,13 +156,13 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 int MyFrame::FindIndexOfTouchId(const wxTouchSequenceId& id)
 {
     // Unique drawing for mouse pointer
-    if (id == m_MouseId)
+    if (id == m_mouseId)
         return TOUCH_POINTS - 1;
 
     int idx = -1;
     for (unsigned i = 0; i < TOUCH_POINTS; i++)
     {
-        if (m_TouchPoints[i].id == id)
+        if (m_touchPoints[i].id == id)
             idx = i;
     }
     return idx;
@@ -176,7 +175,7 @@ void MyFrame::DrawStart(const wxTouchSequenceId& id, wxPoint2DDouble pos)
     {
         for (unsigned i = 0; i < TOUCH_POINTS; i++)
         {
-            if (!m_TouchPoints[i].id.IsOk())
+            if (!m_touchPoints[i].id.IsOk())
             {
                 idx = i;
                 break;
@@ -185,8 +184,8 @@ void MyFrame::DrawStart(const wxTouchSequenceId& id, wxPoint2DDouble pos)
     }
     if (idx == -1)
         return;
-    m_TouchPoints[idx].id = id;
-    m_TouchPoints[idx].last = pos;
+    m_touchPoints[idx].id = id;
+    m_touchPoints[idx].last = pos;
 }
 
 void MyFrame::DrawUpdate(const wxTouchSequenceId& id, wxPoint2DDouble pos)
@@ -195,11 +194,11 @@ void MyFrame::DrawUpdate(const wxTouchSequenceId& id, wxPoint2DDouble pos)
     if (idx == -1)
         return;
 
-    wxMemoryDC dc(m_Bitmap);
-    dc.SetPen(m_TouchPoints[idx].pen);
-    dc.DrawLine(m_TouchPoints[idx].last.GetRounded(), pos.GetRounded());
+    wxMemoryDC dc(m_backingBitmap);
+    dc.SetPen(m_touchPoints[idx].pen);
+    dc.DrawLine(m_touchPoints[idx].last.GetRounded(), pos.GetRounded());
 
-    m_TouchPoints[idx].last = pos;
+    m_touchPoints[idx].last = pos;
 
     Refresh();
 }
@@ -210,11 +209,11 @@ void MyFrame::DrawEnd(const wxTouchSequenceId& id, wxPoint2DDouble pos)
     if (idx == -1)
         return;
 
-    wxMemoryDC dc(m_Bitmap);
-    dc.SetPen(m_TouchPoints[idx].pen);
-    dc.DrawLine(m_TouchPoints[idx].last.GetRounded(), pos.GetRounded());
+    wxMemoryDC dc(m_backingBitmap);
+    dc.SetPen(m_touchPoints[idx].pen);
+    dc.DrawLine(m_touchPoints[idx].last.GetRounded(), pos.GetRounded());
 
-    m_TouchPoints[idx].id.Unset();
+    m_touchPoints[idx].id.Unset();
 
     Refresh();
 }
@@ -236,16 +235,16 @@ void MyFrame::OnTouchEnd(wxMultiTouchEvent& event)
 
 void MyFrame::OnMouseDown(wxMouseEvent& event)
 {
-    DrawStart(m_MouseId, event.GetPosition());
+    DrawStart(m_mouseId, event.GetPosition());
 }
 
 void MyFrame::OnMouseMove(wxMouseEvent& event)
 {
     if (event.LeftIsDown())
-        DrawUpdate(m_MouseId, event.GetPosition());
+        DrawUpdate(m_mouseId, event.GetPosition());
 }
 
 void MyFrame::OnMouseUp(wxMouseEvent& event)
 {
-    DrawEnd(m_MouseId, event.GetPosition());
+    DrawEnd(m_mouseId, event.GetPosition());
 }
