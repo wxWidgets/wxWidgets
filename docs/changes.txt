@@ -259,9 +259,15 @@ All (GUI):
 
 - Improve wxPropGrid checkboxes in high DPI (Alex Shvartzkop, #24650, #24651).
 
+wxGTK:
+
+- Fix copy-pasting text under more Wayland compositors (Weston, kwin) (#24701).
+
 wxMSW:
 
 - Improve print preview in high DPI (taler21, #24815).
+- Fix position of the icons in the printout (#24673).
+- Fix events generated when toast-based notifications are dismissed (#24320).
 
 wxOSX:
 
