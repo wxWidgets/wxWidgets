@@ -1800,6 +1800,16 @@ void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
     m_tabs.SetArtProvider(art);
 
+    // If the art provider implements GetXXXFont() functions, use them.
+    //
+    // Otherwise keep using our own fonts.
+    wxFont font = art->GetNormalFont();
+    if ( font.IsOk() )
+        m_normalFont = font;
+    font = art->GetSelectedFont();
+    if ( font.IsOk() )
+        m_selectedFont = font;
+
     // Update the height and do nothing else if it did something but otherwise
     // (i.e. if the new art provider uses the same height as the old one) we
     // need to manually set the art provider for all tabs ourselves.
