@@ -688,9 +688,10 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     wxVector<wxString> atomNames;
 
-    // always provide TIMESTAMP as a target, see comments in selection_handler
-    // for explanation
-    atomNames.push_back("TIMESTAMP");
+    // under X11, always provide TIMESTAMP as a target, see comments in
+    // selection_handler for explanation
+    if ( !isWayland )
+        atomNames.push_back("TIMESTAMP");
 
 #ifdef __WXGTK3__
     bool addedUTF8Text = false;
