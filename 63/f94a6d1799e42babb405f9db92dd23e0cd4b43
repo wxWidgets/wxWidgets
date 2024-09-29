@@ -1,0 +1,1 @@
+wxGTK: Fix using wrong colour in wxPrinterDC (#24729).
