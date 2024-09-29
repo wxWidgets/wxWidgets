@@ -259,6 +259,10 @@ All (GUI):
 
 - Improve wxPropGrid checkboxes in high DPI (Alex Shvartzkop, #24650, #24651).
 
+wxGTK:
+
+- Fix copy-pasting text under more Wayland compositors (Weston, kwin) (#24701).
+
 wxMSW:
 
 - Improve print preview in high DPI (taler21, #24815).
