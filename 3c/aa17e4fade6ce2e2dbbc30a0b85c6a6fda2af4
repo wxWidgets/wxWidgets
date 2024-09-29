@@ -1,0 +1,1 @@
+wxAll (GUI): Fix wxAUI dock art appearance after DPI change (Maarten Bent, #23420).
