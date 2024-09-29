@@ -188,6 +188,17 @@ extern bool wxGTKIsSameFormat(GdkAtom atom1, GdkAtom atom2)
     return false;
 }
 
+// Also used by wxClipboard to use the alternative Wayland atoms for the text.
+extern GdkAtom wxGTKGetAltWaylandFormat(GdkAtom atom)
+{
+    if (atom == g_u8strAtom)
+        return g_u8textAtom.Get();
+    if (atom == g_strAtom)
+        return g_textAtom.Get();
+
+    return nullptr;
+}
+
 bool wxDataFormat::operator==(const wxDataFormat& other) const
 {
     if ( m_type != other.m_type )

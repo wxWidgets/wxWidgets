@@ -48,6 +48,9 @@ static GdkAtom  g_timestampAtom   = nullptr;
 // This is defined in src/gtk/dataobj.cpp.
 extern bool wxGTKIsSameFormat(GdkAtom atom1, GdkAtom atom2);
 
+// Returns alternative format used under Wayland for the given format or 0.
+extern GdkAtom wxGTKGetAltWaylandFormat(GdkAtom atom);
+
 static wxString wxAtomName(GdkAtom atom)
 {
     return wxString::FromAscii(wxGtkString(gdk_atom_name(atom)));
@@ -708,6 +711,20 @@ bool wxClipboard::AddData( wxDataObject *data )
         }
 #endif // __WXGTK3__
 
+        // Put Wayland native format first, if any.
+        //
+        // Note that since v3.24.25, GTK adds Wayland formats automatically
+        // when putting the traditional X11 atoms corresponding text formats
+        // available, so this could be skipped for the high enough versions,
+        // but it seems simpler to just always do this than test GTK version
+        // and this ensures consistent behaviour on all distributions.
+        if ( isWayland )
+        {
+            if ( GdkAtom altFormat = wxGTKGetAltWaylandFormat(format) )
+                atomNames.push_back(wxAtomName(altFormat));
+        }
+
+        // But still to use the traditional X11 one too in any case.
         atomNames.push_back(wxAtomName(format));
     }
 
