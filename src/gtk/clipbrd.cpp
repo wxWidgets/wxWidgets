@@ -696,35 +696,9 @@ bool wxClipboard::AddData( wxDataObject *data )
     if ( !isWayland )
         atomNames.push_back("TIMESTAMP");
 
-#ifdef __WXGTK3__
-    bool addedUTF8Text = false;
-#endif // __WXGTK3__
-
     for ( size_t i = 0; i < count; i++ )
     {
         const wxDataFormat format(formats[i]);
-
-#ifdef __WXGTK3__
-        if ( isWayland )
-        {
-            if ( format == wxDF_UNICODETEXT )
-            {
-                addedUTF8Text = true;
-            }
-            else if ( format == wxDF_TEXT )
-            {
-                if ( addedUTF8Text )
-                {
-                    // We already added UTF-8 text format, adding plain text
-                    // format is not only unnecessary but seems to be actually
-                    // harmful under Wayland because it somehow _replaces_
-                    // UTF8_STRING, even though it shouldn't happen according
-                    // to the documentation.
-                    continue;
-                }
-            }
-        }
-#endif // __WXGTK3__
 
         // Put Wayland native format first, if any.
         //
