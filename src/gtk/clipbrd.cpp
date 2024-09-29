@@ -664,6 +664,13 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxDataFormatArray formats(count);
     data->GetAllFormats(formats.get());
 
+#ifdef GDK_WINDOWING_WAYLAND
+    const bool isWayland =
+        wxGTKImpl::IsWayland(gtk_widget_get_window(m_clipboardWidget));
+#else // !GDK_WINDOWING_WAYLAND
+    constexpr bool isWayland = false;
+#endif // GDK_WINDOWING_WAYLAND/!GDK_WINDOWING_WAYLAND
+
     std::vector<wxString> atomNames;
 
     // always provide TIMESTAMP as a target, see comments in selection_handler
@@ -679,7 +686,7 @@ bool wxClipboard::AddData( wxDataObject *data )
         const wxDataFormat format(formats[i]);
 
 #ifdef __WXGTK3__
-        if ( wxGTKImpl::IsWayland(gtk_widget_get_window(m_clipboardWidget)) )
+        if ( isWayland )
         {
             if ( format == wxDF_UNICODETEXT )
             {
