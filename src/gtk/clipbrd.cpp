@@ -674,7 +674,7 @@ bool wxClipboard::AddData( wxDataObject *data )
     constexpr bool isWayland = false;
 #endif // GDK_WINDOWING_WAYLAND/!GDK_WINDOWING_WAYLAND
 
-    std::vector<wxString> atomNames;
+    std::vector<wxString> atomNames, atomX11Names;
 
     // under X11, always provide TIMESTAMP as a target, see comments in
     // selection_handler for explanation
@@ -695,12 +695,24 @@ bool wxClipboard::AddData( wxDataObject *data )
         if ( isWayland )
         {
             if ( GdkAtom altFormat = wxGTKGetAltWaylandFormat(format) )
+            {
                 atomNames.push_back(wxAtomName(altFormat));
+
+                // Still use the traditional X11 one too for compatibility but
+                // put it at the end of the formats list.
+                atomX11Names.push_back(wxAtomName(format));
+
+                continue;
+            }
         }
 
-        // But still to use the traditional X11 one too in any case.
+        // When not using Wayland or when the same format is used under Wayland
+        // and X11, just add it to the list directly.
         atomNames.push_back(wxAtomName(format));
     }
+
+    // Add the X11 formats at the end, if any.
+    atomNames.insert(atomNames.end(), atomX11Names.begin(), atomX11Names.end());
 
     std::vector<GtkTargetEntry> targets(atomNames.size());
     auto target = targets.begin();
