@@ -1093,13 +1093,10 @@ inline wxSize wxQtSetClientSize(QWidget* qtWidget, int width, int height)
 
 void wxWindowQt::DoGetSize(int *width, int *height) const
 {
-    QSize size = GetHandle()->frameSize();
-    QRect rect = GetHandle()->frameGeometry();
-    wxASSERT( size.width() == rect.width() );
-    wxASSERT( size.height() == rect.height() );
+    const QSize size =  GetHandle()->frameSize();
 
-    if (width)  *width = rect.width();
-    if (height) *height = rect.height();
+    if (width)  *width = size.width();
+    if (height) *height = size.height();
 }
 
 
