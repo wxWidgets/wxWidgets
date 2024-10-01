@@ -421,47 +421,63 @@ wxLocaleIdent wxLocaleIdent::RemoveLikelySubtags(const wxLocaleIdent& localeIden
     return locId;
 }
 
+// "Infinity" value needs to be larger than any real language distance
+static const int DISTANCE_INFINITY = 1000;
+
 /* static */
 wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArrayString& supported, const wxString& defaultTag)
 {
     // Default distance values
     static int defaultLanguageDistance = wxUILocale::GetMatchDistance("*", "*");
     static int defaultScriptDistance = wxUILocale::GetMatchDistance("*-*", "*-*");
-    static int defaultRegionDistance = wxUILocale::GetMatchDistance("*-*-*", "*-*-*");
+    static int defaultRegionDistance = wxUILocale::GetMatchDistance("*-*-*", "*-*-*") + 1;
     static int defaultRegionGroupDistance = wxUILocale::GetMatchDistance("*-*-*", "*-*-*");
-    static int defaultDemotion = wxUILocale::GetMatchDistance("en-*-*", "en-*-*");
+    static int defaultDemotion = wxUILocale::GetMatchDistance("en-*-*", "en-*-*") + 1;
     static int threshold = defaultScriptDistance;
 
     // Maximized locale identifiers associated with the given desired and supported locale tags
+    wxLocaleIdent desiredLocaleIn;
     wxLocaleIdent desiredLocaleMax;
+    wxLocaleIdent supportedLocaleIn;
+    std::vector<wxLocaleIdent> supportedLocalesIn;
     std::vector<wxLocaleIdent> supportedLocalesMax;
+    std::vector<int> supportedLocalesMinDistance;
 
     // Indexes of best match
     int bestDesired = -1;
     int bestSupported = -1;
-    int bestDistance = 1000; // Value needs to be larger than any real language distance
+    int bestDistance = DISTANCE_INFINITY;
+    int bestMinDistance = DISTANCE_INFINITY;
 
     wxString desiredLanguage;
     wxString desiredScript;
     wxString desiredRegion;
+    wxString supportedLanguageIn;
+    wxString supportedScriptIn;
+    wxString supportedRegionIn;
     wxString supportedLanguage;
     wxString supportedScript;
     wxString supportedRegion;
-    for (size_t j = 0; j < desired.size(); ++j)
+    int supportedMinDistance;
+    bool directMatch = false;
+
+    // Loop over desired languages
+    for (size_t j = 0; !directMatch && j < desired.size(); ++j)
     {
         // Determine maximized desired locale identifiers
-        desiredLocaleMax = AddLikelySubtags(wxLocaleIdent::FromTag(desired[j]));
+        desiredLocaleIn = wxLocaleIdent::FromTag(desired[j]);
+        desiredLocaleMax = AddLikelySubtags(desiredLocaleIn);
         desiredLanguage = desiredLocaleMax.GetLanguage();
         desiredScript = desiredLocaleMax.GetScript();
         desiredRegion = desiredLocaleMax.GetRegion();
 
-        for (size_t k = 0; k < supported.size(); ++k)
+        // Loop over supported languages
+        for (size_t k = 0; !directMatch && k < supported.size(); ++k)
         {
             // Languages closer to the beginning of the list of desired languages are preferred
             int distance = j * defaultDemotion;
 
             // Check direct match
-            bool directMatch = false;
             if (desired[j].IsSameAs(supported[k], false))
             {
                 // This is the best match we can find, so leave the loop
@@ -472,16 +488,31 @@ wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArray
                     bestSupported = k;
                 }
                 directMatch = true;
+                break;
             }
+
+            // No direct match: Slightly increase distance
+            ++distance;
 
             // Determine maximized supported locale identifiers
             if (j == 0)
             {
-                supportedLocalesMax.push_back(AddLikelySubtags(wxLocaleIdent::FromTag(supported[k])));
+                supportedLocaleIn = wxLocaleIdent::FromTag(supported[k]);
+                supportedLocalesIn.push_back(supportedLocaleIn);
+                supportedLocalesMax.push_back(AddLikelySubtags(supportedLocaleIn));
+                wxLocaleIdent supportedLocaleMin = RemoveLikelySubtags(supportedLocaleIn);
+                int minDistance = 0;
+                if (!supportedLocaleMin.GetScript().empty()) minDistance += 1;
+                if (!supportedLocaleMin.GetRegion().empty()) minDistance += 1;
+                supportedLocalesMinDistance.push_back(minDistance);
             }
+            supportedLanguageIn = supportedLocalesIn[k].GetLanguage();
+            supportedScriptIn = supportedLocalesIn[k].GetScript();
+            supportedRegionIn = supportedLocalesIn[k].GetRegion();
             supportedLanguage = supportedLocalesMax[k].GetLanguage();
             supportedScript = supportedLocalesMax[k].GetScript();
             supportedRegion = supportedLocalesMax[k].GetRegion();
+            supportedMinDistance = supportedLocalesMinDistance[k];
 
             // Check for matching language, script and region
             if (!directMatch && !desiredLanguage.empty() && !supportedLanguage.empty())
@@ -503,8 +534,10 @@ wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArray
                     if (!supportedRegion.IsSameAs(desiredRegion, false))
                     {
                         bool sameRegion = wxUILocale::SameRegionGroup(desiredLanguage, desiredRegion, supportedRegion);
-                        distance += (sameRegion) ? defaultRegionGroupDistance : defaultDemotion;
+                        distance += (sameRegion) ? defaultRegionGroupDistance : defaultRegionDistance;
                     }
+                    if (!desiredLocaleIn.GetScript().IsSameAs(supportedScriptIn, false)) supportedMinDistance += 1;
+                    if (!desiredLocaleIn.GetRegion().IsSameAs(supportedRegionIn, false)) supportedMinDistance += 1;
                 }
                 else
                 {
@@ -536,8 +569,10 @@ wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArray
             }
 
             // Check whether better match was found
-            if (distance < threshold && distance < bestDistance)
+            if (distance < threshold && (distance < bestDistance ||
+                                        (distance == bestDistance && supportedMinDistance < bestMinDistance)))
             {
+                bestMinDistance = supportedMinDistance;
                 bestDistance = distance;
                 bestDesired = j;
                 bestSupported = k;
