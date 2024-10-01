@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"> 
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="text" indent="yes" encoding="utf-8"/>
 
 <xsl:param name="locale">en</xsl:param>
 
-<xsl:variable name="uline">_</xsl:variable>  
-<xsl:variable name="hyphen">-</xsl:variable>  
-  
+<xsl:variable name="uline">_</xsl:variable>
+<xsl:variable name="hyphen">-</xsl:variable>
+
 <xsl:template match="/">
 <xsl:text>create table if not exists uni_languagematch (desired char, supported char, distance int, oneway char, primary key (desired, supported));
 delete from uni_languagematch;

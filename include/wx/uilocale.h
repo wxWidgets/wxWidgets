@@ -14,6 +14,7 @@
 
 #if wxUSE_INTL
 
+#include "wx/arrstr.h"
 #include "wx/datetime.h"
 #include "wx/localedefs.h"
 #include "wx/string.h"
@@ -250,7 +251,7 @@ public:
 
     // These three methods are for internal use only.
     // The new algorithm for determine the best translation language
-    // uses them 
+    // uses them.
     // First one expands a locale tag using most likely subtags for script
     // and region. The method returns an empty string, if a matching tag
     // couldn't be found.
