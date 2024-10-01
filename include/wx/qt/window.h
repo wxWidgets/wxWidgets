@@ -247,6 +247,9 @@ private:
 
     bool m_mouseInside;
 
+    bool  m_pendingSize = false; // to properly set the size of the TLW if SetSize()
+                                 // is called before the window is shown.
+
     wxSize  m_pendingClientSize;
 
 #if wxUSE_ACCEL

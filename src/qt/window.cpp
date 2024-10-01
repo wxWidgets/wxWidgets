@@ -1125,6 +1125,14 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
             height = BEST_SIZE.y;
     }
 
+    if ( !GetHandle()->isVisible() && QtGetClientWidget() != GetHandle() )
+    {
+        if ( width != -1 && height != -1 )
+        {
+            m_pendingSize = true;
+        }
+    }
+
     int w, h;
     GetSize(&w, &h);
     if (width == -1)
@@ -1792,6 +1800,14 @@ bool wxWindowQt::QtHandleShowEvent ( QWidget *handler, QEvent *event )
 {
     if ( GetHandle() != handler )
         return false;
+
+    if ( m_pendingSize )
+    {
+        const auto frameSize = GetHandle()->geometry().size();
+        wxQtSetClientSize(GetHandle(), frameSize.width(), frameSize.height());
+
+        m_pendingSize = false;
+    }
 
     wxShowEvent e(GetId(), event->type() == QEvent::Show);
     e.SetEventObject(this);
