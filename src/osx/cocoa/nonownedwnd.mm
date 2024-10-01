@@ -69,6 +69,26 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
     return wxPoint( x, y);
 }
 
+NSPoint wxToNSPointF( NSView* parent, const wxPoint2DDouble& p )
+{
+    NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
+    double x = p.m_x;
+    double y = p.m_y;
+    if ( parent == nullptr || ![ parent isFlipped ] )
+        y = frame.size.height - y;
+    return NSMakePoint(x, y);
+}
+
+wxPoint2DDouble wxFromNSPointF( NSView* parent, const NSPoint& p )
+{
+    NSRect frame = parent ? [parent bounds] : [wxOSXGetMenuScreen() frame];
+    double x = p.x;
+    double y = p.y;
+    if ( parent == nullptr || ![ parent isFlipped ] )
+        y = frame.size.height - y;
+    return wxPoint2DDouble(x, y);
+}
+
 bool shouldHandleSelector(SEL selector)
 {
     if (selector == @selector(noop:)
