@@ -1073,7 +1073,7 @@ void wxWindowQt::DoGetPosition(int *x, int *y) const
 
 namespace
 {
-inline void wxQtSetClientSize(QWidget* qtWidget, int width, int height)
+inline wxSize wxQtSetClientSize(QWidget* qtWidget, int width, int height)
 {
     // There doesn't seem to be any way to change Qt frame size directly, so
     // change the widget size, but take into account the extra margins
@@ -1082,10 +1082,12 @@ inline void wxQtSetClientSize(QWidget* qtWidget, int width, int height)
     const QSize innerSize = qtWidget->geometry().size();
     const QSize frameSizeDiff = frameSize - innerSize;
 
-    const int clientWidth = std::max(width - frameSizeDiff.width(), 0);
-    const int clientHeight = std::max(height - frameSizeDiff.height(), 0);
+    int clientWidth = std::max(width - frameSizeDiff.width(), 0);
+    int clientHeight = std::max(height - frameSizeDiff.height(), 0);
 
     qtWidget->resize(clientWidth, clientHeight);
+
+    return wxSize(clientWidth, clientHeight);
 }
 }
 
@@ -1143,20 +1145,15 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 
 void wxWindowQt::DoGetClientSize(int *width, int *height) const
 {
-    if ( m_pendingClientSize != wxDefaultSize )
-    {
-        if ( width )  *width = m_pendingClientSize.x;
-        if ( height ) *height = m_pendingClientSize.y;
-    }
-    else
-    {
-        QWidget *qtWidget = QtGetClientWidget();
-        wxCHECK_RET( qtWidget, "window must be created" );
+    QWidget *qtWidget = QtGetClientWidget();
+    wxCHECK_RET(qtWidget, "window must be created");
 
-        const QRect geometry = qtWidget->geometry();
-        if (width)  *width = geometry.width();
-        if (height) *height = geometry.height();
-    }
+    const QSize size = (m_pendingClientSize != wxDefaultSize)
+        ? wxQtConvertSize(m_pendingClientSize)
+        : qtWidget->geometry().size();
+
+    if (width)  *width = size.width();
+    if (height) *height = size.height();
 }
 
 
@@ -1165,16 +1162,22 @@ void wxWindowQt::DoSetClientSize(int width, int height)
     QWidget *qtWidget = QtGetClientWidget();
     wxCHECK_RET( qtWidget, "window must be created" );
 
+    if ( qtWidget != GetHandle() )
+    {
+        const QSize frameSize = GetHandle()->frameSize();
+        const QSize innerSize = GetHandle()->geometry().size();
+        const QSize frameSizeDiff = frameSize - innerSize;
+
+        const int clientWidth = width + frameSizeDiff.width();
+        const int clientHeight = height + frameSizeDiff.height();
+
+        GetHandle()->resize(clientWidth, clientHeight);
+    }
+
     QRect geometry = qtWidget->geometry();
     geometry.setWidth( width );
     geometry.setHeight( height );
     qtWidget->setGeometry( geometry );
-
-    if ( qtWidget != GetHandle() )
-    {
-        // Resize the window to be as small as the client size but no smaller
-        wxQtSetClientSize(GetHandle(), width, height);
-    }
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
@@ -1183,11 +1186,11 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 
     qtWidget->move( x, y );
 
-    wxQtSetClientSize(qtWidget, width, height);
+    const auto clientSize = wxQtSetClientSize(qtWidget, width, height);
 
-    if ( !qtWidget->isVisible() )
+    if (!qtWidget->isVisible() && clientSize.x > 0 && clientSize.y > 0)
     {
-        m_pendingClientSize = wxSize(width, height);
+        m_pendingClientSize = clientSize;
     }
 }
 
