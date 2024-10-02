@@ -445,6 +445,7 @@ wxString wxLocaleIdent::GetBestMatch(const wxArrayString& desired, const wxArray
 
     // Indexes of best match
     int bestDesired = -1;
+    wxUnusedVar(bestDesired);
     int bestSupported = -1;
     int bestDistance = DISTANCE_INFINITY;
     int bestMinDistance = DISTANCE_INFINITY;
