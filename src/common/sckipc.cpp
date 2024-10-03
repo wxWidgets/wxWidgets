@@ -134,7 +134,8 @@ public:
     void Client_OnRequest(wxSocketEvent& event);
     void Server_OnRequest(wxSocketEvent& event);
 
-private:
+    bool ExecuteMessage(wxIPCMessageBase* msg, wxSocketBase *socket);
+    void SendFailMessage(const wxString& reason, wxSocketBase* socket);
     void HandleDisconnect(wxTCPConnection *connection);
 
     wxIPCMessageBase* ReadMessageFromSocket(wxSocketBase *socket);
@@ -1298,33 +1299,196 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
             }
 
 
+// Process a single wxIPCMessage from the socket. Returns true if processing
+// can continue, or false if processing should stop, usually because a
+// disconnect was received.
+bool wxTCPEventHandler::ExecuteMessage(wxIPCMessageBase* msg, wxSocketBase *socket)
+{
+    if ( !msg || !msg->IsOk() )
+        return false;
 
+    wxTCPConnection * const connection = GetConnection(socket);
+    if ( !connection || !connection->GetConnected() )
+        return false; // socket is being deleted
 
+    wxString errmsg;
 
-
-
-
-
-
-
-
-
-
-            break;
-
-
-            break;
-
-            break;
-    }
-
-
-
-
-
+    switch ( msg->GetIPCCode() )
     {
+    case IPC_EXECUTE:
+    {
+        wxIPCMessageExecute* msg_execute =
+            wxDynamicCast(msg, wxIPCMessageExecute);
+
+        if ( msg_execute )
+            connection->OnExecute(connection->m_topic,
+                                  msg_execute->GetReadData(),
+                                  msg_execute->GetSize(),
+                                  msg_execute->GetIPCFormat());
+        else
+            errmsg = "No data read for IPC Execute";
+    }
+    break;
+
+    case IPC_ADVISE:
+    {
+        wxIPCMessageAdvise* msg_advise =
+            wxDynamicCast(msg, wxIPCMessageAdvise);
+
+        if ( msg_advise )
+            connection->OnAdvise(connection->m_topic,
+                                 msg_advise->GetItem(),
+                                 msg_advise->GetReadData(),
+                                 msg_advise->GetSize(),
+                                 msg_advise->GetIPCFormat());
+        else
+            errmsg = "No data read for IPC Advise";
+    }
+    break;
+
+    case IPC_ADVISE_START:
+    {
+        wxIPCMessageAdviseStart* msg_advise_start =
+            wxDynamicCast(msg, wxIPCMessageAdviseStart);
+
+        if ( !msg_advise_start )
+        {
+            errmsg = "No data read for IPC Advise Start";
+            break;
+        }
+
+        if ( connection->OnStartAdvise(connection->m_topic,
+                                       msg_advise_start->GetItem()) )
+        {
+            // reply to confirm
+            wxIPCMessageAdviseStart reply(socket,
+                                          msg_advise_start->GetItem());
+            if ( !WriteMessageToSocket(reply) )
+                errmsg = "Failed to confirm IPC StartAdvise";
+        }
+        else
+        {
+            errmsg = "IPC StartAdvise refused by peer";
+        }
+
+    }
+    break;
+
+    case IPC_ADVISE_STOP:
+    {
+        wxIPCMessageAdviseStop* msg_advise_stop =
+            wxDynamicCast(msg, wxIPCMessageAdviseStop);
+
+        if ( !msg_advise_stop )
+        {
+            errmsg = "No data read for IPC Advise Stop";
+            break;
+        }
+
+        if ( connection->OnStopAdvise(connection->m_topic, msg_advise_stop->GetItem()) )
+        {
+            // reply to confirm
+            wxIPCMessageAdviseStop reply(socket, msg_advise_stop->GetItem());
+            if ( !WriteMessageToSocket(reply) )
+                errmsg = "Failed to confirm IPC StopAdvise";
+        }
+        else
+        {
+            errmsg = "IPC StopAdvise refused by peer";
+        }
+
+    }
+    break;
+
+    case IPC_POKE:
+    {
+        wxIPCMessagePoke* msg_poke =
+            wxDynamicCast(msg, wxIPCMessagePoke);
+
+        if ( msg_poke )
+            connection->OnPoke(connection->m_topic,
+                               msg_poke->GetItem(),
+                               msg_poke->GetReadData(),
+                               msg_poke->GetSize(),
+                               msg_poke->GetIPCFormat());
+        else
+            errmsg = "No data read for IPC Poke";
+    }
+    break;
+
+    case IPC_REQUEST:
+    {
+        wxIPCMessageRequest* msg_request =
+            wxDynamicCast(msg, wxIPCMessageRequest);
+
+        if ( !msg_request )
+        {
+            errmsg = "No data read for IPC Request";
+            break;
+        }
+
+        size_t user_size = wxNO_LEN;
+        const void *user_data = connection->OnRequest(connection->m_topic,
+                                                      msg->GetItem(),
+                                                      &user_size,
+                                                      msg->GetIPCFormat());
+        if ( !user_data )
+        {
+            SendFailMessage("No reply data for request.", socket);
+            break;
+        }
+
+        wxIPCMessageRequestReply msg_reply(socket,
+                                           user_data,
+                                           user_size,
+                                           msg->GetItem(),
+                                           msg->GetIPCFormat());
+
+        if ( !WriteMessageToSocket(msg_reply) )
+            errmsg = "Reply failed for IPC Request";
+    }
+    break;
+
+    case IPC_DISCONNECT:
+        HandleDisconnect(connection);
+        return false;
+
+    case IPC_FAIL:
+    {
+        wxIPCMessageFail* msg_fail =
+            wxDynamicCast(msg, wxIPCMessageFail);
+
+        if ( msg_fail )
+            wxLogDebug("Unexpected IPC_FAIL received: " + msg_fail->GetItem());
+        else
+            wxLogDebug("Unexpected IPC_FAIL, and data read failed.");
+
+        return false;
     }
 
+    // Silence unused-enum warnings from the compiler. These should never be
+    // received in this method.
+    case IPC_ADVISE_REQUEST:
+    case IPC_REQUEST_REPLY:
+    case IPC_CONNECT:
+    case IPC_MAX:
+        wxLogDebug("Invalid IPC code %d received", msg->GetIPCCode());
+        return false;
+
+    default:
+        wxLogDebug("Unknown message code %d received. IPC data may be misaligned",
+                   msg);
+        return false;
+    }
+
+    if ( !errmsg.IsEmpty() )
+    {
+        wxLogDebug(errmsg);
+        SendFailMessage(errmsg, socket);
+    }
+
+    return true;
+}
 
     {
 
