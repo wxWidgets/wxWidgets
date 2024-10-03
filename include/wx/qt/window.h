@@ -99,7 +99,7 @@ public:
     virtual int GetCharWidth() const override;
     virtual double GetContentScaleFactor() const override;
 
-    virtual wxSize GetDPI() const;
+    virtual wxSize GetDPI() const override;
     virtual double GetDPIScaleFactor() const override;
 
     virtual void SetScrollbar( int orient,
