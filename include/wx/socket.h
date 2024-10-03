@@ -191,6 +191,7 @@ public:
     // event handling
     void *GetClientData() const { return m_clientData; }
     void SetClientData(void *data) { m_clientData = data; }
+    wxEvtHandler* GetEventHandler() const { return m_handler; }
     void SetEventHandler(wxEvtHandler& handler, int id = wxID_ANY);
     void SetNotify(wxSocketEventFlags flags);
     void Notify(bool notify);
@@ -456,4 +457,3 @@ typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 #endif // wxUSE_SOCKETS
 
 #endif // _WX_SOCKET_H_
-
