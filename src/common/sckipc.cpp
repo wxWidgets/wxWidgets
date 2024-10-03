@@ -784,6 +784,21 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxIPCMessageDisconnect);
 };
 
+// Utility to ensure deletion of wxIPCMessageBase after use
+class wxIPCMessageBaseLocker
+{
+public:
+    wxIPCMessageBaseLocker(wxIPCMessageBase* msg)
+    {
+        m_msg = msg;
+    }
+
+    ~wxIPCMessageBaseLocker()
+    {
+        if (m_msg) delete m_msg;
+    }
+
+    wxIPCMessageBase* m_msg;
 };
 
 // ==========================================================================
