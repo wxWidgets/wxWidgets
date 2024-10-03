@@ -49,6 +49,7 @@
 class WXDLLIMPEXP_FWD_NET wxTCPServer;
 class WXDLLIMPEXP_FWD_NET wxTCPClient;
 
+class wxTCPEventHandler;
 
 class WXDLLIMPEXP_NET wxTCPConnection : public wxConnectionBase
 {
@@ -91,6 +92,8 @@ protected:
     // for IPC server)
     wxSocketBase *m_sock;
 
+    // Handler of events and r/w of messages to the socket
+    wxTCPEventHandler *m_handler;
 
     // the topic of this connection
     wxString m_topic;
