@@ -130,6 +130,9 @@ public:
 private:
     void HandleDisconnect(wxTCPConnection *connection);
 
+
+    char* GetBufPtr(size_t size);
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTCPEventHandler);
 };
@@ -406,6 +409,70 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxIPCMessageBase);
     wxDECLARE_CLASS(wxIPCMessageBase);
 };
+
+// Reads a 32-bit size from the socket, allocates a buffer of that size, then
+// read nbytes worth of data from the socket into m_read_data.
+bool wxIPCMessageBase::ReadSizeAndData()
+{
+    if (!Read32(m_size))
+        return false;
+
+    wxASSERT_MSG( m_handler, "No handler for read allocation");
+    if ( !m_handler )
+        return false;
+
+    m_read_data = m_handler->GetBufPtr(m_size);
+
+    m_socket->Read(m_read_data, m_size);
+    return VerifyLastReadCount(m_size);
+}
+
+bool wxIPCMessageBase::ReadString(wxString& str)
+{
+    wxUint32 len = 0;
+    if ( !Read32(len) )
+        return false;
+
+    if ( len > 0 )
+    {
+
+#if wxUSE_UNICODE
+        wxCharBuffer buf(len);
+        if ( !buf || !ReadData(buf.data(), len) )
+            return false;
+#else
+        wxStringBuffer buf(str, len);
+        if ( !buf || !ReadData(buf,len) )
+            return false;
+#endif
+
+        if ( !VerifyLastReadCount(len))
+            return false;
+
+#if wxUSE_UNICODE
+        str = wxConvUTF8.cMB2WC(buf.data(), len, nullptr);
+#endif
+    }
+
+    return true;
+}
+
+bool wxIPCMessageBase::WriteString(const wxString& str)
+{
+#if wxUSE_UNICODE
+    const wxWX2MBbuf buf = str.mb_str(wxConvUTF8);
+    size_t len = buf.length();
+#else
+    const wxWX2MBbuf buf = str.mb_str();
+    size_t len = str.size();
+#endif
+
+    if (len > 0)
+        return Write32(len) && WriteData(buf, len);
+    else
+        return Write32(len);
+}
+
 
 // ==========================================================================
 // wxIPCMessages
