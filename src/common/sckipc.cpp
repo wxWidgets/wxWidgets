@@ -1149,7 +1149,7 @@ wxTCPServer::OnAcceptConnection(const wxString& WXUNUSED(topic))
 void wxTCPConnection::Init()
 {
     m_sock = nullptr;
-    m_streams = nullptr;
+    m_handler = nullptr;
 }
 
 wxTCPConnection::~wxTCPConnection()
@@ -1161,8 +1161,6 @@ wxTCPConnection::~wxTCPConnection()
         m_sock->SetClientData(nullptr);
         m_sock->Destroy();
     }
-
-    delete m_streams;
 }
 
 void wxTCPConnection::Compress(bool WXUNUSED(on))
@@ -1176,11 +1174,13 @@ bool wxTCPConnection::Disconnect()
     if ( !GetConnected() )
         return true;
 
-    // Send the disconnect message to the peer.
-    IPCOutput(m_streams).Write8(IPC_DISCONNECT);
-
-    if ( m_sock )
+    if ( m_sock && m_handler)
     {
+        // Send the disconnect message to the peer.
+        wxIPCMessageDisconnect msg(m_sock);
+        if ( !m_handler->WriteMessageToSocket(msg) )
+            wxLogDebug("Failed to send IPC_DISCONNECT message");
+
         m_sock->Notify(false);
         m_sock->Close();
     }
