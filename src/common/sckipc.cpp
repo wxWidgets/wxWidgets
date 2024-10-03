@@ -1237,14 +1237,11 @@ bool wxTCPConnection::DoPoke(const wxString& item,
                              size_t size,
                              wxIPCFormat format)
 {
-    if ( !m_sock->IsConnected() )
+    if ( !m_handler )
         return false;
 
-    IPCOutput out(m_streams);
-    out.Write(IPC_POKE, item, format);
-    out.WriteData(data, size);
-
-    return true;
+    wxIPCMessagePoke msg(m_sock, item, data, size, format);
+    return m_handler->WriteMessageToSocket(msg);
 }
 
 bool wxTCPConnection::StartAdvise(const wxString& item)
