@@ -174,6 +174,8 @@ public:
 
     char* GetBufPtr(size_t size);
 
+    wxCRIT_SECT_DECLARE_MEMBER(m_cs_process_msgs);
+
 private:
     wxTCPConnection* GetConnection(wxSocketBase* socket);
 
@@ -1205,20 +1207,29 @@ const void *wxTCPConnection::Request(const wxString& item,
                                      size_t *size,
                                      wxIPCFormat format)
 {
-    if ( !m_sock->IsConnected() )
+    if ( !m_handler )
         return nullptr;
 
-    IPCOutput(m_streams).Write(IPC_REQUEST, item, format);
+    // Don't let ProcessIncomingMessages interfere with getting a response
+    wxCRIT_SECT_LOCKER(lock, m_handler->m_cs_process_msgs);
 
-    const int ret = m_streams->Read8();
-    if ( ret != IPC_REQUEST_REPLY )
+    wxIPCMessageRequest msg(m_sock, item, format);
+    if ( !m_handler->WriteMessageToSocket(msg) )
         return nullptr;
 
-    // ReadData() needs a non-null size pointer but the client code can call us
-    // with null pointer (this makes sense if it knows that it always works
-    // with NUL-terminated strings)
-    size_t sizeFallback;
-    return m_streams->ReadData(this, size ? size : &sizeFallback);
+    wxIPCMessageBase* msg_reply = nullptr;
+
+    if ( !m_handler->FindMessage(IPC_REQUEST_REPLY, m_sock, &msg_reply) )
+        return nullptr;
+
+    wxIPCMessageBaseLocker lockmsg(msg_reply);
+    if ( !msg_reply || !msg_reply->IsOk() )
+        return nullptr;
+
+    if (size)
+        *size = msg_reply->GetSize();
+
+    return msg_reply->GetReadData();
 }
 
 bool wxTCPConnection::DoPoke(const wxString& item,
