@@ -14,7 +14,6 @@
 
 #if wxUSE_INTL
 
-#include "wx/arrstr.h"
 #include "wx/datetime.h"
 #include "wx/localedefs.h"
 #include "wx/string.h"
@@ -27,6 +26,13 @@ enum
 {
     wxCompare_CaseSensitive   = 0,
     wxCompare_CaseInsensitive = 1
+};
+
+// Flags for wxLocaleIdent::RemoveLikelySubtags().
+enum
+{
+    wxSubtags_FavorRegion = 0,
+    wxSubtags_FavorScript = 1
 };
 
 // ----------------------------------------------------------------------------
@@ -45,11 +51,11 @@ public:
     static wxLocaleIdent AddLikelySubtags(const wxLocaleIdent& localeIdent);
 
     // Remove likely subtags from a given locale identifier, favor region.
-    static wxLocaleIdent RemoveLikelySubtags(const wxLocaleIdent& localeIdent, bool favorRegion = true);
+    static wxLocaleIdent RemoveLikelySubtags(const wxLocaleIdent& localeIdent, int subtagsFavor = wxSubtags_FavorRegion);
 
     // Find the best match between desired and supported languages/locales.
-    static wxString GetBestMatch(const wxArrayString& desired, const wxArrayString& supported, const wxString& defaultTag);
-    static wxString GetBestMatch(const wxString& desired, const wxArrayString& supported, const wxString& defaultTag);
+    static wxString GetBestMatch(const wxVector<wxString>& desired, const wxVector<wxString>& supported);
+    static wxString GetBestMatch(const wxString& desired, const wxVector<wxString>& supported);
 
     // Default ctor creates an empty, invalid identifier.
     wxLocaleIdent() = default;

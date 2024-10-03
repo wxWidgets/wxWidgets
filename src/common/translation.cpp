@@ -121,7 +121,7 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
     wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
     LogTraceArray(" - system preferred languages", preferred);
 
-    return wxLocaleIdent::GetBestMatch(preferred, available, wxString());
+    return wxLocaleIdent::GetBestMatch(preferred, available);
 }
 
 } // anonymous namespace
