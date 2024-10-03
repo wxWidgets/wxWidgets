@@ -89,6 +89,14 @@ const wxUint32 IPCCodeHeader=0x439d9600;
     #include <sys/stat.h>
 #endif // __UNIX_LIKE__
 
+
+// For IPC returning a char* buffer. wxWidgets docs say that the user is not
+// supposed to free the memory.  Each buffer pointer is assigned to a list
+// sequentially, and the buffer memory is not freed until MAX_MSG_BUFFERS have
+// been assigned.
+#define MAX_MSG_BUFFERS 2048
+
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -123,13 +131,26 @@ GetAddressFromName(const wxString& serverName,
 }
 
 // --------------------------------------------------------------------------
-// wxTCPEventHandler stuff (private class)
+// wxTCPEventHandler declaration (private class)
 // --------------------------------------------------------------------------
 
 class wxTCPEventHandler : public wxEvtHandler
 {
 public:
-    wxTCPEventHandler() : wxEvtHandler() { }
+    wxTCPEventHandler() : wxEvtHandler()
+    {
+        for (int i = 0; i < MAX_MSG_BUFFERS; i++)
+            m_bufferList[i] = nullptr;
+
+        m_nextAvailable = 0;
+    }
+
+    ~wxTCPEventHandler()
+    {
+        for (int i = 0; i < MAX_MSG_BUFFERS; i++)
+            if (m_bufferList[i])
+                delete[] m_bufferList[i];
+    }
 
     void Client_OnRequest(wxSocketEvent& event);
     void Server_OnRequest(wxSocketEvent& event);
@@ -150,6 +171,11 @@ public:
 
 private:
     wxTCPConnection* GetConnection(wxSocketBase* socket);
+
+    wxCRIT_SECT_DECLARE_MEMBER(m_cs_assign_buffer);
+
+    char* m_bufferList[MAX_MSG_BUFFERS];
+    int m_nextAvailable;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTCPEventHandler);
@@ -1708,6 +1734,19 @@ bool wxTCPEventHandler::PeekAtMessageInSocket(wxSocketBase* socket)
     return socket->LastCount() == 4;
 }
 
+char* wxTCPEventHandler::GetBufPtr(size_t size)
+{
+    wxCRIT_SECT_LOCKER(lock, m_cs_assign_buffer);
+
+    if (m_bufferList[m_nextAvailable] != nullptr)
+        delete[] m_bufferList[m_nextAvailable];  // Free the memory from the last use
+
+    char* ptr = new char[size];
+
+    m_bufferList[m_nextAvailable] = ptr;
+    m_nextAvailable = (m_nextAvailable + 1) % MAX_MSG_BUFFERS;
+
+    return ptr;
 }
 
 wxTCPConnection* wxTCPEventHandler::GetConnection(wxSocketBase* socket)
