@@ -118,7 +118,7 @@ void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 
 wxString GetPreferredUILanguage(const wxArrayString& available)
 {
-    wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
+    const wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
     LogTraceArray(" - system preferred languages", preferred);
 
     return wxLocaleIdent::GetBestMatch(preferred, available);
