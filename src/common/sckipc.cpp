@@ -1237,15 +1237,43 @@ wxBEGIN_EVENT_TABLE(wxTCPEventHandler, wxEvtHandler)
 wxEND_EVENT_TABLE()
 
 void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
+void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
     // connection was closed (either gracefully or not): destroy everything
     connection->m_sock->Notify(false);
     connection->m_sock->Close();
+    wxSocketBase *sock = event.GetSocket();
+    wxTCPConnection * connection = GetConnection(sock);
 
     // don't leave references to this soon-to-be-dangling connection in the
     // socket as it won't be destroyed immediately as its destruction will be
     // delayed in case there are more events pending for it
     connection->m_sock->SetClientData(nullptr);
+    // This socket is being deleted
+    if ( !connection )
+        return;
+
+    if ( event.GetSocketEvent() == wxSOCKET_LOST )
+    {
+        HandleDisconnect(connection);
+        return;
+    }
+
+    // Process incoming messages. Block any IPC command that uses
+    // FindMessage until this method finishes.
+    wxCRIT_SECT_LOCKER(lock, m_cs_process_msgs);
+
+    // More than one wxIPCMessage can be sent to the socket before the socket
+    // notifies us of another read event, so loop until there are no new
+    // messages.
+    while ( PeekAtMessageInSocket(sock) )
+    {
+        wxIPCMessageBase* msg = ReadMessageFromSocket(sock);
+        wxIPCMessageBaseLocker lock(msg);
+
+        if ( !ExecuteMessage(msg, sock) )
+            break;
+    };
 
     connection->SetConnected(false);
     connection->OnDisconnect();
