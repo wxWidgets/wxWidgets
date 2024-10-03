@@ -135,6 +135,10 @@ public:
     void Server_OnRequest(wxSocketEvent& event);
 
     bool ExecuteMessage(wxIPCMessageBase* msg, wxSocketBase *socket);
+    bool FindMessage(IPCCode code,
+                     wxSocketBase* socket,
+                     wxIPCMessageBase** msgptr);
+
     void SendFailMessage(const wxString& reason, wxSocketBase* socket);
     void HandleDisconnect(wxTCPConnection *connection);
 
@@ -1490,14 +1494,50 @@ bool wxTCPEventHandler::ExecuteMessage(wxIPCMessageBase* msg, wxSocketBase *sock
     return true;
 }
 
+// Find a message with IPCCode code. Returns true when a valid message with
+// the matching IPCCode is found.  If msgptr is non-null, then the message is
+// also returned and the caller is responsible for deleting the returned
+// message.
+bool wxTCPEventHandler::FindMessage(IPCCode code,
+                                    wxSocketBase* socket,
+                                    wxIPCMessageBase** return_msgptr)
+{
+    while ( GetConnection(socket) )
     {
+        wxIPCMessageBase* msg = ReadMessageFromSocket(socket);
 
+        if ( msg && msg->GetIPCCode() == code )
         {
+            // The correct message has been found, but there may still be
+            // messages waiting in the socket data buffer. Place an event in
+            // the socket event queue so that they will be read out later.
 
+            if (socket && socket->GetEventHandler())
             {
+                wxSocketEvent event(wxID_ANY);
+                event.m_event = wxSOCKET_INPUT;
+                event.m_clientData = socket->GetClientData();
+                event.SetEventObject(socket);
+
+                socket->GetEventHandler()->AddPendingEvent(event);
             }
+
+            if (return_msgptr)
+                *return_msgptr = msg;
+            else
+                delete msg;
+
+            return true;
         }
 
+        // Not the correct msg to be returned.
+        wxIPCMessageBaseLocker lock(msg);
+        if (!ExecuteMessage(msg, socket) )
+            return false;
+    };
+
+    return false;
+}
 
 // Reads a single message from the socket. Returns wxIPCMessageNull when no
 // message was read.  The returned message must be freed by the caller.
