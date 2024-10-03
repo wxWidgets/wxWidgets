@@ -91,6 +91,8 @@ protected:
     // for IPC server)
     wxSocketBase *m_sock;
 
+    // Handler of events and r/w of messages to the socket
+    wxTCPEventHandler *m_handler;
 
     // the topic of this connection
     wxString m_topic;
