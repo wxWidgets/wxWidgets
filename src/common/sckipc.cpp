@@ -148,6 +148,9 @@ public:
 
     char* GetBufPtr(size_t size);
 
+private:
+    wxTCPConnection* GetConnection(wxSocketBase* socket);
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTCPEventHandler);
 };
@@ -1596,6 +1599,14 @@ bool wxTCPEventHandler::FindMessage(IPCCode code,
     return false;
 }
 
+void wxTCPEventHandler::SendFailMessage(const wxString& reason, wxSocketBase* socket)
+{
+    wxIPCMessageFail msg(socket, reason);
+
+    if (!WriteMessageToSocket(msg) )
+        wxLogDebug("Failed to send IPC_FAIL message: " + reason);
+}
+
 // Reads a single message from the socket. Returns wxIPCMessageNull when no
 // message was read.  The returned message must be freed by the caller.
 wxIPCMessageBase* wxTCPEventHandler::ReadMessageFromSocket(wxSocketBase* socket)
@@ -1697,6 +1708,14 @@ bool wxTCPEventHandler::PeekAtMessageInSocket(wxSocketBase* socket)
     return socket->LastCount() == 4;
 }
 
+}
+
+wxTCPConnection* wxTCPEventHandler::GetConnection(wxSocketBase* socket)
+{
+    if ( !socket || !socket->IsOk() )
+        return nullptr;
+
+    return static_cast<wxTCPConnection *>(socket->GetClientData());
 }
 
 #endif // wxUSE_SOCKETS && wxUSE_IPC
