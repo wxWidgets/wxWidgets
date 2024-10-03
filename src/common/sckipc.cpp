@@ -1291,74 +1291,22 @@ void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
     }
 
 
-void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
-{
-    wxSocketServer *server = (wxSocketServer *) event.GetSocket();
-    if (!server)
-        return;
-    wxTCPServer *ipcserv = (wxTCPServer *) server->GetClientData();
 
-    // This socket is being deleted; skip this event
-    if (!ipcserv)
-        return;
 
-    if (event.GetSocketEvent() != wxSOCKET_CONNECTION)
-        return;
 
-    // Accept the connection, getting a new socket
-    wxSocketBase *sock = server->Accept();
-    if (!sock)
-        return;
-    if (!sock->IsOk())
     {
-        sock->Destroy();
-        return;
     }
 
-    wxIPCSocketStreams *streams = new wxIPCSocketStreams(*sock);
 
     {
-        IPCOutput out(streams);
 
-        const int msg = streams->Read8();
-        if ( msg == IPC_CONNECT )
         {
-            const wxString topic = streams->ReadString();
 
-            wxTCPConnection *new_connection =
-                (wxTCPConnection *)ipcserv->OnAcceptConnection (topic);
-
-            if (new_connection)
             {
-                if (wxDynamicCast(new_connection, wxTCPConnection))
-                {
-                    // Acknowledge success
-                    out.Write8(IPC_CONNECT);
-
-                    new_connection->m_sock = sock;
-                    new_connection->m_streams = streams;
-                    new_connection->m_topic = topic;
-                    sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
-                                          _CLIENT_ONREQUEST_ID);
-                    sock->SetClientData(new_connection);
-                    sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
-                    sock->Notify(true);
-                    return;
-                }
-                else
-                {
-                    delete new_connection;
-                    // and fall through to delete everything else
-                }
             }
         }
 
-        // Something went wrong, send failure message and delete everything
-        out.Write8(IPC_FAIL);
-    } // IPCOutput object is destroyed here, before destroying stream
 
-    delete streams;
-    sock->Destroy();
 // Reads a single message from the socket. Returns wxIPCMessageNull when no
 // message was read.  The returned message must be freed by the caller.
 wxIPCMessageBase* wxTCPEventHandler::ReadMessageFromSocket(wxSocketBase* socket)
