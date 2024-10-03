@@ -945,7 +945,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageNull,wxIPCMessageBase);
 // --------------------------------------------------------------------------
 
 wxTCPClient::wxTCPClient()
-           : wxClientBase()
+    : wxClientBase()
 {
 }
 
@@ -965,33 +965,42 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
         return nullptr;
 
     wxSocketClient * const client = new wxSocketClient(wxSOCKET_WAITALL);
-    wxIPCSocketStreams * const streams = new wxIPCSocketStreams(*client);
 
     bool ok = client->Connect(*addr);
     delete addr;
 
+
     if ( ok )
     {
-        // Send topic name, and enquire whether this has succeeded
-        IPCOutput(streams).Write(IPC_CONNECT, topic);
+        wxTCPEventHandler* handler = &wxTCPEventHandlerModule::GetHandler();
 
-        unsigned char msg = streams->Read8();
+        // Send topic name, and enquire whether this has succeeded
+        wxIPCMessageConnect msg(client, topic);
+        if ( !handler->WriteMessageToSocket(msg) )
+        {
+            client->Destroy();
+            return nullptr;
+        }
+
+        wxIPCMessageBase* msg_reply = handler->ReadMessageFromSocket(client);
+        wxIPCMessageBaseLocker lock(msg_reply);
 
         // OK! Confirmation.
-        if (msg == IPC_CONNECT)
+        if ( msg_reply->GetIPCCode() == IPC_CONNECT )
         {
             wxTCPConnection *
                 connection = (wxTCPConnection *)OnMakeConnection ();
 
-            if (connection)
+            if ( connection )
             {
                 if (wxDynamicCast(connection, wxTCPConnection))
                 {
+                    connection->m_sock = client;
+                    connection->m_sock->SetTimeout(wxIPCTimeout);
+                    connection->m_handler = handler;
                     connection->m_topic = topic;
-                    connection->m_sock  = client;
-                    connection->m_streams = streams;
-                    client->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
-                                            _CLIENT_ONREQUEST_ID);
+
+                    client->SetEventHandler(*handler, _CLIENT_ONREQUEST_ID);
                     client->SetClientData(connection);
                     client->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
                     client->Notify(true);
@@ -1004,10 +1013,17 @@ wxConnectionBase *wxTCPClient::MakeConnection(const wxString& host,
                 }
             }
         }
+        else if ( msg_reply->GetIPCCode() == IPC_FAIL )
+        {
+            wxIPCMessageFail* msg_fail =
+                wxDynamicCast(msg_reply, wxIPCMessageFail);
+
+            if (msg_fail)
+                wxLogDebug("FailMessage received: " + msg_fail->GetItem());
+        }
     }
 
-    // Something went wrong, delete everything
-    delete streams;
+    // Something went wrong
     client->Destroy();
 
     return nullptr;
@@ -1023,7 +1039,7 @@ wxConnectionBase *wxTCPClient::OnMakeConnection()
 // --------------------------------------------------------------------------
 
 wxTCPServer::wxTCPServer()
-           : wxServerBase()
+    : wxServerBase()
 {
     m_server = nullptr;
 }
