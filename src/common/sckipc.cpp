@@ -42,6 +42,8 @@
 
 #include "wx/socket.h"
 
+class wxIPCMessageBase;
+
 // --------------------------------------------------------------------------
 // macros and constants
 // --------------------------------------------------------------------------
@@ -66,6 +68,11 @@ enum IPCCode
     IPC_DISCONNECT      = 11,
     IPC_MAX
 };
+
+// A random header, which is used to detect a loss-of-sync on the IPC
+// data stream. The header is 24-bits, and the IPCCode above is sent in the
+// last 8 bits.
+const wxUint32 IPCCodeHeader=0x439d9600;
 
 } // anonymous namespace
 
@@ -167,32 +174,238 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxTCPEventHandlerModule, wxModule);
 wxTCPEventHandler *wxTCPEventHandlerModule::ms_handler = nullptr;
 
 // --------------------------------------------------------------------------
-// wxIPCSocketStreams
+// wxIPCMessageBase
 // --------------------------------------------------------------------------
 
+// This class and its derivatives manage the reading and writing of data from
+// the socket.
+class wxIPCMessageBase : public wxObject
 {
 public:
+    wxIPCMessageBase(wxSocketBase* socket = nullptr,
+                     wxTCPEventHandler* handler = nullptr)
+        : m_write_data(nullptr), m_handler(handler)
     {
+        Init(socket);
     }
 
-
+    wxIPCMessageBase(wxSocketBase* socket, const void* data)
+        : m_write_data(data), m_handler(nullptr)
     {
+        Init(socket);
+    }
+    virtual ~wxIPCMessageBase() {};
+
+    bool IsOk() const { return m_ipc_code != IPC_NULL; }
+
+    // Accessors for the base object
+    IPCCode GetIPCCode() const { return m_ipc_code; }
+    void SetIPCCode(IPCCode ipc_code) { m_ipc_code = ipc_code; }
+
+    wxSocketBase* GetSocket() const { return m_socket; }
+    void SetSocket(wxSocketBase* socket) { m_socket = socket; }
+
+    wxSocketError GetError() const { return m_error; }
+    void SetError(wxSocketError error) { m_error = error; }
+
+    // These accessors are here to avoid repetition in the derived objects.
+    wxIPCFormat GetIPCFormat() const { return m_ipc_format; }
+    void SetIPCFormat(wxIPCFormat ipc_format) { m_ipc_format = ipc_format; }
+
+    const void* GetReadData() const { return m_read_data; }
+    void SetReadData(void *data) { m_read_data = data; }
+
+    size_t GetSize() const { return m_size; }
+    void SetSize(size_t size) { m_size = size; }
+
+    wxString GetItem() const { return m_item; }
+    void SetItem(const wxString& item) { m_item = item; }
+
+protected:
+    void Init(wxSocketBase* socket)
+    {
+        SetIPCCode(IPC_NULL);
+        SetSocket(socket);
+        SetError(wxSOCKET_NOERROR);
+
+        SetIPCFormat(wxIPC_INVALID);
+        SetReadData(nullptr);
+        SetSize(0);
     }
 
+    virtual bool DataFromSocket() = 0;
+    virtual bool DataToSocket() = 0;
+
+    // primitives for read/write to socket
+
+    bool VerifyValidSocket()
     {
+        if (m_socket && m_socket->IsOk() && m_socket->IsConnected() ) return true;
+
+        SetError(wxSOCKET_INVSOCK);
+        return false;
     }
 
+    bool Read32(wxUint32& word)
     {
+        word = 0;
+
+        if ( !VerifyValidSocket() )
+            return false;
+
+        m_socket->Read(reinterpret_cast<char *>(&word), 4);
+
+        return VerifyLastReadCount(4);
     }
 
+    // Reads nbytes of data from the socket into a pre-allocated buffer
+    bool ReadData(void* buffer, wxUint32& nbytes)
     {
+        if ( !VerifyValidSocket() )
+            return false;
+
+        m_socket->Read(buffer, nbytes);
+
+        return VerifyLastReadCount(nbytes);
     }
 
+    bool ReadSizeAndData();
+    bool ReadIPCCode()
     {
+        wxUint32 code_with_header;
+        if (!Read32(code_with_header))
+            return false;
 
+        if ((code_with_header & 0xFFFFFF00) != IPCCodeHeader)
+        {
+            // The expected data is misaligned, which is bad.
+            SetError(wxSOCKET_IOERR);
+            return false;
+        }
 
+        SetIPCCode(static_cast<IPCCode>(code_with_header & 0xFF));
+        return true;
+    }
 
+    bool ReadIPCFormat()
+    {
+        if ( !VerifyValidSocket() )
+            return false;
 
+        m_socket->Read(reinterpret_cast<char *>(&m_ipc_format), 1);
+
+        return VerifyLastReadCount(1);
+    }
+
+    bool ReadString(wxString& str);
+    bool VerifyLastReadCount(wxUint32 nbytes)
+    {
+        if ( !VerifyValidSocket() )
+            return false;
+
+        if (m_socket->Error())
+        {
+            SetError(m_socket->LastError());
+            return false;
+        }
+
+        if (m_socket->LastReadCount() != nbytes)
+        {
+            // The expected data is misaligned, which is bad.
+            SetError(wxSOCKET_IOERR);
+            return false;
+        }
+        return true;
+    }
+
+    bool Write32(wxUint32 word)
+    {
+        if ( !VerifyValidSocket() )
+            return false;
+
+        m_socket->Write(reinterpret_cast<char *>(&word), 4);
+
+        return VerifyLastWriteCount(4);
+    }
+
+    bool WriteData(const void* data, wxUint32 nbytes)
+    {
+        if ( !VerifyValidSocket() )
+            return false;
+
+        m_socket->Write(data, nbytes);
+
+        return VerifyLastWriteCount(nbytes);
+    }
+
+    bool WriteSizeAndData()
+    {
+        if (!Write32(m_size))
+            return false;
+
+        return WriteData(m_write_data, m_size);
+    }
+
+    bool WriteIPCCode()
+    {
+        wxUint32 code_with_header = IPCCodeHeader | GetIPCCode();
+        return Write32(code_with_header);
+    }
+
+    bool WriteIPCFormat()
+    {
+        if ( !VerifyValidSocket() )
+            return false;
+
+        m_socket->Write(reinterpret_cast<char *>(&m_ipc_format), 1);
+
+        return VerifyLastWriteCount(1);
+    }
+
+    bool WriteString(const wxString& str);
+
+    bool VerifyLastWriteCount(wxUint32 nbytes)
+    {
+        if ( !VerifyValidSocket() )
+            return false;
+
+        if (m_socket->Error())
+        {
+            SetError(m_socket->LastError());
+            return false;
+        }
+
+        if (m_socket->LastWriteCount() != nbytes)
+        {
+            SetError(wxSOCKET_IOERR);
+            return false;
+        }
+        return true;
+    }
+
+    IPCCode m_ipc_code;
+
+    wxSocketBase* m_socket;
+    wxSocketError m_error;
+
+    // Members used in most of the derived messages
+    wxUint32 m_size;
+    wxIPCFormat m_ipc_format;
+    wxString m_item;
+
+    // immutable pointer to data from connection object
+    const void* m_write_data;
+
+    // pointer to data read from socket
+    void* m_read_data;
+
+    wxTCPEventHandler *m_handler;
+
+    friend wxTCPEventHandler;
+
+    wxDECLARE_NO_COPY_CLASS(wxIPCMessageBase);
+    wxDECLARE_CLASS(wxIPCMessageBase);
+};
 
     }
 
