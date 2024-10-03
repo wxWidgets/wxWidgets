@@ -1251,160 +1251,45 @@ void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
     connection->OnDisconnect();
 }
 
-void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
-    wxSocketBase *sock = event.GetSocket();
-    if (!sock)
         return;
-
-    wxSocketNotify evt = event.GetSocketEvent();
-    wxTCPConnection * const
-        connection = static_cast<wxTCPConnection *>(sock->GetClientData());
 
     // This socket is being deleted; skip this event
-    if (!connection)
         return;
 
-    if ( evt == wxSOCKET_LOST )
-    {
-        HandleDisconnect(connection);
         return;
-    }
 
-    // Receive message number.
-    wxIPCSocketStreams * const streams = connection->m_streams;
 
-    const wxString topic = connection->m_topic;
-    wxString item;
 
-    bool error = false;
 
-    const int msg = streams->Read8();
-    switch ( msg )
     {
-        case IPC_EXECUTE:
+
             {
-                wxIPCFormat format;
-                size_t size wxDUMMY_INITIALIZE(0);
-                void * const
-                    data = streams->ReadFormatData(connection, &format, &size);
-                if ( data )
-                    connection->OnExecute(topic, data, size, format);
-                else
-                    error = true;
+
+
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             break;
 
-        case IPC_ADVISE:
-            {
-                item = streams->ReadString();
 
-                wxIPCFormat format;
-                size_t size wxDUMMY_INITIALIZE(0);
-                void * const
-                    data = streams->ReadFormatData(connection, &format, &size);
-
-                if ( data )
-                    connection->OnAdvise(topic, item, data, size, format);
-                else
-                    error = true;
-            }
             break;
 
-        case IPC_ADVISE_START:
-            {
-                item = streams->ReadString();
-
-                IPCOutput(streams).Write8(connection->OnStartAdvise(topic, item)
-                                            ? IPC_ADVISE_START
-                                            : IPC_FAIL);
-            }
-            break;
-
-        case IPC_ADVISE_STOP:
-            {
-                item = streams->ReadString();
-
-                IPCOutput(streams).Write8(connection->OnStopAdvise(topic, item)
-                                             ? IPC_ADVISE_STOP
-                                             : IPC_FAIL);
-            }
-            break;
-
-        case IPC_POKE:
-            {
-                item = streams->ReadString();
-                wxIPCFormat format = (wxIPCFormat)streams->Read8();
-
-                size_t size wxDUMMY_INITIALIZE(0);
-                void * const data = streams->ReadData(connection, &size);
-
-                if ( data )
-                    connection->OnPoke(topic, item, data, size, format);
-                else
-                    error = true;
-            }
-            break;
-
-        case IPC_REQUEST:
-            {
-                item = streams->ReadString();
-
-                wxIPCFormat format = (wxIPCFormat)streams->Read8();
-
-                size_t user_size = wxNO_LEN;
-                const void *user_data = connection->OnRequest(topic,
-                                                              item,
-                                                              &user_size,
-                                                              format);
-
-                if ( !user_data )
-                {
-                    IPCOutput(streams).Write8(IPC_FAIL);
-                    break;
-                }
-
-                IPCOutput out(streams);
-                out.Write8(IPC_REQUEST_REPLY);
-
-                if ( user_size == wxNO_LEN )
-                {
-                    switch ( format )
-                    {
-                        case wxIPC_TEXT:
-                        case wxIPC_UTF8TEXT:
-                            user_size = strlen((const char *)user_data) + 1;  // includes final NUL
-                            break;
-                        case wxIPC_UNICODETEXT:
-                            user_size = (wcslen((const wchar_t *)user_data) + 1) * sizeof(wchar_t);  // includes final NUL
-                            break;
-                        default:
-                            user_size = 0;
-                    }
-                }
-
-                out.WriteData(user_data, user_size);
-            }
-            break;
-
-        case IPC_DISCONNECT:
-            HandleDisconnect(connection);
-            break;
-
-        case IPC_FAIL:
-            wxLogDebug("Unexpected IPC_FAIL received");
-            error = true;
-            break;
-
-        default:
-            wxLogDebug("Unknown message code %d received.", msg);
-            error = true;
             break;
     }
 
-    if ( error )
-        IPCOutput(streams).Write8(IPC_FAIL);
-}
 
 void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 {
