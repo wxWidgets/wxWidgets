@@ -62,11 +62,12 @@ namespace
 // wxIPC protocol!)
 enum IPCCode
 {
+    IPC_NULL            = 0,
     IPC_EXECUTE         = 1,
     IPC_REQUEST         = 2,
     IPC_POKE            = 3,
     IPC_ADVISE_START    = 4,
-    IPC_ADVISE_REQUEST  = 5,
+    IPC_ADVISE_REQUEST  = 5, // not used
     IPC_ADVISE          = 6,
     IPC_ADVISE_STOP     = 7,
     IPC_REQUEST_REPLY   = 8,
@@ -88,6 +89,10 @@ const wxUint32 IPCCodeHeader=0x439d9600;
     #include <sys/types.h>
     #include <sys/stat.h>
 #endif // __UNIX_LIKE__
+
+#define wxNO_RETURN_MESSAGE nullptr
+
+const long wxIPCTimeout = 10; // socket timeout, in seconds
 
 
 // For IPC returning a char* buffer. wxWidgets docs say that the user is not
