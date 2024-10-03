@@ -49,6 +49,7 @@
 class WXDLLIMPEXP_FWD_NET wxTCPServer;
 class WXDLLIMPEXP_FWD_NET wxTCPClient;
 
+class wxTCPEventHandler;
 
 class WXDLLIMPEXP_NET wxTCPConnection : public wxConnectionBase
 {
