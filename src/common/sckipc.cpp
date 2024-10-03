@@ -1284,24 +1284,81 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     connection->OnDisconnect();
 }
 
+
+// This method is called for incoming connections to wxServer only.
+void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 {
+    wxSocketServer *server = (wxSocketServer *) event.GetSocket();
+    if (!server)
         return;
+    wxTCPServer *ipcserv = (wxTCPServer *) server->GetClientData();
 
     // This socket is being deleted; skip this event
+    if (!ipcserv)
         return;
 
+    if ( event.GetSocketEvent() != wxSOCKET_CONNECTION )
         return;
 
+    // Accept the connection, getting a new socket
+    wxSocketBase *sock = server->Accept();
+    if (!sock)
+        return;
 
-
-
+    if ( !sock->IsOk() )
     {
+        sock->Destroy();
+        return;
+    }
 
+    wxIPCMessageBase* msg = ReadMessageFromSocket(sock);
+    wxIPCMessageBaseLocker lock(msg);
+
+    if ( msg->GetIPCCode() == IPC_CONNECT )
+    {
+        wxIPCMessageConnect* msg_conn = (wxIPCMessageConnect*) msg;
+
+        if ( msg_conn )
+        {
+            if (wxDynamicCast(msg, wxIPCMessageConnect))
             {
+                wxString topic = msg_conn->GetTopic();
 
+                wxTCPConnection *new_connection =
+                    (wxTCPConnection *) ipcserv->OnAcceptConnection(topic);
 
+                if ( new_connection )
+                {
+                    if ( wxDynamicCast(new_connection, wxTCPConnection) )
+                    {
+                        // Acknowledge success
+                        wxIPCMessageConnect msg_reply(sock, topic);
+
+                        if ( WriteMessageToSocket(msg_reply) )
+                        {
+                            new_connection->m_topic = topic;
+                            new_connection->m_sock = sock;
+                            new_connection->m_handler = &wxTCPEventHandlerModule::GetHandler();
+
+                            sock->SetTimeout(wxIPCTimeout);
+                            sock->SetEventHandler(wxTCPEventHandlerModule::GetHandler(),
+                                                  _CLIENT_ONREQUEST_ID);
+                            sock->SetClientData(new_connection);
+                            sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
+                            sock->Notify(true);
+                            return;
+                        }
+                    }
+
+                    delete new_connection;
+                }
             }
+        }
+    }
 
+    SendFailMessage("IPC CONNECT failed to create valid connection", sock);
+    sock->Destroy();
+}
 
 // Process a single wxIPCMessage from the socket. Returns true if processing
 // can continue, or false if processing should stop, usually because a
