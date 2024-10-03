@@ -295,6 +295,13 @@ wxSocketError wxSocketImplMSW::GetLastError() const
         case WSAENOTSOCK:
             return wxSOCKET_INVSOCK;
 
+        // Trying to read or peek on the socket when there
+        // is no data waiting will result in ERROR_ACCESS_DENIED
+        // and/or WSAECONNABORTED. We return wxSOCKET_WOULDBLOCK
+        // so the caller can keep trying.
+        case ERROR_ACCESS_DENIED:
+        case WSAECONNABORTED:
+
         case WSAEWOULDBLOCK:
             return wxSOCKET_WOULDBLOCK;
 
