@@ -1289,7 +1289,7 @@ bool wxTCPConnection::DoAdvise(const wxString& item,
 }
 
 // --------------------------------------------------------------------------
-// wxTCPEventHandler (private class)
+// wxTCPEventHandler implementation (private class)
 // --------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(wxTCPEventHandler, wxEvtHandler)
@@ -1297,19 +1297,11 @@ wxBEGIN_EVENT_TABLE(wxTCPEventHandler, wxEvtHandler)
     EVT_SOCKET(_SERVER_ONREQUEST_ID, wxTCPEventHandler::Server_OnRequest)
 wxEND_EVENT_TABLE()
 
-void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
 void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
-    // connection was closed (either gracefully or not): destroy everything
-    connection->m_sock->Notify(false);
-    connection->m_sock->Close();
     wxSocketBase *sock = event.GetSocket();
     wxTCPConnection * connection = GetConnection(sock);
 
-    // don't leave references to this soon-to-be-dangling connection in the
-    // socket as it won't be destroyed immediately as its destruction will be
-    // delayed in case there are more events pending for it
-    connection->m_sock->SetClientData(nullptr);
     // This socket is being deleted
     if ( !connection )
         return;
@@ -1336,8 +1328,6 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
             break;
     };
 
-    connection->SetConnected(false);
-    connection->OnDisconnect();
 }
 
 
@@ -1658,6 +1648,21 @@ void wxTCPEventHandler::SendFailMessage(const wxString& reason, wxSocketBase* so
 
     if (!WriteMessageToSocket(msg) )
         wxLogDebug("Failed to send IPC_FAIL message: " + reason);
+}
+
+void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
+{
+    // connection was closed (either gracefully or not): destroy everything
+    connection->m_sock->Notify(false);
+    connection->m_sock->Close();
+
+    // don't leave references to this soon-to-be-dangling connection in the
+    // socket as it won't be destroyed immediately as its destruction will be
+    // delayed in case there are more events pending for it
+    connection->m_sock->SetClientData(nullptr);
+
+    connection->SetConnected(false);
+    connection->OnDisconnect();
 }
 
 // Reads a single message from the socket. Returns wxIPCMessageNull when no
