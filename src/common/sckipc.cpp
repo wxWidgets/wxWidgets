@@ -1246,27 +1246,34 @@ bool wxTCPConnection::DoPoke(const wxString& item,
 
 bool wxTCPConnection::StartAdvise(const wxString& item)
 {
-    if ( !m_sock->IsConnected() )
+    if ( !m_handler )
         return false;
 
-    IPCOutput(m_streams).Write(IPC_ADVISE_START, item);
+    // Don't let ProcessIncomingMessages interfere with getting a response
+    wxCRIT_SECT_LOCKER(lock, m_handler->m_cs_process_msgs);
 
-    const int ret = m_streams->Read8();
+    wxIPCMessageAdviseStart msg(m_sock, item);
+    if ( !m_handler->WriteMessageToSocket(msg) )
+        return false;
 
-    return ret == IPC_ADVISE_START;
+    return m_handler->FindMessage(IPC_ADVISE_START, m_sock, wxNO_RETURN_MESSAGE);
 }
 
 bool wxTCPConnection::StopAdvise (const wxString& item)
 {
-    if ( !m_sock->IsConnected() )
+    if ( !m_handler )
         return false;
 
-    IPCOutput(m_streams).Write(IPC_ADVISE_STOP, item);
+    // Don't let ProcessIncomingMessages interfere with getting a response
+    wxCRIT_SECT_LOCKER(lock, m_handler->m_cs_process_msgs);
 
-    const int ret = m_streams->Read8();
+    wxIPCMessageAdviseStop msg(m_sock, item);
+    if ( !m_handler->WriteMessageToSocket(msg) )
+        return false;
 
-    return ret == IPC_ADVISE_STOP;
+    return m_handler->FindMessage(IPC_ADVISE_STOP, m_sock, wxNO_RETURN_MESSAGE);
 }
+
 
 // Calls that SERVER can make
 bool wxTCPConnection::DoAdvise(const wxString& item,
@@ -1274,14 +1281,11 @@ bool wxTCPConnection::DoAdvise(const wxString& item,
                                size_t size,
                                wxIPCFormat format)
 {
-    if ( !m_sock->IsConnected() )
+    if ( !m_handler )
         return false;
 
-    IPCOutput out(m_streams);
-    out.Write(IPC_ADVISE, item, format);
-    out.WriteData(data, size);
-
-    return true;
+    wxIPCMessageAdvise msg(m_sock, item, data, size, format);
+    return m_handler->WriteMessageToSocket(msg);
 }
 
 // --------------------------------------------------------------------------
