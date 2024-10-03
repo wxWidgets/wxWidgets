@@ -862,14 +862,12 @@ public:
 protected:
     bool DataToSocket() override
     {
-        wxLogMessage("write topic: " + m_topic);
         return WriteString(m_topic);
     }
 
     bool DataFromSocket() override
     {
         bool b = ReadString(m_topic);
-        wxLogMessage("read topic: " + m_topic);
         return b;
     }
 
