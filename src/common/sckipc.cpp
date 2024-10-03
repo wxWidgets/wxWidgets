@@ -407,36 +407,382 @@ protected:
     wxDECLARE_CLASS(wxIPCMessageBase);
 };
 
-    }
+// ==========================================================================
+// wxIPCMessages
+// ==========================================================================
 
+class wxIPCMessageExecute : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageExecute(wxSocketBase* socket = nullptr,
+                        wxTCPEventHandler* handler = nullptr)
+        : wxIPCMessageBase(socket, handler)
     {
-
-
+        SetIPCCode(IPC_EXECUTE);
     }
 
+    wxIPCMessageExecute(wxSocketBase* socket,
+                        const void* data,
+                        size_t size,
+                        wxIPCFormat format)
+        : wxIPCMessageBase(socket, data)
+    {
+        SetIPCCode(IPC_EXECUTE);
+        SetSize((wxUint32) size);
+        SetIPCFormat(format);
+    }
 
+protected:
+    bool DataToSocket() override
+    {
+        return WriteIPCFormat() && WriteSizeAndData();
+    }
 
+    bool DataFromSocket() override
+    {
+        return ReadIPCFormat() && ReadSizeAndData();
+    }
 
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageExecute);
+};
 
+class wxIPCMessageRequest : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageRequest(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_REQUEST);
+        SetIPCFormat(wxIPC_INVALID);
+    }
+
+    wxIPCMessageRequest(wxSocketBase* socket,
+                        const wxString& item,
+                        wxIPCFormat format)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_REQUEST);
+        SetItem(item);
+        SetIPCFormat(format);
+    }
+
+protected:
+    bool DataToSocket() override
+    {
+        return WriteIPCFormat() && WriteString(m_item);
+    }
+
+    bool DataFromSocket() override
+    {
+        return ReadIPCFormat() && ReadString(m_item);
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageRequest);
+};
+
+class wxIPCMessageRequestReply : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageRequestReply(wxSocketBase* socket = nullptr,
+                             wxTCPEventHandler* handler = nullptr)
+        : wxIPCMessageBase(socket, handler)
+    {
+        SetIPCCode(IPC_REQUEST_REPLY);
+    }
+
+    wxIPCMessageRequestReply(wxSocketBase* socket,
+                             const void* user_data,
+                             size_t user_size,
+                             const wxString& item,
+                             wxIPCFormat format)
+        : wxIPCMessageBase(socket, user_data)
+    {
+        SetIPCCode(IPC_REQUEST_REPLY);
+        SetItem(item);
+        SetIPCFormat(format);
+
+        wxUint32 len = user_size;
+        if ( user_size == wxNO_LEN )
+        {
+            switch ( format )
+            {
+            case wxIPC_TEXT:
+            case wxIPC_UTF8TEXT:
+                len = strlen((const char *)user_data) + 1;  // includes final NUL
+                break;
+            case wxIPC_UNICODETEXT:
+                len = (wcslen((const wchar_t *)user_data) + 1) * sizeof(wchar_t);  // includes final NUL
+                break;
+            default:
+                len = 0;
+            }
+        }
+        SetSize(len);
+    }
+
+protected:
+    bool DataToSocket() override
+    {
+        return WriteIPCFormat() && WriteString(m_item) && WriteSizeAndData();
+    }
+
+    bool DataFromSocket() override
+    {
+        return ReadIPCFormat() && ReadString(m_item) && ReadSizeAndData();
+    }
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageRequestReply);
+};
+
+class wxIPCMessagePoke : public wxIPCMessageBase
+{
+public:
+    wxIPCMessagePoke(wxSocketBase* socket = nullptr,
+                     wxTCPEventHandler* handler = nullptr)
+        : wxIPCMessageBase(socket, handler)
+    {
+        SetIPCCode(IPC_POKE);
+    }
+
+    wxIPCMessagePoke(wxSocketBase* socket,
+                     const wxString& item,
+                     const void* data,
+                     size_t size,
+                     wxIPCFormat format)
+        : wxIPCMessageBase(socket, data)
+    {
+        SetIPCCode(IPC_POKE);
+        SetItem(item);
+        SetIPCFormat(format);
+        SetSize(size);
+    }
+
+protected:
+    bool DataToSocket() override
+    {
+        return WriteIPCFormat() && WriteString(m_item) && WriteSizeAndData();
+    }
+
+    bool DataFromSocket() override
+    {
+        return ReadIPCFormat() && ReadString(m_item) && ReadSizeAndData();
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessagePoke);
+};
+
+class wxIPCMessageAdviseStart : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageAdviseStart(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_ADVISE_START);
+    }
+
+    wxIPCMessageAdviseStart(wxSocketBase* socket, const wxString& item)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_ADVISE_START);
+        SetItem(item);
+    }
+
+protected:
+    bool DataToSocket() override
+    {
+        return WriteString(m_item);
+    }
+
+    bool DataFromSocket() override
+    {
+        return ReadString(m_item);
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageAdviseStart);
+};
+
+class wxIPCMessageAdviseStop : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageAdviseStop(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_ADVISE_STOP);
+    }
+
+    wxIPCMessageAdviseStop(wxSocketBase* socket, const wxString& item)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_ADVISE_STOP);
+        SetItem(item);
+    }
+
+protected:
+    bool DataToSocket() override
+    {
+        return WriteString(m_item);
+    }
+
+    bool DataFromSocket() override
+    {
+        return ReadString(m_item);
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageAdviseStop);
+};
+
+class wxIPCMessageAdvise : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageAdvise(wxSocketBase* socket = nullptr,
+                       wxTCPEventHandler* handler = nullptr)
+        : wxIPCMessageBase(socket, handler)
+    {
+        SetIPCCode(IPC_ADVISE);
+    }
+
+    wxIPCMessageAdvise(wxSocketBase* socket,
+                       const wxString& item,
+                       const void* data,
+                       size_t size,
+                       wxIPCFormat format)
+        : wxIPCMessageBase(socket, data)
+    {
+        SetIPCCode(IPC_ADVISE);
+        SetItem(item);
+        SetIPCFormat(format);
+        SetSize(size);
+    }
+
+protected:
+    bool DataToSocket() override
+    {
+        return WriteIPCFormat() && WriteString(m_item) && WriteSizeAndData();
+    }
+
+    bool DataFromSocket() override
+    {
+        return ReadIPCFormat() && ReadString(m_item) && ReadSizeAndData();
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageAdvise);
+};
+
+// Member var item to be used for failure reason (for debug)
+class wxIPCMessageFail : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageFail(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_FAIL);
+    }
+
+    wxIPCMessageFail(wxSocketBase* socket, const wxString& item)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_FAIL);
+        SetItem(item);
+    }
+
+protected:
+    bool DataToSocket() override
+    {
+        return WriteString(m_item);
+    }
+
+    bool DataFromSocket() override
+    {
+        return ReadString(m_item);
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageFail);
+};
+
+// Message returned when socket fails to read an wxIPCMessage
+class wxIPCMessageNull : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageNull(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_NULL);
+    }
+
+protected:
+    bool DataToSocket() override
+    {
+        return false;
+    }
+
+    bool DataFromSocket() override
+    {
+        return false;
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageNull);
+};
+
+class wxIPCMessageConnect : public wxIPCMessageBase
+{
+public:
+    wxIPCMessageConnect(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_CONNECT);
+    }
+
+    wxIPCMessageConnect(wxSocketBase* socket, const wxString& topic)
+        : wxIPCMessageBase(socket)
+    {
+        SetIPCCode(IPC_CONNECT);
+        SetTopic(topic);
+    }
+
+    wxString GetTopic() const { return m_topic; }
+    void SetTopic(const wxString& topic) { m_topic = topic; }
+
+protected:
+    bool DataToSocket() override
+    {
+        wxLogMessage("write topic: " + m_topic);
+        return WriteString(m_topic);
+    }
+
+    bool DataFromSocket() override
+    {
+        bool b = ReadString(m_topic);
+        wxLogMessage("read topic: " + m_topic);
+        return b;
+    }
+
+    wxString m_topic;
+
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageConnect);
 };
 
 
+class wxIPCMessageDisconnect : public wxIPCMessageBase
 {
 public:
+    wxIPCMessageDisconnect(wxSocketBase* socket = nullptr)
+        : wxIPCMessageBase(socket)
     {
+        SetIPCCode(IPC_DISCONNECT);
     }
 
+protected:
+    bool DataToSocket() override
     {
+        return true;
     }
 
+    bool DataFromSocket() override
     {
+        return true;
     }
 
-    {
-    }
-
-    {
-    }
+    wxDECLARE_DYNAMIC_CLASS(wxIPCMessageDisconnect);
+};
 
 };
 
@@ -447,6 +793,21 @@ public:
 wxIMPLEMENT_DYNAMIC_CLASS(wxTCPServer, wxServerBase);
 wxIMPLEMENT_DYNAMIC_CLASS(wxTCPClient, wxClientBase);
 wxIMPLEMENT_CLASS(wxTCPConnection, wxConnectionBase);
+
+wxIMPLEMENT_CLASS(wxIPCMessageBase,wxObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageExecute,wxIPCMessageBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageRequest,wxIPCMessageBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageRequestReply,wxIPCMessageBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessagePoke,wxIPCMessageBase);
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageAdviseStart,wxIPCMessageBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageAdviseStop,wxIPCMessageBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageAdvise,wxIPCMessageBase);
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageConnect,wxIPCMessageBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageDisconnect,wxIPCMessageBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageFail,wxIPCMessageBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPCMessageNull,wxIPCMessageBase);
 
 // --------------------------------------------------------------------------
 // wxTCPClient
