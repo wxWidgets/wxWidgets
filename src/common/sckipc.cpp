@@ -26,7 +26,7 @@
 #include "wx/wxprec.h"
 
 
-#if wxUSE_SOCKETS && wxUSE_IPC && wxUSE_STREAMS
+#if wxUSE_SOCKETS && wxUSE_IPC
 
 #include "wx/sckipc.h"
 
@@ -170,177 +170,62 @@ wxTCPEventHandler *wxTCPEventHandlerModule::ms_handler = nullptr;
 // wxIPCSocketStreams
 // --------------------------------------------------------------------------
 
-#define USE_BUFFER
-
-// this class contains the various (related) streams used by wxTCPConnection
-// and also provides a way to read from the socket stream directly
-//
-// for writing to the stream use the IPCOutput class below
-class wxIPCSocketStreams
 {
 public:
-    // ctor initializes all the streams on top of the given socket
-    //
-    // note that we use a bigger than default buffer size which matches the
-    // typical Ethernet MTU (minus TCP header overhead)
-    wxIPCSocketStreams(wxSocketBase& sock)
-        : m_socketStream(sock),
-#ifdef USE_BUFFER
-          m_bufferedOut(m_socketStream, 1448),
-#else
-          m_bufferedOut(m_socketStream),
-#endif
-          m_dataIn(m_socketStream),
-          m_dataOut(m_bufferedOut)
     {
     }
 
-    // expose the IO methods needed by IPC code (notice that writing is only
-    // done via IPCOutput)
 
-    // flush output
-    void Flush()
     {
-#ifdef USE_BUFFER
-        m_bufferedOut.Sync();
-#endif
     }
 
-    // simple wrappers around the functions with the same name in
-    // wxDataInputStream
-    wxUint8 Read8()
     {
-        Flush();
-        return m_dataIn.Read8();
     }
 
-    wxUint32 Read32()
     {
-        Flush();
-        return m_dataIn.Read32();
     }
 
-    wxString ReadString()
     {
-        Flush();
-        return m_dataIn.ReadString();
     }
 
-    // read arbitrary (size-prepended) data
-    //
-    // connection parameter is needed to call its GetBufferAtLeast() method
-    void *ReadData(wxConnectionBase *conn, size_t *size)
     {
-        Flush();
 
-        wxCHECK_MSG( conn, nullptr, "null connection parameter" );
-        wxCHECK_MSG( size, nullptr, "null size parameter" );
 
-        *size = Read32();
 
-        void * const data = conn->GetBufferAtLeast(*size);
-        wxCHECK_MSG( data, nullptr, "IPC buffer allocation failed" );
 
-        m_socketStream.Read(data, *size);
 
-        return data;
     }
 
-    // same as above but for data preceded by the format
-    void *
-    ReadFormatData(wxConnectionBase *conn, wxIPCFormat *format, size_t *size)
     {
-        wxCHECK_MSG( format, nullptr, "null format parameter" );
 
-        *format = static_cast<wxIPCFormat>(Read8());
 
-        return ReadData(conn, size);
     }
 
 
-    // these methods are only used by IPCOutput and not directly
-    wxDataOutputStream& GetDataOut() { return m_dataOut; }
-    wxOutputStream& GetUnformattedOut() { return m_bufferedOut; }
 
-private:
-    // this is the low-level underlying stream using the connection socket
-    wxSocketStream m_socketStream;
 
-    // the buffered stream is used to avoid writing all pieces of an IPC
-    // request to the socket one by one but to instead do it all at once when
-    // we're done with it
-#ifdef USE_BUFFER
-    wxBufferedOutputStream m_bufferedOut;
-#else
-    wxOutputStream& m_bufferedOut;
-#endif
 
-    // finally the data streams are used to be able to write typed data into
-    // the above streams easily
-    wxDataInputStream  m_dataIn;
-    wxDataOutputStream m_dataOut;
-
-    wxDECLARE_NO_COPY_CLASS(wxIPCSocketStreams);
 };
 
-namespace
-{
 
-// an object of this class should be instantiated on the stack to write to the
-// underlying socket stream
-//
-// this class is intentionally separated from wxIPCSocketStreams to ensure that
-// Flush() is always called
-class IPCOutput
 {
 public:
-    // construct an object associated with the given streams (which must have
-    // life time greater than ours as we keep a reference to it)
-    IPCOutput(wxIPCSocketStreams *streams)
-        : m_streams(*streams)
     {
-        wxASSERT_MSG( streams, "null streams pointer" );
     }
 
-    // dtor calls Flush() really sending the IPC data to the network
-    ~IPCOutput() { m_streams.Flush(); }
-
-
-    // write a byte
-    void Write8(wxUint8 i)
     {
-        m_streams.GetDataOut().Write8(i);
     }
 
-    // write the reply code and a string
-    void Write(IPCCode code, const wxString& str)
     {
-        Write8(code);
-        m_streams.GetDataOut().WriteString(str);
     }
 
-    // write the reply code, a string and a format in this order
-    void Write(IPCCode code, const wxString& str, wxIPCFormat format)
     {
-        Write(code, str);
-        Write8(format);
     }
 
-    // write arbitrary data
-    void WriteData(const void *data, size_t size)
     {
-        m_streams.GetDataOut().Write32(size);
-        m_streams.GetUnformattedOut().Write(data, size);
     }
 
-
-private:
-    wxIPCSocketStreams& m_streams;
-
-    wxDECLARE_NO_COPY_CLASS(IPCOutput);
 };
-
-} // anonymous namespace
 
 // ==========================================================================
 // implementation
@@ -925,4 +810,4 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
     sock->Destroy();
 }
 
-#endif // wxUSE_SOCKETS && wxUSE_IPC && wxUSE_STREAMS
+#endif // wxUSE_SOCKETS && wxUSE_IPC
