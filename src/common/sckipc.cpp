@@ -1194,17 +1194,11 @@ bool wxTCPConnection::DoExecute(const void *data,
                                 size_t size,
                                 wxIPCFormat format)
 {
-    if ( !m_sock->IsConnected() )
+    if ( !m_handler )
         return false;
 
-    // Prepare EXECUTE message
-    IPCOutput out(m_streams);
-    out.Write8(IPC_EXECUTE);
-    out.Write8(format);
-
-    out.WriteData(data, size);
-
-    return true;
+    wxIPCMessageExecute msg(m_sock, data, size, format);
+    return m_handler->WriteMessageToSocket(msg);
 }
 
 const void *wxTCPConnection::Request(const wxString& item,
