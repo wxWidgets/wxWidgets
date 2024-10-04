@@ -182,14 +182,6 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
         switch ( WSAGETSELECTEVENT(lParam) )
         {
             case FD_READ:
-                {
-                    fd_set fds;
-                    wxTimeVal_t tv = { 0, 0 };
-
-                    wxFD_ZERO(&fds);
-                    wxFD_SET(socket->m_fd, &fds);
-                }
-
                 event = wxSOCKET_INPUT;
                 break;
 
