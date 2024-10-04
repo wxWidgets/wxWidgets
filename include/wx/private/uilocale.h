@@ -100,6 +100,41 @@ public:
                                int flags) const = 0;
 
     virtual ~wxUILocaleImpl() = default;
+
+    // These two methods are for internal use only. First one creates the
+    // global language database if it doesn't already exist, second one destroys
+    // it.
+    static void CreateLanguagesDB();
+    static void DestroyLanguagesDB();
+
+    // Creates the global tables of languages and scripts called by CreateLanguagesDB
+    static void InitLanguagesDB();
+
+    // These two methods are for internal use only.
+    // wxLocaleIdent expects script identifiers as listed in ISO 15924.
+    // However, directory names for translation catalogs follow the
+    // Unix convention, using script aliases as listed  in ISO 15924.
+    // First one converts a script name to its alias, second converts
+    // a script alias to its corresponding script name.
+    // Both methods return empty strings, if the script name or alias
+    // couldn't be found.
+    static wxString GetScriptAliasFromName(const wxString& scriptName);
+    static wxString GetScriptNameFromAlias(const wxString& scriptAlias);
+
+    // These three methods are for internal use only.
+    // The new algorithm for determine the best translation language
+    // uses them.
+    // First one expands a locale tag using most likely subtags for script
+    // and region. The method returns an empty string, if a matching tag
+    // couldn't be found.
+    // Second one determines the matching distance between locale tags.
+    // The method returns -1, if no match was found.
+    // Third one determines whether 2 regions belong to the same region
+    // group of the given language. The method returns false, if no
+    // region group is defined for the given language.
+    static wxString GetLikelySubtags(const wxString & fromTag);
+    static int GetMatchDistance(const wxString& desired, const wxString& supported);
+    static bool SameRegionGroup(const wxString& language, const wxString& desiredRegion, const wxString& supportedRegion);
 };
 
 #endif // _WX_PRIVATE_UILOCALE_H_

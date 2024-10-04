@@ -116,6 +116,7 @@ void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 
 #endif // wxUSE_LOG_TRACE/!wxUSE_LOG_TRACE
 
+#if 1
 wxString GetPreferredUILanguage(const wxVector<wxString>& available)
 {
     const wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
@@ -123,6 +124,7 @@ wxString GetPreferredUILanguage(const wxVector<wxString>& available)
 
     return wxLocaleIdent::GetBestMatch(preferred, available);
 }
+#endif
 
 } // anonymous namespace
 
@@ -1451,9 +1453,7 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
         return lang;
     }
 
-    wxLogTrace(TRACE_I18N, "choosing best language for domain '%s'", domain);
-    LogTraceArray(" - available translations", available);
-    const wxString lang = GetPreferredUILanguage(available);
+    const wxString lang = GetPreferredUILanguage(available.AsVector());
     wxLogTrace(TRACE_I18N, " => using language '%s'", lang);
     return lang;
 }

@@ -128,7 +128,7 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     if (!tagRest.empty())
     {
         // POSIX modifier found
-        wxString script = wxUILocale::GetScriptNameFromAlias(tagRest);
+        wxString script = wxUILocaleImpl::GetScriptNameFromAlias(tagRest);
         if (!script.empty())
             locId.Script(script);
         else
@@ -319,15 +319,15 @@ wxLocaleIdent wxLocaleIdent::AddLikelySubtags(const wxLocaleIdent& localeIdent)
     wxString toTag;
     if (!script.empty())
     {
-        toTag = wxUILocale::GetLikelySubtags(language + wxString("-") + script);
+        toTag = wxUILocaleImpl::GetLikelySubtags(language + wxString("-") + script);
     }
     if (toTag.empty() && !region.empty())
     {
-        toTag = wxUILocale::GetLikelySubtags(language + wxString("-") + region);
+        toTag = wxUILocaleImpl::GetLikelySubtags(language + wxString("-") + region);
     }
     if (toTag.empty())
     {
-        toTag = wxUILocale::GetLikelySubtags(language);
+        toTag = wxUILocaleImpl::GetLikelySubtags(language);
     }
 
     if (toTag.empty())
@@ -428,11 +428,11 @@ static const int DISTANCE_INFINITY = 1000;
 wxString wxLocaleIdent::GetBestMatch(const wxVector<wxString>& desired, const wxVector<wxString>& supported)
 {
     // Default distance values
-    static int defaultLanguageDistance = wxUILocale::GetMatchDistance("*", "*");
-    static int defaultScriptDistance = wxUILocale::GetMatchDistance("*-*", "*-*");
-    static int defaultRegionDistance = wxUILocale::GetMatchDistance("*-*-*", "*-*-*") + 1;
-    static int defaultRegionGroupDistance = wxUILocale::GetMatchDistance("*-*-*", "*-*-*");
-    static int defaultDemotion = wxUILocale::GetMatchDistance("en-*-*", "en-*-*") + 1;
+    static int defaultLanguageDistance = wxUILocaleImpl::GetMatchDistance("*", "*");
+    static int defaultScriptDistance = wxUILocaleImpl::GetMatchDistance("*-*", "*-*");
+    static int defaultRegionDistance = wxUILocaleImpl::GetMatchDistance("*-*-*", "*-*-*") + 1;
+    static int defaultRegionGroupDistance = wxUILocaleImpl::GetMatchDistance("*-*-*", "*-*-*");
+    static int defaultDemotion = wxUILocaleImpl::GetMatchDistance("en-*-*", "en-*-*") + 1;
     static int threshold = defaultScriptDistance;
 
     // Maximized locale identifiers associated with the given desired and supported locale tags
@@ -526,15 +526,15 @@ wxString wxLocaleIdent::GetBestMatch(const wxVector<wxString>& desired, const wx
                     // Check script subtags
                     if (supportedScript.CmpNoCase(desiredScript) != 0)
                     {
-                        int scriptDistance = wxUILocale::GetMatchDistance(desiredLanguage + wxString("-") + desiredScript,
-                                                                          supportedLanguage + wxString("-") + supportedScript);
+                        int scriptDistance = wxUILocaleImpl::GetMatchDistance(desiredLanguage + wxString("-") + desiredScript,
+                                                                              supportedLanguage + wxString("-") + supportedScript);
                         distance += (scriptDistance >= 0) ? scriptDistance : defaultScriptDistance;
                     }
 
                     // Check region subtags
                     if (supportedRegion.CmpNoCase(desiredRegion) != 0)
                     {
-                        bool sameRegion = wxUILocale::SameRegionGroup(desiredLanguage, desiredRegion, supportedRegion);
+                        bool sameRegion = wxUILocaleImpl::SameRegionGroup(desiredLanguage, desiredRegion, supportedRegion);
                         distance += (sameRegion) ? defaultRegionGroupDistance : defaultRegionDistance;
                     }
                     if (desiredLocaleIn.GetScript().CmpNoCase(supportedScriptIn) != 0) supportedMinDistance += 1;
@@ -545,14 +545,14 @@ wxString wxLocaleIdent::GetBestMatch(const wxVector<wxString>& desired, const wx
                     // Language subtags not equal
 
                     // Determine language distance
-                    int languageDistance = wxUILocale::GetMatchDistance(desiredLanguage, supportedLanguage);
+                    int languageDistance = wxUILocaleImpl::GetMatchDistance(desiredLanguage, supportedLanguage);
                     distance += (languageDistance >= 0) ? languageDistance : defaultLanguageDistance;
 
                     // Check whether script subtags are not equal
                     if (supportedScript.CmpNoCase(desiredScript) != 0)
                     {
-                        int scriptDistance = wxUILocale::GetMatchDistance(desiredLanguage + wxString("-") + desiredScript,
-                                                                          supportedLanguage + wxString("-") + supportedScript);
+                        int scriptDistance = wxUILocaleImpl::GetMatchDistance(desiredLanguage + wxString("-") + desiredScript,
+                                                                              supportedLanguage + wxString("-") + supportedScript);
                         distance += (scriptDistance >= 0) ? scriptDistance : defaultScriptDistance;
                     }
 
@@ -641,7 +641,7 @@ wxLocaleIdent& wxLocaleIdent::Script(const wxString& script)
     }
     else if (!script.empty())
     {
-        m_script = wxUILocale::GetScriptNameFromAlias(script.Lower());
+        m_script = wxUILocaleImpl::GetScriptNameFromAlias(script.Lower());
     }
     else
     {
@@ -734,7 +734,7 @@ wxString wxLocaleIdent::GetTag(wxLocaleTagType tagType) const
                     tag << '.' << m_charset;
                 if (!minTag.m_script.empty())
                 {
-                    const wxString& script = wxUILocale::GetScriptAliasFromName(m_script);
+                    const wxString& script = wxUILocaleImpl::GetScriptAliasFromName(m_script);
                     if (!script.empty())
                         tag << '@' << script;
                 }
@@ -1120,7 +1120,7 @@ wxVector<wxString> wxUILocale::GetPreferredUILanguages()
 /* static */
 const wxLanguageInfo* wxUILocale::GetLanguageInfo(int lang)
 {
-    CreateLanguagesDB();
+    wxUILocaleImpl::CreateLanguagesDB();
 
     // calling GetLanguageInfo(wxLANGUAGE_DEFAULT) is a natural thing to do, so
     // make it work
@@ -1177,7 +1177,7 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxString& localeOrig)
     if (localeOrig.empty())
         return nullptr;
 
-    CreateLanguagesDB();
+    wxUILocaleImpl::CreateLanguagesDB();
 
     // Determine full language and region names, which will be compared
     // to the entry description in the language database.
@@ -1236,7 +1236,7 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
     if (locId.IsEmpty())
         return nullptr;
 
-    CreateLanguagesDB();
+    wxUILocaleImpl::CreateLanguagesDB();
 
     const wxLanguageInfo* infoRet = nullptr;
 
