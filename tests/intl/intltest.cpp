@@ -531,7 +531,7 @@ TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
     CHECK( TagToPOSIX("sr-Cyrl-RS") == "sr_RS");
 }
 
-static wxString FindBestMatch(const wxArrayString& desired, const wxArrayString& supported)
+static wxString FindBestMatch(const wxVector<wxString>& desired, const wxVector<wxString>& supported)
 {
     return wxLocaleIdent::GetBestMatch(desired, supported);
 }
