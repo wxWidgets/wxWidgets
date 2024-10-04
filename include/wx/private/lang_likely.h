@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/private/lang_likely.h
 // Purpose:     Mapping of likely subtags
-// Author:      Vadim Zeitlin
+// Author:      misc/languages/genlang.py
 // Created:     2024-10-04
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Copyright:   (c) 2024 wxWidgets development team <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
