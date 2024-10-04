@@ -26,12 +26,6 @@
     #include "wx/wx.h"
 #endif
 
-#include <vector>
-#include <wx/intl.h>
-#include <wx/uilocale.h>
-#include "wx/private/localeset.h"
-#include <wx/private/uilocale.h>
-
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -194,36 +188,6 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxArrayString desired = { /*"zh-Hant"*/ "pt-PT" };
-    wxArrayString supported = { "de", "el", "zh-Hans", "ja", "fa", "sq", "eu", "co", "uk", "kab",
-                                "nb", "pa", "en-GB", "es", "is", "sl", "da", "gl", "it", "bg",
-                                "sk", "sr", "ms", "be", "sv", "cs", "ko", "hy", "zh-Hant", "tg",
-                                "hu", "ga", "tr", "pl", "pt-BR", "vi", "lt", "ru", "af", "uz",
-                                "fr", "fi", "id", "nl", "th", "az", "pt", "pt-PT", "ro", "bs",
-                                "hr", "ca", "en", "en", "en"};
-    wxString bestFit = wxLocaleIdent::GetBestMatch(desired, supported, "en-US");
-    wxLocaleIdent entry = wxLocaleIdent::AddLikelySubtags(wxLocaleIdent::FromTag("tl-PH"));
-
-    wxArrayString desired2 = { "ja" };
-    wxArrayString supported2 = { "fr", "en-GB", "en" };
-    wxString bestFit2 = wxLocaleIdent::GetBestMatch(desired2, supported2, "en-US");
-
-    wxArrayString desired3 = { "zh-Hant", "pt-PT" };
-    wxArrayString supported3 = { "zh-Hans", "en" };
-    wxString bestFit3 = wxLocaleIdent::GetBestMatch(desired3, supported3, "en-US");
-
-#if 0
-    int dbNoMatch = 0;
-    const wxLanguageInfos& languagesDB = ::wxGetLanguageInfos();
-    const size_t count = languagesDB.size();
-    for (size_t i = 0; i < count; i++)
-    {
-        const wxLanguageInfo* info = &languagesDB[i];
-        wxLocaleIdent entry = wxLocaleIdent::AddLikelySubtags(wxLocaleIdent::FromTag(info->LocaleTag));
-        if (entry.GetLanguage().empty()) ++dbNoMatch;
-    }
-#endif
-
     wxMessageBox(wxString::Format
                  (
                     "Welcome to %s!\n"
