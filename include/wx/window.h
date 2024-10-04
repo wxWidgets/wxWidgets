@@ -1341,6 +1341,11 @@ public:
     // send wxUpdateUIEvents to this window, and children if recurse is true
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
 
+    // do the window-specific processing before processing the update event
+    // (mainly for deciding whether wxUpdateUIEvent::Is3State() is set)
+    virtual void DoPrepareUpdateWindowUI(wxUpdateUIEvent& event) const
+        { event.Allow3rdState(false); }
+
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 

@@ -789,24 +789,31 @@ void wxToolBarBase::UpdateWindowUI(long flags)
         if ( tool->IsSeparator() )
             continue;
 
-        int toolid = tool->GetId();
-
-        wxUpdateUIEvent event(toolid);
-        event.SetEventObject(this);
-
-        if ( !tool->CanBeToggled() )
-            event.DisallowCheck();
-
-        if ( evtHandler->ProcessEvent(event) )
+        if ( !tool->IsControl() )
         {
-            if ( event.GetSetEnabled() )
-                EnableTool(toolid, event.GetEnabled());
-            if ( event.GetSetChecked() )
-                ToggleTool(toolid, event.GetChecked());
+            int toolid = tool->GetId();
+
+            wxUpdateUIEvent event(toolid);
+            event.SetEventObject(this);
+
+            if ( !tool->CanBeToggled() )
+                event.DisallowCheck();
+
+            if ( evtHandler->ProcessEvent(event) )
+            {
+                if ( event.GetSetEnabled() )
+                    EnableTool(toolid, event.GetEnabled());
+                if ( event.GetSetChecked() )
+                    ToggleTool(toolid, event.GetChecked());
 #if 0
-            if ( event.GetSetText() )
-                // Set tooltip?
+                if ( event.GetSetText() )
+                    // Set tooltip?
 #endif // 0
+            }
+        }
+        else
+        {
+            tool->GetControl()->UpdateWindowUI(flags);
         }
     }
 }

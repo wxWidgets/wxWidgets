@@ -12,10 +12,10 @@
     Chromium Embedded Framework (CEF).
 
     This backend is only available for Windows, Linux and macOS and currently
-    requires CEF version 116 (later, or even slightly earlier, versions may
-    work too, but compatibility with them is not guaranteed).
+    requires CEF version 116 or later but earlier than 128, which has known
+    problems in wxGTK.
 
-    Using CEF also requires a compiler with C++14 support.
+    Using CEF also requires a compiler with at least C++14 support.
 
     @section requirements Building CEF
 

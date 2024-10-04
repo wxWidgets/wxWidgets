@@ -26,6 +26,7 @@
 #include "wx/combobox.h"
 #include "wx/tglbtn.h"
 #include "wx/wrapsizer.h"
+#include "wx/checkbox.h"
 
 // -- application --
 
@@ -80,6 +81,9 @@ public:
         ID_CHANGE_TEXT1,
         ID_CHANGE_TEXT2,
         ID_UI_CHANGE_TEXT_UPDATED,
+        ID_3CHECK,
+        ID_UI_2CHECK_UPDATED,
+        ID_UI_3CHECK_UPDATED,
         ID_REMOVE_PAGE,
         ID_HIDE_PAGES,
         ID_SHOW_PAGES,
@@ -95,6 +99,7 @@ public:
 
     void OnEnableUpdateUI(wxUpdateUIEvent& evt);
     void OnCheckUpdateUI(wxUpdateUIEvent& evt);
+    void OnCheckboxUpdateUI(wxUpdateUIEvent& evt);
     void OnChangeTextUpdateUI(wxUpdateUIEvent& evt);
     void OnCheck(wxRibbonButtonBarEvent& evt);
     void OnEnable(wxRibbonButtonBarEvent& evt);
@@ -204,6 +209,8 @@ EVT_RIBBONBUTTONBAR_CLICKED(ID_UI_ENABLE_UPDATED, MyFrame::OnEnableUpdated)
 EVT_UPDATE_UI(ID_UI_ENABLE_UPDATED, MyFrame::OnEnableUpdateUI)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_CHECK, MyFrame::OnCheck)
 EVT_UPDATE_UI(ID_UI_CHECK_UPDATED, MyFrame::OnCheckUpdateUI)
+EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
+EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_CHANGE_TEXT1, MyFrame::OnChangeText1)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_CHANGE_TEXT2, MyFrame::OnChangeText2)
 EVT_UPDATE_UI(ID_UI_CHANGE_TEXT_UPDATED, MyFrame::OnChangeTextUpdateUI)
@@ -437,6 +444,34 @@ MyFrame::MyFrame()
         bar->AddButton(ID_CHANGE_TEXT1, "One", ribbon_xpm);
         bar->AddButton(ID_CHANGE_TEXT2, "Two", ribbon_xpm);
         bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, "Zero", ribbon_xpm);
+
+#if wxUSE_CHECKBOX
+        panel = new wxRibbonPanel(page, wxID_ANY, "3State",
+                                                    wxNullBitmap, wxDefaultPosition, wxDefaultSize,
+                                                    wxRIBBON_PANEL_DEFAULT_STYLE);
+        wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        panel->SetSizer(sizer);
+        wxCheckBox* checkbox1 = new wxCheckBox(panel, ID_3CHECK,
+                                                    "Checkbox",
+                                                    wxDefaultPosition, wxDefaultSize,
+                                                    wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
+        checkbox1->SetMinSize(checkbox1->GetSizeFromText(checkbox1->GetLabelText()));
+        sizer->Add(checkbox1, 0, wxALL | wxEXPAND);
+        wxCheckBox* checkbox2 = new wxCheckBox(panel, ID_UI_2CHECK_UPDATED,
+                                                    "2Checkbox UI Updated",
+                                                    wxDefaultPosition, wxDefaultSize,
+                                                    wxCHK_2STATE);
+        checkbox2->SetMinSize(checkbox2->GetSizeFromText(checkbox2->GetLabelText()));
+        checkbox2->Disable();
+        sizer->Add(checkbox2, 0, wxALL | wxEXPAND);
+        wxCheckBox* checkbox3 = new wxCheckBox(panel, ID_UI_3CHECK_UPDATED,
+                                                    "3Checkbox UI Updated",
+                                                    wxDefaultPosition, wxDefaultSize,
+                                                    wxCHK_3STATE);
+        checkbox3->SetMinSize(checkbox3->GetSizeFromText(checkbox3->GetLabelText()));
+        checkbox3->Disable();
+        sizer->Add(checkbox3, 0, wxALL | wxEXPAND);
+#endif
 
         //Also set the general disabled text colour:
         wxRibbonArtProvider* artProvider = m_ribbon->GetArtProvider();
@@ -734,6 +769,33 @@ void MyFrame::OnEnableUpdateUI(wxUpdateUIEvent& evt)
 void MyFrame::OnCheckUpdateUI(wxUpdateUIEvent& evt)
 {
     evt.Check(m_bChecked);
+}
+
+void MyFrame::OnCheckboxUpdateUI(wxUpdateUIEvent& evt)
+{
+#if wxUSE_CHECKBOX
+    wxASSERT(evt.IsCheckable());
+    wxCheckBox* cb = wxDynamicCast(evt.GetEventObject(), wxCheckBox);
+    wxWindow* parent = cb->GetParent();
+    wxWindow* wnd = parent->FindWindow(ID_3CHECK);
+    wxCheckBox* src = wxCheckCast<wxCheckBox>(wnd);
+    if (!evt.Is3State())
+    {
+        if (src->Get3StateValue() != wxCHK_UNDETERMINED)
+        {
+            evt.Show(true);
+            evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
+        }
+        else
+        {
+            evt.Show(false);
+        }
+    }
+    else
+    {
+        evt.Set3StateValue(src->Get3StateValue());
+    }
+#endif
 }
 
 void MyFrame::OnChangeTextUpdateUI(wxUpdateUIEvent& evt)

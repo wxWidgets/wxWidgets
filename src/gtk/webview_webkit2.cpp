@@ -801,10 +801,28 @@ private:
 // wxWebViewFactoryWebKit
 //-----------------------------------------------------------------------------
 
-wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
+wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo(wxVersionContext context)
 {
-    return wxVersionInfo("webkit2", webkit_get_major_version(),
-        webkit_get_minor_version(), webkit_get_micro_version());
+    int major = 0,
+        minor = 0,
+        micro = 0;
+
+    switch ( context )
+    {
+        case wxVersionContext::RunTime:
+            major = webkit_get_major_version();
+            minor = webkit_get_minor_version();
+            micro = webkit_get_micro_version();
+            break;
+
+        case wxVersionContext::BuildTime:
+            major = WEBKIT_MAJOR_VERSION;
+            minor = WEBKIT_MINOR_VERSION;
+            micro = WEBKIT_MICRO_VERSION;
+            break;
+    }
+
+    return wxVersionInfo("webkit2", major, minor, micro);
 }
 
 wxWebViewConfiguration wxWebViewFactoryWebKit::CreateConfiguration()
@@ -1003,6 +1021,25 @@ void wxWebViewWebKit::EnableAccessToDevTools(bool enable)
 {
     WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
     webkit_settings_set_enable_developer_extras(settings, enable);
+}
+
+bool wxWebViewWebKit::ShowDevTools()
+{
+    // If we don't enable access to dev tools, the inspector is simply not
+    // shown.
+    EnableAccessToDevTools();
+
+    WebKitWebInspector* const
+        inspector = webkit_web_view_get_inspector(m_web_view);
+    if ( !inspector )
+    {
+        wxLogDebug("Unexpectedly failed to obtain WebKit inspector.");
+        return false;
+    }
+
+    webkit_web_inspector_show(inspector);
+
+    return true;
 }
 
 bool wxWebViewWebKit::IsAccessToDevToolsEnabled() const

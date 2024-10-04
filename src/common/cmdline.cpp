@@ -1176,7 +1176,7 @@ int wxCmdLineParser::Parse(bool showUsage)
             if ( (opt.flags & wxCMD_LINE_OPTION_MANDATORY) && !opt.HasValue() )
             {
                 wxString optName;
-                if ( !opt.longName )
+                if ( opt.longName.empty() )
                 {
                     optName = opt.shortName;
                 }
@@ -1293,8 +1293,8 @@ wxString wxCmdLineParser::GetUsageString() const
 
     // the switch char is usually '-' but this can be changed with
     // SetSwitchChars() and then the first one of possible chars is used
-    wxChar chSwitch = !m_data->m_switchChars ? wxT('-')
-                                             : m_data->m_switchChars[0u];
+    wxChar chSwitch = m_data->m_switchChars.empty() ? wxT('-')
+                                                    : m_data->m_switchChars[0u];
 
     bool areLongOptionsEnabled = AreLongOptionsEnabled();
     size_t n, count = m_data->m_options.size();
@@ -1354,7 +1354,7 @@ wxString wxCmdLineParser::GetUsageString() const
                 wxString val;
                 val << wxT('<') << GetTypeName(opt.type) << wxT('>');
                 usage << wxT(' ') << val;
-                option << (!opt.longName ? wxT(':') : wxT('=')) << val;
+                option << (opt.longName.empty() ? wxT(':') : wxT('=')) << val;
             }
 
             if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )

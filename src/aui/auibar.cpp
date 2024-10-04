@@ -2212,60 +2212,67 @@ void wxAuiToolBar::DoIdleUpdate()
         if (item.m_toolId == -1)
             continue;
 
-        wxUpdateUIEvent evt(item.m_toolId);
-        evt.SetEventObject(this);
-
-        if ( !item.CanBeToggled() )
-            evt.DisallowCheck();
-
-        if (handler->ProcessEvent(evt))
+        if (item.GetKind() != wxITEM_CONTROL)
         {
-            if (evt.GetSetEnabled())
-            {
-                bool is_enabled;
-                if (item.m_window)
-                    is_enabled = item.m_window->IsThisEnabled();
-                else
-                    is_enabled = (item.m_state & wxAUI_BUTTON_STATE_DISABLED) ? false : true;
+            wxUpdateUIEvent evt(item.m_toolId);
+            evt.SetEventObject(this);
 
-                bool new_enabled = evt.GetEnabled();
-                if (new_enabled != is_enabled)
+            if ( !item.CanBeToggled() )
+                evt.DisallowCheck();
+
+            if (handler->ProcessEvent(evt))
+            {
+                if (evt.GetSetEnabled())
                 {
+                    bool is_enabled;
                     if (item.m_window)
-                    {
-                        item.m_window->Enable(new_enabled);
-                    }
+                        is_enabled = item.m_window->IsThisEnabled();
                     else
+                        is_enabled = (item.m_state & wxAUI_BUTTON_STATE_DISABLED) ? false : true;
+
+                    bool new_enabled = evt.GetEnabled();
+                    if (new_enabled != is_enabled)
                     {
-                        if (new_enabled)
-                            item.m_state &= ~wxAUI_BUTTON_STATE_DISABLED;
+                        if (item.m_window)
+                        {
+                            item.m_window->Enable(new_enabled);
+                        }
                         else
-                            item.m_state |= wxAUI_BUTTON_STATE_DISABLED;
+                        {
+                            if (new_enabled)
+                                item.m_state &= ~wxAUI_BUTTON_STATE_DISABLED;
+                            else
+                                item.m_state |= wxAUI_BUTTON_STATE_DISABLED;
+                        }
+                        need_refresh = true;
                     }
-                    need_refresh = true;
                 }
-            }
 
-            if (evt.GetSetChecked())
-            {
-                // make sure we aren't checking an item that can't be
-                if (item.m_kind != wxITEM_CHECK && item.m_kind != wxITEM_RADIO)
-                    continue;
-
-                bool is_checked = (item.m_state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
-                bool new_checked = evt.GetChecked();
-
-                if (new_checked != is_checked)
+                if (evt.GetSetChecked())
                 {
-                    if (new_checked)
-                        item.m_state |= wxAUI_BUTTON_STATE_CHECKED;
-                    else
-                        item.m_state &= ~wxAUI_BUTTON_STATE_CHECKED;
+                    // make sure we aren't checking an item that can't be
+                    if (item.m_kind != wxITEM_CHECK && item.m_kind != wxITEM_RADIO)
+                        continue;
 
-                    need_refresh = true;
+                    bool is_checked = (item.m_state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
+                    bool new_checked = evt.GetChecked();
+
+                    if (new_checked != is_checked)
+                    {
+                        if (new_checked)
+                            item.m_state |= wxAUI_BUTTON_STATE_CHECKED;
+                        else
+                            item.m_state &= ~wxAUI_BUTTON_STATE_CHECKED;
+
+                        need_refresh = true;
+                    }
                 }
-            }
 
+            }
+        }
+        else
+        {
+            item.GetWindow()->UpdateWindowUI();
         }
     }
 

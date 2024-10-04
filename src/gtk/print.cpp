@@ -1214,6 +1214,36 @@ bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 // wxGtkPrinterDC
 //-----------------------------------------------------------------------------
 
+// Helper class for saving/restoring Cairo context in its ctor/dtor.
+class wxGtkPrinterDCContextSaver
+{
+public:
+    explicit wxGtkPrinterDCContextSaver(const wxGtkPrinterDCImpl* impl)
+        : m_impl(impl),
+          m_origSourceColour(impl->m_currentSourceColour)
+    {
+        cairo_save( m_impl->m_cairo );
+    }
+
+    ~wxGtkPrinterDCContextSaver()
+    {
+        // Because the source colour corresponds to the actual colour used by
+        // Cairo, we need to reset it if it was changed (which is quite
+        // possible as SetPen() and SetBrush(), called from the implementation
+        // of other functions, do it) when restoring the context, otherwise it
+        // wouldn't match the actually used colour any longer.
+        m_impl->m_currentSourceColour = m_origSourceColour;
+
+        cairo_restore( m_impl->m_cairo );
+    }
+
+private:
+    const wxGtkPrinterDCImpl* const m_impl;
+    const wxColour m_origSourceColour;
+
+    wxDECLARE_NO_COPY_CLASS(wxGtkPrinterDCContextSaver);
+};
+
 #define wxCAIRO_SCALE 1
 
 #if wxCAIRO_SCALE
@@ -1262,11 +1292,6 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
     m_DEV2PS = 72.0 / (double)m_resolution;
 #endif
 
-    m_currentRed = 0;
-    m_currentBlue = 0;
-    m_currentGreen = 0;
-    m_currentAlpha = 0;
-
     m_signX = 1;  // default x-axis left to right.
     m_signY = 1;  // default y-axis bottom up -> top down.
 }
@@ -1293,6 +1318,30 @@ void* wxGtkPrinterDCImpl::GetCairoContext() const
 void* wxGtkPrinterDCImpl::GetHandle() const
 {
     return GetCairoContext();
+}
+
+namespace
+{
+
+void DoSetSourceColour(cairo_t* cr, const wxColour& col)
+{
+    cairo_set_source_rgba( cr,
+                           col.Red() / 255.0,
+                           col.Green() / 255.0,
+                           col.Blue() / 255.0,
+                           col.Alpha() / 255.0 );
+}
+
+} // anonymous namespace
+
+void wxGtkPrinterDCImpl::SetSourceColour(const wxColour& col)
+{
+    if ( col == m_currentSourceColour )
+        return;
+
+    DoSetSourceColour(m_cairo, col);
+
+    m_currentSourceColour = col;
 }
 
 bool wxGtkPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
@@ -1493,7 +1542,7 @@ void wxGtkPrinterDCImpl::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,w
 
 void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
-    cairo_save( m_cairo );
+    wxGtkPrinterDCContextSaver saver(this);
 
     cairo_new_path(m_cairo);
 
@@ -1510,8 +1559,6 @@ void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
 
     SetBrush( m_brush );
     cairo_fill( m_cairo );
-
-    cairo_restore( m_cairo );
 
     CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 }
@@ -1558,7 +1605,8 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, const wxPoint points[],
 {
     if (n==0) return;
 
-    cairo_save(m_cairo);
+    wxGtkPrinterDCContextSaver saver(this);
+
     if (fillStyle == wxWINDING_RULE)
         cairo_set_fill_rule( m_cairo, CAIRO_FILL_RULE_WINDING);
     else
@@ -1590,8 +1638,6 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     }
 
     CalcBoundingBox( x, y );
-
-    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
@@ -1686,7 +1732,7 @@ void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCo
     width--;
     height--;
 
-    cairo_save (m_cairo);
+    wxGtkPrinterDCContextSaver saver(this);
 
     cairo_new_path(m_cairo);
 
@@ -1707,8 +1753,6 @@ void wxGtkPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCo
     }
 
     CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
-
-    cairo_restore (m_cairo);
 }
 
 #if wxUSE_SPLINES
@@ -1817,7 +1861,7 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
         bmpSource.SetMask(nullptr);
 #endif
 
-    cairo_save(m_cairo);
+    wxGtkPrinterDCContextSaver saver(this);
 
     // Prepare to draw the image.
     cairo_translate(m_cairo, x, y);
@@ -1839,8 +1883,6 @@ void wxGtkPrinterDCImpl::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoor
 #endif
 
     CalcBoundingBox(0, 0, bw, bh);
-
-    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
@@ -1861,32 +1903,12 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
     if (m_textForegroundColour.IsOk())
-    {
-        unsigned char red = m_textForegroundColour.Red();
-        unsigned char blue = m_textForegroundColour.Blue();
-        unsigned char green = m_textForegroundColour.Green();
-        unsigned char alpha = m_textForegroundColour.Alpha();
-
-        if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue && alpha == m_currentAlpha))
-        {
-            double redPS = (double)(red) / 255.0;
-            double bluePS = (double)(blue) / 255.0;
-            double greenPS = (double)(green) / 255.0;
-            double alphaPS = (double)(alpha) / 255.0;
-
-            cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
-
-            m_currentRed = red;
-            m_currentBlue = blue;
-            m_currentGreen = green;
-            m_currentAlpha = alpha;
-        }
-    }
+        SetSourceColour(m_textForegroundColour);
 
     // Draw layout.
     cairo_move_to (m_cairo, xx, yy);
 
-    cairo_save( m_cairo );
+    wxGtkPrinterDCContextSaver saver(this);
 
     if (fabs(angle) > 0.00001)
         cairo_rotate( m_cairo, angle*DEG2RAD );
@@ -1898,27 +1920,15 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     if ( m_backgroundMode == wxBRUSHSTYLE_SOLID )
     {
-        unsigned char red = m_textBackgroundColour.Red();
-        unsigned char blue = m_textBackgroundColour.Blue();
-        unsigned char green = m_textBackgroundColour.Green();
-        unsigned char alpha = m_textBackgroundColour.Alpha();
+        wxGtkPrinterDCContextSaver saver2(this);
 
-        double redPS = (double)(red) / 255.0;
-        double bluePS = (double)(blue) / 255.0;
-        double greenPS = (double)(green) / 255.0;
-        double alphaPS = (double)(alpha) / 255.0;
-
-        cairo_save(m_cairo);
-        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
+        SetSourceColour(m_textBackgroundColour);
         cairo_rectangle(m_cairo, 0, 0, w, h);   // still in cairo units
         cairo_fill(m_cairo);
-        cairo_restore(m_cairo);
     }
 
     pango_cairo_update_layout (m_cairo, m_layout);
     pango_cairo_show_layout (m_cairo, m_layout);
-
-    cairo_restore( m_cairo );
 
     if (setAttrs)
     {
@@ -1934,11 +1944,10 @@ void wxGtkPrinterDCImpl::Clear()
 // Clear does nothing for printing, but keep the code
 // for later reuse
 /*
-    cairo_save(m_cairo);
+    wxGtkPrinterDCContextSaver saver(this);
     cairo_set_operator (m_cairo, CAIRO_OPERATOR_SOURCE);
     SetBrush(m_backgroundBrush);
     cairo_paint(m_cairo);
-    cairo_restore(m_cairo);
 */
 }
 
@@ -2019,25 +2028,7 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
         default:            cairo_set_line_join (m_cairo, CAIRO_LINE_JOIN_ROUND); break;
     }
 
-    unsigned char red = m_pen.GetColour().Red();
-    unsigned char blue = m_pen.GetColour().Blue();
-    unsigned char green = m_pen.GetColour().Green();
-    unsigned char alpha = m_pen.GetColour().Alpha();
-
-    if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue && alpha == m_currentAlpha))
-    {
-        double redPS = (double)(red) / 255.0;
-        double bluePS = (double)(blue) / 255.0;
-        double greenPS = (double)(green) / 255.0;
-        double alphaPS = (double)(alpha) / 255.0;
-
-        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
-
-        m_currentRed = red;
-        m_currentBlue = blue;
-        m_currentGreen = green;
-        m_currentAlpha = alpha;
-    }
+    SetSourceColour(m_pen.GetColour());
 }
 
 void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
@@ -2048,34 +2039,12 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
 
     if (m_brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT)
     {
-        cairo_set_source_rgba( m_cairo, 0, 0, 0, 0 );
-        m_currentRed = 0;
-        m_currentBlue = 0;
-        m_currentGreen = 0;
-        m_currentAlpha = 0;
+        SetSourceColour(wxColour(0, 0, 0, 0));
         return;
     }
 
     // Brush colour.
-    unsigned char red = m_brush.GetColour().Red();
-    unsigned char blue = m_brush.GetColour().Blue();
-    unsigned char green = m_brush.GetColour().Green();
-    unsigned char alpha = m_brush.GetColour().Alpha();
-
-    double redPS = (double)(red) / 255.0;
-    double bluePS = (double)(blue) / 255.0;
-    double greenPS = (double)(green) / 255.0;
-    double alphaPS = (double)(alpha) / 255.0;
-
-    if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue && alpha == m_currentAlpha))
-    {
-        cairo_set_source_rgba( m_cairo, redPS, greenPS, bluePS, alphaPS );
-
-        m_currentRed = red;
-        m_currentBlue = blue;
-        m_currentGreen = green;
-        m_currentAlpha = alpha;
-    }
+    SetSourceColour(m_brush.GetColour());
 
     if (m_brush.IsHatch())
     {
@@ -2121,7 +2090,7 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
                 wxFAIL_MSG("Couldn't get hatch style from wxBrush.");
         }
 
-        cairo_set_source_rgba(cr, redPS, greenPS, bluePS, alphaPS);
+        DoSetSourceColour(cr, m_brush.GetColour());
         cairo_stroke (cr);
 
         cairo_destroy(cr);
@@ -2153,13 +2122,13 @@ void wxGtkPrinterDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 
 void wxGtkPrinterDCImpl::SetBackground( const wxBrush& brush )
 {
+    wxGtkPrinterDCContextSaver saver(this);
+
     m_backgroundBrush = brush;
-    cairo_save(m_cairo);
     cairo_set_operator (m_cairo, CAIRO_OPERATOR_DEST_OVER);
 
     SetBrush(m_backgroundBrush);
     cairo_paint(m_cairo);
-    cairo_restore(m_cairo);
 }
 
 void wxGtkPrinterDCImpl::SetBackgroundMode(int mode)
@@ -2252,7 +2221,8 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
         return;
     }
 
-    cairo_save( m_cairo );
+    wxGtkPrinterDCContextSaver saver(this);
+
     cairo_scale(m_cairo, m_scaleX, m_scaleY);
 
     // Set layout's text
@@ -2293,8 +2263,6 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
         PangoFontDescription *desc = theFont->GetNativeFontInfo()->description;
         pango_font_description_set_size(desc, oldSize);
     }
-
-    cairo_restore( m_cairo );
 }
 
 bool wxGtkPrinterDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
@@ -2305,7 +2273,8 @@ bool wxGtkPrinterDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayIn
     int w = 0;
     if ( data.length() > 0 )
     {
-        cairo_save(m_cairo);
+        wxGtkPrinterDCContextSaver saver(this);
+
         cairo_scale(m_cairo, m_scaleX, m_scaleY);
 
         pango_layout_set_text(m_layout, data, data.length());
@@ -2318,8 +2287,6 @@ bool wxGtkPrinterDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayIn
             widths.Add(PANGO_PIXELS(w));
         } while (pango_layout_iter_next_cluster(iter));
         pango_layout_iter_free(iter);
-
-       cairo_restore(m_cairo);
     }
     size_t i = widths.GetCount();
     const size_t len = text.length();

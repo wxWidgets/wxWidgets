@@ -126,6 +126,11 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
           j != preferred.end();
           ++j )
     {
+        // try exact match first:
+        if (available.Index(*j, /*bCase=*/false) != wxNOT_FOUND)
+            return *j;
+
+        // try looking up as a POSIX locale:
         wxLocaleIdent localeId = wxLocaleIdent::FromTag(*j);
         wxString lang = localeId.GetTag(wxLOCALE_TAGTYPE_POSIX);
 

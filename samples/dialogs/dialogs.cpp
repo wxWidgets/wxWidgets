@@ -166,7 +166,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_LOG_DIALOG
 #if wxUSE_INFOBAR
     EVT_MENU(DIALOGS_INFOBAR_SIMPLE,                MyFrame::InfoBarSimple)
-    EVT_MENU(DIALOGS_INFOBAR_SIMPLE_WRAPPED,        MyFrame::InfoBarSimpleWrapped)
     EVT_MENU(DIALOGS_INFOBAR_ADVANCED,              MyFrame::InfoBarAdvanced)
 #endif // wxUSE_INFOBAR
 
@@ -580,7 +579,6 @@ bool MyApp::OnInit()
 
     #if wxUSE_INFOBAR
        info_menu->Append(DIALOGS_INFOBAR_SIMPLE, "Simple &info bar\tCtrl-I");
-       info_menu->Append(DIALOGS_INFOBAR_SIMPLE_WRAPPED, "Simple info bar with wrapped text");
        info_menu->Append(DIALOGS_INFOBAR_ADVANCED, "&Advanced info bar\tShift-Ctrl-I");
     #endif // wxUSE_INFOBAR
 
@@ -944,15 +942,24 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
 {
     static int s_count = 0;
-    m_infoBarSimple->ShowMessage
-                     (
-                      wxString::Format("Message #%d in the info bar.", ++s_count)
-                     );
-}
 
-void MyFrame::InfoBarSimpleWrapped(wxCommandEvent &WXUNUSED(event))
-{
-    m_infoBarSimple->ShowMessage( "This is very very long message to try the label wrapping on the info bar" );
+    wxString msg;
+    if ( ++s_count % 2 )
+    {
+        msg.Printf("Short message #%d in the info bar.", s_count);
+    }
+    else
+    {
+        msg.Printf("A very, very, very, very long message #%d showing what "
+                   "happens when a message is too long to fit in the info bar "
+                   "and has to be either wrapped or ellipsized because it's "
+                   "just too long to fit in the available space (unless "
+                   "you have a humongously wide monitor, in which case, "
+                   "congratulations, you've managed to break this test).",
+                   s_count);
+    }
+
+    m_infoBarSimple->ShowMessage(msg);
 }
 
 void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))

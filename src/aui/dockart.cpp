@@ -205,12 +205,12 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 #elif defined(__WXGTK__)
     m_sashSize     = wxRendererNative::Get().GetSplitterParams(nullptr).widthSash;
 #else
-    m_sashSize     = wxWindow::FromDIP( 4, nullptr);
+    m_sashSize     = 4;
 #endif
-    m_captionSize  = wxWindow::FromDIP(17, nullptr);
+    m_captionSize  = 17;
     m_borderSize   = 1;
-    m_buttonSize   = wxWindow::FromDIP(14, nullptr);
-    m_gripperSize  = wxWindow::FromDIP( 9, nullptr);
+    m_buttonSize   = 14;
+    m_gripperSize  = 9;
     m_gradientType = wxAUI_GRADIENT_VERTICAL;
 
     InitBitmaps();
@@ -518,7 +518,7 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow* window, const wxRect& _
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     wxRect rect = _rect;
-    int i, border_width = GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
+    int i, border_width = window->FromDIP(GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
 
     if (pane.IsToolbar())
     {
@@ -640,11 +640,11 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
     clip_rect.width -= window->FromDIP(3); // text offset
     clip_rect.width -= window->FromDIP(2); // button padding
     if (pane.HasCloseButton())
-        clip_rect.width -= m_buttonSize;
+        clip_rect.width -= window->FromDIP(m_buttonSize);
     if (pane.HasPinButton())
-        clip_rect.width -= m_buttonSize;
+        clip_rect.width -= window->FromDIP(m_buttonSize);
     if (pane.HasMaximizeButton())
-        clip_rect.width -= m_buttonSize;
+        clip_rect.width -= window->FromDIP(m_buttonSize);
 
     wxString draw_text = wxAuiChopText(dc, text, clip_rect.width);
 

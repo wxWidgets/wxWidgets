@@ -4099,6 +4099,22 @@ public:
     */
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
 
+    /**
+        When UpdateWindowUI() runs, it creates instances of
+        wxUpdateUIEvent.  Those instances may vary depending on the
+        window that the wxUpdateUIEvent will control.  For example, a
+        wxCheckBox with wxCHK_3STATE should enable
+        wxUpdateUIEvent::Is3State(), but most other windows should not.
+        This function can be overridden to perform the
+        window-specific initializations, such as enabling setting the
+        checkable state.
+
+        @see wxUpdateUIEvent, UpdateWindowUI()
+
+        @since 3.3.0
+    */
+    virtual void DoPrepareUpdateWindowUI(wxUpdateUIEvent& event) const;
+
     ///@}
 
 

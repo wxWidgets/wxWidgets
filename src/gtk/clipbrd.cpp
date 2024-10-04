@@ -48,6 +48,14 @@ static GdkAtom  g_timestampAtom   = nullptr;
 // This is defined in src/gtk/dataobj.cpp.
 extern bool wxGTKIsSameFormat(GdkAtom atom1, GdkAtom atom2);
 
+// Returns alternative format used under Wayland for the given format or 0.
+extern GdkAtom wxGTKGetAltWaylandFormat(GdkAtom atom);
+
+static wxString wxAtomName(GdkAtom atom)
+{
+    return wxString::FromAscii(wxGtkString(gdk_atom_name(atom)));
+}
+
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
 // (there will be a *lot* of them!)
@@ -294,9 +302,9 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     wxLogTrace(TRACE_CLIPBOARD,
                wxT("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s timestamp=%u"),
                format.GetId(),
-               wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_target(selection_data)))),
-               wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_data_type(selection_data)))),
-               wxString::FromAscii(wxGtkString(gdk_atom_name(gtk_selection_data_get_selection(selection_data)))),
+               wxAtomName(gtk_selection_data_get_target(selection_data)),
+               wxAtomName(gtk_selection_data_get_data_type(selection_data)),
+               wxAtomName(gtk_selection_data_get_selection(selection_data)),
                timestamp
                );
 
@@ -520,17 +528,6 @@ bool wxClipboard::SetSelectionOwner(bool set)
     return rc;
 }
 
-void wxClipboard::AddSupportedTarget(GdkAtom atom)
-{
-    gtk_selection_add_target
-    (
-        m_clipboardWidget,
-        GTKGetClipboardAtom(),
-        atom,
-        0 // info (same as client data) unused
-    );
-}
-
 bool wxClipboard::IsSupportedAsync(wxEvtHandler *sink)
 {
     if (m_sink.get())
@@ -670,45 +667,72 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxDataFormatArray formats(count);
     data->GetAllFormats(formats.get());
 
-    // always provide TIMESTAMP as a target, see comments in selection_handler
-    // for explanation
-    AddSupportedTarget(g_timestampAtom);
+#ifdef GDK_WINDOWING_WAYLAND
+    const bool isWayland =
+        wxGTKImpl::IsWayland(gtk_widget_get_window(m_clipboardWidget));
+#else // !GDK_WINDOWING_WAYLAND
+    constexpr bool isWayland = false;
+#endif // GDK_WINDOWING_WAYLAND/!GDK_WINDOWING_WAYLAND
 
-#ifdef __WXGTK3__
-    bool addedUTF8Text = false;
-#endif // __WXGTK3__
+    std::vector<wxString> atomNames, atomX11Names;
+
+    // under X11, always provide TIMESTAMP as a target, see comments in
+    // selection_handler for explanation
+    if ( !isWayland )
+        atomNames.push_back("TIMESTAMP");
 
     for ( size_t i = 0; i < count; i++ )
     {
         const wxDataFormat format(formats[i]);
 
-#ifdef __WXGTK3__
-        if ( wxGTKImpl::IsWayland(gtk_widget_get_window(m_clipboardWidget)) )
+        // Put Wayland native format first, if any.
+        //
+        // Note that since v3.24.25, GTK adds Wayland formats automatically
+        // when putting the traditional X11 atoms corresponding text formats
+        // available, so this could be skipped for the high enough versions,
+        // but it seems simpler to just always do this than test GTK version
+        // and this ensures consistent behaviour on all distributions.
+        if ( isWayland )
         {
-            if ( format == wxDF_UNICODETEXT )
+            if ( GdkAtom altFormat = wxGTKGetAltWaylandFormat(format) )
             {
-                addedUTF8Text = true;
-            }
-            else if ( format == wxDF_TEXT )
-            {
-                if ( addedUTF8Text )
-                {
-                    // We already added UTF-8 text format, adding plain text
-                    // format is not only unnecessary but seems to be actually
-                    // harmful under Wayland because it somehow _replaces_
-                    // UTF8_STRING, even though it shouldn't happen according
-                    // to the documentation.
-                    continue;
-                }
+                atomNames.push_back(wxAtomName(altFormat));
+
+                // Still use the traditional X11 one too for compatibility but
+                // put it at the end of the formats list.
+                atomX11Names.push_back(wxAtomName(format));
+
+                continue;
             }
         }
-#endif // __WXGTK3__
 
-        wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"),
-                   format.GetId());
-
-        AddSupportedTarget(format);
+        // When not using Wayland or when the same format is used under Wayland
+        // and X11, just add it to the list directly.
+        atomNames.push_back(wxAtomName(format));
     }
+
+    // Add the X11 formats at the end, if any.
+    atomNames.insert(atomNames.end(), atomX11Names.begin(), atomX11Names.end());
+
+    std::vector<GtkTargetEntry> targets(atomNames.size());
+    auto target = targets.begin();
+    for ( const auto& name: atomNames )
+    {
+        wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"), name);
+
+        target->target = const_cast<char*>((const char*)name.utf8_str());
+        target->flags = 0;
+        target->info = 0;
+        ++target;
+    }
+
+    gtk_selection_add_targets
+    (
+        m_clipboardWidget,
+        GTKGetClipboardAtom(),
+        targets.data(),
+        targets.size()
+    );
 
     if ( !m_idSelectionGetHandler )
     {

@@ -1297,8 +1297,8 @@ _cppflags=`echo "-I${libdir}/wx/include/@TOOLCHAIN_FULLNAME@" $_include_cppflags
 
 # now without further ado, we can answer these too.
 [ -z "$output_option_cppflags" ] || echo $_cppflags
-[ -z "$output_option_cflags"   ] || echo $_cppflags "@WXCONFIG_CFLAGS@"
-[ -z "$output_option_cxxflags" ] || echo $_cppflags "@WXCONFIG_CXXFLAGS@"
+[ -z "$output_option_cflags"   ] || echo $_cppflags @WXCONFIG_CFLAGS@
+[ -z "$output_option_cxxflags" ] || echo $_cppflags @WXCONFIG_CXXFLAGS@
 [ -z "$output_option_gl_libs"  ] || echo `lib_flags_for gl`
 [ -z "$output_option_linkdeps" ] || echo $link_deps
 
