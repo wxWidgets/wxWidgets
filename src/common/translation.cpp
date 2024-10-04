@@ -85,10 +85,12 @@ namespace
 
 #if wxUSE_LOG_TRACE
 
+#if 0
 void LogTraceArray(const char* prefix, const wxArrayString& arr)
 {
     wxLogTrace(TRACE_I18N, "%s: [%s]", prefix, wxJoin(arr, ','));
 }
+#endif
 
 void LogTraceArray(const char *prefix, const wxVector<wxString>& arr)
 {
@@ -116,7 +118,6 @@ void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 
 #endif // wxUSE_LOG_TRACE/!wxUSE_LOG_TRACE
 
-#if 1
 wxString GetPreferredUILanguage(const wxVector<wxString>& available)
 {
     const wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
@@ -124,7 +125,6 @@ wxString GetPreferredUILanguage(const wxVector<wxString>& available)
 
     return wxLocaleIdent::GetBestMatch(preferred, available);
 }
-#endif
 
 } // anonymous namespace
 
