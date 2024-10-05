@@ -1867,7 +1867,7 @@ template <typename T> void wxDELETEA(T*& array);
 
     @since 3.3.0
 */
-#define wxWARN_UNUSED [[gnu::warn_unused]]
+#define wxWARN_UNUSED __attribute__((warn_unused))
 
 /**
     Swaps the contents of two variables.
