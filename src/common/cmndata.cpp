@@ -25,9 +25,6 @@
 #include "wx/cmndata.h"
 
 #ifndef WX_PRECOMP
-    #if defined(__WXMSW__)
-        #include "wx/msw/wrapcdlg.h"
-    #endif // MSW
     #include <stdio.h>
     #include "wx/string.h"
     #include "wx/utils.h"
