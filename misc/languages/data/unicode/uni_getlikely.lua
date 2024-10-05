@@ -2,10 +2,8 @@
 -- Relevant tags: <likelySubtag from="xx" to="xx_Xxxx_XX"/>
 
 -- Assign script arguments and check validity
-xmlFileName = arg[1]
-assert(xmlFileName ~= nil, "Name of XML file missing!")
-sqlFileName = arg[2]
-assert(sqlFileName ~= nil, "Name of SQL file missing!")
+xmlFileName = "unicode/likelySubtags.xml"
+sqlFileName = "temp/uni_loadlikely.sql"
 
 -- Open files
 xmlInput = assert(io.open(xmlFileName, "r"))

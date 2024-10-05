@@ -11,15 +11,21 @@ copy ..\regiongrouptabl.txt temp\regiongrouptabl_current.txt
 rem Generate lists based on Unicode data
 luashell unicode\uni_territorycodes.lua
 luashell unicode\uni_genscriptmap.lua
+luashell unicode\uni_getlikely.lua
+luashell unicode\uni_getmatch.lua
+luashell unicode\uni_getregions.lua
 
 rem Generate list of locales based on known Windows locales
 luashell windows\win_genlocaletable.lua
 
 rem Generate lists based on current wxWidgets data
+
 rem   Extract current wxWidgets version
 luashell wx\wx_readversion.lua
+
 rem   Load current version of langtabl.txt
 luashell wx\wx_loadlangtabl.lua
+
 rem   Load list of current synonyms
 luashell wx\wx_loadsynonymtabl.lua
 

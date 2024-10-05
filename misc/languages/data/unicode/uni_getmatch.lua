@@ -2,9 +2,9 @@
 -- Relevant tags: <languageMatch desired="xx"	supported="yy"	distance="30"	oneway="true"/>
 
 -- Assign script arguments and check validity
-xmlFileName = arg[1]
+xmlFileName = "unicode/languageInfo.xml"
 assert(xmlFileName ~= nil, "Name of XML file missing!")
-sqlFileName = arg[2]
+sqlFileName = "temp/uni_loadmatching.sql"
 assert(sqlFileName ~= nil, "Name of SQL file missing!")
 
 -- Open files
