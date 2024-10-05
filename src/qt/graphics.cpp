@@ -1240,22 +1240,26 @@ class wxQtImageContext : public wxQtGraphicsContext
 public:
     wxQtImageContext(wxGraphicsRenderer* renderer, wxImage& image) :
         wxQtGraphicsContext(renderer),
-        m_image(image)
+        m_image(image),
+        m_bitmap(GetRenderer(), wxBitmap(image))
     {
-        const wxBitmap wxbitmap(image);
-        m_pixmap = *wxbitmap.GetHandle();
-        AttachPainter(new QPainter(&m_pixmap));
+        auto pixmap = static_cast<QPixmap*>(m_bitmap.GetNativeBitmap());
+        AttachPainter(new QPainter(pixmap));
     }
 
     ~wxQtImageContext()
     {
-        wxQtBitmapData bitmap(GetRenderer(), m_pixmap);
-        m_image = bitmap.ConvertToImage();
+        // Finish the painting on the pixmap so we can access it below.
+        m_qtPainter->end();
+
+        m_image = m_bitmap.ConvertToImage();
     }
 
 private:
-    QPixmap m_pixmap;
     wxImage& m_image;
+    wxQtBitmapData m_bitmap;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtImageContext);
 };
 
 //-----------------------------------------------------------------------------
