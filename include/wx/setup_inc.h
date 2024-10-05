@@ -1180,14 +1180,6 @@
 // common dialogs
 // ----------------------------------------------------------------------------
 
-// Use common dialogs (e.g. file selector, printer dialog). Switching this off
-// also switches off the printing architecture and interactive wxPrinterDC.
-//
-// Default is 1
-//
-// Recommended setting: 1
-#define wxUSE_COMMON_DIALOGS 1
-
 // wxBusyInfo displays window with message when app is busy. Works in same way
 // as wxBusyCursor
 #define wxUSE_BUSYINFO      1

@@ -308,7 +308,6 @@ library:
 @itemdef{wxUSE_ACCESSIBILITY, Enable accessibility support}
 @itemdef{wxUSE_ACTIVEX, Use wxActiveXContainer and related classes.}
 @itemdef{wxUSE_COMBOCTRL_POPUP_ANIMATION, See wx/msw/combo.h file.}
-@itemdef{wxUSE_COMMON_DIALOGS, Enable use of windows common dialogs from header commdlg.h; example PRINTDLG.}
 @itemdef{wxUSE_CRASHREPORT, Use wxCrashReport class.}
 @itemdef{wxUSE_DATEPICKCTRL_GENERIC, Use generic wxDatePickerCtrl implementation in addition to the native one.}
 @itemdef{wxUSE_DC_CACHEING, cache temporary wxDC objects.}
