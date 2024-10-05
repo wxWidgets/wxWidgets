@@ -1,8 +1,8 @@
 -- Extract data from CLDR data file supplementalData.xml and languageInfo.xml
--- Relevant tags in supplementalData: 
+-- Relevant tags in supplementalData:
 --   <territoryContainment>
 --     <group type="nnn" contains="aaa bbb cccc ..."/>
--- Relevant tags in languageInfo: 
+-- Relevant tags in languageInfo:
 --   <matchVariable id="$yyy" value="zzz"/>
 --   <languageMatch desired="xx_*_$yyy"	[...] />
 
