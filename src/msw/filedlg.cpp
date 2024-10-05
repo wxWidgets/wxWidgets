@@ -24,8 +24,6 @@
 #include "wx/filedlg.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/wrapcdlg.h"
-    #include "wx/msw/missing.h"
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
     #include "wx/filefn.h"
@@ -44,6 +42,8 @@
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
 
+#include "wx/msw/wrapshl.h"
+#include "wx/msw/wrapcdlg.h"
 #include "wx/msw/private/dpiaware.h"
 #include "wx/msw/private/filedialog.h"
 
@@ -59,8 +59,6 @@
     #include "wx/radiobut.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
-
-    #include "wx/msw/wrapshl.h"
 
     #include "wx/msw/private/cotaskmemptr.h"
 #endif // wxUSE_IFILEOPENDIALOG

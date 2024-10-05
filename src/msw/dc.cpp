@@ -20,7 +20,7 @@
 
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/wrapcdlg.h"
+    #include "wx/msw/private.h"
     #include "wx/image.h"
     #include "wx/window.h"
     #include "wx/utils.h"
