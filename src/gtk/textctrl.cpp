@@ -560,6 +560,29 @@ au_insert_text_callback(GtkTextBuffer *buffer,
         wxGtkTextApplyTagsFromAttr(win->GetHandle(), buffer, win->GetDefaultStyle(),
                                    &start, end);
     }
+    auto maxlen = win->GTKGetMaxLength();
+    auto count = gtk_text_buffer_get_char_count( buffer );
+    if( maxlen > 0 && count > maxlen )
+    {
+        GtkTextIter offset;
+        int trim_len = count - maxlen;
+        gtk_text_buffer_get_iter_at_offset( buffer, &offset, gtk_text_iter_get_offset( end ) - trim_len );
+        // This function is connected using g_signal_connect_after() call, therefore
+        // direct buffer modification is required.
+        // Using g_signal_connect() doesn't work as the text is still being entered
+        // probably because the signal is documented as "Run Last". For exactly same
+        // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
+        // the handler that does not connected after
+        gtk_text_buffer_delete( buffer, &offset, end );
+#if GTK_CHECK_VERSION( 3, 2, 0 )
+        if( wx_is_at_least_gtk3(2) )
+            gtk_text_iter_assign( end, &offset );
+#endif
+        wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
+        event.SetEventObject( win );
+        event.SetString( win->GetValue() );
+        win->HandleWindowEvent( event );
+    }
 
     if ( !len || !(win->GetWindowStyleFlag() & wxTE_AUTO_URL) )
         return;
@@ -796,9 +819,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // work around probable bug in GTK+ 2.18 when calling WriteText on a
         // new, empty control, see https://github.com/wxWidgets/wxWidgets/issues/11409
         gtk_entry_get_text((GtkEntry*)m_text);
-
-        if (style & wxNO_BORDER)
-            gtk_entry_set_has_frame((GtkEntry*)m_text, FALSE);
     }
     g_object_ref(m_widget);
 
@@ -911,6 +931,16 @@ GtkEditable *wxTextCtrl::GetEditable() const
     wxCHECK_MSG( IsSingleLine(), nullptr, "shouldn't be called for multiline" );
 
     return GTK_EDITABLE(m_text);
+}
+
+void wxTextCtrl::SetMaxLength(unsigned long length)
+{
+    if( IsMultiLine() )
+    {
+        m_maxlen = length;
+    }
+    else
+        wxTextEntry::SetMaxLength( length );
 }
 
 GtkEntry *wxTextCtrl::GetEntry() const
@@ -1227,6 +1257,10 @@ void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
 
+    auto old_maxlen = m_maxlen;
+    m_maxlen = 0;
+    wxON_BLOCK_EXIT_SET( m_maxlen, old_maxlen );
+
     if ( text.empty() )
     {
         // We don't need to actually do anything, but we still need to generate
@@ -1525,6 +1559,12 @@ void wxTextCtrl::GTKOnTextChanged()
 {
     if ( IgnoreTextUpdate() )
         return;
+    if( IsMultiLine() )
+    {
+        auto count = gtk_text_buffer_get_char_count( m_buffer );
+        if( m_maxlen > 0 && count >= m_maxlen )
+            return;
+    }
 
     if ( MarkDirtyOnChange() )
         MarkDirty();

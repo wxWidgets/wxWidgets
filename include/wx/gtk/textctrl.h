@@ -60,6 +60,7 @@ public:
 
     virtual void Remove(long from, long to) override;
 
+    virtual void SetMaxLength(unsigned long length) override;
     virtual void MarkDirty() override;
     virtual void DiscardEdits() override;
 
