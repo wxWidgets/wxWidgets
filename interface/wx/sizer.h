@@ -1042,6 +1042,46 @@ public:
     void Realize();
 
     /**
+        Returns the affirmative button for the sizer.
+
+        Affirmative buttons are those added with ID @c wxID_OK, @c wxID_YES
+        or @c wxID_SAVE. They can have other ID if they were added calling
+        wxStdDialogButtonSizer::SetAffirmativeButton.
+    */
+    wxButton* GetAffirmativeButton() const;
+
+    /**
+        Returns the apply button for the sizer.
+
+        Apply buttons are those added with ID @c wxID_APPLY.
+    */
+    wxButton* GetApplyButton() const;
+
+    /**
+        Returns the negative button for the sizer.
+
+        Negative buttons are those added with ID @c wxID_NO. They can have other
+        ID if they were added calling wxStdDialogButtonSizer::SetNegativeButton.
+    */
+    wxButton* GetNegativeButton() const;
+
+    /**
+        Returns the cancel button for the sizer.
+
+        Cancel buttons are those added with ID @c wxID_CANCEL or @c wxID_CLOSE.
+        They can have other ID if they were added calling
+        wxStdDialogButtonSizer::SetCancelButton.
+    */
+    wxButton* GetCancelButton() const;
+
+    /**
+        Returns the help button for the sizer.
+
+        Help buttons are those added with ID @c wxID_HELP or @c wxID_CONTEXT_HELP.
+    */
+    wxButton* GetHelpButton() const;
+
+    /**
         Sets the affirmative button for the sizer.
 
         This allows you to use identifiers other than the standard identifiers
