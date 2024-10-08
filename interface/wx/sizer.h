@@ -1042,6 +1042,41 @@ public:
     void Realize();
 
     /**
+        Returns the affirmative button for the sizer.
+
+        Affirmative buttons have ID awxID_OK, wxID_YES or wxID_SAVE
+    */
+    wxButton* GetAffirmativeButton() const;
+
+    /**
+        Returns the apply button for the sizer.
+
+        Apply buttons have ID wxID_APPLY
+    */
+    wxButton* GetApplyButton() const;
+
+    /**
+        Returns the negative button for the sizer.
+
+        Negative buttons have ID wxID_NO
+    */
+    wxButton* GetNegativeButton() const;
+
+    /**
+        Returns the cancel button for the sizer.
+
+        Cancel buttons have ID wxID_CANCEL or wxxID_CLOSE
+    */
+    wxButton* GetCancelButton() const;
+
+    /**
+        Returns the help button for the sizer.
+
+        Help buttons have ID wxID_HELP or wxID_CONTEXT_HELP
+    */
+    wxButton* GetHelpButton() const;
+
+    /**
         Sets the affirmative button for the sizer.
 
         This allows you to use identifiers other than the standard identifiers
