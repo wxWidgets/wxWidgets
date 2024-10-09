@@ -1936,6 +1936,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_tree.o \
 	xrcdll_xh_treebk.o \
 	xrcdll_xh_unkwn.o \
+	xrcdll_xh_vlistbox.o \
 	xrcdll_xh_wizrd.o \
 	xrcdll_xmlres.o \
 	xrcdll_xmlrsall.o \
@@ -2012,6 +2013,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_tree.o \
 	xrclib_xh_treebk.o \
 	xrclib_xh_unkwn.o \
+	xrclib_xh_vlistbox.o \
 	xrclib_xh_wizrd.o \
 	xrclib_xmlres.o \
 	xrclib_xmlrsall.o \
@@ -4006,6 +4008,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_tree.h \
 	wx/xrc/xh_treebk.h \
 	wx/xrc/xh_unkwn.h \
+	wx/xrc/xh_vlistbox.h \
 	wx/xrc/xh_wizrd.h \
 	wx/xrc/xmlres.h \
 	wx/xrc/xh_bookctrlbase.h \
@@ -4330,6 +4333,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_tree.o \
 	monodll_xh_treebk.o \
 	monodll_xh_unkwn.o \
+	monodll_xh_vlistbox.o \
 	monodll_xh_wizrd.o \
 	monodll_xmlres.o \
 	monodll_xmlrsall.o \
@@ -6085,6 +6089,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_tree.o \
 	monolib_xh_treebk.o \
 	monolib_xh_unkwn.o \
+	monolib_xh_vlistbox.o \
 	monolib_xh_wizrd.o \
 	monolib_xmlres.o \
 	monolib_xmlrsall.o \
@@ -16276,6 +16281,9 @@ monodll_xh_treebk.o: $(srcdir)/src/xrc/xh_treebk.cpp $(MONODLL_ODEP)
 monodll_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_unkwn.cpp
 
+monodll_xh_vlistbox.o: $(srcdir)/src/xrc/xh_vlistbox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_vlistbox.cpp
+
 monodll_xh_wizrd.o: $(srcdir)/src/xrc/xh_wizrd.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_wizrd.cpp
 
@@ -21009,6 +21017,9 @@ monolib_xh_treebk.o: $(srcdir)/src/xrc/xh_treebk.cpp $(MONOLIB_ODEP)
 
 monolib_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_unkwn.cpp
+
+monolib_xh_vlistbox.o: $(srcdir)/src/xrc/xh_vlistbox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_vlistbox.cpp
 
 monolib_xh_wizrd.o: $(srcdir)/src/xrc/xh_wizrd.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_wizrd.cpp
@@ -33226,6 +33237,9 @@ xrcdll_xh_treebk.o: $(srcdir)/src/xrc/xh_treebk.cpp $(XRCDLL_ODEP)
 xrcdll_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_unkwn.cpp
 
+xrcdll_xh_vlistbox.o: $(srcdir)/src/xrc/xh_vlistbox.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_vlistbox.cpp
+
 xrcdll_xh_wizrd.o: $(srcdir)/src/xrc/xh_wizrd.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_wizrd.cpp
 
@@ -33432,6 +33446,9 @@ xrclib_xh_treebk.o: $(srcdir)/src/xrc/xh_treebk.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_unkwn.o: $(srcdir)/src/xrc/xh_unkwn.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_unkwn.cpp
+
+xrclib_xh_vlistbox.o: $(srcdir)/src/xrc/xh_vlistbox.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_vlistbox.cpp
 
 xrclib_xh_wizrd.o: $(srcdir)/src/xrc/xh_wizrd.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_wizrd.cpp

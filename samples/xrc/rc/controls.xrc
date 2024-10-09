@@ -1559,6 +1559,34 @@ lay them out using wxSizers, absolute positioning, everything you like!
                         </object>
                     </object>
                 </object>
+                <object class="choicebookpage">
+                    <label>wxVListBox</label>
+                    <object class="wxPanel" name="listbox">
+                        <object class="wxFlexGridSizer">
+                            <cols>1</cols>
+                            <rows>0</rows>
+                            <vgap>0</vgap>
+                            <hgap>0</hgap>
+                            <growablecols>0</growablecols>
+                            <growablerows>0</growablerows>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxVListBox" name="controls_vlistbox_single" subclass="wxVListBoxDerived">
+                                    <size>250,80</size>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxVListBox" name="controls_vlistbox_multiple" subclass="wxVListBoxDerived">
+                                    <size>250,80</size>
+                                    <style>wxLB_MULTIPLE</style>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
 
                 <object class="choicebookpage">
                     <label>wx*PickerCtrl</label>
