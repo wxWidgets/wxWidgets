@@ -1044,35 +1044,42 @@ public:
     /**
         Returns the affirmative button for the sizer.
 
-        Affirmative buttons have ID awxID_OK, wxID_YES or wxID_SAVE
+        Affirmative buttons must have ID @c wxID_OK, @c wxID_YES or @c wxID_SAVE
+        when calling wxStdDialogButtonSizer::AddButton. You can use other ID calling
+        wxStdDialogButtonSizer::SetAffirmativeButton instead.
     */
     wxButton* GetAffirmativeButton() const;
 
     /**
         Returns the apply button for the sizer.
 
-        Apply buttons have ID wxID_APPLY
+        Apply buttons must have ID @c wxID_APPLY.
     */
     wxButton* GetApplyButton() const;
 
     /**
         Returns the negative button for the sizer.
 
-        Negative buttons have ID wxID_NO
+        Negative buttons must have ID @c wxID_NO when calling
+        wxStdDialogButtonSizer::AddButton. You can use other ID calling
+        wxStdDialogButtonSizer::SetNegativeButton instead.
     */
     wxButton* GetNegativeButton() const;
 
     /**
         Returns the cancel button for the sizer.
 
-        Cancel buttons have ID wxID_CANCEL or wxxID_CLOSE
+        Cancel buttons must have ID @c wxID_CANCEL or @c wxID_CLOSE when calling
+        wxStdDialogButtonSizer::AddButton. You can use other ID calling
+        wxStdDialogButtonSizer::SetCancelButton instead.
     */
     wxButton* GetCancelButton() const;
 
     /**
         Returns the help button for the sizer.
 
-        Help buttons have ID wxID_HELP or wxID_CONTEXT_HELP
+        Help buttons must have ID @c wxID_HELP or @c wxID_CONTEXT_HELP when calling
+        wxStdDialogButtonSizer::AddButton.
     */
     wxButton* GetHelpButton() const;
 
