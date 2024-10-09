@@ -449,3 +449,52 @@ void MyFrame::OnInfoBarShowMessage(wxCommandEvent& event)
 #endif
 
 }
+
+#include <wx/vlbox.h>
+
+class wxVListBoxDerived : public wxVListBox
+{
+public:
+    // the derived class must implement this function to actually draw the item
+    // with the given index on the provided DC
+    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
+
+    // the derived class must implement this method to return the height of the
+    // specified item
+    virtual wxCoord OnMeasureItem(size_t n) const;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(CTileListBoxWx);
+    wxDECLARE_EVENT_TABLE();
+
+    void OnCreate(wxWindowCreateEvent& event);
+    wxString GetItem(size_t n) const;
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxVListBoxDerived, wxVListBox);
+
+wxBEGIN_EVENT_TABLE(wxVListBoxDerived, wxVListBox)
+    EVT_WINDOW_CREATE(wxVListBoxDerived::OnCreate)
+wxEND_EVENT_TABLE()
+
+void wxVListBoxDerived::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
+{
+    dc.DrawText(GetItem(n), rect.GetLeftTop());
+}
+
+wxCoord wxVListBoxDerived::OnMeasureItem(size_t n) const
+{
+    // safe to const_cast since we're just using GetTextExtent
+    wxInfoDC dc(const_cast<wxVListBoxDerived*>(this));
+    return dc.GetTextExtent(GetItem(n)).y;
+}
+
+void wxVListBoxDerived::OnCreate(wxWindowCreateEvent& /*event*/)
+{
+    SetItemCount(10);
+}
+
+wxString wxVListBoxDerived::GetItem(size_t n) const
+{
+    return wxString::Format("Item %zu", n);
+}
