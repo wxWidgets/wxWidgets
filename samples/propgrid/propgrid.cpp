@@ -2761,7 +2761,7 @@ void FormMain::OnColourScheme( wxCommandEvent& event )
         m_pPropGridManager->Freeze();
         m_pPropGridManager->GetGrid()->SetMarginColour( my_grey_1 );
         m_pPropGridManager->GetGrid()->SetCaptionBackgroundColour( my_grey_1 );
-        m_pPropGridManager->GetGrid()->SetLineColour( my_grey_1 );
+        m_pPropGridManager->GetGrid()->SetLineColour( my_grey_2 );
         m_pPropGridManager->Thaw();
     }
     else if ( id == ID_COLOURSCHEME4 )
