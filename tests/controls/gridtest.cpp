@@ -1420,9 +1420,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellFormatting", "[grid]")
 
     CHECK(m_grid->GetCellBackgroundColour(0, 0) == back);
 
-    back = m_grid->GetDefaultCellTextColour();
+    text = m_grid->GetDefaultCellTextColour();
 
-    CHECK(m_grid->GetCellTextColour(0, 0) == back);
+    CHECK(m_grid->GetCellTextColour(0, 0) == text);
 
     m_grid->SetCellAlignment(0, 0, wxALIGN_LEFT, wxALIGN_BOTTOM);
     m_grid->GetCellAlignment(0, 0, &cellhoriz, &cellvert);
