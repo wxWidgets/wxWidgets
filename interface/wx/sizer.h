@@ -1044,42 +1044,40 @@ public:
     /**
         Returns the affirmative button for the sizer.
 
-        Affirmative buttons must have ID @c wxID_OK, @c wxID_YES or @c wxID_SAVE
-        when calling wxStdDialogButtonSizer::AddButton. You can use other ID calling
-        wxStdDialogButtonSizer::SetAffirmativeButton instead.
+        Affirmative buttons are those added with ID @c wxID_OK, @c wxID_YES
+        or @c wxID_SAVE. They can have other ID if they were added calling
+        wxStdDialogButtonSizer::SetAffirmativeButton.
     */
     wxButton* GetAffirmativeButton() const;
 
     /**
         Returns the apply button for the sizer.
 
-        Apply buttons must have ID @c wxID_APPLY.
+        Apply buttons are those added with ID @c wxID_APPLY.
     */
     wxButton* GetApplyButton() const;
 
     /**
         Returns the negative button for the sizer.
 
-        Negative buttons must have ID @c wxID_NO when calling
-        wxStdDialogButtonSizer::AddButton. You can use other ID calling
-        wxStdDialogButtonSizer::SetNegativeButton instead.
+        Negative buttons are those added with ID @c wxID_NO. They can have other
+        ID if they were added calling wxStdDialogButtonSizer::SetNegativeButton.
     */
     wxButton* GetNegativeButton() const;
 
     /**
         Returns the cancel button for the sizer.
 
-        Cancel buttons must have ID @c wxID_CANCEL or @c wxID_CLOSE when calling
-        wxStdDialogButtonSizer::AddButton. You can use other ID calling
-        wxStdDialogButtonSizer::SetCancelButton instead.
+        Cancel buttons are those added with ID @c wxID_CANCEL or @c wxID_CLOSE.
+        They can have other ID if they were added calling
+        wxStdDialogButtonSizer::SetCancelButton.
     */
     wxButton* GetCancelButton() const;
 
     /**
         Returns the help button for the sizer.
 
-        Help buttons must have ID @c wxID_HELP or @c wxID_CONTEXT_HELP when calling
-        wxStdDialogButtonSizer::AddButton.
+        Help buttons are those added with ID @c wxID_HELP or @c wxID_CONTEXT_HELP.
     */
     wxButton* GetHelpButton() const;
 
