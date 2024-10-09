@@ -5093,6 +5093,9 @@ if test "$USE_UNIX" = 1 ; then
         AC_LINK_IFELSE([AC_LANG_PROGRAM([
                 #include <sys/ioctl.h>
                 #include <sys/soundcard.h>
+                #ifdef HAVE_UNISTD_H
+                # include <unistd.h> /* needed for ioctl() on Solaris */
+                #endif
             ],
             [
                 ioctl(0, SNDCTL_DSP_SPEED, 0);
@@ -5104,6 +5107,9 @@ if test "$USE_UNIX" = 1 ; then
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([
                         #include <sys/ioctl.h>
                         #include <sys/soundcard.h>
+                        #ifdef HAVE_UNISTD_H
+                        # include <unistd.h> /* needed for ioctl() on Solaris */
+                        #endif
                     ],
                     [
                         ioctl(0, SNDCTL_DSP_SPEED, 0);
