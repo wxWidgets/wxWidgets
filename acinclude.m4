@@ -269,7 +269,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
  not big endian
 #endif])], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
 if test $ac_cv_c_bigendian = unknown; then
-AC_RUN_IFELSE([AC_LANG_SOURCE([[main () {
+AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>]],[[
   /* Are we little or big endian?  From Harbison&Steele.  */
   union
   {
@@ -278,7 +278,7 @@ AC_RUN_IFELSE([AC_LANG_SOURCE([[main () {
   } u;
   u.l = 1;
   exit (u.c[sizeof (long) - 1] == 1);
-}]])], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes], [ac_cv_c_bigendian=unknown])
+]])], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes], [ac_cv_c_bigendian=unknown])
 fi])
 if test $ac_cv_c_bigendian = unknown; then
   AC_MSG_WARN([Assuming little-endian target machine - this may be overridden by adding the line "ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}" to config.cache file])
