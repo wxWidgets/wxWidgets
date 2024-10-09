@@ -58,8 +58,14 @@ for line in io.lines(codeFileName) do
     count = count + 1
   end
 end
-print("Number of script mappings=" .. count)
-print("Number of missing aliases=" .. noalias)
+print("  Number of script mappings        = " .. count)
+print("  Number of missing script aliases = " .. noalias)
+if noalias > 0 then
+  print("  Script aliases are used in POSIX locale identifiers where they are")
+  print("  used as modifiers to represent the script of a language.")
+  print("  Missing script aliases impose a problem only for script identifiers")
+  print("  actually used in locale tags supported by wxWidgets.")
+end
 
 fo2:write('commit;\n')
 fo2:close()

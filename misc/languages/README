@@ -1,9 +1,22 @@
-Run the genlang.py script from the top level wxWidgets directory to
-update include/wx/language.h (wxLanguage enum), interface/wx/language.h
-(its documentation) and src/common/languageinfo.cpp (conversion tables)
-with the data from langtabl.txt, synonymtabl.txt, and scripttabl.txt.
+# The wxWidgets language database
 
-langtabl.txt contains a tabular list of language entries. Each entry
+## Regeneration of the wxWidgets language database related files
+
+Run the `genlang.py` script from the top level wxWidgets directory to
+update `include/wx/language.h` (wxLanguage enum), `interface/wx/language.h`
+(its documentation), `src/common/languageinfo.cpp` (conversion tables)
+and the actual tabular data in `include/wx/private/lang_*.h` with the data
+from `langtabl.txt`, `synonymtabl.txt`, `scripttabl.txt`, `likelytabl.txt`,
+`matchingtabl.txt`, and `regiongrouptabl.txt`.
+
+The files with the raw tabular data - `langtabl.txt`, `synonymtabl.txt`,
+`scripttabl.txt`, `likelytabl.txt`, `matchingtabl.txt`, and
+`regiongrouptabl.txt` - are derived from public data of the Unicode
+organization. The scripts to generate the files are provided.
+
+## Description of the raw data files
+
+`langtabl.txt` contains a tabular list of language entries. Each entry
 contains
 
 - a symbolic language identifier used in enum wxLanguage,
@@ -18,24 +31,48 @@ contains
 - language and region description in English
 - language and region description in native language.
 
-scripttabl.txt contains a list of 4-letter script codes and their
+`scripttabl.txt` contains a list of 4-letter script codes and their
 aliases (English) based on the ISO 15924 standard (2), restricted to
 entries for which aliases are defined. This list is used in wxWidgets
 to convert between script code used in BCP 47-like identifiers and
 script modifiers used in Unix locale names. The data in (2) can be used
 to update scripttabl.txt if necessary.
 
-synonymtabl.txt contains a list of aliases for symbolic language identifiers.
+`synonymtabl.txt` contains a list of aliases for symbolic language identifiers.
 This list is used to generate specific entries in wxLanguage enumeration.
 
-Note: None of the files langtabl.txt, synonymtabl.txt, and scripttabl.txt should be
+The following 3 files are used in the algorithm determining the best translation
+language based on the list of preferred UI languages and the list of available
+translations.
+
+`likelytabl.txt` contains for most locales the likely subtags for script and
+region.
+
+`matchingtabl.txt` contains a map relating languages to possible replacement
+languages giving the relative distance between 2 languages.
+
+`regiongrouptabl.txt` contains for some languages region groups. This allows
+to determine whether certain regional language variants are closer to each
+other or not.
+
+**Note**: None of the files `langtabl.txt`, `synonymtabl.txt`, `scripttabl.txt`,
+`likelytabl.txt`, `matchingtabl.txt`, and``regiongrouptabl.txt` should be
 edited manually. Instead these files should be regenerated under Windows 11 or
 above.
 
+## Regeneration process
+
 Windows provides an extensive list of locales. This list is used to regenerate
-the files langtabl.txt, synonymtabl.txt, and scripttabl.txt. The subdirectory
-util contains the C source of a small utility application that queries Windows
-for a list of known locales.
+the files `langtabl.txt`, `synonymtabl.txt`, and `scripttabl.txt`. The
+subdirectory `util` contains the C source of a small utility application
+`showlocales.c` that queries Windows for a list of known locales.
+
+**Note**: It is recommended to run `showlocales` on a Windows 11 Pro desktop
+computer, because the desktop versions of Windows get updates of locale data
+more frequently than server versions of Windows. Unfortunately, there is no
+easy method to determine when the locale data were last updated. The date of
+last modification of the file `Windows/System32/locale.nls` can be an
+indication when the last update occurred.
 
 2 additional tools are required to perform the regeneration process:
 
@@ -46,39 +83,45 @@ for a list of known locales.
    current SQLite version). Alternatively, the SQLite shell can be compiled from
    sources - the archive "sqlite-amalgamation-3xxyyzz.zip" contains the required
    source files.
+   The scripts expect that the executable `sqlite3.exe` can be found on the path.
 
 2) Lua shell
    Precompiled binaries are available at https://luabinaries.sourceforge.net/.
-   Download lua-x.y.z_Win32_bin.zip or lua-x.y.z_Win64_bin.zip (where x, y, z denotes
-   the lua version) from the download page. Rename the executable luaxy.exe to
-   luashell.exe or adjust the batch file mklangtablnew.bat accordingly.
+   Download lua-x.y.z_Win32_bin.zip or lua-x.y.z_Win64_bin.zip (where x, y, z
+   denotes the lua version) from the download page.
+   Adjust the script file `misc/languages/data/setupenv.ps1`, so that the
+   environment variable `$env:luashell` contains the name of the executable,
+   and add the location of the executables to the path.
 
-The regeneration process consists of the following steps:
+All provided scripts are PowerShell scripts. It is recommended to use
+PowerShell 7 or higher. The regeneration process consists of the following steps:
 
 1) Regenerate the list of known Windows locales (optional)
    This step is usually only required when a new major Windows version is published.
-   The utility showlocales should be invoked from a command prompt as follows:
+   The utility `showlocales` should be invoked from a command prompt as follows:
 
      showlocales > win-locale-table-win.txt
 
-   The resulting file win-locale-table-win.txt has to be placed into subdirectory
-   data/windows.
+   The resulting file `win-locale-table-win.txt` has to be placed into subdirectory
+   `data/windows`. Alternatively, the script `getwindowsdata.ps1` can be used.
 
 2) Update the Unicode data files (optional)
    This step is only required when the Unicode data were actually updated.
-   To perform this step execute the batch file getunicodefiles.bat, located in the
-   data subdirectory.
+   To perform this step execute the script file `getunicodefiles.ps1`, located
+   in the `data` subdirectory.
 
-3) Regenerate langtabl.txt, synonymtabl.txt, and scripttabl.txt
-   To perform this step execute the batch file mklangtablnew.bat, located in the
-   data subdirectory. The new versions will be placed in the data directory.
+3) Regenerate the tabular data files `langtabl.txt`, `synonymtabl.txt`,
+   `scripttabl.txt` etc.
+   To perform this step execute the script files `gensqlfiles.ps1` and
+   `makelangdb.ps1`, located in the `data` subdirectory.
+   The new versions will be placed in the `data` directory.
 
-4) Check resulting new files langtabl.txt, synonymtabl.txt, and scripttabl.txt
-   The messages from step 3 issued by the batch file and the resulting files should
-   be carefully checked. If no errors occurred, the batch file replacetables.bat
-   can be executed.
+4) Check the resulting new tabular data.
+   The messages from step 3 issued by the script files and the resulting files
+   should be carefully checked. If no errors occurred, the script file
+   replacetables.bat can be executed.
 
-5) Run the Python script genlang.py from the top level wxWidgets directory.
+5) Run the Python script `genlang.py` from the top level wxWidgets directory.
 
 6) Commit the changes.
 
@@ -87,7 +130,7 @@ Notes:
    The scripts expect the data table files in a new format that was first introduced
    in version 3.3.0.
 2) If you need to add locales not present in the list of known Windows locales, then
-   they should be added at the end of the script win_genlocaletable.lua.
+   they should be added at the end of the script `win_genlocaletable.lua`.
 
 Footnotes
 (1) used on Windows only, deprecated by Microsoft

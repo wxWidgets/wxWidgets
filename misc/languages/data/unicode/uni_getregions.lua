@@ -24,10 +24,9 @@ sqlFile = assert(io.open(sqlFileName, "w"))
 -- Replace underscore by hyphen
 
 local regions = {}
--- local rgrouping = {}
 
 -- Extract territory containments
-print("--- Extract territory containments ---")
+print("  -> Extract territory containments")
 for w in string.gmatch(xmlData1, "<territoryContainment>(.-)</territoryContainment>") do
   for grtype,grcontains,grother in string.gmatch(w, "<group type=\"(.-)\" contains=\"(.-)\"(.-)/>") do
     -- Extract value of status attribute
@@ -45,11 +44,9 @@ for w in string.gmatch(xmlData1, "<territoryContainment>(.-)</territoryContainme
     -- Use only entries with status NOT equal to "deprecated" or "grouping"
     if status ~= "deprecated" and status ~= "grouping" then
       regions[grtype] = grcontains
---      rgrouping[grtype] = grouping
     end
   end
 end
-print("... done.")
 
 -- Function for building the country list of a region
 function addcountries(regions, countries, countrylist)
@@ -66,7 +63,7 @@ function addcountries(regions, countries, countrylist)
 end
 
 -- Extract matching region
-print("\n--- Extract languages and matching regions ---")
+print("  -> Extract languages and matching regions")
 local languages = {}
 local matchids = {}
 for w in string.gmatch(xmlData2, ".-<languageMatches.->(.-)</languageMatches>") do
@@ -87,7 +84,7 @@ for w in string.gmatch(xmlData2, ".-<languageMatches.->(.-)</languageMatches>") 
         end
         language = language:gsub('_','-')
         languages[language] = matchVarId
-        print("Language: " .. language, "Region: " .. string.sub(matchVarId,2))
+        print("    Language: " .. language, "Region: " .. string.sub(matchVarId,2))
       end
     end
   end
@@ -95,11 +92,11 @@ end
 
 -- Extract territory containments
 local regionlist = {}
-print('\n--- List of regions ---')
+print('  -> Extract (and  expand) regions')
 for k,v in pairs(regions) do
   regionlist[k] = {}
   addcountries(regions, regionlist[k], v)
-  print("Region=", k, " Size=", #regionlist[k])
+  print("    Region:", k, " Size:", #regionlist[k])
 -- Print for debugging if necessary
 --  for _, cid in ipairs(regionlist[k]) do
 --    io.write(cid .. " ")
@@ -107,7 +104,7 @@ for k,v in pairs(regions) do
 --  io.write("\n")
 end
 
-print("\n--- Generate SQL file ---")
+print("  -> Generate SQL file")
 -- Write SQL file header
 sqlFile:write("create table if not exists uni_regiongroups (language char, country char, primary key(language, country));\n")
 sqlFile:write("delete from uni_regiongroups;\n")
@@ -128,7 +125,6 @@ for _, k in ipairs(tkeys) do
     sqlFile:write("insert into uni_regiongroups values ('" .. k .. "', '" .. cid .. "');\n")
   end
 end
-print("... done.")
 
 -- Write SQL file trailer
 sqlFile:write("commit;\n")
