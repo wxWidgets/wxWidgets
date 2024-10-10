@@ -269,7 +269,8 @@ AC_TRY_COMPILE([#include <sys/types.h>
  not big endian
 #endif], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
 if test $ac_cv_c_bigendian = unknown; then
-AC_TRY_RUN([main () {
+AC_TRY_RUN([#include <stdlib.h>
+main () {
   /* Are we little or big endian?  From Harbison&Steele.  */
   union
   {
