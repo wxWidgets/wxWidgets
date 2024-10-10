@@ -448,8 +448,6 @@
 #endif
 
 
-#define wxUSE_COMMON_DIALOGS 0
-
 #define wxUSE_BUSYINFO      0
 
 #define wxUSE_CHOICEDLG     0

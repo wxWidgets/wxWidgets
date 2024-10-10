@@ -392,7 +392,6 @@ wx_option(wxUSE_TREELISTCTRL "use wxTreeListCtrl class")
 # common dialogs
 # ---------------------------------------------------------------------------
 
-wx_option(wxUSE_COMMON_DIALOGS "use all common dialogs")
 wx_option(wxUSE_ABOUTDLG "use wxAboutBox")
 wx_option(wxUSE_CHOICEDLG "use wxChoiceDialog")
 wx_option(wxUSE_COLOURDLG "use wxColourDialog")

@@ -445,8 +445,6 @@
 #endif
 
 
-#cmakedefine01 wxUSE_COMMON_DIALOGS
-
 #cmakedefine01 wxUSE_BUSYINFO
 
 #cmakedefine01 wxUSE_CHOICEDLG

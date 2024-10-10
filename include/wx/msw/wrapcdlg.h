@@ -14,12 +14,10 @@
 
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/private.h"
+
+#include <commdlg.h>
+
 #include "wx/msw/missing.h"
-
-#if wxUSE_COMMON_DIALOGS
-    #include <commdlg.h>
-#endif
-
 #include "wx/msw/winundef.h"
 
 #endif // _WX_MSW_WRAPCDLG_H_

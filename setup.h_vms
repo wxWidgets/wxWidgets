@@ -501,8 +501,6 @@ typedef pid_t GPid;
 #define wxUSE_AUTOID_MANAGEMENT 0
 #endif
 
-#define wxUSE_COMMON_DIALOGS 1
-
 #define wxUSE_BUSYINFO      1
 
 #define wxUSE_CHOICEDLG     1
