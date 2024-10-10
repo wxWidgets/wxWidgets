@@ -242,7 +242,6 @@ void wxHTTP::SendHeaders()
 bool wxHTTP::ParseHeaders()
 {
     wxString line;
-    wxStringTokenizer tokenzr;
 
     ClearHeaders();
     ClearCookies();
