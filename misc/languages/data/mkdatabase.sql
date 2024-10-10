@@ -21,7 +21,7 @@
 .read temp/uni_loadmatching.sql
 
 .print Import region groups for main languages map
-.read uni_loadregiongroups.sql
+.read temp/uni_loadregiongroups.sql
 
 .read temp/wx_loadversion.sql
 
