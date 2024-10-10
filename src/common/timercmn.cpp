@@ -55,12 +55,10 @@ wxTimer::~wxTimer()
 void wxTimer::Init()
 {
     wxAppTraits * const traits = wxApp::GetTraitsIfExists();
-    m_impl = traits ? traits->CreateTimerImpl(this) : nullptr;
-    if ( !m_impl )
-    {
-        wxFAIL_MSG( wxT("No timer implementation for this platform") );
+    wxCHECK_RET( traits, wxT("Can't create timer, is wxApp fully initialized?") );
 
-    }
+    m_impl = traits->CreateTimerImpl(this);
+    wxCHECK_RET( m_impl, wxT("No timer implementation for this platform") );
 }
 
 // ============================================================================
