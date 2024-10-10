@@ -150,7 +150,6 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
             return nullptr;
 
         wxString sFlags(wxT("flags"));
-        wxString flags;
         if ( HasParam(sFlags) )
             property->SetFlagsFromString( GetText(sFlags) );
 

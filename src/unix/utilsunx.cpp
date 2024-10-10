@@ -896,11 +896,10 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
 const wxChar* wxGetHomeDir( wxString *home  )
 {
     *home = wxGetUserHome();
-    wxString tmp;
     if ( home->empty() )
         *home = wxT("/");
 #ifdef __VMS
-    tmp = *home;
+    wxString tmp = *home;
     if ( tmp.Last() != wxT(']'))
         if ( tmp.Last() != wxT('/')) *home << wxT('/');
 #endif

@@ -355,7 +355,7 @@ private:
 };
 #endif // wxUSE_UNICODE_UTF8
 
-class WXDLLIMPEXP_BASE wxString
+class WXDLLIMPEXP_BASE wxWARN_UNUSED wxString
 {
   // NB: special care was taken in arranging the member functions in such order
   //     that all inline functions can be effectively inlined, verify that all
