@@ -2515,8 +2515,6 @@ void wxAuiToolBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 
 void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 {
-    wxRect cli_rect(wxPoint(0,0), GetClientSize());
-
     if (m_gripperSizerItem)
     {
         wxRect gripper_rect = m_gripperSizerItem->GetRect();
