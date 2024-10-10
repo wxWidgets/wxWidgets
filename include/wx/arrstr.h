@@ -65,7 +65,7 @@ inline int wxCMPFUNC_CONV wxNaturalStringSortDescending(const wxString& s1, cons
 
 typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
 
-class WXDLLIMPEXP_BASE wxArrayString : public wxBaseArray<wxString>
+class WXDLLIMPEXP_BASE wxWARN_UNUSED wxArrayString : public wxBaseArray<wxString>
 {
 public:
     // type of function used by wxArrayString::Sort()
@@ -155,7 +155,7 @@ private:
 #include <iterator>
 #include "wx/afterstd.h"
 
-class WXDLLIMPEXP_BASE wxArrayString
+class WXDLLIMPEXP_BASE wxWARN_UNUSED wxArrayString
 {
 public:
   // type of function used by wxArrayString::Sort()

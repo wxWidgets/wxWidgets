@@ -423,7 +423,6 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
 void wxGridSelection::ClearSelection()
 {
     size_t n;
-    wxRect r;
     wxGridCellCoords coords1, coords2;
 
     if ( m_grid->UsesOverlaySelection() )
