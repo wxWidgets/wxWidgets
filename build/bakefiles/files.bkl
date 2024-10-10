@@ -3006,6 +3006,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
+    wx/aui/serializer.h
 </set>
 <set var="AUI_HDR" hints="files">
     $(AUI_CMN_HDR)
