@@ -239,6 +239,11 @@ protected:
     // both integer and floating point numbers.
     virtual wxString NormalizeString(const wxString& s) const override
     {
+        // If empty value is handled as zero, just return it as is for
+        // consistency with TransferFromWindow() and NormalizeValue().
+        if ( s.empty() && BaseValidator::HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+            return wxString();
+
         LongestValueType value;
         if ( !BaseValidator::FromString(s, &value) )
         {
