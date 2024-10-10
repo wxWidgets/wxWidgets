@@ -126,7 +126,7 @@ extern WXDLLIMPEXP_DATA_BASE(const wxDateTime) wxDefaultDateTime;
 // wxDateTime represents an absolute moment in the time
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxDateTime
+class WXDLLIMPEXP_BASE wxWARN_UNUSED wxDateTime
 {
 public:
     // types
