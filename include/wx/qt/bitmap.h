@@ -38,8 +38,8 @@ public:
     bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) final;
     bool Create(int width, int height, const wxDC& dc);
 
-    virtual void SetScaleFactor(double scale);
-    virtual double GetScaleFactor() const;
+    virtual void SetScaleFactor(double scale) override;
+    virtual double GetScaleFactor() const override;
 
     virtual int GetHeight() const override;
     virtual int GetWidth() const override;

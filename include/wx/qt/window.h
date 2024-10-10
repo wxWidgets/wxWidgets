@@ -99,7 +99,7 @@ public:
     virtual int GetCharWidth() const override;
     virtual double GetContentScaleFactor() const override;
 
-    virtual wxSize GetDPI() const;
+    virtual wxSize GetDPI() const override;
     virtual double GetDPIScaleFactor() const override;
 
     virtual void SetScrollbar( int orient,
@@ -246,6 +246,9 @@ private:
     std::unique_ptr<QPainter> m_qtPainter;                   // always allocated
 
     bool m_mouseInside;
+
+    bool  m_pendingSize = false; // to properly set the size of the TLW if SetSize()
+                                 // is called before the window is shown.
 
     wxSize  m_pendingClientSize;
 

@@ -942,6 +942,17 @@ public:
         return QVariant();
     }
 
+    bool removeRows(int row, int count, const QModelIndex &parent) override
+    {
+        if ( count == 0 )
+            return true;
+
+        beginRemoveRows(parent, row, row + count - 1);
+        m_rowCount -= count;
+        endRemoveRows();
+        return true;
+    }
+
     bool GetItem(wxListItem& info) override
     {
         const int row = static_cast<int>(info.GetId());
@@ -1326,16 +1337,6 @@ void wxQtListTreeWidget::OnKeyDown(wxKeyEvent& event)
     event.Skip();
 }
 
-// Specialization: to safely remove and delete the model associated with QTreeView
-template<>
-void wxQtEventSignalHandler< QTreeView, wxListCtrl >::HandleDestroyedSignal()
-{
-    // This handler is emitted immediately before the QTreeView obj is destroyed
-    // at which point the parent object (wxListCtrl) pointer is guaranteed to still
-    // be valid for the model to be safely removed.
-    this->setModel(nullptr);
-}
-
 wxListCtrl::wxListCtrl(wxWindow *parent,
            wxWindowID id,
            const wxPoint& pos,
@@ -1380,7 +1381,14 @@ bool wxListCtrl::Create(wxWindow *parent,
 
 wxListCtrl::~wxListCtrl()
 {
-    m_model->deleteLater();
+    // Safely remove and delete the model associated with the QTreeView.
+    std::unique_ptr<QItemSelectionModel>
+        oldSelModel{GetQListTreeWidget()->selectionModel()};
+
+    oldSelModel->reset();
+    ClearAll();
+    GetQListTreeWidget()->setModel(nullptr);
+    delete m_model;
 }
 
 wxQtListTreeWidget* wxListCtrl::GetQListTreeWidget() const
