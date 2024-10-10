@@ -1,0 +1,1 @@
+wxAll: Add wxWARN_UNUSED and use it for wxString (Lauri Nurmi, #24833).
