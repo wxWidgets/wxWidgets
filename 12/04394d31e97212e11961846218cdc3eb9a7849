@@ -1,0 +1,1 @@
+wxAll (GUI): Fix wxNUM_VAL_ZERO_AS_BLANK behaviour on focus loss (#24859).
