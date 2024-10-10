@@ -78,6 +78,7 @@
 #include "wx/xrc/xh_tree.h"
 #include "wx/xrc/xh_treebk.h"
 #include "wx/xrc/xh_unkwn.h"
+#include "wx/xrc/xh_vlistbox.h"
 #include "wx/xrc/xh_wizrd.h"
 
 #endif // _WX_XH_ALL_H_

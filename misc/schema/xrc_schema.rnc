@@ -342,6 +342,7 @@ builtinClassesNames =
     | "wxToolbook"
     | "wxTreeCtrl"
     | "wxTreebook"
+    | "wxVListBox"
     | "wxWizard"
 
     | "wxBoxSizer"
@@ -1797,6 +1798,14 @@ wxTreebook_treebookpage =
         [xrc:p="o"] element selected {_, t_bool }* &
         [xrc:p="o"] element expanded {_, t_bool }* &
         windowNode
+    }
+
+
+wxVListBox =
+    element object {
+        attribute class { "wxVListBox" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties
     }
 
 

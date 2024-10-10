@@ -128,6 +128,7 @@ void wxXmlResource::InitAllHandlers()
 #endif
 #if wxUSE_LISTBOX
     AddHandler(new wxListBoxXmlHandler);
+    AddHandler(new wxVListBoxXmlHandler);
 #endif
 #if wxUSE_LISTCTRL
     AddHandler(new wxListCtrlXmlHandler);
