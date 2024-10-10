@@ -279,7 +279,7 @@ enum wxEllipsizeMode
 // wxSize
 // ---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxSize
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxSize
 {
 public:
     // members are public for compatibility, don't use them directly.
@@ -456,7 +456,7 @@ inline wxSize operator*(double i, const wxSize& s)
 // Point classes: with real or integer coordinates
 // ---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxRealPoint
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxRealPoint
 {
 public:
     double x;
@@ -574,7 +574,7 @@ inline wxRealPoint operator*(double i, const wxRealPoint& s)
 // wxPoint: 2D point with integer coordinates
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPoint
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxPoint
 {
 public:
     int x, y;
@@ -730,7 +730,7 @@ WX_DECLARE_LIST_WITH_DECL(wxPoint, wxPointList, class WXDLLIMPEXP_CORE);
 // wxRect
 // ---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxRect
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxRect
 {
 public:
     wxRect()
