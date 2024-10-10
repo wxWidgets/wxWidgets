@@ -411,7 +411,6 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
 #endif // __WXMSW__ || __WXOSX__
         {
             const wxColour clrFg(*wxCYAN);
-            const wxColour clrBg(*wxGREEN);
             const unsigned char alpha = 92;
 
 #ifdef wxHAS_PREMULTIPLIED_ALPHA
@@ -489,7 +488,6 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
 #endif // __WXMSW__ || __WXOSX__
         {
             const wxColour clrFg(*wxCYAN);
-            const wxColour clrBg(*wxGREEN);
             const unsigned char alpha = 92;
 #ifdef wxHAS_PREMULTIPLIED_ALPHA
             // premultiplied values

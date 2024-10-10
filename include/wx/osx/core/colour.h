@@ -18,7 +18,7 @@
 struct RGBColor;
 
 // Colour
-class WXDLLIMPEXP_CORE wxColour: public wxColourBase
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour: public wxColourBase
 {
 public:
     // constructors
