@@ -17,7 +17,7 @@ Avst;134;Avestan;avestique;Avestan;5.2;2009-06-01
 Bali;360;Balinese;balinais;Balinese;5.0;2006-10-10
 Bamu;435;Bamum;bamoum;Bamum;5.2;2009-06-01
 Bass;259;Bassa Vah;bassa;Bassa_Vah;7.0;2014-11-15
-Batk;365;Batak;batik;Batak;6.0;2010-07-23
+Batk;365;Batak;batak;Batak;6.0;2010-07-23
 Beng;325;Bengali (Bangla);bengalî (bangla);Bengali;1.1;2016-12-05
 Bhks;334;Bhaiksuki;bhaïksukî;Bhaiksuki;9.0;2016-12-05
 Blis;550;Blissymbols;symboles Bliss;;;2004-05-01
@@ -31,6 +31,7 @@ Cans;440;Unified Canadian Aboriginal Syllabics;syllabaire autochtone canadien un
 Cari;201;Carian;carien;Carian;5.1;2007-07-02
 Cham;358;Cham;cham (čam, tcham);Cham;5.1;2009-11-11
 Cher;445;Cherokee;tchérokî;Cherokee;3.0;2004-05-01
+Chis;298;Chisoi;chisoi;;;2023-09-12
 Chrs;109;Chorasmian;chorasmien;Chorasmian;13.0;2019-08-19
 Cirt;291;Cirth;cirth;;;2004-05-01
 Copt;204;Coptic;copte;Coptic;4.1;2006-06-21
@@ -49,6 +50,7 @@ Egyp;050;Egyptian hieroglyphs;hiéroglyphes égyptiens;Egyptian_Hieroglyphs;5.2;
 Elba;226;Elbasan;elbasan;Elbasan;7.0;2014-11-15
 Elym;128;Elymaic;élymaïque;Elymaic;12.0;2018-08-26
 Ethi;430;Ethiopic (Geʻez);éthiopien (geʻez, guèze);Ethiopic;3.0;2004-10-25
+Gara;164;Garay;garay;;;2023-09-12
 Geok;241;Khutsuri (Asomtavruli and Nuskhuri);khoutsouri (assomtavrouli et nouskhouri);Georgian;1.1;2012-10-16
 Geor;240;Georgian (Mkhedruli and Mtavruli);géorgien (mkhédrouli et mtavrouli);Georgian;1.1;2016-12-05
 Glag;225;Glagolitic;glagolitique;Glagolitic;4.1;2006-06-21
@@ -58,6 +60,7 @@ Goth;206;Gothic;gotique;Gothic;3.1;2004-05-01
 Gran;343;Grantha;grantha;Grantha;7.0;2014-11-15
 Grek;200;Greek;grec;Greek;1.1;2004-05-01
 Gujr;320;Gujarati;goudjarâtî (gujrâtî);Gujarati;1.1;2004-05-01
+Gukh;397;Gurung Khema;gurung khema;;;2023-09-12
 Guru;310;Gurmukhi;gourmoukhî;Gurmukhi;1.1;2004-05-01
 Hanb;503;Han with Bopomofo (alias for Han + Bopomofo);han avec bopomofo (alias pour han + bopomofo);;1.1;2016-01-19
 Hang;286;Hangul (Hangŭl, Hangeul);hangûl (hangŭl, hangeul);Hangul;1.1;2004-05-29
@@ -81,7 +84,7 @@ Jpan;413;Japanese (alias for Han + Hiragana + Katakana);japonais (alias pour han
 Jurc;510;Jurchen;jurchen;;;2010-12-21
 Kali;357;Kayah Li;kayah li;Kayah_Li;5.1;2007-07-02
 Kana;411;Katakana;katakana;Katakana;1.1;2004-05-01
-Kawi;368;Kawi;kawi;;;2021-12-03
+Kawi;368;Kawi;kawi;Kawi;15.0;2021-12-03
 Khar;305;Kharoshthi;kharochthî;Kharoshthi;4.1;2006-06-21
 Khmr;355;Khmer;khmer;Khmer;3.0;2004-05-29
 Khoj;322;Khojki;khojkî;Khojki;7.0;2014-11-15
@@ -90,6 +93,7 @@ Kits;288;Khitan small script;petite écriture khitan;Khitan_Small_Script;13.0;20
 Knda;345;Kannada;kannara (canara);Kannada;1.1;2004-05-29
 Kore;287;Korean (alias for Hangul + Han);coréen (alias pour hangûl + han);;1.1;2007-06-13
 Kpel;436;Kpelle;kpèllé;;;2010-03-26
+Krai;396;Kirat Rai;kirat rai;;;2023-09-12
 Kthi;317;Kaithi;kaithî;Kaithi;5.2;2009-06-01
 Lana;351;Tai Tham (Lanna);taï tham (lanna);Tai_Tham;5.2;2009-06-01
 Laoo;356;Lao;laotien;Lao;1.1;2004-05-01
@@ -123,7 +127,7 @@ Mroo;264;Mro, Mru;mro;Mro;7.0;2016-12-05
 Mtei;337;Meitei Mayek (Meithei, Meetei);meitei mayek;Meetei_Mayek;5.2;2009-06-01
 Mult;323;Multani;multanî;Multani;8.0;2015-07-07
 Mymr;350;Myanmar (Burmese);birman;Myanmar;3.0;2004-05-01
-Nagm;295;Nag Mundari;nag mundari;;;2021-12-03
+Nagm;295;Nag Mundari;nag mundari;Nag_Mundari;15.0;2021-12-03
 Nand;311;Nandinagari;nandinâgarî;Nandinagari;12.0;2018-08-26
 Narb;106;Old North Arabian (Ancient North Arabian);nord-arabique;Old_North_Arabian;7.0;2014-11-15
 Nbat;159;Nabataean;nabatéen;Nabataean;7.0;2014-11-15
@@ -134,6 +138,7 @@ Nkoo;165;N’Ko;n’ko;Nko;5.0;2006-10-10
 Nshu;499;Nüshu;nüshu;Nushu;10.0;2017-07-26
 Ogam;212;Ogham;ogam;Ogham;3.0;2004-05-01
 Olck;261;Ol Chiki (Ol Cemet’, Ol, Santali);ol tchiki;Ol_Chiki;5.1;2007-07-02
+Onao;296;Ol Onal;ol onal;;;2023-09-12
 Orkh;175;Old Turkic, Orkhon Runic;orkhon;Old_Turkic;5.2;2009-06-01
 Orya;327;Oriya (Odia);oriyâ (odia);Oriya;1.1;2016-12-05
 Osge;219;Osage;osage;Osage;9.0;2016-12-05
@@ -169,6 +174,7 @@ Shaw;281;Shavian (Shaw);shavien (Shaw);Shavian;4.0;2004-05-01
 Shrd;319;Sharada, Śāradā;charada, shard;Sharada;6.1;2012-02-06
 Shui;530;Shuishu;shuishu;;;2017-07-26
 Sidd;302;Siddham, Siddhaṃ, Siddhamātṛkā;siddham;Siddham;7.0;2014-11-15
+Sidt;180;Sidetic;sidétique;;;2023-09-12
 Sind;318;Khudawadi, Sindhi;khoudawadî, sindhî;Khudawadi;7.0;2014-11-15
 Sinh;348;Sinhala;singhalais;Sinhala;3.0;2004-05-01
 Sogd;141;Sogdian;sogdien;Sogdian;11.0;2017-11-21
@@ -189,6 +195,7 @@ Talu;354;New Tai Lue;nouveau taï-lue;New_Tai_Lue;4.1;2006-06-21
 Taml;346;Tamil;tamoul;Tamil;1.1;2004-05-01
 Tang;520;Tangut;tangoute;Tangut;9.0;2016-12-05
 Tavt;359;Tai Viet;taï viêt;Tai_Viet;5.2;2009-06-01
+Tayo;380;Tai Yo;taï yo;;;2023-09-12
 Telu;340;Telugu;télougou;Telugu;1.1;2004-05-01
 Teng;290;Tengwar;tengwar;;;2004-05-01
 Tfng;120;Tifinagh (Berber);tifinagh (berbère);Tifinagh;4.1;2006-06-21
@@ -198,7 +205,10 @@ Thai;352;Thai;thaï;Thai;1.1;2004-05-01
 Tibt;330;Tibetan;tibétain;Tibetan;2.0;2004-05-01
 Tirh;326;Tirhuta;tirhouta;Tirhuta;7.0;2014-11-15
 Tnsa;275;Tangsa;tangsa;Tangsa;14.0;2021-02-17
+Todr;229;Todhri;todhri;;;2023-09-12
+Tols;299;Tolong Siki;tolong siki;;;2023-09-12
 Toto;294;Toto;toto;Toto;14.0;2020-04-16
+Tutg;341;Tulu-Tigalari;tulu-tigalari;;;2023-09-12
 Ugar;040;Ugaritic;ougaritique;Ugaritic;4.0;2004-05-01
 Vaii;470;Vai;vaï;Vai;5.1;2007-07-02
 Visp;280;Visible Speech;parole visible;;;2004-05-01

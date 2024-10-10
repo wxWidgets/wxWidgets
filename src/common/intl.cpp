@@ -179,13 +179,13 @@ static bool gs_languagesDBInitialized = false;
 
 const wxLanguageInfos& wxGetLanguageInfos()
 {
-    wxUILocale::CreateLanguagesDB();
+    wxUILocaleImpl::CreateLanguagesDB();
 
     return gs_languagesDB;
 }
 
 /*static*/
-void wxUILocale::CreateLanguagesDB()
+void wxUILocaleImpl::CreateLanguagesDB()
 {
     if (!gs_languagesDBInitialized)
     {
@@ -196,7 +196,7 @@ void wxUILocale::CreateLanguagesDB()
 }
 
 /*static*/
-void wxUILocale::DestroyLanguagesDB()
+void wxUILocaleImpl::DestroyLanguagesDB()
 {
     if (gs_languagesDBInitialized)
     {
@@ -208,7 +208,7 @@ void wxUILocale::DestroyLanguagesDB()
 /* static */
 void wxUILocale::AddLanguage(const wxLanguageInfo& info)
 {
-    CreateLanguagesDB();
+    wxUILocaleImpl::CreateLanguagesDB();
     gs_languagesDB.push_back(info);
 }
 
@@ -219,13 +219,13 @@ void wxUILocale::AddLanguage(const wxLanguageInfo& info)
 /*static*/
 void wxLocale::CreateLanguagesDB()
 {
-    wxUILocale::CreateLanguagesDB();
+    wxUILocaleImpl::CreateLanguagesDB();
 }
 
 /*static*/
 void wxLocale::DestroyLanguagesDB()
 {
-    wxUILocale::DestroyLanguagesDB();
+    wxUILocaleImpl::DestroyLanguagesDB();
 }
 
 void wxLocale::DoCommonInit()

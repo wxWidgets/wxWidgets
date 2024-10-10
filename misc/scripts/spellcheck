@@ -12,7 +12,7 @@ fi
 $CODESPELL \
   -I misc/suppressions/codespell-words \
   -x misc/suppressions/codespell-lines \
-  -S 'build/cmake/modules/cotire.cmake,docs/changes*.txt,*.png,*.ico,*.bmp,*.cur,docs/doxygen/images,docs/doxygen/mainpages/copyright.h,docs/doxygen/doxygen-awesome-css' \
+  -S 'build/cmake/modules/cotire.cmake,docs/changes*.txt,*.png,*.ico,*.bmp,*.cur,docs/doxygen/images,docs/doxygen/mainpages/copyright.h,docs/doxygen/doxygen-awesome-css,include/wx/private/lang_*.h' \
   README.md docs include interface
 
 rc=$?
