@@ -45,6 +45,7 @@ class WXDLLIMPEXP_FWD_BASE wxEventFilter;
 #if wxUSE_GUI
     class WXDLLIMPEXP_FWD_CORE wxDC;
     class WXDLLIMPEXP_FWD_CORE wxMenu;
+    class WXDLLIMPEXP_FWD_CORE wxMenuItem;
     class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
     class WXDLLIMPEXP_FWD_CORE wxWindow;
     class WXDLLIMPEXP_FWD_CORE wxWindowBase;
@@ -2576,12 +2577,12 @@ private:
 class WXDLLIMPEXP_CORE wxMenuEvent : public wxEvent
 {
 public:
-    wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = nullptr)
+    wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = nullptr, wxMenuItem* menuItem = nullptr)
         : wxEvent(winid, type)
-        { m_menuId = winid; m_menu = menu; }
+        { m_menuId = winid; m_menu = menu; m_menuItem = menuItem; }
     wxMenuEvent(const wxMenuEvent& event)
         : wxEvent(event)
-    { m_menuId = event.m_menuId; m_menu = event.m_menu; }
+    { m_menuId = event.m_menuId; m_menu = event.m_menu; m_menuItem = event.m_menuItem; }
 
     // only for wxEVT_MENU_HIGHLIGHT
     int GetMenuId() const { return m_menuId; }
@@ -2592,11 +2593,14 @@ public:
     // only for wxEVT_MENU_OPEN/CLOSE
     wxMenu* GetMenu() const { return m_menu; }
 
+    wxMenuItem* GetMenuItem() const { return m_menuItem; }
+
     virtual wxEvent *Clone() const override { return new wxMenuEvent(*this); }
 
 private:
-    int     m_menuId;
-    wxMenu* m_menu;
+    int         m_menuId;
+    wxMenu*     m_menu;
+    wxMenuItem* m_menuItem;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMenuEvent);
 };
