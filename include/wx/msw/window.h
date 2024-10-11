@@ -574,6 +574,10 @@ public:
 
     // Find the menu corresponding to the given handle.
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
+
+    // Find the the current menu item using the given handle and the item id
+    virtual wxMenuItem* MSWFindMenuItemFromHMENU(WXHMENU hMenu, int nItem);
+
 #endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
     // Return the default button for the TLW containing this window or nullptr if
