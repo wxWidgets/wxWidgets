@@ -954,7 +954,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     int fromPage, toPage;
     int minPage, maxPage;
     printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
-    m_printDialogData.SetAllPages(true);
 
     if (minPage < 1) minPage = 1;
     if (maxPage < 1) maxPage = 9999;
@@ -974,9 +973,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         if (toPage > maxPage) toPage = maxPage;
         else if (toPage < minPage) toPage = minPage;
     }
-
-    if (((minPage != fromPage) && fromPage != 0) || ((maxPage != toPage) && toPage != 0)) m_printDialogData.SetAllPages(false);
-
 
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) printdata.GetNativeData();
