@@ -23,12 +23,8 @@ wxVListBoxXmlHandler::wxVListBoxXmlHandler() : wxXmlResourceHandler()
 {
     // panel styles
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
-    /* I don't think it makes much sense for wxVListBox to have children
-    XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
-    */
 
     // listbox styles
-    /* docs say the only special style is */
     XRC_ADD_STYLE(wxLB_MULTIPLE);
 
     AddWindowStyles();
@@ -38,11 +34,10 @@ wxObject * wxVListBoxXmlHandler::DoCreateResource()
 {
     /* non-standard because wxVListBox is an abstract
         class, so "subclass" must be used */
-    wxVListBox *vlistbox = nullptr;
     wxCHECK_MSG(m_instance,
                 nullptr,
                 "wxVListBox requires \"subclass\" attribute");
-    vlistbox = wxStaticCast(m_instance, wxVListBox);
+    wxVListBox* const vlistbox = wxStaticCast(m_instance, wxVListBox);
     if (GetBool(wxT("hidden"), 0) == 1)
         vlistbox->Hide();
 
