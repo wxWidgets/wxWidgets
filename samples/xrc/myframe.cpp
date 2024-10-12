@@ -496,9 +496,11 @@ wxCoord wxVListBoxDerived::OnMeasureItem(size_t n) const
 
 /* XRC requires default constructor, and Create() is not
     virtual, so initialization must be done here */
-void wxVListBoxDerived::OnCreate(wxWindowCreateEvent& /*event*/)
+void wxVListBoxDerived::OnCreate(wxWindowCreateEvent& event)
 {
     SetItemCount(10);
+
+    event.Skip();
 }
 
 wxString wxVListBoxDerived::GetItem(size_t n) const
