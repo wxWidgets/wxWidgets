@@ -809,6 +809,8 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
             bmp.GetLogicalHeight() - window->FromDIP(1));
     }
 
+    wxDCClipper clip(dc, rect);
+
     // draw the button itself
     dc.DrawBitmap(bmp, rect.x, rect.y, true);
 }
