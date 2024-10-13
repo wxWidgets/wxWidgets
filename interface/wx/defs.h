@@ -1866,9 +1866,12 @@ template <typename T> void wxDELETEA(T*& array);
     Expands to the "warn_unused" attribute (also known as [[gnu::warn_unused]])
     on compilers supporting it (GCC and Clang), otherwise to nothing.
 
+    @note This is an opt-in feature, and wxNO_UNUSED_VARIABLES must be
+    defined to enable it. In 3.3.0 and later, it is enabled by default.
+
     @header{wx/defs.h}
 
-    @since 3.3.0
+    @since 3.2.7 (opt-in), 3.3.0
 */
 #define wxWARN_UNUSED __attribute__((warn_unused))
 

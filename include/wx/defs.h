@@ -342,11 +342,14 @@ typedef short int WXTYPE;
 #endif
 
 /* wxWARN_UNUSED is used as an attribute to a class, stating that unused instances
-   should be warned about (in case such warnings are enabled in the first place) */
+   should be warned about (in case such warnings are enabled in the first place)
+   In 3.2.x this is an opt-in feature enabled by defining wxNO_UNUSED_VARIABLES. */
 
-#ifdef __has_cpp_attribute
-    #if __has_cpp_attribute(warn_unused)
-        #define wxWARN_UNUSED __attribute__((warn_unused))
+#if defined(wxNO_UNUSED_VARIABLES) || defined(WXBUILDING)
+    #ifdef __has_cpp_attribute
+        #if __has_cpp_attribute(warn_unused)
+            #define wxWARN_UNUSED __attribute__((warn_unused))
+        #endif
     #endif
 #endif
 #ifndef wxWARN_UNUSED
