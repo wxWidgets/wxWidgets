@@ -220,6 +220,8 @@ public:
 
     virtual wxString GetHeader(const wxString& name) const = 0;
 
+    virtual std::vector<wxString> GetAllHeaderValues(const wxString& name) const = 0;
+
     virtual wxString GetMimeType() const;
 
     virtual wxString GetContentType() const;

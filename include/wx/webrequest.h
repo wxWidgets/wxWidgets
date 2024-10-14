@@ -104,6 +104,8 @@ public:
 
     wxString GetHeader(const wxString& name) const;
 
+    std::vector<wxString> GetAllHeaderValues(const wxString& name) const;
+
     wxString GetMimeType() const;
 
     wxString GetContentType() const;

@@ -433,6 +433,19 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+    "WebRequest::Get::AllHeaderValues", "[net][webrequest][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("response-headers?freeform=wxWidgets&freeform=works!");
+    Run();
+    std::vector<wxString> headers = request.GetResponse().GetAllHeaderValues("freeform");
+    REQUIRE( headers.size() == 2 );
+    CHECK( (headers[0] == "wxWidgets" && headers[1] == "works!") );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::Param", "[net][webrequest][get]")
 {
     if ( !InitBaseURL() )

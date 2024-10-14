@@ -276,6 +276,12 @@ wxString wxWebResponseCURL::GetHeader(const wxString& name) const
         return wxString();
 }
 
+std::vector<wxString> wxWebResponseCURL::GetAllHeaderValues(const wxString& WXUNUSED(name)) const
+{
+    std::vector<wxString> result;
+    return result;
+}
+
 int wxWebResponseCURL::GetStatus() const
 {
     long status = 0;

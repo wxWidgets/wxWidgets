@@ -1026,6 +1026,18 @@ public:
     wxString GetHeader(const wxString& name) const;
 
     /**
+        Returns all values of response headers with the same name or an empty
+        vector if the header could not be found at all.
+
+        @param name Name of the header fields
+
+        @since 3.3.0
+
+        @see GetHeader()
+    */
+    std::vector<wxString> GetAllHeaderValues(const wxString& name) const;
+
+    /**
         Get the length of returned data if available.
 
         Returns the value specified in the @c Content-Length response header

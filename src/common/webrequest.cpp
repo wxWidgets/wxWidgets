@@ -843,6 +843,13 @@ wxString wxWebResponse::GetHeader(const wxString& name) const
     return m_impl->GetHeader(name);
 }
 
+std::vector<wxString> wxWebResponse::GetAllHeaderValues(const wxString& name) const
+{
+    wxCHECK_IMPL( std::vector<wxString>() );
+
+    return m_impl->GetAllHeaderValues(name);
+}
+
 wxString wxWebResponse::GetMimeType() const
 {
     wxCHECK_IMPL( wxString() );

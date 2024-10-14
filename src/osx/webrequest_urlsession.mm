@@ -434,6 +434,12 @@ wxString wxWebResponseURLSession::GetHeader(const wxString& name) const
         return wxString();
 }
 
+std::vector<wxString> wxWebResponseURLSession::GetAllHeaderValues(const wxString& WXUNUSED(name)) const
+{
+    std::vector<wxString> result;
+    return result;
+}
+
 int wxWebResponseURLSession::GetStatus() const
 {
     NSHTTPURLResponse* httpResp = (NSHTTPURLResponse*) m_task.response;
