@@ -13,6 +13,7 @@
 #include "wx/osx/dcscreen.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 #include "wx/graphics.h"
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl);
@@ -68,14 +69,25 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
         srcRect = CGRectOffset( srcRect, -subrect->x, -subrect->y ) ;
 
     CGImageRef image = nullptr;
-    
-    image = CGDisplayCreateImage(kCGDirectMainDisplay);
 
-    wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 140000
+    if ( WX_IS_MACOS_AVAILABLE(14, 4) ) // errors on lower versions of macOS 14
+    {
+        // TODO add ScreenKit implementation
+    }
+    else
+#endif // macOS 10.14+
+    {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 150000
+        image = CGDisplayCreateImage(kCGDirectMainDisplay);
+#endif
+    }
 
-    CGContextDrawImage(context, srcRect, image);
-
-    CGImageRelease(image);
+    if ( image != nullptr )
+    {
+        CGContextDrawImage(context, srcRect, image);
+        CGImageRelease(image);
+    }
 
     CGContextRestoreGState(context);
 #else
