@@ -321,7 +321,7 @@ SplitParameters(const wxString& s, wxWebRequestHeaderMap& parameters)
         }
         pvalue.Trim();
         if ( !pname.empty() )
-            parameters[pname] = pvalue;
+            parameters[pname] = { pvalue };
         if ( it != end )
             ++it;
     }
@@ -418,6 +418,13 @@ void wxWebRequestBase::SetHeader(const wxString& name, const wxString& value)
     wxCHECK_IMPL_VOID();
 
     m_impl->SetHeader(name, value);
+}
+
+void wxWebRequestBase::AddHeader(const wxString& name, const wxString& value)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->AddHeader(name, value);
 }
 
 void wxWebRequestBase::SetMethod(const wxString& method)
@@ -702,10 +709,10 @@ wxString wxWebResponseImpl::GetSuggestedFileName() const
     wxString contentDisp = GetHeader("Content-Disposition");
     wxWebRequestHeaderMap params;
     const wxString disp = wxPrivate::SplitParameters(contentDisp, params);
-    if ( disp == "attachment" )
+    if ( disp == "attachment" && !params["filename"].empty())
     {
         // Parse as filename to filter potential path names
-        wxFileName fn(params["filename"]);
+        wxFileName fn(params["filename"].back());
         suggestedFilename = fn.GetFullName();
     }
 

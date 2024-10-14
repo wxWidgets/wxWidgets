@@ -1174,7 +1174,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     DumpResponse(request.GetResponse());
 }
 
-using wxWebRequestHeaderMap = std::unordered_map<wxString, wxString>;
+using wxWebRequestHeaderMap = std::unordered_map<wxString, std::vector<wxString>>;
 
 namespace wxPrivate
 {
@@ -1192,7 +1192,8 @@ TEST_CASE("WebRequestUtils", "[net][webrequest]")
     value = wxPrivate::SplitParameters(header, params);
     CHECK( value == "multipart/mixed" );
     CHECK( params.size() == 1 );
-    CHECK( params["boundary"] == "MIME_boundary_01234567" );
+    REQUIRE( !params["boundary"].empty() );
+    CHECK( params["boundary"].back() == "MIME_boundary_01234567" );
 }
 
 // This is not a real test, run it to see the version of the library used.
