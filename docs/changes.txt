@@ -273,6 +273,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix build with macOS 15 SDK (#24724, #24879).
 - Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
 - Fix regression in GetPreferredUILanguage() in some cases (#24804).
 - Fix CMake build with PCH disabled (Maarten Bent, #24851).
