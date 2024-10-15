@@ -1417,6 +1417,33 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
 
             MakeDIP(m_frame, dockDIP.rect);
 
+            // Update dock sizes to ensure that restoring this layout later
+            // restores the same geometry as is used now: if we didn't do it,
+            // panes would have their initial sizes.
+            switch ( dock.dock_direction )
+            {
+                case wxAUI_DOCK_TOP:
+                case wxAUI_DOCK_BOTTOM:
+                    dockDIP.size = dock.rect.height;
+                    break;
+
+                case wxAUI_DOCK_LEFT:
+                case wxAUI_DOCK_RIGHT:
+                    dockDIP.size = dock.rect.width;
+                    break;
+
+                case wxAUI_DOCK_CENTER:
+                    // Not clear what to do for this one, but it shouldn't
+                    // matter as its size is determined by what remains
+                    // available after positioning the rest of the elements, so
+                    // don't do anything.
+                    break;
+
+                case wxAUI_DOCK_NONE:
+                    wxFAIL_MSG("invalid dock direction");
+                    break;
+            }
+
             serializer.SaveDock(dockDIP);
         }
 
