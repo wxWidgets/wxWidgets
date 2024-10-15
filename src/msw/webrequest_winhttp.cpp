@@ -185,35 +185,6 @@ struct wxURLComponents : URL_COMPONENTS
 
 // Helper functions
 
-static wxString wxWinHTTPQueryHeaderString(HINTERNET hRequest, DWORD dwInfoLevel,
-    LPCWSTR pwszName = WINHTTP_HEADER_NAME_BY_INDEX)
-{
-    wxString result;
-    DWORD bufferLen = 0;
-    wxWinHTTP::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName, nullptr, &bufferLen,
-        WINHTTP_NO_HEADER_INDEX);
-    if ( ::GetLastError() == ERROR_INSUFFICIENT_BUFFER )
-    {
-        // Buffer length is in bytes, including the terminating (wide) NUL, but
-        // wxWCharBuffer needs the size in characters and adds NUL itself.
-        if ( !bufferLen || (bufferLen % sizeof(wchar_t)) )
-        {
-            wxLogDebug("Unexpected size of header %s: %lu", pwszName, bufferLen);
-            return wxString();
-        }
-
-        wxWCharBuffer resBuf(bufferLen / sizeof(wchar_t) - 1);
-        if ( wxWinHTTP::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName,
-                                   resBuf.data(), &bufferLen,
-                                   WINHTTP_NO_HEADER_INDEX) )
-        {
-            result.assign(resBuf);
-        }
-    }
-
-    return result;
-}
-
 static std::vector<wxString> wxWinHTTPQueryAllHeaderStrings(HINTERNET hRequest, DWORD dwInfoLevel,
     LPCWSTR pwszName = WINHTTP_HEADER_NAME_BY_INDEX)
 {
@@ -244,6 +215,15 @@ static std::vector<wxString> wxWinHTTPQueryAllHeaderStrings(HINTERNET hRequest, 
     }
 
     return result;
+}
+
+static wxString wxWinHTTPQueryHeaderString(HINTERNET hRequest, DWORD dwInfoLevel,
+    LPCWSTR pwszName = WINHTTP_HEADER_NAME_BY_INDEX)
+{
+    std::vector<wxString> result = wxWinHTTPQueryAllHeaderStrings(
+        hRequest, dwInfoLevel, pwszName);
+
+    return result.empty() ? wxString() : result.back();
 }
 
 static wxString wxWinHTTPQueryOptionString(HINTERNET hInternet, DWORD dwOption)

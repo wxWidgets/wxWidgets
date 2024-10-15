@@ -709,7 +709,7 @@ wxString wxWebResponseImpl::GetSuggestedFileName() const
     wxString contentDisp = GetHeader("Content-Disposition");
     wxWebRequestHeaderMap params;
     const wxString disp = wxPrivate::SplitParameters(contentDisp, params);
-    if ( disp == "attachment" && !params["filename"].empty())
+    if ( disp == "attachment" && !params["filename"].empty() )
     {
         // Parse as filename to filter potential path names
         wxFileName fn(params["filename"].back());
