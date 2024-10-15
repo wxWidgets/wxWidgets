@@ -42,7 +42,7 @@ wxString wxGTKMimeTypesManagerImpl::GetIconFromMimeType(const wxString& mime)
                                        (
                                             theme,
                                             gicon,
-                                            256,
+                                            32,
                                             GtkIconLookupFlags(flags)
                                        );
 
