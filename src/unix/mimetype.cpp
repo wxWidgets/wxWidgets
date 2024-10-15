@@ -254,7 +254,14 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
        wxStringTokenizer tok( file.GetLine(i), ":" );
        wxString mime = tok.GetNextToken();
        wxString ext = tok.GetNextToken();
+       if (!ext.StartsWith(wxT("*.")))
+           continue;
        ext.Remove( 0, 2 );
+       if (ext.find_first_of('*') != wxString::npos ||
+           ext.find_first_of('[') != wxString::npos)
+       {
+           continue;
+       }
        wxArrayString exts;
        exts.Add( ext );
 
