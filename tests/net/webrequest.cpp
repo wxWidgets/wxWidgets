@@ -447,6 +447,21 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+    "WebRequest::Headers", "[net][webrequest][headers]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("headers");
+    request.AddHeader("Greeting", "Hello");
+    request.AddHeader("Greeting", "wxWidgets!");
+    Run();
+
+    // The httpbin service joins multiple headers with the same name using commas.
+    CheckExpectedJSON( request.GetResponse().AsString(), "Greeting", "Hello,wxWidgets!" );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::Param", "[net][webrequest][get]")
 {
     if ( !InitBaseURL() )
