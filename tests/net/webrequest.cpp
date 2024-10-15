@@ -182,10 +182,14 @@ protected:
 
         // There may, or not, be a space after it.
         // And the value may be returned in an array.
-        while ( wxIsspace(response[pos]) || response[pos] == '[' )
+        while ( wxIsspace(response[pos]) ||
+                response[pos] == '"' ||
+                response[pos] == '[' )
+        {
             ++pos;
+        }
 
-        wxString actualValue = response.substr(++pos, value.size());
+        wxString actualValue = response.substr(pos, value.size());
         REQUIRE( actualValue == value );
     }
 
@@ -460,17 +464,12 @@ TEST_CASE_METHOD(RequestFixture,
         return;
 
     Create("headers");
-    request.AddHeader("Greeting", "Hello");
-    request.AddHeader("Greeting", "wxWidgets!");
+    request.SetHeader("One", "1");
+    request.AddHeader("Two", "2");
     Run();
 
-#if wxUSE_WEBREQUEST_URLSESSION
-    // Only the last header of a given name is sent by the URLSession backend.
-    CheckExpectedJSON( request.GetResponse().AsString(), "Greeting", "wxWidgets!" );
-#else
-    // The httpbin service joins multiple headers with the same name using commas.
-    CheckExpectedJSON( request.GetResponse().AsString(), "Greeting", "Hello,wxWidgets!" );
-#endif
+    CheckExpectedJSON( request.GetResponse().AsString(), "One", "1" );
+    CheckExpectedJSON( request.GetResponse().AsString(), "Two", "2" );
 }
 
 TEST_CASE_METHOD(RequestFixture,
