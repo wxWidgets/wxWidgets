@@ -79,8 +79,10 @@ wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
 const int auiToolBarLayer = 10;
 
 // -- static utility functions --
+namespace
+{
 
-static wxBitmap wxCreateVenetianBlindsBitmap(wxByte r, wxByte g, wxByte b, wxByte a)
+wxBitmap wxCreateVenetianBlindsBitmap(wxByte r, wxByte g, wxByte b, wxByte a)
 {
     const unsigned char c = wxSystemSettings::GetAppearance().IsDark() ? 220 : 5;
 
@@ -97,10 +99,11 @@ static wxBitmap wxCreateVenetianBlindsBitmap(wxByte r, wxByte g, wxByte b, wxByt
 // to wxAuiPaneInfo classes, thus this function is necessary to reliably
 // reconstruct that relationship in the new dock info and pane info arrays
 
-static void CopyDocksAndPanes(wxAuiDockInfoArray& dest_docks,
-                              wxAuiPaneInfoArray& dest_panes,
-                              const wxAuiDockInfoArray& src_docks,
-                              const wxAuiPaneInfoArray& src_panes)
+void
+CopyDocksAndPanes(wxAuiDockInfoArray& dest_docks,
+                  wxAuiPaneInfoArray& dest_panes,
+                  const wxAuiDockInfoArray& src_docks,
+                  const wxAuiPaneInfoArray& src_panes)
 {
     dest_docks = src_docks;
     dest_panes = src_panes;
@@ -117,8 +120,7 @@ static void CopyDocksAndPanes(wxAuiDockInfoArray& dest_docks,
 
 // GetMaxLayer() is an internal function which returns
 // the highest layer inside the specified dock
-static int GetMaxLayer(const wxAuiDockInfoArray& docks,
-                       int dock_direction)
+int GetMaxLayer(const wxAuiDockInfoArray& docks, int dock_direction)
 {
     int i, dock_count, max_layer = 0;
     for (i = 0, dock_count = docks.GetCount(); i < dock_count; ++i)
@@ -134,7 +136,7 @@ static int GetMaxLayer(const wxAuiDockInfoArray& docks,
 
 // GetMaxRow() is an internal function which returns
 // the highest layer inside the specified dock
-static int GetMaxRow(const wxAuiPaneInfoArray& panes, int direction, int layer)
+int GetMaxRow(const wxAuiPaneInfoArray& panes, int direction, int layer)
 {
     int i, pane_count, max_row = 0;
     for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
@@ -152,9 +154,10 @@ static int GetMaxRow(const wxAuiPaneInfoArray& panes, int direction, int layer)
 
 // DoInsertDockLayer() is an internal function that inserts a new dock
 // layer by incrementing all existing dock layer values by one
-static void DoInsertDockLayer(wxAuiPaneInfoArray& panes,
-                              int dock_direction,
-                              int dock_layer)
+void
+DoInsertDockLayer(wxAuiPaneInfoArray& panes,
+                  int dock_direction,
+                  int dock_layer)
 {
     int i, pane_count;
     for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
@@ -169,10 +172,11 @@ static void DoInsertDockLayer(wxAuiPaneInfoArray& panes,
 
 // DoInsertDockLayer() is an internal function that inserts a new dock
 // row by incrementing all existing dock row values by one
-static void DoInsertDockRow(wxAuiPaneInfoArray& panes,
-                            int dock_direction,
-                            int dock_layer,
-                            int dock_row)
+void
+DoInsertDockRow(wxAuiPaneInfoArray& panes,
+                int dock_direction,
+                int dock_layer,
+                int dock_row)
 {
     int i, pane_count;
     for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
@@ -188,11 +192,12 @@ static void DoInsertDockRow(wxAuiPaneInfoArray& panes,
 
 // DoInsertDockLayer() is an internal function that inserts a space for
 // another dock pane by incrementing all existing dock row values by one
-static void DoInsertPane(wxAuiPaneInfoArray& panes,
-                         int dock_direction,
-                         int dock_layer,
-                         int dock_row,
-                         int dock_pos)
+void
+DoInsertPane(wxAuiPaneInfoArray& panes,
+             int dock_direction,
+             int dock_layer,
+             int dock_row,
+             int dock_pos)
 {
     int i, pane_count;
     for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
@@ -210,11 +215,12 @@ static void DoInsertPane(wxAuiPaneInfoArray& panes,
 // FindDocks() is an internal function that returns a list of docks which meet
 // the specified conditions in the parameters and returns a sorted array
 // (sorted by layer and then row)
-static void FindDocks(wxAuiDockInfoArray& docks,
-                      int dock_direction,
-                      int dock_layer,
-                      int dock_row,
-                      wxAuiDockInfoPtrArray& arr)
+void
+FindDocks(wxAuiDockInfoArray& docks,
+          int dock_direction,
+          int dock_layer,
+          int dock_row,
+          wxAuiDockInfoPtrArray& arr)
 {
     int begin_layer = dock_layer;
     int end_layer = dock_layer;
@@ -261,7 +267,7 @@ static void FindDocks(wxAuiDockInfoArray& docks,
 
 // FindPaneInDock() looks up a specified window pointer inside a dock.
 // If found, the corresponding wxAuiPaneInfo pointer is returned, otherwise nullptr.
-static wxAuiPaneInfo* FindPaneInDock(const wxAuiDockInfo& dock, wxWindow* window)
+wxAuiPaneInfo* FindPaneInDock(const wxAuiDockInfo& dock, wxWindow* window)
 {
     int i, count = dock.panes.GetCount();
     for (i = 0; i < count; ++i)
@@ -275,9 +281,10 @@ static wxAuiPaneInfo* FindPaneInDock(const wxAuiDockInfo& dock, wxWindow* window
 
 // RemovePaneFromDocks() removes a pane window from all docks
 // with a possible exception specified by parameter "ex_cept"
-static void RemovePaneFromDocks(wxAuiDockInfoArray& docks,
-                                wxAuiPaneInfo& pane,
-                                wxAuiDockInfo* ex_cept  = nullptr  )
+void
+RemovePaneFromDocks(wxAuiDockInfoArray& docks,
+                    wxAuiPaneInfo& pane,
+                    wxAuiDockInfo* ex_cept  = nullptr)
 {
     int i, dock_count;
     for (i = 0, dock_count = docks.GetCount(); i < dock_count; ++i)
@@ -297,7 +304,7 @@ static void RemovePaneFromDocks(wxAuiDockInfoArray& docks,
 // RenumberDockRows() takes a dock and assigns sequential numbers
 // to existing rows.  Basically it takes out the gaps; so if a
 // dock has rows with numbers 0,2,5, they will become 0,1,2
-static void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
+void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
 {
     int i, dock_count;
     for (i = 0, dock_count = docks.GetCount(); i < dock_count; ++i)
@@ -311,6 +318,8 @@ static void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
     }
 }
 */
+
+} // anonymous namespace
 
 
 // SetActivePane() sets the active pane, as well as cycles through
