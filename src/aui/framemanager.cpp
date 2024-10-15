@@ -4110,7 +4110,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         }
 #endif
 
-        wxRect& rect = m_actionPart->dock->rect;
+        const wxRect& rect = m_actionPart->dock->rect;
 
         wxPoint new_pos(event.m_x - m_actionOffset.x,
             event.m_y - m_actionOffset.y);
