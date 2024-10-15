@@ -343,7 +343,14 @@ void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 {
     event.Skip();
 
-    (void)ShowMenuHelp(event.GetMenuId());
+    if ( wxMenuItem* menuItem = event.GetMenuItem() )
+    {
+        DoGiveHelp(menuItem->GetHelp(), true);
+    }
+    else
+    {
+        (void)ShowMenuHelp(event.GetMenuId());
+    }
 }
 
 void wxFrameBase::OnMenuClose(wxMenuEvent& event)
