@@ -165,27 +165,28 @@ protected:
 
     virtual wxWebRequestBase& GetRequest() = 0;
 
-    // Check that the response is a JSON object containing a key "pi" with the
+    // Check that the response is a JSON object containing a specific key with the
     // expected value.
-    void CheckExpectedJSON(const wxString& response)
+    void CheckExpectedJSON(const wxString& response, const wxString& key,
+                           const wxString& value)
     {
         // We ought to really parse the returned JSON object, but to keep things as
         // simple as possible for now we just treat it as a string.
         INFO("Response: " << response);
 
-        const char* expectedKey = "\"pi\":";
+        wxString expectedKey = wxString::Format("\"%s\":", key);
         size_t pos = response.find(expectedKey);
         REQUIRE( pos != wxString::npos );
 
-        pos += strlen(expectedKey);
+        pos += expectedKey.size();
 
         // There may, or not, be a space after it.
         // And the value may be returned in an array.
         while ( wxIsspace(response[pos]) || response[pos] == '[' )
             pos++;
 
-        const char* expectedValue = "\"3.14159265358979323\"";
-        REQUIRE( response.compare(pos, strlen(expectedValue), expectedValue) == 0 );
+        wxString expectedValue = wxString::Format("\"%s\"", value);
+        REQUIRE( response.compare(pos, expectedValue.size(), expectedValue) == 0 );
     }
 
     // Special helper for "manual" tests taking the URL from the environment.
@@ -451,10 +452,13 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    Create("get?pi=3.14159265358979323");
+    wxString key = "pi";
+    wxString value = "3.14159265358979323";
+
+    Create(wxString::Format("get?%s=%s", key, value));
     Run();
 
-    CheckExpectedJSON( request.GetResponse().AsString() );
+    CheckExpectedJSON( request.GetResponse().AsString(), key, value );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -879,9 +883,12 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    REQUIRE( Execute("get?pi=3.14159265358979323") );
+    wxString key = "pi";
+    wxString value = "3.14159265358979323";
 
-    CheckExpectedJSON( response.AsString() );
+    REQUIRE( Execute(wxString::Format("get?%s=%s", key, value)) );
+
+    CheckExpectedJSON( response.AsString(), key, value );
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
