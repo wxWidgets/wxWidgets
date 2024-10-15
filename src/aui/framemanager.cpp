@@ -212,15 +212,28 @@ DoInsertPane(wxAuiPaneInfoArray& panes,
     }
 }
 
+// Flags for FindDocks()
+enum class FindDocksFlags
+{
+    // No special flags.
+    None = 0,
+
+    // Stop after the first found dock, returned array has 0 or 1 elements.
+    OnlyFirst = 1,
+
+    // Reverse the order of the returned docks, useful for right/bottom docks.
+    ReverseOrder = 2
+};
+
 // FindDocks() is an internal function that returns a list of docks which meet
 // the specified conditions in the parameters and returns a sorted array
 // (sorted by layer and then row)
-void
+wxAuiDockInfoPtrArray
 FindDocks(wxAuiDockInfoArray& docks,
           int dock_direction,
           int dock_layer,
           int dock_row,
-          wxAuiDockInfoPtrArray& arr)
+          FindDocksFlags flags = FindDocksFlags::None)
 {
     int begin_layer = dock_layer;
     int end_layer = dock_layer;
@@ -250,19 +263,44 @@ FindDocks(wxAuiDockInfoArray& docks,
         end_row = max_row;
     }
 
-    arr.Clear();
+    wxAuiDockInfoPtrArray arr;
 
     for (layer = begin_layer; layer <= end_layer; ++layer)
+    {
         for (row = begin_row; row <= end_row; ++row)
+        {
             for (i = 0; i < dock_count; ++i)
             {
                 wxAuiDockInfo& d = docks.Item(i);
                 if (dock_direction == -1 || dock_direction == d.dock_direction)
                 {
                     if (d.dock_layer == layer && d.dock_row == row)
-                        arr.Add(&d);
+                    {
+                        switch ( flags )
+                        {
+                            case FindDocksFlags::None:
+                                arr.Add(&d);
+                                break;
+
+                            case FindDocksFlags::OnlyFirst:
+                                arr.Add(&d);
+                                return arr;
+
+                            case FindDocksFlags::ReverseOrder:
+                                // Inserting into an array is inefficient, but
+                                // we won't have more than a few docks here, so
+                                // it doesn't matter, and it keeps the code
+                                // simpler.
+                                arr.Insert(&d, 0);
+                                break;
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    return arr;
 }
 
 // FindPaneInDock() looks up a specified window pointer inside a dock.
@@ -2013,16 +2051,17 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
         // find any docks with the same dock direction, dock layer, and
         // dock row as the pane we are working on
-        wxAuiDockInfo* dock;
-        wxAuiDockInfoPtrArray arr;
-        FindDocks(docks, p.dock_direction, p.dock_layer, p.dock_row, arr);
-
-        if (arr.GetCount() > 0)
+        wxAuiDockInfo* dock = nullptr;
+        for ( auto dockInfo : FindDocks(docks,
+                                        p.dock_direction,
+                                        p.dock_layer,
+                                        p.dock_row,
+                                        FindDocksFlags::OnlyFirst) )
         {
             // found the right dock
-            dock = arr.Item(0);
+            dock = dockInfo;
         }
-        else
+        if ( !dock )
         {
             // dock was not found, so we need to create a new one
             wxAuiDockInfo d;
@@ -2244,17 +2283,12 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
     wxSizer* cont = nullptr;
     wxSizer* middle = nullptr;
     int layer = 0;
-    int row, row_count;
 
     for (layer = 0; layer <= max_layer; ++layer)
     {
-        wxAuiDockInfoPtrArray arr;
-
         // find any docks in this layer
-        FindDocks(docks, -1, layer, -1, arr);
-
         // if there aren't any, skip to the next layer
-        if (arr.IsEmpty())
+        if ( FindDocks(docks, -1, layer, -1, FindDocksFlags::OnlyFirst).IsEmpty() )
             continue;
 
         wxSizer* old_cont = cont;
@@ -2265,11 +2299,9 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
 
         // find any top docks in this layer
-        FindDocks(docks, wxAUI_DOCK_TOP, layer, -1, arr);
-        if (!arr.IsEmpty())
+        for ( auto dockInfo : FindDocks(docks, wxAUI_DOCK_TOP, layer, -1) )
         {
-            for (row = 0, row_count = arr.GetCount(); row < row_count; ++row)
-                LayoutAddDock(cont, *arr.Item(row), uiparts, spacer_only);
+            LayoutAddDock(cont, *dockInfo, uiparts, spacer_only);
         }
 
 
@@ -2279,11 +2311,9 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         middle = new wxBoxSizer(wxHORIZONTAL);
 
         // find any left docks in this layer
-        FindDocks(docks, wxAUI_DOCK_LEFT, layer, -1, arr);
-        if (!arr.IsEmpty())
+        for ( auto dockInfo : FindDocks(docks, wxAUI_DOCK_LEFT, layer, -1) )
         {
-            for (row = 0, row_count = arr.GetCount(); row < row_count; ++row)
-                LayoutAddDock(middle, *arr.Item(row), uiparts, spacer_only);
+            LayoutAddDock(middle, *dockInfo, uiparts, spacer_only);
         }
 
         // add content dock (or previous layer's sizer
@@ -2291,13 +2321,13 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         if (!old_cont)
         {
             // find any center docks
-            FindDocks(docks, wxAUI_DOCK_CENTER, -1, -1, arr);
-            if (!arr.IsEmpty())
+            bool hasCenter = false;
+            for ( auto dockInfo : FindDocks(docks, wxAUI_DOCK_CENTER, -1, -1) )
             {
-                for (row = 0,row_count = arr.GetCount(); row<row_count; ++row)
-                   LayoutAddDock(middle, *arr.Item(row), uiparts, spacer_only);
+                LayoutAddDock(middle, *dockInfo, uiparts, spacer_only);
+                hasCenter = true;
             }
-            else if (!m_hasMaximized)
+            if (!hasCenter && !m_hasMaximized)
             {
                 // there are no center docks, add a background area
                 wxSizerItem* sizer_item = middle->Add(1,1, 1, wxEXPAND);
@@ -2317,11 +2347,10 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         }
 
         // find any right docks in this layer
-        FindDocks(docks, wxAUI_DOCK_RIGHT, layer, -1, arr);
-        if (!arr.IsEmpty())
+        for ( auto dockInfo : FindDocks(docks, wxAUI_DOCK_RIGHT, layer, -1,
+                                        FindDocksFlags::ReverseOrder) )
         {
-            for (row = arr.GetCount()-1; row >= 0; --row)
-                LayoutAddDock(middle, *arr.Item(row), uiparts, spacer_only);
+            LayoutAddDock(middle, *dockInfo, uiparts, spacer_only);
         }
 
         if (middle->GetChildren().GetCount() > 0)
@@ -2332,11 +2361,10 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
 
         // find any bottom docks in this layer
-        FindDocks(docks, wxAUI_DOCK_BOTTOM, layer, -1, arr);
-        if (!arr.IsEmpty())
+        for ( auto dockInfo : FindDocks(docks, wxAUI_DOCK_BOTTOM, layer, -1,
+                                        FindDocksFlags::ReverseOrder) )
         {
-            for (row = arr.GetCount()-1; row >= 0; --row)
-                LayoutAddDock(cont, *arr.Item(row), uiparts, spacer_only);
+            LayoutAddDock(cont, *dockInfo, uiparts, spacer_only);
         }
 
     }
@@ -4385,12 +4413,11 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
         // save the new positions
-        wxAuiDockInfoPtrArray docks;
-        FindDocks(m_docks, pane.dock_direction,
-                  pane.dock_layer, pane.dock_row, docks);
-        if (docks.GetCount() == 1)
+        for ( auto dockInfo : FindDocks(m_docks, pane.dock_direction,
+                                        pane.dock_layer, pane.dock_row,
+                                        FindDocksFlags::OnlyFirst) )
         {
-            wxAuiDockInfo& dock = *docks.Item(0);
+            wxAuiDockInfo& dock = *dockInfo;
 
             wxArrayInt pane_positions, pane_sizes;
             GetPanePositionsAndSizes(dock, pane_positions, pane_sizes);
