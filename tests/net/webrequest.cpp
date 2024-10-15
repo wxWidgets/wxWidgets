@@ -183,10 +183,10 @@ protected:
         // There may, or not, be a space after it.
         // And the value may be returned in an array.
         while ( wxIsspace(response[pos]) || response[pos] == '[' )
-            pos++;
+            ++pos;
 
-        wxString expectedValue = wxString::Format("\"%s\"", value);
-        REQUIRE( response.compare(pos, expectedValue.size(), expectedValue) == 0 );
+        wxString actualValue = response.substr(++pos, value.size());
+        REQUIRE( actualValue == value );
     }
 
     // Special helper for "manual" tests taking the URL from the environment.
