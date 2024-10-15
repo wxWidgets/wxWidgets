@@ -995,6 +995,8 @@ LIBTIFF_CFLAGS
 wxPCRE2_CODE_UNIT_WIDTH
 LIBPCRE_LIBS
 LIBPCRE_CFLAGS
+PKG_CONFIG_LIBDIR
+PKG_CONFIG_PATH
 PKG_CONFIG
 AR
 HAVE_CXX20
@@ -1391,6 +1393,8 @@ CXX
 CXXFLAGS
 CCC
 PKG_CONFIG
+PKG_CONFIG_PATH
+PKG_CONFIG_LIBDIR
 LIBPCRE_CFLAGS
 LIBPCRE_LIBS
 LIBTIFF_CFLAGS
@@ -2408,6 +2412,10 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
   LIBPCRE_CFLAGS
               C compiler flags for LIBPCRE, overriding pkg-config
   LIBPCRE_LIBS
@@ -24344,41 +24352,80 @@ if test "$ac_cv_sys_largefile_source" != no; then
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether byte ordering is bigendian" >&5
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether byte ordering is bigendian" >&5
 $as_echo_n "checking whether byte ordering is bigendian... " >&6; }
 if ${ac_cv_c_bigendian+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_cv_c_bigendian=unknown
-# See if sys/param.h defines the BYTE_ORDER macro.
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+    # See if we're dealing with a universal compiler.
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __APPLE_CC__
+	       not a universal capable compiler
+	     #endif
+	     typedef int dummy;
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+	# Check for potential -arch flags.  It is not universal unless
+	# there are at least two -arch flags with different values.
+	ac_arch=
+	ac_prev=
+	for ac_word in $CC $CFLAGS $CPPFLAGS $LDFLAGS; do
+	 if test -n "$ac_prev"; then
+	   case $ac_word in
+	     i?86 | x86_64 | ppc | ppc64)
+	       if test -z "$ac_arch" || test "$ac_arch" = "$ac_word"; then
+		 ac_arch=$ac_word
+	       else
+		 ac_cv_c_bigendian=universal
+		 break
+	       fi
+	       ;;
+	   esac
+	   ac_prev=
+	 elif test "x$ac_word" = "x-arch"; then
+	   ac_prev=arch
+	 fi
+       done
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+    if test $ac_cv_c_bigendian = unknown; then
+      # See if sys/param.h defines the BYTE_ORDER macro.
+      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/types.h>
-#include <sys/param.h>
+	     #include <sys/param.h>
+
 int
 main ()
 {
+#if ! (defined BYTE_ORDER && defined BIG_ENDIAN \
+		     && defined LITTLE_ENDIAN && BYTE_ORDER && BIG_ENDIAN \
+		     && LITTLE_ENDIAN)
+	      bogus endian macros
+	     #endif
 
-#if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
- bogus endian macros
-#endif
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   # It does; now see whether it defined to BIG_ENDIAN or not.
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <sys/types.h>
-#include <sys/param.h>
+		#include <sys/param.h>
+
 int
 main ()
 {
-
 #if BYTE_ORDER != BIG_ENDIAN
- not big endian
-#endif
+		 not big endian
+		#endif
+
   ;
   return 0;
 }
@@ -24391,25 +24438,110 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-if test $ac_cv_c_bigendian = unknown; then
-if test "$cross_compiling" = yes; then :
-  ac_cv_c_bigendian=unknown
+    fi
+    if test $ac_cv_c_bigendian = unknown; then
+      # See if <limits.h> defines _LITTLE_ENDIAN or _BIG_ENDIAN (e.g., Solaris).
+      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <limits.h>
+
+int
+main ()
+{
+#if ! (defined _LITTLE_ENDIAN || defined _BIG_ENDIAN)
+	      bogus endian macros
+	     #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  # It does; now see whether it defined to _BIG_ENDIAN or not.
+	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <limits.h>
+
+int
+main ()
+{
+#ifndef _BIG_ENDIAN
+		 not big endian
+		#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ac_cv_c_bigendian=yes
+else
+  ac_cv_c_bigendian=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+    fi
+    if test $ac_cv_c_bigendian = unknown; then
+      # Compile a test program.
+      if test "$cross_compiling" = yes; then :
+  # Try to guess by grepping values from an object file.
+	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+short int ascii_mm[] =
+		  { 0x4249, 0x4765, 0x6E44, 0x6961, 0x6E53, 0x7953, 0 };
+		short int ascii_ii[] =
+		  { 0x694C, 0x5454, 0x656C, 0x6E45, 0x6944, 0x6E61, 0 };
+		int use_ascii (int i) {
+		  return ascii_mm[i] + ascii_ii[i];
+		}
+		short int ebcdic_ii[] =
+		  { 0x89D3, 0xE3E3, 0x8593, 0x95C5, 0x89C4, 0x9581, 0 };
+		short int ebcdic_mm[] =
+		  { 0xC2C9, 0xC785, 0x95C4, 0x8981, 0x95E2, 0xA8E2, 0 };
+		int use_ebcdic (int i) {
+		  return ebcdic_mm[i] + ebcdic_ii[i];
+		}
+		extern int foo;
+
+int
+main ()
+{
+return use_ascii (foo) == use_ebcdic (foo);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  if grep BIGenDianSyS conftest.$ac_objext >/dev/null; then
+	      ac_cv_c_bigendian=yes
+	    fi
+	    if grep LiTTleEnDian conftest.$ac_objext >/dev/null ; then
+	      if test "$ac_cv_c_bigendian" = unknown; then
+		ac_cv_c_bigendian=no
+	      else
+		# finding both strings is unlikely to happen, but who knows?
+		ac_cv_c_bigendian=unknown
+	      fi
+	    fi
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <stdlib.h>
+$ac_includes_default
 int
 main ()
 {
 
-  /* Are we little or big endian?  From Harbison&Steele.  */
-  union
-  {
-    long l;
-    char c[sizeof (long)];
-  } u;
-  u.l = 1;
-  exit (u.c[sizeof (long) - 1] == 1);
+	     /* Are we little or big endian?  From Harbison&Steele.  */
+	     union
+	     {
+	       long int l;
+	       char c[sizeof (long int)];
+	     } u;
+	     u.l = 1;
+	     return u.c[sizeof (long int) - 1] == 1;
 
   ;
   return 0;
@@ -24424,18 +24556,25 @@ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
   conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
 
-fi
+    fi
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_c_bigendian" >&5
 $as_echo "$ac_cv_c_bigendian" >&6; }
-if test $ac_cv_c_bigendian = unknown; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Assuming little-endian target machine - this may be overridden by adding the line \"ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}\" to config.cache file" >&5
-$as_echo "$as_me: WARNING: Assuming little-endian target machine - this may be overridden by adding the line \"ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}\" to config.cache file" >&2;}
-fi
-if test $ac_cv_c_bigendian = yes; then
-  $as_echo "#define WORDS_BIGENDIAN 1" >>confdefs.h
+ case $ac_cv_c_bigendian in #(
+   yes)
+     $as_echo "#define WORDS_BIGENDIAN 1" >>confdefs.h
+;; #(
+   no)
+      ;; #(
+   universal)
 
-fi
+$as_echo "#define AC_APPLE_UNIVERSAL_BUILD 1" >>confdefs.h
+
+     ;; #(
+   *)
+     as_fn_error $? "unknown endianness
+ presetting ac_cv_c_bigendian=no (or yes) will help" "$LINENO" 5 ;;
+ esac
 
 
 if test "x$SUNCXX" = xyes; then
@@ -24922,8 +25061,13 @@ fi
 
 
 
+
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
+    if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
 set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -25023,18 +25167,17 @@ fi
 
 fi
 if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+    _pkg_min_version=0.9.0
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
 $as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
+        PKG_CONFIG=""
+    fi
 fi
 
 if test "$build" != "$host"; then
@@ -25084,49 +25227,49 @@ if test "$wxUSE_REGEX" != "no"; then
     if test "$wxUSE_REGEX" != "builtin"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBPCRE" >&5
-$as_echo_n "checking for LIBPCRE... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libpcre2-$pcre_suffix" >&5
+$as_echo_n "checking for libpcre2-$pcre_suffix... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBPCRE_CFLAGS"; then
-        pkg_cv_LIBPCRE_CFLAGS="$LIBPCRE_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBPCRE_CFLAGS"; then
+    pkg_cv_LIBPCRE_CFLAGS="$LIBPCRE_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-\$pcre_suffix\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libpcre2-$pcre_suffix") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBPCRE_CFLAGS=`$PKG_CONFIG --cflags "libpcre2-$pcre_suffix" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBPCRE_LIBS"; then
-        pkg_cv_LIBPCRE_LIBS="$LIBPCRE_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBPCRE_LIBS"; then
+    pkg_cv_LIBPCRE_LIBS="$LIBPCRE_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpcre2-\$pcre_suffix\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libpcre2-$pcre_suffix") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBPCRE_LIBS=`$PKG_CONFIG --libs "libpcre2-$pcre_suffix" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -25134,25 +25277,27 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libpcre2-$pcre_suffix"`
+            LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpcre2-$pcre_suffix" 2>&1`
         else
-	        LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libpcre2-$pcre_suffix"`
+            LIBPCRE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpcre2-$pcre_suffix" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBPCRE_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$LIBPCRE_PKG_ERRORS" >&5
 
 
                 wxUSE_REGEX=builtin
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 wxUSE_REGEX=builtin
 
 
 else
-	LIBPCRE_CFLAGS=$pkg_cv_LIBPCRE_CFLAGS
-	LIBPCRE_LIBS=$pkg_cv_LIBPCRE_LIBS
+    LIBPCRE_CFLAGS=$pkg_cv_LIBPCRE_CFLAGS
+    LIBPCRE_LIBS=$pkg_cv_LIBPCRE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -25872,49 +26017,49 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
     if test "$wxUSE_LIBTIFF" = "sys" -o "$wxUSE_LIBTIFF" = "yes" ; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBTIFF" >&5
-$as_echo_n "checking for LIBTIFF... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libtiff-4" >&5
+$as_echo_n "checking for libtiff-4... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBTIFF_CFLAGS"; then
-        pkg_cv_LIBTIFF_CFLAGS="$LIBTIFF_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBTIFF_CFLAGS"; then
+    pkg_cv_LIBTIFF_CFLAGS="$LIBTIFF_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libtiff-4\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libtiff-4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBTIFF_CFLAGS=`$PKG_CONFIG --cflags "libtiff-4" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBTIFF_LIBS"; then
-        pkg_cv_LIBTIFF_LIBS="$LIBTIFF_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBTIFF_LIBS"; then
+    pkg_cv_LIBTIFF_LIBS="$LIBTIFF_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libtiff-4\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libtiff-4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBTIFF_LIBS=`$PKG_CONFIG --libs "libtiff-4" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -25922,12 +26067,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBTIFF_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libtiff-4"`
+            LIBTIFF_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libtiff-4" 2>&1`
         else
-	        LIBTIFF_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libtiff-4"`
+            LIBTIFF_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libtiff-4" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBTIFF_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$LIBTIFF_PKG_ERRORS" >&5
 
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found via pkg-config" >&5
@@ -25998,6 +26143,8 @@ fi
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found via pkg-config" >&5
 $as_echo "not found via pkg-config" >&6; }
@@ -26067,8 +26214,8 @@ fi
 
 
 else
-	LIBTIFF_CFLAGS=$pkg_cv_LIBTIFF_CFLAGS
-	LIBTIFF_LIBS=$pkg_cv_LIBTIFF_LIBS
+    LIBTIFF_CFLAGS=$pkg_cv_LIBTIFF_CFLAGS
+    LIBTIFF_LIBS=$pkg_cv_LIBTIFF_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -27009,49 +27156,49 @@ if test "$wxUSE_WEBREQUEST" = "yes"; then
     if test "$wxUSE_LIBCURL" != "no"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCURL" >&5
-$as_echo_n "checking for LIBCURL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libcurl" >&5
+$as_echo_n "checking for libcurl... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBCURL_CFLAGS"; then
-        pkg_cv_LIBCURL_CFLAGS="$LIBCURL_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBCURL_CFLAGS"; then
+    pkg_cv_LIBCURL_CFLAGS="$LIBCURL_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libcurl\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libcurl") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBCURL_CFLAGS=`$PKG_CONFIG --cflags "libcurl" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBCURL_LIBS"; then
-        pkg_cv_LIBCURL_LIBS="$LIBCURL_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBCURL_LIBS"; then
+    pkg_cv_LIBCURL_LIBS="$LIBCURL_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libcurl\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libcurl") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBCURL_LIBS=`$PKG_CONFIG --libs "libcurl" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -27059,12 +27206,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBCURL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libcurl"`
+            LIBCURL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libcurl" 2>&1`
         else
-	        LIBCURL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libcurl"`
+            LIBCURL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libcurl" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBCURL_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$LIBCURL_PKG_ERRORS" >&5
 
 
                 wxUSE_LIBCURL=no
@@ -27073,6 +27220,8 @@ $as_echo "not found" >&6; }
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 wxUSE_LIBCURL=no
                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
@@ -27080,8 +27229,8 @@ $as_echo "not found" >&6; }
 
 
 else
-	LIBCURL_CFLAGS=$pkg_cv_LIBCURL_CFLAGS
-	LIBCURL_LIBS=$pkg_cv_LIBCURL_LIBS
+    LIBCURL_CFLAGS=$pkg_cv_LIBCURL_CFLAGS
+    LIBCURL_LIBS=$pkg_cv_LIBCURL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -27176,49 +27325,49 @@ else
                 if test "$wxGTK_VERSION" = 3 -o "$wxGTK_VERSION" = any; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK" >&5
-$as_echo_n "checking for GTK... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gtk+-3.0" >&5
+$as_echo_n "checking for gtk+-3.0... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTK_CFLAGS"; then
-        pkg_cv_GTK_CFLAGS="$GTK_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTK_CFLAGS"; then
+    pkg_cv_GTK_CFLAGS="$GTK_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-3.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gtk+-3.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTK_CFLAGS=`$PKG_CONFIG --cflags "gtk+-3.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTK_LIBS"; then
-        pkg_cv_GTK_LIBS="$GTK_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTK_LIBS"; then
+    pkg_cv_GTK_LIBS="$GTK_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-3.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gtk+-3.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTK_LIBS=`$PKG_CONFIG --libs "gtk+-3.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -27226,14 +27375,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTK_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gtk+-3.0"`
+            GTK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gtk+-3.0" 2>&1`
         else
-	        GTK_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk+-3.0"`
+            GTK_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gtk+-3.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GTK_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GTK_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (gtk+-3.0) were not met:
+    as_fn_error $? "Package requirements (gtk+-3.0) were not met:
 
 $GTK_PKG_ERRORS
 
@@ -27242,10 +27391,11 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GTK_CFLAGS
 and GTK_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
 is in your PATH or set the PKG_CONFIG environment variable to the full
@@ -27255,63 +27405,63 @@ Alternatively, you may set the environment variables GTK_CFLAGS
 and GTK_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 
-To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
 See \`config.log' for more details" "$LINENO" 5; }
 else
-	GTK_CFLAGS=$pkg_cv_GTK_CFLAGS
-	GTK_LIBS=$pkg_cv_GTK_LIBS
+    GTK_CFLAGS=$pkg_cv_GTK_CFLAGS
+    GTK_LIBS=$pkg_cv_GTK_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	wx_cv_lib_gtk=3
+    wx_cv_lib_gtk=3
 fi
                 fi
                 if test -z "$wx_cv_lib_gtk"; then
                     if test "$wxGTK_VERSION" = 2 -o "$wxGTK_VERSION" = any; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK" >&5
-$as_echo_n "checking for GTK... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gtk+-2.0 >= 2.6.0" >&5
+$as_echo_n "checking for gtk+-2.0 >= 2.6.0... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTK_CFLAGS"; then
-        pkg_cv_GTK_CFLAGS="$GTK_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTK_CFLAGS"; then
+    pkg_cv_GTK_CFLAGS="$GTK_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-2.0 >= 2.6.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gtk+-2.0 >= 2.6.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTK_CFLAGS=`$PKG_CONFIG --cflags "gtk+-2.0 >= 2.6.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTK_LIBS"; then
-        pkg_cv_GTK_LIBS="$GTK_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTK_LIBS"; then
+    pkg_cv_GTK_LIBS="$GTK_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-2.0 >= 2.6.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gtk+-2.0 >= 2.6.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTK_LIBS=`$PKG_CONFIG --libs "gtk+-2.0 >= 2.6.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -27319,14 +27469,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTK_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gtk+-2.0 >= 2.6.0"`
+            GTK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gtk+-2.0 >= 2.6.0" 2>&1`
         else
-	        GTK_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk+-2.0 >= 2.6.0"`
+            GTK_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gtk+-2.0 >= 2.6.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GTK_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GTK_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (gtk+-2.0 >= 2.6.0) were not met:
+    as_fn_error $? "Package requirements (gtk+-2.0 >= 2.6.0) were not met:
 
 $GTK_PKG_ERRORS
 
@@ -27335,10 +27485,11 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GTK_CFLAGS
 and GTK_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
 is in your PATH or set the PKG_CONFIG environment variable to the full
@@ -27348,14 +27499,14 @@ Alternatively, you may set the environment variables GTK_CFLAGS
 and GTK_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 
-To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
 See \`config.log' for more details" "$LINENO" 5; }
 else
-	GTK_CFLAGS=$pkg_cv_GTK_CFLAGS
-	GTK_LIBS=$pkg_cv_GTK_LIBS
+    GTK_CFLAGS=$pkg_cv_GTK_CFLAGS
+    GTK_LIBS=$pkg_cv_GTK_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	wx_cv_lib_gtk=2.0
+    wx_cv_lib_gtk=2.0
 fi
                     fi
                 fi
@@ -27363,49 +27514,49 @@ fi
                     if test "$wxGTK_VERSION" = 4 -o "$wxGTK_VERSION" = any; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK" >&5
-$as_echo_n "checking for GTK... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gtk4" >&5
+$as_echo_n "checking for gtk4... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTK_CFLAGS"; then
-        pkg_cv_GTK_CFLAGS="$GTK_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTK_CFLAGS"; then
+    pkg_cv_GTK_CFLAGS="$GTK_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk4\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gtk4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTK_CFLAGS=`$PKG_CONFIG --cflags "gtk4" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTK_LIBS"; then
-        pkg_cv_GTK_LIBS="$GTK_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTK_LIBS"; then
+    pkg_cv_GTK_LIBS="$GTK_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk4\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gtk4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTK_LIBS=`$PKG_CONFIG --libs "gtk4" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -27413,14 +27564,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTK_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gtk4"`
+            GTK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gtk4" 2>&1`
         else
-	        GTK_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk4"`
+            GTK_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gtk4" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GTK_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GTK_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (gtk4) were not met:
+    as_fn_error $? "Package requirements (gtk4) were not met:
 
 $GTK_PKG_ERRORS
 
@@ -27429,10 +27580,11 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GTK_CFLAGS
 and GTK_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
 is in your PATH or set the PKG_CONFIG environment variable to the full
@@ -27442,14 +27594,14 @@ Alternatively, you may set the environment variables GTK_CFLAGS
 and GTK_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 
-To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
 See \`config.log' for more details" "$LINENO" 5; }
 else
-	GTK_CFLAGS=$pkg_cv_GTK_CFLAGS
-	GTK_LIBS=$pkg_cv_GTK_LIBS
+    GTK_CFLAGS=$pkg_cv_GTK_CFLAGS
+    GTK_LIBS=$pkg_cv_GTK_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	wx_cv_lib_gtk=4
+    wx_cv_lib_gtk=4
 fi
                     fi
                 fi
@@ -27464,49 +27616,49 @@ fi
                                                             if test "$wxUSE_THREADS" = "yes"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTHREAD" >&5
-$as_echo_n "checking for GTHREAD... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gthread-2.0" >&5
+$as_echo_n "checking for gthread-2.0... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTHREAD_CFLAGS"; then
-        pkg_cv_GTHREAD_CFLAGS="$GTHREAD_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTHREAD_CFLAGS"; then
+    pkg_cv_GTHREAD_CFLAGS="$GTHREAD_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gthread-2.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gthread-2.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTHREAD_CFLAGS=`$PKG_CONFIG --cflags "gthread-2.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTHREAD_LIBS"; then
-        pkg_cv_GTHREAD_LIBS="$GTHREAD_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTHREAD_LIBS"; then
+    pkg_cv_GTHREAD_LIBS="$GTHREAD_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gthread-2.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gthread-2.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTHREAD_LIBS=`$PKG_CONFIG --libs "gthread-2.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -27514,14 +27666,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTHREAD_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gthread-2.0"`
+            GTHREAD_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gthread-2.0" 2>&1`
         else
-	        GTHREAD_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gthread-2.0"`
+            GTHREAD_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gthread-2.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GTHREAD_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GTHREAD_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (gthread-2.0) were not met:
+    as_fn_error $? "Package requirements (gthread-2.0) were not met:
 
 $GTHREAD_PKG_ERRORS
 
@@ -27530,10 +27682,11 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GTHREAD_CFLAGS
 and GTHREAD_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
 is in your PATH or set the PKG_CONFIG environment variable to the full
@@ -27543,14 +27696,14 @@ Alternatively, you may set the environment variables GTHREAD_CFLAGS
 and GTHREAD_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 
-To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
 See \`config.log' for more details" "$LINENO" 5; }
 else
-	GTHREAD_CFLAGS=$pkg_cv_GTHREAD_CFLAGS
-	GTHREAD_LIBS=$pkg_cv_GTHREAD_LIBS
+    GTHREAD_CFLAGS=$pkg_cv_GTHREAD_CFLAGS
+    GTHREAD_LIBS=$pkg_cv_GTHREAD_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	:
+
 fi
                     fi
 
@@ -27773,49 +27926,49 @@ $as_echo "$wx_cv_gdk_wayland" >&6; }
     if test "$wxUSE_DFB" = 1; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for DIRECTFB" >&5
-$as_echo_n "checking for DIRECTFB... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for directfb >= 0.9.23" >&5
+$as_echo_n "checking for directfb >= 0.9.23... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$DIRECTFB_CFLAGS"; then
-        pkg_cv_DIRECTFB_CFLAGS="$DIRECTFB_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$DIRECTFB_CFLAGS"; then
+    pkg_cv_DIRECTFB_CFLAGS="$DIRECTFB_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"directfb >= 0.9.23\""; } >&5
   ($PKG_CONFIG --exists --print-errors "directfb >= 0.9.23") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_DIRECTFB_CFLAGS=`$PKG_CONFIG --cflags "directfb >= 0.9.23" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$DIRECTFB_LIBS"; then
-        pkg_cv_DIRECTFB_LIBS="$DIRECTFB_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$DIRECTFB_LIBS"; then
+    pkg_cv_DIRECTFB_LIBS="$DIRECTFB_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"directfb >= 0.9.23\""; } >&5
   ($PKG_CONFIG --exists --print-errors "directfb >= 0.9.23") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_DIRECTFB_LIBS=`$PKG_CONFIG --libs "directfb >= 0.9.23" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -27823,25 +27976,27 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "directfb >= 0.9.23"`
+            DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "directfb >= 0.9.23" 2>&1`
         else
-	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "directfb >= 0.9.23"`
+            DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "directfb >= 0.9.23" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$DIRECTFB_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$DIRECTFB_PKG_ERRORS" >&5
 
 
                            as_fn_error $? "DirectFB not found." "$LINENO" 5
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                            as_fn_error $? "DirectFB not found." "$LINENO" 5
 
 
 else
-	DIRECTFB_CFLAGS=$pkg_cv_DIRECTFB_CFLAGS
-	DIRECTFB_LIBS=$pkg_cv_DIRECTFB_LIBS
+    DIRECTFB_CFLAGS=$pkg_cv_DIRECTFB_CFLAGS
+    DIRECTFB_LIBS=$pkg_cv_DIRECTFB_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -28564,49 +28719,49 @@ $as_echo "$MICROWIN" >&6; }
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PANGOXFT" >&5
-$as_echo_n "checking for PANGOXFT... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pangoxft" >&5
+$as_echo_n "checking for pangoxft... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PANGOXFT_CFLAGS"; then
-        pkg_cv_PANGOXFT_CFLAGS="$PANGOXFT_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$PANGOXFT_CFLAGS"; then
+    pkg_cv_PANGOXFT_CFLAGS="$PANGOXFT_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangoxft\""; } >&5
   ($PKG_CONFIG --exists --print-errors "pangoxft") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_PANGOXFT_CFLAGS=`$PKG_CONFIG --cflags "pangoxft" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PANGOXFT_LIBS"; then
-        pkg_cv_PANGOXFT_LIBS="$PANGOXFT_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$PANGOXFT_LIBS"; then
+    pkg_cv_PANGOXFT_LIBS="$PANGOXFT_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangoxft\""; } >&5
   ($PKG_CONFIG --exists --print-errors "pangoxft") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_PANGOXFT_LIBS=`$PKG_CONFIG --libs "pangoxft" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -28614,25 +28769,27 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "pangoxft"`
+            PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "pangoxft" 2>&1`
         else
-	        PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangoxft"`
+            PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "pangoxft" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PANGOXFT_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$PANGOXFT_PKG_ERRORS" >&5
 
 
                 as_fn_error $? "Required pangoxft library not found" "$LINENO" 5
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 as_fn_error $? "Required pangoxft library not found" "$LINENO" 5
 
 
 else
-	PANGOXFT_CFLAGS=$pkg_cv_PANGOXFT_CFLAGS
-	PANGOXFT_LIBS=$pkg_cv_PANGOXFT_LIBS
+    PANGOXFT_CFLAGS=$pkg_cv_PANGOXFT_CFLAGS
+    PANGOXFT_LIBS=$pkg_cv_PANGOXFT_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -28645,49 +28802,49 @@ $as_echo "yes" >&6; }
 fi
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PANGOFT2" >&5
-$as_echo_n "checking for PANGOFT2... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pangoft2" >&5
+$as_echo_n "checking for pangoft2... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PANGOFT2_CFLAGS"; then
-        pkg_cv_PANGOFT2_CFLAGS="$PANGOFT2_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$PANGOFT2_CFLAGS"; then
+    pkg_cv_PANGOFT2_CFLAGS="$PANGOFT2_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangoft2\""; } >&5
   ($PKG_CONFIG --exists --print-errors "pangoft2") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_PANGOFT2_CFLAGS=`$PKG_CONFIG --cflags "pangoft2" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PANGOFT2_LIBS"; then
-        pkg_cv_PANGOFT2_LIBS="$PANGOFT2_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$PANGOFT2_LIBS"; then
+    pkg_cv_PANGOFT2_LIBS="$PANGOFT2_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangoft2\""; } >&5
   ($PKG_CONFIG --exists --print-errors "pangoft2") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_PANGOFT2_LIBS=`$PKG_CONFIG --libs "pangoft2" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -28695,12 +28852,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        PANGOFT2_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "pangoft2"`
+            PANGOFT2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "pangoft2" 2>&1`
         else
-	        PANGOFT2_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangoft2"`
+            PANGOFT2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "pangoft2" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PANGOFT2_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$PANGOFT2_PKG_ERRORS" >&5
 
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: pangoft2 library not found, library will be compiled without printing support" >&5
@@ -28709,6 +28866,8 @@ $as_echo "$as_me: WARNING: pangoft2 library not found, library will be compiled 
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: pangoft2 library not found, library will be compiled without printing support" >&5
 $as_echo "$as_me: WARNING: pangoft2 library not found, library will be compiled without printing support" >&2;}
@@ -28716,8 +28875,8 @@ $as_echo "$as_me: WARNING: pangoft2 library not found, library will be compiled 
 
 
 else
-	PANGOFT2_CFLAGS=$pkg_cv_PANGOFT2_CFLAGS
-	PANGOFT2_LIBS=$pkg_cv_PANGOFT2_LIBS
+    PANGOFT2_CFLAGS=$pkg_cv_PANGOFT2_CFLAGS
+    PANGOFT2_LIBS=$pkg_cv_PANGOFT2_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -28953,49 +29112,49 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
         else
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for QT5" >&5
-$as_echo_n "checking for QT5... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" >&5
+$as_echo_n "checking for Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$QT5_CFLAGS"; then
-        pkg_cv_QT5_CFLAGS="$QT5_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$QT5_CFLAGS"; then
+    pkg_cv_QT5_CFLAGS="$QT5_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test\""; } >&5
   ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_QT5_CFLAGS=`$PKG_CONFIG --cflags "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$QT5_LIBS"; then
-        pkg_cv_QT5_LIBS="$QT5_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$QT5_LIBS"; then
+    pkg_cv_QT5_LIBS="$QT5_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test\""; } >&5
   ($PKG_CONFIG --exists --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_QT5_LIBS=`$PKG_CONFIG --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -29003,25 +29162,27 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        QT5_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test"`
+            QT5_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" 2>&1`
         else
-	        QT5_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test"`
+            QT5_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$QT5_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$QT5_PKG_ERRORS" >&5
 
 
                     as_fn_error $? "Qt5 libraries are not available" "$LINENO" 5
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                     as_fn_error $? "Qt5 libraries are not available" "$LINENO" 5
 
 
 else
-	QT5_CFLAGS=$pkg_cv_QT5_CFLAGS
-	QT5_LIBS=$pkg_cv_QT5_LIBS
+    QT5_CFLAGS=$pkg_cv_QT5_CFLAGS
+    QT5_LIBS=$pkg_cv_QT5_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -29104,8 +29265,13 @@ if test "$wxUSE_DISPLAY" = "yes"; then
     fl_pkgname=`echo "Xinerama" | tr [:upper:] [:lower:]`
 
 
+
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
+    if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
 set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -29205,64 +29371,63 @@ fi
 
 fi
 if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+    _pkg_min_version=0.9.0
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
 $as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
+        PKG_CONFIG=""
+    fi
 fi 6> /dev/null
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Xinerama" >&5
-$as_echo_n "checking for Xinerama... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $fl_pkgname" >&5
+$as_echo_n "checking for $fl_pkgname... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$Xinerama_CFLAGS"; then
-        pkg_cv_Xinerama_CFLAGS="$Xinerama_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$Xinerama_CFLAGS"; then
+    pkg_cv_Xinerama_CFLAGS="$Xinerama_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_Xinerama_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$Xinerama_LIBS"; then
-        pkg_cv_Xinerama_LIBS="$Xinerama_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$Xinerama_LIBS"; then
+    pkg_cv_Xinerama_LIBS="$Xinerama_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_Xinerama_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -29270,12 +29435,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        Xinerama_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+            Xinerama_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         else
-	        Xinerama_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+            Xinerama_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$Xinerama_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$Xinerama_PKG_ERRORS" >&5
 
 
       if test "x$ac_find_libraries" = "x"; then
@@ -29348,6 +29513,8 @@ $as_echo "no" >&6; }
       fi
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
       if test "x$ac_find_libraries" = "x"; then
                 if test "xXineramaQueryScreens" != "x"; then
@@ -29419,8 +29586,8 @@ $as_echo "no" >&6; }
       fi
 
 else
-	Xinerama_CFLAGS=$pkg_cv_Xinerama_CFLAGS
-	Xinerama_LIBS=$pkg_cv_Xinerama_LIBS
+    Xinerama_CFLAGS=$pkg_cv_Xinerama_CFLAGS
+    Xinerama_LIBS=$pkg_cv_Xinerama_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -29475,8 +29642,13 @@ if test "$wxUSE_DISPLAY" = "yes"; then
     fl_pkgname=`echo "Xxf86vm" | tr [:upper:] [:lower:]`
 
 
+
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
+    if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
 set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -29576,64 +29748,63 @@ fi
 
 fi
 if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+    _pkg_min_version=0.9.0
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
 $as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
+        PKG_CONFIG=""
+    fi
 fi 6> /dev/null
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for Xxf86vm" >&5
-$as_echo_n "checking for Xxf86vm... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $fl_pkgname" >&5
+$as_echo_n "checking for $fl_pkgname... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$Xxf86vm_CFLAGS"; then
-        pkg_cv_Xxf86vm_CFLAGS="$Xxf86vm_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$Xxf86vm_CFLAGS"; then
+    pkg_cv_Xxf86vm_CFLAGS="$Xxf86vm_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_Xxf86vm_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$Xxf86vm_LIBS"; then
-        pkg_cv_Xxf86vm_LIBS="$Xxf86vm_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$Xxf86vm_LIBS"; then
+    pkg_cv_Xxf86vm_LIBS="$Xxf86vm_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_Xxf86vm_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -29641,12 +29812,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        Xxf86vm_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+            Xxf86vm_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         else
-	        Xxf86vm_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+            Xxf86vm_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$Xxf86vm_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$Xxf86vm_PKG_ERRORS" >&5
 
 
       if test "x$ac_find_libraries" = "x"; then
@@ -29719,6 +29890,8 @@ $as_echo "no" >&6; }
       fi
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
       if test "x$ac_find_libraries" = "x"; then
                 if test "xXF86VidModeQueryExtension" != "x"; then
@@ -29790,8 +29963,8 @@ $as_echo "no" >&6; }
       fi
 
 else
-	Xxf86vm_CFLAGS=$pkg_cv_Xxf86vm_CFLAGS
-	Xxf86vm_LIBS=$pkg_cv_Xxf86vm_LIBS
+    Xxf86vm_CFLAGS=$pkg_cv_Xxf86vm_CFLAGS
+    Xxf86vm_LIBS=$pkg_cv_Xxf86vm_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -29841,8 +30014,13 @@ if test "$wxUSE_DETECT_SM" = "yes"; then
     fl_pkgname=`echo "SM" | tr [:upper:] [:lower:]`
 
 
+
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
+    if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
 set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -29942,64 +30120,63 @@ fi
 
 fi
 if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+    _pkg_min_version=0.9.0
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
 $as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
+        PKG_CONFIG=""
+    fi
 fi 6> /dev/null
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SM" >&5
-$as_echo_n "checking for SM... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $fl_pkgname" >&5
+$as_echo_n "checking for $fl_pkgname... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$SM_CFLAGS"; then
-        pkg_cv_SM_CFLAGS="$SM_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$SM_CFLAGS"; then
+    pkg_cv_SM_CFLAGS="$SM_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_SM_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$SM_LIBS"; then
-        pkg_cv_SM_LIBS="$SM_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$SM_LIBS"; then
+    pkg_cv_SM_LIBS="$SM_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_SM_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -30007,12 +30184,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        SM_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+            SM_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         else
-	        SM_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+            SM_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$SM_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$SM_PKG_ERRORS" >&5
 
 
       if test "x$ac_find_libraries" = "x"; then
@@ -30085,6 +30262,8 @@ $as_echo "no" >&6; }
       fi
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
       if test "x$ac_find_libraries" = "x"; then
                 if test "xSmcOpenConnection" != "x"; then
@@ -30156,8 +30335,8 @@ $as_echo "no" >&6; }
       fi
 
 else
-	SM_CFLAGS=$pkg_cv_SM_CFLAGS
-	SM_LIBS=$pkg_cv_SM_LIBS
+    SM_CFLAGS=$pkg_cv_SM_CFLAGS
+    SM_LIBS=$pkg_cv_SM_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -30263,8 +30442,13 @@ if test "x$ac_cv_header_GL_gl_h" = xyes; then :
     fl_pkgname=`echo "GL" | tr [:upper:] [:lower:]`
 
 
+
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
+    if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
 set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -30364,64 +30548,63 @@ fi
 
 fi
 if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+    _pkg_min_version=0.9.0
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
 $as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
+        PKG_CONFIG=""
+    fi
 fi 6> /dev/null
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GL" >&5
-$as_echo_n "checking for GL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $fl_pkgname" >&5
+$as_echo_n "checking for $fl_pkgname... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GL_CFLAGS"; then
-        pkg_cv_GL_CFLAGS="$GL_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GL_CFLAGS"; then
+    pkg_cv_GL_CFLAGS="$GL_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GL_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GL_LIBS"; then
-        pkg_cv_GL_LIBS="$GL_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GL_LIBS"; then
+    pkg_cv_GL_LIBS="$GL_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GL_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -30429,12 +30612,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+            GL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         else
-	        GL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+            GL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GL_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GL_PKG_ERRORS" >&5
 
 
       if test "x$ac_find_libraries" = "x"; then
@@ -30507,6 +30690,8 @@ $as_echo "no" >&6; }
       fi
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
       if test "x$ac_find_libraries" = "x"; then
                 if test "xglBegin" != "x"; then
@@ -30578,8 +30763,8 @@ $as_echo "no" >&6; }
       fi
 
 else
-	GL_CFLAGS=$pkg_cv_GL_CFLAGS
-	GL_LIBS=$pkg_cv_GL_LIBS
+    GL_CFLAGS=$pkg_cv_GL_CFLAGS
+    GL_LIBS=$pkg_cv_GL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -30624,49 +30809,49 @@ fi
                             if test "$wxUSE_GLCANVAS_EGL" != "no"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for EGL" >&5
-$as_echo_n "checking for EGL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for egl >= 1.5" >&5
+$as_echo_n "checking for egl >= 1.5... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$EGL_CFLAGS"; then
-        pkg_cv_EGL_CFLAGS="$EGL_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$EGL_CFLAGS"; then
+    pkg_cv_EGL_CFLAGS="$EGL_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.5\""; } >&5
   ($PKG_CONFIG --exists --print-errors "egl >= 1.5") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_EGL_CFLAGS=`$PKG_CONFIG --cflags "egl >= 1.5" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$EGL_LIBS"; then
-        pkg_cv_EGL_LIBS="$EGL_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$EGL_LIBS"; then
+    pkg_cv_EGL_LIBS="$EGL_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.5\""; } >&5
   ($PKG_CONFIG --exists --print-errors "egl >= 1.5") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_EGL_LIBS=`$PKG_CONFIG --libs "egl >= 1.5" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -30674,12 +30859,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "egl >= 1.5"`
+            EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "egl >= 1.5" 2>&1`
         else
-	        EGL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "egl >= 1.5"`
+            EGL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "egl >= 1.5" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$EGL_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$EGL_PKG_ERRORS" >&5
 
 
                                         { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
@@ -30687,14 +30872,16 @@ $as_echo "$as_me: EGL 1.5+ not available. Will use GLX." >&6;}
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                                         { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
 $as_echo "$as_me: EGL 1.5+ not available. Will use GLX." >&6;}
 
 
 else
-	EGL_CFLAGS=$pkg_cv_EGL_CFLAGS
-	EGL_LIBS=$pkg_cv_EGL_LIBS
+    EGL_CFLAGS=$pkg_cv_EGL_CFLAGS
+    EGL_LIBS=$pkg_cv_EGL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -30703,49 +30890,49 @@ $as_echo "yes" >&6; }
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WAYLAND_EGL" >&5
-$as_echo_n "checking for WAYLAND_EGL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wayland-egl" >&5
+$as_echo_n "checking for wayland-egl... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$WAYLAND_EGL_CFLAGS"; then
-        pkg_cv_WAYLAND_EGL_CFLAGS="$WAYLAND_EGL_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$WAYLAND_EGL_CFLAGS"; then
+    pkg_cv_WAYLAND_EGL_CFLAGS="$WAYLAND_EGL_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"wayland-egl\""; } >&5
   ($PKG_CONFIG --exists --print-errors "wayland-egl") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WAYLAND_EGL_CFLAGS=`$PKG_CONFIG --cflags "wayland-egl" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$WAYLAND_EGL_LIBS"; then
-        pkg_cv_WAYLAND_EGL_LIBS="$WAYLAND_EGL_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$WAYLAND_EGL_LIBS"; then
+    pkg_cv_WAYLAND_EGL_LIBS="$WAYLAND_EGL_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"wayland-egl\""; } >&5
   ($PKG_CONFIG --exists --print-errors "wayland-egl") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WAYLAND_EGL_LIBS=`$PKG_CONFIG --libs "wayland-egl" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -30753,21 +30940,23 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        WAYLAND_EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "wayland-egl"`
+            WAYLAND_EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "wayland-egl" 2>&1`
         else
-	        WAYLAND_EGL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "wayland-egl"`
+            WAYLAND_EGL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "wayland-egl" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$WAYLAND_EGL_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$WAYLAND_EGL_PKG_ERRORS" >&5
 
-	:
+    :
 
 elif test $pkg_failed = untried; then
-	:
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    :
 
 else
-	WAYLAND_EGL_CFLAGS=$pkg_cv_WAYLAND_EGL_CFLAGS
-	WAYLAND_EGL_LIBS=$pkg_cv_WAYLAND_EGL_LIBS
+    WAYLAND_EGL_CFLAGS=$pkg_cv_WAYLAND_EGL_CFLAGS
+    WAYLAND_EGL_LIBS=$pkg_cv_WAYLAND_EGL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -30794,8 +30983,13 @@ $as_echo "$as_me: wxGLCanvas will not have Wayland support" >&6;}
     fl_pkgname=`echo "MesaGL" | tr [:upper:] [:lower:]`
 
 
+
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
+    if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
 set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -30895,64 +31089,63 @@ fi
 
 fi
 if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+    _pkg_min_version=0.9.0
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
 $as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
+        PKG_CONFIG=""
+    fi
 fi 6> /dev/null
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MesaGL" >&5
-$as_echo_n "checking for MesaGL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $fl_pkgname" >&5
+$as_echo_n "checking for $fl_pkgname... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$MesaGL_CFLAGS"; then
-        pkg_cv_MesaGL_CFLAGS="$MesaGL_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$MesaGL_CFLAGS"; then
+    pkg_cv_MesaGL_CFLAGS="$MesaGL_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_MesaGL_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$MesaGL_LIBS"; then
-        pkg_cv_MesaGL_LIBS="$MesaGL_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$MesaGL_LIBS"; then
+    pkg_cv_MesaGL_LIBS="$MesaGL_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_MesaGL_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -30960,12 +31153,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        MesaGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
+            MesaGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         else
-	        MesaGL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
+            MesaGL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$fl_pkgname" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$MesaGL_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$MesaGL_PKG_ERRORS" >&5
 
 
       if test "x$ac_find_libraries" = "x"; then
@@ -31038,6 +31231,8 @@ $as_echo "no" >&6; }
       fi
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
       if test "x$ac_find_libraries" = "x"; then
                 if test "xglEnable" != "x"; then
@@ -31109,8 +31304,8 @@ $as_echo "no" >&6; }
       fi
 
 else
-	MesaGL_CFLAGS=$pkg_cv_MesaGL_CFLAGS
-	MesaGL_LIBS=$pkg_cv_MesaGL_LIBS
+    MesaGL_CFLAGS=$pkg_cv_MesaGL_CFLAGS
+    MesaGL_LIBS=$pkg_cv_MesaGL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -35327,49 +35522,49 @@ if test "$wxUSE_GTK" = 1; then
     if test "$USE_WIN32" != 1 -a "$USE_DARWIN" != 1; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for XKBCOMMON" >&5
-$as_echo_n "checking for XKBCOMMON... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for xkbcommon" >&5
+$as_echo_n "checking for xkbcommon... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$XKBCOMMON_CFLAGS"; then
-        pkg_cv_XKBCOMMON_CFLAGS="$XKBCOMMON_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$XKBCOMMON_CFLAGS"; then
+    pkg_cv_XKBCOMMON_CFLAGS="$XKBCOMMON_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xkbcommon\""; } >&5
   ($PKG_CONFIG --exists --print-errors "xkbcommon") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_XKBCOMMON_CFLAGS=`$PKG_CONFIG --cflags "xkbcommon" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$XKBCOMMON_LIBS"; then
-        pkg_cv_XKBCOMMON_LIBS="$XKBCOMMON_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$XKBCOMMON_LIBS"; then
+    pkg_cv_XKBCOMMON_LIBS="$XKBCOMMON_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xkbcommon\""; } >&5
   ($PKG_CONFIG --exists --print-errors "xkbcommon") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_XKBCOMMON_LIBS=`$PKG_CONFIG --libs "xkbcommon" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -35377,12 +35572,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        XKBCOMMON_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "xkbcommon"`
+            XKBCOMMON_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "xkbcommon" 2>&1`
         else
-	        XKBCOMMON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "xkbcommon"`
+            XKBCOMMON_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "xkbcommon" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$XKBCOMMON_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$XKBCOMMON_PKG_ERRORS" >&5
 
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libxkbcommon not found, key codes in key events may be incorrect" >&5
@@ -35390,14 +35585,16 @@ $as_echo "$as_me: WARNING: libxkbcommon not found, key codes in key events may b
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libxkbcommon not found, key codes in key events may be incorrect" >&5
 $as_echo "$as_me: WARNING: libxkbcommon not found, key codes in key events may be incorrect" >&2;}
 
 
 else
-	XKBCOMMON_CFLAGS=$pkg_cv_XKBCOMMON_CFLAGS
-	XKBCOMMON_LIBS=$pkg_cv_XKBCOMMON_LIBS
+    XKBCOMMON_CFLAGS=$pkg_cv_XKBCOMMON_CFLAGS
+    XKBCOMMON_LIBS=$pkg_cv_XKBCOMMON_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -35416,49 +35613,49 @@ if test "$wxUSE_SECRETSTORE" = "yes"; then
             if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBSECRET" >&5
-$as_echo_n "checking for LIBSECRET... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsecret-1" >&5
+$as_echo_n "checking for libsecret-1... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBSECRET_CFLAGS"; then
-        pkg_cv_LIBSECRET_CFLAGS="$LIBSECRET_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBSECRET_CFLAGS"; then
+    pkg_cv_LIBSECRET_CFLAGS="$LIBSECRET_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsecret-1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libsecret-1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBSECRET_CFLAGS=`$PKG_CONFIG --cflags "libsecret-1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBSECRET_LIBS"; then
-        pkg_cv_LIBSECRET_LIBS="$LIBSECRET_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBSECRET_LIBS"; then
+    pkg_cv_LIBSECRET_LIBS="$LIBSECRET_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsecret-1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libsecret-1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBSECRET_LIBS=`$PKG_CONFIG --libs "libsecret-1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -35466,12 +35663,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBSECRET_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libsecret-1"`
+            LIBSECRET_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsecret-1" 2>&1`
         else
-	        LIBSECRET_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libsecret-1"`
+            LIBSECRET_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsecret-1" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBSECRET_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$LIBSECRET_PKG_ERRORS" >&5
 
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret not found, wxSecretStore won't be available" >&5
@@ -35480,6 +35677,8 @@ $as_echo "$as_me: WARNING: libsecret not found, wxSecretStore won't be available
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret not found, wxSecretStore won't be available" >&5
 $as_echo "$as_me: WARNING: libsecret not found, wxSecretStore won't be available" >&2;}
@@ -35487,8 +35686,8 @@ $as_echo "$as_me: WARNING: libsecret not found, wxSecretStore won't be available
 
 
 else
-	LIBSECRET_CFLAGS=$pkg_cv_LIBSECRET_CFLAGS
-	LIBSECRET_LIBS=$pkg_cv_LIBSECRET_LIBS
+    LIBSECRET_CFLAGS=$pkg_cv_LIBSECRET_CFLAGS
+    LIBSECRET_LIBS=$pkg_cv_LIBSECRET_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -35516,49 +35715,49 @@ if test "$wxUSE_SPELLCHECK" = "yes"; then
     if test "$WXGTK3" = 1; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GSPELL" >&5
-$as_echo_n "checking for GSPELL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gspell-1" >&5
+$as_echo_n "checking for gspell-1... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GSPELL_CFLAGS"; then
-        pkg_cv_GSPELL_CFLAGS="$GSPELL_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GSPELL_CFLAGS"; then
+    pkg_cv_GSPELL_CFLAGS="$GSPELL_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gspell-1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gspell-1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GSPELL_CFLAGS=`$PKG_CONFIG --cflags "gspell-1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GSPELL_LIBS"; then
-        pkg_cv_GSPELL_LIBS="$GSPELL_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GSPELL_LIBS"; then
+    pkg_cv_GSPELL_LIBS="$GSPELL_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gspell-1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gspell-1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GSPELL_LIBS=`$PKG_CONFIG --libs "gspell-1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -35566,12 +35765,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GSPELL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gspell-1"`
+            GSPELL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gspell-1" 2>&1`
         else
-	        GSPELL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gspell-1"`
+            GSPELL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gspell-1" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GSPELL_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GSPELL_PKG_ERRORS" >&5
 
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gspell-1 not found, spell checking in wxTextCtrl won't be available" >&5
@@ -35580,6 +35779,8 @@ $as_echo "$as_me: WARNING: gspell-1 not found, spell checking in wxTextCtrl won'
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gspell-1 not found, spell checking in wxTextCtrl won't be available" >&5
 $as_echo "$as_me: WARNING: gspell-1 not found, spell checking in wxTextCtrl won't be available" >&2;}
@@ -35587,8 +35788,8 @@ $as_echo "$as_me: WARNING: gspell-1 not found, spell checking in wxTextCtrl won'
 
 
 else
-	GSPELL_CFLAGS=$pkg_cv_GSPELL_CFLAGS
-	GSPELL_LIBS=$pkg_cv_GSPELL_LIBS
+    GSPELL_CFLAGS=$pkg_cv_GSPELL_CFLAGS
+    GSPELL_LIBS=$pkg_cv_GSPELL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -35714,49 +35915,49 @@ if test "$wxUSE_SOUND" = "yes"; then
     if test "$wxUSE_LIBSDL" != "no"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL" >&5
-$as_echo_n "checking for SDL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for sdl2 >= 2.0.0" >&5
+$as_echo_n "checking for sdl2 >= 2.0.0... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$SDL_CFLAGS"; then
-        pkg_cv_SDL_CFLAGS="$SDL_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$SDL_CFLAGS"; then
+    pkg_cv_SDL_CFLAGS="$SDL_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sdl2 >= 2.0.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "sdl2 >= 2.0.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_SDL_CFLAGS=`$PKG_CONFIG --cflags "sdl2 >= 2.0.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$SDL_LIBS"; then
-        pkg_cv_SDL_LIBS="$SDL_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$SDL_LIBS"; then
+    pkg_cv_SDL_LIBS="$SDL_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"sdl2 >= 2.0.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "sdl2 >= 2.0.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_SDL_LIBS=`$PKG_CONFIG --libs "sdl2 >= 2.0.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -35764,12 +35965,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        SDL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "sdl2 >= 2.0.0"`
+            SDL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "sdl2 >= 2.0.0" 2>&1`
         else
-	        SDL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "sdl2 >= 2.0.0"`
+            SDL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "sdl2 >= 2.0.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$SDL_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$SDL_PKG_ERRORS" >&5
 
 
                     { $as_echo "$as_me:${as_lineno-$LINENO}: SDL 2.0 not available. Falling back to 1.2." >&5
@@ -36035,6 +36236,8 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                     { $as_echo "$as_me:${as_lineno-$LINENO}: SDL 2.0 not available. Falling back to 1.2." >&5
 $as_echo "$as_me: SDL 2.0 not available. Falling back to 1.2." >&6;}
@@ -36299,8 +36502,8 @@ rm -f core conftest.err conftest.$ac_objext \
 
 
 else
-	SDL_CFLAGS=$pkg_cv_SDL_CFLAGS
-	SDL_LIBS=$pkg_cv_SDL_LIBS
+    SDL_CFLAGS=$pkg_cv_SDL_CFLAGS
+    SDL_LIBS=$pkg_cv_SDL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -36335,49 +36538,49 @@ if test "$wxUSE_GTK" = 1; then
             fi
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTKPRINT" >&5
-$as_echo_n "checking for GTKPRINT... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $gtk_unix_print" >&5
+$as_echo_n "checking for $gtk_unix_print... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTKPRINT_CFLAGS"; then
-        pkg_cv_GTKPRINT_CFLAGS="$GTKPRINT_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTKPRINT_CFLAGS"; then
+    pkg_cv_GTKPRINT_CFLAGS="$GTKPRINT_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$gtk_unix_print\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$gtk_unix_print") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTKPRINT_CFLAGS=`$PKG_CONFIG --cflags "$gtk_unix_print" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTKPRINT_LIBS"; then
-        pkg_cv_GTKPRINT_LIBS="$GTKPRINT_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTKPRINT_LIBS"; then
+    pkg_cv_GTKPRINT_LIBS="$GTKPRINT_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$gtk_unix_print\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$gtk_unix_print") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GTKPRINT_LIBS=`$PKG_CONFIG --libs "$gtk_unix_print" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -36385,12 +36588,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTKPRINT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$gtk_unix_print"`
+            GTKPRINT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$gtk_unix_print" 2>&1`
         else
-	        GTKPRINT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$gtk_unix_print"`
+            GTKPRINT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$gtk_unix_print" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GTKPRINT_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GTKPRINT_PKG_ERRORS" >&5
 
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GTK printing support not found (GTK+ >= 2.10), library will use GNOME printing support or standard PostScript printing" >&5
@@ -36399,6 +36602,8 @@ $as_echo "$as_me: WARNING: GTK printing support not found (GTK+ >= 2.10), librar
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GTK printing support not found (GTK+ >= 2.10), library will use GNOME printing support or standard PostScript printing" >&5
 $as_echo "$as_me: WARNING: GTK printing support not found (GTK+ >= 2.10), library will use GNOME printing support or standard PostScript printing" >&2;}
@@ -36406,8 +36611,8 @@ $as_echo "$as_me: WARNING: GTK printing support not found (GTK+ >= 2.10), librar
 
 
 else
-	GTKPRINT_CFLAGS=$pkg_cv_GTKPRINT_CFLAGS
-	GTKPRINT_LIBS=$pkg_cv_GTKPRINT_LIBS
+    GTKPRINT_CFLAGS=$pkg_cv_GTKPRINT_CFLAGS
+    GTKPRINT_LIBS=$pkg_cv_GTKPRINT_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -36426,49 +36631,49 @@ fi
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNOMEVFS" >&5
-$as_echo_n "checking for GNOMEVFS... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gnome-vfs-2.0 >= 2.0" >&5
+$as_echo_n "checking for gnome-vfs-2.0 >= 2.0... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GNOMEVFS_CFLAGS"; then
-        pkg_cv_GNOMEVFS_CFLAGS="$GNOMEVFS_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GNOMEVFS_CFLAGS"; then
+    pkg_cv_GNOMEVFS_CFLAGS="$GNOMEVFS_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gnome-vfs-2.0 >= 2.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gnome-vfs-2.0 >= 2.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GNOMEVFS_CFLAGS=`$PKG_CONFIG --cflags "gnome-vfs-2.0 >= 2.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GNOMEVFS_LIBS"; then
-        pkg_cv_GNOMEVFS_LIBS="$GNOMEVFS_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GNOMEVFS_LIBS"; then
+    pkg_cv_GNOMEVFS_LIBS="$GNOMEVFS_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gnome-vfs-2.0 >= 2.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gnome-vfs-2.0 >= 2.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GNOMEVFS_LIBS=`$PKG_CONFIG --libs "gnome-vfs-2.0 >= 2.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -36476,12 +36681,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GNOMEVFS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gnome-vfs-2.0 >= 2.0"`
+            GNOMEVFS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gnome-vfs-2.0 >= 2.0" 2>&1`
         else
-	        GNOMEVFS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gnome-vfs-2.0 >= 2.0"`
+            GNOMEVFS_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gnome-vfs-2.0 >= 2.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GNOMEVFS_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GNOMEVFS_PKG_ERRORS" >&5
 
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&5
@@ -36490,6 +36695,8 @@ $as_echo "$as_me: WARNING: libgnomevfs not found, library won't be able to assoc
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&5
 $as_echo "$as_me: WARNING: libgnomevfs not found, library won't be able to associate MIME type" >&2;}
@@ -36497,8 +36704,8 @@ $as_echo "$as_me: WARNING: libgnomevfs not found, library won't be able to assoc
 
 
 else
-	GNOMEVFS_CFLAGS=$pkg_cv_GNOMEVFS_CFLAGS
-	GNOMEVFS_LIBS=$pkg_cv_GNOMEVFS_LIBS
+    GNOMEVFS_CFLAGS=$pkg_cv_GNOMEVFS_CFLAGS
+    GNOMEVFS_LIBS=$pkg_cv_GNOMEVFS_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -36517,49 +36724,49 @@ fi
             HAVE_LIBNOTIFY=0
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY" >&5
-$as_echo_n "checking for LIBNOTIFY... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnotify >= 0.7" >&5
+$as_echo_n "checking for libnotify >= 0.7... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBNOTIFY_CFLAGS"; then
-        pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBNOTIFY_CFLAGS"; then
+    pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.7\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libnotify >= 0.7") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBNOTIFY_CFLAGS=`$PKG_CONFIG --cflags "libnotify >= 0.7" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBNOTIFY_LIBS"; then
-        pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBNOTIFY_LIBS"; then
+    pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.7\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libnotify >= 0.7") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBNOTIFY_LIBS=`$PKG_CONFIG --libs "libnotify >= 0.7" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -36567,59 +36774,59 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libnotify >= 0.7"`
+            LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libnotify >= 0.7" 2>&1`
         else
-	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libnotify >= 0.7"`
+            LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libnotify >= 0.7" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBNOTIFY_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$LIBNOTIFY_PKG_ERRORS" >&5
 
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY" >&5
-$as_echo_n "checking for LIBNOTIFY... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnotify >= 0.4" >&5
+$as_echo_n "checking for libnotify >= 0.4... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBNOTIFY_CFLAGS"; then
-        pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBNOTIFY_CFLAGS"; then
+    pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.4\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libnotify >= 0.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBNOTIFY_CFLAGS=`$PKG_CONFIG --cflags "libnotify >= 0.4" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBNOTIFY_LIBS"; then
-        pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBNOTIFY_LIBS"; then
+    pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.4\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libnotify >= 0.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBNOTIFY_LIBS=`$PKG_CONFIG --libs "libnotify >= 0.4" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -36627,12 +36834,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libnotify >= 0.4"`
+            LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libnotify >= 0.4" 2>&1`
         else
-	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libnotify >= 0.4"`
+            LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libnotify >= 0.4" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBNOTIFY_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$LIBNOTIFY_PKG_ERRORS" >&5
 
 
                             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
@@ -36641,6 +36848,8 @@ $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use g
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
 $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
@@ -36648,61 +36857,63 @@ $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use g
 
 
 else
-	LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
-	LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
+    LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
+    LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVE_LIBNOTIFY=1
+    HAVE_LIBNOTIFY=1
 fi
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY" >&5
-$as_echo_n "checking for LIBNOTIFY... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnotify >= 0.4" >&5
+$as_echo_n "checking for libnotify >= 0.4... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBNOTIFY_CFLAGS"; then
-        pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBNOTIFY_CFLAGS"; then
+    pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.4\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libnotify >= 0.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBNOTIFY_CFLAGS=`$PKG_CONFIG --cflags "libnotify >= 0.4" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBNOTIFY_LIBS"; then
-        pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBNOTIFY_LIBS"; then
+    pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.4\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libnotify >= 0.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_LIBNOTIFY_LIBS=`$PKG_CONFIG --libs "libnotify >= 0.4" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -36710,12 +36921,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libnotify >= 0.4"`
+            LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libnotify >= 0.4" 2>&1`
         else
-	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libnotify >= 0.4"`
+            LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libnotify >= 0.4" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBNOTIFY_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$LIBNOTIFY_PKG_ERRORS" >&5
 
 
                             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
@@ -36724,6 +36935,8 @@ $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use g
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
 $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
@@ -36731,17 +36944,17 @@ $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use g
 
 
 else
-	LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
-	LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
+    LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
+    LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVE_LIBNOTIFY=1
+    HAVE_LIBNOTIFY=1
 fi
 
 
 else
-	LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
-	LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
+    LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
+    LIBNOTIFY_LIBS=$pkg_cv_LIBNOTIFY_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -38180,49 +38393,49 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
         if test "$wxUSE_XTEST" = "yes" ; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for XTST" >&5
-$as_echo_n "checking for XTST... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for xtst" >&5
+$as_echo_n "checking for xtst... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$XTST_CFLAGS"; then
-        pkg_cv_XTST_CFLAGS="$XTST_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$XTST_CFLAGS"; then
+    pkg_cv_XTST_CFLAGS="$XTST_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xtst\""; } >&5
   ($PKG_CONFIG --exists --print-errors "xtst") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_XTST_CFLAGS=`$PKG_CONFIG --cflags "xtst" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$XTST_LIBS"; then
-        pkg_cv_XTST_LIBS="$XTST_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$XTST_LIBS"; then
+    pkg_cv_XTST_LIBS="$XTST_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"xtst\""; } >&5
   ($PKG_CONFIG --exists --print-errors "xtst") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_XTST_LIBS=`$PKG_CONFIG --libs "xtst" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -38230,12 +38443,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        XTST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "xtst"`
+            XTST_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "xtst" 2>&1`
         else
-	        XTST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "xtst"`
+            XTST_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "xtst" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$XTST_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$XTST_PKG_ERRORS" >&5
 
 
                     if test "$WXGTK3" = 1; then
@@ -38247,6 +38460,8 @@ $as_echo "$as_me: WARNING: XTest not found, disabling wxUIActionSimulator" >&2;}
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                     if test "$WXGTK3" = 1; then
                                                                         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest not found, disabling wxUIActionSimulator" >&5
@@ -38257,8 +38472,8 @@ $as_echo "$as_me: WARNING: XTest not found, disabling wxUIActionSimulator" >&2;}
 
 
 else
-	XTST_CFLAGS=$pkg_cv_XTST_CFLAGS
-	XTST_LIBS=$pkg_cv_XTST_LIBS
+    XTST_CFLAGS=$pkg_cv_XTST_CFLAGS
+    XTST_LIBS=$pkg_cv_XTST_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -38763,49 +38978,49 @@ if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
         if test "$wxUSE_PRIVATE_FONTS" = "yes"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PRIVATE_FONTS" >&5
-$as_echo_n "checking for PRIVATE_FONTS... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for fontconfig >= 2.8.0 pangoft2 >= 1.38.0" >&5
+$as_echo_n "checking for fontconfig >= 2.8.0 pangoft2 >= 1.38.0... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PRIVATE_FONTS_CFLAGS"; then
-        pkg_cv_PRIVATE_FONTS_CFLAGS="$PRIVATE_FONTS_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$PRIVATE_FONTS_CFLAGS"; then
+    pkg_cv_PRIVATE_FONTS_CFLAGS="$PRIVATE_FONTS_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fontconfig >= 2.8.0 pangoft2 >= 1.38.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_PRIVATE_FONTS_CFLAGS=`$PKG_CONFIG --cflags "fontconfig >= 2.8.0 pangoft2 >= 1.38.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PRIVATE_FONTS_LIBS"; then
-        pkg_cv_PRIVATE_FONTS_LIBS="$PRIVATE_FONTS_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$PRIVATE_FONTS_LIBS"; then
+    pkg_cv_PRIVATE_FONTS_LIBS="$PRIVATE_FONTS_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fontconfig >= 2.8.0 pangoft2 >= 1.38.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_PRIVATE_FONTS_LIBS=`$PKG_CONFIG --libs "fontconfig >= 2.8.0 pangoft2 >= 1.38.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -38813,21 +39028,23 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        PRIVATE_FONTS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0"`
+            PRIVATE_FONTS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "fontconfig >= 2.8.0 pangoft2 >= 1.38.0" 2>&1`
         else
-	        PRIVATE_FONTS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "fontconfig >= 2.8.0 pangoft2 >= 1.38.0"`
+            PRIVATE_FONTS_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "fontconfig >= 2.8.0 pangoft2 >= 1.38.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PRIVATE_FONTS_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$PRIVATE_FONTS_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: run-time font loading won't be supported by wxFont" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: run-time font loading won't be supported by wxFont" >&5
 $as_echo "$as_me: WARNING: run-time font loading won't be supported by wxFont" >&2;}
 elif test $pkg_failed = untried; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: run-time font loading won't be supported by wxFont" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: run-time font loading won't be supported by wxFont" >&5
 $as_echo "$as_me: WARNING: run-time font loading won't be supported by wxFont" >&2;}
 else
-	PRIVATE_FONTS_CFLAGS=$pkg_cv_PRIVATE_FONTS_CFLAGS
-	PRIVATE_FONTS_LIBS=$pkg_cv_PRIVATE_FONTS_LIBS
+    PRIVATE_FONTS_CFLAGS=$pkg_cv_PRIVATE_FONTS_CFLAGS
+    PRIVATE_FONTS_LIBS=$pkg_cv_PRIVATE_FONTS_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -39097,49 +39314,49 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             if test "$WXGTK3" = 1; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
-$as_echo_n "checking for WEBKIT... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for webkit2gtk-4.1" >&5
+$as_echo_n "checking for webkit2gtk-4.1... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$WEBKIT_CFLAGS"; then
-        pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$WEBKIT_CFLAGS"; then
+    pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$WEBKIT_LIBS"; then
-        pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$WEBKIT_LIBS"; then
+    pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -39147,25 +39364,27 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "webkit2gtk-4.1"`
+            WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "webkit2gtk-4.1" 2>&1`
         else
-	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "webkit2gtk-4.1"`
+            WEBKIT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "webkit2gtk-4.1" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$WEBKIT_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$WEBKIT_PKG_ERRORS" >&5
 
 
                                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&5
 $as_echo "$as_me: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&2;}
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&5
 $as_echo "$as_me: WARNING: webkit2gtk-4.1 not found, falling back to webkit2gtk-4.0" >&2;}
 
 else
-	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
-	WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
+    WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
+    WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -39177,49 +39396,49 @@ fi
                 if test "$USE_WEBVIEW_WEBKIT2" = 0; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
-$as_echo_n "checking for WEBKIT... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for webkit2gtk-4.0" >&5
+$as_echo_n "checking for webkit2gtk-4.0... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$WEBKIT_CFLAGS"; then
-        pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$WEBKIT_CFLAGS"; then
+    pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$WEBKIT_LIBS"; then
-        pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$WEBKIT_LIBS"; then
+    pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.0" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -39227,25 +39446,27 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "webkit2gtk-4.0"`
+            WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "webkit2gtk-4.0" 2>&1`
         else
-	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "webkit2gtk-4.0"`
+            WEBKIT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "webkit2gtk-4.0" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$WEBKIT_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$WEBKIT_PKG_ERRORS" >&5
 
 
                                         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&5
 $as_echo "$as_me: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&2;}
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                                         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&5
 $as_echo "$as_me: WARNING: webkit2gtk-4.0 not found, falling back to webkitgtk" >&2;}
 
 else
-	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
-	WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
+    WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
+    WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -39263,49 +39484,49 @@ fi
                 fi
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WEBKIT" >&5
-$as_echo_n "checking for WEBKIT... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $webkitgtk >= 1.3.1" >&5
+$as_echo_n "checking for $webkitgtk >= 1.3.1... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$WEBKIT_CFLAGS"; then
-        pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$WEBKIT_CFLAGS"; then
+    pkg_cv_WEBKIT_CFLAGS="$WEBKIT_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$webkitgtk >= 1.3.1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$webkitgtk >= 1.3.1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "$webkitgtk >= 1.3.1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$WEBKIT_LIBS"; then
-        pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$WEBKIT_LIBS"; then
+    pkg_cv_WEBKIT_LIBS="$WEBKIT_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$webkitgtk >= 1.3.1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "$webkitgtk >= 1.3.1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "$webkitgtk >= 1.3.1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -39313,25 +39534,27 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$webkitgtk >= 1.3.1"`
+            WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$webkitgtk >= 1.3.1" 2>&1`
         else
-	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$webkitgtk >= 1.3.1"`
+            WEBKIT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$webkitgtk >= 1.3.1" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$WEBKIT_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$WEBKIT_PKG_ERRORS" >&5
 
 
                                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
 $as_echo "$as_me: WARNING: webkitgtk not found." >&2;}
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: webkitgtk not found." >&5
 $as_echo "$as_me: WARNING: webkitgtk not found." >&2;}
 
 else
-	WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
-	WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
+    WEBKIT_CFLAGS=$pkg_cv_WEBKIT_CFLAGS
+    WEBKIT_LIBS=$pkg_cv_WEBKIT_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -39759,49 +39982,49 @@ fi
 if test "$wxUSE_CAIRO" = "yes" -o "$wx_needs_cairo" = 1; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CAIRO" >&5
-$as_echo_n "checking for CAIRO... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for cairo >= 1.2" >&5
+$as_echo_n "checking for cairo >= 1.2... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CAIRO_CFLAGS"; then
-        pkg_cv_CAIRO_CFLAGS="$CAIRO_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$CAIRO_CFLAGS"; then
+    pkg_cv_CAIRO_CFLAGS="$CAIRO_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo >= 1.2\""; } >&5
   ($PKG_CONFIG --exists --print-errors "cairo >= 1.2") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_CAIRO_CFLAGS=`$PKG_CONFIG --cflags "cairo >= 1.2" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CAIRO_LIBS"; then
-        pkg_cv_CAIRO_LIBS="$CAIRO_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$CAIRO_LIBS"; then
+    pkg_cv_CAIRO_LIBS="$CAIRO_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo >= 1.2\""; } >&5
   ($PKG_CONFIG --exists --print-errors "cairo >= 1.2") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_CAIRO_LIBS=`$PKG_CONFIG --libs "cairo >= 1.2" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -39809,23 +40032,25 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        CAIRO_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cairo >= 1.2"`
+            CAIRO_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "cairo >= 1.2" 2>&1`
         else
-	        CAIRO_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cairo >= 1.2"`
+            CAIRO_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "cairo >= 1.2" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CAIRO_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$CAIRO_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 elif test $pkg_failed = untried; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
 else
-	CAIRO_CFLAGS=$pkg_cv_CAIRO_CFLAGS
-	CAIRO_LIBS=$pkg_cv_CAIRO_LIBS
+    CAIRO_CFLAGS=$pkg_cv_CAIRO_CFLAGS
+    CAIRO_LIBS=$pkg_cv_CAIRO_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -39974,49 +40199,49 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GST" >&5
-$as_echo_n "checking for GST... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" >&5
+$as_echo_n "checking for gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GST_CFLAGS"; then
-        pkg_cv_GST_CFLAGS="$GST_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GST_CFLAGS"; then
+    pkg_cv_GST_CFLAGS="$GST_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION gstreamer-player-\$GST_VERSION >= 1.7.2.1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GST_LIBS"; then
-        pkg_cv_GST_LIBS="$GST_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GST_LIBS"; then
+    pkg_cv_GST_LIBS="$GST_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION gstreamer-player-\$GST_VERSION >= 1.7.2.1\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -40024,12 +40249,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1"`
+            GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" 2>&1`
         else
-	        GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1"`
+            GST_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GST_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GST_PKG_ERRORS" >&5
 
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&5
@@ -40037,14 +40262,16 @@ $as_echo "$as_me: GStreamer 1.7.2+ not available. Not using GstPlayer and fallin
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&5
 $as_echo "$as_me: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&6;}
 
 
 else
-	GST_CFLAGS=$pkg_cv_GST_CFLAGS
-	GST_LIBS=$pkg_cv_GST_LIBS
+    GST_CFLAGS=$pkg_cv_GST_CFLAGS
+    GST_LIBS=$pkg_cv_GST_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -40057,49 +40284,49 @@ fi
         if test $wxUSE_GSTREAMER = "no"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GST" >&5
-$as_echo_n "checking for GST... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION" >&5
+$as_echo_n "checking for gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GST_CFLAGS"; then
-        pkg_cv_GST_CFLAGS="$GST_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GST_CFLAGS"; then
+    pkg_cv_GST_CFLAGS="$GST_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GST_LIBS"; then
-        pkg_cv_GST_LIBS="$GST_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GST_LIBS"; then
+    pkg_cv_GST_LIBS="$GST_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -40107,12 +40334,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION"`
+            GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION" 2>&1`
         else
-	        GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION"`
+            GST_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GST_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GST_PKG_ERRORS" >&5
 
 
                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
@@ -40123,6 +40350,8 @@ $as_echo "$as_me: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
 $as_echo "$as_me: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&2;}
@@ -40132,8 +40361,8 @@ $as_echo "$as_me: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&
 
 
 else
-	GST_CFLAGS=$pkg_cv_GST_CFLAGS
-	GST_LIBS=$pkg_cv_GST_LIBS
+    GST_CFLAGS=$pkg_cv_GST_CFLAGS
+    GST_LIBS=$pkg_cv_GST_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -40145,49 +40374,49 @@ fi
         if test $GST_VERSION_MINOR = "10"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GST" >&5
-$as_echo_n "checking for GST... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION" >&5
+$as_echo_n "checking for gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GST_CFLAGS"; then
-        pkg_cv_GST_CFLAGS="$GST_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GST_CFLAGS"; then
+    pkg_cv_GST_CFLAGS="$GST_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-plugins-base-\$GST_VERSION\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GST_LIBS"; then
-        pkg_cv_GST_LIBS="$GST_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GST_LIBS"; then
+    pkg_cv_GST_LIBS="$GST_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-plugins-base-\$GST_VERSION\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -40195,12 +40424,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION"`
+            GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION" 2>&1`
         else
-	        GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION"`
+            GST_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GST_PKG_ERRORS" >&5
+    # Put the nasty error message in config.log where it belongs
+    echo "$GST_PKG_ERRORS" >&5
 
 
                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 0.10 not available" >&5
@@ -40208,14 +40437,16 @@ $as_echo "$as_me: WARNING: GStreamer 0.10 not available" >&2;}
 
 
 elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 0.10 not available" >&5
 $as_echo "$as_me: WARNING: GStreamer 0.10 not available" >&2;}
 
 
 else
-	GST_CFLAGS=$pkg_cv_GST_CFLAGS
-	GST_LIBS=$pkg_cv_GST_LIBS
+    GST_CFLAGS=$pkg_cv_GST_CFLAGS
+    GST_LIBS=$pkg_cv_GST_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -43357,6 +43588,7 @@ done
 LIBOBJS=$ac_libobjs
 
 LTLIBOBJS=$ac_ltlibobjs
+
 
 
       ax_dir="3rdparty/pcre"
