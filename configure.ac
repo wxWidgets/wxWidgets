@@ -1759,8 +1759,7 @@ if test "$ac_cv_sys_largefile_source" != no; then
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
 fi
 
-dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
-WX_C_BIGENDIAN
+AC_C_BIGENDIAN
 
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.

@@ -251,44 +251,6 @@ AC_DEFUN([WX_CHECK_FUNCS],
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl a slightly better AC_C_BIGENDIAN macro which allows cross-compiling
-dnl ---------------------------------------------------------------------------
-
-AC_DEFUN([WX_C_BIGENDIAN],
-[AC_CACHE_CHECK([whether byte ordering is bigendian], ac_cv_c_bigendian,
-[ac_cv_c_bigendian=unknown
-# See if sys/param.h defines the BYTE_ORDER macro.
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
-#include <sys/param.h>], [
-#if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
- bogus endian macros
-#endif])], [# It does; now see whether it defined to BIG_ENDIAN or not.
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
-#include <sys/param.h>], [
-#if BYTE_ORDER != BIG_ENDIAN
- not big endian
-#endif])], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
-if test $ac_cv_c_bigendian = unknown; then
-AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>]],[[
-  /* Are we little or big endian?  From Harbison&Steele.  */
-  union
-  {
-    long l;
-    char c[sizeof (long)];
-  } u;
-  u.l = 1;
-  exit (u.c[sizeof (long) - 1] == 1);
-]])], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes], [ac_cv_c_bigendian=unknown])
-fi])
-if test $ac_cv_c_bigendian = unknown; then
-  AC_MSG_WARN([Assuming little-endian target machine - this may be overridden by adding the line "ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}" to config.cache file])
-fi
-if test $ac_cv_c_bigendian = yes; then
-  AC_DEFINE(WORDS_BIGENDIAN)
-fi
-])
-
-dnl ---------------------------------------------------------------------------
 dnl override AC_ARG_ENABLE/WITH to handle options defaults
 dnl ---------------------------------------------------------------------------
 
