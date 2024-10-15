@@ -2317,7 +2317,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
         if (middle->GetChildren().GetCount() > 0)
             cont->Add(middle, 1, wxEXPAND);
-             else
+        else
             delete middle;
 
 
