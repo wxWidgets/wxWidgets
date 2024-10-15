@@ -338,6 +338,11 @@ public:
         @param value
             String value of the header.
 
+        @note
+            The URLSession backend does not support multiple headers with the
+            same name. The last added header with a given name is used as a
+            fallback.
+
         @since 3.3.0
 
         @see SetHeader()
@@ -775,6 +780,11 @@ public:
         @param value
             String value of the header.
 
+        @note
+            The URLSession backend does not support multiple headers with the
+            same name. The last added header with a given name is used as a
+            fallback.
+
         @since 3.3.0
 
         @see SetHeader()
@@ -1073,6 +1083,11 @@ public:
 
         @param name Name of the header fields
 
+        @note
+            The URLSession backend does not support multiple headers with the
+            same name. The last added header with a given name is used as a
+            fallback.
+
         @since 3.3.0
 
         @see GetHeader()
@@ -1297,6 +1312,11 @@ public:
 
         @param name Name of the header
         @param value String value of the header
+
+        @note
+            The URLSession backend does not support multiple headers with the
+            same name. The last added header with a given name is used as a
+            fallback.
 
         @see SetCommonHeader()
     */

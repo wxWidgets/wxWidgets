@@ -442,8 +442,15 @@ TEST_CASE_METHOD(RequestFixture,
     Create("response-headers?freeform=wxWidgets&freeform=works!");
     Run();
     std::vector<wxString> headers = request.GetResponse().GetAllHeaderValues("freeform");
+
+#if wxUSE_WEBREQUEST_URLSESSION
+    // The httpbin service concatenates the given parameters.
+    REQUIRE( headers.size() == 1 );
+    CHECK( headers[0] == "wxWidgets, works!" );
+#else
     REQUIRE( headers.size() == 2 );
     CHECK( (headers[0] == "wxWidgets" && headers[1] == "works!") );
+#endif
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -457,8 +464,13 @@ TEST_CASE_METHOD(RequestFixture,
     request.AddHeader("Greeting", "wxWidgets!");
     Run();
 
+#if wxUSE_WEBREQUEST_URLSESSION
+    // Only the last header of a given name is sent by the URLSession backend.
+    CheckExpectedJSON( request.GetResponse().AsString(), "Greeting", "wxWidgets!" );
+#else
     // The httpbin service joins multiple headers with the same name using commas.
     CheckExpectedJSON( request.GetResponse().AsString(), "Greeting", "Hello,wxWidgets!" );
+#endif
 }
 
 TEST_CASE_METHOD(RequestFixture,
