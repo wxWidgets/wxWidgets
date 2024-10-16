@@ -194,6 +194,7 @@ static std::vector<wxString> wxWinHTTPQueryAllHeaderStrings(HINTERNET hRequest, 
     while ( ::GetLastError() != ERROR_WINHTTP_HEADER_NOT_FOUND )
     {
         DWORD bufferLen = 0;
+        DWORD currentIndex = nextIndex;
         wxWinHTTP::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName, nullptr, &bufferLen, &nextIndex);
         if ( ::GetLastError() == ERROR_INSUFFICIENT_BUFFER )
         {
@@ -212,6 +213,9 @@ static std::vector<wxString> wxWinHTTPQueryAllHeaderStrings(HINTERNET hRequest, 
                 result.push_back(resBuf);
             }
         }
+
+        if ( nextIndex <= currentIndex )
+            break;
     }
 
     return result;
