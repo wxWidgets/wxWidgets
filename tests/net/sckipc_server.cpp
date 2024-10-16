@@ -254,7 +254,7 @@ wxString IPCTestConnection::HandleThreadRequestCounting(const wxString& item)
     int lastval = -2;
 
     bool err = false;
-    wxString s, err_string;
+    wxString err_string;
 
     switch (thread_number)
     {

@@ -165,7 +165,7 @@ void IPCTestConnection::HandleThreadAdviseCounting(const wxString& advise_string
     int lastval = INT_MIN; // default to causing an error below
 
     bool err = false;
-    wxString s, err_string;
+    wxString err_string;
 
     if ( g_show_message_timing )
         std::cout << advise_string << '\n' << std::flush;
