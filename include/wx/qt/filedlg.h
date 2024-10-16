@@ -8,6 +8,11 @@
 #ifndef _WX_QT_FILEDLG_H_
 #define _WX_QT_FILEDLG_H_
 
+// Use MSW implementation to support custom controls in modern-style dialogs.
+#ifdef __WINDOWS__
+#include <wx/msw/filedlg.h>
+#else
+
 class QFileDialog;
 
 class WXDLLIMPEXP_CORE wxFileDialog : public wxFileDialogBase
@@ -54,5 +59,7 @@ private:
 
     wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
 };
+
+#endif // __WINDOWS__
 
 #endif // _WX_QT_FILEDLG_H_
