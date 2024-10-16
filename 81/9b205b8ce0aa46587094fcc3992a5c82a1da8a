@@ -1,0 +1,1 @@
+wxAll: Add support for multiple headers with same name in wxWebRequest (Stefan Dinkelacker, #24878).
