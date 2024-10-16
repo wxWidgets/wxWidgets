@@ -609,6 +609,72 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// Search features for wxTextCtrl
+// ----------------------------------------------------------------------------
+
+// search options
+// --------------
+struct wxTextSearch
+{
+    explicit wxTextSearch(const wxString& text = wxString{}) : m_searchValue(text) {}
+
+    enum class Direction
+    {
+        Down,
+        Up
+    };
+
+    wxTextSearch& SearchValue(const wxString& value)
+    {
+        m_searchValue = value;
+        return *this;
+    }
+
+    wxTextSearch& MatchCase(bool matchCase = true)
+    {
+        m_matchCase = matchCase;
+        return *this;
+    }
+
+    wxTextSearch& MatchWholeWord(const bool matchWholeWord = true)
+    {
+        m_wholeWord = matchWholeWord;
+        return *this;
+    }
+
+    wxTextSearch& SearchDirection(const Direction direction)
+    {
+        m_direction = direction;
+        return *this;
+    }
+
+    wxTextSearch& Start(const long startPosition)
+    {
+        m_startingPosition = startPosition;
+        return *this;
+    }
+
+    wxString              m_searchValue;
+    long                  m_startingPosition = -1;
+    bool                  m_matchCase = false;
+    bool                  m_wholeWord = false;
+    Direction m_direction = Direction::Down;
+};
+
+// results from a search operation
+// -------------------------------
+struct wxTextSearchResult
+{
+    explicit operator bool() const { return m_start != wxNOT_FOUND; }
+    explicit wxTextSearchResult(long startPos, long endPos) :
+        m_start(startPos), m_end(endPos) {}
+    wxTextSearchResult() = default;
+
+    long m_start = wxNOT_FOUND;
+    long m_end = wxNOT_FOUND;
+};
+
+// ----------------------------------------------------------------------------
 // wxTextAreaBase: multiline text control specific methods
 // ----------------------------------------------------------------------------
 
@@ -697,6 +763,15 @@ public:
     // true, the port must override these functions to really implement them.
     virtual wxString GetRTFValue() const;
     virtual void SetRTFValue(const wxString& val);
+
+    // Searches for text.
+    // Base class implementations simply asserts,
+    // the port must override these functions to really implement them.
+    virtual wxTextSearchResult SearchText(const wxTextSearch& WXUNUSED(search)) const
+    {
+        wxFAIL_MSG("Text search not implemented for the current platform.");
+        return wxTextSearchResult();
+    }
 
 protected:
     // implementation of loading/saving

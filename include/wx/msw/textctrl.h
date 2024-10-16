@@ -44,6 +44,7 @@ public:
     virtual wxString GetRTFValue() const override;
     virtual void SetRTFValue(const wxString& val) override;
     virtual bool IsRTFSupported() override { return IsRich(); }
+    virtual wxTextSearchResult SearchText(const wxTextSearch& search) const override;
 #endif // wxUSE_RICHEDIT
 
     virtual bool IsEmpty() const;
