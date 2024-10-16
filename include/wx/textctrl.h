@@ -669,7 +669,7 @@ struct wxTextSearchResult
     explicit wxTextSearchResult(long startPos, long endPos) :
         m_start(startPos), m_end(endPos) {}
     wxTextSearchResult() : m_start(wxNOT_FOUND), m_end(wxNOT_FOUND) {}
-
+wxTextSearchResult() = default;
     long m_start = wxNOT_FOUND;
     long m_end = wxNOT_FOUND;
 };
