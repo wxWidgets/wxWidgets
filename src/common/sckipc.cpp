@@ -7,6 +7,8 @@
 //                                  (callbacks deprecated)    Mar 2000
 //              Vadim Zeitlin (added support for Unix sockets) Apr 2002
 //                            (use buffering, many fixes/cleanup) Oct 2008
+//              JP Mattia (use messages, fix reporting of errors
+//                         and use in multithreading) Sep 2024
 // Created:     1993
 // Copyright:   (c) Julian Smart 1993
 //              (c) Guilhem Lavaux 1997, 1998
