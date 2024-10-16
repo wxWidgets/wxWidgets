@@ -25,6 +25,7 @@
 #include "wx/aui/floatpane.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/aui/auibar.h"
+#include "wx/aui/serializer.h"
 #include "wx/mdi.h"
 #include "wx/wupdlock.h"
 
@@ -1338,6 +1339,205 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         Update();
 
     return true;
+}
+
+// These helper functions are used by SaveLayout() and LoadLayout() below, as
+// we save the panes and docks geometries using DIPs on all platforms in order
+// to ensure that they're restored correctly if the display DPI changes between
+// saving and restoring the layout even on the platforms not using DIPs.
+namespace
+{
+
+void MakeDIP(wxWindow* w, wxPoint& pos)
+{
+    pos = w->ToDIP(pos);
+}
+
+void MakeDIP(wxWindow* w, wxSize& size)
+{
+    size = w->ToDIP(size);
+}
+
+void MakeDIP(wxWindow* w, wxRect& rect)
+{
+    rect = wxRect{w->ToDIP(rect.GetPosition()), w->ToDIP(rect.GetSize())};
+}
+
+void MakeLogical(wxWindow* w, wxPoint& pos)
+{
+    pos = w->FromDIP(pos);
+}
+
+void MakeLogical(wxWindow* w, wxSize& size)
+{
+    size = w->FromDIP(size);
+}
+
+void MakeLogical(wxWindow* w, wxRect& rect)
+{
+    rect = wxRect{w->FromDIP(rect.GetPosition()), w->FromDIP(rect.GetSize())};
+}
+
+} // anonymous namespace
+
+void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
+{
+    serializer.BeforeSave();
+
+    if ( !m_panes.empty() )
+    {
+        serializer.BeforeSavePanes();
+
+        for ( const auto& pane : m_panes )
+        {
+            auto paneDIP = pane;
+
+            MakeDIP(m_frame, paneDIP.best_size);
+            MakeDIP(m_frame, paneDIP.min_size);
+            MakeDIP(m_frame, paneDIP.max_size);
+
+            MakeDIP(m_frame, paneDIP.floating_pos);
+            MakeDIP(m_frame, paneDIP.floating_size);
+
+            MakeDIP(m_frame, paneDIP.rect);
+
+            serializer.SavePane(paneDIP);
+        }
+
+        serializer.AfterSavePanes();
+    }
+
+    if ( !m_docks.empty() )
+    {
+        serializer.BeforeSaveDocks();
+
+        for ( const auto& dock : m_docks )
+        {
+            auto dockDIP = dock;
+
+            MakeDIP(m_frame, dockDIP.rect);
+
+            // Update dock sizes to ensure that restoring this layout later
+            // restores the same geometry as is used now: if we didn't do it,
+            // panes would have their initial sizes.
+            switch ( dock.dock_direction )
+            {
+                case wxAUI_DOCK_TOP:
+                case wxAUI_DOCK_BOTTOM:
+                    dockDIP.size = dock.rect.height;
+                    break;
+
+                case wxAUI_DOCK_LEFT:
+                case wxAUI_DOCK_RIGHT:
+                    dockDIP.size = dock.rect.width;
+                    break;
+
+                case wxAUI_DOCK_CENTER:
+                    // Not clear what to do for this one, but it shouldn't
+                    // matter as its size is determined by what remains
+                    // available after positioning the rest of the elements, so
+                    // don't do anything.
+                    break;
+
+                case wxAUI_DOCK_NONE:
+                    wxFAIL_MSG("invalid dock direction");
+                    break;
+            }
+
+            serializer.SaveDock(dockDIP);
+        }
+
+        serializer.AfterSaveDocks();
+    }
+
+    serializer.AfterSave();
+}
+
+void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
+{
+    deserializer.BeforeLoad();
+
+    // Note that we don't reset m_hasMaximized here but use a local variable so
+    // as to avoid modifying m_hasMaximized in case one of the deserializer
+    // functions called below throws an exception.
+    bool hasMaximized = false;
+
+    // Also keep local variables for the existing (and possibly updated) panes
+    // and the new ones for the same reason.
+    wxAuiPaneInfoArray panes = m_panes;
+
+    struct NewPane
+    {
+        // In C++11 this ctor is required.
+        NewPane(wxWindow* window_, const wxAuiPaneInfo& info_)
+            : window(window_), info(info_)
+        {
+        }
+
+        wxWindow* window = nullptr;
+        wxAuiPaneInfo info;
+    };
+    std::vector<NewPane> newPanes;
+
+    for ( const auto& paneDIP : deserializer.LoadPanes() )
+    {
+        auto pane = paneDIP;
+
+        MakeLogical(m_frame, pane.best_size);
+        MakeLogical(m_frame, pane.min_size);
+        MakeLogical(m_frame, pane.max_size);
+
+        MakeLogical(m_frame, pane.floating_pos);
+        MakeLogical(m_frame, pane.floating_size);
+
+        MakeLogical(m_frame, pane.rect);
+
+        if ( pane.IsMaximized() )
+            hasMaximized = true;
+
+        // Find the pane with the same name in the existing layout.
+        bool found = false;
+        for ( auto& existingPane : panes )
+        {
+            if ( existingPane.name == pane.name )
+            {
+                // Update the existing pane with the restored layout.
+                existingPane.SafeSet(pane);
+
+                found = true;
+                break;
+            }
+        }
+
+        // This pane couldn't be found in the existing layout, let deserializer
+        // create a new window for it if desired, otherwise just ignore it.
+        if ( !found )
+        {
+            if ( const auto w = deserializer.CreatePaneWindow(pane) )
+                newPanes.emplace_back(w, pane);
+        }
+    }
+
+    wxAuiDockInfoArray docks;
+    for ( const auto& dockDIP : deserializer.LoadDocks() )
+    {
+        auto dock = dockDIP;
+
+        MakeLogical(m_frame, dock.rect);
+
+        docks.push_back(dock);
+    }
+
+    // After loading everything successfully, do update the internal variables.
+    m_hasMaximized = hasMaximized;
+    m_panes.swap(panes);
+
+    for ( const auto& newPane : newPanes )
+        AddPane(newPane.window, newPane.info);
+
+    m_docks.swap(docks);
+
+    deserializer.AfterLoad();
 }
 
 void wxAuiManager::GetPanePositionsAndSizes(wxAuiDockInfo& dock,

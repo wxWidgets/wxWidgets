@@ -372,6 +372,19 @@ public:
                     int insert_level = wxAUI_INSERT_PANE);
 
     /**
+        Load the layout information saved by SaveLayout().
+
+        The implementation of wxAuiDeserializer object passed to this function
+        should be consistent with that of the serializer used to save the
+        layout. See @ref page_samples_aui for an example of using serializer
+        saving the layout in XML format and matching deserializer restoring the
+        layout from it.
+
+        @since 3.3.0
+     */
+    void LoadLayout(wxAuiDeserializer& deserializer) const;
+
+    /**
         LoadPaneInfo() is similar to LoadPerspective, with the exception that it
         only loads information about a single pane.
 
@@ -388,6 +401,10 @@ public:
 
     /**
         Loads a saved perspective.
+
+        This function is used to load layouts previously saved with
+        SavePerspective(), use LoadLayout() to load a layout saved with
+        SaveLayout().
 
         A perspective is the layout state of an AUI managed window.
 
@@ -423,6 +440,19 @@ public:
     void RestoreMaximizedPane();
 
     /**
+        Save the layout information using the provided object.
+
+        This function allows to use a custom @a serializer to save the layout
+        information in any format, e.g. @ref page_samples_aui shows how to save
+        it in XML format.
+
+        See wxAuiSerializer documentation for more details.
+
+        @since 3.3.0
+     */
+    void SaveLayout(wxAuiSerializer& serializer) const;
+
+    /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
         saves information about a single pane.
 
@@ -440,6 +470,9 @@ public:
     /**
         Saves the entire user interface layout into an encoded wxString, which
         can then be stored by the application (probably using wxConfig).
+
+        @note You may prefer to use SaveLayout() instead of this function for
+            more flexibility.
 
         @see LoadPerspective
         @see LoadPaneInfo

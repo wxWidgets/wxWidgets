@@ -86,6 +86,9 @@
     <ClInclude Include="..\..\include\wx\aui\framemanager.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\aui\serializer.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\aui\tabart.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

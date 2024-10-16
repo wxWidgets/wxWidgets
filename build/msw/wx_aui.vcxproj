@@ -931,6 +931,7 @@
     <ClInclude Include="..\..\include\wx\aui\tabartmsw.h" />
     <ClInclude Include="..\..\include\wx\aui\barartmsw.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_aui.h" />
+    <ClInclude Include="..\..\include\wx\aui\serializer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
