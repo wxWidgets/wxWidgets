@@ -61,6 +61,8 @@ public:
 
     wxString GetHeader(const wxString& name) const override;
 
+    std::vector<wxString> GetAllHeaderValues(const wxString& name) const override;
+
     int GetStatus() const override;
 
     wxString GetStatusText() const override;

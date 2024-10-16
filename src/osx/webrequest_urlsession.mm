@@ -190,8 +190,10 @@ wxWebRequestURLSession::DoPrepare(void (^completionHandler)(NSData*, NSURLRespon
     // Set request headers
     for (wxWebRequestHeaderMap::const_iterator it = m_headers.begin(); it != m_headers.end(); ++it)
     {
-        [req setValue:wxCFStringRef(it->second).AsNSString() forHTTPHeaderField:
-         wxCFStringRef(it->first).AsNSString()];
+        // TODO: URLSession does not support multiple headers with the same name.
+        //       Fall back to last header with given name.
+        [req setValue:wxCFStringRef(it->second.back()).AsNSString() forHTTPHeaderField:
+        wxCFStringRef(it->first).AsNSString()];
     }
 
     if (m_dataSize)
@@ -432,6 +434,13 @@ wxString wxWebResponseURLSession::GetHeader(const wxString& name) const
         return wxCFStringRefFromGet(value).AsString();
     else
         return wxString();
+}
+
+std::vector<wxString> wxWebResponseURLSession::GetAllHeaderValues(const wxString& name) const
+{
+    // TODO: URLSession does not support multiple headers with the same name.
+    //       Fall back to last header with given name.
+    return { GetHeader(name) };
 }
 
 int wxWebResponseURLSession::GetStatus() const

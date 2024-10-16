@@ -222,7 +222,7 @@ size_t wxWebResponseCURL::CURLOnHeader(const char * buffer, size_t size)
         wxString hdrValue;
         wxString hdrName = hdr.BeforeFirst(':', &hdrValue).Strip(wxString::trailing);
         hdrName.MakeUpper();
-        m_headers[hdrName] = hdrValue.Strip(wxString::leading);
+        m_headers[hdrName].push_back(hdrValue.Strip(wxString::leading));
     }
 
     return size;
@@ -270,10 +270,21 @@ wxString wxWebResponseCURL::GetURL() const
 wxString wxWebResponseCURL::GetHeader(const wxString& name) const
 {
     wxWebRequestHeaderMap::const_iterator it = m_headers.find(name.Upper());
+    if ( it != m_headers.end() && !it->second.empty() )
+        return it->second.back();
+
+    return wxString();
+}
+
+std::vector<wxString> wxWebResponseCURL::GetAllHeaderValues(const wxString& name) const
+{
+    std::vector<wxString> result;
+
+    wxWebRequestHeaderMap::const_iterator it = m_headers.find(name.Upper());
     if ( it != m_headers.end() )
-        return it->second;
-    else
-        return wxString();
+        result = it->second;
+
+    return result;
 }
 
 int wxWebResponseCURL::GetStatus() const
@@ -445,10 +456,13 @@ wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
     for ( wxWebRequestHeaderMap::const_iterator it = m_headers.begin();
         it != m_headers.end(); ++it )
     {
-        // TODO: We need to implement RFC 2047 encoding here instead of blindly
-        //       sending UTF-8 which is against the standard.
-        wxString hdrStr = wxString::Format("%s: %s", it->first, it->second);
-        m_headerList = curl_slist_append(m_headerList, hdrStr.utf8_str());
+        for ( const wxString& value : it->second )
+        {
+            // TODO: We need to implement RFC 2047 encoding here instead of blindly
+            //       sending UTF-8 which is against the standard.
+            wxString hdrStr = wxString::Format("%s: %s", it->first, value);
+            m_headerList = curl_slist_append(m_headerList, hdrStr.utf8_str());
+        }
     }
     wxCURLSetOpt(m_handle, CURLOPT_HTTPHEADER, m_headerList);
 
