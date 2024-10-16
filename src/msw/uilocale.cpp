@@ -113,6 +113,11 @@ WXDLLIMPEXP_BASE wxString wxGetMSWDateTimeFormat(wxLocaleInfo index)
 {
     wxString format;
     wxString localeName = wxUILocale::GetCurrent().GetName();
+    if (localeName.IsSameAs("C"))
+    {
+        localeName = "en-US";
+    }
+
     const wchar_t* name = localeName.wc_str();
     LCTYPE lctype = wxGetLCTYPEFormatFromLocalInfo(index);
     if (lctype != 0)
