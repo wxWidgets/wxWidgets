@@ -466,9 +466,10 @@ public:
     virtual void SetMaxLength(unsigned long len) override
     {
         // Notice that setMaxLength() takes an int and not an unsigned int
-        if ( len == 0 || len > std::numeric_limits<int>::max() )
+        const unsigned long maxlen = std::numeric_limits<int>::max();
+        if ( len == 0 || len > maxlen )
         {
-            len = std::numeric_limits<int>::max();
+            len = maxlen;
         }
 
         m_edit->setMaxLength(len);
