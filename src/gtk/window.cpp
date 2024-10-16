@@ -374,6 +374,7 @@ public:
     int                  m_activeGestures;
     wxPoint              m_lastTouchPoint;
     GdkEventSequence*    m_touchSequence;
+    bool                 m_rawTouchEvents;
 
     GtkGesture* m_vertical_pan_gesture;
     GtkGesture* m_horizontal_pan_gesture;
@@ -1705,18 +1706,14 @@ bool AreGTKEventsBlocked()
 
 } // anonymous namespace
 
-// all event handlers must have C linkage as they're called from GTK+ C code
-extern "C"
-{
-
 //-----------------------------------------------------------------------------
 // "button_press_event"
 //-----------------------------------------------------------------------------
 
-static gboolean
-gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
-                                  GdkEventButton *gdk_event,
-                                  wxWindowGTK *win )
+gboolean
+wxGTKImpl::WindowButtonPressCallback(GtkWidget* WXUNUSED_IN_GTK3(widget),
+                                     GdkEventButton* gdk_event,
+                                     wxWindowGTK* win, bool synthesized)
 {
     /*
       GTK does not set the button1 mask when the event comes from the left
@@ -1811,6 +1808,7 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
 
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
+    event.m_synthesized = synthesized;
 
     AdjustEventButtonState(event);
 
@@ -1851,14 +1849,27 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
     return FALSE;
 }
 
+extern "C"
+{
+
+static gboolean
+gtk_window_button_press_callback( GtkWidget* widget,
+                                  GdkEventButton *gdk_event,
+                                  wxWindowGTK *win )
+{
+    return wxGTKImpl::WindowButtonPressCallback(widget, gdk_event, win);
+}
+
+} // extern "C"
+
 //-----------------------------------------------------------------------------
 // "button_release_event"
 //-----------------------------------------------------------------------------
 
-static gboolean
-gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
-                                    GdkEventButton *gdk_event,
-                                    wxWindowGTK *win )
+gboolean
+wxGTKImpl::WindowButtonReleaseCallback(GtkWidget* WXUNUSED(widget),
+                                       GdkEventButton* gdk_event,
+                                       wxWindowGTK* win, bool synthesized)
 {
     wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
 
@@ -1900,6 +1911,7 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
+    event.m_synthesized = synthesized;
 
     AdjustEventButtonState(event);
 
@@ -1920,6 +1932,19 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 
     return FALSE;
 }
+
+extern "C"
+{
+
+static gboolean
+gtk_window_button_release_callback( GtkWidget *widget,
+                                    GdkEventButton *gdk_event,
+                                    wxWindowGTK *win )
+{
+    return wxGTKImpl::WindowButtonReleaseCallback(widget, gdk_event, win);
+}
+
+} // extern "C"
 
 //-----------------------------------------------------------------------------
 
@@ -1958,10 +1983,10 @@ static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
 // "motion_notify_event"
 //-----------------------------------------------------------------------------
 
-static gboolean
-gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
-                                   GdkEventMotion *gdk_event,
-                                   wxWindowGTK *win )
+gboolean
+wxGTKImpl::WindowMotionCallback(GtkWidget* WXUNUSED(widget),
+                                       GdkEventMotion* gdk_event,
+                                       wxWindowGTK* win, bool synthesized)
 {
     wxPROCESS_EVENT_ONCE(GdkEventMotion, gdk_event);
 
@@ -1972,6 +1997,7 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
 
     wxMouseEvent event( wxEVT_MOTION );
     InitMouseEvent(win, event, gdk_event);
+    event.m_synthesized = synthesized;
 
     if ( g_captureWindow )
     {
@@ -2061,6 +2087,19 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     return ret;
 }
 
+extern "C"
+{
+
+static gboolean
+gtk_window_motion_notify_callback( GtkWidget * widget,
+                                   GdkEventMotion *gdk_event,
+                                   wxWindowGTK *win )
+{
+    return wxGTKImpl::WindowMotionCallback(widget, gdk_event, win);
+}
+
+} // extern "C"
+
 //-----------------------------------------------------------------------------
 // "scroll_event" (mouse wheel event)
 //-----------------------------------------------------------------------------
@@ -2075,6 +2114,9 @@ static void AdjustRangeValue(GtkRange* range, double step)
         gtk_range_set_value(range, value);
     }
 }
+
+extern "C"
+{
 
 static gboolean
 scroll_event(GtkWidget* widget, GdkEventScroll* gdk_event, wxWindow* win)
@@ -3673,9 +3715,9 @@ wxEmulateLeftDownEvent(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* wi
         return;
 
     wxEventButtonFromEventTouch(&gdk_event_button, gdk_event);
-    gtk_window_button_press_callback( widget,
-                                      &gdk_event_button,
-                                      win );
+    wxGTKImpl::WindowButtonPressCallback(widget,
+                                         &gdk_event_button,
+                                         win, true);
 }
 
 void
@@ -3687,9 +3729,9 @@ wxEmulateLeftUpEvent(GtkWidget* widget,GdkEventTouch* gdk_event, wxWindow* win)
         return;
 
     wxEventButtonFromEventTouch(&gdk_event_button, gdk_event);
-    gtk_window_button_release_callback( widget,
-                                        &gdk_event_button,
-                                        win );
+    wxGTKImpl::WindowButtonReleaseCallback(widget,
+                                           &gdk_event_button,
+                                           win, true);
 }
 
 void
@@ -3701,18 +3743,59 @@ wxEmulateMotionEvent(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
         return;
 
     wxEventMotionFromEventTouch(&gdk_event_motion, gdk_event);
-    gtk_window_motion_notify_callback(widget, &gdk_event_motion, win);
+    wxGTKImpl::WindowMotionCallback(widget,
+                                    &gdk_event_motion,
+                                    win, true);
 }
 
 } // anonymous namespace
 
 extern "C" {
-static void
+static gboolean
 touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
 {
     wxWindowGesturesData* const data = wxWindowGestures::FromObject(win);
     if ( !data )
-        return;
+        return false;
+
+    if ( data->m_rawTouchEvents)
+    {
+        wxEventType type;
+
+        switch(gdk_event->type)
+        {
+        case GDK_TOUCH_BEGIN:
+            type = wxEVT_TOUCH_BEGIN;
+            break;
+
+        case GDK_TOUCH_UPDATE:
+            type = wxEVT_TOUCH_MOVE;
+            break;
+
+        case GDK_TOUCH_END:
+            type = wxEVT_TOUCH_END;
+            break;
+
+        case GDK_TOUCH_CANCEL:
+            type = wxEVT_TOUCH_CANCEL;
+            break;
+
+        default:
+            type = wxEVT_NULL;
+        }
+        if (type != wxEVT_NULL)
+        {
+            wxMultiTouchEvent event(win->GetId(), type);
+
+            event.SetEventObject(win);
+            event.SetPosition(wxPoint2DDouble(gdk_event->x, gdk_event->y));
+            event.SetSequenceId(wxTouchSequenceId(gdk_event->sequence));
+            event.SetPrimary(gdk_event->emulating_pointer);
+
+            if (win->GTKProcessEvent(event))
+                return true;
+        }
+    }
 
     switch ( gdk_event->type )
     {
@@ -3808,6 +3891,8 @@ touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
         default:
         break;
     }
+
+    return true;
 }
 }
 
@@ -3821,6 +3906,7 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
     m_allowedGestures = 0;
     m_activeGestures = 0;
     m_touchSequence = nullptr;
+    m_rawTouchEvents = false;
 
     if ( eventsMask & wxTOUCH_VERTICAL_PAN_GESTURE )
     {
@@ -3935,7 +4021,16 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
         m_long_press_gesture = nullptr;
     }
 
-    wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
+    if ( eventsMask & wxTOUCH_RAW_EVENTS )
+    {
+        if ( gtk_check_version(3, 4, 0) == nullptr )
+        {
+            gtk_widget_add_events(widget, GDK_TOUCH_MASK);
+        }
+
+        eventsMask &= ~wxTOUCH_RAW_EVENTS;
+        m_rawTouchEvents = true;
+    }
 
     // GDK_TOUCHPAD_GESTURE_MASK was added in 3.18, but we can just define it
     // ourselves if we use an earlier version when compiling.
@@ -3946,6 +4041,8 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
     {
         gtk_widget_add_events(widget, GDK_TOUCHPAD_GESTURE_MASK);
     }
+
+    wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
 
     g_signal_connect (widget, "touch-event",
                       G_CALLBACK(touch_callback), win);
@@ -3958,6 +4055,7 @@ void wxWindowGesturesData::Free()
     g_clear_object(&m_zoom_gesture);
     g_clear_object(&m_rotate_gesture);
     g_clear_object(&m_long_press_gesture);
+    m_rawTouchEvents = false;
 
     // We don't current remove GDK_TOUCHPAD_GESTURE_MASK as this can't be done
     // for a window as long as it's realized, and this might still be the case
