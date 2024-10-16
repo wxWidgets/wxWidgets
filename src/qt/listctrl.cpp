@@ -1448,7 +1448,6 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     {
         if ( width == wxLIST_AUTOSIZE_USEHEADER )
         {
-            const auto header = GetQListTreeWidget()->header();
             const QHeaderView::ResizeMode oldResizeMode = header->sectionResizeMode(col);
 
             header->setSectionResizeMode(col, QHeaderView::ResizeToContents);
