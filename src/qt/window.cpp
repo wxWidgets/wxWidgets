@@ -1727,7 +1727,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
 
     // Use screen position as the event might originate from a different
     // Qt window than this one.
-    wxPoint mousePos = ScreenToClient(wxQtConvertPoint(event->globalPos()));
+    const wxPoint mousePos = ScreenToClient(wxQtConvertPoint(event->globalPos()));
 
     wxMouseEvent e( wxType );
     e.SetEventObject(this);
@@ -1740,42 +1740,92 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
     // Keyboard modifiers
     wxQtFillKeyboardModifiers( event->modifiers(), &e );
 
-    bool handled = ProcessWindowEvent( e );
+    bool processed = ProcessWindowEvent( e );
 
-    // Determine if mouse is inside the widget
-    bool mouseInside = true;
-    if ( mousePos.x < 0 || mousePos.x > handler->width() ||
-        mousePos.y < 0 || mousePos.y > handler->height() )
-        mouseInside = false;
-
-    if ( e.GetEventType() == wxEVT_MOTION )
+    if ( wxType == wxEVT_MOTION && QtGetParentWidget() == handler )
     {
         /* Qt doesn't emit leave/enter events while the mouse is grabbed
         * and it automatically grabs the mouse while dragging. In that cases
         * we emulate the enter and leave events */
 
-        // Mouse enter/leaves
-        if ( m_mouseInside != mouseInside )
-        {
-            if ( mouseInside )
-                e.SetEventType( wxEVT_ENTER_WINDOW );
-            else
-                e.SetEventType( wxEVT_LEAVE_WINDOW );
-
-            ProcessWindowEvent( e );
-        }
+        static QWidget* s_targetHandler = nullptr;
 
         QtSendSetCursorEvent(this, mousePos);
+
+        const auto qtMousePos = wxQtConvertPoint(mousePos);
+
+        // Determine if mouse is inside the widget, see below...
+        bool mouseInside = handler->rect().contains(qtMousePos);
+
+        if ( !s_targetHandler && mouseInside )
+        {
+            s_targetHandler = handler;
+        }
+
+        if ( QApplication::mouseButtons() != Qt::NoButton )
+        {
+            if ( mouseInside )
+            {
+                // Quoting wx docs: the mouse is considered to be inside the window if
+                // it is in the window client area and not inside one of its children.
+                auto rgn = handler->childrenRegion();
+                if ( rgn.rectCount() > 1 )
+                {
+                    rgn = QRegion(handler->rect()) - rgn;
+                    mouseInside = rgn.contains(qtMousePos);
+                }
+            }
+
+            // Generate mouse enter/leaves for target handler only
+            if ( m_mouseInside != mouseInside && s_targetHandler == handler )
+            {
+                e.SetEventType(mouseInside ? wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW);
+
+                processed = ProcessWindowEvent( e ) && processed;
+
+            }
+        }
+        else // No mouse button is pressed
+        {
+            s_targetHandler = nullptr; // reset
+        }
+
+        m_mouseInside = mouseInside;
     }
 
-    m_mouseInside = mouseInside;
-
-    return handled;
+    return processed;
 }
 
 bool wxWindowQt::QtHandleEnterEvent ( QWidget *handler, QEvent *event )
 {
-    wxMouseEvent e( event->type() == QEvent::Enter ? wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW );
+    static QWidget* s_handlerParent = nullptr;
+
+    const bool isEnterEvent = event->type() == QEvent::Enter;
+
+    // Notice that Qt doesn't generate Enter/Leave events for parent widget when
+    // the mouse enters/leaves a child widget. And for consistency with the wx
+    // documentation, we should generate the events manually for s_handlerParent.
+    if ( s_handlerParent != handler )
+    {
+        s_handlerParent = handler->parentWidget();
+
+        if ( s_handlerParent )
+        {
+            QEvent qtEvent(isEnterEvent ? QEvent::Leave : QEvent::Enter);
+            QApplication::sendEvent(s_handlerParent, &qtEvent);
+        }
+    }
+    else // s_handlerParent == handler
+    {
+        if ( isEnterEvent && !s_handlerParent->underMouse() )
+        {
+            return false;
+        }
+    }
+
+    s_handlerParent = nullptr;
+
+    wxMouseEvent e( isEnterEvent ? wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW );
     e.m_clickCount = 0;
     e.SetPosition( wxQtConvertPoint( handler->mapFromGlobal( QCursor::pos() ) ) );
     e.SetEventObject(this);
