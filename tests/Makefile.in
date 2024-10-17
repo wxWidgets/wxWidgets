@@ -251,6 +251,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_windowtest.o \
 	test_gui_dialogtest.o \
 	test_gui_clone.o \
+	test_gui_enterleave.o \
 	test_gui_evtlooptest.o \
 	test_gui_propagation.o \
 	test_gui_keyboard.o \
@@ -1164,6 +1165,9 @@ test_gui_dialogtest.o: $(srcdir)/controls/dialogtest.cpp $(TEST_GUI_ODEP)
 
 test_gui_clone.o: $(srcdir)/events/clone.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/clone.cpp
+
+test_gui_enterleave.o: $(srcdir)/events/enterleave.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/enterleave.cpp
 
 test_gui_evtlooptest.o: $(srcdir)/events/evtlooptest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/evtlooptest.cpp

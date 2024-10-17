@@ -261,6 +261,7 @@
             controls/windowtest.cpp
             controls/dialogtest.cpp
             events/clone.cpp
+            events/enterleave.cpp
             <!--
                 Duplicate this file here to test GUI event loops too.
              -->
