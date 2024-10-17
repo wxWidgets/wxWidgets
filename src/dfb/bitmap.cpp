@@ -248,7 +248,7 @@ DFBSurfacePixelFormat DepthToFormat(int depth)
 // is typically wxUint32 for RGB32, wxUint16 for RGB16 &c) as we don't need
 // access to the individual pixel components -- and so it's not suitable for
 // the pixel formats with pixel size not equal to 8, 16 or 32
-template <typename T, int White, int Black>
+template <typename T, T White, T Black>
 void
 CopyBits(int width,
          int height,

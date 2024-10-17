@@ -2,7 +2,6 @@
 // Name:        wx/generic/splitter.h
 // Purpose:     wxSplitterWindow class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -13,6 +12,7 @@
 
 #include "wx/window.h"                      // base class declaration
 #include "wx/containr.h"                    // wxControlContainer
+#include "wx/overlay.h"
 
 class WXDLLIMPEXP_FWD_CORE wxSplitterEvent;
 
@@ -226,6 +226,15 @@ public:
     // all any more.
     wxDEPRECATED_INLINE( void SetSashSize(int WXUNUSED(width)), return; )
 
+    // Get the sash position that was last used before Unsplit() was called.
+    // Horizontal and vertical components correspond to the split in the
+    // corresponding direction, and are 0 if the splitter hadn't been split in
+    // this direction at all.
+    wxPoint GetLastSplitPosition() const;
+
+    // Set the default initial sash position to use when the splitter is split.
+    void SetLastSplitPosition(const wxPoint& pos);
+
 protected:
     // event handlers
 #if defined(__WXMSW__) || defined(__WXMAC__)
@@ -289,9 +298,10 @@ protected:
     wxPoint     m_ptStart;      // mouse position when dragging started
     int         m_sashStart;    // sash position when dragging started
     int         m_minimumPaneSize;
+    wxPoint     m_lastSplitPosition;
     wxCursor    m_sashCursorWE;
     wxCursor    m_sashCursorNS;
-    wxPen      *m_sashTrackerPen;
+    wxOverlay   m_overlay;
 
     // when in live mode, set this to true to resize children in idle
     bool        m_needUpdating:1;

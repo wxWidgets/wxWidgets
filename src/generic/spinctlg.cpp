@@ -2,7 +2,6 @@
 // Name:        src/generic/spinctlg.cpp
 // Purpose:     implements wxSpinCtrl as a composite control
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29.01.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

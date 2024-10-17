@@ -2,7 +2,6 @@
 // Name:        dnd.cpp
 // Purpose:     Drag and drop sample
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04/01/98
 // Copyright:
 // Licence:     wxWindows licence

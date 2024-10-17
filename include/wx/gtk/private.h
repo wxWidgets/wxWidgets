@@ -2,7 +2,6 @@
 // Name:        wx/gtk/private.h
 // Purpose:     wxGTK private macros, functions &c
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.03.02
 // Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

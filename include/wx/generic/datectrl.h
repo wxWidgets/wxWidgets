@@ -2,7 +2,6 @@
 // Name:        wx/generic/datectrl.h
 // Purpose:     generic wxDatePickerCtrl implementation
 // Author:      Andreas Pflug
-// Modified by:
 // Created:     2005-01-19
 // Copyright:   (c) 2005 Andreas Pflug <pgadmin@pse-consulting.de>
 // Licence:     wxWindows licence

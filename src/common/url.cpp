@@ -2,7 +2,6 @@
 // Name:        src/common/url.cpp
 // Purpose:     URL parser
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     20/07/1997
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence
@@ -357,7 +356,7 @@ wxInputStream *wxURL::GetInputStream()
 #if wxUSE_PROTOCOL_HTTP
 void wxURL::SetDefaultProxy(const wxString& url_proxy)
 {
-    if ( !url_proxy )
+    if ( url_proxy.empty() )
     {
         if ( ms_proxyDefault )
         {
@@ -392,7 +391,7 @@ void wxURL::SetDefaultProxy(const wxString& url_proxy)
 
 void wxURL::SetProxy(const wxString& url_proxy)
 {
-    if ( !url_proxy )
+    if ( url_proxy.empty() )
     {
         if ( m_proxy && m_proxy != ms_proxyDefault )
         {

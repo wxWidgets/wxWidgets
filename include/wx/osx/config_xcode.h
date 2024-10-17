@@ -2,7 +2,6 @@
 // Name:        wx/osx/config_xcode.h
 // Purpose:     configurations for xcode builds
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     29.04.04
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -31,7 +30,6 @@
 #define WX_SOCKLEN_T socklen_t
 #define SOCKOPTLEN_T socklen_t
 #define WX_STATFS_T struct statfs
-#define wxTYPE_SA_HANDLER int
 #define WX_GMTOFF_IN_TM 1
 #define HAVE_PW_GECOS 1
 #define HAVE_DLOPEN 1

@@ -2,7 +2,6 @@
 // Name:        wx/joystick.h
 // Purpose:     wxJoystick base header
 // Author:      wxWidgets Team
-// Modified by:
 // Created:
 // Copyright:   (c) wxWidgets Team
 // Licence:     wxWindows licence

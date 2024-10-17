@@ -65,11 +65,27 @@ wxEventType wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED;
     A panel adds a border and label to a group of controls, and can be
     minimised (either automatically to conserve space, or manually by the user).
 
-    Non ribbon controls can be placed on a panel using wxSizers to manage
+    Non-ribbon controls can be placed on a panel using wxSizers to manage
     layout. Panel size is governed by the sizer's minimum calculated size and
-    the parent wxRibbonPage's dimensions. For functional and aesthetic reasons
-    it is recommended that ribbon and non ribbon controls are not mixed in one
+    the parent wxRibbonPage's dimensions. For functional and aesthetic reasons,
+    it is recommended that ribbon and non-ribbon controls are not mixed in one
     panel.
+
+    A wxRibbonPage can show or hide its panels to offer a dynamic experience
+    for the end user. For example, a page can hide certain panels and show others
+    when the user interacts with other elements in the application. As an example
+    of toggling the visibility of a panel:
+
+    @code
+        wxRibbonPanel* panel = m_ribbon->GetPage(0)->GetPanelById(ID_EDITOR_PANEL);
+        if ( panel != nullptr )
+        {
+            panel->Show(!panel->IsShown());
+        }
+        // Update the UI
+        m_ribbon->Realise();
+        m_ribbon->Layout();
+    @endcode
 
     @see wxRibbonPage
 

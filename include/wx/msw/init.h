@@ -2,7 +2,6 @@
 // Name:        wx/msw/init.h
 // Purpose:     Windows-specific wxEntry() overload
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

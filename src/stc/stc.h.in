@@ -641,7 +641,7 @@ public:
 #ifndef SWIG
     wxStyledTextEvent(const wxStyledTextEvent& event);
 #endif
-    ~wxStyledTextEvent() {}
+    ~wxStyledTextEvent() = default;
 
     void SetPosition(int pos)             { m_position = pos; }
     void SetKey(int k)                    { m_key = k; }

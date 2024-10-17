@@ -2,7 +2,6 @@
 // Name:        wx/caret.h
 // Purpose:     wxCaretBase class - the interface of wxCaret
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     23.05.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -57,7 +56,7 @@ public:
     }
 
     // a virtual dtor has been provided since this class has virtual members
-    virtual ~wxCaretBase() { }
+    virtual ~wxCaretBase() = default;
 
     // Create() functions - same as ctor but returns the success code
     // --------------------------------------------------------------

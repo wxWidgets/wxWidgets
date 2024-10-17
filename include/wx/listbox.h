@@ -2,7 +2,6 @@
 // Name:        wx/listbox.h
 // Purpose:     wxListBox class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.10.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -38,7 +37,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxListBoxNameStr[];
 class WXDLLIMPEXP_CORE wxListBoxBase : public wxControlWithItems
 {
 public:
-    wxListBoxBase() { }
+    wxListBoxBase() = default;
     virtual ~wxListBoxBase();
 
     void InsertItems(unsigned int nItems, const wxString *items, unsigned int pos)

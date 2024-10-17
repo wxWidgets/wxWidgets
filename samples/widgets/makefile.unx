@@ -220,5 +220,22 @@ widgets_widgets.o: ./widgets.cpp
 .PHONY: all install uninstall clean
 
 
+widgets_native_wrapper.o: ./native_wrapper.mm ./native.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(OBJCXXFLAGS) ./native_wrapper.mm
+
+ifeq ($(WX_PORT),osx_cocoa)
+WIDGETS_OBJECTS += widgets_native_wrapper.o
+
+widgets: widgets_native_wrapper.o
+endif
+ifeq ($(WX_PORT),gtk2)
+widgets_native.o: CXXFLAGS=$(shell pkg-config --cflags gtk+-2.0)
+widgets: LDFLAGS=$(shell pkg-config --libs gtk+-2.0)
+endif
+ifeq ($(WX_PORT),gtk3)
+widgets_native.o: CXXFLAGS=$(shell pkg-config --cflags gtk+-3.0)
+widgets: LDFLAGS=$(shell pkg-config --libs gtk+-3.0)
+endif
+
 # Dependencies tracking:
 -include ./*.d

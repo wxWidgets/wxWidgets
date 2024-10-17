@@ -2,7 +2,6 @@
 // Name:        wx/gauge.h
 // Purpose:     wxGauge interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.02.01
 // Copyright:   (c) 1996-2001 wxWidgets team
 // Licence:     wxWindows licence

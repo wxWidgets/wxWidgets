@@ -45,7 +45,7 @@ enum GlobalAdjustFlags
         Enable region adjustment for all controls.
 
         If AJ_DisableRegionAdjust and AJ_AlwaysRegionAdjust are both specified,
-        current implemetation will ignore AJ_DisableRegionAdjust.
+        current implementation will ignore AJ_DisableRegionAdjust.
     */
     AJ_AlwaysRegionAdjust =  1 << 1,
 
@@ -189,9 +189,9 @@ enum AdjustFlags
     the code is short, quite readable and well commented, please read the codes
     before any modification.
 
-    If you need the class to do something sepcial for you, consider introducing
+    If you need the class to do something special for you, consider introducing
     a new flag and implement it in them. For an operation performed on multiple
-    controls, implemente its logic in CaptureAll(), otherwise in the private
+    controls, implement its logic in CaptureAll(), otherwise in the private
     member Capture().
 
     @subsection tag_yield_issue wxYield Issues
@@ -222,7 +222,7 @@ public:
             It's one of or a combination of GlobalAdjustFlags, to disable /
             enable some auto-adjustment for all controls.
         @param margin
-            It's the margin around every control in the sreenshots.
+            It's the margin around every control in the screenshots.
     */
     AutoCaptureMechanism(wxNotebook *notebook,
                          int flag = AJ_NormalAll,
@@ -231,7 +231,7 @@ public:
     ~AutoCaptureMechanism() { }
 
     /**
-        Register a control and perform specifid auto adjustments.
+        Register a control and perform specified auto adjustments.
 
         @param ctrl
             The pointer to the control to be taken a screenshot.
@@ -243,7 +243,7 @@ public:
             If you end up with an a smaller or deflected screenshot, use
             AJ_RegionAdjust.
 
-            If you want to caputure the "drop-down" state of a "drop-down"
+            If you want to capture the "drop-down" state of a "drop-down"
             control, use AJ_Dropdown.
 
             If you want to present different states of a control in one

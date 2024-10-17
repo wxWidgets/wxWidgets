@@ -2,7 +2,6 @@
 // Name:        wx/unix/utilsx11.h
 // Purpose:     Miscellaneous X11 functions
 // Author:      Mattia Barbon, Vaclav Slavik, Vadim Zeitlin
-// Modified by:
 // Created:     25.03.02
 // Copyright:   (c) wxWidgets team
 //              (c) 2010 Vadim Zeitlin

@@ -25,7 +25,7 @@ Files
 * functions.cmake
     * contains various wxWidgets specific functions and macros used throughout
       the CMake files
-    * Every function should contain a short description of it's parameters as
+    * Every function should contain a short description of its parameters as
       a comment before the function/macro
 * install.cmake
     * Handles definitions for the `install` and `uninstall` target

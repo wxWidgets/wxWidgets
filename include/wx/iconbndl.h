@@ -2,7 +2,6 @@
 // Name:        wx/iconbndl.h
 // Purpose:     wxIconBundle
 // Author:      Mattia barbon
-// Modified by:
 // Created:     23.03.02
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence

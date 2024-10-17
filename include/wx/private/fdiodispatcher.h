@@ -59,7 +59,7 @@ public:
     // -1 if an error occurred
     virtual int Dispatch(int timeout = TIMEOUT_INFINITE) = 0;
 
-    virtual ~wxFDIODispatcher() { }
+    virtual ~wxFDIODispatcher() = default;
 };
 
 //entry for wxFDIOHandlerMap
@@ -105,7 +105,7 @@ public:
     // unregister descriptor previously registered with RegisterFD()
     virtual bool UnregisterFD(int fd) override;
 
-    virtual ~wxMappedFDIODispatcher() { }
+    virtual ~wxMappedFDIODispatcher() = default;
 
 protected:
     // the fd -> handler map containing all the registered handlers

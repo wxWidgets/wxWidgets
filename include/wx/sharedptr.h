@@ -110,12 +110,24 @@ public:
     bool unique()   const    { return (m_ref ? m_ref->m_count == 1 : true); }
     long use_count() const   { return (m_ref ? (long)m_ref->m_count : 0); }
 
+    template <class U>
+    friend bool operator == (wxSharedPtr<T> const &a, wxSharedPtr<U> const &b )
+    {
+        return a.get() == b.get();
+    }
+
+    template <class U>
+    friend bool operator != (wxSharedPtr<T> const &a, wxSharedPtr<U> const &b )
+    {
+        return a.get() != b.get();
+    }
+
 private:
 
     struct reftype
     {
         reftype(T* ptr) : m_ptr(ptr), m_count(1) {}
-        virtual ~reftype() {}
+        virtual ~reftype() = default;
         virtual void delete_ptr() { delete m_ptr; }
 
         T*          m_ptr;
@@ -153,17 +165,5 @@ private:
         }
     }
 };
-
-template <class T, class U>
-bool operator == (wxSharedPtr<T> const &a, wxSharedPtr<U> const &b )
-{
-    return a.get() == b.get();
-}
-
-template <class T, class U>
-bool operator != (wxSharedPtr<T> const &a, wxSharedPtr<U> const &b )
-{
-    return a.get() != b.get();
-}
 
 #endif // _WX_SHAREDPTR_H_

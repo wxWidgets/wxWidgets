@@ -15,7 +15,7 @@ class QGridLayout;
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
 public:
-    wxRadioBox();
+    wxRadioBox() = default;
 
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
@@ -79,17 +79,18 @@ public:
     virtual void SetSelection(int n) override;
     virtual int GetSelection() const override;
 
-    virtual QWidget *GetHandle() const override;
+    virtual void SetLabel(const wxString &label) override;
+    virtual wxString GetLabel() const override;
+
+    // The 'visual' group box:
+    QGroupBox* GetQGroupBox() const;
 
 private:
-    // The 'visual' group box:
-    QGroupBox *m_qtGroupBox;
-
     // Handles the mutual exclusion of buttons:
-    QButtonGroup *m_qtButtonGroup;
+    QButtonGroup *m_qtButtonGroup = nullptr;
 
     // Autofit layout for buttons (either vert. or horiz.):
-    QGridLayout *m_qtGridLayout;
+    QGridLayout *m_qtGridLayout = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };

@@ -2,7 +2,6 @@
 // Name:        src/x11/palette.cpp
 // Purpose:     wxPalette
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -125,10 +124,6 @@ wxPalette::wxPalette()
 wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
     Create(n, red, green, blue);
-}
-
-wxPalette::~wxPalette()
-{
 }
 
 int wxPalette::GetColoursCount() const

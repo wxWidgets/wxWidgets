@@ -282,6 +282,13 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+#ifdef __WXGTK__
+    // Many version of wxGTK generate spurious diagnostic messages when
+    // destroying wxNotebook (or removing pages from it), allow wxWidgets to
+    // suppress them.
+    GTKAllowDiagnosticsControl();
+#endif // __WXGTK__
+
     // This will be used in the title of the preferences dialog under some
     // platforms, don't leave it as default "Preferences" because this would
     // result in rather strange "Preferences Preferences" title.

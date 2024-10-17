@@ -26,7 +26,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxCollapsibleHeaderCtrlNameStr[];
 class WXDLLIMPEXP_CORE wxCollapsibleHeaderCtrlBase : public wxControl
 {
 public:
-    wxCollapsibleHeaderCtrlBase() { }
+    wxCollapsibleHeaderCtrlBase() = default;
 
     wxCollapsibleHeaderCtrlBase(wxWindow *parent,
         wxWindowID id,
@@ -82,7 +82,7 @@ class WXDLLIMPEXP_CORE wxCollapsibleHeaderCtrl
     : public wxGenericCollapsibleHeaderCtrl
 {
 public:
-    wxCollapsibleHeaderCtrl() { }
+    wxCollapsibleHeaderCtrl() = default;
 
     wxCollapsibleHeaderCtrl(wxWindow *parent,
         wxWindowID id,

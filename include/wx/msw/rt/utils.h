@@ -64,7 +64,7 @@ class WXDLLIMPEXP_CORE TempStringRef
 public:
     HSTRING Get() const { return m_hstring; }
 
-    operator HSTRING() const { return m_hstring; };
+    operator HSTRING() const { return m_hstring; }
 
     TempStringRef(const wxString& str);
 

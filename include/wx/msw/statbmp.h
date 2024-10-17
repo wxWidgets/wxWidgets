@@ -2,7 +2,6 @@
 // Name:        wx/msw/statbmp.h
 // Purpose:     wxStaticBitmap class for wxMSW
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

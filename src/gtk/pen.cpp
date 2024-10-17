@@ -115,11 +115,6 @@ wxPen::wxPen(const wxPenInfo& info)
     m_refData = new wxPenRefData(info);
 }
 
-wxPen::~wxPen()
-{
-    // m_refData unrefed in ~wxObject
-}
-
 wxGDIRefData *wxPen::CreateGDIRefData() const
 {
     return new wxPenRefData;

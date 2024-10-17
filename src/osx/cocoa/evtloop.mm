@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/evtloop.mm
 // Purpose:     implementation of wxEventLoop for OS X
 // Author:      Vadim Zeitlin, Stefan Csomor
-// Modified by:
 // Created:     2006-01-12
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -522,6 +521,7 @@ void wxGUIEventLoop::EndModalSession()
         m_modalSession = nil;
         if ( m_dummyWindow )
         {
+            [m_dummyWindow close];
             [m_dummyWindow release];
             m_dummyWindow = nil;
         }
@@ -546,8 +546,11 @@ void wxGUIEventLoop::EndModalSession()
         
         if ( m_dummyWindow != element.dummyWindow )
         {
-            if ( element.dummyWindow )
-                [element.dummyWindow release];
+            if ( m_dummyWindow )
+            {
+                [m_dummyWindow close];
+                [m_dummyWindow release];
+            }
 
             m_dummyWindow = element.dummyWindow;
         }

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2022-06-28 03:37+0300\n"
+"PO-Revision-Date: 2023-07-06 08:52+0300\n"
 "Last-Translator: Kaya Zeren <translator@zeron.net>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/klyok/wxwidgets/"
 "language/tr_TR/)\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: ../include/wx/defs.h:2592
 msgid "All files (*.*)|*.*"
@@ -1031,7 +1031,7 @@ msgstr "\"%s\" hata ayıklama rapor dosyası silinemedi"
 #: ../src/common/debugrpt.cpp:240
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "\"%s\" hata ayıklama rapor klasörü temizlenemedi"
+msgstr "\"%s\" hata ayıklama raporu klasörü temizlenemedi"
 
 #: ../src/common/debugrpt.cpp:515
 msgid "process context description"
@@ -1101,35 +1101,34 @@ msgstr "Kay&det"
 
 #: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
 msgid "&Discard changes"
-msgstr ""
+msgstr "&Değişiklikleri yok say"
 
 #: ../src/common/docview.cpp:524
-#, fuzzy
 msgid "Do&n't close"
-msgstr "Kaydedilmesin"
+msgstr "&Kapatılmasın"
 
 #: ../src/common/docview.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "%s üzerinde yapılan değişiklikleri kaydetmek istiyor musunuz?"
+msgstr ""
+"Kapatmadan önce %s üzerinde yapılan değişiklikleri kaydetmek istiyor musunuz?"
 
 #: ../src/common/docview.cpp:560
-#, fuzzy
 msgid "The document must be closed."
-msgstr "Metin kaydedilemedi."
+msgstr "Belge kapatılmalıdır."
 
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "%s kaydedilemedi. Yeniden denemek ister misiniz?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
-msgstr ""
+msgstr "Yeniden dene"
 
 #: ../src/common/docview.cpp:578
 msgid "Discard changes"
-msgstr ""
+msgstr "Değişiklikleri yok say"
 
 #: ../src/common/docview.cpp:680
 #, c-format
@@ -4342,7 +4341,7 @@ msgstr "Klasörde bir hata ayıklama raporu oluşturuldu\n"
 
 #: ../src/generic/dbgrptg.cpp:318
 msgid "The following debug report will be generated\n"
-msgstr "Şu hata ayıklama raporu üretilecek\n"
+msgstr "Şu hata ayıklama raporu oluşturulacak\n"
 
 #: ../src/generic/dbgrptg.cpp:322
 msgid ""
@@ -4361,8 +4360,8 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"Bu hata raporunu göndermek istemiyorsanız, \"İptal\" düğmesine tıklayın,\n"
-"ancak bu rapor, yazılımın geliştirilmesine yardımcı olabilir, \n"
+"Bu hata raporunu göndermek istemiyorsanız, \"İptal\" düğmesine tıklayın.\n"
+"Ancak bu rapor, yazılımın geliştirilmesine yardımcı olabilir, \n"
 "bu nedenle olanağınız varsa raporu gönderin.\n"
 
 #: ../src/generic/dbgrptg.cpp:326
@@ -5108,7 +5107,8 @@ msgid ""
 "work around this by setting environment variable GDK_BACKEND=x11 before\n"
 "starting your program."
 msgstr ""
-"wxGLCanvas şu anda yalnız Wayland ve X11 üzerinde destekleniyor. Uygulamayı\n"
+"wxGLCanvas şu anda yalnızca Wayland ve X11 üzerinde destekleniyor. "
+"Uygulamayı\n"
 "başlatmadan önce GDK_BACKEND=x11 ortam değişkenini ayarlayıp, uygulamayı \n"
 "X11 arka yüzü üzerinde çalıştırarak bu sorunu çözebilirsiniz."
 
@@ -5227,7 +5227,7 @@ msgstr "'%s'', '%s' içine açılamadı."
 
 #: ../src/html/chm.cpp:806 ../src/html/chm.cpp:863
 msgid "CHM handler currently supports only local files!"
-msgstr "CHM işleyici şimdilik yalnız yerel dosyaları destekliyor!"
+msgstr "CHM işleyici şimdilik yalnızca yerel dosyaları destekliyor!"
 
 #: ../src/html/chm.cpp:827
 msgid "Link contained '//', converted to absolute link."
@@ -5309,7 +5309,7 @@ msgstr "Büyük küçük harfe duyarlı"
 
 #: ../src/html/helpwnd.cpp:526
 msgid "Whole words only"
-msgstr "Yalnız tam sözcükler"
+msgstr "Yalnızca tam sözcükler"
 
 #: ../src/html/helpwnd.cpp:529
 msgid ""
@@ -5679,7 +5679,7 @@ msgstr "eşzamanlı itme hareketi isteği zaman aşımına uğradı."
 
 #: ../src/msw/dde.cpp:1171
 msgid "an internal call to the PostMessage function has failed. "
-msgstr "PostMessage işlevine içsel çağrı yapılamadı. "
+msgstr "PostMessage işlevine iç çağrı yapılamadı. "
 
 #: ../src/msw/dde.cpp:1174
 msgid "reentrancy problem."
@@ -6299,15 +6299,15 @@ msgstr "'%s' içinden simge yüklenemedi."
 
 #: ../src/msw/webview_ie.cpp:1000
 msgid "Failed to find web view emulation level in the registry"
-msgstr "Kayıt defterinde web görünümü benzetimi düzeyi bulunamadı"
+msgstr "Kayıt defterinde internet görünümü benzetimi düzeyi bulunamadı"
 
 #: ../src/msw/webview_ie.cpp:1009
 msgid "Failed to set web view to modern emulation level"
-msgstr "Web görünümü modern benzetim düzeyine ayarlanamadı"
+msgstr "İnternet görünümü modern benzetim düzeyine ayarlanamadı"
 
 #: ../src/msw/webview_ie.cpp:1017
 msgid "Failed to reset web view to standard emulation level"
-msgstr "Web görünümü standart benzetim düzeyine sıfırlanamadı"
+msgstr "İnternet görünümü standart benzetim düzeyine sıfırlanamadı"
 
 #: ../src/msw/webview_ie.cpp:1039
 msgid "Can't run JavaScript script without a valid HTML document"
@@ -6418,31 +6418,26 @@ msgid "File type:"
 msgstr "Dosya türü:"
 
 #: ../src/osx/cocoa/menu.mm:243
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Pencere"
 
 #: ../src/osx/cocoa/menu.mm:260
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Yardım"
 
 #: ../src/osx/cocoa/menu.mm:299
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Küçült"
 
 #: ../src/osx/cocoa/menu.mm:304
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
 msgstr "Yakınlaştır"
 
 #: ../src/osx/cocoa/menu.mm:310
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "Tümünü öne getir"
@@ -8892,7 +8887,7 @@ msgstr "epoll tanımlayıcısı oluşturulamadı"
 
 #: ../src/unix/epolldispatcher.cpp:103
 msgid "Error closing epoll descriptor"
-msgstr "epoll tanımlayıcı kapatma hatası"
+msgstr "epoll tanımlayıcı kapatılırken sorun çıktı"
 
 #: ../src/unix/epolldispatcher.cpp:116
 #, c-format

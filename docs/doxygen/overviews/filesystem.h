@@ -73,6 +73,10 @@ The following virtual file system handlers are part of wxWidgets so far:
     A handler for archives such as zip
     and tar. Include file is wx/fs_arc.h. URLs examples:
     "archive.zip#zip:filename", "archive.tar.gz#gzip:#tar:filename".
+@li @b wxDataSchemeFSHandler:
+    A handler for accessing data inlined in URI according to RFC 2397.
+    URI example: "data:text/plain;base64,d3hXaWRnZXRzIGV4YW1wbGU=".
+    Include file is wx/fs_data.h.
 @li @b wxFilterFSHandler:
     A handler for compression schemes such
     as gzip. Header is wx/fs_filter.h. URLs are in the form, e.g.:

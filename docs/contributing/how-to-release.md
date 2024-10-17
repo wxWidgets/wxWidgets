@@ -125,7 +125,7 @@ Update https://www.wxwidgets.org:
   anything else, the page will dynamically show the release files with the
   specified prefixes).
 * Add a news item. Usually a news item is enough but something
-  more can be called for for major releases
+  more can be called for major releases
 * Push the changes (or create the PR with them) to GitHub. Note that this will
   trigger the site rebuild which will fail if the release statistics are not
   available yet, so make sure to publish the release on GitHub first (or wait
@@ -164,7 +164,7 @@ Then from the build/bakesfiles directory run
 
 and from the root directory run
 
-        autoconf -B build/autoconf_prepend-include
+        autoconf
 
 or, if you're not using Debian Stable version of autoconf, see the instructions
 in `build/tools/autoconf/README.md` for regenerating configure on a different

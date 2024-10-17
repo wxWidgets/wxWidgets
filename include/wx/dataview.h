@@ -1402,7 +1402,7 @@ class WXDLLIMPEXP_CORE wxDataViewTreeCtrl: public wxDataViewCtrl,
                                           public wxWithImages
 {
 public:
-    wxDataViewTreeCtrl() { }
+    wxDataViewTreeCtrl() = default;
     wxDataViewTreeCtrl(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,

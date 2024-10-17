@@ -2,7 +2,6 @@
 // Name:        src/common/slidercmn.cpp
 // Purpose:     wxSlider common code
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart 1998
 //                  Vadim Zeitlin 2004

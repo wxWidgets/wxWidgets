@@ -46,7 +46,7 @@ class WXDLLIMPEXP_FWD_CORE WidgetsBookCtrl;
 
 class WidgetsPageInfo;
 
-#include "wx/panel.h"
+#include "wx/scrolwin.h"
 #include "wx/vector.h"
 
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
@@ -119,7 +119,7 @@ struct WidgetAttributes
     long m_defaultFlags;
 };
 
-class WidgetsPage : public wxPanel
+class WidgetsPage : public wxScrolledWindow
 {
 public:
     WidgetsPage(WidgetsBookCtrl *book,
@@ -149,6 +149,13 @@ public:
     // this is currently used only to take into account the border flags
     virtual void RecreateWidget() = 0;
 
+    // notify the main window about the widget recreation if it didn't happen
+    // due to a call to RecreateWidget()
+    void NotifyWidgetRecreation(wxWindow* widget);
+
+    // enable notifications about the widget recreation disabled initially
+    void EnableRecreationNotifications() { m_notifyRecreate = true; }
+
     // apply current attributes to the widget(s)
     void SetUpWidget();
 
@@ -172,22 +179,28 @@ protected:
     // create a sizer containing a label and a text ctrl
     wxSizer *CreateSizerWithTextAndLabel(const wxString& label,
                                          wxWindowID id = wxID_ANY,
-                                         wxTextCtrl **ppText = nullptr);
+                                         wxTextCtrl **ppText = nullptr,
+                                         wxWindow* statBoxParent = nullptr);
 
     // create a sizer containing a button and a text ctrl
     wxSizer *CreateSizerWithTextAndButton(wxWindowID idBtn,
                                           const wxString& labelBtn,
                                           wxWindowID id = wxID_ANY,
-                                          wxTextCtrl **ppText = nullptr);
+                                          wxTextCtrl **ppText = nullptr,
+                                          wxWindow* statBoxParent = nullptr);
 
     // create a checkbox and add it to the sizer
     wxCheckBox *CreateCheckBoxAndAddToSizer(wxSizer *sizer,
                                             const wxString& label,
-                                            wxWindowID id = wxID_ANY);
+                                            wxWindowID id = wxID_ANY,
+                                            wxWindow* statBoxParent = nullptr);
 
 public:
     // the head of the linked list containinginfo about all pages
     static WidgetsPageInfo *ms_widgetPages;
+
+private:
+    bool m_notifyRecreate = false;
 };
 
 // ----------------------------------------------------------------------------

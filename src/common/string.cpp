@@ -2,7 +2,6 @@
 // Name:        src/common/string.cpp
 // Purpose:     wxString class
 // Author:      Vadim Zeitlin, Ryan Norton
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              (c) 2004 Ryan Norton <wxprojects@comcast.net>
@@ -170,17 +169,29 @@ std::ostream& operator<<(std::ostream& os, const wxString& str)
     return os << str.c_str();
 }
 
-std::ostream& operator<<(std::ostream& os, const wxScopedCharBuffer& str)
+std::ostream&
+wxPrivate::OutputCharBuffer(std::ostream& os, const char* str)
+{
+    return os << str;
+}
+
+std::ostream& operator<<(std::ostream& os, const wxCharBuffer& str)
 {
     return os << str.data();
 }
 
-std::ostream& operator<<(std::ostream& os, const wxScopedWCharBuffer& str)
+std::ostream&
+wxPrivate::OutputWCharBuffer(std::ostream& os, const wchar_t* wstr)
 {
     // There is no way to write wide character data to std::ostream directly,
     // but we need to define this operator for compatibility, as we provided it
     // since basically always, even if it never worked correctly before. So do
     // the only reasonable thing and output it as UTF-8.
+    return os << wxConvWhateverWorks.cWC2MB(wstr);
+}
+
+std::ostream& operator<<(std::ostream& os, const wxWCharBuffer& str)
+{
     return os << wxConvWhateverWorks.cWC2MB(str.data());
 }
 
@@ -196,7 +207,13 @@ std::wostream& operator<<(std::wostream& wos, const wxCStrData& str)
     return wos << str.AsWChar();
 }
 
-std::wostream& operator<<(std::wostream& wos, const wxScopedWCharBuffer& str)
+std::wostream&
+wxPrivate::OutputWCharBuffer(std::wostream& wos, const wchar_t* wstr)
+{
+    return wos << wstr;
+}
+
+std::wostream& operator<<(std::wostream& wos, const wxWCharBuffer& str)
 {
     return wos << str.data();
 }
@@ -1569,29 +1586,38 @@ bool wxString::ToDouble(double *pVal) const
 // Check if C++17 <charconv> is available: even though normally it should be
 // available in any compiler claiming C++17 support, there are actually some
 // compilers (e.g. gcc 7) that don't have it, so do it in this way instead:
-#ifdef __has_include
-    #if __has_include(<charconv>)
-        // This should define __cpp_lib_to_chars checked below.
-        #include <charconv>
-    #endif
+#if wxHAS_CXX17_INCLUDE(<charconv>)
+    // This should define __cpp_lib_to_chars checked below.
+    #include <charconv>
 #endif
 
 // Now check if the functions we need are present in it (normally they ought
 // to if the compiler claims to support C++17, but it doesn't hurt to check).
 #ifdef __cpp_lib_to_chars
 
-bool wxString::ToCLong(long *pVal, int base) const
+namespace
 {
-    wxCHECK_MSG( pVal, false, "null output pointer" );
 
-    const wxScopedCharBuffer& buf = utf8_str();
-    auto start = buf.data();
-    const auto end = start + buf.length();
+// Helper of ToCLong() and ToCULong() taking care of prefix and base-related
+// stuff: because from_chars() doesn't skip leading whitespace and doesn't
+// recognize base==0 nor "0x" prefix even if base 16 is explicitly specified,
+// we need to skip the leading space and prefix indicating the base to use if
+// it's present and adjust "base" itself instead.
+//
+// Return false if base is already specified but is incompatible with the
+// prefix used.
+bool SkipOptPrefixAndSetBase(int& base, const char*& start, const char* end)
+{
+    // Start by skipping whitespace.
+    while ( wxSafeIsspace(*start) )
+        ++start;
 
-    // from_chars() doesn't recognize base==0 and doesn't recognize "0x" prefix
-    // even if base 16 is explicitly specified, so adjust the input to use the
-    // form it supports.
-    if ( buf.length() > 1 && *start == '0' )
+    // Also skip optional "+" which std::from_chars() doesn't accept either.
+    if ( *start == '+' )
+        ++start;
+
+    // Then check for the base prefix.
+    if ( end - start > 1 && *start == '0' )
     {
         ++start;
         if ( *start == 'x' || *start == 'X' )
@@ -1612,6 +1638,22 @@ bool wxString::ToCLong(long *pVal, int base) const
     if ( base == 0 )
         base = 10;
 
+    return true;
+}
+
+} // anonymous namespace
+
+bool wxString::ToCLong(long *pVal, int base) const
+{
+    wxCHECK_MSG( pVal, false, "null output pointer" );
+
+    const wxScopedCharBuffer& buf = utf8_str();
+    auto start = buf.data();
+    const auto end = start + buf.length();
+
+    if ( !SkipOptPrefixAndSetBase(base, start, end) )
+        return false;
+
     const auto res = std::from_chars(start, end, *pVal, base);
 
     return res.ec == std::errc{} && res.ptr == end;
@@ -1619,20 +1661,34 @@ bool wxString::ToCLong(long *pVal, int base) const
 
 bool wxString::ToCULong(unsigned long *pVal, int base) const
 {
-    // We intentionally don't use std::from_chars() here because this function
-    // is supposed to be compatible with strtoul() and so _succeed_ for "-1",
-    // for example, instead of returning an error as from_chars() (much more
-    // logically) does.
-
     wxCHECK_MSG( pVal, false, "null output pointer" );
 
-    long l;
-    if ( !ToCLong(&l, base) )
+    const wxScopedCharBuffer& buf = utf8_str();
+    auto start = buf.data();
+    const auto end = start + buf.length();
+
+    if ( !SkipOptPrefixAndSetBase(base, start, end) )
         return false;
 
-    *pVal = static_cast<unsigned long>(l);
+    // Extra complication: for compatibility reasons, this function does accept
+    // "-1" as valid input (as strtoul() does!), but from_chars() doesn't, for
+    // unsigned values, so check for this separately.
+    if ( *start == '-' )
+    {
+        long l;
+        const auto res = std::from_chars(start, end, l, base);
 
-    return true;
+        if ( res.ec != std::errc{} || res.ptr != end )
+            return false;
+
+        *pVal = static_cast<unsigned long>(l);
+
+        return true;
+    }
+
+    const auto res = std::from_chars(start, end, *pVal, base);
+
+    return res.ec == std::errc{} && res.ptr == end;
 }
 
 bool wxString::ToCDouble(double *pVal) const
@@ -1640,9 +1696,20 @@ bool wxString::ToCDouble(double *pVal) const
     wxCHECK_MSG( pVal, false, "null output pointer" );
 
     const wxScopedCharBuffer& buf = utf8_str();
-    const auto start = buf.data();
+    auto start = buf.data();
     const auto end = start + buf.length();
-    const auto res = std::from_chars(start, end, *pVal);
+
+    // Retain compatibility with the strtod() function by allowing starting spaces
+    // and a leading + sign, which from_chars() does not accept.
+    int base = 0;
+    SkipOptPrefixAndSetBase(base, start, end);
+
+    std::chars_format flags = std::chars_format::general;
+
+    if ( base == 16 )
+        flags = std::chars_format::hex;
+
+    const auto res = std::from_chars(start, end, *pVal, flags);
 
     return res.ec == std::errc{} && res.ptr == end;
 }

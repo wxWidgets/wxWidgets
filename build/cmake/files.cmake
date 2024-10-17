@@ -187,7 +187,6 @@ set(QT_WIN32_SRC
     src/msw/dialup.cpp
     src/msw/dib.cpp
     src/msw/joystick.cpp
-    src/qt/graphics.cpp
 )
 
 set(QT_WIN32_HDR
@@ -255,7 +254,6 @@ set(QT_HDR
     wx/qt/msgdlg.h
     wx/qt/nonownedwnd.h
     wx/qt/notebook.h
-    wx/qt/palette.h
     wx/qt/pen.h
     wx/qt/popupwin.h
     wx/qt/printdlg.h
@@ -288,6 +286,9 @@ set(QT_HDR
     wx/generic/activityindicator.h
     ${QT_PLATFORM_HDR}
     wx/qt/treectrl.h
+    wx/generic/paletteg.h
+    wx/qt/datectrl.h
+    wx/qt/timectrl.h
 )
 
 set(QT_SRC
@@ -346,7 +347,6 @@ set(QT_SRC
     src/qt/msgdlg.cpp
     src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
-    src/qt/palette.cpp
     src/qt/pen.cpp
     src/qt/popupwin.cpp
     src/qt/printdlg.cpp
@@ -386,6 +386,12 @@ set(QT_SRC
     src/qt/taskbar.cpp
     ${QT_PLATFORM_SRC}
     src/qt/treectrl.cpp
+    src/generic/paletteg.cpp
+    src/qt/datectrl.cpp
+    src/qt/timectrl.cpp
+    src/qt/overlay.cpp
+    src/qt/renderer.cpp
+    src/qt/graphics.cpp
 )
 
 set(MEDIA_QT_SRC
@@ -487,6 +493,7 @@ set(BASE_CMN_SRC
     src/generic/fswatcherg.cpp
     src/common/lzmastream.cpp
     src/common/uilocale.cpp
+    src/common/fs_data.cpp
 )
 
 set(BASE_AND_GUI_CMN_SRC
@@ -664,6 +671,7 @@ set(BASE_CMN_HDR
     wx/lzmastream.h
     wx/localedefs.h
     wx/uilocale.h
+    wx/fs_data.h
 )
 
 set(NET_UNIX_SRC
@@ -1218,6 +1226,7 @@ set(GUI_CMN_HDR
     wx/bmpbndl.h
     wx/filedlgcustomize.h
     wx/compositebookctrl.h
+    wx/persist/combobox.h
 )
 
 set(UNIX_SRC
@@ -1274,6 +1283,7 @@ set(GTK_WIN32_HDR
     wx/msw/sound.h
     wx/msw/taskbar.h
     wx/msw/joystick.h
+    wx/msw/init.h
 )
 
 set(GTK_LOWLEVEL_SRC
@@ -1591,7 +1601,6 @@ set(MSW_LOWLEVEL_SRC
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
-    src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/graphicsd2d.cpp
     src/msw/icon.cpp
@@ -2032,7 +2041,6 @@ set(OSX_COMMON_SRC
     src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
     src/osx/carbon/popupwin.cpp
-    src/osx/carbon/renderer.cpp
     src/osx/carbon/statbrma.cpp
     src/osx/carbon/region.cpp
     # cocoa bridge
@@ -2208,6 +2216,7 @@ set(OSX_COCOA_SRC
     src/osx/core/sound.cpp
     src/osx/cocoa/statbmp.mm
     src/osx/core/display.cpp
+    src/osx/cocoa/renderer.mm
 )
 
 set(OSX_COCOA_HDR
@@ -2510,6 +2519,7 @@ set(WEBVIEW_CMN_SRC
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
+    src/common/webview_chromium.cpp
 )
 
 set(WEBVIEW_MSW_HDR
@@ -2522,6 +2532,8 @@ set(WEBVIEW_CMN_HDR
     wx/webview.h
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
+    wx/webview_chromium.h
+    wx/webview_chromium_impl.h
 )
 
 set(WEBVIEW_OSX_SHARED_HDR
@@ -2531,6 +2543,7 @@ set(WEBVIEW_OSX_SHARED_HDR
 
 set(WEBVIEW_OSX_SHARED_SRC
     src/osx/webview_webkit.mm
+    src/osx/webview_chromium.mm
 )
 
 set(WEBVIEW_GTK_HDR
@@ -2548,6 +2561,17 @@ set(WEBVIEW2_GTK_SRC
 
 set(WEBVIEW_WEBKIT2_EXTENSION_SRC
     src/gtk/webview_webkit2_extension.cpp
+)
+
+set(WEBVIEWCHROMIUM_HDR
+    wx/webview.h
+    wx/webview_chromium.h
+)
+set(WEBVIEWCHROMIUM_SRC
+    src/common/webview_chromium.cpp
+)
+set(WEBVIEWCHROMIUM_OSX_SHARED_SRC
+    src/osx/webview_chromium.mm
 )
 
 set(XRC_SRC
@@ -2769,6 +2793,7 @@ set(AUI_CMN_HDR
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
+    wx/aui/serializer.h
 )
 
 set(AUI_MSW_HDR
@@ -2825,6 +2850,7 @@ set(PROPGRID_SRC
     src/propgrid/propgridiface.cpp
     src/propgrid/propgridpagestate.cpp
     src/propgrid/props.cpp
+    src/xrc/xh_propgrid.cpp
 )
 
 set(PROPGRID_HDR
@@ -2838,6 +2864,7 @@ set(PROPGRID_HDR
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
     wx/propgrid/private.h
+    wx/xrc/xh_propgrid.h
 )
 
 set(RICHTEXT_SRC

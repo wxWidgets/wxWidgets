@@ -2,7 +2,6 @@
 // Name:        wx/msw/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.99
 // Copyright:   (c) 1999 Robert Roebling, Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -54,9 +53,6 @@ public:
 
     // implementation only from now on
     // -------------------------------
-
-    // should be called in response to WM_MOUSEMOVE
-    static void RelayEvent(WXMSG *msg);
 
     // add a window to the tooltip control
     void AddOtherWindow(WXHWND hwnd);

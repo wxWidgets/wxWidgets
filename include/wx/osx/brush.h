@@ -2,7 +2,6 @@
 // Name:        wx/osx/brush.h
 // Purpose:     wxBrush class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -24,7 +23,6 @@ public:
     wxBrush();
     wxBrush(const wxColour& col, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
     wxBrush(const wxBitmap& stipple);
-    virtual ~wxBrush();
 
     virtual void SetColour(const wxColour& col) override;
     virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) override;

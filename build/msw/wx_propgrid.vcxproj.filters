@@ -49,6 +49,9 @@
     <ClCompile Include="..\..\src\propgrid\props.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\xrc\xh_propgrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -63,6 +66,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\propgrid\manager.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\propgrid\private.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\propgrid\property.h">
@@ -83,7 +89,7 @@
     <ClInclude Include="..\..\include\wx\propgrid\props.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\propgrid\private.h">
+    <ClInclude Include="..\..\include\wx\xrc\xh_propgrid.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,6 @@
 // Name:        wx/osx/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     31.01.99
 // Copyright:   (c) 1999 Robert Roebling, Vadim Zeitlin, Stefan Csomor
 // Licence:     wxWindows licence

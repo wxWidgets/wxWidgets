@@ -8,13 +8,12 @@
 #############################################################################
 
 wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSIBILITY)
-wx_add_sample(animate anitest.cpp anitest.h DATA throbber.gif hourglass.ani DEPENDS wxUSE_ANIMATIONCTRL)
+wx_add_sample(animate anitest.cpp anitest.h DATA throbber.gif throbber_2x.gif hourglass.ani DEPENDS wxUSE_ANIMATIONCTRL)
 wx_add_sample(archive CONSOLE)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)
-wx_add_sample(aui auidemo.cpp LIBRARIES wxaui wxhtml NAME auidemo DEPENDS wxUSE_AUI)
+wx_add_sample(aui auidemo.cpp LIBRARIES wxaui wxhtml wxxml NAME auidemo DEPENDS wxUSE_AUI)
 wx_add_sample(calendar DEPENDS wxUSE_CALENDARCTRL)
 wx_add_sample(caret DEPENDS wxUSE_CARET)
-wx_add_sample(clipboard DEPENDS wxUSE_CLIPBOARD)
 wx_add_sample(collpane DEPENDS wxUSE_COLLPANE)
 wx_add_sample(combo DATA dropbuth.svg dropbutn.svg dropbutp.svg three-dots.svg DEPENDS wxUSE_COMBOCTRL)
 wx_add_sample(config conftest.cpp DEPENDS wxUSE_CONFIG)
@@ -115,7 +114,7 @@ wx_add_sample(power)
 wx_add_sample(preferences DEPENDS wxUSE_PREFERENCES_EDITOR)
 wx_add_sample(printing printing.cpp printing.h DEPENDS wxUSE_PRINTING_ARCHITECTURE)
 wx_add_sample(propgrid propgrid.cpp propgrid_minimal.cpp sampleprops.cpp
-    sampleprops.h propgrid.h LIBRARIES wxpropgrid NAME propgriddemo DEPENDS wxUSE_PROPGRID)
+    sampleprops.h propgrid.h LIBRARIES wxpropgrid wxxrc NAME propgriddemo DEPENDS wxUSE_PROPGRID)
 wx_add_sample(render FOLDER render)
 wx_add_sample(render DLL renddll.cpp NAME renddll FOLDER render)
 wx_add_sample(ribbon ribbondemo.cpp LIBRARIES wxribbon NAME ribbondemo DEPENDS wxUSE_RIBBON)
@@ -151,11 +150,8 @@ wx_add_sample(typetest typetest.cpp typetest.h)
 wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
-wx_add_sample(webview LIBRARIES wxwebview
-    DATA ../help/doc.zip:doc.zip handler_advanced.html
-    NAME webviewsample DEPENDS wxUSE_WEBVIEW)
-if(TARGET webviewsample AND wxUSE_STC)
-    wx_exe_link_libraries(webviewsample wxstc)
+if(wxUSE_WEBVIEW)
+    include(webview.cmake)
 endif()
 wx_add_sample(webrequest LIBRARIES wxnet DEPENDS wxUSE_WEBREQUEST)
 # widgets Sample

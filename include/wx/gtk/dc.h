@@ -64,6 +64,8 @@ class wxClientDCImpl: public wxGTKCairoDCImpl
 public:
     wxClientDCImpl(wxClientDC* owner, wxWindow* window);
 
+    static bool CanBeUsedForDrawing(const wxWindow* window);
+
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
 };
 //-----------------------------------------------------------------------------

@@ -203,7 +203,7 @@ public:
         @a grandparent or the @NULL node (which is the parent of non-linked
         nodes or the parent of a wxXmlDocument's root element node).
     */
-    int GetDepth(wxXmlNode* grandparent = nullptr) const;
+    int GetDepth(const wxXmlNode* grandparent = nullptr) const;
 
     /**
         Returns a flag indicating whether encoding conversion is necessary when saving. The default is @false.
@@ -557,6 +557,20 @@ enum wxXmlDocumentLoadFlag
 };
 
 
+/**
+  Pass this structure to wxXmlDocument::Load() to get more information
+  if an error occurred during XML parsing.
+
+  @since 3.3.0
+ */
+struct wxXmlParseError
+{
+    wxString message;   ///< Error description
+    int line;           ///< Line number where error occurred
+    int column;         ///< Column number where error occurred
+    int byte_offset;    ///< Byte offset where error occurred
+};
+
 
 /**
     @class wxXmlDocument
@@ -637,7 +651,7 @@ enum wxXmlDocumentLoadFlag
 
     @code
     wxXmlDocument doc;
-    doc.Load("myfile.xml", "UTF-8", wxXMLDOC_KEEP_WHITESPACE_NODES);
+    doc.Load("myfile.xml", wxXMLDOC_KEEP_WHITESPACE_NODES);
 
     // myfile2.xml will be identical to myfile.xml saving it this way:
     doc.Save("myfile2.xml", wxXML_NO_INDENTATION);
@@ -709,16 +723,14 @@ public:
     wxXmlDocument(const wxXmlDocument& doc);
 
     /**
-        Loads the given filename using the given encoding. See Load().
+        Loads the given filename. See Load().
     */
-    wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = "UTF-8");
+    wxXmlDocument(const wxString& filename);
 
     /**
-        Loads the XML document from given stream using the given encoding. See Load().
+        Loads the XML document from given stream. See Load().
     */
-    wxXmlDocument(wxInputStream& stream,
-                  const wxString& encoding = "UTF-8");
+    wxXmlDocument(wxInputStream& stream);
 
     /**
         Virtual destructor. Frees the document root node.
@@ -759,14 +771,6 @@ public:
         to avoid memory leaks.
     */
     wxXmlNode* DetachRoot();
-
-    /**
-        Returns encoding of in-memory representation of the document
-        (same as passed to Load() or constructor, defaults to UTF-8).
-
-        @note this is meaningless in Unicode build where data are stored as @c wchar_t*.
-    */
-    wxString GetEncoding() const;
 
     /**
         Returns encoding of document (may be empty).
@@ -837,17 +841,21 @@ public:
         less memory however makes impossible to recreate exactly the loaded text with a
         Save() call later. Read the initial description of this class for more info.
 
+        Create an wxXmlParseError object and pass it to this function to get more
+        information if an error occurred during XML parsing (this parameter is
+        only available since wxWidgets 3.3.0).
+
         Returns true on success, false otherwise.
     */
-    virtual bool Load(const wxString& filename,
-                      const wxString& encoding = "UTF-8", int flags = wxXMLDOC_NONE);
+    bool Load(const wxString& filename, int flags = wxXMLDOC_NONE,
+              wxXmlParseError* err = nullptr);
 
     /**
-        Like Load(const wxString&, const wxString&, int) but takes the data from
-        given input stream.
+        Like Load(const wxString&, int) but takes the data from given input
+        stream.
     */
-    virtual bool Load(wxInputStream& stream,
-                      const wxString& encoding = "UTF-8", int flags = wxXMLDOC_NONE);
+    bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE,
+              wxXmlParseError* err = nullptr);
 
     /**
         Saves XML tree creating a file named with given string.

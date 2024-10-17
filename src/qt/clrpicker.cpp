@@ -8,11 +8,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/clrpicker.h"
+#if wxUSE_COLOURPICKERCTRL
 
-wxColourPickerWidget::wxColourPickerWidget()
-{
-}
+#include "wx/clrpicker.h"
 
 wxColourPickerWidget::wxColourPickerWidget(wxWindow *parent,
                wxWindowID id,
@@ -45,3 +43,4 @@ void wxColourPickerWidget::UpdateColour()
     wxGenericColourButton::UpdateColour();
 }
 
+#endif // wxUSE_COLOURPICKERCTRL

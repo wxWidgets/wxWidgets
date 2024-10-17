@@ -62,7 +62,7 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     // Some no-window widgets, notably GtkEntry on GTK3, have a GdkWindow
     // covering part of their area. Event coordinates from that window are
     // not relative to the widget, so do the conversion here.
-    if (!gtk_widget_get_has_window(win->m_widget) &&
+    if (win->m_wxwindow == nullptr && !gtk_widget_get_has_window(win->m_widget) &&
         gtk_widget_get_window(win->m_widget) == gdk_window_get_parent(gdk_event->window))
     {
         GtkAllocation a;
@@ -87,6 +87,23 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     event.SetId( win->GetId() );
     event.SetTimestamp( gdk_event->time );
 }
+
+// Update the window currently known to be under the mouse pointer.
+//
+// Returns true if it was updated, false if this window was already known to
+// contain the mouse pointer.
+bool SetWindowUnderMouse(wxWindowGTK* win);
+
+// Implementation of enter/leave window callbacks.
+gboolean
+WindowEnterCallback(GtkWidget* widget,
+                    GdkEventCrossing* event,
+                    wxWindowGTK* win);
+
+gboolean
+WindowLeaveCallback(GtkWidget* widget,
+                    GdkEventCrossing* event,
+                    wxWindowGTK* win);
 
 } // namespace wxGTKImpl
 

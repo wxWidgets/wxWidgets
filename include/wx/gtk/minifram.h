@@ -21,7 +21,7 @@ class WXDLLIMPEXP_CORE wxMiniFrame: public wxFrame
     wxDECLARE_DYNAMIC_CLASS(wxMiniFrame);
 
 public:
-    wxMiniFrame() {}
+    wxMiniFrame() = default;
     wxMiniFrame(wxWindow *parent,
             wxWindowID id,
             const wxString& title,

@@ -114,6 +114,20 @@
     #define __WXFUNCTION__ __func__
 #endif /* __WXFUNCTION__ already defined */
 
+/*
+    Expands to the current function's full signature, if available.
+
+    Falls back to the function name (i.e., __func__) if not available.
+ */
+#ifndef __WXFUNCTION_SIG__
+    #if defined(__VISUALC__)
+        #define __WXFUNCTION_SIG__ __FUNCSIG__
+    #elif defined(__GNUG__)
+        #define __WXFUNCTION_SIG__ __PRETTY_FUNCTION__
+    #else
+        #define __WXFUNCTION_SIG__ __func__
+    #endif
+#endif /* __WXFUNCTION_SIG__ already defined */
 
 /*
    wxCALL_FOR_EACH(what, ...) calls the macro from its first argument, what(pos, x),

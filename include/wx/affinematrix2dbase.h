@@ -38,8 +38,8 @@ struct wxMatrix2D
 class WXDLLIMPEXP_CORE wxAffineMatrix2DBase
 {
 public:
-    wxAffineMatrix2DBase() {}
-    virtual ~wxAffineMatrix2DBase() {}
+    wxAffineMatrix2DBase() = default;
+    virtual ~wxAffineMatrix2DBase() = default;
 
     // sets the matrix to the respective values
     virtual void Set(const wxMatrix2D& mat2D, const wxPoint2DDouble& tr) = 0;

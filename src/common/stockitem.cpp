@@ -2,7 +2,6 @@
 // Name:        src/common/stockitem.cpp
 // Purpose:     Stock buttons, menu and toolbar items labels
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2004-08-15
 // Copyright:   (c) Vaclav Slavik, 2004
 // Licence:     wxWindows licence
@@ -304,11 +303,13 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
         STOCKITEM(wxID_FIND,                wxACCEL_CTRL,'F')
         STOCKITEM(wxID_NEW,                 wxACCEL_CTRL,'N')
         STOCKITEM(wxID_OPEN,                wxACCEL_CTRL,'O')
+        STOCKITEM(wxID_CLOSE,               wxACCEL_CTRL,'W')
         STOCKITEM(wxID_PASTE,               wxACCEL_CTRL,'V')
         STOCKITEM(wxID_PRINT,               wxACCEL_CTRL,'P')
         STOCKITEM(wxID_REDO,                wxACCEL_CTRL | wxACCEL_SHIFT,'Z')
         STOCKITEM(wxID_REPLACE,             wxACCEL_CTRL,'H')
         STOCKITEM(wxID_SAVE,                wxACCEL_CTRL,'S')
+        STOCKITEM(wxID_SAVEAS,              wxACCEL_CTRL | wxACCEL_SHIFT,'S')
         STOCKITEM(wxID_SELECTALL,           wxACCEL_CTRL,'A')
         STOCKITEM(wxID_UNDO,                wxACCEL_CTRL,'Z')
 #ifdef __WXOSX__

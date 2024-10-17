@@ -1,0 +1,12 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        tests/test.rc
+// Purpose:     MSW resource file for the wxWidgets tests
+// Author:      Igor Korot
+// Created:     2023-05-21
+// Copyright:   (c) 2023 wxWidgets development team
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#include "../samples/sample.rc"
+
+horse    CURSOR "horse.cur"

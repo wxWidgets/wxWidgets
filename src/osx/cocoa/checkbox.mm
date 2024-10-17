@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/checkbox.mm
 // Purpose:     wxCheckBox
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-08-20
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence

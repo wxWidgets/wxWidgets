@@ -7,7 +7,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 if(NOT CMAKE_CONFIGURATION_TYPES)
     get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
@@ -88,7 +88,7 @@ math(EXPR wxSOVERSION_MAJOR "${WX_CURRENT} - ${WX_AGE}")
 set(wxSOVERSION ${wxSOVERSION_MAJOR}.${WX_AGE}.${WX_REVISION})
 
 set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
-set(wxCOPYRIGHT "2002-2023 wxWidgets")
+set(wxCOPYRIGHT "2002-2024 wxWidgets")
 
 set(wxLANGUAGES C CXX)
 if(APPLE AND NOT CMAKE_VERSION VERSION_LESS "3.16")
@@ -96,9 +96,6 @@ if(APPLE AND NOT CMAKE_VERSION VERSION_LESS "3.16")
 endif()
 
 project(wxWidgets VERSION ${wxVERSION} LANGUAGES ${wxLANGUAGES})
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(build/cmake/main.cmake)
 

@@ -155,14 +155,14 @@ class ImageDetailsView : public wxView
 {
 public:
     ImageDetailsView(ImageDetailsDocument *doc);
+    ImageDetailsView(const ImageDetailsView&) = delete;
+    ImageDetailsView& operator=(const ImageDetailsView&) = delete;
 
     virtual void OnDraw(wxDC *dc) override;
     virtual bool OnClose(bool deleteWindow) override;
 
 private:
     wxFrame *m_frame;
-
-    wxDECLARE_NO_COPY_CLASS(ImageDetailsView);
 };
 
 #endif // _WX_SAMPLES_DOCVIEW_VIEW_H_

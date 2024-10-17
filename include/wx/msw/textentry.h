@@ -79,8 +79,12 @@ protected:
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) override;
 #endif // wxUSE_OLE
 
+#if wxUSE_OLE
     // Returns true if this control uses standard file names completion.
     bool MSWUsesStandardAutoComplete() const;
+#else
+    bool MSWUsesStandardAutoComplete() const { return false; }
+#endif //wxUSE_OLE
 
     // Returns false if this message shouldn't be preprocessed, but is always
     // handled by the EDIT control represented by this object itself.

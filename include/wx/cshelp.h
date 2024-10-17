@@ -2,7 +2,6 @@
 // Name:        wx/cshelp.h
 // Purpose:     Context-sensitive help support classes
 // Author:      Julian Smart, Vadim Zeitlin
-// Modified by:
 // Created:     08/09/2000
 // Copyright:   (c) 2000 Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -68,7 +67,7 @@ private:
 class WXDLLIMPEXP_CORE wxContextHelpButton : public wxBitmapButton
 {
 public:
-    wxContextHelpButton() {}
+    wxContextHelpButton() = default;
 
     wxContextHelpButton(wxWindow* parent,
                         wxWindowID id = wxID_CONTEXT_HELP,

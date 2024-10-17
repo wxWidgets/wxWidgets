@@ -59,6 +59,11 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW)
 endif()
 
+if(POLICY CMP0057)
+    # Support new if() IN_LIST operator.
+    cmake_policy(SET CMP0057 NEW)
+endif()
+
 if(POLICY CMP0060)
     # Link libraries by full path even in implicit directories.
     cmake_policy(SET CMP0060 NEW)
@@ -72,6 +77,11 @@ endif()
 if(POLICY CMP0072)
     # FindOpenGL prefers GLVND by default when available.
     cmake_policy(SET CMP0072 NEW)
+endif()
+
+if(POLICY CMP0079)
+    # target_link_libraries() allows use with targets in other directories.
+    cmake_policy(SET CMP0079 NEW)
 endif()
 
 if(POLICY CMP0092)

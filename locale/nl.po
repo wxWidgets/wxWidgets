@@ -3306,7 +3306,7 @@ msgstr "&Kopiëren"
 
 #: ../src/common/stockitem.cpp:156 ../src/stc/stc_i18n.cpp:18
 msgid "Copy"
-msgstr "Kopi&#235;ren"
+msgstr "Kopiëren"
 
 #: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2708
 #: ../src/osx/textctrl_osx.cpp:637 ../src/richtext/richtextctrl.cpp:331

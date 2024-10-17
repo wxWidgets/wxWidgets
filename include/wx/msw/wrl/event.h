@@ -17,7 +17,7 @@ class CInvokable : public baseT
 {
 public:
     CInvokable() : m_nRefCount(0) {}
-    virtual ~CInvokable() {}
+    virtual ~CInvokable() = default;
     // IUnknown methods
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppvObj) override
     {

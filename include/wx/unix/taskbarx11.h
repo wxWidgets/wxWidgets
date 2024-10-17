@@ -2,7 +2,6 @@
 // File:        wx/unix/taskbarx11.h
 // Purpose:     Defines wxTaskBarIcon class for most common X11 desktops
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     04/04/2003
 // Copyright:   (c) Vaclav Slavik, 2003
 // Licence:     wxWindows licence

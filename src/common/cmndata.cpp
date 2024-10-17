@@ -2,7 +2,6 @@
 // Name:        src/common/cmndata.cpp
 // Purpose:     Common GDI data
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -25,9 +24,6 @@
 #include "wx/cmndata.h"
 
 #ifndef WX_PRECOMP
-    #if defined(__WXMSW__)
-        #include "wx/msw/wrapcdlg.h"
-    #endif // MSW
     #include <stdio.h>
     #include "wx/string.h"
     #include "wx/utils.h"

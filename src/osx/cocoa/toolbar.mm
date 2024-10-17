@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/toolbar.mm
 // Purpose:     wxToolBar
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -962,8 +961,11 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
         if (curToolbarRef == nullptr)
         {
             bResult = true;
-            [tlw setToolbar:(NSToolbar*) m_macToolbar];
+            // Note that we apparently need to make the toolbar visible before
+            // setting it as the window's toolbar to avoid some mysterious
+            // crashes under macOS 14, see #24560.
             [(NSToolbar*) m_macToolbar setVisible:YES];
+            [tlw setToolbar:(NSToolbar*) m_macToolbar];
 
             GetPeer()->Move(0,0,0,0 );
             SetSize( wxSIZE_AUTO_WIDTH, 0 );

@@ -2,7 +2,6 @@
 // Name:        remhelp.cpp
 // Purpose:     Remote help controller class
 // Author:      Eric Dowty
-// Modified by:
 // Created:     2002-11-18
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

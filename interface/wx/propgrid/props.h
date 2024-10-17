@@ -28,11 +28,6 @@ public:
 // Property classes
 // -----------------------------------------------------------------------
 
-/** If set, enables ::wxTE_PASSWORD on wxStringProperty editor.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_PASSWORD = wxPG_PROP_CLASS_SPECIFIC_2;
-
 /** @class wxStringProperty
     @ingroup classes
     Basic property with string value.
@@ -53,10 +48,10 @@ public:
                       const wxString& value = wxString() );
     virtual ~wxStringProperty();
 
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
@@ -68,19 +63,19 @@ public:
 
 /** Constants used with NumericValidation<>().
 */
-enum wxPGNumericValidationConstants
+enum class wxPGNumericValidationMode
 {
     /** Instead of modifying the value, show an error message.
     */
-    wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE      = 0,
+    ErrorMessage,
 
     /** Modify value, but stick with the limitations.
     */
-    wxPG_PROPERTY_VALIDATION_SATURATE           = 1,
+    Saturate,
 
     /** Modify value, wrap around on overflow.
     */
-    wxPG_PROPERTY_VALIDATION_WRAP               = 2
+    Wrap
 };
 
 
@@ -91,15 +86,15 @@ enum wxPGNumericValidationConstants
 class wxNumericPropertyValidator : public wxTextValidator
 {
 public:
-    enum NumericType
+    enum class NumericType
     {
-        Signed = 0,
+        Signed,
         Unsigned,
         Float
     };
 
     wxNumericPropertyValidator( NumericType numericType, int base = 10 );
-    virtual ~wxNumericPropertyValidator() { }
+    virtual ~wxNumericPropertyValidator() = default;
     virtual bool Validate(wxWindow* parent);
 };
 
@@ -220,15 +215,14 @@ public:
     wxIntProperty( const wxString& label,
                    const wxString& name,
                    const wxLongLong& value );
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
-    virtual bool IntToValue( wxVariant& variant,
-                             int number,
-                             int argFlags = 0 ) const;
+    virtual bool IntToValue(wxVariant& variant, int number,
+                            wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator() const;
     virtual wxVariant AddSpinStepValue(long stepScale) const;
@@ -265,17 +259,16 @@ public:
     wxUIntProperty( const wxString& label,
                     const wxString& name,
                     const wxULongLong& value );
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
     virtual wxValidator* DoGetValidator () const;
-    virtual bool IntToValue( wxVariant& variant,
-                             int number,
-                             int argFlags = 0 ) const;
+    virtual bool IntToValue(wxVariant& variant, int number,
+                            wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual wxVariant AddSpinStepValue(long stepScale) const;
 
 protected:
@@ -304,10 +297,10 @@ public:
                      double value = 0.0 );
     virtual ~wxFloatProperty();
 
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
@@ -340,23 +333,15 @@ public:
                     bool value = false );
     virtual ~wxBoolProperty();
 
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
-    virtual bool IntToValue( wxVariant& variant,
-                             int number, int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool IntToValue(wxVariant& variant, int number,
+                            wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 };
 
-
-
-/** If set, then selection of choices is static and should not be
-    changed (i.e. returns @NULL in GetPropertyChoices).
-    Used by wxSystemColourProperty, wxCursorProperty.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_STATIC_CHOICES = wxPG_PROP_CLASS_SPECIFIC_1;
 
 /** @class wxEnumProperty
     @ingroup classes
@@ -402,18 +387,18 @@ public:
     size_t GetItemCount() const;
 
     virtual void OnSetValue();
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
 
-    // If wxPG_FULL_VALUE is not set in flags, then the value is interpreted
-    // as index to choices list. Otherwise, it is actual value.
-    virtual bool IntToValue( wxVariant& variant,
-                             int number,
-                             int argFlags = 0 ) const;
+    /** If wxPGPropValFormatFlags::FullValue is not set in flags, then the value is interpreted
+        as index to choices list. Otherwise, it is actual value.
+    */
+    virtual bool IntToValue(wxVariant& variant, int number,
+                            wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     //
     // Additional virtuals
@@ -431,13 +416,10 @@ protected:
     int GetIndex() const;
     void SetIndex( int index );
 
-    bool ValueFromString_( wxVariant& value,
-                           const wxString& text,
-                           int argFlags ) const;
-    bool ValueFromInt_( wxVariant& value, int intVal, int argFlags ) const;
-
-    static void ResetNextIndex();
-
+    bool ValueFromString_(wxVariant& value, int* pIndex, const wxString& text,
+                          wxPGPropValFormatFlags flags) const;
+    bool ValueFromInt_(wxVariant& value, int* pIndex, int intVal,
+                       wxPGPropValFormatFlags flags) const;
 };
 
 
@@ -481,6 +463,11 @@ public:
 
     virtual ~wxEditEnumProperty();
 
+    void OnSetValue() override;
+    bool StringToValue(wxVariant& variant, const wxString& text,
+                       wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    bool ValidateValue(wxVariant& value,
+                       wxPGValidationInfo& validationInfo) const;
 };
 
 
@@ -519,36 +506,24 @@ public:
     virtual ~wxFlagsProperty ();
 
     virtual void OnSetValue();
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int flags ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags) const;
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
                                     wxVariant& childValue ) const;
     virtual void RefreshChildren();
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
-    // GetChoiceSelection needs to overridden since m_choices is
-    // used and value is integer, but it is not index.
     virtual int GetChoiceSelection() const;
 
-    // helpers
     size_t GetItemCount() const;
     const wxString& GetLabel( size_t ind ) const;
 
 protected:
-    // Used to detect if choices have been changed
-    wxPGChoicesData*        m_oldChoicesData;
-
-    // Needed to properly mark changed sub-properties
-    long                    m_oldValue;
-
-    // Converts string id to a relevant bit.
     long IdToBit( const wxString& id ) const;
-
-    // Creates children and sets value.
-    void Init();
+    void Init(long value);
 };
 
 
@@ -601,12 +576,6 @@ protected:
 };
 
 
-/**
-    If set, full path is shownin wxFileProperty.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_CLASS_SPECIFIC_1;
-
 /** @class wxFileProperty
     @ingroup classes
     Like wxLongStringProperty, but the button triggers file selector instead.
@@ -633,10 +602,10 @@ public:
     virtual ~wxFileProperty ();
 
     virtual void OnSetValue();
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
     static wxValidator* GetClassValidator();
@@ -657,12 +626,6 @@ protected:
 };
 
 
-/** Flag used in wxLongStringProperty to mark that edit button
-    should be enabled even in the read-only mode.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_1;
-
 /** @class wxLongStringProperty
     @ingroup classes
     Like wxStringProperty, but has a button that triggers a small text
@@ -680,10 +643,10 @@ public:
                           const wxString& value = wxString() );
     virtual ~wxLongStringProperty();
 
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
@@ -706,26 +669,15 @@ public:
                    const wxString& value = wxString() );
     virtual ~wxDirProperty();
 
-    virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool StringToValue(wxVariant& variant, const wxString& text,
-                               int argFlags = 0) const;
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual wxValidator* DoGetValidator() const;
 
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
 };
-
-
-/** wxBoolProperty, wxFlagsProperty specific flag.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_USE_CHECKBOX = wxPG_PROP_CLASS_SPECIFIC_1;
-/** wxBoolProperty, wxFlagsProperty specific flag.
-    DCC = Double Click Cycles
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_USE_DCC = wxPG_PROP_CLASS_SPECIFIC_2;
-
 
 
 /** @class wxArrayStringProperty
@@ -745,10 +697,10 @@ public:
     virtual ~wxArrayStringProperty();
 
     virtual void OnSetValue();
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
     /**
@@ -881,7 +833,7 @@ class wxPGArrayStringEditorDialog : public wxPGArrayEditorDialog
 {
 public:
     wxPGArrayStringEditorDialog();
-    virtual ~wxPGArrayStringEditorDialog() { }
+    virtual ~wxPGArrayStringEditorDialog() = default;
 
     void Init();
 

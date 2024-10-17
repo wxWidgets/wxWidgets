@@ -109,12 +109,21 @@ void ListBoxTestCase::Sort()
 
     m_list->Append(testitems);
 
+#ifndef __WXQT__
     CPPUNIT_ASSERT_EQUAL("AAA", m_list->GetString(0));
     CPPUNIT_ASSERT_EQUAL("Aaa", m_list->GetString(1));
     CPPUNIT_ASSERT_EQUAL("aaa", m_list->GetString(2));
     CPPUNIT_ASSERT_EQUAL("aaab", m_list->GetString(3));
     CPPUNIT_ASSERT_EQUAL("aab", m_list->GetString(4));
     CPPUNIT_ASSERT_EQUAL("aba", m_list->GetString(5));
+#else
+    CPPUNIT_ASSERT_EQUAL("aaa", m_list->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("Aaa", m_list->GetString(1));
+    CPPUNIT_ASSERT_EQUAL("AAA", m_list->GetString(2));
+    CPPUNIT_ASSERT_EQUAL("aaab", m_list->GetString(3));
+    CPPUNIT_ASSERT_EQUAL("aab", m_list->GetString(4));
+    CPPUNIT_ASSERT_EQUAL("aba", m_list->GetString(5));
+#endif
 
     m_list->Append("a", wxUIntToPtr(1));
 
@@ -190,8 +199,8 @@ void ListBoxTestCase::ClickEvents()
 
     m_list->Append(testitems);
 
-    m_list->Update();
     m_list->Refresh();
+    m_list->Update();
 
     sim.MouseMove(m_list->ClientToScreen(wxPoint(10, 10)));
     wxYield();
@@ -233,8 +242,8 @@ void ListBoxTestCase::ClickNotOnItem()
     // simply avoid it by starting with a valid selection.
     m_list->SetSelection(0);
 
-    m_list->Update();
     m_list->Refresh();
+    m_list->Update();
 
     sim.MouseMove(m_list->ClientToScreen(wxPoint(m_list->GetSize().x - 10, m_list->GetSize().y - 10)));
     wxYield();

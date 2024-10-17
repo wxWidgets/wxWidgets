@@ -2,7 +2,6 @@
 // Name:        wx/strconv.h
 // Purpose:     conversion routines for char sets any Unicode
 // Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Ove Kaaven, Robert Roebling
 //              (c) 1998-2006 Vadim Zeitlin
@@ -163,7 +162,7 @@ public:
     virtual wxMBConv *Clone() const = 0;
 
     // virtual dtor for any base class
-    virtual ~wxMBConv() { }
+    virtual ~wxMBConv() = default;
 
 private:
     // Common part of single argument cWC2MB() and cMB2WC() overloads above.
@@ -243,7 +242,7 @@ private:
 class WXDLLIMPEXP_BASE wxMBConvUTF7 : public wxMBConv
 {
 public:
-    wxMBConvUTF7() { }
+    wxMBConvUTF7() = default;
 
     // compiler-generated copy ctor, assignment operator and dtor are ok
     // (assuming it's ok to copy the shift state -- not really sure about it)

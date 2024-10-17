@@ -369,7 +369,7 @@ void wxAuiMSWToolBarArt::DrawOverflowButton(
 }
 
 wxSize wxAuiMSWToolBarArt::GetLabelSize(
-    wxDC& dc,
+    wxReadOnlyDC& dc,
     wxWindow* wnd,
     const wxAuiToolBarItem& item)
 {
@@ -377,7 +377,7 @@ wxSize wxAuiMSWToolBarArt::GetLabelSize(
 }
 
 wxSize wxAuiMSWToolBarArt::GetToolSize(
-    wxDC& dc,
+    wxReadOnlyDC& dc,
     wxWindow* wnd,
     const wxAuiToolBarItem& item)
 {

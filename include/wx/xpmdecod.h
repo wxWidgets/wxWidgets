@@ -24,8 +24,8 @@ class WXDLLIMPEXP_CORE wxXPMDecoder
 {
 public:
     // constructor, destructor, etc.
-    wxXPMDecoder() {}
-    ~wxXPMDecoder() {}
+    wxXPMDecoder() = default;
+    ~wxXPMDecoder() = default;
 
 #if wxUSE_STREAMS
     // Is the stream XPM file?

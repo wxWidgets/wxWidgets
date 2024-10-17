@@ -2,7 +2,6 @@
 // Name:        wx/ffile.h
 // Purpose:     wxFFile - encapsulates "FILE *" stream
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.07.99
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -116,7 +115,7 @@ class WXDLLIMPEXP_BASE wxTempFFile
 public:
   // ctors
     // default
-  wxTempFFile() { }
+  wxTempFFile() = default;
     // associates the temp file with the file to be replaced and opens it
   explicit wxTempFFile(const wxString& strName);
 

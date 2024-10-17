@@ -374,7 +374,7 @@ public:
             while (!GetThread()->TestDestroy())
             {
                 // since this Entry() is implemented in MyFrame context we don't
-                // need any pointer to access the m_data, m_processedData, m_dataCS
+                // need any pointer to access the m_data and m_dataCS
                 // variables... very nice!
 
                 // this is an example of the generic structure of a download thread:

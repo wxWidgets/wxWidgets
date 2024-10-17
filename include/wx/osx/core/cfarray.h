@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/cfarrayref.h
 // Purpose:     wxCFArrayRef class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2018/07/27
 // Copyright:   (c) 2018 Stefan Csomor
 // Licence:     wxWindows licence

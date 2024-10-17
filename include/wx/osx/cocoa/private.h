@@ -4,7 +4,6 @@
 //              wxWidgets itself, it may contain identifiers which don't start
 //              with "wx".
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -18,6 +17,8 @@
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
 #endif
+
+#include <vector>
 
 //
 // shared between Cocoa and Carbon
@@ -173,7 +174,10 @@ public :
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
 
     virtual void        SetupKeyEvent(wxKeyEvent &wxevent, NSEvent * nsEvent, NSString* charString = nullptr);
-    virtual void        SetupMouseEvent(wxMouseEvent &wxevent, NSEvent * nsEvent);
+
+    using MouseEvents = std::vector<wxMouseEvent>;
+    virtual MouseEvents TranslateMouseEvent(NSEvent * nsEvent);
+
     void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
     virtual bool        SetupCursor(NSEvent* event);
 
@@ -221,9 +225,14 @@ public :
     // from the same pimpl class.
     virtual void                controlTextDidChange();
 
+    virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) override;
+    virtual void                UseClippingView() override;
+    virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
+
 protected:
     WXWidget m_osxView;
-    
+    WXWidget m_osxClipView;
+
     // begins processing of native key down event, storing the native event for later wx event generation
     void BeginNativeKeyDownEvent( NSEvent* event );
     // done with the current native key down event

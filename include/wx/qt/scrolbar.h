@@ -12,12 +12,11 @@
 
 class QScrollBar;
 
-class WXDLLIMPEXP_FWD_CORE wxQtScrollBar;
-
 class WXDLLIMPEXP_CORE wxScrollBar : public wxScrollBarBase
 {
 public:
-    wxScrollBar();
+    wxScrollBar() = default;
+
     wxScrollBar( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
@@ -42,11 +41,7 @@ public:
                               int range, int pageSize,
                               bool refresh = true) override;
 
-    QScrollBar *GetQScrollBar() const { return m_qtScrollBar; }
-    QWidget *GetHandle() const override;
-
-private:
-    QScrollBar *m_qtScrollBar;
+    QScrollBar* GetQScrollBar() const;
 
     wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };

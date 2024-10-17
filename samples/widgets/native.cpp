@@ -170,7 +170,9 @@ public:
         );
 #endif // GTK+ 3.6/earlier
 
+        wxGCC_WARNING_SUPPRESS(ignored-qualifiers)
         g_object_ref_sink(widget);
+        wxGCC_WARNING_RESTORE(ignored-qualifiers)
 
         (void)Create(parent, wxID_ANY, widget);
     }
@@ -305,6 +307,8 @@ void NativeWidgetsPage::RecreateWidget()
 {
     delete m_nativeWindow;
     m_nativeWindow = new NativeWindow(this);
+
+    NotifyWidgetRecreation(m_nativeWindow);
 
     m_sizerCtrl->Clear();
     if ( m_chkExpand->IsChecked() )

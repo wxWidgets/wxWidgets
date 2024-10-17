@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtexthtml.cpp
 // Purpose:     HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

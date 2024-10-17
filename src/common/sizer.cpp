@@ -802,7 +802,7 @@ bool wxSizerItem::IsShown() const
 
 wxSizer::~wxSizer()
 {
-    WX_CLEAR_LIST(wxSizerItemList, m_children);
+    wxClearList(m_children);
 }
 
 wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
@@ -847,7 +847,9 @@ wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
         // later, but by this time the stack trace at the moment of assertion
         // won't point out the culprit any longer).
         if ( m_containingWindow )
+        {
             ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+        }
     }
 
     if ( item->GetSizer() )
@@ -897,7 +899,9 @@ void wxSizer::SetContainingWindow(wxWindow *win)
         if ( m_containingWindow )
         {
             if ( wxWindow* const w = item->GetWindow() )
+            {
                 ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+            }
         }
     }
 }
@@ -1080,7 +1084,7 @@ void wxSizer::Clear( bool delete_windows )
         DeleteWindows();
 
     // Now empty the list
-    WX_CLEAR_LIST(wxSizerItemList, m_children);
+    wxClearList(m_children);
 }
 
 void wxSizer::DeleteWindows()
@@ -2796,7 +2800,7 @@ void wxStaticBoxSizer::RepositionChildren(const wxSize& minSize)
     wxPoint old_pos( m_position );
 
     // If we didn't have any sibling children so far, but we don't have any
-    // real children neither, chances are that they could have been added, so
+    // real children either, chances are that they could have been added, so
     // check for this (but if we do have real children, don't bother doing
     // anything as this would result in extra overhead for every re-layout).
     if ( !m_hasNonBoxChildren && m_staticBox->GetChildren().empty() )

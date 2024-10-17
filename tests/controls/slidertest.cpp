@@ -93,6 +93,7 @@ void SliderTestCase::PageUpDown()
     wxUIActionSimulator sim;
 
     m_slider->SetFocus();
+    wxYield();
 
     sim.Char(WXK_PAGEUP);
     sim.Char(WXK_PAGEDOWN);
@@ -111,8 +112,9 @@ void SliderTestCase::LineUpDown()
     EventCounter linedown(m_slider, wxEVT_SCROLL_LINEDOWN);
 
     wxUIActionSimulator sim;
-    wxYield();
+
     m_slider->SetFocus();
+    wxYield();
 
     sim.Char(WXK_UP);
     sim.Char(WXK_DOWN);
@@ -130,8 +132,9 @@ void SliderTestCase::EvtSlider()
     EventCounter slider(m_slider, wxEVT_SLIDER);
 
     wxUIActionSimulator sim;
-    wxYield();
+
     m_slider->SetFocus();
+    wxYield();
 
     sim.Char(WXK_UP);
     sim.Char(WXK_DOWN);
@@ -146,8 +149,9 @@ void SliderTestCase::LinePageSize()
 {
 #if wxUSE_UIACTIONSIMULATOR
     wxUIActionSimulator sim;
-    wxYield();
+
     m_slider->SetFocus();
+    wxYield();
 
     m_slider->SetPageSize(20);
 
@@ -221,7 +225,7 @@ void SliderTestCase::Thumb()
 
     CPPUNIT_ASSERT(track.GetCount() != 0);
     CPPUNIT_ASSERT_EQUAL(1, release.GetCount());
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
     CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 #endif

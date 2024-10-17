@@ -2,7 +2,6 @@
 // Name:        wx/propgrid/editors.h
 // Purpose:     wxPropertyGrid editors
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2007-04-14
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

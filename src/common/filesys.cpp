@@ -640,7 +640,7 @@ bool wxFileSystem::HasHandlerForPath(const wxString &location)
 
 void wxFileSystem::CleanUpHandlers()
 {
-    WX_CLEAR_LIST(wxList, m_Handlers);
+    wxClearList(m_Handlers);
 }
 
 // Returns the native path for a file URL

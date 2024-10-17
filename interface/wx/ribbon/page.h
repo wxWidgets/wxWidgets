@@ -197,4 +197,29 @@ public:
         @return wxHORIZONTAL or wxVERTICAL (never wxBOTH).
     */
     wxOrientation GetMajorAxis() const;
+
+    /**
+        Get a panel by index.
+
+        @NULL will be returned if the given index is out of range.
+
+        @since 3.3.0
+    */
+    wxRibbonPanel* GetPanel(int n);
+
+    /**
+        Get a panel by window ID.
+
+        @NULL will be returned if no panel with the ID is found.
+
+        @since 3.3.0
+    */
+    wxRibbonPanel* GetPanelById(wxWindowID id);
+
+    /**
+        Get the number of panels in this page.
+
+        @since 3.3.0
+    */
+    size_t GetPanelCount() const;
 };

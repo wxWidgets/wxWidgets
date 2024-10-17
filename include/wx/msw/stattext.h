@@ -2,7 +2,6 @@
 // Name:        wx/msw/stattext.h
 // Purpose:     wxStaticText class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
 {
 public:
-    wxStaticText() { }
+    wxStaticText() = default;
 
     wxStaticText(wxWindow *parent,
                  wxWindowID id,

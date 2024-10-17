@@ -68,17 +68,21 @@ jobs:
     # versions of MinGW and Wine and is simpler to test with locally than the
     # bespoke container used by GitHub Actions by default.
     runs-on: ubuntu-latest
-    container: debian:testing-slim
+    container: debian:${{ matrix.debian_release }}-slim
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: wxMSW 64 bits
+            debian_release: testing
             configure_flags: --disable-compat32
           - name: wxMSW 32 bits
+            # Testing doesn't have 32 bit support any more.
+            debian_release: stable
             triplet: i686-w64-mingw32
           - name: wxMSW/Univ
+            debian_release: testing
             configure_flags: --enable-universal --disable-compat32 --disable-debug --disable-optimise
             minimal: true
     env:
@@ -125,12 +129,12 @@ jobs:
           echo "wxTEST_RUNNER=wine" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
       - name: Install CCache
-        uses: hendrikmuhs/ccache-action@v1.2.3
+        uses: hendrikmuhs/ccache-action@v1.2.12
         with:
           key: ${{ matrix.name }}
 
@@ -241,7 +245,7 @@ jobs:
           excluded_tests+=('~wxFileSystemWatcher::EventCreate')
 
           # The test fails (even with wxTEST_RUNNER-related changes) and hangs.
-          excluded_tests+=('~ExecTestCase')
+          excluded_tests+=('~[exec]')
 
           # Wine WinHTTP implementations seems buggy, there are many errors.
           excluded_tests+=('~[webrequest]')
@@ -261,7 +265,7 @@ jobs:
           excluded_gui_tests+=('~ComboBoxTestCase') # TextChangeEvents
           excluded_gui_tests+=('~DatePickerCtrlTestCase') # Range
           excluded_gui_tests+=('~wxEnhMetaFileDC::GetTextExtent')
-          excluded_gui_tests+=('~ExecTestCase')
+          excluded_gui_tests+=('~[exec]')
           excluded_gui_tests+=('~wxFont::GetSet')
           excluded_gui_tests+=('~GraphicsPathTestCaseGDIPlus')
           excluded_gui_tests+=('~ImageList*')
@@ -269,7 +273,7 @@ jobs:
           excluded_gui_tests+=('~SettingsTestCase') # GetFont fails
           excluded_gui_tests+=('~SliderTestCase')   # Thumb
           excluded_gui_tests+=('~TransformMatrixTestCase*')
-          excluded_gui_tests+=('~TreeCtrlTestCase') # LabelEdit
+          excluded_gui_tests+=('~wxTreeCtrl::LabelEdit') # LabelEdit
           excluded_gui_tests+=('~TextCtrlTestCase') # many sub-tests
           excluded_gui_tests+=('~wxTextCtrl::InitialCanUndo')
           excluded_gui_tests+=('~[wxWebView]')

@@ -2,7 +2,6 @@
 // Name:        wx/dcprint.h
 // Purpose:     wxPrinterDC base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

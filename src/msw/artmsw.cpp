@@ -2,7 +2,6 @@
 // Name:        src/msw/artmsw.cpp
 // Purpose:     stock wxArtProvider instance with native MSW stock icons
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2008-10-15
 // Copyright:   (c) Vaclav Slavik, 2008
 // Licence:     wxWindows licence

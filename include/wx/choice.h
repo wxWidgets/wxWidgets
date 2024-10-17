@@ -2,7 +2,6 @@
 // Name:        wx/choice.h
 // Purpose:     wxChoice class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     26.07.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxChoiceNameStr[];
 class WXDLLIMPEXP_CORE wxChoiceBase : public wxControlWithItems
 {
 public:
-    wxChoiceBase() { }
+    wxChoiceBase() = default;
     virtual ~wxChoiceBase();
 
     // all generic methods are in wxControlWithItems

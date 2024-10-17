@@ -149,6 +149,16 @@ void wxTextCtrl::OSXDisableAllSmartSubstitutions()
     OSXEnableAutomaticQuoteSubstitution(false);
 }
 
+wxString wxTextCtrl::GetRTFValue() const
+{
+    return GetTextPeer()->GetRTFValue();
+}
+
+void wxTextCtrl::SetRTFValue(const wxString& val)
+{
+    GetTextPeer()->SetRTFValue(val);
+}
+
 bool wxTextCtrl::SetFont( const wxFont& font )
 {
     if ( !wxTextCtrlBase::SetFont( font ) )
@@ -399,6 +409,7 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
                     return;
                 }
                 // else fall through to Redo
+                wxFALLTHROUGH;
             case 'Y':
                 if ( CanRedo() )
                     Redo() ;

@@ -2,7 +2,6 @@
 // Name:        src/msw/ole/droptgt.cpp
 // Purpose:     wxDropTarget implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

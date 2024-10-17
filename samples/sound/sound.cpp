@@ -2,7 +2,6 @@
 // Name:        sound.cpp
 // Purpose:     Example of sound playing in wxWidgets
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2004/01/29
 // Copyright:   (c) 2004 Vaclav Salvik
 // Licence:     wxWindows licence

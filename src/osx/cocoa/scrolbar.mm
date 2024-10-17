@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/scrolbar.mm
 // Purpose:     wxScrollBar
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
@@ -63,7 +62,7 @@ public :
 
     virtual wxInt32 GetValue() const override
     {
-        return wxRound([(wxNSScroller*) m_osxView floatValue] * m_maximum);
+        return wxRound([(wxNSScroller*) m_osxView doubleValue] * m_maximum);
     }
 
     virtual wxInt32 GetMaximum() const override

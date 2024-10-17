@@ -143,7 +143,7 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
     default.
 
     It is mostly useful for asserting inside functions called from macros, as
-    by passing the usual @c \__FILE__, @c \__LINE__ and @c \__FUNCTION__ values to
+    by passing the usual @c \__FILE__, @c \__LINE__ and @c \__func__ values to
     a function, it's possible to pretend that the assert happens at the
     location of the macro in the source code (which can be useful) instead of
     inside the function itself (which is never useful as these values are

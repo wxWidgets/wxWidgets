@@ -58,7 +58,7 @@ The following files need to be modified when adding a new `wxUSE_FOO`:
    These options won't be defined for the other ports, so shouldn't be added to
    the common `include/wx/chkconf.h` but to this file instead.
 
-- `configure.in`
+- `configure.ac`
 
    Here you need to add `DEFAULT_wxUSE_FOO` define. It should be added in the
    block beginning after `WX_ARG_CACHE_INIT` line and should default to "no" for

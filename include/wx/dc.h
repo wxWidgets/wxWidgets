@@ -2,7 +2,6 @@
 // Name:        wx/dc.h
 // Purpose:     wxDC class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05/25/99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -115,8 +114,8 @@ class WXDLLIMPEXP_FWD_CORE wxDCImpl;
 class WXDLLIMPEXP_CORE wxDCFactory
 {
 public:
-    wxDCFactory() {}
-    virtual ~wxDCFactory() {}
+    wxDCFactory() = default;
+    virtual ~wxDCFactory() = default;
 
     virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) = 0;
     virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) = 0;
@@ -128,6 +127,8 @@ public:
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) = 0;
 #endif
+
+    virtual bool CanDrawUsingClientDC(const wxWindow* window) const = 0;
 
     static void Set(wxDCFactory *factory);
     static wxDCFactory *Get();
@@ -143,7 +144,7 @@ private:
 class WXDLLIMPEXP_CORE wxNativeDCFactory: public wxDCFactory
 {
 public:
-    wxNativeDCFactory() {}
+    wxNativeDCFactory() = default;
 
     virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) override;
     virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) override;
@@ -155,6 +156,8 @@ public:
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) override;
 #endif
+
+    virtual bool CanDrawUsingClientDC(const wxWindow* window) const override;
 };
 
 //-----------------------------------------------------------------------------
@@ -694,24 +697,14 @@ private:
 };
 
 
-class WXDLLIMPEXP_CORE wxDC : public wxObject
+// This base class provides only functions that don't modify device contents.
+class WXDLLIMPEXP_CORE wxReadOnlyDC : public wxObject
 {
 public:
-    // copy attributes (font, colours and writing direction) from another DC
-    void CopyAttributes(const wxDC& dc);
-
-    virtual ~wxDC() { delete m_pimpl; }
-
-    wxDCImpl *GetImpl()
-        { return m_pimpl; }
-    const wxDCImpl *GetImpl() const
-        { return m_pimpl; }
+    virtual ~wxReadOnlyDC() { delete m_pimpl; }
 
     wxWindow *GetWindow() const
         { return m_pimpl->GetWindow(); }
-
-    void *GetHandle() const
-        { return m_pimpl->GetHandle(); }
 
     bool IsOk() const
         { return m_pimpl && m_pimpl->IsOk(); }
@@ -781,82 +774,12 @@ public:
     wxLayoutDirection GetLayoutDirection() const
         { return m_pimpl->GetLayoutDirection(); }
 
-    // page and document
-
-    bool StartDoc(const wxString& message)
-        { return m_pimpl->StartDoc(message); }
-    void EndDoc()
-        { m_pimpl->EndDoc(); }
-
-    void StartPage()
-        { m_pimpl->StartPage(); }
-    void EndPage()
-        { m_pimpl->EndPage(); }
-
-    // bounding box
-
-    void CalcBoundingBox(wxCoord x, wxCoord y)
-        { m_pimpl->CalcBoundingBox(x,y); }
-    void ResetBoundingBox()
-        { m_pimpl->ResetBoundingBox(); }
-
-    wxCoord MinX() const
-        { return m_pimpl->MinX(); }
-    wxCoord MaxX() const
-        { return m_pimpl->MaxX(); }
-    wxCoord MinY() const
-        { return m_pimpl->MinY(); }
-    wxCoord MaxY() const
-        { return m_pimpl->MaxY(); }
-
-    // setters and getters
+    // font
 
     void SetFont(const wxFont& font)
         { m_pimpl->SetFont( font ); }
     const wxFont&   GetFont() const
         { return m_pimpl->GetFont(); }
-
-    void SetPen(const wxPen& pen)
-        { m_pimpl->SetPen( pen ); }
-    const wxPen&    GetPen() const
-        { return m_pimpl->GetPen(); }
-
-    void SetBrush(const wxBrush& brush)
-        { m_pimpl->SetBrush( brush ); }
-    const wxBrush&  GetBrush() const
-        { return m_pimpl->GetBrush(); }
-
-    void SetBackground(const wxBrush& brush)
-        { m_pimpl->SetBackground( brush ); }
-    const wxBrush&  GetBackground() const
-        { return m_pimpl->GetBackground(); }
-
-    void SetBackgroundMode(int mode)
-        { m_pimpl->SetBackgroundMode( mode ); }
-    int GetBackgroundMode() const
-        { return m_pimpl->GetBackgroundMode(); }
-
-    void SetTextForeground(const wxColour& colour)
-        { m_pimpl->SetTextForeground(colour); }
-    const wxColour& GetTextForeground() const
-        { return m_pimpl->GetTextForeground(); }
-
-    void SetTextBackground(const wxColour& colour)
-        { m_pimpl->SetTextBackground(colour); }
-    const wxColour& GetTextBackground() const
-        { return m_pimpl->GetTextBackground(); }
-
-#if wxUSE_PALETTE
-    void SetPalette(const wxPalette& palette)
-        { m_pimpl->SetPalette(palette); }
-#endif // wxUSE_PALETTE
-
-    // logical functions
-
-    void SetLogicalFunction(wxRasterOperationMode function)
-        { m_pimpl->SetLogicalFunction(function); }
-    wxRasterOperationMode GetLogicalFunction() const
-        { return m_pimpl->GetLogicalFunction(); }
 
     // text measurement
 
@@ -904,55 +827,6 @@ public:
 
     bool GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
         { return m_pimpl->DoGetPartialTextExtents(text, widths); }
-
-    // clearing
-
-    void Clear()
-        { m_pimpl->Clear(); }
-
-    // clipping
-
-    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
-        { m_pimpl->DoSetClippingRegion(x, y, width, height); }
-    void SetClippingRegion(const wxPoint& pt, const wxSize& sz)
-        { m_pimpl->DoSetClippingRegion(pt.x, pt.y, sz.x, sz.y); }
-    void SetClippingRegion(const wxRect& rect)
-        { m_pimpl->DoSetClippingRegion(rect.x, rect.y, rect.width, rect.height); }
-
-    // unlike the functions above, the coordinates of the region used in this
-    // one are in device coordinates, not the logical ones
-    void SetDeviceClippingRegion(const wxRegion& region)
-        { m_pimpl->DoSetDeviceClippingRegion(region); }
-
-    // this function is deprecated because its name is confusing: you may
-    // expect it to work with logical coordinates but, in fact, it does exactly
-    // the same thing as SetDeviceClippingRegion()
-    //
-    // please review the code using it and either replace it with calls to
-    // SetDeviceClippingRegion() or correct it if it was [wrongly] passing
-    // logical coordinates to this function
-    wxDEPRECATED_INLINE(void SetClippingRegion(const wxRegion& region),
-                        SetDeviceClippingRegion(region); )
-
-    void DestroyClippingRegion()
-        { m_pimpl->DestroyClippingRegion(); }
-
-    bool GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
-    {
-        wxRect r;
-        const bool clipping = m_pimpl->DoGetClippingRect(r);
-        if ( x )
-            *x = r.x;
-        if ( y )
-            *y = r.y;
-        if ( w )
-            *w = r.width;
-        if ( h )
-            *h = r.height;
-        return clipping;
-    }
-    bool GetClippingBox(wxRect& rect) const
-        { return m_pimpl->DoGetClippingRect(rect); }
 
     // coordinates conversions and transforms
 
@@ -1039,6 +913,151 @@ public:
     void SetDeviceLocalOrigin( wxCoord x, wxCoord y )
         { m_pimpl->SetDeviceLocalOrigin( x, y ); }
 
+protected:
+    explicit wxReadOnlyDC(wxDCImpl *pimpl)
+        : m_pimpl(pimpl)
+    {
+    }
+
+    wxDCImpl * const m_pimpl;
+};
+
+// Full device context class, providing functions for drawing on the device in
+// addition to the base class functions only querying it.
+class WXDLLIMPEXP_CORE wxDC : public wxReadOnlyDC
+{
+public:
+    // copy attributes (font, colours and writing direction) from another DC
+    void CopyAttributes(const wxDC& dc);
+
+    wxDCImpl *GetImpl()
+        { return m_pimpl; }
+    const wxDCImpl *GetImpl() const
+        { return m_pimpl; }
+
+    void *GetHandle() const
+        { return m_pimpl->GetHandle(); }
+
+    // page and document
+
+    bool StartDoc(const wxString& message)
+        { return m_pimpl->StartDoc(message); }
+    void EndDoc()
+        { m_pimpl->EndDoc(); }
+
+    void StartPage()
+        { m_pimpl->StartPage(); }
+    void EndPage()
+        { m_pimpl->EndPage(); }
+
+    // bounding box
+
+    void CalcBoundingBox(wxCoord x, wxCoord y)
+        { m_pimpl->CalcBoundingBox(x,y); }
+    void ResetBoundingBox()
+        { m_pimpl->ResetBoundingBox(); }
+
+    wxCoord MinX() const
+        { return m_pimpl->MinX(); }
+    wxCoord MaxX() const
+        { return m_pimpl->MaxX(); }
+    wxCoord MinY() const
+        { return m_pimpl->MinY(); }
+    wxCoord MaxY() const
+        { return m_pimpl->MaxY(); }
+
+    // setters and getters
+
+    void SetPen(const wxPen& pen)
+        { m_pimpl->SetPen( pen ); }
+    const wxPen&    GetPen() const
+        { return m_pimpl->GetPen(); }
+
+    void SetBrush(const wxBrush& brush)
+        { m_pimpl->SetBrush( brush ); }
+    const wxBrush&  GetBrush() const
+        { return m_pimpl->GetBrush(); }
+
+    void SetBackground(const wxBrush& brush)
+        { m_pimpl->SetBackground( brush ); }
+    const wxBrush&  GetBackground() const
+        { return m_pimpl->GetBackground(); }
+
+    void SetBackgroundMode(int mode)
+        { m_pimpl->SetBackgroundMode( mode ); }
+    int GetBackgroundMode() const
+        { return m_pimpl->GetBackgroundMode(); }
+
+    void SetTextForeground(const wxColour& colour)
+        { m_pimpl->SetTextForeground(colour); }
+    const wxColour& GetTextForeground() const
+        { return m_pimpl->GetTextForeground(); }
+
+    void SetTextBackground(const wxColour& colour)
+        { m_pimpl->SetTextBackground(colour); }
+    const wxColour& GetTextBackground() const
+        { return m_pimpl->GetTextBackground(); }
+
+#if wxUSE_PALETTE
+    void SetPalette(const wxPalette& palette)
+        { m_pimpl->SetPalette(palette); }
+#endif // wxUSE_PALETTE
+
+    // logical functions
+
+    void SetLogicalFunction(wxRasterOperationMode function)
+        { m_pimpl->SetLogicalFunction(function); }
+    wxRasterOperationMode GetLogicalFunction() const
+        { return m_pimpl->GetLogicalFunction(); }
+
+    // clearing
+
+    void Clear()
+        { m_pimpl->Clear(); }
+
+    // clipping
+
+    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+        { m_pimpl->DoSetClippingRegion(x, y, width, height); }
+    void SetClippingRegion(const wxPoint& pt, const wxSize& sz)
+        { m_pimpl->DoSetClippingRegion(pt.x, pt.y, sz.x, sz.y); }
+    void SetClippingRegion(const wxRect& rect)
+        { m_pimpl->DoSetClippingRegion(rect.x, rect.y, rect.width, rect.height); }
+
+    // unlike the functions above, the coordinates of the region used in this
+    // one are in device coordinates, not the logical ones
+    void SetDeviceClippingRegion(const wxRegion& region)
+        { m_pimpl->DoSetDeviceClippingRegion(region); }
+
+    // this function is deprecated because its name is confusing: you may
+    // expect it to work with logical coordinates but, in fact, it does exactly
+    // the same thing as SetDeviceClippingRegion()
+    //
+    // please review the code using it and either replace it with calls to
+    // SetDeviceClippingRegion() or correct it if it was [wrongly] passing
+    // logical coordinates to this function
+    wxDEPRECATED_INLINE(void SetClippingRegion(const wxRegion& region),
+                        SetDeviceClippingRegion(region); )
+
+    void DestroyClippingRegion()
+        { m_pimpl->DestroyClippingRegion(); }
+
+    bool GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+    {
+        wxRect r;
+        const bool clipping = m_pimpl->DoGetClippingRect(r);
+        if ( x )
+            *x = r.x;
+        if ( y )
+            *y = r.y;
+        if ( w )
+            *w = r.width;
+        if ( h )
+            *h = r.height;
+        return clipping;
+    }
+    bool GetClippingBox(wxRect& rect) const
+        { return m_pimpl->DoGetClippingRect(rect); }
 
     // -----------------------------------------------
     // the actual drawing API
@@ -1311,9 +1330,7 @@ public:
 
 protected:
     // ctor takes ownership of the pointer
-    wxDC(wxDCImpl *pimpl) : m_pimpl(pimpl) { }
-
-    wxDCImpl * const m_pimpl;
+    explicit wxDC(wxDCImpl *pimpl) : wxReadOnlyDC(pimpl) { }
 
     void SetWindow(wxWindow* w)
         { return m_pimpl->SetWindow(w); }

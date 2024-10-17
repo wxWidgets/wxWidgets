@@ -80,7 +80,7 @@ enum
     wxLIST_ALIGN_SNAP_TO_GRID
 };
 
-/// Column format (MSW only except wxLIST_FORMAT_LEFT)
+/// Column format determining alignment of the items in the column.
 enum wxListColumnFormat
 {
     wxLIST_FORMAT_LEFT,
@@ -359,6 +359,12 @@ public:
         column after all the existing ones without having to specify its
         position explicitly.
 
+        Note that under MSW the first column always uses left alignment due to
+        the limitation of the underlying native control. If you need to use a
+        different alignment for the first column, add a dummy column, then add
+        another column with the desired alignment and finally call
+        DeleteColumn() to remove the dummy one to achieve the desired result.
+
         @since 2.9.4
      */
     long AppendColumn(const wxString& heading,
@@ -420,9 +426,17 @@ public:
 
         This function does @e not send the @c wxEVT_LIST_DELETE_ITEM
         event because deleting many items from the control would be too slow
-        then (unlike wxListCtrl::DeleteItem) but it does send the special @c
+        then (unlike wxListCtrl::DeleteItem), but it does send the special @c
         wxEVT_LIST_DELETE_ALL_ITEMS event if the control was not empty.
         If it was already empty, nothing is done and no event is sent.
+
+        @note If using the generic version of this control
+        (e.g., GTK+) and you bind a function to
+        wxEVT_LIST_DELETE_ALL_ITEMS from a derived class,
+        then it is recommended to unbind this in your derived class's destructor.
+        The base version of wxListCtrl will send a wxEVT_LIST_DELETE_ALL_ITEMS
+        event from its destructor, so you must unbind your class from
+        this event before that occurs.
 
         @return @true if the items were successfully deleted or if the control
             was already empty, @false if an error occurred while deleting the
@@ -1386,6 +1400,8 @@ public:
 
         Always returns false if checkboxes support hadn't been enabled.
 
+        For a control with @c wxLC_VIRTUAL style, this uses OnGetItemIsChecked().
+
         @param item Item (zero-based) index.
 
         @since 3.1.0
@@ -1397,6 +1413,10 @@ public:
 
         This method only works if checkboxes support had been successfully
         enabled using EnableCheckBoxes().
+
+        For a control with @c wxLC_VIRTUAL style, this will only generate the
+        @c EVT_LIST_ITEM_CHECKED and @c EVT_LIST_ITEM_UNCHECKED events. See
+        OnGetItemIsChecked() for information on how to update the checkbox state.
 
         @param item Item (zero-based) index.
         @param check If @true, check the item, otherwise uncheck.

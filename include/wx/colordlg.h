@@ -2,7 +2,6 @@
 // Name:        wx/colordlg.h
 // Purpose:     wxColourDialog
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

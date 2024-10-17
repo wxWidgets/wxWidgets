@@ -2,7 +2,6 @@
 // Name:        src/x11/evtloop.cpp
 // Purpose:     implements wxEventLoop for X11
 // Author:      Julian Smart
-// Modified by:
 // Created:     01.06.01
 // Copyright:   (c) 2002 Julian Smart
 // Licence:     wxWindows licence

@@ -281,7 +281,7 @@ public:
 
         @param doc A valid, i.e. non-null, document pointer ownership of which
             is passed to wxXmlResource, i.e. this pointer can't be used after
-            this function rteturns.
+            this function returns.
         @param name The name argument is optional, but may be provided if you
             plan to call Unload() later. It doesn't need to be an existing file
             or even conform to the usual form of file names as it is not
@@ -760,10 +760,31 @@ protected:
         @since 3.1.0
     */
     bool IsObjectNode(const wxXmlNode *node) const;
+
+    /**
+        Returns the node name.
+
+        Returns empty string if @a node is @NULL.
+
+        @since 3.3.0
+    */
+    wxString GetNodeName(wxXmlNode* node) const;
+
+    /**
+        Gets the node attribute value.
+
+        If @a node is @NULL or the attribute is not present, returns @a defaultValue.
+
+        @since 3.3.0
+    */
+    wxString GetNodeAttribute(const wxXmlNode *node,
+                              const wxString& attrName,
+                              const wxString& defaultValue = {}) const;
+
     /**
         Gets node content from wxXML_ENTITY_NODE.
     */
-    wxString GetNodeContent(wxXmlNode* node);
+    wxString GetNodeContent(wxXmlNode* node) const;
 
     /**
         Gets the parent of the node given.

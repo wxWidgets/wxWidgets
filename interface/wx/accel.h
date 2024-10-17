@@ -224,12 +224,6 @@ public:
     wxAcceleratorTable(const wxString& resource);
 
     /**
-        Destroys the wxAcceleratorTable object.
-        See @ref overview_refcount_destruct for more info.
-    */
-    virtual ~wxAcceleratorTable();
-
-    /**
         Returns @true if the accelerator table is valid.
     */
     bool IsOk() const;

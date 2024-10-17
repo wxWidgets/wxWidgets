@@ -35,10 +35,12 @@ All binaries are available at:
 https://www.wxwidgets.org/downloads#v3.2.0_msw
 
 Once you have the files you need, unzip all of them into the same directory, for
-example `c:\wx\3.2.0`. You should have only include and lib subdirectories under
-it, nothing else. To avoid hard-coding this path into your projects, define
-`wxwin` environment variable containing it: although it's a little known fact,
-all versions of MSVC support environment variable expansion in the C++ projects
+example `c:\wx\3.2.0`. You should have `include` and `lib` subdirectories under
+this directory, as well as files such as `wxwidgets.props`.
+
+Note: To avoid hard-coding this path into your projects, define `wxwin`
+environment variable containing it: although it's a little known fact, all
+versions of MSVC support environment variable expansion in the C++ projects
 (but not, unfortunately, in the solution files).
 
 Using Binaries with Visual Studio

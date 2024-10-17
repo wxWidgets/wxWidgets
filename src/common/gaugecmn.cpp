@@ -2,7 +2,6 @@
 // Name:        src/common/gaugecmn.cpp
 // Purpose:     wxGaugeBase: common to all ports methods of wxGauge
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.02.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

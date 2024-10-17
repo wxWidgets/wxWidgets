@@ -663,7 +663,7 @@ BENCHMARK_FUNC(PrintfDouble)
     return true;
 }
 
-#if wxCHECK_CXX_STD(201703L)
+#if wxHAS_CXX17_INCLUDE(<charconv>)
 
 #include <charconv>
 
@@ -715,4 +715,4 @@ BENCHMARK_FUNC(StdToChars)
 }
 #endif // __cpp_lib_to_chars
 
-#endif // C++17
+#endif // wxHAS_CXX17_INCLUDE(<charconv>)

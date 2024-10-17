@@ -2,7 +2,6 @@
 // Name:        src/common/xtistrm.cpp
 // Purpose:     streaming runtime metadata information
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     27/07/03
 // Copyright:   (c) 2003 Stefan Csomor
 // Licence:     wxWindows licence

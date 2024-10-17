@@ -2,7 +2,6 @@
 // Name:        tbtest.cpp
 // Purpose:     wxTaskBarIcon demo
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c)
 // Licence:     wxWindows licence

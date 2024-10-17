@@ -2,7 +2,6 @@
 // Name:        wx/dirctrl.h
 // Purpose:     Directory control base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

@@ -162,6 +162,9 @@ public:
 #undef wxDEFINE_UNICHAR_OPERATOR
 #undef wxDEFINE_UNCHAR_CMP_WITH_INT
 
+    wxDEFINE_COMPARISONS_BY_REV(char, const wxUniChar&)
+    wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniChar&)
+
     // this is needed for expressions like 'Z'-c
     int operator-(const wxUniChar& c) const { return m_value - c.m_value; }
     int operator-(char c) const { return m_value - From8bit(c); }
@@ -290,12 +293,23 @@ public:
 #undef wxDEFINE_UNICHARREF_OPERATOR
 #undef wxDEFINE_UNICHARREF_CMP_WITH_INT
 
+    // Comparison operators for the case when wxUniChar(Ref) is the second
+    // operand implemented in terms of member comparison functions
+    wxDEFINE_COMPARISONS_BY_REV(char, const wxUniCharRef&)
+    wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniCharRef&)
+
+    wxDEFINE_COMPARISONS_BY_REV(const wxUniChar&, const wxUniCharRef&)
+
     // for expressions like c-'A':
     int operator-(const wxUniCharRef& c) const { return UniChar() - c.UniChar(); }
     int operator-(const wxUniChar& c) const { return UniChar() - c; }
     int operator-(char c) const { return UniChar() - c; }
     int operator-(unsigned char c) const { return UniChar() - c; }
     int operator-(wchar_t c) const { return UniChar() - c; }
+    friend int operator-(char c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+    friend int operator-(const wxUniChar& c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+    friend int operator-(wchar_t c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+
 
 private:
 #if wxUSE_UNICODE_UTF8
@@ -364,22 +378,5 @@ void swap(wxUniCharRef&& lhs, wxUniCharRef&& rhs)
     lhs = rhs;
     rhs = tmp;
 }
-
-
-// Comparison operators for the case when wxUniChar(Ref) is the second operand
-// implemented in terms of member comparison functions
-
-wxDEFINE_COMPARISONS_BY_REV(char, const wxUniChar&)
-wxDEFINE_COMPARISONS_BY_REV(char, const wxUniCharRef&)
-
-wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniChar&)
-wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniCharRef&)
-
-wxDEFINE_COMPARISONS_BY_REV(const wxUniChar&, const wxUniCharRef&)
-
-// for expressions like c-'A':
-inline int operator-(char c1, const wxUniCharRef& c2) { return -(c2 - c1); }
-inline int operator-(const wxUniChar& c1, const wxUniCharRef& c2) { return -(c2 - c1); }
-inline int operator-(wchar_t c1, const wxUniCharRef& c2) { return -(c2 - c1); }
 
 #endif /* _WX_UNICHAR_H_ */

@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/window.mm
 // Purpose:     widgets (non tlw) for cocoa
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-06-20
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -17,6 +16,7 @@
     #include "wx/textctrl.h"
     #include "wx/combobox.h"
     #include "wx/radiobut.h"
+    #include "wx/scrolbar.h"
 #endif
 
 #ifdef __WXMAC__
@@ -190,6 +190,9 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)flag;
+
+- (BOOL)clipsToBounds;
+- (void)setClipsToBounds:(BOOL)clipsToBounds;
 
 - (void)setImage:(NSImage *)image;
 - (void)setControlSize:(NSControlSize)size;
@@ -589,22 +592,29 @@ void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEven
     wxSetupCoordinates(m_osxView, x, y, nsEvent);
 }
 
-void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
+wxWidgetCocoaImpl::MouseEvents
+wxWidgetCocoaImpl::TranslateMouseEvent( NSEvent * nsEvent )
 {
+    MouseEvents wxevents(1);
+
+    // This pointer may be invalidated by resizing the vector and has to be
+    // reset in this case.
+    wxMouseEvent* wxevent = &wxevents.front();
+
     int eventType = [nsEvent type];
     UInt32 modifiers = [nsEvent modifierFlags] ;
     
-    SetupCoordinates(wxevent.m_x, wxevent.m_y, nsEvent);
+    SetupCoordinates(wxevent->m_x, wxevent->m_y, nsEvent);
 
     // these parameters are not given for all events
     UInt32 button = [nsEvent buttonNumber];
     UInt32 clickCount = 0;
 
-    wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
-    wxevent.m_rawControlDown = modifiers & NSControlKeyMask;
-    wxevent.m_altDown = modifiers & NSAlternateKeyMask;
-    wxevent.m_controlDown = modifiers & NSCommandKeyMask;
-    wxevent.SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
+    wxevent->m_shiftDown = modifiers & NSShiftKeyMask;
+    wxevent->m_rawControlDown = modifiers & NSControlKeyMask;
+    wxevent->m_altDown = modifiers & NSAlternateKeyMask;
+    wxevent->m_controlDown = modifiers & NSCommandKeyMask;
+    wxevent->SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
 
     UInt32 mouseChord = 0;
 
@@ -679,21 +689,21 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         mouseChord = ((mouseChord & ~1U) | 2U);
 
     if(mouseChord & 1U)
-                wxevent.m_leftDown = true ;
+                wxevent->m_leftDown = true ;
     if(mouseChord & 2U)
-                wxevent.m_rightDown = true ;
+                wxevent->m_rightDown = true ;
     if(mouseChord & 4U)
     {
         switch ( button )
         {
             default:
-                wxevent.m_middleDown = true ;
+                wxevent->m_middleDown = true ;
                 break;
             case 3:
-                wxevent.m_aux1Down = true ;
+                wxevent->m_aux1Down = true ;
                 break;
             case 4:
-                wxevent.m_aux2Down = true ;
+                wxevent->m_aux2Down = true ;
                 break;
         }
     }
@@ -707,23 +717,23 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
             switch ( button )
             {
                 case 0 :
-                    wxevent.SetEventType( clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN )  ;
+                    wxevent->SetEventType( clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN )  ;
                     break ;
 
                 case 1 :
-                    wxevent.SetEventType( clickCount > 1 ? wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN ) ;
+                    wxevent->SetEventType( clickCount > 1 ? wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN ) ;
                     break ;
 
                 case 2 :
-                    wxevent.SetEventType( clickCount > 1 ? wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN ) ;
+                    wxevent->SetEventType( clickCount > 1 ? wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN ) ;
                     break ;
 
                 case 3 :
-                    wxevent.SetEventType( clickCount > 1 ? wxEVT_AUX1_DCLICK : wxEVT_AUX1_DOWN ) ;
+                    wxevent->SetEventType( clickCount > 1 ? wxEVT_AUX1_DCLICK : wxEVT_AUX1_DOWN ) ;
                     break ;
 
                 case 4 :
-                    wxevent.SetEventType( clickCount > 1 ? wxEVT_AUX2_DCLICK : wxEVT_AUX2_DOWN ) ;
+                    wxevent->SetEventType( clickCount > 1 ? wxEVT_AUX2_DCLICK : wxEVT_AUX2_DOWN ) ;
                     break ;
 
                 default:
@@ -737,23 +747,23 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
             switch ( button )
             {
                 case 0 :
-                    wxevent.SetEventType( wxEVT_LEFT_UP )  ;
+                    wxevent->SetEventType( wxEVT_LEFT_UP )  ;
                     break ;
 
                 case 1 :
-                    wxevent.SetEventType( wxEVT_RIGHT_UP ) ;
+                    wxevent->SetEventType( wxEVT_RIGHT_UP ) ;
                     break ;
 
                 case 2 :
-                    wxevent.SetEventType( wxEVT_MIDDLE_UP ) ;
+                    wxevent->SetEventType( wxEVT_MIDDLE_UP ) ;
                     break ;
 
                 case 3 :
-                    wxevent.SetEventType( wxEVT_AUX1_UP ) ;
+                    wxevent->SetEventType( wxEVT_AUX1_UP ) ;
                     break ;
 
                 case 4 :
-                    wxevent.SetEventType( wxEVT_AUX2_UP ) ;
+                    wxevent->SetEventType( wxEVT_AUX2_UP ) ;
                     break ;
 
                 default:
@@ -766,7 +776,7 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
             float deltaX = 0.0;
             float deltaY = 0.0;
 
-            wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
+            wxevent->SetEventType( wxEVT_MOUSEWHEEL ) ;
 
             if ( [nsEvent hasPreciseScrollingDeltas] )
             {
@@ -779,56 +789,73 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
                 deltaY = [nsEvent scrollingDeltaY] * 10;
             }
             
-            wxevent.m_wheelDelta = 10;
-            wxevent.m_wheelInverted = [nsEvent isDirectionInvertedFromDevice];
-            wxevent.m_linesPerAction = 1;
-            wxevent.m_columnsPerAction = 1;
+            wxevent->m_wheelDelta = 10;
+            wxevent->m_wheelInverted = [nsEvent isDirectionInvertedFromDevice];
+            wxevent->m_linesPerAction = 1;
+            wxevent->m_columnsPerAction = 1;
 
-            if ( fabs(deltaX) > fabs(deltaY) )
+            // Should we impose some minimum threshold here?
+            if ( deltaY != 0 )
             {
+                wxevent->m_wheelRotation = (int)deltaY;
+            }
+
+            if ( deltaX != 0 )
+            {
+                // We can send one or two events depending on whether we have
+                // delta in just one or both directions.
+                wxMouseEvent* wxeventPtr = wxevent;
+                if ( deltaY != 0 )
+                {
+                    wxevents.push_back(*wxevent);
+
+                    // The push above could have invalidated the pointer, so
+                    // reset it to still point to the first element.
+                    wxevent = &wxevents.front();
+                    wxeventPtr = &wxevents.back();
+                }
+
                 // wx conventions for horizontal are inverted from vertical (originating from native msw behavior)
                 // right and up are positive values, left and down are negative values, while on OSX right and down
                 // are negative and left and up are positive.
-                wxevent.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
-                wxevent.m_wheelRotation = -(int)deltaX;
-            }
-            else
-            {
-                wxevent.m_wheelRotation = (int)deltaY;
+                wxeventPtr->m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+                wxeventPtr->m_wheelRotation = -(int)deltaX;
             }
 
         }
         break ;
 
         case NSMouseEntered :
-            wxevent.SetEventType( wxEVT_ENTER_WINDOW ) ;
+            wxevent->SetEventType( wxEVT_ENTER_WINDOW ) ;
             break;
         case NSMouseExited :
-            wxevent.SetEventType( wxEVT_LEAVE_WINDOW ) ;
+            wxevent->SetEventType( wxEVT_LEAVE_WINDOW ) ;
             break;
         case NSLeftMouseDragged :
         case NSRightMouseDragged :
         case NSOtherMouseDragged :
         case NSMouseMoved :
-            wxevent.SetEventType( wxEVT_MOTION ) ;
+            wxevent->SetEventType( wxEVT_MOTION ) ;
             break;
         
         case NSEventTypeMagnify:
-            wxevent.SetEventType( wxEVT_MAGNIFY );
-            wxevent.m_magnification = [nsEvent magnification];
+            wxevent->SetEventType( wxEVT_MAGNIFY );
+            wxevent->m_magnification = [nsEvent magnification];
             break;
             
         default :
             break ;
     }
 
-    wxevent.m_clickCount = clickCount;
+    wxevent->m_clickCount = clickCount;
     wxWindowMac* peer = GetWXPeer();
     if ( peer )
     {
-        wxevent.SetEventObject(peer);
-        wxevent.SetId(peer->GetId()) ;
+        wxevent->SetEventObject(peer);
+        wxevent->SetId(peer->GetId()) ;
     }
+
+    return wxevents;
 }
 
 static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool enable)
@@ -914,7 +941,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     [super viewDidMoveToWindow];
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101200
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
 - (void) viewWillDraw
 {
     if ( WX_IS_MACOS_AVAILABLE(11, 0) )
@@ -1493,11 +1520,16 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( slf );
             if ( [ event type]  == NSLeftMouseDown && !wxGetMouseState().LeftIsDown() && impl != nullptr )
             {
-                wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-                SetupMouseEvent(wxevent , event) ;
-                wxevent.SetEventType(wxEVT_LEFT_UP);
+                for ( auto wxevent : TranslateMouseEvent(event) )
+                {
+                    if ( wxevent.GetEventType() == wxEVT_LEFT_DOWN )
+                    {
+                        wxevent.SetEventType(wxEVT_LEFT_UP);
 
-                GetWXPeer()->HandleWindowEvent(wxevent);
+                        GetWXPeer()->HandleWindowEvent(wxevent);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -2166,6 +2198,7 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
                 wxKeyEvent wxevent(wxEVT_KEY_DOWN);
                 SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
                 result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
+                SetKeyDownSent();
             }
 
             // ...and wxEVT_CHAR.
@@ -2559,7 +2592,8 @@ wxWidgetImpl( peer, flags )
 {
     Init();
     m_osxView = w;
-    
+    m_osxClipView = nil;
+
     // check if the user wants to create the control initially hidden
     if ( !peer->IsShown() )
         SetVisibility(false);
@@ -2568,6 +2602,7 @@ wxWidgetImpl( peer, flags )
     if ( m_osxView )
         CFRetain(m_osxView);
     [m_osxView release];
+    m_osxView.clipsToBounds = YES;
 }
 
 
@@ -3211,6 +3246,36 @@ bool wxWidgetCocoaImpl::CanFocus() const
     return canFocus;
 }
 
+@interface wxNSClipView : NSClipView
+
+@end
+
+@implementation wxNSClipView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW);
+    }
+}
+
+- (BOOL) needsPanelToBecomeKey
+{
+    return YES;
+}
+
+#if wxOSX_USE_NATIVE_FLIPPED
+- (BOOL)isFlipped
+{
+    return YES;
+}
+#endif
+
+@end
+
 bool wxWidgetCocoaImpl::HasFocus() const
 {
     NSView* targetView = m_osxView;
@@ -3301,7 +3366,13 @@ void wxWidgetCocoaImpl::RemoveFromParent()
 
 void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
 {
-    NSView* container = parent->GetWXWidget() ;
+    NSView* container = nil;
+
+    if ( m_wxPeer->MacIsWindowScrollbar( parent->GetWXPeer()))
+        container = parent->GetWXWidget();
+    else
+        container = parent->GetContainer();
+
     wxASSERT_MSG( container != nullptr , wxT("No valid mac container control") ) ;
     [container addSubview:m_osxView];
     
@@ -3883,6 +3954,15 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
             [[(NSScrollView*)m_osxView documentView] interpretKeyEvents:[NSArray arrayWithObject:event]];
         else
             [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+
+        if ( IsInNativeKeyDown() && !WasKeyDownSent())
+        {
+            wxLogTrace(TRACE_KEYS, "Emulating missing key down event");
+
+            wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+            SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
+            GetWXPeer()->OSXHandleKeyEvent(wxevent);
+        }
         return true;
     }
     else
@@ -3897,9 +3977,18 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     // this window.
     (void)SetupCursor(event);
 
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent(wxevent , event) ;
-    return GetWXPeer()->HandleWindowEvent(wxevent);
+    bool processed = false;
+    for ( auto& wxevent : TranslateMouseEvent(event) )
+    {
+        // Even if this event was processed, still continue with the other
+        // events, if any.
+        if ( GetWXPeer()->HandleWindowEvent(wxevent) )
+            processed = true;
+    }
+
+    // We consider the NSEvent to be processed if any of the wxEvents it was
+    // mapped to was processed, even if not necessarily all of them.
+    return processed;
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusSet()
@@ -4021,6 +4110,57 @@ void wxWidgetCocoaImpl::SetDrawingEnabled(bool enabled)
         [[m_osxView window] disableFlushWindow];
     }
 }
+
+void wxWidgetCocoaImpl::AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical)
+{
+    if( m_osxClipView )
+    {
+        NSRect bounds = m_osxView.bounds;
+        if( horizontal && horizontal->IsShown() )
+        {
+            int sz = horizontal->GetSize().y;
+            bounds.size.height -= sz;
+        }
+        if( vertical && vertical->IsShown() )
+        {
+            int sz = vertical->GetSize().x;
+            bounds.size.width -= sz;
+        }
+        m_osxClipView.frame = bounds;
+    }
+}
+
+void wxWidgetCocoaImpl::UseClippingView()
+{
+// starting from Sonoma child windows are bleeding through under the scrollbar
+// use native scrollviews therefore
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_14_0
+    if ( WX_IS_MACOS_AVAILABLE(14, 0) )
+    {
+        wxWindow* peer = m_wxPeer;
+
+        if ( peer && m_osxClipView == nil)
+        {
+            m_osxClipView = [[wxNSClipView alloc] initWithFrame: m_osxView.bounds];
+            [(NSClipView*)m_osxClipView setDrawsBackground: NO];
+            [m_osxView addSubview:m_osxClipView];
+
+            // add tracking for this clipview as well
+
+            NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited|NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect;
+            NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: NSZeroRect options: options owner: m_osxClipView userInfo: nil];
+            [m_osxClipView addTrackingArea: area];
+            [area release];
+
+            wxWidgetImpl::Associate( m_osxClipView, this ) ;
+
+            // TODO check for additional subwindows which might have to be moved to the clip view ?
+        }
+    }
+#endif
+}
+
+
 //
 // Factory methods
 //

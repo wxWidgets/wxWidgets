@@ -2,7 +2,6 @@
 // Name:        wx/msw/spinctrl.h
 // Purpose:     wxSpinCtrl class declaration for Win32
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/common/appbase.cpp
 // Purpose:     implements wxAppConsoleBase class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.06.2003 (extracted from common/appcmn.cpp)
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -112,6 +111,8 @@
 wxAppConsole *wxAppConsoleBase::ms_appInstance = nullptr;
 
 wxAppInitializerFunction wxAppConsoleBase::ms_appInitFn = nullptr;
+
+int wxAppConsoleBase::ms_fatalErrorExitCode = 255;
 
 wxSocketManager *wxAppTraitsBase::ms_manager = nullptr;
 
@@ -1024,19 +1025,18 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
 
             if ( !name.empty() )
             {
-                m_stackTrace << wxString::Format(wxT("%-40s"), name.c_str());
+                m_stackTrace << wxString::Format("%-80s", name);
             }
             else
             {
-                m_stackTrace << wxString::Format(wxT("%p"), frame.GetAddress());
+                m_stackTrace << wxString::Format("%-80p", frame.GetAddress());
             }
 
             if ( frame.HasSourceLocation() )
             {
-                m_stackTrace << wxT('\t')
-                             << frame.GetFileName()
-                             << wxT(':')
-                             << frame.GetLine();
+                m_stackTrace << wxString::Format("%s:%zu",
+                                                 frame.GetFileName(),
+                                                 frame.GetLine());
             }
 
             m_stackTrace << wxT('\n');
@@ -1124,10 +1124,6 @@ wxDefaultAssertHandler(const wxString& file,
                        const wxString& cond,
                        const wxString& msg)
 {
-    // If this option is set, we should abort immediately when assert happens.
-    if ( wxSystemOptions::GetOptionInt("exit-on-assert") )
-        wxAbort();
-
     // FIXME MT-unsafe
     static int s_bInAssert = 0;
 
@@ -1139,6 +1135,10 @@ wxDefaultAssertHandler(const wxString& file,
 
         return;
     }
+
+    // If this option is set, we should abort immediately when assert happens.
+    if ( wxSystemOptions::GetOptionInt("exit-on-assert") )
+        wxAbort();
 
     if ( !wxTheApp )
     {

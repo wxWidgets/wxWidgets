@@ -32,7 +32,7 @@ class wxFontInstanceBase
 {
 protected:
     wxFontInstanceBase(float ptSize, bool aa) : m_ptSize(ptSize), m_aa(aa) {}
-    virtual ~wxFontInstanceBase() {}
+    virtual ~wxFontInstanceBase() = default;
 
 public:
     float GetPointSize() const { return m_ptSize; }

@@ -242,7 +242,6 @@ void wxHTTP::SendHeaders()
 bool wxHTTP::ParseHeaders()
 {
     wxString line;
-    wxStringTokenizer tokenzr;
 
     ClearHeaders();
     ClearCookies();
@@ -480,8 +479,6 @@ size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
 wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 {
     wxHTTPStream *inp_stream;
-
-    wxString new_path;
 
     m_lastError = wxPROTO_CONNERR;  // all following returns share this type of error
     if (!m_addr)

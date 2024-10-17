@@ -2,7 +2,6 @@
 // Name:        src/msw/version.rc
 // Purpose:     contains version info resource for wxMSW DLL build
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     09.07.00
 // Copyright:   (c) 2000 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -87,7 +86,7 @@ BEGIN
             VALUE "FileDescription", "wxWidgets " WXLIBDESC " library\0"
             VALUE "FileVersion", wxVERSION_NUM_DOT_STRING "\0"
             VALUE "InternalName", wxSTRINGIZE(WXDLLNAME) "\0"
-            VALUE "LegalCopyright", L"Copyright \xa9 1992-2023 wxWidgets development team\0"
+            VALUE "LegalCopyright", L"Copyright \xa9 1992-2024 wxWidgets development team\0"
             VALUE "OriginalFilename", wxSTRINGIZE(WXDLLNAME) ".dll\0"
             VALUE "ProductName", "wxWidgets\0"
             VALUE "ProductVersion", wxVERSION_NUM_DOT_STRING "\0"

@@ -2,7 +2,6 @@
 // Name:        wx/univ/toolbar.h
 // Purpose:     wxToolBar declaration
 // Author:      Robert Roebling
-// Modified by:
 // Created:     10.09.00
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence

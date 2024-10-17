@@ -2,7 +2,6 @@
 // Name:        wx/stockitem.h
 // Purpose:     stock items helpers (privateh header)
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2004-08-15
 // Copyright:   (c) Vaclav Slavik, 2004
 // Licence:     wxWindows licence

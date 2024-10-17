@@ -2,7 +2,6 @@
 // Name:        wx/univ/stattext.h
 // Purpose:     wxStaticText
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -16,7 +15,7 @@
 class WXDLLIMPEXP_CORE wxStaticText : public wxGenericStaticText
 {
 public:
-    wxStaticText() { }
+    wxStaticText() = default;
 
     // usual ctor
     wxStaticText(wxWindow *parent,

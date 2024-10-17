@@ -2,7 +2,6 @@
 // Name:        wx/msw/registry.h
 // Purpose:     Registry classes and functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.04.1998
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

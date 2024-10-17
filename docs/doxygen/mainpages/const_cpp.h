@@ -31,6 +31,7 @@ using @ifdef_ and not @if_.
 @itemdef{\__WXGTK210__, GTK+ 2.10 or higher}
 @itemdef{\__WXGTK218__, GTK+ 2.18 or higher}
 @itemdef{\__WXGTK220__, GTK+ 2.20 or higher}
+@itemdef{\__WXGTK3__, GTK+ 3.0 or higher}
 @itemdef{\__WXMAC__, old define, same as <tt>\__WXOSX__</tt>}
 @itemdef{\__WXMOTIF__, Motif (not used any longer).}
 @itemdef{\__WXMOTIF20__, Motif 2.0 or higher (not used any longer).}
@@ -168,6 +169,10 @@ Currently the following symbols exist:
     implemented in a generic way, using a critical section.}
 @itemdef{wxHAS_BITMAPTOGGLEBUTTON, Defined in @c wx/tglbtn.h if
     wxBitmapToggleButton class is available in addition to wxToggleButton.}
+@itemdef{wxHAS_CONFIG_AS_FILECONFIG, Defined if wxConfig is defined as
+    wxFileConfig. This constant is available since wxWidgets 3.3.0.}
+@itemdef{wxHAS_CONFIG_AS_REGCONFIG, Defined if wxConfig is defined as
+    wxRegConfig. This constant is available since wxWidgets 3.3.0.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
 @itemdef{wxHAS_DEPRECATED_ATTR, Defined if C++14 @c [[deprecated]] attribute is
@@ -210,6 +215,10 @@ Currently the following symbols exist:
     Windows resource files</a> resource files are available on the current platform.
     Usually wxHAS_IMAGE_RESOURCES should be used instead.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
+@itemdef{wxHAS_PREMULTIPLIED_ALPHA, Defined if wxBitmap stores raw pixel color
+    values premultiplied (scaled) by alpha. This is generally used to switch
+    whether to premultiply before storing pixels via wxAlphaPixelData converted
+    from a straight alpha source.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,
         Defined if the current port supports radio menu items (see wxMenu::AppendRadioItem).}
 @itemdef{wxHAS_RAW_BITMAP, Defined if direct access to bitmap data using the classes in @c wx/rawbmp.h is supported.}
@@ -219,6 +228,9 @@ Currently the following symbols exist:
     symbol doesn't need to be tested any more.}
 @itemdef{wxHAS_SVG, Defined if SVG support (currently only via wxBitmapBundle::FromSVG()) is available.}
 @itemdef{wxHAS_TASK_BAR_ICON, Defined if wxTaskBarIcon is available on the current platform.}
+@itemdef{wxHAS_TEXTCTRL_RTF, Defined if wxTextCtrl::SetRTFValue() and
+    wxTextCtrl::GetRTFValue() can be used. This constant, as well as RTF
+    support itself, is available since wxWidgets 3.3.0.}
 @itemdef{wxHAS_WINDOW_LABEL_IN_STATIC_BOX, Defined if wxStaticBox::Create()
     overload taking @c wxWindow* instead of the text label is available on the current platform.}
 @itemdef{wxHAS_MODE_T, Defined when wxWidgets defines @c mode_t typedef for the

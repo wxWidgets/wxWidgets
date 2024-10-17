@@ -11,6 +11,7 @@
     <wxCompilerPrefix>vc</wxCompilerPrefix>
     <wxCfg>
     </wxCfg>
+    <wxSuffix>u</wxSuffix>
     <wxVendor>custom</wxVendor>
     <wxRuntimeLibs>dynamic</wxRuntimeLibs>
     <wxReleaseRuntimeLibrary>MultiThreadedDLL</wxReleaseRuntimeLibrary>
@@ -21,18 +22,23 @@
     <wxReleaseRuntimeLibrary>MultiThreaded</wxReleaseRuntimeLibrary>
     <wxDebugRuntimeLibrary>MultiThreadedDebug</wxDebugRuntimeLibrary>
   </PropertyGroup>
+  <PropertyGroup Label="UserMacros">
+    <wxArchSuffix>_unknownplatform</wxArchSuffix>
+  </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Win32'">
-    <wxArchSuffix>
-    </wxArchSuffix>
+    <wxArchSuffix></wxArchSuffix>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='x64'">
     <wxArchSuffix>_x64</wxArchSuffix>
   </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM'">
+    <wxArchSuffix>_arm</wxArchSuffix>
+  </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM64'">
     <wxArchSuffix>_arm64</wxArchSuffix>
   </PropertyGroup>
-  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Itanium'">
-    <wxArchSuffix>_ia64</wxArchSuffix>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM64EC'">
+    <wxArchSuffix>_arm64ec</wxArchSuffix>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="('$(Configuration)'=='Debug' or '$(Configuration)'=='DLL Debug')">
     <wxSuffixDebug>d</wxSuffixDebug>
@@ -80,11 +86,10 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalOptions Condition="'$(PlatformToolset)' == 'v140_xp'">/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="('$(Configuration)'=='Release' or '$(Configuration)'=='DLL Release') and '$(VisualStudioVersion)' >= '14.0'">/Zc:throwingNew %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;shell32.lib;shlwapi.lib;ole32.lib;oleaut32.lib;uuid.lib;advapi32.lib;version.lib;comctl32.lib;rpcrt4.lib;ws2_32.lib;wininet.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;shell32.lib;shlwapi.lib;ole32.lib;oleaut32.lib;uuid.lib;advapi32.lib;version.lib;comctl32.lib;rpcrt4.lib;ws2_32.lib;wininet.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

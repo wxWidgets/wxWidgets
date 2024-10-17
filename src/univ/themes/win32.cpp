@@ -2,7 +2,6 @@
 // Name:        src/univ/themes/win32.cpp
 // Purpose:     wxUniversal theme implementing Win32-like LNF
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -2482,7 +2481,7 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
                                                      const wxMenu& menu) const
 {
     // prepare the dc: for now we draw all the items with the system font
-    wxClientDC dc(win);
+    wxInfoDC dc(win);
     dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // the height of a normal item

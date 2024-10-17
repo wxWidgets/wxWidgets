@@ -2,7 +2,6 @@
 // Name:        wx/radiobut.h
 // Purpose:     wxRadioButton declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.09.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxRadioButton;
 class WXDLLIMPEXP_CORE wxRadioButtonBase : public wxRadioButtonBaseBase
 {
 public:
-    wxRadioButtonBase() { }
+    wxRadioButtonBase() = default;
 
     // Methods to be implemented by the derived classes:
     virtual void SetValue(bool value) = 0;

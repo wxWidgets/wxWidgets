@@ -2,7 +2,6 @@
 // Name:        wx/socket.h
 // Purpose:     Socket handling classes
 // Authors:     Guilhem Lavaux, Guillermo Rodriguez Garcia
-// Modified by:
 // Created:     April 1997
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence

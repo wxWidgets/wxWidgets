@@ -366,6 +366,13 @@ public:
     */
     void Delete(unsigned int n);
 
+    /**
+        The control may maintain its items in a sorted order in which case
+        items are automatically inserted at the right position when they are
+        inserted or appended.
+        Returns true if the control maintains its items in a sorted order.
+    */
+    bool IsSorted() const;
 
     /**
         Returns the client object associated with the given item and transfers

@@ -2,7 +2,6 @@
 // Name:        src/common/txtstrm.cpp
 // Purpose:     Text stream classes
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     28/06/98
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence

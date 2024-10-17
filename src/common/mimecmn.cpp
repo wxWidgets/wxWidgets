@@ -2,7 +2,6 @@
 // Name:        src/common/mimecmn.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
-// Modified by:
 //  Chris Elliott (biol75@york.ac.uk) 5 Dec 00: write support for Win32
 // Created:     23.09.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -165,7 +164,6 @@ wxString wxFileType::ExpandCommand(const wxString& command,
                     {
                         const wxChar *pEnd = wxStrchr(pc, wxT('}'));
                         if ( pEnd == nullptr ) {
-                            wxString mimetype;
                             wxLogWarning(_("Unmatched '{' in an entry for mime type %s."),
                                          params.GetMimeType().c_str());
                             str << wxT("%{");

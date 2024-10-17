@@ -2,7 +2,6 @@
 // Name:        src/aui/floatpane.cpp
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
-// Modified by:
 // Created:     2005-05-17
 // Copyright:   (C) Copyright 2005-2006, Kirix Corporation, All Rights Reserved
 // Licence:     wxWindows Library Licence, Version 3.1
@@ -149,9 +148,9 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
         if (m_ownerMgr && pane.HasGripper())
         {
             if (pane.HasGripperTop())
-                size.y += m_ownerMgr->m_art->GetMetric(wxAUI_DOCKART_GRIPPER_SIZE);
+                size.y += m_paneWindow->FromDIP(m_ownerMgr->m_art->GetMetric(wxAUI_DOCKART_GRIPPER_SIZE));
             else
-                size.x += m_ownerMgr->m_art->GetMetric(wxAUI_DOCKART_GRIPPER_SIZE);
+                size.x += m_paneWindow->FromDIP(m_ownerMgr->m_art->GetMetric(wxAUI_DOCKART_GRIPPER_SIZE));
         }
 
         SetClientSize(size);

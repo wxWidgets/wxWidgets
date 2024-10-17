@@ -57,6 +57,8 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     m_qtPixmap = bitmap.GetHandle();
     if ( bitmap.IsOk() && !m_qtPixmap->isNull() )
     {
+        m_contentScaleFactor = bitmap.GetScaleFactor();
+
         // apply mask before drawing
         wxMask *mask = bitmap.GetMask();
         if ( mask && mask->GetHandle() )
@@ -64,6 +66,12 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
         // start drawing on the intermediary device:
         m_ok = m_qtPainter->begin( m_qtPixmap );
+
+        if (m_qtPainter->device()->depth() > 1)
+        {
+            m_qtPainter->setRenderHints(QPainter::Antialiasing,
+                                        true);
+        }
 
         SetPen(m_pen);
         SetBrush(m_brush);

@@ -173,10 +173,6 @@ wxCursor::wxCursor(const char bits[], int width, int height,
 #endif
 }
 
-wxCursor::~wxCursor()
-{
-}
-
 wxPoint wxCursor::GetHotSpot() const
 {
 #if GTK_CHECK_VERSION(2,8,0)

@@ -2,7 +2,6 @@
 // Name:        src/generic/odcombo.cpp
 // Purpose:     wxOwnerDrawnComboBox, wxVListBoxComboPopup
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
@@ -733,7 +732,7 @@ void wxVListBoxComboPopup::CalcWidths()
         // I think using wxDC::GetTextExtent is faster than
         // wxWindow::GetTextExtent (assuming same dc is used
         // for all calls, as we do here).
-        wxClientDC dc(m_combo);
+        wxInfoDC dc(m_combo);
         if ( !m_useFont.IsOk() )
             m_useFont = m_combo->GetFont();
         dc.SetFont(m_useFont);
@@ -1104,6 +1103,7 @@ int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
             AssignNewItemClientData(n, clientData, i, type);
         }
 
+        InvalidateBestSize();
         return n;
     }
     else
@@ -1114,6 +1114,7 @@ int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
             AssignNewItemClientData(pos, clientData, i, type);
         }
 
+        InvalidateBestSize();
         return pos - 1;
     }
 }

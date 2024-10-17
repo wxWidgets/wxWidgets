@@ -2,7 +2,6 @@
 // Name:        wx/slider.h
 // Purpose:     wxSlider interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     09.02.01
 // Copyright:   (c) 1996-2001 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -61,7 +60,7 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxSliderNameStr);
     */
-    wxSliderBase() { }
+    wxSliderBase() = default;
 
     // get/set the current slider value (should be in range)
     virtual int GetValue() const = 0;

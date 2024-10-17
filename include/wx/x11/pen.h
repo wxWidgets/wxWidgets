@@ -2,7 +2,6 @@
 // Name:        wx/x11/pen.h
 // Purpose:     wxPen class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -31,15 +30,13 @@ typedef char wxX11Dash;
 class WXDLLIMPEXP_CORE wxPen: public wxPenBase
 {
 public:
-    wxPen() { }
+    wxPen() = default;
 
     wxPen( const wxColour &colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID );
 
     wxPen( const wxBitmap &stipple, int width );
 
     wxPen( const wxPenInfo& info );
-
-    virtual ~wxPen();
 
     bool operator == ( const wxPen& pen ) const;
     bool operator != (const wxPen& pen) const { return !(*this == pen); }

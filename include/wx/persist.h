@@ -185,7 +185,7 @@ public:
     wxPersistentObject(void *obj) : m_obj(obj) { }
 
     // trivial but virtual dtor
-    virtual ~wxPersistentObject() { }
+    virtual ~wxPersistentObject() = default;
 
 
     // methods used by wxPersistenceManager

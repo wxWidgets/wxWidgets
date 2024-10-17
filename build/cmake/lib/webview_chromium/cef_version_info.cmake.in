@@ -1,0 +1,27 @@
+#############################################################################
+# Name:        build/cmake/lib/webview_chromium/cef_version_info.cmake
+# Purpose:     CMake file CEF version information
+# Author:      Tobias Taschner
+# Created:     2018-02-03
+# Copyright:   (c) 2018 wxWidgets development team
+# Licence:     wxWindows licence
+#############################################################################
+
+#
+# DO NOT MODIFY MANUALLY
+#
+# To update this file, use cef_update_version_info.cmake
+
+set(CEF_BASE_URL "@CEF_BASE_URL@")
+set(CEF_VERSION "@CEF_VERSION@")
+set(CEF_DISTRIBUTION "@CEF_DISTRIBUTION@")
+set(CEF_FILE_EXT "@CEF_FILE_EXT@")
+
+set(CEF_SHA1_macosarm64     "@CEF_SHA1_macosarm64@")
+set(CEF_SHA1_macosx64       "@CEF_SHA1_macosx64@")
+set(CEF_SHA1_linuxarm       "@CEF_SHA1_linuxarm@")
+set(CEF_SHA1_linuxarm64     "@CEF_SHA1_linuxarm64@")
+set(CEF_SHA1_linux64        "@CEF_SHA1_linux64@")
+set(CEF_SHA1_windows32      "@CEF_SHA1_windows32@")
+set(CEF_SHA1_windowsarm64   "@CEF_SHA1_windowsarm64@")
+set(CEF_SHA1_windows64      "@CEF_SHA1_windows64@")

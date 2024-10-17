@@ -2,7 +2,6 @@
 // Name:        wx/vlbox.h
 // Purpose:     wxVListBox is a virtual listbox with lines of variable height
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.05.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -95,6 +94,12 @@ public:
     #ifdef __WXUNIVERSAL__
     bool IsCurrent() const { return wxVScrolledWindow::IsCurrent(); }
     #endif
+
+    // get current item
+    int GetCurrent() const { return m_current; }
+
+    // set current item
+    void SetCurrent(int current) { DoSetCurrent(current); }
 
     // is this item selected?
     bool IsSelected(size_t item) const;

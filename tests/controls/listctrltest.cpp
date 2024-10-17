@@ -81,6 +81,8 @@ void ListCtrlTestCase::setUp()
     m_list = new wxListCtrl(wxTheApp->GetTopWindow());
     m_list->SetWindowStyle(wxLC_REPORT | wxLC_EDIT_LABELS);
     m_list->SetSize(400, 200);
+
+    wxTheApp->GetTopWindow()->Raise();
 }
 
 void ListCtrlTestCase::tearDown()

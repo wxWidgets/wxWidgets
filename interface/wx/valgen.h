@@ -15,11 +15,18 @@
     - wxButton, wxRadioButton, wxToggleButton, wxBitmapToggleButton, wxSpinButton
     - wxCheckBox, wxRadioBox, wxComboBox, wxListBox, wxCheckListBox
     - wxGauge, wxSlider, wxScrollBar, wxChoice, wxStaticText
-    - wxSpinCtrl, wxTextCtrl
+    - wxSpinCtrl, wxTextCtrl, wxColourPickerCtrl (since wxWidgets 3.3.0 or later).
 
     It checks the type of the window and uses an appropriate type for it.
     For example, wxButton and wxTextCtrl transfer data to and from a
     wxString variable; wxListBox uses a wxArrayInt; wxCheckBox uses a boolean.
+
+    @since 3.2.5
+    A wxLB_SINGLE wxListBox can also use an int.  wxColourPickerCtrl support.
+    A 3-state wxCheckBox can use wxCheckBoxState.
+
+    @since 3.3.0
+    A group of wxRadioButton controls can also be associated with an int.
 
     For more information, please see @ref overview_validator.
 
@@ -75,7 +82,7 @@ public:
     wxGenericValidator(int* valPtr);
     /**
         Constructor taking a wxArrayInt pointer. This will be used for
-        wxListBox, wxCheckListBox.
+        wxListBox, wxCheckListBox, and groups of wxRadioButton.
 
         @param valPtr
             A pointer to a variable that contains the value. This variable

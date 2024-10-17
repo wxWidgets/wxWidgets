@@ -840,6 +840,34 @@ void wxNSTextViewControl::SetStringValue( const wxString &str)
     }
 }
 
+wxString wxNSTextViewControl::GetRTFValue() const
+{
+    if (m_textView)
+    {
+        NSData* rtfData = [m_textView RTFFromRange:NSMakeRange(0, [[m_textView textStorage] length])];
+        NSMutableString* rtfString = [[NSMutableString alloc] initWithData:rtfData encoding:NSASCIIStringEncoding];
+        wxString result = wxMacConvertNewlines13To10(wxCFStringRef::AsString(rtfString));
+        [rtfString release];
+        return result;
+    }
+    return wxEmptyString;
+}
+
+void wxNSTextViewControl::SetRTFValue(const wxString &str)
+{
+    wxString st = wxMacConvertNewlines10To13(str);
+    wxMacEditHelper helper(m_textView);
+
+    if (m_textView)
+    {
+        [m_textView setString: wxCFStringRef( wxEmptyString ).AsNSString()];
+        NSData* rtfData=[wxCFStringRef( st ).AsNSString() dataUsingEncoding:NSASCIIStringEncoding];
+        [m_textView replaceCharactersInRange:NSMakeRange(0, 0) withRTF:rtfData];
+    }
+    // Some text styles have to be updated manually.
+    DoUpdateTextStyle();
+}
+
 void wxNSTextViewControl::Copy()
 {
     if (m_textView)
@@ -1261,6 +1289,9 @@ void wxNSTextViewControl::SetStyle(long start,
                 break;
             case wxTEXT_ALIGNMENT_CENTER:
                 [m_textView setAlignment:NSCenterTextAlignment];
+                break;
+            case wxTEXT_ALIGNMENT_JUSTIFIED:
+                [m_textView setAlignment:NSJustifiedTextAlignment];
                 break;
             default:
                 [m_textView setAlignment:NSLeftTextAlignment];

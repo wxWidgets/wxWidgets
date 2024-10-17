@@ -59,11 +59,11 @@ IPCSERVER_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
 IPCSERVER_OBJECTS =  \
 	ipcserver_server.o
 BASEIPCCLIENT_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 BASEIPCCLIENT_OBJECTS =  \
 	baseipcclient_baseclient.o
 BASEIPCSERVER_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 BASEIPCSERVER_OBJECTS =  \
 	baseipcserver_baseserver.o
 

@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextstyles.cpp
 // Purpose:     Style management for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -367,10 +366,10 @@ wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxList& list, c
 /// Delete all styles
 void wxRichTextStyleSheet::DeleteStyles()
 {
-    WX_CLEAR_LIST(wxList, m_characterStyleDefinitions);
-    WX_CLEAR_LIST(wxList, m_paragraphStyleDefinitions);
-    WX_CLEAR_LIST(wxList, m_listStyleDefinitions);
-    WX_CLEAR_LIST(wxList, m_boxStyleDefinitions);
+    wxClearList(m_characterStyleDefinitions);
+    wxClearList(m_paragraphStyleDefinitions);
+    wxClearList(m_listStyleDefinitions);
+    wxClearList(m_boxStyleDefinitions);
 }
 
 /// Insert into list of style sheets
@@ -753,7 +752,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 
     if (attr.GetLeftIndent() > 0)
     {
-        wxClientDC dc(const_cast<wxRichTextStyleListBox*>(this));
+        wxInfoDC dc(const_cast<wxRichTextStyleListBox*>(this));
 
         str << wxT("<td width=") << wxMin(50, (ConvertTenthsMMToPixels(dc, attr.GetLeftIndent())/2)) << wxT("></td>");
     }
@@ -893,7 +892,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 }
 
 // Convert units in tends of a millimetre to device units
-int wxRichTextStyleListBox::ConvertTenthsMMToPixels(wxDC& dc, int units) const
+int wxRichTextStyleListBox::ConvertTenthsMMToPixels(wxReadOnlyDC& dc, int units) const
 {
     int ppi = dc.GetPPI().x;
 

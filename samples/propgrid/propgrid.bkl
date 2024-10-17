@@ -14,8 +14,14 @@
             propgrid.h
         </headers>
         <wx-lib>propgrid</wx-lib>
+        <wx-lib>xrc</wx-lib>
+        <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
+        <wx-lib>xml</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
 
+    <wx-data id="data">
+        <files>propgrid.xrc</files>
+    </wx-data>
 </makefile>

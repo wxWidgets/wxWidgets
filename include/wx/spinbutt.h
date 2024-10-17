@@ -2,7 +2,6 @@
 // Name:        wx/spinbutt.h
 // Purpose:     wxSpinButtonBase class
 // Author:      Julian Smart, Vadim Zeitlin
-// Modified by:
 // Created:     23.07.99
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

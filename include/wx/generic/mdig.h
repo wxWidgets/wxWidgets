@@ -217,7 +217,7 @@ private:
 class WXDLLIMPEXP_CORE wxGenericMDIClientWindow : public wxMDIClientWindowBase
 {
 public:
-    wxGenericMDIClientWindow() { }
+    wxGenericMDIClientWindow() = default;
 
     // unfortunately we need to provide our own version of CreateClient()
     // because of the difference in the type of the first parameter and

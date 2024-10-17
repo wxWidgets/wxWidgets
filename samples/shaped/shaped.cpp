@@ -2,7 +2,6 @@
 // Name:        shaped.cpp
 // Purpose:     Shaped Window sample
 // Author:      Robin Dunn
-// Modified by:
 // Created:     28-Mar-2003
 // Copyright:   (c) Robin Dunn
 // Licence:     wxWindows licence

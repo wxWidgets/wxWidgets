@@ -8,6 +8,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CLIPBOARD
 
 #include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
@@ -144,3 +145,5 @@ int wxClipboard::Mode()
 {
     return m_usePrimary ? QClipboard::Selection : QClipboard::Clipboard;
 }
+
+#endif // wxUSE_CLIPBOARD

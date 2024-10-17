@@ -1955,7 +1955,7 @@ public:
         Default constructor initializes the object to invalid state.
 
         Initially the row and column are both invalid (-1) and so operator!()
-        for an uninitialized wxGridCellCoords returns false.
+        for an uninitialized wxGridCellCoords returns @false.
      */
     wxGridCellCoords();
 
@@ -1990,6 +1990,13 @@ public:
     void Set(int row, int col);
 
     /**
+        Returns @c true if neither the row nor column are invalid (-1).
+
+        @since 3.3.0
+     */
+    bool IsFullySpecified() const
+
+    /**
         Assignment operator for coordinate types.
      */
     wxGridCellCoords& operator=(const wxGridCellCoords& other);
@@ -2008,7 +2015,7 @@ public:
         Checks whether the coordinates are invalid.
 
         Returns false only if both row and column are -1. Notice that if either
-        row or column (but not both) are -1, this method returns true even if
+        row or column (but not both) are -1, this method returns @true even if
         the object is invalid. This is done because objects in such state
         should actually never exist, i.e. either both coordinates should be -1
         or none of them should be -1.
@@ -2099,7 +2106,7 @@ public:
 
     /**
         Return the canonicalized block where top left coordinates is less
-        then bottom right coordinates.
+        than bottom right coordinates.
      */
     wxGridBlockCoords Canonicalize() const;
 
@@ -4564,6 +4571,24 @@ public:
     bool CanDragRowSize(int row) const;
 
     /**
+        Returns @true if the row labels can be resized by dragging with the
+        mouse.
+
+        @since 3.3.0
+    */
+    bool CanDragRowLabelSize();
+
+    /**
+        Returns @true if the column labels can be resized by dragging with the
+        mouse.
+
+        This is the same as CanDragRowLabelSize() but for column labels.
+
+        @since 3.3.0
+    */
+    bool CanDragColLabelSize();
+
+    /**
         Returns @true if columns can be hidden from the popup menu of the native header.
 
         @since 3.1.3
@@ -4638,6 +4663,24 @@ public:
     void DisableDragRowSize();
 
     /**
+        Disables row label sizing by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragRowLabelSize().
+
+        @since 3.3.0
+    */
+    void DisableDragRowLabelSize();
+
+    /**
+        Disables column label sizing by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragColLabelSize().
+
+        @since 3.3.0
+    */
+    void DisableDragColLabelSize();
+
+    /**
         Disables column hiding from the header popup menu.
 
         Equivalent to passing @false to EnableHidingColumns().
@@ -4705,6 +4748,24 @@ public:
         @see DisableRowResize()
     */
     void EnableDragRowSize(bool enable = true);
+
+    /**
+        Enables or disables row label sizing by dragging with the mouse.
+
+        @see DisableDragRowLabelSize()
+
+        @since 3.3.0
+    */
+    void EnableDragRowLabelSize(bool enable = true);
+
+    /**
+        Enables or disables col label sizing by dragging with the mouse.
+
+        @see DisableDragColLabelSize()
+
+        @since 3.3.0
+    */
+    void EnableDragColLabelSize(bool enable = true);
 
     /**
         Enables or disables column hiding from the header popup menu.
@@ -4998,6 +5059,21 @@ public:
     void ClearSelection();
 
     /**
+        Copies all cells that are currently selected.
+
+        Note that the cells must be contiguously selected;
+        otherwise, nothing will be copied.
+
+        Returns @c true if content is successfully copied,
+        @c false otherwise. @c false will be returned if
+        nothing was selected, the selected cells weren't contiguous,
+        or a clipboard error occurred.
+
+        @since 3.3.0
+     */
+    bool CopySelection();
+
+    /**
         Deselects a row of cells.
     */
     void DeselectRow( int row );
@@ -5242,6 +5318,30 @@ public:
         rows or columns).
     */
     void SetSelectionMode(wxGridSelectionModes selmode);
+
+    /**
+        Return @true if overlay selection can be used (wxUSE_GRAPHICS_CONTEXT=1)
+        and DisableOverlaySelection() hadn't been called, @false otherwise.
+
+        @since 3.3.0
+
+        @see DisableOverlaySelection()
+    */
+    bool UsesOverlaySelection();
+
+    /**
+        Disable overlay selection if it is enabled.
+
+        Starting from wxWidgets 3.3.0, the wxGrid selection appearance is changed
+        from using a solid and opaque colour to denote selection to using a semi-
+        transparent area overlaid on the selected cells. Notice that the old behaviour
+        is still supported and can be reverted to by calling this function.
+
+        @since 3.3.0
+
+        @see UsesOverlaySelection()
+    */
+    void DisableOverlaySelection();
 
     ///@}
 
@@ -5935,11 +6035,21 @@ public:
     */
     void SetRowAttr(int row, wxGridCellAttr* attr);
 
-
+    /**
+        Returns an array of row labels within the given region.
+    */
     wxArrayInt CalcRowLabelsExposed( const wxRegion& reg,
                                      wxGridWindow *gridWindow = nullptr) const;
+
+    /**
+        Returns an array of column labels within the given region.
+    */
     wxArrayInt CalcColLabelsExposed( const wxRegion& reg,
                                      wxGridWindow *gridWindow = nullptr) const;
+
+    /**
+        Returns an array of (visible) cells within the given region.
+    */
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
                                             wxGridWindow *gridWindow = nullptr) const;
 
@@ -6322,28 +6432,30 @@ public:
         Processes a @c wxEVT_GRID_SELECT_CELL event type.
     @event{EVT_GRID_ROW_MOVE(func)}
         The user tries to change the order of the rows in the grid by
-        dragging the row specified by GetRow(). This event can be vetoed to
-        either prevent the user from reordering the row change completely
-        (but notice that if you don't want to allow it at all, you simply
-        shouldn't call wxGrid::EnableDragRowMove() in the first place), vetoed
-        but handled in some way in the handler, e.g. by really moving the
-        row to the new position at the associated table level, or allowed to
-        proceed in which case wxGrid::SetRowPos() is used to reorder the
-        rows display order without affecting the use of the row indices
-        otherwise.
+        dragging the row specified by GetRow() to the position specified
+        by GetNewRow().
+        This event can be vetoed to either prevent the user from reordering
+        the row change completely (but notice that if you don't want to allow
+        it at all, you simply shouldn't call wxGrid::EnableDragRowMove() in
+        the first place), vetoed but handled in some way in the handler,
+        e.g. by really moving the row to the new position at the associated
+        table level, or allowed to proceed in which case wxGrid::SetRowPos()
+        is used to reorder the rows display order without affecting the use
+        of the row indices otherwise.
         This event macro corresponds to @c wxEVT_GRID_ROW_MOVE event type.
         It is only available since wxWidgets 3.1.7.
     @event{EVT_GRID_COL_MOVE(func)}
         The user tries to change the order of the columns in the grid by
-        dragging the column specified by GetCol(). This event can be vetoed to
-        either prevent the user from reordering the column change completely
-        (but notice that if you don't want to allow it at all, you simply
-        shouldn't call wxGrid::EnableDragColMove() in the first place), vetoed
-        but handled in some way in the handler, e.g. by really moving the
-        column to the new position at the associated table level, or allowed to
-        proceed in which case wxGrid::SetColPos() is used to reorder the
-        columns display order without affecting the use of the column indices
-        otherwise.
+        dragging the column specified by GetCol() to the position specified
+        by GetNewCol().
+        This event can be vetoed to either prevent the user from reordering
+        the column change completely (but notice that if you don't want to
+        allow it at all, you simply shouldn't call wxGrid::EnableDragColMove()
+        in the first place), vetoed but handled in some way in the handler,
+        e.g. by really moving the column to the new position at the associated
+        table level, or allowed to proceed in which case wxGrid::SetColPos()
+        is used to reorder the columns display order without affecting the use
+        of the column indices otherwise.
         This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
     @event{EVT_GRID_COL_SORT(func)}
         This event is generated when a column is clicked by the user and its
@@ -6414,6 +6526,20 @@ public:
     int GetRow() const;
 
     /**
+        Target row for wxEVT_GRID_ROW_MOVE
+
+        @since 3.3.0
+    */
+    int GetNewRow() const;
+
+    /**
+        Target column for wxEVT_GRID_COL_MOVE
+
+        @since 3.3.0
+    */
+    int GetNewCol() const;
+
+    /**
         Returns @true if the Meta key was down at the time of the event.
     */
     bool MetaDown() const;
@@ -6462,6 +6588,14 @@ public:
         wxWidgets 2.9.5.
     @event{EVT_GRID_ROW_SIZE(func)}
         Same as EVT_GRID_CMD_ROW_SIZE() but uses `wxID_ANY` id.
+    @event{EVT_GRID_ROW_LABEL_SIZE(id, func)}
+        The user resized the row labels.
+        Corresponds to @c wxEVT_GRID_ROW_LABEL_SIZE event type.
+        This is new since wxWidgets 3.3.0.
+    @event{EVT_GRID_COL_LABEL_SIZE(id, func)}
+        The user resized the column labels.
+        Corresponds to @c wxEVT_GRID_COL_LABEL_SIZE event type.
+        This is new since wxWidgets 3.3.0.
     @endEventTable
 
     @library{wxcore}
@@ -6727,6 +6861,8 @@ wxEventType wxEVT_GRID_ROW_SIZE;
 wxEventType wxEVT_GRID_ROW_AUTO_SIZE;
 wxEventType wxEVT_GRID_COL_SIZE;
 wxEventType wxEVT_GRID_COL_AUTO_SIZE;
+wxEventType wxEVT_GRID_ROW_LABEL_SIZE;
+wxEventType wxEVT_GRID_COL_LABEL_SIZE;
 wxEventType wxEVT_GRID_RANGE_SELECTING;
 wxEventType wxEVT_GRID_RANGE_SELECTED;
 wxEventType wxEVT_GRID_CELL_CHANGING;

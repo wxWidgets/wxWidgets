@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextxml.cpp
 // Purpose:     XML and HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -77,10 +76,7 @@ bool wxRichTextXMLHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& s
     wxXmlDocument* xmlDoc = new wxXmlDocument;
     bool success = true;
 
-    // This is the encoding to convert to (memory encoding rather than file encoding)
-    wxString encoding(wxT("UTF-8"));
-
-    if (!xmlDoc->Load(stream, encoding))
+    if (!xmlDoc->Load(stream))
     {
         buffer->ResetAndClearCommands();
         success = false;
@@ -1921,7 +1917,6 @@ void wxRichTextXMLHelper::OutputIndentation(wxOutputStream& stream, int indent)
 void wxRichTextXMLHelper::OutputStringEnt(wxOutputStream& stream, const wxString& str,
                             wxMBConv *convMem, wxMBConv *convFile)
 {
-    wxString buf;
     size_t i, last, len;
     wxChar c;
 

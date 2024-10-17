@@ -2,7 +2,6 @@
 // Name:        wx/osx/carbon/private/print.h
 // Purpose:     private implementation for printing on OS X
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     03/02/99
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

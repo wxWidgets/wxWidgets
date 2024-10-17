@@ -2,7 +2,6 @@
 // Name:        wx/msw/icon.h
 // Purpose:     wxIcon class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -26,7 +25,7 @@
 class WXDLLIMPEXP_CORE wxIconRefData : public wxGDIImageRefData
 {
 public:
-    wxIconRefData() { }
+    wxIconRefData() = default;
     virtual ~wxIconRefData() { Free(); }
 
     virtual void Free() override;
@@ -41,7 +40,7 @@ class WXDLLIMPEXP_CORE wxIcon : public wxGDIImage
 public:
     // ctors
         // default
-    wxIcon() { }
+    wxIcon() = default;
 
         // from raw data
     wxIcon(const char bits[], int width, int height);
@@ -77,6 +76,8 @@ public:
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
+
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxIcon, WXDLLIMPEXP_CORE);
 
 protected:
     virtual wxGDIImageRefData *CreateData() const override

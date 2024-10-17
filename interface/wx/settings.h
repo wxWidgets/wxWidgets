@@ -263,6 +263,9 @@ enum wxSystemScreenType
     colours, as they need to adjust the colours used for drawing them to fit in
     the system look.
 
+    Note that this class is only used to query the current appearance, see
+    wxApp::SetAppearance() for changing it.
+
     @since 3.1.3
  */
 class wxSystemAppearance

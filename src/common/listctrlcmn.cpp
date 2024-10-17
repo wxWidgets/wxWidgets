@@ -184,7 +184,7 @@ wxSize wxListCtrlBase::DoGetBestClientSize() const
         return wxControl::DoGetBestClientSize();
 
     int totalWidth;
-    wxClientDC dc(const_cast<wxListCtrlBase*>(this));
+    wxInfoDC dc(const_cast<wxListCtrlBase*>(this));
 
     // In report mode, we use only the column headers, not items, to determine
     // the best width. The reason for this is that it's easier (we can't just

@@ -253,11 +253,13 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Range", "[spinctrl]")
 
     CHECK(m_spin->GetBase() == 10);
 
+#ifndef __WXQT__
     //Test backwards ranges
     m_spin->SetRange(75, 50);
 
     CHECK(m_spin->GetMin() == 75);
     CHECK(m_spin->GetMax() == 50);
+#endif
 }
 
 TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Value", "[spinctrl]")
@@ -291,7 +293,11 @@ TEST_CASE_METHOD(SpinCtrlTestCase2, "SpinCtrl::Value", "[spinctrl]")
     CHECK(updatedText.GetCount() == 0);
 
     m_spin->SetValue("");
+#ifndef __WXQT__
     CHECK( m_spin->GetTextValue() == "" );
+#else
+    CHECK( m_spin->GetTextValue() == "0" ); // the control automatically displays minVal
+#endif
     CHECK( m_spin->GetValue() == 0 );
 
     CHECK(updatedSpin.GetCount() == 0);

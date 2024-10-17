@@ -165,10 +165,13 @@ TEST_CASE("Event::BuiltinConnect", "[event][connect]")
     handler.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), nullptr, &handler);
     handler.Disconnect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnIdle), nullptr, &handler);
 
-    // using casts like this is even uglier than using wxIdleEventHandler but
-    // it should still continue to work for compatibility
+    // using casts like this is even uglier than using wxIdleEventHandler and
+    // results in warnings with gcc, but it should still continue to work for
+    // compatibility
+    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
     handler.Connect(wxEVT_IDLE, (wxObjectEventFunction)(wxEventFunction)&MyHandler::OnIdle);
     handler.Disconnect(wxEVT_IDLE, (wxObjectEventFunction)(wxEventFunction)&MyHandler::OnIdle);
+    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
 
     handler.Bind(wxEVT_IDLE, GlobalOnIdle);
     handler.Unbind(wxEVT_IDLE, GlobalOnIdle);

@@ -2,7 +2,6 @@
 // Name:        wx/osx/frame.h
 // Purpose:     wxFrame class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -21,7 +20,7 @@ class WXDLLIMPEXP_CORE wxFrame: public wxFrameBase
 {
 public:
     // construction
-    wxFrame() { }
+    wxFrame() = default;
     wxFrame(wxWindow *parent,
             wxWindowID id,
             const wxString& title,

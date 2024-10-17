@@ -2,7 +2,6 @@
 // Name:        wx/msw/statusbar.h
 // Purpose:     native implementation of wxStatusBar
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.04.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -67,7 +66,6 @@ protected:
     virtual wxSize DoGetBestSize() const override;
     virtual void DoMoveWindow(int x, int y, int width, int height) override;
 #if wxUSE_TOOLTIPS
-    virtual bool MSWProcessMessage(WXMSG* pMsg) override;
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result) override;
 #endif
 

@@ -2,7 +2,6 @@
 // Name:        wx/univ/inpcons.h
 // Purpose:     wxInputConsumer: mix-in class for input handling
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -38,7 +37,7 @@ class WXDLLIMPEXP_CORE wxInputConsumer
 {
 public:
     wxInputConsumer() { m_inputHandler = nullptr; }
-    virtual ~wxInputConsumer() { }
+    virtual ~wxInputConsumer() = default;
 
     // get the input handler
     wxInputHandler *GetInputHandler() const { return m_inputHandler; }

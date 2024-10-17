@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextbuffer.h
 // Purpose:     Buffer for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -371,7 +370,7 @@ public:
     /**
         Default constructor.
     */
-    wxTextAttrDimensions() {}
+    wxTextAttrDimensions() = default;
 
     /**
         Resets the value and flags for all dimensions.
@@ -465,7 +464,7 @@ public:
     /**
         Default constructor.
     */
-    wxTextAttrSize() {}
+    wxTextAttrSize() = default;
 
     /**
         Resets the width and height dimensions.
@@ -863,7 +862,7 @@ public:
     /**
         Default constructor.
     */
-    wxTextAttrBorders() { }
+    wxTextAttrBorders() = default;
 
     /**
         Equality operator.
@@ -1605,7 +1604,7 @@ public:
     /**
         Default constructor.
     */
-    wxRichTextAttr() {}
+    wxRichTextAttr() = default;
 
     /**
         Copy function.
@@ -1693,7 +1692,7 @@ public:
     /**
         Default constructor.
     */
-    wxRichTextProperties() {}
+    wxRichTextProperties() = default;
 
     /**
         Copy constructor.
@@ -1944,7 +1943,7 @@ public:
         Copy constructor.
     */
     wxRichTextRange(const wxRichTextRange& range) { m_start = range.m_start; m_end = range.m_end; }
-    ~wxRichTextRange() {}
+    ~wxRichTextRange() = default;
 
     /**
         Assigns @a range to this range.
@@ -4192,7 +4191,7 @@ public:
 
     wxRichTextLine(wxRichTextParagraph* parent);
     wxRichTextLine(const wxRichTextLine& obj);
-    virtual ~wxRichTextLine() {}
+    virtual ~wxRichTextLine() = default;
 
 // Overridables
 
@@ -6732,8 +6731,8 @@ public:
     /**
         Constructor.
     */
-    wxRichTextRenderer() {}
-    virtual ~wxRichTextRenderer() {}
+    wxRichTextRenderer() = default;
+    virtual ~wxRichTextRenderer() = default;
 
     /**
         Draws a standard bullet, as specified by the value of GetBulletName. This function should be overridden.
@@ -6778,7 +6777,7 @@ public:
     /**
         Constructor.
     */
-    wxRichTextStdRenderer() {}
+    wxRichTextStdRenderer() = default;
 
     // Draw a standard bullet, as specified by the value of GetBulletName
     virtual bool DrawStandardBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect);

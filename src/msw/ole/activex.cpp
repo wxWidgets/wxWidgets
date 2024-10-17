@@ -2,7 +2,6 @@
 // Name:        src/msw/ole/activex.cpp
 // Purpose:     wxActiveXContainer implementation
 // Author:      Ryan Norton <wxprojects@comcast.net>, Lindsay Mathieson <???>
-// Modified by:
 // Created:     11/07/04
 // Copyright:   (c) 2003 Lindsay Mathieson, (c) 2005 Ryan Norton
 // Licence:     wxWindows licence
@@ -782,7 +781,7 @@ wxVariant &wxActiveXEvent::operator [](size_t idx)
         {
             // copy the _real_ parameter into this one
             // NOTE: m_params stores the parameters in *reverse* order.
-            // Whyever, but this was the case in the original implementation of
+            // Whatever, but this was the case in the original implementation of
             // wxActiveXEvents::Invoke
             // Keep this convention.
             VARIANTARG& va = native->pDispParams->rgvarg[ native->pDispParams->cArgs - idx - 1 ];

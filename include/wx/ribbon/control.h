@@ -2,7 +2,6 @@
 // Name:        wx/ribbon/control.h
 // Purpose:     Extension of wxControl with common ribbon methods
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-06-05
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence

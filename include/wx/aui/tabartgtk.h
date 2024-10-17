@@ -2,7 +2,6 @@
 // Name:        include/wx/aui/tabartgtk.h
 // Purpose:     declaration of the wxAuiGTKTabArt
 // Author:      Jens Lody and Teodor Petrov
-// Modified by:
 // Created:     2012-03-23
 // Copyright:   (c) 2012 Jens Lody <jens@codeblocks.org>
 //                  and Teodor Petrov
@@ -48,7 +47,7 @@ public:
                             const wxSize& required_bmp_size) override;
     int GetBorderWidth(wxWindow* wnd) override;
     int GetAdditionalBorderSpace(wxWindow* wnd) override;
-    virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
+    virtual wxSize GetTabSize(wxReadOnlyDC& dc, wxWindow* wnd, const wxString& caption,
                               const wxBitmapBundle& bitmap, bool active,
                               int close_button_state, int* x_extent) override;
 };

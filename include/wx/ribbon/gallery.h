@@ -2,7 +2,6 @@
 // Name:        wx/ribbon/gallery.h
 // Purpose:     Ribbon control which displays a gallery of items to choose from
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-07-22
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -106,7 +105,7 @@ protected:
     wxRect m_scroll_up_button_rect;
     wxRect m_scroll_down_button_rect;
     wxRect m_extension_button_rect;
-    const wxRect* m_mouse_active_rect;
+    const wxRect* m_mouse_active_rect = nullptr;
     int m_item_separation_x;
     int m_item_separation_y;
     int m_scroll_amount;
@@ -148,8 +147,8 @@ public:
     void SetGalleryItem(wxRibbonGalleryItem* item) {m_item = item;}
 
 protected:
-    wxRibbonGallery* m_gallery;
-    wxRibbonGalleryItem* m_item;
+    wxRibbonGallery* m_gallery = nullptr;
+    wxRibbonGalleryItem* m_item = nullptr;
 
 #ifndef SWIG
 private:

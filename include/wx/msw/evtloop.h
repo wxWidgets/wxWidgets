@@ -2,7 +2,6 @@
 // Name:        wx/msw/evtloop.h
 // Purpose:     wxEventLoop class for wxMSW port
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-07-31
 // Copyright:   (c) 2003-2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -21,7 +20,7 @@
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxMSWEventLoopBase
 {
 public:
-    wxGUIEventLoop() { }
+    wxGUIEventLoop() = default;
 
     // process a single message: calls PreProcessMessage() before dispatching
     // it

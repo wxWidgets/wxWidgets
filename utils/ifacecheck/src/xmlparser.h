@@ -16,6 +16,7 @@
 #include <wx/xml/xml.h>
 #include <wx/platinfo.h>
 #include <wx/log.h>
+#include <wx/hashmap.h>
 
 
 /*

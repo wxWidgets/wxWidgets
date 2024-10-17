@@ -2,7 +2,6 @@
 // Name:        src/common/protocol.cpp
 // Purpose:     Implement protocol base class
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     07/07/1997
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence

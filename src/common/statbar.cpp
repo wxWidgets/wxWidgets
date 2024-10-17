@@ -112,6 +112,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow);
 wxStatusBarBase::wxStatusBarBase()
 {
     m_bSameWidthForAllPanes = true;
+
+    Bind(wxEVT_SIZE, &wxStatusBarBase::OnSize, this);
 }
 
 wxStatusBarBase::~wxStatusBarBase()
@@ -295,6 +297,42 @@ void wxStatusBarBase::PopStatusText(int number)
 
     if ( m_panes[number].PopText() )
         DoUpdateStatusText(number);
+}
+
+// ----------------------------------------------------------------------------
+// controls
+// ----------------------------------------------------------------------------
+bool wxStatusBarBase::AddFieldControl(int n, wxWindow* win)
+{
+    wxCHECK_MSG( (unsigned)n < m_panes.size(), false,
+                    "invalid status bar field index" );
+    wxCHECK_MSG( !m_panes[n].GetFieldControl(), false,
+                    "another control is already added in this field" );
+
+    m_panes[n].SetFieldControl(win);
+
+    return true;
+}
+
+void wxStatusBarBase::OnSize(wxSizeEvent& event)
+{
+    event.Skip();
+
+    if ( GetChildren().empty() )
+        return;
+
+    for ( int i = 0; i < (int)m_panes.size(); ++i )
+    {
+        wxWindow* const win = m_panes[i].GetFieldControl();
+        if ( win )
+        {
+            wxRect rect;
+            if ( GetFieldRect(i, rect) )
+            {
+                win->SetSize(rect);
+            }
+        }
+    }
 }
 
 #endif // wxUSE_STATUSBAR

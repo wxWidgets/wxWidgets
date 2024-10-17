@@ -151,16 +151,24 @@ public:
     // get languages available for this app
     wxArrayString GetAvailableTranslations(const wxString& domain) const;
 
-    // find best translation language for given domain
+    // find best available translation language for given domain
+    wxString GetBestAvailableTranslation(const wxString& domain);
+
     wxString GetBestTranslation(const wxString& domain, wxLanguage msgIdLanguage);
     wxString GetBestTranslation(const wxString& domain,
                                 const wxString& msgIdLanguage = wxASCII_STR("en"));
+
+    // add catalog for the given domain returning true if it could be found by
+    // wxTranslationsLoader
+    bool AddAvailableCatalog(const wxString& domain, wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 
     // add standard wxWidgets catalog ("wxstd")
     bool AddStdCatalog();
 
     // add catalog with given domain name and language, looking it up via
-    // wxTranslationsLoader
+    // wxTranslationsLoader -- unlike AddAvailableCatalog(), this function also
+    // returns true if this catalog is not needed at all because msgIdLanguage
+    // is an acceptable language to use directly
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 
@@ -185,8 +193,17 @@ public:
     static const wxString& GetUntranslatedString(const wxString& str);
 
 private:
+    enum class Translations
+    {
+      NotNeeded = -1,
+      NotFound = 0,
+      Found = 1
+    };
+
+    Translations DoAddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+
     // perform loading of the catalog via m_loader
-    bool LoadCatalog(const wxString& domain, const wxString& lang, const wxString& msgIdLang);
+    bool LoadCatalog(const wxString& domain, const wxString& lang);
 
     // find catalog by name in a linked list, return nullptr if !found
     wxMsgCatalog *FindCatalog(const wxString& domain) const;
@@ -194,6 +211,8 @@ private:
     // same as Set(), without taking ownership; only for wxLocale
     static void SetNonOwned(wxTranslations *t);
     friend class wxLocale;
+
+    wxString DoGetBestAvailableTranslation(const wxString& domain, const wxString& additionalAvailableLanguage);
 
 private:
     wxString m_lang;
@@ -213,8 +232,8 @@ private:
 class WXDLLIMPEXP_BASE wxTranslationsLoader
 {
 public:
-    wxTranslationsLoader() {}
-    virtual ~wxTranslationsLoader() {}
+    wxTranslationsLoader() = default;
+    virtual ~wxTranslationsLoader() = default;
 
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
                                       const wxString& lang) = 0;

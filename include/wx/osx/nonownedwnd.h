@@ -2,7 +2,6 @@
 // Name:        wx/osx/nonownedwnd.h
 // Purpose:     declares wxNonOwnedWindow class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-03-24
 // Copyright:   (c) 2008 Stefan Csomor
 // Licence:     wxWindows licence

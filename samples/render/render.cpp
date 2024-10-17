@@ -2,7 +2,6 @@
 // Name:        render.cpp
 // Purpose:     Render wxWidgets sample
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.08.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -384,6 +383,12 @@ private:
         else
             renderer.DrawChoice(this, dc,
                                 wxRect(x2, y, width, GetCharHeight() * 3 / 2), m_flags);
+
+        y += lineHeight + heightGauge;
+
+        dc.DrawText("DrawTextCtrl()", x1, y);
+        renderer.DrawTextCtrl(this, dc,
+            wxRect(x2, y, width, GetCharHeight() * 3 / 2), m_flags);
     }
 
     int m_flags;

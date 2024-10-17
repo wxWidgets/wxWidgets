@@ -2,7 +2,6 @@
 // Name:        wx/x11/dataform.h
 // Purpose:     declaration of the wxDataFormat class
 // Author:      Robert Roebling
-// Modified by:
 // Created:     19.10.99 (extracted from motif/dataobj.h)
 // Copyright:   (c) 1999 Robert Roebling
 // Licence:     wxWindows licence

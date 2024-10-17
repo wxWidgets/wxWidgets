@@ -2,7 +2,6 @@
 // Name:        wx/msw/gauge.h
 // Purpose:     wxGauge implementation for MSW
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -19,7 +18,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxGaugeNameStr[];
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
 {
 public:
-    wxGauge() { }
+    wxGauge() = default;
 
     wxGauge(wxWindow *parent,
             wxWindowID id,

@@ -17,6 +17,8 @@ public:
 
     wxPen( const wxColour &colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID );
 
+    wxPen( const wxPenInfo& info );
+
     wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
     wxPen(const wxColour& col, int width, int style);
 

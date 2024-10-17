@@ -2,7 +2,6 @@
 // Name:        wx/filefn.h
 // Purpose:     File- and directory-related functions
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
@@ -584,7 +583,7 @@ private:
 class WXDLLIMPEXP_BASE wxPathList : public wxArrayString
 {
 public:
-    wxPathList() {}
+    wxPathList() = default;
     wxPathList(const wxArrayString &arr)
         { Add(arr); }
 

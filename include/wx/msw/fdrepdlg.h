@@ -41,6 +41,8 @@ public:
     virtual void SetTitle( const wxString& title) override;
     virtual wxString GetTitle() const override;
 
+    virtual bool MSWProcessMessage(WXMSG* pMsg) override;
+
 protected:
     virtual void DoGetSize(int *width, int *height) const override;
     virtual void DoGetClientSize(int *width, int *height) const override;

@@ -2,7 +2,6 @@
 // Name:        wx/univ/statbox.h
 // Purpose:     wxStaticBox declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     15.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
-    wxStaticBox() { }
+    wxStaticBox() = default;
 
     wxStaticBox(wxWindow *parent,
                 const wxString& label,

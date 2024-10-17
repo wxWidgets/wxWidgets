@@ -75,11 +75,6 @@ wxBrush::wxBrush( const wxBitmap &stippleBitmap )
     M_BRUSHDATA->m_stipple = stippleBitmap;
 }
 
-wxBrush::~wxBrush()
-{
-    // m_refData unrefed in ~wxObject
-}
-
 wxGDIRefData *wxBrush::CreateGDIRefData() const
 {
     return new wxBrushRefData;

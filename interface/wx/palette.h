@@ -71,13 +71,6 @@ public:
               const unsigned char* blue);
 
     /**
-        Destructor.
-
-        @see @ref overview_refcount_destruct "reference-counted object destruction"
-    */
-    virtual ~wxPalette();
-
-    /**
         Creates a palette from arrays of size @a n, one for each red, blue or
         green component.
 

@@ -105,52 +105,57 @@ enum class wxPGPropertyValuesFlags : int
 
 // -----------------------------------------------------------------------
 
-/** Misc argument flags.
+/** Miscellaneous property value format flags.
 */
-enum wxPG_MISC_ARG_FLAGS
+enum class wxPGPropValFormatFlags : int
 {
+    /** No flags.
+        @hideinitializer
+    */
+    Null                        = 0,
+
     /** Get/Store full value instead of displayed value.
         @hideinitializer
     */
-    wxPG_FULL_VALUE                     = 0x00000001,
+    FullValue                   = 0x00000001,
 
     /** Perform special action in case of unsuccessful conversion.
         @hideinitializer
     */
-    wxPG_REPORT_ERROR                   = 0x00000002,
+    ReportError                 = 0x00000002,
 
     /**
         @hideinitializer
     */
-    wxPG_PROPERTY_SPECIFIC              = 0x00000004,
+    PropertySpecific            = 0x00000004,
 
     /** Get/Store editable value instead of displayed one (should only be
         different in the case of common values).
         @hideinitializer
     */
-    wxPG_EDITABLE_VALUE                 = 0x00000008,
+    EditableValue               = 0x00000008,
 
     /** Used when dealing with fragments of composite string value
         @hideinitializer
     */
-    wxPG_COMPOSITE_FRAGMENT             = 0x00000010,
+    CompositeFragment           = 0x00000010,
 
     /** Means property for which final string value is for cannot really be
         edited.
         @hideinitializer
     */
-    wxPG_UNEDITABLE_COMPOSITE_FRAGMENT  = 0x00000020,
+    UneditableCompositeFragment = 0x00000020,
 
     /** wxPGProperty::ValueToString() called from wxPGProperty::GetValueAsString()
         (guarantees that input wxVariant value is current own value)
         @hideinitializer
     */
-    wxPG_VALUE_IS_CURRENT               = 0x00000040,
+    ValueIsCurrent              = 0x00000040,
 
     /** Value is being set programmatically (i.e. not by user)
         @hideinitializer
     */
-    wxPG_PROGRAMMATIC_VALUE             = 0x00000080
+    ProgrammaticValue           = 0x00000080
 };
 
 // -----------------------------------------------------------------------

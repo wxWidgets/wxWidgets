@@ -36,7 +36,7 @@ public:
     typedef typename container_type::size_type size_type;
     typedef typename container_type::value_type value_type;
 
-    wxStack() { }
+    wxStack() = default;
     explicit wxStack(const container_type& cont) : m_cont(cont) { }
 
     // Default copy ctor, assignment operator and dtor are ok.

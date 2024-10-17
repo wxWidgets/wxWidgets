@@ -2,7 +2,6 @@
 // Name:        wx/osx/palette.h
 // Purpose:     wxPalette class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -21,7 +20,6 @@ public:
     wxPalette();
 
     wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
-    virtual ~wxPalette();
     bool Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
 
     int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;

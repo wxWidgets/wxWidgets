@@ -2,7 +2,6 @@
 // Name:        src/univ/settingsuniv.cpp
 // Purpose:     wxSystemSettings wxUniv-specific parts
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

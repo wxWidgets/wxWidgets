@@ -175,6 +175,12 @@ protected:
 private:
     friend class wxSearchButton;
 
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    // Implement wxMSW-specific pure virtual function by forwarding it to the
+    // real text entry.
+    virtual WXHWND GetEditHWND() const override;
+#endif
+
     // Implement pure virtual function inherited from wxCompositeWindow.
     virtual wxWindowList GetCompositeWindowParts() const override;
 

@@ -2,7 +2,6 @@
 // Name:        wx/generic/spinctlg.h
 // Purpose:     generic wxSpinCtrl class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     28.10.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

@@ -223,7 +223,7 @@ private:
     template <typename T>
     struct FontModifier
     {
-        FontModifier() { }
+        FontModifier() = default;
 
         void operator()(wxMarkupSpanAttributes::OptionalBool isIt,
                         wxFont& font,

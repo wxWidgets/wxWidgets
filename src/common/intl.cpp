@@ -797,18 +797,6 @@ bool wxLocale::AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
     return t->AddCatalog(domain, msgIdLanguage);
 }
 
-// add a catalog to our linked list
-bool wxLocale::AddCatalog(const wxString& szDomain,
-                        wxLanguage      msgIdLanguage,
-                        const wxString& msgIdCharset)
-{
-    wxTranslations *t = wxTranslations::Get();
-    if ( !t )
-        return false;
-    wxUnusedVar(msgIdCharset);
-    return t->AddCatalog(szDomain, msgIdLanguage);
-}
-
 bool wxLocale::IsLoaded(const wxString& domain) const
 {
     wxTranslations *t = wxTranslations::Get();
@@ -1260,7 +1248,7 @@ wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
-    CFStringRef cfstr = 0;
+    CFStringRef cfstr = nullptr;
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:

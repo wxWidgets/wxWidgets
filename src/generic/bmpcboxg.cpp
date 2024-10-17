@@ -2,7 +2,6 @@
 // Name:        src/generic/bmpcboxg.cpp
 // Purpose:     wxBitmapComboBox
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Aug-31-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence

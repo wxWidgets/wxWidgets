@@ -4,7 +4,6 @@
 //              wxUniv port controls, it supports the customization of the
 //              window drawing and input processing.
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -127,7 +126,7 @@ public:
     int GetStateFlags() const;
 
     // set the "highlighted" flag and return true if it changed
-    virtual bool SetCurrent(bool doit = true);
+    virtual bool WXMakeCurrent(bool doit = true);
 
 #if wxUSE_SCROLLBAR
     // get the scrollbar (may be null) for the given orientation

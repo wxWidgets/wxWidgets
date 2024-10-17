@@ -17,7 +17,7 @@ typedef struct _GdkRGBA GdkRGBA;
 // wxColour
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxColour : public wxColourBase
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour : public wxColourBase
 {
 public:
     // constructors
@@ -27,8 +27,6 @@ public:
 #ifdef __WXGTK3__
     wxColour(const GdkRGBA& gdkRGBA);
 #endif
-
-    virtual ~wxColour();
 
     bool operator==(const wxColour& col) const;
     bool operator!=(const wxColour& col) const { return !(*this == col); }

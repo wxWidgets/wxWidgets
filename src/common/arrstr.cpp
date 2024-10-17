@@ -2,7 +2,6 @@
 // Name:        src/common/arrstr.cpp
 // Purpose:     wxArrayString class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

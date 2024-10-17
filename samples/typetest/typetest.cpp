@@ -2,7 +2,6 @@
 // Name:        typetest.cpp
 // Purpose:     Types wxWidgets sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -942,7 +941,7 @@ void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
             wxFileType::MessageParameters params(filename, type);
             filetype->GetOpenCommand(&open, params);
 
-            textCtrl << "MIME information about extension '" << ext << '\n'
+            textCtrl << "MIME information about extension '" << ext << "'\n"
                      << "\tMIME type: " << ( !type ? wxString("unknown") : type ) << '\n'
                      << "\tDescription: " << ( !desc ? wxString(wxEmptyString) : desc )
                         << '\n'

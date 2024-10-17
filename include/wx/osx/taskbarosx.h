@@ -2,7 +2,6 @@
 // File:        wx/mac/taskbarosx.h
 // Purpose:     Defines wxTaskBarIcon class for OSX
 // Author:      Ryan Norton
-// Modified by:
 // Created:     04/04/2003
 // Copyright:   (c) Ryan Norton, 2003
 // Licence:     wxWindows licence

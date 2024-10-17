@@ -2,7 +2,6 @@
 // Name:        wx/fontdlg.h
 // Purpose:     common interface for different wxFontDialog classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.05.02
 // Copyright:   (c) 1997-2002 wxWidgets team
 // Licence:     wxWindows licence
@@ -26,7 +25,7 @@ class WXDLLIMPEXP_CORE wxFontDialogBase : public wxDialog
 {
 public:
     // create the font dialog
-    wxFontDialogBase() { }
+    wxFontDialogBase() = default;
     wxFontDialogBase(wxWindow *parent) { m_parent = parent; }
     wxFontDialogBase(wxWindow *parent, const wxFontData& data)
         { m_parent = parent; InitFontData(&data); }

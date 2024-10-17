@@ -2,7 +2,6 @@
 // Name:        src/osx/iphone/utils.mm
 // Purpose:     various cocoa utility functions
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -91,6 +90,11 @@ void wxApp::DoCleanUp()
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
+
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance WXUNUSED(appearance))
+{
+    return AppearanceResult::Failure;
+}
 
 // Emit a beeeeeep
 void wxBell()

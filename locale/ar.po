@@ -4387,7 +4387,7 @@ msgstr ""
 #: ../src/generic/datavgen.cpp:7004
 #, fuzzy, c-format
 msgid "%s (%d items)"
-msgstr "%s (أو %s)"
+msgstr "%s (أو %d)"
 
 #: ../src/generic/datavgen.cpp:7055
 #, c-format
@@ -5442,12 +5442,12 @@ msgstr "(مساعدة)"
 #: ../src/html/helpwnd.cpp:1023
 #, fuzzy, c-format
 msgid "%d of %lu"
-msgstr "%i من %i"
+msgstr "%d من %lu"
 
 #: ../src/html/helpwnd.cpp:1025
 #, fuzzy, c-format
 msgid "%lu of %lu"
-msgstr "%i من %i"
+msgstr "%lu من %lu"
 
 #: ../src/html/helpwnd.cpp:1044
 msgid "Search in all books"
@@ -5524,12 +5524,12 @@ msgstr "ملف مساعدة html مضغوط (*.chm)|*.chm|"
 #: ../src/html/helpwnd.cpp:1670
 #, fuzzy, c-format
 msgid "%i of %u"
-msgstr "%i من %i"
+msgstr "%i من %u"
 
 #: ../src/html/helpwnd.cpp:1708
 #, fuzzy, c-format
 msgid "%u of %u"
-msgstr "%i من %i"
+msgstr "%u من %u"
 
 #: ../src/html/htmlfilt.cpp:134
 #, c-format

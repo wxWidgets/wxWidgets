@@ -31,7 +31,7 @@
       class wxDDEModule: public wxModule
       {
       public:
-          wxDDEModule() { }
+          wxDDEModule() = default;
           virtual bool OnInit() { wxDDEInitialize(); return true; };
           virtual void OnExit() { wxDDECleanUp(); };
 

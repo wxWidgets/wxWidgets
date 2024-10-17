@@ -28,7 +28,7 @@ public:
     void Wrap(wxWindow *win, const wxString& text, int widthMax);
 
     // we don't need it, but just to avoid compiler warnings
-    virtual ~wxTextWrapper() { }
+    virtual ~wxTextWrapper() = default;
 
 protected:
     // line may be empty

@@ -2,7 +2,6 @@
 // Name:        wx/checkbox.h
 // Purpose:     wxCheckBox class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.09.00
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -49,7 +48,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 class WXDLLIMPEXP_CORE wxCheckBoxBase : public wxControl
 {
 public:
-    wxCheckBoxBase() { }
+    wxCheckBoxBase() = default;
 
     // set/get the checked status of the listbox
     virtual void SetValue(bool value) = 0;
@@ -104,13 +103,27 @@ public:
     // background colour of the checkbox itself under the other platforms.
     virtual void SetTransparentPartColour(const wxColour& WXUNUSED(col)) { }
 
+    // do the window-specific processing before processing the update event
+    // (mainly for deciding whether wxUpdateUIEvent::Is3State() is set)
+    virtual void DoPrepareUpdateWindowUI(wxUpdateUIEvent& event) const override
+        { event.Allow3rdState(Is3State()); }
+
     // wxCheckBox-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) override
     {
         wxControl::DoUpdateWindowUI(event);
 
         if ( event.GetSetChecked() )
-            SetValue(event.GetChecked());
+        {
+            if ( Is3State() )
+            {
+                Set3StateValue(event.Get3StateValue());
+            }
+            else
+            {
+                SetValue(event.GetChecked());
+            }
+        }
     }
 
 protected:

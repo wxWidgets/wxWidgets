@@ -2,7 +2,6 @@
 // Name:        wx/osx/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -86,7 +85,7 @@ class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
     friend class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 
 public:
-    wxBitmap() {} // Platform-specific
+    wxBitmap() = default; // Platform-specific
 
     // Initialize with raw data.
     wxBitmap(const char bits[], int width, int height, int depth = 1);
@@ -124,18 +123,16 @@ public:
     wxBitmap(const wxCursor &cursor);
 #endif
 
-    virtual ~wxBitmap() {}
-
     wxImage ConvertToImage() const override;
 
     // get the given part of bitmap
     wxBitmap GetSubBitmap( const wxRect& rect ) const override;
 
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) override;
-    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) override
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) final;
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) final
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 
-    virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
+    bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     bool Create( CGImageRef image, double scale = 1.0 );
     bool Create( WXImage image );
     bool Create( CGContextRef bitmapcontext);
@@ -143,7 +140,6 @@ public:
     // Create a bitmap compatible with the given DC, inheriting its magnification factor
     bool Create(int width, int height, const wxDC& dc);
 
-    // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) override;
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = nullptr) const override;
 

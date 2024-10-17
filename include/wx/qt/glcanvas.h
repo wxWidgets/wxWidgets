@@ -10,9 +10,9 @@
 
 #include <GL/gl.h>
 
-class QGLWidget;
-class QGLContext;
-class QGLFormat;
+class QOpenGLWidget;
+class QOpenGLContext;
+class QSurfaceFormat;
 
 class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
@@ -23,6 +23,9 @@ public:
 ///    virtual ~wxGLContext();
 
     virtual bool SetCurrent(const wxGLCanvas& win) const override;
+
+private:
+    QOpenGLContext* m_glContext = nullptr;
 
     wxDECLARE_CLASS(wxGLContext);
 };
@@ -78,7 +81,9 @@ public:
 
     virtual bool SwapBuffers() override;
 
-    static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
+    virtual bool QtCanPaintWithoutActivePainter() const override;
+
+    static bool ConvertWXAttrsToQtGL(const wxGLAttributes &glattrs, const wxGLContextAttrs ctxAttrs, QSurfaceFormat &format);
 
 private:
     wxDECLARE_CLASS(wxGLCanvas);

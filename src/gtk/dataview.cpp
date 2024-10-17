@@ -1564,6 +1564,15 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
 
     wxSize size = cell->GetSize();
 
+    // Somehow returning 0 or negative width prevents the returned height from
+    // being taken into account at all, even if we return strictly positive
+    // width from later calls to GetSize(), meaning that it's enough to return
+    // 0 from it once to completely break the layout for the entire lifetime of
+    // the control.
+    //
+    // As this is completely unexpected, forcefully prevent this from happening
+    size.IncTo(wxSize(1, 1));
+
     wxDataViewCtrl * const ctrl = cell->GetOwner()->GetOwner();
 
     // Uniform row height, if specified, overrides the value returned by the
@@ -3215,7 +3224,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
         // Ignore the return value of PrepareForItem() here, if it returns
         // false because GetValue() didn't return anything, we still want to
         // keep this cell visible, as otherwise it wouldn't be possible to edit
-        // it neither, and we do want to allow editing empty cells.
+        // it either, and we do want to allow editing empty cells.
         cell->PrepareForItem(wx_model, item, column);
     }
 
@@ -4689,7 +4698,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         }
 
         wxDataViewEvent
-            event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKPathToItem(path));
+            event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKColumnToWX(column), dv->GTKPathToItem(path));
 #if GTK_CHECK_VERSION(2,12,0)
         if (wx_is_at_least_gtk2(12))
         {

@@ -2,7 +2,6 @@
 // Name:        src/x11/reparent.cpp
 // Purpose:     wxWindow
 // Author:      Julian Smart
-// Modified by:
 // Created:     2002-03-09
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

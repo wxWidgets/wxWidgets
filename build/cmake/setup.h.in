@@ -283,6 +283,8 @@
 
 #cmakedefine01 wxUSE_WEBVIEW
 
+#cmakedefine01 wxUSE_WEBVIEW_CHROMIUM
+
 #ifdef __WXMSW__
 #cmakedefine01 wxUSE_WEBVIEW_IE
 #else
@@ -443,8 +445,6 @@
 #endif
 
 
-#cmakedefine01 wxUSE_COMMON_DIALOGS
-
 #cmakedefine01 wxUSE_BUSYINFO
 
 #cmakedefine01 wxUSE_CHOICEDLG
@@ -595,6 +595,11 @@
  */
 #cmakedefine01 wxUSE_SELECT_DISPATCHER
 #cmakedefine01 wxUSE_EPOLL_DISPATCHER
+
+/*
+   Use debug version of CEF in wxWebViewChromium.
+ */
+#cmakedefine wxHAVE_CEF_DEBUG
 
 /*
    Use GStreamer for Unix.
@@ -790,9 +795,6 @@
 
 /* The type of statvfs(2) argument */
 #cmakedefine WX_STATFS_T @WX_STATFS_T@
-
-/* The signal handler prototype */
-#define wxTYPE_SA_HANDLER @wxTYPE_SA_HANDLER@
 
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */

@@ -2,7 +2,6 @@
 // Name:        src/generic/toolbkg.cpp
 // Purpose:     generic implementation of wxToolbook
 // Author:      Julian Smart
-// Modified by:
 // Created:     2006-01-29
 // Copyright:   (c) 2006 Julian Smart
 // Licence:     wxWindows licence

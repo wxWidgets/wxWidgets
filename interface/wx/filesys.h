@@ -44,19 +44,19 @@ public:
     wxFileSystem();
 
     /**
-        This static function adds new handler into the list of handlers
-        (see wxFileSystemHandler) which provide access to virtual FS.
+        This static function adds a new handler into the list of handlers
+        which provide access to virtual FS.
 
-        Note that if two handlers for the same protocol are added, the last
+        @a handler must be a heap-allocated object which will be deleted
+        if it is removed by RemoveHandler() or at program shutdown.
+
+        Typical example of use:
+        @code
+        wxFileSystem::AddHandler(new wxZipFSHandler);
+        @endcode
+
+        @note If two handlers for the same protocol are added, the last
         added one takes precedence.
-
-        @note You can call:
-              @code
-              wxFileSystem::AddHandler(new My_FS_Handler);
-              @endcode
-              This is because (a) AddHandler is a static method, and (b) the
-              handlers are deleted in wxFileSystem's destructor so that you
-              don't have to care about it.
     */
     static void AddHandler(wxFileSystemHandler* handler);
 

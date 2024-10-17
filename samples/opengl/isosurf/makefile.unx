@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 isosurf: $(ISOSURF_OBJECTS)
-	$(CXX) -o $@ $(ISOSURF_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs gl,core,base`
+	$(CXX) -o $@ $(ISOSURF_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs gl,core,base` -lGL
 
 isosurf_isosurf.o: ./isosurf.cpp
 	$(CXX) -c -o $@ $(ISOSURF_CXXFLAGS) $(CPPDEPS) $<

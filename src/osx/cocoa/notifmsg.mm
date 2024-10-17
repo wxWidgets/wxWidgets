@@ -143,6 +143,8 @@ public:
             case NSUserNotificationActivationTypeNone:
             {
                 wxCommandEvent evt(wxEVT_NOTIFICATION_MESSAGE_DISMISSED);
+                // reason for dismissal not available on Mac
+                evt.SetInt(static_cast<int>(wxNotificationMessage::DismissalReason::Unknown));
                 ProcessNotificationEvent(evt);
                 break;
             }

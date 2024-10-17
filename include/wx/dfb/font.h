@@ -21,7 +21,7 @@ wxDFB_DECLARE_INTERFACE(IDirectFBFont);
 class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
-    wxFont() {}
+    wxFont() = default;
 
     wxFont(const wxFontInfo& info)
     {

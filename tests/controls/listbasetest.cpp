@@ -179,12 +179,12 @@ void ListBaseTestCase::MultiSelect()
 {
 #if wxUSE_UIACTIONSIMULATOR
 
-#ifndef __WXMSW__
-    // FIXME: This test fails on Travis CI although works fine on
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    // FIXME: This test fails on GitHub CI under wxGTK2 although works fine on
     //        development machine, no idea why though!
     if ( IsAutomaticTest() )
         return;
-#endif // !__WXMSW__
+#endif // wxGTK2
 
     wxListCtrl* const list = GetList();
 
@@ -273,6 +273,37 @@ void ListBaseTestCase::MultiSelect()
     CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // because the focus changed from item 0 to anchor
     CPPUNIT_ASSERT_EQUAL(0, selected.GetCount()); // anchor is already in selection state
     CPPUNIT_ASSERT_EQUAL(2, deselected.GetCount()); // items 0 and 1 are deselected
+
+    focused.Clear();
+    selected.Clear();
+    deselected.Clear();
+
+    list->GetItemRect(3, pos);
+    point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 10);
+
+    // select and deselect item 3 while leaving item 2 selected
+    for ( int i = 0; i < 2; ++i )
+    {
+        sim.MouseMove(point + wxPoint(i*10, 0));
+        wxYield();
+
+        sim.KeyDown(WXK_CONTROL);
+        sim.MouseClick();
+        sim.KeyUp(WXK_CONTROL);
+        wxYield();
+    }
+
+    // select only item 3
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, list->GetSelectedItemCount()); // item 3 is the only selected item
+    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // because the focus changed from anchor to item 3
+    CPPUNIT_ASSERT_EQUAL(2, selected.GetCount()); // item 3 was selected twice
+    CPPUNIT_ASSERT_EQUAL(2, deselected.GetCount()); // anchor and item 3 were each deselected once
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 

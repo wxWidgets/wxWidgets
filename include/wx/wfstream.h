@@ -2,7 +2,6 @@
 // Name:        wx/wfstream.h
 // Purpose:     File stream classes
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     11/07/98
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence

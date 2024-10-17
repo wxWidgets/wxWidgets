@@ -610,12 +610,18 @@ public:
     int GetC();
 
     /**
-        Returns the last number of bytes read.
+        Returns the last number of bytes read by the last input operation.
+
+        Such operations include Read(), GetC() and Peek().
     */
     virtual size_t LastRead() const;
 
     /**
         Returns the first character in the input queue without removing it.
+
+        If Peek() failed, e.g. because there is nothing more to read in the
+        stream, LastRead() will return 0 after calling it, otherwise it will
+        return 1.
     */
     virtual char Peek();
 

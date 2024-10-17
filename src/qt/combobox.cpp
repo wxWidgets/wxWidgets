@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_COMBOBOX
+
 #include "wx/combobox.h"
 #include "wx/window.h"
 #include "wx/qt/private/converter.h"
@@ -26,27 +28,6 @@ public:
     virtual void showPopup() override;
     virtual void hidePopup() override;
 
-    class IgnoreTextChange
-    {
-    public:
-        // Note that wxComboBox inherits its QComboBox pointer from wxChoice,
-        // where it can't be stored as wxQtComboBox, but its dynamic type is
-        // nevertheless always wxQtComboBox, so the cast below is safe.
-        explicit IgnoreTextChange(QComboBox *combo)
-            : m_combo(static_cast<wxQtComboBox*>(combo))
-        {
-            m_combo->m_textChangeIgnored = true;
-        }
-
-        ~IgnoreTextChange()
-        {
-            m_combo->m_textChangeIgnored = false;
-        }
-
-    private:
-        wxQtComboBox* m_combo;
-    };
-
     virtual wxString GetValueForProcessEnter() override
     {
         return GetHandler()->GetValue();
@@ -55,13 +36,10 @@ public:
 private:
     void activated(int index);
     void editTextChanged(const QString &text);
-
-    bool m_textChangeIgnored;
 };
 
 wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
-    : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler ),
-      m_textChangeIgnored( false )
+    : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler )
 {
     connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
             this, &wxQtComboBox::activated);
@@ -94,9 +72,6 @@ void wxQtComboBox::activated(int WXUNUSED(index))
 
 void wxQtComboBox::editTextChanged(const QString &text)
 {
-    if ( m_textChangeIgnored )
-        return;
-
     wxComboBox *handler = GetHandler();
     if ( handler )
     {
@@ -108,14 +83,9 @@ void wxQtComboBox::editTextChanged(const QString &text)
 
 void wxComboBox::SetSelection( int n )
 {
-    wxQtComboBox::IgnoreTextChange ignore( m_qtComboBox );
+    wxQtEnsureSignalsBlocked blocker(GetQComboBox());
     wxChoice::SetSelection( n );
 }
-
-wxComboBox::wxComboBox()
-{
-}
-
 
 wxComboBox::wxComboBox(wxWindow *parent,
            wxWindowID id,
@@ -168,28 +138,19 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    m_qtComboBox = new wxQtComboBox( parent, this );
-    m_qtComboBox->setEditable(!(style & wxCB_READONLY));
-    QtInitSort( m_qtComboBox );
+    m_qtWindow = new wxQtComboBox( parent, this );
+
+    GetQComboBox()->setEditable(!(style & wxCB_READONLY));
+    QtInitSort( GetQComboBox() );
 
     while ( n-- > 0 )
-        m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
-    m_qtComboBox->setCurrentText( wxQtConvertString( value ));
-
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
-}
-
-void wxComboBox::SetActualValue(const wxString &value)
-{
-    if ( IsReadOnly() )
     {
-        SetStringSelection( value );
+        GetQComboBox()->addItem( wxQtConvertString( *choices++ ));
     }
-    else
-    {
-        wxTextEntry::SetValue(value);
-        m_qtComboBox->setEditText( wxQtConvertString(value) );
-    }
+
+    GetQComboBox()->setCurrentText( wxQtConvertString( value ));
+
+    return wxChoiceBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 bool wxComboBox::IsReadOnly() const
@@ -200,34 +161,44 @@ bool wxComboBox::IsReadOnly() const
 bool wxComboBox::IsEditable() const
 {
     // Only editable combo boxes have a line edit.
-    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    QLineEdit* const lineEdit = GetQComboBox()->lineEdit();
     return lineEdit && !lineEdit->isReadOnly();
 }
 
 void wxComboBox::SetEditable(bool editable)
 {
-    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    QLineEdit* const lineEdit = GetQComboBox()->lineEdit();
     if ( lineEdit )
         lineEdit->setReadOnly(!editable);
 }
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    SetActualValue( value );
-
-    if ( !IsReadOnly() )
-        SetInsertionPoint( 0 );
+    if ( IsReadOnly() )
+    {
+        SetStringSelection( value );
+    }
+    else
+    {
+        wxTextEntry::SetValue(value);
+    }
 }
 
 void wxComboBox::ChangeValue(const wxString &value)
 {
-    wxQtComboBox::IgnoreTextChange ignore( m_qtComboBox );
-    SetValue( value );
+    if ( IsReadOnly() )
+    {
+        SetStringSelection( value );
+    }
+    else
+    {
+        wxTextEntry::ChangeValue(value);
+    }
 }
 
 void wxComboBox::AppendText(const wxString &value)
 {
-    SetActualValue( GetValue() + value );
+    wxTextEntry::AppendText(value);
 }
 
 void wxComboBox::Replace(long from, long to, const wxString &value)
@@ -241,7 +212,7 @@ void wxComboBox::Replace(long from, long to, const wxString &value)
 
     if ( from == 0 )
     {
-        SetActualValue( value + original.substr(to, original.length()) );
+        SetValue( value + original.substr(to, original.length()) );
     }
 
     wxString front = original.substr( 0, from ) + value;
@@ -249,23 +220,26 @@ void wxComboBox::Replace(long from, long to, const wxString &value)
     long iPoint = front.length();
     if ( front.length() <= original.length() )
     {
-        SetActualValue( front + original.substr(to, original.length()) );
+        SetValue( front + original.substr(to, original.length()) );
     }
     else
     {
-        SetActualValue( front );
+        SetValue( front );
     }
     SetInsertionPoint( iPoint );
 }
 
 void wxComboBox::WriteText(const wxString &value)
 {
-    m_qtComboBox->lineEdit()->insert( wxQtConvertString( value ) );
+    if ( IsEditable() )
+    {
+        GetQComboBox()->lineEdit()->insert( wxQtConvertString( value ) );
+    }
 }
 
 wxString wxComboBox::DoGetValue() const
 {
-    return wxQtConvertString( m_qtComboBox->currentText() );
+    return wxQtConvertString( GetQComboBox()->currentText() );
 }
 
 void wxComboBox::Popup()
@@ -287,7 +261,7 @@ bool wxComboBox::QtHandleFocusEvent(QWidget *handler, QFocusEvent *event)
         // generating a lose focus event if the combobox or its drop-down still
         // have focus.
         QWidget* const widget = qApp->focusWidget();
-        if ( widget == m_qtComboBox || widget == m_qtComboBox->view() )
+        if ( widget == GetQComboBox() || widget == GetQComboBox()->view() )
             return false;
     }
 
@@ -315,43 +289,53 @@ void wxComboBox::SetSelection( long from, long to )
 
     SetInsertionPoint( from );
     // use the inner text entry widget (note that can be null if not editable)
-    if ( m_qtComboBox->lineEdit() != nullptr )
+    if ( QLineEdit* const lineEdit = GetQComboBox()->lineEdit() )
     {
-        m_qtComboBox->lineEdit()->setSelection( from, to - from );
+        lineEdit->setSelection( from, to - from );
     }
 }
 
 void wxComboBox::SetInsertionPoint( long pos )
 {
-    // check if pos indicates end of text:
-    if ( pos == -1 )
-        m_qtComboBox->lineEdit()->end( false );
-    else
-        m_qtComboBox->lineEdit()->setCursorPosition( pos );
+    if ( QLineEdit* const lineEdit = GetQComboBox()->lineEdit() )
+    {
+        // check if pos indicates end of text:
+        if ( pos == -1 )
+            lineEdit->end( false );
+        else
+            lineEdit->setCursorPosition( pos );
+    }
 }
 
 long wxComboBox::GetInsertionPoint() const
 {
-    long selectionStart = m_qtComboBox->lineEdit()->selectionStart();
+    QLineEdit* const lineEdit = GetQComboBox()->lineEdit();
+
+    if ( !lineEdit )
+        return -1;
+
+    long selectionStart = lineEdit->selectionStart();
 
     if ( selectionStart >= 0 )
         return selectionStart;
 
-    return m_qtComboBox->lineEdit()->cursorPosition();
+    return lineEdit->cursorPosition();
 }
 
 void wxComboBox::GetSelection(long* from, long* to) const
 {
     // use the inner text entry widget (note that can be null if not editable)
-    if ( m_qtComboBox->lineEdit() != nullptr )
+    if ( QLineEdit* const lineEdit = GetQComboBox()->lineEdit() )
     {
-        *from = m_qtComboBox->lineEdit()->selectionStart();
+        *from = lineEdit->selectionStart();
         if ( *from >= 0 )
         {
-            *to = *from + m_qtComboBox->lineEdit()->selectedText().length();
+            *to = *from + lineEdit->selectedText().length();
             return;
         }
     }
     // No selection or text control, call base for default behaviour:
     wxTextEntry::GetSelection(from, to);
 }
+
+#endif // wxUSE_COMBOBOX

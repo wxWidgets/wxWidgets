@@ -2,7 +2,6 @@
 // Name:        src/unix/dir.cpp
 // Purpose:     wxDir implementation for Unix/POSIX systems
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     08.12.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

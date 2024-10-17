@@ -2,7 +2,6 @@
 // Name:        src/univ/bmpbuttn.cpp
 // Purpose:     wxBitmapButton implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -107,11 +106,11 @@ bool wxBitmapButton::Enable(bool enable)
     return true;
 }
 
-bool wxBitmapButton::SetCurrent(bool doit)
+bool wxBitmapButton::WXMakeCurrent(bool doit)
 {
     ChangeBitmap(doit ? GetBitmapFocus() : GetBitmapLabel());
 
-    return wxButton::SetCurrent(doit);
+    return wxButton::WXMakeCurrent(doit);
 }
 
 void wxBitmapButton::OnSetFocus(wxFocusEvent& event)

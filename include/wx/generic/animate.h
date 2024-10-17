@@ -57,7 +57,7 @@ public:
     virtual bool IsPlaying() const override
         { return m_isPlaying; }
 
-    void SetAnimation(const wxAnimation &animation) override;
+    void SetAnimation(const wxAnimationBundle &animations) override;
 
     virtual void SetInactiveBitmap(const wxBitmapBundle &bmp) override;
 
@@ -140,6 +140,9 @@ protected:
                                       // on the screen
 
 private:
+    // True if we need to show the next frame after painting the current one.
+    bool m_needToShowNextFrame = false;
+
     typedef wxAnimationCtrlBase base_type;
     wxDECLARE_DYNAMIC_CLASS(wxGenericAnimationCtrl);
     wxDECLARE_EVENT_TABLE();

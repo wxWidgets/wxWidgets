@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/mimetype.h
 // Purpose:     Mac implementation for wx mime-related classes
 // Author:      Neil Perkins
-// Modified by:
 // Created:     2010-05-15
 // Copyright:   (C) 2010 Neil Perkins
 // Licence:     wxWindows licence

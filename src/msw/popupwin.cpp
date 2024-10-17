@@ -2,7 +2,6 @@
 // Name:        src/msw/popupwin.cpp
 // Purpose:     implements wxPopupWindow for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     08.05.02
 // Copyright:   (c) 2002 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

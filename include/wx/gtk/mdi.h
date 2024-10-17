@@ -141,7 +141,7 @@ private:
 class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxMDIClientWindowBase
 {
 public:
-    wxMDIClientWindow() { }
+    wxMDIClientWindow() = default;
     ~wxMDIClientWindow();
 
     virtual bool CreateClient(wxMDIParentFrame *parent,

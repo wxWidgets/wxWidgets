@@ -557,6 +557,11 @@ public:
         form is for convenient setting of the most commonly-used attributes.
     */
     void SetLevelAttributes(int level, const wxRichTextAttr& attr);
+
+    /**
+        Convenience function for setting the major attributes for a list level specification.
+     */
+    void SetAttributes(int i, int leftIndent, int leftSubIndent, int bulletStyle, const wxString& bulletSymbol = wxEmptyString);
 };
 
 
@@ -582,9 +587,19 @@ public:
     wxRichTextStyleSheet();
 
     /**
+        Copy constructor.
+     */
+    wxRichTextStyleSheet(const wxRichTextStyleSheet& sheet);
+
+    /**
         Destructor.
     */
     virtual ~wxRichTextStyleSheet();
+
+    /**
+        Copies given style sheet.
+     */
+    void Copy(const wxRichTextStyleSheet& sheet);
 
     /**
         Adds a definition to the character style list.

@@ -11,7 +11,7 @@
     </exe>
 
     <wx-data id="catalog">
-        <files>throbber.gif hourglass.ani</files>
+        <files>throbber.gif throbber_2x.gif hourglass.ani</files>
     </wx-data>
 
 </makefile>

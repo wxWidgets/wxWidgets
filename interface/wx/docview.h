@@ -560,8 +560,8 @@ public:
         Returns the view to apply a user command to.
 
         This method tries to find the view that the user wants to interact
-        with. It returns the same view as GetCurrentDocument() if there is any
-        currently active view but falls back to the first view of the first
+        with. It returns the same view as GetCurrentView() if there is any
+        currently active view, but falls back to the first view of the first
         document if there is no active view.
 
         @since 2.9.5

@@ -4,7 +4,6 @@
 //              wx/osx/cocoa/evtloop.h for consistency with the other Mac
 //              headers
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2006-01-12
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

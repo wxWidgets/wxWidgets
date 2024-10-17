@@ -23,7 +23,7 @@
 #include "wx/window.h"
 
 #include "testfile.h"
-#include "waitforpaint.h"
+#include "waitfor.h"
 
 static const wxSize s_dcSize(260, 300);
 
@@ -751,11 +751,7 @@ TEST_CASE("ClipperTestCase::wxPaintDC", "[clipper][dc][paintdc]")
     testWin->Refresh();
     testWin->Update();
     // Wait for update to be done
-    wxStopWatch sw;
-    while( sw.Time() < 50 )
-    {
-         wxYield();
-    }
+    YieldForAWhile();
 
     CHECK(paintExecuted == true);
 }

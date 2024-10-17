@@ -112,10 +112,12 @@ char wxMemoryInputStream::Peek()
     if ( pos == m_length )
     {
         m_lasterror = wxSTREAM_READ_ERROR;
+        m_lastcount = 0;
 
         return 0;
     }
 
+    m_lastcount = 1;
     return buf[pos];
 }
 

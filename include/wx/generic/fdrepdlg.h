@@ -2,7 +2,6 @@
 // Name:        wx/generic/fdrepdlg.h
 // Purpose:     wxGenericFindReplaceDialog class
 // Author:      Markus Greither
-// Modified by:
 // Created:     25/05/2001
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

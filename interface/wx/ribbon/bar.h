@@ -304,6 +304,15 @@ public:
     wxRibbonPage* GetPage(int n);
 
     /**
+        Get a page by window ID.
+
+        @NULL will be returned if no page with the ID is found.
+
+        @since 3.3.0
+    */
+    wxRibbonPage* GetPageById(wxWindowID id);
+
+    /**
         Get the number of pages in this bar.
 
         @since 2.9.4

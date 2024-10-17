@@ -2,7 +2,6 @@
 // Name:        wx/toolbook.h
 // Purpose:     wxToolbook: wxToolBar and wxNotebook combination
 // Author:      Julian Smart
-// Modified by:
 // Created:     2006-01-29
 // Copyright:   (c) 2006 Julian Smart
 // Licence:     wxWindows licence

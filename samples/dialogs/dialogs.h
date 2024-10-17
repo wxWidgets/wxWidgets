@@ -190,6 +190,8 @@ class TestMessageBoxDialog : public wxDialog
 {
 public:
     TestMessageBoxDialog(wxWindow *parent);
+    TestMessageBoxDialog(const TestMessageBoxDialog&) = delete;
+    TestMessageBoxDialog& operator=(const TestMessageBoxDialog&) = delete;
 
     bool Create();
 
@@ -201,7 +203,7 @@ protected:
     void PrepareMessageDialog(wxMessageDialogBase &dlg);
 
     virtual void AddAdditionalTextOptions(wxSizer *WXUNUSED(sizer)) { }
-    virtual void AddAdditionalFlags(wxSizer *WXUNUSED(sizer)) { }
+    virtual void AddAdditionalFlags(wxStaticBoxSizer *WXUNUSED(sizer)) { }
 
     void ShowResult(int res);
 
@@ -256,7 +258,6 @@ private:
     wxStaticText *m_labelResult;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
 };
 
 #if wxUSE_RICHMSGDLG
@@ -268,7 +269,7 @@ public:
 protected:
     // overrides method in base class
     virtual void AddAdditionalTextOptions(wxSizer *sizer) override;
-    virtual void AddAdditionalFlags(wxSizer *sizer) override;
+    virtual void AddAdditionalFlags(wxStaticBoxSizer *sizer) override;
 
     void OnApply(wxCommandEvent& event);
 
@@ -393,7 +394,6 @@ public:
 
 #if wxUSE_INFOBAR
     void InfoBarSimple(wxCommandEvent& event);
-    void InfoBarSimpleWrapped(wxCommandEvent &event);
     void InfoBarAdvanced(wxCommandEvent& event);
 #endif // wxUSE_INFOBAR
 
@@ -632,7 +632,6 @@ enum
     DIALOGS_NUM_ENTRY,
     DIALOGS_LOG_DIALOG,
     DIALOGS_INFOBAR_SIMPLE,
-    DIALOGS_INFOBAR_SIMPLE_WRAPPED,
     DIALOGS_INFOBAR_ADVANCED,
     DIALOGS_MODAL,
     DIALOGS_MODELESS,

@@ -33,6 +33,7 @@
         <ldlibs>$(EXTRALIBS_MEDIA)</ldlibs>
         <ldlibs>$(EXTRALIBS_STC)</ldlibs>
         <ldlibs>$(PLUGIN_MONOLIB_EXTRALIBS)</ldlibs>
+        <ldflags>$(EXTRALDFLAGS_WEBVIEW)</ldflags>
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <library>$(wxscintilla_library_link)</library>
         <library>$(wxlexilla_library_link)</library>

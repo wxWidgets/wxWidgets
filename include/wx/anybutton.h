@@ -51,7 +51,7 @@
 class WXDLLIMPEXP_CORE wxAnyButtonBase : public wxControl
 {
 public:
-    wxAnyButtonBase() { }
+    wxAnyButtonBase() = default;
 
     // show the image in the button in addition to the label: this method is
     // supported on all (major) platforms

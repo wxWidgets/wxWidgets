@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextctrl.h
 // Purpose:     A rich edit control
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -1421,7 +1420,7 @@ public:
     /**
         Implements layout. An application may override this to perform operations before or after layout.
     */
-    virtual void DoLayoutBuffer(wxRichTextBuffer& buffer, wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int flags);
+    virtual void DoLayoutBuffer(wxRichTextBuffer& buffer, wxReadOnlyDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int flags);
 
     /**
         Move the caret to the given character position.

@@ -249,6 +249,22 @@ public:
     virtual void SetFieldsCount(int number = 1, const int* widths = nullptr);
 
     /**
+        Add a control (child of the wxStatusBar) to be shown at the specified
+        field position in the status bar.
+
+        @param i
+            The field index where the control will be shown.
+        @param win
+            The control in question. Must be a child of the wxStatusBar itself.
+
+        @note You must delete the control to remove it from the status bar, as
+            simply passing @NULL will not do that.
+
+        @since 3.3.0
+    */
+    bool AddFieldControl(int i, wxWindow* win);
+
+    /**
         Sets the minimal possible height for the status bar.
 
         The real height may be bigger than the height specified here depending

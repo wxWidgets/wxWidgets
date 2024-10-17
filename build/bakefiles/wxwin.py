@@ -44,6 +44,10 @@ MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net', 'webview',
 LIBS_NOGUI = ['xml', 'net']
 LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'qa', 'xrc', 'media',
               'aui', 'propgrid', 'richtext', 'stc', 'ribbon', 'webview']
+# Additional ld flags
+EXTRALDFLAGS = {
+    'webview' : '$(EXTRALDFLAGS_WEBVIEW)',
+}
 # Additional libraries that must be linked in:
 EXTRALIBS = {
     'gl' : '$(EXTRALIBS_OPENGL)',
@@ -93,6 +97,12 @@ def libToLink(wxlibname):
 
 
 def extraLdflags(wxlibname):
+    if wxlibname in EXTRALDFLAGS:
+        return EXTRALDFLAGS[wxlibname]
+    else:
+        return ''
+
+def extraLdlibs(wxlibname):
     if wxlibname in EXTRALIBS:
         return EXTRALIBS[wxlibname]
     else:

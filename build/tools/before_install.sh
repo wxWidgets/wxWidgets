@@ -95,7 +95,7 @@ case $(uname -s) in
 
                     extra_deps="$extra_deps \
                             libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-                            libglu1-mesa-dev"
+                            "
             esac
 
             # Install locales used by our tests to run all the tests instead of
@@ -128,7 +128,7 @@ case $(uname -s) in
         fi
 
         if [ -f /etc/redhat-release ]; then
-            dnf install -y ${WX_EXTRA_PACKAGES} expat-devel findutils g++ git-core gspell-devel gstreamer1-plugins-base-devel gtk3-devel make libcurl-devel libGLU-devel libjpeg-devel libnotify-devel libpng-devel libSM-devel libsecret-devel libtiff-devel SDL-devel webkit2gtk4.1-devel zlib-devel
+            dnf install -y ${WX_EXTRA_PACKAGES} expat-devel findutils g++ git-core gspell-devel gstreamer1-plugins-base-devel gtk3-devel make libcurl-devel libjpeg-devel libnotify-devel libpng-devel libSM-devel libsecret-devel libtiff-devel SDL-devel webkit2gtk4.1-devel zlib-devel
         fi
         ;;
 

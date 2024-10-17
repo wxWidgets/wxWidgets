@@ -2,7 +2,6 @@
 // Name:        wx/dfb/nonownedwnd.h
 // Purpose:     declares wxNonOwnedWindow class
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2006-12-24
 // Copyright:   (c) 2006 TT-Solutions
 // Licence:     wxWindows licence

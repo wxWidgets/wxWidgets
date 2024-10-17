@@ -2,7 +2,6 @@
 // Name:        wx/help.h
 // Purpose:     wxHelpController base header
 // Author:      wxWidgets Team
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

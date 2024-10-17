@@ -2,7 +2,6 @@
 // Name:        wx/notebook.h
 // Purpose:     wxNotebook interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.02.01
 // Copyright:   (c) 1996-2000 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -64,7 +63,7 @@ class WXDLLEXPORT wxNotebookPageInfo : public wxObject
 {
 public:
     wxNotebookPageInfo() { m_page = nullptr; m_imageId = -1; m_selected = false; }
-    virtual ~wxNotebookPageInfo() { }
+    virtual ~wxNotebookPageInfo() = default;
 
     bool Create(wxNotebookPage *page,
                 const wxString& text,
@@ -106,7 +105,7 @@ public:
     // ctors
     // -----
 
-    wxNotebookBase() { }
+    wxNotebookBase() = default;
 
     // wxNotebook-specific additions to wxBookCtrlBase interface
     // ---------------------------------------------------------

@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/combobox.mm
 // Purpose:     wxChoice
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -357,7 +356,7 @@ wxSize wxComboBox::DoGetBestSize() const
     int wLine;
     
     {
-        wxClientDC dc(const_cast<wxComboBox*>(this));
+        wxInfoDC dc(const_cast<wxComboBox*>(this));
         
         // Find the widest line
         for(unsigned int i = 0; i < GetCount(); i++)

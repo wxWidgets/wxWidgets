@@ -41,6 +41,9 @@ protected:
     virtual void DoSetValue(const wxString& value, int flags=0) override;
 
     virtual wxWindow *GetEditableWindow() override;
+
+    // Block/unblock the corresponding Qt signal.
+    virtual void EnableTextChangedEvents(bool enable) override;
 };
 
 #endif // _WX_QT_TEXTENTRY_H_

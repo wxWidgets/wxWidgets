@@ -38,7 +38,7 @@ typedef wxScopedArray<wxDataFormat> wxDataFormatScopedArray;
 // copied in the src program. It will send an paste request, in x11, it will
 // send an event which type is SelectionRequest by XConvertSelection, then X
 // server will try to find a program that could handle SelectionRequest event.
-// In src program, when recieve a SelectionRequest event, it will set the
+// In src program, when receive a SelectionRequest event, it will set the
 // copied data to dest program's window property. More specific, the dest
 // program is called "requestor", the src program could find which window ask
 // for the data, through the event member : "event.xselection.requestor".
@@ -117,7 +117,7 @@ typedef wxScopedArray<wxDataFormat> wxDataFormatScopedArray;
 // If we want copy data to clipboard. We must own the XA_CLIPBOARD selection
 // through XSetSelectionOwner().
 
-// But the data is still host by src program. When src program recieve
+// But the data is still host by src program. When src program receive
 // SelectionRequest event type. It set the data to requestor's window
 // property, through XCHangeProperty(xdisplay, requestor, ...). The second
 // parameter is the requests window. Requestor could find through XEvent.
@@ -135,7 +135,7 @@ typedef wxScopedArray<wxDataFormat> wxDataFormatScopedArray;
 // -----------------
 
 // In SetData, due to x11 program does not send data to a gloabal clipboard,
-// so the program hold the data, when the program recieve a SelectionRequest
+// so the program hold the data, when the program receive a SelectionRequest
 // event, the program set the data to requestor's window property. So in the
 // implementation of SetData, it hold the wxDataObject that need to be paste.
 // And set XA_CLIPBOARD selection owner.

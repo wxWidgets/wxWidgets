@@ -2,7 +2,6 @@
 // Name:        wx/msw/colour.h
 // Purpose:     wxColour class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -17,7 +16,7 @@
 // Colour
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxColour : public wxColourBase
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour : public wxColourBase
 {
 public:
     // constructors

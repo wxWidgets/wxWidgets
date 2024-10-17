@@ -2,7 +2,6 @@
 // Name:        src/msw/app.cpp
 // Purpose:     wxApp
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -150,6 +149,7 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 // Module for OLE initialization and cleanup
 // ----------------------------------------------------------------------------
 
+#if wxUSE_OLE
 class wxOleInitModule : public wxModule
 {
 public:
@@ -172,6 +172,7 @@ private:
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxOleInitModule, wxModule);
+#endif //wxUSE_OLE
 
 // ===========================================================================
 // wxGUIAppTraits implementation

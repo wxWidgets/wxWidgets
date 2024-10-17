@@ -235,13 +235,6 @@ bool wxBitmapDataObject::QtSetDataFrom(const QMimeData &mimeData)
 // wxTextDataObject
 // ---------------------------------------------------------------------------
 
-void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
-    wxDataObjectBase::Direction WXUNUSED(dir)) const
-{
-    formats[0] = wxDataFormat(wxDF_UNICODETEXT);
-    formats[1] = wxDataFormat(wxDF_TEXT);
-}
-
 void wxTextDataObject::QtSetDataSingleFormat(const QMimeData &mimeData, const wxDataFormat &WXUNUSED(format))
 {
     SetText(wxQtConvertString(mimeData.text()));

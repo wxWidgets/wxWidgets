@@ -152,6 +152,7 @@
 #include <wx/fontutil.h>
 #include <wx/frame.h>
 #include <wx/fs_arc.h>
+#include <wx/fs_data.h>
 #include <wx/fs_filter.h>
 #include <wx/fs_inet.h>
 #include <wx/fs_mem.h>

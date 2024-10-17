@@ -668,7 +668,7 @@ AppAbout::AppAbout (wxWindow *parent,
     m_timer = nullptr;
     if (milliseconds > 0) {
         m_timer = new wxTimer (this, myID_ABOUTTIMER);
-        m_timer->Start (milliseconds, wxTIMER_ONE_SHOT);
+        m_timer->StartOnce(milliseconds);
     }
 
     // Get version of Scintilla

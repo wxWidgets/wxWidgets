@@ -42,18 +42,11 @@ void wxScreenDCImpl::Init()
 
     SetUpDC();
 
-    gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-    gdk_gc_set_subwindow( m_brushGC, GDK_INCLUDE_INFERIORS );
-    gdk_gc_set_subwindow( m_textGC, GDK_INCLUDE_INFERIORS );
-    gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
+    DontClipSubWindows();
 }
 
 wxScreenDCImpl::~wxScreenDCImpl()
 {
-    gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
-    gdk_gc_set_subwindow( m_brushGC, GDK_CLIP_BY_CHILDREN );
-    gdk_gc_set_subwindow( m_textGC, GDK_CLIP_BY_CHILDREN );
-    gdk_gc_set_subwindow( m_bgGC, GDK_CLIP_BY_CHILDREN );
 }
 
 void wxScreenDCImpl::DoGetSize(int *width, int *height) const

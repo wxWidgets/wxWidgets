@@ -286,6 +286,8 @@
 
 #define wxUSE_WEBVIEW 0
 
+#define wxUSE_WEBVIEW_CHROMIUM 0
+
 #ifdef __WXMSW__
 #define wxUSE_WEBVIEW_IE 0
 #else
@@ -446,8 +448,6 @@
 #endif
 
 
-#define wxUSE_COMMON_DIALOGS 0
-
 #define wxUSE_BUSYINFO      0
 
 #define wxUSE_CHOICEDLG     0
@@ -598,6 +598,11 @@
  */
 #define wxUSE_SELECT_DISPATCHER 0
 #define wxUSE_EPOLL_DISPATCHER 0
+
+/*
+   Use debug version of CEF in wxWebViewChromium.
+ */
+#undef wxHAVE_CEF_DEBUG
 
 /*
    Use GStreamer for Unix.
@@ -790,9 +795,6 @@
 /* The type of statvfs(2) argument */
 #undef WX_STATFS_T
 
-/* The signal handler prototype */
-#undef wxTYPE_SA_HANDLER
-
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
 #undef WX_GETTIMEOFDAY_NO_TZ
@@ -937,6 +939,9 @@
 
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
+
+/* Define if you have the dl_iterate_phdr function.  */
+#undef HAVE_DL_ITERATE_PHDR
 
 /* Define if you have Posix fnctl() function. */
 #undef HAVE_FCNTL

@@ -101,7 +101,7 @@ wxCONSTRUCTOR_6( wxStaticText, wxWindow*, Parent, wxWindowID, Id, \
 
 void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
-    const wxClientDC dc(win);
+    const wxInfoDC dc(win);
 
     const wxArrayString ls = wxSplit(text, '\n', '\0');
     for ( wxArrayString::const_iterator i = ls.begin(); i != ls.end(); ++i )
@@ -264,7 +264,7 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
         return label;
     }
 
-    wxClientDC dc(const_cast<wxStaticTextBase*>(this));
+    wxInfoDC dc(const_cast<wxStaticTextBase*>(this));
 
     wxEllipsizeMode mode;
     if ( HasFlag(wxST_ELLIPSIZE_START) )

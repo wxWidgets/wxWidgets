@@ -2,7 +2,6 @@
 // Name:        wx/ipc.h
 // Purpose:     wrapper around different wxIPC classes implementations
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     15.04.02
 // Copyright:   (c) 2002 Vadim Zeitlin
 // Licence:     wxWindows licence

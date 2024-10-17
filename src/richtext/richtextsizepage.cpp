@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextsizepage.cpp
 // Purpose:     Implements the rich text formatting dialog size page.
 // Author:      Julian Smart
-// Modified by:
 // Created:     20/10/2010 10:23:24
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

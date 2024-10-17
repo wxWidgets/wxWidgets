@@ -8,13 +8,13 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-class QScrollArea;
 class wxQtEdit;
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
-    wxTextCtrl();
+    wxTextCtrl() = default;
+
     wxTextCtrl(wxWindow *parent,
                wxWindowID id,
                const wxString &value = wxEmptyString,
@@ -52,6 +52,14 @@ public:
 
     virtual void ShowPosition(long pos) override;
 
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                            wxTextCoord *col,
+                                            wxTextCoord *row) const override
+    {
+        return wxTextCtrlBase::HitTest(pt, col, row);
+    }
+
     virtual void SetInsertionPoint(long pos) override;
     virtual long GetInsertionPoint() const override;
     virtual void SetSelection( long from, long to ) override;
@@ -68,11 +76,14 @@ public:
 
     virtual void EmptyUndoBuffer() override;
 
+    virtual bool IsEditable() const override;
+    virtual void SetEditable(bool editable) override;
+
     virtual wxString DoGetValue() const override;
     virtual void DoSetValue(const wxString &text, int flags = 0) override;
     virtual void WriteText(const wxString& text) override;
 
-    virtual QWidget *GetHandle() const override;
+    virtual void SetMaxLength(unsigned long len) override;
 
 protected:
     virtual wxSize DoGetBestSize() const override;
@@ -80,13 +91,11 @@ protected:
     virtual bool DoLoadFile(const wxString& file, int fileType) override;
     virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const override;
-
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() override { return this; }
 
 private:
-    wxQtEdit *m_qtEdit;
+    wxQtEdit *m_qtEdit = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };

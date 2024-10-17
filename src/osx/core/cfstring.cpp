@@ -2,7 +2,6 @@
 // Name:        src/osx/core/cfstring.cpp
 // Purpose:     wxCFStringHolder and other string functions
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2004-10-29 (from code in src/osx/carbon/utils.cpp)
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

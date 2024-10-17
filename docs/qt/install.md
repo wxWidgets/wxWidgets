@@ -118,7 +118,7 @@ for Windows (ran from Git Bash, or any other Unix-like shell):
 Building wxGT on Android               {#qt_android}
 --------------------------
 
-Download Android Native Development Kit (NDK), tandalone Android Software
+Download Android Native Development Kit (NDK), standalone Android Software
 Development Kit (SDK), install them and perform the following instructions to
 prepare the cross-compilation tool-chain to (change NDK and other paths):
 

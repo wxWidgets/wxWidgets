@@ -2,7 +2,6 @@
 // Name:        wx/msw/slider.h
 // Purpose:     wxSlider class implementation using trackbar control
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

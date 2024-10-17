@@ -51,6 +51,31 @@ TEST_CASE("wxPoint::Operators", "[point]")
     p6 = p2; p6 -= s;
     CHECK( p3 == p5 );
     CHECK( p4 == p6 );
+
+    // Test arithmetic compound assignment operators with scalars
+    wxPoint p7(3, 5);
+    p7 /= 2;  // chosen to check results truncate
+    CHECK( p7.x == 1 );
+    CHECK( p7.y == 2 );
+    p7 *= 2;
+    CHECK( p7.x == 2 );
+    CHECK( p7.y == 4 );
+    p7 *= 3.2;  // chosen so that x and y rounds down and up respectively
+    CHECK( p7.x == 6 );
+    CHECK( p7.y == 13 );
+    p7 /= 1.1;  // chosen so that x and y rounds up and down respectively
+    CHECK( p7.x == 5 );
+    CHECK( p7.y == 12 );
+
+    // Test arithmetic compound assignment operators with wxSizes
+    wxSize s1(2, 3);
+    p7 += s1;
+    CHECK( p7.x == 7 );
+    CHECK( p7.y == 15 );
+    wxSize s2(3, 4);
+    p7 -= s2;
+    CHECK( p7.x == 4 );
+    CHECK( p7.y == 11 );
 }
 
 TEST_CASE("wxRealPoint::Operators", "[point]")
@@ -66,4 +91,23 @@ TEST_CASE("wxRealPoint::Operators", "[point]")
     CHECK( p4.x == Approx(p6.x) );
     CHECK( p4.y == Approx(p6.y) );
     CHECK( p3.x != Approx(p4.x) );
+
+    // Test arithmetic compound assignment operators with scalars
+    wxRealPoint p7(3.0, 5.0);
+    p7 /= 2.0;
+    CHECK( p7.x == Approx(1.5) );
+    CHECK( p7.y == Approx(2.5) );
+    p7 *= 3.0;
+    CHECK( p7.x == Approx(4.5) );
+    CHECK( p7.y == Approx(7.5) );
+
+    // Test arithmetic compound assignment operators with wxSizes
+    wxSize s1(2, 3);
+    p7 += s1;
+    CHECK( p7.x == Approx(6.5) );
+    CHECK( p7.y == Approx(10.5) );
+    wxSize s2(3, 4);
+    p7 -= s2;
+    CHECK( p7.x == Approx(3.5) );
+    CHECK( p7.y == Approx(6.5) );
 }

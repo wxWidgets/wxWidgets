@@ -2,7 +2,6 @@
 // Name:        wx/msgdlg.h
 // Purpose:     common header and base class for wxMessageDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -99,7 +98,7 @@ public:
     }
 
     // virtual dtor for the base class
-    virtual ~wxMessageDialogBase() { }
+    virtual ~wxMessageDialogBase() = default;
 
     wxString GetCaption() const { return m_caption; }
 

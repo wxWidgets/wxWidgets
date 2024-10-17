@@ -2,7 +2,6 @@
 // Name:        src/osx/pen.cpp
 // Purpose:     wxPen
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -99,10 +98,6 @@ wxPenRefData::~wxPenRefData()
 #define M_PENDATA ((wxPenRefData *)m_refData)
 
 wxPen::wxPen()
-{
-}
-
-wxPen::~wxPen()
 {
 }
 

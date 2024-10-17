@@ -2,7 +2,6 @@
 // Name:        src/x11/font.cpp
 // Purpose:     wxFont class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -438,10 +437,6 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding WXUNUSED(enc))
     tn.GetNextToken();                           // avg width
 
     return true;
-}
-
-wxFont::~wxFont()
-{
 }
 
 wxGDIRefData *wxFont::CreateGDIRefData() const

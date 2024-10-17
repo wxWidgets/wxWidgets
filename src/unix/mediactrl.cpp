@@ -2,7 +2,6 @@
 // Name:        src/unix/mediactrl.cpp
 // Purpose:     GStreamer backend for Unix
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by:
 // Created:     02/04/05
 // Copyright:   (c) 2004-2005 Ryan Norton
 // Licence:     wxWindows licence

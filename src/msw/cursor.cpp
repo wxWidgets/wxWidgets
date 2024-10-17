@@ -2,7 +2,6 @@
 // Name:        src/msw/cursor.cpp
 // Purpose:     wxCursor class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) 1997-2003 Julian Smart and Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -400,10 +399,6 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
     {
         m_refData = new wxCursorRefData(hcursor, deleteLater);
     }
-}
-
-wxCursor::~wxCursor()
-{
 }
 
 // ----------------------------------------------------------------------------

@@ -2,7 +2,6 @@
 // Name:        wx/x11/dcclient.h
 // Purpose:     wxClientDC, wxPaintDC and wxWindowDC classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -153,6 +152,9 @@ class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 public:
     wxClientDCImpl( wxDC *owner ) : wxWindowDCImpl( owner ) { }
     wxClientDCImpl( wxDC *owner, wxWindow *win );
+
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return true; }
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;

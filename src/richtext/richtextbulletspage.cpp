@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextbulletspage.cpp
 // Purpose:     Implements the rich text formatting dialog bullets page.
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/4/2006 10:32:31 AM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

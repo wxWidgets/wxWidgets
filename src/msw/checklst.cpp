@@ -2,7 +2,6 @@
 // Name:        src/msw/checklst.cpp
 // Purpose:     implementation of wxCheckListBox class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     16.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -44,7 +43,6 @@
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
-#include "wx/msw/private/dcdynwrap.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -166,7 +164,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     UINT uState = stat & wxOwnerDrawn::wxODSelected ? wxDSB_SELECTED : wxDSB_NORMAL;
 
     // checkmarks should not be mirrored in RTL layout
-    DWORD oldLayout = wxDynLoadWrappers::GetLayout(hdc);
+    DWORD oldLayout = ::GetLayout(hdc);
     if ( oldLayout & LAYOUT_RTL )
         ::SetLayout(hdc, oldLayout | LAYOUT_BITMAPORIENTATIONPRESERVED);
     wxDrawStateBitmap(hdc, hBmpCheck, x, y, uState);

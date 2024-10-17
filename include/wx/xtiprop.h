@@ -41,7 +41,7 @@ class WXDLLIMPEXP_BASE wxPropertySetter
 {
 public:
     wxPropertySetter( const wxString name ) { m_name = name; }
-    virtual ~wxPropertySetter() {}
+    virtual ~wxPropertySetter() = default;
 
     virtual void Set( wxObject *object, const wxAny &variantValue ) const = 0;
     const wxString& GetName() const { return m_name; }
@@ -54,7 +54,7 @@ class WXDLLIMPEXP_BASE wxPropertyGetter
 {
 public:
     wxPropertyGetter( const wxString name ) { m_name = name; }
-    virtual ~wxPropertyGetter() {}
+    virtual ~wxPropertyGetter() = default;
 
     virtual void Get( const wxObject *object, wxAny& result) const = 0;
     const wxString& GetName() const { return m_name; }
@@ -67,7 +67,7 @@ class WXDLLIMPEXP_BASE wxPropertyCollectionGetter
 {
 public:
     wxPropertyCollectionGetter( const wxString name ) { m_name = name; }
-    virtual ~wxPropertyCollectionGetter() {}
+    virtual ~wxPropertyCollectionGetter() = default;
 
     virtual void Get( const wxObject *object, wxAnyList& result) const = 0;
     const wxString& GetName() const { return m_name; }
@@ -83,7 +83,7 @@ class WXDLLIMPEXP_BASE wxPropertyCollectionAdder
 {
 public:
     wxPropertyCollectionAdder( const wxString name ) { m_name = name; }
-    virtual ~wxPropertyCollectionAdder() {}
+    virtual ~wxPropertyCollectionAdder() = default;
 
     virtual void Add( wxObject *object, const wxAny &variantValue ) const= 0;
     const wxString& GetName() const { return m_name; }
@@ -97,7 +97,7 @@ class wxPropertySetter##property : public wxPropertySetter              \
 {                                                                       \
 public:                                                                 \
     wxPropertySetter##property() : wxPropertySetter( wxT(#setterMethod) ) {}            \
-    virtual ~wxPropertySetter##property() {}                            \
+    virtual ~wxPropertySetter##property() = default;                            \
                                                                         \
     void Set( wxObject *object, const wxAny &variantValue ) const       \
     {                                                                   \
@@ -115,7 +115,7 @@ class wxPropertyGetter##property : public wxPropertyGetter                      
 {                                                                       \
 public:                                                                 \
     wxPropertyGetter##property() : wxPropertyGetter( wxT(#gettermethod) ) {}            \
-    virtual ~wxPropertyGetter##property() {}                                    \
+    virtual ~wxPropertyGetter##property() = default;                                    \
                                                                         \
     void Get( const wxObject *object, wxAny &result) const        \
     {                                                                   \
@@ -129,7 +129,7 @@ class wxPropertyCollectionAdder##property : public wxPropertyCollectionAdder    
 {                                                                       \
 public:                                                                 \
     wxPropertyCollectionAdder##property() : wxPropertyCollectionAdder( wxT(#addermethod) ) {}               \
-    virtual ~wxPropertyCollectionAdder##property() {}                                     \
+    virtual ~wxPropertyCollectionAdder##property() = default;                                     \
                                                                         \
     void Add( wxObject *object, const wxAny &variantValue ) const  \
     {                                                                   \
@@ -147,7 +147,7 @@ class wxPropertyCollectionGetter##property : public wxPropertyCollectionGetter  
 {                                                                           \
 public:                                                                     \
     wxPropertyCollectionGetter##property() : wxPropertyCollectionGetter( wxT(#gettermethod) ) {} \
-    virtual ~wxPropertyCollectionGetter##property() {}                              \
+    virtual ~wxPropertyCollectionGetter##property() = default;                              \
                                                                             \
     void Get( const wxObject *object, wxAnyList &result) const       \
     {                                                                       \
@@ -164,7 +164,7 @@ public:
     { m_setter = setter; m_getter = getter; m_adder = adder;
       m_collectionGetter = collectionGetter; }
 
-    virtual ~wxPropertyAccessor() {}
+    virtual ~wxPropertyAccessor() = default;
 
     // Setting a simple property (non-collection)
     virtual void SetProperty(wxObject *object, const wxAny &value) const

@@ -2,7 +2,6 @@
 // Name:        src/common/hashmap.cpp
 // Purpose:     wxHashMap implementation
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     29/01/2002
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence

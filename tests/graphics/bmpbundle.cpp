@@ -16,6 +16,11 @@
 
 #include "wx/artprov.h"
 #include "wx/dcmemory.h"
+#include "wx/imaglist.h"
+
+#ifdef __WINDOWS__
+    #include "wx/msw/private/resource_usage.h"
+#endif // __WINDOWS__
 
 #include "asserthelper.h"
 
@@ -52,12 +57,84 @@ TEST_CASE("BitmapBundle::FromBitmaps", "[bmpbundle]")
 
 TEST_CASE("BitmapBundle::GetBitmap", "[bmpbundle]")
 {
-    const wxBitmapBundle b = wxBitmapBundle::FromBitmap(wxBitmap(16, 16));
+    wxBitmapBundle b = wxBitmapBundle::FromBitmap(wxBitmap(16, 16));
 
     CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
     CHECK( b.GetBitmap(wxSize(32, 32)).GetSize() == wxSize(32, 32) );
     CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
+
+    // Test for the special case when the requested size uses the same height
+    // but not the same width.
+    wxBitmap nonSquare(wxSize(51, 41));
+    b = wxBitmapBundle::FromBitmap(nonSquare);
+
+    const wxSize scaledSize(52, 41);
+    CHECK( b.GetBitmap(scaledSize).GetSize() == scaledSize );
+
+    // Test upscaling too.
+    b = wxBitmapBundle::FromBitmap(wxBitmap(32, 32));
+    CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
+    CHECK( b.GetBitmap(wxSize(48, 48)).GetSize() == wxSize(48, 48) );
 }
+
+#ifdef __WINDOWS__
+
+namespace
+{
+
+std::string wxGUIObjectUsageAsString(const wxGUIObjectUsage& useCount)
+{
+    return wxString::Format("%lu GDI, %lu USER",
+                            useCount.numGDI, useCount.numUSER)
+            .utf8_string();
+}
+
+} // anonymous namespace
+
+namespace Catch
+{
+    template <>
+    struct StringMaker<wxGUIObjectUsage>
+    {
+        static std::string convert(const wxGUIObjectUsage& useCount)
+        {
+            return wxGUIObjectUsageAsString(useCount);
+        }
+    };
+}
+
+TEST_CASE("BitmapBundle::ResourceLeak", "[bmpbundle]")
+{
+    wxBitmapBundle bb = wxBitmapBundle::FromBitmap(wxBitmap(32, 32));
+
+    const auto usageBefore = wxGetCurrentlyUsedResources();
+    INFO("Usage before: " << wxGUIObjectUsageAsString(usageBefore));
+
+    for ( int n = 0; n < 10000; ++n )
+    {
+        wxBitmap bmp = bb.GetBitmap(wxSize(24, 24));
+        if ( !bmp.GetHandle() )
+        {
+            FAIL("Failed to create bitmap");
+        }
+    }
+
+    const auto usageAfter = wxGetCurrentlyUsedResources();
+    INFO("Usage after:  " << wxGUIObjectUsageAsString(usageAfter));
+
+    INFO("Usage peak:   " << wxGUIObjectUsageAsString(wxGetMaxUsedResources()));
+
+    // We shouldn't have used any USER resources.
+    CHECK( usageAfter.numUSER == usageBefore.numUSER );
+
+    // Ideally we'd want the GDI usage to be exactly the same as before too,
+    // but at least one extra resource gets allocated somewhere, so allow for
+    // it.
+    REQUIRE( usageAfter.numGDI >= usageBefore.numGDI );
+    CHECK( usageAfter.numGDI - usageBefore.numGDI < 10 );
+}
+
+#endif // __WINDOWS__
 
 // Helper functions for the test below.
 namespace
@@ -312,6 +389,14 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK_THAT( BitmapAtScale(b, 4.25), SameAs(4.0, 2.0) );
     CHECK_THAT( BitmapAtScale(b, 4.50), SameAs(4.5, 1.5) );
     CHECK_THAT( BitmapAtScale(b, 5   ), SameAs(5.0, 1.0) );
+
+
+    // Another check to detect that the scale is computed correctly even when
+    // rounding is involved.
+    wxBitmap nonSquare(wxSize(51, 41));
+    nonSquare.SetScaleFactor(1.5);
+    b = wxBitmapBundle::FromBitmap(nonSquare);
+    CHECK( b.GetPreferredBitmapSizeAtScale(1.5) == nonSquare.GetSize() );
 }
 
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
@@ -375,6 +460,29 @@ TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")
     b = wxBitmapBundle::FromSVG(svg_data, wxSize(20, 20));
     REQUIRE( b.IsOk() );
     CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
+}
+
+TEST_CASE("BitmapBundle::FromSVG-alpha", "[bmpbundle][svg][alpha]")
+{
+    static const char svg_data[] =
+        "<svg viewBox=\"0 0 100 100\">"
+        "<line x1=\"0\" y1=\"0\" x2=\"100%\" y2=\"100%\" stroke=\"#3f7fff\" stroke-width=\"71%\"/>"
+        "</svg>"
+        ;
+
+    wxBitmapBundle b = wxBitmapBundle::FromSVG(svg_data, wxSize(2, 2));
+    REQUIRE( b.IsOk() );
+
+    wxImage img = b.GetBitmap(wxDefaultSize).ConvertToImage();
+    REQUIRE( img.HasAlpha() );
+    // Check that anti-aliased edge at 50% alpha round-trips (after possibly
+    // premultiplied storage in wxBitmap) to substantially original straight
+    // alpha pixel values in wxImage, allowing for roundoff error.
+    CHECK( (int)img.GetRed(0, 1) >= 0x3c );
+    CHECK( (int)img.GetRed(0, 1) <= 0x3f );
+    CHECK( (int)img.GetGreen(0, 1) >= 0x7b );
+    CHECK( (int)img.GetGreen(0, 1) <= 0x7f);
+    CHECK( (int)img.GetBlue(0, 1) == 0xff );
 }
 
 TEST_CASE("BitmapBundle::FromSVGFile", "[bmpbundle][svg][file]")
@@ -468,6 +576,37 @@ TEST_CASE("BitmapBundle::Scale", "[bmpbundle][scale]")
     // works as expected.
     wxBitmapBundle b = bmp2;
     CHECK( b.GetDefaultSize() == wxSize(8, 8) );
+}
+
+TEST_CASE("BitmapBundle::ImageList", "[bmpbundle][imagelist]")
+{
+    wxVector<wxBitmapBundle> images;
+    images.push_back(wxBitmapBundle::FromBitmaps(wxBitmap(16, 16), wxBitmap(32, 32)));
+    images.push_back(wxBitmapBundle::FromBitmap(wxBitmap(24, 24)));
+    images.push_back(wxBitmapBundle::FromBitmaps(wxBitmap(16, 16), wxBitmap(32, 32)));
+
+    // There are 2 bundles with preferred size of 32x32, so they should win.
+    const wxSize size = wxBitmapBundle::GetConsensusSizeFor(2.0, images);
+    CHECK( size == wxSize(32, 32) );
+
+    wxImageList iml(size.x, size.y);
+    for ( const auto& bundle : images )
+    {
+        wxBitmap bmp = bundle.GetBitmap(size);
+        REQUIRE( bmp.IsOk() );
+        CHECK( bmp.GetSize() == size );
+        REQUIRE( iml.Add(bmp) != -1 );
+    }
+
+    CHECK( iml.GetBitmap(0).GetSize() == size );
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CHECK( iml.GetBitmap(0).GetScaleFactor() == 2 );
+#endif
+
+    CHECK( iml.GetBitmap(1).GetSize() == size );
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CHECK( iml.GetBitmap(1).GetScaleFactor() == Approx(1.3333333333) );
+#endif
 }
 
 #endif // ports with scaled bitmaps support

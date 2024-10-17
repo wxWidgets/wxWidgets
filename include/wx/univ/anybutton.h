@@ -17,9 +17,9 @@
 class WXDLLIMPEXP_CORE wxAnyButton : public wxAnyButtonBase
 {
 public:
-    wxAnyButton() {}
+    wxAnyButton() = default;
 
-    virtual ~wxAnyButton() {}
+    virtual ~wxAnyButton() = default;
 
     // wxAnyButton actions
     virtual void Toggle();

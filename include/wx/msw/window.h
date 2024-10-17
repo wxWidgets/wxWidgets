@@ -213,13 +213,6 @@ public:
 
     void OnPaint(wxPaintEvent& event);
 
-    // Override this to return true to automatically invert the window colours
-    // in dark mode.
-    //
-    // This doesn't result in visually great results, but may still be better
-    // than using light background.
-    virtual bool MSWShouldUseAutoDarkMode() const { return false; }
-
 public:
     // Windows subclassing
     void SubclassWin(WXHWND hWnd);
@@ -295,6 +288,14 @@ public:
 
     // Setup background and foreground colours correctly
     virtual void SetupColours();
+
+    virtual wxVisualAttributes GetDefaultAttributes() const override
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // ------------------------------------------------------------------------
     // helpers for message handlers: these perform the same function as the
@@ -573,6 +574,10 @@ public:
 
     // Find the menu corresponding to the given handle.
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
+
+    // Find the the current menu item using the given handle and the item id
+    virtual wxMenuItem* MSWFindMenuItemFromHMENU(WXHMENU hMenu, int nItem);
+
 #endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
     // Return the default button for the TLW containing this window or nullptr if
@@ -616,17 +621,9 @@ protected:
     {
     }
 
-    // this allows you to implement standard control borders without
-    // repeating the code in different classes that are not derived from
-    // wxControl
-    virtual wxBorder GetDefaultBorderForControl() const override;
-
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const override;
-
-    // Translate wxBORDER_THEME (and other border styles if necessary to the value
-    // that makes most sense for this Windows environment
-    virtual wxBorder TranslateBorder(wxBorder border) const;
+    // Translate wxBORDER_THEME to a standard border style or return it as is
+    // if themed border should be used, depending on CanApplyThemeBorder().
+    wxBorder DoTranslateBorder(wxBorder border) const;
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;

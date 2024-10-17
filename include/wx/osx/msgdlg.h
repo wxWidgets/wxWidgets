@@ -3,7 +3,6 @@
 // Purpose:     wxMessageDialog class. Use generic version if no
 //              platform-specific implementation.
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

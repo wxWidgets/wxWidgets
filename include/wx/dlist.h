@@ -339,7 +339,7 @@ public:
     void Assign(const wxDList<T> &list)
     {
         wxASSERT_MSG( !list.m_destroy,
-                      "copying list which owns it's elements is a bad idea" );
+                      "copying list which owns its elements is a bad idea" );
         Clear();
         m_destroy = list.m_destroy;
         m_nodeFirst = nullptr;

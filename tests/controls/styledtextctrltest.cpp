@@ -11,9 +11,6 @@
 
 #if wxUSE_STC
 
-#if defined(WXUSINGDLL)
-
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif // WX_PRECOMP
@@ -163,8 +160,6 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
 #endif // !defined(__WXOSX_COCOA__)
 
 #endif // defined(__WXOSX_COCOA__) || defined(__WXMSW__) || defined(__WXGTK__)
-
-#endif // WXUSINGDLL
 
 #endif // wxUSE_STC
 

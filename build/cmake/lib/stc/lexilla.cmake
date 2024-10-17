@@ -14,6 +14,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/access/LexillaAccess.cxx
     ${LEXILLA_SRC_DIR}/access/LexillaAccess.h
     ${LEXILLA_SRC_DIR}/include/Lexilla.h
+    ${LEXILLA_SRC_DIR}/include/LexillaCompat.h
     ${LEXILLA_SRC_DIR}/include/SciLexer.h
     ${LEXILLA_SRC_DIR}/lexers/LexA68k.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexAPDL.cxx
@@ -23,6 +24,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexAVS.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexAbaqus.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexAda.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexAsciidoc.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexAsm.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexAsn1.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexBaan.cxx
@@ -58,6 +60,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexForth.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexFortran.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexGAP.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexGDScript.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexGui4Cli.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexHTML.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexHaskell.cxx
@@ -66,6 +69,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexIndent.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexInno.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexJSON.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexJulia.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexKVIrc.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexKix.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexLaTeX.cxx
@@ -133,13 +137,16 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexlib/Accessor.cxx
     ${LEXILLA_SRC_DIR}/lexlib/Accessor.h
     ${LEXILLA_SRC_DIR}/lexlib/CatalogueModules.h
-    # ${LEXILLA_SRC_DIR}/lexlib/CharacterCategory.cxx
-    # ${LEXILLA_SRC_DIR}/lexlib/CharacterCategory.h
-    # ${LEXILLA_SRC_DIR}/lexlib/CharacterSet.cxx
-    # ${LEXILLA_SRC_DIR}/lexlib/CharacterSet.h
     ${LEXILLA_SRC_DIR}/lexlib/DefaultLexer.cxx
     ${LEXILLA_SRC_DIR}/lexlib/DefaultLexer.h
+    ${LEXILLA_SRC_DIR}/lexlib/InList.cxx
+    ${LEXILLA_SRC_DIR}/lexlib/InList.h
+    ${LEXILLA_SRC_DIR}/lexlib/LexAccessor.cxx
     ${LEXILLA_SRC_DIR}/lexlib/LexAccessor.h
+    ${LEXILLA_SRC_DIR}/lexlib/LexCharacterCategory.cxx
+    ${LEXILLA_SRC_DIR}/lexlib/LexCharacterCategory.h
+    ${LEXILLA_SRC_DIR}/lexlib/LexCharacterSet.cxx
+    ${LEXILLA_SRC_DIR}/lexlib/LexCharacterSet.h
     ${LEXILLA_SRC_DIR}/lexlib/LexerBase.cxx
     ${LEXILLA_SRC_DIR}/lexlib/LexerBase.h
     ${LEXILLA_SRC_DIR}/lexlib/LexerModule.cxx

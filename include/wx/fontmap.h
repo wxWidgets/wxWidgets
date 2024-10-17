@@ -2,7 +2,6 @@
 // Name:        wx/fontmap.h
 // Purpose:     wxFontMapper class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.11.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

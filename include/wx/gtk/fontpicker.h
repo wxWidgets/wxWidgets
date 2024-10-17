@@ -2,7 +2,6 @@
 // Name:        wx/gtk/fontpicker.h
 // Purpose:     wxFontButton header
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence

@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxNonOwnedWindowBase
 {
 public:
-    wxNonOwnedWindow();
+    wxNonOwnedWindow() = default;
 
 protected:
     virtual bool DoClearShape() override;

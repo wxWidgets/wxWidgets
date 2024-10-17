@@ -2,7 +2,6 @@
 // Name:        wx/unix/apptbase.h
 // Purpose:     declaration of wxAppTraits for Unix systems
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     23.06.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

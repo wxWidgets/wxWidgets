@@ -2,7 +2,6 @@
 // Name:        src/ribbon/toolbar.cpp
 // Purpose:     Ribbon-style tool bar
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-07-06
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -36,7 +35,7 @@ public:
     wxRect dropdown;
     wxPoint position;
     wxSize size;
-    wxObject* client_data;
+    wxObject* client_data = nullptr;
     int id;
     wxRibbonButtonKind kind;
     long state;

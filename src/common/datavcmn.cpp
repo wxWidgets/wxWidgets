@@ -902,12 +902,13 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
         }
 
         SetValue(value);
-
-        // Also set up the attributes for this item if it's not empty.
-        wxDataViewItemAttr attr;
-        model->GetAttr(item, column, attr);
-        SetAttr(attr);
     }
+
+    // Also set up the attributes: note that we need to do this even for the
+    // empty cells because background colour is still relevant for them.
+    wxDataViewItemAttr attr;
+    model->GetAttr(item, column, attr);
+    SetAttr(attr);
 
     // Finally determine the enabled/disabled state and apply it, even to the
     // empty cells.
@@ -1996,7 +1997,8 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
 
 wxWindow* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
-    wxVariant string_value = GetChoice( value.GetLong() );
+    wxVariant string_value = value.GetLong() != wxNOT_FOUND ? GetChoice( value.GetLong() )
+                                                            : wxString();
 
     return wxDataViewChoiceRenderer::CreateEditorCtrl( parent, labelRect, string_value );
 }
@@ -2013,7 +2015,8 @@ bool wxDataViewChoiceByIndexRenderer::GetValueFromEditorCtrl( wxWindow* editor, 
 
 bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
 {
-    wxVariant string_value = GetChoice( value.GetLong() );
+    wxVariant string_value = value.GetLong() != wxNOT_FOUND ? GetChoice( value.GetLong() )
+                                                            : wxString();
     return wxDataViewChoiceRenderer::SetValue( string_value );
 }
 

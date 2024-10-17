@@ -144,8 +144,10 @@ public:
     wxLocaleIdent GetLocaleId() const override;
     wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const override;
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const override;
+#if wxUSE_DATETIME
     wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const override;
     wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const override;
+#endif // wxUSE_DATETIME
 
     wxLayoutDirection GetLayoutDirection() const override;
     int CompareStrings(const wxString& lhs, const wxString& rhs,
@@ -227,6 +229,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     return wxCFStringRef::AsString(str);
 }
 
+#if wxUSE_DATETIME
 wxString
 wxUILocaleImplCF::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
 {
@@ -316,6 +319,7 @@ wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFo
     NSString* weekdayName = [weekdayNames objectAtIndex:(weekday)];
     return wxCFStringRef::AsString(weekdayName);
 }
+#endif // wxUSE_DATETIME
 
 wxLayoutDirection
 wxUILocaleImplCF::GetLayoutDirection() const

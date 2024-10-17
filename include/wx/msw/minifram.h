@@ -2,7 +2,6 @@
 // Name:        wx/msw/minifram.h
 // Purpose:     wxMiniFrame class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -16,7 +15,7 @@
 class WXDLLIMPEXP_CORE wxMiniFrame : public wxFrame
 {
 public:
-  wxMiniFrame() { }
+  wxMiniFrame() = default;
 
   bool Create(wxWindow *parent,
               wxWindowID id,

@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/comimpl.h
 // Purpose:     COM helper routines, COM debugging support &c
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.02.1998
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -10,6 +9,12 @@
 
 #ifndef WX_COMIMPL_H
 #define WX_COMIMPL_H
+
+// DO NOT USE THIS HEADER.
+//
+// This header is only preserved for compatibility and the helpers defined here
+// are obsolete and shouldn't be used in any new code and don't work correctly
+// with classes inheriting from IUnknown more than once.
 
 #include "wx/defs.h"
 

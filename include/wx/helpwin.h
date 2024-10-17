@@ -2,7 +2,6 @@
 // Name:        wx/helpwin.h
 // Purpose:     Includes Windows help
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

@@ -3,7 +3,6 @@
 // Purpose:     macros to use some non-standard features of MS Visual C++
 //              C run-time library
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.1999
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

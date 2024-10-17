@@ -2,7 +2,6 @@
 // Name:        wx/font.h
 // Purpose:     wxFontBase class: the interface of wxFont
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.09.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -341,9 +340,6 @@ public:
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     */
 
-    // creator function
-    virtual ~wxFontBase();
-
 
     // from the font components
     static wxFont *New(
@@ -672,6 +668,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;
 // to compile without warnings which it would otherwise provoke from some
 // compilers as it compares elements of different enums
 
+#if WXWIN_COMPATIBILITY_3_2
+
 wxDEPRECATED_MSG("use wxFONTFAMILY_XXX constants") \
 inline bool operator==(wxFontFamily s, wxDeprecatedGUIConstants t)
     { return static_cast<int>(s) == static_cast<int>(t); }
@@ -690,5 +688,7 @@ inline bool operator==(wxFontWeight s, wxDeprecatedGUIConstants t)
 wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants") \
 inline bool operator!=(wxFontWeight s, wxDeprecatedGUIConstants t)
     { return static_cast<int>(s) != static_cast<int>(t); }
+
+#endif // WXWIN_COMPATIBILITY_3_2
 
 #endif // _WX_FONT_H_BASE_

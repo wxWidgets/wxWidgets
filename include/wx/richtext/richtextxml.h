@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextxml.h
 // Purpose:     XML and HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -164,7 +163,7 @@ public:
     @class wxRichTextXMLHandler
 
     Implements XML loading and saving. Two methods of saving are included:
-    writing directly to a text stream, and populating an wxXmlDocument
+    writing directly to a text stream, and populating a wxXmlDocument
     before writing it. The former method is considerably faster, so we favour
     that one, even though the code is a little less elegant.
  */

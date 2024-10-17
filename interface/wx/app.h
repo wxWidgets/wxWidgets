@@ -284,8 +284,7 @@ public:
         @param line
             the line number in this file where the assert occurred
         @param func
-            the name of the function where the assert occurred, may be
-            empty if the compiler doesn't support C99 \__FUNCTION__
+            the name of the function where the assert occurred
         @param cond
             the condition of the failed assert in text form
         @param msg
@@ -389,11 +388,28 @@ public:
         that the function returns @true.
 
         Notice that if you want to use the command line processing provided by
-        wxWidgets you have to call the base class version in the derived class
-        OnInit().
+        wxWidgets (see OnInitCmdLine() and OnCmdLineParsed() functions) you
+        have to call the base class version in the derived class OnInit(),
+        e.g.:
+
+        @code
+        bool MyApp::OnInit() {
+            if ( !wxApp::OnInit() ) {
+                // The most likely reason for the error here is that incorrect
+                // command line arguments have been specified, so just exit:
+                // error message has already been given.
+                return false;
+            }
+
+            // Perform any additional initialization here.
+
+            return true;
+        }
+        @endcode
 
         Return @true to continue processing, @false to exit the application
-        immediately.
+        immediately. In the latter case, you may want to call SetErrorExitCode()
+        to set the process exit code to use when the application terminates.
     */
     virtual bool OnInit();
 
@@ -411,14 +427,23 @@ public:
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
 
     /**
-        This virtual function is where the execution of a program written in wxWidgets
-        starts. The default implementation just enters the main loop and starts
-        handling the events until it terminates, either because ExitMainLoop() has
-        been explicitly called or because the last frame has been deleted and
-        GetExitOnFrameDelete() flag is @true (this is the default).
+        Virtual function executing the application's main event loop.
 
-        The return value of this function becomes the exit code of the program, so it
-        should return 0 in case of successful termination.
+        For the GUI applications, it is typically not necessary to override
+        this function, as the default implementation, which enters the main
+        event loop and dispatches all events until ExitMainLoop() is called
+        (either explicitly or because the last top level window was closed),
+        rarely needs to be customized.
+
+        For the console applications not using event loops, this function can
+        be used as the equivalent of the traditional @c main() function by
+        putting most of the program logic here.
+
+        The return value of this function becomes the exit code of the program,
+        so it should return 0 in case of successful termination.
+
+        Note that this function is not called at all if OnInit() had returned
+        @false.
     */
     virtual int OnRun();
 
@@ -762,6 +787,73 @@ public:
     void SetCLocale();
 
     /**
+        Sets the error code to use in case of exit on error.
+
+        This function is mostly useful to customize the error code returned by
+        the application when it exits due to OnInit() returning @false and can
+        be called from OnInit() itself or other virtual functions called from
+        it, for example OnCmdLineError().
+
+        By default, the exit code is @c 255 which indicates a generic error,
+        so it is may be useful to call this function to set a more precise exit
+        code, e.g. @c 2 which is a de facto standard exit code if command line
+        parsing fails.
+
+        Please also note that in the previous versions of wxWidgets this exit
+        code was @c -1, which corresponds to either @c 255 or @c 127 depending
+        on the platform and compiler used, so you may want to call this
+        function with @c -1 argument if you need to preserve compatibility with
+        the old behaviour.
+
+        SetErrorExitCode() can be overridden by the application to perform
+        additional actions, but the overridden version should call the base
+        class version to update the value returned by GetErrorExitCode() and
+        actually used when exiting the application.
+
+        @see SetFatalErrorExitCode()
+
+        @since 3.3.0
+     */
+    virtual void SetErrorExitCode(int code);
+
+    /**
+        Allows to set a custom process exit code if a fatal error happens.
+
+        If the program can't continue due to a fatal error, such as receiving
+        an unhandled exception or failing to initialize the graphical
+        environment for the GUI applications, it terminates with the default
+        fatal error exit code which is @c 255.
+
+        This function can be used to change this default value to something
+        else, e.g. @c -1 which used to be returned in the previous versions of
+        wxWidgets (and corresponds to either @c 255 or @c 127 depending on the
+        platform and compiler used) if compatibility is important.
+
+        Notice that it has to be called as early as possible to take effect
+        even during the early application initialization, e.g.
+
+        @code
+        struct FatalErrorCodeInitializer {
+            FatalErrorCodeInitializer() {
+                wxApp::SetFatalErrorExitCode(3); // same as abort()
+            }
+        };
+
+        // Create a global variable to call SetFatalErrorExitCode() in its ctor.
+        static FatalErrorCodeInitializer s_fatalErrorCodeInitializer;
+        @endcode
+
+        Note that this function doesn't change the exit code returned if
+        OnInit() returns @false, so if you change the default value of this
+        exit code you may want to call SetErrorExitCode() to change the other
+        one too.
+
+        @since 3.3.0
+     */
+    static void SetFatalErrorExitCode(int code);
+
+
+    /**
         Number of command line arguments (after environment-specific processing).
     */
     int argc;
@@ -936,7 +1028,7 @@ public:
         Works like SafeYield() with @e onlyIfNeeded == @true except that
         it allows the caller to specify a mask of events to be processed.
 
-        See wxAppConsole::YieldFor for more info.
+        See wxEventLoopBase::YieldFor() for more info.
     */
     virtual bool SafeYieldFor(wxWindow *win, long eventsToProcess);
 
@@ -964,6 +1056,69 @@ public:
         @onlyfor{wxmsw}
     */
     bool ProcessMessage(WXMSG* msg);
+
+
+    /**
+        Possible parameters for SetAppearance().
+
+        @since 3.3.0
+    */
+    enum class Appearance
+    {
+        System, ///< Use system default appearance.
+        Light,  ///< Use light appearance.
+        Dark    ///< Use dark appearance.
+    };
+
+    /**
+        Possible values returned by SetAppearance().
+
+        @since 3.3.0
+    */
+    enum class AppearanceResult
+    {
+        Failure,     ///< Changing the appearance failed.
+        Ok,          ///< Appearance was successfully changed.
+        CannotChange ///< Appearance can't be changed any more.
+    };
+
+    /**
+        Request using either system default or explicitly light or dark theme
+        for the application.
+
+        Under GTK and macOS applications use the system default appearance by
+        default, and so it is only useful to call this function with either
+        Appearance::Light or Appearance::Dark parameters if you need to
+        override the default system appearance. The effect of calling this
+        function is immediate, i.e. this function returns
+        AppearanceResult::Ok, and affects all the existing windows as well
+        as any windows created after this call.
+
+        Under MSW, the default appearance is always light and the applications
+        that want to follow the system appearance need to explicitly call this
+        function with Appearance::System parameter in order to do it. Please
+        note using dark appearance under MSW requires using non-documented
+        system functions and has several known limitations, please see
+        MSWEnableDarkMode() for more details. Also, on this platform the
+        appearance can be only set before any windows are created and calling
+        this function too late will return AppearanceResult::CannotChange.
+
+        Note that to query the current appearance, you can use
+        wxSystemAppearance, see wxSystemSettings::GetAppearance().
+
+        @return AppearanceResult::Ok if the appearance was successfully
+            changed or had been already set to the requested value,
+            AppearanceResult::CannotChange if the appearance can't be changed
+            any more because it's too late to do it but could be changed if
+            done immediately on next program launch (only returned by wxMSW
+            currently) or AppearanceResult::Failure if changing the appearance
+            failed for some other reason, e.g. because `GTK_THEME` is defined
+            when using wxGTK of this function is not implemented at all for
+            the current platform.
+
+        @since 3.3.0
+    */
+    AppearanceResult SetAppearance(Appearance appearance);
 
     /**
         Set display mode to use. This is only used in framebuffer wxWidgets
@@ -1041,6 +1196,11 @@ public:
 
         This function can be called to suppress GTK diagnostic messages that
         are output on the standard error stream by default.
+
+        If @c WXSUPPRESS_GTK_DIAGNOSTICS environment variable is set to a
+        non-zero value, wxWidgets automatically calls this function on program
+        startup with the value of this variable as @a flags if it's a number or
+        with the default flags value otherwise.
 
         The default value of the argument disables all messages, but you
         can pass in a mask flag to specifically disable only particular
@@ -1195,18 +1355,25 @@ public:
 
         Note that dark mode can also be enabled by setting the "msw.dark-mode"
         @ref wxSystemOptions "system option" via an environment variable from
-        outside the application.
+        outside the application or by calling SetAppearance() with either
+        `System` or `Dark` parameter.
 
         Known limitations of dark mode support include:
 
-            - wxMessageBox() contents doesn't use dark mode. Consider using
-              wxGenericMessageDialog if dark mode support is more important
-              than using the native dialog.
-            - wxDatePickerCtrl and wxTimePickerCtrl don't support dark mode and
-              use the same (light) background as by default in it.
-            - Toolbar items for which wxToolBar::SetDropdownMenu() was called
-              don't draw the menu drop-down correctly, making it almost
-              invisible.
+        - Anything based on `TaskDialog()` Win32 API doesn't support dark mode:
+          wxMessageBox(), wxMessageDialog, wxRichMessageDialog, wxProgressDialog
+          and simple (i.e., without hyperlink or licence) wxAboutBox(). Consider
+          using generic versions (e.g. wxGenericMessageDialog or wxGenericProgressDialog)
+          if dark mode support is more important than using the native dialog.
+        - The following dialogs wrapping common windows dialogs don't support
+          dark mode: wxColourDialog, wxFindReplaceDialog, wxFontDialog,
+          wxPageSetupDialog, wxPrintDialog.
+        - wxDatePickerCtrl and wxTimePickerCtrl don't support dark mode and
+          use the same (light) background as by default in it.
+        - Toolbar items for which wxToolBar::SetDropdownMenu() was called
+          don't draw the menu drop-down correctly, making it almost
+          invisible.
+        - Calling wxMenu::Break() will result in the menu being light.
 
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the

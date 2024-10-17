@@ -2,7 +2,6 @@
 // Name:        wx/osx/pen.h
 // Purpose:     wxPen class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -25,8 +24,6 @@ public:
     wxPen(const wxBitmap& stipple, int width);
 
     wxPen(const wxPenInfo& info);
-
-    virtual ~wxPen();
 
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }

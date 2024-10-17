@@ -19,7 +19,7 @@
 
     @beginStyleTable
     @style{wxEL_ALLOW_NEW}
-           Allows the user to enter new strings.
+           Allows the user to enter new strings (implies wxEL_ALLOW_EDIT as well).
     @style{wxEL_ALLOW_EDIT}
            Allows the user to edit existing strings.
     @style{wxEL_ALLOW_DELETE}

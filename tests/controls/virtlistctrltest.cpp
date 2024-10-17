@@ -81,6 +81,7 @@ void VirtListCtrlTestCase::setUp()
     };
 
     m_list = new VirtListCtrl;
+    m_list->AppendColumn("Col0");
 }
 
 void VirtListCtrlTestCase::tearDown()
@@ -101,15 +102,19 @@ void VirtListCtrlTestCase::UpdateSelection()
     CPPUNIT_ASSERT_EQUAL( 2, m_list->GetSelectedItemCount() );
 
     // The item 7 is now invalid and so shouldn't be counted as selected any
-    // more.
+    // more. Notice that under wxQt, the selection is lost/cleared when the
+    // model is reset
     m_list->SetItemCount(5);
+#ifndef __WXQT__
     CPPUNIT_ASSERT_EQUAL( 1, m_list->GetSelectedItemCount() );
+#else
+    CPPUNIT_ASSERT_EQUAL( 0, m_list->GetSelectedItemCount() );
+#endif
 }
 
 void VirtListCtrlTestCase::DeselectedEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    m_list->AppendColumn("Col0");
     m_list->SetItemCount(1);
     wxListCtrl* const list = m_list;
 

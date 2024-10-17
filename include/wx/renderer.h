@@ -2,7 +2,6 @@
 // Name:        wx/renderer.h
 // Purpose:     wxRendererNative class declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.07.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -25,6 +24,7 @@
 #define _WX_RENDERER_H_
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 #include "wx/gdicmn.h" // for wxPoint, wxSize
@@ -34,7 +34,8 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 #include "wx/string.h"
 
 // some platforms have their own renderers, others use the generic one
-#if defined(__WXMSW__) || ( defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON ) || defined(__WXGTK__)
+#if defined(__WXMSW__) || ( defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON ) || \
+    defined(__WXGTK__) || defined(__WXQT__)
     #define wxHAS_NATIVE_RENDERER
 #else
     #undef wxHAS_NATIVE_RENDERER
@@ -291,7 +292,7 @@ public:
                                     int flags = 0) = 0;
 
     // Returns the default size of a collapse button
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) = 0;
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& dc) = 0;
 
     // draw rectangle indicating that an item in e.g. a list control
     // has been selected or focused
@@ -524,7 +525,7 @@ public:
                                     int flags = 0) override
         { m_rendererNative.DrawCollapseButton(win, dc, rect, flags); }
 
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) override
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& dc) override
         { return m_rendererNative.GetCollapseButtonSize(win, dc); }
 
     virtual void DrawItemSelectionRect(wxWindow *win,

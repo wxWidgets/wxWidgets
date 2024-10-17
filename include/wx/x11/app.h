@@ -2,7 +2,6 @@
 // Name:        wx/x11/app.h
 // Purpose:     wxApp class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -41,8 +40,6 @@ public:
 
     // override base class (pure) virtuals
     // -----------------------------------
-
-    virtual void Exit();
 
     virtual void WakeUpIdle();
 

@@ -56,7 +56,7 @@ public:     // public API
     virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) override;
     virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) override;
 
-    void SetAnimation(const wxAnimation &anim) override;
+    void SetAnimation(const wxAnimationBundle& anim) override;
 
     virtual bool Play() override;
     virtual void Stop() override;

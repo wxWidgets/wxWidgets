@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextsymboldlg.h
 // Purpose:     Declares the symbol picker dialog.
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/5/2006 3:11:58 PM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/osx/textctrl.h
 // Purpose:     wxTextCtrl class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -109,6 +108,10 @@ public:
     virtual void Command(wxCommandEvent& event) override;
 
     virtual void SetWindowStyleFlag(long style) override;
+
+    virtual wxString GetRTFValue() const override;
+    virtual void SetRTFValue(const wxString& val) override;
+    virtual bool IsRTFSupported() override { return IsMultiLine(); }
 
     // callbacks
     void OnDropFiles(wxDropFilesEvent& event);

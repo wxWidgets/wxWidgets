@@ -51,6 +51,9 @@ public:
     wxClientDCImpl(wxDC *owner) : wxWindowDCImpl(owner) { }
     wxClientDCImpl(wxDC *owner, wxWindow *win);
 
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return true; }
+
     wxDECLARE_DYNAMIC_CLASS(wxClientDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
 };

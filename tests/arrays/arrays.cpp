@@ -598,10 +598,31 @@ TEST_CASE("wxObjArray", "[dynarray]")
         CHECK( bars.GetCount() == 0 );
         CHECK( Bar::GetNumber() == 1 );
 
-        bars.Add(new Bar(wxT("first bar in array")));
+        const wxString firstName(wxT("first bar in array"));
+        bars.Add(new Bar(firstName));
         bars.Add(bar, 2);
 
+        // Test that range for works with wxObjArray.
+        int count = 0;
+        for ( const auto& bar : bars )
+        {
+            if ( !count )
+                CHECK( bar.GetName() == firstName );
+
+            ++count;
+        }
+        CHECK( count == 3 );
+
         CHECK( bars.GetCount() == 3 );
+        CHECK( Bar::GetNumber() == 4 );
+
+        ArrayBars tmp;
+        bars.swap(tmp);
+        CHECK( bars.size() == 0 );
+        CHECK( Bar::GetNumber() == 4 );
+
+        bars.swap(tmp);
+        CHECK( bars.size() == 3 );
         CHECK( Bar::GetNumber() == 4 );
 
         bars.RemoveAt(1, bars.GetCount() - 1);

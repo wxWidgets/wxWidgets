@@ -201,7 +201,7 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent,
 
 wxTextCtrl::~wxTextCtrl()
 {
-    WX_CLEAR_LIST(wxList, m_undos);
+    wxClearList(m_undos);
 }
 
 bool wxTextCtrl::Create( wxWindow *parent,
@@ -233,7 +233,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     else
         m_sourceFont = GetFont();
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     dc.SetFont( m_sourceFont );
     m_lineHeight = dc.GetCharHeight();
     m_charWidth = dc.GetCharWidth();
@@ -403,7 +403,7 @@ void wxTextCtrl::Clear()
 
     SetScrollbars( m_charWidth, m_lineHeight, 0, 0, 0, 0 );
     Refresh();
-    WX_CLEAR_LIST(wxList, m_undos);
+    wxClearList(m_undos);
 }
 
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
@@ -859,7 +859,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 
     m_sourceFont = font;
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     dc.SetFont( m_sourceFont );
     m_lineHeight = dc.GetCharHeight();
     m_charWidth = dc.GetCharWidth();

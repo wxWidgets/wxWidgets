@@ -2,7 +2,6 @@
 // Name:        wx/dnd.h
 // Purpose:     Drag and drop classes declarations
 // Author:      Vadim Zeitlin, Robert Roebling
-// Modified by:
 // Created:     26.05.99
 // Copyright:   (c) wxWidgets Team
 // Licence:     wxWindows licence
@@ -63,7 +62,7 @@ public:
           m_cursorMove(cursorMove),
           m_cursorStop(cursorStop)
         { m_data = nullptr; }
-    virtual ~wxDropSourceBase() { }
+    virtual ~wxDropSourceBase() = default;
 
     // set the data which is transferred by drag and drop
     void SetData(wxDataObject& data)

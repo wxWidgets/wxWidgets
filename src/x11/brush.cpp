@@ -2,7 +2,6 @@
 // Name:        src/x11/brush.cpp
 // Purpose:     wxBrush
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -32,6 +31,7 @@ public:
     }
 
     wxBrushRefData( const wxBrushRefData& data )
+        : wxGDIRefData()
     {
         m_style = data.m_style;
         m_stipple = data.m_stipple;
@@ -81,11 +81,6 @@ wxBrush::wxBrush( const wxBitmap &stippleBitmap )
         M_BRUSHDATA->m_style = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
     else
         M_BRUSHDATA->m_style = wxBRUSHSTYLE_STIPPLE_MASK;
-}
-
-wxBrush::~wxBrush()
-{
-    // m_refData unrefed in ~wxObject
 }
 
 wxGDIRefData *wxBrush::CreateGDIRefData() const

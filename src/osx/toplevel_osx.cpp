@@ -2,7 +2,6 @@
 // Name:        src/osx/toplevel_osx.cpp
 // Purpose:     implements wxTopLevelWindow for Mac
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     24.09.01
 // Copyright:   (c) 2001-2004 Stefan Csomor
 // Licence:     wxWindows licence

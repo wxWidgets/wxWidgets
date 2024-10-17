@@ -13,7 +13,8 @@ class QCheckBox;
 class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase
 {
 public:
-    wxCheckBox();
+    wxCheckBox() = default;
+
     wxCheckBox( wxWindow *parent, wxWindowID id, const wxString& label,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
@@ -35,14 +36,11 @@ public:
     virtual void SetLabel(const wxString& label) override;
     virtual wxString GetLabel() const override;
 
-    virtual QWidget *GetHandle() const override;
+    QCheckBox* GetQCheckBox() const;
 
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState state) override;
     virtual wxCheckBoxState DoGet3StateValue() const override;
-
-private:
-    QCheckBox *m_qtCheckBox;
 
     wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };

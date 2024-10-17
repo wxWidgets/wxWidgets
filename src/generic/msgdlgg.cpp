@@ -2,7 +2,6 @@
 // Name:        src/generic/msgdlgg.cpp
 // Purpose:     wxGenericMessageDialog
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart and Robert Roebling
 // Licence:     wxWindows licence
@@ -185,6 +184,12 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
 
     wxBoxSizer * const textsizer = new wxBoxSizer(wxVERTICAL);
 
+    // To prevent clipping
+    int maxWidth = wxSystemSettings::GetMetric(wxSYS_SCREEN_X, this) - FromDIP(25);
+
+    // To enhance readability
+    maxWidth = wxMin( maxWidth, GetCharWidth() * 70 );
+
     // We want to show the main message in a different font to make it stand
     // out if the extended message is used as well. This looks better and is
     // more consistent with the native dialogs under MSW and GTK.
@@ -192,7 +197,7 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     if ( !m_extendedMessage.empty() )
     {
         wxTitleTextWrapper titleWrapper(this);
-        textsizer->Add(CreateTextSizer(GetMessage(), titleWrapper),
+        textsizer->Add(CreateTextSizer(GetMessage(), titleWrapper, maxWidth),
                        wxSizerFlags().Border(wxBOTTOM, 20));
 
         lowerMessage = GetExtendedMessage();
@@ -202,7 +207,7 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
         lowerMessage = GetMessage();
     }
 
-    textsizer->Add(CreateTextSizer(lowerMessage));
+    textsizer->Add(CreateTextSizer(lowerMessage, maxWidth));
 
     icon_text->Add(textsizer, 0, wxALIGN_CENTER, 10);
     topsizer->Add( icon_text, 1, wxLEFT|wxRIGHT|wxTOP, 10 );

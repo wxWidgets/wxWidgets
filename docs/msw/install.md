@@ -58,6 +58,14 @@ you may need to perform the build several times because the projects
 are not always built in the correct order, and this may result in link
 errors. Simply do the build again, up to 3 times, to fix this.
 
+Note that targeting ARM64 requires VC++ 2017 or newer, while ARM64EC and ARM64X
+require 2019 or newer and SDK 10.0.22621.0 or newer.
+
+The custom build steps have not yet been tailored to support ARM64X, but it
+seems to work well if you build with `Platform=ARM64` first and then
+`Platform=ARM64EC` and `BuildAsX=true` (see the
+[ARM64X build instructions](https://learn.microsoft.com/en-us/windows/arm/arm64x-build)).
+
 
 ### From the command line
 
@@ -85,6 +93,9 @@ to build a 32 bit release DLL version from an x86 command prompt, or
         > nmake /f makefile.vc BUILD=release SHARED=1 TARGET_CPU=X64
 
 to build a 64 bit release DLL version from an x64 command prompt.
+
+TARGET_CPU=ARM64 is supported while TARGET_CPU=ARM64EC is, at present, not
+supported.
 
 See [Make Parameters](#msw_build_make_params) for more information about the
 additional parameters that can be specified on the command line.
@@ -329,9 +340,10 @@ The full list of the build settings follows:
 
 * `RUNTIME_LIBS=static`
 
-  Links static version of C and C++ runtime libraries into the executable, so
-  that the program does not depend on DLLs provided with the compiler (e.g.
-  Visual C++'s msvcrt.dll). Can be used only with MSVC.
+  (VC++ only.) Links static version of C and C++ runtime libraries into the
+  executable, so that the program does not depend on DLLs provided with the
+  compiler.
+
   Caution: Do not use static runtime libraries when building DLL (SHARED=1)!
 
 * `DEBUG_FLAG=0`
@@ -366,7 +378,7 @@ The full list of the build settings follows:
   usable .pdb files with debug information) and this setting makes it
   possible.
 
-* `TARGET_CPU=X64|ARM64|IA64`
+* `TARGET_CPU=X64|ARM|ARM64|IA64`
 
   (VC++ only.) Set this variable to build for x86_64 systems. If unset, x86
   build is performed.
@@ -413,6 +425,12 @@ The full list of the build settings follows:
 Building Applications Using wxWidgets  {#msw_build_apps}
 =====================================
 
+Note: If you want to use CMake for building your project, please see
+@ref overview_cmake.
+
+Using Microsoft Visual C++ IDE         {#msw_build_apps_msvc}
+------------------------------
+
 If you use MSVS for building your project, simply add
 `wxwidgets.props` property sheet to (all) your project(s) using wxWidgets
 by using "View|Property Manager" menu item to open the property manager
@@ -424,10 +442,8 @@ If you've created a new empty project (i.e. chose "Empty Project" in the
 you need to change "Linker|System|SubSystem" in the project properties to
 "Windows", from the default "Console". You don't need to do anything else.
 
-If you want to use CMake for building your project, please see
-@ref overview_cmake.
-
-Otherwise follow the instructions below for "manual" setup of your project.
+Using Other Compilers or Command Line  {#msw_build_apps_other}
+-------------------------------------
 
 We suppose that wxWidgets sources are under the directory `$WXWIN` (notice that
 different tool chains refer to environment variables such as WXWIN in
@@ -435,13 +451,14 @@ different ways, e.g. MSVC users should use `$``(WXWIN)` instead of just
 `$WXWIN`). And we will use `<wx-lib-dir>` as a shortcut for the subdirectory of
 `$WXWIN\lib` which is composed from several parts separated by underscore:
 first, a compiler-specific prefix (e.g. "vc" for MSVC, "gcc" for g++ or the
-value of `COMPILER_PREFIX` if you set it explicitly), then optional "x64" if
-building in 64 bits and finally either "lib" or "dll" depending on whether
-static or dynamic wx libraries are being used.
+value of `COMPILER_PREFIX` if you set it explicitly), then "x64" if building in
+64 bits using MSVC (but not any other compilers) and finally either "lib" or
+"dll" depending on whether static or dynamic wx libraries are being used.
 
 For example, WXWIN could be "c:\wxWidgets\3.4.5" and `<wx-lib-dir>` could be
 `c:\wxWidgets\3.4.5\lib\vc_x64_lib` for 64-bit static libraries built with
-MSVC.
+MSVC but for shared libraries built with gcc it would be
+`c:\wxWidgets\3.4.5\lib\gcc_dll` instead.
 
 Here is what you need to do:
 
@@ -449,27 +466,43 @@ Here is what you need to do:
   - compiler
   - resource compiler
   include paths.
-* If using MSVC, prepend `$WXWIN\include\msvc` to the include paths too.
-  Otherwise, append `<wx-lib-dir>\mswu[d]` to the include paths, where "d" should
+* Append `<wx-lib-dir>\mswu[d]` to the include paths, where "d" should
   be used for debug builds only.
+  When using MSVC, there is a simpler alternative which allows to use the
+  same compiler options for debug and release builds: just prepend
+  `$WXWIN\include\msvc` to the include paths **instead** of the paths above.
 * Define the following symbols for the preprocessor:
   - `__WXMSW__` to ensure you use the correct wxWidgets port.
   - `NDEBUG` if you want to build in release mode, i.e. disable asserts.
   - `WXUSINGDLL` if you are using DLL build of wxWidgets.
 * Add `<wx-lib-dir>` directory described above to the libraries path.
 
-When using MSVC, the libraries are linked automatically using "#pragma
-comment(lib)" feature of this compiler. With all the other compilers you also
-need to:
+When using MSVC, using `include\msvc` in the compiler include path has another
+advantage: the header found in this directory ensures that all the required
+libraries are linked automatically using `#pragma comment(lib)` feature of this
+compiler. With the other compilers, or if you don't use `include\msvc` with
+MSVC, you also need to:
 
 * Add the list of libraries to link with to the linker input. The exact list
   depends on which libraries you use and whether you built wxWidgets in
-  monolithic or default multlib mode and basically should include all the
-  relevant libraries from the directory above, e.g. `wxmsw31ud_core.lib
-  wxbase31ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
-  wxexpatd.lib` for a debug build of an application using the core library only
-  (all wxWidgets applications use the base library).
+  monolithic or default multi-lib mode and basically should include all the
+  relevant libraries from the directory above, e.g. `wxmsw34ud_core.lib
+  wxbase34ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
+  wxexpatd.lib` for a debug build of an application using the core library of
+  wxWidgets 3.4 only (all wxWidgets applications use the base library).
 
+
+For example, to compile your program with gcc using debug wxWidgets DLLs
+you would need to use the following options for the compiler (and `windres`
+resource compiler):
+
+    -I$WXWIN/include -I$WXWIN/lib/gcc_dll/mswud -D__WXMSW__ -DWXUSINGDLL
+
+and
+
+    -L$WXWIN/lib/gcc_dll
+
+for the linker.
 
 Finally, please notice that the makefiles and project files provided with
 wxWidgets samples show which flags should be used when building applications
@@ -482,34 +515,67 @@ your application.
 Using a Manifest                       {#msw_manifest}
 ----------------
 
+### For MSVS Users
+
+When using MSVS projects to build your application, the manifest is generated
+automatically by default. However this default manifest doesn't mark the
+application as being high-DPI aware, which is normally desirable, as otherwise
+it would look blurry on high DPI monitors.
+
+If this is not a problem for your application, you don't need to do anything at
+all. However if you would like to fix this and make the application DPI-aware,
+you need to choose one of the following options:
+
+- Use wxWidgets manifest in addition to the default manifest generated by MSVC
+  linker: for this, add `include\wx\msw\wx_dpi_aware_pmv2.manifest` to the
+  "Additional manifest files" in the "Manifest Tool | Input and Output" section
+  of the project options.
+
+- Use wxWidgets manifest instead of the default manifest generated by MSVC
+  linker: for this, turn off "Generate manifest" in the "Linker | Manifest
+  File" section of the project options and define `wxUSE_RC_MANIFEST=1` and
+  `wxUSE_DPI_AWARE_MANIFEST=2` in your `.rc` file before including
+  `wx/msw/wx.rc`, e.g.:
+
+        #define wxUSE_RC_MANIFEST 1
+        #define wxUSE_DPI_AWARE_MANIFEST 2
+        #include <wx/msw/wx.rc>
+
+- Not use wxWidgets manifest at all but set the "DPI awareness" under
+  "Manifest" in the project options to the desired value.
+
+
+### For All Other Compilers
+
 All Windows applications should use a "manifest", which is a special kind of
 Windows resource containing information about the application compatibility,
 required, among else, for the application UI to look correctly instead
 of looking very outdated and different from other native applications.
-MSVS projects automatically generate the manifest and embed it into the final
-executable by default, so you don't need to do anything special when using
-them, however you need to ensure that a manifest specifying the use of the v6
-of the Common Controls Library is included when using another compiler.
+Thus, if you see that your application looks like a Windows 95 application, it
+is most likely because it doesn't have a manifest.
 
-The most straightforward way to do this is to include one of the manifests
-provided by wxWidgets in the `include\wx\msw\wx.rc` file. It is sufficient to
-simply include it from your own `.rc` file in order to use a correct manifest
-automatically.
+To fix this, you need to include `include\wx\msw\wx.rc` from your resource
+file. You would typically also define `wxUSE_DPI_AWARE_MANIFEST=2` before doing
+this to enable high DPI support, so your resource file should contain at least
+the following lines:
 
-To be precise, wxWidgets offers three manifests, differing only in which
-DPI-awareness mode they use. Which of the three is used depends on the value of
-`wxUSE_DPI_AWARE_MANIFEST` define. See [MSW Platform-Specific Build Issues](@ref high_dpi_platform_msw)
-section of the High DPI overview for more information.
+        #define wxUSE_DPI_AWARE_MANIFEST 2
+        #include <wx/msw/wx.rc>
 
-Note that the behaviour described above is customizable and you may define
-`wxUSE_NO_MANIFEST` before including `wx/msw/wx.rc` to prevent including a
-manifest if you prefer to embed it in some other way and so don't want to use
-the wxWidgets-provided or, on the contrary, predefine `wxUSE_RC_MANIFEST=1` to
-force using wxWidgets manifest even with MSVC, where it wouldn't be used by
-default.
+Please note that if you already have a manifest in your application, you can
+define `wxUSE_NO_MANIFEST` before including `wx/msw/wx.rc` to prevent using the
+wxWidgets-provided manifest.
 
-More information about application manifests in general is available at
-https://learn.microsoft.com/en-us/windows/win32/controls/cookbook-overview#using-manifests-or-directives-to-ensure-that-visual-styles-can-be-applied-to-applications
+
+### Further Information
+
+See [MSW Platform-Specific Build Issues](@ref high_dpi_platform_msw) section of
+the high DPI overview for more information about high DPI support in wxWidgets.
+
+See [MSDN manifest documentation][msw-manifest] for more information about
+application manifests in general.
+
+[msw-manifest]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
 
 
 Advanced Library Configurations        {#msw_advanced}

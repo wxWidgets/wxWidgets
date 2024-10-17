@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/nonownedwnd.mm
 // Purpose:     non owned window for cocoa
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-06-20
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -675,13 +674,7 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
                                          doubleValue];
         if (newBackingScaleFactor != oldBackingScaleFactor)
         {
-            const wxSize oldDPI = wxWindow::OSXMakeDPIFromScaleFactor(oldBackingScaleFactor);
-            const wxSize newDPI = wxWindow::OSXMakeDPIFromScaleFactor(newBackingScaleFactor);
-
-            wxDPIChangedEvent event(oldDPI, newDPI);
-            event.SetEventObject(wxpeer);
-            wxpeer->HandleWindowEvent(event);
-
+            wxpeer->WXNotifyDPIChange(oldBackingScaleFactor, newBackingScaleFactor);
         }
 
         NSColorSpace *newColorSpace = [theWindow colorSpace];

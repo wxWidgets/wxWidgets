@@ -11,16 +11,22 @@
 #include "wx/dcscreen.h"
 #include "wx/qt/dcscreen.h"
 
-#include <QtWidgets/QDesktopWidget>
-#include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QPainter>
+#include <QtGui/QPicture>
 #include <QtGui/QPixmap>
+#include <QtGui/QScreen>
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxQtDCImpl);
 
 wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner )
     : wxWindowDCImpl( owner )
 {
+    m_pict.reset(new QPicture());
+    m_ok = m_qtPainter->begin( m_pict.get() );
+
+    QtPreparePainter();
 }
 
 wxScreenDCImpl::~wxScreenDCImpl( )

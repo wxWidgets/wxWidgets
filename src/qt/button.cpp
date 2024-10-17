@@ -18,11 +18,9 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QPushButton>
-
-wxButton::wxButton()
-{
-}
+#include <QtWidgets/QStyle>
 
 wxButton::wxButton(wxWindow *parent, wxWindowID id,
        const wxString& label,
@@ -44,17 +42,41 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id,
     QtCreate(parent);
     SetLabel( label.IsEmpty() && wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return wxButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 wxWindow *wxButton::SetDefault()
 {
     wxWindow *oldDefault = wxButtonBase::SetDefault();
 
-    m_qtPushButton->setDefault( true );
+    GetQPushButton()->setDefault( true );
 
     return oldDefault;
 
+}
+
+// ----------------------------------------------------------------------------
+// authentication needed handling
+// ----------------------------------------------------------------------------
+
+bool wxButton::DoGetAuthNeeded() const
+{
+    return m_authNeeded;
+}
+
+void wxButton::DoSetAuthNeeded(bool show)
+{
+    QIcon icon;
+
+    if ( show )
+    {
+        icon = QApplication::style()->standardIcon(QStyle::SP_VistaShield);
+    }
+
+    m_authNeeded = !icon.isNull();
+
+    GetQPushButton()->setIcon(icon);
+    InvalidateBestSize();
 }
 
 /* static */

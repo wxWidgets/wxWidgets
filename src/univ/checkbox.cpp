@@ -2,7 +2,6 @@
 // Name:        src/univ/checkbox.cpp
 // Purpose:     wxCheckBox implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -180,7 +179,7 @@ wxSize wxCheckBox::GetBitmapSize() const
 
 wxSize wxCheckBox::DoGetBestClientSize() const
 {
-    wxClientDC dc(wxConstCast(this, wxCheckBox));
+    wxInfoDC dc(wxConstCast(this, wxCheckBox));
     dc.SetFont(GetFont());
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);

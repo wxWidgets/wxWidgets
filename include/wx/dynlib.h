@@ -2,7 +2,6 @@
 // Name:        wx/dynlib.h
 // Purpose:     Dynamic library loading classes
 // Author:      Guilhem Lavaux, Vadim Zeitlin, Vaclav Slavik
-// Modified by:
 // Created:     20/07/98
 // Copyright:   (c) 1998 Guilhem Lavaux
 // Licence:     wxWindows licence

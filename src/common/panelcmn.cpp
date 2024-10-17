@@ -2,7 +2,6 @@
 // Name:        src/common/panelcmn.cpp
 // Purpose:     wxPanel common code
 // Author:      Julian Smart, Robert Roebling, Vadim Zeitlin
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

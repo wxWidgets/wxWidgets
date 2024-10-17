@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/dropsrc.h
 // Purpose:     declaration of the wxDropSource class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.03.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

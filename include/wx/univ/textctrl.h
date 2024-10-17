@@ -2,7 +2,6 @@
 // Name:        wx/univ/textctrl.h
 // Purpose:     wxTextCtrl class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     15.09.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -208,7 +207,7 @@ public:
     void ScrollText(wxTextCoord col);
 
     // adjust the DC for horz text control scrolling too
-    virtual void DoPrepareDC(wxDC& dc) override;
+    virtual void DoPrepareReadOnlyDC(wxReadOnlyDC& dc) override;
 
     // implementation only from now on
     // -------------------------------

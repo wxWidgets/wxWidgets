@@ -51,31 +51,33 @@ wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
     A collapsible pane is a container with an embedded button-like control
     which can be used by the user to collapse or expand the pane's contents.
 
-    Once constructed you should use the GetPane() function to access the pane
-    and add your controls inside it (i.e. use the returned pointer from
-    GetPane() as parent for the controls which must go in the pane, @b not the
+    Once constructed, you should use the GetPane() function to access the pane
+    and add your controls inside it (i.e., use the returned pointer from
+    GetPane() as the parent for the controls which must go in the pane, @b not the
     wxCollapsiblePane itself!).
 
-    Note that because of its nature of control which can dynamically (and
-    drastically) change its size at run-time under user-input, when putting
-    wxCollapsiblePane inside a wxSizer you should be careful to add it with a
-    proportion value of zero; this is because otherwise all other windows with
-    non-null proportion values will automatically resize each time the user
-    expands or collapse the pane window usually resulting in a weird,
-    flickering effect.
-
-    Usage sample:
+    Note that when using this control inside a sizer, you will usually want to
+    call wxWindow::Layout() whenever its size changes due to the pane being
+    opened or closed, in order to adjust the positions of the neighbouring
+    controls, for example:
 
     @code
     wxCollapsiblePane *collpane = new wxCollapsiblePane(this, wxID_ANY, "Details:");
 
     // add the pane with a zero proportion value to the 'sz' sizer which contains it
-    sz->Add(collpane, 0, wxGROW|wxALL, 5);
+    sz->Add(collpane,
+            wxSizerFlags().Expand().Border();
+
+    // but also ensure that we relayout the entire window when its state
+    // changes to give it enough space when it expands or reduce the space
+    // taken by it when it collapses
+    collpane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
+                   [this](wxCollapsiblePaneEvent &) { Layout(); });
 
     // now add a test label in the collapsible pane using a sizer to layout it:
     wxWindow *win = collpane->GetPane();
     wxSizer *paneSz = new wxBoxSizer(wxVERTICAL);
-    paneSz->Add(new wxStaticText(win, wxID_ANY, "test!"), 1, wxGROW|wxALL, 2);
+    paneSz->Add(new wxStaticText(win, wxID_ANY, "test!"), wxSizerFlags().Proportion(1).Expand().DoubleBorder());
     win->SetSizer(paneSz);
     paneSz->SetSizeHints(win);
     @endcode
@@ -127,7 +129,7 @@ public:
 
     /**
         @param parent
-            Parent window, must not be non-null.
+            Parent window, must be non-null.
         @param id
             The identifier for the control.
         @param label

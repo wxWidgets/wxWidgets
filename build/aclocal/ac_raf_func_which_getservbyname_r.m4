@@ -26,7 +26,7 @@ AC_CACHE_CHECK(how many arguments getservbyname_r() takes,
         dnl we need to use C++ to detect missing prototypes
         AC_LANG_PUSH(C++)
 
-        AC_TRY_COMPILE([#include <netdb.h>],
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <netdb.h>], [
             [
                 char *name;
                 char *proto;
@@ -34,10 +34,10 @@ AC_CACHE_CHECK(how many arguments getservbyname_r() takes,
                 char buffer[2048];
                 int buflen = 2048;
                 (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
-            ],
+            ]])],
             ac_cv_func_which_getservbyname_r=six,
             [
-                AC_TRY_COMPILE([#include <netdb.h>],
+                AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <netdb.h>], [
                     [
                         char *name;
                         char *proto;
@@ -45,17 +45,17 @@ AC_CACHE_CHECK(how many arguments getservbyname_r() takes,
                         char buffer[2048];
                         int buflen = 2048;
                         (void) getservbyname_r(name, proto, se, buffer, buflen)
-                    ],
+                    ]])],
                     ac_cv_func_which_getservbyname_r=five,
                     [
-                        AC_TRY_COMPILE([#include <netdb.h>],
+                        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <netdb.h>],
                             [
                                 char *name;
                                 char *proto;
                                 struct servent *se;
                                 struct servent_data data;
                                 (void) getservbyname_r(name, proto, se, &data);
-                            ],
+                            ])],
                             ac_cv_func_which_getservbyname_r=four,
                             ac_cv_func_which_getservbyname_r=no
                         )

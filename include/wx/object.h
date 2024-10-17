@@ -202,7 +202,7 @@ public:
 protected:
     // this object should never be destroyed directly but only as a
     // result of a DecRef() call:
-    virtual ~wxRefCounter() { }
+    virtual ~wxRefCounter() = default;
 
 private:
     // our refcount:

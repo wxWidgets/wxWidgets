@@ -69,7 +69,7 @@ class wxWakeUpPipeMT : public wxWakeUpPipe
 {
 #if wxUSE_THREADS
 public:
-    wxWakeUpPipeMT() { }
+    wxWakeUpPipeMT() = default;
 
     // Thread-safe wrapper around WakeUpNoLock(): can be called from another
     // thread to wake up the main one.

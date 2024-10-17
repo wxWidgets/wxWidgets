@@ -4198,7 +4198,7 @@ msgstr "Файл индекса шрифтов %s исчез при загруз
 #: ../src/dfb/wrapdfb.cpp:60
 #, c-format
 msgid "DirectFB error %d occurred."
-msgstr "Ошибка DirectFB % d."
+msgstr "Ошибка DirectFB %d."
 
 #: ../src/generic/aboutdlgg.cpp:67
 msgid "Developed by "

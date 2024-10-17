@@ -2,7 +2,6 @@
 // Name:        src/msw/statusbar.cpp
 // Purpose:     native implementation of wxStatusBar
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.04.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -236,7 +235,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
     if (!m_hWnd)
         return;
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
 
     // Get field style, if any
     int style;
@@ -648,30 +647,13 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 }
 
 #if wxUSE_TOOLTIPS
-bool wxStatusBar::MSWProcessMessage(WXMSG* pMsg)
-{
-    if ( HasFlag(wxSTB_SHOW_TIPS) )
-    {
-        // for a tooltip to be shown, we need to relay mouse events to it;
-        // this is typically done by wxWindowMSW::MSWProcessMessage but only
-        // if wxWindow::m_tooltip pointer is non-null.
-        // Since wxStatusBar has multiple tooltips for a single HWND, it keeps
-        // wxWindow::m_tooltip == nullptr and then relays mouse events here:
-        MSG *msg = (MSG *)pMsg;
-        if ( msg->message == WM_MOUSEMOVE )
-            wxToolTip::RelayEvent(pMsg);
-    }
-
-    return wxWindow::MSWProcessMessage(pMsg);
-}
-
 bool wxStatusBar::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM* WXUNUSED(result))
 {
     if ( HasFlag(wxSTB_SHOW_TIPS) )
     {
-        // see comment in wxStatusBar::MSWProcessMessage for more info;
-        // basically we need to override wxWindow::MSWOnNotify because
-        // we have wxWindow::m_tooltip always null but we still use tooltips...
+        // Since wxStatusBar has multiple tooltips for a single HWND, it keeps
+        // wxWindow::m_tooltip == nullptr, so we need to override
+        // wxWindow::MSWOnNotify because we still use tooltips...
 
         NMHDR* hdr = (NMHDR *)lParam;
 

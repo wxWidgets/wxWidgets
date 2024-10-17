@@ -2,7 +2,6 @@
 // Name:        wx/control.h
 // Purpose:     wxControl common interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     26.07.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -32,7 +31,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxControlNameStr[];
 class WXDLLIMPEXP_CORE wxControlBase : public wxWindow
 {
 public:
-    wxControlBase() { }
+    wxControlBase() = default;
 
     virtual ~wxControlBase();
 
@@ -140,7 +139,7 @@ public:
     // ------------------------------
 
     // replaces parts of the given (multiline) string with an ellipsis if needed
-    static wxString Ellipsize(const wxString& label, const wxDC& dc,
+    static wxString Ellipsize(const wxString& label, const wxReadOnlyDC& dc,
                               wxEllipsizeMode mode, int maxWidth,
                               int flags = wxELLIPSIZE_FLAGS_DEFAULT);
 

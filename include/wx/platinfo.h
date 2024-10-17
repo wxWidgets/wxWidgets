@@ -2,7 +2,6 @@
 // Name:        wx/platinfo.h
 // Purpose:     declaration of the wxPlatformInfo class
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     07.07.2006 (based on wxToolkitInfo)
 // Copyright:   (c) 2006 Francesco Montorsi
 // Licence:     wxWindows licence

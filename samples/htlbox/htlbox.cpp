@@ -2,7 +2,6 @@
 // Name:        htmllbox.cpp
 // Purpose:     HtmlLbox wxWidgets sample
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.05.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -61,6 +60,8 @@ class MyHtmlListBox : public wxHtmlListBox
 public:
     MyHtmlListBox() { }
     MyHtmlListBox(wxWindow *parent, bool multi = false);
+    MyHtmlListBox(const MyHtmlListBox&) = delete;
+    MyHtmlListBox& operator=(const MyHtmlListBox&) = delete;
 
     void SetChangeSelFg(bool change) { m_change = change; }
     void UpdateFirstItem();
@@ -91,7 +92,6 @@ public:
     wxTextFile m_file;
 #endif
 
-    wxDECLARE_NO_COPY_CLASS(MyHtmlListBox);
     wxDECLARE_DYNAMIC_CLASS(MyHtmlListBox);
 };
 

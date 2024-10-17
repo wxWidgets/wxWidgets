@@ -2,7 +2,6 @@
 // Name:        wx/fmappriv.h
 // Purpose:     private wxFontMapper stuff, not to be used by the library users
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.06.2003 (extracted from common/fontmap.cpp)
 // Copyright:   (c) 1999-2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

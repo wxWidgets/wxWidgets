@@ -2,7 +2,6 @@
 // Name:        src/msw/caret.cpp
 // Purpose:     MSW implementation of wxCaret
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     23.05.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

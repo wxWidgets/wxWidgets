@@ -2,7 +2,6 @@
 // Name:        wx/x11/colour.h
 // Purpose:     wxColour class
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence
@@ -32,14 +31,12 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 // wxColour
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxColour : public wxColourBase
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour : public wxColourBase
 {
 public:
     // constructors
     // ------------
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
-
-    virtual ~wxColour();
 
     bool operator==(const wxColour& col) const;
     bool operator!=(const wxColour& col) const { return !(*this == col); }

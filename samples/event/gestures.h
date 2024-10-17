@@ -12,6 +12,7 @@ public:
     void OnQuit(wxCloseEvent& event);
 
 private:
+    wxLog *m_logOld;
     wxTextCtrl *m_logText;
 };
 
@@ -34,6 +35,7 @@ private:
     wxAffineMatrix2D m_affineMatrix;
     double m_lastZoomFactor;
     double m_lastRotationAngle;
+    wxPoint m_lastGesturePos;
 };
 
 #endif // _WX_GESTURES_H_

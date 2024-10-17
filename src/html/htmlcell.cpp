@@ -1588,7 +1588,8 @@ wxHtmlWidgetCell::wxHtmlWidgetCell(wxWindow *wnd, int w)
     int sx, sy;
     m_Wnd = wnd;
     m_Wnd->GetSize(&sx, &sy);
-    m_Width = sx, m_Height = sy;
+    m_Width = sx;
+    m_Height = sy;
     m_WidthFloat = w;
 }
 

@@ -2,7 +2,6 @@
 // Name:        src/msw/combo.cpp
 // Purpose:     wxMSW wxComboCtrl
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence

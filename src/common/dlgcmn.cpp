@@ -2,7 +2,6 @@
 // Name:        src/common/dlgcmn.cpp
 // Purpose:     common (to all ports) wxDialog functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     28.06.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

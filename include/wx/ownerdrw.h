@@ -38,7 +38,7 @@ public:
         m_margin = ms_defaultMargin;
     }
 
-    virtual ~wxOwnerDrawnBase() {}
+    virtual ~wxOwnerDrawnBase() = default;
 
     void SetFont(const wxFont& font)
         { m_font = font; m_ownerDrawn = true; }

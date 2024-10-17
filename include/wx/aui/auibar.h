@@ -2,7 +2,6 @@
 // Name:        wx/aui/toolbar.h
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
-// Modified by:
 // Created:     2008-08-04
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
@@ -17,10 +16,12 @@
 
 #include "wx/bmpbndl.h"
 #include "wx/control.h"
+#include "wx/custombgwin.h"
 #include "wx/sizer.h"
 #include "wx/pen.h"
 
 class WXDLLIMPEXP_FWD_CORE wxClientDC;
+class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
 class WXDLLIMPEXP_FWD_AUI wxAuiPaneInfo;
 
 enum wxAuiToolBarStyle
@@ -176,7 +177,7 @@ public:
     void SetDisabledBitmap(const wxBitmapBundle& bmp) { m_disabledBitmap = bmp; }
     const wxBitmapBundle& GetDisabledBitmapBundle() const { return m_disabledBitmap; }
     wxBitmap GetDisabledBitmapFor(wxWindow* wnd) const { return m_disabledBitmap.GetBitmapFor(wnd); }
-    wxBitmap GetDisabledBitmap() const { return GetBitmapFor(m_window); }
+    wxBitmap GetDisabledBitmap() const { return GetDisabledBitmapFor(m_window); }
 
     // Return the bitmap for the current state, normal or disabled.
     wxBitmap GetCurrentBitmapFor(wxWindow* wnd) const;
@@ -265,8 +266,8 @@ class WXDLLIMPEXP_AUI wxAuiToolBarArt
 {
 public:
 
-    wxAuiToolBarArt() { }
-    virtual ~wxAuiToolBarArt() { }
+    wxAuiToolBarArt() = default;
+    virtual ~wxAuiToolBarArt() = default;
 
     virtual wxAuiToolBarArt* Clone() = 0;
     virtual void SetFlags(unsigned int flags) = 0;
@@ -327,12 +328,12 @@ public:
                          int state) = 0;
 
     virtual wxSize GetLabelSize(
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 
     virtual wxSize GetToolSize(
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 
@@ -418,12 +419,12 @@ public:
                 int state) override;
 
     virtual wxSize GetLabelSize(
-                wxDC& dc,
+                wxReadOnlyDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item) override;
 
     virtual wxSize GetToolSize(
-                wxDC& dc,
+                wxReadOnlyDC& dc,
                 wxWindow* wnd,
                 const wxAuiToolBarItem& item) override;
 
@@ -461,7 +462,7 @@ protected:
 
 
 
-class WXDLLIMPEXP_AUI wxAuiToolBar : public wxControl
+class WXDLLIMPEXP_AUI wxAuiToolBar : public wxCustomBackgroundWindow<wxControl>
 {
 public:
     wxAuiToolBar() { Init(); }
@@ -628,6 +629,12 @@ public:
 protected:
     void Init();
 
+    // Override to return the minimum acceptable size because under wxMSW this
+    // function returns DEFAULT_ITEM_HEIGHT (see wxControl::DoGetBestSize())
+    // which is not suitable as height/width for a horizontal/vertical toolbar
+    // if icon sizes are much smaller than DEFAULT_ITEM_HEIGHT.
+    virtual wxSize DoGetBestSize() const override;
+
     virtual void OnCustomRender(wxDC& WXUNUSED(dc),
                                 const wxAuiToolBarItem& WXUNUSED(item),
                                 const wxRect& WXUNUSED(rect)) { }
@@ -651,7 +658,6 @@ protected: // handlers
     void OnIdle(wxIdleEvent& evt);
     void OnDPIChanged(wxDPIChangedEvent& evt);
     void OnPaint(wxPaintEvent& evt);
-    void OnEraseBackground(wxEraseEvent& evt);
     void OnLeftDown(wxMouseEvent& evt);
     void OnLeftUp(wxMouseEvent& evt);
     void OnRightDown(wxMouseEvent& evt);
@@ -694,7 +700,9 @@ protected:
     bool m_gripperVisible;
     bool m_overflowVisible;
 
+    // This function is only kept for compatibility, don't use in the new code.
     bool RealizeHelper(wxClientDC& dc, bool horizontal);
+
     static bool IsPaneValid(long style, const wxAuiPaneInfo& pane);
     bool IsPaneValid(long style) const;
     void SetArtFlags() const;
@@ -705,6 +713,12 @@ protected:
 private:
     // Common part of OnLeaveWindow() and OnCaptureLost().
     void DoResetMouseState();
+
+    wxSize RealizeHelper(wxReadOnlyDC& dc, wxOrientation orientation);
+
+    void UpdateBackgroundBitmap(const wxSize& size);
+
+    wxBitmap m_backgroundBitmap;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiToolBar);

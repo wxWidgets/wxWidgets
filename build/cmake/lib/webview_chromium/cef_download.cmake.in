@@ -1,0 +1,28 @@
+#############################################################################
+# Name:        build/cmake/lib/webview_chromium/cef_download.cmake.in
+# Purpose:     CMakeLists.txt template to download CEF
+# Author:      Tobias Taschner
+# Created:     2018-02-19
+# Copyright:   (c) 2018 wxWidgets development team
+# Licence:     wxWindows licence
+#############################################################################
+
+cmake_minimum_required(VERSION 3.5)
+if(POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+endif()
+
+project(cef-download NONE)
+
+include(ExternalProject)
+
+ExternalProject_Add(cef
+    URL ${CEF_URL}
+    URL_HASH SHA1=${CEF_SHA1}
+    SOURCE_DIR        "${CEF_SOURCE_DIR}"
+    BINARY_DIR        "${CEF_BUILD_DIR}"
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND     ""
+    INSTALL_COMMAND   ""
+    TEST_COMMAND      ""
+)

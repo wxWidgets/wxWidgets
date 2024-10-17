@@ -2,7 +2,6 @@
 // Name:        wx/panel.h
 // Purpose:     Base header for wxPanel
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 //              (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
@@ -28,7 +27,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxPanelNameStr[];
 class WXDLLIMPEXP_CORE wxPanel : public wxNavigationEnabled<wxWindow>
 {
 public:
-    wxPanel() { }
+    wxPanel() = default;
 
     wxPanel(wxWindow *parent,
                 wxWindowID winid = wxID_ANY,

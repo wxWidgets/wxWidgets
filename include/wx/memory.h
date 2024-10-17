@@ -4,7 +4,6 @@
 //              it any longer, it is only preserved to avoid breaking existing
 //              code including it.
 // Author:      Arthur Seaton, Julian Smart
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence

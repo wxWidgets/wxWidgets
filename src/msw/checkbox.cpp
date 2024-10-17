@@ -2,7 +2,6 @@
 // Name:        src/msw/checkbox.cpp
 // Purpose:     wxCheckBox
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -110,7 +109,7 @@ wxSize wxCheckBox::DoGetBestClientSize() const
 
     if ( s_checkSize.HasChanged(this) )
     {
-        wxClientDC dc(const_cast<wxCheckBox*>(this));
+        wxInfoDC dc(const_cast<wxCheckBox*>(this));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
         s_checkSize.SetAtNewDPI(dc.GetCharHeight());
@@ -122,7 +121,7 @@ wxSize wxCheckBox::DoGetBestClientSize() const
     int wCheckbox, hCheckbox;
     if ( !str.empty() )
     {
-        wxClientDC dc(const_cast<wxCheckBox *>(this));
+        wxInfoDC dc(const_cast<wxCheckBox *>(this));
         dc.SetFont(GetFont());
         dc.GetMultiLineTextExtent(GetLabelText(str), &wCheckbox, &hCheckbox);
         wCheckbox += checkSize + GetCharWidth();

@@ -2,7 +2,6 @@
 // Name:        src/msw/printdlg.cpp
 // Purpose:     wxPrintDialog, wxPageSetupDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -423,8 +422,13 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
     // this replaces the PrintDlg function which creates the DEVMODE filled only with data from default printer.
     if ( !m_devMode && !printerName.IsEmpty() )
     {
+        // ensure that we have a printer object here, otherwise we are unable to determine m_devMode
+        WinPrinter fallbackPrinter;
+        if (!printer)
+            printer = &fallbackPrinter;
+
         // Open printer
-        if ( printer && printer->Open( printerName ) == TRUE )
+        if ( printer->Open( printerName ) == TRUE )
         {
             DWORD dwNeeded, dwRet;
 
@@ -468,7 +472,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         }
     }
 
-    if ( !m_devMode )
+    if ( !m_devMode && printerName.IsEmpty() )
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
         PRINTDLG pd;
@@ -516,6 +520,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
     }
 
     // Try to initialize devmode to user or system default.
+    GlobalPtr newDevMode;
     if (m_devMode)
     {
         GlobalPtrLock lockDevMode(m_devMode);
@@ -544,17 +549,20 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                 if ( pDevMode )
                 {
                     DWORD devModeSize = pDevMode->dmSize + pDevMode->dmDriverExtra;
-                    GlobalPtr newDevMode(devModeSize, GMEM_FIXED | GMEM_ZEROINIT);
+                    newDevMode.Init(devModeSize, GMEM_FIXED | GMEM_ZEROINIT);
                     if ( newDevMode )
                     {
                         memcpy(newDevMode, pDevMode, devModeSize);
-
-                        ::GlobalFree(m_devMode);
-                        m_devMode = newDevMode.Release();
                     }
                 }
             }
         }
+    }
+
+    if ( newDevMode )
+    {
+        ::GlobalFree(static_cast<HGLOBAL>(m_devMode));
+        m_devMode = newDevMode.Release();
     }
 }
 

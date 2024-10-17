@@ -581,12 +581,12 @@ miCreateETandAET(int count, const wxPoint * pts, EdgeTable *ET, EdgeTableEntry *
          */
         if (PrevPt->y > CurrPt->y)
         {
-            bottom = PrevPt, top = CurrPt;
+            bottom = PrevPt; top = CurrPt;
             pETEs->ClockWise = 0;
         }
         else
         {
-            bottom = CurrPt, top = PrevPt;
+            bottom = CurrPt; top = PrevPt;
             pETEs->ClockWise = 1;
         }
         

@@ -2,7 +2,6 @@
 // Name:        src/common/artstd.cpp
 // Purpose:     stock wxArtProvider instance with default wxWin art
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     18/03/2002
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence

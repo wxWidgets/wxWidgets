@@ -2,7 +2,6 @@
 // Name:        wx/unix/fontutil.h
 // Purpose:     font-related helper functions for Unix/X11
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.11.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

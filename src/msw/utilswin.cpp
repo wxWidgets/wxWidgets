@@ -2,7 +2,6 @@
 // Name:        src/msw/utilswin.cpp
 // Purpose:     Various utility functions only available in Windows GUI
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.06.2003 (extracted from msw/utils.cpp)
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -19,6 +18,7 @@
 #include "wx/msw/private.h"     // includes <windows.h>
 #include "wx/msw/registry.h"
 #include <shellapi.h> // needed for SHELLEXECUTEINFO
+#include <wchar.h>
 
 // ----------------------------------------------------------------------------
 // Launch document with default app
@@ -143,4 +143,22 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
         return true;
 
     return false;
+}
+
+bool wxMSWIsOnSecureScreen()
+{
+    HDESK desktop = ::GetThreadDesktop(::GetCurrentThreadId());
+    if ( !desktop )
+        return false;
+
+    wchar_t name[256];
+    DWORD needed = 0;
+    BOOL result = ::GetUserObjectInformationW(desktop, UOI_NAME, name, sizeof(name), &needed);
+    if ( !result )
+        return false;
+
+    // Check if the current desktop is the secure desktop, i.e. the desktop
+    // that is used for UAC prompts and sign-in screens and running at system
+    // level.
+    return wcscmp(name, L"Winlogon") == 0;
 }

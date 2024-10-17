@@ -2,7 +2,6 @@
 // Name:        src/generic/datectlg.cpp
 // Purpose:     generic wxDatePickerCtrlGeneric implementation
 // Author:      Andreas Pflug
-// Modified by:
 // Created:     2005-01-19
 // Copyright:   (c) 2005 Andreas Pflug <pgadmin@pse-consulting.de>
 // Licence:     wxWindows licence
@@ -25,6 +24,7 @@
     #include "wx/dialog.h"
     #include "wx/dcmemory.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/msgdlg.h"
     #include "wx/panel.h"
     #include "wx/textctrl.h"
@@ -308,11 +308,32 @@ private:
         wxString fmt = wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT);
         if ( HasDPFlag(wxDP_SHOWCENTURY) )
             fmt.Replace("%y", "%Y");
+#else // !wxUSE_INTL
+        wxString fmt = wxS("%x");
+#endif // wxUSE_INTL/!wxUSE_INTL
+
+        // Also check if we can actually parse dates in this format because we
+        // had several problems with unsupported format specifiers being used
+        // in some locales date format strings in the past, and in this case
+        // we'd just annoy the user with senseless messages about invalid dates
+        // being entered when it's actually just our own bug.
+        wxDateTime dt;
+        if ( !dt.ParseFormat(wxDateTime::Now().Format(fmt), fmt) )
+        {
+            // If we can't parse the date in the format we're going to use, we
+            // can't use it and have to fallback to something else -- this is
+            // not ideal, but better than not allowing the user to enter any
+            // dates at all.
+            wxLogTrace("datectrl",
+                       "Can't parse dates in format \"%s\", "
+                       "using ISO 8601 as fallback",
+                       fmt);
+
+            fmt = HasDPFlag(wxDP_SHOWCENTURY) ? wxS("%Y-%m-%d")
+                                              : wxS("%y-%m-%d");
+        }
 
         return fmt;
-#else // !wxUSE_INTL
-        return wxS("%x");
-#endif // wxUSE_INTL/!wxUSE_INTL
     }
 
     bool SetFormat(const wxString& fmt)

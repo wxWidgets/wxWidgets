@@ -41,7 +41,7 @@
     text in the edit part of the spin control directly, the EVT_TEXT is generated,
     like for the wxTextCtrl. When the use enters text into the text area, the text
     is not validated until the control loses focus (e.g. by using the TAB key).
-    The value is then adjusted to the range and a wxSpinEvent sent then if the value
+    The value is then adjusted to the range and a wxSpinEvent is then sent if the value
     is different from the last value sent.
 
     @library{wxcore}
@@ -136,6 +136,10 @@ public:
     /**
         Returns the text in the text entry part of the control.
 
+        @note In wxQt, setting an empty string in the control is exactly the same
+        as calling SetValue(GetMin()). So this function always returns a non-empty
+        string under this platform.
+
         @since 3.1.6
     */
     wxString GetTextValue() const;
@@ -189,6 +193,8 @@ public:
 
         @note Setting a range including negative values is silently ignored
         if current base is set to 16.
+
+        @note In wxQt @a minVal must be less than @a maxVal.
     */
     void SetRange(int minVal, int maxVal);
 
@@ -252,6 +258,18 @@ public:
            The user can use arrow keys to change the value.
     @style{wxSP_WRAP}
            The value wraps at the minimum and maximum.
+    @style{wxTE_PROCESS_ENTER}
+        Indicates that the control should generate @c wxEVT_TEXT_ENTER
+        events. Using this style will prevent the user from using the Enter key
+        for dialog navigation (e.g. activating the default button in the
+        dialog) under MSW.
+    @style{wxALIGN_LEFT}
+        Same as wxTE_LEFT for wxTextCtrl: the text is left aligned (this is the
+        default).
+    @style{wxALIGN_CENTRE_HORIZONTAL}
+        Same as wxTE_CENTRE for wxTextCtrl: the text is centered.
+    @style{wxALIGN_RIGHT}
+        Same as wxTE_RIGHT for wxTextCtrl: the text is right aligned.
     @endStyleTable
 
     @beginEventEmissionTable{wxSpinDoubleEvent}
@@ -362,6 +380,10 @@ public:
     /**
         Returns the text in the text entry part of the control.
 
+        @note In wxQt, setting an empty string in the control is exactly the same
+        as calling SetValue(GetMin()). So this function always returns a non-empty
+        string under this platform.
+
         @since 3.1.6
     */
     wxString GetTextValue() const;
@@ -393,6 +415,8 @@ public:
 
     /**
         Sets range of allowable values.
+
+        @note In wxQt @a minVal must be less than @a maxVal.
     */
     void SetRange(double minVal, double maxVal);
 

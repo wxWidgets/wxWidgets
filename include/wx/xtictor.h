@@ -27,7 +27,7 @@
 class WXDLLIMPEXP_BASE wxObjectAllocatorAndCreator
 {
 public:
-    virtual ~wxObjectAllocatorAndCreator() { }
+    virtual ~wxObjectAllocatorAndCreator() = default;
     virtual bool Create(wxObject * &o, wxAny *args) = 0;
 };
 

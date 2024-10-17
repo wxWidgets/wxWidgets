@@ -2,7 +2,6 @@
 // Name:        src/msw/tooltip.cpp
 // Purpose:     wxToolTip class implementation for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.99
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -130,6 +129,10 @@ public:
         // tooltip which then reappears because mouse remains hovering over the
         // control, see SF patch 1821229
         uFlags |= TTF_TRANSPARENT;
+        // we use TTF_SUBCLASS to avoid the need for the rest of the code
+        // to handle all mouse move messages and relay them to wxToolTip
+        // (see https://github.com/wxWidgets/wxWidgets/pull/24482)
+        uFlags |= TTF_SUBCLASS;
     }
 };
 
@@ -363,12 +366,6 @@ void wxToolTip::UpdateVisibility()
         ::ShowWindow(ms_hwndTT, SW_HIDE);
 }
 
-/* static */
-void wxToolTip::RelayEvent(WXMSG *msg)
-{
-    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_RELAYEVENT, msg);
-}
-
 // ----------------------------------------------------------------------------
 // ctor & dtor
 // ----------------------------------------------------------------------------
@@ -572,7 +569,7 @@ bool wxToolTip::AdjustMaxWidth()
     // use TTM_SETMAXTIPWIDTH to make tooltip multiline using the
     // extent of its first line as max value
     HFONT hfont = (HFONT)
-        SendTooltipMessage(GetToolTipCtrl(), WM_GETFONT, 0);
+        SendTooltipMessage(GetToolTipCtrl(), WM_GETFONT, nullptr);
 
     if ( !hfont )
     {
@@ -632,7 +629,7 @@ bool wxToolTip::AdjustMaxWidth()
     // one would result in breaking the longer lines unnecessarily as
     // all our tooltips share the same maximal width
     if ( maxWidth > SendTooltipMessage(GetToolTipCtrl(),
-                                       TTM_GETMAXTIPWIDTH, 0) )
+                                       TTM_GETMAXTIPWIDTH, nullptr) )
     {
         SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
                            wxUIntToPtr(maxWidth));

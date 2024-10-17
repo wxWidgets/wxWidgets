@@ -96,7 +96,7 @@ public:
 
         ///@{
         /// zones from GMT (= Greenwich Mean Time): they're guaranteed to be
-        /// consequent numbers, so writing something like `GMT0 + offset' is
+        /// consequent numbers, so writing something like `GMT0 + offset` is
         /// safe if abs(offset) <= 12
 
         // underscore stands for minus
@@ -1003,14 +1003,12 @@ public:
     bool ParseDateTime(const wxString& datetime, wxString::const_iterator *end);
 
     /**
-        This function parses the string @a date according to the given
-        @e format. The system @c strptime(3) function is used whenever
-        available, but even if it is not, this function is still implemented,
-        although support for locale-dependent format specifiers such as
-        @c "%c", @c "%x" or @c "%X" may not be perfect and GNU extensions such
-        as @c "%z" and @c "%Z" are not implemented. This function does handle
-        the month and weekday names in the current locale on all platforms,
-        however.
+        Parses the string @a date according to the given @e format.
+
+        This function is similar to @c strptime(3) but doesn't use it and
+        implements the parsing itself, with support for all the standard
+        (POSIX) formatting specifiers as well as a number of GNU extensions
+        such as `%l`, `%F`, `%z` (but not `%Z`, currently) etc.
 
         Please see the description of the ANSI C function @c strftime(3) for
         the syntax of the format string.
@@ -1679,18 +1677,111 @@ const wxDateTime wxDefaultDateTime;
 /**
     @class wxDateTimeWorkDays
 
-    @todo Write wxDateTimeWorkDays documentation.
+    Holiday authority that classifies all Saturdays and Sundays
+    as holidays.
 
     @library{wxbase}
     @category{data}
 */
-class wxDateTimeWorkDays
+class wxDateTimeWorkDays : public wxDateTimeHolidayAuthority
 {
-public:
-
+protected:
+    /**
+        Override which returns @true if provided date is a Saturday and Sunday.
+    */
+    virtual bool DoIsHoliday(const wxDateTime& dt) const override;
+    /**
+        Override which returns all Saturdays and Sundays from a provided range.
+    */
+    virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                        const wxDateTime& dtEnd,
+                                        wxDateTimeArray& holidays) const override;
 };
 
+/**
+    @class wxDateTimeUSCatholicFeasts
 
+    Holiday authority that returns Catholic holy days of obligation,
+    as observed in the United States. This includes:
+
+    - Solemnity of Mary, Mother of God
+    - Easter (moveable feast)
+    - Ascension (moveable feast)
+    - Assumption of the Blessed Virgin Mary
+    - All Saints Day
+    - Immaculate Conception of the Blessed Virgin Mary
+    - Christmas
+
+    @library{wxbase}
+    @category{data}
+
+    @since 3.3.0
+*/
+class wxDateTimeUSCatholicFeasts : public wxDateTimeHolidayAuthority
+{
+public:
+    /**
+        Returns the date for Easter for a given year.
+    */
+    static wxDateTime GetEaster(int year);
+
+    /**
+        Returns the date for Ascension for a given year.
+        Celebrated on the 40th day of Easter/
+        sixth Thursday after Easter Sunday.
+    */
+    static wxDateTime GetThursdayAscension(int year);
+
+    /**
+        Returns the date for Ascension for a given year.
+        This is the same as GetThursdayAscension(),
+        but moved to the Sunday following the traditional Ascension
+        that falls on a Thursday.
+    */
+    static wxDateTime GetSundayAscension(int year);
+
+protected:
+    /**
+        Override which returns @true if provided date is a holy day of obligation.
+    */
+    bool DoIsHoliday(const wxDateTime& dt) const override;
+
+    /**
+        Override to determine the holy days of obligation within a date range.
+    */
+    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                const wxDateTime& dtEnd,
+                                wxDateTimeArray& holidays) const override;
+};
+
+/**
+    @class wxDateTimeChristianHolidays
+
+    Holiday authority that returns holidays common to all Christian religions.
+    This includes:
+
+    - Easter (moveable feast)
+    - Christmas
+
+    @library{wxbase}
+    @category{data}
+
+    @since 3.3.0
+*/
+class WXDLLIMPEXP_BASE wxDateTimeChristianHolidays : public wxDateTimeUSCatholicFeasts
+{
+protected:
+    /**
+        Override which returns @true if provided date is Easter or Christmas.
+    */
+    bool DoIsHoliday(const wxDateTime& dt) const override;
+    /**
+        Override to determine the holidays within a date range.
+    */
+    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                const wxDateTime& dtEnd,
+                                wxDateTimeArray& holidays) const override;
+};
 
 /**
     @class wxDateSpan
@@ -2231,7 +2322,12 @@ public:
 /**
     @class wxDateTimeHolidayAuthority
 
-    @todo Write wxDateTimeHolidayAuthority documentation.
+    Class which decides whether a given
+    date is a holiday and is used by all functions working with "work days".
+
+    New classes can be derived from this to determine specific holidays.
+    These classes should override DoIsHoliday() and DoGetHolidaysInRange(),
+    and be passed to wxDateTimeHolidayAuthority::AddAuthority() to be used.
 
     @library{wxbase}
     @category{data}
@@ -2239,6 +2335,40 @@ public:
 class wxDateTimeHolidayAuthority
 {
 public:
+    /// Returns @true if the given date is a holiday.
+    static bool IsHoliday(const wxDateTime& dt);
 
+    /**
+        Fills the provided array with all holidays in the given range, returns
+        the number of them.
+     */
+    static size_t GetHolidaysInRange(const wxDateTime& dtStart,
+                                     const wxDateTime& dtEnd,
+                                     wxDateTimeArray& holidays);
+
+    /// Clears the list of holiday authorities.
+    static void ClearAllAuthorities();
+
+    /**
+        Adds a new holiday authority.
+
+        The pointer will be deleted by wxDateTimeHolidayAuthority.
+     */
+    static void AddAuthority(wxDateTimeHolidayAuthority* auth);
+
+protected:
+    /**
+        This function should be overridden to determine whether
+        a given day is a holiday.
+     */
+    virtual bool DoIsHoliday(const wxDateTime& dt) const = 0;
+
+    /**
+        This function should be overridden to fill an array with
+        all holidays between the two given dates.
+     */
+    virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                        const wxDateTime& dtEnd,
+                                        wxDateTimeArray& holidays) const = 0;
 };
 

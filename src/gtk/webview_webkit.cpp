@@ -508,6 +508,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                            G_CALLBACK(wxgtk_webview_webkit_load_status),
                            this);
 
+    NotifyWebViewCreated();
+
     return true;
 }
 

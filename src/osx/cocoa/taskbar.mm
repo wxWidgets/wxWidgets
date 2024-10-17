@@ -2,7 +2,6 @@
 // File:        src/osx/cocoa/taskbar.mm
 // Purpose:     Implements wxTaskBarIcon class
 // Author:      David Elliott, Stefan Csomor
-// Modified by:
 // Created:     2004/01/24
 // Copyright:   (c) 2004 David Elliott, Stefan Csomor
 // Licence:     wxWindows licence

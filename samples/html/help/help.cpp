@@ -2,7 +2,6 @@
 // Name:        help.cpp
 // Purpose:     wxHtml sample: help test
 // Author:      ?
-// Modified by:
 // Created:     ?
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

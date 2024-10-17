@@ -2,7 +2,6 @@
 // Name:        wx/msw/app.h
 // Purpose:     wxApp class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -37,6 +36,8 @@ public:
 
     virtual void SetPrintMode(int mode) override { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
+
+    virtual AppearanceResult SetAppearance(Appearance appearance) override;
 
     // MSW-specific function to enable experimental dark mode support.
     //

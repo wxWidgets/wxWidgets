@@ -2,7 +2,6 @@
 // Name:        wx/msw/evtloopconsole.h
 // Purpose:     wxConsoleEventLoop class for Windows
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-07-31
 // Copyright:   (c) 2003-2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -54,7 +53,7 @@ private:
 class WXDLLIMPEXP_BASE wxConsoleEventLoop : public wxMSWEventLoopBase
 {
 public:
-    wxConsoleEventLoop() { }
+    wxConsoleEventLoop() = default;
 
     // override/implement base class virtuals
     virtual bool Dispatch() override;

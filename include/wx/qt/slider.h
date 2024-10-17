@@ -13,7 +13,8 @@ class QSlider;
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {
 public:
-    wxSlider();
+    wxSlider() = default;
+
     wxSlider(wxWindow *parent,
              wxWindowID id,
              int value, int minValue, int maxValue,
@@ -51,15 +52,12 @@ public:
     virtual void SetThumbLength(int lenPixels) override;
     virtual int GetThumbLength() const override;
 
-    virtual QWidget *GetHandle() const override;
+    QSlider* GetQSlider() const;
 
 protected:
     virtual void DoSetTickFreq(int freq) override;
 
-private:
-    QSlider *m_qtSlider;
-
-    wxDECLARE_DYNAMIC_CLASS( wxSlider );
+    wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };
 
 #endif // _WX_QT_SLIDER_H_

@@ -812,6 +812,12 @@ size_t wxInputStream::Ungetch(const void *buf, size_t bufsize)
         return 0;
     }
 
+    if ( !bufsize )
+    {
+        // nothing to do
+        return 0;
+    }
+
     char *ptrback = AllocSpaceWBack(bufsize);
     if (!ptrback)
         return 0;
@@ -962,11 +968,28 @@ wxFileOffset wxInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
         m_lasterror=wxSTREAM_NO_ERROR;
 
     // avoid unnecessary seek operations (optimization)
-    wxFileOffset currentPos = TellI(), size = GetLength();
-    if ((mode == wxFromStart && currentPos == pos) ||
-        (mode == wxFromCurrent && pos == 0) ||
-        (mode == wxFromEnd && size != wxInvalidOffset && currentPos == size-pos))
-        return currentPos;
+    switch ( mode )
+    {
+        case wxFromStart:
+            {
+                const wxFileOffset currentPos = TellI();
+                if ( pos == currentPos )
+                    return currentPos;
+            }
+            break;
+
+        case wxFromCurrent:
+            if ( pos == 0 )
+                return TellI();
+            break;
+
+        case wxFromEnd:
+            // Don't bother with any optimizations in this case as it could
+            // actually turn out to be a pessimization: getting the length of
+            // the stream may be relatively expensive, more so than actually
+            // seeking.
+            break;
+    }
 
     if (!IsSeekable() && mode == wxFromCurrent && pos > 0)
     {

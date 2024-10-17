@@ -13,7 +13,8 @@ class wxQTreeWidget;
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
 public:
-    wxTreeCtrl();
+    wxTreeCtrl() = default;
+
     wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
@@ -34,6 +35,8 @@ public:
 
     virtual unsigned int GetIndent() const override;
     virtual void SetIndent(unsigned int indent) override;
+
+    virtual void SetStateImages(const wxVector<wxBitmapBundle>& images) override;
 
     virtual void SetImageList(wxImageList *imageList) override;
     virtual void SetStateImageList(wxImageList *imageList) override;
@@ -115,7 +118,7 @@ public:
 
     virtual void SetWindowStyleFlag(long styles) override;
 
-    virtual QWidget *GetHandle() const override;
+    wxQTreeWidget* GetQTreeWidget() const;
 
 protected:
     virtual int DoGetItemState(const wxTreeItemId& item) const override;
@@ -137,13 +140,15 @@ protected:
 
     virtual void OnImagesChanged() override;
 
+    // For wxEVT_TREE_KEY_DOWN generation
+    void OnKeyDown(wxKeyEvent &event);
+
 private:
     void SendDeleteEvent(const wxTreeItemId &item);
     wxTreeItemId GetNext(const wxTreeItemId &item) const;
 
     void DoUpdateIconsSize(wxImageList *imageList);
 
-    wxQTreeWidget *m_qtTreeWidget;
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 };
 

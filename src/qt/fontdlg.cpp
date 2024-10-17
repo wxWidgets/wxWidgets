@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FONTDLG
+
 #include "wx/qt/private/winevent.h"
 #include "wx/fontdlg.h"
 
@@ -37,4 +39,4 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     return wxFontDialogBase::DoCreate(parent);
 }
 
-
+#endif // wxUSE_FONTDLG

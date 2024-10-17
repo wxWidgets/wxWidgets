@@ -2,7 +2,6 @@
 // Name:        splash.pov
 // Purpose:     POV-Ray scene used to generate splash image for wxWidgets
 // Author:      Wlodzimierz ABX Skiba
-// Modified by:
 // Created:     04/08/2004
 // Copyright:   (c) Wlodzimierz Skiba
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/gtk/spinbutt.h
 // Purpose:     wxSpinButton class
 // Author:      Robert Roebling
-// Modified by:
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -24,9 +24,15 @@
 #include "wx/fontmap.h"
 #include "wx/msgout.h"
 
+#include "wx/private/init.h"
+
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/log.h"
 #include "wx/gtk/private/threads.h"
+
+#ifdef __WXGTK3__
+    #include "wx/gtk/private/appearance.h"
+#endif
 
 #include "wx/gtk/mimetype.h"
 //-----------------------------------------------------------------------------
@@ -271,6 +277,9 @@ LogFilterByMessage::~LogFilterByMessage()
 /* static */
 void wxApp::GTKSuppressDiagnostics(int flags)
 {
+    // Allow Install() to actually do something.
+    GTKAllowDiagnosticsControl();
+
     static wxGTKImpl::LogFilterByLevel s_logFilter;
     s_logFilter.SetLevelToIgnore(flags);
     s_logFilter.Install();
@@ -342,6 +351,34 @@ bool wxApp::SetNativeTheme(const wxString& theme)
 #endif
 }
 
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
+{
+#ifdef __WXGTK3__
+    wxGTKImpl::ColorScheme colorScheme = wxGTKImpl::ColorScheme::NoPreference;
+    switch ( appearance )
+    {
+        case Appearance::System:
+            // Already set above.
+            break;
+
+        case Appearance::Light:
+            colorScheme = wxGTKImpl::ColorScheme::PreferLight;
+            break;
+
+        case Appearance::Dark:
+            colorScheme = wxGTKImpl::ColorScheme::PreferDark;
+            break;
+    }
+
+    return wxGTKImpl::UpdateColorScheme(colorScheme) ? AppearanceResult::Ok
+                                                     : AppearanceResult::Failure;
+#else
+    wxUnusedVar(appearance);
+
+    return AppearanceResult::Failure;
+#endif
+}
+
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
@@ -386,6 +423,19 @@ bool wxApp::OnInitGui()
         }
     }
 #endif
+
+    // Suppress GTK diagnostics if requested: this is convenient if the program
+    // doesn't use GTKAllowDiagnosticsControl() itself.
+    wxString suppress;
+    if ( wxGetEnv("WXSUPPRESS_GTK_DIAGNOSTICS", &suppress) )
+    {
+        long flags;
+        if ( !suppress.ToLong(&flags) )
+            flags = -1; // Suppress everything by default.
+
+        if ( flags != 0 )
+            GTKSuppressDiagnostics(flags);
+    }
 
     return true;
 }
@@ -472,19 +522,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
     bool init_result;
 
-    int i;
-
-    // gtk_init() wants UTF-8, not wchar_t, so convert
-    char **argvGTK = new char *[argc_ + 1];
-    for ( i = 0; i < argc_; i++ )
-    {
-        argvGTK[i] = wxStrdupA(wxConvUTF8.cWX2MB(argv_[i]));
-    }
-
-    argvGTK[argc_] = nullptr;
-
-    int argcGTK = argc_;
-
     // Prevent gtk_init_check() from changing the locale automatically for
     // consistency with the other ports that don't do it. If necessary,
     // wxApp::SetCLocale() may be explicitly called.
@@ -501,36 +538,31 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 #if defined(__WXGTK4__)
     init_result = gtk_init_check() != 0;
 #else
-    init_result = gtk_init_check( &argcGTK, &argvGTK ) != 0;
-#endif
+    auto argvA = wxInitData::Get().argvA;
+
+    int argcGTK = argc_;
+    init_result = gtk_init_check( &argcGTK, &argvA ) != 0;
 
     if ( argcGTK != argc_ )
     {
         // we have to drop the parameters which were consumed by GTK+
-        for ( i = 0; i < argcGTK; i++ )
+        for ( int i = 0; i < argcGTK; i++ )
         {
-            while ( strcmp(wxConvUTF8.cWX2MB(argv_[i]), argvGTK[i]) != 0 )
+            while ( strcmp(wxConvUTF8.cWX2MB(argv_[i]), argvA[i]) != 0 )
             {
+                free(argv_[i]);
                 memmove(argv_ + i, argv_ + i + 1, (argc_ - i)*sizeof(*argv_));
             }
         }
 
         argc_ = argcGTK;
         argv_[argc_] = nullptr;
+
+        this->argc = argc_;
+        this->argv.Init(argc_, argv_);
     }
     //else: gtk_init() didn't modify our parameters
-
-    // free our copy
-    for ( i = 0; i < argcGTK; i++ )
-    {
-        free(argvGTK[i]);
-    }
-
-    delete [] argvGTK;
-
-    // update internal arg[cv] as GTK+ may have removed processed options:
-    this->argc = argc_;
-    this->argv.Init(argc_, argv_);
+#endif
 
     if ( !init_result )
     {
@@ -568,6 +600,8 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
 void wxApp::CleanUp()
 {
+    wxAppBase::CleanUp();
+
     if (m_idleSourceId != 0)
         g_source_remove(m_idleSourceId);
 
@@ -577,8 +611,6 @@ void wxApp::CleanUp()
         g_type_class_unref(gt);
 
     gdk_threads_leave();
-
-    wxAppBase::CleanUp();
 }
 
 void wxApp::WakeUpIdle()

@@ -2,7 +2,6 @@
 // Name:        wx/msw/wrapcdlg.h
 // Purpose:     Wrapper for the standard <commdlg.h> header
 // Author:      Wlodzimierz ABX Skiba
-// Modified by:
 // Created:     22.03.2005
 // Copyright:   (c) 2005 Wlodzimierz Skiba
 // Licence:     wxWindows licence
@@ -15,12 +14,10 @@
 
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/private.h"
+
+#include <commdlg.h>
+
 #include "wx/msw/missing.h"
-
-#if wxUSE_COMMON_DIALOGS
-    #include <commdlg.h>
-#endif
-
 #include "wx/msw/winundef.h"
 
 #endif // _WX_MSW_WRAPCDLG_H_

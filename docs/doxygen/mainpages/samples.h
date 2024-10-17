@@ -179,12 +179,6 @@ See @ref overview_config for the descriptions of all features of this class.
 
 @sampledir{dataview}
 
-@section page_samples_clipboard Clipboard Sample
-
-@sampleabout{wxClipboard}
-
-@sampledir{clipboard}
-
 @section page_samples_debugrpt Debug Reporter Sample
 
 This sample shows how to use wxDebugReport class to
@@ -923,7 +917,7 @@ control.
 
 @section page_samples_webview wxWebView Sample
 
-The wxWebView sample demonstarates the various capabilities of the wxWebView
+The wxWebView sample demonstrates the various capabilities of the wxWebView
 control. It is set up as a simple single window web browser, but with support
 for many of the more complex wxWebView features, including browsing through
 archives.

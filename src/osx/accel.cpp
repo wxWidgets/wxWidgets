@@ -2,7 +2,6 @@
 // Name:        src/osx/accel.cpp
 // Purpose:     wxAcceleratorTable
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -38,10 +37,6 @@ public:
 wxAcceleratorTable::wxAcceleratorTable()
 {
     m_refData = nullptr;
-}
-
-wxAcceleratorTable::~wxAcceleratorTable()
-{
 }
 
 // Create from an array

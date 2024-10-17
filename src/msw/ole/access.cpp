@@ -2,7 +2,6 @@
 // Name:        src/msw/ole/access.cpp
 // Purpose:     implementation of wxIAccessible and wxAccessible
 // Author:      Julian Smart
-// Modified by:
 // Created:     2003-02-12
 // Copyright:   (c) 2003 Julian Smart
 // Licence:     wxWindows licence

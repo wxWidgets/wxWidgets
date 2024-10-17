@@ -79,11 +79,9 @@ public:
     virtual wxRendererNative* CreateRenderer() = 0;
 
     /**
-        This method returns the name of the desktop environment currently
-        running in a Unix desktop. Currently only "KDE" or "GNOME" are
-        supported and the code uses the X11 session protocol vendor name
-        to figure out, which desktop environment is running. The method
-        returns an empty string otherwise and on all other platforms.
+        Returns the name of the desktop environment currently running on a Unix
+        desktop. It returns an empty string for platforms other than wxGTK, or
+        if the desktop environment could not be determined.
     */
     virtual wxString GetDesktopEnvironment() const = 0;
 

@@ -394,7 +394,19 @@ double wxNativeFontInfo::GetFractionalPointSize() const
 
 wxSize wxNativeFontInfo::GetPixelSize() const
 {
-    return wxSize(0, m_qtFont.pixelSize());
+    // Note that QFont::pixelSize() returns -1 if the size was set with setPointSize().
+    // If so, fall back to QFontInfo::pixelSize() which returns the pixel size of the
+    // matched window system font.
+
+    int pixelSize = m_qtFont.pixelSize();
+
+    if ( pixelSize < 0 )
+    {
+        QFontInfo fontInfo(m_qtFont);
+        pixelSize = fontInfo.pixelSize();
+    }
+
+    return wxSize(0, pixelSize);
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
@@ -565,7 +577,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    wxMISSING_IMPLEMENTATION( __func__ );
 }
 
 bool wxNativeFontInfo::FromString(const wxString& s)

@@ -2,7 +2,6 @@
 // Name:        wx/toolbar.h
 // Purpose:     wxToolBar interface declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.11.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

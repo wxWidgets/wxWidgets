@@ -27,9 +27,19 @@ Changes in behaviour not resulting in compilation errors
 - wxMSW doesn't support versions of Microsoft Windows before Windows 7. If you
   need Windows XP or Vista support, please use wxWidgets 3.2.
 
+- Default exit code in case of fatal error is now consistently 255, including
+  when using MSVC for which it was 127 previously. Use wxApp::SetErrorExitCode()
+  and wxApp::SetFatalErrorExitCode() to change this to old value if needed.
+
 - wxGLCanvas doesn't use multi-sampling by default any longer, please use
   wxGLAttributes::Samplers(1).SampleBuffers(4) explicitly if you need to keep
   using the same attributes that were previously used by default.
+
+- Default location of file used by wxFileConfig under Unix has changed to
+  XDG-compliant ~/.config/appname.conf instead of ~/.appname but note that
+  any existing files at the old location will still continue to be used.
+  See wxCONFIG_USE_XDG and wxCONFIG_USE_HOME for how to customize this
+  behaviour. You may also find wxFileConfig::MigrateLocalFile() useful.
 
 - As first mentioned in 3.0 release notes, the value of wxTHREAD_WAIT_DEFAULT,
   used by wxThread::Delete() and Wait() by default, has changed from
@@ -77,6 +87,27 @@ Changes in behaviour not resulting in compilation errors
   called any longer by default, you need to explicitly enable 3.0 compatibility
   or change your code to override the newer overload, taking a wxWindow pointer.
 
+- wxImageList size is now expressed in physical pixels, i.e. its size must be
+  the same as the size of bitmaps added to it, in pixels. This is inconvenient
+  but should be viewed as a hint not to use wxImageList (but wxBitmapBundle)
+  in the applications supporting high DPI.
+
+- wxWebRequest doesn't use persistent storage under Mac any longer, as this
+  made is behaviour there incompatible with the other platforms. Please call
+  wxWebRequest::EnablePersistentStorage() explicitly if you need it.
+
+- In wxMSW, behaviour of wxBitmap::Create(size, dc) overload has changed to
+  not scale the size by the content scale factor of the DC any longer, as the
+  size here is expressed in physical pixels and not in DIPs.
+
+- wxIMAGE_QUALITY_NEAREST has a different numeric value and is not the same
+  as wxIMAGE_QUALITY_NORMAL any longer, see documentation for more details.
+
+- wxTextCtrl::{Save,Load}File() will use RTF format when saving/loading files
+  with .rtf extension, and not plain text any longer, by default for the
+  platforms with RTF support. If you need to save/load plain text even for the
+  files with the .rtf extension, specify wxTEXT_TYPE_PLAIN explicitly.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
@@ -97,6 +128,12 @@ Changes in behaviour which may result in build errors
   wxString to std::[w]string which are not enabled by default now, please set
   wxUSE_STD_STRING_CONV_IN_WXSTRING=1 explicitly if you need them.
 
+- wxMSW now requires linking with gdiplus.lib and msimg32.lib.
+  This is done automatically in most cases, but if you use a static build of
+  the library with a non-MSVC compiler such as MinGW and do not use wx-config,
+  then you will need to add these libraries to your make or project files
+  yourself.
+
 - wxMotif and wxGTK1 ports have been removed, please use wxWidgets 3.2 if you
   still need them.
 
@@ -107,6 +144,17 @@ Changes in behaviour which may result in build errors
   are now similar to std::vector<> containing the objects -- they remain mostly
   compatible with the previous wxWidgets versions, but now compare values, and
   not pointers, in their Index() member function.
+
+- All operators (e.g. "==", "+", etc) on wx types are not defined in global
+  scope any more, resulting in much better error messages but also preventing
+  them from implicitly being used with types convertible to wx types. If you
+  really need to use these operators with your own types, please use explicit
+  conversions.
+
+- Due to the possibility to construct wxString from std::string_view some
+  previously valid code, such as "wxstr = {"Hello", 2}", is now ambiguous.
+  Please use explicit class name, e.g. "wxstr = wxString{"Hello", 2}" to
+  preserve the previous behaviour.
 
 - Generic wxSearchCtrl doesn't provide methods that make sense only for
   multiline text controls any longer, for consistency with the other ports.
@@ -125,6 +173,18 @@ Changes in behaviour which may result in build errors
 
 - wxTEST_DIALOG() macro now must be followed by semicolon, whereas previously
   it was only supposed to, but it wasn't mandatory to use one after it.
+
+- wxWindow::GetDefaultBorderForControl() is not virtual any longer and will
+  be completely removed in the future. If you overrode this function, don't
+  do it any longer. If you call it, replace it with wxBORDER_THEME constant.
+
+- wxGTK wxDirButton::Create() doesn't have unused "wildcard" parameter any
+  longer, please just remove it from your code if you used it.
+
+- Several functions now take wxReadOnlyDC instead of wxDC as argument. While
+  any code calling these functions keeps compiling and working, classes that
+  override these functions must be updated to use the new argument type too.
+  Simply replacing wxDC with wxReadOnlyDC should be sufficient.
 
 
 3.3.0: (released 2022-??-??)

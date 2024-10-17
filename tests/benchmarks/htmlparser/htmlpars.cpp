@@ -89,7 +89,7 @@ wx28HtmlParser::~wx28HtmlParser()
     }
     delete m_HandlersStack;
     m_HandlersHash.Clear();
-    WX_CLEAR_LIST(wxList, m_HandlersList);
+    wxClearList(m_HandlersList);
     delete m_entitiesParser;
 }
 

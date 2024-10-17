@@ -58,6 +58,7 @@ class WXDLLIMPEXP_FWD_CORE wxControl;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 class WXDLLIMPEXP_FWD_CORE wxLayoutConstraints;
+class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 class WXDLLIMPEXP_FWD_CORE wxToolTip;
@@ -1142,7 +1143,8 @@ public:
         // return true if window had been frozen and not unthawed yet
     bool IsFrozen() const { return m_freezeCount != 0; }
 
-        // adjust DC for drawing on this window
+        // adjust DC for measuring or drawing on this window
+    virtual void PrepareReadOnlyDC( wxReadOnlyDC & WXUNUSED(dc) ) { }
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
 
         // enable or disable double buffering
@@ -1338,6 +1340,11 @@ public:
 
     // send wxUpdateUIEvents to this window, and children if recurse is true
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+
+    // do the window-specific processing before processing the update event
+    // (mainly for deciding whether wxUpdateUIEvent::Is3State() is set)
+    virtual void DoPrepareUpdateWindowUI(wxUpdateUIEvent& event) const
+        { event.Allow3rdState(false); }
 
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
@@ -1669,6 +1676,18 @@ public:
     // This is an internal helper function implemented by text-like controls.
     virtual const wxTextEntry* WXGetTextEntry() const { return nullptr; }
 
+
+    // DPI-related helpers for ports using DIPs.
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    // Return the DPI corresponding to the given scale factor.
+    static wxSize MakeDPIFromScaleFactor(double scaleFactor);
+
+    // Notify all non-top-level children of the given (typically top-level
+    // itself) window about the DPI change.
+    void WXNotifyDPIChange(double oldScaleFactor, double newScaleFactor);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+
 protected:
     // helper for the derived class Create() methods: the first overload, with
     // validator parameter, should be used for child windows while the second
@@ -1838,10 +1857,13 @@ protected:
     // specified) border for the window class
     virtual wxBorder GetDefaultBorder() const;
 
-    // this allows you to implement standard control borders without
-    // repeating the code in different classes that are not derived from
-    // wxControl
-    virtual wxBorder GetDefaultBorderForControl() const { return wxBORDER_THEME; }
+    // Don't override this function any longer (it used to be virtual but isn't
+    // any more) as it's not called by wxWidgets any more and don't call it
+    // yourself, just use wxBORDER_THEME instead.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Just use wxBORDER_THEME instead")
+    wxBorder GetDefaultBorderForControl() const { return wxBORDER_THEME; }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     // Get the default size for the new window if no explicit size given. TLWs
     // have their own default size so this is just for non top-level windows.
@@ -2099,7 +2121,7 @@ class WXDLLIMPEXP_CORE wxWindowAccessible: public wxAccessible
 {
 public:
     wxWindowAccessible(wxWindow* win): wxAccessible(win) { if (win) win->SetAccessible(this); }
-    virtual ~wxWindowAccessible() {}
+    virtual ~wxWindowAccessible() = default;
 
 // Overridables
 

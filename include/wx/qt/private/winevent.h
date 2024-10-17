@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/qt/winevent_qt.h
+// Name:        include/wx/qt/private/winevent.h
 // Purpose:     QWidget to wxWindow event handler
 // Author:      Javier Torres, Peter Most
-// Modified by:
 // Created:     21.06.10
 // Copyright:   (c) Javier Torres
 // Licence:     wxWindows licence
@@ -31,21 +30,17 @@ class QPaintEvent;
 class wxQtSignalHandler
 {
 protected:
-    wxQtSignalHandler( wxEvtHandler *handler )
+    explicit wxQtSignalHandler( wxWindow *handler ) : m_handler(handler)
     {
-        m_handler = handler;
     }
 
     bool EmitEvent( wxEvent &event ) const
     {
-        // We're only called with the objects of class (or derived from)
-        // wxWindow, so the cast is safe.
-        wxWindow* const handler = static_cast<wxWindow *>(GetHandler());
-        event.SetEventObject( handler );
-        return handler->HandleWindowEvent( event );
+        event.SetEventObject( m_handler );
+        return m_handler->HandleWindowEvent( event );
     }
 
-    virtual wxEvtHandler *GetHandler() const
+    virtual wxWindow *GetHandler() const
     {
         return m_handler;
     }
@@ -55,22 +50,18 @@ protected:
     // event if the control has wxTE_PROCESS_ENTER flag.
     bool HandleKeyPressEvent(QWidget* widget, QKeyEvent* e)
     {
-        // We're only called with the objects of class (or derived from)
-        // wxWindow, so the cast is safe.
-        wxWindow* const handler = static_cast<wxWindow *>(GetHandler());
-
-        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
+        if ( m_handler->HasFlag(wxTE_PROCESS_ENTER) )
         {
             if ( e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter )
             {
-                wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
+                wxCommandEvent event( wxEVT_TEXT_ENTER, m_handler->GetId() );
                 event.SetString( GetValueForProcessEnter() );
-                event.SetEventObject( handler );
-                return handler->HandleWindowEvent( event );
+                event.SetEventObject( m_handler );
+                return m_handler->HandleWindowEvent( event );
             }
         }
 
-        return handler->QtHandleKeyEvent(widget, e);
+        return m_handler->QtHandleKeyEvent(widget, e);
     }
 
     // Controls supporting wxTE_PROCESS_ENTER flag (e.g. wxTextCtrl, wxComboBox and wxSpinCtrl)
@@ -78,7 +69,7 @@ protected:
     virtual wxString GetValueForProcessEnter() { return wxString(); }
 
 private:
-    wxEvtHandler *m_handler;
+    wxWindow* const m_handler;
 };
 
 template < typename Widget, typename Handler >
@@ -149,10 +140,20 @@ protected:
         if ( !this->GetHandler() )
             return;
 
-        if ( !this->GetHandler()->QtHandleContextMenuEvent(this, event) )
-            Widget::contextMenuEvent(event);
-        else
-            event->accept();
+        this->GetHandler()->QtHandleContextMenuEvent(this, event);
+
+        // Notice that we are simply accepting the event and deliberately not
+        // calling Widget::contextMenuEvent(event); here because the context menu
+        // is supposed to be shown from a wxEVT_CONTEXT_MENU handler and not from
+        // QWidget::contextMenuEvent() overrides (and we are already in one of
+        // these overrides to perform QContextMenuEvent --> wxContextMenuEvent
+        // translation).
+        // More importantly, the default implementation of contextMenuEvent() simply
+        // ignores the context event, which means that the event will be propagated
+        // to the parent widget again which is undesirable here because the event may
+        // have already been propagated at the wxWidgets level.
+
+        event->accept();
     }
 
     //wxDropFilesEvent
@@ -362,7 +363,7 @@ protected:
     virtual bool winEvent ( MSG * message, long * result ) { }
     virtual bool x11Event ( XEvent * event ) { } */
 
-    virtual bool event(QEvent *event)
+    virtual bool event(QEvent *event) override
     {
         if (event->type() == QEvent::Gesture)
         {
@@ -430,12 +431,7 @@ protected:
             wxPanGestureEvent evp(win->GetId());
             QPoint pos = QCursor::pos();
             evp.SetPosition( wxQtConvertPoint( pos ) );
-
-            QPoint offset = gesture->offset().toPoint();
-            QPoint offset_last = gesture->lastOffset().toPoint();
-            QPoint delta(offset.x() - offset_last.x(), offset.y() - offset_last.y());
-
-            evp.SetDelta( wxQtConvertPoint( delta ) );
+            evp.SetDelta( wxQtConvertPoint( gesture->delta().toPoint() ) );
 
             switch(gesture->state())
             {
@@ -461,16 +457,14 @@ protected:
         wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
         if (win)
         {
-
-            qreal this_sf = gesture->scaleFactor();
-            QPoint center_point = gesture->centerPoint().toPoint();
-
-            wxZoomGestureEvent evp(win->GetId());
-            evp.SetPosition( wxQtConvertPoint( center_point ) );
-            evp.SetZoomFactor( this_sf);
-
-            switch(gesture->state())
+            if (gesture->changeFlags() & QPinchGesture::ScaleFactorChanged)
             {
+                wxZoomGestureEvent evp(win->GetId());
+                evp.SetPosition(wxQtConvertPoint(gesture->centerPoint().toPoint()));
+                evp.SetZoomFactor(gesture->totalScaleFactor());
+
+                switch (gesture->state())
+                {
                 case Qt::GestureStarted:
                     evp.SetGestureStart();
                     break;
@@ -480,12 +474,34 @@ protected:
                     break;
                 default:
                     break;
+                }
+
+                win->ProcessWindowEvent(evp);
             }
 
-            win->ProcessWindowEvent( evp );
+            if (gesture->changeFlags() & QPinchGesture::RotationAngleChanged)
+            {
+                wxRotateGestureEvent evp(win->GetId());
+                evp.SetPosition(wxQtConvertPoint(gesture->centerPoint().toPoint()));
+                evp.SetRotationAngle(wxDegToRad(gesture->totalRotationAngle()));
+
+                switch (gesture->state())
+                {
+                case Qt::GestureStarted:
+                    evp.SetGestureStart();
+                    break;
+                case Qt::GestureFinished:
+                case Qt::GestureCanceled:
+                    evp.SetGestureEnd();
+                    break;
+                default:
+                    break;
+                }
+
+                win->ProcessWindowEvent(evp);
+            }
 
             event->accept();
-
         }
     }
 };

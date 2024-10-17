@@ -2,7 +2,6 @@
 // Name:        src/msw/graphics.cpp
 // Purpose:     wxGCDC class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2006-09-30
 // Copyright:   (c) 2006 Stefan Csomor
 // Licence:     wxWindows licence
@@ -16,7 +15,7 @@
 #if wxUSE_GRAPHICS_GDIPLUS
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/wrapcdlg.h"
+    #include "wx/msw/private.h"
     #include "wx/image.h"
     #include "wx/window.h"
     #include "wx/utils.h"
@@ -43,12 +42,11 @@
 #include "wx/dcgraph.h"
 #include "wx/rawbmp.h"
 
-#include "wx/msw/private.h" // needs to be before #include <commdlg.h>
-
-#if wxUSE_COMMON_DIALOGS
-#include <commdlg.h>
-#endif
 #include <float.h> // for FLT_MAX, FLT_MIN
+
+#ifdef _MSC_VER
+    #pragma comment(lib, "gdiplus")
+#endif
 
 // Define REAL_MAX, REAL_MIN
 // if it isn't done in GDI+ header(s).
@@ -485,6 +483,8 @@ public:
 
     virtual WXHDC GetNativeHDC() override;
     virtual void ReleaseNativeHDC(WXHDC hdc) override;
+
+    class OffsetHelper;
 
 protected:
     // Used from ctors (including those in the derived classes) and takes
@@ -1828,32 +1828,42 @@ void * wxGDIPlusMatrixData::GetNativeMatrix() const
 // wxGDIPlusContext implementation
 //-----------------------------------------------------------------------------
 
-class wxGDIPlusOffsetHelper
+class wxGDIPlusContext::OffsetHelper
 {
 public :
-    wxGDIPlusOffsetHelper(Graphics* gr, double scaleFactor, bool offset)
+    OffsetHelper(wxGDIPlusContext* gc, Graphics* gr, const wxGraphicsPen& pen)
     {
+        m_shouldOffset = gc->ShouldOffset();
+        if (!m_shouldOffset)
+            return;
+
         m_gr = gr;
-        m_offset = 0;
-        if (offset)
+        m_offsetX = m_offsetY = 0.5f;
+
+        const double width = static_cast<wxGDIPlusPenData*>(pen.GetRefData())->GetWidth();
+        if (width <= 0)
         {
+            // For 1-pixel pen width, offset by half a device pixel
             Matrix matrix;
             gr->GetTransform(&matrix);
-            const float f = float(scaleFactor);
+            const float f = float(gc->GetContentScaleFactor());
             PointF pt(f, f);
             matrix.TransformVectors(&pt);
-            m_offset = 0.5f / wxMin(std::abs(pt.X), std::abs(pt.Y));
-            m_gr->TranslateTransform(m_offset, m_offset);
+            m_offsetX /= pt.X;
+            m_offsetY /= pt.Y;
         }
+
+        gr->TranslateTransform(m_offsetX, m_offsetY);
     }
-    ~wxGDIPlusOffsetHelper( )
+    ~OffsetHelper()
     {
-        if (m_offset > 0)
-            m_gr->TranslateTransform(-m_offset, -m_offset);
+        if (m_shouldOffset)
+            m_gr->TranslateTransform(-m_offsetX, -m_offsetY);
     }
 public :
     Graphics* m_gr;
-    float m_offset;
+    float m_offsetX, m_offsetY;
+    bool m_shouldOffset;
 } ;
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height   )
@@ -1992,7 +2002,7 @@ void wxGDIPlusContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+    OffsetHelper helper(this, m_context, m_pen);
     Brush *brush = m_brush.IsNull() ? nullptr : ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush();
     Pen *pen = m_pen.IsNull() ? nullptr : ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen();
 
@@ -2031,7 +2041,7 @@ void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
 
    if ( !m_pen.IsNull() )
    {
-        wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(this, m_context, m_pen);
        PointF *cpoints = new PointF[n];
        for (size_t i = 0; i < n; i++)
        {
@@ -2049,8 +2059,8 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
    if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
-    PointF *cpoints = new PointF[n];
+    OffsetHelper helper(this, m_context, m_pen);
+    PointF* cpoints = new PointF[n + 1];
     for (size_t i = 0; i < n; i++)
     {
         cpoints[i].X = static_cast<REAL>(points[i].m_x);
@@ -2061,7 +2071,12 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
         m_context->FillPolygon( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , cpoints , n ,
                                 fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding ) ;
     if ( !m_pen.IsNull() )
+    {
+        cpoints[n].X = cpoints[0].X;
+        cpoints[n].Y = cpoints[0].Y;
+        n++;
         m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
+    }
     delete[] cpoints;
 }
 
@@ -2072,7 +2087,7 @@ void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
 
     if ( !m_pen.IsNull() )
     {
-        wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(this, m_context, m_pen);
         m_context->DrawPath( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , (GraphicsPath*) path.GetNativePath() );
     }
 }
@@ -2084,7 +2099,7 @@ void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode 
 
     if ( !m_brush.IsNull() )
     {
-        wxGDIPlusOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(this, m_context, m_pen);
         ((GraphicsPath*) path.GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
         m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() ,
             (GraphicsPath*) path.GetNativePath());
@@ -2478,15 +2493,9 @@ bool wxGDIPlusContext::ShouldOffset() const
     if (width <= 0)
         return true;
 
-    // no offset if overall scale is not odd integer
-    const wxGraphicsMatrix matrix(GetTransform());
-    double x = GetContentScaleFactor(), y = x;
-    matrix.TransformDistance(&x, &y);
-    if (!wxIsSameDouble(fmod(wxMin(fabs(x), fabs(y)), 2.0), 1.0))
-        return false;
-
     // offset if pen width is odd integer
-    return wxIsSameDouble(fmod(width, 2.0), 1.0);
+    const int w = int(width);
+    return (w & 1) && wxIsSameDouble(width, w);
 }
 
 void* wxGDIPlusContext::GetNativeContext()
@@ -3043,8 +3052,6 @@ class wxGDIPlusRendererModule : public wxModule
 public:
     wxGDIPlusRendererModule()
     {
-        // We must be uninitialized before GDI+ DLL itself is unloaded.
-        AddDependency("wxGdiPlusModule");
     }
 
     virtual bool OnInit() override { return true; }

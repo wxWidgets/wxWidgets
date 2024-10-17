@@ -2,7 +2,6 @@
 // Name:        src/x11/toplevel.cpp
 // Purpose:     implements wxTopLevelWindow for X11
 // Author:      Julian Smart
-// Modified by:
 // Created:     24.09.01
 // Copyright:   (c) 2002 Julian Smart
 // Licence:     wxWindows licence

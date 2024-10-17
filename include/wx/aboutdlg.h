@@ -25,7 +25,7 @@ class WXDLLIMPEXP_ADV wxAboutDialogInfo
 {
 public:
     // all fields are initially uninitialized
-    wxAboutDialogInfo() { }
+    wxAboutDialogInfo() = default;
 
     // accessors for various simply fields
     // -----------------------------------

@@ -48,8 +48,40 @@
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
 #define wxTE_RICH2          0x8000
 
+/**
+    File types supported by wxTextCtrl::LoadFile() and wxTextCtrl::SaveFile().
 
-#define wxTEXT_TYPE_ANY     0
+    @since 3.3.0
+*/
+enum wxTextCtrlFileType
+{
+    /**
+        Format determined by file extension when loading/saving the control's
+        content.
+
+        The supported formats depend on the capabilities of the platform's
+        native control.
+    */
+    wxTEXT_TYPE_ANY,
+
+    /**
+        Plain Text Format.
+
+        This format is supported under all platforms.
+
+        @since 3.3.0
+    */
+    wxTEXT_TYPE_PLAIN,
+
+    /**
+        Rich Text Format.
+
+        This format is only supported under macOS and MSW.
+
+        @since 3.3.0
+    */
+    wxTEXT_TYPE_RTF
+};
 
 
 /**
@@ -69,8 +101,10 @@ enum wxTextAttrAlignment
     wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
     wxTEXT_ALIGNMENT_RIGHT,
 
-    /** wxTEXT_ALIGNMENT_JUSTIFIED is unimplemented.
-        In future justification may be supported when printing or previewing, only. */
+    /** wxTEXT_ALIGNMENT_JUSTIFIED is implemented for wxTextCtrl under wxMSW, wxOSX and wxGTK.
+        It is not implemented for wxRichTextCtrl.
+        In the future, wxRichTextCtrl justification may be supported when
+        printing or previewing only. */
     wxTEXT_ALIGNMENT_JUSTIFIED
 };
 
@@ -264,6 +298,9 @@ enum wxTextCtrlHitTestResult
     wxTextAttr represents the character and paragraph attributes, or style,
     for a range of text in a wxTextCtrl or wxRichTextCtrl.
 
+    Unless explicitly mentioned, the attributes are only implemented in wxRichTextCtrl,
+    and not wxTextCtrl.
+
     When setting up a wxTextAttr object, pass a bitlist mask to
     wxTextAttr::SetFlags() to indicate which style elements should be changed.
     As a convenience, when you call a setter such as SetFont, the relevant bit
@@ -328,11 +365,17 @@ public:
     /**
         Returns the alignment flags.
         See ::wxTextAttrAlignment for a list of available styles.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     wxTextAttrAlignment GetAlignment() const;
 
     /**
         Returns the background colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     const wxColour& GetBackgroundColour() const;
 
@@ -362,12 +405,18 @@ public:
 
     /**
         Returns the bullet number.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetBulletNumber() const;
 
     /**
         Returns the bullet style.
         See ::wxTextAttrBulletStyle for a list of available styles.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetBulletStyle() const;
 
@@ -394,6 +443,9 @@ public:
         a temporary font.
 
         For greater efficiency, access the font attributes directly.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     wxFont GetFont() const;
 
@@ -437,12 +489,18 @@ public:
     /**
         Returns the underline type, which is one of the wxTextAttrUnderlineType values.
 
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
+
         @since 3.1.3
     */
     wxTextAttrUnderlineType GetUnderlineType() const;
 
     /**
         Returns the underline color used. wxNullColour when the text colour is used.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
 
         @since 3.1.3
     */
@@ -455,16 +513,25 @@ public:
 
     /**
         Returns the left indent in tenths of a millimetre.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     long GetLeftIndent() const;
 
     /**
         Returns the left sub-indent in tenths of a millimetre.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     long GetLeftSubIndent() const;
 
     /**
         Returns the line spacing value, one of ::wxTextAttrLineSpacing values.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetLineSpacing() const;
 
@@ -480,11 +547,17 @@ public:
 
     /**
         Returns the space in tenths of a millimeter after the paragraph.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetParagraphSpacingAfter() const;
 
     /**
         Returns the space in tenths of a millimeter before the paragraph.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetParagraphSpacingBefore() const;
 
@@ -495,6 +568,9 @@ public:
 
     /**
         Returns the right indent in tenths of a millimeter.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     long GetRightIndent() const;
 
@@ -503,11 +579,17 @@ public:
 
         Each stop is measured from the left margin and therefore each value must
         be larger than the last.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     const wxArrayInt& GetTabs() const;
 
     /**
         Returns the text foreground colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     const wxColour& GetTextColour() const;
 
@@ -544,11 +626,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies alignment.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasAlignment() const;
 
     /**
         Returns @true if the attribute object specifies a background colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasBackgroundColour() const;
 
@@ -559,11 +647,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies a bullet number.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasBulletNumber() const;
 
     /**
         Returns @true if the attribute object specifies a bullet style.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasBulletStyle() const;
 
@@ -586,6 +680,9 @@ public:
 
     /**
         Returns @true if the attribute object specifies any font attributes.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasFont() const;
 
@@ -638,11 +735,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies a left indent.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasLeftIndent() const;
 
     /**
         Returns @true if the attribute object specifies line spacing.
+
+        For wxTextCtrl, is implemented under wxMSW and wxOSX.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasLineSpacing() const;
 
@@ -664,11 +767,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies spacing after a paragraph.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasParagraphSpacingAfter() const;
 
     /**
         Returns @true if the attribute object specifies spacing before a paragraph.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasParagraphSpacingBefore() const;
 
@@ -684,11 +793,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies tab stops.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasTabs() const;
 
     /**
         Returns @true if the attribute object specifies a text foreground colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasTextColour() const;
 
@@ -732,13 +847,19 @@ public:
     /**
         Sets the paragraph alignment. See ::wxTextAttrAlignment enumeration values.
 
-        Of these, wxTEXT_ALIGNMENT_JUSTIFIED is unimplemented.
-        In future justification may be supported when printing or previewing, only.
+        wxTEXT_ALIGNMENT_JUSTIFIED is not implemented for wxRichTextCtrl. In the future, wxRichTextCtrl
+        justification may be supported when printing or previewing only.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetAlignment(wxTextAttrAlignment alignment);
 
     /**
         Sets the background colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetBackgroundColour(const wxColour& colBack);
 
@@ -759,14 +880,25 @@ public:
 
     /**
         Sets the bullet number.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     void SetBulletNumber(int n);
 
     /**
         Sets the bullet style.
 
-        The ::wxTextAttrBulletStyle enumeration values are all supported,
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
+
+        For wxRichTextCtrl, the ::wxTextAttrBulletStyle enumeration values are all supported,
         except for wxTEXT_ATTR_BULLET_STYLE_BITMAP.
+
+        For wxTextCtrl under wxMSW, the ::wxTextAttrBulletStyle enumeration values are all supported,
+        except for wxTEXT_ATTR_BULLET_STYLE_BITMAP, wxTEXT_ATTR_BULLET_STYLE_OUTLINE,
+        wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT, wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT,
+        wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE, and wxTEXT_ATTR_BULLET_STYLE_CONTINUATION.
     */
     void SetBulletStyle(int style);
 
@@ -790,6 +922,9 @@ public:
     /**
         Sets the attributes for the given font.
         Note that wxTextAttr does not store an actual wxFont object.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT & ~wxTEXT_ATTR_FONT_PIXEL_SIZE);
 
@@ -877,6 +1012,9 @@ public:
         at leftMargin + leftSubIndent.
         So the distance between the left edge of the bullet and the
         left of the actual paragraph is leftSubIndent.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetLeftIndent(int indent, int subIndent = 0);
 
@@ -884,6 +1022,9 @@ public:
         Sets the line spacing. @a spacing is a multiple, where 10 means single-spacing,
         15 means 1.5 spacing, and 20 means double spacing.
         The ::wxTextAttrLineSpacing values are defined for convenience.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     void SetLineSpacing(int spacing);
 
@@ -907,11 +1048,17 @@ public:
 
     /**
         Sets the spacing after a paragraph, in tenths of a millimetre.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     void SetParagraphSpacingAfter(int spacing);
 
     /**
         Sets the spacing before a paragraph, in tenths of a millimetre.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     void SetParagraphSpacingBefore(int spacing);
 
@@ -929,6 +1076,9 @@ public:
         Sets the tab stops, expressed in tenths of a millimetre.
         Each stop is measured from the left margin and therefore each value must be
         larger than the last.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetTabs(const wxArrayInt& tabs);
 
@@ -1015,7 +1165,7 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
 
        The returned object enables spelling checks and disables grammar checks.
      */
-    static wxTextProofOptions Default()
+    static wxTextProofOptions Default();
 
     /**
        Create an object disabling all checks.
@@ -1023,12 +1173,12 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
        The returned object can be passed to wxTextCtrl::EnableProofCheck() to
        disable all checks in the text control.
      */
-    static wxTextProofOptions Disable()
+    static wxTextProofOptions Disable();
 
     /**
        Enable / disable spell checking for this control.
      */
-    wxTextProofOptions& SpellCheck(bool enable = true)
+    wxTextProofOptions& SpellCheck(bool enable = true);
 
     /**
        Enable / disable grammar checking for this control.
@@ -1036,7 +1186,13 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
        This option is currently only supported under macOS and is ignored under
        the other platforms.
      */
-    wxTextProofOptions& GrammarCheck(bool enable = true)
+    wxTextProofOptions& GrammarCheck(bool enable = true);
+
+    /**
+       Sets the language for the spell checker (and grammar checker on macOS)
+       from a canonical name (e.g., "fr" or "en").
+     */
+    wxTextProofOptions& Language(const wxString& lang);
 
     /// Return true if spell checking is enabled.
     bool IsSpellCheckEnabled() const;
@@ -1045,7 +1201,7 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
     bool IsGrammarCheckEnabled() const;
 
     /// Returns true if any checks are enabled.
-    bool AnyChecksEnabled() const
+    bool AnyChecksEnabled() const;
 };
 
 /**
@@ -1500,6 +1656,52 @@ public:
     virtual bool GetStyle(long position, wxTextAttr& style);
 
     /**
+        Returns @c true if text controls support reading and writing RTF (Rich
+        Text Format).
+
+        This function only returns @true in wxOSX (for multiline contrls) and
+        wxMSW (for rich controls), which are the only ports implementing
+        RTF support in wxTextCtrl.
+
+        @since 3.3.0
+
+        @see GetRTFValue(), SetRTFValue()
+    */
+    bool IsRTFSupported();
+
+    /**
+        Returns the content of a multiline text control as RTF (Rich Text
+        Formatted) text.
+
+        Don't call this function unless IsRTFSupported() returns @true, as it
+        asserts if called in this case (and returns an empty string).
+
+        @since 3.3.0
+
+        @see SetRTFValue()
+    */
+    wxString GetRTFValue() const;
+
+    /**
+        Sets the content of a multiline text control from an RTF (Rich Text
+        Formatted) buffer.
+
+        This offers more granular control of content formatting, as well as a
+        significant performance benefit with larger content. This also provides
+        the ability to read an RTF file and move it directly into the control.
+
+        Don't call this function unless IsRTFSupported() returns @true, as it
+        asserts if called in this case.
+
+        @since 3.3.0
+
+        @see @ref page_samples_text for a usage example.
+
+        @see GetRTFValue()
+    */
+    void SetRTFValue(const wxString& val);
+
+    /**
         Finds the position of the character at the specified point.
 
         If the return code is not @c wxTE_HT_UNKNOWN the position of the
@@ -1599,7 +1801,10 @@ public:
         @param filename
             The filename of the file to load.
         @param fileType
-            The type of file to load. This is currently ignored in wxTextCtrl.
+            One of the values of wxTextCtrlFileType enum, specifying the type
+            of file to load.
+            Default value and plain text are supported on all platforms, while
+            ::wxTEXT_TYPE_RTF is only supported in wxOSX currently.
 
         @return
             @true if successful, @false otherwise.
@@ -1678,7 +1883,10 @@ public:
         @param filename
             The name of the file in which to save the text.
         @param fileType
-            The type of file to save. This is currently ignored in wxTextCtrl.
+            One of the values of wxTextCtrlFileType enum, specifying the type
+            of file to save as.
+            Default value and plain text are supported on all platforms, while
+            ::wxTEXT_TYPE_RTF is only supported in wxOSX currently.
 
         @return
             @true if the operation was successful, @false otherwise.
@@ -1768,7 +1976,7 @@ public:
     ///@{
 
     /**
-        Enable the automatic replacement of new lines characters in a
+        Enables the automatic replacement of new lines characters in a
         single-line text field with spaces under macOS.
 
         This feature is enabled by default and will replace any new line (`\n`)
@@ -1781,13 +1989,79 @@ public:
         the restriction preventing multiple lines from being entered unless
         wxTE_MULTILINE is specified.
 
-        @note This function is only available for macOS/Cocoa. It also has no
-        effect if the wxTE_MULTILINE flag is set on a text control.
+        @note Has no effect if the wxTE_MULTILINE flag is set on a text control.
 
         @onlyfor{wxosx}
         @since 3.1.6
     */
     void OSXEnableNewLineReplacement(bool enable);
+
+    /**
+        Enables the automatic replacement of ASCII quotation marks and
+        apostrophes with their typographic symbols.
+
+        This feature is enabled by default.
+
+        @onlyfor{wxosx}
+        @since 3.1.1
+    */
+    void OSXEnableAutomaticQuoteSubstitution(bool enable);
+
+    /**
+        Enables the automatic conversion of two ASCII hyphens into an m-dash.
+
+        This feature is enabled by default.
+
+        @onlyfor{wxosx}
+        @since 3.1.1
+    */
+    void OSXEnableAutomaticDashSubstitution(bool enable);
+
+    /**
+        Disables all automatic character substitutions.
+
+        @onlyfor{wxosx}
+        @since 3.1.1
+
+        @see OSXEnableAutomaticQuoteSubstitution(), OSXEnableAutomaticDashSubstitution()
+    */
+    void OSXDisableAllSmartSubstitutions();
+
+    ///@}
+
+    /**
+        @name Gtk-specific functions
+    */
+    ///@{
+
+    /**
+        Gets the underlying text buffer for multi-line controls.
+
+        This function returns the underlying GTK object for multiline text
+        controls, i.e. those with wxTE_MULTILINE style, and @NULL for single
+        line text controls.
+
+        Having direct access to the `GtkTextBuffer` allows to use GTK API
+        directly if necessary, but beware that doing it may interfere with the
+        normal wxTextCtrl operation.
+
+        @onlyfor{wxgtk}
+
+        @since 3.3
+    */
+    GtkTextBuffer *GTKGetTextBuffer();
+
+    /**
+        Gets the underlying text control that can be used with GTK’s API.
+
+        This function can only be called for single-line text controls, i.e.
+        those without wxTE_MULTILINE style.
+
+        @onlyfor{wxgtk}
+
+        @since 3.3
+    */
+    GtkEditable *GTKGetEditable();
 
     ///@}
 
@@ -1894,4 +2168,3 @@ public:
     */
     ~wxStreamToTextRedirector();
 };
-

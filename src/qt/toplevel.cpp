@@ -13,10 +13,6 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QWidget>
 
-wxTopLevelWindowQt::wxTopLevelWindowQt()
-{
-}
-
 wxTopLevelWindowQt::wxTopLevelWindowQt(wxWindow *parent,
            wxWindowID winId,
            const wxString &title,
@@ -29,35 +25,23 @@ wxTopLevelWindowQt::wxTopLevelWindowQt(wxWindow *parent,
 }
 
 bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
-    const wxString &title, const wxPoint &pos, const wxSize &sizeOrig,
+    const wxString &title, const wxPoint &pos, const wxSize &size,
     long style, const wxString &name )
 {
-    wxSize size(sizeOrig);
-    if ( !size.IsFullySpecified() )
-        size.SetDefaults( GetDefaultSize() );
-
     wxTopLevelWindows.Append( this );
 
-    if (!CreateBase( parent, winId, pos, size, style, wxDefaultValidator, name ))
+    if (!wxWindow::Create( parent, winId, pos, size, style, name ))
     {
         wxFAIL_MSG( wxT("wxTopLevelWindowNative creation failed") );
         return false;
     }
 
-    SetTitle( title );
-    SetWindowStyleFlag( style );
-
-    if (pos != wxDefaultPosition)
-        m_qtWindow->move( pos.x, pos.y );
-
-    m_qtWindow->resize( wxQtConvertSize( size ) );
-
     // Prevent automatic deletion of Qt main window on close
     // (this should be the default, but left just fo enforce it)
     GetHandle()->setAttribute(Qt::WA_DeleteOnClose, false);
 
-    // not calling to wxWindow::Create, so do the rest of initialization:
-    if (parent) parent->AddChild( this );
+    SetTitle( title );
+    SetWindowStyleFlag( style );
 
     return true;
 }
@@ -244,4 +228,29 @@ long wxTopLevelWindowQt::GetWindowStyleFlag() const
     }
 
     return winStyle;
+}
+
+void wxTopLevelWindowQt::DoSetSizeHints( int minW, int minH,
+                                         int maxW, int maxH,
+                                         int incW, int incH )
+{
+    // The value -1 is special which means no constraints will be used.
+    // In other words, use the Qt defaults if -1 was specified.
+
+    if ( maxW == wxDefaultCoord )
+        maxW = QWIDGETSIZE_MAX;
+    if ( maxH == wxDefaultCoord )
+        maxH = QWIDGETSIZE_MAX;
+
+    minW = wxMax(0, minW);
+    minH = wxMax(0, minH);
+
+    incW = wxMax(0, incW);
+    incH = wxMax(0, incH);
+
+    GetHandle()->setMinimumSize(minW, minH);
+    GetHandle()->setMaximumSize(maxW, maxH);
+    GetHandle()->setSizeIncrement(incW, incH);
+
+    wxTopLevelWindowBase::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
 }

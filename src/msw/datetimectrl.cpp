@@ -50,6 +50,40 @@
 // wxDateTimePickerCtrl implementation
 // ============================================================================
 
+namespace wxMSWImpl
+{
+
+LRESULT CALLBACK
+DateTimeUDProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam,
+               UINT_PTR uIdSubclass, DWORD_PTR WXUNUSED(dwRefData))
+{
+    switch ( nMsg )
+    {
+        case WM_PAINT:
+            // This is a bit ridiculous, but we have to explicitly paint the
+            // control here, even if all we do is to let it draw itself,
+            // because without this it may not draw the lower arrow at all when
+            // using WS_EX_COMPOSITED (it probably optimizes redraw by assuming
+            // that previously drawn part doesn't change, but this is not the
+            // case when compositing it used).
+            {
+                PAINTSTRUCT ps;
+                ::BeginPaint(hwnd, &ps);
+                ::DefSubclassProc(hwnd, WM_PAINT, (WPARAM)ps.hdc, 0);
+                ::EndPaint(hwnd, &ps);
+            }
+            return 0;
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, DateTimeUDProc, uIdSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, nMsg, wParam, lParam);
+}
+
+} // namespace wxMSWImpl
+
 bool
 wxDateTimePickerCtrl::MSWCreateDateTimePicker(wxWindow *parent,
                                               wxWindowID id,
@@ -75,6 +109,15 @@ wxDateTimePickerCtrl::MSWCreateDateTimePicker(wxWindow *parent,
         SetValue(dt);
     else
         SetValue(wxDateTime::Now());
+
+    // If have an up-down control, we must explicitly paint it ourselves
+    // because otherwise it may be not redrawn at all with WS_EX_COMPOSITED.
+    WinStruct<DATETIMEPICKERINFO> info;
+    ::SendMessage(GetHwnd(), DTM_GETDATETIMEPICKERINFO, 0, (LPARAM)&info);
+    if ( info.hwndUD )
+    {
+        ::SetWindowSubclass(info.hwndUD, wxMSWImpl::DateTimeUDProc, 0, 0);
+    }
 
     return true;
 }

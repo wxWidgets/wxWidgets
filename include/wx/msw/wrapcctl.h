@@ -2,7 +2,6 @@
 // Name:        wx/msw/wrapcctl.h
 // Purpose:     Wrapper for the standard <commctrl.h> header
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.08.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

@@ -3,7 +3,6 @@
 // Purpose:     wxTipWindow is a window like the one typically used for
 //              showing the tooltips
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.09.00
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

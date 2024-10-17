@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/stattext.mm
 // Purpose:     wxStaticText
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

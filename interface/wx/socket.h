@@ -131,13 +131,17 @@ public:
     bool AnyAddress();
 
     /**
-        Set the address to hostname, which can be a host name or an IP-style address
-        in dot notation(<tt>a.b.c.d</tt>).
+        Set the address to hostname, which can be a host name, an IP-style address
+        in dot notation(<tt>a.b.c.d</tt>) or a 32-bit representation of the
+        address as the number.
 
         @return @true on success, @false if something goes wrong (invalid
                 hostname or invalid IP address).
     */
+    //@{
     bool Hostname(const wxString& hostname);
+    bool Hostname(unsigned long addr);
+    //@}
 
     /**
         Returns the hostname which matches the IP address.

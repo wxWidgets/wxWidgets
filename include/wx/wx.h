@@ -2,7 +2,6 @@
 // Name:        wx/wx.h
 // Purpose:     wxWidgets central header including the most often used ones
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

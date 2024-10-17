@@ -2,7 +2,6 @@
 // Name:        wx/splitter.h
 // Purpose:     Base header for wxSplitterWindow
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

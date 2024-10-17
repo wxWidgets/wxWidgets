@@ -2,7 +2,6 @@
 // Name:        src/aui/tabartgtk.cpp
 // Purpose:     implementation of the wxAuiGTKTabArt
 // Author:      Jens Lody and Teodor Petrov
-// Modified by:
 // Created:     2012-03-23
 // Copyright:   (c) 2012 Jens Lody <jens@codeblocks.org>
 //                  and Teodor Petrov
@@ -489,7 +488,7 @@ int wxAuiGtkTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
     return 2 * GetBorderWidth(wnd);
 }
 
-wxSize wxAuiGtkTabArt::GetTabSize(wxDC& dc,
+wxSize wxAuiGtkTabArt::GetTabSize(wxReadOnlyDC& dc,
                               wxWindow* wnd,
                               const wxString& caption,
                               const wxBitmapBundle& bitmap,

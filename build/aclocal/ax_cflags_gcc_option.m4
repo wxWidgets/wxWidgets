@@ -81,19 +81,18 @@ AS_VAR_PUSHDEF([FLAGS],[CFLAGS])dnl
 AS_VAR_PUSHDEF([VAR],[ac_cv_cflags_gcc_option_$2])dnl
 AC_CACHE_CHECK([m4_ifval($1,$1,FLAGS) for gcc m4_ifval($2,$2,-option)],
 VAR,[VAR="no, unknown"
- AC_LANG_SAVE
- AC_LANG_C
+ AC_LANG_PUSH(C)
  ac_save_[]FLAGS="$[]FLAGS"
 for ac_arg dnl
 in "-pedantic -Werror % m4_ifval($2,$2,-option)"  dnl   GCC
    "-pedantic % m4_ifval($2,$2,-option) %% no, obsolete"  dnl new GCC
    #
 do FLAGS="$ac_save_[]FLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
-   AC_TRY_COMPILE([],[return 0;],
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[return 0;])],
    [VAR=`echo $ac_arg | sed -e 's,.*% *,,'` ; break])
 done
  FLAGS="$ac_save_[]FLAGS"
- AC_LANG_RESTORE
+ AC_LANG_POP()
 ])
 case ".$VAR" in
      .ok|.ok,*) m4_ifvaln($3,$3) ;;
@@ -117,19 +116,18 @@ AS_VAR_PUSHDEF([FLAGS],[CXXFLAGS])dnl
 AS_VAR_PUSHDEF([VAR],[ac_cv_cxxflags_gcc_option_$2])dnl
 AC_CACHE_CHECK([m4_ifval($1,$1,FLAGS) for gcc m4_ifval($2,$2,-option)],
 VAR,[VAR="no, unknown"
- AC_LANG_SAVE
- AC_LANG_CPLUSPLUS
+ AC_LANG_PUSH(C++)
  ac_save_[]FLAGS="$[]FLAGS"
 for ac_arg dnl
 in "-pedantic -Werror % m4_ifval($2,$2,-option)"  dnl   GCC
    "-pedantic % m4_ifval($2,$2,-option) %% no, obsolete"  dnl new GCC
    #
 do FLAGS="$ac_save_[]FLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
-   AC_TRY_COMPILE([],[return 0;],
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[return 0;])],
    [VAR=`echo $ac_arg | sed -e 's,.*% *,,'` ; break])
 done
  FLAGS="$ac_save_[]FLAGS"
- AC_LANG_RESTORE
+ AC_LANG_POP()
 ])
 case ".$VAR" in
      .ok|.ok,*) m4_ifvaln($3,$3) ;;
@@ -152,19 +150,18 @@ AS_VAR_PUSHDEF([FLAGS],[CFLAGS])dnl
 AS_VAR_PUSHDEF([VAR],[ac_cv_cflags_gcc_option_$1])dnl
 AC_CACHE_CHECK([m4_ifval($2,$2,FLAGS) for gcc m4_ifval($1,$1,-option)],
 VAR,[VAR="no, unknown"
- AC_LANG_SAVE
- AC_LANG_C
+ AC_LANG_PUSH(C)
  ac_save_[]FLAGS="$[]FLAGS"
 for ac_arg dnl
 in "-pedantic -Werror % m4_ifval($1,$1,-option)"  dnl   GCC
    "-pedantic % m4_ifval($1,$1,-option) %% no, obsolete"  dnl new GCC
    #
 do FLAGS="$ac_save_[]FLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
-   AC_TRY_COMPILE([],[return 0;],
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[return 0;])],
    [VAR=`echo $ac_arg | sed -e 's,.*% *,,'` ; break])
 done
  FLAGS="$ac_save_[]FLAGS"
- AC_LANG_RESTORE
+ AC_LANG_POP()
 ])
 case ".$VAR" in
      .ok|.ok,*) m4_ifvaln($3,$3) ;;
@@ -188,19 +185,18 @@ AS_VAR_PUSHDEF([FLAGS],[CXXFLAGS])dnl
 AS_VAR_PUSHDEF([VAR],[ac_cv_cxxflags_gcc_option_$1])dnl
 AC_CACHE_CHECK([m4_ifval($2,$2,FLAGS) for gcc m4_ifval($1,$1,-option)],
 VAR,[VAR="no, unknown"
- AC_LANG_SAVE
- AC_LANG_CPLUSPLUS
+ AC_LANG_PUSH(C++)
  ac_save_[]FLAGS="$[]FLAGS"
 for ac_arg dnl
 in "-pedantic -Werror % m4_ifval($1,$1,-option)"  dnl   GCC
    "-pedantic % m4_ifval($1,$1,-option) %% no, obsolete"  dnl new GCC
    #
 do FLAGS="$ac_save_[]FLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
-   AC_TRY_COMPILE([],[return 0;],
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[return 0;])],
    [VAR=`echo $ac_arg | sed -e 's,.*% *,,'` ; break])
 done
  FLAGS="$ac_save_[]FLAGS"
- AC_LANG_RESTORE
+ AC_LANG_POP()
 ])
 case ".$VAR" in
      .ok|.ok,*) m4_ifvaln($3,$3) ;;

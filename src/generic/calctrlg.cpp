@@ -2,7 +2,6 @@
 // Name:        src/generic/calctrlg.cpp
 // Purpose:     implementation of the wxGenericCalendarCtrl
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29.12.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -744,7 +743,7 @@ void wxGenericCalendarCtrl::DoGetSize(int *width, int *height) const
 
 void wxGenericCalendarCtrl::RecalcGeometry()
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
 
     dc.SetFont(GetFont());
 

@@ -2,7 +2,6 @@
 // Name:        internat.cpp
 // Purpose:     Demonstrates internationalisation (i18n) support
 // Author:      Vadim Zeitlin/Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -388,6 +387,18 @@ MyFrame::MyFrame()
                       ),
                   wxSizerFlags().Center().Border());
 
+    topSizer->Add(new wxStaticText
+                      (
+                        panel,
+                        wxID_ANY,
+                        wxString::Format
+                        (
+                          _("Preferred UI languages: [%s]"),
+                          wxJoin(wxUILocale::GetPreferredUILanguages(), ',')
+                        )
+                      ),
+                  wxSizerFlags().Center().Border());
+
     // create some controls affected by the locale
 
     // this demonstrates RTL layout mirroring for Arabic locales and using
@@ -558,7 +569,6 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
     {
         wxLayoutDirection layout = uiLocale.GetLayoutDirection();
         wxString strLayout = (layout == wxLayout_RightToLeft) ? "RTL" : "LTR";
-        wxString strLocale = uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE);
         wxLogMessage(_("Locale \"%s\" is available.\nIdentifier: %s; Layout: %s\nEnglish name: %s\nLocalized name: %s"),
                      s_locale, uiLocale.GetName(), strLayout,
                      uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_ENGLISH),

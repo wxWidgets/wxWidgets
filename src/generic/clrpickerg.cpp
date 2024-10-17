@@ -2,7 +2,6 @@
 // Name:        src/generic/clrpickerg.cpp
 // Purpose:     wxGenericColourButton class implementation
 // Author:      Francesco Montorsi (readapted code written by Vadim Zeitlin)
-// Modified by:
 // Created:     15/04/2006
 // Copyright:   (c) Vadim Zeitlin, Francesco Montorsi
 // Licence:     wxWindows licence
@@ -58,7 +57,7 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
     // and handle user clicks on it
     Bind(wxEVT_BUTTON, &wxGenericColourButton::OnButtonClick, this, GetId());
 
-    m_bitmap = wxBitmap(FromDIP(defaultBitmapSize));
+    m_bitmap.CreateWithDIPSize( defaultBitmapSize, GetDPIScaleFactor() );
     m_colour = col;
     UpdateColour();
     InitColourData();
@@ -122,7 +121,7 @@ void wxGenericColourButton::OnColourChanged(wxColourDialogEvent& ev)
 
 void wxGenericColourButton::OnDPIChanged(wxDPIChangedEvent& event)
 {
-    m_bitmap = wxBitmap(FromDIP(defaultBitmapSize));
+    m_bitmap.CreateWithDIPSize( defaultBitmapSize, GetDPIScaleFactor() );
     UpdateColour();
 
     event.Skip();

@@ -1,6 +1,6 @@
-# generated automatically by aclocal 1.15.1 -*- Autoconf -*-
+# generated automatically by aclocal 1.16.5 -*- Autoconf -*-
 
-# Copyright (C) 1996-2017 Free Software Foundation, Inc.
+# Copyright (C) 1996-2021 Free Software Foundation, Inc.
 
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -17,15 +17,9 @@ m4_include([build/aclocal/atomic_builtins.m4])
 m4_include([build/aclocal/ax_cflags_gcc_option.m4])
 m4_include([build/aclocal/ax_cxx_compile_stdcxx.m4])
 m4_include([build/aclocal/ax_func_which_gethostbyname_r.m4])
-m4_include([build/aclocal/ax_gcc_option.m4])
-m4_include([build/aclocal/ax_gxx_version.m4])
 m4_include([build/aclocal/ax_subdirs_configure.m4])
 m4_include([build/aclocal/bakefile-lang.m4])
 m4_include([build/aclocal/bakefile.m4])
-m4_include([build/aclocal/gtk-2.0.m4])
-m4_include([build/aclocal/gtk-3.0.m4])
-m4_include([build/aclocal/gtk-4.0.m4])
-m4_include([build/aclocal/gtk.m4])
 m4_include([build/aclocal/pkg.m4])
 m4_include([build/aclocal/sdl.m4])
 m4_include([build/aclocal/visibility.m4])

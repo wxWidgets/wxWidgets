@@ -2,7 +2,6 @@
 // Name:        popup.cpp
 // Purpose:     Popup wxWidgets sample
 // Author:      Robert Roebling
-// Modified by:
 // Created:     2005-02-04
 // Copyright:   (c) 2005 Robert Roebling
 // Licence:     wxWindows licence
@@ -109,8 +108,10 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
                                               wxBORDER_NONE |
                                               wxPU_CONTAINS_CONTROLS )
 {
+    wxColour colour = wxSystemSettings::SelectLightDark(*wxLIGHT_GREY, wxColour(90, 90, 90));
+
     m_panel = new wxScrolledWindow( this, wxID_ANY );
-    m_panel->SetBackgroundColour( *wxLIGHT_GREY );
+    m_panel->SetBackgroundColour(colour);
 
     // Keep this code to verify if mouse events work, they're required if
     // you're making a control like a combobox where the items are highlighted
@@ -214,7 +215,7 @@ void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
     wxRect rect(m_mouseText->GetRect());
     rect.SetX(-100000);
     rect.SetWidth(1000000);
-    wxColour colour(*wxLIGHT_GREY);
+    wxColour colour = wxSystemSettings::SelectLightDark(*wxLIGHT_GREY, wxColour(90, 90, 90));
 
     if (rect.Contains(event.GetPosition()))
     {

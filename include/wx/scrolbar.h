@@ -2,7 +2,6 @@
 // Name:        wx/scrolbar.h
 // Purpose:     wxScrollBar base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -26,7 +25,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxScrollBarNameStr[];
 class WXDLLIMPEXP_CORE wxScrollBarBase : public wxControl
 {
 public:
-    wxScrollBarBase() { }
+    wxScrollBarBase() = default;
 
     /*
         Derived classes should provide the following method and ctor with the

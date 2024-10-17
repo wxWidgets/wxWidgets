@@ -2,7 +2,6 @@
 // Name:        wx/univ/listbox.h
 // Purpose:     the universal listbox
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     30.08.00
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

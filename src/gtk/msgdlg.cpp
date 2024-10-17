@@ -2,7 +2,6 @@
 // Name:        src/gtk/msgdlg.cpp
 // Purpose:     wxMessageDialog for GTK+2
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2003/02/28
 // Copyright:   (c) Vaclav Slavik, 2003
 // Licence:     wxWindows licence

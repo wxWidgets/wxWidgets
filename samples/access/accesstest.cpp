@@ -2,7 +2,6 @@
 // Name:        accesstest.cpp
 // Purpose:     wxWidgets accessibility sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     2002-02-12
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/common/variant.cpp
 // Purpose:     wxVariant class, container for any type
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/09/98
 // Copyright:   (c)
 // Licence:     wxWindows licence
@@ -2066,7 +2065,6 @@ bool wxVariantDataList::Write(wxString& str) const
         wxVariant* var = node->GetData();
         if (node != m_value.GetFirst())
           str += wxT(" ");
-        wxString str1;
         str += var->MakeString();
         node = node->GetNext();
     }

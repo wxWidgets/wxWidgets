@@ -2,7 +2,6 @@
 // Name:        src/msw/glcanvas.cpp
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under MS Windows
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -171,7 +170,6 @@ inline T wxWGLProcCast(PROC proc)
 // compilers (e.g. MinGW) this needs to be done at makefiles level.
 #ifdef _MSC_VER
 #  pragma comment( lib, "opengl32" )
-#  pragma comment( lib, "glu32" )
 #endif
 
 //-----------------------------------------------------------------------------

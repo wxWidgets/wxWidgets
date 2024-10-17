@@ -12,7 +12,8 @@
 class WXDLLIMPEXP_CORE wxTopLevelWindowQt : public wxTopLevelWindowBase
 {
 public:
-    wxTopLevelWindowQt();
+    wxTopLevelWindowQt() = default;
+
     wxTopLevelWindowQt(wxWindow *parent,
                wxWindowID winid,
                const wxString& title,
@@ -45,6 +46,13 @@ public:
     // Styles
     virtual void SetWindowStyleFlag( long style ) override;
     virtual long GetWindowStyleFlag() const override;
+
+protected:
+    void QtSetSizeIncrement(int width, int height);
+
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW, int maxH,
+                                 int incW, int incH) override;
 };
 
 #endif // _WX_QT_TOPLEVEL_H_

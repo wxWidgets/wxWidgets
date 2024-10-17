@@ -74,7 +74,9 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     // the icon is not shown unless it's assigned a valid bitmap
     m_icon = new wxStaticBitmap(this, wxID_ANY, wxNullBitmap);
 
-    m_text = new wxStaticText(this, wxID_ANY, wxString());
+    m_text = new wxStaticText(this, wxID_ANY, wxString(),
+                              wxDefaultPosition, wxDefaultSize,
+                              wxST_ELLIPSIZE_MIDDLE);
     m_text->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
 
     m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
@@ -87,8 +89,8 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     //     and being preceded by a spacer
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add(m_icon, wxSizerFlags().Centre().Border());
-    sizer->Add(m_text, wxSizerFlags().Centre());
-    sizer->AddStretchSpacer();
+    sizer->Add(m_text, wxSizerFlags().Proportion(1).Centre());
+    sizer->AddSpacer(0); // This spacer only exists for compatibility.
     sizer->Add(m_button, wxSizerFlags().Centre().Border());
     SetSizer(sizer);
 
@@ -230,10 +232,11 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
         m_icon->Show();
     }
 
-    // notice the use of EscapeMnemonics() to ensure that "&" come through
-    // correctly
-    m_text->SetLabel(wxControl::EscapeMnemonics(msg));
-    m_text->Wrap( GetClientSize().GetWidth() );
+    // use SetLabelText() to ensure that "&" come through correctly
+    m_text->SetLabelText(msg);
+
+    // in case it doesn't fit in the window, show the full message as a tooltip
+    m_text->SetToolTip(msg);
 
     // then show this entire window if not done yet
     if ( !IsShown() )

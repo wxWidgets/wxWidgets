@@ -2,7 +2,6 @@
 // Name:        wx/unix/stackwalk.h
 // Purpose:     declaration of wxStackWalker for Unix
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-19
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

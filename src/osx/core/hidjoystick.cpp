@@ -2,7 +2,6 @@
 // Name:        src/osx/core/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Ryan Norton
-// Modified by:
 // Created:     2/13/2005
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

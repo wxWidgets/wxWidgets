@@ -2,7 +2,6 @@
 // Name:        wx/univ/checkbox.h
 // Purpose:     wxCheckBox declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.09.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

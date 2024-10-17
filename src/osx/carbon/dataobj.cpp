@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/dataobj.cpp
 // Purpose:     implementation of wxDataObject class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     10/21/99
 // Copyright:   (c) 1999 Stefan Csomor
 // Licence:     wxWindows licence
@@ -578,17 +577,6 @@ void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray, Direction dir) 
         else
             array[i].AddSupportedTypesForSetting(cfarray);
     }
-}
-
-// ----------------------------------------------------------------------------
-// wxTextDataObject
-// ----------------------------------------------------------------------------
-
-void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
-                                     wxDataObjectBase::Direction WXUNUSED(dir)) const
-{
-    *formats++ = wxDataFormat(wxDF_UNICODETEXT);
-    *formats = wxDataFormat(wxDF_TEXT);
 }
 
 // ----------------------------------------------------------------------------

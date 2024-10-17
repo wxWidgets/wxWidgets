@@ -2,7 +2,6 @@
 // Name:        classlist.cpp
 // Purpose:     ClassListDialog implementation
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     03/06/2007 14:49:55
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence

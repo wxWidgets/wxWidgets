@@ -3,7 +3,6 @@
 // Purpose:     This dummy header includes the proper header file for the
 //              system we're compiling under.
 // Author:      John Norris, minor changes by Axel Schlueter
-// Modified by:
 // Created:     08.02.01
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows Licence
@@ -30,7 +29,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TOGGLEBUTTON, wxCommandEvent )
 class WXDLLIMPEXP_CORE wxToggleButtonBase : public wxAnyButton
 {
 public:
-    wxToggleButtonBase() { }
+    wxToggleButtonBase() = default;
 
     // Get/set the value
     virtual void SetValue(bool state) = 0;
@@ -55,6 +54,7 @@ public:
 
         wxUpdateUIEvent event( GetId() );
         event.SetEventObject(this);
+        DoPrepareUpdateWindowUI(event);
 
         if (GetEventHandler()->ProcessEvent(event) )
         {

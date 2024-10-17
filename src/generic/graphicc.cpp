@@ -2,7 +2,6 @@
 // Name:        src/generic/graphicc.cpp
 // Purpose:     cairo device context class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2006-10-03
 // Copyright:   (c) 2006 Stefan Csomor
 // Licence:     wxWindows licence
@@ -34,6 +33,7 @@ bool wxCairoInit();
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
+    #include "wx/log.h"
     #include "wx/window.h"
 #endif
 
@@ -451,14 +451,9 @@ public:
         if (width <= 0)
             return true;
 
-        // no offset if overall scale is not odd integer
-        double x = GetContentScaleFactor(), y = x;
-        cairo_user_to_device_distance(m_context, &x, &y);
-        if (!wxIsSameDouble(fmod(wxMin(fabs(x), fabs(y)), 2.0), 1.0))
-            return false;
-
         // offset if pen width is odd integer
-        return wxIsSameDouble(fmod(width, 2.0), 1.0);
+        const int w = int(width);
+        return (w & 1) && wxIsSameDouble(width, w);
     }
 
     virtual void Clip( const wxRegion &region ) override;
@@ -586,7 +581,9 @@ protected:
 #ifdef __WXMAC__
     CGContextRef m_cgContext;
 #endif // __WXMAC__
-    
+
+    class OffsetHelper;
+
 private:
     cairo_t* m_context;
     cairo_matrix_t m_internalTransform;
@@ -1045,7 +1042,11 @@ void wxCairoPenData::Apply( wxGraphicsContext* context )
     double width = m_width;
     if (width <= 0)
     {
-        double x = context->GetContentScaleFactor(), y = x;
+        double x = 1, y = x;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,14,0)
+        if (cairo_version() >= CAIRO_VERSION_ENCODE(1,14,0))
+            cairo_surface_get_device_scale(cairo_get_target(ctext), &x, &y);
+#endif
         cairo_user_to_device_distance(ctext, &x, &y);
         width = 1 / wxMin(fabs(x), fabs(y));
     }
@@ -1622,14 +1623,14 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // different format and iterator than if it doesn't...
     const bool isSrcBpp32 = bmp.GetDepth() == 32;
 
-#if defined(__WXMSW__) || defined(__WXOSX__)
-    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
+#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
+    // Under MSW, OSX and Qt we can have 32 bpp xRGB bitmaps (without alpha).
     const bool hasAlpha = bmp.HasAlpha();
 #endif
 
     cairo_format_t bufferFormat =
-    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
-#if defined(__WXMSW__) || defined(__WXOSX__)
+    // Under MSW, OSX and Qt we can have 32 bpp xRGB bitmaps (without alpha).
+#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
         (isSrcBpp32 && hasAlpha) || bmp.GetMask() != nullptr
 #else
         isSrcBpp32 || bmp.GetMask() != nullptr
@@ -1659,11 +1660,11 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // with alpha in the upper 8 bits, then red, then green, then
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
-#if defined (__WXMSW__) || defined(__WXOSX__)
+#ifdef wxHAS_PREMULTIPLIED_ALPHA
                     unsigned char alpha = hasAlpha ? p.Alpha() : wxALPHA_OPAQUE;
-                    // MSW and OSX bitmap pixel bits are already premultiplied.
+                    // Bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
-#else // !__WXMSW__ , !__WXOSX__
+#else // !wxHAS_PREMULTIPLIED_ALPHA
                     // We always have alpha, but we need to premultiply it.
                     unsigned char alpha = p.Alpha();
                     if (alpha == wxALPHA_TRANSPARENT)
@@ -1673,7 +1674,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                             | Premultiply(alpha, p.Red()) << 16
                             | Premultiply(alpha, p.Green()) << 8
                             | Premultiply(alpha, p.Blue()));
-#endif // __WXMSW__, __WXOSX__ / !__WXMSW__, !__WXOSX__
+#endif // wxHAS_PREMULTIPLIED_ALPHA / !wxHAS_PREMULTIPLIED_ALPHA
                     ++data;
                     ++p;
                 }
@@ -1955,29 +1956,45 @@ wxCairoBitmapData::~wxCairoBitmapData()
 // wxCairoContext implementation
 //-----------------------------------------------------------------------------
 
-class wxCairoOffsetHelper
+class wxCairoContext::OffsetHelper
 {
 public :
-    wxCairoOffsetHelper(cairo_t* ctx, double scaleFactor, bool offset)
+    OffsetHelper(bool shouldOffset, cairo_t* cr, const wxGraphicsPen& pen)
     {
-        m_ctx = ctx;
-        m_offset = 0;
-        if (offset)
+        m_shouldOffset = shouldOffset;
+        if (!shouldOffset)
+            return;
+
+        m_cr = cr;
+        m_offsetX = m_offsetY = 0.5;
+
+        const double width = static_cast<wxCairoPenData*>(pen.GetRefData())->GetWidth();
+        if (width <= 0)
         {
-             double x = scaleFactor, y = x;
-             cairo_user_to_device_distance(ctx, &x, &y);
-             m_offset = 0.5 / wxMin(fabs(x), fabs(y));
-             cairo_translate(m_ctx, m_offset, m_offset);
+            // For 1-pixel pen width, offset by half a device pixel
+
+            double sx = 1, sy = sx;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,14,0)
+            if (cairo_version() >= CAIRO_VERSION_ENCODE(1,14,0))
+                cairo_surface_get_device_scale(cairo_get_target(cr), &sx, &sy);
+#endif
+            cairo_user_to_device_distance(cr, &sx, &sy);
+
+            m_offsetX /= sx;
+            m_offsetY /= sy;
         }
+
+        cairo_translate(cr, m_offsetX, m_offsetY);
     }
-    ~wxCairoOffsetHelper( )
+    ~OffsetHelper()
     {
-        if (m_offset > 0)
-            cairo_translate(m_ctx, -m_offset, -m_offset);
+        if (m_shouldOffset)
+            cairo_translate(m_cr, -m_offsetX, -m_offsetY);
     }
 private:
-    cairo_t* m_ctx;
-    double m_offset;
+    cairo_t* m_cr;
+    double m_offsetX, m_offsetY;
+    bool m_shouldOffset;
 } ;
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -2414,7 +2431,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 #ifdef __WXMAC__
     m_cgContext = nullptr;
 #endif // __WXMAC__
-    
+
     Init( cairo_reference(context), true );
     m_width = 0;
     m_height = 0;
@@ -2742,7 +2759,7 @@ void wxCairoContext::StrokePath( const wxGraphicsPath& path )
 {
     if ( !m_pen.IsNull() )
     {
-        wxCairoOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(ShouldOffset(), m_context, m_pen);
         cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
         cairo_append_path(m_context,cp);
         ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
@@ -2755,7 +2772,7 @@ void wxCairoContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fi
 {
     if ( !m_brush.IsNull() )
     {
-        wxCairoOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(ShouldOffset(), m_context, m_pen);
         cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
         cairo_append_path(m_context,cp);
         ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
@@ -2784,7 +2801,7 @@ void wxCairoContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble
     }
     if ( !m_pen.IsNull() )
     {
-        wxCairoOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(ShouldOffset(), m_context, m_pen);
         ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
         cairo_rectangle(m_context, x, y, w, h);
         cairo_stroke(m_context);
@@ -3070,14 +3087,58 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
 
         ApplyFont(layout, font);
         pango_layout_set_text(layout, data, data.length());
-        PangoLayoutIter* iter = pango_layout_get_iter(layout);
-        PangoRectangle rect;
-        do {
-            pango_layout_iter_get_cluster_extents(iter, nullptr, &rect);
-            w += rect.width;
+
+        // Check if we have any Unicode characters in the text.
+        if (const gint num_chars = pango_layout_get_character_count(layout))
+        {
+            // Get attributes for each character.
+            gint num_attrs = 0;
+            const PangoLogAttr* const
+                attrs = pango_layout_get_log_attrs_readonly(layout, &num_attrs);
+
+            PangoLayoutIter* iter = pango_layout_get_iter(layout);
+
+            PangoRectangle rect;
+            int byte_index = 0;
+
+            // We start at index 1 because the index 0 corresponds to the
+            // position before the first character.
+            for (int char_index = 1; pango_layout_iter_next_char(iter); ++char_index)
+            {
+                if (char_index >= num_attrs)
+                {
+                    // This should never happen, but don't crash if it does.
+                    wxLogDebug("Unexpected Pango chars/attrs mismatch: %d/%d",
+                               num_chars, num_attrs);
+                    break;
+                }
+
+                // We need to know the last byte_index for later, so always get it
+                byte_index = pango_layout_iter_get_index(iter);
+                if (!attrs[char_index].is_cursor_position)
+                    continue;
+
+                pango_layout_index_to_pos(layout, byte_index, &rect);
+                if (rect.width < 0)
+                    w = rect.x + rect.width;
+                else
+                    w = rect.x;
+
+                widths.Add(PANGO_PIXELS(w));
+            }
+
+            // From the num_chars check, we know at least one character exists,
+            // therefore add the position behind the last character as well
+            pango_layout_index_to_pos(layout, byte_index, &rect);
+            if (rect.width < 0)
+                w = rect.x;
+            else
+                w = rect.x + rect.width;
+
             widths.Add(PANGO_PIXELS(w));
-        } while (pango_layout_iter_next_cluster(iter));
-        pango_layout_iter_free(iter);
+
+            pango_layout_iter_free(iter);
+        }
     }
     size_t i = widths.GetCount();
     const size_t len = text.length();
@@ -3676,9 +3737,9 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 
 #endif  // wxUSE_CAIRO/!wxUSE_CAIRO
 
-// MSW and OS X and Qt on Windows have their own native default renderers, but the other ports
+// MSW and OS X and Qt have their own native default renderers, but the other ports
 // use Cairo by default.
-#if !(defined(__WXMSW__) || defined(__WXOSX__) || (defined(__WXQT__) && defined(__WIN32__)))
+#if !(defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__))
 wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 {
     return GetCairoRenderer();

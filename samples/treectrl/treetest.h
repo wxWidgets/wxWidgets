@@ -2,7 +2,6 @@
 // Name:        treectrl.h
 // Purpose:     wxTreeCtrl sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -114,7 +113,7 @@ public:
     void CreateImages(int size);
 
     void CreateButtonsImageList(int size = 11);
-    void CreateStateImageList(bool del = false);
+    void CreateStateImages();
 
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 
@@ -182,7 +181,7 @@ class MyFrame: public wxFrame
 {
 public:
     // ctor and dtor
-    MyFrame(const wxString& title, int x, int y, int w, int h);
+    MyFrame();
     virtual ~MyFrame();
 
     // menu callbacks

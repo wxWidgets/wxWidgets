@@ -2,7 +2,6 @@
 // Name:        wx/cmndata.h
 // Purpose:     Common GDI data classes
 // Author:      Julian Smart and others
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c)
 // Licence:     wxWindows licence

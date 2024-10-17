@@ -48,3 +48,9 @@ leak:_gtk_css_image_draw
 # a one off allocation not freed and not an unbounded leak).
 leak:cups_request_printer_list_cb
 leak:cups_dispatch_watch_dispatch
+
+# Avoid leak reports for glib one off allocations (see also glib own Valgrind
+# suppressions file glib.supp, found under /usr/share/glib-2.0/valgrind on
+# Linux systems).
+leak:g_malloc
+leak:g_quark_init

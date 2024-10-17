@@ -140,6 +140,11 @@ public:
 
     virtual WXWidget GetHandle() const override { return m_widget; }
 
+#ifdef __WINDOWS__
+    // If on Windows, cut through the GtkWidget abstraction to get HWND.
+    WXHWND GTKGetWin32Handle() const;
+#endif
+
     // many important things are done here, this function must be called
     // regularly
     virtual void OnInternalIdle() override;
@@ -171,14 +176,9 @@ public:
     virtual GtkWidget* GetConnectWidget();
     void ConnectWidget( GtkWidget *widget );
 
-    // Called from several event handlers, if it returns true or false, the
-    // same value should be immediately returned by the handler without doing
-    // anything else. If it returns -1, the handler should continue as usual
-    int GTKCallbackCommonPrologue(struct _GdkEventAny *event) const;
 
-    // Simplified form of GTKCallbackCommonPrologue() which can be used from
-    // GTK callbacks without return value to check if the event should be
-    // ignored: if this returns true, the event shouldn't be handled
+    // Returns true if GTK callbacks are blocked due to a drag event being in
+    // progress.
     bool GTKShouldIgnoreEvent() const;
 
 
@@ -466,6 +466,7 @@ protected:
 
 private:
     void Init();
+    virtual void GTKRemoveBorder();
 
     // return true if this window must have a non-null parent, false if it can
     // be created without parent (normally only top level windows but in wxGTK

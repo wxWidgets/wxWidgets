@@ -2,7 +2,6 @@
 // Name:        src/generic/filedlgg.cpp
 // Purpose:     wxGenericFileDialog
 // Author:      Robert Roebling
-// Modified by:
 // Created:     12/12/98
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence

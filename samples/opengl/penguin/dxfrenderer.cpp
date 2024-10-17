@@ -2,7 +2,6 @@
 // Name:        dxfrenderer.cpp
 // Purpose:     DXF reader and renderer
 // Author:      Sandro Sigala
-// Modified by:
 // Created:     2005-11-10
 // Copyright:   (c) Sandro Sigala
 // Licence:     wxWindows licence
@@ -18,15 +17,10 @@
 
 #include "wx/wfstream.h"
 #include "wx/txtstrm.h"
+#include "wx/glcanvas.h"
 
 #if !wxUSE_GLCANVAS
     #error "OpenGL required: set wxUSE_GLCANVAS to 1 and rebuild the library"
-#endif
-
-#ifdef __DARWIN__
-    #include <OpenGL/glu.h>
-#else
-    #include <GL/glu.h>
 #endif
 
 #include <sstream>

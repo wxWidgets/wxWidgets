@@ -59,7 +59,8 @@ public:
         Constructor specifying the image size, whether image masks should be created,
         and the initial size of the list.
 
-        Note that the size is specified in logical pixels.
+        Note that the size is specified in physical pixels and must correspond
+        to the size of bitmaps, in pixels, that will be added to this list.
 
         @param width
             Width of the images in the list.
@@ -83,10 +84,10 @@ public:
     /**
         Adds a new image or images using a bitmap and optional mask bitmap.
 
-        The logical size of the bitmap should be the same as the size specified
-        when constructing wxImageList. If the logical width of the bitmap is
-        greater than the image list width, bitmap is split into smaller images
-        of the required width.
+        The physical size of the bitmap should be the same as the size specified
+        when constructing wxImageList. If the width of the bitmap is greater
+        than the image list width, bitmap is split into smaller images of the
+        required width, allowing to add multiple images from a single bitmap.
 
         @param bitmap
             Bitmap representing the opaque areas of the image.
@@ -101,10 +102,10 @@ public:
     /**
         Adds a new image or images using a bitmap and mask colour.
 
-        The logical size of the bitmap should be the same as the size specified
-        when constructing wxImageList. If the logical width of the bitmap is
-        greater than the image list width, bitmap is split into smaller images
-        of the required width.
+        The physical size of the bitmap should be the same as the size specified
+        when constructing wxImageList. If the width of the bitmap is greater
+        than the image list width, bitmap is split into smaller images of the
+        required width, allowing to add multiple images from a single bitmap.
 
         @param bitmap
             Bitmap representing the opaque areas of the image.
@@ -118,7 +119,7 @@ public:
     /**
         Adds a new image using an icon.
 
-        The logical size of the icon should be the same as the size specified
+        The physical size of the icon should be the same as the size specified
         when constructing wxImageList.
 
         @param icon
@@ -201,9 +202,9 @@ public:
         @param index
             currently unused, should be 0
         @param width
-            receives the width of the images in the list
+            receives the width of the images in the list in pixels
         @param height
-            receives the height of the images in the list
+            receives the height of the images in the list in pixels
 
         @return @true if the function succeeded, @false if it failed
                 (for example, if the image list was not yet initialized).

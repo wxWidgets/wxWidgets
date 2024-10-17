@@ -110,7 +110,7 @@ public:
     // by the current system.
     static wxTaskBarButton* New(wxWindow* parent);
 
-    virtual ~wxTaskBarButton() { }
+    virtual ~wxTaskBarButton() = default;
 
     // Operations:
     virtual void SetProgressRange(int range) = 0;
@@ -132,7 +132,7 @@ public:
     virtual void Realize() = 0;
 
 protected:
-    wxTaskBarButton() { }
+    wxTaskBarButton() = default;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);

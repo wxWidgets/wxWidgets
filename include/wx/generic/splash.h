@@ -2,7 +2,6 @@
 // Name:        wx/generic/splash.h
 // Purpose:     Splash screen class
 // Author:      Julian Smart
-// Modified by:
 // Created:     28/6/2000
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

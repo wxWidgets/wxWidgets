@@ -2,7 +2,6 @@
 // Name:        src/unix/dialup.cpp
 // Purpose:     Network related wxWidgets classes and functions
 // Author:      Karsten Ballüder
-// Modified by:
 // Created:     03.10.99
 // Copyright:   (c) Karsten Ballüder
 // Licence:     wxWindows licence
@@ -775,7 +774,7 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
         else if (wxFileExists( wxT("/usr/sbin/ping") ))
             m_PingPath = wxT("/usr/sbin/ping");
 #endif
-        if (!m_PingPath)
+        if (m_PingPath.empty())
         {
             m_CanUsePing = 0;
         }

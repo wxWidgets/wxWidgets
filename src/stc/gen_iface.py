@@ -26,6 +26,8 @@ CPP_TEMPLATE  = os.path.abspath('./stc.cpp.in')
 H_DEST        = os.path.abspath('../../include/wx/stc/stc.h')
 IH_DEST       = os.path.abspath('../../interface/wx/stc/stc.h')
 CPP_DEST      = os.path.abspath('./stc.cpp')
+SCINTILLA_VER = os.path.abspath('./scintilla/version.txt')
+LEXILLA_VER   = os.path.abspath('./lexilla/version.txt')
 if len(sys.argv) > 1 and sys.argv[1] == '--wxpython':
     DOCSTR_DEST   = os.path.abspath('../../../wxPython/src/_stc_gendocs.i')
 else:
@@ -1283,6 +1285,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     data['METHOD_DEFS'] = defs
     data['METHOD_IDEFS'] = idefs
     data['METHOD_IMPS'] = imps
+    data['VERSION_INFO'] = processVersions()
     data['TABLE_OF_CONTENTS'] = tableitems
 
     # get template text
@@ -1600,6 +1603,26 @@ def parseFun(line, methods, docs, values, is_const, msgcodes, icat):
     methods.append( (retType, name, code, param1, param2, tuple(docs),
                      is_const or name in constNonGetterMethods,
                      name in overrideNeeded, icat) )
+
+#----------------------------------------------------------------------------
+
+def processVersions():
+    scintillaFile = open(SCINTILLA_VER, "r")
+    sVer = scintillaFile.read()
+    lexillaFile = open(LEXILLA_VER, "r")
+    lVer = lexillaFile.read()
+
+    return """
+/*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
+{{
+    return wxVersionInfo("Scintilla", {0}, {1}, {2}, "Scintilla {0}.{1}.{2}");
+}}
+
+/*static*/ wxVersionInfo wxStyledTextCtrl::GetLexerVersionInfo()
+{{
+    return wxVersionInfo("Lexilla", {3}, {4}, {5}, "Lexilla {3}.{4}.{5}");
+}}
+""".format(sVer[0], sVer[1], sVer[2], lVer[0], lVer[1], lVer[2])
 
 
 #----------------------------------------------------------------------------

@@ -56,6 +56,6 @@ void wxColour::Init()
 
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
-    m_red = r, m_green = g, m_blue = b, m_alpha = a;
+    m_red = r; m_green = g; m_blue = b; m_alpha = a;
     m_valid = true;
 }

@@ -70,9 +70,13 @@ inline QColor wxQtConvertColour(const wxColour &colour)
 
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 class QDate;
+class QTime;
 
 wxDateTime wxQtConvertDate(const QDate& date);
 QDate wxQtConvertDate(const wxDateTime& date);
+
+wxDateTime wxQtConvertTime(const QTime& Time);
+QTime wxQtConvertTime(const wxDateTime& time);
 
 #endif // wxUSE_DATETIME
 

@@ -15,8 +15,8 @@
 class WXDLLIMPEXP_CORE wxAppProgressIndicatorBase
 {
 public:
-    wxAppProgressIndicatorBase() {}
-    virtual ~wxAppProgressIndicatorBase() {}
+    wxAppProgressIndicatorBase() = default;
+    virtual ~wxAppProgressIndicatorBase() = default;
 
     virtual bool IsAvailable() const = 0;
 

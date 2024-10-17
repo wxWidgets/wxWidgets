@@ -2,7 +2,6 @@
 // Name:        calendar.cpp
 // Purpose:     wxCalendarCtrl sample
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     02.01.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

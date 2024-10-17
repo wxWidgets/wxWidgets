@@ -2,7 +2,6 @@
 // Name:        virtual.cpp
 // Purpose:     wxHtml sample: demonstrates virtual file systems feature
 // Author:      ?
-// Modified by:
 // Created:     ?
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

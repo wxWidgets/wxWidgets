@@ -150,8 +150,13 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
     const long pageSize = sysconf(_SC_PAGESIZE);
 
     wxFile fileSys("/sys/power/state");
+    if ( !fileSys.IsOpened() )
+    {
+        WARN("/sys/power/state can't be opened, skipping test");
+        return;
+    }
+
     CHECK( fileSys.Length() == pageSize );
-    CHECK( fileSys.IsOpened() );
     CHECK( fileSys.ReadAll(&s) );
     CHECK( !s.empty() );
     CHECK( s.length() < static_cast<unsigned long>(pageSize) );

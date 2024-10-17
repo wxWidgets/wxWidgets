@@ -393,7 +393,7 @@ automatically using wx-config
 2. The other way creates a project within the source code
 directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
-to the bottom of the configure.in script and run autoconf
+to the bottom of the configure.ac script and run autoconf
 and configure before you can type make.
 
 Further notes by Julian Smart          {#x11_notes}

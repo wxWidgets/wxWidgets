@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/mediactrl.mm
 // Purpose:     Built-in Media Backends for Cocoa
 // Author:      Ryan Norton <wxprojects@comcast.net>, Stefan Csomor
-// Modified by:
 // Created:     02/03/05
 // Copyright:   (c) 2004-2005 Ryan Norton, (c) 2005 David Elliot, (c) Stefan Csomor
 // Licence:     wxWindows licence

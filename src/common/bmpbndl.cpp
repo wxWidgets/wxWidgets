@@ -169,9 +169,13 @@ private:
     {
         bool operator()(const Entry& entry1, const Entry& entry2) const
         {
-            // We could compare the bitmaps areas too, but they're supposed to
-            // all use different sizes anyhow, so keep things simple.
-            return entry1.bitmap.GetHeight() < entry2.bitmap.GetHeight();
+            const int h1 = entry1.bitmap.GetHeight();
+            const int h2 = entry2.bitmap.GetHeight();
+
+            // Lexicographical comparison of the bitmap sizes.
+            return h1 < h2 ||
+                    (h1 == h2 &&
+                     entry1.bitmap.GetWidth() < entry2.bitmap.GetWidth());
         }
     };
 
@@ -248,7 +252,21 @@ double wxBitmapBundleImplSet::GetNextAvailableScale(size_t& i) const
         if ( entry.generated )
             continue;
 
-        return static_cast<double>(entry.bitmap.GetSize().y) / GetDefaultSize().y;
+        const wxBitmap& bitmap = entry.bitmap;
+
+        // Determining the scale is not as simple as just dividing the bitmap
+        // height by the bundle height, because this could give us a scale
+        // different from the one actually used by the bitmap: e.g. the size of
+        // a bundle constructed from a single 16x16 bitmap using 1.5 scale
+        // would be 11x11 and 16/11 != 1.5 that we want.
+        //
+        // So instead compute the ratio of the bitmap size in DIPs to the
+        // bundle size, which uses the same rounding, and then multiply it by
+        // the scale factor of the bitmap to get the real scale.
+        const double ratio =
+            static_cast<double>(bitmap.GetDIPSize().y) / GetDefaultSize().y;
+
+        return ratio * bitmap.GetScaleFactor();
     }
 
     return 0.0;
@@ -264,7 +282,7 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
     // We use linear search instead if binary one because it's simpler and the
     // vector size is small enough (< 10) for it not to matter in practice.
     const size_t n = m_entries.size();
-    size_t lastSmaller = 0;
+    size_t nextBigger = 0;
     for ( size_t i = 0; i < n; ++i )
     {
         const Entry& entry = m_entries[i];
@@ -272,25 +290,37 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
         const wxSize sizeThis = entry.bitmap.GetSize();
         if ( sizeThis.y == size.y )
         {
-            // Exact match, just use it.
-            return entry.bitmap;
+            if ( sizeThis.x == size.x )
+            {
+                // Exact match, just use it.
+                return entry.bitmap;
+            }
+
+            if ( sizeThis.x < size.x )
+            {
+                nextBigger = i + 1;
+                continue;
+            }
+
+            // This bitmap is wider than the requested size, we'll rescale it
+            // below.
         }
 
         if ( sizeThis.y < size.y )
         {
             // Don't rescale this one, we prefer to downscale rather than
             // upscale as it results in better-looking bitmaps.
-            lastSmaller = i;
+            nextBigger = i + 1;
             continue;
         }
 
-        if ( sizeThis.y > size.y && !entry.generated )
+        if ( !entry.generated )
         {
             // We know that we don't have any exact match and we've found the
             // next bigger bitmap, so rescale it to the desired size.
             const Entry entryNew(entry, size);
 
-            m_entries.insert(m_entries.begin() + lastSmaller + 1, entryNew);
+            m_entries.insert(m_entries.begin() + nextBigger, entryNew);
 
             return entryNew.bitmap;
         }
@@ -485,7 +515,6 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& f
     wxVector<wxBitmap> bitmaps;
 
     wxFileName fn(path, filename, extension);
-    wxString ext = extension.Lower();
 
     for ( int dpiFactor = 1 ; dpiFactor <= 2 ; ++dpiFactor)
     {
@@ -619,7 +648,7 @@ void RecordSizePref(SizePrefs& prefs, const wxSize& size)
 
 /* static */
 wxSize
-wxBitmapBundle::GetConsensusSizeFor(wxWindow* win,
+wxBitmapBundle::GetConsensusSizeFor(const wxWindow* win,
                                     const wxVector<wxBitmapBundle>& bundles)
 {
     return GetConsensusSizeFor(win->GetDPIScaleFactor(), bundles);
@@ -669,17 +698,13 @@ wxBitmapBundle::GetConsensusSizeFor(double scale,
 
 /* static */
 wxImageList*
-wxBitmapBundle::CreateImageList(wxWindow* win,
+wxBitmapBundle::CreateImageList(const wxWindow* win,
                                 const wxVector<wxBitmapBundle>& bundles)
 {
     wxCHECK_MSG( win, nullptr, "must have a valid window" );
     wxCHECK_MSG( !bundles.empty(), nullptr, "should have some images" );
 
-    wxSize size = GetConsensusSizeFor(win, bundles);
-
-    // wxImageList wants the logical size for the platforms where logical and
-    // physical pixels are different.
-    size /= win->GetContentScaleFactor();
+    const wxSize size = GetConsensusSizeFor(win, bundles);
 
     wxImageList* const iml = new wxImageList(size.x, size.y);
 
@@ -819,15 +844,13 @@ size_t wxBitmapBundleImpl::GetIndexToUpscale(const wxSize& size) const
     const wxSize sizeDef = GetDefaultSize();
     for ( size_t i = 0;; )
     {
-        // Save it before it's updated by GetNextAvailableScale().
-        size_t indexPrev = i;
-
         const double scaleThis = GetNextAvailableScale(i);
         if ( scaleThis == 0.0 )
             break;
 
-        // Only update it now, knowing that this index could have been used.
-        indexLast = indexPrev;
+        // Only update it now, knowing that the index was changed by
+        // GetNextAvailableScale() to be one beyond the actually used one.
+        indexLast = i - 1;
 
         const double scale = size.y / (sizeDef.y*scaleThis);
         if (wxRound(scale) == scale)

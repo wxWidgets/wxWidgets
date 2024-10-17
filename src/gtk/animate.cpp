@@ -275,7 +275,7 @@ wxAnimationImpl* wxAnimationCtrl::DoCreateAnimationImpl() const
     return new wxAnimationGTKImpl();
 }
 
-void wxAnimationCtrl::SetAnimation(const wxAnimation &anim)
+void wxAnimationCtrl::SetAnimation(const wxAnimationBundle& animations)
 {
     if (IsPlaying())
         Stop();
@@ -283,15 +283,26 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation &anim)
     ResetAnim();
     ResetIter();
 
-    m_animation = anim;
-    if (!m_animation.IsOk())
+    m_animations = animations.GetAll();
+
+    // Reset animation if we don't have any valid ones.
+    if ( m_animations.empty() )
     {
+        m_animation.UnRef();
         m_anim = nullptr;
         DisplayStaticImage();
         return;
     }
 
-    wxCHECK_RET(anim.IsCompatibleWith(GetClassInfo()),
+    // TODO: Support higher resolution animations. Currently we always take the
+    // animation for the standard resolution, which will be scaled if
+    // necessary, we would need to create the pixbuf using the correct
+    // animation when it's actually needed (by which time we will also have the
+    // correct scale factor, which is not the case yet if we're called before
+    // the control is shown, as is usually the case).
+    m_animation = m_animations[0];
+
+    wxCHECK_RET(m_animation.IsCompatibleWith(GetClassInfo()),
                 wxT("incompatible animation") );
 
     // copy underlying GdkPixbuf object

@@ -2,7 +2,6 @@
 // Name:        wx/helphtml.h
 // Purpose:     Includes wx/html/helpctrl.h, for wxHtmlHelpController.
 // Author:      Julian Smart
-// Modified by:
 // Created:     2003-05-24
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

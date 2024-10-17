@@ -3,7 +3,6 @@
 // Purpose:     second part of platform specific wxDataObject header -
 //              declarations of predefined wxDataObjectSimple-derived classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.10.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -93,7 +92,7 @@ private:
 class WXDLLIMPEXP_CORE wxFileDataObject : public wxFileDataObjectBase
 {
 public:
-    wxFileDataObject() { }
+    wxFileDataObject() = default;
 
     // implement base class pure virtuals
     virtual bool SetData(size_t len, const void *buf) override;

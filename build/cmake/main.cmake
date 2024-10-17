@@ -57,20 +57,13 @@ include(build/cmake/install.cmake)
 # Determine minimum required OS at runtime
 set(wxREQUIRED_OS_DESC "${CMAKE_SYSTEM_NAME} ${CMAKE_SYSTEM_PROCESSOR}")
 if(MSVC OR MINGW OR CYGWIN)
-    # Determine based on used toolkit
-    if(MINGW OR CYGWIN OR (MSVC_VERSION LESS 1700) OR (CMAKE_VS_PLATFORM_TOOLSET MATCHES "_xp$") )
-        # Visual Studio < 2012 and MinGW always create XP compatible binaries
-        # XP Toolset is required since VS 2012
-        set(wxREQUIRED_OS_DESC "Windows XP / Windows Server 2003")
-    else()
-        set(wxREQUIRED_OS_DESC "Windows Vista / Windows Server 2008")
-    endif()
+    set(wxREQUIRED_OS_DESC "Windows 7 / Windows Server 2008")
     if(wxPLATFORM_ARCH)
         wx_string_append(wxREQUIRED_OS_DESC " (${wxPLATFORM_ARCH} Edition)")
     endif()
 elseif(APPLE AND NOT IPHONE)
     if(DEFINED CMAKE_OSX_DEPLOYMENT_TARGET)
-        set(wxREQUIRED_OS_DESC "macOS ${CMAKE_OSX_DEPLOYMENT_TARGET}")
+        set(wxREQUIRED_OS_DESC "macOS ${CMAKE_OSX_DEPLOYMENT_TARGET} ${CMAKE_SYSTEM_PROCESSOR}")
     endif()
 endif()
 
@@ -82,7 +75,7 @@ if(wxTOOLKIT_EXTRA)
     set(wxTOOLKIT_DESC "with support for: ${wxTOOLKIT_DESC}")
 endif()
 
-message(STATUS "Configured wxWidgets ${wxVERSION} for ${CMAKE_SYSTEM}
+message(STATUS "Configured wxWidgets ${wxVERSION} for ${CMAKE_SYSTEM_NAME}
     Min OS Version required at runtime:                ${wxREQUIRED_OS_DESC}
     Which GUI toolkit should wxWidgets use?            ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION} ${wxTOOLKIT_DESC}
     Should wxWidgets be compiled into single library?  ${wxBUILD_MONOLITHIC}

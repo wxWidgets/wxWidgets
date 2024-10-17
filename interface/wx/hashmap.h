@@ -95,7 +95,7 @@
     class MyKeyHash
     {
     public:
-        MyKeyHash() { }
+        MyKeyHash() = default;
 
         unsigned long operator()( const MyKey& k ) const
             {
@@ -109,7 +109,7 @@
     class MyKeyEqual
     {
     public:
-        MyKeyEqual() { }
+        MyKeyEqual() = default;
         bool operator()( const MyKey& a, const MyKey& b ) const
             {
                // compare for equality

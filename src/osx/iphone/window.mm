@@ -2,7 +2,6 @@
 // Name:        src/osx/iphone/window.mm
 // Purpose:     widgets (non tlw) for iphone
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-06-20
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -469,6 +468,7 @@ void wxWidgetIPhoneImpl::ReleaseMouse()
 
 wxInt32 wxWidgetIPhoneImpl::GetValue() const
 {
+    return 0;
 }
 
 void wxWidgetIPhoneImpl::SetValue( wxInt32 v )

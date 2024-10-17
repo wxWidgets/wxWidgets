@@ -3,7 +3,6 @@
 // Purpose:     Header for wxFileCtrlBase and other common functions used by
 //              platform-specific wxFileCtrl's
 // Author:      Diaa M. Sami
-// Modified by:
 // Created:     Jul-07-2007
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
@@ -33,7 +32,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxFileCtrlNameStr[]; // in filectrlcmn.
 class WXDLLIMPEXP_CORE wxFileCtrlBase
 {
 public:
-    virtual ~wxFileCtrlBase() {}
+    virtual ~wxFileCtrlBase() = default;
 
     virtual void SetWildcard( const wxString& wildCard ) = 0;
     virtual void SetFilterIndex( int filterindex ) = 0;
@@ -90,7 +89,7 @@ void wxGenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, cons
 class WXDLLIMPEXP_CORE wxFileCtrlEvent : public wxCommandEvent
 {
 public:
-    wxFileCtrlEvent() {}
+    wxFileCtrlEvent() = default;
     wxFileCtrlEvent( wxEventType type, wxObject *evtObject, int id )
             : wxCommandEvent( type, id )
     {

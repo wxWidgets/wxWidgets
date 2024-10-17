@@ -724,7 +724,7 @@ msgstr "alt"
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
 msgid "shift"
-msgstr "eltol"
+msgstr "shift"
 
 #: ../src/common/accelcmn.cpp:192
 #, fuzzy
@@ -769,10 +769,9 @@ msgid "Ctrl+"
 msgstr "ctrl"
 
 #: ../src/common/accelcmn.cpp:347
-#, fuzzy
 msgctxt "keyboard key"
 msgid "Shift+"
-msgstr "eltol"
+msgstr "Shift+"
 
 #: ../src/common/accelcmn.cpp:350
 #, fuzzy

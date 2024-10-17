@@ -2,7 +2,6 @@
 // Name:        wx/msw/regconf.h
 // Purpose:     Registry based implementation of wxConfigBase
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     27.04.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -36,7 +35,7 @@ public:
               long style = wxCONFIG_USE_GLOBAL_FILE);
 
     // dtor will save unsaved data
-  virtual ~wxRegConfig(){}
+  virtual ~wxRegConfig() = default;
 
   // implement inherited pure virtual functions
   // ------------------------------------------

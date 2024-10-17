@@ -59,7 +59,7 @@ END
 ABOUTBOX DIALOG DISCARDABLE  34, 22, 144, 75
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About Hello"
-FONT 8, "Helv"
+FONT 8, "MS Shell Dlg"
 BEGIN
     CTEXT           "Microsoft Windows",IDC_STATIC,0,5,144,8
     CTEXT           "Microsoft Foundation Classes",IDC_STATIC,0,14,144,8

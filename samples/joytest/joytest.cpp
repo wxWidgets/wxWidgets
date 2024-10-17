@@ -2,7 +2,6 @@
 // Name:        joytest.cpp
 // Purpose:     Joystick sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -193,7 +192,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(evt))
     else if (m_stick->GetButtonState(3))
         dc.SetPen(*wxYELLOW_PEN);
     else
-        dc.SetPen(*wxBLACK_PEN);
+        dc.SetPen(*wxCYAN_PEN);
 
     dc.DrawLine(FromDIP(m_pos), FromDIP(pt));
 

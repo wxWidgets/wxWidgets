@@ -118,7 +118,7 @@ would like to build, separated by commas. Valid values are:
 TIP: autoconf Project Type
 ---------------------------
 You may notice that in the sample folder, there is also a file called
-configure.in. That file is the input for autoconf, which creates the configure
+configure.ac. That file is the input for autoconf, which creates the configure
 scripts that you often see when you build software from source on Unix-based
 platforms. People use configure scripts because they make your Unix makefiles
 more portable by automatically detecting the right libraries and commands to
@@ -126,7 +126,7 @@ use on the user's machine and OS. This is necessary because there are many
 Unix-based operating systems and they all are slightly different in various
 small ways.
 
-Bakefile does not generate a configure or configure.in script, so if you want
+Bakefile does not generate a configure or configure.ac script, so if you want
 to use configure scripts with your Unix-based software, you will need to learn
 how to use autoconf. Unfortunately, this topic deserves a book all its own and
 is beyond the scope of this tutorial, but a book on the subject can be found

@@ -13,12 +13,34 @@
       -->
     <set var="NATIVE_OBJCPP_SRC">
         <if cond="OUT_OF_TREE_MAKEFILES=='1'">
-            <!-- We can't determine if we're using Cocoa or not, assume we don't -->
+            <!--
+                We can't determine if we're using Cocoa or not at generation
+                time, so deal with it in the makefile fragment below.
+             -->
         </if>
         <if cond="TOOLKIT=='OSX_COCOA' and WXUNIV=='0'">
             native_wrapper.mm
         </if>
     </set>
+
+    <fragment format="gnu">
+widgets_native_wrapper.o: ./native_wrapper.mm ./native.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(OBJCXXFLAGS) ./native_wrapper.mm
+
+ifeq ($(WX_PORT),osx_cocoa)
+WIDGETS_OBJECTS += widgets_native_wrapper.o
+
+widgets: widgets_native_wrapper.o
+endif
+ifeq ($(WX_PORT),gtk2)
+widgets_native.o: CXXFLAGS=$(shell pkg-config --cflags gtk+-2.0)
+widgets: LDFLAGS=$(shell pkg-config --libs gtk+-2.0)
+endif
+ifeq ($(WX_PORT),gtk3)
+widgets_native.o: CXXFLAGS=$(shell pkg-config --cflags gtk+-3.0)
+widgets: LDFLAGS=$(shell pkg-config --libs gtk+-3.0)
+endif
+    </fragment>
 
     <exe id="widgets" template="wx_sample" template_append="wx_append">
         <sources>

@@ -2,7 +2,6 @@
 // Name:        src/msw/mimetype.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     23.09.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWidgets licence (part of base library)
@@ -141,7 +140,7 @@ void wxFileTypeImpl::Init(const wxString& strFileType, const wxString& ext)
     m_ext << ext;
 
     m_strFileType = strFileType;
-    if ( !strFileType ) {
+    if ( strFileType.empty() ) {
         m_strFileType = m_ext.AfterFirst('.') + wxT("_auto_file");
     }
 

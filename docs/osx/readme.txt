@@ -13,10 +13,6 @@ on how to subscribe is available from the wxWidgets.org homepage.
 Questions/Problems related directly to the mac port can be reported
 at https://github.com/wxWidgets/wxWidgets/issues/new.
 
-wxWidgets/Mac doesn't come with any guarantee whatsoever. It
-might crash your harddisk or destroy your monitor. It doesn't
-claim to be suitable for any special or general purpose.
-
 Regards,
 
 Stefan Csomor

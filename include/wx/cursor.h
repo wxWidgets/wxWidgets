@@ -59,7 +59,11 @@ public:
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_MACCURSOR_RESOURCE
     #include "wx/osx/cursor.h"
 #elif defined(__WXQT__)
-    #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR
+    #ifdef __WINDOWS__
+        #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
+    #else
+        #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR
+    #endif
     #include "wx/qt/cursor.h"
 #endif
 

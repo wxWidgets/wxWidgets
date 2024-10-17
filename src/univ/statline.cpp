@@ -2,7 +2,6 @@
 // Name:        src/univ/statline.cpp
 // Purpose:     wxStaticLine implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

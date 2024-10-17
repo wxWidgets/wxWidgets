@@ -47,7 +47,7 @@ namespace wxMSWMessageDialog
         wxString btnCancelLabel;
         wxString btnHelpLabel;
 
-        // Will create a task dialog with it's parameters for it's creation
+        // Will create a task dialog with its parameters for its creation
         // stored in the provided TASKDIALOGCONFIG parameter.
         // NOTE: The wxMSWTaskDialogConfig object needs to remain accessible
         // during the subsequent call to TaskDialogIndirect().

@@ -486,6 +486,25 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     else
         SetGraphicsContext(wxGraphicsContext::Create());
 }
+
+/* static */
+bool wxClientDCImpl::CanBeUsedForDrawing(const wxWindow* WXUNUSED(window))
+{
+#ifdef __UNIX__
+    switch ( wxGetDisplayInfo().type )
+    {
+        case wxDisplayNone:
+        case wxDisplayX11:
+            break;
+
+        case wxDisplayWayland:
+            return false;
+    }
+#endif // __UNIX__
+
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 
 wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)

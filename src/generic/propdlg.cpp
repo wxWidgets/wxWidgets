@@ -2,7 +2,6 @@
 // Name:        src/generic/propdlg.cpp
 // Purpose:     wxPropertySheetDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-03-12
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

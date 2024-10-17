@@ -39,7 +39,8 @@ bool wxGauge::Create( wxWindow *parent,
 
     m_widget = gtk_progress_bar_new();
     g_object_ref(m_widget);
-    if ( style & wxGA_VERTICAL )
+    const bool isVertical = (style & wxGA_VERTICAL) != 0;
+    if (isVertical)
     {
 #ifdef __WXGTK3__
         gtk_orientable_set_orientation(GTK_ORIENTABLE(m_widget), GTK_ORIENTATION_VERTICAL);
@@ -56,6 +57,29 @@ bool wxGauge::Create( wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
+#ifdef __WXGTK3__
+    int wh = isVertical ? size.x : size.y;
+    if (wh > 0 && gtk_check_version(3,20,0) == nullptr)
+    {
+        GtkCssProvider* provider = gtk_css_provider_new();
+        const char* whStr = isVertical ? "width" : "height";
+        char buf[40];
+        snprintf(buf, sizeof(buf), "*{min-%s:%dpx}", whStr, wh);
+        GTKApplyCssStyle(provider, buf);
+
+        int min;
+        if (isVertical)
+            gtk_widget_get_preferred_width(m_widget, &min, nullptr);
+        else
+            gtk_widget_get_preferred_height(m_widget, &min, nullptr);
+
+        // Adjust the min{width,height} to get the right overall size
+        wh -= min - wh;
+        snprintf(buf, sizeof(buf), "*{min-%s:%dpx}", whStr, wxMax(wh, 1));
+        GTKApplyCssStyle(provider, buf);
+        g_object_unref(provider);
+    }
+#endif
     SetInitialSize(size);
 
     return true;

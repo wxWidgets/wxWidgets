@@ -223,7 +223,7 @@ void XmlTestCase::LoadSave()
     ;
 
     wxStringInputStream sisp(xmlTextProlog);
-    CPPUNIT_ASSERT( doc.Load(sisp, "UTF-8") );
+    CPPUNIT_ASSERT( doc.Load(sisp) );
 
     wxStringOutputStream sosp;
     CPPUNIT_ASSERT( doc.Save(sosp) );

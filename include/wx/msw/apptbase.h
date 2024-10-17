@@ -2,7 +2,6 @@
 // Name:        wx/msw/apptbase.h
 // Purpose:     declaration of wxAppTraits for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.06.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

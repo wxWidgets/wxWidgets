@@ -27,7 +27,7 @@ build the library:
   directory where you ran configure, not the one in the source tree) and run
   `make test` (non-GUI tests) or `make test_gui` (GUI ones) to build.
 
-- When using CMake, add `-DwxBUILD_TESTS=ON` (or `=CONSOLE` for non-GUI tests
+- When using CMake, add `-DwxBUILD_TESTS=ALL` (or `=CONSOLE_ONLY` for non-GUI tests
   only) to the command line arguments, or choose the desired `wxBUILD_TESTS`
   option in `cmake-gui`.
 

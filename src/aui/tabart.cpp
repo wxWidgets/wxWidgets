@@ -666,7 +666,7 @@ int wxAuiGenericTabArt::GetBorderWidth(wxWindow* wnd)
     {
         wxAuiDockArt* art = mgr->GetArtProvider();
         if (art)
-            return art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
+            return wnd->FromDIP(art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
     }
     return 1;
 }
@@ -676,7 +676,7 @@ int wxAuiGenericTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
     return 0;
 }
 
-wxSize wxAuiGenericTabArt::GetTabSize(wxDC& dc,
+wxSize wxAuiGenericTabArt::GetTabSize(wxReadOnlyDC& dc,
                                       wxWindow* wnd,
                                       const wxString& caption,
                                       const wxBitmapBundle& bitmap,
@@ -847,7 +847,7 @@ int wxAuiGenericTabArt::GetBestTabCtrlSize(wxWindow* wnd,
                                            const wxAuiNotebookPageArray& pages,
                                            const wxSize& requiredBmp_size)
 {
-    wxClientDC dc(wnd);
+    wxInfoDC dc(wnd);
     dc.SetFont(m_measuringFont);
 
     // sometimes a standard bitmap size needs to be enforced, especially
@@ -918,6 +918,16 @@ void wxAuiGenericTabArt::SetColour(const wxColour& colour)
 void wxAuiGenericTabArt::SetActiveColour(const wxColour& colour)
 {
     m_activeColour = colour;
+}
+
+wxFont wxAuiGenericTabArt::GetNormalFont() const
+{
+    return m_normalFont;
+}
+
+wxFont wxAuiGenericTabArt::GetSelectedFont() const
+{
+    return m_selectedFont;
 }
 
 // -- wxAuiSimpleTabArt class implementation --
@@ -1212,7 +1222,7 @@ int wxAuiSimpleTabArt::GetBorderWidth(wxWindow* wnd)
     {
        wxAuiDockArt*  art = mgr->GetArtProvider();
         if (art)
-            return art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
+            return wnd->FromDIP(art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
     }
     return 1;
 }
@@ -1222,7 +1232,7 @@ int wxAuiSimpleTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
     return 0;
 }
 
-wxSize wxAuiSimpleTabArt::GetTabSize(wxDC& dc,
+wxSize wxAuiSimpleTabArt::GetTabSize(wxReadOnlyDC& dc,
                                      wxWindow* wnd,
                                      const wxString& caption,
                                      const wxBitmapBundle& WXUNUSED(bitmap),
@@ -1370,7 +1380,7 @@ int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd,
                                           const wxAuiNotebookPageArray& WXUNUSED(pages),
                                           const wxSize& WXUNUSED(requiredBmp_size))
 {
-    wxClientDC dc(wnd);
+    wxInfoDC dc(wnd);
     dc.SetFont(m_measuringFont);
     int x_ext = 0;
     wxSize s = GetTabSize(dc,
@@ -1396,6 +1406,16 @@ void wxAuiSimpleTabArt::SetSelectedFont(const wxFont& font)
 void wxAuiSimpleTabArt::SetMeasuringFont(const wxFont& font)
 {
     m_measuringFont = font;
+}
+
+wxFont wxAuiSimpleTabArt::GetNormalFont() const
+{
+    return m_normalFont;
+}
+
+wxFont wxAuiSimpleTabArt::GetSelectedFont() const
+{
+    return m_selectedFont;
 }
 
 #endif // wxUSE_AUI

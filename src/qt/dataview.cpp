@@ -140,10 +140,6 @@ int wxDataViewColumn::GetFlags() const
 //##############################################################################
 
 
-wxDataViewCtrl::wxDataViewCtrl()
-{
-}
-
 wxDataViewCtrl::wxDataViewCtrl( wxWindow *parent, wxWindowID id,
        const wxPoint& pos,
        const wxSize& size, long style,

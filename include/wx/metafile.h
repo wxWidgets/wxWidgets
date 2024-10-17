@@ -2,7 +2,6 @@
 // Name:        wx/metafile.h
 // Purpose:     wxMetaFile class declaration
 // Author:      wxWidgets team
-// Modified by:
 // Created:     13.01.00
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

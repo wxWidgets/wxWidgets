@@ -2,7 +2,6 @@
 // Name:        src/common/fmapbase.cpp
 // Purpose:     wxFontMapperBase class implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.06.2003 (extracted from common/fontmap.cpp)
 // Copyright:   (c) 1999-2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -506,7 +505,7 @@ wxConfigBase *wxFontMapperBase::GetConfig()
 
 const wxString& wxFontMapperBase::GetConfigPath()
 {
-    if ( !m_configRootPath )
+    if ( m_configRootPath.empty() )
     {
         // use the default
         m_configRootPath = GetDefaultConfigPath();
@@ -533,7 +532,7 @@ bool wxFontMapperBase::ChangePath(const wxString& pathNew, wxString *pathOld)
         path += wxCONFIG_PATH_SEPARATOR;
     }
 
-    wxASSERT_MSG( !pathNew || (pathNew[0] != wxCONFIG_PATH_SEPARATOR),
+    wxASSERT_MSG( pathNew.empty() || (pathNew[0] != wxCONFIG_PATH_SEPARATOR),
                   wxT("should be a relative path") );
 
     path += pathNew;

@@ -2,7 +2,6 @@
 // Name:        wx/gtk/filectrl.h
 // Purpose:     wxGtkFileCtrl Header
 // Author:      Diaa M. Sami
-// Modified by:
 // Created:     Aug-10-2007
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence

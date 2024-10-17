@@ -447,16 +447,19 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 #endif
                                        );
 
-        wxImageList *ContentsImageList = new wxImageList(16, 16);
+        wxSize iconSize(16, 16);
+        iconSize *= GetDPIScaleFactor();
+
+        wxImageList *ContentsImageList = new wxImageList(iconSize.x, iconSize.y);
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_BOOK,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_FOLDER,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_PAGE,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
 
         m_ContentsBox->AssignImageList(ContentsImageList);
 
@@ -1063,7 +1066,6 @@ void wxHtmlHelpWindow::RefreshLists()
 void wxHtmlHelpWindow::ReadCustomization(wxConfigBase *cfg, const wxString& path)
 {
     wxString oldpath;
-    wxString tmp;
 
     if (!path.empty())
     {
@@ -1121,7 +1123,6 @@ void wxHtmlHelpWindow::ReadCustomization(wxConfigBase *cfg, const wxString& path
 void wxHtmlHelpWindow::WriteCustomization(wxConfigBase *cfg, const wxString& path)
 {
     wxString oldpath;
-    wxString tmp;
 
     if (!path.empty())
     {
@@ -1521,7 +1522,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
             {
                 if (m_Printer == nullptr)
                     m_Printer = new wxHtmlEasyPrinting(_("Help Printing"), this);
-                if (!m_HtmlWin->GetOpenedPage())
+                if (m_HtmlWin->GetOpenedPage().empty())
                 {
                     wxLogWarning(_("Cannot print empty page."));
                 }

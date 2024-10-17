@@ -74,6 +74,57 @@ public:
         return *this;
     }
 
+    // comparison operators
+    friend bool operator==(const wxWindowIDRef& lhs, const wxWindowIDRef& rhs)
+    {
+        return lhs.GetValue() == rhs.GetValue();
+    }
+
+    friend bool operator==(const wxWindowIDRef& lhs, int rhs)
+    {
+        return lhs.GetValue() == rhs;
+    }
+
+    friend bool operator==(const wxWindowIDRef& lhs, long rhs)
+    {
+        return lhs.GetValue() == rhs;
+    }
+
+    friend bool operator==(int lhs, const wxWindowIDRef& rhs)
+    {
+        return rhs == lhs;
+    }
+
+    friend bool operator==(long lhs, const wxWindowIDRef& rhs)
+    {
+        return rhs == lhs;
+    }
+
+    friend bool operator!=(const wxWindowIDRef& lhs, const wxWindowIDRef& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    friend bool operator!=(const wxWindowIDRef& lhs, int rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    friend bool operator!=(const wxWindowIDRef& lhs, long rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    friend bool operator!=(int lhs, const wxWindowIDRef& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    friend bool operator!=(long lhs, const wxWindowIDRef& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
     // access to the stored id value
     wxWindowID GetValue() const
     {
@@ -113,57 +164,6 @@ private:
 
     wxWindowID m_id;
 };
-
-// comparison operators
-inline bool operator==(const wxWindowIDRef& lhs, const wxWindowIDRef& rhs)
-{
-    return lhs.GetValue() == rhs.GetValue();
-}
-
-inline bool operator==(const wxWindowIDRef& lhs, int rhs)
-{
-    return lhs.GetValue() == rhs;
-}
-
-inline bool operator==(const wxWindowIDRef& lhs, long rhs)
-{
-    return lhs.GetValue() == rhs;
-}
-
-inline bool operator==(int lhs, const wxWindowIDRef& rhs)
-{
-    return rhs == lhs;
-}
-
-inline bool operator==(long lhs, const wxWindowIDRef& rhs)
-{
-    return rhs == lhs;
-}
-
-inline bool operator!=(const wxWindowIDRef& lhs, const wxWindowIDRef& rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline bool operator!=(const wxWindowIDRef& lhs, int rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline bool operator!=(const wxWindowIDRef& lhs, long rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline bool operator!=(int lhs, const wxWindowIDRef& rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline bool operator!=(long lhs, const wxWindowIDRef& rhs)
-{
-    return !(lhs == rhs);
-}
 
 // ----------------------------------------------------------------------------
 // wxIdManager

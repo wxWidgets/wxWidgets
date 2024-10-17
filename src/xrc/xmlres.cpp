@@ -721,13 +721,13 @@ bool wxXmlResource::UpdateResources()
 {
     bool rt = true;
 
+    // We never do it if this flag is specified.
+    if ( m_flags & wxXRC_NO_RELOADING )
+        return rt;
+
     for ( wxXmlResourceDataRecord& rec : Data() )
     {
         // Check if we need to reload this one.
-
-        // We never do it if this flag is specified.
-        if ( m_flags & wxXRC_NO_RELOADING )
-            continue;
 
         // And we don't do it for the records that were not loaded from a
         // file/URI (or at least not directly) in the first place.
@@ -800,10 +800,8 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
         return nullptr;
     }
 
-    wxString encoding(wxT("UTF-8"));
-
     std::unique_ptr<wxXmlDocument> doc(new wxXmlDocument);
-    if (!doc->Load(*stream, encoding))
+    if (!doc->Load(*stream))
     {
         wxLogError(_("Cannot load resources from file '%s'."), filename);
         return nullptr;
@@ -1537,7 +1535,7 @@ int wxXmlResourceHandlerImpl::GetStyle(const wxString& param, int defaults)
 {
     wxString s = GetParamValue(param);
 
-    if (!s) return defaults;
+    if (s.empty()) return defaults;
 
     wxStringTokenizer tkn(s, wxT("| \t\n"), wxTOKEN_STRTOK);
     int style = 0;
@@ -1890,7 +1888,7 @@ wxBitmap LoadBitmapFromFS(wxXmlResourceHandlerImpl* impl,
     wxImage img(*(fsfile->GetStream()));
     delete fsfile;
 #else
-    wxImage img(name);
+    wxImage img(path);
 #endif
 
     if (!img.IsOk())
@@ -1908,12 +1906,8 @@ wxBitmap LoadBitmapFromFS(wxXmlResourceHandlerImpl* impl,
 
 // forward declaration
 template <typename T>
-T
-ParseStringInPixels(wxXmlResourceHandlerImpl* impl,
-                   const wxString& param,
-                   const wxString& str,
-                   const T& defaultValue,
-                   wxWindow *windowToUse = nullptr);
+inline
+bool XRCConvertFromAbsValue(const wxString& s, T& value);
 
 } // anonymous namespace
 
@@ -2021,9 +2015,17 @@ wxXmlResourceHandlerImpl::GetBitmapBundle(const wxXmlNode* node,
         else
         {
 #ifdef wxHAS_SVG
-            wxSize svgDefaultSize = ParseStringInPixels(this, node->GetName(),
-                                                        svgDefaultSizeAttr,
-                                                        wxDefaultSize);
+            wxSize svgDefaultSize;
+            if ( !XRCConvertFromAbsValue(svgDefaultSizeAttr, svgDefaultSize) )
+            {
+                ReportParamError
+                (
+                     node->GetName(),
+                     wxString::Format("cannot parse \"%s\" as SVG size",
+                                      svgDefaultSizeAttr)
+                );
+                return bitmapBundle;
+            }
 #if wxUSE_FILESYSTEM
             wxFSFile* fsfile = GetCurFileSystem().OpenFile(paramValue, wxFS_READ | wxFS_SEEKABLE);
             if (fsfile == nullptr)
@@ -2262,20 +2264,22 @@ bool wxXmlResourceHandlerImpl::IsObjectNode(const wxXmlNode *node) const
                     node->GetName() == wxS("object_ref"));
 }
 
-wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node)
+wxString wxXmlResourceHandlerImpl::GetNodeName(const wxXmlNode *node) const
 {
-    const wxXmlNode *n = node;
-    if (n == nullptr) return wxEmptyString;
-    n = n->GetChildren();
+    return node ? node->GetName() : wxString{};
+}
 
-    while (n)
-    {
-        if (n->GetType() == wxXML_TEXT_NODE ||
-            n->GetType() == wxXML_CDATA_SECTION_NODE)
-            return n->GetContent();
-        n = n->GetNext();
-    }
-    return wxEmptyString;
+wxString
+wxXmlResourceHandlerImpl::GetNodeAttribute(const wxXmlNode *node,
+                                           const wxString& attrName,
+                                           const wxString& defaultValue) const
+{
+    return node ? node->GetAttribute(attrName, defaultValue) : defaultValue;
+}
+
+wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node) const
+{
+    return node ? node->GetNodeContent() : wxString{};
 }
 
 wxXmlNode *wxXmlResourceHandlerImpl::GetNodeParent(const wxXmlNode *node) const

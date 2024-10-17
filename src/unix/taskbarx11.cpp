@@ -2,7 +2,6 @@
 // File:        src/unix/taskbarx11.cpp
 // Purpose:     wxTaskBarIcon class for common Unix desktops
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     04/04/2003
 // Copyright:   (c) Vaclav Slavik, 2003
 // Licence:     wxWindows licence

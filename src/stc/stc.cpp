@@ -6043,6 +6043,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
     return wxVersionInfo("Scintilla", 5, 0, 0, "Scintilla 5.0.0");
@@ -6050,7 +6051,8 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLexerVersionInfo()
 {
-    return wxVersionInfo("Lexilla", 5, 0, 1, "Lexilla 5.0.1");
+    return wxVersionInfo("Lexilla", 5, 3, 1, "Lexilla 5.3.1");
 }
+
 
 #endif // wxUSE_STC

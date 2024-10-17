@@ -2,7 +2,6 @@
 // Name:        wx/sstream.h
 // Purpose:     string-based streams
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-09-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

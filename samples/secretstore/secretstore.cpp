@@ -25,6 +25,11 @@
 #include "wx/crt.h"
 #include "wx/log.h"
 
+#include <cctype>
+
+bool g_verbose_ {false};
+bool g_binary_ {false};
+
 bool Save(wxSecretStore& store, const wxString& service, const wxString& user)
 {
     char password[4096];
@@ -107,12 +112,50 @@ static bool PrintResult(bool ok)
     return ok;
 }
 
+static void PrintSecrets(const wxSecretValue& expected, const wxSecretValue& loaded)
+{
+    wxPrintf("Expected: size=%ld data=", expected.GetSize());
+    if (g_binary_)
+    {
+        wxPrintf("[");
+        size_t n = expected.GetSize();
+        const char* p = static_cast<const char *>(expected.GetData());
+        for (size_t i=0; i<n ;++i)
+            if (std::isprint(p[i]))
+                wxPrintf("%c", p[i]);
+            else
+                wxPrintf("\\x%hhx", p[i]);
+        wxPrintf("]\n");
+    }
+    else
+    {
+        wxPrintf("\"%s\"\n", expected.GetAsString());
+    }
+    wxPrintf("Loaded: size=%ld data=", loaded.GetSize());
+    if (g_binary_)
+    {
+        wxPrintf("[");
+        size_t n = loaded.GetSize();
+        const char* p = static_cast<const char *>(loaded.GetData());
+        for (size_t i=0; i<n ;++i)
+          if (std::isprint(p[i]))
+              wxPrintf("%c", p[i]);
+          else
+              wxPrintf("\\x%hhx", p[i]);
+        wxPrintf("]\n");
+    }
+    else
+    {
+        wxPrintf("\"%s\"\n", loaded.GetAsString());
+    }
+}
+
 bool SelfTest(wxSecretStore& store, const wxString& service)
 {
-    wxPrintf("Running the tests...\n");
+    wxPrintf("Running the tests with %s secrets...\n", g_binary_ ? "binary" : "text");
 
     const wxString userTest("test");
-    const wxSecretValue secret1(6, "secret");
+    const wxSecretValue secret1 = g_binary_ ? wxSecretValue(11, "secret\x1\x86\x2\x99\x3") : wxSecretValue("secret");
 
     wxPrintf("Storing the password:\t");
     bool ok = store.Save(service, userTest, secret1);
@@ -129,9 +172,13 @@ bool SelfTest(wxSecretStore& store, const wxString& service)
     ok = PrintResult(store.Load(service, user, secret) &&
                         user == userTest &&
                             secret == secret1);
+    if (!ok && g_verbose_)
+    {
+        PrintSecrets(secret1, secret);
+    }
 
     // Overwriting the password should work.
-    const wxSecretValue secret2(6, "privet");
+    const wxSecretValue secret2 = g_binary_ ? wxSecretValue(11, "privet\x1\x86\x2\x99\x3") : wxSecretValue("privet");
 
     wxPrintf("Changing the password:\t");
     if ( PrintResult(store.Save(service, user, secret2)) )
@@ -139,7 +186,13 @@ bool SelfTest(wxSecretStore& store, const wxString& service)
         wxPrintf("Reloading the password:\t");
         if ( !PrintResult(store.Load(service, user, secret) &&
                             secret == secret2) )
+        {
             ok = false;
+            if (g_verbose_)
+            {
+                PrintSecrets(secret2, secret);
+            }
+        }
     }
     else
         ok = false;
@@ -164,6 +217,24 @@ bool SelfTest(wxSecretStore& store, const wxString& service)
     return ok;
 }
 
+void usage(char **argv)
+{
+  wxFprintf(stderr,
+            "Usage: %s save <service> <user>\n"
+            "   or  %s {load|delete} <service>\n"
+            "   or  %s [options] selftest <service>\n"
+            "\n"
+            "Sample showing wxSecretStore class functionality.\n"
+            "Specify one of the commands to perform the corresponding\n"
+            "function call. The \"service\" argument is mandatory for\n"
+            "all commands, \"save\" also requires \"user\" and will\n"
+            "prompt for password.\n\n"
+            "options:\n"
+            "\t-v\trun verbose (possibly shows secrets on errors)\n"
+            "\t-b\trun selftest using binary secrets (otherwise uses text strings)\n\n",
+            argv[0], argv[0], argv[0]);
+}
+
 int main(int argc, char **argv)
 {
     // To complement the standard EXIT_{SUCCESS,FAILURE}.
@@ -176,20 +247,59 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    if ( argc < 2 ||
-            argc != (argv[1] == wxString("save") ? 4 : 3) )
+    wxString operation;
+    wxString service;
+    wxString user;
+
+    for (int arg=1; arg<argc ;++arg)
     {
+      if (argv[arg][0] == '-')
+      {
+        if (argv[arg][1] == 'v' && argv[arg][2] == '\0')
+          g_verbose_ = true;
+        else if (argv[arg][1] == 'b' && argv[arg][2] == '\0')
+          g_binary_ = true;
+        else
+        {
+          wxFprintf(stderr,
+                    "ERROR: Unknown switch : %s\n\n",
+                    argv[arg]);
+          usage(argv);
+          return EXIT_SYNTAX;
+        }
+      }
+      else if (operation.IsEmpty())
+      {
+        operation = argv[arg];
+      }
+      else if (service.IsEmpty())
+      {
+        service = argv[arg];
+      }
+      else if (operation == "save" && user.IsEmpty())
+      {
+        user = argv[arg];
+      }
+      else
+      {
         wxFprintf(stderr,
-                  "Usage: %s save <service> <user>\n"
-                  "   or  %s {load|delete|selftest} <service>\n"
-                  "\n"
-                  "Sample showing wxSecretStore class functionality.\n"
-                  "Specify one of the commands to perform the corresponding\n"
-                  "function call. The \"service\" argument is mandatory for\n"
-                  "all commands, \"save\" also requires \"user\" and will\n"
-                  "prompt for password.\n",
-                  argv[0], argv[0]);
+                  "ERROR: Unknown argument : %s\n\n",
+                  argv[arg]);
+        usage(argv);
         return EXIT_SYNTAX;
+      }
+    }
+
+    if (operation.IsEmpty() || service.IsEmpty())
+    {
+      if (operation.IsEmpty())
+        wxFprintf(stderr,
+                  "ERROR: Missing required operation argument\n\n");
+      else
+        wxFprintf(stderr,
+                  "ERROR: Missing required service argument\n\n");
+      usage(argv);
+      return EXIT_SYNTAX;
     }
 
     wxSecretStore store = wxSecretStore::GetDefault();
@@ -201,13 +311,17 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    const wxString operation = argv[1];
-    const wxString service = argv[2];
-
     bool ok;
     if ( operation == "save" )
     {
-        ok = Save(store, service, argv[3]);
+        if (user.IsEmpty())
+        {
+            wxFprintf(stderr,
+                      "ERROR: Missing required user argument\n\n");
+            usage(argv);
+            return EXIT_SYNTAX;
+        }
+        ok = Save(store, service, user);
     }
     else if ( operation == "load" )
     {
@@ -225,8 +339,9 @@ int main(int argc, char **argv)
     {
         wxFprintf(stderr,
                   "Unknown operation \"%s\", expected \"save\", \"load\" or "
-                  "\"delete\".\n",
+                  "\"delete\".\n\n",
                   operation);
+        usage(argv);
         return EXIT_SYNTAX;
     }
 

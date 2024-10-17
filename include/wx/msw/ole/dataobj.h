@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/dataobj.h
 // Purpose:     declaration of the wxDataObject class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.05.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

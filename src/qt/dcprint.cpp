@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/dcprint.h"
 #include "wx/qt/dcprint.h"
 
@@ -199,4 +201,4 @@ void wxPrinterDCImpl::DoDrawPolygon(int WXUNUSED(n), const wxPoint WXUNUSED(poin
 {
 }
 
-
+#endif // wxUSE_PRINTING_ARCHITECTURE

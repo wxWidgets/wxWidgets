@@ -69,7 +69,7 @@ public:
 class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase
 {
 public:
-    wxDataViewCtrl();
+    wxDataViewCtrl() = default;
 
     wxDataViewCtrl( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,

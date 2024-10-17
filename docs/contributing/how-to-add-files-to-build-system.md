@@ -16,6 +16,12 @@ the `bakefile_gen` tool. Run it from `$(wx)/build/bakefiles` directory and it wi
 regenerate all outdated makefiles. See `$(wx)/build/bakefiles/README` for more
 details.
 
+You can also run Bakefile from a Docker or Podman container and avoid the need
+to install it (expanding "$(wx)" to be the path to wx install):
+
+    docker run --rm -v $(wx):$(wx) -w `pwd`
+           ghcr.io/vslavik/bakefile:0.2 bakefile_gen
+
 Note that it generates makefiles for samples, too.
 
 IMPORTANT NOTE: Don't forget to run autoconf in wxWidgets root directory
@@ -180,11 +186,11 @@ d) Modify multilib.bkl to add files to multilib build: add foolib and foodll
 
 e) Regenerate all makefiles (don't forget to run autoconf)
 
-f) Update configure.in and wx-config.in to contain information about
+f) Update configure.ac and wx-config.in to contain information about
    the library and needed linker flags:
-   * Add "foo" to `BUILT_WX_LIBS` in configure.in.
+   * Add "foo" to `BUILT_WX_LIBS` in configure.ac.
    * If appropriate, but it rarely is, so normally this should _not_ be done,
-     add "foo" to either `STD_BASE_LIBS` or `STD_GUI_LIBS` in configure.in.
+     add "foo" to either `STD_BASE_LIBS` or `STD_GUI_LIBS` in configure.ac.
    * If wxFoo links against additional libraries, add necessary linker
      flags and libraries to ldflags_foo and ldlibs_foo variables in
      wx-config.in (both are optional).

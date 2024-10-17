@@ -2,7 +2,6 @@
 // Name:        wx/msw/checklst.h
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     16.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

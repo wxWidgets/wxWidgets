@@ -35,6 +35,7 @@
 #include "wx/sysopt.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/wrapgdk.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/win_gtk.h"
@@ -42,13 +43,11 @@
 #include "wx/gtk/private/threads.h"
 
 #ifdef GDK_WINDOWING_X11
-    #include <gdk/gdkx.h>
     #include <X11/Xatom.h>  // XA_CARDINAL
     #include "wx/unix/utilsx11.h"
 #endif
-#ifdef GDK_WINDOWING_WAYLAND
-    #include <gdk/gdkwayland.h>
-#endif
+
+#define TRACE_TLWSIZE "tlwsize"
 
 // ----------------------------------------------------------------------------
 // data
@@ -271,6 +270,11 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
     if (win->m_clientWidth  != alloc->width ||
         win->m_clientHeight != alloc->height)
     {
+        wxLogTrace(TRACE_TLWSIZE, "Size changed for %s (%d, %d) -> (%d, %d)",
+                   wxDumpWindow(win),
+                   win->m_clientWidth, win->m_clientHeight,
+                   alloc->width, alloc->height);
+
         wxRecursionGuard setInSizeAllocate(g_inSizeAllocate);
 
         win->m_clientWidth  = alloc->width;
@@ -332,6 +336,21 @@ gtk_frame_configure_callback( GtkWidget*,
 
 void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
 {
+#ifdef __WXGTK3__
+    // First of all check if our DPI has changed.
+    const auto newScaleFactor = GetContentScaleFactor();
+    if ( newScaleFactor != m_scaleFactor )
+    {
+        const auto oldScaleFactor = m_scaleFactor;
+
+        // It seems safer to change it before generating the events to avoid
+        // any chance of reentrancy.
+        m_scaleFactor = newScaleFactor;
+
+        WXNotifyDPIChange(oldScaleFactor, newScaleFactor);
+    }
+#endif // __WXGTK3__
+
     wxPoint point;
 #ifdef GDK_WINDOWING_X11
     if (gs_decorCacheValid)
@@ -702,10 +721,21 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         g_object_ref(m_widget);
     }
 
+#ifdef __WXGTK3__
+    // This value may be incorrect as here it's just set to the scale factor of
+    // the primary monitor because the widget is not realized yet, but it's
+    // better than setting it to 1, as chances are that the window will be
+    // created on the primary monitor or, maybe, the other monitors use the
+    // same scale factor anyhow. And if this isn't the case, we will set it to
+    // the correct value when we get "configure-event" from GTK later.
+    m_scaleFactor = GetContentScaleFactor();
+#endif // __WXGTK3__
+
     wxWindow *topParent = wxGetTopLevelParent(m_parent);
     if (topParent && (((GTK_IS_WINDOW(topParent->m_widget)) &&
                        (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)) ||
-                       (style & wxFRAME_FLOAT_ON_PARENT)))
+                       (style & wxFRAME_FLOAT_ON_PARENT) ||
+                       (style & wxSTAY_ON_TOP)))
     {
         gtk_window_set_transient_for( GTK_WINDOW(m_widget),
                                       GTK_WINDOW(topParent->m_widget) );
@@ -759,10 +789,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if (pos.IsFullySpecified())
     {
 #ifdef __WXGTK3__
-        GtkWindowPosition windowPos;
-        g_object_get(m_widget, "window-position", &windowPos, nullptr);
-        if (windowPos == GTK_WIN_POS_NONE)
-            gtk_window_move(GTK_WINDOW(m_widget), m_x, m_y);
+        gtk_window_move(GTK_WINDOW(m_widget), m_x, m_y);
 #else
         gtk_widget_set_uposition( m_widget, m_x, m_y );
 #endif
@@ -1293,6 +1320,9 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 
     if (m_width != oldSize.x || m_height != oldSize.y)
     {
+        wxLogTrace(TRACE_TLWSIZE, "Size set for %s (%d, %d) -> (%d, %d)",
+                   wxDumpWindow(this), oldSize.x, oldSize.y, m_width, m_height);
+
         m_deferShowAllowed = true;
         m_useCachedClientSize = false;
 
@@ -1341,6 +1371,9 @@ static gboolean reset_size_request(void* data)
 
 void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
 {
+    wxLogTrace(TRACE_TLWSIZE, "Client size set for %s: (%d, %d)",
+               wxDumpWindow(this), width, height);
+
     base_type::DoSetClientSize(width, height);
 
     // Since client size is being explicitly set, don't change it later
@@ -1399,6 +1432,9 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int maxW, int maxH,
                                           int incW, int incH )
 {
+    wxLogTrace(TRACE_TLWSIZE, "Size hints for %s set to (%d, %d)",
+               wxDumpWindow(this), minW, minH);
+
     base_type::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
 
     if (!HasFlag(wxRESIZE_BORDER))
@@ -1589,6 +1625,9 @@ void wxTopLevelWindowGTK::GTKDoAfterShow()
 
 void wxTopLevelWindowGTK::GTKUpdateClientSizeIfNecessary()
 {
+    wxLogTrace(TRACE_TLWSIZE, "GTKUpdateClientSizeIfNecessary() for %s, pending=%d",
+               wxDumpWindow(this), m_pendingFittingClientSizeFlags);
+
     if ( m_pendingFittingClientSizeFlags )
     {
         WXSetInitialFittingClientSize(m_pendingFittingClientSizeFlags);
@@ -1599,6 +1638,8 @@ void wxTopLevelWindowGTK::GTKUpdateClientSizeIfNecessary()
 
 void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
 {
+    wxLogTrace(TRACE_TLWSIZE, "SetMinSize() for %s", wxDumpWindow(this));
+
     wxTopLevelWindowBase::SetMinSize(minSize);
 
     // Explicitly set minimum size should override the pending size, if any.
@@ -1608,6 +1649,9 @@ void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
 void
 wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags, wxSizer* sizer)
 {
+    wxLogTrace(TRACE_TLWSIZE, "WXSetInitialFittingClientSize(%d) for %s (%s)",
+               flags, wxDumpWindow(this), IsShown() ? "shown" : "hidden");
+
     // In any case, update the size immediately.
     wxTopLevelWindowBase::WXSetInitialFittingClientSize(flags, sizer);
 

@@ -44,7 +44,10 @@
            is clicked.
     @event{EVT_NOTIFICATION_MESSAGE_DISMISSED(id, func)}
            Process a @c wxEVT_NOTIFICATION_MESSAGE_DISMISSED event, when a notification
-           is dismissed by the user or times out.
+           is dismissed by the user or times out. Since wxWidgets 3.3.0, on platforms
+           supporting it, the reason for dismissal can be obtained from
+           wxCommandEvent::GetInt(), with values corresponding to those of
+           wxNotificationMessage::DismissalReason.
     @event{EVT_NOTIFICATION_MESSAGE_ACTION(id, func)}
            Process a @c wxEVT_NOTIFICATION_MESSAGE_ACTION event, when the user
            selects on of the actions added by AddAction()
@@ -62,6 +65,19 @@ public:
     {
         Timeout_Auto = -1,  ///< Notification will be hidden automatically.
         Timeout_Never = 0   ///< Notification will never time out.
+    };
+
+    /**
+      Reasons for dismissal, posted with wxEVT_NOTIFICATION_MESSAGE_DISMISSED events.
+
+      @since 3.3.0
+    */
+    enum class DismissalReason
+    {
+        Unknown,            ///< Reason unknown, possibly unsupported on this platform.
+        ByUser,             ///< The user dismissed the notification.
+        ByApp,              ///< The application itself closed the notification.
+        TimedOut            ///< The notification expired after reaching its timeout.
     };
 
     /**

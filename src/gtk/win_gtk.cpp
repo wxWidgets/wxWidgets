@@ -458,6 +458,9 @@ struct AdjustData {
 extern "C" {
 static void scroll_adjust(GtkWidget* widget, void* data)
 {
+    if (!gtk_widget_get_visible(widget))
+        return;
+
     const AdjustData* p = static_cast<AdjustData*>(data);
     GtkAllocation a;
     gtk_widget_get_allocation(widget, &a);

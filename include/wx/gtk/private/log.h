@@ -85,7 +85,7 @@ private:
 class LogFilterByLevel : public LogFilter
 {
 public:
-    LogFilterByLevel() { }
+    LogFilterByLevel() = default;
 
     void SetLevelToIgnore(int flags)
     {

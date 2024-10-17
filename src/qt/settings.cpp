@@ -11,6 +11,7 @@
 #include "wx/settings.h"
 #include "wx/qt/private/converter.h"
 #include <QtGui/QPalette>
+#include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QStyle>
@@ -196,10 +197,10 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUN
             return QApplication::style()->pixelMetric(QStyle::PM_IconViewIconSize);
 
         case wxSYS_SCREEN_X:
-            return QApplication::desktop()->screenGeometry().width();
+            return QApplication::primaryScreen()->size().width();
 
         case wxSYS_SCREEN_Y:
-            return QApplication::desktop()->screenGeometry().height();
+            return QApplication::primaryScreen()->size().height();
 
         case wxSYS_HSCROLL_Y:
         case wxSYS_VSCROLL_X:

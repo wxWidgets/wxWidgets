@@ -2,7 +2,6 @@
 // Name:        src/msw/uiaction.cpp
 // Purpose:     wxUIActionSimulator implementation
 // Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
-// Modified by:
 // Created:     2010-03-06
 // Copyright:   (c) Kevin Ollivier
 //              (c) 2010 Steven Lamerton

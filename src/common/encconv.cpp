@@ -87,7 +87,10 @@ static CharsetItem* BuildReverseTable(const wxUint16 *tbl)
     CharsetItem *rev = new CharsetItem[128];
 
     for (int i = 0; i < 128; i++)
-        rev[i].c = wxUint8(128 + i), rev[i].u = tbl[i];
+    {
+        rev[i].c = wxUint8(128 + i);
+        rev[i].u = tbl[i];
+    }
 
     qsort(rev, 128, sizeof(CharsetItem), CompareCharsetItems);
 

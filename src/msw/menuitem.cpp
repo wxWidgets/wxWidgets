@@ -2,7 +2,6 @@
 // Name:        src/msw/menuitem.cpp
 // Purpose:     wxMenuItem implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -781,7 +780,7 @@ wxSize wxMenuItem::GetMenuTextExtent(const wxString& text) const
     // Note that we must have both a valid menu and a valid window by the time
     // we can be called -- and GetFontToUse() already assumes this, so there is
     // no need to check that they're both non-null here.
-    wxClientDC dc(GetMenu()->GetWindow());
+    wxInfoDC dc(GetMenu()->GetWindow());
 
     wxFont font;
     GetFontToUse(font);

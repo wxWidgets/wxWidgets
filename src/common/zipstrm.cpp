@@ -2016,7 +2016,7 @@ bool wxZipInputStream::OpenDecompressor(bool raw /*=false*/)
         }
     }
 
-    m_crcAccumulator = crc32(0, Z_NULL, 0);
+    m_crcAccumulator = crc32(0, nullptr, 0);
     m_lasterror = m_decomp ? m_decomp->GetLastError() : wxSTREAM_READ_ERROR;
     return IsOk();
 }
@@ -2296,7 +2296,7 @@ bool wxZipOutputStream::DoCreate(wxZipEntry *entry, bool raw /*=false*/)
 
     m_pending->SetOffset(m_headerOffset);
 
-    m_crcAccumulator = crc32(0, Z_NULL, 0);
+    m_crcAccumulator = crc32(0, nullptr, 0);
 
     if (raw)
         m_raw = true;

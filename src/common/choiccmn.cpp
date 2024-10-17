@@ -2,7 +2,6 @@
 // Name:        src/common/choiccmn.cpp
 // Purpose:     common (to all ports) wxChoice functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     26.07.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

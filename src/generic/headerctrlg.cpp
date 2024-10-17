@@ -269,10 +269,8 @@ bool wxHeaderCtrl::IsReordering() const
 
 void wxHeaderCtrl::ClearMarkers()
 {
-    wxClientDC dc(this);
-
-    wxDCOverlay dcover(m_overlay, &dc);
-    dcover.Clear();
+    wxOverlayDC dc(m_overlay, this);
+    dc.Clear();
 }
 
 void wxHeaderCtrl::EndDragging()
@@ -372,10 +370,8 @@ void wxHeaderCtrl::EndResizing(int xPhysical)
 
 void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 {
-    wxClientDC dc(this);
-
-    wxDCOverlay dcover(m_overlay, &dc);
-    dcover.Clear();
+    wxOverlayDC dc(m_overlay, this);
+    dc.Clear();
 
     dc.SetPen(*wxBLUE);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -456,7 +452,22 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
         const unsigned pos = GetColumnPos(colNew);
         event.SetNewOrder(pos);
 
-        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        const bool processed = GetEventHandler()->ProcessEvent(event);
+
+        if ( !processed )
+        {
+            // get the reordered columns
+            wxArrayInt order = GetColumnsOrder();
+            MoveColumnInOrderArray(order, colOld, pos);
+
+            // As the event wasn't processed, call the virtual function
+            // callback.
+            UpdateColumnsOrder(order);
+
+            // update columns order
+            SetColumnsOrder(order);
+        }
+        else if ( event.IsAllowed() )
         {
             // do reorder the columns
             DoMoveCol(colOld, pos);
@@ -652,7 +663,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     // find if the event is over a column at all
     bool onSeparator;
     const unsigned col = mevent.Leaving()
-                            ? (onSeparator = false, COL_NONE)
+                            ? ((void)(onSeparator = false), COL_NONE)
                             : FindColumnAtPoint(xPhysical, &onSeparator);
 
 

@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_RADIOBTN
+
 #include "wx/radiobut.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -98,11 +100,6 @@ public:
     }
 };
 
-wxRadioButton::wxRadioButton() :
-    m_qtRadioButton(nullptr)
-{
-}
-
 wxRadioButton::wxRadioButton( wxWindow *parent,
                wxWindowID id,
                const wxString& label,
@@ -124,10 +121,11 @@ bool wxRadioButton::Create( wxWindow *parent,
              const wxValidator& validator,
              const wxString& name)
 {
-    m_qtRadioButton = new wxQtRadioButton( parent, this );
-    m_qtRadioButton->setText( wxQtConvertString( label ));
+    m_qtWindow = new wxQtRadioButton( parent, this );
 
-    if ( !QtCreateControl(parent, id, pos, size, style, validator, name) )
+    GetQRadioButton()->setText( wxQtConvertString( label ));
+
+    if ( !wxRadioButtonBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
     // Check if we need to create a new button group: this must be done when
@@ -135,7 +133,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     // buttons to prevent them implicitly becoming part of an existing group.
     if ( (style & wxRB_GROUP) || (style & wxRB_SINGLE) )
     {
-        QtStartNewGroup(m_qtRadioButton);
+        QtStartNewGroup(GetQRadioButton());
     }
     else
     {
@@ -150,17 +148,31 @@ bool wxRadioButton::Create( wxWindow *parent,
     return true;
 }
 
+QRadioButton* wxRadioButton::GetQRadioButton() const
+{
+    return static_cast<QRadioButton*>(m_qtWindow);
+}
+
 void wxRadioButton::SetValue(bool value)
 {
-    m_qtRadioButton->setChecked( value );
+    GetQRadioButton()->setChecked( value );
 }
 
 bool wxRadioButton::GetValue() const
 {
-    return m_qtRadioButton->isChecked();
+    return GetQRadioButton()->isChecked();
 }
 
-QWidget *wxRadioButton::GetHandle() const
+wxString wxRadioButton::GetLabel() const
 {
-    return m_qtRadioButton;
+    return wxQtConvertString( GetQRadioButton()->text() );
 }
+
+void wxRadioButton::SetLabel(const wxString& label)
+{
+    wxRadioButtonBase::SetLabel(label);
+
+    GetQRadioButton()->setText( wxQtConvertString(label) );
+}
+
+#endif // wxUSE_RADIOBTN

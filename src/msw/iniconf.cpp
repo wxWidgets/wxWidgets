@@ -2,7 +2,6 @@
 // Name:        src/msw/iniconf.cpp
 // Purpose:     implementation of wxIniConfig class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     27.07.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

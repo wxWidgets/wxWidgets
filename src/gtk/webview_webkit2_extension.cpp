@@ -356,11 +356,15 @@ wxgtk_webview_handle_method_call(GDBusConnection*,
 }
 } // extern "C"
 
+wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
 static const GDBusInterfaceVTable interface_vtable = {
     wxgtk_webview_handle_method_call,
     nullptr,
     nullptr
 };
+
+wxGCC_WARNING_RESTORE(missing-field-initializers)
 
 static
 gboolean

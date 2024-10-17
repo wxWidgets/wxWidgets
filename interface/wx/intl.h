@@ -390,7 +390,10 @@ public:
     bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
 
     /**
-        Calls wxTranslations::AddCatalog(const wxString&, wxLanguage, const wxString&).
+        Calls wxTranslations::AddCatalog(const wxString&, const wxString&).
+
+        @deprecated This overload shouldn't be used any longer as @a
+        msgIdCharset is just ignored, please omit it.
     */
     bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage,
                     const wxString& msgIdCharset);

@@ -2,7 +2,6 @@
 // Name:        wx/textctrl.h
 // Purpose:     wxTextAttr and wxTextCtrlBase class - the interface of wxTextCtrl
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     13.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -104,7 +103,17 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl file types
 // ----------------------------------------------------------------------------
 
-#define wxTEXT_TYPE_ANY     0
+// wxOSX and wxMSW support RTF in wxTextCtrl.
+#if defined(__WXOSX__) || (defined(__WXMSW__) && wxUSE_RICHEDIT)
+    #define wxHAS_TEXTCTRL_RTF
+#endif
+
+enum wxTextCtrlFileType
+{
+    wxTEXT_TYPE_ANY,
+    wxTEXT_TYPE_PLAIN,
+    wxTEXT_TYPE_RTF
+};
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl::HitTest return values
@@ -606,8 +615,8 @@ private:
 class WXDLLIMPEXP_CORE wxTextAreaBase
 {
 public:
-    wxTextAreaBase() { }
-    virtual ~wxTextAreaBase() { }
+    wxTextAreaBase() = default;
+    virtual ~wxTextAreaBase() = default;
 
     // lines access
     // ------------
@@ -681,6 +690,14 @@ public:
     virtual wxString GetValue() const = 0;
     virtual void SetValue(const wxString& value) = 0;
 
+    // Returns whether the RTF-related functions below can be used.
+    virtual bool IsRTFSupported() { return false; }
+
+    // Base class implementations simply assert, if IsRTFSupported() returns
+    // true, the port must override these functions to really implement them.
+    virtual wxString GetRTFValue() const;
+    virtual void SetRTFValue(const wxString& val);
+
 protected:
     // implementation of loading/saving
     virtual bool DoLoadFile(const wxString& file, int fileType);
@@ -714,7 +731,7 @@ class WXDLLIMPEXP_CORE wxTextCtrlIface : public wxTextAreaBase,
                                          public wxTextEntryBase
 {
 public:
-    wxTextCtrlIface() { }
+    wxTextCtrlIface() = default;
 
     // wxTextAreaBase overrides
     virtual wxString GetValue() const override
@@ -751,8 +768,8 @@ public:
     // creation
     // --------
 
-    wxTextCtrlBase() { }
-    virtual ~wxTextCtrlBase() { }
+    wxTextCtrlBase() = default;
+    virtual ~wxTextCtrlBase() = default;
 
 
     // more readable flag testing methods

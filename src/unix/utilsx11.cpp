@@ -2,7 +2,6 @@
 // Name:        src/unix/utilsx11.cpp
 // Purpose:     Miscellaneous X11 functions (for wxCore)
 // Author:      Mattia Barbon, Vaclav Slavik, Robert Roebling
-// Modified by:
 // Created:     25.03.02
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

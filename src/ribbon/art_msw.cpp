@@ -2,7 +2,6 @@
 // Name:        src/ribbon/art_msw.cpp
 // Purpose:     MSW style art provider for ribbon interface
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-05-25
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -263,7 +262,7 @@ static const char * const ribbon_help_button_xpm[] = {
 };
 
 wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
-#if defined( __WXMAC__ )
+#if defined( __WXOSX__ )
     : m_tab_label_font(*wxSMALL_FONT)
 #else
     : m_tab_label_font(*wxNORMAL_FONT)
@@ -355,12 +354,18 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     // Map secondary luminance from [0, 1] to [0.1, 0.9]
     secondary_hsl.luminance = std::cos(secondary_hsl.luminance * float(M_PI)) * -0.4f + 0.5f;
 
-#define LikePrimary(h, s, l) \
-    primary_hsl.ShiftHue(h ## f).Saturated(primary_is_gray ? 0 : s ## f) \
-    .Lighter(l ## f).ToRGB()
-#define LikeSecondary(h, s, l) \
-    secondary_hsl.ShiftHue(h ## f).Saturated(secondary_is_gray ? 0 : s ## f) \
-    .Lighter(l ## f).ToRGB()
+    const auto LikePrimary = [primary_hsl, primary_is_gray]
+        (double h, double s, double l)
+        {
+            return primary_hsl.ShiftHue(h).Saturated(primary_is_gray ? 0.0 : s)
+                .Lighter(l).ToRGB();
+        };
+    const auto LikeSecondary = [secondary_hsl, secondary_is_gray]
+        (double h, double s, double l)
+        {
+            return secondary_hsl.ShiftHue(h).Saturated(secondary_is_gray ? 0.0 : s)
+                .Lighter(l).ToRGB();
+        };
 
     m_page_border_pen = LikePrimary(1.4, 0.00, -0.08);
 
@@ -483,9 +488,6 @@ void wxRibbonMSWArtProvider::SetColourScheme(
 
     m_tab_highlight_colour = top_colour2;
     m_tab_highlight_gradient_colour = bottom_colour2;
-
-#undef LikePrimary
-#undef LikeSecondary
 
     // Invalidate cached tab separator
     m_cached_tab_separator_visibility = -1.0;
@@ -691,7 +693,7 @@ int wxRibbonMSWArtProvider::GetMetric(int id) const
         case wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE:
             return m_gallery_bitmap_padding_bottom_size;
         default:
-            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            wxFAIL_MSG("Invalid Metric Ordinal");
             break;
     }
 
@@ -739,7 +741,7 @@ void wxRibbonMSWArtProvider::SetMetric(int id, int new_val)
             m_gallery_bitmap_padding_bottom_size = new_val;
             break;
         default:
-            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            wxFAIL_MSG("Invalid Metric Ordinal");
             break;
     }
 }
@@ -758,7 +760,7 @@ void wxRibbonMSWArtProvider::SetFont(int id, const wxFont& font)
             m_panel_label_font = font;
             break;
         default:
-            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            wxFAIL_MSG("Invalid Metric Ordinal");
             break;
     }
 }
@@ -774,7 +776,7 @@ wxFont wxRibbonMSWArtProvider::GetFont(int id) const
         case wxRIBBON_ART_PANEL_LABEL_FONT:
             return m_panel_label_font;
         default:
-            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            wxFAIL_MSG("Invalid Metric Ordinal");
             break;
     }
 
@@ -973,7 +975,7 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id) const
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
             return m_tool_active_background_gradient_colour;
         default:
-            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            wxFAIL_MSG("Invalid Metric Ordinal");
             break;
     }
 
@@ -1320,7 +1322,7 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             m_tool_active_background_gradient_colour = colour;
             break;        
         default:
-            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            wxFAIL_MSG("Invalid Metric Ordinal");
             break;
     }
 }
@@ -1452,7 +1454,7 @@ void wxRibbonMSWArtProvider::DrawTab(
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
     {
         wxString label = tab.page->GetLabel();
-        if(!label.IsEmpty())
+        if(!label.empty())
         {
             dc.SetFont(m_tab_label_font);
 
@@ -1919,7 +1921,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
         if(label_size.GetWidth() > label_rect.GetWidth())
         {
             // Test if there is enough length for 3 letters and ...
-            wxString new_label = label.Mid(0, 3) + wxT("...");
+            wxString new_label = label.Mid(0, 3) + "...";
             label_size = dc.GetTextExtent(new_label);
             if(label_size.GetWidth() > label_rect.GetWidth())
             {
@@ -1933,7 +1935,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
                 // Display as many characters as possible and append ...
                 for(size_t len = label.Len() - 1; len >= 3; --len)
                 {
-                    new_label = label.Mid(0, len) + wxT("...");
+                    new_label = label.Mid(0, len) + "...";
                     label_size = dc.GetTextExtent(new_label);
                     if(label_size.GetWidth() <= label_rect.GetWidth())
                     {
@@ -1989,7 +1991,7 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
         DrawPanelBorder(dc, true_rect, m_panel_hover_border_pen, m_panel_hover_border_gradient_pen);
 }
 
-wxRect wxRibbonMSWArtProvider::GetPanelExtButtonArea(wxDC& WXUNUSED(dc),
+wxRect wxRibbonMSWArtProvider::GetPanelExtButtonArea(wxReadOnlyDC& WXUNUSED(dc),
                         const wxRibbonPanel* WXUNUSED(wnd),
                         wxRect rect)
 {
@@ -2869,7 +2871,7 @@ void wxRibbonMSWArtProvider::DrawHelpButton(wxDC& dc,
 }
 
 void wxRibbonMSWArtProvider::GetBarTabWidth(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* WXUNUSED(wnd),
                         const wxString& label,
                         const wxBitmap& bitmap,
@@ -2880,7 +2882,7 @@ void wxRibbonMSWArtProvider::GetBarTabWidth(
 {
     int width = 0;
     int min = 0;
-    if((m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS) && !label.IsEmpty())
+    if((m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS) && !label.empty())
     {
         dc.SetFont(m_tab_label_font);
         width += dc.GetTextExtent(label).GetWidth();
@@ -2917,7 +2919,7 @@ void wxRibbonMSWArtProvider::GetBarTabWidth(
 }
 
 int wxRibbonMSWArtProvider::GetTabCtrlHeight(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* WXUNUSED(wnd),
                         const wxRibbonPageTabInfoArray& pages)
 {
@@ -2934,7 +2936,7 @@ int wxRibbonMSWArtProvider::GetTabCtrlHeight(
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
     {
         dc.SetFont(m_tab_label_font);
-        text_height = dc.GetTextExtent(wxT("ABCDEFXj")).GetHeight() + 10;
+        text_height = dc.GetTextExtent("ABCDEFXj").GetHeight() + 10;
     }
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
     {
@@ -2953,7 +2955,7 @@ int wxRibbonMSWArtProvider::GetTabCtrlHeight(
 }
 
 wxSize wxRibbonMSWArtProvider::GetScrollButtonMinimumSize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         wxWindow* WXUNUSED(wnd),
                         long WXUNUSED(style))
 {
@@ -2961,7 +2963,7 @@ wxSize wxRibbonMSWArtProvider::GetScrollButtonMinimumSize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetPanelSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize client_size,
                         wxPoint* client_offset)
@@ -2987,7 +2989,7 @@ wxSize wxRibbonMSWArtProvider::GetPanelSize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetPanelClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset)
@@ -3015,7 +3017,7 @@ wxSize wxRibbonMSWArtProvider::GetPanelClientSize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetGallerySize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         const wxRibbonGallery* WXUNUSED(wnd),
                         wxSize client_size)
 {
@@ -3028,7 +3030,7 @@ wxSize wxRibbonMSWArtProvider::GetGallerySize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         const wxRibbonGallery* WXUNUSED(wnd),
                         wxSize size,
                         wxPoint* client_offset,
@@ -3089,7 +3091,7 @@ wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
 }
 
 wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         const wxRibbonPage* WXUNUSED(wnd),
                         wxSize page_old_size,
                         wxSize page_new_size)
@@ -3133,7 +3135,7 @@ wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
 }
 
 bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
@@ -3259,7 +3261,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
 }
 
 wxCoord wxRibbonMSWArtProvider::GetButtonBarButtonTextWidth(
-                        wxDC& dc, const wxString& label,
+                        wxReadOnlyDC& dc, const wxString& label,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size)
 {
@@ -3300,7 +3302,7 @@ wxCoord wxRibbonMSWArtProvider::GetButtonBarButtonTextWidth(
 }
 
 wxSize wxRibbonMSWArtProvider::GetMinimisedPanelMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize* desired_bitmap_size,
                         wxDirection* expanded_panel_direction)
@@ -3339,7 +3341,7 @@ wxSize wxRibbonMSWArtProvider::GetMinimisedPanelMinimumSize(
 }
 
 wxSize wxRibbonMSWArtProvider::GetToolSize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         wxWindow* WXUNUSED(wnd),
                         wxSize bitmap_size,
                         wxRibbonButtonKind kind,

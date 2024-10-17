@@ -24,8 +24,8 @@ class WXDLLIMPEXP_CORE wxAddRemoveAdaptor
 {
 public:
     // Default ctor and trivial but virtual dtor.
-    wxAddRemoveAdaptor() { }
-    virtual ~wxAddRemoveAdaptor() { }
+    wxAddRemoveAdaptor() = default;
+    virtual ~wxAddRemoveAdaptor() = default;
 
     // Override to return the associated control.
     virtual wxWindow* GetItemsCtrl() const = 0;

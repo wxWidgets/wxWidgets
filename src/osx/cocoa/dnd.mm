@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/dnd.mm
 // Purpose:     wxDropTarget, wxDropSource implementations
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) 1998 Stefan Csomor
 // Licence:     wxWindows licence
@@ -546,11 +545,17 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         if ( mouseUpTarget != nullptr )
         {
-            wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-            ((wxWidgetCocoaImpl*)mouseUpTarget->GetPeer())->SetupMouseEvent(wxevent , theEvent) ;
-            wxevent.SetEventType(wxEVT_LEFT_UP);
+            const auto wxpeer = (wxWidgetCocoaImpl*)mouseUpTarget->GetPeer();
+            for ( auto wxevent : wxpeer->TranslateMouseEvent(theEvent) )
+            {
+                if ( wxevent.GetEventType() == wxEVT_LEFT_DOWN )
+                {
+                    wxevent.SetEventType(wxEVT_LEFT_UP);
 
-            mouseUpTarget->HandleWindowEvent(wxevent);
+                    mouseUpTarget->HandleWindowEvent(wxevent);
+                    break;
+                }
+            }
         }
 
         gCurrentSource = nullptr;

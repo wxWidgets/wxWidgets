@@ -2,7 +2,6 @@
 // Name:        src/unix/displayx11.cpp
 // Purpose:     Unix/X11 implementation of wxDisplay class
 // Author:      Brian Victor, Vadim Zeitlin
-// Modified by:
 // Created:     12/05/02
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

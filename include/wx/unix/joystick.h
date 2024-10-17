@@ -2,7 +2,6 @@
 // Name:        wx/unix/joystick.h
 // Purpose:     wxJoystick class
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence

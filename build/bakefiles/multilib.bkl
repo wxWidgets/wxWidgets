@@ -183,19 +183,20 @@
         <sources>$(WEBVIEW_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
+        <ldflags>$(EXTRALDFLAGS_WEBVIEW)</ldflags>
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+        <include>$(CEF_DIR)</include>
     </dll>
 
     <lib id="webviewlib" template="wx_lib,webview_additional"
          cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <sources>$(WEBVIEW_SRC)</sources>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+        <include>$(CEF_DIR)</include>
     </lib>
 
     <wxshortcut id="wxwebview" cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'"/>
-
-    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">webview=webviewlib+webviewdll</set>
 
     <!-- ================================================================ -->
     <!--                             OpenGL                               -->

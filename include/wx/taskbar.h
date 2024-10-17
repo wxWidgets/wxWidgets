@@ -2,7 +2,6 @@
 // Name:        wx/taskbar.h
 // Purpose:     wxTaskBarIcon base header and class
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -42,7 +41,7 @@ enum wxTaskBarIconType
 class WXDLLIMPEXP_CORE wxTaskBarIconBase : public wxEvtHandler
 {
 public:
-    wxTaskBarIconBase() { }
+    wxTaskBarIconBase() = default;
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXQT__)
     static bool IsAvailable();

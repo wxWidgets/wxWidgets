@@ -136,7 +136,7 @@ class WXDLLIMPEXP_CORE wxNativeContainerWindow : public wxTopLevelWindow
 {
 public:
     // default ctor, call Create() later
-    wxNativeContainerWindow() { }
+    wxNativeContainerWindow() = default;
 
     // create a window from an existing native window handle
     //

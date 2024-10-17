@@ -2,7 +2,6 @@
 // Name:        src/msw/stattext.cpp
 // Purpose:     wxStaticText
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -89,12 +88,7 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxStaticText::DoGetBestClientSize() const
 {
-    wxClientDC dc(const_cast<wxStaticText *>(this));
-    wxFont font(GetFont());
-    if (!font.IsOk())
-        font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-
-    dc.SetFont(font);
+    wxInfoDC dc(const_cast<wxStaticText *>(this));
 
     wxCoord widthTextMax, heightTextTotal;
     dc.GetMultiLineTextExtent(GetLabelText(), &widthTextMax, &heightTextTotal);
@@ -113,6 +107,16 @@ wxSize wxStaticText::DoGetBestClientSize() const
     // always on the same line, e.g. even with this hack wxComboBox text is
     // still not aligned to the same position.
     heightTextTotal += 1;
+
+    // And this extra pixel is an even worse hack which is somehow needed to
+    // avoid the problem with the native control now showing any text at all
+    // for some particular width values: e.g. without this, using " AJ" as a
+    // label doesn't show anything at all on the screen, even though the
+    // control text is properly set and it has rougly the correct (definitely
+    // not empty) size. This looks like a bug in the native control because it
+    // really should show at least the first characters, but it's not clear
+    // what else can we do about it than just add this extra pixel.
+    widthTextMax++;
 
     return wxSize(widthTextMax, heightTextTotal);
 }
@@ -160,7 +164,7 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
     {
         case WM_PAINT:
             // We only customize drawing of disabled labels in dark mode.
-            if ( IsEnabled() || !wxMSWDarkMode::IsActive() )
+            if ( ::IsWindowEnabled(GetHwnd()) || !wxMSWDarkMode::IsActive() )
                 break;
 
             // For them, the default "greying out" of the text for the disabled
@@ -182,8 +186,7 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
             *result = MSWDefWindowProc(WM_PAINT, wParam, lParam);
 
             updateStyle.TurnOn(WS_DISABLED).Apply();
-            if ( m_hasFgCol )
-                m_foregroundColour = colFgOrig;
+            m_foregroundColour = colFgOrig;
 
             return true;
     }

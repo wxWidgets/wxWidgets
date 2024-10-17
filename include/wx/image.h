@@ -18,6 +18,7 @@
 #include "wx/gdicmn.h"
 #include "wx/hashmap.h"
 #include "wx/arrstr.h"
+#include "wx/variant.h"
 
 #if wxUSE_STREAMS
 #  include "wx/stream.h"
@@ -61,16 +62,19 @@ enum wxImageResolution
 enum wxImageResizeQuality
 {
     // different image resizing algorithms used by Scale() and Rescale()
-    wxIMAGE_QUALITY_NEAREST = 0,
+    wxIMAGE_QUALITY_NEAREST = 5,
     wxIMAGE_QUALITY_BILINEAR = 1,
     wxIMAGE_QUALITY_BICUBIC = 2,
     wxIMAGE_QUALITY_BOX_AVERAGE = 3,
 
-    // default quality is low (but fast)
-    wxIMAGE_QUALITY_NORMAL = wxIMAGE_QUALITY_NEAREST,
+    // default quality, suitable for most icons
+    wxIMAGE_QUALITY_NORMAL = 0,
 
-    // highest (but best) quality
-    wxIMAGE_QUALITY_HIGH = 4
+    // "high" quality is not always better, but can be for photos
+    wxIMAGE_QUALITY_HIGH = 4,
+
+    // fastest algorithm, possibly at the expense of quality
+    wxIMAGE_QUALITY_FAST = 6
 };
 
 // Constants for wxImage::Paste() for specifying alpha blending option.
@@ -97,15 +101,6 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 class WXDLLIMPEXP_FWD_CORE wxImageHandler;
 class WXDLLIMPEXP_FWD_CORE wxImage;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
-
-//-----------------------------------------------------------------------------
-// wxVariant support
-//-----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-#include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxImage,WXDLLIMPEXP_CORE)
-#endif
 
 //-----------------------------------------------------------------------------
 // wxImageHandler
@@ -284,7 +279,7 @@ public:
         double value;
     };
 
-    wxImage() {}
+    wxImage() = default;
     wxImage( int width, int height, bool clear = true )
         { Create( width, height, clear ); }
     wxImage( int width, int height, unsigned char* data, bool static_data = false )
@@ -593,6 +588,9 @@ public:
 
     static HSVValue RGBtoHSV(const RGBValue& rgb);
     static RGBValue HSVtoRGB(const HSVValue& hsv);
+
+    // wxVariant support
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxImage, WXDLLIMPEXP_CORE);
 
 protected:
     static wxList   sm_handlers;

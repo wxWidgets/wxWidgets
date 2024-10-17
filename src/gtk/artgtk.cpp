@@ -2,7 +2,6 @@
 // Name:        src/gtk/artgtk.cpp
 // Purpose:     stock wxArtProvider instance with native GTK+ stock icons
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2004-08-22
 // Copyright:   (c) Vaclav Slavik, 2004
 // Licence:     wxWindows licence

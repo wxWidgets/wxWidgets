@@ -2,7 +2,6 @@
 // Name:        src/x11/minifram.cpp
 // Purpose:     wxMiniFrame. Optional; identical to wxFrame if not supported.
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

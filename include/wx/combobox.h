@@ -2,7 +2,6 @@
 // Name:        wx/combobox.h
 // Purpose:     wxComboBox declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     24.12.00
 // Copyright:   (c) 1996-2000 wxWidgets team
 // Licence:     wxWindows licence

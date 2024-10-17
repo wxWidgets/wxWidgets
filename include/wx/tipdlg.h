@@ -2,7 +2,6 @@
 // Name:        wx/tipdlg.h
 // Purpose:     declaration of wxTipDialog
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     28.06.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -45,7 +44,7 @@ public:
     size_t GetCurrentTip() const { return m_currentTip; }
 
     // virtual dtor for the base class
-    virtual ~wxTipProvider() { }
+    virtual ~wxTipProvider() = default;
 
 
 #if WXWIN_COMPATIBILITY_3_0

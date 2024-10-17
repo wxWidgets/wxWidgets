@@ -23,7 +23,7 @@ class WXDLLIMPEXP_BASE wxMemoryText : public wxTextBuffer
 {
 public:
     // Constructors.
-    wxMemoryText() { }
+    wxMemoryText() = default;
     wxMemoryText(const wxString& name) : wxTextBuffer(name) { }
 
 protected:

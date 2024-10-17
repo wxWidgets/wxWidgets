@@ -19,10 +19,12 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	VISUALSTUDIOPLATFORM="$(VISUALSTUDIOPLATFORM)" DEBUG_INFO="$(DEBUG_INFO)" \
 	DEBUG_FLAG="$(DEBUG_FLAG)" DEBUG_RUNTIME_LIBS="$(DEBUG_RUNTIME_LIBS)" \
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" \
-	USE_WEBVIEW="$(USE_WEBVIEW)" USE_MEDIA="$(USE_MEDIA)" USE_XML="$(USE_XML)" \
-	USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" USE_RIBBON="$(USE_RIBBON)" \
-	USE_PROPGRID="$(USE_PROPGRID)" USE_RICHTEXT="$(USE_RICHTEXT)" \
-	USE_STC="$(USE_STC)" USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
+	USE_WEBVIEW="$(USE_WEBVIEW)" \
+	USE_WEBVIEW_CHROMIUM="$(USE_WEBVIEW_CHROMIUM)" USE_MEDIA="$(USE_MEDIA)" \
+	USE_XML="$(USE_XML)" USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" \
+	USE_RIBBON="$(USE_RIBBON)" USE_PROPGRID="$(USE_PROPGRID)" \
+	USE_RICHTEXT="$(USE_RICHTEXT)" USE_STC="$(USE_STC)" \
+	USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" \
 	USE_DPI_AWARE_MANIFEST="$(USE_DPI_AWARE_MANIFEST)" \
 	USE_THREADS="$(USE_THREADS)" USE_CAIRO="$(USE_CAIRO)" \
@@ -75,7 +77,7 @@ __xrc___depname = sub_xrc
 
 ### Targets: ###
 
-all: sub_access sub_animate sub_archive sub_artprov $(__aui___depname) sub_calendar sub_caret sub_clipboard sub_collpane sub_combo sub_config sub_console sub_dataview sub_dialogs sub_dialup sub_display sub_dll sub_dnd sub_docview sub_dragimag sub_drawing sub_erase sub_event $(__except___depname) sub_exec sub_font sub_grid $(__help___depname) $(__htlbox___depname) $(__html___depname) sub_image sub_internat sub_ipc sub_joytest sub_keyboard sub_layout sub_listctrl sub_mdi $(__mediaplayer___depname) sub_menu sub_minimal sub_nativdlg sub_notebook sub_oleauto sub_opengl sub_ownerdrw sub_popup sub_power sub_preferences sub_printing $(__propgrid___depname) sub_regtest sub_render $(__ribbon___depname) $(__richtext___depname) sub_sashtest sub_scroll sub_secretstore sub_shaped sub_sockets sub_sound $(__splash___depname) sub_splitter sub_statbar $(__stc___depname) sub_svg sub_taborder sub_taskbar sub_text sub_thread sub_toolbar sub_treelist sub_treectrl sub_typetest sub_uiaction sub_validate sub_vscroll $(__webview___depname) sub_webrequest sub_widgets sub_wizard sub_wrapsizer $(__xrc___depname)
+all: sub_access sub_animate sub_archive sub_artprov $(__aui___depname) sub_calendar sub_caret sub_collpane sub_combo sub_config sub_console sub_dataview sub_dialogs sub_dialup sub_display sub_dll sub_dnd sub_docview sub_dragimag sub_drawing sub_erase sub_event $(__except___depname) sub_exec sub_font sub_grid $(__help___depname) $(__htlbox___depname) $(__html___depname) sub_image sub_internat sub_ipc sub_joytest sub_keyboard sub_layout sub_listctrl sub_mdi $(__mediaplayer___depname) sub_menu sub_minimal sub_nativdlg sub_notebook sub_oleauto sub_opengl sub_ownerdrw sub_popup sub_power sub_preferences sub_printing $(__propgrid___depname) sub_regtest sub_render $(__ribbon___depname) $(__richtext___depname) sub_sashtest sub_scroll sub_secretstore sub_shaped sub_sockets sub_sound $(__splash___depname) sub_splitter sub_statbar $(__stc___depname) sub_svg sub_taborder sub_taskbar sub_text sub_thread sub_toolbar sub_treelist sub_treectrl sub_typetest sub_uiaction sub_validate sub_vscroll $(__webview___depname) sub_webrequest sub_widgets sub_wizard sub_wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -100,9 +102,6 @@ clean:
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 	cd caret
-	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
-	cd clipboard
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 	cd collpane
@@ -368,11 +367,6 @@ sub_calendar:
 
 sub_caret: 
 	cd caret
-	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
-
-sub_clipboard: 
-	cd clipboard
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 

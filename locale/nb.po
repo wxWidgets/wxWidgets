@@ -2349,7 +2349,7 @@ msgstr "Ingen bildebehandler for type %s definert."
 #: ../src/common/image.cpp:2962
 #, fuzzy, c-format
 msgid "Image is not of type %s."
-msgstr "Bildefil er ikke av type %d."
+msgstr "Bildefil er ikke av type %s."
 
 #: ../src/common/image.cpp:3430
 #, fuzzy, c-format

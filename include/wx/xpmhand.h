@@ -2,7 +2,6 @@
 // Name:        wx/xpmhand.h
 // Purpose:     XPM handler base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

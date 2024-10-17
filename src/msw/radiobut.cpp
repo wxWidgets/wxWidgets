@@ -2,7 +2,6 @@
 // Name:        src/msw/radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -270,7 +269,7 @@ wxSize wxRadioButton::DoGetBestSize() const
 
     if ( s_radioSize.HasChanged(this) )
     {
-        wxClientDC dc(const_cast<wxRadioButton*>(this));
+        wxInfoDC dc(const_cast<wxRadioButton*>(this));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
         s_radioSize.SetAtNewDPI(dc.GetCharHeight());

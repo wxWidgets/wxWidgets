@@ -2,7 +2,6 @@
 // Name:        wx/osx/app.h
 // Purpose:     wxApp class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -42,6 +41,8 @@ class WXDLLIMPEXP_CORE wxApp: public wxAppBase
 
     virtual void SetPrintMode(int mode) override { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
+
+    virtual AppearanceResult SetAppearance(Appearance appearance) override;
 
     // calling OnInit with an auto-release pool ready ...
     virtual bool CallOnInit() override;

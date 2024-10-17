@@ -164,6 +164,11 @@ public:
                             int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE);
 
     /**
+        Apply attributes to the object being edited, if any.
+    */
+    virtual bool ApplyStyle(wxRichTextCtrl* ctrl, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+
+    /**
         Creation: see wxRichTextFormattingDialog() "the constructor" for
         details about the parameters.
     */
@@ -239,6 +244,17 @@ public:
         Currently the only option is Option_AllowPixelFontSize.
     */
     int GetOptions() const { return m_options; }
+
+    /**
+        If editing the attributes for a particular object, such as an image,
+        set the object so the code can initialize attributes such as size correctly.
+    */
+    void SetObject(wxRichTextObject* obj) { m_object = obj; }
+
+    /**
+        Returns the object of which the attributes are to edited (if any).
+     */
+    wxRichTextObject* GetObject() const;
 
     /**
         Returns @true if the given option is present.

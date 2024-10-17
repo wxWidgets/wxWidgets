@@ -2,7 +2,6 @@
 // Name:        demo.cpp
 // Purpose:     wxHelpController demo
 // Author:      Karsten Ballueder
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Karsten Ballueder, Julian Smart
 // Licence:     wxWindows licence

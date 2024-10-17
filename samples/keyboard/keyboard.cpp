@@ -236,8 +236,8 @@ MyFrame::MyFrame(const wxString& title)
                                             wxDefaultPosition, wxDefaultSize,
                                             wxTE_READONLY);
     headerText->SetValue(
-               " event          key     KeyCode mod   UnicodeKey  "
-               "  RawKeyCode RawKeyFlags  Position      Repeat");
+               " event            key   KeyCode mod    UnicodeKey "
+               " RawKeyCode RawKeyFlags  Position  Repeat?  Category");
 
 
     m_logText = new wxTextCtrl(this, wxID_ANY, "",
@@ -257,7 +257,7 @@ MyFrame::MyFrame(const wxString& title)
     SetSizerAndFit(sizer);
 
     // set size and position on screen
-    SetSize(700, 340);
+    SetSize(FromDIP(wxSize(700, 340)));
     CentreOnScreen();
 
     // connect menu event handlers
@@ -537,6 +537,33 @@ wxString GetKeyName(const wxKeyEvent &event)
     return "unknown";
 }
 
+// another helper showing the key category as determined by IsKeyInCategory().
+wxString GetKeyCategory(const wxKeyEvent& event)
+{
+    struct Category
+    {
+        wxKeyCategoryFlags category;
+        const char* name;
+    };
+
+    const Category categories[] =
+    {
+        { WXK_CATEGORY_ARROW,   "arrow" },
+        { WXK_CATEGORY_PAGING,  "page" },
+        { WXK_CATEGORY_JUMP,    "jump" },
+        { WXK_CATEGORY_TAB,     "tab" },
+        { WXK_CATEGORY_CUT,     "cut" },
+    };
+
+    for ( const auto& cat : categories )
+    {
+        if ( event.IsKeyInCategory(cat.category) )
+            return cat.name;
+    }
+
+    return {};
+}
+
 
 void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
 {
@@ -551,6 +578,7 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
 #endif
                    "  (%5d,%5d)"
                    "  %s"
+                   "     %s"
                    "\n",
                name,
                GetKeyName(event),
@@ -568,6 +596,7 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
                , event.GetX()
                , event.GetY()
                , event.IsAutoRepeat() ? "Yes" : "No"
+               , GetKeyCategory(event)
                );
 
     m_logText->AppendText(msg);

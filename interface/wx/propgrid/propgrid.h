@@ -166,8 +166,8 @@ wxPG_EX_NATIVE_DOUBLE_BUFFERING         = 0x00080000,
 
 /**
     Set this style to let user have ability to set values of properties to
-    unspecified state. Same as setting wxPG_PROP_AUTO_UNSPECIFIED for
-    all properties.
+    unspecified state. Same as setting wxPGPropertyFlags::AutoUnspecified
+    for all properties.
     @hideinitializer
 */
 wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
@@ -396,38 +396,34 @@ public:
     @{
 */
 
-enum wxPG_KEYBOARD_ACTIONS
+enum class wxPGKeyboardAction
 {
-    /**
-        @hideinitializer
-    */
-    wxPG_ACTION_INVALID = 0,
+    Invalid,
 
     /** Select the next property. */
-    wxPG_ACTION_NEXT_PROPERTY,
+    NextProperty,
 
     /** Select the previous property. */
-    wxPG_ACTION_PREV_PROPERTY,
+    PrevProperty,
 
     /** Expand the selected property, if it has child items. */
-    wxPG_ACTION_EXPAND_PROPERTY,
+    ExpandProperty,
 
     /** Collapse the selected property, if it has child items. */
-    wxPG_ACTION_COLLAPSE_PROPERTY,
+    CollapseProperty,
 
-    // Cancel and undo any editing done in the currently active property
-    // editor.
-    wxPG_ACTION_CANCEL_EDIT,
+    /** Cancel and undo any editing done in the currently active property
+        editor.
+    */
+    CancelEdit,
 
     /** Move focus to the editor control of the currently selected
         property.
     */
-    wxPG_ACTION_EDIT,
+    Edit,
 
     /** Causes editor's button (if any) to be pressed. */
-    wxPG_ACTION_PRESS_BUTTON,
-
-    wxPG_ACTION_MAX
+    PressButton,
 };
 
 /** @}
@@ -437,8 +433,8 @@ enum wxPG_KEYBOARD_ACTIONS
 
     Call wxPropertyGrid::SetSortFunction() to set it.
 
-    Sort function should return a value greater than 0 if position of p1 is
-    after p2. So, for instance, when comparing property names, you can use
+    Sort function should return a value greater than 0 if position of @a p1 is
+    after @a p2. So, for instance, when comparing property names, you can use
     following implementation:
 
         @code
@@ -521,7 +517,7 @@ public:
         the next property.
 
         @code
-            propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+            propGrid->AddActionTrigger(wxPGKeyboardAction::NextProperty,
                                        WXK_RETURN);
             propGrid->DedicateKey(WXK_RETURN);
         @endcode
@@ -529,12 +525,12 @@ public:
         @param action
             Which action to trigger. See @ref propgrid_keyboard_actions.
         @param keycode
-            Which keycode triggers the action.
+            Which key triggers the action.
         @param modifiers
-            Which key event modifiers, in addition to keycode, are needed to
+            Which key event modifiers, in addition to key code, are needed to
             trigger the action.
     */
-    void AddActionTrigger( int action, int keycode, int modifiers = 0 );
+    void AddActionTrigger(wxPGKeyboardAction action, int keycode, int modifiers = 0);
 
     /**
         Adds given property into selection. If ::wxPG_EX_MULTIPLE_SELECTION
@@ -604,9 +600,9 @@ public:
         Clears action triggers for given action.
 
         @param action
-            Which action to trigger. @ref propgrid_keyboard_actions.
+            Which action to clear. @ref propgrid_keyboard_actions.
     */
-    void ClearActionTriggers( int action );
+    void ClearActionTriggers(wxPGKeyboardAction action);
 
     /**
         Forces updating the value of property from the editor control.
@@ -631,7 +627,7 @@ public:
                 const wxString& name = wxPropertyGridNameStr );
 
     /**
-        Dedicates a specific keycode to wxPropertyGrid. This means that such
+        Dedicates a specific key code to wxPropertyGrid. This means that such
         key presses will not be redirected to editor controls.
 
         Using this function allows, for example, navigation between
@@ -680,7 +676,7 @@ public:
                 already fairly large.
 
                 Note that you can also get calculated column widths by calling
-                GetState->GetColumnWidth() immediately after this function
+                GetState()->GetColumnWidth() immediately after this function
                 returns.
     */
     wxSize FitColumns();
@@ -855,9 +851,9 @@ public:
         Returns (visual) text representation of the unspecified
         property value.
 
-        @param argFlags For internal use only.
+        @param flags For internal use only.
     */
-    wxString GetUnspecifiedValueText( int argFlags = 0 ) const;
+    wxString GetUnspecifiedValueText(wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     /**
         Returns current vertical spacing.
@@ -901,7 +897,8 @@ public:
 
         Note that @a column must not be equal to 1, as the second column is
         always editable and can be made read-only only on cell-by-cell basis
-        using @code wxPGProperty::ChangeFlag(wxPG_PROP_READONLY, true) @endcode
+        using
+        @code wxPGProperty::ChangeFlag(wxPGPropertyFlags::ReadOnly, true) @endcode
 
         @see BeginLabelEdit(), EndLabelEdit()
     */
@@ -1064,7 +1061,7 @@ public:
 
         @param sortFunction
             The sorting function to be used. It should return a value greater
-            than 0 if position of p1 is after p2. So, for instance, when
+            than 0 if position of @a p1 is after @a p2. So, for instance, when
             comparing property names, you can use following implementation:
 
             @code
@@ -1131,7 +1128,7 @@ public:
 
     /**
         Must be called in wxPGEditor::CreateControls() if primary editor window
-        is wxTextCtrl, just before textctrl is created.
+        is wxTextCtrl, just before the text control is created.
         @param text
             Initial text value of created wxTextCtrl.
     */
@@ -1204,7 +1201,7 @@ public:
 
     /** Override to customize resetting of property validation failure status.
         @remarks
-        Property is guaranteed to have flag ::wxPG_PROP_INVALID_VALUE set.
+        Property is guaranteed to have flag wxPGPropertyFlags::InvalidValue set.
     */
     virtual void DoOnValidationFailureReset( wxPGProperty* property );
 
@@ -1355,7 +1352,7 @@ public:
     ~wxPropertyGridEvent();
 
     /**
-        Returns @true if you can veto the action that the event is signaling.
+        Returns @true if you can veto the action that the event is signalling.
     */
     bool CanVeto() const;
 
@@ -1441,7 +1438,7 @@ public:
 
     /**
         Call this from your event handler to veto action that the event is
-        signaling. You can only veto a shutdown if wxPropertyGridEvent::CanVeto()
+        signalling. You can only veto a shutdown if wxPropertyGridEvent::CanVeto()
         returns @true.
 
         @remarks Currently only @c wxEVT_PG_CHANGING supports vetoing.
@@ -1537,10 +1534,16 @@ public:
 
         @param value
             Attribute value.
+
+        @param flags
+            Flags used when setting the attribute. Currently only
+            wxPGPropertyValuesFlags::Recurse is used here. This parameter is
+            only available since wxWidgets 3.3.0.
     */
     bool AddAttribute( const wxString& name,
                        const wxString& type,
-                       const wxString& value );
+                       const wxString& value,
+                       wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse );
 
     /**
         Called once in AddChildren.

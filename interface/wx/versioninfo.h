@@ -6,6 +6,24 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Defines the context in which the version information is requested.
+
+    Elements of this enum can be used to select between getting the compile- or
+    run-time wxVersionInfo object for the components supporting this.
+
+    @since 3.3.0
+ */
+enum class wxVersionContext
+{
+    /// Ask for the version used during run-time.
+    RunTime,
+
+    /// Ask for the version that the application was built with.
+    BuildTime
+};
+
+
+/**
     @class wxVersionInfo
 
     wxVersionInfo contains version information.
@@ -63,6 +81,17 @@ public:
     bool AtLeast(int major, int minor = 0, int micro = 0) const;
 
     /**
+        Return true if there is actually at least some version information.
+
+        For the default-constructed object, this function returns @false,
+        allowing to distinguish it from any object filled with the version
+        information.
+
+        @since 3.3.0
+     */
+    bool IsOk() const;
+
+    /**
         Get the name of the object (library).
 
         @return Name string.
@@ -114,11 +143,27 @@ public:
     wxString ToString() const;
 
     /**
+        Get the string representation of only numeric version components.
+
+        The micro and revision components of the version are ignored/not used
+        if they are both zero. If the revision component is non-zero all four
+        parts will be used even if the micro component is zero.
+
+        @return The version string in the form "major.minor[.micro[.revision]]".
+
+        @since 3.3.0
+     */
+    wxString GetNumericVersionString() const;
+
+    /**
         Get the string representation.
 
         The micro and revision components of the version are ignored/not used
         if they are both zero. If the revision component is non-zero all four
         parts will be used even if the micro component is zero.
+
+        Note that this function includes the name of the object this version is
+        defined for, if this is undesired, use GetNumericVersionString() instead.
 
         @return The version string in the form "name major.minor[.micro[.revision]]".
     */

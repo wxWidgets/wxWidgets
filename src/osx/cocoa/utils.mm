@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/utils.mm
 // Purpose:     various cocoa utility functions
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -109,8 +108,14 @@ void wxBell()
             activate = true;
         }
 
-        if ( activate )
-            [NSApp activateIgnoringOtherApps: YES];
+        if ( activate ) {
+            if ( [NSApp activationPolicy] == NSApplicationActivationPolicyAccessory ) {
+                [[NSRunningApplication currentApplication] activateWithOptions: NSApplicationActivateIgnoringOtherApps];
+            }
+            else {
+                [NSApp activateIgnoringOtherApps: YES];
+            }
+        }
     }
 }
 
@@ -270,6 +275,13 @@ void wxBell()
     wxUnusedVar(notification);
     if ( wxTheApp )
         wxTheApp->SetActive( false , nullptr ) ;
+}
+
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
+{
+    // Just avoid the warning about not returning true from here: as we don't
+    // customize state restoration anyhow, we can let the system do its thing.
+    return YES;
 }
 
 @end
@@ -457,6 +469,38 @@ void wxApp::OSXEnableAutomaticTabbing(bool enable)
 #endif // macOS 10.12+
 }
 
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        NSString* name = nil;
+        switch ( appearance )
+        {
+            case Appearance::System:
+                name = [[NSAppearance currentAppearance] name];
+                break;
+
+            case Appearance::Light:
+                name = NSAppearanceNameAqua;
+                break;
+
+            case Appearance::Dark:
+                name = NSAppearanceNameDarkAqua;
+                break;
+        }
+
+        [NSApp setAppearance:[NSAppearance appearanceNamed:name]];
+
+        return AppearanceResult::Ok;
+    }
+#endif // macOS 10.14+
+
+    wxUnusedVar(appearance);
+
+    return AppearanceResult::Failure;
+}
+
 extern // used from src/osx/core/display.cpp
 wxRect wxOSXGetMainDisplayClientArea()
 {
@@ -580,7 +624,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     const wxSize bitmapSize(subrect ? subrect->GetSize() : m_window->GetSize());
     wxBitmap bitmap;
-    bitmap.CreateWithDIPSize(bitmapSize, m_contentScaleFactor);
+    bitmap.CreateWithLogicalSize(bitmapSize, m_contentScaleFactor);
 
     NSView* view = (NSView*) m_window->GetHandle();
     if ( [view isHiddenOrHasHiddenAncestor] == NO )
@@ -612,7 +656,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
         CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
 
-        // The bitmap created by wxBitmap::CreateWithDIPSize() above is scaled,
+        // The bitmap created by wxBitmap::CreateWithLogicalSize() above is scaled,
         // so we need to adjust the coordinates for it.
         r.size.width /= m_contentScaleFactor;
         r.size.height /= m_contentScaleFactor;

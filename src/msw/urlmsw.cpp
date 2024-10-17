@@ -2,7 +2,6 @@
 // Name:        src/msw/urlmsw.cpp
 // Purpose:     MS-Windows native URL support based on WinINet
 // Author:      Hajo Kirchhoff
-// Modified by:
 // Created:     06/11/2003
 // Copyright:   (c) 2003 Hajo Kirchhoff
 // Licence:     wxWindows licence

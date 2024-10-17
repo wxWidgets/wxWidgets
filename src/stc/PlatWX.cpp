@@ -292,8 +292,8 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID w
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
-    bitmap = new wxBitmap(GETWIN(winid)->ToPhys(wxSize(width, height)));
-    bitmap->SetScaleFactor(GETWIN(winid)->GetDPIScaleFactor());
+    bitmap = new wxBitmap();
+    bitmap->CreateWithLogicalSize(width, height, GETWIN(winid)->GetDPIScaleFactor());
     mdc->SelectObject(*bitmap);
 }
 
@@ -392,7 +392,7 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesi
     hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 4);
 }
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
+#ifdef wxHAS_PREMULTIPLIED_ALPHA
 #define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
 #else
 #define wxPy_premultiply(p, a)   (p)

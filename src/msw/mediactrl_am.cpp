@@ -2,7 +2,6 @@
 // Name:        src/msw/mediactrl_am.cpp
 // Purpose:     ActiveMovie/WMP6/PocketPC 2000 Media Backend for Windows
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by:
 // Created:     01/29/05
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

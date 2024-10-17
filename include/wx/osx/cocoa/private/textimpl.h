@@ -2,7 +2,6 @@
 // Name:        wx/osx/cocoa/private/textimpl.h
 // Purpose:     textcontrol implementation classes that have to be exposed
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     03/02/99
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -29,7 +28,7 @@ public :
           wxTextWidgetImpl(entry)
     {
     }
-    virtual ~wxNSTextBase() { }
+    virtual ~wxNSTextBase() = default;
 
     virtual bool ShouldHandleKeyNavigation(const wxKeyEvent &event) const override;
 
@@ -61,6 +60,15 @@ public :
 
     virtual wxString GetStringValue() const override ;
     virtual void SetStringValue( const wxString &str) override ;
+    virtual wxString GetRTFValue() const override
+    {
+        wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
+        return wxEmptyString;
+    }
+    virtual void SetRTFValue(const wxString& WXUNUSED(str)) override
+    {
+        wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
+    }
     virtual void Copy() override ;
     virtual void Cut() override ;
     virtual void Paste() override ;
@@ -111,6 +119,8 @@ public:
 
     virtual wxString GetStringValue() const override ;
     virtual void SetStringValue( const wxString &str) override ;
+    virtual wxString GetRTFValue() const override;
+    virtual void SetRTFValue(const wxString& str) override;
     virtual void Copy() override ;
     virtual void Cut() override ;
     virtual void Paste() override ;

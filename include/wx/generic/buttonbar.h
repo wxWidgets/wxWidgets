@@ -2,7 +2,6 @@
 // Name:        wx/generic/buttonbar.h
 // Purpose:     wxButtonToolBar declaration
 // Author:      Julian Smart, after Robert Roebling, Vadim Zeitlin, SciTech
-// Modified by:
 // Created:     2006-04-13
 // Copyright:   (c) Julian Smart, Robert Roebling, Vadim Zeitlin,
 //              SciTech Software, Inc.

@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STATTEXT
+
 #include "wx/stattext.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -21,11 +23,6 @@ public:
         wxQtEventSignalHandler< QLabel, wxStaticText >( parent, handler ){}
 };
 
-
-wxStaticText::wxStaticText() :
-    m_qtLabel(nullptr)
-{
-}
 
 wxStaticText::wxStaticText(wxWindow *parent,
              wxWindowID id,
@@ -46,29 +43,31 @@ bool wxStaticText::Create(wxWindow *parent,
             long style,
             const wxString &name)
 {
-    m_qtLabel = new wxQtStaticText( parent, this );
+    m_qtWindow = new wxQtStaticText( parent, this );
 
     // Set the buddy to itself to get the mnemonic key but ensure that we don't have
     // any unwanted side effects, so disable the interaction:
 
-    m_qtLabel->setBuddy( m_qtLabel );
-    m_qtLabel->setTextInteractionFlags( Qt::NoTextInteraction );
+    GetQLabel()->setBuddy( GetQLabel() );
+    GetQLabel()->setTextInteractionFlags( Qt::NoTextInteraction );
 
     // Translate the WX horizontal alignment flags to Qt alignment flags
     // (notice that wxALIGN_LEFT is default and has the value of 0).
     if ( style & wxALIGN_CENTER_HORIZONTAL )
-        m_qtLabel->setAlignment(Qt::AlignHCenter);
+        GetQLabel()->setAlignment(Qt::AlignHCenter);
     else if ((style & wxALIGN_MASK) == wxALIGN_RIGHT)
-        m_qtLabel->setAlignment(Qt::AlignRight);
+        GetQLabel()->setAlignment(Qt::AlignRight);
     else
-        m_qtLabel->setAlignment(Qt::AlignLeft);
-
-    if ( !QtCreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return false;
+        GetQLabel()->setAlignment(Qt::AlignLeft);
 
     SetLabel(label);
 
-    return true;
+    return wxStaticTextBase::Create(parent, id, pos, size, style, wxDefaultValidator, name);
+}
+
+QLabel* wxStaticText::GetQLabel() const
+{
+    return static_cast<QLabel*>(m_qtWindow);
 }
 
 void wxStaticText::SetLabel(const wxString& label)
@@ -88,15 +87,12 @@ void wxStaticText::SetLabel(const wxString& label)
 
 void wxStaticText::WXSetVisibleLabel(const wxString& label)
 {
-    m_qtLabel->setText( wxQtConvertString( label ) );
+    GetQLabel()->setText( wxQtConvertString( label ) );
 }
 
 wxString wxStaticText::WXGetVisibleLabel() const
 {
-    return wxQtConvertString( m_qtLabel->text() );
+    return wxQtConvertString( GetQLabel()->text() );
 }
 
-QWidget *wxStaticText::GetHandle() const
-{
-    return m_qtLabel;
-}
+#endif // wxUSE_STATTEXT

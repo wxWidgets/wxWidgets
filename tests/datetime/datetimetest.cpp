@@ -127,7 +127,7 @@ struct Date
     wxDateTime::wxDateTime_t hour, min, sec;
     double jdn;
     wxDateTime::WeekDay wday;
-    time_t gmticks;
+    wxInt64 gmticks;
 
     void Init(const wxDateTime::Tm& tm)
     {
@@ -184,7 +184,8 @@ static const Date testDates[] =
     {  8, wxDateTime::Feb,  2036, 00, 00, 00, 2464731.5, wxDateTime::Fri,        -1 },
     {  1, wxDateTime::Jan,  2037, 00, 00, 00, 2465059.5, wxDateTime::Thu,        -1 },
     {  1, wxDateTime::Jan,  2038, 00, 00, 00, 2465424.5, wxDateTime::Fri,        -1 },
-    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon,        -1 },
+    {  1, wxDateTime::Jan,  2044, 00, 00, 00, 2467615.5, wxDateTime::Fri, 2335219200LL },
+    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon, 7954070400LL },
     { 29, wxDateTime::May,  1976, 12, 00, 00, 2442928.0, wxDateTime::Sat, 202219200 },
     { 29, wxDateTime::Feb,  1976, 00, 00, 00, 2442837.5, wxDateTime::Sun, 194400000 },
     {  1, wxDateTime::Jan,  1900, 12, 00, 00, 2415021.0, wxDateTime::Mon,        -1 },
@@ -201,73 +202,12 @@ static const Date testDates[] =
 };
 
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class DateTimeTestCase : public CppUnit::TestCase
-{
-public:
-    DateTimeTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( DateTimeTestCase );
-        CPPUNIT_TEST( TestLeapYears );
-        CPPUNIT_TEST( TestTimeSet );
-        CPPUNIT_TEST( TestTimeJDN );
-        CPPUNIT_TEST( TestTimeWNumber );
-        CPPUNIT_TEST( TestTimeWDays );
-        CPPUNIT_TEST( TestTimeDST );
-        CPPUNIT_TEST( TestTimeFormat );
-        CPPUNIT_TEST( TestTimeParse );
-        CPPUNIT_TEST( TestTimeZoneParse );
-        CPPUNIT_TEST( TestTimeSpanFormat );
-        CPPUNIT_TEST( TestTimeTicks );
-        CPPUNIT_TEST( TestParseRFC822 );
-        CPPUNIT_TEST( TestDateParse );
-        CPPUNIT_TEST( TestDateParseISO );
-        CPPUNIT_TEST( TestDateTimeParse );
-        CPPUNIT_TEST( TestDateWeekFormat );
-        CPPUNIT_TEST( TestTimeArithmetics );
-        CPPUNIT_TEST( TestDSTBug );
-        CPPUNIT_TEST( TestDateOnly );
-        CPPUNIT_TEST( TestTranslateFromUnicodeFormat );
-        CPPUNIT_TEST( TestConvToFromLocalTZ );
-    CPPUNIT_TEST_SUITE_END();
-
-    void TestLeapYears();
-    void TestTimeSet();
-    void TestTimeJDN();
-    void TestTimeWNumber();
-    void TestTimeWDays();
-    void TestTimeDST();
-    void TestTimeFormat();
-    void TestTimeParse();
-    void TestTimeZoneParse();
-    void TestTimeSpanFormat();
-    void TestTimeTicks();
-    void TestParseRFC822();
-    void TestDateParse();
-    void TestDateParseISO();
-    void TestDateTimeParse();
-    void TestDateWeekFormat();
-    void TestTimeArithmetics();
-    void TestDSTBug();
-    void TestDateOnly();
-    void TestTranslateFromUnicodeFormat();
-    void TestConvToFromLocalTZ();
-
-    wxDECLARE_NO_COPY_CLASS(DateTimeTestCase);
-};
-
-wxREGISTER_UNIT_TEST_WITH_TAGS(DateTimeTestCase, "[datetime]");
-
 // ============================================================================
-// implementation
+// the tests themselves
 // ============================================================================
 
 // test leap years detection
-void DateTimeTestCase::TestLeapYears()
+TEST_CASE("wxDateTime::Leap", "[datetime][leap]")
 {
     static const struct LeapYearTestData
     {
@@ -289,12 +229,12 @@ void DateTimeTestCase::TestLeapYears()
     {
         const LeapYearTestData& y = years[n];
 
-        CPPUNIT_ASSERT_EQUAL( y.isLeap, wxDateTime::IsLeapYear(y.year) );
+        CHECK( wxDateTime::IsLeapYear(y.year) == y.isLeap );
     }
 }
 
 // test constructing wxDateTime objects
-void DateTimeTestCase::TestTimeSet()
+TEST_CASE("wxDateTime::Set", "[datetime]")
 {
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
@@ -310,7 +250,7 @@ void DateTimeTestCase::TestTimeSet()
 }
 
 // test conversions to JDN &c
-void DateTimeTestCase::TestTimeJDN()
+TEST_CASE("wxDateTime::JDN", "[datetime]")
 {
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
@@ -329,7 +269,7 @@ void DateTimeTestCase::TestTimeJDN()
 }
 
 // test week days computation
-void DateTimeTestCase::TestTimeWDays()
+TEST_CASE("wxDateTime::WDays", "[datetime]")
 {
     // test GetWeekDay()
     size_t n;
@@ -445,12 +385,12 @@ for n in range(20):
         dt.SetToWeekDay(wd.wday, wd.nWeek, wd.month, wd.year);
 
         const Date& d = wd.date;
-        CPPUNIT_ASSERT( d.SameDay(dt.GetTm()) );
+        CHECK( d.SameDay(dt.GetTm()) );
     }
 }
 
 // test the computation of (ISO) week numbers
-void DateTimeTestCase::TestTimeWNumber()
+TEST_CASE("wxDateTime::WNumber", "[datetime]")
 {
     struct WeekNumberTestData
     {
@@ -579,12 +519,12 @@ for n in range(20):
 
         wxDateTime
             dt2 = wxDateTime::SetToWeekOfYear(year, week, dt.GetWeekDay());
-        CPPUNIT_ASSERT_EQUAL( dt, dt2 );
+        CHECK( dt2  == dt );
     }
 }
 
 // test DST applicability
-void DateTimeTestCase::TestTimeDST()
+TEST_CASE("wxDateTime::DST", "[datetime]")
 {
     // taken from http://www.energy.ca.gov/daylightsaving.html
     static const Date datesDST[2][2009 - 1990 + 1] =
@@ -645,13 +585,13 @@ void DateTimeTestCase::TestTimeDST()
         const Date& dBegin = datesDST[0][n];
         const Date& dEnd = datesDST[1][n];
 
-        CPPUNIT_ASSERT_EQUAL( dBegin.DT().FormatDate(), dtBegin.FormatDate() );
-        CPPUNIT_ASSERT_EQUAL( dEnd.DT().FormatDate(), dtEnd.FormatDate() );
+        CHECK( dtBegin.FormatDate() == dBegin.DT().FormatDate() );
+        CHECK( dtEnd.FormatDate() == dEnd.DT().FormatDate() );
     }
 }
 
 // test wxDateTime -> text conversion
-void DateTimeTestCase::TestTimeFormat()
+TEST_CASE("wxDateTime::Format", "[datetime]")
 {
     // some information may be lost during conversion, so store what kind
     // of info should we recover after a round trip
@@ -684,6 +624,7 @@ void DateTimeTestCase::TestTimeFormat()
        { CompareYear, "Date is %x, time is %X" }, // %x could use 2 digits
        { CompareTime, "Time is %H:%M:%S or %I:%M:%S %p" },
        { CompareNone, "The day of year: %j, the week of year: %W" },
+       { CompareDate, "ISO date using short form: %F" },
        { CompareDate, "ISO date without separators: %Y%m%d" },
        { CompareBoth, "RFC 2822 string: %Y-%m-%d %H:%M:%S.%l %z" },
 
@@ -853,103 +794,133 @@ void DateTimeTestCase::TestTimeFormat()
         }
     }
 
-    CPPUNIT_ASSERT(wxDateTime::Now().Format("%%") == "%");
+    CHECK(wxDateTime::Now().Format("%%") == "%");
+}
 
+TEST_CASE("wxDateTime::ParseFormat", "[datetime]")
+{
     wxDateTime dt;
 
 #if 0
     // special case which was known to fail
-    CPPUNIT_ASSERT( dt.ParseFormat("02/06/1856", "%x") );
-    CPPUNIT_ASSERT_EQUAL( 1856, dt.GetYear() );
+    CHECK( dt.ParseFormat("02/06/1856", "%x") );
+    CHECK( dt.GetYear() == 1856 );
 #endif
 
-    // also test %l separately
-    CPPUNIT_ASSERT( dt.ParseFormat("12:23:45.678", "%H:%M:%S.%l") );
-    CPPUNIT_ASSERT_EQUAL( 678, dt.GetMillisecond() );
+    SECTION("%l")
+    {
+        REQUIRE( dt.ParseFormat("12:23:45.678", "%H:%M:%S.%l") );
+        CHECK( dt.GetMillisecond() == 678 );
 
-    // test special case of %l matching 0 milliseconds
-    CPPUNIT_ASSERT( dt.ParseFormat("12:23:45.000", "%H:%M:%S.%l") );
-    CPPUNIT_ASSERT_EQUAL( 0, dt.GetMillisecond() );
+        // test special case of %l matching 0 milliseconds
+        REQUIRE( dt.ParseFormat("12:23:45.000", "%H:%M:%S.%l") );
+        CHECK( dt.GetMillisecond() == 0 );
+    }
 
-    // test another format modifier not tested above.
-    CPPUNIT_ASSERT( dt.ParseFormat("23", "%e") );
-    CPPUNIT_ASSERT_EQUAL( 23, dt.GetDay() );
+    SECTION("%e")
+    {
+        REQUIRE( dt.ParseFormat("23", "%e") );
+        CHECK( dt.GetDay() == 23 );
+    }
+
+    SECTION("%-")
+    {
+        REQUIRE( dt.ParseFormat("17.5.2024", "%-d.%-m.%Y") );
+        CHECK( dt.GetDay() == 17 );
+        CHECK( dt.GetMonth() == wxDateTime::May );
+        CHECK( dt.GetYear() == 2024 );
+
+        REQUIRE( dt.ParseFormat("8.5.2024", "%-d.%-m.%Y") );
+        CHECK( dt.GetDay() == 8 );
+
+        REQUIRE( dt.ParseFormat("11.11.2024", "%-d.%-m.%Y") );
+        CHECK( dt.GetMonth() == wxDateTime::Nov );
+    }
 
     // test partially specified dates too
-    wxDateTime dtDef(26, wxDateTime::Sep, 2008);
-    CPPUNIT_ASSERT( dt.ParseFormat("17", "%d", dtDef) );
-    CPPUNIT_ASSERT_EQUAL( 17, dt.GetDay() );
-    CPPUNIT_ASSERT_EQUAL( wxDateTime::Sep, dt.GetMonth() );
-    CPPUNIT_ASSERT_EQUAL( 2008, dt.GetYear() );
+    SECTION("partial")
+    {
+        wxDateTime dtDef(26, wxDateTime::Sep, 2008);
+        REQUIRE( dt.ParseFormat("17", "%d", dtDef) );
+        CHECK( dt.GetDay() == 17 );
+        CHECK( dt.GetMonth() == wxDateTime::Sep );
+        CHECK( dt.GetYear() == 2008 );
+    }
 
     // test some degenerate cases
-    CPPUNIT_ASSERT( !dt.ParseFormat("", "%z") );
-    CPPUNIT_ASSERT( !dt.ParseFormat("", "%%") );
+    SECTION("special")
+    {
+        CHECK( !dt.ParseFormat("", "%z") );
+        CHECK( !dt.ParseFormat("", "%%") );
+    }
 
     // test compilation of some calls which should compile (and not result in
     // ambiguity because of char*<->wxCStrData<->wxString conversions)
-    wxString s("foo");
-    CPPUNIT_ASSERT( !dt.ParseFormat("foo") );
-    CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo")) );
-    CPPUNIT_ASSERT( !dt.ParseFormat(s) );
-    dt.ParseFormat(s.c_str()); // Simply test compilation of this one.
+    SECTION("compile")
+    {
+        wxString s("foo");
+        CHECK( !dt.ParseFormat("foo") );
+        CHECK( !dt.ParseFormat(wxT("foo")) );
+        CHECK( !dt.ParseFormat(s) );
+        dt.ParseFormat(s.c_str()); // Simply test compilation of this one.
 
-    CPPUNIT_ASSERT( !dt.ParseFormat("foo", "%c") );
-    CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), "%c") );
-    CPPUNIT_ASSERT( !dt.ParseFormat(s, "%c") );
-    dt.ParseFormat(s.c_str(), "%c");
+        CHECK( !dt.ParseFormat("foo", "%c") );
+        CHECK( !dt.ParseFormat(wxT("foo"), "%c") );
+        CHECK( !dt.ParseFormat(s, "%c") );
+        dt.ParseFormat(s.c_str(), "%c");
 
-    CPPUNIT_ASSERT( !dt.ParseFormat("foo", wxT("%c")) );
-    CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), wxT("%c")) );
-    CPPUNIT_ASSERT( !dt.ParseFormat(s, "%c") );
-    dt.ParseFormat(s.c_str(), wxT("%c"));
+        CHECK( !dt.ParseFormat("foo", wxT("%c")) );
+        CHECK( !dt.ParseFormat(wxT("foo"), wxT("%c")) );
+        CHECK( !dt.ParseFormat(s, "%c") );
+        dt.ParseFormat(s.c_str(), wxT("%c"));
 
-    wxString spec("%c");
-    CPPUNIT_ASSERT( !dt.ParseFormat("foo", spec) );
-    CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), spec) );
-    CPPUNIT_ASSERT( !dt.ParseFormat(s, spec) );
-    dt.ParseFormat(s.c_str(), spec);
+        wxString spec("%c");
+        CHECK( !dt.ParseFormat("foo", spec) );
+        CHECK( !dt.ParseFormat(wxT("foo"), spec) );
+        CHECK( !dt.ParseFormat(s, spec) );
+        dt.ParseFormat(s.c_str(), spec);
+    }
 }
 
 // Test parsing time in free format.
-void DateTimeTestCase::TestTimeParse()
+TEST_CASE("wxDateTime::TimeParse", "[datetime]")
 {
     wxDateTime dt;
 
     // Parsing standard formats should work.
     const char* end = dt.ParseTime("12:34:56");
-    CPPUNIT_ASSERT( end );
+    CHECK( end );
     if ( end )
     {
-        CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
-        CPPUNIT_ASSERT_EQUAL( "", wxString(end) );
+        CHECK( dt.FormatISOTime() == "12:34:56" );
+        CHECK( wxString(end) == "" );
     }
     dt.ResetTime();
 
     // Valid, but followed by something.
     end = dt.ParseTime("12:34:56 0123 something");
-    CPPUNIT_ASSERT( end );
+    CHECK( end );
     if ( end )
     {
-        CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
-        CPPUNIT_ASSERT_EQUAL( " 0123 something", wxString(end) );
+        CHECK( dt.FormatISOTime() == "12:34:56" );
+        CHECK( wxString(end) == " 0123 something" );
     }
     dt.ResetTime();
 
     // Parsing just hours should work too.
     end = dt.ParseTime("17");
-    CPPUNIT_ASSERT( end );
+    CHECK( end );
     if ( end )
     {
-        CPPUNIT_ASSERT_EQUAL( "17:00:00", dt.FormatISOTime() );
-        CPPUNIT_ASSERT_EQUAL( "", wxString(end) );
+        CHECK( dt.FormatISOTime() == "17:00:00" );
+        CHECK( wxString(end) == "" );
     }
 
     // Parsing gibberish shouldn't work.
-    CPPUNIT_ASSERT( !dt.ParseTime("bloordyblop") );
+    CHECK( !dt.ParseTime("bloordyblop") );
 }
 
-void DateTimeTestCase::TestTimeZoneParse()
+TEST_CASE("wxDateTime::ParseTZ", "[datetime]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -1008,19 +979,19 @@ void DateTimeTestCase::TestTimeZoneParse()
         if ( dt.ParseFormat(sTimeZone, wxS("%H:%M%z"), &end)
              && end == sTimeZone.end() )
         {
-            CPPUNIT_ASSERT( parseTestTimeZones[n].good );
-            CPPUNIT_ASSERT_EQUAL( 13, dt.GetHour(wxDateTime::UTC));
-            CPPUNIT_ASSERT_EQUAL( 37, dt.GetMinute(wxDateTime::UTC));
+            CHECK( parseTestTimeZones[n].good );
+            CHECK( dt.GetHour(wxDateTime::UTC) == 13 );
+            CHECK( dt.GetMinute(wxDateTime::UTC) == 37 );
         }
         else
         {
             // Failed to parse time zone.
-            CPPUNIT_ASSERT( !parseTestTimeZones[n].good );
+            CHECK( !parseTestTimeZones[n].good );
         }
     }
 }
 
-void DateTimeTestCase::TestTimeSpanFormat()
+TEST_CASE("wxTimeSpan::Format", "[datetime]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -1053,11 +1024,11 @@ void DateTimeTestCase::TestTimeSpanFormat()
     {
         const TimeSpanFormatTestData& td = testSpans[n];
         wxTimeSpan ts(td.h, td.min, td.sec, td.msec);
-        CPPUNIT_ASSERT_EQUAL( td.result, ts.Format(td.fmt) );
+        CHECK( ts.Format(td.fmt) == td.result );
     }
 }
 
-void DateTimeTestCase::TestTimeTicks()
+TEST_CASE("wxDateTime::Ticks", "[datetime]")
 {
     for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
     {
@@ -1069,13 +1040,13 @@ void DateTimeTestCase::TestTimeTicks()
 
         INFO("n=" << n);
 
-        time_t ticks = (dt.GetValue() / 1000).ToLong();
+        wxInt64 ticks = (dt.GetValue() / 1000).GetValue();
         CHECK( d.gmticks == ticks );
     }
 }
 
 // test parsing dates in RFC822 format
-void DateTimeTestCase::TestParseRFC822()
+TEST_CASE("wxDateTime::ParseRFC822", "[datetime]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -1105,6 +1076,12 @@ void DateTimeTestCase::TestParseRFC822()
         {
             "Sat, 18 Dec 1999 10:48:30 -0500",
             { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            true
+        },
+
+        {
+            "Tue, 12 Apr 2044 10:48:30 -0500",
+            { 12, wxDateTime::Apr, 2044, 15, 48, 30 },
             true
         },
 
@@ -1249,7 +1226,7 @@ void DateTimeTestCase::TestParseRFC822()
             );
 
             wxDateTime dtReal = parseTestDates[n].date.DT().FromUTC();
-            CPPUNIT_ASSERT_EQUAL( dtReal, dt );
+            CHECK( dt  == dtReal );
         }
         else // failed to parse
         {
@@ -1262,7 +1239,7 @@ void DateTimeTestCase::TestParseRFC822()
 }
 
 // test parsing dates in free format
-void DateTimeTestCase::TestDateParse()
+TEST_CASE("wxDateTime::DateParse", "[datetime]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -1280,6 +1257,7 @@ void DateTimeTestCase::TestDateParse()
         { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true, "" },
         { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true, "" },
         { "Thu 20 Jun 2019", { 20, wxDateTime::Jun, 2019 }, true, "" },
+        { "Sun 20 Jun 2049", { 20, wxDateTime::Jun, 2049 }, true, "" },
         { "20 Jun 2019 Thu", { 20, wxDateTime::Jun, 2019 }, true, "" },
         { "Dec sixth 2017",  {  6, wxDateTime::Dec, 2017 }, true, "" },
 
@@ -1301,8 +1279,8 @@ void DateTimeTestCase::TestDateParse()
 
     // special cases
     wxDateTime dt;
-    CPPUNIT_ASSERT( dt.ParseDate(wxT("today")) );
-    CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), dt );
+    CHECK( dt.ParseDate(wxT("today")) );
+    CHECK( dt  == wxDateTime::Today() );
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
@@ -1316,8 +1294,8 @@ void DateTimeTestCase::TestDateParse()
                 parseTestDates[n].good
             );
 
-            CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
-            CPPUNIT_ASSERT_EQUAL( wxString(parseTestDates[n].beyondEnd), wxString(end) );
+            CHECK( dt  == parseTestDates[n].date.DT() );
+            CHECK( wxString(end) == wxString(parseTestDates[n].beyondEnd) );
         }
         else // failed to parse
         {
@@ -1330,10 +1308,10 @@ void DateTimeTestCase::TestDateParse()
 
     // Check that incomplete parse works correctly.
     const char* p = dt.ParseFormat("2012-03-23 12:34:56", "%Y-%m-%d");
-    CPPUNIT_ASSERT_EQUAL( " 12:34:56", wxString(p) );
+    CHECK( wxString(p) == " 12:34:56" );
 }
 
-void DateTimeTestCase::TestDateParseISO()
+TEST_CASE("wxDateTime::ParseISO", "[datetime]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -1379,9 +1357,9 @@ void DateTimeTestCase::TestDateParseISO()
         wxDateTime dt;
         if ( dt.ParseISODate(parseTestDates[n].str) )
         {
-            CPPUNIT_ASSERT( parseTestDates[n].good );
+            CHECK( parseTestDates[n].good );
 
-            CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+            CHECK( dt  == parseTestDates[n].date.DT() );
 
             for ( size_t m = 0; m < WXSIZEOF(parseTestTimes); m++ )
             {
@@ -1392,26 +1370,26 @@ void DateTimeTestCase::TestDateParseISO()
 
                 if ( dt.ParseISOCombined(dtCombined) )
                 {
-                    CPPUNIT_ASSERT( parseTestTimes[m].good );
+                    CHECK( parseTestTimes[m].good );
 
-                    CPPUNIT_ASSERT_EQUAL( parseTestTimes[m].hour, dt.GetHour()) ;
-                    CPPUNIT_ASSERT_EQUAL( parseTestTimes[m].min, dt.GetMinute()) ;
-                    CPPUNIT_ASSERT_EQUAL( parseTestTimes[m].sec, dt.GetSecond()) ;
+                    CHECK( dt.GetHour()   == parseTestTimes[m].hour);
+                    CHECK( dt.GetMinute() == parseTestTimes[m].min );
+                    CHECK( dt.GetSecond() == parseTestTimes[m].sec );
                 }
                 else // failed to parse combined date/time
                 {
-                    CPPUNIT_ASSERT( !parseTestTimes[m].good );
+                    CHECK( !parseTestTimes[m].good );
                 }
             }
         }
         else // failed to parse
         {
-            CPPUNIT_ASSERT( !parseTestDates[n].good );
+            CHECK( !parseTestDates[n].good );
         }
     }
 }
 
-void DateTimeTestCase::TestDateTimeParse()
+TEST_CASE("wxDateTime::ParseDateTime", "[datetime]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -1427,6 +1405,14 @@ void DateTimeTestCase::TestDateTimeParse()
         {
             "Thu 22 Nov 2007 07:40:00 PM",
             { 22, wxDateTime::Nov, 2007, 19, 40,  0 },
+            true,
+            "",
+            false
+        },
+
+        {
+            "Sun 20 Jun 2049 07:40:00 PM",
+            { 20, wxDateTime::Jun, 2049, 19, 40,  0 },
             true,
             "",
             false
@@ -1590,8 +1576,8 @@ void DateTimeTestCase::TestDateTimeParse()
             wxDateTime dtReal = parseTestDates[n].dateIsUTC ?
                 parseTestDates[n].date.DT().FromUTC() :
                 parseTestDates[n].date.DT();
-            CPPUNIT_ASSERT_EQUAL( dtReal, dt );
-            CPPUNIT_ASSERT_EQUAL( wxString(parseTestDates[n].beyondEnd), wxString(end) );
+            CHECK( dt  == dtReal );
+            CHECK( wxString(end) == wxString(parseTestDates[n].beyondEnd) );
         }
         else // failed to parse
         {
@@ -1600,12 +1586,12 @@ void DateTimeTestCase::TestDateTimeParse()
                 !parseTestDates[n].good
             );
 
-            CPPUNIT_ASSERT( !parseTestDates[n].good );
+            CHECK( !parseTestDates[n].good );
         }
     }
 }
 
-void DateTimeTestCase::TestDateWeekFormat()
+TEST_CASE("wxDateTime::FormatWeek", "[datetime]")
 {
     static const struct DateWeekTestData
     {
@@ -1677,14 +1663,14 @@ void DateTimeTestCase::TestDateWeekFormat()
         const DateWeekTestData& td = testWeeks[n];
         wxDateTime d(td.d, wxDateTime::Month(td.m - 1), td.y);
 
-        CPPUNIT_ASSERT_EQUAL( td.result, d.Format("%G-%V") );
+        CHECK( d.Format("%G-%V") == td.result );
 
         if ( td.y > 2000 )
-            CPPUNIT_ASSERT_EQUAL( td.result + 2, d.Format("%g-%V") );
+            CHECK( d.Format("%g-%V") == td.result + 2 );
     }
 }
 
-void DateTimeTestCase::TestTimeArithmetics()
+TEST_CASE("wxDateTime::TimeArithmetics", "[datetime]")
 {
     static const wxDateSpan testArithmData[] =
     {
@@ -1705,10 +1691,10 @@ void DateTimeTestCase::TestTimeArithmetics()
         dt1 = dt + span;
         dt2 = dt - span;
 
-        CPPUNIT_ASSERT_EQUAL( dt, dt1 - span );
-        CPPUNIT_ASSERT_EQUAL( dt, dt2 + span );
-        CPPUNIT_ASSERT_EQUAL( dt1, dt2 + 2*span );
-        CPPUNIT_ASSERT_EQUAL( span, dt1.DiffAsDateSpan(dt) );
+        CHECK( dt1 - span  == dt );
+        CHECK( dt2 + span  == dt );
+        CHECK( dt2 + 2*span  == dt1 );
+        CHECK( dt1.DiffAsDateSpan(dt) == span );
     }
 
     // More date span arithmetics tests
@@ -1716,59 +1702,59 @@ void DateTimeTestCase::TestTimeArithmetics()
     wxDateTime dtd2(6, wxDateTime::Aug, 1999);
 
     // All parts in dtd2 is after dtd1
-    CPPUNIT_ASSERT_EQUAL( wxDateSpan(1, 2, 0, 1), dtd2.DiffAsDateSpan(dtd1) );
+    CHECK( dtd2.DiffAsDateSpan(dtd1) == wxDateSpan(1, 2, 0, 1) );
 
     // Year and month after, day earlier, so no full month
     // Jul has 31 days, so it's 31 - 5 + 4 = 30, or 4w 2d
     dtd2.Set(4, wxDateTime::Aug, 1999);
-    CPPUNIT_ASSERT_EQUAL( wxDateSpan(1, 1, 4, 2), dtd2.DiffAsDateSpan(dtd1) );
+    CHECK( dtd2.DiffAsDateSpan(dtd1) == wxDateSpan(1, 1, 4, 2) );
 
     // Year and day after, month earlier, so no full year, but same day diff as
     // first example
     dtd2.Set(6, wxDateTime::May, 1999);
-    CPPUNIT_ASSERT_EQUAL( wxDateSpan(0, 11, 0, 1), dtd2.DiffAsDateSpan(dtd1) );
+    CHECK( dtd2.DiffAsDateSpan(dtd1) == wxDateSpan(0, 11, 0, 1) );
 
     // Year after, month and day earlier, so no full month and no full year
     // April has 30 days, so it's 30 - 5 + 4 = 29, or 4w 1d
     dtd2.Set(4, wxDateTime::May, 1999);
-    CPPUNIT_ASSERT_EQUAL( wxDateSpan(0, 10, 4, 1), dtd2.DiffAsDateSpan(dtd1) );
+    CHECK( dtd2.DiffAsDateSpan(dtd1) == wxDateSpan(0, 10, 4, 1) );
 
     // And a reverse. Now we should use days in Jun (again 30 => 4w 1d)
-    CPPUNIT_ASSERT_EQUAL( wxDateSpan(0, -10, -4, -1), dtd1.DiffAsDateSpan(dtd2) );
+    CHECK( dtd1.DiffAsDateSpan(dtd2) == wxDateSpan(0, -10, -4, -1) );
 
     const wxTimeSpan ts1 = wxTimeSpan::Seconds(30);
     const wxTimeSpan ts2 = wxTimeSpan::Seconds(5);
-    CPPUNIT_ASSERT_EQUAL( wxTimeSpan::Seconds(25), ts1 - ts2 );
+    CHECK( ts1 - ts2  == wxTimeSpan::Seconds(25) );
 }
 
-void DateTimeTestCase::TestDSTBug()
+TEST_CASE("wxDateTime::DSTBug", "[datetime]")
 {
     /////////////////////////
     // Test GetEndDST()
     wxDateTime dt = wxDateTime::GetEndDST(2004, wxDateTime::France);
-    CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
-    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
-    CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
-    CPPUNIT_ASSERT_EQUAL(1, (int)dt.GetHour());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMinute());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
+    CHECK( (int)dt.GetDay() == 31 );
+    CHECK( dt.GetMonth() == wxDateTime::Oct );
+    CHECK( (int)dt.GetYear() == 2004 );
+    CHECK( (int)dt.GetHour() == 1 );
+    CHECK( (int)dt.GetMinute() == 0 );
+    CHECK( (int)dt.GetSecond() == 0 );
+    CHECK( (int)dt.GetMillisecond() == 0 );
 
     /////////////////////////
     // Test ResetTime()
     dt.SetHour(5);
-    CPPUNIT_ASSERT_EQUAL(5, (int)dt.GetHour());
+    CHECK( (int)dt.GetHour() == 5 );
     dt.ResetTime();
-    CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
-    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
-    CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetHour());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMinute());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
+    CHECK( (int)dt.GetDay() == 31 );
+    CHECK( dt.GetMonth() == wxDateTime::Oct );
+    CHECK( (int)dt.GetYear() == 2004 );
+    CHECK( (int)dt.GetHour() == 0 );
+    CHECK( (int)dt.GetMinute() == 0 );
+    CHECK( (int)dt.GetSecond() == 0 );
+    CHECK( (int)dt.GetMillisecond() == 0 );
 
     dt.Set(1, 0, 0, 0);
-    CPPUNIT_ASSERT_EQUAL(1, (int)dt.GetHour());
+    CHECK( (int)dt.GetHour() == 1 );
 
     /////////////////////////
     // Test Today()
@@ -1778,13 +1764,13 @@ void DateTimeTestCase::TestDSTBug()
         dt = wxDateTime::Today();
     }
 
-    CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
-    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
-    CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetHour());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMinute());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
+    CHECK( (int)dt.GetDay() == 31 );
+    CHECK( dt.GetMonth() == wxDateTime::Oct );
+    CHECK( (int)dt.GetYear() == 2004 );
+    CHECK( (int)dt.GetHour() == 0 );
+    CHECK( (int)dt.GetMinute() == 0 );
+    CHECK( (int)dt.GetSecond() == 0 );
+    CHECK( (int)dt.GetMillisecond() == 0 );
 
     /////////////////////////
     // Test Set(hour, minute, second, milli)
@@ -1795,21 +1781,21 @@ void DateTimeTestCase::TestDSTBug()
         dt2.Set(5, 30, 0, 0);
     }
 
-    CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
-    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
-    CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
-    CPPUNIT_ASSERT_EQUAL(1, (int)dt.GetHour());
-    CPPUNIT_ASSERT_EQUAL(30, (int)dt.GetMinute());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
+    CHECK( (int)dt.GetDay() == 31 );
+    CHECK( dt.GetMonth() == wxDateTime::Oct );
+    CHECK( (int)dt.GetYear() == 2004 );
+    CHECK( (int)dt.GetHour() == 1 );
+    CHECK( (int)dt.GetMinute() == 30 );
+    CHECK( (int)dt.GetSecond() == 0 );
+    CHECK( (int)dt.GetMillisecond() == 0 );
 
-    CPPUNIT_ASSERT_EQUAL(31, (int)dt2.GetDay());
-    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt2.GetMonth());
-    CPPUNIT_ASSERT_EQUAL(2004, (int)dt2.GetYear());
-    CPPUNIT_ASSERT_EQUAL(5, (int)dt2.GetHour());
-    CPPUNIT_ASSERT_EQUAL(30, (int)dt2.GetMinute());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt2.GetSecond());
-    CPPUNIT_ASSERT_EQUAL(0, (int)dt2.GetMillisecond());
+    CHECK( (int)dt2.GetDay() == 31 );
+    CHECK( dt2.GetMonth() == wxDateTime::Oct );
+    CHECK( (int)dt2.GetYear() == 2004 );
+    CHECK( (int)dt2.GetHour() == 5 );
+    CHECK( (int)dt2.GetMinute() == 30 );
+    CHECK( (int)dt2.GetSecond() == 0 );
+    CHECK( (int)dt2.GetMillisecond() == 0 );
 #endif // CHANGE_SYSTEM_DATE
 
     // Verify that setting the date to the beginning of the DST period moves it
@@ -1819,30 +1805,30 @@ void DateTimeTestCase::TestDSTBug()
     // either unchanged or moved forward.
     wxDateTime dtDST(10, wxDateTime::Mar, 2013, 2, 0, 0);
     if ( dtDST.GetHour() != 2 )
-        CPPUNIT_ASSERT_EQUAL( 3, dtDST.GetHour() );
+        CHECK( dtDST.GetHour() == 3 );
 
     dtDST = wxDateTime(31, wxDateTime::Mar, 2013, 2, 0, 0);
     if ( dtDST.GetHour() != 2 )
-        CPPUNIT_ASSERT_EQUAL( 3, dtDST.GetHour() );
+        CHECK( dtDST.GetHour() == 3 );
 }
 
-void DateTimeTestCase::TestDateOnly()
+TEST_CASE("wxDateTime::DateOnly", "[datetime]")
 {
     wxDateTime dt(19, wxDateTime::Jan, 2007, 15, 01, 00);
 
     static const wxDateTime::wxDateTime_t DATE_ZERO = 0;
-    CPPUNIT_ASSERT_EQUAL( DATE_ZERO, dt.GetDateOnly().GetHour() );
-    CPPUNIT_ASSERT_EQUAL( DATE_ZERO, dt.GetDateOnly().GetMinute() );
-    CPPUNIT_ASSERT_EQUAL( DATE_ZERO, dt.GetDateOnly().GetSecond() );
-    CPPUNIT_ASSERT_EQUAL( DATE_ZERO, dt.GetDateOnly().GetMillisecond() );
+    CHECK( dt.GetDateOnly().GetHour() == DATE_ZERO );
+    CHECK( dt.GetDateOnly().GetMinute() == DATE_ZERO );
+    CHECK( dt.GetDateOnly().GetSecond() == DATE_ZERO );
+    CHECK( dt.GetDateOnly().GetMillisecond() == DATE_ZERO );
 
     dt.ResetTime();
-    CPPUNIT_ASSERT_EQUAL( wxDateTime(19, wxDateTime::Jan, 2007), dt );
+    CHECK( dt == wxDateTime(19, wxDateTime::Jan, 2007) );
 
-    CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), wxDateTime::Now().GetDateOnly() );
+    CHECK( wxDateTime::Now().GetDateOnly() == wxDateTime::Today() );
 }
 
-void DateTimeTestCase::TestTranslateFromUnicodeFormat()
+TEST_CASE("wxDateTime::TranslateFromUnicodeFormat", "[datetime]")
 {
 #if defined(__WINDOWS__) || defined(__WXOSX__)
     // This function is defined in src/common/intl.cpp and as it is not public we
@@ -1853,34 +1839,38 @@ void DateTimeTestCase::TestTranslateFromUnicodeFormat()
 
     // Test single quote handling...
 
-    CPPUNIT_ASSERT_EQUAL("",   wxTranslateFromUnicodeFormat("'"));
-    CPPUNIT_ASSERT_EQUAL("%H", wxTranslateFromUnicodeFormat("H'"));
-    CPPUNIT_ASSERT_EQUAL("H",  wxTranslateFromUnicodeFormat("'H"));
+    CHECK(   wxTranslateFromUnicodeFormat("'") == "" );
+    CHECK( wxTranslateFromUnicodeFormat("H'") == "%H" );
+    CHECK(  wxTranslateFromUnicodeFormat("'H") == "H" );
 
-    CPPUNIT_ASSERT_EQUAL("'",   wxTranslateFromUnicodeFormat("''"));
-    CPPUNIT_ASSERT_EQUAL("%H'", wxTranslateFromUnicodeFormat("H''"));
-    CPPUNIT_ASSERT_EQUAL("H",   wxTranslateFromUnicodeFormat("'H'"));
-    CPPUNIT_ASSERT_EQUAL("'%H", wxTranslateFromUnicodeFormat("''H"));
+    CHECK(   wxTranslateFromUnicodeFormat("''") == "'" );
+    CHECK( wxTranslateFromUnicodeFormat("H''") == "%H'" );
+    CHECK(   wxTranslateFromUnicodeFormat("'H'") == "H" );
+    CHECK( wxTranslateFromUnicodeFormat("''H") == "'%H" );
 
-    CPPUNIT_ASSERT_EQUAL("'",   wxTranslateFromUnicodeFormat("'''"));
-    CPPUNIT_ASSERT_EQUAL("%H'", wxTranslateFromUnicodeFormat("H'''"));
-    CPPUNIT_ASSERT_EQUAL("H'",  wxTranslateFromUnicodeFormat("'H''"));
-    CPPUNIT_ASSERT_EQUAL("'%H", wxTranslateFromUnicodeFormat("''H'"));
-    CPPUNIT_ASSERT_EQUAL("'H",  wxTranslateFromUnicodeFormat("'''H"));
+    CHECK(   wxTranslateFromUnicodeFormat("'''") == "'" );
+    CHECK( wxTranslateFromUnicodeFormat("H'''") == "%H'" );
+    CHECK(  wxTranslateFromUnicodeFormat("'H''") == "H'" );
+    CHECK( wxTranslateFromUnicodeFormat("''H'") == "'%H" );
+    CHECK(  wxTranslateFromUnicodeFormat("'''H") == "'H" );
 
-    CPPUNIT_ASSERT_EQUAL("''",   wxTranslateFromUnicodeFormat("''''"));
-    CPPUNIT_ASSERT_EQUAL("%H''", wxTranslateFromUnicodeFormat("H''''"));
-    CPPUNIT_ASSERT_EQUAL("H'",   wxTranslateFromUnicodeFormat("'H'''"));
-    CPPUNIT_ASSERT_EQUAL("'%H'", wxTranslateFromUnicodeFormat("''H''"));
-    CPPUNIT_ASSERT_EQUAL("'H",   wxTranslateFromUnicodeFormat("'''H'"));
-    CPPUNIT_ASSERT_EQUAL("''%H", wxTranslateFromUnicodeFormat("''''H"));
+    CHECK(   wxTranslateFromUnicodeFormat("''''") == "''" );
+    CHECK( wxTranslateFromUnicodeFormat("H''''") == "%H''" );
+    CHECK(   wxTranslateFromUnicodeFormat("'H'''") == "H'" );
+    CHECK( wxTranslateFromUnicodeFormat("''H''") == "'%H'" );
+    CHECK(   wxTranslateFromUnicodeFormat("'''H'") == "'H" );
+    CHECK( wxTranslateFromUnicodeFormat("''''H") == "''%H" );
 
-    CPPUNIT_ASSERT_EQUAL("'%H o'clock: It's about time'",
-        wxTranslateFromUnicodeFormat("''H 'o''clock: It''s about time'''"));
+    CHECK
+    (
+        wxTranslateFromUnicodeFormat("''H 'o''clock: It''s about time'''")
+        ==
+        "'%H o'clock: It's about time'"
+    );
 #endif // ports having wxTranslateFromUnicodeFormat()
 }
 
-void DateTimeTestCase::TestConvToFromLocalTZ()
+TEST_CASE("wxDateTime::ConvToFromLocalTZ", "[datetime]")
 {
     // Choose a date when the DST is on in many time zones and verify that
     // converting from/to local time zone still doesn't modify time in this
@@ -1957,7 +1947,7 @@ TEST_CASE("wxDateTime::SetOnDST", "[datetime][dst]")
 // Tests random problems that used to appear in BST time zone during DST.
 // This test is disabled by default as it only passes in BST time zone, due to
 // the times hard-coded in it.
-TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
+TEST_CASE("wxDateTime-BST-bugs", "[.]")
 {
     SECTION("bug-17220")
     {
@@ -2023,6 +2013,570 @@ TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
     }
 
     CHECK( gotMS );
+}
+
+TEST_CASE("Easter", "[datetime][holiday][easter]")
+{
+    std::vector<wxDateTime> easters =
+    {
+        wxDateTime( 2, wxDateTime::Apr, 1600),
+        wxDateTime(22, wxDateTime::Apr, 1601),
+        wxDateTime( 7, wxDateTime::Apr, 1602),
+        wxDateTime(30, wxDateTime::Mar, 1603),
+        wxDateTime(18, wxDateTime::Apr, 1604),
+        wxDateTime(10, wxDateTime::Apr, 1605),
+        wxDateTime(26, wxDateTime::Mar, 1606),
+        wxDateTime(15, wxDateTime::Apr, 1607),
+        wxDateTime( 6, wxDateTime::Apr, 1608),
+        wxDateTime(19, wxDateTime::Apr, 1609),
+        wxDateTime(11, wxDateTime::Apr, 1610),
+        wxDateTime( 3, wxDateTime::Apr, 1611),
+        wxDateTime(22, wxDateTime::Apr, 1612),
+        wxDateTime( 7, wxDateTime::Apr, 1613),
+        wxDateTime(30, wxDateTime::Mar, 1614),
+        wxDateTime(19, wxDateTime::Apr, 1615),
+        wxDateTime( 3, wxDateTime::Apr, 1616),
+        wxDateTime(26, wxDateTime::Mar, 1617),
+        wxDateTime(15, wxDateTime::Apr, 1618),
+        wxDateTime(31, wxDateTime::Mar, 1619),
+        wxDateTime(19, wxDateTime::Apr, 1620),
+        wxDateTime(11, wxDateTime::Apr, 1621),
+        wxDateTime(27, wxDateTime::Mar, 1622),
+        wxDateTime(16, wxDateTime::Apr, 1623),
+        wxDateTime( 7, wxDateTime::Apr, 1624),
+        wxDateTime(30, wxDateTime::Mar, 1625),
+        wxDateTime(12, wxDateTime::Apr, 1626),
+        wxDateTime( 4, wxDateTime::Apr, 1627),
+        wxDateTime(23, wxDateTime::Apr, 1628),
+        wxDateTime(15, wxDateTime::Apr, 1629),
+        wxDateTime(31, wxDateTime::Mar, 1630),
+        wxDateTime(20, wxDateTime::Apr, 1631),
+        wxDateTime(11, wxDateTime::Apr, 1632),
+        wxDateTime(27, wxDateTime::Mar, 1633),
+        wxDateTime(16, wxDateTime::Apr, 1634),
+        wxDateTime( 8, wxDateTime::Apr, 1635),
+        wxDateTime(23, wxDateTime::Mar, 1636),
+        wxDateTime(12, wxDateTime::Apr, 1637),
+        wxDateTime( 4, wxDateTime::Apr, 1638),
+        wxDateTime(24, wxDateTime::Apr, 1639),
+        wxDateTime( 8, wxDateTime::Apr, 1640),
+        wxDateTime(31, wxDateTime::Mar, 1641),
+        wxDateTime(20, wxDateTime::Apr, 1642),
+        wxDateTime( 5, wxDateTime::Apr, 1643),
+        wxDateTime(27, wxDateTime::Mar, 1644),
+        wxDateTime(16, wxDateTime::Apr, 1645),
+        wxDateTime( 1, wxDateTime::Apr, 1646),
+        wxDateTime(21, wxDateTime::Apr, 1647),
+        wxDateTime(12, wxDateTime::Apr, 1648),
+        wxDateTime( 4, wxDateTime::Apr, 1649),
+        wxDateTime(17, wxDateTime::Apr, 1650),
+        wxDateTime( 9, wxDateTime::Apr, 1651),
+        wxDateTime(31, wxDateTime::Mar, 1652),
+        wxDateTime(13, wxDateTime::Apr, 1653),
+        wxDateTime( 5, wxDateTime::Apr, 1654),
+        wxDateTime(28, wxDateTime::Mar, 1655),
+        wxDateTime(16, wxDateTime::Apr, 1656),
+        wxDateTime( 1, wxDateTime::Apr, 1657),
+        wxDateTime(21, wxDateTime::Apr, 1658),
+        wxDateTime(13, wxDateTime::Apr, 1659),
+        wxDateTime(28, wxDateTime::Mar, 1660),
+        wxDateTime(17, wxDateTime::Apr, 1661),
+        wxDateTime( 9, wxDateTime::Apr, 1662),
+        wxDateTime(25, wxDateTime::Mar, 1663),
+        wxDateTime(13, wxDateTime::Apr, 1664),
+        wxDateTime( 5, wxDateTime::Apr, 1665),
+        wxDateTime(25, wxDateTime::Apr, 1666),
+        wxDateTime(10, wxDateTime::Apr, 1667),
+        wxDateTime( 1, wxDateTime::Apr, 1668),
+        wxDateTime(21, wxDateTime::Apr, 1669),
+        wxDateTime( 6, wxDateTime::Apr, 1670),
+        wxDateTime(29, wxDateTime::Mar, 1671),
+        wxDateTime(17, wxDateTime::Apr, 1672),
+        wxDateTime( 2, wxDateTime::Apr, 1673),
+        wxDateTime(25, wxDateTime::Mar, 1674),
+        wxDateTime(14, wxDateTime::Apr, 1675),
+        wxDateTime( 5, wxDateTime::Apr, 1676),
+        wxDateTime(18, wxDateTime::Apr, 1677),
+        wxDateTime(10, wxDateTime::Apr, 1678),
+        wxDateTime( 2, wxDateTime::Apr, 1679),
+        wxDateTime(21, wxDateTime::Apr, 1680),
+        wxDateTime( 6, wxDateTime::Apr, 1681),
+        wxDateTime(29, wxDateTime::Mar, 1682),
+        wxDateTime(18, wxDateTime::Apr, 1683),
+        wxDateTime( 2, wxDateTime::Apr, 1684),
+        wxDateTime(22, wxDateTime::Apr, 1685),
+        wxDateTime(14, wxDateTime::Apr, 1686),
+        wxDateTime(30, wxDateTime::Mar, 1687),
+        wxDateTime(18, wxDateTime::Apr, 1688),
+        wxDateTime(10, wxDateTime::Apr, 1689),
+        wxDateTime(26, wxDateTime::Mar, 1690),
+        wxDateTime(15, wxDateTime::Apr, 1691),
+        wxDateTime( 6, wxDateTime::Apr, 1692),
+        wxDateTime(22, wxDateTime::Mar, 1693),
+        wxDateTime(11, wxDateTime::Apr, 1694),
+        wxDateTime( 3, wxDateTime::Apr, 1695),
+        wxDateTime(22, wxDateTime::Apr, 1696),
+        wxDateTime( 7, wxDateTime::Apr, 1697),
+        wxDateTime(30, wxDateTime::Mar, 1698),
+        wxDateTime(19, wxDateTime::Apr, 1699),
+        wxDateTime(11, wxDateTime::Apr, 1700),
+        wxDateTime(27, wxDateTime::Mar, 1701),
+        wxDateTime(16, wxDateTime::Apr, 1702),
+        wxDateTime( 8, wxDateTime::Apr, 1703),
+        wxDateTime(23, wxDateTime::Mar, 1704),
+        wxDateTime(12, wxDateTime::Apr, 1705),
+        wxDateTime( 4, wxDateTime::Apr, 1706),
+        wxDateTime(24, wxDateTime::Apr, 1707),
+        wxDateTime( 8, wxDateTime::Apr, 1708),
+        wxDateTime(31, wxDateTime::Mar, 1709),
+        wxDateTime(20, wxDateTime::Apr, 1710),
+        wxDateTime( 5, wxDateTime::Apr, 1711),
+        wxDateTime(27, wxDateTime::Mar, 1712),
+        wxDateTime(16, wxDateTime::Apr, 1713),
+        wxDateTime( 1, wxDateTime::Apr, 1714),
+        wxDateTime(21, wxDateTime::Apr, 1715),
+        wxDateTime(12, wxDateTime::Apr, 1716),
+        wxDateTime(28, wxDateTime::Mar, 1717),
+        wxDateTime(17, wxDateTime::Apr, 1718),
+        wxDateTime( 9, wxDateTime::Apr, 1719),
+        wxDateTime(31, wxDateTime::Mar, 1720),
+        wxDateTime(13, wxDateTime::Apr, 1721),
+        wxDateTime( 5, wxDateTime::Apr, 1722),
+        wxDateTime(28, wxDateTime::Mar, 1723),
+        wxDateTime(16, wxDateTime::Apr, 1724),
+        wxDateTime( 1, wxDateTime::Apr, 1725),
+        wxDateTime(21, wxDateTime::Apr, 1726),
+        wxDateTime(13, wxDateTime::Apr, 1727),
+        wxDateTime(28, wxDateTime::Mar, 1728),
+        wxDateTime(17, wxDateTime::Apr, 1729),
+        wxDateTime( 9, wxDateTime::Apr, 1730),
+        wxDateTime(25, wxDateTime::Mar, 1731),
+        wxDateTime(13, wxDateTime::Apr, 1732),
+        wxDateTime( 5, wxDateTime::Apr, 1733),
+        wxDateTime(25, wxDateTime::Apr, 1734),
+        wxDateTime(10, wxDateTime::Apr, 1735),
+        wxDateTime( 1, wxDateTime::Apr, 1736),
+        wxDateTime(21, wxDateTime::Apr, 1737),
+        wxDateTime( 6, wxDateTime::Apr, 1738),
+        wxDateTime(29, wxDateTime::Mar, 1739),
+        wxDateTime(17, wxDateTime::Apr, 1740),
+        wxDateTime( 2, wxDateTime::Apr, 1741),
+        wxDateTime(25, wxDateTime::Mar, 1742),
+        wxDateTime(14, wxDateTime::Apr, 1743),
+        wxDateTime( 5, wxDateTime::Apr, 1744),
+        wxDateTime(18, wxDateTime::Apr, 1745),
+        wxDateTime(10, wxDateTime::Apr, 1746),
+        wxDateTime( 2, wxDateTime::Apr, 1747),
+        wxDateTime(14, wxDateTime::Apr, 1748),
+        wxDateTime( 6, wxDateTime::Apr, 1749),
+        wxDateTime(29, wxDateTime::Mar, 1750),
+        wxDateTime(11, wxDateTime::Apr, 1751),
+        wxDateTime( 2, wxDateTime::Apr, 1752),
+        wxDateTime(22, wxDateTime::Apr, 1753),
+        wxDateTime(14, wxDateTime::Apr, 1754),
+        wxDateTime(30, wxDateTime::Mar, 1755),
+        wxDateTime(18, wxDateTime::Apr, 1756),
+        wxDateTime(10, wxDateTime::Apr, 1757),
+        wxDateTime(26, wxDateTime::Mar, 1758),
+        wxDateTime(15, wxDateTime::Apr, 1759),
+        wxDateTime( 6, wxDateTime::Apr, 1760),
+        wxDateTime(22, wxDateTime::Mar, 1761),
+        wxDateTime(11, wxDateTime::Apr, 1762),
+        wxDateTime( 3, wxDateTime::Apr, 1763),
+        wxDateTime(22, wxDateTime::Apr, 1764),
+        wxDateTime( 7, wxDateTime::Apr, 1765),
+        wxDateTime(30, wxDateTime::Mar, 1766),
+        wxDateTime(19, wxDateTime::Apr, 1767),
+        wxDateTime( 3, wxDateTime::Apr, 1768),
+        wxDateTime(26, wxDateTime::Mar, 1769),
+        wxDateTime(15, wxDateTime::Apr, 1770),
+        wxDateTime(31, wxDateTime::Mar, 1771),
+        wxDateTime(19, wxDateTime::Apr, 1772),
+        wxDateTime(11, wxDateTime::Apr, 1773),
+        wxDateTime( 3, wxDateTime::Apr, 1774),
+        wxDateTime(16, wxDateTime::Apr, 1775),
+        wxDateTime( 7, wxDateTime::Apr, 1776),
+        wxDateTime(30, wxDateTime::Mar, 1777),
+        wxDateTime(19, wxDateTime::Apr, 1778),
+        wxDateTime( 4, wxDateTime::Apr, 1779),
+        wxDateTime(26, wxDateTime::Mar, 1780),
+        wxDateTime(15, wxDateTime::Apr, 1781),
+        wxDateTime(31, wxDateTime::Mar, 1782),
+        wxDateTime(20, wxDateTime::Apr, 1783),
+        wxDateTime(11, wxDateTime::Apr, 1784),
+        wxDateTime(27, wxDateTime::Mar, 1785),
+        wxDateTime(16, wxDateTime::Apr, 1786),
+        wxDateTime( 8, wxDateTime::Apr, 1787),
+        wxDateTime(23, wxDateTime::Mar, 1788),
+        wxDateTime(12, wxDateTime::Apr, 1789),
+        wxDateTime( 4, wxDateTime::Apr, 1790),
+        wxDateTime(24, wxDateTime::Apr, 1791),
+        wxDateTime( 8, wxDateTime::Apr, 1792),
+        wxDateTime(31, wxDateTime::Mar, 1793),
+        wxDateTime(20, wxDateTime::Apr, 1794),
+        wxDateTime( 5, wxDateTime::Apr, 1795),
+        wxDateTime(27, wxDateTime::Mar, 1796),
+        wxDateTime(16, wxDateTime::Apr, 1797),
+        wxDateTime( 8, wxDateTime::Apr, 1798),
+        wxDateTime(24, wxDateTime::Mar, 1799),
+        wxDateTime(13, wxDateTime::Apr, 1800),
+        wxDateTime( 5, wxDateTime::Apr, 1801),
+        wxDateTime(18, wxDateTime::Apr, 1802),
+        wxDateTime(10, wxDateTime::Apr, 1803),
+        wxDateTime( 1, wxDateTime::Apr, 1804),
+        wxDateTime(14, wxDateTime::Apr, 1805),
+        wxDateTime( 6, wxDateTime::Apr, 1806),
+        wxDateTime(29, wxDateTime::Mar, 1807),
+        wxDateTime(17, wxDateTime::Apr, 1808),
+        wxDateTime( 2, wxDateTime::Apr, 1809),
+        wxDateTime(22, wxDateTime::Apr, 1810),
+        wxDateTime(14, wxDateTime::Apr, 1811),
+        wxDateTime(29, wxDateTime::Mar, 1812),
+        wxDateTime(18, wxDateTime::Apr, 1813),
+        wxDateTime(10, wxDateTime::Apr, 1814),
+        wxDateTime(26, wxDateTime::Mar, 1815),
+        wxDateTime(14, wxDateTime::Apr, 1816),
+        wxDateTime( 6, wxDateTime::Apr, 1817),
+        wxDateTime(22, wxDateTime::Mar, 1818),
+        wxDateTime(11, wxDateTime::Apr, 1819),
+        wxDateTime( 2, wxDateTime::Apr, 1820),
+        wxDateTime(22, wxDateTime::Apr, 1821),
+        wxDateTime( 7, wxDateTime::Apr, 1822),
+        wxDateTime(30, wxDateTime::Mar, 1823),
+        wxDateTime(18, wxDateTime::Apr, 1824),
+        wxDateTime( 3, wxDateTime::Apr, 1825),
+        wxDateTime(26, wxDateTime::Mar, 1826),
+        wxDateTime(15, wxDateTime::Apr, 1827),
+        wxDateTime( 6, wxDateTime::Apr, 1828),
+        wxDateTime(19, wxDateTime::Apr, 1829),
+        wxDateTime(11, wxDateTime::Apr, 1830),
+        wxDateTime( 3, wxDateTime::Apr, 1831),
+        wxDateTime(22, wxDateTime::Apr, 1832),
+        wxDateTime( 7, wxDateTime::Apr, 1833),
+        wxDateTime(30, wxDateTime::Mar, 1834),
+        wxDateTime(19, wxDateTime::Apr, 1835),
+        wxDateTime( 3, wxDateTime::Apr, 1836),
+        wxDateTime(26, wxDateTime::Mar, 1837),
+        wxDateTime(15, wxDateTime::Apr, 1838),
+        wxDateTime(31, wxDateTime::Mar, 1839),
+        wxDateTime(19, wxDateTime::Apr, 1840),
+        wxDateTime(11, wxDateTime::Apr, 1841),
+        wxDateTime(27, wxDateTime::Mar, 1842),
+        wxDateTime(16, wxDateTime::Apr, 1843),
+        wxDateTime( 7, wxDateTime::Apr, 1844),
+        wxDateTime(23, wxDateTime::Mar, 1845),
+        wxDateTime(12, wxDateTime::Apr, 1846),
+        wxDateTime( 4, wxDateTime::Apr, 1847),
+        wxDateTime(23, wxDateTime::Apr, 1848),
+        wxDateTime( 8, wxDateTime::Apr, 1849),
+        wxDateTime(31, wxDateTime::Mar, 1850),
+        wxDateTime(20, wxDateTime::Apr, 1851),
+        wxDateTime(11, wxDateTime::Apr, 1852),
+        wxDateTime(27, wxDateTime::Mar, 1853),
+        wxDateTime(16, wxDateTime::Apr, 1854),
+        wxDateTime( 8, wxDateTime::Apr, 1855),
+        wxDateTime(23, wxDateTime::Mar, 1856),
+        wxDateTime(12, wxDateTime::Apr, 1857),
+        wxDateTime( 4, wxDateTime::Apr, 1858),
+        wxDateTime(24, wxDateTime::Apr, 1859),
+        wxDateTime( 8, wxDateTime::Apr, 1860),
+        wxDateTime(31, wxDateTime::Mar, 1861),
+        wxDateTime(20, wxDateTime::Apr, 1862),
+        wxDateTime( 5, wxDateTime::Apr, 1863),
+        wxDateTime(27, wxDateTime::Mar, 1864),
+        wxDateTime(16, wxDateTime::Apr, 1865),
+        wxDateTime( 1, wxDateTime::Apr, 1866),
+        wxDateTime(21, wxDateTime::Apr, 1867),
+        wxDateTime(12, wxDateTime::Apr, 1868),
+        wxDateTime(28, wxDateTime::Mar, 1869),
+        wxDateTime(17, wxDateTime::Apr, 1870),
+        wxDateTime( 9, wxDateTime::Apr, 1871),
+        wxDateTime(31, wxDateTime::Mar, 1872),
+        wxDateTime(13, wxDateTime::Apr, 1873),
+        wxDateTime( 5, wxDateTime::Apr, 1874),
+        wxDateTime(28, wxDateTime::Mar, 1875),
+        wxDateTime(16, wxDateTime::Apr, 1876),
+        wxDateTime( 1, wxDateTime::Apr, 1877),
+        wxDateTime(21, wxDateTime::Apr, 1878),
+        wxDateTime(13, wxDateTime::Apr, 1879),
+        wxDateTime(28, wxDateTime::Mar, 1880),
+        wxDateTime(17, wxDateTime::Apr, 1881),
+        wxDateTime( 9, wxDateTime::Apr, 1882),
+        wxDateTime(25, wxDateTime::Mar, 1883),
+        wxDateTime(13, wxDateTime::Apr, 1884),
+        wxDateTime( 5, wxDateTime::Apr, 1885),
+        wxDateTime(25, wxDateTime::Apr, 1886),
+        wxDateTime(10, wxDateTime::Apr, 1887),
+        wxDateTime( 1, wxDateTime::Apr, 1888),
+        wxDateTime(21, wxDateTime::Apr, 1889),
+        wxDateTime( 6, wxDateTime::Apr, 1890),
+        wxDateTime(29, wxDateTime::Mar, 1891),
+        wxDateTime(17, wxDateTime::Apr, 1892),
+        wxDateTime( 2, wxDateTime::Apr, 1893),
+        wxDateTime(25, wxDateTime::Mar, 1894),
+        wxDateTime(14, wxDateTime::Apr, 1895),
+        wxDateTime( 5, wxDateTime::Apr, 1896),
+        wxDateTime(18, wxDateTime::Apr, 1897),
+        wxDateTime(10, wxDateTime::Apr, 1898),
+        wxDateTime( 2, wxDateTime::Apr, 1899),
+        wxDateTime(15, wxDateTime::Apr, 1900),
+        wxDateTime( 7, wxDateTime::Apr, 1901),
+        wxDateTime(30, wxDateTime::Mar, 1902),
+        wxDateTime(12, wxDateTime::Apr, 1903),
+        wxDateTime( 3, wxDateTime::Apr, 1904),
+        wxDateTime(23, wxDateTime::Apr, 1905),
+        wxDateTime(15, wxDateTime::Apr, 1906),
+        wxDateTime(31, wxDateTime::Mar, 1907),
+        wxDateTime(19, wxDateTime::Apr, 1908),
+        wxDateTime(11, wxDateTime::Apr, 1909),
+        wxDateTime(27, wxDateTime::Mar, 1910),
+        wxDateTime(16, wxDateTime::Apr, 1911),
+        wxDateTime( 7, wxDateTime::Apr, 1912),
+        wxDateTime(23, wxDateTime::Mar, 1913),
+        wxDateTime(12, wxDateTime::Apr, 1914),
+        wxDateTime( 4, wxDateTime::Apr, 1915),
+        wxDateTime(23, wxDateTime::Apr, 1916),
+        wxDateTime( 8, wxDateTime::Apr, 1917),
+        wxDateTime(31, wxDateTime::Mar, 1918),
+        wxDateTime(20, wxDateTime::Apr, 1919),
+        wxDateTime( 4, wxDateTime::Apr, 1920),
+        wxDateTime(27, wxDateTime::Mar, 1921),
+        wxDateTime(16, wxDateTime::Apr, 1922),
+        wxDateTime( 1, wxDateTime::Apr, 1923),
+        wxDateTime(20, wxDateTime::Apr, 1924),
+        wxDateTime(12, wxDateTime::Apr, 1925),
+        wxDateTime( 4, wxDateTime::Apr, 1926),
+        wxDateTime(17, wxDateTime::Apr, 1927),
+        wxDateTime( 8, wxDateTime::Apr, 1928),
+        wxDateTime(31, wxDateTime::Mar, 1929),
+        wxDateTime(20, wxDateTime::Apr, 1930),
+        wxDateTime( 5, wxDateTime::Apr, 1931),
+        wxDateTime(27, wxDateTime::Mar, 1932),
+        wxDateTime(16, wxDateTime::Apr, 1933),
+        wxDateTime( 1, wxDateTime::Apr, 1934),
+        wxDateTime(21, wxDateTime::Apr, 1935),
+        wxDateTime(12, wxDateTime::Apr, 1936),
+        wxDateTime(28, wxDateTime::Mar, 1937),
+        wxDateTime(17, wxDateTime::Apr, 1938),
+        wxDateTime( 9, wxDateTime::Apr, 1939),
+        wxDateTime(24, wxDateTime::Mar, 1940),
+        wxDateTime(13, wxDateTime::Apr, 1941),
+        wxDateTime( 5, wxDateTime::Apr, 1942),
+        wxDateTime(25, wxDateTime::Apr, 1943),
+        wxDateTime( 9, wxDateTime::Apr, 1944),
+        wxDateTime( 1, wxDateTime::Apr, 1945),
+        wxDateTime(21, wxDateTime::Apr, 1946),
+        wxDateTime( 6, wxDateTime::Apr, 1947),
+        wxDateTime(28, wxDateTime::Mar, 1948),
+        wxDateTime(17, wxDateTime::Apr, 1949),
+        wxDateTime( 9, wxDateTime::Apr, 1950),
+        wxDateTime(25, wxDateTime::Mar, 1951),
+        wxDateTime(13, wxDateTime::Apr, 1952),
+        wxDateTime( 5, wxDateTime::Apr, 1953),
+        wxDateTime(18, wxDateTime::Apr, 1954),
+        wxDateTime(10, wxDateTime::Apr, 1955),
+        wxDateTime( 1, wxDateTime::Apr, 1956),
+        wxDateTime(21, wxDateTime::Apr, 1957),
+        wxDateTime( 6, wxDateTime::Apr, 1958),
+        wxDateTime(29, wxDateTime::Mar, 1959),
+        wxDateTime(17, wxDateTime::Apr, 1960),
+        wxDateTime( 2, wxDateTime::Apr, 1961),
+        wxDateTime(22, wxDateTime::Apr, 1962),
+        wxDateTime(14, wxDateTime::Apr, 1963),
+        wxDateTime(29, wxDateTime::Mar, 1964),
+        wxDateTime(18, wxDateTime::Apr, 1965),
+        wxDateTime(10, wxDateTime::Apr, 1966),
+        wxDateTime(26, wxDateTime::Mar, 1967),
+        wxDateTime(14, wxDateTime::Apr, 1968),
+        wxDateTime( 6, wxDateTime::Apr, 1969),
+        wxDateTime(29, wxDateTime::Mar, 1970),
+        wxDateTime(11, wxDateTime::Apr, 1971),
+        wxDateTime( 2, wxDateTime::Apr, 1972),
+        wxDateTime(22, wxDateTime::Apr, 1973),
+        wxDateTime(14, wxDateTime::Apr, 1974),
+        wxDateTime(30, wxDateTime::Mar, 1975),
+        wxDateTime(18, wxDateTime::Apr, 1976),
+        wxDateTime(10, wxDateTime::Apr, 1977),
+        wxDateTime(26, wxDateTime::Mar, 1978),
+        wxDateTime(15, wxDateTime::Apr, 1979),
+        wxDateTime( 6, wxDateTime::Apr, 1980),
+        wxDateTime(19, wxDateTime::Apr, 1981),
+        wxDateTime(11, wxDateTime::Apr, 1982),
+        wxDateTime( 3, wxDateTime::Apr, 1983),
+        wxDateTime(22, wxDateTime::Apr, 1984),
+        wxDateTime( 7, wxDateTime::Apr, 1985),
+        wxDateTime(30, wxDateTime::Mar, 1986),
+        wxDateTime(19, wxDateTime::Apr, 1987),
+        wxDateTime( 3, wxDateTime::Apr, 1988),
+        wxDateTime(26, wxDateTime::Mar, 1989),
+        wxDateTime(15, wxDateTime::Apr, 1990),
+        wxDateTime(31, wxDateTime::Mar, 1991),
+        wxDateTime(19, wxDateTime::Apr, 1992),
+        wxDateTime(11, wxDateTime::Apr, 1993),
+        wxDateTime( 3, wxDateTime::Apr, 1994),
+        wxDateTime(16, wxDateTime::Apr, 1995),
+        wxDateTime( 7, wxDateTime::Apr, 1996),
+        wxDateTime(30, wxDateTime::Mar, 1997),
+        wxDateTime(12, wxDateTime::Apr, 1998),
+        wxDateTime( 4, wxDateTime::Apr, 1999),
+        wxDateTime(23, wxDateTime::Apr, 2000),
+        wxDateTime(15, wxDateTime::Apr, 2001),
+        wxDateTime(31, wxDateTime::Mar, 2002),
+        wxDateTime(20, wxDateTime::Apr, 2003),
+        wxDateTime(11, wxDateTime::Apr, 2004),
+        wxDateTime(27, wxDateTime::Mar, 2005),
+        wxDateTime(16, wxDateTime::Apr, 2006),
+        wxDateTime( 8, wxDateTime::Apr, 2007),
+        wxDateTime(23, wxDateTime::Mar, 2008),
+        wxDateTime(12, wxDateTime::Apr, 2009),
+        wxDateTime( 4, wxDateTime::Apr, 2010),
+        wxDateTime(24, wxDateTime::Apr, 2011),
+        wxDateTime( 8, wxDateTime::Apr, 2012),
+        wxDateTime(31, wxDateTime::Mar, 2013),
+        wxDateTime(20, wxDateTime::Apr, 2014),
+        wxDateTime( 5, wxDateTime::Apr, 2015),
+        wxDateTime(27, wxDateTime::Mar, 2016),
+        wxDateTime(16, wxDateTime::Apr, 2017),
+        wxDateTime( 1, wxDateTime::Apr, 2018),
+        wxDateTime(21, wxDateTime::Apr, 2019),
+        wxDateTime(12, wxDateTime::Apr, 2020),
+        wxDateTime( 4, wxDateTime::Apr, 2021),
+        wxDateTime(17, wxDateTime::Apr, 2022),
+        wxDateTime( 9, wxDateTime::Apr, 2023),
+        wxDateTime(31, wxDateTime::Mar, 2024),
+        wxDateTime(20, wxDateTime::Apr, 2025),
+        wxDateTime( 5, wxDateTime::Apr, 2026),
+        wxDateTime(28, wxDateTime::Mar, 2027),
+        wxDateTime(16, wxDateTime::Apr, 2028),
+        wxDateTime( 1, wxDateTime::Apr, 2029),
+        wxDateTime(21, wxDateTime::Apr, 2030),
+        wxDateTime(13, wxDateTime::Apr, 2031),
+        wxDateTime(28, wxDateTime::Mar, 2032),
+        wxDateTime(17, wxDateTime::Apr, 2033),
+        wxDateTime( 9, wxDateTime::Apr, 2034),
+        wxDateTime(25, wxDateTime::Mar, 2035),
+        wxDateTime(13, wxDateTime::Apr, 2036),
+        wxDateTime( 5, wxDateTime::Apr, 2037),
+        wxDateTime(25, wxDateTime::Apr, 2038),
+        wxDateTime(10, wxDateTime::Apr, 2039),
+        wxDateTime( 1, wxDateTime::Apr, 2040),
+        wxDateTime(21, wxDateTime::Apr, 2041),
+        wxDateTime( 6, wxDateTime::Apr, 2042),
+        wxDateTime(29, wxDateTime::Mar, 2043),
+        wxDateTime(17, wxDateTime::Apr, 2044),
+        wxDateTime( 9, wxDateTime::Apr, 2045),
+        wxDateTime(25, wxDateTime::Mar, 2046),
+        wxDateTime(14, wxDateTime::Apr, 2047),
+        wxDateTime( 5, wxDateTime::Apr, 2048),
+        wxDateTime(18, wxDateTime::Apr, 2049),
+        wxDateTime(10, wxDateTime::Apr, 2050),
+        wxDateTime( 2, wxDateTime::Apr, 2051),
+        wxDateTime(21, wxDateTime::Apr, 2052),
+        wxDateTime( 6, wxDateTime::Apr, 2053),
+        wxDateTime(29, wxDateTime::Mar, 2054),
+        wxDateTime(18, wxDateTime::Apr, 2055),
+        wxDateTime( 2, wxDateTime::Apr, 2056),
+        wxDateTime(22, wxDateTime::Apr, 2057),
+        wxDateTime(14, wxDateTime::Apr, 2058),
+        wxDateTime(30, wxDateTime::Mar, 2059),
+        wxDateTime(18, wxDateTime::Apr, 2060),
+        wxDateTime(10, wxDateTime::Apr, 2061),
+        wxDateTime(26, wxDateTime::Mar, 2062),
+        wxDateTime(15, wxDateTime::Apr, 2063),
+        wxDateTime( 6, wxDateTime::Apr, 2064),
+        wxDateTime(29, wxDateTime::Mar, 2065),
+        wxDateTime(11, wxDateTime::Apr, 2066),
+        wxDateTime( 3, wxDateTime::Apr, 2067),
+        wxDateTime(22, wxDateTime::Apr, 2068),
+        wxDateTime(14, wxDateTime::Apr, 2069),
+        wxDateTime(30, wxDateTime::Mar, 2070),
+        wxDateTime(19, wxDateTime::Apr, 2071),
+        wxDateTime(10, wxDateTime::Apr, 2072),
+        wxDateTime(26, wxDateTime::Mar, 2073),
+        wxDateTime(15, wxDateTime::Apr, 2074),
+        wxDateTime( 7, wxDateTime::Apr, 2075),
+        wxDateTime(19, wxDateTime::Apr, 2076),
+        wxDateTime(11, wxDateTime::Apr, 2077),
+        wxDateTime( 3, wxDateTime::Apr, 2078),
+        wxDateTime(23, wxDateTime::Apr, 2079),
+        wxDateTime( 7, wxDateTime::Apr, 2080),
+        wxDateTime(30, wxDateTime::Mar, 2081),
+        wxDateTime(19, wxDateTime::Apr, 2082),
+        wxDateTime( 4, wxDateTime::Apr, 2083),
+        wxDateTime(26, wxDateTime::Mar, 2084),
+        wxDateTime(15, wxDateTime::Apr, 2085),
+        wxDateTime(31, wxDateTime::Mar, 2086),
+        wxDateTime(20, wxDateTime::Apr, 2087),
+        wxDateTime(11, wxDateTime::Apr, 2088),
+        wxDateTime( 3, wxDateTime::Apr, 2089),
+        wxDateTime(16, wxDateTime::Apr, 2090),
+        wxDateTime( 8, wxDateTime::Apr, 2091),
+        wxDateTime(30, wxDateTime::Mar, 2092),
+        wxDateTime(12, wxDateTime::Apr, 2093),
+        wxDateTime( 4, wxDateTime::Apr, 2094),
+        wxDateTime(24, wxDateTime::Apr, 2095),
+        wxDateTime(15, wxDateTime::Apr, 2096),
+        wxDateTime(31, wxDateTime::Mar, 2097),
+        wxDateTime(20, wxDateTime::Apr, 2098),
+        wxDateTime(12, wxDateTime::Apr, 2099)
+    };
+
+    for (const auto& easter : easters)
+    {
+        INFO("Checking year " << easter.GetYear());
+        CHECK(wxDateTimeUSCatholicFeasts::GetEaster(easter.GetYear()).IsSameDate(easter));
+    }
+}
+
+TEST_CASE("US Catholic Holidays", "[datetime][holiday]")
+{
+    SECTION("Ascension")
+    {
+        wxDateTime ascension = wxDateTimeUSCatholicFeasts::GetThursdayAscension(2023);
+        CHECK(ascension.GetMonth() == wxDateTime::Month::May);
+        CHECK(ascension.GetDay() == 18);
+
+        ascension = wxDateTimeUSCatholicFeasts::GetSundayAscension(2023);
+        CHECK(ascension.GetMonth() == wxDateTime::Month::May);
+        CHECK(ascension.GetDay() == 21);
+    }
+    SECTION("Fixed date feasts")
+    {
+        wxDateTimeHolidayAuthority::AddAuthority(new wxDateTimeUSCatholicFeasts);
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime( 1, wxDateTime::Month::Jan, 2024)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(15, wxDateTime::Month::Aug, 2023)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime( 1, wxDateTime::Month::Nov, 2023)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime( 8, wxDateTime::Month::Dec, 2023)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 2023)));
+        // random days that should not be feasts of obligation
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime( 1, wxDateTime::Month::Dec, 2023)));
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(31, wxDateTime::Month::Oct, 2023)));
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(14, wxDateTime::Month::Feb, 2023)));
+    }
+}
+
+TEST_CASE("Christian Holidays", "[datetime][holiday][christian]")
+{
+    SECTION("Easter")
+    {
+        wxDateTime easter = wxDateTimeChristianHolidays::GetEaster(2023);
+        CHECK(easter.GetMonth() == wxDateTime::Month::Apr);
+        CHECK(easter.GetDay() == 9);
+
+        easter = wxDateTimeChristianHolidays::GetEaster(2010);
+        CHECK(easter.GetMonth() == wxDateTime::Month::Apr);
+        CHECK(easter.GetDay() == 4);
+    }
+    SECTION("Christmas")
+    {
+        wxDateTimeHolidayAuthority::AddAuthority(new wxDateTimeChristianHolidays);
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 1990)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 1700)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 2023)));
+        // random days that are not Christmas or weekends
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(1, wxDateTime::Month::Dec, 2023)));
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(29, wxDateTime::Month::Dec, 2023)));
+    }
 }
 
 #endif // wxUSE_DATETIME

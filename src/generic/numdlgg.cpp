@@ -2,7 +2,6 @@
 // Name:        src/generic/numdlgg.cpp
 // Purpose:     wxGetNumberFromUser implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     23.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

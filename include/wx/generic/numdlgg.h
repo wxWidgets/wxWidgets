@@ -2,7 +2,6 @@
 // Name:        wx/generic/numdlgg.h
 // Purpose:     wxNumberEntryDialog class
 // Author:      John Labenski
-// Modified by:
 // Created:     07.02.04 (extracted from textdlgg.cpp)
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/app.cpp
 // Purpose:     wxApp
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -359,13 +358,14 @@ int wxApp::OnRun()
 void wxApp::CleanUp()
 {
     wxMacAutoreleasePool autoreleasepool;
+
+    wxAppBase::CleanUp();
+
 #if wxUSE_TOOLTIPS
     wxToolTip::RemoveToolTips() ;
 #endif
 
     DoCleanUp();
-
-    wxAppBase::CleanUp();
 }
 
 //----------------------------------------------------------------------

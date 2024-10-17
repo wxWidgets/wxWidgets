@@ -2,7 +2,6 @@
 // Name:        wx/listbook.h
 // Purpose:     wxListbook: wxListCtrl and wxNotebook combination
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.08.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -38,7 +37,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LISTBOOK_PAGE_CHANGING, wxBook
 class WXDLLIMPEXP_CORE wxListbook : public wxCompositeBookCtrlBase
 {
 public:
-    wxListbook() { }
+    wxListbook() = default;
 
     wxListbook(wxWindow *parent,
                wxWindowID id,

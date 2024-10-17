@@ -2,7 +2,6 @@
 // Name:        src/common/powercmn.cpp
 // Purpose:     power event types and stubs for power functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2006-05-27
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

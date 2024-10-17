@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FILEDLG
+
 #include "wx/filename.h"
 
 #include "wx/qt/private/converter.h"
@@ -138,7 +140,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
     foreach (QString file, selectedfiles )
     {
         wxFileName fn = wxQtConvertString(file);
-        files.Add(fn.GetName());
+        files.Add(fn.GetFullName());
     }
 }
 
@@ -257,3 +259,5 @@ QFileDialog *wxDirDialog::GetQFileDialog() const
 {
     return static_cast<QFileDialog *>(m_qtWindow);
 }
+
+#endif // wxUSE_FILEDLG

@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/private/strconv_cf.h
 // Purpose:     Unicode conversion classes
 // Author:      David Elliott, Ryan Norton
-// Modified by:
 // Created:     2007-07-06
 // Copyright:   (c) 2004 Ryan Norton
 //              (c) 2007 David Elliott

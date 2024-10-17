@@ -2,7 +2,6 @@
 // Name:        src/common/utilscmn.cpp
 // Purpose:     Miscellaneous utility functions and classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
@@ -386,7 +385,7 @@ bool wxPlatform::Is(int platform)
 bool wxGetEmailAddress(wxChar *address, int maxSize)
 {
     wxString email = wxGetEmailAddress();
-    if ( !email )
+    if ( email.empty() )
         return false;
 
     wxStrlcpy(address, email.t_str(), maxSize);
@@ -1438,7 +1437,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxString::Format(wxS("Copyright %s 1992-2023 wxWidgets team"),
+                         wxString::Format(wxS("Copyright %s 1992-2024 wxWidgets team"),
                                           copyrightSign));
 }
 

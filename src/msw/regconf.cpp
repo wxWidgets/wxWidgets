@@ -2,7 +2,6 @@
 // Name:        src/msw/regconf.cpp
 // Purpose:
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     27.04.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

@@ -126,7 +126,7 @@ public:
     // not used here.
     explicit Test(const std::string& name = std::string()) : m_name(name) { }
 
-    virtual ~Test() { }
+    virtual ~Test() = default;
 
     virtual void runTest() = 0;
 

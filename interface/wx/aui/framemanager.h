@@ -45,12 +45,14 @@ enum wxAuiManagerOption
     wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
     /// When a docked pane is resized, its content is refreshed in live (instead of moving
     /// the border alone and refreshing the content at the end).
+    /// Since wxWidgets 3.3.0 this flag is included in the default flags.
     wxAUI_MGR_LIVE_RESIZE              = 1 << 8,
     /// Default behaviour.
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
                         wxAUI_MGR_HINT_FADE |
-                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE
+                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE |
+                        wxAUI_MGR_LIVE_RESIZE
 };
 
 /**
@@ -134,7 +136,9 @@ enum wxAuiManagerOption
            appearing partially transparent hint.
     @style{wxAUI_MGR_RECTANGLE_HINT}
            The possible location for docking is indicated by a rectangular
-           outline.
+           outline. Note that this flag doesn't work, i.e. doesn't show any
+           hint in wxGTK and wxOSX, please use one of the hint flags above
+           instead.
     @style{wxAUI_MGR_HINT_FADE}
            The translucent area where the pane could be docked appears gradually.
     @style{wxAUI_MGR_NO_VENETIAN_BLINDS_FADE}
@@ -142,7 +146,11 @@ enum wxAuiManagerOption
            docking hint immediately.
     @style{wxAUI_MGR_LIVE_RESIZE}
            When a docked pane is resized, its content is refreshed in live (instead of moving
-           the border alone and refreshing the content at the end).
+           the border alone and refreshing the content at the end). Note that
+           this flag is included in wxAUI_MGR_DEFAULT and so needs to be
+           explicitly turned off if you don't need. Also note that it is
+           always enabled in wxGTK3 and wxOSX ports as non-live resizing is not
+           implemented in them.
     @style{wxAUI_MGR_DEFAULT}
            Default behaviour, combines: wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT |
            wxAUI_MGR_HINT_FADE | wxAUI_MGR_NO_VENETIAN_BLINDS_FADE.
@@ -213,12 +221,18 @@ public:
         If this function returns true, ::wxAUI_MGR_LIVE_RESIZE flag is ignored
         and live resize is always used, whether it's specified or not.
 
-        Currently this is the case for wxOSX and wxGTK3 ports, as live resizing
-        is the only implemented method there.
+        Currently this is the case for wxOSX and wxGTK3 when using Wayland, as
+        live resizing is the only implemented method there. See
+        wxClientDC::CanBeUsedForDrawing() for more details.
+
+        @param window The associated window, may be null (this parameter was
+            added in wxWidgets 3.3.0)
+
+        @note As of wxWidgets 3.3.0 this function always returns false.
 
         @since 3.1.4
      */
-    static bool AlwaysUsesLiveResize();
+    static bool AlwaysUsesLiveResize(const wxWindow* window);
 
     /**
         This function is used by controls to calculate the drop hint rectangle.
@@ -358,6 +372,19 @@ public:
                     int insert_level = wxAUI_INSERT_PANE);
 
     /**
+        Load the layout information saved by SaveLayout().
+
+        The implementation of wxAuiDeserializer object passed to this function
+        should be consistent with that of the serializer used to save the
+        layout. See @ref page_samples_aui for an example of using serializer
+        saving the layout in XML format and matching deserializer restoring the
+        layout from it.
+
+        @since 3.3.0
+     */
+    void LoadLayout(wxAuiDeserializer& deserializer) const;
+
+    /**
         LoadPaneInfo() is similar to LoadPerspective, with the exception that it
         only loads information about a single pane.
 
@@ -374,6 +401,10 @@ public:
 
     /**
         Loads a saved perspective.
+
+        This function is used to load layouts previously saved with
+        SavePerspective(), use LoadLayout() to load a layout saved with
+        SaveLayout().
 
         A perspective is the layout state of an AUI managed window.
 
@@ -409,6 +440,19 @@ public:
     void RestoreMaximizedPane();
 
     /**
+        Save the layout information using the provided object.
+
+        This function allows to use a custom @a serializer to save the layout
+        information in any format, e.g. @ref page_samples_aui shows how to save
+        it in XML format.
+
+        See wxAuiSerializer documentation for more details.
+
+        @since 3.3.0
+     */
+    void SaveLayout(wxAuiSerializer& serializer) const;
+
+    /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
         saves information about a single pane.
 
@@ -426,6 +470,9 @@ public:
     /**
         Saves the entire user interface layout into an encoded wxString, which
         can then be stored by the application (probably using wxConfig).
+
+        @note You may prefer to use SaveLayout() instead of this function for
+            more flexibility.
 
         @see LoadPerspective
         @see LoadPaneInfo

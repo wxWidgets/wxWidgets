@@ -34,6 +34,7 @@
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/webkit.h"
 #include "wx/gtk/private/error.h"
+#include "wx/gtk/private/variant.h"
 #include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSValueRef.h>
@@ -41,6 +42,10 @@
 
 #if WEBKIT_CHECK_VERSION(2, 10, 0)
 #define wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+#endif
+
+#if WEBKIT_CHECK_VERSION(2, 16, 0)
+#define wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
 #endif
 
 // Function to check webkit version at runtime
@@ -217,7 +222,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
 
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
                          webKitCtrl->GetId(),
-                         wxString( uri, wxConvUTF8 ),
+                         wxString::FromUTF8( uri ),
                          target,
                          wxGetNavigationActionFlags(action));
     event.SetEventObject(webKitCtrl);
@@ -245,8 +250,6 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
 {
     webKitWindow->m_busy = false;
     wxWebViewNavigationError type = wxWEBVIEW_NAV_ERR_OTHER;
-
-    wxString description(error->message, wxConvUTF8);
 
     if (strcmp(g_quark_to_string(error->domain), "soup_http_error_quark") == 0)
     {
@@ -349,7 +352,7 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
                          webKitWindow->GetId(),
                          uri, "");
     event.SetEventObject(webKitWindow);
-    event.SetString(description);
+    event.SetString(wxString::FromUTF8(error->message));
     event.SetInt(type);
 
 
@@ -462,7 +465,7 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
                          webKitCtrl->GetCurrentURL(),
                          "");
     event.SetEventObject(webKitCtrl);
-    event.SetString(wxString(title, wxConvUTF8));
+    event.SetString(wxString::FromUTF8(title));
 
     webKitCtrl->HandleWindowEvent(event);
 
@@ -615,7 +618,7 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
 {
     const char *address = g_dbus_server_get_client_address(dbusServer);
-    GVariant *user_data = g_variant_new("(s)", address);
+    wxGtkVariant user_data(g_variant_new("(s)", address));
 
     // Try to setup extension loading from the location it is supposed to be
     // normally installed in.
@@ -642,7 +645,7 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     }
 
     webkit_web_context_set_web_extensions_initialization_user_data(context,
-                                                                   user_data);
+                                                                   user_data.Release());
 }
 
 static gboolean
@@ -724,6 +727,19 @@ public:
     }
 #endif
 
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+    virtual bool EnablePersistentStorage(bool enable) override
+    {
+        if (wx_check_webkit_version(2, 16, 0))
+        {
+            m_persistentStorage = enable;
+            return true;
+        }
+        else
+            return false;
+    }
+#endif
+
     virtual void* GetNativeConfiguration() const override
     {
         return GetOrCreateContext();
@@ -735,11 +751,22 @@ private:
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
     mutable WebKitWebsiteDataManager* m_websiteDataManager = nullptr;
 #endif
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+    bool m_persistentStorage = true;
+#endif
 
     WebKitWebContext* GetOrCreateContext() const
     {
         if (m_webContext)
             return m_webContext;
+
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+        if (!m_persistentStorage)
+        {
+            m_webContext = webkit_web_context_new_ephemeral();
+            return m_webContext;
+        }
+#endif
 
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
         if (wx_check_webkit_version(2, 10, 0))
@@ -774,10 +801,28 @@ private:
 // wxWebViewFactoryWebKit
 //-----------------------------------------------------------------------------
 
-wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo()
+wxVersionInfo wxWebViewFactoryWebKit::GetVersionInfo(wxVersionContext context)
 {
-    return wxVersionInfo("webkit2", webkit_get_major_version(),
-        webkit_get_minor_version(), webkit_get_micro_version());
+    int major = 0,
+        minor = 0,
+        micro = 0;
+
+    switch ( context )
+    {
+        case wxVersionContext::RunTime:
+            major = webkit_get_major_version();
+            minor = webkit_get_minor_version();
+            micro = webkit_get_micro_version();
+            break;
+
+        case wxVersionContext::BuildTime:
+            major = WEBKIT_MAJOR_VERSION;
+            minor = WEBKIT_MINOR_VERSION;
+            micro = WEBKIT_MICRO_VERSION;
+            break;
+    }
+
+    return wxVersionInfo("webkit2", major, minor, micro);
 }
 
 wxWebViewConfiguration wxWebViewFactoryWebKit::CreateConfiguration()
@@ -907,6 +952,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     PostCreation(size);
 
+    NotifyWebViewCreated();
+
     /* Open a webpage */
     if (!isChildWebView)
         webkit_web_view_load_uri(m_web_view, url.utf8_str());
@@ -976,6 +1023,25 @@ void wxWebViewWebKit::EnableAccessToDevTools(bool enable)
     webkit_settings_set_enable_developer_extras(settings, enable);
 }
 
+bool wxWebViewWebKit::ShowDevTools()
+{
+    // If we don't enable access to dev tools, the inspector is simply not
+    // shown.
+    EnableAccessToDevTools();
+
+    WebKitWebInspector* const
+        inspector = webkit_web_view_get_inspector(m_web_view);
+    if ( !inspector )
+    {
+        wxLogDebug("Unexpectedly failed to obtain WebKit inspector.");
+        return false;
+    }
+
+    webkit_web_inspector_show(inspector);
+
+    return true;
+}
+
 bool wxWebViewWebKit::IsAccessToDevToolsEnabled() const
 {
     WebKitSettings* settings = webkit_web_view_get_settings(m_web_view);
@@ -992,6 +1058,46 @@ bool wxWebViewWebKit::SetUserAgent(const wxString& userAgent)
     else
         m_customUserAgent = userAgent;
     return true;
+}
+
+bool wxWebViewWebKit::SetProxy(const wxString& proxy)
+{
+#if WEBKIT_CHECK_VERSION(2, 16, 0)
+    if (wx_check_webkit_version(2, 16, 0))
+    {
+        const auto context = static_cast<WebKitWebContext*>(m_config.GetNativeConfiguration());
+        wxCHECK_MSG( context, false, "no context?" );
+
+        const auto data_manager = webkit_web_context_get_website_data_manager(context);
+        wxCHECK_MSG( data_manager, false, "no data manager?" );
+
+        const auto proxy_settings = webkit_network_proxy_settings_new(
+            proxy.utf8_str(),
+            nullptr // no hosts to ignore
+        );
+        wxCHECK_MSG( proxy_settings, false, "failed to create proxy settings" );
+
+        webkit_website_data_manager_set_network_proxy_settings(
+            data_manager,
+            WEBKIT_NETWORK_PROXY_MODE_CUSTOM,
+            proxy_settings
+        );
+
+        webkit_network_proxy_settings_free(proxy_settings);
+
+        return true;
+    }
+
+    wxLogError(_("Setting proxy is not supported by WebKit, at least version 2.16 is required."));
+
+    return false;
+#else // WebKit < 2.16 doesn't support setting proxy
+    wxUnusedVar(proxy);
+
+    wxLogError(_("This program was compiled without support for setting WebKit proxy."));
+
+    return false;
+#endif // WebKit 2.16+
 }
 
 void wxWebViewWebKit::Stop()
@@ -1049,6 +1155,24 @@ void wxWebViewWebKit::EnableHistory(bool)
     // In WebKit2GTK+, history can't be disabled so do nothing here.
 }
 
+/* static */
+wxSharedPtr<wxWebViewHistoryItem>
+wxWebViewWebKit::CreateHistoryItemFromWKItem(WebKitBackForwardListItem* gtkitem)
+{
+    wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
+                          wxString::FromUTF8(webkit_back_forward_list_item_get_uri(gtkitem)),
+                          // Since WebKit 2.43.4 titles are not stored any more
+                          // and the function is deprecated, so don't use it.
+#if !WEBKIT_CHECK_VERSION(2, 43, 4)
+                          wxString::FromUTF8(webkit_back_forward_list_item_get_title(gtkitem))
+#else
+                          wxString()
+#endif
+                          );
+    wxitem->m_histItem = gtkitem;
+    return wxSharedPtr<wxWebViewHistoryItem>(wxitem);
+}
+
 wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
 {
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
@@ -1059,12 +1183,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory
     for(int i = g_list_length(list) - 1; i >= 0 ; i--)
     {
         WebKitBackForwardListItem* gtkitem = (WebKitBackForwardListItem*)g_list_nth_data(list, i);
-        wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
-                              webkit_back_forward_list_item_get_uri(gtkitem),
-                              webkit_back_forward_list_item_get_title(gtkitem));
-        wxitem->m_histItem = gtkitem;
-        wxSharedPtr<wxWebViewHistoryItem> item(wxitem);
-        backhist.push_back(item);
+        backhist.push_back(CreateHistoryItemFromWKItem(gtkitem));
     }
     return backhist;
 }
@@ -1078,12 +1197,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory(
     for(guint i = 0; i < g_list_length(list); i++)
     {
         WebKitBackForwardListItem* gtkitem = (WebKitBackForwardListItem*)g_list_nth_data(list, i);
-        wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
-                              webkit_back_forward_list_item_get_uri(gtkitem),
-                              webkit_back_forward_list_item_get_title(gtkitem));
-        wxitem->m_histItem = gtkitem;
-        wxSharedPtr<wxWebViewHistoryItem> item(wxitem);
-        forwardhist.push_back(item);
+        forwardhist.push_back(CreateHistoryItemFromWKItem(gtkitem));
     }
     return forwardhist;
 }
@@ -1241,7 +1355,7 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     if (source)
     {
-        wxString wxs(source, wxConvUTF8, length);
+        const wxString& wxs = wxString::FromUTF8((const char*)source, length);
         free(source);
         return wxs;
     }
@@ -1286,8 +1400,8 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType) const
 void wxWebViewWebKit::DoSetPage(const wxString& html, const wxString& baseUri)
 {
     webkit_web_view_load_html(m_web_view,
-                              html.mb_str(wxConvUTF8),
-                              baseUri.mb_str(wxConvUTF8));
+                              html.utf8_str(),
+                              baseUri.utf8_str());
 }
 
 void wxWebViewWebKit::Print()
@@ -1330,15 +1444,11 @@ void wxWebViewWebKit::DeleteSelection()
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "DeleteSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
-        if (retval)
-        {
-            g_variant_unref(retval);
-        }
+                                                  nullptr, nullptr));
     }
 }
 
@@ -1348,16 +1458,16 @@ bool wxWebViewWebKit::HasSelection() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "HasSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
+                                                  nullptr, nullptr));
         if (retval)
         {
             gboolean has_selection = FALSE;
-            g_variant_get(retval, "(b)", &has_selection);
-            g_variant_unref(retval);
+            retval.Get("(b)", &has_selection);
+
             return has_selection != 0;
         }
     }
@@ -1376,17 +1486,16 @@ wxString wxWebViewWebKit::GetSelectedText() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
+                                                  nullptr, nullptr));
         if (retval)
         {
             char *text;
-            g_variant_get(retval, "(s)", &text);
-            g_variant_unref(retval);
-            return wxString(text, wxConvUTF8);
+            retval.Get("(&s)", &text);
+            return wxString::FromUTF8(text);
         }
     }
     return wxString();
@@ -1398,17 +1507,16 @@ wxString wxWebViewWebKit::GetSelectedSource() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedSource",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
+                                                  nullptr, nullptr));
         if (retval)
         {
             char *source;
-            g_variant_get(retval, "(s)", &source);
-            g_variant_unref(retval);
-            return wxString(source, wxConvUTF8);
+            retval.Get("(&s)", &source);
+            return wxString::FromUTF8(source);
         }
     }
     return wxString();
@@ -1420,15 +1528,11 @@ void wxWebViewWebKit::ClearSelection()
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "ClearSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
-        if (retval)
-        {
-            g_variant_unref(retval);
-        }
+                                                  nullptr, nullptr));
     }
 }
 
@@ -1438,17 +1542,16 @@ wxString wxWebViewWebKit::GetPageText() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetPageText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
+                                                  nullptr, nullptr));
         if (retval)
         {
             char *text;
-            g_variant_get(retval, "(s)", &text);
-            g_variant_unref(retval);
-            return wxString(text, wxConvUTF8);
+            retval.Get("(&s)", &text);
+            return wxString::FromUTF8(text);
         }
     }
     return wxString();

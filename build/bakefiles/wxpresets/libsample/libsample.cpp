@@ -2,7 +2,6 @@
 // Name:        libsample.cpp
 // Purpose:     The source of a dummy sample wx-based library
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     26/11/06
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence

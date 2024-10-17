@@ -30,6 +30,18 @@
 // Disable any warnings inside Windows headers.
 #ifdef __VISUALC__
     #pragma warning(push, 1)
+
+    // Some warnings, which are disabled by default but could be enabled by the
+    // application code before including wx headers, are somehow not disabled
+    // even by switching to warning level 1, so disable them explicitly.
+
+    // expression before comma has no effect; expected expression with
+    // side-effect
+    #pragma warning(disable:4548)
+
+    // 'symbol' is not defined as a preprocessor macro, replacing with '0' for
+    // 'directives'
+    #pragma warning(disable:4668)
 #endif
 
 // When the application wants to use <winsock2.h> (this is required for IPv6

@@ -106,8 +106,12 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     g_object_ref( m_widget );
 
     gtk_widget_set_name( m_widget, "wxPopupWindow" );
-    // wxPopupWindow is used for different windows as well
-    // gtk_window_set_type_hint( GTK_WINDOW(m_widget), GDK_WINDOW_TYPE_HINT_COMBO );
+
+    // While wxPopupWindow is used for different windows as well, we don't
+    // really know how is it going to be used but we do know that without the
+    // hint at all, it doesn't work correctly, at least under Wayland, where
+    // GTK only maps COMBO and {DROPDOWN,POPUP}_MENU to popups, so do set it.
+    gtk_window_set_type_hint( GTK_WINDOW(m_widget), GDK_WINDOW_TYPE_HINT_COMBO );
 
     // Popup windows can be created without parent, so handle this correctly.
     if (parent)

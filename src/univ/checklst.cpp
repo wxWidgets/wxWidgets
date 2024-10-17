@@ -2,7 +2,6 @@
 // Name:        src/univ/checklst.cpp
 // Purpose:     wxCheckListBox implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.09.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

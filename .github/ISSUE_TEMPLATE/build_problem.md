@@ -6,13 +6,31 @@ labels: 'build'
 assignees: ''
 
 ---
+
+### Build System Used
+
 <!--
 
-Please describe exactly how you build wxWidgets, including the full `configure`
-command line and/or `make` command line if relevant.
+Please select the tool you use for building, i.e. check exactly
+one line from those below by putting "x" in between the brackets.
+-->
 
-Please attach the full build log, but feel free to quote the relevant parts of
-it here.
+I build wxWidgets and/or my application using:
+
+- [ ] CMake
+- [ ] configure
+- [ ] mingw32-make with makefile.gcc
+- [ ] MSBuild (Microsoft Visual Studio solution file)
+- [ ] nmake with makefile.vc
+- [ ] Xcode
+
+<!--
+
+For command line based tools, such as configure or CMake,
+please include the full command line used to run them.
+
+Please attach the full build log, but feel free to quote
+the relevant parts of it here.
 
 When using `configure`, please also attach `config.log` file.
 
@@ -28,3 +46,4 @@ When using `configure`, please also attach `config.log` file.
 - wxWidgets port <!-- [e.g. wxMSW, wxGTK, wxOSX] --> you are building:
 - OS <!-- [e.g. Windows 10, Ubuntu 22.10, macOS 15] --> and its version:
 - Compiler <!-- [e.g. MSVS 2022, gcc 12.1] --> being used:
+- Non-default compiler options, if any <!-- e.g. -std=c++26 -->:

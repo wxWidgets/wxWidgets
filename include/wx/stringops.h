@@ -2,7 +2,6 @@
 // Name:        wx/stringops.h
 // Purpose:     implementation of wxString primitive operations
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2007-04-16
 // Copyright:   (c) 2007 REA Elektronik GmbH
 // Licence:     wxWindows licence

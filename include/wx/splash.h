@@ -2,7 +2,6 @@
 // Name:        wx/splash.h
 // Purpose:     Base header for wxSplashScreen
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

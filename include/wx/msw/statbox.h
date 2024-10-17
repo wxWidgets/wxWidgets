@@ -2,7 +2,6 @@
 // Name:        wx/msw/statbox.h
 // Purpose:     wxStaticBox class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -96,6 +95,8 @@ protected:
     virtual void PaintForeground(wxDC& dc, const struct tagRECT& rc);
 
     void OnPaint(wxPaintEvent& event);
+
+    virtual void MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& event) override;
 
 private:
     void PositionLabelWindow();

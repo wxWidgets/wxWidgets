@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextstylepage.h
 // Purpose:     Declares the rich text formatting dialog style page.
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/5/2006 11:34:55 AM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

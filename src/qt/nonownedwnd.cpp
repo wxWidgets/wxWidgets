@@ -18,12 +18,12 @@
 
 
 #ifndef WX_PRECOMP
-    #include "wx/dcclient.h"
-    #include "wx/region.h"
+    #include "wx/dcmemory.h"
     #include "wx/region.h"
 #endif // WX_PRECOMP
 
 #include "wx/nonownedwnd.h"
+#include "wx/graphics.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
@@ -34,10 +34,6 @@
 // ============================================================================
 // wxNonOwnedWindow implementation
 // ============================================================================
-
-wxNonOwnedWindow::wxNonOwnedWindow()
-{
-}
 
 bool wxNonOwnedWindow::DoClearShape()
 {
@@ -57,10 +53,27 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
-bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& WXUNUSED(path))
+bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return true;
+    // Convert the path to wxRegion by rendering the path on a window-sized
+    // bitmap, creating a mask from it and finally creating the region from
+    // this mask.
+    wxBitmap bmp(GetSize());
+
+    {
+        wxMemoryDC dc(bmp);
+        dc.SetBackground(*wxBLACK_BRUSH);
+        dc.Clear();
+
+        std::unique_ptr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
+        context->SetBrush(*wxWHITE_BRUSH);
+        context->SetAntialiasMode(wxANTIALIAS_NONE);
+        context->FillPath(path);
+    }
+
+    bmp.SetMask(new wxMask(bmp, *wxBLACK));
+
+    return DoSetRegionShape(wxRegion(bmp));
 }
 #endif
 

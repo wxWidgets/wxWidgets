@@ -256,7 +256,7 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxGenericListCtrl
     wxDECLARE_DYNAMIC_CLASS(wxListCtrl);
 
 public:
-    wxListCtrl() {}
+    wxListCtrl() = default;
 
     wxListCtrl(wxWindow *parent, wxWindowID winid = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,

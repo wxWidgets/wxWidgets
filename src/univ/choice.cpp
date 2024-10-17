@@ -2,7 +2,6 @@
 // Name:        src/univ/choice.cpp
 // Purpose:     wxChoice implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     15.12.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

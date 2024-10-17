@@ -36,15 +36,15 @@ samples/ with demos/ where needed).
       compiler (run `bakefile --help` to get the list of possible values).
       Again, see `how-to-add-files-to-build-system.md` for more information.
 
-4. Modify configure.in Unix compilation:
+4. Modify configure.ac Unix compilation:
    - if the sample should only be built if `wxUSE_FOO` is enabled, locate
-      the test for `wxUSE_FOO = yes` in configure.in and add a line
+      the test for `wxUSE_FOO = yes` in configure.ac and add a line
       `SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS foo"` under it
    - if it should be always built, locate the line `if test $wxUSE_GUI = yes`
-     near the end of configure.in and modify the assignment to
+     near the end of configure.ac and modify the assignment to
      `SAMPLES_SUBDIRS` to include "foo" (put in alphabetical order)
 
-   After this, regenerate configure from configure.in
+   After this, regenerate configure from configure.ac
    by running "autoconf" on a Unix system in the corresponding directory.
 
 5. Modify `build/cmake/samples/CMakeLists.txt` to include the sample in

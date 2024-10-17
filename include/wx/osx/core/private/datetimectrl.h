@@ -48,7 +48,7 @@ public:
     virtual void SetDateRange(const wxDateTime& dt1, const wxDateTime& dt2) = 0;
     virtual bool GetDateRange(wxDateTime* dt1, wxDateTime* dt2) = 0;
 
-    virtual ~wxDateTimeWidgetImpl() { }
+    virtual ~wxDateTimeWidgetImpl() = default;
 
 protected:
 #if wxOSX_USE_COCOA

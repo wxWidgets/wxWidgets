@@ -66,7 +66,7 @@ protected:
 class WXDLLIMPEXP_CORE wxRegionIterator : public wxObject
 {
 public:
-    wxRegionIterator() {}
+    wxRegionIterator() = default;
     wxRegionIterator(const wxRegion& region) { Reset(region); }
 
     void Reset() { m_rect = wxRect(); }

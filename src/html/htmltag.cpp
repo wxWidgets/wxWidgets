@@ -407,9 +407,15 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
                     if (!IS_WHITE(c))
                     {
                         if (c == wxT('"') || c == wxT('\''))
-                            quote = c, pvalue = wxGetEmptyString();
+                        {
+                            quote = c;
+                            pvalue.clear();
+                        }
                         else
-                            quote = 0, pvalue = c;
+                        {
+                            quote = 0;
+                            pvalue = c;
+                        }
                         state = ST_VALUE;
                     }
                     break;

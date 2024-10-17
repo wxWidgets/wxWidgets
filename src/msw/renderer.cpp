@@ -2,7 +2,6 @@
 // Name:        src/msw/renderer.cpp
 // Purpose:     implementation of wxRendererNative for Windows
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.07.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -246,7 +245,7 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) override;
 
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) override;
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& dc) override;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
@@ -952,7 +951,7 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
     m_rendererNative.DrawCollapseButton(win, dc, rect, flags);
 }
 
-wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
+wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& dc)
 {
     wxUxThemeHandle hTheme(win, L"TASKDIALOG");
 

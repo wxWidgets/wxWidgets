@@ -2,7 +2,6 @@
 // Name:        wx/listimpl.cpp
 // Purpose:     second-part of macro based implementation of template lists
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     16/11/98
 // Copyright:   (c) 1998 Vadim Zeitlin
 // Licence:     wxWindows licence

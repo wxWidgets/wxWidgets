@@ -37,13 +37,13 @@ AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER],
     AC_CACHE_CHECK(
         [whether we are using the $1 $2 compiler],
         [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3],
-        [AC_TRY_COMPILE(
+        [AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
             [],
             [
              #ifndef $3
                 choke me
              #endif
-            ],
+            ])],
             [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3=yes],
             [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3=no]
          )
@@ -67,13 +67,13 @@ AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER_LATER_THAN],
     AC_CACHE_CHECK(
         [whether we are using $1 $2 compiler v$5 or later],
         [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3[]_lt_[]$4],
-        [AC_TRY_COMPILE(
+        [AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
             [],
             [
              #ifndef $3 || $3 < $4
                 choke me
              #endif
-            ],
+            ])],
             [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3[]_lt_[]$4=yes],
             [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3[]_lt_[]$4=no]
          )

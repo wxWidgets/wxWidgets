@@ -2,7 +2,6 @@
 // Name:        src/msw/slider.cpp
 // Purpose:     wxSlider, using trackbar control
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart 1998
 //                  Vadim Zeitlin 2004

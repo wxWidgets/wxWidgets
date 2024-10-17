@@ -727,7 +727,32 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     const tsize_t linebytes =
         (tsize_t)((imageWidth * (spp + extraSamples) * bps + 7) / 8);
 
-    unsigned char *buf;
+    unsigned char* buf = nullptr;
+
+    // Ensure that everything is cleaned up on scope exit.
+    class CleanUp
+    {
+    public:
+        CleanUp(TIFF* tif, unsigned char* buf)
+            : m_tif(tif), m_buf(buf)
+        {
+        }
+
+        ~CleanUp()
+        {
+            TIFFClose(m_tif);
+
+            if (m_buf)
+                _TIFFfree(m_buf);
+        }
+
+        CleanUp(const CleanUp&) = delete;
+        CleanUp& operator=(const CleanUp&) = delete;
+
+    private:
+        TIFF* const m_tif;
+        unsigned char* const m_buf;
+    } cleanUp(tif, buf);
 
     const bool isColouredImage = (spp > 1)
         && (photometric != PHOTOMETRIC_MINISWHITE)
@@ -744,14 +769,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                 wxLogError( _("TIFF: Couldn't allocate memory.") );
             }
 
-            TIFFClose( tif );
-
             return false;
         }
-    }
-    else
-    {
-        buf = nullptr;
     }
 
     TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (wxUint32) -1));
@@ -849,20 +868,21 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                 wxLogError( _("TIFF: Error writing image.") );
             }
 
-            TIFFClose( tif );
-            if (buf)
-                _TIFFfree(buf);
-
             return false;
         }
 
         ptr += imageWidth * 3;
     }
 
-    (void) TIFFClose(tif);
+    if (!TIFFFlush(tif))
+    {
+        if (verbose)
+        {
+            wxLogError( _("TIFF: Error flushing data.") );
+        }
 
-    if (buf)
-        _TIFFfree(buf);
+        return false;
+    }
 
     return true;
 }

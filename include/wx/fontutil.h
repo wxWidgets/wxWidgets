@@ -2,7 +2,6 @@
 // Name:        wx/fontutil.h
 // Purpose:     font-related helper functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.11.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

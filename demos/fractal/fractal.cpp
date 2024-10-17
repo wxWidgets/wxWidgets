@@ -2,7 +2,6 @@
 // Name:        fractal.cpp
 // Purpose:     demo of wxConfig and related classes
 // Author:      Andrew Davison
-// Modified by:
 // Created:     05.04.94
 // Copyright:   (c) 1994 Andrew Davison
 // Licence:     wxWindows licence

@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FONTENUM
+
 #include "wx/fontenum.h"
 #include "wx/qt/private/converter.h"
 
@@ -44,3 +46,5 @@ bool wxFontEnumerator::EnumerateEncodingsUTF8(const wxString& facename)
     return false;
 }
 #endif
+
+#endif // wxUSE_FONTENUM

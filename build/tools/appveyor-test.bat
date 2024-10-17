@@ -47,7 +47,9 @@ echo.
 exit /b 0
 
 :cmake_qt
-set CMAKE_TEST_REGEX="test_[drawing^|gui^|headers]"
+PATH=%QT5DIR%\bin;%PATH%
+set QT_QPA_PLATFORM_PLUGIN_PATH=%QT5DIR%\plugins\platforms
+set QT_USE_NATIVE_WINDOWS=1
 goto :cmake
 
 :cmake
