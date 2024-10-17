@@ -515,7 +515,6 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& f
     wxVector<wxBitmap> bitmaps;
 
     wxFileName fn(path, filename, extension);
-    wxString ext = extension.Lower();
 
     for ( int dpiFactor = 1 ; dpiFactor <= 2 ; ++dpiFactor)
     {

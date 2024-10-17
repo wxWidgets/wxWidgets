@@ -75,7 +75,7 @@ typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
 WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase,
                                   wxARRAY_DUMMY_BASE, WXDLLIMPEXP_BASE);
 
-class WXDLLIMPEXP_BASE wxArrayString : public wxArrayStringBase
+class WXDLLIMPEXP_BASE wxWARN_UNUSED wxArrayString : public wxArrayStringBase
 {
 public:
     // type of function used by wxArrayString::Sort()
@@ -161,7 +161,7 @@ private:
 #include <iterator>
 #include "wx/afterstd.h"
 
-class WXDLLIMPEXP_BASE wxArrayString
+class WXDLLIMPEXP_BASE wxWARN_UNUSED wxArrayString
 {
 public:
   // type of function used by wxArrayString::Sort()

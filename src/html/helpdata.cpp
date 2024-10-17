@@ -276,7 +276,6 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys,
     wxFSFile *f;
     wxHtmlFilterHTML filter;
     wxString buf;
-    wxString string;
 
     HP_Parser parser;
     HP_TagHandler *handler = new HP_TagHandler(book);
@@ -648,7 +647,6 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
     wxFileSystem fsys;
 
     wxString title = _("noname"),
-             safetitle,
              start,
              contents,
              index,

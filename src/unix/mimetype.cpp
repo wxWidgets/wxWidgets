@@ -317,7 +317,7 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
                                   wxArrayString *commands,
                                   const wxFileType::MessageParameters& params) const
 {
-    wxString vrb, cmd, sTmp;
+    wxString vrb, cmd;
     size_t count = 0;
     wxMimeTypeCommands * sPairs;
 
@@ -951,7 +951,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mim
 
 wxString wxMimeTypesManagerImpl::GetCommand(const wxString & verb, size_t nIndex) const
 {
-    wxString command, testcmd, sV, sTmp;
+    wxString command, sV, sTmp;
     sV = verb + wxT("=");
 
     // list of verb = command pairs for this mimetype
