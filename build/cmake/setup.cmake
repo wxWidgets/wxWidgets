@@ -392,7 +392,7 @@ if(UNIX)
         check_symbol_exists(inet_addr arpa/inet.h HAVE_INET_ADDR)
     endif(wxUSE_SOCKETS)
 
-    if(wxUSE_JOYSTICK AND NOT APPLE)
+    if(wxUSE_JOYSTICK AND WXGTK)
         check_include_files("linux/joystick.h" HAVE_JOYSTICK_H)
         if(NOT HAVE_JOYSTICK_H)
             message(WARNING "wxJoystick is not available")
