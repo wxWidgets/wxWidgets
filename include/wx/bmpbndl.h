@@ -98,14 +98,6 @@ public:
     // This overload works for data not terminated with 0
     wxNODISCARD static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
 
-#if wxUSE_LUNASVG
-    wxNODISCARD static wxBitmapBundle FromSVG(const std::string& data, const wxSize& sizeDef);
-
-    // You must pass the document parameter using std::move() so that wxBitmapBundle
-    // can take ownership of it.
-    wxNODISCARD static wxBitmapBundle FromSVG(std::unique_ptr<wxlunasvg::Document> document, const wxSize& sizeDef);
-#endif
-
     // Load SVG image from the given file (must be a local file, not an URL).
     wxNODISCARD static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
 
