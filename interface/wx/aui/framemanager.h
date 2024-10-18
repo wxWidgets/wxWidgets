@@ -382,7 +382,7 @@ public:
 
         @since 3.3.0
      */
-    void LoadLayout(wxAuiDeserializer& deserializer) const;
+    void LoadLayout(wxAuiDeserializer& deserializer);
 
     /**
         LoadPaneInfo() is similar to LoadPerspective, with the exception that it
