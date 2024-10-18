@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxTexTCtrl::SearchText() (Blake-Madden, #24756).
