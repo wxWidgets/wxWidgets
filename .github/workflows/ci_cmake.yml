@@ -66,11 +66,11 @@ jobs:
             runner: ubuntu-22.04
             cmake_generator: Unix Makefiles
             cmake_samples: ALL
-          - name: macOS 12 wxOSX
-            runner: macos-12
+          - name: macOS 14 wxOSX
+            runner: macos-14
             cmake_generator: Xcode
-          - name: macOS 12 wxIOS
-            runner: macos-12
+          - name: macOS 14 wxIOS
+            runner: macos-14
             cmake_generator: Xcode
             cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
             cmake_samples: OFF
