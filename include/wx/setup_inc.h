@@ -318,19 +318,6 @@
 // non GUI features selection
 // ----------------------------------------------------------------------------
 
-// Set wxUSE_LONGLONG to 1 to compile the wxLongLong class. This is a 64 bit
-// integer which is implemented in terms of native 64 bit integers if any or
-// uses emulation otherwise.
-//
-// This class is required by wxDateTime and so you should enable it if you want
-// to use wxDateTime. For most modern platforms, it will use the native 64 bit
-// integers in which case (almost) all of its functions are inline and it
-// almost does not take any space, so there should be no reason to switch it
-// off.
-//
-// Recommended setting: 1
-#define wxUSE_LONGLONG      1
-
 // Set wxUSE_BASE64 to 1, to compile in Base64 support. This is required for
 // storing binary data in wxConfig on most platforms.
 //
@@ -416,8 +403,6 @@
 
 // Set wxUSE_DATETIME to 1 to compile the wxDateTime and related classes which
 // allow to manipulate dates, times and time intervals.
-//
-// Requires: wxUSE_LONGLONG
 //
 // Default is 1
 //

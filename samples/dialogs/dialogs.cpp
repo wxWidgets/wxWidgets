@@ -60,7 +60,7 @@
 #endif // wxUSE_TIPWINDOW
 
 #if wxUSE_PROGRESSDLG
-#if wxUSE_STOPWATCH && wxUSE_LONGLONG
+#if wxUSE_STOPWATCH
     #include "wx/datetime.h"      // wxDateTime
 #endif
 

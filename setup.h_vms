@@ -197,8 +197,6 @@ typedef pid_t GPid;
 
 #define wxUSE_STD_STRING_CONV_IN_WXSTRING 0
 
-#define wxUSE_LONGLONG      1
-
 #define wxUSE_BASE64        1
 
 #define wxUSE_CONSOLE_EVENTLOOP 1

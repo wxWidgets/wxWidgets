@@ -535,11 +535,9 @@ public:
 
     wxArrayString GetPropertyValueAsArrayString(wxPGPropArg id) const;
 
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
     wxLongLong_t GetPropertyValueAsLongLong(wxPGPropArg id) const;
 
     wxULongLong_t GetPropertyValueAsULongLong(wxPGPropArg id) const;
-#endif
 
     wxArrayInt GetPropertyValueAsArrayInt(wxPGPropArg id) const;
 
@@ -1084,36 +1082,30 @@ public:
         SetPropVal( id, v );
     }
 
-#if wxUSE_LONGLONG
-#ifdef wxLongLong_t
     // Sets value (native 64-bit int) of a property.
     void SetPropertyValue(wxPGPropArg id, wxLongLong_t value)
     {
         wxVariant v = wxLongLong(value);
         SetPropVal(id, v);
     }
-#endif
     // Sets value (wxLongLong) of a property.
     void SetPropertyValue( wxPGPropArg id, wxLongLong value )
     {
         wxVariant v(value);
         SetPropVal( id, v );
     }
-#ifdef wxULongLong_t
     // Sets value (native 64-bit unsigned int) of a property.
     void SetPropertyValue(wxPGPropArg id, wxULongLong_t value)
     {
         wxVariant v = wxULongLong(value);
         SetPropVal(id, v);
     }
-#endif
     // Sets value (wxULongLong) of a property.
     void SetPropertyValue( wxPGPropArg id, wxULongLong value )
     {
         wxVariant v(value);
         SetPropVal( id, v );
     }
-#endif
 
     // Sets value (wxArrayInt&) of a property.
     void SetPropertyValue( wxPGPropArg id, const wxArrayInt& value )

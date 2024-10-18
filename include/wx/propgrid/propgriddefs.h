@@ -426,12 +426,10 @@ template<> inline wxVariant WXVARIANT( const wxArrayString& value )
     { return wxVariant(value); }
 template<> inline wxVariant WXVARIANT( const wxString& value )
     { return wxVariant(value); }
-#if wxUSE_LONGLONG
 template<> inline wxVariant WXVARIANT( const wxLongLong& value )
     { return wxVariant(value); }
 template<> inline wxVariant WXVARIANT( const wxULongLong& value )
     { return wxVariant(value); }
-#endif
 #if wxUSE_DATETIME
 template<> inline wxVariant WXVARIANT( const wxDateTime& value )
     { return wxVariant(value); }
@@ -600,10 +598,8 @@ template<> inline wxVariant WXVARIANT( const wxColour& value )
 #if wxUSE_DATETIME
 #define wxPG_VARIANT_TYPE_DATETIME      wxS("datetime")
 #endif
-#if wxUSE_LONGLONG
 #define wxPG_VARIANT_TYPE_LONGLONG      wxS("longlong")
 #define wxPG_VARIANT_TYPE_ULONGLONG     wxS("ulonglong")
-#endif
 #endif // !SWIG
 
 // -----------------------------------------------------------------------

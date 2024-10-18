@@ -51,10 +51,8 @@ WX_TYPE_HIERARCHY_LEVEL( 5, int);
 WX_TYPE_HIERARCHY_LEVEL( 6, unsigned int);
 WX_TYPE_HIERARCHY_LEVEL( 7, long);
 WX_TYPE_HIERARCHY_LEVEL( 8, unsigned long);
-#ifdef wxLongLong_t
 WX_TYPE_HIERARCHY_LEVEL( 9, wxLongLong_t);
 WX_TYPE_HIERARCHY_LEVEL(10, wxULongLong_t);
-#endif
 WX_TYPE_HIERARCHY_LEVEL(11, float);
 WX_TYPE_HIERARCHY_LEVEL(12, double);
 WX_TYPE_HIERARCHY_LEVEL(13, long double);

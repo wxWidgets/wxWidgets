@@ -194,13 +194,9 @@ Currently the following symbols exist:
 @itemdef{wxHAS_LARGE_FFILES, Defined if wxFFile supports files more than 4GB in
     size (notice that you must include @c wx/filefn.h before testing for this
     symbol).}
-@itemdef{wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG, Defined if compiler supports a
-    64 bit integer type (available as @c wxLongLong_t) and this type is
-    different from long. Notice that, provided wxUSE_LONGLONG is not turned
-    off, some 64 bit type is always available to wxWidgets programs and this
-    symbol only indicates a presence of such primitive type. It is useful to
-    decide whether some function should be overloaded for both
-    <code>long</code> and <code>long long</code> types.}
+@itemdef{wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG, Defined if the <code>long
+    long</code> and <code>long</code> types are different. This can be useful
+    to decide whether some function should be overloaded for both types or not.}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
 @itemdef{wxHAS_NATIVE_ANIMATIONCTRL, Defined if native wxAnimationCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}
 @itemdef{wxHAS_NATIVE_DATAVIEWCTRL, Defined if native wxDataViewCtrl class is being used (this symbol only exists in wxWidgets 3.1.4 and later).}

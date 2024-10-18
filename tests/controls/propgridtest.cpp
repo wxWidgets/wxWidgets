@@ -338,11 +338,7 @@ static void PopulateWithExamples(wxPropertyGridManager* pgManager)
     pg->Append(new wxMultiChoiceProperty("MultiChoiceProperty", wxPG_LABEL, tchoices, tchoicesValues));
     pg->SetPropertyAttribute("MultiChoiceProperty", wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, 1);
 
-#if wxUSE_LONGLONG
     pg->Append(new wxUIntProperty("UIntProperty", wxPG_LABEL, wxULongLong(wxULL(0xFEEEFEEEFEEE))));
-#else
-    pg->Append(new wxUIntProperty("UIntProperty", wxPG_LABEL, 0xFEEEFEEE));
-#endif
     pg->SetPropertyAttribute("UIntProperty", wxPG_UINT_PREFIX, wxPG_PREFIX_NONE);
     pg->SetPropertyAttribute("UIntProperty", wxPG_UINT_BASE, wxPG_BASE_HEX);
 
@@ -754,9 +750,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         any = testInt;
         prop->SetValue(any);
         CHECK(prop->GetValue().GetAny().As<int>() == testInt);
-#ifdef wxLongLong_t
         CHECK(prop->GetValue().GetAny().As<wxLongLong_t>() == testInt);
-#endif
 
         prop = pgManager->GetProperty("StringProperty");
         wxString testString = "asd934jfyn3";
@@ -858,13 +852,8 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK(pg->GetPropertyValueAsDateTime("DateProperty") == dt1);
 #endif
 
-#if wxUSE_LONGLONG && defined(wxLongLong_t)
         pgManager->SetPropertyValue("IntProperty", wxLL(10000000000));
         CHECK(pg->GetPropertyValueAsLongLong("IntProperty") == wxLL(10000000000));
-#else
-        pgman->SetPropertyValue("IntProperty", 1000000000);
-        CHECK(pg->GetPropertyValueAsLong("IntProperty") == 1000000000);
-#endif
 
         pg->SetPropertyValue("StringProperty", "Text2");
         pg->SetPropertyValue("IntProperty", 512);
@@ -893,13 +882,8 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         CHECK(pgManager->GetPropertyValueAsDateTime("DateProperty") == dt2);
 #endif
 
-#if wxUSE_LONGLONG && defined(wxLongLong_t)
         pgManager->SetPropertyValue("IntProperty", wxLL(-80000000000));
         CHECK(pgManager->GetPropertyValueAsLongLong("IntProperty") == wxLL(-80000000000));
-#else
-        pgManager->SetPropertyValue("IntProperty", -1000000000);
-        CHECK(pgManager->GetPropertyValueAsLong("IntProperty") == -1000000000);
-#endif
 
         wxString nvs = "Lamborghini Diablo XYZ; 5707; [100; 3.9; 8.6] 3000002; Convertible";
         pgManager->SetPropertyValue("Car", nvs);
