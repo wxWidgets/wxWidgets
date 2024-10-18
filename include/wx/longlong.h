@@ -268,7 +268,6 @@ private:
     wxLongLong_t  m_ll;
 };
 
-
 class WXDLLIMPEXP_BASE wxWARN_UNUSED wxULongLong
 {
 public:
@@ -548,5 +547,11 @@ struct WXDLLIMPEXP_BASE wxArgNormalizer<wxLongLong>
 
      wxLongLong m_value;
 };
+
+// Compatibility typedefs: these types were never supposed to be used outside
+// of wx itself but nevertheless appear in the existing code, so define them to
+// let it continue to build.
+using wxLongLongNative = wxLongLong;
+using wxULongLongNative = wxULongLong;
 
 #endif // _WX_LONGLONG_H
