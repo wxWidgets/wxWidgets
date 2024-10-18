@@ -48,10 +48,8 @@ WX_DECLARE_TYPE_POD(long double)
 #if wxWCHAR_T_IS_REAL_TYPE
 WX_DECLARE_TYPE_POD(wchar_t)
 #endif
-#ifdef wxLongLong_t
 WX_DECLARE_TYPE_POD(wxLongLong_t)
 WX_DECLARE_TYPE_POD(wxULongLong_t)
-#endif
 
 // pointers are Plain Old Data:
 template<typename T>

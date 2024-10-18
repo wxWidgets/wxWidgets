@@ -184,14 +184,6 @@
 #   endif
 #endif /* !defined(wxUSE_LOG) */
 
-#ifndef wxUSE_LONGLONG
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_LONGLONG must be defined, please read comment near the top of this file."
-#   else
-#       define wxUSE_LONGLONG 0
-#   endif
-#endif /* !defined(wxUSE_LONGLONG) */
-
 #ifndef wxUSE_MIMETYPE
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MIMETYPE must be defined, please read comment near the top of this file."
@@ -1431,17 +1423,6 @@
 #   endif
 #endif /* wxUSE_FS_INET */
 
-#if wxUSE_STOPWATCH || wxUSE_DATETIME
-#    if !wxUSE_LONGLONG
-#        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxUSE_STOPWATCH and wxUSE_DATETIME require wxUSE_LONGLONG"
-#        else
-#            undef wxUSE_LONGLONG
-#            define wxUSE_LONGLONG 1
-#        endif
-#    endif
-#endif /* wxUSE_STOPWATCH */
-
 #if wxUSE_MIMETYPE && !wxUSE_TEXTFILE
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MIMETYPE requires wxUSE_TEXTFILE"
@@ -2333,17 +2314,6 @@
 #   endif
 #endif /* wxUSE_PRIVATE_FONTS */
 
-#if wxUSE_MEDIACTRL
-#   if !wxUSE_LONGLONG
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxMediaCtrl requires wxUSE_LONGLONG"
-#       else
-#           undef wxUSE_LONGLONG
-#           define wxUSE_LONGLONG 1
-#       endif
-#   endif
-#endif /* wxUSE_MEDIACTRL */
-
 #if wxUSE_STC
 #   if !wxUSE_STOPWATCH
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -2371,14 +2341,6 @@
 #       else
 #           undef wxUSE_RICHTEXT
 #           define wxUSE_RICHTEXT 0
-#       endif
-#   endif
-#   if !wxUSE_LONGLONG
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxRichTextCtrl requires wxUSE_LONGLONG"
-#       else
-#           undef wxUSE_LONGLONG
-#           define wxUSE_LONGLONG 1
 #       endif
 #   endif
 #   if !wxUSE_VARIANT

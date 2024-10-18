@@ -107,11 +107,7 @@ wxClip(T1 a, T2 b, T3 c)
 // wxGetFreeMemory can return huge amount of memory on 32-bit platforms as well
 // so to always use long long for its result type on all platforms which
 // support it
-#if wxUSE_LONGLONG
-    typedef wxLongLong wxMemorySize;
-#else
-    typedef long wxMemorySize;
-#endif
+typedef wxLongLong wxMemorySize;
 
 // ----------------------------------------------------------------------------
 // Miscellaneous functions
@@ -563,11 +559,7 @@ WXDLLIMPEXP_BASE const wxChar* wxGetHomeDir(wxString *pstr);
 WXDLLIMPEXP_BASE wxString wxGetUserHome(const wxString& user = wxEmptyString);
 
 
-#if wxUSE_LONGLONG
-    typedef wxLongLong wxDiskspaceSize_t;
-#else
-    typedef long wxDiskspaceSize_t;
-#endif
+typedef wxLongLong wxDiskspaceSize_t;
 
 // get number of total/free bytes on the disk where path belongs
 WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,

@@ -121,10 +121,8 @@ enum
     wxFILE_EXISTS_ANY       = 0x1FFF   // check for existence of anything
 };
 
-#if wxUSE_LONGLONG
 // error code of wxFileName::GetSize()
 extern WXDLLIMPEXP_DATA_BASE(const wxULongLong) wxInvalidSize;
-#endif // wxUSE_LONGLONG
 
 
 
@@ -595,7 +593,6 @@ public:
 
     // File size
 
-#if wxUSE_LONGLONG
         // returns the size of the given filename
     wxULongLong GetSize() const;
     static wxULongLong GetSize(const wxString &file);
@@ -610,7 +607,6 @@ public:
                          const wxString& nullsize = wxGetTranslation(wxASCII_STR("Not available")),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL);
-#endif // wxUSE_LONGLONG
 
 
     // deprecated methods, don't use any more

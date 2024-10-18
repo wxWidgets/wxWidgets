@@ -263,41 +263,29 @@ typedef wxUint32 wxDword;
     #define wxLongLongSuffix l
     #define wxLongLongFmtSpec "l"
     #define wxLongLongIsLong
+#else
+    #error "64-bit integer type must be available."
 #endif
 
+#define wxULongLong_t unsigned wxLongLong_t
 
-#ifdef wxLongLong_t
-    #define wxULongLong_t unsigned wxLongLong_t
+/*
+    wxLL() and wxULL() macros allow to define 64 bit constants in a
+    portable way.
+ */
+#define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
+#define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
 
-    /*
-        wxLL() and wxULL() macros allow to define 64 bit constants in a
-        portable way.
-     */
-    #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
-    #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
+typedef wxLongLong_t wxInt64;
+typedef wxULongLong_t wxUint64;
 
-    typedef wxLongLong_t wxInt64;
-    typedef wxULongLong_t wxUint64;
+// These symbols are only defined for compatibility, don't use them.
+#define wxHAS_INT64 1
+#define wxUSE_LONGLONG 1
+#define wxUSE_LONGLONG_NATIVE 1
 
-    #define wxHAS_INT64 1
-
-    #ifndef wxLongLongIsLong
-        #define wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
-    #endif
-#elif wxUSE_LONGLONG
-    /*  these macros allow to define 64 bit constants in a portable way */
-    #define wxLL(x) wxLongLong(x)
-    #define wxULL(x) wxULongLong(x)
-
-    #define wxInt64 wxLongLong
-    #define wxUint64 wxULongLong
-
-    #define wxHAS_INT64 1
-
-#else /* !wxUSE_LONGLONG */
-
-    #define wxHAS_INT64 0
-
+#ifndef wxLongLongIsLong
+    #define wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 #endif
 
 /*

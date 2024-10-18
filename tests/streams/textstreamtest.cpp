@@ -20,9 +20,7 @@
 #include "wx/txtstrm.h"
 #include "wx/wfstream.h"
 
-#if wxUSE_LONGLONG
-    #include "wx/longlong.h"
-#endif
+#include "wx/longlong.h"
 
 #include "wx/mstream.h"
 
@@ -42,10 +40,8 @@ private:
         CPPUNIT_TEST( Endline );
         CPPUNIT_TEST( MiscTests );
 
-#if wxUSE_LONGLONG
         CPPUNIT_TEST( TestLongLong );
         CPPUNIT_TEST( TestULongLong );
-#endif // wxUSE_LONGLONG
 
         CPPUNIT_TEST( TestUTF8Input );
         CPPUNIT_TEST( TestEmbeddedZerosUTF16LEInput );
@@ -57,10 +53,8 @@ private:
     void Endline();
     void MiscTests();
 
-#if wxUSE_LONGLONG
     void TestLongLong();
     void TestULongLong();
-#endif // wxUSE_LONGLONG
 
     void TestUTF8Input();
     void TestEmbeddedZerosUTF16LEInput();
@@ -133,8 +127,6 @@ void TextStreamTestCase::MiscTests()
     CPPUNIT_ASSERT_EQUAL("path=$PATH", tis.ReadLine());
 }
 
-#if wxUSE_LONGLONG
-
 template <typename T>
 static void DoTestRoundTrip(const T *values, size_t numValues)
 {
@@ -192,8 +184,6 @@ void TextStreamTestCase::TestULongLong()
 
     DoTestRoundTrip(ullvalues, WXSIZEOF(ullvalues));
 }
-
-#endif // wxUSE_LONGLONG
 
 static const wchar_t txtWchar[4] =
 {

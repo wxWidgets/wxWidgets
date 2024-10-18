@@ -1460,11 +1460,7 @@ void FormMain::PopulateWithExamples ()
     pg->Append( new wxPointProperty( "PointProperty", "Position", GetPosition() ) );
 
     // UInt samples
-#if wxUSE_LONGLONG
     pg->Append( new wxUIntProperty( "UIntProperty", wxPG_LABEL, wxULongLong(wxULL(0xFEEEFEEEFEEE))));
-#else
-    pg->Append( new wxUIntProperty( "UIntProperty", wxPG_LABEL, 0xFEEEFEEE));
-#endif
     pg->SetPropertyAttribute( "UIntProperty", wxPG_UINT_PREFIX, wxPG_PREFIX_NONE );
     pg->SetPropertyAttribute( "UIntProperty", wxPG_UINT_BASE, wxPG_BASE_HEX );
     //pg->SetPropertyAttribute( "UIntProperty", wxPG_UINT_PREFIX, wxPG_PREFIX_NONE );
@@ -1712,7 +1708,6 @@ void FormMain::PopulateWithLibraryConfig ()
     ADD_WX_LIB_CONF( wxUSE_STD_IOSTREAM )
 
     ADD_WX_LIB_CONF_GROUP("Non-GUI Features")
-    ADD_WX_LIB_CONF( wxUSE_LONGLONG )
     ADD_WX_LIB_CONF( wxUSE_FILE )
     ADD_WX_LIB_CONF( wxUSE_FFILE )
     ADD_WX_LIB_CONF( wxUSE_FSVOLUME )

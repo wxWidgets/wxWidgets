@@ -56,9 +56,7 @@ enum wxPrintfArgType
 
     wxPAT_INT,          // %d, %i, %o, %u, %x, %X
     wxPAT_LONGINT,      // %ld, etc
-#ifdef wxLongLong_t
     wxPAT_LONGLONGINT,  // %Ld, etc
-#endif
     wxPAT_SIZET,        // %zd, etc
 
     wxPAT_DOUBLE,       // %e, %E, %f, %g, %G
@@ -84,9 +82,7 @@ union wxPrintfArg
 {
     int pad_int;                        //  %d, %i, %o, %u, %x, %X
     long int pad_longint;               // %ld, etc
-#ifdef wxLongLong_t
     wxLongLong_t pad_longlongint;       // %Ld, etc
-#endif
     size_t pad_sizet;                   // %zd, etc
 
     double pad_double;                  // %e, %E, %f, %g, %G
@@ -397,11 +393,7 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
                 else if (ilen == 1)
                     m_type = wxPAT_LONGINT;
                 else if (ilen == 2)
-#ifdef wxLongLong_t
                     m_type = wxPAT_LONGLONGINT;
-#else // !wxLongLong_t
-                    m_type = wxPAT_LONGINT;
-#endif // wxLongLong_t/!wxLongLong_t
                 else if (ilen == 3)
                     m_type = wxPAT_SIZET;
                 done = true;
@@ -544,11 +536,9 @@ bool wxPrintfConvSpec<CharType>::LoadArg(wxPrintfArg *p, va_list &argptr)
         case wxPAT_LONGINT:
             p->pad_longint = va_arg(argptr, long int);
             break;
-#ifdef wxLongLong_t
         case wxPAT_LONGLONGINT:
             p->pad_longlongint = va_arg(argptr, wxLongLong_t);
             break;
-#endif // wxLongLong_t
         case wxPAT_SIZET:
             p->pad_sizet = va_arg(argptr, size_t);
             break;
@@ -623,11 +613,9 @@ int wxPrintfConvSpec<CharType>::Process(CharType *buf, size_t lenMax, wxPrintfAr
             lenScratch = system_sprintf(szScratch, wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN, m_szFlags, p->pad_longint);
             break;
 
-#ifdef wxLongLong_t
         case wxPAT_LONGLONGINT:
             lenScratch = system_sprintf(szScratch, wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN, m_szFlags, p->pad_longlongint);
             break;
-#endif // SIZEOF_LONG_LONG
 
         case wxPAT_SIZET:
             lenScratch = system_sprintf(szScratch, wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN, m_szFlags, p->pad_sizet);
@@ -734,9 +722,7 @@ int wxPrintfConvSpec<CharType>::Process(CharType *buf, size_t lenMax, wxPrintfAr
     {
         case wxPAT_INT:
         case wxPAT_LONGINT:
-#ifdef wxLongLong_t
         case wxPAT_LONGLONGINT:
-#endif
         case wxPAT_SIZET:
         case wxPAT_LONGDOUBLE:
         case wxPAT_DOUBLE:

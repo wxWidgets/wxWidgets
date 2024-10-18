@@ -312,13 +312,8 @@ protected:
     // Define the type we use here, it should be the maximal-sized integer type
     // we support to make it possible to base wxIntegerValidator<> for any type
     // on it.
-#ifdef wxLongLong_t
     typedef wxLongLong_t LongestValueType;
     typedef wxULongLong_t ULongestValueType;
-#else
-    typedef long LongestValueType;
-    typedef unsigned long ULongestValueType;
-#endif
 
     wxIntegerValidatorBase(int style)
         : wxNumValidatorBase(style)

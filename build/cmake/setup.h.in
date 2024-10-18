@@ -162,8 +162,6 @@
 #cmakedefine01 wxUSE_STD_STRING_CONV_IN_WXSTRING
 
 
-#cmakedefine01 wxUSE_LONGLONG
-
 #cmakedefine01 wxUSE_BASE64
 
 #cmakedefine01 wxUSE_CONSOLE_EVENTLOOP

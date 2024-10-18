@@ -3012,9 +3012,7 @@ protected:
     bool          m_isCheckable;
     bool          m_is3State;
     wxString      m_text;
-#if wxUSE_LONGLONG
     static wxLongLong       sm_lastUpdate;
-#endif
     static long             sm_updateInterval;
     static wxUpdateUIMode   sm_updateMode;
 

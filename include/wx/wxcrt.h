@@ -1007,10 +1007,8 @@ inline double wxStrtod(const wxCStrData& nptr, std::nullptr_t)
 
 WX_STRTOX_FUNC(long, wxStrtol, wxCRT_StrtolA, wxCRT_StrtolW)
 WX_STRTOX_FUNC(unsigned long, wxStrtoul, wxCRT_StrtoulA, wxCRT_StrtoulW)
-#ifdef wxLongLong_t
 WX_STRTOX_FUNC(wxLongLong_t, wxStrtoll, wxCRT_StrtollA, wxCRT_StrtollW)
 WX_STRTOX_FUNC(wxULongLong_t, wxStrtoull, wxCRT_StrtoullA, wxCRT_StrtoullW)
-#endif // wxLongLong_t
 
 #undef WX_STRTOX_FUNC
 

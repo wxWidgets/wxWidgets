@@ -1133,7 +1133,7 @@ void wxRendererMac::DrawGauge(wxWindow* WXUNUSED(win),
     tdi.kind = kThemeLargeProgressBar;
 
     int milliSecondsPerStep = 1000 / 60;
-    wxLongLongNative localTime = wxGetLocalTimeMillis();
+    wxLongLong localTime = wxGetLocalTimeMillis();
     tdi.trackInfo.progress.phase = localTime.GetValue() / milliSecondsPerStep % 32;
 
     CGContextRef cgContext;

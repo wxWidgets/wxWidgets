@@ -1374,15 +1374,7 @@ wxLongLong wxAMMediaBackend::GetDuration()
 
         case S_OK:
             // outDuration is in seconds, we need milliseconds
-#ifdef wxLongLong_t
             return static_cast<wxLongLong_t>(outDuration * 1000);
-#else
-            // In principle it's possible to have video of duration greater
-            // than ~1193 hours which corresponds LONG_MAX in milliseconds so
-            // cast to wxLongLong first and multiply by 1000 only then to avoid
-            // the overflow (resulting in maximal duration of ~136 years).
-            return wxLongLong(static_cast<long>(outDuration)) * 1000;
-#endif
     }
 }
 

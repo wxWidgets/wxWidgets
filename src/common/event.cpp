@@ -456,9 +456,7 @@ wxNcPaintEvent::wxNcPaintEvent(wxWindowBase* window)
 // wxUpdateUIEvent
 // ----------------------------------------------------------------------------
 
-#if wxUSE_LONGLONG
 wxLongLong wxUpdateUIEvent::sm_lastUpdate = 0;
-#endif
 
 long wxUpdateUIEvent::sm_updateInterval = 0;
 
@@ -509,7 +507,6 @@ bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
     if (sm_updateInterval == 0)
         return true;
 
-#if wxUSE_STOPWATCH && wxUSE_LONGLONG
     wxLongLong now = wxGetLocalTimeMillis();
     if (now > (sm_lastUpdate + sm_updateInterval))
     {
@@ -517,18 +514,12 @@ bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
     }
 
     return false;
-#else
-    // If we don't have wxStopWatch or wxLongLong, we
-    // should err on the safe side and update now anyway.
-    return true;
-#endif
 }
 
 // Reset the update time to provide a delay until the next
 // time we should update
 void wxUpdateUIEvent::ResetUpdateTime()
 {
-#if wxUSE_STOPWATCH && wxUSE_LONGLONG
     if (sm_updateInterval > 0)
     {
         wxLongLong now = wxGetLocalTimeMillis();
@@ -537,7 +528,6 @@ void wxUpdateUIEvent::ResetUpdateTime()
             sm_lastUpdate = now;
         }
     }
-#endif
 }
 
 // ----------------------------------------------------------------------------

@@ -232,11 +232,9 @@ public:
                    long value = 0 );
     virtual ~wxIntProperty() = default;
 
-#if wxUSE_LONGLONG
     wxIntProperty( const wxString& label,
                    const wxString& name,
                    const wxLongLong& value );
-#endif
 #if WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("use ValueToString with 'flags' argument as wxPGPropValFormatFlags")
     virtual wxString ValueToString(wxVariant& value, int flags) const override
@@ -276,12 +274,10 @@ public:
 
 private:
     // Validation helpers.
-#if wxUSE_LONGLONG
     static bool DoValidation( const wxNumericProperty* property,
                               wxLongLong& value,
                               wxPGValidationInfo* pValidationInfo,
                               wxPGNumericValidationMode = wxPGNumericValidationMode::ErrorMessage);
-#endif // wxUSE_LONGLONG
     static bool DoValidation(const wxNumericProperty* property,
                              long& value,
                              wxPGValidationInfo* pValidationInfo,
@@ -300,11 +296,9 @@ public:
                     const wxString& name = wxPG_LABEL,
                     unsigned long value = 0 );
     virtual ~wxUIntProperty() = default;
-#if wxUSE_LONGLONG
     wxUIntProperty( const wxString& label,
                     const wxString& name,
                     const wxULongLong& value );
-#endif
 #if WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("use ValueToString with 'flags' argument as wxPGPropValFormatFlags")
     virtual wxString ValueToString(wxVariant& value, int flags) const override
@@ -351,12 +345,10 @@ private:
     void Init();
 
     // Validation helpers.
-#if wxUSE_LONGLONG
     static bool DoValidation(const wxNumericProperty* property,
                              wxULongLong& value,
                              wxPGValidationInfo* pValidationInfo,
                              wxPGNumericValidationMode = wxPGNumericValidationMode::ErrorMessage);
-#endif // wxUSE_LONGLONG
     static bool DoValidation(const wxNumericProperty* property,
                              long& value,
                              wxPGValidationInfo* pValidationInfo,

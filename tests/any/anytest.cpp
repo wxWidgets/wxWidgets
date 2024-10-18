@@ -130,16 +130,12 @@ wxAnyTestCase::wxAnyTestCase()
       m_anySignedShort1((signed short)15),
       m_anySignedInt1((signed int)15),
       m_anySignedLong1((signed long)15),
-#ifdef wxLongLong_t
       m_anySignedLongLong1((wxLongLong_t)15),
-#endif
       m_anyUnsignedChar1((unsigned char)15),
       m_anyUnsignedShort1((unsigned short)15),
       m_anyUnsignedInt1((unsigned int)15),
       m_anyUnsignedLong1((unsigned long)15),
-#ifdef wxLongLong_t
       m_anyUnsignedLongLong1((wxULongLong_t)15),
-#endif
       m_anyStringString1(wxString("abc")),
       m_anyCharString1("abc"),
       m_anyWcharString1(L"abc"),
@@ -155,16 +151,12 @@ wxAnyTestCase::wxAnyTestCase()
     m_anySignedShort2 = (signed short)15;
     m_anySignedInt2 = (signed int)15;
     m_anySignedLong2 = (signed long)15;
-#ifdef wxLongLong_t
     m_anySignedLongLong2 = (wxLongLong_t)15;
-#endif
     m_anyUnsignedChar2 = (unsigned char)15;
     m_anyUnsignedShort2 = (unsigned short)15;
     m_anyUnsignedInt2 = (unsigned int)15;
     m_anyUnsignedLong2 = (unsigned long)15;
-#ifdef wxLongLong_t
     m_anyUnsignedLongLong2 = (wxULongLong_t)15;
-#endif
     m_anyStringString2 = wxString("abc");
     m_anyCharString2 = "abc";
     m_anyWcharString2 = L"abc";
@@ -254,10 +246,8 @@ void wxAnyTestCase::As()
     CPPUNIT_ASSERT(c == (signed int)15);
     signed long d = m_anySignedLong1.As<signed long>();
     CPPUNIT_ASSERT(d == (signed int)15);
-#ifdef wxLongLong_t
     wxLongLong_t e = m_anySignedLongLong1.As<wxLongLong_t>();
     CPPUNIT_ASSERT(e == (signed int)15);
-#endif
     unsigned char f = m_anyUnsignedChar1.As<unsigned char>();
     CPPUNIT_ASSERT(f == (unsigned int)15);
     unsigned short g = m_anyUnsignedShort1.As<unsigned short>();
@@ -266,10 +256,8 @@ void wxAnyTestCase::As()
     CPPUNIT_ASSERT(h == (unsigned int)15);
     unsigned long i = m_anyUnsignedLong1.As<unsigned long>();
     CPPUNIT_ASSERT(i == (unsigned int)15);
-#ifdef wxLongLong_t
     wxULongLong_t j = m_anyUnsignedLongLong1.As<wxULongLong_t>();
     CPPUNIT_ASSERT(j == (unsigned int)15);
-#endif
     wxString k = m_anyStringString1.As<wxString>();
     CPPUNIT_ASSERT(k == "abc");
     wxString l = m_anyCharString1.As<wxString>();
@@ -517,10 +505,8 @@ void wxAnyTestCase::wxVariantConversions()
     wxVariant vDouble(TEST_FLOAT_CONST);
     wxVariant vBool((bool)true);
     wxVariant vChar('A');
-#ifdef wxLongLong_t
     wxVariant vLongLong(wxLongLong(wxLL(0xAABBBBCCCC)));
     wxVariant vULongLong(wxULongLong(wxULL(123456)));
-#endif
     wxArrayString arrstr;
     arrstr.push_back("test string");
     wxVariant vArrayString(arrstr);
@@ -593,7 +579,6 @@ void wxAnyTestCase::wxVariantConversions()
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetChar() == 'A');
 
-#ifdef wxLongLong_t
     any = wxAny(vLongLong);
     CPPUNIT_ASSERT(any == wxLL(0xAABBBBCCCC));
     res = any.GetAs(&variant);
@@ -621,7 +606,6 @@ void wxAnyTestCase::wxVariantConversions()
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetType() == "long");
     CPPUNIT_ASSERT(variant.GetLong() == -1);
-#endif
 
     // Cannot test equality for the rest, just test that they convert
     // back correctly.

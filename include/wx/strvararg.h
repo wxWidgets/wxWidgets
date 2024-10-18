@@ -183,7 +183,7 @@ public:
 #endif
 #if defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG == SIZEOF_LONG
         Arg_LongLongInt = Arg_LongInt,
-#elif defined(wxLongLong_t)
+#else
         Arg_LongLongInt = 0x0020,
 #endif
 
@@ -416,10 +416,8 @@ wxFORMAT_STRING_SPECIFIER(short int, wxFormatString::Arg_Int)
 wxFORMAT_STRING_SPECIFIER(short unsigned int, wxFormatString::Arg_Int)
 wxFORMAT_STRING_SPECIFIER(long int, wxFormatString::Arg_LongInt)
 wxFORMAT_STRING_SPECIFIER(long unsigned int, wxFormatString::Arg_LongInt)
-#ifdef wxLongLong_t
 wxFORMAT_STRING_SPECIFIER(wxLongLong_t, wxFormatString::Arg_LongLongInt)
 wxFORMAT_STRING_SPECIFIER(wxULongLong_t, wxFormatString::Arg_LongLongInt)
-#endif
 wxFORMAT_STRING_SPECIFIER(float, wxFormatString::Arg_Double)
 wxFORMAT_STRING_SPECIFIER(double, wxFormatString::Arg_Double)
 wxFORMAT_STRING_SPECIFIER(long double, wxFormatString::Arg_LongDouble)
