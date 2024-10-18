@@ -1565,6 +1565,16 @@ protected:
         *y = m_rect.height;
     }
 
+    wxSize DoGetBestSize() const override
+    {
+        return wxSize(m_rect.width, m_rect.height);
+    }
+
+    wxSize DoGetBestClientSize() const override
+    {
+        return wxSize(m_rect.width, m_rect.height);
+    }
+
 public:
     bool Show( bool WXUNUSED(show = true) ) override { return false; }
 
@@ -2107,7 +2117,7 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
 bool wxAuiNotebook::RemovePage(size_t page_idx)
 {
     // Lock the window for changes to avoid flicker when
-    // removing the active page (there is a noticeable 
+    // removing the active page (there is a noticeable
     // flicker from the active tab is closed and until a
     // new one is selected) - this is noticeable on MSW
     wxWindowUpdateLocker locker { this };
