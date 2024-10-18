@@ -185,7 +185,7 @@ public :
 
     virtual wxContentProtection GetContentProtection() const override
         {  return wxCONTENT_PROTECTION_NONE; }
-    virtual bool SetContentProtection(wxContentProtection contentProtection) override
+    virtual bool SetContentProtection(wxContentProtection WXUNUSED(contentProtection)) override
         { return false; }
 
     virtual void RequestUserAttention(int flags) override;
