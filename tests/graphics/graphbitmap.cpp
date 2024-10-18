@@ -98,7 +98,6 @@ wxBitmap CreateBitmapRGBA(int w, int h, bool withMask)
 #endif // __WXMSW__ || __WXOSX__
     {
         const wxColour clrFg(*wxCYAN);
-        const wxColour clrBg(*wxGREEN);
         const unsigned char alpha = 51;
 
 #if defined(__WXMSW__) || defined(__WXOSX__)

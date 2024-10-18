@@ -255,6 +255,7 @@ All:
 
 - Avoid trailing space in `wx-config --c[xx]flags` (Tobiasz Laskowski, #24812).
 - Fix building using gcc 14 under Solaris (Alan Coopersmith, #24869).
+- Add wxNO_UNUSED_VARIABLES to enable warnings about them (Lauri Nurmi, #24882).
 
 All (GUI):
 

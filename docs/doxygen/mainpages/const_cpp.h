@@ -405,6 +405,12 @@ more details.
         fix such problems, by explicitly selecting the wanted conversion, as
         this symbol is only honoured by wxWidgets 3.2 (since 3.2.5) but not by
         the future versions of the library.}
+@itemdef{wxNO_UNUSED_VARIABLES,
+        this symbol is not defined by wxWidgets itself, but can be defined by
+        the applications using the library to opt-in enabling the @c wxWARN_UNUSED
+        attribute, and use it for selected wxWidgets classes to allow warnings
+        for unused instances. This symbol only has effect in wxWidgets 3.2
+        (since 3.2.7); it is no longer needed with 3.3.0 and later.}
 @itemdef{WXMAKINGDLL_XXX,
         used internally and defined when building the
         library @c XXX as a DLL; when a monolithic wxWidgets build is used only a

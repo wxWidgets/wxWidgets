@@ -12,7 +12,7 @@
 
 class QColor;
 
-class WXDLLIMPEXP_CORE wxColour : public wxColourBase
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour : public wxColourBase
 {
 public:
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
