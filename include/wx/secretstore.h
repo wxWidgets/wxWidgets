@@ -225,6 +225,7 @@ private:
     void Init(size_t size, const void *data)
     {
         m_data = wxString::From8BitData(static_cast<const char*>(data), size);
+        m_valid = true;
     }
 
     wxString m_data;
