@@ -86,7 +86,7 @@ static QImage ConvertImage( const wxImage &image, wxMask** mask = nullptr  )
     QRgb colour;
 
     QImage qtMask;
-    QRgb maskedColour;
+    QRgb maskedColour wxDUMMY_INITIALIZE(0);
     if ( hasMask )
     {
         unsigned char r, g, b;

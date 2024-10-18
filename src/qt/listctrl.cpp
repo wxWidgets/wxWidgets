@@ -1138,9 +1138,9 @@ protected:
             {
                 m_isDragging = false;
 
-                const ListEventData data { m_parent->columnAt(event->x()), -1 };
+                const ListEventData eventData { m_parent->columnAt(event->x()), -1 };
 
-                m_parent->EmitListEvent(wxEVT_LIST_COL_END_DRAG, QModelIndex(), &data);
+                m_parent->EmitListEvent(wxEVT_LIST_COL_END_DRAG, QModelIndex(), &eventData);
             }
 
             QHeaderView::mouseReleaseEvent(event);
@@ -1149,26 +1149,26 @@ protected:
     private:
         void sectionClicked(int logicalIndex)
         {
-            const ListEventData data { logicalIndex, -1 };
+            const ListEventData eventData { logicalIndex, -1 };
 
-            m_parent->EmitListEvent(wxEVT_LIST_COL_CLICK, QModelIndex(), &data);
+            m_parent->EmitListEvent(wxEVT_LIST_COL_CLICK, QModelIndex(), &eventData);
         }
 
         void sectionRightClicked(const QPoint& pos)
         {
-            const ListEventData data { m_parent->columnAt(pos.x()), -1 };
+            const ListEventData eventData { m_parent->columnAt(pos.x()), -1 };
 
-            m_parent->EmitListEvent(wxEVT_LIST_COL_RIGHT_CLICK, QModelIndex(), &data);
+            m_parent->EmitListEvent(wxEVT_LIST_COL_RIGHT_CLICK, QModelIndex(), &eventData);
         }
 
         void sectionResized(int logicalIndex, int oldSize, int newSize)
         {
-            ListEventData data;
+            ListEventData eventData;
 
             if ( m_isDragging )
             {
-                data = { logicalIndex, newSize };
-                m_parent->EmitListEvent(wxEVT_LIST_COL_DRAGGING, QModelIndex(), &data);
+                eventData = { logicalIndex, newSize };
+                m_parent->EmitListEvent(wxEVT_LIST_COL_DRAGGING, QModelIndex(), &eventData);
                 return;
             }
 
@@ -1180,10 +1180,10 @@ protected:
                 return;
             }
 
-            data = { logicalIndex, oldSize };
+            eventData = { logicalIndex, oldSize };
 
             if ( sectionResizeMode(logicalIndex) == QHeaderView::Fixed ||
-                 !m_parent->EmitListEvent(wxEVT_LIST_COL_BEGIN_DRAG, QModelIndex(), &data) )
+                 !m_parent->EmitListEvent(wxEVT_LIST_COL_BEGIN_DRAG, QModelIndex(), &eventData) )
             {
                 wxQtEnsureSignalsBlocked blocker(this);
                 resizeSection(logicalIndex, oldSize);
@@ -1229,7 +1229,7 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
 
 bool wxQtListTreeWidget::EmitListEvent(wxEventType type,
                                        const QModelIndex &index,
-                                       const ListEventData* data) const
+                                       const ListEventData* eventData) const
 {
     wxListCtrl *handler = GetHandler();
     if ( handler )
@@ -1239,22 +1239,22 @@ bool wxQtListTreeWidget::EmitListEvent(wxEventType type,
         wxListEvent event;
         InitListEvent(event, handler, type, index);
 
-        if ( !index.isValid() && data )
+        if ( !index.isValid() && eventData )
         {
             if ( type == wxEVT_LIST_ITEM_SELECTED ||
                  type == wxEVT_LIST_ITEM_DESELECTED )
             {
                 // Instead of sending hundreds of (de)selection messages, send only
                 // one for each range which is more efficient (see issue #4541)
-                // data->m_colOrFirstRow is the first row in the (de)selection
-                // data->m_colWidthOrLastRow is the last row in the (de)selection
+                // eventData->m_colOrFirstRow is the first row in the (de)selection
+                // eventData->m_colWidthOrLastRow is the last row in the (de)selection
                 wxFAIL_MSG("No implementation yet");
             }
-            else if ( data->m_colOrFirstRow >= 0 &&
-                      data->m_colOrFirstRow < handler->GetColumnCount() )
+            else if ( eventData->m_colOrFirstRow >= 0 &&
+                      eventData->m_colOrFirstRow < handler->GetColumnCount() )
             {
-                event.m_col = data->m_colOrFirstRow;
-                event.m_item.m_width = data->m_colWidthOrLastRow;
+                event.m_col = eventData->m_colOrFirstRow;
+                event.m_item.m_width = eventData->m_colWidthOrLastRow;
                 event.m_pointDrag = wxQtConvertPoint( QCursor::pos() );
 
                 if ( type == wxEVT_LIST_COL_RIGHT_CLICK )
@@ -1448,7 +1448,6 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     {
         if ( width == wxLIST_AUTOSIZE_USEHEADER )
         {
-            const auto header = GetQListTreeWidget()->header();
             const QHeaderView::ResizeMode oldResizeMode = header->sectionResizeMode(col);
 
             header->setSectionResizeMode(col, QHeaderView::ResizeToContents);
