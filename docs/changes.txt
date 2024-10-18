@@ -254,19 +254,30 @@ Changes in behaviour which may result in build errors
 All:
 
 - Avoid trailing space in `wx-config --c[xx]flags` (Tobiasz Laskowski, #24812).
+- Fix building using gcc 14 under Solaris (Alan Coopersmith, #24869).
+- Add wxNO_UNUSED_VARIABLES to enable warnings about them (Lauri Nurmi, #24882).
 
 All (GUI):
 
 - Improve wxPropGrid checkboxes in high DPI (Alex Shvartzkop, #24650, #24651).
 
+wxGTK:
+
+- Fix copy-pasting text under more Wayland compositors (Weston, kwin) (#24701).
+- Fix unwanted "All pages" selection in the printing dialog (#24868).
+
 wxMSW:
 
 - Improve print preview in high DPI (taler21, #24815).
+- Fix position of the icons in the printout (#24673).
+- Fix events generated when toast-based notifications are dismissed (#24320).
 
 wxOSX:
 
+- Fix build with macOS 15 SDK (#24724, #24879).
 - Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
 - Fix regression in GetPreferredUILanguage() in some cases (#24804).
+- Fix CMake build with PCH disabled (Maarten Bent, #24851).
 
 
 3.2.6: (released 2024-09-09)

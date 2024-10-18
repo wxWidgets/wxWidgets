@@ -16,7 +16,7 @@
 #if wxUSE_GRAPHICS_GDIPLUS
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/wrapcdlg.h"
+    #include "wx/msw/private.h"
     #include "wx/image.h"
     #include "wx/window.h"
     #include "wx/utils.h"
@@ -43,11 +43,6 @@
 #include "wx/dcgraph.h"
 #include "wx/rawbmp.h"
 
-#include "wx/msw/private.h" // needs to be before #include <commdlg.h>
-
-#if wxUSE_COMMON_DIALOGS
-#include <commdlg.h>
-#endif
 #include <float.h> // for FLT_MAX, FLT_MIN
 
 // Define REAL_MAX, REAL_MIN

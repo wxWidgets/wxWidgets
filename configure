@@ -24703,6 +24703,7 @@ if test "$cross_compiling" = yes; then :
 else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+#include <stdlib.h>
 main () {
   /* Are we little or big endian?  From Harbison&Steele.  */
   union
@@ -38378,6 +38379,9 @@ else
 
                 #include <sys/ioctl.h>
                 #include <sys/soundcard.h>
+                #ifdef HAVE_UNISTD_H
+                # include <unistd.h> /* needed for ioctl() on Solaris */
+                #endif
 
 int
 main ()
@@ -38400,6 +38404,9 @@ else
 
                         #include <sys/ioctl.h>
                         #include <sys/soundcard.h>
+                        #ifdef HAVE_UNISTD_H
+                        # include <unistd.h> /* needed for ioctl() on Solaris */
+                        #endif
 
 int
 main ()
