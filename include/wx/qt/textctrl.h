@@ -85,6 +85,8 @@ public:
 
     virtual void SetMaxLength(unsigned long len) override;
 
+    virtual wxTextSearchResult SearchText(const wxTextSearch& search) const override;
+
 protected:
     virtual wxSize DoGetBestSize() const override;
 
