@@ -2074,6 +2074,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     return true;
 }
 
+#ifdef __WXGTK3__
 wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
 {
     const GtkTextSearchFlags flags = static_cast<GtkTextSearchFlags>(
@@ -2168,6 +2169,7 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
         return wxTextSearchResult();
     }
 }
+#endif // __WXGTK3__
 
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
 {

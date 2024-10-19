@@ -105,7 +105,9 @@ public:
     virtual wxTextProofOptions GetProofCheckOptions() const override;
 #endif // wxUSE_SPELLCHECK && __WXGTK3__
 
+#ifdef __WXGTK3__
     virtual wxTextSearchResult SearchText(const wxTextSearch& search) const override;
+#endif // __WXGTK3__
 
     // GTK-specific functions
 
