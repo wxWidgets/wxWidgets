@@ -14,7 +14,16 @@
 .print Import script map
 .read temp/uni_loadscriptmap.sql
 
+.print Import likely subtags map
+.read temp/uni_loadlikely.sql
+
+.print Import matching subtags map
+.read temp/uni_loadmatching.sql
+
+.print Import region groups for main languages map
+.read temp/uni_loadregiongroups.sql
+
 .read temp/wx_loadversion.sql
 
-.print Generate new tables (langtabl, scripttabl, synonymtabl)
+.print Generate new tables (langtabl, scripttabl, synonymtabl, likelytabl, matchingtabl)
 .read mkwxtables.sql

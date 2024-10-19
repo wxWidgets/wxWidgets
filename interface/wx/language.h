@@ -176,8 +176,6 @@ enum wxLanguage
     wxLANGUAGE_DANISH,
     wxLANGUAGE_DANISH_DENMARK,                               ///< @since_wx{3.1.6}
     wxLANGUAGE_DANISH_GREENLAND,                             ///< @since_wx{3.1.6}
-    wxLANGUAGE_DARI,                                         ///< @since_wx{3.1.6}
-    wxLANGUAGE_DARI_AFGHANISTAN,                             ///< @since_wx{3.1.6}
     wxLANGUAGE_DIVEHI,                                       ///< @since_wx{3.1.6}
     wxLANGUAGE_DIVEHI_MALDIVES,                              ///< @since_wx{3.1.6}
     wxLANGUAGE_DOGRI,                                        ///< @since_wx{3.3.0}
@@ -501,8 +499,8 @@ enum wxLanguage
     wxLANGUAGE_KHMER,
     wxLANGUAGE_KHMER_CAMBODIA,                               ///< @since_wx{3.1.6}
     wxLANGUAGE_KICHE,                                        ///< @since_wx{3.1.6}
-    wxLANGUAGE_KICHE_GUATEMALA,                              ///< @since_wx{3.1.6}
     wxLANGUAGE_KICHE_LATIN,                                  ///< @since_wx{3.1.6}
+    wxLANGUAGE_KICHE_LATIN_GUATEMALA,                        ///< @since_wx{3.1.6}
     wxLANGUAGE_KIKUYU,                                       ///< @since_wx{3.1.6}
     wxLANGUAGE_KIKUYU_KENYA,                                 ///< @since_wx{3.1.6}
     wxLANGUAGE_KINYARWANDA,
@@ -655,6 +653,7 @@ enum wxLanguage
     wxLANGUAGE_PASHTO_AFGHANISTAN,                           ///< @since_wx{3.1.6}
     wxLANGUAGE_PASHTO_PAKISTAN,                              ///< @since_wx{3.1.6}
     wxLANGUAGE_PERSIAN,
+    wxLANGUAGE_PERSIAN_AFGHANISTAN,                          ///< @since_wx{3.3.0}
     wxLANGUAGE_PERSIAN_IRAN,                                 ///< @since_wx{3.1.6}
     wxLANGUAGE_POLISH,
     wxLANGUAGE_POLISH_POLAND,                                ///< @since_wx{3.1.6}
@@ -837,7 +836,8 @@ enum wxLanguage
     wxLANGUAGE_TACHELHIT_LATIN_MOROCCO,                      ///< @since_wx{3.1.6}
     wxLANGUAGE_TACHELHIT_TIFINAGH,                           ///< @since_wx{3.1.6}
     wxLANGUAGE_TACHELHIT_TIFINAGH_MOROCCO,                   ///< @since_wx{3.1.6}
-    wxLANGUAGE_TAGALOG,
+    wxLANGUAGE_TAGALOG,                                      ///< @since_wx{3.3.0}
+    wxLANGUAGE_TAGALOG_PHILIPPINES,
     wxLANGUAGE_TAITA,                                        ///< @since_wx{3.1.6}
     wxLANGUAGE_TAITA_KENYA,                                  ///< @since_wx{3.1.6}
     wxLANGUAGE_TAJIK,
@@ -873,7 +873,7 @@ enum wxLanguage
     wxLANGUAGE_TSONGA_SOUTH_AFRICA,                          ///< @since_wx{3.1.6}
     wxLANGUAGE_TURKISH,
     wxLANGUAGE_TURKISH_CYPRUS,                               ///< @since_wx{3.1.6}
-    wxLANGUAGE_TURKISH_TURKEY,                               ///< @since_wx{3.1.6}
+    wxLANGUAGE_TURKISH_TURKIYE,                              ///< @since_wx{3.1.6}
     wxLANGUAGE_TURKMEN,
     wxLANGUAGE_TURKMEN_TURKMENISTAN,                         ///< @since_wx{3.1.6}
     wxLANGUAGE_TWI,
@@ -946,17 +946,21 @@ enum wxLanguage
     wxLANGUAGE_CHINESE_MACAU,                  ///< Synonym for wxLANGUAGE_CHINESE_MACAO.
     wxLANGUAGE_CHINESE_SIMPLIFIED,             ///< Synonym for wxLANGUAGE_CHINESE_CHINA.
     wxLANGUAGE_CHINESE_TRADITIONAL,            ///< Synonym for wxLANGUAGE_CHINESE_TAIWAN.
+    wxLANGUAGE_DARI,                           ///< Synonym for wxLANGUAGE_PERSIAN. @since_wx{3.1.6}
+    wxLANGUAGE_DARI_AFGHANISTAN,               ///< Synonym for wxLANGUAGE_PERSIAN_AFGHANISTAN. @since_wx{3.1.6}
     wxLANGUAGE_FARSI,                          ///< Synonym for wxLANGUAGE_PERSIAN.
     wxLANGUAGE_GREENLANDIC,                    ///< Synonym for wxLANGUAGE_KALAALLISUT_GREENLAND.
     wxLANGUAGE_KANURI_NIGERIA,                 ///< Synonym for wxLANGUAGE_KANURI_LATIN_NIGERIA.
     wxLANGUAGE_KASHMIRI_PERSO_ARABIC,          ///< Synonym for wxLANGUAGE_KASHMIRI_ARABIC. @since_wx{3.1.6}
     wxLANGUAGE_KASHMIRI_PERSO_ARABIC_INDIA,    ///< Synonym for wxLANGUAGE_KASHMIRI_ARABIC_INDIA. @since_wx{3.1.6}
     wxLANGUAGE_KERNEWEK,                       ///< Synonym for wxLANGUAGE_CORNISH.
+    wxLANGUAGE_KICHE_GUATEMALA,                ///< Synonym for wxLANGUAGE_KICHE_LATIN_GUATEMALA. @since_wx{3.1.6}
     wxLANGUAGE_KURDISH_PERSO_ARABIC_IRAN,      ///< Synonym for wxLANGUAGE_KURDISH_ARABIC_IRAN.
     wxLANGUAGE_MALAY_BRUNEI_DARUSSALAM,        ///< Synonym for wxLANGUAGE_MALAY_BRUNEI.
     wxLANGUAGE_ORIYA,                          ///< Synonym for wxLANGUAGE_ODIA.
     wxLANGUAGE_ORIYA_INDIA,                    ///< Synonym for wxLANGUAGE_ODIA_INDIA.
     wxLANGUAGE_SPANISH_MODERN,                 ///< Synonym for wxLANGUAGE_SPANISH.
+    wxLANGUAGE_TURKISH_TURKEY,                 ///< Synonym for wxLANGUAGE_TURKISH_TURKIYE. @since_wx{3.1.6}
     wxLANGUAGE_UZBEK_PERSO_ARABIC,             ///< Synonym for wxLANGUAGE_UZBEK_ARABIC. @since_wx{3.1.6}
     wxLANGUAGE_UZBEK_PERSO_ARABIC_AFGHANISTAN, ///< Synonym for wxLANGUAGE_UZBEK_ARABIC_AFGHANISTAN. @since_wx{3.1.6}
 };

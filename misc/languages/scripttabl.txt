@@ -48,6 +48,8 @@ Guru gurmukhi
 Hang hangul
 Hani han
 Hano hanunoo
+Hans Hans
+Hant Hant
 Hatr hatran
 Hebr hebrew
 Hira hiragana
@@ -60,6 +62,7 @@ Ital old_italic
 Java javanese
 Kali kayah_li
 Kana katakana
+Kawi kawi
 Khar kharoshthi
 Khmr khmer
 Khoj khojki
@@ -92,6 +95,7 @@ Mroo mro
 Mtei meetei_mayek
 Mult multani
 Mymr myanmar
+Nagm nag_mundari
 Nand nandinagari
 Narb old_north_arabian
 Nbat nabataean
