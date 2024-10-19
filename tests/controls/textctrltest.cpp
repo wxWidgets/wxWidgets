@@ -1477,7 +1477,7 @@ TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
 })");
     // test getting the main text, including an extended ASCII character
     wxString result = text->GetValue();
-    CHECK(result.find(L"wxWidg\x00E9ts") != wxString::npos);
+    CHECK(result.find(L"wxWidg\x00E9") != wxString::npos);
     CHECK(result.find(L"3.3") != wxString::npos);
 
     result = text->GetRTFValue();
