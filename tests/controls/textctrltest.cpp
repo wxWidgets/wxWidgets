@@ -1487,7 +1487,7 @@ TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
 }
 #endif
 
-#if defined(__WXMSW__) || defined(__WXGTK3__)
+#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXQT__)
 TEST_CASE("wxTextCtrl::SearchText", "[wxTextCtrl][search]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
