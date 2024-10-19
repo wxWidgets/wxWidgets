@@ -105,6 +105,8 @@ public:
     virtual wxTextProofOptions GetProofCheckOptions() const override;
 #endif // wxUSE_SPELLCHECK && __WXGTK3__
 
+    virtual wxTextSearchResult SearchText(const wxTextSearch& search) const override;
+
     // GTK-specific functions
 
     // Get the underlying text buffer for multi-line controls.

@@ -1463,7 +1463,7 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
     CHECK( updated.GetCount() == 1 );
 }
 
-#ifdef __WXOSX__
+#ifdef wxHAS_TEXTCTRL_RTF
 TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
@@ -1487,7 +1487,7 @@ TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
 }
 #endif
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXGTK__)
 TEST_CASE("wxTextCtrl::SearchText", "[wxTextCtrl][search]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
@@ -1556,6 +1556,10 @@ And there is a mispeled word)");
     // no more matches going down
     results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord().Start(results.m_start + 1));
     CHECK_FALSE(results);
+
+    // bad start position
+    results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord().Start(2000));
+    CHECK_FALSE(results); // started past the length of the control
 
     // go up from the end
     results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Up).MatchCase().MatchWholeWord());

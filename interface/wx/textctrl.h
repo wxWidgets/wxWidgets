@@ -1813,7 +1813,7 @@ public:
         The range of the match will be returned as a wxTextSearchResult, which will
         contain -1 values if no match was found.
 
-        This is currently only implemented under wxMSW.
+        This is currently only implemented under wxMSW and wxGTK.
 
         @since 3.3.0
 
