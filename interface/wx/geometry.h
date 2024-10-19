@@ -82,6 +82,8 @@ public :
     // two different conversions to integers, floor and rounding
     void GetFloor( wxInt32 *x , wxInt32 *y ) const;
     void GetRounded( wxInt32 *x , wxInt32 *y ) const;
+    wxPoint GetFloor() const;
+    wxPoint GetRounded() const;
 
     wxDouble GetVectorLength() const;
      wxDouble GetVectorAngle() const ;
