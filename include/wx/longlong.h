@@ -30,8 +30,10 @@ public:
         // from 2 longs
     wxLongLong(wxInt32 hi, wxUint32 lo)
     {
-        // cast to wxLongLong_t first to avoid precision loss!
-        m_ll = ((wxLongLong_t) hi) << 32;
+        // cast first to avoid precision loss and use unsigned shift to avoid
+        // undefined behaviour if the high part is negative (and then cast
+        // again to avoid warning about the possible sign change)
+        m_ll = (wxLongLong_t)(((wxULongLong_t) hi) << 32);
         m_ll |= (wxLongLong_t) lo;
     }
 
