@@ -367,24 +367,22 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
 #endif
 
 /* supply strtoll and strtoull, if needed */
-#ifdef wxLongLong_t
-    #ifndef wxCRT_StrtollA
-        WXDLLIMPEXP_BASE wxLongLong_t wxCRT_StrtollA(const char* nptr,
-                                                     char** endptr,
-                                                     int base);
-        WXDLLIMPEXP_BASE wxULongLong_t wxCRT_StrtoullA(const char* nptr,
-                                                       char** endptr,
-                                                       int base);
-    #endif
-    #ifndef wxCRT_StrtollW
-        WXDLLIMPEXP_BASE wxLongLong_t wxCRT_StrtollW(const wchar_t* nptr,
-                                                     wchar_t** endptr,
-                                                     int base);
-        WXDLLIMPEXP_BASE wxULongLong_t wxCRT_StrtoullW(const wchar_t* nptr,
-                                                       wchar_t** endptr,
-                                                       int base);
-    #endif
-#endif /* wxLongLong_t */
+#ifndef wxCRT_StrtollA
+    WXDLLIMPEXP_BASE wxLongLong_t wxCRT_StrtollA(const char* nptr,
+                                                 char** endptr,
+                                                 int base);
+    WXDLLIMPEXP_BASE wxULongLong_t wxCRT_StrtoullA(const char* nptr,
+                                                   char** endptr,
+                                                   int base);
+#endif
+#ifndef wxCRT_StrtollW
+    WXDLLIMPEXP_BASE wxLongLong_t wxCRT_StrtollW(const wchar_t* nptr,
+                                                 wchar_t** endptr,
+                                                 int base);
+    WXDLLIMPEXP_BASE wxULongLong_t wxCRT_StrtoullW(const wchar_t* nptr,
+                                                   wchar_t** endptr,
+                                                   int base);
+#endif
 
 
 /* -------------------------------------------------------------------------

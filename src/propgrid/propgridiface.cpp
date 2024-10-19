@@ -799,7 +799,6 @@ wxArrayString wxPropertyGridInterface::GetPropertyValueAsArrayString(wxPGPropArg
     return value.GetArrayString();
 }
 
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
 wxLongLong_t wxPropertyGridInterface::GetPropertyValueAsLongLong(wxPGPropArg id) const
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
@@ -811,7 +810,6 @@ wxULongLong_t wxPropertyGridInterface::GetPropertyValueAsULongLong(wxPGPropArg i
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
     return p->GetValue().GetULongLong().GetValue();
 }
-#endif
 
 wxArrayInt wxPropertyGridInterface::GetPropertyValueAsArrayInt(wxPGPropArg id) const
 {

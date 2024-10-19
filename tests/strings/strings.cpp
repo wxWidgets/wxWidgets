@@ -516,18 +516,12 @@ enum
     Number_Int      = 32    // only for int tests
 };
 
-#ifdef wxLongLong_t
-typedef wxLongLong_t TestValue_t;
-#else
-typedef long TestValue_t;
-#endif
-
 wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
 static const struct ToIntData
 {
     const wxChar *str;
-    TestValue_t value;
+    wxLongLong_t value;
     int flags;
     int base;
 
@@ -544,31 +538,29 @@ static const struct ToIntData
     { wxT("--1"), 0, Number_Invalid },
 
     { wxT("-1"), -1, Number_Signed | Number_Int },
-    { wxT("-1"), (TestValue_t)UINT_MAX, Number_Unsigned | Number_Int | Number_Invalid },
+    { wxT("-1"), (wxLongLong_t)UINT_MAX, Number_Unsigned | Number_Int | Number_Invalid },
 
-    { wxT("2147483647"), (TestValue_t)INT_MAX, Number_Int | Number_Signed },
-    { wxT("2147483648"), (TestValue_t)INT_MAX, Number_Int | Number_Signed | Number_Invalid },
+    { wxT("2147483647"), (wxLongLong_t)INT_MAX, Number_Int | Number_Signed },
+    { wxT("2147483648"), (wxLongLong_t)INT_MAX, Number_Int | Number_Signed | Number_Invalid },
 
-    { wxT("-2147483648"), (TestValue_t)INT_MIN, Number_Int | Number_Signed },
-    { wxT("-2147483649"), (TestValue_t)INT_MIN, Number_Int | Number_Signed | Number_Invalid },
+    { wxT("-2147483648"), (wxLongLong_t)INT_MIN, Number_Int | Number_Signed },
+    { wxT("-2147483649"), (wxLongLong_t)INT_MIN, Number_Int | Number_Signed | Number_Invalid },
 
-    { wxT("4294967295"), (TestValue_t)UINT_MAX, Number_Int | Number_Unsigned },
-    { wxT("4294967296"), (TestValue_t)UINT_MAX, Number_Int | Number_Unsigned | Number_Invalid },
+    { wxT("4294967295"), (wxLongLong_t)UINT_MAX, Number_Int | Number_Unsigned },
+    { wxT("4294967296"), (wxLongLong_t)UINT_MAX, Number_Int | Number_Unsigned | Number_Invalid },
 };
 
 static const struct ToLongData
 {
     const wxChar *str;
-    TestValue_t value;
+    wxLongLong_t value;
     int flags;
     int base;
 
     long LValue() const { return value; }
     unsigned long ULValue() const { return value; }
-#ifdef wxLongLong_t
     wxLongLong_t LLValue() const { return value; }
     wxULongLong_t ULLValue() const { return (wxULongLong_t)value; }
-#endif // wxLongLong_t
 
     bool IsOk() const { return !(flags & Number_Invalid); }
 } longData[] =
@@ -581,21 +573,19 @@ static const struct ToLongData
 
     { wxT("-1"), -1, Number_Signed | Number_Long },
     // this is surprising but consistent with strtoul() behaviour
-    { wxT("-1"), (TestValue_t)ULONG_MAX, Number_Unsigned | Number_Long },
+    { wxT("-1"), (wxLongLong_t)ULONG_MAX, Number_Unsigned | Number_Long },
     // a couple of edge cases
     { wxT(" +1"), 1, Number_Ok },
-    { wxT(" -1"), (TestValue_t)ULONG_MAX, Number_Unsigned | Number_Long },
+    { wxT(" -1"), (wxLongLong_t)ULONG_MAX, Number_Unsigned | Number_Long },
 
     // this must overflow, even with 64 bit long
     { wxT("922337203685477580711"), 0, Number_Invalid },
 
-#ifdef wxLongLong_t
     { wxT("2147483648"), wxLL(2147483648), Number_LongLong },
     { wxT("-2147483648"), wxLL(-2147483648), Number_LongLong | Number_Signed },
     { wxT("9223372036854775808"),
-      TestValue_t(wxULL(9223372036854775808)),
+      (wxLongLong_t)wxULL(9223372036854775808),
       Number_LongLong | Number_Unsigned },
-#endif // wxLongLong_t
 
     // Base tests.
     { wxT("010"),  10, Number_Ok, 10 },
@@ -621,7 +611,7 @@ static const struct ToLongData
 #else
     #error "Unknown sizeof(long)"
 #endif
-      (TestValue_t)ULONG_MAX, Number_Unsigned, 0
+      (wxLongLong_t)ULONG_MAX, Number_Unsigned, 0
     },
 };
 
@@ -748,8 +738,6 @@ TEST_CASE("StringToULong", "[wxString]")
     }
 }
 
-#ifdef wxLongLong_t
-
 TEST_CASE("StringToLongLong", "[wxString]")
 {
     wxLongLong_t l;
@@ -781,8 +769,6 @@ TEST_CASE("StringToULongLong", "[wxString]")
             CHECK( ul == ld.ULLValue() );
     }
 }
-
-#endif // wxLongLong_t
 
 TEST_CASE("StringToDouble", "[wxString]")
 {

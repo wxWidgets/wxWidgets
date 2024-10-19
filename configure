@@ -1190,7 +1190,6 @@ enable_fsvolume
 enable_fswatcher
 enable_geometry
 enable_log
-enable_longlong
 enable_mimetype
 enable_printfposparam
 enable_secretstore
@@ -2161,7 +2160,6 @@ Optional Features:
   --enable-fswatcher      use wxFileSystemWatcher class
   --enable-geometry       use geometry class
   --enable-log            use logging system
-  --enable-longlong       use wxLongLong class
   --enable-mimetype       use wxMimeTypesManager
   --enable-printfposparam use wxVsnprintf() which supports positional parameters
   --enable-secretstore    use wxSecretStore class
@@ -7426,35 +7424,6 @@ fi
 
 
           eval "$wx_cv_use_log"
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-longlong was given.
-if test "${enable_longlong+set}" = set; then :
-  enableval=$enable_longlong;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_longlong='wxUSE_LONGLONG=yes'
-                          else
-                            wx_cv_use_longlong='wxUSE_LONGLONG=no'
-                          fi
-
-else
-
-                          wx_cv_use_longlong='wxUSE_LONGLONG=${'DEFAULT_wxUSE_LONGLONG":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_longlong"
 
 
           enablestring=
@@ -37295,11 +37264,6 @@ if test "$wxUSE_LOG" = "yes"; then
     fi
 
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS keyboard"
-fi
-
-if test "$wxUSE_LONGLONG" = "yes"; then
-  $as_echo "#define wxUSE_LONGLONG 1" >>confdefs.h
-
 fi
 
 if test "$wxUSE_GEOMETRY" = "yes"; then
