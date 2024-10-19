@@ -1471,7 +1471,7 @@ size_t wxMBConvUTF16Base::GetLength(const char *src, size_t srcLen)
     {
         // we can only convert an entire number of UTF-16 characters
         if ( srcLen % BYTES_PER_CHAR )
-            return wxCONV_FAILED;
+            return wxNO_LEN;
     }
 
     return srcLen;
@@ -1769,7 +1769,7 @@ size_t wxMBConvUTF32Base::GetLength(const char *src, size_t srcLen)
     {
         // we can only convert an entire number of UTF-32 characters
         if ( srcLen % BYTES_PER_CHAR )
-            return wxCONV_FAILED;
+            return wxNO_LEN;
     }
 
     return srcLen;
