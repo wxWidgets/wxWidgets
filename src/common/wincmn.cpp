@@ -1311,7 +1311,7 @@ void wxWindowBase::RemoveChild(wxWindowBase *child)
     if ( IsFrozen() && !child->IsBeingDeleted() && !child->IsTopLevel() )
         child->Thaw();
 
-    GetChildren().DeleteObject((wxWindow *)child);
+    GetChildren().DeleteObject(child);
     child->SetParent(nullptr);
 }
 
