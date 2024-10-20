@@ -115,7 +115,7 @@ jobs:
             skip_samples: true
             use_asan: true
             use_xvfb: true
-          - name: Ubuntu 22.04 wxGTK C++20 with UBSAN
+          - name: Ubuntu 22.04 wxGTK with UBSAN
             runner: ubuntu-22.04
             configure_flags: --with-cxx=20
             use_ubsan: true
@@ -291,8 +291,6 @@ jobs:
             echo 'ASAN_OPTIONS=fast_unwind_on_malloc=0' >> $GITHUB_ENV
           elif [ ${{ matrix.use_ubsan }} ]; then
             wxSANITIZER_FLAGS='-fsanitize=undefined'
-
-            echo 'UBSAN_OPTIONS=print_stacktrace=1' >> $GITHUB_ENV
           fi
 
           if [ -n "$wxSANITIZER_FLAGS" ]; then
@@ -358,6 +356,12 @@ jobs:
 
           httpbin_launch
 
+          if [ ${{ matrix.use_ubsan }} ]; then
+            # First run wiht UBSAN: halt on first error to make sure we fail if
+            # any UB is detected.
+            export UBSAN_OPTIONS=halt_on_error=1
+          fi
+
           # Explicitly use bash because /bin/sh doesn't have pipefail option
           /bin/bash -o pipefail -c './test 2>&1 | tee test.out' || rc=$?
           if [ ${{ matrix.use_asan }} ]; then
@@ -367,6 +371,15 @@ jobs:
                 echo '+++ Rerunning the tests once again after LeakSanitizer crash +++'
                 unset rc
                 ./test || rc=$?
+            fi
+          fi
+
+          if [ ${{ matrix.use_ubsan }} ]; then
+            if grep -qF ': runtime error: ' test.out; then
+              export UBSAN_OPTIONS=print_stacktrace=1
+              echo '+++ UB detected, rerunning the tests to show all occurrences +++'
+              ./test
+              # Leave rc set to non-zero value to indicate failure.
             fi
           fi
 
@@ -400,6 +413,12 @@ jobs:
             wx_tests_selection='~[.] ~RichTextCtrlTestCase'
           fi
 
+          if [ ${{ matrix.use_ubsan }} ]; then
+            # First run with UBSAN: halt on first error to make sure we fail if
+            # any UB is detected.
+            export UBSAN_OPTIONS=halt_on_error=1
+          fi
+
           # The tests only work reliably with native windows
           export QT_USE_NATIVE_WINDOWS=1
 
@@ -419,6 +438,17 @@ jobs:
           xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -c Title WebView >/dev/null 2>&1 || echo 'First wxWebView test failure ignored.'
 
           /bin/bash -o pipefail -c "xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -d 1 $wx_tests_selection 2>&1 | tee -a test_gui.out" || rc=$?
+
+          if [ ${{ matrix.use_ubsan }} ]; then
+            if grep -qF ': runtime error: ' test_gui.out; then
+              echo "\n\n+++ UB detected, rerunning the tests to show all occurrences +++\n"
+              export UBSAN_OPTIONS=print_stacktrace=1
+              xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui $wx_tests_selection
+              # rc should be already set to non-zero value, but make sure of it.
+              rc=1
+            fi
+          fi
+
           if [ -n "$rc" ]; then
             if grep -qF '(core dumped)' test_gui.out; then
                 echo '*** Test crashed, trying to get more information ***'
@@ -426,6 +456,7 @@ jobs:
             fi
             exit $rc
           fi
+
 
       - name: Building samples
         if: matrix.skip_samples != true
