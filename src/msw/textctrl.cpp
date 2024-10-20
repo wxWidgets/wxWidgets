@@ -1234,7 +1234,7 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
     }
     else
     {
-        // will search from the start of the selection and upward
+        // will search from the end (or user-provided position) and go upward
         // to the start of the text
         findText.chrg.cpMax = 0;
     }
