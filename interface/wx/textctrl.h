@@ -1813,11 +1813,11 @@ public:
         The range of the match will be returned as a wxTextSearchResult, which will
         contain -1 values if no match was found.
 
-        This is currently only implemented under wxMSW.
+        This is currently only implemented under wxMSW and wxGTK3.
 
         @since 3.3.0
 
-        @onlyfor{wxmsw}
+        @onlyfor{wxmsw,wxgtk}
     */
     wxTextSearchResult SearchText(const wxTextSearch& search) const;
 
