@@ -115,10 +115,10 @@ jobs:
             skip_samples: true
             use_asan: true
             use_xvfb: true
-          - name: Ubuntu 22.04 wxGTK UTF-8 C++20
+          - name: Ubuntu 22.04 wxGTK C++20 with UBSAN
             runner: ubuntu-22.04
-            configure_flags: --with-cxx=20 --enable-utf8 --enable-utf8only
-            use_asan: true
+            configure_flags: --with-cxx=20
+            use_ubsan: true
             use_xvfb: true
             build_out_of_tree_samples: true
           - name: Ubuntu 18.04 wxX11
@@ -286,11 +286,20 @@ jobs:
           fi
 
           if [ ${{ matrix.use_asan }} ]; then
-            wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
-            wxASAN_CXXFLAGS=$wxASAN_CFLAGS
-            wxASAN_LDFLAGS="-fsanitize=address"
+            wxSANITIZER_FLAGS='-fsanitize=address'
 
-            ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+            echo 'ASAN_OPTIONS=fast_unwind_on_malloc=0' >> $GITHUB_ENV
+          elif [ ${{ matrix.use_ubsan }} ]; then
+            wxSANITIZER_FLAGS='-fsanitize=undefined'
+
+            echo 'UBSAN_OPTIONS=print_stacktrace=1' >> $GITHUB_ENV
+          fi
+
+          if [ -n "$wxSANITIZER_FLAGS" ]; then
+            ./configure $wxCONFIGURE_OPTIONS --enable-debug \
+                "CFLAGS=$wxSANITIZER_FLAGS -fno-omit-frame-pointer" \
+                "CXXFLAGS=$wxSANITIZER_FLAGS -fno-omit-frame-pointer" \
+                "LDFLAGS=$wxSANITIZER_FLAGS" || rc=$?
           else
             ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
           fi
@@ -349,8 +358,6 @@ jobs:
 
           httpbin_launch
 
-          export ASAN_OPTIONS=fast_unwind_on_malloc=0
-
           # Explicitly use bash because /bin/sh doesn't have pipefail option
           /bin/bash -o pipefail -c './test 2>&1 | tee test.out' || rc=$?
           if [ ${{ matrix.use_asan }} ]; then
@@ -384,9 +391,8 @@ jobs:
             if [ -f wx_dbgsym_available ]; then
                 export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
             else
-                ASAN_OPTIONS=detect_leaks=0
+                ASAN_OPTIONS="$ASAN_OPTIONS detect_leaks=0"
             fi
-            export ASAN_OPTIONS="$ASAN_OPTIONS fast_unwind_on_malloc=0"
 
             # Running all tests at once fails, apparently due to running out of
             # memory when using ASAN, work around this problem by excluding
