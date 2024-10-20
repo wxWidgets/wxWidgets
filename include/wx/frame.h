@@ -178,6 +178,8 @@ public:
     virtual void DoGiveHelp(const wxString& text, bool show);
 #endif
 
+    virtual void RemoveChild(wxWindowBase *child) override;
+
     virtual bool IsClientAreaChild(const wxWindow *child) const override
     {
         return !IsOneOfBars(child) && wxTopLevelWindow::IsClientAreaChild(child);
