@@ -809,7 +809,7 @@ void wxVListBoxComboPopup::CalcWidths()
 
 wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int maxHeight )
 {
-    int height = 250;
+    int height = FromDIP(250);
 
     maxHeight -= 2;  // Must take borders into account
 
@@ -841,7 +841,7 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
         }
     }
     else
-        height = 50;
+        height = FromDIP(50);
 
     CalcWidths();
 
