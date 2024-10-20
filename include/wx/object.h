@@ -147,10 +147,9 @@ name##PluginSentinel  m_pluginsentinel
 // note that it still has different semantics from dynamic_cast<> and so can't
 // be replaced by it as long as there are any compilers not supporting it
 #define wxDynamicCast(obj, className) \
-    ((className *) wxCheckDynamicCast( \
-        const_cast<wxObject *>(static_cast<const wxObject *>(\
-          const_cast<className *>(static_cast<const className *>(obj)))), \
-        &className::ms_classInfo))
+    (static_cast<className*>(wxCheckDynamicCast( \
+        const_cast<wxObject *>(static_cast<const wxObject *>(obj)), \
+        &className::ms_classInfo)))
 
 // The 'this' pointer is always true, so use this version
 // to cast the this pointer and avoid compiler warnings.
