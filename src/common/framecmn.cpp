@@ -255,6 +255,13 @@ void wxFrameBase::RemoveChild(wxWindowBase *child)
     }
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_TOOLBAR
+    if ( child == m_frameToolBar )
+    {
+        m_frameToolBar = nullptr;
+    }
+#endif // wxUSE_STATUSBAR
+
     wxTopLevelWindow::RemoveChild(child);
 }
 
