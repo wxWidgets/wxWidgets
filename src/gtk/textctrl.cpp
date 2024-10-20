@@ -2074,6 +2074,78 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     return true;
 }
 
+#ifdef __WXGTK3__
+
+wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
+{
+    if ( !IsMultiLine() )
+    {
+        return wxTextSearchResult{};
+    }
+
+    int flags = GTK_TEXT_SEARCH_TEXT_ONLY;
+    if ( !search.m_matchCase )
+        flags |= GTK_TEXT_SEARCH_CASE_INSENSITIVE;
+
+    // get the beginning and end of text buffer
+    GtkTextIter textStart, textEnd;
+    gtk_text_buffer_get_start_iter(m_buffer, &textStart);
+    gtk_text_buffer_get_end_iter(m_buffer, &textEnd);
+
+    const bool forward = search.m_direction == wxTextSearch::Direction::Down;
+
+    // start search at the start or at the end depending on the direction
+    GtkTextIter searchStart = forward ? textStart : textEnd;
+
+    // but user-provided position overrides the default starting position
+    if ( search.m_startingPosition != -1 )
+    {
+        gtk_text_buffer_get_iter_at_offset(m_buffer, &searchStart,
+                                           static_cast<gint>(search.m_startingPosition));
+    }
+
+    // the match results
+    GtkTextIter selectionStart, selectionEnd;
+
+    const auto searchFunc = forward ? gtk_text_iter_forward_search
+                                    : gtk_text_iter_backward_search;
+    for ( ;; )
+    {
+        if ( !searchFunc
+              (
+                &searchStart,
+                search.m_searchValue.utf8_str(),
+                static_cast<GtkTextSearchFlags>(flags),
+                &selectionStart,
+                &selectionEnd,
+                nullptr // no limit
+              ) )
+        {
+            // If we haven't found anything at all, we're done.
+            return wxTextSearchResult{};
+        }
+
+        // But if we did find something, we may need to check whether it was
+        // a whole word.
+        if ( !search.m_wholeWord )
+            break;
+
+        // Check if this is a whole-word match.
+        if ( gtk_text_iter_starts_word(&selectionStart) &&
+                gtk_text_iter_ends_word(&selectionEnd) )
+            break;
+
+        // Not a whole-word match, keep searching for the next match, maybe it
+        // will be a whole-word one.
+        searchStart = selectionEnd;
+    }
+
+    return wxTextSearchResult{ gtk_text_iter_get_offset(&selectionStart),
+                               gtk_text_iter_get_offset(&selectionEnd) };
+}
+
+#endif // __WXGTK3__
+
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     GTKApplyStyle(m_text, style);
