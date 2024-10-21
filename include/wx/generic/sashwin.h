@@ -228,7 +228,7 @@ public:
 private:
     wxSashEdgePosition  m_edge;
     wxRect              m_dragRect;
-    wxSashDragStatus    m_dragStatus;
+    wxSashDragStatus    m_dragStatus = wxSASH_STATUS_OK;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSashEvent);

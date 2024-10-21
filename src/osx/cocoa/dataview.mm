@@ -3592,6 +3592,8 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title,
        m_NativeDataPtr(new wxDataViewColumnNativeData()),
        m_title(title)
 {
+    m_renderer->SetOwner( this );
+
     InitCommon(width, align, flags);
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
@@ -3608,6 +3610,8 @@ wxDataViewColumn::wxDataViewColumn(const wxBitmapBundle& bitmap,
     : wxDataViewColumnBase(bitmap, renderer, model_column),
       m_NativeDataPtr(new wxDataViewColumnNativeData())
 {
+    m_renderer->SetOwner( this );
+
     InitCommon(width, align, flags);
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))

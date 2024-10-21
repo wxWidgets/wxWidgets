@@ -870,6 +870,9 @@ public:
     @c this pointer is non-null which is always true), so this macro should be
     used to avoid them.
 
+    Note that @a ptr must be an object of wxObject-derived class, otherwise
+    using this macro results in undefined behaviour.
+
     @header{wx/object.h}
 
     @see wxDynamicCast()
@@ -880,6 +883,9 @@ public:
     This macro checks that the cast is valid in debug mode (an assert failure
     will result if wxDynamicCast(ptr, classname) == @NULL) and then returns the
     result of executing an equivalent of <tt>static_cast<classname *>(ptr)</tt>.
+
+    Note that @a ptr must be an object of wxObject-derived class, otherwise
+    using this macro results in undefined behaviour.
 
     @header{wx/object.h}
 

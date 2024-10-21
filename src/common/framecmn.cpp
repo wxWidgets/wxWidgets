@@ -246,6 +246,25 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
     return pt;
 }
 
+void wxFrameBase::RemoveChild(wxWindowBase *child)
+{
+#if wxUSE_STATUSBAR
+    if ( child == m_frameStatusBar )
+    {
+        m_frameStatusBar = nullptr;
+    }
+#endif // wxUSE_STATUSBAR
+
+#if wxUSE_TOOLBAR
+    if ( child == m_frameToolBar )
+    {
+        m_frameToolBar = nullptr;
+    }
+#endif // wxUSE_STATUSBAR
+
+    wxTopLevelWindow::RemoveChild(child);
+}
+
 // ----------------------------------------------------------------------------
 // misc
 // ----------------------------------------------------------------------------

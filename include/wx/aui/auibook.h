@@ -87,13 +87,13 @@ private:
 class WXDLLIMPEXP_AUI wxAuiNotebookPage
 {
 public:
-    wxWindow* window;     // page's associated window
+    wxWindow* window = nullptr; // page's associated window
     wxString caption;     // caption displayed on the tab
     wxString tooltip;     // tooltip displayed when hovering over tab title
     wxBitmapBundle bitmap;// tab's bitmap
     wxRect rect;          // tab's hit rectangle
-    bool active;          // true if the page is currently active
-    bool hover;           // true if mouse hovering over tab
+    bool active = false;  // true if the page is currently active
+    bool hover = false;   // true if mouse hovering over tab
 };
 
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton

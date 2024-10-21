@@ -206,7 +206,7 @@ private:
 };
 
 // Async session implementation uses libcurl "multi" API.
-class wxWebSessionCURL : public wxWebSessionBaseCURL, public wxEvtHandler
+class wxWebSessionCURL : public wxEvtHandler, public wxWebSessionBaseCURL
 {
 public:
     wxWebSessionCURL();

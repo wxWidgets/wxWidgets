@@ -49,7 +49,7 @@ static void generateRandomData(void* buff, size_t len)
     unsigned char *cbuff = (unsigned char *)buff;
     while(len--)
     {
-        *(cbuff++) = (unsigned char)(((rand() * 255) / RAND_MAX));
+        *(cbuff++) = (unsigned char)((rand() / (float)RAND_MAX * 255.) + 1);
     }
 }
 
@@ -61,7 +61,7 @@ static void generateGibberish(void* buff, size_t len)
     unsigned char *cbuff = (unsigned char *)buff;
     while(len--)
     {
-        *(cbuff++) = cb64[((rand() * 64) / RAND_MAX)];
+        *(cbuff++) = cb64[(size_t)((rand() / (float)RAND_MAX * 64.) + 1)];
     }
 }
 
@@ -254,7 +254,7 @@ void Base64TestCase::EncodeDecodePatternC()
 
 void Base64TestCase::EncodeDecodeRandom()
 {
-    size_t size = rand() * 3000 / RAND_MAX + 11;
+    size_t size = (size_t)(rand() / (float)RAND_MAX * 3000. + 11);
     unsigned char *buff = new unsigned char[size];
     generateRandomData(buff, size);
     wxString str = wxBase64Encode(buff, size);
