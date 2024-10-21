@@ -113,7 +113,6 @@ protected:
 
 
     // event handlers
-    void OnTextCtrlDelete(wxWindowDestroyEvent &);
     void OnTextCtrlUpdate(wxCommandEvent &);
     void OnTextCtrlKillFocus(wxFocusEvent &);
 
