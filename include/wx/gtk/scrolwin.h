@@ -20,7 +20,10 @@ class WXDLLIMPEXP_CORE wxScrollHelper : public wxScrollHelperBase
     typedef wxScrollHelperBase base_type;
 public:
     // default ctor doesn't do anything
-    wxScrollHelper(wxWindow *win) : wxScrollHelperBase(win) { }
+    wxScrollHelper(wxWindow *win) : wxScrollHelperBase(win)
+    {
+        m_win->SetScrollHelper(this);
+    }
 
     // implement the base class methods
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
