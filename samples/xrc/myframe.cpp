@@ -449,3 +449,61 @@ void MyFrame::OnInfoBarShowMessage(wxCommandEvent& event)
 #endif
 
 }
+
+// Define the wxVListBox subclass here
+
+#include <wx/vlbox.h>
+
+class wxVListBoxDerived : public wxVListBox
+{
+public:
+    // the derived class must implement this function to actually draw the item
+    // with the given index on the provided DC
+    virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const override;
+
+    // the derived class must implement this method to return the height of the
+    // specified item
+    virtual wxCoord OnMeasureItem(size_t n) const override;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxVListBoxDerived);
+    wxDECLARE_EVENT_TABLE();
+
+    /* XRC requires default constructor, and Create() is not
+        virtual, so initialization must be done here */
+    void OnCreate(wxWindowCreateEvent& event);
+
+    wxString GetItem(size_t n) const;
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxVListBoxDerived, wxVListBox);
+
+wxBEGIN_EVENT_TABLE(wxVListBoxDerived, wxVListBox)
+    EVT_WINDOW_CREATE(wxVListBoxDerived::OnCreate)
+wxEND_EVENT_TABLE()
+
+void wxVListBoxDerived::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
+{
+    dc.DrawText(GetItem(n), rect.GetLeftTop());
+}
+
+wxCoord wxVListBoxDerived::OnMeasureItem(size_t n) const
+{
+    // safe to const_cast since we're just using GetTextExtent()
+    wxInfoDC dc(const_cast<wxVListBoxDerived*>(this));
+    return dc.GetTextExtent(GetItem(n)).y;
+}
+
+/* XRC requires default constructor, and Create() is not
+    virtual, so initialization must be done here */
+void wxVListBoxDerived::OnCreate(wxWindowCreateEvent& event)
+{
+    SetItemCount(10);
+
+    event.Skip();
+}
+
+wxString wxVListBoxDerived::GetItem(size_t n) const
+{
+    return wxString::Format("Item %zu", n);
+}

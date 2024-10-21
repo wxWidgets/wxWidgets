@@ -1497,6 +1497,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_tree.obj \
 	$(OBJS)\xrcdll_xh_treebk.obj \
 	$(OBJS)\xrcdll_xh_unkwn.obj \
+	$(OBJS)\xrcdll_xh_vlistbox.obj \
 	$(OBJS)\xrcdll_xh_wizrd.obj \
 	$(OBJS)\xrcdll_xmlres.obj \
 	$(OBJS)\xrcdll_xmlrsall.obj \
@@ -1582,6 +1583,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_tree.obj \
 	$(OBJS)\xrclib_xh_treebk.obj \
 	$(OBJS)\xrclib_xh_unkwn.obj \
+	$(OBJS)\xrclib_xh_vlistbox.obj \
 	$(OBJS)\xrclib_xh_wizrd.obj \
 	$(OBJS)\xrclib_xmlres.obj \
 	$(OBJS)\xrclib_xmlrsall.obj \
@@ -2182,6 +2184,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_tree.obj \
 	$(OBJS)\monodll_xh_treebk.obj \
 	$(OBJS)\monodll_xh_unkwn.obj \
+	$(OBJS)\monodll_xh_vlistbox.obj \
 	$(OBJS)\monodll_xh_wizrd.obj \
 	$(OBJS)\monodll_xmlres.obj \
 	$(OBJS)\monodll_xmlrsall.obj \
@@ -3037,6 +3040,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_tree.obj \
 	$(OBJS)\monolib_xh_treebk.obj \
 	$(OBJS)\monolib_xh_unkwn.obj \
+	$(OBJS)\monolib_xh_vlistbox.obj \
 	$(OBJS)\monolib_xh_wizrd.obj \
 	$(OBJS)\monolib_xmlres.obj \
 	$(OBJS)\monolib_xmlrsall.obj \
@@ -8520,6 +8524,9 @@ $(OBJS)\monodll_xh_treebk.obj: ..\..\src\xrc\xh_treebk.cpp
 $(OBJS)\monodll_xh_unkwn.obj: ..\..\src\xrc\xh_unkwn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_unkwn.cpp
 
+$(OBJS)\monodll_xh_vlistbox.obj: ..\..\src\xrc\xh_vlistbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_vlistbox.cpp
+
 $(OBJS)\monodll_xh_wizrd.obj: ..\..\src\xrc\xh_wizrd.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_wizrd.cpp
 
@@ -11114,6 +11121,9 @@ $(OBJS)\monolib_xh_treebk.obj: ..\..\src\xrc\xh_treebk.cpp
 
 $(OBJS)\monolib_xh_unkwn.obj: ..\..\src\xrc\xh_unkwn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_unkwn.cpp
+
+$(OBJS)\monolib_xh_vlistbox.obj: ..\..\src\xrc\xh_vlistbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_vlistbox.cpp
 
 $(OBJS)\monolib_xh_wizrd.obj: ..\..\src\xrc\xh_wizrd.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_wizrd.cpp
@@ -17472,6 +17482,9 @@ $(OBJS)\xrcdll_xh_treebk.obj: ..\..\src\xrc\xh_treebk.cpp
 $(OBJS)\xrcdll_xh_unkwn.obj: ..\..\src\xrc\xh_unkwn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_unkwn.cpp
 
+$(OBJS)\xrcdll_xh_vlistbox.obj: ..\..\src\xrc\xh_vlistbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_vlistbox.cpp
+
 $(OBJS)\xrcdll_xh_wizrd.obj: ..\..\src\xrc\xh_wizrd.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_wizrd.cpp
 
@@ -17681,6 +17694,9 @@ $(OBJS)\xrclib_xh_treebk.obj: ..\..\src\xrc\xh_treebk.cpp
 
 $(OBJS)\xrclib_xh_unkwn.obj: ..\..\src\xrc\xh_unkwn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_unkwn.cpp
+
+$(OBJS)\xrclib_xh_vlistbox.obj: ..\..\src\xrc\xh_vlistbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_vlistbox.cpp
 
 $(OBJS)\xrclib_xh_wizrd.obj: ..\..\src\xrc\xh_wizrd.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_wizrd.cpp
