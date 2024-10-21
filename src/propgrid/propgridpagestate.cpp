@@ -1439,10 +1439,15 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
         if ( !origFrozen ) m_pPropGrid->Freeze();
     }
 
-    wxPropertyCategory* use_category = (wxPropertyCategory*)defaultCategory;
+    const auto asCategory = [](wxPGProperty* p) -> wxPropertyCategory*
+    {
+        return p && p->IsCategory() ? static_cast<wxPropertyCategory*>(p) : nullptr;
+    };
+
+    wxPropertyCategory* use_category = asCategory(defaultCategory);
 
     if ( !use_category )
-        use_category = (wxPropertyCategory*)m_properties;
+        use_category = asCategory(m_properties);
 
     // Let's iterate over the list of variants.
     int numSpecialEntries = 0;
