@@ -20,6 +20,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *r
                   int flags )
     : wxDataViewColumnBase( renderer, model_column )
 {
+    m_renderer->SetOwner( this );
 }
 
 wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRenderer *renderer,
@@ -28,6 +29,7 @@ wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRend
                   int flags )
     : wxDataViewColumnBase( bitmap, renderer, model_column )
 {
+    m_renderer->SetOwner( this );
 }
 
 void wxDataViewColumn::SetTitle( const wxString &title )

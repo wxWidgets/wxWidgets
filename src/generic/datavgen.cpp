@@ -183,6 +183,8 @@ wxTextCtrl *CreateEditorTextCtrl(wxWindow *parent, const wxRect& labelRect, cons
 
 void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
 {
+    m_renderer->SetOwner(this);
+
     m_width =
     m_manuallySetWidth = width;
     m_minWidth = 0;

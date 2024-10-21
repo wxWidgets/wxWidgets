@@ -1211,15 +1211,6 @@ bool wxDataViewEditorCtrlEvtHandler::IsEditorSubControl(wxWindow* win) const
 // wxDataViewColumnBase
 // ---------------------------------------------------------
 
-void wxDataViewColumnBase::Init(wxDataViewRenderer *renderer,
-                                unsigned int model_column)
-{
-    m_renderer = renderer;
-    m_model_column = model_column;
-    m_owner = nullptr;
-    m_renderer->SetOwner( (wxDataViewColumn*) this );
-}
-
 wxDataViewColumnBase::~wxDataViewColumnBase()
 {
     delete m_renderer;
