@@ -964,7 +964,7 @@ bool wxSizer::Detach( wxSizer *sizer )
     return false;
 }
 
-bool wxSizer::Detach( wxWindow *window )
+bool wxSizer::Detach( wxWindowBase *window )
 {
     wxASSERT_MSG( window, wxT("Detaching null window") );
 
@@ -2901,7 +2901,7 @@ bool wxStaticBoxSizer::AreAnyItemsShown() const
     return m_staticBox->IsShown();
 }
 
-bool wxStaticBoxSizer::Detach( wxWindow *window )
+bool wxStaticBoxSizer::Detach( wxWindowBase *window )
 {
     // avoid deleting m_staticBox in our dtor if it's being detached from the
     // sizer (which can happen because it's being already destroyed for

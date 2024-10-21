@@ -613,7 +613,7 @@ public:
     virtual bool Remove( wxSizer *sizer );
     virtual bool Remove( int index );
 
-    virtual bool Detach( wxWindow *window );
+    virtual bool Detach( wxWindowBase *window );
     virtual bool Detach( wxSizer *sizer );
     virtual bool Detach( int index );
 
@@ -1070,7 +1070,7 @@ public:
     virtual void ShowItems (bool show) override;
     virtual bool AreAnyItemsShown() const override;
 
-    virtual bool Detach( wxWindow *window ) override;
+    virtual bool Detach( wxWindowBase *window ) override;
     virtual bool Detach( wxSizer *sizer ) override { return wxBoxSizer::Detach(sizer); }
     virtual bool Detach( int index ) override { return wxBoxSizer::Detach(index); }
 
