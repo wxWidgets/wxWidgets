@@ -1695,6 +1695,22 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 nmtbcd->clrHighlightHotTrack = wxSysColourToRGB(wxSYS_COLOUR_HOTLIGHT);
 
                 *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK;
+
+                // Draw custom checked button background when it is not hot:
+                // by default it is drawn in a light colour not appropriate for
+                // the dark mode under Windows 11.
+                if ( (nmtbcd->nmcd.uItemState &
+                        (CDIS_CHECKED | CDIS_HOT)) == CDIS_CHECKED )
+                {
+                    const wxColor color =
+                        wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT)
+                            .ChangeLightness(110);
+
+                    AutoHBRUSH br(wxColourToRGB(color));
+                    ::FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
+                    *result |= TBCDRF_NOBACKGROUND;
+                }
+
                 return true;
         }
 
