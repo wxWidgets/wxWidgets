@@ -1694,6 +1694,15 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 nmtbcd->clrTextHighlight = wxColourToRGB(GetForegroundColour());
                 nmtbcd->clrHighlightHotTrack = wxSysColourToRGB(wxSYS_COLOUR_HOTLIGHT);
 
+                if (nmtbcd->nmcd.uItemState & CDIS_CHECKED) {
+                    wxColor color = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT).ChangeLightness(110);
+                    HBRUSH br = CreateSolidBrush(wxColourToRGB(color));
+                    FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
+                    DeleteObject(br);
+                    *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK | TBCDRF_NOBACKGROUND;
+                    return true;
+                }
+
                 *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK;
                 return true;
         }
