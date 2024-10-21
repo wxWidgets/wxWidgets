@@ -1265,13 +1265,12 @@ bool wxPGComboBoxEditor::OnEvent( wxPropertyGrid* propGrid,
                                   wxWindow* ctrl,
                                   wxEvent& event ) const
 {
-    wxOwnerDrawnComboBox* cb = nullptr;
     wxWindow* textCtrl = nullptr;
 
     if ( ctrl )
     {
-        cb = (wxOwnerDrawnComboBox*)ctrl;
-        textCtrl = cb->GetTextCtrl();
+        if ( auto cb = wxDynamicCast(ctrl, wxOwnerDrawnComboBox) )
+            textCtrl = cb->GetTextCtrl();
     }
 
     if ( wxPGTextCtrlEditor::OnTextCtrlEvent(propGrid,property,textCtrl,event) )
