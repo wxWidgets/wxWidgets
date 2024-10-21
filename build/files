@@ -321,7 +321,6 @@ QT_SRC=
     src/generic/fdrepdlg.cpp
     src/generic/filepickerg.cpp
     src/generic/fontpickerg.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/paletteg.cpp
     src/generic/prntdlgg.cpp
@@ -1300,7 +1299,6 @@ GTK_WIN32_HDR =
     wx/unix/fontutil.h
 GTK_LOWLEVEL_SRC =
     $(GTK_PLATFORM_SRC)
-    src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/gtk/app.cpp
     src/gtk/assertdlg_gtk.cpp
@@ -1518,7 +1516,6 @@ X11_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
     src/unix/displayx11.cpp
     src/unix/taskbarx11.cpp
-    src/generic/icon.cpp
     src/generic/textmeasure.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1896,7 +1893,6 @@ DFB_LOWLEVEL_SRC =
     src/common/fontmgrcmn.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
-    src/generic/icon.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -2042,7 +2038,6 @@ OSX_COMMON_SRC =
     src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp

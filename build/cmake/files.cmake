@@ -336,7 +336,6 @@ set(QT_SRC
     src/generic/fontpickerg.cpp
     src/qt/frame.cpp
     src/qt/gauge.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/qt/listbox.cpp
     src/qt/listctrl.cpp
@@ -1288,7 +1287,6 @@ set(GTK_WIN32_HDR
 
 set(GTK_LOWLEVEL_SRC
     ${GTK_PLATFORM_SRC}
-    src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/gtk/app.cpp
     src/gtk/assertdlg_gtk.cpp
@@ -1510,7 +1508,6 @@ set(GTK2_HDR
 
 set(X11_LOWLEVEL_SRC
     ${XWIN_LOWLEVEL_SRC}
-    src/generic/icon.cpp
     src/generic/textmeasure.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1906,7 +1903,6 @@ set(DFB_LOWLEVEL_SRC
     src/common/fontmgrcmn.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
-    src/generic/icon.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -2060,7 +2056,6 @@ set(OSX_COMMON_SRC
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
-    src/generic/icon.cpp
     #TODO: </if>
     src/osx/statbmp_osx.cpp
     src/generic/imaglist.cpp

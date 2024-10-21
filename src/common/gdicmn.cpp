@@ -60,6 +60,11 @@ const wxPoint wxDefaultPosition(wxDefaultCoord, wxDefaultCoord);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxPointList)
 
+// If wxIcon is really a different class (which is currently only the case in
+// wxMSW), this is done in its implementation file instead.
+#ifdef wxICON_IS_BITMAP
+wxIMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap);
+#endif
 
 #if wxUSE_EXTENDED_RTTI
 
