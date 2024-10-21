@@ -34,9 +34,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
 class WXDLLIMPEXP_CORE wxPickerBase : public wxNavigationEnabled<wxControl>
 {
 public:
-    // ctor: text is the associated text control
-    wxPickerBase() : m_text(nullptr), m_picker(nullptr), m_sizer(nullptr)
-        { }
+    wxPickerBase() = default;
     virtual ~wxPickerBase() = default;
 
 
@@ -160,9 +158,9 @@ protected:
     void PostCreation();
 
 protected:
-    wxTextCtrl *m_text;     // can be null
-    wxControl *m_picker;
-    wxBoxSizer *m_sizer;
+    wxTextCtrl *m_text = nullptr;     // can be null
+    wxControl *m_picker = nullptr;
+    wxBoxSizer *m_sizer = nullptr;
 
 private:
     // Common implementation of Set{Text,Picker}CtrlGrowable().
