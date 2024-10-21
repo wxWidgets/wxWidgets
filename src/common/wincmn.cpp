@@ -506,7 +506,7 @@ wxWindowBase::~wxWindowBase()
 #endif // wxUSE_CONSTRAINTS
 
     if ( m_containingSizer )
-        m_containingSizer->Detach( (wxWindow*)this );
+        m_containingSizer->Detach(this);
 
     delete m_windowSizer;
 

@@ -186,6 +186,11 @@ Changes in behaviour which may result in build errors
   override these functions must be updated to use the new argument type too.
   Simply replacing wxDC with wxReadOnlyDC should be sufficient.
 
+- wxSizer::Detach() takes wxWindowBase pointer now instead of wxWindow.
+  This only matters if you override this virtual function in your own classes
+  deriving from wxSizer, please change the function in the derived class to
+  take wxWindowBase pointer too in this case.
+
 
 3.3.0: (released 2022-??-??)
 ----------------------------
