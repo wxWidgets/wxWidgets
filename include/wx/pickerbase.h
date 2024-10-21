@@ -92,10 +92,16 @@ public:     // public API
     wxControl *GetPickerCtrl()
         { return m_picker; }
 
+    // It's not clear why did these functions ever existed, but they can't be
+    // used, both controls are, and can be, managed only by the picker itself.
+#ifdef WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("must not be used, text control is managed internally")
     void SetTextCtrl(wxTextCtrl* text)
         { m_text = text; }
+    wxDEPRECATED_MSG("must not be used, picker control is managed internally")
     void SetPickerCtrl(wxControl* picker)
         { m_picker = picker; }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     // methods that derived class must/may override
     virtual void UpdatePickerFromTextCtrl() = 0;
