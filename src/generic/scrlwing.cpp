@@ -339,8 +339,6 @@ wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
 
     m_handler = nullptr;
 
-    m_win->SetScrollHelper(static_cast<wxScrollHelper *>(this));
-
     // by default, the associated window is also the target window
     DoSetTargetWindow(win);
 }
@@ -1207,6 +1205,8 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
 wxScrollHelper::wxScrollHelper(wxWindow *winToScroll)
     : wxScrollHelperBase(winToScroll)
 {
+    m_win->SetScrollHelper(this);
+
     m_xVisibility =
     m_yVisibility = wxSHOW_SB_DEFAULT;
     m_adjustScrollFlagReentrancy = 0;
