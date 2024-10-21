@@ -158,9 +158,6 @@ public:
     void SetTextCtrlProportion(int prop);
 
 
-    void SetTextCtrl(wxTextCtrl* text);
-    void SetPickerCtrl(wxControl* picker);
-
     virtual void UpdatePickerFromTextCtrl() = 0;
     virtual void UpdateTextCtrlFromPicker() = 0;
 
