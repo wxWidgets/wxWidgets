@@ -3240,6 +3240,8 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
                                     wxAlignment align, int flags )
     : wxDataViewColumnBase( cell, model_column )
 {
+    m_renderer->SetOwner( this );
+
     Init( align, flags, width );
 
     SetTitle( title );
@@ -3250,6 +3252,8 @@ wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRend
                                     wxAlignment align, int flags )
     : wxDataViewColumnBase( bitmap, cell, model_column )
 {
+    m_renderer->SetOwner( this );
+
     Init( align, flags, width );
 
     SetBitmap( bitmap );
