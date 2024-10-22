@@ -284,6 +284,7 @@ wxMSW:
 - Fix background colour of owner-drawn wxListBox items (#24917).
 - Fix handling pending events without an event loop (Stefan Battmer, #18109).
 - Fix indent of imageless wxTreeCtrl in high DPI (taler21, #24941).
+- Fix possible crash during session termination (#24903).
 
 wxOSX:
 
