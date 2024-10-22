@@ -1700,7 +1700,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                     HBRUSH br = CreateSolidBrush(wxColourToRGB(color));
                     FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
                     DeleteObject(br);
-                    *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK | TBCDRF_NOBACKGROUND;
+                    *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK | TBCDRF_NOBACKGROUND | CDRF_NOTIFYPOSTPAINT;
                     return true;
                 }
 
