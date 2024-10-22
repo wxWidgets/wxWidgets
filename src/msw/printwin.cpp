@@ -204,7 +204,13 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     int totalPageCnt = 0;
     for (const wxPrintPageRange& range : pageRanges)
     {
-        totalPageCnt += range.toPage - range.fromPage + 1;
+        for (int pn = range.fromPage; pn <= range.toPage; pn++)
+        {
+            if (printout->HasPage(pn))
+            {
+                totalPageCnt += 1;
+            }
+        }
     }
 
     // The dc we get from the PrintDialog will do multiple copies without help
@@ -235,14 +241,14 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
         for (const wxPrintPageRange& range : pageRanges)
         {
-            printCnt += 1;
-
             for (int pn = range.fromPage; pn <= range.toPage; pn++)
             {
                 if (!printout->HasPage(pn))
                 {
                     continue;
                 }
+
+                printCnt += 1;
 
                 win->SetProgress(printCnt, totalPageCnt, copyCount, maxCopyCount);
 
