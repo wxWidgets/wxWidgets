@@ -78,8 +78,9 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     m_text = new wxStaticText(this, wxID_ANY, wxString(),
                               wxDefaultPosition, wxDefaultSize,
                               wxST_ELLIPSIZE_MIDDLE);
+
     if(!m_hasFgCol)
-      m_text->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+        m_text->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
 
     m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
     m_button->SetToolTip(_("Hide this notification message."));
