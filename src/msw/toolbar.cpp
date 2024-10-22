@@ -1694,8 +1694,50 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 nmtbcd->clrTextHighlight = wxColourToRGB(GetForegroundColour());
                 nmtbcd->clrHighlightHotTrack = wxSysColourToRGB(wxSYS_COLOUR_HOTLIGHT);
 
-                *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK;
+                *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK | CDRF_NOTIFYPOSTPAINT;
                 return true;
+
+            case CDDS_ITEMPOSTPAINT: {
+                // custom draw the drop-down arrow here, as it is always black
+                TBBUTTONINFO bi = { 0 };
+                bi.cbSize = sizeof(TBBUTTONINFO);
+                bi.dwMask = TBIF_STYLE | TBIF_COMMAND;
+                int itemIndex = (int) ::SendMessage(GetHwnd(), TB_GETBUTTONINFO, (WPARAM)nmtbcd->nmcd.dwItemSpec, (LPARAM)&bi);
+                if (itemIndex >= 0 && bi.fsStyle & TBSTYLE_DROPDOWN) {
+                    RECT ddrc = { 0 };
+                    ::SendMessage(GetHwnd(), TB_GETITEMDROPDOWNRECT, (WPARAM)itemIndex, (LPARAM)&ddrc);
+
+                    if (nmtbcd->nmcd.uItemState & CDIS_HOT) {
+                        HBRUSH bgBrush = CreateSolidBrush(wxColourToRGB(GetBackgroundColour().ChangeLightness(110)));
+                        ::FillRect(nmtbcd->nmcd.hdc, &ddrc, bgBrush);
+                        DeleteObject(bgBrush);
+                    }
+                    else {
+                        HBRUSH bgBrush = CreateSolidBrush(wxColourToRGB(GetBackgroundColour()));
+                        ::FillRect(nmtbcd->nmcd.hdc, &ddrc, bgBrush);
+                        DeleteObject(bgBrush);
+                    }
+
+                    int arrowCenterX = (ddrc.left + ddrc.right) / 2;
+                    int arrowCenterY = (ddrc.top + ddrc.bottom) / 2;
+                    POINT ptsArrow[3] = {
+                        { arrowCenterX - FromDIP(3), arrowCenterY - FromDIP(2)},
+                        { arrowCenterX + FromDIP(3), arrowCenterY - FromDIP(2) },
+                        { arrowCenterX, arrowCenterY + FromDIP(2) }
+                    };
+
+                    HBRUSH fgBrush = CreateSolidBrush(wxColourToRGB(GetForegroundColour()));
+                    HPEN hPen = CreatePen(PS_SOLID, 1, wxColourToRGB(GetForegroundColour()));
+                    SelectObject(nmtbcd->nmcd.hdc, hPen);
+                    SelectObject(nmtbcd->nmcd.hdc, fgBrush);
+                    Polygon(nmtbcd->nmcd.hdc, ptsArrow, 3);
+                    DeleteObject(hPen);
+                    DeleteObject(fgBrush);
+                }
+
+                *result = CDRF_DODEFAULT;
+                return true;
+            }
         }
 
         return false;
