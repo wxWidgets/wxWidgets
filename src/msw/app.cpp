@@ -879,7 +879,7 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
     // destroyed: this will result in a leak of a HWND, of course, but who
     // cares when the process is being killed anyhow
     if ( !wxTopLevelWindows.empty() )
-        wxTopLevelWindows[0]->SetHWND(0);
+        wxTopLevelWindows[0]->DissociateHandle();
 
     // Destroy all the remaining TLWs before calling OnExit() to have the same
     // sequence of events in this case as in case of the normal shutdown,
