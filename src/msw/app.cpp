@@ -890,6 +890,10 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 
     const int rc = OnExit();
 
+    // Skip unregistering windows classes: this is not really necessary and
+    // would result in an error because we may still have an open window.
+    gs_regClassesInfo.clear();
+
     wxEntryCleanup();
 
     // calling exit() instead of ExitProcess() or not doing anything at all and
