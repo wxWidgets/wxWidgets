@@ -1699,8 +1699,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 
             case CDDS_ITEMPOSTPAINT: {
                 // custom draw the drop-down arrow here, as it is always black
-                TBBUTTONINFO bi = { 0 };
-                bi.cbSize = sizeof(TBBUTTONINFO);
+                WinStruct<TBBUTTONINFO> bi;
                 bi.dwMask = TBIF_STYLE | TBIF_COMMAND;
                 int itemIndex = (int) ::SendMessage(GetHwnd(), TB_GETBUTTONINFO, (WPARAM)nmtbcd->nmcd.dwItemSpec, (LPARAM)&bi);
                 if (itemIndex >= 0 && bi.fsStyle & TBSTYLE_DROPDOWN) {
