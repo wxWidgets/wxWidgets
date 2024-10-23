@@ -271,6 +271,7 @@ wxMSW:
 - Improve print preview in high DPI (taler21, #24815).
 - Fix position of the icons in the printout (#24673).
 - Fix events generated when toast-based notifications are dismissed (#24320).
+- Fix height of wxOwnerDrawnComboBox popup in high DPI (Maarten Bent, #24850).
 
 wxOSX:
 
