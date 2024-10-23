@@ -188,6 +188,14 @@ int gs_modalEntryWindowCount = 0;
 // Indicates whether we are currently processing WM_CAPTURECHANGED message.
 bool gs_insideCaptureChanged = false;
 
+// Set to true once we receive WM_ENDSESSION: after this happens we know that
+// the process will shut down, so we try to do as little as possible and
+// notably don't delete any windows as this is not only useless (everything
+// will be torn down by the OS anyhow) but also dangerous as it could lead to
+// getting another WM_ENDSESSION when dispatching messages happening during
+// their destruction.
+bool gs_gotEndSession = false;
+
 } // anonymous namespace
 
 #ifdef WM_GESTURE
@@ -4351,9 +4359,14 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
     if ( !endSession )
         return false;
 
-    // only send once
-    if ( this != wxApp::GetMainTopWindow() )
+    if ( gs_gotEndSession )
+    {
+        // Never generate wxEVT_END_SESSION twice, this can only result in
+        // trouble, such as trying to delete the already deleted window.
         return false;
+    }
+
+    gs_gotEndSession = true;
 
     wxCloseEvent event(wxEVT_END_SESSION, wxID_ANY);
     event.SetEventObject(wxTheApp);
