@@ -85,10 +85,12 @@ namespace
 
 #if wxUSE_LOG_TRACE
 
+#if 0
 void LogTraceArray(const char* prefix, const wxArrayString& arr)
 {
     wxLogTrace(TRACE_I18N, "%s: [%s]", prefix, wxJoin(arr, ','));
 }
+#endif
 
 void LogTraceArray(const char *prefix, const wxVector<wxString>& arr)
 {
@@ -116,56 +118,12 @@ void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 
 #endif // wxUSE_LOG_TRACE/!wxUSE_LOG_TRACE
 
-wxString GetPreferredUILanguage(const wxArrayString& available)
+wxString GetPreferredUILanguage(const wxVector<wxString>& available)
 {
-    wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
+    const wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
     LogTraceArray(" - system preferred languages", preferred);
 
-    wxString langNoMatchRegion;
-    for ( wxVector<wxString>::const_iterator j = preferred.begin();
-          j != preferred.end();
-          ++j )
-    {
-        // try exact match first:
-        if (available.Index(*j, /*bCase=*/false) != wxNOT_FOUND)
-            return *j;
-
-        // try looking up as a POSIX locale:
-        wxLocaleIdent localeId = wxLocaleIdent::FromTag(*j);
-        wxString lang = localeId.GetTag(wxLOCALE_TAGTYPE_POSIX);
-
-        if (available.Index(lang, /*bCase=*/false) != wxNOT_FOUND)
-            return lang;
-
-        size_t pos = lang.find('_');
-        if (pos != wxString::npos)
-        {
-            lang = lang.substr(0, pos);
-            if (available.Index(lang, /*bCase=*/false) != wxNOT_FOUND)
-                return lang;
-        }
-
-        if (langNoMatchRegion.empty())
-        {
-            // lang now holds only the language
-            // check for an available language with potentially non-matching region
-            for ( wxArrayString::const_iterator k = available.begin();
-                  k != available.end();
-                  ++k )
-            {
-                if ((*k).Lower().StartsWith(lang.Lower()))
-                {
-                    langNoMatchRegion = *k;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!langNoMatchRegion.empty())
-        return langNoMatchRegion;
-
-    return wxString();
+    return wxLocaleIdent::GetBestMatch(preferred, available);
 }
 
 } // anonymous namespace
@@ -1495,9 +1453,7 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
         return lang;
     }
 
-    wxLogTrace(TRACE_I18N, "choosing best language for domain '%s'", domain);
-    LogTraceArray(" - available translations", available);
-    const wxString lang = GetPreferredUILanguage(available);
+    const wxString lang = GetPreferredUILanguage(available.AsVector());
     wxLogTrace(TRACE_I18N, " => using language '%s'", lang);
     return lang;
 }

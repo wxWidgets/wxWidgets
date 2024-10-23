@@ -41,8 +41,8 @@ ar-TN|Arabic (Tunisia)|Arabic|Tunisia|Arab;|TUN|TND|1|1c01|العربية (تو�
 ar-YE|Arabic (Yemen)|Arabic|Yemen|Arab;|YEM|YER|1|2401|العربية (اليمن)|العربية|اليمن
 arn|Mapuche|Mapuche|Chile|Latn;|CHL|CLP|0|047a|Mapudungun|Mapudungun|Chile
 arn-CL|Mapuche (Chile)|Mapuche|Chile|Latn;|CHL|CLP|0|047a|Mapudungun (Chile)|Mapudungun|Chile
-as|Assamese|Assamese|India|Beng;|IND|INR|0|044d|অসমীয়া|অসমীয়া|ভাৰত
-as-IN|Assamese (India)|Assamese|India|Beng;|IND|INR|0|044d|অসমীয়া (ভাৰত)|অসমীয়া|ভাৰত
+as|Assamese|Assamese|India|Beng;|IND|INR|0|044d|অসমীয়া|অসমীয়া|ভাৰত
+as-IN|Assamese (India)|Assamese|India|Beng;|IND|INR|0|044d|অসমীয়া (ভাৰত)|অসমীয়া|ভাৰত
 asa|Asu|Asu|Tanzania|Latn;|TZA|TZS|0|1000|Kipare|Kipare|Tadhania
 asa-TZ|Asu (Tanzania)|Asu|Tanzania|Latn;|TZA|TZS|0|1000|Kipare (Tadhania)|Kipare|Tadhania
 ast|Asturian|Asturian|Spain|Latn;|ESP|EUR|0|1000|asturianu|asturianu|España
@@ -56,8 +56,8 @@ ba|Bashkir|Bashkir|Russia|Cyrl;|RUS|RUB|0|046d|Башҡорт|Башҡорт|Р�
 ba-RU|Bashkir (Russia)|Bashkir|Russia|Cyrl;|RUS|RUB|0|046d|Башҡорт (Рәсәй)|Башҡорт|Рәсәй
 bas|Basaa|Basaa|Cameroon|Latn;|CMR|XAF|0|1000|Ɓàsàa|Ɓàsàa|Kàmɛ̀rûn
 bas-CM|Basaa (Cameroon)|Basaa|Cameroon|Latn;|CMR|XAF|0|1000|Ɓàsàa (Kàmɛ̀rûn)|Ɓàsàa|Kàmɛ̀rûn
-be|Belarusian|Belarusian|Belarus|Cyrl;|BLR|BYN|0|0423|Беларуская|Беларуская|Беларусь
-be-BY|Belarusian (Belarus)|Belarusian|Belarus|Cyrl;|BLR|BYN|0|0423|Беларуская (Беларусь)|Беларуская|Беларусь
+be|Belarusian|Belarusian|Belarus|Cyrl;|BLR|BYN|0|0423|беларуская|беларуская|Беларусь
+be-BY|Belarusian (Belarus)|Belarusian|Belarus|Cyrl;|BLR|BYN|0|0423|беларуская (Беларусь)|беларуская|Беларусь
 bem|Bemba|Bemba|Zambia|Latn;|ZMB|ZMW|0|1000|Ichibemba|Ichibemba|Zambia
 bem-ZM|Bemba (Zambia)|Bemba|Zambia|Latn;|ZMB|ZMW|0|1000|Ichibemba (Zambia)|Ichibemba|Zambia
 bez|Bena|Bena|Tanzania|Latn;|TZA|TZS|0|1000|Hibena|Hibena|Hutanzania
@@ -72,8 +72,8 @@ bm-Latn-ML|Bamanankan (Latin, Mali)|Bamanankan (Latin)|Mali|Latn;|MLI|XOF|0|1000
 bn|Bangla|Bangla|Bangladesh|Beng;|BGD|BDT|0|0845|বাংলা|বাংলা|বাংলাদেশ
 bn-BD|Bangla (Bangladesh)|Bangla|Bangladesh|Beng;|BGD|BDT|0|0845|বাংলা (বাংলাদেশ)|বাংলা|বাংলাদেশ
 bn-IN|Bengali (India)|Bengali|India|Beng;|IND|INR|0|0445|বাংলা (ভারত)|বাংলা|ভারত
-bo|Tibetan|Tibetan|China|Tibt;|CHN|CNY|0|0451|བོད་ཡིག|བོད་ཡིག|ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།
-bo-CN|Tibetan (China)|Tibetan|China|Tibt;|CHN|CNY|0|0451|བོད་ཡིག (ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།)|བོད་ཡིག|ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།
+bo|Tibetan|Tibetan|China|Tibt;|CHN|CNY|0|0451|བོད་སྐད་|བོད་སྐད་|ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།
+bo-CN|Tibetan (China)|Tibetan|China|Tibt;|CHN|CNY|0|0451|བོད་སྐད་ (རྒྱ་ནག)|བོད་སྐད་|ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།
 bo-IN|Tibetan (India)|Tibetan|India|Tibt;|IND|INR|0|1000|བོད་སྐད་ (རྒྱ་གར་)|བོད་སྐད་|རྒྱ་གར་
 br|Breton|Breton|France|Latn;|FRA|EUR|0|047e|brezhoneg|brezhoneg|Frañs
 br-FR|Breton (France)|Breton|France|Latn;|FRA|EUR|0|047e|brezhoneg (Frañs)|brezhoneg|Frañs
@@ -106,7 +106,7 @@ cgg-UG|Chiga (Uganda)|Chiga|Uganda|Latn;|UGA|UGX|0|1000|Rukiga (Uganda)|Rukiga|U
 chr|Cherokee|Cherokee|United States|Cher;|USA|USD|0|045c|ᏣᎳᎩ|ᏣᎳᎩ|ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ
 chr-Cher|Cherokee|Cherokee|United States|Cher;|USA|USD|0|045c|ᏣᎳᎩ|ᏣᎳᎩ|ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ
 chr-Cher-US|Cherokee (Cherokee, United States)|Cherokee|United States|Cher;|USA|USD|0|045c|ᏣᎳᎩ (ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ)|ᏣᎳᎩ|ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ
-co|Corsican|Corsican|France|Latn;|FRA|EUR|0|0483|Corsu|Corsu|Francia
+co|Corsican|Corsican|France|Latn;|FRA|EUR|0|0483|corsu|corsu|Francia
 co-FR|Corsican (France)|Corsican|France|Latn;|FRA|EUR|0|0483|Corsu (Francia)|Corsu|Francia
 cs|Czech|Czech|Czechia|Latn;|CZE|CZK|0|0405|čeština|čeština|Česko
 cs-CZ|Czech (Czechia)|Czech|Czechia|Latn;|CZE|CZK|0|0405|čeština (Česko)|čeština|Česko
@@ -293,8 +293,9 @@ eu-ES|Basque (Basque)|Basque|Spain|Latn;|ESP|EUR|0|042d|euskara (euskara)|euskar
 ewo|Ewondo|Ewondo|Cameroon|Latn;|CMR|XAF|0|1000|ewondo|ewondo|Kamərún
 ewo-CM|Ewondo (Cameroon)|Ewondo|Cameroon|Latn;|CMR|XAF|0|1000|ewondo (Kamərún)|ewondo|Kamərún
 fa|Persian|Persian|Iran|Arab;|IRN|IRR|1|0429|فارسی|فارسی|ایران
+fa-AF|Persian (Afghanistan)|Persian|Afghanistan|Arab;|AFG|AFN|1|048c|فارسی (افغانستان)|فارسی|افغانستان
 fa-IR|Persian (Iran)|Persian|Iran|Arab;|IRN|IRR|1|0429|فارسی (ایران)|فارسی|ایران
-ff|Fulah (Latin)|Fulah (Latin)|Senegal|Latn;|SEN|XOF|0|0867|Pulaar|Pulaar|Senegaal
+ff|Fulah|Fulah|Senegal|Latn;|SEN|XOF|0|0867|Pulaar|Pulaar|Senegaal
 ff-Adlm|Fulah (Adlam)|Fulah (Adlam)|Guinea|Adlm;|GIN|GNF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃)|𞤆𞤵𞤤𞤢𞤪|𞤘𞤭𞤲𞤫
 ff-Adlm-BF|Fulah (Adlam, Burkina Faso)|Fulah (Adlam)|Burkina Faso|Adlm;|BFA|XOF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤄𞤵𞤪𞤳𞤭𞤲𞤢 𞤊𞤢𞤧𞤮𞥅)|𞤆𞤵𞤤𞤢𞤪|𞤄𞤵𞤪𞤳𞤭𞤲𞤢 𞤊𞤢𞤧𞤮𞥅
 ff-Adlm-CM|Fulah (Adlam, Cameroon)|Fulah (Adlam)|Cameroon|Adlm;|CMR|XAF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤑𞤢𞤥𞤢𞤪𞤵𞥅𞤲)|𞤆𞤵𞤤𞤢𞤪|𞤑𞤢𞤥𞤢𞤪𞤵𞥅𞤲
@@ -410,15 +411,15 @@ he|Hebrew|Hebrew|Israel|Hebr;|ISR|ILS|1|040d|עברית|עברית|ישראל
 he-IL|Hebrew (Israel)|Hebrew|Israel|Hebr;|ISR|ILS|1|040d|עברית (ישראל)|עברית|ישראל
 hi|Hindi|Hindi|India|Deva;|IND|INR|0|0439|हिन्दी|हिन्दी|भारत
 hi-IN|Hindi (India)|Hindi|India|Deva;|IND|INR|0|0439|हिन्दी (भारत)|हिन्दी|भारत
-hr|Croatian|Croatian|Croatia|Latn;|HRV|HRK|0|041a|hrvatski|hrvatski|Hrvatska
+hr|Croatian|Croatian|Croatia|Latn;|HRV|EUR|0|041a|hrvatski|hrvatski|Hrvatska
 hr-BA|Croatian (Bosnia & Herzegovina)|Croatian|Bosnia & Herzegovina|Latn;|BIH|BAM|0|101a|hrvatski (Bosna i Hercegovina)|hrvatski|Bosna i Hercegovina
-hr-HR|Croatian (Croatia)|Croatian|Croatia|Latn;|HRV|HRK|0|041a|hrvatski (Hrvatska)|hrvatski|Hrvatska
+hr-HR|Croatian (Croatia)|Croatian|Croatia|Latn;|HRV|EUR|0|041a|hrvatski (Hrvatska)|hrvatski|Hrvatska
 hsb|Upper Sorbian|Upper Sorbian|Germany|Latn;|DEU|EUR|0|042e|hornjoserbšćina|hornjoserbšćina|Němska
 hsb-DE|Upper Sorbian (Germany)|Upper Sorbian|Germany|Latn;|DEU|EUR|0|042e|hornjoserbšćina (Němska)|hornjoserbšćina|Němska
 hu|Hungarian|Hungarian|Hungary|Latn;|HUN|HUF|0|040e|magyar|magyar|Magyarország
 hu-HU|Hungarian (Hungary)|Hungarian|Hungary|Latn;|HUN|HUF|0|040e|magyar (Magyarország)|magyar|Magyarország
-hy|Armenian|Armenian|Armenia|Armn;|ARM|AMD|0|042b|Հայերեն|Հայերեն|Հայաստան
-hy-AM|Armenian (Armenia)|Armenian|Armenia|Armn;|ARM|AMD|0|042b|Հայերեն (Հայաստան)|Հայերեն|Հայաստան
+hy|Armenian|Armenian|Armenia|Armn;|ARM|AMD|0|042b|հայերեն|հայերեն|Հայաստան
+hy-AM|Armenian (Armenia)|Armenian|Armenia|Armn;|ARM|AMD|0|042b|հայերեն (Հայաստան)|հայերեն|Հայաստան
 ia|Interlingua|Interlingua|World|Latn;|001|XDR|0|1000|interlingua|interlingua|Mundo
 ia-001|Interlingua (World)|Interlingua|World|Latn;|001|XDR|0|1000|interlingua (Mundo)|interlingua|Mundo
 ibb|Ibibio|Ibibio|Nigeria|Latn;|NGA|NGN|0|0469|Ibibio-Efik|Ibibio-Efik|Nigeria
@@ -427,8 +428,8 @@ id|Indonesian|Indonesian|Indonesia|Latn;|IDN|IDR|0|0421|Indonesia|Indonesia|Indo
 id-ID|Indonesian (Indonesia)|Indonesian|Indonesia|Latn;|IDN|IDR|0|0421|Indonesia (Indonesia)|Indonesia|Indonesia
 ig|Igbo|Igbo|Nigeria|Latn;|NGA|NGN|0|0470|Igbo|Igbo|Naịjịrịa
 ig-NG|Igbo (Nigeria)|Igbo|Nigeria|Latn;|NGA|NGN|0|0470|Igbo (Naịjịrịa)|Igbo|Naịjịrịa
-ii|Yi|Yi|China|Yiii;|CHN|CNY|0|0478|ꆈꌠꁱꂷ|ꆈꌠꁱꂷ|ꍏꉸꏓꂱꇭꉼꇩ
-ii-CN|Yi (China)|Yi|China|Yiii;|CHN|CNY|0|0478|ꆈꌠꁱꂷ (ꍏꉸꏓꂱꇭꉼꇩ)|ꆈꌠꁱꂷ|ꍏꉸꏓꂱꇭꉼꇩ
+ii|Yi|Yi|China|Yiii;|CHN|CNY|0|0478|ꆈꌠꉙ|ꆈꌠꉙ|ꍏꉸꏓꂱꇭꉼꇩ
+ii-CN|Yi (China)|Yi|China|Yiii;|CHN|CNY|0|0478|ꆈꌠꉙ (ꍏꇩ)|ꆈꌠꉙ|ꍏꉸꏓꂱꇭꉼꇩ
 is|Icelandic|Icelandic|Iceland|Latn;|ISL|ISK|0|040f|íslenska|íslenska|Ísland
 is-IS|Icelandic (Iceland)|Icelandic|Iceland|Latn;|ISL|ISK|0|040f|íslenska (Ísland)|íslenska|Ísland
 it|Italian|Italian|Italy|Latn;|ITA|EUR|0|0410|italiano|italiano|Italia
@@ -483,14 +484,14 @@ ko-KP|Korean (North Korea)|Korean|North Korea|Kore;|PRK|KPW|0|1000|한국어 (�
 ko-KR|Korean (Korea)|Korean|Korea|Hang;Hani;Kore;|KOR|KRW|2|0412|한국어(대한민국)|한국어|대한민국
 kok|Konkani|Konkani|India|Deva;|IND|INR|0|0457|कोंकणी|कोंकणी|भारत
 kok-IN|Konkani (India)|Konkani|India|Deva;|IND|INR|0|0457|कोंकणी (भारत)|कोंकणी|भारत
-kr|Kanuri (Latin)|Kanuri (Latin)|Nigeria|Latn;|NGA|NGN|0|0471|Kanuri|Kanuri|Nigeria
+kr|Kanuri|Kanuri|Nigeria|Latn;|NGA|NGN|0|0471|Kanuri|Kanuri|Nigeria
 kr-Latn|Kanuri (Latin)|Kanuri (Latin)|Nigeria|Latn;|NGA|NGN|0|0471|Kanuri|Kanuri|Nigeria
 kr-Latn-NG|Kanuri (Latin, Nigeria)|Kanuri (Latin)|Nigeria|Latn;|NGA|NGN|0|0471|Kanuri (Nigeria)|Kanuri|Nigeria
 ks|Kashmiri|Kashmiri|India|Arab;|IND|INR|1|1000|کٲشُر|کٲشُر|ہِندوستان
 ks-Arab|Kashmiri (Arabic)|Kashmiri (Arabic)|India|Arab;|IND|INR|1|1000|کٲشُر (اَربی)|کٲشُر|ہِندوستان
 ks-Arab-IN|Kashmiri (Arabic)|Kashmiri (Arabic)|India|Arab;|IND|INR|1|1000|کٲشُر (اَربی)|کٲشُر|ہِندوستان
 ks-Deva|Kashmiri (Devanagari)|Kashmiri (Devanagari)|India|Deva;|IND|INR|0|0860|कॉशुर|कॉशुर|India
-ks-Deva-IN|Kashmiri (Devanagari, India)|Kashmiri (Devanagari)|India|Deva;|IND|INR|0|0860|कॉशुर (India)|कॉशुर|India
+ks-Deva-IN|Kashmiri (Devanagari)|Kashmiri (Devanagari)|India|Deva;|IND|INR|0|0860|कॉशुर (India)|कॉशुर|India
 ksb|Shambala|Shambala|Tanzania|Latn;|TZA|TZS|0|1000|Kishambaa|Kishambaa|Tanzania
 ksb-TZ|Shambala (Tanzania)|Shambala|Tanzania|Latn;|TZA|TZS|0|1000|Kishambaa (Tanzania)|Kishambaa|Tanzania
 ksf|Bafia|Bafia|Cameroon|Latn;|CMR|XAF|0|1000|rikpa|rikpa|kamɛrún
@@ -562,11 +563,11 @@ mn-MN|Mongolian (Mongolia)|Mongolian|Mongolia|Cyrl;|MNG|MNT|0|0450|монгол 
 mn-Mong|Mongolian (Traditional Mongolian)|Mongolian (Traditional Mongolian)|China|Mong;|CHN|CNY|3|0850|ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ (ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ)|ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ|ᠪᠦᠭᠦᠳᠡ ᠨᠠᠢᠷᠠᠮᠳᠠᠬᠤ ᠳᠤᠮᠳᠠᠳᠤ ᠠᠷᠠᠳ ᠣᠯᠣᠰ
 mn-Mong-CN|Mongolian (Traditional Mongolian, China)|Mongolian (Traditional Mongolian)|China|Mong;|CHN|CNY|3|0850|ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ (ᠪᠦᠭᠦᠳᠡ ᠨᠠᠢᠷᠠᠮᠳᠠᠬᠤ ᠳᠤᠮᠳᠠᠳᠤ ᠠᠷᠠᠳ ᠣᠯᠣᠰ)|ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ|ᠪᠦᠭᠦᠳᠡ ᠨᠠᠢᠷᠠᠮᠳᠠᠬᠤ ᠳᠤᠮᠳᠠᠳᠤ ᠠᠷᠠᠳ ᠣᠯᠣᠰ
 mn-Mong-MN|Mongolian (Traditional Mongolian, Mongolia)|Mongolian (Traditional Mongolian)|Mongolia|Mong;|MNG|MNT|3|0c50|ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ (ᠮᠣᠩᠭᠣᠯ ᠣᠯᠣᠰ)|ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ|ᠮᠣᠩᠭᠣᠯ ᠣᠯᠣᠰ
-mni|Manipuri (Bangla)|Manipuri (Bangla)|India|Beng;|IND|INR|0|0458|মৈতৈলোন্|মৈতৈলোন্|ইন্দিয়া
+mni|Manipuri|Manipuri|India|Beng;|IND|INR|0|0458|মৈতৈলোন্|মৈতৈলোন্|ইন্দিয়া
 mni-Beng|Manipuri (Bangla)|Manipuri (Bangla)|India|Beng;|IND|INR|0|0458|মৈতৈলোন্|মৈতৈলোন্|ইন্দিয়া
 mni-IN|Manipuri (Bangla, India)|Manipuri (Bangla)|India|Beng;|IND|INR|0|0458|মৈতৈলোন্ (ইন্দিয়া)|মৈতৈলোন্|ইন্দিয়া
-moh|Mohawk|Mohawk|Canada|Latn;|CAN|CAD|0|047c|Kanien’kéha|Kanien’kéha|Canada
-moh-CA|Mohawk (Mohawk)|Mohawk|Canada|Latn;|CAN|CAD|0|047c|Kanien'kéha|Kanien’kéha|Canada
+moh|Mohawk|Mohawk|Canada|Latn;|CAN|CAD|0|047c|Kanienʼkéha|Kanienʼkéha|Canada
+moh-CA|Mohawk (Canada)|Mohawk|Canada|Latn;|CAN|CAD|0|047c|Kanienʼkéha (Canada)|Kanien’kéha|Canada
 mr|Marathi|Marathi|India|Deva;|IND|INR|0|044e|मराठी|मराठी|भारत
 mr-IN|Marathi (India)|Marathi|India|Deva;|IND|INR|0|044e|मराठी (भारत)|मराठी|भारत
 ms|Malay|Malay|Malaysia|Latn;|MYS|MYR|0|043e|Melayu|Melayu|Malaysia
@@ -620,13 +621,13 @@ nus|Nuer|Nuer|South Sudan|Latn;|SSD|SSP|0|1000|Thok Nath|Thok Nath|South Sudan
 nus-SS|Nuer (South Sudan)|Nuer|South Sudan|Latn;|SSD|SSP|0|1000|Thok Nath (South Sudan)|Thok Nath|South Sudan
 nyn|Nyankole|Nyankole|Uganda|Latn;|UGA|UGX|0|1000|Runyankore|Runyankore|Uganda
 nyn-UG|Nyankole (Uganda)|Nyankole|Uganda|Latn;|UGA|UGX|0|1000|Runyankore (Uganda)|Runyankore|Uganda
-oc|Occitan|Occitan|France|Latn;|FRA|EUR|0|0482|Occitan|Occitan|França
-oc-FR|Occitan (France)|Occitan|France|Latn;|FRA|EUR|0|0482|Occitan (França)|Occitan|França
+oc|Occitan|Occitan|France|Latn;|FRA|EUR|0|0482|occitan|occitan|França
+oc-FR|Occitan (France)|Occitan|France|Latn;|FRA|EUR|0|0482|occitan (França)|occitan|França
 om|Oromo|Oromo|Ethiopia|Latn;|ETH|ETB|0|0472|Oromoo|Oromoo|Itoophiyaa
 om-ET|Oromo (Ethiopia)|Oromo|Ethiopia|Latn;|ETH|ETB|0|0472|Oromoo (Itoophiyaa)|Oromoo|Itoophiyaa
 om-KE|Oromo (Kenya)|Oromo|Kenya|Latn;|KEN|KES|0|1000|Oromoo (Keeniyaa)|Oromoo|Keeniyaa
-or|Odia|Odia|India|Orya;|IND|INR|0|0448|ଓଡ଼ିଆ|ଓଡ଼ିଆ|ଭାରତ
-or-IN|Odia (India)|Odia|India|Orya;|IND|INR|0|0448|ଓଡ଼ିଆ (ଭାରତ)|ଓଡ଼ିଆ|ଭାରତ
+or|Odia|Odia|India|Orya;|IND|INR|0|0448|ଓଡ଼ିଆ|ଓଡ଼ିଆ|ଭାରତ
+or-IN|Odia (India)|Odia|India|Orya;|IND|INR|0|0448|ଓଡ଼ିଆ (ଭାରତ)|ଓଡ଼ିଆ|ଭାରତ
 os|Ossetic|Ossetic|Georgia|Cyrl;|GEO|GEL|0|1000|ирон|ирон|Гуырдзыстон
 os-GE|Ossetic (Georgia)|Ossetic|Georgia|Cyrl;|GEO|GEL|0|1000|ирон (Гуырдзыстон)|ирон|Гуырдзыстон
 os-RU|Ossetic (Russia)|Ossetic|Russia|Cyrl;|RUS|RUB|0|1000|ирон (Уӕрӕсе)|ирон|Уӕрӕсе
@@ -644,8 +645,6 @@ pl|Polish|Polish|Poland|Latn;|POL|PLN|0|0415|polski|polski|Polska
 pl-PL|Polish (Poland)|Polish|Poland|Latn;|POL|PLN|0|0415|polski (Polska)|polski|Polska
 prg|Prussian|Prussian|World|Latn;|001|XDR|0|1000|prūsiskan|prūsiskan|swītai
 prg-001|Prussian (World)|Prussian|World|Latn;|001|XDR|0|1000|prūsiskan (swītai)|prūsiskan|swītai
-prs|Dari|Dari|Afghanistan|Arab;|AFG|AFN|1|048c|درى|درى|افغانستان
-prs-AF|Dari (Afghanistan)|Dari|Afghanistan|Arab;|AFG|AFN|1|048c|درى (افغانستان)|درى|افغانستان
 ps|Pashto|Pashto|Afghanistan|Arab;|AFG|AFN|1|0463|پښتو|پښتو|افغانستان
 ps-AF|Pashto (Afghanistan)|Pashto|Afghanistan|Arab;|AFG|AFN|1|0463|پښتو (افغانستان)|پښتو|افغانستان
 ps-PK|Pashto (Pakistan)|Pashto|Pakistan|Arab;|PAK|PKR|1|1000|پښتو (پاکستان)|پښتو|پاکستان
@@ -662,9 +661,9 @@ pt-MZ|Portuguese (Mozambique)|Portuguese|Mozambique|Latn;|MOZ|MZN|0|1000|portugu
 pt-PT|Portuguese (Portugal)|Portuguese|Portugal|Latn;|PRT|EUR|0|0816|português (Portugal)|português|Portugal
 pt-ST|Portuguese (São Tomé & Príncipe)|Portuguese|São Tomé & Príncipe|Latn;|STP|STN|0|1000|português (São Tomé e Príncipe)|português|São Tomé e Príncipe
 pt-TL|Portuguese (Timor-Leste)|Portuguese|Timor-Leste|Latn;|TLS|USD|0|1000|português (Timor-Leste)|português|Timor-Leste
-quc|K'iche'|K'iche'|Guatemala|Latn;|GTM|GTQ|0|0486|K'iche'|K'iche'|Guatemala
-quc-Latn|K'iche'|K'iche'|Guatemala|Latn;|GTM|GTQ|0|0486|K'iche'|K'iche'|Guatemala
-quc-Latn-GT|K'iche' (Guatemala)|K'iche'|Guatemala|Latn;|GTM|GTQ|0|0486|K'iche' (Guatemala)|K'iche'|Guatemala
+quc|Kʼicheʼ|Kʼicheʼ|Guatemala|Latn;|GTM|GTQ|0|0486|Kʼicheʼ|Kʼicheʼ|Guatemala
+quc-Latn|Kʼicheʼ (Latin)|Kʼicheʼ (Latin)|Guatemala|Latn;|GTM|GTQ|0|0486|Kʼicheʼ|Kʼicheʼ|Guatemala
+quc-Latn-GT|Kʼicheʼ (Latin, Guatemala)|Kʼicheʼ (Latin)|Guatemala|Latn;|GTM|GTQ|0|0486|Kʼicheʼ (Guatemala)|Kʼicheʼ|Guatemala
 quz|Quechua|Quechua|Bolivia|Latn;|BOL|BOB|0|046b|Runasimi|Runasimi|Bolivia
 quz-BO|Quechua (Bolivia)|Quechua|Bolivia|Latn;|BOL|BOB|0|046b|Runasimi (Bolivia)|Runasimi|Bolivia
 quz-EC|Quechua (Ecuador)|Quechua|Ecuador|Latn;|ECU|USD|0|086b|Runasimi (Ecuador)|Runasimi|Ecuador
@@ -689,8 +688,8 @@ rw|Kinyarwanda|Kinyarwanda|Rwanda|Latn;|RWA|RWF|0|0487|Kinyarwanda|Kinyarwanda|U
 rw-RW|Kinyarwanda (Rwanda)|Kinyarwanda|Rwanda|Latn;|RWA|RWF|0|0487|Kinyarwanda (U Rwanda)|Kinyarwanda|U Rwanda
 rwk|Rwa|Rwa|Tanzania|Latn;|TZA|TZS|0|1000|Kiruwa|Kiruwa|Tanzania
 rwk-TZ|Rwa (Tanzania)|Rwa|Tanzania|Latn;|TZA|TZS|0|1000|Kiruwa (Tanzania)|Kiruwa|Tanzania
-sa|Sanskrit|Sanskrit|India|Deva;|IND|INR|0|044f|संस्कृत|संस्कृत|भारतम्
-sa-IN|Sanskrit (India)|Sanskrit|India|Deva;|IND|INR|0|044f|संस्कृत (भारतम्)|संस्कृत|भारतम्
+sa|Sanskrit|Sanskrit|India|Deva;|IND|INR|0|044f|संस्कृत भाषा|संस्कृत भाषा|भारतः
+sa-IN|Sanskrit (India)|Sanskrit|India|Deva;|IND|INR|0|044f|संस्कृत भाषा (भारतः)|संस्कृत भाषा|भारतः
 sah|Sakha|Sakha|Russia|Cyrl;|RUS|RUB|0|0485|саха тыла|саха тыла|Арассыыйа
 sah-RU|Sakha (Russia)|Sakha|Russia|Cyrl;|RUS|RUB|0|0485|саха тыла (Арассыыйа)|саха тыла|Арассыыйа
 saq|Samburu|Samburu|Kenya|Latn;|KEN|KES|0|1000|Kisampur|Kisampur|Kenya
@@ -801,20 +800,20 @@ ti-ER|Tigrinya (Eritrea)|Tigrinya|Eritrea|Ethi;|ERI|ERN|0|0873|ትግር (ኤር
 ti-ET|Tigrinya (Ethiopia)|Tigrinya|Ethiopia|Ethi;|ETH|ETB|0|0473|ትግር (ኢትዮጵያ)|ትግር|ኢትዮጵያ
 tig|Tigre|Tigre|Eritrea|Ethi;|ERI|ERN|0|1000|ትግረ|ትግረ|ኤርትራ
 tig-ER|Tigre (Eritrea)|Tigre|Eritrea|Ethi;|ERI|ERN|0|1000|ትግረ (ኤርትራ)|ትግረ|ኤርትራ
-tk|Turkmen|Turkmen|Turkmenistan|Latn;|TKM|TMT|0|0442|Türkmen dili|Türkmen dili|Türkmenistan
-tk-TM|Turkmen (Turkmenistan)|Turkmen|Turkmenistan|Latn;|TKM|TMT|0|0442|Türkmen dili (Türkmenistan)|Türkmen dili|Türkmenistan
+tk|Turkmen|Turkmen|Turkmenistan|Latn;|TKM|TMT|0|0442|türkmen dili|türkmen dili|Türkmenistan
+tk-TM|Turkmen (Turkmenistan)|Turkmen|Turkmenistan|Latn;|TKM|TMT|0|0442|türkmen dili (Türkmenistan)|türkmen dili|Türkmenistan
 tn|Setswana|Setswana|South Africa|Latn;|ZAF|ZAR|0|0432|Setswana|Setswana|Aforika Borwa
 tn-BW|Setswana (Botswana)|Setswana|Botswana|Latn;|BWA|BWP|0|0832|Setswana (Botswana)|Setswana|Botswana
 tn-ZA|Setswana (South Africa)|Setswana|South Africa|Latn;|ZAF|ZAR|0|0432|Setswana (Aforika Borwa)|Setswana|Aforika Borwa
 to|Tongan|Tongan|Tonga|Latn;|TON|TOP|0|1000|lea fakatonga|lea fakatonga|Tonga
 to-TO|Tongan (Tonga)|Tongan|Tonga|Latn;|TON|TOP|0|1000|lea fakatonga (Tonga)|lea fakatonga|Tonga
-tr|Turkish|Turkish|Turkey|Latn;|TUR|TRY|0|041f|Türkçe|Türkçe|Türkiye
+tr|Turkish|Turkish|Türkiye|Latn;|TUR|TRY|0|041f|Türkçe|Türkçe|Türkiye
 tr-CY|Turkish (Cyprus)|Turkish|Cyprus|Latn;|CYP|EUR|0|1000|Türkçe (Kıbrıs)|Türkçe|Kıbrıs
-tr-TR|Turkish (Turkey)|Turkish|Turkey|Latn;|TUR|TRY|0|041f|Türkçe (Türkiye)|Türkçe|Türkiye
+tr-TR|Turkish (Türkiye)|Turkish|Türkiye|Latn;|TUR|TRY|0|041f|Türkçe (Türkiye)|Türkçe|Türkiye
 ts|Xitsonga|Xitsonga|South Africa|Latn;|ZAF|ZAR|0|0431|Xitsonga|Xitsonga|South Africa
 ts-ZA|Xitsonga (South Africa)|Xitsonga|South Africa|Latn;|ZAF|ZAR|0|0431|Xitsonga (South Africa)|Xitsonga|South Africa
-tt|Tatar|Tatar|Russia|Cyrl;|RUS|RUB|0|0444|Татар|Татар|Россия
-tt-RU|Tatar (Russia)|Tatar|Russia|Cyrl;|RUS|RUB|0|0444|Татар (Россия)|Татар|Россия
+tt|Tatar|Tatar|Russia|Cyrl;|RUS|RUB|0|0444|татар|татар|Россия
+tt-RU|Tatar (Russia)|Tatar|Russia|Cyrl;|RUS|RUB|0|0444|татар (Россия)|татар|Россия
 twq|Tasawaq|Tasawaq|Niger|Latn;|NER|XOF|0|1000|Tasawaq senni|Tasawaq senni|Nižer
 twq-NE|Tasawaq (Niger)|Tasawaq|Niger|Latn;|NER|XOF|0|1000|Tasawaq senni (Nižer)|Tasawaq senni|Nižer
 tzm|Central Atlas Tamazight|Central Atlas Tamazight|Algeria|Latn;|DZA|DZD|0|085f|Tamaziɣt n laṭlaṣ|Tamaziɣt n laṭlaṣ|Djazaïr
@@ -829,9 +828,9 @@ ug|Uyghur|Uyghur|China|Arab;|CHN|CNY|1|0480|ئۇيغۇرچە|ئۇيغۇرچە|ج
 ug-CN|Uyghur (China)|Uyghur|China|Arab;|CHN|CNY|1|0480|ئۇيغۇرچە (جۇڭخۇا خەلق جۇمھۇرىيىتى)|ئۇيغۇرچە|جۇڭخۇا خەلق جۇمھۇرىيىتى
 uk|Ukrainian|Ukrainian|Ukraine|Cyrl;|UKR|UAH|0|0422|українська|українська|Україна
 uk-UA|Ukrainian (Ukraine)|Ukrainian|Ukraine|Cyrl;|UKR|UAH|0|0422|українська (Україна)|українська|Україна
-ur|Urdu|Urdu|Pakistan|Arab;|PAK|PKR|1|0420|اُردو|اُردو|پاکستان
+ur|Urdu|Urdu|Pakistan|Arab;|PAK|PKR|1|0420|اردو|اردو|پاکستان
 ur-IN|Urdu (India)|Urdu|India|Arab;|IND|INR|1|0820|اردو (بھارت)|اردو|بھارت
-ur-PK|Urdu (Pakistan)|Urdu|Pakistan|Arab;|PAK|PKR|1|0420|اُردو (پاکستان)|اُردو|پاکستان
+ur-PK|Urdu (Pakistan)|Urdu|Pakistan|Arab;|PAK|PKR|1|0420|اردو (پاکستان)|اردو|پاکستان
 uz|Uzbek|Uzbek|Uzbekistan|Latn;|UZB|UZS|0|0443|o‘zbek|o‘zbek|Oʻzbekiston
 uz-Arab|Uzbek (Arabic)|Uzbek (Arabic)|Afghanistan|Arab;|AFG|AFN|1|1000|اوزبیک (عربی)|اوزبیک|افغانستان
 uz-Arab-AF|Uzbek (Arabic, Afghanistan)|Uzbek (Arabic)|Afghanistan|Arab;|AFG|AFN|1|1000|اوزبیک (افغانستان)|اوزبیک|افغانستان
@@ -846,8 +845,8 @@ vai-Vaii|Vai (Vai)|Vai (Vai)|Liberia|Vaii;|LBR|LRD|0|1000|ꕙꔤ (Vai)|ꕙꔤ|�
 vai-Vaii-LR|Vai (Vai, Liberia)|Vai (Vai)|Liberia|Vaii;|LBR|LRD|0|1000|ꕙꔤ (ꕞꔤꔫꕩ)|ꕙꔤ|ꕞꔤꔫꕩ
 ve|Venda|Venda|South Africa|Latn;|ZAF|ZAR|0|0433|Tshivenḓa|Tshivenḓa|South Africa
 ve-ZA|Venda (South Africa)|Venda|South Africa|Latn;|ZAF|ZAR|0|0433|Tshivenḓa (South Africa)|Tshivenḓa|South Africa
-vi|Vietnamese|Vietnamese|Vietnam|Latn;|VNM|VND|0|042a|Tiếng Việt|Tiếng Việt|Việt Nam
-vi-VN|Vietnamese (Vietnam)|Vietnamese|Vietnam|Latn;|VNM|VND|0|042a|Tiếng Việt (Việt Nam)|Tiếng Việt|Việt Nam
+vi|Vietnamese|Vietnamese|Vietnam|Latn;|VNM|VND|0|042a|Tiếng Việt|Tiếng Việt|Việt Nam
+vi-VN|Vietnamese (Vietnam)|Vietnamese|Vietnam|Latn;|VNM|VND|0|042a|Tiếng Việt (Việt Nam)|Tiếng Việt|Việt Nam
 vo|Volapük|Volapük|World|Latn;|001|XDR|0|1000|Volapük|Volapük|World
 vo-001|Volapük (World)|Volapük|World|Latn;|001|XDR|0|1000|Volapük (World)|Volapük|World
 vun|Vunjo|Vunjo|Tanzania|Latn;|TZA|TZS|0|1000|Kyivunjo|Kyivunjo|Tanzania
