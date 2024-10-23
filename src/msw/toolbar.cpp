@@ -1695,7 +1695,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 nmtbcd->clrHighlightHotTrack = wxSysColourToRGB(wxSYS_COLOUR_HOTLIGHT);
 
                 // draw custom checked button background
-                if (nmtbcd->nmcd.uItemState & CDIS_CHECKED) {
+                if ((nmtbcd->nmcd.uItemState & (CDIS_CHECKED|CDIS_HOT)) == CDIS_CHECKED) {
                     wxColor color = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT).ChangeLightness(110);
                     HBRUSH br = CreateSolidBrush(wxColourToRGB(color));
                     FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
