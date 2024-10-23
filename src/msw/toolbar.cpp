@@ -1725,7 +1725,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                         { arrowCenterX, arrowCenterY + FromDIP(2) }
                     };
 
-                    HBRUSH fgBrush = CreateSolidBrush(wxColourToRGB(GetForegroundColour()));
+                    AutoHBRUSH fgBrush(wxColourToRGB(GetForegroundColour()));
                     HPEN hPen = CreatePen(PS_SOLID, 1, wxColourToRGB(GetForegroundColour()));
                     SelectObject(nmtbcd->nmcd.hdc, hPen);
                     SelectObject(nmtbcd->nmcd.hdc, fgBrush);
