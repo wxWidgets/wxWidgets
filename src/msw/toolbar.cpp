@@ -1686,7 +1686,8 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 *result = CDRF_NOTIFYITEMDRAW;
                 return true;
 
-            case CDDS_ITEMPREPAINT: {
+            case CDDS_ITEMPREPAINT:
+            {
                 // If we get here, we must have returned CDRF_NOTIFYITEMDRAW
                 // from above, so we're using the dark mode and need to
                 // customize the colours for it.
@@ -1700,28 +1701,33 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 return true;
             }
 
-            case CDDS_ITEMPOSTPAINT: {
+            case CDDS_ITEMPOSTPAINT:
+            {
                 // custom draw the drop-down arrow here, as it is always black
                 WinStruct<TBBUTTONINFO> bi;
                 bi.dwMask = TBIF_STYLE | TBIF_COMMAND;
                 int itemIndex = (int) ::SendMessage(GetHwnd(), TB_GETBUTTONINFO, (WPARAM)nmtbcd->nmcd.dwItemSpec, (LPARAM)&bi);
-                if (itemIndex >= 0 && bi.fsStyle & TBSTYLE_DROPDOWN) {
+                if (itemIndex >= 0 && bi.fsStyle & TBSTYLE_DROPDOWN)
+                {
                     RECT ddrc = { 0 };
                     ::SendMessage(GetHwnd(), TB_GETITEMDROPDOWNRECT, (WPARAM)itemIndex, (LPARAM)&ddrc);
 
                     wxColour colBg = m_hasBgCol ? GetBackgroundColour() : wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-                    if (nmtbcd->nmcd.uItemState & CDIS_HOT) {
+                    if (nmtbcd->nmcd.uItemState & CDIS_HOT)
+                    {
                         AutoHBRUSH bgBrush(wxColourToRGB(colBg.ChangeLightness(120)));
                         ::FillRect(nmtbcd->nmcd.hdc, &ddrc, bgBrush);
                     }
-                    else {
+                    else
+                    {
                         AutoHBRUSH bgBrush(wxColourToRGB(colBg));
                         ::FillRect(nmtbcd->nmcd.hdc, &ddrc, bgBrush);
                     }
 
                     int arrowCenterX = (ddrc.left + ddrc.right) / 2;
                     int arrowCenterY = (ddrc.top + ddrc.bottom) / 2;
-                    POINT ptsArrow[3] = {
+                    POINT ptsArrow[3] =
+                    {
                         { arrowCenterX - FromDIP(3), arrowCenterY - FromDIP(2)},
                         { arrowCenterX + FromDIP(3), arrowCenterY - FromDIP(2) },
                         { arrowCenterX, arrowCenterY + FromDIP(2) }
