@@ -1686,16 +1686,19 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 *result = CDRF_NOTIFYITEMDRAW;
                 return true;
 
-            case CDDS_ITEMPREPAINT:
+            case CDDS_ITEMPREPAINT: {
                 // If we get here, we must have returned CDRF_NOTIFYITEMDRAW
                 // from above, so we're using the dark mode and need to
                 // customize the colours for it.
                 nmtbcd->clrText =
-                nmtbcd->clrTextHighlight = wxColourToRGB(GetForegroundColour());
-                nmtbcd->clrHighlightHotTrack = wxSysColourToRGB(wxSYS_COLOUR_HOTLIGHT);
+                    nmtbcd->clrTextHighlight = wxColourToRGB(GetForegroundColour());
+
+                wxColour colBg = m_hasBgCol ? GetBackgroundColour() : wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+                nmtbcd->clrHighlightHotTrack = wxColourToRGB(colBg.ChangeLightness(115));
 
                 *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK | CDRF_NOTIFYPOSTPAINT;
                 return true;
+            }
 
             case CDDS_ITEMPOSTPAINT: {
                 // custom draw the drop-down arrow here, as it is always black
@@ -1706,15 +1709,14 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                     RECT ddrc = { 0 };
                     ::SendMessage(GetHwnd(), TB_GETITEMDROPDOWNRECT, (WPARAM)itemIndex, (LPARAM)&ddrc);
 
+                    wxColour colBg = m_hasBgCol ? GetBackgroundColour() : wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
                     if (nmtbcd->nmcd.uItemState & CDIS_HOT) {
-                        AutoHBRUSH bgBrush(wxColourToRGB(GetBackgroundColour().ChangeLightness(110)));
+                        AutoHBRUSH bgBrush(wxColourToRGB(colBg.ChangeLightness(120)));
                         ::FillRect(nmtbcd->nmcd.hdc, &ddrc, bgBrush);
-                        DeleteObject(bgBrush);
                     }
                     else {
-                        HBRUSH bgBrush = CreateSolidBrush(wxColourToRGB(GetBackgroundColour()));
+                        AutoHBRUSH bgBrush(wxColourToRGB(colBg));
                         ::FillRect(nmtbcd->nmcd.hdc, &ddrc, bgBrush);
-                        DeleteObject(bgBrush);
                     }
 
                     int arrowCenterX = (ddrc.left + ddrc.right) / 2;
@@ -1730,8 +1732,6 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                     SelectObject(nmtbcd->nmcd.hdc, hPen);
                     SelectObject(nmtbcd->nmcd.hdc, fgBrush);
                     Polygon(nmtbcd->nmcd.hdc, ptsArrow, 3);
-                    DeleteObject(hPen);
-                    DeleteObject(fgBrush);
                 }
 
                 *result = CDRF_DODEFAULT;
