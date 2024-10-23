@@ -68,6 +68,11 @@ jobs:
               dst=${ref#refs/tags/v}
               ;;
 
+            refs/pull/*/merge)
+              echo "Skipping docs upload for pull request"
+              exit 0
+              ;;
+
             *)
               echo "Skipping docs upload for $ref of unknown type"
               exit 2

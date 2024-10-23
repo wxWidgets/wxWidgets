@@ -481,7 +481,7 @@ void MyFrame::OnFileSystemEvent(wxFileSystemWatcherEvent& event)
         bool found(false);
         for (size_t n = m_filesList->GetItemCount(); n > 0; --n)
         {
-            wxString path, foo = m_filesList->GetItemText(n-1);
+            wxString path;
             if ((!m_filesList->GetItemText(n-1).StartsWith("Dir:  ", &path)) &&
                 (!m_filesList->GetItemText(n-1).StartsWith("Tree: ", &path)))
             {

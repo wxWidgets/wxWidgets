@@ -955,7 +955,6 @@ void wxWebViewIE::ClearSelection()
     if(document)
     {
         wxCOMPtr<IHTMLSelectionObject> selection;
-        wxString selected;
         HRESULT hr = document->get_selection(&selection);
         if(SUCCEEDED(hr))
         {
