@@ -1707,7 +1707,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                     ::SendMessage(GetHwnd(), TB_GETITEMDROPDOWNRECT, (WPARAM)itemIndex, (LPARAM)&ddrc);
 
                     if (nmtbcd->nmcd.uItemState & CDIS_HOT) {
-                        HBRUSH bgBrush = CreateSolidBrush(wxColourToRGB(GetBackgroundColour().ChangeLightness(110)));
+                        AutoHBRUSH bgBrush(wxColourToRGB(GetBackgroundColour().ChangeLightness(110)));
                         ::FillRect(nmtbcd->nmcd.hdc, &ddrc, bgBrush);
                         DeleteObject(bgBrush);
                     }
