@@ -1695,11 +1695,11 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 nmtbcd->clrHighlightHotTrack = wxSysColourToRGB(wxSYS_COLOUR_HOTLIGHT);
 
                 // draw custom checked button background
-                if ((nmtbcd->nmcd.uItemState & (CDIS_CHECKED|CDIS_HOT)) == CDIS_CHECKED) {
-                    wxColor color = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT).ChangeLightness(110);
-                    HBRUSH br = CreateSolidBrush(wxColourToRGB(color));
-                    FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
-                    DeleteObject(br);
+                if ( (nmtbcd->nmcd.uItemState & (CDIS_CHECKED | CDIS_HOT)) == CDIS_CHECKED )
+                {
+                    const wxColor color = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT).ChangeLightness(110);
+                    AutoHBRUSH br(wxColourToRGB(color));
+                    ::FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
                     *result = CDRF_DODEFAULT | TBCDRF_USECDCOLORS | TBCDRF_HILITEHOTTRACK | TBCDRF_NOBACKGROUND | CDRF_NOTIFYPOSTPAINT;
                     return true;
                 }
