@@ -492,22 +492,21 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                                                     "",
                                                     wxDefaultPosition, wxDefaultSize,
                                                     wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
-        checkbox1->SetMinSize(checkbox1->GetSizeFromText(checkbox1->GetLabelText()));
-        toolBar->AddControl(checkbox1, "Checkbox");
+        checkbox1->SetToolTip("Checking this checkbox changes the state of the "
+                              "two other ones using wxEVT_UPDATE_UI handler");
+        toolBar->AddControl(checkbox1, "1");
         wxCheckBox* checkbox2 = new wxCheckBox(toolBar, ID_UI_2CHECK_UPDATED,
                                                     "",
                                                     wxDefaultPosition, wxDefaultSize,
                                                     wxCHK_2STATE);
-        checkbox2->SetMinSize(checkbox2->GetSizeFromText(checkbox2->GetLabelText()));
         checkbox2->Disable();
-        toolBar->AddControl(checkbox2, "2Checkbox UI Updated");
+        toolBar->AddControl(checkbox2, "2");
         wxCheckBox* checkbox3 = new wxCheckBox(toolBar, ID_UI_3CHECK_UPDATED,
                                                     "",
                                                     wxDefaultPosition, wxDefaultSize,
                                                     wxCHK_3STATE);
-        checkbox3->SetMinSize(checkbox3->GetSizeFromText(checkbox3->GetLabelText()));
         checkbox3->Disable();
-        toolBar->AddControl(checkbox3, "3Checkbox UI Updated");
+        toolBar->AddControl(checkbox3, "3");
 #endif
     }
 #endif // USE_CONTROLS_IN_TOOLBAR
