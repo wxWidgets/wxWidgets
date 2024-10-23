@@ -1726,7 +1726,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                     };
 
                     AutoHBRUSH fgBrush(wxColourToRGB(GetForegroundColour()));
-                    HPEN hPen = CreatePen(PS_SOLID, 1, wxColourToRGB(GetForegroundColour()));
+                    AutoHPEN hPen(wxColourToRGB(GetForegroundColour()));
                     SelectObject(nmtbcd->nmcd.hdc, hPen);
                     SelectObject(nmtbcd->nmcd.hdc, fgBrush);
                     Polygon(nmtbcd->nmcd.hdc, ptsArrow, 3);
