@@ -25,6 +25,7 @@
 #endif // WX_PRECOMP
 
 wxModalDialogHook::Hooks wxModalDialogHook::ms_hooks;
+int wxModalDialogHook::ms_countOpen = 0;
 
 // ============================================================================
 // wxModalDialogHook implementation
@@ -96,12 +97,16 @@ int wxModalDialogHook::CallEnter(wxDialog* dialog)
         }
     }
 
+    ms_countOpen++;
+
     return wxID_NONE;
 }
 
 /* static */
 void wxModalDialogHook::CallExit(wxDialog* dialog)
 {
+    ms_countOpen--;
+
     // See comment in CallEnter() for the reasons for making a copy here.
     const Hooks hooks = ms_hooks;
 
