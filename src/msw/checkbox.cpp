@@ -189,6 +189,9 @@ wxCOMPILE_TIME_ASSERT(wxCHK_UNCHECKED == BST_UNCHECKED
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
 {
+    if ( m_state == state )
+        return;
+
     m_state = state;
     if ( !IsOwnerDrawn() )
         ::SendMessage(GetHwnd(), BM_SETCHECK, (WPARAM) state, 0);
