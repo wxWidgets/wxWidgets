@@ -560,12 +560,17 @@ void EventPropagationTestCase::DocView()
     ASSERT_MENU_EVENT_RESULT( menu, "ampA" );
 
 
+    // The document template must be heap-allocated as wxDocManager owns it.
+    wxDocTemplate* const docTemplate = new wxDocTemplate
+                                           (
+                                            &docManager, "Test", "", "", "",
+                                            "Test Document", "Test View",
+                                            wxCLASSINFO(EventTestDocument),
+                                            wxCLASSINFO(EventTestView)
+                                           );
+
     // Now check what happens if we have an active document.
-    wxDocTemplate docTemplate(&docManager, "Test", "", "", "",
-                              "Test Document", "Test View",
-                              wxCLASSINFO(EventTestDocument),
-                              wxCLASSINFO(EventTestView));
-    wxDocument* const doc = docTemplate.CreateDocument("");
+    wxDocument* const doc = docTemplate->CreateDocument("");
     wxView* const view = doc->GetFirstView();
 
     std::unique_ptr<wxMDIChildFrame>

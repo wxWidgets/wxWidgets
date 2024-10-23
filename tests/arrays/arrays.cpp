@@ -604,10 +604,10 @@ TEST_CASE("wxObjArray", "[dynarray]")
 
         // Test that range for works with wxObjArray.
         int count = 0;
-        for ( const auto& bar : bars )
+        for ( const auto& b : bars )
         {
             if ( !count )
-                CHECK( bar.GetName() == firstName );
+                CHECK( b.GetName() == firstName );
 
             ++count;
         }

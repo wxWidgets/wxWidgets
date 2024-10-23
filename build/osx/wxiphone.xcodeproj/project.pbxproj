@@ -636,7 +636,6 @@
 		371809DA4AD1382F8B532878 /* fontenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36E1DBA275AD325DB759C180 /* fontenum.cpp */; };
 		0E8A0B8FA40E365690C20230 /* gzlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 7395814D42CC38F6B8CD81B4 /* gzlib.c */; };
 		B6C364CB4AE33708A862B4B4 /* srchctlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D46A36564C78312CAC538E93 /* srchctlg.cpp */; };
-		01D4C5F2147F3942A7CE91AA /* icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DAF1F49F0F3F41A427A21D /* icon.cpp */; };
 		F0D892C2618130FEAD46BB86 /* panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00969CBE3B8F32C78C195619 /* panel.cpp */; };
 		FDE14459359334DE9FB03ED5 /* xh_scrol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66411D54BAD338498AC59401 /* xh_scrol.cpp */; };
 		020BBB417207393F8C60EFB6 /* LexFortran.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 86A0C3603C8A343AAFBD2CE0 /* LexFortran.cxx */; };
@@ -1279,7 +1278,6 @@
 		5A756B733D093B09BE2098A6 /* filectrlcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filectrlcmn.cpp; path = ../../src/common/filectrlcmn.cpp; sourceTree = SOURCE_ROOT; };
 		5A562F1DA7EA3B909BBB1465 /* LexModula.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexModula.cxx; path = ../../src/stc/lexilla/lexers/LexModula.cxx; sourceTree = SOURCE_ROOT; };
 		1CE9B3DD54AD318FAA821732 /* richtextimagedlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtextimagedlg.cpp; path = ../../src/richtext/richtextimagedlg.cpp; sourceTree = SOURCE_ROOT; };
-		F5DAF1F49F0F3F41A427A21D /* icon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = icon.cpp; path = ../../src/generic/icon.cpp; sourceTree = SOURCE_ROOT; };
 		62C46B0CE620348FBF3860A4 /* LexPLM.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexPLM.cxx; path = ../../src/stc/lexilla/lexers/LexPLM.cxx; sourceTree = SOURCE_ROOT; };
 		EDD97DF408EC347A8CB8EF45 /* filedlgg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filedlgg.cpp; path = ../../src/generic/filedlgg.cpp; sourceTree = SOURCE_ROOT; };
 		9B862D1027C4367BBF44420F /* slider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = slider.mm; path = ../../src/osx/iphone/slider.mm; sourceTree = SOURCE_ROOT; };
@@ -2490,7 +2488,6 @@
 				64DA16CF41C834D7B7642024 /* prntdlgg.cpp */,
 				071FEABEA61E3B559A47A7DB /* statusbr.cpp */,
 				E9B31409EC6532FC83B0B957 /* textmeasure.cpp */,
-				F5DAF1F49F0F3F41A427A21D /* icon.cpp */,
 				F582C6B3A5AA3367BB4DBE97 /* statbmp_osx.cpp */,
 				027D2F04BE933ED6B9BA1518 /* imaglist.cpp */,
 				FE538F33A1423FC2AC9E45F3 /* regiong.cpp */,
@@ -3266,7 +3263,6 @@
 				C005C2D547E735E9B081658E /* prntdlgg.cpp in Sources */,
 				A1AF8FF873D6383996995ECF /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D55969 /* textmeasure.cpp in Sources */,
-				01D4C5F2147F3942A7CE91AA /* icon.cpp in Sources */,
 				750C716389AD3ADBABC9D689 /* statbmp_osx.cpp in Sources */,
 				1EDED99760B23A1999E75C12 /* imaglist.cpp in Sources */,
 				9519D59421513FF28FF717B6 /* regiong.cpp in Sources */,

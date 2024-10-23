@@ -161,7 +161,6 @@
 		923F4797A73A3BDD87BBD1E1 /* LineMarker.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AF3DF03795153E039B8F1F87 /* LineMarker.cxx */; };
 		80665EEAE8613DF8A93A7984 /* utilscmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4188821BBA833CCAA678B234 /* utilscmn.cpp */; };
 		36DB80FD5B153E9099DB6912 /* imaggif.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDB4AB7CDABA3A54B4F8207B /* imaggif.cpp */; };
-		01D4C5F2147F3942A7CE91AA /* icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DAF1F49F0F3F41A427A21D /* icon.cpp */; };
 		800CFCEDBB7938338C65EEAD /* notifmsgcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B233180893DB3328AF4847DA /* notifmsgcmn.cpp */; };
 		EAE02BA934B43EEE92C496C7 /* dcpsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EEA0945B20913754A54D0FD9 /* dcpsg.cpp */; };
 		C2CF6B59914A3183ADE84028 /* tif_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 48F1439BF6C3361296F05A33 /* tif_error.c */; };
@@ -740,7 +739,6 @@
 		59BFB8C8310E37B39AF8B0D4 /* any.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4867546E8B8D3C8683A23ED5 /* any.cpp */; };
 		F5DF7AF0FA9E371BB71EF799 /* xh_listbk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57EB0085AFB93BFC88AC6FFC /* xh_listbk.cpp */; };
 		9FA6C4275F0D3E1A884ED562 /* pcre2_auto_possess.c in Sources */ = {isa = PBXBuildFile; fileRef = C3904351139F3F0DB4B72F94 /* pcre2_auto_possess.c */; };
-		01D4C5F2147F3942A7CE91AB /* icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DAF1F49F0F3F41A427A21D /* icon.cpp */; };
 		8DE45CEAF2DD3C22AA019F75 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 3CF73F49AEC238C99CE89845 /* deflate.c */; };
 		F910C74E48823E0BA7F7885D /* graphicc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BACAA6CE4A0934459F26B27C /* graphicc.cpp */; };
 		8A9C3C04D00334418C3446FA /* dirdlg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0B0DC125AFFC322E8E496262 /* dirdlg.mm */; };
@@ -2566,7 +2564,6 @@
 		C5E5AB869065307F83E27DD3 /* htmlpars.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1800B1884CC73C78A09E7FF1 /* htmlpars.cpp */; };
 		68C300D096BF39239876D045 /* utils_base.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2ED0C0702D2734D9B08FC31D /* utils_base.mm */; };
 		8292D346BFC33D6E8D3CDDC1 /* xh_sttxt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3F1680BBE8331A7B745638C /* xh_sttxt.cpp */; };
-		01D4C5F2147F3942A7CE91AC /* icon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5DAF1F49F0F3F41A427A21D /* icon.cpp */; };
 		3E6AA08E72A030D39D867D4D /* ScintillaWX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6F9D4319F639BE89E5A82F /* ScintillaWX.cpp */; };
 		EAE02BA934B43EEE92C496C8 /* dcpsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EEA0945B20913754A54D0FD9 /* dcpsg.cpp */; };
 		FEA741A9B6663A4C929893C3 /* aboutdlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77D6E66F72443765A2FBE263 /* aboutdlgg.cpp */; };
@@ -4908,7 +4905,6 @@
 		24930711031D35288D28B04B /* choiccmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choiccmn.cpp; path = ../../src/common/choiccmn.cpp; sourceTree = SOURCE_ROOT; };
 		F7440859617F3B47AF4D3817 /* valgen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = valgen.cpp; path = ../../src/common/valgen.cpp; sourceTree = SOURCE_ROOT; };
 		B1F3C70512D93501B0478F3E /* m_fonts.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_fonts.cpp; path = ../../src/html/m_fonts.cpp; sourceTree = SOURCE_ROOT; };
-		F5DAF1F49F0F3F41A427A21D /* icon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = icon.cpp; path = ../../src/generic/icon.cpp; sourceTree = SOURCE_ROOT; };
 		01BA6D45FE4C381493EB4372 /* validate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = validate.cpp; path = ../../src/common/validate.cpp; sourceTree = SOURCE_ROOT; };
 		375FF97B202F3C359402D13E /* jdpostct.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdpostct.c; path = ../../src/jpeg/jdpostct.c; sourceTree = SOURCE_ROOT; };
 		168DB301ACC736FF96D7F581 /* file.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = file.cpp; path = ../../src/common/file.cpp; sourceTree = SOURCE_ROOT; };
@@ -6153,7 +6149,6 @@
 				64DA16CF41C834D7B7642024 /* prntdlgg.cpp */,
 				071FEABEA61E3B559A47A7DB /* statusbr.cpp */,
 				E9B31409EC6532FC83B0B957 /* textmeasure.cpp */,
-				F5DAF1F49F0F3F41A427A21D /* icon.cpp */,
 				F582C6B3A5AA3367BB4DBE97 /* statbmp_osx.cpp */,
 				027D2F04BE933ED6B9BA1518 /* imaglist.cpp */,
 				F4020D790AE7363CB29F1C2F /* anybutton.mm */,
@@ -8138,7 +8133,6 @@
 				C005C2D547E735E9B081658F /* prntdlgg.cpp in Sources */,
 				A1AF8FF873D6383996995ED1 /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D5596A /* textmeasure.cpp in Sources */,
-				01D4C5F2147F3942A7CE91AB /* icon.cpp in Sources */,
 				750C716389AD3ADBABC9D68B /* statbmp_osx.cpp in Sources */,
 				1EDED99760B23A1999E75C14 /* imaglist.cpp in Sources */,
 				65AD3B31319C35F1AC9EC626 /* anybutton.mm in Sources */,
@@ -8826,7 +8820,6 @@
 				C005C2D547E735E9B0816590 /* prntdlgg.cpp in Sources */,
 				A1AF8FF873D6383996995ECF /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D5596B /* textmeasure.cpp in Sources */,
-				01D4C5F2147F3942A7CE91AC /* icon.cpp in Sources */,
 				750C716389AD3ADBABC9D68A /* statbmp_osx.cpp in Sources */,
 				1EDED99760B23A1999E75C12 /* imaglist.cpp in Sources */,
 				65AD3B31319C35F1AC9EC627 /* anybutton.mm in Sources */,
@@ -10032,7 +10025,6 @@
 				C005C2D547E735E9B081658E /* prntdlgg.cpp in Sources */,
 				A1AF8FF873D6383996995ED0 /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D55969 /* textmeasure.cpp in Sources */,
-				01D4C5F2147F3942A7CE91AA /* icon.cpp in Sources */,
 				750C716389AD3ADBABC9D689 /* statbmp_osx.cpp in Sources */,
 				1EDED99760B23A1999E75C13 /* imaglist.cpp in Sources */,
 				65AD3B31319C35F1AC9EC625 /* anybutton.mm in Sources */,

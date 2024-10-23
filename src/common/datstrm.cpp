@@ -198,8 +198,8 @@ void DoReadLL(T *buffer, size_t size, wxInputStream *input, bool be_order)
             buffer[uiIndex] = 0l;
             for ( unsigned ui = 0; ui != 8; ++ui )
             {
-                buffer[uiIndex] = buffer[uiIndex] * 256l +
-                            DataType((unsigned long) pchBuffer[idx_base + ui]);
+                buffer[uiIndex] <<= 8;
+                buffer[uiIndex] += DataType((unsigned long) pchBuffer[idx_base + ui]);
             }
 
             idx_base += 8;
@@ -211,8 +211,11 @@ void DoReadLL(T *buffer, size_t size, wxInputStream *input, bool be_order)
         {
             buffer[uiIndex] = 0l;
             for ( unsigned ui=0; ui!=8; ++ui )
-                buffer[uiIndex] = buffer[uiIndex] * 256l +
-                    DataType((unsigned long) pchBuffer[idx_base + 7 - ui]);
+            {
+                buffer[uiIndex] <<= 8;
+                buffer[uiIndex] += DataType((unsigned long) pchBuffer[idx_base + 7 - ui]);
+            }
+
             idx_base += 8;
         }
     }
