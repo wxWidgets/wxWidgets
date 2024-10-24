@@ -276,8 +276,6 @@ void TextCtrlTestCase::ReadOnly()
 void TextCtrlTestCase::MaxLength()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
-
     wxUIActionSimulator sim;
 
     if ( ms_style == wxTE_MULTILINE )
@@ -285,6 +283,7 @@ void TextCtrlTestCase::MaxLength()
 #if defined(__WXMSW__) || defined(__WXQT__)
         delete m_text;
         CreateText(wxTE_DONTWRAP);
+        EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
 
         m_text->SetMaxLength(250);
         m_text->SetFocus();
@@ -347,6 +346,8 @@ void TextCtrlTestCase::MaxLength()
 #endif
 
         EventCounter updated(m_text, wxEVT_TEXT);
+        EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
+
         m_text->SetMaxLength(10);
         m_text->SetFocus();
         wxYield();
