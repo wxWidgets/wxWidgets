@@ -17,40 +17,8 @@
 // This test suite tests helpers from wx/testing.h intended for testing of code
 // that calls modal dialogs. It does not test the implementation of wxWidgets'
 // dialogs.
-class ModalDialogsTestCase : public CppUnit::TestCase
-{
-public:
-    ModalDialogsTestCase() { }
 
-private:
-    CPPUNIT_TEST_SUITE( ModalDialogsTestCase );
-// wxInfoBar has bug under x11. It will cause the dialog crash
-// Disable it for now.
-#if !defined (__WXX11__)
-        CPPUNIT_TEST( MessageDialog );
-#endif
-#if wxUSE_FILEDLG
-        CPPUNIT_TEST( FileDialog );
-#endif
-        CPPUNIT_TEST( CustomDialog );
-        CPPUNIT_TEST( InitDialog );
-    CPPUNIT_TEST_SUITE_END();
-
-    void MessageDialog();
-    void FileDialog();
-    void CustomDialog();
-    void InitDialog();
-
-    wxDECLARE_NO_COPY_CLASS(ModalDialogsTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ModalDialogsTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ModalDialogsTestCase, "ModalDialogsTestCase" );
-
-void ModalDialogsTestCase::MessageDialog()
+TEST_CASE("Modal::MessageDialog", "[modal]")
 {
     int rc;
 
@@ -68,11 +36,11 @@ void ModalDialogsTestCase::MessageDialog()
         FILE_DIALOG_TEST
     );
 
-    CPPUNIT_ASSERT_EQUAL(wxNO, rc);
+    CHECK( rc == wxNO );
 }
 
 #if wxUSE_FILEDLG
-void ModalDialogsTestCase::FileDialog()
+TEST_CASE("Modal::FileDialog", "[modal]")
 {
 #if defined(__WXQT__) && defined(__WINDOWS__)
     WARN("Skipping test known to fail under wxQt for Windows");
@@ -87,9 +55,9 @@ void ModalDialogsTestCase::FileDialog()
         wxExpectModal<wxFileDialog>(wxGetCwd() + "/test.txt")
     );
 
-    CPPUNIT_ASSERT_EQUAL((int)wxID_OK, rc);
+    CHECK( rc == wxID_OK );
 
-    CPPUNIT_ASSERT_EQUAL("test.txt", dlg.GetFilename());
+    CHECK( dlg.GetFilename() == "test.txt" );
 
 #ifdef __WXGTK3__
     // The native file dialog in GTK+ 3 launches an async operation which tries
@@ -131,7 +99,7 @@ protected:
     int m_valueToSet;
 };
 
-void ModalDialogsTestCase::CustomDialog()
+TEST_CASE("Modal::CustomDialog", "[modal]")
 {
     MyDialog dlg(nullptr);
 
@@ -141,7 +109,7 @@ void ModalDialogsTestCase::CustomDialog()
         wxExpectModal<MyDialog>(42)
     );
 
-    CPPUNIT_ASSERT_EQUAL( 42, dlg.m_value );
+    CHECK( dlg.m_value == 42 );
 }
 
 
@@ -169,9 +137,9 @@ private:
     bool m_wasModal;
 };
 
-void ModalDialogsTestCase::InitDialog()
+TEST_CASE("Modal::InitDialog", "[modal]")
 {
     MyModalDialog dlg;
     dlg.ShowModal();
-    CPPUNIT_ASSERT( dlg.WasModal() );
+    CHECK( dlg.WasModal() );
 }

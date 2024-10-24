@@ -4562,8 +4562,13 @@ public:
     that it could still be executed and exit()s the process itself, without
     waiting for being killed. If this behaviour is for some reason undesirable,
     make sure that you define a handler for this event in your wxApp-derived
-    class and do not call @c event.Skip() in it (but be aware that the system
-    will still kill your application).
+    class and do not call @c event.Skip() in it, but be aware that the system
+    will still kill your application. Because of this, it is usually better to
+    skip this event and let the default handling take place. Please also note
+    that this handler must not be using any UI functionality (such as modal
+    dialogs asking whether the changes should be saved) as it is not safe to do
+    it any more, but it could, for example, save the program state into a file
+    unconditionally in order to restore it during the next program execution.
 
     @beginEventTable{wxCloseEvent}
     @event{EVT_CLOSE(func)}

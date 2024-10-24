@@ -20,7 +20,6 @@
 #endif
 
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/dialogcount.h"
 
 extern "C" {
 static void response(GtkDialog*, int response_id, wxColourDialog* win)

@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/modalhook.h"
 #include "wx/recguard.h"
 #include "wx/sysopt.h"
 
@@ -52,9 +53,6 @@
 // ----------------------------------------------------------------------------
 // data
 // ----------------------------------------------------------------------------
-
-// this is incremented while a modal dialog is shown
-int wxOpenModalDialogsCount = 0;
 
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
@@ -311,7 +309,8 @@ gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget),
                            wxTopLevelWindowGTK *win )
 {
     if (win->IsEnabled() &&
-        (wxOpenModalDialogsCount == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
+        (wxModalDialogHook::GetOpenCount() == 0 ||
+         (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
          win->IsGrabbed()))
         win->Close();
 

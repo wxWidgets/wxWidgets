@@ -115,6 +115,16 @@ public:
      */
     void Unregister();
 
+    /**
+        Return the number of currently open modal dialogs.
+
+        Mostly this function is used to check if there are any open modal
+        dialogs by comparing its result with 0.
+
+        @since 3.3.0
+     */
+    static int GetOpenCount();
+
 protected:
     /**
         Called by wxWidgets before showing any modal dialogs.

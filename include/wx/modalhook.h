@@ -44,11 +44,23 @@ public:
 
     // Called from wxWidgets code before showing any modal dialogs and calls
     // Enter() for every registered hook.
+    //
+    // Also maintains the count of currently open modal dialogs as a side
+    // effect.
     static int CallEnter(wxDialog* dialog);
 
     // Called from wxWidgets code after dismissing the dialog and calls Exit()
     // for every registered hook.
+    //
+    // As CallEnter(), this function also updates the count of currently open
+    // modal dialogs.
     static void CallExit(wxDialog* dialog);
+
+    // Return the number of currently open modal dialogs.
+    //
+    // Mostly this function is used to check if there are any open modal
+    // dialogs by comparing its result with 0.
+    static int GetOpenCount() { return ms_countOpen; }
 
 protected:
     // Called by wxWidgets before showing any modal dialogs, override this to
@@ -68,6 +80,9 @@ private:
     // All the hooks in reverse registration order (i.e. in call order).
     typedef wxVector<wxModalDialogHook*> Hooks;
     static Hooks ms_hooks;
+
+    // The number of currently open modal dialogs.
+    static int ms_countOpen;
 
     wxDECLARE_NO_COPY_CLASS(wxModalDialogHook);
 };
