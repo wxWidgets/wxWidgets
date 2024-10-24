@@ -477,8 +477,10 @@ wxWindowMSW::~wxWindowMSW()
 
     if ( m_hWnd )
     {
-        // VZ: test temp removed to understand what really happens here
-        //if (::IsWindow(GetHwnd()))
+        // Don't destroy the window when shutting down, this is unnecessary and
+        // can result in other messages being generated and possibly resulting
+        // in WM_ENDSESSION reentrancy.
+        if ( !gs_gotEndSession )
         {
             if ( !::DestroyWindow(GetHwnd()) )
             {
