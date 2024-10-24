@@ -346,8 +346,8 @@ typedef short int WXTYPE;
    In 3.2.x this is an opt-in feature enabled by defining wxNO_UNUSED_VARIABLES. */
 
 #if defined(wxNO_UNUSED_VARIABLES) || defined(WXBUILDING)
-    #ifdef __has_cpp_attribute
-        #if __has_cpp_attribute(warn_unused)
+    #ifdef __has_attribute /* __has_cpp_attribute(warn_unused) would return false with Clang, */
+        #if __has_attribute(warn_unused) /* so use __has_attribute instead */
             #define wxWARN_UNUSED __attribute__((warn_unused))
         #endif
     #endif
