@@ -282,8 +282,8 @@ typedef short int WXTYPE;
 /* wxWARN_UNUSED is used as an attribute to a class, stating that unused instances
    should be warned about (in case such warnings are enabled in the first place) */
 
-#ifdef __has_cpp_attribute
-    #if __has_cpp_attribute(warn_unused)
+#ifdef __has_attribute /* __has_cpp_attribute(warn_unused) would return false with Clang, */
+    #if __has_attribute(warn_unused) /* so use __has_attribute instead */
         #define wxWARN_UNUSED __attribute__((warn_unused))
     #endif
 #endif
