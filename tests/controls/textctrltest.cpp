@@ -89,6 +89,7 @@ private:
         // Rerun the text entry tests not specific to single line controls for
         // multiline ones now.
         wxTEXT_ENTRY_TESTS();
+        WXUISIM_TEST( MaxLength );
         SINGLE_AND_MULTI_TESTS();
 
 
@@ -275,6 +276,69 @@ void TextCtrlTestCase::ReadOnly()
 void TextCtrlTestCase::MaxLength()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
+
+    wxUIActionSimulator sim;
+
+    if ( ms_style == wxTE_MULTILINE )
+    {
+#if defined(__WXMSW__) || defined(__WXQT__)
+        delete m_text;
+        CreateText(wxTE_DONTWRAP);
+
+        m_text->SetMaxLength(250);
+        m_text->SetFocus();
+        wxYield();
+
+        const wxString linePattern = MakeLinePattern();
+
+        m_text->AppendText(wxString::Format("%s\n", linePattern));
+        m_text->SelectAll();
+        m_text->Copy();
+
+        m_text->SetInsertionPointEnd();
+
+        sim.Char('v', wxMOD_CONTROL); // Paste copied line.
+        wxYield();
+
+        CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
+
+        sim.Char('v', wxMOD_CONTROL); // Paste copied line (2nd time).
+        wxYield();
+
+        CPPUNIT_ASSERT_EQUAL(1, maxlen.GetCount()); // Maximum length reached.
+        maxlen.Clear();
+
+        sim.Text("7"); // Should be rejected.
+        wxYield();
+
+        CPPUNIT_ASSERT_EQUAL(1, maxlen.GetCount());
+        maxlen.Clear();
+
+        // Depending on the underlying system, the new line (NL) could be
+        // LF, CR or CRLF, and as a consequence the length of the last line
+        // should be 50 - 2*NL.
+
+        CPPUNIT_ASSERT_EQUAL(3, m_text->GetNumberOfLines());
+
+        int lineLength = m_text->GetLineText(0).length(); // 1st line
+        CPPUNIT_ASSERT_EQUAL(100, lineLength);
+
+        lineLength = m_text->GetLineText(1).length(); // 2nd line
+        CPPUNIT_ASSERT_EQUAL(100, lineLength);
+
+        lineLength = m_text->GetLineText(2).length(); // 3rd line
+        CPPUNIT_ASSERT( (lineLength == 46 || lineLength == 48) );
+
+        // Now, despite the maximum length of 250 set above, adding additional
+        // content to the control programmatically is still possible/allowed:
+        m_text->AppendText(wxString::Format("\n%s", linePattern));
+        CPPUNIT_ASSERT_EQUAL(4, m_text->GetNumberOfLines());
+        CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
+#endif // __WXMSW__ || __WXQT__
+    }
+    else // !wxTE_MULTILINE
+    {
 #ifdef __WXQT__
     #if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
         WARN("wxEVT_TEXT_MAXLEN event is only generated if Qt version is 5.12 or greater");
@@ -282,44 +346,42 @@ void TextCtrlTestCase::MaxLength()
     #endif
 #endif
 
-    EventCounter updated(m_text, wxEVT_TEXT);
-    EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
+        EventCounter updated(m_text, wxEVT_TEXT);
+        m_text->SetMaxLength(10);
+        m_text->SetFocus();
+        wxYield();
 
-    m_text->SetFocus();
-    wxYield();
-    m_text->SetMaxLength(10);
+        sim.Text("abcdef");
+        wxYield();
 
-    wxUIActionSimulator sim;
-    sim.Text("abcdef");
-    wxYield();
+        CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
 
-    CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
+        sim.Text("ghij");
+        wxYield();
 
-    sim.Text("ghij");
-    wxYield();
+        CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
+        CPPUNIT_ASSERT_EQUAL(10, updated.GetCount());
 
-    CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
-    CPPUNIT_ASSERT_EQUAL(10, updated.GetCount());
+        maxlen.Clear();
+        updated.Clear();
 
-    maxlen.Clear();
-    updated.Clear();
+        sim.Text("k");
+        wxYield();
 
-    sim.Text("k");
-    wxYield();
+        CPPUNIT_ASSERT_EQUAL(1, maxlen.GetCount());
+        CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
 
-    CPPUNIT_ASSERT_EQUAL(1, maxlen.GetCount());
-    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
+        maxlen.Clear();
+        updated.Clear();
 
-    maxlen.Clear();
-    updated.Clear();
+        m_text->SetMaxLength(0);
 
-    m_text->SetMaxLength(0);
+        sim.Text("k");
+        wxYield();
 
-    sim.Text("k");
-    wxYield();
-
-    CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
+        CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
+        CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
+    }
 #endif
 }
 
