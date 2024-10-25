@@ -903,10 +903,20 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 // user can veto the close, and therefore the end session.
 void wxApp::OnQueryEndSession(wxCloseEvent& event)
 {
-    if (GetTopWindow())
+    // Make a copy to avoid problems due to iterator invalidation if any
+    // windows get destroyed (rather than just closed) during the loop.
+    const auto tlws = wxTopLevelWindows;
+    for ( auto* tlw : tlws )
     {
-        if (!GetTopWindow()->Close(!event.CanVeto()))
-            event.Veto(true);
+        // If it's not in the list any more it could have been destroyed.
+        if ( !wxTopLevelWindows.Member(tlw) )
+            continue;
+
+        if ( !tlw->Close(!event.CanVeto()) )
+        {
+            event.Veto();
+            return;
+        }
     }
 }
 
