@@ -4336,30 +4336,62 @@ bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
 // end session messages
 // ---------------------------------------------------------------------------
 
+namespace
+{
+
+// Possible values for the flag below.
+enum class QueryEndSession
+{
+    Unknown,
+    Allow,
+    Veto
+};
+
+// This flag is set to either Allow or Veto when our first top level window
+// gets WM_QUERYENDSESSION in order to allow all the other windows to just
+// return the same value without asking the user again, because this should
+// have been already done in wxApp::OnQueryEndSession().
+QueryEndSession gs_queryEndSession = QueryEndSession::Unknown;
+
+} // anonymous namespace
+
 bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 {
-    wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
-    event.SetEventObject(wxTheApp);
-    event.SetCanVeto(true);
-    event.SetLoggingOff(logOff == (long)ENDSESSION_LOGOFF);
-
-    bool rc = wxTheApp->SafelyProcessEvent(event);
-
-    if ( rc )
+    if ( gs_queryEndSession == QueryEndSession::Unknown )
     {
-        // we may end only if the app didn't veto session closing (double
-        // negation...)
-        *mayEnd = !event.GetVeto();
+        // Make sure we won't generate another wxEVT_QUERY_END_SESSION.
+        gs_queryEndSession = QueryEndSession::Allow;
+
+        wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
+        event.SetEventObject(wxTheApp);
+        event.SetCanVeto(true);
+        event.SetLoggingOff(logOff == (long)ENDSESSION_LOGOFF);
+
+        if ( !wxTheApp->SafelyProcessEvent(event) )
+        {
+            // If the event wasn't handled at all, skip all the rest.
+            return false;
+        }
+
+        if ( event.GetVeto() )
+            gs_queryEndSession = QueryEndSession::Veto;
     }
 
-    return rc;
+    *mayEnd = gs_queryEndSession == QueryEndSession::Allow;
+
+    return true;
 }
 
 bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 {
-    // do nothing if the session isn't ending
+    // If the session isn't ending we don't need to generate any events, but we
+    // need to reset the flag set in HandleQueryEndSession() to make sure we
+    // send wxEVT_QUERY_END_SESSION again next time.
     if ( !endSession )
+    {
+        gs_queryEndSession = QueryEndSession::Unknown;
         return false;
+    }
 
     if ( gs_gotEndSession )
     {
