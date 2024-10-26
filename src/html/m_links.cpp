@@ -38,7 +38,7 @@ public:
     virtual const wxHtmlCell* Find(int condition, const void* param) const override
     {
         if ((condition == wxHTML_COND_ISANCHOR) &&
-            (m_AnchorName == (*((const wxString*)param))))
+            (m_AnchorName == (*((const wxString*)param)) || (!GetId().IsEmpty() && GetId() == (*((const wxString*)param)))))
         {
             return this;
         }
@@ -58,10 +58,12 @@ TAG_HANDLER_BEGIN(A, "A")
 
     TAG_HANDLER_PROC(tag)
     {
-        wxString name;
-        if (tag.GetParamAsString(wxT("NAME"), &name))
+        wxString name, id;
+        if (tag.GetParamAsString(wxT("NAME"), &name) || tag.GetParamAsString(wxT("ID"), &id))
         {
-            m_WParser->GetContainer()->InsertCell(new wxHtmlAnchorCell(name));
+            auto cell = new wxHtmlAnchorCell(name);
+            cell->SetId(tag.GetParam(wxT("id")));
+            m_WParser->GetContainer()->InsertCell(cell);
         }
 
         wxString href;

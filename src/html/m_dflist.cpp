@@ -35,16 +35,17 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD" )
 
         if (tag.GetName() == wxT("DL"))
         {
-            if (m_WParser->GetContainer()->GetFirstChild() != nullptr)
+            if (m_WParser->GetContainer()->GetFirstChild() != nullptr || !m_WParser->GetContainer()->GetId().IsEmpty())
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
             }
+            m_WParser->GetContainer()->SetId(tag.GetParam(wxT("id")));
             m_WParser->GetContainer()->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
 
             ParseInner(tag);
 
-            if (m_WParser->GetContainer()->GetFirstChild() != nullptr)
+            if (m_WParser->GetContainer()->GetFirstChild() != nullptr || !m_WParser->GetContainer()->GetId().IsEmpty())
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
@@ -57,6 +58,7 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD" )
         {
             m_WParser->CloseContainer();
             c = m_WParser->OpenContainer();
+            c->SetId(tag.GetParam(wxT("id")));
             c->SetAlignHor(wxHTML_ALIGN_LEFT);
             c->SetMinHeight(m_WParser->GetCharHeight());
             return false;
@@ -65,6 +67,7 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD" )
         {
             m_WParser->CloseContainer();
             c = m_WParser->OpenContainer();
+            c->SetId(tag.GetParam(wxT("id")));
             c->SetIndent(5 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
             return false;
         }

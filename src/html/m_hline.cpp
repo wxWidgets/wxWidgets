@@ -84,7 +84,9 @@ TAG_HANDLER_BEGIN(HR, "HR")
         sz = 1;
         tag.GetParamAsInt(wxT("SIZE"), &sz);
         HasShading = !(tag.HasParam(wxT("NOSHADE")));
-        c->InsertCell(new wxHtmlLineCell((int)((double)sz * m_WParser->GetPixelScale()), HasShading));
+        auto cell = new wxHtmlLineCell((int)((double)sz * m_WParser->GetPixelScale()), HasShading);
+        cell->SetId(tag.GetParam(wxT("id")));
+        c->InsertCell(cell);
 
         m_WParser->CloseContainer();
         m_WParser->OpenContainer();

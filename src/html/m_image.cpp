@@ -757,10 +757,11 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
         {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
-            wxString tmp;
-            if (tag.GetParamAsString(wxT("NAME"), &tmp))
+            wxString name, id;
+            if (tag.GetParamAsString(wxT("NAME"), &name) || tag.GetParamAsString(wxT("ID"), &id))
             {
-                wxHtmlImageMapCell *cel = new wxHtmlImageMapCell( tmp );
+                wxHtmlImageMapCell *cel = new wxHtmlImageMapCell( name );
+                cel->SetId(tag.GetParam(wxT("id")));
                 m_WParser->GetContainer()->InsertCell( cel );
             }
             ParseInner( tag );
@@ -787,6 +788,8 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 {
                     cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords, m_WParser->GetPixelScale() );
                 }
+                if (cel != nullptr)
+                    cel->SetId(tag.GetParam(wxT("id")));
                 wxString href;
                 if (cel != nullptr && tag.GetParamAsString(wxT("HREF"), &href))
                     cel->SetLink(wxHtmlLinkInfo(href, tag.GetParam(wxT("TARGET"))));

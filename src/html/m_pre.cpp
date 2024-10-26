@@ -100,6 +100,7 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
 
         m_WParser->CloseContainer();
         c = m_WParser->OpenContainer();
+        c->SetId(tag.GetParam(wxT("id")));
         c->SetWidthFloat(tag);
         c = m_WParser->OpenContainer();
         c->SetAlignHor(wxHTML_ALIGN_LEFT);

@@ -95,11 +95,12 @@ TAG_HANDLER_BEGIN(P, "P")
 
     TAG_HANDLER_PROC(tag)
     {
-        if (m_WParser->GetContainer()->GetFirstChild() != nullptr)
+        if (m_WParser->GetContainer()->GetFirstChild() != nullptr || !m_WParser->GetContainer()->GetId().IsEmpty())
         {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
         }
+        m_WParser->GetContainer()->SetId(tag.GetParam(wxT("id")));
         m_WParser->GetContainer()->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
         m_WParser->GetContainer()->SetAlign(tag);
         return false;
@@ -119,6 +120,7 @@ TAG_HANDLER_BEGIN(BR, "BR")
 
         m_WParser->CloseContainer();
         c = m_WParser->OpenContainer();
+        c->SetId(tag.GetParam(wxT("id")));
         c->SetAlignHor(al);
         c->SetAlign(tag);
         c->SetMinHeight(m_WParser->GetCharHeight());
@@ -138,7 +140,7 @@ TAG_HANDLER_BEGIN(CENTER, "CENTER")
         wxHtmlContainerCell *c = m_WParser->GetContainer();
 
         m_WParser->SetAlign(wxHTML_ALIGN_CENTER);
-        if (c->GetFirstChild() != nullptr)
+        if (c->GetFirstChild() != nullptr || !m_WParser->GetContainer()->GetId().IsEmpty())
         {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
@@ -151,7 +153,7 @@ TAG_HANDLER_BEGIN(CENTER, "CENTER")
             ParseInner(tag);
 
             m_WParser->SetAlign(old);
-            if (c->GetFirstChild() != nullptr)
+            if (c->GetFirstChild() != nullptr || !m_WParser->GetContainer()->GetId().IsEmpty())
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
@@ -179,7 +181,9 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
             if(style.IsSameAs(wxT("PAGE-BREAK-BEFORE:ALWAYS"), false))
             {
                 m_WParser->CloseContainer();
-                m_WParser->OpenContainer()->InsertCell(new wxHtmlPageBreakCell);
+                auto cell = new wxHtmlPageBreakCell;
+                cell->SetId(tag.GetParam(wxT("id")));
+                m_WParser->OpenContainer()->InsertCell(cell);
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
                 return false;
@@ -188,13 +192,14 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
             {
                 // As usual, reuse the current container if it's empty.
                 wxHtmlContainerCell *c = m_WParser->GetContainer();
-                if (c->GetFirstChild() != nullptr)
+                if (c->GetFirstChild() != nullptr || !m_WParser->GetContainer()->GetId().IsEmpty())
                 {
                     // If not, open a new one.
                     m_WParser->CloseContainer();
                     c = m_WParser->OpenContainer();
                 }
 
+                c->SetId(tag.GetParam(wxT("id")));
                 // Force this container to live entirely on the same page.
                 c->SetCanLiveOnPagebreak(false);
 
@@ -223,7 +228,7 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
         {
             int old = m_WParser->GetAlign();
             wxHtmlContainerCell *c = m_WParser->GetContainer();
-            if (c->GetFirstChild() != nullptr)
+            if (c->GetFirstChild() != nullptr || !m_WParser->GetContainer()->GetId().IsEmpty())
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
@@ -236,11 +241,12 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
                 c->SetAlign(tag);
                 m_WParser->SetAlign(c->GetAlignHor());
             }
+            c->SetId(tag.GetParam(wxT("id")));
 
             ParseInner(tag);
 
             m_WParser->SetAlign(old);
-            if (c->GetFirstChild() != nullptr)
+            if (c->GetFirstChild() != nullptr || !m_WParser->GetContainer()->GetId().IsEmpty())
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer();
@@ -258,6 +264,7 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
 
             m_WParser->CloseContainer();
             c = m_WParser->OpenContainer();
+            c->SetId(tag.GetParam(wxT("id")));
             c->SetAlignHor(al);
             c->SetAlign(tag);
             c->SetMinHeight(m_WParser->GetCharHeight());
@@ -354,6 +361,7 @@ TAG_HANDLER_BEGIN(BLOCKQUOTE, "BLOCKQUOTE")
         m_WParser->CloseContainer();
         c = m_WParser->OpenContainer();
 
+        c->SetId(tag.GetParam(wxT("id")));
         if (c->GetAlignHor() == wxHTML_ALIGN_RIGHT)
             c->SetIndent(5 * m_WParser->GetCharWidth(), wxHTML_INDENT_RIGHT);
         else

@@ -258,7 +258,9 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
 
             m_List->AddRow(mark, c);
             c = m_WParser->OpenContainer();
-            m_WParser->SetContainer(new wxHtmlListcontentCell(c));
+            auto cell = new wxHtmlListcontentCell(c);
+            cell->SetId(tag.GetParam(wxT("id")));
+            m_WParser->SetContainer(cell);
 
             if (m_Numbering != 0) m_Numbering++;
         }
@@ -276,6 +278,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
 
             wxHtmlListCell *oldList = m_List;
             m_List = new wxHtmlListCell(c);
+            m_List->SetId(tag.GetParam(wxT("id")));
             m_List->SetIndent(2 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
 
             ParseInner(tag);

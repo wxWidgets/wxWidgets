@@ -191,9 +191,9 @@ void wxHtmlCell::Layout(int WXUNUSED(w))
 
 
 
-const wxHtmlCell* wxHtmlCell::Find(int WXUNUSED(condition), const void* WXUNUSED(param)) const
+const wxHtmlCell* wxHtmlCell::Find(int condition, const void* param) const
 {
-    return nullptr;
+    return condition == wxHTML_COND_ISANCHOR && !GetId().IsEmpty() && GetId() == (*((const wxString*)param)) ? this : nullptr;
 }
 
 
@@ -1287,7 +1287,7 @@ const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) co
             if (r) return r;
         }
     }
-    return nullptr;
+    return condition == wxHTML_COND_ISANCHOR && !GetId().IsEmpty() && GetId() == (*((const wxString*)param)) ? this : nullptr;
 }
 
 

@@ -38,6 +38,10 @@ TAG_HANDLER_BEGIN(SPAN, "SPAN" )
         int oldunderlined = m_WParser->GetFontUnderlined();
         wxString oldfontface = m_WParser->GetFontFace();
 
+        auto cell = new wxHtmlFontCell(m_WParser->CreateCurrentFont());
+        cell->SetId(tag.GetParam(wxT("id")));
+        m_WParser->GetContainer()->InsertCell(cell);
+
         // Load any style parameters
         wxHtmlStyleParams styleParams(tag);
 

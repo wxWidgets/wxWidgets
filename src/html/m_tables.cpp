@@ -730,6 +730,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             m_enclosingContainer = c = m_WParser->OpenContainer();
 
             m_Table = new wxHtmlTableCell(c, tag, m_WParser->GetPixelScale());
+            m_Table->SetId(tag.GetParam(wxT("id")));
 
             // width:
             {
