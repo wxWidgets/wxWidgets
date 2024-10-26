@@ -180,6 +180,8 @@ public:
 
         m_downloadProgressTimer.Bind(wxEVT_TIMER,
             &WebRequestFrame::OnProgressTimer, this);
+
+        m_urlTextCtrl->SetFocus();
     }
 
     virtual ~WebRequestFrame()
