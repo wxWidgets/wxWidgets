@@ -2628,7 +2628,6 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
 {
     wxPoint screen_pt = ::wxGetMousePosition();
     wxPoint client_pt = ScreenToClient(screen_pt);
-    wxPoint zero(0,0);
 
     wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
     wxAuiTabCtrl* dest_tabs = GetTabCtrlFromPoint(client_pt);
@@ -2752,7 +2751,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
     }
     else
     {
-        m_mgr.DrawHintRect(m_dummyWnd, client_pt, zero);
+        m_mgr.DrawHintRect(m_dummyWnd, client_pt);
     }
 }
 
@@ -2911,10 +2910,8 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
         }
         else
         {
-            wxPoint zero(0,0);
             wxRect rect = m_mgr.CalculateHintRect(m_dummyWnd,
-                                                  mouse_client_pt,
-                                                  zero);
+                                                  mouse_client_pt);
             if (rect.IsEmpty())
             {
                 // there is no suitable drop location here, exit out

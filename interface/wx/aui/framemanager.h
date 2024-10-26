@@ -243,12 +243,15 @@ public:
         @param paneWindow The window pointer of the pane being dragged.
         @param pt The mouse position, in client coordinates.
         @param offset Describes the offset that the mouse is from the upper-left
-            corner of the item being dragged.
+            corner of the item being dragged, 0 by default (since wxWidgets
+            3.3.0, this parameter had to be specified in the earlier versions).
         @return The rectangle hint will be returned in screen coordinates if the pane
             would indeed become docked at the specified drop point.
             Otherwise, an empty rectangle is returned.
     */
-    wxRect CalculateHintRect(wxWindow* paneWindow, const wxPoint& pt, const wxPoint& offset);
+    wxRect CalculateHintRect(wxWindow* paneWindow,
+                             const wxPoint& pt,
+                             const wxPoint& offset = wxPoint{0, 0});
 
     /**
         Check if a key modifier is pressed (actually ::WXK_CONTROL or
@@ -284,8 +287,16 @@ public:
 
         Calling it is equivalent to calling CalculateHintRect() and
         UpdateHint() with the resulting rectangle.
+
+        @param paneWindow Window passed to CalculateHintRect().
+        @param pt Mouse position passed to CalculateHintRect().
+        @param offset Offset passed to CalculateHintRect(), 0 by default (since
+            wxWidgets 3.3.0, this parameter had to be specified in the earlier
+            versions).
     */
-    void DrawHintRect(wxWindow* paneWindow, const wxPoint& pt, const wxPoint& offset);
+    void DrawHintRect(wxWindow* paneWindow,
+                      const wxPoint& pt,
+                      const wxPoint& offset = wxPoint{0, 0});
 
     /**
         Returns an array of all panes managed by the frame manager.
