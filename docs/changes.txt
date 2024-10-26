@@ -258,6 +258,7 @@ All:
 - Add wxNO_UNUSED_VARIABLES to enable warnings about them (Lauri Nurmi, #24882).
 - Install all translations in "make install" (Scott Talbert, #24880).
 - Fix compilation with clang 19 (Lauri Nurmi, #24922).
+- Fix crash in wxWebRequestCURL when connection was refused (#24885).
 
 All (GUI):
 
