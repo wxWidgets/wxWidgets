@@ -865,6 +865,8 @@ SocketPollerImpl* SocketPollerImpl::Create(wxEvtHandler* hndlr)
 
 #else
 
+constexpr const char* TRACE_CURL = "curl";
+
 // SocketPollerSourceHandler - a source handler used by the SocketPoller class.
 
 class SocketPollerSourceHandler: public wxEventLoopSourceHandler
@@ -939,6 +941,9 @@ SourceSocketPoller::SourceSocketPoller(wxEvtHandler* hndlr)
 
 SourceSocketPoller::~SourceSocketPoller()
 {
+    wxLogTrace(TRACE_CURL, "Cleaning up all %zu socket pollers",
+               m_socketData.size());
+
     // Clean up any leftover socket data.
     for ( SocketDataMap::iterator it = m_socketData.begin() ;
           it != m_socketData.end() ; ++it )
@@ -975,6 +980,8 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
 
     if ( it != m_socketData.end() )
     {
+        wxLogTrace(TRACE_CURL, "Reusing socket poller for %d", sock);
+
         // If this socket is already being polled, reuse the old handler. Also
         // delete the old source object to stop the old polling operations.
         wxEventLoopSource* oldSrc = it->second;
@@ -985,6 +992,8 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
     else
     {
         // Otherwise create a new source handler.
+        wxLogTrace(TRACE_CURL, "Creating new socket poller for %d", sock);
+
         srcHandler =
             new SocketPollerSourceHandler(sock, m_handler);
     }
@@ -1022,6 +1031,8 @@ void SourceSocketPoller::StopPolling(curl_socket_t sock)
 
     if ( it != m_socketData.end() )
     {
+        wxLogTrace(TRACE_CURL, "Cleaning up socket poller for %d", sock);
+
         CleanUpSocketSource(it->second);
         m_socketData.erase(it);
     }
