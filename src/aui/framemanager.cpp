@@ -828,13 +828,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
     {
         pinfo.best_size = pinfo.window->GetBestSize();
 
-        if (pinfo.min_size != wxDefaultSize)
-        {
-            if (pinfo.best_size.x < pinfo.min_size.x)
-                pinfo.best_size.x = pinfo.min_size.x;
-            if (pinfo.best_size.y < pinfo.min_size.y)
-                pinfo.best_size.y = pinfo.min_size.y;
-        }
+        pinfo.best_size.IncTo(pinfo.min_size);
     }
 
 
