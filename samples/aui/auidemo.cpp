@@ -1185,6 +1185,15 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
     if (flag)
     {
         m_mgr.SetFlags(m_mgr.GetFlags() ^ flag);
+
+        // Propagate the flags to the notebooks too.
+        for ( auto& pane : m_mgr.GetAllPanes() )
+        {
+            if (auto* nb = wxDynamicCast(pane.window, wxAuiNotebook) )
+            {
+                nb->SetManagerFlags(m_mgr.GetFlags());
+            }
+        }
     }
 
     m_mgr.Update();
