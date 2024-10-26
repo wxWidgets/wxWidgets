@@ -1550,6 +1550,16 @@ public:
         m_tabCtrlHeight = h;
     }
 
+    // As we don't have a valid HWND, the base class version doesn't work for
+    // this window, so override it to return the appropriate DPI.
+    wxSize GetDPI() const override
+    {
+        if (!m_tabs)
+            return wxWindow::GetDPI();
+
+        return m_tabs->GetDPI();
+    }
+
 protected:
     void DoSetSize(int x, int y,
                    int width, int height,
