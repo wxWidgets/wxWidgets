@@ -998,9 +998,7 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
     if ( newSrc == nullptr )
     {
         // We were not able to add a source for this socket.
-        wxLogDebug(wxString::Format(
-                       "Unable to create event loop source for %d",
-                       static_cast<int>(sock)));
+        wxLogDebug("Unable to create event loop source for %d", sock);
 
         delete srcHandler;
         socketIsPolled = false;
