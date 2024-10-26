@@ -492,6 +492,10 @@ public:
                  const wxPoint& pt,
                  const wxPoint& offset);
 
+    void UpdateHint(const wxRect& rect);
+
+    // These functions are public for compatibility reasons, but should never
+    // be called directly, use UpdateHint() above instead.
     virtual void ShowHint(const wxRect& rect);
     virtual void HideHint();
 

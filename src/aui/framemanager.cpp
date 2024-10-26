@@ -3455,13 +3455,18 @@ void wxAuiManager::DrawHintRect(wxWindow* pane_window,
                                 const wxPoint& pt,
                                 const wxPoint& offset)
 {
-    wxRect rect = CalculateHintRect(pane_window, pt, offset);
+    const wxRect rect = CalculateHintRect(pane_window, pt, offset);
+    if (rect != m_lastHint)
+        UpdateHint(rect);
+}
 
+void wxAuiManager::UpdateHint(const wxRect& rect)
+{
     if (rect.IsEmpty())
     {
         HideHint();
     }
-    else if (m_lastHint != rect) // if the hint rect is the same as last time, don't do anything
+    else
     {
         m_lastHint = rect;
 

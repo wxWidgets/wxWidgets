@@ -2712,7 +2712,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
                 {
                     wxRect hint_rect = tab_ctrl->GetClientRect();
                     tab_ctrl->ClientToScreen(&hint_rect.x, &hint_rect.y);
-                    m_mgr.ShowHint(hint_rect);
+                    m_mgr.UpdateHint(hint_rect);
                     return;
                 }
             }
@@ -2748,7 +2748,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
     {
         wxRect hint_rect = dest_tabs->GetRect();
         ClientToScreen(&hint_rect.x, &hint_rect.y);
-        m_mgr.ShowHint(hint_rect);
+        m_mgr.UpdateHint(hint_rect);
     }
     else
     {
