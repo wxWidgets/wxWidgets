@@ -313,12 +313,12 @@ public:
 
             #if defined(__WXMSW__)
             ICoreWebView2EnvironmentOptions* webViewOptions =
-                (ICoreWebView2EnvironmentOptions*) config->GetNativeConfiguration();
-            webViewOptions->put_AdditionalBrowserArguments("--autoplay-policy=no-user-gesture-required");
+                (ICoreWebView2EnvironmentOptions*) config.GetNativeConfiguration();
+            webViewOptions->put_AdditionalBrowserArguments(L"--autoplay-policy=no-user-gesture-required");
             #elif defined(__WXOSX__)
             WKWebViewConfiguration* webViewConfiguration =
-                (WKWebViewConfiguration*) config->GetNativeConfiguration();
-            webViewConfiguration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
+                (WKWebViewConfiguration*) config.GetNativeConfiguration();
+            webViewConfiguration->mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
             #endif
 
             wxWebView* webView = wxWebView::New(config);
