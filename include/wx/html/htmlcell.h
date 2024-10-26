@@ -203,6 +203,10 @@ class WXDLLIMPEXP_HTML wxHtmlCell : public wxObject
 {
 public:
     wxHtmlCell() = default;
+    explicit wxHtmlCell(const wxHtmlTag& tag)
+        : m_id(tag.GetParam(wxASCII_STR("id")))
+    {
+    }
     virtual ~wxHtmlCell();
 
     void SetParent(wxHtmlContainerCell *p) {m_Parent = p;}
@@ -230,6 +234,7 @@ public:
     const wxString& GetId() const { return m_id; }
     bool HasId() const { return !m_id.empty(); }
     void SetId(const wxString& id) { m_id = id; }
+    void CopyId(const wxHtmlTag& tag) { m_id = tag.GetParam(wxASCII_STR("id")); }
 
     // returns the link associated with this cell. The position is position
     // within the cell so it varies from 0 to m_Width, from 0 to m_Height
@@ -383,7 +388,8 @@ protected:
     virtual wxString GetDescription() const;
 
     // Can be used in Find() to check if the condition is wxHTML_COND_ISANCHOR
-    // and the parameter matches the given string.
+    // and the parameter matches the given string or, in the overload not
+    // taking anchor, the ID of this cell.
     //
     // This is supposed to only be used as a helper from Find().
     bool CheckIsAnchor(int cond, const void* p, const wxString& anchor) const
@@ -392,6 +398,11 @@ protected:
         // wxString for this condition.
         return cond == wxHTML_COND_ISANCHOR &&
                     *static_cast<const wxString*>(p) == anchor;
+    }
+
+    bool CheckIsAnchor(int cond, const void* p) const
+    {
+        return CheckIsAnchor(cond, p, GetId());
     }
 
 
@@ -499,6 +510,7 @@ class WXDLLIMPEXP_HTML wxHtmlContainerCell : public wxHtmlCell
 {
 public:
     explicit wxHtmlContainerCell(wxHtmlContainerCell *parent);
+    wxHtmlContainerCell(const wxHtmlTag& tag, wxHtmlContainerCell *parent);
     virtual ~wxHtmlContainerCell();
 
     virtual void Layout(int w) override;
@@ -618,6 +630,9 @@ protected:
             // Maximum possible length if ignoring line wrap
 
 
+private:
+    void InitParent(wxHtmlContainerCell *parent);
+
     wxDECLARE_ABSTRACT_CLASS(wxHtmlContainerCell);
     wxDECLARE_NO_COPY_CLASS(wxHtmlContainerCell);
 };
@@ -660,6 +675,7 @@ class WXDLLIMPEXP_HTML wxHtmlFontCell : public wxHtmlCell
 {
 public:
     wxHtmlFontCell(wxFont *font) : wxHtmlCell(), m_Font(*font) { }
+    wxHtmlFontCell(const wxHtmlTag& tag, wxFont *font) : wxHtmlCell(tag), m_Font(*font) { }
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
                       wxHtmlRenderingInfo& info) override;
     virtual void DrawInvisible(wxDC& dc, int x, int y,

@@ -180,8 +180,11 @@ void wxHtmlCell::Layout(int WXUNUSED(w))
 
 
 
-const wxHtmlCell* wxHtmlCell::Find(int WXUNUSED(condition), const void* WXUNUSED(param)) const
+const wxHtmlCell* wxHtmlCell::Find(int condition, const void* param) const
 {
+    if ( CheckIsAnchor(condition, param) )
+        return this;
+
     return nullptr;
 }
 
@@ -655,10 +658,22 @@ wxString wxHtmlWordCell::GetDescription() const
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlContainerCell, wxHtmlCell);
 
-wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCell()
+void wxHtmlContainerCell::InitParent(wxHtmlContainerCell *parent)
 {
     m_Parent = parent;
     if (m_Parent) m_Parent->InsertCell(this);
+}
+
+wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCell()
+{
+    InitParent(parent);
+}
+
+wxHtmlContainerCell::wxHtmlContainerCell(const wxHtmlTag& tag,
+                                         wxHtmlContainerCell *parent)
+    : wxHtmlCell(tag)
+{
+    InitParent(parent);
 }
 
 wxHtmlContainerCell::~wxHtmlContainerCell()
@@ -1258,6 +1273,9 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale
 
 const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) const
 {
+    if ( CheckIsAnchor(condition, param) )
+        return this;
+
     if (m_Cells)
     {
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
