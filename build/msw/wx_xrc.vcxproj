@@ -927,6 +927,7 @@
     <ClCompile Include="..\..\src\xrc\xmlrsall.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_activityindicator.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_dataview.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_vlistbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -1046,6 +1047,7 @@
     <ClInclude Include="..\..\include\wx\xrc\xmlres.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_activityindicator.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_dataview.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_vlistbox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
