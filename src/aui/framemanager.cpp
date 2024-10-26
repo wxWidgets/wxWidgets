@@ -826,8 +826,14 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
     if (pinfo.best_size == wxDefaultSize &&
         pinfo.window)
     {
-        pinfo.best_size = pinfo.window->GetBestSize();
+        // It's important to use the current window size and not the best size
+        // when adding a pane corresponding to a previously docked window: it
+        // shouldn't change its size if it's dragged and docked in a different
+        // place.
+        pinfo.best_size = pinfo.window->GetSize();
 
+        // But we still shouldn't make it too small.
+        pinfo.best_size.IncTo(pinfo.window->GetBestSize());
         pinfo.best_size.IncTo(pinfo.min_size);
     }
 
