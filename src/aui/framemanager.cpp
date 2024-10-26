@@ -3218,10 +3218,13 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
     ShowHint(m_lastHint);
 }
 
-void wxAuiManager::ShowHint(const wxRect& rect)
+void wxAuiManager::ShowHint(const wxRect& rectScreen)
 {
     wxOverlayDC dc(m_overlay, m_frame);
     dc.Clear();
+
+    wxRect rect = rectScreen;
+    m_frame->ScreenToClient(&rect.x, &rect.y);
 
     wxDCClipper clip(dc, rect);
 
@@ -3359,7 +3362,7 @@ void wxAuiManager::StartPaneDrag(wxWindow* pane_window,
 // first calls DoDrop() to determine the exact position the pane would
 // be at were if dropped.  If the pane would indeed become docked at the
 // specified drop point, the rectangle hint will be returned in
-// client coordinates.  Otherwise, an empty rectangle is returned.
+// screen coordinates.  Otherwise, an empty rectangle is returned.
 // |pane_window| is the window pointer of the pane being dragged, |pt| is
 // the mouse position, in client coordinates.  |offset| describes the offset
 // that the mouse is from the upper-left corner of the item being dragged
@@ -3430,15 +3433,15 @@ wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
 
     delete sizer;
 
-    if ( !rect.IsEmpty() )
-    {
-        rect.Offset( m_frame->GetClientAreaOrigin() );
+    if ( rect.IsEmpty() )
+        return rect;
 
-        if ( m_frame->GetLayoutDirection() == wxLayout_RightToLeft )
-        {
-            // Mirror rectangle in RTL mode
-            rect.x -= rect.GetWidth();
-        }
+    m_frame->ClientToScreen(&rect.x, &rect.y);
+
+    if ( m_frame->GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // Mirror rectangle in RTL mode
+        rect.x -= rect.GetWidth();
     }
 
     return rect;
