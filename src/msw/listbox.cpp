@@ -64,6 +64,20 @@ public:
     wxString GetName() const wxOVERRIDE
         { return m_parent->GetString(GetIndex()); }
 
+protected:
+    void
+    GetColourToUse(wxODStatus stat,
+                   wxColour& colText,
+                   wxColour& colBack) const wxOVERRIDE
+    {
+        wxOwnerDrawn::GetColourToUse(stat, colText, colBack);
+
+        // Default background colour for the owner drawn items is the menu one,
+        // but it's not appropriate for the listboxes, so override it here.
+        if ( !(stat & wxODSelected) && !GetBackgroundColour().IsOk() )
+            colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+    }
+
 private:
     wxListBox *m_parent;
 };
