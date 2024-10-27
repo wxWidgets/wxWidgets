@@ -559,22 +559,22 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     wxString r = instr;
     wxString num;
 
-    num.Printf(wxT("%i"), page);
-    r.Replace(wxT("@PAGENUM@"), num);
+    num.Printf("%i", page);
+    r.Replace("@PAGENUM@", num);
 
-    num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.size() - 1));
-    r.Replace(wxT("@PAGESCNT@"), num);
+    num.Printf("%zu", m_PageBreaks.size() - 1);
+    r.Replace("@PAGESCNT@", num);
 
 #if wxUSE_DATETIME
     const wxDateTime now = wxDateTime::Now();
-    r.Replace(wxT("@DATE@"), now.FormatDate());
-    r.Replace(wxT("@TIME@"), now.FormatTime());
+    r.Replace("@DATE@", now.FormatDate());
+    r.Replace("@TIME@", now.FormatTime());
 #else
-    r.Replace(wxT("@DATE@"), wxEmptyString);
-    r.Replace(wxT("@TIME@"), wxEmptyString);
+    r.Replace("@DATE@", wxEmptyString);
+    r.Replace("@TIME@", wxEmptyString);
 #endif
 
-    r.Replace(wxT("@TITLE@"), GetTitle());
+    r.Replace("@TITLE@", GetTitle());
 
     return r;
 }
@@ -709,8 +709,9 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
     }
 
     wxPreviewFrame *frame = new wxPreviewFrame(preview, m_ParentWindow,
-                                               m_Name + _(" Preview"),
-                                               wxPoint(100, 100), wxSize(650, 500));
+                                wxString::Format(/* TRANSLATORS: %s may be a document title. */_("%s Preview"), m_Name),
+                                wxDefaultPosition,
+                                wxWindow::FromDIP(wxSize(650, 500), m_ParentWindow));
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show(true);
