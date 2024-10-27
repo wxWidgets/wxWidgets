@@ -283,13 +283,15 @@ OwnerDrawnFrame::OwnerDrawnFrame()
             aszChoices          // array of strings
         );
 
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     unsigned int ui;
     for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 )
     {
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
         m_pListBox->GetItem(ui)->SetBackgroundColour(*wxBLUE);
-#endif
     }
+
+    m_pListBox->GetItem(3)->SetTextColour(*wxRED);
+#endif
 
     m_pListBox->Check(2);
 

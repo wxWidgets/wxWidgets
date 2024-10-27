@@ -34,7 +34,7 @@
 #include <windowsx.h>
 
 #if wxUSE_OWNER_DRAWN
-    #include  "wx/ownerdrw.h"
+    #include "wx/msw/private/listboxitem.h"
 
     namespace
     {
@@ -49,38 +49,7 @@
 
 #if wxUSE_OWNER_DRAWN
 
-class wxListBoxItem : public wxOwnerDrawn
-{
-public:
-    wxListBoxItem(wxListBox *parent)
-        { m_parent = parent; }
-
-    wxListBox *GetParent() const
-        { return m_parent; }
-
-    int GetIndex() const
-        { return m_parent->GetItemIndex(const_cast<wxListBoxItem*>(this)); }
-
-    wxString GetName() const override
-        { return m_parent->GetString(GetIndex()); }
-
-protected:
-    void
-    GetColourToUse(wxODStatus stat,
-                   wxColour& colText,
-                   wxColour& colBack) const override
-    {
-        wxOwnerDrawn::GetColourToUse(stat, colText, colBack);
-
-        // Default background colour for the owner drawn items is the menu one,
-        // but it's not appropriate for the listboxes, so override it here.
-        if ( !(stat & wxODSelected) && !GetBackgroundColour().IsOk() )
-            colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
-    }
-
-private:
-    wxListBox *m_parent;
-};
+using wxListBoxItem = wxListBoxItemBase<wxListBox>;
 
 wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 {

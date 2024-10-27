@@ -36,7 +36,7 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/ownerdrw.h"
+#include "wx/msw/private/listboxitem.h"
 
 #include <windowsx.h>
 
@@ -69,25 +69,13 @@ namespace
 // declaration and implementation of wxCheckListBoxItem class
 // ----------------------------------------------------------------------------
 
-class wxCheckListBoxItem : public wxOwnerDrawn
+class wxCheckListBoxItem : public wxListBoxItemBase<wxCheckListBox>
 {
 public:
-    // ctor
     wxCheckListBoxItem(wxCheckListBox *parent);
 
     // drawing functions
     virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) override;
-
-    // simple accessors and operations
-    wxCheckListBox *GetParent() const
-        { return m_parent; }
-
-    int GetIndex() const
-        { return m_parent->GetItemIndex(const_cast<wxCheckListBoxItem*>(this)); }
-
-    wxString GetName() const override
-        { return m_parent->GetString(GetIndex()); }
-
 
     bool IsChecked() const
         { return m_checked; }
@@ -108,22 +96,20 @@ protected:
     }
 
 private:
-    wxCheckListBox *m_parent;
     bool m_checked;
 
     wxDECLARE_NO_COPY_CLASS(wxCheckListBoxItem);
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *parent)
+    : wxListBoxItemBase<wxCheckListBox>(parent)
 {
-    m_parent = parent;
     m_checked = false;
 
     wxSize size = wxRendererNative::Get().GetCheckBoxSize(parent);
     size.x += 2 * CHECKMARK_EXTRA_SPACE + CHECKMARK_LABEL_SPACE;
 
     SetMarginWidth(size.GetWidth());
-    SetBackgroundColour(parent->GetBackgroundColour());
 }
 
 bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
