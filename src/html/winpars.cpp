@@ -194,10 +194,24 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_UseLink = false;
     m_Link = wxHtmlLinkInfo( wxEmptyString );
     m_LinkColor = wxPrivate::GetLinkColour();
-    m_ActualColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-    m_ActualBackgroundColor = m_windowInterface
-                            ? m_windowInterface->GetHTMLBackgroundColour()
-                            : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
+    // if an HTML window interface is connected to this parser,
+    // then use its control background color and the system
+    // default text color.
+    if ( m_windowInterface )
+    {
+        m_ActualColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+        m_ActualBackgroundColor = m_windowInterface->GetHTMLBackgroundColour();
+    }
+    // Otherwise, no window interface is connected to this parser
+    // (e.g., an HTML renderer being used for printing).
+    // Fall back to the default white background and black text.
+    else
+    {
+        m_ActualColor = *wxBLACK;
+        m_ActualBackgroundColor = *wxWHITE;
+    }
+
     m_ActualBackgroundMode = wxBRUSHSTYLE_TRANSPARENT;
     m_Align = wxHTML_ALIGN_LEFT;
     m_ScriptMode = wxHTML_SCRIPT_NORMAL;
