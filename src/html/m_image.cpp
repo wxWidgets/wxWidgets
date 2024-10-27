@@ -761,6 +761,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
             if (tag.GetParamAsString(wxT("NAME"), &name) || tag.GetParamAsString(wxT("ID"), &id))
             {
                 wxHtmlImageMapCell *cel = new wxHtmlImageMapCell( name );
+                // since the || operator is short-circuiting, we do not know if we got the id
                 cel->SetId(tag.GetParam(wxT("id")));
                 m_WParser->GetContainer()->InsertCell( cel );
             }

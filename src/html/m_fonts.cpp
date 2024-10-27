@@ -287,7 +287,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         }
 
         c = m_WParser->GetContainer();
-        if (c->GetFirstChild() || !m_WParser->GetContainer()->GetId().IsEmpty())
+        if (c->GetFirstChild() || c->HasId())
         {
             m_WParser->CloseContainer();
             c = m_WParser->OpenContainer();

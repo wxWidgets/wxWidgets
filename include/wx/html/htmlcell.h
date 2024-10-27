@@ -229,6 +229,7 @@ public:
 
     const wxString& GetId() const { return m_id; }
     void SetId(const wxString& id) { m_id = id; }
+    bool HasId() const { return !m_id.IsEmpty(); }
 
     // returns the link associated with this cell. The position is position
     // within the cell so it varies from 0 to m_Width, from 0 to m_Height
