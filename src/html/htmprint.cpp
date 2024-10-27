@@ -711,9 +711,7 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
     wxPreviewFrame *frame = new wxPreviewFrame(preview, m_ParentWindow,
                                                wxString::Format(_("%s Preview"), m_Name),
                                                wxPoint(100, 100),
-                                               m_ParentWindow ?
-                                                   m_ParentWindow->FromDIP(wxSize(650, 500)) :
-                                                   wxSize(650, 500));
+                                               wxWindow::FromDIP(wxSize(650, 500), m_ParentWindow));
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show(true);
