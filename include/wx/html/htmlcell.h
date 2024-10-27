@@ -228,6 +228,7 @@ public:
     bool IsFormattingCell() const { return m_Width == 0 && m_Height == 0; }
 
     const wxString& GetId() const { return m_id; }
+    bool HasId() const { return !m_id.empty(); }
     void SetId(const wxString& id) { m_id = id; }
 
     // returns the link associated with this cell. The position is position
