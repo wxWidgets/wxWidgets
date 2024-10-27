@@ -276,11 +276,6 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
                                           "goodbye", "cruel", "world",
                                           "-------", "owner-drawn", "listbox" };
 
-    wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
-    unsigned int ui;
-    for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
-        astrChoices[ui] = aszChoices[ui];
-
     m_pListBox = new wxCheckListBox
         (
             pPanel,             // parent
@@ -288,11 +283,10 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
             wxPoint(10, 10),    // listbox position
             wxSize(200, 200),   // listbox size
             WXSIZEOF(aszChoices), // number of strings
-            astrChoices         // array of strings
+            aszChoices          // array of strings
         );
 
-    delete [] astrChoices;
-
+    unsigned int ui;
     for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 )
     {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
@@ -307,13 +301,6 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
                                          "Green", "Yellow",
                                          "Black", "Violet"  };
 
-    astrChoices = new wxString[WXSIZEOF(aszColors)];
-
-    for ( ui = 0; ui < WXSIZEOF(aszColors); ui++ )
-    {
-        astrChoices[ui] = aszColors[ui];
-    }
-
     wxListBox *pListBox = new wxListBox
         (
             pPanel,              // parent
@@ -321,7 +308,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
             wxPoint(220, 10),    // listbox position
             wxSize(200, 200),    // listbox size
             WXSIZEOF(aszColors), // number of strings
-            astrChoices,         // array of strings
+            aszColors,           // array of strings
             wxLB_OWNERDRAW       // owner-drawn
         );
 
@@ -353,8 +340,6 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
 #else
     wxUnusedVar( pListBox );
 #endif
-
-    delete[] astrChoices;
 
     Show(true);
 }
