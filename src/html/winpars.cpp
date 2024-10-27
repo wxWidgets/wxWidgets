@@ -211,7 +211,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
         m_ActualColor = *wxBLACK;
         m_ActualBackgroundColor = *wxWHITE;
     }
-    
+
     m_ActualBackgroundMode = wxBRUSHSTYLE_TRANSPARENT;
     m_Align = wxHTML_ALIGN_LEFT;
     m_ScriptMode = wxHTML_SCRIPT_NORMAL;
