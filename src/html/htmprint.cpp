@@ -709,8 +709,8 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
     }
 
     wxPreviewFrame *frame = new wxPreviewFrame(preview, m_ParentWindow,
-                                               wxGETTEXT_IN_CONTEXT("HTML easy printer preview title (%s may be the name of the document)",
-                                                                    wxString::Format(_("%s Preview"), m_Name)),
+        wxGetTranslation(wxString::Format(_("%s Preview"), m_Name), wxString(),
+            "HTML easy printer preview title (%s may be the name of the document)"),
                                                wxDefaultPosition,
                                                wxWindow::FromDIP(wxSize(650, 500), m_ParentWindow));
     frame->Centre(wxBOTH);
