@@ -4496,7 +4496,6 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
                 // draw resize hint
                 m_actionHintRect = rect;
-                rect.SetPosition(rect.GetPosition() + m_frame->GetClientAreaOrigin());
                 wxDrawOverlayResizeHint(m_frame, m_overlay, rect);
             }
         }
