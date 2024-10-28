@@ -108,6 +108,11 @@ Changes in behaviour not resulting in compilation errors
   platforms with RTF support. If you need to save/load plain text even for the
   files with the .rtf extension, specify wxTEXT_TYPE_PLAIN explicitly.
 
+- wxClientDC and wxPaintDC now correctly offset their origin by wxFrame
+  toolbar, if any. This is consistent with the behaviour of the other ports
+  but may require removing any compensation for not doing this before that may
+  be present in the application code.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
