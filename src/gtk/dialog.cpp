@@ -20,7 +20,6 @@
 #include "wx/modalhook.h"
 
 #include "wx/gtk/private/wrapgtk.h"
-#include "wx/gtk/private/dialogcount.h"
 
 wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
 
@@ -161,8 +160,6 @@ int wxDialog::ShowModal()
     m_modalShowing = true;
 
     Show( true );
-
-    wxOpenModalDialogLocker modalLock;
 
     // Prevent the widget from being destroyed if the user closes the window.
     // Needed for derived classes which bypass wxTLW::Create(), and therefore

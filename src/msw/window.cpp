@@ -188,6 +188,14 @@ int gs_modalEntryWindowCount = 0;
 // Indicates whether we are currently processing WM_CAPTURECHANGED message.
 bool gs_insideCaptureChanged = false;
 
+// Set to true once we receive WM_ENDSESSION: after this happens we know that
+// the process will shut down, so we try to do as little as possible and
+// notably don't delete any windows as this is not only useless (everything
+// will be torn down by the OS anyhow) but also dangerous as it could lead to
+// getting another WM_ENDSESSION when dispatching messages happening during
+// their destruction.
+bool gs_gotEndSession = false;
+
 } // anonymous namespace
 
 #ifdef WM_GESTURE
@@ -469,8 +477,10 @@ wxWindowMSW::~wxWindowMSW()
 
     if ( m_hWnd )
     {
-        // VZ: test temp removed to understand what really happens here
-        //if (::IsWindow(GetHwnd()))
+        // Don't destroy the window when shutting down, this is unnecessary and
+        // can result in other messages being generated and possibly resulting
+        // in WM_ENDSESSION reentrancy.
+        if ( !gs_gotEndSession )
         {
             if ( !::DestroyWindow(GetHwnd()) )
             {
@@ -4326,34 +4336,71 @@ bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
 // end session messages
 // ---------------------------------------------------------------------------
 
+namespace
+{
+
+// Possible values for the flag below.
+enum class QueryEndSession
+{
+    Unknown,
+    Allow,
+    Veto
+};
+
+// This flag is set to either Allow or Veto when our first top level window
+// gets WM_QUERYENDSESSION in order to allow all the other windows to just
+// return the same value without asking the user again, because this should
+// have been already done in wxApp::OnQueryEndSession().
+QueryEndSession gs_queryEndSession = QueryEndSession::Unknown;
+
+} // anonymous namespace
+
 bool wxWindowMSW::HandleQueryEndSession(long logOff, bool *mayEnd)
 {
-    wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
-    event.SetEventObject(wxTheApp);
-    event.SetCanVeto(true);
-    event.SetLoggingOff(logOff == (long)ENDSESSION_LOGOFF);
-
-    bool rc = wxTheApp->SafelyProcessEvent(event);
-
-    if ( rc )
+    if ( gs_queryEndSession == QueryEndSession::Unknown )
     {
-        // we may end only if the app didn't veto session closing (double
-        // negation...)
-        *mayEnd = !event.GetVeto();
+        // Make sure we won't generate another wxEVT_QUERY_END_SESSION.
+        gs_queryEndSession = QueryEndSession::Allow;
+
+        wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
+        event.SetEventObject(wxTheApp);
+        event.SetCanVeto(true);
+        event.SetLoggingOff(logOff == (long)ENDSESSION_LOGOFF);
+
+        if ( !wxTheApp->SafelyProcessEvent(event) )
+        {
+            // If the event wasn't handled at all, skip all the rest.
+            return false;
+        }
+
+        if ( event.GetVeto() )
+            gs_queryEndSession = QueryEndSession::Veto;
     }
 
-    return rc;
+    *mayEnd = gs_queryEndSession == QueryEndSession::Allow;
+
+    return true;
 }
 
 bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
 {
-    // do nothing if the session isn't ending
+    // If the session isn't ending we don't need to generate any events, but we
+    // need to reset the flag set in HandleQueryEndSession() to make sure we
+    // send wxEVT_QUERY_END_SESSION again next time.
     if ( !endSession )
+    {
+        gs_queryEndSession = QueryEndSession::Unknown;
         return false;
+    }
 
-    // only send once
-    if ( this != wxApp::GetMainTopWindow() )
+    if ( gs_gotEndSession )
+    {
+        // Never generate wxEVT_END_SESSION twice, this can only result in
+        // trouble, such as trying to delete the already deleted window.
         return false;
+    }
+
+    gs_gotEndSession = true;
 
     wxCloseEvent event(wxEVT_END_SESSION, wxID_ANY);
     event.SetEventObject(wxTheApp);
