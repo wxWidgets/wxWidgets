@@ -53,10 +53,11 @@ environment:
     CONFIGURATION: Release
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
   - TOOLSET: cmake_qt
-    GENERATOR: 'Visual Studio 14 2015 Win64'
+    GENERATOR: 'Visual Studio 16 2019'
+    ARCH: x64
     SHARED: ON
     CONFIGURATION: Release
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 
 clone_depth: 50
 

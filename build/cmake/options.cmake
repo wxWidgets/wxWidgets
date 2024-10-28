@@ -183,7 +183,6 @@ wx_option(wxUSE_FSVOLUME "use wxFSVolume class")
 wx_option(wxUSE_FSWATCHER "use wxFileSystemWatcher class")
 wx_option(wxUSE_GEOMETRY "use geometry class")
 wx_option(wxUSE_LOG "use logging system")
-wx_option(wxUSE_LONGLONG "use wxLongLong class")
 wx_option(wxUSE_MIMETYPE "use wxMimeTypesManager")
 wx_option(wxUSE_PRINTF_POS_PARAMS "use wxVsnprintf() which supports positional parameters")
 wx_option(wxUSE_SECRETSTORE "use wxSecretStore class")
@@ -392,7 +391,6 @@ wx_option(wxUSE_TREELISTCTRL "use wxTreeListCtrl class")
 # common dialogs
 # ---------------------------------------------------------------------------
 
-wx_option(wxUSE_COMMON_DIALOGS "use all common dialogs")
 wx_option(wxUSE_ABOUTDLG "use wxAboutBox")
 wx_option(wxUSE_CHOICEDLG "use wxChoiceDialog")
 wx_option(wxUSE_COLOURDLG "use wxColourDialog")

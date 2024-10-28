@@ -10116,7 +10116,6 @@ bool wxRichTextTable::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
                     wxRichTextCell* cell = GetCell(row, col);
                     if (cell && cell->IsShown() && !cell->GetRange().IsOutside(range))
                     {
-                        wxRect childRect(cell->GetPosition(), cell->GetCachedSize());
                         wxRichTextAttr attr(cell->GetAttributes());
                         cell->AdjustAttributes(attr, context);
                         if (row != 0)
@@ -10394,8 +10393,6 @@ bool wxRichTextTable::Layout(wxReadOnlyDC& dc, wxRichTextDrawingContext& context
     wxArrayInt spanningWidths, spanningWidthsSpanLengths;
     spanningWidths.Add(0, m_colCount);
     spanningWidthsSpanLengths.Add(0, m_colCount);
-
-    wxSize tableSize(tableWidth, 0);
 
     int i, j, k;
 
@@ -12782,7 +12779,6 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
 
     DrawBoxAttributes(dc, GetBuffer(), attr, wxRect(position, GetCachedSize()));
 
-    wxSize imageSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
     wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
     marginRect = wxRect(position, GetCachedSize()); // outer rectangle, will calculate contentRect
     GetBoxRects(dc, GetBuffer(), attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);

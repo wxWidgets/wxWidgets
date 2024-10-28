@@ -165,27 +165,32 @@ protected:
 
     virtual wxWebRequestBase& GetRequest() = 0;
 
-    // Check that the response is a JSON object containing a key "pi" with the
+    // Check that the response is a JSON object containing a specific key with the
     // expected value.
-    void CheckExpectedJSON(const wxString& response)
+    void CheckExpectedJSON(const wxString& response, const wxString& key,
+                           const wxString& value)
     {
         // We ought to really parse the returned JSON object, but to keep things as
         // simple as possible for now we just treat it as a string.
         INFO("Response: " << response);
 
-        const char* expectedKey = "\"pi\":";
+        wxString expectedKey = wxString::Format("\"%s\":", key);
         size_t pos = response.find(expectedKey);
         REQUIRE( pos != wxString::npos );
 
-        pos += strlen(expectedKey);
+        pos += expectedKey.size();
 
         // There may, or not, be a space after it.
         // And the value may be returned in an array.
-        while ( wxIsspace(response[pos]) || response[pos] == '[' )
-            pos++;
+        while ( wxIsspace(response[pos]) ||
+                response[pos] == '"' ||
+                response[pos] == '[' )
+        {
+            ++pos;
+        }
 
-        const char* expectedValue = "\"3.14159265358979323\"";
-        REQUIRE( response.compare(pos, strlen(expectedValue), expectedValue) == 0 );
+        wxString actualValue = response.substr(pos, value.size());
+        REQUIRE( actualValue == value );
     }
 
     // Special helper for "manual" tests taking the URL from the environment.
@@ -433,15 +438,53 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+    "WebRequest::Get::AllHeaderValues", "[net][webrequest][get]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("response-headers?freeform=wxWidgets&freeform=works!");
+    Run();
+    std::vector<wxString> headers = request.GetResponse().GetAllHeaderValues("freeform");
+
+#if wxUSE_WEBREQUEST_URLSESSION
+    // The httpbin service concatenates the given parameters.
+    REQUIRE( headers.size() == 1 );
+    CHECK( headers[0] == "wxWidgets, works!" );
+#else
+    REQUIRE( headers.size() == 2 );
+    CHECK( (headers[0] == "wxWidgets" && headers[1] == "works!") );
+#endif
+}
+
+TEST_CASE_METHOD(RequestFixture,
+    "WebRequest::Headers", "[net][webrequest][headers]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("headers");
+    request.SetHeader("One", "1");
+    request.AddHeader("Two", "2");
+    Run();
+
+    CheckExpectedJSON( request.GetResponse().AsString(), "One", "1" );
+    CheckExpectedJSON( request.GetResponse().AsString(), "Two", "2" );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::Param", "[net][webrequest][get]")
 {
     if ( !InitBaseURL() )
         return;
 
-    Create("get?pi=3.14159265358979323");
+    wxString key = "pi";
+    wxString value = "3.14159265358979323";
+
+    Create(wxString::Format("get?%s=%s", key, value));
     Run();
 
-    CheckExpectedJSON( request.GetResponse().AsString() );
+    CheckExpectedJSON( request.GetResponse().AsString(), key, value );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -866,9 +909,12 @@ TEST_CASE_METHOD(SyncRequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    REQUIRE( Execute("get?pi=3.14159265358979323") );
+    wxString key = "pi";
+    wxString value = "3.14159265358979323";
 
-    CheckExpectedJSON( response.AsString() );
+    REQUIRE( Execute(wxString::Format("get?%s=%s", key, value)) );
+
+    CheckExpectedJSON( response.AsString(), key, value );
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
@@ -1161,7 +1207,7 @@ TEST_CASE_METHOD(SyncRequestFixture,
     DumpResponse(request.GetResponse());
 }
 
-using wxWebRequestHeaderMap = std::unordered_map<wxString, wxString>;
+using wxWebRequestHeaderMap = std::unordered_map<wxString, std::vector<wxString>>;
 
 namespace wxPrivate
 {
@@ -1179,7 +1225,8 @@ TEST_CASE("WebRequestUtils", "[net][webrequest]")
     value = wxPrivate::SplitParameters(header, params);
     CHECK( value == "multipart/mixed" );
     CHECK( params.size() == 1 );
-    CHECK( params["boundary"] == "MIME_boundary_01234567" );
+    REQUIRE( !params["boundary"].empty() );
+    CHECK( params["boundary"].back() == "MIME_boundary_01234567" );
 }
 
 // This is not a real test, run it to see the version of the library used.

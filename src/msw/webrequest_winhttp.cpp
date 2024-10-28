@@ -185,33 +185,49 @@ struct wxURLComponents : URL_COMPONENTS
 
 // Helper functions
 
-static wxString wxWinHTTPQueryHeaderString(HINTERNET hRequest, DWORD dwInfoLevel,
+static std::vector<wxString> wxWinHTTPQueryAllHeaderStrings(HINTERNET hRequest, DWORD dwInfoLevel,
     LPCWSTR pwszName = WINHTTP_HEADER_NAME_BY_INDEX)
 {
-    wxString result;
-    DWORD bufferLen = 0;
-    wxWinHTTP::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName, nullptr, &bufferLen,
-        WINHTTP_NO_HEADER_INDEX);
-    if ( ::GetLastError() == ERROR_INSUFFICIENT_BUFFER )
+    std::vector<wxString> result;
+    DWORD nextIndex = 0;
+    ::SetLastError(NO_ERROR);
+    while ( ::GetLastError() != ERROR_WINHTTP_HEADER_NOT_FOUND )
     {
-        // Buffer length is in bytes, including the terminating (wide) NUL, but
-        // wxWCharBuffer needs the size in characters and adds NUL itself.
-        if ( !bufferLen || (bufferLen % sizeof(wchar_t)) )
+        DWORD bufferLen = 0;
+        DWORD currentIndex = nextIndex;
+        wxWinHTTP::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName, nullptr, &bufferLen, &nextIndex);
+        if ( ::GetLastError() == ERROR_INSUFFICIENT_BUFFER )
         {
-            wxLogDebug("Unexpected size of header %s: %lu", pwszName, bufferLen);
-            return wxString();
+            // Buffer length is in bytes, including the terminating (wide) NUL, but
+            // wxWCharBuffer needs the size in characters and adds NUL itself.
+            if ( !bufferLen || (bufferLen % sizeof(wchar_t)) )
+            {
+                wxLogDebug("Unexpected size of header %s: %lu", pwszName, bufferLen);
+                return std::vector<wxString>();
+            }
+
+            wxWCharBuffer resBuf(bufferLen / sizeof(wchar_t) - 1);
+            if ( wxWinHTTP::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName,
+                resBuf.data(), &bufferLen, &nextIndex) )
+            {
+                result.push_back(resBuf);
+            }
         }
 
-        wxWCharBuffer resBuf(bufferLen / sizeof(wchar_t) - 1);
-        if ( wxWinHTTP::WinHttpQueryHeaders(hRequest, dwInfoLevel, pwszName,
-                                   resBuf.data(), &bufferLen,
-                                   WINHTTP_NO_HEADER_INDEX) )
-        {
-            result.assign(resBuf);
-        }
+        if ( nextIndex <= currentIndex )
+            break;
     }
 
     return result;
+}
+
+static wxString wxWinHTTPQueryHeaderString(HINTERNET hRequest, DWORD dwInfoLevel,
+    LPCWSTR pwszName = WINHTTP_HEADER_NAME_BY_INDEX)
+{
+    std::vector<wxString> result = wxWinHTTPQueryAllHeaderStrings(
+        hRequest, dwInfoLevel, pwszName);
+
+    return result.empty() ? wxString() : result.back();
 }
 
 static wxString wxWinHTTPQueryOptionString(HINTERNET hInternet, DWORD dwOption)
@@ -737,7 +753,8 @@ wxWebRequest::Result wxWebRequestWinHTTP::SendRequest()
           header != m_headers.end();
           ++header )
     {
-        allHeaders.append(wxString::Format("%s: %s\n", header->first, header->second));
+        for ( const wxString& value : header->second )
+            allHeaders.append(wxString::Format("%s: %s\n", header->first, value));
     }
 
     if ( m_dataSize )
@@ -801,6 +818,12 @@ wxString wxWebResponseWinHTTP::GetHeader(const wxString& name) const
 {
     return wxWinHTTPQueryHeaderString(m_requestHandle, WINHTTP_QUERY_CUSTOM,
                                       name.wc_str());
+}
+
+std::vector<wxString> wxWebResponseWinHTTP::GetAllHeaderValues(const wxString& name) const
+{
+    return wxWinHTTPQueryAllHeaderStrings(m_requestHandle, WINHTTP_QUERY_CUSTOM,
+                                          name.wc_str());
 }
 
 int wxWebResponseWinHTTP::GetStatus() const
@@ -973,7 +996,7 @@ bool wxWebSessionWinHTTP::Open()
 
     m_handle = wxWinHTTP::WinHttpOpen
                  (
-                    GetHeaders().find("User-Agent")->second.wc_str(),
+                    GetHeaders().find("User-Agent")->second.back().wc_str(),
                     accessType,
                     proxyName,
                     WINHTTP_NO_PROXY_BYPASS,

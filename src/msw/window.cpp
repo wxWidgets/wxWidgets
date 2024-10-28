@@ -1553,6 +1553,14 @@ wxBorder wxWindowMSW::DoTranslateBorder(wxBorder border) const
 {
     if (border == wxBORDER_THEME)
     {
+        // In dark mode the standard sunken border is too bright, so prefer
+        // using a simple(r) and darker border instead.
+        //
+        // And themed borders don't look good neither in dark mode, so don't
+        // use them in it.
+        if ( wxMSWDarkMode::IsActive() )
+            return wxBORDER_SIMPLE;
+
 #if wxUSE_UXTHEME
         if (CanApplyThemeBorder())
         {
@@ -1561,9 +1569,7 @@ wxBorder wxWindowMSW::DoTranslateBorder(wxBorder border) const
         }
 #endif // wxUSE_UXTHEME
 
-        // In dark mode the standard sunken border is too bright, so prefer
-        // using a simple(r) and darker border instead.
-        return wxMSWDarkMode::IsActive() ? wxBORDER_SIMPLE : wxBORDER_SUNKEN;
+        return wxBORDER_SUNKEN;
     }
 
     return border;
@@ -2518,11 +2524,13 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     // the top level menus of the menu bar, which can't be represented using
     // any valid identifier in wxMenuEvent so use an otherwise unused value for
     // them
-    if ( flags & (MF_POPUP | MF_SEPARATOR) )
+    if ( flags & MF_SEPARATOR )
         item = wxID_NONE;
 
     wxMenu* menu = MSWFindMenuFromHMENU(hMenu);
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item, menu);
+    wxMenuItem* menuItem = MSWFindMenuItemFromHMENU(hMenu, item);
+
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item, menu, menuItem);
     if ( wxMenu::ProcessMenuEvent(menu, event, this) )
         return true;
 
@@ -2569,6 +2577,37 @@ wxMenu* wxWindowMSW::MSWFindMenuFromHMENU(WXHMENU hMenu)
         return wxCurrentPopupMenu;
 
     return nullptr;
+}
+
+wxMenuItem* wxWindowMSW::MSWFindMenuItemFromHMENU(WXHMENU hMenu, int item)
+{
+    WinStruct<MENUITEMINFO> mii;
+    mii.fMask = MIIM_ID | MIIM_DATA; // Include MIIM_DATA to access dwItemData
+
+    const int count = ::GetMenuItemCount(hMenu);
+    for ( int i = 0; i < count; i++ )
+    {
+        if ( ::GetMenuItemInfo(hMenu, i, TRUE, &mii) )
+        {
+            wxMenuItem* menuItem = (wxMenuItem*)mii.dwItemData;
+            if ( mii.wID == (unsigned int)item && menuItem )
+            {
+                return menuItem;
+            }
+
+            // Check for submenus
+            if ( mii.hSubMenu )
+            {
+                wxMenuItem* foundInSubmenu = MSWFindMenuItemFromHMENU(mii.hSubMenu, item);
+                if ( foundInSubmenu )
+                {
+                    return foundInSubmenu;
+                }
+            }
+        }
+    }
+
+    return nullptr; // Not found
 }
 
 #endif // wxUSE_MENUS && !defined(__WXUNIVERSAL__)

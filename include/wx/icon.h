@@ -49,7 +49,11 @@
   #include "wx/generic/icon.h"
 #endif
 #elif defined(__WXQT__)
-  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
+  #ifdef __WINDOWS__
+    #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_ICO_RESOURCE
+  #else
+    #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
+  #endif
   #include "wx/generic/icon.h"
 #endif
 

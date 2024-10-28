@@ -964,7 +964,7 @@ bool wxSizer::Detach( wxSizer *sizer )
     return false;
 }
 
-bool wxSizer::Detach( wxWindow *window )
+bool wxSizer::Detach( wxWindowBase *window )
 {
     wxASSERT_MSG( window, wxT("Detaching null window") );
 
@@ -2440,7 +2440,7 @@ void wxBoxSizer::RepositionChildren(const wxSize& minSize)
             if ( propItem )
             {
                 // is the desired size of this item big enough?
-                if ( (remaining*propItem)/totalProportion >= minMajor )
+                if ( wxMulDivInt32(remaining, propItem, totalProportion) >= minMajor )
                 {
                     // yes, it is, we'll determine the real size of this
                     // item later, for now just leave it as wxDefaultCoord
@@ -2537,7 +2537,7 @@ void wxBoxSizer::RepositionChildren(const wxSize& minSize)
             if ( majorSizes[n] == wxDefaultCoord )
             {
                 const int propItem = item->GetProportion();
-                majorSizes[n] = (remaining*propItem)/totalProportion;
+                majorSizes[n] = wxMulDivInt32(remaining, propItem, totalProportion);
 
                 remaining -= majorSizes[n];
                 totalProportion -= propItem;
@@ -2901,7 +2901,7 @@ bool wxStaticBoxSizer::AreAnyItemsShown() const
     return m_staticBox->IsShown();
 }
 
-bool wxStaticBoxSizer::Detach( wxWindow *window )
+bool wxStaticBoxSizer::Detach( wxWindowBase *window )
 {
     // avoid deleting m_staticBox in our dtor if it's being detached from the
     // sizer (which can happen because it's being already destroyed for

@@ -530,14 +530,6 @@ bool wxToolBarBase::Realize()
 wxToolBarBase::~wxToolBarBase()
 {
     wxClearList(m_tools);
-
-    // notify the frame that it doesn't have a tool bar any longer to avoid
-    // dangling pointers
-    wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if ( frame && frame->GetToolBar() == this )
-    {
-        frame->SetToolBar(nullptr);
-    }
 }
 
 // ----------------------------------------------------------------------------

@@ -273,12 +273,23 @@ typedef short int WXTYPE;
     #define wxNODISCARD [[nodiscard]]
 #elif defined(__VISUALC__)
     #define wxNODISCARD _Check_return_
-#elif defined(__clang__) || defined(__GNUCC__)
+#elif defined(__clang__) || defined(__GNUC__)
     #define wxNODISCARD __attribute__ ((warn_unused_result))
 #else
     #define wxNODISCARD
 #endif
 
+/* wxWARN_UNUSED is used as an attribute to a class, stating that unused instances
+   should be warned about (in case such warnings are enabled in the first place) */
+
+#ifdef __has_cpp_attribute
+    #if __has_cpp_attribute(warn_unused)
+        #define wxWARN_UNUSED __attribute__((warn_unused))
+    #endif
+#endif
+#ifndef wxWARN_UNUSED
+    #define wxWARN_UNUSED
+#endif
 
 /* these macros are obsolete, use the standard C++ casts directly now */
 #define wx_static_cast(t, x) static_cast<t>(x)
@@ -1117,51 +1128,27 @@ typedef double wxDouble;
     (((wxUint32) (val) & (wxUint32) 0xff000000U) >> 24)))
 /*  machine specific byte swapping */
 
-#ifdef wxLongLong_t
-    #define wxUINT64_SWAP_ALWAYS(val) \
-       ((wxUint64) ( \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x00000000000000ff)) << 56) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x000000000000ff00)) << 40) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x0000000000ff0000)) << 24) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x00000000ff000000)) <<  8) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x000000ff00000000)) >>  8) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x0000ff0000000000)) >> 24) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x00ff000000000000)) >> 40) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0xff00000000000000)) >> 56)))
+#define wxUINT64_SWAP_ALWAYS(val) \
+   ((wxUint64) ( \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x00000000000000ff)) << 56) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x000000000000ff00)) << 40) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x0000000000ff0000)) << 24) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x00000000ff000000)) <<  8) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x000000ff00000000)) >>  8) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x0000ff0000000000)) >> 24) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x00ff000000000000)) >> 40) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0xff00000000000000)) >> 56)))
 
-    #define wxINT64_SWAP_ALWAYS(val) \
-       ((wxInt64) ( \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x00000000000000ff)) << 56) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x000000000000ff00)) << 40) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x0000000000ff0000)) << 24) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x00000000ff000000)) <<  8) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x000000ff00000000)) >>  8) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x0000ff0000000000)) >> 24) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0x00ff000000000000)) >> 40) | \
-        (((wxUint64) (val) & (wxUint64) wxULL(0xff00000000000000)) >> 56)))
-#elif wxUSE_LONGLONG /*  !wxLongLong_t */
-    #define wxUINT64_SWAP_ALWAYS(val) \
-       ((wxUint64) ( \
-        ((wxULongLong(val) & wxULongLong(0L, 0x000000ffU)) << 56) | \
-        ((wxULongLong(val) & wxULongLong(0L, 0x0000ff00U)) << 40) | \
-        ((wxULongLong(val) & wxULongLong(0L, 0x00ff0000U)) << 24) | \
-        ((wxULongLong(val) & wxULongLong(0L, 0xff000000U)) <<  8) | \
-        ((wxULongLong(val) & wxULongLong(0x000000ffL, 0U)) >>  8) | \
-        ((wxULongLong(val) & wxULongLong(0x0000ff00L, 0U)) >> 24) | \
-        ((wxULongLong(val) & wxULongLong(0x00ff0000L, 0U)) >> 40) | \
-        ((wxULongLong(val) & wxULongLong(0xff000000L, 0U)) >> 56)))
-
-    #define wxINT64_SWAP_ALWAYS(val) \
-       ((wxInt64) ( \
-        ((wxLongLong(val) & wxLongLong(0L, 0x000000ffU)) << 56) | \
-        ((wxLongLong(val) & wxLongLong(0L, 0x0000ff00U)) << 40) | \
-        ((wxLongLong(val) & wxLongLong(0L, 0x00ff0000U)) << 24) | \
-        ((wxLongLong(val) & wxLongLong(0L, 0xff000000U)) <<  8) | \
-        ((wxLongLong(val) & wxLongLong(0x000000ffL, 0U)) >>  8) | \
-        ((wxLongLong(val) & wxLongLong(0x0000ff00L, 0U)) >> 24) | \
-        ((wxLongLong(val) & wxLongLong(0x00ff0000L, 0U)) >> 40) | \
-        ((wxLongLong(val) & wxLongLong(0xff000000L, 0U)) >> 56)))
-#endif /*  wxLongLong_t/!wxLongLong_t */
+#define wxINT64_SWAP_ALWAYS(val) \
+   ((wxInt64) ( \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x00000000000000ff)) << 56) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x000000000000ff00)) << 40) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x0000000000ff0000)) << 24) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x00000000ff000000)) <<  8) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x000000ff00000000)) >>  8) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x0000ff0000000000)) >> 24) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0x00ff000000000000)) >> 40) | \
+    (((wxUint64) (val) & (wxUint64) wxULL(0xff00000000000000)) >> 56)))
 
 #ifdef WORDS_BIGENDIAN
     #define wxUINT16_SWAP_ON_BE(val)  wxUINT16_SWAP_ALWAYS(val)
@@ -1172,17 +1159,16 @@ typedef double wxDouble;
     #define wxINT32_SWAP_ON_BE(val)   wxINT32_SWAP_ALWAYS(val)
     #define wxUINT32_SWAP_ON_LE(val)  (val)
     #define wxINT32_SWAP_ON_LE(val)   (val)
-    #if wxHAS_INT64
-        #define wxUINT64_SWAP_ON_BE(val)  wxUINT64_SWAP_ALWAYS(val)
-        #define wxUINT64_SWAP_ON_LE(val)  (val)
-        #define wxINT64_SWAP_ON_BE(val)  wxINT64_SWAP_ALWAYS(val)
-        #define wxINT64_SWAP_ON_LE(val)  (val)
 
-        #define wxUINT64_SWAP_ON_BE_IN_PLACE(val)   val = wxUINT64_SWAP_ALWAYS(val)
-        #define wxINT64_SWAP_ON_BE_IN_PLACE(val)   val = wxINT64_SWAP_ALWAYS(val)
-        #define wxUINT64_SWAP_ON_LE_IN_PLACE(val)
-        #define wxINT64_SWAP_ON_LE_IN_PLACE(val)
-    #endif
+    #define wxUINT64_SWAP_ON_BE(val)  wxUINT64_SWAP_ALWAYS(val)
+    #define wxUINT64_SWAP_ON_LE(val)  (val)
+    #define wxINT64_SWAP_ON_BE(val)  wxINT64_SWAP_ALWAYS(val)
+    #define wxINT64_SWAP_ON_LE(val)  (val)
+
+    #define wxUINT64_SWAP_ON_BE_IN_PLACE(val)   val = wxUINT64_SWAP_ALWAYS(val)
+    #define wxINT64_SWAP_ON_BE_IN_PLACE(val)   val = wxINT64_SWAP_ALWAYS(val)
+    #define wxUINT64_SWAP_ON_LE_IN_PLACE(val)
+    #define wxINT64_SWAP_ON_LE_IN_PLACE(val)
 
     #define wxUINT16_SWAP_ON_BE_IN_PLACE(val)   val = wxUINT16_SWAP_ALWAYS(val)
     #define wxINT16_SWAP_ON_BE_IN_PLACE(val)   val = wxINT16_SWAP_ALWAYS(val)
@@ -1201,16 +1187,14 @@ typedef double wxDouble;
     #define wxINT32_SWAP_ON_LE(val)   wxINT32_SWAP_ALWAYS(val)
     #define wxUINT32_SWAP_ON_BE(val)  (val)
     #define wxINT32_SWAP_ON_BE(val)   (val)
-    #if wxHAS_INT64
-        #define wxUINT64_SWAP_ON_LE(val)  wxUINT64_SWAP_ALWAYS(val)
-        #define wxUINT64_SWAP_ON_BE(val)  (val)
-        #define wxINT64_SWAP_ON_LE(val)  wxINT64_SWAP_ALWAYS(val)
-        #define wxINT64_SWAP_ON_BE(val)  (val)
-        #define wxUINT64_SWAP_ON_BE_IN_PLACE(val)
-        #define wxINT64_SWAP_ON_BE_IN_PLACE(val)
-        #define wxUINT64_SWAP_ON_LE_IN_PLACE(val)   val = wxUINT64_SWAP_ALWAYS(val)
-        #define wxINT64_SWAP_ON_LE_IN_PLACE(val)   val = wxINT64_SWAP_ALWAYS(val)
-    #endif
+    #define wxUINT64_SWAP_ON_LE(val)  wxUINT64_SWAP_ALWAYS(val)
+    #define wxUINT64_SWAP_ON_BE(val)  (val)
+    #define wxINT64_SWAP_ON_LE(val)  wxINT64_SWAP_ALWAYS(val)
+    #define wxINT64_SWAP_ON_BE(val)  (val)
+    #define wxUINT64_SWAP_ON_BE_IN_PLACE(val)
+    #define wxINT64_SWAP_ON_BE_IN_PLACE(val)
+    #define wxUINT64_SWAP_ON_LE_IN_PLACE(val)   val = wxUINT64_SWAP_ALWAYS(val)
+    #define wxINT64_SWAP_ON_LE_IN_PLACE(val)   val = wxINT64_SWAP_ALWAYS(val)
 
     #define wxUINT16_SWAP_ON_BE_IN_PLACE(val)
     #define wxINT16_SWAP_ON_BE_IN_PLACE(val)
@@ -1452,8 +1436,6 @@ wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 
 /*  wxALWAYS_SHOW_SB: instead of hiding the scrollbar when it is not needed, */
 /*  disable it - but still show (see also wxLB_ALWAYS_SB style) */
-/*  */
-/*  NB: as this style is only supported by wxUniversal and wxMSW so far */
 #define wxALWAYS_SHOW_SB        0x00800000
 
 /*  Clip children when painting, which reduces flicker in e.g. frames and */

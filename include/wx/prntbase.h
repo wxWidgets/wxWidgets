@@ -386,6 +386,7 @@ private:
     void OnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
     void OnIdle(wxIdleEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     wxPrintPreviewBase* m_printPreview;
 
@@ -640,6 +641,10 @@ public:
     virtual bool IsOk() const;
     virtual void SetOk(bool ok);
 
+    // This is an internal function used only by wxWidgets itself to update
+    // the rendered page when DPI has changed.
+    virtual void WXUpdateOnDPIChanged();
+
     ///////////////////////////////////////////////////////////////////////////
     // OVERRIDES
 
@@ -734,6 +739,8 @@ public:
     virtual bool Ok() const override { return IsOk(); }
     virtual bool IsOk() const override;
     virtual void SetOk(bool ok) override;
+
+    virtual void WXUpdateOnDPIChanged() override;
 
 private:
     wxPrintPreviewBase *m_pimpl;

@@ -104,6 +104,8 @@ public:
 
     wxString GetHeader(const wxString& name) const;
 
+    std::vector<wxString> GetAllHeaderValues(const wxString& name) const;
+
     wxString GetMimeType() const;
 
     wxString GetContentType() const;
@@ -195,6 +197,8 @@ public:
     bool IsOk() const { return m_impl.get() != nullptr; }
 
     void SetHeader(const wxString& name, const wxString& value);
+
+    void AddHeader(const wxString& name, const wxString& value);
 
     void SetMethod(const wxString& method);
 

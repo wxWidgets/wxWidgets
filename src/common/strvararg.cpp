@@ -669,10 +669,8 @@ wxFormatString::ArgumentType ArgTypeFromParamType(wxPrintfArgType type)
             return wxFormatString::Arg_Int;
         case wxPAT_LONGINT:
             return wxFormatString::Arg_LongInt;
-#ifdef wxLongLong_t
         case wxPAT_LONGLONGINT:
             return wxFormatString::Arg_LongLongInt;
-#endif
         case wxPAT_SIZET:
             return wxFormatString::Arg_Size_t;
 

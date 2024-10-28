@@ -309,8 +309,6 @@ wxString wxDir::FindFirst(const wxString& dirname,
 // wxDir::GetTotalSize()
 // ----------------------------------------------------------------------------
 
-#if wxUSE_LONGLONG
-
 class wxDirTraverserSumSize : public wxDirTraverser
 {
 public:
@@ -373,8 +371,6 @@ wxULongLong wxDir::GetTotalSize(const wxString &dirname, wxArrayString *filesSki
 
     return traverser.GetTotalSize();
 }
-
-#endif // wxUSE_LONGLONG
 
 // ----------------------------------------------------------------------------
 // wxDir helpers

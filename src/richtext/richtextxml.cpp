@@ -1917,7 +1917,6 @@ void wxRichTextXMLHelper::OutputIndentation(wxOutputStream& stream, int indent)
 void wxRichTextXMLHelper::OutputStringEnt(wxOutputStream& stream, const wxString& str,
                             wxMBConv *convMem, wxMBConv *convFile)
 {
-    wxString buf;
     size_t i, last, len;
     wxChar c;
 

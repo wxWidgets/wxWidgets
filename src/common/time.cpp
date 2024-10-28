@@ -219,8 +219,6 @@ long wxGetUTCTime()
     return (long)time(nullptr);
 }
 
-#if wxUSE_LONGLONG
-
 wxLongLong wxGetUTCTimeUSec()
 {
 #if defined(__WINDOWS__)
@@ -311,12 +309,3 @@ wxLongLong wxGetLocalTimeMillis()
 {
     return wxGetUTCTimeMillis() - wxGetTimeZone()*MILLISECONDS_PER_SECOND;
 }
-
-#else // !wxUSE_LONGLONG
-
-double wxGetLocalTimeMillis()
-{
-    return (double(clock()) / double(CLOCKS_PER_SEC)) * MILLISECONDS_PER_SECOND;
-}
-
-#endif // wxUSE_LONGLONG/!wxUSE_LONGLONG

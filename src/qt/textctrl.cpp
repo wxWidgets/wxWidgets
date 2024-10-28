@@ -262,7 +262,7 @@ public:
     virtual wxTextCtrlHitTestResult
     HitTest(const wxPoint& pt, long* pos) const override
     {
-        auto qtEdit = static_cast<wxQtTextEdit* const>(m_edit);
+        auto qtEdit = static_cast<wxQtTextEdit*>(m_edit);
 
         auto cursor  = qtEdit->cursorForPosition( wxQtConvertPoint(pt) );
         auto curRect = qtEdit->cursorRect(cursor);
@@ -466,10 +466,13 @@ public:
     virtual void SetMaxLength(unsigned long len) override
     {
         // Notice that setMaxLength() takes an int and not an unsigned int
-        m_edit->setMaxLength(
-            len > std::numeric_limits<int>::max()
-                ? std::numeric_limits<int>::max() : len
-        );
+        const unsigned long maxlen = std::numeric_limits<int>::max();
+        if ( len == 0 || len > maxlen )
+        {
+            len = maxlen;
+        }
+
+        m_edit->setMaxLength(len);
     }
 
     virtual void MarkDirty() override
@@ -542,7 +545,7 @@ public:
     virtual wxTextCtrlHitTestResult
     HitTest(const wxPoint& pt, long *pos) const override
     {
-        auto qtEdit  = static_cast<wxQtLineEdit* const>(m_edit);
+        auto qtEdit  = static_cast<wxQtLineEdit*>(m_edit);
         auto curPos  = qtEdit->cursorPositionAt( wxQtConvertPoint(pt) );
         auto curRect = qtEdit->cursorRect();
 

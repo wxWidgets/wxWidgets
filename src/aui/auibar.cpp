@@ -1372,7 +1372,7 @@ void wxAuiToolBar::SetToolSticky(int tool_id, bool sticky)
 
     item->m_sticky = sticky;
 
-    Refresh(false);
+    Refresh();
     Update();
 }
 
@@ -1463,7 +1463,7 @@ void wxAuiToolBar::SetGripperVisible(bool visible)
     else
         m_windowStyle &= ~wxAUI_TB_GRIPPER;
     Realize();
-    Refresh(false);
+    Refresh();
 }
 
 
@@ -1479,7 +1479,7 @@ void wxAuiToolBar::SetOverflowVisible(bool visible)
         m_windowStyle |= wxAUI_TB_OVERFLOW;
     else
         m_windowStyle &= ~wxAUI_TB_OVERFLOW;
-    Refresh(false);
+    Refresh();
 }
 
 bool wxAuiToolBar::SetFont(const wxFont& font)
@@ -1518,7 +1518,7 @@ void wxAuiToolBar::SetHoverItem(wxAuiToolBarItem* pitem)
 
     if (former_hover != pitem)
     {
-        Refresh(false);
+        Refresh();
         Update();
     }
 }
@@ -1544,7 +1544,7 @@ void wxAuiToolBar::SetPressedItem(wxAuiToolBarItem* pitem)
 
     if (former_item != pitem)
     {
-        Refresh(false);
+        Refresh();
         Update();
     }
 }
@@ -1578,7 +1578,7 @@ void wxAuiToolBar::RefreshOverflowState()
     if (overflow_state != m_overflowState)
     {
         m_overflowState = overflow_state;
-        Refresh(false);
+        Refresh();
         Update();
     }
 
@@ -1936,7 +1936,7 @@ bool wxAuiToolBar::Realize()
         m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
     }
 
-    Refresh(false);
+    Refresh();
     return true;
 }
 
@@ -2279,7 +2279,7 @@ void wxAuiToolBar::DoIdleUpdate()
 
     if (need_refresh)
     {
-        Refresh(false);
+        Refresh();
     }
 }
 
@@ -2324,7 +2324,7 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     // We need to update the bitmap if the size has changed.
     UpdateBackgroundBitmap(wxSize(x, y));
 
-    Refresh(false);
+    Refresh();
 
     // idle events aren't sent while user is resizing frame (why?),
     // but resizing toolbar here causes havoc,
@@ -2435,6 +2435,11 @@ void wxAuiToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxAuiToolBar::UpdateBackgroundBitmap(const wxSize& size)
 {
+    // We can't create 0-sized bitmaps, but we can be called with 0 size: just
+    // ignore it, as we'll be called again when the window is resized.
+    if ( !size.IsAtLeast(wxSize(1, 1)) )
+        return;
+
     m_backgroundBitmap.Create(size);
 
     wxMemoryDC dc(m_backgroundBitmap);
@@ -2544,8 +2549,6 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
 void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 {
-    wxRect cli_rect(wxPoint(0,0), GetClientSize());
-
     if (m_gripperSizerItem)
     {
         wxRect gripper_rect = m_gripperSizerItem->GetRect();
@@ -2607,7 +2610,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 
                 int res = m_art->ShowDropDown(this, overflow_items);
                 m_overflowState = 0;
-                Refresh(false);
+                Refresh();
                 if (res != -1)
                 {
                     wxCommandEvent event(wxEVT_MENU, res);
@@ -2710,7 +2713,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
                 ToggleTool(m_actionItem->m_toolId, toggle);
 
                 // repaint immediately
-                Refresh(false);
+                Refresh();
                 Update();
 
                 e.SetInt(toggle);

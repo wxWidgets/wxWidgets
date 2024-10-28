@@ -36,8 +36,6 @@ public:
         m_fds[1] = -1;
     }
 
-    virtual wxSocketError GetLastError() const override;
-
     virtual void ReenableEvents(wxSocketEventFlags flags) override
     {
         // Events are only ever used for non-blocking sockets.
@@ -75,6 +73,8 @@ public:
     virtual bool IsOk() const override { return m_fd != INVALID_SOCKET; }
 
 private:
+    virtual wxSocketError GetLastError() const override;
+
     virtual void DoClose() override
     {
         DisableEvents();

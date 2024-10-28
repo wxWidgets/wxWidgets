@@ -150,7 +150,6 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
     // and others to "longlong".
     if ( wxANY_CHECK_TYPE(any, signed int) )
     {
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
         wxLongLong_t ll = 0;
         if ( any.GetAs(&ll) )
         {
@@ -166,13 +165,6 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
         {
             return false;
         }
-#else
-        long l;
-        if ( any.GetAs(&l) )
-            *variant = l;
-        else
-            return false;
-#endif
         return true;
     }
 
@@ -240,24 +232,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAnyValueTypeGlobalsManager, wxModule);
 // Dynamic conversion member functions
 //-------------------------------------------------------------------------
 
-//
-// Define integer minimum and maximum as helpers
-#ifdef wxLongLong_t
-    #define UseIntMin  (wxINT64_MIN)
-    #define UseIntMax  (wxINT64_MAX)
-    #define UseUintMax (wxUINT64_MAX)
-#else
-    #define UseIntMin  (LONG_MIN)
-    #define UseIntMax  (LONG_MAX)
-    #define UseUintMax (ULONG_MAX)
-#endif
-
 namespace
 {
 
-const double UseIntMinF = static_cast<double>(UseIntMin);
-const double UseIntMaxF = static_cast<double>(UseIntMax);
-const double UseUintMaxF = static_cast<double>(UseUintMax);
+const double UseIntMinF = static_cast<double>(wxINT64_MIN);
+const double UseIntMaxF = static_cast<double>(wxINT64_MAX);
+const double UseUintMaxF = static_cast<double>(wxUINT64_MAX);
 
 } // anonymous namespace
 
@@ -268,12 +248,8 @@ bool wxAnyValueTypeImplInt::ConvertValue(const wxAnyValueBuffer& src,
     wxAnyBaseIntType value = GetValue(src);
     if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxString) )
     {
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
         wxLongLong ll(value);
         wxString s = ll.ToString();
-#else
-        wxString s = wxString::Format(wxS("%ld"), (long)value);
-#endif
         wxAnyValueTypeImpl<wxString>::SetValue(s, dst);
     }
     else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxAnyBaseUintType) )
@@ -306,17 +282,13 @@ bool wxAnyValueTypeImplUint::ConvertValue(const wxAnyValueBuffer& src,
     wxAnyBaseUintType value = GetValue(src);
     if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxString) )
     {
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
         wxULongLong ull(value);
         wxString s = ull.ToString();
-#else
-        wxString s = wxString::Format(wxS("%lu"), (long)value);
-#endif
         wxAnyValueTypeImpl<wxString>::SetValue(s, dst);
     }
     else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxAnyBaseIntType) )
     {
-        if ( value > UseIntMax )
+        if ( value > wxINT64_MAX )
             return false;
         wxAnyBaseIntType l = (wxAnyBaseIntType) value;
         wxAnyValueTypeImplInt::SetValue(l, dst);
@@ -349,22 +321,14 @@ bool wxAnyConvertString(const wxString& value,
     else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxAnyBaseIntType) )
     {
         wxAnyBaseIntType value2;
-#ifdef wxLongLong_t
         if ( !value.ToLongLong(&value2) )
-#else
-        if ( !value.ToLong(&value2) )
-#endif
             return false;
         wxAnyValueTypeImplInt::SetValue(value2, dst);
     }
     else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxAnyBaseUintType) )
     {
         wxAnyBaseUintType value2;
-#ifdef wxLongLong_t
         if ( !value.ToULongLong(&value2) )
-#else
-        if ( !value.ToULong(&value2) )
-#endif
             return false;
         wxAnyValueTypeImplUint::SetValue(value2, dst);
     }

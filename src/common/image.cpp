@@ -2565,8 +2565,7 @@ int wxImage::GetLoadFlags() const
 
 // Under Windows we can load wxImage not only from files but also from
 // resources.
-#if defined(__WINDOWS__) && wxUSE_WXDIB && wxUSE_IMAGE \
-&& !defined(__WXQT__) // undefined reference to `wxDIB::ConvertToImage(wxDIB::ConversionFlags) const'
+#if defined(__WINDOWS__) && wxUSE_WXDIB && wxUSE_IMAGE
     #define HAS_LOAD_FROM_RESOURCE
 #endif
 

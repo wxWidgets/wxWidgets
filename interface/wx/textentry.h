@@ -410,7 +410,8 @@ public:
         event is sent to notify the program about it (giving it the possibility
         to show an explanatory message, for example) and the extra input is discarded.
 
-        Note that in wxGTK this function may only be used with single line text controls.
+        @note this function may only be used with single line text controls under wxGTK
+        and wxQt ports.
     */
     virtual void SetMaxLength(unsigned long len);
 

@@ -94,12 +94,12 @@ jobs:
           runner: self-hosted
           arch: arm64
           configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-debug --enable-optimise
-        - name: wxMac macOS 12
-          runner: macos-12
+        - name: wxMac macOS 14
+          runner: macos-14
           arch: x86_64
           configure_flags: --disable-sys-libs
         - name: wxiOS
-          runner: macos-12
+          runner: macos-14
           arch: x86_64
           configure_flags: --with-osx_iphone --enable-monolithic  --disable-sys-libs --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0
           configure_env: PKG_CONFIG_LIBDIR=/dev/null

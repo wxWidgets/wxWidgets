@@ -1066,7 +1066,6 @@ void wxHtmlHelpWindow::RefreshLists()
 void wxHtmlHelpWindow::ReadCustomization(wxConfigBase *cfg, const wxString& path)
 {
     wxString oldpath;
-    wxString tmp;
 
     if (!path.empty())
     {
@@ -1124,7 +1123,6 @@ void wxHtmlHelpWindow::ReadCustomization(wxConfigBase *cfg, const wxString& path
 void wxHtmlHelpWindow::WriteCustomization(wxConfigBase *cfg, const wxString& path)
 {
     wxString oldpath;
-    wxString tmp;
 
     if (!path.empty())
     {
@@ -1524,7 +1522,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
             {
                 if (m_Printer == nullptr)
                     m_Printer = new wxHtmlEasyPrinting(_("Help Printing"), this);
-                if (!m_HtmlWin->GetOpenedPage())
+                if (m_HtmlWin->GetOpenedPage().empty())
                 {
                     wxLogWarning(_("Cannot print empty page."));
                 }

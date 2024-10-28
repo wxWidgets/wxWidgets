@@ -355,7 +355,7 @@ private:
 };
 #endif // wxUSE_UNICODE_UTF8
 
-class WXDLLIMPEXP_BASE wxString
+class WXDLLIMPEXP_BASE wxWARN_UNUSED wxString
 {
   // NB: special care was taken in arranging the member functions in such order
   //     that all inline functions can be effectively inlined, verify that all
@@ -2391,11 +2391,9 @@ public:
       // convert to an unsigned long
   bool ToULong(unsigned long *val, int base = 10) const;
       // convert to wxLongLong
-#if defined(wxLongLong_t)
   bool ToLongLong(wxLongLong_t *val, int base = 10) const;
       // convert to wxULongLong
   bool ToULongLong(wxULongLong_t *val, int base = 10) const;
-#endif // wxLongLong_t
       // convert to a double
   bool ToDouble(double *val) const;
 

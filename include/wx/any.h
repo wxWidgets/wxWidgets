@@ -30,9 +30,7 @@ union wxAnyValueBuffer
 {
     union Alignment
     {
-    #if wxHAS_INT64
         wxInt64 m_int64;
-    #endif
         long double m_longDouble;
         void ( *m_funcPtr )(void);
         void ( wxAnyValueBuffer::*m_mFuncPtr )(void);
@@ -410,14 +408,8 @@ _WX_ANY_DEFINE_SUB_TYPE(T, CLSTYPE)\
 //  Integer value types
 //
 
-#ifdef wxLongLong_t
-    typedef wxLongLong_t wxAnyBaseIntType;
-    typedef wxULongLong_t wxAnyBaseUintType;
-#else
-    typedef long wxAnyBaseIntType;
-    typedef unsigned long wxAnyBaseUintType;
-#endif
-
+typedef wxLongLong_t wxAnyBaseIntType;
+typedef wxULongLong_t wxAnyBaseUintType;
 
 class WXDLLIMPEXP_BASE wxAnyValueTypeImplInt :
     public wxAnyValueTypeImplBase<wxAnyBaseIntType>
@@ -453,17 +445,13 @@ WX_ANY_DEFINE_SUB_TYPE(signed long, Int)
 WX_ANY_DEFINE_SUB_TYPE(signed int, Int)
 WX_ANY_DEFINE_SUB_TYPE(signed short, Int)
 WX_ANY_DEFINE_SUB_TYPE(signed char, Int)
-#ifdef wxLongLong_t
 WX_ANY_DEFINE_SUB_TYPE(wxLongLong_t, Int)
-#endif
 
 WX_ANY_DEFINE_SUB_TYPE(unsigned long, Uint)
 WX_ANY_DEFINE_SUB_TYPE(unsigned int, Uint)
 WX_ANY_DEFINE_SUB_TYPE(unsigned short, Uint)
 WX_ANY_DEFINE_SUB_TYPE(unsigned char, Uint)
-#ifdef wxLongLong_t
 WX_ANY_DEFINE_SUB_TYPE(wxULongLong_t, Uint)
-#endif
 
 
 //
@@ -916,9 +904,7 @@ public:
     WXANY_IMPLEMENT_INT_EQ_OP(signed short, unsigned short)
     WXANY_IMPLEMENT_INT_EQ_OP(signed int, unsigned int)
     WXANY_IMPLEMENT_INT_EQ_OP(signed long, unsigned long)
-#ifdef wxLongLong_t
     WXANY_IMPLEMENT_INT_EQ_OP(wxLongLong_t, wxULongLong_t)
-#endif
 
     wxGCC_WARNING_SUPPRESS(float-equal)
 

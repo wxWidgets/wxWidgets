@@ -285,7 +285,7 @@ void URITestCase::Paths()
     try
     {
         wxURI test("http://user:password@192.256.1.100:5050/../path");
-        wxString sTest = test.BuildURI(); // This isn't a unit test, just a niche parsing crash test
+        test.BuildURI(); // This isn't a unit test, just a niche parsing crash test
     }
     catch (...)
     {

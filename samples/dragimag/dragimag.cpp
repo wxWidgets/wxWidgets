@@ -398,23 +398,6 @@ bool MyApp::OnInit()
         }
     }
 
-#if 0
-    // Under GTK, this demonstrates that
-    // wxScreenDC only gets the root window content.
-    // We need to be able to copy the overall content
-    // for full-screen dragging to work.
-    int w, h;
-    wxDisplaySize(& w, & h);
-    wxBitmap bitmap(w, h);
-
-    wxScreenDC dc;
-    wxMemoryDC memDC;
-    memDC.SelectObject(bitmap);
-    memDC.Blit(0, 0, w, h, & dc, 0, 0);
-    memDC.SelectObject(wxNullBitmap);
-    m_background = bitmap;
-#endif
-
     frame->Show( true );
 
     return true;

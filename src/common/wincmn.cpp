@@ -38,7 +38,6 @@
     #include "wx/statusbr.h"
     #include "wx/toolbar.h"
     #include "wx/dcclient.h"
-    #include "wx/dcscreen.h"
     #include "wx/scrolbar.h"
     #include "wx/layout.h"
     #include "wx/sizer.h"
@@ -507,7 +506,7 @@ wxWindowBase::~wxWindowBase()
 #endif // wxUSE_CONSTRAINTS
 
     if ( m_containingSizer )
-        m_containingSizer->Detach( (wxWindow*)this );
+        m_containingSizer->Detach(this);
 
     delete m_windowSizer;
 
@@ -1312,7 +1311,7 @@ void wxWindowBase::RemoveChild(wxWindowBase *child)
     if ( IsFrozen() && !child->IsBeingDeleted() && !child->IsTopLevel() )
         child->Thaw();
 
-    GetChildren().DeleteObject((wxWindow *)child);
+    GetChildren().DeleteObject(child);
     child->SetParent(nullptr);
 }
 
@@ -2905,7 +2904,7 @@ static wxSize GetDPIHelper(const wxWindowBase* w)
     if ( w )
         dpi = w->GetDPI();
     if ( !dpi.x || !dpi.y )
-        dpi = wxScreenDC().GetPPI();
+        dpi = wxDisplay().GetPPI();
     if ( !dpi.x || !dpi.y )
         dpi = wxDisplay::GetStdPPI();
 

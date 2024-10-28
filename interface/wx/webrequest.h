@@ -320,9 +320,34 @@ public:
         @param name
             Name of the header
         @param value
-            String value of the header. An empty string will remove the header.
+            String value of the header. An empty string will remove all headers
+            with the same name.
+
+        @see AddHeader()
     */
     void SetHeader(const wxString& name, const wxString& value);
+
+    /**
+        Adds a request header which will be sent to the server by this request.
+
+        The header will be added even if a header with the same name has been
+        set before.
+
+        @param name
+            Name of the header
+        @param value
+            String value of the header.
+
+        @note
+            The URLSession backend does not support multiple headers with the
+            same name. The last added header with a given name is used as a
+            fallback.
+
+        @since 3.3.0
+
+        @see SetHeader()
+    */
+    void AddHeader(const wxString& name, const wxString& value);
 
     /**
         Set <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">common</a>
@@ -737,9 +762,34 @@ public:
         @param name
             Name of the header
         @param value
-            String value of the header. An empty string will remove the header.
+            String value of the header. An empty string will remove all headers
+            with the same name.
+
+        @see AddHeader()
     */
     void SetHeader(const wxString& name, const wxString& value);
+
+    /**
+        Adds a request header which will be sent to the server by this request.
+
+        The header will be added even if a header with the same name has been
+        set before.
+
+        @param name
+            Name of the header
+        @param value
+            String value of the header.
+
+        @note
+            The URLSession backend does not support multiple headers with the
+            same name. The last added header with a given name is used as a
+            fallback.
+
+        @since 3.3.0
+
+        @see SetHeader()
+    */
+    void AddHeader(const wxString& name, const wxString& value);
 
     /**
         Set <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">common</a>
@@ -1022,8 +1072,27 @@ public:
         could not be found.
 
         @param name Name of the header field
+
+        @see GetAllHeaderValues()
     */
     wxString GetHeader(const wxString& name) const;
+
+    /**
+        Returns all values of response headers with the same name or an empty
+        vector if the header could not be found at all.
+
+        @param name Name of the header fields
+
+        @note
+            The URLSession backend does not support multiple headers with the
+            same name. The last added header with a given name is used as a
+            fallback.
+
+        @since 3.3.0
+
+        @see GetHeader()
+    */
+    std::vector<wxString> GetAllHeaderValues(const wxString& name) const;
 
     /**
         Get the length of returned data if available.
@@ -1216,16 +1285,40 @@ public:
 
     /**
         Sets a request header in every wxWebRequest created from this session
-        after is has been set.
+        after it has been set.
 
         A good example for a session-wide request header is the @c User-Agent
         header.
 
-        Calling this function with the same header name again replaces the
-        previously used value.
+        Calling this function with the same header name again replaces all
+        previously added headers with that name.
+
+        @param name Name of the header
+        @param value String value of the header. An empty string will remove
+            all headers with the same name.
+
+        @see AddCommonHeader()
+
+        @since 3.3.0
+    */
+    void SetCommonHeader(const wxString& name, const wxString& value);
+
+    /**
+        Adds a request header to every wxWebRequest created from this session
+        after it has been added.
+
+        Calling this function with the same header name again adds another
+        header with the same name.
 
         @param name Name of the header
         @param value String value of the header
+
+        @note
+            The URLSession backend does not support multiple headers with the
+            same name. The last added header with a given name is used as a
+            fallback.
+
+        @see SetCommonHeader()
     */
     void AddCommonHeader(const wxString& name, const wxString& value);
 

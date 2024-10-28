@@ -16,10 +16,11 @@
 
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 class WXDLLIMPEXP_FWD_BASE wxURI;
 
-using wxWebRequestHeaderMap = std::unordered_map<wxString, wxString>;
+using wxWebRequestHeaderMap = std::unordered_map<wxString, std::vector<wxString>>;
 
 // Trace mask used for the messages in wxWebRequest code.
 #define wxTRACE_WEBREQUEST "webrequest"
@@ -62,7 +63,15 @@ public:
     virtual ~wxWebRequestImpl() = default;
 
     void SetHeader(const wxString& name, const wxString& value)
-    { m_headers[name] = value; }
+    {
+        if (value.empty())
+            m_headers.erase(name);
+        else
+            m_headers[name] = { value };
+    }
+
+    void AddHeader(const wxString& name, const wxString& value)
+        { m_headers[name].push_back(value); }
 
     void SetMethod(const wxString& method) { m_method = method; }
 
@@ -220,6 +229,8 @@ public:
 
     virtual wxString GetHeader(const wxString& name) const = 0;
 
+    virtual std::vector<wxString> GetAllHeaderValues(const wxString& name) const = 0;
+
     virtual wxString GetMimeType() const;
 
     virtual wxString GetContentType() const;
@@ -319,8 +330,16 @@ public:
     bool SetBaseURL(const wxString& url);
     const wxURI* GetBaseURL() const;
 
+    void SetCommonHeader(const wxString& name, const wxString& value)
+    {
+        if (value.empty())
+            m_headers.erase(name);
+        else
+            m_headers[name] = { value };
+    }
+
     void AddCommonHeader(const wxString& name, const wxString& value)
-        { m_headers[name] = value; }
+        { m_headers[name].push_back(value); }
 
     void SetTempDir(const wxString& dir) { m_tempDir = dir; }
 

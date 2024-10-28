@@ -55,6 +55,11 @@
     #define wxUSE_PS_PRINTING 0
 #endif
 
+// See the comment in wx/msw/dc.cpp before the definition of the macros with
+// the same names for the explanation.
+#define XLOG2DEV(x) ((x) + (m_deviceOriginX / m_scaleX))
+#define YLOG2DEV(y) ((y) + (m_deviceOriginY / m_scaleY))
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -68,69 +73,6 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxMSWDCImpl);
 // ----------------------------------------------------------------------------
 // wxPrinterDC construction
 // ----------------------------------------------------------------------------
-
-#if 0
-// This form is deprecated
-wxPrinterDC::wxPrinterDC(const wxString& driver_name,
-                         const wxString& device_name,
-                         const wxString& file,
-                         bool interactive,
-                         wxPrintOrientation orientation)
-{
-    m_isInteractive = interactive;
-
-    if ( !file.empty() )
-        m_printData.SetFilename(file);
-
-#if wxUSE_COMMON_DIALOGS
-    if ( interactive )
-    {
-        PRINTDLG pd;
-
-        pd.lStructSize = sizeof( PRINTDLG );
-        pd.hwndOwner = (HWND) nullptr;
-        pd.hDevMode = (HANDLE)nullptr;
-        pd.hDevNames = (HANDLE)nullptr;
-        pd.Flags = PD_RETURNDC | PD_NOSELECTION | PD_NOPAGENUMS;
-        pd.nFromPage = 0;
-        pd.nToPage = 0;
-        pd.nMinPage = 0;
-        pd.nMaxPage = 0;
-        pd.nCopies = 1;
-        pd.hInstance = (HINSTANCE)nullptr;
-
-        m_ok = PrintDlg( &pd ) != 0;
-        if ( m_ok )
-        {
-            m_hDC = (WXHDC) pd.hDC;
-        }
-    }
-    else
-#endif // wxUSE_COMMON_DIALOGS
-    {
-        if ( !driver_name.empty() && !device_name.empty() && !file.empty() )
-        {
-            m_hDC = (WXHDC) CreateDC(driver_name.t_str(),
-                                     device_name.t_str(),
-                                     file.fn_str(),
-                                     nullptr);
-        }
-        else // we don't have all parameters, ask the user
-        {
-            wxPrintData printData;
-            printData.SetOrientation(orientation);
-            m_hDC = wxGetPrinterDC(printData);
-        }
-
-        m_ok = m_hDC ? true: false;
-
-        // as we created it, we must delete it as well
-        m_bOwnsDC = true;
-    }
-
-    Init();
-}
-#endif
 
 wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printData ) :
     wxMSWDCImpl( owner )
@@ -410,7 +352,7 @@ void wxPrinterDCImpl::DoDrawBitmap(const wxBitmap& bmp,
         height = bmp.GetHeight();
 
     if ( !(::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB) ||
-            !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, x, y) )
+            !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, XLOG2DEV(x), YLOG2DEV(y)) )
     {
         // no support for StretchDIBits() or an error occurred if we got here
         wxMemoryDC memDC;
@@ -454,9 +396,9 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                 if (cref)
                 {
                     HBRUSH brush = ::CreateSolidBrush(::GetPixel(dcSrc, x, y));
-                    rect.left = xdest + x;
+                    rect.left = XLOG2DEV(xdest) + x;
                     rect.right = rect.left + 1;
-                    rect.top = ydest + y;
+                    rect.top = YLOG2DEV(ydest) + y;
                     rect.bottom = rect.top + 1;
                     ::FillRect(GetHdc(), &rect, brush);
                     ::DeleteObject(brush);
@@ -467,7 +409,7 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
     else // no mask
     {
         if ( !(::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB) ||
-                !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, xdest, ydest) )
+                !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, XLOG2DEV(xdest), YLOG2DEV(ydest)) )
         {
             // no support for StretchDIBits
 
@@ -483,14 +425,14 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     COLORREF col = ::GetPixel(dcSrc, x, y);
                     HBRUSH brush = ::CreateSolidBrush( col );
 
-                    rect.left = xdest + x;
-                    rect.top = ydest + y;
+                    rect.left = XLOG2DEV(xdest) + x;
+                    rect.top = YLOG2DEV(ydest) + y;
                     while( (x + 1 < width) &&
                                 (::GetPixel(dcSrc, x + 1, y) == col ) )
                     {
                         ++x;
                     }
-                    rect.right = xdest + x + 1;
+                    rect.right = XLOG2DEV(xdest) + x + 1;
                     rect.bottom = rect.top + 1;
                     ::FillRect((HDC) m_hDC, &rect, brush);
                     ::DeleteObject(brush);

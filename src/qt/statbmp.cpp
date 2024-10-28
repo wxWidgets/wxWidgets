@@ -78,9 +78,14 @@ wxBitmap wxStaticBitmap::GetBitmap() const
     wxBitmap bitmap = m_bitmapBundle.GetBitmapFor(this);
     if ( !bitmap.IsOk() )
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+        QPixmap pix = GetQLabel()->pixmap(Qt::ReturnByValue);
+        bitmap = wxBitmap( pix );
+#else
         const QPixmap* pix = GetQLabel()->pixmap();
         if ( pix != nullptr )
             bitmap = wxBitmap( *pix );
+#endif
     }
 
     return bitmap;

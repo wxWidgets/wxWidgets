@@ -400,10 +400,17 @@ wxCoord wxQtDCImpl::GetCharHeight() const
 
 wxCoord wxQtDCImpl::GetCharWidth() const
 {
-    //FIXME: Returning max width, instead of average
+    // We don't use QFontMetrics::maxWidth() here as it returns the width of the
+    // widest character in the font, which is usually too big for common usage.
+    // Instead, we use horizontalAdvance() here for consistency with the other
+    // ports. Or a decent approximation of it if not available.
     QFontMetrics metrics(m_qtPainter->isActive() ?
         m_qtPainter->font() : QApplication::font());
-    return wxCoord( metrics.maxWidth() );
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    return wxCoord( metrics.horizontalAdvance('H') );
+#else
+    return wxCoord( metrics.averageCharWidth() + 2 );
+#endif
 }
 
 void wxQtDCImpl::DoGetTextExtent(const wxString& string,

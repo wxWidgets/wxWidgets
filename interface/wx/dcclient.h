@@ -24,7 +24,7 @@
     @library{wxcore}
     @category{dc}
 
-    @see wxDC, wxClientDC, wxMemoryDC, wxWindowDC, wxScreenDC
+    @see wxDC, wxMemoryDC
 */
 class wxPaintDC : public wxClientDC
 {
@@ -66,7 +66,7 @@ public:
     @library{wxcore}
     @category{dc}
 
-    @see wxDC, wxMemoryDC, wxPaintDC, wxWindowDC, wxScreenDC
+    @see wxDC, wxMemoryDC, wxPaintDC, wxWindowDC
 */
 class wxClientDC : public wxWindowDC
 {
@@ -120,7 +120,7 @@ public:
     @library{wxcore}
     @category{dc}
 
-    @see wxDC, wxMemoryDC, wxPaintDC, wxClientDC, wxScreenDC
+    @see wxDC, wxMemoryDC, wxPaintDC, wxClientDC
 */
 class wxWindowDC : public wxDC
 {
