@@ -62,10 +62,10 @@ using wxTranslationsHashMap = std::unordered_map<wxString, wxString>;
     wxGetTranslation((s), wxString(), c)
 #else
 #define wxGETTEXT_IN_CONTEXT(c, s) \
-    wxGetTranslation(wxASCII_STR(s), wxString(), c)
+    wxGetTranslation(wxASCII_STR(s), wxString(), wxASCII_STR(c))
 #endif
 #define wxGETTEXT_IN_CONTEXT_PLURAL(c, sing, plur, n) \
-    wxGetTranslation((sing), (plur), n, wxString(), c)
+    wxGetTranslation(wxASCII_STR(sing), wxASCII_STR(plur), n, wxString(), wxASCII_STR(c))
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)
