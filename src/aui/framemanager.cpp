@@ -4487,16 +4487,9 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             }
             else
             {
-                wxRect rect(pos, m_actionPart->rect.GetSize());
-
-                if (!m_actionHintRect.IsEmpty())
-                {
-                    m_actionHintRect = wxRect();
-                }
-
                 // draw resize hint
-                m_actionHintRect = rect;
-                wxDrawOverlayResizeHint(m_frame, m_overlay, rect);
+                m_actionHintRect = wxRect(pos, m_actionPart->rect.GetSize());
+                wxDrawOverlayResizeHint(m_frame, m_overlay, m_actionHintRect);
             }
         }
     }
