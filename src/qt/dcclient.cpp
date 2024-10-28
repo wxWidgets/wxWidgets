@@ -115,6 +115,8 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
 {
      if ( m_ok )
      {
+        m_qtPainter->translate( wxQtConvertPoint(win->GetClientAreaOrigin()) );
+
         m_qtPainter->setClipRect( wxQtConvertRect(win->GetClientRect()),
                                   m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
     }
