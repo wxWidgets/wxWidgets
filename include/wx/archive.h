@@ -217,9 +217,9 @@ public:
 
     wxArchiveIterator& operator =(const wxArchiveIterator& it) {
         if (it.m_rep)
-            it.m_rep.AddRef();
+            it.m_rep->AddRef();
         if (m_rep)
-            this->m_rep.UnRef();
+            m_rep->UnRef();
         m_rep = it.m_rep;
         return *this;
     }
