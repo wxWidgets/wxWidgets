@@ -1028,6 +1028,11 @@ void ArchiveTestCase<ClassFactoryT>::TestSmartIterator(wxInputStream& in)
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it)
         CPPUNIT_ASSERT(m_testEntries.count((*it)->GetName(wxPATH_UNIX)));
+
+    Iter a, b;
+    // test assignment
+    a = b;
+    CPPUNIT_ASSERT(a == b);
 }
 
 // pair iterator using smart pointers
