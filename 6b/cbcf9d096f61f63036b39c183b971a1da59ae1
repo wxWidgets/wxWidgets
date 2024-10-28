@@ -1,0 +1,1 @@
+wxAll (GUI): Make date/time picker controls locale-aware (Ulrich Telle, #23965).
