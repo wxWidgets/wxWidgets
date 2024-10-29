@@ -709,7 +709,7 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
     }
 
     wxPreviewFrame *frame = new wxPreviewFrame(preview, m_ParentWindow,
-                                wxString::Format(_("%s Preview"), m_Name),
+                                wxString::Format(/* TRANSLATORS: %s may be a document title. */_("%s Preview"), m_Name),
                                 wxDefaultPosition,
                                 wxWindow::FromDIP(wxSize(650, 500), m_ParentWindow));
     frame->Centre(wxBOTH);
