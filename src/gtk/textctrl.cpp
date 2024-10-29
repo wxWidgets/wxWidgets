@@ -2077,6 +2077,11 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 #ifdef __WXGTK3__
 wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
 {
+    if ( !IsMultiLine() )
+    {
+        return wxTextSearchResult{};
+    }
+
     const GtkTextSearchFlags flags = static_cast<GtkTextSearchFlags>(
         search.m_matchCase ? GTK_TEXT_SEARCH_TEXT_ONLY :
                              (GTK_TEXT_SEARCH_TEXT_ONLY | GTK_TEXT_SEARCH_CASE_INSENSITIVE));
