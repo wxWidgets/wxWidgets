@@ -256,6 +256,10 @@ All:
 - Update Brazilian Portuguese translations (Felipe).
 - Ensure that all headers are installed by CMake (Maarten Bent, #25266).
 
+All (GUI):
+
+- Fix crash when using wxPropertyGrid on high DPI screen (#25286).
+
 
 3.2.7: (released 2025-03-20)
 ----------------------------
