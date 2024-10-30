@@ -2588,6 +2588,8 @@ void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 
 void wxPropertyGrid::DrawItemAndValueRelated( wxPGProperty* p )
 {
+    wxCHECK_RET( p, wxS("invalid property id") );
+
     if ( IsFrozen() )
         return;
 
