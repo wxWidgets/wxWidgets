@@ -1378,7 +1378,8 @@ void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &event)
     CalculateFontAndBitmapStuff(m_vspacing);
     Refresh();
 
-    RefreshProperty(GetSelection());
+    if ( wxPGProperty* const selected = GetSelection() )
+        RefreshProperty(selected);
 
     event.Skip();
 }
