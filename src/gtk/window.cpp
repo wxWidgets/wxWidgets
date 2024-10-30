@@ -1718,6 +1718,11 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
                                   GdkEventButton *gdk_event,
                                   wxWindowGTK *win )
 {
+    wxLogTrace(TRACE_MOUSE, "Press for button %d at %g,%g in %s at t=%u",
+               gdk_event->button, gdk_event->x, gdk_event->y,
+               wxDumpWindow(win),
+               gdk_event->time);
+
     /*
       GTK does not set the button1 mask when the event comes from the left
       button of a mouse. but for some reason, it sets it when the event comes
@@ -1860,6 +1865,11 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
                                     GdkEventButton *gdk_event,
                                     wxWindowGTK *win )
 {
+    wxLogTrace(TRACE_MOUSE, "Release for button %d at %g,%g in %s at t=%u",
+               gdk_event->button, gdk_event->x, gdk_event->y,
+               wxDumpWindow(win),
+               gdk_event->time);
+
     wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
 
     if ( AreGTKEventsBlocked() )
