@@ -926,6 +926,8 @@ public:
 
     /**
         Redraws given property.
+
+        @param p Valid, i.e. non-@NULL, property pointer.
     */
     virtual void RefreshProperty( wxPGProperty* p );
 

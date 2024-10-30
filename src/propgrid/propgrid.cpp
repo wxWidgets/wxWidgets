@@ -2568,6 +2568,8 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
 
 void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 {
+    wxCHECK_RET( p, wxS("invalid property id") );
+
     if ( m_pState->DoIsPropertySelected(p) || p->IsChildSelected(true) )
     {
         // NB: We must copy the selection.
