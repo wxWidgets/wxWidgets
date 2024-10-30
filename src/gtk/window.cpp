@@ -1939,11 +1939,8 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    // We ignore the result of the event processing here as we don't really
-    // want to prevent the other handlers from running even if we did process
-    // this event ourselves, there is no real advantage in doing this and it
-    // could actually be harmful, see #16055.
-    (void)win->GTKProcessEvent(event);
+    if ( win->GTKProcessEvent(event) )
+        return TRUE;
 
     return FALSE;
 }
