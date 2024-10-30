@@ -234,13 +234,34 @@ static wxWindowGTK *gs_deferredFocusOut = nullptr;
 
 // global variables because GTK+ DnD want to have the
 // mouse event that caused it
-GdkEvent    *g_lastMouseEvent = nullptr;
+GdkEvent    *g_lastMouseEvent = nullptr; // use SetLastMouseEvent below
 int          g_lastButtonNumber = 0;
-
-static wxWindowGTK* g_windowUnderMouse = nullptr;
 
 namespace wxGTKImpl
 {
+
+// Small RAII helper setting g_lastMouseEvent until the scope exit.
+class SetLastMouseEvent
+{
+public:
+    explicit SetLastMouseEvent(GdkEventButton* event)
+    {
+        g_lastMouseEvent = reinterpret_cast<GdkEvent*>(event);
+    }
+
+    explicit SetLastMouseEvent(GdkEventMotion* event)
+    {
+        g_lastMouseEvent = reinterpret_cast<GdkEvent*>(event);
+    }
+
+    ~SetLastMouseEvent()
+    {
+        g_lastMouseEvent = nullptr;
+    }
+};
+
+
+wxWindowGTK* g_windowUnderMouse = nullptr;
 
 bool SetWindowUnderMouse(wxWindowGTK* win)
 {
@@ -1812,7 +1833,7 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
             return false;
     }
 
-    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    SetLastMouseEvent setLastMouse(gdk_event);
 
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
@@ -1829,9 +1850,7 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    bool ret = win->GTKProcessEvent( event );
-    g_lastMouseEvent = nullptr;
-    if ( ret )
+    if ( win->GTKProcessEvent( event ) )
         return TRUE;
 
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() &&
@@ -1906,7 +1925,7 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
             return FALSE;
     }
 
-    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    SetLastMouseEvent setLastMouse(gdk_event);
 
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
@@ -1925,8 +1944,6 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
     // this event ourselves, there is no real advantage in doing this and it
     // could actually be harmful, see #16055.
     (void)win->GTKProcessEvent(event);
-
-    g_lastMouseEvent = nullptr;
 
     return FALSE;
 }
@@ -1978,7 +1995,7 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     if ( AreGTKEventsBlocked() )
         return FALSE;
 
-    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    SetLastMouseEvent setLastMouse(gdk_event);
 
     wxMouseEvent event( wxEVT_MOTION );
     InitMouseEvent(win, event, gdk_event);
@@ -2051,8 +2068,6 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     }
 
     bool ret = win->GTKProcessEvent(event);
-
-    g_lastMouseEvent = nullptr;
 
     // Request additional motion events. Done at the end to increase the
     // chances that lower priority events requested by the handler above, such
