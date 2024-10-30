@@ -1355,21 +1355,27 @@ bool AdjustCharEventKeyCodes(wxKeyEvent& event)
     return modified;
 }
 
-} // anonymous namespace
-
 // If a widget does not handle a key or mouse event, GTK+ sends it up the
 // parent chain until it is handled. These events are not supposed to propagate
 // in wxWidgets, so this code avoids handling them in any parent wxWindow,
 // while still allowing the event to propagate so things like native keyboard
 // navigation will work.
-#define wxPROCESS_EVENT_ONCE(EventType, event) \
-    static EventType eventPrev; \
-    if (!gs_isNewEvent && memcmp(&eventPrev, event, sizeof(EventType)) == 0) \
-        return false; \
-    gs_isNewEvent = false; \
-    eventPrev = *event
-
 static bool gs_isNewEvent;
+static GdkEvent gs_lastEvent;
+
+template <typename EventType>
+bool EventAlreadyProcessed(const EventType* event)
+{
+    if (!gs_isNewEvent && memcmp(&gs_lastEvent, event, sizeof(EventType)) == 0)
+        return true;
+
+    gs_isNewEvent = false;
+    memcpy(&gs_lastEvent, event, sizeof(EventType));
+
+    return false;
+}
+
+} // anonymous namespace
 
 extern "C" {
 static gboolean
@@ -1380,7 +1386,8 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
     if (g_blockEventsOnDrag)
         return FALSE;
 
-    wxPROCESS_EVENT_ONCE(GdkEventKey, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     bool ret = false;
@@ -1567,7 +1574,8 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
     if (g_blockEventsOnDrag)
         return FALSE;
 
-    wxPROCESS_EVENT_ONCE(GdkEventKey, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_UP );
     wxTranslateGTKKeyEventToWx(event, win, gdk_event);
@@ -1751,7 +1759,8 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
     */
     gdk_event->state &= ~GDK_BUTTON1_MASK;
 
-    wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     if ( AreGTKEventsBlocked() )
         return FALSE;
@@ -1889,7 +1898,8 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
                wxDumpWindow(win),
                gdk_event->time);
 
-    wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     if ( AreGTKEventsBlocked() )
         return FALSE;
@@ -1987,7 +1997,8 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
                                    GdkEventMotion *gdk_event,
                                    wxWindowGTK *win )
 {
-    wxPROCESS_EVENT_ONCE(GdkEventMotion, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     if ( AreGTKEventsBlocked() )
         return FALSE;
