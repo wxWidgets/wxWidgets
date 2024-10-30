@@ -883,7 +883,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                 target_list,
                 (GdkDragAction)allowed_actions,
                 g_lastButtonNumber,  // number of mouse button which started drag
-                (GdkEvent*) g_lastMouseEvent );
+                g_lastMouseEvent );
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
