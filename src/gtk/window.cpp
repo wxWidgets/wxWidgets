@@ -1613,6 +1613,15 @@ static void AdjustEventButtonState(wxMouseEvent& event)
 static
 wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 {
+    // When a window has mouse capture, it should get all the events.
+    if ( g_captureWindow )
+    {
+        win->ClientToScreen(&x, &y);
+        g_captureWindow->ScreenToClient(&x, &y);
+
+        return g_captureWindow;
+    }
+
     wxCoord xx = x;
     wxCoord yy = y;
 
@@ -1817,8 +1826,7 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
     // find the correct window to send the event to: it may be a different one
     // from the one which got it at GTK+ level because some controls don't have
     // their own X window and thus cannot get any events.
-    if ( !g_captureWindow )
-        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
+    win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
     // reset the event object and id in case win changed.
     event.SetEventObject( win );
@@ -1903,8 +1911,7 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 
     AdjustEventButtonState(event);
 
-    if ( !g_captureWindow )
-        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
+    win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
     // reset the event object and id in case win changed.
     event.SetEventObject( win );
