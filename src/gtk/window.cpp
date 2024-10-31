@@ -2271,7 +2271,7 @@ wxGTKImpl::WindowEnterCallback(GtkWidget* widget,
     // Event was emitted after a grab
     if (gdk_event->mode != GDK_CROSSING_NORMAL)
     {
-        wxLogTrace(TRACE_MOUSE, "Ignore event with mode %d", gdk_event->mode);
+        wxLogTrace(TRACE_MOUSE, "Ignore enter event mode=%d", gdk_event->mode);
         return FALSE;
     }
 
@@ -2337,7 +2337,7 @@ wxGTKImpl::WindowLeaveCallback(GtkWidget* widget,
     // Event was emitted after an ungrab
     if (gdk_event->mode != GDK_CROSSING_NORMAL)
     {
-        wxLogTrace(TRACE_MOUSE, "Ignore event with mode %d", gdk_event->mode);
+        wxLogTrace(TRACE_MOUSE, "Ignore leave event mode=%d", gdk_event->mode);
         return FALSE;
     }
 
