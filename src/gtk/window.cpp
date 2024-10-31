@@ -252,6 +252,9 @@ bool SetWindowUnderMouse(wxWindowGTK* win)
     return true;
 }
 
+template <typename EventType>
+gboolean SendEnterLeaveEvents(wxWindowGTK* win, EventType* gdk_event);
+
 } // namespace wxGTKImpl
 
 #ifdef wxHAS_XKB
@@ -2031,13 +2034,31 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     }
     else // no capture
     {
-        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
+        auto* const winUnderMouse =
+            FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
-        // reset the event object and id in case win changed.
-        event.SetEventObject( win );
-        event.SetId( win->GetId() );
+        // If our idea of the window under mouse is different from the actual
+        // window under it, we need to send enter or leave events.
+        bool setCursorEventAlreadySent = false;
+        if ( winUnderMouse != g_windowUnderMouse )
+        {
+            SendEnterLeaveEvents(winUnderMouse, gdk_event);
 
-        SendSetCursorEvent(win, event.m_x, event.m_y);
+            // This is done by SendEnterLeaveEvents() internally.
+            setCursorEventAlreadySent = true;
+        }
+
+        // Also redirect the event to the window under mouse if it's different.
+        if ( winUnderMouse != win )
+        {
+            win = winUnderMouse;
+
+            event.SetEventObject( win );
+            event.SetId( win->GetId() );
+        }
+
+        if ( !setCursorEventAlreadySent )
+            SendSetCursorEvent(win, event.m_x, event.m_y);
     }
 
     bool ret = win->GTKProcessEvent(event);
@@ -2257,6 +2278,37 @@ wx_window_focus_callback(GtkWidget *widget,
 // "enter_notify_event"
 //-----------------------------------------------------------------------------
 
+namespace wxGTKImpl
+{
+
+// Helper function used by both "enter" and "motion" signal handlers.
+template <typename EventType>
+gboolean SendEnterLeaveEvents(wxWindowGTK* win, EventType* gdk_event)
+{
+    if ( g_windowUnderMouse )
+    {
+        // We must not have got the leave event for the previous window, so
+        // generate it now -- better late than never.
+        wxMouseEvent event( wxEVT_LEAVE_WINDOW );
+        InitMouseEvent(g_windowUnderMouse, event, gdk_event);
+
+        (void)g_windowUnderMouse->GTKProcessEvent(event);
+    }
+
+    g_windowUnderMouse = win;
+
+    wxMouseEvent event( wxEVT_ENTER_WINDOW );
+    InitMouseEvent(win, event, gdk_event);
+
+    if ( !g_captureWindow )
+        SendSetCursorEvent(win, event.m_x, event.m_y);
+
+    return win->GTKProcessEvent(event) ? TRUE : FALSE;
+}
+
+} // namespace wxGTKImpl
+
+// This is a (internally) public function used by wxChoice too.
 gboolean
 wxGTKImpl::WindowEnterCallback(GtkWidget* widget,
                                GdkEventCrossing* gdk_event,
@@ -2283,25 +2335,7 @@ wxGTKImpl::WindowEnterCallback(GtkWidget* widget,
         return FALSE;
     }
 
-    if ( g_windowUnderMouse )
-    {
-        // We must not have got the leave event for the previous window, so
-        // generate it now -- better late than never.
-        wxMouseEvent event( wxEVT_LEAVE_WINDOW );
-        InitMouseEvent(g_windowUnderMouse, event, gdk_event);
-
-        (void)g_windowUnderMouse->GTKProcessEvent(event);
-    }
-
-    g_windowUnderMouse = win;
-
-    wxMouseEvent event( wxEVT_ENTER_WINDOW );
-    InitMouseEvent(win, event, gdk_event);
-
-    if ( !g_captureWindow )
-        SendSetCursorEvent(win, event.m_x, event.m_y);
-
-    return win->GTKProcessEvent(event);
+    return SendEnterLeaveEvents(win, gdk_event);
 }
 
 extern "C" {
