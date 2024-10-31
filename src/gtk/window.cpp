@@ -29,6 +29,7 @@
 
 #include "wx/display.h"
 #include "wx/dnd.h"
+#include "wx/evtloop.h"
 #include "wx/tooltip.h"
 #include "wx/caret.h"
 #include "wx/fontutil.h"
@@ -1361,16 +1362,26 @@ bool AdjustCharEventKeyCodes(wxKeyEvent& event)
 // while still allowing the event to propagate so things like native keyboard
 // navigation will work.
 static bool gs_isNewEvent;
-static GdkEvent gs_lastEvent;
 
 template <typename EventType>
 bool EventAlreadyProcessed(const EventType* event)
 {
-    if (!gs_isNewEvent && memcmp(&gs_lastEvent, event, sizeof(EventType)) == 0)
+    // The cast is safe because we can only have windows when using GUI.
+    auto* const loop = static_cast<wxGUIEventLoop*>(wxEventLoop::GetActive());
+    if ( !loop )
+    {
+        // This really shouldn't happen, but don't crash if it does.
+        return false;
+    }
+
+    auto* const ev = reinterpret_cast<const GdkEvent*>(event);
+
+    // Ensure we call GTKIsSameAsLastEvent() in any case to always update the
+    // last stored event (i.e. the order of checks here matters).
+    if ( loop->GTKIsSameAsLastEvent(ev, sizeof(EventType)) && !gs_isNewEvent )
         return true;
 
     gs_isNewEvent = false;
-    memcpy(&gs_lastEvent, event, sizeof(EventType));
 
     return false;
 }
