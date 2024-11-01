@@ -263,6 +263,7 @@ All:
 All (GUI):
 
 - Improve wxPropGrid checkboxes in high DPI (Alex Shvartzkop, #24650, #24651).
+- Don't break AUI layout if Update() called when window is iconized (#24930).
 
 wxGTK:
 
