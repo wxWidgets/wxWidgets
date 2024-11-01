@@ -47,6 +47,7 @@ wxGUIEventLoop::wxGUIEventLoop()
 {
     m_exitcode = 0;
     m_lastEvent = new GdkEvent;
+    memset(m_lastEvent, 0, sizeof(GdkEvent));
 }
 
 wxGUIEventLoop::~wxGUIEventLoop()
