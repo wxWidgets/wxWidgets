@@ -243,12 +243,15 @@ public:
         @param paneWindow The window pointer of the pane being dragged.
         @param pt The mouse position, in client coordinates.
         @param offset Describes the offset that the mouse is from the upper-left
-            corner of the item being dragged.
+            corner of the item being dragged, 0 by default (since wxWidgets
+            3.3.0, this parameter had to be specified in the earlier versions).
         @return The rectangle hint will be returned in screen coordinates if the pane
             would indeed become docked at the specified drop point.
             Otherwise, an empty rectangle is returned.
     */
-    wxRect CalculateHintRect(wxWindow* paneWindow, const wxPoint& pt, const wxPoint& offset);
+    wxRect CalculateHintRect(wxWindow* paneWindow,
+                             const wxPoint& pt,
+                             const wxPoint& offset = wxPoint{0, 0});
 
     /**
         Check if a key modifier is pressed (actually ::WXK_CONTROL or
@@ -281,8 +284,19 @@ public:
 
         It is rarely called, and is mostly used by controls implementing custom
         pane drag/drop behaviour.
+
+        Calling it is equivalent to calling CalculateHintRect() and
+        UpdateHint() with the resulting rectangle.
+
+        @param paneWindow Window passed to CalculateHintRect().
+        @param pt Mouse position passed to CalculateHintRect().
+        @param offset Offset passed to CalculateHintRect(), 0 by default (since
+            wxWidgets 3.3.0, this parameter had to be specified in the earlier
+            versions).
     */
-    void DrawHintRect(wxWindow* paneWindow, const wxPoint& pt, const wxPoint& offset);
+    void DrawHintRect(wxWindow* paneWindow,
+                      const wxPoint& pt,
+                      const wxPoint& offset = wxPoint{0, 0});
 
     /**
         Returns an array of all panes managed by the frame manager.
@@ -353,6 +367,8 @@ public:
 
     /**
         HideHint() hides any docking hint that may be visible.
+
+        @see UpdateHint()
     */
     virtual void HideHint();
 
@@ -518,10 +534,16 @@ public:
     void SetManagedWindow(wxWindow* managed_wnd);
 
     /**
-        This function is used by controls to explicitly show a hint window at the
-        specified rectangle. It is rarely called, and is mostly used by controls
-        implementing custom pane drag/drop behaviour.
-        The specified rectangle should be in screen coordinates.
+        This function is used to show a hint window at the specified rectangle.
+
+        It can be overridden to customize the hint appearance. When overriding
+        it, HideHint() should normally be also overridden as well.
+
+        Do not call this function directly to show the hint, use UpdateHint()
+        instead.
+
+        @param rect The area where the hint window should be shown, in screen
+            coordinates, or an empty rectangle to hide the window.
     */
     virtual void ShowHint(const wxRect& rect);
 
@@ -550,6 +572,18 @@ public:
         pane flicker to be avoided by updating the whole layout at one time.
     */
     void Update();
+
+    /**
+        Show or hide the hint window.
+
+        This function is mostly used internally.
+
+        @param rect The area where the hint window should be shown, in screen
+            coordinates, or an empty rectangle to hide the window.
+
+        @since 3.3.0
+     */
+    void UpdateHint(const wxRect& rect);
 
 protected:
 

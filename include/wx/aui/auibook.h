@@ -334,6 +334,8 @@ public:
 
     const wxAuiManager& GetAuiManager() const { return m_mgr; }
 
+    void SetManagerFlags(unsigned int flags) { m_mgr.SetFlags(flags); }
+
     // Sets the normal font
     void SetNormalFont(const wxFont& font);
 
