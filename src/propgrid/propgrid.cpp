@@ -1378,7 +1378,8 @@ void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &event)
     CalculateFontAndBitmapStuff(m_vspacing);
     Refresh();
 
-    RefreshProperty(GetSelection());
+    if ( wxPGProperty* const selected = GetSelection() )
+        RefreshProperty(selected);
 
     event.Skip();
 }
@@ -2567,6 +2568,8 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
 
 void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 {
+    wxCHECK_RET( p, wxS("invalid property id") );
+
     if ( m_pState->DoIsPropertySelected(p) || p->IsChildSelected(true) )
     {
         // NB: We must copy the selection.
@@ -2585,6 +2588,8 @@ void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 
 void wxPropertyGrid::DrawItemAndValueRelated( wxPGProperty* p )
 {
+    wxCHECK_RET( p, wxS("invalid property id") );
+
     if ( IsFrozen() )
         return;
 
