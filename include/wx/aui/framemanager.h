@@ -634,6 +634,10 @@ private:
     // m_actionPart. If m_actionPart is null, returns wxNOT_FOUND.
     int GetActionPartIndex() const;
 
+    // This flag is set to true if Update() is called while the window is
+    // minimized, in which case we postpone updating it until it is restored.
+    bool m_updateOnRestore = false;
+
 #ifndef SWIG
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiManager);

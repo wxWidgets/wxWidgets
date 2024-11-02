@@ -2416,6 +2416,17 @@ void wxAuiManager::GetDockSizeConstraint(double* width_pct, double* height_pct) 
 
 void wxAuiManager::Update()
 {
+    wxTopLevelWindow * const
+        tlw = wxDynamicCast(wxGetTopLevelParent(m_frame), wxTopLevelWindow);
+    if ( tlw && tlw->IsIconized() )
+    {
+        // We can't compute the layout correctly when the frame is minimized
+        // because at least under MSW its client size is (0,0) in this case
+        // but, luckily, we don't need to do it right now anyhow.
+        m_updateOnRestore = true;
+        return;
+    }
+
     m_hoverButton = nullptr;
     m_actionPart = nullptr;
 
@@ -3886,8 +3897,19 @@ void wxAuiManager::OnSize(wxSizeEvent& event)
 {
     if (m_frame)
     {
-        DoFrameLayout();
-        Repaint();
+        if ( m_updateOnRestore )
+        {
+            // If we had postponed updating, do it now: we only receive size
+            // events once the window is restored.
+            m_updateOnRestore = false;
+
+            Update();
+        }
+        else // Otherwise just re-layout, without redoing the full update.
+        {
+            DoFrameLayout();
+            Repaint();
+        }
 
 #if wxUSE_MDI
         if (wxDynamicCast(m_frame, wxMDIParentFrame))
