@@ -26,6 +26,9 @@
 #include <wx/sstream.h>
 #include <wx/utils.h>
 
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
+
 // forward decl
 class IPCTestClient;
 class ExecAsyncWrapper;
@@ -40,10 +43,10 @@ class ExecAsyncWrapper;
 // runs the checks in this file.
 
 
-// Automated test spawns a process with an external server.  When running this
-// test manually, set g_use_external_server to false and then start the
-// test_sckipc_server via a command line. Then the TEST_CASE below can run.
-bool g_use_external_server = true;
+// Automated test needs a process with an external server.  When running the
+// tests manually, set g_start_external_server to false and then start the
+// test_sckipc_server via the command line.
+bool g_start_external_server = true;
 
 // When g_show_message_timing is set to true, Advise() and RequestReply()
 // messages will be printed when they arrive. This shows how the IPC messages
@@ -54,6 +57,14 @@ bool g_show_message_timing = false;
 // raw arrival times.
 #include <iostream>
 
+// The command to run the external server.
+#ifdef __UNIX__
+    #define SERVER_COMMAND "test_sckipc_server"
+#elif defined(__WINDOWS__)
+    #define SERVER_COMMAND "test_sckipc_server.exe"
+#else
+    #error "no command to exec"
+#endif // OS
 
 // Test connection class used by the client.
 class IPCTestConnection : public wxConnection
@@ -243,9 +254,30 @@ class ExecAsyncWrapper : public wxTimer
 {
 public:
     ExecAsyncWrapper()
+        : m_process(nullptr)
     {
+        if (!g_start_external_server)
+            return;
+
         m_process = new IPCServerProcess(this);
         m_process_finished = false;
+
+        // Get the path that test is running in, and compose the full path to
+        // the executable for the server command.
+        wxFileName fn_testpath(wxStandardPaths::Get().GetExecutablePath());
+        wxString testPath(fn_testpath.GetPath());
+
+        wxFileName fn_executable;
+        fn_executable.Assign(testPath, SERVER_COMMAND);
+
+        REQUIRE( fn_executable.Exists() );
+
+        m_command = fn_executable.GetFullPath();
+    }
+
+    ~ExecAsyncWrapper()
+    {
+        if (m_process) delete m_process;
     }
 
     long DoExecute()
@@ -263,10 +295,8 @@ public:
 
     void Notify() override
     {
-        wxString command = "test_sckipc_server";
-
         // Run wxExecute inside the event loop.
-        m_pid = wxExecute(command, wxEXEC_ASYNC, m_process);
+        m_pid = wxExecute(m_command, wxEXEC_ASYNC, m_process);
 
         REQUIRE( m_pid != 0);
 
@@ -336,6 +366,7 @@ public:
     bool IsFinished() const { return m_process_finished; }
     bool StillRunning() const { return !m_process_finished; }
 
+    wxString m_command;
     long m_pid;
     IPCServerProcess* m_process;
     bool m_process_finished;
@@ -409,6 +440,7 @@ public:
         if ( m_conn )
         {
             m_conn->Disconnect();
+            delete m_conn;
             m_conn = nullptr;
         }
     }
@@ -509,7 +541,7 @@ public:
 
         gs_client = new IPCTestClient;
 
-        if ( g_use_external_server )
+        if ( g_start_external_server )
         {
             long pid = m_exec.DoExecute();
 
@@ -523,7 +555,7 @@ public:
 
     ~IPCFixture()
     {
-        if ( g_use_external_server )
+        if ( g_start_external_server )
         {
             // Make sure there is a connection
             IPCTestConnection& conn = gs_client->GetConn();
@@ -862,7 +894,7 @@ TEST_CASE_METHOD(IPCFixture,
     CHECK( wxString(data).IsEmpty() );
 }
 
-// #ifdef wxMSW
+#ifdef wxMSW
 
 // Run three concurrent threads in the client sending Requests() to the
 // server, and simultaneously run three concurrent threads in the server
@@ -965,6 +997,6 @@ TEST_CASE_METHOD(IPCFixture,
     CHECK( wxString(data).IsEmpty() );
 }
 
-// #endif // wxMSW
+#endif // wxMSW
 
 #endif // wxUSE_THREADS

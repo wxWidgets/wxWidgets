@@ -1322,7 +1322,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     while ( PeekAtMessageInSocket(sock) )
     {
         wxIPCMessageBase* msg = ReadMessageFromSocket(sock);
-        wxIPCMessageBaseLocker lock(msg);
+        wxIPCMessageBaseLocker lock_msg(msg);
 
         if ( !ExecuteMessage(msg, sock) )
             break;
