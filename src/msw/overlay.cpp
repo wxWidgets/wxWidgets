@@ -161,8 +161,14 @@ void wxOverlayImpl::Init(wxDC* dc, int , int , int , int )
     m_window = dc->GetWindow();
 
     // The rectangle must be in screen coordinates
-    m_rect = m_window->GetClientRect();
+    m_rect = m_window->GetClientSize();
     m_window->ClientToScreen(&m_rect.x, &m_rect.y);
+
+    // Because wxClientDC adjusts the origin of the device context to the
+    // origin of the client area of the window, we need to compensate for it
+    // here, to make sure that (0, 0) of the rectangle corresponds to the point
+    // (0, 0) of the window client area.
+    m_rect.Offset(-m_window->GetClientAreaOrigin());
 
     if ( IsUsingConstantOpacity() )
     {
