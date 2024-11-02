@@ -29,6 +29,7 @@
 
 #include "wx/display.h"
 #include "wx/dnd.h"
+#include "wx/evtloop.h"
 #include "wx/tooltip.h"
 #include "wx/caret.h"
 #include "wx/fontutil.h"
@@ -234,13 +235,34 @@ static wxWindowGTK *gs_deferredFocusOut = nullptr;
 
 // global variables because GTK+ DnD want to have the
 // mouse event that caused it
-GdkEvent    *g_lastMouseEvent = nullptr;
+GdkEvent    *g_lastMouseEvent = nullptr; // use SetLastMouseEvent below
 int          g_lastButtonNumber = 0;
-
-static wxWindowGTK* g_windowUnderMouse = nullptr;
 
 namespace wxGTKImpl
 {
+
+// Small RAII helper setting g_lastMouseEvent until the scope exit.
+class SetLastMouseEvent
+{
+public:
+    explicit SetLastMouseEvent(GdkEventButton* event)
+    {
+        g_lastMouseEvent = reinterpret_cast<GdkEvent*>(event);
+    }
+
+    explicit SetLastMouseEvent(GdkEventMotion* event)
+    {
+        g_lastMouseEvent = reinterpret_cast<GdkEvent*>(event);
+    }
+
+    ~SetLastMouseEvent()
+    {
+        g_lastMouseEvent = nullptr;
+    }
+};
+
+
+wxWindowGTK* g_windowUnderMouse = nullptr;
 
 bool SetWindowUnderMouse(wxWindowGTK* win)
 {
@@ -251,6 +273,9 @@ bool SetWindowUnderMouse(wxWindowGTK* win)
 
     return true;
 }
+
+template <typename EventType>
+gboolean SendEnterLeaveEvents(wxWindowGTK* win, EventType* gdk_event);
 
 } // namespace wxGTKImpl
 
@@ -1334,21 +1359,37 @@ bool AdjustCharEventKeyCodes(wxKeyEvent& event)
     return modified;
 }
 
-} // anonymous namespace
-
 // If a widget does not handle a key or mouse event, GTK+ sends it up the
 // parent chain until it is handled. These events are not supposed to propagate
 // in wxWidgets, so this code avoids handling them in any parent wxWindow,
 // while still allowing the event to propagate so things like native keyboard
 // navigation will work.
-#define wxPROCESS_EVENT_ONCE(EventType, event) \
-    static EventType eventPrev; \
-    if (!gs_isNewEvent && memcmp(&eventPrev, event, sizeof(EventType)) == 0) \
-        return false; \
-    gs_isNewEvent = false; \
-    eventPrev = *event
-
 static bool gs_isNewEvent;
+
+template <typename EventType>
+bool EventAlreadyProcessed(const EventType* event)
+{
+    // The cast is safe because we can only have windows when using GUI.
+    auto* const loop = static_cast<wxGUIEventLoop*>(wxEventLoop::GetActive());
+    if ( !loop )
+    {
+        // This really shouldn't happen, but don't crash if it does.
+        return false;
+    }
+
+    auto* const ev = reinterpret_cast<const GdkEvent*>(event);
+
+    // Ensure we call GTKIsSameAsLastEvent() in any case to always update the
+    // last stored event (i.e. the order of checks here matters).
+    if ( loop->GTKIsSameAsLastEvent(ev, sizeof(EventType)) && !gs_isNewEvent )
+        return true;
+
+    gs_isNewEvent = false;
+
+    return false;
+}
+
+} // anonymous namespace
 
 extern "C" {
 static gboolean
@@ -1359,7 +1400,8 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
     if (g_blockEventsOnDrag)
         return FALSE;
 
-    wxPROCESS_EVENT_ONCE(GdkEventKey, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     bool ret = false;
@@ -1546,7 +1588,8 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
     if (g_blockEventsOnDrag)
         return FALSE;
 
-    wxPROCESS_EVENT_ONCE(GdkEventKey, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_UP );
     wxTranslateGTKKeyEventToWx(event, win, gdk_event);
@@ -1613,6 +1656,15 @@ static void AdjustEventButtonState(wxMouseEvent& event)
 static
 wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
 {
+    // When a window has mouse capture, it should get all the events.
+    if ( g_captureWindow )
+    {
+        win->ClientToScreen(&x, &y);
+        g_captureWindow->ScreenToClient(&x, &y);
+
+        return g_captureWindow;
+    }
+
     wxCoord xx = x;
     wxCoord yy = y;
 
@@ -1718,6 +1770,11 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
                                   GdkEventButton *gdk_event,
                                   wxWindowGTK *win )
 {
+    wxLogTrace(TRACE_MOUSE, "Press for button %d at %g,%g in %s at t=%u",
+               gdk_event->button, gdk_event->x, gdk_event->y,
+               wxDumpWindow(win),
+               gdk_event->time);
+
     /*
       GTK does not set the button1 mask when the event comes from the left
       button of a mouse. but for some reason, it sets it when the event comes
@@ -1725,7 +1782,8 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
     */
     gdk_event->state &= ~GDK_BUTTON1_MASK;
 
-    wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     if ( AreGTKEventsBlocked() )
         return FALSE;
@@ -1807,7 +1865,7 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
             return false;
     }
 
-    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    SetLastMouseEvent setLastMouse(gdk_event);
 
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
@@ -1817,16 +1875,13 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
     // find the correct window to send the event to: it may be a different one
     // from the one which got it at GTK+ level because some controls don't have
     // their own X window and thus cannot get any events.
-    if ( !g_captureWindow )
-        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
+    win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
     // reset the event object and id in case win changed.
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    bool ret = win->GTKProcessEvent( event );
-    g_lastMouseEvent = nullptr;
-    if ( ret )
+    if ( win->GTKProcessEvent( event ) )
         return TRUE;
 
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() &&
@@ -1860,7 +1915,13 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
                                     GdkEventButton *gdk_event,
                                     wxWindowGTK *win )
 {
-    wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
+    wxLogTrace(TRACE_MOUSE, "Release for button %d at %g,%g in %s at t=%u",
+               gdk_event->button, gdk_event->x, gdk_event->y,
+               wxDumpWindow(win),
+               gdk_event->time);
+
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     if ( AreGTKEventsBlocked() )
         return FALSE;
@@ -1896,27 +1957,21 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
             return FALSE;
     }
 
-    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    SetLastMouseEvent setLastMouse(gdk_event);
 
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
     AdjustEventButtonState(event);
 
-    if ( !g_captureWindow )
-        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
+    win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
     // reset the event object and id in case win changed.
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    // We ignore the result of the event processing here as we don't really
-    // want to prevent the other handlers from running even if we did process
-    // this event ourselves, there is no real advantage in doing this and it
-    // could actually be harmful, see #16055.
-    (void)win->GTKProcessEvent(event);
-
-    g_lastMouseEvent = nullptr;
+    if ( win->GTKProcessEvent(event) )
+        return TRUE;
 
     return FALSE;
 }
@@ -1963,12 +2018,13 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
                                    GdkEventMotion *gdk_event,
                                    wxWindowGTK *win )
 {
-    wxPROCESS_EVENT_ONCE(GdkEventMotion, gdk_event);
+    if (EventAlreadyProcessed(gdk_event))
+        return FALSE;
 
     if ( AreGTKEventsBlocked() )
         return FALSE;
 
-    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    SetLastMouseEvent setLastMouse(gdk_event);
 
     wxMouseEvent event( wxEVT_MOTION );
     InitMouseEvent(win, event, gdk_event);
@@ -2031,18 +2087,34 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     }
     else // no capture
     {
-        win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
+        auto* const winUnderMouse =
+            FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
-        // reset the event object and id in case win changed.
-        event.SetEventObject( win );
-        event.SetId( win->GetId() );
+        // If our idea of the window under mouse is different from the actual
+        // window under it, we need to send enter or leave events.
+        bool setCursorEventAlreadySent = false;
+        if ( winUnderMouse != g_windowUnderMouse )
+        {
+            SendEnterLeaveEvents(winUnderMouse, gdk_event);
 
-        SendSetCursorEvent(win, event.m_x, event.m_y);
+            // This is done by SendEnterLeaveEvents() internally.
+            setCursorEventAlreadySent = true;
+        }
+
+        // Also redirect the event to the window under mouse if it's different.
+        if ( winUnderMouse != win )
+        {
+            win = winUnderMouse;
+
+            event.SetEventObject( win );
+            event.SetId( win->GetId() );
+        }
+
+        if ( !setCursorEventAlreadySent )
+            SendSetCursorEvent(win, event.m_x, event.m_y);
     }
 
     bool ret = win->GTKProcessEvent(event);
-
-    g_lastMouseEvent = nullptr;
 
     // Request additional motion events. Done at the end to increase the
     // chances that lower priority events requested by the handler above, such
@@ -2257,32 +2329,13 @@ wx_window_focus_callback(GtkWidget *widget,
 // "enter_notify_event"
 //-----------------------------------------------------------------------------
 
-gboolean
-wxGTKImpl::WindowEnterCallback(GtkWidget* widget,
-                               GdkEventCrossing* gdk_event,
-                               wxWindowGTK* win)
+namespace wxGTKImpl
 {
-    wxLogTrace(TRACE_MOUSE, "Window enter in %s (window %p) for window %p",
-               wxDumpWindow(win), gtk_widget_get_window(widget), gdk_event->window);
 
-    if ( AreGTKEventsBlocked() )
-        return FALSE;
-
-    // Event was emitted after a grab
-    if (gdk_event->mode != GDK_CROSSING_NORMAL)
-    {
-        wxLogTrace(TRACE_MOUSE, "Ignore event with mode %d", gdk_event->mode);
-        return FALSE;
-    }
-
-    if ( g_windowUnderMouse == win )
-    {
-        // This can happen if the enter event was generated from another
-        // callback, as is the case for wxSearchCtrl, for example.
-        wxLogTrace(TRACE_MOUSE, "Reentering window %s", wxDumpWindow(win));
-        return FALSE;
-    }
-
+// Helper function used by both "enter" and "motion" signal handlers.
+template <typename EventType>
+gboolean SendEnterLeaveEvents(wxWindowGTK* win, EventType* gdk_event)
+{
     if ( g_windowUnderMouse )
     {
         // We must not have got the leave event for the previous window, so
@@ -2301,7 +2354,39 @@ wxGTKImpl::WindowEnterCallback(GtkWidget* widget,
     if ( !g_captureWindow )
         SendSetCursorEvent(win, event.m_x, event.m_y);
 
-    return win->GTKProcessEvent(event);
+    return win->GTKProcessEvent(event) ? TRUE : FALSE;
+}
+
+} // namespace wxGTKImpl
+
+// This is a (internally) public function used by wxChoice too.
+gboolean
+wxGTKImpl::WindowEnterCallback(GtkWidget* widget,
+                               GdkEventCrossing* gdk_event,
+                               wxWindowGTK* win)
+{
+    wxLogTrace(TRACE_MOUSE, "Window enter in %s (window %p) for window %p",
+               wxDumpWindow(win), gtk_widget_get_window(widget), gdk_event->window);
+
+    if ( AreGTKEventsBlocked() )
+        return FALSE;
+
+    // Event was emitted after a grab
+    if (gdk_event->mode != GDK_CROSSING_NORMAL)
+    {
+        wxLogTrace(TRACE_MOUSE, "Ignore enter event mode=%d", gdk_event->mode);
+        return FALSE;
+    }
+
+    if ( g_windowUnderMouse == win )
+    {
+        // This can happen if the enter event was generated from another
+        // callback, as is the case for wxSearchCtrl, for example.
+        wxLogTrace(TRACE_MOUSE, "Reentering window %s", wxDumpWindow(win));
+        return FALSE;
+    }
+
+    return SendEnterLeaveEvents(win, gdk_event);
 }
 
 extern "C" {
@@ -2337,7 +2422,7 @@ wxGTKImpl::WindowLeaveCallback(GtkWidget* widget,
     // Event was emitted after an ungrab
     if (gdk_event->mode != GDK_CROSSING_NORMAL)
     {
-        wxLogTrace(TRACE_MOUSE, "Ignore event with mode %d", gdk_event->mode);
+        wxLogTrace(TRACE_MOUSE, "Ignore leave event mode=%d", gdk_event->mode);
         return FALSE;
     }
 
