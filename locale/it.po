@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets revised 09.02.2023 by bovirus\n"
+"Project-Id-Version: wxWidgets revised 31.10.2024 by bovirus\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2023-02-09 19:31+0100\n"
+"PO-Revision-Date: 2024-10-31 10:00+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@googlegroups.com>\n"
 "Language: it\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../include/wx/defs.h:2592
@@ -5034,7 +5034,7 @@ msgstr "Impossibile modificare la cartella attuale a \"%s\""
 
 #: ../src/gtk/font.cpp:552
 msgid "Using private fonts is not supported on this system: Pango library is too old, 1.38 or later required."
-msgstr "L'uso di font private ​non è supportato in questo sistema: la libreria Pango è troppo vecchia, è richiesta la versione 1.38 o successiva."
+msgstr "L'uso di font private non è supportato in questo sistema: la libreria Pango è troppo vecchia, è richiesta la versione 1.38 o successiva."
 
 #: ../src/gtk/font.cpp:562
 msgid "Failed to create font configuration object."
