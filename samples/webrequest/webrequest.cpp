@@ -14,6 +14,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/cmdline.h"
 #include "wx/notebook.h"
 #include "wx/artprov.h"
 #include "wx/creddlg.h"
@@ -40,7 +41,7 @@ public:
         Page_Advanced
     };
 
-    WebRequestFrame(const wxString& title):
+    WebRequestFrame(const wxString& title, const wxString& url) :
         wxFrame(nullptr, wxID_ANY, title)
     {
         // set the frame icon
@@ -54,7 +55,8 @@ public:
         mainSizer->Add(new wxStaticText(this, wxID_ANY, "Request URL:"),
             wxSizerFlags().Border());
         m_urlTextCtrl = new wxTextCtrl(this, wxID_ANY,
-            "https://www.wxwidgets.org/downloads/logos/blocks.png",
+            url.empty() ? "https://www.wxwidgets.org/downloads/logos/blocks.png"
+                        : url,
             wxDefaultPosition, wxDefaultSize,
             wxTE_PROCESS_ENTER);
         mainSizer->Add(m_urlTextCtrl,
@@ -178,6 +180,8 @@ public:
 
         m_downloadProgressTimer.Bind(wxEVT_TIMER,
             &WebRequestFrame::OnProgressTimer, this);
+
+        m_urlTextCtrl->SetFocus();
     }
 
     virtual ~WebRequestFrame()
@@ -507,11 +511,33 @@ public:
         wxInitAllImageHandlers();
 
         // create the main application window
-        WebRequestFrame *frame = new WebRequestFrame("wxWebRequest Sample App");
+        WebRequestFrame *frame = new WebRequestFrame("wxWebRequest Sample App", m_url);
         frame->Show(true);
 
         return true;
     }
+
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override
+    {
+        parser.AddParam("url", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL);
+
+        wxApp::OnInitCmdLine(parser);
+    }
+
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override
+    {
+        if ( !wxApp::OnCmdLineParsed(parser) )
+            return false;
+
+        if ( parser.GetParamCount() > 0 )
+            m_url = parser.GetParam(0);
+
+        return true;
+    }
+
+private:
+    // URL specified on the command line, if any.
+    wxString m_url;
 };
 
 wxIMPLEMENT_APP(WebRequestApp);
