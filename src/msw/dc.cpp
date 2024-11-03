@@ -96,10 +96,10 @@ static const int VIEWPORT_EXTENT = 134217727;
         device  = physical/scale + logicalOrigin = logical + deviceOrigin/scale
  */
 
-#define XLOG2DEV(x) ((x) + (m_deviceOriginX / m_scaleX))
-#define YLOG2DEV(y) ((y) + (m_deviceOriginY / m_scaleY))
-#define XDEV2LOG(x) ((x) - (m_deviceOriginX / m_scaleX))
-#define YDEV2LOG(y) ((y) - (m_deviceOriginY / m_scaleY))
+#define XLOG2DEV(x) ((x) + (m_deviceOriginX*m_signX / m_scaleX))
+#define YLOG2DEV(y) ((y) + (m_deviceOriginY*m_signY / m_scaleY))
+#define XDEV2LOG(x) ((x) - (m_deviceOriginX*m_signX / m_scaleX))
+#define YDEV2LOG(y) ((y) - (m_deviceOriginY*m_signY / m_scaleY))
 
 // ---------------------------------------------------------------------------
 // private functions
