@@ -815,6 +815,15 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         EnableSystemThemeByDefault();
     }
 
+    // When using non-standard DPI, we need to scale the default indent with
+    // the DPI scaling factor as Windows doesn't do it and the "+" buttons
+    // would be displayed too small if the tree is used without images.
+    if ( GetDPIScaleFactor() > 1.0 )
+        SetIndent(FromDIP(GetIndent()));
+
+    // And ensure we adjust it again if the DPI changes in the future.
+    Bind(wxEVT_DPI_CHANGED, &wxTreeCtrl::OnDPIChanged, this);
+
     return true;
 }
 
@@ -2298,6 +2307,14 @@ void wxTreeCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
         if ( kv.second->HasFont() )
             SetItemFont(kv.first, kv.second->GetFont());
     }
+}
+
+void wxTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // Adjust the indent to the new DPI scaling factor as Windows doesn't do it.
+    SetIndent(event.ScaleX(GetIndent()));
+
+    event.Skip();
 }
 
 bool wxTreeCtrl::MSWIsOnItem(unsigned flags) const
