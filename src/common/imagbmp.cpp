@@ -562,25 +562,7 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
         return false;
     }
 
-    unsigned char *alpha;
-    if ( bpp == 32 )
-    {
-        // tell the image to allocate an alpha buffer
-        image->SetAlpha();
-        alpha = image->GetAlpha();
-        if ( !alpha )
-        {
-            if ( verbose )
-            {
-                wxLogError(_("BMP: Couldn't allocate memory."));
-            }
-            return false;
-        }
-    }
-    else // no alpha
-    {
-        alpha = nullptr;
-    }
+    unsigned char* alpha = nullptr;
 
     // Reading the palette, if it exists:
     if ( bpp < 16 && ncolors != 0 )
@@ -633,6 +615,17 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             {
                 amask = 0xFF000000;
                 ashift = 24;
+
+                image->SetAlpha();
+                alpha = image->GetAlpha();
+                if (!alpha)
+                {
+                    if (verbose)
+                    {
+                        wxLogError(_("BMP: Couldn't allocate memory."));
+                    }
+                    return false;
+                }
             }
 
             // find shift amount (Least significant bit of mask)
@@ -673,9 +666,7 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             rmask = 0x00FF0000;
             gmask = 0x0000FF00;
             bmask = 0x000000FF;
-            amask = 0xFF000000;
 
-            ashift = 24;
             rshift = 16;
             gshift = 8;
             bshift = 0;
@@ -704,14 +695,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     }
 
     int linesize = ((width * bpp + 31) / 32) * 4;
-
-    // flag indicating if we have any not fully transparent alpha values: this
-    // is used to account for the bitmaps which use 32bpp format (normally
-    // meaning that they have alpha channel) but have only zeroes in it so that
-    // without this hack they appear fully transparent -- and as this is
-    // unlikely intentional, we consider that they don't have alpha at all in
-    // this case (see #10915)
-    bool hasValidAlpha = false;
 
     for ( int row = 0; row < height; row++ )
     {
@@ -977,9 +960,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                 {
                     temp = (unsigned char)((aDword & amask) >> ashift);
                     alpha[line * width + column] = temp;
-
-                    if ( temp != wxALPHA_TRANSPARENT )
-                        hasValidAlpha = true;
                 }
                 column++;
             }
@@ -993,13 +973,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     }
 
     image->SetMask(false);
-
-    // check if we had any valid alpha values in this bitmap
-    if ( alpha && !hasValidAlpha )
-    {
-        // we didn't, so finally discard the alpha channel completely
-        image->ClearAlpha();
-    }
 
     const wxStreamError err = stream.GetLastError();
     return err == wxSTREAM_NO_ERROR || err == wxSTREAM_EOF;
