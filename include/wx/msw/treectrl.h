@@ -266,6 +266,8 @@ protected:
 
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     // data used only while editing the item label:
     wxTextCtrl  *m_textCtrl;        // text control in which it is edited
     wxTreeItemId m_idEdited;        // the item being edited
@@ -347,6 +349,7 @@ private:
     friend class wxTreeSortHelper;
 
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);
 };
 

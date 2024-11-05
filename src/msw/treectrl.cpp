@@ -717,6 +717,10 @@ bool wxTreeTraversal::Traverse(const wxTreeItemId& root, bool recursively)
     return true;
 }
 
+wxBEGIN_EVENT_TABLE(wxTreeCtrl, wxTreeCtrlBase)
+    EVT_DPI_CHANGED(wxTreeCtrl::OnDPIChanged)
+wxEND_EVENT_TABLE()
+
 // ----------------------------------------------------------------------------
 // construction and destruction
 // ----------------------------------------------------------------------------
@@ -814,6 +818,11 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         // this style to it.
         EnableSystemThemeByDefault();
     }
+
+    // Scale the default indent with the DPI scaling factor as Windows doesn't
+    // do it and the "+" buttons would be displayed too small if the tree is
+    // used without images.
+    SetIndent( FromDIP(GetIndent()) );
 
     return true;
 }
@@ -2298,6 +2307,14 @@ void wxTreeCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
         if ( kv.second->HasFont() )
             SetItemFont(kv.first, kv.second->GetFont());
     }
+}
+
+void wxTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // Adjust the indent to the new DPI scaling factor as Windows doesn't do it.
+    SetIndent( event.ScaleX( GetIndent() ) );
+
+    event.Skip();
 }
 
 bool wxTreeCtrl::MSWIsOnItem(unsigned flags) const
