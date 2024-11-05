@@ -303,6 +303,8 @@ private:
     // Delete the given item from the native control.
     bool MSWDeleteItem(const wxTreeItemId& item);
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
 
     // the hash storing the items attributes (indexed by item ids)
     wxMapTreeAttr m_attrs;
