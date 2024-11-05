@@ -1595,6 +1595,15 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMP", "[image][bmp]")
         LoadMalformedImageWithException("image/width-times-height-overflow.bmp",
                                         wxBITMAP_TYPE_BMP);
     }
+    SECTION("32bpp BI_RGB")
+    {
+        wxImage image;
+        CHECK(image.LoadFile("image/32bpp_rgb.bmp", wxBITMAP_TYPE_BMP));
+        if (image.IsOk())
+        {
+            CHECK(!image.GetAlpha());
+        }
+    }
 }
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::Paste", "[image][paste]")
