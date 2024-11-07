@@ -50,8 +50,9 @@ using wxTranslationsHashMap = std::unordered_map<wxString, wxString>;
 #else
     #define _(s)                               wxGetTranslation(wxASCII_STR(s))
 #endif
-    #define wxPLURAL(sing, plur, n)            wxGetTranslation((sing), (plur), n)
 #endif
+
+#define wxPLURAL(sing, plur, n)                wxGetTranslation((sing), (plur), n)
 
 // wx-specific macro for translating strings in the given context: if you use
 // them, you need to also add
