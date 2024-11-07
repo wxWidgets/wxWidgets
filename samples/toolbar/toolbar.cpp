@@ -485,6 +485,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         combo->Append("combobox with extremely, extremely, extremely, extremely long label");
         combo->Append("in a");
         combo->Append("toolbar");
+        combo->MarkAvailable( false );
         toolBar->AddControl(combo, "Combo Label");
 
 #if wxUSE_CHECKBOX
@@ -548,7 +549,9 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     toolBar->AddStretchableSpace();
     toolBar->AddTool(wxID_HELP, "Help", toolBarBitmaps[Tool_help], "Help button", wxITEM_CHECK);
 
-    toolBar->AddTool(wxID_ABOUT, "About", toolBarBitmaps[Tool_about], "About");
+    wxToolBarToolBase *tool = new wxToolBarToolBase( toolBar, wxID_ABOUT, "About", toolBarBitmaps[Tool_about], toolBarBitmaps[Tool_about] );
+    tool->MarkAvailable( false );
+    toolBar->AddTool( tool );
 
     if ( !m_pathBmp.empty() )
     {
