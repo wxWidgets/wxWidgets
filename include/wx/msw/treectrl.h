@@ -349,7 +349,6 @@ private:
     friend class wxTreeSortHelper;
 
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
-    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);
 };
 
