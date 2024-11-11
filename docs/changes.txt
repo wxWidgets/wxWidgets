@@ -265,6 +265,7 @@ All (GUI):
 wxMSW:
 
 - Fix menu padding regression in high DPI under Windows 11 (taler21, #25117).
+- Allow using mouse wheel in wxSpinCtrlDouble (David Langhals, #24935).
 
 wxOSX:
 
