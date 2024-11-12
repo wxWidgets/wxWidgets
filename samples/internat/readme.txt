@@ -37,30 +37,24 @@ A. First of all, you will need the GNU gettext tools (see the next questions).
    After you've probably installed them, type the following (example is for Unix
    and you should do exactly the same under Windows).
 
-   # all translations forgiven language should be in a separate directory.
+   # all translations for a given language should be in a separate directory.
    # Please use the standard abbreviation for the language names!
    mkdir <language>
    cd <language>
 
-   # generate the .po file for the program itself
-   # see `xgettext --help' for options, "-C" is important!
-   xgettext -C -k_ -kwxPLURAL:1,2 -kwxGETTEXT_IN_CONTEXT:1c,2 -kwxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3 -kwxTRANSLATE -kwxTRANSLATE_IN_CONTEXT:1c,2 -kwxGetTranslation -o internat.po ../internat.cpp
+   # generate the .pot (template) file for the program itself
+   # see `xgettext --help' for options
+   xgettext -k_ -kwxPLURAL:1,2 -kwxGETTEXT_IN_CONTEXT:1c,2 -kwxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3 -kwxTRANSLATE -kwxTRANSLATE_IN_CONTEXT:1c,2 -kwxGetTranslation -o internat.pot ../internat.cpp
 
-   # .po file for wxWidgets might be generated in the same way. An already
-   # generated wxstd.pot as well as translations for some languages can be
-   # found in the locale directory.
-   cp ../../locale/<language>.po ./wxstd.pot
-   - or -
-   cp ../../locale/wxstd.pot .
+   # initialize the translation for your language
+   msginit -l <language> -o internat.po
 
-   # now edit the files and do translate strings (this isn't done by gettext)
-   # you can use another editor if you wish :-) No need to edit wxstd.pot if you
-   # already got a translated one.
-   vi internat.po wxstd.pot
+   # now edit the file and do translate strings (this isn't done by gettext)
+   # you can use another editor if you wish :-)
+   vi internat.po
 
-   # create the message catalog files
-   msgfmt -o internat.mo internat.po
-   msgfmt -o wxstd.mo wxstd.pot
+   # create the message catalog file
+   msgfmt -vco internat.mo internat.po
 
    # run the sample to test it
    cd ..
@@ -74,14 +68,18 @@ A. First of all, you will need the GNU gettext tools (see the next question).
    # enter the directory of an already-existing translations which needs to be updated
    cd <language>
 
-   # the -j flag tells xgettext to merge and not simply overwrite the output file
-   xgettext -j -C -k_ -kwxPLURAL:1,2 -kwxGETTEXT_IN_CONTEXT:1c,2 -kwxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3 -kwxTRANSLATE -kwxTRANSLATE_IN_CONTEXT:1c,2 -kwxGetTranslation -o internat.po ../internat.cpp
+   # generate the .pot (template) file for the program itself
+   # see `xgettext --help' for options
+   xgettext -k_ -kwxPLURAL:1,2 -kwxGETTEXT_IN_CONTEXT:1c,2 -kwxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3 -kwxTRANSLATE -kwxTRANSLATE_IN_CONTEXT:1c,2 -kwxGetTranslation -o internat.pot ../internat.cpp
 
-   # now edit the files and do translate the new strings (this isn't done by gettext)
+   # merge updated strings from the .pot (template) into your translation
+   msgmerge -U internat.po internat.pot
+
+   # now edit the file and do translate the new strings (this isn't done by gettext)
    vi internat.po
 
    # update the message catalog:
-   msgfmt -o internat.mo internat.po
+   msgfmt -vco internat.mo internat.po
 
 Q. How to get the gettext tools?
 A. For Unix, you should be able to get the source distribution of any GNU mirror
