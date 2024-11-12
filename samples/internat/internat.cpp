@@ -309,8 +309,6 @@ MyFrame::MyFrame()
     test_menu->Append(INTERNAT_TEST_MSGBOX, _("&Message box test"),
                       _("Tests message box buttons labels translation"));
 
-    // Note that all these strings are currently "translated" only in French
-    // catalog, so you need to use French locale to see them in action.
     wxMenu *macro_menu = new wxMenu;
     macro_menu->Append(INTERNAT_MACRO_1, _("item"));
     macro_menu->Append(INTERNAT_MACRO_2, wxGETTEXT_IN_CONTEXT("context_1", "item"));
