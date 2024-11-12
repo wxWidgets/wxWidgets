@@ -123,6 +123,10 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
             f = kUTTypeFileURL;
             break;
             
+        case wxDF_PNG:
+            f = kUTTypePNG;
+            break;
+
         default:
             wxFAIL_MSG( wxS("unsupported data format") );
             break;
@@ -206,6 +210,10 @@ void wxDataFormat::SetId( NativeFormat format )
     else if ( UTTypeConformsTo( (CFStringRef)format, kUTTypePlainText ) )
     {
         m_type = wxDF_TEXT;
+    }
+    else if (  UTTypeConformsTo( (CFStringRef)format, kUTTypePNG ) )
+    {
+        m_type = wxDF_PNG;
     }
     else if (  UTTypeConformsTo( (CFStringRef)format, kUTTypeImage ) )
     {
