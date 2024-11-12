@@ -2125,7 +2125,7 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
                                                static_cast<gint>(search.m_startingPosition));
         while (!found)
         {
-            found = gtk_text_iter_forward_search(&selectionSearchPos, search.m_searchValue.mb_str(),
+            found = gtk_text_iter_forward_search(&selectionSearchPos, search.m_searchValue.utf8_str(),
                                                  flags, &selectionStart, &selectionEnd, nullptr);
             if (found)
             {
