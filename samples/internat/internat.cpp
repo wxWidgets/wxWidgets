@@ -531,17 +531,8 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        // this is a more implicit way to write _() but note that if you use it
-        // you must ensure that the strings get extracted in the message
-        // catalog as by default xgettext won't do it; it only knows of _(),
-        // not of wxTRANSLATE(). As internat's readme.txt says you should thus
-        // call xgettext with -kwxTRANSLATE.
-        str = wxGetTranslation(wxTRANSLATE("Bad luck! try again..."));
-
-        // note also that if we want 'str' to contain a localized string
-        // we need to use wxGetTranslation explicitly as wxTRANSLATE just
-        // tells xgettext to extract the string but has no effect on the
-        // runtime of the program!
+        // this is a more verbose way to write _()
+        str = wxGetTranslation("Bad luck! try again...");
     }
 
     wxMessageBox(str, _("Result"), wxOK | wxICON_INFORMATION);
