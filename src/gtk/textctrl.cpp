@@ -2097,7 +2097,7 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
     gboolean found = false;
 
     // verifies if the current match is whole-word
-    const auto confirmWholeWordMatch =
+    const auto confirmWhileWordMatch =
         [&selectionStart, &selectionEnd, &found, &selectionSearchPos]()
     {
         // we have a match
@@ -2120,48 +2120,37 @@ wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
     {
         // search forward, beginning at the start (or user-provided position)
         selectionSearchPos = textStart;
-        if (search.m_startingPosition != -1)
+        if ( search.m_startingPosition != -1 )
             gtk_text_buffer_get_iter_at_offset(m_buffer, &selectionSearchPos,
                                                static_cast<gint>(search.m_startingPosition));
-        while (!found)
-        {
-            found = gtk_text_iter_forward_search(&selectionSearchPos, search.m_searchValue.utf8_str(),
-                                                 flags, &selectionStart, &selectionEnd, nullptr);
-            if (found)
-            {
-                if (!search.m_wholeWord || confirmWholeWordMatch())
-                    break;
-                else
-                    continue;
-            }
-            else
-            {
-                break;
-            }
-        }
     }
     else
     {
         // search backwards, starting at the end (or user-provided position)
         selectionSearchPos = textEnd;
-        if (search.m_startingPosition != -1)
+        if ( search.m_startingPosition != -1 )
             gtk_text_buffer_get_iter_at_offset(m_buffer, &selectionSearchPos,
                                                static_cast<gint>(search.m_startingPosition));
-        while (!found)
-        {
-            found =
-                gtk_text_iter_backward_search(&selectionSearchPos, search.m_searchValue.mb_str(),
-                                              flags, &selectionStart, &selectionEnd, nullptr);
-            if (found)
-            {
-                if (!search.m_wholeWord || confirmWholeWordMatch())
-                    break;
-                else
-                    continue;
-            }
-            else
-                break;
-        }
+    }
+
+    for (;;)
+    {
+        found = search.m_direction == wxTextSearch::Direction::Down
+                ? gtk_text_iter_forward_search(&selectionSearchPos, search.m_searchValue.utf8_str(),
+                                               flags, &selectionStart, &selectionEnd, nullptr)
+                : gtk_text_iter_backward_search(&selectionSearchPos, search.m_searchValue.utf8_str(),
+                                                flags, &selectionStart, &selectionEnd, nullptr);
+
+        // If we haven't found anything at all, we're done.
+        if ( !found )
+            break;
+
+        // But if we did find something, we may need to check whether it was
+        // a whole word.
+        if ( !search.m_wholeWord || confirmWhileWordMatch() )
+            break;
+
+        // Keep searching for the next match, maybe it will be a whole-word one.
     }
 
     if (found)
