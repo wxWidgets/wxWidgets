@@ -349,11 +349,11 @@ wxLocaleIdent wxLocaleIdent::AddLikelySubtags(const wxLocaleIdent& localeIdent)
     // Fill in script and region subtags, if they were originally empty
     if (script.empty())
     {
-        locId.Script(subtags.at(1));
+        locId.Script(subtags[1]);
     }
     if (region.empty())
     {
-        locId.Region(subtags.at(2));
+        locId.Region(subtags[2]);
     }
     return locId;
 }
@@ -457,7 +457,6 @@ wxString wxLocaleIdent::GetBestMatch(const wxVector<wxString>& desired, const wx
     wxString desiredLanguage;
     wxString desiredScript;
     wxString desiredRegion;
-    wxString supportedLanguageIn;
     wxString supportedScriptIn;
     wxString supportedRegionIn;
     wxString supportedLanguage;
@@ -511,7 +510,6 @@ wxString wxLocaleIdent::GetBestMatch(const wxVector<wxString>& desired, const wx
                 if (!supportedLocaleMin.GetRegion().empty()) minDistance += 1;
                 supportedLocalesMinDistance.push_back(minDistance);
             }
-            supportedLanguageIn = supportedLocalesIn[k].GetLanguage();
             supportedScriptIn = supportedLocalesIn[k].GetScript();
             supportedRegionIn = supportedLocalesIn[k].GetRegion();
             supportedLanguage = supportedLocalesMax[k].GetLanguage();
