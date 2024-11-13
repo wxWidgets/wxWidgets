@@ -93,6 +93,8 @@ static std::unordered_map<wxString, std::unordered_set<wxString>> gs_region_grou
         const auto groupSet = languageIter->second;
         bool containsDesired = groupSet.find(desiredRegion) != groupSet.end();
         bool containsSupported = groupSet.find(supportedRegion) != groupSet.end();
+        // Desired region and supported region belong to the same region group,
+        // if they are either both contained or both not contained in the region group.
         return (containsDesired && containsSupported) || (!containsDesired && !containsSupported);
     }
 

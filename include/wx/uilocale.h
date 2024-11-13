@@ -31,8 +31,8 @@ enum
 // Flags for wxLocaleIdent::RemoveLikelySubtags().
 enum
 {
-    wxSubtags_FavorRegion = 0,
-    wxSubtags_FavorScript = 1
+    wxSubtags_FavourRegion = 0,
+    wxSubtags_FavourScript = 1
 };
 
 // ----------------------------------------------------------------------------
@@ -114,7 +114,7 @@ private:
     static wxLocaleIdent AddLikelySubtags(const wxLocaleIdent& localeIdent);
 
     // Remove likely subtags from a given locale identifier, favor region.
-    static wxLocaleIdent RemoveLikelySubtags(const wxLocaleIdent& localeIdent, int subtagsFavor = wxSubtags_FavorRegion);
+    static wxLocaleIdent RemoveLikelySubtags(const wxLocaleIdent& localeIdent, int subtagsFavour = wxSubtags_FavourRegion);
 };
 
 // ----------------------------------------------------------------------------

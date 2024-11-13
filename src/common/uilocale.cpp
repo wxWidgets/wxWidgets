@@ -296,6 +296,8 @@ wxLocaleIdent wxLocaleIdent::AddLikelySubtags(const wxLocaleIdent& localeIdent)
     }
 
     // Remove the script code 'Zzzz' and the region code 'ZZ' if they occur.
+    // These codes represent an 'unknown' script resp region, which should
+    // not occur in the result. Instead they are handled as 'not set'.
     if (script.IsSameAs("Zzzz"))
     {
         script.clear();
@@ -335,29 +337,29 @@ wxLocaleIdent wxLocaleIdent::AddLikelySubtags(const wxLocaleIdent& localeIdent)
         // No match, return invalid locale identifier
         return wxLocaleIdent();
     }
-    else
+
+    // Match found. Update script and/or region subtags of the result.
+    // Matches always consist of a combination of language, script, and region.
+    // Therefore there are always 3 subtags.
+    const wxArrayString& subtags = wxSplit(toTag, '-', '\0');
+
+    // Attribute m_tag needs to be cleared, because it contains the tag value of the original identifier
+    locId.m_tag.clear();
+
+    // Fill in script and region subtags, if they were originally empty
+    if (script.empty())
     {
-        // Match found. Update script and/or region subtags of the result.
-        const wxArrayString& subtags = wxSplit(toTag, '-', '\0');
-
-        // Attribute m_tag needs to be cleared, because it contains the tag value of the original identifier
-        locId.m_tag.clear();
-
-        // Fill in script and region subtags, if they were originally empty
-        if (script.empty())
-        {
-            locId.Script(subtags[1]);
-        }
-        if (region.empty())
-        {
-            locId.Region(subtags[2]);
-        }
-        return locId;
+        locId.Script(subtags.at(1));
     }
+    if (region.empty())
+    {
+        locId.Region(subtags.at(2));
+    }
+    return locId;
 }
 
 /* static */
-wxLocaleIdent wxLocaleIdent::RemoveLikelySubtags(const wxLocaleIdent& localeIdent, int subtagsFavor)
+wxLocaleIdent wxLocaleIdent::RemoveLikelySubtags(const wxLocaleIdent& localeIdent, int subtagsFavour)
 {
     // Extend input with likely subtags
     wxLocaleIdent locId = AddLikelySubtags(localeIdent);
@@ -387,13 +389,14 @@ wxLocaleIdent wxLocaleIdent::RemoveLikelySubtags(const wxLocaleIdent& localeIden
 
     // Test "language-region" if favoring region or
     //      "language-script" if favoring script
-    if (subtagsFavor == wxSubtags_FavorRegion)
+    switch (subtagsFavour)
     {
-        trial.Region(region);
-    }
-    else
-    {
-        trial.Script(script);
+        case wxSubtags_FavourRegion:
+            trial.Region(region);
+            break;
+        case wxSubtags_FavourScript:
+            trial.Script(script);
+            break;
     }
     locId = AddLikelySubtags(trial);
     if (script.IsSameAs(locId.GetScript()) && region.IsSameAs(locId.GetRegion()))
@@ -403,13 +406,14 @@ wxLocaleIdent wxLocaleIdent::RemoveLikelySubtags(const wxLocaleIdent& localeIden
 
     // Test "language-script" if favoring region or
     //      "language-region" if favoring script
-    if (subtagsFavor != wxSubtags_FavorRegion)
+    switch (subtagsFavour)
     {
-        trial.Region(region);
-    }
-    else
-    {
-        trial.Script(script);
+        case wxSubtags_FavourScript:
+            trial.Region(region);
+            break;
+        case wxSubtags_FavourRegion:
+            trial.Script(script);
+            break;
     }
     locId = AddLikelySubtags(trial);
     if (script.IsSameAs(locId.GetScript()) && region.IsSameAs(locId.GetRegion()))
@@ -428,12 +432,12 @@ static const int DISTANCE_INFINITY = 1000;
 wxString wxLocaleIdent::GetBestMatch(const wxVector<wxString>& desired, const wxVector<wxString>& supported)
 {
     // Default distance values
-    static int defaultLanguageDistance = wxUILocaleImpl::GetMatchDistance("*", "*");
-    static int defaultScriptDistance = wxUILocaleImpl::GetMatchDistance("*-*", "*-*");
-    static int defaultRegionDistance = wxUILocaleImpl::GetMatchDistance("*-*-*", "*-*-*") + 1;
-    static int defaultRegionGroupDistance = wxUILocaleImpl::GetMatchDistance("*-*-*", "*-*-*");
-    static int defaultDemotion = wxUILocaleImpl::GetMatchDistance("en-*-*", "en-*-*") + 1;
-    static int threshold = defaultScriptDistance;
+    static const int defaultLanguageDistance = wxUILocaleImpl::GetMatchDistance("*", "*");
+    static const int defaultScriptDistance = wxUILocaleImpl::GetMatchDistance("*-*", "*-*");
+    static const int defaultRegionDistance = wxUILocaleImpl::GetMatchDistance("*-*-*", "*-*-*") + 1;
+    static const int defaultRegionGroupDistance = wxUILocaleImpl::GetMatchDistance("*-*-*", "*-*-*");
+    static const int defaultDemotion = wxUILocaleImpl::GetMatchDistance("en-*-*", "en-*-*") + 1;
+    static const int threshold = defaultScriptDistance;
 
     // Maximized locale identifiers associated with the given desired and supported locale tags
     wxLocaleIdent desiredLocaleIn;
