@@ -571,8 +571,9 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-    // open a bogus file -- the error message should be also translated if
-    // you've got wxstd.mo somewhere in the search path (see MyApp::OnInit)
+    // open a bogus file -- the error message should be also either
+    // partially or fully translated if you've got wxstd.mo somewhere
+    // and/or your operating system provides localized error messages.
     wxFile file("NOTEXIST.ING");
 }
 
