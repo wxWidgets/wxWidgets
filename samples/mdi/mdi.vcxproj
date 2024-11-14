@@ -441,7 +441,7 @@
     <ClCompile Include="mdi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\sample.rc" />
+    <ResourceCompile Include="mdi.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -441,7 +441,7 @@
     <ClCompile Include="dragimag.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\sample.rc" />
+    <ResourceCompile Include="dragimag.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

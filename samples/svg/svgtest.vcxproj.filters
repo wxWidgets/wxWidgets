@@ -16,7 +16,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\sample.rc">
+    <ResourceCompile Include="svgtest.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

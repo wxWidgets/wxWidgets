@@ -22,7 +22,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\sample.rc">
+    <ResourceCompile Include="docview.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

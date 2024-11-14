@@ -443,7 +443,7 @@
     <ClCompile Include="view.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\sample.rc" />
+    <ResourceCompile Include="docview.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
