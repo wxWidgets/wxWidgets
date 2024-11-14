@@ -69,6 +69,7 @@
   <ImportGroup Label="PropertySheets">
     <Import Project="..\..\build\msw\wx_setup.props" />
     <Import Project="..\..\build\msw\wx_local.props" Condition="Exists('..\..\build\msw\wx_local.props')" />
+    <Import Project="..\samples.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
