@@ -465,8 +465,10 @@ public:
 ///@{
 
 /**
-    This macro is identical to _() but for the plural variant of
+    This macro is similar to _() but for the plural variant of
     wxGetTranslation().
+
+    The string arguments must be @em string @em literals.
 
     @return A const wxString.
 
@@ -479,6 +481,8 @@ public:
 
     See the description of @c context argument of wxGetTranslation().
 
+    The arguments must be @em string @em literals.
+
     @see wxGETTEXT_IN_CONTEXT_PLURAL()
 
     @since 3.1.1
@@ -487,6 +491,8 @@ public:
 
 /**
     Similar to wxPLURAL() but translates the string in the given context.
+
+    The string arguments must be @em string @em literals.
 
     See the description of @c context argument of wxGetTranslation().
 
@@ -567,7 +573,8 @@ public:
     If @a domain is specified then only that domain/catalog is searched for a
     matching string.  As this function is used very often, an alternative (and
     also common in Unix world) syntax is provided: the _() macro is defined to
-    do the same thing as wxGetTranslation().
+    do nearly the same thing as wxGetTranslation(), with the exception that
+    the argument to _() must be a string literal.
 
     If @a context is not empty (notice that this argument is only available
     starting from wxWidgets 3.1.1), item translation is looked up in the
@@ -633,7 +640,7 @@ const wxString& wxGetTranslation(const wxString& string,
 
     @header{wx/intl.h}
 */
-const wxString& _(const wxString& string);
+#define _(string)
 
 ///@}
 
