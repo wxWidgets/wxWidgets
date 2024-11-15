@@ -25,7 +25,7 @@ A. This will only work under some versions of Linux, don't worry if the second
    half of the sentence is not translated.
 
 Q. How to do translations to other language?
-A. First of all, you will need the GNU gettext tools.
+A. First of all, you will need the GNU gettext tools or, if you prefer GUI applications, a program such as poedit.
    After you've probably installed them, type the following (example is for Unix
    and you should do exactly the same under Windows).
 
