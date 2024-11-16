@@ -15,7 +15,33 @@ samples/ with demos/ where needed).
    specification should use the central `.rc` file, i.e. do not use
    `<win32-res>` bakefile tag unless it is really necessary.
 
-3. Create the makefiles:
+3. Create the make and project files:
+
+ - Create MSVS project for the sample and add it to the solution file:
+   * In the simplest case, run the following command, which requires some
+     version of Perl to be available, from the root of the wxWidgets source
+     tree:
+
+     ./build/clone-minimal-vcxproj samples/foo/foo
+
+   * If you need to base the sample on some other project, e.g. console one
+     for a new non-GUI sample, you can alternatively run
+
+     ./build/vcxproj-clone samples/console/console.vcxproj samples/foo/foo
+
+   * In either case, open the `samples/samples_vc17.sln` and move the new
+     project under the appropriate folder in the solution tree.
+
+   * The following one-liner can be used to update all the other solution files
+     (but you may also update them manually if you can't use this command,
+      which requires Unix-like environment):
+
+     $ for v in 14 15 16; do
+         git diff samples/samples_vc17.sln | \
+         sed "s/samples_vc17.sln/samples_vc${v}.sln/g" | \
+         git apply -v
+       done
+
    - modify samples/samples.bkl (just copy an existing line)
    - create `foo.bkl`, typically by just copying an existing bakefile from
    another sample (`sed 's/minimal/foo/g' minimal.bkl > foo.bkl` is usually
