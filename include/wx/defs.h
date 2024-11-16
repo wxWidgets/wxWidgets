@@ -1174,20 +1174,36 @@ typedef double wxDouble;
 
 /* Define wxChar16 and wxChar32                                              */
 
+#ifdef __cplusplus
+
 #if SIZEOF_WCHAR_T == 2
     #define wxWCHAR_T_IS_WXCHAR16
     typedef wchar_t wxChar16;
 #else
-    typedef wxUint16 wxChar16;
+    // For compatibility, we keep using wxUint16 here, but this wouldn't
+    // compile with libc++ 19+, so use the (more correct but, more importantly,
+    // working) char16_t in this case as there is nothing to be compatible
+    // with in this case.
+    #if defined(_LIBCPP_VERSION) && (_LIBCPP_VERSION+0 >= 19000)
+        typedef char16_t wxChar16;
+    #else
+        typedef wxUint16 wxChar16;
+    #endif
 #endif
 
 #if SIZEOF_WCHAR_T == 4
     #define wxWCHAR_T_IS_WXCHAR32
     typedef wchar_t wxChar32;
 #else
-    typedef wxUint32 wxChar32;
+    // See the comment above for wxChar16 definition.
+    #if defined(_LIBCPP_VERSION) && (_LIBCPP_VERSION+0 >= 19000)
+        typedef char32_t wxChar32;
+    #else
+        typedef wxUint32 wxChar32;
+    #endif
 #endif
 
+#endif /* __cplusplus */
 
 /*
     Helper macro expanding into the given "m" macro invoked with each of the
