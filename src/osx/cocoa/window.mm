@@ -455,7 +455,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     wxevent.m_rawCode = [nsEvent keyCode];
     wxevent.m_rawFlags = modifiers;
 
-    wxevent.SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
+    wxevent.SetTimestamp( static_cast<long>([nsEvent timestamp] * 1000) ) ;
     wxevent.m_isRepeat = (eventType == NSKeyDown) && [nsEvent isARepeat];
 
     wxString chars;
@@ -614,7 +614,7 @@ wxWidgetCocoaImpl::TranslateMouseEvent( NSEvent * nsEvent )
     wxevent->m_rawControlDown = modifiers & NSControlKeyMask;
     wxevent->m_altDown = modifiers & NSAlternateKeyMask;
     wxevent->m_controlDown = modifiers & NSCommandKeyMask;
-    wxevent->SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
+    wxevent->SetTimestamp( static_cast<long>([nsEvent timestamp] * 1000) ) ;
 
     UInt32 mouseChord = 0;
 
@@ -3867,7 +3867,7 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
                 wxevent.SetId(peer->GetId());
 
                 if ( event )
-                    wxevent.SetTimestamp( (int)([event timestamp] * 1000) ) ;
+                    wxevent.SetTimestamp( static_cast<long>([event timestamp] * 1000) ) ;
             }
             
             result = peer->OSXHandleKeyEvent(wxevent) || result;
