@@ -526,6 +526,135 @@ TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
     CheckTag("English_United States.utf8");
 
     CHECK( TagToPOSIX("zh-Hans-CN") == "zh_CN" );
+    CHECK( TagToPOSIX("zh-Hant-TW") == "zh_TW");
+    CHECK( TagToPOSIX("sr-Latn-RS") == "sr_RS@latin");
+    CHECK( TagToPOSIX("sr-Cyrl-RS") == "sr_RS");
+}
+
+static wxString FindBestMatch(const wxVector<wxString>& desired, const wxVector<wxString>& supported)
+{
+    return wxLocaleIdent::GetBestMatch(desired, supported);
+}
+
+TEST_CASE("wxLocaleIdent::GetBestMatch", "[uilocale][localeident]")
+{
+    CHECK(FindBestMatch({ "en-AU" }, { "en-US", "en-NZ" }) == "en-NZ");
+    CHECK(FindBestMatch({ "pt-AO" }, { "pt-BR", "pt-PT" }) == "pt-PT");
+    CHECK(FindBestMatch({ "fr" }, { "fr-FR", "fr", "fr-CA", "en"}) == "fr");
+    CHECK(FindBestMatch({ "fr-FR" }, { "en", "fr", "fr-CA" }) == "fr");
+    CHECK(FindBestMatch({ "fr-FR" }, { "en", "fr-CA" }) == "fr-CA");
+    CHECK(FindBestMatch({ "fr" }, { "fr-CA", "fr-FR"}) == "fr-FR");
+    CHECK(FindBestMatch({ "fr-SN" }, { "fr-CA", "fr-FR" }) == "fr-FR");
+    CHECK(FindBestMatch({ "fr" }, { "de", "en", "it"}) == "");
+
+    // favor a more-default locale among equally imperfect matches
+    CHECK(FindBestMatch({ "fr-SN" }, { "fr-CA", "fr-CH", "fr-FR", "fr-GB"}) == "fr-FR");
+
+    CHECK(FindBestMatch({ "zh-TW" }, { "zh" }) == "");
+    CHECK(FindBestMatch({ "zh-HK" }, { "zh-Hant", "zh-TW" }) == "zh-TW");
+
+    // same language over exact, but distinguish when user is explicit
+    CHECK(FindBestMatch({ "ja", "de"}, {"fr", "en-GB", "ja", "es-ES", "ex-MX"}) == "ja");
+    CHECK(FindBestMatch({ "de-CH", "fr" }, { "en", "de", "fr", "ja" }) == "de");
+    CHECK(FindBestMatch({ "en", "nl" }, { "en-GB", "nl" }) == "en-GB");
+    CHECK(FindBestMatch({ "en", "nl", "en-GB"}, {"en-GB", "nl"}) == "en-GB");
+
+    // pick best maximized match
+    CHECK(FindBestMatch({ "ja-Jpan-JP", "ru" }, { "ja", "ja-Jpan", "ja-JP", "en", "ru"}) == "ja-Jpan");
+    CHECK(FindBestMatch({ "ja-Jpan", "ru" }, { "ja", "ja-Jpan", "ja-JP", "en", "ru" }) == "ja-Jpan");
+
+    // match on maximized tag
+    CHECK(FindBestMatch({ "ja-JP", "en-GB" }, { "fr", "en-GB", "ja", "es-ES", "es-MX" }) == "ja");
+    CHECK(FindBestMatch({ "ja-Jpan-JP", "en-GB" }, { "fr", "en-GB", "ja", "es-ES", "es-MX" }) == "ja");
+
+    // region distance German
+    CHECK(FindBestMatch({ "de" }, { "de-AT", "de-DE", "de-CH" }) == "de-DE");
+
+    // en-AU is closer to en-GB than to en (which is en-US)
+    CHECK(FindBestMatch({ "en-AU" }, { "en", "en-GB", "es-ES" }) == "en-GB");
+
+    // if no preferred locale specified, pick top language, not regional
+    CHECK(FindBestMatch({ "fr-US" }, { "en", "fr", "fr-CA", "fr-CH"}) == "fr");
+
+    // return most originally similar among likely-subtags equivalent locales
+    CHECK(FindBestMatch({ "af" }, { "af", "af-Latn", "af-Arab" }) == "af");
+    CHECK(FindBestMatch({ "af-ZA" }, { "af", "af-Latn", "af-Arab" }) == "af");
+    CHECK(FindBestMatch({ "af-Latn-ZA" }, { "af", "af-Latn", "af-Arab" }) == "af-Latn");
+    CHECK(FindBestMatch({ "af-Latn" }, { "af", "af-Latn", "af-Arab" }) == "af-Latn");
+
+    CHECK(FindBestMatch({ "nl" }, { "nl", "nl-NL", "nl-BE" }) == "nl");
+    CHECK(FindBestMatch({ "nl-Latn" }, { "nl", "nl-NL", "nl-BE" }) == "nl");
+    CHECK(FindBestMatch({ "nl-Latn-NL" }, { "nl", "nl-NL", "nl-BE" }) == "nl-NL");
+    CHECK(FindBestMatch({ "nl-NL" }, { "nl", "nl-NL", "nl-BE" }) == "nl-NL");
+
+    CHECK(FindBestMatch({ "nl" }, { "nl", "nl-Latn", "nl-NL", "nl-BE" }) == "nl");
+    CHECK(FindBestMatch({ "nl-Latn" }, { "nl", "nl-Latn", "nl-NL", "nl-BE" }) == "nl-Latn");
+    CHECK(FindBestMatch({ "nl-NL" }, { "nl", "nl-Latn", "nl-NL", "nl-BE" }) == "nl-NL");
+    CHECK(FindBestMatch({ "nl-Latn-NL" }, { "nl", "nl-Latn", "nl-NL", "nl-BE" }) == "nl-Latn");
+
+    // nearby languages: Danish matches no
+    CHECK(FindBestMatch({ "da" }, { "en", "no" }) == "no");
+    // nearby languages: Nynorsk to Bokmål
+    CHECK(FindBestMatch({ "nn" }, { "en", "nb" }) == "nb");
+    // nearby languages: Danish does not match nn
+    CHECK(FindBestMatch({ "da" }, { "en", "nn" }) == "");
+
+    // script fallbacks
+    CHECK(FindBestMatch({ "zh-Hant" }, { "zh-CN", "zh-TW" }) == "zh-TW");
+    CHECK(FindBestMatch({ "zh" }, { "zh-CN", "zh-TW" }) == "zh-CN");
+    CHECK(FindBestMatch({ "zh-Hans" }, { "zh-CN", "zh-TW" }) == "zh-CN");
+    CHECK(FindBestMatch({ "zh-Hans-CN" }, { "zh-CN", "zh-TW" }) == "zh-CN");
+    CHECK(FindBestMatch({ "zh-Hant-HK" }, { "zh-CN", "zh-TW" }) == "zh-TW");
+    CHECK(FindBestMatch({ "zh-Hans-DE" }, { "zh-CN", "zh-TW" }) == "zh-CN");
+    CHECK(FindBestMatch({ "zh-Hant-DE" }, { "zh-CN", "zh-TW" }) == "zh-TW");
+
+    // language-specific script fallbacks
+    CHECK(FindBestMatch({ "sr" }, { "en", "sr-Latn" }) == "sr-Latn");
+    CHECK(FindBestMatch({ "sr" }, { "en", "sr-Cyrl" }) == "sr-Cyrl");
+    CHECK(FindBestMatch({ "sr" }, { "en", "sr-Latn", "sr-Cyrl"}) == "sr-Cyrl");
+    CHECK(FindBestMatch({ "sr-Latn" }, { "en", "sr-Latn", "sr-Cyrl" }) == "sr-Latn");
+    CHECK(FindBestMatch({ "sr-Cyrl" }, { "en", "sr-Latn" }) == "sr-Latn");
+    CHECK(FindBestMatch({ "sr-Latn" }, { "en", "sr-Cyrl" }) == "sr-Cyrl");
+
+    CHECK(FindBestMatch({ "de", "en-US"}, {"fr", "en-GB", "ja", "es-ES", "es-MX"}) == "en-GB");
+    CHECK(FindBestMatch({ "de", "zh" }, { "fr", "en-GB", "ja", "es-ES", "es-MX" }) == "");
+
+    // match on maximized
+    CHECK(FindBestMatch({ "ja-JP", "en-GB" }, { "fr", "en-GB", "ja", "es-ES", "es-MX" }) == "ja");
+    CHECK(FindBestMatch({ "ja-Jpan-JP", "en-GB" }, { "fr", "en-GB", "ja", "es-ES", "es-MX" }) == "ja");
+    CHECK(FindBestMatch({ "zh", "en" }, { "fr", "zh-Hant", "en" }) == "en");
+
+    // close enough match on maximized
+    CHECK(FindBestMatch({ "de-CH", "fr" }, { "en-GB", "en", "de", "fr", "ja" }) == "de");
+    CHECK(FindBestMatch({ "en-US", "ar", "nl", "de", "ja" }, { "en-GB", "en", "de", "fr", "ja"}) == "en");
+
+    // best matches for Portuguese
+    CHECK(FindBestMatch({ "pt-PT", "es", "pt" }, { "pt-PT", "pt-BR", "es", "es-AR"}) == "pt-PT");
+    CHECK(FindBestMatch({ "pt-PT", "es", "pt" }, { "pt-PT", "pt", "es", "es-AR" }) == "pt-PT");
+    CHECK(FindBestMatch({ "pt-PT", "es", "pt" }, { "pt-BR", "es", "es-AR" }) == "pt-BR");
+
+    CHECK(FindBestMatch({ "pt", "es", "pt-PT" }, { "pt-PT", "pt-BR", "es", "es-AR" }) == "pt-BR");
+    CHECK(FindBestMatch({ "pt", "es", "pt-PT" }, { "pt-PT", "pt", "es", "es-AR" }) == "pt");
+    CHECK(FindBestMatch({ "pt", "es", "pt-PT" }, { "pt-BR", "es", "es-AR" }) == "pt-BR");
+    CHECK(FindBestMatch({ "pt-US", "pt-PT" }, { "pt-PT", "pt-BR", "es", "es-AR" }) == "pt-BR");
+    CHECK(FindBestMatch({ "pt-US", "pt-PT" }, { "pt-PT", "pt", "es", "es-AR" }) == "pt");
+
+    // regional specials
+    CHECK(FindBestMatch({ "en-AU" }, { "en", "en-GB", "es-ES", "es-AR" }) == "en-GB");
+    CHECK(FindBestMatch({ "es-MX" }, { "en", "en-GB", "es-ES", "es-AR" }) == "es-AR");
+    CHECK(FindBestMatch({ "es-PT" }, { "en", "en-GB", "es-ES", "es-AR" }) == "es-ES");
+
+    // best match for traditional chinese
+    CHECK(FindBestMatch({ "zh-TW" }, { "fr", "zh-Hans", "zh-Hans-CN", "en-US" }) == "");
+    CHECK(FindBestMatch({ "zh-Hant" }, { "fr", "zh-Hans", "zh-Hans-CN", "en-US" }) == "");
+
+    CHECK(FindBestMatch({ "zh-TW", "en" }, {"fr", "zh-Hans", "zh-Hans-CN", "en-US"}) == "en-US");
+    CHECK(FindBestMatch({ "zh-Hant-CN", "en" }, {"fr", "zh-Hans", "zh-Hans-CN", "en-US"}) == "en-US");
+    CHECK(FindBestMatch({ "zh-Hans", "en" }, {"fr", "zh-Hans", "zh-Hans-CN", "en-US"}) == "zh-Hans");
+
+    CHECK(FindBestMatch({ "zh-TW", "en" }, { "fr", "zh-Hans", "zh-Hans-CN", "zh-Hant", "en-US" }) == "zh-Hant");
+    CHECK(FindBestMatch({ "zh-Hant-CN", "en" }, { "fr", "zh-Hans", "zh-Hans-CN", "zh-Hant", "en-US" }) == "zh-Hant");
+    CHECK(FindBestMatch({ "zh-Hans", "en" }, { "fr", "zh-Hans", "zh-Hans-CN", "zh-Hant", "en-US" }) == "zh-Hans");
 }
 
 // Yet another helper for the test below.

@@ -25,7 +25,7 @@ for line in io.lines(codeFileName) do
   end
 end
 wxversion = vmajor .. "." .. vminor .. "." .. vrelno
-print("wx version number=" .. wxversion)
+print("  wxWidgets version number:", wxversion)
 fo2:write("insert into wx_version values('" .. wxversion .. "');\n")
 
 fo2:write('commit;\n')

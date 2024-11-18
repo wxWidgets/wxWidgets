@@ -19,7 +19,7 @@ for line in io.lines(codeFileName) do
   fo2:write("insert into wx_langmap values ('" .. wxlangname .. "', '" .. wxlangid .. "', '" .. wxlocregion .. "', '" .. wxversion .. "');\n")
   count = count + 1
 end
-print("Number of languages =" .. count)
+print("  Number of languages = " .. count)
 
 fo2:write('commit;\n')
 fo2:close()

@@ -24,6 +24,7 @@
 #include "wx/private/uilocale.h"
 
 #include "wx/msw/private/uilocale.h"
+#include "wx/msw/registry.h"
 
 #include "wx/scopedarray.h"
 #include "wx/dynlib.h"
@@ -88,6 +89,39 @@
 // ----------------------------------------------------------------------------
 // helper functions
 // ----------------------------------------------------------------------------
+
+namespace
+{
+// Function to retrieve the user's preferred languages
+void GetUserPreferredLanguagesFromRegistry(wxVector<wxString>& userLanguages)
+{
+    // Open the registry key for user preferred languages
+    HKEY hKey;
+    if (::RegOpenKeyEx(HKEY_CURRENT_USER,
+                       L"Control Panel\\International\\User Profile",
+                       0, KEY_READ, &hKey) == ERROR_SUCCESS)
+    {
+        // Retrieve the "Languages" value from the key
+        DWORD type = REG_SZ;
+        DWORD valueSize = 256;
+        wxScopedArray<WCHAR> languages(valueSize);
+        if (::RegQueryValueEx(hKey, L"Languages", nullptr, &type, reinterpret_cast<LPBYTE>(languages.get()), &valueSize) == ERROR_SUCCESS)
+        {
+            // Extract languages from multi-string value
+            WCHAR* buf = languages.get();
+            while (*buf != 0)
+            {
+                const wxString language(buf);
+                userLanguages.push_back(language);
+                buf += language.length() + 1;
+            }
+        }
+        // Close the registry key
+        ::RegCloseKey(hKey);
+    }
+}
+
+} // anonymous namespace
 
 LCTYPE wxGetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
 {
@@ -285,6 +319,8 @@ public:
         // and below definitely do not.
         if (wxGetWinVersion() >= wxWinVersion_10)
         {
+            GetUserPreferredLanguagesFromRegistry(preferred);
+
             ULONG numberOfLanguages = 0;
             ULONG bufferSize = 0;
             if (::GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numberOfLanguages, nullptr, &bufferSize))

@@ -39,7 +39,7 @@ for line in io.lines(codeFileName) do
     count = count + 1
   end
 end
-print("Number of synonyms=" .. count)
+print("  Number of synonyms = " .. count)
 
 fo2:write('commit;\n')
 fo2:close()
