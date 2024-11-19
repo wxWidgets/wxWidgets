@@ -379,6 +379,7 @@
             8bpp-colorsused-negative.bmp
             32bpp_rgb.bmp
             32bpp_rgb.ico
+            32bpp_rgb_a0.ico
             rle4-delta-320x240.bmp
             rle8-delta-320x240.bmp
             rle8-delta-320x240-expected.bmp

@@ -700,6 +700,10 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     int linesize = ((width * bpp + 31) / 32) * 4;
 
+    // flag used to detect fully transparent alpha channels, as
+    // Windows behavior for ICO is to ignore alpha in that case
+    bool hasNonTransparentAlpha = false;
+
     for ( int row = 0; row < height; row++ )
     {
         int line = isUpsideDown ? height - 1 - row : row;
@@ -964,6 +968,9 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                 {
                     temp = (unsigned char)((aDword & amask) >> ashift);
                     alpha[line * width + column] = temp;
+
+                    if (temp != wxALPHA_TRANSPARENT)
+                        hasNonTransparentAlpha = true;
                 }
                 column++;
             }
@@ -977,6 +984,12 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     }
 
     image->SetMask(false);
+
+    if (alpha && !isBmp && !hasNonTransparentAlpha)
+    {
+        // alpha is ignored for ICO if it is all zeros
+        image->ClearAlpha();
+    }
 
     const wxStreamError err = stream.GetLastError();
     return err == wxSTREAM_NO_ERROR || err == wxSTREAM_EOF;
