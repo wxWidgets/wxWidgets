@@ -231,8 +231,8 @@ public:
         The hot spot is the point at which the mouse is actually considered to
         be when this cursor is used.
 
-        This method is currently only implemented in wxMSW and wxGTK2+ and
-        simply returns ::wxDefaultPosition in the other ports.
+        This method is currently implemented in wxMSW, wxGTK and wxOSX (since
+        wxWidgets 3.2.7) and returns ::wxDefaultPosition in the other ports.
 
         @since 3.1.0
      */

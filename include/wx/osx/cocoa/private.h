@@ -556,6 +556,7 @@ WX_NSCursor  wxMacCocoaCreateCursorFromCGImage( CGImageRef cgImageRef, float hot
 void  wxMacCocoaSetCursor( WX_NSCursor cursor );
 void  wxMacCocoaHideCursor();
 void  wxMacCocoaShowCursor();
+wxPoint  wxMacCocoaGetCursorHotSpot( WX_NSCursor cursor );
 
 typedef struct tagClassicCursor
 {
