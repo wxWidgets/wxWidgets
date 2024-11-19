@@ -671,6 +671,11 @@ void  wxMacCocoaShowCursor()
 {
     [NSCursor unhide];
 }
+
+wxPoint wxMacCocoaGetCursorHotSpot(WX_NSCursor cursor)
+{
+    return wxPoint([cursor hotSpot].x, [cursor hotSpot].y);
+}
 #endif
 
 //---------------------------------------------------------
