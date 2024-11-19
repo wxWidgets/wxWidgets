@@ -45,7 +45,7 @@ using wxTranslationsHashMap = std::unordered_map<wxString, wxString>;
 // --keyword="_" --keyword="wxPLURAL:1,2" options
 // to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-    #define _(s)                               wx_Wrapper((s))
+    #define _(s)                               wxUnderscoreWrapper((s))
 #endif
 
 #define wxPLURAL(sing, plur, n)                wxwxPluralWrapper((sing), (plur), n)
@@ -338,7 +338,7 @@ inline const wxString& wxGetTranslation(const char *str1,
 // Wrapper functions that only accept string literals as arguments,
 // not variables, not char* pointers.
 template<size_t M>
-const wxString &wx_Wrapper(const char (&msg)[M])
+const wxString &wxUnderscoreWrapper(const char (&msg)[M])
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg);
