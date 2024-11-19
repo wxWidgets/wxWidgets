@@ -15,6 +15,7 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/gdicmn.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/osx/core/private.h"
@@ -221,6 +222,19 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // system metrics/features
 // ----------------------------------------------------------------------------
 
+static float GetCursorScale()
+{
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] persistentDomainForName:@"com.apple.universalaccess"];
+
+    /* See https://developer.apple.com/documentation/devicemanagement/accessibility?language=objc */
+    if ([dict objectForKey: @"mouseDriverCursorSize"])
+    {
+        return [dict[@"mouseDriverCursorSize"] floatValue];
+    }
+
+    return 1.0f;
+}
+
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUNUSED(win))
 {
@@ -233,14 +247,17 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUN
 
         // TODO case wxSYS_BORDER_X:
         // TODO case wxSYS_BORDER_Y:
-        // TODO case wxSYS_CURSOR_X:
-        // TODO case wxSYS_CURSOR_Y:
         // TODO case wxSYS_DCLICK_X:
         // TODO case wxSYS_DCLICK_Y:
         // TODO case wxSYS_DRAG_X:
         // TODO case wxSYS_DRAG_Y:
         // TODO case wxSYS_EDGE_X:
         // TODO case wxSYS_EDGE_Y:
+
+        case wxSYS_CURSOR_X:
+            return wxRound([[[NSCursor arrowCursor] image] size].width * GetCursorScale());
+        case wxSYS_CURSOR_Y:
+            return wxRound([[[NSCursor arrowCursor] image] size].height * GetCursorScale());
 
         case wxSYS_HSCROLL_ARROW_X:
             return 16;
