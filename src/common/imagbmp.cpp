@@ -518,7 +518,7 @@ struct BMPDesc
 // The stream must be positioned at the start of the bitmap data
 // (i.e., after any palette data)
 bool LoadBMPData(wxImage * image, const BMPDesc& desc,
-                 wxInputStream& stream, bool verbose)
+                 wxInputStream& stream, bool verbose, bool isBmp)
 {
     const int width = desc.width;
     int height = desc.height;
@@ -563,6 +563,19 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     }
 
     unsigned char* alpha = nullptr;
+    if (bpp == 32 && (!isBmp || desc.comp == BI_BITFIELDS))
+    {
+        image->SetAlpha();
+        alpha = image->GetAlpha();
+        if (!alpha)
+        {
+            if (verbose)
+            {
+                wxLogError(_("BMP: Couldn't allocate memory."));
+            }
+            return false;
+        }
+    }
 
     // Reading the palette, if it exists:
     if ( bpp < 16 && ncolors != 0 )
@@ -615,17 +628,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             {
                 amask = 0xFF000000;
                 ashift = 24;
-
-                image->SetAlpha();
-                alpha = image->GetAlpha();
-                if (!alpha)
-                {
-                    if (verbose)
-                    {
-                        wxLogError(_("BMP: Couldn't allocate memory."));
-                    }
-                    return false;
-                }
             }
 
             // find shift amount (Least significant bit of mask)
@@ -666,7 +668,9 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             rmask = 0x00FF0000;
             gmask = 0x0000FF00;
             bmask = 0x000000FF;
+            amask = 0xFF000000;
 
+            ashift = 24;
             rshift = 16;
             gshift = 8;
             bshift = 0;
@@ -1269,7 +1273,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
 
     //read DIB; this is the BMP image or the XOR part of an icon image
-    if ( !LoadBMPData(image, desc, stream, verbose) )
+    if ( !LoadBMPData(image, desc, stream, verbose, IsBmp) )
     {
         if (verbose)
         {
@@ -1290,7 +1294,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
         //there is no palette, so we will create one
         wxImage mask;
-        if ( !LoadBMPData(&mask, descMask, stream, verbose) )
+        if ( !LoadBMPData(&mask, descMask, stream, verbose, IsBmp) )
         {
             if (verbose)
             {
