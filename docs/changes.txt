@@ -277,6 +277,7 @@ wxMSW:
 - Fix events generated when toast-based notifications are dismissed (#24320).
 - Fix height of wxOwnerDrawnComboBox popup in high DPI (Maarten Bent, #24850).
 - Fix background colour of owner-drawn wxListBox items (#24917).
+- Fix handling pending events without an event loop (Stefan Battmer, #18109).
 
 wxOSX:
 
