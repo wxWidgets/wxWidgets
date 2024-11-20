@@ -1089,7 +1089,11 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     int flags = 0;
     if ( state & wxDATAVIEW_CELL_SELECTED )
         flags |= wxCONTROL_SELECTED;
-    if ( !(GetOwner()->GetOwner()->IsEnabled() && GetEnabled()) )
+
+    // Use IsThisEnabled() rather than IsEnabled() to grey the text out if the
+    // item itself or the entire control is disabled, but not if it's
+    // implicitly disabled due to its parent being disabled.
+    if ( !(GetOwner()->GetOwner()->IsThisEnabled() && GetEnabled()) )
         flags |= wxCONTROL_DISABLED;
 
     wxRendererNative::Get().DrawItemText(
