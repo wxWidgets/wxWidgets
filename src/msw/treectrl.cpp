@@ -1719,9 +1719,15 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
         Delete(children[n]);
     }
 
-    // Refresh update the "+" button which otherwise can remain displayed.
-    if ( !IsHiddenRoot(item) )
-        wxTreeView_RefreshItem(GetHwnd(), HITEM(item));
+    // Refresh to update the "+" button which otherwise can remain displayed
+    // and also to refresh the area that used to be taken by the children:
+    // without this, the last child of the control could remain visible after
+    // being deleted, see #23719.
+    //
+    // We could compute the exact rect to refresh, but as we use double
+    // buffering anyhow now, it doesn't make any visible difference to just
+    // refresh the entire control.
+    Refresh();
 }
 
 void wxTreeCtrl::DeleteAllItems()
@@ -1747,6 +1753,10 @@ void wxTreeCtrl::DeleteAllItems()
     {
         wxLogLastError(wxT("TreeView_DeleteAllItems"));
     }
+
+    // As in DeleteChildren() above, we need a refresh to get rid of the
+    // phantom items remaining displayed when using double buffering.
+    Refresh();
 }
 
 void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
