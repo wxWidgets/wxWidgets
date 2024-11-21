@@ -1292,10 +1292,8 @@ wxString wxCmdLineParser::GetUsageString() const
                                                     : m_data->m_switchChars[0u];
 
     bool areLongOptionsEnabled = AreLongOptionsEnabled();
-    size_t n, count = m_data->m_options.size();
-    for ( n = 0; n < count; n++ )
+    for ( const auto& opt : m_data->m_options )
     {
-        wxCmdLineOption& opt = m_data->m_options[n];
         wxString option, negator;
 
         if ( opt.flags & wxCMD_LINE_HIDDEN )
@@ -1362,11 +1360,8 @@ wxString wxCmdLineParser::GetUsageString() const
         descOptions.push_back(opt.description);
     }
 
-    count = m_data->m_paramDesc.size();
-    for ( n = 0; n < count; n++ )
+    for ( const auto& param : m_data->m_paramDesc )
     {
-        wxCmdLineParam& param = m_data->m_paramDesc[n];
-
         if ( param.flags & wxCMD_LINE_HIDDEN )
             continue;
 
@@ -1392,7 +1387,7 @@ wxString wxCmdLineParser::GetUsageString() const
     usage << wxT('\n');
 
     // set to number of our own options, not counting the standard ones
-    count = namesOptions.size();
+    const size_t count = namesOptions.size();
 
     // get option names & descriptions for standard options, if any:
     wxString stdDesc;
@@ -1400,20 +1395,20 @@ wxString wxCmdLineParser::GetUsageString() const
         stdDesc = traits->GetStandardCmdLineOptions(namesOptions, descOptions);
 
     // now construct the detailed help message
-    size_t len, lenMax = 0;
-    for ( n = 0; n < namesOptions.size(); n++ )
+    size_t lenMax = 0;
+    for ( const auto& name : namesOptions )
     {
-        len = namesOptions[n].length();
+        size_t len = name.length();
         if ( len > lenMax )
             lenMax = len;
     }
 
-    for ( n = 0; n < namesOptions.size(); n++ )
+    for ( size_t n = 0; n < namesOptions.size(); n++ )
     {
         if ( n == count )
             usage << wxT('\n') << stdDesc;
 
-        len = namesOptions[n].length();
+        size_t len = namesOptions[n].length();
         // desc contains text if name is empty
         if (len == 0)
         {
