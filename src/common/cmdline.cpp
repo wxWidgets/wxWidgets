@@ -1408,18 +1408,17 @@ wxString wxCmdLineParser::GetUsageString() const
         if ( n == count )
             usage << wxT('\n') << stdDesc;
 
-        size_t len = namesOptions[n].length();
         // desc contains text if name is empty
-        if (len == 0)
+        if ( namesOptions[n].empty() )
         {
             usage << descOptions[n] << wxT('\n');
         }
         else
         {
-            usage << namesOptions[n]
-                  << wxString(wxT(' '), lenMax - len) << wxT('\t')
-                  << descOptions[n]
-                  << wxT('\n');
+            usage << wxString::Format("%-*s\t%s\n",
+                                      static_cast<int>(lenMax),
+                                      namesOptions[n],
+                                      descOptions[n]);
         }
     }
 
