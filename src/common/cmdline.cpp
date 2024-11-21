@@ -1255,14 +1255,9 @@ int wxCmdLineParser::Parse(bool showUsage)
 void wxCmdLineParser::Usage() const
 {
     wxMessageOutput* msgOut = wxMessageOutput::Get();
-    if ( msgOut )
-    {
-        msgOut->Printf( wxT("%s"), GetUsageString().c_str() );
-    }
-    else
-    {
-        wxFAIL_MSG( wxT("no wxMessageOutput object?") );
-    }
+    wxCHECK_RET( msgOut, wxT("no wxMessageOutput?") );
+
+    msgOut->Output(GetUsageString());
 }
 
 wxString wxCmdLineParser::GetUsageString() const
