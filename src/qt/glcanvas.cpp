@@ -68,7 +68,7 @@ wxGLContextAttrs& wxGLContextAttrs::CoreProfile()
 {
 //    AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
 //                  GLX_CONTEXT_CORE_PROFILE_BIT_ARB);
-    AddAttribute(wx_GL_COMPAT_PROFILE);
+    AddAttribute(WX_GL_COMPAT_PROFILE);
     SetNeedsARB();
     return *this;
 }
@@ -98,7 +98,7 @@ wxGLContextAttrs& wxGLContextAttrs::MinorVersion(int val)
 
 wxGLContextAttrs& wxGLContextAttrs::CompatibilityProfile()
 {
-    AddAttribute(wx_GL_COMPAT_PROFILE);
+    AddAttribute(WX_GL_COMPAT_PROFILE);
     SetNeedsARB();
     return *this;
 }
@@ -623,7 +623,7 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxG
                 format.setProfile(QSurfaceFormat::CoreProfile);
                 break;
 
-            case wx_GL_COMPAT_PROFILE:
+            case WX_GL_COMPAT_PROFILE:
                 format.setProfile(QSurfaceFormat::CompatibilityProfile);
                 break;
 
