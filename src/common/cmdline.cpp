@@ -184,6 +184,7 @@ struct wxCmdLineParserData
     wxString m_switchChars;     // characters which may start an option
     bool m_enableLongOptions;   // true if long options are enabled
     wxString m_logo;            // some extra text to show in Usage()
+    wxString m_synopsis;        // the program synopsis or empty to generate it
 
     // cmd line data
     wxArrayString m_arguments;  // == argv, argc == m_arguments.size()
@@ -567,6 +568,11 @@ bool wxCmdLineParser::AreLongOptionsEnabled() const
 void wxCmdLineParser::SetLogo(const wxString& logo)
 {
     m_data->m_logo = logo;
+}
+
+void wxCmdLineParser::SetUsageSynopsis(const wxString& synopsis)
+{
+    m_data->m_synopsis = synopsis;
 }
 
 // ----------------------------------------------------------------------------
@@ -1284,13 +1290,20 @@ wxString wxCmdLineParser::GetUsageString() const
         usage << m_data->m_logo << wxT('\n');
     }
 
-    usage << wxString::Format(_("Usage: %s"), appname.c_str());
+    // Do we need to generate synopsis or were we already given one?
+    const bool needSynopsis = m_data->m_synopsis.empty();
+
+    if ( needSynopsis )
+        usage << wxString::Format(_("Usage: %s"), appname.c_str());
 
     // the switch char is usually '-' but this can be changed with
     // SetSwitchChars() and then the first one of possible chars is used
     wxChar chSwitch = m_data->m_switchChars.empty() ? wxT('-')
                                                     : m_data->m_switchChars[0u];
 
+    // Note that we need to execute this loop even if we don't need the
+    // synopsis because it also fills namesOptions that we use for the detailed
+    // description below.
     bool areLongOptionsEnabled = AreLongOptionsEnabled();
     for ( const auto& opt : m_data->m_options )
     {
@@ -1301,10 +1314,12 @@ wxString wxCmdLineParser::GetUsageString() const
 
         if ( opt.kind != wxCMD_LINE_USAGE_TEXT )
         {
-            usage << wxT(' ');
+            if ( needSynopsis )
+                usage << wxT(' ');
             if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
             {
-                usage << wxT('[');
+                if ( needSynopsis )
+                    usage << wxT('[');
             }
 
             if ( opt.flags & wxCMD_LINE_SWITCH_NEGATABLE )
@@ -1312,11 +1327,13 @@ wxString wxCmdLineParser::GetUsageString() const
 
             if ( !opt.shortName.empty() )
             {
-                usage << chSwitch << opt.shortName << negator;
+                if ( needSynopsis )
+                    usage << chSwitch << opt.shortName << negator;
             }
             else if ( areLongOptionsEnabled && !opt.longName.empty() )
             {
-                usage << wxT("--") << opt.longName << negator;
+                if ( needSynopsis )
+                    usage << wxT("--") << opt.longName << negator;
             }
             else
             {
@@ -1346,13 +1363,15 @@ wxString wxCmdLineParser::GetUsageString() const
             {
                 wxString val;
                 val << wxT('<') << GetTypeName(opt.type) << wxT('>');
-                usage << wxT(' ') << val;
+                if ( needSynopsis )
+                    usage << wxT(' ') << val;
                 option << (opt.longName.empty() ? wxT(':') : wxT('=')) << val;
             }
 
             if ( !(opt.flags & wxCMD_LINE_OPTION_MANDATORY) )
             {
-                usage << wxT(']');
+                if ( needSynopsis )
+                    usage << wxT(']');
             }
         }
 
@@ -1360,30 +1379,36 @@ wxString wxCmdLineParser::GetUsageString() const
         descOptions.push_back(opt.description);
     }
 
-    for ( const auto& param : m_data->m_paramDesc )
+    if ( needSynopsis )
     {
-        if ( param.flags & wxCMD_LINE_HIDDEN )
-            continue;
-
-        usage << wxT(' ');
-        if ( param.flags & wxCMD_LINE_PARAM_OPTIONAL )
+        for ( const auto& param : m_data->m_paramDesc )
         {
-            usage << wxT('[');
-        }
+            if ( param.flags & wxCMD_LINE_HIDDEN )
+                continue;
 
-        usage << param.description;
+            usage << wxT(' ');
+            if ( param.flags & wxCMD_LINE_PARAM_OPTIONAL )
+            {
+                usage << wxT('[');
+            }
 
-        if ( param.flags & wxCMD_LINE_PARAM_MULTIPLE )
-        {
-            usage << wxT("...");
-        }
+            usage << param.description;
 
-        if ( param.flags & wxCMD_LINE_PARAM_OPTIONAL )
-        {
-            usage << wxT(']');
+            if ( param.flags & wxCMD_LINE_PARAM_MULTIPLE )
+            {
+                usage << wxT("...");
+            }
+
+            if ( param.flags & wxCMD_LINE_PARAM_OPTIONAL )
+            {
+                usage << wxT(']');
+            }
         }
     }
 
+    // If we didn't output the synopsis above, do it now.
+    if ( !needSynopsis )
+        usage << m_data->m_synopsis;
     usage << wxT('\n');
 
     // set to number of our own options, not counting the standard ones

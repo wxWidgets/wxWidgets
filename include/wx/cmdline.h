@@ -246,6 +246,9 @@ public:
     // extra text may be shown by Usage() method if set by this function
     void SetLogo(const wxString& logo);
 
+    // set the brief usage string instead of constructing it automatically
+    void SetUsageSynopsis(const wxString& synopsis);
+
     // construct the cmd line description
     // ----------------------------------
 
