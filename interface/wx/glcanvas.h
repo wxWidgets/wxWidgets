@@ -656,7 +656,7 @@ enum
 
         @since 3.1.0
     */
-    wx_GL_COMPAT_PROFILE,
+    WX_GL_COMPAT_PROFILE,
 
     /**
         Request a forward-compatible context.

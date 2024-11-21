@@ -264,6 +264,7 @@ All (GUI):
 
 - Improve wxPropGrid checkboxes in high DPI (Alex Shvartzkop, #24650, #24651).
 - Don't break AUI layout if Update() called when window is iconized (#24930).
+- Fix WX_GL_COMPAT_PROFILE spelling (#24964).
 
 wxGTK:
 
