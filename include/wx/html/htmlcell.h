@@ -285,8 +285,8 @@ public:
     // Condition is unique condition identifier (see htmldefs.h)
     // (user-defined condition IDs should start from 10000)
     // and param is optional parameter
-    // Example : m_Cell->Find(wxHTML_COND_ISANCHOR, "news");
-    //   returns pointer to anchor news
+    // Example : m_Cell->Find(wxHTML_COND_ISANCHOR, &string);
+    //   returns pointer to anchor with the name specified by the string
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
 
 
