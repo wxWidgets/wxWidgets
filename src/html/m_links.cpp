@@ -37,8 +37,7 @@ public:
 
     virtual const wxHtmlCell* Find(int condition, const void* param) const override
     {
-        if ((condition == wxHTML_COND_ISANCHOR) &&
-            (m_AnchorName == (*((const wxString*)param))))
+        if (CheckIsAnchor(condition, param, m_AnchorName))
         {
             return this;
         }

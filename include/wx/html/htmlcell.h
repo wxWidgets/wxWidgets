@@ -287,6 +287,7 @@ public:
     // and param is optional parameter
     // Example : m_Cell->Find(wxHTML_COND_ISANCHOR, &string);
     //   returns pointer to anchor with the name specified by the string
+    // (see protected CheckIsAnchor() helper)
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
 
 
@@ -380,6 +381,18 @@ public:
 protected:
     // Return the description used by Dump().
     virtual wxString GetDescription() const;
+
+    // Can be used in Find() to check if the condition is wxHTML_COND_ISANCHOR
+    // and the parameter matches the given string.
+    //
+    // This is supposed to only be used as a helper from Find().
+    bool CheckIsAnchor(int cond, const void* p, const wxString& anchor) const
+    {
+        // Note that we know that the parameter is always a valid pointer to
+        // wxString for this condition.
+        return cond == wxHTML_COND_ISANCHOR &&
+                    *static_cast<const wxString*>(p) == anchor;
+    }
 
 
     // pointer to the next cell
