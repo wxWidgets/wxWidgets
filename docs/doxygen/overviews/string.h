@@ -40,7 +40,7 @@ them.
 @section overview_string_iterating Iterating over wxString
 
 It is possible to iterate over strings using indices, but the recommended way
-to do it is to use use b iterators, either explicitly:
+to do it is to use iterators, either explicitly:
 
 @code
 wxString s = "hello";
