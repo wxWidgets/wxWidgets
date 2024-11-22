@@ -1236,19 +1236,10 @@ int wxCmdLineParser::Parse(bool showUsage)
     // and also the usage message if it had been requested
     if ( !ok && (!errorMsg.empty() || (helpRequested && showUsage)) )
     {
-        wxMessageOutput* msgOut = wxMessageOutput::Get();
-        if ( msgOut )
-        {
-            wxString usage;
-            if ( showUsage )
-                usage = GetUsageString();
+        if ( showUsage )
+            Usage();
 
-            msgOut->Printf( wxT("%s%s"), usage.c_str(), errorMsg.c_str() );
-        }
-        else
-        {
-            wxFAIL_MSG( wxT("no wxMessageOutput object?") );
-        }
+        wxSafeMessageOutput(errorMsg);
     }
 
     return ok ? 0 : helpRequested ? -1 : 1;
@@ -1260,10 +1251,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 
 void wxCmdLineParser::Usage() const
 {
-    wxMessageOutput* msgOut = wxMessageOutput::Get();
-    wxCHECK_RET( msgOut, wxT("no wxMessageOutput?") );
-
-    msgOut->Output(GetUsageString());
+    wxSafeMessageOutput(GetUsageString(wrapColumn));
 }
 
 wxString wxCmdLineParser::GetUsageString() const
