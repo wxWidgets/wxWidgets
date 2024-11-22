@@ -40,6 +40,9 @@
 #include "wx/apptrait.h"
 #include "wx/scopeguard.h"
 
+#include "wx/private/terminal.h"
+#include "wx/private/wordwrap.h"
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -784,7 +787,7 @@ void wxCmdLineParser::Reset()
 // the real work is done here
 // ----------------------------------------------------------------------------
 
-int wxCmdLineParser::Parse(bool showUsage)
+int wxCmdLineParser::Parse(bool showUsage, int wrapColumn)
 {
     bool maybeOption = true;    // can the following arg be an option?
     bool ok = true;             // true until an error is detected
@@ -1237,7 +1240,7 @@ int wxCmdLineParser::Parse(bool showUsage)
     if ( !ok && (!errorMsg.empty() || (helpRequested && showUsage)) )
     {
         if ( showUsage )
-            Usage();
+            Usage(wrapColumn);
 
         wxSafeMessageOutput(errorMsg);
     }
@@ -1249,12 +1252,12 @@ int wxCmdLineParser::Parse(bool showUsage)
 // give the usage message
 // ----------------------------------------------------------------------------
 
-void wxCmdLineParser::Usage() const
+void wxCmdLineParser::Usage(int wrapColumn) const
 {
     wxSafeMessageOutput(GetUsageString(wrapColumn));
 }
 
-wxString wxCmdLineParser::GetUsageString() const
+wxString wxCmdLineParser::GetUsageString(int wrapColumn) const
 {
     wxString appname;
     if ( m_data->m_arguments.empty() )
@@ -1416,22 +1419,61 @@ wxString wxCmdLineParser::GetUsageString() const
             lenMax = len;
     }
 
+    // Leave some space between the options and their descriptions.
+    constexpr int MARGIN = 3;
+    const int widthName = lenMax + MARGIN;
+
+    // Determine the column to wrap at, if necessary.
+    if ( wrapColumn == wxCMD_LINE_WRAP_AUTO )
+    {
+        // Note that GetWidth() returns 0 if the terminal size couldn't be
+        // determined, which happens to be exactly wxCMD_LINE_WRAP_NONE.
+        wrapColumn = wxTerminal::GetWidth();
+    }
+
+    // Check that we end up with reasonable layout, where descriptions column
+    // is at least as wide as the names one.
+    if ( wrapColumn != wxCMD_LINE_WRAP_NONE && wrapColumn < 2*widthName )
+    {
+        // It doesn't make sense to wrap anything if there is so little space.
+        wrapColumn = wxCMD_LINE_WRAP_NONE;
+    }
+
+    // This is only used when wrapColumn is not wxCMD_LINE_WRAP_NONE.
+    const int widthDesc = wrapColumn - widthName;
+
     for ( size_t n = 0; n < namesOptions.size(); n++ )
     {
         if ( n == count )
             usage << wxT('\n') << stdDesc;
 
+        const auto& desc = descOptions[n];
+
         // desc contains text if name is empty
         if ( namesOptions[n].empty() )
         {
-            usage << descOptions[n] << wxT('\n');
+            usage << desc << wxT('\n');
         }
         else
         {
-            usage << wxString::Format("%-*s\t%s\n",
-                                      static_cast<int>(lenMax),
-                                      namesOptions[n],
-                                      descOptions[n]);
+            // Check if the description fits on the same line if we wrap it.
+            if ( wrapColumn == wxCMD_LINE_WRAP_NONE ||
+                    static_cast<int>(desc.length()) <= widthDesc )
+            {
+                // Note that we use TAB as separator here for compatibility.
+                usage << wxString::Format("%-*s%*s%s\n",
+                                          static_cast<int>(lenMax),
+                                          namesOptions[n],
+                                          MARGIN, "",
+                                          desc);
+            }
+            else // We need to wrap it.
+            {
+                usage << wxString::Format("%s\n", namesOptions[n]);
+
+                for ( const auto& s : wxWordWrap(desc, widthDesc) )
+                    usage << wxString::Format("%*s%s\n", widthName, "", s);
+            }
         }
     }
 

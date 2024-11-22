@@ -98,6 +98,29 @@ enum wxCmdLineSwitchState
     wxCMD_SWITCH_ON
 };
 
+/**
+    Value indicating that wxCmdLineParser::Parse() should determine the wrap
+    column automatically.
+
+    This is the default value for the @c wrapColumn parameter of
+    wxCmdLineParser::Parse() and means that the text will be wrapped at the
+    window boundary if it is possible to find it (which may not be the case if
+    the output is redirected and doesn't appear on a terminal at all, for
+    example).
+
+    @since 3.3.0
+ */
+constexpr int wxCMD_LINE_WRAP_AUTO = -1;
+
+/**
+    Value indicating that wxCmdLineParser::Parse() should not wrap the output.
+
+    Passing this value as @c wrapColumn parameter of wxCmdLineParser::Parse()
+    means that the text should not be wrapped at all.
+
+    @since 3.3.0
+ */
+constexpr int wxCMD_LINE_WRAP_NONE = 0;
 
 /**
     Flags determining wxCmdLineParser::ConvertStringToArgs() behaviour.
@@ -682,8 +705,16 @@ public:
             requested. If @false, only error messages about possible syntax
             errors are given, use Usage to show the usage message from the
             caller if needed.
+        @param wrapColumn
+            When @a giveUsage is @true, this parameter specifies the column at
+            which the help text should be wrapped if given. When left as its
+            default value of wxCMD_LINE_WRAP_AUTO, the text will be wrapped at
+            the window boundary, if it was possible to detect it, or not at all
+            otherwise. If the value of this parameter is wxCMD_LINE_WRAP_NONE,
+            the text is never wrapped. Any other value specifies the column at
+            which to wrap, e.g. 80. This parameter is new since wxWidgets 3.3.0.
     */
-    int Parse(bool giveUsage = true);
+    int Parse(bool giveUsage = true, int wrapColumn = wxCMD_LINE_WRAP_AUTO);
 
     ///@{
     /**
@@ -760,15 +791,23 @@ public:
         resulting message will not be helpful to the user unless the
         descriptions were indeed specified.
 
+        @param wrapColumn
+            See Parse() for the description of this parameter. This parameter
+            is new since wxWidgets 3.3.0.
+
         @see SetLogo(), SetUsageSynopsis()
     */
-    void Usage() const;
+    void Usage(int wrapColumn = wxCMD_LINE_WRAP_AUTO) const;
 
     /**
         Return the string containing the program usage description.
 
         Call Usage() to directly show this string to the user.
+
+        @param wrapColumn
+            See Parse() for the description of this parameter. This parameter
+            is new since wxWidgets 3.3.0.
      */
-    wxString GetUsageString() const;
+    wxString GetUsageString(int wrapColumn = wxCMD_LINE_WRAP_AUTO) const;
 };
 
