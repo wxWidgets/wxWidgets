@@ -54,7 +54,9 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
         celltype type;
         int radius;
     public:
-        wxHtmlImageMapAreaCell( celltype t, wxString &coords, double pixel_scale = 1.0);
+        wxHtmlImageMapAreaCell(celltype t,
+                               wxString coords,
+                               double pixel_scale = 1.0);
         virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const override;
         void Draw(wxDC& WXUNUSED(dc),
                   int WXUNUSED(x), int WXUNUSED(y),
@@ -69,12 +71,13 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
 
 
 
-wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype t, wxString &incoords, double pixel_scale )
+wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell(celltype t,
+                                               wxString x,
+                                               double pixel_scale)
+    : wxHtmlCell(), type(t)
 {
     int i;
-    wxString x = incoords;
 
-    type = t;
     while ((i = x.Find( ',' )) != wxNOT_FOUND)
     {
         coords.push_back( (int)(pixel_scale * (double)wxAtoi( x.Left( i ).c_str())) );
@@ -772,26 +775,23 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
             wxString tmp;
             if (tag.GetParamAsString(wxT("SHAPE"), &tmp))
             {
-                wxString coords = tag.GetParam(wxT("COORDS"));
                 tmp.MakeUpper();
-                wxHtmlImageMapAreaCell *cel = nullptr;
+
+                wxHtmlImageMapAreaCell::celltype t;
                 if (tmp == wxT("POLY"))
-                {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::POLY, coords, m_WParser->GetPixelScale() );
-                }
+                    t = wxHtmlImageMapAreaCell::POLY;
                 else if (tmp == wxT("CIRCLE"))
-                {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::CIRCLE, coords, m_WParser->GetPixelScale() );
-                }
+                    t = wxHtmlImageMapAreaCell::CIRCLE;
                 else if (tmp == wxT("RECT"))
-                {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords, m_WParser->GetPixelScale() );
-                }
+                    t = wxHtmlImageMapAreaCell::RECT;
+                else
+                    return false;
+
+                auto* const cel = new wxHtmlImageMapAreaCell( t, tag.GetParam(wxT("COORDS")), m_WParser->GetPixelScale() );
                 wxString href;
-                if (cel != nullptr && tag.GetParamAsString(wxT("HREF"), &href))
+                if (tag.GetParamAsString(wxT("HREF"), &href))
                     cel->SetLink(wxHtmlLinkInfo(href, tag.GetParam(wxT("TARGET"))));
-                if (cel != nullptr)
-                    m_WParser->GetContainer()->InsertCell( cel );
+                m_WParser->GetContainer()->InsertCell( cel );
             }
         }
 
