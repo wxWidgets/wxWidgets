@@ -657,18 +657,8 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlContainerCell, wxHtmlCell);
 
 wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCell()
 {
-    m_Cells = m_LastCell = nullptr;
     m_Parent = parent;
-    m_MaxTotalWidth = 0;
     if (m_Parent) m_Parent->InsertCell(this);
-    m_AlignHor = wxHTML_ALIGN_LEFT;
-    m_AlignVer = wxHTML_ALIGN_BOTTOM;
-    m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
-    m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
-    m_Border = 0;
-    m_MinHeight = 0;
-    m_MinHeightAlign = wxHTML_ALIGN_TOP;
-    m_LastLayout = -1;
 }
 
 wxHtmlContainerCell::~wxHtmlContainerCell()

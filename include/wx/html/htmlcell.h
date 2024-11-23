@@ -585,29 +585,36 @@ protected:
                                   wxHtmlCell *cell) const;
 
 protected:
-    int m_IndentLeft, m_IndentRight, m_IndentTop, m_IndentBottom;
+    int m_IndentLeft = 0,
+        m_IndentRight = 0,
+        m_IndentTop = 0,
+        m_IndentBottom = 0;
             // indentation of subcells. There is always m_Indent pixels
             // big space between given border of the container and the subcells
             // it m_Indent < 0 it is in PERCENTS, otherwise it is in pixels
-    int m_MinHeight, m_MinHeightAlign;
+    int m_MinHeight = 0,
+        m_MinHeightAlign = wxHTML_ALIGN_TOP;
         // minimal height.
-    wxHtmlCell *m_Cells, *m_LastCell;
+    wxHtmlCell *m_Cells = nullptr,
+               *m_LastCell = nullptr;
             // internal cells, m_Cells points to the first of them, m_LastCell to the last one.
             // (LastCell is needed only to speed-up InsertCell)
-    int m_AlignHor, m_AlignVer;
+    int m_AlignHor = wxHTML_ALIGN_LEFT,
+        m_AlignVer = wxHTML_ALIGN_BOTTOM;
             // alignment horizontal and vertical (left, center, right)
-    int m_WidthFloat, m_WidthFloatUnits;
+    int m_WidthFloat = 100,
+        m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
             // width float is used in adjustWidth
     wxColour m_BkColour;
             // background color of this container
-    int m_Border;
+    int m_Border = 0;
             // border size. Draw only if m_Border > 0
     wxColour m_BorderColour1, m_BorderColour2;
             // borders color of this container
-    int m_LastLayout;
+    int m_LastLayout = -1;
             // if != -1 then call to Layout may be no-op
             // if previous call to Layout has same argument
-    int m_MaxTotalWidth;
+    int m_MaxTotalWidth = 0;
             // Maximum possible length if ignoring line wrap
 
 
