@@ -202,7 +202,7 @@ enum wxHtmlScriptMode
 class WXDLLIMPEXP_HTML wxHtmlCell : public wxObject
 {
 public:
-    wxHtmlCell();
+    wxHtmlCell() = default;
     virtual ~wxHtmlCell();
 
     void SetParent(wxHtmlContainerCell *p) {m_Parent = p;}
@@ -396,23 +396,25 @@ protected:
 
 
     // pointer to the next cell
-    wxHtmlCell *m_Next;
+    wxHtmlCell *m_Next = nullptr;
     // pointer to parent cell
-    wxHtmlContainerCell *m_Parent;
+    wxHtmlContainerCell *m_Parent = nullptr;
 
     // dimensions of fragment (m_Descent is used to position text & images)
-    int m_Width, m_Height, m_Descent;
+    int m_Width = 0,
+        m_Height = 0,
+        m_Descent = 0;
     // position where the fragment is drawn:
     int m_PosX, m_PosY;
 
     // superscript/subscript/normal:
-    wxHtmlScriptMode m_ScriptMode;
-    long m_ScriptBaseline;
+    wxHtmlScriptMode m_ScriptMode = wxHTML_SCRIPT_NORMAL;
+    long m_ScriptBaseline = 0;
 
     // destination address if this fragment is hypertext link, nullptr otherwise
-    wxHtmlLinkInfo *m_Link;
+    wxHtmlLinkInfo *m_Link = nullptr;
     // true if this cell can be placed on pagebreak, false otherwise
-    bool m_CanLiveOnPagebreak;
+    bool m_CanLiveOnPagebreak = true;
     // unique identifier of the cell, generated from "id" property of tags
     wxString m_id;
 
