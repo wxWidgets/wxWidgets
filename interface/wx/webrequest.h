@@ -1432,6 +1432,10 @@ public:
         This frees any resources associated with the session and puts it in an
         invalid state. Another session object can be assigned to it later to
         allow using this object again.
+
+        Note that this is usually unnecessary to call this function explicitly,
+        it will be done by the destructor of the object when it is destroyed in
+        any case.
      */
     void Close();
 
@@ -1619,6 +1623,10 @@ public:
         This frees any resources associated with the session and puts it in an
         invalid state. Another session object can be assigned to it later to
         allow using this object again.
+
+        Note that this is usually unnecessary to call this function explicitly,
+        it will be done by the destructor of the object when it is destroyed in
+        any case.
      */
     void Close();
 
