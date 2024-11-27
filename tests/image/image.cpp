@@ -1624,9 +1624,7 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMP", "[image][bmp]")
         LoadMalformedImage("image/8bpp-colorsused-large.bmp",
                            wxBITMAP_TYPE_BMP);
         LoadMalformedImage("image/badrle4.bmp", wxBITMAP_TYPE_BMP);
-
-        LoadMalformedImageWithException("image/width-times-height-overflow.bmp",
-                                        wxBITMAP_TYPE_BMP);
+        LoadMalformedImage("image/width-times-height-overflow.bmp", wxBITMAP_TYPE_BMP);
     }
     wxImage image;
     SECTION("32bpp alpha")
