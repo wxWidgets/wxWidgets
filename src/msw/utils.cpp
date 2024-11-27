@@ -264,8 +264,8 @@ bool wxGetUserName(wxChar* buf, int maxSize)
         return false;
 
     /* This code is based on Microsoft Learn's ::NetUserGetInfo example code.
-       Attempt to get the full user name; if any of this fails,
-       return false, but with the buffer at least filled with the login name
+       Attempt to get the full user name; if any of this fails, we can still
+       return true with the buffer at least filled with the login name
        from wxGetUserId().
 
        Note that there is a ::GetUserNameEx function, but that requires
@@ -276,7 +276,7 @@ bool wxGetUserName(wxChar* buf, int maxSize)
     if ( !netapi32.IsLoaded() )
     {
         wxLogTrace("utils", "Failed to load netapi32.dll");
-        return false;
+        return true;
     }
 
     const static NetGetAnyDCName_t netGetAnyDCName =
@@ -290,7 +290,7 @@ bool wxGetUserName(wxChar* buf, int maxSize)
          netUserGetInfo == nullptr ||
          netApiBufferFree == nullptr )
     {
-        return false;
+        return true;
     }
 
     LPBYTE computerName{ nullptr };
@@ -333,9 +333,8 @@ bool wxGetUserName(wxChar* buf, int maxSize)
 
     if ( status != NERR_Success )
     {
-        wxLogWarning(_("Failed to retrieve user information: %s"),
-                     wxSysErrorMsgStr());
-        return false;
+        wxLogTrace("utils", "Failed to retrieve full user information.");
+        return true;
     }
 
     if ( ui2 != nullptr &&
@@ -344,7 +343,7 @@ bool wxGetUserName(wxChar* buf, int maxSize)
         wxString fullUserName(ui2->usri2_full_name);
         if ( fullUserName.empty() )
         {
-            return false;
+            return true;
         }
         // In the case of full name being in the format of "[LAST_NAME], [FIRST_NAME]",
         // reformat it to a more readable "[FIRST_NAME] [LAST_NAME]".
