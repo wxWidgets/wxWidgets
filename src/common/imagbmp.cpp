@@ -548,11 +548,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     // In most cases we will set every pixel explicitly, so there
     // is no point clearing (but see exception for RLE below)
     bool clear = false;
-    image->Create(width, height, clear);
 
-    unsigned char *ptr = image->GetData();
-
-    if ( !ptr )
+    if (!image->Create(width, height, clear))
     {
         if ( verbose )
         {
@@ -560,6 +557,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
         }
         return false;
     }
+
+    unsigned char* ptr = image->GetData();
 
     unsigned char* alpha = nullptr;
     if (bpp == 32 && (!isBmp || desc.comp == BI_BITFIELDS))
@@ -1056,6 +1055,8 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         }
         return false;
     }
+    if (desc.width <= 0 || desc.height == 0)
+        return false;
 
     if ( !stream.ReadAll(&aWord, 2) )
         return false;
