@@ -113,6 +113,10 @@ Changes in behaviour not resulting in compilation errors
   but may require removing any compensation for not doing this before that may
   be present in the application code.
 
+- Calling wxTextCtrl::SetLabel() now consistently does nothing and asserts
+  under all platforms instead of behaving as SetValue() under MSW and doing
+  nothing elsewhere.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
