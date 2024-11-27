@@ -270,29 +270,7 @@ wxDataObject::wxDataObject()
 
 bool wxDataObject::IsSupportedFormat( const wxDataFormat& rFormat, Direction vDir ) const
 {
-    size_t nFormatCount = GetFormatCount( vDir );
-    bool found = false;
-
-    if (nFormatCount == 1)
-    {
-        found = (rFormat == GetPreferredFormat());
-    }
-    else
-    {
-        wxScopedArray<wxDataFormat> array(nFormatCount);
-        GetAllFormats( array.get(), vDir );
-
-        for (size_t n = 0; n < nFormatCount; n++)
-        {
-            if (array[n] == rFormat)
-            {
-                found = true;
-                break;
-            }
-        }
-    }
-
-    return found;
+    return wxDataObjectBase::IsSupported(rFormat,vDir);
 }
 
 void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
