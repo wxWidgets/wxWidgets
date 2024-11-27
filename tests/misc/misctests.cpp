@@ -20,6 +20,8 @@
 #include "wx/mimetype.h"
 #include "wx/versioninfo.h"
 
+#include "wx/private/wordwrap.h"
+
 // just some classes using wxRTTI for wxStaticCast() test
 #include "wx/tarstrm.h"
 #include "wx/zipstrm.h"
@@ -253,4 +255,33 @@ TEST_CASE("wxVersionInfo", "[version]")
     CHECK_FALSE( ver120.AtLeast(1, 2, 1) );
     CHECK_FALSE( ver120.AtLeast(1, 3) );
     CHECK_FALSE( ver120.AtLeast(2, 0) );
+}
+
+TEST_CASE("wxWordWrap", "[wordwrap]")
+{
+    // Use artificially small max width to make the tests shorter and simpler.
+    constexpr int N = 8;
+
+    CHECK( wxWordWrap("", N).empty() );
+
+    CHECK_THAT( wxWordWrap("foo", N),
+                Catch::Equals<wxString>({"foo"}) );
+    CHECK_THAT( wxWordWrap("foo bar", N),
+                Catch::Equals<wxString>({"foo bar"}) );
+    CHECK_THAT( wxWordWrap("foo quux", N),
+                Catch::Equals<wxString>({"foo quux"}) );
+    CHECK_THAT( wxWordWrap("foo bar baz", N),
+                Catch::Equals<wxString>({"foo bar", "baz"}) );
+    CHECK_THAT( wxWordWrap("foo barbaz", N),
+                Catch::Equals<wxString>({"foo", "barbaz"}) );
+    CHECK_THAT( wxWordWrap("foobarbaz", N),
+                Catch::Equals<wxString>({"foobarba", "z"}) );
+
+    CHECK_THAT( wxWordWrap("some more realistic text is wrapped correctly", 15),
+                Catch::Equals<wxString>({
+                    "some more",
+                    "realistic text",
+                    "is wrapped",
+                    "correctly"
+                }) );
 }

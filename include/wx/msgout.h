@@ -49,6 +49,14 @@ private:
     static wxMessageOutput* ms_msgOut;
 };
 
+// This is equivalent to wxMessageOutput::Get()->Output() but doesn't crash if
+// there is no message output object (which shouldn't normally happen).
+inline void wxSafeMessageOutput(const wxString& str)
+{
+    if ( wxMessageOutput* msgOut = wxMessageOutput::Get() )
+        msgOut->Output(str);
+}
+
 // ----------------------------------------------------------------------------
 // helper mix-in for output targets that can use difference encodings
 // ----------------------------------------------------------------------------
