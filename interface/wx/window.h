@@ -3399,6 +3399,13 @@ public:
     /**
         Sets the window's label.
 
+        Please note that not all windows have labels and this function may do
+        nothing in this case. And some other derived windows use different
+        functions for changing the text shown in them, e.g. wxTextCtrl uses
+        wxTextCtrl::SetValue() or wxTextCtrl::ChangeValue() and trying to use
+        SetLabel() on it will assert to help to detect possibly erroneous calls
+        to SetLabel().
+
         @param label
             The window label.
 

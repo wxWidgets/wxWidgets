@@ -931,6 +931,11 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
     return true;
 }
 
+void wxTextCtrlBase::SetLabel(const wxString& WXUNUSED(label))
+{
+    wxFAIL_MSG("Use SetValue() or ChangeValue() instead.");
+}
+
 wxString wxTextAreaBase::GetRTFValue() const
 {
     wxFAIL_MSG("Not implemented for the current platform.");

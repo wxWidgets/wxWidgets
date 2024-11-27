@@ -913,6 +913,10 @@ public:
         return GetCompositeControlsDefaultAttributes(variant);
     }
 
+    // Setting label for text control doesn't work portably, use SetValue() or
+    // ChangeValue() instead.
+    virtual void SetLabel(const wxString& label) override;
+
     virtual const wxTextEntry* WXGetTextEntry() const override { return this; }
 
 #if wxUSE_SPELLCHECK
