@@ -159,6 +159,18 @@ jobs:
               #   - xvfb is used for running the GUI tests.
               apt-get update -qq
               apt-get install -qq coreutils ${compiler-g++} git locales make pkg-config python3 python3-pip sudo xvfb
+
+              # Checkout action doesn't work under Ubuntu 18.04 any more, so
+              # run checkout manually.
+              git config --global --add safe.directory $GITHUB_WORKSPACE
+              git config --global gc.auto 0
+              git init $GITHUB_WORKSPACE
+              cd $GITHUB_WORKSPACE
+              git remote add origin $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+              git fetch --depth=1 origin $GITHUB_REF
+              git checkout FETCH_HEAD
+              git submodule update --init --depth=1 --recursive
+              git log -1 --format='%H'
               ;;
 
             '')
@@ -170,11 +182,13 @@ jobs:
           esac
 
       - name: Checkout
-        uses: actions/checkout@v3
+        if: matrix.container == ''
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
       - name: Install CCache
+        if: matrix.container == ''
         uses: hendrikmuhs/ccache-action@v1.2.3
         with:
           key: ${{ matrix.name }}
@@ -245,7 +259,7 @@ jobs:
           echo
 
           echo "ccache version:"
-          ccache --version
+          ccache --version || echo "ccache not available"
           echo
 
       - name: Configuring
