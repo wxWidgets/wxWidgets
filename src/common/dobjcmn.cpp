@@ -693,53 +693,176 @@ bool wxCustomDataObject::SetData(size_t size, const void *buf)
 // wxImageDataObject
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
-#define wxIMAGE_FORMAT_DATA wxDF_PNG
-#define wxIMAGE_FORMAT_BITMAP_TYPE wxBITMAP_TYPE_PNG
-#define wxIMAGE_FORMAT_NAME "PNG"
-#elif defined(__WXGTK__)
-#define wxIMAGE_FORMAT_DATA wxDF_BITMAP
-#define wxIMAGE_FORMAT_BITMAP_TYPE wxBITMAP_TYPE_PNG
-#define wxIMAGE_FORMAT_NAME "PNG"
-#elif defined(__WXOSX__)
-#define wxIMAGE_FORMAT_DATA wxDF_BITMAP
-#define wxIMAGE_FORMAT_BITMAP_TYPE wxBITMAP_TYPE_TIFF
-#define wxIMAGE_FORMAT_NAME "TIFF"
-#else
-#define wxIMAGE_FORMAT_DATA wxDF_BITMAP
-#define wxIMAGE_FORMAT_BITMAP_TYPE wxBITMAP_TYPE_PNG
-#define wxIMAGE_FORMAT_NAME "PNG"
-#endif
-
-wxImageDataObject::wxImageDataObject(const wxImage& image)
-    : wxCustomDataObject(wxIMAGE_FORMAT_DATA)
+static bool SaveImageToOutputStream(wxOutputStream& outputStream,
+                                    const wxImage& image,
+                                    const wxDataFormat& format)
 {
-    if ( image.IsOk() )
+    switch (format.GetType())
     {
-        SetImage(image);
+        case wxDF_PNG:
+            image.SaveFile(outputStream, wxBITMAP_TYPE_PNG);
+            break;
+        case wxDF_TIFF:
+            image.SaveFile(outputStream, wxBITMAP_TYPE_TIFF);
+            break;
+        default:
+            return false;
     }
+    return true;
 }
 
-void wxImageDataObject::SetImage(const wxImage& image)
+wxImageDataObject::wxImageDataObject(const wxImage& image)
 {
-    wxCHECK_RET(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != nullptr,
-        wxIMAGE_FORMAT_NAME " image handler must be installed to use clipboard with image");
+    SetImage(image);
+}
 
-    wxMemoryOutputStream mem;
-    image.SaveFile(mem, wxIMAGE_FORMAT_BITMAP_TYPE);
+wxImageDataObject::~wxImageDataObject()
+{
+    FreeImageData();
+}
 
-    SetData(mem.GetLength(), mem.GetOutputStreamBuffer()->GetBufferStart());
+void wxImageDataObject::GetAllFormats(wxDataFormat *formats, Direction dir) const
+{
+    for (size_t i=0; i<this->GetFormatCount(dir); ++i)
+        formats[i] = m_SupportedFormats[i];
+}
+
+bool wxImageDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
+{
+    if (!IsSupported(format) || !IsImageHandlerLoaded(format) || (m_Data == nullptr))
+        return false;
+
+    if (format == GetPreferredFormat())
+        memcpy(buf,m_Data,m_DataSize);
+    else
+    {
+        wxImage              image(GetImage());
+        wxMemoryOutputStream outputStream;
+
+        if (!SaveImageToOutputStream(outputStream,image,format))
+            return false;
+        memcpy(buf,outputStream.GetOutputStreamBuffer()->GetBufferStart(),outputStream.GetLength());
+    }
+    return true;
+}
+
+size_t wxImageDataObject::GetDataSize(const wxDataFormat& format) const
+{
+    return m_DataSize;
+}
+
+size_t wxImageDataObject::GetFormatCount(Direction WXUNUSED(dir)) const
+{
+    if (m_SupportedFormats.empty())
+    {
+        if (wxImage::FindHandler(wxBITMAP_TYPE_PNG))
+            m_SupportedFormats.push_back(wxDataFormat(wxDF_PNG));
+        if (wxImage::FindHandler(wxBITMAP_TYPE_TIFF))
+            m_SupportedFormats.push_back(wxDataFormat(wxDF_BITMAP));
+    }
+    return m_SupportedFormats.size();
+}
+
+wxDataFormat wxImageDataObject::GetPreferredFormat(Direction dir) const
+{
+    return ((this->GetFormatCount(dir) > 0) ? m_SupportedFormats.front() : wxDataFormat());
+}
+
+bool wxImageDataObject::SetData(const wxDataFormat& format, size_t len, const void* buf)
+{
+    // undefined documentation for wxDataObject in case an invalid buffer is passed:
+    //  - Should we keep the old data or free them? Let's keep the old data.
+    //  - The documentation mentions that buf should not be equal to nullptr. Therefore,
+    //    false is returned. But how to erase the stored data?
+    if (buf == nullptr)
+        return false; // should we keep the old data or free them? Let's keep the old data
+
+    wxDataFormat const preferredDataFormat = GetPreferredFormat(Set);
+
+    FreeImageData();
+    if (preferredDataFormat == format) // just copy raw data
+    {
+        m_Data     = new char[len];
+        m_DataSize = len;
+        memcpy(m_Data,buf,m_DataSize);
+    }
+    else // convert passed data into preferred data format
+    {
+        wxImage image;
+
+        {
+            wxMemoryInputStream inputStream(buf,len);
+
+            image.LoadFile(inputStream);
+        }
+        wxMemoryOutputStream outputStream;
+
+        if (!SaveImageToOutputStream(outputStream,image,preferredDataFormat))
+            return false;
+        m_Data     = new char[outputStream.GetLength()];
+        m_DataSize = outputStream.GetLength();
+        memcpy(m_Data,outputStream.GetOutputStreamBuffer()->GetBufferStart(),m_DataSize);
+    }
+    return true;
 }
 
 wxImage wxImageDataObject::GetImage() const
 {
-    wxCHECK_MSG(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != nullptr, wxNullImage,
-        wxIMAGE_FORMAT_NAME " image handler must be installed to use clipboard with image");
+    wxCHECK_MSG(GetFormatCount(Get) > 0,wxNullImage,
+                "Image handler for preferred format no longer loaded");
 
-    wxMemoryInputStream mem(GetData(), GetSize());
-    wxImage image;
-    image.LoadFile(mem, wxIMAGE_FORMAT_BITMAP_TYPE);
+    wxImage             image;
+    wxMemoryInputStream inputStream(m_Data,m_DataSize);
+
+    image.LoadFile(inputStream);
     return image;
+}
+
+void wxImageDataObject::SetImage(const wxImage& image)
+{
+    if (image.IsOk())
+    {
+        wxDataFormat const preferredDataFormat = GetPreferredFormat(Set);
+
+        wxCHECK_RET(GetFormatCount(Set) > 0,
+                    "No PNG or TIFF image handler intalled");
+        wxCHECK_RET(IsImageHandlerLoaded(preferredDataFormat),
+                    "Preferred image format handler no longer loaded");
+
+        wxMemoryOutputStream outputStream;
+
+        if (SaveImageToOutputStream(outputStream,image,preferredDataFormat))
+            SetData(preferredDataFormat,
+                    outputStream.GetLength(),
+                    outputStream.GetOutputStreamBuffer()->GetBufferStart());
+        else
+            FreeImageData();
+    }
+    else
+        FreeImageData();
+}
+
+void wxImageDataObject::FreeImageData(void)
+{
+    if (m_Data != nullptr)
+    {
+        delete[] reinterpret_cast<char*>(m_Data);
+        m_Data     = nullptr;
+        m_DataSize = 0;
+    }
+}
+
+bool wxImageDataObject::IsImageHandlerLoaded(const wxDataFormat& format) const
+{
+    switch (format.GetType())
+    {
+        case wxDF_PNG:
+            return (wxImage::FindHandler(wxBITMAP_TYPE_PNG) != nullptr);
+        case wxDF_TIFF:
+            return (wxImage::FindHandler(wxBITMAP_TYPE_TIFF) != nullptr);
+        default:
+            return false;
+    }
 }
 
 // ============================================================================
