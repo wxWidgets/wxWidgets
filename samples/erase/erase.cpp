@@ -246,8 +246,7 @@ wxEND_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(nullptr, wxID_ANY, "Erase sample",
-                 wxPoint(50, 50), wxSize(450, 340))
+       : wxFrame(nullptr, wxID_ANY, "Erase sample")
 {
     SetIcon(wxICON(sample));
 
@@ -278,6 +277,8 @@ MyFrame::MyFrame()
     SetMenuBar(menuBar);
 
     m_canvas = new MyCanvas( this );
+
+    SetClientSize(FromDIP(wxSize(450, 340)));
 }
 
 
@@ -338,18 +339,18 @@ MyCanvas::MyCanvas(wxFrame *parent)
     m_useBgBmp = false;
     m_eraseBgInPaint = false;
 
-    SetScrollbars( 10, 10, 40, 100, 0, 0 );
+    SetScrollbars( FromDIP(10), FromDIP(10), 40, 100, 0, 0 );
 
     m_bitmap = wxBitmap( wxICON(sample) );
 
-    new wxStaticBitmap( this, wxID_ANY, m_bitmap, wxPoint(80,20) );
+    new wxStaticBitmap( this, wxID_ANY, m_bitmap, FromDIP(wxPoint(80,20)) );
 
     new wxStaticText(this, wxID_ANY,
                      "Right bitmap is a wxStaticBitmap,\n"
                      "left one drawn directly",
-                     wxPoint(150, 20));
+                     FromDIP(wxPoint(150, 20)));
 
-    new ControlWithTransparency(this, wxPoint(65, 125), wxSize(350, 22));
+    new ControlWithTransparency(this, FromDIP(wxPoint(65, 125)), FromDIP(wxSize(350, 22)));
 
     SetFocusIgnoringChildren();
     SetBackgroundColour(*wxCYAN);
@@ -368,19 +369,19 @@ void MyCanvas::DoPaint(wxDC& dc)
         dc.SetBrush(GetBackgroundColour());
         dc.DrawRectangle(GetVirtualSize());
 
-        dc.DrawText("Background erased in OnPaint", 65, 110);
+        dc.DrawText("Background erased in OnPaint", FromDIP(wxPoint(65, 110)));
     }
     else if ( GetBackgroundStyle() == wxBG_STYLE_PAINT )
     {
         dc.SetTextForeground(*wxRED);
         dc.DrawText("You must enable erasing background in OnPaint to avoid "
-                    "display corruption", 65, 110);
+                    "display corruption", FromDIP(wxPoint(65, 110)));
     }
 
-    dc.DrawBitmap( m_bitmap, 20, 20, true );
+    dc.DrawBitmap( m_bitmap, FromDIP(wxPoint(20, 20)), true );
 
     dc.SetTextForeground(*wxRED);
-    dc.DrawText("This text is drawn from OnPaint", 65, 65);
+    dc.DrawText("This text is drawn from OnPaint", FromDIP(wxPoint(65, 65)));
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -422,18 +423,18 @@ void MyCanvas::OnEraseBackground( wxEraseEvent& event )
     PrepareDC( dc );
 
     const wxSize size = GetVirtualSize();
-    for ( int x = 0; x < size.x; x += 15 )
+    for ( int x = 0; x < size.x; x += FromDIP(15) )
     {
         dc.DrawLine(x, 0, x, size.y);
     }
 
-    for ( int y = 0; y < size.y; y += 15 )
+    for ( int y = 0; y < size.y; y += FromDIP(15) )
     {
         dc.DrawLine(0, y, size.x, y);
     }
 
     dc.SetTextForeground(*wxRED);
     dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
-    dc.DrawText("This text is drawn from OnEraseBackground", 60, 160);
+    dc.DrawText("This text is drawn from OnEraseBackground", FromDIP(wxPoint(60, 160)));
 }
 

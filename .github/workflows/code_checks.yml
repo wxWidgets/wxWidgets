@@ -53,6 +53,9 @@ jobs:
                 ':!build/autogen.mk' \
                 ':!build/bakefiles/make_dist.mk' \
                 ':!build/bakefiles/scintilla.bkl' \
+                ':!build/clone-minimal-vcxproj' \
+                ':!build/upmake' \
+                ':!build/vcxproj-clone' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!misc/languages/data/unicode/*.xml' \
                 ':!samples/widgets/widgets.bkl' \

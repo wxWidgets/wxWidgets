@@ -35,10 +35,12 @@ environment:
   - TOOLSET: msbuild
     CONFIGURATION: DLL Release
     ARCH: x64
+    VSVER: 17
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
   - TOOLSET: msbuild
     CONFIGURATION: Debug
     ARCH: x64
+    VSVER: 17
     wxUSE_UNICODE_UTF8: 1
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
   - TOOLSET: nmake
@@ -59,7 +61,7 @@ environment:
     CONFIGURATION: Release
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 
-clone_depth: 50
+clone_depth: 1
 
 install: git submodule update --init
 

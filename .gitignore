@@ -84,8 +84,6 @@
 /build/msw/*.vcproj.*.user
 /build/msw/*.vcxproj.user
 /build/msw/vc*_mswud
-/build/msw/wx_vc8arm_*.vcproj
-/build/msw/wx_vc8arm.sln
 /build/msw/ipch/
 /build/msw/*.opensdf
 /build/msw/*.sdf

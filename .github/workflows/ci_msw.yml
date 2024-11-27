@@ -107,9 +107,10 @@ jobs:
                 $dlldir | Out-File -Append $env:GITHUB_PATH
             }
 
-      - name: Build minimal sample
+      - name: Build samples
+        if: matrix.platform != 'arm64'
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\minimal\minimal_vc16.sln
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\samples_vc16.sln
 
       - name: Build tests
         run: |

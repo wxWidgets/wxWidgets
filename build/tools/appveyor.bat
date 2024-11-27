@@ -9,12 +9,12 @@ goto %TOOLSET%
 
 :msbuild
 cd build\msw
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc14.sln %MSBUILD_LOGGER%
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc%VSVER%.sln %MSBUILD_LOGGER%
 cd ..\..\tests
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc14.sln %MSBUILD_LOGGER%
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc14.sln %MSBUILD_LOGGER%
-cd  ..\samples\minimal
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" minimal_vc14.sln %MSBUILD_LOGGER%
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc%VSVER%.sln %MSBUILD_LOGGER%
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc%VSVER%.sln %MSBUILD_LOGGER%
+cd  ..\samples
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" /t:"1 Fundamental Samples\minimal" samples_vc%VSVER%.sln %MSBUILD_LOGGER%
 goto :eof
 
 :nmake
