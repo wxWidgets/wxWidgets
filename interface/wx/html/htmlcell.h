@@ -379,6 +379,13 @@ public:
     int GetWidth() const;
 
     /**
+        Returns true if this cell has a non-empty ID.
+
+        @since 3.3.0
+     */
+    bool HasId() const;
+
+    /**
         Layouts the cell.
 
         This method performs two actions:

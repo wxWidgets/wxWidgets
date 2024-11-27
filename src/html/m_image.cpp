@@ -54,7 +54,10 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
         celltype type;
         int radius;
     public:
-        wxHtmlImageMapAreaCell( celltype t, wxString &coords, double pixel_scale = 1.0);
+        wxHtmlImageMapAreaCell(const wxHtmlTag& tag,
+                               celltype t,
+                               wxString coords,
+                               double pixel_scale = 1.0);
         virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const override;
         void Draw(wxDC& WXUNUSED(dc),
                   int WXUNUSED(x), int WXUNUSED(y),
@@ -69,12 +72,14 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
 
 
 
-wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype t, wxString &incoords, double pixel_scale )
+wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell(const wxHtmlTag& tag,
+                                               celltype t,
+                                               wxString x,
+                                               double pixel_scale)
+    : wxHtmlCell(tag), type(t)
 {
     int i;
-    wxString x = incoords;
 
-    type = t;
     while ((i = x.Find( ',' )) != wxNOT_FOUND)
     {
         coords.push_back( (int)(pixel_scale * (double)wxAtoi( x.Left( i ).c_str())) );
@@ -229,7 +234,7 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
 class wxHtmlImageMapCell : public wxHtmlCell
 {
     public:
-        wxHtmlImageMapCell( wxString &name );
+        wxHtmlImageMapCell( const wxHtmlTag& tag, wxString &name );
     protected:
         wxString m_Name;
     public:
@@ -244,8 +249,9 @@ class wxHtmlImageMapCell : public wxHtmlCell
 };
 
 
-wxHtmlImageMapCell::wxHtmlImageMapCell( wxString &name )
-    : m_Name(name)
+wxHtmlImageMapCell::wxHtmlImageMapCell( const wxHtmlTag& tag, wxString &name )
+    : wxHtmlCell(tag),
+      m_Name(name)
 {
 }
 
@@ -279,7 +285,8 @@ const wxHtmlCell *wxHtmlImageMapCell::Find( int cond, const void *param ) const
 class wxHtmlImageCell : public wxHtmlCell
 {
 public:
-    wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
+    wxHtmlImageCell(const wxHtmlTag& tag,
+                    wxHtmlWindowInterface *windowIface,
                     wxFSFile *input, double scaleHDPI = 1.0,
                     int w = wxDefaultCoord, bool wpercent = false,
                     int h = wxDefaultCoord, bool hpresent = false,
@@ -353,10 +360,11 @@ class wxGIFTimer : public wxTimer
 //----------------------------------------------------------------------------
 
 
-wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
+wxHtmlImageCell::wxHtmlImageCell(const wxHtmlTag& tag,
+                                 wxHtmlWindowInterface *windowIface,
                                  wxFSFile *input, double scaleHDPI,
                                  int w, bool wpercent, int h, bool hpresent, double scale, int align,
-                                 const wxString& mapname) : wxHtmlCell()
+                                 const wxString& mapname) : wxHtmlCell(tag)
     , m_mapName(mapname)
 {
     m_windowIface = windowIface;
@@ -741,13 +749,13 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                     }
                 }
                 wxHtmlImageCell *cel = new wxHtmlImageCell(
+                                          tag,
                                           m_WParser->GetWindowInterface(),
                                           str, scaleHDPI, w, wpercent, h, hpresent,
                                           m_WParser->GetPixelScale(),
                                           al, mn);
                 m_WParser->ApplyStateToCell(cel);
                 m_WParser->StopCollapsingSpaces();
-                cel->SetId(tag.GetParam(wxT("id"))); // may be empty
                 cel->SetAlt(tag.GetParam(wxT("alt")));
                 m_WParser->GetContainer()->InsertCell(cel);
                 delete str;
@@ -758,9 +766,10 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
             wxString tmp;
-            if (tag.GetParamAsString(wxT("NAME"), &tmp))
+            if (tag.GetParamAsString(wxT("NAME"), &tmp) ||
+                    tag.HasParam(wxT("ID")))
             {
-                wxHtmlImageMapCell *cel = new wxHtmlImageMapCell( tmp );
+                wxHtmlImageMapCell *cel = new wxHtmlImageMapCell( tag, tmp );
                 m_WParser->GetContainer()->InsertCell( cel );
             }
             ParseInner( tag );
@@ -772,26 +781,23 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
             wxString tmp;
             if (tag.GetParamAsString(wxT("SHAPE"), &tmp))
             {
-                wxString coords = tag.GetParam(wxT("COORDS"));
                 tmp.MakeUpper();
-                wxHtmlImageMapAreaCell *cel = nullptr;
+
+                wxHtmlImageMapAreaCell::celltype t;
                 if (tmp == wxT("POLY"))
-                {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::POLY, coords, m_WParser->GetPixelScale() );
-                }
+                    t = wxHtmlImageMapAreaCell::POLY;
                 else if (tmp == wxT("CIRCLE"))
-                {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::CIRCLE, coords, m_WParser->GetPixelScale() );
-                }
+                    t = wxHtmlImageMapAreaCell::CIRCLE;
                 else if (tmp == wxT("RECT"))
-                {
-                    cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords, m_WParser->GetPixelScale() );
-                }
+                    t = wxHtmlImageMapAreaCell::RECT;
+                else
+                    return false;
+
+                auto* const cel = new wxHtmlImageMapAreaCell( tag, t, tag.GetParam(wxT("COORDS")), m_WParser->GetPixelScale() );
                 wxString href;
-                if (cel != nullptr && tag.GetParamAsString(wxT("HREF"), &href))
+                if (tag.GetParamAsString(wxT("HREF"), &href))
                     cel->SetLink(wxHtmlLinkInfo(href, tag.GetParam(wxT("TARGET"))));
-                if (cel != nullptr)
-                    m_WParser->GetContainer()->InsertCell( cel );
+                m_WParser->GetContainer()->InsertCell( cel );
             }
         }
 

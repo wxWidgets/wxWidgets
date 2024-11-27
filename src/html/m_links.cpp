@@ -28,7 +28,7 @@ private:
     wxString m_AnchorName;
 
 public:
-    wxHtmlAnchorCell(const wxString& name) : wxHtmlCell()
+    wxHtmlAnchorCell(const wxHtmlTag& tag, const wxString& name) : wxHtmlCell(tag)
         , m_AnchorName(name) { }
     void Draw(wxDC& WXUNUSED(dc),
               int WXUNUSED(x), int WXUNUSED(y),
@@ -37,8 +37,8 @@ public:
 
     virtual const wxHtmlCell* Find(int condition, const void* param) const override
     {
-        if ((condition == wxHTML_COND_ISANCHOR) &&
-            (m_AnchorName == (*((const wxString*)param))))
+        if (CheckIsAnchor(condition, param, m_AnchorName) ||
+            CheckIsAnchor(condition, param))
         {
             return this;
         }
@@ -59,9 +59,9 @@ TAG_HANDLER_BEGIN(A, "A")
     TAG_HANDLER_PROC(tag)
     {
         wxString name;
-        if (tag.GetParamAsString(wxT("NAME"), &name))
+        if (tag.GetParamAsString(wxT("NAME"), &name) || tag.HasParam(wxT("ID")))
         {
-            m_WParser->GetContainer()->InsertCell(new wxHtmlAnchorCell(name));
+            m_WParser->GetContainer()->InsertCell(new wxHtmlAnchorCell(tag, name));
         }
 
         wxString href;

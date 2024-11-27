@@ -202,7 +202,11 @@ enum wxHtmlScriptMode
 class WXDLLIMPEXP_HTML wxHtmlCell : public wxObject
 {
 public:
-    wxHtmlCell();
+    wxHtmlCell() = default;
+    explicit wxHtmlCell(const wxHtmlTag& tag)
+        : m_id(tag.GetParam(wxASCII_STR("id")))
+    {
+    }
     virtual ~wxHtmlCell();
 
     void SetParent(wxHtmlContainerCell *p) {m_Parent = p;}
@@ -228,7 +232,9 @@ public:
     bool IsFormattingCell() const { return m_Width == 0 && m_Height == 0; }
 
     const wxString& GetId() const { return m_id; }
+    bool HasId() const { return !m_id.empty(); }
     void SetId(const wxString& id) { m_id = id; }
+    void CopyId(const wxHtmlTag& tag) { m_id = tag.GetParam(wxASCII_STR("id")); }
 
     // returns the link associated with this cell. The position is position
     // within the cell so it varies from 0 to m_Width, from 0 to m_Height
@@ -284,8 +290,9 @@ public:
     // Condition is unique condition identifier (see htmldefs.h)
     // (user-defined condition IDs should start from 10000)
     // and param is optional parameter
-    // Example : m_Cell->Find(wxHTML_COND_ISANCHOR, "news");
-    //   returns pointer to anchor news
+    // Example : m_Cell->Find(wxHTML_COND_ISANCHOR, &string);
+    //   returns pointer to anchor with the name specified by the string
+    // (see protected CheckIsAnchor() helper)
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
 
 
@@ -380,25 +387,45 @@ protected:
     // Return the description used by Dump().
     virtual wxString GetDescription() const;
 
+    // Can be used in Find() to check if the condition is wxHTML_COND_ISANCHOR
+    // and the parameter matches the given string or, in the overload not
+    // taking anchor, the ID of this cell.
+    //
+    // This is supposed to only be used as a helper from Find().
+    bool CheckIsAnchor(int cond, const void* p, const wxString& anchor) const
+    {
+        // Note that we know that the parameter is always a valid pointer to
+        // wxString for this condition.
+        return cond == wxHTML_COND_ISANCHOR &&
+                    *static_cast<const wxString*>(p) == anchor;
+    }
+
+    bool CheckIsAnchor(int cond, const void* p) const
+    {
+        return CheckIsAnchor(cond, p, GetId());
+    }
+
 
     // pointer to the next cell
-    wxHtmlCell *m_Next;
+    wxHtmlCell *m_Next = nullptr;
     // pointer to parent cell
-    wxHtmlContainerCell *m_Parent;
+    wxHtmlContainerCell *m_Parent = nullptr;
 
     // dimensions of fragment (m_Descent is used to position text & images)
-    int m_Width, m_Height, m_Descent;
+    int m_Width = 0,
+        m_Height = 0,
+        m_Descent = 0;
     // position where the fragment is drawn:
     int m_PosX, m_PosY;
 
     // superscript/subscript/normal:
-    wxHtmlScriptMode m_ScriptMode;
-    long m_ScriptBaseline;
+    wxHtmlScriptMode m_ScriptMode = wxHTML_SCRIPT_NORMAL;
+    long m_ScriptBaseline = 0;
 
     // destination address if this fragment is hypertext link, nullptr otherwise
-    wxHtmlLinkInfo *m_Link;
+    wxHtmlLinkInfo *m_Link = nullptr;
     // true if this cell can be placed on pagebreak, false otherwise
-    bool m_CanLiveOnPagebreak;
+    bool m_CanLiveOnPagebreak = true;
     // unique identifier of the cell, generated from "id" property of tags
     wxString m_id;
 
@@ -483,6 +510,7 @@ class WXDLLIMPEXP_HTML wxHtmlContainerCell : public wxHtmlCell
 {
 public:
     explicit wxHtmlContainerCell(wxHtmlContainerCell *parent);
+    wxHtmlContainerCell(const wxHtmlTag& tag, wxHtmlContainerCell *parent);
     virtual ~wxHtmlContainerCell();
 
     virtual void Layout(int w) override;
@@ -569,31 +597,41 @@ protected:
                                   wxHtmlCell *cell) const;
 
 protected:
-    int m_IndentLeft, m_IndentRight, m_IndentTop, m_IndentBottom;
+    int m_IndentLeft = 0,
+        m_IndentRight = 0,
+        m_IndentTop = 0,
+        m_IndentBottom = 0;
             // indentation of subcells. There is always m_Indent pixels
             // big space between given border of the container and the subcells
             // it m_Indent < 0 it is in PERCENTS, otherwise it is in pixels
-    int m_MinHeight, m_MinHeightAlign;
+    int m_MinHeight = 0,
+        m_MinHeightAlign = wxHTML_ALIGN_TOP;
         // minimal height.
-    wxHtmlCell *m_Cells, *m_LastCell;
+    wxHtmlCell *m_Cells = nullptr,
+               *m_LastCell = nullptr;
             // internal cells, m_Cells points to the first of them, m_LastCell to the last one.
             // (LastCell is needed only to speed-up InsertCell)
-    int m_AlignHor, m_AlignVer;
+    int m_AlignHor = wxHTML_ALIGN_LEFT,
+        m_AlignVer = wxHTML_ALIGN_BOTTOM;
             // alignment horizontal and vertical (left, center, right)
-    int m_WidthFloat, m_WidthFloatUnits;
+    int m_WidthFloat = 100,
+        m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
             // width float is used in adjustWidth
     wxColour m_BkColour;
             // background color of this container
-    int m_Border;
+    int m_Border = 0;
             // border size. Draw only if m_Border > 0
     wxColour m_BorderColour1, m_BorderColour2;
             // borders color of this container
-    int m_LastLayout;
+    int m_LastLayout = -1;
             // if != -1 then call to Layout may be no-op
             // if previous call to Layout has same argument
-    int m_MaxTotalWidth;
+    int m_MaxTotalWidth = 0;
             // Maximum possible length if ignoring line wrap
 
+
+private:
+    void InitParent(wxHtmlContainerCell *parent);
 
     wxDECLARE_ABSTRACT_CLASS(wxHtmlContainerCell);
     wxDECLARE_NO_COPY_CLASS(wxHtmlContainerCell);
@@ -637,6 +675,7 @@ class WXDLLIMPEXP_HTML wxHtmlFontCell : public wxHtmlCell
 {
 public:
     wxHtmlFontCell(wxFont *font) : wxHtmlCell(), m_Font(*font) { }
+    wxHtmlFontCell(const wxHtmlTag& tag, wxFont *font) : wxHtmlCell(tag), m_Font(*font) { }
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
                       wxHtmlRenderingInfo& info) override;
     virtual void DrawInvisible(wxDC& dc, int x, int y,

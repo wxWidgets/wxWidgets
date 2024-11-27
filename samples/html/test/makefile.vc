@@ -440,7 +440,7 @@ $(OBJS)\test.exe: $(TEST_OBJECTS) $(OBJS)\test_sample.res
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (imagemap.png pic.png pic2.bmp i18n.gif imagemap.htm tables.htm test.htm listtest.htm 8859_2.htm cp1250.htm regres.htm foo.png subsup.html) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (imagemap.png pic.png pic2.bmp i18n.gif imagemap.htm tables.htm test.htm id.html listtest.htm 8859_2.htm cp1250.htm regres.htm foo.png subsup.html) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\test_sample.res: .\..\..\..\samples\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_1)  $(__TARGET_CPU_COMPFLAG_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1)  /d _WINDOWS /i .\..\..\..\samples /d NOPCH .\..\..\..\samples\sample.rc

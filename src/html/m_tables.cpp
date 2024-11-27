@@ -122,7 +122,7 @@ private:
 
 
 wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale)
- : wxHtmlContainerCell(parent)
+ : wxHtmlContainerCell(tag, parent)
 {
     m_PixelScale = pixel_scale;
     m_ColsInfo = nullptr;

@@ -84,7 +84,7 @@ class wxHtmlListCell : public wxHtmlContainerCell
         int m_ListmarkWidth;
 
     public:
-        wxHtmlListCell(wxHtmlContainerCell *parent);
+        wxHtmlListCell(const wxHtmlTag& tag, wxHtmlContainerCell *parent);
         virtual ~wxHtmlListCell();
         void AddRow(wxHtmlContainerCell *mark, wxHtmlContainerCell *cont);
         virtual void Layout(int w) override;
@@ -92,7 +92,8 @@ class wxHtmlListCell : public wxHtmlContainerCell
     wxDECLARE_NO_COPY_CLASS(wxHtmlListCell);
 };
 
-wxHtmlListCell::wxHtmlListCell(wxHtmlContainerCell *parent) : wxHtmlContainerCell(parent)
+wxHtmlListCell::wxHtmlListCell(const wxHtmlTag& tag, wxHtmlContainerCell *parent)
+    : wxHtmlContainerCell(tag, parent)
 {
     m_NumRows = 0;
     m_RowInfo = nullptr;
@@ -201,7 +202,9 @@ void wxHtmlListCell::ComputeMinMaxWidths()
 class wxHtmlListcontentCell : public wxHtmlContainerCell
 {
 public:
-    wxHtmlListcontentCell(wxHtmlContainerCell *p) : wxHtmlContainerCell(p) {}
+    wxHtmlListcontentCell(const wxHtmlTag& tag, wxHtmlContainerCell *p)
+        : wxHtmlContainerCell(tag, p) {}
+
     virtual void Layout(int w) override {
         // Reset top indentation, fixes <li><p>
         SetIndent(0, wxHTML_INDENT_TOP);
@@ -258,7 +261,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
 
             m_List->AddRow(mark, c);
             c = m_WParser->OpenContainer();
-            m_WParser->SetContainer(new wxHtmlListcontentCell(c));
+            m_WParser->SetContainer(new wxHtmlListcontentCell(tag, c));
 
             if (m_Numbering != 0) m_Numbering++;
         }
@@ -275,7 +278,7 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
             oldcont = c = m_WParser->OpenContainer();
 
             wxHtmlListCell *oldList = m_List;
-            m_List = new wxHtmlListCell(c);
+            m_List = new wxHtmlListCell(tag, c);
             m_List->SetIndent(2 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
 
             ParseInner(tag);

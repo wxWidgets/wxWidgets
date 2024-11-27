@@ -220,7 +220,7 @@ $(OBJS)\test.exe: $(TEST_OBJECTS) $(OBJS)\test_sample_rc.o
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (imagemap.png pic.png pic2.bmp i18n.gif imagemap.htm tables.htm test.htm listtest.htm 8859_2.htm cp1250.htm regres.htm foo.png subsup.html) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (imagemap.png pic.png pic2.bmp i18n.gif imagemap.htm tables.htm test.htm id.html listtest.htm 8859_2.htm cp1250.htm regres.htm foo.png subsup.html) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\test_sample_rc.o: ./../../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../../../samples --define NOPCH
