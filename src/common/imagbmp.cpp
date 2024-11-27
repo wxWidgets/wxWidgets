@@ -767,6 +767,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                                 if ( !stream.IsOk() )
                                     return false;
                                 row += aByte;
+                                if (row >= height)
+                                    return false;
                                 line = isUpsideDown ? height - 1 - row : row;
                             }
                             else
@@ -870,6 +872,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                                 if ( !stream.IsOk() )
                                     return false;
                                 row += aByte;
+                                if (row >= height)
+                                    return false;
                                 line = isUpsideDown ? height - 1 - row : row;
                             }
                             else
