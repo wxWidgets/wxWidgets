@@ -3,15 +3,18 @@
 # Do not run it directly.
 
 httpbin_launch() {
-    WX_TEST_WEBREQUEST_URL=0
-    export WX_TEST_WEBREQUEST_URL
+    # If the tests are already disabled, don't do anything.
+    if [ "$WX_TEST_WEBREQUEST_URL" != "0" ]; then
+        WX_TEST_WEBREQUEST_URL=0
+        export WX_TEST_WEBREQUEST_URL
 
-    go version
-    go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
+        go version
+        go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
 
-    echo 'Launching httpbin...'
-    go-httpbin -host 127.0.0.1 -port 8081 2>&1 >httpbin.log &
-    WX_TEST_WEBREQUEST_URL="http://127.0.0.1:8081"
+        echo 'Launching httpbin...'
+        go-httpbin -host 127.0.0.1 -port 8081 2>&1 >httpbin.log &
+        WX_TEST_WEBREQUEST_URL="http://127.0.0.1:8081"
+    fi
 }
 
 httpbin_show_log() {

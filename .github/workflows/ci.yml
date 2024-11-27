@@ -170,6 +170,22 @@ jobs:
               #   - xvfb is used for running the GUI tests.
               apt-get update -qq
               apt-get install -qq coreutils ${compiler-g++} git make pkg-config sudo xvfb
+
+              # Checkout action doesn't work under Ubuntu 18.04 any more, so
+              # run checkout manually.
+              git config --global --add safe.directory $GITHUB_WORKSPACE
+              git config --global gc.auto 0
+              git init $GITHUB_WORKSPACE
+              cd $GITHUB_WORKSPACE
+              git remote add origin $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+              git fetch --depth=1 origin $GITHUB_REF
+              git checkout FETCH_HEAD
+              git submodule update --init --depth=1 --recursive
+              git log -1 --format='%H'
+
+              # We can't easily install Go neither, so skip the tests requiring
+              # httpbin.
+              echo WX_TEST_WEBREQUEST_URL=0 >> $GITHUB_ENV
               ;;
 
             '')
@@ -181,26 +197,14 @@ jobs:
           esac
 
       - name: Checkout
-        if: matrix.container != 'ubuntu:18.04'
+        if: matrix.container == ''
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
-      - name: Checkout Ubuntu 18.04
-        if: matrix.container == 'ubuntu:18.04'
-        uses: actions/checkout@v3
-        with:
-          submodules: 'recursive'
-
       - name: Install CCache
-        if: matrix.container != 'ubuntu:18.04'
+        if: matrix.container == ''
         uses: hendrikmuhs/ccache-action@v1.2.12
-        with:
-          key: ${{ matrix.name }}
-
-      - name: Install CCache Ubuntu 18.04
-        if: matrix.container == 'ubuntu:18.04'
-        uses: hendrikmuhs/ccache-action@v1.2.3
         with:
           key: ${{ matrix.name }}
 
@@ -266,7 +270,7 @@ jobs:
           echo
 
           echo "ccache version:"
-          ccache --version
+          ccache --version || echo "ccache not available"
           echo
 
           echo "Free space:"
@@ -336,15 +340,8 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_tests }}
 
       - name: Setup Go
-        if: matrix.container != 'ubuntu:18.04'
+        if: matrix.container == ''
         uses: actions/setup-go@v5
-        with:
-          go-version: '1'
-          cache: false
-
-      - name: Setup Go Ubuntu 18.04
-        if: matrix.container == 'ubuntu:18.04'
-        uses: actions/setup-go@v4
         with:
           go-version: '1'
           cache: false
