@@ -1,0 +1,1 @@
+wxAll (GUI): Add support for "id" attribute in wxHTML (Oleg Tolmatcev, #24968).
