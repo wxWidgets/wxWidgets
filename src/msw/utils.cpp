@@ -333,8 +333,7 @@ bool wxGetUserName(wxChar* buf, int maxSize)
 
     if ( status != NERR_Success )
     {
-        wxLogTrace("utils", _("Failed to retrieve full user information: %s"),
-                     wxSysErrorMsgStr());
+        wxLogTrace("utils", "Failed to retrieve full user information.");
         return true;
     }
 
