@@ -746,7 +746,7 @@ bool wxImageDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
     return true;
 }
 
-size_t wxImageDataObject::GetDataSize(const wxDataFormat& format) const
+size_t wxImageDataObject::GetDataSize(const wxDataFormat& WXUNUSED(format)) const
 {
     return m_DataSize;
 }
