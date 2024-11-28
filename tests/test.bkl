@@ -380,6 +380,8 @@
             32bpp_rgb.bmp
             32bpp_rgb.ico
             32bpp_rgb_a0.ico
+            badrle4.bmp
+            rgb16-3103.bmp
             rle4-delta-320x240.bmp
             rle8-delta-320x240.bmp
             rle8-delta-320x240-expected.bmp

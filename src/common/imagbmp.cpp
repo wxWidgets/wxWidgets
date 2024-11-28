@@ -528,7 +528,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0, amask = 0;
     int             rshift = 0, gshift = 0, bshift = 0, ashift = 0;
-    int             rbits = 0, gbits = 0, bbits = 0;
     wxInt8          bbuf[4];
     wxUint8         aByte;
     wxUint16        aWord;
@@ -549,11 +548,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     // In most cases we will set every pixel explicitly, so there
     // is no point clearing (but see exception for RLE below)
     bool clear = false;
-    image->Create(width, height, clear);
 
-    unsigned char *ptr = image->GetData();
-
-    if ( !ptr )
+    if (!image->Create(width, height, clear))
     {
         if ( verbose )
         {
@@ -561,6 +557,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
         }
         return false;
     }
+
+    unsigned char* ptr = image->GetData();
 
     unsigned char* alpha = nullptr;
     if (bpp == 32 && (!isBmp || desc.comp == BI_BITFIELDS))
@@ -640,16 +638,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                 if (rmask & (1 << bit))
                     rshift = bit;
             }
-            // Find number of bits in mask (MSB-LSB+1)
-            for (bit = 0; bit < bpp; bit++)
-            {
-                if (bmask & (1 << bit))
-                    bbits = bit-bshift+1;
-                if (gmask & (1 << bit))
-                    gbits = bit-gshift+1;
-                if (rmask & (1 << bit))
-                    rbits = bit-rshift+1;
-            }
         }
         else if ( bpp == 16 )
         {
@@ -659,9 +647,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             rshift = 10;
             gshift = 5;
             bshift = 0;
-            rbits = 5;
-            gbits = 5;
-            bbits = 5;
         }
         else if ( bpp == 32 )
         {
@@ -674,9 +659,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             rshift = 16;
             gshift = 8;
             bshift = 0;
-            rbits = 8;
-            gbits = 8;
-            bbits = 8;
         }
     }
 
@@ -772,6 +754,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                                 if ( !stream.IsOk() )
                                     return false;
                                 row += aByte;
+                                if (row >= height)
+                                    return false;
                                 line = isUpsideDown ? height - 1 - row : row;
                             }
                             else
@@ -875,6 +859,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                                 if ( !stream.IsOk() )
                                     return false;
                                 row += aByte;
+                                if (row >= height)
+                                    return false;
                                 line = isUpsideDown ? height - 1 - row : row;
                             }
                             else
@@ -938,15 +924,13 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                     return false;
                 wxUINT16_SWAP_ON_BE_IN_PLACE(aWord);
                 linepos += 2;
-                /* Use the masks and calculated amount of shift
-                   to retrieve the color data out of the word.  Then
-                   shift it left by (8 - number of bits) such that
-                   the image has the proper dynamic range */
-                temp = (unsigned char)(((aWord & rmask) >> rshift) << (8-rbits));
+
+                // scale color components to 8 bits
+                temp = rmask ? (aWord & rmask) * 255 / rmask : 0;
                 ptr[poffset] = temp;
-                temp = (unsigned char)(((aWord & gmask) >> gshift) << (8-gbits));
+                temp = gmask ? (aWord & gmask) * 255 / gmask : 0;
                 ptr[poffset + 1] = temp;
-                temp = (unsigned char)(((aWord & bmask) >> bshift) << (8-bbits));
+                temp = bmask ? (aWord & bmask) * 255 / bmask : 0;
                 ptr[poffset + 2] = temp;
                 column++;
             }
@@ -1071,6 +1055,8 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         }
         return false;
     }
+    if (desc.width <= 0 || desc.height == 0)
+        return false;
 
     if ( !stream.ReadAll(&aWord, 2) )
         return false;
