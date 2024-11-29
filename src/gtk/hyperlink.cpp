@@ -180,8 +180,7 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
     if ( UseNative() )
     {
         wxControl::SetLabel(label);
-        const wxString labelGTK = GTKConvertMnemonics(label);
-        gtk_button_set_label(GTK_BUTTON(m_widget), labelGTK.utf8_str());
+        gtk_button_set_label(GTK_BUTTON(m_widget), label.utf8_str());
     }
     else
         wxGenericHyperlinkCtrl::SetLabel(label);
