@@ -347,13 +347,11 @@ void HyperlinkWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 void HyperlinkWidgetsPage::OnButtonSetLabel(wxCommandEvent& WXUNUSED(event))
 {
     m_hyperlink->SetLabel(m_label->GetValue());
-    CreateHyperlink();
 }
 
 void HyperlinkWidgetsPage::OnButtonSetURL(wxCommandEvent& WXUNUSED(event))
 {
     m_hyperlink->SetURL(m_url->GetValue());
-    CreateHyperlink();
 }
 
 void HyperlinkWidgetsPage::OnAlignment(wxCommandEvent& WXUNUSED(event))
