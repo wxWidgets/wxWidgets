@@ -18,11 +18,13 @@
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
+    #include "wx/geometry.h"
     #include "wx/cursor.h"
     #include "wx/mousestate.h"
 #endif
 
 #include "wx/dynarray.h"
+#include "wx/itemid.h"
 #include "wx/thread.h"
 #include "wx/tracker.h"
 #include "wx/typeinfo.h"
@@ -685,6 +687,7 @@ class WXDLLIMPEXP_FWD_CORE wxInitDialogEvent;
 class WXDLLIMPEXP_FWD_CORE wxUpdateUIEvent;
 class WXDLLIMPEXP_FWD_CORE wxClipboardTextEvent;
 class WXDLLIMPEXP_FWD_CORE wxHelpEvent;
+class WXDLLIMPEXP_FWD_CORE wxMultiTouchEvent;
 class WXDLLIMPEXP_FWD_CORE wxGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxPanGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxZoomGestureEvent;
@@ -796,6 +799,12 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEv
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent);
+
+    // MultiTouch event types
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_BEGIN, wxMultiTouchEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_MOVE, wxMultiTouchEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_END, wxMultiTouchEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_CANCEL, wxMultiTouchEvent);
 
     // Gesture events
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_GESTURE_PAN, wxPanGestureEvent);
@@ -1883,6 +1892,9 @@ public:
     // Is the system set to do page scrolling?
     bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
 
+    // Check if the event was synthesized from a touch event.
+    bool IsSynthesized() const { return m_synthesized; }
+
     float GetMagnification() const { return m_magnification; }
     virtual wxEvent *Clone() const override { return new wxMouseEvent(*this); }
     virtual wxEventCategory GetEventCategory() const override { return wxEVT_CATEGORY_USER_INPUT; }
@@ -1904,6 +1916,7 @@ public:
     int           m_linesPerAction;
     int           m_columnsPerAction;
     float         m_magnification;
+    bool          m_synthesized;
 
 protected:
     void Assign(const wxMouseEvent& evt);
@@ -1948,6 +1961,42 @@ private:
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSetCursorEvent);
+};
+
+// MultiTouch Event
+
+class wxTouchSequenceId : public wxItemId<void*>
+{
+public:
+    using wxItemId::wxItemId;
+};
+
+class WXDLLIMPEXP_CORE wxMultiTouchEvent : public wxEvent
+{
+public:
+    wxMultiTouchEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
+        : wxEvent(winid, type)
+    {
+    }
+
+    wxMultiTouchEvent(const wxMultiTouchEvent& event) = default;
+
+    const wxPoint2DDouble& GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint2DDouble& pos) { m_pos = pos; }
+    bool IsPrimary() const { return m_isPrimary; }
+    void SetPrimary(bool primary) { m_isPrimary = primary; }
+    const wxTouchSequenceId& GetSequenceId() const { return m_sequence; }
+    void SetSequenceId(const wxTouchSequenceId& sequence) { m_sequence = sequence; }
+
+    virtual wxEvent *Clone() const override { return new wxMultiTouchEvent(*this); }
+
+protected:
+    wxPoint2DDouble m_pos;
+    wxTouchSequenceId m_sequence;
+    bool m_isPrimary = false;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMultiTouchEvent);
+
 };
 
  // Gesture Event
@@ -4222,6 +4271,7 @@ typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureChangedEvent&);
 typedef void (wxEvtHandler::*wxMouseCaptureLostEventFunction)(wxMouseCaptureLostEvent&);
 typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&);
+typedef void (wxEvtHandler::*wxMultiTouchEventFunction)(wxMultiTouchEvent&);
 typedef void (wxEvtHandler::*wxPanGestureEventFunction)(wxPanGestureEvent&);
 typedef void (wxEvtHandler::*wxZoomGestureEventFunction)(wxZoomGestureEvent&);
 typedef void (wxEvtHandler::*wxRotateGestureEventFunction)(wxRotateGestureEvent&);
@@ -4305,6 +4355,8 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     wxEVENT_HANDLER_CAST(wxMouseCaptureLostEventFunction, func)
 #define wxClipboardTextEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxClipboardTextEventFunction, func)
+#define wxMultiTouchEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxMultiTouchEventFunction, func)
 #define wxPanGestureEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxPanGestureEventFunction, func)
 #define wxZoomGestureEventHandler(func) \
@@ -4650,6 +4702,19 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     EVT_COMMAND_SCROLL_THUMBTRACK(winid, func) \
     EVT_COMMAND_SCROLL_THUMBRELEASE(winid, func) \
     EVT_COMMAND_SCROLL_CHANGED(winid, func)
+
+// Multi-Touch events
+#define EVT_TOUCH_BEGIN(func) wx__DECLARE_EVT0(wxEVT_TOUCH_BEGIN, wxMultiTouchEventHandler(func))
+#define EVT_TOUCH_MOVE(func) wx__DECLARE_EVT0(wxEVT_TOUCH_MOVE, wxMultiTouchEventHandler(func))
+#define EVT_TOUCH_END(func) wx__DECLARE_EVT0(wxEVT_TOUCH_END, wxMultiTouchEventHandler(func))
+#define EVT_TOUCH_CANCEL(func) wx__DECLARE_EVT0(wxEVT_TOUCH_CANCEL, wxMultiTouchEventHandler(func))
+
+// All touch events
+#define EVT_TOUCH_EVENTS(func) \
+    EVT_TOUCH_BEGIN(func) \
+    EVT_TOUCH_MOVE(func) \
+    EVT_TOUCH_END(func) \
+    EVT_TOUCH_CANCEL(func)
 
 // Gesture events
 #define EVT_GESTURE_PAN(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_PAN, winid, wxPanGestureEventHandler(func))
