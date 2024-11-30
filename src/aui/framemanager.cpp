@@ -539,12 +539,6 @@ wxAuiPaneInfo& wxAuiManager::GetPane(const wxString& name)
     return wxAuiNullPaneInfo;
 }
 
-// GetAllPanes() returns a reference to all the pane info structures
-wxAuiPaneInfoArray& wxAuiManager::GetAllPanes()
-{
-    return m_panes;
-}
-
 // HitTest() is an internal function which determines
 // which UI item the specified coordinates are over
 // (x,y) specify a position in client coordinates

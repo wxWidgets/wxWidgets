@@ -303,6 +303,9 @@ public:
     */
     wxAuiPaneInfoArray& GetAllPanes();
 
+    /// @overload
+    const wxAuiPaneInfoArray& GetAllPanes() const;
+
     /**
         Returns the current art provider being used.
         @see wxAuiDockArt.
