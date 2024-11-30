@@ -1948,14 +1948,8 @@ void wxAuiNotebook::UpdateHintWindowSize()
 // calculates the size of the new split
 wxSize wxAuiNotebook::CalculateNewSplitSize()
 {
-    // count number of tab controls
-    int tab_ctrl_count = 0;
-    for ( const auto& pane : m_mgr.GetAllPanes() )
-    {
-        if ( IsDummyPane(pane) )
-            continue;
-        tab_ctrl_count++;
-    }
+    // One of the panes corresponds to the dummy window, the rest are tabs.
+    const int tab_ctrl_count = m_mgr.GetAllPanes().size() - 1;
 
     wxSize new_split_size;
 
