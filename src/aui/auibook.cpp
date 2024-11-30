@@ -1795,6 +1795,22 @@ void wxAuiNotebook::InitNotebook(long style)
     m_mgr.Update();
 }
 
+wxAuiTabFrame* wxAuiNotebook::CreateTabFrame(wxSize size)
+{
+    wxAuiTabFrame* tabframe = new wxAuiTabFrame;
+    tabframe->SetTabCtrlHeight(m_tabCtrlHeight);
+    tabframe->m_rect = wxRect(wxPoint(0, 0), size);
+    tabframe->m_tabs = new wxAuiTabCtrl(this,
+                                        m_tabIdCounter++,
+                                        wxDefaultPosition,
+                                        wxDefaultSize,
+                                        wxNO_BORDER|wxWANTS_CHARS);
+    tabframe->m_tabs->SetFlags(m_flags);
+    tabframe->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
+
+    return tabframe;
+}
+
 wxAuiNotebook::~wxAuiNotebook()
 {
     // Indicate we're deleting pages
@@ -2425,15 +2441,7 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
     }
 
     // If there is no tabframe at all, create one
-    wxAuiTabFrame* tabframe = new wxAuiTabFrame;
-    tabframe->SetTabCtrlHeight(m_tabCtrlHeight);
-    tabframe->m_tabs = new wxAuiTabCtrl(this,
-                                        m_tabIdCounter++,
-                                        wxDefaultPosition,
-                                        wxDefaultSize,
-                                        wxNO_BORDER|wxWANTS_CHARS);
-    tabframe->m_tabs->SetFlags(m_flags);
-    tabframe->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
+    wxAuiTabFrame* tabframe = CreateTabFrame();
     m_mgr.AddPane(tabframe,
                   wxAuiPaneInfo().Center().CaptionVisible(false));
 
@@ -2507,16 +2515,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
 
 
     // create a new tab frame
-    wxAuiTabFrame* new_tabs = new wxAuiTabFrame;
-    new_tabs->m_rect = wxRect(wxPoint(0,0), split_size);
-    new_tabs->SetTabCtrlHeight(m_tabCtrlHeight);
-    new_tabs->m_tabs = new wxAuiTabCtrl(this,
-                                        m_tabIdCounter++,
-                                        wxDefaultPosition,
-                                        wxDefaultSize,
-                                        wxNO_BORDER|wxWANTS_CHARS);
-    new_tabs->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
-    new_tabs->m_tabs->SetFlags(m_flags);
+    wxAuiTabFrame* new_tabs = CreateTabFrame(split_size);
     dest_tabs = new_tabs->m_tabs;
 
     // create a pane info structure with the information
@@ -2915,16 +2914,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             }
 
             // If there is no tabframe at all, create one
-            wxAuiTabFrame* new_tabs = new wxAuiTabFrame;
-            new_tabs->m_rect = wxRect(wxPoint(0,0), CalculateNewSplitSize());
-            new_tabs->SetTabCtrlHeight(m_tabCtrlHeight);
-            new_tabs->m_tabs = new wxAuiTabCtrl(this,
-                                                m_tabIdCounter++,
-                                                wxDefaultPosition,
-                                                wxDefaultSize,
-                                                wxNO_BORDER|wxWANTS_CHARS);
-            new_tabs->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
-            new_tabs->m_tabs->SetFlags(m_flags);
+            wxAuiTabFrame* new_tabs = CreateTabFrame(CalculateNewSplitSize());
 
             m_mgr.AddPane(new_tabs,
                           wxAuiPaneInfo().Bottom().CaptionVisible(false),

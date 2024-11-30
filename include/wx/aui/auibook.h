@@ -27,6 +27,7 @@
 
 
 class wxAuiNotebook;
+class wxAuiTabFrame;
 
 
 enum wxAuiNotebookOption
@@ -456,6 +457,10 @@ protected:
 
     int m_lastDragX;
     unsigned int m_flags;
+
+private:
+    // Create a new tab frame, containing a new wxAuiTabCtrl.
+    wxAuiTabFrame* CreateTabFrame(wxSize size = wxSize());
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);
