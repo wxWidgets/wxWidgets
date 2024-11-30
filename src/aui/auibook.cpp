@@ -1520,19 +1520,19 @@ void wxAuiTabCtrl::OnDpiChanged(wxDPIChangedEvent& event)
     event.Skip();
 }
 
-// wxTabFrame is an interesting case.  It's important that all child pages
+// wxAuiTabFrame is an interesting case.  It's important that all child pages
 // of the multi-notebook control are all actually children of that control
-// (and not grandchildren).  wxTabFrame facilitates this.  There is one
-// instance of wxTabFrame for each tab control inside the multi-notebook.
-// It's important to know that wxTabFrame is not a real window, but it merely
+// (and not grandchildren).  wxAuiTabFrame facilitates this.  There is one
+// instance of wxAuiTabFrame for each tab control inside the multi-notebook.
+// It's important to know that wxAuiTabFrame is not a real window, but it merely
 // used to capture the dimensions/positioning of the internal tab control and
 // it's managed page windows
 
-class wxTabFrame : public wxWindow
+class wxAuiTabFrame : public wxWindow
 {
 public:
 
-    wxTabFrame()
+    wxAuiTabFrame()
     {
         m_tabs = nullptr;
 
@@ -1540,7 +1540,7 @@ public:
         m_tabCtrlHeight = 0;
     }
 
-    ~wxTabFrame()
+    ~wxAuiTabFrame()
     {
         wxDELETE(m_tabs);
     }
@@ -1727,7 +1727,7 @@ void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
         wxAuiPaneInfo& pane = all_panes.Item(i);
         if (pane.name == wxT("dummy"))
             continue;
-        wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+        wxAuiTabFrame* tab_frame = (wxAuiTabFrame*)pane.window;
         wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
         tabctrl->GetArtProvider()->UpdateColoursFromSystem();
         tabctrl->Refresh();
@@ -1832,7 +1832,7 @@ void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
             wxAuiPaneInfo& pane = all_panes.Item(i);
             if (pane.name == wxT("dummy"))
                 continue;
-            wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+            wxAuiTabFrame* tab_frame = (wxAuiTabFrame*)pane.window;
             wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
             tabctrl->SetArtProvider(art->Clone());
         }
@@ -1899,7 +1899,7 @@ bool wxAuiNotebook::UpdateTabCtrlHeight()
         wxAuiPaneInfo& pane = all_panes.Item(i);
         if (pane.name == wxT("dummy"))
             continue;
-        wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+        wxAuiTabFrame* tab_frame = (wxAuiTabFrame*)pane.window;
         wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
         tab_frame->SetTabCtrlHeight(m_tabCtrlHeight);
         tabctrl->SetArtProvider(art->Clone());
@@ -1999,7 +1999,7 @@ void wxAuiNotebook::SetWindowStyleFlag(long style)
             wxAuiPaneInfo& pane = all_panes.Item(i);
             if (pane.name == wxT("dummy"))
                 continue;
-            wxTabFrame* tabframe = (wxTabFrame*)pane.window;
+            wxAuiTabFrame* tabframe = (wxAuiTabFrame*)pane.window;
             wxAuiTabCtrl* tabctrl = tabframe->m_tabs;
             tabctrl->SetFlags(m_flags);
             tabframe->DoSizing();
@@ -2390,7 +2390,7 @@ void wxAuiNotebook::DoSizing()
         if (all_panes.Item(i).name == wxT("dummy"))
             continue;
 
-        wxTabFrame* tabframe = (wxTabFrame*)all_panes.Item(i).window;
+        wxAuiTabFrame* tabframe = (wxAuiTabFrame*)all_panes.Item(i).window;
         tabframe->DoSizing();
     }
 }
@@ -2420,12 +2420,12 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
         if (all_panes.Item(i).name == wxT("dummy"))
             continue;
 
-        wxTabFrame* tabframe = (wxTabFrame*)all_panes.Item(i).window;
+        wxAuiTabFrame* tabframe = (wxAuiTabFrame*)all_panes.Item(i).window;
         return tabframe->m_tabs;
     }
 
     // If there is no tabframe at all, create one
-    wxTabFrame* tabframe = new wxTabFrame;
+    wxAuiTabFrame* tabframe = new wxAuiTabFrame;
     tabframe->SetTabCtrlHeight(m_tabCtrlHeight);
     tabframe->m_tabs = new wxAuiTabCtrl(this,
                                         m_tabIdCounter++,
@@ -2454,7 +2454,7 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx)
         if (all_panes.Item(i).name == wxT("dummy"))
             continue;
 
-        wxTabFrame* tabframe = (wxTabFrame*)all_panes.Item(i).window;
+        wxAuiTabFrame* tabframe = (wxAuiTabFrame*)all_panes.Item(i).window;
 
         int page_idx = tabframe->m_tabs->GetIdxFromWindow(page);
         if (page_idx != -1)
@@ -2507,7 +2507,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
 
 
     // create a new tab frame
-    wxTabFrame* new_tabs = new wxTabFrame;
+    wxAuiTabFrame* new_tabs = new wxAuiTabFrame;
     new_tabs->m_rect = wxRect(wxPoint(0,0), split_size);
     new_tabs->SetTabCtrlHeight(m_tabCtrlHeight);
     new_tabs->m_tabs = new wxAuiTabCtrl(this,
@@ -2884,7 +2884,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
     {
         // If the pointer is in an existing tab frame, do a tab insert
         wxWindow* hit_wnd = ::wxFindWindowAtPoint(mouse_screen_pt);
-        wxTabFrame* tab_frame = (wxTabFrame*)GetTabFrameFromTabCtrl(hit_wnd);
+        wxAuiTabFrame* tab_frame = (wxAuiTabFrame*)GetTabFrameFromTabCtrl(hit_wnd);
         int insert_idx = -1;
         if (tab_frame)
         {
@@ -2915,7 +2915,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             }
 
             // If there is no tabframe at all, create one
-            wxTabFrame* new_tabs = new wxTabFrame;
+            wxAuiTabFrame* new_tabs = new wxAuiTabFrame;
             new_tabs->m_rect = wxRect(wxPoint(0,0), CalculateNewSplitSize());
             new_tabs->SetTabCtrlHeight(m_tabCtrlHeight);
             new_tabs->m_tabs = new wxAuiTabCtrl(this,
@@ -3004,7 +3004,7 @@ wxAuiTabCtrl* wxAuiNotebook::GetTabCtrlFromPoint(const wxPoint& pt)
         if (all_panes.Item(i).name == wxT("dummy"))
             continue;
 
-        wxTabFrame* tabframe = (wxTabFrame*)all_panes.Item(i).window;
+        wxAuiTabFrame* tabframe = (wxAuiTabFrame*)all_panes.Item(i).window;
         if (tabframe->m_tab_rect.Contains(pt))
             return tabframe->m_tabs;
     }
@@ -3023,7 +3023,7 @@ wxWindow* wxAuiNotebook::GetTabFrameFromTabCtrl(wxWindow* tab_ctrl)
         if (all_panes.Item(i).name == wxT("dummy"))
             continue;
 
-        wxTabFrame* tabframe = (wxTabFrame*)all_panes.Item(i).window;
+        wxAuiTabFrame* tabframe = (wxAuiTabFrame*)all_panes.Item(i).window;
         if (tabframe->m_tabs == tab_ctrl)
         {
             return tabframe;
@@ -3044,7 +3044,7 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
         if (all_panes.Item(i).name == wxT("dummy"))
             continue;
 
-        wxTabFrame* tab_frame = (wxTabFrame*)all_panes.Item(i).window;
+        wxAuiTabFrame* tab_frame = (wxAuiTabFrame*)all_panes.Item(i).window;
         if (tab_frame->m_tabs->GetPageCount() == 0)
         {
             m_mgr.DetachPane(tab_frame);
@@ -3103,7 +3103,7 @@ void wxAuiNotebook::OnChildFocusNotebook(wxChildFocusEvent& evt)
         wxAuiPaneInfo& pane = all_panes.Item(i);
         if (pane.name == wxT("dummy"))
             continue;
-        wxTabFrame* tabframe = (wxTabFrame*)pane.window;
+        wxAuiTabFrame* tabframe = (wxAuiTabFrame*)pane.window;
         if (tabframe->m_tabs->IsDragging())
             return;
     }
@@ -3421,7 +3421,7 @@ int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
         if (all_panes.Item(i).name == wxT("dummy"))
             continue;
 
-        wxTabFrame* tabframe = (wxTabFrame*) all_panes.Item(i).window;
+        wxAuiTabFrame* tabframe = (wxAuiTabFrame*) all_panes.Item(i).window;
         if (tabframe->m_tab_rect.Contains(pt))
         {
             wxPoint tabpos = tabframe->m_tabs->ScreenToClient(ClientToScreen(pt));
@@ -3596,7 +3596,7 @@ wxSize wxAuiNotebook::DoGetBestSize() const
         if ( pInfo.name == wxT("dummy") || pInfo.IsFloating() )
             continue;
 
-        const wxTabFrame* tabframe = (wxTabFrame*) all_panes.Item(n).window;
+        const wxAuiTabFrame* tabframe = (wxAuiTabFrame*) all_panes.Item(n).window;
         const wxAuiNotebookPageArray &pages = tabframe->m_tabs->GetPages();
 
         wxSize bestPageSize;
@@ -3695,7 +3695,7 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
                 wxAuiPaneInfo& pane = all_panes.Item(i);
                 if (pane.name == wxT("dummy"))
                     continue;
-                wxAuiTabCtrl* tabctrl = ((wxTabFrame*)pane.window)->m_tabs;
+                wxAuiTabCtrl* tabctrl = ((wxAuiTabFrame*)pane.window)->m_tabs;
                 if (tabctrl != ctrl)
                     tabctrl->SetSelectedFont(m_normalFont);
                 else
