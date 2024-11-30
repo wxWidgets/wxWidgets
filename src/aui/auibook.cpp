@@ -1034,8 +1034,6 @@ void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 {
     wxPaintDC dc(this);
 
-    dc.SetFont(GetFont());
-
     if (GetPageCount() > 0)
         Render(&dc, this);
 }
