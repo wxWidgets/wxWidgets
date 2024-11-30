@@ -357,9 +357,6 @@ public:
     // Shows the window menu
     bool ShowWindowMenu();
 
-    // we do have multiple pages
-    virtual bool HasMultiplePages() const override { return true; }
-
     //wxBookCtrlBase functions
 
     virtual void SetPageSize (const wxSize &size) override;
