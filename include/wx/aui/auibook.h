@@ -360,9 +360,6 @@ public:
     // we do have multiple pages
     virtual bool HasMultiplePages() const override { return true; }
 
-    // we don't want focus for ourselves
-    // virtual bool AcceptsFocus() const { return false; }
-
     //wxBookCtrlBase functions
 
     virtual void SetPageSize (const wxSize &size) override;
