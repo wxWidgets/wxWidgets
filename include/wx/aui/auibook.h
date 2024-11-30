@@ -152,7 +152,7 @@ public:
     size_t GetPageCount() const;
     wxAuiNotebookPage& GetPage(size_t idx);
     const wxAuiNotebookPage& GetPage(size_t idx) const;
-    wxAuiNotebookPageArray& GetPages();
+    const wxAuiNotebookPageArray& GetPages() const;
     void SetNormalFont(const wxFont& normalFont);
     void SetSelectedFont(const wxFont& selectedFont);
     void SetMeasuringFont(const wxFont& measuringFont);

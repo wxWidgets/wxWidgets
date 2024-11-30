@@ -348,7 +348,7 @@ const wxAuiNotebookPage& wxAuiTabContainer::GetPage(size_t idx) const
     return m_pages[idx];
 }
 
-wxAuiNotebookPageArray& wxAuiTabContainer::GetPages()
+const wxAuiNotebookPageArray& wxAuiTabContainer::GetPages() const
 {
     return m_pages;
 }
@@ -949,7 +949,7 @@ static void ShowWnd(wxWindow* wnd, bool show)
 // hides all of the other windows (in that order)
 void wxAuiTabContainer::DoShowHide()
 {
-    wxAuiNotebookPageArray& pages = GetPages();
+    const wxAuiNotebookPageArray& pages = GetPages();
     size_t i, page_count = pages.GetCount();
 
     // show new active page first
@@ -1605,7 +1605,7 @@ public:
         m_tabs->Refresh();
         m_tabs->Update();
 
-        wxAuiNotebookPageArray& pages = m_tabs->GetPages();
+        const wxAuiNotebookPageArray& pages = m_tabs->GetPages();
         size_t i, page_count = pages.GetCount();
 
         for (i = 0; i < page_count; ++i)
