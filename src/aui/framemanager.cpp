@@ -235,12 +235,8 @@ FindDocks(wxAuiDockInfoArray& docks,
           int dock_row,
           FindDocksFlags flags = FindDocksFlags::None)
 {
-    int begin_layer = dock_layer;
-    int end_layer = dock_layer;
-    int begin_row = dock_row;
-    int end_row = dock_row;
     int dock_count = docks.GetCount();
-    int layer, row, i, max_row = 0, max_layer = 0;
+    int i, max_row = 0, max_layer = 0;
 
     // discover the maximum dock layer and the max row
     for (i = 0; i < dock_count; ++i)
@@ -250,24 +246,36 @@ FindDocks(wxAuiDockInfoArray& docks,
     }
 
     // if no dock layer was specified, search all dock layers
+    int begin_layer, end_layer;
     if (dock_layer == -1)
     {
         begin_layer = 0;
         end_layer = max_layer;
     }
+    else
+    {
+        begin_layer = dock_layer;
+        end_layer = dock_layer;
+    }
 
-    // if no dock row was specified, search all dock row
+    // if no dock row was specified, search all dock rows
+    int begin_row, end_row;
     if (dock_row == -1)
     {
         begin_row = 0;
         end_row = max_row;
     }
+    else
+    {
+        begin_row = dock_row;
+        end_row = dock_row;
+    }
 
     wxAuiDockInfoPtrArray arr;
 
-    for (layer = begin_layer; layer <= end_layer; ++layer)
+    for (int layer = begin_layer; layer <= end_layer; ++layer)
     {
-        for (row = begin_row; row <= end_row; ++row)
+        for (int row = begin_row; row <= end_row; ++row)
         {
             for (i = 0; i < dock_count; ++i)
             {
