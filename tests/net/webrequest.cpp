@@ -788,6 +788,21 @@ TEST_CASE_METHOD(RequestFixture,
     CHECK( responseStringFromEvent == "Still alive!" );
 }
 
+TEST_CASE_METHOD(RequestFixture, "WebRequest::LifeTime", "[net][webrequest]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("status/200");
+    Run();
+
+    // Close the session before the request is destroyed: this shouldn't result
+    // in a crash.
+    wxWebSession::GetDefault().Close();
+
+    CHECK( request.GetResponse().GetStatus() == 200 );
+}
+
 class SyncRequestFixture : public BaseRequestFixture
 {
 public:

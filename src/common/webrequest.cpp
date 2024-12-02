@@ -57,6 +57,22 @@ static const wxStringCharType* wxNO_IMPL_MSG
 #define wxCHECK_IMPL(rc) wxCHECK_MSG( m_impl, (rc), wxNO_IMPL_MSG )
 #define wxCHECK_IMPL_VOID() wxCHECK_RET( m_impl, wxNO_IMPL_MSG )
 
+namespace
+{
+
+// Create a pointer from an already owned object.
+inline
+wxWebSessionImplPtr FromOwned(wxWebSessionImpl& impl)
+{
+    // Artificially increase the reference count to compensate the one done by
+    // wxWebSessionImplPtr dtor: we don't want it to destroy the object owned
+    // by somebody else.
+    impl.IncRef();
+    return wxWebSessionImplPtr{&impl};
+}
+
+} // anonymous namespace
+
 //
 // wxWebRequestImpl
 //
@@ -65,7 +81,7 @@ wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session,
                                    wxEvtHandler* handler,
                                    int id)
     : m_headers(sessionImpl.GetHeaders()),
-      m_sessionImpl(sessionImpl),
+      m_sessionImpl(FromOwned(sessionImpl)),
       m_session(&session),
       m_handler(handler),
       m_id(id)
@@ -74,7 +90,7 @@ wxWebRequestImpl::wxWebRequestImpl(wxWebSession& session,
 
 wxWebRequestImpl::wxWebRequestImpl(wxWebSessionImpl& sessionImpl)
     : m_headers(sessionImpl.GetHeaders()),
-      m_sessionImpl(sessionImpl),
+      m_sessionImpl(FromOwned(sessionImpl)),
       m_session(nullptr),
       m_handler(nullptr),
       m_id(wxID_NONE)

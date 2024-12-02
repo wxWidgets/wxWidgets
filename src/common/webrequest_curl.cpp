@@ -606,85 +606,45 @@ void wxWebAuthChallengeCURL::SetCredentials(const wxWebCredentials& cred)
 // SocketPoller - a helper class for wxWebSessionCURL
 //
 
-wxDECLARE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
-
-class SocketPollerImpl;
-
-class SocketPoller
+namespace
 {
-public:
-    enum PollAction
+
+wxDECLARE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
+wxDEFINE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
+
+// These look like scoped enums but are not, actually, because we need to use
+// them as bit masks.
+namespace PollAction
+{
+    enum
     {
         INVALID_ACTION = 0x00,
         POLL_FOR_READ = 0x01,
         POLL_FOR_WRITE = 0x02
     };
+};
 
-    enum Result
+namespace PollResult
+{
+    enum
     {
         INVALID_RESULT = 0x00,
         READY_FOR_READ = 0x01,
         READY_FOR_WRITE = 0x02,
         HAS_ERROR = 0x04
     };
-
-    SocketPoller(wxEvtHandler*);
-    ~SocketPoller();
-    bool StartPolling(curl_socket_t, int);
-    void StopPolling(curl_socket_t);
-    void ResumePolling(curl_socket_t);
-
-private:
-    SocketPollerImpl* m_impl;
 };
-
-wxDEFINE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
-
-class SocketPollerImpl
-{
-public:
-    virtual ~SocketPollerImpl(){}
-    virtual bool StartPolling(curl_socket_t, int) = 0;
-    virtual void StopPolling(curl_socket_t) = 0;
-    virtual void ResumePolling(curl_socket_t) = 0;
-
-    static SocketPollerImpl* Create(wxEvtHandler*);
-};
-
-SocketPoller::SocketPoller(wxEvtHandler* hndlr)
-{
-    m_impl = SocketPollerImpl::Create(hndlr);
-}
-
-SocketPoller::~SocketPoller()
-{
-    delete m_impl;
-}
-
-bool SocketPoller::StartPolling(curl_socket_t sock, int pollAction)
-{
-    return m_impl->StartPolling(sock, pollAction);
-}
-void SocketPoller::StopPolling(curl_socket_t sock)
-{
-    m_impl->StopPolling(sock);
-}
-
-void SocketPoller::ResumePolling(curl_socket_t sock)
-{
-    m_impl->ResumePolling(sock);
-}
 
 #ifdef __WINDOWS__
 
-class WinSock1SocketPoller: public SocketPollerImpl
+class WinSock1SocketPoller
 {
 public:
-    WinSock1SocketPoller(wxEvtHandler*);
-    virtual ~WinSock1SocketPoller();
-    virtual bool StartPolling(curl_socket_t, int) override;
-    virtual void StopPolling(curl_socket_t) override;
-    virtual void ResumePolling(curl_socket_t) override;
+    explicit WinSock1SocketPoller(wxEvtHandler*);
+    ~WinSock1SocketPoller();
+    bool StartPolling(curl_socket_t, int);
+    void StopPolling(curl_socket_t);
+    void ResumePolling(curl_socket_t);
 
 private:
     static LRESULT CALLBACK MsgProc(HWND hwnd, WXUINT uMsg, WXWPARAM wParam,
@@ -761,12 +721,12 @@ bool WinSock1SocketPoller::StartPolling(curl_socket_t sock, int pollAction)
     // Convert pollAction to a flag that can be used by winsock.
     int winActions = 0;
 
-    if ( pollAction & SocketPoller::POLL_FOR_READ )
+    if ( pollAction & PollAction::POLL_FOR_READ )
     {
         winActions |= FD_READ;
     }
 
-    if ( pollAction & SocketPoller::POLL_FOR_WRITE )
+    if ( pollAction & PollAction::POLL_FOR_WRITE )
     {
         winActions |= FD_WRITE;
     }
@@ -807,22 +767,22 @@ LRESULT CALLBACK WinSock1SocketPoller::MsgProc(WXHWND hwnd, WXUINT uMsg,
         int winResult = LOWORD(lParam);
         int error = HIWORD(lParam);
 
-        // Convert the result/errors to a SocketPoller::Result flag.
+        // Convert the result/errors to a PollResult flag.
         int pollResult = 0;
 
         if ( winResult & FD_READ )
         {
-            pollResult |= SocketPoller::READY_FOR_READ;
+            pollResult |= PollResult::READY_FOR_READ;
         }
 
         if ( winResult & FD_WRITE )
         {
-            pollResult |= SocketPoller::READY_FOR_WRITE;
+            pollResult |= PollResult::READY_FOR_WRITE;
         }
 
         if ( error != 0 )
         {
-            pollResult |= SocketPoller::HAS_ERROR;
+            pollResult |= PollResult::HAS_ERROR;
         }
 
         // If there is a significant result, send an event.
@@ -858,10 +818,7 @@ LRESULT CALLBACK WinSock1SocketPoller::MsgProc(WXHWND hwnd, WXUINT uMsg,
     }
 }
 
-SocketPollerImpl* SocketPollerImpl::Create(wxEvtHandler* hndlr)
-{
-    return new WinSock1SocketPoller(hndlr);
-}
+using SocketPollerBase = WinSock1SocketPoller;
 
 #else
 
@@ -889,29 +846,29 @@ private:
 
 void SocketPollerSourceHandler::OnReadWaiting()
 {
-    SendEvent(SocketPoller::READY_FOR_READ);
+    SendEvent(PollResult::READY_FOR_READ);
 }
 
 void SocketPollerSourceHandler::OnWriteWaiting()
 {
-    SendEvent(SocketPoller::READY_FOR_WRITE);
+    SendEvent(PollResult::READY_FOR_WRITE);
 }
 
 void SocketPollerSourceHandler::OnExceptionWaiting()
 {
-    SendEvent(SocketPoller::HAS_ERROR);
+    SendEvent(PollResult::HAS_ERROR);
 }
 
 // SourceSocketPoller - a SocketPollerImpl based on event loop sources.
 
-class SourceSocketPoller: public SocketPollerImpl
+class SourceSocketPoller
 {
 public:
-    SourceSocketPoller(wxEvtHandler*);
+    explicit SourceSocketPoller(wxEvtHandler*);
     ~SourceSocketPoller();
-    bool StartPolling(curl_socket_t, int) override;
-    void StopPolling(curl_socket_t) override;
-    void ResumePolling(curl_socket_t) override;
+    bool StartPolling(curl_socket_t, int);
+    void StopPolling(curl_socket_t);
+    void ResumePolling(curl_socket_t);
 
     void SendEvent(curl_socket_t sock, int result);
 
@@ -957,18 +914,18 @@ SourceSocketPoller::~SourceSocketPoller()
 
 static int SocketPoller2EventSource(int pollAction)
 {
-    // Convert the SocketPoller::PollAction value to a flag that can be used
+    // Convert the PollAction value to a flag that can be used
     // by wxEventLoopSource.
 
     // Always check for errors.
     int eventSourceFlag = wxEVENT_SOURCE_EXCEPTION;
 
-    if ( pollAction & SocketPoller::POLL_FOR_READ )
+    if ( pollAction & PollAction::POLL_FOR_READ )
     {
         eventSourceFlag |= wxEVENT_SOURCE_INPUT;
     }
 
-    if ( pollAction & SocketPoller::POLL_FOR_WRITE )
+    if ( pollAction & PollAction::POLL_FOR_WRITE )
     {
         eventSourceFlag |= wxEVENT_SOURCE_OUTPUT;
     }
@@ -1056,7 +1013,7 @@ void SourceSocketPoller::ResumePolling(curl_socket_t WXUNUSED(sock))
 
 void SourceSocketPoller::SendEvent(curl_socket_t sock, int result)
 {
-    if ( result == SocketPoller::READY_FOR_WRITE )
+    if ( result == PollResult::READY_FOR_WRITE )
     {
         // Prevent the handler from this socket from being deleted in case we
         // get a HAS_ERROR event for it immediately after this one.
@@ -1070,7 +1027,7 @@ void SourceSocketPoller::SendEvent(curl_socket_t sock, int result)
 
     m_activeWriteSocket = 0;
 
-    if ( result == SocketPoller::HAS_ERROR )
+    if ( result == PollResult::HAS_ERROR )
     {
         // Check if we have any sockets to clean up and do it now, it should be
         // safe.
@@ -1090,12 +1047,20 @@ void SourceSocketPoller::CleanUpSocketSource(wxEventLoopSource* source)
     delete srcHandler;
 }
 
-SocketPollerImpl* SocketPollerImpl::Create(wxEvtHandler* hndlr)
-{
-    return new SourceSocketPoller(hndlr);
-}
+using SocketPollerBase = SourceSocketPoller;
 
 #endif
+
+} // anonymous namespace
+
+// We need to define the forward-declared SocketPoller as a class, not just a
+// typedef or alias.
+class SocketPoller : public SocketPollerBase
+{
+public:
+    explicit SocketPoller(wxEvtHandler* hndlr) : SocketPollerBase(hndlr) {}
+};
+
 
 //
 // wxWebSessionBaseCURL
@@ -1183,10 +1148,12 @@ wxWebSessionCURL::wxWebSessionCURL()
 
 wxWebSessionCURL::~wxWebSessionCURL()
 {
-    delete m_socketPoller;
-
     if ( m_handle )
         curl_multi_cleanup(m_handle);
+
+    // Note that this object could be used by curl_multi_cleanup(), so we can
+    // only destroy it after finishing with using libcurl.
+    delete m_socketPoller;
 }
 
 wxWebRequestImplPtr
@@ -1344,20 +1311,19 @@ void wxWebSessionCURL::ProcessTimeoutNotification()
 
 static int CurlPoll2SocketPoller(int what)
 {
-    int pollAction = SocketPoller::INVALID_ACTION;
+    int pollAction = PollAction::INVALID_ACTION;
 
     if ( what == CURL_POLL_IN )
     {
-        pollAction = SocketPoller::POLL_FOR_READ ;
+        pollAction = PollAction::POLL_FOR_READ ;
     }
     else if ( what == CURL_POLL_OUT )
     {
-        pollAction = SocketPoller::POLL_FOR_WRITE;
+        pollAction = PollAction::POLL_FOR_WRITE;
     }
     else if ( what == CURL_POLL_INOUT )
     {
-        pollAction =
-            SocketPoller::POLL_FOR_READ | SocketPoller::POLL_FOR_WRITE;
+        pollAction = PollAction::POLL_FOR_READ | PollAction::POLL_FOR_WRITE;
     }
 
     return pollAction;
@@ -1410,17 +1376,17 @@ static int SocketPollerResult2CurlSelect(int socketEventFlag)
 {
     int curlSelect = 0;
 
-    if ( socketEventFlag & SocketPoller::READY_FOR_READ )
+    if ( socketEventFlag & PollResult::READY_FOR_READ )
     {
         curlSelect |= CURL_CSELECT_IN;
     }
 
-    if ( socketEventFlag & SocketPoller::READY_FOR_WRITE )
+    if ( socketEventFlag & PollResult::READY_FOR_WRITE )
     {
         curlSelect |= CURL_CSELECT_OUT;
     }
 
-    if ( socketEventFlag &  SocketPoller::HAS_ERROR )
+    if ( socketEventFlag &  PollResult::HAS_ERROR )
     {
         curlSelect |= CURL_CSELECT_ERR;
     }
