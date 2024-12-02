@@ -1435,7 +1435,9 @@ public:
 
         Note that this is usually unnecessary to call this function explicitly,
         it will be done by the destructor of the object when it is destroyed in
-        any case.
+        any case. Also note that the session object resources will remain
+        allocated as long as there are any wxWebRequest objects using it still
+        in existence.
      */
     void Close();
 
@@ -1626,7 +1628,9 @@ public:
 
         Note that this is usually unnecessary to call this function explicitly,
         it will be done by the destructor of the object when it is destroyed in
-        any case.
+        any case. Also note that the session object resources will remain
+        allocated as long as there are any wxWebRequest objects using it still
+        in existence.
      */
     void Close();
 

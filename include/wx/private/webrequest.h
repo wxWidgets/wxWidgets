@@ -107,7 +107,7 @@ public:
     wxWebSession& GetSession() const { return *m_session; }
 
     // This one can be always called.
-    wxWebSessionImpl& GetSessionImpl() const { return m_sessionImpl; }
+    wxWebSessionImpl& GetSessionImpl() const { return *m_sessionImpl; }
 
     wxWebRequest::State GetState() const { return m_state; }
 
@@ -198,7 +198,11 @@ private:
     // SetState() when leaving it.
     void ProcessStateEvent(wxWebRequest::State state, const wxString& failMsg);
 
-    wxWebSessionImpl& m_sessionImpl;
+    // This is a shared pointer and not just a reference to ensure that the
+    // session stays alive as long as there are any requests using it, as
+    // allowing it to die first would result in a crash when destroying the
+    // request later.
+    wxWebSessionImplPtr m_sessionImpl;
 
     // These parameters are only valid for async requests.
     wxWebSession* const m_session;
