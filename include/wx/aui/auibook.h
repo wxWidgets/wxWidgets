@@ -27,6 +27,7 @@
 
 
 class wxAuiNotebook;
+class wxAuiTabFrame;
 
 
 enum wxAuiNotebookOption
@@ -152,7 +153,7 @@ public:
     size_t GetPageCount() const;
     wxAuiNotebookPage& GetPage(size_t idx);
     const wxAuiNotebookPage& GetPage(size_t idx) const;
-    wxAuiNotebookPageArray& GetPages();
+    const wxAuiNotebookPageArray& GetPages() const;
     void SetNormalFont(const wxFont& normalFont);
     void SetSelectedFont(const wxFont& selectedFont);
     void SetMeasuringFont(const wxFont& measuringFont);
@@ -357,12 +358,6 @@ public:
     // Shows the window menu
     bool ShowWindowMenu();
 
-    // we do have multiple pages
-    virtual bool HasMultiplePages() const override { return true; }
-
-    // we don't want focus for ourselves
-    // virtual bool AcceptsFocus() const { return false; }
-
     //wxBookCtrlBase functions
 
     virtual void SetPageSize (const wxSize &size) override;
@@ -462,6 +457,10 @@ protected:
 
     int m_lastDragX;
     unsigned int m_flags;
+
+private:
+    // Create a new tab frame, containing a new wxAuiTabCtrl.
+    wxAuiTabFrame* CreateTabFrame(wxSize size = wxSize());
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);

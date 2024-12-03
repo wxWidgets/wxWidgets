@@ -1498,12 +1498,12 @@ public:
 
     virtual void BeforeSavePanes() override
     {
-        m_panes = new wxXmlNode(wxXML_ELEMENT_NODE, "panes");
+        m_panes.reset(new wxXmlNode(wxXML_ELEMENT_NODE, "panes"));
     }
 
     virtual void SavePane(const wxAuiPaneInfo& pane) override
     {
-        auto node = new wxXmlNode(m_panes, wxXML_ELEMENT_NODE, "pane");
+        auto node = new wxXmlNode(wxXML_ELEMENT_NODE, "pane");
         node->AddAttribute("name", pane.name);
 
         AddChild(node, "caption", pane.caption);
@@ -1518,21 +1518,23 @@ public:
         AddChild(node, "max-size", pane.max_size);
         AddChild(node, "floating-rect",
                  wxRect(pane.floating_pos, pane.floating_size));
+
+        m_panes->AddChild(node);
     }
 
     virtual void AfterSavePanes() override
     {
-        m_root->AddChild(m_panes);
+        m_root->AddChild(m_panes.release());
     }
 
     virtual void BeforeSaveDocks() override
     {
-        m_docks = new wxXmlNode(wxXML_ELEMENT_NODE, "docks");
+        m_docks.reset(new wxXmlNode(wxXML_ELEMENT_NODE, "docks"));
     }
 
     virtual void SaveDock(const wxAuiDockInfo& dock) override
     {
-        auto node = new wxXmlNode(m_docks, wxXML_ELEMENT_NODE, "dock");
+        auto node = new wxXmlNode(wxXML_ELEMENT_NODE, "dock");
         node->AddAttribute("resizable", dock.resizable ? "1" : "0");
 
         AddChild(node, "direction", dock.dock_direction);
@@ -1541,11 +1543,13 @@ public:
         AddChild(node, "size", dock.size);
         if ( dock.min_size )
             AddChild(node, "min-size", dock.min_size);
+
+        m_docks->AddChild(node);
     }
 
     virtual void AfterSaveDocks() override
     {
-        m_root->AddChild(m_docks);
+        m_root->AddChild(m_docks.release());
     }
 
     virtual void AfterSave() override {}
@@ -1580,9 +1584,15 @@ private:
     }
 
     wxXmlDocument m_doc;
+
+    // Non-owning pointer to the root node of m_doc.
     wxXmlNode* m_root = nullptr;
-    wxXmlNode* m_panes = nullptr;
-    wxXmlNode* m_docks = nullptr;
+
+    // The other pointers are only set temporarily, until they are added to the
+    // document -- this ensures that we don't leak memory if an exception is
+    // thrown before this happens.
+    std::unique_ptr<wxXmlNode> m_panes;
+    std::unique_ptr<wxXmlNode> m_docks;
 };
 
 class MyXmlDeserializer : public wxAuiDeserializer
@@ -1809,6 +1819,8 @@ private:
 
 
     wxXmlDocument m_doc;
+
+    // Non-owning pointers to the nodes in m_doc.
     wxXmlNode* m_panes = nullptr;
     wxXmlNode* m_docks = nullptr;
 };

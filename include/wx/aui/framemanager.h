@@ -433,7 +433,8 @@ public:
 
     wxAuiPaneInfo& GetPane(wxWindow* window);
     wxAuiPaneInfo& GetPane(const wxString& name);
-    wxAuiPaneInfoArray& GetAllPanes();
+    const wxAuiPaneInfoArray& GetAllPanes() const { return m_panes; }
+    wxAuiPaneInfoArray& GetAllPanes() { return m_panes; }
 
     bool AddPane(wxWindow* window,
                  const wxAuiPaneInfo& paneInfo);
