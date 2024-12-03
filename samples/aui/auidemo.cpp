@@ -1501,23 +1501,23 @@ public:
         m_panes.reset(new wxXmlNode(wxXML_ELEMENT_NODE, "panes"));
     }
 
-    virtual void SavePane(const wxAuiPaneInfo& pane) override
+    virtual void SavePane(const wxAuiPaneLayoutInfo& pane) override
     {
         auto node = new wxXmlNode(wxXML_ELEMENT_NODE, "pane");
         node->AddAttribute("name", pane.name);
 
-        AddChild(node, "caption", pane.caption);
-        AddChild(node, "state", pane.state);
         AddChild(node, "direction", pane.dock_direction);
         AddChild(node, "layer", pane.dock_layer);
         AddChild(node, "row", pane.dock_row);
         AddChild(node, "position", pane.dock_pos);
         AddChild(node, "proportion", pane.dock_proportion);
-        AddChild(node, "best-size", pane.best_size);
-        AddChild(node, "min-size", pane.min_size);
-        AddChild(node, "max-size", pane.max_size);
         AddChild(node, "floating-rect",
                  wxRect(pane.floating_pos, pane.floating_size));
+
+        // Don't bother creating many "maximized" nodes with value 0 when we
+        // can have at most one of them with value 1.
+        if ( pane.is_maximized )
+            AddChild(node, "maximized", 1);
 
         m_panes->AddChild(node);
     }
@@ -1564,12 +1564,6 @@ private:
     void AddChild(wxXmlNode* parent, const wxString& name, int value)
     {
         AddChild(parent, name, wxString::Format("%u", value));
-    }
-
-    void AddChild(wxXmlNode* parent, const wxString& name, const wxSize& size)
-    {
-        if ( size != wxDefaultSize )
-            AddChild(parent, name, wxString::Format("%dx%d", size.x, size.y));
     }
 
     void AddChild(wxXmlNode* parent, const wxString& name, const wxRect& rect)
@@ -1646,9 +1640,9 @@ public:
     }
 
     // Implement wxAuiDeserializer methods.
-    virtual std::vector<wxAuiPaneInfo> LoadPanes() override
+    virtual std::vector<wxAuiPaneLayoutInfo> LoadPanes() override
     {
-        std::vector<wxAuiPaneInfo> panes;
+        std::vector<wxAuiPaneLayoutInfo> panes;
 
         for ( wxXmlNode* node = m_panes->GetChildren(); node; node = node->GetNext() )
         {
@@ -1656,23 +1650,14 @@ public:
                 throw std::runtime_error("Unexpected pane node name");
 
             {
-                wxAuiPaneInfo pane;
-                pane.name = node->GetAttribute("name");
+                wxAuiPaneLayoutInfo pane{node->GetAttribute("name")};
 
                 for ( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
                 {
                     const wxString& name = child->GetName();
                     const wxString& content = child->GetNodeContent();
 
-                    if ( name == "caption" )
-                    {
-                        pane.caption = content;
-                    }
-                    else if ( name == "state" )
-                    {
-                        pane.state = wxAuiPaneInfo::wxAuiPaneState(GetInt(content));
-                    }
-                    else if ( name == "direction" )
+                    if ( name == "direction" )
                     {
                         pane.dock_direction = GetInt(content);
                     }
@@ -1692,24 +1677,16 @@ public:
                     {
                         pane.dock_proportion = GetInt(content);
                     }
-                    else if ( name == "best-size" )
-                    {
-                        pane.best_size = GetSize(content);
-                    }
-                    else if ( name == "min-size" )
-                    {
-                        pane.min_size = GetSize(content);
-                    }
-                    else if ( name == "max-size" )
-                    {
-                        pane.max_size = GetSize(content);
-                    }
                     else if ( name == "floating-rect" )
                     {
                         auto rect = GetRect(content);
 
                         pane.floating_pos = rect.GetPosition();
                         pane.floating_size = rect.GetSize();
+                    }
+                    else if ( name == "maximized" )
+                    {
+                        pane.is_maximized = GetInt(content) != 0;
                     }
                     else
                     {
