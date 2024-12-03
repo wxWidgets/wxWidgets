@@ -42,6 +42,9 @@ struct wxAuiPaneLayoutInfo
     /// Relative proportion of the dock allocated to this pane.
     int dock_proportion  = 0;
 
+    /// Size of the containing dock.
+    int dock_size        = 0;
+
 
     /// Position of the pane when floating, may be invalid.
     wxPoint floating_pos = wxDefaultPosition;
@@ -124,32 +127,6 @@ public:
     virtual void AfterSavePanes();
 
     /**
-        Called before starting to save information about the docks.
-
-        Does nothing by default.
-     */
-    virtual void BeforeSaveDocks();
-
-    /**
-        Save information about the given dock.
-
-        This function will be called for all docks and must be implemented to
-        save their data in a format from which it can be restored later using a
-        matching wxAuiDeserializer implementation.
-
-        As with SavePane(), the coordinates in @a dock are always in DIPs and
-        this function does _not_ need to perform any scaling itself.
-     */
-    virtual void SaveDock(const wxAuiDockInfo& dock) = 0;
-
-    /**
-        Called after the last call to SaveDock().
-
-        Does nothing by default.
-     */
-    virtual void AfterSaveDocks();
-
-    /**
         Called after saving everything.
 
         Does nothing by default.
@@ -229,14 +206,6 @@ public:
         LoadPanes().
      */
     virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& pane);
-
-    /**
-        Load information about all the docks previously saved with SaveDock().
-
-        As with LoadPanes(), this function doesn't need to perform any scaling
-        itself.
-     */
-    virtual std::vector<wxAuiDockInfo> LoadDocks() = 0;
 
     /**
         Called after restoring everything.

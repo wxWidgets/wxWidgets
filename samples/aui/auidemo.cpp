@@ -1511,6 +1511,11 @@ public:
         AddChild(node, "row", pane.dock_row);
         AddChild(node, "position", pane.dock_pos);
         AddChild(node, "proportion", pane.dock_proportion);
+
+        // Saving dock size of 0 is harmless but unnecessary, so don't do it.
+        if ( pane.dock_size )
+            AddChild(node, "size", pane.dock_size);
+
         AddChild(node, "floating-rect",
                  wxRect(pane.floating_pos, pane.floating_size));
 
@@ -1525,31 +1530,6 @@ public:
     virtual void AfterSavePanes() override
     {
         m_root->AddChild(m_panes.release());
-    }
-
-    virtual void BeforeSaveDocks() override
-    {
-        m_docks.reset(new wxXmlNode(wxXML_ELEMENT_NODE, "docks"));
-    }
-
-    virtual void SaveDock(const wxAuiDockInfo& dock) override
-    {
-        auto node = new wxXmlNode(wxXML_ELEMENT_NODE, "dock");
-        node->AddAttribute("resizable", dock.resizable ? "1" : "0");
-
-        AddChild(node, "direction", dock.dock_direction);
-        AddChild(node, "layer", dock.dock_layer);
-        AddChild(node, "row", dock.dock_row);
-        AddChild(node, "size", dock.size);
-        if ( dock.min_size )
-            AddChild(node, "min-size", dock.min_size);
-
-        m_docks->AddChild(node);
-    }
-
-    virtual void AfterSaveDocks() override
-    {
-        m_root->AddChild(m_docks.release());
     }
 
     virtual void AfterSave() override {}
@@ -1586,7 +1566,6 @@ private:
     // document -- this ensures that we don't leak memory if an exception is
     // thrown before this happens.
     std::unique_ptr<wxXmlNode> m_panes;
-    std::unique_ptr<wxXmlNode> m_docks;
 };
 
 class MyXmlDeserializer : public wxAuiDeserializer
@@ -1619,13 +1598,6 @@ public:
 
                 m_panes = node;
             }
-            else if ( node->GetName() == "docks" )
-            {
-                if ( m_docks )
-                    throw std::runtime_error("Unexpected multiple docks nodes");
-
-                m_docks = node;
-            }
             else
             {
                 throw std::runtime_error("Unexpected node name");
@@ -1634,9 +1606,6 @@ public:
 
         if ( !m_panes )
             throw std::runtime_error("Missing panes node");
-
-        if ( !m_docks )
-            throw std::runtime_error("Missing docks node");
     }
 
     // Implement wxAuiDeserializer methods.
@@ -1677,6 +1646,10 @@ public:
                     {
                         pane.dock_proportion = GetInt(content);
                     }
+                    else if ( name == "size" )
+                    {
+                        pane.dock_size = GetInt(content);
+                    }
                     else if ( name == "floating-rect" )
                     {
                         auto rect = GetRect(content);
@@ -1705,56 +1678,6 @@ public:
     {
         wxLogWarning("Unknown pane \"%s\"", pane.name);
         return nullptr;
-    }
-
-    virtual std::vector<wxAuiDockInfo> LoadDocks() override
-    {
-        std::vector<wxAuiDockInfo> docks;
-
-        for ( wxXmlNode* node = m_docks->GetChildren(); node; node = node->GetNext() )
-        {
-            if ( node->GetName() != "dock" )
-                throw std::runtime_error("Unexpected dock node name");
-
-            wxAuiDockInfo dock;
-            if ( node->GetAttribute("resizable") == "1" )
-                dock.resizable = true;
-
-            for ( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
-            {
-                const wxString& name = child->GetName();
-                const wxString& content = child->GetNodeContent();
-
-                if ( name == "direction" )
-                {
-                    dock.dock_direction = GetInt(content);
-                }
-                else if ( name == "layer" )
-                {
-                    dock.dock_layer = GetInt(content);
-                }
-                else if ( name == "row" )
-                {
-                    dock.dock_row = GetInt(content);
-                }
-                else if ( name == "size" )
-                {
-                    dock.size = GetInt(content);
-                }
-                else if ( name == "min-size" )
-                {
-                    dock.min_size = GetInt(content);
-                }
-                else
-                {
-                    throw std::runtime_error("Unexpected dock child node name");
-                }
-            }
-
-            docks.push_back(dock);
-        }
-
-        return docks;
     }
 
 private:
@@ -1799,7 +1722,6 @@ private:
 
     // Non-owning pointers to the nodes in m_doc.
     wxXmlNode* m_panes = nullptr;
-    wxXmlNode* m_docks = nullptr;
 };
 
 void MyFrame::OnCopyLayout(wxCommandEvent& WXUNUSED(evt))
