@@ -191,10 +191,7 @@ bool wxAuiTabContainer::InsertPage(wxWindow* page,
     page_info.window = page;
     page_info.hover = false;
 
-    if (idx >= m_pages.GetCount())
-        m_pages.Add(page_info);
-    else
-        m_pages.Insert(page_info, idx);
+    m_pages.insert(m_pages.begin() + idx, page_info);
 
     // let the art provider know how many pages we have
     if (m_art)
