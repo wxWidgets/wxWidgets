@@ -540,13 +540,38 @@ private:
 // wxImageDataObject - data object for wxImage
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxImageDataObject : public wxCustomDataObject
+class WXDLLIMPEXP_CORE wxImageDataObject : public wxDataObject
 {
 public:
     explicit wxImageDataObject(const wxImage& image = wxNullImage);
 
-    void SetImage(const wxImage& image);
+    ~wxImageDataObject();
+
+    // Inherited methods from wxDataObject
+    virtual void GetAllFormats(wxDataFormat *formats,
+                               Direction dir = Get) const override;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const override;
+    virtual size_t GetDataSize(const wxDataFormat& format) const override;
+    virtual size_t GetFormatCount(Direction dir = Get) const override;
+    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const override;
+
+    virtual bool SetData(const wxDataFormat& WXUNUSED(format),
+                         size_t WXUNUSED(len), const void * WXUNUSED(buf)) override;
+
+    // Image access
     wxImage GetImage() const;
+    void SetImage(const wxImage& image);
+
+protected:
+    void FreeImageData(void); // deallocates internal image data
+
+    bool IsImageHandlerLoaded(const wxDataFormat& format) const; // checks if the image handler for the passed format is (still) loaded
+
+    size_t m_DataSize = 0; // Size of the stored image
+
+    void* m_Data = nullptr; // Data of the stored image (always the preferred format is used)
+
+    mutable wxVector<wxDataFormat> m_SupportedFormats; // lazily initialized in a call to GetFormatCount(Direction)
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxImageDataObject);
