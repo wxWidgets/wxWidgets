@@ -175,8 +175,13 @@ public:
 
         If this function returns @NULL, as it does by default, the pane is not
         added to the manager.
+
+        If the function does create a new window, it should typically modify @a
+        pane parameter to fill in the fields such as `caption` or `icon` that
+        wouldn't normally be serialized and so wouldn't be restored by
+        LoadPanes().
      */
-    virtual wxWindow* CreatePaneWindow(const wxAuiPaneInfo& pane);
+    virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& pane);
 
     /**
         Load information about all the docks previously saved with SaveDock().

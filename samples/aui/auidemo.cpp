@@ -1724,7 +1724,7 @@ public:
         return panes;
     }
 
-    virtual wxWindow* CreatePaneWindow(const wxAuiPaneInfo& pane) override
+    virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& pane) override
     {
         wxLogWarning("Unknown pane \"%s\"", pane.name);
         return nullptr;

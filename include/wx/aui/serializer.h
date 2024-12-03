@@ -89,7 +89,11 @@ public:
     // layout and allows to create windows on the fly.
     //
     // If this function returns nullptr, the pane is not added to the manager.
-    virtual wxWindow* CreatePaneWindow(const wxAuiPaneInfo& WXUNUSED(pane))
+    //
+    // Note that the pane may (and usually will, if a window is created) be
+    // modified, to set fields such as caption or icon that wouldn't normally
+    // be serialized.
+    virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& WXUNUSED(pane))
     {
         return nullptr;
     }
