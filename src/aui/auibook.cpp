@@ -187,8 +187,7 @@ bool wxAuiTabContainer::InsertPage(wxWindow* page,
                                    const wxAuiNotebookPage& info,
                                    size_t idx)
 {
-    wxAuiNotebookPage page_info;
-    page_info = info;
+    wxAuiNotebookPage page_info = info;
     page_info.window = page;
     page_info.hover = false;
 
