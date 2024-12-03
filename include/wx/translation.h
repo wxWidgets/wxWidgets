@@ -45,30 +45,19 @@ using wxTranslationsHashMap = std::unordered_map<wxString, wxString>;
 // --keyword="_" --keyword="wxPLURAL:1,2" options
 // to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    #define _(s)                               wxGetTranslation((s))
-#else
-    #define _(s)                               wxGetTranslation(wxASCII_STR(s))
-#endif
+    #define _(s)                               wx_Wrapper((s))
 #endif
 
-#define wxPLURAL(sing, plur, n)                wxGetTranslation((sing), (plur), n)
+#define wxPLURAL(sing, plur, n)                wxwxPluralWrapper((sing), (plur), n)
 
 // wx-specific macro for translating strings in the given context: if you use
 // them, you need to also add
 // --keyword="wxGETTEXT_IN_CONTEXT:1c,2" --keyword="wxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3"
 // options to xgettext invocation.
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 #define wxGETTEXT_IN_CONTEXT(c, s) \
-    wxGetTranslation((s), wxString(), c)
+    wxwxGettextInContextWrapper((c), (s))
 #define wxGETTEXT_IN_CONTEXT_PLURAL(c, sing, plur, n) \
-    wxGetTranslation((sing), (plur), n, wxString(), c)
-#else
-#define wxGETTEXT_IN_CONTEXT(c, s) \
-    wxGetTranslation(wxASCII_STR(s), wxString(), wxASCII_STR(c))
-#define wxGETTEXT_IN_CONTEXT_PLURAL(c, sing, plur, n) \
-    wxGetTranslation(wxASCII_STR(sing), wxASCII_STR(plur), n, wxString(), wxASCII_STR(c))
-#endif
+    wxwxGettextInContextPluralWrapper((c), (sing), (plur), (n))
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)
@@ -345,6 +334,51 @@ inline const wxString& wxGetTranslation(const char *str1,
 }
 
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+// Wrapper functions that only accept string literals as arguments,
+// not variables, not char* pointers.
+template<size_t M>
+const wxString &wx_Wrapper(const char (&msg)[M])
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg);
+#else
+    return wxGetTranslation(wxASCII_STR(msg));
+#endif
+}
+
+template<size_t N, size_t M>
+const wxString &wxwxPluralWrapper(const char (&msg)[N], const char (&plural)[M], int count)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, plural, count);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count);
+#endif
+}
+
+template<size_t N, size_t M>
+const wxString &wxwxGettextInContextWrapper(const char (&ctx)[N], const char (&msg)[M])
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, wxString(), ctx);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxString(), wxASCII_STR(ctx));
+#endif
+}
+
+template<size_t N, size_t M, size_t L>
+const wxString &wxwxGettextInContextPluralWrapper(const char (&ctx)[N],
+                                                  const char (&msg)[M],
+                                                  const char (&plural)[L], int count)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, plural, count, wxString(), ctx);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count,
+                            wxString(), wxASCII_STR(ctx));
+#endif
+}
 
 #else // !wxUSE_INTL
 
