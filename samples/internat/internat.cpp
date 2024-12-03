@@ -309,8 +309,6 @@ MyFrame::MyFrame()
     test_menu->Append(INTERNAT_TEST_MSGBOX, _("&Message box test"),
                       _("Tests message box buttons labels translation"));
 
-    // Note that all these strings are currently "translated" only in French
-    // catalog, so you need to use French locale to see them in action.
     wxMenu *macro_menu = new wxMenu;
     macro_menu->Append(INTERNAT_MACRO_1, _("item"));
     macro_menu->Append(INTERNAT_MACRO_2, wxGETTEXT_IN_CONTEXT("context_1", "item"));
@@ -533,17 +531,8 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        // this is a more implicit way to write _() but note that if you use it
-        // you must ensure that the strings get extracted in the message
-        // catalog as by default xgettext won't do it; it only knows of _(),
-        // not of wxTRANSLATE(). As internat's readme.txt says you should thus
-        // call xgettext with -kwxTRANSLATE.
-        str = wxGetTranslation(wxTRANSLATE("Bad luck! try again..."));
-
-        // note also that if we want 'str' to contain a localized string
-        // we need to use wxGetTranslation explicitly as wxTRANSLATE just
-        // tells xgettext to extract the string but has no effect on the
-        // runtime of the program!
+        // this is a more verbose way to write _()
+        str = wxGetTranslation("Bad luck! try again...");
     }
 
     wxMessageBox(str, _("Result"), wxOK | wxICON_INFORMATION);
@@ -582,8 +571,9 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-    // open a bogus file -- the error message should be also translated if
-    // you've got wxstd.mo somewhere in the search path (see MyApp::OnInit)
+    // open a bogus file -- the error message should be also either
+    // partially or fully translated if you've got wxstd.mo somewhere
+    // and/or your operating system provides localized error messages.
     wxFile file("NOTEXIST.ING");
 }
 
