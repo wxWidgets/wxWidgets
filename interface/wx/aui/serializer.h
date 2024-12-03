@@ -8,6 +8,53 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Description of user-modifiable pane layout information.
+
+    This struct is used with wxAuiSerializer and wxAuiDeserializer to store the
+    pane layout. Its fields have the same meaning as the corresponding fields
+    in wxAuiPaneInfo (with the exception of `is_maximized`), but it doesn't
+    contain the fields that it wouldn't make sense to serialize.
+
+    @since 3.3.0
+ */
+struct wxAuiPaneLayoutInfo
+{
+    /**
+        Ctor sets the name, which is always required.
+     */
+    explicit wxAuiPaneLayoutInfo(wxString name);
+
+    /// Unique name of the pane.
+    wxString name;
+
+    /// Direction of the dock containing the pane.
+    int dock_direction   = wxAUI_DOCK_LEFT;
+
+    /// Layer of the dock containing the pane.
+    int dock_layer       = 0;
+
+    /// Row of the dock containing the pane.
+    int dock_row         = 0;
+
+    /// Position of the pane in the dock containing it.
+    int dock_pos         = 0;
+
+    /// Relative proportion of the dock allocated to this pane.
+    int dock_proportion  = 0;
+
+
+    /// Position of the pane when floating, may be invalid.
+    wxPoint floating_pos = wxDefaultPosition;
+
+    /// Size of the pane when floating, may be invalid.
+    wxSize floating_size = wxDefaultSize;
+
+
+    /// True if the pane is currently maximized.
+    bool is_maximized   = false;
+};
+
+/**
     @class wxAuiSerializer
 
     wxAuiSerializer is used by wxAuiManager::SaveLayout() to store layout
@@ -67,7 +114,7 @@ public:
         it does _not_ need to perform any scaling itself to ensure that the
         stored values are restored correctly if the resolution changes.
      */
-    virtual void SavePane(const wxAuiPaneInfo& pane) = 0;
+    virtual void SavePane(const wxAuiPaneLayoutInfo& pane) = 0;
 
     /**
         Called after the last call to SavePane().

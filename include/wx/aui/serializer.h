@@ -10,9 +10,42 @@
 #ifndef _WX_AUI_SERIALIZER_H_
 #define _WX_AUI_SERIALIZER_H_
 
+#include <utility>
+
 // ----------------------------------------------------------------------------
 // Classes used to save/load wxAuiManager layout.
 // ----------------------------------------------------------------------------
+
+// This struct contains the pane name and information about its layout that can
+// be manipulated by the user interactively.
+struct wxAuiPaneLayoutInfo
+{
+    // Ctor sets the name, which is always required.
+    explicit wxAuiPaneLayoutInfo(wxString name_) : name{std::move(name_)} { }
+
+    // Unique name of the pane.
+    wxString name;
+
+
+    // Identifies the dock containing the pane.
+    int dock_direction   = wxAUI_DOCK_LEFT;
+    int dock_layer       = 0;
+    int dock_row         = 0;
+    int dock_pos         = 0;
+    int dock_proportion  = 0;
+
+
+    // Floating pane geometry, may be invalid.
+    wxPoint floating_pos = wxDefaultPosition;
+    wxSize floating_size = wxDefaultSize;
+
+
+    // True if the pane is currently maximized.
+    //
+    // Note that it's the only field of this struct which doesn't directly
+    // correspond to a field of wxAuiPaneInfo.
+    bool is_maximized   = false;
+};
 
 // wxAuiSerializer is used with wxAuiManager::SaveLayout().
 //
@@ -40,7 +73,7 @@ public:
     virtual void BeforeSavePanes() { }
 
     // Save information about the given pane.
-    virtual void SavePane(const wxAuiPaneInfo& pane) = 0;
+    virtual void SavePane(const wxAuiPaneLayoutInfo& pane) = 0;
 
     // Called after the last call to SavePane(), does nothing by default.
     virtual void AfterSavePanes() { }
@@ -82,7 +115,7 @@ public:
     virtual void BeforeLoad() { }
 
     // Load information about all the panes previously saved with SavePane().
-    virtual std::vector<wxAuiPaneInfo> LoadPanes() = 0;
+    virtual std::vector<wxAuiPaneLayoutInfo> LoadPanes() = 0;
 
     // Create the window to be managed by the given pane: this is called if any
     // of the panes returned by LoadPanes() doesn't exist in the existing
@@ -90,9 +123,9 @@ public:
     //
     // If this function returns nullptr, the pane is not added to the manager.
     //
-    // Note that the pane may (and usually will, if a window is created) be
-    // modified, to set fields such as caption or icon that wouldn't normally
-    // be serialized.
+    // Note that the pane info may (and usually will, if a window is created)
+    // be modified, to set fields such as caption or icon and any flags other
+    // "maximized".
     virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& WXUNUSED(pane))
     {
         return nullptr;

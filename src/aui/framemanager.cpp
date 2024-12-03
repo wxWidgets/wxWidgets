@@ -1390,6 +1390,39 @@ void MakeLogical(wxWindow* w, wxRect& rect)
 
 } // anonymous namespace
 
+// Copy pane layout information between wxAuiPaneLayoutInfo and wxAuiPaneInfo,
+// used when (de)serializing the layout.
+void
+wxAuiManager::CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
+                             const wxAuiPaneInfo& pane) const
+{
+    layoutInfo.dock_direction = pane.dock_direction;
+    layoutInfo.dock_layer = pane.dock_layer;
+    layoutInfo.dock_row = pane.dock_row;
+    layoutInfo.dock_pos = pane.dock_pos;
+    layoutInfo.dock_proportion = pane.dock_proportion;
+    layoutInfo.floating_pos = pane.floating_pos;
+    layoutInfo.floating_size = pane.floating_size;
+
+    layoutInfo.is_maximized = pane.HasFlag(wxAuiPaneInfo::optionMaximized);
+}
+
+void
+wxAuiManager::CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
+                           wxAuiPaneInfo& pane) const
+{
+    pane.dock_direction = layoutInfo.dock_direction;
+    pane.dock_layer = layoutInfo.dock_layer;
+    pane.dock_row = layoutInfo.dock_row;
+    pane.dock_pos = layoutInfo.dock_pos;
+    pane.dock_proportion = layoutInfo.dock_proportion;
+    pane.floating_pos = layoutInfo.floating_pos;
+    pane.floating_size = layoutInfo.floating_size;
+
+    pane.SetFlag(wxAuiPaneInfo::optionMaximized, layoutInfo.is_maximized);
+}
+
+
 void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
 {
     serializer.BeforeSave();
@@ -1400,18 +1433,13 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
 
         for ( const auto& pane : m_panes )
         {
-            auto paneDIP = pane;
+            wxAuiPaneLayoutInfo layoutInfo{pane.name};
+            CopyLayoutFrom(layoutInfo, pane);
 
-            MakeDIP(m_frame, paneDIP.best_size);
-            MakeDIP(m_frame, paneDIP.min_size);
-            MakeDIP(m_frame, paneDIP.max_size);
+            MakeDIP(m_frame, layoutInfo.floating_pos);
+            MakeDIP(m_frame, layoutInfo.floating_size);
 
-            MakeDIP(m_frame, paneDIP.floating_pos);
-            MakeDIP(m_frame, paneDIP.floating_size);
-
-            MakeDIP(m_frame, paneDIP.rect);
-
-            serializer.SavePane(paneDIP);
+            serializer.SavePane(layoutInfo);
         }
 
         serializer.AfterSavePanes();
@@ -1489,30 +1517,23 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
     };
     std::vector<NewPane> newPanes;
 
-    for ( const auto& paneDIP : deserializer.LoadPanes() )
+    auto layoutInfos = deserializer.LoadPanes();
+    for ( auto& layoutInfo : layoutInfos )
     {
-        auto pane = paneDIP;
+        MakeLogical(m_frame, layoutInfo.floating_pos);
+        MakeLogical(m_frame, layoutInfo.floating_size);
 
-        MakeLogical(m_frame, pane.best_size);
-        MakeLogical(m_frame, pane.min_size);
-        MakeLogical(m_frame, pane.max_size);
-
-        MakeLogical(m_frame, pane.floating_pos);
-        MakeLogical(m_frame, pane.floating_size);
-
-        MakeLogical(m_frame, pane.rect);
-
-        if ( pane.IsMaximized() )
+        if ( layoutInfo.is_maximized )
             hasMaximized = true;
 
         // Find the pane with the same name in the existing layout.
         bool found = false;
         for ( auto& existingPane : panes )
         {
-            if ( existingPane.name == pane.name )
+            if ( existingPane.name == layoutInfo.name )
             {
                 // Update the existing pane with the restored layout.
-                existingPane.SafeSet(pane);
+                CopyLayoutTo(layoutInfo, existingPane);
 
                 found = true;
                 break;
@@ -1523,6 +1544,10 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
         // create a new window for it if desired, otherwise just ignore it.
         if ( !found )
         {
+            wxAuiPaneInfo pane;
+            pane.name = layoutInfo.name;
+            CopyLayoutTo(layoutInfo, pane);
+
             if ( const auto w = deserializer.CreatePaneWindow(pane) )
                 newPanes.emplace_back(w, pane);
         }
