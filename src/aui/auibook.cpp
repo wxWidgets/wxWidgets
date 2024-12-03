@@ -180,20 +180,7 @@ void wxAuiTabContainer::SetRect(const wxRect& rect, wxWindow* wnd)
 bool wxAuiTabContainer::AddPage(wxWindow* page,
                                 const wxAuiNotebookPage& info)
 {
-    wxAuiNotebookPage page_info;
-    page_info = info;
-    page_info.window = page;
-    page_info.hover = false;
-
-    m_pages.Add(page_info);
-
-    // let the art provider know how many pages we have
-    if (m_art)
-    {
-        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), page);
-    }
-
-    return true;
+    return InsertPage(page, info, m_pages.GetCount());
 }
 
 bool wxAuiTabContainer::InsertPage(wxWindow* page,
