@@ -34,6 +34,13 @@ struct wxAuiPaneLayoutInfo
     int dock_pos         = 0;
     int dock_proportion  = 0;
 
+    // Size of the containing dock.
+    //
+    // Note that storing the dock size is redundant as it can be calculated
+    // from pane sizes, but storing all pane sizes would be redundant too, so
+    // we prefer to keep things simple and store just this size.
+    int dock_size        = 0;
+
 
     // Floating pane geometry, may be invalid.
     wxPoint floating_pos = wxDefaultPosition;
@@ -78,16 +85,6 @@ public:
     // Called after the last call to SavePane(), does nothing by default.
     virtual void AfterSavePanes() { }
 
-    // Called before starting to save information about the docks, does nothing
-    // by default.
-    virtual void BeforeSaveDocks() { }
-
-    // Save information about the given dock.
-    virtual void SaveDock(const wxAuiDockInfo& dock) = 0;
-
-    // Called after the last call to SaveDock(), does nothing by default.
-    virtual void AfterSaveDocks() { }
-
     // Called after saving everything, does nothing by default.
     virtual void AfterSave() { }
 };
@@ -130,9 +127,6 @@ public:
     {
         return nullptr;
     }
-
-    // Load information about all the docks previously saved with SaveDock().
-    virtual std::vector<wxAuiDockInfo> LoadDocks() = 0;
 
     // Called after restoring everything, calls Update() on the manager by
     // default.

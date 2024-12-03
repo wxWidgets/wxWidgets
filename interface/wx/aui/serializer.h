@@ -42,6 +42,9 @@ struct wxAuiPaneLayoutInfo
     /// Relative proportion of the dock allocated to this pane.
     int dock_proportion  = 0;
 
+    /// Size of the containing dock.
+    int dock_size        = 0;
+
 
     /// Position of the pane when floating, may be invalid.
     wxPoint floating_pos = wxDefaultPosition;

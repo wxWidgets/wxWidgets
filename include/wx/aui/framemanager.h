@@ -159,6 +159,7 @@ public:
         dock_layer = 0;
         dock_row = 0;
         dock_pos = 0;
+        dock_size = 0;
         dock_proportion = 0;
 
         DefaultPane();
@@ -381,6 +382,7 @@ public:
     int dock_layer;       // layer number (0 = innermost layer)
     int dock_row;         // row number on the docking bar (0 = first row)
     int dock_pos;         // position inside the row (0 = first position)
+    int dock_size;        // size of the containing dock (0 if not set)
 
     wxSize best_size;     // size that the layout engine will prefer
     wxSize min_size;      // minimum size the pane window can tolerate
@@ -634,6 +636,10 @@ private:
     // Return the index in m_uiParts corresponding to the current value of
     // m_actionPart. If m_actionPart is null, returns wxNOT_FOUND.
     int GetActionPartIndex() const;
+
+    // Find the dock containing the specified pane.
+    const wxAuiDockInfo* FindDockContainingPane(const wxAuiPaneInfo& pane) const;
+
 
     // This flag is set to true if Update() is called while the window is
     // minimized, in which case we postpone updating it until it is restored.
