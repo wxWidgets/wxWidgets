@@ -425,7 +425,7 @@ public:
         The @a direction argument specifies where the pane should go, it should be one
         of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
     */
-    virtual void Split(size_t page, int direction);
+    void Split(size_t page, int direction);
 
     /**
         Shows the window menu for the active tab control associated with this notebook,
