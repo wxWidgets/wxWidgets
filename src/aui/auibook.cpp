@@ -209,14 +209,12 @@ bool wxAuiTabContainer::MovePage(wxWindow* page,
     if (idx == -1)
         return false;
 
-    // get page entry, make a copy of it
-    wxAuiNotebookPage p = GetPage(idx);
+    // Check if we actually have anything to do.
+    if (new_idx == (size_t)idx)
+        return true;
 
-    // remove old page entry
-    RemovePage(page);
-
-    // insert page where it should be
-    InsertPage(page, p, new_idx);
+    // Just swap the pages contents.
+    std::swap(m_pages.at(idx), m_pages.at(new_idx));
 
     return true;
 }
