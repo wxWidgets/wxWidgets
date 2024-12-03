@@ -1810,8 +1810,8 @@ private:
         wxString strY;
         const wxString strX = strXY.BeforeFirst(',', &strY);
 
-        unsigned int x, y;
-        if ( !strX.ToUInt(&x) || !strY.ToUInt(&y) )
+        int x, y;
+        if ( !strX.ToInt(&x) || !strY.ToInt(&y) )
             throw std::runtime_error("Failed to parse position");
 
         return wxRect(wxPoint(x, y), GetSize(strWH));
