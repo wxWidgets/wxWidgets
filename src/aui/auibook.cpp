@@ -2011,9 +2011,7 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
                                bool select,
                                const wxBitmapBundle& bitmap)
 {
-    wxASSERT_MSG(page, wxT("page pointer must be non-null"));
-    if (!page)
-        return false;
+    wxCHECK_MSG(page, false, wxT("page pointer must be non-null"));
 
     page->Reparent(this);
 
