@@ -219,27 +219,30 @@ bool wxAuiTabContainer::MovePage(wxWindow* page,
     return true;
 }
 
-bool wxAuiTabContainer::RemovePage(wxWindow* wnd)
+bool wxAuiTabContainer::RemovePage(wxWindow* page)
 {
-    size_t i, page_count = m_pages.GetCount();
-    for (i = 0; i < page_count; ++i)
+    int idx = GetIdxFromWindow(page);
+    if (idx == -1)
+        return false;
+
+    RemovePageAt(idx);
+
+    return true;
+}
+
+void wxAuiTabContainer::RemovePageAt(size_t idx)
+{
+    wxCHECK_RET( idx < m_pages.GetCount(), "invalid page index" );
+
+    wxWindow* const wnd = m_pages[idx].window;
+
+    m_pages.RemoveAt(idx);
+
+    // let the art provider know how many pages we have
+    if (m_art)
     {
-        wxAuiNotebookPage& page = m_pages.Item(i);
-        if (page.window == wnd)
-        {
-            m_pages.RemoveAt(i);
-
-            // let the art provider know how many pages we have
-            if (m_art)
-            {
-                m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), wnd);
-            }
-
-            return true;
-        }
+        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), wnd);
     }
-
-    return false;
 }
 
 bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
@@ -2091,11 +2094,10 @@ wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
 
 
     // remove the tab from main catalog
-    if (!m_tabs.RemovePage(wnd))
-        return nullptr;
+    m_tabs.RemovePageAt(page_idx);
 
     // remove the tab from the onscreen tab ctrl
-    ctrl->RemovePage(wnd);
+    ctrl->RemovePageAt(ctrl_idx);
 
     if (is_active_in_split)
     {
@@ -2471,7 +2473,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     // remove the page from the source tabs
     wxAuiNotebookPage page_info = src_tabs->GetPage(src_idx);
     page_info.active = false;
-    src_tabs->RemovePage(page_info.window);
+    src_tabs->RemovePageAt(src_idx);
     if (src_tabs->GetPageCount() > 0)
     {
         src_tabs->SetActivePage((size_t)0);
