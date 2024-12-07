@@ -2174,8 +2174,7 @@ int wxAuiNotebook::FindPage(const wxWindow* page) const
 // SetPageText() changes the tab caption of the specified page
 bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), false, "invalid page index");
 
     // update our own tab catalog
     wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2198,8 +2197,7 @@ bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
 // returns the page caption
 wxString wxAuiNotebook::GetPageText(size_t page_idx) const
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return wxEmptyString;
+    wxCHECK_MSG(page_idx <= GetPageCount(), wxString(), "invalid page index");
 
     // update our own tab catalog
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2208,8 +2206,7 @@ wxString wxAuiNotebook::GetPageText(size_t page_idx) const
 
 bool wxAuiNotebook::SetPageToolTip(size_t page_idx, const wxString& text)
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), false, "invalid page index");
 
     // update our own tab catalog
     wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2230,8 +2227,7 @@ bool wxAuiNotebook::SetPageToolTip(size_t page_idx, const wxString& text)
 
 wxString wxAuiNotebook::GetPageToolTip(size_t page_idx) const
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return wxString();
+    wxCHECK_MSG(page_idx <= GetPageCount(), wxString(), "invalid page index");
 
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
     return page_info.tooltip;
@@ -2239,8 +2235,7 @@ wxString wxAuiNotebook::GetPageToolTip(size_t page_idx) const
 
 bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmapBundle& bitmap)
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), false, "invalid page index");
 
     // update our own tab catalog
     wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2266,8 +2261,7 @@ bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmapBundle& bitmap)
 // returns the page bitmap
 wxBitmap wxAuiNotebook::GetPageBitmap(size_t page_idx) const
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return wxBitmap();
+    wxCHECK_MSG(page_idx <= GetPageCount(), wxBitmap(), "invalid page index");
 
     // update our own tab catalog
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
