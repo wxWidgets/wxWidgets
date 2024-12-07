@@ -177,26 +177,20 @@ void wxAuiTabContainer::SetRect(const wxRect& rect, wxWindow* wnd)
     }
 }
 
-bool wxAuiTabContainer::AddPage(wxWindow* page,
-                                const wxAuiNotebookPage& info)
+bool wxAuiTabContainer::AddPage(const wxAuiNotebookPage& info)
 {
-    return InsertPage(page, info, m_pages.GetCount());
+    return InsertPage(info, m_pages.GetCount());
 }
 
-bool wxAuiTabContainer::InsertPage(wxWindow* page,
-                                   const wxAuiNotebookPage& info,
+bool wxAuiTabContainer::InsertPage(const wxAuiNotebookPage& info,
                                    size_t idx)
 {
-    wxAuiNotebookPage page_info = info;
-    page_info.window = page;
-    page_info.hover = false;
-
-    m_pages.insert(m_pages.begin() + idx, page_info);
+    m_pages.insert(m_pages.begin() + idx, info);
 
     // let the art provider know how many pages we have
     if (m_art)
     {
-        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), page);
+        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), info.window);
     }
 
     return true;
@@ -2051,11 +2045,11 @@ void wxAuiNotebook::InsertPageAt(wxAuiNotebookPage& info,
         select = true;
     }
 
-    m_tabs.InsertPage(page, info, page_idx);
+    m_tabs.InsertPage(info, page_idx);
 
     if ( tab_page_idx == -1 )
         tab_page_idx = tabctrl->GetPageCount();
-    tabctrl->InsertPage(page, info, tab_page_idx);
+    tabctrl->InsertPage(info, tab_page_idx);
 
     // Note that we don't need to call DoSizing() if the height has changed, as
     // it's already called from UpdateTabCtrlHeight() itself in this case.
@@ -2489,7 +2483,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
 
 
     // add the page to the destination tabs
-    dest_tabs->InsertPage(page_info.window, page_info, 0);
+    dest_tabs->InsertPage(page_info, 0);
 
     if (src_tabs->GetPageCount() == 0)
     {
@@ -2751,6 +2745,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
 
                 // make a copy of the page info
                 wxAuiNotebookPage page_info = m_tabs.GetPage(main_idx);
+                page_info.hover = false;
 
                 // remove the page from the source notebook
                 RemovePage(main_idx);
@@ -2854,7 +2849,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
         // add the page to the destination tabs
         if (insert_idx == -1)
             insert_idx = dest_tabs->GetPageCount();
-        dest_tabs->InsertPage(page_info.window, page_info, insert_idx);
+        dest_tabs->InsertPage(page_info, insert_idx);
 
         if (src_tabs->GetPageCount() == 0)
         {

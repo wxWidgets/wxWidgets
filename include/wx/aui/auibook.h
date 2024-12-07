@@ -138,8 +138,8 @@ public:
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
 
-    bool AddPage(wxWindow* page, const wxAuiNotebookPage& info);
-    bool InsertPage(wxWindow* page, const wxAuiNotebookPage& info, size_t idx);
+    bool AddPage(const wxAuiNotebookPage& info);
+    bool InsertPage(const wxAuiNotebookPage& info, size_t idx);
     bool MovePage(wxWindow* page, size_t newIdx);
     bool RemovePage(wxWindow* page);
     void RemovePageAt(size_t idx);
@@ -178,7 +178,20 @@ public:
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
 
-    // Compatibility only, don't use.
+    // Backwards compatible variants of internal functions, which shouldn't be
+    // used anyhow.
+    bool AddPage(wxWindow* page, wxAuiNotebookPage info)
+    {
+        info.window = page;
+        return AddPage(info);
+    }
+
+    bool InsertPage(wxWindow* page, wxAuiNotebookPage info, size_t idx)
+    {
+        info.window = page;
+        return InsertPage(info, idx);
+    }
+
     bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const
     {
         auto* const button = ButtonHitTest(x, y);
