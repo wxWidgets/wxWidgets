@@ -50,6 +50,20 @@ enum wxAuiNotebookOption
     glossy look and feel.
     The theme can be changed by calling wxAuiNotebook::SetArtProvider.
 
+    @section auibook_tabs Multiple Tab Controls
+
+    By default, wxAuiNotebook uses a single tab control for all tabs, however
+    when wxAUI_NB_TAB_SPLIT style is used (which is the case by default), the
+    user will be able to drag pages out of it and create new tab controls, that
+    can then themselves be dragged to be docked in a different place inside the
+    notebook. Also, whether wxAUI_NB_TAB_SPLIT is specified or not, Split()
+    function can always be used to create new tab controls programmatically.
+
+    When using multiple tab controls, exactly one of them is active at any
+    time. This tab control can be retrieved by calling GetActiveTabCtrl() and
+    is always used for appending or inserting new pages.
+
+
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}
            Defined as wxAUI_NB_TOP | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
@@ -279,6 +293,10 @@ public:
         should be inserted. It may be equal to the current number of pages in
         the notebook, in which case this function is equivalent to AddPage(),
         but can't be strictly greater than it.
+
+        Note that if the page with the given index is not in the currently
+        active tab control, the new page will be added at the end of the active
+        tab instead of being inserted into another tab control.
     */
     bool InsertPage(size_t page_idx, wxWindow* page,
                     const wxString& caption,
