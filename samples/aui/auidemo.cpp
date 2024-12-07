@@ -164,6 +164,8 @@ private:
     void OnNotebookPageClose(wxAuiNotebookEvent& evt);
     void OnNotebookPageClosed(wxAuiNotebookEvent& evt);
     void OnNotebookPageChanging(wxAuiNotebookEvent &evt);
+    void OnNotebookTabRightClick(wxAuiNotebookEvent &evt);
+    void OnNotebookTabBackgroundDClick(wxAuiNotebookEvent &evt);
     void OnExit(wxCommandEvent& evt);
     void OnAbout(wxCommandEvent& evt);
     void OnTabAlignment(wxCommandEvent &evt);
@@ -682,6 +684,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
     EVT_AUINOTEBOOK_PAGE_CLOSED(wxID_ANY, MyFrame::OnNotebookPageClosed)
     EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnNotebookPageChanging)
+    EVT_AUINOTEBOOK_TAB_RIGHT_DOWN(wxID_ANY, MyFrame::OnNotebookTabRightClick)
+    EVT_AUINOTEBOOK_BG_DCLICK(wxID_ANY, MyFrame::OnNotebookTabBackgroundDClick)
     EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
     EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
 wxEND_EVENT_TABLE()
@@ -1909,6 +1913,33 @@ void MyFrame::OnNotebookPageChanging(wxAuiNotebookEvent& evt)
             evt.Veto();
         }
     }
+}
+
+void MyFrame::OnNotebookTabRightClick(wxAuiNotebookEvent& evt)
+{
+    wxPoint pt;
+    wxGetMousePosition(&pt.x, &pt.y);
+
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    wxLogMessage("Page from event: %d, page under mouse: %d",
+                 evt.GetSelection(),
+                 book->HitTest(book->ScreenToClient(pt)));
+}
+
+void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    wxString pages("Notebook contains the following pages:\n\n");
+    for ( size_t i = 0; i < book->GetPageCount(); ++i )
+    {
+        pages += wxString::Format("%zu: %s\n", i, book->GetPageText(i));
+    }
+
+    wxMessageBox(pages, "wxAUI", wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)

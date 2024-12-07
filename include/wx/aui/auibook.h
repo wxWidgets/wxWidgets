@@ -142,6 +142,7 @@ public:
     bool InsertPage(wxWindow* page, const wxAuiNotebookPage& info, size_t idx);
     bool MovePage(wxWindow* page, size_t newIdx);
     bool RemovePage(wxWindow* page);
+    void RemovePageAt(size_t idx);
     bool SetActivePage(wxWindow* page);
     bool SetActivePage(size_t page);
     void SetNoneActive();
@@ -308,9 +309,6 @@ public:
                     bool select = false,
                     const wxBitmapBundle& bitmap = wxBitmapBundle());
 
-    bool DeletePage(size_t page) override;
-    bool RemovePage(size_t page) override;
-
     virtual size_t GetPageCount() const override;
     virtual wxWindow* GetPage(size_t pageIdx) const override;
     virtual int FindPage(const wxWindow* page) const override;
@@ -400,7 +398,7 @@ protected:
     virtual wxSize CalculateNewSplitSize();
 
     // remove the page and return a pointer to it
-    virtual wxWindow *DoRemovePage(size_t WXUNUSED(page)) override { return nullptr; }
+    virtual wxWindow *DoRemovePage(size_t page) override;
 
     //A general selection function
     virtual int DoModifySelection(size_t n, bool events);

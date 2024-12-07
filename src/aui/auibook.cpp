@@ -180,35 +180,18 @@ void wxAuiTabContainer::SetRect(const wxRect& rect, wxWindow* wnd)
 bool wxAuiTabContainer::AddPage(wxWindow* page,
                                 const wxAuiNotebookPage& info)
 {
-    wxAuiNotebookPage page_info;
-    page_info = info;
-    page_info.window = page;
-    page_info.hover = false;
-
-    m_pages.Add(page_info);
-
-    // let the art provider know how many pages we have
-    if (m_art)
-    {
-        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), page);
-    }
-
-    return true;
+    return InsertPage(page, info, m_pages.GetCount());
 }
 
 bool wxAuiTabContainer::InsertPage(wxWindow* page,
                                    const wxAuiNotebookPage& info,
                                    size_t idx)
 {
-    wxAuiNotebookPage page_info;
-    page_info = info;
+    wxAuiNotebookPage page_info = info;
     page_info.window = page;
     page_info.hover = false;
 
-    if (idx >= m_pages.GetCount())
-        m_pages.Add(page_info);
-    else
-        m_pages.Insert(page_info, idx);
+    m_pages.insert(m_pages.begin() + idx, page_info);
 
     // let the art provider know how many pages we have
     if (m_art)
@@ -226,39 +209,40 @@ bool wxAuiTabContainer::MovePage(wxWindow* page,
     if (idx == -1)
         return false;
 
-    // get page entry, make a copy of it
-    wxAuiNotebookPage p = GetPage(idx);
+    // Check if we actually have anything to do.
+    if (new_idx == (size_t)idx)
+        return true;
 
-    // remove old page entry
-    RemovePage(page);
-
-    // insert page where it should be
-    InsertPage(page, p, new_idx);
+    // Just swap the pages contents.
+    std::swap(m_pages.at(idx), m_pages.at(new_idx));
 
     return true;
 }
 
-bool wxAuiTabContainer::RemovePage(wxWindow* wnd)
+bool wxAuiTabContainer::RemovePage(wxWindow* page)
 {
-    size_t i, page_count = m_pages.GetCount();
-    for (i = 0; i < page_count; ++i)
+    int idx = GetIdxFromWindow(page);
+    if (idx == -1)
+        return false;
+
+    RemovePageAt(idx);
+
+    return true;
+}
+
+void wxAuiTabContainer::RemovePageAt(size_t idx)
+{
+    wxCHECK_RET( idx < m_pages.GetCount(), "invalid page index" );
+
+    wxWindow* const wnd = m_pages[idx].window;
+
+    m_pages.RemoveAt(idx);
+
+    // let the art provider know how many pages we have
+    if (m_art)
     {
-        wxAuiNotebookPage& page = m_pages.Item(i);
-        if (page.window == wnd)
-        {
-            m_pages.RemoveAt(i);
-
-            // let the art provider know how many pages we have
-            if (m_art)
-            {
-                m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), wnd);
-            }
-
-            return true;
-        }
+        m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount(), wnd);
     }
-
-    return false;
 }
 
 bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
@@ -1752,7 +1736,7 @@ void wxAuiNotebook::OnDpiChanged(wxDPIChangedEvent& event)
 
 void wxAuiNotebook::Init()
 {
-    m_curPage = -1;
+    m_curPage = wxNOT_FOUND;
     m_tabIdCounter = wxAuiBaseTabCtrlId;
     m_dummyWnd = nullptr;
     m_requestedBmpSize = wxDefaultSize;
@@ -1778,7 +1762,7 @@ bool wxAuiNotebook::Create(wxWindow* parent,
 void wxAuiNotebook::InitNotebook(long style)
 {
     SetName(wxT("wxAuiNotebook"));
-    m_curPage = -1;
+    m_curPage = wxNOT_FOUND;
     m_tabIdCounter = wxAuiBaseTabCtrlId;
     m_dummyWnd = nullptr;
     m_flags = (unsigned int)style;
@@ -2030,9 +2014,9 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
                                bool select,
                                const wxBitmapBundle& bitmap)
 {
-    wxASSERT_MSG(page, wxT("page pointer must be non-null"));
-    if (!page)
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), false, wxT("invalid page index"));
+
+    wxCHECK_MSG(page, false, wxT("page pointer must be non-null"));
 
     page->Reparent(this);
 
@@ -2043,18 +2027,14 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     info.active = false;
 
     // if there are currently no tabs, the first added
-    // tab must be active
+    // tab must be active and selected, even if "select" is false
     if (m_tabs.GetPageCount() == 0)
+    {
         info.active = true;
+        select = true;
+    }
 
     m_tabs.InsertPage(page, info, page_idx);
-
-    // if that was the first page added, even if
-    // select is false, it must become the "current page"
-    // (though no select events will be fired)
-    if (!select && m_tabs.GetPageCount() == 1)
-        select = true;
-        //m_curPage = GetPageIndex(page);
 
     wxAuiTabCtrl* active_tabctrl = GetActiveTabCtrl();
     if (page_idx >= active_tabctrl->GetPageCount())
@@ -2082,46 +2062,10 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 }
 
 
-// DeletePage() removes a tab from the multi-notebook,
-// and destroys the window as well
-bool wxAuiNotebook::DeletePage(size_t page_idx)
+wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), nullptr, "invalid page index");
 
-    wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
-
-    // hide the window in advance, as this will
-    // prevent flicker
-    ShowWnd(wnd, false);
-
-    if (!RemovePage(page_idx))
-        return false;
-
-#if wxUSE_MDI
-    // actually destroy the window now
-    if (wxDynamicCast(wnd, wxAuiMDIChildFrame))
-    {
-        // delete the child frame with pending delete, as is
-        // customary with frame windows
-        if (!wxPendingDelete.Member(wnd))
-            wxPendingDelete.Append(wnd);
-    }
-    else
-#endif
-    {
-        wnd->Destroy();
-    }
-
-    return true;
-}
-
-
-
-// RemovePage() removes a tab from the multi-notebook,
-// but does not destroy the window
-bool wxAuiNotebook::RemovePage(size_t page_idx)
-{
     // Lock the window for changes to avoid flicker when
     // removing the active page (there is a noticeable 
     // flicker from the active tab is closed and until a
@@ -2137,28 +2081,23 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
     wxWindow* new_active = nullptr;
 
-    // make sure we found the page
-    if (!wnd)
-        return false;
-
     ShowWnd(wnd, false);
 
     // find out which onscreen tab ctrl owns this tab
     wxAuiTabCtrl* ctrl;
     int ctrl_idx;
     if (!FindTab(wnd, &ctrl, &ctrl_idx))
-        return false;
+        return nullptr;
 
     bool is_curpage = (m_curPage == (int)page_idx);
     bool is_active_in_split = ctrl->GetPage(ctrl_idx).active;
 
 
     // remove the tab from main catalog
-    if (!m_tabs.RemovePage(wnd))
-        return false;
+    m_tabs.RemovePageAt(page_idx);
 
     // remove the tab from the onscreen tab ctrl
-    ctrl->RemovePage(wnd);
+    ctrl->RemovePageAt(ctrl_idx);
 
     if (is_active_in_split)
     {
@@ -2223,7 +2162,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     if (new_active && !m_isBeingDeleted)
         SetSelectionToWindow(new_active);
 
-    return true;
+    return wnd;
 }
 
 int wxAuiNotebook::FindPage(const wxWindow* page) const
@@ -2235,8 +2174,7 @@ int wxAuiNotebook::FindPage(const wxWindow* page) const
 // SetPageText() changes the tab caption of the specified page
 bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), false, "invalid page index");
 
     // update our own tab catalog
     wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2259,8 +2197,7 @@ bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
 // returns the page caption
 wxString wxAuiNotebook::GetPageText(size_t page_idx) const
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return wxEmptyString;
+    wxCHECK_MSG(page_idx <= GetPageCount(), wxString(), "invalid page index");
 
     // update our own tab catalog
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2269,8 +2206,7 @@ wxString wxAuiNotebook::GetPageText(size_t page_idx) const
 
 bool wxAuiNotebook::SetPageToolTip(size_t page_idx, const wxString& text)
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), false, "invalid page index");
 
     // update our own tab catalog
     wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2291,8 +2227,7 @@ bool wxAuiNotebook::SetPageToolTip(size_t page_idx, const wxString& text)
 
 wxString wxAuiNotebook::GetPageToolTip(size_t page_idx) const
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return wxString();
+    wxCHECK_MSG(page_idx <= GetPageCount(), wxString(), "invalid page index");
 
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
     return page_info.tooltip;
@@ -2300,8 +2235,7 @@ wxString wxAuiNotebook::GetPageToolTip(size_t page_idx) const
 
 bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmapBundle& bitmap)
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), false, "invalid page index");
 
     // update our own tab catalog
     wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2327,8 +2261,7 @@ bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmapBundle& bitmap)
 // returns the page bitmap
 wxBitmap wxAuiNotebook::GetPageBitmap(size_t page_idx) const
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return wxBitmap();
+    wxCHECK_MSG(page_idx <= GetPageCount(), wxBitmap(), "invalid page index");
 
     // update our own tab catalog
     const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
@@ -2534,7 +2467,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     // remove the page from the source tabs
     wxAuiNotebookPage page_info = src_tabs->GetPage(src_idx);
     page_info.active = false;
-    src_tabs->RemovePage(page_info.window);
+    src_tabs->RemovePageAt(src_idx);
     if (src_tabs->GetPageCount() > 0)
     {
         src_tabs->SetActivePage((size_t)0);
@@ -2556,7 +2489,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     dest_tabs->Refresh();
 
     // force the set selection function reset the selection
-    m_curPage = -1;
+    m_curPage = wxNOT_FOUND;
 
     // set the active page to the one we just split off
     SetSelectionToPage(page_info);
@@ -2937,7 +2870,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
         dest_tabs->Refresh();
 
         // force the set selection function reset the selection
-        m_curPage = -1;
+        m_curPage = wxNOT_FOUND;
 
         // set the active page to the one we just split off
         SetSelectionToPage(page_info);

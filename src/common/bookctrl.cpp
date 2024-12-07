@@ -401,11 +401,15 @@ wxBookCtrlBase::InsertPage(size_t nPage,
 bool wxBookCtrlBase::DeletePage(size_t nPage)
 {
     wxWindow *page = DoRemovePage(nPage);
-    if ( !(page || AllowNullPage()) )
-        return false;
 
-    // deleting null pointer is harmless
-    delete page;
+    if ( !page )
+    {
+        // Normally a null page indicates a problem, but it can be valid if
+        // null pages are allowed in the control.
+        return AllowNullPage();
+    }
+
+    page->Destroy();
 
     return true;
 }
