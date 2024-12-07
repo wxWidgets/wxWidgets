@@ -274,6 +274,11 @@ public:
         insert location.
         If the @a select parameter is @true, calling this will generate a page change
         event.
+
+        Page index @a page_idx specifies the page before which the new page
+        should be inserted. It may be equal to the current number of pages in
+        the notebook, in which case this function is equivalent to AddPage(),
+        but can't be strictly greater than it.
     */
     bool InsertPage(size_t page_idx, wxWindow* page,
                     const wxString& caption,
