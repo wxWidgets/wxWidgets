@@ -2059,46 +2059,10 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 }
 
 
-// DeletePage() removes a tab from the multi-notebook,
-// and destroys the window as well
-bool wxAuiNotebook::DeletePage(size_t page_idx)
+wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
 {
-    if (page_idx >= m_tabs.GetPageCount())
-        return false;
+    wxCHECK_MSG(page_idx <= GetPageCount(), nullptr, "invalid page index");
 
-    wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
-
-    // hide the window in advance, as this will
-    // prevent flicker
-    ShowWnd(wnd, false);
-
-    if (!RemovePage(page_idx))
-        return false;
-
-#if wxUSE_MDI
-    // actually destroy the window now
-    if (wxDynamicCast(wnd, wxAuiMDIChildFrame))
-    {
-        // delete the child frame with pending delete, as is
-        // customary with frame windows
-        if (!wxPendingDelete.Member(wnd))
-            wxPendingDelete.Append(wnd);
-    }
-    else
-#endif
-    {
-        wnd->Destroy();
-    }
-
-    return true;
-}
-
-
-
-// RemovePage() removes a tab from the multi-notebook,
-// but does not destroy the window
-bool wxAuiNotebook::RemovePage(size_t page_idx)
-{
     // Lock the window for changes to avoid flicker when
     // removing the active page (there is a noticeable 
     // flicker from the active tab is closed and until a
@@ -2116,7 +2080,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
 
     // make sure we found the page
     if (!wnd)
-        return false;
+        return nullptr;
 
     ShowWnd(wnd, false);
 
@@ -2124,7 +2088,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     wxAuiTabCtrl* ctrl;
     int ctrl_idx;
     if (!FindTab(wnd, &ctrl, &ctrl_idx))
-        return false;
+        return nullptr;
 
     bool is_curpage = (m_curPage == (int)page_idx);
     bool is_active_in_split = ctrl->GetPage(ctrl_idx).active;
@@ -2132,7 +2096,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
 
     // remove the tab from main catalog
     if (!m_tabs.RemovePage(wnd))
-        return false;
+        return nullptr;
 
     // remove the tab from the onscreen tab ctrl
     ctrl->RemovePage(wnd);
@@ -2200,7 +2164,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     if (new_active && !m_isBeingDeleted)
         SetSelectionToWindow(new_active);
 
-    return true;
+    return wnd;
 }
 
 int wxAuiNotebook::FindPage(const wxWindow* page) const
