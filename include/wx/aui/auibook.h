@@ -204,7 +204,10 @@ protected:
 protected:
 
     wxAuiTabArt* m_art;
+
+    // Contains pages in the display order.
     wxAuiNotebookPageArray m_pages;
+
     wxAuiTabContainerButtonArray m_buttons;
     wxAuiTabContainerButtonArray m_tabCloseButtons;
     wxRect m_rect;
@@ -462,8 +465,13 @@ protected:
 protected:
 
     wxAuiManager m_mgr;
+
+    // Contains all pages in the insertion order.
     wxAuiTabContainer m_tabs;
+
+    // Current page index in m_tabs or wxNOT_FOUND if none.
     int m_curPage;
+
     int m_tabIdCounter;
     wxWindow* m_dummyWnd;
 
@@ -482,6 +490,13 @@ private:
 
     // Create the main tab control unconditionally.
     wxAuiTabCtrl* CreateMainTabCtrl();
+
+    // Inserts the page at the given position into the given tab control.
+    void InsertPageAt(wxAuiNotebookPage& info,
+                      size_t page_idx,
+                      wxAuiTabCtrl* tabctrl,
+                      int tab_page_idx, // Can be -1 to append.
+                      bool select);
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);

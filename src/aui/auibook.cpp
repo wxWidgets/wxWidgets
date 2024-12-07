@@ -2002,13 +2002,46 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 
     wxCHECK_MSG(page, false, wxT("page pointer must be non-null"));
 
-    page->Reparent(this);
-
     wxAuiNotebookPage info;
     info.window = page;
     info.caption = caption;
     info.bitmap = bitmap;
     info.active = false;
+
+    wxAuiTabCtrl* active_tabctrl = GetActiveTabCtrl();
+
+    // The usual case is appending a new page, when we can just add it page at
+    // the end of the currently active tab control.
+    int tab_page_idx = -1;
+
+    // But when inserting, we may need to do it at a different place.
+    if ( page_idx != m_tabs.GetPageCount() )
+    {
+        wxAuiTabCtrl* tabWithPage = nullptr;
+        int idx = wxNOT_FOUND;
+        if ( FindTab(m_tabs.GetWindowFromIdx(page_idx), &tabWithPage, &idx) &&
+                tabWithPage == active_tabctrl )
+        {
+            // Use this index for insertion, as it's in the correct control.
+            tab_page_idx = idx;
+        }
+        //else: Do nothing, we'll append it to the active tab control.
+    }
+
+    InsertPageAt(info, page_idx, active_tabctrl, tab_page_idx, select);
+
+    return true;
+}
+
+void wxAuiNotebook::InsertPageAt(wxAuiNotebookPage& info,
+                                 size_t page_idx,
+                                 wxAuiTabCtrl* tabctrl,
+                                 int tab_page_idx,
+                                 bool select)
+{
+    wxWindow* const page = info.window;
+
+    page->Reparent(this);
 
     // if there are currently no tabs, the first added
     // tab must be active and selected, even if "select" is false
@@ -2020,18 +2053,16 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 
     m_tabs.InsertPage(page, info, page_idx);
 
-    wxAuiTabCtrl* active_tabctrl = GetActiveTabCtrl();
-    if (page_idx >= active_tabctrl->GetPageCount())
-        active_tabctrl->AddPage(page, info);
-    else
-        active_tabctrl->InsertPage(page, info, page_idx);
+    if ( tab_page_idx == -1 )
+        tab_page_idx = tabctrl->GetPageCount();
+    tabctrl->InsertPage(page, info, tab_page_idx);
 
     // Note that we don't need to call DoSizing() if the height has changed, as
     // it's already called from UpdateTabCtrlHeight() itself in this case.
     if ( !UpdateTabCtrlHeight() )
         DoSizing();
 
-    active_tabctrl->DoShowHide();
+    tabctrl->DoShowHide();
 
     // adjust selected index
     if(m_curPage >= (int) page_idx)
@@ -2041,8 +2072,6 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     {
         SetSelectionToWindow(page);
     }
-
-    return true;
 }
 
 
@@ -2575,7 +2604,6 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
 
             wxWindow* src_tab = dest_tabs->GetWindowFromIdx(src_idx);
             dest_tabs->MovePage(src_tab, dest_idx);
-            m_tabs.MovePage(m_tabs.GetPage(src_idx).window, dest_idx);
             dest_tabs->SetActivePage((size_t)dest_idx);
             dest_tabs->DoUpdateActive();
             m_lastDragX = pt.x;
@@ -2734,9 +2762,6 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                 // remove the page from the source notebook
                 RemovePage(main_idx);
 
-                // reparent the page
-                src_page->Reparent(nb);
-
 
                 // found out the insert idx
                 wxAuiTabCtrl* dest_tabs = (wxAuiTabCtrl*)tab_ctrl;
@@ -2750,19 +2775,14 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                 }
 
 
-                // add the page to the new notebook
-                if (insert_idx == -1)
-                    insert_idx = dest_tabs->GetPageCount();
-                dest_tabs->InsertPage(page_info.window, page_info, insert_idx);
-                nb->m_tabs.InsertPage(page_info.window, page_info, insert_idx);
-
-                nb->DoSizing();
-                dest_tabs->SetActivePage(insert_idx);
-                dest_tabs->DoShowHide();
-                dest_tabs->Refresh();
-
-                // set the selection in the destination tab control
-                nb->DoModifySelection(insert_idx, false);
+                // add the page to the new notebook: note that we always append
+                // it to the end in logical order, as it's not clear what
+                // should its position be (the alternative would be to insert
+                // it before the target page, but it's not really clear if this
+                // is really what we want)
+                nb->InsertPageAt(page_info, nb->GetPageCount(),
+                                 dest_tabs, insert_idx,
+                                 true /* select */);
 
                 // notify owner that the tab has been dragged
                 wxAuiNotebookEvent e2(wxEVT_AUINOTEBOOK_DRAG_DONE, m_windowId);
