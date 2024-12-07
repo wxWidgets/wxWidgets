@@ -2078,10 +2078,6 @@ wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
     wxWindow* new_active = nullptr;
 
-    // make sure we found the page
-    if (!wnd)
-        return nullptr;
-
     ShowWnd(wnd, false);
 
     // find out which onscreen tab ctrl owns this tab
