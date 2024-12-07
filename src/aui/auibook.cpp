@@ -1733,7 +1733,7 @@ void wxAuiNotebook::OnDpiChanged(wxDPIChangedEvent& event)
 
 void wxAuiNotebook::Init()
 {
-    m_curPage = -1;
+    m_curPage = wxNOT_FOUND;
     m_tabIdCounter = wxAuiBaseTabCtrlId;
     m_dummyWnd = nullptr;
     m_requestedBmpSize = wxDefaultSize;
@@ -1759,7 +1759,7 @@ bool wxAuiNotebook::Create(wxWindow* parent,
 void wxAuiNotebook::InitNotebook(long style)
 {
     SetName(wxT("wxAuiNotebook"));
-    m_curPage = -1;
+    m_curPage = wxNOT_FOUND;
     m_tabIdCounter = wxAuiBaseTabCtrlId;
     m_dummyWnd = nullptr;
     m_flags = (unsigned int)style;
@@ -2533,7 +2533,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     dest_tabs->Refresh();
 
     // force the set selection function reset the selection
-    m_curPage = -1;
+    m_curPage = wxNOT_FOUND;
 
     // set the active page to the one we just split off
     SetSelectionToPage(page_info);
@@ -2914,7 +2914,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
         dest_tabs->Refresh();
 
         // force the set selection function reset the selection
-        m_curPage = -1;
+        m_curPage = wxNOT_FOUND;
 
         // set the active page to the one we just split off
         SetSelectionToPage(page_info);
