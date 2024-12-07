@@ -2392,7 +2392,7 @@ wxAuiTabCtrl* wxAuiNotebook::CreateMainTabCtrl()
 // FindTab() finds the tab control that currently contains the window as well
 // as the index of the window in the tab control.  It returns true if the
 // window was found, otherwise false.
-bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx)
+bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const
 {
     for ( const auto& pane : m_mgr.GetAllPanes() )
     {
@@ -2411,6 +2411,15 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx)
     }
 
     return false;
+}
+
+wxAuiNotebookPosition wxAuiNotebook::GetPagePosition(size_t page) const
+{
+    wxAuiNotebookPosition pos;
+
+    FindTab(GetPage(page), &pos.tabctrl, &pos.page);
+
+    return pos;
 }
 
 void wxAuiNotebook::Split(size_t page, int direction)

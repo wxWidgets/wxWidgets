@@ -32,6 +32,21 @@ enum wxAuiNotebookOption
 
 
 /**
+    Simple struct combining wxAuiTabCtrl with the position inside it.
+
+    This information fully determines the position of the page in
+    wxAuiNotebook, see wxAuiNotebook::GetPagePosition().
+
+    @since 3.3.0
+*/
+struct wxAuiNotebookPosition
+{
+    wxAuiTabCtrl* tabctrl = nullptr;
+    int page = wxNOT_FOUND;
+};
+
+
+/**
     @class wxAuiNotebook
 
     wxAuiNotebook is part of the wxAUI class framework, which represents a
@@ -63,6 +78,17 @@ enum wxAuiNotebookOption
     time. This tab control can be retrieved by calling GetActiveTabCtrl() and
     is always used for appending or inserting new pages.
 
+
+    @section auibook_order Pages Order
+
+    The logical order of the pages in the notebook is determined by the order
+    in which they are added to it, i.e. the first page added has index 0, the
+    second one has index 1, and so on. Since wxWidgets 3.3.0 this order is not
+    affected any longer by reodering the visual order of the pages in the UI,
+    which can be done by dragging them around if the wxAUI_NB_TAB_MOVE style is
+    used (which is the case by default).
+
+    To get the visual position of the page, GetPagePosition() can be used.
 
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}
@@ -260,6 +286,30 @@ public:
         recommended to use that generic method instead of this one.
     */
     int GetPageIndex(wxWindow* page_wnd) const;
+
+    /**
+        Returns the position of the page in the notebook.
+
+        For example, to determine if one page is located immediately next to
+        another one, the following code could be used:
+
+        @code
+        wxAuiNotebookPosition pos1 = notebook->GetPagePosition(page1);
+        wxAuiNotebookPosition pos2 = notebook->GetPagePosition(page2);
+        if ( pos1.tabctrl == pos2.tabctrl && pos1.page + 1 == pos2.page )
+        {
+            // page1 is immediately before page2
+        }
+        @endcode
+
+        Note that it would be wrong to just check that `page1 + 1 == page2`
+        here because the logical page index may not correspond to their visual
+        position if they have been reordered by the user in a control with
+        wxAUI_NB_TAB_MOVE style.
+
+        @since 3.3.0
+    */
+    wxAuiNotebookPosition GetPagePosition(size_t page) const;
 
     /**
         Returns the tab label for the page.
