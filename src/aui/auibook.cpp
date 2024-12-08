@@ -2366,11 +2366,18 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
     }
 
     // If there is no tabframe at all, create one
+    auto* const tab = CreateMainTabCtrl();
+
+    m_mgr.Update();
+
+    return tab;
+}
+
+wxAuiTabCtrl* wxAuiNotebook::CreateMainTabCtrl()
+{
     wxAuiTabFrame* tabframe = CreateTabFrame();
     m_mgr.AddPane(tabframe,
                   wxAuiPaneInfo().Center().CaptionVisible(false));
-
-    m_mgr.Update();
 
     return tabframe->m_tabs;
 }

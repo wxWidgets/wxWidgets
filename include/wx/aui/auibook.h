@@ -461,6 +461,9 @@ private:
     // Create a new tab frame, containing a new wxAuiTabCtrl.
     wxAuiTabFrame* CreateTabFrame(wxSize size = wxSize());
 
+    // Create the main tab control unconditionally.
+    wxAuiTabCtrl* CreateMainTabCtrl();
+
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);
     wxDECLARE_EVENT_TABLE();
