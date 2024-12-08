@@ -1380,30 +1380,50 @@ void MakeLogical(wxWindow* w, wxSize& size)
 
 } // anonymous namespace
 
-// Copy pane layout information between wxAuiPaneLayoutInfo and wxAuiPaneInfo,
-// used when (de)serializing the layout.
+// Copy pane layout information between structs used when (de)serializing the
+// layout and wxAuiPaneInfo itself.
+
 void
-wxAuiManager::CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
-                             const wxAuiPaneInfo& pane) const
+wxAuiManager::CopyDockLayoutFrom(wxAuiDockLayoutInfo& dockInfo,
+                                 const wxAuiPaneInfo& paneInfo) const
 {
-    layoutInfo.dock_direction = pane.dock_direction;
-    layoutInfo.dock_layer = pane.dock_layer;
-    layoutInfo.dock_row = pane.dock_row;
-    layoutInfo.dock_pos = pane.dock_pos;
-    layoutInfo.dock_proportion = pane.dock_proportion;
+    dockInfo.dock_direction = paneInfo.dock_direction;
+    dockInfo.dock_layer = paneInfo.dock_layer;
+    dockInfo.dock_row = paneInfo.dock_row;
+    dockInfo.dock_pos = paneInfo.dock_pos;
+    dockInfo.dock_proportion = paneInfo.dock_proportion;
 
     // The dock size is typically not set in the pane itself, but set in its
     // containing dock, so find it and copy it from there, as we do need to
     // save it when serializing.
-    layoutInfo.dock_size = 0;
+    dockInfo.dock_size = 0;
     for ( const auto& d : m_docks )
     {
-        if ( FindPaneInDock(d, pane.window) )
+        if ( FindPaneInDock(d, paneInfo.window) )
         {
-            layoutInfo.dock_size = d.size;
+            dockInfo.dock_size = d.size;
             break;
         }
     }
+}
+
+void
+wxAuiManager::CopyDockLayoutTo(const wxAuiDockLayoutInfo& dockInfo,
+                               wxAuiPaneInfo& paneInfo) const
+{
+    paneInfo.dock_direction = dockInfo.dock_direction;
+    paneInfo.dock_layer = dockInfo.dock_layer;
+    paneInfo.dock_row = dockInfo.dock_row;
+    paneInfo.dock_pos = dockInfo.dock_pos;
+    paneInfo.dock_proportion = dockInfo.dock_proportion;
+    paneInfo.dock_size = dockInfo.dock_size;
+}
+
+void
+wxAuiManager::CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
+                             const wxAuiPaneInfo& pane) const
+{
+    CopyDockLayoutFrom(layoutInfo, pane);
 
     layoutInfo.floating_pos = pane.floating_pos;
     layoutInfo.floating_size = pane.floating_size;
@@ -1415,12 +1435,8 @@ void
 wxAuiManager::CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
                            wxAuiPaneInfo& pane) const
 {
-    pane.dock_direction = layoutInfo.dock_direction;
-    pane.dock_layer = layoutInfo.dock_layer;
-    pane.dock_row = layoutInfo.dock_row;
-    pane.dock_pos = layoutInfo.dock_pos;
-    pane.dock_proportion = layoutInfo.dock_proportion;
-    pane.dock_size = layoutInfo.dock_size;
+    CopyDockLayoutTo(layoutInfo, pane);
+
     pane.floating_pos = layoutInfo.floating_pos;
     pane.floating_size = layoutInfo.floating_size;
 

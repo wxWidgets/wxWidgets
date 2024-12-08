@@ -16,17 +16,8 @@
 // Classes used to save/load wxAuiManager layout.
 // ----------------------------------------------------------------------------
 
-// This struct contains the pane name and information about its layout that can
-// be manipulated by the user interactively.
-struct wxAuiPaneLayoutInfo
+struct wxAuiDockLayoutInfo
 {
-    // Ctor sets the name, which is always required.
-    explicit wxAuiPaneLayoutInfo(wxString name_) : name{std::move(name_)} { }
-
-    // Unique name of the pane.
-    wxString name;
-
-
     // Identifies the dock containing the pane.
     int dock_direction   = wxAUI_DOCK_LEFT;
     int dock_layer       = 0;
@@ -40,6 +31,17 @@ struct wxAuiPaneLayoutInfo
     // from pane sizes, but storing all pane sizes would be redundant too, so
     // we prefer to keep things simple and store just this size.
     int dock_size        = 0;
+};
+
+// This struct contains the pane name and information about its layout that can
+// be manipulated by the user interactively.
+struct wxAuiPaneLayoutInfo : wxAuiDockLayoutInfo
+{
+    // Ctor sets the name, which is always required.
+    explicit wxAuiPaneLayoutInfo(wxString name_) : name{std::move(name_)} { }
+
+    // Unique name of the pane.
+    wxString name;
 
 
     // Floating pane geometry, may be invalid.
