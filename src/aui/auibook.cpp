@@ -1007,6 +1007,12 @@ void wxAuiTabCtrl::DoShowTab(int idx)
     MakeTabVisible(idx, this);
 }
 
+void wxAuiTabCtrl::DoUpdateActive()
+{
+    DoShowHide();
+    Refresh();
+}
+
 void wxAuiTabCtrl::DoEndDragging()
 {
     m_clickPt = wxDefaultPosition;
@@ -2471,8 +2477,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     if (src_tabs->GetPageCount() > 0)
     {
         src_tabs->SetActivePage((size_t)0);
-        src_tabs->DoShowHide();
-        src_tabs->Refresh();
+        src_tabs->DoUpdateActive();
     }
 
 
@@ -2485,8 +2490,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     }
 
     DoSizing();
-    dest_tabs->DoShowHide();
-    dest_tabs->Refresh();
+    dest_tabs->DoUpdateActive();
 
     // force the set selection function reset the selection
     m_curPage = wxNOT_FOUND;
@@ -2589,8 +2593,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
             dest_tabs->MovePage(src_tab, dest_idx);
             m_tabs.MovePage(m_tabs.GetPage(src_idx).window, dest_idx);
             dest_tabs->SetActivePage((size_t)dest_idx);
-            dest_tabs->DoShowHide();
-            dest_tabs->Refresh();
+            dest_tabs->DoUpdateActive();
             m_lastDragX = pt.x;
 
         }
@@ -2849,8 +2852,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
         if (src_tabs->GetPageCount() > 0)
         {
             src_tabs->SetActivePage((size_t)0);
-            src_tabs->DoShowHide();
-            src_tabs->Refresh();
+            src_tabs->DoUpdateActive();
         }
 
 
@@ -2866,8 +2868,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
         }
 
         DoSizing();
-        dest_tabs->DoShowHide();
-        dest_tabs->Refresh();
+        dest_tabs->DoUpdateActive();
 
         // force the set selection function reset the selection
         m_curPage = wxNOT_FOUND;

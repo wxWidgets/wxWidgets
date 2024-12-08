@@ -215,8 +215,9 @@ public:
 
     void SetRect(const wxRect& rect) { wxAuiTabContainer::SetRect(rect, this); }
 
-    // Internal helper.
+    // Internal helpers.
     void DoShowTab(int idx);
+    void DoUpdateActive();
 
 protected:
     // choose the default border for this window
