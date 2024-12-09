@@ -32,6 +32,21 @@ enum wxAuiNotebookOption
 
 
 /**
+    Simple struct combining wxAuiTabCtrl with the position inside it.
+
+    This information fully determines the position of the page in
+    wxAuiNotebook, see wxAuiNotebook::GetPagePosition().
+
+    @since 3.3.0
+*/
+struct wxAuiNotebookPosition
+{
+    wxAuiTabCtrl* tabctrl = nullptr;
+    int page = wxNOT_FOUND;
+};
+
+
+/**
     @class wxAuiNotebook
 
     wxAuiNotebook is part of the wxAUI class framework, which represents a
@@ -49,6 +64,31 @@ enum wxAuiNotebookOption
     The default theme that is used is wxAuiDefaultTabArt, which provides a modern,
     glossy look and feel.
     The theme can be changed by calling wxAuiNotebook::SetArtProvider.
+
+    @section auibook_tabs Multiple Tab Controls
+
+    By default, wxAuiNotebook uses a single tab control for all tabs, however
+    when wxAUI_NB_TAB_SPLIT style is used (which is the case by default), the
+    user will be able to drag pages out of it and create new tab controls, that
+    can then themselves be dragged to be docked in a different place inside the
+    notebook. Also, whether wxAUI_NB_TAB_SPLIT is specified or not, Split()
+    function can always be used to create new tab controls programmatically.
+
+    When using multiple tab controls, exactly one of them is active at any
+    time. This tab control can be retrieved by calling GetActiveTabCtrl() and
+    is always used for appending or inserting new pages.
+
+
+    @section auibook_order Pages Order
+
+    The logical order of the pages in the notebook is determined by the order
+    in which they are added to it, i.e. the first page added has index 0, the
+    second one has index 1, and so on. Since wxWidgets 3.3.0 this order is not
+    affected any longer by reodering the visual order of the pages in the UI,
+    which can be done by dragging them around if the wxAUI_NB_TAB_MOVE style is
+    used (which is the case by default).
+
+    To get the visual position of the page, GetPagePosition() can be used.
 
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}
@@ -248,6 +288,30 @@ public:
     int GetPageIndex(wxWindow* page_wnd) const;
 
     /**
+        Returns the position of the page in the notebook.
+
+        For example, to determine if one page is located immediately next to
+        another one, the following code could be used:
+
+        @code
+        wxAuiNotebookPosition pos1 = notebook->GetPagePosition(page1);
+        wxAuiNotebookPosition pos2 = notebook->GetPagePosition(page2);
+        if ( pos1.tabctrl == pos2.tabctrl && pos1.page + 1 == pos2.page )
+        {
+            // page1 is immediately before page2
+        }
+        @endcode
+
+        Note that it would be wrong to just check that `page1 + 1 == page2`
+        here because the logical page index may not correspond to their visual
+        position if they have been reordered by the user in a control with
+        wxAUI_NB_TAB_MOVE style.
+
+        @since 3.3.0
+    */
+    wxAuiNotebookPosition GetPagePosition(size_t page) const;
+
+    /**
         Returns the tab label for the page.
     */
     wxString GetPageText(size_t page) const;
@@ -279,6 +343,10 @@ public:
         should be inserted. It may be equal to the current number of pages in
         the notebook, in which case this function is equivalent to AddPage(),
         but can't be strictly greater than it.
+
+        Note that if the page with the given index is not in the currently
+        active tab control, the new page will be added at the end of the active
+        tab instead of being inserted into another tab control.
     */
     bool InsertPage(size_t page_idx, wxWindow* page,
                     const wxString& caption,

@@ -204,7 +204,10 @@ protected:
 protected:
 
     wxAuiTabArt* m_art;
+
+    // Contains pages in the display order.
     wxAuiNotebookPageArray m_pages;
+
     wxAuiTabContainerButtonArray m_buttons;
     wxAuiTabContainerButtonArray m_tabCloseButtons;
     wxRect m_rect;
@@ -284,6 +287,13 @@ private:
 };
 
 
+// Simple struct combining wxAuiTabCtrl with the position inside it.
+struct wxAuiNotebookPosition
+{
+    wxAuiTabCtrl* tabctrl = nullptr;
+    int page = wxNOT_FOUND;
+};
+
 
 
 class WXDLLIMPEXP_AUI wxAuiNotebook : public wxCompositeBookCtrlBase
@@ -349,6 +359,11 @@ public:
     int SetSelection(size_t newPage) override;
     int GetSelection() const override;
 
+    // Return the tab control containing the page with the given index and its
+    // visual position in it (i.e. 0 for the leading one).
+    wxAuiNotebookPosition GetPagePosition(size_t page) const;
+
+
     void Split(size_t page, int direction);
 
     const wxAuiManager& GetAuiManager() const { return m_mgr; }
@@ -396,7 +411,9 @@ public:
 
     wxAuiTabCtrl* GetTabCtrlFromPoint(const wxPoint& pt);
     wxAuiTabCtrl* GetActiveTabCtrl();
-    bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
+
+    // Internal, don't use: use GetPagePosition() instead.
+    bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const;
 
 protected:
     // Common part of all ctors.
@@ -462,8 +479,13 @@ protected:
 protected:
 
     wxAuiManager m_mgr;
+
+    // Contains all pages in the insertion order.
     wxAuiTabContainer m_tabs;
+
+    // Current page index in m_tabs or wxNOT_FOUND if none.
     int m_curPage;
+
     int m_tabIdCounter;
     wxWindow* m_dummyWnd;
 
@@ -482,6 +504,13 @@ private:
 
     // Create the main tab control unconditionally.
     wxAuiTabCtrl* CreateMainTabCtrl();
+
+    // Inserts the page at the given position into the given tab control.
+    void InsertPageAt(wxAuiNotebookPage& info,
+                      size_t page_idx,
+                      wxAuiTabCtrl* tabctrl,
+                      int tab_page_idx, // Can be -1 to append.
+                      bool select);
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);

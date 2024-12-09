@@ -42,6 +42,8 @@
 
 #include "../sample.xpm"
 
+#include <map>
+
 // -- application --
 
 class MyApp : public wxApp
@@ -1842,9 +1844,16 @@ void MyFrame::OnNotebookTabRightClick(wxAuiNotebookEvent& evt)
     auto* const book =
         wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
 
-    wxLogMessage("Page from event: %d, page under mouse: %d",
-                 evt.GetSelection(),
-                 book->HitTest(book->ScreenToClient(pt)));
+    const auto page = evt.GetSelection();
+    const auto pageUnderMouse = book->HitTest(book->ScreenToClient(pt));
+    if ( pageUnderMouse != page )
+    {
+        wxLogWarning("Unexpected mismatch: page under mouse is %d (position %d)",
+                     pageUnderMouse, book->GetPagePosition(pageUnderMouse).page);
+    }
+
+    wxLogMessage("Right click on page %d (tab position %d)",
+                 page, book->GetPagePosition(page).page);
 }
 
 void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
@@ -1852,10 +1861,27 @@ void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
     auto* const book =
         wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
 
-    wxString pages("Notebook contains the following pages:\n\n");
+    // Show notebook pages in per-tab visual page order.
+    std::map<wxAuiTabCtrl*, std::map<int, size_t>> pagesByTabCtrl;
     for ( size_t i = 0; i < book->GetPageCount(); ++i )
     {
-        pages += wxString::Format("%zu: %s\n", i, book->GetPageText(i));
+        const auto pos = book->GetPagePosition(i);
+        pagesByTabCtrl[pos.tabctrl][pos.page] = i;
+    }
+
+    wxString pages("Notebook contains the following pages:\n");
+    int tab = 0;
+    for ( const auto& kv : pagesByTabCtrl )
+    {
+        if ( pagesByTabCtrl.size() > 1 )
+            pages += wxString::Format("\nTab %d:\n", ++tab);
+
+        for ( const auto& kv2 : kv.second )
+        {
+            pages += wxString::Format("  %d. %s\n",
+                                      kv2.first,
+                                      book->GetPageText(kv2.second));
+        }
     }
 
     wxMessageBox(pages, "wxAUI", wxOK | wxICON_INFORMATION, this);
@@ -2148,10 +2174,10 @@ wxAuiNotebook* MyFrame::CreateNotebook()
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 2" );
 
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 3" );
-
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 4" );
+
+   ctrl->InsertPage( 4, new wxTextCtrl( ctrl, wxID_ANY, "Page inserted before another one",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 3" );
 
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 5" );

@@ -117,6 +117,12 @@ Changes in behaviour not resulting in compilation errors
   under all platforms instead of behaving as SetValue() under MSW and doing
   nothing elsewhere.
 
+- The meaning of page index in wxAuiNotebook has changed if the pages have
+  been reordered (see wxAUI_NB_TAB_MOVE) and now always refers to the page
+  logical index, which is not affected by reordering. To get the position of
+  the page on screen, which doesn't make sense without reference to the tab
+  control containing it, use GetPagePosition() to retrieve both of them.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
