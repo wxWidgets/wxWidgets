@@ -407,6 +407,15 @@ more details.
         the applications using the library to disable implicit
         conversions from and to <tt>const char*</tt> in wxString class.
         Support for this option appeared in wxWidgets 3.1.4.}
+@itemdef{wxNO_REQUIRE_LITERAL_MSGIDS,
+        this symbol is not defined by wxWidgets itself, but can be defined by
+        the applications using the library to allow variables as string arguments to
+        translation macros such as _() and wxPLURAL. The default since wxWidgets
+        3.3.0 is to allow only string literals.
+        Note that passing string variables as arguments to translation macros is
+        likely to be a bug, and does not produce the expected results. If you
+        feel you need to define this macro, you should first consider whether
+        your code is doing the right thing.}
 @itemdef{WXMAKINGDLL_XXX,
         used internally and defined when building the
         library @c XXX as a DLL; when a monolithic wxWidgets build is used only a

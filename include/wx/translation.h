@@ -335,6 +335,9 @@ inline const wxString& wxGetTranslation(const char *str1,
 
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
+namespace wxTransImplStrict
+{
+
 // Wrapper functions that only accept string literals as arguments,
 // not variables, not char* pointers.
 template<size_t N>
@@ -383,6 +386,61 @@ const wxString &wxGettextInContextPluralWrapper(const char (&ctx)[L],
                             wxString(), wxASCII_STR(ctx));
 #endif
 }
+
+} // namespace wxTransImplStrict
+
+namespace wxTransImplTraditional
+{
+
+// Wrapper functions that accept both string literals and variables
+// as arguments.
+inline const wxString &wxUnderscoreWrapper(const wxString& msg)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg);
+#else
+    return wxGetTranslation(wxASCII_STR(msg));
+#endif
+}
+
+inline const wxString &wxPluralWrapper(const wxString& msg, const wxString& plural, int count)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, plural, count);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count);
+#endif
+}
+
+inline const wxString &wxGettextInContextWrapper(const wxString& ctx, const wxString& msg)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, wxString(), ctx);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxString(), wxASCII_STR(ctx));
+#endif
+}
+
+inline const wxString &wxGettextInContextPluralWrapper(const wxString& ctx,
+                                                       const wxString&msg,
+                                                       const wxString&plural,
+                                                       int count)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, plural, count, wxString(), ctx);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count,
+                            wxString(), wxASCII_STR(ctx));
+#endif
+}
+
+} // namespace wxTransImplTraditional
+
+#ifdef wxNO_REQUIRE_LITERAL_MSGIDS
+using namespace wxTransImplTraditional;
+#else
+using namespace wxTransImplStrict;
+#endif
 
 #else // !wxUSE_INTL
 
