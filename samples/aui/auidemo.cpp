@@ -111,6 +111,7 @@ class MyFrame : public wxFrame
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
         ID_NotebookSplit,
+        ID_NotebookUnsplit,
         ID_NotebookNewTab,
         ID_NotebookDeleteTab,
         ID_3CHECK,
@@ -180,6 +181,7 @@ private:
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
     void OnNotebookSplit(wxCommandEvent& evt);
+    void OnNotebookUnsplit(wxCommandEvent& evt);
     void OnNotebookNewTab(wxCommandEvent& evt);
     void OnNotebookDeleteTab(wxCommandEvent& evt);
 
@@ -642,6 +644,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookSplit, MyFrame::OnNotebookSplit)
+    EVT_MENU(ID_NotebookUnsplit, MyFrame::OnNotebookUnsplit)
     EVT_MENU(ID_NotebookNewTab, MyFrame::OnNotebookNewTab)
     EVT_MENU(ID_NotebookDeleteTab, MyFrame::OnNotebookDeleteTab)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
@@ -777,6 +780,7 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
     notebook_menu->AppendSeparator();
     notebook_menu->Append(ID_NotebookSplit, _("&Split Notebook"));
+    notebook_menu->Append(ID_NotebookUnsplit, _("&Unsplit Notebook"));
     notebook_menu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
     notebook_menu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
 
@@ -1407,6 +1411,14 @@ void MyFrame::OnNotebookSplit(wxCommandEvent& WXUNUSED(evt))
     book->Split(0, wxRIGHT);
     book->Split(1, wxRIGHT);
     book->Split(2, wxBOTTOM);
+}
+
+void MyFrame::OnNotebookUnsplit(wxCommandEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    book->UnsplitAll();
 }
 
 void MyFrame::OnNotebookNewTab(wxCommandEvent& WXUNUSED(evt))

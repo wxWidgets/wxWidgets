@@ -492,6 +492,8 @@ public:
 
         The @a direction argument specifies where the pane should go, it should be one
         of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
+
+        @see UnsplitAll()
     */
     void Split(size_t page, int direction);
 
@@ -501,6 +503,22 @@ public:
     */
     bool ShowWindowMenu();
 
+    /**
+        Remove all split tab controls, leaving only the single one.
+
+        This is the opposite of Split() function and collects all the pages
+        from all tab controls in the central tab control and removes the other
+        ones.
+
+        If there are no other tab controls, this function doesn't do anything.
+
+        Note that calling Split() followed by UnsplitAll() does _not_ preserve
+        the page order, as all previously split pages are added at the end of
+        the main tab control and not at their previous positions.
+
+        @since 3.3.0
+    */
+    void UnsplitAll();
 
     /**
         Returns the image index for the given page.

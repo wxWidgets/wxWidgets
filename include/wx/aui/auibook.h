@@ -381,6 +381,7 @@ public:
 
 
     void Split(size_t page, int direction);
+    void UnsplitAll();
 
     const wxAuiManager& GetAuiManager() const { return m_mgr; }
 

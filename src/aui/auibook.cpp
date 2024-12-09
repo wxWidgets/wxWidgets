@@ -2529,6 +2529,42 @@ void wxAuiNotebook::Split(size_t page, int direction)
     UpdateHintWindowSize();
 }
 
+void wxAuiNotebook::UnsplitAll()
+{
+    auto* const tabMain = GetMainTabCtrl();
+
+    bool changed = false;
+    for ( const auto& pane : m_mgr.GetAllPanes() )
+    {
+        if ( IsDummyPane(pane) )
+            continue;
+
+        auto* const tab = static_cast<wxAuiTabFrame*>(pane.window)->m_tabs;
+
+        // Don't move tabs from the main tab control to itself.
+        if ( tab == tabMain )
+            continue;
+
+        while ( tab->GetPageCount() )
+        {
+            wxAuiNotebookPage info = tab->GetPage(0);
+            info.active = false;
+
+            tab->RemovePageAt(0);
+
+            tabMain->AddPage(info);
+
+            changed = true;
+        }
+    }
+
+    if ( changed )
+    {
+        RemoveEmptyTabFrames();
+
+        DoSizing();
+    }
+}
 
 void wxAuiNotebook::OnSize(wxSizeEvent& evt)
 {
