@@ -1121,7 +1121,7 @@ bool wxWebSessionWinHTTP::SetProxy(const wxWebProxy& proxy)
         }
 
         // Final step: WinHttpOpen() doesn't accept trailing slashes in the URL
-        // neither (it just fails with ERROR_INVALID_PARAMETER), so remove them.
+        // either (it just fails with ERROR_INVALID_PARAMETER), so remove them.
         while ( m_proxyURLWithoutCredentials.Last() == '/' )
             m_proxyURLWithoutCredentials.RemoveLast();
 
