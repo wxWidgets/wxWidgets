@@ -337,8 +337,8 @@ inline const wxString& wxGetTranslation(const char *str1,
 
 // Wrapper functions that only accept string literals as arguments,
 // not variables, not char* pointers.
-template<size_t M>
-const wxString &wxUnderscoreWrapper(const char (&msg)[M])
+template<size_t N>
+const wxString &wxUnderscoreWrapper(const char (&msg)[N])
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg);
@@ -347,8 +347,8 @@ const wxString &wxUnderscoreWrapper(const char (&msg)[M])
 #endif
 }
 
-template<size_t N, size_t M>
-const wxString &wxwxPluralWrapper(const char (&msg)[N], const char (&plural)[M], int count)
+template<size_t M, size_t N>
+const wxString& wxwxPluralWrapper(const char(&msg)[M], const char(&plural)[N], int count)
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg, plural, count);
@@ -357,8 +357,8 @@ const wxString &wxwxPluralWrapper(const char (&msg)[N], const char (&plural)[M],
 #endif
 }
 
-template<size_t N, size_t M>
-const wxString &wxwxGettextInContextWrapper(const char (&ctx)[N], const char (&msg)[M])
+template<size_t M, size_t N>
+const wxString& wxwxGettextInContextWrapper(const char(&ctx)[M], const char(&msg)[N])
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg, wxString(), ctx);
@@ -367,10 +367,10 @@ const wxString &wxwxGettextInContextWrapper(const char (&ctx)[N], const char (&m
 #endif
 }
 
-template<size_t N, size_t M, size_t L>
-const wxString &wxwxGettextInContextPluralWrapper(const char (&ctx)[N],
+template<size_t L, size_t M, size_t N>
+const wxString &wxwxGettextInContextPluralWrapper(const char (&ctx)[L],
                                                   const char (&msg)[M],
-                                                  const char (&plural)[L], int count)
+                                                  const char (&plural)[N], int count)
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg, plural, count, wxString(), ctx);
