@@ -16,17 +16,10 @@
 // Classes used to save/load wxAuiManager layout.
 // ----------------------------------------------------------------------------
 
-// This struct contains the pane name and information about its layout that can
-// be manipulated by the user interactively.
-struct wxAuiPaneLayoutInfo
+// Fields common to wxAuiPaneLayoutInfo and wxAuiTabLayoutInfo containing
+// information about a docked pane or tab layout.
+struct wxAuiDockLayoutInfo
 {
-    // Ctor sets the name, which is always required.
-    explicit wxAuiPaneLayoutInfo(wxString name_) : name{std::move(name_)} { }
-
-    // Unique name of the pane.
-    wxString name;
-
-
     // Identifies the dock containing the pane.
     int dock_direction   = wxAUI_DOCK_LEFT;
     int dock_layer       = 0;
@@ -40,6 +33,26 @@ struct wxAuiPaneLayoutInfo
     // from pane sizes, but storing all pane sizes would be redundant too, so
     // we prefer to keep things simple and store just this size.
     int dock_size        = 0;
+};
+
+// This struct contains information about the layout of a tab control in a
+// wxAuiNotebook, including where it is docked and the order of pages in it.
+struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
+{
+    // If this vector is empty, it means that the tab control contains all
+    // notebook pages in natural order.
+    std::vector<int> pages;
+};
+
+// This struct contains the pane name and information about its layout that can
+// be manipulated by the user interactively.
+struct wxAuiPaneLayoutInfo : wxAuiDockLayoutInfo
+{
+    // Ctor sets the name, which is always required.
+    explicit wxAuiPaneLayoutInfo(wxString name_) : name{std::move(name_)} { }
+
+    // Unique name of the pane.
+    wxString name;
 
 
     // Floating pane geometry, may be invalid.
@@ -85,6 +98,25 @@ public:
     // Called after the last call to SavePane(), does nothing by default.
     virtual void AfterSavePanes() { }
 
+    // Called before starting to save information about the notebooks, does
+    // nothing by default.
+    virtual void BeforeSaveNotebooks() { }
+
+    // Called before starting to save information about the tabs in the
+    // notebook in the AUI pane with the given name.
+    virtual void BeforeSaveNotebook(const wxString& name) = 0;
+
+    // Called to save information about a single tab control in the given
+    // notebook.
+    virtual void SaveNotebookTabControl(const wxAuiTabLayoutInfo& tab) = 0;
+
+    // Called after saving information about all the pages of the notebook in
+    // the AUI pane with the given name, does nothing by default.
+    virtual void AfterSaveNotebook() { }
+
+    // Called after the last call to SaveNotebook(), does nothing by default.
+    virtual void AfterSaveNotebooks() { }
+
     // Called after saving everything, does nothing by default.
     virtual void AfterSave() { }
 };
@@ -113,6 +145,11 @@ public:
 
     // Load information about all the panes previously saved with SavePane().
     virtual std::vector<wxAuiPaneLayoutInfo> LoadPanes() = 0;
+
+    // For a pane containing wxAuiNotebook, load information about all the tab
+    // controls inside it.
+    virtual std::vector<wxAuiTabLayoutInfo>
+    LoadNotebookTabs(const wxString& name) = 0;
 
     // Create the window to be managed by the given pane: this is called if any
     // of the panes returned by LoadPanes() doesn't exist in the existing

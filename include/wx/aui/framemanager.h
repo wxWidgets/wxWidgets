@@ -131,6 +131,7 @@ class wxAuiManagerEvent;
 class wxAuiSerializer;
 class wxAuiDeserializer;
 
+struct wxAuiDockLayoutInfo;
 struct wxAuiPaneLayoutInfo;
 
 using wxAuiDockUIPartArray = wxBaseArray<wxAuiDockUIPart>;
@@ -505,6 +506,11 @@ public:
     virtual void HideHint();
 
     // Internal functions, don't use them outside of wxWidgets itself.
+    void CopyDockLayoutFrom(wxAuiDockLayoutInfo& layoutInfo,
+                            const wxAuiPaneInfo& pane) const;
+    void CopyDockLayoutTo(const wxAuiDockLayoutInfo& layoutInfo,
+                          wxAuiPaneInfo& pane) const;
+
     void CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
                         const wxAuiPaneInfo& pane) const;
     void CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
