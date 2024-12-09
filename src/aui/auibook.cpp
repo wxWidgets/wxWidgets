@@ -249,10 +249,8 @@ bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
 {
     bool found = false;
 
-    size_t i, page_count = m_pages.GetCount();
-    for (i = 0; i < page_count; ++i)
+    for ( auto& page : m_pages )
     {
-        wxAuiNotebookPage& page = m_pages.Item(i);
         if (page.window == wnd)
         {
             page.active = true;
@@ -269,10 +267,8 @@ bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
 
 void wxAuiTabContainer::SetNoneActive()
 {
-    size_t i, page_count = m_pages.GetCount();
-    for (i = 0; i < page_count; ++i)
+    for ( auto& page : m_pages )
     {
-        wxAuiNotebookPage& page = m_pages.Item(i);
         page.active = false;
     }
 }
@@ -871,10 +867,8 @@ wxAuiTabContainerButton* wxAuiTabContainer::ButtonHitTest(int x, int y) const
     if (!m_rect.Contains(x,y))
         return nullptr;
 
-    button_count = m_buttons.GetCount();
-    for (i = 0; i < button_count; ++i)
+    for ( auto& button : m_buttons )
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(i);
         if (button.rect.Contains(x,y) &&
             !(button.curState & wxAUI_BUTTON_STATE_HIDDEN ))
         {
@@ -882,10 +876,8 @@ wxAuiTabContainerButton* wxAuiTabContainer::ButtonHitTest(int x, int y) const
         }
     }
 
-    button_count = m_tabCloseButtons.GetCount();
-    for (i = 0; i < button_count; ++i)
+    for ( const auto& button : m_tabCloseButtons )
     {
-        wxAuiTabContainerButton& button = m_tabCloseButtons.Item(i);
         if (button.rect.Contains(x,y) &&
             !(button.curState & (wxAUI_BUTTON_STATE_HIDDEN |
                                    wxAUI_BUTTON_STATE_DISABLED)))
@@ -923,12 +915,10 @@ static void ShowWnd(wxWindow* wnd, bool show)
 void wxAuiTabContainer::DoShowHide()
 {
     const wxAuiNotebookPageArray& pages = GetPages();
-    size_t i, page_count = pages.GetCount();
 
     // show new active page first
-    for (i = 0; i < page_count; ++i)
+    for ( const auto& page : pages )
     {
-        wxAuiNotebookPage& page = pages.Item(i);
         if (page.active)
         {
             ShowWnd(page.window, true);
@@ -937,9 +927,8 @@ void wxAuiTabContainer::DoShowHide()
     }
 
     // hide all other pages
-    for (i = 0; i < page_count; ++i)
+    for ( const auto& page : pages )
     {
-        wxAuiNotebookPage& page = pages.Item(i);
         if (!page.active)
             ShowWnd(page.window, false);
     }
@@ -1585,11 +1574,9 @@ public:
         m_tabs->Update();
 
         const wxAuiNotebookPageArray& pages = m_tabs->GetPages();
-        size_t i, page_count = pages.GetCount();
 
-        for (i = 0; i < page_count; ++i)
+        for ( auto& page : pages )
         {
-            wxAuiNotebookPage& page = pages.Item(i);
             int border_space = m_tabs->GetArtProvider()->GetAdditionalBorderSpace(page.window);
 
             int height = m_rect.height - m_tabCtrlHeight - border_space;
@@ -3613,10 +3600,8 @@ void wxAuiTabCtrl::SetHoverTab(wxWindow* wnd)
 {
     bool hoverChanged = false;
 
-    const size_t page_count = m_pages.GetCount();
-    for ( size_t i = 0; i < page_count; ++i )
+    for ( auto& page : m_pages )
     {
-        wxAuiNotebookPage& page = m_pages.Item(i);
         bool oldHover = page.hover;
         page.hover = (page.window == wnd);
         if ( oldHover != page.hover )
