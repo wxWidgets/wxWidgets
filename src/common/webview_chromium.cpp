@@ -204,7 +204,7 @@ void AppImplData::StartThreadDispatch(GMainContext* threadContext)
     m_wakeupSource = g_source_new(&wakeupSourceVtbl, sizeof(GSource));
 
     // Note that we need to attach it to the main context, not the thread one
-    // (otherwise this source itself would be never used neither).
+    // (otherwise this source itself would be never used either).
     g_source_attach(m_wakeupSource, nullptr /* main context */);
 }
 

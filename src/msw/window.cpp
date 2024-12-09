@@ -1566,7 +1566,7 @@ wxBorder wxWindowMSW::DoTranslateBorder(wxBorder border) const
         // In dark mode the standard sunken border is too bright, so prefer
         // using a simple(r) and darker border instead.
         //
-        // And themed borders don't look good neither in dark mode, so don't
+        // And themed borders don't look good either in dark mode, so don't
         // use them in it.
         if ( wxMSWDarkMode::IsActive() )
             return wxBORDER_SIMPLE;
