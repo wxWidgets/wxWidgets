@@ -1544,15 +1544,7 @@ public:
         auto node = new wxXmlNode(wxXML_ELEMENT_NODE, "pane");
         node->AddAttribute("name", pane.name);
 
-        AddChild(node, "direction", pane.dock_direction);
-        AddChild(node, "layer", pane.dock_layer);
-        AddChild(node, "row", pane.dock_row);
-        AddChild(node, "position", pane.dock_pos);
-        AddChild(node, "proportion", pane.dock_proportion);
-
-        // Saving dock size of 0 is harmless but unnecessary, so don't do it.
-        if ( pane.dock_size )
-            AddChild(node, "size", pane.dock_size);
+        AddDockLayout(node, pane);
 
         AddChild(node, "floating-rect",
                  wxRect(pane.floating_pos, pane.floating_size));
@@ -1569,6 +1561,54 @@ public:
     {
         m_root->AddChild(m_panes.release());
     }
+
+
+    virtual void BeforeSaveNotebooks() override
+    {
+        m_books.reset(new wxXmlNode(wxXML_ELEMENT_NODE, "notebooks"));
+    }
+
+    virtual void BeforeSaveNotebook(const wxString& name) override
+    {
+        m_book.reset(new wxXmlNode(wxXML_ELEMENT_NODE, "notebook"));
+        m_book->AddAttribute("name", name);
+    }
+
+    virtual void SaveNotebookTabControl(const wxAuiTabLayoutInfo& tab) override
+    {
+        auto node = new wxXmlNode(wxXML_ELEMENT_NODE, "tab");
+
+        AddDockLayout(node, tab);
+
+        // We don't need to save the pages order if the vector is empty, this
+        // means that this tab contains all the notebook pages in default order.
+        if ( !tab.pages.empty() )
+        {
+            wxString pagesList;
+            for ( auto page : tab.pages )
+            {
+                if ( !pagesList.empty() )
+                    pagesList << ',';
+
+                pagesList << page;
+            }
+
+            AddChild(node, "pages", pagesList);
+        }
+
+        m_book->AddChild(node);
+    }
+
+    virtual void AfterSaveNotebook() override
+    {
+        m_books->AddChild(m_book.release());
+    }
+
+    virtual void AfterSaveNotebooks() override
+    {
+        m_root->AddChild(m_books.release());
+    }
+
 
     virtual void AfterSave() override {}
 
@@ -1595,6 +1635,22 @@ private:
         }
     }
 
+    // Common helper of SavePane() and SaveNotebookTabControl() which both need
+    // to save the same layout information.
+    void AddDockLayout(wxXmlNode* node, const wxAuiDockLayoutInfo& layout)
+    {
+        AddChild(node, "direction", layout.dock_direction);
+        AddChild(node, "layer", layout.dock_layer);
+        AddChild(node, "row", layout.dock_row);
+        AddChild(node, "position", layout.dock_pos);
+        AddChild(node, "proportion", layout.dock_proportion);
+
+        // Saving dock size of 0 is harmless but unnecessary, so don't do it.
+        if ( layout.dock_size )
+            AddChild(node, "size", layout.dock_size);
+    }
+
+
     wxXmlDocument m_doc;
 
     // Non-owning pointer to the root node of m_doc.
@@ -1604,6 +1660,8 @@ private:
     // document -- this ensures that we don't leak memory if an exception is
     // thrown before this happens.
     std::unique_ptr<wxXmlNode> m_panes;
+    std::unique_ptr<wxXmlNode> m_books;
+    std::unique_ptr<wxXmlNode> m_book;
 };
 
 class MyXmlDeserializer : public wxAuiDeserializer
@@ -1627,6 +1685,13 @@ public:
         if ( layout->GetNext() )
             throw std::runtime_error("Unexpected multiple layout nodes");
 
+        // Check that we only have the top level nodes that we expect.
+        //
+        // This is nice to detect errors in this sample, but note that this
+        // might not be the best strategy for a real application, which might
+        // decide to to gracefully ignore unknown nodes instead of failing, or
+        // at least save the format version in the XML file to be able to give
+        // a better error message.
         for ( wxXmlNode* node = layout->GetChildren(); node; node = node->GetNext() )
         {
             if ( node->GetName() == "panes" )
@@ -1635,6 +1700,13 @@ public:
                     throw std::runtime_error("Unexpected multiple panes nodes");
 
                 m_panes = node;
+            }
+            else if ( node->GetName() == "notebooks" )
+            {
+                if ( m_books )
+                    throw std::runtime_error("Unexpected multiple notebooks nodes");
+
+                m_books = node;
             }
             else
             {
@@ -1661,34 +1733,13 @@ public:
 
                 for ( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
                 {
+                    if ( LoadDockLayout(child, pane) )
+                        continue;
+
                     const wxString& name = child->GetName();
                     const wxString& content = child->GetNodeContent();
 
-                    if ( name == "direction" )
-                    {
-                        pane.dock_direction = GetInt(content);
-                    }
-                    else if ( name == "layer" )
-                    {
-                        pane.dock_layer = GetInt(content);
-                    }
-                    else if ( name == "row" )
-                    {
-                        pane.dock_row = GetInt(content);
-                    }
-                    else if ( name == "position" )
-                    {
-                        pane.dock_pos = GetInt(content);
-                    }
-                    else if ( name == "proportion" )
-                    {
-                        pane.dock_proportion = GetInt(content);
-                    }
-                    else if ( name == "size" )
-                    {
-                        pane.dock_size = GetInt(content);
-                    }
-                    else if ( name == "floating-rect" )
+                    if ( name == "floating-rect" )
                     {
                         auto rect = GetRect(content);
 
@@ -1710,6 +1761,26 @@ public:
         }
 
         return panes;
+    }
+
+    virtual std::vector<wxAuiTabLayoutInfo>
+    LoadNotebookTabs(const wxString& name) override
+    {
+        // Find the notebook with the given name.
+        for ( wxXmlNode* node = m_books->GetChildren(); node; node = node->GetNext() )
+        {
+            if ( node->GetName() != "notebook" )
+                throw std::runtime_error("Unexpected notebook node name");
+
+            if ( node->GetAttribute("name") == name )
+                return LoadNotebookTabs(node);
+        }
+
+        // As above, this might not be the best thing to do in a real
+        // application, where, perhaps, the XML file was saved by a newer
+        // version of the problem, but here we do this for simplicity and to
+        // make sure we detect any errors.
+        throw std::runtime_error("Notebook with the given name not found");
     }
 
     virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& pane) override
@@ -1755,11 +1826,83 @@ private:
         return wxRect(wxPoint(x, y), GetSize(strWH));
     }
 
+    // Common helper of LoadPanes() and LoadNotebookTabs() which both need to
+    // load the dock layout information.
+    //
+    // Returns true if we processed this node.
+    bool LoadDockLayout(wxXmlNode* node, wxAuiDockLayoutInfo& info)
+    {
+        const wxString& name = node->GetName();
+        const wxString& content = node->GetNodeContent();
+
+        if ( name == "direction" )
+        {
+            info.dock_direction = GetInt(content);
+        }
+        else if ( name == "layer" )
+        {
+            info.dock_layer = GetInt(content);
+        }
+        else if ( name == "row" )
+        {
+            info.dock_row = GetInt(content);
+        }
+        else if ( name == "position" )
+        {
+            info.dock_pos = GetInt(content);
+        }
+        else if ( name == "proportion" )
+        {
+            info.dock_proportion = GetInt(content);
+        }
+        else if ( name == "size" )
+        {
+            info.dock_size = GetInt(content);
+        }
+        else
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    std::vector<wxAuiTabLayoutInfo> LoadNotebookTabs(wxXmlNode* book)
+    {
+        std::vector<wxAuiTabLayoutInfo> tabs;
+
+        for ( wxXmlNode* node = book->GetChildren(); node; node = node->GetNext() )
+        {
+            if ( node->GetName() != "tab" )
+                throw std::runtime_error("Unexpected tab node name");
+
+            wxAuiTabLayoutInfo tab;
+            for ( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
+            {
+                if ( LoadDockLayout(child, tab) )
+                    continue;
+
+                if ( child->GetName() != "pages" )
+                    throw std::runtime_error("Unexpected tab child node name");
+
+                for ( const auto& s : wxSplit(child->GetNodeContent(), ',') )
+                {
+                    tab.pages.push_back(GetInt(s));
+                }
+            }
+
+            tabs.push_back(tab);
+        }
+
+        return tabs;
+    }
+
 
     wxXmlDocument m_doc;
 
     // Non-owning pointers to the nodes in m_doc.
     wxXmlNode* m_panes = nullptr;
+    wxXmlNode* m_books = nullptr;
 };
 
 void MyFrame::OnCopyLayout(wxCommandEvent& WXUNUSED(evt))

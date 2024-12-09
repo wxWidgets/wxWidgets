@@ -25,6 +25,7 @@
 #include "wx/aui/floatpane.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/aui/auibar.h"
+#include "wx/aui/auibook.h"
 #include "wx/aui/serializer.h"
 #include "wx/mdi.h"
 #include "wx/wupdlock.h"
@@ -69,6 +70,7 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 
 #include "wx/generic/private/drawresize.h"
 
+#include <map>
 #include <memory>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
@@ -1451,6 +1453,10 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
     {
         serializer.BeforeSavePanes();
 
+        // Collect information about all the notebooks we may have while saving
+        // the panes layout.
+        std::map<wxString, wxAuiNotebook*> notebooks;
+
         for ( const auto& pane : m_panes )
         {
             wxAuiPaneLayoutInfo layoutInfo{pane.name};
@@ -1460,9 +1466,26 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
             MakeDIP(m_frame, layoutInfo.floating_size);
 
             serializer.SavePane(layoutInfo);
+
+            if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
+            {
+                notebooks[pane.name] = nb;
+            }
         }
 
         serializer.AfterSavePanes();
+
+        if ( !notebooks.empty() )
+        {
+            serializer.BeforeSaveNotebooks();
+
+            for ( const auto& kv : notebooks )
+            {
+                kv.second->SaveLayout(kv.first, serializer);
+            }
+
+            serializer.AfterSaveNotebooks();
+        }
     }
 
     serializer.AfterSave();
@@ -1504,7 +1527,7 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
             hasMaximized = true;
 
         // Find the pane with the same name in the existing layout.
-        bool found = false;
+        wxWindow* window = nullptr;
         for ( auto& existingPane : panes )
         {
             if ( existingPane.name == layoutInfo.name )
@@ -1512,21 +1535,29 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
                 // Update the existing pane with the restored layout.
                 CopyLayoutTo(layoutInfo, existingPane);
 
-                found = true;
+                window = existingPane.window;
                 break;
             }
         }
 
         // This pane couldn't be found in the existing layout, let deserializer
         // create a new window for it if desired, otherwise just ignore it.
-        if ( !found )
+        if ( !window )
         {
             wxAuiPaneInfo pane;
             pane.name = layoutInfo.name;
             CopyLayoutTo(layoutInfo, pane);
 
-            if ( const auto w = deserializer.CreatePaneWindow(pane) )
-                newPanes.emplace_back(w, pane);
+            window = deserializer.CreatePaneWindow(pane);
+            if ( !window )
+                continue;
+
+            newPanes.emplace_back(window, pane);
+        }
+
+        if ( auto* const nb = wxDynamicCast(window, wxAuiNotebook) )
+        {
+            nb->LoadLayout(layoutInfo.name, deserializer);
         }
     }
 
