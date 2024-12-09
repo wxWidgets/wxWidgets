@@ -8,6 +8,56 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Description of user-modifiable pane layout information.
+
+    This struct is used with wxAuiSerializer and wxAuiDeserializer to store the
+    pane layout. Its fields have the same meaning as the corresponding fields
+    in wxAuiPaneInfo (with the exception of `is_maximized`), but it doesn't
+    contain the fields that it wouldn't make sense to serialize.
+
+    @since 3.3.0
+ */
+struct wxAuiPaneLayoutInfo
+{
+    /**
+        Ctor sets the name, which is always required.
+     */
+    explicit wxAuiPaneLayoutInfo(wxString name);
+
+    /// Unique name of the pane.
+    wxString name;
+
+    /// Direction of the dock containing the pane.
+    int dock_direction   = wxAUI_DOCK_LEFT;
+
+    /// Layer of the dock containing the pane.
+    int dock_layer       = 0;
+
+    /// Row of the dock containing the pane.
+    int dock_row         = 0;
+
+    /// Position of the pane in the dock containing it.
+    int dock_pos         = 0;
+
+    /// Relative proportion of the dock allocated to this pane.
+    int dock_proportion  = 0;
+
+    /// Size of the containing dock.
+    int dock_size        = 0;
+
+
+    /// Position of the pane when floating, may be invalid.
+    wxPoint floating_pos = wxDefaultPosition;
+
+    /// Size of the pane when floating, may be invalid.
+    wxSize floating_size = wxDefaultSize;
+
+
+    /// True if the pane is currently maximized.
+    bool is_maximized   = false;
+};
+
+/**
     @class wxAuiSerializer
 
     wxAuiSerializer is used by wxAuiManager::SaveLayout() to store layout
@@ -67,7 +117,7 @@ public:
         it does _not_ need to perform any scaling itself to ensure that the
         stored values are restored correctly if the resolution changes.
      */
-    virtual void SavePane(const wxAuiPaneInfo& pane) = 0;
+    virtual void SavePane(const wxAuiPaneLayoutInfo& pane) = 0;
 
     /**
         Called after the last call to SavePane().
@@ -75,32 +125,6 @@ public:
         Does nothing by default.
      */
     virtual void AfterSavePanes();
-
-    /**
-        Called before starting to save information about the docks.
-
-        Does nothing by default.
-     */
-    virtual void BeforeSaveDocks();
-
-    /**
-        Save information about the given dock.
-
-        This function will be called for all docks and must be implemented to
-        save their data in a format from which it can be restored later using a
-        matching wxAuiDeserializer implementation.
-
-        As with SavePane(), the coordinates in @a dock are always in DIPs and
-        this function does _not_ need to perform any scaling itself.
-     */
-    virtual void SaveDock(const wxAuiDockInfo& dock) = 0;
-
-    /**
-        Called after the last call to SaveDock().
-
-        Does nothing by default.
-     */
-    virtual void AfterSaveDocks();
 
     /**
         Called after saving everything.
@@ -175,16 +199,13 @@ public:
 
         If this function returns @NULL, as it does by default, the pane is not
         added to the manager.
-     */
-    virtual wxWindow* CreatePaneWindow(const wxAuiPaneInfo& pane);
 
-    /**
-        Load information about all the docks previously saved with SaveDock().
-
-        As with LoadPanes(), this function doesn't need to perform any scaling
-        itself.
+        If the function does create a new window, it should typically modify @a
+        pane parameter to fill in the fields such as `caption` or `icon` that
+        wouldn't normally be serialized and so wouldn't be restored by
+        LoadPanes().
      */
-    virtual std::vector<wxAuiDockInfo> LoadDocks() = 0;
+    virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& pane);
 
     /**
         Called after restoring everything.

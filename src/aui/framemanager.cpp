@@ -1368,11 +1368,6 @@ void MakeDIP(wxWindow* w, wxSize& size)
     size = w->ToDIP(size);
 }
 
-void MakeDIP(wxWindow* w, wxRect& rect)
-{
-    rect = wxRect{w->ToDIP(rect.GetPosition()), w->ToDIP(rect.GetSize())};
-}
-
 void MakeLogical(wxWindow* w, wxPoint& pos)
 {
     pos = w->FromDIP(pos);
@@ -1383,12 +1378,54 @@ void MakeLogical(wxWindow* w, wxSize& size)
     size = w->FromDIP(size);
 }
 
-void MakeLogical(wxWindow* w, wxRect& rect)
+} // anonymous namespace
+
+// Copy pane layout information between wxAuiPaneLayoutInfo and wxAuiPaneInfo,
+// used when (de)serializing the layout.
+void
+wxAuiManager::CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
+                             const wxAuiPaneInfo& pane) const
 {
-    rect = wxRect{w->FromDIP(rect.GetPosition()), w->FromDIP(rect.GetSize())};
+    layoutInfo.dock_direction = pane.dock_direction;
+    layoutInfo.dock_layer = pane.dock_layer;
+    layoutInfo.dock_row = pane.dock_row;
+    layoutInfo.dock_pos = pane.dock_pos;
+    layoutInfo.dock_proportion = pane.dock_proportion;
+
+    // The dock size is typically not set in the pane itself, but set in its
+    // containing dock, so find it and copy it from there, as we do need to
+    // save it when serializing.
+    layoutInfo.dock_size = 0;
+    for ( const auto& d : m_docks )
+    {
+        if ( FindPaneInDock(d, pane.window) )
+        {
+            layoutInfo.dock_size = d.size;
+            break;
+        }
+    }
+
+    layoutInfo.floating_pos = pane.floating_pos;
+    layoutInfo.floating_size = pane.floating_size;
+
+    layoutInfo.is_maximized = pane.HasFlag(wxAuiPaneInfo::optionMaximized);
 }
 
-} // anonymous namespace
+void
+wxAuiManager::CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
+                           wxAuiPaneInfo& pane) const
+{
+    pane.dock_direction = layoutInfo.dock_direction;
+    pane.dock_layer = layoutInfo.dock_layer;
+    pane.dock_row = layoutInfo.dock_row;
+    pane.dock_pos = layoutInfo.dock_pos;
+    pane.dock_proportion = layoutInfo.dock_proportion;
+    pane.dock_size = layoutInfo.dock_size;
+    pane.floating_pos = layoutInfo.floating_pos;
+    pane.floating_size = layoutInfo.floating_size;
+
+    pane.SetFlag(wxAuiPaneInfo::optionMaximized, layoutInfo.is_maximized);
+}
 
 void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
 {
@@ -1400,64 +1437,16 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
 
         for ( const auto& pane : m_panes )
         {
-            auto paneDIP = pane;
+            wxAuiPaneLayoutInfo layoutInfo{pane.name};
+            CopyLayoutFrom(layoutInfo, pane);
 
-            MakeDIP(m_frame, paneDIP.best_size);
-            MakeDIP(m_frame, paneDIP.min_size);
-            MakeDIP(m_frame, paneDIP.max_size);
+            MakeDIP(m_frame, layoutInfo.floating_pos);
+            MakeDIP(m_frame, layoutInfo.floating_size);
 
-            MakeDIP(m_frame, paneDIP.floating_pos);
-            MakeDIP(m_frame, paneDIP.floating_size);
-
-            MakeDIP(m_frame, paneDIP.rect);
-
-            serializer.SavePane(paneDIP);
+            serializer.SavePane(layoutInfo);
         }
 
         serializer.AfterSavePanes();
-    }
-
-    if ( !m_docks.empty() )
-    {
-        serializer.BeforeSaveDocks();
-
-        for ( const auto& dock : m_docks )
-        {
-            auto dockDIP = dock;
-
-            MakeDIP(m_frame, dockDIP.rect);
-
-            // Update dock sizes to ensure that restoring this layout later
-            // restores the same geometry as is used now: if we didn't do it,
-            // panes would have their initial sizes.
-            switch ( dock.dock_direction )
-            {
-                case wxAUI_DOCK_TOP:
-                case wxAUI_DOCK_BOTTOM:
-                    dockDIP.size = dock.rect.height;
-                    break;
-
-                case wxAUI_DOCK_LEFT:
-                case wxAUI_DOCK_RIGHT:
-                    dockDIP.size = dock.rect.width;
-                    break;
-
-                case wxAUI_DOCK_CENTER:
-                    // Not clear what to do for this one, but it shouldn't
-                    // matter as its size is determined by what remains
-                    // available after positioning the rest of the elements, so
-                    // don't do anything.
-                    break;
-
-                case wxAUI_DOCK_NONE:
-                    wxFAIL_MSG("invalid dock direction");
-                    break;
-            }
-
-            serializer.SaveDock(dockDIP);
-        }
-
-        serializer.AfterSaveDocks();
     }
 
     serializer.AfterSave();
@@ -1489,30 +1478,23 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
     };
     std::vector<NewPane> newPanes;
 
-    for ( const auto& paneDIP : deserializer.LoadPanes() )
+    auto layoutInfos = deserializer.LoadPanes();
+    for ( auto& layoutInfo : layoutInfos )
     {
-        auto pane = paneDIP;
+        MakeLogical(m_frame, layoutInfo.floating_pos);
+        MakeLogical(m_frame, layoutInfo.floating_size);
 
-        MakeLogical(m_frame, pane.best_size);
-        MakeLogical(m_frame, pane.min_size);
-        MakeLogical(m_frame, pane.max_size);
-
-        MakeLogical(m_frame, pane.floating_pos);
-        MakeLogical(m_frame, pane.floating_size);
-
-        MakeLogical(m_frame, pane.rect);
-
-        if ( pane.IsMaximized() )
+        if ( layoutInfo.is_maximized )
             hasMaximized = true;
 
         // Find the pane with the same name in the existing layout.
         bool found = false;
         for ( auto& existingPane : panes )
         {
-            if ( existingPane.name == pane.name )
+            if ( existingPane.name == layoutInfo.name )
             {
                 // Update the existing pane with the restored layout.
-                existingPane.SafeSet(pane);
+                CopyLayoutTo(layoutInfo, existingPane);
 
                 found = true;
                 break;
@@ -1523,19 +1505,13 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
         // create a new window for it if desired, otherwise just ignore it.
         if ( !found )
         {
+            wxAuiPaneInfo pane;
+            pane.name = layoutInfo.name;
+            CopyLayoutTo(layoutInfo, pane);
+
             if ( const auto w = deserializer.CreatePaneWindow(pane) )
                 newPanes.emplace_back(w, pane);
         }
-    }
-
-    wxAuiDockInfoArray docks;
-    for ( const auto& dockDIP : deserializer.LoadDocks() )
-    {
-        auto dock = dockDIP;
-
-        MakeLogical(m_frame, dock.rect);
-
-        docks.push_back(dock);
     }
 
     // After loading everything successfully, do update the internal variables.
@@ -1545,7 +1521,8 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
     for ( const auto& newPane : newPanes )
         AddPane(newPane.window, newPane.info);
 
-    m_docks.swap(docks);
+    // Force recreating the docks using the new sizes from the panes.
+    m_docks.clear();
 
     deserializer.AfterLoad();
 }
@@ -2021,6 +1998,11 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         {
             // found the right dock
             dock = dockInfo;
+
+            // if we've just recreated it, apply the dock size possibly saved
+            // in the pane to it
+            if ( dock->size == 0 )
+                dock->size = p.dock_size;
         }
         if ( !dock )
         {
@@ -2029,6 +2011,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
             d.dock_direction = p.dock_direction;
             d.dock_layer = p.dock_layer;
             d.dock_row = p.dock_row;
+            d.size = p.dock_size;
             docks.Add(d);
             dock = &docks.Last();
         }

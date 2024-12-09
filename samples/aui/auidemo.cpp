@@ -1505,23 +1505,28 @@ public:
         m_panes.reset(new wxXmlNode(wxXML_ELEMENT_NODE, "panes"));
     }
 
-    virtual void SavePane(const wxAuiPaneInfo& pane) override
+    virtual void SavePane(const wxAuiPaneLayoutInfo& pane) override
     {
         auto node = new wxXmlNode(wxXML_ELEMENT_NODE, "pane");
         node->AddAttribute("name", pane.name);
 
-        AddChild(node, "caption", pane.caption);
-        AddChild(node, "state", pane.state);
         AddChild(node, "direction", pane.dock_direction);
         AddChild(node, "layer", pane.dock_layer);
         AddChild(node, "row", pane.dock_row);
         AddChild(node, "position", pane.dock_pos);
         AddChild(node, "proportion", pane.dock_proportion);
-        AddChild(node, "best-size", pane.best_size);
-        AddChild(node, "min-size", pane.min_size);
-        AddChild(node, "max-size", pane.max_size);
+
+        // Saving dock size of 0 is harmless but unnecessary, so don't do it.
+        if ( pane.dock_size )
+            AddChild(node, "size", pane.dock_size);
+
         AddChild(node, "floating-rect",
                  wxRect(pane.floating_pos, pane.floating_size));
+
+        // Don't bother creating many "maximized" nodes with value 0 when we
+        // can have at most one of them with value 1.
+        if ( pane.is_maximized )
+            AddChild(node, "maximized", 1);
 
         m_panes->AddChild(node);
     }
@@ -1529,31 +1534,6 @@ public:
     virtual void AfterSavePanes() override
     {
         m_root->AddChild(m_panes.release());
-    }
-
-    virtual void BeforeSaveDocks() override
-    {
-        m_docks.reset(new wxXmlNode(wxXML_ELEMENT_NODE, "docks"));
-    }
-
-    virtual void SaveDock(const wxAuiDockInfo& dock) override
-    {
-        auto node = new wxXmlNode(wxXML_ELEMENT_NODE, "dock");
-        node->AddAttribute("resizable", dock.resizable ? "1" : "0");
-
-        AddChild(node, "direction", dock.dock_direction);
-        AddChild(node, "layer", dock.dock_layer);
-        AddChild(node, "row", dock.dock_row);
-        AddChild(node, "size", dock.size);
-        if ( dock.min_size )
-            AddChild(node, "min-size", dock.min_size);
-
-        m_docks->AddChild(node);
-    }
-
-    virtual void AfterSaveDocks() override
-    {
-        m_root->AddChild(m_docks.release());
     }
 
     virtual void AfterSave() override {}
@@ -1568,12 +1548,6 @@ private:
     void AddChild(wxXmlNode* parent, const wxString& name, int value)
     {
         AddChild(parent, name, wxString::Format("%u", value));
-    }
-
-    void AddChild(wxXmlNode* parent, const wxString& name, const wxSize& size)
-    {
-        if ( size != wxDefaultSize )
-            AddChild(parent, name, wxString::Format("%dx%d", size.x, size.y));
     }
 
     void AddChild(wxXmlNode* parent, const wxString& name, const wxRect& rect)
@@ -1596,7 +1570,6 @@ private:
     // document -- this ensures that we don't leak memory if an exception is
     // thrown before this happens.
     std::unique_ptr<wxXmlNode> m_panes;
-    std::unique_ptr<wxXmlNode> m_docks;
 };
 
 class MyXmlDeserializer : public wxAuiDeserializer
@@ -1629,13 +1602,6 @@ public:
 
                 m_panes = node;
             }
-            else if ( node->GetName() == "docks" )
-            {
-                if ( m_docks )
-                    throw std::runtime_error("Unexpected multiple docks nodes");
-
-                m_docks = node;
-            }
             else
             {
                 throw std::runtime_error("Unexpected node name");
@@ -1644,15 +1610,12 @@ public:
 
         if ( !m_panes )
             throw std::runtime_error("Missing panes node");
-
-        if ( !m_docks )
-            throw std::runtime_error("Missing docks node");
     }
 
     // Implement wxAuiDeserializer methods.
-    virtual std::vector<wxAuiPaneInfo> LoadPanes() override
+    virtual std::vector<wxAuiPaneLayoutInfo> LoadPanes() override
     {
-        std::vector<wxAuiPaneInfo> panes;
+        std::vector<wxAuiPaneLayoutInfo> panes;
 
         for ( wxXmlNode* node = m_panes->GetChildren(); node; node = node->GetNext() )
         {
@@ -1660,23 +1623,14 @@ public:
                 throw std::runtime_error("Unexpected pane node name");
 
             {
-                wxAuiPaneInfo pane;
-                pane.name = node->GetAttribute("name");
+                wxAuiPaneLayoutInfo pane{node->GetAttribute("name")};
 
                 for ( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
                 {
                     const wxString& name = child->GetName();
                     const wxString& content = child->GetNodeContent();
 
-                    if ( name == "caption" )
-                    {
-                        pane.caption = content;
-                    }
-                    else if ( name == "state" )
-                    {
-                        pane.state = wxAuiPaneInfo::wxAuiPaneState(GetInt(content));
-                    }
-                    else if ( name == "direction" )
+                    if ( name == "direction" )
                     {
                         pane.dock_direction = GetInt(content);
                     }
@@ -1696,17 +1650,9 @@ public:
                     {
                         pane.dock_proportion = GetInt(content);
                     }
-                    else if ( name == "best-size" )
+                    else if ( name == "size" )
                     {
-                        pane.best_size = GetSize(content);
-                    }
-                    else if ( name == "min-size" )
-                    {
-                        pane.min_size = GetSize(content);
-                    }
-                    else if ( name == "max-size" )
-                    {
-                        pane.max_size = GetSize(content);
+                        pane.dock_size = GetInt(content);
                     }
                     else if ( name == "floating-rect" )
                     {
@@ -1714,6 +1660,10 @@ public:
 
                         pane.floating_pos = rect.GetPosition();
                         pane.floating_size = rect.GetSize();
+                    }
+                    else if ( name == "maximized" )
+                    {
+                        pane.is_maximized = GetInt(content) != 0;
                     }
                     else
                     {
@@ -1728,60 +1678,10 @@ public:
         return panes;
     }
 
-    virtual wxWindow* CreatePaneWindow(const wxAuiPaneInfo& pane) override
+    virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& pane) override
     {
         wxLogWarning("Unknown pane \"%s\"", pane.name);
         return nullptr;
-    }
-
-    virtual std::vector<wxAuiDockInfo> LoadDocks() override
-    {
-        std::vector<wxAuiDockInfo> docks;
-
-        for ( wxXmlNode* node = m_docks->GetChildren(); node; node = node->GetNext() )
-        {
-            if ( node->GetName() != "dock" )
-                throw std::runtime_error("Unexpected dock node name");
-
-            wxAuiDockInfo dock;
-            if ( node->GetAttribute("resizable") == "1" )
-                dock.resizable = true;
-
-            for ( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
-            {
-                const wxString& name = child->GetName();
-                const wxString& content = child->GetNodeContent();
-
-                if ( name == "direction" )
-                {
-                    dock.dock_direction = GetInt(content);
-                }
-                else if ( name == "layer" )
-                {
-                    dock.dock_layer = GetInt(content);
-                }
-                else if ( name == "row" )
-                {
-                    dock.dock_row = GetInt(content);
-                }
-                else if ( name == "size" )
-                {
-                    dock.size = GetInt(content);
-                }
-                else if ( name == "min-size" )
-                {
-                    dock.min_size = GetInt(content);
-                }
-                else
-                {
-                    throw std::runtime_error("Unexpected dock child node name");
-                }
-            }
-
-            docks.push_back(dock);
-        }
-
-        return docks;
     }
 
 private:
@@ -1814,8 +1714,8 @@ private:
         wxString strY;
         const wxString strX = strXY.BeforeFirst(',', &strY);
 
-        unsigned int x, y;
-        if ( !strX.ToUInt(&x) || !strY.ToUInt(&y) )
+        int x, y;
+        if ( !strX.ToInt(&x) || !strY.ToInt(&y) )
             throw std::runtime_error("Failed to parse position");
 
         return wxRect(wxPoint(x, y), GetSize(strWH));
@@ -1826,7 +1726,6 @@ private:
 
     // Non-owning pointers to the nodes in m_doc.
     wxXmlNode* m_panes = nullptr;
-    wxXmlNode* m_docks = nullptr;
 };
 
 void MyFrame::OnCopyLayout(wxCommandEvent& WXUNUSED(evt))

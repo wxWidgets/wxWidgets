@@ -131,6 +131,8 @@ class wxAuiManagerEvent;
 class wxAuiSerializer;
 class wxAuiDeserializer;
 
+struct wxAuiPaneLayoutInfo;
+
 using wxAuiDockUIPartArray = wxBaseArray<wxAuiDockUIPart>;
 using wxAuiDockInfoArray = wxBaseArray<wxAuiDockInfo>;
 using wxAuiDockInfoPtrArray = wxBaseArray<wxAuiDockInfo*>;
@@ -159,6 +161,7 @@ public:
         dock_layer = 0;
         dock_row = 0;
         dock_pos = 0;
+        dock_size = 0;
         dock_proportion = 0;
 
         DefaultPane();
@@ -381,6 +384,7 @@ public:
     int dock_layer;       // layer number (0 = innermost layer)
     int dock_row;         // row number on the docking bar (0 = first row)
     int dock_pos;         // position inside the row (0 = first position)
+    int dock_size;        // size of the containing dock (0 if not set)
 
     wxSize best_size;     // size that the layout engine will prefer
     wxSize min_size;      // minimum size the pane window can tolerate
@@ -499,6 +503,12 @@ public:
     // be called directly, use UpdateHint() above instead.
     virtual void ShowHint(const wxRect& rect);
     virtual void HideHint();
+
+    // Internal functions, don't use them outside of wxWidgets itself.
+    void CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
+                        const wxAuiPaneInfo& pane) const;
+    void CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
+                      wxAuiPaneInfo& pane) const;
 
 public:
 
