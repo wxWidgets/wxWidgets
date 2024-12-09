@@ -577,7 +577,7 @@ public:
     bool SetActivePage(size_t page);
     void SetNoneActive();
     int GetActivePage() const;
-    bool TabHitTest(int x, int y, wxWindow** hit) const;
+    wxWindow* TabHitTest(int x, int y) const;
     const wxAuiTabContainerButton* ButtonHitTest(int x, int y) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
     int GetIdxFromWindow(const wxWindow* page) const;

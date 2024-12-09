@@ -833,13 +833,12 @@ void wxAuiTabContainer::MakeTabVisible(int tabPage, wxWindow* win)
     }
 }
 
-// TabHitTest() tests if a tab was hit, passing the window pointer
-// back if that condition was fulfilled.  The function returns
-// true if a tab was hit, otherwise false
-bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
+// TabHitTest() tests if a tab was hit, returning the pointer to the window
+// that was or null pointer otherwise.
+wxWindow* wxAuiTabContainer::TabHitTest(int x, int y) const
 {
     if (!m_rect.Contains(x,y))
-        return false;
+        return nullptr;
 
     const wxAuiTabContainerButton* const btn = ButtonHitTest(x, y);
     if (btn && !(btn->curState & wxAUI_BUTTON_STATE_DISABLED))
@@ -847,7 +846,7 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
         for ( const auto& button : m_buttons )
         {
             if ( btn == &button )
-                return false;
+                return nullptr;
         }
     }
 
@@ -858,13 +857,11 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxWindow** hit) const
         wxAuiNotebookPage& page = m_pages.Item(i);
         if (page.rect.Contains(x,y))
         {
-            if (hit)
-                *hit = page.window;
-            return true;
+            return page.window;
         }
     }
 
-    return false;
+    return nullptr;
 }
 
 // ButtonHitTest() tests if a button was hit. The function returns
@@ -1050,8 +1047,7 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     m_pressedButton = nullptr;
 
 
-    wxWindow* wnd;
-    if (TabHitTest(evt.m_x, evt.m_y, &wnd))
+    if ( wxWindow* const wnd = TabHitTest(evt.m_x, evt.m_y) )
     {
         int new_selection = GetIdxFromWindow(wnd);
 
@@ -1151,8 +1147,8 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnMiddleUp(wxMouseEvent& evt)
 {
-    wxWindow* wnd = nullptr;
-    if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
+    wxWindow* const wnd = TabHitTest(evt.m_x, evt.m_y);
+    if (!wnd)
         return;
 
     wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
@@ -1163,8 +1159,8 @@ void wxAuiTabCtrl::OnMiddleUp(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnMiddleDown(wxMouseEvent& evt)
 {
-    wxWindow* wnd = nullptr;
-    if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
+    wxWindow* const wnd = TabHitTest(evt.m_x, evt.m_y);
+    if (!wnd)
         return;
 
     wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, m_windowId);
@@ -1175,8 +1171,8 @@ void wxAuiTabCtrl::OnMiddleDown(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnRightUp(wxMouseEvent& evt)
 {
-    wxWindow* wnd = nullptr;
-    if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
+    wxWindow* const wnd = TabHitTest(evt.m_x, evt.m_y);
+    if (!wnd)
         return;
 
     wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP, m_windowId);
@@ -1187,8 +1183,8 @@ void wxAuiTabCtrl::OnRightUp(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnRightDown(wxMouseEvent& evt)
 {
-    wxWindow* wnd = nullptr;
-    if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
+    wxWindow* const wnd = TabHitTest(evt.m_x, evt.m_y);
+    if (!wnd)
         return;
 
     wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN, m_windowId);
@@ -1199,8 +1195,7 @@ void wxAuiTabCtrl::OnRightDown(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnLeftDClick(wxMouseEvent& evt)
 {
-    wxWindow* wnd;
-    if (!TabHitTest(evt.m_x, evt.m_y, &wnd) && !ButtonHitTest(evt.m_x, evt.m_y))
+    if (!TabHitTest(evt.m_x, evt.m_y) && !ButtonHitTest(evt.m_x, evt.m_y))
     {
         wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BG_DCLICK, m_windowId);
         e.SetEventObject(this);
@@ -1245,21 +1240,27 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         }
     }
 
-    wxWindow* wnd = nullptr;
-    if (evt.Moving() && TabHitTest(evt.m_x, evt.m_y, &wnd))
+    bool hovering = false;
+    if (evt.Moving())
     {
-        SetHoverTab(wnd);
+        if ( wxWindow* const wnd = TabHitTest(evt.m_x, evt.m_y) )
+        {
+            hovering = true;
+
+            SetHoverTab(wnd);
 
 #if wxUSE_TOOLTIPS
-        wxString tooltip(m_pages[GetIdxFromWindow(wnd)].tooltip);
+            wxString tooltip(m_pages[GetIdxFromWindow(wnd)].tooltip);
 
-        // If the text changes, set it else, keep old, to avoid
-        // 'moving tooltip' effect
-        if (GetToolTipText() != tooltip)
-            SetToolTip(tooltip);
+            // If the text changes, set it else, keep old, to avoid
+            // 'moving tooltip' effect
+            if (GetToolTipText() != tooltip)
+                SetToolTip(tooltip);
 #endif // wxUSE_TOOLTIPS
+        }
     }
-    else
+
+    if (!hovering)
     {
         SetHoverTab(nullptr);
 
@@ -2566,10 +2567,9 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
         }
 
         wxPoint pt = dest_tabs->ScreenToClient(screen_pt);
-        wxWindow* dest_location_tab;
 
         // this is an inner-tab drag/reposition
-        if (dest_tabs->TabHitTest(pt.x, pt.y, &dest_location_tab))
+        if (wxWindow* const dest_location_tab = dest_tabs->TabHitTest(pt.x, pt.y))
         {
             int src_idx = evt.GetSelection();
             wxCHECK_RET( src_idx != -1, "Invalid source tab?" );
@@ -2755,9 +2755,8 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                 wxAuiTabCtrl* dest_tabs = (wxAuiTabCtrl*)tab_ctrl;
                 wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
 
-                wxWindow* target = nullptr;
                 int insert_idx = -1;
-                dest_tabs->TabHitTest(pt.x, pt.y, &target);
+                wxWindow* const target = dest_tabs->TabHitTest(pt.x, pt.y);
                 if (target)
                 {
                     insert_idx = dest_tabs->GetIdxFromWindow(target);
@@ -2813,9 +2812,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             }
 
             wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
-            wxWindow* target = nullptr;
-            dest_tabs->TabHitTest(pt.x, pt.y, &target);
-            if (target)
+            if (wxWindow* const target = dest_tabs->TabHitTest(pt.x, pt.y))
             {
                 insert_idx = dest_tabs->GetIdxFromWindow(target);
             }
@@ -3321,7 +3318,8 @@ int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
         if (tabframe->m_tab_rect.Contains(pt))
         {
             wxPoint tabpos = tabframe->m_tabs->ScreenToClient(ClientToScreen(pt));
-            if (tabframe->m_tabs->TabHitTest(tabpos.x, tabpos.y, &w))
+            w = tabframe->m_tabs->TabHitTest(tabpos.x, tabpos.y);
+            if (w)
                 position = wxBK_HITTEST_ONITEM;
             break;
         }
