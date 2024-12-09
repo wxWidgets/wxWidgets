@@ -521,6 +521,9 @@ private:
     // Create the main tab control unconditionally.
     wxAuiTabCtrl* CreateMainTabCtrl();
 
+    // Get main tab control, creating it on demand if necessary.
+    wxAuiTabCtrl* GetMainTabCtrl();
+
     // Inserts the page at the given position into the given tab control.
     void InsertPageAt(wxAuiNotebookPage& info,
                       size_t page_idx,

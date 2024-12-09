@@ -2388,6 +2388,28 @@ wxAuiTabCtrl* wxAuiNotebook::CreateMainTabCtrl()
     return tabframe->m_tabs;
 }
 
+wxAuiTabCtrl* wxAuiNotebook::GetMainTabCtrl()
+{
+    wxAuiTabCtrl* tabMain = nullptr;
+    for ( const auto& pane : m_mgr.GetAllPanes() )
+    {
+        if ( IsDummyPane(pane) )
+            continue;
+
+        if ( pane.dock_direction == wxAUI_DOCK_CENTER )
+        {
+            wxASSERT_MSG( !tabMain, "Multiple main tab controls?" );
+
+            tabMain = static_cast<wxAuiTabFrame*>(pane.window)->m_tabs;
+        }
+    }
+
+    if ( !tabMain )
+        tabMain = CreateMainTabCtrl();
+
+    return tabMain;
+}
+
 // FindTab() finds the tab control that currently contains the window as well
 // as the index of the window in the tab control.  It returns true if the
 // window was found, otherwise false.
