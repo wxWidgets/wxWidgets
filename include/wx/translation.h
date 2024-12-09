@@ -48,16 +48,16 @@ using wxTranslationsHashMap = std::unordered_map<wxString, wxString>;
     #define _(s)                               wxUnderscoreWrapper((s))
 #endif
 
-#define wxPLURAL(sing, plur, n)                wxwxPluralWrapper((sing), (plur), n)
+#define wxPLURAL(sing, plur, n)                wxPluralWrapper((sing), (plur), n)
 
 // wx-specific macro for translating strings in the given context: if you use
 // them, you need to also add
 // --keyword="wxGETTEXT_IN_CONTEXT:1c,2" --keyword="wxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3"
 // options to xgettext invocation.
 #define wxGETTEXT_IN_CONTEXT(c, s) \
-    wxwxGettextInContextWrapper((c), (s))
+    wxGettextInContextWrapper((c), (s))
 #define wxGETTEXT_IN_CONTEXT_PLURAL(c, sing, plur, n) \
-    wxwxGettextInContextPluralWrapper((c), (sing), (plur), (n))
+    wxGettextInContextPluralWrapper((c), (sing), (plur), (n))
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)
@@ -335,6 +335,9 @@ inline const wxString& wxGetTranslation(const char *str1,
 
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
+namespace wxTransImplStrict
+{
+
 // Wrapper functions that only accept string literals as arguments,
 // not variables, not char* pointers.
 template<size_t N>
@@ -348,7 +351,7 @@ const wxString &wxUnderscoreWrapper(const char (&msg)[N])
 }
 
 template<size_t M, size_t N>
-const wxString& wxwxPluralWrapper(const char(&msg)[M], const char(&plural)[N], int count)
+const wxString &wxPluralWrapper(const char (&msg)[M], const char (&plural)[N], int count)
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg, plural, count);
@@ -358,7 +361,7 @@ const wxString& wxwxPluralWrapper(const char(&msg)[M], const char(&plural)[N], i
 }
 
 template<size_t M, size_t N>
-const wxString& wxwxGettextInContextWrapper(const char(&ctx)[M], const char(&msg)[N])
+const wxString &wxGettextInContextWrapper(const char (&ctx)[M], const char (&msg)[N])
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg, wxString(), ctx);
@@ -368,7 +371,7 @@ const wxString& wxwxGettextInContextWrapper(const char(&ctx)[M], const char(&msg
 }
 
 template<size_t L, size_t M, size_t N>
-const wxString &wxwxGettextInContextPluralWrapper(const char (&ctx)[L],
+const wxString &wxGettextInContextPluralWrapper(const char (&ctx)[L],
                                                   const char (&msg)[M],
                                                   const char (&plural)[N], int count)
 {
@@ -379,6 +382,60 @@ const wxString &wxwxGettextInContextPluralWrapper(const char (&ctx)[L],
                             wxString(), wxASCII_STR(ctx));
 #endif
 }
+
+} // namespace wxTransImplStrict
+
+namespace wxTransImplTraditional
+{
+
+// Wrapper functions that accept both string literals and variables
+// as arguments.
+inline const wxString &wxUnderscoreWrapper(const wxString& msg)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg);
+#else
+    return wxGetTranslation(wxASCII_STR(msg));
+#endif
+}
+
+inline const wxString &wxPluralWrapper(const wxString& msg, const wxString& plural, int count)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, plural, count);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count);
+#endif
+}
+
+inline const wxString &wxGettextInContextWrapper(const wxString& ctx, const wxString& msg)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, wxString(), ctx);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxString(), wxASCII_STR(ctx));
+#endif
+}
+
+inline const wxString &wxGettextInContextPluralWrapper(const wxString& ctx,
+                                                  const wxString&msg,
+                                                  const wxString&plural, int count)
+{
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    return wxGetTranslation(msg, plural, count, wxString(), ctx);
+#else
+    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count,
+                            wxString(), wxASCII_STR(ctx));
+#endif
+}
+
+} // namespace wxTransImplTraditional
+
+#ifdef wxNO_REQUIRE_LITERAL_MSGIDS
+using namespace wxTransImplTraditional;
+#else
+using namespace wxTransImplStrict;
+#endif
 
 #else // !wxUSE_INTL
 
