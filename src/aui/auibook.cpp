@@ -2406,24 +2406,8 @@ void wxAuiNotebook::Split(size_t page, int direction)
     if (!src_tabs || src_idx == -1)
         return;
 
-    // choose a split size
-    wxSize split_size;
-    if (GetPageCount() > 2)
-    {
-        split_size = CalculateNewSplitSize();
-    }
-    else
-    {
-        // because there are two panes, always split them
-        // equally
-        split_size = GetClientSize();
-        split_size.x /= 2;
-        split_size.y /= 2;
-    }
-
-
     // create a new tab frame
-    wxAuiTabFrame* new_tabs = CreateTabFrame(split_size);
+    wxAuiTabFrame* new_tabs = CreateTabFrame(CalculateNewSplitSize());
     dest_tabs = new_tabs->m_tabs;
 
     // create a pane info structure with the information

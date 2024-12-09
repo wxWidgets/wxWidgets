@@ -108,6 +108,7 @@ class MyFrame : public wxFrame
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
+        ID_NotebookSplit,
         ID_NotebookNewTab,
         ID_NotebookDeleteTab,
         ID_3CHECK,
@@ -176,6 +177,7 @@ private:
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
+    void OnNotebookSplit(wxCommandEvent& evt);
     void OnNotebookNewTab(wxCommandEvent& evt);
     void OnNotebookDeleteTab(wxCommandEvent& evt);
 
@@ -637,6 +639,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
+    EVT_MENU(ID_NotebookSplit, MyFrame::OnNotebookSplit)
     EVT_MENU(ID_NotebookNewTab, MyFrame::OnNotebookNewTab)
     EVT_MENU(ID_NotebookDeleteTab, MyFrame::OnNotebookDeleteTab)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
@@ -771,6 +774,7 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
     notebook_menu->AppendSeparator();
+    notebook_menu->Append(ID_NotebookSplit, _("&Split Notebook"));
     notebook_menu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
     notebook_menu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
 
@@ -1386,6 +1390,22 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
     }
 }
 
+
+void MyFrame::OnNotebookSplit(wxCommandEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    if ( !book || book->GetPageCount() < 3 )
+    {
+        wxLogWarning("Not enough pages to split.");
+        return;
+    }
+
+    book->Split(0, wxRIGHT);
+    book->Split(1, wxRIGHT);
+    book->Split(2, wxBOTTOM);
+}
 
 void MyFrame::OnNotebookNewTab(wxCommandEvent& WXUNUSED(evt))
 {

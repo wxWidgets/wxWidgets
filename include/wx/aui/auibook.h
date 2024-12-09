@@ -349,7 +349,7 @@ public:
     int SetSelection(size_t newPage) override;
     int GetSelection() const override;
 
-    virtual void Split(size_t page, int direction);
+    void Split(size_t page, int direction);
 
     const wxAuiManager& GetAuiManager() const { return m_mgr; }
 
