@@ -26,6 +26,7 @@
     #include "wx/frame.h"
 #endif
 
+#include "wx/aui/serializer.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/wupdlock.h"
 
@@ -34,6 +35,8 @@
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #endif
+
+#include <unordered_set>
 
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEvent);
@@ -3686,5 +3689,197 @@ void wxAuiTabCtrl::SetHoverTab(wxWindow* wnd)
     }
 }
 
+// ----------------------------------------------------------------------------
+// Layout serialization
+// ----------------------------------------------------------------------------
+
+void
+wxAuiNotebook::SaveLayout(const wxString& name,
+                          wxAuiSerializer& serializer) const
+{
+    serializer.BeforeSaveNotebook(name);
+
+    for ( const auto& pane : m_mgr.GetAllPanes() )
+    {
+        if ( IsDummyPane(pane) )
+            continue;
+
+        wxAuiTabLayoutInfo tab;
+        m_mgr.CopyDockLayoutFrom(tab, pane);
+
+        const wxAuiTabCtrl* const
+            tabCtrl = static_cast<wxAuiTabFrame*>(pane.window)->m_tabs;
+
+        // As an optimization, don't bother with saving the pages order for the
+        // main control if it hasn't been changed from the default.
+        bool mustSavePages = false;
+        if ( tab.dock_direction != wxAUI_DOCK_CENTER )
+        {
+            // The non-main tab controls can't possibly have all the pages, so
+            // we always have to save the indices of the ones they contain.
+            mustSavePages = true;
+        }
+        else if ( tabCtrl->GetPageCount() != GetPageCount() )
+        {
+            // If the main control doesn't have all the pages, we need to save
+            // them for it as well.
+            mustSavePages = true;
+        }
+
+        std::vector<int> pages;
+        int n = 0;
+        for ( const auto& page : tabCtrl->GetPages() )
+        {
+            // This is inefficient for many pages, we should consider using a
+            // hash map indexed by the window pointer if this proves to be a
+            // problem in practice.
+            const int idx = m_tabs.GetIdxFromWindow(page.window);
+            if ( idx != n++ )
+            {
+                // And if the pages are not in order, we must save them too.
+                mustSavePages = true;
+            }
+
+            pages.push_back(idx);
+        }
+
+        // But if none of the conditions above is true, we can avoid saving
+        // them, which also allows us not to remove and re-add them when
+        // restoring later, see LoadLayout() below.
+        if ( mustSavePages )
+            tab.pages = std::move(pages);
+
+        serializer.SaveNotebookTabControl(tab);
+    }
+
+    serializer.AfterSaveNotebook();
+}
+
+void
+wxAuiNotebook::LoadLayout(const wxString& name, wxAuiDeserializer& deserializer)
+{
+    const auto tabs = deserializer.LoadNotebookTabs(name);
+
+    if ( tabs.empty() )
+        return;
+
+    // Remove any existing tabs before adding new ones.
+    UnsplitAll();
+
+    // Get the only remaining tab control.
+    wxAuiTabCtrl* const tabMain = GetMainTabCtrl();
+
+    // Keep track of pages we've already added to some tab control: even if the
+    // deserialized data is somehow incorrect and duplicates the page indices,
+    // we don't want to try to have the same page in more than one tab control.
+    std::unordered_set<int> addedPages;
+    const int pageCount = m_tabs.GetPageCount();
+
+    for ( const auto& tab : tabs )
+    {
+        wxAuiTabCtrl* tabCtrl = nullptr;
+
+        // The pages pointer will be set to point to either tab.pages or
+        // pageDefault in which case it will also be filled.
+        std::vector<int> pagesDefault;
+        const std::vector<int>* pages = nullptr;
+
+        // We don't need to create a new pane for the main, central tab control,
+        // but we still need to order its tabs correctly.
+        if ( tab.dock_direction == wxAUI_DOCK_CENTER )
+        {
+            // Special case: if the pages vector is empty check if we're using
+            // the default order, in which case we can avoid doing anything if
+            // the pages are already in the same order (which is a common case).
+            if ( tab.pages.empty() )
+            {
+                bool mustRestore = false;
+                for ( int i = 0; i < pageCount; ++i )
+                {
+                    if ( tabMain->GetWindowFromIdx(i) != m_tabs.GetWindowFromIdx(i) )
+                    {
+                        mustRestore = true;
+                        break;
+                    }
+                }
+
+                if ( !mustRestore )
+                {
+                    // All pages are in the main tab in the default order
+                    // already, so we don't have anything to do.
+                    break;
+                }
+
+                // The pages had been reordered, restore the default order when
+                // re-adding them below.
+                for ( int i = 0; i < pageCount; ++i )
+                    pagesDefault.push_back(i);
+
+                pages = &pagesDefault;
+            }
+            else
+            {
+                // Just use the specified pages.
+                pages = &tab.pages;
+            }
+
+            // In any case, we must remove all pages currently in this tab as
+            // they will be re-added.
+            tabMain->RemoveAll();
+
+            tabCtrl = tabMain;
+        }
+        else // Non-central tab control.
+        {
+            // In this case, we must have some pages, but if we somehow don't,
+            // just skip adding the tab control entirely.
+            if ( tab.pages.empty() )
+                continue;
+
+            // Re-add using the saved layout.
+            wxAuiPaneInfo pane;
+            m_mgr.CopyDockLayoutTo(tab, pane);
+
+            // Our panes never show caption.
+            pane.CaptionVisible(false);
+
+            wxAuiTabFrame* tabframe = CreateTabFrame();
+            m_mgr.AddPane(tabframe, pane);
+
+            tabCtrl = tabframe->m_tabs;
+            pages = &tab.pages;
+        }
+
+        // In any case, add the pages that this tab control had before to it.
+        bool first = true;
+        for ( auto page : *pages )
+        {
+            // We just silently ignore invalid or duplicate page indices
+            // here, because it doesn't seem right for them to result in a
+            // fatal error and any warnings would be just annoying.
+            if ( page >= pageCount )
+                continue;
+
+            if ( !addedPages.insert(page).second )
+                continue;
+
+            auto info = m_tabs.GetPage(page);
+
+            // We don't save the last active page currently, so just make the
+            // first one active.
+            if ( first )
+            {
+                info.active = true;
+                first = false;
+            }
+
+            tabCtrl->AddPage(info);
+        }
+
+        tabCtrl->DoUpdateActive();
+    }
+
+    m_mgr.Update();
+}
 
 #endif // wxUSE_AUI
