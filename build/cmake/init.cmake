@@ -537,7 +537,7 @@ if(wxUSE_GUI)
             if(NOT (CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR wxHAVE_CXX17))
                 # We shouldn't disable this option as it's disabled by default and
                 # if it is on, it means that CEF is meant to be used, but we can't
-                # continue neither as libcef_dll_wrapper will fail to build
+                # continue either as libcef_dll_wrapper will fail to build
                 # (actually it may still succeed with CEF v116 which provided
                 # its own stand-in for std::in_place used in CEF headers, but
                 # not with the later versions, so just fail instead of trying

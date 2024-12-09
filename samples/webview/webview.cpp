@@ -563,7 +563,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
 
         // Chromium backend can't be used immediately after creation, so wait
         // until the browser is created before calling GetUserAgent(), but we
-        // can't do it unconditionally neither as doing it with WebViewGTK
+        // can't do it unconditionally either as doing it with WebViewGTK
         // triggers https://gitlab.gnome.org/GNOME/gtk/-/issues/124 and just
         // kills the sample.
         const auto initShow = [this](){

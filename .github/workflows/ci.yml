@@ -183,7 +183,7 @@ jobs:
               git submodule update --init --depth=1 --recursive
               git log -1 --format='%H'
 
-              # We can't easily install Go neither, so skip the tests requiring
+              # We can't easily install Go either, so skip the tests requiring
               # httpbin.
               echo WX_TEST_WEBREQUEST_URL=0 >> $GITHUB_ENV
               ;;

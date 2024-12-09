@@ -1274,7 +1274,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
     // Epoch and, for 32-bit time_t, before 2038 (for 64-bit time_t, the range
     // is unlimited and while we can't be sure that the standard library works
     // for the dates in the distant future, we are not going to do better
-    // ourselves neither, so let it handle them).
+    // ourselves either, so let it handle them).
     static const int yearMinInRange = 1970;
     static const int yearMaxInRange = 2037;
 
