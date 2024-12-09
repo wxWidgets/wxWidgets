@@ -148,7 +148,7 @@ public:
     void SetNoneActive();
     int GetActivePage() const;
     bool TabHitTest(int x, int y, wxWindow** hit) const;
-    bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const;
+    wxAuiTabContainerButton* ButtonHitTest(int x, int y) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
     int GetIdxFromWindow(const wxWindow* page) const;
     size_t GetPageCount() const;
@@ -177,6 +177,16 @@ public:
 
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
+
+    // Compatibility only, don't use.
+    bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const
+    {
+        auto* const button = ButtonHitTest(x, y);
+        if ( hit )
+            *hit = button;
+
+        return button != nullptr;
+    }
 
 protected:
 
