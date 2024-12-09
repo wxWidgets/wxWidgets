@@ -178,6 +178,9 @@ public:
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
 
+    // Internal, don't use.
+    void RemoveAll();
+
     // Backwards compatible variants of internal functions, which shouldn't be
     // used anyhow.
     bool AddPage(wxWindow* page, wxAuiNotebookPage info)
