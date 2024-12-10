@@ -2074,6 +2074,97 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     return true;
 }
 
+#ifdef __WXGTK3__
+wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
+{
+    if ( !IsMultiLine() )
+    {
+        return wxTextSearchResult{};
+    }
+
+    const GtkTextSearchFlags flags = static_cast<GtkTextSearchFlags>(
+        search.m_matchCase ? GTK_TEXT_SEARCH_TEXT_ONLY :
+                             (GTK_TEXT_SEARCH_TEXT_ONLY | GTK_TEXT_SEARCH_CASE_INSENSITIVE));
+
+    // get the beginning and end of text buffer
+    GtkTextIter textStart, textEnd;
+    gtk_text_buffer_get_start_iter(m_buffer, &textStart);
+    gtk_text_buffer_get_end_iter(m_buffer, &textEnd);
+
+    // the match results
+    GtkTextIter selectionStart, selectionEnd, selectionSearchPos;
+
+    gboolean found = false;
+
+    // verifies if the current match is whole-word
+    const auto confirmWhileWordMatch =
+        [&selectionStart, &selectionEnd, &found, &selectionSearchPos]()
+    {
+        // we have a match
+        if (gtk_text_iter_starts_word(&selectionStart) && gtk_text_iter_ends_word(&selectionEnd))
+        {
+            found = true;
+            return true;
+        }
+        // Not a whole-word match.
+        // Step to the end of this match for the next search.
+        else
+        {
+            found = false;
+            selectionSearchPos = selectionEnd;
+            return false;
+        }
+    };
+
+    if (search.m_direction == wxTextSearch::Direction::Down)
+    {
+        // search forward, beginning at the start (or user-provided position)
+        selectionSearchPos = textStart;
+        if ( search.m_startingPosition != -1 )
+            gtk_text_buffer_get_iter_at_offset(m_buffer, &selectionSearchPos,
+                                               static_cast<gint>(search.m_startingPosition));
+    }
+    else
+    {
+        // search backwards, starting at the end (or user-provided position)
+        selectionSearchPos = textEnd;
+        if ( search.m_startingPosition != -1 )
+            gtk_text_buffer_get_iter_at_offset(m_buffer, &selectionSearchPos,
+                                               static_cast<gint>(search.m_startingPosition));
+    }
+
+    for (;;)
+    {
+        found = search.m_direction == wxTextSearch::Direction::Down
+                ? gtk_text_iter_forward_search(&selectionSearchPos, search.m_searchValue.utf8_str(),
+                                               flags, &selectionStart, &selectionEnd, nullptr)
+                : gtk_text_iter_backward_search(&selectionSearchPos, search.m_searchValue.utf8_str(),
+                                                flags, &selectionStart, &selectionEnd, nullptr);
+
+        // If we haven't found anything at all, we're done.
+        if ( !found )
+            break;
+
+        // But if we did find something, we may need to check whether it was
+        // a whole word.
+        if ( !search.m_wholeWord || confirmWhileWordMatch() )
+            break;
+
+        // Keep searching for the next match, maybe it will be a whole-word one.
+    }
+
+    if (found)
+    {
+        return wxTextSearchResult{ gtk_text_iter_get_offset(&selectionStart),
+                                   gtk_text_iter_get_offset(&selectionEnd) };
+    }
+    else
+    {
+        return wxTextSearchResult();
+    }
+}
+#endif // __WXGTK3__
+
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     GTKApplyStyle(m_text, style);
