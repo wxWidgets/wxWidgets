@@ -81,11 +81,6 @@ public:
 
     // Default copy ctor, assignment operator and dtor are ok.
 
-    // Update the markup string.
-    //
-    // The same rules for mnemonics as in the ctor apply to this string.
-    void SetMarkup(const wxString& markup) { m_markup = markup; }
-
     // Render the markup string into the given DC in the specified rectangle.
     //
     // Notice that while the function uses the provided rectangle for alignment
