@@ -342,10 +342,9 @@ public:
             remains unchanged.
 
 
-        Currently wxButton supports markup in all major ports (wxMSW, wxGTK and
-        wxOSX/Cocoa) while wxStaticText supports it in wxGTK and wxOSX and its
-        generic version (which can be used under MSW if markup support is
-        required). Extending support to more controls is planned in the future.
+        Currently wxButton and wxStaticText support markup in all major ports
+        (wxMSW, wxGTK and wxOSX/Cocoa). Extending support to more controls is
+        planned in the future.
 
         @since 2.9.2
     */
