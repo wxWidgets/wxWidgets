@@ -297,6 +297,8 @@ bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 
     AutoResizeIfNecessary();
 
+    Refresh();
+
     return true;
 }
 
