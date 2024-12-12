@@ -27,8 +27,16 @@ class WXDLLIMPEXP_CORE wxMarkupTextBase
 public:
     virtual ~wxMarkupTextBase() = default;
 
-    // Update the markup string.
-    void SetMarkup(const wxString& markup) { m_markup = markup; }
+    // Update the markup string, return false if it didn't change.
+    bool SetMarkup(const wxString& markup)
+    {
+        if ( markup == m_markup )
+            return false;
+
+        m_markup = markup;
+
+        return true;
+    }
 
     // Return the width and height required by the given string and optionally
     // the height of the visible part above the baseline (i.e. ascent minus
