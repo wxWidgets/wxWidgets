@@ -124,10 +124,11 @@ bool wxGenericStaticText::DoSetLabelMarkup(const wxString& markup)
     if ( !wxStaticTextBase::DoSetLabelMarkup(markup) )
         return false;
 
+    if ( m_markupText && !m_markupText->SetMarkup(markup) )
+        return true;
+
     if ( !m_markupText )
         m_markupText = new wxMarkupText(markup);
-    else
-        m_markupText->SetMarkup(markup);
 
     AutoResizeIfNecessary();
 
