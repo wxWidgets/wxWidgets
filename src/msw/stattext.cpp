@@ -61,6 +61,13 @@ bool wxStaticText::Create(wxWindow *parent,
     return true;
 }
 
+wxStaticText::~wxStaticText()
+{
+#if wxUSE_MARKUP
+    delete m_markupText;
+#endif // wxUSE_MARKUP
+}
+
 WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);

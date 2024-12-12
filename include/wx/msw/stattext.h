@@ -34,6 +34,8 @@ public:
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxStaticTextNameStr));
 
+    virtual ~wxStaticText();
+
     // override some methods to resize the window properly
     virtual void SetLabel(const wxString& label) override;
     virtual bool SetFont( const wxFont &font ) override;
