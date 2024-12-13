@@ -521,13 +521,13 @@ const wxBrush* wxStockGDI::GetBrush(Item item)
             brush = new wxBrush(*GetColour(COLOUR_YELLOW), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_GREY:
-            brush = new wxBrush(wxColour(wxT("GREY")), wxBRUSHSTYLE_SOLID);
+            brush = new wxBrush(*GetColour(COLOUR_GREY), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_LIGHTGREY:
             brush = new wxBrush(*GetColour(COLOUR_LIGHTGREY), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_MEDIUMGREY:
-            brush = new wxBrush(wxColour(wxT("MEDIUM GREY")), wxBRUSHSTYLE_SOLID);
+            brush = new wxBrush(*GetColour(COLOUR_MEDIUMGREY), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_RED:
             brush = new wxBrush(*GetColour(COLOUR_RED), wxBRUSHSTYLE_SOLID);
@@ -568,8 +568,14 @@ const wxColour* wxStockGDI::GetColour(Item item)
         case COLOUR_YELLOW:
             colour = new wxColour(255, 255, 0);
             break;
+        case COLOUR_GREY:
+            colour = new wxColour(128, 128, 128);
+            break;
         case COLOUR_LIGHTGREY:
             colour = new wxColour(192, 192, 192);
+            break;
+        case COLOUR_MEDIUMGREY:
+            colour = new wxColour(100, 100, 100);
             break;
         case COLOUR_RED:
             colour = new wxColour(255, 0, 0);
@@ -676,13 +682,13 @@ const wxPen* wxStockGDI::GetPen(Item item)
             pen = new wxPen(*GetColour(COLOUR_YELLOW), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_GREY:
-            pen = new wxPen(wxColour(wxT("GREY")), 1, wxPENSTYLE_SOLID);
+            pen = new wxPen(*GetColour(COLOUR_GREY), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_LIGHTGREY:
             pen = new wxPen(*GetColour(COLOUR_LIGHTGREY), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_MEDIUMGREY:
-            pen = new wxPen(wxColour(wxT("MEDIUM GREY")), 1, wxPENSTYLE_SOLID);
+            pen = new wxPen(*GetColour(COLOUR_MEDIUMGREY), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_RED:
             pen = new wxPen(*GetColour(COLOUR_RED), 1, wxPENSTYLE_SOLID);
