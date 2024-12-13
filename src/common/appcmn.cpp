@@ -172,8 +172,6 @@ void wxAppBase::CleanUp()
 
     wxDeleteStockLists();
 
-    wxDELETE(wxTheColourDatabase);
-
     wxAppConsole::CleanUp();
 }
 

@@ -734,7 +734,7 @@ void wxDeleteStockLists()
     wxDELETE(wxThePenList);
     wxDELETE(wxTheFontList);
 
-    // wxTheColourDatabase is cleaned up by wxAppBase::CleanUp()
+    wxDELETE(wxTheColourDatabase);
 }
 
 // ============================================================================
