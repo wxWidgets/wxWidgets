@@ -328,24 +328,29 @@ void wxColourDatabase::Initialize()
         {"CORAL", 255, 127, 0},
         {"CORNFLOWER BLUE", 66, 66, 111},
         {"CYAN", 0, 255, 255},
+        {"DARK GRAY", 47, 47, 47},
         {"DARK GREY", 47, 47, 47},   // ?
         {"DARK GREEN", 47, 79, 47},
         {"DARK OLIVE GREEN", 79, 79, 47},
         {"DARK ORCHID", 153, 50, 204},
         {"DARK SLATE BLUE", 107, 35, 142},
+        {"DARK SLATE GRAY", 47, 79, 79},
         {"DARK SLATE GREY", 47, 79, 79},
         {"DARK TURQUOISE", 112, 147, 219},
+        {"DIM GRAY", 84, 84, 84},
         {"DIM GREY", 84, 84, 84},
         {"FIREBRICK", 142, 35, 35},
         {"FOREST GREEN", 35, 142, 35},
         {"GOLD", 204, 127, 50},
         {"GOLDENROD", 219, 219, 112},
+        {"GRAY", 128, 128, 128},
         {"GREY", 128, 128, 128},
         {"GREEN", 0, 255, 0},
         {"GREEN YELLOW", 147, 219, 112},
         {"INDIAN RED", 79, 47, 47},
         {"KHAKI", 159, 159, 95},
         {"LIGHT BLUE", 191, 216, 216},
+        {"LIGHT GRAY", 192, 192, 192},
         {"LIGHT GREY", 192, 192, 192},
         {"LIGHT STEEL BLUE", 143, 143, 188},
         {"LIME GREEN", 50, 204, 50},
@@ -353,6 +358,7 @@ void wxColourDatabase::Initialize()
         {"MAGENTA", 255, 0, 255},
         {"MAROON", 142, 35, 107},
         {"MEDIUM AQUAMARINE", 50, 204, 153},
+        {"MEDIUM GRAY", 100, 100, 100},
         {"MEDIUM GREY", 100, 100, 100},
         {"MEDIUM BLUE", 50, 50, 204},
         {"MEDIUM FOREST GREEN", 107, 142, 35},
@@ -413,26 +419,7 @@ void wxColourDatabase::AddColour(const wxString& name, const wxColour& colour)
     wxString colName = name;
     colName.MakeUpper();
 
-    // ... and we also allow both grey/gray
-    wxString colNameAlt = colName;
-    if ( !colNameAlt.Replace(wxT("GRAY"), wxT("GREY")) )
-    {
-        // but in this case it is not necessary so avoid extra search below
-        colNameAlt.clear();
-    }
-
-    auto& map = GetColours(m_map);
-    auto it = map.find(colName);
-    if ( it == map.end() && !colNameAlt.empty() )
-        it = map.find(colNameAlt);
-    if ( it != map.end() )
-    {
-        it->second = colour;
-    }
-    else // new colour
-    {
-        map[colName] = wxColour(colour);
-    }
+    GetColours(m_map)[colName] = colour;
 }
 
 wxColour wxColourDatabase::Find(const wxString& colour) const
@@ -440,17 +427,12 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
     self->Initialize();
 
-    // make the comparison case insensitive and also match both grey and gray
+    // make the comparison case insensitive
     wxString colName = colour;
     colName.MakeUpper();
-    wxString colNameAlt = colName;
-    if ( !colNameAlt.Replace(wxT("GRAY"), wxT("GREY")) )
-        colNameAlt.clear();
 
     const auto& map = GetColours(m_map);
-    auto it = map.find(colName);
-    if ( it == map.end() && !colNameAlt.empty() )
-        it = map.find(colNameAlt);
+    const auto it = map.find(colName);
     if ( it != map.end() )
         return it->second;
 
