@@ -1870,10 +1870,12 @@ void MyCanvas::DrawDatabaseColours(wxDC& dc)
     dc.DrawText(title, x, r.y);
     r.y += 3*lineHeight;
 
-    const wxVector<wxString> names(wxTheColourDatabase->GetAllNames());
-    for (wxVector<wxString>::const_iterator p = names.begin(); p != names.end(); ++p)
+    wxVector<wxString> names(wxTheColourDatabase->GetAllNames());
+    std::sort(names.begin(), names.end());
+
+    for ( const auto& name : names )
     {
-        DrawColour(dc, mono, x, r, *p, wxTheColourDatabase->Find(*p));
+        DrawColour(dc, mono, x, r, name, wxTheColourDatabase->Find(name));
         r.y += lineHeight;
     }
 }
