@@ -560,9 +560,9 @@ au_insert_text_callback(GtkTextBuffer *buffer,
         wxGtkTextApplyTagsFromAttr(win->GetHandle(), buffer, win->GetDefaultStyle(),
                                    &start, end);
     }
-    auto maxlen = win->GTKGetMaxLength();
+    const auto maxlen = win->GTKGetMaxLength();
     auto count = gtk_text_buffer_get_char_count( buffer );
-    if( maxlen > 0 && count > maxlen )
+    if ( maxlen > 0 && count > maxlen )
     {
         GtkTextIter offset;
         int trim_len = count - maxlen;
@@ -819,6 +819,9 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // work around probable bug in GTK+ 2.18 when calling WriteText on a
         // new, empty control, see https://github.com/wxWidgets/wxWidgets/issues/11409
         gtk_entry_get_text((GtkEntry*)m_text);
+
+        if (style & wxNO_BORDER)
+            gtk_entry_set_has_frame((GtkEntry*)m_text, FALSE);
     }
     g_object_ref(m_widget);
 
@@ -935,12 +938,14 @@ GtkEditable *wxTextCtrl::GetEditable() const
 
 void wxTextCtrl::SetMaxLength(unsigned long length)
 {
-    if( IsMultiLine() )
+    if ( IsMultiLine() )
     {
         m_maxlen = length;
     }
     else
+    {
         wxTextEntry::SetMaxLength( length );
+    }
 }
 
 GtkEntry *wxTextCtrl::GetEntry() const
@@ -1257,9 +1262,10 @@ void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != nullptr, wxT("invalid text ctrl") );
 
-    auto old_maxlen = m_maxlen;
+    // Disable max length check, they don't apply to changes done by the program
+    auto maxlenOrig = m_maxlen;
     m_maxlen = 0;
-    wxON_BLOCK_EXIT_SET( m_maxlen, old_maxlen );
+    wxON_BLOCK_EXIT_SET( m_maxlen, maxlenOrig );
 
     if ( text.empty() )
     {
@@ -1559,6 +1565,7 @@ void wxTextCtrl::GTKOnTextChanged()
 {
     if ( IgnoreTextUpdate() )
         return;
+
     if( IsMultiLine() )
     {
         auto count = gtk_text_buffer_get_char_count( m_buffer );
