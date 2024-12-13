@@ -41,6 +41,10 @@ Changes in behaviour not resulting in compilation errors
   See wxCONFIG_USE_XDG and wxCONFIG_USE_HOME for how to customize this
   behaviour. You may also find wxFileConfig::MigrateLocalFile() useful.
 
+- Values of many colours in wxColourDatabase have been changed to use the
+  values from the CSS standard. Use wxColourDatabase::UseScheme() to revert to
+  using the traditional values if your application appearance depends on them.
+
 - As first mentioned in 3.0 release notes, the value of wxTHREAD_WAIT_DEFAULT,
   used by wxThread::Delete() and Wait() by default, has changed from
   wxTHREAD_WAIT_YIELD to wxTHREAD_WAIT_BLOCK for safety and consistency.
