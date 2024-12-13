@@ -283,6 +283,12 @@ GetColours(wxStringToColourHashMap* map)
     return map->m_colours;
 }
 
+struct wxColourDesc
+{
+    const char *name;
+    unsigned char r,g,b;
+};
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -311,84 +317,78 @@ void wxColourDatabase::Initialize()
 
     m_map = new wxStringToColourHashMap;
 
-    static const struct wxColourDesc
+    static const wxColourDesc wxColourTable[] =
     {
-        const wxChar *name;
-        unsigned char r,g,b;
-    }
-    wxColourTable[] =
-    {
-        {wxT("AQUAMARINE"),112, 219, 147},
-        {wxT("BLACK"),0, 0, 0},
-        {wxT("BLUE"), 0, 0, 255},
-        {wxT("BLUE VIOLET"), 159, 95, 159},
-        {wxT("BROWN"), 165, 42, 42},
-        {wxT("CADET BLUE"), 95, 159, 159},
-        {wxT("CORAL"), 255, 127, 0},
-        {wxT("CORNFLOWER BLUE"), 66, 66, 111},
-        {wxT("CYAN"), 0, 255, 255},
-        {wxT("DARK GREY"), 47, 47, 47},   // ?
-
-        {wxT("DARK GREEN"), 47, 79, 47},
-        {wxT("DARK OLIVE GREEN"), 79, 79, 47},
-        {wxT("DARK ORCHID"), 153, 50, 204},
-        {wxT("DARK SLATE BLUE"), 107, 35, 142},
-        {wxT("DARK SLATE GREY"), 47, 79, 79},
-        {wxT("DARK TURQUOISE"), 112, 147, 219},
-        {wxT("DIM GREY"), 84, 84, 84},
-        {wxT("FIREBRICK"), 142, 35, 35},
-        {wxT("FOREST GREEN"), 35, 142, 35},
-        {wxT("GOLD"), 204, 127, 50},
-        {wxT("GOLDENROD"), 219, 219, 112},
-        {wxT("GREY"), 128, 128, 128},
-        {wxT("GREEN"), 0, 255, 0},
-        {wxT("GREEN YELLOW"), 147, 219, 112},
-        {wxT("INDIAN RED"), 79, 47, 47},
-        {wxT("KHAKI"), 159, 159, 95},
-        {wxT("LIGHT BLUE"), 191, 216, 216},
-        {wxT("LIGHT GREY"), 192, 192, 192},
-        {wxT("LIGHT STEEL BLUE"), 143, 143, 188},
-        {wxT("LIME GREEN"), 50, 204, 50},
-        {wxT("LIGHT MAGENTA"), 255, 119, 255},
-        {wxT("MAGENTA"), 255, 0, 255},
-        {wxT("MAROON"), 142, 35, 107},
-        {wxT("MEDIUM AQUAMARINE"), 50, 204, 153},
-        {wxT("MEDIUM GREY"), 100, 100, 100},
-        {wxT("MEDIUM BLUE"), 50, 50, 204},
-        {wxT("MEDIUM FOREST GREEN"), 107, 142, 35},
-        {wxT("MEDIUM GOLDENROD"), 234, 234, 173},
-        {wxT("MEDIUM ORCHID"), 147, 112, 219},
-        {wxT("MEDIUM SEA GREEN"), 66, 111, 66},
-        {wxT("MEDIUM SLATE BLUE"), 127, 0, 255},
-        {wxT("MEDIUM SPRING GREEN"), 127, 255, 0},
-        {wxT("MEDIUM TURQUOISE"), 112, 219, 219},
-        {wxT("MEDIUM VIOLET RED"), 219, 112, 147},
-        {wxT("MIDNIGHT BLUE"), 47, 47, 79},
-        {wxT("NAVY"), 35, 35, 142},
-        {wxT("ORANGE"), 204, 50, 50},
-        {wxT("ORANGE RED"), 255, 0, 127},
-        {wxT("ORCHID"), 219, 112, 219},
-        {wxT("PALE GREEN"), 143, 188, 143},
-        {wxT("PINK"), 255, 192, 203},
-        {wxT("PLUM"), 234, 173, 234},
-        {wxT("PURPLE"), 176, 0, 255},
-        {wxT("RED"), 255, 0, 0},
-        {wxT("SALMON"), 111, 66, 66},
-        {wxT("SEA GREEN"), 35, 142, 107},
-        {wxT("SIENNA"), 142, 107, 35},
-        {wxT("SKY BLUE"), 50, 153, 204},
-        {wxT("SLATE BLUE"), 0, 127, 255},
-        {wxT("SPRING GREEN"), 0, 255, 127},
-        {wxT("STEEL BLUE"), 35, 107, 142},
-        {wxT("TAN"), 219, 147, 112},
-        {wxT("THISTLE"), 216, 191, 216},
-        {wxT("TURQUOISE"), 173, 234, 234},
-        {wxT("VIOLET"), 79, 47, 79},
-        {wxT("VIOLET RED"), 204, 50, 153},
-        {wxT("WHEAT"), 216, 216, 191},
-        {wxT("WHITE"), 255, 255, 255},
-        {wxT("YELLOW"), 255, 255, 0},
-        {wxT("YELLOW GREEN"), 153, 204, 50}
+        {"AQUAMARINE",112, 219, 147},
+        {"BLACK",0, 0, 0},
+        {"BLUE", 0, 0, 255},
+        {"BLUE VIOLET", 159, 95, 159},
+        {"BROWN", 165, 42, 42},
+        {"CADET BLUE", 95, 159, 159},
+        {"CORAL", 255, 127, 0},
+        {"CORNFLOWER BLUE", 66, 66, 111},
+        {"CYAN", 0, 255, 255},
+        {"DARK GREY", 47, 47, 47},   // ?
+        {"DARK GREEN", 47, 79, 47},
+        {"DARK OLIVE GREEN", 79, 79, 47},
+        {"DARK ORCHID", 153, 50, 204},
+        {"DARK SLATE BLUE", 107, 35, 142},
+        {"DARK SLATE GREY", 47, 79, 79},
+        {"DARK TURQUOISE", 112, 147, 219},
+        {"DIM GREY", 84, 84, 84},
+        {"FIREBRICK", 142, 35, 35},
+        {"FOREST GREEN", 35, 142, 35},
+        {"GOLD", 204, 127, 50},
+        {"GOLDENROD", 219, 219, 112},
+        {"GREY", 128, 128, 128},
+        {"GREEN", 0, 255, 0},
+        {"GREEN YELLOW", 147, 219, 112},
+        {"INDIAN RED", 79, 47, 47},
+        {"KHAKI", 159, 159, 95},
+        {"LIGHT BLUE", 191, 216, 216},
+        {"LIGHT GREY", 192, 192, 192},
+        {"LIGHT STEEL BLUE", 143, 143, 188},
+        {"LIME GREEN", 50, 204, 50},
+        {"LIGHT MAGENTA", 255, 119, 255},
+        {"MAGENTA", 255, 0, 255},
+        {"MAROON", 142, 35, 107},
+        {"MEDIUM AQUAMARINE", 50, 204, 153},
+        {"MEDIUM GREY", 100, 100, 100},
+        {"MEDIUM BLUE", 50, 50, 204},
+        {"MEDIUM FOREST GREEN", 107, 142, 35},
+        {"MEDIUM GOLDENROD", 234, 234, 173},
+        {"MEDIUM ORCHID", 147, 112, 219},
+        {"MEDIUM SEA GREEN", 66, 111, 66},
+        {"MEDIUM SLATE BLUE", 127, 0, 255},
+        {"MEDIUM SPRING GREEN", 127, 255, 0},
+        {"MEDIUM TURQUOISE", 112, 219, 219},
+        {"MEDIUM VIOLET RED", 219, 112, 147},
+        {"MIDNIGHT BLUE", 47, 47, 79},
+        {"NAVY", 35, 35, 142},
+        {"ORANGE", 204, 50, 50},
+        {"ORANGE RED", 255, 0, 127},
+        {"ORCHID", 219, 112, 219},
+        {"PALE GREEN", 143, 188, 143},
+        {"PINK", 255, 192, 203},
+        {"PLUM", 234, 173, 234},
+        {"PURPLE", 176, 0, 255},
+        {"RED", 255, 0, 0},
+        {"SALMON", 111, 66, 66},
+        {"SEA GREEN", 35, 142, 107},
+        {"SIENNA", 142, 107, 35},
+        {"SKY BLUE", 50, 153, 204},
+        {"SLATE BLUE", 0, 127, 255},
+        {"SPRING GREEN", 0, 255, 127},
+        {"STEEL BLUE", 35, 107, 142},
+        {"TAN", 219, 147, 112},
+        {"THISTLE", 216, 191, 216},
+        {"TURQUOISE", 173, 234, 234},
+        {"VIOLET", 79, 47, 79},
+        {"VIOLET RED", 204, 50, 153},
+        {"WHEAT", 216, 216, 191},
+        {"WHITE", 255, 255, 255},
+        {"YELLOW", 255, 255, 0},
+        {"YELLOW GREEN", 153, 204, 50}
     };
 
     size_t n;
@@ -396,7 +396,7 @@ void wxColourDatabase::Initialize()
     for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
     {
         const wxColourDesc& cc = wxColourTable[n];
-        GetColours(m_map)[cc.name] = wxColour(cc.r, cc.g, cc.b);
+        GetColours(m_map)[wxString::FromAscii(cc.name)] = wxColour(cc.r, cc.g, cc.b);
     }
 }
 
