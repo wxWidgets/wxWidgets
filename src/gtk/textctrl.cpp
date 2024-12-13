@@ -574,10 +574,6 @@ au_insert_text_callback(GtkTextBuffer *buffer,
         // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
         // the handler that does not connected after
         gtk_text_buffer_delete( buffer, &offset, end );
-#if GTK_CHECK_VERSION( 3, 2, 0 )
-        if( wx_is_at_least_gtk3(2) )
-            gtk_text_iter_assign( end, &offset );
-#endif
         wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
         event.SetEventObject( win );
         event.SetString( win->GetValue() );
