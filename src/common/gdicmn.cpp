@@ -273,14 +273,67 @@ struct wxColourDesc
     unsigned char r,g,b;
 };
 
-using wxColourMap = std::unordered_map<wxString, wxColour>;
+// Instead of just creating the colour and storing it in wxColourDatabase, we
+// create a struct which contains a yet uninitialized wxColour and the RGB
+// values that can be used to initialize it later if it's really needed. This
+// makes initialization faster (~15% in my tests) as we don't need to create
+// all the colour objects that we're never going to use.
+class wxColourWithRGB
+{
+public:
+    // Set the RGB values but leave wxColour uninitialized.
+    wxColourWithRGB& operator=(const wxColourDesc& cc)
+    {
+        r = cc.r;
+        g = cc.g;
+        b = cc.b;
+
+        return *this;
+    }
+
+    // Initialize the wxColour immediately.
+    wxColourWithRGB& operator=(const wxColour& c)
+    {
+        m_col = c;
+
+        // We don't really need to set the RGB values here as they are only
+        // used if the colour is not initialized but it seems cleaner to do it
+        // as it doesn't have any real performance implications.
+        r = c.Red();
+        g = c.Green();
+        b = c.Blue();
+
+        return *this;
+    }
+
+    // Get the colour, creating it on demand.
+    const wxColour& GetColour()
+    {
+        if ( !m_col.IsOk() )
+            m_col.Set(r, g, b);
+
+        return m_col;
+    }
+
+    bool operator==(const wxColour& c) const
+    {
+        return m_col.IsOk() ? m_col == c
+                            : (c.Red() == r && c.Green() == g && c.Blue() == b);
+    }
+
+private:
+    wxColour m_col;
+    unsigned char r,g,b;
+};
+
+using wxColourMap = std::unordered_map<wxString, wxColourWithRGB>;
 
 void AddColours(wxColourMap& map, const wxColourDesc* table, size_t len)
 {
     for ( size_t n = 0; n < len; n++ )
     {
         const wxColourDesc& cc = table[n];
-        map[wxString::FromAscii(cc.name)] = wxColour(cc.r, cc.g, cc.b);
+        map[wxString::FromAscii(cc.name)] = cc;
     }
 }
 
@@ -629,10 +682,10 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     wxString colName = colour;
     colName.MakeUpper();
 
-    const auto& map = GetColours(m_map);
-    const auto it = map.find(colName);
+    auto& map = GetColours(m_map);
+    auto it = map.find(colName);
     if ( it != map.end() )
-        return it->second;
+        return it->second.GetColour();
 
     // we did not find any result in existing colours:
     // we won't use wxString -> wxColour conversion because the
