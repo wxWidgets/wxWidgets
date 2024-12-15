@@ -1882,10 +1882,9 @@ STCDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_611)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\stc\scintilla\src /D__WX__ /I..\..\src\stc\lexilla\access \
 	/I..\..\src\stc\lexilla\include /I..\..\src\stc\lexilla\lexlib \
 	/I..\..\src\stc\lexilla\include /I..\..\src\stc\scintilla\include \
-	/I..\..\src\stc\scintilla\src /I..\..\3rdparty\lunasvg\include \
-	/I..\..\3rdparty\lunasvg\3rdparty\plutovg /DWXUSINGDLL /DWXMAKINGDLL_STC \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_stcdll.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\stc\scintilla\src /DWXUSINGDLL /DWXMAKINGDLL_STC $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_stcdll.pch" \
+	$(CPPFLAGS) $(CXXFLAGS)
 STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_dummy.obj \
 	$(OBJS)\stcdll_stc.obj \
@@ -1909,10 +1908,8 @@ STCLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_626)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\stc\scintilla\src /D__WX__ /I..\..\src\stc\lexilla\access \
 	/I..\..\src\stc\lexilla\include /I..\..\src\stc\lexilla\lexlib \
 	/I..\..\src\stc\lexilla\include /I..\..\src\stc\scintilla\include \
-	/I..\..\src\stc\scintilla\src /I..\..\3rdparty\lunasvg\include \
-	/I..\..\3rdparty\lunasvg\3rdparty\plutovg $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_stclib.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\stc\scintilla\src $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_stclib.pch" $(CPPFLAGS) $(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_dummy.obj \
 	$(OBJS)\stclib_stc.obj \
@@ -3010,9 +3007,6 @@ __wxscintilla_library_link_DEP = $(__wxscintilla)
 !if "$(USE_STC)" == "1"
 __wxlexilla_library_link_DEP = $(__wxlexilla)
 !endif
-!if "$(USE_LUNASVG)" == "1"
-__wxlunasvg_library_link_DEP = $(__wxlunasvg)
-!endif
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "0"
 __monolib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
@@ -3880,10 +3874,10 @@ __DEBUGINFO_169 =
 __DEBUGINFO_169 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_207 = D
+__RUNTIME_LIBS_177 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_207 = $(__THREADSFLAG)
+__RUNTIME_LIBS_177 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
 __baselib___depname = \
@@ -3918,10 +3912,10 @@ __DEBUGINFO_200 =
 __DEBUGINFO_200 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_238 = D
+__RUNTIME_LIBS_208 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_238 = $(__THREADSFLAG)
+__RUNTIME_LIBS_208 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
 __netlib___depname = \
@@ -5348,10 +5342,10 @@ __DEBUGINFO_262 =
 __DEBUGINFO_262 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_300 = D
+__RUNTIME_LIBS_270 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_300 = $(__THREADSFLAG)
+__RUNTIME_LIBS_270 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __advlib___depname = \
@@ -5386,10 +5380,10 @@ __DEBUGINFO_293 =
 __DEBUGINFO_293 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_331 = D
+__RUNTIME_LIBS_301 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_331 = $(__THREADSFLAG)
+__RUNTIME_LIBS_301 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
 __medialib___depname = \
@@ -5424,10 +5418,10 @@ __DEBUGINFO_324 =
 __DEBUGINFO_324 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_362 = D
+__RUNTIME_LIBS_332 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_362 = $(__THREADSFLAG)
+__RUNTIME_LIBS_332 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 __htmllib___depname = \
@@ -5462,10 +5456,10 @@ __DEBUGINFO_355 =
 __DEBUGINFO_355 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_393 = D
+__RUNTIME_LIBS_363 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_393 = $(__THREADSFLAG)
+__RUNTIME_LIBS_363 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_WEBVIEW)" == "1"
 __webviewlib___depname = \
@@ -5500,10 +5494,10 @@ __DEBUGINFO_386 =
 __DEBUGINFO_386 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_424 = D
+__RUNTIME_LIBS_394 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_424 = $(__THREADSFLAG)
+__RUNTIME_LIBS_394 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_QA)" == "1"
 __qalib___depname = \
@@ -5538,10 +5532,10 @@ __DEBUGINFO_417 =
 __DEBUGINFO_417 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_455 = D
+__RUNTIME_LIBS_425 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_455 = $(__THREADSFLAG)
+__RUNTIME_LIBS_425 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_XML)" == "1"
 __xmllib___depname = \
@@ -5576,10 +5570,10 @@ __DEBUGINFO_448 =
 __DEBUGINFO_448 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_486 = D
+__RUNTIME_LIBS_456 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_486 = $(__THREADSFLAG)
+__RUNTIME_LIBS_456 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_XRC)" == "1"
 __xrclib___depname = \
@@ -5614,10 +5608,10 @@ __DEBUGINFO_479 =
 __DEBUGINFO_479 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_517 = D
+__RUNTIME_LIBS_487 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_517 = $(__THREADSFLAG)
+__RUNTIME_LIBS_487 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_AUI)" == "1"
 __auilib___depname = \
@@ -5652,10 +5646,10 @@ __DEBUGINFO_510 =
 __DEBUGINFO_510 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_548 = D
+__RUNTIME_LIBS_518 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_548 = $(__THREADSFLAG)
+__RUNTIME_LIBS_518 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_RIBBON)" == "1"
 __ribbonlib___depname = \
@@ -5690,10 +5684,10 @@ __DEBUGINFO_541 =
 __DEBUGINFO_541 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_579 = D
+__RUNTIME_LIBS_549 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_579 = $(__THREADSFLAG)
+__RUNTIME_LIBS_549 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_PROPGRID)" == "1"
 __propgridlib___depname = \
@@ -5728,10 +5722,10 @@ __DEBUGINFO_572 =
 __DEBUGINFO_572 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_610 = D
+__RUNTIME_LIBS_580 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_610 = $(__THREADSFLAG)
+__RUNTIME_LIBS_580 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_RICHTEXT)" == "1"
 __richtextlib___depname = \
@@ -5766,10 +5760,10 @@ __DEBUGINFO_603 =
 __DEBUGINFO_603 = $(__DEBUGRUNTIME_12)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_641 = D
+__RUNTIME_LIBS_611 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_641 = $(__THREADSFLAG)
+__RUNTIME_LIBS_611 = $(__THREADSFLAG)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_STC)" == "1"
 __stclib___depname = \
@@ -5852,9 +5846,6 @@ __wx = /DWXUSINGDLL
 !if "$(USE_STC)" == "1"
 __wxlexilla = $(LIBDIRNAME)\wxlexilla$(WXDEBUGFLAG).lib
 !endif
-!if "$(USE_LUNASVG)" == "1"
-__wxlunasvg = $(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).lib
-!endif
 !if "$(TARGET_CPU)" == ""
 __webview_additional_libdirs_arch_FILENAMES = x86
 !endif
@@ -5918,16 +5909,16 @@ ____DEBUGRUNTIME_6 =
 ____DEBUGRUNTIME_6 = /d _DEBUG
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_13 = 
+__DEBUGRUNTIME_12 = 
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_13 = /opt:ref /opt:icf
+__DEBUGRUNTIME_12 = /opt:ref /opt:icf
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_13 = /opt:ref /opt:icf
+__DEBUGRUNTIME_12 = /opt:ref /opt:icf
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_13 = 
+__DEBUGRUNTIME_12 = 
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
 __NO_VC_CRTDBG_p_71 = /d __NO_VC_CRTDBG__

@@ -38,7 +38,6 @@
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <library>$(wxscintilla_library_link)</library>
         <library>$(wxlexilla_library_link)</library>
-        <library>$(wxlunasvg_library_link)</library>
     </dll>
 
     <lib id="monolib" template="wx_lib,wx_monolib_or_dll"
