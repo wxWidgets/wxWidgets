@@ -1772,14 +1772,6 @@ ifeq ($(USE_LUNASVG),1)
 __wxlunasvg___depname = $(LIBDIRNAME)\libwxlunasvg$(WXDEBUGFLAG).a
 endif
 ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),1)
-__wxlunasvg_usingdll_p = -DWXUSINGDLL LUNASVG_SHARED LUNASVG_EXPORT
-endif
-endif
-ifeq ($(USE_LUNASVG),1)
-__wxplutovg___depname = $(LIBDIRNAME)\libwxplutovg$(WXDEBUGFLAG).a
-endif
-ifeq ($(MONOLITHIC),0)
 EXTRALIBS_FOR_BASE = 
 endif
 ifeq ($(MONOLITHIC),1)
@@ -2644,9 +2636,6 @@ __wxscintilla_library_link_DEP = $(__wxscintilla)
 endif
 ifeq ($(USE_STC),1)
 __wxlexilla_library_link_DEP = $(__wxlexilla)
-endif
-ifeq ($(USE_LUNASVG),1)
-__wxlunasvg_library_link_DEP = $(__wxlunasvg)
 endif
 ifeq ($(MONOLITHIC),1)
 ifeq ($(SHARED),0)
@@ -5265,9 +5254,6 @@ endif
 ifeq ($(USE_STC),1)
 __wxlexilla = $(LIBDIRNAME)\libwxlexilla$(WXDEBUGFLAG).a
 endif
-ifeq ($(USE_LUNASVG),1)
-__wxlunasvg = $(LIBDIRNAME)\libwxlunasvg$(WXDEBUGFLAG).a
-endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
@@ -5414,6 +5400,10 @@ clean:
 	-if exist $(LIBDIRNAME)\libwxscintilla$(WXDEBUGFLAG).a del $(LIBDIRNAME)\libwxscintilla$(WXDEBUGFLAG).a
 	-if exist $(LIBDIRNAME)\libwxlexilla$(WXDEBUGFLAG).a del $(LIBDIRNAME)\libwxlexilla$(WXDEBUGFLAG).a
 	-if exist $(LIBDIRNAME)\libwxlunasvg$(WXDEBUGFLAG).a del $(LIBDIRNAME)\libwxlunasvg$(WXDEBUGFLAG).a
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
+	-if exist $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll del $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a del $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
 	-if exist $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a del $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
 	-if exist $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG).dll del $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG).dll
