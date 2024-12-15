@@ -34,7 +34,7 @@ if( wxUSE_LUNASVG STREQUAL "builtin" )
     )
 
     set( LUNASVG_LIBRARIES wxlunasvg )
-    set( LUNASVG_INCLUDE_DIRS 
+    set( LUNASVG_INCLUDE_DIRS
         ${wxSOURCE_DIR}/3rdparty/lunasvg/include
         ${wxSOURCE_DIR}/3rdparty/plutovg/include
     )
