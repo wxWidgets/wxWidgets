@@ -304,6 +304,8 @@ private:
     // Delete the given item from the native control.
     bool MSWDeleteItem(const wxTreeItemId& item);
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
 
     // Return guaranteed non-null non-owning pointer to the attribute for the
     // given item.

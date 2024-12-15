@@ -162,8 +162,6 @@
 #cmakedefine01 wxUSE_STD_STRING_CONV_IN_WXSTRING
 
 
-#cmakedefine01 wxUSE_LONGLONG
-
 #cmakedefine01 wxUSE_BASE64
 
 #cmakedefine01 wxUSE_CONSOLE_EVENTLOOP
@@ -445,8 +443,6 @@
 #endif
 
 
-#cmakedefine01 wxUSE_COMMON_DIALOGS
-
 #cmakedefine01 wxUSE_BUSYINFO
 
 #cmakedefine01 wxUSE_CHOICEDLG
@@ -561,6 +557,8 @@
 #cmakedefine01 wxUSE_LIBJPEG
 
 #cmakedefine01 wxUSE_LIBTIFF
+
+#cmakedefine01 wxUSE_LUNASVG
 
 #cmakedefine01 wxUSE_NANOSVG
 

@@ -104,14 +104,14 @@ WrapSizerFrame::WrapSizerFrame()
     sizerRoot->Add(sizerTop, wxSizerFlags().Expand().Border());
 
     // A number of checkboxes inside a wrap sizer
-    wxSizer *sizerMid = new wxStaticBoxSizer(wxVERTICAL, m_panel,
-                                                "With check-boxes");
+    wxStaticBoxSizer *sizerMid = new wxStaticBoxSizer(wxVERTICAL, m_panel,
+                                                      "With check-boxes");
     wxSizer * const sizerMidWrap = new wxWrapSizer(wxHORIZONTAL);
     for ( int nCheck = 0; nCheck < 6; nCheck++ )
     {
         wxCheckBox *chk = new wxCheckBox
                                 (
-                                m_panel,
+                                sizerMid->GetStaticBox(),
                                 wxID_ANY,
                                 wxString::Format("Option %d", nCheck)
                                 );
@@ -124,16 +124,16 @@ WrapSizerFrame::WrapSizerFrame()
 
 
     // A shaped item inside a box sizer
-    wxSizer *sizerBottom = new wxStaticBoxSizer(wxVERTICAL, m_panel,
-                                                "With wxSHAPED item");
+    wxStaticBoxSizer *sizerBottom = new wxStaticBoxSizer(wxVERTICAL, m_panel,
+                                                         "With wxSHAPED item");
     wxSizer *sizerBottomBox = new wxBoxSizer(wxHORIZONTAL);
     sizerBottom->Add(sizerBottomBox, wxSizerFlags(100).Expand());
 
-    sizerBottomBox->Add(new wxListBox(m_panel, wxID_ANY,
+    sizerBottomBox->Add(new wxListBox(sizerBottom->GetStaticBox(), wxID_ANY,
                                         wxPoint(0, 0), wxSize(70, 70)),
                         wxSizerFlags().Expand().Shaped());
     sizerBottomBox->AddSpacer(10);
-    sizerBottomBox->Add(new wxCheckBox(m_panel, wxID_ANY,
+    sizerBottomBox->Add(new wxCheckBox(sizerBottom->GetStaticBox(), wxID_ANY,
                                         "A much longer option..."),
                         wxSizerFlags(100).Border());
     sizerRoot->Add(sizerBottom, wxSizerFlags(100).Expand().Border());

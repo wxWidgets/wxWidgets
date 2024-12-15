@@ -45,6 +45,8 @@ class WXDLLIMPEXP_FWD_BASE wxEventFilter;
 #if wxUSE_GUI
     class WXDLLIMPEXP_FWD_CORE wxDC;
     class WXDLLIMPEXP_FWD_CORE wxMenu;
+    class WXDLLIMPEXP_FWD_CORE wxMenuItem;
+    class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
     class WXDLLIMPEXP_FWD_CORE wxWindow;
     class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 #endif // wxUSE_GUI
@@ -287,9 +289,6 @@ private:
     wxEvtHandler *m_handler;
     wxEventFunction m_method;
 
-    // Provide a dummy default ctor for type info purposes
-    wxObjectEventFunctor() : m_handler(nullptr), m_method(nullptr) { }
-
     WX_DECLARE_TYPEINFO_INLINE(wxObjectEventFunctor)
 };
 
@@ -460,9 +459,6 @@ private:
     EventHandler *m_handler;
     void (Class::*m_method)(EventArg&);
 
-    // Provide a dummy default ctor for type info purposes
-    wxEventFunctorMethod() = default;
-
     typedef wxEventFunctorMethod<EventTag, Class,
                                  EventArg, EventHandler> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)
@@ -516,9 +512,6 @@ public:
 private:
     void (*m_handler)(EventArg&);
 
-    // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunction() = default;
-
     typedef wxEventFunctorFunction<EventTag, EventArg> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)
 };
@@ -567,9 +560,6 @@ private:
 
     // Use the address of the original functor for comparison in IsMatching:
     const void *m_handlerAddr;
-
-    // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunctor() = default;
 
     typedef wxEventFunctorFunctor<EventTag, Functor> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)
@@ -1857,7 +1847,7 @@ public:
     int GetClickCount() const { return m_clickCount; }
 
     // Find the logical position of the event given the DC
-    wxPoint GetLogicalPosition(const wxDC& dc) const;
+    wxPoint GetLogicalPosition(const wxReadOnlyDC& dc) const;
 
     // Get wheel rotation, positive or negative indicates direction of
     // rotation.  Current devices all send an event when rotation is equal to
@@ -2587,12 +2577,12 @@ private:
 class WXDLLIMPEXP_CORE wxMenuEvent : public wxEvent
 {
 public:
-    wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = nullptr)
+    wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = nullptr, wxMenuItem* menuItem = nullptr)
         : wxEvent(winid, type)
-        { m_menuId = winid; m_menu = menu; }
+        { m_menuId = winid; m_menu = menu; m_menuItem = menuItem; }
     wxMenuEvent(const wxMenuEvent& event)
         : wxEvent(event)
-    { m_menuId = event.m_menuId; m_menu = event.m_menu; }
+    { m_menuId = event.m_menuId; m_menu = event.m_menu; m_menuItem = event.m_menuItem; }
 
     // only for wxEVT_MENU_HIGHLIGHT
     int GetMenuId() const { return m_menuId; }
@@ -2603,11 +2593,14 @@ public:
     // only for wxEVT_MENU_OPEN/CLOSE
     wxMenu* GetMenu() const { return m_menu; }
 
+    wxMenuItem* GetMenuItem() const { return m_menuItem; }
+
     virtual wxEvent *Clone() const override { return new wxMenuEvent(*this); }
 
 private:
-    int     m_menuId;
-    wxMenu* m_menu;
+    int         m_menuId;
+    wxMenu*     m_menu;
+    wxMenuItem* m_menuItem;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMenuEvent);
 };
@@ -2937,7 +2930,7 @@ public:
     wxUpdateUIEvent(wxWindowID commandId = 0)
         : wxCommandEvent(wxEVT_UPDATE_UI, commandId)
     {
-        m_checked =
+        m_3checked = wxCHK_UNCHECKED;
         m_enabled =
         m_shown =
         m_setEnabled =
@@ -2945,10 +2938,11 @@ public:
         m_setText =
         m_setChecked = false;
         m_isCheckable = true;
+        m_is3State = false;
     }
     wxUpdateUIEvent(const wxUpdateUIEvent& event)
         : wxCommandEvent(event),
-          m_checked(event.m_checked),
+          m_3checked(event.m_3checked),
           m_enabled(event.m_enabled),
           m_shown(event.m_shown),
           m_setEnabled(event.m_setEnabled),
@@ -2956,10 +2950,12 @@ public:
           m_setText(event.m_setText),
           m_setChecked(event.m_setChecked),
           m_isCheckable(event.m_isCheckable),
+          m_is3State(event.m_is3State),
           m_text(event.m_text)
     { }
 
-    bool GetChecked() const { return m_checked; }
+    bool GetChecked() const { return Get3StateValue() != wxCHK_UNCHECKED; }
+    wxCheckBoxState Get3StateValue() const { return m_3checked; }
     bool GetEnabled() const { return m_enabled; }
     bool GetShown() const { return m_shown; }
     wxString GetText() const { return m_text; }
@@ -2968,14 +2964,18 @@ public:
     bool GetSetEnabled() const { return m_setEnabled; }
     bool GetSetShown() const { return m_setShown; }
 
-    void Check(bool check) { m_checked = check; m_setChecked = true; }
+    void Check(bool check) { Set3StateValue(check ? wxCHK_CHECKED : wxCHK_UNCHECKED); }
+    void Set3StateValue(wxCheckBoxState check);
     void Enable(bool enable) { m_enabled = enable; m_setEnabled = true; }
     void Show(bool show) { m_shown = show; m_setShown = true; }
     void SetText(const wxString& text) { m_text = text; m_setText = true; }
 
     // A flag saying if the item can be checked. True by default.
     bool IsCheckable() const { return m_isCheckable; }
-    void DisallowCheck() { m_isCheckable = false; }
+    void DisallowCheck();
+    // A flag saying if the item can be wxCHK_UNDETERMINED. False by default.
+    bool Is3State() const { return m_is3State; }
+    void Allow3rdState(bool b = true);
 
     // Sets the interval between updates in milliseconds.
     // Set to -1 to disable updates, or to 0 to update as frequently as possible.
@@ -3002,7 +3002,7 @@ public:
     virtual wxEvent *Clone() const override { return new wxUpdateUIEvent(*this); }
 
 protected:
-    bool          m_checked;
+    wxCheckBoxState m_3checked;
     bool          m_enabled;
     bool          m_shown;
     bool          m_setEnabled;
@@ -3010,10 +3010,9 @@ protected:
     bool          m_setText;
     bool          m_setChecked;
     bool          m_isCheckable;
+    bool          m_is3State;
     wxString      m_text;
-#if wxUSE_LONGLONG
     static wxLongLong       sm_lastUpdate;
-#endif
     static long             sm_updateInterval;
     static wxUpdateUIMode   sm_updateMode;
 

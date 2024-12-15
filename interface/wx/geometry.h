@@ -46,10 +46,8 @@ public :
     wxPoint2DInt& operator=(const wxPoint2DInt& pt);
     wxPoint2DInt& operator+=(const wxPoint2DInt& pt);
     wxPoint2DInt& operator-=(const wxPoint2DInt& pt);
-    wxPoint2DInt& operator*=(const wxPoint2DInt& pt);
     wxPoint2DInt& operator*=(wxDouble n);
     wxPoint2DInt& operator*=(wxInt32 n);
-    wxPoint2DInt& operator/=(const wxPoint2DInt& pt);
     wxPoint2DInt& operator/=(wxDouble n);
     wxPoint2DInt& operator/=(wxInt32 n);
     operator wxPoint() const;
@@ -62,13 +60,11 @@ public :
 
 wxPoint2DInt operator+(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2);
 wxPoint2DInt operator-(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2);
-wxPoint2DInt operator*(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2);
+wxPoint2DInt operator*(wxDouble n , const wxPoint2DInt& pt);
 wxPoint2DInt operator*(wxInt32 n , const wxPoint2DInt& pt);
-wxPoint2DInt operator*(wxInt32 n , const wxPoint2DInt& pt);
+wxPoint2DInt operator*(const wxPoint2DInt& pt , wxDouble n);
 wxPoint2DInt operator*(const wxPoint2DInt& pt , wxInt32 n);
-wxPoint2DInt operator*(const wxPoint2DInt& pt , wxInt32 n);
-wxPoint2DInt operator/(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2);
-wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n);
+wxPoint2DInt operator/(const wxPoint2DInt& pt , wxDouble n);
 wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n);
 
 
@@ -105,10 +101,8 @@ public :
     wxPoint2DDouble& operator=(const wxPoint2DDouble& pt);
     wxPoint2DDouble& operator+=(const wxPoint2DDouble& pt);
     wxPoint2DDouble& operator-=(const wxPoint2DDouble& pt);
-    wxPoint2DDouble& operator*=(const wxPoint2DDouble& pt);
     wxPoint2DDouble& operator*=(wxDouble n);
     wxPoint2DDouble& operator*=(wxInt32 n);
-    wxPoint2DDouble& operator/=(const wxPoint2DDouble& pt);
     wxPoint2DDouble& operator/=(wxDouble n);
     wxPoint2DDouble& operator/=(wxInt32 n);
 
@@ -121,12 +115,10 @@ public :
 
 wxPoint2DDouble operator+(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
 wxPoint2DDouble operator-(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
-wxPoint2DDouble operator*(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
 wxPoint2DDouble operator*(wxDouble n , const wxPoint2DDouble& pt);
 wxPoint2DDouble operator*(wxInt32 n , const wxPoint2DDouble& pt);
 wxPoint2DDouble operator*(const wxPoint2DDouble& pt , wxDouble n);
 wxPoint2DDouble operator*(const wxPoint2DDouble& pt , wxInt32 n);
-wxPoint2DDouble operator/(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
 wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxDouble n);
 wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxInt32 n);
 

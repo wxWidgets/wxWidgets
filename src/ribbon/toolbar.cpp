@@ -1092,12 +1092,7 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
     }
 #endif
 
-    if(new_hover && new_hover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
-    {
-        m_hover_tool = new_hover;
-        new_hover = nullptr; // A disabled tool can not be hilighted
-    }
-    else if(new_hover != m_hover_tool)
+    if(new_hover != m_hover_tool)
     {
         if(m_hover_tool)
         {
@@ -1105,6 +1100,10 @@ void wxRibbonToolBar::OnMouseMove(wxMouseEvent& evt)
                 | wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK);
         }
         m_hover_tool = new_hover;
+
+        if(new_hover && new_hover->state & wxRIBBON_TOOLBAR_TOOL_DISABLED)
+            new_hover = nullptr; // A disabled tool can not be highlighted
+
         if(new_hover)
         {
             long what = wxRIBBON_TOOLBAR_TOOL_NORMAL_HOVERED;

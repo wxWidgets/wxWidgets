@@ -112,7 +112,7 @@
     physical pixels and a window must be 200px wide to have the same apparent
     size in high DPI as in normal DPI.
  */
-#if defined(__WXGTK3__) || defined(__WXMAC__)
+#if defined(__WXGTK3__) || defined(__WXMAC__) || defined(__WXQT__)
     #define wxHAS_DPI_INDEPENDENT_PIXELS
 
     // This is an older synonym kept only for compatibility

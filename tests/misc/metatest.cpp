@@ -73,9 +73,7 @@ void MetaProgrammingTestCase::ImplicitConversion()
 #ifndef wxNO_RTTI
     CPPUNIT_ASSERT(typeid(wxImplicitConversionType<char,int>::value) == typeid(int));
     CPPUNIT_ASSERT(typeid(wxImplicitConversionType<int,unsigned>::value) == typeid(unsigned));
-#ifdef wxLongLong_t
     CPPUNIT_ASSERT(typeid(wxImplicitConversionType<wxLongLong_t,float>::value) == typeid(float));
-#endif
 #endif // !wxNO_RTTI
 }
 

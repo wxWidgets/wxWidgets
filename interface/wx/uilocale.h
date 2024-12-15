@@ -100,6 +100,41 @@ public:
     static const wxUILocale& GetCurrent();
 
     /**
+        Configure the UI to use the locale corresponding to the given locale name tag.
+
+        If localized applications use this function instead of the recommended
+        function wxUILocale::UseDefault(), it should be called as early as possible
+        during the program startup, e.g. in the very beginning of the overridden
+        wxApp::OnInit().
+
+        @param localeName
+            The locale name tag for which the corresponding locale should be created.
+            Example: "de_DE.UTF-8" - German locale name in POSIX notation.
+            See wxLocaleIdent::FromTag() for more information about the syntax of
+            the @a locale tag string.
+
+        Note that under most Unix systems (but not macOS) this function changes
+        the C locale to the locale specified by the environment variables and
+        so affects the results of calling C functions such as @c sprintf() etc
+        which can use comma, rather than period, as decimal separator. The
+        wxString::ToCDouble() and wxString::FromCDouble() functions can be used
+        for parsing and formatting floating point numbers using period as
+        decimal separator independently of the current locale.
+
+        @return @true on success or @false if the locale with the given name
+        couldn't be set
+
+        @note If an application tries to configure the UI to use a locale other
+              than the default user locale of the system, it can't be guaranteed
+              that really @em all controls will obey the locale setting. For
+              example, under Windows the calendar control will always use the
+              default user locale, no matter which locale was set by this function.
+              Under MacOS several standard dialogs like the file selection dialog
+              will use at least partially the default user locale.
+     */
+    static bool UseLocaleName(const wxString& localeName);
+
+    /**
         Creates the local corresponding to the given language tag.
 
         This is exactly equivalent to using wxUILocale constructor with

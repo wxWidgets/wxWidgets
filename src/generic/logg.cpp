@@ -96,7 +96,6 @@ public:
                 const wxArrayLong& timess,
                 const wxString& caption,
                 long style);
-    virtual ~wxLogDialog();
 
     // event handlers
     void OnOk(wxCommandEvent& event);
@@ -776,6 +775,8 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 #else
     wxPanel* win = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                wxBORDER_NONE);
+
+    sizerTop->Add(win, wxSizerFlags(1).Expand().Border());
 #endif
     wxSizer * const paneSz = new wxBoxSizer(wxVERTICAL);
 
@@ -988,14 +989,6 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
 
 #endif // CAN_SAVE_FILES
 
-wxLogDialog::~wxLogDialog()
-{
-    if ( m_listctrl )
-    {
-        delete m_listctrl->GetImageList(wxIMAGE_LIST_SMALL);
-    }
-}
-
 #endif // wxUSE_LOG_DIALOG
 
 #if CAN_SAVE_FILES
@@ -1009,7 +1002,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename, wxWindow *parent)
     // get the file name
     // -----------------
     wxString filename = wxSaveFileSelector(wxT("log"), wxT("txt"), wxT("log.txt"), parent);
-    if ( !filename ) {
+    if ( filename.empty() ) {
         // cancelled
         return -1;
     }

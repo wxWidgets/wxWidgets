@@ -1541,7 +1541,7 @@ public:
         wxStringBuffer and wxStringBufferLength classes may be very useful when working
         with some external API which requires the caller to provide a writable buffer.
 
-        See also the reserve(), resize() and shrink_to_fit() STL-like functions.
+        See also the `reserve()`, `resize()` and `shrink_to_fit()` STL-like functions.
     */
     ///@{
 
@@ -1610,7 +1610,11 @@ public:
     wxString Clone() const;
 
     /**
-        Empties the string and frees memory occupied by it.
+        Clears the string's content, setting its length to zero.
+
+        This is the same as `clear()` and does @e not free the memory used by
+        the string. To do this, call standard-like `shrink_to_fit()` or
+        Shrink() after calling this function.
 
         @see Empty()
     */
@@ -1635,9 +1639,11 @@ public:
     bool Contains(const wxString& str) const;
 
     /**
-        Makes the string empty, but doesn't free memory occupied by the string.
+        This is a synonym for Clear().
 
-        @see Clear().
+        Prefer using `clear()` instead of this function in new code, especially
+        considering that this function is very different from the standard
+        `empty()` function.
     */
     void Empty();
 
@@ -1675,7 +1681,9 @@ public:
         Adds @a count copies of @a chPad to the beginning, or to the end of the
         string (the default).
 
-        Removes spaces from the left or from the right (default).
+        By default, appends the given number of spaces to the string. The
+        character being added and whether it is appended or prepended can be
+        changed by providing non-default parameter values.
     */
     wxString& Pad(size_t count, wxUniChar chPad = ' ', bool fromRight = true);
 

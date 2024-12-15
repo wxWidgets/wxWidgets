@@ -46,7 +46,6 @@ public:
     virtual long XYToPosition(long x, long y) const = 0;
     virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const = 0;
-    virtual QAbstractScrollArea *ScrollBarsContainer() const = 0;
     virtual void WriteText( const wxString &text ) = 0;
     virtual void SetMaxLength(unsigned long len) = 0;
     virtual void MarkDirty() = 0;
@@ -263,7 +262,7 @@ public:
     virtual wxTextCtrlHitTestResult
     HitTest(const wxPoint& pt, long* pos) const override
     {
-        auto qtEdit = static_cast<wxQtTextEdit* const>(m_edit);
+        auto qtEdit = static_cast<wxQtTextEdit*>(m_edit);
 
         auto cursor  = qtEdit->cursorForPosition( wxQtConvertPoint(pt) );
         auto curRect = qtEdit->cursorRect(cursor);
@@ -353,11 +352,6 @@ public:
             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, pos);
         m_edit->setTextCursor(cursor);
         m_edit->ensureCursorVisible();
-    }
-
-    QAbstractScrollArea *ScrollBarsContainer() const override
-    {
-        return static_cast<QAbstractScrollArea*>(m_edit);
     }
 
     virtual void SetStyleFlags(long flags) override
@@ -472,10 +466,13 @@ public:
     virtual void SetMaxLength(unsigned long len) override
     {
         // Notice that setMaxLength() takes an int and not an unsigned int
-        m_edit->setMaxLength(
-            len > std::numeric_limits<int>::max()
-                ? std::numeric_limits<int>::max() : len
-        );
+        const unsigned long maxlen = std::numeric_limits<int>::max();
+        if ( len == 0 || len > maxlen )
+        {
+            len = maxlen;
+        }
+
+        m_edit->setMaxLength(len);
     }
 
     virtual void MarkDirty() override
@@ -548,7 +545,7 @@ public:
     virtual wxTextCtrlHitTestResult
     HitTest(const wxPoint& pt, long *pos) const override
     {
-        auto qtEdit  = static_cast<wxQtLineEdit* const>(m_edit);
+        auto qtEdit  = static_cast<wxQtLineEdit*>(m_edit);
         auto curPos  = qtEdit->cursorPositionAt( wxQtConvertPoint(pt) );
         auto curRect = qtEdit->cursorRect();
 
@@ -562,11 +559,6 @@ public:
             return wxTE_HT_BEYOND;
 
         return wxTE_HT_ON_TEXT;
-    }
-
-    virtual QAbstractScrollArea *ScrollBarsContainer() const override
-    {
-        return nullptr;
     }
 
     virtual void SetStyleFlags(long flags) override
@@ -644,11 +636,6 @@ void wxQtTextEdit::textChanged()
 } // anonymous namespace
 
 
-wxTextCtrl::wxTextCtrl() :
-    m_qtEdit(nullptr)
-{
-}
-
 wxTextCtrl::wxTextCtrl(wxWindow *parent,
            wxWindowID id,
            const wxString &value,
@@ -686,7 +673,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     m_qtEdit->SetStyleFlags(style);
 
-    m_qtWindow = m_qtEdit->ScrollBarsContainer();
+    m_qtWindow = m_qtEdit->GetHandle();
 
     // set the initial text value without sending the event
     ChangeValue( value );
@@ -701,7 +688,11 @@ wxTextCtrl::~wxTextCtrl()
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    return wxTextCtrlBase::DoGetBestSize();
+    if (IsSingleLine())
+        return wxQtConvertSize(m_qtEdit->GetHandle()->sizeHint());
+
+    return wxSize(80,
+                  1 + GetCharHeight() * wxMax(wxMin(GetNumberOfLines(), 10), 2));
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
@@ -910,11 +901,6 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
         if ( flags & SetValue_SendEvent )
             SendTextUpdatedEventIfAllowed();
     }
-}
-
-QWidget *wxTextCtrl::GetHandle() const
-{
-    return (QWidget *) m_qtEdit->GetHandle();
 }
 
 #endif // wxUSE_TEXTCTRL

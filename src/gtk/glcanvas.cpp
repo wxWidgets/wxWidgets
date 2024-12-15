@@ -14,14 +14,8 @@
 
 #include "wx/glcanvas.h"
 
-#include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/wrapgdk.h"
 #include "wx/gtk/private/backend.h"
-#ifdef GDK_WINDOWING_WAYLAND
-#include <gdk/gdkwayland.h>
-#endif
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
 
 #ifdef __WXGTK3__
 extern "C" {

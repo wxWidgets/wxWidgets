@@ -11,6 +11,7 @@
 
 #include <QtGui/QPicture>
 #include <QtGui/QPainter>
+#include <QtGui/QWindow>
 #include <QtWidgets/QScrollBar>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QApplication>
@@ -49,8 +50,9 @@ inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
 
     return qtWidget;
 }
+}
 
-inline wxSize wxQtGetBestSize(QWidget* qtWidget)
+extern wxSize wxQtGetBestSize(QWidget* qtWidget)
 {
     auto size = qtWidget->sizeHint();
     // best effort to ensure a correct size (note that some qt controls
@@ -58,7 +60,7 @@ inline wxSize wxQtGetBestSize(QWidget* qtWidget)
     size = size.expandedTo(qtWidget->minimumSizeHint());
     return wxQtConvertSize(size);
 }
-}
+
 
 // Base Widget helper (no scrollbar, used by wxWindow)
 
@@ -324,6 +326,8 @@ void wxWindowQt::Init()
 #endif
     m_qtWindow = nullptr;
     m_qtContainer = nullptr;
+
+    m_pendingClientSize = wxDefaultSize;
 }
 
 wxWindowQt::wxWindowQt()
@@ -439,8 +443,9 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
         p = pos;
 
     wxSize initialSize = size;
-    initialSize.SetDefaults( IsTopLevel() ? wxTopLevelWindowBase::GetDefaultSize()
-                                          : wxQtGetBestSize( GetHandle() ) );
+    initialSize.SetDefaults( IsTopLevel() && !GetHandle()->inherits("QDialog")
+                                 ? wxTopLevelWindowBase::GetDefaultSize()
+                                 : wxQtGetBestSize( GetHandle() ) );
 
     DoMoveWindow( p.x, p.y, initialSize.GetWidth(), initialSize.GetHeight() );
 
@@ -490,8 +495,7 @@ void wxWindowQt::PostCreation(bool generic)
         DoEnable(false);
 
     // The window might have been hidden before Create() and it needs to remain
-    // hidden in this case, so do it (unfortunately there doesn't seem to be
-    // any way to create the window initially hidden with Qt).
+    // hidden in this case.
     GetHandle()->setVisible(m_isShown);
 
     wxWindowCreateEvent event(this);
@@ -515,17 +519,10 @@ bool wxWindowQt::Show( bool show )
 
     // Show can be called before the underlying window is created:
 
-    QWidget *qtWidget = GetHandle();
-    if ( qtWidget == nullptr )
+    if ( QWidget *qtWidget = GetHandle() )
     {
-        return false;
+        qtWidget->setVisible( show );
     }
-
-    qtWidget->setVisible( show );
-
-    wxSizeEvent event(GetSize(), GetId());
-    event.SetEventObject(this);
-    HandleWindowEvent(event);
 
     return true;
 }
@@ -558,19 +555,7 @@ void wxWindowQt::SetFocus()
 
 /* static */ void wxWindowQt::QtReparent( QWidget *child, QWidget *parent )
 {
-    // Backup the attributes which will be changed during the reparenting:
-
-//    QPoint position = child->pos();
-//    bool isVisible = child->isVisible();
-    Qt::WindowFlags windowFlags = child->windowFlags();
-
-    child->setParent( parent );
-
-    // Restore the attributes:
-
-    child->setWindowFlags( windowFlags );
-//    child->move( position );
-//    child->setVisible( isVisible );
+    child->setParent( parent, child->windowFlags() );
 }
 
 bool wxWindowQt::Reparent( wxWindowBase *parent )
@@ -694,6 +679,32 @@ int wxWindowQt::GetCharHeight() const
 int wxWindowQt::GetCharWidth() const
 {
     return ( GetHandle()->fontMetrics().averageCharWidth() );
+}
+
+double wxWindowQt::GetContentScaleFactor() const
+{
+    if (GetHandle())
+    {
+        QWidget* npw = GetHandle()->nativeParentWidget();
+
+        if (npw)
+        {
+            QWindow *win = npw->windowHandle();
+            return win->devicePixelRatio();
+        }
+    }
+
+    return qApp->devicePixelRatio();
+}
+
+double wxWindowQt::GetDPIScaleFactor() const
+{
+    return GetContentScaleFactor();
+}
+
+wxSize wxWindowQt::GetDPI() const
+{
+    return MakeDPIFromScaleFactor(GetDPIScaleFactor());
 }
 
 void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *descent,
@@ -1025,7 +1036,6 @@ void wxWindowQt::DoScreenToClient( int *x, int *y ) const
 void wxWindowQt::DoCaptureMouse()
 {
     wxCHECK_RET( GetHandle() != nullptr, wxT("invalid window") );
-    GetHandle()->grabMouse();
     s_capturedWindow = this;
 }
 
@@ -1033,8 +1043,19 @@ void wxWindowQt::DoCaptureMouse()
 void wxWindowQt::DoReleaseMouse()
 {
     wxCHECK_RET( GetHandle() != nullptr, wxT("invalid window") );
-    GetHandle()->releaseMouse();
     s_capturedWindow = nullptr;
+}
+
+void wxWindowQt::QtReleaseMouseAndNotify()
+{
+    s_capturedWindow = nullptr;
+
+    while ( auto qtWidget = QWidget::mouseGrabber() )
+    {
+        qtWidget->releaseMouse();
+    }
+
+    NotifyCaptureLost();
 }
 
 wxWindowQt *wxWindowBase::GetCapture()
@@ -1052,7 +1073,7 @@ void wxWindowQt::DoGetPosition(int *x, int *y) const
 
 namespace
 {
-inline void wxQtSetClientSize(QWidget* qtWidget, int width, int height)
+inline wxSize wxQtSetClientSize(QWidget* qtWidget, int width, int height)
 {
     // There doesn't seem to be any way to change Qt frame size directly, so
     // change the widget size, but take into account the extra margins
@@ -1061,22 +1082,21 @@ inline void wxQtSetClientSize(QWidget* qtWidget, int width, int height)
     const QSize innerSize = qtWidget->geometry().size();
     const QSize frameSizeDiff = frameSize - innerSize;
 
-    const int clientWidth = std::max(width - frameSizeDiff.width(), 0);
-    const int clientHeight = std::max(height - frameSizeDiff.height(), 0);
+    int clientWidth = std::max(width - frameSizeDiff.width(), 0);
+    int clientHeight = std::max(height - frameSizeDiff.height(), 0);
 
     qtWidget->resize(clientWidth, clientHeight);
+
+    return wxSize(clientWidth, clientHeight);
 }
 }
 
 void wxWindowQt::DoGetSize(int *width, int *height) const
 {
-    QSize size = GetHandle()->frameSize();
-    QRect rect = GetHandle()->frameGeometry();
-    wxASSERT( size.width() == rect.width() );
-    wxASSERT( size.height() == rect.height() );
+    const QSize size =  GetHandle()->frameSize();
 
-    if (width)  *width = rect.width();
-    if (height) *height = rect.height();
+    if (width)  *width = size.width();
+    if (height) *height = size.height();
 }
 
 
@@ -1102,6 +1122,14 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
             height = BEST_SIZE.y;
     }
 
+    if ( !GetHandle()->isVisible() && QtGetClientWidget() != GetHandle() )
+    {
+        if ( width != -1 && height != -1 )
+        {
+            m_pendingSize = true;
+        }
+    }
+
     int w, h;
     GetSize(&w, &h);
     if (width == -1)
@@ -1123,11 +1151,14 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 void wxWindowQt::DoGetClientSize(int *width, int *height) const
 {
     QWidget *qtWidget = QtGetClientWidget();
-    wxCHECK_RET( qtWidget, "window must be created" );
+    wxCHECK_RET(qtWidget, "window must be created");
 
-    const QRect geometry = qtWidget->geometry();
-    if (width)  *width = geometry.width();
-    if (height) *height = geometry.height();
+    const QSize size = (m_pendingClientSize != wxDefaultSize)
+        ? wxQtConvertSize(m_pendingClientSize)
+        : qtWidget->geometry().size();
+
+    if (width)  *width = size.width();
+    if (height) *height = size.height();
 }
 
 
@@ -1136,34 +1167,22 @@ void wxWindowQt::DoSetClientSize(int width, int height)
     QWidget *qtWidget = QtGetClientWidget();
     wxCHECK_RET( qtWidget, "window must be created" );
 
+    if ( qtWidget != GetHandle() )
+    {
+        const QSize frameSize = GetHandle()->frameSize();
+        const QSize innerSize = GetHandle()->geometry().size();
+        const QSize frameSizeDiff = frameSize - innerSize;
+
+        const int clientWidth = width + frameSizeDiff.width();
+        const int clientHeight = height + frameSizeDiff.height();
+
+        GetHandle()->resize(clientWidth, clientHeight);
+    }
+
     QRect geometry = qtWidget->geometry();
     geometry.setWidth( width );
     geometry.setHeight( height );
     qtWidget->setGeometry( geometry );
-
-    if ( qtWidget != GetHandle() )
-    {
-        // Resize the window to be as small as the client size but no smaller
-        wxQtSetClientSize(GetHandle(), width, height);
-    }
-}
-
-wxSize wxWindowQt::DoGetBestSize() const
-{
-    const wxSize size = wxWindowBase::DoGetBestSize();
-
-    if ( dynamic_cast<wxQtWidget*>(GetHandle()) )
-    {
-        return size;
-    }
-
-    wxSize bestSize = wxQtGetBestSize( GetHandle() );
-    if ( size.IsFullySpecified() )
-    {
-        bestSize.IncTo(size);
-    }
-
-    return bestSize;
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
@@ -1172,7 +1191,12 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 
     qtWidget->move( x, y );
 
-    wxQtSetClientSize(qtWidget, width, height);
+    const auto clientSize = wxQtSetClientSize(qtWidget, width, height);
+
+    if (!qtWidget->isVisible() && clientSize.x > 0 && clientSize.y > 0)
+    {
+        m_pendingClientSize = clientSize;
+    }
 }
 
 #if wxUSE_TOOLTIPS
@@ -1481,6 +1505,8 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 
 bool wxWindowQt::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEvent *event )
 {
+    m_pendingClientSize = wxDefaultSize;
+
     wxSizeEvent e( wxQtConvertSize( event->size() ) );
     e.SetEventObject(this);
 
@@ -1492,14 +1518,21 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     QPoint qPt = event->position().toPoint();
+    wxMouseWheelAxis wheelAxis = event->angleDelta().y() > 0
+                               ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
+    int wheelRotation = wheelAxis == wxMOUSE_WHEEL_VERTICAL
+                      ? (event->angleDelta().y() / 8) : (event->angleDelta().x() / 8);
 #else
     QPoint qPt = event->pos();
+    wxMouseWheelAxis wheelAxis = event->orientation() == Qt::Vertical
+                               ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
+    int wheelRotation = event->delta();
 #endif
     e.SetPosition( wxQtConvertPoint( qPt ) );
     e.SetEventObject(this);
 
-    e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
-    e.m_wheelRotation = event->delta();
+    e.m_wheelAxis = wheelAxis;
+    e.m_wheelRotation = wheelRotation;
     e.m_linesPerAction = 3;
     e.m_wheelDelta = 120;
 
@@ -1771,6 +1804,14 @@ bool wxWindowQt::QtHandleShowEvent ( QWidget *handler, QEvent *event )
 {
     if ( GetHandle() != handler )
         return false;
+
+    if ( m_pendingSize )
+    {
+        const auto frameSize = GetHandle()->geometry().size();
+        wxQtSetClientSize(GetHandle(), frameSize.width(), frameSize.height());
+
+        m_pendingSize = false;
+    }
 
     wxShowEvent e(GetId(), event->type() == QEvent::Show);
     e.SetEventObject(this);

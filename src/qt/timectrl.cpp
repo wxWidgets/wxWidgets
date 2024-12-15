@@ -70,12 +70,18 @@ wxTimePickerCtrl::Create(wxWindow *parent,
                          const wxValidator& validator,
                          const wxString& name)
 {
-    m_qtTimeEdit = new wxQtTimeEdit( parent, this );
-    m_qtTimeEdit->setTime( dt.IsValid() ? wxQtConvertTime(dt) :
-                                          wxQtConvertTime(wxDateTime::Now()) );
-    m_qtTimeEdit->setDisplayFormat(QLocale::system().timeFormat(QLocale::ShortFormat));
+    m_qtWindow = new wxQtTimeEdit( parent, this );
+
+    GetQTimeEdit()->setTime( dt.IsValid() ? wxQtConvertTime(dt) :
+                                           wxQtConvertTime(wxDateTime::Now()) );
+    GetQTimeEdit()->setDisplayFormat(QLocale::system().timeFormat(QLocale::ShortFormat));
 
     return wxTimePickerCtrlBase::Create( parent, id, pos, size, style, validator, name );
+}
+
+QTimeEdit* wxTimePickerCtrl::GetQTimeEdit() const
+{
+    return static_cast<QTimeEdit*>(m_qtWindow);
 }
 
 // ----------------------------------------------------------------------------
@@ -84,18 +90,13 @@ wxTimePickerCtrl::Create(wxWindow *parent,
 
 void wxTimePickerCtrl::SetValue(const wxDateTime& dt)
 {
-    wxQtEnsureSignalsBlocked blocker(m_qtTimeEdit);
-    m_qtTimeEdit->setTime( dt.IsValid() ? wxQtConvertTime(dt) : QTime() );
+    wxQtEnsureSignalsBlocked blocker(GetQTimeEdit());
+    GetQTimeEdit()->setTime( dt.IsValid() ? wxQtConvertTime(dt) : QTime() );
 }
 
 wxDateTime wxTimePickerCtrl::GetValue() const
 {
-    return wxQtConvertTime( m_qtTimeEdit->time() );
-}
-
-QWidget* wxTimePickerCtrl::GetHandle() const
-{
-    return m_qtTimeEdit;
+    return wxQtConvertTime( GetQTimeEdit()->time() );
 }
 
 #endif // wxUSE_TIMEPICKCTRL

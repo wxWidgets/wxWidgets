@@ -265,6 +265,7 @@ public:
     /**
         Get the value of a certain setting.
         @a id can be one of the size values of @b wxAuiPaneDockArtSetting.
+        Sizes are in DPI-independent pixel values.
     */
     virtual int GetMetric(int id) = 0;
 
@@ -282,6 +283,7 @@ public:
     /**
         Set a certain setting with the value @e new_val.
         @a id can be one of the size values of @b wxAuiPaneDockArtSetting.
+        Sizes should be in DPI-independent pixel values.
     */
     virtual void SetMetric(int id, int new_val) = 0;
 };

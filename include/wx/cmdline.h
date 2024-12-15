@@ -75,6 +75,10 @@ enum wxCmdLineSwitchState
     wxCMD_SWITCH_ON         // Found in normal state.
 };
 
+// Constants determining how (and if) to wrap the usage message
+constexpr int wxCMD_LINE_WRAP_AUTO = -1;
+constexpr int wxCMD_LINE_WRAP_NONE = 0;
+
 // ----------------------------------------------------------------------------
 // wxCmdLineEntryDesc is a description of one command line
 // switch/option/parameter
@@ -246,6 +250,9 @@ public:
     // extra text may be shown by Usage() method if set by this function
     void SetLogo(const wxString& logo);
 
+    // set the brief usage string instead of constructing it automatically
+    void SetUsageSynopsis(const wxString& synopsis);
+
     // construct the cmd line description
     // ----------------------------------
 
@@ -292,14 +299,16 @@ public:
     // syntax error occurred
     //
     // if showUsage is true, Usage() is called in case of syntax error or if
-    // help was requested
-    int Parse(bool showUsage = true);
+    // help was requested and if wrapColumn is not 0, the usage message is
+    // wrapped at the specified column, which will be the terminal width for
+    // its default value
+    int Parse(bool showUsage = true, int wrapColumn = wxCMD_LINE_WRAP_AUTO);
 
     // give the usage message describing all program options
-    void Usage() const;
+    void Usage(int wrapColumn = wxCMD_LINE_WRAP_AUTO) const;
 
     // return the usage string, call Usage() to directly show it to the user
-    wxString GetUsageString() const;
+    wxString GetUsageString(int wrapColumn = wxCMD_LINE_WRAP_AUTO) const;
 
     // get the command line arguments
     // ------------------------------

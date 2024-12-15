@@ -235,7 +235,7 @@ public:
     // case we determine our position/size ourselves
 
     // calculate the size of the line
-    void CalculateSize( wxDC *dc, int spacing );
+    void CalculateSize( wxReadOnlyDC *dc, int spacing );
 
     // remember the position this line appears at
     void SetPosition( int x, int y, int spacing );

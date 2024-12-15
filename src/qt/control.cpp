@@ -15,9 +15,8 @@
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow);
 
-wxControl::wxControl()
-{
-}
+// Defined in src/qt/window.cpp
+extern wxSize wxQtGetBestSize(QWidget* qtWidget);
 
 wxControl::wxControl(wxWindow *parent, wxWindowID id,
          const wxPoint& pos,
@@ -42,4 +41,14 @@ bool wxControl::Create(wxWindow *parent, wxWindowID id,
 #endif
 
     return isCreated;
+}
+
+wxSize wxControl::DoGetBestSize() const
+{
+    wxCHECK_MSG(GetHandle(), wxDefaultSize, "Invalid control");
+
+    if ( m_windowSizer )
+       return wxControlBase::DoGetBestSize();
+
+    return wxQtGetBestSize( GetHandle() );
 }

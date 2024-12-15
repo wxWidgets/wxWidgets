@@ -13,34 +13,55 @@ A wxDC is a @e device context onto which graphics and text can be drawn.
 The device context is intended to represent a number of output devices in a
 generic way, with the same API being used throughout.
 
-Some device contexts are created temporarily in order to draw on a window.
-This is @true of wxScreenDC, wxClientDC, wxPaintDC, and wxWindowDC.
-The following describes the differences between these device contexts and
-when you should use them.
+Objects of wxDC class itself can't be created, instead you should create
+objects of the following classes:
 
-@li @b wxScreenDC. Use this to paint on the screen, as opposed to an individual window.
-@li @b wxClientDC. Use this to paint on the client area of window (the part without
-    borders and other decorations), but do not use it from within an wxPaintEvent.
-@li @b wxPaintDC. Use this to paint on the client area of a window, but @e only from
-    within a wxPaintEvent.
-@li @b wxWindowDC. Use this to paint on the whole area of a window, including decorations.
-    This may not be available on non-Windows platforms.
+@li wxPaintDC for painting on a window from within a paint event handler. This
+    is the most common device context to use.
+@li wxMemoryDC for painting off-screen, i.e. to a bitmap.
+@li wxPrinterDC for printing.
+@li wxInfoDC for obtaining information about the device context without drawing
+    on it.
 
-To use a client, paint or window device context, create an object on the stack with
-the window as argument, for example:
-
+To draw on a window, you need to create a wxPaintDC object in the paint event
+handler:
 @code
-void MyWindow::OnMyCmd(wxCommandEvent& event)
+void MyWindow::OnPaint(wxPaintEvent& event)
 {
-    wxClientDC dc(window);
-    DrawMyPicture(dc);
+    wxPaintDC dc(this);
+
+    dc.DrawText("Hello, world!", 20, 20);
 }
 @endcode
 
-Try to write code so it is parameterised by wxDC - if you do this, the same piece of code may
-write to a number of different devices, by passing a different device context. This doesn't
-work for everything (for example not all device contexts support bitmap drawing) but
-will work most of the time.
+To obtain information about a device context associated with a window outside
+of its paint event handler, you need to use wxInfoDC, e.g.
+the window as argument, for example:
+
+@code
+void MyFrame::SomeFunction()
+{
+    wxInfoDC dc(this);
+
+    // Create control with the width just big enough for the given string.
+    auto* text = new wxStaticText
+                     (
+                        this, wxID_ANY, "",
+                        wxPoint(),
+                        dc.GetTextExtent("String of max length"),
+                        wxST_NO_AUTORESIZE
+                     );
+}
+@endcode
+
+When writing drawing code, it is recommended to extract it into a function
+taking wxDC as an argument. This allows you to reuse the same code for drawing
+and printing, by calling it with either wxPaintDC or wxPrinterDC.
+
+Please note that other device context classes that could previously be used for
+painting on screen cannot be used any more due to the architecture of the
+modern graphics systems. In particular, wxClientDC, wxWindowDC and wxScreenDC
+are not guaranteed to work any longer.
 
 @see @ref group_class_dc
 

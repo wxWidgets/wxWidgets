@@ -40,6 +40,13 @@ public:
     virtual wxString GetValue() const override;
     virtual wxString GetRange(long from, long to) const override;
 
+#if wxUSE_RICHEDIT
+    virtual wxString GetRTFValue() const override;
+    virtual void SetRTFValue(const wxString& val) override;
+    virtual bool IsRTFSupported() override { return IsRich(); }
+    virtual wxTextSearchResult SearchText(const wxTextSearch& search) const override;
+#endif // wxUSE_RICHEDIT
+
     virtual bool IsEmpty() const;
 
     virtual void WriteText(const wxString& text) override;

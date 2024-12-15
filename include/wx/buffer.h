@@ -211,7 +211,17 @@ public:
         DecRef();
     }
 
+    // For some reasong clang-tidy gives a warning about using freed memory
+    // here even when this is not at all the case, seemingly because it doesn't
+    // follow reference counting logic, i.e. it assumes that it's possible to
+    // delete the data even when it's still referenced.
+    //
+    // Suppress the warning as it's extremely annoying to get it for every use
+    // of wxCharBuffer.
+    //
+    // NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDelete)
     CharType *data() { return m_data->Get(); }
+    // NOLINTNEXTLINE(clang-analyzer-cplusplus.NewDelete)
     const CharType *data() const { return  m_data->Get(); }
     operator const CharType *() const { return data(); }
     CharType operator[](size_t n) const { return data()[n]; }

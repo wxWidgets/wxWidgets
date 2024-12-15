@@ -13,7 +13,7 @@ class QComboBox;
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
-    wxChoice();
+    wxChoice() = default;
 
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
@@ -56,7 +56,7 @@ public:
     virtual void SetSelection(int n) override;
     virtual int GetSelection() const override;
 
-    virtual QWidget *GetHandle() const override;
+    QComboBox* GetQComboBox() const;
 
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,
@@ -72,10 +72,6 @@ protected:
     virtual void DoDeleteOneItem(unsigned int pos) override;
 
     void QtInitSort(QComboBox *combo);
-
-    QComboBox *m_qtComboBox;
-
-private:
 
     wxDECLARE_DYNAMIC_CLASS(wxChoice);
 };

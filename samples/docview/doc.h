@@ -157,19 +157,17 @@ public:
 
 
 // ----------------------------------------------------------------------------
-// wxTextDocument: wxDocument and wxTextCtrl married
+// TextEditDocument: wxDocument implemented using wxTextCtrl
 // ----------------------------------------------------------------------------
 
-class wxTextDocument : public wxDocument
+class TextEditDocument : public wxDocument
 {
 public:
-    wxTextDocument() : wxDocument() { }
-    wxTextDocument(const wxTextDocument&) = delete;
-    wxTextDocument &operator=(const wxTextDocument&) = delete;
+    TextEditDocument() : wxDocument() { }
+    TextEditDocument(const TextEditDocument&) = delete;
+    TextEditDocument &operator=(const TextEditDocument&) = delete;
 
     virtual bool OnCreate(const wxString& path, long flags) override;
-
-    virtual wxTextCtrl* GetTextCtrl() const = 0;
 
     virtual bool IsModified() const override;
     virtual void Modify(bool mod) override;
@@ -178,23 +176,10 @@ protected:
     virtual bool DoSaveDocument(const wxString& filename) override;
     virtual bool DoOpenDocument(const wxString& filename) override;
 
+private:
+    wxTextCtrl* GetTextCtrl() const;
+
     void OnTextChange(wxCommandEvent& event);
-
-    wxDECLARE_ABSTRACT_CLASS(wxTextDocument);
-};
-
-// ----------------------------------------------------------------------------
-// A very simple text document class
-// ----------------------------------------------------------------------------
-
-class TextEditDocument : public wxTextDocument
-{
-public:
-    TextEditDocument() : wxTextDocument() { }
-    TextEditDocument(const TextEditDocument&) = delete;
-    TextEditDocument &operator=(const TextEditDocument&) = delete;
-
-    virtual wxTextCtrl* GetTextCtrl() const override;
 
     wxDECLARE_DYNAMIC_CLASS(TextEditDocument);
 };

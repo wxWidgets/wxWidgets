@@ -249,6 +249,11 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         gtk_style_context_set_state(sc, stateTypeToFlags[state]);
         gtk_render_background(sc, cr, rect.x, rect.y, rect.width, rect.height);
         gtk_render_frame(sc, cr, rect.x, rect.y, rect.width, rect.height);
+        if (params)
+        {
+            sc.Fg(params->m_arrowColour, stateTypeToFlags[state]);
+            params->m_labelColour = params->m_arrowColour;
+        }
     }
     else
 #endif // GTK >= 3.20
@@ -258,6 +263,13 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         gtk_style_context_set_state(sc, stateTypeToFlags[state]);
         gtk_render_background(sc, cr, rect.x, rect.y, rect.width, rect.height);
         gtk_render_frame(sc, cr, rect.x, rect.y, rect.width, rect.height);
+        if (params)
+        {
+            GdkRGBA rgba;
+            gtk_style_context_get_color(sc, stateTypeToFlags[state], &rgba);
+            params->m_arrowColour = wxColour(rgba);
+            params->m_labelColour = params->m_arrowColour;
+        }
         gtk_style_context_restore(sc);
     }
 #else

@@ -10,14 +10,10 @@
 // compiler detection; includes setup.h
 #include "wx/defs.h"
 
-// check if to use precompiled headers: do it for most Windows compilers unless
-// explicitly disabled by defining NOPCH
-#if defined(__VISUALC__)
-    // If user did not request NOCPH and we're not building using configure
-    // then assume user wants precompiled headers.
-    #if !defined(NOPCH) && !defined(__WX_SETUP_H__)
-        #define WX_PRECOMP
-    #endif
+// check if to use precompiled headers: do it for MSVC unless explicitly
+// disabled by defining NOPCH
+#if !defined(WX_PRECOMP) && defined(__VISUALC__) && !defined(NOPCH)
+    #define WX_PRECOMP
 #endif
 
 #ifdef WX_PRECOMP

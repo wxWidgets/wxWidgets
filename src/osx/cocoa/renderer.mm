@@ -107,7 +107,7 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) override;
 
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) override;
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& dc) override;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
@@ -713,12 +713,9 @@ void wxRendererMac::DrawMacHeaderCell(wxWindow *win,
 
         ApplyMacControlFlags(win, cell, flags);
 
-        NSString* title = @("");
-        NSTextAlignment alignment = NSTextAlignmentLeft;
-
         if ( params )
         {
-            title = wxCFStringRef(params->m_labelText).AsNSString();
+            cell.title = wxCFStringRef(params->m_labelText).AsNSString();
             switch( params->m_labelAlignment )
             {
                 case wxALIGN_CENTER:
@@ -733,9 +730,11 @@ void wxRendererMac::DrawMacHeaderCell(wxWindow *win,
             }
 
         }
-
-        cell.title = title;
-        cell.alignment = alignment;
+        else
+        {
+            cell.title = @("");
+            cell.alignment = NSTextAlignmentLeft;
+        }
 
         wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
         CGContextRef cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
@@ -880,7 +879,7 @@ void wxRendererMac::DrawCollapseButton(wxWindow *win,
                        kThemeArrowButton, adornment);
 }
 
-wxSize wxRendererMac::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxDC& WXUNUSED(dc))
+wxSize wxRendererMac::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxReadOnlyDC& WXUNUSED(dc))
 {
     wxSize size;
     SInt32 width, height;
@@ -1134,7 +1133,7 @@ void wxRendererMac::DrawGauge(wxWindow* WXUNUSED(win),
     tdi.kind = kThemeLargeProgressBar;
 
     int milliSecondsPerStep = 1000 / 60;
-    wxLongLongNative localTime = wxGetLocalTimeMillis();
+    wxLongLong localTime = wxGetLocalTimeMillis();
     tdi.trackInfo.progress.phase = localTime.GetValue() / milliSecondsPerStep % 32;
 
     CGContextRef cgContext;

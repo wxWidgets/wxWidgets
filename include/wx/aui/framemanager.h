@@ -128,6 +128,10 @@ class wxAuiPaneInfo;
 class wxAuiDockInfo;
 class wxAuiDockArt;
 class wxAuiManagerEvent;
+class wxAuiSerializer;
+class wxAuiDeserializer;
+
+struct wxAuiPaneLayoutInfo;
 
 using wxAuiDockUIPartArray = wxBaseArray<wxAuiDockUIPart>;
 using wxAuiDockInfoArray = wxBaseArray<wxAuiDockInfo>;
@@ -157,6 +161,7 @@ public:
         dock_layer = 0;
         dock_row = 0;
         dock_pos = 0;
+        dock_size = 0;
         dock_proportion = 0;
 
         DefaultPane();
@@ -379,6 +384,7 @@ public:
     int dock_layer;       // layer number (0 = innermost layer)
     int dock_row;         // row number on the docking bar (0 = first row)
     int dock_pos;         // position inside the row (0 = first position)
+    int dock_size;        // size of the containing dock (0 if not set)
 
     wxSize best_size;     // size that the layout engine will prefer
     wxSize min_size;      // minimum size the pane window can tolerate
@@ -431,7 +437,8 @@ public:
 
     wxAuiPaneInfo& GetPane(wxWindow* window);
     wxAuiPaneInfo& GetPane(const wxString& name);
-    wxAuiPaneInfoArray& GetAllPanes();
+    const wxAuiPaneInfoArray& GetAllPanes() const { return m_panes; }
+    wxAuiPaneInfoArray& GetAllPanes() { return m_panes; }
 
     bool AddPane(wxWindow* window,
                  const wxAuiPaneInfo& paneInfo);
@@ -452,6 +459,12 @@ public:
 
     void Update();
 
+    // Serialize or restore the whole layout using the provided serializer.
+    void SaveLayout(wxAuiSerializer& serializer) const;
+    void LoadLayout(wxAuiDeserializer& deserializer);
+
+    // Older functions using bespoke text format, prefer using the ones using
+    // wxAuiSerializer and wxAuiDeserializer above instead in the new code.
     wxString SavePaneInfo(const wxAuiPaneInfo& pane);
     void LoadPaneInfo(wxString panePart, wxAuiPaneInfo &pane);
     wxString SavePerspective();
@@ -477,15 +490,25 @@ public:
     wxRect CalculateHintRect(
                  wxWindow* paneWindow,
                  const wxPoint& pt,
-                 const wxPoint& offset);
+                 const wxPoint& offset = wxPoint{});
 
     void DrawHintRect(
                  wxWindow* paneWindow,
                  const wxPoint& pt,
-                 const wxPoint& offset);
+                 const wxPoint& offset = wxPoint{});
 
+    void UpdateHint(const wxRect& rect);
+
+    // These functions are public for compatibility reasons, but should never
+    // be called directly, use UpdateHint() above instead.
     virtual void ShowHint(const wxRect& rect);
     virtual void HideHint();
+
+    // Internal functions, don't use them outside of wxWidgets itself.
+    void CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
+                        const wxAuiPaneInfo& pane) const;
+    void CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
+                      wxAuiPaneInfo& pane) const;
 
 public:
 
@@ -621,6 +644,10 @@ private:
     // Return the index in m_uiParts corresponding to the current value of
     // m_actionPart. If m_actionPart is null, returns wxNOT_FOUND.
     int GetActionPartIndex() const;
+
+    // This flag is set to true if Update() is called while the window is
+    // minimized, in which case we postpone updating it until it is restored.
+    bool m_updateOnRestore = false;
 
 #ifndef SWIG
     wxDECLARE_EVENT_TABLE();

@@ -34,9 +34,7 @@ public:
 class OwnerDrawnFrame : public wxFrame
 {
 public:
-    // ctor & dtor
-    OwnerDrawnFrame(wxFrame *frame, const wxString& title, int x, int y, int w, int h);
-    ~OwnerDrawnFrame(){}
+    OwnerDrawnFrame();
 
     // notifications
     void OnQuit             (wxCommandEvent& event);
@@ -88,7 +86,7 @@ bool OwnerDrawnApp::OnInit(void)
     if ( !wxApp::OnInit() )
         return false;
 
-    new OwnerDrawnFrame(nullptr, "wxWidgets Ownerdraw Sample", 50, 50, 450, 340);
+    new OwnerDrawnFrame();
 
     return true;
 }
@@ -250,9 +248,8 @@ void OwnerDrawnFrame::InitMenu()
 }
 
 // main frame constructor
-OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
-                                 int x, int y, int w, int h)
-         : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
+OwnerDrawnFrame::OwnerDrawnFrame()
+         : wxFrame(nullptr, wxID_ANY, "wxWidgets Ownerdraw Sample")
 {
     // set the icon
     SetIcon(wxICON(sample));
@@ -262,7 +259,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
 
 #if wxUSE_STATUSBAR
     // create the status line
-    const int widths[] = { -1, 60 };
+    const int widths[] = { -1, FromDIP(60) };
     CreateStatusBar(2);
     SetStatusWidths(2, widths);
     SetStatusText("no selection", 0);
@@ -276,29 +273,25 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
                                           "goodbye", "cruel", "world",
                                           "-------", "owner-drawn", "listbox" };
 
-    wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
-    unsigned int ui;
-    for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
-        astrChoices[ui] = aszChoices[ui];
-
     m_pListBox = new wxCheckListBox
         (
             pPanel,             // parent
             Control_Listbox,    // control id
-            wxPoint(10, 10),    // listbox position
-            wxSize(200, 200),   // listbox size
+            FromDIP(wxPoint(10, 10)),    // listbox position
+            FromDIP(wxSize(200, 200)),   // listbox size
             WXSIZEOF(aszChoices), // number of strings
-            astrChoices         // array of strings
+            aszChoices          // array of strings
         );
 
-    delete [] astrChoices;
-
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    unsigned int ui;
     for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 )
     {
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
         m_pListBox->GetItem(ui)->SetBackgroundColour(*wxBLUE);
-#endif
     }
+
+    m_pListBox->GetItem(3)->SetTextColour(*wxRED);
+#endif
 
     m_pListBox->Check(2);
 
@@ -307,21 +300,14 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
                                          "Green", "Yellow",
                                          "Black", "Violet"  };
 
-    astrChoices = new wxString[WXSIZEOF(aszColors)];
-
-    for ( ui = 0; ui < WXSIZEOF(aszColors); ui++ )
-    {
-        astrChoices[ui] = aszColors[ui];
-    }
-
     wxListBox *pListBox = new wxListBox
         (
             pPanel,              // parent
             Control_Listbox2,    // control id
-            wxPoint(220, 10),    // listbox position
-            wxSize(200, 200),    // listbox size
+            FromDIP(wxPoint(220, 10)),    // listbox position
+            FromDIP(wxSize(200, 200)),    // listbox size
             WXSIZEOF(aszColors), // number of strings
-            astrChoices,         // array of strings
+            aszColors,           // array of strings
             wxLB_OWNERDRAW       // owner-drawn
         );
 
@@ -354,7 +340,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
     wxUnusedVar( pListBox );
 #endif
 
-    delete[] astrChoices;
+    SetSize(FromDIP(wxSize(450, 340)));
 
     Show(true);
 }

@@ -16,8 +16,10 @@
 
 struct WXDLLIMPEXP_BASE wxInitData
 {
+private:
     wxInitData() = default;
 
+public:
     // Get the single global object.
     static wxInitData& Get();
 
@@ -55,13 +57,20 @@ struct WXDLLIMPEXP_BASE wxInitData
     // It's also possible to use Initialize(), even under Windows, in which
     // case this pointer remains null and argv must be freed as usual.
     wchar_t** argvMSW = nullptr;
-#else // !__WINDOWS__
-    // Under other platforms we typically need the original, non-Unicode
-    // command line version, so we keep it too. This pointer may or not need to
-    // be freed, as indicated by ownsArgvA flag.
+#endif // __WINDOWS__
+
+    // At least wxGTK needs narrow command line arguments too and even thought
+    // other ports under Windows typically don't need them (e.g. wxMSW itself
+    // doesn't), we have to have them, as this header is toolkit-independent,
+    // and so can't differ between wxMSW and wxGTK.
+
+    // Initializes argvA using argc and argv. This means that argc and argv
+    // MUST be initialized before calling this function.
+    void InitArgvA();
+
+    // This pointer may or not need to be freed, as indicated by ownsArgvA flag.
     char** argvA = nullptr;
     bool ownsArgvA = false;
-#endif // __WINDOWS__
 
     wxDECLARE_NO_COPY_CLASS(wxInitData);
 };

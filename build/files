@@ -210,7 +210,6 @@ QT_WIN32_SRC=
     src/msw/dib.cpp
     src/msw/joystick.cpp
     src/msw/sound.cpp
-    src/qt/graphics.cpp
 
 QT_WIN32_HDR=
     wx/msw/ole/automtn.h
@@ -322,7 +321,6 @@ QT_SRC=
     src/generic/fdrepdlg.cpp
     src/generic/filepickerg.cpp
     src/generic/fontpickerg.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/paletteg.cpp
     src/generic/prntdlgg.cpp
@@ -370,6 +368,7 @@ QT_SRC=
     src/qt/fontutil.cpp
     src/qt/frame.cpp
     src/qt/gauge.cpp
+    src/qt/graphics.cpp
     src/qt/listbox.cpp
     src/qt/listctrl.cpp
     src/qt/mdi.cpp
@@ -1288,6 +1287,7 @@ GTK_WIN32_SRC =
 GTK_WIN32_HDR =
     wx/generic/caret.h
     wx/msw/dib.h
+    wx/msw/init.h
     wx/msw/joystick.h
     wx/msw/ole/automtn.h
     wx/msw/ole/comimpl.h
@@ -1299,7 +1299,6 @@ GTK_WIN32_HDR =
     wx/unix/fontutil.h
 GTK_LOWLEVEL_SRC =
     $(GTK_PLATFORM_SRC)
-    src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/gtk/app.cpp
     src/gtk/assertdlg_gtk.cpp
@@ -1517,7 +1516,6 @@ X11_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
     src/unix/displayx11.cpp
     src/unix/taskbarx11.cpp
-    src/generic/icon.cpp
     src/generic/textmeasure.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1612,7 +1610,6 @@ MSW_LOWLEVEL_SRC =
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
-    src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/graphicsd2d.cpp
     src/msw/helpchm.cpp
@@ -1896,7 +1893,6 @@ DFB_LOWLEVEL_SRC =
     src/common/fontmgrcmn.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
-    src/generic/icon.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -2042,7 +2038,6 @@ OSX_COMMON_SRC =
     src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
@@ -2578,6 +2573,7 @@ XRC_SRC =
     src/xrc/xh_tree.cpp
     src/xrc/xh_treebk.cpp
     src/xrc/xh_unkwn.cpp
+    src/xrc/xh_vlistbox.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
     src/xrc/xmlrsall.cpp
@@ -2649,6 +2645,7 @@ XRC_HDR =
     wx/xrc/xh_tree.h
     wx/xrc/xh_treebk.h
     wx/xrc/xh_unkwn.h
+    wx/xrc/xh_vlistbox.h
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
 
@@ -2722,6 +2719,7 @@ AUI_CMN_HDR =
     wx/aui/auibar.h
     wx/aui/tabmdi.h
     wx/aui/aui.h
+    wx/aui/serializer.h
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
@@ -2845,4 +2843,3 @@ STC_CMN_HDR =
 STC_OSX_COCOA_SRC =
     src/stc/PlatWXcocoa.mm
 STC_OSX_COCOA_HDR =
-

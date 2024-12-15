@@ -96,7 +96,8 @@
                 $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
                 $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
                 $(INSTALL_SCRIPT) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
-                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) $(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
+                # Warning! If the --relative symlink fails (e.g. *BSD), then we'd create an absolute symlink, which will be broken if DESTDIR is moved
+                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) --relative $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || $(LN_S) $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
             </command>
         </action>
 
@@ -139,8 +140,9 @@
             <srcdir>$(SRCDIR)/locale</srcdir>
             <catalog-name>wxstd-$(WX_RELEASE)</catalog-name>
             <linguas>
-                ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk
-                zh zh_CN zh_TW
+                af an ar ca ca@valencia co cs da de el es eu fa_IR fi fr
+                gl_ES hi hr hu id it ja ka ko_KR lt lv ms nb ne nl pl pt
+                pt_BR ro ru sk sl sq sr sv ta tr uk vi zh_CN zh_TW
             </linguas>
             <install-to>$(LOCALEDIR)</install-to>
         </gettext-catalogs>

@@ -153,9 +153,10 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
 {
     wxASSERT_MSG( !argc && !argv, "initializing twice?" );
 
-#ifndef __WINDOWS__
+    // We assume that the command line arguments are static and remain valid
+    // until the end of the program, so we don't make a copy of them here.
     argvA = argvIn;
-#endif
+    ownsArgvA = false;
 
     argv = new wchar_t *[argcIn + 1];
 
@@ -183,6 +184,22 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
     argv[wargc] = nullptr;
 }
 
+void wxInitData::InitArgvA()
+{
+    // We need to convert from wide arguments back to the narrow ones.
+    argvA = new char*[argc + 1];
+    argvA[argc] = nullptr;
+
+    ownsArgvA = true;
+
+    for ( int i = 0; i < argc; i++ )
+    {
+        // Try to use the current encoding, but if it fails, it's better to
+        // fall back to UTF-8 than lose an argument entirely.
+        argvA[i] = wxConvWhateverWorks.cWC2MB(argv[i]).release();
+    }
+}
+
 #ifdef __WINDOWS__
 
 void wxInitData::MSWInitialize()
@@ -200,6 +217,8 @@ void wxInitData::MSWInitialize()
     // argvMSW because it could be allocated by Initialize() if a custom entry
     // point is used.
     argv = argvMSW;
+
+    InitArgvA();
 }
 
 #endif // __WINDOWS__
@@ -210,7 +229,7 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
     // elsewhere, but it is also possible to call a wide-char initialization
     // function (wxInitialize(), wxEntryStart() or wxEntry() itself) directly,
     // so we need to support this case too.
-    if ( argc || !argcIn )
+    if ( argv || !argvIn )
     {
         // Already initialized or nothing to do.
         return;
@@ -228,23 +247,12 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
         argv[i] = wxCRT_StrdupW(argvIn[i]);
     }
 
+    InitArgvA();
+
 #ifdef __WINDOWS__
     // Not used in this case and shouldn't be passed to LocalFree().
     argvMSW = nullptr;
-#else // !__WINDOWS__
-    // We need to convert from wide arguments back to the narrow ones.
-    argvA = new char*[argc + 1];
-    argvA[argc] = nullptr;
-
-    ownsArgvA = true;
-
-    for ( int i = 0; i < argc; i++ )
-    {
-        // Try to use the current encoding, but if it fails, it's better to
-        // fall back to UTF-8 than lose an argument entirely.
-        argvA[i] = wxConvWhateverWorks.cWC2MB(argvIn[i]).release();
-    }
-#endif // __WINDOWS__/!__WINDOWS__
+#endif // __WINDOWS__
 }
 
 void wxInitData::Free()
@@ -256,18 +264,17 @@ void wxInitData::Free()
 
         // If argvMSW is non-null, argv must be the same value, so reset it too.
         argv = argvMSW = nullptr;
-        argc = 0;
     }
+#else
+    for ( int i = 0; i < argc; i++ )
+    {
+        free(argv[i]);
+    }
+    wxDELETEA(argv);
 #endif // __WINDOWS__
 
     if ( argc )
     {
-        for ( int i = 0; i < argc; i++ )
-        {
-            free(argv[i]);
-        }
-
-#ifndef __WINDOWS__
         if ( ownsArgvA )
         {
             for ( int i = 0; i < argc; i++ )
@@ -277,9 +284,7 @@ void wxInitData::Free()
 
             wxDELETEA(argvA);
         }
-#endif // !__WINDOWS__
 
-        wxDELETEA(argv);
         argc = 0;
     }
 }
@@ -545,7 +550,7 @@ int wxEntryReal(int& argc, wxChar **argv)
         // flush any log messages explaining why we failed
         delete wxLog::SetActiveTarget(nullptr);
 #endif
-        return -1;
+        return wxApp::GetFatalErrorExitCode();
     }
 
     wxTRY
@@ -554,7 +559,7 @@ int wxEntryReal(int& argc, wxChar **argv)
         if ( !wxTheApp->CallOnInit() )
         {
             // don't call OnExit() if OnInit() failed
-            return -1;
+            return wxTheApp->GetErrorExitCode();
         }
 
         // ensure that OnExit() is called if OnInit() had succeeded
@@ -569,7 +574,10 @@ int wxEntryReal(int& argc, wxChar **argv)
         // app execution
         return wxTheApp->OnRun();
     }
-    wxCATCH_ALL( wxTheApp->OnUnhandledException(); return -1; )
+    wxCATCH_ALL(
+        wxTheApp->OnUnhandledException();
+        return wxApp::GetFatalErrorExitCode();
+    )
 }
 
 // as with wxEntryStart, we provide an ANSI wrapper

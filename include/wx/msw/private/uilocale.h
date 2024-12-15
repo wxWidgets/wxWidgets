@@ -21,4 +21,6 @@
 
 WXDLLIMPEXP_BASE wxString wxTranslateFromUnicodeFormat(const wxString& fmt);
 
+WXDLLIMPEXP_BASE wxString wxGetMSWDateTimeFormat(wxLocaleInfo index);
+
 #endif // _WX_MSW_PRIVATE_UILOCALE_H_

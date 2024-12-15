@@ -34,14 +34,6 @@
 
 typedef wxLongLong wxTimerTick_t;
 
-#if wxUSE_LONGLONG_WX
-    #define wxTimerTickFmtSpec wxLongLongFmtSpec "d"
-    #define wxTimerTickPrintfArg(tt) (tt.GetValue())
-#else // using native wxLongLong
-    #define wxTimerTickFmtSpec wxT("s")
-    #define wxTimerTickPrintfArg(tt) (tt.ToString().c_str())
-#endif // wx/native long long
-
 inline bool wxTickGreaterEqual(wxTimerTick_t x, wxTimerTick_t y)
 {
     return x >= y;
@@ -89,8 +81,8 @@ void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, wxTimerTick_t when)
     desc->running = true;
 
     wxLogTrace( wxT("timer"),
-                wxT("queued timer %p at tick %") wxTimerTickFmtSpec,
-               desc->timer,  wxTimerTickPrintfArg(when));
+                wxT("queued timer %p at tick %s"),
+               desc->timer,  when);
 
     if ( m_timers )
     {
@@ -143,10 +135,9 @@ void wxTimerScheduler::NotifyTimers()
                 if ( !timerDeleted )
                 {
                     wxLogTrace( wxT("timer"),
-                                wxT("notified timer %p sheduled for %")
-                                wxTimerTickFmtSpec,
+                                wxT("notified timer %p scheduled for %s"),
                                 desc->timer,
-                                wxTimerTickPrintfArg(desc->shotTime) );
+                                desc->shotTime );
 
                     desc->deleteFlag = nullptr;
                     if ( !oneShot )

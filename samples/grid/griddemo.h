@@ -34,6 +34,8 @@ class GridFrame : public wxFrame
     void ToggleEditing( wxCommandEvent& );
     void ToggleRowSizing( wxCommandEvent& );
     void ToggleColSizing( wxCommandEvent& );
+    void ToggleRowLabelSizing(wxCommandEvent&);
+    void ToggleColLabelSizing(wxCommandEvent&);
     void ToggleRowMoving( wxCommandEvent& );
     void ToggleColMoving( wxCommandEvent& );
     void ToggleColHiding( wxCommandEvent& );
@@ -82,6 +84,7 @@ class GridFrame : public wxFrame
 
     void FreezeOrThaw( wxCommandEvent& );
 
+    void OnOverlaySelection(wxCommandEvent& event);
     void DeselectCell(wxCommandEvent& event);
     void DeselectCol(wxCommandEvent& event);
     void DeselectRow(wxCommandEvent& event);
@@ -111,6 +114,10 @@ class GridFrame : public wxFrame
     void OnRowSize( wxGridSizeEvent& );
     void OnColSize( wxGridSizeEvent& );
     void OnColAutoSize( wxGridSizeEvent& );
+    void OnRowLabelSize( wxGridSizeEvent& );
+    void OnColLabelSize( wxGridSizeEvent& );
+    void OnRowMove( wxGridEvent& );
+    void OnColMove( wxGridEvent& );
     void OnSelectCell( wxGridEvent& );
     void OnRangeSelected( wxGridRangeSelectEvent& );
     void OnRangeSelecting( wxGridRangeSelectEvent& );
@@ -148,6 +155,8 @@ public:
         ID_TOGGLEEDIT,
         ID_TOGGLEROWSIZING,
         ID_TOGGLECOLSIZING,
+        ID_TOGGLEROWLABELSIZING,
+        ID_TOGGLECOLLABELSIZING,
         ID_TOGGLEROWMOVING,
         ID_TOGGLECOLMOVING,
         ID_TOGGLECOLHIDING,
@@ -204,6 +213,7 @@ public:
         ID_VTABLE,
         ID_BUGS_TABLE,
         ID_TABULAR_TABLE,
+        ID_SELECT_OVERLAY,
         ID_SELECT_UNSELECT,
         ID_SELECT_ALL,
         ID_SELECT_ROW,

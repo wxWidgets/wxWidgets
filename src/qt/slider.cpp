@@ -136,11 +136,6 @@ void wxQtSlider::sliderReleased()
     }
 }
 
-wxSlider::wxSlider() :
-    m_qtSlider(nullptr)
-{
-}
-
 wxSlider::wxSlider(wxWindow *parent,
          wxWindowID id,
          int value, int minValue, int maxValue,
@@ -162,16 +157,17 @@ bool wxSlider::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtSlider = new wxQtSlider( parent, this );
-    m_qtSlider->setOrientation( wxQtConvertOrientation( style, wxSL_HORIZONTAL ) );
+    m_qtWindow = new wxQtSlider( parent, this );
 
-    m_qtSlider->setInvertedAppearance( style & wxSL_INVERSE );
+    GetQSlider()->setOrientation( wxQtConvertOrientation( style, wxSL_HORIZONTAL ) );
+
+    GetQSlider()->setInvertedAppearance( style & wxSL_INVERSE );
 
     // For compatibility with the other ports, pressing PageUp should move value
     // towards the slider's minimum.
-    m_qtSlider->setInvertedControls(true);
+    GetQSlider()->setInvertedControls(true);
 
-    wxQtEnsureSignalsBlocked blocker(m_qtSlider);
+    wxQtEnsureSignalsBlocked blocker(GetQSlider());
     SetRange( minValue, maxValue );
     SetValue( value );
     SetPageSize(wxMax(1, (maxValue - minValue) / 10));
@@ -186,46 +182,51 @@ bool wxSlider::Create(wxWindow *parent,
     return true;
 }
 
+QSlider* wxSlider::GetQSlider() const
+{
+    return static_cast<QSlider*>(m_qtWindow);
+}
+
 int wxSlider::GetValue() const
 {
-    return m_qtSlider->value();
+    return GetQSlider()->value();
 }
 
 void wxSlider::SetValue(int value)
 {
-    wxQtEnsureSignalsBlocked blocker(m_qtSlider);
-    m_qtSlider->setValue( value );
+    wxQtEnsureSignalsBlocked blocker(GetQSlider());
+    GetQSlider()->setValue( value );
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
 {
-    wxQtEnsureSignalsBlocked blocker(m_qtSlider);
-    m_qtSlider->setRange( minValue, maxValue );
+    wxQtEnsureSignalsBlocked blocker(GetQSlider());
+    GetQSlider()->setRange( minValue, maxValue );
 }
 
 int wxSlider::GetMin() const
 {
-    return m_qtSlider->minimum();
+    return GetQSlider()->minimum();
 }
 
 int wxSlider::GetMax() const
 {
-    return m_qtSlider->maximum();
+    return GetQSlider()->maximum();
 }
 
 void wxSlider::DoSetTickFreq(int freq)
 {
-    m_qtSlider->setTickInterval(freq);
+    GetQSlider()->setTickInterval(freq);
 }
 
 int wxSlider::GetTickFreq() const
 {
-    return m_qtSlider->tickInterval();
+    return GetQSlider()->tickInterval();
 }
 
 void wxSlider::ClearTicks()
 {
-    m_qtSlider->setTickPosition(QSlider::NoTicks);
+    GetQSlider()->setTickPosition(QSlider::NoTicks);
 }
 
 void wxSlider::SetTick(int WXUNUSED(tickPos))
@@ -256,27 +257,27 @@ void wxSlider::SetTick(int WXUNUSED(tickPos))
     }
 
     // Draw ticks marks if posTicks != QSlider::NoTicks. remove them otherwise.
-    m_qtSlider->setTickPosition( posTicks );
+    GetQSlider()->setTickPosition( posTicks );
 }
 
 void wxSlider::SetLineSize(int lineSize)
 {
-    m_qtSlider->setSingleStep(lineSize);
+    GetQSlider()->setSingleStep(lineSize);
 }
 
 void wxSlider::SetPageSize(int pageSize)
 {
-    m_qtSlider->setPageStep(pageSize);
+    GetQSlider()->setPageStep(pageSize);
 }
 
 int wxSlider::GetLineSize() const
 {
-    return m_qtSlider->singleStep();
+    return GetQSlider()->singleStep();
 }
 
 int wxSlider::GetPageSize() const
 {
-    return m_qtSlider->pageStep();
+    return GetQSlider()->pageStep();
 }
 
 void wxSlider::SetThumbLength(int WXUNUSED(lenPixels))
@@ -286,12 +287,6 @@ void wxSlider::SetThumbLength(int WXUNUSED(lenPixels))
 int wxSlider::GetThumbLength() const
 {
     return 0;
-}
-
-
-QWidget *wxSlider::GetHandle() const
-{
-    return m_qtSlider;
 }
 
 #endif // wxUSE_SLIDER

@@ -96,9 +96,10 @@
 // adjusted.
 #define IN_CELL_EXPANDER_BUTTON_X_ADJUST    2
 
-#if WXWIN_COMPATIBILITY_3_0
 namespace
 {
+
+#if WXWIN_COMPATIBILITY_3_0
 // Hash containing for every active wxPG the list of editors and their event handlers
 // to be deleted in the idle event handler.
 // It emulates member variable 'm_deletedEditorObjects' in 3.0 compatibility mode.
@@ -107,9 +108,24 @@ WX_DECLARE_HASH_MAP(wxPropertyGrid*, wxArrayPGObject*,
                     DeletedObjects);
 
 DeletedObjects gs_deletedEditorObjects;
+#endif
+
+// Bit values for wxPropertyGrid::m_coloursCustomized.
+enum CustomColour
+{
+    CustomColour_None           = 0x0000,
+    CustomColour_Margin         = 0x0001,
+    CustomColour_CaptionBg      = 0x0002,
+    CustomColour_CaptionText    = 0x0004,
+    CustomColour_CellBg         = 0x0008,
+    CustomColour_CellText       = 0x0010,
+    CustomColour_SelectionBg    = 0x0020,
+    CustomColour_SelectionText  = 0x0040,
+    CustomColour_Line           = 0x0080,
+    CustomColour_DisabledText   = 0x0100
+};
 
 } // anonymous namespace
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -389,7 +405,7 @@ void wxPropertyGrid::Init1()
     AddActionTrigger(wxPGKeyboardAction::PressButton, WXK_DOWN, wxMOD_ALT);
     AddActionTrigger(wxPGKeyboardAction::PressButton, WXK_F4);
 
-    m_coloursCustomized = 0;
+    m_coloursCustomized = CustomColour_None;
 
     m_doubleBuffer = nullptr;
 
@@ -466,7 +482,7 @@ void wxPropertyGrid::Init2()
     m_cursorSizeWE = wxCursor(wxCURSOR_SIZEWE);
 
     // adjust bitmap icon y position so they are centered
-    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
+    m_vspacing = wxPG_DEFAULT_VSPACING;
 
     CalculateFontAndBitmapStuff( m_vspacing );
 
@@ -1359,9 +1375,11 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
 
 void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &event)
 {
-    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
     CalculateFontAndBitmapStuff(m_vspacing);
     Refresh();
+
+    if ( wxPGProperty* const selected = GetSelection() )
+        RefreshProperty(selected);
 
     event.Skip();
 }
@@ -1420,7 +1438,7 @@ static int wxPGGetColAvg( const wxColour& col )
 
 void wxPropertyGrid::RegainColours()
 {
-    if ( !(m_coloursCustomized & 0x0002) )
+    if ( !(m_coloursCustomized & CustomColour_CaptionBg) )
     {
         wxColour col = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 
@@ -1437,10 +1455,10 @@ void wxPropertyGrid::RegainColours()
         m_categoryDefaultCell.GetData()->SetBgCol(m_colCapBack);
     }
 
-    if ( !(m_coloursCustomized & 0x0001) )
+    if ( !(m_coloursCustomized & CustomColour_Margin) )
         m_colMargin = m_colCapBack;
 
-    if ( !(m_coloursCustomized & 0x0004) )
+    if ( !(m_coloursCustomized & CustomColour_CaptionText) )
     {
     #ifdef __WXGTK__
         int colDec = -90;
@@ -1455,7 +1473,7 @@ void wxPropertyGrid::RegainColours()
         m_categoryDefaultCell.GetData()->SetFgCol(capForeCol);
     }
 
-    if ( !(m_coloursCustomized & 0x0008) )
+    if ( !(m_coloursCustomized & CustomColour_CellBg) )
     {
         wxColour bgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
         m_colPropBack = bgCol;
@@ -1464,7 +1482,7 @@ void wxPropertyGrid::RegainColours()
             m_unspecifiedAppearance.SetBgCol(bgCol);
     }
 
-    if ( !(m_coloursCustomized & 0x0010) )
+    if ( !(m_coloursCustomized & CustomColour_CellText) )
     {
         wxColour fgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
         m_colPropFore = fgCol;
@@ -1473,17 +1491,17 @@ void wxPropertyGrid::RegainColours()
             m_unspecifiedAppearance.SetFgCol(fgCol);
     }
 
-    if ( !(m_coloursCustomized & 0x0020) )
+    if ( !(m_coloursCustomized & CustomColour_SelectionBg) )
         m_colSelBack = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
 
-    if ( !(m_coloursCustomized & 0x0040) )
+    if ( !(m_coloursCustomized & CustomColour_SelectionText) )
         m_colSelFore = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
-    if ( !(m_coloursCustomized & 0x0080) )
+    if ( !(m_coloursCustomized & CustomColour_Line) )
         m_colLine = m_colCapBack;
 
-    if ( !(m_coloursCustomized & 0x0100) )
-        m_colDisPropFore = m_colCapFore;
+    if ( !(m_coloursCustomized & CustomColour_DisabledText) )
+        m_colDisPropFore = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
 
     m_colEmptySpace = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
 }
@@ -1492,7 +1510,7 @@ void wxPropertyGrid::RegainColours()
 
 void wxPropertyGrid::ResetColours()
 {
-    m_coloursCustomized = 0;
+    m_coloursCustomized = CustomColour_None;
 
     RegainColours();
 
@@ -1521,7 +1539,7 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
 void wxPropertyGrid::SetLineColour( const wxColour& col )
 {
     m_colLine = col;
-    m_coloursCustomized |= 0x80;
+    m_coloursCustomized |= CustomColour_Line;
     Refresh();
 }
 
@@ -1530,7 +1548,7 @@ void wxPropertyGrid::SetLineColour( const wxColour& col )
 void wxPropertyGrid::SetMarginColour( const wxColour& col )
 {
     m_colMargin = col;
-    m_coloursCustomized |= 0x01;
+    m_coloursCustomized |= CustomColour_Margin;
     Refresh();
 }
 
@@ -1539,7 +1557,7 @@ void wxPropertyGrid::SetMarginColour( const wxColour& col )
 void wxPropertyGrid::SetCellBackgroundColour( const wxColour& col )
 {
     m_colPropBack = col;
-    m_coloursCustomized |= 0x08;
+    m_coloursCustomized |= CustomColour_CellBg;
 
     m_propertyDefaultCell.GetData()->SetBgCol(col);
     m_unspecifiedAppearance.SetBgCol(col);
@@ -1552,7 +1570,7 @@ void wxPropertyGrid::SetCellBackgroundColour( const wxColour& col )
 void wxPropertyGrid::SetCellTextColour( const wxColour& col )
 {
     m_colPropFore = col;
-    m_coloursCustomized |= 0x10;
+    m_coloursCustomized |= CustomColour_CellText;
 
     m_propertyDefaultCell.GetData()->SetFgCol(col);
     m_unspecifiedAppearance.SetFgCol(col);
@@ -1574,7 +1592,7 @@ void wxPropertyGrid::SetEmptySpaceColour( const wxColour& col )
 void wxPropertyGrid::SetCellDisabledTextColour( const wxColour& col )
 {
     m_colDisPropFore = col;
-    m_coloursCustomized |= 0x100;
+    m_coloursCustomized |= CustomColour_DisabledText;
     Refresh();
 }
 
@@ -1583,7 +1601,7 @@ void wxPropertyGrid::SetCellDisabledTextColour( const wxColour& col )
 void wxPropertyGrid::SetSelectionBackgroundColour( const wxColour& col )
 {
     m_colSelBack = col;
-    m_coloursCustomized |= 0x20;
+    m_coloursCustomized |= CustomColour_SelectionBg;
     Refresh();
 }
 
@@ -1592,7 +1610,7 @@ void wxPropertyGrid::SetSelectionBackgroundColour( const wxColour& col )
 void wxPropertyGrid::SetSelectionTextColour( const wxColour& col )
 {
     m_colSelFore = col;
-    m_coloursCustomized |= 0x40;
+    m_coloursCustomized |= CustomColour_SelectionText;
     Refresh();
 }
 
@@ -1601,7 +1619,7 @@ void wxPropertyGrid::SetSelectionTextColour( const wxColour& col )
 void wxPropertyGrid::SetCaptionBackgroundColour( const wxColour& col )
 {
     m_colCapBack = col;
-    m_coloursCustomized |= 0x02;
+    m_coloursCustomized |= CustomColour_CaptionBg;
 
     m_categoryDefaultCell.GetData()->SetBgCol(col);
 
@@ -1613,7 +1631,7 @@ void wxPropertyGrid::SetCaptionBackgroundColour( const wxColour& col )
 void wxPropertyGrid::SetCaptionTextColour( const wxColour& col )
 {
     m_colCapFore = col;
-    m_coloursCustomized |= 0x04;
+    m_coloursCustomized |= CustomColour_CaptionText;
 
     m_categoryDefaultCell.GetData()->SetFgCol(col);
 
@@ -1940,64 +1958,25 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
     r.Offset(m_gutterWidth, m_buttonSpacingY);
     r.width = m_iconWidth; r.height = m_iconHeight;
 
-#if (wxPG_USE_RENDERER_NATIVE)
-    //
-#elif wxPG_ICON_WIDTH
-    // Drawing expand/collapse button manually
-    dc.SetPen(m_colPropFore);
-    if ( property->IsCategory() )
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    else
-        dc.SetBrush(m_colPropBack);
-
-    dc.DrawRectangle( r );
-    int _y = r.y+(m_iconWidth/2);
-    dc.DrawLine(r.x+2,_y,r.x+m_iconWidth-2,_y);
-#else
-    wxBitmap bmp;
-#endif
-
-    if ( property->IsExpanded() )
-    {
     // wxRenderer functions are non-mutating in nature, so it
     // should be safe to cast "const wxPropertyGrid*" to "wxWindow*".
     // Hopefully this does not cause problems.
-    #if (wxPG_USE_RENDERER_NATIVE)
-        wxRendererNative::Get().DrawTreeItemButton(
-                const_cast<wxPropertyGrid*>(this),
-                dc,
-                r,
-                wxCONTROL_EXPANDED
-            );
-    #elif wxPG_ICON_WIDTH
-        //
-    #else
-        bmp = s_collbmp;
-    #endif
-
-    }
-    else
-    {
-    #if (wxPG_USE_RENDERER_NATIVE)
-        wxRendererNative::Get().DrawTreeItemButton(
-                const_cast<wxPropertyGrid*>(this),
-                dc,
-                r,
-                0
-            );
-    #elif wxPG_ICON_WIDTH
-        int _x = r.x+(m_iconWidth/2);
-        dc.DrawLine(_x,r.y+2,_x,r.y+m_iconWidth-2);
-    #else
-        bmp = s_expandbmp;
-    #endif
-    }
-
-#if (wxPG_USE_RENDERER_NATIVE)
-    //
+#if wxPG_USE_RENDERER_NATIVE
+    wxRendererNative::Get().DrawTreeItemButton(
+            const_cast<wxPropertyGrid*>(this),
+            dc,
+            r,
+            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
+        );
 #elif wxPG_ICON_WIDTH
-    //
+    wxRendererNative::GetGeneric().DrawTreeItemButton(
+            const_cast<wxPropertyGrid*>(this),
+            dc,
+            r,
+            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
+        );
 #else
+    wxBitmap bmp = property->IsExpanded() ? s_collbmp : s_expandbmp;
     dc.DrawBitmap( bmp, r.x, r.y, true );
 #endif
 }
@@ -2589,6 +2568,8 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
 
 void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 {
+    wxCHECK_RET( p, wxS("invalid property id") );
+
     if ( m_pState->DoIsPropertySelected(p) || p->IsChildSelected(true) )
     {
         // NB: We must copy the selection.
@@ -2607,6 +2588,8 @@ void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
 
 void wxPropertyGrid::DrawItemAndValueRelated( wxPGProperty* p )
 {
+    wxCHECK_RET( p, wxS("invalid property id") );
+
     if ( IsFrozen() )
         return;
 

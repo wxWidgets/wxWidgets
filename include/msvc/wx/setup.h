@@ -189,6 +189,9 @@
             #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
             #pragma comment(lib, wx3RD_PARTY_LIB_NAME("lexilla"))
         #endif
+        #if wxUSE_LUNASVG && !defined(wxNO_LUNASVG_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("lunasvg"))
+        #endif
     #endif // !defined(WXUSINGDLL)
 
 
@@ -241,6 +244,8 @@
     #pragma comment(lib, "kernel32")
     #pragma comment(lib, "user32")
     #pragma comment(lib, "gdi32")
+    #pragma comment(lib, "gdiplus")
+    #pragma comment(lib, "msimg32")
     #pragma comment(lib, "comdlg32")
     #pragma comment(lib, "winspool")
     #pragma comment(lib, "winmm")

@@ -187,7 +187,6 @@ set(QT_WIN32_SRC
     src/msw/dialup.cpp
     src/msw/dib.cpp
     src/msw/joystick.cpp
-    src/qt/graphics.cpp
 )
 
 set(QT_WIN32_HDR
@@ -337,7 +336,6 @@ set(QT_SRC
     src/generic/fontpickerg.cpp
     src/qt/frame.cpp
     src/qt/gauge.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/qt/listbox.cpp
     src/qt/listctrl.cpp
@@ -392,6 +390,7 @@ set(QT_SRC
     src/qt/timectrl.cpp
     src/qt/overlay.cpp
     src/qt/renderer.cpp
+    src/qt/graphics.cpp
 )
 
 set(MEDIA_QT_SRC
@@ -1283,11 +1282,11 @@ set(GTK_WIN32_HDR
     wx/msw/sound.h
     wx/msw/taskbar.h
     wx/msw/joystick.h
+    wx/msw/init.h
 )
 
 set(GTK_LOWLEVEL_SRC
     ${GTK_PLATFORM_SRC}
-    src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/gtk/app.cpp
     src/gtk/assertdlg_gtk.cpp
@@ -1509,7 +1508,6 @@ set(GTK2_HDR
 
 set(X11_LOWLEVEL_SRC
     ${XWIN_LOWLEVEL_SRC}
-    src/generic/icon.cpp
     src/generic/textmeasure.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1600,7 +1598,6 @@ set(MSW_LOWLEVEL_SRC
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
-    src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/graphicsd2d.cpp
     src/msw/icon.cpp
@@ -1906,7 +1903,6 @@ set(DFB_LOWLEVEL_SRC
     src/common/fontmgrcmn.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
-    src/generic/icon.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -2060,7 +2056,6 @@ set(OSX_COMMON_SRC
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
-    src/generic/icon.cpp
     #TODO: </if>
     src/osx/statbmp_osx.cpp
     src/generic/imaglist.cpp
@@ -2639,6 +2634,7 @@ set(XRC_SRC
     src/xrc/xh_tree.cpp
     src/xrc/xh_treebk.cpp
     src/xrc/xh_unkwn.cpp
+    src/xrc/xh_vlistbox.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
     src/xrc/xmlrsall.cpp
@@ -2712,6 +2708,7 @@ set(XRC_HDR
     wx/xrc/xh_tree.h
     wx/xrc/xh_treebk.h
     wx/xrc/xh_unkwn.h
+    wx/xrc/xh_vlistbox.h
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
     wx/xrc/xh_dataview.h
@@ -2793,6 +2790,7 @@ set(AUI_CMN_HDR
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
+    wx/aui/serializer.h
 )
 
 set(AUI_MSW_HDR

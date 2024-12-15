@@ -33,7 +33,7 @@ static Qt::PenStyle ConvertPenStyle(wxPenStyle style)
             return Qt::DashLine;
 
         case wxPENSTYLE_DOT_DASH:
-            return Qt::DotLine;
+            return Qt::DashDotLine;
 
         case wxPENSTYLE_USER_DASH:
             return Qt::CustomDashLine;

@@ -267,14 +267,14 @@ wxBitmapBundle::FromSVG() or wxBitmapBundle::FromSVGFile(). Such bitmap
 bundles will always produce bitmaps of exactly the required size, at any
 resolution. At normal DPI, i.e. without any scaling, the size of the resulting
 bitmap will be the default bundle size, which must be provided when creating
-this kind of bitmap bundle, as SVG image itself doesn't necessarily contain
+this kind of bitmap bundle, as an SVG image itself doesn't necessarily contain
 this information.
 
-Note that wxWidgets currently uses [NanoSVG][] library for SVG support and so
+Note that wxWidgets currently uses the [LunaSVG][] library for SVG support and so
 doesn't support all SVG standard features and you may need to simplify or
 tweak the SVG files to make them appear correctly.
 
-[NanoSVG]: https://github.com/memononen/nanosvg
+[LunaSVG]: https://github.com/wxWidgets/lunasvg
 
 wxBitmapBundle and XRC              {#high_dpi_bundle_xrc}
 ----------------------
@@ -320,13 +320,16 @@ The behaviour of the application when running on a high-DPI display depends on
 the values in its [manifest][msw-manifest]. You may either use your own
 manifest, in which case you need to define the `dpiAware` (for compatibility
 with older OS versions) and `dpiAwareness` (for proper per-monitor DPI support)
-in it, or simply include `wx/msw/wx.rc` from your resource file to use the
-manifest provided by wxWidgets and predefine `wxUSE_DPI_AWARE_MANIFEST` to
-opt-in into [high DPI support][msw-highdpi]: define it as `1` for minimal DPI
-awareness and `2` for full, per-monitor DPI awareness supported by Windows 10
-version 1703 or later.
+in it, or use a manifest provided by wxWidgets in one of the ways explained in
+the [manifests documentation](@ref msw_manifest).
 
-[msw-manifest]: https://docs.microsoft.com/en-us/windows/win32/sbscs/application-manifests
+Note that `wx_dpi_aware_pmv2.manifest` file and `wxUSE_DPI_AWARE_MANIFEST=2`
+documented there correspond to full, per-monitor DPI awareness supported by
+Windows 10 version 1703 or later. It is also possible to use
+`wx_dpi_aware.manifest` and set `wxUSE_DPI_AWARE_MANIFEST=1` to enable minimal
+support for system DPI, see [MSDN documentation][msw-highdpi] for more
+information about different levels of DPI awareness.
+
 [msw-highdpi]: https://docs.microsoft.com/en-us/windows/win32/hidpi/high-dpi-desktop-application-development-on-windows
 
 macOS                               {#high_dpi_platform_mac}

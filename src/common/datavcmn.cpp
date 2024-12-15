@@ -1089,7 +1089,11 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     int flags = 0;
     if ( state & wxDATAVIEW_CELL_SELECTED )
         flags |= wxCONTROL_SELECTED;
-    if ( !(GetOwner()->GetOwner()->IsEnabled() && GetEnabled()) )
+
+    // Use IsThisEnabled() rather than IsEnabled() to grey the text out if the
+    // item itself or the entire control is disabled, but not if it's
+    // implicitly disabled due to its parent being disabled.
+    if ( !(GetOwner()->GetOwner()->IsThisEnabled() && GetEnabled()) )
         flags |= wxCONTROL_DISABLED;
 
     wxRendererNative::Get().DrawItemText(
@@ -1210,15 +1214,6 @@ bool wxDataViewEditorCtrlEvtHandler::IsEditorSubControl(wxWindow* win) const
 // ---------------------------------------------------------
 // wxDataViewColumnBase
 // ---------------------------------------------------------
-
-void wxDataViewColumnBase::Init(wxDataViewRenderer *renderer,
-                                unsigned int model_column)
-{
-    m_renderer = renderer;
-    m_model_column = model_column;
-    m_owner = nullptr;
-    m_renderer->SetOwner( (wxDataViewColumn*) this );
-}
 
 wxDataViewColumnBase::~wxDataViewColumnBase()
 {
@@ -1997,7 +1992,8 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
 
 wxWindow* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
-    wxVariant string_value = GetChoice( value.GetLong() );
+    wxVariant string_value = value.GetLong() != wxNOT_FOUND ? GetChoice( value.GetLong() )
+                                                            : wxString();
 
     return wxDataViewChoiceRenderer::CreateEditorCtrl( parent, labelRect, string_value );
 }
@@ -2014,7 +2010,8 @@ bool wxDataViewChoiceByIndexRenderer::GetValueFromEditorCtrl( wxWindow* editor, 
 
 bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
 {
-    wxVariant string_value = GetChoice( value.GetLong() );
+    wxVariant string_value = value.GetLong() != wxNOT_FOUND ? GetChoice( value.GetLong() )
+                                                            : wxString();
     return wxDataViewChoiceRenderer::SetValue( string_value );
 }
 

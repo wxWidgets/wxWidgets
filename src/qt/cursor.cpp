@@ -165,9 +165,9 @@ void wxCursor::InitFromImage( const wxImage & image )
 
     GetHandle() = QCursor(*bmp.GetHandle(),
                            image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) ?
-                           image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) : -1,
+                           image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) : 0,
                            image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ?
-                           image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y) : -1);
+                           image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y) : 0);
 }
 
 #endif // wxUSE_IMAGE

@@ -170,7 +170,7 @@ int wxEntry(int& argc, wxChar **argv)
     {
         return wxEntryReal(argc, argv);
     }
-    wxSEH_HANDLE(-1)
+    wxSEH_HANDLE(wxApp::GetFatalErrorExitCode())
 }
 
 #else // !wxUSE_ON_FATAL_EXCEPTION
@@ -202,12 +202,12 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
     wxUnusedVar(nCmdShow);
 #endif
 
-    wxInitData().Get().MSWInitialize();
+    wxInitData::Get().MSWInitialize();
 
     return true;
 }
 
-WXDLLEXPORT bool wxEntryStart(HINSTANCE hInstance,
+WXDLLIMPEXP_CORE bool wxEntryStart(HINSTANCE hInstance,
                               HINSTANCE WXUNUSED(hPrevInstance),
                               wxCmdLineArgType WXUNUSED(pCmdLine),
                               int nCmdShow)
@@ -219,13 +219,13 @@ WXDLLEXPORT bool wxEntryStart(HINSTANCE hInstance,
     return wxEntryStart(initData.argc, initData.argv);
 }
 
-WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
+WXDLLIMPEXP_CORE int wxEntry(HINSTANCE hInstance,
                         HINSTANCE WXUNUSED(hPrevInstance),
                         wxCmdLineArgType WXUNUSED(pCmdLine),
                         int nCmdShow)
 {
     if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
-        return -1;
+        return wxApp::GetFatalErrorExitCode();
 
     auto& initData = wxInitData::Get();
     return wxEntry(initData.argc, initData.argv);
@@ -241,7 +241,7 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
 
 int wxEntry()
 {
-    wxInitData().Get().MSWInitialize();
+    wxInitData::Get().MSWInitialize();
 
     auto& initData = wxInitData::Get();
     return wxEntry(initData.argc, initData.argv);

@@ -73,13 +73,23 @@ wxBUILD_COMPATIBILITY     | STRING | 3.2     | Enable API compatibility with 3.0
 wxBUILD_PRECOMP           | BOOL   | ON      | Use precompiled headers
 wxBUILD_MONOLITHIC        | BOOL   | OFF     | Build a single library
 
+Note that on macOS, the option `CMAKE_OSX_ARCHITECTURES` is used to specify which architecture(s) to build.
+For example, the following will build a "universal binary 2" (i.e., ARM64 and Intel x86_64) library.
+~~~{.sh}
+    cmake ~/Downloads/wxWidgets_3.1 \
+      -DCMAKE_INSTALL_PREFIX=~/wx_install \
+      -DwxBUILD_SHARED=OFF
+      -D"CMAKE_OSX_ARCHITECTURES:STRING=arm64;x86_64"
+    cmake --build . --target install
+~~~
+
 A complete list of options and advanced options can be found when using the
 CMake GUI.
 
 Recommendations                       {#cmake_recommendations}
 =======================
 While CMake in wxWidgets aims to support most generators available
-in CMake the following generators are recommended:
+in CMake, the following generators are recommended:
 * Windows: Visual Studio (any supported version)
 * macOS: Xcode
 * Linux: Ninja or Makefiles
@@ -88,7 +98,7 @@ CMake 3.10 or newer is recommended. The minimum tested version is 3.5.
 
 Using CMake with your applications     {#cmake_apps}
 ==================================
-If you are using CMake with your own application there are various ways to use
+If you are using CMake with your own application, there are various ways to use
 wxWidgets:
 * Using an installed, binary or compiled version of wxWidgets
 using `find_package()`

@@ -1,0 +1,68 @@
+name: Generate wxWidgets language database
+
+on: workflow_dispatch
+
+jobs:
+
+  regenerate:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Enable MSVC command line
+      uses: ilammy/msvc-dev-cmd@v1.13.0
+
+    - name: Install utilities with Chocolatey
+      run: |
+        choco install sqlite.shell
+        choco install lua53
+        choco install python2
+
+    - name: Build utils
+      run: |
+        cd misc\languages\util
+        cl showlocales.c
+        # Test showlocales
+        .\showlocales >..\data\temp\win-locale-table-test.txt
+
+    - name: Generate database and language files
+      run: |
+        misc\languages\data\setupenv.ps1
+        cd misc\languages\data
+        .\getunicodefiles.ps1 46-beta2
+        # Do not run the following step on Windows Server 2022,
+        # locale data of Windows Server versions are usually outdated.
+        # Use Windows 11 Pro (or later) with recent updates for this step.
+        # .\getwindowsdata.ps1
+        .\gensqlfiles.ps1
+        .\makelangdb.ps1
+
+    - name: Replace language files and regenerate C++ source files
+      run: |
+        cd misc\languages\data
+        .\replacetables.ps1
+        cd ..\..\..
+        python misc\languages\genlang.py
+
+    - name: Prepare language database update artifact
+      run: |
+        misc\languages\preparedist.ps1
+
+    - name: Upload language update distribution
+      uses: actions/upload-artifact@v4
+      with:
+        name: wxLanguageDatabaseDist
+        path: |
+          distlang
+
+    - name: Upload temporary language data files and logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: wxLanguageDatabaseLog
+        path: |
+          misc/languages/data
+          !misc/languages/data/**/*.db3
+          !misc/languages/data/**/*.lua
+          !misc/languages/data/**/*.ps1

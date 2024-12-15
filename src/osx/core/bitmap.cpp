@@ -252,7 +252,7 @@ bool wxBitmapRefData::Create(CGImageRef image, double scale)
         bool hasAlpha = IsCGImageAlphaFlag(alpha);
         m_hBitmap = CGBitmapContextCreate(nullptr, width, height, 8, bytesPerRow, wxMacGetGenericRGBColorSpace(),
                                           hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst);
-        wxCHECK_MSG(m_hBitmap, false, wxT("Unable to create CGBitmapContext context"));
+        wxCHECK_MSG(m_hBitmap, false, "Unable to create CGBitmapContext context");
         CGRect rect = CGRectMake(0, 0, width, height);
         CGContextDrawImage(m_hBitmap, rect, image);
 
@@ -289,7 +289,7 @@ bool wxBitmapRefData::Create(int w, int h, int WXUNUSED(d), double logicalscale)
 
     size_t bytesPerRow = GetBestBytesPerRow(width * 4);
     m_hBitmap = CGBitmapContextCreate(nullptr, width, height, 8, bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst);
-    wxCHECK_MSG(m_hBitmap, false, wxT("Unable to create CGBitmapContext context"));
+    wxCHECK_MSG(m_hBitmap, false, "Unable to create CGBitmapContext context");
     CGContextTranslateCTM(m_hBitmap, 0, height);
     CGContextScaleCTM(m_hBitmap, 1 * GetScaleFactor(), -1 * GetScaleFactor());
 
@@ -370,7 +370,7 @@ WXImage wxBitmapRefData::GetImage() const
 
 void wxBitmapRefData::SetScaleFactor( double scale )
 {
-    wxCHECK_RET( IsOk() , wxT("invalid bitmap") ) ;
+    wxCHECK_RET( IsOk() , "invalid bitmap" ) ;
 
     if ( m_scaleFactor == scale )
         return ;
@@ -382,7 +382,7 @@ void wxBitmapRefData::SetScaleFactor( double scale )
 
 void wxBitmapRefData::UseAlpha( bool use )
 {
-    wxCHECK_RET( IsOk() , wxT("invalid bitmap") ) ;
+    wxCHECK_RET( IsOk() , "invalid bitmap" ) ;
 
     if ( HasAlpha() == use )
         return ;
@@ -390,7 +390,7 @@ void wxBitmapRefData::UseAlpha( bool use )
     CGContextRef hBitmap = CGBitmapContextCreate(nullptr, GetWidth(), GetHeight(), 8, GetBytesPerRow(), wxMacGetGenericRGBColorSpace(), use ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst );
 
     memcpy(CGBitmapContextGetData(hBitmap),CGBitmapContextGetData(m_hBitmap),GetBytesPerRow()*GetHeight());
-    wxCHECK_RET( hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+    wxCHECK_RET( hBitmap , "Unable to create CGBitmapContext context" ) ;
     CGContextTranslateCTM( hBitmap, 0,  GetHeight() );
     CGContextScaleCTM( hBitmap, GetScaleFactor(), -GetScaleFactor() );
 
@@ -399,7 +399,7 @@ void wxBitmapRefData::UseAlpha( bool use )
 
 const void *wxBitmapRefData::GetRawAccess() const
 {
-    wxCHECK_MSG( IsOk(), nullptr , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), nullptr , "invalid bitmap" ) ;
 
     EnsureBitmapExists();
 
@@ -414,12 +414,12 @@ void *wxBitmapRefData::GetRawAccess()
 
 void *wxBitmapRefData::BeginRawAccess()
 {
-    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), nullptr, "invalid bitmap" ) ;
     wxASSERT( m_rawAccessCount == 0 ) ;
 
 #if wxOSX_USE_ICONREF
     wxASSERT_MSG( m_iconRef == nullptr ,
-                 wxT("Currently, modifying bitmaps that are used in controls already is not supported") ) ;
+                 "Currently, modifying bitmaps that are used in controls already is not supported" ) ;
 #endif
 
     ++m_rawAccessCount ;
@@ -433,7 +433,7 @@ void *wxBitmapRefData::BeginRawAccess()
 
 void wxBitmapRefData::EndRawAccess()
 {
-    wxCHECK_RET( IsOk() , wxT("invalid bitmap") ) ;
+    wxCHECK_RET( IsOk() , "invalid bitmap" ) ;
     wxASSERT( m_rawAccessCount == 1 ) ;
 
     --m_rawAccessCount ;
@@ -645,10 +645,10 @@ IconRef wxBitmapRefData::GetIconRef() const
                 }
 
                 OSStatus err = SetIconFamilyData( iconFamily, dataType , data ) ;
-                wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") ) ;
+                wxASSERT_MSG( err == noErr , "Error when adding bitmap" ) ;
 
                 err = SetIconFamilyData( iconFamily, maskType , maskdata ) ;
-                wxASSERT_MSG( err == noErr , wxT("Error when adding mask") ) ;
+                wxASSERT_MSG( err == noErr , "Error when adding mask" ) ;
 
                 HUnlock( data ) ;
                 HUnlock( maskdata ) ;
@@ -664,7 +664,7 @@ IconRef wxBitmapRefData::GetIconRef() const
         HUnlock((Handle) iconFamily);
         DisposeHandle( (Handle) iconFamily ) ;
 
-        wxCHECK_MSG( err == noErr, nullptr, wxT("Error when constructing icon ref") );
+        wxCHECK_MSG( err == noErr, nullptr, "Error when constructing icon ref" );
     }
 
     return m_iconRef ;
@@ -772,7 +772,7 @@ void wxBitmapRefData::FreeDerivedRepresentations()
 
 void wxBitmapRefData::Free()
 {
-    wxASSERT_MSG( m_rawAccessCount == 0 , wxT("Bitmap still selected when destroyed") ) ;
+    wxASSERT_MSG( m_rawAccessCount == 0 , "Bitmap still selected when destroyed" ) ;
 
     FreeDerivedRepresentations();
 
@@ -840,7 +840,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
         }
         else
         {
-            wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
+            wxFAIL_MSG("multicolor BITMAPs not yet implemented");
         }
     }
 }
@@ -878,21 +878,21 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 #if WXWIN_COMPATIBILITY_3_0
 const void * wxBitmap::GetRawAccess() const
 {
-    wxCHECK_MSG( IsOk() , nullptr , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk() , nullptr , "invalid bitmap" ) ;
 
     return GetBitmapData()->GetRawAccess() ;
 }
 
 void * wxBitmap::BeginRawAccess()
 {
-    wxCHECK_MSG( IsOk() , nullptr , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk() , nullptr , "invalid bitmap" ) ;
 
     return GetBitmapData()->BeginRawAccess() ;
 }
 
 void wxBitmap::EndRawAccess()
 {
-    wxCHECK_RET( IsOk() , wxT("invalid bitmap") ) ;
+    wxCHECK_RET( IsOk() , "invalid bitmap" ) ;
 
     GetBitmapData()->EndRawAccess() ;
 }
@@ -900,7 +900,7 @@ void wxBitmap::EndRawAccess()
 
 CGImageRef wxBitmap::CreateCGImage() const
 {
-    wxCHECK_MSG( IsOk(), nullptr , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), nullptr , "invalid bitmap" ) ;
 
     return GetBitmapData()->CreateCGImage() ;
 }
@@ -909,7 +909,7 @@ CGImageRef wxBitmap::CreateCGImage() const
 
 IconRef wxBitmap::GetIconRef() const
 {
-    wxCHECK_MSG( IsOk(), nullptr , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), nullptr , "invalid bitmap" ) ;
 
     return GetBitmapData()->GetIconRef() ;
 }
@@ -964,17 +964,17 @@ WXImage wxBitmap::OSXGetImage() const
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 {
-    wxCHECK_MSG( IsOk(), wxNullBitmap, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), wxNullBitmap, "invalid bitmap" );
 
     wxCHECK_MSG((rect.x >= 0) && (rect.y >= 0) &&
                 (rect.x+rect.width <= GetLogicalWidth()) &&
                 (rect.y+rect.height <= GetLogicalHeight()),
-                wxNullBitmap, wxT("invalid bitmap region") );
+                wxNullBitmap, "invalid bitmap region" );
 
     wxBitmap ret;
     double scale = GetScaleFactor();
     ret.CreateWithLogicalSize( rect.GetSize(), scale, GetDepth() );
-    wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
+    wxASSERT_MSG( ret.IsOk(), "GetSubBitmap error" );
     if ( HasAlpha() )
         ret.UseAlpha() ;
 
@@ -1121,7 +1121,7 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
 #endif
     }
 
-    wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
+    wxLogWarning("no bitmap handler for type %d defined.", type);
 
     return false;
 }
@@ -1136,7 +1136,7 @@ bool wxBitmap::Create(const void* data, wxBitmapType type, int width, int height
 
     if ( handler == nullptr )
     {
-        wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
+        wxLogWarning("no bitmap handler for type %d defined.", type);
 
         return false;
     }
@@ -1148,7 +1148,7 @@ bool wxBitmap::Create(const void* data, wxBitmapType type, int width, int height
 
 void wxBitmap::InitFromImage(const wxImage& image, int depth, double scale)
 {
-    wxCHECK_RET( image.IsOk(), wxT("invalid image") );
+    wxCHECK_RET( image.IsOk(), "invalid image" );
 
     // width and height of the device-dependent bitmap
     int width = image.GetWidth();
@@ -1261,7 +1261,7 @@ wxImage wxBitmap::ConvertToImage() const
 {
     wxImage image;
 
-    wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), wxNullImage, "invalid bitmap" );
 
     // this call may trigger a conversion from platform image to bitmap, issue it
     // before any measurements are taken, multi-resolution platform images may be
@@ -1274,7 +1274,7 @@ wxImage wxBitmap::ConvertToImage() const
     image.Create( width, height );
 
     unsigned char *data = image.GetData();
-    wxCHECK_MSG( data, wxNullImage, wxT("Could not allocate data for image") );
+    wxCHECK_MSG( data, wxNullImage, "Could not allocate data for image" );
 
     bool hasAlpha = false ;
     bool hasMask = false ;
@@ -1388,7 +1388,7 @@ bool wxBitmap::SaveFile( const wxString& filename,
         wxImage image = ConvertToImage();
         success = image.SaveFile(filename, type);
 #else
-        wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
+        wxLogWarning("no bitmap handler for type %d defined.", type);
 #endif
     }
 
@@ -1397,21 +1397,21 @@ bool wxBitmap::SaveFile( const wxString& filename,
 
 int wxBitmap::GetHeight() const
 {
-   wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
 
    return GetBitmapData()->GetHeight();
 }
 
 int wxBitmap::GetWidth() const
 {
-   wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
 
    return GetBitmapData()->GetWidth() ;
 }
 
 void wxBitmap::SetScaleFactor(double scale)
 {
-    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
+    wxCHECK_RET( IsOk(), "invalid bitmap" );
 
     if ( GetBitmapData()->GetScaleFactor() != scale )
     {
@@ -1423,28 +1423,28 @@ void wxBitmap::SetScaleFactor(double scale)
 
 double wxBitmap::GetScaleFactor() const
 {
-    wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
 
     return GetBitmapData()->GetScaleFactor() ;
 }
 
 int wxBitmap::GetDepth() const
 {
-   wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
 
    return GetBitmapData()->GetDepth();
 }
 
 wxMask *wxBitmap::GetMask() const
 {
-   wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), nullptr, "invalid bitmap" );
 
    return GetBitmapData()->m_bitmapMask;
 }
 
 bool wxBitmap::HasAlpha() const
 {
-   wxCHECK_MSG( IsOk(), false , wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), false , "invalid bitmap" );
 
    return GetBitmapData()->HasAlpha() ;
 }
@@ -1472,7 +1472,7 @@ void wxBitmap::SetDepth(int WXUNUSED_UNLESS_DEBUG(d))
 #if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const
 {
-   wxCHECK_MSG( IsOk(), nullptr, wxT("Invalid bitmap  GetPalette()") );
+   wxCHECK_MSG( IsOk(), nullptr, "Invalid bitmap  GetPalette()" );
 
    return & const_cast<wxBitmapRefData*>(GetBitmapData())->m_bitmapPalette;
 }
@@ -1543,7 +1543,7 @@ void wxMask::Init()
 
 void *wxMask::GetRawAccess() const
 {
-    wxCHECK_MSG( m_maskBitmap, nullptr , wxT("invalid mask") ) ;
+    wxCHECK_MSG( m_maskBitmap, nullptr , "invalid mask" ) ;
     return CGBitmapContextGetData(m_maskBitmap);
 }
 
@@ -1575,7 +1575,7 @@ void wxMask::DoCreateMaskBitmap(int width, int height, int bytesPerRow)
 
     m_maskBitmap = CGBitmapContextCreate(nullptr, width, height, kMaskBytesPerPixel * 8, bytesPerRow, colorspace,
         kCGImageAlphaNone);
-    wxASSERT_MSG(m_maskBitmap, wxT("Unable to create CGBitmapContext context"));
+    wxASSERT_MSG(m_maskBitmap, "Unable to create CGBitmapContext context");
 }
 
 void wxMask::RealizeNative()
@@ -1595,7 +1595,7 @@ void wxMask::RealizeNative()
     m_maskBitmap = CGBitmapContextCreate((char*) m_memBuf.GetData(), m_width, m_height, 8, m_bytesPerRow, colorspace,
         kCGImageAlphaNone );
     CGColorSpaceRelease( colorspace );
-    wxASSERT_MSG( m_maskBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+    wxASSERT_MSG( m_maskBitmap , "Unable to create CGBitmapContext context" ) ;
 #endif
 }
 
@@ -1766,7 +1766,7 @@ class WXDLLEXPORT wxPNGResourceHandler: public wxBundleResourceHandler
 public:
     inline wxPNGResourceHandler()
     {
-        SetName(wxT("PNG resource"));
+        SetName("PNG resource");
         SetExtension("PNG");
         SetType(wxBITMAP_TYPE_PNG_RESOURCE);
     }
@@ -1781,7 +1781,7 @@ class WXDLLEXPORT wxJPEGResourceHandler: public wxBundleResourceHandler
 public:
     inline wxJPEGResourceHandler()
     {
-        SetName(wxT("JPEG resource"));
+        SetName("JPEG resource");
         SetExtension("JPEG");
         SetType(wxBITMAP_TYPE_JPEG_RESOURCE);
     }
@@ -1798,7 +1798,7 @@ class WXDLLEXPORT wxICNSHandler: public wxBitmapHandler
 public:
     inline wxICNSHandler()
     {
-        SetName(wxT("icns file"));
+        SetName("icns file");
         SetExtension("icns");
         SetType(wxBITMAP_TYPE_ICON);
     }
@@ -1836,7 +1836,7 @@ class WXDLLEXPORT wxICNSResourceHandler: public wxBundleResourceHandler
 public:
     inline wxICNSResourceHandler()
     {
-        SetName(wxT("icns resource"));
+        SetName("icns resource");
         SetExtension("icns");
         SetType(wxBITMAP_TYPE_ICON_RESOURCE);
     }
@@ -1859,83 +1859,83 @@ bool wxICNSResourceHandler::LoadFile(wxBitmap *bitmap,
 {
     OSType theId = 0 ;
 
-    if ( resourceName == wxT("wxICON_INFORMATION") )
+    if ( resourceName == "wxICON_INFORMATION" )
     {
         theId = kAlertNoteIcon ;
     }
-    else if ( resourceName == wxT("wxICON_QUESTION") )
+    else if ( resourceName == "wxICON_QUESTION" )
     {
         theId = kAlertCautionIcon ;
     }
-    else if ( resourceName == wxT("wxICON_WARNING") )
+    else if ( resourceName == "wxICON_WARNING" )
     {
         theId = kAlertCautionIcon ;
     }
-    else if ( resourceName == wxT("wxICON_ERROR") )
+    else if ( resourceName == "wxICON_ERROR" )
     {
         theId = kAlertStopIcon ;
     }
-    else if ( resourceName == wxT("wxICON_FOLDER") )
+    else if ( resourceName == "wxICON_FOLDER" )
     {
         theId = kGenericFolderIcon ;
     }
-    else if ( resourceName == wxT("wxICON_FOLDER_OPEN") )
+    else if ( resourceName == "wxICON_FOLDER_OPEN" )
     {
         theId = kOpenFolderIcon ;
     }
-    else if ( resourceName == wxT("wxICON_NORMAL_FILE") )
+    else if ( resourceName == "wxICON_NORMAL_FILE" )
     {
         theId = kGenericDocumentIcon ;
     }
-    else if ( resourceName == wxT("wxICON_EXECUTABLE_FILE") )
+    else if ( resourceName == "wxICON_EXECUTABLE_FILE" )
     {
         theId = kGenericApplicationIcon ;
     }
-    else if ( resourceName == wxT("wxICON_CDROM") )
+    else if ( resourceName == "wxICON_CDROM" )
     {
         theId = kGenericCDROMIcon ;
     }
-    else if ( resourceName == wxT("wxICON_FLOPPY") )
+    else if ( resourceName == "wxICON_FLOPPY" )
     {
         theId = kGenericFloppyIcon ;
     }
-    else if ( resourceName == wxT("wxICON_HARDDISK") )
+    else if ( resourceName == "wxICON_HARDDISK" )
     {
         theId = kGenericHardDiskIcon ;
     }
-    else if ( resourceName == wxT("wxICON_REMOVABLE") )
+    else if ( resourceName == "wxICON_REMOVABLE" )
     {
         theId = kGenericRemovableMediaIcon ;
     }
-    else if ( resourceName == wxT("wxICON_DELETE") )
+    else if ( resourceName == "wxICON_DELETE" )
     {
         theId = kToolbarDeleteIcon ;
     }
-    else if ( resourceName == wxT("wxICON_GO_BACK") )
+    else if ( resourceName == "wxICON_GO_BACK" )
     {
         theId = kBackwardArrowIcon ;
     }
-    else if ( resourceName == wxT("wxICON_GO_FORWARD") )
+    else if ( resourceName == "wxICON_GO_FORWARD" )
     {
         theId = kForwardArrowIcon ;
     }
-    else if ( resourceName == wxT("wxICON_GO_HOME") )
+    else if ( resourceName == "wxICON_GO_HOME" )
     {
         theId = kToolbarHomeIcon ;
     }
-    else if ( resourceName == wxT("wxICON_HELP_SETTINGS") )
+    else if ( resourceName == "wxICON_HELP_SETTINGS" )
     {
         theId = kGenericFontIcon ;
     }
-    else if ( resourceName == wxT("wxICON_HELP_PAGE") )
+    else if ( resourceName == "wxICON_HELP_PAGE" )
     {
         theId = kGenericDocumentIcon ;
     }
-    else if ( resourceName == wxT( "wxICON_PRINT" ) )
+    else if ( resourceName == "wxICON_PRINT" )
     {
         theId = kPrintMonitorFolderIcon;
     }
-    else if ( resourceName == wxT( "wxICON_HELP_FOLDER" ) )
+    else if ( resourceName == "wxICON_HELP_FOLDER" )
     {
         theId = kHelpFolderIcon;
     }

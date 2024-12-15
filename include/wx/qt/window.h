@@ -35,10 +35,6 @@ class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
 
 /* wxQt specific notes:
  *
- * Remember to implement the Qt object getters on all subclasses:
- *  - GetHandle() returns the Qt object
- *
- *
  * Event handling is achieved by using the template class wxQtEventSignalHandler
  * found in winevent.h to send all Qt events here to QtHandleXXXEvent() methods.
  * All these methods receive the Qt event and the handler. This is done because
@@ -101,6 +97,10 @@ public:
     // get the (average) character size for the current font
     virtual int GetCharHeight() const override;
     virtual int GetCharWidth() const override;
+    virtual double GetContentScaleFactor() const override;
+
+    virtual wxSize GetDPI() const override;
+    virtual double GetDPIScaleFactor() const override;
 
     virtual void SetScrollbar( int orient,
                                int pos,
@@ -206,8 +206,6 @@ protected:
     virtual void DoSetClientSize(int width, int height) override;
     virtual void DoGetClientSize(int *width, int *height) const override;
 
-    virtual wxSize DoGetBestSize() const override;
-
     virtual void DoMoveWindow(int x, int y, int width, int height) override;
 
 #if wxUSE_TOOLTIPS
@@ -217,6 +215,10 @@ protected:
 #if wxUSE_MENUS
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y) override;
 #endif // wxUSE_MENUS
+
+    // This is called when capture is taken from the window. It will
+    // fire off capture lost events.
+    void QtReleaseMouseAndNotify();
 
     // Return the parent to use for children being reparented to us: this is
     // overridden in wxFrame to use its central widget rather than the frame
@@ -244,6 +246,11 @@ private:
     std::unique_ptr<QPainter> m_qtPainter;                   // always allocated
 
     bool m_mouseInside;
+
+    bool  m_pendingSize = false; // to properly set the size of the TLW if SetSize()
+                                 // is called before the window is shown.
+
+    wxSize  m_pendingClientSize;
 
 #if wxUSE_ACCEL
     wxVector<QShortcut*> m_qtShortcuts; // owned by whatever GetHandle() returns

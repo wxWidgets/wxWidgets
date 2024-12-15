@@ -188,9 +188,8 @@ void wxClientDCImpl::InitDC()
 {
     wxWindowDCImpl::InitDC();
 
-    // in wxUniv build we must manually do some DC adjustments usually
-    // performed by Windows for us
-#if defined(__WXUNIVERSAL__)
+    // Account for the origin of the client area which is non-zero only for
+    // TLWs with (left or top) toolbar: we shouldn't draw over the toolbar.
     wxPoint ptOrigin = m_window->GetClientAreaOrigin();
     if ( ptOrigin.x || ptOrigin.y )
     {
@@ -198,6 +197,9 @@ void wxClientDCImpl::InitDC()
         SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
     }
 
+    // in wxUniv build we must manually do some DC adjustments usually
+    // performed by Windows for us
+#if defined(__WXUNIVERSAL__)
     // clip the DC to avoid overwriting the non client area
     wxSize size = m_window->GetClientSize();
     DoSetClippingRegion(0, 0, size.x, size.y);

@@ -377,6 +377,11 @@
             bitfields-alpha.bmp
             8bpp-colorsused-large.bmp
             8bpp-colorsused-negative.bmp
+            32bpp_rgb.bmp
+            32bpp_rgb.ico
+            32bpp_rgb_a0.ico
+            badrle4.bmp
+            rgb16-3103.bmp
             rle4-delta-320x240.bmp
             rle8-delta-320x240.bmp
             rle8-delta-320x240-expected.bmp
@@ -443,6 +448,7 @@
     <wx-data id="en_GB" template="catalog"/>
     <wx-data id="fr" template="catalog"/>
     <wx-data id="ja" template="catalog"/>
+    <wx-data id="xart-dothraki" template="catalog"/>
 
 
     <fragment format="autoconf">

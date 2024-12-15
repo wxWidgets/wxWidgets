@@ -36,15 +36,14 @@ public:
     bool operator==(wxDataFormatId type) const
         { return m_type == type; }
     bool operator!=(wxDataFormatId type) const
-        { return m_type != type; }
+        { return !(*this == type); }
     bool operator==(NativeFormat format) const
         { return m_format == (NativeFormat)format; }
     bool operator!=(NativeFormat format) const
-        { return m_format != (NativeFormat)format; }
-    bool operator==(const wxDataFormat& other) const
-        { return m_format == other.m_format; }
+        { return !(*this == (NativeFormat)format); }
+    bool operator==(const wxDataFormat& other) const;
     bool operator!=(const wxDataFormat& other) const
-        { return m_format != other.m_format; }
+        { return !(*this == other); }
 
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the

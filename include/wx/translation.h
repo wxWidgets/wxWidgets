@@ -50,8 +50,9 @@ using wxTranslationsHashMap = std::unordered_map<wxString, wxString>;
 #else
     #define _(s)                               wxGetTranslation(wxASCII_STR(s))
 #endif
-    #define wxPLURAL(sing, plur, n)            wxGetTranslation((sing), (plur), n)
 #endif
+
+#define wxPLURAL(sing, plur, n)                wxGetTranslation((sing), (plur), n)
 
 // wx-specific macro for translating strings in the given context: if you use
 // them, you need to also add
@@ -60,12 +61,14 @@ using wxTranslationsHashMap = std::unordered_map<wxString, wxString>;
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 #define wxGETTEXT_IN_CONTEXT(c, s) \
     wxGetTranslation((s), wxString(), c)
-#else
-#define wxGETTEXT_IN_CONTEXT(c, s) \
-    wxGetTranslation(wxASCII_STR(s), wxString(), c)
-#endif
 #define wxGETTEXT_IN_CONTEXT_PLURAL(c, sing, plur, n) \
     wxGetTranslation((sing), (plur), n, wxString(), c)
+#else
+#define wxGETTEXT_IN_CONTEXT(c, s) \
+    wxGetTranslation(wxASCII_STR(s), wxString(), wxASCII_STR(c))
+#define wxGETTEXT_IN_CONTEXT_PLURAL(c, sing, plur, n) \
+    wxGetTranslation(wxASCII_STR(sing), wxASCII_STR(plur), n, wxString(), wxASCII_STR(c))
+#endif
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)

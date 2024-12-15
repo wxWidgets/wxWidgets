@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    Add the folder where wxWidgets DLL were built to MSVS PATH so that a sample can be run
+    from MSVS in DLL builds.
+    HTML and OpenGL samples are stored one folder level deeper than all the others,
+    so their relative path to the DLLs needs one more level up.
+   -->
+  <PropertyGroup Condition="'$(Configuration)' == 'DLL Debug' or '$(Configuration)' == 'DLL Release'">
+    <_wxDLLPathRel>.\..\..</_wxDLLPathRel>
+    <_wxDLLPathRel Condition = "'$(MSBuildProjectDirectory.IndexOf(`\samples\html\`))' != '-1' or '$(MSBuildProjectDirectory.IndexOf(`\samples\opengl\`))' != '-1'">$(_wxDLLPathRel)\..</_wxDLLPathRel>
+    <LocalDebuggerEnvironment>PATH=$(_wxDLLPathRel)\lib\$(wxOutDirName);$(PATH)</LocalDebuggerEnvironment>
+  </PropertyGroup>
+</Project>

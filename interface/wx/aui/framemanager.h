@@ -243,12 +243,15 @@ public:
         @param paneWindow The window pointer of the pane being dragged.
         @param pt The mouse position, in client coordinates.
         @param offset Describes the offset that the mouse is from the upper-left
-            corner of the item being dragged.
+            corner of the item being dragged, 0 by default (since wxWidgets
+            3.3.0, this parameter had to be specified in the earlier versions).
         @return The rectangle hint will be returned in screen coordinates if the pane
             would indeed become docked at the specified drop point.
             Otherwise, an empty rectangle is returned.
     */
-    wxRect CalculateHintRect(wxWindow* paneWindow, const wxPoint& pt, const wxPoint& offset);
+    wxRect CalculateHintRect(wxWindow* paneWindow,
+                             const wxPoint& pt,
+                             const wxPoint& offset = wxPoint{0, 0});
 
     /**
         Check if a key modifier is pressed (actually ::WXK_CONTROL or
@@ -281,13 +284,27 @@ public:
 
         It is rarely called, and is mostly used by controls implementing custom
         pane drag/drop behaviour.
+
+        Calling it is equivalent to calling CalculateHintRect() and
+        UpdateHint() with the resulting rectangle.
+
+        @param paneWindow Window passed to CalculateHintRect().
+        @param pt Mouse position passed to CalculateHintRect().
+        @param offset Offset passed to CalculateHintRect(), 0 by default (since
+            wxWidgets 3.3.0, this parameter had to be specified in the earlier
+            versions).
     */
-    void DrawHintRect(wxWindow* paneWindow, const wxPoint& pt, const wxPoint& offset);
+    void DrawHintRect(wxWindow* paneWindow,
+                      const wxPoint& pt,
+                      const wxPoint& offset = wxPoint{0, 0});
 
     /**
         Returns an array of all panes managed by the frame manager.
     */
     wxAuiPaneInfoArray& GetAllPanes();
+
+    /// @overload
+    const wxAuiPaneInfoArray& GetAllPanes() const;
 
     /**
         Returns the current art provider being used.
@@ -353,6 +370,8 @@ public:
 
     /**
         HideHint() hides any docking hint that may be visible.
+
+        @see UpdateHint()
     */
     virtual void HideHint();
 
@@ -372,6 +391,19 @@ public:
                     int insert_level = wxAUI_INSERT_PANE);
 
     /**
+        Load the layout information saved by SaveLayout().
+
+        The implementation of wxAuiDeserializer object passed to this function
+        should be consistent with that of the serializer used to save the
+        layout. See @ref page_samples_aui for an example of using serializer
+        saving the layout in XML format and matching deserializer restoring the
+        layout from it.
+
+        @since 3.3.0
+     */
+    void LoadLayout(wxAuiDeserializer& deserializer);
+
+    /**
         LoadPaneInfo() is similar to LoadPerspective, with the exception that it
         only loads information about a single pane.
 
@@ -388,6 +420,10 @@ public:
 
     /**
         Loads a saved perspective.
+
+        This function is used to load layouts previously saved with
+        SavePerspective(), use LoadLayout() to load a layout saved with
+        SaveLayout().
 
         A perspective is the layout state of an AUI managed window.
 
@@ -423,6 +459,19 @@ public:
     void RestoreMaximizedPane();
 
     /**
+        Save the layout information using the provided object.
+
+        This function allows to use a custom @a serializer to save the layout
+        information in any format, e.g. @ref page_samples_aui shows how to save
+        it in XML format.
+
+        See wxAuiSerializer documentation for more details.
+
+        @since 3.3.0
+     */
+    void SaveLayout(wxAuiSerializer& serializer) const;
+
+    /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
         saves information about a single pane.
 
@@ -440,6 +489,9 @@ public:
     /**
         Saves the entire user interface layout into an encoded wxString, which
         can then be stored by the application (probably using wxConfig).
+
+        @note You may prefer to use SaveLayout() instead of this function for
+            more flexibility.
 
         @see LoadPerspective
         @see LoadPaneInfo
@@ -485,10 +537,16 @@ public:
     void SetManagedWindow(wxWindow* managed_wnd);
 
     /**
-        This function is used by controls to explicitly show a hint window at the
-        specified rectangle. It is rarely called, and is mostly used by controls
-        implementing custom pane drag/drop behaviour.
-        The specified rectangle should be in screen coordinates.
+        This function is used to show a hint window at the specified rectangle.
+
+        It can be overridden to customize the hint appearance. When overriding
+        it, HideHint() should normally be also overridden as well.
+
+        Do not call this function directly to show the hint, use UpdateHint()
+        instead.
+
+        @param rect The area where the hint window should be shown, in screen
+            coordinates, or an empty rectangle to hide the window.
     */
     virtual void ShowHint(const wxRect& rect);
 
@@ -517,6 +575,18 @@ public:
         pane flicker to be avoided by updating the whole layout at one time.
     */
     void Update();
+
+    /**
+        Show or hide the hint window.
+
+        This function is mostly used internally.
+
+        @param rect The area where the hint window should be shown, in screen
+            coordinates, or an empty rectangle to hide the window.
+
+        @since 3.3.0
+     */
+    void UpdateHint(const wxRect& rect);
 
 protected:
 

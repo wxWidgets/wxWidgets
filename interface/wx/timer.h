@@ -27,9 +27,9 @@ wxEventType wxEVT_TIMER;
       wxTimer::Notify member to perform the required action.
     - You may redirect the notifications to any wxEvtHandler derived object by
       using the non-default constructor or wxTimer::SetOwner.
-      Then use the @c EVT_TIMER macro to connect it to the event handler which
-      will receive wxTimerEvent notifications.
-    - You may use a derived class and the @c EVT_TIMER macro to connect it to
+      Then Bind() @c wxEVT_TIMER (or use the @c EVT_TIMER macro) to connect it to
+      the event handler which will receive wxTimerEvent notifications.
+    - You may use a derived class and Bind() @c wxEVT_TIMER to connect it to
       an event handler defined in the derived class. If the default constructor
       is used, the timer object will be its own owner object, since it is
       derived from wxEvtHandler.
@@ -125,8 +125,8 @@ public:
         If @true, it will be called only once and the timer will stop automatically.
 
         To make your code more readable you may also use the following symbolic constants:
-        - wxTIMER_CONTINUOUS: Start a normal, continuously running, timer
-        - wxTIMER_ONE_SHOT: Start a one shot timer. Alternatively, and
+        - @c wxTIMER_CONTINUOUS: Start a normal, continuously running, timer
+        - @c wxTIMER_ONE_SHOT: Start a one shot timer. Alternatively, and
         preferably, call StartOnce() instead of this function.
 
         If the timer was already running, it will be stopped by this method before

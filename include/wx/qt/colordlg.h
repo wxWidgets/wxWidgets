@@ -16,8 +16,9 @@ class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {
 public:
     wxColourDialog() = default;
-    wxColourDialog(wxWindow *parent,
-                   const wxColourData *data = nullptr) { Create(parent, data); }
+
+    explicit wxColourDialog(wxWindow *parent,
+                            const wxColourData *data = nullptr) { Create(parent, data); }
 
     bool Create(wxWindow *parent, const wxColourData *data = nullptr);
 

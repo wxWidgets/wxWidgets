@@ -36,23 +36,34 @@ wxString wxGTKMimeTypesManagerImpl::GetIconFromMimeType(const wxString& mime)
     if ( !theme )
         return icon;
 
-    // Notice that we can't use wxGtkObject here because a special function
-    // needs to be used for freeing this object prior to GTK+ 3.8.
-    GtkIconInfo* const giconinfo = gtk_icon_theme_lookup_by_gicon
-                                   (
-                                        theme,
-                                        gicon,
-                                        256,
-                                        GTK_ICON_LOOKUP_NO_SVG
-                                   );
-
-    if ( giconinfo )
+    for (int flags = GTK_ICON_LOOKUP_NO_SVG; ; flags = 0)
     {
-        icon = wxString::FromUTF8(gtk_icon_info_get_filename(giconinfo));
+        GtkIconInfo* const giconinfo = gtk_icon_theme_lookup_by_gicon
+                                       (
+                                            theme,
+                                            gicon,
+                                            32,
+                                            GtkIconLookupFlags(flags)
+                                       );
 
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_icon_info_free(giconinfo);
-        wxGCC_WARNING_RESTORE()
+        if ( giconinfo )
+        {
+            const char* filename = gtk_icon_info_get_filename(giconinfo);
+
+            // If icon theme has only SVG files, icon lookup with GTK_ICON_LOOKUP_NO_SVG
+            // may use a builtin icon, in which case the GtkIconInfo filename is a
+            // resource path of the form "/org/gtk/libgtk/icons/...", not a file path.
+            if (filename && strncmp(filename, "/org/", 5) != 0)
+                icon = wxString::FromUTF8(filename);
+
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+            // g_object_unref() cannot be used for GtkIconInfo prior to GTK 3.8
+            gtk_icon_info_free(giconinfo);
+            wxGCC_WARNING_RESTORE()
+        }
+        if (!icon.empty() || flags == 0)
+            break;
+        // else try again without GTK_ICON_LOOKUP_NO_SVG
     }
 #endif // GTK_CHECK_VERSION(2,14,0)
     return icon;

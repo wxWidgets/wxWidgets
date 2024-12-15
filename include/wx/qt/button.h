@@ -14,7 +14,8 @@
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
 public:
-    wxButton();
+    wxButton() = default;
+
     wxButton(wxWindow *parent, wxWindowID id,
            const wxString& label = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
@@ -33,6 +34,13 @@ public:
 
     // implementation only
     virtual int QtGetEventType() const override { return wxEVT_BUTTON; }
+
+protected:
+    virtual bool DoGetAuthNeeded() const override;
+    virtual void DoSetAuthNeeded(bool show) override;
+
+    // true if the UAC symbol is shown. Always false under non-Windows platforms.
+    bool m_authNeeded = false;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);

@@ -3399,6 +3399,13 @@ public:
     /**
         Sets the window's label.
 
+        Please note that not all windows have labels and this function may do
+        nothing in this case. And some other derived windows use different
+        functions for changing the text shown in them, e.g. wxTextCtrl uses
+        wxTextCtrl::SetValue() or wxTextCtrl::ChangeValue() and trying to use
+        SetLabel() on it will assert to help to detect possibly erroneous calls
+        to SetLabel().
+
         @param label
             The window label.
 
@@ -3890,6 +3897,38 @@ public:
     virtual WXWidget GetHandle() const;
 
     /**
+        This function is used only with wxGTK when running on Windows, to
+        receive a wxWindow's underlying HWND.
+
+        Whereas GetHandle() returns a port-specific handle (a GtkWidget on
+        wxGTK), this function returns the handle which underlies the GtkWidget
+        itself.
+
+        If you do need to use it, please note that this function doesn't exist
+        anywhere besides wxGTK on Windows, and so any code using it must be
+        conditionally guarded against using, for example:
+        @code
+        #if defined(__WINDOWS__) && defined(__WXGTK__)
+        ... code that uses GTKGetWin32Handle() ...
+        #endif
+        @endcode
+
+        Note that this function will return nullptr if the Window has not yet
+        been initialized ("realized" in GTK terms) or is otherwise invalid.
+
+        A Window is generally realized once it has been shown, and code which
+        needs to run as soon as the Window is realized should hook wxWindowCreateEvent
+        to do so.
+
+        @return HWND if the Window is valid, nullptr otherwise.
+
+        @see wxWindowCreateEvent
+
+        @since 3.3.0
+     */
+    WXHWND GTKGetWin32Handle() const;
+
+    /**
         This method should be overridden to return @true if this window has
         multiple pages. All standard class with multiple pages such as
         wxNotebook, wxListbook and wxTreebook already override it to return @true
@@ -4066,6 +4105,22 @@ public:
         @see wxUpdateUIEvent, DoUpdateWindowUI(), OnInternalIdle()
     */
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+
+    /**
+        When UpdateWindowUI() runs, it creates instances of
+        wxUpdateUIEvent.  Those instances may vary depending on the
+        window that the wxUpdateUIEvent will control.  For example, a
+        wxCheckBox with wxCHK_3STATE should enable
+        wxUpdateUIEvent::Is3State(), but most other windows should not.
+        This function can be overridden to perform the
+        window-specific initializations, such as enabling setting the
+        checkable state.
+
+        @see wxUpdateUIEvent, UpdateWindowUI()
+
+        @since 3.3.0
+    */
+    virtual void DoPrepareUpdateWindowUI(wxUpdateUIEvent& event) const;
 
     ///@}
 

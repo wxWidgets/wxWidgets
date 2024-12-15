@@ -912,10 +912,10 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     through wxVariant which can be extended to support more data formats as necessary.
     Accordingly, all type information uses the strings returned from wxVariant::GetType.
 
-    This control supports single column sorting and on some platforms
-    (currently only those using the generic version, i.e. not wxGTK nor wxOSX)
-    also sorting by multiple columns at once. The latter must be explicitly
-    enabled using AllowMultiColumnSort(), which will also indicate whether this
+    This control supports single column sorting. On platforms using the generic implementation,
+    sorting multiple columns at once is also available. (This currently excludes wxGTK and wxOSX,
+    which use native implementations.) Multi-column sorting must be explicitly
+    enabled using AllowMultiColumnSort(). Calling this will also indicate whether this
     feature is supported, as it changes the default behaviour of right clicking
     the column header to add or remove it to the set of columns used for
     sorting. If this behaviour is not appropriate, you may handle
@@ -1032,12 +1032,12 @@ public:
     /**
         Call to allow using multiple columns for sorting.
 
-        When using multiple column for sorting, GetSortingColumns() method
+        When using multiple columns for sorting, the GetSortingColumns() method
         should be used to retrieve all the columns which should be used to
         effectively sort the data when processing the sorted event.
 
-        Currently multiple column sort is only implemented in the generic
-        version, i.e. this functionality is not available when using the native
+        Currently, multiple column sort is only implemented in the generic
+        version; this functionality is not available when using the native
         wxDataViewCtrl implementation in wxGTK nor wxOSX.
 
         @return @true if sorting by multiple columns could be enabled, @false
@@ -2438,6 +2438,9 @@ public:
 
     /**
         Returns the choice referred to by index.
+
+        @param index A valid index, i.e. a value between 0 and number of
+            choices minus one.
     */
     wxString GetChoice(size_t index) const;
 
@@ -2454,6 +2457,10 @@ public:
     Unlike its base wxDataViewChoiceRenderer class, this one stores the choice
     index, i.e. an @c int, in the variant used by its SetValue() and
     GetValue().
+
+    The index must be either a valid index, i.e. a value between 0 and the
+    number of choices minus one, or @c -1, in which case the renderer shows an
+    empty string.
 
     @library{wxcore}
     @category{dvc}

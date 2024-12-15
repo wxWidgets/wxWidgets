@@ -28,10 +28,6 @@ wxQtDialog::wxQtDialog( wxWindow *parent, wxDialog *handler )
 {
 }
 
-wxDialog::wxDialog()
-{
-}
-
 wxDialog::wxDialog( wxWindow *parent, wxWindowID id,
         const wxString &title,
         const wxPoint &pos,
@@ -77,6 +73,11 @@ int wxDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( GetHandle() != nullptr, -1, "Invalid dialog" );
+
+    // Release the mouse if it's currently captured as the window having it
+    // will be disabled when this dialog is shown -- but will still keep the
+    // capture making it impossible to do anything in the modal dialog itself
+    QtReleaseMouseAndNotify();
 
     QDialog *qDialog = GetDialogHandle();
     qDialog->setModal(true);

@@ -14,7 +14,7 @@ include(CMakePrintHelpers)
 
 # Use the MSVC/makefile naming convention, or the configure naming convention,
 # this is the same check as used in FindwxWidgets.
-if(WIN32 AND NOT CYGWIN AND NOT MSYS)
+if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_CROSSCOMPILING)
     set(WIN32_MSVC_NAMING 1)
 else()
     set(WIN32_MSVC_NAMING 0)
@@ -109,6 +109,14 @@ function(wx_set_common_target_properties target_name)
 
     if(wxBUILD_PIC)
         set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+    endif()
+
+    if(NOT WIN32 AND wxUSE_VISIBILITY)
+        set_target_properties(${target_name} PROPERTIES
+            C_VISIBILITY_PRESET hidden
+            CXX_VISIBILITY_PRESET hidden
+            VISIBILITY_INLINES_HIDDEN TRUE
+        )
     endif()
 
     if(MSVC)
@@ -252,6 +260,8 @@ function(wx_set_target_properties target_name)
     set(lib_prefix "lib")
     if(MSVC OR (WIN32 AND wxBUILD_SHARED))
         set(lib_prefix)
+    elseif (CYGWIN AND wxBUILD_SHARED)
+        set(lib_prefix "cyg")
     endif()
 
     # static (and import) library names
@@ -346,6 +356,8 @@ function(wx_set_target_properties target_name)
             kernel32
             user32
             gdi32
+            gdiplus
+            msimg32
             comdlg32
             winspool
             winmm
@@ -452,10 +464,11 @@ macro(wx_add_library name)
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
         # Setup install
-        set(runtime_dir "lib")
-        if(WIN32 AND NOT WIN32_MSVC_NAMING)
+        if(MSYS OR CYGWIN)
             # configure puts the .dll in the bin directory
             set(runtime_dir "bin")
+        else()
+            set(runtime_dir "lib")
         endif()
         wx_install(TARGETS ${name}
             EXPORT wxWidgetsTargets

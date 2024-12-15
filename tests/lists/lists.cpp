@@ -181,6 +181,14 @@ void ListsTestCase::wxStdListTest()
     list1.insert(list1.end(), list2.begin(), list2.end());
     CPPUNIT_ASSERT_EQUAL( 5, list1.size() );
     CPPUNIT_ASSERT_EQUAL( (int *)4, list1.back() );
+
+    // Sort the list in the reverse order.
+    list1.Sort([](const void *a, const void *b) -> int {
+        return *static_cast<const int*>(b) - *static_cast<const int*>(a);
+    });
+    REQUIRE( list1.size() == 5 );
+    CHECK( list1.front() == (int *)4 );
+    CHECK( list1.back() == (int *)1 );
 }
 
 void ListsTestCase::wxListCtorTest()

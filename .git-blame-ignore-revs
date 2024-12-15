@@ -31,6 +31,9 @@ db31a0161503c6ea4cc461f4e10b67830b7d6b52
 # Fix comment typos in sources, 2021-10-02
 668a2186cd89fd4576bed224df3624811eebeca1
 
+# Wrap variable initializations after '=' consistently, 2019-11-22
+2bc6e50eded2a14099655ce0b4c7df582b87c93a
+
 # Remove all trailing spaces, 2019-01-30
 8fbca5cb70c8b647d5bd2cacb1e0a2a00358f351
 

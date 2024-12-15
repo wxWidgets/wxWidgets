@@ -35,7 +35,7 @@ enum wxOutCode
 class WXDLLIMPEXP_CORE wxPoint2DInt
 {
 public :
-    inline wxPoint2DInt();
+    wxPoint2DInt() = default;
     inline wxPoint2DInt( wxInt32 x , wxInt32 y );
     inline wxPoint2DInt( const wxPoint &pt );
     // default copy ctor and copy-assign operator are OK
@@ -61,10 +61,8 @@ public :
 
     inline wxPoint2DInt& operator+=(const wxPoint2DInt& pt);
     inline wxPoint2DInt& operator-=(const wxPoint2DInt& pt);
-    inline wxPoint2DInt& operator*=(const wxPoint2DInt& pt);
     inline wxPoint2DInt& operator*=(wxDouble n);
     inline wxPoint2DInt& operator*=(wxInt32 n);
-    inline wxPoint2DInt& operator/=(const wxPoint2DInt& pt);
     inline wxPoint2DInt& operator/=(wxDouble n);
     inline wxPoint2DInt& operator/=(wxInt32 n);
     inline operator wxPoint() const;
@@ -81,11 +79,6 @@ public :
         return wxPoint2DInt( pt1.m_x - pt2.m_x , pt1.m_y - pt2.m_y );
     }
 
-
-    friend wxPoint2DInt operator*(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
-    {
-        return wxPoint2DInt( pt1.m_x * pt2.m_x , pt1.m_y * pt2.m_y );
-    }
 
     friend wxPoint2DInt operator*(wxInt32 n , const wxPoint2DInt& pt)
     {
@@ -109,11 +102,6 @@ public :
             static_cast<wxInt32>(pt.m_y * n) );
     }
 
-    friend wxPoint2DInt operator/(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
-    {
-        return wxPoint2DInt( pt1.m_x / pt2.m_x , pt1.m_y / pt2.m_y );
-    }
-
     friend wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n)
     {
         return wxPoint2DInt( pt.m_x / n , pt.m_y / n );
@@ -130,15 +118,39 @@ public :
     void ReadFrom( wxDataInputStream &stream );
 #endif // wxUSE_STREAMS
 
-    wxInt32 m_x;
-    wxInt32 m_y;
-};
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Multiplying points doesn't make sense")
+    wxPoint2DInt& operator*=(const wxPoint2DInt& pt)
+    {
+        m_x *= pt.m_x;
+        m_y *= pt.m_y;
+        return *this;
+    }
 
-inline wxPoint2DInt::wxPoint2DInt()
-{
-    m_x = 0;
-    m_y = 0;
-}
+    wxDEPRECATED_MSG("Multiplying points doesn't make sense")
+    friend wxPoint2DInt operator*(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
+    {
+        return wxPoint2DInt( pt1.m_x * pt2.m_x , pt1.m_y * pt2.m_y );
+    }
+
+    wxDEPRECATED_MSG("Dividing points doesn't make sense")
+    inline wxPoint2DInt& operator/=(const wxPoint2DInt& pt)
+    {
+        m_x /= pt.m_x;
+        m_y /= pt.m_y;
+        return *this;
+    }
+
+    wxDEPRECATED_MSG("Dividing points doesn't make sense")
+    friend wxPoint2DInt operator/(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
+    {
+        return wxPoint2DInt( pt1.m_x / pt2.m_x , pt1.m_y / pt2.m_y );
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+
+    wxInt32 m_x = 0;
+    wxInt32 m_y = 0;
+};
 
 inline wxPoint2DInt::wxPoint2DInt( wxInt32 x , wxInt32 y )
 {
@@ -167,8 +179,7 @@ inline void wxPoint2DInt::GetRounded( wxInt32 *x , wxInt32 *y ) const
 
 inline wxDouble wxPoint2DInt::GetVectorLength() const
 {
-    // cast needed MIPSpro compiler under SGI
-    return sqrt( (wxDouble)(m_x)*(m_x) + (wxDouble)(m_y)*(m_y) );
+    return sqrt( static_cast<wxDouble>(m_x*m_x + m_y*m_y) );
 }
 
 inline void wxPoint2DInt::SetVectorLength( wxDouble length )
@@ -216,29 +227,43 @@ inline wxPoint2DInt wxPoint2DInt::operator-() const
 
 inline wxPoint2DInt& wxPoint2DInt::operator+=(const wxPoint2DInt& pt)
 {
-    m_x = m_x + pt.m_x;
-    m_y = m_y + pt.m_y;
+    m_x += pt.m_x;
+    m_y += pt.m_y;
     return *this;
 }
 
 inline wxPoint2DInt& wxPoint2DInt::operator-=(const wxPoint2DInt& pt)
 {
-    m_x = m_x - pt.m_x;
-    m_y = m_y - pt.m_y;
+    m_x -= pt.m_x;
+    m_y -= pt.m_y;
     return *this;
 }
 
-inline wxPoint2DInt& wxPoint2DInt::operator*=(const wxPoint2DInt& pt)
+inline wxPoint2DInt& wxPoint2DInt::operator*=(wxDouble n)
 {
-    m_x = m_x * pt.m_x;
-    m_y = m_y * pt.m_y;
+    m_x = wxRound(m_x * n);
+    m_y = wxRound(m_y * n);
     return *this;
 }
 
-inline wxPoint2DInt& wxPoint2DInt::operator/=(const wxPoint2DInt& pt)
+inline wxPoint2DInt& wxPoint2DInt::operator*=(wxInt32 n)
 {
-    m_x = m_x / pt.m_x;
-    m_y = m_y / pt.m_y;
+    m_x *= n;
+    m_y *= n;
+    return *this;
+}
+
+inline wxPoint2DInt& wxPoint2DInt::operator/=(wxDouble n)
+{
+    m_x = wxRound(m_x / n);
+    m_y = wxRound(m_y / n);
+    return *this;
+}
+
+inline wxPoint2DInt& wxPoint2DInt::operator/=(wxInt32 n)
+{
+    m_x /= n;
+    m_y /= n;
     return *this;
 }
 
@@ -257,7 +282,7 @@ inline bool wxPoint2DInt::operator!=(const wxPoint2DInt& pt) const
 class WXDLLIMPEXP_CORE wxPoint2DDouble
 {
 public :
-    inline wxPoint2DDouble();
+    wxPoint2DDouble() = default;
     inline wxPoint2DDouble( wxDouble x , wxDouble y );
     wxPoint2DDouble( const wxPoint2DInt &pt )
         { m_x = (wxDouble) pt.m_x ; m_y = (wxDouble) pt.m_y ; }
@@ -286,10 +311,8 @@ public :
 
     inline wxPoint2DDouble& operator+=(const wxPoint2DDouble& pt);
     inline wxPoint2DDouble& operator-=(const wxPoint2DDouble& pt);
-    inline wxPoint2DDouble& operator*=(const wxPoint2DDouble& pt);
     inline wxPoint2DDouble& operator*=(wxDouble n);
     inline wxPoint2DDouble& operator*=(wxInt32 n);
-    inline wxPoint2DDouble& operator/=(const wxPoint2DDouble& pt);
     inline wxPoint2DDouble& operator/=(wxDouble n);
     inline wxPoint2DDouble& operator/=(wxInt32 n);
 
@@ -306,11 +329,6 @@ public :
         return wxPoint2DDouble( pt1.m_x - pt2.m_x , pt1.m_y - pt2.m_y );
     }
 
-
-    friend wxPoint2DDouble operator*(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2)
-    {
-        return wxPoint2DDouble( pt1.m_x * pt2.m_x , pt1.m_y * pt2.m_y );
-    }
 
     friend wxPoint2DDouble operator*(wxDouble n , const wxPoint2DDouble& pt)
     {
@@ -332,11 +350,6 @@ public :
         return wxPoint2DDouble( pt.m_x * n , pt.m_y * n );
     }
 
-    friend wxPoint2DDouble operator/(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2)
-    {
-        return wxPoint2DDouble( pt1.m_x / pt2.m_x , pt1.m_y / pt2.m_y );
-    }
-
     friend wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxDouble n)
     {
         return wxPoint2DDouble( pt.m_x / n , pt.m_y / n );
@@ -347,15 +360,39 @@ public :
         return wxPoint2DDouble( pt.m_x / n , pt.m_y / n );
     }
 
-    wxDouble m_x;
-    wxDouble m_y;
-};
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Multiplying points doesn't make sense")
+    inline wxPoint2DDouble& operator*=(const wxPoint2DDouble& pt)
+    {
+        m_x *= pt.m_x;
+        m_y *= pt.m_y;
+        return *this;
+    }
 
-inline wxPoint2DDouble::wxPoint2DDouble()
-{
-    m_x = 0.0;
-    m_y = 0.0;
-}
+    wxDEPRECATED_MSG("Multiplying points doesn't make sense")
+    friend wxPoint2DDouble operator*(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2)
+    {
+        return wxPoint2DDouble( pt1.m_x * pt2.m_x , pt1.m_y * pt2.m_y );
+    }
+
+    wxDEPRECATED_MSG("Dividing points doesn't make sense")
+    inline wxPoint2DDouble& operator/=(const wxPoint2DDouble& pt)
+    {
+        m_x /= pt.m_x;
+        m_y /= pt.m_y;
+        return *this;
+    }
+
+    wxDEPRECATED_MSG("Dividing points doesn't make sense")
+    friend wxPoint2DDouble operator/(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2)
+    {
+        return wxPoint2DDouble( pt1.m_x / pt2.m_x , pt1.m_y / pt2.m_y );
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+
+    wxDouble m_x = 0.0;
+    wxDouble m_y = 0.0;
+};
 
 inline wxPoint2DDouble::wxPoint2DDouble( wxDouble x , wxDouble y )
 {
@@ -371,8 +408,8 @@ inline void wxPoint2DDouble::GetFloor( wxInt32 *x , wxInt32 *y ) const
 
 inline void wxPoint2DDouble::GetRounded( wxInt32 *x , wxInt32 *y ) const
 {
-    *x = (wxInt32) floor( m_x + 0.5 );
-    *y = (wxInt32) floor( m_y + 0.5);
+    *x = wxRound( m_x );
+    *y = wxRound( m_y );
 }
 
 inline wxDouble wxPoint2DDouble::GetVectorLength() const
@@ -419,29 +456,43 @@ inline wxPoint2DDouble wxPoint2DDouble::operator-() const
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator+=(const wxPoint2DDouble& pt)
 {
-    m_x = m_x + pt.m_x;
-    m_y = m_y + pt.m_y;
+    m_x += pt.m_x;
+    m_y += pt.m_y;
     return *this;
 }
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator-=(const wxPoint2DDouble& pt)
 {
-    m_x = m_x - pt.m_x;
-    m_y = m_y - pt.m_y;
+    m_x -= pt.m_x;
+    m_y -= pt.m_y;
     return *this;
 }
 
-inline wxPoint2DDouble& wxPoint2DDouble::operator*=(const wxPoint2DDouble& pt)
+inline wxPoint2DDouble& wxPoint2DDouble::operator*=(wxDouble n)
 {
-    m_x = m_x * pt.m_x;
-    m_y = m_y * pt.m_y;
+    m_x *= n;
+    m_y *= n;
     return *this;
 }
 
-inline wxPoint2DDouble& wxPoint2DDouble::operator/=(const wxPoint2DDouble& pt)
+inline wxPoint2DDouble& wxPoint2DDouble::operator*=(wxInt32 n)
 {
-    m_x = m_x / pt.m_x;
-    m_y = m_y / pt.m_y;
+    m_x *= n;
+    m_y *= n;
+    return *this;
+}
+
+inline wxPoint2DDouble& wxPoint2DDouble::operator/=(wxDouble n)
+{
+    m_x /= n;
+    m_y /= n;
+    return *this;
+}
+
+inline wxPoint2DDouble& wxPoint2DDouble::operator/=(wxInt32 n)
+{
+    m_x /= n;
+    m_y /= n;
     return *this;
 }
 
@@ -462,8 +513,7 @@ inline bool wxPoint2DDouble::operator!=(const wxPoint2DDouble& pt) const
 class WXDLLIMPEXP_CORE wxRect2DDouble
 {
 public:
-    wxRect2DDouble()
-        { m_x = m_y = m_width = m_height = 0; }
+    wxRect2DDouble() = default;
     wxRect2DDouble(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
         { m_x = x; m_y = y; m_width = w;  m_height = h; }
 /*
@@ -578,10 +628,10 @@ public:
     inline bool operator != (const wxRect2DDouble& rect) const
         { return !(*this == rect); }
 
-    wxDouble  m_x;
-    wxDouble  m_y;
-    wxDouble  m_width;
-    wxDouble m_height;
+    wxDouble m_x = 0.0;
+    wxDouble m_y = 0.0;
+    wxDouble m_width = 0.0;
+    wxDouble m_height = 0.0;
 };
 
 
@@ -592,7 +642,7 @@ public:
 class WXDLLIMPEXP_CORE wxRect2DInt
 {
 public:
-       wxRect2DInt() { m_x = m_y = m_width = m_height = 0; }
+       wxRect2DInt() = default;
        wxRect2DInt( const wxRect& r ) { m_x = r.x ; m_y = r.y ; m_width = r.width ; m_height = r.height ; }
        wxRect2DInt(wxInt32 x, wxInt32 y, wxInt32 w, wxInt32 h) { m_x = x; m_y = y; m_width = w;  m_height = h; }
        wxRect2DInt(const wxPoint2DInt& topLeft, const wxPoint2DInt& bottomRight);
@@ -683,10 +733,10 @@ public:
        void ReadFrom( wxDataInputStream &stream );
 #endif // wxUSE_STREAMS
 
-       wxInt32 m_x;
-       wxInt32 m_y;
-       wxInt32 m_width;
-       wxInt32 m_height;
+       wxInt32 m_x = 0;
+       wxInt32 m_y = 0;
+       wxInt32 m_width = 0;
+       wxInt32 m_height = 0;
 };
 
 inline wxRect2DInt::wxRect2DInt( const wxPoint2DInt &a , const wxPoint2DInt &b)

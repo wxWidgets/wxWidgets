@@ -78,6 +78,7 @@ static void AddSpinCtrlStyles(wxXmlResourceHandler& handler)
     handler.XRC_ADD_STYLE(wxALIGN_LEFT);
     handler.XRC_ADD_STYLE(wxALIGN_CENTER);
     handler.XRC_ADD_STYLE(wxALIGN_RIGHT);
+    handler.XRC_ADD_STYLE(wxTE_PROCESS_ENTER);
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlXmlHandler, wxXmlResourceHandler);

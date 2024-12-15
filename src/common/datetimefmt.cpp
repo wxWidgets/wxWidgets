@@ -394,7 +394,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     tmTimeOnly.tm_year = 76;
     tmTimeOnly.tm_isdst = 0;        // no DST, we adjust for tz ourselves
 
-    wxString tmp, res, fmt;
+    wxString res, fmt;
     for ( wxString::const_iterator p = format.begin(); p != format.end(); ++p )
     {
         if ( *p != wxT('%') )
@@ -1044,7 +1044,6 @@ wxDateTime::ParseFormat(const wxString& date,
     wxCHECK_MSG( !format.empty(), false, "format can't be empty" );
     wxCHECK_MSG( endParse, false, "end iterator pointer must be specified" );
 
-    wxString str;
     unsigned long num;
 
     // what fields have we found?
@@ -1106,13 +1105,20 @@ wxDateTime::ParseFormat(const wxString& date,
         }
 
         // start of a format specification
+        ++fmt;
+
+        // skip the optional character specifying the padding: this is a GNU
+        // extension which we need to support as this is used in the default
+        // date formats for some locales (but luckily this is simple to do)
+        if ( *fmt == '-' || *fmt == '_' || *fmt == '0' )
+            ++fmt;
 
         // parse the optional width
         size_t width = 0;
-        while ( wxIsdigit(*++fmt) )
+        while ( wxIsdigit(*fmt) )
         {
             width *= 10;
-            width += *fmt - '0';
+            width += *fmt++ - '0';
         }
 
         // the default widths for the various fields

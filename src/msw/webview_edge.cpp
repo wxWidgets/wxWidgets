@@ -850,6 +850,7 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     m_initialized = true;
     UpdateBounds();
     m_webViewController->put_IsVisible(true);
+    m_ctrl->NotifyWebViewCreated();
 
     // Connect and handle the various WebView events
     m_webView->add_NavigationStarting(
@@ -1082,8 +1083,6 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     wxWindow* topLevelParent = wxGetTopLevelParent(this);
     if (topLevelParent)
         topLevelParent->Bind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
-
-    NotifyWebViewCreated();
 
     LoadURL(url);
     return true;
@@ -1345,6 +1344,18 @@ void wxWebViewEdge::EnableAccessToDevTools(bool enable)
         m_impl->m_pendingAccessToDevToolsEnabled = enable ? 1 : 0;
 }
 
+bool wxWebViewEdge::ShowDevTools()
+{
+    const HRESULT hr = m_impl->m_webView->OpenDevToolsWindow();
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("ICoreWebView2::OpenDevToolsWindow", hr);
+        return false;
+    }
+
+    return true;
+}
+
 bool wxWebViewEdge::IsAccessToDevToolsEnabled() const
 {
     wxCOMPtr<ICoreWebView2Settings> settings(m_impl->GetSettings());
@@ -1575,32 +1586,42 @@ bool wxWebViewFactoryEdge::IsAvailable()
     return wxWebViewEdgeImpl::Initialize();
 }
 
-wxVersionInfo wxWebViewFactoryEdge::GetVersionInfo()
+wxVersionInfo wxWebViewFactoryEdge::GetVersionInfo(wxVersionContext context)
 {
-    long major = 0,
-         minor = 0,
-         micro = 0,
-         revision = 0;
-
-    if (wxWebViewEdgeImpl::Initialize())
+    switch ( context )
     {
-        wxCoTaskMemPtr<wchar_t> nativeVersionStr;
-        HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
-            wxWebViewConfigurationImplEdge::ms_browserExecutableDir.wc_str(), &nativeVersionStr);
-        if (SUCCEEDED(hr) && nativeVersionStr)
-        {
-            wxStringTokenizer tk(wxString(nativeVersionStr), ". ");
-            // Ignore the return value because if the version component is missing
-            // or invalid (i.e. non-numeric), the only thing we can do is to ignore
-            // it anyhow.
-            tk.GetNextToken().ToLong(&major);
-            tk.GetNextToken().ToLong(&minor);
-            tk.GetNextToken().ToLong(&micro);
-            tk.GetNextToken().ToLong(&revision);
-        }
+        case wxVersionContext::BuildTime:
+            // There is no build-time version for this backend.
+            break;
+
+        case wxVersionContext::RunTime:
+            long major = 0,
+                 minor = 0,
+                 micro = 0,
+                 revision = 0;
+
+            if (wxWebViewEdgeImpl::Initialize())
+            {
+                wxCoTaskMemPtr<wchar_t> nativeVersionStr;
+                HRESULT hr = wxGetAvailableCoreWebView2BrowserVersionString(
+                    wxWebViewConfigurationImplEdge::ms_browserExecutableDir.wc_str(), &nativeVersionStr);
+                if (SUCCEEDED(hr) && nativeVersionStr)
+                {
+                    wxStringTokenizer tk(wxString(nativeVersionStr), ". ");
+                    // Ignore the return value because if the version component is missing
+                    // or invalid (i.e. non-numeric), the only thing we can do is to ignore
+                    // it anyhow.
+                    tk.GetNextToken().ToLong(&major);
+                    tk.GetNextToken().ToLong(&minor);
+                    tk.GetNextToken().ToLong(&micro);
+                    tk.GetNextToken().ToLong(&revision);
+                }
+            }
+
+            return wxVersionInfo("Microsoft Edge WebView2", major, minor, micro, revision);
     }
 
-    return wxVersionInfo("Microsoft Edge WebView2", major, minor, micro, revision);
+    return {};
 }
 
 wxWebViewConfiguration wxWebViewFactoryEdge::CreateConfiguration()

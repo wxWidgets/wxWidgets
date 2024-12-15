@@ -38,7 +38,6 @@
     #include "wx/statusbr.h"
     #include "wx/toolbar.h"
     #include "wx/dcclient.h"
-    #include "wx/dcscreen.h"
     #include "wx/scrolbar.h"
     #include "wx/layout.h"
     #include "wx/sizer.h"
@@ -507,7 +506,7 @@ wxWindowBase::~wxWindowBase()
 #endif // wxUSE_CONSTRAINTS
 
     if ( m_containingSizer )
-        m_containingSizer->Detach( (wxWindow*)this );
+        m_containingSizer->Detach(this);
 
     delete m_windowSizer;
 
@@ -633,28 +632,6 @@ void wxWindowBase::FitInside()
     SetVirtualSize( GetBestVirtualSize() );
 }
 
-// On Mac, scrollbars are explicitly children.
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
-static bool wxHasRealChildren(const wxWindowBase* win)
-{
-    int realChildCount = 0;
-
-    for ( wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow *win = node->GetData();
-        if ( !win->IsTopLevel() && win->IsShown()
-#if wxUSE_SCROLLBAR
-            && !wxDynamicCast(win, wxScrollBar)
-#endif
-            )
-            realChildCount ++;
-    }
-    return (realChildCount > 0);
-}
-#endif
-
 void wxWindowBase::InvalidateBestSize()
 {
     m_bestSizeCache = wxDefaultSize;
@@ -713,11 +690,7 @@ wxSize wxWindowBase::DoGetBestSize() const
         best = wxSize(maxX, maxY);
     }
 #endif // wxUSE_CONSTRAINTS
-    else if ( !GetChildren().empty()
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
-              && wxHasRealChildren(this)
-#endif
-              )
+    else
     {
         // our minimal acceptable size is such that all our visible child
         // windows fit inside
@@ -729,16 +702,13 @@ wxSize wxWindowBase::DoGetBestSize() const
               node = node->GetNext() )
         {
             wxWindow *win = node->GetData();
-            if ( win->IsTopLevel()
-                    || !win->IsShown()
-#if wxUSE_STATUSBAR
-                        || wxDynamicCast(win, wxStatusBar)
-#endif // wxUSE_STATUSBAR
-               )
+
+            if ( win->IsTopLevel() || !win->IsShown() || !IsClientAreaChild(win) )
             {
-                // dialogs and frames lie in different top level windows -
-                // don't deal with them here; as for the status bars, they
-                // don't lie in the client area at all
+                // Other top level windows, hidden windows and those windows
+                // that are deemed to not be part of the client area (such as
+                // tool or status bars in wxFrame) shouldn't be taken into
+                // account when computing best client size.
                 continue;
             }
 
@@ -759,22 +729,24 @@ wxSize wxWindowBase::DoGetBestSize() const
                 maxY = wy + wh;
         }
 
-        best = wxSize(maxX, maxY);
-    }
-    else // ! has children
-    {
-        wxSize size = GetMinSize();
-        if ( !size.IsFullySpecified() )
+        // Check if we had any children at all.
+        if ( maxX == 0 && maxY == 0 )
         {
-            // if the window doesn't define its best size we assume that it can
-            // be arbitrarily small -- usually this is not the case, of course,
-            // but we have no way to know what the limit is, it should really
-            // override DoGetBestClientSize() itself to tell us
-            size.SetDefaults(wxSize(1, 1));
+            wxSize size = GetMinSize();
+            if ( !size.IsFullySpecified() )
+            {
+                // if the window doesn't define its best size we assume that it can
+                // be arbitrarily small -- usually this is not the case, of course,
+                // but we have no way to know what the limit is, it should really
+                // override DoGetBestClientSize() itself to tell us
+                size.SetDefaults(wxSize(1, 1));
+            }
+
+            // return as-is, unadjusted by the client size difference.
+            return size;
         }
 
-        // return as-is, unadjusted by the client size difference.
-        return size;
+        best = wxSize(maxX, maxY);
     }
 
     // Add any difference between size and client size
@@ -1339,7 +1311,7 @@ void wxWindowBase::RemoveChild(wxWindowBase *child)
     if ( IsFrozen() && !child->IsBeingDeleted() && !child->IsTopLevel() )
         child->Thaw();
 
-    GetChildren().DeleteObject((wxWindow *)child);
+    GetChildren().DeleteObject(child);
     child->SetParent(nullptr);
 }
 
@@ -2752,6 +2724,7 @@ void wxWindowBase::UpdateWindowUI(long flags)
 {
     wxUpdateUIEvent event(GetId());
     event.SetEventObject(this);
+    DoPrepareUpdateWindowUI(event);
 
     if ( GetEventHandler()->ProcessEvent(event) )
     {
@@ -2931,7 +2904,7 @@ static wxSize GetDPIHelper(const wxWindowBase* w)
     if ( w )
         dpi = w->GetDPI();
     if ( !dpi.x || !dpi.y )
-        dpi = wxScreenDC().GetPPI();
+        dpi = wxDisplay().GetPPI();
     if ( !dpi.x || !dpi.y )
         dpi = wxDisplay::GetStdPPI();
 
@@ -3058,6 +3031,7 @@ bool wxWindowBase::PopupMenu(wxMenu *menu, int x, int y)
         setInvokingWin(*menu, static_cast<wxWindow *>(this));
 
     wxCurrentPopupMenu = menu;
+    menu->UpdateUI();
     const bool rc = DoPopupMenu(menu, x, y);
     wxCurrentPopupMenu = nullptr;
 

@@ -136,7 +136,7 @@ Generate the 'configure' script in your wxQt root directory with:
 
         void wxSomeClass::SomeMethod()
         {
-            wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+            wxMISSING_IMPLEMENTATION( __func__ );
         }
 
 

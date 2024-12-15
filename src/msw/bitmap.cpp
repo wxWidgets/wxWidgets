@@ -242,8 +242,12 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
             const int d = dib.GetDepth();
 
             wxDIB dibDst(w, h, d);
-            memcpy(dibDst.GetData(), dib.GetData(), wxDIB::GetLineSize(w, d)*h);
-            InitFromDIB(dibDst);
+            if ( dibDst.IsOk() )
+            {
+                memcpy(dibDst.GetData(), dib.GetData(), wxDIB::GetLineSize(w, d)*h);
+                InitFromDIB(dibDst);
+            }
+            //else: creating the DIB failed, we can't do anything about it here.
         }
         else
         {
@@ -751,12 +755,10 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
 {
     wxCHECK_MSG( dc.IsOk(), false, wxT("invalid HDC in wxBitmap::Create()") );
 
-    const double scale = dc.GetContentScaleFactor();
-
-    if ( !DoCreate(wxRound(width*scale), wxRound(height*scale), -1, dc.GetHDC()) )
+    if ( !DoCreate(width, height, -1, dc.GetHDC()) )
         return false;
 
-    GetBitmapData()->m_scaleFactor = scale;
+    GetBitmapData()->m_scaleFactor = dc.GetContentScaleFactor();
 
     return true;
 }

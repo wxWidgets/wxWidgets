@@ -5791,7 +5791,7 @@ msgstr "無法取得資料夾名稱"
 #: ../src/msw/dlmsw.cpp:164
 #, c-format
 msgid "(error %d: %s)"
-msgstr "(錯誤 %id: %s)"
+msgstr "(錯誤 %d: %s)"
 
 #: ../src/msw/dragimag.cpp:144 ../src/msw/dragimag.cpp:179
 #: ../src/msw/imaglist.cpp:304 ../src/msw/imaglist.cpp:326

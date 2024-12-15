@@ -27,6 +27,7 @@
 
 
 class wxAuiNotebook;
+class wxAuiTabFrame;
 
 
 enum wxAuiNotebookOption
@@ -87,13 +88,13 @@ private:
 class WXDLLIMPEXP_AUI wxAuiNotebookPage
 {
 public:
-    wxWindow* window;     // page's associated window
+    wxWindow* window = nullptr; // page's associated window
     wxString caption;     // caption displayed on the tab
     wxString tooltip;     // tooltip displayed when hovering over tab title
     wxBitmapBundle bitmap;// tab's bitmap
     wxRect rect;          // tab's hit rectangle
-    bool active;          // true if the page is currently active
-    bool hover;           // true if mouse hovering over tab
+    bool active = false;  // true if the page is currently active
+    bool hover = false;   // true if mouse hovering over tab
 };
 
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton
@@ -141,18 +142,19 @@ public:
     bool InsertPage(wxWindow* page, const wxAuiNotebookPage& info, size_t idx);
     bool MovePage(wxWindow* page, size_t newIdx);
     bool RemovePage(wxWindow* page);
+    void RemovePageAt(size_t idx);
     bool SetActivePage(wxWindow* page);
     bool SetActivePage(size_t page);
     void SetNoneActive();
     int GetActivePage() const;
-    bool TabHitTest(int x, int y, wxWindow** hit) const;
-    bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const;
+    wxWindow* TabHitTest(int x, int y) const;
+    wxAuiTabContainerButton* ButtonHitTest(int x, int y) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
     int GetIdxFromWindow(const wxWindow* page) const;
     size_t GetPageCount() const;
     wxAuiNotebookPage& GetPage(size_t idx);
     const wxAuiNotebookPage& GetPage(size_t idx) const;
-    wxAuiNotebookPageArray& GetPages();
+    const wxAuiNotebookPageArray& GetPages() const;
     void SetNormalFont(const wxFont& normalFont);
     void SetSelectedFont(const wxFont& selectedFont);
     void SetMeasuringFont(const wxFont& measuringFont);
@@ -171,10 +173,29 @@ public:
     void SetTabOffset(size_t offset);
 
     // Is the tab visible?
-    bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
+    bool IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* dc, wxWindow* wnd);
 
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
+
+    // Compatibility only, don't use.
+    bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const
+    {
+        auto* const button = ButtonHitTest(x, y);
+        if ( hit )
+            *hit = button;
+
+        return button != nullptr;
+    }
+
+    bool TabHitTest(int x, int y, wxWindow** hit) const
+    {
+        auto* const window = TabHitTest(x, y);
+        if ( hit )
+            *hit = window;
+
+        return window != nullptr;
+    }
 
 protected:
 
@@ -183,7 +204,10 @@ protected:
 protected:
 
     wxAuiTabArt* m_art;
+
+    // Contains pages in the display order.
     wxAuiNotebookPageArray m_pages;
+
     wxAuiTabContainerButtonArray m_buttons;
     wxAuiTabContainerButtonArray m_tabCloseButtons;
     wxRect m_rect;
@@ -213,8 +237,9 @@ public:
 
     void SetRect(const wxRect& rect) { wxAuiTabContainer::SetRect(rect, this); }
 
-    // Internal helper.
+    // Internal helpers.
     void DoShowTab(int idx);
+    void DoUpdateActive();
 
 protected:
     // choose the default border for this window
@@ -262,6 +287,13 @@ private:
 };
 
 
+// Simple struct combining wxAuiTabCtrl with the position inside it.
+struct wxAuiNotebookPosition
+{
+    wxAuiTabCtrl* tabctrl = nullptr;
+    int page = wxNOT_FOUND;
+};
+
 
 
 class WXDLLIMPEXP_AUI wxAuiNotebook : public wxCompositeBookCtrlBase
@@ -307,9 +339,6 @@ public:
                     bool select = false,
                     const wxBitmapBundle& bitmap = wxBitmapBundle());
 
-    bool DeletePage(size_t page) override;
-    bool RemovePage(size_t page) override;
-
     virtual size_t GetPageCount() const override;
     virtual wxWindow* GetPage(size_t pageIdx) const override;
     virtual int FindPage(const wxWindow* page) const override;
@@ -330,9 +359,16 @@ public:
     int SetSelection(size_t newPage) override;
     int GetSelection() const override;
 
-    virtual void Split(size_t page, int direction);
+    // Return the tab control containing the page with the given index and its
+    // visual position in it (i.e. 0 for the leading one).
+    wxAuiNotebookPosition GetPagePosition(size_t page) const;
+
+
+    void Split(size_t page, int direction);
 
     const wxAuiManager& GetAuiManager() const { return m_mgr; }
+
+    void SetManagerFlags(unsigned int flags) { m_mgr.SetFlags(flags); }
 
     // Sets the normal font
     void SetNormalFont(const wxFont& font);
@@ -355,12 +391,6 @@ public:
     // Shows the window menu
     bool ShowWindowMenu();
 
-    // we do have multiple pages
-    virtual bool HasMultiplePages() const override { return true; }
-
-    // we don't want focus for ourselves
-    // virtual bool AcceptsFocus() const { return false; }
-
     //wxBookCtrlBase functions
 
     virtual void SetPageSize (const wxSize &size) override;
@@ -381,7 +411,9 @@ public:
 
     wxAuiTabCtrl* GetTabCtrlFromPoint(const wxPoint& pt);
     wxAuiTabCtrl* GetActiveTabCtrl();
-    bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
+
+    // Internal, don't use: use GetPagePosition() instead.
+    bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const;
 
 protected:
     // Common part of all ctors.
@@ -403,7 +435,7 @@ protected:
     virtual wxSize CalculateNewSplitSize();
 
     // remove the page and return a pointer to it
-    virtual wxWindow *DoRemovePage(size_t WXUNUSED(page)) override { return nullptr; }
+    virtual wxWindow *DoRemovePage(size_t page) override;
 
     //A general selection function
     virtual int DoModifySelection(size_t n, bool events);
@@ -447,8 +479,13 @@ protected:
 protected:
 
     wxAuiManager m_mgr;
+
+    // Contains all pages in the insertion order.
     wxAuiTabContainer m_tabs;
+
+    // Current page index in m_tabs or wxNOT_FOUND if none.
     int m_curPage;
+
     int m_tabIdCounter;
     wxWindow* m_dummyWnd;
 
@@ -460,6 +497,20 @@ protected:
 
     int m_lastDragX;
     unsigned int m_flags;
+
+private:
+    // Create a new tab frame, containing a new wxAuiTabCtrl.
+    wxAuiTabFrame* CreateTabFrame(wxSize size = wxSize());
+
+    // Create the main tab control unconditionally.
+    wxAuiTabCtrl* CreateMainTabCtrl();
+
+    // Inserts the page at the given position into the given tab control.
+    void InsertPageAt(wxAuiNotebookPage& info,
+                      size_t page_idx,
+                      wxAuiTabCtrl* tabctrl,
+                      int tab_page_idx, // Can be -1 to append.
+                      bool select);
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);

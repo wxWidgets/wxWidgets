@@ -118,7 +118,7 @@ enum {
 class WXDLLIMPEXP_HTML wxHtmlPrintout : public wxPrintout
 {
 public:
-    wxHtmlPrintout(const wxString& title = wxT("Printout"));
+    wxHtmlPrintout(const wxString& title = /* TRANSLATORS: HTML printout default title. */_("Printout"));
 
     void SetHtmlText(const wxString& html, const wxString &basepath = wxEmptyString, bool isdir = true);
             // prepares the class for printing this html document.
@@ -231,7 +231,8 @@ private:
 class WXDLLIMPEXP_HTML wxHtmlEasyPrinting : public wxObject
 {
 public:
-    wxHtmlEasyPrinting(const wxString& name = wxT("Printing"), wxWindow *parentWindow = nullptr);
+    wxHtmlEasyPrinting(const wxString& name = /* TRANSLATORS: HTML easy print default title. */_("Printing"),
+                       wxWindow *parentWindow = nullptr);
     virtual ~wxHtmlEasyPrinting();
 
     bool PreviewFile(const wxString &htmlfile);

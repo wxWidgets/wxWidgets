@@ -78,18 +78,6 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
         return true;
     }
 
-#if wxUSE_TOOLTIPS
-    // we must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
-    // popup the tooltip bubbles
-    if ( msg->message == WM_MOUSEMOVE )
-    {
-        // we should do it if one of window children has an associated tooltip
-        // (and not just if the window has a tooltip itself)
-        if ( wndThis->HasToolTips() )
-            wxToolTip::RelayEvent((WXMSG *)msg);
-    }
-#endif // wxUSE_TOOLTIPS
-
     // allow the window to prevent certain messages from being
     // translated/processed (this is currently used by wxTextCtrl to always
     // grab Ctrl-C/V/X, even if they are also accelerators in some parent)

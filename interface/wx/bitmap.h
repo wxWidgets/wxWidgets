@@ -69,8 +69,8 @@ public:
 
         @return @true if the call succeeded, @false otherwise (the default).
     */
-    virtual bool Create(wxBitmap* bitmap, const void* data, wxBitmapType type,
-                        int width, int height, int depth = 1);
+    bool Create(wxBitmap* bitmap, const void* data, wxBitmapType type,
+                int width, int height, int depth = 1);
 
     /**
         Gets the file extension associated with this handler.
@@ -455,12 +455,12 @@ public:
 
         @return @true if the creation was successful.
     */
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         @overload
     */
-    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Create a bitmap compatible with the given DC, inheriting its magnification factor
@@ -528,7 +528,7 @@ public:
         The physical size of the bitmap created by this function depends on the
         platform and will be the same as @a size on the platforms for which
         `wxHAS_DPI_INDEPENDENT_PIXELS` is not defined (e.g. wxMSW) or @a size
-        multiplied by @a scale for those where it is (e.g. wxGTK3 and wxOSX).
+        multiplied by @a scale for those where it is (e.g. wxGTK3, wxOSX and wxQt).
         In other words, this function is the same as CreateWithDIPSize() if
         `wxHAS_DPI_INDEPENDENT_PIXELS` is defined, but not otherwise.
 
@@ -593,7 +593,7 @@ public:
 
         This overload depends on the @a type of data.
 
-    virtual bool Create(const void* data, int type, int width,
+    bool Create(const void* data, int type, int width,
                         int height, int depth = -1);
 
         NOTE: leave this undoc for the same reason of the relative ctor.

@@ -264,8 +264,8 @@ bool wxGetUserName(wxChar* buf, int maxSize)
         return false;
 
     /* This code is based on Microsoft Learn's ::NetUserGetInfo example code.
-       Attempt to get the full user name; if any of this fails,
-       return false, but with the buffer at least filled with the login name
+       Attempt to get the full user name; if any of this fails, we can still
+       return true with the buffer at least filled with the login name
        from wxGetUserId().
 
        Note that there is a ::GetUserNameEx function, but that requires
@@ -276,7 +276,7 @@ bool wxGetUserName(wxChar* buf, int maxSize)
     if ( !netapi32.IsLoaded() )
     {
         wxLogTrace("utils", "Failed to load netapi32.dll");
-        return false;
+        return true;
     }
 
     const static NetGetAnyDCName_t netGetAnyDCName =
@@ -290,7 +290,7 @@ bool wxGetUserName(wxChar* buf, int maxSize)
          netUserGetInfo == nullptr ||
          netApiBufferFree == nullptr )
     {
-        return false;
+        return true;
     }
 
     LPBYTE computerName{ nullptr };
@@ -333,9 +333,8 @@ bool wxGetUserName(wxChar* buf, int maxSize)
 
     if ( status != NERR_Success )
     {
-        wxLogWarning(_("Failed to retrieve user information: %s"),
-                     wxSysErrorMsgStr());
-        return false;
+        wxLogTrace("utils", "Failed to retrieve full user information.");
+        return true;
     }
 
     if ( ui2 != nullptr &&
@@ -344,7 +343,7 @@ bool wxGetUserName(wxChar* buf, int maxSize)
         wxString fullUserName(ui2->usri2_full_name);
         if ( fullUserName.empty() )
         {
-            return false;
+            return true;
         }
         // In the case of full name being in the format of "[LAST_NAME], [FIRST_NAME]",
         // reformat it to a more readable "[FIRST_NAME] [LAST_NAME]".
@@ -479,25 +478,14 @@ bool wxGetDiskSpace(const wxString& path,
         return false;
     }
 
-    // ULARGE_INTEGER is a union of a 64 bit value and a struct containing
-    // two 32 bit fields which may be or may be not named
-    #define UL(ul) ul
     if ( pTotal )
     {
-#if wxUSE_LONGLONG
-        *pTotal = wxDiskspaceSize_t(UL(bytesTotal).HighPart, UL(bytesTotal).LowPart);
-#else
-        *pTotal = wxDiskspaceSize_t(UL(bytesTotal).LowPart);
-#endif
+        *pTotal = wxDiskspaceSize_t(bytesTotal.HighPart, bytesTotal.LowPart);
     }
 
     if ( pFree )
     {
-#if wxUSE_LONGLONG
-        *pFree = wxLongLong(UL(bytesFree).HighPart, UL(bytesFree).LowPart);
-#else
-        *pFree = wxDiskspaceSize_t(UL(bytesFree).LowPart);
-#endif
+        *pFree = wxLongLong(bytesFree.HighPart, bytesFree.LowPart);
     }
 
     return true;
@@ -861,7 +849,7 @@ bool wxShell(const wxString& command)
     if ( !shell )
         shell = wxT("\\COMMAND.COM");
 
-    if ( !command )
+    if ( command.empty() )
     {
         // just the shell
         cmd = shell;
@@ -1108,12 +1096,17 @@ int wxIsWindowsServer()
     return -1;
 }
 
+static const int WINDOWS_SERVER2016_BUILD = 14393;
+static const int WINDOWS_SERVER2019_BUILD = 17763;
+static const int WINDOWS_SERVER2022_BUILD = 20348;
+
 // Windows 11 uses the same version as Windows 10 but its build numbers start
 // from 22000, which provides a way to test for it.
 static const int FIRST_WINDOWS11_BUILD = 22000;
 
 } // anonymous namespace
 
+// When adding a new version, update also the table in wxGetOsVersion() docs.
 wxString wxGetOsDescription()
 {
     wxString str;
@@ -1175,20 +1168,34 @@ wxString wxGetOsDescription()
                     break;
 
                 case 10:
-                    if (info.dwBuildNumber >= FIRST_WINDOWS11_BUILD)
-                        str = wxIsWindowsServer() == 1
-                            ? "Windows Server 2022"
-                            : "Windows 11";
+                    if ( wxIsWindowsServer() == 1 )
+                    {
+                        switch ( info.dwBuildNumber )
+                        {
+                            case WINDOWS_SERVER2016_BUILD:
+                                str = "Windows Server 2016";
+                                break;
+                            case WINDOWS_SERVER2019_BUILD:
+                                str = "Windows Server 2019";
+                                break;
+                            case WINDOWS_SERVER2022_BUILD:
+                                str = "Windows Server 2022";
+                                break;
+                        }
+                    }
                     else
-                        str = wxIsWindowsServer() == 1
-                                ? "Windows Server 2016"
-                                : "Windows 10";
+                    {
+                        str = info.dwBuildNumber >= FIRST_WINDOWS11_BUILD
+                            ? "Windows 11"
+                            : "Windows 10";
+                    }
                     break;
             }
 
             if ( str.empty() )
             {
-                str.Printf("Windows %lu.%lu",
+                str.Printf("Windows %s%lu.%lu",
+                           wxIsWindowsServer() == 1 ? "Server " : "",
                            info.dwMajorVersion,
                            info.dwMinorVersion);
             }

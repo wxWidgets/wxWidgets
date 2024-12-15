@@ -34,6 +34,7 @@ rem Change to wx root folder
 
 set curr_dir1=%cd%
 cd ..\..\..
+set base_dir=%cd%
 
 mkdir %packagePath%
 mkdir %packagePath%\%VCver%
@@ -90,8 +91,18 @@ cd %packagePath%\%VCver%
 
 del wxwidgets.props
 
+rem Change to the directory containing licence file in order to include it
+rem into the archives without any path.
+cd %base_dir%\docs
+
+7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z licence.txt
+7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_ReleaseDLL.7z licence.txt
+7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z licence.txt
+7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleaseDLL.7z licence.txt
+
+cd %packagePath%\%VCver%
 del sha1.txt
-rem fciv requies a complete path to files
+rem fciv requires a complete path to files
 fciv %cd%\. -type *.7z -sha1 -wp >> sha1.txt
 
 

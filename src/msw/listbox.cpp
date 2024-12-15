@@ -34,7 +34,7 @@
 #include <windowsx.h>
 
 #if wxUSE_OWNER_DRAWN
-    #include  "wx/ownerdrw.h"
+    #include "wx/msw/private/listboxitem.h"
 
     namespace
     {
@@ -49,24 +49,7 @@
 
 #if wxUSE_OWNER_DRAWN
 
-class wxListBoxItem : public wxOwnerDrawn
-{
-public:
-    wxListBoxItem(wxListBox *parent)
-        { m_parent = parent; }
-
-    wxListBox *GetParent() const
-        { return m_parent; }
-
-    int GetIndex() const
-        { return m_parent->GetItemIndex(const_cast<wxListBoxItem*>(this)); }
-
-    wxString GetName() const override
-        { return m_parent->GetString(GetIndex()); }
-
-private:
-    wxListBox *m_parent;
-};
+using wxListBoxItem = wxListBoxItemBase<wxListBox>;
 
 wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 {
@@ -719,7 +702,7 @@ bool wxListBox::SetFont(const wxFont &font)
 
         // Non owner drawn list boxes update the item height on their own, but
         // we need to do it manually in the owner drawn case.
-        wxClientDC dc(this);
+        wxInfoDC dc(this);
         dc.SetFont(m_font);
         SendMessage(GetHwnd(), LB_SETITEMHEIGHT, 0,
                     dc.GetCharHeight() + 2 * LISTBOX_EXTRA_SPACE);

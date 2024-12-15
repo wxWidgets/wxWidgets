@@ -94,6 +94,13 @@ wxWindowDCImpl::~wxWindowDCImpl()
     // Painter will be deleted by base class if we own it
 }
 
+void wxWindowDCImpl::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_window, "wxWindowDCImpl without a window?" );
+
+    m_window->GetSize(width, height);
+}
+
 //##############################################################################
 
 wxIMPLEMENT_CLASS(wxClientDCImpl,wxWindowDCImpl);
@@ -110,9 +117,17 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
      {
         m_qtPainter->setClipRect( wxQtConvertRect(win->GetClientRect()),
                                   m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+
+        m_qtPainter->translate( wxQtConvertPoint(win->GetClientAreaOrigin()) );
     }
 }
 
+void wxClientDCImpl::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_window, "wxClientDCImpl without a window?" );
+
+    m_window->GetClientSize(width, height);
+}
 
 //##############################################################################
 
@@ -128,5 +143,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
 {
     wxCHECK_RET( m_isWindowPainter || win->QtCanPaintWithoutActivePainter(),
                  "wxPaintDC can't be created outside wxEVT_PAINT handler" );
+
+    m_qtPainter->translate( wxQtConvertPoint(win->GetClientAreaOrigin()) );
 }
 

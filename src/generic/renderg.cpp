@@ -123,7 +123,7 @@ public:
         const wxRect& rect,
         int flags = 0) override;
 
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) override;
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& dc) override;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
@@ -532,24 +532,32 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
     wxDCPenChanger penChanger(dc, *wxGREY_PEN);
     wxDCBrushChanger brushChanger(dc, *wxWHITE_BRUSH);
 
-    dc.DrawRectangle(rect);
+    // make the size odd to keep the cross centered.
+    wxRect oddRect(rect);
+
+    if ( oddRect.width % 2 == 0 )
+        oddRect.width--;
+    if ( oddRect.height % 2 == 0 )
+        oddRect.height--;
+
+    dc.DrawRectangle(oddRect);
 
     // black lines
-    const wxCoord xMiddle = rect.x + rect.width/2;
-    const wxCoord yMiddle = rect.y + rect.height/2;
+    const wxCoord xMiddle = oddRect.x + oddRect.width/2;
+    const wxCoord yMiddle = oddRect.y + oddRect.height/2;
 
     // half of the length of the horz lines in "-" and "+"
-    const wxCoord halfWidth = rect.width/2 - 2;
+    const wxCoord halfWidth = oddRect.width/2 - 2;
     wxDCPenChanger setPen(dc, *wxBLACK_PEN);
     dc.DrawLine(xMiddle - halfWidth, yMiddle,
-                xMiddle + halfWidth + 1, yMiddle);
+                xMiddle + halfWidth, yMiddle);
 
     if ( !(flags & wxCONTROL_EXPANDED) )
     {
         // turn "-" into "+"
-        const wxCoord halfHeight = rect.height/2 - 2;
+        const wxCoord halfHeight = oddRect.height/2 - 2;
         dc.DrawLine(xMiddle, yMiddle - halfHeight,
-                    xMiddle, yMiddle + halfHeight + 1);
+                    xMiddle, yMiddle + halfHeight);
     }
 }
 
@@ -793,7 +801,7 @@ wxRendererGeneric::DrawCollapseButton(wxWindow *win,
     dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
 }
 
-wxSize wxRendererGeneric::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxDC& WXUNUSED(dc))
+wxSize wxRendererGeneric::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxReadOnlyDC& WXUNUSED(dc))
 {
     return wxSize(18, 18);
 }

@@ -95,18 +95,6 @@ wxVListBoxComboPopup::~wxVListBoxComboPopup()
     Clear();
 }
 
-void wxVListBoxComboPopup::SetFocus()
-{
-    // Suppress SetFocus() warning by simply not calling it. This combo popup
-    // has already been designed with the assumption that SetFocus() may not
-    // do anything useful, so it really doesn't need to be called.
-#ifdef __WXMSW__
-    //
-#else
-    wxVListBox::SetFocus();
-#endif
-}
-
 void wxVListBoxComboPopup::OnDPIChanged(wxDPIChangedEvent& event)
 {
     m_itemHeight = m_combo->GetCharHeight();
@@ -732,7 +720,7 @@ void wxVListBoxComboPopup::CalcWidths()
         // I think using wxDC::GetTextExtent is faster than
         // wxWindow::GetTextExtent (assuming same dc is used
         // for all calls, as we do here).
-        wxClientDC dc(m_combo);
+        wxInfoDC dc(m_combo);
         if ( !m_useFont.IsOk() )
             m_useFont = m_combo->GetFont();
         dc.SetFont(m_useFont);
@@ -809,7 +797,7 @@ void wxVListBoxComboPopup::CalcWidths()
 
 wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int maxHeight )
 {
-    int height = 250;
+    int height = FromDIP(250);
 
     maxHeight -= 2;  // Must take borders into account
 
@@ -841,7 +829,7 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
         }
     }
     else
-        height = 50;
+        height = FromDIP(50);
 
     CalcWidths();
 

@@ -530,9 +530,9 @@ WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifica
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 WX_ARG_WITH(nanosvg,       [  --with-nanosvg          use NanoSVG for rasterizing SVG], wxUSE_NANOSVG)
-WX_ARG_WITH(lunasvg,       [  --with-lunasvg          use LunaSVG for rasterizing SVG], wxUSE_LUNASVG)
+WX_ARG_WITH(lunasvg,       [  --with-lunasvg          use LunaSVG for rasterizing SVG, replaces NanoSVG], wxUSE_LUNASVG)
 
-if test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
+if test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
     wx_needs_cairo_for_gc=1
 fi
 
@@ -723,7 +723,6 @@ WX_ARG_FEATURE(fsvolume,      [  --enable-fsvolume       use wxFSVolume class], 
 WX_ARG_FEATURE(fswatcher,     [  --enable-fswatcher      use wxFileSystemWatcher class], wxUSE_FSWATCHER)
 WX_ARG_FEATURE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wxUSE_LOG)
-WX_ARG_FEATURE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
 WX_ARG_FEATURE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_FEATURE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
 WX_ARG_FEATURE(secretstore,   [  --enable-secretstore    use wxSecretStore class], wxUSE_SECRETSTORE)
@@ -784,6 +783,7 @@ WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUS
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
 WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
+WX_ARG_FEATURE(lunasvg,     [  --enable-lunasvg        use wxLunaSVG to render SVG images], wxUSE_LUNASVG)
 WX_ARG_FEATURE(webview,     [  --enable-webview        use wxWebView library], wxUSE_WEBVIEW)
 
 dnl This one is not enabled by default as it requires CEF to be available under
@@ -1760,8 +1760,7 @@ if test "$ac_cv_sys_largefile_source" != no; then
     WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
 fi
 
-dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
-WX_C_BIGENDIAN
+AC_C_BIGENDIAN
 
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.
@@ -2778,7 +2777,7 @@ if test "$USE_WIN32" = 1 ; then
     ],
     [ ])
 
-    LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lws2_32 -lgdi32"
+    LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lws2_32 -lgdi32 -lgdiplus -lmsimg32"
     case "${host}" in
         x86_64-*-mingw* )
             dnl we need to define this to embed the manifest for correct
@@ -3509,6 +3508,10 @@ for dep in \${libnames} ; do
     changes="\${changes} -change \${4}/\${dep} \${3}/\${dep}"
 done
 for i in \${libnames} ; do
+    if test -L \${1}/\${i}; then
+        # skip symbolic links
+        continue
+    fi
     ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${1}/\${i}
 done
 
@@ -5098,6 +5101,9 @@ if test "$USE_UNIX" = 1 ; then
         AC_LINK_IFELSE([AC_LANG_PROGRAM([
                 #include <sys/ioctl.h>
                 #include <sys/soundcard.h>
+                #ifdef HAVE_UNISTD_H
+                # include <unistd.h> /* needed for ioctl() on Solaris */
+                #endif
             ],
             [
                 ioctl(0, SNDCTL_DSP_SPEED, 0);
@@ -5109,6 +5115,9 @@ if test "$USE_UNIX" = 1 ; then
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([
                         #include <sys/ioctl.h>
                         #include <sys/soundcard.h>
+                        #ifdef HAVE_UNISTD_H
+                        # include <unistd.h> /* needed for ioctl() on Solaris */
+                        #endif
                     ],
                     [
                         ioctl(0, SNDCTL_DSP_SPEED, 0);
@@ -5471,10 +5480,6 @@ if test "$wxUSE_LOG" = "yes"; then
 
     dnl the keyboard sample requires wxUSE_LOG
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS keyboard"
-fi
-
-if test "$wxUSE_LONGLONG" = "yes"; then
-  AC_DEFINE(wxUSE_LONGLONG)
 fi
 
 if test "$wxUSE_GEOMETRY" = "yes"; then
@@ -6765,7 +6770,7 @@ fi
 
 USE_LUNASVG=0
 if test "$wxUSE_LUNASVG" = "yes"; then
-   if ! test -f "$3rdparty/lunasvg/include/lunasvg.h" ; then
+   if ! test -f "$srcdir/3rdparty/lunasvg/include/lunasvg.h" ; then
        AC_MSG_ERROR([
    The required lunasvg header was not found. You probably need to run
 
@@ -7480,6 +7485,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_STC" = "yes" ; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_LUNASVG" = "yes" ; then
+        BUILT_WX_LIBS="lunasvg $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_WEBVIEW" = "yes" ; then
         BUILT_WX_LIBS="webview $BUILT_WX_LIBS"

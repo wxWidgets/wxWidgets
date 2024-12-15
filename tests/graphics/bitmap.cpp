@@ -140,7 +140,7 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
         wxBitmap bmp(16, 16, 24);
         {
             wxMemoryDC dc(bmp);
-            dc.SetPen(*wxYELLOW_PEN);
+            dc.SetPen(*wxTRANSPARENT_PEN);
             dc.SetBrush(*wxYELLOW_BRUSH);
             dc.DrawRectangle(0, 0, bmp.GetWidth(), bmp.GetHeight());
         }
@@ -153,19 +153,180 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
         REQUIRE(image.GetWidth() == bmp.GetWidth());
         REQUIRE(image.GetHeight() == bmp.GetHeight());
 
-        wxNativePixelData dataBmp(bmp);
-        wxNativePixelData::Iterator rowStartBmp(dataBmp);
-
-        for ( int y = 0; y < bmp.GetHeight(); ++y )
         {
-            wxNativePixelData::Iterator iBmp = rowStartBmp;
-            for ( int x = 0; x < bmp.GetWidth(); ++x, ++iBmp )
+            wxNativePixelData dataBmp(bmp);
+            wxNativePixelData::Iterator rowStartBmp(dataBmp);
+
+            for ( int y = 0; y < bmp.GetHeight(); ++y )
             {
-                wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
-                wxColour imgc(image.GetRed(x, y), image.GetGreen(x, y), image.GetBlue(x, y));
-                CHECK_EQUAL_COLOUR_RGB(imgc, bmpc);
+                wxNativePixelData::Iterator iBmp = rowStartBmp;
+                for ( int x = 0; x < bmp.GetWidth(); ++x, ++iBmp )
+                {
+                    wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                    wxColour imgc(image.GetRed(x, y), image.GetGreen(x, y), image.GetBlue(x, y));
+                    CHECK_EQUAL_COLOUR_RGB(imgc, bmpc);
+                }
+                rowStartBmp.OffsetY(dataBmp, 1);
             }
-            rowStartBmp.OffsetY(dataBmp, 1);
+        }
+
+        // rectangle transparent pen test
+        for ( int size = 4 ; size != 0 ; --size )
+        {
+            INFO("Red square size:  " << size)
+            wxBitmap bmp2 = bmp;
+            // verify bmp starts yellow
+            {
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        CHECK_EQUAL_COLOUR_RGB(bmpc, (*wxYELLOW));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+            }
+
+            // change square to red
+            wxRect square(wxPoint(5, 5), wxSize(size, size));
+            {
+                wxMemoryDC dc(bmp2);
+                dc.SetPen(*wxTRANSPARENT_PEN);
+                dc.SetBrush(*wxRED_BRUSH);
+                dc.DrawRectangle(square);
+            }
+
+            // verify bitmap is still yellow, except square is red
+            {
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        CHECK_EQUAL_COLOUR_RGB(bmpc, (square.Contains(x, y) ? *wxRED : *wxYELLOW));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+            }
+        }
+
+        /* ellipse boundary test:  on wxMSW, ellipse goes outside
+            rect on right and bottom */
+        {
+            wxBitmap bmp2 = bmp;
+            // verify bmp starts yellow
+            {
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        CHECK_EQUAL_COLOUR_RGB(bmpc, (*wxYELLOW));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+            }
+
+            // change rectangle to red
+            wxRect rect(wxPoint(3, 3), wxSize(10, 5));
+            {
+                wxMemoryDC dc(bmp2);
+                dc.SetPen(*wxTRANSPARENT_PEN);
+                dc.SetBrush(*wxRED_BRUSH);
+                dc.DrawRectangle(rect);
+            }
+
+            // verify bitmap is still yellow, except rectangle is red
+            {
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        CHECK_EQUAL_COLOUR_RGB(bmpc, (rect.Contains(x, y) ? *wxRED : *wxYELLOW));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+            }
+
+            // draw ellipse with rectangle bottomright moved in 1 (diagonal) pixel
+            {
+                wxMemoryDC dc(bmp2);
+                dc.SetPen(*wxRED_PEN);
+                dc.SetBrush(*wxTRANSPARENT_BRUSH);
+                wxRect rect2(rect.GetTopLeft(), wxSize(rect.GetWidth() - 1, rect.GetHeight() - 1));
+                dc.DrawEllipse(rect2);
+            }
+
+            // verify bitmap is still yellow, except rectangle is red
+            {
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        CHECK_EQUAL_COLOUR_RGB(bmpc, (rect.Contains(x, y) ? *wxRED : *wxYELLOW));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+            }
+
+            // draw ellipse with full rectangle
+            {
+                wxMemoryDC dc(bmp2);
+                dc.SetPen(*wxRED_PEN);
+                dc.SetBrush(*wxTRANSPARENT_BRUSH);
+                dc.DrawEllipse(rect);
+            }
+
+            // verify that ellipse exceeded rect on bottom and right
+            {
+                bool pastBottom = false;
+                bool pastRight = false;
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        if (bmpc != (rect.Contains(x, y) ? *wxRED : *wxYELLOW))
+                        {
+                            INFO("x,y:  " << x << ", " << y);
+                            if (y == rect.GetBottom() + 1)
+                            {
+                                pastBottom = true;
+                            }
+                            if (x == rect.GetRight() + 1)
+                            {
+                                pastRight = true;
+                            }
+                        }
+                        CHECK((bmpc == (rect.Contains(x, y) ? *wxRED : *wxYELLOW) ||
+                                y == rect.GetBottom() + 1 ||
+                                x == rect.GetRight() + 1));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+                CHECK((pastBottom && pastRight));
+            }
         }
     }
 
@@ -250,7 +411,6 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
 #endif // __WXMSW__ || __WXOSX__
         {
             const wxColour clrFg(*wxCYAN);
-            const wxColour clrBg(*wxGREEN);
             const unsigned char alpha = 92;
 
 #ifdef wxHAS_PREMULTIPLIED_ALPHA
@@ -328,7 +488,6 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
 #endif // __WXMSW__ || __WXOSX__
         {
             const wxColour clrFg(*wxCYAN);
-            const wxColour clrBg(*wxGREEN);
             const unsigned char alpha = 92;
 #ifdef wxHAS_PREMULTIPLIED_ALPHA
             // premultiplied values
@@ -1839,7 +1998,11 @@ TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
     // A bitmap "compatible" with this DC should also use the same scale factor.
     wxBitmap bmp2(4, 4, dc);
     CHECK( bmp2.GetScaleFactor() == 2 );
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
     CHECK( bmp2.GetSize() == wxSize(8, 8) );
+#else
+    CHECK( bmp2.GetSize() == wxSize(4, 4) );
+#endif
 
     // A compatible bitmap created from wxImage and this DC should also inherit
     // the same scale factor, but its size should be still the same as that of
@@ -1898,3 +2061,34 @@ TEST_CASE("wxBitmap::GetSubBitmap", "[bitmap]")
 }
 
 #endif // ports with scaled bitmaps support
+
+// This test doesn't run by default because it may bring the system, or at
+// least the GUI layer, down, so please only run if you know what you're doing.
+TEST_CASE("wxBitmap::ResourceExhaustion", "[.]")
+{
+    // Under MSW this creates a DDB and a DIB, which tests 2 different code
+    // paths when copying bitmaps below.
+    wxBitmap bmp1(8, 8);
+    wxBitmap bmp2(8, 8, 24);
+
+    std::vector<wxBitmap> bitmaps;
+    for ( int n = 0;; ++n )
+    {
+        bitmaps.emplace_back(8, 8);
+
+        // This will fail sooner or later, but it shouldn't crash.
+        if ( !bitmaps.back().IsOk() )
+        {
+            WARN("Failed to create bitmap after creating " << n << " of them.");
+            break;
+        }
+    }
+
+    // Copying bitmaps (triggered by modifying the scale factor) doesn't work
+    // neither, but still shouldn't crash.
+    wxBitmap bmp1x2 = bmp1;
+    bmp1x2.SetScaleFactor(2);
+
+    wxBitmap bmp2x2 = bmp2;
+    bmp2x2.SetScaleFactor(2);
+}

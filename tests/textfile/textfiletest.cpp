@@ -342,7 +342,7 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
 
     SECTION("/sys")
     {
-        if ( wxFile::Exists("/sys/power/state") )
+        if ( !wxFile::Exists("/sys/power/state") )
         {
             WARN("/sys/power/state doesn't exist, skipping test");
             return;

@@ -185,7 +185,11 @@ public:
                               long style = 0,
                               const wxString& name = wxASCII_STR(wxWebViewNameStr)) = 0;
     virtual bool IsAvailable() { return true; }
-    virtual wxVersionInfo GetVersionInfo() { return wxVersionInfo(); }
+    virtual wxVersionInfo
+    GetVersionInfo(wxVersionContext WXUNUSED(context) = wxVersionContext::RunTime)
+    {
+        return wxVersionInfo();
+    }
     virtual wxWebViewConfiguration CreateConfiguration();
 };
 
@@ -226,7 +230,10 @@ public:
     static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);
     static bool IsBackendAvailable(const wxString& backend);
-    static wxVersionInfo GetBackendVersionInfo(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
+    static wxVersionInfo GetBackendVersionInfo(
+        const wxString& backend = wxASCII_STR(wxWebViewBackendDefault),
+        wxVersionContext context = wxVersionContext::RunTime
+    );
     static wxWebViewConfiguration NewConfiguration(const wxString& backend = wxASCII_STR(wxWebViewBackendDefault));
 
     // General methods
@@ -235,6 +242,7 @@ public:
         m_showMenu = enable;
     }
     virtual void EnableAccessToDevTools(bool WXUNUSED(enable) = true) { }
+    virtual bool ShowDevTools() { return false; }
     virtual void EnableBrowserAcceleratorKeys(bool WXUNUSED(enable) = true) { }
     virtual bool AreBrowserAcceleratorKeysEnabled() const { return false;  }
     virtual wxString GetCurrentTitle() const = 0;

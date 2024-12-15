@@ -145,10 +145,10 @@ size_t ReadValues(const wxConfig& config, bool has_values)
     size_t read = 0;
     bool r;
 
-    wxString string1 = config.Read("string1", "abc");
+    config.Read("string1", "abc");
     read++;
 
-    wxString string2 = config.Read("string2", wxString("def"));
+    config.Read("string2", wxString("def"));
     read++;
 
     wxString string3;

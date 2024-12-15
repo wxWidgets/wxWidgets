@@ -22,6 +22,8 @@
 #include "wx/mstream.h"
 #include "wx/textbuf.h"
 
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -51,20 +53,16 @@ bool wxDataObjectBase::IsSupported(const wxDataFormat& format,
     }
     else
     {
-        wxDataFormat *formats = new wxDataFormat[nFormatCount];
-        GetAllFormats( formats, dir );
+        std::vector<wxDataFormat> formats(nFormatCount);
+        GetAllFormats( formats.data(), dir );
 
-        size_t n;
-        for ( n = 0; n < nFormatCount; n++ )
+        for ( const auto& supported: formats )
         {
-            if ( formats[n] == format )
-                break;
+            if ( supported == format )
+                return true;
         }
 
-        delete [] formats;
-
-        // found?
-        return n < nFormatCount;
+        return false;
     }
 }
 

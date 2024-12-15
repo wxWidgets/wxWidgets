@@ -264,7 +264,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/safearray.cpp
     src/msw/sound.cpp
     src/msw/ole/automtn.cpp
-    src/qt/graphics.cpp
 </set>
 
 <set var="QT_WIN32_HDR" hints="files">
@@ -387,7 +386,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fdrepdlg.cpp
     src/generic/filepickerg.cpp
     src/generic/fontpickerg.cpp
-    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/prntdlgg.cpp
     src/generic/textmeasure.cpp
@@ -479,6 +477,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/timectrl.cpp
     src/qt/overlay.cpp
     src/qt/renderer.cpp
+    src/qt/graphics.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
@@ -1393,6 +1392,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/sound.h
     wx/msw/joystick.h
     wx/msw/taskbar.h
+    wx/msw/init.h
 </set>
 <set var="GTK_PLATFORM_SRC" hints="files">
     <if cond="PLATFORM_UNIX=='1'">$(XWIN_LOWLEVEL_SRC)</if>
@@ -1406,7 +1406,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="GTK_LOWLEVEL_SRC" hints="files">
     $(GTK_PLATFORM_SRC)
-    src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/gtk/app.cpp
     src/gtk/assertdlg_gtk.cpp
@@ -1628,7 +1627,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="X11_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
-    src/generic/icon.cpp
     src/generic/textmeasure.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1724,7 +1722,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
-    src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/icon.cpp
     src/msw/minifram.cpp
@@ -2020,7 +2017,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/fontmgrcmn.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
-    src/generic/icon.cpp
     src/generic/mask.cpp
     src/generic/textmeasure.cpp
     src/dfb/app.cpp
@@ -2181,7 +2177,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
-    src/generic/icon.cpp
     src/osx/statbmp_osx.cpp
     src/generic/imaglist.cpp
 </if>
@@ -2789,6 +2784,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_tree.cpp
     src/xrc/xh_treebk.cpp
     src/xrc/xh_unkwn.cpp
+    src/xrc/xh_vlistbox.cpp
     src/xrc/xh_wizrd.cpp
     src/xrc/xmlres.cpp
     src/xrc/xmlrsall.cpp
@@ -2861,6 +2857,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_tree.h
     wx/xrc/xh_treebk.h
     wx/xrc/xh_unkwn.h
+    wx/xrc/xh_vlistbox.h
     wx/xrc/xh_wizrd.h
     wx/xrc/xmlres.h
     wx/xrc/xh_bookctrlbase.h
@@ -3006,6 +3003,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
+    wx/aui/serializer.h
 </set>
 <set var="AUI_HDR" hints="files">
     $(AUI_CMN_HDR)

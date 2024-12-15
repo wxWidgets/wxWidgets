@@ -153,8 +153,6 @@ end
 script2alias = scriptmap();
 locid2wxid = initmap()
 
-fo2 = io.open('temp/langtabl_test.txt','w')
-
 fo1 = io.open('temp/win_loadlocaletable.sql','w')
 fo1:write('-- List of locales supported by Windows\n-- Date: ' .. os.date("%Y-%m-%d %H:%M") .. '\n\n')
 fo1:write('-- Data source: MSDN\n\n')
@@ -217,7 +215,7 @@ for line in io.lines(codeFileName) do
     ENGLISHDISPLAYNAME = ENGLISHDISPLAYNAME:gsub("'", "''")
     ENGLISHDISPLAYNAMEHEX = string.tohex(ENGLISHDISPLAYNAME)
     if ENGLISHDISPLAYNAME ~= ENGLISHDISPLAYNAMEHEX then
-      print('*** ' .. locid .. ' - Display name contains non-ASCII characters')
+      print('  +++ Warning: ' .. locid .. ' - Display name contains non-ASCII characters')
     end
     ENGLISHLANGUAGENAME = values[3]
     ENGLISHLANGUAGENAME = ENGLISHLANGUAGENAME:gsub("'", "''")
@@ -335,46 +333,43 @@ for line in io.lines(codeFileName) do
 
     fo1:write("insert into win_localetable values ('" .. locid .. "', '" .. locidnew .. "', '" .. WXNAME .. "', '-', '-', '" .. string.tohex(ENGLISHDISPLAYNAME) .. "', '" .. string.tohex(ENGLISHLANGUAGENAME) .. "', '" .. string.tohex(ENGLISHCOUNTRYNAME) .. "', '" .. SCRIPTS .. "', '" .. COUNTRY3 .. "', '" .. script4 .. "', '" .. CURRENCY .. "', '" .. LAYOUT .. "', '" .. sidlang .. "', '" .. sidsublang .. "', '" .. NATIVEDISPLAYNAME .. "', '" .. NATIVELANGUAGENAME .. "', '" .. NATIVECOUNTRYNAME .. "', '" .. NATIVEDISPLAYNAMEHEX .. "', '" .. NATIVELANGUAGENAMEHEX .. "', '" .. NATIVECOUNTRYNAMEHEX .. "');\n")
 
-    fo2:write(SWXNAME .. " " .. slocid .. " " .. sidlang .. " " .. sidsublang .. " " .. LAYOUT .. ' "' .. ENGLISHDISPLAYNAMEHEX .. '","' .. NATIVEDISPLAYNAMEHEX .. '"\n')
-
     count = count + 1
   end
 end
 
 -- Add manually entries for compatibility with prior wxWidgets versions
-fo1:write("insert into win_localetable values ('ab', 'ab', 'wxLANGUAGE_ABKHAZIAN', '-', '-', 'Abkhazian', 'Abkhazian', '', '', '', '', '', 'LTR', '-', '-', 'аҧсуа бызшәа', 'аҧсуа бызшәа', '', '" .. string.tohex('аҧсуа бызшәа') .. "', '" .. string.tohex('аҧсуа бызшәа') .. "', '');\n")
-fo1:write("insert into win_localetable values ('ay', 'ay', 'wxLANGUAGE_AYMARA', '-', '-', 'Aymara', 'Aymara', '', '', '', '', '', 'LTR', '-', '-', 'Aymara', 'Aymara', '', 'Aymara', 'Aymara', '');\n")
-fo1:write("insert into win_localetable values ('bh', 'bh', 'wxLANGUAGE_BIHARI', '-', '-', 'Bihari', 'Bihari', '', '', '', '', '', 'LTR', '-', '-', 'Bihari', 'Bihari', '', 'Bihari', 'Bihari', '');\n")
-fo1:write("insert into win_localetable values ('bi', 'bi', 'wxLANGUAGE_BISLAMA', '-', '-', 'Bislama', 'Bislama', '', '', '', '', '', 'LTR', '-', '-', 'Bislama', 'Bislama', 'Vanuatu', 'Bislama', 'Bislama', 'Vanuatu');\n")
-fo1:write("insert into win_localetable values ('en-CB', 'en_CB', 'wxLANGUAGE_ENGLISH_CARIBBEAN_CB', '-', '-', 'English (Caribbean)', 'English (Caribbean)', '', '', '', '', '', 'LTR', '0x09', '0x09', 'English (Caribbean)', 'English (Caribbean)', '', 'English (Caribbean)', 'English (Caribbean)', '');\n")
+fo1:write("insert or ignore into win_localetable values ('ab', 'ab', 'wxLANGUAGE_ABKHAZIAN', '-', '-', 'Abkhazian', 'Abkhazian', '', '', '', '', '', 'LTR', '-', '-', 'аҧсуа бызшәа', 'аҧсуа бызшәа', '', '" .. string.tohex('аҧсуа бызшәа') .. "', '" .. string.tohex('аҧсуа бызшәа') .. "', '');\n")
+fo1:write("insert or ignore into win_localetable values ('ay', 'ay', 'wxLANGUAGE_AYMARA', '-', '-', 'Aymara', 'Aymara', '', '', '', '', '', 'LTR', '-', '-', 'Aymara', 'Aymara', '', 'Aymara', 'Aymara', '');\n")
+fo1:write("insert or ignore into win_localetable values ('bh', 'bh', 'wxLANGUAGE_BIHARI', '-', '-', 'Bihari', 'Bihari', '', '', '', '', '', 'LTR', '-', '-', 'Bihari', 'Bihari', '', 'Bihari', 'Bihari', '');\n")
+fo1:write("insert or ignore into win_localetable values ('bi', 'bi', 'wxLANGUAGE_BISLAMA', '-', '-', 'Bislama', 'Bislama', '', '', '', '', '', 'LTR', '-', '-', 'Bislama', 'Bislama', 'Vanuatu', 'Bislama', 'Bislama', 'Vanuatu');\n")
+fo1:write("insert or ignore into win_localetable values ('en-CB', 'en_CB', 'wxLANGUAGE_ENGLISH_CARIBBEAN_CB', '-', '-', 'English (Caribbean)', 'English (Caribbean)', '', '', '', '', '', 'LTR', '0x09', '0x09', 'English (Caribbean)', 'English (Caribbean)', '', 'English (Caribbean)', 'English (Caribbean)', '');\n")
 
-fo1:write("insert into win_localetable values ('fj', 'fj', 'wxLANGUAGE_FIJI', '-', '-', 'Fiji', 'Fiji', '', '', '', '', '', 'LTR', '-', '-', 'Na Vosa Vakaviti', 'Na Vosa Vakaviti', '', 'Na Vosa Vakaviti', 'Na Vosa Vakaviti', '');\n")
-fo1:write("insert into win_localetable values ('ie', 'ie', 'wxLANGUAGE_INTERLINGUE', '-', '-', 'Interlingue', 'Interlingue', '', '', '', '', '', 'LTR', '-', '-', 'Interlingue', 'Interlingue', '', 'Interlingue', 'Interlingue', '');\n")
-fo1:write("insert into win_localetable values ('ik', 'ik', 'wxLANGUAGE_INUPIAK', '-', '-', 'Inupiak', 'Inupiak', '', '', '', '', '', 'LTR', '-', '-', 'Inupiaq', 'Inupiaq', '', 'Inupiaq', 'Inupiaq', '');\n")
-fo1:write("insert into win_localetable values ('ks-IN', 'ks_IN', 'wxLANGUAGE_KASHMIRI_INDIA', '-', '-', 'Kashmiri (India)', 'Kashmiri', 'India', '', '', '', '', 'RTL', '0x00', '0x04', 'کشور (بھارت)', 'کٲشُر', 'ہِندوستان', '" .. string.tohex('کشور (بھارت)') .."', '" .. string.tohex('کٲشُر') .."', '" .. string.tohex('ہِندوستان') .."');\n")
-fo1:write("insert into win_localetable values ('ku-TR', 'ku_TR', 'wxLANGUAGE_KURDISH', '-', '-', 'Kurdish', 'Kurdish', '', '', '', '', '', 'LTR', '-', '-', 'Kurdî', 'Kurdî', '', '" .. string.tohex('Kurdî') .. "', '" .. string.tohex('Kurdî') .. "', '');\n")
+fo1:write("insert or ignore into win_localetable values ('fj', 'fj', 'wxLANGUAGE_FIJI', '-', '-', 'Fiji', 'Fiji', '', '', '', '', '', 'LTR', '-', '-', 'Na Vosa Vakaviti', 'Na Vosa Vakaviti', '', 'Na Vosa Vakaviti', 'Na Vosa Vakaviti', '');\n")
+fo1:write("insert or ignore into win_localetable values ('ie', 'ie', 'wxLANGUAGE_INTERLINGUE', '-', '-', 'Interlingue', 'Interlingue', '', '', '', '', '', 'LTR', '-', '-', 'Interlingue', 'Interlingue', '', 'Interlingue', 'Interlingue', '');\n")
+fo1:write("insert or ignore into win_localetable values ('ik', 'ik', 'wxLANGUAGE_INUPIAK', '-', '-', 'Inupiak', 'Inupiak', '', '', '', '', '', 'LTR', '-', '-', 'Inupiaq', 'Inupiaq', '', 'Inupiaq', 'Inupiaq', '');\n")
+fo1:write("insert or ignore into win_localetable values ('ks-IN', 'ks_IN', 'wxLANGUAGE_KASHMIRI_INDIA', '-', '-', 'Kashmiri (India)', 'Kashmiri', 'India', '', '', '', '', 'RTL', '0x00', '0x04', 'کشور (بھارت)', 'کٲشُر', 'ہِندوستان', '" .. string.tohex('کشور (بھارت)') .."', '" .. string.tohex('کٲشُر') .."', '" .. string.tohex('ہِندوستان') .."');\n")
+fo1:write("insert or ignore into win_localetable values ('ku-TR', 'ku_TR', 'wxLANGUAGE_KURDISH', '-', '-', 'Kurdish', 'Kurdish', '', '', '', '', '', 'LTR', '-', '-', 'Kurdî', 'Kurdî', '', '" .. string.tohex('Kurdî') .. "', '" .. string.tohex('Kurdî') .. "', '');\n")
 
-fo1:write("insert into win_localetable values ('la-001', 'la_001', 'wxLANGUAGE_LATIN_WORLD', '-', '-', 'Latin (World)', 'Latin', 'World', '', '', '', '', 'LTR', '0x76', '0x01', 'Latina (World)', 'Latina', 'World', 'Latina (Mundus)', 'Latina', 'Mundus');\n")
-fo1:write("insert into win_localetable values ('mo', 'mo', 'wxLANGUAGE_MOLDAVIAN', '-', '-', 'Moldavian', 'Moldavian', '', '', '', '', '', 'LTR', '-', '-', 'лимба молдовеняскэ', 'лимба молдовеняскэ', '', '" .. string.tohex('лимба молдовеняскэ') .. "', '" .. string.tohex('лимба молдовеняскэ') .. "', '');\n")
-fo1:write("insert into win_localetable values ('na', 'na', 'wxLANGUAGE_NAURU', '-', '-', 'Nauru', 'Nauru', 'Nauru', '', '', '', '', 'LTR', '-', '-', 'Nauru', 'Nauru', 'Nauru', 'Nauru', 'Nauru', 'Nauru');\n")
-fo1:write("insert into win_localetable values ('qu', 'qu', 'wxLANGUAGE_QUECHUA_MACRO', '-', '-', 'Quechua', 'Quechua', '', '', '', '', '', 'LTR', '-', '-', 'Qhichwa', 'Qhichwa', '', 'Qhichwa', 'Qhichwa', '');\n")
-fo1:write("insert into win_localetable values ('sm', 'sm', 'wxLANGUAGE_SAMOAN', '-', '-', 'Samoan', 'Samoan', '', '', '', '', '', 'LTR', '-', '-', 'Samoa', 'Samoa', 'Samoa', 'Samoa', 'Samoa', 'Samoa');\n")
+fo1:write("insert or ignore into win_localetable values ('la-001', 'la_001', 'wxLANGUAGE_LATIN_WORLD', '-', '-', 'Latin (World)', 'Latin', 'World', '', '', '', '', 'LTR', '0x76', '0x01', 'Latina (World)', 'Latina', 'World', 'Latina (Mundus)', 'Latina', 'Mundus');\n")
+fo1:write("insert or ignore into win_localetable values ('mo', 'mo', 'wxLANGUAGE_MOLDAVIAN', '-', '-', 'Moldavian', 'Moldavian', '', '', '', '', '', 'LTR', '-', '-', 'лимба молдовеняскэ', 'лимба молдовеняскэ', '', '" .. string.tohex('лимба молдовеняскэ') .. "', '" .. string.tohex('лимба молдовеняскэ') .. "', '');\n")
+fo1:write("insert or ignore into win_localetable values ('na', 'na', 'wxLANGUAGE_NAURU', '-', '-', 'Nauru', 'Nauru', 'Nauru', '', '', '', '', 'LTR', '-', '-', 'Nauru', 'Nauru', 'Nauru', 'Nauru', 'Nauru', 'Nauru');\n")
+fo1:write("insert or ignore into win_localetable values ('qu', 'qu', 'wxLANGUAGE_QUECHUA_MACRO', '-', '-', 'Quechua', 'Quechua', '', '', '', '', '', 'LTR', '-', '-', 'Qhichwa', 'Qhichwa', '', 'Qhichwa', 'Qhichwa', '');\n")
+fo1:write("insert or ignore into win_localetable values ('sm', 'sm', 'wxLANGUAGE_SAMOAN', '-', '-', 'Samoan', 'Samoan', '', '', '', '', '', 'LTR', '-', '-', 'Samoa', 'Samoa', 'Samoa', 'Samoa', 'Samoa', 'Samoa');\n")
 
-fo1:write("insert into win_localetable values ('sr-RS', 'sr_RS', 'wxLANGUAGE_SERBIAN_SERBIA', '-', '-', 'Serbian (Serbia)', 'Serbian', 'Serbia', '', '', '', '', 'LTR', '0x1a', '0x01', 'srpski (Srbija)', 'srpski', 'Srbija', 'srpski (Srbija)', 'srpski', 'Srbija');\n")
-fo1:write("insert into win_localetable values ('sr-YU', 'sr_YU', 'wxLANGUAGE_SERBIAN_YU', '-', '-', 'Serbian', 'Serbian', '', '', '', '', '', 'LTR', '0x1a', '0x01', 'srpski', 'srpski', 'Srbija', 'srpski', 'srpski', 'Srbija');\n")
-fo1:write("insert into win_localetable values ('sr-Cyrl-YU', 'sr_YU@cyrillic', 'wxLANGUAGE_SERBIAN_CYRILLIC_YU', '-', '-', 'Serbian (Cyrillic)', 'Serbian (Cyrillic)', '', 'Cyrl;', '', '', '', 'LTR', '0x1a', '0x03', 'српски (Србија)', 'српски', 'Србија', '" .. string.tohex('српски (Србија)') .. "', '" .. string.tohex('српски') .. "', '" .. string.tohex('Србија') .. "');\n")
-fo1:write("insert into win_localetable values ('sr-Latn-YU', 'sr_YU@latin', 'wxLANGUAGE_SERBIAN_LATIN_YU', '-', '-', 'Serbian (Latin)', 'Serbian (Latin)', '', 'Latn;', '', '', '', 'LTR', '0x1a', '0x02', 'srpski (latinica)', 'srpski', 'Srbija', 'srpski (latinica)', 'srpski', 'Srbija');\n")
-fo1:write("insert into win_localetable values ('sh', 'sh', 'wxLANGUAGE_SERBO_CROATIAN', '-', '-', 'Serbo-Croatian', 'Serbo-Croatian', '', '', '', '', '', 'LTR', '-', '-', 'srpskohrvatski', 'srpskohrvatski', '', 'srpskohrvatski', 'srpskohrvatski', '');\n")
+fo1:write("insert or ignore into win_localetable values ('sr-RS', 'sr_RS', 'wxLANGUAGE_SERBIAN_SERBIA', '-', '-', 'Serbian (Serbia)', 'Serbian', 'Serbia', '', '', '', '', 'LTR', '0x1a', '0x01', 'srpski (Srbija)', 'srpski', 'Srbija', 'srpski (Srbija)', 'srpski', 'Srbija');\n")
+fo1:write("insert or ignore into win_localetable values ('sr-YU', 'sr_YU', 'wxLANGUAGE_SERBIAN_YU', '-', '-', 'Serbian', 'Serbian', '', '', '', '', '', 'LTR', '0x1a', '0x01', 'srpski', 'srpski', 'Srbija', 'srpski', 'srpski', 'Srbija');\n")
+fo1:write("insert or ignore into win_localetable values ('sr-Cyrl-YU', 'sr_YU@cyrillic', 'wxLANGUAGE_SERBIAN_CYRILLIC_YU', '-', '-', 'Serbian (Cyrillic)', 'Serbian (Cyrillic)', '', 'Cyrl;', '', '', '', 'LTR', '0x1a', '0x03', 'српски (Србија)', 'српски', 'Србија', '" .. string.tohex('српски (Србија)') .. "', '" .. string.tohex('српски') .. "', '" .. string.tohex('Србија') .. "');\n")
+fo1:write("insert or ignore into win_localetable values ('sr-Latn-YU', 'sr_YU@latin', 'wxLANGUAGE_SERBIAN_LATIN_YU', '-', '-', 'Serbian (Latin)', 'Serbian (Latin)', '', 'Latn;', '', '', '', 'LTR', '0x1a', '0x02', 'srpski (latinica)', 'srpski', 'Srbija', 'srpski (latinica)', 'srpski', 'Srbija');\n")
+fo1:write("insert or ignore into win_localetable values ('sh', 'sh', 'wxLANGUAGE_SERBO_CROATIAN', '-', '-', 'Serbo-Croatian', 'Serbo-Croatian', '', '', '', '', '', 'LTR', '-', '-', 'srpskohrvatski', 'srpskohrvatski', '', 'srpskohrvatski', 'srpskohrvatski', '');\n")
 
-fo1:write("insert into win_localetable values ('tl-PH', 'tl_PH', 'wxLANGUAGE_TAGALOG', '-', '-', 'Tagalog', 'Tagalog', 'Philippines', '', '', '', '', 'LTR', '-', '-', 'Tagalog', 'Tagalog', 'Pilipinas ', 'Tagalog', 'Tagalog', 'Pilipinas');\n")
-fo1:write("insert into win_localetable values ('tw', 'tw', 'wxLANGUAGE_TWI', '-', '-', 'Twi', 'Twi', '', '', '', '', '', 'LTR', '-', '-', 'Twi', 'Twi', 'Ghana', 'Twi', 'Twi', 'Ghana');\n")
-fo1:write("insert into win_localetable values ('za', 'za', 'wxLANGUAGE_ZHUANG', '-', '-', 'Zhuang', 'Zhuang', '', '', '', '', '', 'LTR', '-', '-', 'Zhuang', 'Zhuang', 'China', 'Zhuang', 'Zhuang', 'China');\n")
+fo1:write("insert or ignore into win_localetable values ('tl', 'tl', 'wxLANGUAGE_TAGALOG', '-', '-', 'Tagalog', 'Tagalog', '', 'Latn;', 'PHL', '', '', 'LTR', '-', '-', 'Tagalog', 'Tagalog', '', 'Tagalog', 'Tagalog', '');\n")
+fo1:write("insert or ignore into win_localetable values ('tl-PH', 'tl_PH', 'wxLANGUAGE_TAGALOG_PHILIPPINES', '-', '-', 'Tagalog (Philippines)', 'Tagalog', 'Philippines', 'Latn;', 'PHL', '', '', 'LTR', '-', '-', 'Tagalog (Pilipinas)', 'Tagalog', 'Pilipinas', 'Tagalog (Pilipinas)', 'Tagalog', 'Pilipinas');\n")
+fo1:write("insert or ignore into win_localetable values ('tw', 'tw', 'wxLANGUAGE_TWI', '-', '-', 'Twi', 'Twi', '', '', '', '', '', 'LTR', '-', '-', 'Twi', 'Twi', 'Ghana', 'Twi', 'Twi', 'Ghana');\n")
+fo1:write("insert or ignore into win_localetable values ('za', 'za', 'wxLANGUAGE_ZHUANG', '-', '-', 'Zhuang', 'Zhuang', '', '', '', '', '', 'LTR', '-', '-', 'Zhuang', 'Zhuang', 'China', 'Zhuang', 'Zhuang', 'China');\n")
 
 -- Update count to reflect manual entries (needs to be updated, if entries are added or removed)
-count = count + 23
-print("Number of locales=" .. count)
+count = count + 24
+print("  Number of locales = " .. count)
 
 fo1:write('commit;\n')
 fo1:close()
-
-fo2:close()

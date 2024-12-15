@@ -9,12 +9,11 @@
 #define _WX_QT_COMBOBOX_H_
 
 #include "wx/choice.h"
-class QComboBox;
 
 class WXDLLIMPEXP_CORE wxComboBox : public wxChoice, public wxTextEntry
 {
 public:
-    wxComboBox();
+    wxComboBox() = default;
 
     wxComboBox(wxWindow *parent,
                wxWindowID id,

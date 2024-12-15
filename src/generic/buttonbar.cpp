@@ -144,7 +144,7 @@ bool wxButtonToolBar::Create(wxWindow *parent,
     // Calculate the label height if necessary
     if (GetWindowStyle() & wxTB_TEXT)
     {
-        wxClientDC dc(this);
+        wxInfoDC dc(this);
         dc.SetFont(font);
         int w, h;
         dc.GetTextExtent(wxT("X"), & w, & h);
@@ -408,7 +408,7 @@ void wxButtonToolBar::DoLayout()
 
                     if (!tool->GetShortHelp().empty())
                     {
-                        wxClientDC dc(this);
+                        wxInfoDC dc(this);
                         dc.SetFont(GetFont());
                         int tw, th;
                         dc.GetTextExtent(tool->GetShortHelp(), & tw, & th);

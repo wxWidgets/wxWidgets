@@ -34,9 +34,12 @@ public:
 
     static void InitStandardHandlers();
 
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) override;
-    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) override;
-    virtual bool Create(int width, int height, const wxDC& dc);
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) final;
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) final;
+    bool Create(int width, int height, const wxDC& dc);
+
+    virtual void SetScaleFactor(double scale) override;
+    virtual double GetScaleFactor() const override;
 
     virtual int GetHeight() const override;
     virtual int GetWidth() const override;
@@ -82,6 +85,8 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const override;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth) override;
 
 private:
 #if wxUSE_IMAGE

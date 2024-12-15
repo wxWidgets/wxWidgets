@@ -348,6 +348,17 @@ void wxUITextViewControl::SetStringValue( const wxString &str)
     }
 }
 
+wxString wxUITextViewControl::GetRTFValue() const
+{
+    wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
+    return wxEmptyString;
+}
+
+void wxUITextViewControl::SetRTFValue(const wxString &str)
+{
+    wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
+}
+
 void wxUITextViewControl::Copy()
 {
     if (m_textView)
@@ -553,6 +564,17 @@ void wxUITextFieldControl::SetStringValue( const wxString &str)
 {
 //    wxMacEditHelper helper(m_textField);
     [m_textField setText: wxCFStringRef( str ).AsNSString()];
+}
+
+wxString wxUITextFieldControl::GetRTFValue() const
+{
+    wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
+    return wxEmptyString;
+}
+
+void wxUITextFieldControl::SetRTFValue(const wxString &str)
+{
+    wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
 }
 
 wxSize wxUITextFieldControl::GetBestSize() const

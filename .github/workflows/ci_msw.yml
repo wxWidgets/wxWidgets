@@ -66,6 +66,9 @@ jobs:
             platform: 'x64'
             vsversion: 2022
             use_utf8: true
+          - configuration: 'Release'
+            platform: 'arm64'
+            vsversion: 2022
           - configuration: 'Debug'
             platform: 'Win32'
             vsversion: 2019
@@ -104,15 +107,17 @@ jobs:
                 $dlldir | Out-File -Append $env:GITHUB_PATH
             }
 
-      - name: Build minimal sample
+      - name: Build samples
+        if: matrix.platform != 'arm64'
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\minimal\minimal_vc16.sln
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\samples_vc16.sln
 
       - name: Build tests
         run: |
             msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc16.sln
 
       - name: Run tests
+        if: ${{ !contains(matrix.platform, 'arm64') }}
         working-directory: tests
         run: |
             .\vc*msw*\test.exe
@@ -122,6 +127,7 @@ jobs:
             msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc16.sln
 
       - name: Run GUI tests
+        if: ${{ !contains(matrix.platform, 'arm64') }}
         working-directory: tests
         run: |
             .\vc*msw*\test_gui.exe

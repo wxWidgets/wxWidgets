@@ -13,10 +13,6 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QWidget>
 
-wxTopLevelWindowQt::wxTopLevelWindowQt()
-{
-}
-
 wxTopLevelWindowQt::wxTopLevelWindowQt(wxWindow *parent,
            wxWindowID winId,
            const wxString &title,

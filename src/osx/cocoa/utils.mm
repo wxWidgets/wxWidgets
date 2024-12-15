@@ -277,6 +277,13 @@ void wxBell()
         wxTheApp->SetActive( false , nullptr ) ;
 }
 
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
+{
+    // Just avoid the warning about not returning true from here: as we don't
+    // customize state restoration anyhow, we can let the system do its thing.
+    return YES;
+}
+
 @end
 
 /*
@@ -485,7 +492,7 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 
         [NSApp setAppearance:[NSAppearance appearanceNamed:name]];
 
-        return AppearanceResult::Success;
+        return AppearanceResult::Ok;
     }
 #endif // macOS 10.14+
 

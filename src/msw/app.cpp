@@ -861,7 +861,12 @@ void wxApp::MSWProcessPendingEventsIfNeeded()
     // both console and GUI applications.
     wxMSWEventLoopBase * const evtLoop =
         static_cast<wxMSWEventLoopBase *>(wxEventLoop::GetActive());
-    if ( evtLoop && evtLoop->MSWIsWakeUpRequested() )
+
+    // We don't want to do anything if we have an event loop which hadn't been
+    // woken up, but we need to do it if we don't have any event loop at all
+    // (which is uncommon but may happen), as otherwise pending events would
+    // just accumulate forever, without ever being processed.
+    if ( !evtLoop || evtLoop->MSWIsWakeUpRequested() )
         ProcessPendingEvents();
 }
 
@@ -875,20 +880,21 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
     // WM_ENDSESSION handler or when we delete our last window, so make sure we
     // at least execute our cleanup code before
 
-    // prevent the window from being destroyed when the corresponding wxTLW is
-    // destroyed: this will result in a leak of a HWND, of course, but who
-    // cares when the process is being killed anyhow
-    if ( !wxTopLevelWindows.empty() )
-        wxTopLevelWindows[0]->SetHWND(0);
-
     // Destroy all the remaining TLWs before calling OnExit() to have the same
     // sequence of events in this case as in case of the normal shutdown,
     // otherwise we could have many problems due to wxApp being already
     // destroyed when window cleanup code (in close event handlers or dtor) is
     // executed.
+    //
+    // Note that we survive after this call only because we don't delete any
+    // windows at MSW level, see gs_gotEndSession check in wxWindow dtor.
     DeleteAllTLWs();
 
     const int rc = OnExit();
+
+    // Skip unregistering windows classes: this is not really necessary and
+    // would result in an error because we may still have an open window.
+    gs_regClassesInfo.clear();
 
     wxEntryCleanup();
 
@@ -902,10 +908,20 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 // user can veto the close, and therefore the end session.
 void wxApp::OnQueryEndSession(wxCloseEvent& event)
 {
-    if (GetTopWindow())
+    // Make a copy to avoid problems due to iterator invalidation if any
+    // windows get destroyed (rather than just closed) during the loop.
+    const auto tlws = wxTopLevelWindows;
+    for ( auto* tlw : tlws )
     {
-        if (!GetTopWindow()->Close(!event.CanVeto()))
-            event.Veto(true);
+        // If it's not in the list any more it could have been destroyed.
+        if ( !wxTopLevelWindows.Member(tlw) )
+            continue;
+
+        if ( !tlw->Close(!event.CanVeto()) )
+        {
+            event.Veto();
+            return;
+        }
     }
 }
 

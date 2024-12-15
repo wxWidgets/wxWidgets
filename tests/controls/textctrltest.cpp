@@ -1364,18 +1364,11 @@ TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
     s += s;
     const wxSize sizeVeryLong = getBestSizeFor(s);
 
-#ifndef __WXQT__
     // Control with a few lines of text in it should be taller.
     CHECK( sizeMedium.y > sizeEmpty.y );
 
     // And a control with many lines in it should be even more so.
     CHECK( sizeLong.y > sizeMedium.y );
-#else
-    // Under wxQt, the multiline textctrl has a fixed calculated best size
-    // regardless of its content.
-    CHECK( sizeMedium.y == sizeEmpty.y );
-    CHECK( sizeLong.y == sizeMedium.y );
-#endif
 
     // However there is a cutoff at 10 lines currently, so anything longer than
     // that should still have the same best size.
@@ -1469,6 +1462,136 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
     text->SetValue("Bye");
     CHECK( updated.GetCount() == 1 );
 }
+
+#ifdef __WXOSX__
+TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+
+    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH2 | wxTE_MULTILINE));
+
+    text->SetRTFValue(R"({\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red192\green80\blue77;}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1
+ \pard\sa200\sl276\slmult1\b\i\f0\fs22\lang9 wxWidg\'e9ts \cf1\i0 3.3\cf0\b0\par
+})");
+    // test getting the main text, including an extended ASCII character
+    wxString result = text->GetValue();
+    CHECK(result.find(L"wxWidgéts") != wxString::npos);
+    CHECK(result.find(L"3.3") != wxString::npos);
+
+    result = text->GetRTFValue();
+    // 'é' will be encoded, just see if parts of the content are in there
+    CHECK(result.find(L"wxWidg") != wxString::npos);
+    CHECK(result.find(L"3.3") != wxString::npos);
+}
+#endif
+
+#ifdef __WXMSW__
+TEST_CASE("wxTextCtrl::SearchText", "[wxTextCtrl][search]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+
+    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH2 | wxTE_MULTILINE));
+
+    text->SetValue(R"(Allows more than 30Kb of text
+(on all Windows versions)
+and a very very long line to test wxHSCROLL style
+
+And here is a link in quotation marks to test wxTE_AUTO_URL: "http://www.wxwidgets.org"
+
+First 10 characters should be in red
+Next 10 characters should be in blue
+Next 10 characters should be normal
+And the next 10 characters should be green and italic
+This text should be cyan on blue
+And this should be in blue and the text you type should be in blue as well.
+
+And there is a mispeled word)");
+
+    text->SetSelection(0, 0);
+    auto results = text->SearchText(wxTextSearch(L"IMnotHERE!").SearchDirection(wxTextSearch::Direction::Down));
+    CHECK_FALSE(results);
+
+    results = text->SearchText(wxTextSearch(L"window").SearchDirection(wxTextSearch::Direction::Down).MatchCase());
+    CHECK_FALSE(results); // case is different
+
+    // ignore case
+    results = text->SearchText(wxTextSearch(L"window").SearchDirection(wxTextSearch::Direction::Down).MatchCase(false));
+    CHECK(results);
+    CHECK(results.m_start == 38);
+    CHECK(results.m_end == 44);
+
+    results = text->SearchText(wxTextSearch(L"Window").SearchDirection(wxTextSearch::Direction::Down).MatchCase());
+    CHECK(results);
+    CHECK(results.m_start == 38);
+    CHECK(results.m_end == 44);
+
+    results = text->SearchText(wxTextSearch(L"Window").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord());
+    CHECK_FALSE(results); // whole word fails
+
+    results = text->SearchText(wxTextSearch(L"Windows").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord());
+    CHECK(results);
+    CHECK(results.m_start == 38);
+    CHECK(results.m_end == 45);
+
+
+    results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord());
+    CHECK(results);
+    CHECK(results.m_start == 62);
+    CHECK(results.m_end == 66);
+
+    // will find the same match
+    results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord().Start(results.m_start));
+    CHECK(results);
+    CHECK(results.m_start == 62);
+    CHECK(results.m_end == 66);
+
+    // goes to next match
+    results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord().Start(results.m_start + 1));
+    CHECK(results);
+    CHECK(results.m_start == 67);
+    CHECK(results.m_end == 71);
+
+    // no more matches going down
+    results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord().Start(results.m_start + 1));
+    CHECK_FALSE(results);
+
+    // go up from the end
+    results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Up).MatchCase().MatchWholeWord());
+    CHECK(results);
+    CHECK(results.m_start == 67);
+    CHECK(results.m_end == 71);
+
+    results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Up).MatchCase().MatchWholeWord().Start(results.m_start));
+    CHECK(results);
+    CHECK(results.m_start == 62);
+    CHECK(results.m_end == 66);
+
+    // no more going up
+    results = text->SearchText(wxTextSearch(L"very").SearchDirection(wxTextSearch::Direction::Up).MatchCase().MatchWholeWord().Start(results.m_start));
+    CHECK_FALSE(results);
+
+    // phrase
+    results = text->SearchText(wxTextSearch(L"Next 10 characters").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord());
+    CHECK(results);
+    CHECK(results.m_start == 233);
+    CHECK(results.m_end == 251);
+
+    // Edge cases
+    // last word
+    results = text->SearchText(wxTextSearch(L"word").SearchDirection(wxTextSearch::Direction::Up).MatchCase().MatchWholeWord());
+    CHECK(results);
+    CHECK(results.m_start == 494);
+    CHECK(results.m_end == 498);
+
+    // first word
+    results = text->SearchText(wxTextSearch(L"Allows").SearchDirection(wxTextSearch::Direction::Down).MatchCase().MatchWholeWord());
+    CHECK(results);
+    CHECK(results.m_start == 0);
+    CHECK(results.m_end == 6);
+}
+#endif
 
 TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
 {

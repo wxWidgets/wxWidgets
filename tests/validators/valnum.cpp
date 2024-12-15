@@ -24,6 +24,8 @@
 #include "wx/scopeguard.h"
 #include "wx/uiaction.h"
 
+#include "waitfor.h"
+
 class NumValidatorTestCase
 {
 public:
@@ -237,6 +239,23 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::ZeroAsBlank", "[valnum]")
     value++;
     CHECK( val->TransferFromWindow() );
     CHECK( value == 0 );
+
+    // Check that switching focus to another control doesn't change the value:
+    // we need to trigger the "kill focus" event for m_text, so create another
+    // control which can be focused and give it the focus and also mark this
+    // control as "modified" because we we avoid changing its contents if it
+    // has never been modified at all.
+    m_text->SetSize(100, 50);
+    m_text->MarkDirty();
+    m_text->SetFocus();
+    std::unique_ptr<wxTextCtrl>
+        text2(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "Test",
+                             wxPoint(0, 100), wxSize(100, 50)));
+    text2->SetFocus();
+    WaitFor("the other control to become focused", [&text2]() {
+        return text2->HasFocus();
+    });
+    CHECK( m_text->GetValue() == "" );
 }
 
 TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::NoTrailingZeroes", "[valnum]")

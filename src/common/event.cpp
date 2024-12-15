@@ -456,13 +456,33 @@ wxNcPaintEvent::wxNcPaintEvent(wxWindowBase* window)
 // wxUpdateUIEvent
 // ----------------------------------------------------------------------------
 
-#if wxUSE_LONGLONG
 wxLongLong wxUpdateUIEvent::sm_lastUpdate = 0;
-#endif
 
 long wxUpdateUIEvent::sm_updateInterval = 0;
 
 wxUpdateUIMode wxUpdateUIEvent::sm_updateMode = wxUPDATE_UI_PROCESS_ALL;
+
+void wxUpdateUIEvent::Set3StateValue(wxCheckBoxState check)
+{
+    wxASSERT_MSG(IsCheckable(), "Shouldn't be called if non-checkable");
+    wxASSERT_MSG(Is3State() || check != wxCHK_UNDETERMINED, "Is3State() not enabled");
+
+    m_3checked = check;
+    m_setChecked = true;
+}
+
+void wxUpdateUIEvent::DisallowCheck()
+{
+    wxASSERT_MSG(!GetSetChecked(), "SetCheck() or Set3StateValue() has already been called");
+
+    m_isCheckable = false;
+}
+
+void wxUpdateUIEvent::Allow3rdState(bool b /*= true*/)
+{
+    wxASSERT_MSG(b || Get3StateValue() != wxCHK_UNDETERMINED, "wxCHK_UNDETERMINED already set");
+    m_is3State = b;
+}
 
 // Can we update?
 bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
@@ -487,7 +507,6 @@ bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
     if (sm_updateInterval == 0)
         return true;
 
-#if wxUSE_STOPWATCH && wxUSE_LONGLONG
     wxLongLong now = wxGetLocalTimeMillis();
     if (now > (sm_lastUpdate + sm_updateInterval))
     {
@@ -495,18 +514,12 @@ bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
     }
 
     return false;
-#else
-    // If we don't have wxStopWatch or wxLongLong, we
-    // should err on the safe side and update now anyway.
-    return true;
-#endif
 }
 
 // Reset the update time to provide a delay until the next
 // time we should update
 void wxUpdateUIEvent::ResetUpdateTime()
 {
-#if wxUSE_STOPWATCH && wxUSE_LONGLONG
     if (sm_updateInterval > 0)
     {
         wxLongLong now = wxGetLocalTimeMillis();
@@ -515,7 +528,6 @@ void wxUpdateUIEvent::ResetUpdateTime()
             sm_lastUpdate = now;
         }
     }
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -732,7 +744,7 @@ int wxMouseEvent::GetButton() const
 }
 
 // Find the logical position of the event given the DC
-wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
+wxPoint wxMouseEvent::GetLogicalPosition(const wxReadOnlyDC& dc) const
 {
     wxPoint pt(dc.DeviceToLogicalX(m_x), dc.DeviceToLogicalY(m_y));
     return pt;

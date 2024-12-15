@@ -72,6 +72,9 @@ public:
         DoEnableSystemTheme(enable, this);
     }
 
+    // Using wxBORDER_THEME is unnecessary and looks bad for these controls.
+    virtual bool CanApplyThemeBorder() const override { return false; }
+
 protected:
     void EnableSystemThemeByDefault()
     {

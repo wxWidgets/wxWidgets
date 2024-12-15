@@ -47,8 +47,6 @@ public:
 
     virtual ~wxSocketImplMSW();
 
-    virtual wxSocketError GetLastError() const override;
-
     virtual void ReenableEvents(wxSocketEventFlags WXUNUSED(flags)) override
     {
         // notifications are never disabled in this implementation, there is no
@@ -84,6 +82,7 @@ public:
     }
 
 private:
+    virtual wxSocketError GetLastError() const override;
     virtual void DoClose() override;
 
     int m_msgnumber;

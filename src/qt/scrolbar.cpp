@@ -29,11 +29,6 @@ class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 };
 
 
-wxScrollBar::wxScrollBar() :
-    m_qtScrollBar(nullptr)
-{
-}
-
 wxScrollBar::wxScrollBar( wxWindow *parent, wxWindowID id,
        const wxPoint& pos,
        const wxSize& size,
@@ -51,74 +46,75 @@ bool wxScrollBar::Create( wxWindow *parent, wxWindowID id,
        const wxValidator& validator,
        const wxString& name)
 {
-    m_qtScrollBar = new wxQtScrollBar( parent, this );
-    m_qtScrollBar->setOrientation( wxQtConvertOrientation( style, wxSB_HORIZONTAL ));
+    m_qtWindow = new wxQtScrollBar( parent, this );
+
+    GetQScrollBar()->setOrientation( wxQtConvertOrientation( style, wxSB_HORIZONTAL ));
 
     return wxScrollBarBase::Create( parent, id, pos, size, style, validator, name );
 }
 
+QScrollBar* wxScrollBar::GetQScrollBar() const
+{
+    return static_cast<QScrollBar*>(m_qtWindow);
+}
+
 int wxScrollBar::GetThumbPosition() const
 {
-    wxCHECK_MSG( m_qtScrollBar, 0, "Invalid QScrollbar" );
+    wxCHECK_MSG( GetHandle(), 0, "Invalid QScrollbar" );
 
-    return m_qtScrollBar->value();
+    return GetQScrollBar()->value();
 }
 
 int wxScrollBar::GetThumbSize() const
 {
-    wxCHECK_MSG( m_qtScrollBar, 0, "Invalid QScrollbar" );
+    wxCHECK_MSG( GetHandle(), 0, "Invalid QScrollbar" );
 
-    return m_qtScrollBar->pageStep();
+    return GetQScrollBar()->pageStep();
 }
 
 int wxScrollBar::GetPageSize() const
 {
-    wxCHECK_MSG( m_qtScrollBar, 0, "Invalid QScrollbar" );
+    wxCHECK_MSG( GetHandle(), 0, "Invalid QScrollbar" );
 
-    return m_qtScrollBar->pageStep();
+    return GetQScrollBar()->pageStep();
 }
 
 int wxScrollBar::GetRange() const
 {
-    wxCHECK_MSG( m_qtScrollBar, 0, "Invalid QScrollbar" );
+    wxCHECK_MSG( GetHandle(), 0, "Invalid QScrollbar" );
 
-    return m_qtScrollBar->maximum();
+    return GetQScrollBar()->maximum();
 }
 
 void wxScrollBar::SetThumbPosition(int viewStart)
 {
-    wxCHECK_RET( m_qtScrollBar, "Invalid QScrollbar" );
+    wxCHECK_RET( GetHandle(), "Invalid QScrollbar" );
 
-    m_qtScrollBar->setValue( viewStart );
+    GetQScrollBar()->setValue( viewStart );
 }
 
 void wxScrollBar::SetScrollbar(int position, int WXUNUSED(thumbSize),
                           int range, int pageSize,
                           bool WXUNUSED(refresh))
 {
-    wxCHECK_RET( m_qtScrollBar, "Invalid QScrollbar" );
+    wxCHECK_RET( GetHandle(), "Invalid QScrollbar" );
 
     // Configure the scrollbar
     if (range != 0 )
     {
-        m_qtScrollBar->setRange( 0, range - pageSize );
-        m_qtScrollBar->setPageStep( pageSize );
+        GetQScrollBar()->setRange( 0, range - pageSize );
+        GetQScrollBar()->setPageStep( pageSize );
         {
-            wxQtEnsureSignalsBlocked blocker(m_qtScrollBar);
-            m_qtScrollBar->setValue( position );
+            wxQtEnsureSignalsBlocked blocker(GetQScrollBar());
+            GetQScrollBar()->setValue( position );
         }
-        m_qtScrollBar->show();
+        GetQScrollBar()->show();
     }
     else
     {
         // If range is zero, hide it
-        m_qtScrollBar->hide();
+        GetQScrollBar()->hide();
     }
-}
-
-QWidget *wxScrollBar::GetHandle() const
-{
-    return m_qtScrollBar;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1623,9 +1623,29 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMP", "[image][bmp]")
                            wxBITMAP_TYPE_BMP);
         LoadMalformedImage("image/8bpp-colorsused-large.bmp",
                            wxBITMAP_TYPE_BMP);
+        LoadMalformedImage("image/badrle4.bmp", wxBITMAP_TYPE_BMP);
+        LoadMalformedImage("image/width-times-height-overflow.bmp", wxBITMAP_TYPE_BMP);
+    }
+    wxImage image;
+    SECTION("32bpp alpha")
+    {
+        REQUIRE(image.LoadFile("image/32bpp_rgb.bmp", wxBITMAP_TYPE_BMP));
+        REQUIRE_FALSE(image.GetAlpha());
 
-        LoadMalformedImageWithException("image/width-times-height-overflow.bmp",
-                                        wxBITMAP_TYPE_BMP);
+        // alpha is preserved for ICO
+        REQUIRE(image.LoadFile("image/32bpp_rgb.ico", wxBITMAP_TYPE_ICO));
+        const unsigned char* alpha = image.GetAlpha();
+        REQUIRE(alpha);
+        REQUIRE(alpha[0] == 0x80);
+
+        // alpha is ignored for ICO if it is fully transparent
+        REQUIRE(image.LoadFile("image/32bpp_rgb_a0.ico", wxBITMAP_TYPE_ICO));
+        REQUIRE_FALSE(image.GetAlpha());
+    }
+    SECTION("bitfields")
+    {
+        REQUIRE(image.LoadFile("image/rgb16-3103.bmp", wxBITMAP_TYPE_BMP));
+        REQUIRE(image.GetData()[0] == 0xff);
     }
 }
 

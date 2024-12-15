@@ -86,7 +86,7 @@ void wxPGCellRenderer::DrawEditorValue( wxDC& dc, const wxRect& rect,
     {
         wxRect rect2(rect);
         rect2.Offset(xOffset, yOffset);
-        rect2.height -= yOffset;
+        rect2.height -= yOffset * 2;
         editor->DrawValue( dc, rect2, property, text );
     }
     else
@@ -1750,12 +1750,10 @@ wxVariant wxPGProperty::GetDefaultValue() const
             return wxVariant(0.0);
         if ( valueType == wxPG_VARIANT_TYPE_ARRSTRING )
             return wxVariant(wxArrayString());
-#if wxUSE_LONGLONG
         if ( valueType == wxPG_VARIANT_TYPE_LONGLONG )
             return wxVariant(wxLongLong(0));
         if ( valueType == wxPG_VARIANT_TYPE_ULONGLONG )
             return wxVariant(wxULongLong(0));
-#endif
         if ( valueType == wxS("wxColour") )
             return WXVARIANT(*wxBLACK);
 #if wxUSE_DATETIME

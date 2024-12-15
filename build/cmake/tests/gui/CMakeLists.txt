@@ -151,6 +151,11 @@ set(TEST_GUI_DATA
     image/bitfields-alpha.bmp
     image/8bpp-colorsused-large.bmp
     image/8bpp-colorsused-negative.bmp
+    image/32bpp_rgb.bmp
+    image/32bpp_rgb.ico
+    image/32bpp_rgb_a0.ico
+    image/badrle4.bmp
+    image/rgb16-3103.bmp
     image/rle4-delta-320x240.bmp
     image/rle8-delta-320x240-expected.bmp
     image/rle8-delta-320x240.bmp

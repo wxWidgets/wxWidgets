@@ -194,8 +194,7 @@ public:
     const char *filename;
     int line;
 
-    // the name of the function where the log record was generated (may be null
-    // if the compiler doesn't support __FUNCTION__)
+    // the name of the function where the log record was generated
     const char *func;
 
     // the name of the component which generated this message, may be null if

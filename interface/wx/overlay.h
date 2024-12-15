@@ -9,12 +9,24 @@
    @class wxOverlay
 
    Creates an overlay over an existing window, allowing for manipulations like
-   rubberbanding, etc.  On wxOSX the overlay is implemented with native
-   platform APIs, on the other platforms it is simulated using wxMemoryDC.
+   rubber-banding, etc.
+
+   Overlay is implemented internally as a native window shown on top of the
+   window it is used with and it is more efficient to keep the wxOverlay object
+   around instead of recreating it every time it's needed, i.e. typically you
+   would have a member variable of type wxOverlay in your window class.
+
+   The overlay is initialized automatically when it is used by wxDCOverlay or
+   wxOverlayDC but has to be cleared manually, using its Reset() function, when
+   its contents shouldn't be shown any longer.
+
+   Use of this class is shown in the @ref page_samples_drawing where pressing
+   the left mouse button and dragging the mouse creates a rubber band effect
+   using wxOverlay.
 
    @library{wxcore}
 
-   @see wxDCOverlay, wxDC
+   @see wxDCOverlay, wxOverlayDC
  */
 class wxOverlay
 {
@@ -55,9 +67,12 @@ public:
 
    Connects an overlay with a drawing DC.
 
+   Note that when using wxDCOverlay with wxClientDC, which is the most common
+   case, using wxOverlayDC class is simpler and so is recommended.
+
    @library{wxcore}
 
-   @see wxOverlay, wxDC
+   @see wxOverlay, wxDC, wxOverlayDC
 
  */
 class wxDCOverlay
@@ -83,4 +98,46 @@ public:
        Clears the layer, restoring the state at the last init.
     */
     void Clear();
+};
+
+/**
+   @class wxOverlayDC
+
+   A device context allowing to draw on an overlay associated with a window.
+
+   Assuming `MyWindow` as a wxWindow-derived object with `wxOverlay m_overlay`
+   as a member variable, this class could be used in the following way:
+
+   @code
+   void MyWindow::OnDrawSomethingTemporary()
+   {
+       wxOverlayDC dc(m_overlay, this);
+       dc.Clear(); // Usually required, unless the entire DC is filled.
+
+       // Use wxDC functions as usual.
+       dc.DrawText("Hello, world!", 10, 10);
+   }
+
+   void MyWindow::OnClearTemporaryDrawing()
+   {
+       m_overlay.Reset();
+   }
+   @endcode
+
+   Note that while wxOverlayDC currently actually inherits from wxClientDC,
+   this is an implementation detail and shouldn't be relied upon, it is only
+   guaranteed to derive from wxDC as documented here.
+
+   @library{wxcore}
+
+   @see wxOverlay, wxDCOverlay, wxDC
+
+   @since 3.3.0
+ */
+class wxOverlayDC : public wxDC
+{
+public:
+    wxOverlayDC(wxOverlay& overlay, wxWindow* win);
+
+    wxOverlayDC(wxOverlay& overlay, wxWindow* win, const wxRect& rect);
 };

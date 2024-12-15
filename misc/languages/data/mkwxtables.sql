@@ -23,11 +23,16 @@ select '*** Missing via wx_langmapuni';
 select wxlangname, wxlangid from wx_langmapuni where not exists (select wxnameold from wx2winmapping where wxnameold=wxlangname);
 select '*** Missing via wx_langmap';
 select wxlangname, wxlangid from wx_langmap where not exists (select wxname from win_localetable where wxname=wxlangname);
+
+select '*** Missing locale tags in likely subtags mapping';
+select locid from win_localetable w where length(w.locid) < 4 and not exists (select tagfrom from uni_likelysubtags s where s.tagfrom=w.locid);
+
 .output stdout
 
 select '  #missing wxlangmapuni =', count(wxlangname) from wx_langmapuni where not exists (select wxnameold from wx2winmapping where wxnameold=wxlangname);
 select '  #matched wxlangmapuni =', count(wxlangname) from wx_langmapuni where exists (select wxnameold from wx2winmapping where wxnameold=wxlangname);
 select '  #matched wx2win       =', count(distinct wxnameold) from wx2winmapping where wxnameold <> '-';
+select '  #missing likely tags  =', count(locid) from win_localetable w where length(w.locid) < 4 and not exists (select tagfrom from uni_likelysubtags s where s.tagfrom=w.locid);
 
 select '  #missing wxlangmap    =', count(wxlangname) from wx_langmap where not exists (select wxname from win_localetable where wxname=wxlangname) and not exists (select wxnamesyn from wx_synonyms where wxnamesyn=wxlangname);
 select wxlangname from wx_langmap where not exists (select wxname from win_localetable where wxname=wxlangname) and not exists (select wxnamesyn from wx_synonyms where wxnamesyn=wxlangname);
@@ -73,8 +78,10 @@ select printf('%-55s %-9s %-14s %-25s %-14s %-4s %-4s %s "%s","%s"',
 .output stdout
 
 -- Generate new list of script mappings
+-- Special handling for scripts Hans and Hant
+update uni_scriptmap set scalias = lower(scalias) where scalias not in ('Hans','Hant');
 .output scripttabl.txt
-select printf('%-4s %s', sctag, lower(scalias)) from uni_scriptmap where scalias <> '-' order by sctag;
+select printf('%-4s %s', sctag, scalias) from uni_scriptmap where scalias <> '-' order by sctag;
 .output stdout
 
 -- Generate new list of wxLANGUAGE synonyms
@@ -85,4 +92,23 @@ insert into wx_synonyms
 delete from wx_synonyms where wxnamesyn in (select wxname from win_localetable);
 .output synonymtabl.txt
 select printf('%-55s %-55s %-14s %s', wxnamesyn, wxnameprim, winlocid, wxversion) from wx_synonyms order by wxnamesyn;
+.output stdout
+
+-- Generate list of likely subtags
+.output likelytabl.txt
+select printf('%-11s %s', tagfrom, tagto) from uni_likelysubtags t where exists (select w.locid from win_localetable w where substr(w.locid,1,iif(instr(w.locid,'-')>0,instr(w.locid,'-')-1,length(w.locid))) = substr(t.tagfrom,1,iif(instr(t.tagfrom,'-')>0,instr(t.tagfrom,'-')-1,length(t.tagfrom)))) order by tagfrom;
+.output stdout
+
+-- Generate list of language matches
+insert into uni_languagematch select supported, desired, distance, 'true' from uni_languagematch where oneway = 'false' and desired <> supported;
+.output matchingtabl.txt
+-- First all patterns without asterisks or variables
+select printf('%-10s %-10s %3d', desired, supported, distance) from uni_languagematch t where desired not like ('%*%') and desired not like ('%$%') and exists (select w.locid from win_localetable w where substr(w.locid,1,iif(instr(w.locid,'-')>0,instr(w.locid,'-')-1,length(w.locid))) = substr(t.desired,1,iif(instr(t.desired,'-')>0,instr(t.desired,'-')-1,length(t.desired)))) order by desired;
+-- Include patterns with asterisks, but without variables
+select printf('%-10s %-10s %3d', desired, supported, distance) from uni_languagematch t where desired like ('%*%') and desired not like ('%$%') and supported not like ('%$%') order by desired;
+.output stdout
+
+-- Generate list of region groups for selected languages
+.output regiongrouptabl.txt
+select printf('%-8s %s', language, country) from uni_regiongroups order by language, country;
 .output stdout

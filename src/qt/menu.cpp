@@ -226,28 +226,34 @@ QMenu *wxMenu::GetHandle() const
 
 wxMenuBar::wxMenuBar()
 {
-    m_qtMenuBar  = new QMenuBar();
+    m_qtWindow = new QMenuBar();
 
     wxMenuBarBase::Create(nullptr, wxID_ANY);
 }
 
 wxMenuBar::wxMenuBar( long style )
 {
-    m_qtMenuBar = new QMenuBar();
+    m_qtWindow = new QMenuBar();
 
     wxMenuBarBase::Create(nullptr, wxID_ANY, wxDefaultPosition, wxDefaultSize, style);
 }
 
 wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], long style)
 {
-    m_qtMenuBar = new QMenuBar();
+    m_qtWindow = new QMenuBar();
 
     for ( size_t i = 0; i < count; ++i )
+    {
         Append( menus[ i ], titles[ i ] );
+    }
 
     wxMenuBarBase::Create(nullptr, wxID_ANY, wxDefaultPosition, wxDefaultSize, style);
 }
 
+QMenuBar* wxMenuBar::GetQMenuBar() const
+{
+    return static_cast<QMenuBar*>(m_qtWindow);
+}
 
 static QMenu *SetTitle( wxMenu *menu, const wxString &title )
 {
@@ -268,10 +274,10 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString& title )
     // Override the stored menu title with the given one:
 
     QMenu *qtMenu = SetTitle( menu, title );
-    m_qtMenuBar->addMenu( qtMenu );
+    GetQMenuBar()->addMenu( qtMenu );
     // Menus in Qt can be reused as popups, so a menu bar will not take ownership when
     // one is added to it. Take it explicitly, otherwise there will be a memory leak.
-    qtMenu->setParent(m_qtMenuBar, Qt::Popup); // must specify window type for correct display!
+    qtMenu->setParent(GetQMenuBar(), Qt::Popup); // must specify window type for correct display!
 
     return true;
 }
@@ -292,9 +298,9 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     // Override the stored menu title with the given one:
 
     QMenu *qtMenu = SetTitle( menu, title );
-    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
-    m_qtMenuBar->insertMenu( qtAction, qtMenu );
-    qtMenu->setParent(m_qtMenuBar, Qt::Popup); // must specify window type for correct display!
+    QAction *qtAction = GetActionAt( GetQMenuBar(), pos );
+    GetQMenuBar()->insertMenu( qtAction, qtMenu );
+    qtMenu->setParent(GetQMenuBar(), Qt::Popup); // must specify window type for correct display!
 
     return true;
 }
@@ -306,33 +312,33 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if (( menu = wxMenuBarBase::Remove( pos )) == nullptr )
         return nullptr;
 
-    m_qtMenuBar->removeAction( GetActionAt( m_qtMenuBar, pos ));
+    GetQMenuBar()->removeAction( GetActionAt( GetQMenuBar(), pos ));
     return menu;
 }
 
 void wxMenuBar::EnableTop(size_t pos, bool enable)
 {
-    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
+    QAction *qtAction = GetActionAt( GetQMenuBar(), pos );
     qtAction->setEnabled( enable );
 }
 
 bool wxMenuBar::IsEnabledTop(size_t pos) const
 {
-    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
+    QAction *qtAction = GetActionAt( GetQMenuBar(), pos );
     return qtAction->isEnabled();
 }
 
 
 void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
 {
-    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
+    QAction *qtAction = GetActionAt( GetQMenuBar(), pos );
     QMenu *qtMenu = qtAction->menu();
     qtMenu->setTitle( wxQtConvertString( label ));
 }
 
 wxString wxMenuBar::GetMenuLabel(size_t pos) const
 {
-    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
+    QAction *qtAction = GetActionAt( GetQMenuBar(), pos );
     QMenu *qtMenu = qtAction->menu();
 
     return wxQtConvertString( qtMenu->title() );
@@ -341,18 +347,13 @@ wxString wxMenuBar::GetMenuLabel(size_t pos) const
 void wxMenuBar::Attach(wxFrame *frame)
 {
     // sanity check as setMenuBar takes ownership
-    wxCHECK_RET( m_qtMenuBar, "Menu bar has been previously deleted by Qt");
+    wxCHECK_RET( GetHandle(), "Menu bar has been previously deleted by Qt");
     wxMenuBarBase::Attach(frame);
 }
 
 void wxMenuBar::Detach()
 {
     // the QMenuBar probably was deleted by Qt as setMenuBar takes ownership
-    m_qtMenuBar = nullptr;
+    m_qtWindow = nullptr;
     wxMenuBarBase::Detach();
-}
-
-QWidget *wxMenuBar::GetHandle() const
-{
-    return m_qtMenuBar;
 }

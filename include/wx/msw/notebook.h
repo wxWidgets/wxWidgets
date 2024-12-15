@@ -81,8 +81,8 @@ public:
     // remove all pages
   bool DeleteAllPages() override;
 
-    // inserts a new page to the notebook (it will be deleted ny the notebook,
-    // don't delete it yourself). If bSelect, this page becomes active.
+    // inserts a new page to the notebook (it will be deleted by the notebook,
+    // don't delete it yourself). If bSelect is true,  this page becomes active.
   bool InsertPage(size_t nPage,
                   wxNotebookPage *pPage,
                   const wxString& strText,

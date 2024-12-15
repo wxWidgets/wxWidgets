@@ -522,7 +522,7 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& size)
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
 {
-    QFont::Style qtStyle;
+    QFont::Style qtStyle wxDUMMY_INITIALIZE(QFont::StyleNormal);
 
     switch ( style )
     {
@@ -577,7 +577,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    wxMISSING_IMPLEMENTATION( __func__ );
 }
 
 bool wxNativeFontInfo::FromString(const wxString& s)

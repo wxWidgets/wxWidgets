@@ -48,9 +48,6 @@ public:
 
     /**
         The name of the function where the log record was generated.
-
-        This field may be @NULL if the compiler doesn't support @c \__FUNCTION__
-        (but most modern compilers do).
      */
     const char *func;
 

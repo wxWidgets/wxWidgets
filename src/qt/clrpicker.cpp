@@ -12,10 +12,6 @@
 
 #include "wx/clrpicker.h"
 
-wxColourPickerWidget::wxColourPickerWidget()
-{
-}
-
 wxColourPickerWidget::wxColourPickerWidget(wxWindow *parent,
                wxWindowID id,
                const wxColour& initial,

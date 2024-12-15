@@ -58,6 +58,7 @@ class WXDLLIMPEXP_FWD_CORE wxControl;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 class WXDLLIMPEXP_FWD_CORE wxLayoutConstraints;
+class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 class WXDLLIMPEXP_FWD_CORE wxToolTip;
@@ -1142,7 +1143,8 @@ public:
         // return true if window had been frozen and not unthawed yet
     bool IsFrozen() const { return m_freezeCount != 0; }
 
-        // adjust DC for drawing on this window
+        // adjust DC for measuring or drawing on this window
+    virtual void PrepareReadOnlyDC( wxReadOnlyDC & WXUNUSED(dc) ) { }
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
 
         // enable or disable double buffering
@@ -1338,6 +1340,11 @@ public:
 
     // send wxUpdateUIEvents to this window, and children if recurse is true
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+
+    // do the window-specific processing before processing the update event
+    // (mainly for deciding whether wxUpdateUIEvent::Is3State() is set)
+    virtual void DoPrepareUpdateWindowUI(wxUpdateUIEvent& event) const
+        { event.Allow3rdState(false); }
 
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;

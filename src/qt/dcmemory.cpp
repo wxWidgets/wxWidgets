@@ -57,6 +57,8 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     m_qtPixmap = bitmap.GetHandle();
     if ( bitmap.IsOk() && !m_qtPixmap->isNull() )
     {
+        m_contentScaleFactor = bitmap.GetScaleFactor();
+
         // apply mask before drawing
         wxMask *mask = bitmap.GetMask();
         if ( mask && mask->GetHandle() )

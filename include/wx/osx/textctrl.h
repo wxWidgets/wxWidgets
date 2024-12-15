@@ -109,6 +109,10 @@ public:
 
     virtual void SetWindowStyleFlag(long style) override;
 
+    virtual wxString GetRTFValue() const override;
+    virtual void SetRTFValue(const wxString& val) override;
+    virtual bool IsRTFSupported() override { return IsMultiLine(); }
+
     // callbacks
     void OnDropFiles(wxDropFilesEvent& event);
     void OnChar(wxKeyEvent& event); // Process 'enter' if required

@@ -815,6 +815,15 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         EnableSystemThemeByDefault();
     }
 
+    // When using non-standard DPI, we need to scale the default indent with
+    // the DPI scaling factor as Windows doesn't do it and the "+" buttons
+    // would be displayed too small if the tree is used without images.
+    if ( GetDPIScaleFactor() > 1.0 )
+        SetIndent(FromDIP(GetIndent()));
+
+    // And ensure we adjust it again if the DPI changes in the future.
+    Bind(wxEVT_DPI_CHANGED, &wxTreeCtrl::OnDPIChanged, this);
+
     return true;
 }
 
@@ -1710,9 +1719,15 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
         Delete(children[n]);
     }
 
-    // Refresh update the "+" button which otherwise can remain displayed.
-    if ( !IsHiddenRoot(item) )
-        wxTreeView_RefreshItem(GetHwnd(), HITEM(item));
+    // Refresh to update the "+" button which otherwise can remain displayed
+    // and also to refresh the area that used to be taken by the children:
+    // without this, the last child of the control could remain visible after
+    // being deleted, see #23719.
+    //
+    // We could compute the exact rect to refresh, but as we use double
+    // buffering anyhow now, it doesn't make any visible difference to just
+    // refresh the entire control.
+    Refresh();
 }
 
 void wxTreeCtrl::DeleteAllItems()
@@ -1738,6 +1753,10 @@ void wxTreeCtrl::DeleteAllItems()
     {
         wxLogLastError(wxT("TreeView_DeleteAllItems"));
     }
+
+    // As in DeleteChildren() above, we need a refresh to get rid of the
+    // phantom items remaining displayed when using double buffering.
+    Refresh();
 }
 
 void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
@@ -2298,6 +2317,14 @@ void wxTreeCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
         if ( kv.second->HasFont() )
             SetItemFont(kv.first, kv.second->GetFont());
     }
+}
+
+void wxTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // Adjust the indent to the new DPI scaling factor as Windows doesn't do it.
+    SetIndent(event.ScaleX(GetIndent()));
+
+    event.Skip();
 }
 
 bool wxTreeCtrl::MSWIsOnItem(unsigned flags) const

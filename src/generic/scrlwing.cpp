@@ -339,8 +339,6 @@ wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
 
     m_handler = nullptr;
 
-    m_win->SetScrollHelper(static_cast<wxScrollHelper *>(this));
-
     // by default, the associated window is also the target window
     DoSetTargetWindow(win);
 }
@@ -641,7 +639,7 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
     return nScrollInc;
 }
 
-void wxScrollHelperBase::DoPrepareDC(wxDC& dc)
+void wxScrollHelperBase::DoPrepareReadOnlyDC(wxReadOnlyDC& dc)
 {
     wxPoint pt = dc.GetDeviceOrigin();
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
@@ -901,6 +899,11 @@ void wxAnyScrollHelperBase::HandleOnChar(wxKeyEvent& event)
         newEvent.SetOrientation(wxHORIZONTAL);
         m_win->ProcessWindowEvent(newEvent);
     }
+}
+
+void wxAnyScrollHelperBase::DoPrepareDC(wxDC& dc)
+{
+    DoPrepareReadOnlyDC(dc);
 }
 
 // ----------------------------------------------------------------------------
@@ -1202,6 +1205,8 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
 wxScrollHelper::wxScrollHelper(wxWindow *winToScroll)
     : wxScrollHelperBase(winToScroll)
 {
+    m_win->SetScrollHelper(this);
+
     m_xVisibility =
     m_yVisibility = wxSHOW_SB_DEFAULT;
     m_adjustScrollFlagReentrancy = 0;

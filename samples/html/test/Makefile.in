@@ -194,7 +194,7 @@ test$(EXEEXT): $(TEST_OBJECTS) $(__test___win32rc)
 
 data: 
 	@mkdir -p .
-	@for f in imagemap.png pic.png pic2.bmp i18n.gif imagemap.htm tables.htm test.htm listtest.htm 8859_2.htm cp1250.htm regres.htm foo.png subsup.html; do \
+	@for f in imagemap.png pic.png pic2.bmp i18n.gif imagemap.htm tables.htm test.htm id.html listtest.htm 8859_2.htm cp1250.htm regres.htm foo.png subsup.html; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

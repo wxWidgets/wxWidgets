@@ -27,7 +27,7 @@ public:
 
         @param parent
             The parent window of wxAppProgressIndicator. Note that the
-            window should has taskbar button showing. If parent is @NULL,
+            window should have its taskbar button showing. If parent is @NULL,
             the progress will reflect on the taskbar buttons of all the
             top level windows.
         @param maxValue
@@ -44,11 +44,9 @@ public:
     /**
         Check if the application progress display is available.
 
-        Currently this only returns @true when using wxMSW and running
-        under Windows 7 or later systems (which provide task bar button
-        API) or when using wxOSX.
+        Currently, this only returns @true under wxMSW or wxOSX.
 
-        If this method returns @false, no other methods of this class do
+        If this method returns @false, no other methods of this class will do
         anything, but they may still be called without any ill effects.
      */
     bool IsAvailable() const;

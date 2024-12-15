@@ -48,8 +48,40 @@
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
 #define wxTE_RICH2          0x8000
 
+/**
+    File types supported by wxTextCtrl::LoadFile() and wxTextCtrl::SaveFile().
 
-#define wxTEXT_TYPE_ANY     0
+    @since 3.3.0
+*/
+enum wxTextCtrlFileType
+{
+    /**
+        Format determined by file extension when loading/saving the control's
+        content.
+
+        The supported formats depend on the capabilities of the platform's
+        native control.
+    */
+    wxTEXT_TYPE_ANY,
+
+    /**
+        Plain Text Format.
+
+        This format is supported under all platforms.
+
+        @since 3.3.0
+    */
+    wxTEXT_TYPE_PLAIN,
+
+    /**
+        Rich Text Format.
+
+        This format is only supported under macOS and MSW.
+
+        @since 3.3.0
+    */
+    wxTEXT_TYPE_RTF
+};
 
 
 /**
@@ -1097,6 +1129,112 @@ public:
 };
 
 /**
+    Search options for wxTextCtrl::SearchText().
+
+    This is a builder class, where property functions can be
+    called during construction. For example:
+
+    @code
+    wxTextSearchResult result =
+        textctrl->SearchText(wxTextSearch(L"Institutional Research").
+            SearchDirection(wxTextSearch::Direction::Down).
+            MatchCase().
+            MatchWholeWord());
+    @endcode
+
+    @since 3.3.0
+*/
+struct wxTextSearch
+{
+    /**
+       The string to search for.
+     */
+    wxTextSearch(const wxString& text) : m_searchValue(text) {}
+
+    /**
+        One of the following values can be passed to wxTextSearch::SearchDirection() to
+        control direction when searching a wxTextCtrl.
+
+        @since 3.3.0
+    */
+    enum class Direction
+    {
+        Down,
+        Up
+    };
+
+    /**
+       The string to search for.
+     */
+    wxTextSearch& SearchValue(const wxString& value)
+    {
+        m_searchValue = value;
+        return *this;
+    }
+
+    /**
+       Whether the search should match case (i.e., be case sensitive).
+
+       By default, this is @c false; search will be case insensitive.
+     */
+    wxTextSearch& MatchCase(const bool matchCase = true)
+    {
+        m_matchCase = matchCase;
+        return *this;
+    }
+
+    /**
+       Whether the search should match the whole word.
+
+       By default, this is @c false; searching will not match by whole word.
+     */
+    wxTextSearch& MatchWholeWord(const bool matchWholeWord = true)
+    {
+        m_wholeWord = matchWholeWord;
+        return *this;
+    }
+
+    /**
+       Whether the search should go up or down in the text control.
+
+       By default, search will go downward.
+     */
+    wxTextSearch& SearchDirection(const wxTextSearch::Direction direction)
+    {
+        m_direction = direction;
+        return *this;
+    }
+
+    /**
+       Where the search should start from. By default, if searching down,
+       then the search will start at 0. If searching up, then will start
+       at the end of control.
+     */
+    wxTextSearch& Start(const long startPosition)
+    {
+        m_startingPosition = startPosition;
+        return *this;
+    }
+
+    wxString              m_searchValue;
+    long                  m_startingPosition = -1;
+    bool                  m_matchCase = true;
+    bool                  m_wholeWord = false;
+    Direction m_direction = Direction::Down;
+};
+
+/** Result from wxTextCtrl::SearchText(), specifying the range of the found text.
+    Range values will be @c wxNOT_FOUND if a match was not found.
+
+    @since 3.3.0
+*/
+struct wxTextSearchResult
+{
+    long m_start = wxNOT_FOUND;
+    long m_end = wxNOT_FOUND;
+};
+
+/**
     @class wxTextProofOptions
 
     This class provides a convenient means of passing multiple parameters to
@@ -1624,6 +1762,66 @@ public:
     virtual bool GetStyle(long position, wxTextAttr& style);
 
     /**
+        Returns @c true if text controls support reading and writing RTF (Rich
+        Text Format).
+
+        This function only returns @true in wxOSX (for multiline contrls) and
+        wxMSW (for rich controls), which are the only ports implementing
+        RTF support in wxTextCtrl.
+
+        @since 3.3.0
+
+        @see GetRTFValue(), SetRTFValue()
+    */
+    bool IsRTFSupported();
+
+    /**
+        Returns the content of a multiline text control as RTF (Rich Text
+        Formatted) text.
+
+        Don't call this function unless IsRTFSupported() returns @true, as it
+        asserts if called in this case (and returns an empty string).
+
+        @since 3.3.0
+
+        @see SetRTFValue()
+    */
+    wxString GetRTFValue() const;
+
+    /**
+        Sets the content of a multiline text control from an RTF (Rich Text
+        Formatted) buffer.
+
+        This offers more granular control of content formatting, as well as a
+        significant performance benefit with larger content. This also provides
+        the ability to read an RTF file and move it directly into the control.
+
+        Don't call this function unless IsRTFSupported() returns @true, as it
+        asserts if called in this case.
+
+        @since 3.3.0
+
+        @see @ref page_samples_text for a usage example.
+
+        @see GetRTFValue()
+    */
+    void SetRTFValue(const wxString& val);
+
+    /**
+        Searches for a string in the control, using the provided search options.
+
+        The range of the match will be returned as a wxTextSearchResult, which will
+        contain -1 values if no match was found.
+
+        This is currently only implemented under wxMSW.
+
+        @since 3.3.0
+
+        @onlyfor{wxmsw}
+    */
+    wxTextSearchResult SearchText(const wxTextSearch& search) const;
+
+    /**
         Finds the position of the character at the specified point.
 
         If the return code is not @c wxTE_HT_UNKNOWN the position of the
@@ -1723,7 +1921,10 @@ public:
         @param filename
             The filename of the file to load.
         @param fileType
-            The type of file to load. This is currently ignored in wxTextCtrl.
+            One of the values of wxTextCtrlFileType enum, specifying the type
+            of file to load.
+            Default value and plain text are supported on all platforms, while
+            ::wxTEXT_TYPE_RTF is only supported in wxOSX currently.
 
         @return
             @true if successful, @false otherwise.
@@ -1802,7 +2003,10 @@ public:
         @param filename
             The name of the file in which to save the text.
         @param fileType
-            The type of file to save. This is currently ignored in wxTextCtrl.
+            One of the values of wxTextCtrlFileType enum, specifying the type
+            of file to save as.
+            Default value and plain text are supported on all platforms, while
+            ::wxTEXT_TYPE_RTF is only supported in wxOSX currently.
 
         @return
             @true if the operation was successful, @false otherwise.

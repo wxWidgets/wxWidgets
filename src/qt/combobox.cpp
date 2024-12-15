@@ -83,14 +83,9 @@ void wxQtComboBox::editTextChanged(const QString &text)
 
 void wxComboBox::SetSelection( int n )
 {
-    wxQtEnsureSignalsBlocked blocker(m_qtComboBox);
+    wxQtEnsureSignalsBlocked blocker(GetQComboBox());
     wxChoice::SetSelection( n );
 }
-
-wxComboBox::wxComboBox()
-{
-}
-
 
 wxComboBox::wxComboBox(wxWindow *parent,
            wxWindowID id,
@@ -143,13 +138,17 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    m_qtComboBox = new wxQtComboBox( parent, this );
-    m_qtComboBox->setEditable(!(style & wxCB_READONLY));
-    QtInitSort( m_qtComboBox );
+    m_qtWindow = new wxQtComboBox( parent, this );
+
+    GetQComboBox()->setEditable(!(style & wxCB_READONLY));
+    QtInitSort( GetQComboBox() );
 
     while ( n-- > 0 )
-        m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
-    m_qtComboBox->setCurrentText( wxQtConvertString( value ));
+    {
+        GetQComboBox()->addItem( wxQtConvertString( *choices++ ));
+    }
+
+    GetQComboBox()->setCurrentText( wxQtConvertString( value ));
 
     return wxChoiceBase::Create( parent, id, pos, size, style, validator, name );
 }
@@ -162,13 +161,13 @@ bool wxComboBox::IsReadOnly() const
 bool wxComboBox::IsEditable() const
 {
     // Only editable combo boxes have a line edit.
-    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    QLineEdit* const lineEdit = GetQComboBox()->lineEdit();
     return lineEdit && !lineEdit->isReadOnly();
 }
 
 void wxComboBox::SetEditable(bool editable)
 {
-    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    QLineEdit* const lineEdit = GetQComboBox()->lineEdit();
     if ( lineEdit )
         lineEdit->setReadOnly(!editable);
 }
@@ -234,13 +233,13 @@ void wxComboBox::WriteText(const wxString &value)
 {
     if ( IsEditable() )
     {
-        m_qtComboBox->lineEdit()->insert( wxQtConvertString( value ) );
+        GetQComboBox()->lineEdit()->insert( wxQtConvertString( value ) );
     }
 }
 
 wxString wxComboBox::DoGetValue() const
 {
-    return wxQtConvertString( m_qtComboBox->currentText() );
+    return wxQtConvertString( GetQComboBox()->currentText() );
 }
 
 void wxComboBox::Popup()
@@ -262,7 +261,7 @@ bool wxComboBox::QtHandleFocusEvent(QWidget *handler, QFocusEvent *event)
         // generating a lose focus event if the combobox or its drop-down still
         // have focus.
         QWidget* const widget = qApp->focusWidget();
-        if ( widget == m_qtComboBox || widget == m_qtComboBox->view() )
+        if ( widget == GetQComboBox() || widget == GetQComboBox()->view() )
             return false;
     }
 
@@ -290,7 +289,7 @@ void wxComboBox::SetSelection( long from, long to )
 
     SetInsertionPoint( from );
     // use the inner text entry widget (note that can be null if not editable)
-    if ( QLineEdit* const lineEdit = m_qtComboBox->lineEdit() )
+    if ( QLineEdit* const lineEdit = GetQComboBox()->lineEdit() )
     {
         lineEdit->setSelection( from, to - from );
     }
@@ -298,7 +297,7 @@ void wxComboBox::SetSelection( long from, long to )
 
 void wxComboBox::SetInsertionPoint( long pos )
 {
-    if ( QLineEdit* const lineEdit = m_qtComboBox->lineEdit() )
+    if ( QLineEdit* const lineEdit = GetQComboBox()->lineEdit() )
     {
         // check if pos indicates end of text:
         if ( pos == -1 )
@@ -310,7 +309,7 @@ void wxComboBox::SetInsertionPoint( long pos )
 
 long wxComboBox::GetInsertionPoint() const
 {
-    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+    QLineEdit* const lineEdit = GetQComboBox()->lineEdit();
 
     if ( !lineEdit )
         return -1;
@@ -326,7 +325,7 @@ long wxComboBox::GetInsertionPoint() const
 void wxComboBox::GetSelection(long* from, long* to) const
 {
     // use the inner text entry widget (note that can be null if not editable)
-    if ( QLineEdit* const lineEdit = m_qtComboBox->lineEdit() )
+    if ( QLineEdit* const lineEdit = GetQComboBox()->lineEdit() )
     {
         *from = lineEdit->selectionStart();
         if ( *from >= 0 )

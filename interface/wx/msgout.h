@@ -183,3 +183,24 @@ public:
     /// Default constructor.
     wxMessageOutputMessageBox();
 };
+
+/**
+    Check that the message output exists before using it.
+
+    This function is equivalent to
+
+    @code
+    wxMessageOutput::Get()->Output(str);
+    @endcode
+
+    but doesn't do anything if wxMessageOutput::Get() returns @NULL, instead of
+    crashing.
+
+    Note that typically wxMessageOutput::Get() can only ever return @NULL if
+    wxAppTraits::CreateMessageOutput() is overridden to return @NULL, so unless
+    your application does this, using this function is not necessary as the
+    snippet above can be used directly.
+
+    @since 3.3.0
+ */
+void wxSafeMessageOutput(const wxString& str);

@@ -94,7 +94,7 @@ private:
     void CalcWidth(wxMenuBar *menubar)
     {
         wxSize size;
-        wxClientDC dc(menubar);
+        wxInfoDC dc(menubar);
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
         dc.GetTextExtent(m_label, &size.x, &size.y);
 
@@ -2025,7 +2025,7 @@ wxSize wxMenuBar::DoGetBestClientSize() const
     wxSize size;
     if ( GetMenuCount() > 0 )
     {
-        wxClientDC dc(wxConstCast(this, wxMenuBar));
+        wxInfoDC dc(wxConstCast(this, wxMenuBar));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
         dc.GetTextExtent(GetMenuLabel(0), &size.x, &size.y);
 

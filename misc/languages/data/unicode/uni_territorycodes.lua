@@ -55,7 +55,7 @@ for line in io.lines(codeFileName) do
     end
   end
 end
-print("Number of countries=" .. count)
+print("  Number of countries = " .. count)
 
 fo1:write('commit;\n')
 fo1:close()

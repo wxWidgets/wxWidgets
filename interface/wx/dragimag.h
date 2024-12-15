@@ -15,6 +15,9 @@
     platforms, wxGenericDragImage is used. Applications may also prefer to use
     wxGenericDragImage on Windows, too.
 
+    @note wxGenericDragImage implementation uses wxScreenDC and so doesn't work
+    on the platforms where wxScreenDC doesn't work, e.g. modern macOS versions.
+
     To use this class, when you wish to start dragging an image, create a
     wxDragImage object and store it somewhere you can access it as the drag
     progresses. Call BeginDrag() to start, and EndDrag() to stop the drag. To

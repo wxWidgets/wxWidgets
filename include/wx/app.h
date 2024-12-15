@@ -135,6 +135,18 @@ public:
     // Called from wxExit() function, should terminate the application a.s.a.p.
     virtual void Exit();
 
+    // Allows to set a custom process exit code if a fatal error happens.
+    // This code is 255 by default, but can be changed if necessary, notably
+    // set to -1 (which still maps to 255 under most systems, but to 127 when
+    // using MSVC) if compatibility with the previous wx versions is important.
+    static void SetFatalErrorExitCode(int code) { ms_fatalErrorExitCode = code; }
+    static int GetFatalErrorExitCode() { return ms_fatalErrorExitCode; }
+
+    // Allows to set a custom process exit code if OnInit() returns false.
+    // By default, this exit code is 255, as for the fatal errors.
+    virtual void SetErrorExitCode(int code) { m_exitCode = code; }
+    int GetErrorExitCode() const { return m_exitCode; }
+
 
     // application info: name, description, vendor
     // -------------------------------------------
@@ -423,8 +435,7 @@ public:
     // version does the normal processing (i.e. shows the usual assert failure
     // dialog box)
     //
-    // the arguments are the location of the failed assert (func may be empty
-    // if the compiler doesn't support C99 __FUNCTION__), the text of the
+    // the arguments are the location of the failed assert, the text of the
     // assert itself and the user-specified message
     virtual void OnAssertFailure(const wxChar *file,
                                  int line,
@@ -538,6 +549,14 @@ private:
     // flag set to true at the end of wxApp ctor, call WXAppConstructed() to
     // set it
     bool m_fullyConstructed = false;
+
+    // Exit code to use if a fatal error occurs when the application object
+    // doesn't exist yet or is already destroyed.
+    static int ms_fatalErrorExitCode;
+
+    // Exit code to use if OnInit() returns false.
+    int m_exitCode = ms_fatalErrorExitCode;
+
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
@@ -687,7 +706,7 @@ public:
     enum class AppearanceResult
     {
         Failure,
-        Success,
+        Ok,
         CannotChange
     };
 

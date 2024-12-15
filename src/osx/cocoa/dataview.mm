@@ -1664,33 +1664,6 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 //
-// contextual menus
-//
--(NSMenu*) menuForEvent:(NSEvent*)theEvent
-{
-    wxUnusedVar(theEvent);
-
-    // this method does not do any special menu event handling but only sends
-    // an event message; therefore, the user has full control if a context
-    // menu should be shown or not
-    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
-
-    // get the item information;
-    // theoretically more than one ID can be returned but the event can only
-    // handle one item, therefore only the first item of the array is
-    // returned:
-    wxDataViewItem item;
-    wxDataViewItemArray selectedItems;
-    if (dvc->GetSelections(selectedItems) > 0)
-        item = selectedItems[0];
-
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dvc, item);
-    dvc->GetEventHandler()->ProcessEvent(event);
-    // nothing is done:
-    return nil;
-}
-
-//
 // delegate methods
 //
 -(void) outlineView:(NSOutlineView*)outlineView didClickTableColumn:(NSTableColumn*)tableColumn
@@ -3619,6 +3592,8 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title,
        m_NativeDataPtr(new wxDataViewColumnNativeData()),
        m_title(title)
 {
+    m_renderer->SetOwner( this );
+
     InitCommon(width, align, flags);
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
@@ -3635,6 +3610,8 @@ wxDataViewColumn::wxDataViewColumn(const wxBitmapBundle& bitmap,
     : wxDataViewColumnBase(bitmap, renderer, model_column),
       m_NativeDataPtr(new wxDataViewColumnNativeData())
 {
+    m_renderer->SetOwner( this );
+
     InitCommon(width, align, flags);
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))

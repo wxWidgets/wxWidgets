@@ -709,12 +709,16 @@ public :
 
     virtual wxString GetStringValue() const = 0 ;
     virtual void SetStringValue( const wxString &val ) = 0 ;
+    virtual wxString GetRTFValue() const = 0;
+    virtual void SetRTFValue( const wxString& val ) = 0;
     virtual void SetSelection( long from, long to ) = 0 ;
     virtual void GetSelection( long* from, long* to ) const = 0 ;
     virtual void WriteText( const wxString& str ) = 0 ;
 
     virtual bool CanClipMaxLength() const { return false; }
     virtual void SetMaxLength(unsigned long WXUNUSED(len)) {}
+
+    virtual bool IsRTFSupported() { return false; }
 
     virtual bool CanForceUpper() { return false; }
     virtual void ForceUpper() {}

@@ -137,7 +137,6 @@ TEST_CASE("StdString", "[wxString][Printf][vararg]")
     CHECK( s == "string widechar(2)." );
 }
 
-#if wxUSE_LONGLONG
 TEST_CASE("LongLongPrintf", "[wxString][Printf][vararg]")
 {
     const char * const llfmt = "%" wxLongLongFmtSpec "d";
@@ -147,7 +146,6 @@ TEST_CASE("LongLongPrintf", "[wxString][Printf][vararg]")
     wxLongLong ll = 1234567890;
     CHECK( wxString::Format(llfmt, ll) == "1234567890" );
 }
-#endif // wxUSE_LONGLONG
 
 TEST_CASE("Sscanf", "[wxSscanf][vararg]")
 {

@@ -285,7 +285,7 @@ void wxQtDCImpl::SetBackgroundMode(int mode)
 #if wxUSE_PALETTE
 void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    wxMISSING_IMPLEMENTATION(__func__);
 }
 #endif // wxUSE_PALETTE
 
@@ -400,10 +400,17 @@ wxCoord wxQtDCImpl::GetCharHeight() const
 
 wxCoord wxQtDCImpl::GetCharWidth() const
 {
-    //FIXME: Returning max width, instead of average
+    // We don't use QFontMetrics::maxWidth() here as it returns the width of the
+    // widest character in the font, which is usually too big for common usage.
+    // Instead, we use horizontalAdvance() here for consistency with the other
+    // ports. Or a decent approximation of it if not available.
     QFontMetrics metrics(m_qtPainter->isActive() ?
         m_qtPainter->font() : QApplication::font());
-    return wxCoord( metrics.maxWidth() );
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    return wxCoord( metrics.horizontalAdvance('H') );
+#else
+    return wxCoord( metrics.averageCharWidth() + 2 );
+#endif
 }
 
 void wxQtDCImpl::DoGetTextExtent(const wxString& string,
@@ -839,7 +846,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
         m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
 
         //Draw
-        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+        m_qtPainter->drawText(0, 0, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 
         //Restore saved settings
         m_qtPainter->setBackground(savedBrush);
@@ -847,7 +854,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
         m_qtPainter->setBackgroundMode(Qt::TransparentMode);
     }
     else
-        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+        m_qtPainter->drawText(0, 0, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 
     //Reset to default
     ComputeScaleAndOrigin();
@@ -941,6 +948,48 @@ void wxQtDCImpl::DoDrawPolygon(int n, const wxPoint points[],
         m_qtPainter->translate(xoffset, yoffset);
         m_qtPainter->drawPolygon(qtPoints, fill);
     }
+
+    // Reset transform
+    ComputeScaleAndOrigin();
+}
+
+void wxQtDCImpl::DoDrawPolyPolygon(int n,
+                                   const int count[],
+                                   const wxPoint points[],
+                                   wxCoord xoffset,
+                                   wxCoord yoffset,
+                                   wxPolygonFillMode fillStyle)
+{
+    if ( n == 1 )
+    {
+        DoDrawPolygon(count[0], points, xoffset, yoffset, fillStyle);
+        return;
+    }
+
+    QPainterPath path;
+
+    int i = 0;
+    for ( int j = 0; j < n; ++j )
+    {
+        wxPoint start = points[i];
+        path.moveTo(start.x + xoffset, start.y + yoffset);
+
+        ++i;
+        int l = count[j];
+        for ( int k = 1; k < l; ++k )
+        {
+            path.lineTo(points[i].x + xoffset, points[i].y + yoffset);
+            ++i;
+        }
+        // close the polygon
+        if ( start != points[i-1] )
+            path.lineTo(start.x + xoffset, start.y + yoffset);
+    }
+
+    QtDCOffsetHelper helper(m_qtPainter);
+
+    m_qtPainter->fillPath(path, m_qtPainter->brush());
+    m_qtPainter->strokePath(path, m_qtPainter->pen());
 
     // Reset transform
     ComputeScaleAndOrigin();

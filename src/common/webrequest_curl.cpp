@@ -88,22 +88,93 @@ static int wxCURLProgress(void* clientp, double dltotal, double dlnow,
                           static_cast<curl_off_t>(ulnow));
 }
 
+// Replace dangerous variadic curl_easy_setopt() with safe overloads.
+namespace
+{
+
+void wxCURLSetOpt(CURL* handle, CURLoption option, long long value)
+{
+    CURLcode res = curl_easy_setopt(handle, option, value);
+    if ( res != CURLE_OK )
+    {
+        wxLogDebug("curl_easy_setopt(%d, %lld) failed: %s",
+                   static_cast<int>(option), value, curl_easy_strerror(res));
+    }
+}
+
+void wxCURLSetOpt(CURL* handle, CURLoption option, unsigned long value)
+{
+    CURLcode res = curl_easy_setopt(handle, option, value);
+    if ( res != CURLE_OK )
+    {
+        wxLogDebug("curl_easy_setopt(%d, %lx) failed: %s",
+                   static_cast<int>(option), value, curl_easy_strerror(res));
+    }
+}
+
+void wxCURLSetOpt(CURL* handle, CURLoption option, long value)
+{
+    CURLcode res = curl_easy_setopt(handle, option, value);
+    if ( res != CURLE_OK )
+    {
+        wxLogDebug("curl_easy_setopt(%d, %ld) failed: %s",
+                   static_cast<int>(option), value, curl_easy_strerror(res));
+    }
+}
+
+void wxCURLSetOpt(CURL* handle, CURLoption option, int value)
+{
+    wxCURLSetOpt(handle, option, static_cast<long>(value));
+}
+
+void wxCURLSetOpt(CURL* handle, CURLoption option, const void* value)
+{
+    CURLcode res = curl_easy_setopt(handle, option, value);
+    if ( res != CURLE_OK )
+    {
+        wxLogDebug("curl_easy_setopt(%d, %p) failed: %s",
+                   static_cast<int>(option), value, curl_easy_strerror(res));
+    }
+}
+
+// Overload for function pointers used for various callbacks.
+template <typename R, typename... Args>
+void wxCURLSetOpt(CURL* handle, CURLoption option, R (*func)(Args...))
+{
+    wxCURLSetOpt(handle, option, reinterpret_cast<void*>(func));
+}
+
+void wxCURLSetOpt(CURL* handle, CURLoption option, const char* value)
+{
+    CURLcode res = curl_easy_setopt(handle, option, value);
+    if ( res != CURLE_OK )
+    {
+        wxLogDebug("curl_easy_setopt(%d, \"%s\") failed: %s",
+                   static_cast<int>(option), value, curl_easy_strerror(res));
+    }
+}
+
+void wxCURLSetOpt(CURL* handle, CURLoption option, const wxString& value)
+{
+    wxCURLSetOpt(handle, option, value.utf8_str().data());
+}
+
+} // anonymous namespace
+
 wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
     wxWebResponseImpl(request)
 {
     m_knownDownloadSize = 0;
 
-    curl_easy_setopt(GetHandle(), CURLOPT_WRITEDATA, static_cast<void*>(this));
-    curl_easy_setopt(GetHandle(), CURLOPT_HEADERDATA, static_cast<void*>(this));
+    wxCURLSetOpt(GetHandle(), CURLOPT_WRITEDATA, this);
+    wxCURLSetOpt(GetHandle(), CURLOPT_HEADERDATA, this);
 
  // Set the progress callback.
     #if CURL_AT_LEAST_VERSION(7, 32, 0)
         if ( wxWebSessionCURL::CurlRuntimeAtLeastVersion(7, 32, 0) )
         {
-            curl_easy_setopt(GetHandle(), CURLOPT_XFERINFOFUNCTION,
-                             wxCURLXferInfo);
-            curl_easy_setopt(GetHandle(), CURLOPT_XFERINFODATA,
-                             static_cast<void*>(this));
+            wxCURLSetOpt(GetHandle(), CURLOPT_XFERINFOFUNCTION, wxCURLXferInfo);
+            wxCURLSetOpt(GetHandle(), CURLOPT_XFERINFODATA, this);
         }
         else
     #endif
@@ -112,18 +183,14 @@ wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
             // to use them with this old version.
             wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
-            curl_easy_setopt(GetHandle(), CURLOPT_PROGRESSFUNCTION,
-                             wxCURLProgress);
-            curl_easy_setopt(GetHandle(), CURLOPT_PROGRESSDATA,
-                             static_cast<void*>(this));
+            wxCURLSetOpt(GetHandle(), CURLOPT_PROGRESSFUNCTION, wxCURLProgress);
+            wxCURLSetOpt(GetHandle(), CURLOPT_PROGRESSDATA, this);
 
             wxGCC_WARNING_RESTORE(deprecated-declarations)
         }
 
     // Have curl call the progress callback.
-    curl_easy_setopt(GetHandle(), CURLOPT_NOPROGRESS, 0L);
-
-    Init();
+    wxCURLSetOpt(GetHandle(), CURLOPT_NOPROGRESS, 0L);
 }
 
 size_t wxWebResponseCURL::CURLOnWrite(void* buffer, size_t size)
@@ -155,7 +222,7 @@ size_t wxWebResponseCURL::CURLOnHeader(const char * buffer, size_t size)
         wxString hdrValue;
         wxString hdrName = hdr.BeforeFirst(':', &hdrValue).Strip(wxString::trailing);
         hdrName.MakeUpper();
-        m_headers[hdrName] = hdrValue.Strip(wxString::leading);
+        m_headers[hdrName].push_back(hdrValue.Strip(wxString::leading));
     }
 
     return size;
@@ -203,10 +270,21 @@ wxString wxWebResponseCURL::GetURL() const
 wxString wxWebResponseCURL::GetHeader(const wxString& name) const
 {
     wxWebRequestHeaderMap::const_iterator it = m_headers.find(name.Upper());
+    if ( it != m_headers.end() && !it->second.empty() )
+        return it->second.back();
+
+    return wxString();
+}
+
+std::vector<wxString> wxWebResponseCURL::GetAllHeaderValues(const wxString& name) const
+{
+    std::vector<wxString> result;
+
+    wxWebRequestHeaderMap::const_iterator it = m_headers.find(name.Upper());
     if ( it != m_headers.end() )
-        return it->second;
-    else
-        return wxString();
+        result = it->second;
+
+    return result;
 }
 
 int wxWebResponseCURL::GetStatus() const
@@ -233,11 +311,24 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
                                    const wxString & url,
                                    int id):
     wxWebRequestImpl(session, sessionImpl, handler, id),
-    m_sessionImpl(sessionImpl)
+    m_sessionCURL(&sessionImpl),
+    m_handle(curl_easy_init())
 {
-    m_headerList = nullptr;
 
-    m_handle = curl_easy_init();
+    DoStartPrepare(url);
+}
+
+wxWebRequestCURL::wxWebRequestCURL(wxWebSessionSyncCURL& sessionImpl,
+                                   const wxString& url) :
+    wxWebRequestImpl(sessionImpl),
+    m_sessionCURL(nullptr),
+    m_handle(sessionImpl.GetHandle())
+{
+    DoStartPrepare(url);
+}
+
+void wxWebRequestCURL::DoStartPrepare(const wxString& url)
+{
     if ( !m_handle )
     {
         wxStrlcpy(m_errorBuffer, "libcurl initialization failed", CURL_ERROR_SIZE);
@@ -246,95 +337,165 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
 
     // Set error buffer to get more detailed CURL status
     m_errorBuffer[0] = '\0';
-    curl_easy_setopt(m_handle, CURLOPT_ERRORBUFFER, m_errorBuffer);
+    wxCURLSetOpt(m_handle, CURLOPT_ERRORBUFFER, m_errorBuffer);
     // Set URL to handle: note that we must use wxURI to escape characters not
     // allowed in the URLs correctly (URL API is only available in libcurl
     // since the relatively recent v7.62.0, so we don't want to rely on it).
-    curl_easy_setopt(m_handle, CURLOPT_URL, wxURI(url).BuildURI().utf8_str().data());
+    wxCURLSetOpt(m_handle, CURLOPT_URL, wxURI(url).BuildURI());
     // Set callback functions
-    curl_easy_setopt(m_handle, CURLOPT_WRITEFUNCTION, wxCURLWriteData);
-    curl_easy_setopt(m_handle, CURLOPT_HEADERFUNCTION, wxCURLHeader);
-    curl_easy_setopt(m_handle, CURLOPT_READFUNCTION, wxCURLRead);
-    curl_easy_setopt(m_handle, CURLOPT_READDATA, static_cast<void*>(this));
+    wxCURLSetOpt(m_handle, CURLOPT_WRITEFUNCTION, wxCURLWriteData);
+    wxCURLSetOpt(m_handle, CURLOPT_HEADERFUNCTION, wxCURLHeader);
+    wxCURLSetOpt(m_handle, CURLOPT_READFUNCTION, wxCURLRead);
+    wxCURLSetOpt(m_handle, CURLOPT_READDATA, this);
     // Enable gzip, etc decompression
-    curl_easy_setopt(m_handle, CURLOPT_ACCEPT_ENCODING, "");
+    wxCURLSetOpt(m_handle, CURLOPT_ACCEPT_ENCODING, "");
     // Enable redirection handling
-    curl_easy_setopt(m_handle, CURLOPT_FOLLOWLOCATION, 1L);
+    wxCURLSetOpt(m_handle, CURLOPT_FOLLOWLOCATION, 1L);
     // Limit redirect to HTTP
     #if CURL_AT_LEAST_VERSION(7, 85, 0)
     if ( wxWebSessionCURL::CurlRuntimeAtLeastVersion(7, 85, 0) )
     {
-        curl_easy_setopt(m_handle, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+        wxCURLSetOpt(m_handle, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
     }
     else
     #endif // curl >= 7.85
     {
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
-        curl_easy_setopt(m_handle, CURLOPT_REDIR_PROTOCOLS,
+        wxCURLSetOpt(m_handle, CURLOPT_REDIR_PROTOCOLS,
             CURLPROTO_HTTP | CURLPROTO_HTTPS);
 
         wxGCC_WARNING_RESTORE(deprecated-declarations)
     }
+
+    // Configure proxy settings.
+    const wxWebProxy& proxy = GetSessionImpl().GetProxy();
+    bool usingProxy = true;
+    switch ( proxy.GetType() )
+    {
+        case wxWebProxy::Type::URL:
+            wxCURLSetOpt(m_handle, CURLOPT_PROXY, proxy.GetURL());
+            break;
+
+        case wxWebProxy::Type::Disabled:
+            // This is a special value disabling use of proxy.
+            wxCURLSetOpt(m_handle, CURLOPT_PROXY, "");
+            usingProxy = false;
+            break;
+
+        case wxWebProxy::Type::Default:
+            // Nothing to do, libcurl will use the standard http_proxy and
+            // other similar environment variables by default.
+            break;
+    }
+
     // Enable all supported authentication methods
-    curl_easy_setopt(m_handle, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-    curl_easy_setopt(m_handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
+    wxCURLSetOpt(m_handle, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+    if ( usingProxy )
+        wxCURLSetOpt(m_handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 }
 
 wxWebRequestCURL::~wxWebRequestCURL()
 {
-    DestroyHeaderList();
-    m_sessionImpl.RequestHasTerminated(this);
+    if ( m_headerList )
+        curl_slist_free_all(m_headerList);
+
+    if ( IsAsync() )
+    {
+        m_sessionCURL->RequestHasTerminated(this);
+
+        curl_easy_cleanup(m_handle);
+    }
 }
 
-void wxWebRequestCURL::Start()
+wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
 {
     m_response.reset(new wxWebResponseCURL(*this));
 
-    if ( m_dataSize )
-    {
-        if ( m_method.empty() || m_method.CmpNoCase("POST") == 0 )
-        {
-            curl_easy_setopt(m_handle, CURLOPT_POSTFIELDSIZE_LARGE,
-                static_cast<curl_off_t>(m_dataSize));
-            curl_easy_setopt(m_handle, CURLOPT_POST, 1L);
-        }
-        else if ( m_method.CmpNoCase("PUT") == 0 )
-        {
-            curl_easy_setopt(m_handle, CURLOPT_UPLOAD, 1L);
-            curl_easy_setopt(m_handle, CURLOPT_INFILESIZE_LARGE,
-                static_cast<curl_off_t>(m_dataSize));
-        }
-        else
-        {
-            wxFAIL_MSG(wxString::Format(
-                "Supplied data is ignored when using method %s", m_method
-            ));
-        }
-    }
+    const auto result = m_response->InitFileStorage();
+    if ( !result )
+        return result;
 
-    if ( m_method.CmpNoCase("HEAD") == 0 )
+    const wxString method = GetHTTPMethod();
+
+    if ( method == "GET" )
     {
-        curl_easy_setopt(m_handle, CURLOPT_NOBODY, 1L);
+        // Nothing to do, libcurl defaults to GET. We could explicitly set
+        // CURLOPT_HTTPGET option to 1, but this would be useless, as we always
+        // reset the handle after making a request anyhow and curl_easy_reset()
+        // already resets the method to GET.
     }
-    else if ( !m_method.empty() )
+    else if ( method == "POST" )
     {
-        curl_easy_setopt(m_handle, CURLOPT_CUSTOMREQUEST,
-            static_cast<const char*>(m_method.mb_str()));
+        wxCURLSetOpt(m_handle, CURLOPT_POSTFIELDSIZE_LARGE,
+                     static_cast<long long>(m_dataSize));
+        wxCURLSetOpt(m_handle, CURLOPT_POST, 1L);
+    }
+    else if ( method == "HEAD" )
+    {
+        wxCURLSetOpt(m_handle, CURLOPT_NOBODY, 1L);
+    }
+    else if ( method != "PUT" || m_dataSize == 0 )
+    {
+        wxCURLSetOpt(m_handle, CURLOPT_CUSTOMREQUEST, method);
+    }
+    //else: PUT will be used by default if we have any data to send (and if we
+    //      don't, which should never happen but is nevertheless formally
+    //      allowed, we've set it as custom request above).
+
+    // POST is handled specially by libcurl, but for everything else, including
+    // PUT as well as any other method, such as e.g. DELETE, we need to
+    // explicitly request uploading the data, if any.
+    if ( m_dataSize && method != "POST" )
+    {
+        wxCURLSetOpt(m_handle, CURLOPT_UPLOAD, 1L);
+        wxCURLSetOpt(m_handle, CURLOPT_INFILESIZE_LARGE,
+                     static_cast<long long>(m_dataSize));
     }
 
     for ( wxWebRequestHeaderMap::const_iterator it = m_headers.begin();
         it != m_headers.end(); ++it )
     {
-        // TODO: We need to implement RFC 2047 encoding here instead of blindly
-        //       sending UTF-8 which is against the standard.
-        wxString hdrStr = wxString::Format("%s: %s", it->first, it->second);
-        m_headerList = curl_slist_append(m_headerList, hdrStr.utf8_str());
+        for ( const wxString& value : it->second )
+        {
+            // TODO: We need to implement RFC 2047 encoding here instead of blindly
+            //       sending UTF-8 which is against the standard.
+            wxString hdrStr = wxString::Format("%s: %s", it->first, value);
+            m_headerList = curl_slist_append(m_headerList, hdrStr.utf8_str());
+        }
     }
-    curl_easy_setopt(m_handle, CURLOPT_HTTPHEADER, m_headerList);
+    wxCURLSetOpt(m_handle, CURLOPT_HTTPHEADER, m_headerList);
 
-    if ( IsPeerVerifyDisabled() )
-        curl_easy_setopt(m_handle, CURLOPT_SSL_VERIFYPEER, 0);
+    const int securityFlags = GetSecurityFlags();
+    if ( securityFlags & wxWebRequest::Ignore_Certificate )
+        wxCURLSetOpt(m_handle, CURLOPT_SSL_VERIFYPEER, 0);
+    if ( securityFlags & wxWebRequest::Ignore_Host )
+        wxCURLSetOpt(m_handle, CURLOPT_SSL_VERIFYHOST, 0);
+
+    return Result::Ok();
+}
+
+wxWebRequest::Result wxWebRequestCURL::Execute()
+{
+    const auto result = DoFinishPrepare();
+    if ( result.state == wxWebRequest::State_Failed )
+        return result;
+
+    const CURLcode err = curl_easy_perform(m_handle);
+    if ( err != CURLE_OK )
+    {
+        // This ensures that DoHandleCompletion() returns failure and uses
+        // libcurl error message.
+        m_response.reset(nullptr);
+    }
+
+    return DoHandleCompletion();
+}
+
+void wxWebRequestCURL::Start()
+{
+    if ( !CheckResult(DoFinishPrepare()) )
+        return;
 
     StartRequest();
 }
@@ -343,7 +504,7 @@ bool wxWebRequestCURL::StartRequest()
 {
     m_bytesSent = 0;
 
-    if ( !m_sessionImpl.StartRequest(*this) )
+    if ( !m_sessionCURL->StartRequest(*this) )
     {
         SetState(wxWebRequest::State_Failed);
         return false;
@@ -354,26 +515,33 @@ bool wxWebRequestCURL::StartRequest()
 
 void wxWebRequestCURL::DoCancel()
 {
-    m_sessionImpl.CancelRequest(this);
+    m_sessionCURL->CancelRequest(this);
+}
+
+wxWebRequest::Result wxWebRequestCURL::DoHandleCompletion()
+{
+    // This is a special case, we want to use libcurl error message if there is
+    // no response at all.
+    if ( !m_response || m_response->GetStatus() == 0 )
+        return Result::Error(GetError());
+
+    return GetResultFromHTTPStatus(m_response);
 }
 
 void wxWebRequestCURL::HandleCompletion()
 {
-    int status = m_response ? m_response->GetStatus() : 0;
+    HandleResult(DoHandleCompletion());
 
-    if ( status == 0 )
+    if ( GetState() == wxWebRequest::State_Unauthorized )
     {
-        SetState(wxWebRequest::State_Failed, GetError());
-    }
-    else if ( status == 401 || status == 407 )
-    {
-        m_authChallenge.reset(new wxWebAuthChallengeCURL(
-            (status == 407) ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
-        SetState(wxWebRequest::State_Unauthorized, m_response->GetStatusText());
-    }
-    else
-    {
-        SetFinalStateFromStatus();
+        m_authChallenge.reset(
+            new wxWebAuthChallengeCURL(
+                m_response->GetStatus() == 407
+                    ? wxWebAuthChallenge::Source_Proxy
+                    : wxWebAuthChallenge::Source_Server,
+                    *this
+            )
+        );
     }
 }
 
@@ -395,15 +563,6 @@ size_t wxWebRequestCURL::CURLOnRead(char* buffer, size_t size)
     }
     else
         return 0;
-}
-
-void wxWebRequestCURL::DestroyHeaderList()
-{
-    if ( m_headerList )
-    {
-        curl_slist_free_all(m_headerList);
-        m_headerList = nullptr;
-    }
 }
 
 wxFileOffset wxWebRequestCURL::GetBytesSent() const
@@ -436,9 +595,10 @@ void wxWebAuthChallengeCURL::SetCredentials(const wxWebCredentials& cred)
             cred.GetUser(),
             static_cast<const wxString&>(wxSecretString(cred.GetPassword()))
         );
-    curl_easy_setopt(m_request.GetHandle(),
+    wxCURLSetOpt(m_request.GetHandle(),
         (GetSource() == wxWebAuthChallenge::Source_Proxy) ? CURLOPT_PROXYUSERPWD : CURLOPT_USERPWD,
-        authStr.utf8_str().data());
+        authStr);
+
     m_request.StartRequest();
 }
 
@@ -446,85 +606,45 @@ void wxWebAuthChallengeCURL::SetCredentials(const wxWebCredentials& cred)
 // SocketPoller - a helper class for wxWebSessionCURL
 //
 
-wxDECLARE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
-
-class SocketPollerImpl;
-
-class SocketPoller
+namespace
 {
-public:
-    enum PollAction
+
+wxDECLARE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
+wxDEFINE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
+
+// These look like scoped enums but are not, actually, because we need to use
+// them as bit masks.
+namespace PollAction
+{
+    enum
     {
         INVALID_ACTION = 0x00,
         POLL_FOR_READ = 0x01,
         POLL_FOR_WRITE = 0x02
     };
+};
 
-    enum Result
+namespace PollResult
+{
+    enum
     {
         INVALID_RESULT = 0x00,
         READY_FOR_READ = 0x01,
         READY_FOR_WRITE = 0x02,
         HAS_ERROR = 0x04
     };
-
-    SocketPoller(wxEvtHandler*);
-    ~SocketPoller();
-    bool StartPolling(curl_socket_t, int);
-    void StopPolling(curl_socket_t);
-    void ResumePolling(curl_socket_t);
-
-private:
-    SocketPollerImpl* m_impl;
 };
-
-wxDEFINE_EVENT(wxEVT_SOCKET_POLLER_RESULT, wxThreadEvent);
-
-class SocketPollerImpl
-{
-public:
-    virtual ~SocketPollerImpl(){}
-    virtual bool StartPolling(curl_socket_t, int) = 0;
-    virtual void StopPolling(curl_socket_t) = 0;
-    virtual void ResumePolling(curl_socket_t) = 0;
-
-    static SocketPollerImpl* Create(wxEvtHandler*);
-};
-
-SocketPoller::SocketPoller(wxEvtHandler* hndlr)
-{
-    m_impl = SocketPollerImpl::Create(hndlr);
-}
-
-SocketPoller::~SocketPoller()
-{
-    delete m_impl;
-}
-
-bool SocketPoller::StartPolling(curl_socket_t sock, int pollAction)
-{
-    return m_impl->StartPolling(sock, pollAction);
-}
-void SocketPoller::StopPolling(curl_socket_t sock)
-{
-    m_impl->StopPolling(sock);
-}
-
-void SocketPoller::ResumePolling(curl_socket_t sock)
-{
-    m_impl->ResumePolling(sock);
-}
 
 #ifdef __WINDOWS__
 
-class WinSock1SocketPoller: public SocketPollerImpl
+class WinSock1SocketPoller
 {
 public:
-    WinSock1SocketPoller(wxEvtHandler*);
-    virtual ~WinSock1SocketPoller();
-    virtual bool StartPolling(curl_socket_t, int) override;
-    virtual void StopPolling(curl_socket_t) override;
-    virtual void ResumePolling(curl_socket_t) override;
+    explicit WinSock1SocketPoller(wxEvtHandler*);
+    ~WinSock1SocketPoller();
+    bool StartPolling(curl_socket_t, int);
+    void StopPolling(curl_socket_t);
+    void ResumePolling(curl_socket_t);
 
 private:
     static LRESULT CALLBACK MsgProc(HWND hwnd, WXUINT uMsg, WXWPARAM wParam,
@@ -601,12 +721,12 @@ bool WinSock1SocketPoller::StartPolling(curl_socket_t sock, int pollAction)
     // Convert pollAction to a flag that can be used by winsock.
     int winActions = 0;
 
-    if ( pollAction & SocketPoller::POLL_FOR_READ )
+    if ( pollAction & PollAction::POLL_FOR_READ )
     {
         winActions |= FD_READ;
     }
 
-    if ( pollAction & SocketPoller::POLL_FOR_WRITE )
+    if ( pollAction & PollAction::POLL_FOR_WRITE )
     {
         winActions |= FD_WRITE;
     }
@@ -647,22 +767,22 @@ LRESULT CALLBACK WinSock1SocketPoller::MsgProc(WXHWND hwnd, WXUINT uMsg,
         int winResult = LOWORD(lParam);
         int error = HIWORD(lParam);
 
-        // Convert the result/errors to a SocketPoller::Result flag.
+        // Convert the result/errors to a PollResult flag.
         int pollResult = 0;
 
         if ( winResult & FD_READ )
         {
-            pollResult |= SocketPoller::READY_FOR_READ;
+            pollResult |= PollResult::READY_FOR_READ;
         }
 
         if ( winResult & FD_WRITE )
         {
-            pollResult |= SocketPoller::READY_FOR_WRITE;
+            pollResult |= PollResult::READY_FOR_WRITE;
         }
 
         if ( error != 0 )
         {
-            pollResult |= SocketPoller::HAS_ERROR;
+            pollResult |= PollResult::HAS_ERROR;
         }
 
         // If there is a significant result, send an event.
@@ -698,19 +818,21 @@ LRESULT CALLBACK WinSock1SocketPoller::MsgProc(WXHWND hwnd, WXUINT uMsg,
     }
 }
 
-SocketPollerImpl* SocketPollerImpl::Create(wxEvtHandler* hndlr)
-{
-    return new WinSock1SocketPoller(hndlr);
-}
+using SocketPollerBase = WinSock1SocketPoller;
 
 #else
 
+constexpr const char* TRACE_CURL = "curl";
+
 // SocketPollerSourceHandler - a source handler used by the SocketPoller class.
+
+class SourceSocketPoller;
 
 class SocketPollerSourceHandler: public wxEventLoopSourceHandler
 {
 public:
-    SocketPollerSourceHandler(curl_socket_t, wxEvtHandler*);
+    SocketPollerSourceHandler(curl_socket_t sock, SourceSocketPoller* poller)
+        : m_socket(sock), m_poller(poller) {}
 
     void OnReadWaiting() override;
     void OnWriteWaiting() override;
@@ -719,49 +841,36 @@ public:
 private:
     void SendEvent(int);
     curl_socket_t m_socket;
-    wxEvtHandler* m_handler;
+    SourceSocketPoller* const m_poller;
 };
-
-SocketPollerSourceHandler::SocketPollerSourceHandler(curl_socket_t sock,
-                                                     wxEvtHandler* hndlr)
-{
-    m_socket = sock;
-    m_handler = hndlr;
-}
 
 void SocketPollerSourceHandler::OnReadWaiting()
 {
-    SendEvent(SocketPoller::READY_FOR_READ);
+    SendEvent(PollResult::READY_FOR_READ);
 }
 
 void SocketPollerSourceHandler::OnWriteWaiting()
 {
-    SendEvent(SocketPoller::READY_FOR_WRITE);
+    SendEvent(PollResult::READY_FOR_WRITE);
 }
 
 void SocketPollerSourceHandler::OnExceptionWaiting()
 {
-    SendEvent(SocketPoller::HAS_ERROR);
-}
-
-void SocketPollerSourceHandler::SendEvent(int result)
-{
-    wxThreadEvent event(wxEVT_SOCKET_POLLER_RESULT);
-    event.SetPayload<curl_socket_t>(m_socket);
-    event.SetInt(result);
-    m_handler->ProcessEvent(event);
+    SendEvent(PollResult::HAS_ERROR);
 }
 
 // SourceSocketPoller - a SocketPollerImpl based on event loop sources.
 
-class SourceSocketPoller: public SocketPollerImpl
+class SourceSocketPoller
 {
 public:
-    SourceSocketPoller(wxEvtHandler*);
+    explicit SourceSocketPoller(wxEvtHandler*);
     ~SourceSocketPoller();
-    bool StartPolling(curl_socket_t, int) override;
-    void StopPolling(curl_socket_t) override;
-    void ResumePolling(curl_socket_t) override;
+    bool StartPolling(curl_socket_t, int);
+    void StopPolling(curl_socket_t);
+    void ResumePolling(curl_socket_t);
+
+    void SendEvent(curl_socket_t sock, int result);
 
 private:
     using SocketDataMap = std::unordered_map<curl_socket_t, wxEventLoopSource*>;
@@ -770,7 +879,20 @@ private:
 
     SocketDataMap m_socketData;
     wxEvtHandler* m_handler;
+
+    // The socket for which we're currently processing a write IO notification.
+    curl_socket_t m_activeWriteSocket = 0;
+
+    // The sockets that we couldn't clean up yet but should do if/when we get
+    // an error notification for them.
+    std::vector<curl_socket_t> m_socketsToCleanUp;
 };
+
+// This function must be implemented after full SourceSocketPoller declaration.
+void SocketPollerSourceHandler::SendEvent(int result)
+{
+    m_poller->SendEvent(m_socket, result);
+}
 
 SourceSocketPoller::SourceSocketPoller(wxEvtHandler* hndlr)
 {
@@ -779,6 +901,9 @@ SourceSocketPoller::SourceSocketPoller(wxEvtHandler* hndlr)
 
 SourceSocketPoller::~SourceSocketPoller()
 {
+    wxLogTrace(TRACE_CURL, "Cleaning up all %zu socket pollers",
+               m_socketData.size());
+
     // Clean up any leftover socket data.
     for ( SocketDataMap::iterator it = m_socketData.begin() ;
           it != m_socketData.end() ; ++it )
@@ -789,18 +914,18 @@ SourceSocketPoller::~SourceSocketPoller()
 
 static int SocketPoller2EventSource(int pollAction)
 {
-    // Convert the SocketPoller::PollAction value to a flag that can be used
+    // Convert the PollAction value to a flag that can be used
     // by wxEventLoopSource.
 
     // Always check for errors.
     int eventSourceFlag = wxEVENT_SOURCE_EXCEPTION;
 
-    if ( pollAction & SocketPoller::POLL_FOR_READ )
+    if ( pollAction & PollAction::POLL_FOR_READ )
     {
         eventSourceFlag |= wxEVENT_SOURCE_INPUT;
     }
 
-    if ( pollAction & SocketPoller::POLL_FOR_WRITE )
+    if ( pollAction & PollAction::POLL_FOR_WRITE )
     {
         eventSourceFlag |= wxEVENT_SOURCE_OUTPUT;
     }
@@ -815,6 +940,8 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
 
     if ( it != m_socketData.end() )
     {
+        wxLogTrace(TRACE_CURL, "Reusing socket poller for %d", sock);
+
         // If this socket is already being polled, reuse the old handler. Also
         // delete the old source object to stop the old polling operations.
         wxEventLoopSource* oldSrc = it->second;
@@ -824,9 +951,9 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
     }
     else
     {
-        // Otherwise create a new source handler.
-        srcHandler =
-            new SocketPollerSourceHandler(sock, m_handler);
+        wxLogTrace(TRACE_CURL, "Creating new socket poller for %d", sock);
+
+        srcHandler = new SocketPollerSourceHandler(sock, this);
     }
 
     // Get a new source object for these polling checks.
@@ -838,9 +965,7 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
     if ( newSrc == nullptr )
     {
         // We were not able to add a source for this socket.
-        wxLogDebug(wxString::Format(
-                       "Unable to create event loop source for %d",
-                       static_cast<int>(sock)));
+        wxLogDebug("Unable to create event loop source for %d", sock);
 
         delete srcHandler;
         socketIsPolled = false;
@@ -860,10 +985,23 @@ bool SourceSocketPoller::StartPolling(curl_socket_t sock, int pollAction)
 
 void SourceSocketPoller::StopPolling(curl_socket_t sock)
 {
+    if ( sock == m_activeWriteSocket )
+    {
+        // We can't clean up the socket while we're inside OnWriteWaiting() for
+        // it because it could be followed by OnExceptionWaiting() and we'd
+        // crash if we deleted it already.
+        wxLogTrace(TRACE_CURL, "Delaying cleanup of socket poller for %d", sock);
+
+        m_socketsToCleanUp.push_back(sock);
+        return;
+    }
+
     SocketDataMap::iterator it = m_socketData.find(sock);
 
     if ( it != m_socketData.end() )
     {
+        wxLogTrace(TRACE_CURL, "Cleaning up socket poller for %d", sock);
+
         CleanUpSocketSource(it->second);
         m_socketData.erase(it);
     }
@@ -873,6 +1011,35 @@ void SourceSocketPoller::ResumePolling(curl_socket_t WXUNUSED(sock))
 {
 }
 
+void SourceSocketPoller::SendEvent(curl_socket_t sock, int result)
+{
+    if ( result == PollResult::READY_FOR_WRITE )
+    {
+        // Prevent the handler from this socket from being deleted in case we
+        // get a HAS_ERROR event for it immediately after this one.
+        m_activeWriteSocket = sock;
+    }
+
+    wxThreadEvent event(wxEVT_SOCKET_POLLER_RESULT);
+    event.SetPayload<curl_socket_t>(sock);
+    event.SetInt(result);
+    m_handler->ProcessEvent(event);
+
+    m_activeWriteSocket = 0;
+
+    if ( result == PollResult::HAS_ERROR )
+    {
+        // Check if we have any sockets to clean up and do it now, it should be
+        // safe.
+        for ( auto sock : m_socketsToCleanUp )
+        {
+            StopPolling(sock);
+        }
+
+        m_socketsToCleanUp.clear();
+    }
+}
+
 void SourceSocketPoller::CleanUpSocketSource(wxEventLoopSource* source)
 {
     wxEventLoopSourceHandler* srcHandler = source->GetHandler();
@@ -880,22 +1047,30 @@ void SourceSocketPoller::CleanUpSocketSource(wxEventLoopSource* source)
     delete srcHandler;
 }
 
-SocketPollerImpl* SocketPollerImpl::Create(wxEvtHandler* hndlr)
-{
-    return new SourceSocketPoller(hndlr);
-}
+using SocketPollerBase = SourceSocketPoller;
 
 #endif
 
+} // anonymous namespace
+
+// We need to define the forward-declared SocketPoller as a class, not just a
+// typedef or alias.
+class SocketPoller : public SocketPollerBase
+{
+public:
+    explicit SocketPoller(wxEvtHandler* hndlr) : SocketPollerBase(hndlr) {}
+};
+
+
 //
-// wxWebSessionCURL
+// wxWebSessionBaseCURL
 //
 
-int wxWebSessionCURL::ms_activeSessions = 0;
-unsigned int wxWebSessionCURL::ms_runtimeVersion = 0;
+int wxWebSessionBaseCURL::ms_activeSessions = 0;
+unsigned int wxWebSessionBaseCURL::ms_runtimeVersion = 0;
 
-wxWebSessionCURL::wxWebSessionCURL() :
-    m_handle(nullptr)
+wxWebSessionBaseCURL::wxWebSessionBaseCURL(Mode mode)
+    : wxWebSessionImpl(mode)
 {
     // Initialize CURL globally if no sessions are active
     if ( ms_activeSessions == 0 )
@@ -912,7 +1087,58 @@ wxWebSessionCURL::wxWebSessionCURL() :
     }
 
     ms_activeSessions++;
+}
 
+wxWebSessionBaseCURL::~wxWebSessionBaseCURL()
+{
+    // Global CURL cleanup if this is the last session
+    --ms_activeSessions;
+    if ( ms_activeSessions == 0 )
+        curl_global_cleanup();
+}
+
+//
+// wxWebSessionSyncCURL
+//
+
+wxWebSessionSyncCURL::wxWebSessionSyncCURL()
+    : wxWebSessionBaseCURL(Mode::Sync)
+{
+}
+
+wxWebSessionSyncCURL::~wxWebSessionSyncCURL()
+{
+    if ( m_handle )
+        curl_easy_cleanup(m_handle);
+}
+
+wxWebRequestImplPtr
+wxWebSessionSyncCURL::CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
+                                        const wxString& url)
+{
+    if ( !m_handle )
+    {
+        // Allocate it the first time we need it and keep it later.
+        m_handle = curl_easy_init();
+    }
+    else
+    {
+        // But when reusing it subsequently, we must reset all the previously
+        // set options to prevent the settings from one request from applying
+        // to the subsequent ones.
+        curl_easy_reset(m_handle);
+    }
+
+    return wxWebRequestImplPtr(new wxWebRequestCURL(*this, url));
+}
+
+//
+// wxWebSessionCURL
+//
+
+wxWebSessionCURL::wxWebSessionCURL()
+    : wxWebSessionBaseCURL(Mode::Async)
+{
     m_socketPoller = new SocketPoller(this);
     m_timeoutTimer.SetOwner(this);
     Bind(wxEVT_TIMER, &wxWebSessionCURL::TimeoutNotification, this);
@@ -922,15 +1148,12 @@ wxWebSessionCURL::wxWebSessionCURL() :
 
 wxWebSessionCURL::~wxWebSessionCURL()
 {
-    delete m_socketPoller;
-
     if ( m_handle )
         curl_multi_cleanup(m_handle);
 
-    // Global CURL cleanup if this is the last session
-    --ms_activeSessions;
-    if ( ms_activeSessions == 0 )
-        curl_global_cleanup();
+    // Note that this object could be used by curl_multi_cleanup(), so we can
+    // only destroy it after finishing with using libcurl.
+    delete m_socketPoller;
 }
 
 wxWebRequestImplPtr
@@ -998,11 +1221,9 @@ void wxWebSessionCURL::RequestHasTerminated(wxWebRequestCURL* request)
     // If this transfer is currently active, stop it.
     CURL* curl = request->GetHandle();
     StopActiveTransfer(curl);
-
-    curl_easy_cleanup(curl);
 }
 
-wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
+wxVersionInfo wxWebSessionBaseCURL::GetLibraryVersionInfo() const
 {
     const curl_version_info_data* vi = curl_version_info(CURLVERSION_NOW);
     wxString desc = wxString::Format("libcurl/%s", vi->version);
@@ -1015,9 +1236,9 @@ wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
         desc);
 }
 
-bool wxWebSessionCURL::CurlRuntimeAtLeastVersion(unsigned int major,
-                                                 unsigned int minor,
-                                                 unsigned int patch)
+bool wxWebSessionBaseCURL::CurlRuntimeAtLeastVersion(unsigned int major,
+                                                     unsigned int minor,
+                                                     unsigned int patch)
 {
     return (ms_runtimeVersion >= CURL_VERSION_BITS(major, minor, patch));
 }
@@ -1090,20 +1311,19 @@ void wxWebSessionCURL::ProcessTimeoutNotification()
 
 static int CurlPoll2SocketPoller(int what)
 {
-    int pollAction = SocketPoller::INVALID_ACTION;
+    int pollAction = PollAction::INVALID_ACTION;
 
     if ( what == CURL_POLL_IN )
     {
-        pollAction = SocketPoller::POLL_FOR_READ ;
+        pollAction = PollAction::POLL_FOR_READ ;
     }
     else if ( what == CURL_POLL_OUT )
     {
-        pollAction = SocketPoller::POLL_FOR_WRITE;
+        pollAction = PollAction::POLL_FOR_WRITE;
     }
     else if ( what == CURL_POLL_INOUT )
     {
-        pollAction =
-            SocketPoller::POLL_FOR_READ | SocketPoller::POLL_FOR_WRITE;
+        pollAction = PollAction::POLL_FOR_READ | PollAction::POLL_FOR_WRITE;
     }
 
     return pollAction;
@@ -1156,17 +1376,17 @@ static int SocketPollerResult2CurlSelect(int socketEventFlag)
 {
     int curlSelect = 0;
 
-    if ( socketEventFlag & SocketPoller::READY_FOR_READ )
+    if ( socketEventFlag & PollResult::READY_FOR_READ )
     {
         curlSelect |= CURL_CSELECT_IN;
     }
 
-    if ( socketEventFlag & SocketPoller::READY_FOR_WRITE )
+    if ( socketEventFlag & PollResult::READY_FOR_WRITE )
     {
         curlSelect |= CURL_CSELECT_OUT;
     }
 
-    if ( socketEventFlag &  SocketPoller::HAS_ERROR )
+    if ( socketEventFlag &  PollResult::HAS_ERROR )
     {
         curlSelect |= CURL_CSELECT_ERR;
     }

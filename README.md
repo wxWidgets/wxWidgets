@@ -29,7 +29,7 @@ Platforms
 
 This version of wxWidgets supports the following primary platforms:
 
-- Windows 7, 8, 10 and 11 (32/64 bits).
+- Windows 7, 8, 10 and 11 (32/64 bit Intel and ARM64).
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer or 3.x).
 - macOS (10.10 or newer) using Cocoa under both amd64 and ARM platforms.
 

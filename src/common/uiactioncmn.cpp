@@ -202,14 +202,18 @@ bool wxUIActionSimulator::Select(const wxString& text)
         container = combo;
 #endif // wxUSE_COMBOBOX
 #if wxUSE_CHOICE
-    wxChoice* choice;
-    if ( !container && (choice = wxDynamicCast(focus, wxChoice)) )
-        container = choice;
+    if ( !container )
+    {
+        if ( wxChoice* choice = wxDynamicCast(focus, wxChoice) )
+            container = choice;
+    }
 #endif // wxUSE_CHOICE
 #if wxUSE_LISTBOX
-    wxListBox* listbox;
-    if ( !container && (listbox = wxDynamicCast(focus, wxListBox)) )
-        container = listbox;
+    if ( !container )
+    {
+        if ( wxListBox* listbox = wxDynamicCast(focus, wxListBox) )
+            container = listbox;
+    }
 #endif // wxUSE_LISTBOX
 #else // !wxNO_RTTI
     wxItemContainer* const container = dynamic_cast<wxItemContainer*>(focus);

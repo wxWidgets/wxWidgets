@@ -31,10 +31,12 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/modalhook.h"
 #include "wx/recguard.h"
 #include "wx/sysopt.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/wrapgdk.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/win_gtk.h"
@@ -42,12 +44,8 @@
 #include "wx/gtk/private/threads.h"
 
 #ifdef GDK_WINDOWING_X11
-    #include <gdk/gdkx.h>
     #include <X11/Xatom.h>  // XA_CARDINAL
     #include "wx/unix/utilsx11.h"
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-    #include <gdk/gdkwayland.h>
 #endif
 
 #define TRACE_TLWSIZE "tlwsize"
@@ -55,9 +53,6 @@
 // ----------------------------------------------------------------------------
 // data
 // ----------------------------------------------------------------------------
-
-// this is incremented while a modal dialog is shown
-int wxOpenModalDialogsCount = 0;
 
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
@@ -314,7 +309,8 @@ gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget),
                            wxTopLevelWindowGTK *win )
 {
     if (win->IsEnabled() &&
-        (wxOpenModalDialogsCount == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
+        (wxModalDialogHook::GetOpenCount() == 0 ||
+         (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
          win->IsGrabbed()))
         win->Close();
 
@@ -792,10 +788,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if (pos.IsFullySpecified())
     {
 #ifdef __WXGTK3__
-        GtkWindowPosition windowPos;
-        g_object_get(m_widget, "window-position", &windowPos, nullptr);
-        if (windowPos == GTK_WIN_POS_NONE)
-            gtk_window_move(GTK_WINDOW(m_widget), m_x, m_y);
+        gtk_window_move(GTK_WINDOW(m_widget), m_x, m_y);
 #else
         gtk_widget_set_uposition( m_widget, m_x, m_y );
 #endif

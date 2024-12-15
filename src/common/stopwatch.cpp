@@ -150,8 +150,6 @@ wxLongLong wxStopWatch::TimeInMicro() const
 // old timer functions superceded by wxStopWatch
 // ----------------------------------------------------------------------------
 
-#if wxUSE_LONGLONG
-
 static wxLongLong wxStartTime = 0l;
 
 // starts the global timer
@@ -171,5 +169,3 @@ long wxGetElapsedTime(bool resetTimer)
 
     return (newTime - oldTime).GetLo();
 }
-
-#endif // wxUSE_LONGLONG

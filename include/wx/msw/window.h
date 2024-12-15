@@ -289,6 +289,14 @@ public:
     // Setup background and foreground colours correctly
     virtual void SetupColours();
 
+    virtual wxVisualAttributes GetDefaultAttributes() const override
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     // ------------------------------------------------------------------------
     // helpers for message handlers: these perform the same function as the
     // message crackers from <windowsx.h> - they unpack WPARAM and LPARAM into
@@ -566,6 +574,10 @@ public:
 
     // Find the menu corresponding to the given handle.
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
+
+    // Find the the current menu item using the given handle and the item id
+    virtual wxMenuItem* MSWFindMenuItemFromHMENU(WXHMENU hMenu, int nItem);
+
 #endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
     // Return the default button for the TLW containing this window or nullptr if

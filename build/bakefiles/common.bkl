@@ -183,7 +183,6 @@
     <set var="WXLIB_STC">
         <if cond="MONOLITHIC=='0' and USE_STC=='1'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
     </set>
-
     <set var="WXLIB_WEBVIEW">
         <if cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'">$(mk.evalExpr(wxwin.mkLibName('webview')))</if>
     </set>
@@ -607,6 +606,8 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
                 <sys-lib>kernel32</sys-lib>
                 <sys-lib>user32</sys-lib>
                 <sys-lib>gdi32</sys-lib>
+                <sys-lib>gdiplus</sys-lib>
+                <sys-lib>msimg32</sys-lib>
                 <sys-lib>comdlg32</sys-lib>
                 <sys-lib>winspool</sys-lib>
                 <sys-lib>winmm</sys-lib>
@@ -671,7 +672,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <sys-lib>$(LIB_SCINTILLA_IF_MONO)</sys-lib>
         <sys-lib>$(LIB_LEXILLA_IF_MONO)</sys-lib>
     </template>
-
 
     <set var="WX_DISABLE_PRECOMP_HEADERS" overwrite="0">0</set>
 
@@ -779,6 +779,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
         <include>$(INC_PNG)</include>
+        <include>$(INC_LUNASVG)</include>
     </template>
 
     <template id="wx_lib"

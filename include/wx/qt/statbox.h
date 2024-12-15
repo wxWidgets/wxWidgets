@@ -13,7 +13,7 @@ class QGroupBox;
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
-    wxStaticBox();
+    wxStaticBox() = default;
 
     wxStaticBox(wxWindow *parent, wxWindowID id,
                 const wxString& label,
@@ -31,17 +31,12 @@ public:
 
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const override;
 
-    virtual QWidget *GetHandle() const override;
-
     virtual void SetLabel(const wxString& label) override;
     virtual wxString GetLabel() const override;
 
-protected:
+    QGroupBox* GetQGroupBox() const;
 
-private:
-    QGroupBox *m_qtGroupBox;
-
-    wxDECLARE_DYNAMIC_CLASS( wxStaticBox );
+    wxDECLARE_DYNAMIC_CLASS(wxStaticBox);
 };
 
 #endif // _WX_QT_STATBOX_H_

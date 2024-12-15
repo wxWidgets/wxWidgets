@@ -77,17 +77,6 @@ GetSelectedTextBgColour(const wxColour& WXUNUSED(clr))
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlCell, wxObject);
 
-wxHtmlCell::wxHtmlCell() : wxObject()
-{
-    m_Next = nullptr;
-    m_Parent = nullptr;
-    m_Width = m_Height = m_Descent = 0;
-    m_ScriptMode = wxHTML_SCRIPT_NORMAL;        // <sub> or <sup> mode
-    m_ScriptBaseline = 0;                       // <sub> or <sup> baseline
-    m_CanLiveOnPagebreak = true;
-    m_Link = nullptr;
-}
-
 wxHtmlCell::~wxHtmlCell()
 {
     delete m_Link;
@@ -191,8 +180,11 @@ void wxHtmlCell::Layout(int WXUNUSED(w))
 
 
 
-const wxHtmlCell* wxHtmlCell::Find(int WXUNUSED(condition), const void* WXUNUSED(param)) const
+const wxHtmlCell* wxHtmlCell::Find(int condition, const void* param) const
 {
+    if ( CheckIsAnchor(condition, param) )
+        return this;
+
     return nullptr;
 }
 
@@ -666,20 +658,22 @@ wxString wxHtmlWordCell::GetDescription() const
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlContainerCell, wxHtmlCell);
 
+void wxHtmlContainerCell::InitParent(wxHtmlContainerCell *parent)
+{
+    m_Parent = parent;
+    if (m_Parent) m_Parent->InsertCell(this);
+}
+
 wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCell()
 {
-    m_Cells = m_LastCell = nullptr;
-    m_Parent = parent;
-    m_MaxTotalWidth = 0;
-    if (m_Parent) m_Parent->InsertCell(this);
-    m_AlignHor = wxHTML_ALIGN_LEFT;
-    m_AlignVer = wxHTML_ALIGN_BOTTOM;
-    m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
-    m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
-    m_Border = 0;
-    m_MinHeight = 0;
-    m_MinHeightAlign = wxHTML_ALIGN_TOP;
-    m_LastLayout = -1;
+    InitParent(parent);
+}
+
+wxHtmlContainerCell::wxHtmlContainerCell(const wxHtmlTag& tag,
+                                         wxHtmlContainerCell *parent)
+    : wxHtmlCell(tag)
+{
+    InitParent(parent);
 }
 
 wxHtmlContainerCell::~wxHtmlContainerCell()
@@ -1279,6 +1273,9 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale
 
 const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) const
 {
+    if ( CheckIsAnchor(condition, param) )
+        return this;
+
     if (m_Cells)
     {
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())

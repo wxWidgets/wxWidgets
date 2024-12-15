@@ -115,7 +115,7 @@ wxSize wxBannerWindow::DoGetBestClientSize() const
     }
     else
     {
-        wxClientDC dc(const_cast<wxBannerWindow *>(this));
+        wxInfoDC dc(const_cast<wxBannerWindow *>(this));
         const wxSize sizeText = dc.GetMultiLineTextExtent(m_message);
 
         dc.SetFont(GetTitleFont());

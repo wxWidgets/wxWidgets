@@ -66,7 +66,6 @@ protected:
     virtual wxSize DoGetBestSize() const override;
     virtual void DoMoveWindow(int x, int y, int width, int height) override;
 #if wxUSE_TOOLTIPS
-    virtual bool MSWProcessMessage(WXMSG* pMsg) override;
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result) override;
 #endif
 

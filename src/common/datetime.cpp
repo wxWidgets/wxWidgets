@@ -2306,13 +2306,13 @@ wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
     const float A = year % 19;
     const float B = year % 4;
     const float C = year % 7;
-    const float P = std::floor((float)year / 100.0);
+    const float P = std::floor(year / 100.0f);
 
-    const float Q = std::floor((float)(13 + 8 * P) / 25.0);
+    const float Q = std::floor((13 + 8 * P) / 25.0f);
 
-    const float M = (int)(15 - Q + P - std::floor((float)P / 4)) % 30;
+    const float M = (int)(15 - Q + P - std::floor(P / 4)) % 30;
 
-    const float N = (int)(4 + P - std::floor((float)P / 4)) % 7;
+    const float N = (int)(4 + P - std::floor(P / 4)) % 7;
 
     const float D = (int)(19 * A + M) % 30;
 

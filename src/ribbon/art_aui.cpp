@@ -341,7 +341,7 @@ void wxRibbonAUIArtProvider::DrawTabCtrlBackground(
 }
 
 int wxRibbonAUIArtProvider::GetTabCtrlHeight(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* WXUNUSED(wnd),
                         const wxRibbonPageTabInfoArray& pages)
 {
@@ -520,7 +520,7 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
 }
 
 void wxRibbonAUIArtProvider::GetBarTabWidth(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* WXUNUSED(wnd),
                         const wxString& label,
                         const wxBitmap& bitmap,
@@ -592,7 +592,7 @@ void wxRibbonAUIArtProvider::DrawPageBackground(
 }
 
 wxSize wxRibbonAUIArtProvider::GetScrollButtonMinimumSize(
-                        wxDC& WXUNUSED(dc),
+                        wxReadOnlyDC& WXUNUSED(dc),
                         wxWindow* WXUNUSED(wnd),
                         long WXUNUSED(style))
 {
@@ -670,7 +670,7 @@ void wxRibbonAUIArtProvider::DrawScrollButton(
 }
 
 wxSize wxRibbonAUIArtProvider::GetPanelSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize client_size,
                         wxPoint* client_offset)
@@ -694,7 +694,7 @@ wxSize wxRibbonAUIArtProvider::GetPanelSize(
 }
 
 wxSize wxRibbonAUIArtProvider::GetPanelClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset)
@@ -719,7 +719,7 @@ wxSize wxRibbonAUIArtProvider::GetPanelClientSize(
     return size;
 }
 
-wxRect wxRibbonAUIArtProvider::GetPanelExtButtonArea(wxDC& dc,
+wxRect wxRibbonAUIArtProvider::GetPanelExtButtonArea(wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxRect rect)
 {

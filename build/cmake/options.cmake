@@ -111,8 +111,10 @@ wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing" DEFAULT_
 wx_add_thirdparty_library(wxUSE_LIBJPEG JPEG "use libjpeg (JPEG file format)")
 wx_add_thirdparty_library(wxUSE_LIBPNG PNG "use libpng (PNG image format)")
 wx_add_thirdparty_library(wxUSE_LIBTIFF TIFF "use libtiff (TIFF file format)")
+
+wx_add_thirdparty_library(wxUSE_LUNASVG LunaSVG "use lunasvg for rasterizing SVG" DEFAULT builtin)
 wx_add_thirdparty_library(wxUSE_NANOSVG NanoSVG "use NanoSVG for rasterizing SVG" DEFAULT OFF)
-wx_add_thirdparty_library(wxUSE_LUNASVG LunaSVG "use LunaSVG for rasterizing SVG" DEFAULT builtin)
+wx_option_force_value(wxUSE_NANOSVG OFF)
 
 wx_option(wxUSE_LIBLZMA "use LZMA compression" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzma for LZMA compression")
@@ -184,7 +186,6 @@ wx_option(wxUSE_FSVOLUME "use wxFSVolume class")
 wx_option(wxUSE_FSWATCHER "use wxFileSystemWatcher class")
 wx_option(wxUSE_GEOMETRY "use geometry class")
 wx_option(wxUSE_LOG "use logging system")
-wx_option(wxUSE_LONGLONG "use wxLongLong class")
 wx_option(wxUSE_MIMETYPE "use wxMimeTypesManager")
 wx_option(wxUSE_PRINTF_POS_PARAMS "use wxVsnprintf() which supports positional parameters")
 wx_option(wxUSE_SECRETSTORE "use wxSecretStore class")
@@ -393,7 +394,6 @@ wx_option(wxUSE_TREELISTCTRL "use wxTreeListCtrl class")
 # common dialogs
 # ---------------------------------------------------------------------------
 
-wx_option(wxUSE_COMMON_DIALOGS "use all common dialogs")
 wx_option(wxUSE_ABOUTDLG "use wxAboutBox")
 wx_option(wxUSE_CHOICEDLG "use wxChoiceDialog")
 wx_option(wxUSE_COLOURDLG "use wxColourDialog")

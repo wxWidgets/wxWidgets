@@ -304,8 +304,8 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    // uncomment this to get some debugging messages from the trace code
-    // on the console (or just set WXTRACE env variable to include "thread")
+    // get any debugging messages from trace code onto the console
+    // (can also be done by setting the WXTRACE env variable to include "thread")
     wxLog::AddTraceMask("thread");
 
     // Create the main frame window
@@ -836,7 +836,7 @@ MyImageDialog::MyImageDialog(wxFrame *parent)
 
     CentreOnScreen();
 
-    // NOTE: no need to lock m_csBmp until the thread isn't started:
+    // NOTE: no need to lock m_csBmp until the thread has started:
 
     // create the bitmap
     if (!m_bmp.Create(GUITHREAD_BMP_SIZE,GUITHREAD_BMP_SIZE) || !m_bmp.IsOk())

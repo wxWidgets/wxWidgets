@@ -1445,9 +1445,6 @@ protected:
 
     wxBitmap            *m_doubleBuffer;
 
-    // Local time ms when control was created.
-    wxMilliClock_t      m_timeCreated;
-
     // wxPGProperty::OnEvent can change value by setting this.
     wxVariant           m_changeInEventValue;
 

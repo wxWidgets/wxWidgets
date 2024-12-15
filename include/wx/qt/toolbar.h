@@ -16,7 +16,8 @@ class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
 public:
 
-    wxToolBar() { Init(); }
+    wxToolBar() = default;
+
     wxToolBar(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -24,8 +25,6 @@ public:
               long style = wxTB_DEFAULT_STYLE | wxNO_BORDER,
               const wxString& name = wxASCII_STR(wxToolBarNameStr))
     {
-        Init();
-
         Create(parent, id, pos, size, style, name);
     }
 
@@ -59,10 +58,8 @@ public:
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
-    QWidget *GetHandle() const override;
 
-    // Private, only used by wxFrame.
-    QToolBar *GetQToolBar() const { return m_qtToolBar; }
+    QToolBar* GetQToolBar() const;
 
 protected:
     QActionGroup* GetActionGroup(size_t pos);
@@ -73,11 +70,7 @@ protected:
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) override;
 
 private:
-    void Init();
-
     long GetButtonStyle();
-
-    QToolBar *m_qtToolBar;
 
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
 };

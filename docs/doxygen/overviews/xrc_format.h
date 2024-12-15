@@ -405,6 +405,10 @@ When using SVG file you must also specify @c default_size attribute
 @code
 <bitmap default_size="32,32">new.svg</bitmap>
 @endcode
+Note that, unlike most of the other sizes in XRC, this size is expressed in
+DPI-independent pixels and is not scaled by DPI scaling factor. Because of
+this, it can't be specified in dialog units, which are, by definition,
+DPI-dependent, but only in pixels as shown above.
 
 Alternatively, it is possible to specify the bitmap using wxArtProvider IDs.
 In this case, the property element has no textual value (filename) and instead

@@ -13,7 +13,8 @@ class wxQTreeWidget;
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
 public:
-    wxTreeCtrl();
+    wxTreeCtrl() = default;
+
     wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
@@ -117,7 +118,7 @@ public:
 
     virtual void SetWindowStyleFlag(long styles) override;
 
-    virtual QWidget *GetHandle() const override;
+    wxQTreeWidget* GetQTreeWidget() const;
 
 protected:
     virtual int DoGetItemState(const wxTreeItemId& item) const override;
@@ -148,7 +149,6 @@ private:
 
     void DoUpdateIconsSize(wxImageList *imageList);
 
-    wxQTreeWidget *m_qtTreeWidget;
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 };
 

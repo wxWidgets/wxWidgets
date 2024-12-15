@@ -244,6 +244,17 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
         }
     }
 #endif // wxUSE_STATUSBAR
+
+    // Ensure that we always return a valid size, it can never be negative.
+    //
+    // Note that this takes care of the case when the frame is minimized, as
+    // Windows client size in this case is (0,0), but while we could test for
+    // this separately, it seems more robust to just always do this here to
+    // establish our post-condition.
+    if ( x && *x < 0 )
+        *x = 0;
+    if ( y && *y < 0 )
+        *y = 0;
 }
 
 // ----------------------------------------------------------------------------

@@ -53,7 +53,11 @@ jobs:
                 ':!build/autogen.mk' \
                 ':!build/bakefiles/make_dist.mk' \
                 ':!build/bakefiles/scintilla.bkl' \
+                ':!build/clone-minimal-vcxproj' \
+                ':!build/upmake' \
+                ':!build/vcxproj-clone' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
+                ':!misc/languages/data/unicode/*.xml' \
                 ':!samples/widgets/widgets.bkl' \
                 ':!tests/test.bkl' \
                 ':!**/*akefile*' \
@@ -93,7 +97,7 @@ jobs:
             git fetch --depth=1 origin master
             if git diff origin/master \
                ':**.h' ':**.cpp' \
-               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^"_@A-Za-z0-9]NULL([- ,;()+*/%&=!?]|$))'; then
+               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|wxMEMBER_DELETE|__WXFUNCTION__|[^"_@A-Za-z0-9]NULL([- ,;()+*/%&=!?]|$))'; then
               echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
               exit 1
             fi

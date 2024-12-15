@@ -14,6 +14,8 @@
 
 #include "wx/private/webrequest.h"
 
+DECLARE_WXCOCOA_OBJC_CLASS(NSError);
+DECLARE_WXCOCOA_OBJC_CLASS(NSURLComponents);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLCredential);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSession);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSessionTask);
@@ -59,6 +61,8 @@ public:
 
     wxString GetHeader(const wxString& name) const override;
 
+    std::vector<wxString> GetAllHeaderValues(const wxString& name) const override;
+
     int GetStatus() const override;
 
     wxString GetStatusText() const override;
@@ -76,13 +80,20 @@ private:
 class wxWebRequestURLSession : public wxWebRequestImpl
 {
 public:
+    // Ctor for asynchronous requests.
     wxWebRequestURLSession(wxWebSession& session,
                            wxWebSessionURLSession& sessionImpl,
                            wxEvtHandler* handler,
                            const wxString& url,
                            int winid);
 
+    // Ctor for synchronous requests.
+    wxWebRequestURLSession(wxWebSessionURLSession& sessionImpl,
+                           const wxString& url);
+
     ~wxWebRequestURLSession();
+
+    Result Execute() override;
 
     void Start() override;
 
@@ -105,7 +116,9 @@ public:
         return (wxWebRequestHandle)m_task;
     }
 
-    void HandleCompletion();
+    Result GetResultAfterCompletion(WX_NSError error);
+
+    void HandleCompletion(WX_NSError error);
 
     void HandleChallenge(wxWebAuthChallengeURLSession* challenge);
 
@@ -120,6 +133,17 @@ public:
 private:
     void DoCancel() override;
 
+    // This is a blatant ODR-violation, but there doesn't seem to be any way to
+    // declare a function taking a block in (non-Objective) C++, so just skip
+    // its declaration when compiling pure C++ code.
+#if defined(__OBJC__)
+    // Common part of Execute() and Start(), used for both synchronous and
+    // asynchronous requests, but for the completion handler can only be
+    // non-nil in the synchronous case.
+    Result
+    DoPrepare(void (^completionHandler)(NSData*, NSURLResponse*, NSError*));
+#endif // __OBJC__
+
     wxWebSessionURLSession& m_sessionImpl;
     wxString m_url;
     WX_NSURLSessionTask m_task;
@@ -132,7 +156,7 @@ private:
 class wxWebSessionURLSession : public wxWebSessionImpl
 {
 public:
-    wxWebSessionURLSession();
+    explicit wxWebSessionURLSession(Mode mode);
 
     ~wxWebSessionURLSession();
 
@@ -142,12 +166,18 @@ public:
                   const wxString& url,
                   int winid = wxID_ANY) override;
 
-    wxVersionInfo GetLibraryVersionInfo() override;
+    wxWebRequestImplPtr
+    CreateRequestSync(wxWebSessionSync& session,
+                      const wxString& url) override;
+
+    wxVersionInfo GetLibraryVersionInfo() const override;
 
     wxWebSessionHandle GetNativeHandle() const override
     {
         return (wxWebSessionHandle)m_session;
     }
+
+    bool SetProxy(const wxWebProxy& proxy) override;
 
     bool EnablePersistentStorage(bool enable) override;
 
@@ -158,6 +188,9 @@ public:
 private:
     WX_NSURLSession m_session = nullptr;
     WX_wxWebSessionDelegate m_delegate;
+#if !wxOSX_USE_IPHONE
+    WX_NSURLComponents m_proxyURL = nullptr;
+#endif // !wxOSX_USE_IPHONE
     bool m_persistentStorageEnabled = false;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionURLSession);
@@ -167,7 +200,14 @@ class wxWebSessionFactoryURLSession : public wxWebSessionFactory
 {
 public:
     wxWebSessionImpl* Create() override
-    { return new wxWebSessionURLSession(); }
+    {
+        return new wxWebSessionURLSession(wxWebSessionImpl::Mode::Async);
+    }
+
+    wxWebSessionImpl* CreateSync() override
+    {
+        return new wxWebSessionURLSession(wxWebSessionImpl::Mode::Sync);
+    }
 };
 
 #endif // wxUSE_WEBREQUEST_URLSESSION

@@ -73,12 +73,6 @@ void wxQtChoice::activated(int WXUNUSED(index))
 
 } // anonymous namespace
 
-
-wxChoice::wxChoice() :
-    m_qtComboBox(nullptr)
-{
-}
-
 void wxChoice::QtInitSort( QComboBox *combo )
 {
     QSortFilterProxyModel *proxyModel = new LexicalSortProxyModel(combo);
@@ -133,14 +127,21 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    m_qtComboBox = new wxQtChoice( parent, this );
+    m_qtWindow = new wxQtChoice( parent, this );
 
-    QtInitSort( m_qtComboBox );
+    QtInitSort( GetQComboBox() );
 
     while ( n-- > 0 )
-        m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
+    {
+        GetQComboBox()->addItem( wxQtConvertString( *choices++ ));
+    }
 
     return wxChoiceBase::Create( parent, id, pos, size, style, validator, name );
+}
+
+QComboBox* wxChoice::GetQComboBox() const
+{
+    return static_cast<QComboBox*>(m_qtWindow);
 }
 
 wxSize wxChoice::DoGetBestSize() const
@@ -158,31 +159,31 @@ wxSize wxChoice::DoGetBestSize() const
 
 unsigned wxChoice::GetCount() const
 {
-    return m_qtComboBox->count();
+    return GetQComboBox()->count();
 }
 
 wxString wxChoice::GetString(unsigned int n) const
 {
     wxCHECK_MSG(n < GetCount(), wxString(), "invalid index");
 
-    return wxQtConvertString( m_qtComboBox->itemText(n) );
+    return wxQtConvertString( GetQComboBox()->itemText(n) );
 }
 
 void wxChoice::SetString(unsigned int n, const wxString& s)
 {
-    m_qtComboBox->setItemText(n, wxQtConvertString(s));
+    GetQComboBox()->setItemText(n, wxQtConvertString(s));
 }
 
 
 void wxChoice::SetSelection(int n)
 {
-    wxQtEnsureSignalsBlocked blocker(m_qtComboBox);
-    m_qtComboBox->setCurrentIndex(n);
+    wxQtEnsureSignalsBlocked blocker(GetQComboBox());
+    GetQComboBox()->setCurrentIndex(n);
 }
 
 int wxChoice::GetSelection() const
 {
-    return m_qtComboBox->currentIndex();
+    return GetQComboBox()->currentIndex();
 }
 
 
@@ -211,7 +212,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         ToggleWindowStyle(wxCB_SORT);
 
         // And actually sort items now.
-        m_qtComboBox->model()->sort(0);
+        GetQComboBox()->model()->sort(0);
     }
 
     return n;
@@ -220,15 +221,15 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
     // Maintain unselected state
-    const bool unselected = m_qtComboBox->currentIndex() == -1;
+    const bool unselected = GetQComboBox()->currentIndex() == -1;
 
-    m_qtComboBox->insertItem(pos, wxQtConvertString(item));
+    GetQComboBox()->insertItem(pos, wxQtConvertString(item));
 
     if ( IsSorted() )
-        m_qtComboBox->model()->sort(0);
+        GetQComboBox()->model()->sort(0);
 
     if ( unselected )
-        m_qtComboBox->setCurrentIndex(-1);
+        GetQComboBox()->setCurrentIndex(-1);
 
     return pos;
 }
@@ -236,19 +237,19 @@ int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 void wxChoice::DoSetItemClientData(unsigned int n, void *clientData)
 {
     QVariant variant = QVariant::fromValue(clientData);
-    m_qtComboBox->setItemData(n, variant);
+    GetQComboBox()->setItemData(n, variant);
 }
 
 void *wxChoice::DoGetItemClientData(unsigned int n) const
 {
-    QVariant variant = m_qtComboBox->itemData(n);
+    QVariant variant = GetQComboBox()->itemData(n);
     return variant.value<void *>();
 }
 
 
 void wxChoice::DoClear()
 {
-    m_qtComboBox->clear();
+    GetQComboBox()->clear();
 }
 
 void wxChoice::DoDeleteOneItem(unsigned int pos)
@@ -259,12 +260,7 @@ void wxChoice::DoDeleteOneItem(unsigned int pos)
     {
         SetSelection( wxNOT_FOUND );
     }
-    m_qtComboBox->removeItem(pos);
-}
-
-QWidget *wxChoice::GetHandle() const
-{
-    return m_qtComboBox;
+    GetQComboBox()->removeItem(pos);
 }
 
 #endif // wxUSE_CHOICE

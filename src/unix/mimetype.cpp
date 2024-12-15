@@ -68,7 +68,7 @@ public:
        {
           wxString t = tok.GetNextToken();
           t.MakeLower();
-          if ((!!t) && (t.Find( "comment" ) != 0) && (t.Find( "#" ) != 0) && (t.Find( "generic" ) != 0))
+          if (!t.empty() && (t.Find( "comment" ) != 0) && (t.Find( "#" ) != 0) && (t.Find( "generic" ) != 0))
              m_text.Add( t );
        }
        return true;
@@ -254,7 +254,14 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
        wxStringTokenizer tok( file.GetLine(i), ":" );
        wxString mime = tok.GetNextToken();
        wxString ext = tok.GetNextToken();
+       if (!ext.StartsWith(wxT("*.")))
+           continue;
        ext.Remove( 0, 2 );
+       if (ext.find_first_of('*') != wxString::npos ||
+           ext.find_first_of('[') != wxString::npos)
+       {
+           continue;
+       }
        wxArrayString exts;
        exts.Add( ext );
 
@@ -316,7 +323,7 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
                                   wxArrayString *commands,
                                   const wxFileType::MessageParameters& params) const
 {
-    wxString vrb, cmd, sTmp;
+    wxString vrb, cmd;
     size_t count = 0;
     wxMimeTypeCommands * sPairs;
 
@@ -830,13 +837,18 @@ int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
 
     // add all extensions we don't have yet
     wxString ext;
+    wxString ext2;
     size_t count = strExtensions.GetCount();
     for ( size_t i = 0; i < count; i++ )
     {
         ext = strExtensions[i];
         ext += wxT(' ');
 
-        if ( exts.Find(ext) == wxNOT_FOUND )
+        if (exts.StartsWith(ext))
+            continue;
+        ext2 = wxT(' ');
+        ext2 += ext;
+        if (exts.Find(ext2) == wxNOT_FOUND)
         {
             exts += ext;
         }
@@ -950,7 +962,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mim
 
 wxString wxMimeTypesManagerImpl::GetCommand(const wxString & verb, size_t nIndex) const
 {
-    wxString command, testcmd, sV, sTmp;
+    wxString command, sV, sTmp;
     sV = verb + wxT("=");
 
     // list of verb = command pairs for this mimetype

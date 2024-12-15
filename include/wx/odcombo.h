@@ -78,7 +78,6 @@ public:
     // required virtuals
     virtual void Init() override;
     virtual bool Create(wxWindow* parent) override;
-    virtual void SetFocus() override;
     virtual wxWindow *GetControl() override { return this; }
     virtual void SetStringValue( const wxString& value ) override;
     virtual wxString GetStringValue() const override;

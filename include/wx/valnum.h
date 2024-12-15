@@ -239,6 +239,11 @@ protected:
     // both integer and floating point numbers.
     virtual wxString NormalizeString(const wxString& s) const override
     {
+        // If empty value is handled as zero, just return it as is for
+        // consistency with TransferFromWindow() and NormalizeValue().
+        if ( s.empty() && BaseValidator::HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+            return wxString();
+
         LongestValueType value;
         if ( !BaseValidator::FromString(s, &value) )
         {
@@ -307,13 +312,8 @@ protected:
     // Define the type we use here, it should be the maximal-sized integer type
     // we support to make it possible to base wxIntegerValidator<> for any type
     // on it.
-#ifdef wxLongLong_t
     typedef wxLongLong_t LongestValueType;
     typedef wxULongLong_t ULongestValueType;
-#else
-    typedef long LongestValueType;
-    typedef unsigned long ULongestValueType;
-#endif
 
     wxIntegerValidatorBase(int style)
         : wxNumValidatorBase(style)

@@ -1564,6 +1564,15 @@ gtk_wx_cell_renderer_get_size (GtkCellRenderer *renderer,
 
     wxSize size = cell->GetSize();
 
+    // Somehow returning 0 or negative width prevents the returned height from
+    // being taken into account at all, even if we return strictly positive
+    // width from later calls to GetSize(), meaning that it's enough to return
+    // 0 from it once to completely break the layout for the entire lifetime of
+    // the control.
+    //
+    // As this is completely unexpected, forcefully prevent this from happening
+    size.IncTo(wxSize(1, 1));
+
     wxDataViewCtrl * const ctrl = cell->GetOwner()->GetOwner();
 
     // Uniform row height, if specified, overrides the value returned by the
@@ -3231,6 +3240,8 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
                                     wxAlignment align, int flags )
     : wxDataViewColumnBase( cell, model_column )
 {
+    m_renderer->SetOwner( this );
+
     Init( align, flags, width );
 
     SetTitle( title );
@@ -3241,6 +3252,8 @@ wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRend
                                     wxAlignment align, int flags )
     : wxDataViewColumnBase( bitmap, cell, model_column )
 {
+    m_renderer->SetOwner( this );
+
     Init( align, flags, width );
 
     SetBitmap( bitmap );
@@ -4689,7 +4702,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         }
 
         wxDataViewEvent
-            event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKPathToItem(path));
+            event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKColumnToWX(column), dv->GTKPathToItem(path));
 #if GTK_CHECK_VERSION(2,12,0)
         if (wx_is_at_least_gtk2(12))
         {

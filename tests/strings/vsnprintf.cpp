@@ -314,7 +314,6 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::Percent", "[vsnprintf]")
     // Compare(wxT("%"), wxT("%%%"));
 }
 
-#ifdef wxLongLong_t
 TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::LongLong", "[vsnprintf]")
 {
     CMP("123456789", "%lld", (wxLongLong_t)123456789);
@@ -327,7 +326,6 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::LongLong", "[vsnprintf]")
     CMP("123456789abcdef", "%I64x", wxLL(0x123456789abcdef));
 #endif
 }
-#endif
 
 TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::WrongFormatStrings", "[vsnprintf]")
 {
@@ -515,7 +513,6 @@ TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::GlibcMisc1", "[vsnprintf]")
 TEST_CASE_METHOD(VsnprintfTestCase, "Vsnprintf::GlibcMisc2", "[vsnprintf]")
 {
     int prec;
-    wxString test_format;
 
     prec = 0;
     CMP("3", "%.*g", prec, 3.3);

@@ -196,6 +196,7 @@ public:
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
     void OnEnableDevTools(wxCommandEvent& evt);
+    void OnShowDevTools(wxCommandEvent& evt);
     void OnEnableBrowserAcceleratorKeys(wxCommandEvent& evt);
 
 private:
@@ -361,24 +362,6 @@ bool WebApp::OnInit()
         "</head><body><h1>Page 2</h1>"
         "<p><a href='memory:page1.htm'>Page 1</a> was better.</p></body>");
     wxMemoryFSHandler::AddFile("test.css", "h1 {color: red;}");
-
-    // Set log target which only logs debugging messages in the usual way: all
-    // the rest will be shown in wxLogWindow created by WebFrame.
-    class DebugOnlyLog : public wxLog
-    {
-    public:
-        DebugOnlyLog() = default;
-
-    protected:
-        void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) override
-        {
-            // Ignore all non-debug/trace messages.
-            if ( level == wxLOG_Debug || level == wxLOG_Trace )
-                wxLog::DoLogTextAtLevel(level, msg);
-        }
-    };
-
-    delete wxLog::SetActiveTarget(new DebugOnlyLog);
 
     WebFrame *frame = new WebFrame(m_url, WebFrame::Main);
     frame->Show();
@@ -548,15 +531,42 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
         m_log_textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_RICH2);
         m_log_textCtrl->SetMinSize(FromDIP(wxSize(100, 100)));
         topsizer->Add(m_log_textCtrl, wxSizerFlags().Expand().Proportion(0));
-        wxLog::SetActiveTarget(new wxLogTextCtrl(m_log_textCtrl));
+        delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_log_textCtrl));
 
         // Log backend information
-        wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
-            wxWebView::GetBackendVersionInfo(backend).ToString());
+
+        const auto formatVersion = [](const char* context,
+                                      const wxVersionInfo& version) {
+            wxString str;
+
+            if ( version.IsOk() )
+            {
+                str.Printf(", %s version=%s",
+                           context, version.GetNumericVersionString());
+
+                if ( version.HasDescription() )
+                    str += wxString::Format(" (%s)", version.GetDescription());
+            }
+
+            return str;
+        };
+
+        const auto versionRunTime = formatVersion("run-time", wxWebView::GetBackendVersionInfo(backend));
+        const auto versionBuildTime = formatVersion("build-time", wxWebView::GetBackendVersionInfo(
+            backend, wxVersionContext::BuildTime
+        ));
+
+        wxLogMessage("Backend: %s%s%s",
+                     m_browser->GetClassInfo()->GetClassName(),
+                     versionRunTime,
+                     versionBuildTime);
 
         // Chromium backend can't be used immediately after creation, so wait
-        // until the browser is created before calling GetUserAgent().
-        m_browser->Bind(wxEVT_WEBVIEW_CREATED, [this](wxWebViewEvent& event) {
+        // until the browser is created before calling GetUserAgent(), but we
+        // can't do it unconditionally neither as doing it with WebViewGTK
+        // triggers https://gitlab.gnome.org/GNOME/gtk/-/issues/124 and just
+        // kills the sample.
+        const auto initShow = [this](){
             wxLogMessage("Web view created, user agent is \"%s\"", m_browser->GetUserAgent());
 
             // We need to synchronize this call with GetUserAgent() one, as
@@ -565,9 +575,22 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
             // order and we'd get the wrong user agent string back.
             if (!m_browser->AddScriptMessageHandler("wx"))
                 wxLogError("Could not add script message handler");
+        };
 
-            event.Skip();
-        });
+#if wxUSE_WEBVIEW_CHROMIUM
+        if ( backend == wxWebViewBackendChromium )
+        {
+            m_browser->Bind(wxEVT_WEBVIEW_CREATED, [initShow](wxWebViewEvent& event) {
+                initShow();
+
+                event.Skip();
+            });
+        }
+        else
+#endif // wxUSE_WEBVIEW_CHROMIUM
+        {
+            initShow();
+        }
 
 #ifndef __WXMAC__
         //We register the wxfs:// protocol for testing purposes
@@ -692,8 +715,9 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     m_tools_menu->AppendSubMenu(handlers, _("Handler Examples"));
 
     m_context_menu = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Context Menu"));
-    m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
     m_browser_accelerator_keys = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Browser Accelerator Keys"));
+    m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
+    auto* const show_dev_tools = m_tools_menu->Append(wxID_ANY, _("Show Dev Tools"));
 
     if (m_flags & Main)
     {
@@ -806,6 +830,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     Bind(wxEVT_MENU, &WebFrame::OnFind, this, m_find->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableContextMenu, this, m_context_menu->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableDevTools, this, m_dev_tools->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnShowDevTools, this, show_dev_tools->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnEnableBrowserAcceleratorKeys, this, m_browser_accelerator_keys->GetId());
 
     //Connect the idle events
@@ -981,6 +1006,12 @@ void WebFrame::OnEnableContextMenu(wxCommandEvent& evt)
 void WebFrame::OnEnableDevTools(wxCommandEvent& evt)
 {
     m_browser->EnableAccessToDevTools(evt.IsChecked());
+}
+
+void WebFrame::OnShowDevTools(wxCommandEvent& WXUNUSED(evt))
+{
+    if ( !m_browser->ShowDevTools() )
+        wxLogWarning("Failed to show development tools window");
 }
 
 void WebFrame::OnEnableBrowserAcceleratorKeys(wxCommandEvent& evt)

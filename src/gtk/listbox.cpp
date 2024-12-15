@@ -938,9 +938,13 @@ wxSize wxListBox::DoGetBestSize() const
     wxSize size(lbWidth, lbHeight);
 #ifdef __WXGTK3__
     // Ensure size is at least the required minimum
+    int w, h;
+    gtk_widget_get_size_request(m_widget, &w, &h);
+    gtk_widget_set_size_request(m_widget, -1, -1);
     wxSize min;
     gtk_widget_get_preferred_width(m_widget, &min.x, nullptr);
     gtk_widget_get_preferred_height_for_width(m_widget, min.x, &min.y, nullptr);
+    gtk_widget_set_size_request(m_widget, w, h);
     size.IncTo(min);
 #endif
     return size;

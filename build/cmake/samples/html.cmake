@@ -30,7 +30,7 @@ wx_add_sample(printing DATA logo6.gif test.htm LIBRARIES wxhtml NAME htmlprintin
 wx_add_sample(test
     DATA
         imagemap.png pic.png pic2.bmp i18n.gif
-        imagemap.htm tables.htm test.htm listtest.htm 8859_2.htm cp1250.htm
+        imagemap.htm tables.htm test.htm id.html listtest.htm 8859_2.htm cp1250.htm
         regres.htm foo.png subsup.html
     LIBRARIES wxnet wxhtml NAME htmltest)
 wx_add_sample(virtual DATA start.htm LIBRARIES wxhtml)

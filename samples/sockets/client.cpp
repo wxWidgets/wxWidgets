@@ -600,7 +600,9 @@ void DoDownload(const wxString& urlname)
     // Print the contents type and file size
     wxLogMessage("Contents type: %s\nFile size: %s\nStarting to download...",
                  url.GetProtocol().GetContentType(),
-                 data->GetSize() != (size_t)-1 ? wxString::Format("%zu", data->GetSize()) : "n/a");
+                 data->GetSize() != (size_t)-1
+                    ? wxString::Format("%zu", data->GetSize())
+                    : wxString("n/a"));
 
     // Get the data
     wxStringOutputStream sout;

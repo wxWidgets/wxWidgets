@@ -54,9 +54,6 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    // should be called in response to WM_MOUSEMOVE
-    static void RelayEvent(WXMSG *msg);
-
     // add a window to the tooltip control
     void AddOtherWindow(WXHWND hwnd);
 

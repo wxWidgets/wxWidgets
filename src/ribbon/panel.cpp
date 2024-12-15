@@ -352,7 +352,7 @@ wxSize wxRibbonPanel::GetBestSizeForParentSize(const wxSize& parentSize) const
         wxRibbonControl* control = wxDynamicCast(win, wxRibbonControl);
         if (control)
         {
-            wxClientDC temp_dc(const_cast<wxRibbonPanel*>(this));
+            wxInfoDC temp_dc(const_cast<wxRibbonPanel*>(this));
             wxSize clientParentSize = m_art->GetPanelClientSize(temp_dc, this, parentSize, nullptr);
             wxSize childSize = control->GetBestSizeForParentSize(clientParentSize);
             wxSize overallSize = m_art->GetPanelSize(temp_dc, this, childSize, nullptr);
@@ -374,7 +374,7 @@ wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
 
     if(m_art != nullptr)
     {
-        wxClientDC dc(const_cast<wxRibbonPanel*>(this));
+        wxInfoDC dc(const_cast<wxRibbonPanel*>(this));
         wxSize child_relative = m_art->GetPanelClientSize(dc, this, relative_to, nullptr);
         wxSize smaller(-1, -1);
         bool minimise = false;
@@ -495,7 +495,7 @@ wxSize wxRibbonPanel::DoGetNextLargerSize(wxOrientation direction,
 
     if(m_art != nullptr)
     {
-        wxClientDC dc(const_cast<wxRibbonPanel*>(this));
+        wxInfoDC dc(const_cast<wxRibbonPanel*>(this));
         wxSize child_relative = m_art->GetPanelClientSize(dc, this, relative_to, nullptr);
         wxSize larger(-1, -1);
 
@@ -595,14 +595,14 @@ wxSize wxRibbonPanel::GetMinNotMinimisedSize() const
     // Ask sizer if present
     if(GetSizer())
     {
-        wxClientDC dc(const_cast<wxRibbonPanel*>(this));
+        wxInfoDC dc(const_cast<wxRibbonPanel*>(this));
         return m_art->GetPanelSize(dc, this, GetPanelSizerMinSize(), nullptr);
     }
     else if(GetChildren().GetCount() == 1)
     {
         // Common case of single child taking up the entire panel
         wxWindow* child = GetChildren().Item(0)->GetData();
-        wxClientDC dc(const_cast<wxRibbonPanel*>(this));
+        wxInfoDC dc(const_cast<wxRibbonPanel*>(this));
         return m_art->GetPanelSize(dc, this, child->GetMinSize(), nullptr);
     }
 
@@ -623,7 +623,7 @@ wxSize wxRibbonPanel::GetPanelSizerMinSize() const
          return GetSizer()->CalcMin();
     }
     // else use previously calculated m_smallest_unminimised_size
-    wxClientDC dc(const_cast<wxRibbonPanel*>(this));
+    wxInfoDC dc(const_cast<wxRibbonPanel*>(this));
     return m_art->GetPanelClientSize(dc,
                                     this,
                                     m_smallest_unminimised_size,
@@ -644,14 +644,14 @@ wxSize wxRibbonPanel::DoGetBestSize() const
     // Ask sizer if present
     if( GetSizer())
     {
-        wxClientDC dc(const_cast<wxRibbonPanel*>(this));
+        wxInfoDC dc(const_cast<wxRibbonPanel*>(this));
         return m_art->GetPanelSize(dc, this, GetPanelSizerBestSize(), nullptr);
     }
     else if(GetChildren().GetCount() == 1)
     {
         // Common case of no sizer and single child taking up the entire panel
         wxWindow* child = GetChildren().Item(0)->GetData();
-        wxClientDC dc(const_cast<wxRibbonPanel*>(this));
+        wxInfoDC dc(const_cast<wxRibbonPanel*>(this));
         return m_art->GetPanelSize(dc, this, child->GetBestSize(), nullptr);
     }
 
@@ -695,7 +695,7 @@ bool wxRibbonPanel::Realize()
 
     if(m_art != nullptr)
     {
-        wxClientDC temp_dc(this);
+        wxInfoDC temp_dc(this);
 
         m_smallest_unminimised_size =
             m_art->GetPanelSize(temp_dc, this, minimum_children_size, nullptr);
@@ -757,7 +757,7 @@ bool wxRibbonPanel::Layout()
 
     // Get wxRibbonPanel client size
     wxPoint position;
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     wxSize size = m_art->GetPanelClientSize(dc, this, GetSize(), &position);
 
     // If there is a sizer, use it

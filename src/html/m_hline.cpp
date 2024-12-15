@@ -32,7 +32,8 @@ FORCE_LINK_ME(m_hline)
 class wxHtmlLineCell : public wxHtmlCell
 {
     public:
-        wxHtmlLineCell(int size, bool shading) : wxHtmlCell() {m_Height = size; m_HasShading = shading;}
+        wxHtmlLineCell(const wxHtmlTag& tag, int size, bool shading)
+            : wxHtmlCell(tag) {m_Height = size; m_HasShading = shading;}
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
                   wxHtmlRenderingInfo& info) override;
         void Layout(int w) override
@@ -84,7 +85,7 @@ TAG_HANDLER_BEGIN(HR, "HR")
         sz = 1;
         tag.GetParamAsInt(wxT("SIZE"), &sz);
         HasShading = !(tag.HasParam(wxT("NOSHADE")));
-        c->InsertCell(new wxHtmlLineCell((int)((double)sz * m_WParser->GetPixelScale()), HasShading));
+        c->InsertCell(new wxHtmlLineCell(tag, (int)((double)sz * m_WParser->GetPixelScale()), HasShading));
 
         m_WParser->CloseContainer();
         m_WParser->OpenContainer();

@@ -28,6 +28,13 @@ enum
     wxCompare_CaseInsensitive = 1
 };
 
+// Flags for wxLocaleIdent::RemoveLikelySubtags().
+enum
+{
+    wxSubtags_FavourRegion = 0,
+    wxSubtags_FavourScript = 1
+};
+
 // ----------------------------------------------------------------------------
 // wxLocaleIdent: allows to fully identify a locale under all platforms
 // ----------------------------------------------------------------------------
@@ -87,6 +94,11 @@ public:
         return m_language.empty();
     }
 
+    // Methods for internal use only
+    // Find the best match between desired and supported languages/locales.
+    static wxString GetBestMatch(const wxVector<wxString>& desired, const wxVector<wxString>& supported);
+    static wxString GetBestMatch(const wxString& desired, const wxVector<wxString>& supported);
+
 private:
     wxString m_tag;
 
@@ -97,6 +109,12 @@ private:
     wxString m_modifier;
     wxString m_extension;
     wxString m_sortorder;
+
+    // Add likely subtags to a given locale identifier.
+    static wxLocaleIdent AddLikelySubtags(const wxLocaleIdent& localeIdent);
+
+    // Remove likely subtags from a given locale identifier, favor region.
+    static wxLocaleIdent RemoveLikelySubtags(const wxLocaleIdent& localeIdent, int subtagsFavour = wxSubtags_FavourRegion);
 };
 
 // ----------------------------------------------------------------------------
@@ -221,30 +239,10 @@ public:
     //        2) must be called before Init to have effect
     static void AddLanguage(const wxLanguageInfo& info);
 
-    // These two methods are for internal use only. First one creates the
-    // global language database if it doesn't already exist, second one destroys
-    // it.
-    static void CreateLanguagesDB();
-    static void DestroyLanguagesDB();
-
-    // These two methods are for internal use only.
-    // wxLocaleIdent expects script identifiers as listed in ISO 15924.
-    // However, directory names for translation catalogs follow the
-    // Unix convention, using script aliases as listed  in ISO 15924.
-    // First one converts a script name to its alias, second converts
-    // a script alias to its corresponding script name.
-    // Both methods return empty strings, if the script name or alias
-    // couldn't be found.
-    static wxString GetScriptAliasFromName(const wxString& scriptName);
-    static wxString GetScriptNameFromAlias(const wxString& scriptAlias);
-
 private:
     // This ctor is private and exists only for implementation reasons.
     // It takes ownership of the provided pointer.
     explicit wxUILocale(wxUILocaleImpl* impl = nullptr) : m_impl(impl) { }
-
-    // Creates the global tables of languages and scripts called by CreateLanguagesDB
-    static void InitLanguagesDB();
 
     static wxUILocale ms_current;
 

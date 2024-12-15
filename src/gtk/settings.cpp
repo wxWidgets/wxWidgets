@@ -269,14 +269,21 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
         return;
     }
 
-    // We don't need to enable prefer-dark if the theme is already dark
-    if (strstr(themeName, "-dark") || strstr(themeName, "-Dark"))
-    {
-        wxLogTrace(TRACE_DARKMODE, "Force dark mode for theme \"%s\"", themeName);
-        preferDarkPrev = TRUE;
-    }
+    wxLogTrace(TRACE_DARKMODE, "Current GTK theme is \"%s\"", themeName);
 
+    const wxString theme = wxString::FromUTF8(themeName);
     g_free(themeName);
+
+    // Check if the current theme is a dark variant.
+    constexpr const char* darkVariant = "-dark";
+    constexpr const char* darkVariantU = "-Dark";
+    constexpr size_t lenDark = 5; // strlen(darkVariant) == strlen(darkVariantU)
+    auto posDark = theme.find(darkVariant);
+    if ( posDark == wxString::npos )
+        posDark = theme.find(darkVariantU);
+
+    if ( posDark != wxString::npos )
+        preferDarkPrev = TRUE;
 
     gboolean preferDark = FALSE;
     switch ( colorScheme )
@@ -301,6 +308,19 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
     }
 
     UpdatePreferDark(preferDark);
+
+    if ( posDark != wxString::npos )
+    {
+        // We need to stop using the dark theme variant when switching to the
+        // light application appearance as otherwise it would remain dark.
+        wxString themeNew = theme;
+        themeNew.erase(posDark, lenDark);
+
+        wxLogTrace(TRACE_DARKMODE, "Switching to theme \"%s\"", themeNew);
+
+        g_object_set(gtk_settings_get_default(),
+            "gtk-theme-name", themeNew.utf8_str().data(), nullptr);
+    }
 
     for (int i = wxSYS_COLOUR_MAX; i--;)
         gs_systemColorCache[i].UnRef();
@@ -595,8 +615,31 @@ void wxGtkStyleContext::Bg(wxColour& color, int state) const
     // If there is an image, try to get a color out of it.
     if (pattern)
     {
-        if (cairo_pattern_get_type(pattern) == CAIRO_PATTERN_TYPE_SURFACE)
+        int count;
+        switch (cairo_pattern_get_type(pattern))
         {
+        default:
+            break;
+        case CAIRO_PATTERN_TYPE_LINEAR:
+        case CAIRO_PATTERN_TYPE_RADIAL:
+            cairo_pattern_get_color_stop_count(pattern, &count);
+            if (count > 0)
+            {
+                double r, g, b, a;
+                cairo_pattern_get_color_stop_rgba(pattern, 0, nullptr, &r, &g, &b, &a);
+                if (count > 1)
+                {
+                    double r2, g2, b2, a2;
+                    cairo_pattern_get_color_stop_rgba(pattern, count - 1, nullptr, &r2, &g2, &b2, &a2);
+                    r = (r + r2) / 2;
+                    g = (g + g2) / 2;
+                    b = (b + b2) / 2;
+                    a = (a + a2) / 2;
+                }
+                color.Set(guchar(r * 255), guchar(g * 255), guchar(b * 255), guchar(a * 255));
+            }
+            break;
+        case CAIRO_PATTERN_TYPE_SURFACE:
             cairo_surface_t* surf;
             cairo_pattern_get_surface(pattern, &surf);
             if (cairo_surface_get_type(surf) == CAIRO_SURFACE_TYPE_IMAGE)

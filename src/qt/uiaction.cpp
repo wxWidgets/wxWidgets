@@ -17,7 +17,9 @@
 // Apparently {mouse,key}Event() functions signature has changed from QWidget to
 // QWindow at some time during Qt5.  Fortunately, we can continue to use the API
 // taking QWidget by defining QT_WIDGETS_LIB before including the test headers.
+#ifndef QT_WIDGETS_LIB
 #define QT_WIDGETS_LIB
+#endif
 
 #include <QtTest/QtTestGui>
 #include <QtWidgets/QApplication>

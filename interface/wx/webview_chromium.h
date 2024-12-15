@@ -12,9 +12,10 @@
     Chromium Embedded Framework (CEF).
 
     This backend is only available for Windows, Linux and macOS and currently
-    requires CEF version 116.
+    requires CEF version 116 or later but earlier than 128, which has known
+    problems in wxGTK.
 
-    Using CEF also requires a compiler with C++14 support.
+    Using CEF also requires a compiler with at least C++14 support.
 
     @section requirements Building CEF
 
@@ -149,11 +150,11 @@
     know when it is usable.
 
 
-    __Mac OS X Platform__
+    __macOS Platform__
 
-    OS X 10.13 or above is required.
+    macOS 10.13 or above is required.
 
-    Due to the application bundle structure on OS X, wxWebviewChromium is a
+    Due to the application bundle structure on macOS, wxWebviewChromium is a
     little more complicated than on Windows/Linux platforms as extra helper
     applications for executing separate Chromium processes(renderer, plugin,
     etc) are required.
@@ -386,6 +387,14 @@ public:
         Default value 0 means to use default "INFO" log level.
      */
     int m_logLevel = 0;
+
+    /**
+        Port for remote debugging if non-zero.
+
+        Settings this to non-zero value, e.g. 9223 which is commonly used,
+        enables Chrome remote debugging on the given port.
+     */
+    int m_remoteDebuggingPort = 0;
 
     /**
         Function to create the custom CefClient to use if non-null.
