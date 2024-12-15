@@ -1495,10 +1495,8 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
 {
     deserializer.BeforeLoad();
 
-    // Note that we don't reset m_hasMaximized here but use a local variable so
-    // as to avoid modifying m_hasMaximized in case one of the deserializer
-    // functions called below throws an exception.
-    bool hasMaximized = false;
+    // This will be non-empty only if we have a maximized pane.
+    wxString maximizedPaneName;
 
     // Also keep local variables for the existing (and possibly updated) panes
     // and the new ones for the same reason.
@@ -1523,9 +1521,6 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
         MakeLogical(m_frame, layoutInfo.floating_pos);
         MakeLogical(m_frame, layoutInfo.floating_size);
 
-        if ( layoutInfo.is_maximized )
-            hasMaximized = true;
-
         // Find the pane with the same name in the existing layout.
         wxWindow* window = nullptr;
         for ( auto& existingPane : panes )
@@ -1534,6 +1529,9 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
             {
                 // Update the existing pane with the restored layout.
                 CopyLayoutTo(layoutInfo, existingPane);
+
+                if ( layoutInfo.is_maximized )
+                    maximizedPaneName = existingPane.name;
 
                 window = existingPane.window;
                 break;
@@ -1553,6 +1551,9 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
                 continue;
 
             newPanes.emplace_back(window, pane);
+
+            if ( layoutInfo.is_maximized )
+                maximizedPaneName = pane.name;
         }
 
         if ( auto* const nb = wxDynamicCast(window, wxAuiNotebook) )
@@ -1562,11 +1563,13 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
     }
 
     // After loading everything successfully, do update the internal variables.
-    m_hasMaximized = hasMaximized;
     m_panes.swap(panes);
 
     for ( const auto& newPane : newPanes )
         AddPane(newPane.window, newPane.info);
+
+    if ( !maximizedPaneName.empty() )
+        MaximizePane(GetPane(maximizedPaneName));
 
     // Force recreating the docks using the new sizes from the panes.
     m_docks.clear();
