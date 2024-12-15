@@ -270,11 +270,13 @@ bitmap will be the default bundle size, which must be provided when creating
 this kind of bitmap bundle, as an SVG image itself doesn't necessarily contain
 this information.
 
-Note that wxWidgets currently uses the [LunaSVG][] library for SVG support and so
-doesn't support all SVG standard features and you may need to simplify or
-tweak the SVG files to make them appear correctly.
+Note that wxWidgets neither the default [NanoSVG][] library nor the newer
+[LunaSVG][] library support all SVG standard features and you may need to
+simplify or tweak the SVG files to make them appear correctly.
 
 [LunaSVG]: https://github.com/wxWidgets/lunasvg
+
+[NanoSVG]: https://github.com/wxWidgets/nanosvg
 
 wxBitmapBundle and XRC              {#high_dpi_bundle_xrc}
 ----------------------

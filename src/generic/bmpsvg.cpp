@@ -19,15 +19,11 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(wxUSE_LUNASVG)
+#if wxUSE_LUNASVG
     #if !(__cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L))
-        #warning "C++17 or later is required for wxLunaSVG support -- switching to NanoSVG"
+        // #warning "C++17 or later is required for wxLunaSVG support -- switching to NanoSVG"
         #undef wxUSE_LUNASVG
     #endif
-#endif
-
-#if !defined(wxHAS_SVG)
-#pragma message("wxHAS_SVG not defined")
 #endif
 
 #if defined(wxHAS_SVG) && !wxUSE_NANOSVG_EXTERNAL && !wxUSE_LUNASVG

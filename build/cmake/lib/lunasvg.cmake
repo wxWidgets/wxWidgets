@@ -7,7 +7,7 @@
 # Licence:     wxWindows licence
 # ############################################################################
 
-if( wxUSE_LUNASVG STREQUAL "builtin" )
+if( wxUSE_LUNASVG STREQUAL "builtin" OR wxUSE_LUNASVG STREQUAL "ON" )
     wx_add_builtin_library( wxlunasvg
         3rdparty/lunasvg/source/lunasvg.cpp
         3rdparty/lunasvg/source/graphics.cpp
