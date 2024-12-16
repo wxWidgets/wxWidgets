@@ -974,7 +974,13 @@ public:
             wxTheColourDatabase->UseScheme(wxColourDatabase::Traditional);
         @endcode
 
-        during the application initialization.
+        during the application initialization. Please note that in the previous
+        versions wxGTK already used CSS colour values, unlike all the other
+        ports, so @c Traditional is not actually backwards compatible for
+        wxGTK, but does make the colour values consistent across all platforms
+        and the same as had been used by wxMSW and wxOSX before. In other
+        words, to obtain 100% compatibility with the previous versions, the
+        UseScheme() call above should be made for all ports except wxGTK.
 
         Note that the colour names defined only by wxWidgets, which notably
         includes all colour variants with spaces in their names, are still

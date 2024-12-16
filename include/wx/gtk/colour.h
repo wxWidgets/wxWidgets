@@ -49,8 +49,6 @@ protected:
     virtual void
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
 
-    virtual bool FromString(const wxString& str) override;
-
     wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
 
