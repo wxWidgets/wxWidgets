@@ -25,6 +25,7 @@
 #include "wx/aui/floatpane.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/aui/auibar.h"
+#include "wx/aui/auibook.h"
 #include "wx/aui/serializer.h"
 #include "wx/mdi.h"
 #include "wx/wupdlock.h"
@@ -69,6 +70,7 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 
 #include "wx/generic/private/drawresize.h"
 
+#include <map>
 #include <memory>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
@@ -1380,30 +1382,50 @@ void MakeLogical(wxWindow* w, wxSize& size)
 
 } // anonymous namespace
 
-// Copy pane layout information between wxAuiPaneLayoutInfo and wxAuiPaneInfo,
-// used when (de)serializing the layout.
+// Copy pane layout information between structs used when (de)serializing the
+// layout and wxAuiPaneInfo itself.
+
 void
-wxAuiManager::CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
-                             const wxAuiPaneInfo& pane) const
+wxAuiManager::CopyDockLayoutFrom(wxAuiDockLayoutInfo& dockInfo,
+                                 const wxAuiPaneInfo& paneInfo) const
 {
-    layoutInfo.dock_direction = pane.dock_direction;
-    layoutInfo.dock_layer = pane.dock_layer;
-    layoutInfo.dock_row = pane.dock_row;
-    layoutInfo.dock_pos = pane.dock_pos;
-    layoutInfo.dock_proportion = pane.dock_proportion;
+    dockInfo.dock_direction = paneInfo.dock_direction;
+    dockInfo.dock_layer = paneInfo.dock_layer;
+    dockInfo.dock_row = paneInfo.dock_row;
+    dockInfo.dock_pos = paneInfo.dock_pos;
+    dockInfo.dock_proportion = paneInfo.dock_proportion;
 
     // The dock size is typically not set in the pane itself, but set in its
     // containing dock, so find it and copy it from there, as we do need to
     // save it when serializing.
-    layoutInfo.dock_size = 0;
+    dockInfo.dock_size = 0;
     for ( const auto& d : m_docks )
     {
-        if ( FindPaneInDock(d, pane.window) )
+        if ( FindPaneInDock(d, paneInfo.window) )
         {
-            layoutInfo.dock_size = d.size;
+            dockInfo.dock_size = d.size;
             break;
         }
     }
+}
+
+void
+wxAuiManager::CopyDockLayoutTo(const wxAuiDockLayoutInfo& dockInfo,
+                               wxAuiPaneInfo& paneInfo) const
+{
+    paneInfo.dock_direction = dockInfo.dock_direction;
+    paneInfo.dock_layer = dockInfo.dock_layer;
+    paneInfo.dock_row = dockInfo.dock_row;
+    paneInfo.dock_pos = dockInfo.dock_pos;
+    paneInfo.dock_proportion = dockInfo.dock_proportion;
+    paneInfo.dock_size = dockInfo.dock_size;
+}
+
+void
+wxAuiManager::CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
+                             const wxAuiPaneInfo& pane) const
+{
+    CopyDockLayoutFrom(layoutInfo, pane);
 
     layoutInfo.floating_pos = pane.floating_pos;
     layoutInfo.floating_size = pane.floating_size;
@@ -1415,12 +1437,8 @@ void
 wxAuiManager::CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
                            wxAuiPaneInfo& pane) const
 {
-    pane.dock_direction = layoutInfo.dock_direction;
-    pane.dock_layer = layoutInfo.dock_layer;
-    pane.dock_row = layoutInfo.dock_row;
-    pane.dock_pos = layoutInfo.dock_pos;
-    pane.dock_proportion = layoutInfo.dock_proportion;
-    pane.dock_size = layoutInfo.dock_size;
+    CopyDockLayoutTo(layoutInfo, pane);
+
     pane.floating_pos = layoutInfo.floating_pos;
     pane.floating_size = layoutInfo.floating_size;
 
@@ -1435,6 +1453,10 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
     {
         serializer.BeforeSavePanes();
 
+        // Collect information about all the notebooks we may have while saving
+        // the panes layout.
+        std::map<wxString, wxAuiNotebook*> notebooks;
+
         for ( const auto& pane : m_panes )
         {
             wxAuiPaneLayoutInfo layoutInfo{pane.name};
@@ -1444,9 +1466,26 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
             MakeDIP(m_frame, layoutInfo.floating_size);
 
             serializer.SavePane(layoutInfo);
+
+            if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
+            {
+                notebooks[pane.name] = nb;
+            }
         }
 
         serializer.AfterSavePanes();
+
+        if ( !notebooks.empty() )
+        {
+            serializer.BeforeSaveNotebooks();
+
+            for ( const auto& kv : notebooks )
+            {
+                kv.second->SaveLayout(kv.first, serializer);
+            }
+
+            serializer.AfterSaveNotebooks();
+        }
     }
 
     serializer.AfterSave();
@@ -1488,7 +1527,7 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
             hasMaximized = true;
 
         // Find the pane with the same name in the existing layout.
-        bool found = false;
+        wxWindow* window = nullptr;
         for ( auto& existingPane : panes )
         {
             if ( existingPane.name == layoutInfo.name )
@@ -1496,21 +1535,29 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
                 // Update the existing pane with the restored layout.
                 CopyLayoutTo(layoutInfo, existingPane);
 
-                found = true;
+                window = existingPane.window;
                 break;
             }
         }
 
         // This pane couldn't be found in the existing layout, let deserializer
         // create a new window for it if desired, otherwise just ignore it.
-        if ( !found )
+        if ( !window )
         {
             wxAuiPaneInfo pane;
             pane.name = layoutInfo.name;
             CopyLayoutTo(layoutInfo, pane);
 
-            if ( const auto w = deserializer.CreatePaneWindow(pane) )
-                newPanes.emplace_back(w, pane);
+            window = deserializer.CreatePaneWindow(pane);
+            if ( !window )
+                continue;
+
+            newPanes.emplace_back(window, pane);
+        }
+
+        if ( auto* const nb = wxDynamicCast(window, wxAuiNotebook) )
+        {
+            nb->LoadLayout(layoutInfo.name, deserializer);
         }
     }
 

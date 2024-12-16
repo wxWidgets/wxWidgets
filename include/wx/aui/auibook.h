@@ -26,6 +26,9 @@
 #include "wx/compositebookctrl.h"
 
 
+class wxAuiSerializer;
+class wxAuiDeserializer;
+
 class wxAuiNotebook;
 class wxAuiTabFrame;
 
@@ -138,8 +141,8 @@ public:
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
 
-    bool AddPage(wxWindow* page, const wxAuiNotebookPage& info);
-    bool InsertPage(wxWindow* page, const wxAuiNotebookPage& info, size_t idx);
+    bool AddPage(const wxAuiNotebookPage& info);
+    bool InsertPage(const wxAuiNotebookPage& info, size_t idx);
     bool MovePage(wxWindow* page, size_t newIdx);
     bool RemovePage(wxWindow* page);
     void RemovePageAt(size_t idx);
@@ -178,7 +181,23 @@ public:
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
 
-    // Compatibility only, don't use.
+    // Internal, don't use.
+    void RemoveAll();
+
+    // Backwards compatible variants of internal functions, which shouldn't be
+    // used anyhow.
+    bool AddPage(wxWindow* page, wxAuiNotebookPage info)
+    {
+        info.window = page;
+        return AddPage(info);
+    }
+
+    bool InsertPage(wxWindow* page, wxAuiNotebookPage info, size_t idx)
+    {
+        info.window = page;
+        return InsertPage(info, idx);
+    }
+
     bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const
     {
         auto* const button = ButtonHitTest(x, y);
@@ -365,6 +384,7 @@ public:
 
 
     void Split(size_t page, int direction);
+    void UnsplitAll();
 
     const wxAuiManager& GetAuiManager() const { return m_mgr; }
 
@@ -414,6 +434,11 @@ public:
 
     // Internal, don't use: use GetPagePosition() instead.
     bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const;
+
+    // Serialization support: this is only used by wxAuiManager, don't use
+    // directly.
+    void SaveLayout(const wxString& name, wxAuiSerializer& serializer) const;
+    void LoadLayout(const wxString& name, wxAuiDeserializer& deserializer);
 
 protected:
     // Common part of all ctors.
@@ -504,6 +529,9 @@ private:
 
     // Create the main tab control unconditionally.
     wxAuiTabCtrl* CreateMainTabCtrl();
+
+    // Get main tab control, creating it on demand if necessary.
+    wxAuiTabCtrl* GetMainTabCtrl();
 
     // Inserts the page at the given position into the given tab control.
     void InsertPageAt(wxAuiNotebookPage& info,
