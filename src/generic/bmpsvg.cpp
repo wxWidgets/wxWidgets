@@ -19,13 +19,33 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_LUNASVG
+#if defined(wxHAS_SVG) && wxUSE_LUNASVG
     #if !(__cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L))
         // #warning "C++17 or later is required for wxLunaSVG support -- switching to NanoSVG"
         #undef wxUSE_LUNASVG
     #endif
 #endif
 
+// wxUSE_LUNASVG will not be defined if C++17 is not available
+#if defined(wxHAS_SVG) && wxUSE_LUNASVG
+
+// Try to help people updating their sources from Git and forgetting to
+// initialize new submodules, if possible: if you get this error, it means that
+// your source tree doesn't contain 3rdparty/lunasvg or 3rdparty/plutovg and you
+// should initialize and update the corresponding submodule.
+#ifdef __has_include
+    #if ! __has_include("../../3rdparty/lunasvg/include/lunasvg.h")
+        #error You need to run "git submodule update --init 3rdparty/lunasvg" from the wxWidgets directory.
+        #undef wxUSE_LUNASVG
+    #endif
+    #if ! __has_include("../../3rdparty/plutovg/include/plutovg.h")
+        #error You need to run "git submodule update --init 3rdparty/plutovg" from the wxWidgets directory.
+        #undef wxUSE_LUNASVG
+    #endif
+#endif // __has_include
+#endif // defined(wxHAS_SVG) && wxUSE_LUNASVG
+
+// If not C++17 or missing a submodule, use NanoSVG
 #if defined(wxHAS_SVG) && !wxUSE_NANOSVG_EXTERNAL && !wxUSE_LUNASVG
 
 // Try to help people updating their sources from Git and forgetting to
@@ -35,11 +55,13 @@
 #ifdef __has_include
     #if ! __has_include("../../3rdparty/nanosvg/src/nanosvg.h")
         #error You need to run "git submodule update --init 3rdparty/nanosvg" from the wxWidgets directory.
+        // If we get here, neither lunasvg or nanosvg are available, so we can't
+        // use SVG at all.
         #undef wxHAS_SVG
     #endif
 #endif // __has_include
 
-#endif // wxHAS_SVG
+#endif // defined(wxHAS_SVG) && !wxUSE_NANOSVG_EXTERNAL && !wxUSE_LUNASVG
 
 #ifdef wxHAS_SVG
 
@@ -65,21 +87,6 @@
 
 #include "wx/buffer.h"
 #include "wx/log.h"
-
-// Try to help people updating their sources from Git and forgetting to
-// initialize new submodules, if possible: if you get this error, it means that
-// your source tree doesn't contain 3rdparty/lunasvg or 3rdparty/plutovg and you
-// should initialize and update the corresponding submodule.
-#ifdef __has_include
-    #if ! __has_include("../../3rdparty/lunasvg/include/lunasvg.h")
-        #error You need to run "git submodule update --init 3rdparty/lunasvg" from the wxWidgets directory.
-        #undef wxHAS_SVG
-    #endif
-    #if ! __has_include("../../3rdparty/plutovg/include/plutovg.h")
-        #error You need to run "git submodule update --init 3rdparty/plutovg" from the wxWidgets directory.
-        #undef wxHAS_SVG
-    #endif
-#endif // __has_include
 
 #include "../../3rdparty/lunasvg/include/lunasvg.h"
 
