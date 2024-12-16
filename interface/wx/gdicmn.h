@@ -816,6 +816,13 @@ const wxPoint wxDefaultPosition;
     using AddColour() and may use it to look up colours by names using Find()
     or find the names for the standard colour using FindName().
 
+    It is also possible to switch between the colour values defined in the CSS
+    standard (see https://www.w3.org/TR/css-color-4/#named-colors) and the
+    traditional colour values which were used by wxWidgets versions earlier
+    than 3.3.0, which may be useful to preserve the appearance of the existing
+    code: if you need to do this, please call UseScheme() with @c Traditional
+    argument, but the use of new, standard colours is recommended.
+
     There is one predefined, global instance of this class called
     ::wxTheColourDatabase.
 
@@ -939,6 +946,56 @@ public:
         @since 3.3.0
     */
     wxVector<wxString> GetAllNames() const;
+
+    /**
+        Possible colour schemes for UseScheme().
+
+        @since 3.3.0
+    */
+    enum Scheme
+    {
+        CSS,        ///< Use CSS standard colours, default since 3.3.0.
+        Traditional ///< Use traditional wxWidgets colours for compatibility.
+    };
+
+    /**
+        Select the colour scheme to use.
+
+        By default, wxColourDatabase uses CSS scheme which returns the standard
+        values for the colours defined in the CSS specification, see
+        https://www.w3.org/TR/css-color-4/#named-colors
+
+        If preserving compatibility with the behaviour and appearance of the
+        previous wxWidgets versions is important, you may switch to the
+        traditional colour scheme by using this function with @c Traditional
+        argument, e.g. call
+
+        @code
+            wxTheColourDatabase->UseScheme(wxColourDatabase::Traditional);
+        @endcode
+
+        during the application initialization. Please note that in the previous
+        versions wxGTK already used CSS colour values, unlike all the other
+        ports, so @c Traditional is not actually backwards compatible for
+        wxGTK, but does make the colour values consistent across all platforms
+        and the same as had been used by wxMSW and wxOSX before. In other
+        words, to obtain 100% compatibility with the previous versions, the
+        UseScheme() call above should be made for all ports except wxGTK.
+
+        Note that the colour names defined only by wxWidgets, which notably
+        includes all colour variants with spaces in their names, are still
+        available in the default CSS colour scheme, with their traditional
+        values but the names of colours defined by CSS standard are taken from
+        it, e.g. "GREEN" corresponds to @c #00ff00 in the traditional scheme
+        but to @c #008000 in the CSS scheme. Similarly, CSS colour names that
+        were not defined by the previous wxWidgets versions are available even
+        when using the traditional scheme, the scheme choice only affects the
+        values of the colours defined by both wxWidgets and CSS with different
+        values.
+
+        @since 3.3.0
+    */
+    void UseScheme(Scheme scheme);
 };
 
 

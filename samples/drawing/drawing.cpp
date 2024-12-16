@@ -391,6 +391,9 @@ enum
     Colour_AppearanceLight,
     Colour_AppearanceDark,
 
+    Colour_DatabaseCSS,
+    Colour_DatabaseTraditional,
+
 #if wxUSE_COLOURDLG
     Colour_TextForeground,
     Colour_TextBackground,
@@ -1870,10 +1873,12 @@ void MyCanvas::DrawDatabaseColours(wxDC& dc)
     dc.DrawText(title, x, r.y);
     r.y += 3*lineHeight;
 
-    const wxVector<wxString> names(wxTheColourDatabase->GetAllNames());
-    for (wxVector<wxString>::const_iterator p = names.begin(); p != names.end(); ++p)
+    wxVector<wxString> names(wxTheColourDatabase->GetAllNames());
+    std::sort(names.begin(), names.end());
+
+    for ( const auto& name : names )
     {
-        DrawColour(dc, mono, x, r, *p, wxTheColourDatabase->Find(*p));
+        DrawColour(dc, mono, x, r, name, wxTheColourDatabase->Find(name));
         r.y += lineHeight;
     }
 }
@@ -2506,6 +2511,9 @@ MyFrame::MyFrame(const wxString& title)
     menuColour->AppendRadioItem(Colour_AppearanceLight, "Use &light appearance");
     menuColour->AppendRadioItem(Colour_AppearanceDark, "Use &dark appearance");
     menuColour->AppendSeparator();
+    menuColour->AppendRadioItem(Colour_DatabaseCSS, "&Use CSS colours");
+    menuColour->AppendRadioItem(Colour_DatabaseTraditional, "Use &traditional colours");
+    menuColour->AppendSeparator();
 #if wxUSE_COLOURDLG
     menuColour->Append( Colour_TextForeground, "Text &foreground..." );
     menuColour->Append( Colour_TextBackground, "Text &background..." );
@@ -2557,7 +2565,7 @@ MyFrame::MyFrame(const wxString& title)
     m_textureBackground = false;
 
     m_canvas = new MyCanvas( this );
-    m_canvas->SetScrollbars( 10, 10, 100, 240 );
+    m_canvas->SetScrollbars( 10, 10, 100, 450 );
 
     SetSize(FromDIP(wxSize(800, 700)));
     Center(wxBOTH);
@@ -2831,6 +2839,14 @@ void MyFrame::OnOption(wxCommandEvent& event)
         case Colour_AppearanceDark:
             if ( wxGetApp().DoSetAppearance(event.GetId()) )
                 Refresh();
+            break;
+
+        case Colour_DatabaseCSS:
+        case Colour_DatabaseTraditional:
+            wxTheColourDatabase->UseScheme(event.GetId() == Colour_DatabaseCSS
+                                                ? wxColourDatabase::CSS
+                                                : wxColourDatabase::Traditional);
+            Refresh();
             break;
 
 #if wxUSE_COLOURDLG

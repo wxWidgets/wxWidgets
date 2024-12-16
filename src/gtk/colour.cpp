@@ -253,24 +253,3 @@ wxColour::operator const GdkRGBA*() const
     return c;
 }
 #endif
-
-bool wxColour::FromString(const wxString& str)
-{
-#ifdef __WXGTK3__
-    GdkRGBA gdkRGBA;
-    if (gdk_rgba_parse(&gdkRGBA, str.utf8_str()))
-    {
-        *this = wxColour(gdkRGBA);
-        return true;
-    }
-#else
-    GdkColor colGDK;
-    if ( gdk_color_parse( str.utf8_str(), &colGDK ) )
-    {
-        *this = wxColour(colGDK);
-        return true;
-    }
-#endif
-
-    return wxColourBase::FromString(str);
-}
