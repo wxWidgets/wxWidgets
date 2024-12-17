@@ -1561,10 +1561,10 @@ def parseVal(line, values, docs, icat):
 #----------------------------------------------------------------------------
 
 funregex = re.compile(r'\s*([a-zA-Z0-9_]+)'  # <ws>return type
-                      '\s+([a-zA-Z0-9_]+)='  # <ws>name=
-                      '([0-9]+)'             # number
-                      '\(([ a-zA-Z0-9_]*),'  # (param,
-                      '([ a-zA-Z0-9_]*),*\)')  # param)
+                      r'\s+([a-zA-Z0-9_]+)='  # <ws>name=
+                      r'([0-9]+)'             # number
+                      r'\(([ a-zA-Z0-9_]*),'  # (param,
+                      r'([ a-zA-Z0-9_]*),*\)')  # param)
 
 def parseFun(line, methods, docs, values, is_const, msgcodes, icat):
     def parseParam(param):
