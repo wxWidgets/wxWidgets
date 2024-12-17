@@ -5203,7 +5203,7 @@ wxStyledTextCtrl::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
     wxFile file(filename, wxFile::write);
 #endif
 
-    if ( file.IsOpened() && file.Write(GetValue(), *wxConvCurrent) )
+    if ( file.IsOpened() && file.Write(GetValue()) )
     {
         SetSavePoint();
 
@@ -5232,7 +5232,7 @@ wxStyledTextCtrl::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
     if ( file.IsOpened() )
     {
         wxString text;
-        if ( file.ReadAll(&text, wxConvAuto()) )
+        if ( file.ReadAll(&text) )
         {
             // Detect the EOL: we use just the first line because there is not
             // much we can do if the file uses inconsistent EOLs anyhow, we'd
