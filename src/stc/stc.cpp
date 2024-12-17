@@ -5203,7 +5203,7 @@ wxStyledTextCtrl::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
     wxFile file(filename, wxFile::write);
 #endif
 
-    if ( file.IsOpened() && file.Write(GetValue(), *wxConvCurrent) )
+    if ( file.IsOpened() && file.Write(GetValue(), wxConvUTF8) )
     {
         SetSavePoint();
 
