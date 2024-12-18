@@ -1666,7 +1666,7 @@ msgstr "Chinois Traditionnel Windows (CP 950) ou Big-5"
 
 #: ../src/common/fmapbase.cpp:168
 msgid "Windows Central European (CP 1250)"
-msgstr "Européen central limité à Windows (CP 1255)"
+msgstr "Européen central limité à Windows (CP 1250)"
 
 #: ../src/common/fmapbase.cpp:169
 msgid "Windows Cyrillic (CP 1251)"
