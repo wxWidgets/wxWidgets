@@ -1577,7 +1577,7 @@ msgstr "Báltico (antiguo) (ISO-8859-4)"
 
 #: ../src/common/fmapbase.cpp:149
 msgid "Cyrillic (ISO-8859-5)"
-msgstr "Cirílico (ISO-8859-14)"
+msgstr "Cirílico (ISO-8859-5)"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Arabic (ISO-8859-6)"

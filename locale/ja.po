@@ -2812,7 +2812,7 @@ msgstr "A3 Extra Transverse 322 x 445 mm"
 
 #: ../src/common/paper.cpp:160
 msgid "Japanese Double Postcard 200 x 148 mm"
-msgstr "往復はがき 200×248mm"
+msgstr "往復はがき 200×148mm"
 
 #: ../src/common/paper.cpp:161
 msgid "A6 105 x 148 mm"

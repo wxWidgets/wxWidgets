@@ -2657,7 +2657,7 @@ msgstr "Nota, 8 1/2 x 11 polz."
 
 #: ../src/common/paper.cpp:113
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
-msgstr "Sobre núm. 9, 3 7/8 x 8 7/2 polz."
+msgstr "Sobre núm. 9, 3 7/8 x 8 7/8 polz."
 
 #: ../src/common/paper.cpp:114
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -2717,7 +2717,7 @@ msgstr "Sobre italià, 110 x 230 mm"
 
 #: ../src/common/paper.cpp:128
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
-msgstr "Sobre Monarch, 3 7/8 x 1/2 polz."
+msgstr "Sobre Monarch, 3 7/8 x 7 1/2 polz."
 
 #: ../src/common/paper.cpp:129
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
@@ -2737,7 +2737,7 @@ msgstr "German Legal Fanfold, 8 1/2 x 13 polz."
 
 #: ../src/common/paper.cpp:134
 msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 (ISO), 250 x 354 mm"
+msgstr "B4 (ISO), 250 x 353 mm"
 
 #: ../src/common/paper.cpp:135
 msgid "Japanese Postcard 100 x 148 mm"

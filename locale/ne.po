@@ -1674,7 +1674,7 @@ msgstr "बाल्टीकन विन्डोज (CP 1257)"
 
 #: ../src/common/fmapbase.cpp:176
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "भियतनामी विन्डोज (CP 1253)"
+msgstr "भियतनामी विन्डोज (CP 1258)"
 
 #: ../src/common/fmapbase.cpp:177
 msgid "Windows Johab (CP 1361)"

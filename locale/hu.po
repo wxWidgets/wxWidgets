@@ -2727,7 +2727,7 @@ msgid "Note, 8 1/2 x 11 in"
 msgstr "Feljegyzés, 8 1/2 x 11 hüvelyk"
 
 #: ../src/common/paper.cpp:113
-msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
+msgid "#10 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#10 Boriték, 3 7/8 x 8 7/8 hüvelyk"
 
 #: ../src/common/paper.cpp:114

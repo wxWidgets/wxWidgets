@@ -1670,7 +1670,7 @@ msgstr "Windows Vietnamita (CP 1258)"
 
 #: ../src/common/fmapbase.cpp:177
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows Johab (CP 1231)"
+msgstr "Windows Johab (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:178
 msgid "Windows/DOS OEM (CP 437)"
@@ -2701,7 +2701,7 @@ msgstr "Fanfold Legal Tedesco, 8 1/2 x 13 pollici"
 
 #: ../src/common/paper.cpp:134
 msgid "B4 (ISO) 250 x 353 mm"
-msgstr "Foglio B4 (ISO) 250 x 354 mm"
+msgstr "Foglio B4 (ISO) 250 x 353 mm"
 
 #: ../src/common/paper.cpp:135
 msgid "Japanese Postcard 100 x 148 mm"

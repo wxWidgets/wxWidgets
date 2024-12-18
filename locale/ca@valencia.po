@@ -2742,7 +2742,7 @@ msgstr "Nota, 8 1/2 x 11 polzades"
 
 #: ../src/common/paper.cpp:113
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
-msgstr "#9 Sobre, 3 7/8 x 8 7/2 polz. "
+msgstr "#9 Sobre, 3 7/8 x 8 7/8 polz. "
 
 #: ../src/common/paper.cpp:114
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -2802,7 +2802,7 @@ msgstr "Sobre italià, 110 x 230 mm"
 
 #: ../src/common/paper.cpp:128
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
-msgstr "Sobre reial, 3 7/8 x 1/2 polz"
+msgstr "Sobre reial, 3 7/8 x 7 1/2 polz"
 
 #: ../src/common/paper.cpp:129
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"

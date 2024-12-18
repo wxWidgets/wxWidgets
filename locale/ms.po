@@ -2655,7 +2655,7 @@ msgstr "Helai A4, 210 x 297 mm"
 
 #: ../src/common/paper.cpp:95
 msgid "C sheet, 17 x 22 in"
-msgstr "Helai D, 22 x 34 in"
+msgstr "Helai C, 17 x 22 in"
 
 #: ../src/common/paper.cpp:96
 msgid "D sheet, 22 x 34 in"

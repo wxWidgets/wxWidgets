@@ -1652,7 +1652,7 @@ msgstr "KOI8-U"
 
 #: ../src/common/fmapbase.cpp:162
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
-msgstr "Windows/DOS OEM Kyrillisk (CP 1251)"
+msgstr "Windows/DOS OEM Kyrillisk (CP 866)"
 
 #: ../src/common/fmapbase.cpp:163
 msgid "Windows Thai (CP 874)"

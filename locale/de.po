@@ -758,7 +758,7 @@ msgstr "geben Sie das zu benutzende Thema an"
 #: ../src/common/appcmn.cpp:257
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr ""
-"Geben Sie eine zu verwendende Bildschirmauflösung ein (z. B. 640x48-16)"
+"Geben Sie eine zu verwendende Bildschirmauflösung ein (z. B. 640x480-16)"
 
 #: ../src/common/appcmn.cpp:279
 #, c-format

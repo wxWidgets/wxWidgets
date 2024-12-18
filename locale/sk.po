@@ -1680,7 +1680,7 @@ msgstr "Windows baltské (CP 1257)"
 
 #: ../src/common/fmapbase.cpp:176
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Windows vietnamské (CP 125á)"
+msgstr "Windows vietnamské (CP 1258)"
 
 #: ../src/common/fmapbase.cpp:177
 msgid "Windows Johab (CP 1361)"
