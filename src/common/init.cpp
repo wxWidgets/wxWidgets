@@ -580,7 +580,6 @@ int wxEntryReal(int& argc, wxChar **argv)
     {
         return DoEntryReal();
     }
-    else
     wxTRY
     {
         return DoEntryReal();
