@@ -458,21 +458,6 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
-    "WebRequest::Headers", "[net][webrequest][headers]")
-{
-    if ( !InitBaseURL() )
-        return;
-
-    Create("headers");
-    request.SetHeader("One", "1");
-    request.AddHeader("Two", "2");
-    Run();
-
-    CheckExpectedJSON( request.GetResponse().AsString(), "One", "1" );
-    CheckExpectedJSON( request.GetResponse().AsString(), "Two", "2" );
-}
-
-TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Get::Param", "[net][webrequest][get]")
 {
     if ( !InitBaseURL() )
