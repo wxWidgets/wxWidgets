@@ -198,8 +198,6 @@ public:
 
     void SetHeader(const wxString& name, const wxString& value);
 
-    void AddHeader(const wxString& name, const wxString& value);
-
     void SetMethod(const wxString& method);
 
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);

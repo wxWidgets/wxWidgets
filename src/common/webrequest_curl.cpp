@@ -269,8 +269,8 @@ wxString wxWebResponseCURL::GetURL() const
 
 wxString wxWebResponseCURL::GetHeader(const wxString& name) const
 {
-    wxWebRequestHeaderMap::const_iterator it = m_headers.find(name.Upper());
-    if ( it != m_headers.end() && !it->second.empty() )
+    const auto it = m_headers.find(name.Upper());
+    if ( it != m_headers.end() )
         return it->second.back();
 
     return wxString();
@@ -278,13 +278,11 @@ wxString wxWebResponseCURL::GetHeader(const wxString& name) const
 
 std::vector<wxString> wxWebResponseCURL::GetAllHeaderValues(const wxString& name) const
 {
-    std::vector<wxString> result;
-
-    wxWebRequestHeaderMap::const_iterator it = m_headers.find(name.Upper());
+    const auto it = m_headers.find(name.Upper());
     if ( it != m_headers.end() )
-        result = it->second;
+        return it->second;
 
-    return result;
+    return {};
 }
 
 int wxWebResponseCURL::GetStatus() const
@@ -456,13 +454,10 @@ wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
     for ( wxWebRequestHeaderMap::const_iterator it = m_headers.begin();
         it != m_headers.end(); ++it )
     {
-        for ( const wxString& value : it->second )
-        {
-            // TODO: We need to implement RFC 2047 encoding here instead of blindly
-            //       sending UTF-8 which is against the standard.
-            wxString hdrStr = wxString::Format("%s: %s", it->first, value);
-            m_headerList = curl_slist_append(m_headerList, hdrStr.utf8_str());
-        }
+        // TODO: We need to implement RFC 2047 encoding here instead of blindly
+        //       sending UTF-8 which is against the standard.
+        wxString hdrStr = wxString::Format("%s: %s", it->first, it->second);
+        m_headerList = curl_slist_append(m_headerList, hdrStr.utf8_str());
     }
     wxCURLSetOpt(m_handle, CURLOPT_HTTPHEADER, m_headerList);
 
