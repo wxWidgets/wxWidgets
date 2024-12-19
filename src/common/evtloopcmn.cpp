@@ -343,6 +343,11 @@ int wxEventLoopManual::DoRun()
     // wxModalEventLoop depends on this (so we can't just use ON_BLOCK_EXIT or
     // something similar here)
 #if wxUSE_EXCEPTIONS
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        Loop();
+        return m_exitcode;
+    }
     for ( ;; )
     {
         try
