@@ -454,7 +454,7 @@ public:
     static THREAD_RETVAL DoThreadStart(wxThread *thread);
 
     // really really start the thread, without catching exceptions
-    static THREAD_RETVAL DoDoThreadStart(wxThread *thread);
+    static THREAD_RETVAL DoThreadStartWithoutExceptionHandling(wxThread *thread);
 
     // call OnExit() on the thread
     static void DoThreadOnExit(wxThread *thread);
@@ -517,7 +517,7 @@ void wxThreadInternal::DoThreadOnExit(wxThread *thread)
 }
 
 /* static */
-THREAD_RETVAL wxThreadInternal::DoDoThreadStart(wxThread* thread)
+THREAD_RETVAL wxThreadInternal::DoThreadStartWithoutExceptionHandling(wxThread* thread)
 {
     // store the thread object in the TLS
     wxASSERT_MSG(gs_tlsThisThread != TLS_OUT_OF_INDEXES,
@@ -542,12 +542,12 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 
     if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
     {
-        rc = DoDoThreadStart(thread);
+        rc = DoThreadStartWithoutExceptionHandling(thread);
     }
     else
     wxTRY
     {
-        rc = DoDoThreadStart(thread);
+        rc = DoThreadStartWithoutExceptionHandling(thread);
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
