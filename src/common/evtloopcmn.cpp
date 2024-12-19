@@ -345,13 +345,6 @@ int wxEventLoopManual::DoRun()
 #if wxUSE_EXCEPTIONS
     for ( ;; )
     {
-        if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
-        {
-            Loop();
-            // exit the outer loop as well
-            break;
-        }
-        else
         try
         {
 #endif // wxUSE_EXCEPTIONS
