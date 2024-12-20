@@ -3017,7 +3017,7 @@ msgstr "PRC Envelop #5 Gedraaid 220 x 110 mm"
 
 #: ../src/common/paper.cpp:205
 msgid "PRC Envelope #6 Rotated 230 x 120 mm"
-msgstr "Envelop C5, 162 x 229 mm"
+msgstr "PRC Envelop #6 Gedraaid 230 x 120 mm"
 
 #: ../src/common/paper.cpp:206
 msgid "PRC Envelope #7 Rotated 230 x 160 mm"

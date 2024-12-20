@@ -3145,7 +3145,7 @@ msgstr "German Legal Fanfold, 8 1/2 x 13 pal."
 # generic/dcpsg.cpp:2547
 #: ../src/common/paper.cpp:134
 msgid "B4 (ISO) 250 x 353 mm"
-msgstr "B4 (ISO), 250 x 354 mm"
+msgstr "B4 (ISO), 250 x 353 mm"
 
 #: ../src/common/paper.cpp:135
 msgid "Japanese Postcard 100 x 148 mm"

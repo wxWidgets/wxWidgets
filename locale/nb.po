@@ -2719,7 +2719,7 @@ msgstr "#11 konvolutt, 4 1/2 x 10 3/8 tommer"
 
 #: ../src/common/paper.cpp:116
 msgid "#12 Envelope, 4 3/4 x 11 in"
-msgstr "#12 konvolutt, 4 3/3 x 11 tommer"
+msgstr "#12 konvolutt, 4 3/4 x 11 tommer"
 
 #: ../src/common/paper.cpp:117
 msgid "#14 Envelope, 5 x 11 1/2 in"
@@ -2727,7 +2727,7 @@ msgstr "#14 konvolutt, 5 x 11 1/2 tommer"
 
 #: ../src/common/paper.cpp:118
 msgid "DL Envelope, 110 x 220 mm"
-msgstr "DL-konvolutt, 11 x 220 mm"
+msgstr "DL-konvolutt, 110 x 220 mm"
 
 #: ../src/common/paper.cpp:119
 msgid "C5 Envelope, 162 x 229 mm"
@@ -2751,7 +2751,7 @@ msgstr "C65-konvolutt, 114 x 229 mm"
 
 #: ../src/common/paper.cpp:124
 msgid "B4 Envelope, 250 x 353 mm"
-msgstr "B4-konvolutt, 2500 x 353 mm"
+msgstr "B4-konvolutt, 250 x 353 mm"
 
 #: ../src/common/paper.cpp:125
 msgid "B5 Envelope, 176 x 250 mm"

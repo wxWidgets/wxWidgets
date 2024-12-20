@@ -2847,7 +2847,7 @@ msgstr "A3 轉向 420 x 297 公釐"
 
 #: ../src/common/paper.cpp:168
 msgid "A4 Rotated 297 x 210 mm"
-msgstr "A3 轉向 297 x 210 公釐"
+msgstr "A4 轉向 297 x 210 公釐"
 
 #: ../src/common/paper.cpp:169
 msgid "A5 Rotated 210 x 148 mm"

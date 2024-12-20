@@ -1684,7 +1684,7 @@ msgstr "Windows Vietnamiera (CP 1258)"
 
 #: ../src/common/fmapbase.cpp:177
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows Joahb (CP 1356)"
+msgstr "Windows Joahb (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:178
 msgid "Windows/DOS OEM (CP 437)"

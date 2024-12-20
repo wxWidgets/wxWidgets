@@ -1609,7 +1609,7 @@ msgstr "Baltic (ISO-8859-13)"
 
 #: ../src/common/fmapbase.cpp:158
 msgid "Celtic (ISO-8859-14)"
-msgstr "Кельтська (ISO-8859-13)"
+msgstr "Кельтська (ISO-8859-14)"
 
 #: ../src/common/fmapbase.cpp:159
 msgid "Western European with Euro (ISO-8859-15)"
