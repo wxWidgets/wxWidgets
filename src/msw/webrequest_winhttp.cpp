@@ -753,8 +753,7 @@ wxWebRequest::Result wxWebRequestWinHTTP::SendRequest()
           header != m_headers.end();
           ++header )
     {
-        for ( const wxString& value : header->second )
-            allHeaders.append(wxString::Format("%s: %s\n", header->first, value));
+        allHeaders.append(wxString::Format("%s: %s\n", header->first, header->second));
     }
 
     if ( m_dataSize )
@@ -996,7 +995,7 @@ bool wxWebSessionWinHTTP::Open()
 
     m_handle = wxWinHTTP::WinHttpOpen
                  (
-                    GetHeaders().find("User-Agent")->second.back().wc_str(),
+                    GetHeaders().find("User-Agent")->second.wc_str(),
                     accessType,
                     proxyName,
                     WINHTTP_NO_PROXY_BYPASS,
