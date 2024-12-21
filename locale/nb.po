@@ -3318,7 +3318,7 @@ msgstr "&Hjelp"
 
 #: ../src/common/stockitem.cpp:145
 msgid "&About"
-msgstr "%Om"
+msgstr "&Om"
 
 #: ../src/common/stockitem.cpp:145
 #, fuzzy

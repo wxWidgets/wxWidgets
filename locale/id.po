@@ -8911,7 +8911,7 @@ msgstr "&Ukuran"
 
 #: ../src/univ/themes/win32.cpp:3749
 msgid "Mi&nimize"
-msgstr "Mi%nimalkan"
+msgstr "Mi&nimalkan"
 
 #: ../src/univ/themes/win32.cpp:3751
 msgid "Ma&ximize"

@@ -121,7 +121,7 @@ msgstr "&Irudia"
 
 #: ../include/wx/richtext/richtextbuffer.h:5959
 msgid "&Cell"
-msgstr "%Gelaxka"
+msgstr "&Gelaxka"
 
 #: ../include/wx/richtext/richtextbuffer.h:6068
 msgid "&Table"
