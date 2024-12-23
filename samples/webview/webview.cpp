@@ -119,6 +119,16 @@ public:
         Private = 2
     };
 
+    enum
+    {
+        ID_CLEAR_BROWSING_DATA_ALL = wxID_HIGHEST + 1,
+        ID_CLEAR_BROWSING_DATA_CACHE,
+        ID_CLEAR_BROWSING_DATA_COOKIES,
+        ID_CLEAR_BROWSING_DATA_DOM_STORAGE,
+        ID_CLEAR_BROWSING_DATA_OTHER,
+        ID_CLEAR_BROWSING_DATA_LAST_HOUR
+    };
+
     WebFrame(const wxString& url, int flags = 0, wxWebViewWindowFeatures* windowFeatures = nullptr);
     virtual ~WebFrame();
 
@@ -184,6 +194,7 @@ public:
     void OnAddUserScript(wxCommandEvent& evt);
     void OnSetCustomUserAgent(wxCommandEvent& evt);
     void OnSetProxy(wxCommandEvent& evt);
+    void OnClearBrowsingData(wxCommandEvent& evt);
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -592,6 +603,15 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
             initShow();
         }
 
+
+        m_browser->Bind(wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, [](wxWebViewEvent& event) {
+            if (event.IsError())
+                wxLogError("Failed to clear browsing data");
+            else
+                wxLogMessage("Browsing data cleared");
+            event.Skip();
+        });
+
 #ifndef __WXMAC__
         //We register the wxfs:// protocol for testing purposes
         m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));
@@ -651,6 +671,17 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     m_tools_history_menu->AppendSeparator();
 
     m_tools_menu->AppendSubMenu(m_tools_history_menu, "History");
+
+    // Browsing data menu
+    wxMenu* browsingDataMenu = new wxMenu();
+    browsingDataMenu->Append(ID_CLEAR_BROWSING_DATA_ALL, _("All"));
+    browsingDataMenu->Append(ID_CLEAR_BROWSING_DATA_CACHE, _("Cache"));
+    browsingDataMenu->Append(ID_CLEAR_BROWSING_DATA_COOKIES, _("Cookies"));
+    browsingDataMenu->Append(ID_CLEAR_BROWSING_DATA_DOM_STORAGE, _("DOM Storage"));
+    browsingDataMenu->Append(ID_CLEAR_BROWSING_DATA_OTHER, _("Other"));
+    browsingDataMenu->AppendSeparator();
+    browsingDataMenu->Append(ID_CLEAR_BROWSING_DATA_LAST_HOUR, _("All in last hour"));
+    m_tools_menu->AppendSubMenu(browsingDataMenu, _("Clear Browsing Data"));
 
     //Create an editing menu
     wxMenu* editmenu = new wxMenu();
@@ -821,6 +852,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     Bind(wxEVT_MENU, &WebFrame::OnAddUserScript, this, addUserScript->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetCustomUserAgent, this, setCustomUserAgent->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetProxy, this, setProxy->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnClearBrowsingData, this, ID_CLEAR_BROWSING_DATA_ALL, ID_CLEAR_BROWSING_DATA_LAST_HOUR);
     Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnDeleteSelection, this, m_selection_delete->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSelectAll, this, selectall->GetId());
@@ -1567,6 +1599,40 @@ void WebFrame::OnSetProxy(wxCommandEvent& WXUNUSED(evt))
 
     if (!m_browser->SetProxy(s_proxy))
         wxLogError("Could not set proxy");
+}
+
+void WebFrame::OnClearBrowsingData(wxCommandEvent &evt)
+{
+    int dataTypes;
+    wxDateTime since((time_t) 0);
+    switch (evt.GetId())
+    {
+        case ID_CLEAR_BROWSING_DATA_ALL:
+            dataTypes = wxWEBVIEW_BROWSING_DATA_ALL;
+            break;
+        case ID_CLEAR_BROWSING_DATA_CACHE:
+            dataTypes = wxWEBVIEW_BROWSING_DATA_CACHE;
+            break;
+        case ID_CLEAR_BROWSING_DATA_COOKIES:
+            dataTypes = wxWEBVIEW_BROWSING_DATA_COOKIES;
+            break;
+        case ID_CLEAR_BROWSING_DATA_DOM_STORAGE:
+            dataTypes = wxWEBVIEW_BROWSING_DATA_DOM_STORAGE;
+            break;
+        case ID_CLEAR_BROWSING_DATA_OTHER:
+            dataTypes = wxWEBVIEW_BROWSING_DATA_OTHER;
+            break;
+        case ID_CLEAR_BROWSING_DATA_LAST_HOUR:
+            dataTypes = wxWEBVIEW_BROWSING_DATA_ALL;
+            since = wxDateTime::Now() - wxTimeSpan::Hour();
+            break;
+        default:
+            wxFAIL_MSG("Unexpected event ID");
+            return;
+    }
+
+    if (!m_browser->ClearBrowsingData(dataTypes, since))
+        wxLogError("Clearing this browsing data type is not supported by this backend");
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))

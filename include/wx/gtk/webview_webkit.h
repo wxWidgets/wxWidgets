@@ -126,6 +126,8 @@ public:
     virtual bool AddUserScript(const wxString& javascript,
         wxWebViewUserScriptInjectionTime injectionTime = wxWEBVIEW_INJECT_AT_DOCUMENT_START) override;
     virtual void RemoveAllUserScripts() override;
+    virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
+                                   wxDateTime since = {}) override;
 #else
     virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const override;
 #endif
@@ -156,6 +158,9 @@ public:
 #if wxUSE_WEBVIEW_WEBKIT2
     // This method needs to be public to make it callable from a callback
     void ProcessJavaScriptResult(GAsyncResult *res, wxWebKitRunScriptParams* params) const;
+
+    // Make the configuration accessible from callbacks
+    wxWebViewConfiguration m_config;
 #endif
 
 protected:
@@ -198,7 +203,6 @@ private:
     //Used for webkit2 extension
     GDBusServer *m_dbusServer;
     GDBusProxy *m_extension;
-    wxWebViewConfiguration m_config;
 
     static wxSharedPtr<wxWebViewHistoryItem>
     CreateHistoryItemFromWKItem(WebKitBackForwardListItem* gtkitem);
