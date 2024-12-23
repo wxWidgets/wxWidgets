@@ -105,6 +105,24 @@ WindowLeaveCallback(GtkWidget* widget,
                     GdkEventCrossing* event,
                     wxWindowGTK* win);
 
+gboolean
+WindowMotionCallback(GtkWidget* widget,
+                     GdkEventMotion* event,
+                     wxWindowGTK* win,
+                     bool synthesized = false);
+
+gboolean
+WindowButtonPressCallback(GtkWidget* widget,
+                          GdkEventButton* event,
+                          wxWindowGTK* win,
+                          bool synthesized = false);
+
+gboolean
+WindowButtonReleaseCallback(GtkWidget* widget,
+                            GdkEventButton* event,
+                            wxWindowGTK* win,
+                            bool synthesized = false);
+
 } // namespace wxGTKImpl
 
 #endif // _GTK_PRIVATE_EVENT_H_
