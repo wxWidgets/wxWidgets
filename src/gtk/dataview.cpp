@@ -55,8 +55,6 @@ class wxGtkDataViewModelNotifier;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-static wxDataViewCtrlInternal *gs_internal = nullptr;
-
 class wxGtkTreeModelNode;
 
 extern "C" {
@@ -222,14 +220,17 @@ public:
     gboolean row_drop_possible( GtkTreeDragDest *drag_dest, GtkTreePath *dest_path,
         GtkSelectionData *selection_data );
 
-    // notifactions from wxDataViewModel
-    bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
-    bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
-    bool ItemChanged( const wxDataViewItem &item );
-    bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
-    bool Cleared();
-    bool BeforeReset();
-    bool AfterReset();
+    // May return null if the item is not present in this tree.
+    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
+
+    // notifications from wxDataViewModel: they never really fail, so they
+    // don't return bool unlike the corresponding wxDataViewModelNotifier
+    // functions
+    void ItemAdded( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item );
+    void ItemDeleted( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item );
+    void ItemChanged( const wxDataViewItem &item );
+    void ValueChanged( const wxDataViewItem &item, unsigned int model_column );
+    void Cleared();
     void Resort();
 
     // sorting interface
@@ -271,26 +272,14 @@ public:
     GtkWxTreeModel* GetGtkModel()       { return m_gtk_model; }
 
     // item can be deleted already in the model
-    int GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item );
+    int GetIndexOf( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item );
 
     void OnInternalIdle();
-
-    enum wxFindNodeMode
-    {
-        // return nullptr from FindNode() of a subtree was not realized
-        wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED,
-
-        // call BuildBranch() from FindNode() to realize a subtree
-        wxFIND_NODE_BUILD_SUBTREE,
-    };
 
 protected:
     void InitTree();
     void ScheduleRefresh();
 
-    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item,
-                                  wxFindNodeMode mode =
-                                    wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED );
     wxGtkTreeModelNode *FindNode( GtkTreeIter *iter );
     wxGtkTreeModelNode *FindParentNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindParentNode( GtkTreeIter *iter );
@@ -329,17 +318,8 @@ public:
 // wxGtkTreeModelNode
 //-----------------------------------------------------------------------------
 
-static
-int LINKAGEMODE wxGtkTreeModelChildCmp( void** id1, void** id2 )
-{
-    int ret = gs_internal->GetDataViewModel()->Compare( wxDataViewItem(*id1), wxDataViewItem(*id2),
-        gs_internal->GetSortColumn(), (gs_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
-
-    return ret;
-}
-
-WX_DEFINE_ARRAY_PTR( wxGtkTreeModelNode*, wxGtkTreeModelNodes );
-WX_DEFINE_ARRAY_PTR( void*, wxGtkTreeModelChildren );
+using wxGtkTreeModelNodes = std::vector<wxGtkTreeModelNode*>;
+using wxGtkTreeModelChildren = std::vector<void*>;
 
 class wxGtkTreeModelNode
 {
@@ -354,28 +334,19 @@ public:
 
     ~wxGtkTreeModelNode()
     {
-        size_t count = m_nodes.GetCount();
-        size_t i;
-        for (i = 0; i < count; i++)
-        {
-            wxGtkTreeModelNode *child = m_nodes.Item( i );
+        for ( auto child : m_nodes )
             delete child;
-        }
     }
 
     void AddNode( wxGtkTreeModelNode* child )
         {
-            m_nodes.Add( child );
+            m_nodes.push_back( child );
 
             void *id = child->GetItem().GetID();
 
-            m_children.Add( id );
+            m_children.push_back( id );
 
-            if ( !m_internal->IsSortFrozen() && m_internal->ShouldBeSorted() )
-            {
-                gs_internal = m_internal;
-                m_children.Sort( &wxGtkTreeModelChildCmp );
-            }
+            ResortChildrenIfNeeded();
         }
 
     void InsertNode( wxGtkTreeModelNode* child, unsigned pos )
@@ -390,23 +361,23 @@ public:
 
             // Insert into m_nodes so that the order of nodes in m_nodes is the
             // same as the order of their corresponding IDs in m_children:
-            const unsigned int count = m_nodes.GetCount();
+            const unsigned int count = m_nodes.size();
             bool inserted = false;
             for (unsigned i = 0; i < count; i++)
             {
                 wxGtkTreeModelNode *node = m_nodes[i];
-                int posInChildren = m_children.Index(node->GetItem().GetID());
+                int posInChildren = FindChildIndex(node->GetItem().GetID());
                 if ( (unsigned)posInChildren >= pos )
                 {
-                    m_nodes.Insert(child, i);
+                    m_nodes.insert(m_nodes.begin() + i, child);
                     inserted = true;
                     break;
                 }
             }
             if ( !inserted )
-                m_nodes.Add(child);
+                m_nodes.push_back(child);
 
-            m_children.Insert( id, pos );
+            m_children.insert(m_children.begin() + pos, id);
         }
 
     void AddLeaf( void* id )
@@ -416,37 +387,40 @@ public:
 
     void InsertLeaf( void* id, unsigned pos )
         {
-            m_children.Insert( id, pos );
+            m_children.insert(m_children.begin() + pos, id);
 
-            if ( !m_internal->IsSortFrozen() && m_internal->ShouldBeSorted() )
-            {
-                gs_internal = m_internal;
-                m_children.Sort( &wxGtkTreeModelChildCmp );
-            }
+            ResortChildrenIfNeeded();
         }
 
     void DeleteChild( void* id )
         {
-            m_children.Remove( id );
+            const auto idx = FindChildIndex(id);
+            if ( idx != wxNOT_FOUND )
+            {
+                m_children.erase(m_children.begin() + idx);
+            }
+            else
+            {
+                wxFAIL_MSG( "deleting non-existent child" );
+            }
 
-            unsigned int count = m_nodes.GetCount();
+            unsigned int count = m_nodes.size();
             unsigned int pos;
             for (pos = 0; pos < count; pos++)
             {
-                wxGtkTreeModelNode *node = m_nodes.Item( pos );
+                wxGtkTreeModelNode *node = m_nodes[pos];
                 if (node->GetItem().GetID() == id)
                 {
-                    m_nodes.RemoveAt( pos );
+                    m_nodes.erase( m_nodes.begin() + pos );
                     delete node;
                     break;
                 }
             }
         }
 
-    // returns position of child node for given item in children list or wxNOT_FOUND
-    int FindChildByItem(const wxDataViewItem& item) const
+    // returns position of child node for given ID in children list or wxNOT_FOUND
+    int FindChildIndex(const void* itemId) const
     {
-        const void* itemId = item.GetID();
         const wxGtkTreeModelChildren& nodes = m_children;
         const int len = nodes.size();
         for ( int i = 0; i < len; i++ )
@@ -457,6 +431,12 @@ public:
         return wxNOT_FOUND;
     }
 
+    // returns position of child node for given item in children list or wxNOT_FOUND
+    int FindChildByItem(const wxDataViewItem& item) const
+    {
+        return FindChildIndex(item.GetID());
+    }
+
     wxGtkTreeModelNode* GetParent()
         { return m_parent; }
     wxGtkTreeModelNodes &GetNodes()
@@ -464,8 +444,7 @@ public:
     wxGtkTreeModelChildren &GetChildren()
         { return m_children; }
 
-    unsigned int GetChildCount() const { return m_children.GetCount(); }
-    unsigned int GetNodesCount() const { return m_nodes.GetCount(); }
+    unsigned int GetChildCount() const { return m_children.size(); }
 
     wxDataViewItem &GetItem() { return m_item; }
     wxDataViewCtrlInternal *GetInternal() { return m_internal; }
@@ -475,10 +454,36 @@ public:
     void Resort();
 
 private:
+    void ResortChildrenIfNeeded()
+    {
+        if ( !m_internal->IsSortFrozen() && m_internal->ShouldBeSorted() )
+        {
+            std::sort(m_children.begin(), m_children.end(),
+                [this](void* id1, void* id2)
+                {
+                    return m_internal->GetDataViewModel()->Compare(
+                                wxDataViewItem(id1),
+                                wxDataViewItem(id2),
+                                m_internal->GetSortColumn(),
+                                m_internal->GetSortOrder() == GTK_SORT_ASCENDING
+                            ) < 0;
+                });
+        }
+    }
+
+    // Only null for the root node, i.e. wxDataViewCtrlInternal::m_root.
     wxGtkTreeModelNode         *m_parent;
+
+    // TODO: Don't store the child items both in m_item of m_nodes and
+    // separately in m_children, it's redundant and not only wastes space but
+    // makes the code more complicated. This is apparently used for sorting but
+    // it looks like we could just sort m_nodes themselves instead.
     wxGtkTreeModelNodes         m_nodes;
     wxGtkTreeModelChildren      m_children;
     wxDataViewItem              m_item;
+
+    // TODO: Don't store the same pointer in all tree nodes, it would be enough
+    // to store it in the root node only and access it from there.
     wxDataViewCtrlInternal     *m_internal;
 };
 
@@ -1809,7 +1814,17 @@ wxGtkDataViewModelNotifier::~wxGtkDataViewModelNotifier()
 
 bool wxGtkDataViewModelNotifier::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    m_internal->ItemAdded( parent, item );
+    wxGtkTreeModelNode* const parent_node = m_internal->FindNode( parent );
+    if ( !parent_node )
+    {
+        // This may happen if the item being added is added to another tree,
+        // to which the parent item has already been added, but that item
+        // doesn't exist in our tree yet -- just do nothing in this case, we'll
+        // add the new item when the parent item is expanded here.
+        return true;
+    }
+
+    m_internal->ItemAdded( parent_node, item );
     GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
 
     GtkTreeIter iter;
@@ -1826,17 +1841,19 @@ bool wxGtkDataViewModelNotifier::ItemAdded( const wxDataViewItem &parent, const 
 
 bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
+    wxGtkTreeModelNode* const parent_node = m_internal->FindNode( parent );
+    if ( !parent_node )
+    {
+        // This is similar to the situation described in the comment in
+        // ItemAdded() above: the item may be present in another tree, but not
+        // here, just ignore it.
+        return true;
+    }
+
     GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
-#if 0
+
     // using _get_path for a deleted item cannot be
-    // a good idea
-    GtkTreeIter iter;
-    iter.stamp = wxgtk_model->stamp;
-    iter.user_data = (gpointer) item.GetID();
-    wxGtkTreePath path(wxgtk_tree_model_get_path(
-        GTK_TREE_MODEL(wxgtk_model), &iter ));
-#else
-    // so get the path from the parent
+    // a good idea so get the path from the parent
     GtkTreeIter parentIter;
     parentIter.stamp = wxgtk_model->stamp;
     parentIter.user_data = (gpointer) parent.GetID();
@@ -1844,11 +1861,10 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
         GTK_TREE_MODEL(wxgtk_model), &parentIter ));
 
     // and add the final index ourselves
-    int index = m_internal->GetIndexOf( parent, item );
+    int index = m_internal->GetIndexOf( parent_node, item );
     gtk_tree_path_append_index( path, index );
-#endif
 
-    m_internal->ItemDeleted( parent, item );
+    m_internal->ItemDeleted( parent_node, item );
 
     gtk_tree_model_row_deleted(
         GTK_TREE_MODEL(wxgtk_model), path );
@@ -3522,65 +3538,33 @@ bool wxDataViewColumn::IsReorderable() const
 // wxGtkTreeModelNode
 //-----------------------------------------------------------------------------
 
-#if 0
-class wxGtkTreeModelChildWithPos
-{
-public:
-    unsigned int pos;
-    void        *id;
-};
-
-static
-int wxGtkTreeModelChildWithPosCmp( const void* data1, const void* data2, const void* user_data )
-{
-    const wxGtkTreeModelChildWithPos* child1 = (const wxGtkTreeModelChildWithPos*) data1;
-    const wxGtkTreeModelChildWithPos* child2 = (const wxGtkTreeModelChildWithPos*) data2;
-    const wxDataViewCtrlInternal *internal = (const wxDataViewCtrlInternal *) user_data;
-    int ret = internal->GetDataViewModel()->Compare( child1->id, child2->id,
-        internal->GetSortColumn(), (internal->GetSortOrder() == GTK_SORT_DESCENDING) );
-
-    return ret;
-}
-#else
-static
-int LINKAGEMODE wxGtkTreeModelChildPtrCmp( void*** data1, void*** data2 )
-{
-    return gs_internal->GetDataViewModel()->Compare( wxDataViewItem(**data1), wxDataViewItem(**data2),
-        gs_internal->GetSortColumn(), (gs_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
-}
-
-WX_DEFINE_ARRAY_PTR( void**, wxGtkTreeModelChildrenPtr );
-#endif
-
 void wxGtkTreeModelNode::Resort()
 {
     size_t child_count = GetChildCount();
     if (child_count == 0)
         return;
 
-    size_t node_count = GetNodesCount();
-
     if (child_count == 1)
     {
-        if (node_count == 1)
-        {
-            wxGtkTreeModelNode *node = m_nodes.Item( 0 );
-            node->Resort();
-        }
+        wxGtkTreeModelNode *node = m_nodes.front( );
+        node->Resort();
         return;
     }
 
-    gint *new_order = new gint[child_count];
+    std::vector<gint> new_order(child_count);
 
     // m_children has the original *void
     // ptrs points to these
-    wxGtkTreeModelChildrenPtr ptrs;
+    std::vector<void**> ptrs;
     size_t i;
     for (i = 0; i < child_count; i++)
-       ptrs.Add( &(m_children[i]) );
+       ptrs.push_back( &(m_children[i]) );
     // Sort the ptrs
-    gs_internal = m_internal;
-    ptrs.Sort( &wxGtkTreeModelChildPtrCmp );
+    std::sort(ptrs.begin(), ptrs.end(), [this](void** data1, void** data2)
+        {
+            return m_internal->GetDataViewModel()->Compare( wxDataViewItem(*data1), wxDataViewItem(*data2),
+                m_internal->GetSortColumn(), (m_internal->GetSortOrder() == GTK_SORT_ASCENDING) ) < 0;
+        });
 
     wxGtkTreeModelChildren temp;
     void** base_ptr = &(m_children[0]);
@@ -3589,12 +3573,11 @@ void wxGtkTreeModelNode::Resort()
     for (i = 0; i < child_count; i++)
     {
         new_order[i] = ptrs[i] - base_ptr;
-        temp.Add( *ptrs[i] );
+        temp.push_back( *ptrs[i] );
     }
 
     // Transfer IDs back to m_children
-    m_children.Clear();
-    WX_APPEND_ARRAY( temp, m_children );
+    m_children.swap(temp);
 
     GtkTreeModel *gtk_tree_model = GTK_TREE_MODEL( m_internal->GetGtkModel() );
 
@@ -3603,16 +3586,10 @@ void wxGtkTreeModelNode::Resort()
     iter.stamp = m_internal->GetGtkModel()->stamp;
 
     gtk_tree_model_rows_reordered( gtk_tree_model,
-            wxGtkTreePath(m_internal->get_path(&iter)), &iter, new_order );
+            wxGtkTreePath(m_internal->get_path(&iter)), &iter, &new_order[0] );
 
-    delete [] new_order;
-
-    unsigned int pos;
-    for (pos = 0; pos < node_count; pos++)
-    {
-        wxGtkTreeModelNode *node = m_nodes.Item( pos );
+    for ( auto node : m_nodes )
         node->Resort();
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -3903,7 +3880,7 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
 
 // notifications from wxDataViewModel
 
-bool wxDataViewCtrlInternal::Cleared()
+void wxDataViewCtrlInternal::Cleared()
 {
     if (m_root)
     {
@@ -3914,8 +3891,6 @@ bool wxDataViewCtrlInternal::Cleared()
     InitTree();
 
     ScheduleRefresh();
-
-    return true;
 }
 
 void wxDataViewCtrlInternal::Resort()
@@ -3926,20 +3901,18 @@ void wxDataViewCtrlInternal::Resort()
     ScheduleRefresh();
 }
 
-bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
+void wxDataViewCtrlInternal::ItemAdded( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item )
 {
     if (!m_wx_model->IsVirtualListModel())
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent, wxFIND_NODE_BUILD_SUBTREE );
-        wxCHECK_MSG(parent_node, false,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+        const wxDataViewItem parent = parent_node->GetItem();
 
         wxDataViewItemArray modelSiblings;
         m_wx_model->GetChildren(parent, modelSiblings);
         const int modelSiblingsSize = modelSiblings.size();
 
         int posInModel = modelSiblings.Index(item, /*fromEnd=*/true);
-        wxCHECK_MSG( posInModel != wxNOT_FOUND, false, "adding non-existent item?" );
+        wxCHECK_RET( posInModel != wxNOT_FOUND, "adding non-existent item?" );
 
         const wxGtkTreeModelChildren& nodeSiblings = parent_node->GetChildren();
         const int nodeSiblingsSize = nodeSiblings.size();
@@ -3947,12 +3920,12 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
         if ( nodeSiblingsSize == 0 )
         {
             BuildBranch( parent_node );
-            return true;
+            return;
         }
         else
         {
             if ( parent_node->FindChildByItem(item) != wxNOT_FOUND )
-                return true;
+                return;
         }
 
         int nodePos = 0;
@@ -3998,42 +3971,30 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
     }
 
     ScheduleRefresh();
-
-    return true;
 }
 
-bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
+void wxDataViewCtrlInternal::ItemDeleted( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item )
 {
     if (!m_wx_model->IsVirtualListModel())
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxASSERT_MSG(parent_node,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
-
         parent_node->DeleteChild( item.GetID() );
     }
 
     ScheduleRefresh();
-
-    return true;
 }
 
-bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
+void wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
 {
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, item);
     m_owner->HandleWindowEvent( event );
-
-    return true;
 }
 
-bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int view_column )
+void wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int view_column )
 {
     wxDataViewColumn* const column = m_owner->GetColumn(view_column);
     wxDataViewEvent
         event(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, column, item);
     m_owner->HandleWindowEvent( event );
-
-    return true;
 }
 
 // GTK+ model iface
@@ -4084,7 +4045,7 @@ gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path 
             if (pos < 0) return FALSE;
             if ((size_t)pos >= node->GetChildCount()) return FALSE;
 
-            void* id = node->GetChildren().Item( (size_t) pos );
+            void* id = node->GetChildren().at( (size_t) pos );
 
             if (i == depth-1)
             {
@@ -4093,11 +4054,8 @@ gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path 
                 return TRUE;
             }
 
-            size_t count = node->GetNodes().GetCount();
-            size_t pos2;
-            for (pos2 = 0; pos2 < count; pos2++)
+            for ( auto child_node : node->GetNodes() )
             {
-                wxGtkTreeModelNode *child_node = node->GetNodes().Item( pos2 );
                 if (child_node->GetItem().GetID() == id)
                 {
                     node = child_node;
@@ -4134,7 +4092,7 @@ GtkTreePath *wxDataViewCtrlInternal::get_path( GtkTreeIter *iter )
         wxGtkTreeModelNode *node = FindParentNode( iter );
         while (node)
         {
-            int pos = node->GetChildren().Index( id );
+            int pos = node->FindChildIndex( id );
 
             gtk_tree_path_prepend_index( retval, pos );
 
@@ -4173,13 +4131,13 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
     else
     {
         wxGtkTreeModelNode *parent = FindParentNode( iter );
-        if( parent == nullptr )
+        if ( parent == nullptr )
         {
             iter->user_data = nullptr;
             return FALSE;
         }
 
-        int pos = parent->GetChildren().Index( iter->user_data );
+        int pos = parent->FindChildIndex( iter->user_data );
 
         if (pos == (int) parent->GetChildCount()-1)
         {
@@ -4187,7 +4145,7 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
             return FALSE;
         }
 
-        iter->user_data = parent->GetChildren().Item( pos+1 );
+        iter->user_data = parent->GetChildren().at( pos+1 );
     }
 
     return TRUE;
@@ -4216,8 +4174,8 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
             return FALSE;
 
         wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxCHECK_MSG(parent_node, FALSE,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+        if ( !parent_node )
+            return FALSE;
 
         BuildBranch( parent_node );
 
@@ -4225,7 +4183,7 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;
-        iter->user_data = (gpointer) parent_node->GetChildren().Item( 0 );
+        iter->user_data = (gpointer) parent_node->GetChildren().front();
     }
 
     return TRUE;
@@ -4256,8 +4214,8 @@ gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
             return FALSE;
 
         wxGtkTreeModelNode *node = FindNode( iter );
-        wxCHECK_MSG(node, FALSE,
-            "Did you forget a call to ItemAdded()? The iterator is unknown to the wxGtkTreeModel");
+        if ( !node )
+            return FALSE;
 
         BuildBranch( node );
 
@@ -4287,8 +4245,8 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
             return 0;
 
         wxGtkTreeModelNode *parent_node = FindNode( iter );
-        wxCHECK_MSG(parent_node, FALSE,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+        if (!parent_node)
+            return 0;
 
         BuildBranch( parent_node );
 
@@ -4327,13 +4285,13 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
             return FALSE;
 
         wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxCHECK_MSG(parent_node, FALSE,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+        if (!parent_node)
+            return FALSE;
 
         BuildBranch( parent_node );
 
         iter->stamp = m_gtk_model->stamp;
-        iter->user_data = parent_node->GetChildren().Item( n );
+        iter->user_data = parent_node->GetChildren().at( n );
 
         return TRUE;
     }
@@ -4359,7 +4317,7 @@ gboolean wxDataViewCtrlInternal::iter_parent( GtkTreeIter *iter, GtkTreeIter *ch
 }
 
 // item can be deleted already in the model
-int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item )
+int wxDataViewCtrlInternal::GetIndexOf( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item )
 {
     if (m_wx_model->IsVirtualListModel())
     {
@@ -4367,10 +4325,9 @@ int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDa
     }
     else
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent );
         wxGtkTreeModelChildren &children = parent_node->GetChildren();
         size_t j;
-        for (j = 0; j < children.GetCount(); j++)
+        for (j = 0; j < children.size(); j++)
         {
             if (children[j] == item.GetID())
                return j;
@@ -4380,59 +4337,39 @@ int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDa
 }
 
 
-wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item,
-                                                      wxFindNodeMode mode )
+wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item )
 {
+    wxCHECK_MSG( m_wx_model, nullptr, "no associated model?" );
+
     if ( !item.IsOk() )
         return m_root;
-
-    if( m_wx_model == nullptr )
-        return nullptr;
 
     std::list<wxDataViewItem> list;
     wxDataViewItem it( item );
 
-    while( it.IsOk() )
+    while ( it.IsOk() )
     {
         list.push_front( it );
         it = m_wx_model->GetParent( it );
     }
 
     wxGtkTreeModelNode * node = m_root;
-    for( const auto& item : list )
+    for ( const auto& item : list )
     {
-        if( node && node->GetNodes().GetCount() != 0 )
+        wxGtkTreeModelNode* next = nullptr;
+        for (auto child : node->GetNodes())
         {
-            switch ( mode )
+            if (child->GetItem() == item)
             {
-                case wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED:
-                    // Do nothing and a subtree will not built.
-                    break;
-
-                case wxFIND_NODE_BUILD_SUBTREE:
-                    BuildBranch( node );
-                    break;
-            }
-
-            int len = node->GetNodes().GetCount();
-            wxGtkTreeModelNodes &nodes = node->GetNodes();
-            int j = 0;
-            for( ; j < len; j ++)
-            {
-                if( nodes[j]->GetItem() == item )
-                {
-                    node = nodes[j];
-                    break;
-                }
-            }
-
-            if( j == len )
-            {
-                return nullptr;
+                next = child;
+                break;
             }
         }
-        else
+
+        if ( !next )
             return nullptr;
+
+        node = next;
     }
     return node;
 
@@ -4443,74 +4380,22 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
     if (!iter)
         return m_root;
 
-    wxDataViewItem item( (void*) iter->user_data );
+    wxGtkTreeModelNode* const node = FindNode( wxDataViewItem{iter->user_data} );
 
-    const wxFindNodeMode mode = wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED;
-    wxGtkTreeModelNode *result = FindNode( item, mode );
+    // Unlike in FindNode(wxDataViewItem), where we may not have the node
+    // corresponding to the model item in this tree, we really ought to have
+    // the node corresponding to the iterator from this tree itself.
+    wxASSERT_MSG( node,
+        "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
-/*
-    if (!result)
-    {
-        wxLogDebug( "Not found %p", iter->user_data );
-        char *crash = nullptr;
-        *crash = 0;
-    }
-    // TODO: remove this code
-*/
-
-    return result;
+    return node;
 }
 
-static wxGtkTreeModelNode*
-wxDataViewCtrlInternal_FindParentNode( wxDataViewModel * model, wxGtkTreeModelNode *treeNode, const wxDataViewItem &item )
+wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem &item )
 {
-    if( model == nullptr )
-        return nullptr;
+    wxCHECK_MSG( m_wx_model, nullptr, "no associated model?" );
 
-    std::list<wxDataViewItem> list;
-    if( !item.IsOk() )
-        return nullptr;
-
-    wxDataViewItem it( model->GetParent( item ) );
-    while( it.IsOk() )
-    {
-        list.push_front( it );
-        it = model->GetParent( it );
-    }
-
-    wxGtkTreeModelNode * node = treeNode;
-    for( const auto& item : list )
-    {
-        if( node && node->GetNodes().GetCount() != 0 )
-        {
-            int len = node->GetNodes().GetCount();
-            wxGtkTreeModelNodes nodes = node->GetNodes();
-            int j = 0;
-            for( ; j < len; j ++)
-            {
-                if( nodes[j]->GetItem() == item )
-                {
-                    node = nodes[j];
-                    break;
-                }
-            }
-
-            if( j == len )
-            {
-                return nullptr;
-            }
-        }
-        else
-            return nullptr;
-    }
-    //Examine whether the node is item's parent node
-    int len = node->GetChildCount();
-    for( int i = 0; i < len ; i ++ )
-    {
-        if( node->GetChildren().Item( i ) == item.GetID() )
-            return node;
-    }
-    return nullptr;
+    return FindNode( m_wx_model->GetParent(item) );
 }
 
 wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( GtkTreeIter *iter )
@@ -4518,19 +4403,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( GtkTreeIter *iter )
     if (!iter)
         return nullptr;
 
-    wxDataViewItem item( (void*) iter->user_data );
-    if (!item.IsOk())
-        return nullptr;
-
-    return wxDataViewCtrlInternal_FindParentNode( m_wx_model, m_root, item );
-}
-
-wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem &item )
-{
-    if (!item.IsOk())
-        return nullptr;
-
-    return wxDataViewCtrlInternal_FindParentNode( m_wx_model, m_root, item );
+    return FindParentNode( wxDataViewItem{iter->user_data} );
 }
 
 //-----------------------------------------------------------------------------
