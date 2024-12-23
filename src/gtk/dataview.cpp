@@ -220,11 +220,14 @@ public:
     gboolean row_drop_possible( GtkTreeDragDest *drag_dest, GtkTreePath *dest_path,
         GtkSelectionData *selection_data );
 
+    // May return null if the item is not present in this tree.
+    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
+
     // notifications from wxDataViewModel: they never really fail, so they
     // don't return bool unlike the corresponding wxDataViewModelNotifier
     // functions
-    void ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
-    void ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
+    void ItemAdded( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item );
+    void ItemDeleted( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item );
     void ItemChanged( const wxDataViewItem &item );
     void ValueChanged( const wxDataViewItem &item, unsigned int model_column );
     void Cleared();
@@ -269,7 +272,7 @@ public:
     GtkWxTreeModel* GetGtkModel()       { return m_gtk_model; }
 
     // item can be deleted already in the model
-    int GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item );
+    int GetIndexOf( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item );
 
     void OnInternalIdle();
 
@@ -277,7 +280,6 @@ protected:
     void InitTree();
     void ScheduleRefresh();
 
-    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindNode( GtkTreeIter *iter );
     wxGtkTreeModelNode *FindParentNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindParentNode( GtkTreeIter *iter );
@@ -1812,7 +1814,17 @@ wxGtkDataViewModelNotifier::~wxGtkDataViewModelNotifier()
 
 bool wxGtkDataViewModelNotifier::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    m_internal->ItemAdded( parent, item );
+    wxGtkTreeModelNode* const parent_node = m_internal->FindNode( parent );
+    if ( !parent_node )
+    {
+        // This may happen if the item being added is added to another tree,
+        // to which the parent item has already been added, but that item
+        // doesn't exist in our tree yet -- just do nothing in this case, we'll
+        // add the new item when the parent item is expanded here.
+        return true;
+    }
+
+    m_internal->ItemAdded( parent_node, item );
     GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
 
     GtkTreeIter iter;
@@ -1829,6 +1841,15 @@ bool wxGtkDataViewModelNotifier::ItemAdded( const wxDataViewItem &parent, const 
 
 bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
+    wxGtkTreeModelNode* const parent_node = m_internal->FindNode( parent );
+    if ( !parent_node )
+    {
+        // This is similar to the situation described in the comment in
+        // ItemAdded() above: the item may be present in another tree, but not
+        // here, just ignore it.
+        return true;
+    }
+
     GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
 
     // using _get_path for a deleted item cannot be
@@ -1840,10 +1861,10 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
         GTK_TREE_MODEL(wxgtk_model), &parentIter ));
 
     // and add the final index ourselves
-    int index = m_internal->GetIndexOf( parent, item );
+    int index = m_internal->GetIndexOf( parent_node, item );
     gtk_tree_path_append_index( path, index );
 
-    m_internal->ItemDeleted( parent, item );
+    m_internal->ItemDeleted( parent_node, item );
 
     gtk_tree_model_row_deleted(
         GTK_TREE_MODEL(wxgtk_model), path );
@@ -3880,13 +3901,11 @@ void wxDataViewCtrlInternal::Resort()
     ScheduleRefresh();
 }
 
-void wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
+void wxDataViewCtrlInternal::ItemAdded( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item )
 {
     if (!m_wx_model->IsVirtualListModel())
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxCHECK_RET(parent_node,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+        const wxDataViewItem parent = parent_node->GetItem();
 
         wxDataViewItemArray modelSiblings;
         m_wx_model->GetChildren(parent, modelSiblings);
@@ -3954,14 +3973,10 @@ void wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
     ScheduleRefresh();
 }
 
-void wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
+void wxDataViewCtrlInternal::ItemDeleted( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item )
 {
     if (!m_wx_model->IsVirtualListModel())
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxASSERT_MSG(parent_node,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
-
         parent_node->DeleteChild( item.GetID() );
     }
 
@@ -4302,7 +4317,7 @@ gboolean wxDataViewCtrlInternal::iter_parent( GtkTreeIter *iter, GtkTreeIter *ch
 }
 
 // item can be deleted already in the model
-int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item )
+int wxDataViewCtrlInternal::GetIndexOf( wxGtkTreeModelNode* parent_node, const wxDataViewItem &item )
 {
     if (m_wx_model->IsVirtualListModel())
     {
@@ -4310,10 +4325,6 @@ int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDa
     }
     else
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxCHECK_MSG(parent_node, -1,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
-
         wxGtkTreeModelChildren &children = parent_node->GetChildren();
         size_t j;
         for (j = 0; j < children.size(); j++)
