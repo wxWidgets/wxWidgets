@@ -4358,6 +4358,9 @@ int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDa
     else
     {
         wxGtkTreeModelNode *parent_node = FindNode( parent );
+        wxCHECK_MSG(parent_node, -1,
+            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+
         wxGtkTreeModelChildren &children = parent_node->GetChildren();
         size_t j;
         for (j = 0; j < children.GetCount(); j++)
