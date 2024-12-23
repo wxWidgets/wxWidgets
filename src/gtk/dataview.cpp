@@ -327,7 +327,7 @@ int LINKAGEMODE wxGtkTreeModelChildCmp( void** id1, void** id2 )
     return ret;
 }
 
-WX_DEFINE_ARRAY_PTR( wxGtkTreeModelNode*, wxGtkTreeModelNodes );
+using wxGtkTreeModelNodes = std::vector<wxGtkTreeModelNode*>;
 WX_DEFINE_ARRAY_PTR( void*, wxGtkTreeModelChildren );
 
 class wxGtkTreeModelNode
@@ -354,7 +354,7 @@ public:
 
     void AddNode( wxGtkTreeModelNode* child )
         {
-            m_nodes.Add( child );
+            m_nodes.push_back( child );
 
             void *id = child->GetItem().GetID();
 
@@ -379,7 +379,7 @@ public:
 
             // Insert into m_nodes so that the order of nodes in m_nodes is the
             // same as the order of their corresponding IDs in m_children:
-            const unsigned int count = m_nodes.GetCount();
+            const unsigned int count = m_nodes.size();
             bool inserted = false;
             for (unsigned i = 0; i < count; i++)
             {
@@ -387,13 +387,13 @@ public:
                 int posInChildren = m_children.Index(node->GetItem().GetID());
                 if ( (unsigned)posInChildren >= pos )
                 {
-                    m_nodes.Insert(child, i);
+                    m_nodes.insert(m_nodes.begin() + i, child);
                     inserted = true;
                     break;
                 }
             }
             if ( !inserted )
-                m_nodes.Add(child);
+                m_nodes.push_back(child);
 
             m_children.Insert( id, pos );
         }
@@ -418,14 +418,14 @@ public:
         {
             m_children.Remove( id );
 
-            unsigned int count = m_nodes.GetCount();
+            unsigned int count = m_nodes.size();
             unsigned int pos;
             for (pos = 0; pos < count; pos++)
             {
-                wxGtkTreeModelNode *node = m_nodes.Item( pos );
+                wxGtkTreeModelNode *node = m_nodes[pos];
                 if (node->GetItem().GetID() == id)
                 {
-                    m_nodes.RemoveAt( pos );
+                    m_nodes.erase( m_nodes.begin() + pos );
                     delete node;
                     break;
                 }
@@ -3549,7 +3549,7 @@ void wxGtkTreeModelNode::Resort()
 
     if (child_count == 1)
     {
-        wxGtkTreeModelNode *node = m_nodes.Item( 0 );
+        wxGtkTreeModelNode *node = m_nodes.front( );
         node->Resort();
         return;
     }
