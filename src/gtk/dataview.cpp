@@ -3573,7 +3573,7 @@ void wxGtkTreeModelNode::Resort()
         return;
     }
 
-    gint *new_order = new gint[child_count];
+    std::vector<gint> new_order(child_count);
 
     // m_children has the original *void
     // ptrs points to these
@@ -3606,9 +3606,7 @@ void wxGtkTreeModelNode::Resort()
     iter.stamp = m_internal->GetGtkModel()->stamp;
 
     gtk_tree_model_rows_reordered( gtk_tree_model,
-            wxGtkTreePath(m_internal->get_path(&iter)), &iter, new_order );
-
-    delete [] new_order;
+            wxGtkTreePath(m_internal->get_path(&iter)), &iter, &new_order[0] );
 
     unsigned int pos;
     for (pos = 0; pos < child_count; pos++)
