@@ -68,6 +68,9 @@ a3ef8eb50346e04c080ed1711578390080baff8b
 # classes), gridctrl.cpp (for wxGridCellRenderer-derived classes), 2009-01-11
 29efc6e4a478652d6f59fb3f5ca7990d78a8ead4
 
+# removed trailing whitespace, 2007-11-27
+b9db5f3061af49519c56e9981d627a5b206507f3
+
 # cleanup - reformatting, 2006-04-20
 a9339fe22c1815cfbbf2ed9c300c897256644d18
 
