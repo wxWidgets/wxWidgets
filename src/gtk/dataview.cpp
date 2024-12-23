@@ -465,7 +465,6 @@ public:
         { return m_children; }
 
     unsigned int GetChildCount() const { return m_children.GetCount(); }
-    unsigned int GetNodesCount() const { return m_nodes.GetCount(); }
 
     wxDataViewItem &GetItem() { return m_item; }
     wxDataViewCtrlInternal *GetInternal() { return m_internal; }
@@ -3567,15 +3566,10 @@ void wxGtkTreeModelNode::Resort()
     if (child_count == 0)
         return;
 
-    size_t node_count = GetNodesCount();
-
     if (child_count == 1)
     {
-        if (node_count == 1)
-        {
-            wxGtkTreeModelNode *node = m_nodes.Item( 0 );
-            node->Resort();
-        }
+        wxGtkTreeModelNode *node = m_nodes.Item( 0 );
+        node->Resort();
         return;
     }
 
@@ -3617,7 +3611,7 @@ void wxGtkTreeModelNode::Resort()
     delete [] new_order;
 
     unsigned int pos;
-    for (pos = 0; pos < node_count; pos++)
+    for (pos = 0; pos < child_count; pos++)
     {
         wxGtkTreeModelNode *node = m_nodes.Item( pos );
         node->Resort();
