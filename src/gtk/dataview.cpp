@@ -4448,16 +4448,6 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
     const wxFindNodeMode mode = wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED;
     wxGtkTreeModelNode *result = FindNode( item, mode );
 
-/*
-    if (!result)
-    {
-        wxLogDebug( "Not found %p", iter->user_data );
-        char *crash = nullptr;
-        *crash = 0;
-    }
-    // TODO: remove this code
-*/
-
     return result;
 }
 
