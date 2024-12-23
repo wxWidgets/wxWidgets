@@ -3506,15 +3506,6 @@ bool wxDataViewColumn::IsReorderable() const
 // wxGtkTreeModelNode
 //-----------------------------------------------------------------------------
 
-static
-int LINKAGEMODE wxGtkTreeModelChildPtrCmp( void*** data1, void*** data2 )
-{
-    return gs_internal->GetDataViewModel()->Compare( wxDataViewItem(**data1), wxDataViewItem(**data2),
-        gs_internal->GetSortColumn(), (gs_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
-}
-
-WX_DEFINE_ARRAY_PTR( void**, wxGtkTreeModelChildrenPtr );
-
 void wxGtkTreeModelNode::Resort()
 {
     size_t child_count = GetChildCount();
@@ -3532,13 +3523,16 @@ void wxGtkTreeModelNode::Resort()
 
     // m_children has the original *void
     // ptrs points to these
-    wxGtkTreeModelChildrenPtr ptrs;
+    std::vector<void**> ptrs;
     size_t i;
     for (i = 0; i < child_count; i++)
-       ptrs.Add( &(m_children[i]) );
+       ptrs.push_back( &(m_children[i]) );
     // Sort the ptrs
-    gs_internal = m_internal;
-    ptrs.Sort( &wxGtkTreeModelChildPtrCmp );
+    std::sort(ptrs.begin(), ptrs.end(), [this](void** data1, void** data2)
+        {
+            return m_internal->GetDataViewModel()->Compare( wxDataViewItem(*data1), wxDataViewItem(*data2),
+                m_internal->GetSortColumn(), (m_internal->GetSortOrder() == GTK_SORT_ASCENDING) ) < 0;
+        });
 
     wxGtkTreeModelChildren temp;
     void** base_ptr = &(m_children[0]);
