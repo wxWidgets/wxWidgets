@@ -270,7 +270,7 @@ public:
         is no pane with the matching name, CreatePaneWindow() is called to
         allow creating it on the fly.
      */
-    virtual std::vector<wxAuiPaneInfo> LoadPanes() = 0;
+    virtual std::vector<wxAuiPaneLayoutInfo> LoadPanes() = 0;
 
     /**
         Load information about the notebook tabs previously saved by
