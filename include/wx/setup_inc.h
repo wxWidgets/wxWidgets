@@ -1467,6 +1467,9 @@
 // Set to 1 for TIFF format support (requires libtiff)
 #define wxUSE_LIBTIFF       1
 
+// Set to 1 for SVG rasterizing support using LunaSVG (C++17 compiler required)
+#define wxUSE_LUNASVG       0
+
 // Set to 1 for SVG rasterizing support using nanosvg
 #define wxUSE_NANOSVG       1
 

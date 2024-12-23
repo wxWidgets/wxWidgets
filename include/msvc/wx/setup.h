@@ -189,6 +189,9 @@
             #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
             #pragma comment(lib, wx3RD_PARTY_LIB_NAME("lexilla"))
         #endif
+        #if wxUSE_LUNASVG && !defined(wxNO_LUNASVG_LIB)
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("lunasvg"))
+        #endif
     #endif // !defined(WXUSINGDLL)
 
 

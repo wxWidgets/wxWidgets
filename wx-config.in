@@ -1034,6 +1034,7 @@ ldlibs_html="@EXTRALIBS_HTML@"
 ldlibs_media="@EXTRALIBS_MEDIA@"
 ldlibs_xml="@EXTRALIBS_XML@"
 ldlibs_stc="@WXCONFIG_STC_LIBS@ @EXTRALIBS_STC@"
+ldlibs_lunasvg="@EXTRALIBS_LUNASVG@"
 ldlibs_webview="@EXTRALIBS_WEBVIEW@"
 
 
