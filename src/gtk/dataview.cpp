@@ -4174,8 +4174,8 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
             return FALSE;
 
         wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxCHECK_MSG(parent_node, FALSE,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+        if ( !parent_node )
+            return FALSE;
 
         BuildBranch( parent_node );
 
@@ -4214,8 +4214,8 @@ gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
             return FALSE;
 
         wxGtkTreeModelNode *node = FindNode( iter );
-        wxCHECK_MSG(node, FALSE,
-            "Did you forget a call to ItemAdded()? The iterator is unknown to the wxGtkTreeModel");
+        if ( !node )
+            return FALSE;
 
         BuildBranch( node );
 
@@ -4245,8 +4245,8 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
             return 0;
 
         wxGtkTreeModelNode *parent_node = FindNode( iter );
-        wxCHECK_MSG(parent_node, 0,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+        if (!parent_node)
+            return 0;
 
         BuildBranch( parent_node );
 
@@ -4285,8 +4285,8 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
             return FALSE;
 
         wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxCHECK_MSG(parent_node, FALSE,
-            "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+        if (!parent_node)
+            return FALSE;
 
         BuildBranch( parent_node );
 
@@ -4380,7 +4380,15 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
     if (!iter)
         return m_root;
 
-    return FindNode( wxDataViewItem{iter->user_data} );
+    wxGtkTreeModelNode* const node = FindNode( wxDataViewItem{iter->user_data} );
+
+    // Unlike in FindNode(wxDataViewItem), where we may not have the node
+    // corresponding to the model item in this tree, we really ought to have
+    // the node corresponding to the iterator from this tree itself.
+    wxASSERT_MSG( node,
+        "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
+
+    return node;
 }
 
 wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem &item )
