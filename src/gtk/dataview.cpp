@@ -4389,27 +4389,20 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item
     wxGtkTreeModelNode * node = m_root;
     for ( const auto& item : list )
     {
-        if ( node && node->GetNodes().GetCount() != 0 )
+        wxGtkTreeModelNode* next = nullptr;
+        for (auto child : node->GetNodes())
         {
-            int len = node->GetNodes().GetCount();
-            wxGtkTreeModelNodes &nodes = node->GetNodes();
-            int j = 0;
-            for ( ; j < len; j ++)
+            if (child->GetItem() == item)
             {
-                if ( nodes[j]->GetItem() == item )
-                {
-                    node = nodes[j];
-                    break;
-                }
-            }
-
-            if ( j == len )
-            {
-                return nullptr;
+                next = child;
+                break;
             }
         }
-        else
+
+        if ( !next )
             return nullptr;
+
+        node = next;
     }
     return node;
 
@@ -4425,53 +4418,9 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
 
 wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem &item )
 {
-    if ( m_wx_model == nullptr )
-        return nullptr;
+    wxCHECK_MSG( m_wx_model, nullptr, "no associated model?" );
 
-    std::list<wxDataViewItem> list;
-    if ( !item.IsOk() )
-        return nullptr;
-
-    wxDataViewItem it( m_wx_model->GetParent( item ) );
-    while ( it.IsOk() )
-    {
-        list.push_front( it );
-        it = m_wx_model->GetParent( it );
-    }
-
-    wxGtkTreeModelNode * node = m_root;
-    for ( const auto& item : list )
-    {
-        if ( node && node->GetNodes().GetCount() != 0 )
-        {
-            int len = node->GetNodes().GetCount();
-            wxGtkTreeModelNodes nodes = node->GetNodes();
-            int j = 0;
-            for( ; j < len; j ++)
-            {
-                if( nodes[j]->GetItem() == item )
-                {
-                    node = nodes[j];
-                    break;
-                }
-            }
-
-            if( j == len )
-            {
-                return nullptr;
-            }
-        }
-        else
-            return nullptr;
-    }
-    //Examine whether the node is item's parent node
-    int len = node->GetChildCount();
-    for ( int i = 0; i < len ; i ++ )
-    {
-        if ( node->GetChildren().Item( i ) == item.GetID() )
-            return node;
-    }
-    return nullptr;
+    return FindNode( m_wx_model->GetParent(item) );
 }
 
 wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( GtkTreeIter *iter )
