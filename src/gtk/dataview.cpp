@@ -222,14 +222,14 @@ public:
     gboolean row_drop_possible( GtkTreeDragDest *drag_dest, GtkTreePath *dest_path,
         GtkSelectionData *selection_data );
 
-    // notifications from wxDataViewModel
-    bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
-    bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
-    bool ItemChanged( const wxDataViewItem &item );
-    bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
-    bool Cleared();
-    bool BeforeReset();
-    bool AfterReset();
+    // notifications from wxDataViewModel: they never really fail, so they
+    // don't return bool unlike the corresponding wxDataViewModelNotifier
+    // functions
+    void ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
+    void ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
+    void ItemChanged( const wxDataViewItem &item );
+    void ValueChanged( const wxDataViewItem &item, unsigned int model_column );
+    void Cleared();
     void Resort();
 
     // sorting interface
@@ -3885,7 +3885,7 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
 
 // notifications from wxDataViewModel
 
-bool wxDataViewCtrlInternal::Cleared()
+void wxDataViewCtrlInternal::Cleared()
 {
     if (m_root)
     {
@@ -3896,8 +3896,6 @@ bool wxDataViewCtrlInternal::Cleared()
     InitTree();
 
     ScheduleRefresh();
-
-    return true;
 }
 
 void wxDataViewCtrlInternal::Resort()
@@ -3908,12 +3906,12 @@ void wxDataViewCtrlInternal::Resort()
     ScheduleRefresh();
 }
 
-bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
+void wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
     if (!m_wx_model->IsVirtualListModel())
     {
         wxGtkTreeModelNode *parent_node = FindNode( parent );
-        wxCHECK_MSG(parent_node, false,
+        wxCHECK_RET(parent_node,
             "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
         wxDataViewItemArray modelSiblings;
@@ -3921,7 +3919,7 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
         const int modelSiblingsSize = modelSiblings.size();
 
         int posInModel = modelSiblings.Index(item, /*fromEnd=*/true);
-        wxCHECK_MSG( posInModel != wxNOT_FOUND, false, "adding non-existent item?" );
+        wxCHECK_RET( posInModel != wxNOT_FOUND, "adding non-existent item?" );
 
         const wxGtkTreeModelChildren& nodeSiblings = parent_node->GetChildren();
         const int nodeSiblingsSize = nodeSiblings.size();
@@ -3929,12 +3927,12 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
         if ( nodeSiblingsSize == 0 )
         {
             BuildBranch( parent_node );
-            return true;
+            return;
         }
         else
         {
             if ( parent_node->FindChildByItem(item) != wxNOT_FOUND )
-                return true;
+                return;
         }
 
         int nodePos = 0;
@@ -3980,11 +3978,9 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
     }
 
     ScheduleRefresh();
-
-    return true;
 }
 
-bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
+void wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
     if (!m_wx_model->IsVirtualListModel())
     {
@@ -3996,26 +3992,20 @@ bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wx
     }
 
     ScheduleRefresh();
-
-    return true;
 }
 
-bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
+void wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
 {
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, item);
     m_owner->HandleWindowEvent( event );
-
-    return true;
 }
 
-bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int view_column )
+void wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int view_column )
 {
     wxDataViewColumn* const column = m_owner->GetColumn(view_column);
     wxDataViewEvent
         event(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, column, item);
     m_owner->HandleWindowEvent( event );
-
-    return true;
 }
 
 // GTK+ model iface
