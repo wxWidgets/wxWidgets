@@ -275,22 +275,11 @@ public:
 
     void OnInternalIdle();
 
-    enum wxFindNodeMode
-    {
-        // return nullptr from FindNode() of a subtree was not realized
-        wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED,
-
-        // call BuildBranch() from FindNode() to realize a subtree
-        wxFIND_NODE_BUILD_SUBTREE,
-    };
-
 protected:
     void InitTree();
     void ScheduleRefresh();
 
-    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item,
-                                  wxFindNodeMode mode =
-                                    wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED );
+    wxGtkTreeModelNode *FindNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindNode( GtkTreeIter *iter );
     wxGtkTreeModelNode *FindParentNode( const wxDataViewItem &item );
     wxGtkTreeModelNode *FindParentNode( GtkTreeIter *iter );
@@ -3931,7 +3920,7 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
 {
     if (!m_wx_model->IsVirtualListModel())
     {
-        wxGtkTreeModelNode *parent_node = FindNode( parent, wxFIND_NODE_BUILD_SUBTREE );
+        wxGtkTreeModelNode *parent_node = FindNode( parent );
         wxCHECK_MSG(parent_node, false,
             "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
@@ -4381,8 +4370,7 @@ int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDa
 }
 
 
-wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item,
-                                                      wxFindNodeMode mode )
+wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item )
 {
     if ( !item.IsOk() )
         return m_root;
@@ -4404,17 +4392,6 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item
     {
         if ( node && node->GetNodes().GetCount() != 0 )
         {
-            switch ( mode )
-            {
-                case wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED:
-                    // Do nothing and a subtree will not built.
-                    break;
-
-                case wxFIND_NODE_BUILD_SUBTREE:
-                    BuildBranch( node );
-                    break;
-            }
-
             int len = node->GetNodes().GetCount();
             wxGtkTreeModelNodes &nodes = node->GetNodes();
             int j = 0;
@@ -4444,12 +4421,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
     if (!iter)
         return m_root;
 
-    wxDataViewItem item( (void*) iter->user_data );
-
-    const wxFindNodeMode mode = wxFIND_NODE_RETURN_IF_SUBTREE_NOT_REALIZED;
-    wxGtkTreeModelNode *result = FindNode( item, mode );
-
-    return result;
+    return FindNode( wxDataViewItem{iter->user_data} );
 }
 
 wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem &item )
