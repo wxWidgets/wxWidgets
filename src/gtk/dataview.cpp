@@ -475,10 +475,19 @@ public:
     void Resort();
 
 private:
+    // Only null for the root node, i.e. wxDataViewCtrlInternal::m_root.
     wxGtkTreeModelNode         *m_parent;
+
+    // TODO: Don't store the child items both in m_item of m_nodes and
+    // separately in m_children, it's redundant and not only wastes space but
+    // makes the code more complicated. This is apparently used for sorting but
+    // it looks like we could just sort m_nodes themselves instead.
     wxGtkTreeModelNodes         m_nodes;
     wxGtkTreeModelChildren      m_children;
     wxDataViewItem              m_item;
+
+    // TODO: Don't store the same pointer in all tree nodes, it would be enough
+    // to store it in the root node only and access it from there.
     wxDataViewCtrlInternal     *m_internal;
 };
 
