@@ -4174,7 +4174,7 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
     else
     {
         wxGtkTreeModelNode *parent = FindParentNode( iter );
-        if( parent == nullptr )
+        if ( parent == nullptr )
         {
             iter->user_data = nullptr;
             return FALSE;
@@ -4387,22 +4387,22 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item
     if ( !item.IsOk() )
         return m_root;
 
-    if( m_wx_model == nullptr )
+    if ( m_wx_model == nullptr )
         return nullptr;
 
     std::list<wxDataViewItem> list;
     wxDataViewItem it( item );
 
-    while( it.IsOk() )
+    while ( it.IsOk() )
     {
         list.push_front( it );
         it = m_wx_model->GetParent( it );
     }
 
     wxGtkTreeModelNode * node = m_root;
-    for( const auto& item : list )
+    for ( const auto& item : list )
     {
-        if( node && node->GetNodes().GetCount() != 0 )
+        if ( node && node->GetNodes().GetCount() != 0 )
         {
             switch ( mode )
             {
@@ -4418,16 +4418,16 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item
             int len = node->GetNodes().GetCount();
             wxGtkTreeModelNodes &nodes = node->GetNodes();
             int j = 0;
-            for( ; j < len; j ++)
+            for ( ; j < len; j ++)
             {
-                if( nodes[j]->GetItem() == item )
+                if ( nodes[j]->GetItem() == item )
                 {
                     node = nodes[j];
                     break;
                 }
             }
 
-            if( j == len )
+            if ( j == len )
             {
                 return nullptr;
             }
@@ -4455,24 +4455,24 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( GtkTreeIter *iter )
 static wxGtkTreeModelNode*
 wxDataViewCtrlInternal_FindParentNode( wxDataViewModel * model, wxGtkTreeModelNode *treeNode, const wxDataViewItem &item )
 {
-    if( model == nullptr )
+    if ( model == nullptr )
         return nullptr;
 
     std::list<wxDataViewItem> list;
-    if( !item.IsOk() )
+    if ( !item.IsOk() )
         return nullptr;
 
     wxDataViewItem it( model->GetParent( item ) );
-    while( it.IsOk() )
+    while ( it.IsOk() )
     {
         list.push_front( it );
         it = model->GetParent( it );
     }
 
     wxGtkTreeModelNode * node = treeNode;
-    for( const auto& item : list )
+    for ( const auto& item : list )
     {
-        if( node && node->GetNodes().GetCount() != 0 )
+        if ( node && node->GetNodes().GetCount() != 0 )
         {
             int len = node->GetNodes().GetCount();
             wxGtkTreeModelNodes nodes = node->GetNodes();
@@ -4496,9 +4496,9 @@ wxDataViewCtrlInternal_FindParentNode( wxDataViewModel * model, wxGtkTreeModelNo
     }
     //Examine whether the node is item's parent node
     int len = node->GetChildCount();
-    for( int i = 0; i < len ; i ++ )
+    for ( int i = 0; i < len ; i ++ )
     {
-        if( node->GetChildren().Item( i ) == item.GetID() )
+        if ( node->GetChildren().Item( i ) == item.GetID() )
             return node;
     }
     return nullptr;
