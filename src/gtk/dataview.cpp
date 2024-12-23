@@ -1824,16 +1824,9 @@ bool wxGtkDataViewModelNotifier::ItemAdded( const wxDataViewItem &parent, const 
 bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
     GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
-#if 0
+
     // using _get_path for a deleted item cannot be
-    // a good idea
-    GtkTreeIter iter;
-    iter.stamp = wxgtk_model->stamp;
-    iter.user_data = (gpointer) item.GetID();
-    wxGtkTreePath path(wxgtk_tree_model_get_path(
-        GTK_TREE_MODEL(wxgtk_model), &iter ));
-#else
-    // so get the path from the parent
+    // a good idea so get the path from the parent
     GtkTreeIter parentIter;
     parentIter.stamp = wxgtk_model->stamp;
     parentIter.user_data = (gpointer) parent.GetID();
@@ -1843,7 +1836,6 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
     // and add the final index ourselves
     int index = m_internal->GetIndexOf( parent, item );
     gtk_tree_path_append_index( path, index );
-#endif
 
     m_internal->ItemDeleted( parent, item );
 
