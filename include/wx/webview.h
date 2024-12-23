@@ -96,11 +96,11 @@ enum wxWebViewUserScriptInjectionTime
 
 enum wxWebViewBrowsingDataTypes
 {
-    wxWEBVIEW_BROWSING_DATA_COOKIES = 1,
-    wxWEBVIEW_BROWSING_DATA_CACHE = 2,
-    wxWEBVIEW_BROWSING_DATA_DOM_STORAGE = 4,
-    wxWEBVIEW_BROWSING_DATA_OTHER = 8,
-    wxWEBVIEW_BROWSING_DATA_ALL = 16
+    wxWEBVIEW_BROWSING_DATA_COOKIES     = 0x01,
+    wxWEBVIEW_BROWSING_DATA_CACHE       = 0x02,
+    wxWEBVIEW_BROWSING_DATA_DOM_STORAGE = 0x04,
+    wxWEBVIEW_BROWSING_DATA_OTHER       = 0x08,
+    wxWEBVIEW_BROWSING_DATA_ALL         = 0x0f
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerRequest
@@ -271,7 +271,7 @@ public:
     virtual wxString GetUserAgent() const;
     virtual bool SetProxy(const wxString& proxy) { wxUnusedVar(proxy); return false; }
     virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
-        wxDateTime since = wxDateTime((time_t)0) )
+                                   wxDateTime since = {})
     { wxUnusedVar(types); wxUnusedVar(since); return false; }
 
     // Script

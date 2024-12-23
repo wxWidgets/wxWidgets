@@ -520,11 +520,13 @@ bool wxWebViewWebKit::ClearBrowsingData(int types, wxDateTime since)
 {
     if ( WX_IS_MACOS_AVAILABLE(10, 11) )
     {
-        NSSet<NSString*>* clearDataTypes = nil;
-        if (types & wxWEBVIEW_BROWSING_DATA_OTHER)
-        {
+        // We return immediately if wxWEBVIEW_BROWSING_DATA_OTHER is specified
+        // on its own as it doesn't do anything, but we just ignore it if it is
+        // given together with something else.
+        if (types == wxWEBVIEW_BROWSING_DATA_OTHER)
             return false;
-        }
+
+        NSSet<NSString*>* clearDataTypes = nil;
         if (types & wxWEBVIEW_BROWSING_DATA_ALL)
         {
             clearDataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
@@ -535,15 +537,25 @@ bool wxWebViewWebKit::ClearBrowsingData(int types, wxDateTime since)
             if (types & wxWEBVIEW_BROWSING_DATA_COOKIES)
                 [dataTypes addObject:WKWebsiteDataTypeCookies];
             if (types & wxWEBVIEW_BROWSING_DATA_CACHE)
-                [dataTypes addObjectsFromArray:@[WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache,
-                    WKWebsiteDataTypeOfflineWebApplicationCache]];
+                [dataTypes addObjectsFromArray:@[
+                    WKWebsiteDataTypeDiskCache,
+                    WKWebsiteDataTypeMemoryCache,
+                    WKWebsiteDataTypeOfflineWebApplicationCache
+                ]];
             if (types & wxWEBVIEW_BROWSING_DATA_DOM_STORAGE)
-                [dataTypes addObjectsFromArray:@[WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage,
-                    WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases]];
+                [dataTypes addObjectsFromArray:@[
+                    WKWebsiteDataTypeLocalStorage,
+                    WKWebsiteDataTypeSessionStorage,
+                    WKWebsiteDataTypeWebSQLDatabases,
+                    WKWebsiteDataTypeIndexedDBDatabases
+                ]];
 
             clearDataTypes = dataTypes;
         }
 
+        // We rely on the fact that NSDateFromWX() returns nil for invalid
+        // date, as this is exactly what we want here: if the date is not
+        // specified, we pass nil to clear everything.
         [m_webView.configuration.websiteDataStore removeDataOfTypes:clearDataTypes
             modifiedSince:NSDateFromWX(since) completionHandler:^{
                 wxWebViewEvent event(wxEVT_WEBVIEW_BROWSING_DATA_CLEARED,

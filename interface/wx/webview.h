@@ -164,20 +164,24 @@ enum wxWebViewIE_EmulationLevel
 /**
     Types of browsing data that can be cleared.
 
+    Note that different constants can be combined using the bitwise OR
+    operator and that @c wxWEBVIEW_BROWSING_DATA_ALL is a shorthand for
+    specifying all of them.
+
     @since 3.3.0
 */
 enum wxWebViewBrowsingDataTypes
 {
     /** All stored and session cookies */
-    wxWEBVIEW_BROWSING_DATA_COOKIES = 1,
+    wxWEBVIEW_BROWSING_DATA_COOKIES = 0x01,
     /** Cached data from disk and memory */
-    wxWEBVIEW_BROWSING_DATA_CACHE = 2,
+    wxWEBVIEW_BROWSING_DATA_CACHE = 0x02,
     /** All DOM Storage: File Systems, Indexed DB, Local Storage, Web SQL, Cache Storage */
-    wxWEBVIEW_BROWSING_DATA_DOM_STORAGE = 4,
+    wxWEBVIEW_BROWSING_DATA_DOM_STORAGE = 0x04,
     /** Other browsing data like history, settings, auto fill, passwords, etc. */
-    wxWEBVIEW_BROWSING_DATA_OTHER = 8,
-    /** All browsing data */
-    wxWEBVIEW_BROWSING_DATA_ALL = 16
+    wxWEBVIEW_BROWSING_DATA_OTHER = 0x08,
+    /** All browsing data, including data corresponding to all the other constants. */
+    wxWEBVIEW_BROWSING_DATA_ALL = 0x0f
 };
 
 /**
@@ -1361,19 +1365,24 @@ public:
         This operation is asynchronous and may take some time to complete. When finished
         @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event is generated.
 
-        @param types The types of browsing data to clear. By default, it clears all types of browsing data.
-        @param since The time since when the browsing data should be cleared. By default, it clears all browsing data.
-        @return @true if the specified browsing data can be cleared by the backend. Completion will be notified by a
-            @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event, @false otherwise.
+        @param types The types of browsing data to clear. By default, it clears
+            all types of browsing data.
+        @param since The time since when the browsing data should be cleared.
+            By default, it clears all browsing data.
+        @return @false if backend doesn't support clearing browsing data or an
+            error occurred. Otherwise, @true is returned and the browsing data
+            will be cleared asynchronously and the application will receive a
+            @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event when it is done (or if
+            doing it fails later).
 
         @since 3.3.0
 
-        @note This is only implemented on the Edge, WebKit2GTK+ and macOS backends.
+        @note This is only implemented in the Edge, WebKit2GTK+ and macOS backends.
 
         @see wxWebViewBrowsingDataTypes
      */
     virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
-        wxDateTime since = wxDateTime((time_t)0) );
+                                   wxDateTime since = {});
 
     /**
         @name Scripting

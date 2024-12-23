@@ -98,7 +98,7 @@ public:
     virtual bool SetProxy(const wxString& proxy) override;
 
     virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
-        wxDateTime since = wxDateTime((time_t)0) ) override;
+                                   wxDateTime since = {}) override;
 
     virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const override;
     virtual void RunScriptAsync(const wxString& javascript, void* clientData = nullptr) const override;

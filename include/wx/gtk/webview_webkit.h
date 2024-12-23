@@ -127,7 +127,7 @@ public:
         wxWebViewUserScriptInjectionTime injectionTime = wxWEBVIEW_INJECT_AT_DOCUMENT_START) override;
     virtual void RemoveAllUserScripts() override;
     virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
-        wxDateTime since = wxDateTime((time_t)0) ) override;
+                                   wxDateTime since = {}) override;
 #else
     virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const override;
 #endif

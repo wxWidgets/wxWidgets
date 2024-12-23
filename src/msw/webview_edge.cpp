@@ -1447,25 +1447,44 @@ bool wxWebViewEdge::ClearBrowsingData(int types, wxDateTime since)
     if (types & wxWEBVIEW_BROWSING_DATA_ALL)
     {
         dataKinds = COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_PROFILE;
-        types |= wxWEBVIEW_BROWSING_DATA_COOKIES | wxWEBVIEW_BROWSING_DATA_DOM_STORAGE |
-            wxWEBVIEW_BROWSING_DATA_OTHER | wxWEBVIEW_BROWSING_DATA_CACHE;
     }
-    if (types & wxWEBVIEW_BROWSING_DATA_CACHE)
-        dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_DISK_CACHE;
-    if (types & wxWEBVIEW_BROWSING_DATA_COOKIES)
-        dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_COOKIES;
-    if (types & wxWEBVIEW_BROWSING_DATA_DOM_STORAGE)
-        dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_DOM_STORAGE;
-    if (types & wxWEBVIEW_BROWSING_DATA_OTHER)
-        dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_BROWSING_HISTORY |
-            COREWEBVIEW2_BROWSING_DATA_KINDS_SETTINGS |
-            COREWEBVIEW2_BROWSING_DATA_KINDS_DOWNLOAD_HISTORY |
-            COREWEBVIEW2_BROWSING_DATA_KINDS_GENERAL_AUTOFILL |
-            COREWEBVIEW2_BROWSING_DATA_KINDS_PASSWORD_AUTOSAVE;
+    else
+    {
+        if (types & wxWEBVIEW_BROWSING_DATA_CACHE)
+            dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_DISK_CACHE;
+
+        // This makes the code a bit more complicated, but prefer to use "ALL
+        // SITE" if we want to delete both cookies and DOM storage because this
+        // will include any other kind of data that may be added in the future.
+        switch ( types & (wxWEBVIEW_BROWSING_DATA_COOKIES |
+                          wxWEBVIEW_BROWSING_DATA_DOM_STORAGE) )
+        {
+            case wxWEBVIEW_BROWSING_DATA_COOKIES:
+                dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_COOKIES;
+                break;
+
+            case wxWEBVIEW_BROWSING_DATA_DOM_STORAGE:
+                dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_DOM_STORAGE;
+
+            case wxWEBVIEW_BROWSING_DATA_COOKIES | wxWEBVIEW_BROWSING_DATA_DOM_STORAGE:
+                dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_SITE;
+                break;
+        }
+
+        if (types & wxWEBVIEW_BROWSING_DATA_OTHER)
+        {
+            // All the other kinds not already mentioned above.
+            dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_BROWSING_HISTORY |
+                         COREWEBVIEW2_BROWSING_DATA_KINDS_SETTINGS |
+                         COREWEBVIEW2_BROWSING_DATA_KINDS_DOWNLOAD_HISTORY |
+                         COREWEBVIEW2_BROWSING_DATA_KINDS_GENERAL_AUTOFILL |
+                         COREWEBVIEW2_BROWSING_DATA_KINDS_PASSWORD_AUTOSAVE;
+        }
+    }
 
     profile2->ClearBrowsingDataInTimeRange(
         (COREWEBVIEW2_BROWSING_DATA_KINDS) dataKinds,
-        (double) since.GetTicks(),
+        (double) (since.IsValid() ? since.GetTicks() : 0),
         (double) wxDateTime::Now().GetTicks(),
         Callback<ICoreWebView2ClearBrowsingDataCompletedHandler>(
             [this](HRESULT error) -> HRESULT

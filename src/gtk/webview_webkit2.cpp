@@ -1715,25 +1715,60 @@ bool wxWebViewWebKit::ClearBrowsingData(int types, wxDateTime since)
     {
         WebKitWebsiteDataManager* manager = static_cast<wxWebViewConfigurationImplWebKit*>(m_config.GetImpl())->GetWebsiteDataManager();
 
-        if (types & wxWEBVIEW_BROWSING_DATA_OTHER)
-            return false;
-
         int wkTypes = 0;
-        if (types & wxWEBVIEW_BROWSING_DATA_COOKIES)
-            wkTypes |= WEBKIT_WEBSITE_DATA_COOKIES;
-        if (types & wxWEBVIEW_BROWSING_DATA_CACHE)
-            wkTypes |= WEBKIT_WEBSITE_DATA_DISK_CACHE | WEBKIT_WEBSITE_DATA_MEMORY_CACHE |
-                WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE;
-        if (types & wxWEBVIEW_BROWSING_DATA_DOM_STORAGE)
-            wkTypes |= WEBKIT_WEBSITE_DATA_LOCAL_STORAGE | WEBKIT_WEBSITE_DATA_SESSION_STORAGE |
-                WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES | WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES;
+
         if (types & wxWEBVIEW_BROWSING_DATA_ALL)
+        {
             wkTypes |= WEBKIT_WEBSITE_DATA_ALL;
+        }
+        else
+        {
+            if (types & wxWEBVIEW_BROWSING_DATA_COOKIES)
+                wkTypes |= WEBKIT_WEBSITE_DATA_COOKIES;
+
+            if (types & wxWEBVIEW_BROWSING_DATA_CACHE)
+            {
+                wkTypes |= WEBKIT_WEBSITE_DATA_DISK_CACHE |
+                           WEBKIT_WEBSITE_DATA_MEMORY_CACHE |
+                           WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE |
+                           WEBKIT_WEBSITE_DATA_DOM_CACHE;
+            }
+
+            if (types & wxWEBVIEW_BROWSING_DATA_DOM_STORAGE)
+            {
+                wkTypes |= WEBKIT_WEBSITE_DATA_LOCAL_STORAGE |
+                           WEBKIT_WEBSITE_DATA_SESSION_STORAGE |
+                           WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES |
+                           WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES;
+            }
+
+            if (types & wxWEBVIEW_BROWSING_DATA_OTHER)
+            {
+                // All the elements of WebKitWebsiteDataTypes not already
+                // appearing above.
+                wkTypes |= WEBKIT_WEBSITE_DATA_PLUGIN_DATA |
+                           WEBKIT_WEBSITE_DATA_HSTS_CACHE |
+                           WEBKIT_WEBSITE_DATA_DEVICE_ID_HASH_SALT |
+                           WEBKIT_WEBSITE_DATA_ITP |
+                           WEBKIT_WEBSITE_DATA_SERVICE_WORKER_REGISTRATIONS;
+            }
+        }
+
+        GTimeSpan timeSpan = 0;
+        if ( since.IsValid() )
+        {
+            const auto now = wxDateTime::Now();
+
+            wxCHECK_MSG( since < now, false, "Date must be in the past" );
+
+            // GTimeSpan is in microseconds.
+            timeSpan = (since - now).GetMilliseconds().GetValue() * 1000;
+        }
 
         webkit_website_data_manager_clear(
             manager,
             (WebKitWebsiteDataTypes) wkTypes,
-            since.GetTicks(),
+            timeSpan,
             nullptr,
             wxgtk_webview_webkit_clear_data_ready, this);
 
