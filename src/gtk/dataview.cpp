@@ -3506,26 +3506,6 @@ bool wxDataViewColumn::IsReorderable() const
 // wxGtkTreeModelNode
 //-----------------------------------------------------------------------------
 
-#if 0
-class wxGtkTreeModelChildWithPos
-{
-public:
-    unsigned int pos;
-    void        *id;
-};
-
-static
-int wxGtkTreeModelChildWithPosCmp( const void* data1, const void* data2, const void* user_data )
-{
-    const wxGtkTreeModelChildWithPos* child1 = (const wxGtkTreeModelChildWithPos*) data1;
-    const wxGtkTreeModelChildWithPos* child2 = (const wxGtkTreeModelChildWithPos*) data2;
-    const wxDataViewCtrlInternal *internal = (const wxDataViewCtrlInternal *) user_data;
-    int ret = internal->GetDataViewModel()->Compare( child1->id, child2->id,
-        internal->GetSortColumn(), (internal->GetSortOrder() == GTK_SORT_DESCENDING) );
-
-    return ret;
-}
-#else
 static
 int LINKAGEMODE wxGtkTreeModelChildPtrCmp( void*** data1, void*** data2 )
 {
@@ -3534,7 +3514,6 @@ int LINKAGEMODE wxGtkTreeModelChildPtrCmp( void*** data1, void*** data2 )
 }
 
 WX_DEFINE_ARRAY_PTR( void**, wxGtkTreeModelChildrenPtr );
-#endif
 
 void wxGtkTreeModelNode::Resort()
 {
