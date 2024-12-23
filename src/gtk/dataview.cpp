@@ -355,11 +355,7 @@ public:
 
             m_children.Add( id );
 
-            if ( !m_internal->IsSortFrozen() && m_internal->ShouldBeSorted() )
-            {
-                gs_internal = m_internal;
-                m_children.Sort( &wxGtkTreeModelChildCmp );
-            }
+            ResortChildrenIfNeeded();
         }
 
     void InsertNode( wxGtkTreeModelNode* child, unsigned pos )
@@ -402,11 +398,7 @@ public:
         {
             m_children.Insert( id, pos );
 
-            if ( !m_internal->IsSortFrozen() && m_internal->ShouldBeSorted() )
-            {
-                gs_internal = m_internal;
-                m_children.Sort( &wxGtkTreeModelChildCmp );
-            }
+            ResortChildrenIfNeeded();
         }
 
     void DeleteChild( void* id )
@@ -458,6 +450,15 @@ public:
     void Resort();
 
 private:
+    void ResortChildrenIfNeeded()
+    {
+        if ( !m_internal->IsSortFrozen() && m_internal->ShouldBeSorted() )
+        {
+            gs_internal = m_internal;
+            m_children.Sort( &wxGtkTreeModelChildCmp );
+        }
+    }
+
     // Only null for the root node, i.e. wxDataViewCtrlInternal::m_root.
     wxGtkTreeModelNode         *m_parent;
 
