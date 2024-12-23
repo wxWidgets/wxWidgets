@@ -4372,11 +4372,10 @@ int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDa
 
 wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item )
 {
+    wxCHECK_MSG( m_wx_model, nullptr, "no associated model?" );
+
     if ( !item.IsOk() )
         return m_root;
-
-    if ( m_wx_model == nullptr )
-        return nullptr;
 
     std::list<wxDataViewItem> list;
     wxDataViewItem it( item );
