@@ -343,13 +343,8 @@ public:
 
     ~wxGtkTreeModelNode()
     {
-        size_t count = m_nodes.GetCount();
-        size_t i;
-        for (i = 0; i < count; i++)
-        {
-            wxGtkTreeModelNode *child = m_nodes.Item( i );
+        for ( auto child : m_nodes )
             delete child;
-        }
     }
 
     void AddNode( wxGtkTreeModelNode* child )
@@ -3589,12 +3584,8 @@ void wxGtkTreeModelNode::Resort()
     gtk_tree_model_rows_reordered( gtk_tree_model,
             wxGtkTreePath(m_internal->get_path(&iter)), &iter, &new_order[0] );
 
-    unsigned int pos;
-    for (pos = 0; pos < child_count; pos++)
-    {
-        wxGtkTreeModelNode *node = m_nodes.Item( pos );
+    for ( auto node : m_nodes )
         node->Resort();
-    }
 }
 
 //-----------------------------------------------------------------------------
@@ -4065,11 +4056,8 @@ gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path 
                 return TRUE;
             }
 
-            size_t count = node->GetNodes().GetCount();
-            size_t pos2;
-            for (pos2 = 0; pos2 < count; pos2++)
+            for ( auto child_node : node->GetNodes() )
             {
-                wxGtkTreeModelNode *child_node = node->GetNodes().Item( pos2 );
                 if (child_node->GetItem().GetID() == id)
                 {
                     node = child_node;
