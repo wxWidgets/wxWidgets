@@ -4277,7 +4277,7 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
             return 0;
 
         wxGtkTreeModelNode *parent_node = FindNode( iter );
-        wxCHECK_MSG(parent_node, FALSE,
+        wxCHECK_MSG(parent_node, 0,
             "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
         BuildBranch( parent_node );
