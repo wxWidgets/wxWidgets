@@ -29,6 +29,7 @@
 #include "wx/atomic.h"
 
 #include "wx/except.h"
+#include "wx/sysopt.h"
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
@@ -528,6 +529,28 @@ void wxAddEntryHook(wxEntryHook hook)
     #define wxEntryReal wxEntry
 #endif // !__WINDOWS__
 
+static int DoEntryReal()
+{
+    // app initialization
+    if ( !wxTheApp->CallOnInit() )
+    {
+        // don't call OnExit() if OnInit() failed
+        return wxTheApp->GetErrorExitCode();
+    }
+
+    // ensure that OnExit() is called if OnInit() had succeeded
+    class CallOnExit
+    {
+    public:
+        ~CallOnExit() { wxTheApp->OnExit(); }
+    } callOnExit;
+
+    WX_SUPPRESS_UNUSED_WARN(callOnExit);
+
+    // app execution
+    return wxTheApp->OnRun();
+}
+
 int wxEntryReal(int& argc, wxChar **argv)
 {
     // Do this before trying the hooks as they may use command line arguments.
@@ -553,26 +576,13 @@ int wxEntryReal(int& argc, wxChar **argv)
         return wxApp::GetFatalErrorExitCode();
     }
 
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        return DoEntryReal();
+    }
     wxTRY
     {
-        // app initialization
-        if ( !wxTheApp->CallOnInit() )
-        {
-            // don't call OnExit() if OnInit() failed
-            return wxTheApp->GetErrorExitCode();
-        }
-
-        // ensure that OnExit() is called if OnInit() had succeeded
-        class CallOnExit
-        {
-        public:
-            ~CallOnExit() { wxTheApp->OnExit(); }
-        } callOnExit;
-
-        WX_SUPPRESS_UNUSED_WARN(callOnExit);
-
-        // app execution
-        return wxTheApp->OnRun();
+        return DoEntryReal();
     }
     wxCATCH_ALL(
         wxTheApp->OnUnhandledException();
