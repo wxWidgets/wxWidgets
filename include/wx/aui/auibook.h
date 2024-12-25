@@ -139,7 +139,8 @@ public:
     wxAuiTabArt* GetArtProvider() const;
 
     void SetFlags(unsigned int flags);
-    unsigned int GetFlags() const;
+    unsigned int GetFlags() const { return m_flags; }
+    bool IsFlagSet(unsigned int flag) const { return (m_flags & flag) != 0; }
 
     bool AddPage(const wxAuiNotebookPage& info);
     bool InsertPage(const wxAuiNotebookPage& info, size_t idx);

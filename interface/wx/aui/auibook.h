@@ -654,6 +654,13 @@ public:
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
 
+    /**
+        Returns @true if the given flag is set.
+
+        @since 3.3.0
+    */
+    bool IsFlagSet(unsigned int flag) const;
+
     bool AddPage(const wxAuiNotebookPage& info);
     bool InsertPage(const wxAuiNotebookPage& info, size_t idx);
     bool MovePage(wxWindow* page, size_t newIdx);

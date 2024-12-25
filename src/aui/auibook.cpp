@@ -139,12 +139,6 @@ void wxAuiTabContainer::SetFlags(unsigned int flags)
     }
 }
 
-unsigned int wxAuiTabContainer::GetFlags() const
-{
-    return m_flags;
-}
-
-
 void wxAuiTabContainer::SetNormalFont(const wxFont& font)
 {
     m_art->SetNormalFont(font);
@@ -1550,20 +1544,20 @@ public:
         if (m_tabs->IsFrozen() || m_tabs->GetParent()->IsFrozen())
             return;
 
-        if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
+        if (m_tabs->IsFlagSet(wxAUI_NB_BOTTOM))
         {
             m_tab_rect = wxRect (m_rect.x, m_rect.y + m_rect.height - m_tabCtrlHeight, m_rect.width, m_tabCtrlHeight);
             m_tabs->SetSize     (m_rect.x, m_rect.y + m_rect.height - m_tabCtrlHeight, m_rect.width, m_tabCtrlHeight);
             m_tabs->SetRect     (wxRect(0, 0, m_rect.width, m_tabCtrlHeight));
         }
-        else //TODO: if (GetFlags() & wxAUI_NB_TOP)
+        else //TODO: if (IsFlagSet(wxAUI_NB_TOP))
         {
             m_tab_rect = wxRect (m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
             m_tabs->SetSize     (m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
             m_tabs->SetRect     (wxRect(0, 0,        m_rect.width, m_tabCtrlHeight));
         }
-        // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
-        // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
+        // TODO: else if (IsFlagSet(wxAUI_NB_LEFT)){}
+        // TODO: else if (IsFlagSet(wxAUI_NB_RIGHT)){}
 
         m_tabs->Refresh();
         m_tabs->Update();
@@ -1585,22 +1579,22 @@ public:
             if (width < 0)
                 width = 0;
 
-            if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
+            if (m_tabs->IsFlagSet(wxAUI_NB_BOTTOM))
             {
                 page.window->SetSize(m_rect.x + border_space,
                                      m_rect.y + border_space,
                                      width,
                                      height);
             }
-            else //TODO: if (GetFlags() & wxAUI_NB_TOP)
+            else //TODO: if (IsFlagSet(wxAUI_NB_TOP))
             {
                 page.window->SetSize(m_rect.x + border_space,
                                      m_rect.y + m_tabCtrlHeight,
                                      width,
                                      height);
             }
-            // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
-            // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
+            // TODO: else if (IsFlagSet(wxAUI_NB_LEFT)){}
+            // TODO: else if (IsFlagSet(wxAUI_NB_RIGHT)){}
         }
     }
 
