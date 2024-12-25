@@ -1502,17 +1502,11 @@ class wxAuiTabFrame : public wxWindow
 {
 public:
 
-    wxAuiTabFrame()
-    {
-        m_tabs = nullptr;
-
-        // Both m_rect and m_tabCtrlHeight will be really initialized later.
-        m_tabCtrlHeight = 0;
-    }
+    wxAuiTabFrame() = default;
 
     ~wxAuiTabFrame()
     {
-        wxDELETE(m_tabs);
+        delete m_tabs;
     }
 
     void SetTabCtrlHeight(int h)
@@ -1628,8 +1622,8 @@ public:
 
     wxRect m_rect;
     wxRect m_tab_rect;
-    wxAuiTabCtrl* m_tabs;
-    int m_tabCtrlHeight;
+    wxAuiTabCtrl* m_tabs = nullptr;
+    int m_tabCtrlHeight = 0;
 };
 
 
