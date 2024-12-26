@@ -16,6 +16,9 @@
 #
 # incantation to directly create an entry in the format used here.
 
+# Add missing spaces after compound statement keywords, 2024-12-23
+216232fd7c92d067c21ef28f12d7fc3020441ea8
+
 # Get rid of obsoleted comments, 2023-02-05
 2df05fb915516e0563578e34aec45980be51b1f4
 
@@ -67,6 +70,9 @@ a3ef8eb50346e04c080ed1711578390080baff8b
 # split wxGrid implementation in grideditors.cpp (for wxGridCellEditor-derived
 # classes), gridctrl.cpp (for wxGridCellRenderer-derived classes), 2009-01-11
 29efc6e4a478652d6f59fb3f5ca7990d78a8ead4
+
+# removed trailing whitespace, 2007-11-27
+b9db5f3061af49519c56e9981d627a5b206507f3
 
 # cleanup - reformatting, 2006-04-20
 a9339fe22c1815cfbbf2ed9c300c897256644d18
