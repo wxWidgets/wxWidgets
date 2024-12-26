@@ -234,9 +234,9 @@ protected:
     size_t m_tabOffset;
     unsigned int m_flags;
 
-private:
     int GetCloseButtonState(const wxAuiNotebookPage& page) const;
 
+private:
     // Render the buttons: part of Render(), returns the extent of the buttons
     // on the left and right side.
     void RenderButtons(wxDC& dc, wxWindow* wnd,
@@ -265,6 +265,10 @@ public:
     // Internal helpers.
     void DoShowTab(int idx);
     void DoUpdateActive();
+
+    // Internal function taking the total tab frame area and setting the size
+    // of the window to its sub-rectangle corresponding to tabs orientation.
+    void DoApplyRect(const wxRect& rect, int tabCtrlHeight);
 
 protected:
     // choose the default border for this window

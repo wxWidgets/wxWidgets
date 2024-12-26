@@ -1001,6 +1001,26 @@ void wxAuiTabCtrl::DoEndDragging()
     m_clickTab = nullptr;
 }
 
+void wxAuiTabCtrl::DoApplyRect(const wxRect& rect, int tabCtrlHeight)
+{
+    if (IsFlagSet(wxAUI_NB_BOTTOM))
+    {
+        SetSize(rect.x, rect.y + rect.height - tabCtrlHeight,
+                rect.width, tabCtrlHeight);
+        SetRect(wxRect(0, 0, rect.width, tabCtrlHeight));
+    }
+    else //TODO: if (IsFlagSet(wxAUI_NB_TOP))
+    {
+        SetSize(rect.x, rect.y, rect.width, tabCtrlHeight);
+        SetRect(wxRect(0, 0, rect.width, tabCtrlHeight));
+    }
+    // TODO: else if (IsFlagSet(wxAUI_NB_LEFT)){}
+    // TODO: else if (IsFlagSet(wxAUI_NB_RIGHT)){}
+
+    Refresh();
+    Update();
+}
+
 void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 {
     wxPaintDC dc(this);
@@ -1551,23 +1571,8 @@ public:
         if (m_tabs->IsFrozen() || m_tabs->GetParent()->IsFrozen())
             return;
 
-        if (m_tabs->IsFlagSet(wxAUI_NB_BOTTOM))
-        {
-            m_tab_rect = wxRect (m_rect.x, m_rect.y + m_rect.height - m_tabCtrlHeight, m_rect.width, m_tabCtrlHeight);
-            m_tabs->SetSize     (m_rect.x, m_rect.y + m_rect.height - m_tabCtrlHeight, m_rect.width, m_tabCtrlHeight);
-            m_tabs->SetRect     (wxRect(0, 0, m_rect.width, m_tabCtrlHeight));
-        }
-        else //TODO: if (IsFlagSet(wxAUI_NB_TOP))
-        {
-            m_tab_rect = wxRect (m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
-            m_tabs->SetSize     (m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
-            m_tabs->SetRect     (wxRect(0, 0,        m_rect.width, m_tabCtrlHeight));
-        }
-        // TODO: else if (IsFlagSet(wxAUI_NB_LEFT)){}
-        // TODO: else if (IsFlagSet(wxAUI_NB_RIGHT)){}
-
-        m_tabs->Refresh();
-        m_tabs->Update();
+        m_tabs->DoApplyRect(m_rect, m_tabCtrlHeight);
+        m_tab_rect = m_tabs->GetRect();
 
         const wxAuiNotebookPageArray& pages = m_tabs->GetPages();
 
