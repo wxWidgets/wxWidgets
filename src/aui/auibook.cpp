@@ -609,7 +609,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
     // draw the tabs
 
-    size_t active = 999;
+    size_t active = (size_t)-1;
     wxRect active_rect;
 
     int x_extent = 0;
