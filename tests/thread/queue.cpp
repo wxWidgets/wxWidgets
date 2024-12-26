@@ -191,3 +191,27 @@ void *MyThread::Entry()
 
     return (wxThread::ExitCode)wxMSGQUEUE_NO_ERROR;
 }
+
+TEST_CASE("wxMessageQueue::NonCopyable", "[msgqueue]")
+{
+    struct NonCopyable
+    {
+        explicit NonCopyable(int n) : m_n(new int(n)) { }
+
+        NonCopyable(NonCopyable&& other) = default;
+        NonCopyable& operator=(NonCopyable&& other) = default;
+
+        std::unique_ptr<int> m_n;
+    };
+
+    wxMessageQueue<NonCopyable> queue;
+
+    NonCopyable nc(17);
+    CHECK( queue.Post(std::move(nc)) == wxMSGQUEUE_NO_ERROR );
+
+    NonCopyable nc2(0);
+    CHECK( queue.Receive(nc2) == wxMSGQUEUE_NO_ERROR );
+    CHECK( *nc2.m_n == 17 );
+
+    CHECK( queue.ReceiveTimeout(0, nc2) == wxMSGQUEUE_TIMEOUT );
+}
