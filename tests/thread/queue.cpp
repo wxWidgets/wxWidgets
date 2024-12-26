@@ -15,7 +15,6 @@
 
 
 #ifndef WX_PRECOMP
-    #include "wx/dynarray.h"
     #include "wx/thread.h"
 #endif // WX_PRECOMP
 
@@ -67,8 +66,6 @@ private:
         Queue        m_queue;
     };
 
-    WX_DEFINE_ARRAY_PTR(MyThread *, ArrayThread);
-
     CPPUNIT_TEST_SUITE( QueueTestCase );
         CPPUNIT_TEST( TestReceive );
         CPPUNIT_TEST( TestReceiveTimeout );
@@ -96,7 +93,7 @@ void QueueTestCase::TestReceive()
     const int msgCount = 100;
     const int threadCount = 10;
 
-    ArrayThread threads;
+    std::vector<MyThread*> threads;
 
     int i;
     for ( i = 0; i < threadCount; ++i )
@@ -106,7 +103,7 @@ void QueueTestCase::TestReceive()
             new MyThread(WaitInfinitlyLong, previousThread, msgCount);
 
         CPPUNIT_ASSERT_EQUAL ( thread->Create(), wxTHREAD_NO_ERROR );
-        threads.Add(thread);
+        threads.push_back(thread);
     }
 
     for ( i = 0; i < threadCount; ++i )
