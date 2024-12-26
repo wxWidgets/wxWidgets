@@ -618,6 +618,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     rect.y = 0;
     rect.height = m_rect.height;
 
+    const int rightBorder = m_rect.width - right_buttons_width - wnd->FromDIP(2);
+
     for (i = m_tabOffset; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
@@ -640,7 +642,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         }
 
         rect.x = offset;
-        rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
+        rect.width = rightBorder - offset;
 
         if (rect.width <= 0)
             break;
