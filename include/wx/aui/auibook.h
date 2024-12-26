@@ -236,6 +236,11 @@ protected:
 
 private:
     int GetCloseButtonState(const wxAuiNotebookPage& page) const;
+
+    // Render the buttons: part of Render(), returns the extent of the buttons
+    // on the left and right side.
+    void RenderButtons(wxDC& dc, wxWindow* wnd,
+                       int& left_buttons_width, int& right_buttons_width);
 };
 
 

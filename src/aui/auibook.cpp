@@ -387,38 +387,13 @@ int wxAuiTabContainer::GetCloseButtonState(const wxAuiNotebookPage& page) const
 }
 
 
-// Render() renders the tab catalog to the specified DC
-// It is a virtual function and can be overridden to
-// provide custom drawing capabilities
-void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
+void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
+                                      int& left_buttons_width,
+                                      int& right_buttons_width)
 {
-    if (!raw_dc || !raw_dc->IsOk())
-        return;
-
-    if (m_rect.IsEmpty())
-        return;
-
     size_t i;
-    size_t page_count = m_pages.GetCount();
-    size_t button_count = m_buttons.GetCount();
-
-#if wxALWAYS_NATIVE_DOUBLE_BUFFER
-    wxDC& dc = *raw_dc;
-#else
-    wxMemoryDC dc;
-
-    // use the same layout direction as the window DC uses to ensure that the
-    // text is rendered correctly
-    dc.SetLayoutDirection(raw_dc->GetLayoutDirection());
-
-    wxBitmap bmp;
-    // create off-screen bitmap
-    bmp.Create(m_rect.GetWidth(), m_rect.GetHeight(),*raw_dc);
-    dc.SelectObject(bmp);
-
-    if (!dc.IsOk())
-        return;
-#endif
+    const size_t page_count = m_pages.GetCount();
+    const size_t button_count = m_buttons.GetCount();
 
     // ensure we show as many tabs as possible
     while (m_tabOffset > 0 && IsTabVisible(page_count-1, m_tabOffset-1, &dc, wnd))
@@ -506,15 +481,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         }
     }
 
-
-
-    // draw background
-    m_art->DrawBackground(dc, wnd, m_rect);
-
-    // draw buttons
-    int left_buttons_width = 0;
-    int right_buttons_width = 0;
-
     // draw the buttons on the right side
     int offset = m_rect.x + m_rect.width;
     for (i = 0; i < button_count; ++i)
@@ -568,13 +534,9 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                           &button.rect);
 
         offset += button.rect.GetWidth();
-        left_buttons_width += button.rect.GetWidth();
     }
 
-    offset = left_buttons_width;
-
-    if (offset == 0)
-        offset += m_art->GetIndentSize();
+    left_buttons_width = offset;
 
 
     // prepare the tab-close-button array
@@ -598,7 +560,52 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     {
         m_tabCloseButtons.Item(i).curState = wxAUI_BUTTON_STATE_HIDDEN;
     }
+}
 
+
+// Render() renders the tab catalog to the specified DC
+// It is a virtual function and can be overridden to
+// provide custom drawing capabilities
+void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
+{
+    if (!raw_dc || !raw_dc->IsOk())
+        return;
+
+    if (m_rect.IsEmpty())
+        return;
+
+    size_t i;
+    size_t page_count = m_pages.GetCount();
+
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+    wxDC& dc = *raw_dc;
+#else
+    wxMemoryDC dc;
+
+    // use the same layout direction as the window DC uses to ensure that the
+    // text is rendered correctly
+    dc.SetLayoutDirection(raw_dc->GetLayoutDirection());
+
+    wxBitmap bmp;
+    // create off-screen bitmap
+    bmp.Create(m_rect.GetWidth(), m_rect.GetHeight(),*raw_dc);
+    dc.SelectObject(bmp);
+
+    if (!dc.IsOk())
+        return;
+#endif
+
+    // draw background
+    m_art->DrawBackground(dc, wnd, m_rect);
+
+    // draw buttons
+    int left_buttons_width = 0;
+    int right_buttons_width = 0;
+    RenderButtons(dc, wnd, left_buttons_width, right_buttons_width);
+
+    int offset = left_buttons_width;
+    if (offset == 0)
+        offset += m_art->GetIndentSize();
 
     // draw the tabs
 
