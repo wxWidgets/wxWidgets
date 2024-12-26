@@ -610,7 +610,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     // draw the tabs
 
     size_t active = 999;
-    int active_offset = 0;
     wxRect active_rect;
 
     int x_extent = 0;
@@ -659,7 +658,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         if (page.active)
         {
             active = i;
-            active_offset = offset;
             active_rect = rect;
         }
 
@@ -681,7 +679,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
         wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(active);
 
-        rect.x = active_offset;
         m_art->DrawTab(dc,
                        wnd,
                        page,
