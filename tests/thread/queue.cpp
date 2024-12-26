@@ -76,17 +76,17 @@ TEST_CASE("wxMessageQueue::Receive", "[msgqueue]")
     const int msgCount = 100;
     const int threadCount = 10;
 
-    std::vector<MyThread*> threads;
+    std::vector<std::unique_ptr<MyThread>> threads;
 
     int i;
     for ( i = 0; i < threadCount; ++i )
     {
-        MyThread *previousThread = i == 0 ? nullptr : threads[i-1];
-        MyThread *thread =
-            new MyThread(WaitInfinitlyLong, previousThread, msgCount);
+        MyThread *previousThread = i == 0 ? nullptr : threads[i-1].get();
+        std::unique_ptr<MyThread>
+            thread(new MyThread(WaitInfinitlyLong, previousThread, msgCount));
 
         CHECK( thread->Create() == wxTHREAD_NO_ERROR );
-        threads.push_back(thread);
+        threads.push_back(std::move(thread));
     }
 
     for ( i = 0; i < threadCount; ++i )
@@ -94,7 +94,7 @@ TEST_CASE("wxMessageQueue::Receive", "[msgqueue]")
         threads[i]->Run();
     }
 
-    MyThread* lastThread = threads[threadCount - 1];
+    MyThread* const lastThread = threads[threadCount - 1].get();
 
     for ( i = 0; i < msgCount; ++i )
     {
@@ -107,7 +107,6 @@ TEST_CASE("wxMessageQueue::Receive", "[msgqueue]")
         // if it returns a negative, then it detected some problem.
         wxThread::ExitCode code = threads[i]->Wait();
         CHECK( code == (wxThread::ExitCode)wxMSGQUEUE_NO_ERROR );
-        delete threads[i];
     }
 }
 
@@ -119,8 +118,8 @@ TEST_CASE("wxMessageQueue::Receive", "[msgqueue]")
 // should return wxMSGQUEUUE_TIMEOUT.
 TEST_CASE("wxMessageQueue::ReceiveTimeout", "[msgqueue]")
 {
-    MyThread* thread1 = new MyThread(WaitWithTimeout, nullptr, 2);
-    MyThread* thread2 = new MyThread(WaitWithTimeout, nullptr, 2);
+    std::unique_ptr<MyThread> thread1(new MyThread(WaitWithTimeout, nullptr, 2));
+    std::unique_ptr<MyThread> thread2(new MyThread(WaitWithTimeout, nullptr, 2));
 
     CHECK( thread1->Create() == wxTHREAD_NO_ERROR );
     CHECK( thread2->Create() == wxTHREAD_NO_ERROR );
@@ -140,8 +139,6 @@ TEST_CASE("wxMessageQueue::ReceiveTimeout", "[msgqueue]")
 
     CHECK( code1 == (wxThread::ExitCode)wxMSGQUEUE_NO_ERROR );
     CHECK( code2 == (wxThread::ExitCode)wxMSGQUEUE_TIMEOUT );
-    delete thread2;
-    delete thread1;
 }
 
 // every thread tries to read exactly m_maxMsgCount messages from its queue
