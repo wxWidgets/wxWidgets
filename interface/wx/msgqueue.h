@@ -87,6 +87,16 @@ public:
     wxMessageQueueError Post(T const& msg);
 
     /**
+        Post a message of move-only type.
+
+        This function has the same semantics as the other overload but can be
+        used for non-copyable (but movable) types.
+
+        @since 3.3.0
+     */
+    wxMessageQueueError Post(T&& msg);
+
+    /**
         Block until a message becomes available in the queue.
         Waits indefinitely long or until an error occurs.
 
