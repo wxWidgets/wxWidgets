@@ -30,6 +30,7 @@ wx_buildfile_var(wxUSE_PROPGRID)
 wx_buildfile_var(wxUSE_RIBBON)
 wx_buildfile_var(wxUSE_RICHTEXT)
 wx_buildfile_var(wxUSE_STC)
+wx_buildfile_var(wxUSE_LUNASVG)
 wx_buildfile_var(wxUSE_WEBVIEW)
 wx_buildfile_var(wxUSE_XRC)
 

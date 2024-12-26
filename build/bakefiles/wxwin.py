@@ -39,11 +39,11 @@ def mk_wxid(id):
 
 # All libs that are part of the main library:
 MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net', 'webview',
-             'media', 'qa', 'xrc', 'aui', 'ribbon', 'propgrid', 'richtext', 'stc']
+             'media', 'qa', 'xrc', 'aui', 'ribbon', 'propgrid', 'richtext', 'stc', 'lunasvg']
 # List of library names/ids for categories with different names:
 LIBS_NOGUI = ['xml', 'net']
 LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'qa', 'xrc', 'media',
-              'aui', 'propgrid', 'richtext', 'stc', 'ribbon', 'webview']
+              'aui', 'propgrid', 'richtext', 'stc', 'ribbon', 'lunasvg', 'webview']
 # Additional ld flags
 EXTRALDFLAGS = {
     'webview' : '$(EXTRALDFLAGS_WEBVIEW)',
@@ -56,6 +56,7 @@ EXTRALIBS = {
     'adv' : '$(PLUGIN_ADV_EXTRALIBS)',
     'media' : '$(EXTRALIBS_MEDIA)',
     'stc' : '$(EXTRALIBS_STC)',
+    'lunasvg' : '$(EXTRALIBS_LUNASVG)',
     'webview' : '$(EXTRALIBS_WEBVIEW)',
 }
 
