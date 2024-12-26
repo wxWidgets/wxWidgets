@@ -1575,7 +1575,7 @@ public:
         {
             int border_space = m_tabs->GetArtProvider()->GetAdditionalBorderSpace(page.window);
 
-            int height = m_rect.height - m_tabCtrlHeight - border_space;
+            int height = m_rect.height - m_tab_rect.height - border_space;
             if ( height < 0 )
             {
                 // avoid passing negative height to wxWindow::SetSize(), this
@@ -1596,7 +1596,7 @@ public:
             else //TODO: if (IsFlagSet(wxAUI_NB_TOP))
             {
                 page.window->SetSize(m_rect.x + border_space,
-                                     m_rect.y + m_tabCtrlHeight,
+                                     m_rect.y + m_tab_rect.height,
                                      width,
                                      height);
             }
