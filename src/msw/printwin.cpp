@@ -46,6 +46,8 @@
 #include "wx/msw/enhmeta.h"
 #include "wx/display.h"
 
+#include "wx/private/print.h"
+
 #include <stdlib.h>
 
 // ---------------------------------------------------------------------------
@@ -178,7 +180,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     abortWindowCloser.Initialize(win);
 
-    printout->OnBeginPrinting();
+    wxPrintingGuard guard(printout);
 
     sm_lastError = wxPRINTER_NO_ERROR;
 
@@ -250,8 +252,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
         printout->OnEndDocument();
     }
-
-    printout->OnEndPrinting();
 
     return sm_lastError == wxPRINTER_NO_ERROR;
 }

@@ -32,6 +32,8 @@
 #include "wx/display.h"
 #include "wx/osx/printdlg.h"
 
+#include "wx/private/print.h"
+
 #include <stdlib.h>
 
 // Helper function to get the printer "name": actually we use its unique ID
@@ -632,7 +634,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
             m_printDialogData.SetToPage(toPage);
     }
 
-    printout->OnBeginPrinting();
+    wxPrintingGuard guard(printout);
 
     bool keepGoing = true;
 
@@ -658,8 +660,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         }
     }
     printout->OnEndDocument();
-
-    printout->OnEndPrinting();
 
     if (sm_abortWindow)
     {
