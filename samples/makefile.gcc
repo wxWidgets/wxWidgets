@@ -81,7 +81,7 @@ endif
 
 ### Targets: ###
 
-all: access animate archive artprov $(__aui___depname) calendar caret collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treelist treectrl typetest uiaction validate vscroll $(__webview___depname) webrequest widgets wizard wrapsizer $(__xrc___depname)
+all: access animate archive artprov $(__aui___depname) calendar caret collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar touchtest treelist treectrl typetest uiaction validate vscroll $(__webview___depname) webrequest widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -156,6 +156,7 @@ clean:
 	$(MAKE) -C text -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C thread -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C toolbar -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C touchtest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C treelist -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C treectrl -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C typetest -f makefile.gcc $(MAKEARGS) clean
@@ -403,6 +404,9 @@ thread:
 toolbar: 
 	$(MAKE) -C toolbar -f makefile.gcc $(MAKEARGS) all
 
+touchtest: 
+	$(MAKE) -C touchtest -f makefile.gcc $(MAKEARGS) all
+
 treelist: 
 	$(MAKE) -C treelist -f makefile.gcc $(MAKEARGS) all
 
@@ -451,8 +455,8 @@ endif
 	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
 	opengl ownerdrw popup power preferences printing propgrid regtest render ribbon \
 	richtext sashtest scroll secretstore shaped sockets sound splash splitter statbar \
-	stc svg taborder taskbar text thread toolbar treelist treectrl typetest uiaction \
-	validate vscroll webview webrequest widgets wizard wrapsizer xrc
+	stc svg taborder taskbar text thread toolbar touchtest treelist treectrl typetest \
+	uiaction validate vscroll webview webrequest widgets wizard wrapsizer xrc
 
 
 SHELL := $(COMSPEC)

@@ -44,6 +44,8 @@
 
 #include <objc/objc-runtime.h>
 
+#include <vector>
+
 #define TRACE_FOCUS "focus"
 #define TRACE_KEYS  "keyevent"
 
@@ -1188,6 +1190,15 @@ void wxOSX_touchesEnded(NSView* self, SEL WXUNUSED(_cmd), NSEvent *event)
     impl->TouchesEnded(event);
 }
 
+void wxOSX_touchesCancel(NSView* self, SEL _cmd, NSEvent *event)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl == nullptr )
+        return;
+
+    impl->TouchesCancel(event);
+}
+
 BOOL wxOSX_acceptsFirstResponder(NSView* self, SEL _cmd)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1623,6 +1634,7 @@ public:
         m_allowedGestures = 0;
         m_activeGestures = 0;
         m_initialTouch = nullptr;
+        m_rawTouchEvents = false;
 
         Class cls = [m_view class];
 
@@ -1698,6 +1710,13 @@ public:
             m_pressGestureRecognizer = nil;
         }
 
+        if ( eventsMask & wxTOUCH_RAW_EVENTS )
+        {
+            eventsMask &= ~wxTOUCH_RAW_EVENTS;
+            m_rawTouchEvents = true;
+        }
+
+
         wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
 
         if ( !class_respondsToSelector(cls, @selector(touchesBeganWithEvent:)) )
@@ -1706,6 +1725,8 @@ public:
             class_addMethod(cls, @selector(touchesMovedWithEvent:), (IMP) wxOSX_touchesMoved, "v@:@" );
         if ( !class_respondsToSelector(cls, @selector(touchesEndedWithEvent:)) )
             class_addMethod(cls, @selector(touchesEndedWithEvent:), (IMP) wxOSX_touchesEnded, "v@:@" );
+        if ( !class_respondsToSelector(cls, @selector(touchesCancelledWithEvent:)) )
+            class_addMethod(cls, @selector(touchesCancelledWithEvent:), (IMP) wxOSX_touchesCancel, "v@:@" );
     }
 
     ~wxCocoaGesturesImpl()
@@ -1720,6 +1741,7 @@ public:
     void TouchesBegan(NSEvent* event);
     void TouchesMoved(NSEvent* event);
     void TouchesEnded(NSEvent* event);
+    void TouchesCancel(NSEvent* event);
 
 private:
     wxWindowMac* const m_win;
@@ -1734,9 +1756,14 @@ private:
     int m_activeGestures;
     unsigned int m_touchCount;
     unsigned int m_lastTouchTime;
+    bool m_rawTouchEvents;
+    std::vector<NSObject*> m_touchIDs;
 
     // Used to keep track of the touch corresponding to "press" in Press and Tap gesture
     NSTouch* m_initialTouch;
+
+    void* GetTouchID(NSObject* id, wxEventType type);
+    void RawTouchEvent(NSEvent* event, wxEventType type, NSTouchPhase phase);
 
     wxDECLARE_NO_COPY_CLASS(wxCocoaGesturesImpl);
 };
@@ -1973,6 +2000,8 @@ void wxWidgetCocoaImpl::TouchesBegan(WX_NSEvent event)
 
 void wxCocoaGesturesImpl::TouchesBegan(NSEvent* event)
 {
+    RawTouchEvent(event, wxEVT_TOUCH_BEGIN, NSTouchPhaseBegan);
+
     NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseBegan inView:m_view];
 
     m_touchCount += touches.count;
@@ -2030,6 +2059,8 @@ void wxWidgetCocoaImpl::TouchesMoved(WX_NSEvent event)
 
 void wxCocoaGesturesImpl::TouchesMoved(NSEvent* event)
 {
+    RawTouchEvent(event, wxEVT_TOUCH_MOVE, NSTouchPhaseMoved);
+
     // Cancel Two Finger Tap Event if there is any movement
     m_allowedGestures &= ~two_finger_tap;
 
@@ -2086,6 +2117,8 @@ void wxWidgetCocoaImpl::TouchesEnded(WX_NSEvent event)
 
 void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
 {
+    RawTouchEvent(event, wxEVT_TOUCH_END, NSTouchPhaseEnded);
+
     NSSet* touches = [event touchesMatchingPhase:NSTouchPhaseEnded inView:m_view];
 
     m_touchCount -= touches.count;
@@ -2179,6 +2212,83 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
         m_allowedGestures &= ~press_and_tap;
         m_allowedGestures &= ~two_finger_tap;
         m_activeGestures &= ~press_and_tap;
+    }
+}
+
+void wxWidgetCocoaImpl::TouchesCancel(WX_NSEvent event)
+{
+    if ( wxCocoaGesturesImpl* gestures = wxCocoaGestures::FromObject(this) )
+        gestures->TouchesCancel(event);
+}
+
+void wxCocoaGesturesImpl::TouchesCancel(NSEvent* event)
+{
+    RawTouchEvent(event, wxEVT_TOUCH_CANCEL, NSTouchPhaseCancelled);
+}
+
+void* wxCocoaGesturesImpl::GetTouchID(NSObject* id, wxEventType type)
+{
+    for(size_t i = 0; i < m_touchIDs.size(); i++)
+    {
+        NSObject* other = m_touchIDs[i];
+        if (other == nullptr)
+            continue;
+        if ([id isEqual:other])
+        {
+            if (type == wxEVT_TOUCH_END || type == wxEVT_TOUCH_CANCEL)
+            {
+                [other release];
+                m_touchIDs[i] = nullptr;
+            }
+            return wxUIntToPtr(i);
+         }
+    }
+    for(size_t i = 0; i < m_touchIDs.size(); i++)
+    {
+        if (m_touchIDs[i] == nullptr)
+        {
+            m_touchIDs[i] = [id copy];
+            return wxUIntToPtr(i);
+        }
+    }
+    m_touchIDs.push_back([id copy]);
+    return wxUIntToPtr(m_touchIDs.size() - 1);
+}
+
+void wxCocoaGesturesImpl::RawTouchEvent(NSEvent* event, wxEventType type, NSTouchPhase phase)
+{
+    NSSet* touches = [event touchesMatchingPhase:phase inView:m_view];
+
+    NSArray* array = [touches allObjects];
+
+    // Iterate through all moving touches to check if the touch corresponding to "press"
+    // in Press and Tap event is moving.
+    for ( int i = 0; i < [array count]; ++i )
+    {
+        NSTouch* touch = [array objectAtIndex:i];
+
+        wxMultiTouchEvent wxevent(m_win->GetId(), type);
+        wxevent.SetEventObject(m_win);
+        wxevent.SetSequenceId(wxTouchSequenceId(GetTouchID([touch identity], type)));
+        wxevent.SetPrimary(wxevent.GetSequenceId().GetID() == nullptr);
+
+        NSRect locationInWindow = NSZeroRect;
+        locationInWindow.origin = [touch normalizedPosition];
+
+        // adjust coordinates for the window of the target view
+        if ( [event window] != [m_view window] )
+        {
+            if ( [event window] != nil )
+                locationInWindow = [[event window] convertRectToScreen:locationInWindow];
+
+            if ( [m_view window] != nil )
+                locationInWindow = [[m_view window] convertRectFromScreen:locationInWindow];
+        }
+
+        NSPoint locationInView = [m_view convertPoint:locationInWindow.origin fromView:nil];
+        wxPoint2DDouble locationInViewWX = wxFromNSPointF( m_view, locationInView );
+        wxevent.SetPosition(locationInViewWX);
+        m_win->HandleWindowEvent(wxevent);
     }
 }
 
