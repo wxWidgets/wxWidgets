@@ -558,28 +558,25 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxPrinterDC *dc = nullptr;
+    std::unique_ptr<wxPrinterDC> dc;
     if (prompt)
     {
         wxMacPrintDialog dialog(parent, & m_printDialogData);
         if (dialog.ShowModal() == wxID_OK)
         {
-            dc = wxDynamicCast(dialog.GetPrintDC(), wxPrinterDC);
-            wxASSERT(dc);
+            dc.reset(wxDynamicCast(dialog.GetPrintDC(), wxPrinterDC));
+            wxASSERT(dc.get());
             m_printDialogData = dialog.GetPrintDialogData();
         }
     }
     else
     {
-        dc = new wxPrinterDC( m_printDialogData.GetPrintData() ) ;
+        dc.reset(new wxPrinterDC( m_printDialogData.GetPrintData() ));
     }
 
     // May have pressed cancel.
     if (!dc || !dc->IsOk())
-    {
-        delete dc;
         return false;
-    }
 
     PMResolution res;
     PMPrinter printer;
@@ -672,8 +669,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     }
 
     wxEndBusyCursor();
-
-    delete dc;
 
     return true;
 }
