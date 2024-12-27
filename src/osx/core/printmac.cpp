@@ -639,7 +639,8 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
     if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
     {
-            wxMessageBox(wxT("Could not start printing."), wxT("Print Error"), wxOK, parent);
+        wxMessageBox(wxT("Could not start printing."), wxT("Print Error"), wxOK, parent);
+        return false;
     }
 
     int pn;

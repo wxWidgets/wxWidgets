@@ -1111,6 +1111,12 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout,
                             GtkPrintContext * WXUNUSED(context),
                             int page_nr)
 {
+    // The last error is set if OnBeginDocument() failed when called for the
+    // first page, and we shouldn't do anything with the subsequent pages
+    // neither in this case.
+    if (sm_lastError != wxPRINTER_NO_ERROR)
+        return;
+
     int fromPage, toPage, minPage, maxPage, startPage, endPage;
     printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
 
@@ -1154,6 +1160,7 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout,
         {
             wxLogError(_("Could not start printing."));
             sm_lastError = wxPRINTER_ERROR;
+            return;
         }
     }
 
