@@ -601,7 +601,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     printout->SetUp(*dc);
 
     // Create an abort window
-    wxBeginBusyCursor();
+    wxBusyCursor busyCursor;
 
     printout->OnPreparePrinting();
 
@@ -638,7 +638,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
     if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
     {
-            wxEndBusyCursor();
             wxMessageBox(wxT("Could not start printing."), wxT("Print Error"), wxOK, parent);
     }
 
@@ -667,8 +666,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         sm_abortWindow->Show(false);
         wxDELETE(sm_abortWindow);
     }
-
-    wxEndBusyCursor();
 
     return true;
 }
