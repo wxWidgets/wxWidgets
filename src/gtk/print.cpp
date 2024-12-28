@@ -698,9 +698,8 @@ int wxGtkPrintDialog::ShowModal()
 
     GtkPrintOperation * const printOp = native->GetPrintJob();
 
-    // If the settings are OK, we restore it.
-    if (settings != nullptr)
-        gtk_print_operation_set_print_settings (printOp, settings);
+    gtk_print_operation_set_print_settings (printOp, settings);
+
     GtkPageSetup* pgSetup = GetPageSetupFromSettings(settings);
     gtk_print_operation_set_default_page_setup (printOp, pgSetup);
     g_object_unref(pgSetup);
