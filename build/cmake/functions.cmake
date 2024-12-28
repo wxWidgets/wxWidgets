@@ -920,7 +920,7 @@ function(wx_add name group)
                 ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_dst})
         endforeach()
         add_custom_command(
-            TARGET ${target_name} ${cmds}
+            TARGET ${target_name} POST_BUILD ${cmds}
             COMMENT "Copying ${target_name} data files...")
     endif()
 
