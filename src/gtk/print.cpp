@@ -44,6 +44,7 @@
 #include "wx/link.h"
 wxFORCE_LINK_THIS_MODULE(gtk_print)
 
+#include "wx/gtk/private/error.h"
 #include "wx/gtk/private/object.h"
 
 // Useful to convert angles from degrees to radians.
@@ -710,7 +711,7 @@ int wxGtkPrintDialog::ShowModal()
     gtk_print_operation_set_use_full_page(printOp, TRUE);
 
     // Show the dialog if needed.
-    GError* gError = nullptr;
+    wxGtkError gError;
     GtkPrintOperationResult response = gtk_print_operation_run
                                        (
                                            printOp,
@@ -720,7 +721,7 @@ int wxGtkPrintDialog::ShowModal()
                                            m_parent
                                             ? GTK_WINDOW(gtk_widget_get_toplevel(m_parent->m_widget))
                                             : nullptr,
-                                           &gError
+                                           gError.Out()
                                        );
 
     // Does everything went well?
@@ -730,8 +731,7 @@ int wxGtkPrintDialog::ShowModal()
     }
     else if (response == GTK_PRINT_OPERATION_RESULT_ERROR)
     {
-        wxLogError(_("Error while printing: ") + wxString(gError ? gError->message : "???"));
-        g_error_free (gError);
+        wxLogError(_("Error while printing: %s"), gError.GetMessage());
         return wxID_NO; // We use wxID_NO because there is no wxID_ERROR available
     }
 
