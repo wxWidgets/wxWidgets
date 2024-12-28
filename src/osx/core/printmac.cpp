@@ -546,7 +546,6 @@ wxMacPrinter::~wxMacPrinter()
 bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
     sm_abortIt = false;
-    sm_abortWindow = nullptr;
 
     if (!printout)
     {
@@ -660,12 +659,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         }
     }
     printout->OnEndDocument();
-
-    if (sm_abortWindow)
-    {
-        sm_abortWindow->Show(false);
-        wxDELETE(sm_abortWindow);
-    }
 
     return true;
 }
