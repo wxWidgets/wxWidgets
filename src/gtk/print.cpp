@@ -707,6 +707,15 @@ int wxGtkPrintDialog::ShowModal()
 
     gtk_print_operation_set_print_settings (printOp, settings);
 
+    if ( m_printDialogData.GetEnableCurrentPage() )
+    {
+        // We need to set the current page value to make the corresponding
+        // radio button enabled in the GTK dialog. As we don't know what it's
+        // going to be yet (this will be returned by GetPagesInfo() which will
+        // be called later), just set it to 1.
+        g_object_set(G_OBJECT(printOp), "current-page", 1, nullptr);
+    }
+
     GtkPageSetup* pgSetup = GetPageSetupFromSettings(settings);
     gtk_print_operation_set_default_page_setup (printOp, pgSetup);
     g_object_unref(pgSetup);
