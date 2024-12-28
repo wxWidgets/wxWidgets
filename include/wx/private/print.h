@@ -34,4 +34,28 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPrintingGuard);
 };
 
+// ----------------------------------------------------------------------------
+// Another helper ensuring EndPage() is called on scope exit
+// ----------------------------------------------------------------------------
+
+class wxPrintingPageGuard
+{
+public:
+    explicit wxPrintingPageGuard(wxDC& dc)
+        : m_dc(dc)
+    {
+        m_dc.StartPage();
+    }
+
+    ~wxPrintingPageGuard()
+    {
+        m_dc.EndPage();
+    }
+
+private:
+    wxDC& m_dc;
+
+    wxDECLARE_NO_COPY_CLASS(wxPrintingPageGuard);
+};
+
 #endif // _WX_PRIVATE_PRINT_H_

@@ -31,6 +31,8 @@
 #include "wx/modalhook.h"
 #include "wx/display.h"
 
+#include "wx/private/print.h"
+
 #include "wx/gtk/private/wrapgtk.h"
 
 #if GTK_CHECK_VERSION(2,14,0)
@@ -1112,8 +1114,8 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout,
                             int page_nr)
 {
     // The last error is set if OnBeginDocument() failed when called for the
-    // first page, and we shouldn't do anything with the subsequent pages
-    // neither in this case.
+    // first page or OnPrintPage() returned false for any page, and we
+    // shouldn't do anything with the subsequent pages in this case.
     if (sm_lastError != wxPRINTER_NO_ERROR)
         return;
 
@@ -1167,9 +1169,9 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout,
     // The app can render the page numPageToDraw.
     if (printout->HasPage(numPageToDraw))
     {
-        m_dc->StartPage();
-        printout->OnPrintPage(numPageToDraw);
-        m_dc->EndPage();
+        wxPrintingPageGuard pageGuard(*m_dc);
+        if (!printout->OnPrintPage(numPageToDraw))
+            sm_lastError = wxPRINTER_CANCELLED;
     }
 
 

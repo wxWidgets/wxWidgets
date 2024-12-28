@@ -239,11 +239,8 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
                 break;
             }
 
-            dc->StartPage();
-            bool cont = printout->OnPrintPage(pn);
-            dc->EndPage();
-
-            if ( !cont )
+            wxPrintingPageGuard pageGuard(*dc);
+            if ( !printout->OnPrintPage(pn) )
             {
                 sm_lastError = wxPRINTER_CANCELLED;
                 break;

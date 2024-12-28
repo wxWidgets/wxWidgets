@@ -635,7 +635,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
     wxPrintingGuard guard(printout);
 
-    bool keepGoing = true;
+    sm_lastError = wxPRINTER_NO_ERROR;
 
     if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
     {
@@ -645,7 +645,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
     int pn;
     for (pn = m_printDialogData.GetFromPage();
-        keepGoing && (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
+        (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
         pn++)
     {
         if (sm_abortIt)
@@ -654,14 +654,17 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         }
         else
         {
-                dc->StartPage();
-                keepGoing = printout->OnPrintPage(pn);
-                dc->EndPage();
+            wxPrintingPageGuard pageGuard(*dc);
+            if ( !printout->OnPrintPage(pn) )
+            {
+                sm_lastError = wxPRINTER_CANCELLED;
+                break;
+            }
         }
     }
     printout->OnEndDocument();
 
-    return true;
+    return sm_lastError == wxPRINTER_NO_ERROR;
 }
 
 wxDC* wxMacPrinter::PrintDialog(wxWindow *parent)
