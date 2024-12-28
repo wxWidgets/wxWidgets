@@ -599,7 +599,11 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     printout->SetPPIPrinter(int(res.hRes), int(res.vRes));
 
     // Set printout parameters
-    printout->SetUp(*dc);
+    if ( !printout->SetUp(*dc) )
+    {
+        sm_lastError = wxPRINTER_ERROR;
+        return false;
+    }
 
     // Create an abort window
     wxBusyCursor busyCursor;

@@ -1040,7 +1040,11 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
         return;
     }
 
-    printout->SetUp(*m_dc);
+    if (!printout->SetUp(*m_dc))
+    {
+        sm_lastError = wxPRINTER_ERROR;
+        return;
+    }
 
     printout->OnPreparePrinting();
 
