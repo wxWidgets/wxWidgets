@@ -735,63 +735,6 @@ int wxGtkPrintDialog::ShowModal()
         return wxID_NO; // We use wxID_NO because there is no wxID_ERROR available
     }
 
-    // Now get the settings and save it.
-    GtkPrintSettings* newSettings = gtk_print_operation_get_print_settings(printOp);
-
-    // When embedding the page setup tab into the dialog, as we do, changes to
-    // the settings such as the paper size and orientation there are not
-    // reflected in the print settings, but must be retrieved from the page
-    // setup struct itself separately.
-    GtkPageSetup* defPageSetup = nullptr;
-    g_object_get(printOp, "default-page-setup", &defPageSetup, nullptr);
-    if ( defPageSetup )
-    {
-        SetPageSetupToSettings(newSettings, defPageSetup);
-        g_object_unref(defPageSetup);
-    }
-
-    native->SetPrintConfig(newSettings);
-    data.ConvertFromNative();
-
-    // Set PrintDialogData variables
-    m_printDialogData.SetPrintData(data);
-    m_printDialogData.SetCollate(data.GetCollate());
-    m_printDialogData.SetNoCopies(data.GetNoCopies());
-    m_printDialogData.SetPrintToFile(data.GetPrinterName() == "Print to File");
-
-    // Same problem as a few lines before.
-    switch (gtk_print_settings_get_print_pages(newSettings))
-    {
-        case GTK_PRINT_PAGES_CURRENT:
-            m_printDialogData.SetSelection( true );
-            break;
-        case GTK_PRINT_PAGES_RANGES:
-            {// wxWidgets doesn't support multiple ranges, so we can only save the first one even if the user wants to print others.
-            // For example, the user enters "1-3;5-7" in the dialog: pages 1-3 and 5-7 will be correctly printed when the user
-            // will hit "OK" button. However we can only save 1-3 in the print data.
-            gint num_ranges = 0;
-            GtkPageRange* range;
-            range = gtk_print_settings_get_page_ranges (newSettings, &num_ranges);
-            if (num_ranges >= 1)
-            {
-                m_printDialogData.SetFromPage( range[0].start );
-                m_printDialogData.SetToPage( range[0].end );
-                g_free(range);
-            }
-            else {
-                m_printDialogData.SetAllPages( true );
-                m_printDialogData.SetFromPage( 0 );
-                m_printDialogData.SetToPage( 9999 );
-            }
-            break;}
-        case GTK_PRINT_PAGES_ALL:
-        default:
-            m_printDialogData.SetAllPages( true );
-            m_printDialogData.SetFromPage( 0 );
-            m_printDialogData.SetToPage( 9999 );
-            break;
-    }
-
     return wxID_OK;
 }
 
@@ -1014,8 +957,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         return false;
     }
 
-    m_printDialogData = dialog.GetPrintDialogData();
-
     sm_lastError = wxPRINTER_NO_ERROR;
     return true;
 }
@@ -1025,11 +966,64 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) printdata.GetNativeData();
 
+    // Now get the settings and save it.
+    GtkPrintSettings* newSettings = gtk_print_operation_get_print_settings(operation);
+
+    // When embedding the page setup tab into the dialog, as we do, changes to
+    // the settings such as the paper size and orientation there are not
+    // reflected in the print settings, but must be retrieved from the page
+    // setup struct itself separately.
+    GtkPageSetup* defPageSetup = nullptr;
+    g_object_get(operation, "default-page-setup", &defPageSetup, nullptr);
+    if ( defPageSetup )
+    {
+        SetPageSetupToSettings(newSettings, defPageSetup);
+        g_object_unref(defPageSetup);
+    }
+
     // We need to update printdata with the new data from the dialog and we
     // have to do this here because this method needs this new data and we
     // cannot update it earlier
-    native->SetPrintConfig(gtk_print_operation_get_print_settings(operation));
+    native->SetPrintConfig(newSettings);
     printdata.ConvertFromNative();
+
+    // Set PrintDialogData variables
+    m_printDialogData.SetPrintData(printdata);
+    m_printDialogData.SetCollate(printdata.GetCollate());
+    m_printDialogData.SetNoCopies(printdata.GetNoCopies());
+    m_printDialogData.SetPrintToFile(printdata.GetPrinterName() == "Print to File");
+
+    switch (gtk_print_settings_get_print_pages(newSettings))
+    {
+        case GTK_PRINT_PAGES_CURRENT:
+            m_printDialogData.SetSelection( true );
+            break;
+        case GTK_PRINT_PAGES_RANGES:
+            {// wxWidgets doesn't support multiple ranges, so we can only save the first one even if the user wants to print others.
+            // For example, the user enters "1-3;5-7" in the dialog: pages 1-3 and 5-7 will be correctly printed when the user
+            // will hit "OK" button. However we can only save 1-3 in the print data.
+            gint num_ranges = 0;
+            GtkPageRange* range;
+            range = gtk_print_settings_get_page_ranges (newSettings, &num_ranges);
+            if (num_ranges >= 1)
+            {
+                m_printDialogData.SetFromPage( range[0].start );
+                m_printDialogData.SetToPage( range[0].end );
+                g_free(range);
+            }
+            else {
+                m_printDialogData.SetAllPages( true );
+                m_printDialogData.SetFromPage( 0 );
+                m_printDialogData.SetToPage( 9999 );
+            }
+            break;}
+        case GTK_PRINT_PAGES_ALL:
+        default:
+            m_printDialogData.SetAllPages( true );
+            m_printDialogData.SetFromPage( 0 );
+            m_printDialogData.SetToPage( 9999 );
+            break;
+    }
 
     SetPrintContext(context);
     native->SetPrintContext( context );
