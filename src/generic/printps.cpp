@@ -111,9 +111,10 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined
-    int fromPage, toPage;
-    int minPage, maxPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+    wxPrintPageRanges ranges;
+    const auto all = printout->GetPagesInfo(ranges);
+    const int minPage = all.fromPage;
+    const int maxPage = all.toPage;
 
     if (maxPage == 0)
     {

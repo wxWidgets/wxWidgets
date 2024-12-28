@@ -97,8 +97,7 @@ public:
     virtual bool OnPrintPage(int page) override;
     virtual bool HasPage(int page) override;
     virtual bool OnBeginDocument(int startPage, int endPage) override;
-    virtual void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) override;
-    virtual bool IsPageSelected(int pageNum) override;
+    virtual wxPrintPageRange GetPagesInfo(wxPrintPageRanges& ranges) override;
 
     void DrawPageOne();
     void DrawPageTwo();

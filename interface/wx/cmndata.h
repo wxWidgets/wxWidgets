@@ -6,6 +6,50 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @class wxPrintPageRange
+
+    This class represents a range of pages to be printed.
+
+    @library{wxcore}
+    @category{printing,data}
+
+    @see wxPrintDialogData
+
+    @since 3.3.0
+*/
+class wxPrintPageRange
+{
+public:
+    /// Default constructor creates an uninitialized range.
+    wxPrintPageRange() = default;
+
+    /**
+        Constructor creating a range from @a from to @a to (inclusive).
+
+        Parameters must be valid, i.e. @a from must be strictly positive and @a
+        to must be greater or equal to @a from.
+     */
+    wxPrintPageRange(int from, int to);
+
+    /// Return @true if both components are initialized correctly.
+    bool IsValid() const;
+
+    /// Return the number of pages in this range if it is valid.
+    int GetNumberOfPages() const;
+
+    int fromPage = 0;
+    int toPage = 0;
+};
+
+/**
+    Synonym for a vector of page ranges.
+
+    @since 3.3.0
+*/
+using wxPrintPageRanges = std::vector<wxPrintPageRange>;
+
+
+/**
     @class wxPageSetupDialogData
 
     This class holds a variety of information related to wxPageSetupDialog.
@@ -513,6 +557,9 @@ public:
 
     /**
         Returns the @e from page number, as entered by the user.
+
+        This function can't be used if multiple page ranges were specified, use
+        GetPageRanges() instead.
     */
     int GetFromPage() const;
 
@@ -561,6 +608,9 @@ public:
 
     /**
         Returns the @e "print to" page number, as entered by the user.
+
+        This function can't be used if multiple page ranges were specified, use
+        GetPageRanges() instead.
     */
     int GetToPage() const;
 
@@ -578,6 +628,13 @@ public:
 
     /**
         Sets the @e from page number.
+
+        Together with SetToPage(), this function can be used to define a single
+        range of pages to print. If you need to specify multiple ranges, use
+        SetPageRanges() instead.
+
+        @note If SetPageRanges() was used to specify multiple ranges, this
+              function cannot be used as there is no single "from" page to set.
     */
     void SetFromPage(int page);
 
@@ -638,6 +695,13 @@ public:
 
     /**
         Sets the @e "print to" page number.
+
+        Together with SetFromPage(), this function can be used to define a
+        single range of pages to print. If you need to specify multiple ranges,
+        use SetPageRanges() instead.
+
+        @note If SetPageRanges() was used to specify multiple ranges, this
+              function cannot be used as there is no single "to" page to set.
     */
     void SetToPage(int page);
 
@@ -650,5 +714,53 @@ public:
         Assigns another print dialog data object to this object.
     */
     void operator =(const wxPrintDialogData& data);
+
+    /**
+        Sets the maximum number of page ranges that the user can specify.
+
+        This value is used as a limit for the number of page ranges that can be
+        used in the print dialog. The default value is 64.
+
+        Currently this is only used in wxMSW.
+
+        @since 3.3.0
+    */
+    void SetMaxPageRanges(int maxRanges);
+
+    /**
+        Returns the maximum number of page ranges that the user can specify.
+
+        @see SetMaxRanges()
+
+        @since 3.3.0
+    */
+    int GetMaxPageRanges() const;
+
+    /**
+        Returns the page ranges to print.
+
+        This vector contains the page ranges to be printed. If it is empty, all
+        pages are printed, otherwise only the pages in the specified ranges are.
+
+        @see SetPageRanges()
+
+        @since 3.3.0
+    */
+    const std::vector<wxPrintPageRange>& GetPageRanges() const;
+
+    /**
+        Sets the ranges of pages to print.
+
+        Each element of the vector represents a range of pages to print. All
+        ranges should be disjoint and be specified in increasing order.
+
+        Currently only wxMSW supports the full functionality of this function,
+        all other ports only allow specifying a single range.
+
+        Passing an empty vector is equivalent to printing all pages.
+
+        @since 3.3.0
+    */
+    void SetPageRanges(const std::vector<wxPrintPageRange>& pageRanges);
 };
 

@@ -542,40 +542,30 @@ bool MyPrintout::OnBeginDocument(int startPage, int endPage)
     return true;
 }
 
-void MyPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
+wxPrintPageRange MyPrintout::GetPagesInfo(wxPrintPageRanges& ranges)
 {
-    *minPage = 1;
-    *maxPage = 2;
-    *selPageFrom = 1;
-    *selPageTo = 2;
-
-    // check if the user just wants to print the current page and if so,
-    // we say, that page 1 is the current page in this example.
     if (m_printDlgData->GetCurrentPage())
     {
-        *selPageFrom = 1;
-        *selPageTo = 1;
+        // if the user just wants to print the current page,
+        // we say, that page 1 is the current page in this example.
+        ranges = { wxPrintPageRange(1, 1) };
     }
     else if (m_printDlgData->GetSelection())
     {
-        // if the user wants to print the selection, we could set the range via
-        // selPageFrom and selPageTo, but if the pages are not consecutive, we
-        // set selPageFrom and selPageTo to the maximum range and we use
-        // IsPageSelected() to tell the printing system which page is selected.
-
-        // in our example below, only page 2 is selected.
+        // if the user wants to print the selection, we set the ranges
+        // of the selected pages. In our example, only page 2 is selected.
+        ranges = { wxPrintPageRange(2, 2) };
     }
+    //else: nothing to do, either user-specified ranges or all pages will be
+    //      printed, depending on the ranges contents on entry to this function
+
+    // This is the total range of pages that can be printed.
+    return { 1, 2 };
 }
 
 bool MyPrintout::HasPage(int pageNum)
 {
     return (pageNum == 1 || pageNum == 2);
-}
-
-bool MyPrintout::IsPageSelected(int pageNum)
-{
-    // to demonstrate selection, we just simulate selection of page 2
-    return pageNum == 2;
 }
 
 void MyPrintout::DrawPageOne()

@@ -145,6 +145,32 @@ private:
 };
 
 /*
+ * wxPrintPageRange
+ * Defines a range of pages to be printed.
+ */
+
+class wxPrintPageRange
+{
+public:
+    wxPrintPageRange() = default;
+    wxPrintPageRange(int from, int to) : fromPage(from), toPage(to)
+    {
+        wxASSERT_MSG( IsValid(), "Invalid page range values" );
+    }
+
+    // check if both components are set/initialized correctly
+    bool IsValid() const { return fromPage > 0 && fromPage <= toPage; }
+
+    // get the number of pages in the range
+    int GetNumberOfPages() const { return toPage - fromPage + 1; }
+
+    int fromPage = 0;
+    int toPage = 0;
+};
+
+using wxPrintPageRanges = std::vector<wxPrintPageRange>;
+
+/*
  * wxPrintDialogData
  * Encapsulates information displayed and edited in the printer dialog box.
  * Contains a wxPrintData object which is filled in according to the values retrieved
@@ -159,8 +185,12 @@ public:
     wxPrintDialogData(const wxPrintData& printData);
     virtual ~wxPrintDialogData();
 
-    int GetFromPage() const { return m_printFromPage; }
-    int GetToPage() const { return m_printToPage; }
+    // These functions can be used only when printing all pages or a single
+    // continuous range of pages, use GetPageRanges() to support multiple
+    // ranges.
+    int GetFromPage() const;
+    int GetToPage() const;
+
     int GetMinPage() const { return m_printMinPage; }
     int GetMaxPage() const { return m_printMaxPage; }
     int GetNoCopies() const { return m_printNoCopies; }
@@ -170,8 +200,13 @@ public:
     bool GetCollate() const { return m_printCollate; }
     bool GetPrintToFile() const { return m_printToFile; }
 
-    void SetFromPage(int v) { m_printFromPage = v; }
-    void SetToPage(int v) { m_printToPage = v; }
+    // Similarly to the getters above, these functions can be used only to
+    // define a single continuous range of pages to print, use SetPageRanges()
+    // for anything else. Note that if you do use SetPageRanges() to specify
+    // multiple ranges, then these functions cannot be used.
+    void SetFromPage(int v);
+    void SetToPage(int v);
+
     void SetMinPage(int v) { m_printMinPage = v; }
     void SetMaxPage(int v) { m_printMaxPage = v; }
     void SetNoCopies(int v) { m_printNoCopies = v; }
@@ -200,12 +235,16 @@ public:
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
 
+    void SetPageRanges(const wxPrintPageRanges& pageRanges) { m_printPageRanges = pageRanges; }
+    const wxPrintPageRanges& GetPageRanges() const { return m_printPageRanges; }
+
+    void SetMaxPageRanges(int maxPageRanges) { m_maxPageRanges = maxPageRanges; }
+    int GetMaxPageRanges() const { return m_maxPageRanges; }
+
     wxPrintDialogData& operator=(const wxPrintDialogData& data) = default;
     void operator=(const wxPrintData& data); // Sets internal m_printData member
 
 private:
-    int             m_printFromPage = 0;
-    int             m_printToPage = 0;
     int             m_printMinPage = 0;
     int             m_printMaxPage = 0;
     int             m_printNoCopies = 1;
@@ -220,6 +259,14 @@ private:
     bool            m_printEnableHelp = false;
     bool            m_printEnablePrintToFile = true;
     wxPrintData     m_printData;
+
+    // Maximum number of page ranges that the user can specify via the print dialog.
+    int m_maxPageRanges = 64;
+
+    // The page ranges to print. If this vector contains more then m_maxPageRanges
+    // elements, then the maximum number of page ranges that the user can specify
+    // via the print dialog is the size of this vector.
+    wxPrintPageRanges m_printPageRanges;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPrintDialogData);
