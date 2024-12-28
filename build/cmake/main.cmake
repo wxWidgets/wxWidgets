@@ -9,6 +9,8 @@
 
 list(APPEND CMAKE_MODULE_PATH "${wxSOURCE_DIR}/build/cmake/modules")
 
+file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" CMAKE_INSTALL_PREFIX)
+
 include(build/cmake/files.cmake)            # Files list
 include(build/cmake/source_groups.cmake)    # Source group definitions
 include(build/cmake/functions.cmake)        # wxWidgets functions
