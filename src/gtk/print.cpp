@@ -684,7 +684,7 @@ int wxGtkPrintDialog::ShowModal()
     // We have to restore pages to print here because they're stored in a wxPrintDialogData and ConvertToNative only works for wxPrintData.
     int fromPage = m_printDialogData.GetFromPage();
     int toPage = m_printDialogData.GetToPage();
-    if (m_printDialogData.GetSelection())
+    if (m_printDialogData.GetSelection() || m_printDialogData.GetCurrentPage())
         gtk_print_settings_set_print_pages(settings, GTK_PRINT_PAGES_CURRENT);
     else if (m_printDialogData.GetAllPages())
         gtk_print_settings_set_print_pages(settings, GTK_PRINT_PAGES_ALL);
