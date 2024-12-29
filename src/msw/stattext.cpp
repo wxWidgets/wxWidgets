@@ -101,6 +101,11 @@ wxSize wxStaticText::DoGetBestClientSize() const
 {
     wxInfoDC dc(const_cast<wxStaticText *>(this));
 
+#if wxUSE_MARKUP
+    if ( m_markupText )
+        return m_markupText->Measure(dc);
+#endif // wxUSE_MARKUP
+
     wxCoord widthTextMax, heightTextTotal;
     dc.GetMultiLineTextExtent(GetLabelText(), &widthTextMax, &heightTextTotal);
 
