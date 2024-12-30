@@ -101,6 +101,11 @@ wxSize wxStaticText::DoGetBestClientSize() const
 {
     wxInfoDC dc(const_cast<wxStaticText *>(this));
 
+#if wxUSE_MARKUP
+    if ( m_markupText )
+        return m_markupText->Measure(dc);
+#endif // wxUSE_MARKUP
+
     wxCoord widthTextMax, heightTextTotal;
     dc.GetMultiLineTextExtent(GetLabelText(), &widthTextMax, &heightTextTotal);
 
@@ -321,8 +326,11 @@ void wxStaticText::WXOnPaint(wxPaintEvent& event)
 
     wxPaintDC dc(this);
 
-    // TODO: support transparent background for static text with markup.
-    dc.Clear();
+    // Erase the background in the same way the native control does it, in
+    // particular this lets the parent background show through.
+    ::SendMessage(GetHwnd(), WM_PRINTCLIENT,
+                  (WPARAM)dc.GetHDC(),
+                  PRF_ERASEBKGND);
 
     const wxRect rect = GetClientRect();
     if ( !IsThisEnabled() )
