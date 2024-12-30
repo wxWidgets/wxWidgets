@@ -1740,9 +1740,6 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
         }
         else // Single selected file is in m_path.
         {
-            // Append the extension if necessary.
-            m_path = AppendExtension(m_path, wildFilters[m_filterIndex]);
-
             const wxFileName fn(m_path);
             m_dir = fn.GetPath();
             m_fileName = fn.GetFullName();
