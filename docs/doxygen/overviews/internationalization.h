@@ -40,12 +40,12 @@ Only the binary files are needed during program execution.
 
 Translating your application involves several steps:
 
-@li Translating the strings in the program text using wxGetTranslation or
+@li Translating the strings in the program text using wxGetTranslation() or
     equivalently the @c _() macro.
 @li Extracting the strings to be translated from the program: this uses the
     work done in the previous step because @c xgettext program used for string
     extraction recognises the standard @c _() as well as (using its @c -k
-    option) our wxGetTranslation and extracts all strings inside the calls to
+    option) our wxGetTranslation() and extracts all strings inside the calls to
     these functions. Alternatively, you may use @c -a option to extract all the
     strings, but it will usually result in many strings being found which don't
     have to be translated at all. This will create a text message catalog - a
@@ -59,7 +59,7 @@ Translating your application involves several steps:
     given language: see wxLocale.
 
 
-@note Under macOS you also need to list all the supported languages under
+@note Under macOS you also need to list all the supported languages under the
       @c CFBundleLocalizations key in your application @c Info.plist file
       in order to allow the application to support the corresponding locale.
 
@@ -72,7 +72,7 @@ alongside the application (although you could use wxResourceTranslationsLoader
 or some custom loader too).
 
 The files are expected to be in the resources directory (as returned by
-wxStandardPaths::GetLocalizedResourcesDir(wxStandardPaths::ResourceCat_Messages).
+wxStandardPaths::GetLocalizedResourcesDir().
 If the message catalogs are not installed in this default location you may
 explicitly use wxFileTranslationsLoader::AddCatalogLookupPathPrefix() to still
 allow wxWidgets to find them, but it is recommended to use the default
@@ -85,7 +85,7 @@ is used.
 
 In all cases, translations are searched for in subdirectories named using the
 languages codes from ISO 639. The .mo file(s) should be located either directly
-in that directory or in LC_MESSAGES subdirectory. On macOS, ".lproj" extension
+in that directory or in LC_MESSAGES subdirectory. On macOS, the ".lproj" extension
 is used for the per-languages Resources subdirectories.
 
 Here's how an app would typically install the files on Unix:

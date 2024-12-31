@@ -581,12 +581,12 @@ public:
 
     This function is thread-safe.
 
-    @note This function is not suitable for literal strings using wxT() macro
-          since this macro is not recognised by @c xgettext, and so such
-          strings are not extracted to the message catalog. Instead, use the
-          _() and wxPLURAL() macro for all literal strings.
+    @note If you want literal strings inside of this function to be translated,
+          you need to use `-kwxGetTranslation` with @c xgettext.
+          Also, don't use wxT() inside of this function with string literals,
+          as @c xgettext won't be able to extract them.
 
-    @see wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&)
+    @see wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&, const wxString&)
 
     @header{wx/intl.h}
 */
@@ -596,12 +596,12 @@ const wxString& wxGetTranslation(const wxString& string,
 
 /**
     This is an overloaded version of
-    wxGetTranslation(const wxString&, const wxString&), please see its
+    wxGetTranslation(const wxString&, const wxString&, const wxString&), please see its
     documentation for general information.
 
     This version is used when retrieving translation of string that has
     different singular and plural forms in English or different plural forms in
-    some other language. Like wxGetTranslation(const wxString&,const wxString&),
+    some other language. Like wxGetTranslation(const wxString&,const wxString&, const wxString&),
     the @a string parameter must contain the singular form of the string to be
     converted and is used as the key for the search in the catalog. The
     @a plural parameter is the plural form (in English). The parameter @a n is

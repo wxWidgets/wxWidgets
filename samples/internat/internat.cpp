@@ -531,7 +531,9 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        // this is a more verbose way to write _()
+        // This is a more verbose way to write _().
+        // (Note that you will need to pass -kwxGetTranslation to xgettext
+        //  for it to recognize this function.)
         str = wxGetTranslation("Bad luck! try again...");
     }
 
