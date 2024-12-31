@@ -581,10 +581,10 @@ public:
 
     This function is thread-safe.
 
-    @note This function is not suitable for literal strings using wxT() macro
+    @note This function is not suitable for literal strings
           since this macro is not recognised by @c xgettext, and so such
           strings are not extracted to the message catalog. Instead, use the
-          _() and wxPLURAL() macro for all literal strings.
+          _() and wxPLURAL() macros for all literal strings.
 
     @see wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&)
 
