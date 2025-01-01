@@ -260,6 +260,7 @@ All:
 - Fix compilation with clang 19 (Lauri Nurmi, #24922).
 - Fix crash in wxWebRequestCURL when connection was refused (#24885).
 - Fix build with libc++ v19 (#24959).
+- Add wxApp::SetErrorExitCode() to customize exit code on initialization error.
 
 All (GUI):
 
