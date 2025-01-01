@@ -65,6 +65,9 @@ TEST_CASE("wxRegEx::Compile", "[regex][compile]")
     CHECK      ( re.Compile("foo*") );
     CHECK      ( re.Compile("foo+") );
     CHECK      ( re.Compile("foo?") );
+
+    // Valid even if unusual, used to trigger a bug in wxRegEx::Compile().
+    CHECK      ( re.Compile("\\0\\Q\\") );
 }
 
 static void
