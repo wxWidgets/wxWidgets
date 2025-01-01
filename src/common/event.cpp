@@ -22,6 +22,7 @@
 #include "wx/event.h"
 #include "wx/eventfilter.h"
 #include "wx/evtloop.h"
+#include "wx/sysopt.h"
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
@@ -1658,6 +1659,11 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
 
 bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
 {
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        return ProcessEvent(event);
+    }
+    else
 #if wxUSE_EXCEPTIONS
     try
     {
