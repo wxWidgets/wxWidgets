@@ -409,7 +409,6 @@ void wxButtonToolBar::DoLayout()
                     if (!tool->GetShortHelp().empty())
                     {
                         wxInfoDC dc(this);
-                        dc.SetFont(GetFont());
                         int tw, th;
                         dc.GetTextExtent(tool->GetShortHelp(), & tw, & th);
 
@@ -495,7 +494,6 @@ void wxButtonToolBar::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
-    dc.SetFont(GetFont());
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();

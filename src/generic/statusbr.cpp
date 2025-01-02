@@ -442,9 +442,6 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     }
 #endif // __WXGTK__
 
-    if (GetFont().IsOk())
-        dc.SetFont(GetFont());
-
     // compute char height only once for all panes:
     int textHeight = dc.GetCharHeight();
 

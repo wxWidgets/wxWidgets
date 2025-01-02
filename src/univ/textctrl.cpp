@@ -2870,7 +2870,6 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
     int col;
     wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
     wxInfoDC dc(self);
-    dc.SetFont(GetFont());
     self->DoPrepareReadOnlyDC(dc);
 
     wxCoord width;
@@ -3550,7 +3549,6 @@ wxCoord wxTextCtrl::GetMaxWidth() const
 
         wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
         wxInfoDC dc(self);
-        dc.SetFont(GetFont());
 
         self->MData().m_widthMax = 0;
 
