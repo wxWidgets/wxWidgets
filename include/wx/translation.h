@@ -375,9 +375,9 @@ const wxString &wxGettextInContextWrapper(const char (&ctx)[M],
 
 template<size_t L, size_t M, size_t N>
 const wxString &wxGettextInContextPluralWrapper(const char (&ctx)[L],
-                                                  const char (&msg)[M],
-                                                  const char (&plural)[N],
-                                                  int count)
+                                                const char (&msg)[M],
+                                                const char (&plural)[N],
+                                                int count)
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg, plural, count, wxString(), ctx);
