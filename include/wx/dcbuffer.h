@@ -189,6 +189,10 @@ private:
             Init(&m_paintdc, *buffer, style);
         else
             Init(&m_paintdc, GetBufferedSize(window, style), style);
+
+        // This class should behave similarly to wxPaintDC, which inherits the
+        // font and colours of the associated window, so do it here as well.
+        GetImpl()->InheritAttributes(window);
     }
 
     wxPaintDC m_paintdc;
