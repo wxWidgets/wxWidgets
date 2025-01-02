@@ -146,31 +146,14 @@ class WXDLLIMPEXP_CORE wxBufferedPaintDC : public wxBufferedDC
 public:
     // If no bitmap is supplied by the user, a temporary one will be created.
     wxBufferedPaintDC(wxWindow *window, wxBitmap& buffer, int style = wxBUFFER_CLIENT_AREA)
-        : m_paintdc(window)
+        : wxBufferedPaintDC(window, &buffer, style)
     {
-        SetWindow(window);
-
-        // If we're buffering the virtual window, scale the paint DC as well
-        if (style & wxBUFFER_VIRTUAL_AREA)
-            window->PrepareDC( m_paintdc );
-
-        if( buffer.IsOk() )
-            Init(&m_paintdc, buffer, style);
-        else
-            Init(&m_paintdc, GetBufferedSize(window, style), style);
     }
 
     // If no bitmap is supplied by the user, a temporary one will be created.
     explicit wxBufferedPaintDC(wxWindow *window, int style = wxBUFFER_CLIENT_AREA)
-        : m_paintdc(window)
+        : wxBufferedPaintDC(window, nullptr, style)
     {
-        SetWindow(window);
-
-        // If we're using the virtual window, scale the paint DC as well
-        if (style & wxBUFFER_VIRTUAL_AREA)
-            window->PrepareDC( m_paintdc );
-
-        Init(&m_paintdc, GetBufferedSize(window, style), style);
     }
 
     // default copy ctor ok.
@@ -192,6 +175,22 @@ protected:
     }
 
 private:
+    // If no bitmap is supplied, a temporary one will be created.
+    wxBufferedPaintDC(wxWindow *window, wxBitmap* buffer, int style)
+        : m_paintdc(window)
+    {
+        SetWindow(window);
+
+        // If we're buffering the virtual window, scale the paint DC as well
+        if (style & wxBUFFER_VIRTUAL_AREA)
+            window->PrepareDC( m_paintdc );
+
+        if ( buffer && buffer->IsOk() )
+            Init(&m_paintdc, *buffer, style);
+        else
+            Init(&m_paintdc, GetBufferedSize(window, style), style);
+    }
+
     wxPaintDC m_paintdc;
 
     wxDECLARE_ABSTRACT_CLASS(wxBufferedPaintDC);
