@@ -228,7 +228,6 @@ wxTipWindowView::wxTipWindowView(wxWindow *parent)
 void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
 {
     wxInfoDC dc(this);
-    dc.SetFont(GetFont());
 
     // calculate the length: we want each line be no longer than maxLength
     // pixels and we only break lines at words boundary
@@ -303,10 +302,6 @@ void wxTipWindowView::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.DrawRectangle(rect);
 
     // and then draw the text line by line
-    dc.SetTextBackground(GetBackgroundColour());
-    dc.SetTextForeground(GetForegroundColour());
-    dc.SetFont(GetFont());
-
     wxPoint pt;
     pt.x = TEXT_MARGIN_X;
     pt.y = TEXT_MARGIN_Y;

@@ -180,7 +180,6 @@ wxSize wxCheckBox::GetBitmapSize() const
 wxSize wxCheckBox::DoGetBestClientSize() const
 {
     wxInfoDC dc(wxConstCast(this, wxCheckBox));
-    dc.SetFont(GetFont());
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 

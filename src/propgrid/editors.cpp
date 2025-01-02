@@ -1621,8 +1621,6 @@ void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
     dc.SetBrush( bgcol );
     dc.SetPen( bgcol );
 
-    dc.SetTextForeground(GetForegroundColour());
-
     wxSimpleCheckBoxStates state = m_state;
     if ( !(state & wxSimpleCheckBoxStates::Unspecified) &&
          GetFont().GetWeight() == wxFONTWEIGHT_BOLD )

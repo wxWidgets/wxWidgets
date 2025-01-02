@@ -494,8 +494,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         if ( m_text )
             rectTextField.width = m_widthCustomPaint;
 
-        dc.SetFont( GetFont() );
-
         dc.SetClippingRegion(rectTextField);
         if ( m_popupInterface )
             m_popupInterface->PaintComboControl(dc,rectTextField);

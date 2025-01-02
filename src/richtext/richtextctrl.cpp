@@ -457,8 +457,6 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         PrepareDC(dc);
 
-        dc.SetFont(GetFont());
-
         wxRect drawingArea(GetUpdateRegion().GetBox());
         drawingArea.SetPosition(GetUnscaledPoint(GetLogicalPoint(drawingArea.GetPosition())));
         drawingArea.SetSize(GetUnscaledSize(drawingArea.GetSize()));
@@ -607,7 +605,6 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 
     wxInfoDC dc(this);
     PrepareDC(dc);
-    dc.SetFont(GetFont());
 
     // TODO: detect change of focus object
     long position = 0;
@@ -686,7 +683,6 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
         // See if we clicked on a URL
         wxInfoDC dc(this);
         PrepareDC(dc);
-        dc.SetFont(GetFont());
 
         long position = 0;
         wxPoint logicalPt = event.GetLogicalPosition(dc);
@@ -887,7 +883,6 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 
     wxInfoDC dc(this);
     PrepareDC(dc);
-    dc.SetFont(GetFont());
 
     long position = 0;
     wxPoint logicalPt = event.GetLogicalPosition(dc);
@@ -1025,7 +1020,6 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
 
     wxInfoDC dc(this);
     PrepareDC(dc);
-    dc.SetFont(GetFont());
 
     long position = 0;
     wxPoint logicalPt = event.GetLogicalPosition(dc);
@@ -1075,7 +1069,6 @@ void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& event)
         {
             wxInfoDC dc(this);
             PrepareDC(dc);
-            dc.SetFont(GetFont());
 
             long position = 0;
             wxPoint logicalPt = event.GetLogicalPosition(dc);
@@ -2115,7 +2108,6 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
         long newPos = 0;
         wxInfoDC dc(this);
         PrepareDC(dc);
-        dc.SetFont(GetFont());
 
         wxRichTextObject* hitObj = nullptr;
         wxRichTextObject* contextObj = nullptr;
@@ -2312,7 +2304,6 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     long newPos = 0;
     wxInfoDC dc(this);
     PrepareDC(dc);
-    dc.SetFont(GetFont());
 
     wxRichTextObject* hitObj = nullptr;
     wxRichTextObject* contextObj = nullptr;
@@ -3243,7 +3234,6 @@ wxRichTextCtrl::FindContainerAtPoint(const wxPoint& pt, long& position, int& hit
 {
     wxInfoDC dc(this);
     PrepareDC(dc);
-    dc.SetFont(GetFont());
 
     wxPoint logicalPt = GetLogicalPoint(pt);
 
@@ -3901,7 +3891,6 @@ int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool add
 {
     wxInfoDC dc(this);
     PrepareDC(dc);
-    dc.SetFont(GetFont());
 
     m_contextMenuPropertiesInfo.Clear();
 
@@ -4197,7 +4186,6 @@ bool wxRichTextCtrl::GetCaretPositionForIndex(long position, wxRect& rect, wxRic
     wxInfoDC dc(this);
     PrepareDC(dc);
     dc.SetUserScale(GetScale(), GetScale());
-    dc.SetFont(GetFont());
 
     wxPoint pt;
     int height = 0;
@@ -4286,7 +4274,6 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
         wxInfoDC dc(this);
 
         PrepareDC(dc);
-        dc.SetFont(GetFont());
         dc.SetUserScale(GetScale(), GetScale());
 
         wxRichTextDrawingContext context(& GetBuffer());

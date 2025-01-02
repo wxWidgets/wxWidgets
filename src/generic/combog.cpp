@@ -320,8 +320,6 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         if ( m_text )
             tcRect.width = m_widthCustomPaint;
 
-        dc.SetFont( GetFont() );
-
         dc.SetClippingRegion(tcRect);
         if ( m_popupInterface )
             m_popupInterface->PaintComboControl(dc, tcRect);

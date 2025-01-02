@@ -513,7 +513,6 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( font.IsOk() )
     {
-        dc.SetFont(font);
         // Calculate vertical and horizontal centre
         wxCoord w = 0, h = 0;
 
@@ -530,7 +529,6 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         if ( GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT )
             cy += h/2;
 
-        dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(text, cx, cy);
 

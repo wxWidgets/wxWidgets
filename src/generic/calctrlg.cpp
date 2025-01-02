@@ -745,8 +745,6 @@ void wxGenericCalendarCtrl::RecalcGeometry()
 {
     wxInfoDC dc(this);
 
-    dc.SetFont(GetFont());
-
     // determine the column width (weekday names are not necessarily wider
     // than the numbers (in some languages), so let's not assume that they are)
     m_widthCol = 0;
@@ -789,8 +787,6 @@ void wxGenericCalendarCtrl::RecalcGeometry()
 void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
-
-    dc.SetFont(GetFont());
 
     RecalcGeometry();
 
