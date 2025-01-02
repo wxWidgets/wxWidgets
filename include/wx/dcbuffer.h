@@ -161,7 +161,7 @@ public:
     }
 
     // If no bitmap is supplied by the user, a temporary one will be created.
-    wxBufferedPaintDC(wxWindow *window, int style = wxBUFFER_CLIENT_AREA)
+    explicit wxBufferedPaintDC(wxWindow *window, int style = wxBUFFER_CLIENT_AREA)
         : m_paintdc(window)
     {
         SetWindow(window);
@@ -216,7 +216,7 @@ class WXDLLIMPEXP_CORE wxAutoBufferedPaintDC : public wxAutoBufferedPaintDCBase
 {
 public:
 
-    wxAutoBufferedPaintDC(wxWindow* win)
+    explicit wxAutoBufferedPaintDC(wxWindow* win)
         : wxAutoBufferedPaintDCBase(win)
     {
         wxASSERT_MSG( win->GetBackgroundStyle() == wxBG_STYLE_PAINT,
