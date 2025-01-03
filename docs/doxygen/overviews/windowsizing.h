@@ -121,4 +121,6 @@ some simple explanations of things.
     the only child of the top-level window to cover its entire client area if
     there is no sizer associated with the window. Note that this only happens
     if there is exactly one child.
+
+See also @ref overview_sizer
 */
