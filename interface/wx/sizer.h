@@ -1611,7 +1611,7 @@ public:
     wxSizerFlags& Right();
 
     /**
-        Set the @c wx_SHAPED flag which indicates that the elements should
+        Sets the @c wxSHAPED flag which indicates that the elements should
         always keep the fixed width to height ratio equal to its original value.
     */
     wxSizerFlags& Shaped();
