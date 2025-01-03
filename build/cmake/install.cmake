@@ -24,7 +24,16 @@ endforeach()
 if(MSVC)
     install(
         DIRECTORY "${wxSOURCE_DIR}/include/msvc"
-        DESTINATION "${wxINSTALL_INCLUDE_DIR}")
+        DESTINATION "${wxINSTALL_INCLUDE_DIR}"
+    )
+    install(
+        FILES "${wxSOURCE_DIR}/wxwidgets.props"
+        DESTINATION "."
+    )
+    install(
+        FILES "${wxSOURCE_DIR}/build/msw/wx_setup.props"
+        DESTINATION "build/msw"
+    )
 endif()
 
 # setup header and wx-config
