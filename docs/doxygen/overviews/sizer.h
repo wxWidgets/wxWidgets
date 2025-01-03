@@ -25,7 +25,7 @@ For information about the wxWidgets resource system, which can describe
 sizer-based dialogs, see the @ref overview_xrc.
 
 @see wxSizer, wxBoxSizer, wxStaticBoxSizer, wxStdDialogButtonSizer, wxWrapSizer,
-     wxGridSizer, wxFlexGridSizer, wxGridBagSizer
+     wxGridSizer, wxFlexGridSizer, wxGridBagSizer, @ref overview_windowsizing
 
 
 

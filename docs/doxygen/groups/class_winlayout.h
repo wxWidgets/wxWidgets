@@ -15,7 +15,7 @@ classes known as "sizers". Sizers allow for flexible window positioning and
 sizes that can help with automatically handling localization differences, as
 well as making it easy to write user resizable windows.
 
-Related Overviews: @ref overview_sizer
+Related Overviews: @ref overview_sizer, @ref overview_windowsizing
 
 */
 
