@@ -341,7 +341,7 @@ namespace wxTransImplStrict
 // Wrapper functions that only accept string literals as arguments,
 // not variables, not char* pointers.
 template<size_t N>
-const wxString &wxUnderscoreWrapper(const char (&msg)[N])
+const wxString& wxUnderscoreWrapper(const char (&msg)[N])
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg);
@@ -351,7 +351,7 @@ const wxString &wxUnderscoreWrapper(const char (&msg)[N])
 }
 
 template<size_t M, size_t N>
-const wxString &wxPluralWrapper(const char (&msg)[M],
+const wxString& wxPluralWrapper(const char (&msg)[M],
                                 const char (&plural)[N],
                                 int count)
 {
@@ -363,7 +363,7 @@ const wxString &wxPluralWrapper(const char (&msg)[M],
 }
 
 template<size_t M, size_t N>
-const wxString &wxGettextInContextWrapper(const char (&ctx)[M],
+const wxString& wxGettextInContextWrapper(const char (&ctx)[M],
                                           const char (&msg)[N])
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
@@ -374,7 +374,7 @@ const wxString &wxGettextInContextWrapper(const char (&ctx)[M],
 }
 
 template<size_t L, size_t M, size_t N>
-const wxString &wxGettextInContextPluralWrapper(const char (&ctx)[L],
+const wxString& wxGettextInContextPluralWrapper(const char (&ctx)[L],
                                                 const char (&msg)[M],
                                                 const char (&plural)[N],
                                                 int count)
