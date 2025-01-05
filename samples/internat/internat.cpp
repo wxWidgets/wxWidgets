@@ -531,11 +531,9 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        // This is a more verbose way to write _(),
-        // although note that xgettext will not recognize this by default
-        // and will not extract it to the message catalog.
-        // wxGetTranslation will search the message catalog for this string
-        // at runtime though in case it was extracted into it elsewhere.
+        // This is a more verbose way to write _().
+        // (Note that you will need to pass -kwxGetTranslation to xgettext
+        //  for it to recognize this function.)
         str = wxGetTranslation("Bad luck! try again...");
     }
 
