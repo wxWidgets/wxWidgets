@@ -15,6 +15,8 @@
 
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/win_gtk.h"
+#include "wx/gtk/private/stylecontext.h"
+#include "wx/gtk/private/gtk3-compat.h"
 
 // constants taken from GTK sources
 #define LABEL_PAD 1
@@ -204,6 +206,22 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
         gtk_widget_get_preferred_width(label, nullptr, &nat_width);
         gtk_widget_get_preferred_height_for_width(label, nat_width, borderTop, nullptr);
     }
+    wxGtkStyleContext sc(GetContentScaleFactor());
+    sc.Add(GTK_TYPE_FRAME, "frame", "frame", nullptr);
+    if (wx_is_at_least_gtk3(20))
+        sc.Add("border");
+    else
+    {
+        *borderOther = gtk_container_get_border_width(GTK_CONTAINER(m_widget));
+        *borderTop += *borderOther;
+    }
+    GtkBorder border;
+    gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
+    *borderOther += border.left;
+    *borderTop += border.top;
+    gtk_style_context_get_padding(sc, GTK_STATE_FLAG_NORMAL, &border);
+    *borderOther += border.left;
+    *borderTop += border.top;
 #else
     gtk_widget_ensure_style(m_widget);
     const int border_width = GTK_CONTAINER(m_widget)->border_width;
