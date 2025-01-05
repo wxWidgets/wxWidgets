@@ -394,7 +394,7 @@ namespace wxTransImplTraditional
 
 // Wrapper functions that accept both string literals and variables
 // as arguments.
-inline const wxString &wxUnderscoreWrapper(const char *msg)
+inline const wxString& wxUnderscoreWrapper(const char *msg)
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     return wxGetTranslation(msg);
@@ -403,7 +403,7 @@ inline const wxString &wxUnderscoreWrapper(const char *msg)
 #endif
 }
 
-inline const wxString &wxPluralWrapper(const char *msg,
+inline const wxString& wxPluralWrapper(const char *msg,
                                        const char *plural,
                                        int count)
 {
@@ -414,7 +414,7 @@ inline const wxString &wxPluralWrapper(const char *msg,
 #endif
 }
 
-inline const wxString &wxGettextInContextWrapper(const char *ctx,
+inline const wxString& wxGettextInContextWrapper(const char *ctx,
                                                  const char *msg)
 {
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
@@ -424,7 +424,7 @@ inline const wxString &wxGettextInContextWrapper(const char *ctx,
 #endif
 }
 
-inline const wxString &wxGettextInContextPluralWrapper(const char *ctx,
+inline const wxString& wxGettextInContextPluralWrapper(const char *ctx,
                                                        const char *msg,
                                                        const char *plural,
                                                        int count)
