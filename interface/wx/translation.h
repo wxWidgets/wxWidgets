@@ -468,7 +468,7 @@ public:
     This macro is similar to _() but for the plural variant of
     wxGetTranslation().
 
-    The string arguments must be @a string @a literals.
+    The string arguments must be @em string @em literals.
 
     @return A const wxString.
 
@@ -481,7 +481,7 @@ public:
 
     See the description of @c context argument of wxGetTranslation().
 
-    The arguments must be @a string @a literals.
+    The arguments must be @em string @em literals.
 
     @see wxGETTEXT_IN_CONTEXT_PLURAL()
 
@@ -492,7 +492,7 @@ public:
 /**
     Similar to wxPLURAL() but translates the string in the given context.
 
-    The string arguments must be @a string @a literals.
+    The string arguments must be @em string @em literals.
 
     See the description of @c context argument of wxGetTranslation().
 
