@@ -106,6 +106,7 @@ class MyFrame : public wxFrame
         ID_NotebookWindowList,
         ID_NotebookScrollButtons,
         ID_NotebookTabFixedWidth,
+        ID_NotebookMultiLine,
         ID_NotebookArtGloss,
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
@@ -630,6 +631,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_LiveUpdate, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NotebookTabFixedWidth, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookMultiLine, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookNoCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButtonAll, MyFrame::OnNotebookFlag)
@@ -662,6 +664,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_UPDATE_UI(ID_NotebookTabFixedWidth, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookMultiLine, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookNoCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButtonAll, MyFrame::OnUpdateUI)
@@ -778,6 +781,7 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
+    notebook_menu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
     notebook_menu->AppendSeparator();
     notebook_menu->Append(ID_NotebookSplit, _("&Split Notebook"));
     notebook_menu->Append(ID_NotebookUnsplit, _("&Unsplit Notebook"));
@@ -1260,6 +1264,10 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     {
         m_notebook_style ^= wxAUI_NB_TAB_FIXED_WIDTH;
     }
+    else if (id == ID_NotebookMultiLine)
+    {
+        m_notebook_style ^= wxAUI_NB_MULTILINE;
+    }
 
 
     size_t i, count;
@@ -1385,6 +1393,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_NotebookTabFixedWidth:
             event.Check((m_notebook_style & wxAUI_NB_TAB_FIXED_WIDTH) != 0);
+            break;
+        case ID_NotebookMultiLine:
+            event.Check((m_notebook_style & wxAUI_NB_MULTILINE) != 0);
             break;
         case ID_NotebookArtGloss:
             event.Check(m_notebook_style == 0);

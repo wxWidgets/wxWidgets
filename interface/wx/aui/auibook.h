@@ -22,6 +22,9 @@ enum wxAuiNotebookOption
     wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 12,
     wxAUI_NB_MIDDLE_CLICK_CLOSE  = 1 << 13,
 
+    /// @since 3.3.0
+    wxAUI_NB_MULTILINE           = 1 << 14,
+
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
                              wxAUI_NB_TAB_MOVE |
@@ -105,6 +108,7 @@ struct wxAuiNotebookPosition
            With this style, all tabs have the same width.
     @style{wxAUI_NB_SCROLL_BUTTONS}
            With this style, left and right scroll buttons are displayed.
+           Note that this style is ignored if wxAUI_NB_MULTILINE is used.
     @style{wxAUI_NB_WINDOWLIST_BUTTON}
            With this style, a drop-down list of windows is available.
     @style{wxAUI_NB_CLOSE_BUTTON}
@@ -119,6 +123,11 @@ struct wxAuiNotebookPosition
            With this style, tabs are drawn along the top of the notebook.
     @style{wxAUI_NB_BOTTOM}
            With this style, tabs are drawn along the bottom of the notebook.
+    @style{wxAUI_NB_MULTILINE}
+           If this style is specified and all the tabs don't fit in the visible
+           area, multiple rows of tabs are used instead of adding a button
+           allowing to scroll them. This style is only available in wxWidgets
+           3.3.0 or later.
     @endStyleTable
 
     @beginEventEmissionTable{wxAuiNotebookEvent}
@@ -473,6 +482,10 @@ public:
 
         Specifying -1 as the height will return the control to its default auto-sizing
         behaviour.
+
+        If the control uses @c wxAUI_NB_MULTILINE style, the @a height
+        parameter specifies the height of a single row of tabs and not the
+        combined height of all rows.
     */
     virtual void SetTabCtrlHeight(int height);
 
@@ -810,6 +823,27 @@ public:
     virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
                               const wxBitmapBundle& bitmap, bool active,
                               int close_button_state, int* x_extent) = 0;
+
+    /**
+        Returns the rectangle for the given button.
+
+        This function is not pure virtual because it is only for multi-line
+        tabs, but it must be implemented if wxAUI_NB_MULTILINE is used.
+
+        If specified, the returned rectangle must be filled with the same value
+        as DrawButton() puts into its @a outRect but here it can also be null in
+        which case just its width is returned.
+
+        @since 3.3.0
+    */
+    virtual int GetButtonRect(
+                         wxReadOnlyDC& dc,
+                         wxWindow* wnd,
+                         const wxRect& inRect,
+                         int bitmapId,
+                         int buttonState,
+                         int orientation,
+                         wxRect* outRect = nullptr) /* = 0 */;
 
     /**
         Sets flags.

@@ -117,7 +117,7 @@ void wxAuiTabContainer::SetFlags(unsigned int flags)
     RemoveButton(wxAUI_BUTTON_CLOSE);
 
 
-    if (flags & wxAUI_NB_SCROLL_BUTTONS)
+    if ((flags & wxAUI_NB_SCROLL_BUTTONS) && !(flags & wxAUI_NB_MULTILINE))
     {
         AddButton(wxAUI_BUTTON_LEFT, wxLEFT);
         AddButton(wxAUI_BUTTON_RIGHT, wxRIGHT);
@@ -172,6 +172,11 @@ void wxAuiTabContainer::SetRect(const wxRect& rect, wxWindow* wnd)
     {
         m_art->SetSizingInfo(rect.GetSize(), m_pages.GetCount(), wnd);
     }
+}
+
+void wxAuiTabContainer::SetRowHeight(int rowHeight)
+{
+    m_tabRowHeight = rowHeight;
 }
 
 bool wxAuiTabContainer::AddPage(const wxAuiNotebookPage& info)
@@ -372,22 +377,99 @@ size_t wxAuiTabContainer::GetTabOffset() const
 
 void wxAuiTabContainer::SetTabOffset(size_t offset)
 {
+    // It doesn't make sense to set the offset when multiple lines of tabs are
+    // used as it is not used in this case.
+    wxASSERT( !IsFlagSet(wxAUI_NB_MULTILINE) );
+
     m_tabOffset = offset;
 }
 
 
 
-int wxAuiTabContainer::GetCloseButtonState(const wxAuiNotebookPage& page) const
+int wxAuiTabContainer::GetCloseButtonState(bool isPageActive) const
 {
     // determine if a close button is on this tab
     return ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
-            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
+            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && isPageActive))
             ? wxAUI_BUTTON_STATE_NORMAL
             : wxAUI_BUTTON_STATE_HIDDEN;
 }
 
 // Combined border between the tabs and the buttons in DIPs.
 static const int wxAUI_BUTTONS_BORDER = 2;
+
+int wxAuiTabContainer::GetAvailableForTabs(const wxRect& rect,
+                                           wxReadOnlyDC& dc,
+                                           wxWindow* wnd)
+{
+    // This function is similar to RenderButtons() but is only used when
+    // wxAUI_NB_MULTILINE is on, so we can simplify things here compared to
+    // the other functions, notable we can assume that all tabs are visible.
+
+    size_t i;
+    const size_t button_count = m_buttons.GetCount();
+
+    int right_buttons_width = 0;
+
+    // measure the buttons on the right side
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+
+        if (button.location != wxRIGHT)
+            continue;
+        if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
+            continue;
+        if (button.id == wxAUI_BUTTON_RIGHT) // Never used in multi-line mode.
+            continue;
+
+        wxRect button_rect = rect;
+        button_rect.SetY(1);
+        button_rect.SetWidth(rect.width - right_buttons_width);
+
+        const int buttonWidth = m_art->GetButtonRect(dc,
+                                                     wnd,
+                                                     button_rect,
+                                                     button.id,
+                                                     button.curState,
+                                                     wxRIGHT);
+
+        right_buttons_width += buttonWidth;
+    }
+
+
+    int left_buttons_width = 0;
+
+    // measure the buttons on the left side
+
+    for (i = 0; i < button_count; ++i)
+    {
+        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+
+        if (button.location != wxLEFT)
+            continue;
+        if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
+            continue;
+        if (button.id == wxAUI_BUTTON_LEFT) // Never used in multi-line mode.
+            continue;
+
+        wxRect button_rect(left_buttons_width, 1, 1000, rect.height);
+
+        const int buttonWidth = m_art->GetButtonRect(dc,
+                                                     wnd,
+                                                     button_rect,
+                                                     button.id,
+                                                     button.curState,
+                                                     wxLEFT);
+
+        left_buttons_width += buttonWidth;
+    }
+
+    if (left_buttons_width == 0)
+        left_buttons_width = m_art->GetIndentSize();
+
+    return m_rect.width - left_buttons_width - right_buttons_width - wnd->FromDIP(wxAUI_BUTTONS_BORDER);
+}
 
 void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
                                       int& left_buttons_width,
@@ -608,6 +690,10 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
     int offset = left_buttons_width;
 
+    // These variables are used only in wxAUI_NB_MULTILINE case, see below.
+    int widthRow = offset;
+    bool firstTabInRow = true;
+
     // draw the tabs
 
     size_t active = (size_t)-1;
@@ -616,8 +702,9 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     int x_extent = 0;
     wxRect rect = m_rect;
     rect.y = 0;
-    rect.height = m_rect.height;
+    rect.height = m_tabRowHeight;
 
+    // Note that this must be consistent with GetAvailableForTabs().
     const int rightBorder = m_rect.width - right_buttons_width - wnd->FromDIP(wxAUI_BUTTONS_BORDER);
 
     for (i = m_tabOffset; i < page_count; ++i)
@@ -641,11 +728,61 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
             tab_button.curState = wxAUI_BUTTON_STATE_HIDDEN;
         }
 
+        // Check if there is enough space remaining to draw the tab in this
+        // row: when using a single row, we draw it even if it's only partially
+        // shown, as it can be scrolled into view, but when using multiple
+        // rows, it has to fit entirely.
+        if (IsFlagSet(wxAUI_NB_MULTILINE))
+        {
+            // When using wxAUI_NB_CLOSE_ON_ACTIVE_TAB, We need to reserve
+            // enough space in each row to show "Close" button on the active
+            // tab if it's in this row to avoid redoing the layout when the
+            // selection changes (as this would be very confusing). So we
+            // always measure the first tab in the row as if it had the "Close"
+            // button. This relies on the extra increment in the width returned
+            // by GetTabSize() being constant for all tabs, but this seems to
+            // be a safe enough assumption.
+            //
+            // Note that for non-wxAUI_NB_CLOSE_ON_ACTIVE_TAB cases, it doesn't
+            // matter, as "Close" is either never shown at all or always shown
+            // regardless of the page active status.
+            //
+            // See also DoApplyRect().
+            int dummy = 0;
+            const auto size = m_art->GetTabSize(dc,
+                wnd,
+                page.caption,
+                page.bitmap,
+                page.active,
+                GetCloseButtonState(firstTabInRow),
+                &dummy
+            );
+
+            widthRow += size.x;
+            firstTabInRow = false;
+
+            rect.height = size.y;
+
+            // If the tab doesn't fit in the current row, start the next one.
+            if (widthRow > rightBorder)
+            {
+                offset = left_buttons_width;
+                widthRow = offset + size.x;
+
+                rect.y += size.y;
+
+                firstTabInRow = true;
+            }
+        }
+        else if (offset >= rightBorder)
+        {
+            // This (and, hence, all the subsequent) tab(s) would be completely
+            // hidden, stop drawing.
+            break;
+        }
+
         rect.x = offset;
         rect.width = rightBorder - offset;
-
-        if (rect.width <= 0)
-            break;
 
         m_art->DrawTab(dc,
                        wnd,
@@ -703,6 +840,10 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* d
 {
     if (!dc || !dc->IsOk())
         return false;
+
+    // All tabs are always visible when multiple lines are used.
+    if (IsFlagSet(wxAUI_NB_MULTILINE))
+        return true;
 
     size_t i;
     size_t page_count = m_pages.GetCount();
@@ -1003,6 +1144,52 @@ void wxAuiTabCtrl::DoEndDragging()
 
 void wxAuiTabCtrl::DoApplyRect(const wxRect& rect, int tabCtrlHeight)
 {
+    // Save the height of a single tab row before possibly changing it below in
+    // multi-line case.
+    SetRowHeight(tabCtrlHeight);
+
+    if (IsFlagSet(wxAUI_NB_MULTILINE))
+    {
+        wxInfoDC dc(this);
+
+        const int availableWidth = GetAvailableForTabs(rect, dc, this);
+
+        int widthRow = 0;
+        bool firstTabInRow = true;
+        for ( const auto& page : m_pages )
+        {
+            // As explained in a comment before GetTabSize() call in Render(),
+            // we need to reserve space for the close button for one tab in
+            // this row to avoid changing the tabs layout when a page becomes
+            // (or stops being) active.
+            int dummy = 0;
+            const auto size = m_art->GetTabSize(
+                dc,
+                this,
+                page.caption,
+                page.bitmap,
+                page.active,
+                GetCloseButtonState(firstTabInRow),
+                &dummy
+            );
+
+            widthRow += size.x;
+            firstTabInRow = false;
+
+            // Start a new row if this tab doesn't fit into the current one.
+            if ( widthRow > availableWidth )
+            {
+                widthRow = size.x;
+
+                // We assume that all tabs have the same height: if they don't,
+                // things are not going to look well no matter what.
+                tabCtrlHeight += size.y;
+
+                firstTabInRow = true;
+            }
+        }
+    }
+
     if (IsFlagSet(wxAUI_NB_BOTTOM))
     {
         SetSize(rect.x, rect.y + rect.height - tabCtrlHeight,

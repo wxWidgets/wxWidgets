@@ -166,6 +166,21 @@ static const unsigned char list_bits[] = {
 
 
 
+// wxAuiTabArt implementation
+
+int wxAuiTabArt::GetButtonRect(
+                         wxReadOnlyDC& WXUNUSED(dc),
+                         wxWindow* WXUNUSED(wnd),
+                         const wxRect& WXUNUSED(inRect),
+                         int WXUNUSED(bitmapId),
+                         int WXUNUSED(buttonState),
+                         int WXUNUSED(orientation),
+                         wxRect* WXUNUSED(outRect))
+{
+    wxFAIL_MSG("Should be implemented if wxAUI_NB_MULTILINE is used");
+
+    return 0;
+}
 
 
 // -- wxAuiGenericTabArt class implementation --
@@ -178,7 +193,6 @@ wxAuiGenericTabArt::wxAuiGenericTabArt()
     m_measuringFont = m_selectedFont;
 
     m_fixedTabWidth = wxWindow::FromDIP(100, nullptr);
-    m_tabCtrlHeight = 0;
     m_flags = 0;
 
     UpdateColoursFromSystem();
@@ -264,8 +278,6 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
         m_fixedTabWidth = tot_width/2;
 
     m_fixedTabWidth = wxMin(m_fixedTabWidth, wnd->FromDIP(220));
-
-    m_tabCtrlHeight = tab_ctrl_size.y;
 }
 
 
@@ -376,7 +388,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                                  close_button_state,
                                  x_extent);
 
-    wxCoord tab_height = m_tabCtrlHeight - 3;
+    wxCoord tab_height = in_rect.height - 3;
     wxCoord tab_width = tab_size.x;
     wxCoord tab_x = in_rect.x;
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
@@ -710,13 +722,13 @@ wxSize wxAuiGenericTabArt::GetTabSize(wxReadOnlyDC& dc,
 }
 
 
-void wxAuiGenericTabArt::DrawButton(wxDC& dc,
-                                    wxWindow* wnd,
-                                    const wxRect& in_rect,
-                                    int bitmap_id,
-                                    int button_state,
-                                    int orientation,
-                                    wxRect* out_rect)
+bool wxAuiGenericTabArt::DoGetButtonRectAndBitmap(wxWindow* wnd,
+                                                  const wxRect& in_rect,
+                                                  int bitmap_id,
+                                                  int button_state,
+                                                  int orientation,
+                                                  wxRect* outRect,
+                                                  wxBitmap* outBitmap)
 {
     wxBitmapBundle bb;
     wxRect rect;
@@ -751,7 +763,7 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
 
 
     if (!bb.IsOk())
-        return;
+        return false;
 
     const wxBitmap bmp = bb.GetBitmapFor(wnd);
 
@@ -772,9 +784,52 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
     }
 
     IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, button_state);
+
+    if ( outRect )
+        *outRect = rect;
+    if ( outBitmap )
+        *outBitmap = bmp;
+
+    return true;
+}
+
+void wxAuiGenericTabArt::DrawButton(wxDC& dc,
+                                    wxWindow* wnd,
+                                    const wxRect& in_rect,
+                                    int bitmap_id,
+                                    int button_state,
+                                    int orientation,
+                                    wxRect* out_rect)
+{
+    wxRect rect;
+    wxBitmap bmp;
+
+    if ( !DoGetButtonRectAndBitmap(wnd, in_rect,
+                                   bitmap_id, button_state, orientation,
+                                   &rect, &bmp) )
+        return;
+
     dc.DrawBitmap(bmp, rect.x, rect.y, true);
 
     *out_rect = rect;
+}
+
+int wxAuiGenericTabArt::GetButtonRect(wxReadOnlyDC& WXUNUSED(dc),
+                                      wxWindow* wnd,
+                                      const wxRect& inRect,
+                                      int bitmapId,
+                                      int buttonState,
+                                      int orientation,
+                                      wxRect* outRect)
+{
+    wxRect rect;
+    DoGetButtonRectAndBitmap(wnd, inRect,
+                             bitmapId, buttonState, orientation,
+                             &rect);
+    if ( outRect )
+        *outRect = rect;
+
+    return rect.width;
 }
 
 int wxAuiGenericTabArt::ShowDropDown(wxWindow* wnd,
@@ -1242,13 +1297,13 @@ wxSize wxAuiSimpleTabArt::GetTabSize(wxReadOnlyDC& dc,
 }
 
 
-void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
-                                   wxWindow* wnd,
-                                   const wxRect& in_rect,
-                                   int bitmap_id,
-                                   int button_state,
-                                   int orientation,
-                                   wxRect* out_rect)
+bool wxAuiSimpleTabArt::DoGetButtonRectAndBitmap(wxWindow* wnd,
+                                                 const wxRect& in_rect,
+                                                 int bitmap_id,
+                                                 int button_state,
+                                                 int orientation,
+                                                 wxRect* outRect,
+                                                 wxBitmap* outBitmap)
 {
     wxBitmapBundle bb;
     wxRect rect;
@@ -1282,7 +1337,7 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
     }
 
     if (!bb.IsOk())
-        return;
+        return false;
 
     const wxBitmap bmp = bb.GetBitmapFor(wnd);
 
@@ -1302,10 +1357,51 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
                       bmp.GetLogicalWidth(), bmp.GetLogicalHeight());
     }
 
+    if ( outRect )
+        *outRect = rect;
+    if ( outBitmap )
+        *outBitmap = bmp;
+
+    return true;
+}
+
+void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
+                                   wxWindow* wnd,
+                                   const wxRect& in_rect,
+                                   int bitmap_id,
+                                   int button_state,
+                                   int orientation,
+                                   wxRect* out_rect)
+{
+    wxRect rect;
+    wxBitmap bmp;
+
+    if ( !DoGetButtonRectAndBitmap(wnd, in_rect,
+                                   bitmap_id, button_state, orientation,
+                                   &rect, &bmp) )
+        return;
 
     DrawButtons(dc, wnd->FromDIP(wxSize(1, 1)), rect, bmp, *wxWHITE, button_state);
 
     *out_rect = rect;
+}
+
+int wxAuiSimpleTabArt::GetButtonRect(wxReadOnlyDC& WXUNUSED(dc),
+                                     wxWindow* wnd,
+                                     const wxRect& inRect,
+                                     int bitmapId,
+                                     int buttonState,
+                                     int orientation,
+                                     wxRect* outRect)
+{
+    wxRect rect;
+    DoGetButtonRectAndBitmap(wnd, inRect,
+                             bitmapId, buttonState, orientation,
+                             &rect);
+    if ( outRect )
+        *outRect = rect;
+
+    return rect.width;
 }
 
 int wxAuiSimpleTabArt::ShowDropDown(wxWindow* wnd,
