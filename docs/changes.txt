@@ -261,6 +261,7 @@ All:
 - Fix crash in wxWebRequestCURL when connection was refused (#24885).
 - Fix build with libc++ v19 (#24959).
 - Add wxApp::SetErrorExitCode() to customize exit code on initialization error.
+- Fix buffer read overflow when compiling RE ending with backslash (#25040).
 
 All (GUI):
 
