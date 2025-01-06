@@ -1,0 +1,1 @@
+wxMSW: Don't append unwanted extension in wxFileDialg (Martin Corino, #24949).
