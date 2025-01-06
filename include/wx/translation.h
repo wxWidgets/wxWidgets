@@ -389,7 +389,7 @@ const wxString& wxGettextInContextPluralWrapper(const char (&ctx)[L],
 
 } // namespace wxTransImplStrict
 
-namespace wxTransImplTraditional
+namespace wxTransImplCompatible
 {
 
 // Wrapper functions that accept both string literals and variables
@@ -437,10 +437,10 @@ inline const wxString& wxGettextInContextPluralWrapper(const char *ctx,
 #endif
 }
 
-} // namespace wxTransImplTraditional
+} // namespace wxTransImplCompatible
 
 #ifdef wxNO_REQUIRE_LITERAL_MSGIDS
-using namespace wxTransImplTraditional;
+using namespace wxTransImplCompatible;
 #else
 using namespace wxTransImplStrict;
 #endif
