@@ -333,6 +333,9 @@ inline const wxString& wxGetTranslation(const char *str1,
                             wxString(context, conv));
 }
 
+    #define wxTRANS_INPUT_STR(s) wxASCII_STR(s)
+#else
+    #define wxTRANS_INPUT_STR(s) s
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
 namespace wxTransImplStrict
@@ -343,11 +346,7 @@ namespace wxTransImplStrict
 template<size_t N>
 const wxString& wxUnderscoreWrapper(const char (&msg)[N])
 {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    return wxGetTranslation(msg);
-#else
-    return wxGetTranslation(wxASCII_STR(msg));
-#endif
+    return wxGetTranslation(wxTRANS_INPUT_STR(msg));
 }
 
 template<size_t M, size_t N>
@@ -355,22 +354,16 @@ const wxString& wxPluralWrapper(const char (&msg)[M],
                                 const char (&plural)[N],
                                 int count)
 {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    return wxGetTranslation(msg, plural, count);
-#else
-    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count);
-#endif
+    return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
+                            count);
 }
 
 template<size_t M, size_t N>
 const wxString& wxGettextInContextWrapper(const char (&ctx)[M],
                                           const char (&msg)[N])
 {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    return wxGetTranslation(msg, wxString(), ctx);
-#else
-    return wxGetTranslation(wxASCII_STR(msg), wxString(), wxASCII_STR(ctx));
-#endif
+    return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxString(),
+                            wxTRANS_INPUT_STR(ctx));
 }
 
 template<size_t L, size_t M, size_t N>
@@ -379,12 +372,8 @@ const wxString& wxGettextInContextPluralWrapper(const char (&ctx)[L],
                                                 const char (&plural)[N],
                                                 int count)
 {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    return wxGetTranslation(msg, plural, count, wxString(), ctx);
-#else
-    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count,
-                            wxString(), wxASCII_STR(ctx));
-#endif
+    return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
+                            count, wxString(), wxTRANS_INPUT_STR(ctx));
 }
 
 } // namespace wxTransImplStrict
@@ -396,32 +385,22 @@ namespace wxTransImplCompatible
 // as arguments.
 inline const wxString& wxUnderscoreWrapper(const char *msg)
 {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    return wxGetTranslation(msg);
-#else
-    return wxGetTranslation(wxASCII_STR(msg));
-#endif
+    return wxGetTranslation(wxTRANS_INPUT_STR(msg));
 }
 
 inline const wxString& wxPluralWrapper(const char *msg,
                                        const char *plural,
                                        int count)
 {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    return wxGetTranslation(msg, plural, count);
-#else
-    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count);
-#endif
+    return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
+                            count);
 }
 
 inline const wxString& wxGettextInContextWrapper(const char *ctx,
                                                  const char *msg)
 {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    return wxGetTranslation(msg, wxString(), ctx);
-#else
-    return wxGetTranslation(wxASCII_STR(msg), wxString(), wxASCII_STR(ctx));
-#endif
+    return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxString(),
+                            wxTRANS_INPUT_STR(ctx));
 }
 
 inline const wxString& wxGettextInContextPluralWrapper(const char *ctx,
@@ -429,12 +408,8 @@ inline const wxString& wxGettextInContextPluralWrapper(const char *ctx,
                                                        const char *plural,
                                                        int count)
 {
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    return wxGetTranslation(msg, plural, count, wxString(), ctx);
-#else
-    return wxGetTranslation(wxASCII_STR(msg), wxASCII_STR(plural), count,
-                            wxString(), wxASCII_STR(ctx));
-#endif
+    return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
+                            count, wxString(), wxTRANS_INPUT_STR(ctx));
 }
 
 } // namespace wxTransImplCompatible
