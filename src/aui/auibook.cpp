@@ -483,8 +483,9 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
         }
     }
 
+    right_buttons_width = 0;
+
     // draw the buttons on the right side
-    int offset = m_rect.x + m_rect.width;
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
@@ -496,7 +497,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
 
         wxRect button_rect = m_rect;
         button_rect.SetY(1);
-        button_rect.SetWidth(offset);
+        button_rect.SetWidth(m_rect.width - right_buttons_width);
 
         m_art->DrawButton(dc,
                           wnd,
@@ -506,13 +507,12 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
                           wxRIGHT,
                           &button.rect);
 
-        offset -= button.rect.GetWidth();
         right_buttons_width += button.rect.GetWidth();
     }
 
 
 
-    offset = 0;
+    left_buttons_width = 0;
 
     // draw the buttons on the left side
 
@@ -525,7 +525,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
         if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
             continue;
 
-        wxRect button_rect(offset, 1, 1000, m_rect.height);
+        wxRect button_rect(left_buttons_width, 1, 1000, m_rect.height);
 
         m_art->DrawButton(dc,
                           wnd,
@@ -535,10 +535,11 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
                           wxLEFT,
                           &button.rect);
 
-        offset += button.rect.GetWidth();
+        left_buttons_width += button.rect.GetWidth();
     }
 
-    left_buttons_width = offset;
+    if (left_buttons_width == 0)
+        left_buttons_width = m_art->GetIndentSize();
 
 
     // prepare the tab-close-button array
@@ -606,8 +607,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     RenderButtons(dc, wnd, left_buttons_width, right_buttons_width);
 
     int offset = left_buttons_width;
-    if (offset == 0)
-        offset += m_art->GetIndentSize();
 
     // draw the tabs
 
