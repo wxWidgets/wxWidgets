@@ -574,7 +574,7 @@ public:
     matching string.  As this function is used very often, an alternative (and
     also common in Unix world) syntax is provided: the _() macro is defined to
     do nearly the same thing as wxGetTranslation(), with the exception that
-    arguments to _() must be string literals.
+    the argument to _() must be a string literal.
 
     If @a context is not empty (notice that this argument is only available
     starting from wxWidgets 3.1.1), item translation is looked up in the
