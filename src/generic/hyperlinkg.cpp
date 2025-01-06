@@ -199,9 +199,6 @@ wxRect wxGenericHyperlinkCtrl::GetLabelRect() const
 void wxGenericHyperlinkCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
-    dc.SetFont(GetFont());
-    dc.SetTextForeground(GetForegroundColour());
-    dc.SetTextBackground(GetBackgroundColour());
 
     dc.DrawText(GetLabel(), GetLabelRect().GetTopLeft());
     if (HasFocus())

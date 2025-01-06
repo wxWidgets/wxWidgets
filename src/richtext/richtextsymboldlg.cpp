@@ -937,9 +937,6 @@ void wxSymbolListCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.SetBackground(GetBackgroundColour());
     dc.Clear();
 
-    // set the font to be displayed
-    dc.SetFont(GetFont());
-
     // the bounding rectangle of the current line
     wxRect rectRow;
     rectRow.width = clientSize.x;

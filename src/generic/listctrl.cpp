@@ -1005,15 +1005,12 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     AdjustDC( dc );
 
-    dc.SetFont( GetFont() );
-
     // width and height of the entire header window
     int w, h;
     GetClientSize( &w, &h );
     parent->CalcUnscrolledPosition(w, 0, &w, nullptr);
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    dc.SetTextForeground(GetForegroundColour());
 
     int x = HEADER_OFFSET_X;
     int numColumns = m_owner->GetColumnCount();
@@ -1680,7 +1677,6 @@ wxCoord wxListMainWindow::GetLineHeight() const
         wxListMainWindow *self = wxConstCast(this, wxListMainWindow);
 
         wxInfoDC dc( self );
-        dc.SetFont( GetFont() );
 
         wxCoord y;
         dc.GetTextExtent(wxT("H"), nullptr, &y);
@@ -2027,8 +2023,6 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     int dev_x, dev_y;
     GetListCtrl()->CalcScrolledPosition( 0, 0, &dev_x, &dev_y );
-
-    dc.SetFont( GetFont() );
 
     if ( InReportView() )
     {
@@ -3983,7 +3977,6 @@ void wxListMainWindow::RecalculatePositions()
     const int lineHeight = GetLineHeight();
 
     wxInfoDC dc( this );
-    dc.SetFont( GetFont() );
 
     const size_t count = GetItemCount();
 
@@ -4652,8 +4645,6 @@ int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
 {
     int width = 0;
     wxInfoDC dc(this);
-
-    dc.SetFont( GetFont() );
 
     if (item->GetImage() != -1)
     {

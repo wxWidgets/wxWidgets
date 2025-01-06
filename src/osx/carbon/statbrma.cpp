@@ -122,8 +122,6 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     dc.SetTextForeground(tlw == keyWindow ? m_textActive : m_textInactive);
 
-    if ( GetFont().IsOk() )
-        dc.SetFont(GetFont());
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     // compute char height only once for all panes:
