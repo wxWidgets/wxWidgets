@@ -355,7 +355,8 @@ void wxStaticText::WXOnPaint(wxPaintEvent& event)
             wxRect rectShadow = rect;
             rectShadow.Offset(1, 1);
 
-            m_markupText->Render(dc, rectShadow, wxMarkupText::Render_ShowAccels);
+            m_markupText->Render(dc, rectShadow, wxMarkupText::Render_ShowAccels,
+                                 GetAlignment());
 
             dc.SetTextForeground(
                 wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW)
@@ -363,7 +364,8 @@ void wxStaticText::WXOnPaint(wxPaintEvent& event)
         }
     }
 
-    m_markupText->Render(dc, rect, wxMarkupText::Render_ShowAccels);
+    m_markupText->Render(dc, rect, wxMarkupText::Render_ShowAccels,
+                         GetAlignment());
 }
 
 #endif // wxUSE_MARKUP
