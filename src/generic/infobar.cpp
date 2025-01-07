@@ -36,6 +36,13 @@
 #include "wx/artprov.h"
 #include "wx/scopeguard.h"
 
+#ifdef __WXGTK3__
+    #include "wx/gtk/private/wrapgtk.h"
+
+    #include "wx/gtk/private/gtk3-compat.h"
+    #include "wx/gtk/private/stylecontext.h"
+#endif
+
 wxBEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
     EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)
 wxEND_EVENT_TABLE()
@@ -66,8 +73,34 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
         return false;
 
     // use special, easy to notice, colours
+    wxColour colBg, colFg;
+    if ( !m_hasBgCol && !m_hasFgCol )
+    {
+        // We want to use the native infobar colours for consistency with the
+        // native implementation under GTK, but only do it for 3.24, as both
+        // the CSS structure and the default colour values have changed in this
+        // version compared to all the previous ones and it seems safer to keep
+        // the old behaviour for the older GTK versions, see #25048.
+#ifdef __WXGTK3__
+        if ( wx_is_at_least_gtk3(24) )
+        {
+            wxGtkStyleContext sc;
+            sc.Add(GTK_TYPE_INFO_BAR, "infobar", "info", nullptr);
+            sc.Add("revealer");
+            sc.Add("box");
+            sc.Bg(colBg);
+            sc.Fg(colFg);
+        }
+        else
+#endif // GTK 3
+        {
+            colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK);
+            colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT);
+        }
+    }
+
     if( !m_hasBgCol )
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
+        SetBackgroundColour(colBg);
 
     // create the controls: icon, text and the button to dismiss the
     // message.
@@ -80,7 +113,7 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
                               wxST_ELLIPSIZE_MIDDLE);
 
     if(!m_hasFgCol)
-        m_text->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+        m_text->SetForegroundColour(colFg);
 
     m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
     m_button->SetToolTip(_("Hide this notification message."));
