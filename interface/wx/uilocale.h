@@ -52,7 +52,7 @@ enum
     consistently on all platforms, a wxLocale object should be created and
     initialized with @c wxLANGUAGE_DEFAULT. This is not recommended due to
     various side effects, but can be done for applications which rely on these
-    functions. (Note that this should be done in conjuction with calling
+    functions. (Note that this should be done in conjunction with calling
     wxUILocale::UseDefault().)
 
     Localized applications should call wxUILocale::UseDefault() on startup to
