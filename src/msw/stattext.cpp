@@ -290,6 +290,10 @@ void wxStaticText::WXSetVisibleLabel(const wxString& str)
 
 bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 {
+    // Remove the non-markup label, we don't want the native control to show it
+    // in addition to the one we draw ourselves.
+    ::SetWindowText(GetHwnd(), wxT(""));
+
     const wxString label = RemoveMarkup(markup);
     if ( label.empty() && !markup.empty() )
         return false;
