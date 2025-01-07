@@ -250,8 +250,6 @@ enum wxFontEncoding
     wxFONTENCODING_MACETHIOPIC,     //!< Ethiopic (Mac)
     wxFONTENCODING_MACCENTRALEUR,   //!< Latin 2; Central European (Mac)
     wxFONTENCODING_MACVIETNAMESE,   //!< Vietnamese (Mac)
-    // misspelling kept for backward compatibility
-    wxFONTENCODING_MACVIATNAMESE = wxFONTENCODING_MACVIETNAMESE,
     wxFONTENCODING_MACARABICEXT,    //!< Arabic (Mac)
     wxFONTENCODING_MACSYMBOL,       //!< Symbol (Mac)
     wxFONTENCODING_MACDINGBATS,     //!< Dingbats (Mac)
