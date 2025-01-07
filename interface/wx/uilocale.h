@@ -48,6 +48,13 @@ enum
     current UI locale or wxString::FromCDouble() and wxString::ToCDouble()
     functions for doing it always using period as decimal separator.
 
+    To set the C runtime functions (e.g., @c strtod()) to use the user's locale
+    consistently on all platforms, a wxLocale object should be created and
+    initialized with @c wxLANGUAGE_DEFAULT. This is not recommended due to
+    various side effects, but can be done for applications which rely on these
+    functions. (Note that this should be done in conjunction with calling
+    wxUILocale::UseDefault().)
+
     Localized applications should call wxUILocale::UseDefault() on startup to
     explicitly indicate that they opt-in using the current UI locale, even if
     this results in changing the global C locale, as is the case in wxGTK. Note
@@ -61,7 +68,7 @@ enum
     listed as a supported language in the application @c Info.plist file under
     @c CFBundleLocalizations key.
 
-    Unlike wxLocale class, this class doesn't affect the translations used by
+    Unlike the wxLocale class, this class doesn't affect the translations used by
     the application, see wxTranslations for doing this.
 
     @library{wxbase}
