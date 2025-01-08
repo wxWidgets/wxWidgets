@@ -365,12 +365,63 @@ protected:
 
     virtual bool event(QEvent *event) override
     {
-        if (event->type() == QEvent::Gesture)
+        switch (event->type())
         {
-            return gestureEvent(static_cast<QGestureEvent*>(event), event);
+            case QEvent::Gesture:
+                return gestureEvent(static_cast<QGestureEvent*>(event), event);
+
+            case QEvent::TouchBegin:
+            case QEvent::TouchUpdate:
+            case QEvent::TouchCancel:
+            case QEvent::TouchEnd:
+                return touchEvent(static_cast<QTouchEvent*>(event));
+            default:;
         }
 
         return Widget::event(event);
+    }
+
+    bool touchEvent(QTouchEvent *touch)
+    {
+        wxWindow *win = wxWindow::QtRetrieveWindowPointer(this);
+        bool handled = false;
+
+        for (const QTouchEvent::TouchPoint& tp : touch->touchPoints())
+        {
+            wxEventType evtype = wxEVT_NULL;
+
+            switch (tp.state())
+            {
+                case Qt::TouchPointPressed:
+                    evtype = wxEVT_TOUCH_BEGIN;
+                    break;
+
+                case Qt::TouchPointMoved:
+                    evtype = wxEVT_TOUCH_MOVE;
+                    break;
+                case Qt::TouchPointReleased:
+                    evtype = wxEVT_TOUCH_END;
+                    break;
+
+                default:
+                    continue;
+            }
+
+            wxMultiTouchEvent evt(win->GetId(), evtype);
+
+            // Use screen position as the event might originate from a different
+            // Qt window than this one.
+            wxPoint2DDouble pt = wxQtConvertPointF(tp.screenPos().toPoint());
+            wxPoint ref = pt.GetFloor();
+
+            evt.SetPosition(win->ScreenToClient(ref) + (pt - ref));
+            evt.SetSequenceId(wxTouchSequenceId(wxUIntToPtr((unsigned)tp.id())));
+            // Qt doesn't provide the primary point flag
+
+            handled |= win->ProcessWindowEvent(evt);
+        }
+
+        return handled;
     }
 
     bool gestureEvent(QGestureEvent *gesture, QEvent *event)

@@ -144,6 +144,7 @@ wx_add_sample(taskbar tbtest.cpp tbtest.h DATA info.svg DEPENDS wxUSE_TASKBARICO
 wx_add_sample(text DEPENDS wxUSE_TEXTCTRL)
 wx_add_sample(thread DEPENDS wxUSE_THREADS)
 wx_add_sample(toolbar RES toolbar.rc DEPENDS wxUSE_TOOLBAR)
+wx_add_sample(touchtest touchtest.cpp)
 wx_add_sample(treectrl treetest.cpp treetest.h DEPENDS wxUSE_TREECTRL)
 wx_add_sample(treelist DEPENDS wxUSE_TREELISTCTRL)
 wx_add_sample(typetest typetest.cpp typetest.h)
