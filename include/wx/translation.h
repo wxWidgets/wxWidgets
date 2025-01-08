@@ -348,8 +348,7 @@ inline wxString wxTRANS_INPUT_STR(const wchar_t* s)
     #define wxTRANS_INPUT_STR(s) s
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
-namespace wxTransImplStrict
-{
+#ifndef wxNO_REQUIRE_LITERAL_MSGIDS
 
 // Wrapper functions that only accept string literals as arguments,
 // not variables, not char* pointers, and define the fall backs only in
@@ -445,10 +444,7 @@ wxString wxGettextInContextPluralWrapper(T, U, V, int)
     return {};
 }
 
-} // namespace wxTransImplStrict
-
-namespace wxTransImplCompatible
-{
+#else // wxNO_REQUIRE_LITERAL_MSGIDS
 
 // Wrapper functions that accept both string literals and variables
 // as arguments.
@@ -481,13 +477,7 @@ inline const wxString& wxGettextInContextPluralWrapper(const char *ctx,
                             count, wxString(), wxTRANS_INPUT_STR(ctx));
 }
 
-} // namespace wxTransImplCompatible
-
-#ifdef wxNO_REQUIRE_LITERAL_MSGIDS
-using namespace wxTransImplCompatible;
-#else
-using namespace wxTransImplStrict;
-#endif
+#endif // wxNO_REQUIRE_LITERAL_MSGIDS
 
 #else // !wxUSE_INTL
 
