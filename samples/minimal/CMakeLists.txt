@@ -14,7 +14,7 @@
 #
 
 # Declare the minimum required CMake version
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0...3.31)
 
 if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
     # If no deployment target has been set default to the minimum supported

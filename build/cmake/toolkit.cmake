@@ -136,7 +136,7 @@ if(WXQT)
     set(wxTOOLKIT_VERSION ${Qt5Core_VERSION})
 endif()
 
-if(APPLE)
+if(wxBUILD_TOOLKIT MATCHES "osx_cocoa")
     list(APPEND wxTOOLKIT_DEFINITIONS __WXMAC__ __WXOSX__)
 endif()
 
