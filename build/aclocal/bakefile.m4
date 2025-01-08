@@ -282,11 +282,11 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       *-*-darwin* )
-        SHARED_LD_MODULE_CC="\${CC} -bundle -single_module -headerpad_max_install_names -o"
-        SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -headerpad_max_install_names -o"
+        SHARED_LD_MODULE_CC="\${CC} -bundle -headerpad_max_install_names -o"
+        SHARED_LD_MODULE_CXX="\${CXX} -bundle -headerpad_max_install_names -o"
 
-        SHARED_LD_CC="\${CC} -dynamiclib -single_module -headerpad_max_install_names -o"
-        SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
+        SHARED_LD_CC="\${CC} -dynamiclib -headerpad_max_install_names -o"
+        SHARED_LD_CXX="\${CXX} -dynamiclib -headerpad_max_install_names -o"
 
         if test "x$GCC" = "xyes"; then
             PIC_FLAG="-dynamic -fPIC"
