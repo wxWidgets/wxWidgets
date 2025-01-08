@@ -162,54 +162,54 @@ enum wxFontEncoding
     wxFONTENCODING_DEFAULT,
 
     // ISO8859 standard defines a number of single-byte charsets
-    wxFONTENCODING_ISO8859_1,       //!< West European (Latin1)
-    wxFONTENCODING_ISO8859_2,       //!< Central and East European (Latin2)
-    wxFONTENCODING_ISO8859_3,       //!< Esperanto (Latin3)
-    wxFONTENCODING_ISO8859_4,       //!< Baltic (old) (Latin4)
+    wxFONTENCODING_ISO8859_1,       //!< West European (Latin 1)
+    wxFONTENCODING_ISO8859_2,       //!< Central and East European (Latin 2)
+    wxFONTENCODING_ISO8859_3,       //!< Esperanto (Latin 3)
+    wxFONTENCODING_ISO8859_4,       //!< Baltic (old) (Latin 4)
     wxFONTENCODING_ISO8859_5,       //!< Cyrillic
     wxFONTENCODING_ISO8859_6,       //!< Arabic
     wxFONTENCODING_ISO8859_7,       //!< Greek
     wxFONTENCODING_ISO8859_8,       //!< Hebrew
-    wxFONTENCODING_ISO8859_9,       //!< Turkish (Latin5)
-    wxFONTENCODING_ISO8859_10,      //!< Variation of Latin4 (Latin6)
+    wxFONTENCODING_ISO8859_9,       //!< Turkish (Latin 5)
+    wxFONTENCODING_ISO8859_10,      //!< Variation of Latin 4 (Latin 6)
     wxFONTENCODING_ISO8859_11,      //!< Thai
-    wxFONTENCODING_ISO8859_12,      //!< doesn't exist currently, but put it
-                                    //!< here anyhow to make all ISO8859
+    wxFONTENCODING_ISO8859_12,      //!< Doesn't exist currently, but put it
+                                    //!< here anyhow to make all ISO-8859
                                     //!< consecutive numbers
-    wxFONTENCODING_ISO8859_13,      //!< Baltic (Latin7)
-    wxFONTENCODING_ISO8859_14,      //!< Latin8
-    wxFONTENCODING_ISO8859_15,      //!< Latin9 (a.k.a. Latin0, includes euro)
+    wxFONTENCODING_ISO8859_13,      //!< Baltic (Latin 7)
+    wxFONTENCODING_ISO8859_14,      //!< Latin 8
+    wxFONTENCODING_ISO8859_15,      //!< Latin 9 (a.k.a. Latin 0, includes Euro symbol)
     wxFONTENCODING_ISO8859_MAX,
 
     // Cyrillic charset soup (see http://czyborra.com/charsets/cyrillic.html)
     wxFONTENCODING_KOI8,            //!< KOI8 Russian
     wxFONTENCODING_KOI8_U,          //!< KOI8 Ukrainian
-    wxFONTENCODING_ALTERNATIVE,     //!< same as MS-DOS CP866
-    wxFONTENCODING_BULGARIAN,       //!< used under Linux in Bulgaria
+    wxFONTENCODING_ALTERNATIVE,     //!< Same as MS-DOS CP866
+    wxFONTENCODING_BULGARIAN,       //!< Used under Linux in Bulgaria
 
     // what would we do without Microsoft? They have their own encodings
         // for DOS
-    wxFONTENCODING_CP437,           //!< original MS-DOS codepage
-    wxFONTENCODING_CP850,           //!< CP437 merged with Latin1
-    wxFONTENCODING_CP852,           //!< CP437 merged with Latin2
-    wxFONTENCODING_CP855,           //!< another cyrillic encoding
-    wxFONTENCODING_CP866,           //!< and another one
+    wxFONTENCODING_CP437,           //!< United States (DOS)
+    wxFONTENCODING_CP850,           //!< Multilingual Latin 1; Western European (DOS)
+    wxFONTENCODING_CP852,           //!< Latin 2; Central European (DOS)
+    wxFONTENCODING_CP855,           //!< Cyrillic (primarily Russian)
+    wxFONTENCODING_CP866,           //!< Russian; Cyrillic (DOS)
         // and for Windows
-    wxFONTENCODING_CP874,           //!< WinThai
+    wxFONTENCODING_CP874,           //!< Thai (Windows)
     wxFONTENCODING_CP932,           //!< Japanese (shift-JIS)
-    wxFONTENCODING_CP936,           //!< Chinese simplified (GB)
-    wxFONTENCODING_CP949,           //!< Korean (Hangul charset)
-    wxFONTENCODING_CP950,           //!< Chinese (traditional - Big5)
-    wxFONTENCODING_CP1250,          //!< WinLatin2
-    wxFONTENCODING_CP1251,          //!< WinCyrillic
-    wxFONTENCODING_CP1252,          //!< WinLatin1
-    wxFONTENCODING_CP1253,          //!< WinGreek (8859-7)
-    wxFONTENCODING_CP1254,          //!< WinTurkish
-    wxFONTENCODING_CP1255,          //!< WinHebrew
-    wxFONTENCODING_CP1256,          //!< WinArabic
-    wxFONTENCODING_CP1257,          //!< WinBaltic (same as Latin 7)
-    wxFONTENCODING_CP1258,          //!< WinVietnamese (since 2.9.4)
-    wxFONTENCODING_CP1361,          //!< Johab Korean character set (since 2.9.4)
+    wxFONTENCODING_CP936,           //!< Simplified Chinese (GB2312)
+    wxFONTENCODING_CP949,           //!< Korean (Unified Hangul Code)
+    wxFONTENCODING_CP950,           //!< Traditional Chinese (Big5)
+    wxFONTENCODING_CP1250,          //!< Central European (Windows)
+    wxFONTENCODING_CP1251,          //!< Cyrillic (Windows)
+    wxFONTENCODING_CP1252,          //!< Latin 1; Western European (Windows)
+    wxFONTENCODING_CP1253,          //!< Greek (Windows) (8859-7)
+    wxFONTENCODING_CP1254,          //!< Turkish (Windows)
+    wxFONTENCODING_CP1255,          //!< Hebrew (Windows)
+    wxFONTENCODING_CP1256,          //!< Arabic (Windows)
+    wxFONTENCODING_CP1257,          //!< Baltic (Windows) (same as Latin 7)
+    wxFONTENCODING_CP1258,          //!< Vietnamese (Windows) (since 2.9.4)
+    wxFONTENCODING_CP1361,          //!< Korean (Johab) (since 2.9.4)
     wxFONTENCODING_CP12_MAX,
 
     wxFONTENCODING_UTF7,            //!< UTF-7 Unicode encoding
@@ -218,61 +218,61 @@ enum wxFontEncoding
     wxFONTENCODING_UTF16BE,         //!< UTF-16 Big Endian Unicode encoding
     wxFONTENCODING_UTF16LE,         //!< UTF-16 Little Endian Unicode encoding
     wxFONTENCODING_UTF32BE,         //!< UTF-32 Big Endian Unicode encoding
-    wxFONTENCODING_UTF32LE,         // UTF-32 Little Endian Unicode encoding
+    wxFONTENCODING_UTF32LE,         //!< UTF-32 Little Endian Unicode encoding
 
-    wxFONTENCODING_MACROMAN,        //!< the standard mac encodings
-    wxFONTENCODING_MACJAPANESE,
-    wxFONTENCODING_MACCHINESETRAD,
-    wxFONTENCODING_MACKOREAN,
-    wxFONTENCODING_MACARABIC,
-    wxFONTENCODING_MACHEBREW,
-    wxFONTENCODING_MACGREEK,
-    wxFONTENCODING_MACCYRILLIC,
-    wxFONTENCODING_MACDEVANAGARI,
-    wxFONTENCODING_MACGURMUKHI,
-    wxFONTENCODING_MACGUJARATI,
-    wxFONTENCODING_MACORIYA,
-    wxFONTENCODING_MACBENGALI,
-    wxFONTENCODING_MACTAMIL,
-    wxFONTENCODING_MACTELUGU,
-    wxFONTENCODING_MACKANNADA,
-    wxFONTENCODING_MACMALAJALAM,
-    wxFONTENCODING_MACSINHALESE,
-    wxFONTENCODING_MACBURMESE,
-    wxFONTENCODING_MACKHMER,
-    wxFONTENCODING_MACTHAI,
-    wxFONTENCODING_MACLAOTIAN,
-    wxFONTENCODING_MACGEORGIAN,
-    wxFONTENCODING_MACARMENIAN,
-    wxFONTENCODING_MACCHINESESIMP,
-    wxFONTENCODING_MACTIBETAN,
-    wxFONTENCODING_MACMONGOLIAN,
-    wxFONTENCODING_MACETHIOPIC,
-    wxFONTENCODING_MACCENTRALEUR,
-    wxFONTENCODING_MACVIATNAMESE,
-    wxFONTENCODING_MACARABICEXT,
-    wxFONTENCODING_MACSYMBOL,
-    wxFONTENCODING_MACDINGBATS,
-    wxFONTENCODING_MACTURKISH,
-    wxFONTENCODING_MACCROATIAN,
-    wxFONTENCODING_MACICELANDIC,
-    wxFONTENCODING_MACROMANIAN,
-    wxFONTENCODING_MACCELTIC,
-    wxFONTENCODING_MACGAELIC,
+    wxFONTENCODING_MACROMAN,        //!< Roman; Western European (Mac)
+    wxFONTENCODING_MACJAPANESE,     //!< Japanese (Mac)
+    wxFONTENCODING_MACCHINESETRAD,  //!< Traditional Chinese (Big5, Mac)
+    wxFONTENCODING_MACKOREAN,       //!< Korean (Mac)
+    wxFONTENCODING_MACARABIC,       //!< Arabic (Mac)
+    wxFONTENCODING_MACHEBREW,       //!< Hebrew (Mac)
+    wxFONTENCODING_MACGREEK,        //!< Greek (Mac)
+    wxFONTENCODING_MACCYRILLIC,     //!< Cyrillic (Mac)
+    wxFONTENCODING_MACDEVANAGARI,   //!< Devanagari (Mac)
+    wxFONTENCODING_MACGURMUKHI,     //!< Gurmukhi (Mac)
+    wxFONTENCODING_MACGUJARATI,     //!< Gujarati (Mac)
+    wxFONTENCODING_MACORIYA,        //!< Oriya (Mac)
+    wxFONTENCODING_MACBENGALI,      //!< Bengali (Mac)
+    wxFONTENCODING_MACTAMIL,        //!< Tamil (Mac)
+    wxFONTENCODING_MACTELUGU,       //!< Telugu (Mac)
+    wxFONTENCODING_MACKANNADA,      //!< Kannada (Mac)
+    wxFONTENCODING_MACMALAJALAM,    //!< Malajalam (Mac)
+    wxFONTENCODING_MACSINHALESE,    //!< Sinhalese (Mac)
+    wxFONTENCODING_MACBURMESE,      //!< Burmese (Mac)
+    wxFONTENCODING_MACKHMER,        //!< Khmer (Mac)
+    wxFONTENCODING_MACTHAI,         //!< Thai (Mac)
+    wxFONTENCODING_MACLAOTIAN,      //!< Laotian (Mac)
+    wxFONTENCODING_MACGEORGIAN,     //!< Georgian (Mac)
+    wxFONTENCODING_MACARMENIAN,     //!< Armenian (Mac)
+    wxFONTENCODING_MACCHINESESIMP,  //!< Simplified Chinese (GB 2312, Mac)
+    wxFONTENCODING_MACTIBETAN,      //!< Tibetan (Mac)
+    wxFONTENCODING_MACMONGOLIAN,    //!< Mongolian (Mac)
+    wxFONTENCODING_MACETHIOPIC,     //!< Ethiopic (Mac)
+    wxFONTENCODING_MACCENTRALEUR,   //!< Latin 2; Central European (Mac)
+    wxFONTENCODING_MACVIETNAMESE,   //!< Vietnamese (Mac)
+    wxFONTENCODING_MACARABICEXT,    //!< Arabic (Mac)
+    wxFONTENCODING_MACSYMBOL,       //!< Symbol (Mac)
+    wxFONTENCODING_MACDINGBATS,     //!< Dingbats (Mac)
+    wxFONTENCODING_MACTURKISH,      //!< Turkish (Mac)
+    wxFONTENCODING_MACCROATIAN,     //!< Croatian (Mac)
+    wxFONTENCODING_MACICELANDIC,    //!< Icelandic (Mac)
+    wxFONTENCODING_MACROMANIAN,     //!< Romanian (Mac)
+    wxFONTENCODING_MACCELTIC,       //!< Celtic (Mac)
+    wxFONTENCODING_MACGAELIC,       //!< Gaelic (Mac)
     wxFONTENCODING_MACKEYBOARD,
 
     // more CJK encodings (for historical reasons some are already declared
     // above)
     wxFONTENCODING_ISO2022_JP,      //!< ISO-2022-JP JIS encoding
 
-    wxFONTENCODING_MAX,             //!< highest enumerated encoding value
+    wxFONTENCODING_MAX,             //!< Highest enumerated encoding value
 
     wxFONTENCODING_MACMIN = wxFONTENCODING_MACROMAN ,
     wxFONTENCODING_MACMAX = wxFONTENCODING_MACKEYBOARD ,
 
     // aliases for endian-dependent UTF encodings
-    wxFONTENCODING_UTF16,  //!< native UTF-16
-    wxFONTENCODING_UTF32,  //!< native UTF-32
+    wxFONTENCODING_UTF16,  //!< Native UTF-16
+    wxFONTENCODING_UTF32,  //!< Native UTF-32
 
     /// Alias for the native Unicode encoding on this platform
     /// (this is used by wxEncodingConverter and wxUTFFile only for now)
@@ -280,7 +280,7 @@ enum wxFontEncoding
 
     wxFONTENCODING_GB2312 = wxFONTENCODING_CP936, //!< Simplified Chinese
     wxFONTENCODING_BIG5 = wxFONTENCODING_CP950,   //!< Traditional Chinese
-    wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932, //!< Shift JIS
+    wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932, //!< Japanese Shift JIS
     wxFONTENCODING_EUC_KR = wxFONTENCODING_CP949, //!< Korean
     wxFONTENCODING_JOHAB = wxFONTENCODING_CP1361, //!< Korean Johab (since 2.9.4)
     wxFONTENCODING_VIETNAMESE = wxFONTENCODING_CP1258 //!< Vietnamese (since 2.9.4)
