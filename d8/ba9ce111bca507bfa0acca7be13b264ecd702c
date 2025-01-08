@@ -1,0 +1,1 @@
+wxGTK: Implement wxTextCtrl::SearchText() (Blake-Madden, #24897).
