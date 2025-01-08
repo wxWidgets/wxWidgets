@@ -5392,7 +5392,7 @@ public:
         if ( pos == -1 )
             return -1;
 
-        if ( x >= LineLength(y) )
+        if ( x >= LineLength((int)y) )
             return -1;
 
         pos += x;
@@ -5405,7 +5405,7 @@ public:
         if ( l == -1 )
             return false;
 
-        int lx = pos - PositionFromLine(l);
+        long lx = pos - PositionFromLine(l);
         if ( lx >= LineLength(l) )
             return false;
 
