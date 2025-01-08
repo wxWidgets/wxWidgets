@@ -31,5 +31,5 @@ endif()
 
 if (wxUSE_WEBREQUEST_CURL)
     wx_lib_include_directories(wxnet ${CURL_INCLUDE_DIRS})
-    wx_lib_link_libraries(wxnet PRIVATE ${CURL_LIBRARIES})
+    wx_lib_link_libraries(wxnet PUBLIC ${CURL_LIBRARIES})
 endif()
