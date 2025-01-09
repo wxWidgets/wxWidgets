@@ -283,8 +283,15 @@ public:
 
     virtual bool HasPage(int page);
     virtual bool OnPrintPage(int page) = 0;
+
+    // Return the total range of pages and fill in the provided parameter with
+    // the ranges of pages that should be printed (if it remains empty, all
+    // pages are printed).
+    virtual wxPrintPageRange GetPagesInfo(wxPrintPageRanges& ranges);
+
+    // Override GetPagesInfo() instead if more than one range of pages needs to
+    // be printed.
     virtual void GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo);
-    virtual bool IsPageSelected(int page);
 
     virtual wxString GetTitle() const { return m_printoutTitle; }
 

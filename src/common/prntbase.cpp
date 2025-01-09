@@ -374,12 +374,15 @@ bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         // If the dialog is not shown, set the pages range to print everything
         // by default (as otherwise we wouldn't print anything at all which is
         // certainly not a reasonable default behaviour).
-        int minPage, maxPage, selFrom, selTo;
-        printout->GetPageInfo(&minPage, &maxPage, &selFrom, &selTo);
+        wxPrintPageRanges ranges;
+        const auto all = printout->GetPagesInfo(ranges);
+        if ( ranges.empty() )
+        {
+            // If the printout didn't specify any pages neither, print them all.
+            ranges.push_back(all);
+        }
 
-        wxPrintDialogData& pdd = m_pimpl->GetPrintDialogData();
-        pdd.SetFromPage(minPage);
-        pdd.SetToPage(maxPage);
+        m_pimpl->GetPrintDialogData().SetPageRanges(ranges);
     }
 
     return m_pimpl->Print( parent, printout, prompt );
@@ -522,13 +525,13 @@ wxPrintAbortDialog::wxPrintAbortDialog(wxWindow *parent,
     mainSizer->Add(new wxStaticText(this, wxID_ANY, _("Please wait while printing...")),
                    wxSizerFlags().Expand().DoubleBorder());
 
-    wxFlexGridSizer *gridSizer = new wxFlexGridSizer(2, wxSize(20, 0));
+    wxFlexGridSizer *gridSizer = new wxFlexGridSizer(2, FromDIP(wxSize(20, 0)));
     gridSizer->Add(new wxStaticText(this, wxID_ANY, _("Document:")));
     gridSizer->AddGrowableCol(1);
     gridSizer->Add(new wxStaticText(this, wxID_ANY, documentTitle));
     gridSizer->Add(new wxStaticText(this, wxID_ANY, _("Progress:")));
     m_progress = new wxStaticText(this, wxID_ANY, _("Preparing"));
-    m_progress->SetMinSize(wxSize(250, -1));
+    m_progress->SetMinSize(FromDIP(wxSize(250, -1)));
     gridSizer->Add(m_progress);
     mainSizer->Add(gridSizer, wxSizerFlags().Expand().DoubleBorder(wxLEFT | wxRIGHT));
 
@@ -622,9 +625,19 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
     *toPage = 1;
 }
 
-bool wxPrintout::IsPageSelected(int WXUNUSED(page))
+wxPrintPageRange wxPrintout::GetPagesInfo(wxPrintPageRanges& ranges)
 {
-    return false;
+    int minPage = 0;
+    int maxPage = 0;
+    int fromPage = 0;
+    int toPage = 0;
+
+    GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+
+    if ( fromPage > 0 && toPage >= fromPage )
+        ranges.push_back({fromPage, toPage});
+
+    return { minPage, maxPage };
 }
 
 bool wxPrintout::SetUp(wxDC& dc)
@@ -2043,8 +2056,11 @@ bool wxPrintPreviewBase::RenderPageIntoDC(wxDC& dc, int pageNum)
         m_printingPrepared = true;
 
         m_previewPrintout->OnPreparePrinting();
-        int selFrom, selTo;
-        m_previewPrintout->GetPageInfo(&m_minPage, &m_maxPage, &selFrom, &selTo);
+
+        wxPrintPageRanges ranges;
+        const auto all = m_previewPrintout->GetPagesInfo(ranges);
+        m_minPage = all.fromPage;
+        m_maxPage = all.toPage;
 
         // Update the wxPreviewControlBar page range display.
         if ( m_previewFrame )

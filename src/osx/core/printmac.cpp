@@ -32,6 +32,8 @@
 #include "wx/display.h"
 #include "wx/osx/printdlg.h"
 
+#include "wx/private/print.h"
+
 #include <stdlib.h>
 
 // Helper function to get the printer "name": actually we use its unique ID
@@ -544,7 +546,6 @@ wxMacPrinter::~wxMacPrinter()
 bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
     sm_abortIt = false;
-    sm_abortWindow = nullptr;
 
     if (!printout)
     {
@@ -558,28 +559,25 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxPrinterDC *dc = nullptr;
+    std::unique_ptr<wxPrinterDC> dc;
     if (prompt)
     {
         wxMacPrintDialog dialog(parent, & m_printDialogData);
         if (dialog.ShowModal() == wxID_OK)
         {
-            dc = wxDynamicCast(dialog.GetPrintDC(), wxPrinterDC);
-            wxASSERT(dc);
+            dc.reset(wxDynamicCast(dialog.GetPrintDC(), wxPrinterDC));
+            wxASSERT(dc.get());
             m_printDialogData = dialog.GetPrintDialogData();
         }
     }
     else
     {
-        dc = new wxPrinterDC( m_printDialogData.GetPrintData() ) ;
+        dc.reset(new wxPrinterDC( m_printDialogData.GetPrintData() ));
     }
 
     // May have pressed cancel.
     if (!dc || !dc->IsOk())
-    {
-        delete dc;
         return false;
-    }
 
     PMResolution res;
     PMPrinter printer;
@@ -601,81 +599,74 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     printout->SetPPIPrinter(int(res.hRes), int(res.vRes));
 
     // Set printout parameters
-    printout->SetUp(*dc);
-
-    // Create an abort window
-    wxBeginBusyCursor();
-
-    printout->OnPreparePrinting();
-
-    // Get some parameters from the printout, if defined
-    int fromPage, toPage;
-    int minPage, maxPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
-
-    if (maxPage == 0)
+    if ( !printout->SetUp(*dc) )
     {
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
 
-    // Only set min and max, because from and to will be
-    // set by the user if prompted for the print dialog above
-    m_printDialogData.SetMinPage(minPage);
-    m_printDialogData.SetMaxPage(maxPage);
+    // Create an abort window
+    wxBusyCursor busyCursor;
 
-    // Set from and to pages if bypassing the print dialog
-    if ( !prompt )
+    printout->OnPreparePrinting();
+
+    // Get some parameters from the printout, if defined
+    wxPrintPageRanges ranges = m_printDialogData.GetPageRanges();
+    const auto all = printout->GetPagesInfo(ranges);
+
+    if ( !all.IsValid() )
     {
-        m_printDialogData.SetFromPage(fromPage);
-        
-        if( m_printDialogData.GetAllPages() )
-            m_printDialogData.SetToPage(maxPage);
-        else
-            m_printDialogData.SetToPage(toPage);
+        sm_lastError = wxPRINTER_ERROR;
+        return false;
     }
 
-    printout->OnBeginPrinting();
+    if ( ranges.empty() )
+    {
+        // Not having any ranges to print is equivalent to printing all pages.
+        ranges.push_back(all);
+    }
 
-    bool keepGoing = true;
+    // Only set min and max, because from and to will be
+    // set by the user if prompted for the print dialog above
+    m_printDialogData.SetMinPage(all.fromPage);
+    m_printDialogData.SetMaxPage(all.toPage);
+
+    wxPrintingGuard guard(printout);
+
+    sm_lastError = wxPRINTER_NO_ERROR;
 
     if (!printout->OnBeginDocument(m_printDialogData.GetFromPage(), m_printDialogData.GetToPage()))
     {
-            wxEndBusyCursor();
-            wxMessageBox(wxT("Could not start printing."), wxT("Print Error"), wxOK, parent);
+        wxMessageBox(wxT("Could not start printing."), wxT("Print Error"), wxOK, parent);
+        sm_lastError = wxPRINTER_ERROR;
+        return false;
     }
 
-    int pn;
-    for (pn = m_printDialogData.GetFromPage();
-        keepGoing && (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
-        pn++)
+    for ( const wxPrintPageRange& range : ranges )
     {
-        if (sm_abortIt)
+        for ( int pn = range.fromPage; pn <= range.toPage; pn++ )
         {
+            if ( !printout->HasPage(pn) )
+                continue;
+
+            if (sm_abortIt)
+            {
                 break;
-        }
-        else
-        {
-                dc->StartPage();
-                keepGoing = printout->OnPrintPage(pn);
-                dc->EndPage();
+            }
+            else
+            {
+                wxPrintingPageGuard pageGuard(*dc);
+                if ( !printout->OnPrintPage(pn) )
+                {
+                    sm_lastError = wxPRINTER_CANCELLED;
+                    break;
+                }
+            }
         }
     }
     printout->OnEndDocument();
 
-    printout->OnEndPrinting();
-
-    if (sm_abortWindow)
-    {
-        sm_abortWindow->Show(false);
-        wxDELETE(sm_abortWindow);
-    }
-
-    wxEndBusyCursor();
-
-    delete dc;
-
-    return true;
+    return sm_lastError == wxPRINTER_NO_ERROR;
 }
 
 wxDC* wxMacPrinter::PrintDialog(wxWindow *parent)
