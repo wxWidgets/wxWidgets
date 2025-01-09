@@ -1428,6 +1428,7 @@ void wxRibbonButtonBar::OnMouseEnter(wxMouseEvent& evt)
 {
     if(m_active_button && !evt.LeftIsDown())
     {
+        m_active_button->base->state &= ~wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;
         m_active_button = nullptr;
     }
 }
