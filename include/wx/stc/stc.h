@@ -3214,7 +3214,7 @@ public:
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id=wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
-                     const wxString& name = wxSTCNameStr);
+                     const wxString& name = wxASCII_STR(wxSTCNameStr));
     wxStyledTextCtrl() { m_swx = nullptr; }
     ~wxStyledTextCtrl();
 
@@ -3223,7 +3223,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID id=wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
-                const wxString& name = wxSTCNameStr);
+                const wxString& name = wxASCII_STR(wxSTCNameStr));
 
 
     //----------------------------------------------------------------------
@@ -5851,7 +5851,7 @@ public:
         if ( pos == -1 )
             return -1;
 
-        if ( x >= LineLength(y) )
+        if ( x >= LineLength((int)y) )
             return -1;
 
         pos += x;
@@ -5864,7 +5864,7 @@ public:
         if ( l == -1 )
             return false;
 
-        int lx = pos - PositionFromLine(l);
+        long lx = pos - PositionFromLine(l);
         if ( lx >= LineLength(l) )
             return false;
 
