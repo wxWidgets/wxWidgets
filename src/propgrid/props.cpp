@@ -2055,7 +2055,7 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
         m_dlgTitle.empty() ? _("Choose a file") : m_dlgTitle,
         m_initialPath.empty() ? path : m_initialPath,
         file,
-        m_wildcard.empty() ? _(wxALL_FILES) : m_wildcard,
+        m_wildcard.empty() ? wxGetTranslation(wxALL_FILES) : m_wildcard,
         m_dlgStyle,
         wxDefaultPosition);
 
