@@ -1202,6 +1202,7 @@ void wxRibbonToolBar::OnMouseEnter(wxMouseEvent& evt)
 {
     if(m_active_tool && !evt.LeftIsDown())
     {
+        m_active_tool->state &= ~wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK;
         m_active_tool = nullptr;
     }
 }
