@@ -46,6 +46,7 @@
 
 #if WEBKIT_CHECK_VERSION(2, 16, 0)
 #define wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+#define wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER_CLEAR
 #endif
 
 // Function to check webkit version at runtime
@@ -744,6 +745,13 @@ public:
     {
         return GetOrCreateContext();
     }
+
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
+    WebKitWebsiteDataManager* GetWebsiteDataManager()
+    {
+        return m_websiteDataManager;
+    }
+#endif
 
 private:
     wxString m_dataPath;
@@ -1677,6 +1685,98 @@ void wxWebViewWebKit::RemoveAllUserScripts()
 {
     WebKitUserContentManager *ucm = webkit_web_view_get_user_content_manager(m_web_view);
     webkit_user_content_manager_remove_all_scripts(ucm);
+}
+
+
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER_CLEAR
+static void
+wxgtk_webview_webkit_clear_data_ready(GObject *,
+                                      GAsyncResult *result,
+                                      void *user_data)
+{
+    wxWebViewWebKit* webKitCtrl = static_cast<wxWebViewWebKit*>(user_data);
+    WebKitWebsiteDataManager* manager = static_cast<wxWebViewConfigurationImplWebKit*>(webKitCtrl->m_config.GetImpl())->GetWebsiteDataManager();
+
+    gboolean success = webkit_website_data_manager_clear_finish(manager, result, nullptr);
+    wxWebViewEvent event(wxEVT_WEBVIEW_BROWSING_DATA_CLEARED,
+                         webKitCtrl->GetId(),
+                         webKitCtrl->GetCurrentURL(),
+                         "");
+    event.SetEventObject(webKitCtrl);
+    event.SetInt((success) ? 1 : 0);
+    webKitCtrl->HandleWindowEvent(event);
+}
+#endif // wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER_CLEAR
+
+bool wxWebViewWebKit::ClearBrowsingData(int types, wxDateTime since)
+{
+#ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER_CLEAR
+    if (wx_check_webkit_version(2, 16, 0))
+    {
+        WebKitWebsiteDataManager* manager = static_cast<wxWebViewConfigurationImplWebKit*>(m_config.GetImpl())->GetWebsiteDataManager();
+
+        int wkTypes = 0;
+
+        if (types & wxWEBVIEW_BROWSING_DATA_ALL)
+        {
+            wkTypes |= WEBKIT_WEBSITE_DATA_ALL;
+        }
+        else
+        {
+            if (types & wxWEBVIEW_BROWSING_DATA_COOKIES)
+                wkTypes |= WEBKIT_WEBSITE_DATA_COOKIES;
+
+            if (types & wxWEBVIEW_BROWSING_DATA_CACHE)
+            {
+                wkTypes |= WEBKIT_WEBSITE_DATA_DISK_CACHE |
+                           WEBKIT_WEBSITE_DATA_MEMORY_CACHE |
+                           WEBKIT_WEBSITE_DATA_OFFLINE_APPLICATION_CACHE |
+                           WEBKIT_WEBSITE_DATA_DOM_CACHE;
+            }
+
+            if (types & wxWEBVIEW_BROWSING_DATA_DOM_STORAGE)
+            {
+                wkTypes |= WEBKIT_WEBSITE_DATA_LOCAL_STORAGE |
+                           WEBKIT_WEBSITE_DATA_SESSION_STORAGE |
+                           WEBKIT_WEBSITE_DATA_INDEXEDDB_DATABASES |
+                           WEBKIT_WEBSITE_DATA_WEBSQL_DATABASES;
+            }
+
+            if (types & wxWEBVIEW_BROWSING_DATA_OTHER)
+            {
+                // All the elements of WebKitWebsiteDataTypes not already
+                // appearing above.
+                wkTypes |= WEBKIT_WEBSITE_DATA_PLUGIN_DATA |
+                           WEBKIT_WEBSITE_DATA_HSTS_CACHE |
+                           WEBKIT_WEBSITE_DATA_DEVICE_ID_HASH_SALT |
+                           WEBKIT_WEBSITE_DATA_ITP |
+                           WEBKIT_WEBSITE_DATA_SERVICE_WORKER_REGISTRATIONS;
+            }
+        }
+
+        GTimeSpan timeSpan = 0;
+        if ( since.IsValid() )
+        {
+            const auto now = wxDateTime::Now();
+
+            wxCHECK_MSG( since < now, false, "Date must be in the past" );
+
+            // GTimeSpan is in microseconds.
+            timeSpan = (since - now).GetMilliseconds().GetValue() * 1000;
+        }
+
+        webkit_website_data_manager_clear(
+            manager,
+            (WebKitWebsiteDataTypes) wkTypes,
+            timeSpan,
+            nullptr,
+            wxgtk_webview_webkit_clear_data_ready, this);
+
+        return true;
+    }
+    else
+#endif
+    return false;
 }
 
 void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
