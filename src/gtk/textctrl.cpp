@@ -561,23 +561,26 @@ au_insert_text_callback(GtkTextBuffer *buffer,
                                    &start, end);
     }
     const auto maxlen = win->GTKGetMaxLength();
-    auto count = gtk_text_buffer_get_char_count( buffer );
-    if ( maxlen > 0 && count > maxlen )
+    if( maxlen > 0 )
     {
-        GtkTextIter offset;
-        int trim_len = count - maxlen;
-        gtk_text_buffer_get_iter_at_offset( buffer, &offset, gtk_text_iter_get_offset( end ) - trim_len );
-        // This function is connected using g_signal_connect_after() call, therefore
-        // direct buffer modification is required.
-        // Using g_signal_connect() doesn't work as the text is still being entered
-        // probably because the signal is documented as "Run Last". For exactly same
-        // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
-        // the handler that does not connected after
-        gtk_text_buffer_delete( buffer, &offset, end );
-        wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
-        event.SetEventObject( win );
-        event.SetString( win->GetValue() );
-        win->HandleWindowEvent( event );
+        auto count = gtk_text_buffer_get_char_count( buffer );
+        if ( count > maxlen )
+        {
+            GtkTextIter offset;
+            int trim_len = count - maxlen;
+            gtk_text_buffer_get_iter_at_offset( buffer, &offset, gtk_text_iter_get_offset( end ) - trim_len );
+            // This function is connected using g_signal_connect_after() call, therefore
+            // direct buffer modification is required.
+            // Using g_signal_connect() doesn't work as the text is still being entered
+            // probably because the signal is documented as "Run Last". For exactly same
+            // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
+            // the handler that does not connected after
+            gtk_text_buffer_delete( buffer, &offset, end );
+            wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
+            event.SetEventObject( win );
+            event.SetString( win->GetValue() );
+            win->HandleWindowEvent( event );
+        }
     }
 
     if ( !len || !(win->GetWindowStyleFlag() & wxTE_AUTO_URL) )
