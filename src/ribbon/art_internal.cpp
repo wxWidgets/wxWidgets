@@ -100,10 +100,12 @@ void wxRibbonDrawParallelGradientLines(wxDC& dc,
 }
 
 wxRibbonHSLColour wxRibbonShiftLuminance(wxRibbonHSLColour colour,
-                                                float amount)
+                                         float amount)
 {
-    if(amount <= 1.0f)
+    if (amount <= 1.0f)
         return colour.Darker(colour.luminance * (1.0f - amount));
+    else if (wxSystemSettings::GetAppearance().IsDark())
+        return colour.Darker(colour.luminance * (amount - 1.0f));
     else
         return colour.Lighter((1.0f - colour.luminance) * (amount - 1.0f));
 }

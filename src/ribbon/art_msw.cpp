@@ -272,12 +272,22 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
     m_button_bar_label_font = m_tab_label_font;
     m_panel_label_font = m_tab_label_font;
 
-    if(set_colour_scheme)
+    if (set_colour_scheme)
     {
-        SetColourScheme(
-            wxColour(194, 216, 241),
-            wxColour(255, 223, 114),
-            wxColour(  0,   0,   0));
+        if (wxSystemSettings::GetAppearance().IsDark())
+        {
+            SetColourScheme(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE),
+                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
+                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+        }
+        else
+        {
+            SetColourScheme(
+                wxColour(194, 216, 241),
+                wxColour(255, 223, 114),
+                wxColour(0, 0, 0));
+        }
     }
 
     m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
@@ -357,14 +367,30 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     const auto LikePrimary = [primary_hsl, primary_is_gray]
         (double h, double s, double l)
         {
-            return primary_hsl.ShiftHue(h).Saturated(primary_is_gray ? 0.0 : s)
-                .Lighter(l).ToRGB();
+            if (wxSystemSettings::GetAppearance().IsDark())
+            {
+                return primary_hsl.ShiftHue(h).Saturated(primary_is_gray ? 0.0 : s)
+                    .Darker(l).ToRGB();
+            }
+            else
+            {
+                return primary_hsl.ShiftHue(h).Saturated(primary_is_gray ? 0.0 : s)
+                    .Lighter(l).ToRGB();
+            }
         };
     const auto LikeSecondary = [secondary_hsl, secondary_is_gray]
         (double h, double s, double l)
         {
-            return secondary_hsl.ShiftHue(h).Saturated(secondary_is_gray ? 0.0 : s)
-                .Lighter(l).ToRGB();
+            if (wxSystemSettings::GetAppearance().IsDark())
+            {
+                return secondary_hsl.ShiftHue(h).Saturated(secondary_is_gray ? 0.0 : s)
+                    .Darker(l).ToRGB();
+            }
+            else
+            {
+                return secondary_hsl.ShiftHue(h).Saturated(secondary_is_gray ? 0.0 : s)
+                    .Lighter(l).ToRGB();
+            }
         };
 
     m_page_border_pen = LikePrimary(1.4, 0.00, -0.08);

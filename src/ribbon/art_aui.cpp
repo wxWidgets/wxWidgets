@@ -252,11 +252,18 @@ void wxRibbonAUIArtProvider::SetColourScheme(
 #ifdef __WXOSX__
     m_tab_label_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
 #else
-    m_tab_label_colour = LikePrimary(0.1);
+    if (wxSystemSettings::GetAppearance().IsDark())
+    {
+        m_tab_label_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
+    }
+    else
+    {
+        m_tab_label_colour = LikePrimary(0.1);
+    }
 #endif
     m_tab_active_label_colour = m_tab_label_colour;
     m_tab_hover_label_colour = m_tab_label_colour;
-    m_tab_hover_background_top_colour =  primary_hsl.ToRGB();
+    m_tab_hover_background_top_colour = primary_hsl.ToRGB();
 #ifdef __WXOSX__
     m_tab_hover_background_top_gradient_colour = m_tab_hover_background_top_colour;
 #else
@@ -281,7 +288,8 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     m_panel_label_background_colour = LikePrimary(0.85);
     m_panel_label_background_gradient_colour = LikePrimary(0.97);
     m_panel_hover_label_background_gradient_colour = secondary_hsl.ToRGB();
-    m_panel_hover_label_background_colour = secondary_hsl.Lighter(0.2f).ToRGB();
+    m_panel_hover_label_background_colour = wxSystemSettings::GetAppearance().IsDark() ?
+        secondary_hsl.Darker(0.2f).ToRGB() : secondary_hsl.Lighter(0.2f).ToRGB();
     m_button_bar_hover_border_pen = secondary_hsl.ToRGB();
     m_button_bar_hover_background_brush = LikeSecondary(1.7);
     m_button_bar_active_background_brush = LikeSecondary(1.4);
