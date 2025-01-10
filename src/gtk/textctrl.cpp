@@ -1568,6 +1568,9 @@ void wxTextCtrl::GTKOnTextChanged()
     if( IsMultiLine() )
     {
         auto count = gtk_text_buffer_get_char_count( m_buffer );
+        // We are ignoring the change for the equality in order to have proper event generation
+        // otherwise the event generation is not consistent - we get text changed and then the maxlen
+        // events. This is not correct
         if( m_maxlen > 0 && count >= m_maxlen )
             return;
     }
