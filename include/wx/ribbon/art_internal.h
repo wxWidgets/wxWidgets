@@ -11,7 +11,7 @@
 #define _WX_RIBBON_ART_INTERNAL_H_
 
 #include "wx/defs.h"
-#include <wx/settings.h>
+#include "wx/settings.h"
 
 #if wxUSE_RIBBON
 
