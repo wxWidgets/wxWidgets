@@ -419,20 +419,20 @@ private:
 
 bool wxConsoleStderr::DoInit()
 {
+    if ( !::AttachConsole(ATTACH_PARENT_PROCESS) )
+        return false;
+
     HANDLE hStderr = ::GetStdHandle(STD_ERROR_HANDLE);
 
     if ( hStderr == INVALID_HANDLE_VALUE || !hStderr )
         return false;
 
+    // console attached, set m_hStderr now to ensure that we free it in the dtor
+    m_hStderr = hStderr;
+
+    // dynamically load the undocumented GetConsoleCommandHistory{,Length}()
     if ( !m_dllKernel32.Load(wxT("kernel32.dll")) )
         return false;
-
-    if ( !::AttachConsole(ATTACH_PARENT_PROCESS) )
-        return false;
-
-    // console attached, set m_hStderr now to ensure that we free it in the
-    // dtor
-    m_hStderr = hStderr;
 
     wxDL_INIT_FUNC_AW(m_pfn, GetConsoleCommandHistory, m_dllKernel32);
     if ( !m_pfnGetConsoleCommandHistory )
