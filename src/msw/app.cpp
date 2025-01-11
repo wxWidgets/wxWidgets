@@ -424,6 +424,13 @@ bool wxConsoleStderr::DoInit()
     // console attached, set m_hStderr now to ensure that we free it in the dtor
     m_hStderr = hStderr;
 
+    // also associate standard streams with this console: this may not work
+    // with all compilers, but it can't make things worse as by default none of
+    // these streams does anything useful in a GUI app anyhow
+    freopen("CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
+
     // dynamically load the undocumented GetConsoleCommandHistory{,Length}()
     if ( !m_dllKernel32.Load(wxT("kernel32.dll")) )
         return false;
@@ -484,14 +491,17 @@ bool wxConsoleStderr::Write(const wxString& text)
     wxASSERT_MSG( m_hStderr != INVALID_HANDLE_VALUE,
                     wxT("should only be called if Init() returned true") );
 
+    // Try directly console access first.
     DWORD ret;
-    if ( !::WriteConsole(m_hStderr, text.t_str(), text.length(), &ret, nullptr) )
-    {
-        wxLogLastError(wxT("WriteConsole"));
-        return false;
-    }
+    if ( ::WriteConsole(m_hStderr, text.t_str(), text.length(), &ret, nullptr) )
+        return true;
 
-    return true;
+    // This fails, for not very clear reasons, when running under a Cygwin
+    // shell, so try to use the standard output functions as a fallback.
+    if ( fwprintf(stderr, L"%s", text.t_str()) != -1 )
+        return true;
+
+    return false;
 }
 
 wxConsoleStderr s_consoleStderr;
