@@ -342,9 +342,7 @@ public:
     wxConsoleStderr()
     {
         m_hStderr = INVALID_HANDLE_VALUE;
-        m_historyLen =
-        m_dataLen =
-        m_dataLine = 0;
+        m_historyLen = 0;
 
         m_ok = -1;
     }
@@ -402,10 +400,6 @@ private:
     wxWCharBuffer m_history;    // command history on startup
     int m_historyLen;           // length command history buffer
 
-    wxCharBuffer m_data;        // data between empty line and cursor position
-    int m_dataLen;              // length data buffer
-    int m_dataLine;             // line offset
-
     typedef DWORD (WINAPI *GetConsoleCommandHistory_t)(LPTSTR sCommands,
                                                        DWORD nBufferLength,
                                                        LPCTSTR sExeName);
@@ -447,49 +441,6 @@ bool wxConsoleStderr::DoInit()
     m_historyLen = GetCommandHistory(m_history);
     if ( !m_history )
         return false;
-
-
-    // now find the first blank line above the current position
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-    if ( !::GetConsoleScreenBufferInfo(m_hStderr, &csbi) )
-    {
-        wxLogLastError(wxT("GetConsoleScreenBufferInfo"));
-        return false;
-    }
-
-    COORD pos;
-    pos.X = 0;
-    pos.Y = csbi.dwCursorPosition.Y + 1;
-
-    // we decide that a line is empty if first 4 characters are spaces
-    DWORD ret;
-    char buf[4];
-    do
-    {
-        pos.Y--;
-        if ( !::ReadConsoleOutputCharacterA(m_hStderr, buf, WXSIZEOF(buf),
-                                            pos, &ret) )
-        {
-            wxLogLastError(wxT("ReadConsoleOutputCharacterA"));
-            return false;
-        }
-    } while ( wxStrncmp("    ", buf, WXSIZEOF(buf)) != 0 );
-
-    // calculate line offset and length of data
-    m_dataLine = csbi.dwCursorPosition.Y - pos.Y;
-    m_dataLen = m_dataLine*csbi.dwMaximumWindowSize.X + csbi.dwCursorPosition.X;
-
-    if ( m_dataLen > 0 )
-    {
-        m_data.extend(m_dataLen);
-        if ( !::ReadConsoleOutputCharacterA(m_hStderr, m_data.data(), m_dataLen,
-                                            pos, &ret) )
-        {
-            wxLogLastError(wxT("ReadConsoleOutputCharacterA"));
-            return false;
-        }
-    }
 
     return true;
 }
@@ -533,39 +484,12 @@ bool wxConsoleStderr::Write(const wxString& text)
     wxASSERT_MSG( m_hStderr != INVALID_HANDLE_VALUE,
                     wxT("should only be called if Init() returned true") );
 
-    // get current position
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    if ( !::GetConsoleScreenBufferInfo(m_hStderr, &csbi) )
-    {
-        wxLogLastError(wxT("GetConsoleScreenBufferInfo"));
-        return false;
-    }
-
-    // and calculate new position (where is empty line)
-    csbi.dwCursorPosition.X = 0;
-    csbi.dwCursorPosition.Y -= m_dataLine;
-
-    if ( !::SetConsoleCursorPosition(m_hStderr, csbi.dwCursorPosition) )
-    {
-        wxLogLastError(wxT("SetConsoleCursorPosition"));
-        return false;
-    }
-
     DWORD ret;
-    if ( !::FillConsoleOutputCharacter(m_hStderr, wxT(' '), m_dataLen,
-                                       csbi.dwCursorPosition, &ret) )
-    {
-        wxLogLastError(wxT("FillConsoleOutputCharacter"));
-        return false;
-    }
-
     if ( !::WriteConsole(m_hStderr, text.t_str(), text.length(), &ret, nullptr) )
     {
         wxLogLastError(wxT("WriteConsole"));
         return false;
     }
-
-    WriteConsoleA(m_hStderr, m_data, m_dataLen, &ret, 0);
 
     return true;
 }
