@@ -325,15 +325,8 @@ namespace
 /*
     Helper class to manipulate console from a GUI app.
 
-    Notice that console output is available in the GUI app only if:
-    - AttachConsole() returns TRUE
-    - we have a valid STD_ERROR_HANDLE
-    - command history hasn't been changed since our startup
-
-    To check if all these conditions are verified, you need to simple call
-    IsOkToUse(). It will check the first two conditions above the first time it
-    is called (and if this fails, the subsequent calls will return immediately)
-    and also recheck the last one every time it is called.
+    It checks if can successfully attach to the console when either IsOkToUse()
+    or Write() is called for the first time.
  */
 class wxConsoleStderr
 {
@@ -342,7 +335,6 @@ public:
     wxConsoleStderr()
     {
         m_hStderr = INVALID_HANDLE_VALUE;
-        m_historyLen = 0;
 
         m_ok = -1;
     }
@@ -366,13 +358,9 @@ public:
         {
             wxConsoleStderr * const self = const_cast<wxConsoleStderr *>(this);
             self->m_ok = self->DoInit();
-
-            // no need to call IsHistoryUnchanged() as we just initialized
-            // m_history anyhow
-            return m_ok == 1;
         }
 
-        return m_ok && IsHistoryUnchanged();
+        return m_ok == 1;
     }
 
 
@@ -383,30 +371,10 @@ private:
     // called by Init() once only to do the real initialization
     bool DoInit();
 
-    // retrieve the command line history into the provided buffer and return
-    // its length
-    int GetCommandHistory(wxWCharBuffer& buf) const;
-
-    // check if the console history has changed
-    bool IsHistoryUnchanged() const;
-
     int m_ok;                   // initially -1, set to true or false by Init()
-
-    wxDynamicLibrary m_dllKernel32;
 
     HANDLE m_hStderr;           // console handle, if it's valid we must call
                                 // FreeConsole() (even if m_ok != 1)
-
-    wxWCharBuffer m_history;    // command history on startup
-    int m_historyLen;           // length command history buffer
-
-    typedef DWORD (WINAPI *GetConsoleCommandHistory_t)(LPTSTR sCommands,
-                                                       DWORD nBufferLength,
-                                                       LPCTSTR sExeName);
-    typedef DWORD (WINAPI *GetConsoleCommandHistoryLength_t)(LPCTSTR sExeName);
-
-    GetConsoleCommandHistory_t m_pfnGetConsoleCommandHistory;
-    GetConsoleCommandHistoryLength_t m_pfnGetConsoleCommandHistoryLength;
 
     wxDECLARE_NO_COPY_CLASS(wxConsoleStderr);
 };
@@ -431,59 +399,7 @@ bool wxConsoleStderr::DoInit()
     freopen("CONOUT$", "w", stdout);
     freopen("CONOUT$", "w", stderr);
 
-    // dynamically load the undocumented GetConsoleCommandHistory{,Length}()
-    if ( !m_dllKernel32.Load(wxT("kernel32.dll")) )
-        return false;
-
-    wxDL_INIT_FUNC_AW(m_pfn, GetConsoleCommandHistory, m_dllKernel32);
-    if ( !m_pfnGetConsoleCommandHistory )
-        return false;
-
-    wxDL_INIT_FUNC_AW(m_pfn, GetConsoleCommandHistoryLength, m_dllKernel32);
-    if ( !m_pfnGetConsoleCommandHistoryLength )
-        return false;
-
-    // remember the current command history to be able to compare with it later
-    // in IsHistoryUnchanged()
-    m_historyLen = GetCommandHistory(m_history);
-    if ( !m_history )
-        return false;
-
     return true;
-}
-
-int wxConsoleStderr::GetCommandHistory(wxWCharBuffer& buf) const
-{
-    // these functions are internal and may only be called by cmd.exe
-    static const wxChar *CMD_EXE = wxT("cmd.exe");
-
-    const int len = m_pfnGetConsoleCommandHistoryLength(CMD_EXE);
-    if ( len )
-    {
-        buf.extend(len);
-
-        int len2 = m_pfnGetConsoleCommandHistory(buf.data(), len, CMD_EXE);
-
-        if ( len2 != len )
-        {
-            wxFAIL_MSG( wxT("failed getting history?") );
-        }
-    }
-
-    return len;
-}
-
-bool wxConsoleStderr::IsHistoryUnchanged() const
-{
-    wxASSERT_MSG( m_ok == 1, wxT("shouldn't be called if not initialized") );
-
-    // get (possibly changed) command history
-    wxWCharBuffer history;
-    const int historyLen = GetCommandHistory(history);
-
-    // and compare it with the original one
-    return historyLen == m_historyLen && history &&
-                memcmp(m_history, history, historyLen) == 0;
 }
 
 bool wxConsoleStderr::Write(const wxString& text)
