@@ -558,14 +558,13 @@ bool wxAuiMDIChildFrame::Destroy()
         pParentFrame->SetChildMenuBar(nullptr);
     }
 
-    size_t page_count = pClientWindow->GetPageCount();
-    for (size_t pos = 0; pos < page_count; pos++)
-    {
-        if (pClientWindow->GetPage(pos) == this)
-            return pClientWindow->DeletePage(pos);
-    }
+    pClientWindow->RemovePage(pClientWindow->FindPage(this));
 
-    return false;
+    // This is a child window, so we need to delete it immediately instead of
+    // postponing it until idle time as we do with real TLWs.
+    delete this;
+
+    return true;
 }
 
 #if wxUSE_MENUS
