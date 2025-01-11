@@ -1099,6 +1099,7 @@ int wxIsWindowsServer()
 static const int WINDOWS_SERVER2016_BUILD = 14393;
 static const int WINDOWS_SERVER2019_BUILD = 17763;
 static const int WINDOWS_SERVER2022_BUILD = 20348;
+static const int WINDOWS_SERVER2025_BUILD = 26100;
 
 // Windows 11 uses the same version as Windows 10 but its build numbers start
 // from 22000, which provides a way to test for it.
@@ -1180,6 +1181,9 @@ wxString wxGetOsDescription()
                                 break;
                             case WINDOWS_SERVER2022_BUILD:
                                 str = "Windows Server 2022";
+                                break;
+                            case WINDOWS_SERVER2025_BUILD:
+                                str = "Windows Server 2025";
                                 break;
                         }
                     }
