@@ -669,7 +669,7 @@ typedef short int WXTYPE;
 #endif
 
 /* Specific macros for -Wcast-function-type warning new in gcc 8. */
-#if wxCHECK_GCC_VERSION(8, 0)
+#if wxCHECK_GCC_VERSION(8, 0) || defined(__clang__)
     #define wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE() \
         wxGCC_WARNING_SUPPRESS(cast-function-type)
     #define wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE() \
