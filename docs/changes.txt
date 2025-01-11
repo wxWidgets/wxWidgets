@@ -279,6 +279,7 @@ wxGTK:
 - Fix insufficient wxStaticBox borders size (#25045).
 - Fix unwanted "All pages" selection in the printing dialog (#24868).
 - Fix size of wxDataViewCustomRenderer which was ignored in some cases (#24227).
+- Don't consume Ctrl-C when using SDL-based wxSound (Kyriet, #25067).
 
 wxMSW:
 
