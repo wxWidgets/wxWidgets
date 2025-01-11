@@ -576,6 +576,7 @@ au_insert_text_callback(GtkTextBuffer *buffer,
             // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
             // the handler that does not connected after
             gtk_text_buffer_delete( buffer, &offset, end );
+            win->IgnoreNextTextUpdate();
             wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
             event.SetEventObject( win );
             event.SetString( win->GetValue() );
@@ -1564,17 +1565,6 @@ void wxTextCtrl::GTKOnTextChanged()
 {
     if ( IgnoreTextUpdate() )
         return;
-
-    if( IsMultiLine() )
-    {
-        auto count = gtk_text_buffer_get_char_count( m_buffer );
-        // We are ignoring the change for the equality in order to have proper event generation
-        // otherwise the event generation is not consistent - we get text changed and then the maxlen
-        // events. This is not correct
-        if( m_maxlen > 0 && count >= m_maxlen )
-            return;
-    }
-
     if ( MarkDirtyOnChange() )
         MarkDirty();
 
