@@ -320,12 +320,6 @@ MyFrame::MyFrame()
     macro_menu->Append(INTERNAT_MACRO_8, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 1));
     macro_menu->Append(INTERNAT_MACRO_9, wxGETTEXT_IN_CONTEXT_PLURAL("context_2", "sing", "plur", 2));
 
-    // Also wide strings can be used:
-    _(L"item");
-    wxGETTEXT_IN_CONTEXT(L"context", L"item");
-    wxPLURAL(L"sing", L"plur", 3);
-    wxGETTEXT_IN_CONTEXT_PLURAL(L"context", L"sing", L"plur", 3);
-
     wxMenu *help_menu = new wxMenu;
 #ifdef USE_COREUTILS_MO
     help_menu->Append(wxID_HELP, _("Show coreutils &help"));
