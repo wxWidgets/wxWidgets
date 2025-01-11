@@ -167,6 +167,10 @@ void wxMessageOutputDebug::Output(const wxString& str)
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
     ::OutputDebugString(out.t_str());
+
+    // If we have a console under Windows, send this there too (if not, this
+    // won't do anything, so it's safe to call it unconditionally).
+    wxMessageOutputStderr::Output(str);
 #elif defined(__ANDROID__)
     const wxCharBuffer& buf = PrepareForOutput(str);
 
