@@ -333,8 +333,18 @@ inline const wxString& wxGetTranslation(const char *str1,
                             wxString(context, conv));
 }
 
-    #define wxTRANS_INPUT_STR(s) wxASCII_STR(s)
-#else
+// We can't construct wxString implicitly in this case, so use a helper.
+inline wxString wxTRANS_INPUT_STR(const char* s)
+{
+    return wxString::FromAscii(s);
+}
+
+inline wxString wxTRANS_INPUT_STR(const wchar_t* s)
+{
+    return wxString(s);
+}
+#else // !wxNO_IMPLICIT_WXSTRING_ENCODING
+    // We can rely on implicit conversion, so don't bother with the helper.
     #define wxTRANS_INPUT_STR(s) s
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 

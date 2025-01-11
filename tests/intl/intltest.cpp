@@ -796,14 +796,4 @@ TEST_CASE("wxUILocale::ShowSystem", "[.]")
     WARN("Preferred UI languages:\n" << preferredLangsStr);
 }
 
-// Not an actual test, but a way to ensure that wide string versions
-// of translation macros are available and successfully compile.
-static void EnsureWideStringVersionsOfMacrosExist() {
-    // Also wide strings can be used:
-    _(L"item");
-    wxGETTEXT_IN_CONTEXT(L"context", L"item");
-    wxPLURAL(L"sing", L"plur", 3);
-    wxGETTEXT_IN_CONTEXT_PLURAL(L"context", L"sing", L"plur", 3);
-}
-
 #endif // wxUSE_INTL
