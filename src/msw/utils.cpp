@@ -616,12 +616,12 @@ BOOL CALLBACK wxEnumFindByPidProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc);
+int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc, int flags);
 
 int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 {
     if (flags & wxKILL_CHILDREN)
-        wxKillAllChildren(pid, sig, krc);
+        wxKillAllChildren(pid, sig, krc, flags);
 
     // get the process handle to operate on
     DWORD dwAccess = PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
@@ -801,7 +801,7 @@ bool wxMSWActivatePID(long pid)
 }
 
 // By John Skiff
-int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc)
+int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc, int flags)
 {
     if (krc)
         *krc = wxKILL_OK;
@@ -831,7 +831,7 @@ int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc)
 
     do {
         if (pe.th32ParentProcessID == (DWORD) pid) {
-            if (wxKill(pe.th32ProcessID, sig, krc))
+            if (wxKill(pe.th32ProcessID, sig, krc, flags))
                 return -1;
         }
     } while (::Process32Next (hProcessSnap, &pe));
