@@ -601,12 +601,12 @@ wxGtkStyleContext& wxGtkStyleContext::AddWindow(const char* className2)
     return Add(GTK_TYPE_WINDOW, "window", "background", className2, nullptr);
 }
 
-void wxGtkStyleContext::Bg(wxColour& color, int state) const
+static void bg(GtkStyleContext* sc, wxColour& color, int state)
 {
     GdkRGBA* rgba;
     cairo_pattern_t* pattern = nullptr;
-    gtk_style_context_set_state(m_context, GtkStateFlags(state));
-    gtk_style_context_get(m_context, GtkStateFlags(state),
+    gtk_style_context_set_state(sc, GtkStateFlags(state));
+    gtk_style_context_get(sc, GtkStateFlags(state),
         "background-color", &rgba, "background-image", &pattern, nullptr);
     color = wxColour(*rgba);
     gdk_rgba_free(rgba);
@@ -679,12 +679,26 @@ void wxGtkStyleContext::Bg(wxColour& color, int state) const
         }
         cairo_pattern_destroy(pattern);
     }
+}
 
-    if (color.Alpha() == 0)
+void wxGtkStyleContext::Bg(wxColour& color, int state) const
+{
+    for (GtkStyleContext* sc = m_context; sc; )
     {
-        // Try TLW as last resort, but not if we're already doing it
-        if (gtk_widget_path_length(m_path) > 1)
-            wxGtkStyleContext().AddWindow().Bg(color, state);
+        bg(sc, color, state);
+        if (color.Alpha())
+            break;
+#if GTK_CHECK_VERSION(3,4,0)
+        if (gtk_check_version(3,4,0) == nullptr)
+            sc = gtk_style_context_get_parent(sc);
+        else
+#endif
+        {
+            // Try TLW as last resort, but not if we're already doing it
+            if (gtk_widget_path_length(m_path) > 1)
+                wxGtkStyleContext().AddWindow().Bg(color, state);
+            break;
+        }
     }
 }
 
