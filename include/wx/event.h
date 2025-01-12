@@ -137,9 +137,11 @@ inline wxEventFunction wxEventFunctionCast(void (wxEvtHandler::*func)(T&))
     // code using event table macros.
 
     wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+    wxCLANG_WARNING_SUPPRESS(cast-function-type)
 
     return reinterpret_cast<wxEventFunction>(func);
 
+    wxCLANG_WARNING_RESTORE(cast-function-type)
     wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
 }
 
