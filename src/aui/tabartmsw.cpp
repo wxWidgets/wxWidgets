@@ -133,7 +133,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     wxCoord tabHeight = tabSize.y;
     wxCoord tabWidth = tabSize.x;
     wxCoord tabX = in_rect.x;
-    wxCoord tabY = 0;
+    wxCoord tabY = in_rect.y;
 
     if (!page.active)
     {
