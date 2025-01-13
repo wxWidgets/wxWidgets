@@ -405,25 +405,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     if (tab_x + clip_width > in_rect.x + in_rect.width)
         clip_width = (in_rect.x + in_rect.width) - tab_x;
 
-/*
-    wxPoint clip_points[6];
-    clip_points[0] = wxPoint(tab_x,              tab_y+tab_height-3);
-    clip_points[1] = wxPoint(tab_x,              tab_y+2);
-    clip_points[2] = wxPoint(tab_x+2,            tab_y);
-    clip_points[3] = wxPoint(tab_x+clip_width-1, tab_y);
-    clip_points[4] = wxPoint(tab_x+clip_width+1, tab_y+2);
-    clip_points[5] = wxPoint(tab_x+clip_width+1, tab_y+tab_height-3);
-
-    // FIXME: these ports don't provide wxRegion ctor from array of points
-#if !defined(__WXDFB__)
-    // set the clipping region for the tab --
-    wxRegion clipping_region(WXSIZEOF(clip_points), clip_points);
-    dc.SetClippingRegion(clipping_region);
-#endif // !wxDFB && !wxCocoa
-*/
-    // since the above code above doesn't play well with WXDFB or WXCOCOA,
-    // we'll just use a rectangle for the clipping region for now --
-    dc.SetClippingRegion(tab_x, tab_y, clip_width+1, tab_height-3);
+    wxDCClipper clip(dc, tab_x, tab_y, clip_width+1, tab_height-3);
 
 
     wxPoint border_points[6];
@@ -650,8 +632,6 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
 #endif // !__WXOSX__
 
     *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
-
-    dc.DestroyClippingRegion();
 }
 
 int wxAuiGenericTabArt::GetIndentSize()
@@ -1137,7 +1117,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     points[5].y = tab_y + tab_height - 1;
     points[6] = points[0];
 
-    dc.SetClippingRegion(in_rect);
+    wxDCClipper clip(dc, in_rect);
 
     dc.DrawPolygon(WXSIZEOF(points) - 1, points);
 
@@ -1205,8 +1185,6 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
 #endif // !__WXOSX__
 
     *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
-
-    dc.DestroyClippingRegion();
 }
 
 int wxAuiSimpleTabArt::GetIndentSize()

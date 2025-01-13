@@ -648,9 +648,9 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
 
     wxString draw_text = wxAuiChopText(dc, text, clip_rect.width);
 
-    dc.SetClippingRegion(clip_rect);
+    wxDCClipper clipper(dc, clip_rect);
+
     dc.DrawText(draw_text, rect.x+window->FromDIP(3) + caption_offset, rect.y+(rect.height/2)-(h/2)-1);
-    dc.DestroyClippingRegion();
 }
 
 #if WXWIN_COMPATIBILITY_3_0

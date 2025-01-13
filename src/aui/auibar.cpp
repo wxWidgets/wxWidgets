@@ -264,13 +264,12 @@ void wxAuiGenericToolBarArt::DrawLabel(
     // set the clipping region
     wxRect clipRect = rect;
     clipRect.width -= 1;
-    dc.SetClippingRegion(clipRect);
+    wxDCClipper clipper(dc, clipRect);
 
     int textX, textY;
     textX = rect.x + 1;
     textY = rect.y + (rect.height-textHeight)/2;
     dc.DrawText(item.GetLabel(), textX, textY);
-    dc.DestroyClippingRegion();
 }
 
 
