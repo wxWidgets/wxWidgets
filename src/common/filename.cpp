@@ -2600,9 +2600,9 @@ bool wxFileName::SetPermissions(int permissions)
     if ( m_dontFollowLinks &&
             Exists(GetFullPath(), wxFILE_EXISTS_SYMLINK|wxFILE_EXISTS_NO_FOLLOW) )
     {
-        // Looks like changing permissions for a symlinc is only supported
+        // Looks like changing permissions for a symlink is only supported
         // on BSD where lchmod is present and correctly implemented.
-        // http://lists.gnu.org/archive/html/bug-coreutils/2009-09/msg00268.html
+        // https://lists.gnu.org/archive/html/bug-coreutils/2009-09/msg00268.html
         return false;
     }
 
