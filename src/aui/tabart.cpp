@@ -1187,17 +1187,16 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     wxColor font_color = wxAuiHasSufficientContrast(back_color, sys_color) ? sys_color
         : wxAuiGetBetterContrastColour(back_color, *wxWHITE, *wxBLACK);
     dc.SetTextForeground(font_color);
-    dc.DrawText(draw_text,
-                 text_offset,
-                 (tab_y + tab_height)/2 - (texty/2) + 1);
+
+    const auto textY = tab_y + (tab_height - texty) / 2 + 1;
+    dc.DrawText(draw_text, text_offset, textY);
 
 
     // draw focus rectangle except under macOS where it looks out of place
 #ifndef __WXOSX__
     if (page.active && (wnd->FindFocus() == wnd))
     {
-        wxRect focusRect(text_offset, ((tab_y + tab_height)/2 - (texty/2) + 1),
-            selected_textx, selected_texty);
+        wxRect focusRect(text_offset, textY, selected_textx, selected_texty);
 
         focusRect.Inflate(2, 2);
 
