@@ -92,9 +92,10 @@ public:
     // Render the markup string into the given DC in the specified rectangle.
     //
     // Notice that while the function uses the provided rectangle for alignment
-    // (it centers the text in it), no clipping is done by it so use Measure()
-    // and set the clipping region before rendering if necessary.
-    void Render(wxDC& dc, const wxRect& rect, int flags);
+    // (by default it centers the text in it), no clipping is done by it so use
+    // Measure() and set the clipping region before rendering if necessary.
+    void Render(wxDC& dc, const wxRect& rect, int flags,
+                int alignment = wxALIGN_CENTER);
 
 protected:
     virtual wxString GetMarkupForMeasuring() const override;
