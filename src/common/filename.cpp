@@ -27,8 +27,8 @@
                 its current mount point, i.e. you can change a volume's mount
                 point from D: to E:, or even remove it, and still be able to
                 access it through its unique volume name. More on the subject can
-                be found in MSDN's article "Naming a Volume" that is currently at
-                http://msdn.microsoft.com/en-us/library/aa365248(VS.85).aspx.
+                be found in Microsoft's "Naming a Volume" documentation at
+                https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-volume
 
 
    wxPATH_MAC:  Mac OS 8/9 only, not used any longer, absolute file
