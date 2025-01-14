@@ -869,9 +869,9 @@ public:
         one of the following forms:
 
         - Just a single letter, for the usual drive letter volumes, e.g. @c C.
-        - A share name preceded by a double backslash, e.g. @c \\\\share.
+        - A share name preceded by a double backslash, e.g. `\\share`.
         - A GUID volume preceded by a double backslash and a question mark,
-          e.g. @c \\\\?\\Volume{12345678-9abc-def0-1234-56789abcdef0}.
+          e.g. `\\?\Volume{12345678-9abc-def0-1234-56789abcdef0}`.
     */
     wxString GetVolume() const;
 
