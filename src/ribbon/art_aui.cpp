@@ -252,14 +252,9 @@ void wxRibbonAUIArtProvider::SetColourScheme(
 #ifdef __WXOSX__
     m_tab_label_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
 #else
-    if (wxSystemSettings::GetAppearance().IsDark())
-    {
-        m_tab_label_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
-    }
-    else
-    {
-        m_tab_label_colour = LikePrimary(0.1);
-    }
+    m_tab_label_colour = wxSystemSettings::SelectLightDark()
+        ? LikePrimary(0.1)
+        : wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
 #endif
     m_tab_active_label_colour = m_tab_label_colour;
     m_tab_hover_label_colour = m_tab_label_colour;
