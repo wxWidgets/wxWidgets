@@ -1127,12 +1127,20 @@ TEST_CASE("StringBeforeAndAfter", "[wxString]")
     CHECK( s.BeforeFirst('!', &r) == s );
     CHECK( r == "" );
 
+    const wxString phrase("Two words apart");
+    r = phrase;
+    CHECK( r.BeforeFirst(' ', &r) == "Two" );
+    CHECK( r == "words apart" );
 
     CHECK( s.BeforeLast('=', &r) == FIRST_PART wxT("=") MIDDLE_PART );
     CHECK( r == LAST_PART );
 
     CHECK( s.BeforeLast('!', &r) == "" );
     CHECK( r == s );
+
+    r = phrase;
+    CHECK( r.BeforeLast(' ', &r) == "Two words" );
+    CHECK( r == "apart" );
 
 
     CHECK( s.AfterFirst('=') == MIDDLE_PART wxT("=") LAST_PART );
