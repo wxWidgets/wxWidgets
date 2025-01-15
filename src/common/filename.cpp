@@ -134,8 +134,10 @@ namespace
 // private constants
 // ----------------------------------------------------------------------------
 
-// length of \\?\Volume{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\ string
-static const size_t wxMSWUniqueVolumePrefixLength = 49;
+// Prefix of MSW extended-length paths.
+static constexpr char wxMSW_EXTENDED_PATH_PREFIX[] = R"(\\?\)";
+static constexpr size_t
+    wxMSW_EXTENDED_PATH_PREFIX_LEN = WXSIZEOF(wxMSW_EXTENDED_PATH_PREFIX) - 1;
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -298,14 +300,6 @@ static bool IsUNCPath(const wxString& path)
                     IsDOSPathSep(path[0u]) &&
                         IsDOSPathSep(path[1u]) &&
                             !IsDOSPathSep(path[2u]);
-}
-
-// return true if the string looks like a GUID volume path ("\\?\Volume{guid}\")
-static bool IsVolumeGUIDPath(const wxString& path)
-{
-    return path.length() >= wxMSWUniqueVolumePrefixLength &&
-             path.StartsWith(wxS("\\\\?\\Volume{")) &&
-              path[wxMSWUniqueVolumePrefixLength - 1] == wxFILE_SEP_PATH_DOS;
 }
 
 // Under Unix-ish systems (basically everything except Windows but we can't
@@ -619,22 +613,44 @@ namespace
 
 void RemoveTrailingSeparatorsFromPath(wxString& strPath)
 {
-    // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
-    // so remove all trailing backslashes from the path - but don't do this for
-    // the paths "d:\" (which are different from "d:"), for just "\" or for
-    // windows unique volume names ("\\?\Volume{GUID}\")
-    while ( wxEndsWithPathSeparator( strPath ) )
-    {
-        size_t len = strPath.length();
-        if ( len == 1 || (len == 3 && strPath[len - 2] == wxT(':')) ||
-                (len == wxMSWUniqueVolumePrefixLength &&
-                 wxFileName::IsMSWUniqueVolumeNamePath(strPath)))
-        {
-            break;
-        }
+    // We should never have empty paths here, but skip them if we ever do.
+    if ( strPath.empty() )
+        return;
 
-        strPath.Truncate(len - 1);
+    // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
+    // so remove all trailing backslashes from the path - but don't do this if
+    // it is the last slash in the path to avoid turning "d:\" into "d:" (which
+    // is a different path), turning "\" into nothing or making extended length
+    // paths invalid.
+    const auto lastNonSeparator = strPath.find_last_not_of(R"(\/)");
+
+    const auto firstTrailingSeparator =
+        lastNonSeparator == wxString::npos ? 0 : lastNonSeparator + 1;
+
+    if ( firstTrailingSeparator == strPath.length() )
+    {
+        // The path doesn't end with a separator, nothing to do.
+        return;
     }
+
+    // Check if there any separators would remain if we removed all trailing
+    // ones, ignoring those that are part of fixed wxMSW_EXTENDED_PATH_PREFIX
+    // or UNC path prefix.
+    const auto lastButOneSeparator =
+        strPath.find_last_of(R"(\/)", lastNonSeparator);
+    if ( lastButOneSeparator == wxString::npos ||
+            (lastButOneSeparator == wxMSW_EXTENDED_PATH_PREFIX_LEN - 1 &&
+             strPath.StartsWith(wxMSW_EXTENDED_PATH_PREFIX)) ||
+                (lastButOneSeparator == 1 && IsUNCPath(strPath)) )
+    {
+        // The path doesn't contain any other separators, so don't remove all
+        // of them.
+        strPath.erase(firstTrailingSeparator + 1);
+        return;
+    }
+
+    // Remove all trailing separators.
+    strPath.erase(firstTrailingSeparator);
 }
 
 #endif // __WINDOWS_
@@ -1997,11 +2013,26 @@ bool wxFileName::IsPathSeparator(wxChar ch, wxPathFormat format)
 
 /* static */
 bool
+wxFileName::IsMSWExtendedLengthPath(const wxString& path, wxPathFormat format)
+{
+    return GetFormat(format) == wxPATH_DOS &&
+            path.StartsWith(wxMSW_EXTENDED_PATH_PREFIX);
+}
+
+/* static */
+bool
 wxFileName::IsMSWUniqueVolumeNamePath(const wxString& path, wxPathFormat format)
 {
+    // length of \\?\Volume{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\ string
+    constexpr size_t wxMSWUniqueVolumePrefixLength = 49;
+
     // return true if the format used is the DOS/Windows one and the string begins
     // with a Windows unique volume name ("\\?\Volume{guid}\")
-    return GetFormat(format) == wxPATH_DOS && IsVolumeGUIDPath(path);
+    return GetFormat(format) == wxPATH_DOS &&
+            path.length() >= wxMSWUniqueVolumePrefixLength &&
+             path.StartsWith(wxS("\\\\?\\Volume{")) &&
+              path[wxMSWUniqueVolumePrefixLength - 1] == wxFILE_SEP_PATH_DOS;
+
 }
 
 // ----------------------------------------------------------------------------
@@ -2367,18 +2398,33 @@ wxFileName::SplitVolume(const wxString& fullpath,
     switch ( format )
     {
         case wxPATH_DOS:
-            // Deal with MSW UNC and volume GUID paths complications first.
-            if ( IsVolumeGUIDPath(fullpath) )
+            // Deal with MSW complications first: first, the special case of
+            // extended-length paths.
+            if ( fullpath.StartsWith(wxMSW_EXTENDED_PATH_PREFIX) )
             {
+                // Find the next path separator after this prefix.
+                //
+                // Note that such paths contain only backslashes, never slashes.
+                const auto posNextSep =
+                    fullpath.find(wxFILE_SEP_PATH_DOS,
+                                  wxMSW_EXTENDED_PATH_PREFIX_LEN);
+
+                // Note that this works even if posNextSep is npos.
                 if ( pstrVolume )
-                    *pstrVolume = fullpath.Left(wxMSWUniqueVolumePrefixLength - 1);
+                    *pstrVolume = fullpath(0, posNextSep);
 
-                // Note: take the first slash here.
-                pathOnly = fullpath.Mid(wxMSWUniqueVolumePrefixLength - 1);
-
+                // Extended-length paths must have a backslash after the volume
+                // but if they ever don't, still pretend that there is one at
+                // the end because this is not going to be a normal path
+                // anyhow, so this seems like the least useless thing we can do.
+                if ( posNextSep != wxString::npos )
+                    pathOnly = fullpath.substr(posNextSep);
+                else
+                    pathOnly = wxFILE_SEP_PATH_DOS;
                 break;
             }
 
+            // Next check for UNC \\share\path syntax.
             if ( IsUNCPath(fullpath) )
             {
                 // Note that IsUNCPath() checks that 3rd character is not a

@@ -82,6 +82,7 @@ static struct TestFileNameInfo
     { "c:foo.bar", "c", "", "foo", "bar", false, wxPATH_DOS },
     { "c:\\foo.bar", "c", "\\", "foo", "bar", true, wxPATH_DOS },
     { "c:\\Windows\\command.com", "c", "\\Windows", "command", "com", true, wxPATH_DOS },
+    { R"(\\?\c:\Windows\System32\cmd.exe)", R"(\\?\c:)", R"(\Windows\System32)", R"(cmd)", R"(exe)", true, wxPATH_DOS },
     { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
       "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\", "", "", true, wxPATH_DOS },
     { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe",
