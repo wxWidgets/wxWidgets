@@ -1052,3 +1052,36 @@ TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
 }
 
 #endif // __LINUX__
+
+// This test is disabled by default as it requires the environment variable
+// below to be defined to point to the file to test.
+TEST_CASE("wxFileName::Test", "[.]")
+{
+    wxString file;
+    REQUIRE( wxGetEnv("WX_TEST_FILENAME", &file) );
+
+    wxFileName fn{file};
+    fn.MakeAbsolute();
+
+    WARN
+    (
+        "Absolute path:\t\"" << fn.GetFullPath() << "\"\n"
+        "Volume:\t\t\"" << fn.GetVolume() << "\"\n"
+        "Name:\t\t\t\"" << fn.GetName() << "\"\n"
+        "Extension:\t\t\"" << fn.GetExt() << "\"\n"
+        "Path:\t\t\t[" << wxJoin(fn.GetDirs(), ' ', '\\') << "]\n"
+    );
+
+    if ( fn.FileExists() )
+    {
+        WARN("File of size:\t" << fn.GetHumanReadableSize() << "\n");
+    }
+    else if ( fn.DirExists() )
+    {
+        WARN("Is a directory");
+    }
+    else
+    {
+        FAIL("Does not exist");
+    }
+}
