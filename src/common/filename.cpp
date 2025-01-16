@@ -2230,7 +2230,7 @@ wxString wxFileName::GetShortPath() const
 {
     wxString path(GetFullPath());
 
-#if defined(__WINDOWS__) && defined(__WIN32__)
+#if defined(__WINDOWS__)
     DWORD sz = ::GetShortPathName(path.t_str(), nullptr, 0);
     if ( sz != 0 )
     {
