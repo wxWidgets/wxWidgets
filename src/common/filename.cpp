@@ -94,7 +94,7 @@
     #include "wx/vector.h"
 #endif
 
-#if defined(__WIN32__) && defined(__MINGW32__)
+#if defined(__WINDOWS__) && defined(__MINGW32__)
     #include "wx/msw/gccpriv.h"
 #endif
 
@@ -145,7 +145,7 @@ static constexpr size_t
 
 // small helper class which opens and closes the file - we use it just to get
 // a file handle for the given file name to pass it to some Win32 API function
-#if defined(__WIN32__)
+#if defined(__WINDOWS__)
 
 class wxFileHandle
 {
@@ -211,13 +211,13 @@ private:
     HANDLE m_hFile;
 };
 
-#endif // __WIN32__
+#endif // __WINDOWS__
 
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
 
-#if wxUSE_DATETIME && defined(__WIN32__)
+#if wxUSE_DATETIME && defined(__WINDOWS__)
 
 // Convert between wxDateTime and FILETIME which is a 64-bit value representing
 // the number of 100-nanosecond intervals since January 1, 1601 UTC.
@@ -245,7 +245,7 @@ static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
     ft->dwLowDateTime = t.GetLo();
 }
 
-#endif // wxUSE_DATETIME && __WIN32__
+#endif // wxUSE_DATETIME && __WINDOWS__
 
 // return a string with the volume par
 static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
@@ -303,7 +303,7 @@ static bool IsUNCPath(const wxString& path)
 }
 
 // Under Unix-ish systems (basically everything except Windows but we can't
-// just test for non-__WIN32__ because Cygwin defines it, yet we want to use
+// just test for non-__WINDOWS__ because Cygwin defines it, yet we want to use
 // lstat() under it, so test for all the rest explicitly) we may work either
 // with the file itself or its target if it's a symbolic link and we should
 // dereference it, as determined by wxFileName::ShouldFollowLink() and the
@@ -1554,7 +1554,7 @@ bool wxFileName::Normalize(int flags,
         m_dirs.Add(dir);
     }
 
-#if defined(__WIN32__) && wxUSE_OLE
+#if defined(__WINDOWS__) && wxUSE_OLE
     if ( (flags & wxPATH_NORM_SHORTCUT) )
     {
         wxString filename;
@@ -1566,7 +1566,7 @@ bool wxFileName::Normalize(int flags,
     }
 #endif
 
-#if defined(__WIN32__)
+#if defined(__WINDOWS__)
     if ( (flags & wxPATH_NORM_LONG) && (format == wxPATH_DOS) )
     {
         Assign(GetLongPath());
@@ -1647,7 +1647,7 @@ bool wxFileName::ReplaceHomeDir(wxPathFormat format)
 // get the shortcut target
 // ----------------------------------------------------------------------------
 
-#if defined(__WIN32__) && wxUSE_OLE
+#if defined(__WINDOWS__) && wxUSE_OLE
 
 bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                    wxString& targetFilename,
@@ -1702,7 +1702,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
     return success;
 }
 
-#endif // __WIN32__
+#endif // __WINDOWS__
 
 // ----------------------------------------------------------------------------
 // Resolve links
@@ -2256,7 +2256,7 @@ wxString wxFileName::GetLongPath() const
     wxString pathOut,
              path = GetFullPath();
 
-#if defined(__WIN32__)
+#if defined(__WINDOWS__)
 
     DWORD dwSize = ::GetLongPathName(path.t_str(), nullptr, 0);
     if ( dwSize > 0 )
@@ -2761,7 +2761,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtMod,
                           const wxDateTime *dtCreate) const
 {
-#if defined(__WIN32__)
+#if defined(__WINDOWS__)
     FILETIME ftAccess, ftCreate, ftWrite;
 
     if ( dtCreate )
@@ -2848,7 +2848,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtMod,
                           wxDateTime *dtCreate) const
 {
-#if defined(__WIN32__)
+#if defined(__WINDOWS__)
     // we must use different methods for the files and directories under
     // Windows as CreateFile(GENERIC_READ) doesn't work for the directories and
     // CreateFile(FILE_FLAG_BACKUP_SEMANTICS) works -- but only under NT and
@@ -2934,7 +2934,7 @@ wxULongLong wxFileName::GetSize(const wxString &filename)
     if (!wxFileExists(filename))
         return wxInvalidSize;
 
-#if defined(__WIN32__)
+#if defined(__WINDOWS__)
     wxFileHandle f(filename, wxFileHandle::ReadAttr);
     if (!f.IsOk())
         return wxInvalidSize;
@@ -2945,7 +2945,7 @@ wxULongLong wxFileName::GetSize(const wxString &filename)
         return wxInvalidSize;
 
     return wxULongLong(lpFileSizeHigh, ret);
-#else // ! __WIN32__
+#else // ! __WINDOWS__
     wxStructStat st;
     if (wxStat( filename, &st) != 0)
         return wxInvalidSize;
