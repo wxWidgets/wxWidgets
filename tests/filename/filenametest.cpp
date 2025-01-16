@@ -1030,6 +1030,49 @@ TEST_CASE("wxFileName::Shortcuts", "[filename]")
    CHECK( fnLinkRel.GetFullName() == fnLink.GetFullName() );
 }
 
+TEST_CASE("wxFileName::LongPath", "[filename]")
+{
+    constexpr const char* dir = "test_directory_name";
+    constexpr const char* file = "test_file_name";
+
+    // Use many nested directories to ensure that the total path length for
+    // a file inside the innermost one is longer than MAX_PATH.
+    wxString path(dir);
+    path += wxFileName::GetPathSeparator();
+    path += path;
+    path += path;
+    path += path;
+    path += path;
+
+    CHECK( path.length() > MAX_PATH );
+
+    REQUIRE( wxFileName::Mkdir(path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) );
+
+    // If we managed to create it, ensure that we delete it.
+    class CleanupTestDir
+    {
+    public:
+        explicit CleanupTestDir(const wxString& dir) : m_dir(dir) { }
+        ~CleanupTestDir() { wxFileName::Rmdir(m_dir, wxPATH_RMDIR_RECURSIVE); }
+
+    private:
+        const wxString m_dir;
+    } cleanupTestDir(dir);
+
+    const wxFileName fn{path, file};
+
+    // Create the file in this directory by constructing a temporary wxFile.
+    {
+        wxFile f(fn.GetFullPath(), wxFile::write);
+        REQUIRE( f.IsOpened() );
+        REQUIRE( f.Write("Hello wx") );
+    }
+
+    // Try accessing it too.
+    CHECK( fn.FileExists() );
+    CHECK( fn.GetSize() == 8 );
+}
+
 #endif // __WINDOWS__
 
 #ifdef __LINUX__
