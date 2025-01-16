@@ -17,6 +17,7 @@ echo "Updating dates to use $new_year instead of $old_year:"
 # Update copyright to extend to the new year.
 for f in docs/doxygen/mainpages/copyright.h docs/doxygen/regen.sh \
          interface/wx/aboutdlg.h interface/wx/generic/aboutdlgg.h \
+         samples/dialogs/dialogs.cpp \
          src/common/utilscmn.cpp src/msw/version.rc \
          ; do
     run_sed $f "s/1992-$old_year/1992-$new_year/"
