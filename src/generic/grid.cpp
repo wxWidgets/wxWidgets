@@ -11920,7 +11920,7 @@ void wxGrid::SetName(const wxString &name)
 
 bool wxGrid::Reparent(wxWindowBase *newParent)
 {
-    bool changed = wxWindowBase::Reparent(newParent);
+    bool changed = wxScrolledCanvas::Reparent(newParent);
     if ( changed )
     {
         wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_PARENTCHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
