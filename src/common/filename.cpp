@@ -2109,7 +2109,7 @@ wxString wxFileName::GetFullName() const
     return fullname;
 }
 
-wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
+wxString wxFileName::DoGetPath( int flags, wxPathFormat format ) const
 {
     format = GetFormat( format );
 
@@ -2210,11 +2210,25 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         fullpath += wxT(']');
     }
 
+    return fullpath;
+}
+
+wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
+{
+    wxString fullpath = DoGetPath(flags, format);
+
 #ifdef __WINDOWS__
     // Paths have to use "extended length" form to be longer than MAX_PATH
     // under Windows, check if we need to use it.
-    if ( format == wxPATH_DOS && fullpath.length() > MAX_PATH )
+    if ( format == wxPATH_DOS && (flags & wxPATH_GET_VOLUME) &&
+            fullpath.length() > MAX_PATH )
     {
+        // Extended length paths can't be relative and can't contain any
+        // periods etc, so normalize the path first.
+        wxFileName fnAbs(*this);
+        fnAbs.MakeAbsolute();
+        fullpath = fnAbs.DoGetPath(flags, format);
+
         // We can switch to extended length paths for paths using normal driver
         // letters or UNC paths.
         if ( fullpath[1] == GetVolumeSeparator() )

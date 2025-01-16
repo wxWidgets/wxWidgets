@@ -632,7 +632,8 @@ private:
         SetPath_MayHaveVolume = 1
     };
 
-    // helper of public SetPath() also used internally
+    // helpers of public functions with the corresponding names
+    wxString DoGetPath(int flags, wxPathFormat format) const;
     void DoSetPath(const wxString& path, wxPathFormat format,
                    int flags = SetPath_MayHaveVolume);
 
