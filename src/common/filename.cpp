@@ -2210,6 +2210,26 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         fullpath += wxT(']');
     }
 
+#ifdef __WINDOWS__
+    // Paths have to use "extended length" form to be longer than MAX_PATH
+    // under Windows, check if we need to use it.
+    if ( format == wxPATH_DOS && fullpath.length() > MAX_PATH )
+    {
+        // We can switch to extended length paths for paths using normal driver
+        // letters or UNC paths.
+        if ( fullpath[1] == GetVolumeSeparator() )
+        {
+            // Turn C: into \\?\C:
+            fullpath.insert(0, wxMSW_EXTENDED_PATH_PREFIX);
+        }
+        else if ( fullpath.StartsWith(R"(\\)") && fullpath[2] != '?' )
+        {
+            // Turn \\share into \\?\UNC\share
+            fullpath.insert(1, R"(\?\UNC)");
+        }
+    }
+#endif // __WINDOWS__
+
     return fullpath;
 }
 
