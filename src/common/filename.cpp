@@ -1297,16 +1297,18 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
             currPath << wxGetVolumeString(filename.GetVolume(), wxPATH_NATIVE);
         }
 
-        wxArrayString dirs = filename.GetDirs();
-        size_t count = dirs.GetCount();
-        for ( size_t i = 0; i < count; i++ )
+        bool hasPrevious = false;
+        for ( const auto& pathComponent : filename.GetDirs() )
         {
             // Do not use IsAbsolute() here because we want the path to start
             // with the separator even if it doesn't have any volume, but
             // IsAbsolute() would return false in this case.
-            if ( i > 0 || !filename.m_relative )
+            if ( hasPrevious || !filename.m_relative )
                 currPath += wxFILE_SEP_PATH;
-            currPath += dirs[i];
+
+            hasPrevious = true;
+
+            currPath += pathComponent;
 
             if (!DirExists(currPath))
             {
