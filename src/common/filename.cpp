@@ -2222,14 +2222,22 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
 #ifdef __WINDOWS__
     // Paths have to use "extended length" form to be longer than MAX_PATH
     // under Windows, check if we need to use it.
-    if ( format == wxPATH_DOS && (flags & wxPATH_GET_VOLUME) &&
-            fullpath.length() > MAX_PATH )
+    if ( GetFormat(format) == wxPATH_DOS && (flags & wxPATH_GET_VOLUME) )
     {
         // Extended length paths can't be relative and can't contain any
         // periods etc, so normalize the path first.
         wxFileName fnAbs(*this);
         fnAbs.MakeAbsolute();
-        fullpath = fnAbs.DoGetPath(flags, format);
+        const wxString absPath = fnAbs.DoGetPath(flags, format);
+
+        // No need to do anything if it fits. Note that the exact inequality is
+        // important here, paths of exactly MAX_PATH length don't work.
+        if ( absPath.length() < MAX_PATH )
+            return fullpath;
+
+        // But if it doesn't, we have to switch to using absolute path and
+        // modify it to use the extended length form.
+        fullpath = absPath;
 
         // We can switch to extended length paths for paths using normal driver
         // letters or UNC paths.
