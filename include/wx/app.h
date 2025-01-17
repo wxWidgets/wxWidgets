@@ -901,7 +901,7 @@ public:
     #define wxIMPLEMENT_WXWIN_MAIN          wxIMPLEMENT_WXWIN_MAIN_CONSOLE
 #endif // defined(wxIMPLEMENT_WXWIN_MAIN)
 
-#ifdef __WXUNIVERSAL__
+#if defined(__WXUNIVERSAL__) && wxUSE_GUI
     #include "wx/univ/theme.h"
 
     #ifdef wxUNIV_DEFAULT_THEME
