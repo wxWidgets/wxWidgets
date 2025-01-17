@@ -2219,9 +2219,16 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         fnAbs.MakeAbsolute();
         const wxString absPath = fnAbs.DoGetPath(flags, format);
 
-        // No need to do anything if it fits. Note that the exact inequality is
-        // important here, paths of exactly MAX_PATH length don't work.
-        if ( absPath.length() < MAX_PATH )
+        // No need to do anything if it fits: note that normally paths up to
+        // MAX_PATH should work but in practice the limit is lower than that
+        // depending on whether it's a file or a directory, whether it's in the
+        // root directory or a subdirectory, Windows version and probably the
+        // phase of the moon as well, so keep things simple and use the lowest
+        // known limit which is 248 (which is MAX_PATH minus 12, where 12 is,
+        // apparently, the length of a 8.3 filename) characters for a directory:
+        // it does no real harm to use extended length limit paths for shorter
+        // paths while not using them would result in a "file not found" error.
+        if ( absPath.length() < 248 )
             return fullpath;
 
         // But if it doesn't, we have to switch to using absolute path and
