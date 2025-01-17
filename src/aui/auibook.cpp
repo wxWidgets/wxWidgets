@@ -1286,7 +1286,8 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         e.SetEventObject(this);
         ProcessWindowEvent(e);
 
-        m_isDragging = true;
+        if ( e.IsAllowed() )
+            m_isDragging = true;
     }
 }
 
@@ -2606,9 +2607,21 @@ void wxAuiNotebook::OnTabBgDClick(wxAuiNotebookEvent& evt)
     ProcessWindowEvent(e);
 }
 
-void wxAuiNotebook::OnTabBeginDrag(wxAuiNotebookEvent&)
+void wxAuiNotebook::OnTabBeginDrag(wxAuiNotebookEvent& evt)
 {
     m_lastDragX = 0;
+
+    wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
+    wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
+
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BEGIN_DRAG, m_windowId);
+    e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
+    e.SetEventObject(this);
+    ProcessWindowEvent(e);
+
+    // Propagate calls to Veto() back to the original event.
+    if ( !e.IsAllowed() )
+        evt.Veto();
 }
 
 void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)

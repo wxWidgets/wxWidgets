@@ -165,6 +165,7 @@ private:
     void OnSettings(wxCommandEvent& evt);
     void OnCustomizeToolbar(wxCommandEvent& evt);
     void OnAllowNotebookDnD(wxAuiNotebookEvent& evt);
+    void OnNotebookBeginDrag(wxAuiNotebookEvent& evt);
     void OnNotebookPageClose(wxAuiNotebookEvent& evt);
     void OnNotebookPageClosed(wxAuiNotebookEvent& evt);
     void OnNotebookPageChanging(wxAuiNotebookEvent &evt);
@@ -689,6 +690,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUITOOLBAR_TOOL_DROPDOWN(ID_DropDownToolbarItem, MyFrame::OnDropDownToolbarItem)
     EVT_AUI_PANE_CLOSE(MyFrame::OnPaneClose)
     EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
+    EVT_AUINOTEBOOK_BEGIN_DRAG(wxID_ANY, MyFrame::OnNotebookBeginDrag)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
     EVT_AUINOTEBOOK_PAGE_CLOSED(wxID_ANY, MyFrame::OnNotebookPageClosed)
     EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnNotebookPageChanging)
@@ -2047,6 +2049,20 @@ void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)
     // for the purpose of this test application, explicitly
     // allow all notebook drag and drop events
     evt.Allow();
+}
+
+void MyFrame::OnNotebookBeginDrag(wxAuiNotebookEvent& evt)
+{
+    // For demonstration purposes, disallow dragging the first tab.
+    if ( evt.GetSelection() == 0 )
+    {
+        wxLogMessage("Dragging the first tab is forbidden");
+        evt.Veto();
+    }
+    else
+    {
+        evt.Skip();
+    }
 }
 
 wxPoint MyFrame::GetStartPosition()
