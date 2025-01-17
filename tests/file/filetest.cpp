@@ -89,13 +89,68 @@ TEST_CASE("wxFile::RoundTrip", "[file]")
     }
 }
 
+static void CheckFileContents(const wxString& name, const wxString& data)
+{
+    // Check that the file exists with the expected contents.
+    wxFile f(name);
+    REQUIRE( f.IsOpened() );
+
+    wxString s;
+    CHECK( f.ReadAll(&s) );
+    CHECK( s == data );
+}
+
 TEST_CASE("wxTempFile", "[file][temp]")
 {
+    constexpr const char* name = "wxtemp_test";
+    const wxString dataOld("what is the meaning of life?");
+    const wxString dataNew("the answer is 42");
+
+    // Ensure that it will be removed at the end of the test in any case.
+    TempFile tf(name);
+
+    bool hasOldFile = false;
+
+    SECTION("New")
+    {
+        wxRemoveFile(name);
+    }
+
+    SECTION("Existing")
+    {
+        wxFile f(name, wxFile::write);
+        CHECK( f.IsOpened() );
+        CHECK( f.Write(dataOld) );
+        CHECK( f.Close() );
+
+        hasOldFile = true;
+    }
+
+    // First check that not committing the file doesn't do anything.
+    {
+        wxTempFile discarded(name);
+        CHECK( discarded.IsOpened() );
+        CHECK( discarded.Write(dataNew) );
+    }
+
+    if ( !hasOldFile )
+    {
+        // The file shouldn't have been created.
+        CHECK( !wxFile::Exists(name) );
+    }
+    else
+    {
+        // Check that the old file is still there with the old contents.
+        CheckFileContents(name, dataOld);
+    }
+
+    // Next check that committing it does.
     wxTempFile tmpFile;
-    CHECK( tmpFile.Open(wxT("test2")) );
-    CHECK( tmpFile.Write(wxT("the answer is 42")) );
+    CHECK( tmpFile.Open(name) );
+    CHECK( tmpFile.Write(dataNew) );
     CHECK( tmpFile.Commit() );
-    CHECK( wxRemoveFile(wxT("test2")) );
+
+    CheckFileContents(name, dataNew);
 }
 
 #ifdef __LINUX__
