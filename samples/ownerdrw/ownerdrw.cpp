@@ -211,7 +211,9 @@ void OwnerDrawnFrame::InitMenu()
     drawn_menu->Append(pItem);
 
     pItem = new wxMenuItem(drawn_menu, Menu_Drawn5, "&Other\tCtrl+O", "other item");
+#ifndef __WXUNIVERSAL__
     pItem->SetTextColour(*wxRED);
+#endif
     drawn_menu->Append(pItem);
 
     wxMenu* native_menu = new wxMenu;
