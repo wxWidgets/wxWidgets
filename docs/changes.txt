@@ -292,6 +292,7 @@ wxMSW:
 - Fix indent of imageless wxTreeCtrl in high DPI (taler21, #24941).
 - Fix possible crash during session termination (#24903).
 - Make wxKill(wxKILL_CHILDREN) work recursively (Wolfgang Dautermann, #25069).
+- Use ReplaceFile() in wxRenameFile() to make operation atomic (#25088).
 - Recognize Windows Server 2025 in wxGetOsDescription() (PB, #25066).
 
 wxOSX:
