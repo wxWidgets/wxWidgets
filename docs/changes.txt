@@ -264,6 +264,7 @@ All:
 - Add wxApp::SetErrorExitCode() to customize exit code on initialization error.
 - Fix buffer read overflow when compiling RE ending with backslash (#25040).
 - Fix crash in wxWebRequest::Close() with recent libcurl (#24969).
+- Make wxTempFile::Commit() really atomic (#25088).
 - Improve CMake install target and many other fixes (Maarten Bent, #24792).
 
 All (GUI):
