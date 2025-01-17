@@ -32,7 +32,11 @@
 
 #include "wx/xrc/xmlres.h"              // XRC XML resouces
 
+//-----------------------------------------------------------------------------
+// For unique_ptr etc.
+//-----------------------------------------------------------------------------
 
+#include <memory>
 
 //-----------------------------------------------------------------------------
 // Public members
@@ -107,7 +111,37 @@ void ObjrefDialog::OnNotebookPageChanged( wxNotebookEvent &event )
                 wxNotebookPage *page = nb->GetPage(icons_page);
                 wxTextCtrl* const text = XRCCTRL(*page, "log_text", wxTextCtrl);
                 if (text)
-                    delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
+                {
+                    // This block of code is a safer (though uglier) version of the single line:
+                    //
+                    // ```
+                    // delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
+                    // ```
+                    //
+                    // The problem with that single line (and generally with calling `setActiveTarget(new ...)`)
+                    // was (in my opinion):
+                    //
+                    // `SetActiveTarget` might fail before taking "ownership" of the specified (via pointer) `wxLog` object
+                    // => in that case the newly-created object is leaked
+                    // (which might be benign or it might actually have bad effects,
+                    // but anyway in a sample we wish to give a good example to be followed in many cases).
+                    //
+                    // Currently, I do not think that "ownership" in the paragraph above includes deletion
+                    // (i.e. I think that wxWidgets never deletes `ms_pLogger`).
+                    // But it does include usage.
+                    //
+                    // Immediately after `SetActiveTarget` has returned,
+                    // we release ownership (via `unique_ptr<...>::release`)
+                    // of the object which is going to be used (and in the future possibly even deleted) by wxWidgets.
+                    //
+                    // Comments and suggestions are warmly welcome...
+                    // ... and even if the problem really exists, I will be happy to see a more compact way to solve it...
+                    // especially given that we might want to replicate the idiom to many other points-of-usage.
+
+                          std::unique_ptr<wxLog> spNew{std::make_unique<wxLogTextCtrl>(text)};
+                    const std::unique_ptr<wxLog> spOld{wxLog::SetActiveTarget(spNew.get    ())};
+                                                                              spNew.release();
+                }
                 break;
             }
 
