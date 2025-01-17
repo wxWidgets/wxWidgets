@@ -35,9 +35,9 @@
     #include "wx/sizer.h"
 #endif // !WX_PRECOMP
 
-#include "wx/nativewin.h"
-
 #ifdef wxHAS_NATIVE_WINDOW
+
+#include "wx/nativewin.h"
 
 #include "widgets.h"
 
