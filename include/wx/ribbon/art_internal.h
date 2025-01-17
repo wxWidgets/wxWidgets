@@ -64,8 +64,6 @@ public:
 
    wxColour    ToRGB() const;
 
-   wxRibbonHSLColour& MakeDarker(float delta);
-
    // In dark mode, makes the colour darker, while in light mode make it
    // lighter.
    wxRibbonHSLColour AdjustLuminance(float delta)

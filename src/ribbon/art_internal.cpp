@@ -227,12 +227,6 @@ wxRibbonHSLColour wxRibbonHSLColour::Darker(float delta) const
     return Lighter(-delta);
 }
 
-wxRibbonHSLColour& wxRibbonHSLColour::MakeDarker(float delta)
-{
-    luminance -= delta;
-    return *this;
-}
-
 wxRibbonHSLColour wxRibbonHSLColour::Lighter(float delta) const
 {
     return wxRibbonHSLColour(hue, saturation, luminance + delta);
