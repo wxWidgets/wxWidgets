@@ -2206,13 +2206,11 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     // But when inserting, we may need to do it at a different place.
     if ( page_idx != m_tabs.GetPageCount() )
     {
-        wxAuiTabCtrl* tabWithPage = nullptr;
-        int idx = wxNOT_FOUND;
-        if ( FindTab(m_tabs.GetWindowFromIdx(page_idx), &tabWithPage, &idx) &&
-                tabWithPage == active_tabctrl )
+        const auto tabInfo = FindTab(m_tabs.GetWindowFromIdx(page_idx));
+        if ( tabInfo.tabCtrl == active_tabctrl )
         {
             // Use this index for insertion, as it's in the correct control.
-            tab_page_idx = idx;
+            tab_page_idx = tabInfo.tabIdx;
         }
         //else: Do nothing, we'll append it to the active tab control.
     }
@@ -2286,10 +2284,12 @@ wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
     ShowWnd(wnd, false);
 
     // find out which onscreen tab ctrl owns this tab
-    wxAuiTabCtrl* ctrl;
-    int ctrl_idx;
-    if (!FindTab(wnd, &ctrl, &ctrl_idx))
+    const auto tabInfo = FindTab(wnd);
+    if ( !tabInfo )
         return nullptr;
+
+    wxAuiTabCtrl* const ctrl = tabInfo.tabCtrl;
+    int ctrl_idx = tabInfo.tabIdx;
 
     bool is_curpage = (m_curPage == (int)page_idx);
     bool is_active_in_split = ctrl->GetPage(ctrl_idx).active;
@@ -2383,14 +2383,11 @@ bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
     page_info.caption = text;
 
     // update what's on screen
-    wxAuiTabCtrl* ctrl;
-    int ctrl_idx;
-    if (FindTab(page_info.window, &ctrl, &ctrl_idx))
+    if ( const auto tabInfo = FindTab(page_info.window) )
     {
-        wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
-        info.caption = text;
-        ctrl->Refresh();
-        ctrl->Update();
+        tabInfo.pageInfo->caption = text;
+        tabInfo.tabCtrl->Refresh();
+        tabInfo.tabCtrl->Update();
     }
 
     return true;
@@ -2414,13 +2411,11 @@ bool wxAuiNotebook::SetPageToolTip(size_t page_idx, const wxString& text)
     wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
     page_info.tooltip = text;
 
-    wxAuiTabCtrl* ctrl;
-    int ctrl_idx;
-    if (!FindTab(page_info.window, &ctrl, &ctrl_idx))
+    const auto tabInfo = FindTab(page_info.window);
+    if ( !tabInfo )
         return false;
 
-    wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
-    info.tooltip = text;
+    tabInfo.pageInfo->tooltip = text;
 
     // NB: we don't update the tooltip if it is already being displayed, it
     //     typically never happens, no need to code that
@@ -2447,15 +2442,13 @@ bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmapBundle& bitmap)
     UpdateTabCtrlHeight();
 
     // update what's on screen
-    wxAuiTabCtrl* ctrl;
-    int ctrl_idx;
-    if (FindTab(page_info.window, &ctrl, &ctrl_idx))
-    {
-        wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
-        info.bitmap = bitmap;
-        ctrl->Refresh();
-        ctrl->Update();
-    }
+    const auto tabInfo = FindTab(page_info.window);
+    if ( !tabInfo )
+        return false;
+
+    tabInfo.pageInfo->bitmap = bitmap;
+    tabInfo.tabCtrl->Refresh();
+    tabInfo.tabCtrl->Update();
 
     return true;
 }
@@ -2540,15 +2533,8 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
 {
     if (m_curPage >= 0 && m_curPage < (int)m_tabs.GetPageCount())
     {
-        wxAuiTabCtrl* ctrl;
-        int idx;
-
         // find the tab ctrl with the current page
-        if (FindTab(m_tabs.GetPage(m_curPage).window,
-                    &ctrl, &idx))
-        {
-            return ctrl;
-        }
+        return FindTab(m_tabs.GetPage(m_curPage).window).tabCtrl;
     }
 
     // no current page, just find the first tab ctrl
@@ -2600,10 +2586,7 @@ wxAuiTabCtrl* wxAuiNotebook::GetMainTabCtrl()
     return tabMain;
 }
 
-// FindTab() finds the tab control that currently contains the window as well
-// as the index of the window in the tab control.  It returns true if the
-// window was found, otherwise false.
-bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const
+wxAuiNotebook::TabInfo wxAuiNotebook::FindTab(wxWindow* wnd) const
 {
     for ( const auto& pane : m_mgr.GetAllPanes() )
     {
@@ -2611,26 +2594,38 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const
             continue;
 
         wxAuiTabFrame* tabframe = (wxAuiTabFrame*)pane.window;
+        wxAuiTabCtrl* const tabCtrl = tabframe->m_tabs;
 
-        int page_idx = tabframe->m_tabs->GetIdxFromWindow(page);
-        if (page_idx != -1)
+        const size_t page_count = tabCtrl->GetPageCount();
+        for ( size_t i = 0; i < page_count; ++i )
         {
-            *ctrl = tabframe->m_tabs;
-            *idx = page_idx;
-            return true;
+            wxAuiNotebookPage& page = tabCtrl->GetPage(i);
+            if ( page.window == wnd )
+                return { tabCtrl, static_cast<int>(i), &page };
         }
     }
 
-    return false;
+    wxFAIL_MSG( "Window unexpectedly not found in any tab control" );
+
+    return {};
+}
+
+// This overload is deprecated and kept only for compatibility.
+bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const
+{
+    const auto tabInfo = FindTab(page);
+    if ( !tabInfo )
+        return false;
+
+    *ctrl = tabInfo.tabCtrl;
+    *idx = tabInfo.tabIdx;
+
+    return true;
 }
 
 wxAuiNotebookPosition wxAuiNotebook::GetPagePosition(size_t page) const
 {
-    wxAuiNotebookPosition pos;
-
-    FindTab(GetPage(page), &pos.tabCtrl, &pos.tabIdx);
-
-    return pos;
+    return FindTab(GetPage(page));
 }
 
 void wxAuiNotebook::Split(size_t page, int direction)
@@ -2647,17 +2642,15 @@ void wxAuiNotebook::Split(size_t page, int direction)
         return;
 
     // find out which tab control the page currently belongs to
-    wxAuiTabCtrl *src_tabs, *dest_tabs;
-    int src_idx = -1;
-    src_tabs = nullptr;
-    if (!FindTab(wnd, &src_tabs, &src_idx))
+    const auto srcTabInfo = FindTab(wnd);
+    if ( !srcTabInfo )
         return;
-    if (!src_tabs || src_idx == -1)
-        return;
+
+    wxAuiTabCtrl* const src_tabs = srcTabInfo.tabCtrl;
 
     // create a new tab frame
     wxAuiTabFrame* new_tabs = CreateTabFrame(CalculateNewSplitSize());
-    dest_tabs = new_tabs->m_tabs;
+    wxAuiTabCtrl* const dest_tabs = new_tabs->m_tabs;
 
     // create a pane info structure with the information
     // about where the pane should be added
@@ -2689,9 +2682,9 @@ void wxAuiNotebook::Split(size_t page, int direction)
     m_mgr.Update();
 
     // remove the page from the source tabs
-    wxAuiNotebookPage page_info = src_tabs->GetPage(src_idx);
+    wxAuiNotebookPage page_info = *srcTabInfo.pageInfo;
     page_info.active = false;
-    src_tabs->RemovePageAt(src_idx);
+    src_tabs->RemovePageAt(srcTabInfo.tabIdx);
     if (src_tabs->GetPageCount() > 0)
     {
         src_tabs->SetActivePage((size_t)0);
@@ -3787,12 +3780,10 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
     // however, clicking again on a tab should give it the focus.
     if ((int)n == m_curPage)
     {
-        wxAuiTabCtrl* ctrl;
-        int ctrl_idx;
-        if (FindTab(wnd, &ctrl, &ctrl_idx))
+        wxAuiTabCtrl* const ctrl = FindTab(wnd).tabCtrl;
+        if ( ctrl && FindFocus() != ctrl )
         {
-            if (FindFocus() != ctrl)
-                ctrl->SetFocus();
+            ctrl->SetFocus();
         }
         return m_curPage;
     }
@@ -3815,15 +3806,15 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
         int old_curpage = m_curPage;
         m_curPage = n;
 
-        wxAuiTabCtrl* ctrl;
-        int ctrl_idx;
-        if (FindTab(wnd, &ctrl, &ctrl_idx))
+        if ( const auto tabInfo = FindTab(wnd) )
         {
             m_tabs.SetActivePage(wnd);
 
-            ctrl->SetActivePage(ctrl_idx);
+            wxAuiTabCtrl* const ctrl = tabInfo.tabCtrl;
+
+            ctrl->SetActivePage(tabInfo.tabIdx);
             DoSizing();
-            ctrl->DoShowTab(ctrl_idx);
+            ctrl->DoShowTab(tabInfo.tabIdx);
 
             // set fonts
             for ( const auto& pane : m_mgr.GetAllPanes() )

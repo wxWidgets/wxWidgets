@@ -334,6 +334,13 @@ private:
 // Simple struct combining wxAuiTabCtrl with the position inside it.
 struct wxAuiNotebookPosition
 {
+    wxAuiNotebookPosition() = default;
+
+    wxAuiNotebookPosition(wxAuiTabCtrl* tabCtrl_, int tabIdx_)
+        : tabCtrl(tabCtrl_), tabIdx(tabIdx_)
+    {
+    }
+
     // Check if the position is valid.
     explicit operator bool() const { return tabCtrl != nullptr; }
 
@@ -567,6 +574,25 @@ private:
                       wxAuiTabCtrl* tabctrl,
                       int tab_page_idx, // Can be -1 to append.
                       bool select);
+
+    // More convenient version of FindTab(): returns all the results instead of
+    // requiring output parameters for returning some of them.
+    //
+    // Note that TabInfo returned by FindTab() is normally always valid.
+    struct TabInfo : wxAuiNotebookPosition
+    {
+        TabInfo() = default;
+
+        TabInfo(wxAuiTabCtrl* tabCtrl, int tabIdx, wxAuiNotebookPage* info)
+            : wxAuiNotebookPosition{tabCtrl, tabIdx}, pageInfo(info)
+        {
+        }
+
+        // Information about the page or nullptr if not found.
+        wxAuiNotebookPage* pageInfo = nullptr;
+    };
+
+    TabInfo FindTab(wxWindow* page) const;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);
