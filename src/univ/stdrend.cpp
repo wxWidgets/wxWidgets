@@ -253,9 +253,10 @@ void wxStdRenderer::DrawButtonLabel(wxDC& dc,
                                     wxRect *rectBounds)
 {
     wxDCTextColourChanger clrChanger(dc);
+    wxString labelWithoutMnemonics = wxControlBase::GetLabelText(label);
 
     wxRect rectLabel = rect;
-    if ( !label.empty() && (flags & wxCONTROL_DISABLED) )
+    if ( !labelWithoutMnemonics.empty() && (flags & wxCONTROL_DISABLED) )
     {
         if ( flags & wxCONTROL_PRESSED )
         {
@@ -267,7 +268,7 @@ void wxStdRenderer::DrawButtonLabel(wxDC& dc,
         clrChanger.Set(m_penHighlight.GetColour());
         wxRect rectShadow = rect;
         rectShadow.Offset(1, 1);
-        dc.DrawLabel(label, rectShadow, alignment, indexAccel);
+        dc.DrawLabel(labelWithoutMnemonics, rectShadow, alignment, indexAccel);
 
         // make the main label text grey
         clrChanger.Set(m_penDarkGrey.GetColour());
@@ -279,9 +280,9 @@ void wxStdRenderer::DrawButtonLabel(wxDC& dc,
         }
     }
 
-    dc.DrawLabel(label, image, rectLabel, alignment, indexAccel, rectBounds);
+    dc.DrawLabel(labelWithoutMnemonics, image, rectLabel, alignment, indexAccel, rectBounds);
 
-    if ( !label.empty() && (flags & wxCONTROL_FOCUSED) )
+    if ( !labelWithoutMnemonics.empty() && (flags & wxCONTROL_FOCUSED) )
     {
         rectLabel.Inflate(-1);
 
