@@ -44,8 +44,11 @@ enum wxAuiNotebookOption
 */
 struct wxAuiNotebookPosition
 {
-    wxAuiTabCtrl* tabctrl = nullptr;
-    int page = wxNOT_FOUND;
+    /// Tab control containing the page or nullptr if the position is invalid.
+    wxAuiTabCtrl* tabCtrl = nullptr;
+
+    /// Index of the page in this tab control or wxNOT_FOUND if invalid.
+    int tabIdx = wxNOT_FOUND;
 };
 
 

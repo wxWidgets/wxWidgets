@@ -2628,7 +2628,7 @@ wxAuiNotebookPosition wxAuiNotebook::GetPagePosition(size_t page) const
 {
     wxAuiNotebookPosition pos;
 
-    FindTab(GetPage(page), &pos.tabctrl, &pos.page);
+    FindTab(GetPage(page), &pos.tabCtrl, &pos.tabIdx);
 
     return pos;
 }

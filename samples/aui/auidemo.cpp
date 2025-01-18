@@ -2019,11 +2019,11 @@ void MyFrame::OnNotebookTabRightClick(wxAuiNotebookEvent& evt)
     if ( pageUnderMouse != page )
     {
         wxLogWarning("Unexpected mismatch: page under mouse is %d (position %d)",
-                     pageUnderMouse, book->GetPagePosition(pageUnderMouse).page);
+                     pageUnderMouse, book->GetPagePosition(pageUnderMouse).tabIdx);
     }
 
     wxLogMessage("Right click on page %d (tab position %d)",
-                 page, book->GetPagePosition(page).page);
+                 page, book->GetPagePosition(page).tabIdx);
 }
 
 void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
@@ -2036,7 +2036,7 @@ void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
     for ( size_t i = 0; i < book->GetPageCount(); ++i )
     {
         const auto pos = book->GetPagePosition(i);
-        pagesByTabCtrl[pos.tabctrl][pos.page] = i;
+        pagesByTabCtrl[pos.tabCtrl][pos.tabIdx] = i;
     }
 
     wxString pages("Notebook contains the following pages:\n");

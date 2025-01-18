@@ -334,8 +334,8 @@ private:
 // Simple struct combining wxAuiTabCtrl with the position inside it.
 struct wxAuiNotebookPosition
 {
-    wxAuiTabCtrl* tabctrl = nullptr;
-    int page = wxNOT_FOUND;
+    wxAuiTabCtrl* tabCtrl = nullptr;
+    int tabIdx = wxNOT_FOUND;
 };
 
 
