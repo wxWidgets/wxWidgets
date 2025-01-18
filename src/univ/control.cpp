@@ -84,9 +84,11 @@ void wxControl::SetLabel(const wxString& label)
 void wxControl::UnivDoSetLabel(const wxString& label)
 {
     wxString labelOld = m_label;
+    int indexAccelOld = m_indexAccel;
+
     m_indexAccel = FindAccelIndex(label, &m_label);
 
-    if ( m_label != labelOld )
+    if ( ( m_label != labelOld ) || ( m_indexAccel != indexAccelOld ) )
     {
         Refresh();
     }

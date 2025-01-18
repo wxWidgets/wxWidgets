@@ -1804,6 +1804,10 @@ private:
         wxString strH;
         const wxString strW = str.BeforeFirst('x', &strH);
 
+        // Special case which wouldn't be parse by ToUInt() below.
+        if ( strW == "-1" && strH == strW )
+            return wxDefaultSize;
+
         unsigned int w, h;
         if ( !strW.ToUInt(&w) || !strH.ToUInt(&h) )
             throw std::runtime_error("Failed to parse size");
