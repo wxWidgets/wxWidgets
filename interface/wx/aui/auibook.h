@@ -566,7 +566,10 @@ public:
 /**
     @class wxAuiNotebookPage
 
-    A simple class which holds information about the notebook's pages and their state.
+    Holds information about a page in wxAuiNotebook.
+
+    An object of this class is notably passed to wxAuiTabArt::DrawTab() and is
+    used by it to render the pages tab accordingly.
 
     @library{wxaui}
     @category{aui}
@@ -574,12 +577,23 @@ public:
 class wxAuiNotebookPage
 {
 public:
-    wxWindow* window;     // page's associated window
-    wxString caption;     // caption displayed on the tab
-    wxString tooltip;     // tooltip displayed when hovering over tab title
-    wxBitmapBundle bitmap;// tab's bitmap
-    wxRect rect;          // tab's hit rectangle
-    bool active;          // true if the page is currently active
+    /// Window shown on this page.
+    wxWindow* window = nullptr;
+
+    /// Text displayed on the tab.
+    wxString caption;
+
+    /// Tooltip displayed when hovering over tab title.
+    wxString tooltip;
+
+    /// Bitmap shown in the tab if valid.
+    wxBitmapBundle bitmap;
+
+    /// True if the page is the currently selected page.
+    bool active = false;
+
+    // The rest of the fields are used internally by wxAUI and are
+    // intentionally not documented here.
 };
 
 /**
