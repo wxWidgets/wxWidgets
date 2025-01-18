@@ -334,6 +334,9 @@ private:
 // Simple struct combining wxAuiTabCtrl with the position inside it.
 struct wxAuiNotebookPosition
 {
+    // Check if the position is valid.
+    explicit operator bool() const { return tabCtrl != nullptr; }
+
     wxAuiTabCtrl* tabCtrl = nullptr;
     int tabIdx = wxNOT_FOUND;
 };

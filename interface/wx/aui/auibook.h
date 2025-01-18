@@ -44,6 +44,21 @@ enum wxAuiNotebookOption
 */
 struct wxAuiNotebookPosition
 {
+    /**
+        Check if the position is valid.
+
+        This overloaded operator allows to use objects of this class in
+        conditional statements, e.g.
+
+        @code
+        if ( const auto pos = book->GetPagePosition(page) )
+        {
+            // pos is valid, can use its tabCtrl and tabIdx members here
+        }
+        @endcode
+     */
+    explicit operator bool() const;
+
     /// Tab control containing the page or nullptr if the position is invalid.
     wxAuiTabCtrl* tabCtrl = nullptr;
 
