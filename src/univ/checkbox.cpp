@@ -157,7 +157,7 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
 
     renderer->GetRenderer()->
         DrawCheckButton(dc,
-                        GetLabel(),
+                        GetLabelText(),
                         bitmap,
                         renderer->GetRect(),
                         flags,
