@@ -206,8 +206,11 @@ bool wxAuiTabContainer::MovePage(wxWindow* page,
     if (idx == -1)
         return false;
 
-    const size_t old_idx = static_cast<size_t>(idx);
+    return MovePage(static_cast<size_t>(idx), new_idx);
+}
 
+bool wxAuiTabContainer::MovePage(size_t old_idx, size_t new_idx)
+{
     const auto b = m_pages.begin();
     if (old_idx < new_idx)
         std::rotate(b + old_idx, b + old_idx + 1, b + new_idx + 1);

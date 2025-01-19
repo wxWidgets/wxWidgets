@@ -150,6 +150,7 @@ public:
     bool AddPage(const wxAuiNotebookPage& info);
     bool InsertPage(const wxAuiNotebookPage& info, size_t idx);
     bool MovePage(wxWindow* page, size_t newIdx);
+    bool MovePage(size_t oldIdx, size_t newIdx);
     bool RemovePage(wxWindow* page);
     void RemovePageAt(size_t idx);
     bool SetActivePage(wxWindow* page);
