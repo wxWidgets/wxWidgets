@@ -152,9 +152,6 @@ PreviousLogInfo gs_prevLog;
 // map containing all components for which log level was explicitly set
 //
 // NB: all accesses to it must be protected by GetLevelsCS() critical section
-namespace
-{
-
 using ComponentLevelsMap = std::unordered_map<wxString, wxLogLevel>;
 
 inline ComponentLevelsMap& GetComponentLevels()
@@ -162,8 +159,6 @@ inline ComponentLevelsMap& GetComponentLevels()
     static ComponentLevelsMap s_componentLevels;
     return s_componentLevels;
 }
-
-} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxLogOutputBest: wxLog wrapper around wxMessageOutputBest
