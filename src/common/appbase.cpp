@@ -319,19 +319,26 @@ wxAppTraits *wxAppConsoleBase::CreateTraits()
 
 wxAppTraits *wxAppConsoleBase::GetTraits()
 {
-    // Check for m_fullyConstructed to prevent constructing wrong traits
-    // object: if it is false, it means that the object of the user-defined
-    // wxApp-derived class hasn't been fully constructed yet, and so its
-    // possibly overridden CreateTraits() wouldn't be called if we called it
-    // now, so avoid doing it.
-    if ( !m_traits && m_fullyConstructed )
-    {
-        m_traits = CreateTraits();
+    // If we already have valid traits, just return them.
+    if ( m_traits )
+        return m_traits;
 
-        wxASSERT_MSG( m_traits, wxT("wxApp::CreateTraits() failed?") );
-    }
+    // Otherwise, create a new traits object as it would be unexpected (and
+    // backwards incompatible) to return a null pointer from this function.
+    auto* const traits = CreateTraits();
 
-    return m_traits;
+    // But only remember it if we're fully constructed to prevent using wrong
+    // traits object later: if m_fullyConstructed is false, it means that the
+    // object of the user-defined wxApp-derived class hasn't been fully
+    // constructed yet, and so its possibly overridden CreateTraits() wasn't
+    // called above, so make sure we do call it the next time GetTraits() is
+    // called.
+    if ( m_fullyConstructed )
+        m_traits = traits;
+
+    wxASSERT_MSG( traits, wxT("wxApp::CreateTraits() failed?") );
+
+    return traits;
 }
 
 /* static */
