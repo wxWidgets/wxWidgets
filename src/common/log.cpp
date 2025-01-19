@@ -512,9 +512,17 @@ wxLog *wxLog::GetMainThreadActiveTarget()
             ms_pLogger = wxApp::GetValidTraits().CreateLogTarget();
 
             s_bInGetActiveTarget = false;
-
-            // do nothing if it fails - what can we do?
         }
+    }
+
+    if ( !ms_pLogger )
+    {
+        // if we still don't have any logger, provide the default fallback, but
+        // don't remember it -- we don't want to use it if a real logger if we
+        // can call CreateLogTarget() successfully later
+        static wxLogOutputBest s_defaultLogger;
+
+        return &s_defaultLogger;
     }
 
     return ms_pLogger;
