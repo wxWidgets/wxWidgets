@@ -20,7 +20,7 @@
 class wxLogOutputBest : public wxLog
 {
 public:
-    wxLogOutputBest() { }
+    wxLogOutputBest() = default;
 
 protected:
     virtual void DoLogText(const wxString& msg) override
