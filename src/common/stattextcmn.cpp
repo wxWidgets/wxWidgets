@@ -103,16 +103,14 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
     const wxInfoDC dc(win);
 
-    const wxArrayString ls = wxSplit(text, '\n', '\0');
-    for ( wxArrayString::const_iterator i = ls.begin(); i != ls.end(); ++i )
+    bool hadFirst = false;
+    for ( auto line : wxSplit(text, '\n', '\0') )
     {
-        wxString line = *i;
-
-        if ( i != ls.begin() )
-        {
-            // Do this even if the line is empty, except if it's the first one.
+        // Call OnNewLine() for every new line in any case.
+        if ( !hadFirst )
+            hadFirst = true;
+        else
             OnNewLine();
-        }
 
         // Is this a special case when wrapping is disabled?
         if ( widthMax < 0 )
