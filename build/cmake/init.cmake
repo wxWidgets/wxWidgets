@@ -52,6 +52,8 @@ else()
 endif()
 
 if(MSVC)
+    if(CMAKE_VERSION VERSION_LESS "3.15")
+    # CMake 3.15 and later use MSVC_RUNTIME_LIBRARY property, see functions.cmake
     # Determine MSVC runtime library flag
     set(MSVC_LIB_USE "/MD")
     set(MSVC_LIB_REPLACE "/MT")
@@ -79,6 +81,7 @@ if(MSVC)
               "Flags used by the CXX compiler during ${cfg_upper} builds." FORCE)
         endif()
     endforeach()
+    endif()
 
     if(wxBUILD_OPTIMISE)
         set(MSVC_LINKER_RELEASE_FLAGS " /LTCG /OPT:REF /OPT:ICF")
