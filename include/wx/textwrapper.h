@@ -21,7 +21,7 @@
 class WXDLLIMPEXP_CORE wxTextWrapper
 {
 public:
-    wxTextWrapper() { m_eol = false; }
+    wxTextWrapper() = default;
 
     // win is used for getting the font, text is the text to wrap, width is the
     // max line width or -1 to disable wrapping
@@ -60,7 +60,7 @@ private:
     }
 
 
-    bool m_eol;
+    bool m_eol = false;
 
     wxDECLARE_NO_COPY_CLASS(wxTextWrapper);
 };
