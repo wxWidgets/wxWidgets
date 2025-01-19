@@ -509,10 +509,7 @@ wxLog *wxLog::GetMainThreadActiveTarget()
             s_bInGetActiveTarget = true;
 
             // ask the application to create a log target for us
-            if ( wxTheApp != nullptr )
-                ms_pLogger = wxTheApp->GetTraits()->CreateLogTarget();
-            else
-                ms_pLogger = new wxLogOutputBest;
+            ms_pLogger = wxApp::GetValidTraits().CreateLogTarget();
 
             s_bInGetActiveTarget = false;
 
