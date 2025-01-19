@@ -60,6 +60,10 @@
     #include "wx/fontmap.h"
 #endif // wxUSE_FONTMAP
 
+#if wxUSE_LOG
+    #include "wx/private/log.h"
+#endif // wxUSE_LOG
+
 #if wxDEBUG_LEVEL
     #if wxUSE_STACKWALKER
         #include "wx/stackwalk.h"
@@ -886,14 +890,14 @@ void wxAppConsoleBase::SetCLocale()
 
 wxLog *wxConsoleAppTraitsBase::CreateLogTarget()
 {
-    return new wxLogStderr;
+    return new wxLogOutputBest;
 }
 
 #endif // wxUSE_LOG
 
 wxMessageOutput *wxConsoleAppTraitsBase::CreateMessageOutput()
 {
-    return new wxMessageOutputStderr;
+    return new wxMessageOutputBest;
 }
 
 #if wxUSE_FONTMAP

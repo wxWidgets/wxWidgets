@@ -40,6 +40,8 @@
 #include "wx/crt.h"
 #include "wx/vector.h"
 
+#include "wx/private/log.h"
+
 // other standard headers
 #include <errno.h>
 
@@ -159,25 +161,6 @@ inline ComponentLevelsMap& GetComponentLevels()
     static ComponentLevelsMap s_componentLevels;
     return s_componentLevels;
 }
-
-// ----------------------------------------------------------------------------
-// wxLogOutputBest: wxLog wrapper around wxMessageOutputBest
-// ----------------------------------------------------------------------------
-
-class wxLogOutputBest : public wxLog
-{
-public:
-    wxLogOutputBest() { }
-
-protected:
-    virtual void DoLogText(const wxString& msg) override
-    {
-        wxMessageOutputBest().Output(msg);
-    }
-
-private:
-    wxDECLARE_NO_COPY_CLASS(wxLogOutputBest);
-};
 
 } // anonymous namespace
 
