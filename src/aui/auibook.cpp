@@ -629,8 +629,8 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
         if (button.id == wxAUI_BUTTON_RIGHT)
         {
             int button_width = 0;
-            for (i = 0; i < button_count; ++i)
-                button_width += m_buttons.Item(button_count - i - 1).rect.GetWidth();
+            for ( const auto& b : m_buttons )
+                button_width += b.rect.GetWidth();
 
             if (visible_width < m_rect.GetWidth() - button_width)
                 button.curState |= wxAUI_BUTTON_STATE_DISABLED;
