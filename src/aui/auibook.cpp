@@ -615,7 +615,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
         }
     }
 
-    // determine whether left button should be enabled
+    // determine whether various buttons should be enabled
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(i);
@@ -626,7 +626,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
             else
                 button.curState &= ~wxAUI_BUTTON_STATE_DISABLED;
         }
-        if (button.id == wxAUI_BUTTON_RIGHT)
+        else if (button.id == wxAUI_BUTTON_RIGHT)
         {
             int button_width = 0;
             for ( const auto& b : m_buttons )
