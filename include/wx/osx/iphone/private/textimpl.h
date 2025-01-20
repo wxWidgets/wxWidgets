@@ -21,6 +21,8 @@ public :
     wxUITextFieldControl( wxTextCtrl *wxPeer, UITextField* w );
     virtual ~wxUITextFieldControl();
 
+    virtual wxTextSearchResult SearchText(const wxTextSearch &search) const;
+
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
     virtual wxString GetRTFValue() const;
@@ -52,6 +54,8 @@ class wxUITextViewControl : public wxWidgetIPhoneImpl, public wxTextWidgetImpl
 public:
     wxUITextViewControl( wxTextCtrl *wxPeer, UITextView* w );
     virtual ~wxUITextViewControl();
+
+    virtual wxTextSearchResult SearchText(const wxTextSearch &search) const;
 
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;

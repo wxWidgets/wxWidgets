@@ -149,6 +149,11 @@ void wxTextCtrl::OSXDisableAllSmartSubstitutions()
     OSXEnableAutomaticQuoteSubstitution(false);
 }
 
+wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
+{
+    return GetTextPeer()->SearchText(search);
+}
+
 wxString wxTextCtrl::GetRTFValue() const
 {
     return GetTextPeer()->GetRTFValue();

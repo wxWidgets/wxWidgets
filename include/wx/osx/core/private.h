@@ -77,6 +77,8 @@ WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path
 #include "wx/toplevel.h"
 
 class wxTextProofOptions;
+struct wxTextSearchResult;
+struct wxTextSearch;
 
 class WXDLLIMPEXP_CORE wxMacCGContextStateSaver
 {
@@ -706,6 +708,8 @@ public :
     wxTextEntry *GetTextEntry() const { return m_entry; }
 
     virtual bool CanFocus() const { return true; }
+
+    virtual wxTextSearchResult SearchText(const wxTextSearch &search) const = 0;
 
     virtual wxString GetStringValue() const = 0 ;
     virtual void SetStringValue( const wxString &val ) = 0 ;

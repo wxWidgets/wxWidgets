@@ -868,6 +868,102 @@ void wxNSTextViewControl::SetRTFValue(const wxString &str)
     DoUpdateTextStyle();
 }
 
+wxTextSearchResult wxNSTextViewControl::SearchText(const wxTextSearch &search) const
+{
+    if (!m_textView)
+        return wxTextSearchResult{};
+
+    int searchFlags = 0;
+    switch ( search.m_direction )
+    {
+        case wxTextSearch::Direction::Down:
+            // the deault
+            break;
+
+        case wxTextSearch::Direction::Up:
+            searchFlags |= NSBackwardsSearch;
+            break;
+    }
+
+    if ( !search.m_matchCase )
+    {
+        searchFlags |= NSCaseInsensitiveSearch;
+    }
+
+    NSString *viewString = [[m_textView textStorage] string];
+
+    // return if passed an invalid starting point
+    if ( search.m_startingPosition != -1 &&
+            search.m_startingPosition >= [viewString length] )
+        return wxTextSearchResult{};
+
+    NSRange searchRange = NSMakeRange(0, [viewString length]);
+    if ( search.m_startingPosition != -1 )
+    {
+        if ( search.m_direction == wxTextSearch::Direction::Down )
+        {
+            // if going down, range is user-provided start to the end
+            searchRange.location = search.m_startingPosition;
+            searchRange.length = [viewString length] - search.m_startingPosition;
+        }
+        else
+        {
+            // if going up, then the range will be from 0 to starting point
+            searchRange.length = search.m_startingPosition;
+        }
+    }
+    NSString* textContent = [[[NSString alloc] initWithString:
+        wxCFStringRef( search.m_searchValue ).AsNSString()]
+        autorelease];
+
+    NSRange found;
+    for ( ;; )
+    {
+        found = [viewString rangeOfString:textContent
+                                  options:searchFlags
+                                    range:searchRange];
+
+        if ( found.location == NSNotFound )
+        {
+            // If we haven't found anything at all, we're done.
+            return wxTextSearchResult{};
+        }
+
+        // But if we did find something, we may need to check whether it was
+        // a whole word.
+        if ( !search.m_wholeWord )
+            break;
+
+        const auto posAfter = found.location + found.length;
+
+        // see if preceding and following characters are alphanumeric
+        if ((found.location > 0 &&
+             [[NSCharacterSet alphanumericCharacterSet] characterIsMember:[viewString characterAtIndex:found.location - 1]]) ||
+            (posAfter < [viewString length] &&
+             [[NSCharacterSet alphanumericCharacterSet] characterIsMember:[viewString characterAtIndex:posAfter]]) )
+        {
+            // this match is inside a word, skip it
+            if ( search.m_direction == wxTextSearch::Direction::Down )
+            {
+                searchRange.location = posAfter;
+                searchRange.length = [viewString length] - searchRange.location;
+            }
+            else
+            {
+                if ( found.location == 0 )
+                    return wxTextSearchResult{};
+                searchRange.length = found.location;
+            }
+            continue;
+        }
+
+        // otherwise, a whole word matched
+        break;
+    }
+
+    return wxTextSearchResult(found.location, found.location + found.length);
+}
+
 void wxNSTextViewControl::Copy()
 {
     if (m_textView)
