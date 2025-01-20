@@ -147,3 +147,23 @@ TEST_CASE("wxTextWrapper::Wrap", "[text]")
         CHECK( w.GetLine(5) == "consectetur" );
     }
 }
+
+// This pseudo test is disabled by default as it requires the environment
+// variables WX_TEST_TEXT_WRAP WX_TEST_TEXT_WIDTH to be defined to test how the
+// given text is wrapped.
+TEST_CASE("wxTextWrapper::Manual", "[.]")
+{
+    wxString text;
+    REQUIRE( wxGetEnv("WX_TEST_TEXT_WRAP", &text) );
+
+    wxString widthStr;
+    REQUIRE( wxGetEnv("WX_TEST_TEXT_WIDTH", &widthStr) );
+
+    int width;
+    REQUIRE( widthStr.ToInt(&width) );
+
+    HardBreakWrapper w;
+    const size_t n = w.Do(text, width);
+    WARN("Text wrapped at " << width << " takes " << n << " lines:\n\n"
+         << w.GetResult() << "\n");
+}
