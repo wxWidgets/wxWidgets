@@ -77,6 +77,8 @@ WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path
 #include "wx/toplevel.h"
 
 class wxTextProofOptions;
+struct wxTextSearchResult;
+struct wxTextSearch;
 
 class WXDLLIMPEXP_CORE wxMacCGContextStateSaver
 {
