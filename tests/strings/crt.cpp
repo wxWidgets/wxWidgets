@@ -46,7 +46,15 @@ TEST_CASE("CRT::SetGetEnv", "[crt][getenv][setenv]")
     wxSetEnv(TESTVAR_NAME, nonASCII);
     CHECK( wxGetEnv(TESTVAR_NAME, &val) );
     CHECK( val == nonASCII );
+
+    // Under MSW the current locale encoding is used for storing the value in
+    // the ASCII environment block, so we can't expect to get it back unless
+    // this encoding is UTF-8, which is not the case by default.
+#ifndef __WINDOWS__
     CHECK( wxString::FromUTF8(wxGetenv(TESTVAR_NAME)) == nonASCII );
+#endif
+
+    // Wide char wxGetenv() overload does work, under both MSW and Unix.
     CHECK( wxGetenv(L"WXTESTVAR") == nonASCII );
 
     CHECK( wxUnsetEnv(TESTVAR_NAME) );
