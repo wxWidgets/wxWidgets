@@ -106,9 +106,10 @@ TEST_CASE("wxTextWrapper::Wrap", "[text]")
 
     SECTION("Narrow")
     {
-        const auto n = w.Do(text, 20*w.GetExtent("x"));
+        const auto n = w.Do(text, w.GetExtent("Lorum ipsum dolor"));
         INFO("Wrapped text:\n" << w.GetResult() << "\n");
-        CHECK( n >= 7 );
+        CHECK( n >= 8 );
+        CHECK( w.GetLine(0) == "Lorem ipsum dolor" );
     }
 
     // Make the window too narrow to fit the word "consectetur" and check that

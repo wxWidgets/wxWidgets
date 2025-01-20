@@ -127,15 +127,27 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             wxArrayInt widths;
             dc.GetPartialTextExtents(line, widths);
 
-            const size_t posEnd = std::lower_bound(widths.begin(),
-                                                   widths.end(),
-                                                   widthMax) - widths.begin();
+            const size_t posEnd = std::lower_bound
+                (
+                   widths.begin(),
+                   widths.end(),
+                   widthMax,
+                   [](int w1, int w2) { return w1 <= w2; }
+                ) - widths.begin();
 
             // Does the entire remaining line fit?
             if ( posEnd == line.length() )
             {
                 DoOutputLine(line);
                 break;
+            }
+
+            // If the overflowing character is a space, we can break right here.
+            if ( line[posEnd] == ' ' )
+            {
+                DoOutputLine(line.substr(0, posEnd));
+                line = line.substr(posEnd + 1);
+                continue;
             }
 
             // Find the last word to chop off.
