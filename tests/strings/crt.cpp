@@ -47,6 +47,7 @@ TEST_CASE("CRT::SetGetEnv", "[crt][getenv][setenv]")
     CHECK( wxGetEnv(TESTVAR_NAME, &val) );
     CHECK( val == nonASCII );
     CHECK( wxString::FromUTF8(wxGetenv(TESTVAR_NAME)) == nonASCII );
+    CHECK( wxGetenv(L"WXTESTVAR") == nonASCII );
 
     CHECK( wxUnsetEnv(TESTVAR_NAME) );
     CHECK( !wxGetEnv(TESTVAR_NAME, nullptr) );

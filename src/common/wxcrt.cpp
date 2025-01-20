@@ -779,7 +779,7 @@ WXDLLIMPEXP_BASE wchar_t* wxCRT_GetenvW(const wchar_t *name)
     //     time getenv() is called, so it is OK to use static string
     //     buffer to hold the data.
     static wxWCharBuffer value;
-    value = wxConvLibc.cMB2WC(getenv(wxConvLibc.cWC2MB(name)));
+    value = wxConvWhateverWorks.cMB2WC(getenv(wxConvWhateverWorks.cWC2MB(name)));
     return value.data();
 }
 #endif // !wxCRT_GetenvW
