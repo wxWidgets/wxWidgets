@@ -265,6 +265,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_garbage.o \
 	test_gui_safearrayconverttest.o \
 	test_gui_settings.o \
+	test_gui_textwrap.o \
 	test_gui_socket.o \
 	test_gui_tlw.o \
 	test_gui_dataview.o \
@@ -1174,6 +1175,9 @@ test_gui_safearrayconverttest.o: $(srcdir)/misc/safearrayconverttest.cpp $(TEST_
 
 test_gui_settings.o: $(srcdir)/misc/settings.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/misc/settings.cpp
+
+test_gui_textwrap.o: $(srcdir)/misc/textwrap.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/misc/textwrap.cpp
 
 test_gui_socket.o: $(srcdir)/net/socket.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/net/socket.cpp
