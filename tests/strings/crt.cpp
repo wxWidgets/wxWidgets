@@ -34,7 +34,7 @@ static const wxString strWX("hello, world");
 
 TEST_CASE("CRT::SetGetEnv", "[crt][getenv][setenv]")
 {
-#define TESTVAR_NAME wxT("WXTESTVAR")
+#define TESTVAR_NAME "WXTESTVAR"
 
     wxString val;
     wxSetEnv(TESTVAR_NAME, wxT("value"));
@@ -42,10 +42,11 @@ TEST_CASE("CRT::SetGetEnv", "[crt][getenv][setenv]")
     CHECK( val == "value" );
     CHECK( wxString(wxGetenv(TESTVAR_NAME)) == "value" );
 
-    wxSetEnv(TESTVAR_NAME, wxT("something else"));
+    const wxString nonASCII = wxString::FromUTF8("\xe2\x98\xba");
+    wxSetEnv(TESTVAR_NAME, nonASCII);
     CHECK( wxGetEnv(TESTVAR_NAME, &val) );
-    CHECK( val == "something else" );
-    CHECK( wxString(wxGetenv(TESTVAR_NAME)) == "something else" );
+    CHECK( val == nonASCII );
+    CHECK( wxString::FromUTF8(wxGetenv(TESTVAR_NAME)) == nonASCII );
 
     CHECK( wxUnsetEnv(TESTVAR_NAME) );
     CHECK( !wxGetEnv(TESTVAR_NAME, nullptr) );
