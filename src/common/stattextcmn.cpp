@@ -139,19 +139,27 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             }
 
             // Find the last word to chop off.
-            const size_t lastSpace = line.rfind(' ', posEnd);
-            if ( lastSpace == wxString::npos )
+            size_t posSpace = line.rfind(' ', posEnd);
+            if ( posSpace == wxString::npos )
             {
-                // No spaces, so can't wrap.
-                DoOutputLine(line);
-                break;
+                // No spaces, so can't wrap, output until the end of the word
+                // which is defined here as just a sequence of non-space chars.
+                //
+                // TODO: Implement real Unicode word break algorithm.
+                posSpace = line.find(' ', posEnd);
+                if ( posSpace == wxString::npos )
+                {
+                    // No more spaces at all, output the rest of the line.
+                    DoOutputLine(line);
+                    break;
+                }
             }
 
             // Output the part that fits.
-            DoOutputLine(line.substr(0, lastSpace));
+            DoOutputLine(line.substr(0, posSpace));
 
             // And redo the layout with the rest.
-            line = line.substr(lastSpace + 1);
+            line = line.substr(posSpace + 1);
         }
     }
 }
