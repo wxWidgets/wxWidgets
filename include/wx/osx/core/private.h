@@ -706,7 +706,7 @@ public :
     wxTextEntry *GetTextEntry() const { return m_entry; }
 
     virtual bool CanFocus() const { return true; }
-    
+
     virtual wxTextSearchResult SearchText(const wxTextSearch &search) const = 0;
 
     virtual wxString GetStringValue() const = 0;

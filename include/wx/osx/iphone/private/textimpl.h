@@ -20,7 +20,7 @@ class wxUITextFieldControl : public wxWidgetIPhoneImpl, public wxTextWidgetImpl
 public :
     wxUITextFieldControl( wxTextCtrl *wxPeer, UITextField* w );
     virtual ~wxUITextFieldControl();
-    
+
     virtual wxTextSearchResult SearchText(const wxTextSearch &search) const;
 
     virtual wxString GetStringValue() const ;
@@ -54,7 +54,7 @@ class wxUITextViewControl : public wxWidgetIPhoneImpl, public wxTextWidgetImpl
 public:
     wxUITextViewControl( wxTextCtrl *wxPeer, UITextView* w );
     virtual ~wxUITextViewControl();
-    
+
     virtual wxTextSearchResult SearchText(const wxTextSearch &search) const;
 
     virtual wxString GetStringValue() const ;

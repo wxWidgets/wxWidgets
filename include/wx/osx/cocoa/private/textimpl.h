@@ -57,7 +57,7 @@ public :
 
     virtual bool CanForceUpper() override { return true; }
     virtual void ForceUpper() override;
-    
+
     virtual wxTextSearchResult SearchText(const wxTextSearch& WXUNUSED(search)) const override
     {
         wxFAIL_MSG("SearchText() should only be used with multiline controls.");
@@ -122,7 +122,7 @@ public:
     virtual ~wxNSTextViewControl();
 
     virtual void insertText(NSString* text, WXWidget slf, void *_cmd) override;
-    
+
     virtual wxTextSearchResult SearchText(const wxTextSearch &search) const override;
 
     virtual wxString GetStringValue() const override;

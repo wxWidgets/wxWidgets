@@ -1817,7 +1817,7 @@ public:
 
         @since 3.3.0
 
-        @onlyfor{wxmsw,wxgtk,wxosx,wxqt}
+        @onlyfor{wxmsw,wxgtk,wxosx}
     */
     wxTextSearchResult SearchText(const wxTextSearch& search) const;
 

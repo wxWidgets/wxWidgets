@@ -888,7 +888,7 @@ wxTextSearchResult wxNSTextViewControl::SearchText(const wxTextSearch &search) c
                 searchFlags |= NSCaseInsensitiveSearch;
             }
         NSString *viewString = [[m_textView textStorage] string];
-        
+
         // return if passed an invalid starting point
         if (search.m_startingPosition != -1 && search.m_startingPosition >= [viewString length])
             return wxTextSearchResult{};
