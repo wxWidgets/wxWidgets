@@ -40,41 +40,6 @@ class wxStringPrinter:
     def display_hint(self):
         return 'string'
 
-class wxArrayStringPrinter:
-
-    class _iterator(Iterator):
-        def __init__ (self, firstItem, count):
-            self.item = firstItem
-            self.count = count
-            self.current = 0
-
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            current = self.current
-            self.current = self.current + 1
-
-            if current == self.count:
-                raise StopIteration
-            elt = self.item.dereference()
-            self.item = self.item + 1
-            return ('[%d]' % current, elt)
-
-    def __init__(self, val):
-        self.val = val
-
-    def children(self):
-        return self._iterator(self.val['m_pItems'], self.val['m_nCount'])
-
-    def to_string(self):
-        count = self.val['m_nCount']
-        capacity = self.val['m_nSize']
-        return ('length %d, capacity %d' % (int (count), int (capacity)))
-
-    def display_hint(self):
-        return 'array'
-
 class wxDateTimePrinter:
     def __init__(self, val):
         self.val = val
@@ -130,7 +95,6 @@ def wxLookupFunction(val):
     # Using a list is probably ok for so few items but consider switching to a
     # set (or a dict and cache class types as the keys in it?) if needed later.
     types = ['wxString',
-             'wxArrayString',
              'wxDateTime',
              'wxFileName',
              'wxPoint',
