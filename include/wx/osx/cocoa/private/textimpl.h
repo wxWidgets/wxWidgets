@@ -125,22 +125,22 @@ public:
 
     virtual wxTextSearchResult SearchText(const wxTextSearch &search) const override;
 
-    virtual wxString GetStringValue() const override;
-    virtual void SetStringValue( const wxString &str) override;
+    virtual wxString GetStringValue() const override ;
+    virtual void SetStringValue( const wxString &str) override ;
     virtual wxString GetRTFValue() const override;
     virtual void SetRTFValue(const wxString& str) override;
-    virtual void Copy() override;
-    virtual void Cut() override;
+    virtual void Copy() override ;
+    virtual void Cut() override ;
     virtual void Paste() override ;
-    virtual bool CanPaste() const override;
-    virtual void SetEditable(bool editable) override;
+    virtual bool CanPaste() const override ;
+    virtual void SetEditable(bool editable) override ;
     virtual long GetLastPosition() const override;
-    virtual void GetSelection( long* from, long* to) const override;
+    virtual void GetSelection( long* from, long* to) const override ;
     virtual void SetSelection( long from , long to ) override;
     virtual bool PositionToXY(long pos, long *x, long *y) const override;
     virtual long XYToPosition(long x, long y) const override;
     virtual void ShowPosition(long pos) override;
-    virtual void WriteText(const wxString& str) override;
+    virtual void WriteText(const wxString& str) override ;
     virtual void SetFont(const wxFont & font) override;
 
     virtual bool GetStyle(long position, wxTextAttr& style) override;
