@@ -69,6 +69,25 @@ bool wxControl::Create(wxWindow *parent,
     return true;
 }
 
+wxControl::~wxControl()
+{
+#if wxUSE_ACCEL
+    wxChar accelChar = GetAccelChar();
+
+    for ( wxWindow *win = this; win; win = win->GetParent() )
+    {
+        if ( win->IsTopLevel() )
+        {
+            if ( accelChar != wxEMPTY_ACCEL_CHAR )
+            {
+                wxAcceleratorEntry accelEntry(wxACCEL_NORMAL, (int)accelChar);
+                win->GetAcceleratorTable()->Remove(accelEntry);
+            }
+        }
+    }
+#endif // wxUSE_ACCEL
+}
+
 // ----------------------------------------------------------------------------
 // mnemonics handling
 // ----------------------------------------------------------------------------
@@ -85,8 +104,36 @@ void wxControl::UnivDoSetLabel(const wxString& label)
 {
     wxString labelOld = m_label;
     int indexAccelOld = m_indexAccel;
+#if wxUSE_ACCEL
+    wxChar accelCharOld = GetAccelChar();
+#endif // wxUSE_ACCEL
 
     m_indexAccel = FindAccelIndex(label, &m_label);
+
+#if wxUSE_ACCEL
+    wxChar accelChar = GetAccelChar();
+
+    if ( accelCharOld != accelChar )
+    {
+        for ( wxWindow *win = this; win; win = win->GetParent() )
+        {
+            if ( win->IsTopLevel() )
+            {
+                if ( accelCharOld != wxEMPTY_ACCEL_CHAR )
+                {
+                    wxAcceleratorEntry accelEntryOld(wxACCEL_NORMAL, (int)accelCharOld);
+                    win->GetAcceleratorTable()->Remove(accelEntryOld);
+                }
+
+                if ( accelChar != wxEMPTY_ACCEL_CHAR )
+                {
+                    wxAcceleratorEntry accelEntryNew(wxACCEL_NORMAL, (int)accelChar, GetId());
+                    win->GetAcceleratorTable()->Add(accelEntryNew);
+                }
+            }
+        }
+    }
+#endif // wxUSE_ACCEL
 
     if ( ( m_label != labelOld ) || ( m_indexAccel != indexAccelOld ) )
     {
