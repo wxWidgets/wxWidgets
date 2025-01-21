@@ -74,15 +74,15 @@ wxControl::~wxControl()
 #if wxUSE_ACCEL
     wxChar accelChar = GetAccelChar();
 
-    for ( wxWindow *win = this; win; win = win->GetParent() )
+    if ( accelChar != wxEMPTY_ACCEL_CHAR )
     {
-        if ( win->IsTopLevel() )
+        wxWindow *win = wxGetTopLevelParent(this);
+        if ( win )
         {
-            if ( accelChar != wxEMPTY_ACCEL_CHAR )
-            {
-                wxAcceleratorEntry accelEntry(wxACCEL_NORMAL, (int)accelChar);
-                win->GetAcceleratorTable()->Remove(accelEntry);
-            }
+            wxAcceleratorEntry accelEntry(wxACCEL_ALT, (int)accelChar);
+            wxAcceleratorTable *accelTable = win->GetAcceleratorTable();
+            if ( accelTable && accelTable->IsOk() )
+                accelTable->Remove(accelEntry);
         }
     }
 #endif // wxUSE_ACCEL
@@ -115,21 +115,19 @@ void wxControl::UnivDoSetLabel(const wxString& label)
 
     if ( accelCharOld != accelChar )
     {
-        for ( wxWindow *win = this; win; win = win->GetParent() )
+        wxWindow *win = wxGetTopLevelParent(this);
+        if ( win )
         {
-            if ( win->IsTopLevel() )
+            if ( accelCharOld != wxEMPTY_ACCEL_CHAR )
             {
-                if ( accelCharOld != wxEMPTY_ACCEL_CHAR )
-                {
-                    wxAcceleratorEntry accelEntryOld(wxACCEL_NORMAL, (int)accelCharOld);
-                    win->GetAcceleratorTable()->Remove(accelEntryOld);
-                }
+                wxAcceleratorEntry accelEntryOld(wxACCEL_ALT, (int)accelCharOld);
+                win->GetAcceleratorTable()->Remove(accelEntryOld);
+            }
 
-                if ( accelChar != wxEMPTY_ACCEL_CHAR )
-                {
-                    wxAcceleratorEntry accelEntryNew(wxACCEL_NORMAL, (int)accelChar, GetId());
-                    win->GetAcceleratorTable()->Add(accelEntryNew);
-                }
+            if ( accelChar != wxEMPTY_ACCEL_CHAR )
+            {
+                wxAcceleratorEntry accelEntryNew(wxACCEL_ALT, (int)accelChar, GetId());
+                win->GetAcceleratorTable()->Add(accelEntryNew);
             }
         }
     }
