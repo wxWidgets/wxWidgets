@@ -587,7 +587,7 @@ bool wxTempFile::Commit()
 {
     m_file.Close();
 
-    if ( wxRename(m_strTemp, m_strName) != 0 ) {
+    if ( !wxRenameFile(m_strTemp, m_strName) ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName);
         return false;
     }
