@@ -31,6 +31,7 @@ typedef wxString wxControlAction;
 // in the controls headers)
 
 #define wxACTION_NONE    wxT("")           // no action to perform
+#define wxEMPTY_ACCEL_CHAR    wxT('\0')
 
 // ----------------------------------------------------------------------------
 // wxControl: the base class for all GUI controls
@@ -52,6 +53,8 @@ public:
 
         Create(parent, id, pos, size, style, validator, name);
     }
+
+    virtual ~wxControl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -78,7 +81,7 @@ public:
     // return the accel char itself or 0 if none
     wxChar GetAccelChar() const
     {
-        return m_indexAccel == -1 ? wxT('\0') : (wxChar)m_label[m_indexAccel];
+        return m_indexAccel == -1 ? wxEMPTY_ACCEL_CHAR : (wxChar)m_label[m_indexAccel];
     }
 
     virtual wxWindow *GetInputWindow() const override
