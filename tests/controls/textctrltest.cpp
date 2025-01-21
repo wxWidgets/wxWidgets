@@ -1487,7 +1487,6 @@ TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
 }
 #endif
 
-#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXQT__) || defined(__WXOSX__)
 TEST_CASE("wxTextCtrl::SearchText", "[wxTextCtrl][search]")
 {
     wxWindow* const parent = wxTheApp->GetTopWindow();
@@ -1595,7 +1594,6 @@ And there is a mispeled word)");
     CHECK(results.m_start == 0);
     CHECK(results.m_end == 6);
 }
-#endif
 
 TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
 {
