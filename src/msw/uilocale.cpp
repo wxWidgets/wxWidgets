@@ -459,10 +459,6 @@ public:
                                     : LOCALE_SDECIMAL);
                 break;
 
-            case wxLOCALE_CURRENCY_SYMBOL:
-                str = DoGetInfo(LOCALE_SCURRENCY);
-                break;
-
             case wxLOCALE_INTERNATIONAL_CURRENCY_SYMBOL:
                 str = DoGetInfo(LOCALE_SINTLSYMBOL);
                 break;

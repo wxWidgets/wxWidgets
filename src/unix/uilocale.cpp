@@ -589,9 +589,6 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 
             return GetLangInfo(RADIXCHAR);
 
-        case wxLOCALE_CURRENCY_SYMBOL:
-            return GetLangInfo(CURRENCY_SYMBOL);
-
         case wxLOCALE_INTERNATIONAL_CURRENCY_SYMBOL:
             return GetLangInfo(INT_CURR_SYMBOL);
 

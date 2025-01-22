@@ -423,10 +423,6 @@ TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
     if (CheckSupported(locDE, "German"))
     {
         CHECK(locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
-        REQUIRE_FALSE(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL).empty());
-        // only look at first character, Unix may include additional
-        // info after this character that we aren't interested in here
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL).substr(0, 1) == wxString(L"\U000020AC")); // Euro symbol
         CHECK(locDE.GetInfo(wxLOCALE_INTERNATIONAL_CURRENCY_SYMBOL) == "EUR");
     }
 

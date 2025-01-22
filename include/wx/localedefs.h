@@ -87,9 +87,6 @@ enum wxLocaleInfo
     // the character used as decimal point (for wxLOCALE_CAT_NUMBER or MONEY)
     wxLOCALE_DECIMAL_POINT,
 
-    // the character used for currency
-    wxLOCALE_CURRENCY_SYMBOL,
-
     // the string used for international currency symbol (e.g, USD)
     wxLOCALE_INTERNATIONAL_CURRENCY_SYMBOL,
 

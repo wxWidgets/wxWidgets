@@ -198,20 +198,6 @@ enum wxLocaleInfo
     wxLOCALE_DECIMAL_POINT,
 
     /**
-       Currency symbol (e.g., '$' or '€').
-
-       @note Under Unix, using this with `wxUILocale` may return additional data.
-             The returned string will include the currency symbol in the first position,
-             but may also include a `-` or `+` symbol after that. This indicates
-             whether the currency symbol should appear before or after the monetary
-             value, respectively. Refer to documentation for the function `nl_langinfo`
-             for further details.
-
-       @since 3.3.0
-    */
-    wxLOCALE_CURRENCY_SYMBOL,
-
-    /**
        International currency symbol (e.g., "USD" or "EUR").
 
        @since 3.3.0

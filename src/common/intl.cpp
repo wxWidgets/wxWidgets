@@ -1209,9 +1209,6 @@ wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
         case wxLOCALE_DECIMAL_POINT:
             return ".";
 
-        case wxLOCALE_CURRENCY_SYMBOL:
-            return "$";
-
         case wxLOCALE_INTERNATIONAL_CURRENCY_SYMBOL:
             return "USD";
 
@@ -1263,10 +1260,6 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
 
         case wxLOCALE_DECIMAL_POINT:
             cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleDecimalSeparator);
-            break;
-
-        case wxLOCALE_CURRENCY_SYMBOL:
-            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleCurrencySymbol);
             break;
 
         case wxLOCALE_INTERNATIONAL_CURRENCY_SYMBOL:
@@ -1413,9 +1406,6 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
                     wxFAIL_MSG( "invalid wxLocaleCategory" );
             }
             break;
-
-        case wxLOCALE_CURRENCY_SYMBOL:
-            return lc->currency_symbol;
 
         case wxLOCALE_INTERNATIONAL_CURRENCY_SYMBOL:
             return lc->int_curr_symbol;
