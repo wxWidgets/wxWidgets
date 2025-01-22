@@ -74,10 +74,9 @@ wxControl::~wxControl()
 #if wxUSE_ACCEL
     wxChar accelChar = GetAccelChar();
 
-    if ( accelChar != wxEMPTY_ACCEL_CHAR )
+    if ( accelChar != wxNO_ACCEL_CHAR )
     {
-        wxWindow *win = wxGetTopLevelParent(this);
-        if ( win )
+        if ( wxWindow *win = wxGetTopLevelParent(this) )
         {
             wxAcceleratorEntry accelEntry(wxACCEL_ALT, (int)accelChar);
             wxAcceleratorTable *accelTable = win->GetAcceleratorTable();
@@ -115,19 +114,23 @@ void wxControl::UnivDoSetLabel(const wxString& label)
 
     if ( accelCharOld != accelChar )
     {
-        wxWindow *win = wxGetTopLevelParent(this);
-        if ( win )
+        if ( wxWindow *win = wxGetTopLevelParent(this) )
         {
-            if ( accelCharOld != wxEMPTY_ACCEL_CHAR )
+            if ( wxAcceleratorTable *accelTable = win->GetAcceleratorTable() )
             {
-                wxAcceleratorEntry accelEntryOld(wxACCEL_ALT, (int)accelCharOld);
-                win->GetAcceleratorTable()->Remove(accelEntryOld);
-            }
+                // remove entry only from valid accelerator table
+                if ( ( accelCharOld != wxNO_ACCEL_CHAR ) && accelTable->IsOk() )
+                {
+                    wxAcceleratorEntry accelEntryOld(wxACCEL_ALT, (int)accelCharOld);
+                    accelTable->Remove(accelEntryOld);
+                }
 
-            if ( accelChar != wxEMPTY_ACCEL_CHAR )
-            {
-                wxAcceleratorEntry accelEntryNew(wxACCEL_ALT, (int)accelChar, GetId());
-                win->GetAcceleratorTable()->Add(accelEntryNew);
+                // accelerator table doesn't have to be valid to add
+                if ( accelChar != wxNO_ACCEL_CHAR )
+                {
+                    wxAcceleratorEntry accelEntryNew(wxACCEL_ALT, (int)accelChar, GetId());
+                    accelTable->Add(accelEntryNew);
+                }
             }
         }
     }
