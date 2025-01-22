@@ -90,7 +90,7 @@ enum wxLocaleInfo
     // the character used for currency
     wxLOCALE_CURRENCY_SYMBOL,
 
-    // the string used for international currency symbol (e.g, USD) 
+    // the string used for international currency symbol (e.g, USD)
     wxLOCALE_INTERNATIONAL_CURRENCY_SYMBOL,
 
     // the stftime()-formats used for short/long date and time representations
