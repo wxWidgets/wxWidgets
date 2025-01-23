@@ -450,7 +450,7 @@ void wxPopupMenuWindow::Popup(wxWindow *focus)
         // if we're shown, the parent menu must be also shown
         wxCHECK_RET( win, wxT("parent menu is not shown?") );
 
-        if ( !::SetWindowPos(GetHwndOf(win), GetHwnd(),
+        if ( !::SetWindowPos(GetHwnd(), GetHwndOf(win),
                              0, 0, 0, 0,
                              SWP_NOMOVE | SWP_NOSIZE | SWP_NOREDRAW) )
         {
