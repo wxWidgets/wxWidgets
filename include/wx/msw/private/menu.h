@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/private/menu.h
-// Purpose:     Structs used to custom draw menu bar in wxMSW
+// Purpose:     Structs used to custom draw and measure menu bar in wxMSW
 // Author:      Vadim Zeitlin
 // Created:     2025-01-24
 // Copyright:   (c) 2025 wxWidgets development team
@@ -16,6 +16,7 @@ namespace wxMSWMenuImpl
 // Definitions for undocumented messages and structs used in this code.
 constexpr int WM_MENUBAR_DRAWMENU = 0x91;
 constexpr int WM_MENUBAR_DRAWMENUITEM = 0x92;
+constexpr int WM_MENUBAR_MEASUREMENUITEM = 0x94;
 
 // This is passed via LPARAM of WM_MENUBAR_DRAWMENU.
 struct MenuBarDrawMenu
@@ -36,6 +37,13 @@ struct MenuBarMenuItem
 struct MenuBarDrawMenuItem
 {
     DRAWITEMSTRUCT dis;
+    MenuBarDrawMenu mbdm;
+    MenuBarMenuItem mbmi;
+};
+
+struct MenuBarMeasureMenuItem
+{
+    MEASUREITEMSTRUCT mis;
     MenuBarDrawMenu mbdm;
     MenuBarMenuItem mbmi;
 };
