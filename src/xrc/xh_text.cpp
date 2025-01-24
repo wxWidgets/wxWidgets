@@ -35,11 +35,14 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxTE_AUTO_URL);
     XRC_ADD_STYLE(wxTE_NOHIDESEL);
     XRC_ADD_STYLE(wxTE_LEFT);
+    XRC_ADD_STYLE(wxTE_CENTER);
     XRC_ADD_STYLE(wxTE_CENTRE);
     XRC_ADD_STYLE(wxTE_RIGHT);
     XRC_ADD_STYLE(wxTE_DONTWRAP);
     XRC_ADD_STYLE(wxTE_CHARWRAP);
     XRC_ADD_STYLE(wxTE_WORDWRAP);
+    XRC_ADD_STYLE(wxTE_BESTWRAP);
+    XRC_ADD_STYLE(wxTE_CAPITALIZE);
 
     // this style doesn't exist since wx 2.9.0 but we still support it (by
     // ignoring it silently) in XRC files to avoid unimportant warnings when
