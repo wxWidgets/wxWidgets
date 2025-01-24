@@ -50,6 +50,7 @@
 
 #include "wx/msw/private/custompaint.h"
 #include "wx/msw/private/darkmode.h"
+#include "wx/msw/private/menu.h"
 
 #include <memory>
 
@@ -531,32 +532,7 @@ bool PaintIfNecessary(HWND hwnd, WXWNDPROC defWndProc)
 namespace wxMSWMenuImpl
 {
 
-// Definitions for undocumented messages and structs used in this code.
-constexpr int WM_MENUBAR_DRAWMENU = 0x91;
-constexpr int WM_MENUBAR_DRAWMENUITEM = 0x92;
-
-// This is passed via LPARAM of WM_MENUBAR_DRAWMENU.
-struct MenuBarDrawMenu
-{
-    HMENU hmenu;
-    HDC hdc;
-    DWORD dwReserved;
-};
-
-struct MenuBarMenuItem
-{
-    int iPosition;
-
-    // There are more fields in this (undocumented) struct but we don't
-    // currently need them, so don't bother with declaring them.
-};
-
-struct MenuBarDrawMenuItem
-{
-    DRAWITEMSTRUCT dis;
-    MenuBarDrawMenu mbdm;
-    MenuBarMenuItem mbmi;
-};
+using namespace ::wxMSWMenuImpl;
 
 wxColour GetMenuColour(wxMenuColour which)
 {
