@@ -256,15 +256,19 @@ wxVersionInfo wxGetLibraryVersionInfo();
 using wxEnvVariableHashMap = std::unordered_map<wxString, wxString>;
 
 /**
-    This is a macro defined as @c getenv() or its wide char version in Unicode
-    mode.
+    Wrapper of the standard @c getenv() or its wide char version.
 
-    Note that under Win32 it may not return correct value for the variables set
-    with wxSetEnv(), use wxGetEnv() function instead.
+    Note that under Win32 the overload using `char*` doesn't not work for the
+    variables using non-ASCII characters, use either the overload taking
+    `wchar_t*` or, preferably, wxGetEnv() instead.
+
+    Under other platforms, `char*` overload always uses UTF-8 encoding.
 
     @header{wx/utils.h}
 */
-wxChar* wxGetenv(const wxString& var);
+char* wxGetenv(const char* s);
+wchar_t* wxGetenv(const wchar_t* ws);
+char* wxGetenv(const wxString& s);
 
 /**
     Returns the current value of the environment variable @a var in @a value.
