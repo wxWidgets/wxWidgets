@@ -2124,7 +2124,7 @@ public:
     void OSXEnableAutomaticQuoteSubstitution(bool enable);
 
     /**
-        Enables the automatic conversion of two ASCII hyphens into an m-dash.
+        Enables the automatic conversion of two ASCII hyphens into an em dash.
 
         This feature is enabled by default.
 
