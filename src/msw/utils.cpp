@@ -1205,7 +1205,9 @@ wxString wxGetOsDescription()
             }
 
             str << wxT(" (")
-                << wxString::Format(_("build %lu"), info.dwBuildNumber);
+                << wxString::Format(
+                       /* TRANSLATORS: MS Windows build number */_("build %lu"),
+                       info.dwBuildNumber);
             if ( !wxIsEmpty(info.szCSDVersion) )
             {
                 str << wxT(", ") << info.szCSDVersion;

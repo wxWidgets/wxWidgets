@@ -252,11 +252,15 @@ wxString wxLogGui::GetTitle() const
     switch ( GetSeverityIcon() )
     {
         case wxICON_STOP:
-            titleFormat = _("%s Error");
+            titleFormat =
+                /* TRANSLATORS: %s will be either the application name or "Application" */
+                _("%s Error");
             break;
 
         case wxICON_EXCLAMATION:
-            titleFormat = _("%s Warning");
+            titleFormat =
+                /* TRANSLATORS: %s will be either the application name or "Application" */
+                _("%s Warning");
             break;
 
         default:
@@ -264,7 +268,9 @@ wxString wxLogGui::GetTitle() const
             wxFALLTHROUGH;
 
         case wxICON_INFORMATION:
-            titleFormat = _("%s Information");
+            titleFormat =
+                /* TRANSLATORS: %s will be either the application name or "Application" */
+                _("%s Information");
     }
 
     return wxString::Format(titleFormat, wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
