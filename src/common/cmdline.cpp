@@ -1193,8 +1193,7 @@ int wxCmdLineParser::Parse(bool showUsage, int wrapColumn)
                 {
                     if ( AreLongOptionsEnabled() )
                     {
-                        optName.Printf( 
-                                        // TRANSLATORS: Short name and long name for a command line option
+                        optName.Printf(// TRANSLATORS: Short name and long name for a command line option
                                         _("%s (or %s)"),
                                         opt.shortName.c_str(),
                                         opt.longName.c_str() );
