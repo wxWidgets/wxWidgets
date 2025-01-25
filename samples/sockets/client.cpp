@@ -235,8 +235,12 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY,
   // Append menus to the menubar
   m_menuBar = new wxMenuBar();
   m_menuBar->Append(m_menuFile, _("&File"));
-  m_menuBar->Append(m_menuSocket, _("&TCP"));
-  m_menuBar->Append(m_menuDatagramSocket, _("&UDP"));
+  m_menuBar->Append(m_menuSocket,
+                    /* TRANSLATORS: Transmission Control Protocol */
+                    _("&TCP"));
+  m_menuBar->Append(m_menuDatagramSocket,
+                    /* TRANSLATORS: User Datagram Protocol */
+                    _("&UDP"));
 #if wxUSE_URL
   m_menuBar->Append(m_menuProtocols, _("&Protocols"));
 #endif

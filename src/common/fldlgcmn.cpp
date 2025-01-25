@@ -806,6 +806,7 @@ bool wxFileDialogBase::Create(wxWindow *parent,
 
             m_wildCard = wxString::Format
                          (
+                            // TRANSLATORS: %s are a file extension used to build a file wildcard string
                             _("%s files (%s)|%s"),
                             wildCard.c_str() + nDot,
                             wildCard.c_str(),

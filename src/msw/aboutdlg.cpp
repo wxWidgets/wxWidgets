@@ -55,7 +55,9 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         if ( info.HasCopyright() )
             msg << wxT('\n') << info.GetCopyrightToDisplay();
 
-        wxMessageBox(msg, wxString::Format(_("About %s"), name), wxOK | wxCENTRE, parent);
+        wxMessageBox(msg, wxString::Format(
+                     /* TRANSLATORS: %s is application name */
+                     _("About %s"), name), wxOK | wxCENTRE, parent);
     }
     else // simple "native" version is not enough
     {

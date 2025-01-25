@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 16:43+0100\n"
+"POT-Creation-Date: 2025-02-08 16:44+0100\n"
 "PO-Revision-Date: 2013-11-01 21:34+0100\n"
 "Last-Translator: Nuria Andión <nandiez@gmail.com>\n"
 "Language-Team: Proxecto Trasno <proxecto@trasno.net>\n"
@@ -843,39 +843,40 @@ msgstr "Opción '%s': '%s' non se pode converter en data."
 msgid "Unexpected parameter '%s'"
 msgstr "Parámetro '%s' inesperado"
 
-#: ../src/common/cmdline.cpp:1196
+#. TRANSLATORS: Short name and long name for a command line option
+#: ../src/common/cmdline.cpp:1197
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (ou %s)"
 
-#: ../src/common/cmdline.cpp:1207
+#: ../src/common/cmdline.cpp:1208
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Debe especificarse o valor para a opción '%s'."
 
-#: ../src/common/cmdline.cpp:1229
+#: ../src/common/cmdline.cpp:1230
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Non se especificou o parámetro requirido '%s'."
 
-#: ../src/common/cmdline.cpp:1288
+#: ../src/common/cmdline.cpp:1289
 #, c-format
 msgid "Usage: %s"
 msgstr "Uso: %s"
 
-#: ../src/common/cmdline.cpp:1497
+#: ../src/common/cmdline.cpp:1498
 msgid "str"
 msgstr "cadea"
 
-#: ../src/common/cmdline.cpp:1501
+#: ../src/common/cmdline.cpp:1502
 msgid "num"
 msgstr "núm"
 
-#: ../src/common/cmdline.cpp:1505
+#: ../src/common/cmdline.cpp:1506
 msgid "double"
 msgstr "dobre"
 
-#: ../src/common/cmdline.cpp:1509
+#: ../src/common/cmdline.cpp:1510
 msgid "date"
 msgstr "data"
 
@@ -1613,17 +1614,18 @@ msgstr "Explorar"
 msgid "All files (%s)|%s"
 msgstr "Todos os ficheiros (%s)|%s"
 
-#: ../src/common/fldlgcmn.cpp:809
+#. TRANSLATORS: %s are a file extension used to build a file wildcard string
+#: ../src/common/fldlgcmn.cpp:810
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "%s ficheiros (%s)|%s"
 
-#: ../src/common/fldlgcmn.cpp:1071
+#: ../src/common/fldlgcmn.cpp:1072
 #, c-format
 msgid "Load %s file"
 msgstr "Cargar o ficheiro %s"
 
-#: ../src/common/fldlgcmn.cpp:1073
+#: ../src/common/fldlgcmn.cpp:1074
 #, c-format
 msgid "Save %s file"
 msgstr "Gardar o ficheiro %s"
@@ -3209,7 +3211,7 @@ msgid "Zoom In"
 msgstr "Achegar"
 
 #: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:153
-#: ../src/generic/logg.cpp:547 ../src/univ/themes/win32.cpp:3752
+#: ../src/generic/logg.cpp:553 ../src/univ/themes/win32.cpp:3752
 msgid "&Close"
 msgstr "&Pechar"
 
@@ -3671,7 +3673,7 @@ msgstr "Substituír"
 msgid "Revert to Saved"
 msgstr "Volver á versión gardada"
 
-#: ../src/common/stockitem.cpp:196 ../src/generic/logg.cpp:543
+#: ../src/common/stockitem.cpp:196 ../src/generic/logg.cpp:549
 msgid "Save &As..."
 msgstr "Gardar &como..."
 
@@ -4335,28 +4337,29 @@ msgstr "Traducións de "
 msgid "Version "
 msgstr "Versión"
 
-#: ../src/generic/aboutdlgg.cpp:145 ../src/msw/aboutdlg.cpp:58
+#. TRANSLATORS: %s is application name
+#: ../src/generic/aboutdlgg.cpp:146 ../src/msw/aboutdlg.cpp:60
 #, c-format
 msgid "About %s"
 msgstr "Sobre %s"
 
-#: ../src/generic/aboutdlgg.cpp:180
+#: ../src/generic/aboutdlgg.cpp:181
 msgid "License"
 msgstr "Licencia"
 
-#: ../src/generic/aboutdlgg.cpp:183
+#: ../src/generic/aboutdlgg.cpp:184
 msgid "Developers"
 msgstr "Desenvolvedores"
 
-#: ../src/generic/aboutdlgg.cpp:187
+#: ../src/generic/aboutdlgg.cpp:188
 msgid "Documentation writers"
 msgstr "Autores da documentación"
 
-#: ../src/generic/aboutdlgg.cpp:191
+#: ../src/generic/aboutdlgg.cpp:192
 msgid "Artists"
 msgstr "Artistas"
 
-#: ../src/generic/aboutdlgg.cpp:195
+#: ../src/generic/aboutdlgg.cpp:196
 msgid "Translators"
 msgstr "Tradutores/as"
 
@@ -4433,30 +4436,31 @@ msgstr ""
 msgid "Expand"
 msgstr ""
 
-#: ../src/generic/datavgen.cpp:7003
+#. TRANSLATORS: Name of data view control and number of rows
+#: ../src/generic/datavgen.cpp:7005
 #, fuzzy, c-format
 msgid "%s (%d items)"
 msgstr "%s (ou %s)"
 
-#: ../src/generic/datavgen.cpp:7054
+#: ../src/generic/datavgen.cpp:7056
 #, fuzzy, c-format
 msgid "Column %u"
 msgstr "Engadir columna"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7123 ../src/richtext/richtextbulletspage.cpp:185
-#: ../src/richtext/richtextbulletspage.cpp:188
-#: ../src/richtext/richtextbulletspage.cpp:189
-#: ../src/richtext/richtextliststylepage.cpp:248
-#: ../src/richtext/richtextliststylepage.cpp:251
+#: ../src/generic/datavgen.cpp:7125 ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/richtext/richtextbulletspage.cpp:192
+#: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextliststylepage.cpp:252
+#: ../src/richtext/richtextliststylepage.cpp:255
+#: ../src/richtext/richtextliststylepage.cpp:256
 #: ../src/richtext/richtextsizepage.cpp:248
 msgid "Left"
 msgstr "Esquerda"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7126 ../src/richtext/richtextbulletspage.cpp:187
-#: ../src/richtext/richtextliststylepage.cpp:250
+#: ../src/generic/datavgen.cpp:7128 ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Right"
 msgstr "Clara"
@@ -4965,72 +4969,75 @@ msgstr "&Copiar URL"
 msgid "Hide this notification message."
 msgstr "Agochar esta mensaxe de notificación."
 
-#: ../src/generic/logg.cpp:255
+#. TRANSLATORS: %s will be either the application name or "Application"
+#: ../src/generic/logg.cpp:257
 #, c-format
 msgid "%s Error"
 msgstr "%s Erro"
 
-#: ../src/generic/logg.cpp:259
+#. TRANSLATORS: %s will be either the application name or "Application"
+#: ../src/generic/logg.cpp:263
 #, c-format
 msgid "%s Warning"
 msgstr "%s Aviso"
 
-#: ../src/generic/logg.cpp:267
+#. TRANSLATORS: %s will be either the application name or "Application"
+#: ../src/generic/logg.cpp:273
 #, c-format
 msgid "%s Information"
 msgstr "%s Información"
 
-#: ../src/generic/logg.cpp:270
+#: ../src/generic/logg.cpp:276
 msgid "Application"
 msgstr "Aplicativo"
 
-#: ../src/generic/logg.cpp:543
+#: ../src/generic/logg.cpp:549
 msgid "Save log contents to file"
 msgstr "Gardar o contido do rexistro nun ficheiro"
 
-#: ../src/generic/logg.cpp:545
+#: ../src/generic/logg.cpp:551
 msgid "C&lear"
 msgstr "&Borrar"
 
-#: ../src/generic/logg.cpp:545
+#: ../src/generic/logg.cpp:551
 msgid "Clear the log contents"
 msgstr "Borrar o contido do rexistro"
 
-#: ../src/generic/logg.cpp:547
+#: ../src/generic/logg.cpp:553
 msgid "Close this window"
 msgstr "Pechar esta xanela"
 
-#: ../src/generic/logg.cpp:548
+#: ../src/generic/logg.cpp:554
 msgid "&Log"
 msgstr "&Rexistro"
 
-#: ../src/generic/logg.cpp:604 ../src/generic/logg.cpp:986
+#: ../src/generic/logg.cpp:610 ../src/generic/logg.cpp:992
 msgid "Can't save log contents to file."
 msgstr "Non se puido gardar o contido do rexistro nun ficheiro."
 
-#: ../src/generic/logg.cpp:607
+#: ../src/generic/logg.cpp:613
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "O rexistro gardouse no ficheiro '%s'."
 
-#: ../src/generic/logg.cpp:713
+#: ../src/generic/logg.cpp:719
 msgid "&Details"
 msgstr "&Detalles"
 
-#: ../src/generic/logg.cpp:966
+#: ../src/generic/logg.cpp:972
 msgid "Failed to copy dialog contents to the clipboard."
 msgstr "Erro ao copiar o contido do diálogo no portapapeis."
 
-#: ../src/generic/logg.cpp:1016
+#: ../src/generic/logg.cpp:1022
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Engadir rexistro ao ficheiro '%s'? (Se elixe [Non] sobreescribirase)"
 
-#: ../src/generic/logg.cpp:1018
+#: ../src/generic/logg.cpp:1024
 msgid "Question"
 msgstr "Pregunta"
 
-#: ../src/generic/logg.cpp:1032
+#: ../src/generic/logg.cpp:1038
 msgid "invalid message box return value"
 msgstr "valor de retorno incorrecto da caixa de correo"
 
@@ -6469,12 +6476,13 @@ msgstr "Erro ao cargar recurso \"%s\"."
 msgid "Failed to lock resource \"%s\"."
 msgstr "Erro ao bloquear recurso \"%s\"."
 
-#: ../src/msw/utils.cpp:1208
+#. TRANSLATORS: MS Windows build number
+#: ../src/msw/utils.cpp:1209
 #, c-format
 msgid "build %lu"
 msgstr "compilar %lu"
 
-#: ../src/msw/utils.cpp:1216
+#: ../src/msw/utils.cpp:1218
 msgid ", 64-bit edition"
 msgstr ", edición de 64 bits"
 
@@ -7404,6 +7412,7 @@ msgstr "Activar valor de anchura."
 msgid "The shadow opacity."
 msgstr ""
 
+#. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
 #: ../src/richtext/richtextsizepage.cpp:373
@@ -7426,7 +7435,7 @@ msgstr "Bordo"
 #: ../src/richtext/richtextborderspage.cpp:242
 #: ../src/richtext/richtextborderspage.cpp:410
 #: ../src/richtext/richtextindentspage.cpp:194
-#: ../src/richtext/richtextliststylepage.cpp:380
+#: ../src/richtext/richtextliststylepage.cpp:384
 #: ../src/richtext/richtextmarginspage.cpp:185
 #: ../src/richtext/richtextmarginspage.cpp:299
 #: ../src/richtext/richtextsizepage.cpp:531
@@ -7462,7 +7471,7 @@ msgstr "Estilo do tipo de letra."
 #: ../src/richtext/richtextborderspage.cpp:276
 #: ../src/richtext/richtextborderspage.cpp:444
 #: ../src/richtext/richtextindentspage.cpp:212
-#: ../src/richtext/richtextliststylepage.cpp:398
+#: ../src/richtext/richtextliststylepage.cpp:402
 #: ../src/richtext/richtextmarginspage.cpp:210
 #: ../src/richtext/richtextmarginspage.cpp:324
 #: ../src/richtext/richtextsizepage.cpp:601
@@ -7741,179 +7750,181 @@ msgstr "Perí&odo"
 msgid "Check to add a period after the bullet."
 msgstr "Marque para engadir un período despois da viñeta."
 
-#: ../src/richtext/richtextbulletspage.cpp:165
-#: ../src/richtext/richtextliststylepage.cpp:228
+#. TRANSLATORS: Bullet point in parentheses option
+#: ../src/richtext/richtextbulletspage.cpp:167
+#: ../src/richtext/richtextliststylepage.cpp:230
 msgid "(*)"
 msgstr "(*)"
 
-#: ../src/richtext/richtextbulletspage.cpp:167
 #: ../src/richtext/richtextbulletspage.cpp:169
-#: ../src/richtext/richtextliststylepage.cpp:230
+#: ../src/richtext/richtextbulletspage.cpp:171
 #: ../src/richtext/richtextliststylepage.cpp:232
+#: ../src/richtext/richtextliststylepage.cpp:234
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Marcar para meter a viñeta entre parénteses."
 
-#: ../src/richtext/richtextbulletspage.cpp:172
-#: ../src/richtext/richtextliststylepage.cpp:235
+#. TRANSLATORS: Right parenthesis bullet point option
+#: ../src/richtext/richtextbulletspage.cpp:176
+#: ../src/richtext/richtextliststylepage.cpp:239
 msgid "*)"
 msgstr "*)"
 
-#: ../src/richtext/richtextbulletspage.cpp:174
-#: ../src/richtext/richtextbulletspage.cpp:176
-#: ../src/richtext/richtextliststylepage.cpp:237
-#: ../src/richtext/richtextliststylepage.cpp:239
+#: ../src/richtext/richtextbulletspage.cpp:178
+#: ../src/richtext/richtextbulletspage.cpp:180
+#: ../src/richtext/richtextliststylepage.cpp:241
+#: ../src/richtext/richtextliststylepage.cpp:243
 msgid "Check to add a right parenthesis."
 msgstr "Marque para engadir unha paréntese dereita."
 
-#: ../src/richtext/richtextbulletspage.cpp:181
-#: ../src/richtext/richtextliststylepage.cpp:244
+#: ../src/richtext/richtextbulletspage.cpp:185
+#: ../src/richtext/richtextliststylepage.cpp:248
 msgid "Bullet &Alignment:"
 msgstr "&Aliñamento de viñetas:"
 
-#: ../src/richtext/richtextbulletspage.cpp:186
-#: ../src/richtext/richtextliststylepage.cpp:249
+#: ../src/richtext/richtextbulletspage.cpp:190
+#: ../src/richtext/richtextliststylepage.cpp:253
 msgid "Centre"
 msgstr "Centrar"
 
-#: ../src/richtext/richtextbulletspage.cpp:190
-#: ../src/richtext/richtextbulletspage.cpp:192
-#: ../src/richtext/richtextbulletspage.cpp:213
-#: ../src/richtext/richtextbulletspage.cpp:215
-#: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextliststylepage.cpp:255
-#: ../src/richtext/richtextliststylepage.cpp:274
-#: ../src/richtext/richtextliststylepage.cpp:276
+#: ../src/richtext/richtextbulletspage.cpp:194
+#: ../src/richtext/richtextbulletspage.cpp:196
+#: ../src/richtext/richtextbulletspage.cpp:217
+#: ../src/richtext/richtextbulletspage.cpp:219
+#: ../src/richtext/richtextliststylepage.cpp:257
+#: ../src/richtext/richtextliststylepage.cpp:259
+#: ../src/richtext/richtextliststylepage.cpp:278
+#: ../src/richtext/richtextliststylepage.cpp:280
 msgid "The bullet character."
 msgstr "O caracter das viñetas."
 
-#: ../src/richtext/richtextbulletspage.cpp:208
-#: ../src/richtext/richtextliststylepage.cpp:267
+#: ../src/richtext/richtextbulletspage.cpp:212
+#: ../src/richtext/richtextliststylepage.cpp:271
 msgid "&Symbol:"
 msgstr "&Símbolo:"
 
-#: ../src/richtext/richtextbulletspage.cpp:218
-#: ../src/richtext/richtextliststylepage.cpp:279
+#: ../src/richtext/richtextbulletspage.cpp:222
+#: ../src/richtext/richtextliststylepage.cpp:283
 msgid "Ch&oose..."
 msgstr "&Elixir..."
 
-#: ../src/richtext/richtextbulletspage.cpp:219
-#: ../src/richtext/richtextbulletspage.cpp:221
-#: ../src/richtext/richtextliststylepage.cpp:280
-#: ../src/richtext/richtextliststylepage.cpp:282
+#: ../src/richtext/richtextbulletspage.cpp:223
+#: ../src/richtext/richtextbulletspage.cpp:225
+#: ../src/richtext/richtextliststylepage.cpp:284
+#: ../src/richtext/richtextliststylepage.cpp:286
 msgid "Click to browse for a symbol."
 msgstr "Prema para atopar un símbolo."
 
-#: ../src/richtext/richtextbulletspage.cpp:226
-#: ../src/richtext/richtextliststylepage.cpp:287
+#: ../src/richtext/richtextbulletspage.cpp:230
+#: ../src/richtext/richtextliststylepage.cpp:291
 msgid "Symbol &font:"
 msgstr "&Símbolos:"
 
-#: ../src/richtext/richtextbulletspage.cpp:231
-#: ../src/richtext/richtextbulletspage.cpp:233
-#: ../src/richtext/richtextliststylepage.cpp:293
+#: ../src/richtext/richtextbulletspage.cpp:235
+#: ../src/richtext/richtextbulletspage.cpp:237
+#: ../src/richtext/richtextliststylepage.cpp:297
 msgid "Available fonts."
 msgstr "Tipos de letra dispoñíbeis."
 
-#: ../src/richtext/richtextbulletspage.cpp:238
-#: ../src/richtext/richtextliststylepage.cpp:298
+#: ../src/richtext/richtextbulletspage.cpp:242
+#: ../src/richtext/richtextliststylepage.cpp:302
 msgid "S&tandard bullet name:"
 msgstr "Nome estándar de viñeta:"
 
-#: ../src/richtext/richtextbulletspage.cpp:243
-#: ../src/richtext/richtextbulletspage.cpp:245
-#: ../src/richtext/richtextliststylepage.cpp:303
-#: ../src/richtext/richtextliststylepage.cpp:305
+#: ../src/richtext/richtextbulletspage.cpp:247
+#: ../src/richtext/richtextbulletspage.cpp:249
+#: ../src/richtext/richtextliststylepage.cpp:307
+#: ../src/richtext/richtextliststylepage.cpp:309
 msgid "A standard bullet name."
 msgstr "Un nome de viñeta estándar."
 
-#: ../src/richtext/richtextbulletspage.cpp:250
+#: ../src/richtext/richtextbulletspage.cpp:254
 msgid "&Number:"
 msgstr "&Número:"
 
-#: ../src/richtext/richtextbulletspage.cpp:254
-#: ../src/richtext/richtextbulletspage.cpp:256
+#: ../src/richtext/richtextbulletspage.cpp:258
+#: ../src/richtext/richtextbulletspage.cpp:260
 msgid "The list item number."
 msgstr "O número de ítem da lista."
 
-#: ../src/richtext/richtextbulletspage.cpp:262
-#: ../src/richtext/richtextbulletspage.cpp:264
-#: ../src/richtext/richtextliststylepage.cpp:471
-#: ../src/richtext/richtextliststylepage.cpp:473
+#: ../src/richtext/richtextbulletspage.cpp:266
+#: ../src/richtext/richtextbulletspage.cpp:268
+#: ../src/richtext/richtextliststylepage.cpp:475
+#: ../src/richtext/richtextliststylepage.cpp:477
 msgid "Shows a preview of the bullet settings."
 msgstr "Amosa unha vista previa da configuración das viñetas."
 
-#: ../src/richtext/richtextbulletspage.cpp:272
-#: ../src/richtext/richtextliststylepage.cpp:480
+#: ../src/richtext/richtextbulletspage.cpp:276
+#: ../src/richtext/richtextliststylepage.cpp:484
 msgid "(None)"
 msgstr "(Ningún)"
 
-#: ../src/richtext/richtextbulletspage.cpp:273
-#: ../src/richtext/richtextliststylepage.cpp:481
+#: ../src/richtext/richtextbulletspage.cpp:277
+#: ../src/richtext/richtextliststylepage.cpp:485
 msgid "Arabic"
 msgstr "Árabe"
 
-#: ../src/richtext/richtextbulletspage.cpp:274
-#: ../src/richtext/richtextliststylepage.cpp:482
+#: ../src/richtext/richtextbulletspage.cpp:278
+#: ../src/richtext/richtextliststylepage.cpp:486
 msgid "Upper case letters"
 msgstr "Maiúsculas"
 
-#: ../src/richtext/richtextbulletspage.cpp:275
-#: ../src/richtext/richtextliststylepage.cpp:483
+#: ../src/richtext/richtextbulletspage.cpp:279
+#: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Lower case letters"
 msgstr "Letras minúsculas"
 
-#: ../src/richtext/richtextbulletspage.cpp:276
-#: ../src/richtext/richtextliststylepage.cpp:484
+#: ../src/richtext/richtextbulletspage.cpp:280
+#: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Upper case roman numerals"
 msgstr "Números romanos en maiúscula"
 
-#: ../src/richtext/richtextbulletspage.cpp:277
-#: ../src/richtext/richtextliststylepage.cpp:485
+#: ../src/richtext/richtextbulletspage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:489
 msgid "Lower case roman numerals"
 msgstr "Núeros romanos en minúscula"
 
-#: ../src/richtext/richtextbulletspage.cpp:278
-#: ../src/richtext/richtextliststylepage.cpp:486
+#: ../src/richtext/richtextbulletspage.cpp:282
+#: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Numbered outline"
 msgstr "Esquema numerado"
 
-#: ../src/richtext/richtextbulletspage.cpp:279
-#: ../src/richtext/richtextliststylepage.cpp:487
+#: ../src/richtext/richtextbulletspage.cpp:283
+#: ../src/richtext/richtextliststylepage.cpp:491
 msgid "Symbol"
 msgstr "Símbolo"
 
-#: ../src/richtext/richtextbulletspage.cpp:280
-#: ../src/richtext/richtextliststylepage.cpp:488
+#: ../src/richtext/richtextbulletspage.cpp:284
+#: ../src/richtext/richtextliststylepage.cpp:492
 msgid "Bitmap"
 msgstr "Mapa de bits"
 
-#: ../src/richtext/richtextbulletspage.cpp:281
-#: ../src/richtext/richtextliststylepage.cpp:489
+#: ../src/richtext/richtextbulletspage.cpp:285
+#: ../src/richtext/richtextliststylepage.cpp:493
 msgid "Standard"
 msgstr "Estándar"
 
-#: ../src/richtext/richtextbulletspage.cpp:283
-#: ../src/richtext/richtextliststylepage.cpp:491
+#: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextliststylepage.cpp:495
 msgid "*"
 msgstr "*"
 
-#: ../src/richtext/richtextbulletspage.cpp:284
-#: ../src/richtext/richtextliststylepage.cpp:492
+#: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextliststylepage.cpp:496
 msgid "-"
 msgstr "-"
 
-#: ../src/richtext/richtextbulletspage.cpp:285
-#: ../src/richtext/richtextliststylepage.cpp:493
+#: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextliststylepage.cpp:497
 msgid ">"
 msgstr ">"
 
-#: ../src/richtext/richtextbulletspage.cpp:286
-#: ../src/richtext/richtextliststylepage.cpp:494
+#: ../src/richtext/richtextbulletspage.cpp:290
+#: ../src/richtext/richtextliststylepage.cpp:498
 msgid "+"
 msgstr "+"
 
-#: ../src/richtext/richtextbulletspage.cpp:287
-#: ../src/richtext/richtextliststylepage.cpp:495
+#: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextliststylepage.cpp:499
 msgid "~"
 msgstr "~"
 
@@ -8090,9 +8101,9 @@ msgstr "Amosa unha vista previa da configuración de tipos de letra."
 #: ../src/richtext/richtextindentspage.cpp:286
 #: ../src/richtext/richtextindentspage.cpp:310
 #: ../src/richtext/richtextindentspage.cpp:325
-#: ../src/richtext/richtextliststylepage.cpp:447
-#: ../src/richtext/richtextliststylepage.cpp:459
-#: ../src/richtext/richtextliststylepage.cpp:460
+#: ../src/richtext/richtextliststylepage.cpp:451
+#: ../src/richtext/richtextliststylepage.cpp:463
+#: ../src/richtext/richtextliststylepage.cpp:464
 msgid "(none)"
 msgstr "(ningún)"
 
@@ -8135,98 +8146,98 @@ msgid "Colour"
 msgstr "Cor"
 
 #: ../src/richtext/richtextindentspage.cpp:127
-#: ../src/richtext/richtextliststylepage.cpp:318
+#: ../src/richtext/richtextliststylepage.cpp:322
 msgid "&Alignment"
 msgstr "&Aliñamento"
 
 #: ../src/richtext/richtextindentspage.cpp:138
-#: ../src/richtext/richtextliststylepage.cpp:327
+#: ../src/richtext/richtextliststylepage.cpp:331
 msgid "&Left"
 msgstr "&Esquerda"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:329
-#: ../src/richtext/richtextliststylepage.cpp:331
+#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "Aliñar o texto á esquerda."
 
 #: ../src/richtext/richtextindentspage.cpp:145
-#: ../src/richtext/richtextliststylepage.cpp:334
+#: ../src/richtext/richtextliststylepage.cpp:338
 msgid "&Right"
 msgstr "&Dereita"
 
 #: ../src/richtext/richtextindentspage.cpp:147
 #: ../src/richtext/richtextindentspage.cpp:149
-#: ../src/richtext/richtextliststylepage.cpp:336
-#: ../src/richtext/richtextliststylepage.cpp:338
+#: ../src/richtext/richtextliststylepage.cpp:340
+#: ../src/richtext/richtextliststylepage.cpp:342
 msgid "Right-align text."
 msgstr "Aliñar texto á dereita."
 
 #: ../src/richtext/richtextindentspage.cpp:152
-#: ../src/richtext/richtextliststylepage.cpp:341
+#: ../src/richtext/richtextliststylepage.cpp:345
 msgid "&Justified"
 msgstr "&Xustificado"
 
 #: ../src/richtext/richtextindentspage.cpp:154
 #: ../src/richtext/richtextindentspage.cpp:156
-#: ../src/richtext/richtextliststylepage.cpp:343
-#: ../src/richtext/richtextliststylepage.cpp:345
+#: ../src/richtext/richtextliststylepage.cpp:347
+#: ../src/richtext/richtextliststylepage.cpp:349
 msgid "Justify text left and right."
 msgstr "Xustificar texto á esquerda e á dereita."
 
 #: ../src/richtext/richtextindentspage.cpp:159
-#: ../src/richtext/richtextliststylepage.cpp:348
+#: ../src/richtext/richtextliststylepage.cpp:352
 msgid "Cen&tred"
 msgstr "Cen&trado"
 
 #: ../src/richtext/richtextindentspage.cpp:161
 #: ../src/richtext/richtextindentspage.cpp:163
-#: ../src/richtext/richtextliststylepage.cpp:350
-#: ../src/richtext/richtextliststylepage.cpp:352
+#: ../src/richtext/richtextliststylepage.cpp:354
+#: ../src/richtext/richtextliststylepage.cpp:356
 msgid "Centre text."
 msgstr "Centrar texto."
 
 #: ../src/richtext/richtextindentspage.cpp:166
-#: ../src/richtext/richtextliststylepage.cpp:355
+#: ../src/richtext/richtextliststylepage.cpp:359
 msgid "&Indeterminate"
 msgstr "&Indeterminado"
 
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
-#: ../src/richtext/richtextliststylepage.cpp:357
-#: ../src/richtext/richtextliststylepage.cpp:359
+#: ../src/richtext/richtextliststylepage.cpp:361
+#: ../src/richtext/richtextliststylepage.cpp:363
 msgid "Use the current alignment setting."
 msgstr "Usar a configuración de aliñamento actual."
 
 #: ../src/richtext/richtextindentspage.cpp:183
-#: ../src/richtext/richtextliststylepage.cpp:371
+#: ../src/richtext/richtextliststylepage.cpp:375
 msgid "&Indentation (tenths of a mm)"
 msgstr "&Sangría (décimas de mm)"
 
 #: ../src/richtext/richtextindentspage.cpp:198
 #: ../src/richtext/richtextindentspage.cpp:200
-#: ../src/richtext/richtextliststylepage.cpp:384
-#: ../src/richtext/richtextliststylepage.cpp:386
+#: ../src/richtext/richtextliststylepage.cpp:388
+#: ../src/richtext/richtextliststylepage.cpp:390
 msgid "The left indent."
 msgstr "A sangría esquerda."
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:389
+#: ../src/richtext/richtextliststylepage.cpp:393
 msgid "Left (&first line):"
 msgstr "Esquerda (&primeira liña):"
 
 #: ../src/richtext/richtextindentspage.cpp:207
 #: ../src/richtext/richtextindentspage.cpp:209
-#: ../src/richtext/richtextliststylepage.cpp:393
-#: ../src/richtext/richtextliststylepage.cpp:395
+#: ../src/richtext/richtextliststylepage.cpp:397
+#: ../src/richtext/richtextliststylepage.cpp:399
 msgid "The first line indent."
 msgstr "A sangría de primeira liña."
 
 #: ../src/richtext/richtextindentspage.cpp:216
 #: ../src/richtext/richtextindentspage.cpp:218
-#: ../src/richtext/richtextliststylepage.cpp:402
-#: ../src/richtext/richtextliststylepage.cpp:404
+#: ../src/richtext/richtextliststylepage.cpp:406
+#: ../src/richtext/richtextliststylepage.cpp:408
 msgid "The right indent."
 msgstr "A sangría dereita."
 
@@ -8240,7 +8251,7 @@ msgid "The outline level."
 msgstr "O nivel de esquema."
 
 #: ../src/richtext/richtextindentspage.cpp:241
-#: ../src/richtext/richtextliststylepage.cpp:416
+#: ../src/richtext/richtextliststylepage.cpp:420
 msgid "&Spacing (tenths of a mm)"
 msgstr "&Espazamento (décimas de mm)"
 
@@ -8250,8 +8261,8 @@ msgstr "&Antes dun parágrafo:"
 
 #: ../src/richtext/richtextindentspage.cpp:256
 #: ../src/richtext/richtextindentspage.cpp:258
-#: ../src/richtext/richtextliststylepage.cpp:429
-#: ../src/richtext/richtextliststylepage.cpp:431
+#: ../src/richtext/richtextliststylepage.cpp:433
+#: ../src/richtext/richtextliststylepage.cpp:435
 msgid "The spacing before the paragraph."
 msgstr "O espazamento antes do parágrafo."
 
@@ -8260,8 +8271,8 @@ msgid "&After a paragraph:"
 msgstr "&Despois dun parágrafo:"
 
 #: ../src/richtext/richtextindentspage.cpp:266
-#: ../src/richtext/richtextliststylepage.cpp:438
-#: ../src/richtext/richtextliststylepage.cpp:440
+#: ../src/richtext/richtextliststylepage.cpp:442
+#: ../src/richtext/richtextliststylepage.cpp:444
 msgid "The spacing after the paragraph."
 msgstr "O espazamento despois do parágrafo."
 
@@ -8270,64 +8281,64 @@ msgid "L&ine spacing:"
 msgstr "Espazamento entre &liñas:"
 
 #: ../src/richtext/richtextindentspage.cpp:274
-#: ../src/richtext/richtextliststylepage.cpp:448
+#: ../src/richtext/richtextliststylepage.cpp:452
 msgid "Single"
 msgstr "Simple"
 
 #: ../src/richtext/richtextindentspage.cpp:275
-#: ../src/richtext/richtextliststylepage.cpp:449
+#: ../src/richtext/richtextliststylepage.cpp:453
 msgid "1.1"
 msgstr "1.1"
 
 #: ../src/richtext/richtextindentspage.cpp:276
-#: ../src/richtext/richtextliststylepage.cpp:450
+#: ../src/richtext/richtextliststylepage.cpp:454
 msgid "1.2"
 msgstr "1.2"
 
 #: ../src/richtext/richtextindentspage.cpp:277
-#: ../src/richtext/richtextliststylepage.cpp:451
+#: ../src/richtext/richtextliststylepage.cpp:455
 msgid "1.3"
 msgstr "1.3"
 
 #: ../src/richtext/richtextindentspage.cpp:278
-#: ../src/richtext/richtextliststylepage.cpp:452
+#: ../src/richtext/richtextliststylepage.cpp:456
 msgid "1.4"
 msgstr "1.4"
 
 #: ../src/richtext/richtextindentspage.cpp:279
-#: ../src/richtext/richtextliststylepage.cpp:453
+#: ../src/richtext/richtextliststylepage.cpp:457
 msgid "1.5"
 msgstr "1.5"
 
 #: ../src/richtext/richtextindentspage.cpp:280
-#: ../src/richtext/richtextliststylepage.cpp:454
+#: ../src/richtext/richtextliststylepage.cpp:458
 msgid "1.6"
 msgstr "1.6"
 
 #: ../src/richtext/richtextindentspage.cpp:281
-#: ../src/richtext/richtextliststylepage.cpp:455
+#: ../src/richtext/richtextliststylepage.cpp:459
 msgid "1.7"
 msgstr "1.7"
 
 #: ../src/richtext/richtextindentspage.cpp:282
-#: ../src/richtext/richtextliststylepage.cpp:456
+#: ../src/richtext/richtextliststylepage.cpp:460
 msgid "1.8"
 msgstr "1.8"
 
 #: ../src/richtext/richtextindentspage.cpp:283
-#: ../src/richtext/richtextliststylepage.cpp:457
+#: ../src/richtext/richtextliststylepage.cpp:461
 msgid "1.9"
 msgstr "1.9"
 
 #: ../src/richtext/richtextindentspage.cpp:284
-#: ../src/richtext/richtextliststylepage.cpp:458
+#: ../src/richtext/richtextliststylepage.cpp:462
 msgid "2"
 msgstr "2"
 
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:289
-#: ../src/richtext/richtextliststylepage.cpp:461
-#: ../src/richtext/richtextliststylepage.cpp:463
+#: ../src/richtext/richtextliststylepage.cpp:465
+#: ../src/richtext/richtextliststylepage.cpp:467
 msgid "The line spacing."
 msgstr "O espazamento de liñas."
 
@@ -8363,23 +8374,23 @@ msgstr "&Tipo de letra para nivel..."
 msgid "Click to choose the font for this level."
 msgstr "Prema para elixir o tipo de letra para este nivel."
 
-#: ../src/richtext/richtextliststylepage.cpp:308
+#: ../src/richtext/richtextliststylepage.cpp:312
 msgid "Bullet style"
 msgstr "Estilo de viñetas"
 
-#: ../src/richtext/richtextliststylepage.cpp:425
+#: ../src/richtext/richtextliststylepage.cpp:429
 msgid "Before a paragraph:"
 msgstr "Antes dun parágrafo:"
 
-#: ../src/richtext/richtextliststylepage.cpp:434
+#: ../src/richtext/richtextliststylepage.cpp:438
 msgid "After a paragraph:"
 msgstr "Despois dun parágrafo:"
 
-#: ../src/richtext/richtextliststylepage.cpp:443
+#: ../src/richtext/richtextliststylepage.cpp:447
 msgid "Line spacing:"
 msgstr "Espazamento entre liñas:"
 
-#: ../src/richtext/richtextliststylepage.cpp:466
+#: ../src/richtext/richtextliststylepage.cpp:470
 msgid "Spacing"
 msgstr "Espazamento"
 

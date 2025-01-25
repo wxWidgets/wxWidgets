@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 16:43+0100\n"
+"POT-Creation-Date: 2025-02-08 16:44+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Cătălin Răceanu <cata_sr@yahoo.com>\n"
 "Language-Team: ro.ro\n"
@@ -809,39 +809,40 @@ msgstr "Opțiunea '%s': '%s' nu poate fi convertită la o dată."
 msgid "Unexpected parameter '%s'"
 msgstr "Parametru neașteptat '%s'"
 
-#: ../src/common/cmdline.cpp:1196
+#. TRANSLATORS: Short name and long name for a command line option
+#: ../src/common/cmdline.cpp:1197
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (sau %s)"
 
-#: ../src/common/cmdline.cpp:1207
+#: ../src/common/cmdline.cpp:1208
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Valoarea pentru opțiunea '%s' trebuie specificată."
 
-#: ../src/common/cmdline.cpp:1229
+#: ../src/common/cmdline.cpp:1230
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Parametrul necesar '%s' nu a fost specificat."
 
-#: ../src/common/cmdline.cpp:1288
+#: ../src/common/cmdline.cpp:1289
 #, c-format
 msgid "Usage: %s"
 msgstr "Utlizare: %s"
 
-#: ../src/common/cmdline.cpp:1497
+#: ../src/common/cmdline.cpp:1498
 msgid "str"
 msgstr "str"
 
-#: ../src/common/cmdline.cpp:1501
+#: ../src/common/cmdline.cpp:1502
 msgid "num"
 msgstr "numeric"
 
-#: ../src/common/cmdline.cpp:1505
+#: ../src/common/cmdline.cpp:1506
 msgid "double"
 msgstr "double"
 
-#: ../src/common/cmdline.cpp:1509
+#: ../src/common/cmdline.cpp:1510
 msgid "date"
 msgstr "dată"
 
@@ -1582,17 +1583,18 @@ msgstr "Răsfoiește"
 msgid "All files (%s)|%s"
 msgstr "Toate fișierele (%s)|%s"
 
-#: ../src/common/fldlgcmn.cpp:809
+#. TRANSLATORS: %s are a file extension used to build a file wildcard string
+#: ../src/common/fldlgcmn.cpp:810
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "fișiere %s (%s)|%s"
 
-#: ../src/common/fldlgcmn.cpp:1071
+#: ../src/common/fldlgcmn.cpp:1072
 #, c-format
 msgid "Load %s file"
 msgstr "Încarcă fișier %s"
 
-#: ../src/common/fldlgcmn.cpp:1073
+#: ../src/common/fldlgcmn.cpp:1074
 #, c-format
 msgid "Save %s file"
 msgstr "Salvează fișier %s"
@@ -3169,7 +3171,7 @@ msgid "Zoom In"
 msgstr "Mărește"
 
 #: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:153
-#: ../src/generic/logg.cpp:547 ../src/univ/themes/win32.cpp:3752
+#: ../src/generic/logg.cpp:553 ../src/univ/themes/win32.cpp:3752
 msgid "&Close"
 msgstr "În&chide"
 
@@ -3624,7 +3626,7 @@ msgstr "Înlocuire..."
 msgid "Revert to Saved"
 msgstr "Revenire la versiunea salvată"
 
-#: ../src/common/stockitem.cpp:196 ../src/generic/logg.cpp:543
+#: ../src/common/stockitem.cpp:196 ../src/generic/logg.cpp:549
 msgid "Save &As..."
 msgstr "S&alvare ca..."
 
@@ -4285,28 +4287,29 @@ msgstr "Traduceri de "
 msgid "Version "
 msgstr "Versiunea "
 
-#: ../src/generic/aboutdlgg.cpp:145 ../src/msw/aboutdlg.cpp:58
+#. TRANSLATORS: %s is application name
+#: ../src/generic/aboutdlgg.cpp:146 ../src/msw/aboutdlg.cpp:60
 #, c-format
 msgid "About %s"
 msgstr "Despre %s"
 
-#: ../src/generic/aboutdlgg.cpp:180
+#: ../src/generic/aboutdlgg.cpp:181
 msgid "License"
 msgstr "Licență"
 
-#: ../src/generic/aboutdlgg.cpp:183
+#: ../src/generic/aboutdlgg.cpp:184
 msgid "Developers"
 msgstr "Dezvoltatori"
 
-#: ../src/generic/aboutdlgg.cpp:187
+#: ../src/generic/aboutdlgg.cpp:188
 msgid "Documentation writers"
 msgstr "Autorii documentației"
 
-#: ../src/generic/aboutdlgg.cpp:191
+#: ../src/generic/aboutdlgg.cpp:192
 msgid "Artists"
 msgstr "Artiști"
 
-#: ../src/generic/aboutdlgg.cpp:195
+#: ../src/generic/aboutdlgg.cpp:196
 msgid "Translators"
 msgstr "Traducători"
 
@@ -4381,30 +4384,31 @@ msgstr "Contractă"
 msgid "Expand"
 msgstr "Expandează"
 
-#: ../src/generic/datavgen.cpp:7003
+#. TRANSLATORS: Name of data view control and number of rows
+#: ../src/generic/datavgen.cpp:7005
 #, c-format
 msgid "%s (%d items)"
 msgstr "%s (%d elemente)"
 
-#: ../src/generic/datavgen.cpp:7054
+#: ../src/generic/datavgen.cpp:7056
 #, c-format
 msgid "Column %u"
 msgstr "Coloana %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7123 ../src/richtext/richtextbulletspage.cpp:185
-#: ../src/richtext/richtextbulletspage.cpp:188
-#: ../src/richtext/richtextbulletspage.cpp:189
-#: ../src/richtext/richtextliststylepage.cpp:248
-#: ../src/richtext/richtextliststylepage.cpp:251
+#: ../src/generic/datavgen.cpp:7125 ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/richtext/richtextbulletspage.cpp:192
+#: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextliststylepage.cpp:252
+#: ../src/richtext/richtextliststylepage.cpp:255
+#: ../src/richtext/richtextliststylepage.cpp:256
 #: ../src/richtext/richtextsizepage.cpp:248
 msgid "Left"
 msgstr "Stânga"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7126 ../src/richtext/richtextbulletspage.cpp:187
-#: ../src/richtext/richtextliststylepage.cpp:250
+#: ../src/generic/datavgen.cpp:7128 ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Right"
 msgstr "Dreapta"
@@ -4912,73 +4916,76 @@ msgstr "&Copiază URL"
 msgid "Hide this notification message."
 msgstr "Ascunde această notificare."
 
-#: ../src/generic/logg.cpp:255
+#. TRANSLATORS: %s will be either the application name or "Application"
+#: ../src/generic/logg.cpp:257
 #, c-format
 msgid "%s Error"
 msgstr "%s Eroare"
 
-#: ../src/generic/logg.cpp:259
+#. TRANSLATORS: %s will be either the application name or "Application"
+#: ../src/generic/logg.cpp:263
 #, c-format
 msgid "%s Warning"
 msgstr "%s Avertizare"
 
-#: ../src/generic/logg.cpp:267
+#. TRANSLATORS: %s will be either the application name or "Application"
+#: ../src/generic/logg.cpp:273
 #, c-format
 msgid "%s Information"
 msgstr "%s Informație"
 
-#: ../src/generic/logg.cpp:270
+#: ../src/generic/logg.cpp:276
 msgid "Application"
 msgstr "Aplicație"
 
-#: ../src/generic/logg.cpp:543
+#: ../src/generic/logg.cpp:549
 msgid "Save log contents to file"
 msgstr "Salvează conținutul raportului în fișier"
 
-#: ../src/generic/logg.cpp:545
+#: ../src/generic/logg.cpp:551
 msgid "C&lear"
 msgstr "&Curăță"
 
-#: ../src/generic/logg.cpp:545
+#: ../src/generic/logg.cpp:551
 msgid "Clear the log contents"
 msgstr "Curăță conținutul jurnalului"
 
-#: ../src/generic/logg.cpp:547
+#: ../src/generic/logg.cpp:553
 msgid "Close this window"
 msgstr "Închide această fereastră"
 
-#: ../src/generic/logg.cpp:548
+#: ../src/generic/logg.cpp:554
 msgid "&Log"
 msgstr "&Jurnal"
 
-#: ../src/generic/logg.cpp:604 ../src/generic/logg.cpp:986
+#: ../src/generic/logg.cpp:610 ../src/generic/logg.cpp:992
 msgid "Can't save log contents to file."
 msgstr "Nu se poate salva conținutul raportului în fișier."
 
-#: ../src/generic/logg.cpp:607
+#: ../src/generic/logg.cpp:613
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Raport salvat în fișierul '%s'."
 
-#: ../src/generic/logg.cpp:713
+#: ../src/generic/logg.cpp:719
 msgid "&Details"
 msgstr "&Detalii"
 
-#: ../src/generic/logg.cpp:966
+#: ../src/generic/logg.cpp:972
 msgid "Failed to copy dialog contents to the clipboard."
 msgstr "A eșuat copierea conținutului dialogului în memoria clipboard."
 
-#: ../src/generic/logg.cpp:1016
+#: ../src/generic/logg.cpp:1022
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr ""
 "Să fie adăugat raportul la fișierul '%s' (alegând [Nu] îl va suprascrie)?"
 
-#: ../src/generic/logg.cpp:1018
+#: ../src/generic/logg.cpp:1024
 msgid "Question"
 msgstr "Întrebare"
 
-#: ../src/generic/logg.cpp:1032
+#: ../src/generic/logg.cpp:1038
 msgid "invalid message box return value"
 msgstr "valoare invalidă returnată de caseta de mesaje"
 
@@ -6435,12 +6442,13 @@ msgstr "A eșuat încărcarea resursei \"%s\"."
 msgid "Failed to lock resource \"%s\"."
 msgstr "A eșuat blocarea resursei \"%s\"."
 
-#: ../src/msw/utils.cpp:1208
+#. TRANSLATORS: MS Windows build number
+#: ../src/msw/utils.cpp:1209
 #, c-format
 msgid "build %lu"
 msgstr "build %lu"
 
-#: ../src/msw/utils.cpp:1216
+#: ../src/msw/utils.cpp:1218
 msgid ", 64-bit edition"
 msgstr ", ediție 64-bit"
 
@@ -7334,6 +7342,7 @@ msgstr "Activează opacitatea umbrei."
 msgid "The shadow opacity."
 msgstr "Opacitatea umbrei."
 
+#. TRANSLATORS: Rich text page units (percentage)
 #: ../src/richtext/richtextbackgroundpage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:339
 #: ../src/richtext/richtextsizepage.cpp:373
@@ -7356,7 +7365,7 @@ msgstr "Margine"
 #: ../src/richtext/richtextborderspage.cpp:242
 #: ../src/richtext/richtextborderspage.cpp:410
 #: ../src/richtext/richtextindentspage.cpp:194
-#: ../src/richtext/richtextliststylepage.cpp:380
+#: ../src/richtext/richtextliststylepage.cpp:384
 #: ../src/richtext/richtextmarginspage.cpp:185
 #: ../src/richtext/richtextmarginspage.cpp:299
 #: ../src/richtext/richtextsizepage.cpp:531
@@ -7391,7 +7400,7 @@ msgstr "Stilul liniei de contur."
 #: ../src/richtext/richtextborderspage.cpp:276
 #: ../src/richtext/richtextborderspage.cpp:444
 #: ../src/richtext/richtextindentspage.cpp:212
-#: ../src/richtext/richtextliststylepage.cpp:398
+#: ../src/richtext/richtextliststylepage.cpp:402
 #: ../src/richtext/richtextmarginspage.cpp:210
 #: ../src/richtext/richtextmarginspage.cpp:324
 #: ../src/richtext/richtextsizepage.cpp:601
@@ -7669,179 +7678,181 @@ msgstr "P&unct"
 msgid "Check to add a period after the bullet."
 msgstr "Bifează pentru a adăuga punct după marcator."
 
-#: ../src/richtext/richtextbulletspage.cpp:165
-#: ../src/richtext/richtextliststylepage.cpp:228
+#. TRANSLATORS: Bullet point in parentheses option
+#: ../src/richtext/richtextbulletspage.cpp:167
+#: ../src/richtext/richtextliststylepage.cpp:230
 msgid "(*)"
 msgstr "(*)"
 
-#: ../src/richtext/richtextbulletspage.cpp:167
 #: ../src/richtext/richtextbulletspage.cpp:169
-#: ../src/richtext/richtextliststylepage.cpp:230
+#: ../src/richtext/richtextbulletspage.cpp:171
 #: ../src/richtext/richtextliststylepage.cpp:232
+#: ../src/richtext/richtextliststylepage.cpp:234
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Bifează pentru a încadra marcatorul între paranteze."
 
-#: ../src/richtext/richtextbulletspage.cpp:172
-#: ../src/richtext/richtextliststylepage.cpp:235
+#. TRANSLATORS: Right parenthesis bullet point option
+#: ../src/richtext/richtextbulletspage.cpp:176
+#: ../src/richtext/richtextliststylepage.cpp:239
 msgid "*)"
 msgstr "*)"
 
-#: ../src/richtext/richtextbulletspage.cpp:174
-#: ../src/richtext/richtextbulletspage.cpp:176
-#: ../src/richtext/richtextliststylepage.cpp:237
-#: ../src/richtext/richtextliststylepage.cpp:239
+#: ../src/richtext/richtextbulletspage.cpp:178
+#: ../src/richtext/richtextbulletspage.cpp:180
+#: ../src/richtext/richtextliststylepage.cpp:241
+#: ../src/richtext/richtextliststylepage.cpp:243
 msgid "Check to add a right parenthesis."
 msgstr "Bifează pentru a adăuga paranteză închisă."
 
-#: ../src/richtext/richtextbulletspage.cpp:181
-#: ../src/richtext/richtextliststylepage.cpp:244
+#: ../src/richtext/richtextbulletspage.cpp:185
+#: ../src/richtext/richtextliststylepage.cpp:248
 msgid "Bullet &Alignment:"
 msgstr "&Aliniere marcatori:"
 
-#: ../src/richtext/richtextbulletspage.cpp:186
-#: ../src/richtext/richtextliststylepage.cpp:249
+#: ../src/richtext/richtextbulletspage.cpp:190
+#: ../src/richtext/richtextliststylepage.cpp:253
 msgid "Centre"
 msgstr "Centru"
 
-#: ../src/richtext/richtextbulletspage.cpp:190
-#: ../src/richtext/richtextbulletspage.cpp:192
-#: ../src/richtext/richtextbulletspage.cpp:213
-#: ../src/richtext/richtextbulletspage.cpp:215
-#: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextliststylepage.cpp:255
-#: ../src/richtext/richtextliststylepage.cpp:274
-#: ../src/richtext/richtextliststylepage.cpp:276
+#: ../src/richtext/richtextbulletspage.cpp:194
+#: ../src/richtext/richtextbulletspage.cpp:196
+#: ../src/richtext/richtextbulletspage.cpp:217
+#: ../src/richtext/richtextbulletspage.cpp:219
+#: ../src/richtext/richtextliststylepage.cpp:257
+#: ../src/richtext/richtextliststylepage.cpp:259
+#: ../src/richtext/richtextliststylepage.cpp:278
+#: ../src/richtext/richtextliststylepage.cpp:280
 msgid "The bullet character."
 msgstr "Caracterul de marcaj."
 
-#: ../src/richtext/richtextbulletspage.cpp:208
-#: ../src/richtext/richtextliststylepage.cpp:267
+#: ../src/richtext/richtextbulletspage.cpp:212
+#: ../src/richtext/richtextliststylepage.cpp:271
 msgid "&Symbol:"
 msgstr "&Simbol:"
 
-#: ../src/richtext/richtextbulletspage.cpp:218
-#: ../src/richtext/richtextliststylepage.cpp:279
+#: ../src/richtext/richtextbulletspage.cpp:222
+#: ../src/richtext/richtextliststylepage.cpp:283
 msgid "Ch&oose..."
 msgstr "&Alege..."
 
-#: ../src/richtext/richtextbulletspage.cpp:219
-#: ../src/richtext/richtextbulletspage.cpp:221
-#: ../src/richtext/richtextliststylepage.cpp:280
-#: ../src/richtext/richtextliststylepage.cpp:282
+#: ../src/richtext/richtextbulletspage.cpp:223
+#: ../src/richtext/richtextbulletspage.cpp:225
+#: ../src/richtext/richtextliststylepage.cpp:284
+#: ../src/richtext/richtextliststylepage.cpp:286
 msgid "Click to browse for a symbol."
 msgstr "Clic pentru a căuta un simbol."
 
-#: ../src/richtext/richtextbulletspage.cpp:226
-#: ../src/richtext/richtextliststylepage.cpp:287
+#: ../src/richtext/richtextbulletspage.cpp:230
+#: ../src/richtext/richtextliststylepage.cpp:291
 msgid "Symbol &font:"
 msgstr "&Font simbol:"
 
-#: ../src/richtext/richtextbulletspage.cpp:231
-#: ../src/richtext/richtextbulletspage.cpp:233
-#: ../src/richtext/richtextliststylepage.cpp:293
+#: ../src/richtext/richtextbulletspage.cpp:235
+#: ../src/richtext/richtextbulletspage.cpp:237
+#: ../src/richtext/richtextliststylepage.cpp:297
 msgid "Available fonts."
 msgstr "Fonturi disponibile."
 
-#: ../src/richtext/richtextbulletspage.cpp:238
-#: ../src/richtext/richtextliststylepage.cpp:298
+#: ../src/richtext/richtextbulletspage.cpp:242
+#: ../src/richtext/richtextliststylepage.cpp:302
 msgid "S&tandard bullet name:"
 msgstr "Nume de marcator s&tandard:"
 
-#: ../src/richtext/richtextbulletspage.cpp:243
-#: ../src/richtext/richtextbulletspage.cpp:245
-#: ../src/richtext/richtextliststylepage.cpp:303
-#: ../src/richtext/richtextliststylepage.cpp:305
+#: ../src/richtext/richtextbulletspage.cpp:247
+#: ../src/richtext/richtextbulletspage.cpp:249
+#: ../src/richtext/richtextliststylepage.cpp:307
+#: ../src/richtext/richtextliststylepage.cpp:309
 msgid "A standard bullet name."
 msgstr "Un nume de marcator standard."
 
-#: ../src/richtext/richtextbulletspage.cpp:250
+#: ../src/richtext/richtextbulletspage.cpp:254
 msgid "&Number:"
 msgstr "&Număr:"
 
-#: ../src/richtext/richtextbulletspage.cpp:254
-#: ../src/richtext/richtextbulletspage.cpp:256
+#: ../src/richtext/richtextbulletspage.cpp:258
+#: ../src/richtext/richtextbulletspage.cpp:260
 msgid "The list item number."
 msgstr "Numărul elementului din listă."
 
-#: ../src/richtext/richtextbulletspage.cpp:262
-#: ../src/richtext/richtextbulletspage.cpp:264
-#: ../src/richtext/richtextliststylepage.cpp:471
-#: ../src/richtext/richtextliststylepage.cpp:473
+#: ../src/richtext/richtextbulletspage.cpp:266
+#: ../src/richtext/richtextbulletspage.cpp:268
+#: ../src/richtext/richtextliststylepage.cpp:475
+#: ../src/richtext/richtextliststylepage.cpp:477
 msgid "Shows a preview of the bullet settings."
 msgstr "Afișează o previzualizare a setărilor pentru marcatori."
 
-#: ../src/richtext/richtextbulletspage.cpp:272
-#: ../src/richtext/richtextliststylepage.cpp:480
+#: ../src/richtext/richtextbulletspage.cpp:276
+#: ../src/richtext/richtextliststylepage.cpp:484
 msgid "(None)"
 msgstr "(Nimic)"
 
-#: ../src/richtext/richtextbulletspage.cpp:273
-#: ../src/richtext/richtextliststylepage.cpp:481
+#: ../src/richtext/richtextbulletspage.cpp:277
+#: ../src/richtext/richtextliststylepage.cpp:485
 msgid "Arabic"
 msgstr "Arabă"
 
-#: ../src/richtext/richtextbulletspage.cpp:274
-#: ../src/richtext/richtextliststylepage.cpp:482
+#: ../src/richtext/richtextbulletspage.cpp:278
+#: ../src/richtext/richtextliststylepage.cpp:486
 msgid "Upper case letters"
 msgstr "Majuscule"
 
-#: ../src/richtext/richtextbulletspage.cpp:275
-#: ../src/richtext/richtextliststylepage.cpp:483
+#: ../src/richtext/richtextbulletspage.cpp:279
+#: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Lower case letters"
 msgstr "Litere mici"
 
-#: ../src/richtext/richtextbulletspage.cpp:276
-#: ../src/richtext/richtextliststylepage.cpp:484
+#: ../src/richtext/richtextbulletspage.cpp:280
+#: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Upper case roman numerals"
 msgstr "Numere romane în majuscule"
 
-#: ../src/richtext/richtextbulletspage.cpp:277
-#: ../src/richtext/richtextliststylepage.cpp:485
+#: ../src/richtext/richtextbulletspage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:489
 msgid "Lower case roman numerals"
 msgstr "Numere romane în litere mici"
 
-#: ../src/richtext/richtextbulletspage.cpp:278
-#: ../src/richtext/richtextliststylepage.cpp:486
+#: ../src/richtext/richtextbulletspage.cpp:282
+#: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Numbered outline"
 msgstr "Contur cu numerotare"
 
-#: ../src/richtext/richtextbulletspage.cpp:279
-#: ../src/richtext/richtextliststylepage.cpp:487
+#: ../src/richtext/richtextbulletspage.cpp:283
+#: ../src/richtext/richtextliststylepage.cpp:491
 msgid "Symbol"
 msgstr "Simbol"
 
-#: ../src/richtext/richtextbulletspage.cpp:280
-#: ../src/richtext/richtextliststylepage.cpp:488
+#: ../src/richtext/richtextbulletspage.cpp:284
+#: ../src/richtext/richtextliststylepage.cpp:492
 msgid "Bitmap"
 msgstr "Imagine rastru"
 
-#: ../src/richtext/richtextbulletspage.cpp:281
-#: ../src/richtext/richtextliststylepage.cpp:489
+#: ../src/richtext/richtextbulletspage.cpp:285
+#: ../src/richtext/richtextliststylepage.cpp:493
 msgid "Standard"
 msgstr "Standard"
 
-#: ../src/richtext/richtextbulletspage.cpp:283
-#: ../src/richtext/richtextliststylepage.cpp:491
+#: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextliststylepage.cpp:495
 msgid "*"
 msgstr "*"
 
-#: ../src/richtext/richtextbulletspage.cpp:284
-#: ../src/richtext/richtextliststylepage.cpp:492
+#: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextliststylepage.cpp:496
 msgid "-"
 msgstr "-"
 
-#: ../src/richtext/richtextbulletspage.cpp:285
-#: ../src/richtext/richtextliststylepage.cpp:493
+#: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextliststylepage.cpp:497
 msgid ">"
 msgstr ">"
 
-#: ../src/richtext/richtextbulletspage.cpp:286
-#: ../src/richtext/richtextliststylepage.cpp:494
+#: ../src/richtext/richtextbulletspage.cpp:290
+#: ../src/richtext/richtextliststylepage.cpp:498
 msgid "+"
 msgstr "+"
 
-#: ../src/richtext/richtextbulletspage.cpp:287
-#: ../src/richtext/richtextliststylepage.cpp:495
+#: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextliststylepage.cpp:499
 msgid "~"
 msgstr "~"
 
@@ -8017,9 +8028,9 @@ msgstr "Afișează o previzualizare a setărilor pentru font."
 #: ../src/richtext/richtextindentspage.cpp:286
 #: ../src/richtext/richtextindentspage.cpp:310
 #: ../src/richtext/richtextindentspage.cpp:325
-#: ../src/richtext/richtextliststylepage.cpp:447
-#: ../src/richtext/richtextliststylepage.cpp:459
-#: ../src/richtext/richtextliststylepage.cpp:460
+#: ../src/richtext/richtextliststylepage.cpp:451
+#: ../src/richtext/richtextliststylepage.cpp:463
+#: ../src/richtext/richtextliststylepage.cpp:464
 msgid "(none)"
 msgstr "(nimic)"
 
@@ -8062,98 +8073,98 @@ msgid "Colour"
 msgstr "Culoare"
 
 #: ../src/richtext/richtextindentspage.cpp:127
-#: ../src/richtext/richtextliststylepage.cpp:318
+#: ../src/richtext/richtextliststylepage.cpp:322
 msgid "&Alignment"
 msgstr "&Aliniere"
 
 #: ../src/richtext/richtextindentspage.cpp:138
-#: ../src/richtext/richtextliststylepage.cpp:327
+#: ../src/richtext/richtextliststylepage.cpp:331
 msgid "&Left"
 msgstr "&Stânga"
 
 #: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextindentspage.cpp:142
-#: ../src/richtext/richtextliststylepage.cpp:329
-#: ../src/richtext/richtextliststylepage.cpp:331
+#: ../src/richtext/richtextliststylepage.cpp:333
+#: ../src/richtext/richtextliststylepage.cpp:335
 msgid "Left-align text."
 msgstr "Aliniază text la stânga."
 
 #: ../src/richtext/richtextindentspage.cpp:145
-#: ../src/richtext/richtextliststylepage.cpp:334
+#: ../src/richtext/richtextliststylepage.cpp:338
 msgid "&Right"
 msgstr "&Dreapta"
 
 #: ../src/richtext/richtextindentspage.cpp:147
 #: ../src/richtext/richtextindentspage.cpp:149
-#: ../src/richtext/richtextliststylepage.cpp:336
-#: ../src/richtext/richtextliststylepage.cpp:338
+#: ../src/richtext/richtextliststylepage.cpp:340
+#: ../src/richtext/richtextliststylepage.cpp:342
 msgid "Right-align text."
 msgstr "Aliniază text la dreapta."
 
 #: ../src/richtext/richtextindentspage.cpp:152
-#: ../src/richtext/richtextliststylepage.cpp:341
+#: ../src/richtext/richtextliststylepage.cpp:345
 msgid "&Justified"
 msgstr "&Aliniat la margini"
 
 #: ../src/richtext/richtextindentspage.cpp:154
 #: ../src/richtext/richtextindentspage.cpp:156
-#: ../src/richtext/richtextliststylepage.cpp:343
-#: ../src/richtext/richtextliststylepage.cpp:345
+#: ../src/richtext/richtextliststylepage.cpp:347
+#: ../src/richtext/richtextliststylepage.cpp:349
 msgid "Justify text left and right."
 msgstr "Aliniază text la stânga și la dreapta."
 
 #: ../src/richtext/richtextindentspage.cpp:159
-#: ../src/richtext/richtextliststylepage.cpp:348
+#: ../src/richtext/richtextliststylepage.cpp:352
 msgid "Cen&tred"
 msgstr "Cen&trat"
 
 #: ../src/richtext/richtextindentspage.cpp:161
 #: ../src/richtext/richtextindentspage.cpp:163
-#: ../src/richtext/richtextliststylepage.cpp:350
-#: ../src/richtext/richtextliststylepage.cpp:352
+#: ../src/richtext/richtextliststylepage.cpp:354
+#: ../src/richtext/richtextliststylepage.cpp:356
 msgid "Centre text."
 msgstr "Centrează textul."
 
 #: ../src/richtext/richtextindentspage.cpp:166
-#: ../src/richtext/richtextliststylepage.cpp:355
+#: ../src/richtext/richtextliststylepage.cpp:359
 msgid "&Indeterminate"
 msgstr "&Nedeterminat"
 
 #: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextindentspage.cpp:170
-#: ../src/richtext/richtextliststylepage.cpp:357
-#: ../src/richtext/richtextliststylepage.cpp:359
+#: ../src/richtext/richtextliststylepage.cpp:361
+#: ../src/richtext/richtextliststylepage.cpp:363
 msgid "Use the current alignment setting."
 msgstr "Folosește setările curente pentru aliniere."
 
 #: ../src/richtext/richtextindentspage.cpp:183
-#: ../src/richtext/richtextliststylepage.cpp:371
+#: ../src/richtext/richtextliststylepage.cpp:375
 msgid "&Indentation (tenths of a mm)"
 msgstr "&Indent (zecimi de mm)"
 
 #: ../src/richtext/richtextindentspage.cpp:198
 #: ../src/richtext/richtextindentspage.cpp:200
-#: ../src/richtext/richtextliststylepage.cpp:384
-#: ../src/richtext/richtextliststylepage.cpp:386
+#: ../src/richtext/richtextliststylepage.cpp:388
+#: ../src/richtext/richtextliststylepage.cpp:390
 msgid "The left indent."
 msgstr "Indent stânga."
 
 #: ../src/richtext/richtextindentspage.cpp:203
-#: ../src/richtext/richtextliststylepage.cpp:389
+#: ../src/richtext/richtextliststylepage.cpp:393
 msgid "Left (&first line):"
 msgstr "Stânga (pri&ma linie):"
 
 #: ../src/richtext/richtextindentspage.cpp:207
 #: ../src/richtext/richtextindentspage.cpp:209
-#: ../src/richtext/richtextliststylepage.cpp:393
-#: ../src/richtext/richtextliststylepage.cpp:395
+#: ../src/richtext/richtextliststylepage.cpp:397
+#: ../src/richtext/richtextliststylepage.cpp:399
 msgid "The first line indent."
 msgstr "Indentarea primei linii."
 
 #: ../src/richtext/richtextindentspage.cpp:216
 #: ../src/richtext/richtextindentspage.cpp:218
-#: ../src/richtext/richtextliststylepage.cpp:402
-#: ../src/richtext/richtextliststylepage.cpp:404
+#: ../src/richtext/richtextliststylepage.cpp:406
+#: ../src/richtext/richtextliststylepage.cpp:408
 msgid "The right indent."
 msgstr "Indent dreapta."
 
@@ -8167,7 +8178,7 @@ msgid "The outline level."
 msgstr "Nivelul conturului."
 
 #: ../src/richtext/richtextindentspage.cpp:241
-#: ../src/richtext/richtextliststylepage.cpp:416
+#: ../src/richtext/richtextliststylepage.cpp:420
 msgid "&Spacing (tenths of a mm)"
 msgstr "&Spațiere (zecimi de mm)"
 
@@ -8177,8 +8188,8 @@ msgstr "În&aintea unui paragraf:"
 
 #: ../src/richtext/richtextindentspage.cpp:256
 #: ../src/richtext/richtextindentspage.cpp:258
-#: ../src/richtext/richtextliststylepage.cpp:429
-#: ../src/richtext/richtextliststylepage.cpp:431
+#: ../src/richtext/richtextliststylepage.cpp:433
+#: ../src/richtext/richtextliststylepage.cpp:435
 msgid "The spacing before the paragraph."
 msgstr "Spațierea înainte de paragraf."
 
@@ -8187,8 +8198,8 @@ msgid "&After a paragraph:"
 msgstr "&După un paragraf:"
 
 #: ../src/richtext/richtextindentspage.cpp:266
-#: ../src/richtext/richtextliststylepage.cpp:438
-#: ../src/richtext/richtextliststylepage.cpp:440
+#: ../src/richtext/richtextliststylepage.cpp:442
+#: ../src/richtext/richtextliststylepage.cpp:444
 msgid "The spacing after the paragraph."
 msgstr "Spațierea dupa paragraf."
 
@@ -8197,64 +8208,64 @@ msgid "L&ine spacing:"
 msgstr "&Spațiere linii:"
 
 #: ../src/richtext/richtextindentspage.cpp:274
-#: ../src/richtext/richtextliststylepage.cpp:448
+#: ../src/richtext/richtextliststylepage.cpp:452
 msgid "Single"
 msgstr "Singur"
 
 #: ../src/richtext/richtextindentspage.cpp:275
-#: ../src/richtext/richtextliststylepage.cpp:449
+#: ../src/richtext/richtextliststylepage.cpp:453
 msgid "1.1"
 msgstr "1.1"
 
 #: ../src/richtext/richtextindentspage.cpp:276
-#: ../src/richtext/richtextliststylepage.cpp:450
+#: ../src/richtext/richtextliststylepage.cpp:454
 msgid "1.2"
 msgstr "1.2"
 
 #: ../src/richtext/richtextindentspage.cpp:277
-#: ../src/richtext/richtextliststylepage.cpp:451
+#: ../src/richtext/richtextliststylepage.cpp:455
 msgid "1.3"
 msgstr "1.3"
 
 #: ../src/richtext/richtextindentspage.cpp:278
-#: ../src/richtext/richtextliststylepage.cpp:452
+#: ../src/richtext/richtextliststylepage.cpp:456
 msgid "1.4"
 msgstr "1.4"
 
 #: ../src/richtext/richtextindentspage.cpp:279
-#: ../src/richtext/richtextliststylepage.cpp:453
+#: ../src/richtext/richtextliststylepage.cpp:457
 msgid "1.5"
 msgstr "1.5"
 
 #: ../src/richtext/richtextindentspage.cpp:280
-#: ../src/richtext/richtextliststylepage.cpp:454
+#: ../src/richtext/richtextliststylepage.cpp:458
 msgid "1.6"
 msgstr "1.6"
 
 #: ../src/richtext/richtextindentspage.cpp:281
-#: ../src/richtext/richtextliststylepage.cpp:455
+#: ../src/richtext/richtextliststylepage.cpp:459
 msgid "1.7"
 msgstr "1.7"
 
 #: ../src/richtext/richtextindentspage.cpp:282
-#: ../src/richtext/richtextliststylepage.cpp:456
+#: ../src/richtext/richtextliststylepage.cpp:460
 msgid "1.8"
 msgstr "1.8"
 
 #: ../src/richtext/richtextindentspage.cpp:283
-#: ../src/richtext/richtextliststylepage.cpp:457
+#: ../src/richtext/richtextliststylepage.cpp:461
 msgid "1.9"
 msgstr "1.9"
 
 #: ../src/richtext/richtextindentspage.cpp:284
-#: ../src/richtext/richtextliststylepage.cpp:458
+#: ../src/richtext/richtextliststylepage.cpp:462
 msgid "2"
 msgstr "2"
 
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:289
-#: ../src/richtext/richtextliststylepage.cpp:461
-#: ../src/richtext/richtextliststylepage.cpp:463
+#: ../src/richtext/richtextliststylepage.cpp:465
+#: ../src/richtext/richtextliststylepage.cpp:467
 msgid "The line spacing."
 msgstr "Spațierea dintre linii."
 
@@ -8290,23 +8301,23 @@ msgstr "&Font pentru Nivelul..."
 msgid "Click to choose the font for this level."
 msgstr "Clic pentru a alege fontul pentru acest nivel."
 
-#: ../src/richtext/richtextliststylepage.cpp:308
+#: ../src/richtext/richtextliststylepage.cpp:312
 msgid "Bullet style"
 msgstr "Stil marcatori"
 
-#: ../src/richtext/richtextliststylepage.cpp:425
+#: ../src/richtext/richtextliststylepage.cpp:429
 msgid "Before a paragraph:"
 msgstr "Înainte de un paragraf:"
 
-#: ../src/richtext/richtextliststylepage.cpp:434
+#: ../src/richtext/richtextliststylepage.cpp:438
 msgid "After a paragraph:"
 msgstr "După un paragraf:"
 
-#: ../src/richtext/richtextliststylepage.cpp:443
+#: ../src/richtext/richtextliststylepage.cpp:447
 msgid "Line spacing:"
 msgstr "Spațiere linii:"
 
-#: ../src/richtext/richtextliststylepage.cpp:466
+#: ../src/richtext/richtextliststylepage.cpp:470
 msgid "Spacing"
 msgstr "Spațiere"
 
