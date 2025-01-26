@@ -89,13 +89,15 @@ public:
     */
     wxArrayString(const wxArrayString& array);
 
-    ///@{
     /**
         Constructor from a C string array. Pass a size @a sz and an array @a arr.
-    **/
+     */
     wxArrayString(size_t sz, const char** arr);
+
+    /**
+        Constructor from a C wide string array. Pass a size @a sz and an array @a arr.
+     */
     wxArrayString(size_t sz, const wchar_t** arr);
-    ///@}
 
     /**
         Constructor from a wxString array. Pass a size @a sz and array @a arr.
