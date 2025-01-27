@@ -83,7 +83,7 @@ void BitmapComboBoxTestCase::Bitmap()
     CPPUNIT_ASSERT(!m_combo->GetItemBitmap(0).IsOk());
 
     wxBitmap bitmap = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER,
-                                             wxSize(16, 16));
+                                             m_combo->FromDIP(wxSize(16, 16)));
 
     m_combo->Append("item with bitmap", bitmap);
 
@@ -97,7 +97,7 @@ void BitmapComboBoxTestCase::Bitmap()
 
     CPPUNIT_ASSERT(m_combo->GetItemBitmap(0).IsOk());
 
-    CPPUNIT_ASSERT_EQUAL(wxSize(16, 16), m_combo->GetBitmapSize());
+    CPPUNIT_ASSERT_EQUAL(m_combo->FromDIP(wxSize(16, 16)), m_combo->GetBitmapSize());
 
     m_combo->SetSelection( 1 );
 
