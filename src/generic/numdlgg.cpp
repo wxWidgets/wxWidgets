@@ -104,7 +104,7 @@ bool wxNumberEntryDialog::Create(wxWindow *parent,
     wxString valStr;
     valStr.Printf(wxT("%ld"), m_value);
 #if wxUSE_SPINCTRL
-    m_spinctrl = new wxSpinCtrl(this, wxID_ANY, valStr, wxDefaultPosition, wxSize( 140, wxDefaultCoord ), wxSP_ARROW_KEYS, (int)m_min, (int)m_max, (int)m_value);
+    m_spinctrl = new wxSpinCtrl(this, wxID_ANY, valStr, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, (int)m_min, (int)m_max, (int)m_value);
 #else
     m_spinctrl = new wxTextCtrl(this, wxID_ANY, valStr, wxDefaultPosition, wxSize( 140, wxDefaultCoord ));
 #endif
