@@ -781,8 +781,7 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
     {
         rect.SetX(in_rect.x);
         rect.SetY(((in_rect.y + in_rect.height)/2) - (bmp.GetLogicalHeight()/2));
-        rect.SetWidth(bmp.GetLogicalWidth());
-        rect.SetHeight(bmp.GetLogicalHeight());
+        rect.SetSize(bmp.GetLogicalSize());
     }
     else
     {
@@ -1315,8 +1314,7 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
     {
         rect.SetX(in_rect.x);
         rect.SetY(((in_rect.y + in_rect.height)/2) - (bmp.GetLogicalHeight()/2));
-        rect.SetWidth(bmp.GetLogicalWidth());
-        rect.SetHeight(bmp.GetLogicalHeight());
+        rect.SetSize(bmp.GetLogicalSize());
     }
     else
     {
