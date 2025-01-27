@@ -258,7 +258,7 @@ using wxEnvVariableHashMap = std::unordered_map<wxString, wxString>;
 /**
     Wrapper of the standard @c getenv() or its wide char version.
 
-    Note that under Win32 the overload using `char*` doesn't not work for the
+    Note that under Win32 the overload using `char*` does not work for
     variables using non-ASCII characters, use either the overload taking
     `wchar_t*` or, preferably, wxGetEnv() instead.
 

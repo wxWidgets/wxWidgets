@@ -876,7 +876,7 @@ public:
 
         This offers basically the same functionality as Connect(), but it is
         more flexible as it also allows you to use ordinary functions and
-        arbitrary functors as event handlers. It is also less restrictive then
+        arbitrary functors as event handlers. It is also less restrictive than
         Connect() because you can use an arbitrary method as an event handler,
         whereas Connect() requires a wxEvtHandler derived handler.
 

@@ -976,7 +976,7 @@ public:
         This function is like ParseDateTime(), but it only allows the date to
         be specified.
 
-        It is thus less flexible then ParseDateTime(), but also has less
+        It is thus less flexible than ParseDateTime(), but also has less
         chances to misinterpret the user input.
 
         See ParseFormat() for the description of function parameters and return

@@ -39,7 +39,7 @@ public:
     enum ScaleMode
     {
         /**
-            The bitmap is displayed in original size. Portions larger then the
+            The bitmap is displayed in original size. Portions larger than the
             control will be cut off.
         */
         Scale_None,
