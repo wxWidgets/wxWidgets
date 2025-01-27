@@ -1461,7 +1461,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
     SECTION("SetSplitterPosition")
     {
 #ifndef __WXQT__
-        const int trySplitterPos = 50;
+        const int trySplitterPos = wxTheApp->GetTopWindow()->FromDIP(50);
 #else
         const int trySplitterPos = 51; // FIXME!
 #endif
