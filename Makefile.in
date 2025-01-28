@@ -4927,6 +4927,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_win_gtk.o \
 	monodll_gtk_window.o \
 	monodll_gtk_mimetype.o \
+	monodll_gtk_power.o \
 	monodll_gtk_dcclient.o \
 	monodll_gtk_dcmemory.o \
 	monodll_gtk_dcscreen.o
@@ -4967,7 +4968,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_utilsgtk.o \
 	monodll_win_gtk.o \
 	monodll_gtk_window.o \
-	monodll_gtk_mimetype.o
+	monodll_gtk_mimetype.o \
+	monodll_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS =  \
 	$(__GTK_PLATFORM_SRC_OBJECTS) \
@@ -5005,7 +5007,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_utilsgtk.o \
 	monodll_win_gtk.o \
 	monodll_gtk_window.o \
-	monodll_gtk_mimetype.o
+	monodll_gtk_mimetype.o \
+	monodll_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_activex.o \
@@ -5654,6 +5657,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_win_gtk.o \
 	monodll_gtk_window.o \
 	monodll_gtk_mimetype.o \
+	monodll_gtk_power.o \
 	monodll_gtk_dcclient.o \
 	monodll_gtk_dcmemory.o \
 	monodll_gtk_dcscreen.o
@@ -5694,7 +5698,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_utilsgtk.o \
 	monodll_win_gtk.o \
 	monodll_gtk_window.o \
-	monodll_gtk_mimetype.o
+	monodll_gtk_mimetype.o \
+	monodll_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_1 =  \
 	$(__GTK_PLATFORM_SRC_OBJECTS) \
@@ -5732,7 +5737,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_utilsgtk.o \
 	monodll_win_gtk.o \
 	monodll_gtk_window.o \
-	monodll_gtk_mimetype.o
+	monodll_gtk_mimetype.o \
+	monodll_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_activex.o \
@@ -6683,6 +6689,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_win_gtk.o \
 	monolib_gtk_window.o \
 	monolib_gtk_mimetype.o \
+	monolib_gtk_power.o \
 	monolib_gtk_dcclient.o \
 	monolib_gtk_dcmemory.o \
 	monolib_gtk_dcscreen.o
@@ -6723,7 +6730,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_utilsgtk.o \
 	monolib_win_gtk.o \
 	monolib_gtk_window.o \
-	monolib_gtk_mimetype.o
+	monolib_gtk_mimetype.o \
+	monolib_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_2 =  \
 	$(__GTK_PLATFORM_SRC_OBJECTS_27) \
@@ -6761,7 +6769,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_utilsgtk.o \
 	monolib_win_gtk.o \
 	monolib_gtk_window.o \
-	monolib_gtk_mimetype.o
+	monolib_gtk_mimetype.o \
+	monolib_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_activex.o \
@@ -7410,6 +7419,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_win_gtk.o \
 	monolib_gtk_window.o \
 	monolib_gtk_mimetype.o \
+	monolib_gtk_power.o \
 	monolib_gtk_dcclient.o \
 	monolib_gtk_dcmemory.o \
 	monolib_gtk_dcscreen.o
@@ -7450,7 +7460,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_utilsgtk.o \
 	monolib_win_gtk.o \
 	monolib_gtk_window.o \
-	monolib_gtk_mimetype.o
+	monolib_gtk_mimetype.o \
+	monolib_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_3 =  \
 	$(__GTK_PLATFORM_SRC_OBJECTS_27) \
@@ -7488,7 +7499,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_utilsgtk.o \
 	monolib_win_gtk.o \
 	monolib_gtk_window.o \
-	monolib_gtk_mimetype.o
+	monolib_gtk_mimetype.o \
+	monolib_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_activex.o \
@@ -8048,7 +8060,7 @@ COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
 @COND_PLATFORM_WIN32_1@	= coredll_main.o coredll_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
-@COND_TOOLKIT_OSX_COCOA@	= coredll_power.o coredll_cocoa_utils.o \
+@COND_TOOLKIT_OSX_COCOA@	= coredll_cocoa_power.o coredll_cocoa_utils.o \
 @COND_TOOLKIT_OSX_COCOA@	coredll_osx_volume.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_4) \
@@ -8588,6 +8600,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_win_gtk.o \
 	coredll_gtk_window.o \
 	coredll_mimetype.o \
+	coredll_gtk_power.o \
 	coredll_gtk_dcclient.o \
 	coredll_gtk_dcmemory.o \
 	coredll_gtk_dcscreen.o
@@ -8628,7 +8641,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_utilsgtk.o \
 	coredll_win_gtk.o \
 	coredll_gtk_window.o \
-	coredll_mimetype.o
+	coredll_mimetype.o \
+	coredll_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_4 =  \
 	$(__GTK_PLATFORM_SRC_OBJECTS_1_4) \
@@ -8666,7 +8680,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_utilsgtk.o \
 	coredll_win_gtk.o \
 	coredll_gtk_window.o \
-	coredll_mimetype.o
+	coredll_mimetype.o \
+	coredll_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_activex.o \
@@ -9315,6 +9330,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_win_gtk.o \
 	coredll_gtk_window.o \
 	coredll_mimetype.o \
+	coredll_gtk_power.o \
 	coredll_gtk_dcclient.o \
 	coredll_gtk_dcmemory.o \
 	coredll_gtk_dcscreen.o
@@ -9355,7 +9371,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_utilsgtk.o \
 	coredll_win_gtk.o \
 	coredll_gtk_window.o \
-	coredll_mimetype.o
+	coredll_mimetype.o \
+	coredll_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_5 =  \
 	$(__GTK_PLATFORM_SRC_OBJECTS_1_4) \
@@ -9393,7 +9410,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_utilsgtk.o \
 	coredll_win_gtk.o \
 	coredll_gtk_window.o \
-	coredll_mimetype.o
+	coredll_mimetype.o \
+	coredll_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_activex.o \
@@ -9528,7 +9546,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
 @COND_PLATFORM_WIN32_1@	= corelib_main.o corelib_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
-@COND_TOOLKIT_OSX_COCOA@	= corelib_power.o corelib_cocoa_utils.o \
+@COND_TOOLKIT_OSX_COCOA@	= corelib_cocoa_power.o corelib_cocoa_utils.o \
 @COND_TOOLKIT_OSX_COCOA@	corelib_osx_volume.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_6) \
@@ -10068,6 +10086,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_win_gtk.o \
 	corelib_gtk_window.o \
 	corelib_mimetype.o \
+	corelib_gtk_power.o \
 	corelib_gtk_dcclient.o \
 	corelib_gtk_dcmemory.o \
 	corelib_gtk_dcscreen.o
@@ -10108,7 +10127,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_utilsgtk.o \
 	corelib_win_gtk.o \
 	corelib_gtk_window.o \
-	corelib_mimetype.o
+	corelib_mimetype.o \
+	corelib_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_6 =  \
 	$(__GTK_PLATFORM_SRC_OBJECTS_2_2) \
@@ -10146,7 +10166,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_utilsgtk.o \
 	corelib_win_gtk.o \
 	corelib_gtk_window.o \
-	corelib_mimetype.o
+	corelib_mimetype.o \
+	corelib_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_activex.o \
@@ -10795,6 +10816,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_win_gtk.o \
 	corelib_gtk_window.o \
 	corelib_mimetype.o \
+	corelib_gtk_power.o \
 	corelib_gtk_dcclient.o \
 	corelib_gtk_dcmemory.o \
 	corelib_gtk_dcscreen.o
@@ -10835,7 +10857,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_utilsgtk.o \
 	corelib_win_gtk.o \
 	corelib_gtk_window.o \
-	corelib_mimetype.o
+	corelib_mimetype.o \
+	corelib_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_7 =  \
 	$(__GTK_PLATFORM_SRC_OBJECTS_2_2) \
@@ -10873,7 +10896,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_utilsgtk.o \
 	corelib_win_gtk.o \
 	corelib_gtk_window.o \
-	corelib_mimetype.o
+	corelib_mimetype.o \
+	corelib_gtk_power.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_activex.o \
@@ -17311,6 +17335,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_mimetype.o: $(srcdir)/src/gtk/mimetype.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/mimetype.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_dcclient.o: $(srcdir)/src/gtk/dcclient.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dcclient.cpp
 
@@ -22048,6 +22081,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_mimetype.o: $(srcdir)/src/gtk/mimetype.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/mimetype.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_dcclient.o: $(srcdir)/src/gtk/dcclient.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dcclient.cpp
 
@@ -25339,7 +25381,7 @@ coredll_main.o: $(srcdir)/src/msw/main.cpp $(COREDLL_ODEP)
 coredll_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
-coredll_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
+coredll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 coredll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
@@ -26871,6 +26913,15 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_mimetype.o: $(srcdir)/src/gtk/mimetype.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/mimetype.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@coredll_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_gtk_dcclient.o: $(srcdir)/src/gtk/dcclient.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/dcclient.cpp
@@ -29035,7 +29086,7 @@ corelib_main.o: $(srcdir)/src/msw/main.cpp $(CORELIB_ODEP)
 corelib_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
-corelib_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
+corelib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 corelib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
@@ -30567,6 +30618,15 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_mimetype.o: $(srcdir)/src/gtk/mimetype.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/mimetype.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@corelib_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_power.o: $(srcdir)/src/gtk/power.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/power.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_gtk_dcclient.o: $(srcdir)/src/gtk/dcclient.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/dcclient.cpp

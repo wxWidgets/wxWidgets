@@ -36,11 +36,11 @@ enum wxBatteryState
 // wxPowerEvent is generated when the system online status changes
 // ----------------------------------------------------------------------------
 
-// currently the power events are only available under Windows, to avoid
+// currently the power events are only available under some platforms, to avoid
 // compiling in the code for handling them which is never going to be invoked
 // under the other platforms, we define wxHAS_POWER_EVENTS symbol if this event
 // is available, it should be used to guard all code using wxPowerEvent
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) || defined(__WXGTK__)
 
 #define wxHAS_POWER_EVENTS
 
