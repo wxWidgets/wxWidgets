@@ -390,14 +390,10 @@ void wxColourDatabase::Initialize()
     static const wxColourDesc legacyColours[] =
     {
         {"AQUAMARINE",112, 219, 147},
-        {"BLACK",0, 0, 0},
-        {"BLUE", 0, 0, 255},
         {"BLUE VIOLET", 159, 95, 159},
-        {"BROWN", 165, 42, 42},
         {"CADET BLUE", 95, 159, 159},
         {"CORAL", 255, 127, 0},
         {"CORNFLOWER BLUE", 66, 66, 111},
-        {"CYAN", 0, 255, 255},
         {"DARK GRAY", 47, 47, 47},
         {"DARK GREY", 47, 47, 47},   // ?
         {"DARK GREEN", 47, 79, 47},
@@ -413,8 +409,6 @@ void wxColourDatabase::Initialize()
         {"FOREST GREEN", 35, 142, 35},
         {"GOLD", 204, 127, 50},
         {"GOLDENROD", 219, 219, 112},
-        {"GRAY", 128, 128, 128},
-        {"GREY", 128, 128, 128},
         {"GREEN", 0, 255, 0},
         {"GREEN YELLOW", 147, 219, 112},
         {"INDIAN RED", 79, 47, 47},
@@ -425,7 +419,6 @@ void wxColourDatabase::Initialize()
         {"LIGHT STEEL BLUE", 143, 143, 188},
         {"LIME GREEN", 50, 204, 50},
         {"LIGHT MAGENTA", 255, 119, 255},
-        {"MAGENTA", 255, 0, 255},
         {"MAROON", 142, 35, 107},
         {"MEDIUM AQUAMARINE", 50, 204, 153},
         {"MEDIUM GRAY", 100, 100, 100},
@@ -445,10 +438,8 @@ void wxColourDatabase::Initialize()
         {"ORANGE RED", 255, 0, 127},
         {"ORCHID", 219, 112, 219},
         {"PALE GREEN", 143, 188, 143},
-        {"PINK", 255, 192, 203},
         {"PLUM", 234, 173, 234},
         {"PURPLE", 176, 0, 255},
-        {"RED", 255, 0, 0},
         {"SALMON", 111, 66, 66},
         {"SEA GREEN", 35, 142, 107},
         {"SIENNA", 142, 107, 35},
@@ -457,13 +448,10 @@ void wxColourDatabase::Initialize()
         {"SPRING GREEN", 0, 255, 127},
         {"STEEL BLUE", 35, 107, 142},
         {"TAN", 219, 147, 112},
-        {"THISTLE", 216, 191, 216},
         {"TURQUOISE", 173, 234, 234},
         {"VIOLET", 79, 47, 79},
         {"VIOLET RED", 204, 50, 153},
         {"WHEAT", 216, 216, 191},
-        {"WHITE", 255, 255, 255},
-        {"YELLOW", 255, 255, 0},
         {"YELLOW GREEN", 153, 204, 50}
     };
 
