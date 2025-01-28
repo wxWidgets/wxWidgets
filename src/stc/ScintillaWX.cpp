@@ -1407,23 +1407,6 @@ public:
             ::ImmReleaseContext(hwnd, hIMC);
     }
 
-    unsigned int GetImeCaretPos() const noexcept {
-        return ImmGetCompositionStringW(hIMC, GCS_CURSORPOS, nullptr, 0);
-    }
-
-    std::vector<BYTE> GetImeAttributes() {
-        const int attrLen = ::ImmGetCompositionStringW(hIMC, GCS_COMPATTR, nullptr, 0);
-        std::vector<BYTE> attr(attrLen, 0);
-        ::ImmGetCompositionStringW(hIMC, GCS_COMPATTR, &attr[0], static_cast<DWORD>(attr.size()));
-        return attr;
-    }
-
-    std::wstring GetCompositionString(DWORD dwIndex) {
-        const LONG byteLen = ::ImmGetCompositionStringW(hIMC, dwIndex, nullptr, 0);
-        std::wstring wcs(byteLen / 2, 0);
-        ::ImmGetCompositionStringW(hIMC, dwIndex, &wcs[0], byteLen);
-        return wcs;
-    }
 private:
     // Private so IMContext objects can not be copied.
     IMContext(const IMContext&);

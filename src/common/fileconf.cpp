@@ -339,11 +339,6 @@ wxFileConfig::MigrateLocalFile(const wxString& name, int newStyle, int oldStyle)
             m_tempPath = tempPath;
         }
 
-        void Dismiss()
-        {
-            m_tempPath.clear();
-        }
-
         ~RenameBackOnError()
         {
             if ( !m_tempPath.empty() )

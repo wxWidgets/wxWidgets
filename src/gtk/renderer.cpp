@@ -148,7 +148,6 @@ wxRendererNative& wxRendererNative::GetDefault()
 }
 
 #ifdef __WXGTK3__
-#define NULL_RECT
 typedef cairo_t wxGTKDrawable;
 
 static cairo_t* wxGetGTKDrawable(const wxDC& dc)
