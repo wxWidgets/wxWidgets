@@ -489,6 +489,7 @@ void TextCtrlTestCase::Url()
 
     wxUIActionSimulator sim;
     sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5)));
+    url.Clear();
     sim.MouseClick();
     wxYield();
 
