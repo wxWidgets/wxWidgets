@@ -985,91 +985,58 @@ void wxDCImpl::DoGradientFillLinear(const wxRect& rect,
                                     const wxColour& destColour,
                                     wxDirection nDirection)
 {
+    if (rect.width <= 0 || rect.height <= 0)
+       return;
+
     // save old pen
     wxPen oldPen = m_pen;
     wxBrush oldBrush = m_brush;
 
-    wxUint8 nR1 = initialColour.Red();
-    wxUint8 nG1 = initialColour.Green();
-    wxUint8 nB1 = initialColour.Blue();
-    wxUint8 nR2 = destColour.Red();
-    wxUint8 nG2 = destColour.Green();
-    wxUint8 nB2 = destColour.Blue();
-    wxUint8 nR, nG, nB;
-
-    if ( nDirection == wxEAST || nDirection == wxWEST )
+    const bool isRightOrDown = (nDirection & (wxRIGHT | wxDOWN)) != 0;
+    const wxColour& c1 = isRightOrDown ? initialColour : destColour;
+    const wxColour& c2 = isRightOrDown ? destColour : initialColour;
+    const wxByte r1 = c1.Red(), g1 = c1.Green(), b1 = c1.Blue();
+    const int rSpan = c2.Red()   - r1;
+    const int gSpan = c2.Green() - g1;
+    const int bSpan = c2.Blue()  - b1;
+    const bool isHorizontal = (nDirection & (wxLEFT | wxRIGHT)) != 0;
+    const int span = isHorizontal ? rect.width : rect.height;
+    int bands = wxMin(span, wxMax(abs(rSpan), wxMax(abs(gSpan), abs(bSpan))) + 1);
+    float rInc = 0, gInc = 0, bInc = 0;
+    if (bands > 1)
     {
-        wxInt32 x = rect.GetWidth();
-        wxInt32 w = x;              // width of area to shade
-        wxInt32 xDelta = w/256;     // height of one shade bend
-        if (xDelta < 1)
-            xDelta = 1;
-
-        while (x >= xDelta)
-        {
-            x -= xDelta;
-            if (nR1 > nR2)
-                nR = nR1 - (nR1-nR2)*(w-x)/w;
-            else
-                nR = nR1 + (nR2-nR1)*(w-x)/w;
-
-            if (nG1 > nG2)
-                nG = nG1 - (nG1-nG2)*(w-x)/w;
-            else
-                nG = nG1 + (nG2-nG1)*(w-x)/w;
-
-            if (nB1 > nB2)
-                nB = nB1 - (nB1-nB2)*(w-x)/w;
-            else
-                nB = nB1 + (nB2-nB1)*(w-x)/w;
-
-            wxColour colour(nR,nG,nB);
-            SetPen(wxPen(colour, 1, wxPENSTYLE_SOLID));
-            SetBrush(wxBrush(colour));
-            if(nDirection == wxEAST)
-                DoDrawRectangle(rect.GetRight()-x-xDelta+1, rect.GetTop(),
-                        xDelta, rect.GetHeight());
-            else //nDirection == wxWEST
-                DoDrawRectangle(rect.GetLeft()+x, rect.GetTop(),
-                        xDelta, rect.GetHeight());
-        }
+        const float bands1 = bands - 1;
+        rInc = rSpan / bands1;
+        gInc = gSpan / bands1;
+        bInc = bSpan / bands1;
     }
-    else  // nDirection == wxNORTH || nDirection == wxSOUTH
+    int offset = 0;
+    const float inc = float(span) / bands;
+    float offsetNext = inc;
+    float r = r1, g = g1, b = b1;
+    SetPen(*wxTRANSPARENT_PEN);
+    wxColour color(c1);
+    wxBrush brush(color);
+    for (;;)
     {
-        wxInt32 y = rect.GetHeight();
-        wxInt32 w = y;              // height of area to shade
-        wxInt32 yDelta = w/255;     // height of one shade bend
-        if (yDelta < 1)
-            yDelta = 1;
+        SetBrush(brush);
+        const int size = int(std::lround(offsetNext)) - offset;
+        if (isHorizontal)
+            DoDrawRectangle(rect.x + offset, rect.y, size, rect.height);
+        else
+            DoDrawRectangle(rect.x, rect.y + offset, rect.width, size);
 
-        while (y > 0)
-        {
-            y -= yDelta;
-            if (nR1 > nR2)
-                nR = nR1 - (nR1-nR2)*(w-y)/w;
-            else
-                nR = nR1 + (nR2-nR1)*(w-y)/w;
+        bands--;
+        if (bands == 0)
+            break;
 
-            if (nG1 > nG2)
-                nG = nG1 - (nG1-nG2)*(w-y)/w;
-            else
-                nG = nG1 + (nG2-nG1)*(w-y)/w;
-
-            if (nB1 > nB2)
-                nB = nB1 - (nB1-nB2)*(w-y)/w;
-            else
-                nB = nB1 + (nB2-nB1)*(w-y)/w;
-
-            wxColour colour(nR,nG,nB);
-            SetPen(wxPen(colour, 1, wxPENSTYLE_SOLID));
-            SetBrush(wxBrush(colour));
-            if(nDirection == wxNORTH)
-                DoDrawRectangle(rect.GetLeft(), rect.GetTop()+y,
-                        rect.GetWidth(), yDelta);
-            else //nDirection == wxSOUTH
-                DoDrawRectangle(rect.GetLeft(), rect.GetBottom()-y-yDelta+1,
-                        rect.GetWidth(), yDelta);
-        }
+        offset += size;
+        offsetNext += inc;
+        r += rInc;
+        g += gInc;
+        b += bInc;
+        color.Set(std::lround(r), std::lround(g), std::lround(b));
+        brush.SetColour(color);
     }
 
     SetPen(oldPen);
