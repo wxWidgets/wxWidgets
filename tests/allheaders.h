@@ -7,6 +7,7 @@
     #include <wx/catch_cppunit.h>
     #include <wx/dvrenderers.h>
     #include <wx/fmappriv.h>
+    #include <wx/memory.h>
     #include <wx/setup_inc.h>
     #include <wx/setup_redirect.h>
     #include <wx/variantbase.h>
