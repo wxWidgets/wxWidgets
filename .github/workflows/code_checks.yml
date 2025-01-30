@@ -101,3 +101,15 @@ jobs:
               echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
               exit 1
             fi
+
+  check-allheaders:
+    runs-on: ubuntu-20.04
+    name: Check All Headers In allheaders.h
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check that all headers are listed in tests/allheaders.h
+        run: |
+            ./misc/scripts/check_allheaders.sh
