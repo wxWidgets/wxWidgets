@@ -39,6 +39,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/darkmode.h"
+#include "wx/msw/private/menu.h"
 
 #include "wx/generic/statusbr.h"
 
@@ -839,6 +840,61 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     return wxFrameBase::HandleCommand(id, cmd, control);
 }
 
+bool
+HandleMenuMessage(WXLRESULT* result,
+                  wxWindow* w,
+                  WXUINT nMsg,
+                  WXWPARAM wParam,
+                  WXLPARAM lParam)
+{
+    if ( wxMSWDarkMode::HandleMenuMessage(result, w, nMsg, wParam, lParam) )
+        return true;
+
+    using namespace wxMSWMenuImpl;
+
+    switch ( nMsg )
+    {
+        case WM_MENUBAR_MEASUREMENUITEM:
+            if ( auto* const measureMenuItem = (MenuBarMeasureMenuItem*)lParam )
+            {
+                // We only need to handle this message for a workaround when
+                // using non-standard DPI.
+                if ( !(w->GetDPIScaleFactor() > 1.0) )
+                    break;
+
+                MEASUREITEMSTRUCT& mis = measureMenuItem->mis;
+
+                // Just a sanity check.
+                if ( mis.CtlType != ODT_MENU )
+                    break;
+
+                HWND hwnd = GetHwndOf(w);
+
+                WinStruct<MENUBARINFO> mbi;
+                if ( !::GetMenuBarInfo(hwnd, OBJID_MENU, 0, &mbi) )
+                {
+                    wxLogLastError("GetMenuBarInfo");
+                    break;
+                }
+
+                *result = w->MSWDefWindowProc(nMsg, wParam, lParam);
+
+                // Scale the horizontal padding of menu bar menus and the
+                // vertical padding of menu items with the DPI scaling factor
+                // as Windows doesn't do it.
+                if ( mbi.hMenu == measureMenuItem->mbdm.hmenu )
+                    mis.itemWidth += w->FromDIP(14) - 14;
+                else
+                    mis.itemHeight += w->FromDIP(6) - 6;
+
+                return true;
+            }
+            break;
+    }
+
+    return false;
+}
+
 // ---------------------------------------------------------------------------
 // the window proc for wxFrame
 // ---------------------------------------------------------------------------
@@ -849,7 +905,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
     bool processed = false;
 
     if ( GetMenuBar() &&
-          wxMSWDarkMode::HandleMenuMessage(&rc, this, message, wParam, lParam) )
+          HandleMenuMessage(&rc, this, message, wParam, lParam) )
     {
         return rc;
     }
