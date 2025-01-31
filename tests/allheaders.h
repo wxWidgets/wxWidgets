@@ -7,10 +7,12 @@
     #include <wx/catch_cppunit.h>
     #include <wx/dvrenderers.h>
     #include <wx/fmappriv.h>
+    #include <wx/memory.h>
     #include <wx/setup_inc.h>
     #include <wx/setup_redirect.h>
     #include <wx/variantbase.h>
     #include <wx/vms_x_fix.h>
+    #include <wx/webview_chromium_impl.h>
     #include <wx/xpmhand.h>
 */
 
@@ -40,6 +42,7 @@
 #include <wx/bannerwindow.h>
 #include <wx/base64.h>
 #include <wx/bitmap.h>
+#include <wx/bmpbndl.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bmpcbox.h>
 #include <wx/bookctrl.h>
@@ -74,6 +77,7 @@
 #include <wx/combo.h>
 #include <wx/commandlinkbutton.h>
 #include <wx/compiler.h>
+#include <wx/compositebookctrl.h>
 #include <wx/compositewin.h>
 #include <wx/confbase.h>
 #include <wx/config.h>
@@ -81,6 +85,7 @@
 #include <wx/control.h>
 #include <wx/convauto.h>
 #include <wx/cpp.h>
+#include <wx/creddlg.h>
 #include <wx/crt.h>
 #include <wx/cshelp.h>
 #include <wx/ctrlsub.h>
@@ -135,6 +140,7 @@
 #include <wx/fileconf.h>
 #include <wx/filectrl.h>
 #include <wx/filedlg.h>
+#include <wx/filedlgcustomize.h>
 #include <wx/filefn.h>
 #include <wx/file.h>
 #include <wx/filehistory.h>
@@ -213,6 +219,7 @@
 #include <wx/listbox.h>
 #include <wx/listctrl.h>
 #include <wx/list.h>
+#include <wx/localedefs.h>
 #include <wx/log.h>
 #include <wx/longlong.h>
 #include <wx/lzmastream.h>
@@ -365,6 +372,7 @@
 #include <wx/typeinfo.h>
 #include <wx/types.h>
 #include <wx/uiaction.h>
+#include <wx/uilocale.h>
 #include <wx/unichar.h>
 #include <wx/uri.h>
 #include <wx/url.h>
@@ -383,6 +391,8 @@
 #include <wx/volume.h>
 #include <wx/vscroll.h>
 #include <wx/weakref.h>
+#include <wx/webrequest.h>
+#include <wx/webview_chromium.h>
 #include <wx/webviewarchivehandler.h>
 #include <wx/webviewfshandler.h>
 #include <wx/webview.h>
