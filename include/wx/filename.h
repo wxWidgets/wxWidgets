@@ -492,6 +492,10 @@ public:
     // is the char a path separator for this format?
     static bool IsPathSeparator(wxChar ch, wxPathFormat format = wxPATH_NATIVE);
 
+    // is this is a DOS path which begins with "\\?\"?
+    static bool IsMSWExtendedLengthPath(const wxString& path,
+                                        wxPathFormat format = wxPATH_NATIVE);
+
     // is this is a DOS path which begins with a windows unique volume name
     // ('\\?\Volume{guid}\')?
     static bool IsMSWUniqueVolumeNamePath(const wxString& path,
@@ -628,7 +632,8 @@ private:
         SetPath_MayHaveVolume = 1
     };
 
-    // helper of public SetPath() also used internally
+    // helpers of public functions with the corresponding names
+    wxString DoGetPath(int flags, wxPathFormat format) const;
     void DoSetPath(const wxString& path, wxPathFormat format,
                    int flags = SetPath_MayHaveVolume);
 

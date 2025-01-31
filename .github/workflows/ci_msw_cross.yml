@@ -235,6 +235,10 @@ jobs:
           # to exclude the tests that are not run by default, so start with this.
           excluded_tests=('~[.]')
 
+          # Somehow, this test itself passes, but causes subsequent tests, such
+          # as FileFunctions::CopyFile, to fail. It would be nice to debug this.
+          excluded_tests+=('~wxFileName::LongPath')
+
           # There is 1 day difference in creation time under Wine somehow.
           excluded_tests+=('~wxFileName::SetTimes')
 

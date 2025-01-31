@@ -660,7 +660,7 @@ bool wxMkdir(const wxString& dir, int perm)
   #endif
 #else  // MSW and VC++
     wxUnusedVar(perm);
-    if ( wxMkDir(dir.fn_str()) != 0 )
+    if ( wxMkDir(dir) != 0 )
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dir);

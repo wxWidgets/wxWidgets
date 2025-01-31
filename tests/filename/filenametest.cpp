@@ -82,6 +82,7 @@ static struct TestFileNameInfo
     { "c:foo.bar", "c", "", "foo", "bar", false, wxPATH_DOS },
     { "c:\\foo.bar", "c", "\\", "foo", "bar", true, wxPATH_DOS },
     { "c:\\Windows\\command.com", "c", "\\Windows", "command", "com", true, wxPATH_DOS },
+    { R"(\\?\c:\Windows\System32\cmd.exe)", R"(\\?\c:)", R"(\Windows\System32)", R"(cmd)", R"(exe)", true, wxPATH_DOS },
     { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
       "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\", "", "", true, wxPATH_DOS },
     { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe",
@@ -1029,6 +1030,49 @@ TEST_CASE("wxFileName::Shortcuts", "[filename]")
    CHECK( fnLinkRel.GetFullName() == fnLink.GetFullName() );
 }
 
+TEST_CASE("wxFileName::LongPath", "[filename]")
+{
+    constexpr const char* dir = "test_directory_name";
+    constexpr const char* file = "test_file_name";
+
+    // Use many nested directories to ensure that the total path length for
+    // a file inside the innermost one is longer than MAX_PATH.
+    wxString path(dir);
+    path += wxFileName::GetPathSeparator();
+    path += path;
+    path += path;
+    path += path;
+    path += path;
+
+    CHECK( path.length() > MAX_PATH );
+
+    REQUIRE( wxFileName::Mkdir(path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) );
+
+    // If we managed to create it, ensure that we delete it.
+    class CleanupTestDir
+    {
+    public:
+        explicit CleanupTestDir(const wxString& dir) : m_dir(dir) { }
+        ~CleanupTestDir() { wxFileName::Rmdir(m_dir, wxPATH_RMDIR_RECURSIVE); }
+
+    private:
+        const wxString m_dir;
+    } cleanupTestDir(dir);
+
+    const wxFileName fn{path, file};
+
+    // Create the file in this directory by constructing a temporary wxFile.
+    {
+        wxFile f(fn.GetFullPath(), wxFile::write);
+        REQUIRE( f.IsOpened() );
+        REQUIRE( f.Write("Hello wx") );
+    }
+
+    // Try accessing it too.
+    CHECK( fn.FileExists() );
+    CHECK( fn.GetSize() == 8 );
+}
+
 #endif // __WINDOWS__
 
 #ifdef __LINUX__
@@ -1052,3 +1096,36 @@ TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
 }
 
 #endif // __LINUX__
+
+// This test is disabled by default as it requires the environment variable
+// below to be defined to point to the file to test.
+TEST_CASE("wxFileName::Test", "[.]")
+{
+    wxString file;
+    REQUIRE( wxGetEnv("WX_TEST_FILENAME", &file) );
+
+    wxFileName fn{file};
+    fn.MakeAbsolute();
+
+    WARN
+    (
+        "Absolute path:\t\"" << fn.GetFullPath() << "\"\n"
+        "Volume:\t\t\"" << fn.GetVolume() << "\"\n"
+        "Name:\t\t\t\"" << fn.GetName() << "\"\n"
+        "Extension:\t\t\"" << fn.GetExt() << "\"\n"
+        "Path:\t\t\t[" << wxJoin(fn.GetDirs(), ' ', '\\') << "]\n"
+    );
+
+    if ( fn.FileExists() )
+    {
+        WARN("File of size:\t" << fn.GetHumanReadableSize() << "\n");
+    }
+    else if ( fn.DirExists() )
+    {
+        WARN("Is a directory");
+    }
+    else
+    {
+        FAIL("Does not exist");
+    }
+}
