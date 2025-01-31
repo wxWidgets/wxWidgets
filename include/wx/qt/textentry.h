@@ -8,6 +8,8 @@
 #ifndef _WX_QT_TEXTENTRY_H_
 #define _WX_QT_TEXTENTRY_H_
 
+class wxTextAutoCompleteData; // private class used only by wxTextEntry itself
+
 class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 {
 public:
@@ -40,10 +42,21 @@ protected:
     virtual wxString DoGetValue() const override;
     virtual void DoSetValue(const wxString& value, int flags=0) override;
 
+    virtual bool DoAutoCompleteStrings(const wxArrayString& choices) override;
+    virtual bool DoAutoCompleteFileNames(int flags) override;
+    virtual bool DoAutoCompleteCustom(wxTextCompleter* completer) override;
+
     virtual wxWindow *GetEditableWindow() override;
 
     // Block/unblock the corresponding Qt signal.
     virtual void EnableTextChangedEvents(bool enable) override;
+
+    // Various auto-completion-related stuff, only used if any of AutoComplete()
+    // methods are called. Use the function above to access it.
+    wxTextAutoCompleteData* m_autoCompleteData = nullptr;
+
+    // It needs to call our GetEditableWindow() method.
+    friend class wxTextAutoCompleteData;
 };
 
 #endif // _WX_QT_TEXTENTRY_H_
