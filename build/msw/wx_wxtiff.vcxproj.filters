@@ -55,10 +55,25 @@
     <ClCompile Include="..\..\src\tiff\libtiff\tif_getimage.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tiff\libtiff\tif_hash_set.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tiff\libtiff\tif_jbig.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\tiff\libtiff\tif_jpeg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tiff\libtiff\tif_jpeg_12.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tiff\libtiff\tif_lerc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\tiff\libtiff\tif_luv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tiff\libtiff\tif_lzma.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\tiff\libtiff\tif_lzw.c">
@@ -106,6 +121,9 @@
     <ClCompile Include="..\..\src\tiff\libtiff\tif_warning.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tiff\libtiff\tif_webp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\tiff\libtiff\tif_win32.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -113,18 +131,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\tiff\libtiff\tif_zip.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\tiff\libtiff\tif_jbig.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\tiff\libtiff\tif_jpeg_12.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\tiff\libtiff\tif_lzma.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\tiff\libtiff\tif_webp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\tiff\libtiff\tif_zstd.c">

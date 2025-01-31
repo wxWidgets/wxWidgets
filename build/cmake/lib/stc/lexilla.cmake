@@ -47,6 +47,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexD.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexDMAP.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexDMIS.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexDart.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexDataflex.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexDiff.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexECL.cxx
@@ -89,6 +90,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexMySQL.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexNim.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexNimrod.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexNix.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexNsis.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexNull.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexOScript.cxx
@@ -126,7 +128,9 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexTAL.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexTCL.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexTCMD.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexTOML.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexTeX.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexTroff.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexTxt2tags.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexVB.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexVHDL.cxx
@@ -134,6 +138,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexVisualProlog.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexX12.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexYAML.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexZig.cxx
     ${LEXILLA_SRC_DIR}/lexlib/Accessor.cxx
     ${LEXILLA_SRC_DIR}/lexlib/Accessor.h
     ${LEXILLA_SRC_DIR}/lexlib/CatalogueModules.h
@@ -151,8 +156,6 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexlib/LexerBase.h
     ${LEXILLA_SRC_DIR}/lexlib/LexerModule.cxx
     ${LEXILLA_SRC_DIR}/lexlib/LexerModule.h
-    ${LEXILLA_SRC_DIR}/lexlib/LexerNoExceptions.cxx
-    ${LEXILLA_SRC_DIR}/lexlib/LexerNoExceptions.h
     ${LEXILLA_SRC_DIR}/lexlib/LexerSimple.cxx
     ${LEXILLA_SRC_DIR}/lexlib/LexerSimple.h
     ${LEXILLA_SRC_DIR}/lexlib/OptionSet.h

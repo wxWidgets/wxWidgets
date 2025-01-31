@@ -768,9 +768,11 @@
     <ClCompile Include="..\..\src\tiff\libtiff\tif_fax3sm.c" />
     <ClCompile Include="..\..\src\tiff\libtiff\tif_flush.c" />
     <ClCompile Include="..\..\src\tiff\libtiff\tif_getimage.c" />
+    <ClCompile Include="..\..\src\tiff\libtiff\tif_hash_set.c" />
     <ClCompile Include="..\..\src\tiff\libtiff\tif_jbig.c" />
     <ClCompile Include="..\..\src\tiff\libtiff\tif_jpeg.c" />
     <ClCompile Include="..\..\src\tiff\libtiff\tif_jpeg_12.c" />
+    <ClCompile Include="..\..\src\tiff\libtiff\tif_lerc.c" />
     <ClCompile Include="..\..\src\tiff\libtiff\tif_luv.c" />
     <ClCompile Include="..\..\src\tiff\libtiff\tif_lzma.c" />
     <ClCompile Include="..\..\src\tiff\libtiff\tif_lzw.c" />
