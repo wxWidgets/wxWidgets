@@ -483,12 +483,13 @@ void TextCtrlTestCase::Url()
     delete m_text;
     CreateText(wxTE_RICH | wxTE_AUTO_URL);
 
-    EventCounter url(m_text, wxEVT_TEXT_URL);
-
     m_text->AppendText("http://www.wxwidgets.org");
 
     wxUIActionSimulator sim;
     sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5)));
+
+    EventCounter url(m_text, wxEVT_TEXT_URL);
+
     sim.MouseClick();
     wxYield();
 
