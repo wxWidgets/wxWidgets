@@ -165,7 +165,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                     int match_pos = 0;
                     while (pos < end && match_pos < tag_len )
                     {
-                        wxChar c = *pos;
+                        wxUniChar c = *pos;
                         if ( c == '>' || c == '<' )
                             break;
 

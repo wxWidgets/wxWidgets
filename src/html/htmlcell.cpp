@@ -629,7 +629,7 @@ wxString wxHtmlWordWithTabsCell::GetPartAsText(int begin, int end) const
     // copy the content until we reach 'end':
     for ( ; pos < end; ++i )
     {
-        const wxChar c = *i;
+        const wxUniChar c = *i;
         sel += c;
 
         if ( c == '\t' )

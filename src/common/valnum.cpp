@@ -325,7 +325,7 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
                                        int pos,
                                        wxChar ch) const
 {
-    const wxChar separator = wxNumberFormatter::GetDecimalSeparator();
+    const wxUniChar separator = wxNumberFormatter::GetDecimalSeparator();
     if ( ch == separator )
     {
         if ( val.find(separator) != wxString::npos )

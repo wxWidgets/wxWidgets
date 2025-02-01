@@ -1615,10 +1615,10 @@ wxCmdLineParser::ConvertStringToArgs(const wxString& cmdline,
         // parse this parameter
         bool lastBS = false,
              isInsideQuotes = false;
-        wxChar chDelim = '\0';
+        wxUniChar chDelim = '\0';
         for ( arg.clear(); p != end; ++p )
         {
-            const wxChar ch = *p;
+            const wxUniChar ch = *p;
 
             if ( type == wxCMD_LINE_SPLIT_DOS )
             {

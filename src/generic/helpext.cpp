@@ -415,7 +415,7 @@ bool wxExtHelpController::KeywordSearch(const wxString& k,
                 choices[idx].clear();
                 for (int j=0; ; j++)
                 {
-                    wxChar targetChar = entry->doc.c_str()[j];
+                    wxUniChar targetChar = entry->doc.c_str()[j];
                     if ((targetChar == 0) || (targetChar == WXEXTHELP_COMMENTCHAR))
                         break;
 

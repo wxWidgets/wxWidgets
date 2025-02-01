@@ -1792,7 +1792,7 @@ wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
     wxString lang_sanitized = lang;
     for ( wxString::iterator it = lang_sanitized.begin(); it != lang_sanitized.end(); ++it )
     {
-        const wxChar c = *it;
+        const wxUniChar c = *it;
         if ( !((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) )
             *it = '_';
     }

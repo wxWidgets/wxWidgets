@@ -131,10 +131,10 @@ wxString wxNumberFormatter::Format(const wxString& format, double val)
 {
     wxString s = wxString::Format(format, val);
 
-    const wxChar sep = GetDecimalSeparator();
+    const wxUniChar sep = GetDecimalSeparator();
     if ( s.find(sep) == wxString::npos )
     {
-        const wxChar other = sep == '.' ? ',' : '.';
+        const wxUniChar other = sep == '.' ? ',' : '.';
         const size_t posSep = s.find(other);
         if ( posSep != wxString::npos )
             s[posSep] = sep;

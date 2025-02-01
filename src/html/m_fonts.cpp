@@ -66,7 +66,7 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
             wxString sizeStr;
             if (tag.GetParamAsString(wxT("SIZE"), &sizeStr) && sizeStr.ToLong(&tmp))
             {
-                wxChar c = sizeStr[0];
+                wxUniChar c = sizeStr[0];
                 if (c == wxT('+') || c == wxT('-'))
                     m_WParser->SetFontSize(oldsize+tmp);
                 else

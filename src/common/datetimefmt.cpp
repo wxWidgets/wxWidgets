@@ -2402,7 +2402,7 @@ wxString wxTimeSpan::Format(const wxString& format) const
 
     for ( wxString::const_iterator pch = format.begin(); pch != format.end(); ++pch )
     {
-        wxChar ch = *pch;
+        wxUniChar ch = *pch;
 
         if ( ch == wxT('%') )
         {
@@ -2416,7 +2416,7 @@ wxString wxTimeSpan::Format(const wxString& format) const
             unsigned digits = 0;
 
             ch = *++pch;    // get the format spec char
-            switch ( ch )
+            switch ( ch.GetValue() )
             {
                 default:
                     wxFAIL_MSG( wxT("invalid format character") );

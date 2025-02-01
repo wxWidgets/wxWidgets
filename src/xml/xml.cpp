@@ -600,7 +600,7 @@ bool wxIsWhiteOnly(const wxString& buf)
 {
     for ( wxString::const_iterator i = buf.begin(); i != buf.end(); ++i )
     {
-        wxChar c = *i;
+        wxUniChar c = *i;
         if ( c != wxS(' ') && c != wxS('\t') && c != wxS('\n') && c != wxS('\r'))
             return false;
     }
@@ -949,9 +949,9 @@ bool OutputEscapedString(wxOutputStream& stream,
 
     for ( wxString::const_iterator i = str.begin(); i != str.end(); ++i )
     {
-        const wxChar c = *i;
+        const wxUniChar c = *i;
 
-        switch ( c )
+        switch ( c.GetValue() )
         {
             case wxS('<'):
                 escaped.append(wxS("&lt;"));
@@ -968,7 +968,7 @@ bool OutputEscapedString(wxOutputStream& stream,
             default:
                 if ( mode == Escape_Attribute )
                 {
-                    switch ( c )
+                    switch ( c.GetValue() )
                     {
                         case wxS('"'):
                             escaped.append(wxS("&quot;"));
