@@ -72,11 +72,11 @@ wxString wxTextBuffer::Translate(const wxString& text, wxTextFileType type)
     // unnecessary relocations
     result.Alloc(text.Len());
 
-    wxChar chLast = 0;
+    wxUniChar chLast = 0;
     for ( wxString::const_iterator i = text.begin(); i != text.end(); ++i )
     {
-        wxChar ch = *i;
-        switch ( ch ) {
+        wxUniChar ch = *i;
+        switch ( ch.GetValue() ) {
             case wxT('\n'):
                 // Dos/Unix line termination
                 result += eol;

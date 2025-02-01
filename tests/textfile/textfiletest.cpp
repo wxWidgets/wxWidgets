@@ -327,6 +327,15 @@ void TextFileTestCase::ReadBig()
                           f[NUM_LINES - 1] );
 }
 
+TEST_CASE("wxTextBuffer::Translate", "[textbuffer]")
+{
+    // Bytes with the value of LF that are part of an UTF-8 character shouldn't
+    // be mangled.
+    const wxString smiley = wxString::FromUTF8("\xf0\x9f\x98\x8a"); // U+1F60A
+
+    CHECK( wxTextBuffer::Translate(smiley, wxTextFileType_Dos) == smiley );
+}
+
 #ifdef __LINUX__
 
 // Check if using wxTextFile with special files, whose reported size doesn't
