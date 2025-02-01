@@ -1798,11 +1798,11 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt )
             // if the user code caught EVT_SET_CURSOR() and returned nothing from
             // it - this is a way to say that our cursor shouldn't be used for this
             // point
-            if ( !processedEvtSetCursor && m_cursor.IsOk() )
+            if ( !processedEvtSetCursor && m_cursor.IsOk() ) {
                 cursor = m_cursor ;
-
-            if ( !wxIsBusy() && !GetParent() )
+            } else if ( !wxIsBusy() && !GetParent() ) {
                 cursor = *wxSTANDARD_CURSOR ;
+            }
         }
 
         if ( cursor.IsOk() )
