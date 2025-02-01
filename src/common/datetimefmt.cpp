@@ -2406,6 +2406,12 @@ wxString wxTimeSpan::Format(const wxString& format) const
 
         if ( ch == wxT('%') )
         {
+            if ( ++pch == format.end() )
+            {
+                wxFAIL_MSG( wxT("trailing '%' in format string") );
+                break;
+            }
+
             // the start of the format specification of the printf() below
             wxString fmtPrefix(wxT('%'));
 
@@ -2415,7 +2421,7 @@ wxString wxTimeSpan::Format(const wxString& format) const
             // the number of digits for the format string, 0 if unused
             unsigned digits = 0;
 
-            ch = *++pch;    // get the format spec char
+            ch = *pch;    // get the format spec char
             switch ( ch.GetValue() )
             {
                 default:
