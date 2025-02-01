@@ -73,6 +73,7 @@
             src/stc/lexilla/lexers/LexD.cxx
             src/stc/lexilla/lexers/LexDMAP.cxx
             src/stc/lexilla/lexers/LexDMIS.cxx
+            src/stc/lexilla/lexers/LexDart.cxx
             src/stc/lexilla/lexers/LexDataflex.cxx
             src/stc/lexilla/lexers/LexDiff.cxx
             src/stc/lexilla/lexers/LexECL.cxx
@@ -115,6 +116,7 @@
             src/stc/lexilla/lexers/LexMySQL.cxx
             src/stc/lexilla/lexers/LexNim.cxx
             src/stc/lexilla/lexers/LexNimrod.cxx
+            src/stc/lexilla/lexers/LexNix.cxx
             src/stc/lexilla/lexers/LexNsis.cxx
             src/stc/lexilla/lexers/LexNull.cxx
             src/stc/lexilla/lexers/LexOScript.cxx
@@ -152,7 +154,9 @@
             src/stc/lexilla/lexers/LexTAL.cxx
             src/stc/lexilla/lexers/LexTCL.cxx
             src/stc/lexilla/lexers/LexTCMD.cxx
+            src/stc/lexilla/lexers/LexTOML.cxx
             src/stc/lexilla/lexers/LexTeX.cxx
+            src/stc/lexilla/lexers/LexTroff.cxx
             src/stc/lexilla/lexers/LexTxt2tags.cxx
             src/stc/lexilla/lexers/LexVB.cxx
             src/stc/lexilla/lexers/LexVHDL.cxx
@@ -160,6 +164,7 @@
             src/stc/lexilla/lexers/LexVisualProlog.cxx
             src/stc/lexilla/lexers/LexX12.cxx
             src/stc/lexilla/lexers/LexYAML.cxx
+            src/stc/lexilla/lexers/LexZig.cxx
             src/stc/lexilla/lexlib/Accessor.cxx
             src/stc/lexilla/lexlib/DefaultLexer.cxx
             src/stc/lexilla/lexlib/InList.cxx
@@ -168,7 +173,6 @@
             src/stc/lexilla/lexlib/LexCharacterSet.cxx
             src/stc/lexilla/lexlib/LexerBase.cxx
             src/stc/lexilla/lexlib/LexerModule.cxx
-            src/stc/lexilla/lexlib/LexerNoExceptions.cxx
             src/stc/lexilla/lexlib/LexerSimple.cxx
             src/stc/lexilla/lexlib/PropSetSimple.cxx
             src/stc/lexilla/lexlib/StyleContext.cxx

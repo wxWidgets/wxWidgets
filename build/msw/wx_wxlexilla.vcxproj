@@ -803,7 +803,6 @@
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexCharacterSet.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerBase.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerModule.h" />
-    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerNoExceptions.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerSimple.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\OptionSet.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\PropSetSimple.h" />
@@ -848,6 +847,7 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDiff.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDMAP.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDMIS.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDart.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexECL.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEDIFACT.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexEiffel.cxx" />
@@ -888,6 +888,7 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexMySQL.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNim.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNimrod.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNix.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNsis.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNull.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexOpal.cxx" />
@@ -925,7 +926,9 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTAL.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTCL.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTCMD.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTOML.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTeX.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTroff.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTxt2tags.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexVB.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexVerilog.cxx" />
@@ -933,6 +936,7 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexVisualProlog.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexX12.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexYAML.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexZig.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\Accessor.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\DefaultLexer.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\InList.cxx" />
@@ -941,7 +945,6 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexCharacterSet.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerBase.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerModule.cxx" />
-    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerNoExceptions.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerSimple.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\PropSetSimple.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\StyleContext.cxx" />
