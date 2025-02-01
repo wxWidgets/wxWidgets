@@ -8954,10 +8954,8 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
 #ifdef __WXMSW__
                 wxString text2;
                 text2.Alloc(text.length()+1);
-                size_t i;
-                for (i = 0; i < text.length(); i++)
+                for ( wxUniChar ch : text )
                 {
-                    wxUniChar ch = text[i];
                     if (ch != wxT('\r'))
                         text2 += ch;
                 }
