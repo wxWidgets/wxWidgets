@@ -279,14 +279,7 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
     // if the conversion fails make an approximation
     if (!nameBuf) {
         badconv = true;
-        size_t len = name.length();
-        wxCharBuffer approx(len);
-        for (size_t i = 0; i < len; i++)
-        {
-            wxChar c = name[i];
-            approx.data()[i] = c & ~0x7F ? '_' : c;
-        }
-        nameBuf = approx;
+        nameBuf = name.ToAscii();
     }
 
     const char *mbName = nameBuf;
