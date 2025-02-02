@@ -98,7 +98,10 @@ public:
     wxBitmapBundle bitmap;// tab's bitmap
     wxRect rect;          // tab's hit rectangle
     bool active = false;  // true if the page is currently active
+
+    // These fields are internal, don't use them.
     bool hover = false;   // true if mouse hovering over tab
+    bool rowEnd = false;  // true if the tab is the last in the row
 };
 
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton
@@ -240,6 +243,20 @@ public:
         return res.window != nullptr;
     }
 
+    // Internal functions only, don't use.
+
+    // Layout tabs in wxAUI_NB_MULTILINE case using either the width of the
+    // given rectangle or the current width and return the extra height needed
+    // for the additional rows.
+    //
+    // This function has an important side effect of updating rowEnd for all
+    // pages -- which defines the layout.
+    int LayoutMultiLineTabs(const wxRect& rect, wxWindow* wnd);
+    int LayoutMultiLineTabs(wxWindow* wnd)
+    {
+        return LayoutMultiLineTabs(m_rect, wnd);
+    }
+
 protected:
 
     virtual void Render(wxDC* dc, wxWindow* wnd);
@@ -266,11 +283,11 @@ protected:
     // flags and the state of the page.
     int GetCloseButtonState(bool isPageActive) const;
 
+private:
     // Return the width that can be used for the tabs, i.e. without the space
     // reserved for the buttons.
     int GetAvailableForTabs(const wxRect& rect, wxReadOnlyDC& dc, wxWindow* wnd);
 
-private:
     // Render the buttons: part of Render(), returns the extent of the buttons
     // on the left and right side.
     void RenderButtons(wxDC& dc, wxWindow* wnd,
@@ -304,6 +321,8 @@ public:
 
     // Internal function taking the total tab frame area and setting the size
     // of the window to its sub-rectangle corresponding to tabs orientation.
+    //
+    // Also updates rowEnd for all pages in m_pages when using multiple rows.
     void DoApplyRect(const wxRect& rect, int tabCtrlHeight);
 
 protected:
