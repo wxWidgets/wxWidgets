@@ -2788,7 +2788,7 @@ void wxAuiNotebook::OnTabBgDClick(wxAuiNotebookEvent& evt)
 
 void wxAuiNotebook::OnTabBeginDrag(wxAuiNotebookEvent&)
 {
-    m_lastDragX = 0;
+    m_lastDropMovePos = -1;
 }
 
 void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
@@ -2825,22 +2825,31 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
 
             int dest_idx = destTabInfo.pos;
 
-            // prevent jumpy drag
-            if ((src_idx == dest_idx) ||
-                (src_idx > dest_idx && m_lastDragX <= pt.x) ||
-                (src_idx < dest_idx && m_lastDragX >= pt.x))
+            if ( src_idx == dest_idx )
             {
-                m_lastDragX = pt.x;
+                // Reset the last drop position, the mouse has moved away from
+                // the other tab, so now the user should be able to drag this
+                // one there again.
+                m_lastDropMovePos = -1;
                 return;
             }
 
+            // When dragging a smaller tab over the larger one, after moving
+            // the tab into the new position, the same point can be now over a
+            // different tab, which would result in another move of this tab as
+            // soon as the mouse moves even by a single pixel. And then, of
+            // course, it would move again, and so on. To avoid this, we need
+            // to check if the mouse has moved from the tab over which it was
+            // when the last drop occurred.
+            if ( dest_idx == m_lastDropMovePos )
+                return;
 
             wxWindow* src_tab = dest_tabs->GetWindowFromIdx(src_idx);
             dest_tabs->MovePage(src_tab, dest_idx);
             dest_tabs->SetActivePage((size_t)dest_idx);
             dest_tabs->DoUpdateActive();
-            m_lastDragX = pt.x;
 
+            m_lastDropMovePos = dest_tabs->TabHitTest(pt.x, pt.y).pos;
         }
 
         return;

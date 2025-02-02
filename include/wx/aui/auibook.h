@@ -576,7 +576,7 @@ protected:
     wxFont m_normalFont;
     int m_tabCtrlHeight;
 
-    int m_lastDragX;
+    int m_lastDropMovePos = -1;
     unsigned int m_flags;
 
 private:
