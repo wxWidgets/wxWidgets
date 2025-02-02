@@ -1043,9 +1043,8 @@ wxAuiTabContainer::TabHitTest(const wxPoint& pt) const
         }
     }
 
-    size_t i, page_count = m_pages.GetCount();
-
-    for (i = m_tabOffset; i < page_count; ++i)
+    const size_t page_count = m_pages.GetCount();
+    for (size_t i = m_tabOffset; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
         if (page.rect.Contains(pt))
