@@ -36,6 +36,7 @@
 #include "wx/osx/private.h"
 #endif
 
+#include <algorithm>
 #include <unordered_set>
 
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEvent);
@@ -205,12 +206,14 @@ bool wxAuiTabContainer::MovePage(wxWindow* page,
     if (idx == -1)
         return false;
 
-    // Check if we actually have anything to do.
-    if (new_idx == (size_t)idx)
-        return true;
+    const size_t old_idx = static_cast<size_t>(idx);
 
-    // Just swap the pages contents.
-    std::swap(m_pages.at(idx), m_pages.at(new_idx));
+    const auto b = m_pages.begin();
+    if (old_idx < new_idx)
+        std::rotate(b + old_idx, b + old_idx + 1, b + new_idx + 1);
+    else if (old_idx > new_idx)
+        std::rotate(b + new_idx, b + old_idx, b + old_idx + 1);
+    //else: nothing to do
 
     return true;
 }
