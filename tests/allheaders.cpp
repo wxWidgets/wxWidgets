@@ -421,4 +421,10 @@ TEST_CASE("wxNO_IMPLICIT_WXSTRING_ENCODING", "[string]")
     wxPLURAL("singular", "plural", 2);
     wxGETTEXT_IN_CONTEXT("context", "text");
     wxGETTEXT_IN_CONTEXT_PLURAL("context", "singular", "plural", 3);
+
+    // Also wide strings can be used:
+    _(L"item");
+    wxGETTEXT_IN_CONTEXT(L"context", L"item");
+    wxPLURAL(L"sing", L"plur", 3);
+    wxGETTEXT_IN_CONTEXT_PLURAL(L"context", L"sing", L"plur", 3);
 }

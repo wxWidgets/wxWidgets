@@ -36,7 +36,11 @@ wx_option(wxBUILD_DEBUG_LEVEL "Debug Level" Default STRINGS Default 0 1 2)
 mark_as_advanced(wxBUILD_DEBUG_LEVEL)
 
 if(NOT APPLE)
-    wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" OFF)
+    set(wxBUILD_USE_STATIC_RUNTIME_DEFAULT OFF)
+    if(MSVC AND CMAKE_MSVC_RUNTIME_LIBRARY AND NOT CMAKE_MSVC_RUNTIME_LIBRARY MATCHES "DLL")
+        set(wxBUILD_USE_STATIC_RUNTIME_DEFAULT ON)
+    endif()
+    wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" ${wxBUILD_USE_STATIC_RUNTIME_DEFAULT})
     mark_as_advanced(wxBUILD_USE_STATIC_RUNTIME)
 endif()
 

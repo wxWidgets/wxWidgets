@@ -104,6 +104,8 @@ wxRibbonHSLColour wxRibbonShiftLuminance(wxRibbonHSLColour colour,
 {
     if(amount <= 1.0f)
         return colour.Darker(colour.luminance * (1.0f - amount));
+    else if (wxSystemSettings::GetAppearance().IsDark())
+        return colour.Darker(colour.luminance * (amount - 1.0f));
     else
         return colour.Lighter((1.0f - colour.luminance) * (amount - 1.0f));
 }
@@ -223,12 +225,6 @@ wxColour wxRibbonHSLColour::ToRGB() const
 wxRibbonHSLColour wxRibbonHSLColour::Darker(float delta) const
 {
     return Lighter(-delta);
-}
-
-wxRibbonHSLColour& wxRibbonHSLColour::MakeDarker(float delta)
-{
-    luminance -= delta;
-    return *this;
 }
 
 wxRibbonHSLColour wxRibbonHSLColour::Lighter(float delta) const

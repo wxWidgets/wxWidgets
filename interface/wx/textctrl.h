@@ -1813,11 +1813,7 @@ public:
         The range of the match will be returned as a wxTextSearchResult, which will
         contain -1 values if no match was found.
 
-        This is currently only implemented under wxMSW and wxGTK3.
-
         @since 3.3.0
-
-        @onlyfor{wxmsw,wxgtk}
     */
     wxTextSearchResult SearchText(const wxTextSearch& search) const;
 
@@ -2117,8 +2113,8 @@ public:
     void OSXEnableNewLineReplacement(bool enable);
 
     /**
-        Enables the automatic replacement of ASCII quotation marks and
-        apostrophes with their typographic symbols.
+        Enables the automatic replacement of straight (ASCII) quotation marks and
+        apostrophes with smart ("curly") quotes.
 
         This feature is enabled by default.
 
@@ -2128,7 +2124,7 @@ public:
     void OSXEnableAutomaticQuoteSubstitution(bool enable);
 
     /**
-        Enables the automatic conversion of two ASCII hyphens into an m-dash.
+        Enables the automatic conversion of two ASCII hyphens into an em dash.
 
         This feature is enabled by default.
 

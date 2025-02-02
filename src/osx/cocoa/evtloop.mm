@@ -513,7 +513,9 @@ void wxGUIEventLoop::EndModalSession()
     wxASSERT_MSG(m_modalSession != nullptr, "no modal session active");
     
     wxASSERT_MSG(m_modalNestedLevel > 0, "incorrect modal nesting level");
-    
+
+    m_modalWindow = nullptr;
+
     --m_modalNestedLevel;
     if ( m_modalNestedLevel == 0 )
     {

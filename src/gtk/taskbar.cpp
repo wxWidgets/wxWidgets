@@ -40,23 +40,6 @@ wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
 GdkWindow* wxGetTopLevelGDK();
 
-namespace
-{
-
-wxBitmap GetBitmapFromBundle(const wxBitmapBundle& bundle)
-{
-#if GTK_CHECK_VERSION(3,10,0)
-    return bundle.GetBitmap(
-        bundle.GetPreferredBitmapSizeAtScale(
-            gdk_window_get_scale_factor(wxGetTopLevelGDK())
-        )
-    );
-#endif
-    return bundle.GetBitmap(wxDefaultSize);
-}
-
-} // anonymous namespace
-
 class wxTaskBarIcon::Private
 {
 public:
@@ -212,7 +195,15 @@ void wxTaskBarIcon::Private::SetIcon()
 #if GTK_CHECK_VERSION(2,10,0)
     if (wx_is_at_least_gtk2(10))
     {
-        wxBitmap bmp = m_win ? m_bitmap.GetBitmapFor(m_win) : GetBitmapFromBundle(m_bitmap);
+        int scale = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+        if (gtk_check_version(3,10,0) == nullptr)
+        {
+            scale = gdk_window_get_scale_factor(wxGetTopLevelGDK());
+        }
+#endif
+        const wxSize size(m_bitmap.GetPreferredBitmapSizeAtScale(scale));
+        const wxBitmap bmp(m_bitmap.GetBitmap(size));
         if (m_statusIcon)
             gtk_status_icon_set_from_pixbuf(m_statusIcon, bmp.GetPixbuf());
         else
@@ -229,7 +220,7 @@ void wxTaskBarIcon::Private::SetIcon()
     {
 #ifndef __WXGTK3__
         m_size = 0;
-        wxBitmap bmp = m_win ? m_bitmap.GetBitmapFor(m_win) : GetBitmapFromBundle(m_bitmap);
+        const wxBitmap bmp(m_bitmap.GetBitmap(wxDefaultSize));
         if (m_eggTrayIcon)
         {
             GtkWidget* image = gtk_bin_get_child(GTK_BIN(m_eggTrayIcon));
@@ -299,7 +290,7 @@ void wxTaskBarIcon::Private::size_allocate(int width, int height)
     if (m_size == size)
         return;
     m_size = size;
-    wxBitmap bmp = m_win ? m_bitmap.GetBitmapFor(m_win) : GetBitmapFromBundle(m_bitmap);
+    const wxBitmap bmp(m_bitmap.GetBitmap(wxDefaultSize));
     int w = bmp.GetLogicalWidth();
     int h = bmp.GetLogicalHeight();
     if (w > size || h > size)

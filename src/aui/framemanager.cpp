@@ -53,13 +53,6 @@ wxDEFINE_EVENT( wxEVT_AUI_PANE_ACTIVATED, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_RENDER, wxAuiManagerEvent );
 wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 
-#ifdef __WXMAC__
-    // a few defines to avoid nameclashes
-    #define __MAC_OS_X_MEMORY_MANAGER_CLEAN__ 1
-    #define __AIFF__
-    #include "wx/osx/private.h"
-#endif
-
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
     #include "wx/msw/private.h"

@@ -31,6 +31,7 @@ typedef wxString wxControlAction;
 // in the controls headers)
 
 #define wxACTION_NONE    wxT("")           // no action to perform
+#define wxNO_ACCEL_CHAR    wxT('\0')
 
 // ----------------------------------------------------------------------------
 // wxControl: the base class for all GUI controls
@@ -53,6 +54,8 @@ public:
         Create(parent, id, pos, size, style, validator, name);
     }
 
+    virtual ~wxControl();
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -64,8 +67,11 @@ public:
     // accelerator char (the one immediately after '&') into m_chAccel
     virtual void SetLabel(const wxString& label) override;
 
-    // return the current label
+    // return the current label with mnemonics
     virtual wxString GetLabel() const override { return wxControlBase::GetLabel(); }
+
+    // return the current label without mnemonics
+    virtual wxString GetLabelText() const override { return m_label; }
 
     // wxUniversal-specific methods
 
@@ -75,7 +81,7 @@ public:
     // return the accel char itself or 0 if none
     wxChar GetAccelChar() const
     {
-        return m_indexAccel == -1 ? wxT('\0') : (wxChar)m_label[m_indexAccel];
+        return m_indexAccel == -1 ? wxNO_ACCEL_CHAR : (wxChar)m_label[m_indexAccel];
     }
 
     virtual wxWindow *GetInputWindow() const override

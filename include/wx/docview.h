@@ -700,14 +700,14 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
+        this->Bind(wxEVT_ACTIVATE, &wxDocChildFrameAny::OnActivate, this);
+        this->Bind(wxEVT_CLOSE_WINDOW, &wxDocChildFrameAny::OnCloseWindow, this);
+
         if ( !wxDocChildFrameAnyBase::Create(doc, view, this) )
             return false;
 
         if ( !BaseClass::Create(parent, id, title, pos, size, style, name) )
             return false;
-
-        this->Bind(wxEVT_ACTIVATE, &wxDocChildFrameAny::OnActivate, this);
-        this->Bind(wxEVT_CLOSE_WINDOW, &wxDocChildFrameAny::OnCloseWindow, this);
 
         return true;
     }

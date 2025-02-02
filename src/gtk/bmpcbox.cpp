@@ -207,8 +207,7 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmapBundle& bitma
     {
         if ( m_bitmapSize.x < 0 )
         {
-            m_bitmapSize.x = bmp.GetLogicalWidth();
-            m_bitmapSize.y = bmp.GetLogicalHeight();
+            m_bitmapSize = bmp.GetLogicalSize();
         }
 
         GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );

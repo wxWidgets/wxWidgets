@@ -743,7 +743,7 @@ public:
 
     /**
         Implementing this method allows for more control over requests from
-        the backend then GetFile(). More details of the request are available
+        the backend than GetFile(). More details of the request are available
         from the request object which allows access to URL, method, postdata
         and headers.
 

@@ -327,7 +327,7 @@ wxString wxMarkupText::GetMarkupForMeasuring() const
     return wxControl::RemoveMnemonics(m_markup);
 }
 
-void wxMarkupText::Render(wxDC& dc, const wxRect& rect, int flags)
+void wxMarkupText::Render(wxDC& dc, const wxRect& rect, int flags, int align)
 {
     // We want to center the above-baseline parts of the letter vertically, so
     // we use the visible height and not the total height (which includes
@@ -336,7 +336,19 @@ void wxMarkupText::Render(wxDC& dc, const wxRect& rect, int flags)
     wxRect rectText(rect.GetPosition(), Measure(dc, &visibleHeight));
     rectText.height = visibleHeight;
 
-    wxMarkupParserRenderLabelOutput out(dc, rectText.CentreIn(rect), flags);
+    if ( align & wxALIGN_RIGHT )
+        rectText.x = rect.GetRight() - rectText.width;
+    else if ( align & wxALIGN_CENTRE_HORIZONTAL )
+        rectText.x += (rect.GetWidth() - rectText.width) / 2;
+    //else: wxALIGN_LEFT, nothing to do
+
+    if ( align & wxALIGN_BOTTOM )
+        rectText.y = rect.GetBottom() - rectText.height;
+    else if ( align & wxALIGN_CENTRE_VERTICAL )
+        rectText.y += (rect.GetHeight() - rectText.height) / 2;
+    //else: wxALIGN_TOP, nothing to do
+
+    wxMarkupParserRenderLabelOutput out(dc, rectText, flags);
     wxMarkupParser parser(out);
     parser.Parse(m_markup);
 }

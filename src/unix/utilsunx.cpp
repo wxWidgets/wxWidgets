@@ -933,7 +933,7 @@ wxString wxGetUserHome( const wxString &user )
     }
     else
     {
-      who = getpwnam (user.mb_str());
+      who = getpwnam (user.mb_str(wxConvWhateverWorks));
     }
 
     return wxSafeConvertMB2WX(who ? who->pw_dir : nullptr);
@@ -1426,15 +1426,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSetEnvModule, wxModule);
 
 bool wxGetEnv(const wxString& var, wxString *value)
 {
-    // wxGetenv is defined as getenv()
-    char *p = wxGetenv(var);
+    char *p = wxGetenv(var.mb_str(wxConvWhateverWorks));
     if ( !p )
         return false;
 
     if ( value )
-    {
-        *value = p;
-    }
+        value->assign(wxScopedCharBuffer::CreateNonOwned(p), wxConvWhateverWorks);
 
     return true;
 }
@@ -1447,21 +1444,21 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
 #ifdef HAVE_UNSETENV
         // don't test unsetenv() return value: it's void on some systems (at
         // least Darwin)
-        unsetenv(variable.mb_str());
+        unsetenv(variable.mb_str(wxConvWhateverWorks));
         return true;
 #else
         value = ""; // we can't pass nullptr to setenv()
 #endif
     }
 
-    return setenv(variable.mb_str(), value, 1 /* overwrite */) == 0;
+    return setenv(variable.mb_str(wxConvWhateverWorks), value, 1 /* overwrite */) == 0;
 #elif defined(HAVE_PUTENV)
     wxString s = variable;
     if ( value )
         s << wxT('=') << value;
 
     // transform to ANSI
-    const wxWX2MBbuf p = s.mb_str();
+    const wxWX2MBbuf p = s.mb_str(wxConvWhateverWorks);
 
     char *buf = (char *)malloc(strlen(p) + 1);
     strcpy(buf, p);
@@ -1486,7 +1483,7 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
 
 bool wxSetEnv(const wxString& variable, const wxString& value)
 {
-    return wxDoSetEnv(variable, value.mb_str());
+    return wxDoSetEnv(variable, value.mb_str(wxConvWhateverWorks));
 }
 
 bool wxUnsetEnv(const wxString& variable)

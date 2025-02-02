@@ -47,6 +47,11 @@ upstream:
 
 Run `buildconf.sh` to update the generated files and commit the changes.
 
+## jpeg
+
+There is no upstream repository available with the latest version. So download
+and commit the releases from https://www.ijg.org/files/.
+
 ## libpng
 
 We use a special hack for libpng as we want to prefix all its symbols with
@@ -69,7 +74,12 @@ without `-DHAVE_CONFIG_H` as it works just fine without it on any ANSI C system
 
 ## libtiff
 
+The forked upstream shown in github is incorrect. It is based on the official
+TIFF repository https://gitlab.com/libtiff/libtiff.
 Run `autogen.sh` to update the generated files and commit the changes.
+
+Update `tif_config.h` and `tifconf.h` with the updated entries from their `.in` files.
+Update the version numbers in `tiffvers.h`.
 
 ## zlib
 
@@ -80,6 +90,12 @@ If `zconf.h` is updated, you probably already had to resolve the conflicts in
 it, as our file differs from the upstream version due to having the changes
 from [Z_PREFIX PR](https://github.com/madler/zlib/pull/323) included in it.
 
+## pcre2
+
+The forked upstream shown in github is incorrect. It is based on the official
+PCRE2 repository https://github.com/PCRE2Project/pcre2.
+You might need to use `git merge --allow-unrelated-histories`.
+
 
 Updating the main repository
 ----------------------------
@@ -89,6 +105,8 @@ corresponding `build/bakefiles/$lib.bkl` file (e.g. `expat.bkl` for Expat) and
 rerun bakefile to regenerate most of the makefiles and project files. Currently
 you will need to update `build/msw/wx_wx$lib.vcxproj{,.filters}` files
 manually.
+After updating the `bkl` file, run  `build/osx/makeprojects.py` to generate
+the Xcode projects.
 
 Commit these changes and the changes to the submodule itself, but don't push
 them to GitHub yet.

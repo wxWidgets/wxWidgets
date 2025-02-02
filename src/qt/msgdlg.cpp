@@ -30,10 +30,6 @@ public:
 private:
     // Initial position, may be wxDefaultPosition.
     wxPoint m_pos;
-
-    // Set to true once the dialog has been initialized, which happens before
-    // it's shown for the first time.
-    bool m_initialized = false;
 };
 
 

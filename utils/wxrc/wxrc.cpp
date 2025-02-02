@@ -437,6 +437,8 @@ static bool NodeContainsFilename(wxXmlNode *node)
        parent->GetAttribute(wxT("class"), wxT("")) == wxT("wxBitmapButton") &&
        (name == wxT("focus") ||
         name == wxT("disabled") ||
+        name == wxT("current") ||
+        name == wxT("pressed") ||
         name == wxT("hover") ||
         name == wxT("selected")))
        return true;

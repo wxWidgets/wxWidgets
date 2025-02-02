@@ -52,6 +52,8 @@ else()
 endif()
 
 if(MSVC)
+    if(CMAKE_VERSION VERSION_LESS "3.15")
+    # CMake 3.15 and later use MSVC_RUNTIME_LIBRARY property, see functions.cmake
     # Determine MSVC runtime library flag
     set(MSVC_LIB_USE "/MD")
     set(MSVC_LIB_REPLACE "/MT")
@@ -79,6 +81,15 @@ if(MSVC)
               "Flags used by the CXX compiler during ${cfg_upper} builds." FORCE)
         endif()
     endforeach()
+    endif()
+
+    if(wxBUILD_SHARED AND wxBUILD_USE_STATIC_RUNTIME AND wxUSE_STD_IOSTREAM)
+        # Objects like std::cout are defined as extern in <iostream> and implemented in libcpmt.
+        # This is statically linked into wxbase (stdstream.cpp).
+        # When building an application with both wxbase and libcpmt,
+        # the linker gives 'multiply defined symbols' error.
+        message(WARNING "wxUSE_STD_IOSTREAM combined with wxBUILD_USE_STATIC_RUNTIME will fail to link when using std::cout or similar functions")
+    endif()
 
     if(wxBUILD_OPTIMISE)
         set(MSVC_LINKER_RELEASE_FLAGS " /LTCG /OPT:REF /OPT:ICF")

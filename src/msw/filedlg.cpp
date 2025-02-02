@@ -288,19 +288,6 @@ public:
     }
 };
 
-class wxFileDialogCustomControlImplFDC
-    : public wxFileDialogImplFDC<wxFileDialogCustomControlImpl>
-{
-public:
-    // All custom controls are identified by their ID in this implementation.
-    wxFileDialogCustomControlImplFDC(IFileDialogCustomize* fdc, DWORD id)
-        : wxFileDialogImplFDC<wxFileDialogCustomControlImpl>(fdc, id)
-    {
-    }
-
-    wxDECLARE_NO_COPY_CLASS(wxFileDialogCustomControlImplFDC);
-};
-
 class wxFileDialogButtonImplFDC
     : public wxFileDialogImplFDC<wxFileDialogButtonImpl>
 {

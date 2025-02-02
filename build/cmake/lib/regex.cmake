@@ -12,6 +12,7 @@ if(wxUSE_REGEX STREQUAL "builtin")
     # add_subdirectory or ExternalProject_Add
     wx_add_builtin_library(wxregex
         3rdparty/pcre/src/pcre2_auto_possess.c
+        3rdparty/pcre/src/pcre2_chkdint.c
         3rdparty/pcre/src/pcre2_compile.c
         3rdparty/pcre/src/pcre2_config.c
         3rdparty/pcre/src/pcre2_context.c

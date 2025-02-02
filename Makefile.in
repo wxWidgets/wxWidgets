@@ -93,6 +93,7 @@ WXREGEX_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG \
 	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	wxregex_pcre2_auto_possess.o \
+	wxregex_pcre2_chkdint.o \
 	wxregex_pcre2_compile.o \
 	wxregex_pcre2_config.o \
 	wxregex_pcre2_context.o \
@@ -234,9 +235,11 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_fax3sm.o \
 	wxtiff_tif_flush.o \
 	wxtiff_tif_getimage.o \
+	wxtiff_tif_hash_set.o \
 	wxtiff_tif_jbig.o \
 	wxtiff_tif_jpeg.o \
 	wxtiff_tif_jpeg_12.o \
+	wxtiff_tif_lerc.o \
 	wxtiff_tif_luv.o \
 	wxtiff_tif_lzma.o \
 	wxtiff_tif_lzw.o \
@@ -342,6 +345,7 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexD.o \
 	wxlexilla_LexDMAP.o \
 	wxlexilla_LexDMIS.o \
+	wxlexilla_LexDart.o \
 	wxlexilla_LexDataflex.o \
 	wxlexilla_LexDiff.o \
 	wxlexilla_LexECL.o \
@@ -384,6 +388,7 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexMySQL.o \
 	wxlexilla_LexNim.o \
 	wxlexilla_LexNimrod.o \
+	wxlexilla_LexNix.o \
 	wxlexilla_LexNsis.o \
 	wxlexilla_LexNull.o \
 	wxlexilla_LexOScript.o \
@@ -421,7 +426,9 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexTAL.o \
 	wxlexilla_LexTCL.o \
 	wxlexilla_LexTCMD.o \
+	wxlexilla_LexTOML.o \
 	wxlexilla_LexTeX.o \
+	wxlexilla_LexTroff.o \
 	wxlexilla_LexTxt2tags.o \
 	wxlexilla_LexVB.o \
 	wxlexilla_LexVHDL.o \
@@ -429,6 +436,7 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexVisualProlog.o \
 	wxlexilla_LexX12.o \
 	wxlexilla_LexYAML.o \
+	wxlexilla_LexZig.o \
 	wxlexilla_Accessor.o \
 	wxlexilla_DefaultLexer.o \
 	wxlexilla_InList.o \
@@ -437,7 +445,6 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexCharacterSet.o \
 	wxlexilla_LexerBase.o \
 	wxlexilla_LexerModule.o \
-	wxlexilla_LexerNoExceptions.o \
 	wxlexilla_LexerSimple.o \
 	wxlexilla_PropSetSimple.o \
 	wxlexilla_StyleContext.o \
@@ -13764,6 +13771,9 @@ locale_uninstall:
 wxregex_pcre2_auto_possess.o: $(srcdir)/3rdparty/pcre/src/pcre2_auto_possess.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/3rdparty/pcre/src/pcre2_auto_possess.c
 
+wxregex_pcre2_chkdint.o: $(srcdir)/3rdparty/pcre/src/pcre2_chkdint.c
+	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/3rdparty/pcre/src/pcre2_chkdint.c
+
 wxregex_pcre2_compile.o: $(srcdir)/3rdparty/pcre/src/pcre2_compile.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/3rdparty/pcre/src/pcre2_compile.c
 
@@ -14148,6 +14158,9 @@ wxtiff_tif_flush.o: $(srcdir)/src/tiff/libtiff/tif_flush.c
 wxtiff_tif_getimage.o: $(srcdir)/src/tiff/libtiff/tif_getimage.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_getimage.c
 
+wxtiff_tif_hash_set.o: $(srcdir)/src/tiff/libtiff/tif_hash_set.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_hash_set.c
+
 wxtiff_tif_jbig.o: $(srcdir)/src/tiff/libtiff/tif_jbig.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_jbig.c
 
@@ -14156,6 +14169,9 @@ wxtiff_tif_jpeg.o: $(srcdir)/src/tiff/libtiff/tif_jpeg.c
 
 wxtiff_tif_jpeg_12.o: $(srcdir)/src/tiff/libtiff/tif_jpeg_12.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_jpeg_12.c
+
+wxtiff_tif_lerc.o: $(srcdir)/src/tiff/libtiff/tif_lerc.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_lerc.c
 
 wxtiff_tif_luv.o: $(srcdir)/src/tiff/libtiff/tif_luv.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_luv.c
@@ -14418,6 +14434,9 @@ wxlexilla_LexDMAP.o: $(srcdir)/src/stc/lexilla/lexers/LexDMAP.cxx
 wxlexilla_LexDMIS.o: $(srcdir)/src/stc/lexilla/lexers/LexDMIS.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexDMIS.cxx
 
+wxlexilla_LexDart.o: $(srcdir)/src/stc/lexilla/lexers/LexDart.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexDart.cxx
+
 wxlexilla_LexDataflex.o: $(srcdir)/src/stc/lexilla/lexers/LexDataflex.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexDataflex.cxx
 
@@ -14544,6 +14563,9 @@ wxlexilla_LexNim.o: $(srcdir)/src/stc/lexilla/lexers/LexNim.cxx
 wxlexilla_LexNimrod.o: $(srcdir)/src/stc/lexilla/lexers/LexNimrod.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexNimrod.cxx
 
+wxlexilla_LexNix.o: $(srcdir)/src/stc/lexilla/lexers/LexNix.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexNix.cxx
+
 wxlexilla_LexNsis.o: $(srcdir)/src/stc/lexilla/lexers/LexNsis.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexNsis.cxx
 
@@ -14655,8 +14677,14 @@ wxlexilla_LexTCL.o: $(srcdir)/src/stc/lexilla/lexers/LexTCL.cxx
 wxlexilla_LexTCMD.o: $(srcdir)/src/stc/lexilla/lexers/LexTCMD.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexTCMD.cxx
 
+wxlexilla_LexTOML.o: $(srcdir)/src/stc/lexilla/lexers/LexTOML.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexTOML.cxx
+
 wxlexilla_LexTeX.o: $(srcdir)/src/stc/lexilla/lexers/LexTeX.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexTeX.cxx
+
+wxlexilla_LexTroff.o: $(srcdir)/src/stc/lexilla/lexers/LexTroff.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexTroff.cxx
 
 wxlexilla_LexTxt2tags.o: $(srcdir)/src/stc/lexilla/lexers/LexTxt2tags.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexTxt2tags.cxx
@@ -14678,6 +14706,9 @@ wxlexilla_LexX12.o: $(srcdir)/src/stc/lexilla/lexers/LexX12.cxx
 
 wxlexilla_LexYAML.o: $(srcdir)/src/stc/lexilla/lexers/LexYAML.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexYAML.cxx
+
+wxlexilla_LexZig.o: $(srcdir)/src/stc/lexilla/lexers/LexZig.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexZig.cxx
 
 wxlexilla_Accessor.o: $(srcdir)/src/stc/lexilla/lexlib/Accessor.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/Accessor.cxx
@@ -14702,9 +14733,6 @@ wxlexilla_LexerBase.o: $(srcdir)/src/stc/lexilla/lexlib/LexerBase.cxx
 
 wxlexilla_LexerModule.o: $(srcdir)/src/stc/lexilla/lexlib/LexerModule.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/LexerModule.cxx
-
-wxlexilla_LexerNoExceptions.o: $(srcdir)/src/stc/lexilla/lexlib/LexerNoExceptions.cxx
-	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/LexerNoExceptions.cxx
 
 wxlexilla_LexerSimple.o: $(srcdir)/src/stc/lexilla/lexlib/LexerSimple.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/LexerSimple.cxx

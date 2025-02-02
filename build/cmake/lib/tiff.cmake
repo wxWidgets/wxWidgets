@@ -34,9 +34,11 @@ if(wxUSE_LIBTIFF STREQUAL "builtin")
         src/tiff/libtiff/tif_fax3sm.c
         src/tiff/libtiff/tif_flush.c
         src/tiff/libtiff/tif_getimage.c
+        src/tiff/libtiff/tif_hash_set.c
         src/tiff/libtiff/tif_jbig.c
         src/tiff/libtiff/tif_jpeg.c
         src/tiff/libtiff/tif_jpeg_12.c
+        src/tiff/libtiff/tif_lerc.c
         src/tiff/libtiff/tif_luv.c
         src/tiff/libtiff/tif_lzma.c
         src/tiff/libtiff/tif_lzw.c

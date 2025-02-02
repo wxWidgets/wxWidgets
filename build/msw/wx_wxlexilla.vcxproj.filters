@@ -50,9 +50,6 @@
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerNoExceptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerSimple.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -181,6 +178,9 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDMIS.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexDart.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexECL.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -301,6 +301,9 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNimrod.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNix.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexNsis.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -412,7 +415,13 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTCMD.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTOML.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTeX.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTroff.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexTxt2tags.cxx">
@@ -434,6 +443,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexYAML.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexZig.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\Accessor.cxx">
@@ -458,9 +470,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerModule.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerNoExceptions.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerSimple.cxx">

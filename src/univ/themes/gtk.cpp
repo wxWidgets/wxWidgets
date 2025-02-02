@@ -1671,6 +1671,7 @@ void wxGTKRenderer::DoDrawMenuItem(wxDC& dc,
 
         if ( bmp.IsOk() )
         {
+            rect.x = MENU_BMP_MARGIN;
             rect.SetRight(geometryInfo->GetLabelOffset());
             wxControlRenderer::DrawBitmap(dc, bmp, rect);
         }
@@ -1780,6 +1781,16 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
             if ( widthAccel > widthAccelMax )
             {
                 widthAccelMax = widthAccel;
+            }
+
+            if ( item->IsCheckable() )
+            {
+                wxCoord width = GetCheckBitmapSize().x;
+                if ( width > widthBmpMax )
+                    widthBmpMax = width;
+                width = GetRadioBitmapSize().x;
+                if ( width > widthBmpMax )
+                    widthBmpMax = width;
             }
 
             const wxBitmap& bmp = item->GetBitmap();

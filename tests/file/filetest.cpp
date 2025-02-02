@@ -20,46 +20,10 @@
 #include "testfile.h"
 
 // ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class FileTestCase : public CppUnit::TestCase
-{
-public:
-    FileTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( FileTestCase );
-        CPPUNIT_TEST( ReadAll );
-        CPPUNIT_TEST( RoundTripUTF8 );
-        CPPUNIT_TEST( RoundTripUTF16 );
-        CPPUNIT_TEST( RoundTripUTF32 );
-        CPPUNIT_TEST( TempFile );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ReadAll();
-    void RoundTripUTF8() { DoRoundTripTest(wxConvUTF8); }
-    void RoundTripUTF16() { DoRoundTripTest(wxMBConvUTF16()); }
-    void RoundTripUTF32() { DoRoundTripTest(wxMBConvUTF32()); }
-
-    void DoRoundTripTest(const wxMBConv& conv);
-    void TempFile();
-
-    wxDECLARE_NO_COPY_CLASS(FileTestCase);
-};
-
-// ----------------------------------------------------------------------------
-// CppUnit macros
-// ----------------------------------------------------------------------------
-
-CPPUNIT_TEST_SUITE_REGISTRATION( FileTestCase );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileTestCase, "FileTestCase" );
-
-// ----------------------------------------------------------------------------
 // tests implementation
 // ----------------------------------------------------------------------------
 
-void FileTestCase::ReadAll()
+TEST_CASE("wxFile::ReadAll", "[file]")
 {
     TestFile tf;
 
@@ -67,23 +31,29 @@ void FileTestCase::ReadAll()
 
     {
         wxFile fout(tf.GetName(), wxFile::write);
-        CPPUNIT_ASSERT( fout.IsOpened() );
+        CHECK( fout.IsOpened() );
         fout.Write(text, strlen(text));
-        CPPUNIT_ASSERT( fout.Close() );
+        CHECK( fout.Close() );
     }
 
     {
         wxFile fin(tf.GetName(), wxFile::read);
-        CPPUNIT_ASSERT( fin.IsOpened() );
+        CHECK( fin.IsOpened() );
 
         wxString s;
-        CPPUNIT_ASSERT( fin.ReadAll(&s) );
-        CPPUNIT_ASSERT_EQUAL( text, s );
+        CHECK( fin.ReadAll(&s) );
+        CHECK( s == text );
     }
 }
 
-void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
+TEST_CASE("wxFile::RoundTrip", "[file]")
 {
+    std::unique_ptr<wxMBConv> conv;
+
+    SECTION("UTF-8") { conv.reset(new wxMBConvStrictUTF8); }
+    SECTION("UTF-16") { conv.reset(new wxMBConvUTF16); }
+    SECTION("UTF-32") { conv.reset(new wxMBConvUTF32); }
+
     TestFile tf;
 
     // Explicit length is needed because of the embedded NUL.
@@ -91,41 +61,96 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
 
     {
         wxFile fout(tf.GetName(), wxFile::write);
-        CPPUNIT_ASSERT( fout.IsOpened() );
+        CHECK( fout.IsOpened() );
 
-        CPPUNIT_ASSERT( fout.Write(data, conv) );
+        CHECK( fout.Write(data, *conv) );
     }
 
     {
         wxFile fin(tf.GetName(), wxFile::read);
-        CPPUNIT_ASSERT( fin.IsOpened() );
+        CHECK( fin.IsOpened() );
 
         const ssize_t len = fin.Length();
         wxCharBuffer buf(len);
-        CPPUNIT_ASSERT_EQUAL( len, fin.Read(buf.data(), len) );
+        CHECK( fin.Read(buf.data(), len) == len );
 
-        wxString dataReadBack(buf, conv, len);
-        CPPUNIT_ASSERT_EQUAL( data, dataReadBack );
+        wxString dataReadBack(buf, *conv, len);
+        CHECK( dataReadBack == data );
     }
 
     {
         wxFile fin(tf.GetName(), wxFile::read);
-        CPPUNIT_ASSERT( fin.IsOpened() );
+        CHECK( fin.IsOpened() );
 
         wxString dataReadBack;
-        CPPUNIT_ASSERT( fin.ReadAll(&dataReadBack, conv) );
+        CHECK( fin.ReadAll(&dataReadBack, *conv) );
 
-        CPPUNIT_ASSERT_EQUAL( data, dataReadBack );
+        CHECK( dataReadBack == data );
     }
 }
 
-void FileTestCase::TempFile()
+static void CheckFileContents(const wxString& name, const wxString& data)
 {
+    // Check that the file exists with the expected contents.
+    wxFile f(name);
+    REQUIRE( f.IsOpened() );
+
+    wxString s;
+    CHECK( f.ReadAll(&s) );
+    CHECK( s == data );
+}
+
+TEST_CASE("wxTempFile", "[file][temp]")
+{
+    constexpr const char* name = "wxtemp_test";
+    const wxString dataOld("what is the meaning of life?");
+    const wxString dataNew("the answer is 42");
+
+    // Ensure that it will be removed at the end of the test in any case.
+    TempFile tf(name);
+
+    bool hasOldFile = false;
+
+    SECTION("New")
+    {
+        wxRemoveFile(name);
+    }
+
+    SECTION("Existing")
+    {
+        wxFile f(name, wxFile::write);
+        CHECK( f.IsOpened() );
+        CHECK( f.Write(dataOld) );
+        CHECK( f.Close() );
+
+        hasOldFile = true;
+    }
+
+    // First check that not committing the file doesn't do anything.
+    {
+        wxTempFile discarded(name);
+        CHECK( discarded.IsOpened() );
+        CHECK( discarded.Write(dataNew) );
+    }
+
+    if ( !hasOldFile )
+    {
+        // The file shouldn't have been created.
+        CHECK( !wxFile::Exists(name) );
+    }
+    else
+    {
+        // Check that the old file is still there with the old contents.
+        CheckFileContents(name, dataOld);
+    }
+
+    // Next check that committing it does.
     wxTempFile tmpFile;
-    CPPUNIT_ASSERT( tmpFile.Open(wxT("test2")) );
-    CPPUNIT_ASSERT( tmpFile.Write(wxT("the answer is 42")) );
-    CPPUNIT_ASSERT( tmpFile.Commit() );
-    CPPUNIT_ASSERT( wxRemoveFile(wxT("test2")) );
+    CHECK( tmpFile.Open(name) );
+    CHECK( tmpFile.Write(dataNew) );
+    CHECK( tmpFile.Commit() );
+
+    CheckFileContents(name, dataNew);
 }
 
 #ifdef __LINUX__

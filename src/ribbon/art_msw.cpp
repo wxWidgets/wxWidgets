@@ -274,10 +274,20 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
 
     if(set_colour_scheme)
     {
-        SetColourScheme(
-            wxColour(194, 216, 241),
-            wxColour(255, 223, 114),
-            wxColour(  0,   0,   0));
+        if (wxSystemSettings::GetAppearance().IsDark())
+        {
+            SetColourScheme(
+                wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE),
+                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
+                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+        }
+        else
+        {
+            SetColourScheme(
+                wxColour(194, 216, 241),
+                wxColour(255, 223, 114),
+                wxColour(0, 0, 0));
+        }
     }
 
     m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
@@ -358,13 +368,13 @@ void wxRibbonMSWArtProvider::SetColourScheme(
         (double h, double s, double l)
         {
             return primary_hsl.ShiftHue(h).Saturated(primary_is_gray ? 0.0 : s)
-                .Lighter(l).ToRGB();
+                .AdjustLuminance(l).ToRGB();
         };
     const auto LikeSecondary = [secondary_hsl, secondary_is_gray]
         (double h, double s, double l)
         {
             return secondary_hsl.ShiftHue(h).Saturated(secondary_is_gray ? 0.0 : s)
-                .Lighter(l).ToRGB();
+                .AdjustLuminance(l).ToRGB();
         };
 
     m_page_border_pen = LikePrimary(1.4, 0.00, -0.08);

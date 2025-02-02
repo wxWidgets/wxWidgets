@@ -333,43 +333,53 @@ inline const wxString& wxGetTranslation(const char *str1,
                             wxString(context, conv));
 }
 
-    #define wxTRANS_INPUT_STR(s) wxASCII_STR(s)
-#else
+// We can't construct wxString implicitly in this case, so use a helper.
+inline wxString wxTRANS_INPUT_STR(const char* s)
+{
+    return wxString::FromAscii(s);
+}
+
+inline wxString wxTRANS_INPUT_STR(const wchar_t* s)
+{
+    return wxString(s);
+}
+#else // !wxNO_IMPLICIT_WXSTRING_ENCODING
+    // We can rely on implicit conversion, so don't bother with the helper.
     #define wxTRANS_INPUT_STR(s) s
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
 namespace wxTransImplStrict
 {
 
-// Wrapper functions that only accept string literals as arguments,
-// not variables, not char* pointers.
-template<size_t N>
-const wxString& wxUnderscoreWrapper(const char (&msg)[N])
+// Wrapper functions that only accept string literals (regular or wide) as
+// arguments, not variables, not char* pointers, not wchar_t* pointers.
+template<size_t N, typename T>
+const wxString& wxUnderscoreWrapper(const T (&msg)[N])
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg));
 }
 
-template<size_t M, size_t N>
-const wxString& wxPluralWrapper(const char (&msg)[M],
-                                const char (&plural)[N],
+template<size_t M, size_t N, typename T>
+const wxString& wxPluralWrapper(const T (&msg)[M],
+                                const T (&plural)[N],
                                 int count)
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),
                             count);
 }
 
-template<size_t M, size_t N>
-const wxString& wxGettextInContextWrapper(const char (&ctx)[M],
-                                          const char (&msg)[N])
+template<size_t M, size_t N, typename T>
+const wxString& wxGettextInContextWrapper(const T (&ctx)[M],
+                                          const T (&msg)[N])
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxString(),
                             wxTRANS_INPUT_STR(ctx));
 }
 
-template<size_t L, size_t M, size_t N>
-const wxString& wxGettextInContextPluralWrapper(const char (&ctx)[L],
-                                                const char (&msg)[M],
-                                                const char (&plural)[N],
+template<size_t L, size_t M, size_t N, typename T>
+const wxString& wxGettextInContextPluralWrapper(const T (&ctx)[L],
+                                                const T (&msg)[M],
+                                                const T (&plural)[N],
                                                 int count)
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxTRANS_INPUT_STR(plural),

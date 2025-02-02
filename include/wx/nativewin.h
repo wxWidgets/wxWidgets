@@ -31,7 +31,7 @@
 //    all platforms except GTK where we also can work with Window/XID)
 //
 //  - wxNativeWindowHandle for child windows, i.e. HWND/GtkWidget*/NSControl
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/wrapwin.h"
 
     typedef HWND wxNativeContainerWindowId;

@@ -45,6 +45,7 @@ WXREGEX_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
 	-DHAVE_CONFIG_H $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_auto_possess.o \
+	$(OBJS)\wxregex_pcre2_chkdint.o \
 	$(OBJS)\wxregex_pcre2_compile.o \
 	$(OBJS)\wxregex_pcre2_config.o \
 	$(OBJS)\wxregex_pcre2_context.o \
@@ -186,9 +187,11 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_fax3sm.o \
 	$(OBJS)\wxtiff_tif_flush.o \
 	$(OBJS)\wxtiff_tif_getimage.o \
+	$(OBJS)\wxtiff_tif_hash_set.o \
 	$(OBJS)\wxtiff_tif_jbig.o \
 	$(OBJS)\wxtiff_tif_jpeg.o \
 	$(OBJS)\wxtiff_tif_jpeg_12.o \
+	$(OBJS)\wxtiff_tif_lerc.o \
 	$(OBJS)\wxtiff_tif_luv.o \
 	$(OBJS)\wxtiff_tif_lzma.o \
 	$(OBJS)\wxtiff_tif_lzw.o \
@@ -291,6 +294,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexD.o \
 	$(OBJS)\wxlexilla_LexDMAP.o \
 	$(OBJS)\wxlexilla_LexDMIS.o \
+	$(OBJS)\wxlexilla_LexDart.o \
 	$(OBJS)\wxlexilla_LexDataflex.o \
 	$(OBJS)\wxlexilla_LexDiff.o \
 	$(OBJS)\wxlexilla_LexECL.o \
@@ -333,6 +337,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexMySQL.o \
 	$(OBJS)\wxlexilla_LexNim.o \
 	$(OBJS)\wxlexilla_LexNimrod.o \
+	$(OBJS)\wxlexilla_LexNix.o \
 	$(OBJS)\wxlexilla_LexNsis.o \
 	$(OBJS)\wxlexilla_LexNull.o \
 	$(OBJS)\wxlexilla_LexOScript.o \
@@ -370,7 +375,9 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexTAL.o \
 	$(OBJS)\wxlexilla_LexTCL.o \
 	$(OBJS)\wxlexilla_LexTCMD.o \
+	$(OBJS)\wxlexilla_LexTOML.o \
 	$(OBJS)\wxlexilla_LexTeX.o \
+	$(OBJS)\wxlexilla_LexTroff.o \
 	$(OBJS)\wxlexilla_LexTxt2tags.o \
 	$(OBJS)\wxlexilla_LexVB.o \
 	$(OBJS)\wxlexilla_LexVHDL.o \
@@ -378,6 +385,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexVisualProlog.o \
 	$(OBJS)\wxlexilla_LexX12.o \
 	$(OBJS)\wxlexilla_LexYAML.o \
+	$(OBJS)\wxlexilla_LexZig.o \
 	$(OBJS)\wxlexilla_Accessor.o \
 	$(OBJS)\wxlexilla_DefaultLexer.o \
 	$(OBJS)\wxlexilla_InList.o \
@@ -386,7 +394,6 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexCharacterSet.o \
 	$(OBJS)\wxlexilla_LexerBase.o \
 	$(OBJS)\wxlexilla_LexerModule.o \
-	$(OBJS)\wxlexilla_LexerNoExceptions.o \
 	$(OBJS)\wxlexilla_LexerSimple.o \
 	$(OBJS)\wxlexilla_PropSetSimple.o \
 	$(OBJS)\wxlexilla_StyleContext.o \
@@ -6063,6 +6070,9 @@ build_cfg_file: $(SETUPHDIR)
 $(OBJS)\wxregex_pcre2_auto_possess.o: ../../3rdparty/pcre/src/pcre2_auto_possess.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxregex_pcre2_chkdint.o: ../../3rdparty/pcre/src/pcre2_chkdint.c
+	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxregex_pcre2_compile.o: ../../3rdparty/pcre/src/pcre2_compile.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
@@ -6447,6 +6457,9 @@ $(OBJS)\wxtiff_tif_flush.o: ../../src/tiff/libtiff/tif_flush.c
 $(OBJS)\wxtiff_tif_getimage.o: ../../src/tiff/libtiff/tif_getimage.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxtiff_tif_hash_set.o: ../../src/tiff/libtiff/tif_hash_set.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxtiff_tif_jbig.o: ../../src/tiff/libtiff/tif_jbig.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
@@ -6454,6 +6467,9 @@ $(OBJS)\wxtiff_tif_jpeg.o: ../../src/tiff/libtiff/tif_jpeg.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxtiff_tif_jpeg_12.o: ../../src/tiff/libtiff/tif_jpeg_12.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxtiff_tif_lerc.o: ../../src/tiff/libtiff/tif_lerc.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxtiff_tif_luv.o: ../../src/tiff/libtiff/tif_luv.c
@@ -6711,6 +6727,9 @@ $(OBJS)\wxlexilla_LexDMAP.o: ../../src/stc/lexilla/lexers/LexDMAP.cxx
 $(OBJS)\wxlexilla_LexDMIS.o: ../../src/stc/lexilla/lexers/LexDMIS.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxlexilla_LexDart.o: ../../src/stc/lexilla/lexers/LexDart.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxlexilla_LexDataflex.o: ../../src/stc/lexilla/lexers/LexDataflex.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6837,6 +6856,9 @@ $(OBJS)\wxlexilla_LexNim.o: ../../src/stc/lexilla/lexers/LexNim.cxx
 $(OBJS)\wxlexilla_LexNimrod.o: ../../src/stc/lexilla/lexers/LexNimrod.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxlexilla_LexNix.o: ../../src/stc/lexilla/lexers/LexNix.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxlexilla_LexNsis.o: ../../src/stc/lexilla/lexers/LexNsis.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6948,7 +6970,13 @@ $(OBJS)\wxlexilla_LexTCL.o: ../../src/stc/lexilla/lexers/LexTCL.cxx
 $(OBJS)\wxlexilla_LexTCMD.o: ../../src/stc/lexilla/lexers/LexTCMD.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxlexilla_LexTOML.o: ../../src/stc/lexilla/lexers/LexTOML.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxlexilla_LexTeX.o: ../../src/stc/lexilla/lexers/LexTeX.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_LexTroff.o: ../../src/stc/lexilla/lexers/LexTroff.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexTxt2tags.o: ../../src/stc/lexilla/lexers/LexTxt2tags.cxx
@@ -6970,6 +6998,9 @@ $(OBJS)\wxlexilla_LexX12.o: ../../src/stc/lexilla/lexers/LexX12.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexYAML.o: ../../src/stc/lexilla/lexers/LexYAML.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_LexZig.o: ../../src/stc/lexilla/lexers/LexZig.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_Accessor.o: ../../src/stc/lexilla/lexlib/Accessor.cxx
@@ -6994,9 +7025,6 @@ $(OBJS)\wxlexilla_LexerBase.o: ../../src/stc/lexilla/lexlib/LexerBase.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexerModule.o: ../../src/stc/lexilla/lexlib/LexerModule.cxx
-	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxlexilla_LexerNoExceptions.o: ../../src/stc/lexilla/lexlib/LexerNoExceptions.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexerSimple.o: ../../src/stc/lexilla/lexlib/LexerSimple.cxx

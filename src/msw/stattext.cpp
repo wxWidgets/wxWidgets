@@ -101,6 +101,11 @@ wxSize wxStaticText::DoGetBestClientSize() const
 {
     wxInfoDC dc(const_cast<wxStaticText *>(this));
 
+#if wxUSE_MARKUP
+    if ( m_markupText )
+        return m_markupText->Measure(dc);
+#endif // wxUSE_MARKUP
+
     wxCoord widthTextMax, heightTextTotal;
     dc.GetMultiLineTextExtent(GetLabelText(), &widthTextMax, &heightTextTotal);
 
@@ -285,6 +290,10 @@ void wxStaticText::WXSetVisibleLabel(const wxString& str)
 
 bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 {
+    // Remove the non-markup label, we don't want the native control to show it
+    // in addition to the one we draw ourselves.
+    ::SetWindowText(GetHwnd(), wxT(""));
+
     const wxString label = RemoveMarkup(markup);
     if ( label.empty() && !markup.empty() )
         return false;
@@ -321,8 +330,11 @@ void wxStaticText::WXOnPaint(wxPaintEvent& event)
 
     wxPaintDC dc(this);
 
-    // TODO: support transparent background for static text with markup.
-    dc.Clear();
+    // Erase the background in the same way the native control does it, in
+    // particular this lets the parent background show through.
+    ::SendMessage(GetHwnd(), WM_PRINTCLIENT,
+                  (WPARAM)dc.GetHDC(),
+                  PRF_ERASEBKGND);
 
     const wxRect rect = GetClientRect();
     if ( !IsThisEnabled() )
@@ -343,7 +355,8 @@ void wxStaticText::WXOnPaint(wxPaintEvent& event)
             wxRect rectShadow = rect;
             rectShadow.Offset(1, 1);
 
-            m_markupText->Render(dc, rectShadow, wxMarkupText::Render_ShowAccels);
+            m_markupText->Render(dc, rectShadow, wxMarkupText::Render_ShowAccels,
+                                 GetAlignment());
 
             dc.SetTextForeground(
                 wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW)
@@ -351,7 +364,8 @@ void wxStaticText::WXOnPaint(wxPaintEvent& event)
         }
     }
 
-    m_markupText->Render(dc, rect, wxMarkupText::Render_ShowAccels);
+    m_markupText->Render(dc, rect, wxMarkupText::Render_ShowAccels,
+                         GetAlignment());
 }
 
 #endif // wxUSE_MARKUP

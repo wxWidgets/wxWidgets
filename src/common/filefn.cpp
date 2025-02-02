@@ -574,6 +574,31 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 bool
 wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 {
+#ifdef __WINDOWS__
+    // When overwriting, prefer using ReplaceFile() which allows to preserve
+    // the destination file attributes while replacing its contents.
+    if ( overwrite && wxFileExists(file2) )
+    {
+        if ( ::ReplaceFile
+               (
+                    file2.t_str(),  // File to replace.
+                    file1.t_str(),  // File to replace it with.
+                    nullptr,        // No backup file.
+                    REPLACEFILE_IGNORE_MERGE_ERRORS,
+                                    // Don't return error just because ACLs
+                                    // couldn't be preserved.
+                    wxRESERVED_PARAM,
+                    wxRESERVED_PARAM
+               ) )
+        {
+            return true;
+        }
+
+        // Continue with the normal rename logic if ReplaceFile() failed, it
+        // will probably fail as well but it shouldn't hurt to try.
+    }
+#endif // __WINDOWS__
+
     if ( !overwrite && wxFileExists(file2) )
     {
         wxLogSysError
@@ -635,7 +660,7 @@ bool wxMkdir(const wxString& dir, int perm)
   #endif
 #else  // MSW and VC++
     wxUnusedVar(perm);
-    if ( wxMkDir(dir.fn_str()) != 0 )
+    if ( wxMkDir(dir) != 0 )
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dir);
