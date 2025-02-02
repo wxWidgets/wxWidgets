@@ -2826,7 +2826,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
             int dest_idx = destTabInfo.pos;
 
             // prevent jumpy drag
-            if ((src_idx == dest_idx) || dest_idx == -1 ||
+            if ((src_idx == dest_idx) ||
                 (src_idx > dest_idx && m_lastDragX <= pt.x) ||
                 (src_idx < dest_idx && m_lastDragX >= pt.x))
             {
