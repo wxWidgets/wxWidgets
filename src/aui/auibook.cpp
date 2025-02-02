@@ -1027,12 +1027,13 @@ void wxAuiTabContainer::MakeTabVisible(int tabPage, wxWindow* win)
 
 // TabHitTest() tests if a tab was hit, returning the struct containing the
 // window that was hit together with its position or null pointer otherwise.
-wxAuiTabContainer::HitTestResult wxAuiTabContainer::TabHitTest(int x, int y) const
+wxAuiTabContainer::HitTestResult
+wxAuiTabContainer::TabHitTest(const wxPoint& pt) const
 {
-    if (!m_rect.Contains(x,y))
+    if (!m_rect.Contains(pt))
         return {};
 
-    const wxAuiTabContainerButton* const btn = ButtonHitTest(x, y);
+    const wxAuiTabContainerButton* const btn = ButtonHitTest(pt);
     if (btn && !(btn->curState & wxAUI_BUTTON_STATE_DISABLED))
     {
         for ( const auto& button : m_buttons )
@@ -1047,7 +1048,7 @@ wxAuiTabContainer::HitTestResult wxAuiTabContainer::TabHitTest(int x, int y) con
     for (i = m_tabOffset; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
-        if (page.rect.Contains(x,y))
+        if (page.rect.Contains(pt))
         {
             return { page.window, static_cast<int>(i) };
         }
@@ -1058,14 +1059,15 @@ wxAuiTabContainer::HitTestResult wxAuiTabContainer::TabHitTest(int x, int y) con
 
 // ButtonHitTest() tests if a button was hit. The function returns
 // the button if one was hit and null pointer otherwise
-wxAuiTabContainerButton* wxAuiTabContainer::ButtonHitTest(int x, int y) const
+wxAuiTabContainerButton*
+wxAuiTabContainer::ButtonHitTest(const wxPoint& pt) const
 {
-    if (!m_rect.Contains(x,y))
+    if (!m_rect.Contains(pt))
         return nullptr;
 
     for ( auto& button : m_buttons )
     {
-        if (button.rect.Contains(x,y) &&
+        if (button.rect.Contains(pt) &&
             !(button.curState & wxAUI_BUTTON_STATE_HIDDEN ))
         {
             return const_cast<wxAuiTabContainerButton*>(&button);
@@ -1074,7 +1076,7 @@ wxAuiTabContainerButton* wxAuiTabContainer::ButtonHitTest(int x, int y) const
 
     for ( const auto& button : m_tabCloseButtons )
     {
-        if (button.rect.Contains(x,y) &&
+        if (button.rect.Contains(pt) &&
             !(button.curState & (wxAUI_BUTTON_STATE_HIDDEN |
                                    wxAUI_BUTTON_STATE_DISABLED)))
         {
@@ -1261,7 +1263,7 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     m_pressedButton = nullptr;
 
 
-    if ( auto const tabInfo = TabHitTest(evt.m_x, evt.m_y) )
+    if ( auto const tabInfo = TabHitTest(evt.GetPosition()) )
     {
         int new_selection = tabInfo.pos;
 
@@ -1331,7 +1333,8 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
     if (m_pressedButton)
     {
         // make sure we're still clicking the button
-        const wxAuiTabContainerButton* const button = ButtonHitTest(evt.m_x, evt.m_y);
+        const wxAuiTabContainerButton* const
+            button = ButtonHitTest(evt.GetPosition());
         if (!button || button->curState & wxAUI_BUTTON_STATE_DISABLED)
             return;
 
@@ -1361,7 +1364,7 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnMiddleUp(wxMouseEvent& evt)
 {
-    auto const tabInfo = TabHitTest(evt.m_x, evt.m_y);
+    auto const tabInfo = TabHitTest(evt.GetPosition());
     if (!tabInfo)
         return;
 
@@ -1373,7 +1376,7 @@ void wxAuiTabCtrl::OnMiddleUp(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnMiddleDown(wxMouseEvent& evt)
 {
-    auto const tabInfo = TabHitTest(evt.m_x, evt.m_y);
+    auto const tabInfo = TabHitTest(evt.GetPosition());
     if (!tabInfo)
         return;
 
@@ -1385,7 +1388,7 @@ void wxAuiTabCtrl::OnMiddleDown(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnRightUp(wxMouseEvent& evt)
 {
-    auto const tabInfo = TabHitTest(evt.m_x, evt.m_y);
+    auto const tabInfo = TabHitTest(evt.GetPosition());
     if (!tabInfo)
         return;
 
@@ -1397,7 +1400,7 @@ void wxAuiTabCtrl::OnRightUp(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnRightDown(wxMouseEvent& evt)
 {
-    auto const tabInfo = TabHitTest(evt.m_x, evt.m_y);
+    auto const tabInfo = TabHitTest(evt.GetPosition());
     if (!tabInfo)
         return;
 
@@ -1409,7 +1412,9 @@ void wxAuiTabCtrl::OnRightDown(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnLeftDClick(wxMouseEvent& evt)
 {
-    if (!TabHitTest(evt.m_x, evt.m_y) && !ButtonHitTest(evt.m_x, evt.m_y))
+    wxPoint pos = evt.GetPosition();
+
+    if (!TabHitTest(pos) && !ButtonHitTest(pos))
     {
         wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BG_DCLICK, m_windowId);
         e.SetEventObject(this);
@@ -1422,7 +1427,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     wxPoint pos = evt.GetPosition();
 
     // check if the mouse is hovering above a button
-    wxAuiTabContainerButton* const button = ButtonHitTest(pos.x, pos.y);
+    wxAuiTabContainerButton* const button = ButtonHitTest(pos);
     if (button && !(button->curState & wxAUI_BUTTON_STATE_DISABLED))
     {
         if (m_hoverButton && button != m_hoverButton)
@@ -1457,7 +1462,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     bool hovering = false;
     if (evt.Moving())
     {
-        if ( auto const tabInfo = TabHitTest(evt.m_x, evt.m_y) )
+        if ( auto const tabInfo = TabHitTest(evt.GetPosition()) )
         {
             hovering = true;
 
@@ -2833,7 +2838,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
         wxPoint pt = dest_tabs->ScreenToClient(screen_pt);
 
         // this is an inner-tab drag/reposition
-        if (auto const destTabInfo = dest_tabs->TabHitTest(pt.x, pt.y))
+        if (auto const destTabInfo = dest_tabs->TabHitTest(pt))
         {
             int src_idx = evt.GetSelection();
             wxCHECK_RET( src_idx != -1, "Invalid source tab?" );
@@ -2871,7 +2876,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
                 dest_tabs->DoUpdateActive();
             }
 
-            m_lastDropMovePos = dest_tabs->TabHitTest(pt.x, pt.y).pos;
+            m_lastDropMovePos = dest_tabs->TabHitTest(pt).pos;
         }
 
         return;
@@ -3033,7 +3038,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                 wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
 
                 int insert_idx = -1;
-                if (auto const targetInfo = dest_tabs->TabHitTest(pt.x, pt.y))
+                if (auto const targetInfo = dest_tabs->TabHitTest(pt))
                 {
                     insert_idx = targetInfo.pos;
                 }
@@ -3083,7 +3088,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             }
 
             wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
-            if (auto const targetInfo = dest_tabs->TabHitTest(pt.x, pt.y))
+            if (auto const targetInfo = dest_tabs->TabHitTest(pt))
             {
                 insert_idx = targetInfo.pos;
             }
@@ -3589,7 +3594,7 @@ int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
         if (tabframe->m_tab_rect.Contains(pt))
         {
             wxPoint tabpos = tabframe->m_tabs->ScreenToClient(ClientToScreen(pt));
-            w = tabframe->m_tabs->TabHitTest(tabpos.x, tabpos.y).window;
+            w = tabframe->m_tabs->TabHitTest(tabpos).window;
             if (w)
                 position = wxBK_HITTEST_ONITEM;
             break;

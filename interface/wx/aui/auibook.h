@@ -721,8 +721,8 @@ public:
         wxWindow* window = nullptr;
         int pos = wxNOT_FOUND;
     };
-    HitTestResult TabHitTest(int x, int y) const;
-    const wxAuiTabContainerButton* ButtonHitTest(int x, int y) const;
+    HitTestResult TabHitTest(const wxPoint& pt) const;
+    const wxAuiTabContainerButton* ButtonHitTest(const wxPoint& pt) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
     int GetIdxFromWindow(const wxWindow* page) const;
     size_t GetPageCount() const;

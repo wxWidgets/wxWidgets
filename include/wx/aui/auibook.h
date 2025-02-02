@@ -175,9 +175,9 @@ public:
         // The position of the tab in the tab control.
         int pos = wxNOT_FOUND;
     };
-    HitTestResult TabHitTest(int x, int y) const;
+    HitTestResult TabHitTest(const wxPoint& pt) const;
 
-    wxAuiTabContainerButton* ButtonHitTest(int x, int y) const;
+    wxAuiTabContainerButton* ButtonHitTest(const wxPoint& pt) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
     int GetIdxFromWindow(const wxWindow* page) const;
     size_t GetPageCount() const;
@@ -227,7 +227,7 @@ public:
 
     bool ButtonHitTest(int x, int y, wxAuiTabContainerButton** hit) const
     {
-        auto* const button = ButtonHitTest(x, y);
+        auto* const button = ButtonHitTest(wxPoint(x, y));
         if ( hit )
             *hit = button;
 
@@ -236,7 +236,7 @@ public:
 
     bool TabHitTest(int x, int y, wxWindow** hit) const
     {
-        auto const res = TabHitTest(x, y);
+        auto const res = TabHitTest(wxPoint(x, y));
         if ( hit )
             *hit = res.window;
 
