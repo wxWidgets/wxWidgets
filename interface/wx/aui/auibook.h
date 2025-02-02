@@ -715,7 +715,13 @@ public:
     bool SetActivePage(size_t page);
     void SetNoneActive();
     int GetActivePage() const;
-    wxWindow* TabHitTest(int x, int y) const;
+    struct HitTestResult
+    {
+        explicit operator bool() const;
+        wxWindow* window = nullptr;
+        int pos = wxNOT_FOUND;
+    };
+    HitTestResult TabHitTest(int x, int y) const;
     const wxAuiTabContainerButton* ButtonHitTest(int x, int y) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
     int GetIdxFromWindow(const wxWindow* page) const;

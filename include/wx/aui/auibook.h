@@ -152,7 +152,28 @@ public:
     bool SetActivePage(size_t page);
     void SetNoneActive();
     int GetActivePage() const;
-    wxWindow* TabHitTest(int x, int y) const;
+
+    // Struct containing the result of a tab hit test.
+    struct HitTestResult
+    {
+        HitTestResult() = default;
+
+        HitTestResult(wxWindow* window_, int pos_)
+            : window(window_), pos(pos_)
+        {
+        }
+
+        // Check if the result is valid.
+        explicit operator bool() const { return window != nullptr; }
+
+        // The window at the given position or null if none.
+        wxWindow* window = nullptr;
+
+        // The position of the tab in the tab control.
+        int pos = wxNOT_FOUND;
+    };
+    HitTestResult TabHitTest(int x, int y) const;
+
     wxAuiTabContainerButton* ButtonHitTest(int x, int y) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;
     int GetIdxFromWindow(const wxWindow* page) const;
@@ -212,11 +233,11 @@ public:
 
     bool TabHitTest(int x, int y, wxWindow** hit) const
     {
-        auto* const window = TabHitTest(x, y);
+        auto const res = TabHitTest(x, y);
         if ( hit )
-            *hit = window;
+            *hit = res.window;
 
-        return window != nullptr;
+        return res.window != nullptr;
     }
 
 protected:
