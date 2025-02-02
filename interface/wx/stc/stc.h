@@ -582,6 +582,11 @@
 #define wxSTC_LEX_JULIA 133
 #define wxSTC_LEX_ASCIIDOC 134
 #define wxSTC_LEX_GDSCRIPT 135
+#define wxSTC_LEX_TOML 136
+#define wxSTC_LEX_TROFF 137
+#define wxSTC_LEX_DART 138
+#define wxSTC_LEX_ZIG 139
+#define wxSTC_LEX_NIX 140
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -612,7 +617,6 @@
 
 /// Lexical states for SCLEX_CPP
 /// Lexical states for SCLEX_BULLANT
-/// Lexical states for SCLEX_COBOL
 /// Lexical states for SCLEX_TACL
 /// Lexical states for SCLEX_TAL
 #define wxSTC_C_DEFAULT 0
@@ -643,6 +647,21 @@
 #define wxSTC_C_USERLITERAL 25
 #define wxSTC_C_TASKMARKER 26
 #define wxSTC_C_ESCAPESEQUENCE 27
+
+/// Lexical states for SCLEX_COBOL
+#define wxSTC_COBOL_DEFAULT 0
+#define wxSTC_COBOL_COMMENT 1
+#define wxSTC_COBOL_COMMENTLINE 2
+#define wxSTC_COBOL_COMMENTDOC 3
+#define wxSTC_COBOL_NUMBER 4
+#define wxSTC_COBOL_WORD 5
+#define wxSTC_COBOL_STRING 6
+#define wxSTC_COBOL_CHARACTER 7
+#define wxSTC_COBOL_WORD3 8
+#define wxSTC_COBOL_PREPROCESSOR 9
+#define wxSTC_COBOL_OPERATOR 10
+#define wxSTC_COBOL_IDENTIFIER 11
+#define wxSTC_COBOL_WORD2 16
 
 /// Lexical states for SCLEX_D
 #define wxSTC_D_DEFAULT 0
@@ -749,6 +768,7 @@
 #define wxSTC_HJ_SYMBOLS 50
 #define wxSTC_HJ_STRINGEOL 51
 #define wxSTC_HJ_REGEX 52
+#define wxSTC_HJ_TEMPLATELITERAL 53
 
 /// ASP Javascript
 #define wxSTC_HJA_START 55
@@ -764,6 +784,7 @@
 #define wxSTC_HJA_SYMBOLS 65
 #define wxSTC_HJA_STRINGEOL 66
 #define wxSTC_HJA_REGEX 67
+#define wxSTC_HJA_TEMPLATELITERAL 68
 
 /// Embedded VBScript
 #define wxSTC_HB_START 70
@@ -2438,6 +2459,8 @@
 #define wxSTC_RUST_BYTESTRING 21
 #define wxSTC_RUST_BYTESTRINGR 22
 #define wxSTC_RUST_BYTECHARACTER 23
+#define wxSTC_RUST_CSTRING 24
+#define wxSTC_RUST_CSTRINGR 25
 
 /// Lexical states for SCLEX_DMAP
 #define wxSTC_DMAP_DEFAULT 0
@@ -2742,6 +2765,120 @@
 #define wxSTC_GD_WORD2 14
 #define wxSTC_GD_ANNOTATION 15
 #define wxSTC_GD_NODEPATH 16
+
+/// Lexical states for SCLEX_TOML
+#define wxSTC_TOML_DEFAULT 0
+#define wxSTC_TOML_COMMENT 1
+#define wxSTC_TOML_IDENTIFIER 2
+#define wxSTC_TOML_KEYWORD 3
+#define wxSTC_TOML_NUMBER 4
+#define wxSTC_TOML_TABLE 5
+#define wxSTC_TOML_KEY 6
+#define wxSTC_TOML_ERROR 7
+#define wxSTC_TOML_OPERATOR 8
+#define wxSTC_TOML_STRING_SQ 9
+#define wxSTC_TOML_STRING_DQ 10
+#define wxSTC_TOML_TRIPLE_STRING_SQ 11
+#define wxSTC_TOML_TRIPLE_STRING_DQ 12
+#define wxSTC_TOML_ESCAPECHAR 13
+#define wxSTC_TOML_DATETIME 14
+
+/// Lexical states for SCLEX_TROFF
+#define wxSTC_TROFF_DEFAULT 0
+#define wxSTC_TROFF_REQUEST 1
+#define wxSTC_TROFF_COMMAND 2
+#define wxSTC_TROFF_NUMBER 3
+#define wxSTC_TROFF_OPERATOR 4
+#define wxSTC_TROFF_STRING 5
+#define wxSTC_TROFF_COMMENT 6
+#define wxSTC_TROFF_IGNORE 7
+#define wxSTC_TROFF_ESCAPE_STRING 8
+#define wxSTC_TROFF_ESCAPE_MACRO 9
+#define wxSTC_TROFF_ESCAPE_FONT 10
+#define wxSTC_TROFF_ESCAPE_NUMBER 11
+#define wxSTC_TROFF_ESCAPE_COLOUR 12
+#define wxSTC_TROFF_ESCAPE_GLYPH 13
+#define wxSTC_TROFF_ESCAPE_ENV 14
+#define wxSTC_TROFF_ESCAPE_SUPPRESSION 15
+#define wxSTC_TROFF_ESCAPE_SIZE 16
+#define wxSTC_TROFF_ESCAPE_TRANSPARENT 17
+#define wxSTC_TROFF_ESCAPE_ISVALID 18
+#define wxSTC_TROFF_ESCAPE_DRAW 19
+#define wxSTC_TROFF_ESCAPE_MOVE 20
+#define wxSTC_TROFF_ESCAPE_HEIGHT 21
+#define wxSTC_TROFF_ESCAPE_OVERSTRIKE 22
+#define wxSTC_TROFF_ESCAPE_SLANT 23
+#define wxSTC_TROFF_ESCAPE_WIDTH 24
+#define wxSTC_TROFF_ESCAPE_VSPACING 25
+#define wxSTC_TROFF_ESCAPE_DEVICE 26
+#define wxSTC_TROFF_ESCAPE_NOMOVE 27
+
+/// Lexical states for SCLEX_DART
+#define wxSTC_DART_DEFAULT 0
+#define wxSTC_DART_COMMENTLINE 1
+#define wxSTC_DART_COMMENTLINEDOC 2
+#define wxSTC_DART_COMMENTBLOCK 3
+#define wxSTC_DART_COMMENTBLOCKDOC 4
+#define wxSTC_DART_STRING_SQ 5
+#define wxSTC_DART_STRING_DQ 6
+#define wxSTC_DART_TRIPLE_STRING_SQ 7
+#define wxSTC_DART_TRIPLE_STRING_DQ 8
+#define wxSTC_DART_RAWSTRING_SQ 9
+#define wxSTC_DART_RAWSTRING_DQ 10
+#define wxSTC_DART_TRIPLE_RAWSTRING_SQ 11
+#define wxSTC_DART_TRIPLE_RAWSTRING_DQ 12
+#define wxSTC_DART_ESCAPECHAR 13
+#define wxSTC_DART_IDENTIFIER 14
+#define wxSTC_DART_IDENTIFIER_STRING 15
+#define wxSTC_DART_OPERATOR 16
+#define wxSTC_DART_OPERATOR_STRING 17
+#define wxSTC_DART_SYMBOL_IDENTIFIER 18
+#define wxSTC_DART_SYMBOL_OPERATOR 19
+#define wxSTC_DART_NUMBER 20
+#define wxSTC_DART_KEY 21
+#define wxSTC_DART_METADATA 22
+#define wxSTC_DART_KW_PRIMARY 23
+#define wxSTC_DART_KW_SECONDARY 24
+#define wxSTC_DART_KW_TERTIARY 25
+#define wxSTC_DART_KW_TYPE 26
+
+/// Lexical states for SCLEX_ZIG
+#define wxSTC_ZIG_DEFAULT 0
+#define wxSTC_ZIG_COMMENTLINE 1
+#define wxSTC_ZIG_COMMENTLINEDOC 2
+#define wxSTC_ZIG_COMMENTLINETOP 3
+#define wxSTC_ZIG_NUMBER 4
+#define wxSTC_ZIG_OPERATOR 5
+#define wxSTC_ZIG_CHARACTER 6
+#define wxSTC_ZIG_STRING 7
+#define wxSTC_ZIG_MULTISTRING 8
+#define wxSTC_ZIG_ESCAPECHAR 9
+#define wxSTC_ZIG_IDENTIFIER 10
+#define wxSTC_ZIG_FUNCTION 11
+#define wxSTC_ZIG_BUILTIN_FUNCTION 12
+#define wxSTC_ZIG_KW_PRIMARY 13
+#define wxSTC_ZIG_KW_SECONDARY 14
+#define wxSTC_ZIG_KW_TERTIARY 15
+#define wxSTC_ZIG_KW_TYPE 16
+#define wxSTC_ZIG_IDENTIFIER_STRING 17
+
+/// Lexical states for SCLEX_NIX
+#define wxSTC_NIX_DEFAULT 0
+#define wxSTC_NIX_COMMENTLINE 1
+#define wxSTC_NIX_COMMENTBLOCK 2
+#define wxSTC_NIX_STRING 3
+#define wxSTC_NIX_STRING_MULTILINE 4
+#define wxSTC_NIX_ESCAPECHAR 5
+#define wxSTC_NIX_IDENTIFIER 6
+#define wxSTC_NIX_OPERATOR 7
+#define wxSTC_NIX_OPERATOR_STRING 8
+#define wxSTC_NIX_NUMBER 9
+#define wxSTC_NIX_KEY 10
+#define wxSTC_NIX_PATH 11
+#define wxSTC_NIX_KEYWORD1 12
+#define wxSTC_NIX_KEYWORD2 13
+#define wxSTC_NIX_KEYWORD3 14
+#define wxSTC_NIX_KEYWORD4 15
 
 //}}}
 
