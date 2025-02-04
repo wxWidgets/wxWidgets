@@ -175,7 +175,15 @@ public:
         // The position of the tab in the tab control.
         int pos = wxNOT_FOUND;
     };
-    HitTestResult TabHitTest(const wxPoint& pt) const;
+
+    // Flags allowing to customize the behaviour of TabHitTest().
+    enum HitTestFlags
+    {
+        HitTest_Default = 0,
+        HitTest_AllowAfterTab = 1
+    };
+
+    HitTestResult TabHitTest(const wxPoint& pt, int flags = HitTest_Default) const;
 
     wxAuiTabContainerButton* ButtonHitTest(const wxPoint& pt) const;
     wxWindow* GetWindowFromIdx(size_t idx) const;

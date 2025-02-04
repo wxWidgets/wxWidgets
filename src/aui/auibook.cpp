@@ -1029,7 +1029,7 @@ void wxAuiTabContainer::MakeTabVisible(int tabPage, wxWindow* win)
 // TabHitTest() tests if a tab was hit, returning the struct containing the
 // window that was hit together with its position or null pointer otherwise.
 wxAuiTabContainer::HitTestResult
-wxAuiTabContainer::TabHitTest(const wxPoint& pt) const
+wxAuiTabContainer::TabHitTest(const wxPoint& pt, int flags) const
 {
     if (!m_rect.Contains(pt))
         return {};
@@ -1051,6 +1051,18 @@ wxAuiTabContainer::TabHitTest(const wxPoint& pt) const
         if (page.rect.Contains(pt))
         {
             return { page.window, static_cast<int>(i) };
+        }
+
+        // Also optionally check if the point lies over the blank space after
+        // the last tab in the row if this should be allowed.
+        if ((flags & HitTest_AllowAfterTab) && page.rowEnd)
+        {
+            if (pt.x >= page.rect.x &&
+                    pt.y >= page.rect.y &&
+                        pt.y < page.rect.y + page.rect.height)
+            {
+                return { page.window, static_cast<int>(i) };
+            }
         }
     }
 
@@ -2837,8 +2849,14 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
 
         wxPoint pt = dest_tabs->ScreenToClient(screen_pt);
 
+        // When using multiple rows, allow dragging the tab to the space after
+        // the last tab of the row too.
+        int flags = wxAuiTabContainer::HitTest_Default;
+        if (dest_tabs->IsFlagSet(wxAUI_NB_MULTILINE))
+            flags |= wxAuiTabContainer::HitTest_AllowAfterTab;
+
         // this is an inner-tab drag/reposition
-        if (auto const destTabInfo = dest_tabs->TabHitTest(pt))
+        if (auto const destTabInfo = dest_tabs->TabHitTest(pt, flags))
         {
             int src_idx = evt.GetSelection();
             wxCHECK_RET( src_idx != -1, "Invalid source tab?" );
