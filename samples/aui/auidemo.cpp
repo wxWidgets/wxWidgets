@@ -2039,6 +2039,8 @@ void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
         pagesByTabCtrl[pos.tabCtrl][pos.tabIdx] = i;
     }
 
+    const auto sel = static_cast<size_t>(book->GetSelection());
+
     wxString pages("Notebook contains the following pages:\n");
     int tab = 0;
     for ( const auto& kv : pagesByTabCtrl )
@@ -2048,11 +2050,14 @@ void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
 
         for ( const auto& kv2 : kv.second )
         {
-            pages += wxString::Format("  %d. %s\n",
+            pages += wxString::Format("%s %d. %s\n",
+                                      kv2.second == sel ? "*" : "  ",
                                       kv2.first,
                                       book->GetPageText(kv2.second));
         }
     }
+
+    pages += wxString::Format("\n* selected");
 
     wxMessageBox(pages, "wxAUI", wxOK | wxICON_INFORMATION, this);
 }

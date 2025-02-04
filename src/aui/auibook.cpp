@@ -3082,10 +3082,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             dest_tabs = tab_frame->m_tabs;
 
             if (dest_tabs == src_tabs)
-            {
-                m_curPage = evt.GetSelection();
                 return;
-            }
 
             wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
             if (auto const targetInfo = dest_tabs->TabHitTest(pt))
