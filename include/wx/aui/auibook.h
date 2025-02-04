@@ -25,6 +25,7 @@
 #include "wx/aui/framemanager.h"
 #include "wx/compositebookctrl.h"
 
+#include <vector>
 
 class wxAuiSerializer;
 class wxAuiDeserializer;
@@ -465,6 +466,9 @@ public:
     // visual position in it (i.e. 0 for the leading one).
     wxAuiNotebookPosition GetPagePosition(size_t page) const;
 
+    // Return all pages in the given tab control in display order.
+    std::vector<size_t> GetPagesInDisplayOrder(wxAuiTabCtrl* tabCtrl) const;
+
 
     void Split(size_t page, int direction);
     void UnsplitAll();
@@ -517,6 +521,9 @@ public:
 
     // Get main tab control, creating it on demand if necessary.
     wxAuiTabCtrl* GetMainTabCtrl();
+
+    // Get all tab controls.
+    std::vector<wxAuiTabCtrl*> GetAllTabCtrls();
 
 
     // Internal, don't use: use GetPagePosition() instead.

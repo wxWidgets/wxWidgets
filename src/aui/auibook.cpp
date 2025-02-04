@@ -2602,6 +2602,26 @@ wxAuiTabCtrl* wxAuiNotebook::GetMainTabCtrl()
     return tabMain;
 }
 
+std::vector<wxAuiTabCtrl*> wxAuiNotebook::GetAllTabCtrls()
+{
+    std::vector<wxAuiTabCtrl*> tabCtrls;
+    for ( const auto& pane : m_mgr.GetAllPanes() )
+    {
+        if ( IsDummyPane(pane) )
+            continue;
+
+        wxAuiTabFrame* tabframe = (wxAuiTabFrame*)pane.window;
+        tabCtrls.push_back(tabframe->m_tabs);
+    }
+
+    if ( tabCtrls.empty() )
+    {
+        tabCtrls.push_back(GetMainTabCtrl());
+    }
+
+    return tabCtrls;
+}
+
 wxAuiNotebook::TabInfo wxAuiNotebook::FindTab(wxWindow* wnd) const
 {
     for ( const auto& pane : m_mgr.GetAllPanes() )
@@ -2642,6 +2662,21 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const
 wxAuiNotebookPosition wxAuiNotebook::GetPagePosition(size_t page) const
 {
     return FindTab(GetPage(page));
+}
+
+std::vector<size_t>
+wxAuiNotebook::GetPagesInDisplayOrder(wxAuiTabCtrl* tabCtrl) const
+{
+    wxCHECK_MSG( tabCtrl, std::vector<size_t>(), "invalid tab control" );
+
+    const size_t count = tabCtrl->GetPageCount();
+    std::vector<size_t> pages(count);
+    for ( size_t i = 0; i < count; ++i )
+    {
+        pages[i] = m_tabs.GetIdxFromWindow(tabCtrl->GetWindowFromIdx(i));
+    }
+
+    return pages;
 }
 
 void wxAuiNotebook::Split(size_t page, int direction)

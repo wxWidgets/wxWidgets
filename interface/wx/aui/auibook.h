@@ -98,7 +98,8 @@ struct wxAuiNotebookPosition
 
     When using multiple tab controls, exactly one of them is active at any
     time. This tab control can be retrieved by calling GetActiveTabCtrl() and
-    is always used for appending or inserting new pages.
+    is always used for appending or inserting new pages. You can also use
+    GetAllTabCtrls() to get all existing tab controls.
 
 
     @section auibook_order Pages Indices and Positions
@@ -118,7 +119,9 @@ struct wxAuiNotebookPosition
     All functions taking a page index parameter, such as SetPageText(), work
     with logical indices. Similarly, functions returning a page index, such as
     GetSelection(), also always return logical indices. To get the physical
-    position of a page, GetPagePosition() can be used.
+    position of a single page, use GetPagePosition() and to get all pages in
+    some tab control in their physical, display order GetPagesInDisplayOrder()
+    can be used.
 
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}
@@ -346,6 +349,23 @@ public:
         @since 3.3.0
     */
     wxAuiNotebookPosition GetPagePosition(size_t page) const;
+
+    /**
+        Returns indices of all pages in the given tab control.
+
+        The pages are returned in the order they are displayed in the tab,
+        which may be different from the default order if they were rearranged
+        by the user.
+
+        The @a tabCtrl must be valid, see GetActiveTabCtrl() and
+        GetAllTabCtrls() for the functions that can be used to get the tab
+        control to use.
+
+        The returned vector contains the logical page indices.
+
+        @since 3.3.0
+     */
+    std::vector<size_t> GetPagesInDisplayOrder(wxAuiTabCtrl* tabCtrl) const;
 
     /**
         Returns the tab label for the page.
@@ -584,6 +604,16 @@ public:
         @since 3.1.4
     */
     wxAuiTabCtrl* GetActiveTabCtrl();
+
+    /**
+        Returns all tab controls for this notebook.
+
+        @return Vector of all tab controls, never empty as it always contains
+            at least the main tab control.
+
+        @since 3.3.0
+    */
+    std::vector<wxAuiTabCtrl*> GetAllTabCtrls();
 
     /**
         Returns the main tab control for this notebook.

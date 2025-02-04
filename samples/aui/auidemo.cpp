@@ -2032,28 +2032,38 @@ void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
         wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
 
     // Show notebook pages in per-tab visual page order.
-    std::map<wxAuiTabCtrl*, std::map<int, size_t>> pagesByTabCtrl;
-    for ( size_t i = 0; i < book->GetPageCount(); ++i )
-    {
-        const auto pos = book->GetPagePosition(i);
-        pagesByTabCtrl[pos.tabCtrl][pos.tabIdx] = i;
-    }
-
     const auto sel = static_cast<size_t>(book->GetSelection());
 
     wxString pages("Notebook contains the following pages:\n");
-    int tab = 0;
-    for ( const auto& kv : pagesByTabCtrl )
-    {
-        if ( pagesByTabCtrl.size() > 1 )
-            pages += wxString::Format("\nTab %d:\n", ++tab);
 
-        for ( const auto& kv2 : kv.second )
+    const auto& tabControls = book->GetAllTabCtrls();
+    int tab = 0;
+    for ( const auto tabCtrl : tabControls )
+    {
+        if ( tabControls.size() > 1 )
+        {
+            pages += wxString::Format("\nTab %d", ++tab);
+
+            wxArrayString extras;
+            if ( tabCtrl == book->GetMainTabCtrl() )
+                extras.push_back("main");
+
+            if ( tabCtrl == book->GetActiveTabCtrl() )
+                extras.push_back("active");
+
+            if ( !extras.empty() )
+                pages += wxString::Format(" (%s)", wxJoin(extras, ','));
+
+            pages += ":\n";
+        }
+
+        int pos = 0;
+        for ( auto idx : book->GetPagesInDisplayOrder(tabCtrl) )
         {
             pages += wxString::Format("%s %d. %s\n",
-                                      kv2.second == sel ? "*" : "  ",
-                                      kv2.first,
-                                      book->GetPageText(kv2.second));
+                                      idx == sel ? "*" : "  ",
+                                      pos++,
+                                      book->GetPageText(idx));
         }
     }
 
