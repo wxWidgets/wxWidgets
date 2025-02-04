@@ -100,16 +100,24 @@ struct wxAuiNotebookPosition
     is always used for appending or inserting new pages.
 
 
-    @section auibook_order Pages Order
+    @section auibook_order Pages Indices and Positions
 
-    The logical order of the pages in the notebook is determined by the order
-    in which they are added to it, i.e. the first page added has index 0, the
-    second one has index 1, and so on. Since wxWidgets 3.3.0 this order is not
-    affected any longer by reodering the visual order of the pages in the UI,
-    which can be done by dragging them around if the wxAUI_NB_TAB_MOVE style is
-    used (which is the case by default).
+    Each notebook page has its logical index, which is determined by the order
+    in which the pages are added, i.e. the first page added has index 0, the
+    second one has index 1, and so on, but also has its physical display
+    position, which corresponds to the position at which it is displayed.
+    Initially the indices and positions are the same for all pages, but they
+    may become different if the user reorders the pages by dragging them around
+    (which is possible when ::wxAUI_NB_TAB_MOVE style, included in the default
+    notebook flags, is on). Also note that it's possible to have multiple pages
+    with the same physical position, in different tab controls (see the
+    previous section), e.g. each first page in each tab control has physical
+    position 0, but there is only one page with logical index 0.
 
-    To get the visual position of the page, GetPagePosition() can be used.
+    All functions taking a page index parameter, such as SetPageText(), work
+    with logical indices. Similarly, functions returning a page index, such as
+    GetSelection(), also always return logical indices. To get the physical
+    position of a page, GetPagePosition() can be used.
 
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}
