@@ -471,7 +471,7 @@ int wxAuiTabContainer::GetAvailableForTabs(const wxRect& rect,
     if (left_buttons_width == 0)
         left_buttons_width = m_art->GetIndentSize();
 
-    return m_rect.width - left_buttons_width - right_buttons_width - wnd->FromDIP(wxAUI_BUTTONS_BORDER);
+    return rect.width - left_buttons_width - right_buttons_width - wnd->FromDIP(wxAUI_BUTTONS_BORDER);
 }
 
 void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
