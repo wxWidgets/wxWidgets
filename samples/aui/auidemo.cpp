@@ -107,6 +107,8 @@ class MyFrame : public wxFrame
         ID_NotebookScrollButtons,
         ID_NotebookTabFixedWidth,
         ID_NotebookMultiLine,
+        ID_NotebookNextTab,
+        ID_NotebookPrevTab,
         ID_NotebookArtGloss,
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
@@ -181,6 +183,7 @@ private:
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
+    void OnNotebookNextOrPrev(wxCommandEvent& evt);
     void OnNotebookSplit(wxCommandEvent& evt);
     void OnNotebookUnsplit(wxCommandEvent& evt);
     void OnNotebookNewTab(wxCommandEvent& evt);
@@ -643,6 +646,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookWindowList, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtGloss, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookNextTab, MyFrame::OnNotebookNextOrPrev)
+    EVT_MENU(ID_NotebookPrevTab, MyFrame::OnNotebookNextOrPrev)
     EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookSplit, MyFrame::OnNotebookSplit)
@@ -782,6 +787,9 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
     notebook_menu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
+    notebook_menu->AppendSeparator();
+    notebook_menu->Append(ID_NotebookNextTab, _("Switch to next tab\tCtrl-F6"));
+    notebook_menu->Append(ID_NotebookPrevTab, _("Switch to previous tab\tShift-Ctrl-F6"));
     notebook_menu->AppendSeparator();
     notebook_menu->Append(ID_NotebookSplit, _("&Split Notebook"));
     notebook_menu->Append(ID_NotebookUnsplit, _("&Unsplit Notebook"));
@@ -1405,6 +1413,15 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
     }
+}
+
+
+void MyFrame::OnNotebookNextOrPrev(wxCommandEvent& evt)
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    book->AdvanceSelection(evt.GetId() == ID_NotebookNextTab);
 }
 
 

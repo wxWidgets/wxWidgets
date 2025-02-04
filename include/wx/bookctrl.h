@@ -316,7 +316,7 @@ protected:
     virtual wxSize DoGetBestSize() const override;
 
     // helper: get the next page wrapping if we reached the end
-    int GetNextPage(bool forward) const;
+    virtual int GetNextPage(bool forward) const;
 
     // Lay out controls
     virtual void DoSize();

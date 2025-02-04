@@ -553,6 +553,9 @@ protected:
     virtual int CalculateTabCtrlHeight();
     virtual wxSize CalculateNewSplitSize();
 
+    // get next page in physical (display) order
+    virtual int GetNextPage(bool forward) const override;
+
     // remove the page and return a pointer to it
     virtual wxWindow *DoRemovePage(size_t page) override;
 

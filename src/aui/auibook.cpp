@@ -2293,6 +2293,25 @@ void wxAuiNotebook::InsertPageAt(wxAuiNotebookPage& info,
     }
 }
 
+int wxAuiNotebook::GetNextPage(bool forward) const
+{
+    if ( m_curPage == wxNOT_FOUND )
+        return wxNOT_FOUND;
+
+    const auto tabInfo = FindTab(m_tabs.GetWindowFromIdx(m_curPage));
+    if ( !tabInfo )
+        return wxNOT_FOUND;
+
+    // Find the next or previous position in the active tab control, with
+    // wraparound.
+    const int lastPos = tabInfo.tabCtrl->GetPageCount() - 1;
+    const int nextPos = forward
+        ? tabInfo.tabIdx < lastPos ? tabInfo.tabIdx + 1 : 0
+        : tabInfo.tabIdx > 0 ? tabInfo.tabIdx - 1 : lastPos;
+
+    // Now find the corresponding page index.
+    return m_tabs.GetIdxFromWindow(tabInfo.tabCtrl->GetWindowFromIdx(nextPos));
+}
 
 wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
 {

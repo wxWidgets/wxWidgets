@@ -250,7 +250,11 @@ public:
     virtual bool AddPage(wxWindow *page, const wxString &text, bool select, int imageId);
 
     /**
-        Sets the selection to the next or previous page.
+        Sets the selection to the next or previous page in the same tab control.
+
+        This function sets selection to the next (if @a forward is @a true) or
+        previous (otherwise) page after or before the currently selected one in
+        but without leaving the current tab control.
     */
     void AdvanceSelection(bool forward = true);
 
