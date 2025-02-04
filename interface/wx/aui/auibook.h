@@ -88,7 +88,8 @@ struct wxAuiNotebookPosition
 
     @section auibook_tabs Multiple Tab Controls
 
-    By default, wxAuiNotebook uses a single tab control for all tabs, however
+    Initially, wxAuiNotebook creates the main tab control, which can be
+    retrieved using GetMainTabCtrl(), and uses it for all tabs. However
     when wxAUI_NB_TAB_SPLIT style is used (which is the case by default), the
     user will be able to drag pages out of it and create new tab controls, that
     can then themselves be dragged to be docked in a different place inside the
@@ -574,9 +575,27 @@ public:
     /**
         Returns active tab control for this notebook.
 
+        Active tab control is the one containing the currently selected page.
+        If there is no selected page, the main tab control is returned, see
+        GetMainTabCtrl().
+
+        @return Non-@NULL pointer to either the active or main tab control.
+
         @since 3.1.4
     */
     wxAuiTabCtrl* GetActiveTabCtrl();
+
+    /**
+        Returns the main tab control for this notebook.
+
+        The main tab control is the one created by the notebook itself
+        initially to contain the pages added to it.
+
+        @return Non-@NULL pointer to the main tab control.
+
+        @since 3.3.0
+     */
+    wxAuiTabCtrl* GetMainTabCtrl();
 
     /**
         Finds tab control associated with a given window and its tab index.

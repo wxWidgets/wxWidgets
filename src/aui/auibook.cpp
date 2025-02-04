@@ -2569,31 +2569,8 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
         return FindTab(m_tabs.GetPage(m_curPage).window).tabCtrl;
     }
 
-    // no current page, just find the first tab ctrl
-    for ( const auto& pane : m_mgr.GetAllPanes() )
-    {
-        if ( IsDummyPane(pane) )
-            continue;
-
-        wxAuiTabFrame* tabframe = (wxAuiTabFrame*)pane.window;
-        return tabframe->m_tabs;
-    }
-
-    // If there is no tabframe at all, create one
-    auto* const tab = CreateMainTabCtrl();
-
-    m_mgr.Update();
-
-    return tab;
-}
-
-wxAuiTabCtrl* wxAuiNotebook::CreateMainTabCtrl()
-{
-    wxAuiTabFrame* tabframe = CreateTabFrame();
-    m_mgr.AddPane(tabframe,
-                  wxAuiPaneInfo().Center().CaptionVisible(false));
-
-    return tabframe->m_tabs;
+    // no current page, just return the main tab control
+    return GetMainTabCtrl();
 }
 
 wxAuiTabCtrl* wxAuiNotebook::GetMainTabCtrl()
@@ -2613,7 +2590,14 @@ wxAuiTabCtrl* wxAuiNotebook::GetMainTabCtrl()
     }
 
     if ( !tabMain )
-        tabMain = CreateMainTabCtrl();
+    {
+        wxAuiTabFrame* tabframe = CreateTabFrame();
+        m_mgr.AddPane(tabframe,
+                      wxAuiPaneInfo().Center().CaptionVisible(false));
+        m_mgr.Update();
+
+        tabMain = tabframe->m_tabs;
+    }
 
     return tabMain;
 }

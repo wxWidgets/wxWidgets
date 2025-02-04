@@ -515,6 +515,10 @@ public:
     wxAuiTabCtrl* GetTabCtrlFromPoint(const wxPoint& pt);
     wxAuiTabCtrl* GetActiveTabCtrl();
 
+    // Get main tab control, creating it on demand if necessary.
+    wxAuiTabCtrl* GetMainTabCtrl();
+
+
     // Internal, don't use: use GetPagePosition() instead.
     bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const;
 
@@ -609,12 +613,6 @@ protected:
 private:
     // Create a new tab frame, containing a new wxAuiTabCtrl.
     wxAuiTabFrame* CreateTabFrame(wxSize size = wxSize());
-
-    // Create the main tab control unconditionally.
-    wxAuiTabCtrl* CreateMainTabCtrl();
-
-    // Get main tab control, creating it on demand if necessary.
-    wxAuiTabCtrl* GetMainTabCtrl();
 
     // Inserts the page at the given position into the given tab control.
     void InsertPageAt(wxAuiNotebookPage& info,
