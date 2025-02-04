@@ -392,6 +392,7 @@ public:
     /**
         InsertPage() is similar to AddPage, but allows the ability to specify the
         insert location.
+
         If the @a select parameter is @true, calling this will generate a page change
         event.
 
@@ -400,28 +401,26 @@ public:
         the notebook, in which case this function is equivalent to AddPage(),
         but can't be strictly greater than it.
 
+        Note that if you want to insert the page at the specified physical
+        position, e.g. at the beginning of the current tab control, you need to
+        use GetPagesInDisplayOrder() to get the logical page index
+        corresponding to the position 0 and then pass this index to this
+        function.
+
         Note that if the page with the given index is not in the currently
         active tab control, the new page will be added at the end of the active
         tab instead of being inserted into another tab control.
-    */
-    bool InsertPage(size_t page_idx, wxWindow* page,
-                    const wxString& caption,
-                    bool select = false,
-                    const wxBitmapBundle& bitmap = wxBitmapBundle());
-
-    /**
-        Inserts a new page at the specified position.
 
         @param index
-            Specifies the position for the new page.
+            Specifies the page before which the new page should be inserted.
         @param page
             Specifies the new page.
         @param text
             Specifies the text for the new page.
         @param select
             Specifies whether the page should be selected.
-        @param imageId
-            Specifies the optional image index for the new page.
+        @param bitmap
+            Specifies the optional bitmap to use for the new page.
 
         @return @true if successful, @false otherwise.
 
@@ -430,6 +429,12 @@ public:
         @see AddPage()
         @since 2.9.3
     */
+    bool InsertPage(size_t index, wxWindow* page,
+                    const wxString& text,
+                    bool select = false,
+                    const wxBitmapBundle& bitmap = wxBitmapBundle());
+
+    /// @overload
     virtual bool InsertPage(size_t index, wxWindow *page, const wxString &text,
                             bool select, int imageId);
 
