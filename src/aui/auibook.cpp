@@ -213,7 +213,8 @@ bool wxAuiTabContainer::MovePage(wxWindow* page,
         std::rotate(b + old_idx, b + old_idx + 1, b + new_idx + 1);
     else if (old_idx > new_idx)
         std::rotate(b + new_idx, b + old_idx, b + old_idx + 1);
-    //else: nothing to do
+    else // nothing to do
+        return false;
 
     return true;
 }
