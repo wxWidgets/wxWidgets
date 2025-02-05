@@ -316,8 +316,7 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     return GetFS()->OpenFile(myurl, flags);
 }
 
-#define NBSP_UNICODE_VALUE  (wxChar(160))
-#define CUR_NBSP_VALUE NBSP_UNICODE_VALUE
+static constexpr wxChar CUR_NBSP_VALUE = L'\xA0';
 
 void wxHtmlWinParser::AddText(const wxString& txt)
 {
