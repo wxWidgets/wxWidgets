@@ -214,7 +214,8 @@ private:
         GetMenuBar()->Enable(wxID_ABORT, true);
 
         m_powerResourceBlocker.reset(
-            new wxPowerResourceBlocker(wxPOWER_RESOURCE_SYSTEM)
+            new wxPowerResourceBlocker(wxPOWER_RESOURCE_SYSTEM,
+                                       "Waiting for long task to finish")
         );
 
         if ( !m_powerResourceBlocker->IsInEffect() )
