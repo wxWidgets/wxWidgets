@@ -313,5 +313,66 @@ private:
     wxDECLARE_ABSTRACT_CLASS(wxVListBox);
 };
 
+extern WXDLLIMPEXP_DATA_CORE(const char) wxXRCPreviewVListBoxNameStr[];
+
+// ----------------------------------------------------------------------------
+// wxXRCPreviewVListBox
+// ----------------------------------------------------------------------------
+
+/*
+    GUI editors, e.g., wxFormBuilder, typically allow users to lay out
+    instances of controls.  However, wxVListBox is an abstract class, so a GUI
+    editor can only create instances of a subclass of wxVListBox.  Rather than
+    require every GUI editor to repeat the work of subclassing wxVListBox for
+    GUI editing, and because the user's intended subclass will not exist in GUI
+    editors, provide a class that GUI editors can use.  Also, the
+    wxVListBoxXmlHandler can create instances of this class when in
+    wxXRC_NO_SUBCLASSING mode;
+ */
+class WXDLLIMPEXP_CORE wxXRCPreviewVListBox : public wxVListBox
+{
+public:
+    // default constructor, you must call Create() later
+    wxXRCPreviewVListBox() = default;
+
+    // normal constructor which calls Create() internally
+    wxXRCPreviewVListBox(wxWindow *parent,
+                            wxWindowID id = wxID_ANY,
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize,
+                            long style = 0,
+                            const wxString& name = wxASCII_STR(wxXRCPreviewVListBoxNameStr))
+    {
+        (void)Create(parent, id, pos, size, style, name);
+    }
+
+    // really creates the control and sets the initial number of items in it
+    // (which may be changed later with SetItemCount())
+    //
+    // the only special style which may be specified here is wxLB_MULTIPLE
+    //
+    // returns true on success or false if the control couldn't be created
+    bool Create(wxWindow *parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxASCII_STR(wxXRCPreviewVListBoxNameStr));
+
+protected:
+    // the derived class must implement this function to actually draw the item
+    // with the given index on the provided DC
+    void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const override;
+
+    // the derived class must implement this method to return the height of the
+    // specified item
+    wxCoord OnMeasureItem(size_t n) const override;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxXRCPreviewVListBox);
+
+    wxString GetItem(size_t n) const;
+};
+
 #endif // _WX_VLBOX_H_
 

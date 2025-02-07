@@ -32,6 +32,19 @@ wxVListBoxXmlHandler::wxVListBoxXmlHandler() : wxXmlResourceHandler()
 
 wxObject * wxVListBoxXmlHandler::DoCreateResource()
 {
+    // see comment for wxXRCPreviewVListBox
+
+    /* Create() isn't virtual, but the preview class has its
+        own implementation, so we need to use the static type
+        of the pointer to get the correct version */
+    wxXRCPreviewVListBox* preview = nullptr;
+    if (!m_instance &&
+        m_resource->GetFlags() & wxXRC_NO_SUBCLASSING)
+    {
+        preview = new wxXRCPreviewVListBox;
+        m_instance = preview;
+    }
+
     /* non-standard because wxVListBox is an abstract
         class, so "subclass" must be used */
     wxCHECK_MSG(m_instance,
@@ -41,11 +54,22 @@ wxObject * wxVListBoxXmlHandler::DoCreateResource()
     if (GetBool(wxT("hidden"), 0) == 1)
         vlistbox->Hide();
 
-    vlistbox->Create(m_parentAsWindow,
-                  GetID(),
-                  GetPosition(), GetSize(),
-                  GetStyle(wxT("style"), wxTAB_TRAVERSAL),
-                  GetName());
+    if (!preview)
+    {
+        vlistbox->Create(m_parentAsWindow,
+                      GetID(),
+                      GetPosition(), GetSize(),
+                      GetStyle(wxT("style"), wxTAB_TRAVERSAL),
+                      GetName());
+    }
+    else
+    {
+        preview->Create(m_parentAsWindow,
+                      GetID(),
+                      GetPosition(), GetSize(),
+                      GetStyle(wxT("style"), wxTAB_TRAVERSAL),
+                      GetName());
+    }
 
     SetupWindow(vlistbox);
     CreateChildren(vlistbox);

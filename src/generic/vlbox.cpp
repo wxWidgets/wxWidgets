@@ -744,4 +744,43 @@ wxVListBox::GetClassDefaultAttributes(wxWindowVariant variant)
     return wxListBox::GetClassDefaultAttributes(variant);
 }
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxXRCPreviewVListBox, wxVListBox);
+const char wxXRCPreviewVListBoxNameStr[] = "wxXRCPreviewVListBox";
+
+bool wxXRCPreviewVListBox::Create(wxWindow *parent,
+            wxWindowID id /*= wxID_ANY*/,
+            const wxPoint& pos /*= wxDefaultPosition*/,
+            const wxSize& size /*= wxDefaultSize*/,
+            long style /*= 0*/,
+            const wxString& name /*= wxASCII_STR(wxVListBoxNameStr)*/)
+{
+    bool retval = wxVListBox::Create(parent, id, pos, size, style, name);
+    if (retval)
+    {
+        SetItemCount(std::numeric_limits<int>::max());
+    }
+    return retval;
+}
+
+void wxXRCPreviewVListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
+{
+    dc.DrawText(GetItem(n), rect.GetLeftTop());
+}
+
+wxCoord wxXRCPreviewVListBox::OnMeasureItem(size_t n) const
+{
+    // safe to const_cast since we're just using GetTextExtent()
+    wxInfoDC dc(const_cast<wxXRCPreviewVListBox*>(this));
+    return dc.GetTextExtent(GetItem(n)).y;
+}
+
+wxString wxXRCPreviewVListBox::GetItem(size_t n) const
+{
+    return wxString::Format("Item %zu", n);
+}
+
 #endif
