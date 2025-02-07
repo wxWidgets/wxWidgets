@@ -58,8 +58,15 @@ bool UpdatePowerResourceExecutionState()
 
 bool
 wxPowerResource::Acquire(wxPowerResourceKind kind,
-                         const wxString& WXUNUSED(reason))
+                         const wxString& WXUNUSED(reason),
+                         wxPowerBlockKind blockKind)
 {
+    if ( blockKind == wxPOWER_DELAY )
+    {
+        // We don't support this mode under MSW because it's not needed there.
+        return true;
+    }
+
     switch ( kind )
     {
         case wxPOWER_RESOURCE_SCREEN:

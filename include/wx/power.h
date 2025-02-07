@@ -104,11 +104,18 @@ enum wxPowerResourceKind
     wxPOWER_RESOURCE_SYSTEM
 };
 
+enum wxPowerBlockKind
+{
+    wxPOWER_PREVENT,
+    wxPOWER_DELAY
+};
+
 class WXDLLIMPEXP_BASE wxPowerResource
 {
 public:
     static bool Acquire(wxPowerResourceKind kind,
-                        const wxString& reason = wxString());
+                        const wxString& reason = wxString(),
+                        wxPowerBlockKind blockKind = wxPOWER_PREVENT);
     static void Release(wxPowerResourceKind kind);
 };
 
@@ -116,9 +123,10 @@ class wxPowerResourceBlocker
 {
 public:
     explicit wxPowerResourceBlocker(wxPowerResourceKind kind,
-                                    const wxString& reason = wxString())
+                                    const wxString& reason = wxString(),
+                                    wxPowerBlockKind blockKind = wxPOWER_PREVENT)
         : m_kind(kind),
-          m_acquired(wxPowerResource::Acquire(kind, reason))
+          m_acquired(wxPowerResource::Acquire(kind, reason, blockKind))
     {
     }
 

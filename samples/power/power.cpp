@@ -263,12 +263,22 @@ wxEND_EVENT_TABLE()
 class MyApp : public wxApp
 {
 public:
+    MyApp()
+        : m_powerDelaySleep(wxPOWER_RESOURCE_SYSTEM,
+                            "Sample needs to show sleep event",
+                            wxPOWER_DELAY)
+    {
+    }
+
     virtual bool OnInit() override
     {
         new MyFrame;
 
         return true;
     }
+
+private:
+    wxPowerResourceBlocker m_powerDelaySleep;
 };
 
 wxIMPLEMENT_APP(MyApp);

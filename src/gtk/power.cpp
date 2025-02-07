@@ -28,6 +28,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/module.h"
+    #include "wx/window.h"
 #endif
 
 #include "wx/power.h"
@@ -71,7 +72,12 @@ public:
             close(m_fdInhibit);
     }
 
-    bool Inhibit(const wxString& reason);
+    // Start or stop blocking system sleep/shutdown.
+    bool StartInhibit(const wxString& reason, wxPowerBlockKind block);
+    void StopInhibit();
+
+    // Resume blocking with the same parameters as before.
+    void RestartInhibit();
 
 private:
     static GDBusProxy* CreateProxyLoginManager();
@@ -80,10 +86,14 @@ private:
 
     int m_fdInhibit = INVALID_FD;
 
+    // Arguments passed to the last successful call to StartInhibit().
+    wxString m_reason;
+    wxPowerBlockKind m_blockKind;
+
     wxDECLARE_NO_COPY_CLASS(wxGDBusLoginManagerProxy);
 };
 
-// The global login manager proxy, non-null if g_powerResourceAcquired != 0.
+// The global login manager proxy.
 std::unique_ptr<wxGDBusLoginManagerProxy> g_proxyLoginManager;
 
 // Net number of times system power resource was acquired.
@@ -119,6 +129,43 @@ private:
 // real implementation
 // ----------------------------------------------------------------------------
 
+extern "C" {
+static void
+wx_dbus_login_manager_cb(
+        GDBusProxy* WXUNUSED(proxy),
+        const gchar* WXUNUSED(sender),
+        const gchar* signalname,
+        GVariant* args,
+        gpointer WXUNUSED(data)
+    )
+{
+    // We're only interested in a single signal.
+    if ( strcmp(signalname, "PrepareForSleep") != 0 )
+        return;
+
+    gboolean suspending = FALSE;
+    g_variant_get(args, "(b)", &suspending);
+
+    wxPowerEvent event(suspending ? wxEVT_POWER_SUSPENDED : wxEVT_POWER_RESUME);
+    for ( auto tlw : wxTopLevelWindows )
+    {
+        if ( tlw->IsShown() )
+            tlw->HandleWindowEvent(event);
+    }
+
+    if ( g_powerResourceAcquired )
+    {
+        // If we're suspending, we need to release the power resource to allow
+        // suspend to go ahead without waiting for the timeout -- and then we
+        // need to take it back again when we resume.
+        if ( suspending )
+            g_proxyLoginManager->StopInhibit();
+        else
+            g_proxyLoginManager->RestartInhibit();
+    }
+}
+}
+
 // static
 GDBusProxy* wxGDBusLoginManagerProxy::CreateProxyLoginManager()
 {
@@ -142,11 +189,15 @@ GDBusProxy* wxGDBusLoginManagerProxy::CreateProxyLoginManager()
         );
     }
 
+    g_signal_connect(proxyLoginManager, "g-signal",
+                     G_CALLBACK(wx_dbus_login_manager_cb), nullptr);
+
     return proxyLoginManager;
 }
 
-// Start inhibiting system suspend.
-bool wxGDBusLoginManagerProxy::Inhibit(const wxString& reason)
+bool
+wxGDBusLoginManagerProxy::StartInhibit(const wxString& reason,
+                                       wxPowerBlockKind blockKind)
 {
     if ( !m_proxyLoginManager )
         return false;
@@ -163,8 +214,24 @@ bool wxGDBusLoginManagerProxy::Inhibit(const wxString& reason)
 
     // And also some user-readable reason for doing this.
     wxString why = reason;
-    if ( why.empty() )
-        why = _("Application needs to keep running");
+    const char* what = nullptr;
+    const char* mode = nullptr;
+    switch ( blockKind )
+    {
+        case wxPOWER_PREVENT:
+            mode = "block";
+            what = "sleep:shutdown:idle";
+            if ( why.empty() )
+                why = _("Application needs to keep running");
+            break;
+
+        case wxPOWER_DELAY:
+            mode = "delay";
+            what = "sleep";
+            if ( why.empty() )
+                why = _("Clean up before suspend");
+            break;
+    }
 
     wxGtkObject<GUnixFDList> fd_list;
     wxGtkError error;
@@ -173,10 +240,10 @@ bool wxGDBusLoginManagerProxy::Inhibit(const wxString& reason)
         "Inhibit",
         g_variant_new(
             "(ssss)",
-            "sleep:shutdown:idle",
+            what,
             static_cast<const char*>(who.utf8_str()),
             static_cast<const char*>(why.utf8_str()),
-            "block"
+            mode
         ),
         G_DBUS_CALL_FLAGS_NONE,
         G_MAXINT,               // No timeout.
@@ -202,7 +269,26 @@ bool wxGDBusLoginManagerProxy::Inhibit(const wxString& reason)
     m_fdInhibit = fds[0];
     g_free(fds);
 
+    // Remember them so that we could call Inhibit() with the same arguments
+    // again later from RestartInhibit().
+    m_reason = reason;
+    m_blockKind = blockKind;
+
     return true;
+}
+
+void wxGDBusLoginManagerProxy::StopInhibit()
+{
+    wxCHECK_RET( m_fdInhibit != INVALID_FD, "Not inhibited" );
+
+    close(m_fdInhibit);
+
+    m_fdInhibit = INVALID_FD;
+}
+
+void wxGDBusLoginManagerProxy::RestartInhibit()
+{
+    StartInhibit(m_reason, m_blockKind);
 }
 
 // ----------------------------------------------------------------------------
@@ -210,7 +296,9 @@ bool wxGDBusLoginManagerProxy::Inhibit(const wxString& reason)
 // ----------------------------------------------------------------------------
 
 bool
-wxPowerResource::Acquire(wxPowerResourceKind kind, const wxString& reason)
+wxPowerResource::Acquire(wxPowerResourceKind kind,
+                         const wxString& reason,
+                         wxPowerBlockKind blockKind)
 {
     switch ( kind )
     {
@@ -221,11 +309,12 @@ wxPowerResource::Acquire(wxPowerResourceKind kind, const wxString& reason)
         case wxPOWER_RESOURCE_SYSTEM:
             if ( !g_powerResourceAcquired++ )
             {
-                g_proxyLoginManager.reset(new wxGDBusLoginManagerProxy);
-                if ( g_proxyLoginManager->Inhibit(reason) )
+                if ( !g_proxyLoginManager )
+                    g_proxyLoginManager.reset(new wxGDBusLoginManagerProxy);
+
+                if ( g_proxyLoginManager->StartInhibit(reason, blockKind) )
                     return true;
 
-                g_proxyLoginManager.reset();
                 g_powerResourceAcquired--;
             }
             break;
@@ -243,7 +332,7 @@ void wxPowerResource::Release(wxPowerResourceKind kind)
 
         case wxPOWER_RESOURCE_SYSTEM:
             if ( !--g_powerResourceAcquired )
-                g_proxyLoginManager.reset();
+                g_proxyLoginManager->StopInhibit();
             break;
     }
 }

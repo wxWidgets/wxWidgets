@@ -36,18 +36,76 @@ enum wxPowerResourceKind
 };
 
 /**
+    Possible blocking behaviours for power resources.
+
+    @since 3.3.0
+ */
+enum wxPowerBlockKind
+{
+    /**
+        Prevent the resource from disappearing.
+
+        When combined with ::wxPOWER_RESOURCE_SCREEN, this prevents the screen
+        from turning off automatically. When combined with
+        ::wxPOWER_RESOURCE_SYSTEM, this prevents the system from suspending.
+     */
+    wxPOWER_PREVENT,
+
+    /**
+        Delay suspend until the application handles the corresponding event.
+
+        This block kind can only be used with ::wxPOWER_RESOURCE_SYSTEM.
+     */
+    wxPOWER_DELAY
+};
+
+
+/**
     @class wxPowerEvent
 
     The power events are generated when the system power state changes, e.g. the
     system is suspended, hibernated, plugged into or unplugged from the wall socket
     and so on. wxPowerEvents are emitted by wxWindows.
 
-    Notice that currently only suspend and resume events are generated and only
-    under MS Windows platform. To avoid the need to change the code using this
-    event later when these events are implemented on the other platforms please
-    use the test <tt>ifdef wxHAS_POWER_EVENTS</tt> instead of directly testing for
-    the platform in your code: this symbol will be defined for all platforms
-    supporting the power events.
+    Notice that currently these events are generated only under MSW and Linux
+    and that under Linux you @e must use wxPowerResource::Acquire() to receive
+    them, e.g. typically an application interested in these events should
+    initialize wxPowerResourceBlocker for ::wxPOWER_RESOURCE_SYSTEM resource
+    using ::wxPOWER_DELAY block kind when initializing either the application
+    itself or its main window. E.g. for an application that wants to handle
+    suspend to gracefully close the open network connections and then reopen
+    them on resume you could do
+
+    @code
+    class MyMainFrame : public wxFrame
+    {
+        ...
+
+    private:
+        wxPowerResourceBlocker m_powerDelaySleep;
+    };
+
+    MyMainFrame::MyMainFrame()
+        : wxFrame(...),
+          m_powerDelaySleep(wxPOWER_RESOURCE_SYSTEM,
+                            "MyApp needs to close network connections",
+                            wxPOWER_DELAY)
+    {
+        Bind(wxEVT_POWER_SUSPENDED, [](wxPowerEvent&) {
+            // Close network connections here.
+        });
+
+        Bind(wxEVT_POWER_RESUME, [](wxPowerEvent&) {
+            // Restore previously closed network connections here.
+        });
+    }
+    @endcode
+
+    To avoid the need to change the code using this event later when these
+    events are implemented on the other platforms please use the test <tt>ifdef
+    wxHAS_POWER_EVENTS</tt> instead of directly testing for the platform in
+    your code: this symbol will be defined for all platforms supporting the
+    power events.
 
     @beginEventTable{wxPowerEvent}
     @event{EVT_POWER_SUSPENDING(func)}
@@ -64,6 +122,8 @@ enum wxPowerResourceKind
            connections here, possibly remembering them to reopen them later when
            the system is resumed.
     @event{EVT_POWER_SUSPEND_CANCEL(func)}
+           @warning This event is currently never generated.
+
            System suspension was cancelled because some application vetoed it.
     @event{EVT_POWER_RESUME(func)}
            System resumed from suspend: normally the application should restore
@@ -125,8 +185,16 @@ public:
     /**
        Acquire a power resource for the application.
 
-       If successful, the system will not automatically power of the screen or
-       suspend until Release() is called.
+       The default behaviour, chosen by setting @a blockKind to
+       ::wxPOWER_PREVENT, is to ensure that the resource of the corresponding
+       @a kind remains accessible, i.e. prevent the system from turning off the
+       screen or suspending.
+
+       Specifying ::wxPOWER_DELAY for @a blockKind doesn't actually prevent the
+       system from suspending but does delay it to allow the application to
+       handle the corresponding notifications. Note that under Linux systems
+       will *not* receive ::wxEVT_POWER_SUSPENDED without acquiring the system
+       resource using ::wxPOWER_DELAY.
 
        Every call to Acquire @b must be matched by a corresponding call to
        Release() or the system will not suspend until the application ends, use
@@ -138,12 +206,18 @@ public:
            some platforms to inform the user what is preventing power saving.
            It should usually describe the operation requiring the resource and
            specifying it is strongly recommended.
+       @param blockKind The default value corresponds to the blocking
+           behaviour, the ::wxPOWER_DELAY value can be used to avoid blocking
+           the resource but just delay it to allow the application to handle
+           the corresponding notifications. This parameter is available in
+           wxWidgets 3.3.0 and later.
        @return Returns true if the acquisition was successful.
 
        @see Release()
     */
     static bool Acquire(wxPowerResourceKind kind,
-                        const wxString& reason = wxString());
+                        const wxString& reason = wxString(),
+                        wxPowerBlockKind blockKind = wxPOWER_PREVENT);
 
     /**
         Release a previously acquired power resource.
@@ -203,7 +277,8 @@ public:
        Uses the same parameters as wxPowerResource::Acquire().
     */
     explicit wxPowerResourceBlocker(wxPowerResourceKind kind,
-                                    const wxString& reason = wxString());
+                                    const wxString& reason = wxString(),
+                                    wxPowerBlockKind blockKind = wxPOWER_PREVENT);
 
     /**
         Returns whether the power resource could be acquired.

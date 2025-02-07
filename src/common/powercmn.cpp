@@ -47,7 +47,8 @@
 
 bool
 wxPowerResource::Acquire(wxPowerResourceKind WXUNUSED(kind),
-                         const wxString& WXUNUSED(reason))
+                         const wxString& WXUNUSED(reason),
+                         wxPowerBlockKind WXUNUSED(blockKind))
 {
     return false;
 }
