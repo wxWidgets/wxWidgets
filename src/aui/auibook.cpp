@@ -845,10 +845,11 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
 
         // determine if a close button is on this tab
-        const auto prevState = tab_button.curState;
-        tab_button.curState = GetCloseButtonState(page);
-        if ( tab_button.curState == wxAUI_BUTTON_STATE_NORMAL &&
-                prevState == wxAUI_BUTTON_STATE_HIDDEN )
+        const auto wasHidden = tab_button.curState & wxAUI_BUTTON_STATE_HIDDEN;
+        tab_button.curState &= ~wxAUI_BUTTON_STATE_HIDDEN;
+        tab_button.curState |= GetCloseButtonState(page);
+        if ( !(tab_button.curState & wxAUI_BUTTON_STATE_HIDDEN) &&
+                wasHidden )
         {
             tab_button.id = wxAUI_BUTTON_CLOSE;
             tab_button.location = wxCENTER;
