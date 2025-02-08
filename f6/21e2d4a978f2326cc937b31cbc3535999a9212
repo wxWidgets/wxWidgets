@@ -1,0 +1,1 @@
+wxGTK: Implement max length limit for multiline wxTextCtrl (Igor Korot, #24751).
