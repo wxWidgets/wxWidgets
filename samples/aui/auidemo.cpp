@@ -118,6 +118,9 @@ class MyFrame : public wxFrame
         ID_NotebookUnsplit,
         ID_NotebookNewTab,
         ID_NotebookDeleteTab,
+        ID_NotebookNormalTab,
+        ID_NotebookPinTab,
+        ID_NotebookLockTab,
         ID_3CHECK,
         ID_UI_2CHECK_UPDATED,
         ID_UI_3CHECK_UPDATED,
@@ -184,12 +187,14 @@ private:
     void OnManagerFlag(wxCommandEvent& evt);
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
+    void OnUpdateTabKindUI(wxUpdateUIEvent& evt);
 
     void OnNotebookNextOrPrev(wxCommandEvent& evt);
     void OnNotebookSplit(wxCommandEvent& evt);
     void OnNotebookUnsplit(wxCommandEvent& evt);
     void OnNotebookNewTab(wxCommandEvent& evt);
     void OnNotebookDeleteTab(wxCommandEvent& evt);
+    void OnNotebookSetTabKind(wxCommandEvent& evt);
 
     void OnPaneClose(wxAuiManagerEvent& evt);
 
@@ -657,6 +662,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookUnsplit, MyFrame::OnNotebookUnsplit)
     EVT_MENU(ID_NotebookNewTab, MyFrame::OnNotebookNewTab)
     EVT_MENU(ID_NotebookDeleteTab, MyFrame::OnNotebookDeleteTab)
+    EVT_MENU(ID_NotebookNormalTab, MyFrame::OnNotebookSetTabKind)
+    EVT_MENU(ID_NotebookPinTab, MyFrame::OnNotebookSetTabKind)
+    EVT_MENU(ID_NotebookLockTab, MyFrame::OnNotebookSetTabKind)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
@@ -682,6 +690,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_NotebookAllowTabSplit, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookScrollButtons, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookWindowList, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookNormalTab, MyFrame::OnUpdateTabKindUI)
+    EVT_UPDATE_UI(ID_NotebookPinTab, MyFrame::OnUpdateTabKindUI)
+    EVT_UPDATE_UI(ID_NotebookLockTab, MyFrame::OnUpdateTabKindUI)
     EVT_UPDATE_UI(ID_AllowFloating, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentHint, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_VenetianBlindsHint, MyFrame::OnUpdateUI)
@@ -798,6 +809,10 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->Append(ID_NotebookUnsplit, _("&Unsplit Notebook"));
     notebook_menu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
     notebook_menu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
+    notebook_menu->AppendSeparator();
+    notebook_menu->AppendRadioItem(ID_NotebookNormalTab, _("Make Current Tab Normal\tCtrl-0"));
+    notebook_menu->AppendRadioItem(ID_NotebookPinTab, _("Pin Current Tab\tCtrl-1"));
+    notebook_menu->AppendRadioItem(ID_NotebookLockTab, _("Lock Current Tab\tCtrl-2"));
 
     m_perspectives_menu = new wxMenu;
     m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
@@ -1418,6 +1433,46 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
     }
+}
+
+void MyFrame::OnUpdateTabKindUI(wxUpdateUIEvent& event)
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    if ( !book )
+    {
+        event.Enable(false);
+        return;
+    }
+
+    const auto sel = book->GetSelection();
+    if ( sel == wxNOT_FOUND )
+    {
+        event.Enable(false);
+        return;
+    }
+
+    const int kind = static_cast<int>(book->GetPageKind(sel));
+
+    event.Check(kind == event.GetId() - ID_NotebookNormalTab);
+}
+
+void MyFrame::OnNotebookSetTabKind(wxCommandEvent& event)
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    if ( !book )
+        return;
+
+    const auto sel = book->GetSelection();
+    if ( sel == wxNOT_FOUND )
+        return;
+
+    book->SetPageKind(sel,
+        static_cast<wxAuiTabKind>(event.GetId() - ID_NotebookNormalTab)
+    );
 }
 
 
@@ -2395,7 +2450,8 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    wxBitmapBundle page_bmp = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
 
    ctrl->AddPage(CreateHTMLCtrl(ctrl), "Welcome to wxAUI" , false, page_bmp);
-   ctrl->SetPageToolTip(0, "Welcome to wxAUI (this is a page tooltip)");
+   ctrl->SetPageKind(0, wxAuiTabKind::Locked);
+   ctrl->SetPageToolTip(0, "Note that this page is locked and can't be moved or closed");
 
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 4, 2, 0, 0 );

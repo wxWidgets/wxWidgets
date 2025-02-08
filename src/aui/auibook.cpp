@@ -393,6 +393,22 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 
 
 
+int wxAuiTabContainer::GetCloseButtonState(const wxAuiNotebookPage& page) const
+{
+    switch ( page.kind )
+    {
+        case wxAuiTabKind::Normal:
+        case wxAuiTabKind::Pinned:
+            break;
+
+        case wxAuiTabKind::Locked:
+            // A locked page can't be closed.
+            return wxAUI_BUTTON_STATE_HIDDEN;
+    }
+
+    return GetCloseButtonState(page.active);
+}
+
 int wxAuiTabContainer::GetCloseButtonState(bool isPageActive) const
 {
     // determine if a close button is on this tab
@@ -636,6 +652,30 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
                 button.curState |= wxAUI_BUTTON_STATE_DISABLED;
             else
                 button.curState &= ~wxAUI_BUTTON_STATE_DISABLED;
+        }
+        else if (button.id == wxAUI_BUTTON_CLOSE)
+        {
+            button.curState &= ~wxAUI_BUTTON_STATE_DISABLED;
+
+            // Disable "Close" button if the current page is locked, as such
+            // pages can't be closed.
+            for (const auto& page : m_pages)
+            {
+                if (page.active)
+                {
+                    switch ( page.kind )
+                    {
+                        case wxAuiTabKind::Normal:
+                        case wxAuiTabKind::Pinned:
+                            break;
+
+                        case wxAuiTabKind::Locked:
+                            button.curState |= wxAUI_BUTTON_STATE_DISABLED;
+                            break;
+                    }
+                    break;
+                }
+            }
         }
     }
 
@@ -1142,8 +1182,33 @@ void wxAuiTabContainer::DoShowHide()
 }
 
 
+int wxAuiTabContainer::GetFirstTabOfKind(wxAuiTabKind kind) const
+{
+    int pos = 0;
+    for ( const auto& page : m_pages )
+    {
+        if ( page.kind == kind )
+            break;
 
+        pos++;
+    }
 
+    return pos;
+}
+
+int wxAuiTabContainer::GetFirstTabNotOfKind(wxAuiTabKind kind) const
+{
+    int pos = 0;
+    for ( const auto& page : m_pages )
+    {
+        if ( page.kind != kind )
+            break;
+
+        pos++;
+    }
+
+    return pos;
+}
 
 
 // -- wxAuiTabCtrl class implementation --
@@ -1517,8 +1582,23 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     if (abs(pos.x - m_clickPt.x) > drag_x_threshold ||
         abs(pos.y - m_clickPt.y) > drag_y_threshold)
     {
+        const int idx = GetIdxFromWindow(m_clickTab);
+        if ( idx != wxNOT_FOUND )
+        {
+            switch ( GetPage(idx).kind )
+            {
+                case wxAuiTabKind::Normal:
+                    break;
+
+                case wxAuiTabKind::Pinned:
+                case wxAuiTabKind::Locked:
+                    // Don't allow dragging pinned or locked tabs.
+                    return;
+            }
+        }
+
         wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BEGIN_DRAG, m_windowId);
-        e.SetSelection(GetIdxFromWindow(m_clickTab));
+        e.SetSelection(idx);
         e.SetOldSelection(e.GetSelection());
         e.SetEventObject(this);
         ProcessWindowEvent(e);
@@ -2511,6 +2591,91 @@ wxBitmap wxAuiNotebook::GetPageBitmap(size_t page_idx) const
     return page_info.bitmap.GetBitmap(page_info.bitmap.GetDefaultSize());
 }
 
+wxAuiTabKind wxAuiNotebook::GetPageKind(size_t page_idx) const
+{
+    wxCHECK_MSG(page_idx < GetPageCount(), wxAuiTabKind::Normal, "invalid page index");
+
+    return m_tabs.GetPage(page_idx).kind;
+}
+
+bool wxAuiNotebook::SetPageKind(size_t page_idx, wxAuiTabKind kind)
+{
+    wxCHECK_MSG(page_idx < GetPageCount(), false, "invalid page index");
+
+    wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    if ( page_info.kind == kind )
+        return false;
+
+    page_info.kind = kind;
+
+    const auto tabInfo = FindTab(page_info.window);
+    if ( !tabInfo )
+        return false;
+
+    auto& tabCtrl = *tabInfo.tabCtrl;
+
+    // Update the tab position as changing its kind moves it: if it becomes
+    // locked/pinned, it needs to be moved to the end of the group of the tabs
+    // of this kind and if it becomes normal, it needs to be moved to the
+    // beginning of the normal tabs (and not the end, to minimize the distance
+    // by which it moves).
+    size_t newIdx = 0;
+    switch ( kind )
+    {
+        case wxAuiTabKind::Normal:
+            newIdx = tabCtrl.GetFirstTabOfKind(wxAuiTabKind::Normal);
+
+            // There must be at least the locked/pinned tab which is changing
+            // its kind now before the first normal one.
+            wxASSERT( newIdx > 0 );
+
+            // Move it before the first normal tab or before the end.
+            newIdx--;
+            break;
+
+        case wxAuiTabKind::Pinned:
+            // When a normal tab becomes pinned, it should be moved to the end
+            // of the pinned tabs, but when a locked tab becomes pinned, it
+            // makes more sense to put it at the beginning of this group, for
+            // symmetry with what happens when a pinned tab becomes normal.
+            switch ( tabInfo.pageInfo->kind )
+            {
+                case wxAuiTabKind::Normal:
+                    newIdx = tabCtrl.GetFirstTabOfKind(wxAuiTabKind::Normal);
+                    break;
+
+                case wxAuiTabKind::Pinned:
+                    // This tab is switching to pinned state, so it couldn't
+                    // have already been pinned before.
+                    wxFAIL_MSG("unreachable");
+                    break;
+
+                case wxAuiTabKind::Locked:
+                    newIdx = tabCtrl.GetFirstTabNotOfKind(wxAuiTabKind::Locked);
+
+                    // There must be at least one locked tab, which is
+                    // switching to pinned state right now.
+                    wxASSERT( newIdx > 0 );
+
+                    newIdx--;
+                    break;
+            }
+            break;
+
+        case wxAuiTabKind::Locked:
+            newIdx = tabCtrl.GetFirstTabNotOfKind(wxAuiTabKind::Locked);
+            break;
+    }
+
+    // And also update kind in this copy of the page info before moving it.
+    tabInfo.pageInfo->kind = kind;
+
+    tabCtrl.MovePage(tabInfo.tabIdx, newIdx);
+    tabCtrl.Refresh();
+
+    return true;
+}
+
 // GetSelection() returns the index of the currently active page
 int wxAuiNotebook::GetSelection() const
 {
@@ -2905,6 +3070,19 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
                 // one there again.
                 m_lastDropMovePos = -1;
                 return;
+            }
+
+            switch ( dest_tabs->GetPage(dest_idx).kind )
+            {
+                case wxAuiTabKind::Normal:
+                    break;
+
+                case wxAuiTabKind::Pinned:
+                case wxAuiTabKind::Locked:
+                    // Don't allow dragging normal tabs (and source tab must be
+                    // normal because we don't allow dragging any other ones)
+                    // to put them before locked or pinned ones.
+                    return;
             }
 
             // When dragging a smaller tab over the larger one, after moving

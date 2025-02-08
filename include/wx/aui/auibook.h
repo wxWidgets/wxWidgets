@@ -90,6 +90,15 @@ private:
 };
 
 
+// Possible tab states.
+enum class wxAuiTabKind
+{
+    Normal, // Can be closed and dragged by user.
+    Pinned, // Can be closed but can't be dragged. Can be unpinned by user.
+    Locked  // Can't be closed, dragged nor unlocked by user.
+};
+
+
 class WXDLLIMPEXP_AUI wxAuiNotebookPage
 {
 public:
@@ -97,7 +106,9 @@ public:
     wxString caption;     // caption displayed on the tab
     wxString tooltip;     // tooltip displayed when hovering over tab title
     wxBitmapBundle bitmap;// tab's bitmap
-    wxRect rect;          // tab's hit rectangle
+    wxAuiTabKind kind = wxAuiTabKind::Normal; // tab's kind
+
+    wxRect rect;          // tab's hit rectangle (only used internally)
     bool active = false;  // true if the page is currently active
 
     // These fields are internal, don't use them.
@@ -267,6 +278,11 @@ public:
         return LayoutMultiLineTabs(m_rect, wnd);
     }
 
+    // Get the index of the first tab of the given kind or of a different kind,
+    // returning GetPageCount() if there is no such tabs.
+    int GetFirstTabOfKind(wxAuiTabKind kind) const;
+    int GetFirstTabNotOfKind(wxAuiTabKind kind) const;
+
 protected:
 
     virtual void Render(wxDC* dc, wxWindow* wnd);
@@ -284,13 +300,12 @@ protected:
     size_t m_tabOffset;
     unsigned int m_flags;
 
-    int GetCloseButtonState(const wxAuiNotebookPage& page) const
-    {
-        return GetCloseButtonState(page.active);
-    }
+    // Return wxAUI_BUTTON_STATE_{NORMAL,HIDDEN} corresponding to the current
+    // flags and the kind and state of the page.
+    int GetCloseButtonState(const wxAuiNotebookPage& page) const;
 
     // Return wxAUI_BUTTON_STATE_{NORMAL,HIDDEN} corresponding to the current
-    // flags and the state of the page.
+    // flags and the given active state.
     int GetCloseButtonState(bool isPageActive) const;
 
 private:
@@ -459,6 +474,9 @@ public:
 
     bool SetPageBitmap(size_t page, const wxBitmapBundle& bitmap);
     wxBitmap GetPageBitmap(size_t pageIdx) const;
+
+    wxAuiTabKind GetPageKind(size_t pageIdx) const;
+    bool SetPageKind(size_t pageIdx, wxAuiTabKind kind);
 
     int SetSelection(size_t newPage) override;
     int GetSelection() const override;

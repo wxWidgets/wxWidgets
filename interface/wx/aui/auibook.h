@@ -349,6 +349,15 @@ public:
     int GetPageIndex(wxWindow* page_wnd) const;
 
     /**
+        Returns the tab kind for the page.
+
+        See SetPageKind().
+
+        @since 3.3.0
+     */
+    wxAuiTabKind GetPageKind(size_t pageIdx) const;
+
+    /**
         Returns the position of the page in the notebook.
 
         For example, to determine if one page is located immediately next to
@@ -563,6 +572,26 @@ public:
     virtual bool SetPageImage(size_t n, int imageId);
 
     /**
+        Set the tab kind.
+
+        Can be used to pin or lock a tab. Note that pinned tabs can be unpinned
+        by the user, but locked tabs can only be unlocked programmatically by
+        calling this function.
+
+        @param pageIdx
+            The index of the page to change.
+        @param kind
+            The new kind for the page.
+        @return
+            @true if the kind was changed, @false if it didn't change, either
+            because the page already was of the specified @a kind or because
+            the page index is invalid.
+
+        @since 3.3.0
+     */
+    bool SetPageKind(size_t pageIdx, wxAuiTabKind kind);
+
+    /**
         Sets the tab label for the page.
     */
     bool SetPageText(size_t page, const wxString& text);
@@ -703,6 +732,20 @@ public:
         @since 3.1.4
     */
     bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
+};
+
+/**
+    Tab kind for wxAuiNotebook pages.
+
+    See wxAuiNotebook::SetTabKind().
+
+    @since 3.3.0
+ */
+enum class wxAuiTabKind
+{
+    Normal, ///< Can be closed and dragged by user.
+    Pinned, ///< Can be closed but can't be dragged, can be unpinned by user.
+    Locked  ///< Can't be closed, dragged nor unlocked by user.
 };
 
 
