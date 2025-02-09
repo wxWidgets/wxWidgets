@@ -358,18 +358,16 @@ void wxAuiTabContainer::AddButton(int id,
     button.location = location;
     button.curState = wxAUI_BUTTON_STATE_NORMAL;
 
-    m_buttons.Add(button);
+    m_buttons.push_back(button);
 }
 
 void wxAuiTabContainer::RemoveButton(int id)
 {
-    size_t i, button_count = m_buttons.GetCount();
-
-    for (i = 0; i < button_count; ++i)
+    for (auto it = m_buttons.begin(); it != m_buttons.end(); ++it)
     {
-        if (m_buttons.Item(i).id == id)
+        if (it->id == id)
         {
-            m_buttons.RemoveAt(i);
+            m_buttons.erase(it);
             return;
         }
     }
@@ -432,14 +430,14 @@ int wxAuiTabContainer::GetAvailableForTabs(const wxRect& rect,
     // the other functions, notable we can assume that all tabs are visible.
 
     size_t i;
-    const size_t button_count = m_buttons.GetCount();
+    const size_t button_count = m_buttons.size();
 
     int right_buttons_width = 0;
 
     // measure the buttons on the right side
     for (i = 0; i < button_count; ++i)
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+        wxAuiTabContainerButton& button = m_buttons.at(button_count - i - 1);
 
         if (button.location != wxRIGHT)
             continue;
@@ -469,7 +467,7 @@ int wxAuiTabContainer::GetAvailableForTabs(const wxRect& rect,
 
     for (i = 0; i < button_count; ++i)
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+        wxAuiTabContainerButton& button = m_buttons.at(button_count - i - 1);
 
         if (button.location != wxLEFT)
             continue;
@@ -569,7 +567,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
 {
     size_t i;
     const size_t page_count = m_pages.GetCount();
-    const size_t button_count = m_buttons.GetCount();
+    const size_t button_count = m_buttons.size();
 
     // ensure we show as many tabs as possible
     while (m_tabOffset > 0 && IsTabVisible(page_count-1, m_tabOffset-1, &dc, wnd))
@@ -611,7 +609,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
         // show left/right buttons
         for (i = 0; i < button_count; ++i)
         {
-            wxAuiTabContainerButton& button = m_buttons.Item(i);
+            wxAuiTabContainerButton& button = m_buttons.at(i);
             if (button.id == wxAUI_BUTTON_LEFT ||
                 button.id == wxAUI_BUTTON_RIGHT)
             {
@@ -624,7 +622,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
         // hide left/right buttons
         for (i = 0; i < button_count; ++i)
         {
-            wxAuiTabContainerButton& button = m_buttons.Item(i);
+            wxAuiTabContainerButton& button = m_buttons.at(i);
             if (button.id == wxAUI_BUTTON_LEFT ||
                 button.id == wxAUI_BUTTON_RIGHT)
             {
@@ -636,7 +634,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
     // determine whether various buttons should be enabled
     for (i = 0; i < button_count; ++i)
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(i);
+        wxAuiTabContainerButton& button = m_buttons.at(i);
         if (button.id == wxAUI_BUTTON_LEFT)
         {
             if (m_tabOffset == 0)
@@ -686,7 +684,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
     // draw the buttons on the right side
     for (i = 0; i < button_count; ++i)
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+        wxAuiTabContainerButton& button = m_buttons.at(button_count - i - 1);
 
         if (button.location != wxRIGHT)
             continue;
@@ -716,7 +714,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
 
     for (i = 0; i < button_count; ++i)
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+        wxAuiTabContainerButton& button = m_buttons.at(button_count - i - 1);
 
         if (button.location != wxLEFT)
             continue;
@@ -940,7 +938,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* d
 
     size_t i;
     size_t page_count = m_pages.GetCount();
-    size_t button_count = m_buttons.GetCount();
+    size_t button_count = m_buttons.size();
 
     // Hasn't been rendered yet; assume it's visible
     if (m_tabCloseButtons.GetCount() < page_count)
@@ -951,7 +949,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* d
     int arrowButtonVisibleCount = 0;
     for (i = 0; i < button_count; ++i)
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(i);
+        wxAuiTabContainerButton& button = m_buttons.at(i);
         if (button.id == wxAUI_BUTTON_LEFT ||
             button.id == wxAUI_BUTTON_RIGHT)
         {
@@ -976,7 +974,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* d
     int offset = m_rect.x + m_rect.width;
     for (i = 0; i < button_count; ++i)
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+        wxAuiTabContainerButton& button = m_buttons.at(button_count - i - 1);
 
         if (button.location != wxRIGHT)
             continue;
@@ -992,7 +990,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* d
     // calculate size of the buttons on the left side
     for (i = 0; i < button_count; ++i)
     {
-        wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
+        wxAuiTabContainerButton& button = m_buttons.at(button_count - i - 1);
 
         if (button.location != wxLEFT)
             continue;

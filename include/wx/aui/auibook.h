@@ -294,7 +294,10 @@ protected:
     // Contains pages in the display order.
     wxAuiNotebookPageArray m_pages;
 
-    wxAuiTabContainerButtonArray m_buttons;
+    // This vector contains container-level buttons, e.g. left/right scroll
+    // buttons, close button if it's not per-tab, window list button etc.
+    std::vector<wxAuiTabContainerButton> m_buttons;
+
     wxAuiTabContainerButtonArray m_tabCloseButtons;
     wxRect m_rect;
     size_t m_tabOffset;
