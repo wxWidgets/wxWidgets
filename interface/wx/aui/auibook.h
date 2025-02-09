@@ -1031,7 +1031,7 @@ public:
     /**
         Returns the tab size for the given caption, bitmap and state.
     */
-    virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
+    virtual wxSize GetTabSize(wxReadOnlyDC& dc, wxWindow* wnd, const wxString& caption,
                               const wxBitmapBundle& bitmap, bool active,
                               int close_button_state, int* x_extent) = 0;
 
@@ -1238,7 +1238,7 @@ public:
     int GetIndentSize();
 
     wxSize GetTabSize(
-                 wxDC& dc,
+                 wxReadOnlyDC& dc,
                  wxWindow* wnd,
                  const wxString& caption,
                  const wxBitmapBundle& bitmap,
@@ -1344,7 +1344,7 @@ public:
     int GetIndentSize();
 
     wxSize GetTabSize(
-                 wxDC& dc,
+                 wxReadOnlyDC& dc,
                  wxWindow* wnd,
                  const wxString& caption,
                  const wxBitmap& bitmap,
