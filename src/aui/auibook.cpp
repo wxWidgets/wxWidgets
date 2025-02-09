@@ -393,7 +393,8 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 
 
 
-int wxAuiTabContainer::GetCloseButtonState(const wxAuiNotebookPage& page) const
+wxAuiPaneButtonState
+wxAuiTabContainer::GetCloseButtonState(const wxAuiNotebookPage& page) const
 {
     switch ( page.kind )
     {
@@ -409,7 +410,8 @@ int wxAuiTabContainer::GetCloseButtonState(const wxAuiNotebookPage& page) const
     return GetCloseButtonState(page.active);
 }
 
-int wxAuiTabContainer::GetCloseButtonState(bool isPageActive) const
+wxAuiPaneButtonState
+wxAuiTabContainer::GetCloseButtonState(bool isPageActive) const
 {
     // determine if a close button is on this tab
     return ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||

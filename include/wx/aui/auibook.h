@@ -302,11 +302,11 @@ protected:
 
     // Return wxAUI_BUTTON_STATE_{NORMAL,HIDDEN} corresponding to the current
     // flags and the kind and state of the page.
-    int GetCloseButtonState(const wxAuiNotebookPage& page) const;
+    wxAuiPaneButtonState GetCloseButtonState(const wxAuiNotebookPage& page) const;
 
     // Return wxAUI_BUTTON_STATE_{NORMAL,HIDDEN} corresponding to the current
     // flags and the given active state.
-    int GetCloseButtonState(bool isPageActive) const;
+    wxAuiPaneButtonState GetCloseButtonState(bool isPageActive) const;
 
 private:
     // Return the width that can be used for the tabs, i.e. without the space
