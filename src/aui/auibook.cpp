@@ -348,17 +348,11 @@ size_t wxAuiTabContainer::GetPageCount() const
 
 void wxAuiTabContainer::AddButton(int id,
                                   int location,
-                                  const wxBitmapBundle& normalBitmap,
-                                  const wxBitmapBundle& disabledBitmap)
+                                  const wxBitmapBundle& WXUNUSED(normalBitmap),
+                                  const wxBitmapBundle& WXUNUSED(disabledBitmap))
 {
-    wxAuiTabContainerButton button;
-    button.id = id;
-    button.bitmap = normalBitmap;
-    button.disBitmap = disabledBitmap;
-    button.location = location;
-    button.curState = wxAUI_BUTTON_STATE_NORMAL;
-
-    m_buttons.push_back(button);
+    // We ignore the bitmaps as they are never used currently.
+    m_buttons.push_back({id, location});
 }
 
 void wxAuiTabContainer::RemoveButton(int id)
@@ -746,11 +740,9 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
     // make sure there are enough tab button entries to accommodate all tabs
     while (m_tabCloseButtons.GetCount() < page_count)
     {
-        wxAuiTabContainerButton tempbtn;
-        tempbtn.id = wxAUI_BUTTON_CLOSE;
-        tempbtn.location = wxCENTER;
-        tempbtn.curState = wxAUI_BUTTON_STATE_HIDDEN;
-        m_tabCloseButtons.Add(tempbtn);
+        m_tabCloseButtons.push_back(
+            {wxAUI_BUTTON_CLOSE, wxCENTER, wxAUI_BUTTON_STATE_HIDDEN}
+        );
     }
 
 

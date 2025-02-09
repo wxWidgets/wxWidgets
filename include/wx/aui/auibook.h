@@ -119,10 +119,19 @@ public:
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton
 {
 public:
+    wxAuiTabContainerButton() = default;
 
-    int id;               // button's id
-    int curState;        // current state (normal, hover, pressed, etc.)
-    int location;         // buttons location (wxLEFT, wxRIGHT, or wxCENTER)
+    wxAuiTabContainerButton(
+            int id_,
+            int location_,
+            wxAuiPaneButtonState curState_ = wxAUI_BUTTON_STATE_NORMAL
+        ) : id(id_), curState(curState_), location(location_)
+    {
+    }
+
+    int id = 0;               // button's id
+    int curState = 0;         // current state (normal, hover, pressed, etc.)
+    int location = 0;         // buttons location (wxLEFT, wxRIGHT, or wxCENTER)
     wxBitmapBundle bitmap;    // button's hover bitmap
     wxBitmapBundle disBitmap; // button's disabled bitmap
     wxRect rect;          // button's hit rectangle
