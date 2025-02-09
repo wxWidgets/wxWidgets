@@ -2119,12 +2119,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 #ifdef __WXGTK3__
 void wxTextCtrl::GTKSetPangoMarkup(const wxString& str)
 {
-    if (!IsMultiLine())
-    {
-        wxASSERT_MSG(IsMultiLine(),
-            wxT("shouldn't be called for single line controls"));
-        return;
-    }
+    wxCHECK_RET(IsMultiLine(), "pango markup requires multiline control");
 
     // multiple events may get fired while editing text, so block those
     {
