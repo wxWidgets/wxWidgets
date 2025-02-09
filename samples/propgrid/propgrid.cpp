@@ -2161,11 +2161,11 @@ FormMain::FormMain(const wxString& title)
     wxBoxSizer* btnSizer = new wxBoxSizer(wxHORIZONTAL);
     btnSizer->Add(new wxButton(m_panel, wxID_ANY,
         "Should be able to move here with Tab"),
-        wxSizerFlags(1).Border(wxALL, 10));
+        wxSizerFlags(1).DoubleBorder(wxALL));
     btnSizer->Add(new wxButton(m_panel, ID_SHOWPOPUP,
         "Show Popup"),
-        wxSizerFlags(1).Border(wxALL, 10));
-    m_topSizer->Add(btnSizer, wxSizerFlags(0).Border(wxALL, 5).Expand());
+        wxSizerFlags(1).DoubleBorder(wxALL));
+    m_topSizer->Add(btnSizer, wxSizerFlags(0).Border(wxALL).Expand());
 
     m_panel->SetSizer(m_topSizer);
     m_topSizer->SetSizeHints(m_panel);

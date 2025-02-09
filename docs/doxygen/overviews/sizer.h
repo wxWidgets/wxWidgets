@@ -286,7 +286,7 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
     // vertically stretchable with a border width of 10
     topsizer->Add(
         new wxTextCtrl( this, -1, "My text.", wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
-        wxSizerFlags(1).Align().Expand().Border(wxALL, 10));
+        wxSizerFlags(1).Align().Expand().DoubleBorder(wxALL));
 
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -294,11 +294,11 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
     // with an all-around border with a width of 10 and implicit top alignment
     button_sizer->Add(
         new wxButton( this, wxID_OK, "OK" ),
-        wxSizerFlags(0).Align().Border(wxALL, 10));
+        wxSizerFlags(0).Align().DoubleBorder(wxALL));
 
     button_sizer->Add(
         new wxButton( this, wxID_CANCEL, "Cancel" ),
-        wxSizerFlags(0).Align().Border(wxALL, 10));
+        wxSizerFlags(0).Align().DoubleBorder(wxALL));
 
     //create a sizer with no border and centered horizontally
     topsizer->Add(

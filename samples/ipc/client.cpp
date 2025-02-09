@@ -184,15 +184,15 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 
     sizerCmds->Add( 20, 20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-    sizerMain->Add( sizerCmds, wxSizerFlags().Expand().Border(wxALL, 5) );
+    sizerMain->Add( sizerCmds, wxSizerFlags().Expand().Border(wxALL) );
 
     wxStaticBoxSizer * const
         sizerLog = new wxStaticBoxSizer(wxVERTICAL, panel, "Client log");
 
     wxTextCtrl * const textLog = new wxTextCtrl( sizerLog->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(500,140), wxTE_MULTILINE );
-    sizerLog->Add( textLog, wxSizerFlags(1).Expand().Border(wxALL, 5) );
+    sizerLog->Add( textLog, wxSizerFlags(1).Expand().Border(wxALL) );
 
-    sizerMain->Add( sizerLog, wxSizerFlags(1).Expand().Border(wxALL, 5) );
+    sizerMain->Add( sizerLog, wxSizerFlags(1).Expand().Border(wxALL) );
 
     panel->SetSizer( sizerMain );
     SetClientSize( panel->GetBestSize() );
