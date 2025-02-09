@@ -2117,7 +2117,22 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 }
 
 #ifdef __WXGTK3__
+void wxTextCtrl::GTKSetPangoMarkup(const wxString& str)
+{
+    wxCHECK_RET(IsMultiLine(), "pango markup requires multiline control");
 
+    // multiple events may get fired while editing text, so block those
+    {
+        EventsSuppressor noevents(this);
+        // clear current content
+        GtkTextIter start, end;
+        gtk_text_buffer_get_bounds(m_buffer, &start, &end);
+        gtk_text_buffer_delete(m_buffer, &start, &end);
+
+        gtk_text_buffer_insert_markup(m_buffer, &start, str.utf8_str(), -1);
+    }
+    SendTextUpdatedEvent(GetEditableWindow());
+}
 wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
 {
     if ( !IsMultiLine() )

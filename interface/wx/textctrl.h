@@ -2179,6 +2179,20 @@ public:
     */
     GtkEditable *GTKGetEditable();
 
+    /**
+        Sets the content of a multiline text control from a Pango markup buffer.
+
+        This offers more granular control of content formatting, as well as a
+        significant performance benefit with larger content.
+
+        This is the GTK analogy to SetRTFValue().
+
+        @onlyfor{wxgtk}
+
+        @since 3.3
+    */
+    void GTKSetPangoMarkup(const wxString& str);
+
     ///@}
 
     ///@{
