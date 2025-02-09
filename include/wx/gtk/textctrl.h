@@ -117,6 +117,9 @@ public:
     // Get the underlying text control.
     GtkEditable *GTKGetEditable() const { return GetEditable(); }
 
+#ifdef __WXGTK3__
+    void GTKSetPangoMarkup(const wxString& str);
+#endif // __WXGTK3__
 
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );

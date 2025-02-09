@@ -1464,6 +1464,19 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
     CHECK( updated.GetCount() == 1 );
 }
 
+#ifdef __WXGTK3__
+TEST_CASE("wxTextCtrl::GTKSetPangoMarkup", "[wxTextCtrl][pango]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+
+    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE));
+    text->SetValue("Bogus content to be replaced");
+    text->GTKSetPangoMarkup(R"(Welcome to <span background="#D3D3D3" strikethrough="true">wxWidgets</span> 3.3!)");
+
+    CHECK(text->GetValue() == wxString("Welcome to wxWidgets 3.3!"));
+}
+#endif
+
 #ifdef __WXOSX__
 TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
 {
