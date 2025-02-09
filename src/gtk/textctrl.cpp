@@ -2123,13 +2123,13 @@ void wxTextCtrl::GTKSetPangoMarkup(const wxString& str)
 
     // multiple events may get fired while editing text, so block those
     {
-    EventsSuppressor noevents(this);
-    // clear current content
-    GtkTextIter start, end;
-    gtk_text_buffer_get_bounds(GTKGetTextBuffer(), &start, &end);
-    gtk_text_buffer_delete(GTKGetTextBuffer(), &start, &end);
-
-    gtk_text_buffer_insert_markup(GTKGetTextBuffer(), &start, str.utf8_str(), -1);
+        EventsSuppressor noevents(this);
+        // clear current content
+        GtkTextIter start, end;
+        gtk_text_buffer_get_bounds(m_buffer, &start, &end);
+        gtk_text_buffer_delete(m_buffer, &start, &end);
+    
+        gtk_text_buffer_insert_markup(m_buffer, &start, str.utf8_str(), -1);
     }
     SendTextUpdatedEvent(GetEditableWindow());
 }
