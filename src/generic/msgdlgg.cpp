@@ -173,9 +173,9 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
                                     wxArtProvider::GetMessageBoxIcon(m_dialogStyle)
                                    );
         if ( wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA )
-            topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, 10 );
+            topsizer->Add( icon, 0, wxTOP|wxLEFT|wxRIGHT | wxALIGN_LEFT, FromDIP(10) );
         else
-            icon_text->Add(icon, wxSizerFlags().Top().Border(wxRIGHT, 20));
+            icon_text->Add(icon, wxSizerFlags().Top().Border(wxRIGHT, FromDIP(20)));
     }
 #endif // wxUSE_STATBMP
 
@@ -198,7 +198,7 @@ void wxGenericMessageDialog::DoCreateMsgdialog()
     {
         wxTitleTextWrapper titleWrapper(this);
         textsizer->Add(CreateTextSizer(GetMessage(), titleWrapper, maxWidth),
-                       wxSizerFlags().Border(wxBOTTOM, 20));
+                       wxSizerFlags().Border(wxBOTTOM, FromDIP(20)));
 
         lowerMessage = GetExtendedMessage();
     }

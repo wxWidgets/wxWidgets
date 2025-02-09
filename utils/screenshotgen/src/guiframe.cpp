@@ -27,7 +27,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
     bSizer0 = new wxBoxSizer( wxVERTICAL );
     m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-    m_commonExpandFlags = wxSizerFlags(1).Expand().Border(wxALL, 20);
+    m_commonExpandFlags = wxSizerFlags(1).Expand().Border(wxALL, FromDIP(20));
 
     //Add panels into m_notebook1
 
@@ -261,7 +261,7 @@ void GUIFrame::AddPanel_2()
     collbSizer->Add( m_collBut, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
     collbSizer->Add( m_collText, wxSizerFlags().Expand() );
     win->SetSizer(collbSizer);
-    fgSizer2->Add( m_collPane1, wxSizerFlags().Expand().Border(wxALL, 5) );
+    fgSizer2->Add( m_collPane1, wxSizerFlags().Expand().Border(wxALL) );
 
     //wxCollapsiblePane 2
     m_collPane2 = new wxCollapsiblePane(m_panel2, -1, wxT("Expanded"));
@@ -279,7 +279,7 @@ void GUIFrame::AddPanel_2()
 
     m_collPane2->Expand();
 
-    fgSizer2->Add( m_collPane2, wxSizerFlags().Expand().Border(wxALL, 5) );
+    fgSizer2->Add( m_collPane2, wxSizerFlags().Expand().Border(wxALL) );
 
     m_panel2->SetSizer( fgSizer2 );
     m_panel2->Layout();

@@ -171,7 +171,7 @@ wxNotificationMessageWindow::wxNotificationMessageWindow(wxGenericNotificationMe
 
     // Add a single close button if no actions are specified
     m_closeBtn = wxBitmapButton::NewCloseButton(m_messagePanel, wxID_ANY);
-    msgSizer->Add(m_closeBtn, wxSizerFlags(0).Border(wxALL, 3).Top());
+    msgSizer->Add(m_closeBtn, wxSizerFlags(0).Border(wxALL, FromDIP(3)).Top());
     m_closeBtn->Bind(wxEVT_BUTTON, &wxNotificationMessageWindow::OnCloseClicked, this);
     PrepareNotificationControl(m_closeBtn, false);
 

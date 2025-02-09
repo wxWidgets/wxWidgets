@@ -336,7 +336,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     m_textChangeHeight->SetSize(20, wxDefaultCoord);
     sizerOptions->Add(sizerRow, 0, wxALL | wxFIXED_MINSIZE /*| wxGROW*/, 5);
 
-    sizerLeft->Add( sizerOptions, wxSizerFlags().Expand().Border(wxTOP, 2));
+    sizerLeft->Add( sizerOptions, wxSizerFlags().Expand().Border(wxTOP, FromDIP(2)));
 
     // middle pane
     wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change wxBitmapComboBox contents");

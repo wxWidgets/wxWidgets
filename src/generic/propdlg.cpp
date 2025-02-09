@@ -98,7 +98,7 @@ void wxPropertySheetDialog::CreateButtons(int flags)
     wxSizer *buttonSizer = CreateButtonSizer(flags);
     if( buttonSizer )
     {
-        m_innerSizer->Add( buttonSizer, wxSizerFlags().Expand().Border(wxALL, 2) );
+        m_innerSizer->Add( buttonSizer, wxSizerFlags().Expand().Border(wxALL, FromDIP(2)) );
         m_innerSizer->AddSpacer(2);
     }
 }

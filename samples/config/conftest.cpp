@@ -182,9 +182,9 @@ MyFrame::MyFrame()
 
     // put everything in a sizer
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(st, wxSizerFlags().Border(wxLEFT|wxBOTTOM|wxTOP, 10));
-    sizer->Add(m_text, wxSizerFlags().Border(wxLEFT|wxBOTTOM|wxRIGHT, 10).Expand());
-    sizer->Add(m_check, wxSizerFlags().Border(wxLEFT, 10));
+    sizer->Add(st, wxSizerFlags().DoubleBorder(wxLEFT|wxBOTTOM|wxTOP));
+    sizer->Add(m_text, wxSizerFlags().DoubleBorder(wxLEFT|wxBOTTOM|wxRIGHT).Expand());
+    sizer->Add(m_check, wxSizerFlags().DoubleBorder(wxLEFT));
     panel->SetSizer(sizer);
 
     // restore the control's values from the config
