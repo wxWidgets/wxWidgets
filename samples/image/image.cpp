@@ -86,6 +86,7 @@ public:
     void OnThumbnail( wxCommandEvent &event );
     void OnFilters(wxCommandEvent& event);
     void OnUpdateNewFrameHiDPI(wxUpdateUIEvent&);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
 #ifdef wxHAVE_RAW_BITMAP
     void OnTestRawBitmap( wxCommandEvent &event );
@@ -1106,11 +1107,11 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_PASTE_IMAGE, MyFrame::OnPasteImage)
 #endif // wxUSE_CLIPBOARD
     EVT_UPDATE_UI(ID_NEW_HIDPI, MyFrame::OnUpdateNewFrameHiDPI)
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-    : wxFrame( nullptr, wxID_ANY, "wxImage sample",
-                wxPoint(20, 20), wxSize(950, 700) )
+    : wxFrame(nullptr, wxID_ANY, "wxImage sample")
 {
     SetIcon(wxICON(sample));
 
@@ -1161,11 +1162,13 @@ MyFrame::MyFrame()
     SetStatusWidths( 2, widths );
 #endif // wxUSE_STATUSBAR
 
-    m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(10,10) );
-
-    // 500 width * 2750 height
-    m_canvas->SetScrollbars( 10, 10, 50, 275 );
+    m_canvas = new MyCanvas(this);
+    wxSize cz = m_canvas->GetDrawingSize();
+    m_canvas->SetScrollbars(10, 10, cz.GetWidth() / 10, cz.GetHeight() / 10);
     m_canvas->SetCursor(wxImage("cursor.png"));
+
+    // slightly wider than the canvas
+    SetSize(wxSize(cz.GetWidth() + FromDIP(50), FromDIP(700)));
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
@@ -1317,6 +1320,14 @@ void MyFrame::OnUpdateNewFrameHiDPI(wxUpdateUIEvent& event)
     event.Enable(GetContentScaleFactor() > 1);
 }
 
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    event.Skip();
+
+    wxSize cz = m_canvas->GetDrawingSize();
+    m_canvas->SetScrollbars(10, 10, cz.GetWidth() / 10, cz.GetHeight() / 10);
+}
+
 void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
 {
     wxImage image;
@@ -1449,7 +1460,7 @@ void MyFrame::OnTestGraphics(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     wxBitmapDataObject *dobjBmp = new wxBitmapDataObject;
-    dobjBmp->SetBitmap(m_canvas->my_horse_png);
+    dobjBmp->SetBitmap(m_canvas->GetPngBitmap());
 
     wxTheClipboard->Open();
 
