@@ -275,6 +275,7 @@ All (GUI):
 - Fix multiple bugs in wxStaticText::Wrap() (#23339).
 - Recognize "current" and "pressed" in wxBitmapButton XRC handler (#25114).
 - Fix wrong row parameter in wxEVT_GRID_ROW_MOVE events (Tony Kennedy).
+- Add subitem support to wxGenericListCtrl::HitTest() (Lauri Nurmi, #25153).
 - Fix WX_GL_COMPAT_PROFILE spelling (#24964).
 
 wxGTK:
