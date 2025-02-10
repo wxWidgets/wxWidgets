@@ -27,9 +27,11 @@
 #include "wx/brush.h"
 #include "wx/bmpbndl.h"
 
+#include <vector>
 
 class wxAuiNotebookPage;
 class wxAuiNotebookPageArray;
+class wxAuiTabContainerButton;
 class wxWindow;
 class wxDC;
 class wxReadOnlyDC;
@@ -73,6 +75,18 @@ public:
                          wxWindow* wnd,
                          const wxRect& rect) = 0;
 
+    // This function is not pure virtual for compatibility: if the derived
+    // class implements DrawTab(), then its default implementation is
+    // sufficient as long as pinned tabs are not used, but it must be
+    // overridden if the program does use them and it should be overridden
+    // instead of DrawTab() in the new code.
+    virtual int DrawPageTab(
+                         wxDC& dc,
+                         wxWindow* wnd,
+                         wxAuiNotebookPage& page,
+                         const wxRect& rect);
+
+    // Override DrawPageTab() in the new code rather than this one.
     virtual void DrawTab(wxDC& dc,
                          wxWindow* wnd,
                          const wxAuiNotebookPage& pane,
@@ -80,7 +94,7 @@ public:
                          int closeButtonState,
                          wxRect* outTabRect,
                          wxRect* outButtonRect,
-                         int* xExtent) = 0;
+                         int* xExtent);
 
     virtual void DrawButton(
                          wxDC& dc,
@@ -91,6 +105,18 @@ public:
                          int orientation,
                          wxRect* outRect) = 0;
 
+    // This function relationship with GetTabSize() is similar as for DrawTab()
+    // and DrawPageTab(): this one should be overridden when pinned tabs are
+    // used, but doesn't have to be if they are not and GetTabSize() itself is
+    // overridden for compatibility with the existing code.
+    //
+    // It also allows to omit "xExtent" parameter if it is not needed.
+    virtual wxSize GetPageTabSize(
+                         wxReadOnlyDC& dc,
+                         wxWindow* wnd,
+                         const wxAuiNotebookPage& page,
+                         int* xExtent = nullptr);
+
     virtual wxSize GetTabSize(
                          wxReadOnlyDC& dc,
                          wxWindow* wnd,
@@ -98,7 +124,7 @@ public:
                          const wxBitmapBundle& bitmap,
                          bool active,
                          int closeButtonState,
-                         int* xExtent) = 0;
+                         int* xExtent);
 
     // This function is not pure virtual because it is only for multi-line
     // tabs, but it must be implemented if wxAUI_NB_MULTILINE is used.
@@ -172,14 +198,11 @@ public:
                  wxWindow* wnd,
                  const wxRect& rect) override;
 
-    void DrawTab(wxDC& dc,
+    int DrawPageTab(
+                 wxDC& dc,
                  wxWindow* wnd,
-                 const wxAuiNotebookPage& pane,
-                 const wxRect& inRect,
-                 int closeButtonState,
-                 wxRect* outTabRect,
-                 wxRect* outButtonRect,
-                 int* xExtent) override;
+                 wxAuiNotebookPage& page,
+                 const wxRect& rect) override;
 
     void DrawButton(
                  wxDC& dc,
@@ -198,14 +221,11 @@ public:
     int GetAdditionalBorderSpace(
                  wxWindow* wnd) override;
 
-    wxSize GetTabSize(
+    wxSize GetPageTabSize(
                  wxReadOnlyDC& dc,
                  wxWindow* wnd,
-                 const wxString& caption,
-                 const wxBitmapBundle& bitmap,
-                 bool active,
-                 int closeButtonState,
-                 int* xExtent) override;
+                 const wxAuiNotebookPage& page,
+                 int* xExtent = nullptr) override;
 
     int GetButtonRect(
                  wxReadOnlyDC& dc,
@@ -246,6 +266,10 @@ protected:
     wxBitmapBundle m_disabledRightBmp;
     wxBitmapBundle m_activeWindowListBmp;
     wxBitmapBundle m_disabledWindowListBmp;
+    wxBitmapBundle m_activePinBmp;
+    wxBitmapBundle m_disabledPinBmp;
+    wxBitmapBundle m_activeUnpinBmp;
+    wxBitmapBundle m_disabledUnpinBmp;
 
     int m_fixedTabWidth;
     unsigned int m_flags;
@@ -260,6 +284,11 @@ private:
                  int orientation,
                  wxRect* outRect,
                  wxBitmap* outBitmap = nullptr);
+
+    // Return pointer to our bitmap bundle corresponding to the button ID and
+    // state or null if we don't support this button (and also if it is hidden).
+    const wxBitmapBundle*
+    GetButtonBitmapBundle(const wxAuiTabContainerButton& button) const;
 };
 
 

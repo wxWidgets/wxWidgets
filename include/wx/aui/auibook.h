@@ -51,6 +51,7 @@ enum wxAuiNotebookOption
     wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 12,
     wxAUI_NB_MIDDLE_CLICK_CLOSE  = 1 << 13,
     wxAUI_NB_MULTILINE           = 1 << 14,
+    wxAUI_NB_TAB_PIN             = 1 << 15,
 
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
@@ -136,6 +137,10 @@ public:
     // These fields are internal, don't use them.
     bool hover = false;   // true if mouse hovering over tab
     bool rowEnd = false;  // true if the tab is the last in the row
+
+    // This vector contains per-page buttons, i.e. "close" and, optionally,
+    // "pin" buttons. It can be empty if none are used.
+    std::vector<wxAuiTabContainerButton> buttons;
 };
 
 
@@ -308,18 +313,9 @@ protected:
     // buttons, close button if it's not per-tab, window list button etc.
     std::vector<wxAuiTabContainerButton> m_buttons;
 
-    wxAuiTabContainerButtonArray m_tabCloseButtons;
     wxRect m_rect;
     size_t m_tabOffset;
     unsigned int m_flags;
-
-    // Return wxAUI_BUTTON_STATE_{NORMAL,HIDDEN} corresponding to the current
-    // flags and the kind and state of the page.
-    wxAuiPaneButtonState GetCloseButtonState(const wxAuiNotebookPage& page) const;
-
-    // Return wxAUI_BUTTON_STATE_{NORMAL,HIDDEN} corresponding to the current
-    // flags and the given active state.
-    wxAuiPaneButtonState GetCloseButtonState(bool isPageActive) const;
 
 private:
     // Return the width that can be used for the tabs, i.e. without the space
@@ -330,6 +326,14 @@ private:
     // on the left and right side.
     void RenderButtons(wxDC& dc, wxWindow* wnd,
                        int& left_buttons_width, int& right_buttons_width);
+
+    // Update the state of the close button for the given page depending on its
+    // state and flags.
+    //
+    // If forceActive is true, the page is always considered as active, see the
+    // comment in LayoutMultiLineTabs() for the reason why this is needed.
+    void UpdateCloseButtonState(wxAuiNotebookPage& page,
+                                bool forceActive = false);
 
     int m_tabRowHeight;
 };

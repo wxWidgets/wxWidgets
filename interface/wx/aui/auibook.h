@@ -25,6 +25,17 @@ enum wxAuiNotebookOption
     /// @since 3.3.0
     wxAUI_NB_MULTILINE           = 1 << 14,
 
+    /**
+        Allow the user to pin tabs and to use wxAuiNotebook::SetPageKind() to
+        do it programmatically.
+
+        This style is not included in the default notebook style and has to be
+        explicitly specified when creating the control.
+
+        @since 3.3.0
+     */
+    wxAUI_NB_TAB_PIN             = 1 << 15
+
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
                              wxAUI_NB_TAB_MOVE |
@@ -176,6 +187,12 @@ struct wxAuiNotebookPosition
            area, multiple rows of tabs are used instead of adding a button
            allowing to scroll them. This style is only available in wxWidgets
            3.3.0 or later.
+    @style{wxAUI_NB_TAB_PIN}
+           If this style is specified, tabs show a "pin" icon allowing to
+           change their kind to wxAuiTabKind::Pinned and back to normal. This
+           style is not included in the default notebook style and has to be
+           explicitly specified for pinned tabs to be supported. It is
+           available in wxWidgets 3.3.0 or later.
     @endStyleTable
 
     @beginEventEmissionTable{wxAuiNotebookEvent}
@@ -574,9 +591,12 @@ public:
     /**
         Set the tab kind.
 
-        Can be used to pin or lock a tab. Note that pinned tabs can be unpinned
-        by the user, but locked tabs can only be unlocked programmatically by
-        calling this function.
+        Can be used to pin or lock a tab. Pinning, i.e. passing @a kind of
+        wxAuiTabKind::Pinned, requires the control to have ::wxAUI_NB_TAB_PIN
+        style, which also allows the user to unpin the tab later.
+
+        Locking doesn't require any special styles because locked tabs can only
+        be unlocked programmatically by calling this function.
 
         @param pageIdx
             The index of the page to change.
@@ -585,7 +605,9 @@ public:
         @return
             @true if the kind was changed, @false if it didn't change, either
             because the page already was of the specified @a kind or because
-            the page index is invalid.
+            the preconditions were not satisfied, e.g. the page index was
+            invalid or pinning was requested for a control without
+            ::wxAUI_NB_TAB_PIN style.
 
         @since 3.3.0
      */
@@ -775,8 +797,20 @@ public:
     /// Bitmap shown in the tab if valid.
     wxBitmapBundle bitmap;
 
+    /// The bounding rectangle of this page tab.
+    wxRect rect;
+
     /// True if the page is the currently selected page.
     bool active = false;
+
+    /**
+        Vector with per-page buttons.
+
+        This vector may be empty.
+
+        @since 3.3.0
+     */
+    std::vector<wxAuiTabContainerButton> buttons;
 
     // The rest of the fields are used internally by wxAUI and are
     // intentionally not documented here.
@@ -805,10 +839,23 @@ class wxAuiNotebookPageArray : public std::vector<wxAuiNotebookPage>
 class wxAuiTabContainerButton
 {
 public:
-    /// button's id
+    /**
+        The id of the button.
+
+        E.g. ::wxAUI_BUTTON_CLOSE.
+     */
     int id;
-    /// current state (normal, hover, pressed, etc.)
+
+    /**
+        State of the button.
+
+        This is a combination of values from ::wxAuiPaneButtonState enum.
+
+        The effect of specifying ::wxAUI_BUTTON_STATE_HIDDEN here is the same
+        as not including information about this button at all.
+     */
     int curState;
+
     /// buttons location (wxLEFT, wxRIGHT, or wxCENTER)
     int location;
     /// button's hover bitmap
@@ -988,10 +1035,46 @@ public:
 
     /**
         Draws a tab.
+
+        This function used to be pure virtual and so had to be overridden in
+        the derived classes in the previous versions of wxWidgets, however
+        since version 3.3.0 it doesn't have to be overridden if
+        DrawPageTab() is overridden and, moreover, it is recommended to
+        override DrawPageTab() instead of this function in the new code.
     */
     virtual void DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& page,
                          const wxRect& rect, int close_button_state,
-                         wxRect* out_tab_rect, wxRect* out_button_rect, int* x_extent) = 0;
+                         wxRect* out_tab_rect, wxRect* out_button_rect, int* x_extent);
+
+    /**
+        Draws a tab for the specified notebook page.
+
+        This function must be overridden if DrawTab() is not overridden and,
+        also, if pinned tabs are used, as they are not supported by DrawTab().
+
+        The @a pane contains the information about the page to draw, in
+        particular its wxAuiNotebookPage::buttons specifies the buttons to
+        draw if it is not empty and receives the rectangles where they were
+        drawn on output in the wxAuiTabContainerButton::rect fields.
+
+        Note that if a button state is ::wxAUI_BUTTON_STATE_HIDDEN, the effect
+        is the same as not including this button at all, i.e. it is not drawn
+        and the output field is not modified in this case.
+
+        The wxAuiNotebookPage::rect field is also updated by this function to
+        contain the bounding rectangle of the tab.
+
+        @return
+            The total horizontal span of the tab, which may be greater than the
+            page bounding rectangle.
+
+        @since 3.3.0
+     */
+    virtual int DrawPageTab(
+                         wxDC& dc,
+                         wxWindow* wnd,
+                         wxAuiNotebookPage& page,
+                         const wxRect& rect);
 
     /**
         Returns the tab control size.
@@ -1030,10 +1113,30 @@ public:
 
     /**
         Returns the tab size for the given caption, bitmap and state.
+
+        This function used to be pure virtual and so had to be overridden in
+        the derived classes in the previous versions of wxWidgets, however
+        since version 3.3.0 it doesn't have to be overridden if
+        GetPageTabSize() is overridden and it is recommended to override
+        GetPageTabSize() instead of this function in the new code.
     */
     virtual wxSize GetTabSize(wxReadOnlyDC& dc, wxWindow* wnd, const wxString& caption,
                               const wxBitmapBundle& bitmap, bool active,
-                              int close_button_state, int* x_extent) = 0;
+                              int close_button_state, int* x_extent);
+
+    /**
+        Returns the size of the tab for the specified notebook page.
+
+        This function must be overridden if GetTabSize() is not overridden and,
+        also, if pinned tabs are used, as they are not supported by GetTabSize().
+
+        @since 3.3.0
+     */
+    virtual wxSize GetPageTabSize(
+                 wxReadOnlyDC& dc,
+                 wxWindow* wnd,
+                 const wxAuiNotebookPage& page,
+                 int* xExtent = nullptr);
 
     /**
         Returns the rectangle for the given button.

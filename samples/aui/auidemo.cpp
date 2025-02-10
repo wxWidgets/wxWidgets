@@ -107,6 +107,7 @@ class MyFrame : public wxFrame
         ID_NotebookWindowList,
         ID_NotebookScrollButtons,
         ID_NotebookTabFixedWidth,
+        ID_NotebookTabPin,
         ID_NotebookMultiLine,
         ID_NotebookNextTab,
         ID_NotebookPrevTab,
@@ -642,6 +643,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_LiveUpdate, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NotebookTabFixedWidth, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookTabPin, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookMultiLine, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookNoCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButton, MyFrame::OnNotebookFlag)
@@ -680,6 +682,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_UPDATE_UI(ID_NotebookTabFixedWidth, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookTabPin, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookMultiLine, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookNoCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButton, MyFrame::OnUpdateUI)
@@ -800,6 +803,7 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
+    notebook_menu->AppendCheckItem(ID_NotebookTabPin, _("Allow to &Pin Tabs"));
     notebook_menu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
     notebook_menu->AppendSeparator();
     notebook_menu->Append(ID_NotebookNextTab, _("Switch to next tab\tCtrl-F6"));
@@ -1292,6 +1296,10 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     {
         m_notebook_style ^= wxAUI_NB_TAB_FIXED_WIDTH;
     }
+    else if (id == ID_NotebookTabPin)
+    {
+        m_notebook_style ^= wxAUI_NB_TAB_PIN;
+    }
     else if (id == ID_NotebookMultiLine)
     {
         m_notebook_style ^= wxAUI_NB_MULTILINE;
@@ -1421,6 +1429,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_NotebookTabFixedWidth:
             event.Check((m_notebook_style & wxAUI_NB_TAB_FIXED_WIDTH) != 0);
+            break;
+        case ID_NotebookTabPin:
+            event.Check((m_notebook_style & wxAUI_NB_TAB_PIN) != 0);
             break;
         case ID_NotebookMultiLine:
             event.Check((m_notebook_style & wxAUI_NB_MULTILINE) != 0);
@@ -2177,8 +2188,25 @@ void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
         int pos = 0;
         for ( auto idx : book->GetPagesInDisplayOrder(tabCtrl) )
         {
-            pages += wxString::Format("%s %d. %s\n",
+            wxString kind;
+            switch ( book->GetPageKind(idx) )
+            {
+                case wxAuiTabKind::Normal:
+                    kind = "   "; // Don't show anything for normal tabs.
+                    break;
+
+                case wxAuiTabKind::Pinned:
+                    kind = wxString::FromUTF8("\xf0\x9f\x93\x8c"); // U+1F4CC
+                    break;
+
+                case wxAuiTabKind::Locked:
+                    kind = wxString::FromUTF8("\xf0\x9f\x94\x92"); // U+1F512
+                    break;
+            }
+
+            pages += wxString::Format("%s%s%d. %s\n",
                                       idx == sel ? "*" : "  ",
+                                      kind,
                                       pos++,
                                       book->GetPageText(idx));
         }
