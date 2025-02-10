@@ -11,12 +11,15 @@
 
 #include "wx/gtk/filectrl.h"    // for wxGtkFileChooser
 
+typedef struct _GtkFileChooser GtkFileChooser;
+
 //-------------------------------------------------------------------------
 // wxFileDialog
 //-------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxFileDialog: public wxFileDialogBase
 {
+    typedef wxFileDialogBase BaseType;
 public:
     wxFileDialog() = default;
 
@@ -76,6 +79,8 @@ private:
     virtual void AddChildGTK(wxWindowGTK* child) override;
 
     wxGtkFileChooser    m_fc;
+    wxGtkFileChooser* m_fcNative = nullptr;
+    GtkFileChooser* m_fileChooserNative = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
     wxDECLARE_EVENT_TABLE();
