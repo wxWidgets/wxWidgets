@@ -1,0 +1,1 @@
+wxGTK: Use native file dialogs if possible (#24486, #25104).
