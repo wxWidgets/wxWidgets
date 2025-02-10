@@ -443,18 +443,6 @@ int wxFileDialog::ShowModal()
     return wxDialog::ShowModal();
 }
 
-bool wxFileDialog::Show(bool show)
-{
-    if (show && m_fileChooserNative)
-    {
-        delete m_fcNative;
-        m_fcNative = nullptr;
-        g_object_unref(m_fileChooserNative);
-        m_fileChooserNative = nullptr;
-    }
-    return BaseType::Show(show);
-}
-
 void wxFileDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                              int WXUNUSED(width), int WXUNUSED(height),
                              int WXUNUSED(sizeFlags))

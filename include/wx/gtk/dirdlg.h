@@ -38,7 +38,6 @@ public:
     ~wxDirDialog();
 
     virtual int ShowModal() override;
-    virtual bool Show(bool show = true) override;
     void SetPath(const wxString& path) override;
 
     // Implementation only.
@@ -56,7 +55,7 @@ protected:
 
 private:
     void GTKAccept();
-    GtkFileChooser* m_fileChooserNative = nullptr;
+    GtkFileChooser* m_fileChooser = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };
