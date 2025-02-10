@@ -75,7 +75,7 @@ public:
     void OnRightClick(wxMouseEvent& event);
 
 private:
-    void ShowContextMenu(const wxPoint& pos, long item);
+    void ShowContextMenu(const wxPoint& pos, long item, long sub);
     void SetColumnImage(int col, int image);
 
     void LogEvent(const wxListEvent& event, const wxString& eventName);
