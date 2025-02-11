@@ -15,6 +15,9 @@
 // there is no separate setting for wxMemoryText, it's smallish anyhow
 #if wxUSE_TEXTBUFFER
 
+#include "wx/strconv.h"
+#include "wx/textbuf.h"
+
 // ----------------------------------------------------------------------------
 // wxMemoryText
 // ----------------------------------------------------------------------------
