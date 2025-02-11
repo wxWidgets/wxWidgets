@@ -428,7 +428,7 @@ class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 {
     virtual void HandleString(CharType WXUNUSED(conv),
                               SizeModifier WXUNUSED(size),
-                              CharType& outConv, SizeModifier& outSize)
+                              CharType& outConv, SizeModifier& outSize) override
     {
         outConv = 's';
         outSize = Size_Default;
@@ -436,7 +436,7 @@ class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 
     virtual void HandleChar(CharType WXUNUSED(conv),
                             SizeModifier WXUNUSED(size),
-                            CharType& outConv, SizeModifier& outSize)
+                            CharType& outConv, SizeModifier& outSize) override
     {
         outConv = 'c';
         outSize = Size_Default;
