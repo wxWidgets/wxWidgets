@@ -23,15 +23,15 @@
 #ifndef _WX_RENDERER_H_
 #define _WX_RENDERER_H_
 
-class WXDLLIMPEXP_FWD_CORE wxDC;
-class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
-class WXDLLIMPEXP_FWD_CORE wxWindow;
-
 #include "wx/gdicmn.h" // for wxPoint, wxSize
 #include "wx/colour.h"
 #include "wx/font.h"
 #include "wx/bitmap.h"
 #include "wx/string.h"
+
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // some platforms have their own renderers, others use the generic one
 #if defined(__WXMSW__) || ( defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON ) || \
