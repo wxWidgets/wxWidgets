@@ -11,6 +11,9 @@
 #define _WX_AUI_SERIALIZER_H_
 
 #include <utility>
+#include <vector>
+
+#include "wx/aui/framemanager.h" // Just for wxAUI_DOCK_LEFT
 
 // ----------------------------------------------------------------------------
 // Classes used to save/load wxAuiManager layout.
