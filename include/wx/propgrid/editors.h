@@ -16,6 +16,8 @@
 
 #include "wx/window.h"
 
+#include "wx/propgrid/propgriddefs.h"
+
 #include <vector>
 
 class WXDLLIMPEXP_FWD_CORE wxBitmapBundle;
