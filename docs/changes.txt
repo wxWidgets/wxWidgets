@@ -274,6 +274,7 @@ All (GUI):
 - Improve wxInfoBar appearance (#24838, #24902, #25048).
 - Fix multiple bugs in wxStaticText::Wrap() (#23339).
 - Recognize "current" and "pressed" in wxBitmapButton XRC handler (#25114).
+- Fix wrong row parameter in wxEVT_GRID_ROW_MOVE events (Tony Kennedy).
 - Fix WX_GL_COMPAT_PROFILE spelling (#24964).
 
 wxGTK:
