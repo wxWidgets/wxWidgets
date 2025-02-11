@@ -11,6 +11,8 @@
 #ifndef _WX_AUITABMDI_H_
 #define _WX_AUITABMDI_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_AUI && wxUSE_MDI
 
 // ----------------------------------------------------------------------------
