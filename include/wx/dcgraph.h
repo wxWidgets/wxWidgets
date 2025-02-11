@@ -10,6 +10,8 @@
 #ifndef _WX_GRAPHICS_DC_H_
 #define _WX_GRAPHICS_DC_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/dc.h"

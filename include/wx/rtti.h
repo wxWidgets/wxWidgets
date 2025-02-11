@@ -12,6 +12,8 @@
 #ifndef _WX_RTTIH__
 #define _WX_RTTIH__
 
+#include "wx/defs.h"
+
 #if !wxUSE_EXTENDED_RTTI     // XTI system is meant to replace these macros
 
 // ----------------------------------------------------------------------------

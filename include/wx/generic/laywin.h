@@ -13,6 +13,8 @@
 #ifndef _WX_LAYWIN_H_G_
 #define _WX_LAYWIN_H_G_
 
+#include "wx/defs.h"
+
 #if wxUSE_SASH
     #include "wx/sashwin.h"
 #endif // wxUSE_SASH

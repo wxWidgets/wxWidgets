@@ -11,6 +11,8 @@
 #ifndef _WX_SNGLINST_H_
 #define _WX_SNGLINST_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_SNGLINST_CHECKER
 
 #include "wx/app.h"

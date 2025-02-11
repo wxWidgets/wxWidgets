@@ -14,6 +14,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/defs.h"
+
 #if wxUSE_FONTMAP
 
 #include "wx/fontenc.h"         // for wxFontEncoding

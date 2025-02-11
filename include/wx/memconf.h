@@ -20,6 +20,8 @@
 #ifndef _WX_MEMCONF_H_
 #define _WX_MEMCONF_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_CONFIG
 
 #include "wx/fileconf.h"   // the base class

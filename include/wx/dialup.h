@@ -10,6 +10,8 @@
 #ifndef _WX_DIALUP_H
 #define _WX_DIALUP_H
 
+#include "wx/defs.h"
+
 #if wxUSE_DIALUP_MANAGER
 
 #include "wx/event.h"

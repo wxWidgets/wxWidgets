@@ -10,6 +10,7 @@
 #ifndef _WX_FILEDLGCUSTOMIZE_H_
 #define _WX_FILEDLGCUSTOMIZE_H_
 
+#include "wx/event.h"
 #include "wx/vector.h"
 
 class wxFileDialogCustomControlImpl;

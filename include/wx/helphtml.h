@@ -10,6 +10,8 @@
 #ifndef __WX_HELPHTML_H_
 #define __WX_HELPHTML_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_WXHTML_HELP
 #include "wx/html/helpctrl.h"
 #endif
