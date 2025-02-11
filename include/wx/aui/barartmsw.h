@@ -12,6 +12,8 @@
 
 #include "wx/aui/auibar.h"
 
+#if wxUSE_AUI
+
 class WXDLLIMPEXP_AUI wxAuiMSWToolBarArt : public wxAuiGenericToolBarArt
 {
 public:
@@ -84,5 +86,7 @@ private:
     bool m_themed;
     wxSize m_buttonSize;
 };
+
+#endif // wxUSE_AUI
 
 #endif // _WX_AUI_BARART_MSW_H_

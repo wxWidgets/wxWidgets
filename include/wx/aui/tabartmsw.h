@@ -12,6 +12,8 @@
 
 #include "wx/aui/tabart.h"
 
+#if wxUSE_AUI
+
 class WXDLLIMPEXP_AUI wxAuiMSWTabArt : public wxAuiGenericTabArt
 {
 
@@ -88,5 +90,7 @@ private:
 
     bool IsThemed() const;
 };
+
+#endif // wxUSE_AUI
 
 #endif // _WX_AUI_TABARTMSW_H_
