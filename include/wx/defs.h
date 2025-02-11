@@ -1010,27 +1010,6 @@ typedef double wxDouble;
  */
 #define wxNullPtr nullptr
 
-
-/* Define wxChar16 and wxChar32                                              */
-
-#ifdef __cplusplus
-
-#if SIZEOF_WCHAR_T == 2
-    #define wxWCHAR_T_IS_WXCHAR16
-    typedef wchar_t wxChar16;
-#else
-    typedef char16_t wxChar16;
-#endif
-
-#if SIZEOF_WCHAR_T == 4
-    #define wxWCHAR_T_IS_WXCHAR32
-    typedef wchar_t wxChar32;
-#else
-    typedef char32_t wxChar32;
-#endif
-
-#endif /* __cplusplus */
-
 /*
     Helper macro expanding into the given "m" macro invoked with each of the
     integer types as parameter (notice that this does not include char/unsigned
