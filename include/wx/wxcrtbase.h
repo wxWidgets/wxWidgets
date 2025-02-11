@@ -19,6 +19,7 @@
    ------------------------------------------------------------------------- */
 
 #include "wx/chartype.h"
+#include "wx/dlimpexp.h"
 
 /*
     Standard headers we need here.
