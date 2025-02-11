@@ -1317,6 +1317,17 @@ failtest_allheaders:
 
 .PHONY: failtest failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
 
+allheaders_selfcontained:
+	@if [ -z "$$check_headers" ]; then \
+	    check_headers=`sed -ne '/BEGIN STANDALONE CHECK/,/END STANDALONE CHECK/s/#include <\(.\+\)>$$/\1/p' $(top_srcdir)/tests/allheaders.h`; \
+	fi; \
+	for h in $$check_headers; do \
+	    if ! $(CXX) -fsyntax-only -Wall -Werror -x c++ $(TEST_ALLHEADERS_CXXFLAGS) $(top_srcdir)/include/$$h; then \
+		echo "*** Checking $$h failed.">&2; \
+		exit 1; \
+	    fi; \
+	done
+
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 

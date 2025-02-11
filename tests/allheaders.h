@@ -5,8 +5,11 @@
     Excluded headers:
 
     #include <wx/aui/aui.h>
+    #include <wx/build.h>
     #include <wx/catch_cppunit.h>
+    #include <wx/chkconf.h>
     #include <wx/dvrenderers.h>
+    #include <wx/features.h>
     #include <wx/fmappriv.h>
     #include <wx/memory.h>
     #include <wx/setup_inc.h>
@@ -15,7 +18,10 @@
     #include <wx/vms_x_fix.h>
     #include <wx/webview_chromium_impl.h>
     #include <wx/xpmhand.h>
+    #include <wx/xti2.h>
 */
+
+// BEGIN STANDALONE CHECK
 
 #include <wx/beforestd.h>
 #include <wx/afterstd.h>
@@ -49,7 +55,6 @@
 #include <wx/bookctrl.h>
 #include <wx/brush.h>
 #include <wx/buffer.h>
-#include <wx/build.h>
 #include <wx/busyinfo.h>
 #include <wx/button.h>
 #include <wx/calctrl.h>
@@ -58,7 +63,6 @@
 #include <wx/checkbox.h>
 #include <wx/checkeddelete.h>
 #include <wx/checklst.h>
-#include <wx/chkconf.h>
 #include <wx/choicdlg.h>
 #include <wx/choicebk.h>
 #include <wx/choice.h>
@@ -136,7 +140,6 @@
 #include <wx/evtloopsrc.h>
 #include <wx/except.h>
 #include <wx/fdrepdlg.h>
-#include <wx/features.h>
 #include <wx/ffile.h>
 #include <wx/fileconf.h>
 #include <wx/filectrl.h>
@@ -415,7 +418,6 @@
 #include <wx/xlocale.h>
 #include <wx/xpmdecod.h>
 #include <wx/xrc/xmlres.h>
-#include <wx/xti2.h>
 #include <wx/xtictor.h>
 #include <wx/xti.h>
 #include <wx/xtihandler.h>
@@ -440,6 +442,8 @@
 #include <wx/propgrid/editors.h>
 #include <wx/propgrid/manager.h>
 #include <wx/propgrid/propgrid.h>
+
+// END STANDALONE CHECK
 
 #if defined(__WINDOWS__)
 #include <wx/dde.h>
