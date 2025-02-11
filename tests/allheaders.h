@@ -4,6 +4,7 @@
 
     Excluded headers:
 
+    #include <wx/aui/aui.h>
     #include <wx/catch_cppunit.h>
     #include <wx/dvrenderers.h>
     #include <wx/fmappriv.h>
@@ -424,6 +425,17 @@
 #include <wx/xtixml.h>
 #include <wx/zipstrm.h>
 #include <wx/zstream.h>
+#include <wx/aui/auibar.h>
+#include <wx/aui/auibook.h>
+#include <wx/aui/barartmsw.h>
+#include <wx/aui/dockart.h>
+#include <wx/aui/floatpane.h>
+#include <wx/aui/framemanager.h>
+#include <wx/aui/serializer.h>
+#include <wx/aui/tabart.h>
+#include <wx/aui/tabartgtk.h>
+#include <wx/aui/tabartmsw.h>
+#include <wx/aui/tabmdi.h>
 #include <wx/propgrid/advprops.h>
 #include <wx/propgrid/editors.h>
 #include <wx/propgrid/manager.h>
