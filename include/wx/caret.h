@@ -14,18 +14,12 @@
 
 #if wxUSE_CARET
 
-// ---------------------------------------------------------------------------
-// forward declarations
-// ---------------------------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_CORE wxWindow;
-class WXDLLIMPEXP_FWD_CORE wxWindowBase;
-
 // ----------------------------------------------------------------------------
 // headers we have to include
 // ----------------------------------------------------------------------------
 
 #include "wx/gdicmn.h"  // for wxPoint, wxSize
+#include "wx/window.h"
 
 // ----------------------------------------------------------------------------
 // A caret is a blinking cursor showing the position where the typed text will
@@ -94,7 +88,7 @@ public:
     wxSize GetSize() const { return wxSize(m_width, m_height); }
 
         // get the window we're associated with
-    wxWindow *GetWindow() const { return (wxWindow *)m_window; }
+    wxWindow *GetWindow() const { return static_cast<wxWindow *>(m_window); }
 
         // change the size of the caret
     void SetSize(int width, int height) {
