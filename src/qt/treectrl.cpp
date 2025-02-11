@@ -207,7 +207,7 @@ public:
                 this, SLOT(_q_selectionChanged(QItemSelection, QItemSelection)));
     }
 
-    virtual void paintEvent (QPaintEvent * event)
+    virtual void paintEvent(QPaintEvent* event) override
     {
         //QT generates warnings if we try to paint to a QTreeWidget
         //(perhaps because it's a compound widget) so we've disabled

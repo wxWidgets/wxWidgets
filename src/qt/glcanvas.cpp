@@ -378,11 +378,11 @@ private:
 
     bool IsValidMove(int dx, int dy);
 
-    virtual QGesture* create(QObject* pTarget);
+    virtual QGesture* create(QObject* pTarget) override;
 
-    virtual QGestureRecognizer::Result recognize(QGesture* pGesture, QObject *pWatched, QEvent *pEvent);
+    virtual QGestureRecognizer::Result recognize(QGesture* pGesture, QObject* pWatched, QEvent* pEvent) override;
 
-    void reset (QGesture *pGesture);
+    virtual void reset(QGesture* pGesture) override;
 
     QPointF m_startPoint;
     QPointF m_lastPoint;

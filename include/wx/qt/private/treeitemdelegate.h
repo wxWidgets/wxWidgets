@@ -68,7 +68,7 @@ public:
         QStyledItemDelegate::setModelData(editor, model, index);
     }
 
-    bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index)
+    virtual bool helpEvent(QHelpEvent* event, QAbstractItemView* view, const QStyleOptionViewItem& option, const QModelIndex& index) override
     {
         if ( event->type() == QEvent::ToolTip )
         {

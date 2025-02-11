@@ -128,7 +128,7 @@ public:
                            const wxRect& rect,
                            int value,
                            int max,
-                           int flags = 0);
+                           int flags = 0) override;
 
     virtual void DrawRadioBitmap(wxWindow* win,
                                 wxDC& dc,

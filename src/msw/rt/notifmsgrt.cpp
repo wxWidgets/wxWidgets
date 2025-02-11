@@ -60,13 +60,13 @@ public:
     }
 
     // DesktopToastActivatedEventHandler
-    IFACEMETHODIMP Invoke(IToastNotification *sender, IInspectable* args);
+    IFACEMETHODIMP Invoke(IToastNotification* sender, IInspectable* args) override;
 
     // DesktopToastDismissedEventHandler
-    IFACEMETHODIMP Invoke(IToastNotification *sender, IToastDismissedEventArgs *e);
+    IFACEMETHODIMP Invoke(IToastNotification* sender, IToastDismissedEventArgs* e) override;
 
     // DesktopToastFailedEventHandler
-    IFACEMETHODIMP Invoke(IToastNotification *sender, IToastFailedEventArgs *e);
+    IFACEMETHODIMP Invoke(IToastNotification* sender, IToastFailedEventArgs* e) override;
 
     // IUnknown
     STDMETHODIMP_(ULONG) AddRef() override
