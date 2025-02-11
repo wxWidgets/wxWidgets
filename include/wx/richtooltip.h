@@ -18,6 +18,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxBitmapBundle;
 class WXDLLIMPEXP_FWD_CORE wxFont;
+class WXDLLIMPEXP_FWD_CORE wxRect;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 class wxRichToolTipImpl;
