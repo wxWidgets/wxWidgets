@@ -26,8 +26,8 @@
 #include "wx/compositebookctrl.h"
 
 
-class wxAuiSerializer;
-class wxAuiDeserializer;
+class wxAuiBookSerializer;
+class wxAuiBookDeserializer;
 
 class wxAuiNotebook;
 class wxAuiTabFrame;
@@ -435,10 +435,10 @@ public:
     // Internal, don't use: use GetPagePosition() instead.
     bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const;
 
-    // Serialization support: this is only used by wxAuiManager, don't use
-    // directly.
-    void SaveLayout(const wxString& name, wxAuiSerializer& serializer) const;
-    void LoadLayout(const wxString& name, wxAuiDeserializer& deserializer);
+    // Serialization support: this is used by wxAuiManager but can also be
+    // called directly to save/load layout of just this notebook.
+    void SaveLayout(const wxString& name, wxAuiBookSerializer& serializer) const;
+    void LoadLayout(const wxString& name, wxAuiBookDeserializer& deserializer);
 
 protected:
     // Common part of all ctors.

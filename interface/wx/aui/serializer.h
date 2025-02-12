@@ -94,17 +94,82 @@ struct wxAuiPaneLayoutInfo : wxAuiDockLayoutInfo
 };
 
 /**
+    @class wxAuiBookSerializer
+
+    wxAuiBookSerializer is used for serializing wxAuiNotebook layout.
+
+    This includes the tab controls layout and the order of pages in them.
+
+    It can be used standalone with wxAuiNotebook::SaveLayout() or as base class
+    of wxAuiSerializer for saving and restoring the entire layout.
+
+    @library{wxaui}
+    @category{aui}
+
+    @since 3.3.0
+ */
+class wxAuiBookSerializer
+{
+public:
+    /// Trivial default ctor.
+    wxAuiBookSerializer() = default;
+
+    /// Trivial but virtual destructor.
+    virtual ~wxAuiBookSerializer() = default;
+
+    /**
+        Called before starting to save information about the tabs in the
+        notebook in the AUI pane with the given name.
+
+        This function needs to be overridden to keep record of the notebook for
+        which SaveNotebookTabControl() will be called next.
+
+        If this class is used as a base class of wxAuiSerializer, saving
+        notebook layout may be unnecessary, e.g. because the program doesn't
+        use wxAuiNotebook at all, and the implementation can be trivial and
+        just do nothing because it is not going to be called at all if there
+        are no notebooks in the full layout.
+
+        When using wxAuiNotebook::SaveLayout() directly, this function is
+        always called and is the first function of this class to be called.
+     */
+    virtual void BeforeSaveNotebook(const wxString& name) = 0;
+
+    /**
+        Called to save information about a single tab control in the given
+        notebook.
+
+        This function will be called for all tab controls in the notebook after
+        BeforeSaveNotebook().
+
+        As with that function, it has to be implemented, but can simply do
+        nothing if saving notebook layout is not necessary.
+     */
+    virtual void SaveNotebookTabControl(const wxAuiTabLayoutInfo& tab) = 0;
+
+    /**
+        Called after saving information about all the pages of the notebook in
+        the AUI pane with the given name.
+
+        Does nothing by default.
+     */
+    virtual void AfterSaveNotebook();
+
+};
+
+/**
     @class wxAuiSerializer
 
     wxAuiSerializer is used by wxAuiManager::SaveLayout() to store layout
     information.
 
     This is an abstract base class, you need to inherit from it and override its
-    pure virtual functions in your derived class.
+    pure virtual functions, including those inherited from its base
+    wxAuiBookSerializer class, in your derived class.
 
-    SavePane() and SaveDock() must be overridden and will be called by
-    wxAuiManager for each pane and dock present in the layout. The other
-    functions don't need to be overridden, but it is often convenient to
+    In particular, SavePane() must be overridden and will be called by
+    wxAuiManager for each pane and dock present in the layout. Most of the
+    other functions don't need to be overridden, but it is often convenient to
     perform some actions before or after starting to save the objects of the
     given type or at the beginning or end of the whole saving process, so this
     class provides hooks for doing it.
@@ -118,14 +183,11 @@ struct wxAuiPaneLayoutInfo : wxAuiDockLayoutInfo
 
     @since 3.3.0
  */
-class wxAuiSerializer
+class wxAuiSerializer : public wxAuiBookSerializer
 {
 public:
     /// Trivial default ctor.
     wxAuiSerializer() = default;
-
-    /// Trivial but virtual destructor.
-    virtual ~wxAuiSerializer() = default;
 
     /**
         Called before doing anything else.
@@ -169,47 +231,18 @@ public:
 
         Note that this function is called after AfterSavePanes() but may not be
         called at all if there are no panes containing wxAuiNotebook.
+
+        wxAuiBookSerializer member functions will be called after this function
+        if it is called at all.
      */
     virtual void BeforeSaveNotebooks();
-
-    /**
-        Called before starting to save information about the tabs in the
-        notebook in the AUI pane with the given name.
-
-        This function needs to be overridden to keep record of the notebook for
-        which SaveNotebookTabControl() will be called next. Of course, if
-        saving notebook layout is unnecessary, e.g. because the program doesn't
-        use wxAuiNotebook at all, the implementation can be trivial and just do
-        nothing.
-
-        This function is called one or more times after BeforeSaveNotebooks().
-     */
-    virtual void BeforeSaveNotebook(const wxString& name) = 0;
-
-    /**
-        Called to save information about a single tab control in the given
-        notebook.
-
-        This function will be called for all tab controls in the notebook after
-        BeforeSaveNotebook().
-
-        As with that function, it has to be implemented, but can simply do
-        nothing if saving notebook layout is not necessary.
-     */
-    virtual void SaveNotebookTabControl(const wxAuiTabLayoutInfo& tab) = 0;
-
-    /**
-        Called after saving information about all the pages of the notebook in
-        the AUI pane with the given name.
-
-        Does nothing by default.
-     */
-    virtual void AfterSaveNotebook();
 
     /**
         Called after the last call to SaveNotebook().
 
         Does nothing by default.
+
+        This function is called after all wxAuiBookSerializer member functions
      */
     virtual void AfterSaveNotebooks();
 
@@ -219,6 +252,44 @@ public:
         Does nothing by default.
      */
     virtual void AfterSave();
+};
+
+/**
+    wxAuiBookDeserializer is used for deserializing wxAuiNotebook layout.
+
+    Similarly to wxAuiBookSerializer, it can be used standalone with
+    wxAuiNotebook::LoadLayout() or as base class of wxAuiDeserializer.
+
+    @library{wxaui}
+    @category{aui}
+
+    @since 3.3.0
+ */
+class wxAuiBookDeserializer
+{
+public:
+    /// Trivial default ctor.
+    wxAuiBookDeserializer() = default;
+
+    /// Trivial but virtual destructor.
+    virtual ~wxAuiBookDeserializer() = default;
+
+    /**
+        Load information about the notebook tabs previously saved by
+        wxAuiBookSerializer::SaveNotebookTabControl().
+
+        When using this class as a base class of wxAuiDeserializer, this
+        function is called by wxAuiManager::LoadLayout() after loading the pane
+        with the name @a name if it is a wxAuiNotebook. Otherwise, i.e. when
+        using wxAuiNotebook::LoadLayout() directly, this function is called
+        with the same @a name as was passed to that function.
+
+        If restoring the notebook layout is not necessary, this function can
+        just return an empty vector which is interpreted as meaning that the
+        default notebook layout should be used.
+     */
+    virtual std::vector<wxAuiTabLayoutInfo>
+    LoadNotebookTabs(const wxString& name) = 0;
 };
 
 /**
@@ -276,19 +347,6 @@ public:
         allow creating it on the fly.
      */
     virtual std::vector<wxAuiPaneLayoutInfo> LoadPanes() = 0;
-
-    /**
-        Load information about the notebook tabs previously saved by
-        wxAuiSerializer::SaveNotebookTabControl().
-
-        The pane with the name @a name is guaranteed to exist in the layout and
-        have wxAuiNotebook as the associated window.
-
-        If restoring the notebook layout is not necessary, this function can
-        just return an empty vector.
-     */
-    virtual std::vector<wxAuiTabLayoutInfo>
-    LoadNotebookTabs(const wxString& name) = 0;
 
     /**
         Create the window to be managed by the given pane if necessary.
