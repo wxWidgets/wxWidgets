@@ -454,7 +454,7 @@
 
 
     <fragment format="autoconf">
-failtest: failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
+failtest: failtest_combobox failtest_evthandler failtest_msgid failtest_weakref failtest_allheaders
 
 failtest_combobox:
 	@$(RM) test_gui_comboboxtest.o
@@ -474,6 +474,13 @@ failtest_evthandler:
 	done; \
 	exit 0
 
+failtest_msgid:
+	@$(RM) test_intltest.o
+	if $(MAKE) CPPFLAGS=-DTEST_INVALID_MSGID test_intltest.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_INVALID_MSGID unexpectedly succeeded.">&amp;2; \
+	    exit 1; \
+	fi;
+
 failtest_weakref:
 	@$(RM) test_weakref.o
 	if $(MAKE) CPPFLAGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
@@ -490,7 +497,7 @@ failtest_allheaders:
 	fi; \
 	exit 0
 
-.PHONY: failtest failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
+.PHONY: failtest failtest_combobox failtest_evthandler failtest_msgid failtest_weakref failtest_allheaders
     </fragment>
 
     <!-- Test that each header can be included independently, i.e. is self-contained. -->
