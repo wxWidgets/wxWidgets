@@ -723,6 +723,17 @@ TEST_CASE("wxUILocale::FromTag", "[.]")
          "supported:\t" << (loc.IsSupported() ? "yes" : "no"));
 }
 
+#ifdef TEST_INVALID_MSGID
+
+// This is not a real test, its compilation should fail.
+TEST_CASE("wxTranslations/msgid", "[.]")
+{
+    wxString s = _(wxString::Format("Hello %s", "world"));
+    CHECK( s == "Hello world" );
+}
+
+#endif // TEST_INVALID_MSGID
+
 namespace
 {
 

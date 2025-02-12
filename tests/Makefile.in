@@ -1279,7 +1279,7 @@ test_allheaders_testableframe.o: $(srcdir)/testableframe.cpp $(TEST_ALLHEADERS_O
 	$(CXXC) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(srcdir)/testableframe.cpp
 
 
-failtest: failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
+failtest: failtest_combobox failtest_evthandler failtest_msgid failtest_weakref failtest_allheaders
 
 failtest_combobox:
 	@$(RM) test_gui_comboboxtest.o
@@ -1299,6 +1299,13 @@ failtest_evthandler:
 	done; \
 	exit 0
 
+failtest_msgid:
+	@$(RM) test_intltest.o
+	if $(MAKE) CPPFLAGS=-DTEST_INVALID_MSGID test_intltest.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_INVALID_MSGID unexpectedly succeeded.">&2; \
+	    exit 1; \
+	fi;
+
 failtest_weakref:
 	@$(RM) test_weakref.o
 	if $(MAKE) CPPFLAGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
@@ -1315,7 +1322,7 @@ failtest_allheaders:
 	fi; \
 	exit 0
 
-.PHONY: failtest failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
+.PHONY: failtest failtest_combobox failtest_evthandler failtest_msgid failtest_weakref failtest_allheaders
 
 allheaders_selfcontained:
 	@if [ -z "$$check_headers" ]; then \
