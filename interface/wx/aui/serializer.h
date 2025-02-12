@@ -14,6 +14,11 @@
     wxAuiTabLayoutInfo and contain information about the layout of a docked
     pane or tab layout.
 
+    Note that when saving the objects of this type, fields that have the value
+    of 0 can be omitted, as this is their default value in any case (except for
+    `dock_direction` which is never 0), to make the serialized representation
+    more compact.
+
     @since 3.3.0
 */
 struct wxAuiDockLayoutInfo

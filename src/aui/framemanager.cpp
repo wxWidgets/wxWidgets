@@ -1392,6 +1392,12 @@ wxAuiManager::CopyDockLayoutFrom(wxAuiDockLayoutInfo& dockInfo,
     dockInfo.dock_pos = paneInfo.dock_pos;
     dockInfo.dock_proportion = paneInfo.dock_proportion;
 
+    // Storing the default proportion is not really useful and it looks weird
+    // as it's an arbitrary huge number, so replace it with 0 in serialized
+    // representation, it will be mapped back to maxDockProportion after load.
+    if ( dockInfo.dock_proportion == maxDockProportion )
+        dockInfo.dock_proportion = 0;
+
     // The dock size is typically not set in the pane itself, but set in its
     // containing dock, so find it and copy it from there, as we do need to
     // save it when serializing.
