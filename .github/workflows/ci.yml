@@ -111,14 +111,14 @@ jobs:
             configure_flags: --enable-compat30 --disable-std_containers
             use_xvfb: true
             check_headers: true
-          - name: Ubuntu 22.04 wxGTK with ASAN
-            runner: ubuntu-22.04
+          - name: Ubuntu 24.04 wxGTK with ASAN
+            runner: ubuntu-24.04
             configure_flags: --disable-compat32 --disable-sys-libs
             skip_samples: true
             use_asan: true
             use_xvfb: true
-          - name: Ubuntu 22.04 wxGTK with UBSAN
-            runner: ubuntu-22.04
+          - name: Ubuntu 24.04 wxGTK with UBSAN
+            runner: ubuntu-24.04
             configure_flags: --with-cxx=20
             use_ubsan: true
             use_xvfb: true
