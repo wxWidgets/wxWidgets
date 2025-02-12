@@ -1,0 +1,1 @@
+wxGTK: Add wxTextCtrl::GTKSetPangoMarkup() (Blake-Madden, #24912)
