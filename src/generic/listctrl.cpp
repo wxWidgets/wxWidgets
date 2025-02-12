@@ -5482,9 +5482,26 @@ long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& pt,
 
 long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *col) const
 {
-    // TODO: sub item hit testing
     if ( col )
+    {
         *col = -1;
+        if ( InReportView() )
+        {
+            const wxPoint unscrolled = CalcUnscrolledPosition( point );
+
+            for ( int c = 0, wsum = 0, cols = GetColumnCount();
+                  c < cols;
+                  ++c )
+            {
+                wsum += GetColumnWidth(c);
+                if ( wsum > unscrolled.x )
+                {
+                    *col = c;
+                    break;
+                }
+            }
+        }
+    }
 
     return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
 }
