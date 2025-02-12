@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   check-unix:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Check Spelling
 
     steps:
@@ -31,7 +31,7 @@ jobs:
 
 
   check-whitespace:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Check Whitespace
 
     steps:
@@ -69,7 +69,7 @@ jobs:
 
 
   check-mixed-eol:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Check Mixed EOL
 
     steps:
@@ -85,7 +85,7 @@ jobs:
             ./misc/scripts/check_mixed_eol.sh
 
   check-cxx-style:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Check C++ Style
 
     steps:
@@ -103,7 +103,7 @@ jobs:
             fi
 
   check-allheaders:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Check All Headers In allheaders.h
 
     steps:
