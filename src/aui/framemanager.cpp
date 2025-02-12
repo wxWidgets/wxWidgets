@@ -77,6 +77,10 @@ namespace
 // Index of the outermost layer used for all toolbars.
 constexpr int auiToolBarLayer = 10;
 
+// Default proportion which is "infinitely" greater than anything else.
+constexpr int maxDockProportion = 100000;
+
+
 wxBitmap wxCreateVenetianBlindsBitmap(wxByte r, wxByte g, wxByte b, wxByte a)
 {
     const unsigned char c = wxSystemSettings::GetAppearance().IsDark() ? 220 : 5;
@@ -779,7 +783,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
 
     // set initial proportion (if not already set)
     if (pinfo.dock_proportion == 0)
-        pinfo.dock_proportion = 100000;
+        pinfo.dock_proportion = maxDockProportion;
 
     if (pinfo.HasGripper())
     {
