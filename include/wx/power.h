@@ -36,11 +36,11 @@ enum wxBatteryState
 // wxPowerEvent is generated when the system online status changes
 // ----------------------------------------------------------------------------
 
-// currently the power events are only available under Windows, to avoid
+// currently the power events are only available under some platforms, to avoid
 // compiling in the code for handling them which is never going to be invoked
 // under the other platforms, we define wxHAS_POWER_EVENTS symbol if this event
 // is available, it should be used to guard all code using wxPowerEvent
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) || defined(__WXGTK__)
 
 #define wxHAS_POWER_EVENTS
 
@@ -104,11 +104,18 @@ enum wxPowerResourceKind
     wxPOWER_RESOURCE_SYSTEM
 };
 
+enum wxPowerBlockKind
+{
+    wxPOWER_PREVENT,
+    wxPOWER_DELAY
+};
+
 class WXDLLIMPEXP_BASE wxPowerResource
 {
 public:
     static bool Acquire(wxPowerResourceKind kind,
-                        const wxString& reason = wxString());
+                        const wxString& reason = wxString(),
+                        wxPowerBlockKind blockKind = wxPOWER_PREVENT);
     static void Release(wxPowerResourceKind kind);
 };
 
@@ -116,9 +123,10 @@ class wxPowerResourceBlocker
 {
 public:
     explicit wxPowerResourceBlocker(wxPowerResourceKind kind,
-                                    const wxString& reason = wxString())
+                                    const wxString& reason = wxString(),
+                                    wxPowerBlockKind blockKind = wxPOWER_PREVENT)
         : m_kind(kind),
-          m_acquired(wxPowerResource::Acquire(kind, reason))
+          m_acquired(wxPowerResource::Acquire(kind, reason, blockKind))
     {
     }
 

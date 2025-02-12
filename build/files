@@ -1323,6 +1323,7 @@ GTK_LOWLEVEL_SRC =
     src/gtk/overlay.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
+    src/gtk/power.cpp
     src/gtk/private.cpp
     src/gtk/region.cpp
     src/gtk/renderer.cpp

@@ -68,8 +68,17 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
     return true;
 }
 
-bool wxPowerResource::Acquire(wxPowerResourceKind kind, const wxString& reason)
+bool
+wxPowerResource::Acquire(wxPowerResourceKind kind,
+                         const wxString& reason,
+                         wxPowerBlockKind blockKind)
 {
+    if ( blockKind == wxPOWER_DELAY )
+    {
+        // We don't support this mode under macOS because it's not needed there.
+        return true;
+    }
+
     wxAtomicInc(g_powerResourceSystemRefCount);
 
     bool success = UpdatePowerResourceUsage(kind, reason);
