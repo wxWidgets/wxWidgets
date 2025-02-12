@@ -127,7 +127,10 @@ get stock bitmaps for use in your application.
 
 @section page_samples_aui Advanced User Interface Sample
 
-@sampleabout{@ref overview_aui "AUI classes"}
+This sample shows how to use wxAuiManager and other
+@ref overview_aui "AUI classes", such as wxAuiToolBar and wxAuiNotebook. It
+allows to change wxAuiNotebook styles and save and reload the layout of either
+the entire wxAuiManager or just the notebook part.
 
 @sampledir{aui}
 

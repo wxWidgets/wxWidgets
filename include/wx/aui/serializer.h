@@ -67,22 +67,49 @@ struct wxAuiPaneLayoutInfo : wxAuiDockLayoutInfo
     bool is_maximized   = false;
 };
 
+// wxAuiBookSerializer is used for serializing wxAuiNotebook layout.
+//
+// This includes the tab controls layout and the order of pages in them.
+//
+// It can be used standalone with wxAuiNotebook::SaveLayout() or as base class
+// of wxAuiSerializer for saving and restoring the entire layout.
+class wxAuiBookSerializer
+{
+public:
+    // Trivial default ctor.
+    wxAuiBookSerializer() = default;
+
+    // Trivial but virtual dtor for a base class.
+    virtual ~wxAuiBookSerializer() = default;
+
+
+    // Called before starting to save information about the tabs in the
+    // notebook in the AUI pane with the given name.
+    virtual void BeforeSaveNotebook(const wxString& name) = 0;
+
+    // Called to save information about a single tab control in the given
+    // notebook.
+    virtual void SaveNotebookTabControl(const wxAuiTabLayoutInfo& tab) = 0;
+
+    // Called after saving information about all the pages of the notebook in
+    // the AUI pane with the given name, does nothing by default.
+    virtual void AfterSaveNotebook() { }
+};
+
 // wxAuiSerializer is used with wxAuiManager::SaveLayout().
 //
 // This is an abstract base class, you need to inherit from it and override its
-// pure virtual functions in your derived class.
+// pure virtual functions, including those inherited from wxAuiBookSerializer,
+// in your derived class.
 //
 // If any of the functions of the derived class throw an exception, it is
 // propagated out of wxAuiManager::SaveLayout() and it's callers responsibility
 // to handle it.
-class wxAuiSerializer
+class wxAuiSerializer : public wxAuiBookSerializer
 {
 public:
     // Trivial default ctor.
     wxAuiSerializer() = default;
-
-    // Trivial but virtual dtor for a base class.
-    virtual ~wxAuiSerializer() = default;
 
 
     // Called before doing anything else, does nothing by default.
@@ -102,23 +129,30 @@ public:
     // nothing by default.
     virtual void BeforeSaveNotebooks() { }
 
-    // Called before starting to save information about the tabs in the
-    // notebook in the AUI pane with the given name.
-    virtual void BeforeSaveNotebook(const wxString& name) = 0;
-
-    // Called to save information about a single tab control in the given
-    // notebook.
-    virtual void SaveNotebookTabControl(const wxAuiTabLayoutInfo& tab) = 0;
-
-    // Called after saving information about all the pages of the notebook in
-    // the AUI pane with the given name, does nothing by default.
-    virtual void AfterSaveNotebook() { }
-
     // Called after the last call to SaveNotebook(), does nothing by default.
     virtual void AfterSaveNotebooks() { }
 
     // Called after saving everything, does nothing by default.
     virtual void AfterSave() { }
+};
+
+// wxAuiBookDeserializer is used for deserializing wxAuiNotebook layout.
+//
+// Similarly to wxAuiBookSerializer, it can be used standalone with
+// wxAuiNotebook::LoadLayout() or as base class of wxAuiDeserializer.
+class wxAuiBookDeserializer
+{
+public:
+    // Trivial default ctor.
+    wxAuiBookDeserializer() = default;
+
+    // Trivial but virtual dtor for a base class.
+    virtual ~wxAuiBookDeserializer() = default;
+
+    // Load information about all the tab controls in the pane containing
+    // wxAuiNotebook with the given name.
+    virtual std::vector<wxAuiTabLayoutInfo>
+    LoadNotebookTabs(const wxString& name) = 0;
 };
 
 // wxAuiDeserializer is used with wxAuiManager::LoadLayout().
@@ -129,15 +163,12 @@ public:
 // Derived class function also may throw and, if any of them other than
 // AfterLoad() does, the existing layout is not changed, i.e.
 // wxAuiManager::LoadLayout() is exception-safe.
-class wxAuiDeserializer
+class wxAuiDeserializer : public wxAuiBookDeserializer
 {
 public:
     // Ctor takes the manager for which we're restoring the layout, it must
     // remain valid for the lifetime of this object.
     explicit wxAuiDeserializer(wxAuiManager& manager) : m_manager(manager) { }
-
-    // Trivial but virtual dtor for a base class.
-    virtual ~wxAuiDeserializer() = default;
 
 
     // Called before doing anything else, does nothing by default.
@@ -145,11 +176,6 @@ public:
 
     // Load information about all the panes previously saved with SavePane().
     virtual std::vector<wxAuiPaneLayoutInfo> LoadPanes() = 0;
-
-    // For a pane containing wxAuiNotebook, load information about all the tab
-    // controls inside it.
-    virtual std::vector<wxAuiTabLayoutInfo>
-    LoadNotebookTabs(const wxString& name) = 0;
 
     // Create the window to be managed by the given pane: this is called if any
     // of the panes returned by LoadPanes() doesn't exist in the existing

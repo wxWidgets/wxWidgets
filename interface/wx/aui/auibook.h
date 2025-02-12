@@ -68,10 +68,10 @@ struct wxAuiNotebookPosition
     @section auibook_tabs Multiple Tab Controls
 
     By default, wxAuiNotebook uses a single tab control for all tabs, however
-    when wxAUI_NB_TAB_SPLIT style is used (which is the case by default), the
+    when ::wxAUI_NB_TAB_SPLIT style is used (which is the case by default), the
     user will be able to drag pages out of it and create new tab controls, that
     can then themselves be dragged to be docked in a different place inside the
-    notebook. Also, whether wxAUI_NB_TAB_SPLIT is specified or not, Split()
+    notebook. Also, whether ::wxAUI_NB_TAB_SPLIT is specified or not, Split()
     function can always be used to create new tab controls programmatically.
 
     When using multiple tab controls, exactly one of them is active at any
@@ -84,11 +84,29 @@ struct wxAuiNotebookPosition
     The logical order of the pages in the notebook is determined by the order
     in which they are added to it, i.e. the first page added has index 0, the
     second one has index 1, and so on. Since wxWidgets 3.3.0 this order is not
-    affected any longer by reodering the visual order of the pages in the UI,
-    which can be done by dragging them around if the wxAUI_NB_TAB_MOVE style is
-    used (which is the case by default).
+    affected any longer by changing the visual order of the pages in the UI,
+    which can be done by dragging them around if the ::wxAUI_NB_TAB_MOVE style
+    is used (which is the case by default).
 
     To get the visual position of the page, GetPagePosition() can be used.
+
+
+    @section auibook_layout Pages Layout
+
+    When the user can change the notebook layout interactively, i.e. when
+    ::wxAUI_NB_TAB_MOVE and/or ::wxAUI_NB_TAB_SPLIT styles are used, it can be
+    useful to remember the current layout on program exit and restore it when
+    it is restarted. This can be done by saving, and reloading, the layout of
+    the entire wxAuiManager containing this notebook using
+    wxAuiManager::SaveLayout() and wxAuiManager::LoadLayout(), but it can also
+    be done just for the given notebook, without affecting the other panes,
+    using SaveLayout() and LoadLayout() functions of this class.
+
+    Using them is similar to using wxAuiManager functions, except they only
+    require implementing wxAuiBookSerializer or wxAuiBookDeserializer
+    interface, which is a subset of the full wxAuiSerializer or
+    wxAuiDeserializer. The @ref page_samples_aui shows how to use them.
+
 
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}
@@ -378,9 +396,50 @@ public:
                             bool select, int imageId);
 
     /**
+        Load the previously saved layout of the notebook.
+
+        This function is used to restore the layout previously saved by
+        SaveLayout().
+
+        @param name
+            Used as argument for wxAuiBookDeserializer::LoadNotebookTabs()
+            call.
+        @param deserializer
+            The object to use for restoring the layout.
+
+        @see wxAuiManager::LoadLayout()
+
+        @since 3.3.0
+     */
+    void LoadLayout(const wxString& name, wxAuiBookDeserializer& deserializer);
+
+    /**
         Removes a page, without deleting the window pointer.
     */
     bool RemovePage(size_t page);
+
+    /**
+        Save the layout of the notebook using the provided serializer.
+
+        The notebook layout includes the number and positions of all the tab
+        controls as well as the pages contained in each of them and their
+        order.
+
+        The serializer defines how exactly this information is saved: it can
+        use any form of serialization, e.g. XML or JSON, to do it, with the
+        only requirement being that LoadLayout() should be able to restore it
+        from the same @a name.
+
+        @param name
+            Used as argument for wxAuiBookSerializer::BeforeSaveNotebook() call.
+        @param serializer
+            The object to use for saving the layout.
+
+        @see wxAuiManager::SaveLayout()
+
+        @since 3.3.0
+     */
+    void SaveLayout(const wxString& name, wxAuiBookSerializer& serializer) const;
 
     /**
         Sets the art provider to be used by the notebook.

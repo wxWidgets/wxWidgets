@@ -3696,7 +3696,7 @@ void wxAuiTabCtrl::SetHoverTab(wxWindow* wnd)
 
 void
 wxAuiNotebook::SaveLayout(const wxString& name,
-                          wxAuiSerializer& serializer) const
+                          wxAuiBookSerializer& serializer) const
 {
     serializer.BeforeSaveNotebook(name);
 
@@ -3757,7 +3757,8 @@ wxAuiNotebook::SaveLayout(const wxString& name,
 }
 
 void
-wxAuiNotebook::LoadLayout(const wxString& name, wxAuiDeserializer& deserializer)
+wxAuiNotebook::LoadLayout(const wxString& name,
+                          wxAuiBookDeserializer& deserializer)
 {
     const auto tabs = deserializer.LoadNotebookTabs(name);
 
