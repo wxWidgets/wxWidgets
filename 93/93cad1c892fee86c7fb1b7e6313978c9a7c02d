@@ -1,0 +1,1 @@
+wxMSW: Fix using strings with Unicode characters outside of BMP (#25128).
