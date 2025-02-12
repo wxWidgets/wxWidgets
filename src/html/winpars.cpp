@@ -37,8 +37,6 @@ wxList wxHtmlWinParser::m_Modules;
 
 wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
 {
-    m_tmpStrBuf = nullptr;
-    m_tmpStrBufSize = 0;
     m_windowInterface = wndIface;
     m_Container = nullptr;
     m_DC = nullptr;
@@ -85,7 +83,6 @@ wxHtmlWinParser::~wxHtmlWinParser()
                         if (m_FontsTable[i][j][k][l][m] != nullptr)
                             delete m_FontsTable[i][j][k][l][m];
                     }
-    delete[] m_tmpStrBuf;
 }
 
 void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
@@ -319,23 +316,14 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     return GetFS()->OpenFile(myurl, flags);
 }
 
-#define NBSP_UNICODE_VALUE  (wxChar(160))
-#define CUR_NBSP_VALUE NBSP_UNICODE_VALUE
+static constexpr wxChar CUR_NBSP_VALUE = L'\xA0';
 
 void wxHtmlWinParser::AddText(const wxString& txt)
 {
     if ( m_whitespaceMode == Whitespace_Normal )
     {
-        int templen = 0;
-
-        size_t lng = txt.length();
-        if (lng+1 > m_tmpStrBufSize)
-        {
-            delete[] m_tmpStrBuf;
-            m_tmpStrBuf = new wxChar[lng+1];
-            m_tmpStrBufSize = lng+1;
-        }
-        wxChar *temp = m_tmpStrBuf;
+        m_tmpStrBuf.reserve(txt.length());
+        m_tmpStrBuf.clear();
 
         wxString::const_iterator i = txt.begin();
         const wxString::const_iterator end = txt.end();
@@ -353,7 +341,7 @@ void wxHtmlWinParser::AddText(const wxString& txt)
         while (i < end)
         {
             size_t x = 0;
-            const wxChar d = temp[templen++] = *i;
+            const wxUniChar d = *i;
             if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
             {
                 ++i;
@@ -373,16 +361,35 @@ void wxHtmlWinParser::AddText(const wxString& txt)
 
             if (x)
             {
-                temp[templen-1] = wxT(' ');
-                FlushWordBuf(temp, templen);
+                m_tmpStrBuf.append(' ');
+                m_tmpStrBuf.Replace(CUR_NBSP_VALUE, ' ');
+                AddWord(m_tmpStrBuf);
+                m_tmpStrBuf.clear();
+
                 m_tmpLastWasSpace = true;
+            }
+            else
+            {
+                m_tmpStrBuf.append(d);
             }
         }
 
-        if (templen && (templen > 1 || temp[0] != wxT(' ')))
+        switch (m_tmpStrBuf.length())
         {
-            FlushWordBuf(temp, templen);
-            m_tmpLastWasSpace = false;
+            case 1:
+                // If the only remaining character is space, don't add it.
+                if (m_tmpStrBuf[0] == wxT(' '))
+                    break;
+                wxFALLTHROUGH;
+
+            default:
+                AddWord(m_tmpStrBuf);
+                m_tmpStrBuf.clear();
+                m_tmpLastWasSpace = false;
+                break;
+
+            case 0:
+                break;
         }
     }
     else // m_whitespaceMode == Whitespace_Pre
@@ -403,21 +410,6 @@ void wxHtmlWinParser::AddText(const wxString& txt)
         // don't eat any whitespace in <pre> block
         m_tmpLastWasSpace = false;
     }
-}
-
-void wxHtmlWinParser::FlushWordBuf(wxChar *buf, int& len)
-{
-    buf[len] = 0;
-
-    for ( int i = 0; i < len; i++ )
-    {
-        if ( buf[i] == CUR_NBSP_VALUE )
-            buf[i] = ' ';
-    }
-
-    AddWord(wxString(buf, len));
-
-    len = 0;
 }
 
 void wxHtmlWinParser::AddWord(wxHtmlWordCell *word)

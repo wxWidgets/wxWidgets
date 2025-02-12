@@ -139,7 +139,7 @@ wxStandardPathsBase::AppendPathComponent(const wxString& dir,
     {
         if ( !component.empty() )
         {
-            const wxChar ch = *(subdir.end() - 1);
+            const wxUniChar ch = *(subdir.end() - 1);
             if ( !wxFileName::IsPathSeparator(ch) && ch != wxT('.') )
                 subdir += wxFileName::GetPathSeparator();
 

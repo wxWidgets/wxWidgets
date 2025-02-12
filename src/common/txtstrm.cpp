@@ -491,9 +491,8 @@ void wxTextOutputStream::WriteString(const wxString& string)
     wxString out;
     out.reserve(len);
 
-    for ( size_t i = 0; i < len; i++ )
+    for ( wxUniChar c : string )
     {
-        const wxChar c = string[i];
         if ( c == wxT('\n') )
         {
             switch ( m_mode )

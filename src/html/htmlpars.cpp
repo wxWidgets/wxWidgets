@@ -462,7 +462,7 @@ wxString wxHtmlEntitiesParser::Parse(const wxString& input) const
 
             for ( ; c != end; ++c )
             {
-                wxChar ch = *c;
+                wxUniChar ch = *c;
                 if ( !((ch >= wxT('a') && ch <= wxT('z')) ||
                        (ch >= wxT('A') && ch <= wxT('Z')) ||
                        (ch >= wxT('0') && ch <= wxT('9')) ||
@@ -927,7 +927,7 @@ wxHtmlParser::SkipCommentTag(wxString::const_iterator& start,
     int dashes = 0;
     while ( ++p < end )
     {
-        const wxChar c = *p;
+        const wxUniChar c = *p;
 
         if ( (c == wxT(' ') || c == wxT('\n') ||
               c == wxT('\r') || c == wxT('\t')) && dashes >= 2 )

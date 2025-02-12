@@ -445,7 +445,7 @@ wxFileName::DoSetPath(const wxString& pathOrig, wxPathFormat format, int flags)
 
     // 1) Determine if the path is relative or absolute.
 
-    wxChar leadingChar = path[0u];
+    const wxUniChar leadingChar = path[0u];
 
     switch (format)
     {

@@ -159,15 +159,13 @@ protected:
     virtual void AddText(const wxString& txt) override;
 
 private:
-    void FlushWordBuf(wxChar *temp, int& len);
     void AddWord(wxHtmlWordCell *word);
     void AddWord(const wxString& word)
         { AddWord(new wxHtmlWordCell(word, *(GetDC()))); }
     void AddPreBlock(const wxString& text);
 
     bool m_tmpLastWasSpace;
-    wxChar *m_tmpStrBuf;
-    size_t  m_tmpStrBufSize;
+    wxString m_tmpStrBuf;
         // temporary variables used by AddText
     wxHtmlWindowInterface *m_windowInterface;
             // window we're parsing for

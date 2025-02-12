@@ -1186,7 +1186,7 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
 
     for ( wxString::const_iterator it = in.begin(); it != in.end(); ++it )
     {
-        wxChar ch = *it;
+        wxUniChar ch = *it;
         if ( (flags & wxStrip_Mnemonics) && ch == wxT('&') )
         {
             // skip it, it is used to introduce the accel char (or to quote

@@ -103,7 +103,7 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
     const wxString::const_iterator end = str.end();
     for ( wxString::const_iterator p = lineStart; p != end; ++p )
     {
-        const wxChar ch = *p;
+        const wxUniChar ch = *p;
         if ( ch == '\r' || ch == '\n' )
         {
             // Determine the kind of line ending this is.

@@ -1384,8 +1384,8 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     dir.reserve(len);
     for ( i = 0; i < len; i++ )
     {
-        wxChar ch = m_dir[i];
-        switch ( ch )
+        wxUniChar ch = m_dir[i];
+        switch ( ch.GetValue() )
         {
             case wxT('/'):
                 // convert to backslash
@@ -1395,7 +1395,7 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
             case wxT('\\'):
                 while ( i < len - 1 )
                 {
-                    wxChar chNext = m_dir[i + 1];
+                    wxUniChar chNext = m_dir[i + 1];
                     if ( chNext != wxT('\\') && chNext != wxT('/') )
                         break;
 

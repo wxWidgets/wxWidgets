@@ -887,7 +887,7 @@ void wxHtmlSearchEngine::LookFor(const wxString& keyword, bool case_sensitive, b
 }
 
 
-static inline bool WHITESPACE(wxChar c)
+static inline bool WHITESPACE(wxUniChar c)
 {
     return c == wxT(' ') || c == wxT('\n') || c == wxT('\r') || c == wxT('\t');
 }
@@ -899,9 +899,8 @@ static inline wxString CompressSpaces(const wxString & str)
     buf.reserve( str.size() );
 
     bool space_counted = false;
-    for( const wxChar * pstr = str.c_str(); *pstr; ++pstr )
+    for ( wxUniChar ch: str )
     {
-        wxChar ch = *pstr;
         if( WHITESPACE( ch ) )
         {
             if( space_counted )

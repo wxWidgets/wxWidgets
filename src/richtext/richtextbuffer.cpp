@@ -2796,7 +2796,7 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
 
     while (i < len)
     {
-        wxChar ch = text[i];
+        wxUniChar ch = text[i];
         if (ch == wxT('\n') || ch == wxT('\r'))
         {
             if (i != (len-1))
@@ -7753,7 +7753,7 @@ long wxRichTextPlainText::GetFirstLineBreakPosition(long pos)
     int startPos = pos - m_range.GetStart();
     for (i = startPos; i < len; i++)
     {
-        wxChar ch = m_text[i];
+        wxUniChar ch = m_text[i];
         if (ch == wxRichTextLineBreakChar)
         {
             return i + m_range.GetStart();
@@ -8954,10 +8954,8 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
 #ifdef __WXMSW__
                 wxString text2;
                 text2.Alloc(text.length()+1);
-                size_t i;
-                for (i = 0; i < text.length(); i++)
+                for ( wxUniChar ch : text )
                 {
-                    wxChar ch = text[i];
                     if (ch != wxT('\r'))
                         text2 += ch;
                 }

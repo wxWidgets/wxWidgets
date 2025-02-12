@@ -316,13 +316,13 @@ char wxFTP::GetResult()
         else // line has at least 4 chars
         {
             // this is the char which tells us what we're dealing with
-            wxChar chMarker = line.GetChar(LEN_CODE);
+            const wxUniChar chMarker = line.GetChar(LEN_CODE);
 
             if ( firstLine )
             {
                 code = wxString(line, LEN_CODE);
 
-                switch ( chMarker )
+                switch ( chMarker.GetValue() )
                 {
                     case wxT(' '):
                         endOfReply = true;

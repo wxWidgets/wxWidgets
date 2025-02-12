@@ -280,7 +280,7 @@ bool wxTextMeasureBase::DoGetPartialTextExtents(const wxString& text,
           it != text.end();
           ++it )
     {
-        const wxChar c = *it;
+        const wxUniChar c = *it;
         unsigned int c_int = (unsigned int)c;
 
         int w;

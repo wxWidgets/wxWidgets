@@ -100,7 +100,7 @@ WXDLLIMPEXP_BASE wxTextOutputStream& operator<< (wxTextOutputStream& o, const wx
     return o << ll.ToString();
 }
 
-#define READ_STRING_CHAR(s, idx, len) ((idx!=len) ? (wxChar)s[idx++] : wxT('\0'))
+#define READ_STRING_CHAR(s, idx, len) ((idx!=len) ? s[idx++] : wxUniChar())
 
 WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &o, wxULongLong &ll)
 {
@@ -110,7 +110,7 @@ WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &o,
     size_t length = s.length();
     size_t idx = 0;
 
-    wxChar ch = READ_STRING_CHAR(s, idx, length);
+    wxUniChar ch = READ_STRING_CHAR(s, idx, length);
 
     // Skip WS
     while (ch==wxT(' ') || ch==wxT('\t'))
@@ -135,7 +135,7 @@ WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &o,
     size_t length = s.length();
     size_t idx = 0;
 
-    wxChar ch = READ_STRING_CHAR(s, idx, length);
+    wxUniChar ch = READ_STRING_CHAR(s, idx, length);
 
     // Skip WS
     while (ch==wxT(' ') || ch==wxT('\t'))
