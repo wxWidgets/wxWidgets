@@ -24,6 +24,7 @@
 
 #include "wx/statline.h"
 #include "wx/dcbuffer.h"
+#include "wx/frame.h"
 #include "wx/sizer.h"
 #include "wx/image.h"
 #include "wx/settings.h"
@@ -1460,6 +1461,16 @@ bool wxAuiToolBar::SetFont(const wxFont& font)
 
 void wxAuiToolBar::SetHoverItem(wxAuiToolBarItem* pitem)
 {
+    if ( wxFrame* frame = wxDynamicCast(wxGetTopLevelParent(this), wxFrame) )
+    {
+        wxString help;
+        if (pitem)
+        {
+            help = pitem->GetLongHelp();
+        }
+        frame->DoGiveHelp(help, pitem);
+    }
+
     if (pitem && (pitem->m_state & wxAUI_BUTTON_STATE_DISABLED))
         pitem = NULL;
 

@@ -273,6 +273,7 @@ All (GUI):
 - Don't break AUI layout if Update() called when window is iconized (#24930).
 - Improve wxInfoBar appearance (#24838, #24902, #25048).
 - Fix multiple bugs in wxStaticText::Wrap() (#23339).
+- Show wxAuiToolBar long help text in frame status bar (Bill Su, #25157).
 - Recognize "current" and "pressed" in wxBitmapButton XRC handler (#25114).
 - Fix wrong row parameter in wxEVT_GRID_ROW_MOVE events (Tony Kennedy).
 - Add subitem support to wxGenericListCtrl::HitTest() (Lauri Nurmi, #25153).
