@@ -228,6 +228,8 @@ public:
         , m_bar(bar), m_button(button)
     {
     }
+
+    wxRibbonButtonBarEvent(const wxRibbonButtonBarEvent& e) = default;
     wxEvent *Clone() const override { return new wxRibbonButtonBarEvent(*this); }
 
     wxRibbonButtonBar* GetBar() {return m_bar;}

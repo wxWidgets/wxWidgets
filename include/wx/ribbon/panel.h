@@ -149,6 +149,8 @@ public:
         , m_panel(panel)
     {
     }
+
+    wxRibbonPanelEvent(const wxRibbonPanelEvent& e) = default;
     wxEvent *Clone() const override { return new wxRibbonPanelEvent(*this); }
 
     wxRibbonPanel* GetPanel() {return m_panel;}
