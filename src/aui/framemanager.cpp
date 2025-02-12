@@ -70,12 +70,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
 wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
 
 
-
-const int auiToolBarLayer = 10;
-
-// -- static utility functions --
+// -- local constants and helper functions --
 namespace
 {
+
+// Index of the outermost layer used for all toolbars.
+constexpr int auiToolBarLayer = 10;
 
 wxBitmap wxCreateVenetianBlindsBitmap(wxByte r, wxByte g, wxByte b, wxByte a)
 {
