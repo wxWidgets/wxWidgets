@@ -88,7 +88,8 @@ jobs:
             use_xvfb: true
             build_out_of_tree_samples: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
-            runner: ubuntu-20.04
+            runner: ubuntu-latest
+            container: ubuntu:20.04
             compiler: clang++-10
             configure_flags: --disable-sys-libs
             use_xvfb: true
@@ -149,6 +150,24 @@ jobs:
               fi
 
               compiler=${{ matrix.compiler }}
+              case "$compiler" in
+                clang++*)
+                  compiler_packages='clang libc++-dev libc++abi-dev'
+                  ;;
+
+                g++*)
+                  compiler_packages="${compiler}"
+                  ;;
+
+                '')
+                  # Assume gcc.
+                  compiler_packages='g++'
+                  ;;
+
+                *)
+                  echo '::error ::Unknown compiler kind.'
+                  exit 1
+              esac
 
               # Explanation for installing some less obvious packages:
               #   - coreutils contains nproc used in proc_count.sh called below.
@@ -158,7 +177,7 @@ jobs:
               #     closed https://github.com/actions/setup-python/issues/370
               #   - xvfb is used for running the GUI tests.
               apt-get update -qq
-              apt-get install -qq coreutils ${compiler-g++} git locales make pkg-config python3 python3-pip sudo xvfb
+              apt-get install -qq coreutils ${compiler_packages} git locales make pkg-config python3 python3-pip sudo xvfb
 
               # Checkout action doesn't work under Ubuntu 18.04 any more, so
               # run checkout manually.
@@ -182,14 +201,14 @@ jobs:
           esac
 
       - name: Checkout
-        if: matrix.container == ''
+        if: matrix.container != 'ubuntu:18.04'
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
       - name: Install CCache
-        if: matrix.container == ''
-        uses: hendrikmuhs/ccache-action@v1.2.3
+        if: matrix.container != 'ubuntu:18.04'
+        uses: hendrikmuhs/ccache-action@v1.2.12
         with:
           key: ${{ matrix.name }}
 
@@ -214,6 +233,8 @@ jobs:
               echo LD=$compiler >> $GITHUB_ENV
 
               allow_warn_opt="-Wno-error=#warnings"
+
+              export WX_EXTRA_PACKAGES="libc++-dev"
               ;;
 
             g++*)
@@ -309,7 +330,7 @@ jobs:
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
       - name: Setup Python
-        if: matrix.container == ''
+        if: matrix.container != 'ubuntu:18.04'
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
