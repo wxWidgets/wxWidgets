@@ -2599,6 +2599,7 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
 
         AX_SUBDIRS_CONFIGURE([src/tiff],
             [[--disable-jbig],
+             [--disable-lerc],
              [--disable-libdeflate],
              [--disable-webp],
              [--disable-zstd],
