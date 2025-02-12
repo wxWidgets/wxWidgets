@@ -23,37 +23,6 @@
     #include "wx/string.h"
 #endif
 
-#define wxDECLARE_CLASS_INFO_ITERATORS()                                     \
-class WXDLLIMPEXP_BASE const_iterator                                    \
-    {                                                                        \
-    typedef wxHashTable_Node Node;                                       \
-    public:                                                                  \
-    typedef const wxClassInfo* value_type;                               \
-    typedef const value_type& const_reference;                           \
-    typedef const_iterator itor;                                         \
-    typedef value_type* ptr_type;                                        \
-    \
-    Node* m_node;                                                        \
-    wxHashTable* m_table;                                                \
-    public:                                                                  \
-    typedef const_reference reference_type;                              \
-    typedef ptr_type pointer_type;                                       \
-    \
-    const_iterator(Node* node, wxHashTable* table)                       \
-    : m_node(node), m_table(table) { }                               \
-    const_iterator() : m_node(nullptr), m_table(nullptr) { }                   \
-    value_type operator*() const;                                        \
-    itor& operator++();                                                  \
-    const itor operator++(int);                                          \
-    bool operator!=(const itor& it) const                                \
-            { return it.m_node != m_node; }                                  \
-            bool operator==(const itor& it) const                                \
-            { return it.m_node == m_node; }                                  \
-    };                                                                       \
-    \
-    static const_iterator begin_classinfo();                                 \
-    static const_iterator end_classinfo()
-
 // based on the value of wxUSE_EXTENDED_RTTI symbol,
 // only one of the RTTI system will be compiled:
 // - the "old" one (defined by rtti.h) or
@@ -172,7 +141,6 @@ inline T *wxCheckCast(const void *ptr)
 // (note that also some wx-prefixed macro do _not_ require a semicolon because
 // it's not always possible to force the compiler to require it)
 
-#define DECLARE_CLASS_INFO_ITERATORS()                              wxDECLARE_CLASS_INFO_ITERATORS();
 #define DECLARE_ABSTRACT_CLASS(n)                                   wxDECLARE_ABSTRACT_CLASS(n);
 #define DECLARE_DYNAMIC_CLASS_NO_ASSIGN(n)                          wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(n);
 #define DECLARE_DYNAMIC_CLASS_NO_COPY(n)                            wxDECLARE_DYNAMIC_CLASS_NO_COPY(n);

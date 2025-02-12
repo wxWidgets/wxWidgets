@@ -10,7 +10,12 @@
 #ifndef _WX_AUI_SERIALIZER_H_
 #define _WX_AUI_SERIALIZER_H_
 
+#include "wx/aui/framemanager.h" // Just for wxAUI_DOCK_LEFT
+
+#if wxUSE_AUI
+
 #include <utility>
+#include <vector>
 
 // ----------------------------------------------------------------------------
 // Classes used to save/load wxAuiManager layout.
@@ -173,5 +178,7 @@ protected:
     // The manager for which we're restoring the layout.
     wxAuiManager& m_manager;
 };
+
+#endif // wxUSE_AUI
 
 #endif // _WX_AUI_SERIALIZER_H_

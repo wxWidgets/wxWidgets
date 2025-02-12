@@ -109,6 +109,7 @@ jobs:
             runner: ubuntu-22.04
             configure_flags: --enable-compat30 --disable-std_containers
             use_xvfb: true
+            check_headers: true
           - name: Ubuntu 22.04 wxGTK with ASAN
             runner: ubuntu-22.04
             configure_flags: --disable-compat32 --disable-sys-libs
@@ -265,6 +266,10 @@ jobs:
           env | sort
           echo
 
+          echo "Make version:"
+          make --version
+          echo
+
           echo "Compiler version:"
           ${CXX-g++} --version
           echo
@@ -332,6 +337,11 @@ jobs:
       - name: Building tests
         working-directory: tests
         run: |
+          if [ ${{ matrix.check_headers }} ]; then
+            echo "Checking that all headers are self-contained..."
+            make allheaders_selfcontained
+            echo "Done."
+          fi
           make $wxBUILD_ARGS failtest
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 

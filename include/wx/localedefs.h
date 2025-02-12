@@ -10,6 +10,8 @@
 #ifndef _WX_LOCALEDEFS_H_
 #define _WX_LOCALEDEFS_H_
 
+#include "wx/defs.h"
+
 // ----------------------------------------------------------------------------
 // wxLayoutDirection: used by wxWindow, wxDC etc
 // ----------------------------------------------------------------------------

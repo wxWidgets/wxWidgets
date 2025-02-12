@@ -7,6 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "wx/defs.h"
+
 #if wxUSE_STD_IOSTREAM
 
 #include <iosfwd>

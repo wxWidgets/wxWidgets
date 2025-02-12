@@ -11,6 +11,7 @@
 #define _WX_WINDOWPTR_H_
 
 #include "wx/sharedptr.h"
+#include "wx/window.h"
 
 // ----------------------------------------------------------------------------
 // wxWindowPtr: A smart pointer with correct wxWindow destruction.

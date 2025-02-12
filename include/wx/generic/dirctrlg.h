@@ -13,6 +13,8 @@
 #ifndef _WX_DIRCTRL_H_
 #define _WX_DIRCTRL_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_DIRDLG || wxUSE_FILEDLG
 
 #include "wx/treectrl.h"

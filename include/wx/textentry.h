@@ -10,17 +10,17 @@
 #ifndef _WX_TEXTENTRY_H_
 #define _WX_TEXTENTRY_H_
 
-// wxTextPos is the position in the text (currently it's hardly used anywhere
-// and should probably be replaced with int anyhow)
-typedef long wxTextPos;
+#include "wx/filefn.h"              // for wxFILE and wxDIR only
+#include "wx/gdicmn.h"              // for wxPoint
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_CORE wxTextCompleter;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-#include "wx/filefn.h"              // for wxFILE and wxDIR only
-#include "wx/gdicmn.h"              // for wxPoint
+// wxTextPos is the position in the text (currently it's hardly used anywhere
+// and should probably be replaced with int anyhow)
+typedef long wxTextPos;
 
 // ----------------------------------------------------------------------------
 // wxTextEntryBase

@@ -12,11 +12,11 @@
 
 #include "wx/defs.h"
 #include "wx/bmpbndl.h"
+#include "wx/event.h"
 #include "wx/icon.h"
 #include "wx/imaglist.h"
 #include "wx/vector.h"
-
-class WXDLLIMPEXP_FWD_CORE wxWindow;
+#include "wx/window.h"
 
 // ----------------------------------------------------------------------------
 // wxWithImages: mix-in for classes using indices for image access

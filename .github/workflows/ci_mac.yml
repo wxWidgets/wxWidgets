@@ -162,6 +162,10 @@ jobs:
         env | sort
         echo
 
+        echo "Make version:"
+        make --version
+        echo
+
         echo "Compiler version:"
         ${CXX-g++} --version
         echo

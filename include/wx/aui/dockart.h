@@ -22,6 +22,9 @@
 #include "wx/brush.h"
 #include "wx/bmpbndl.h"
 #include "wx/colour.h"
+#include "wx/font.h"
+
+class WXDLLIMPEXP_FWD_AUI wxAuiPaneInfo;
 
 // dock art provider code - a dock provider provides all drawing
 // functionality to the wxAui dock manager.  This allows the dock

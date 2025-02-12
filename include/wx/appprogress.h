@@ -12,6 +12,8 @@
 
 #include "wx/defs.h"
 
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 class WXDLLIMPEXP_CORE wxAppProgressIndicatorBase
 {
 public:

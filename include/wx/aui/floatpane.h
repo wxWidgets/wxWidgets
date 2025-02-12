@@ -15,9 +15,10 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/defs.h"
-#include "wx/weakref.h"
 
 #if wxUSE_AUI
+
+#include "wx/weakref.h"
 
 #if wxUSE_MINIFRAME
     #include "wx/minifram.h"
@@ -26,6 +27,8 @@
     #include "wx/frame.h"
     #define wxAuiFloatingFrameBaseClass wxFrame
 #endif
+
+#include "wx/aui/framemanager.h"
 
 class WXDLLIMPEXP_AUI wxAuiFloatingFrame : public wxAuiFloatingFrameBaseClass
 {

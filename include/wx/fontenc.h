@@ -10,6 +10,8 @@
 #ifndef _WX_FONTENC_H_
 #define _WX_FONTENC_H_
 
+#include "wx/defs.h"
+
 // font encodings
 enum wxFontEncoding
 {

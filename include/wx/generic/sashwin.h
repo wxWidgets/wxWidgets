@@ -12,6 +12,8 @@
 #ifndef _WX_SASHWIN_H_G_
 #define _WX_SASHWIN_H_G_
 
+#include "wx/defs.h"
+
 #if wxUSE_SASH
 
 #include "wx/defs.h"

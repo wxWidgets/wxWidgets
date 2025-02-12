@@ -10,6 +10,8 @@
 #ifndef _WX_SETH__
 #define _WX_SETH__
 
+#include "wx/defs.h"
+
 // wxBitset should be applied to an enum, then this can be used like
 // bitwise operators but keeps the type safety and information, the
 // enums must be in a sequence , their value determines the bit position
