@@ -1395,7 +1395,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
 #if !wxUSE_REPRODUCIBLE_BUILD
                wxS("compiled at %s %s\n\n")
 #endif
-               wxS("Runtime version of toolkit used is %d.%d.\n"),
+               wxS("Runtime version of toolkit used is %d.%d.%d.\n"),
                wxPlatformInfo::Get().GetPortIdName(),
                ver,
 #if wxUSE_UNICODE_UTF8
@@ -1415,7 +1415,8 @@ wxVersionInfo wxGetLibraryVersionInfo()
                __TTIME__,
 #endif
                wxPlatformInfo::Get().GetToolkitMajorVersion(),
-               wxPlatformInfo::Get().GetToolkitMinorVersion()
+               wxPlatformInfo::Get().GetToolkitMinorVersion(),
+               wxPlatformInfo::Get().GetToolkitMicroVersion()
               );
 
 #ifdef __WXGTK__
