@@ -21,6 +21,7 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/apptrait.h"
 #include "wx/utils.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
@@ -122,4 +123,9 @@ wxWindow *wxGetActiveWindow()
 bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )
 {
     return QDesktopServices::openUrl( QUrl::fromLocalFile( wxQtConvertString( path ) ) );
+}
+
+wxString wxGUIAppTraits::GetLibversionExtraText() const {
+    return wxString::Format("Compile-time QT version is %s.\n",
+                            QT_VERSION_STR);
 }

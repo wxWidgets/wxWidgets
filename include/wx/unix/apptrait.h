@@ -65,6 +65,10 @@ public:
     virtual wxString GetDesktopEnvironment() const override;
 #endif // __WXGTK____
 
+#if defined(__WXGTK__) || defined(__WXQT__)
+    virtual wxString GetLibversionExtraText() const override;
+#endif
+
 #if defined(__WXGTK__)
     virtual bool ShowAssertDialog(const wxString& msg) override;
 #endif

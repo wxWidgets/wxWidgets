@@ -118,7 +118,7 @@ WXDLLIMPEXP_CORE void wxBell();
 WXDLLIMPEXP_CORE void wxInfoMessageBox(wxWindow* parent);
 #endif // wxUSE_MSGDLG
 
-WXDLLIMPEXP_CORE wxVersionInfo wxGetLibraryVersionInfo();
+WXDLLIMPEXP_BASE wxVersionInfo wxGetLibraryVersionInfo();
 
 // Get OS description as a user-readable string
 WXDLLIMPEXP_BASE wxString wxGetOsDescription();
