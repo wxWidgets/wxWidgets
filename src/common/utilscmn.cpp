@@ -1022,6 +1022,64 @@ unsigned int wxCTZ(wxUint32 x)
 #endif
 }
 
+wxVersionInfo wxGetLibraryVersionInfo()
+{
+    // Only add the last build component to the version if it's non-zero, it's
+    // pretty useless otherwise.
+    wxString ver = wxString::Format
+                   (
+                        wxS("%d.%d.%d"),
+                        wxMAJOR_VERSION,
+                        wxMINOR_VERSION,
+                        wxRELEASE_NUMBER
+                   );
+    if ( wxSUBRELEASE_NUMBER )
+        ver += wxString::Format(wxS(".%d"), wxSUBRELEASE_NUMBER);
+
+    // don't translate these strings, they're for diagnostics purposes only
+    wxString msg;
+    msg.Printf(wxS("wxWidgets Library (%s port)\n")
+               wxS("Version %s (Unicode: %s, debug level: %d),\n")
+#if !wxUSE_REPRODUCIBLE_BUILD
+               wxS("compiled at %s %s\n\n")
+#endif
+               wxS("Runtime version of toolkit used is %d.%d.%d.\n"),
+               wxPlatformInfo::Get().GetPortIdName(),
+               ver,
+#if wxUSE_UNICODE_UTF8
+               "UTF-8",
+#else
+               "wchar_t",
+#endif
+               wxDEBUG_LEVEL,
+#if !wxUSE_REPRODUCIBLE_BUILD
+               // As explained in the comment near these macros definitions,
+               // ccache has special logic for detecting the use of __DATE__
+               // and __TIME__ macros, which doesn't apply to our own versions
+               // of them, hence this comment is needed just to mention the
+               // standard macro names and to ensure that ccache does _not_
+               // cache the results of compiling this file.
+               __TDATE__,
+               __TTIME__,
+#endif
+               wxPlatformInfo::Get().GetToolkitMajorVersion(),
+               wxPlatformInfo::Get().GetToolkitMinorVersion(),
+               wxPlatformInfo::Get().GetToolkitMicroVersion()
+              );
+
+    msg += wxPlatformInfo::Get().GetPlatformDescription();
+
+    const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
+
+    return wxVersionInfo(wxS("wxWidgets"),
+                         wxMAJOR_VERSION,
+                         wxMINOR_VERSION,
+                         wxRELEASE_NUMBER,
+                         msg,
+                         wxString::Format(wxS("Copyright %s 1992-2025 wxWidgets team"),
+                                          copyrightSign));
+}
+
 
 #endif // wxUSE_BASE
 
@@ -1372,74 +1430,6 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
     wxFAIL_MSG( wxT("unexpected return code from wxMessageDialog") );
 
     return wxCANCEL;
-}
-
-wxVersionInfo wxGetLibraryVersionInfo()
-{
-    // Only add the last build component to the version if it's non-zero, it's
-    // pretty useless otherwise.
-    wxString ver = wxString::Format
-                   (
-                        wxS("%d.%d.%d"),
-                        wxMAJOR_VERSION,
-                        wxMINOR_VERSION,
-                        wxRELEASE_NUMBER
-                   );
-    if ( wxSUBRELEASE_NUMBER )
-        ver += wxString::Format(wxS(".%d"), wxSUBRELEASE_NUMBER);
-
-    // don't translate these strings, they're for diagnostics purposes only
-    wxString msg;
-    msg.Printf(wxS("wxWidgets Library (%s port)\n")
-               wxS("Version %s (Unicode: %s, debug level: %d),\n")
-#if !wxUSE_REPRODUCIBLE_BUILD
-               wxS("compiled at %s %s\n\n")
-#endif
-               wxS("Runtime version of toolkit used is %d.%d.%d.\n"),
-               wxPlatformInfo::Get().GetPortIdName(),
-               ver,
-#if wxUSE_UNICODE_UTF8
-               "UTF-8",
-#else
-               "wchar_t",
-#endif
-               wxDEBUG_LEVEL,
-#if !wxUSE_REPRODUCIBLE_BUILD
-               // As explained in the comment near these macros definitions,
-               // ccache has special logic for detecting the use of __DATE__
-               // and __TIME__ macros, which doesn't apply to our own versions
-               // of them, hence this comment is needed just to mention the
-               // standard macro names and to ensure that ccache does _not_
-               // cache the results of compiling this file.
-               __TDATE__,
-               __TTIME__,
-#endif
-               wxPlatformInfo::Get().GetToolkitMajorVersion(),
-               wxPlatformInfo::Get().GetToolkitMinorVersion(),
-               wxPlatformInfo::Get().GetToolkitMicroVersion()
-              );
-
-#ifdef __WXGTK__
-    msg += wxString::Format("Compile-time GTK+ version is %d.%d.%d.\n",
-                            GTK_MAJOR_VERSION,
-                            GTK_MINOR_VERSION,
-                            GTK_MICRO_VERSION);
-#endif // __WXGTK__
-
-#ifdef __WXQT__
-    msg += wxString::Format("Compile-time QT version is %s.\n",
-                            QT_VERSION_STR);
-#endif // __WXQT__
-
-    const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
-
-    return wxVersionInfo(wxS("wxWidgets"),
-                         wxMAJOR_VERSION,
-                         wxMINOR_VERSION,
-                         wxRELEASE_NUMBER,
-                         msg,
-                         wxString::Format(wxS("Copyright %s 1992-2025 wxWidgets team"),
-                                          copyrightSign));
 }
 
 void wxInfoMessageBox(wxWindow* parent)

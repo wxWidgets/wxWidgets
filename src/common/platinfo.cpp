@@ -170,7 +170,8 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
            m_port == t.m_port &&
            m_usingUniversal == t.m_usingUniversal &&
            m_bitness == t.m_bitness &&
-           m_endian == t.m_endian;
+           m_endian == t.m_endian &&
+           m_platformDescription == t.m_platformDescription;
 }
 
 void wxPlatformInfo::InitForCurrentPlatform()
@@ -195,6 +196,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
                                            &m_tkVersionMicro);
         m_usingUniversal = traits->IsUsingUniversalWidgets();
         m_desktopEnv = traits->GetDesktopEnvironment();
+        m_platformDescription = traits->GetPlatformDescription();
     }
 
     m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor, &m_osVersionMicro);

@@ -232,7 +232,7 @@ void wxInfoMessageBox(wxWindow* parent);
 
     @header{wx/utils.h}
 
-    @library{wxcore}
+    @library{wxbase}
 */
 wxVersionInfo wxGetLibraryVersionInfo();
 
