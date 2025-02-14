@@ -63,7 +63,6 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     QSurfaceFormat::setDefaultFormat(format);
 
     m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.get()));
-    m_qtApplication->processEvents(); // Avoids SIGPIPE when debugging
 
     if ( m_qtApplication->platformName() == "xcb" )
         m_qtApplication->processEvents(); // Avoids SIGPIPE on X11 when debugging
