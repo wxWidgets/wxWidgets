@@ -700,7 +700,15 @@ static gboolean draw_icon(GtkWidget*, cairo_t* cr, wxIcon* icon)
     return true;
 }
 }
-#endif
+
+extern "C" {
+static gboolean mouse_event(GtkWidget*, GdkEvent*, wxDropSource* source)
+{
+    source->m_waiting = false;
+    return false;
+}
+}
+#endif // __WXGTK3__
 
 //---------------------------------------------------------------------------
 // wxDropSource
@@ -905,7 +913,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         if (!m_waiting)
             break;
 #ifdef __WXGTK3__
-        if (!wxGTKImpl::IsX11(gtk_widget_get_display(m_iconWindow)))
+        if (wxGTKImpl::IsWayland(nullptr))
             GiveFeedback(ConvertFromGTK(gdk_drag_context_get_selected_action(context)));
 #endif
     }
@@ -939,7 +947,17 @@ void wxDropSource::GTKConnectDragSignals()
                       G_CALLBACK (source_drag_data_get), this);
     g_signal_connect (m_widget, "drag_end",
                       G_CALLBACK (source_drag_end), this);
-
+#ifdef __WXGTK3__
+    if (wxGTKImpl::IsWayland(gtk_widget_get_display(m_widget)))
+    {
+        // Something can apparently go wrong under Wayland, and the
+        // "drag-end" event never happens. This is a work-around to
+        // at least allow DoDragDrop() to finish.
+        g_signal_connect(m_widget, "button-press-event", G_CALLBACK(mouse_event), this);
+        g_signal_connect(m_widget, "button-release-event", G_CALLBACK(mouse_event), this);
+        g_signal_connect(m_widget, "motion-notify-event", G_CALLBACK(mouse_event), this);
+    }
+#endif
 }
 
 void wxDropSource::GTKDisconnectDragSignals()
@@ -955,6 +973,9 @@ void wxDropSource::GTKDisconnectDragSignals()
     g_signal_handlers_disconnect_by_func (m_widget,
                                           (gpointer) source_drag_end,
                                           this);
+#ifdef __WXGTK3__
+    g_signal_handlers_disconnect_by_func(m_widget, (void*)mouse_event, this);
+#endif
 }
 
 #endif
