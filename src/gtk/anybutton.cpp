@@ -200,53 +200,67 @@ wxBitmap wxAnyButton::DoGetBitmap(State which) const
     return m_bitmaps[which].GetBitmap(wxDefaultSize);
 }
 
+void wxAnyButton::SetLabel(const wxString& label)
+{
+    BaseType::SetLabel(label);
+
+    if (HasFlag(wxBU_NOTEXT))
+        return;
+
+    GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
+    if (WX_GTK_IS_IMAGE(child))
+    {
+        // Widget hierarchy is different for image-only and label+image.
+        // Direct-child image must be moved into label+image configuration.
+        gtk_button_set_image(GTK_BUTTON(m_widget), child);
+    }
+}
+
 void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
 {
     switch ( which )
     {
         case State_Normal:
-            if ( DontShowLabel() )
-            {
-                // we only have the bitmap in this button, never remove it but
-                // do invalidate the best size when the bitmap (and presumably
-                // its size) changes
-                InvalidateBestSize();
-            }
             // normal image is special: setting it enables images for the button and
             // resetting it to nothing disables all of them
+            if (bitmap.IsOk())
+            {
+                GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
+                if (!child)
+                {
+                    GtkWidget* image = wxGtkImage::New(this);
+                    gtk_widget_show(image);
+                    gtk_container_add(GTK_CONTAINER(m_widget), image);
+                }
+                else if (!WX_GTK_IS_IMAGE(child))
+                {
+                    GtkWidget* image = gtk_button_get_image(GTK_BUTTON(m_widget));
+                    if (!WX_GTK_IS_IMAGE(image))
+                    {
+                        // Either there is no image or it's a GtkImage created for stock
+                        // buttons, which we want to replace with wxGtkImage for HiDPI
+                        image = wxGtkImage::New(this);
+                        gtk_button_set_image(GTK_BUTTON(m_widget), image);
+
+                        // Setting the image recreates the label, so we need to
+                        // reapply the styles to it to preserve the existing text
+                        // font and colour if they're different from defaults.
+                        GTKApplyWidgetStyle();
+                    }
+                }
+            }
             else
             {
-                GtkWidget *image = gtk_button_get_image(GTK_BUTTON(m_widget));
-                if ( image && !WX_GTK_IS_IMAGE(image) )
+                GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
+                if (WX_GTK_IS_IMAGE(child))
+                    gtk_container_remove(GTK_CONTAINER(m_widget), child);
+                else if (gtk_button_get_image(GTK_BUTTON(m_widget)))
                 {
-                    // This must be the GtkImage created for stock buttons, we
-                    // want to replace it with our own wxGtkImage as only it
-                    // handles showing appropriately-sized bitmaps in high DPI.
-                    image = nullptr;
-                }
-
-                if ( image && !bitmap.IsOk() )
-                {
-                    gtk_container_remove(GTK_CONTAINER(m_widget), image);
-                }
-                else if ( !image && bitmap.IsOk() )
-                {
-                    image = wxGtkImage::New(this);
-                    gtk_button_set_image(GTK_BUTTON(m_widget), image);
-
-                    // Setting the image recreates the label, so we need to
-                    // reapply the styles to it to preserve the existing text
-                    // font and colour if they're different from defaults.
+                    gtk_button_set_image(GTK_BUTTON(m_widget), nullptr);
                     GTKApplyWidgetStyle();
                 }
-                else // image presence or absence didn't change
-                {
-                    // don't invalidate best size below
-                    break;
-                }
-
-                InvalidateBestSize();
             }
+            InvalidateBestSize();
             break;
 
         case State_Pressed:
