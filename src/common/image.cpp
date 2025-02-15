@@ -568,13 +568,13 @@ wxImage wxImage::ResampleNearest(int width, int height) const
 
     unsigned char* dest_pixel = target_data;
 
-    wxUIntPtr y = 0;
+    wxUIntPtr y = y_delta / 2;
     for (int j = 0; j < height; j++)
     {
         const unsigned char* src_line = &source_data[(y>>16)*old_width*3];
         const unsigned char* src_alpha_line = source_alpha ? &source_alpha[(y>>16)*old_width] : nullptr ;
 
-        wxUIntPtr x = 0;
+        wxUIntPtr x = x_delta / 2;
         for (int i = 0; i < width; i++)
         {
             const unsigned char* src_pixel = &src_line[(x>>16)*3];
