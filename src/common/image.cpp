@@ -464,14 +464,21 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
     switch ( quality )
     {
         case wxIMAGE_QUALITY_NORMAL:
-            // When downscaling, we prefer to use bilinear resampling as it
-            // results in better quality at reasonable speed.
-            if ( width <= old_width && height <= old_height )
             {
-                image = ResampleBilinear(width, height);
-                break;
-            }
+                double shrinkFactorX = double(old_width) / width;
+                double shrinkFactorY = double(old_height) / height;
 
+                // When downsampling, use bilinear algorithm for pre-scaling and
+                // box average for integer part
+                if ( shrinkFactorX >= 1 && shrinkFactorY >= 1 )
+                {
+                    int shrinkInt(wxMin(shrinkFactorX, shrinkFactorY));
+
+                    image = ResampleBilinear(width * shrinkInt, height * shrinkInt);
+                    image = image.ResampleBox(width, height);
+                    break;
+                }
+            }
             // Otherwise use NEAREST for upscaling.
             wxFALLTHROUGH;
 
