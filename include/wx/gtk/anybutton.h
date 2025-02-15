@@ -16,12 +16,14 @@
 
 class WXDLLIMPEXP_CORE wxAnyButton : public wxAnyButtonBase
 {
+    typedef wxAnyButtonBase BaseType;
 public:
     wxAnyButton()
     {
         m_isCurrent =
         m_isPressed = false;
     }
+    virtual void SetLabel(const wxString& label) override;
 
     // implementation
     // --------------

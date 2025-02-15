@@ -176,6 +176,11 @@ TEST_CASE_METHOD(ButtonTestCase, "Button::Bitmap", "[button]")
     m_button->SetLabel(wxString());
     CHECK_NOTHROW( m_button->Disable() );
 
+    wxButton* button = new wxButton(m_button->GetParent(), wxID_ANY, "a");
+    button->SetLabel("");
+    CHECK_NOTHROW(button->SetBitmap(bmp));
+    delete button;
+
     // Also check that setting an invalid bitmap doesn't do anything untoward,
     // such as crashing, as it used to do in wxOSX (#19257).
     CHECK_NOTHROW( m_button->SetBitmapPressed(wxNullBitmap) );
