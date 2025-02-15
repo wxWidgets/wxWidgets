@@ -360,6 +360,9 @@ public:
                 const wxString& name = wxASCII_STR(wxXRCPreviewVListBoxNameStr));
 
 protected:
+    // avoid defaulting to tiny window
+    wxSize DoGetBestClientSize() const override;
+
     // the derived class must implement this function to actually draw the item
     // with the given index on the provided DC
     void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const override;

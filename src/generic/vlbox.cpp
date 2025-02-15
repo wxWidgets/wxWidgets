@@ -766,6 +766,16 @@ bool wxXRCPreviewVListBox::Create(wxWindow *parent,
     return retval;
 }
 
+// avoid defaulting to tiny window
+wxSize wxXRCPreviewVListBox::DoGetBestClientSize() const
+{
+    // safe to const_cast since we're just using GetTextExtent()
+    wxInfoDC dc(const_cast<wxXRCPreviewVListBox*>(this));
+    wxSize item99Size = dc.GetTextExtent(GetItem(99));
+    return wxSize(item99Size.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this),
+                    5 * item99Size.y);
+}
+
 void wxXRCPreviewVListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
 {
     dc.DrawText(GetItem(n), rect.GetLeftTop());
