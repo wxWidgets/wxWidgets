@@ -476,11 +476,14 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
 
                     image = ResampleBilinear(width * shrinkInt, height * shrinkInt);
                     image = image.ResampleBox(width, height);
-                    break;
                 }
+                else
+                {
+                    image = ResampleBox(width, height);
+                }
+
+                break;
             }
-            // Otherwise use NEAREST for upscaling.
-            wxFALLTHROUGH;
 
         case wxIMAGE_QUALITY_FAST:
         case wxIMAGE_QUALITY_NEAREST:
