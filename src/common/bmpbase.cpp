@@ -17,6 +17,7 @@
     #include "wx/colour.h"
     #include "wx/icon.h"
     #include "wx/image.h"
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_IMAGE && wxUSE_LIBPNG && wxUSE_STREAMS
@@ -69,12 +70,31 @@ void wxBitmapHelpers::Rescale(wxBitmap& bmp, const wxSize& sizeNeeded)
 {
     wxCHECK_RET( sizeNeeded.IsFullySpecified(), wxS("New size must be given") );
 
+    // can't scale to 0 size
+    wxCHECK_RET( (sizeNeeded.x > 0) && (sizeNeeded.y > 0),
+                 wxT("invalid new bitmap size") );
+
 #if wxUSE_IMAGE
-    // Note that we use "nearest" rescale mode here to preserve sharp edges in
-    // the icons for which this function is often used. It's also consistent
-    // with what wxDC::DrawBitmap() does, i.e. the fallback method below.
+
     wxImage img = bmp.ConvertToImage();
-    img.Rescale(sizeNeeded.x, sizeNeeded.y, wxIMAGE_QUALITY_NEAREST);
+
+    double shrinkFactorX = double(bmp.GetWidth()) / sizeNeeded.x;
+    double shrinkFactorY = double(bmp.GetHeight()) / sizeNeeded.y;
+
+    // When downsampling, use bilinear algorithm for pre-scaling and
+    // box average for integer part
+    if ( shrinkFactorX >= 1 && shrinkFactorY >= 1 )
+    {
+        int shrinkInt(wxMin(shrinkFactorX, shrinkFactorY));
+
+        img.Rescale(sizeNeeded.x * shrinkInt, sizeNeeded.y * shrinkInt, wxIMAGE_QUALITY_BILINEAR);
+        img.Rescale(sizeNeeded.x, sizeNeeded.y, wxIMAGE_QUALITY_BOX_AVERAGE);
+    }
+    else
+    {
+        img.Rescale(sizeNeeded.x, sizeNeeded.y, wxIMAGE_QUALITY_NEAREST);
+    }
+
     bmp = wxBitmap(img);
 #else // !wxUSE_IMAGE
     // Fallback method of scaling the bitmap
@@ -102,7 +122,6 @@ void wxBitmapHelpers::Rescale(wxBitmap& bmp, const wxSize& sizeNeeded)
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/utils.h"
     #include "wx/palette.h"
     #include "wx/module.h"
 #endif // WX_PRECOMP
