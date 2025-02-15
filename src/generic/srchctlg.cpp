@@ -825,94 +825,180 @@ static int GetMultiplier()
     return 6;
 }
 
-wxBitmap wxSearchCtrl::RenderSearchBitmap(const wxSize& size, bool renderDrop)
+wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
 {
     int x = size.x;
     int y = size.y;
 
     wxColour bg = GetBackgroundColour();
-    wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
+
+    wxBitmap bitmap;
+
+    int multiplier = GetMultiplier();
 
     //===============================================================================
     // begin drawing code
     //===============================================================================
-    // image stats
 
-    // force width:height ratio
-    if ( 14*x > y*20 )
+    switch ( bitmapType )
     {
-        // x is too big
-        x = y*20/14;
-    }
-    else
-    {
-        // y is too big
-        y = x*14/20;
-    }
-
-    // glass 11x11, top left corner
-    // handle (9,9)-(13,13)
-    // drop (13,16)-(19,6)-(16,9)
-
-    int multiplier = GetMultiplier();
-    int penWidth = multiplier * 2;
-
-    penWidth = penWidth * x / 20;
-
-    wxBitmap bitmap( multiplier*x, multiplier*y );
-    wxMemoryDC mem;
-    mem.SelectObject(bitmap);
-
-    // clear background
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
-
-    // draw drop glass
-    mem.SetBrush( wxBrush(fg) );
-    mem.SetPen( wxPen(fg) );
-    int glassBase = 5 * x / 20;
-    int glassFactor = 2*glassBase + 1;
-    int radius = multiplier*glassFactor/2;
-    mem.DrawCircle(radius,radius,radius);
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawCircle(radius,radius,radius-penWidth);
-
-    // draw handle
-    int lineStart = radius + (radius-penWidth/2) * 707 / 1000; // 707 / 1000 = 0.707 = 1/sqrt(2);
-
-    mem.SetPen( wxPen(fg) );
-    mem.SetBrush( wxBrush(fg) );
-    int handleCornerShift = penWidth * 707 / 1000 / 2; // 707 / 1000 = 0.707 = 1/sqrt(2);
-    handleCornerShift = wxMax( handleCornerShift, 1 );
-    int handleBase = 4 * x / 20;
-    int handleLength = 2*handleBase+1;
-    wxPoint handlePolygon[] =
-    {
-        wxPoint(-handleCornerShift,+handleCornerShift),
-        wxPoint(+handleCornerShift,-handleCornerShift),
-        wxPoint(multiplier*handleLength/2+handleCornerShift,multiplier*handleLength/2-handleCornerShift),
-        wxPoint(multiplier*handleLength/2-handleCornerShift,multiplier*handleLength/2+handleCornerShift),
-    };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,lineStart,lineStart);
-
-    // draw drop triangle
-    int triangleX = 13 * x / 20;
-    int triangleY = 5 * x / 20;
-    int triangleBase = 3 * x / 20;
-    int triangleFactor = triangleBase*2+1;
-    if ( renderDrop )
-    {
-        wxPoint dropPolygon[] =
+    case BitmapType::Search:
+#if wxUSE_MENUS
+    case BitmapType::Menu:
+#endif // wxUSE_MENUS
         {
-            wxPoint(multiplier*0,multiplier*0), // triangle left
-            wxPoint(multiplier*triangleFactor-1,multiplier*0), // triangle right
-            wxPoint(multiplier*triangleFactor/2,multiplier*triangleFactor/2), // triangle bottom
-        };
-        mem.DrawPolygon(WXSIZEOF(dropPolygon),dropPolygon,multiplier*triangleX,multiplier*triangleY);
+            wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
+
+            // image stats
+
+            // force width:height ratio
+            if ( 14*x > y*20 )
+            {
+                // x is too big
+                x = y*20/14;
+            }
+            else
+            {
+                // y is too big
+                y = x*14/20;
+            }
+
+            // glass 11x11, top left corner
+            // handle (9,9)-(13,13)
+            // drop (13,16)-(19,6)-(16,9)
+
+            int penWidth = multiplier * 2;
+
+            penWidth = penWidth * x / 20;
+
+            bitmap.Create( multiplier*x, multiplier*y );
+            wxMemoryDC mem;
+            mem.SelectObject(bitmap);
+
+            // clear background
+            mem.SetBrush( wxBrush(bg) );
+            mem.SetPen( wxPen(bg) );
+            mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
+
+            // draw drop glass
+            mem.SetBrush( wxBrush(fg) );
+            mem.SetPen( wxPen(fg) );
+            int glassBase = 5 * x / 20;
+            int glassFactor = 2*glassBase + 1;
+            int radius = multiplier*glassFactor/2;
+            mem.DrawCircle(radius,radius,radius);
+            mem.SetBrush( wxBrush(bg) );
+            mem.SetPen( wxPen(bg) );
+            mem.DrawCircle(radius,radius,radius-penWidth);
+
+            // draw handle
+            int lineStart = radius + (radius-penWidth/2) * 707 / 1000; // 707 / 1000 = 0.707 = 1/sqrt(2);
+
+            mem.SetPen( wxPen(fg) );
+            mem.SetBrush( wxBrush(fg) );
+            int handleCornerShift = penWidth * 707 / 1000 / 2; // 707 / 1000 = 0.707 = 1/sqrt(2);
+            handleCornerShift = wxMax( handleCornerShift, 1 );
+            int handleBase = 4 * x / 20;
+            int handleLength = 2*handleBase+1;
+            wxPoint handlePolygon[] =
+            {
+                wxPoint(-handleCornerShift,+handleCornerShift),
+                wxPoint(+handleCornerShift,-handleCornerShift),
+                wxPoint(multiplier*handleLength/2+handleCornerShift,multiplier*handleLength/2-handleCornerShift),
+                wxPoint(multiplier*handleLength/2-handleCornerShift,multiplier*handleLength/2+handleCornerShift),
+            };
+            mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,lineStart,lineStart);
+
+            // draw drop triangle
+            int triangleX = 13 * x / 20;
+            int triangleY = 5 * x / 20;
+            int triangleBase = 3 * x / 20;
+            int triangleFactor = triangleBase*2+1;
+#if wxUSE_MENUS
+            if ( bitmapType == BitmapType::Menu )
+            {
+                wxPoint dropPolygon[] =
+                {
+                    wxPoint(multiplier*0,multiplier*0), // triangle left
+                    wxPoint(multiplier*triangleFactor-1,multiplier*0), // triangle right
+                    wxPoint(multiplier*triangleFactor/2,multiplier*triangleFactor/2), // triangle bottom
+                };
+                mem.DrawPolygon(WXSIZEOF(dropPolygon),dropPolygon,multiplier*triangleX,multiplier*triangleY);
+            }
+#endif // wxUSE_MENUS
+        }
+        break;
+
+    case BitmapType::Cancel:
+        {
+            wxColour fg = GetForegroundColour().ChangeLightness(CANCEL_BITMAP_LIGHTNESS);
+
+            //===============================================================================
+            // begin drawing code
+            //===============================================================================
+            // image stats
+
+            // total size 14x14
+            // force 1:1 ratio
+            if ( x > y )
+            {
+                // x is too big
+                x = y;
+            }
+            else
+            {
+                // y is too big
+                y = x;
+            }
+
+            // 14x14 circle
+            // cross line starts (4,4)-(10,10)
+            // drop (13,16)-(19,6)-(16,9)
+
+            int penWidth = multiplier * x / 14;
+
+            bitmap.Create( multiplier*x, multiplier*y );
+            wxMemoryDC mem;
+            mem.SelectObject(bitmap);
+
+            // clear background
+            mem.SetBrush( wxBrush(bg) );
+            mem.SetPen( wxPen(bg) );
+            mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
+
+            // draw drop glass
+            mem.SetBrush( wxBrush(fg) );
+            mem.SetPen( wxPen(fg) );
+            int radius = multiplier*x/2;
+            mem.DrawCircle(radius,radius,radius);
+
+            // draw cross
+            int lineStartBase = 4 * x / 14;
+            int lineLength = x - 2*lineStartBase;
+
+            mem.SetPen( wxPen(bg) );
+            mem.SetBrush( wxBrush(bg) );
+            int handleCornerShift = penWidth/2;
+            handleCornerShift = wxMax( handleCornerShift, 1 );
+            wxPoint handlePolygon[] =
+            {
+                wxPoint(-handleCornerShift,+handleCornerShift),
+                wxPoint(+handleCornerShift,-handleCornerShift),
+                wxPoint(multiplier*lineLength+handleCornerShift,multiplier*lineLength-handleCornerShift),
+                wxPoint(multiplier*lineLength-handleCornerShift,multiplier*lineLength+handleCornerShift),
+            };
+            mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,multiplier*lineStartBase,multiplier*lineStartBase);
+            wxPoint handlePolygon2[] =
+            {
+                wxPoint(+handleCornerShift,+handleCornerShift),
+                wxPoint(-handleCornerShift,-handleCornerShift),
+                wxPoint(multiplier*lineLength-handleCornerShift,-multiplier*lineLength-handleCornerShift),
+                wxPoint(multiplier*lineLength+handleCornerShift,-multiplier*lineLength+handleCornerShift),
+            };
+            mem.DrawPolygon(WXSIZEOF(handlePolygon2),handlePolygon2,multiplier*lineStartBase,multiplier*(x-lineStartBase));
+        }
+        break;
     }
-    mem.SelectObject(wxNullBitmap);
 
     //===============================================================================
     // end drawing code
@@ -922,100 +1008,11 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap(const wxSize& size, bool renderDrop)
     {
         wxBitmap::Rescale(bitmap, wxSize(x, y));
     }
-    if ( !renderDrop )
+
+    if ( bitmapType == BitmapType::Search )
     {
         // Trim the edge where the arrow would have gone
         bitmap = bitmap.GetSubBitmap(wxRect(0,0, y,y));
-    }
-
-    return bitmap;
-}
-
-wxBitmap wxSearchCtrl::RenderCancelBitmap(const wxSize& size)
-{
-    int x = size.x;
-    int y = size.y;
-
-    wxColour bg = GetBackgroundColour();
-    wxColour fg = GetForegroundColour().ChangeLightness(CANCEL_BITMAP_LIGHTNESS);
-
-    //===============================================================================
-    // begin drawing code
-    //===============================================================================
-    // image stats
-
-    // total size 14x14
-    // force 1:1 ratio
-    if ( x > y )
-    {
-        // x is too big
-        x = y;
-    }
-    else
-    {
-        // y is too big
-        y = x;
-    }
-
-    // 14x14 circle
-    // cross line starts (4,4)-(10,10)
-    // drop (13,16)-(19,6)-(16,9)
-
-    int multiplier = GetMultiplier();
-
-    int penWidth = multiplier * x / 14;
-
-    wxBitmap bitmap( multiplier*x, multiplier*y );
-    wxMemoryDC mem;
-    mem.SelectObject(bitmap);
-
-    // clear background
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
-
-    // draw drop glass
-    mem.SetBrush( wxBrush(fg) );
-    mem.SetPen( wxPen(fg) );
-    int radius = multiplier*x/2;
-    mem.DrawCircle(radius,radius,radius);
-
-    // draw cross
-    int lineStartBase = 4 * x / 14;
-    int lineLength = x - 2*lineStartBase;
-
-    mem.SetPen( wxPen(bg) );
-    mem.SetBrush( wxBrush(bg) );
-    int handleCornerShift = penWidth/2;
-    handleCornerShift = wxMax( handleCornerShift, 1 );
-    wxPoint handlePolygon[] =
-    {
-        wxPoint(-handleCornerShift,+handleCornerShift),
-        wxPoint(+handleCornerShift,-handleCornerShift),
-        wxPoint(multiplier*lineLength+handleCornerShift,multiplier*lineLength-handleCornerShift),
-        wxPoint(multiplier*lineLength-handleCornerShift,multiplier*lineLength+handleCornerShift),
-    };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,multiplier*lineStartBase,multiplier*lineStartBase);
-    wxPoint handlePolygon2[] =
-    {
-        wxPoint(+handleCornerShift,+handleCornerShift),
-        wxPoint(-handleCornerShift,-handleCornerShift),
-        wxPoint(multiplier*lineLength-handleCornerShift,-multiplier*lineLength-handleCornerShift),
-        wxPoint(multiplier*lineLength+handleCornerShift,-multiplier*lineLength+handleCornerShift),
-    };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon2),handlePolygon2,multiplier*lineStartBase,multiplier*(x-lineStartBase));
-
-    // Stop drawing on the bitmap before possibly calling wxBitmap::Rescale()
-    // below.
-    mem.SelectObject(wxNullBitmap);
-
-    //===============================================================================
-    // end drawing code
-    //===============================================================================
-
-    if ( multiplier != 1 )
-    {
-        wxBitmap::Rescale(bitmap, wxSize(x, y));
     }
 
     return bitmap;
@@ -1039,7 +1036,7 @@ void wxSearchCtrl::RecalcBitmaps()
             m_searchBitmap.GetSize() != bitmapSize
             )
         {
-            m_searchBitmap = RenderSearchBitmap(bitmapSize, false);
+            m_searchBitmap = RenderBitmap(bitmapSize, BitmapType::Search);
             if ( !HasMenu() )
             {
                 m_searchButton->SetBitmapLabel(m_searchBitmap);
@@ -1056,7 +1053,7 @@ void wxSearchCtrl::RecalcBitmaps()
             m_searchMenuBitmap.GetSize() != bitmapSize
             )
         {
-            m_searchMenuBitmap = RenderSearchBitmap(bitmapSize, true);
+            m_searchMenuBitmap = RenderBitmap(bitmapSize, BitmapType::Menu);
             if ( m_menu )
             {
                 m_searchButton->SetBitmapLabel(m_searchMenuBitmap);
@@ -1073,7 +1070,7 @@ void wxSearchCtrl::RecalcBitmaps()
             m_cancelBitmap.GetSize() != bitmapSize
             )
         {
-            m_cancelBitmap = RenderCancelBitmap(bitmapSize);
+            m_cancelBitmap = RenderBitmap(bitmapSize, BitmapType::Cancel);
             m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         }
         // else this bitmap was set by user, don't alter
