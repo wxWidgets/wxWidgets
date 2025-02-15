@@ -187,8 +187,8 @@ private:
 #endif // wxUSE_MENUS
 
     void RecalcBitmaps();
-    wxBitmap RenderSearchBitmap( int x, int y, bool renderDrop );
-    wxBitmap RenderCancelBitmap( int x, int y );
+    wxBitmap RenderSearchBitmap(const wxSize& size, bool renderDrop);
+    wxBitmap RenderCancelBitmap(const wxSize& size);
 
     // the subcontrols
     wxSearchTextCtrl *m_text;

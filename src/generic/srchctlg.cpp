@@ -825,8 +825,11 @@ static int GetMultiplier()
     return 6;
 }
 
-wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
+wxBitmap wxSearchCtrl::RenderSearchBitmap(const wxSize& size, bool renderDrop)
 {
+    int x = size.x;
+    int y = size.y;
+
     wxColour bg = GetBackgroundColour();
     wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
 
@@ -928,8 +931,11 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
     return bitmap;
 }
 
-wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
+wxBitmap wxSearchCtrl::RenderCancelBitmap(const wxSize& size)
 {
+    int x = size.x;
+    int y = size.y;
+
     wxColour bg = GetBackgroundColour();
     wxColour fg = GetForegroundColour().ChangeLightness(CANCEL_BITMAP_LIGHTNESS);
 
@@ -1023,18 +1029,17 @@ void wxSearchCtrl::RecalcBitmaps()
     }
     wxSize sizeText = m_text->GetBestSize();
 
-    int bitmapHeight = sizeText.y - FromDIP(4);
-    int bitmapWidth  = sizeText.y * 20 / 14;
+    const wxSize
+        bitmapSize = wxSize(sizeText.y * 20 / 14, sizeText.y - FromDIP(4));
 
     if ( !m_searchBitmapUser )
     {
         if (
             !m_searchBitmap.IsOk() ||
-            m_searchBitmap.GetHeight() != bitmapHeight ||
-            m_searchBitmap.GetWidth() != bitmapWidth
+            m_searchBitmap.GetSize() != bitmapSize
             )
         {
-            m_searchBitmap = RenderSearchBitmap(bitmapWidth,bitmapHeight,false);
+            m_searchBitmap = RenderSearchBitmap(bitmapSize, false);
             if ( !HasMenu() )
             {
                 m_searchButton->SetBitmapLabel(m_searchBitmap);
@@ -1048,11 +1053,10 @@ void wxSearchCtrl::RecalcBitmaps()
     {
         if (
             !m_searchMenuBitmap.IsOk() ||
-            m_searchMenuBitmap.GetHeight() != bitmapHeight ||
-            m_searchMenuBitmap.GetWidth() != bitmapWidth
+            m_searchMenuBitmap.GetSize() != bitmapSize
             )
         {
-            m_searchMenuBitmap = RenderSearchBitmap(bitmapWidth,bitmapHeight,true);
+            m_searchMenuBitmap = RenderSearchBitmap(bitmapSize, true);
             if ( m_menu )
             {
                 m_searchButton->SetBitmapLabel(m_searchMenuBitmap);
@@ -1066,11 +1070,10 @@ void wxSearchCtrl::RecalcBitmaps()
     {
         if (
             !m_cancelBitmap.IsOk() ||
-            m_cancelBitmap.GetHeight() != bitmapHeight ||
-            m_cancelBitmap.GetWidth() != bitmapWidth
+            m_cancelBitmap.GetSize() != bitmapSize
             )
         {
-            m_cancelBitmap = RenderCancelBitmap(bitmapWidth,bitmapHeight);
+            m_cancelBitmap = RenderCancelBitmap(bitmapSize);
             m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         }
         // else this bitmap was set by user, don't alter
