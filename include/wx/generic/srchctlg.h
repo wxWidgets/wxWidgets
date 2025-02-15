@@ -150,12 +150,7 @@ protected:
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestClientSize() const override;
 
-    virtual void RecalcBitmaps();
-
     void Init();
-
-    virtual wxBitmap RenderSearchBitmap( int x, int y, bool renderDrop );
-    virtual wxBitmap RenderCancelBitmap( int x, int y );
 
     void OnCancelButton( wxCommandEvent& event );
 
@@ -190,6 +185,10 @@ private:
 #if wxUSE_MENUS
     void PopupSearchMenu();
 #endif // wxUSE_MENUS
+
+    void RecalcBitmaps();
+    wxBitmap RenderSearchBitmap( int x, int y, bool renderDrop );
+    wxBitmap RenderCancelBitmap( int x, int y );
 
     // the subcontrols
     wxSearchTextCtrl *m_text;
