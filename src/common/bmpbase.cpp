@@ -92,7 +92,7 @@ void wxBitmapHelpers::Rescale(wxBitmap& bmp, const wxSize& sizeNeeded)
     }
     else
     {
-        img.Rescale(sizeNeeded.x, sizeNeeded.y, wxIMAGE_QUALITY_NEAREST);
+        img.Rescale(sizeNeeded.x, sizeNeeded.y, wxIMAGE_QUALITY_BOX_AVERAGE);
     }
 
     bmp = wxBitmap(img);
