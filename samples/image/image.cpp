@@ -783,8 +783,9 @@ public:
         wxSizerFlags sizerFlags4;
         sizerFlags4.Border();
 
+        wxString hueLabel = wxString::Format(wxS("Hue (%s)"), wxString::FromUTF8("\xc2\xb0"));
         wxStaticBoxSizer *sizerHue = new wxStaticBoxSizer(new wxStaticBox(this,
-                                     wxID_ANY, wxS("Hue (°)")), wxVERTICAL);
+                                     wxID_ANY, hueLabel), wxVERTICAL);
         m_sliderHue = new wxSlider(sizerHue->GetStaticBox(), wxID_ANY, 0, -360, 360,
                       wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_LABELS);
         sizerHue->Add(m_sliderHue, sizerFlags2);
@@ -911,6 +912,7 @@ public:
 
         SetSizer(sizerMain);
         CreateStatusBar();
+        SetSize(GetBestSize());
 
         // Bind Events
         Bind(wxEVT_MENU, &MyFiltersFrame::OnNewImage, this, wxID_OPEN);
