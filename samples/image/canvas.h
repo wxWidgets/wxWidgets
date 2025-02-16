@@ -21,6 +21,7 @@ public:
     ~MyCanvas();
 
     void OnPaint(wxPaintEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
     wxBitmap const& GetPngBitmap() const;
     wxSize GetDrawingSize() const;
 
@@ -28,7 +29,8 @@ private:
     void DrawSquares(wxDC& dc, int xOffset, int yOffset);
     void CreateAntiAliasedBitmap();
 
-    wxBitmap  my_horse_png;
+    wxBitmap  my_horse_png,
+              my_horse_png_scaled;
     wxBitmap  my_horse_jpeg;
     wxBitmap  my_horse_gif;
     wxBitmap  my_horse_bmp;

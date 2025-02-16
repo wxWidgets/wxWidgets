@@ -32,6 +32,7 @@
 
 wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
+    EVT_DPI_CHANGED(MyCanvas::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxWindow* parent)
@@ -400,13 +401,19 @@ wxBitmap const& MyCanvas::GetPngBitmap() const
     return my_horse_png;
 }
 
+void MyCanvas::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    event.Skip();
+    my_horse_png_scaled = wxNullBitmap;
+}
+
 wxSize MyCanvas::GetDrawingSize() const
 {
     // Aproximate the size used in OnPaint
-    // 4 rows, about 14 columns
+    // 4 rows, about 13 columns and 1 DPI dependent column
     const int imageSize = 200;
     const int width = 4 * FromDIP(250);
-    const int height = 14 * (imageSize + 2 * GetCharHeight());
+    const int height = 13 * (imageSize + 2 * GetCharHeight()) + FromDIP(imageSize);
 
     return wxSize(width, height);
 }
@@ -449,6 +456,17 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
         wxBitmap sub(my_horse_png.GetSubBitmap(rect));
         dc.DrawText("GetSubBitmap()", col2, y);
         dc.DrawBitmap(sub, col2, y + ch);
+
+        const double scale = GetDPIScaleFactor() / GetContentScaleFactor();
+        if (!my_horse_png_scaled.IsOk())
+        {
+            my_horse_png_scaled = my_horse_png;
+            wxBitmap::Rescale(my_horse_png_scaled, scale * my_horse_png.GetSize());
+        }
+        dc.DrawText(wxString::Format("DPI Rescale(%.1f)", scale), col3, y);
+        dc.DrawBitmap(my_horse_png_scaled, col3, y + ch);
+        // extra offset
+        y += (scale * imageSize - imageSize);
     }
 
     y += yOffset;
