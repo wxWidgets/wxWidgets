@@ -838,20 +838,6 @@ wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
         {
             wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
 
-            // image stats
-
-            // force width:height ratio
-            if ( 14*x > y*20 )
-            {
-                // x is too big
-                x = y*20/14;
-            }
-            else
-            {
-                // y is too big
-                y = x*14/20;
-            }
-
             // glass 11x11, top left corner
             // handle (9,9)-(13,13)
             // drop (13,16)-(19,6)-(16,9)
@@ -925,20 +911,6 @@ wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
             //===============================================================================
             // begin drawing code
             //===============================================================================
-            // image stats
-
-            // total size 14x14
-            // force 1:1 ratio
-            if ( x > y )
-            {
-                // x is too big
-                x = y;
-            }
-            else
-            {
-                // y is too big
-                y = x;
-            }
 
             // 14x14 circle
             // cross line starts (4,4)-(10,10)
@@ -1015,8 +987,19 @@ void wxSearchCtrl::RecalcBitmaps()
     }
     wxSize sizeText = m_text->GetBestSize();
 
-    const wxSize
-        bitmapSize = wxSize(sizeText.y * 20 / 14, sizeText.y - FromDIP(4));
+    // We use rectangular shape for the search bitmap to accommodate a possible
+    // menu drop down indicator in the menu bitmap.
+    wxSize bitmapSize = wxSize(sizeText.y * 20 / 14, sizeText.y - FromDIP(4));
+    if ( 14*bitmapSize.x > bitmapSize.y*20 )
+    {
+        // x is too big
+        bitmapSize.x = bitmapSize.y*20/14;
+    }
+    else
+    {
+        // y is too big
+        bitmapSize.y = bitmapSize.x*14/20;
+    }
 
     if ( !m_searchBitmapUser )
     {
@@ -1051,6 +1034,19 @@ void wxSearchCtrl::RecalcBitmaps()
         // else this bitmap was set by user, don't alter
     }
 #endif // wxUSE_MENUS
+
+    // But the cancel button is square, so force 1:1 ratio.
+    if ( bitmapSize.x > bitmapSize.y )
+    {
+        // x is too big
+        bitmapSize.x = bitmapSize.y;
+    }
+    else
+    {
+        // y is too big
+        bitmapSize.y = bitmapSize.x;
+    }
+
 
     if ( m_cancelButton && !m_cancelBitmapUser )
     {
