@@ -812,19 +812,6 @@ bool wxSearchCtrl::ShouldInheritColours() const
     return true;
 }
 
-// icons are rendered at 3-8 times larger than necessary and downscaled for
-// antialiasing
-static int GetMultiplier()
-{
-    int depth = ::wxDisplayDepth();
-
-    if  ( depth >= 24 )
-    {
-        return 8;
-    }
-    return 6;
-}
-
 wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
 {
     int x = size.x;
@@ -834,7 +821,9 @@ wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
 
     wxBitmap bitmap;
 
-    int multiplier = GetMultiplier();
+    // icons are rendered at 6-8 times larger than necessary and downscaled for
+    // antialiasing
+    const int multiplier = ::wxDisplayDepth() >= 24 ? 8 : 6;
 
     //===============================================================================
     // begin drawing code
