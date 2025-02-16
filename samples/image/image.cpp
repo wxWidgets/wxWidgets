@@ -1194,17 +1194,17 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
     array.Add("Version of the libraries used:");
 
 #if wxUSE_LIBPNG
-    array.Add(wxPNGHandler::GetLibraryVersionInfo().ToString());
+    array.Add(wxPNGHandler::GetLibraryVersionInfo().GetVersionString());
 #endif
 #if wxUSE_LIBJPEG
-    array.Add(wxJPEGHandler::GetLibraryVersionInfo().ToString());
+    array.Add(wxJPEGHandler::GetLibraryVersionInfo().GetVersionString());
 #endif
 #if wxUSE_LIBTIFF
-    array.Add(wxTIFFHandler::GetLibraryVersionInfo().ToString());
+    array.Add(wxTIFFHandler::GetLibraryVersionInfo().GetVersionString());
 #endif
 #if wxUSE_ZLIB && wxUSE_STREAMS
     // zlib is used by libpng
-    array.Add(wxGetZlibVersionInfo().ToString());
+    array.Add(wxGetZlibVersionInfo().GetVersionString());
 #endif
     (void)wxMessageBox( wxJoin(array, '\n'),
                         "About wxImage Demo",
