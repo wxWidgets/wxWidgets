@@ -65,42 +65,15 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxBookCtrlEvent);
 namespace
 {
 
-// Return the state the pin button should have for the given tab kind.
-wxAuiPaneButtonState GetPinButtonState(wxAuiTabKind kind)
-{
-    wxAuiPaneButtonState state = wxAUI_BUTTON_STATE_NORMAL;
-
-    switch (kind)
-    {
-        case wxAuiTabKind::Normal:
-            // Nothing to do, just show the button normally.
-            break;
-
-        case wxAuiTabKind::Pinned:
-            // The button should not be only visible, but in "on" state.
-            state = wxAUI_BUTTON_STATE_CHECKED;
-            break;
-
-        case wxAuiTabKind::Locked:
-            // Locked tabs can't be pinned.
-            state = wxAUI_BUTTON_STATE_HIDDEN;
-            break;
-    }
-
-    return state;
-}
-
-// Build the vector of buttons for the page depending on the global notebook
-// flags and this page kind.
-std::vector<wxAuiTabContainerButton>
-MakePageButtons(wxAuiTabKind kind, unsigned int flags)
+// Build the vector of buttons for the page depending on the notebook flags.
+std::vector<wxAuiTabContainerButton> MakePageButtons(unsigned int flags)
 {
     std::vector<wxAuiTabContainerButton> buttons;
 
-    // Pinned button is only shown if the corresponding style is used and its
-    // state depends on the page kind.
-    if (flags & wxAUI_NB_TAB_PIN)
-        buttons.push_back({wxAUI_BUTTON_PIN, wxRIGHT, GetPinButtonState(kind)});
+    // Pinned button is only shown if the corresponding style is used and only
+    // shown for the current tab, so make it hidden by default.
+    if (flags & wxAUI_NB_PIN_ON_ACTIVE_TAB)
+        buttons.push_back({wxAUI_BUTTON_PIN, wxRIGHT, wxAUI_BUTTON_STATE_HIDDEN});
 
     // Close button is hidden by default, it will be shown depending on the
     // exact style used and, for wxAUI_NB_CLOSE_ON_ACTIVE_TAB, on whether the
@@ -188,14 +161,14 @@ void wxAuiTabContainer::SetFlags(unsigned int flags)
     // Also synchronize the tabs buttons with the new settings if any of the
     // flags affecting them changed.
     const auto flagsAffectingButtons =
-        wxAUI_NB_TAB_PIN |
+        wxAUI_NB_PIN_ON_ACTIVE_TAB |
         wxAUI_NB_CLOSE_ON_ALL_TABS |
         wxAUI_NB_CLOSE_ON_ACTIVE_TAB;
     if ((m_flags & flagsAffectingButtons) != (flags & flagsAffectingButtons))
     {
         for (auto& page : m_pages)
         {
-            page.buttons = MakePageButtons(page.kind, flags);
+            page.buttons = MakePageButtons(flags);
         }
     }
 
@@ -257,7 +230,7 @@ bool wxAuiTabContainer::InsertPage(const wxAuiNotebookPage& info,
 {
     const auto it = m_pages.insert(m_pages.begin() + idx, info);
 
-    it->buttons = MakePageButtons(info.kind, m_flags);
+    it->buttons = MakePageButtons(m_flags);
 
     // let the art provider know how many pages we have
     if (m_art)
@@ -454,44 +427,60 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 
 
 void
-wxAuiTabContainer::UpdateCloseButtonState(wxAuiNotebookPage& page,
-                                          bool forceActive)
+wxAuiTabContainer::UpdateButtonsState(wxAuiNotebookPage& page, bool forceActive)
 {
-    // determine if a close button is on this tab
+    const bool isActive = forceActive || page.active;
     for (auto& button : page.buttons)
     {
-        if (button.id == wxAUI_BUTTON_CLOSE)
+        bool shown = false;
+        switch ( page.kind )
         {
-            bool shown = false;
-            switch ( page.kind )
-            {
-                case wxAuiTabKind::Normal:
-                case wxAuiTabKind::Pinned:
-                    if (IsFlagSet(wxAUI_NB_CLOSE_ON_ALL_TABS))
-                    {
-                        shown = true;
-                    }
-                    else if (IsFlagSet(wxAUI_NB_CLOSE_ON_ACTIVE_TAB))
-                    {
-                        if (forceActive || page.active)
+            case wxAuiTabKind::Normal:
+            case wxAuiTabKind::Pinned:
+                switch ( button.id )
+                {
+                    case wxAUI_BUTTON_CLOSE:
+                        if (IsFlagSet(wxAUI_NB_CLOSE_ON_ALL_TABS))
+                        {
                             shown = true;
-                    }
-                    break;
+                        }
+                        else if (IsFlagSet(wxAUI_NB_CLOSE_ON_ACTIVE_TAB))
+                        {
+                            if (isActive)
+                                shown = true;
+                        }
+                        break;
 
-                case wxAuiTabKind::Locked:
-                    // A locked page can't be closed, leave the button hidden.
-                    break;
-            }
+                    case wxAUI_BUTTON_PIN:
+                        if (IsFlagSet(wxAUI_NB_PIN_ON_ACTIVE_TAB))
+                        {
+                            if (isActive)
+                            {
+                                shown = true;
 
-            // Leave the other flags unchanged, this doesn't matter when hiding
-            // the button but does when showing it as it could be pressed or
-            // under the mouse.
-            if ( shown )
-                button.curState &= ~wxAUI_BUTTON_STATE_HIDDEN;
-            else
-                button.curState |= wxAUI_BUTTON_STATE_HIDDEN;
-            break;
+                                if ( page.kind == wxAuiTabKind::Pinned )
+                                    button.curState |= wxAUI_BUTTON_STATE_CHECKED;
+                                else
+                                    button.curState &= ~wxAUI_BUTTON_STATE_CHECKED;
+                            }
+                        }
+                        break;
+                }
+                break;
+
+            case wxAuiTabKind::Locked:
+                // A locked page can't be closed or pinned, leave the button
+                // in its default hidden state.
+                break;
         }
+
+        // Leave the other flags unchanged, this doesn't matter when hiding
+        // the button but does when showing it as it could be pressed or
+        // under the mouse.
+        if ( shown )
+            button.curState &= ~wxAUI_BUTTON_STATE_HIDDEN;
+        else
+            button.curState |= wxAUI_BUTTON_STATE_HIDDEN;
     }
 }
 
@@ -584,14 +573,13 @@ int wxAuiTabContainer::LayoutMultiLineTabs(const wxRect& rect, wxWindow* wnd)
     bool* lastRowEnd = nullptr; // Pointer to the flag in the last tab.
     for ( auto& page : m_pages )
     {
-        // When using wxAUI_NB_CLOSE_ON_ACTIVE_TAB, we need to reserve
-        // enough space in each row to show "Close" button on the active
-        // tab if it's in this row to avoid redoing the layout when the
+        // When using wxAUI_NB_{CLOSE,PIN}_ON_ACTIVE_TAB, we need to reserve
+        // enough space in each row to show the corresponding button on the
+        // active tab if it's in this row to avoid redoing the layout when the
         // selection changes (as this would be very confusing). So we
-        // always measure the first tab in the row as if it had the "Close"
-        // button. This relies on the extra increment in the width being
-        // constant for all tabs, but this seems to be a safe enough
-        // assumption.
+        // always measure the first tab in the row as if it had the button(s).
+        // This relies on the extra increment in the width being constant for
+        // all tabs, but this seems to be a safe enough assumption.
         //
         // Note that for non-wxAUI_NB_CLOSE_ON_ACTIVE_TAB cases, it doesn't
         // matter, as "Close" is either never shown at all or always shown
@@ -603,7 +591,7 @@ int wxAuiTabContainer::LayoutMultiLineTabs(const wxRect& rect, wxWindow* wnd)
         // locked tabs, we never have to add any extra space.
         if ( page.kind != wxAuiTabKind::Locked )
         {
-            UpdateCloseButtonState(page, firstTabInRow);
+            UpdateButtonsState(page, firstTabInRow);
             firstTabInRow = false;
         }
 
@@ -659,7 +647,7 @@ void wxAuiTabContainer::RenderButtons(wxDC& dc, wxWindow* wnd,
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
 
-        UpdateCloseButtonState(page);
+        UpdateButtonsState(page);
 
         int x_extent = 0;
         const wxSize size = m_art->GetPageTabSize(dc, wnd, page, &x_extent);
@@ -901,7 +889,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
 
-        UpdateCloseButtonState(page);
+        UpdateButtonsState(page);
 
         // Check if this tab is at least partially visible when using a single
         // row (otherwise all rows are visible).
@@ -1043,7 +1031,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxReadOnlyDC* d
         if (rect.width <= 0)
             return false; // haven't found the tab, and we've run out of space, so return false
 
-        UpdateCloseButtonState(page);
+        UpdateButtonsState(page);
 
         int x_extent = 0;
         m_art->GetPageTabSize(*dc, wnd, page, &x_extent);
@@ -2659,9 +2647,6 @@ bool wxAuiNotebook::SetPageKind(size_t page_idx, wxAuiTabKind kind)
             break;
 
         case wxAuiTabKind::Pinned:
-            wxCHECK_MSG(tabCtrl.IsFlagSet(wxAUI_NB_TAB_PIN), false,
-                        "Pinning tabs requires using wxAUI_NB_TAB_PIN style");
-
             // When a normal tab becomes pinned, it should be moved to the end
             // of the pinned tabs, but when a locked tab becomes pinned, it
             // makes more sense to put it at the beginning of this group, for
@@ -2699,14 +2684,6 @@ bool wxAuiNotebook::SetPageKind(size_t page_idx, wxAuiTabKind kind)
 
     // And also update kind in this copy of the page info before moving it.
     tabInfo.pageInfo->kind = kind;
-    for ( auto& button : tabInfo.pageInfo->buttons )
-    {
-        if ( button.id == wxAUI_BUTTON_PIN )
-        {
-            button.curState = GetPinButtonState(kind);
-            break;
-        }
-    }
 
     tabCtrl.MovePage(tabInfo.tabIdx, newIdx);
     tabCtrl.Refresh();

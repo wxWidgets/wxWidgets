@@ -51,7 +51,7 @@ enum wxAuiNotebookOption
     wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 12,
     wxAUI_NB_MIDDLE_CLICK_CLOSE  = 1 << 13,
     wxAUI_NB_MULTILINE           = 1 << 14,
-    wxAUI_NB_TAB_PIN             = 1 << 15,
+    wxAUI_NB_PIN_ON_ACTIVE_TAB   = 1 << 15,
 
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
@@ -327,13 +327,11 @@ private:
     void RenderButtons(wxDC& dc, wxWindow* wnd,
                        int& left_buttons_width, int& right_buttons_width);
 
-    // Update the state of the close button for the given page depending on its
-    // state and flags.
+    // Update the state of the page buttons depending on its state and flags.
     //
     // If forceActive is true, the page is always considered as active, see the
     // comment in LayoutMultiLineTabs() for the reason why this is needed.
-    void UpdateCloseButtonState(wxAuiNotebookPage& page,
-                                bool forceActive = false);
+    void UpdateButtonsState(wxAuiNotebookPage& page, bool forceActive = false);
 
     int m_tabRowHeight;
 };

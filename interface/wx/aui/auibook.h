@@ -26,15 +26,18 @@ enum wxAuiNotebookOption
     wxAUI_NB_MULTILINE           = 1 << 14,
 
     /**
-        Allow the user to pin tabs and to use wxAuiNotebook::SetPageKind() to
-        do it programmatically.
+        Allow the user to pin tabs by using the pin button.
 
-        This style is not included in the default notebook style and has to be
-        explicitly specified when creating the control.
+        With this style, the active page shows either a "pin" icon allowing to
+        pin it if it it's currently not pinned or an "unpin" icon if it is
+        already pinned.
+
+        Note that if this style is not specified, tabs can still be pinned
+        programmatically using SetPageKind().
 
         @since 3.3.0
      */
-    wxAUI_NB_TAB_PIN             = 1 << 15
+    wxAUI_NB_PIN_ON_ACTIVE_TAB    = 1 << 15
 
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
@@ -187,12 +190,13 @@ struct wxAuiNotebookPosition
            area, multiple rows of tabs are used instead of adding a button
            allowing to scroll them. This style is only available in wxWidgets
            3.3.0 or later.
-    @style{wxAUI_NB_TAB_PIN}
-           If this style is specified, tabs show a "pin" icon allowing to
-           change their kind to wxAuiTabKind::Pinned and back to normal. This
-           style is not included in the default notebook style and has to be
-           explicitly specified for pinned tabs to be supported. It is
-           available in wxWidgets 3.3.0 or later.
+    @style{wxAUI_NB_PIN_ON_ACTIVE_TAB}
+           If this style is specified, the active tab shows either a "pin" icon
+           allowing to pin it (i.e. change its kind to wxAuiTabKind::Pinned) if
+           it's not currently pinned or an "unpin" icon to change the kind back
+           to normal. This style is not included in the default notebook style
+           and has to be explicitly specified for the user to be able to pin
+           the tabs interactively. It is available in wxWidgets 3.3.0 or later.
     @endStyleTable
 
     @beginEventEmissionTable{wxAuiNotebookEvent}
@@ -591,12 +595,25 @@ public:
     /**
         Set the tab kind.
 
-        Can be used to pin or lock a tab. Pinning, i.e. passing @a kind of
-        wxAuiTabKind::Pinned, requires the control to have ::wxAUI_NB_TAB_PIN
-        style, which also allows the user to unpin the tab later.
+        Can be used to pin or lock a tab.
 
-        Locking doesn't require any special styles because locked tabs can only
-        be unlocked programmatically by calling this function.
+        Tabs are are grouped in 3 subsets (each of which can possibly be
+        empty):
+
+        - Shown first are locked tabs which are typically used for showing some
+        different content from the normal (and pinned) tabs. These tabs are
+        special, they're always shown and can't be closed nor moved, by
+        dragging them, by the user.
+        - Next are pinned tabs: these tabs can be closed and, depending on the
+        presence of ::wxAUI_NB_PIN_ON_ACTIVE_TAB style, can also be unpinned
+        (i.e. made normal) by the user. If ::wxAUI_NB_TAB_MOVE is specified,
+        they can be moved by dragging them, however they are restricted to
+        remain in the pinned tabs group, i.e. only the order of the pinned tabs
+        can be changed.
+        - Finally, normal tabs are shown. These tabs can be closed and,
+        depending on ::wxAUI_NB_PIN_ON_ACTIVE_TAB style, pinned by the user.
+        They can also be moved by dragging them, but only inside the same
+        group.
 
         @param pageIdx
             The index of the page to change.
@@ -606,8 +623,7 @@ public:
             @true if the kind was changed, @false if it didn't change, either
             because the page already was of the specified @a kind or because
             the preconditions were not satisfied, e.g. the page index was
-            invalid or pinning was requested for a control without
-            ::wxAUI_NB_TAB_PIN style.
+            invalid.
 
         @since 3.3.0
      */
@@ -766,7 +782,7 @@ public:
 enum class wxAuiTabKind
 {
     Normal, ///< Can be closed and dragged by user.
-    Pinned, ///< Can be closed but can't be dragged, can be unpinned by user.
+    Pinned, ///< Can be closed and possibly unpinned by user.
     Locked  ///< Can't be closed, dragged nor unlocked by user.
 };
 

@@ -803,7 +803,7 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
-    notebook_menu->AppendCheckItem(ID_NotebookTabPin, _("Allow to &Pin Tabs"));
+    notebook_menu->AppendCheckItem(ID_NotebookTabPin, _("Show &Pin Button"));
     notebook_menu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
     notebook_menu->AppendSeparator();
     notebook_menu->Append(ID_NotebookNextTab, _("Switch to next tab\tCtrl-F6"));
@@ -1298,7 +1298,7 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     }
     else if (id == ID_NotebookTabPin)
     {
-        m_notebook_style ^= wxAUI_NB_TAB_PIN;
+        m_notebook_style ^= wxAUI_NB_PIN_ON_ACTIVE_TAB;
     }
     else if (id == ID_NotebookMultiLine)
     {
@@ -1431,7 +1431,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             event.Check((m_notebook_style & wxAUI_NB_TAB_FIXED_WIDTH) != 0);
             break;
         case ID_NotebookTabPin:
-            event.Check((m_notebook_style & wxAUI_NB_TAB_PIN) != 0);
+            event.Check((m_notebook_style & wxAUI_NB_PIN_ON_ACTIVE_TAB) != 0);
             break;
         case ID_NotebookMultiLine:
             event.Check((m_notebook_style & wxAUI_NB_MULTILINE) != 0);
