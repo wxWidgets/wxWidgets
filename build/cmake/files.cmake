@@ -64,7 +64,6 @@ set(BASE_WIN32_SRC
     src/msw/dlmsw.cpp
     src/msw/evtloopconsole.cpp
     src/msw/mimetype.cpp
-    src/msw/power.cpp
     src/msw/regconf.cpp
     src/msw/registry.cpp
     src/msw/secretstore.cpp
@@ -152,7 +151,6 @@ set(BASE_OSX_SHARED_HDR
 
 set(BASE_AND_GUI_OSX_COCOA_SRC
     src/osx/cocoa/utils.mm
-    src/osx/cocoa/power.mm
     src/osx/volume.mm
 )
 
@@ -453,7 +451,6 @@ set(BASE_CMN_SRC
     src/common/numformatter.cpp
     src/common/object.cpp
     src/common/platinfo.cpp
-    src/common/powercmn.cpp
     src/common/process.cpp
     src/common/regex.cpp
     src/common/secretstore.cpp
@@ -591,7 +588,6 @@ set(BASE_CMN_HDR
     wx/object.h
     wx/platform.h
     wx/platinfo.h
-    wx/power.h
     wx/process.h
     wx/ptr_scpd.h
     wx/ptr_shrd.h
@@ -933,6 +929,7 @@ set(GUI_CMN_SRC
     src/generic/animateg.cpp
     src/common/bmpbndl.cpp
     src/generic/bmpsvg.cpp
+    src/common/powercmn.cpp
 )
 
 set(GUI_CMN_HDR
@@ -1226,6 +1223,7 @@ set(GUI_CMN_HDR
     wx/filedlgcustomize.h
     wx/compositebookctrl.h
     wx/persist/combobox.h
+    wx/power.h
 )
 
 set(UNIX_SRC
@@ -1646,6 +1644,7 @@ set(MSW_LOWLEVEL_SRC
     src/msw/darkmode.cpp
     src/msw/appprogress.cpp
     src/msw/taskbarbutton.cpp
+    src/msw/power.cpp
 )
 
 set(MSW_LOWLEVEL_HDR
@@ -2213,6 +2212,7 @@ set(OSX_COCOA_SRC
     src/osx/cocoa/statbmp.mm
     src/osx/core/display.cpp
     src/osx/cocoa/renderer.mm
+    src/osx/cocoa/power.mm
 )
 
 set(OSX_COCOA_HDR

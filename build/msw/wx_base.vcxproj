@@ -942,7 +942,6 @@
     <ClCompile Include="..\..\src\common\numformatter.cpp" />
     <ClCompile Include="..\..\src\common\object.cpp" />
     <ClCompile Include="..\..\src\common\platinfo.cpp" />
-    <ClCompile Include="..\..\src\common\powercmn.cpp" />
     <ClCompile Include="..\..\src\common\process.cpp" />
     <ClCompile Include="..\..\src\common\regex.cpp" />
     <ClCompile Include="..\..\src\common\sstream.cpp" />
@@ -987,7 +986,6 @@
     <ClCompile Include="..\..\src\msw\fswatcher.cpp" />
     <ClCompile Include="..\..\src\msw\main.cpp" />
     <ClCompile Include="..\..\src\msw\mimetype.cpp" />
-    <ClCompile Include="..\..\src\msw\power.cpp" />
     <ClCompile Include="..\..\src\msw\regconf.cpp" />
     <ClCompile Include="..\..\src\msw\registry.cpp" />
     <ClCompile Include="..\..\src\msw\snglinst.cpp" />
@@ -1237,7 +1235,6 @@
     <ClInclude Include="..\..\include\wx\platform.h" />
     <ClInclude Include="..\..\include\wx\platinfo.h" />
     <ClInclude Include="..\..\include\wx\meta\pod.h" />
-    <ClInclude Include="..\..\include\wx\power.h" />
     <ClInclude Include="..\..\include\wx\process.h" />
     <ClInclude Include="..\..\include\wx\ptr_scpd.h" />
     <ClInclude Include="..\..\include\wx\ptr_shrd.h" />

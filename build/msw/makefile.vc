@@ -511,7 +511,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_numformatter.obj \
 	$(OBJS)\monodll_object.obj \
 	$(OBJS)\monodll_platinfo.obj \
-	$(OBJS)\monodll_powercmn.obj \
 	$(OBJS)\monodll_process.obj \
 	$(OBJS)\monodll_regex.obj \
 	$(OBJS)\monodll_stdpbase.obj \
@@ -559,7 +558,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dlmsw.obj \
 	$(OBJS)\monodll_evtloopconsole.obj \
 	$(OBJS)\monodll_mimetype.obj \
-	$(OBJS)\monodll_power.obj \
 	$(OBJS)\monodll_regconf.obj \
 	$(OBJS)\monodll_registry.obj \
 	$(OBJS)\monodll_snglinst.obj \
@@ -682,7 +680,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_numformatter.obj \
 	$(OBJS)\monolib_object.obj \
 	$(OBJS)\monolib_platinfo.obj \
-	$(OBJS)\monolib_powercmn.obj \
 	$(OBJS)\monolib_process.obj \
 	$(OBJS)\monolib_regex.obj \
 	$(OBJS)\monolib_stdpbase.obj \
@@ -730,7 +727,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dlmsw.obj \
 	$(OBJS)\monolib_evtloopconsole.obj \
 	$(OBJS)\monolib_mimetype.obj \
-	$(OBJS)\monolib_power.obj \
 	$(OBJS)\monolib_regconf.obj \
 	$(OBJS)\monolib_registry.obj \
 	$(OBJS)\monolib_snglinst.obj \
@@ -841,7 +837,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_numformatter.obj \
 	$(OBJS)\basedll_object.obj \
 	$(OBJS)\basedll_platinfo.obj \
-	$(OBJS)\basedll_powercmn.obj \
 	$(OBJS)\basedll_process.obj \
 	$(OBJS)\basedll_regex.obj \
 	$(OBJS)\basedll_stdpbase.obj \
@@ -889,7 +884,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dlmsw.obj \
 	$(OBJS)\basedll_evtloopconsole.obj \
 	$(OBJS)\basedll_mimetype.obj \
-	$(OBJS)\basedll_power.obj \
 	$(OBJS)\basedll_regconf.obj \
 	$(OBJS)\basedll_registry.obj \
 	$(OBJS)\basedll_snglinst.obj \
@@ -982,7 +976,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_numformatter.obj \
 	$(OBJS)\baselib_object.obj \
 	$(OBJS)\baselib_platinfo.obj \
-	$(OBJS)\baselib_powercmn.obj \
 	$(OBJS)\baselib_process.obj \
 	$(OBJS)\baselib_regex.obj \
 	$(OBJS)\baselib_stdpbase.obj \
@@ -1030,7 +1023,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dlmsw.obj \
 	$(OBJS)\baselib_evtloopconsole.obj \
 	$(OBJS)\baselib_mimetype.obj \
-	$(OBJS)\baselib_power.obj \
 	$(OBJS)\baselib_regconf.obj \
 	$(OBJS)\baselib_registry.obj \
 	$(OBJS)\baselib_snglinst.obj \
@@ -2311,6 +2303,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_darkmode.obj \
 	$(OBJS)\monodll_appprogress.obj \
 	$(OBJS)\monodll_taskbarbutton.obj \
+	$(OBJS)\monodll_power.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_filepickerg.obj \
@@ -2583,7 +2576,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_creddlgg.obj \
 	$(OBJS)\monodll_rowheightcache.obj \
 	$(OBJS)\monodll_common_bmpbndl.obj \
-	$(OBJS)\monodll_bmpsvg.obj
+	$(OBJS)\monodll_bmpsvg.obj \
+	$(OBJS)\monodll_powercmn.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_OBJECTS =  \
@@ -2656,6 +2650,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_darkmode.obj \
 	$(OBJS)\monodll_appprogress.obj \
 	$(OBJS)\monodll_taskbarbutton.obj \
+	$(OBJS)\monodll_power.obj \
 	$(OBJS)\monodll_generic_accel.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
@@ -2915,7 +2910,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_creddlgg.obj \
 	$(OBJS)\monodll_rowheightcache.obj \
 	$(OBJS)\monodll_common_bmpbndl.obj \
-	$(OBJS)\monodll_bmpsvg.obj
+	$(OBJS)\monodll_bmpsvg.obj \
+	$(OBJS)\monodll_powercmn.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_OBJECTS =  \
@@ -3167,6 +3163,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_darkmode.obj \
 	$(OBJS)\monolib_appprogress.obj \
 	$(OBJS)\monolib_taskbarbutton.obj \
+	$(OBJS)\monolib_power.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_filepickerg.obj \
@@ -3439,7 +3436,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_creddlgg.obj \
 	$(OBJS)\monolib_rowheightcache.obj \
 	$(OBJS)\monolib_common_bmpbndl.obj \
-	$(OBJS)\monolib_bmpsvg.obj
+	$(OBJS)\monolib_bmpsvg.obj \
+	$(OBJS)\monolib_powercmn.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_1_OBJECTS =  \
@@ -3512,6 +3510,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_darkmode.obj \
 	$(OBJS)\monolib_appprogress.obj \
 	$(OBJS)\monolib_taskbarbutton.obj \
+	$(OBJS)\monolib_power.obj \
 	$(OBJS)\monolib_generic_accel.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
@@ -3771,7 +3770,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_creddlgg.obj \
 	$(OBJS)\monolib_rowheightcache.obj \
 	$(OBJS)\monolib_common_bmpbndl.obj \
-	$(OBJS)\monolib_bmpsvg.obj
+	$(OBJS)\monolib_bmpsvg.obj \
+	$(OBJS)\monolib_powercmn.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_1_OBJECTS =  \
@@ -3949,6 +3949,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_darkmode.obj \
 	$(OBJS)\coredll_appprogress.obj \
 	$(OBJS)\coredll_taskbarbutton.obj \
+	$(OBJS)\coredll_power.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_filepickerg.obj \
@@ -4221,7 +4222,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_creddlgg.obj \
 	$(OBJS)\coredll_rowheightcache.obj \
 	$(OBJS)\coredll_common_bmpbndl.obj \
-	$(OBJS)\coredll_bmpsvg.obj
+	$(OBJS)\coredll_bmpsvg.obj \
+	$(OBJS)\coredll_powercmn.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_2_OBJECTS =  \
@@ -4294,6 +4296,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_darkmode.obj \
 	$(OBJS)\coredll_appprogress.obj \
 	$(OBJS)\coredll_taskbarbutton.obj \
+	$(OBJS)\coredll_power.obj \
 	$(OBJS)\coredll_generic_accel.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
@@ -4553,7 +4556,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_creddlgg.obj \
 	$(OBJS)\coredll_rowheightcache.obj \
 	$(OBJS)\coredll_common_bmpbndl.obj \
-	$(OBJS)\coredll_bmpsvg.obj
+	$(OBJS)\coredll_bmpsvg.obj \
+	$(OBJS)\coredll_powercmn.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __corelib___depname = \
@@ -4636,6 +4640,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_darkmode.obj \
 	$(OBJS)\corelib_appprogress.obj \
 	$(OBJS)\corelib_taskbarbutton.obj \
+	$(OBJS)\corelib_power.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_filepickerg.obj \
@@ -4908,7 +4913,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_creddlgg.obj \
 	$(OBJS)\corelib_rowheightcache.obj \
 	$(OBJS)\corelib_common_bmpbndl.obj \
-	$(OBJS)\corelib_bmpsvg.obj
+	$(OBJS)\corelib_bmpsvg.obj \
+	$(OBJS)\corelib_powercmn.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_3_OBJECTS =  \
@@ -4981,6 +4987,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_darkmode.obj \
 	$(OBJS)\corelib_appprogress.obj \
 	$(OBJS)\corelib_taskbarbutton.obj \
+	$(OBJS)\corelib_power.obj \
 	$(OBJS)\corelib_generic_accel.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
@@ -5240,7 +5247,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_creddlgg.obj \
 	$(OBJS)\corelib_rowheightcache.obj \
 	$(OBJS)\corelib_common_bmpbndl.obj \
-	$(OBJS)\corelib_bmpsvg.obj
+	$(OBJS)\corelib_bmpsvg.obj \
+	$(OBJS)\corelib_powercmn.obj
 !endif
 !if "$(SHARED)" == "1"
 ____wxcore_namedll_DEP = $(__coredll___depname)
@@ -7655,9 +7663,6 @@ $(OBJS)\monodll_object.obj: ..\..\src\common\object.cpp
 $(OBJS)\monodll_platinfo.obj: ..\..\src\common\platinfo.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\platinfo.cpp
 
-$(OBJS)\monodll_powercmn.obj: ..\..\src\common\powercmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\powercmn.cpp
-
 $(OBJS)\monodll_process.obj: ..\..\src\common\process.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\process.cpp
 
@@ -7798,9 +7803,6 @@ $(OBJS)\monodll_evtloopconsole.obj: ..\..\src\msw\evtloopconsole.cpp
 
 $(OBJS)\monodll_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\mimetype.cpp
-
-$(OBJS)\monodll_power.obj: ..\..\src\msw\power.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\power.cpp
 
 $(OBJS)\monodll_regconf.obj: ..\..\src\msw\regconf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\regconf.cpp
@@ -9057,6 +9059,11 @@ $(OBJS)\monodll_taskbarbutton.obj: ..\..\src\msw\taskbarbutton.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_power.obj: ..\..\src\msw\power.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\power.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_clrpickerg.obj: ..\..\src\generic\clrpickerg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\clrpickerg.cpp
 !endif
@@ -10106,6 +10113,11 @@ $(OBJS)\monodll_bmpsvg.obj: ..\..\src\generic\bmpsvg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\bmpsvg.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_powercmn.obj: ..\..\src\common\powercmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\powercmn.cpp
+!endif
+
 $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\3rdparty\pcre\src\wx /i ..\..\src\expat\expat\lib $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_73)  $(__TARGET_CPU_COMPFLAG_p_73) /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG) /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\src /d __WX__ /i ..\..\src\stc\lexilla\access /i ..\..\src\stc\lexilla\include /i ..\..\src\stc\lexilla\lexlib /i ..\..\src\stc\lexilla\include /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\src  /i ..\..\3rdparty\webview2\build\native\include /d wxUSE_BASE=1 /d WXMAKINGDLL ..\..\src\msw\version.rc
 
@@ -10253,9 +10265,6 @@ $(OBJS)\monolib_object.obj: ..\..\src\common\object.cpp
 $(OBJS)\monolib_platinfo.obj: ..\..\src\common\platinfo.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\platinfo.cpp
 
-$(OBJS)\monolib_powercmn.obj: ..\..\src\common\powercmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\powercmn.cpp
-
 $(OBJS)\monolib_process.obj: ..\..\src\common\process.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\process.cpp
 
@@ -10396,9 +10405,6 @@ $(OBJS)\monolib_evtloopconsole.obj: ..\..\src\msw\evtloopconsole.cpp
 
 $(OBJS)\monolib_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\mimetype.cpp
-
-$(OBJS)\monolib_power.obj: ..\..\src\msw\power.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\power.cpp
 
 $(OBJS)\monolib_regconf.obj: ..\..\src\msw\regconf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\regconf.cpp
@@ -11655,6 +11661,11 @@ $(OBJS)\monolib_taskbarbutton.obj: ..\..\src\msw\taskbarbutton.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_power.obj: ..\..\src\msw\power.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\power.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_clrpickerg.obj: ..\..\src\generic\clrpickerg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\clrpickerg.cpp
 !endif
@@ -12704,6 +12715,11 @@ $(OBJS)\monolib_bmpsvg.obj: ..\..\src\generic\bmpsvg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\bmpsvg.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_powercmn.obj: ..\..\src\common\powercmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\powercmn.cpp
+!endif
+
 $(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -12851,9 +12867,6 @@ $(OBJS)\basedll_object.obj: ..\..\src\common\object.cpp
 $(OBJS)\basedll_platinfo.obj: ..\..\src\common\platinfo.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\platinfo.cpp
 
-$(OBJS)\basedll_powercmn.obj: ..\..\src\common\powercmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\powercmn.cpp
-
 $(OBJS)\basedll_process.obj: ..\..\src\common\process.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\process.cpp
 
@@ -12994,9 +13007,6 @@ $(OBJS)\basedll_evtloopconsole.obj: ..\..\src\msw\evtloopconsole.cpp
 
 $(OBJS)\basedll_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\mimetype.cpp
-
-$(OBJS)\basedll_power.obj: ..\..\src\msw\power.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\power.cpp
 
 $(OBJS)\basedll_regconf.obj: ..\..\src\msw\regconf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\regconf.cpp
@@ -13196,9 +13206,6 @@ $(OBJS)\baselib_object.obj: ..\..\src\common\object.cpp
 $(OBJS)\baselib_platinfo.obj: ..\..\src\common\platinfo.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\platinfo.cpp
 
-$(OBJS)\baselib_powercmn.obj: ..\..\src\common\powercmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\powercmn.cpp
-
 $(OBJS)\baselib_process.obj: ..\..\src\common\process.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\process.cpp
 
@@ -13339,9 +13346,6 @@ $(OBJS)\baselib_evtloopconsole.obj: ..\..\src\msw\evtloopconsole.cpp
 
 $(OBJS)\baselib_mimetype.obj: ..\..\src\msw\mimetype.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\mimetype.cpp
-
-$(OBJS)\baselib_power.obj: ..\..\src\msw\power.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\power.cpp
 
 $(OBJS)\baselib_regconf.obj: ..\..\src\msw\regconf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\regconf.cpp
@@ -14202,6 +14206,11 @@ $(OBJS)\coredll_appprogress.obj: ..\..\src\msw\appprogress.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_taskbarbutton.obj: ..\..\src\msw\taskbarbutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\taskbarbutton.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_power.obj: ..\..\src\msw\power.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\power.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15254,6 +15263,11 @@ $(OBJS)\coredll_bmpsvg.obj: ..\..\src\generic\bmpsvg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\bmpsvg.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_powercmn.obj: ..\..\src\common\powercmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\powercmn.cpp
+!endif
+
 $(OBJS)\corelib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -15957,6 +15971,11 @@ $(OBJS)\corelib_appprogress.obj: ..\..\src\msw\appprogress.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_taskbarbutton.obj: ..\..\src\msw\taskbarbutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\taskbarbutton.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_power.obj: ..\..\src\msw\power.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\power.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -17007,6 +17026,11 @@ $(OBJS)\corelib_common_bmpbndl.obj: ..\..\src\common\bmpbndl.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_bmpsvg.obj: ..\..\src\generic\bmpsvg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\bmpsvg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_powercmn.obj: ..\..\src\common\powercmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\powercmn.cpp
 !endif
 
 $(OBJS)\advdll_dummy.obj: ..\..\src\common\dummy.cpp

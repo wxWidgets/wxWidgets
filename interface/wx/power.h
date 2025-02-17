@@ -130,7 +130,7 @@ enum wxPowerBlockKind
            the state in which it had been before the suspension.
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{events}
 
     @see ::wxGetPowerType(), ::wxGetBatteryState()
@@ -174,7 +174,7 @@ wxEventType wxEVT_POWER_RESUME;
     called instead of calling it manually.
 
     @since 3.1.0
-    @library{wxbase}
+    @library{wxcore}
     @category{misc}
 
     @see wxPowerResourceBlocker
@@ -263,7 +263,7 @@ public:
     @endcode
 
     @since 3.1.0
-    @library{wxbase}
+    @library{wxcore}
     @category{misc}
 
     @see wxPowerResource
