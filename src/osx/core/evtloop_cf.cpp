@@ -31,7 +31,14 @@
 
 #include "wx/scopedptr.h"
 
-#include "wx/osx/private.h"
+#ifdef __WXMAC__
+    #include "wx/osx/private.h"
+#else
+    #include <CoreFoundation/CoreFoundation.h>
+    #include <Carbon/Carbon.h>
+    #include "wx/osx/core/cfstring.h"
+#endif
+
 #include "wx/osx/core/cfref.h"
 #include "wx/thread.h"
 
