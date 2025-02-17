@@ -31,6 +31,8 @@
 
 #include "wx/osx/private.h"
 
+#ifdef __WXMAC__
+
 // ----------------------------------------------------------------------------
 // common helpers compiled even in wxUSE_DISPLAY==0 case
 // ----------------------------------------------------------------------------
@@ -440,5 +442,14 @@ protected:
 {
     return new wxDisplayFactorySingleMacOSX;
 }
+
+#else
+
+/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
+{
+    return new wxDisplayFactorySingle;
+}
+
+#endif
 
 #endif // wxUSE_DISPLAY
