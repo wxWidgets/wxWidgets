@@ -86,6 +86,7 @@ public:
     void OnThumbnail( wxCommandEvent &event );
     void OnFilters(wxCommandEvent& event);
     void OnUpdateNewFrameHiDPI(wxUpdateUIEvent&);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
 #ifdef wxHAVE_RAW_BITMAP
     void OnTestRawBitmap( wxCommandEvent &event );
@@ -782,8 +783,9 @@ public:
         wxSizerFlags sizerFlags4;
         sizerFlags4.Border();
 
+        wxString hueLabel = wxString::Format(wxS("Hue (%s)"), wxString::FromUTF8("\xc2\xb0"));
         wxStaticBoxSizer *sizerHue = new wxStaticBoxSizer(new wxStaticBox(this,
-                                     wxID_ANY, wxS("Hue (°)")), wxVERTICAL);
+                                     wxID_ANY, hueLabel), wxVERTICAL);
         m_sliderHue = new wxSlider(sizerHue->GetStaticBox(), wxID_ANY, 0, -360, 360,
                       wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL | wxSL_LABELS);
         sizerHue->Add(m_sliderHue, sizerFlags2);
@@ -910,6 +912,7 @@ public:
 
         SetSizer(sizerMain);
         CreateStatusBar();
+        SetSize(GetBestSize());
 
         // Bind Events
         Bind(wxEVT_MENU, &MyFiltersFrame::OnNewImage, this, wxID_OPEN);
@@ -1106,11 +1109,11 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_PASTE_IMAGE, MyFrame::OnPasteImage)
 #endif // wxUSE_CLIPBOARD
     EVT_UPDATE_UI(ID_NEW_HIDPI, MyFrame::OnUpdateNewFrameHiDPI)
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-    : wxFrame( nullptr, wxID_ANY, "wxImage sample",
-                wxPoint(20, 20), wxSize(950, 700) )
+    : wxFrame(nullptr, wxID_ANY, "wxImage sample")
 {
     SetIcon(wxICON(sample));
 
@@ -1161,11 +1164,13 @@ MyFrame::MyFrame()
     SetStatusWidths( 2, widths );
 #endif // wxUSE_STATUSBAR
 
-    m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(10,10) );
-
-    // 500 width * 2750 height
-    m_canvas->SetScrollbars( 10, 10, 50, 275 );
+    m_canvas = new MyCanvas(this);
+    wxSize cz = m_canvas->GetDrawingSize();
+    m_canvas->SetScrollbars(10, 10, cz.GetWidth() / 10, cz.GetHeight() / 10);
     m_canvas->SetCursor(wxImage("cursor.png"));
+
+    // slightly wider than the canvas
+    SetSize(wxSize(cz.GetWidth() + FromDIP(50), FromDIP(700)));
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
@@ -1189,17 +1194,17 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
     array.Add("Version of the libraries used:");
 
 #if wxUSE_LIBPNG
-    array.Add(wxPNGHandler::GetLibraryVersionInfo().ToString());
+    array.Add(wxPNGHandler::GetLibraryVersionInfo().GetVersionString());
 #endif
 #if wxUSE_LIBJPEG
-    array.Add(wxJPEGHandler::GetLibraryVersionInfo().ToString());
+    array.Add(wxJPEGHandler::GetLibraryVersionInfo().GetVersionString());
 #endif
 #if wxUSE_LIBTIFF
-    array.Add(wxTIFFHandler::GetLibraryVersionInfo().ToString());
+    array.Add(wxTIFFHandler::GetLibraryVersionInfo().GetVersionString());
 #endif
 #if wxUSE_ZLIB && wxUSE_STREAMS
     // zlib is used by libpng
-    array.Add(wxGetZlibVersionInfo().ToString());
+    array.Add(wxGetZlibVersionInfo().GetVersionString());
 #endif
     (void)wxMessageBox( wxJoin(array, '\n'),
                         "About wxImage Demo",
@@ -1315,6 +1320,14 @@ void MyFrame::OnNewSVGFrame(wxCommandEvent&)
 void MyFrame::OnUpdateNewFrameHiDPI(wxUpdateUIEvent& event)
 {
     event.Enable(GetContentScaleFactor() > 1);
+}
+
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    event.Skip();
+
+    wxSize cz = m_canvas->GetDrawingSize();
+    m_canvas->SetScrollbars(10, 10, cz.GetWidth() / 10, cz.GetHeight() / 10);
 }
 
 void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
@@ -1449,7 +1462,7 @@ void MyFrame::OnTestGraphics(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     wxBitmapDataObject *dobjBmp = new wxBitmapDataObject;
-    dobjBmp->SetBitmap(m_canvas->my_horse_png);
+    dobjBmp->SetBitmap(m_canvas->GetPngBitmap());
 
     wxTheClipboard->Open();
 
