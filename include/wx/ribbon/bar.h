@@ -62,6 +62,8 @@ public:
         , m_page(page)
     {
     }
+
+    wxRibbonBarEvent(const wxRibbonBarEvent& e) = default;
     wxEvent *Clone() const override { return new wxRibbonBarEvent(*this); }
 
     wxRibbonPage* GetPage() {return m_page;}

@@ -26325,6 +26325,7 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
       ax_args="--disable-option-checking $ax_args"
       # Options that must be added as they are provided.
       as_fn_append ax_args " '--disable-jbig'"
+      as_fn_append ax_args " '--disable-lerc'"
       as_fn_append ax_args " '--disable-libdeflate'"
       as_fn_append ax_args " '--disable-webp'"
       as_fn_append ax_args " '--disable-zstd'"

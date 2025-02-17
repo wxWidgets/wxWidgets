@@ -99,6 +99,8 @@ public:
     {
     }
 
+    TestAssertFailure(const TestAssertFailure&) = default;
+
     const wxString m_file;
     const int m_line;
     const wxString m_func;

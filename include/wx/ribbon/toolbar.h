@@ -210,6 +210,8 @@ public:
         , m_bar(bar)
     {
     }
+
+    wxRibbonToolBarEvent(const wxRibbonToolBarEvent& e) = default;
     wxEvent *Clone() const override { return new wxRibbonToolBarEvent(*this); }
 
     wxRibbonToolBar* GetBar() {return m_bar;}
