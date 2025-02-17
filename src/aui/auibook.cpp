@@ -1607,11 +1607,11 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
             switch ( GetPage(idx).kind )
             {
                 case wxAuiTabKind::Normal:
+                case wxAuiTabKind::Pinned:
                     break;
 
-                case wxAuiTabKind::Pinned:
                 case wxAuiTabKind::Locked:
-                    // Don't allow dragging pinned or locked tabs.
+                    // Don't allow dragging locked tabs.
                     return;
             }
         }
@@ -3102,18 +3102,13 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
                 return;
             }
 
-            switch ( dest_tabs->GetPage(dest_idx).kind )
-            {
-                case wxAuiTabKind::Normal:
-                    break;
+            const auto& src_page = src_tabs->GetPage(src_idx);
 
-                case wxAuiTabKind::Pinned:
-                case wxAuiTabKind::Locked:
-                    // Don't allow dragging normal tabs (and source tab must be
-                    // normal because we don't allow dragging any other ones)
-                    // to put them before locked or pinned ones.
-                    return;
-            }
+            // A tab can only be moved inside the group of tabs of the same
+            // kind, as otherwise the tabs of the same kind wouldn't be grouped
+            // together any longer.
+            if ( dest_tabs->GetPage(dest_idx).kind != src_page.kind )
+                return;
 
             // When dragging a smaller tab over the larger one, after moving
             // the tab into the new position, the same point can be now over a
@@ -3125,8 +3120,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
             if ( dest_idx == m_lastDropMovePos )
                 return;
 
-            wxWindow* src_tab = dest_tabs->GetWindowFromIdx(src_idx);
-            if (dest_tabs->MovePage(src_tab, dest_idx))
+            if (dest_tabs->MovePage(src_page.window, dest_idx))
             {
                 // Update the layout when using multiline tabs as it can change
                 // depending on the tab order.
