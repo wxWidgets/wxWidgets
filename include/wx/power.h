@@ -44,7 +44,7 @@ enum wxBatteryState
 
 #define wxHAS_POWER_EVENTS
 
-class WXDLLIMPEXP_BASE wxPowerEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxPowerEvent : public wxEvent
 {
 public:
     wxPowerEvent()            // just for use by wxRTTI
@@ -71,10 +71,10 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxPowerEvent);
 };
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDING, wxPowerEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDED, wxPowerEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPEND_CANCEL, wxPowerEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_RESUME, wxPowerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_POWER_SUSPENDING, wxPowerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_POWER_SUSPENDED, wxPowerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_POWER_SUSPEND_CANCEL, wxPowerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_POWER_RESUME, wxPowerEvent );
 
 typedef void (wxEvtHandler::*wxPowerEventFunction)(wxPowerEvent&);
 
@@ -110,7 +110,7 @@ enum wxPowerBlockKind
     wxPOWER_DELAY
 };
 
-class WXDLLIMPEXP_BASE wxPowerResource
+class WXDLLIMPEXP_CORE wxPowerResource
 {
 public:
     static bool Acquire(wxPowerResourceKind kind,
@@ -150,9 +150,9 @@ private:
 // ----------------------------------------------------------------------------
 
 // return the current system power state: online or offline
-WXDLLIMPEXP_BASE wxPowerType wxGetPowerType();
+WXDLLIMPEXP_CORE wxPowerType wxGetPowerType();
 
 // return approximate battery state
-WXDLLIMPEXP_BASE wxBatteryState wxGetBatteryState();
+WXDLLIMPEXP_CORE wxBatteryState wxGetBatteryState();
 
 #endif // _WX_POWER_H_

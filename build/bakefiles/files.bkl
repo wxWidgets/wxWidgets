@@ -134,7 +134,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dlmsw.cpp
     src/msw/evtloopconsole.cpp
     src/msw/mimetype.cpp
-    src/msw/power.cpp
     src/msw/regconf.cpp
     src/msw/registry.cpp
     src/msw/snglinst.cpp
@@ -224,7 +223,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Base and GUI files used by OS X -->
 
 <set var="BASE_AND_GUI_OSX_COCOA_SRC" hints="files">
-    src/osx/cocoa/power.mm
     src/osx/cocoa/utils.mm
     src/osx/volume.mm
 </set>
@@ -541,7 +539,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/numformatter.cpp
     src/common/object.cpp
     src/common/platinfo.cpp
-    src/common/powercmn.cpp
     src/common/process.cpp
     src/common/regex.cpp
     src/common/stdpbase.cpp
@@ -677,7 +674,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/object.h
     wx/platform.h
     wx/platinfo.h
-    wx/power.h
     wx/process.h
     wx/ptr_scpd.h
     wx/ptr_shrd.h
@@ -1032,6 +1028,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/rowheightcache.cpp
     src/common/bmpbndl.cpp
     src/generic/bmpsvg.cpp
+    src/common/powercmn.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1325,6 +1322,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/filedlgcustomize.h
     wx/compositebookctrl.h
     wx/persist/combobox.h
+    wx/power.h
 </set>
 
 <!-- ====================================================================== -->
@@ -1770,6 +1768,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/darkmode.cpp
     src/msw/appprogress.cpp
     src/msw/taskbarbutton.cpp
+    src/msw/power.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -2339,6 +2338,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/statbmp.mm
     src/osx/core/display.cpp
     src/osx/cocoa/renderer.mm
+    src/osx/cocoa/power.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h

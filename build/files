@@ -89,7 +89,6 @@ BASE_WIN32_SRC =
     src/msw/dlmsw.cpp
     src/msw/evtloopconsole.cpp
     src/msw/mimetype.cpp
-    src/msw/power.cpp
     src/msw/regconf.cpp
     src/msw/registry.cpp
     src/msw/secretstore.cpp
@@ -176,7 +175,6 @@ BASE_OSX_SHARED_HDR =
 # Base and GUI files used by OS X
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
-    src/osx/cocoa/power.mm
     src/osx/volume.mm
 
 # files used by non-wxMac OS X builds
@@ -473,7 +471,6 @@ BASE_CMN_SRC =
     src/common/numformatter.cpp
     src/common/object.cpp
     src/common/platinfo.cpp
-    src/common/powercmn.cpp
     src/common/process.cpp
     src/common/regex.cpp
     src/common/secretstore.cpp
@@ -609,7 +606,6 @@ BASE_CMN_HDR =
     wx/object.h
     wx/platform.h
     wx/platinfo.h
-    wx/power.h
     wx/process.h
     wx/ptr_scpd.h
     wx/ptr_shrd.h
@@ -842,6 +838,7 @@ GUI_CMN_SRC =
     src/common/persist.cpp
     src/common/pickerbase.cpp
     src/common/popupcmn.cpp
+    src/common/powercmn.cpp
     src/common/preferencescmn.cpp
     src/common/prntbase.cpp
     src/common/quantize.cpp
@@ -1161,6 +1158,7 @@ GUI_CMN_HDR =
     wx/pickerbase.h
     wx/popupwin.h
     wx/position.h
+    wx/power.h
     wx/preferences.h
     wx/print.h
     wx/printdlg.h
@@ -1634,6 +1632,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/palette.cpp
     src/msw/pen.cpp
     src/msw/popupwin.cpp
+    src/msw/power.cpp
     src/msw/printdlg.cpp
     src/msw/printwin.cpp
     src/msw/region.cpp
@@ -2170,6 +2169,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/notebook.mm
     src/osx/cocoa/notifmsg.mm
     src/osx/cocoa/overlay.mm
+    src/osx/cocoa/power.mm
     src/osx/cocoa/preferences.mm
     src/osx/cocoa/printdlg.mm
     src/osx/cocoa/radiobut.mm

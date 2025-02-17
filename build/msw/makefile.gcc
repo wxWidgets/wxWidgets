@@ -475,7 +475,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_numformatter.o \
 	$(OBJS)\monodll_object.o \
 	$(OBJS)\monodll_platinfo.o \
-	$(OBJS)\monodll_powercmn.o \
 	$(OBJS)\monodll_process.o \
 	$(OBJS)\monodll_regex.o \
 	$(OBJS)\monodll_stdpbase.o \
@@ -523,7 +522,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dlmsw.o \
 	$(OBJS)\monodll_evtloopconsole.o \
 	$(OBJS)\monodll_mimetype.o \
-	$(OBJS)\monodll_power.o \
 	$(OBJS)\monodll_regconf.o \
 	$(OBJS)\monodll_registry.o \
 	$(OBJS)\monodll_snglinst.o \
@@ -637,7 +635,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_numformatter.o \
 	$(OBJS)\monolib_object.o \
 	$(OBJS)\monolib_platinfo.o \
-	$(OBJS)\monolib_powercmn.o \
 	$(OBJS)\monolib_process.o \
 	$(OBJS)\monolib_regex.o \
 	$(OBJS)\monolib_stdpbase.o \
@@ -685,7 +682,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dlmsw.o \
 	$(OBJS)\monolib_evtloopconsole.o \
 	$(OBJS)\monolib_mimetype.o \
-	$(OBJS)\monolib_power.o \
 	$(OBJS)\monolib_regconf.o \
 	$(OBJS)\monolib_registry.o \
 	$(OBJS)\monolib_snglinst.o \
@@ -787,7 +783,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_numformatter.o \
 	$(OBJS)\basedll_object.o \
 	$(OBJS)\basedll_platinfo.o \
-	$(OBJS)\basedll_powercmn.o \
 	$(OBJS)\basedll_process.o \
 	$(OBJS)\basedll_regex.o \
 	$(OBJS)\basedll_stdpbase.o \
@@ -835,7 +830,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dlmsw.o \
 	$(OBJS)\basedll_evtloopconsole.o \
 	$(OBJS)\basedll_mimetype.o \
-	$(OBJS)\basedll_power.o \
 	$(OBJS)\basedll_regconf.o \
 	$(OBJS)\basedll_registry.o \
 	$(OBJS)\basedll_snglinst.o \
@@ -918,7 +912,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_numformatter.o \
 	$(OBJS)\baselib_object.o \
 	$(OBJS)\baselib_platinfo.o \
-	$(OBJS)\baselib_powercmn.o \
 	$(OBJS)\baselib_process.o \
 	$(OBJS)\baselib_regex.o \
 	$(OBJS)\baselib_stdpbase.o \
@@ -966,7 +959,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dlmsw.o \
 	$(OBJS)\baselib_evtloopconsole.o \
 	$(OBJS)\baselib_mimetype.o \
-	$(OBJS)\baselib_power.o \
 	$(OBJS)\baselib_regconf.o \
 	$(OBJS)\baselib_registry.o \
 	$(OBJS)\baselib_snglinst.o \
@@ -1966,6 +1958,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_darkmode.o \
 	$(OBJS)\monodll_appprogress.o \
 	$(OBJS)\monodll_taskbarbutton.o \
+	$(OBJS)\monodll_power.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
 	$(OBJS)\monodll_filepickerg.o \
@@ -2238,7 +2231,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_creddlgg.o \
 	$(OBJS)\monodll_rowheightcache.o \
 	$(OBJS)\monodll_common_bmpbndl.o \
-	$(OBJS)\monodll_bmpsvg.o
+	$(OBJS)\monodll_bmpsvg.o \
+	$(OBJS)\monodll_powercmn.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -2313,6 +2307,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_darkmode.o \
 	$(OBJS)\monodll_appprogress.o \
 	$(OBJS)\monodll_taskbarbutton.o \
+	$(OBJS)\monodll_power.o \
 	$(OBJS)\monodll_generic_accel.o \
 	$(OBJS)\monodll_clrpickerg.o \
 	$(OBJS)\monodll_collpaneg.o \
@@ -2572,7 +2567,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_creddlgg.o \
 	$(OBJS)\monodll_rowheightcache.o \
 	$(OBJS)\monodll_common_bmpbndl.o \
-	$(OBJS)\monodll_bmpsvg.o
+	$(OBJS)\monodll_bmpsvg.o \
+	$(OBJS)\monodll_powercmn.o
 endif
 endif
 ifeq ($(USE_STC),1)
@@ -2822,6 +2818,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_darkmode.o \
 	$(OBJS)\monolib_appprogress.o \
 	$(OBJS)\monolib_taskbarbutton.o \
+	$(OBJS)\monolib_power.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
 	$(OBJS)\monolib_filepickerg.o \
@@ -3094,7 +3091,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_creddlgg.o \
 	$(OBJS)\monolib_rowheightcache.o \
 	$(OBJS)\monolib_common_bmpbndl.o \
-	$(OBJS)\monolib_bmpsvg.o
+	$(OBJS)\monolib_bmpsvg.o \
+	$(OBJS)\monolib_powercmn.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -3169,6 +3167,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_darkmode.o \
 	$(OBJS)\monolib_appprogress.o \
 	$(OBJS)\monolib_taskbarbutton.o \
+	$(OBJS)\monolib_power.o \
 	$(OBJS)\monolib_generic_accel.o \
 	$(OBJS)\monolib_clrpickerg.o \
 	$(OBJS)\monolib_collpaneg.o \
@@ -3428,7 +3427,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_creddlgg.o \
 	$(OBJS)\monolib_rowheightcache.o \
 	$(OBJS)\monolib_common_bmpbndl.o \
-	$(OBJS)\monolib_bmpsvg.o
+	$(OBJS)\monolib_bmpsvg.o \
+	$(OBJS)\monolib_powercmn.o
 endif
 endif
 ifeq ($(USE_STC),1)
@@ -3554,6 +3554,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_darkmode.o \
 	$(OBJS)\coredll_appprogress.o \
 	$(OBJS)\coredll_taskbarbutton.o \
+	$(OBJS)\coredll_power.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
 	$(OBJS)\coredll_filepickerg.o \
@@ -3826,7 +3827,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_creddlgg.o \
 	$(OBJS)\coredll_rowheightcache.o \
 	$(OBJS)\coredll_common_bmpbndl.o \
-	$(OBJS)\coredll_bmpsvg.o
+	$(OBJS)\coredll_bmpsvg.o \
+	$(OBJS)\coredll_powercmn.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -3901,6 +3903,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_darkmode.o \
 	$(OBJS)\coredll_appprogress.o \
 	$(OBJS)\coredll_taskbarbutton.o \
+	$(OBJS)\coredll_power.o \
 	$(OBJS)\coredll_generic_accel.o \
 	$(OBJS)\coredll_clrpickerg.o \
 	$(OBJS)\coredll_collpaneg.o \
@@ -4160,7 +4163,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_creddlgg.o \
 	$(OBJS)\coredll_rowheightcache.o \
 	$(OBJS)\coredll_common_bmpbndl.o \
-	$(OBJS)\coredll_bmpsvg.o
+	$(OBJS)\coredll_bmpsvg.o \
+	$(OBJS)\coredll_powercmn.o
 endif
 endif
 ifeq ($(MONOLITHIC),0)
@@ -4243,6 +4247,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_darkmode.o \
 	$(OBJS)\corelib_appprogress.o \
 	$(OBJS)\corelib_taskbarbutton.o \
+	$(OBJS)\corelib_power.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
 	$(OBJS)\corelib_filepickerg.o \
@@ -4515,7 +4520,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_creddlgg.o \
 	$(OBJS)\corelib_rowheightcache.o \
 	$(OBJS)\corelib_common_bmpbndl.o \
-	$(OBJS)\corelib_bmpsvg.o
+	$(OBJS)\corelib_bmpsvg.o \
+	$(OBJS)\corelib_powercmn.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -4590,6 +4596,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_darkmode.o \
 	$(OBJS)\corelib_appprogress.o \
 	$(OBJS)\corelib_taskbarbutton.o \
+	$(OBJS)\corelib_power.o \
 	$(OBJS)\corelib_generic_accel.o \
 	$(OBJS)\corelib_clrpickerg.o \
 	$(OBJS)\corelib_collpaneg.o \
@@ -4849,7 +4856,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_creddlgg.o \
 	$(OBJS)\corelib_rowheightcache.o \
 	$(OBJS)\corelib_common_bmpbndl.o \
-	$(OBJS)\corelib_bmpsvg.o
+	$(OBJS)\corelib_bmpsvg.o \
+	$(OBJS)\corelib_powercmn.o
 endif
 endif
 ifeq ($(SHARED),1)
@@ -7186,9 +7194,6 @@ $(OBJS)\monodll_object.o: ../../src/common/object.cpp
 $(OBJS)\monodll_platinfo.o: ../../src/common/platinfo.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_powercmn.o: ../../src/common/powercmn.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_process.o: ../../src/common/process.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7328,9 +7333,6 @@ $(OBJS)\monodll_evtloopconsole.o: ../../src/msw/evtloopconsole.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_mimetype.o: ../../src/msw/mimetype.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_power.o: ../../src/msw/power.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_regconf.o: ../../src/msw/regconf.cpp
@@ -8588,6 +8590,11 @@ $(OBJS)\monodll_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_power.o: ../../src/msw/power.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9637,6 +9644,11 @@ $(OBJS)\monodll_bmpsvg.o: ../../src/generic/bmpsvg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_powercmn.o: ../../src/common/powercmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\monodll_version_rc.o: ../../src/msw/version.rc
 	$(WINDRES) -i$< -o$@   --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../3rdparty/pcre/src/wx --include-dir ../../src/expat/expat/lib   --define __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG) --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --define __WX__ --include-dir ../../src/stc/lexilla/access --include-dir ../../src/stc/lexilla/include --include-dir ../../src/stc/lexilla/lexlib --include-dir ../../src/stc/lexilla/include --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --include-dir ../../include/wx/msw/wrl --include-dir ../../3rdparty/webview2/build/native/include --define wxUSE_BASE=1 --define WXMAKINGDLL
 
@@ -9784,9 +9796,6 @@ $(OBJS)\monolib_object.o: ../../src/common/object.cpp
 $(OBJS)\monolib_platinfo.o: ../../src/common/platinfo.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_powercmn.o: ../../src/common/powercmn.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monolib_process.o: ../../src/common/process.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9926,9 +9935,6 @@ $(OBJS)\monolib_evtloopconsole.o: ../../src/msw/evtloopconsole.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_mimetype.o: ../../src/msw/mimetype.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_power.o: ../../src/msw/power.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_regconf.o: ../../src/msw/regconf.cpp
@@ -11186,6 +11192,11 @@ $(OBJS)\monolib_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_power.o: ../../src/msw/power.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_clrpickerg.o: ../../src/generic/clrpickerg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12235,6 +12246,11 @@ $(OBJS)\monolib_bmpsvg.o: ../../src/generic/bmpsvg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_powercmn.o: ../../src/common/powercmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\basedll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12382,9 +12398,6 @@ $(OBJS)\basedll_object.o: ../../src/common/object.cpp
 $(OBJS)\basedll_platinfo.o: ../../src/common/platinfo.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\basedll_powercmn.o: ../../src/common/powercmn.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\basedll_process.o: ../../src/common/process.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12524,9 +12537,6 @@ $(OBJS)\basedll_evtloopconsole.o: ../../src/msw/evtloopconsole.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_mimetype.o: ../../src/msw/mimetype.cpp
-	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\basedll_power.o: ../../src/msw/power.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_regconf.o: ../../src/msw/regconf.cpp
@@ -12727,9 +12737,6 @@ $(OBJS)\baselib_object.o: ../../src/common/object.cpp
 $(OBJS)\baselib_platinfo.o: ../../src/common/platinfo.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\baselib_powercmn.o: ../../src/common/powercmn.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\baselib_process.o: ../../src/common/process.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12869,9 +12876,6 @@ $(OBJS)\baselib_evtloopconsole.o: ../../src/msw/evtloopconsole.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_mimetype.o: ../../src/msw/mimetype.cpp
-	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\baselib_power.o: ../../src/msw/power.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_regconf.o: ../../src/msw/regconf.cpp
@@ -13732,6 +13736,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_power.o: ../../src/msw/power.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14785,6 +14794,11 @@ $(OBJS)\coredll_bmpsvg.o: ../../src/generic/bmpsvg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_powercmn.o: ../../src/common/powercmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\corelib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15487,6 +15501,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_taskbarbutton.o: ../../src/msw/taskbarbutton.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_power.o: ../../src/msw/power.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -16537,6 +16556,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_bmpsvg.o: ../../src/generic/bmpsvg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_powercmn.o: ../../src/common/powercmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

@@ -540,7 +540,6 @@ ALL_BASE_HEADERS =  \
 	wx/object.h \
 	wx/platform.h \
 	wx/platinfo.h \
-	wx/power.h \
 	wx/process.h \
 	wx/ptr_scpd.h \
 	wx/ptr_shrd.h \
@@ -727,7 +726,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/object.h \
 	wx/platform.h \
 	wx/platinfo.h \
-	wx/power.h \
 	wx/process.h \
 	wx/ptr_scpd.h \
 	wx/ptr_shrd.h \
@@ -904,7 +902,6 @@ ALL_BASE_SOURCES =  \
 	src/common/numformatter.cpp \
 	src/common/object.cpp \
 	src/common/platinfo.cpp \
-	src/common/powercmn.cpp \
 	src/common/process.cpp \
 	src/common/regex.cpp \
 	src/common/stdpbase.cpp \
@@ -972,7 +969,6 @@ ALL_BASE_SOURCES =  \
 	src/msw/dlmsw.cpp \
 	src/msw/evtloopconsole.cpp \
 	src/msw/mimetype.cpp \
-	src/msw/power.cpp \
 	src/msw/regconf.cpp \
 	src/msw/registry.cpp \
 	src/msw/snglinst.cpp \
@@ -990,7 +986,6 @@ ALL_BASE_SOURCES =  \
 	src/common/fs_mem.cpp \
 	src/common/msgout.cpp \
 	src/common/utilscmn.cpp \
-	src/osx/cocoa/power.mm \
 	src/osx/cocoa/utils.mm \
 	src/osx/volume.mm \
 	src/msw/main.cpp \
@@ -1110,7 +1105,6 @@ MONODLL_OBJECTS =  \
 	monodll_numformatter.o \
 	monodll_object.o \
 	monodll_platinfo.o \
-	monodll_powercmn.o \
 	monodll_process.o \
 	monodll_regex.o \
 	monodll_stdpbase.o \
@@ -1270,7 +1264,6 @@ MONOLIB_OBJECTS =  \
 	monolib_numformatter.o \
 	monolib_object.o \
 	monolib_platinfo.o \
-	monolib_powercmn.o \
 	monolib_process.o \
 	monolib_regex.o \
 	monolib_stdpbase.o \
@@ -1399,7 +1392,6 @@ BASEDLL_OBJECTS =  \
 	basedll_numformatter.o \
 	basedll_object.o \
 	basedll_platinfo.o \
-	basedll_powercmn.o \
 	basedll_process.o \
 	basedll_regex.o \
 	basedll_stdpbase.o \
@@ -1510,7 +1502,6 @@ BASELIB_OBJECTS =  \
 	baselib_numformatter.o \
 	baselib_object.o \
 	baselib_platinfo.o \
-	baselib_powercmn.o \
 	baselib_process.o \
 	baselib_regex.o \
 	baselib_stdpbase.o \
@@ -3922,6 +3913,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/filedlgcustomize.h \
 	wx/compositebookctrl.h \
 	wx/persist/combobox.h \
+	wx/power.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	wx/mediactrl.h \
@@ -4208,7 +4200,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_dlmsw.o \
 	monodll_evtloopconsole.o \
 	monodll_msw_mimetype.o \
-	monodll_msw_power.o \
 	monodll_regconf.o \
 	monodll_registry.o \
 	monodll_msw_snglinst.o \
@@ -4225,8 +4216,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_WIN32_1@	= monodll_main.o monodll_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
-@COND_TOOLKIT_OSX_COCOA@	= monodll_cocoa_power.o monodll_cocoa_utils.o \
-@COND_TOOLKIT_OSX_COCOA@	monodll_osx_volume.o
+@COND_TOOLKIT_OSX_COCOA@	= monodll_cocoa_utils.o monodll_osx_volume.o
 COND_PLATFORM_MACOSX_1___NET_PLATFORM_SRC_OBJECTS =  \
 	monodll_socketiohandler.o \
 	monodll_sockunix.o \
@@ -4596,7 +4586,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_creddlgg.o \
 	monodll_rowheightcache.o \
 	monodll_common_bmpbndl.o \
-	monodll_bmpsvg.o
+	monodll_bmpsvg.o \
+	monodll_powercmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
@@ -4860,7 +4851,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_creddlgg.o \
 	monodll_rowheightcache.o \
 	monodll_common_bmpbndl.o \
-	monodll_bmpsvg.o
+	monodll_bmpsvg.o \
+	monodll_powercmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
@@ -5079,7 +5071,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_overlay.o \
 	monodll_darkmode.o \
 	monodll_msw_appprogress.o \
-	monodll_taskbarbutton.o
+	monodll_taskbarbutton.o \
+	monodll_msw_power.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS)
@@ -5450,7 +5443,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_activityindicator.o \
 	monodll_cocoa_statbmp.o \
 	monodll_core_display.o \
-	monodll_cocoa_renderer.o
+	monodll_cocoa_renderer.o \
+	monodll_cocoa_power.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	$(__OSX_COMMON_SRC_OBJECTS) \
@@ -5809,7 +5803,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_overlay.o \
 	monodll_darkmode.o \
 	monodll_msw_appprogress.o \
-	monodll_taskbarbutton.o
+	monodll_taskbarbutton.o \
+	monodll_msw_power.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS)
@@ -5970,7 +5965,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_dlmsw.o \
 	monolib_evtloopconsole.o \
 	monolib_msw_mimetype.o \
-	monolib_msw_power.o \
 	monolib_regconf.o \
 	monolib_registry.o \
 	monolib_msw_snglinst.o \
@@ -5987,8 +5981,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_WIN32_1@	= monolib_main.o monolib_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
-@COND_TOOLKIT_OSX_COCOA@	= monolib_cocoa_power.o monolib_cocoa_utils.o \
-@COND_TOOLKIT_OSX_COCOA@	monolib_osx_volume.o
+@COND_TOOLKIT_OSX_COCOA@	= monolib_cocoa_utils.o monolib_osx_volume.o
 COND_PLATFORM_MACOSX_1___NET_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_socketiohandler.o \
 	monolib_sockunix.o \
@@ -6358,7 +6351,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_creddlgg.o \
 	monolib_rowheightcache.o \
 	monolib_common_bmpbndl.o \
-	monolib_bmpsvg.o
+	monolib_bmpsvg.o \
+	monolib_powercmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
@@ -6622,7 +6616,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_creddlgg.o \
 	monolib_rowheightcache.o \
 	monolib_common_bmpbndl.o \
-	monolib_bmpsvg.o
+	monolib_bmpsvg.o \
+	monolib_powercmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
@@ -6841,7 +6836,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_overlay.o \
 	monolib_darkmode.o \
 	monolib_msw_appprogress.o \
-	monolib_taskbarbutton.o
+	monolib_taskbarbutton.o \
+	monolib_msw_power.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_17)
@@ -7212,7 +7208,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_activityindicator.o \
 	monolib_cocoa_statbmp.o \
 	monolib_core_display.o \
-	monolib_cocoa_renderer.o
+	monolib_cocoa_renderer.o \
+	monolib_cocoa_power.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_0) \
@@ -7571,7 +7568,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_overlay.o \
 	monolib_darkmode.o \
 	monolib_msw_appprogress.o \
-	monolib_taskbarbutton.o
+	monolib_taskbarbutton.o \
+	monolib_msw_power.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_17)
@@ -7782,7 +7780,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_dlmsw.o \
 	basedll_evtloopconsole.o \
 	basedll_msw_mimetype.o \
-	basedll_msw_power.o \
 	basedll_regconf.o \
 	basedll_registry.o \
 	basedll_msw_snglinst.o \
@@ -7799,8 +7796,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
-@COND_TOOLKIT_OSX_COCOA@	= basedll_cocoa_power.o basedll_cocoa_utils.o \
-@COND_TOOLKIT_OSX_COCOA@	basedll_osx_volume.o
+@COND_TOOLKIT_OSX_COCOA@	= basedll_cocoa_utils.o basedll_osx_volume.o
 COND_MONOLITHIC_0_SHARED_0___baselib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0@__baselib___depname = $(COND_MONOLITHIC_0_SHARED_0___baselib___depname)
@@ -7869,7 +7865,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_dlmsw.o \
 	baselib_evtloopconsole.o \
 	baselib_msw_mimetype.o \
-	baselib_msw_power.o \
 	baselib_regconf.o \
 	baselib_registry.o \
 	baselib_msw_snglinst.o \
@@ -7886,8 +7881,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
-@COND_TOOLKIT_OSX_COCOA@	= baselib_cocoa_power.o baselib_cocoa_utils.o \
-@COND_TOOLKIT_OSX_COCOA@	baselib_osx_volume.o
+@COND_TOOLKIT_OSX_COCOA@	= baselib_cocoa_utils.o baselib_osx_volume.o
 @COND_SHARED_1@____wxbase_namedll_DEP = $(__basedll___depname)
 @COND_SHARED_0@____wxbase_namelib_DEP = $(__baselib___depname)
 COND_MONOLITHIC_0_SHARED_1___netdll___depname = \
@@ -8060,8 +8054,7 @@ COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
 @COND_PLATFORM_WIN32_1@	= coredll_main.o coredll_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
-@COND_TOOLKIT_OSX_COCOA@	= coredll_cocoa_power.o coredll_cocoa_utils.o \
-@COND_TOOLKIT_OSX_COCOA@	coredll_osx_volume.o
+@COND_TOOLKIT_OSX_COCOA@	= coredll_cocoa_utils.o coredll_osx_volume.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_4) \
 	$(__PLATFORM_SRC_OBJECTS_8) \
@@ -8269,7 +8262,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_creddlgg.o \
 	coredll_rowheightcache.o \
 	coredll_common_bmpbndl.o \
-	coredll_bmpsvg.o
+	coredll_bmpsvg.o \
+	coredll_powercmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
@@ -8533,7 +8527,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_creddlgg.o \
 	coredll_rowheightcache.o \
 	coredll_common_bmpbndl.o \
-	coredll_bmpsvg.o
+	coredll_bmpsvg.o \
+	coredll_powercmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
@@ -8752,7 +8747,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_overlay.o \
 	coredll_darkmode.o \
 	coredll_msw_appprogress.o \
-	coredll_taskbarbutton.o
+	coredll_taskbarbutton.o \
+	coredll_msw_power.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_4 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_1)
@@ -9123,7 +9119,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_activityindicator.o \
 	coredll_cocoa_statbmp.o \
 	coredll_core_display.o \
-	coredll_cocoa_renderer.o
+	coredll_cocoa_renderer.o \
+	coredll_cocoa_power.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_8) \
@@ -9482,7 +9479,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_overlay.o \
 	coredll_darkmode.o \
 	coredll_msw_appprogress.o \
-	coredll_taskbarbutton.o
+	coredll_taskbarbutton.o \
+	coredll_msw_power.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_1)
@@ -9546,8 +9544,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
 @COND_PLATFORM_WIN32_1@	= corelib_main.o corelib_msw_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
-@COND_TOOLKIT_OSX_COCOA@	= corelib_cocoa_power.o corelib_cocoa_utils.o \
-@COND_TOOLKIT_OSX_COCOA@	corelib_osx_volume.o
+@COND_TOOLKIT_OSX_COCOA@	= corelib_cocoa_utils.o corelib_osx_volume.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_6) \
 	$(__PLATFORM_SRC_OBJECTS_9) \
@@ -9755,7 +9752,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_creddlgg.o \
 	corelib_rowheightcache.o \
 	corelib_common_bmpbndl.o \
-	corelib_bmpsvg.o
+	corelib_bmpsvg.o \
+	corelib_powercmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
@@ -10019,7 +10017,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_creddlgg.o \
 	corelib_rowheightcache.o \
 	corelib_common_bmpbndl.o \
-	corelib_bmpsvg.o
+	corelib_bmpsvg.o \
+	corelib_powercmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
@@ -10238,7 +10237,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_overlay.o \
 	corelib_darkmode.o \
 	corelib_msw_appprogress.o \
-	corelib_taskbarbutton.o
+	corelib_taskbarbutton.o \
+	corelib_msw_power.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_6 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_4)
@@ -10609,7 +10609,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_activityindicator.o \
 	corelib_cocoa_statbmp.o \
 	corelib_core_display.o \
-	corelib_cocoa_renderer.o
+	corelib_cocoa_renderer.o \
+	corelib_cocoa_power.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_9) \
@@ -10968,7 +10969,8 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_overlay.o \
 	corelib_darkmode.o \
 	corelib_msw_appprogress.o \
-	corelib_taskbarbutton.o
+	corelib_taskbarbutton.o \
+	corelib_msw_power.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7)
 @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_4)
@@ -14914,9 +14916,6 @@ monodll_object.o: $(srcdir)/src/common/object.cpp $(MONODLL_ODEP)
 monodll_platinfo.o: $(srcdir)/src/common/platinfo.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/platinfo.cpp
 
-monodll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
-
 monodll_process.o: $(srcdir)/src/common/process.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/process.cpp
 
@@ -15073,9 +15072,6 @@ monodll_evtloopconsole.o: $(srcdir)/src/msw/evtloopconsole.cpp $(MONODLL_ODEP)
 monodll_msw_mimetype.o: $(srcdir)/src/msw/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mimetype.cpp
 
-monodll_msw_power.o: $(srcdir)/src/msw/power.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
-
 monodll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/regconf.cpp
 
@@ -15156,9 +15152,6 @@ monodll_main.o: $(srcdir)/src/msw/main.cpp $(MONODLL_ODEP)
 
 monodll_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
-
-monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 monodll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
@@ -15561,6 +15554,9 @@ monodll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONODLL_ODEP)
 
 monodll_cocoa_renderer.o: $(srcdir)/src/osx/cocoa/renderer.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/renderer.mm
+
+monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -17523,6 +17519,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_taskbarbutton.o: $(srcdir)/src/msw/taskbarbutton.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/taskbarbutton.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_power.o: $(srcdir)/src/msw/power.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
@@ -19489,6 +19488,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_bmpsvg.o: $(srcdir)/src/generic/bmpsvg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bmpsvg.cpp
 
+@COND_USE_GUI_1@monodll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
@@ -19660,9 +19662,6 @@ monolib_object.o: $(srcdir)/src/common/object.cpp $(MONOLIB_ODEP)
 monolib_platinfo.o: $(srcdir)/src/common/platinfo.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/platinfo.cpp
 
-monolib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
-
 monolib_process.o: $(srcdir)/src/common/process.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/process.cpp
 
@@ -19819,9 +19818,6 @@ monolib_evtloopconsole.o: $(srcdir)/src/msw/evtloopconsole.cpp $(MONOLIB_ODEP)
 monolib_msw_mimetype.o: $(srcdir)/src/msw/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mimetype.cpp
 
-monolib_msw_power.o: $(srcdir)/src/msw/power.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
-
 monolib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/regconf.cpp
 
@@ -19902,9 +19898,6 @@ monolib_main.o: $(srcdir)/src/msw/main.cpp $(MONOLIB_ODEP)
 
 monolib_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
-
-monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 monolib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
@@ -20307,6 +20300,9 @@ monolib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONOLIB_ODEP)
 
 monolib_cocoa_renderer.o: $(srcdir)/src/osx/cocoa/renderer.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/renderer.mm
+
+monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -22269,6 +22265,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_taskbarbutton.o: $(srcdir)/src/msw/taskbarbutton.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/taskbarbutton.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_power.o: $(srcdir)/src/msw/power.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
@@ -24235,6 +24234,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_bmpsvg.o: $(srcdir)/src/generic/bmpsvg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bmpsvg.cpp
 
+@COND_USE_GUI_1@monolib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
@@ -24406,9 +24408,6 @@ basedll_object.o: $(srcdir)/src/common/object.cpp $(BASEDLL_ODEP)
 basedll_platinfo.o: $(srcdir)/src/common/platinfo.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/platinfo.cpp
 
-basedll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
-
 basedll_process.o: $(srcdir)/src/common/process.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/process.cpp
 
@@ -24565,9 +24564,6 @@ basedll_evtloopconsole.o: $(srcdir)/src/msw/evtloopconsole.cpp $(BASEDLL_ODEP)
 basedll_msw_mimetype.o: $(srcdir)/src/msw/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/mimetype.cpp
 
-basedll_msw_power.o: $(srcdir)/src/msw/power.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
-
 basedll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/regconf.cpp
 
@@ -24648,9 +24644,6 @@ basedll_main.o: $(srcdir)/src/msw/main.cpp $(BASEDLL_ODEP)
 
 basedll_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
-
-basedll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
@@ -24889,9 +24882,6 @@ baselib_object.o: $(srcdir)/src/common/object.cpp $(BASELIB_ODEP)
 baselib_platinfo.o: $(srcdir)/src/common/platinfo.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/platinfo.cpp
 
-baselib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
-
 baselib_process.o: $(srcdir)/src/common/process.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/process.cpp
 
@@ -25048,9 +25038,6 @@ baselib_evtloopconsole.o: $(srcdir)/src/msw/evtloopconsole.cpp $(BASELIB_ODEP)
 baselib_msw_mimetype.o: $(srcdir)/src/msw/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/mimetype.cpp
 
-baselib_msw_power.o: $(srcdir)/src/msw/power.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
-
 baselib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/regconf.cpp
 
@@ -25131,9 +25118,6 @@ baselib_main.o: $(srcdir)/src/msw/main.cpp $(BASELIB_ODEP)
 
 baselib_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
-
-baselib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
@@ -25380,9 +25364,6 @@ coredll_main.o: $(srcdir)/src/msw/main.cpp $(COREDLL_ODEP)
 
 coredll_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
-
-coredll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 coredll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
@@ -25734,6 +25715,9 @@ coredll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(COREDLL_ODEP)
 
 coredll_cocoa_renderer.o: $(srcdir)/src/osx/cocoa/renderer.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/renderer.mm
+
+coredll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -27102,6 +27086,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_taskbarbutton.o: $(srcdir)/src/msw/taskbarbutton.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/taskbarbutton.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_power.o: $(srcdir)/src/msw/power.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_artmac.o: $(srcdir)/src/osx/artmac.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
@@ -29068,6 +29055,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_bmpsvg.o: $(srcdir)/src/generic/bmpsvg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/bmpsvg.cpp
 
+@COND_USE_GUI_1@coredll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
 corelib_event.o: $(srcdir)/src/common/event.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -29085,9 +29075,6 @@ corelib_main.o: $(srcdir)/src/msw/main.cpp $(CORELIB_ODEP)
 
 corelib_msw_volume.o: $(srcdir)/src/msw/volume.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
-
-corelib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 corelib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
@@ -29439,6 +29426,9 @@ corelib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(CORELIB_ODEP)
 
 corelib_cocoa_renderer.o: $(srcdir)/src/osx/cocoa/renderer.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/renderer.mm
+
+corelib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
 corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -30807,6 +30797,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_taskbarbutton.o: $(srcdir)/src/msw/taskbarbutton.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/taskbarbutton.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_power.o: $(srcdir)/src/msw/power.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_artmac.o: $(srcdir)/src/osx/artmac.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/artmac.cpp
@@ -32772,6 +32765,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_bmpsvg.o: $(srcdir)/src/generic/bmpsvg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/bmpsvg.cpp
+
+@COND_USE_GUI_1@corelib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
 
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_ADV
