@@ -348,15 +348,51 @@ inline wxString wxTRANS_INPUT_STR(const wchar_t* s)
     #define wxTRANS_INPUT_STR(s) s
 #endif // wxNO_IMPLICIT_WXSTRING_ENCODING
 
-namespace wxTransImplStrict
-{
+#ifndef wxNO_REQUIRE_LITERAL_MSGIDS
 
-// Wrapper functions that only accept string literals (regular or wide) as
-// arguments, not variables, not char* pointers, not wchar_t* pointers.
+// Wrapper functions that only accept string literals as arguments,
+// not variables, not char* pointers, and define the fall backs only in
+// order to point out to the comment below:
+
+/*
+    *** LITERALS-MSGID comment marker ***
+
+    This comment explains the reason for static assert failures below. Please
+    see https://wxwidgets.org/help/msgid-literals for a more detailed and
+    possibly more up-to-date version of this comment.
+
+    If you get a compile error when using any of the translation macros, i.e.
+    _(), wxPLURAL() etc, it means that you're passing something other than a
+    literal string, i.e. just simple "whatever", to wx translation functions.
+    This most likely indicates a bug in your program which is now detected when
+    it was silently ignored before and should be fixed by changing the code to
+    use string literals. For example, existing code doing
+
+        _(wxString::Format("Hello %s", who))
+
+    wouldn't work properly even if it were allowed to compile and should be
+    changed to
+
+        wxString::Format(_("Hello %s"), who))
+
+    However if you can't do this, for some reason, you may choose to predefine
+    wxNO_REQUIRE_LITERAL_MSGIDS which disables these checks. Please note that
+    this is *NOT* recommended, as the problematic strings still won't be
+    translated, because they won't have been extracted by xgettext in the first
+    place and the right thing to do remains to fix the code instead.
+*/
+
 template<size_t N, typename T>
 const wxString& wxUnderscoreWrapper(const T (&msg)[N])
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg));
+}
+
+template <typename T>
+wxString wxUnderscoreWrapper(T)
+{
+    static_assert(!sizeof(T), "See https://wxwidgets.org/help/msgid-literals or LITERALS-MSGID comment above.");
+    return {};
 }
 
 template<size_t M, size_t N, typename T>
@@ -368,12 +404,26 @@ const wxString& wxPluralWrapper(const T (&msg)[M],
                             count);
 }
 
+template <typename T, typename U>
+wxString wxPluralWrapper(T, U, int)
+{
+    static_assert(!sizeof(T), "See https://wxwidgets.org/help/msgid-literals or LITERALS-MSGID comment above.");
+    return {};
+}
+
 template<size_t M, size_t N, typename T>
 const wxString& wxGettextInContextWrapper(const T (&ctx)[M],
                                           const T (&msg)[N])
 {
     return wxGetTranslation(wxTRANS_INPUT_STR(msg), wxString(),
                             wxTRANS_INPUT_STR(ctx));
+}
+
+template <typename T, typename U>
+wxString wxGettextInContextWrapper(T, U)
+{
+    static_assert(!sizeof(T), "See https://wxwidgets.org/help/msgid-literals or LITERALS-MSGID comment above.");
+    return {};
 }
 
 template<size_t L, size_t M, size_t N, typename T>
@@ -386,10 +436,14 @@ const wxString& wxGettextInContextPluralWrapper(const T (&ctx)[L],
                             count, wxString(), wxTRANS_INPUT_STR(ctx));
 }
 
-} // namespace wxTransImplStrict
-
-namespace wxTransImplCompatible
+template <typename T, typename U, typename V>
+wxString wxGettextInContextPluralWrapper(T, U, V, int)
 {
+    static_assert(!sizeof(T), "See https://wxwidgets.org/help/msgid-literals or LITERALS-MSGID comment above.");
+    return {};
+}
+
+#else // wxNO_REQUIRE_LITERAL_MSGIDS
 
 // Wrapper functions that accept both string literals and variables
 // as arguments.
@@ -422,13 +476,7 @@ inline const wxString& wxGettextInContextPluralWrapper(const char *ctx,
                             count, wxString(), wxTRANS_INPUT_STR(ctx));
 }
 
-} // namespace wxTransImplCompatible
-
-#ifdef wxNO_REQUIRE_LITERAL_MSGIDS
-using namespace wxTransImplCompatible;
-#else
-using namespace wxTransImplStrict;
-#endif
+#endif // wxNO_REQUIRE_LITERAL_MSGIDS
 
 #else // !wxUSE_INTL
 
