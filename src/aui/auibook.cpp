@@ -596,12 +596,20 @@ int wxAuiTabContainer::LayoutMultiLineTabs(const wxRect& rect, wxWindow* wnd)
         // Note that for non-wxAUI_NB_CLOSE_ON_ACTIVE_TAB cases, it doesn't
         // matter, as "Close" is either never shown at all or always shown
         // regardless of the page active status.
-        UpdateCloseButtonState(page, firstTabInRow);
+        //
+        // Also note that we don't need to update the buttons state for the
+        // locked pages as they never change, so the layout doesn't depend on
+        // whether they're active or not and if the entire row consists of only
+        // locked tabs, we never have to add any extra space.
+        if ( page.kind != wxAuiTabKind::Locked )
+        {
+            UpdateCloseButtonState(page, firstTabInRow);
+            firstTabInRow = false;
+        }
 
         const auto size = m_art->GetPageTabSize(dc, wnd, page);
 
         widthRow += size.x;
-        firstTabInRow = false;
 
         // Reset it by default, it will be set during the next loop
         // iteration or after the loop if it's the last tab in the row.
