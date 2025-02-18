@@ -102,11 +102,9 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 }
 
 // ----------------------------------------------------------------------------
-// get display info
+// get mouse position
 // ----------------------------------------------------------------------------
 
-// See also the wxGetMousePosition in window.cpp
-// Deprecated: use wxPoint wxGetMousePosition() instead
 void wxGetMousePosition( int* x, int* y )
 {
     POINT pt;

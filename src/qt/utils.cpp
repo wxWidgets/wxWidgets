@@ -44,17 +44,14 @@ void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )
 }
 
 #if wxUSE_GUI
-wxPoint wxGetMousePosition()
-{
-    return wxQtConvertPoint( QCursor::pos() );
-}
-
 void wxGetMousePosition( int *x, int *y )
 {
-    wxPoint position = wxGetMousePosition();
+    const auto position = QCursor::pos();
 
-    *x = position.x;
-    *y = position.y;
+    if ( x )
+        *x = position.x();
+    if ( y )
+        *y = position.y();
 }
 #endif
 

@@ -1997,8 +1997,7 @@ void MyFrame::OnNotebookPageChanging(wxAuiNotebookEvent& evt)
 
 void MyFrame::OnNotebookTabRightClick(wxAuiNotebookEvent& evt)
 {
-    wxPoint pt;
-    wxGetMousePosition(&pt.x, &pt.y);
+    wxPoint pt = wxGetMousePosition();
 
     auto* const book =
         wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);

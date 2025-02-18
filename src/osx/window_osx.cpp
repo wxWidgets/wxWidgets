@@ -2317,16 +2317,6 @@ wxWindow * wxFindWindowAtPointer( wxPoint& pt )
     return (wxWindow*) found;
 }
 
-// Get the current mouse position.
-wxPoint wxGetMousePosition()
-{
-    int x, y;
-
-    wxGetMousePosition( &x, &y );
-
-    return wxPoint(x, y);
-}
-
 void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 {
     if ( event.GetEventType() == wxEVT_RIGHT_DOWN )

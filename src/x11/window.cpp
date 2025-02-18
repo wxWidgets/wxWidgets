@@ -1682,16 +1682,6 @@ void wxGetMouseState(int& rootX, int& rootY, unsigned& maskReturn)
 #endif
 }
 
-// Get the current mouse position.
-wxPoint wxGetMousePosition()
-{
-    int x, y;
-    unsigned mask;
-
-    wxGetMouseState(x, y, mask);
-    return wxPoint(x, y);
-}
-
 wxMouseState wxGetMouseState()
 {
     wxMouseState ms;

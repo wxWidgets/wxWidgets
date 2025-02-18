@@ -7840,15 +7840,6 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     return wxGetWindowFromHWND((WXHWND)hWnd);
 }
 
-// Get the current mouse position.
-wxPoint wxGetMousePosition()
-{
-    POINT pt;
-    wxGetCursorPosMSW(&pt);
-
-    return wxPoint(pt.x, pt.y);
-}
-
 #if wxUSE_HOTKEY
 
 bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int keycode)

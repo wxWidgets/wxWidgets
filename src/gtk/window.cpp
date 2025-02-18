@@ -6922,13 +6922,6 @@ void wxGetMousePosition(int* x, int* y)
 #endif
 }
 
-wxPoint wxGetMousePosition()
-{
-    wxPoint pt;
-    wxGetMousePosition(&pt.x, &pt.y);
-    return pt;
-}
-
 GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
 {
     GdkWindow* window = nullptr;
