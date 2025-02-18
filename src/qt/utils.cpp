@@ -76,13 +76,6 @@ wxWindow *wxFindWindowAtPoint(const wxPoint& pt)
     return wxGenericFindWindowAtPoint( pt );
 }
 
-wxWindow *wxFindWindowAtPointer(wxPoint& pt)
-{
-    pt = wxQtConvertPoint( QCursor::pos() );
-
-    return wxFindWindowAtPoint( pt );
-}
-
 bool wxGetKeyState(wxKeyCode key)
 {
     /* FIXME: Qt doesn't provide a method to check the state of keys others

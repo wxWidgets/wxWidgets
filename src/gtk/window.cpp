@@ -6893,15 +6893,6 @@ void wxWindowGTK::GTKScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
     }
 }
 
-// Find the wxWindow at the current mouse position, also returning the mouse
-// position.
-wxWindow* wxFindWindowAtPointer(wxPoint& pt)
-{
-    pt = wxGetMousePosition();
-    wxWindow* found = wxFindWindowAtPoint(pt);
-    return found;
-}
-
 // Get the current mouse position.
 void wxGetMousePosition(int* x, int* y)
 {

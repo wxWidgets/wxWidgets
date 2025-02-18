@@ -1039,13 +1039,6 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
     }
 }
 
-// Find the wxWindow at the current mouse position, returning the mouse
-// position.
-wxWindow* wxFindWindowAtPointer(wxPoint& pt)
-{
-    return wxFindWindowAtPoint(pt = wxGetMousePosition());
-}
-
 wxWindow* wxFindWindowAtPoint(const wxPoint& WXUNUSED(pt))
 {
     wxFAIL_MSG( "wxFindWindowAtPoint not implemented" );

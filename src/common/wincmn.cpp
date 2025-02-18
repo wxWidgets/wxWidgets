@@ -3712,6 +3712,12 @@ wxPoint wxGetMousePosition()
     return pt;
 }
 
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+{
+    pt = wxGetMousePosition();
+    return wxFindWindowAtPoint(pt);
+}
+
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------
 // accessible object for windows
