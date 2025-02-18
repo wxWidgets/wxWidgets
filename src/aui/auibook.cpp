@@ -70,9 +70,9 @@ std::vector<wxAuiTabContainerButton> MakePageButtons(unsigned int flags)
 {
     std::vector<wxAuiTabContainerButton> buttons;
 
-    // Pinned button is only shown if the corresponding style is used and only
-    // shown for the current tab, so make it hidden by default.
-    if (flags & wxAUI_NB_PIN_ON_ACTIVE_TAB)
+    // Pin/unpin button can be only shown if one of the styles enabling it is
+    // used and depends on the current tab state, so make it hidden by default.
+    if (flags & (wxAUI_NB_PIN_ON_ACTIVE_TAB | wxAUI_NB_UNPIN_ON_ALL_PINNED))
         buttons.push_back({wxAUI_BUTTON_PIN, wxRIGHT, wxAUI_BUTTON_STATE_HIDDEN});
 
     // Close button is hidden by default, it will be shown depending on the
@@ -162,6 +162,7 @@ void wxAuiTabContainer::SetFlags(unsigned int flags)
     // flags affecting them changed.
     const auto flagsAffectingButtons =
         wxAUI_NB_PIN_ON_ACTIVE_TAB |
+        wxAUI_NB_UNPIN_ON_ALL_PINNED |
         wxAUI_NB_CLOSE_ON_ALL_TABS |
         wxAUI_NB_CLOSE_ON_ACTIVE_TAB;
     if ((m_flags & flagsAffectingButtons) != (flags & flagsAffectingButtons))
@@ -462,6 +463,20 @@ wxAuiTabContainer::UpdateButtonsState(wxAuiNotebookPage& page, bool forceActive)
                                     button.curState |= wxAUI_BUTTON_STATE_CHECKED;
                                 else
                                     button.curState &= ~wxAUI_BUTTON_STATE_CHECKED;
+                            }
+                        }
+
+                        // This is not an "else" of the above "if" as when both
+                        // styles are used, we show "pin" button only on the
+                        // active tab, but also show "unpin" on all the pinned
+                        // tabs.
+                        if (IsFlagSet(wxAUI_NB_UNPIN_ON_ALL_PINNED))
+                        {
+                            if ( page.kind == wxAuiTabKind::Pinned )
+                            {
+                                shown = true;
+
+                                button.curState |= wxAUI_BUTTON_STATE_CHECKED;
                             }
                         }
                         break;

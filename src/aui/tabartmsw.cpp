@@ -445,7 +445,8 @@ bool wxAuiMSWTabArt::IsThemed() const
 {
     return
         m_themed &&
-        !(m_flags & wxAUI_NB_PIN_ON_ACTIVE_TAB) && // We don't draw pin button yet
+        !(m_flags & wxAUI_NB_PIN_ON_ACTIVE_TAB) && // We don't draw pin
+        !(m_flags & wxAUI_NB_UNPIN_ON_ALL_PINNED) && // ...and unpin buttons yet
         !(m_flags & wxAUI_NB_BOTTOM); // Native theme does not support bottom tabs
 }
 

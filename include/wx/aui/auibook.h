@@ -52,6 +52,7 @@ enum wxAuiNotebookOption
     wxAUI_NB_MIDDLE_CLICK_CLOSE  = 1 << 13,
     wxAUI_NB_MULTILINE           = 1 << 14,
     wxAUI_NB_PIN_ON_ACTIVE_TAB   = 1 << 15,
+    wxAUI_NB_UNPIN_ON_ALL_PINNED = 1 << 16,
 
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |

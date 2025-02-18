@@ -108,6 +108,7 @@ class MyFrame : public wxFrame
         ID_NotebookScrollButtons,
         ID_NotebookTabFixedWidth,
         ID_NotebookTabPin,
+        ID_NotebookTabUnpin,
         ID_NotebookMultiLine,
         ID_NotebookNextTab,
         ID_NotebookPrevTab,
@@ -644,6 +645,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NotebookTabFixedWidth, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookTabPin, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookTabUnpin, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookMultiLine, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookNoCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButton, MyFrame::OnNotebookFlag)
@@ -683,6 +685,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_UPDATE_UI(ID_NotebookTabFixedWidth, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookTabPin, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookTabUnpin, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookMultiLine, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookNoCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButton, MyFrame::OnUpdateUI)
@@ -804,6 +807,7 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
     notebook_menu->AppendCheckItem(ID_NotebookTabPin, _("Show &Pin Button"));
+    notebook_menu->AppendCheckItem(ID_NotebookTabUnpin, _("Show &Unpin Buttons"));
     notebook_menu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
     notebook_menu->AppendSeparator();
     notebook_menu->Append(ID_NotebookNextTab, _("Switch to next tab\tCtrl-F6"));
@@ -1300,6 +1304,10 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     {
         m_notebook_style ^= wxAUI_NB_PIN_ON_ACTIVE_TAB;
     }
+    else if (id == ID_NotebookTabUnpin)
+    {
+        m_notebook_style ^= wxAUI_NB_UNPIN_ON_ALL_PINNED;
+    }
     else if (id == ID_NotebookMultiLine)
     {
         m_notebook_style ^= wxAUI_NB_MULTILINE;
@@ -1432,6 +1440,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_NotebookTabPin:
             event.Check((m_notebook_style & wxAUI_NB_PIN_ON_ACTIVE_TAB) != 0);
+            break;
+        case ID_NotebookTabUnpin:
+            event.Check((m_notebook_style & wxAUI_NB_UNPIN_ON_ALL_PINNED) != 0);
             break;
         case ID_NotebookMultiLine:
             event.Check((m_notebook_style & wxAUI_NB_MULTILINE) != 0);

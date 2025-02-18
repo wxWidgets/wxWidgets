@@ -30,14 +30,28 @@ enum wxAuiNotebookOption
 
         With this style, the active page shows either a "pin" icon allowing to
         pin it if it it's currently not pinned or an "unpin" icon if it is
-        already pinned.
+        already pinned. Note that "unpin" icon may be shown even if this style
+        is not specified, but ::wxAUI_NB_UNPIN_ON_ALL_PINNED is.
 
         Note that if this style is not specified, tabs can still be pinned
         programmatically using SetPageKind().
 
         @since 3.3.0
      */
-    wxAUI_NB_PIN_ON_ACTIVE_TAB    = 1 << 15
+    wxAUI_NB_PIN_ON_ACTIVE_TAB    = 1 << 15,
+
+    /**
+        Allow the user to unpin pinned tabs by using the unpin button.
+
+        Specifying this style shows "unpin" button on all currently pinned
+        tabs, allowing the user to unpin them, i.e. make them normal again.
+
+        This style can be combined with ::wxAUI_NB_PIN_ON_ACTIVE_TAB or used on
+        its own.
+
+        @since 3.3.0
+     */
+    wxAUI_NB_UNPIN_ON_ALL_PINNED  = 1 << 16,
 
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
@@ -197,6 +211,11 @@ struct wxAuiNotebookPosition
            to normal. This style is not included in the default notebook style
            and has to be explicitly specified for the user to be able to pin
            the tabs interactively. It is available in wxWidgets 3.3.0 or later.
+    @style{wxAUI_NB_UNPIN_ON_ALL_PINNED}
+           If this style is specified, "unpin" button is shown on all currently
+           pinned tabs, allowing the user to unpin them, i.e. make them normal
+           again. This style can be combined with ::wxAUI_NB_PIN_ON_ACTIVE_TAB
+           or used on its own. It is available in wxWidgets 3.3.0 or later.
     @endStyleTable
 
     @beginEventEmissionTable{wxAuiNotebookEvent}
@@ -604,12 +623,12 @@ public:
         different content from the normal (and pinned) tabs. These tabs are
         special, they're always shown and can't be closed nor moved, by
         dragging them, by the user.
-        - Next are pinned tabs: these tabs can be closed and, depending on the
-        presence of ::wxAUI_NB_PIN_ON_ACTIVE_TAB style, can also be unpinned
-        (i.e. made normal) by the user. If ::wxAUI_NB_TAB_MOVE is specified,
-        they can be moved by dragging them, however they are restricted to
-        remain in the pinned tabs group, i.e. only the order of the pinned tabs
-        can be changed.
+        - Next are pinned tabs: these tabs can be closed and, depending on
+        whether ::wxAUI_NB_PIN_ON_ACTIVE_TAB and ::wxAUI_NB_UNPIN_ON_ALL_PINNED
+        styles are specified, can also be unpinned (i.e. made normal) by the
+        user. If ::wxAUI_NB_TAB_MOVE is specified, they can be moved by
+        dragging them, however they are restricted to remain in the pinned tabs
+        group, i.e. only the order of the pinned tabs can be changed.
         - Finally, normal tabs are shown. These tabs can be closed and,
         depending on ::wxAUI_NB_PIN_ON_ACTIVE_TAB style, pinned by the user.
         They can also be moved by dragging them, but only inside the same
