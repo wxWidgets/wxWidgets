@@ -704,17 +704,24 @@ inline wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 }
 
 // Macro that indicates the default encoding for converting C strings
-// to wxString. It provides a default value for a const wxMBConv&
-// parameter (i.e. wxConvLibc) unless wxNO_IMPLICIT_WXSTRING_ENCODING
-// is defined.
+// to wxString. There are 3 possible cases:
 //
-// Intended use:
+//  - In UTF-8-only build, all strings are supposed to use UTF-8.
+//  - If wxNO_IMPLICIT_WXSTRING_ENCODING is defined, the conversion must be
+//    always specified explicitly. This forbids error prone implicit
+//    conversions (note that this is incompatible with UTF-8-only build).
+//  - Otherwise strings are considered to use current locale encoding.
+//
+// It is used to provide a default value for const wxMBConv& parameters, i.e.
+// its intended use is:
 // wxString(const char *data, ...,
 //          const wxMBConv &conv wxSTRING_DEFAULT_CONV_ARG);
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-#define wxSTRING_DEFAULT_CONV_ARG = wxConvLibc
-#else
+#if wxUSE_UTF8_LOCALE_ONLY
+#define wxSTRING_DEFAULT_CONV_ARG = wxConvUTF8
+#elif defined(wxNO_IMPLICIT_WXSTRING_ENCODING)
 #define wxSTRING_DEFAULT_CONV_ARG
+#else
+#define wxSTRING_DEFAULT_CONV_ARG = wxConvLibc
 #endif
 
 #endif // _WX_STRCONV_H_
