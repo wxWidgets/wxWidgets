@@ -263,7 +263,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
         // do not scale on already small screens
         if (!m_isPda)
-            image.Rescale( bitmap.GetWidth()/2, bitmap.GetHeight()/2 );
+            image.Rescale(bitmap.GetSize()/2);
 
         bitmap = wxBitmap(image);
         wxSplashScreen *splash = new wxSplashScreen(bitmap,

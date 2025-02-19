@@ -12731,7 +12731,7 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, w
             wxImage img;
             if (image.GetWidth() <= upscaleThreshold || image.GetHeight() <= upscaleThreshold)
             {
-                img = image.Scale(image.GetWidth()*2, image.GetHeight()*2);
+                img = image.Scale(2*image.GetSize());
                 img.Rescale(width*scaleFactor, height*scaleFactor, wxIMAGE_QUALITY_HIGH);
             }
             else

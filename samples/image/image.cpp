@@ -462,9 +462,7 @@ private:
     void OnResize(wxCommandEvent& WXUNUSED(event))
     {
         wxImage img(m_bitmap.ConvertToImage());
-
-        const wxSize size = GetClientSize();
-        img.Rescale(size.x, size.y, wxIMAGE_QUALITY_HIGH);
+        img.Rescale(GetClientSize(), wxIMAGE_QUALITY_HIGH);
         m_bitmap = wxBitmap(img);
 
         UpdateStatusBar();

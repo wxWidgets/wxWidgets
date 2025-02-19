@@ -1900,7 +1900,8 @@ wxBitmap LoadBitmapFromFS(wxXmlResourceHandlerImpl* impl,
         );
         return wxNullBitmap;
     }
-    if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
+    if (size != wxDefaultSize)
+        img.Rescale(size);
     return wxBitmap(img);
 }
 

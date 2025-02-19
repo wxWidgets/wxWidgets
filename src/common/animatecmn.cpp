@@ -203,7 +203,7 @@ void wxAnimationCtrlBase::UpdateStaticImage()
         {
             // the user-provided bitmap is bigger than our control, strech it
             wxImage temp(bmpCurrent.ConvertToImage());
-            temp.Rescale(sz.GetWidth(), sz.GetHeight(), wxIMAGE_QUALITY_HIGH);
+            temp.Rescale(sz, wxIMAGE_QUALITY_HIGH);
             m_bmpStaticReal = wxBitmap(temp);
         }
     }

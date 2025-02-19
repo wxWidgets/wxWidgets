@@ -584,7 +584,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                     // anything.
                     wxImage image = m_image;
                     if ( image.GetSize() != size )
-                        image.Rescale(size.x, size.y, wxIMAGE_QUALITY_HIGH);
+                        image.Rescale(size, wxIMAGE_QUALITY_HIGH);
 
                     // This is required under MSW in order to be able to draw
                     // over the bitmap using wxDC. For full alpha support,

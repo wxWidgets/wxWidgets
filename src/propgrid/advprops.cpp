@@ -1964,7 +1964,7 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
         if ( !m_bitmap.IsOk() )
         {
             wxImage imgScaled = m_image;
-            imgScaled.Rescale(rect.width, rect.height);
+            imgScaled.Rescale(rect.GetSize());
             m_bitmap = wxBitmap(imgScaled, dc);
         }
     }

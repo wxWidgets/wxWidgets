@@ -352,6 +352,9 @@ public:
     // return the new image with size width*height
     wxImage Scale( int width, int height,
                    wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL ) const;
+    wxImage Scale(const wxSize& size,
+                  wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL) const
+        { return Scale(size.GetWidth(), size.GetHeight(), quality); }
 
     // box averager and bicubic filters for up/down sampling
     wxImage ResampleNearest(int width, int height) const;
@@ -370,6 +373,9 @@ public:
     wxImage& Rescale( int width, int height,
                       wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL )
         { return *this = Scale(width, height, quality); }
+    wxImage& Rescale( const wxSize& size,
+                      wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL )
+        { return *this = Scale(size, quality); }
 
     // resizes the image in place
     wxImage& Resize( const wxSize& size, const wxPoint& pos,

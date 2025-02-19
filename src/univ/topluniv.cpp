@@ -337,7 +337,7 @@ void wxTopLevelWindow::SetIcons(const wxIconBundle& icons)
             else
             {
                 wxImage img = bmp1.ConvertToImage();
-                img.Rescale(size.x, size.y);
+                img.Rescale(size);
                 m_titlebarIcon.CopyFromBitmap(wxBitmap(img));
             }
 #endif // wxUSE_IMAGE

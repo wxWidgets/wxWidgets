@@ -877,9 +877,15 @@ public:
         For a description of the @a quality parameter, see the Scale() function.
         Returns the (modified) image itself.
 
+        Overload taking wxSize is only available since wxWidgets 3.3.0.
+
         @see Scale()
     */
     wxImage& Rescale(int width, int height,
+                     wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL);
+
+    /// @overload
+    wxImage& Rescale(const wxSize& size,
                      wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL);
 
     /**
@@ -1008,10 +1014,16 @@ public:
         for 32-bit programs. For 64-bit programs the limit is 2^48 and so not
         relevant in practice.
 
+        The overload taking a wxSize is only available since wxWidgets 3.3.0.
+
         @see Rescale()
     */
     wxImage Scale(int width, int height,
                    wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL) const;
+
+    /// @overload
+    wxImage Scale(const wxSize& size,
+                  wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL) const;
 
     /**
         Returns a resized version of this image without scaling it by adding either a
