@@ -850,6 +850,8 @@ wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
             break;
     }
 
+    wxCHECK_MSG( data, wxNullBitmap, "Invalid bitmap type" );
+
     // All data starts with a new line, use +1 to skip it.
     wxString svgData = wxString::FromAscii(data + 1);
 
