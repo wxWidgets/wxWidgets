@@ -858,7 +858,7 @@ wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
     if (wxSystemSettings::GetAppearance().IsDark())
         svgData.Replace("black", "white");
 
-    return wxBitmapBundle::FromSVG(svgData, size).GetBitmap(size);
+    return wxBitmapBundle::FromSVG(svgData.ToAscii(), size).GetBitmap(size);
 }
 
 #else // !wxHAS_SVG
