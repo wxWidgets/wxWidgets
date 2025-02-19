@@ -16,10 +16,11 @@
 #include "wx/srchctrl.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/bmpbndl.h"
     #include "wx/button.h"
     #include "wx/dcclient.h"
     #include "wx/menu.h"
-    #include "wx/dcmemory.h"
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #if !wxUSE_NATIVE_SEARCH_CONTROL
@@ -27,17 +28,16 @@
 #include "wx/image.h"
 #include "wx/utils.h"
 
+#ifndef wxHAS_SVG
+    #include "wx/dcmemory.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
 // the margin between the text control and the search/cancel buttons
 static const wxCoord MARGIN = 2;
-
-// arguments to wxColour::ChangeLightness() for making the search/cancel
-// bitmaps foreground colour, respectively
-static const int SEARCH_BITMAP_LIGHTNESS = 140; // slightly lighter
-static const int CANCEL_BITMAP_LIGHTNESS = 160; // a bit more lighter
 
 // ----------------------------------------------------------------------------
 // wxSearchTextCtrl: text control used by search control
@@ -153,7 +153,7 @@ public:
           m_eventType(eventType),
           m_bmp(bmp)
     {
-        SetBackgroundStyle(wxBG_STYLE_PAINT);
+        SetBackgroundColour(search->GetBackgroundColour());
     }
 
     void SetBitmapLabel(const wxBitmap& label)
@@ -210,10 +210,6 @@ protected:
     void OnPaint(wxPaintEvent&)
     {
         wxPaintDC dc(this);
-
-        // Clear the background in case of a user bitmap with alpha channel
-        dc.SetBrush(m_search->GetBackgroundColour());
-        dc.Clear();
 
         // Draw the bitmap
         dc.DrawBitmap(m_bmp, 0,0, true);
@@ -812,104 +808,212 @@ bool wxSearchCtrl::ShouldInheritColours() const
     return true;
 }
 
-// icons are rendered at 3-8 times larger than necessary and downscaled for
-// antialiasing
-static int GetMultiplier()
-{
-    int depth = ::wxDisplayDepth();
+#ifdef wxHAS_SVG
 
-    if  ( depth >= 24 )
+namespace
+{
+
+const char* const search_svg_data = R"svg(
+<?xml version="1.0" encoding="UTF-8"?><svg version="1.1" id="Layer_1" x="0px" y="0px" width="171" height="120" viewBox="0 0 171 120" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><g><path fill="black" stroke="black" d="m 49.988,0 h 0.016 v 0.007 c 13.799,0.004 26.294,5.601 35.336,14.645 9.027,9.031 14.619,21.515 14.628,35.303 h 0.007 v 0.033 0.04 h -0.007 c -0.005,5.557 -0.917,10.905 -2.594,15.892 -0.281,0.837 -0.575,1.641 -0.877,2.409 v 0.007 c -1.446,3.66 -3.315,7.12 -5.547,10.307 l 29.082,26.139 0.018,0.016 0.157,0.146 0.011,0.011 c 1.642,1.563 2.536,3.656 2.649,5.78 0.11,2.1 -0.543,4.248 -1.979,5.971 l -0.011,0.016 -0.175,0.203 -0.035,0.035 -0.146,0.16 -0.016,0.021 c -1.565,1.642 -3.654,2.534 -5.78,2.646 -2.097,0.111 -4.247,-0.54 -5.971,-1.978 l -0.015,-0.011 -0.204,-0.175 -0.029,-0.024 -29.745,-26.734 c -0.88,0.62 -1.778,1.209 -2.687,1.765 -1.233,0.755 -2.51,1.466 -3.813,2.115 -6.699,3.342 -14.269,5.222 -22.272,5.222 v 0.007 H 49.973 V 99.967 C 36.174,99.963 23.677,94.366 14.635,85.322 5.605,76.291 0.016,63.805 0.007,50.021 H 0 V 49.988 49.972 H 0.007 C 0.011,36.173 5.608,23.676 14.652,14.634 23.683,5.608 36.167,0.016 49.955,0.007 V 0 Z m 0.016,11.21 v 0.007 H 49.988 49.955 V 11.21 C 39.269,11.217 29.583,15.56 22.571,22.569 15.56,29.578 11.213,39.274 11.21,49.973 h 0.007 v 0.016 0.033 H 11.21 c 0.007,10.686 4.347,20.367 11.359,27.381 7.009,7.012 16.705,11.359 27.403,11.361 v -0.007 h 0.016 0.033 v 0.007 c 10.686,-0.007 20.368,-4.348 27.382,-11.359 7.011,-7.009 11.358,-16.702 11.36,-27.4 h -0.006 v -0.016 -0.033 h 0.006 C 88.757,39.27 84.413,29.584 77.405,22.572 70.396,15.56 60.703,11.213 50.004,11.21 Z" id="path148" /></g></svg>
+)svg";
+
+#if wxUSE_MENUS
+const char* const menu_svg_data = R"svg(
+<?xml version="1.0" encoding="UTF-8"?><svg version="1.1" id="Layer_1" x="0px" y="0px" width="171" height="120" viewBox="0 0 171 120" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><g><path fill="black" stroke="black" d="m 49.988,0 h 0.016 v 0.007 c 13.799,0.004 26.294,5.601 35.336,14.645 9.027,9.031 14.619,21.515 14.628,35.303 h 0.007 v 0.033 0.04 h -0.007 c -0.005,5.557 -0.917,10.905 -2.594,15.892 -0.281,0.837 -0.575,1.641 -0.877,2.409 v 0.007 c -1.446,3.66 -3.315,7.12 -5.547,10.307 l 29.082,26.139 0.018,0.016 0.157,0.146 0.011,0.011 c 1.642,1.563 2.536,3.656 2.649,5.78 0.11,2.1 -0.543,4.248 -1.979,5.971 l -0.011,0.016 -0.175,0.203 -0.035,0.035 -0.146,0.16 -0.016,0.021 c -1.565,1.642 -3.654,2.534 -5.78,2.646 -2.097,0.111 -4.247,-0.54 -5.971,-1.978 l -0.015,-0.011 -0.204,-0.175 -0.029,-0.024 -29.745,-26.734 c -0.88,0.62 -1.778,1.209 -2.687,1.765 -1.233,0.755 -2.51,1.466 -3.813,2.115 -6.699,3.342 -14.269,5.222 -22.272,5.222 v 0.007 H 49.973 V 99.967 C 36.174,99.963 23.677,94.366 14.635,85.322 5.605,76.291 0.016,63.805 0.007,50.021 H 0 V 49.988 49.972 H 0.007 C 0.011,36.173 5.608,23.676 14.652,14.634 23.683,5.608 36.167,0.016 49.955,0.007 V 0 Z m 0.016,11.21 v 0.007 H 49.988 49.955 V 11.21 C 39.269,11.217 29.583,15.56 22.571,22.569 15.56,29.578 11.213,39.274 11.21,49.973 h 0.007 v 0.016 0.033 H 11.21 c 0.007,10.686 4.347,20.367 11.359,27.381 7.009,7.012 16.705,11.359 27.403,11.361 v -0.007 h 0.016 0.033 v 0.007 c 10.686,-0.007 20.368,-4.348 27.382,-11.359 7.011,-7.009 11.358,-16.702 11.36,-27.4 h -0.006 v -0.016 -0.033 h 0.006 C 88.757,39.27 84.413,29.584 77.405,22.572 70.396,15.56 60.703,11.213 50.004,11.21 Z" id="path148" /><path style="fill:black" id="path990" d="m 106.85428,59.294043 4.84235,-8.422398 4.87284,8.404792 4.87283,8.404791 -9.71518,0.01761 -9.71518,0.01761 z" transform="matrix(2.4060396,0,0,-2.3425443,-133.80698,203.09011)" /></g></svg>
+)svg";
+#endif // wxUSE_MENUS
+
+const char* const cancel_svg_data = R"svg(
+<?xml version="1.0" encoding="UTF-8"?><svg version="1.1" id="Layer_1" x="0px" y="0px" width="123" height="123" viewBox="0 0 123 123" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><g><path fill="black" stroke="black" d="M61.44,0c16.966,0,32.326,6.877,43.445,17.996c11.119,11.118,17.996,26.479,17.996,43.444 c0,16.967-6.877,32.326-17.996,43.444C93.766,116.003,78.406,122.88,61.44,122.88c-16.966,0-32.326-6.877-43.444-17.996 C6.877,93.766,0,78.406,0,61.439c0-16.965,6.877-32.326,17.996-43.444C29.114,6.877,44.474,0,61.44,0L61.44,0z M80.16,37.369 c1.301-1.302,3.412-1.302,4.713,0c1.301,1.301,1.301,3.411,0,4.713L65.512,61.444l19.361,19.362c1.301,1.301,1.301,3.411,0,4.713 c-1.301,1.301-3.412,1.301-4.713,0L60.798,66.157L41.436,85.52c-1.301,1.301-3.412,1.301-4.713,0c-1.301-1.302-1.301-3.412,0-4.713 l19.363-19.362L36.723,42.082c-1.301-1.302-1.301-3.412,0-4.713c1.301-1.302,3.412-1.302,4.713,0l19.363,19.362L80.16,37.369 L80.16,37.369z M100.172,22.708C90.26,12.796,76.566,6.666,61.44,6.666c-15.126,0-28.819,6.13-38.731,16.042 C12.797,32.62,6.666,46.314,6.666,61.439c0,15.126,6.131,28.82,16.042,38.732c9.912,9.911,23.605,16.042,38.731,16.042 c15.126,0,28.82-6.131,38.732-16.042c9.912-9.912,16.043-23.606,16.043-38.732C116.215,46.314,110.084,32.62,100.172,22.708 L100.172,22.708z"/></g></svg>
+)svg";
+
+} // anonymous namespace
+
+wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
+{
+    const char* data = nullptr;
+
+    switch ( bitmapType )
     {
-        return 8;
+        case BitmapType::Search:
+            data = search_svg_data;
+            break;
+
+#if wxUSE_MENUS
+        case BitmapType::Menu:
+            data = menu_svg_data;
+            break;
+#endif // wxUSE_MENUS
+
+        case BitmapType::Cancel:
+            data = cancel_svg_data;
+            break;
     }
-    return 6;
+
+    // All data starts with a new line, use +1 to skip it.
+    wxString svgData = wxString::FromAscii(data + 1);
+
+    if (wxSystemSettings::GetAppearance().IsDark())
+        svgData.Replace("black", "white");
+
+    return wxBitmapBundle::FromSVG(svgData, size).GetBitmap(size);
 }
 
-wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
+#else // !wxHAS_SVG
+
+// arguments to wxColour::ChangeLightness() for making the search/cancel
+// bitmaps foreground colour, respectively
+static const int SEARCH_BITMAP_LIGHTNESS = 140; // slightly lighter
+static const int CANCEL_BITMAP_LIGHTNESS = 160; // a bit more lighter
+
+wxBitmap wxSearchCtrl::RenderBitmap(const wxSize& size, BitmapType bitmapType)
 {
+    int x = size.x;
+    int y = size.y;
+
     wxColour bg = GetBackgroundColour();
-    wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
+
+    wxBitmap bitmap;
+
+    // icons are rendered at 6-8 times larger than necessary and downscaled for
+    // antialiasing
+    const int multiplier = ::wxDisplayDepth() >= 24 ? 8 : 6;
 
     //===============================================================================
     // begin drawing code
     //===============================================================================
-    // image stats
 
-    // force width:height ratio
-    if ( 14*x > y*20 )
+    switch ( bitmapType )
     {
-        // x is too big
-        x = y*20/14;
-    }
-    else
-    {
-        // y is too big
-        y = x*14/20;
-    }
-
-    // glass 11x11, top left corner
-    // handle (9,9)-(13,13)
-    // drop (13,16)-(19,6)-(16,9)
-
-    int multiplier = GetMultiplier();
-    int penWidth = multiplier * 2;
-
-    penWidth = penWidth * x / 20;
-
-    wxBitmap bitmap( multiplier*x, multiplier*y );
-    wxMemoryDC mem;
-    mem.SelectObject(bitmap);
-
-    // clear background
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
-
-    // draw drop glass
-    mem.SetBrush( wxBrush(fg) );
-    mem.SetPen( wxPen(fg) );
-    int glassBase = 5 * x / 20;
-    int glassFactor = 2*glassBase + 1;
-    int radius = multiplier*glassFactor/2;
-    mem.DrawCircle(radius,radius,radius);
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawCircle(radius,radius,radius-penWidth);
-
-    // draw handle
-    int lineStart = radius + (radius-penWidth/2) * 707 / 1000; // 707 / 1000 = 0.707 = 1/sqrt(2);
-
-    mem.SetPen( wxPen(fg) );
-    mem.SetBrush( wxBrush(fg) );
-    int handleCornerShift = penWidth * 707 / 1000 / 2; // 707 / 1000 = 0.707 = 1/sqrt(2);
-    handleCornerShift = wxMax( handleCornerShift, 1 );
-    int handleBase = 4 * x / 20;
-    int handleLength = 2*handleBase+1;
-    wxPoint handlePolygon[] =
-    {
-        wxPoint(-handleCornerShift,+handleCornerShift),
-        wxPoint(+handleCornerShift,-handleCornerShift),
-        wxPoint(multiplier*handleLength/2+handleCornerShift,multiplier*handleLength/2-handleCornerShift),
-        wxPoint(multiplier*handleLength/2-handleCornerShift,multiplier*handleLength/2+handleCornerShift),
-    };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,lineStart,lineStart);
-
-    // draw drop triangle
-    int triangleX = 13 * x / 20;
-    int triangleY = 5 * x / 20;
-    int triangleBase = 3 * x / 20;
-    int triangleFactor = triangleBase*2+1;
-    if ( renderDrop )
-    {
-        wxPoint dropPolygon[] =
+    case BitmapType::Search:
+#if wxUSE_MENUS
+    case BitmapType::Menu:
+#endif // wxUSE_MENUS
         {
-            wxPoint(multiplier*0,multiplier*0), // triangle left
-            wxPoint(multiplier*triangleFactor-1,multiplier*0), // triangle right
-            wxPoint(multiplier*triangleFactor/2,multiplier*triangleFactor/2), // triangle bottom
-        };
-        mem.DrawPolygon(WXSIZEOF(dropPolygon),dropPolygon,multiplier*triangleX,multiplier*triangleY);
+            wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
+
+            // glass 11x11, top left corner
+            // handle (9,9)-(13,13)
+            // drop (13,16)-(19,6)-(16,9)
+
+            int penWidth = multiplier * 2;
+
+            penWidth = penWidth * x / 20;
+
+            bitmap.Create( multiplier*x, multiplier*y );
+            wxMemoryDC mem;
+            mem.SelectObject(bitmap);
+
+            // clear background
+            mem.SetBrush( wxBrush(bg) );
+            mem.SetPen( wxPen(bg) );
+            mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
+
+            // draw drop glass
+            mem.SetBrush( wxBrush(fg) );
+            mem.SetPen( wxPen(fg) );
+            int glassBase = 5 * x / 20;
+            int glassFactor = 2*glassBase + 1;
+            int radius = multiplier*glassFactor/2;
+            mem.DrawCircle(radius,radius,radius);
+            mem.SetBrush( wxBrush(bg) );
+            mem.SetPen( wxPen(bg) );
+            mem.DrawCircle(radius,radius,radius-penWidth);
+
+            // draw handle
+            int lineStart = radius + (radius-penWidth/2) * 707 / 1000; // 707 / 1000 = 0.707 = 1/sqrt(2);
+
+            mem.SetPen( wxPen(fg) );
+            mem.SetBrush( wxBrush(fg) );
+            int handleCornerShift = penWidth * 707 / 1000 / 2; // 707 / 1000 = 0.707 = 1/sqrt(2);
+            handleCornerShift = wxMax( handleCornerShift, 1 );
+            int handleBase = 4 * x / 20;
+            int handleLength = 2*handleBase+1;
+            wxPoint handlePolygon[] =
+            {
+                wxPoint(-handleCornerShift,+handleCornerShift),
+                wxPoint(+handleCornerShift,-handleCornerShift),
+                wxPoint(multiplier*handleLength/2+handleCornerShift,multiplier*handleLength/2-handleCornerShift),
+                wxPoint(multiplier*handleLength/2-handleCornerShift,multiplier*handleLength/2+handleCornerShift),
+            };
+            mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,lineStart,lineStart);
+
+            // draw drop triangle
+            int triangleX = 13 * x / 20;
+            int triangleY = 5 * x / 20;
+            int triangleBase = 3 * x / 20;
+            int triangleFactor = triangleBase*2+1;
+#if wxUSE_MENUS
+            if ( bitmapType == BitmapType::Menu )
+            {
+                wxPoint dropPolygon[] =
+                {
+                    wxPoint(multiplier*0,multiplier*0), // triangle left
+                    wxPoint(multiplier*triangleFactor-1,multiplier*0), // triangle right
+                    wxPoint(multiplier*triangleFactor/2,multiplier*triangleFactor/2), // triangle bottom
+                };
+                mem.DrawPolygon(WXSIZEOF(dropPolygon),dropPolygon,multiplier*triangleX,multiplier*triangleY);
+            }
+#endif // wxUSE_MENUS
+        }
+        break;
+
+    case BitmapType::Cancel:
+        {
+            wxColour fg = GetForegroundColour().ChangeLightness(CANCEL_BITMAP_LIGHTNESS);
+
+            //===============================================================================
+            // begin drawing code
+            //===============================================================================
+
+            // 14x14 circle
+            // cross line starts (4,4)-(10,10)
+            // drop (13,16)-(19,6)-(16,9)
+
+            int penWidth = multiplier * x / 14;
+
+            bitmap.Create( multiplier*x, multiplier*y );
+            wxMemoryDC mem;
+            mem.SelectObject(bitmap);
+
+            // clear background
+            mem.SetBrush( wxBrush(bg) );
+            mem.SetPen( wxPen(bg) );
+            mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
+
+            // draw drop glass
+            mem.SetBrush( wxBrush(fg) );
+            mem.SetPen( wxPen(fg) );
+            int radius = multiplier*x/2;
+            mem.DrawCircle(radius,radius,radius);
+
+            // draw cross
+            int lineStartBase = 4 * x / 14;
+            int lineLength = x - 2*lineStartBase;
+
+            mem.SetPen( wxPen(bg) );
+            mem.SetBrush( wxBrush(bg) );
+            int handleCornerShift = penWidth/2;
+            handleCornerShift = wxMax( handleCornerShift, 1 );
+            wxPoint handlePolygon[] =
+            {
+                wxPoint(-handleCornerShift,+handleCornerShift),
+                wxPoint(+handleCornerShift,-handleCornerShift),
+                wxPoint(multiplier*lineLength+handleCornerShift,multiplier*lineLength-handleCornerShift),
+                wxPoint(multiplier*lineLength-handleCornerShift,multiplier*lineLength+handleCornerShift),
+            };
+            mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,multiplier*lineStartBase,multiplier*lineStartBase);
+            wxPoint handlePolygon2[] =
+            {
+                wxPoint(+handleCornerShift,+handleCornerShift),
+                wxPoint(-handleCornerShift,-handleCornerShift),
+                wxPoint(multiplier*lineLength-handleCornerShift,-multiplier*lineLength-handleCornerShift),
+                wxPoint(multiplier*lineLength+handleCornerShift,-multiplier*lineLength+handleCornerShift),
+            };
+            mem.DrawPolygon(WXSIZEOF(handlePolygon2),handlePolygon2,multiplier*lineStartBase,multiplier*(x-lineStartBase));
+        }
+        break;
     }
-    mem.SelectObject(wxNullBitmap);
 
     //===============================================================================
     // end drawing code
@@ -919,7 +1023,8 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
     {
         wxBitmap::Rescale(bitmap, wxSize(x, y));
     }
-    if ( !renderDrop )
+
+    if ( bitmapType == BitmapType::Search )
     {
         // Trim the edge where the arrow would have gone
         bitmap = bitmap.GetSubBitmap(wxRect(0,0, y,y));
@@ -928,92 +1033,7 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
     return bitmap;
 }
 
-wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
-{
-    wxColour bg = GetBackgroundColour();
-    wxColour fg = GetForegroundColour().ChangeLightness(CANCEL_BITMAP_LIGHTNESS);
-
-    //===============================================================================
-    // begin drawing code
-    //===============================================================================
-    // image stats
-
-    // total size 14x14
-    // force 1:1 ratio
-    if ( x > y )
-    {
-        // x is too big
-        x = y;
-    }
-    else
-    {
-        // y is too big
-        y = x;
-    }
-
-    // 14x14 circle
-    // cross line starts (4,4)-(10,10)
-    // drop (13,16)-(19,6)-(16,9)
-
-    int multiplier = GetMultiplier();
-
-    int penWidth = multiplier * x / 14;
-
-    wxBitmap bitmap( multiplier*x, multiplier*y );
-    wxMemoryDC mem;
-    mem.SelectObject(bitmap);
-
-    // clear background
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
-
-    // draw drop glass
-    mem.SetBrush( wxBrush(fg) );
-    mem.SetPen( wxPen(fg) );
-    int radius = multiplier*x/2;
-    mem.DrawCircle(radius,radius,radius);
-
-    // draw cross
-    int lineStartBase = 4 * x / 14;
-    int lineLength = x - 2*lineStartBase;
-
-    mem.SetPen( wxPen(bg) );
-    mem.SetBrush( wxBrush(bg) );
-    int handleCornerShift = penWidth/2;
-    handleCornerShift = wxMax( handleCornerShift, 1 );
-    wxPoint handlePolygon[] =
-    {
-        wxPoint(-handleCornerShift,+handleCornerShift),
-        wxPoint(+handleCornerShift,-handleCornerShift),
-        wxPoint(multiplier*lineLength+handleCornerShift,multiplier*lineLength-handleCornerShift),
-        wxPoint(multiplier*lineLength-handleCornerShift,multiplier*lineLength+handleCornerShift),
-    };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,multiplier*lineStartBase,multiplier*lineStartBase);
-    wxPoint handlePolygon2[] =
-    {
-        wxPoint(+handleCornerShift,+handleCornerShift),
-        wxPoint(-handleCornerShift,-handleCornerShift),
-        wxPoint(multiplier*lineLength-handleCornerShift,-multiplier*lineLength-handleCornerShift),
-        wxPoint(multiplier*lineLength+handleCornerShift,-multiplier*lineLength+handleCornerShift),
-    };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon2),handlePolygon2,multiplier*lineStartBase,multiplier*(x-lineStartBase));
-
-    // Stop drawing on the bitmap before possibly calling wxBitmap::Rescale()
-    // below.
-    mem.SelectObject(wxNullBitmap);
-
-    //===============================================================================
-    // end drawing code
-    //===============================================================================
-
-    if ( multiplier != 1 )
-    {
-        wxBitmap::Rescale(bitmap, wxSize(x, y));
-    }
-
-    return bitmap;
-}
+#endif // wxHAS_SVG/!wxHAS_SVG
 
 void wxSearchCtrl::RecalcBitmaps()
 {
@@ -1023,18 +1043,28 @@ void wxSearchCtrl::RecalcBitmaps()
     }
     wxSize sizeText = m_text->GetBestSize();
 
-    int bitmapHeight = sizeText.y - FromDIP(4);
-    int bitmapWidth  = sizeText.y * 20 / 14;
+    // We use rectangular shape for the search bitmap to accommodate a possible
+    // menu drop down indicator in the menu bitmap.
+    wxSize bitmapSize = wxSize(sizeText.y * 20 / 14, sizeText.y - FromDIP(4));
+    if ( 14*bitmapSize.x > bitmapSize.y*20 )
+    {
+        // x is too big
+        bitmapSize.x = bitmapSize.y*20/14;
+    }
+    else
+    {
+        // y is too big
+        bitmapSize.y = bitmapSize.x*14/20;
+    }
 
     if ( !m_searchBitmapUser )
     {
         if (
             !m_searchBitmap.IsOk() ||
-            m_searchBitmap.GetHeight() != bitmapHeight ||
-            m_searchBitmap.GetWidth() != bitmapWidth
+            m_searchBitmap.GetSize() != bitmapSize
             )
         {
-            m_searchBitmap = RenderSearchBitmap(bitmapWidth,bitmapHeight,false);
+            m_searchBitmap = RenderBitmap(bitmapSize, BitmapType::Search);
             if ( !HasMenu() )
             {
                 m_searchButton->SetBitmapLabel(m_searchBitmap);
@@ -1048,11 +1078,10 @@ void wxSearchCtrl::RecalcBitmaps()
     {
         if (
             !m_searchMenuBitmap.IsOk() ||
-            m_searchMenuBitmap.GetHeight() != bitmapHeight ||
-            m_searchMenuBitmap.GetWidth() != bitmapWidth
+            m_searchMenuBitmap.GetSize() != bitmapSize
             )
         {
-            m_searchMenuBitmap = RenderSearchBitmap(bitmapWidth,bitmapHeight,true);
+            m_searchMenuBitmap = RenderBitmap(bitmapSize, BitmapType::Menu);
             if ( m_menu )
             {
                 m_searchButton->SetBitmapLabel(m_searchMenuBitmap);
@@ -1062,15 +1091,27 @@ void wxSearchCtrl::RecalcBitmaps()
     }
 #endif // wxUSE_MENUS
 
+    // But the cancel button is square, so force 1:1 ratio.
+    if ( bitmapSize.x > bitmapSize.y )
+    {
+        // x is too big
+        bitmapSize.x = bitmapSize.y;
+    }
+    else
+    {
+        // y is too big
+        bitmapSize.y = bitmapSize.x;
+    }
+
+
     if ( m_cancelButton && !m_cancelBitmapUser )
     {
         if (
             !m_cancelBitmap.IsOk() ||
-            m_cancelBitmap.GetHeight() != bitmapHeight ||
-            m_cancelBitmap.GetWidth() != bitmapWidth
+            m_cancelBitmap.GetSize() != bitmapSize
             )
         {
-            m_cancelBitmap = RenderCancelBitmap(bitmapWidth,bitmapHeight);
+            m_cancelBitmap = RenderBitmap(bitmapSize, BitmapType::Cancel);
             m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         }
         // else this bitmap was set by user, don't alter
