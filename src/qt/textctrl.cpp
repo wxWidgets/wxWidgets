@@ -16,6 +16,8 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/utils.h"
 
+#include <QtGui/QClipboard>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QTextEdit>
 
@@ -118,6 +120,8 @@ private:
 #endif
 };
 
+class wxQtTextLimitFilter;
+
 class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
 {
 public:
@@ -131,11 +135,108 @@ public:
     bool IsUndoAvailable() const { return m_undoAvailable; }
     bool IsRedoAvailable() const { return m_redoAvailable; }
 
+    void SetMaxLength(unsigned long len);
+    int  GetMaxLength() const { return m_maxLength; }
+
+    // wxQtTextLimitFilter calls this function to try to enter
+    // as much text as possible into the control, before emitting
+    // the wxEVT_TEXT_MAXLEN event.
+    bool TryEnterText(const QString& str)
+    {
+        if ( !str.isEmpty() )
+        {
+            long from, to;
+            GetHandler()->GetSelection(&from, &to);
+            const int lenSel = to - from;
+            const int nChars = document()->characterCount() - 1;
+
+            if ( nChars + str.length() - lenSel > m_maxLength )
+            {
+                if ( lenSel || nChars < m_maxLength )
+                {
+                    QString content = toPlainText();
+                    QString text = str;
+
+                    text.truncate(m_maxLength - nChars + lenSel);
+
+                    if ( lenSel )
+                        content.replace(from, lenSel, text);
+                    else
+                        content.insert(from, text);
+
+                    wxQtEnsureSignalsBlocked blocker(this);
+                    setPlainText(content);
+
+                    moveCursor(QTextCursor::End);
+                    ensureCursorVisible();
+                }
+
+                wxCommandEvent event(wxEVT_TEXT_MAXLEN, GetHandler()->GetId());
+                event.SetString(GetHandler()->GetValue());
+                EmitEvent(event);
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 private:
     void textChanged();
 
     bool m_undoAvailable = false,
          m_redoAvailable = false;
+
+    long m_maxLength = 0;
+    wxQtTextLimitFilter* m_textLimiter = nullptr;
+};
+
+class wxQtTextLimitFilter : public QObject
+{
+public:
+    explicit wxQtTextLimitFilter(wxQtTextEdit* textEdit)
+        : m_textEdit(textEdit)
+    {}
+
+private:
+    virtual bool eventFilter(QObject* obj, QEvent* event) override
+    {
+        if ( event->type() == QEvent::KeyPress )
+        {
+            auto keyEvent = static_cast<QKeyEvent*>(event);
+
+            if ( keyEvent->key() != Qt::Key_Backspace &&
+                 keyEvent->key() != Qt::Key_Delete )
+            {
+                QString text;
+
+                if ( keyEvent->matches(QKeySequence::Cut) )
+                {
+                    // Always let default handling of Ctrl+X event to take place.
+                }
+                else if ( keyEvent->matches(QKeySequence::Paste) )
+                {
+                    const QClipboard* clipboard = QApplication::clipboard();
+
+                    text = clipboard->text();
+                }
+                else
+                {
+                    text = keyEvent->text();
+                }
+
+                if ( !m_textEdit->TryEnterText(text) )
+                {
+                    return true; // Block the event
+                }
+            }
+        }
+
+        return QObject::eventFilter(obj, event);
+    }
+
+    wxQtTextEdit* const m_textEdit;
 };
 
 class wxQtMultiLineEdit : public wxQtEdit
@@ -157,7 +258,19 @@ public:
 
     virtual void Copy() override { m_edit->copy(); }
     virtual void Cut() override  { m_edit->cut(); }
-    virtual void Paste() override  { m_edit->paste(); }
+    virtual void Paste() override
+    {
+        auto qtEdit = static_cast<wxQtTextEdit*>(m_edit);
+        if ( qtEdit->GetMaxLength() > 0 )
+        {
+            QKeyEvent event(QEvent::KeyPress, Qt::Key_V, Qt::ControlModifier);
+            QApplication::sendEvent(qtEdit, &event);
+        }
+        else
+        {
+            m_edit->paste();
+        }
+    }
 
     virtual void Undo() override  { m_edit->undo(); }
     virtual void Redo() override  { m_edit->redo(); }
@@ -287,9 +400,9 @@ public:
         m_edit->ensureCursorVisible();
     }
 
-    virtual void SetMaxLength(unsigned long WXUNUSED(len)) override
+    virtual void SetMaxLength(unsigned long len) override
     {
-        wxMISSING_IMPLEMENTATION("not implemented for multiline control");
+        static_cast<wxQtTextEdit*>(m_edit)->SetMaxLength(len);
     }
 
     virtual wxTextSearchResult SearchText(const wxTextSearch& search) const override
@@ -663,6 +776,34 @@ wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
     connect(this, &QTextEdit::redoAvailable, [this](bool available) {
                 m_redoAvailable = available;
             });
+}
+
+void wxQtTextEdit::SetMaxLength(unsigned long len)
+{
+    const unsigned long maxlen = std::numeric_limits<int>::max();
+    if ( len == 0 || len > maxlen )
+    {
+        len = maxlen;
+    }
+
+    m_maxLength = len;
+
+    if ( m_maxLength > 0 )
+    {
+        if ( !m_textLimiter )
+        {
+            m_textLimiter = new wxQtTextLimitFilter(this);
+            installEventFilter(m_textLimiter);
+        }
+    }
+    else
+    {
+        if ( m_textLimiter )
+        {
+            removeEventFilter(m_textLimiter);
+            wxDELETE(m_textLimiter);
+        }
+    }
 }
 
 void wxQtTextEdit::textChanged()
