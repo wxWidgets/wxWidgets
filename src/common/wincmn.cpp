@@ -43,6 +43,7 @@
     #include "wx/sizer.h"
     #include "wx/menu.h"
     #include "wx/button.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_DRAG_AND_DROP
@@ -3702,6 +3703,19 @@ wxString wxDumpWindow(const wxWindowBase* win)
     s += ")";
 
     return s;
+}
+
+wxPoint wxGetMousePosition()
+{
+    wxPoint pt;
+    wxGetMousePosition(&pt.x, &pt.y);
+    return pt;
+}
+
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+{
+    pt = wxGetMousePosition();
+    return wxFindWindowAtPoint(pt);
 }
 
 #if wxUSE_ACCESSIBILITY

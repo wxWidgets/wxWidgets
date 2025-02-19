@@ -104,13 +104,6 @@ void wxGetMousePosition(int *x, int *y)
         layer->GetCursorPosition(x, y);
 }
 
-wxPoint wxGetMousePosition()
-{
-    wxPoint pt;
-    wxGetMousePosition(&pt.x, &pt.y);
-    return pt;
-}
-
 //-----------------------------------------------------------------------------
 // keyboard
 //-----------------------------------------------------------------------------

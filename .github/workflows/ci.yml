@@ -98,7 +98,7 @@ jobs:
           - name: Ubuntu 18.04 wxGTK 3 compatible 3.0
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --enable-compat30
+            configure_flags: --enable-compat30 --enable-pch
             use_xvfb: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
             runner: ubuntu-latest
@@ -126,18 +126,18 @@ jobs:
           - name: Ubuntu 18.04 wxX11
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --with-x11 --enable-pch --disable-stc
+            configure_flags: --with-x11 --disable-stc
             skip_samples: true
           - name: Ubuntu 18.04 wxDFB
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --with-directfb --enable-pch --disable-stc
+            configure_flags: --with-directfb --disable-stc
             skip_samples: true
             allow_warnings: true
           - name: Ubuntu 18.04 wxQt
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --with-qt --enable-pch --without-opengl
+            configure_flags: --with-qt --without-opengl
             skip_samples: true
             use_xvfb: true
 

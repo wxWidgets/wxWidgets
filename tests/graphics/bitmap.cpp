@@ -12,10 +12,10 @@
 
 #include "testprec.h"
 
+#include "wx/bitmap.h"
+
 #ifdef wxHAS_RAW_BITMAP
 
-
-#include "wx/bitmap.h"
 #include "wx/rawbmp.h"
 #include "wx/dcmemory.h"
 #include "wx/dcsvg.h"

@@ -44,17 +44,14 @@ void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )
 }
 
 #if wxUSE_GUI
-wxPoint wxGetMousePosition()
-{
-    return wxQtConvertPoint( QCursor::pos() );
-}
-
 void wxGetMousePosition( int *x, int *y )
 {
-    wxPoint position = wxGetMousePosition();
+    const auto position = QCursor::pos();
 
-    *x = position.x;
-    *y = position.y;
+    if ( x )
+        *x = position.x();
+    if ( y )
+        *y = position.y();
 }
 #endif
 
@@ -77,13 +74,6 @@ wxWindow *wxFindWindowAtPoint(const wxPoint& pt)
      * a wxQtWidget/wxQtFrame to the window, but they have
      * no standard interface to return that. */
     return wxGenericFindWindowAtPoint( pt );
-}
-
-wxWindow *wxFindWindowAtPointer(wxPoint& pt)
-{
-    pt = wxQtConvertPoint( QCursor::pos() );
-
-    return wxFindWindowAtPoint( pt );
 }
 
 bool wxGetKeyState(wxKeyCode key)
