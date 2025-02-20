@@ -1621,7 +1621,9 @@ private:
 
     void AddChild(wxXmlNode* parent, const wxString& name, int value)
     {
-        AddChild(parent, name, wxString::Format("%u", value));
+        // Don't save 0 values, they're the default.
+        if ( value )
+            AddChild(parent, name, wxString::Format("%u", value));
     }
 
     void AddChild(wxXmlNode* parent, const wxString& name, const wxRect& rect)
@@ -1644,10 +1646,7 @@ private:
         AddChild(node, "row", layout.dock_row);
         AddChild(node, "position", layout.dock_pos);
         AddChild(node, "proportion", layout.dock_proportion);
-
-        // Saving dock size of 0 is harmless but unnecessary, so don't do it.
-        if ( layout.dock_size )
-            AddChild(node, "size", layout.dock_size);
+        AddChild(node, "size", layout.dock_size);
     }
 
 
