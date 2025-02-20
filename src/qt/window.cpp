@@ -1063,6 +1063,15 @@ wxWindowQt *wxWindowBase::GetCapture()
     return s_capturedWindow;
 }
 
+void wxWindowQt::DoFreeze()
+{
+    GetHandle()->setUpdatesEnabled(false);
+}
+
+void wxWindowQt::DoThaw()
+{
+    GetHandle()->setUpdatesEnabled(true);
+}
 
 void wxWindowQt::DoGetPosition(int *x, int *y) const
 {
