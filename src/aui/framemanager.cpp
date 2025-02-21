@@ -1422,6 +1422,10 @@ wxAuiManager::CopyDockLayoutTo(const wxAuiDockLayoutInfo& dockInfo,
     paneInfo.dock_pos = dockInfo.dock_pos;
     paneInfo.dock_proportion = dockInfo.dock_proportion;
     paneInfo.dock_size = dockInfo.dock_size;
+
+    // Undo the transformation done in CopyDockLayoutFrom() above.
+    if ( dockInfo.dock_proportion == 0 )
+        paneInfo.dock_proportion = maxDockProportion;
 }
 
 void
