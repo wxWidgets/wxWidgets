@@ -234,7 +234,7 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
     if (tab_rect.x + tab_rect.width > in_rect.x + in_rect.width)
         clip_width = (in_rect.x + in_rect.width) - tab_rect.x;
 
-    dc.SetClippingRegion(tab_rect.x, tab_rect.y - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder, clip_width, tab_rect.height + GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder);
+    wxDCClipper clipper(dc, tab_rect.x, tab_rect.y - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder, clip_width, tab_rect.height + GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder);
 
     GdkRectangle area;
     area.x = tab_rect.x - GTK_NOTEBOOK (wxGTKPrivate::GetNotebookWidget())->tab_vborder;
@@ -381,8 +381,6 @@ void wxAuiGtkTabArt::DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& p
     if ( clip_width < tab_rect.width )
         tab_rect.width = clip_width;
     *out_tab_rect = tab_rect;
-
-    dc.DestroyClippingRegion();
 }
 
 wxRect DrawSimpleArrow(wxDC& dc,

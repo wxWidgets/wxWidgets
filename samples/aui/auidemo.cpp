@@ -107,6 +107,9 @@ class MyFrame : public wxFrame
         ID_NotebookWindowList,
         ID_NotebookScrollButtons,
         ID_NotebookTabFixedWidth,
+        ID_NotebookMultiLine,
+        ID_NotebookNextTab,
+        ID_NotebookPrevTab,
         ID_NotebookArtGloss,
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
@@ -182,6 +185,7 @@ private:
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
+    void OnNotebookNextOrPrev(wxCommandEvent& evt);
     void OnNotebookSplit(wxCommandEvent& evt);
     void OnNotebookUnsplit(wxCommandEvent& evt);
     void OnNotebookNewTab(wxCommandEvent& evt);
@@ -633,6 +637,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_LiveUpdate, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NotebookTabFixedWidth, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookMultiLine, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookNoCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButtonAll, MyFrame::OnNotebookFlag)
@@ -644,6 +649,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookWindowList, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtGloss, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookNextTab, MyFrame::OnNotebookNextOrPrev)
+    EVT_MENU(ID_NotebookPrevTab, MyFrame::OnNotebookNextOrPrev)
     EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookSplit, MyFrame::OnNotebookSplit)
@@ -665,6 +672,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_UPDATE_UI(ID_NotebookTabFixedWidth, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookMultiLine, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookNoCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButtonAll, MyFrame::OnUpdateUI)
@@ -781,6 +789,10 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
+    notebook_menu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
+    notebook_menu->AppendSeparator();
+    notebook_menu->Append(ID_NotebookNextTab, _("Switch to next tab\tCtrl-F6"));
+    notebook_menu->Append(ID_NotebookPrevTab, _("Switch to previous tab\tShift-Ctrl-F6"));
     notebook_menu->AppendSeparator();
     notebook_menu->Append(ID_NotebookSplit, _("&Split Notebook"));
     notebook_menu->Append(ID_NotebookUnsplit, _("&Unsplit Notebook"));
@@ -1265,6 +1277,10 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     {
         m_notebook_style ^= wxAUI_NB_TAB_FIXED_WIDTH;
     }
+    else if (id == ID_NotebookMultiLine)
+    {
+        m_notebook_style ^= wxAUI_NB_MULTILINE;
+    }
 
 
     size_t i, count;
@@ -1391,6 +1407,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
         case ID_NotebookTabFixedWidth:
             event.Check((m_notebook_style & wxAUI_NB_TAB_FIXED_WIDTH) != 0);
             break;
+        case ID_NotebookMultiLine:
+            event.Check((m_notebook_style & wxAUI_NB_MULTILINE) != 0);
+            break;
         case ID_NotebookArtGloss:
             event.Check(m_notebook_style == 0);
             break;
@@ -1399,6 +1418,15 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
     }
+}
+
+
+void MyFrame::OnNotebookNextOrPrev(wxCommandEvent& evt)
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    book->AdvanceSelection(evt.GetId() == ID_NotebookNextTab);
 }
 
 
@@ -2053,11 +2081,11 @@ void MyFrame::OnNotebookTabRightClick(wxAuiNotebookEvent& evt)
     if ( pageUnderMouse != page )
     {
         wxLogWarning("Unexpected mismatch: page under mouse is %d (position %d)",
-                     pageUnderMouse, book->GetPagePosition(pageUnderMouse).page);
+                     pageUnderMouse, book->GetPagePosition(pageUnderMouse).tabIdx);
     }
 
     wxLogMessage("Right click on page %d (tab position %d)",
-                 page, book->GetPagePosition(page).page);
+                 page, book->GetPagePosition(page).tabIdx);
 }
 
 void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
@@ -2066,27 +2094,42 @@ void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
         wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
 
     // Show notebook pages in per-tab visual page order.
-    std::map<wxAuiTabCtrl*, std::map<int, size_t>> pagesByTabCtrl;
-    for ( size_t i = 0; i < book->GetPageCount(); ++i )
-    {
-        const auto pos = book->GetPagePosition(i);
-        pagesByTabCtrl[pos.tabctrl][pos.page] = i;
-    }
+    const auto sel = static_cast<size_t>(book->GetSelection());
 
     wxString pages("Notebook contains the following pages:\n");
-    int tab = 0;
-    for ( const auto& kv : pagesByTabCtrl )
-    {
-        if ( pagesByTabCtrl.size() > 1 )
-            pages += wxString::Format("\nTab %d:\n", ++tab);
 
-        for ( const auto& kv2 : kv.second )
+    const auto& tabControls = book->GetAllTabCtrls();
+    int tab = 0;
+    for ( const auto tabCtrl : tabControls )
+    {
+        if ( tabControls.size() > 1 )
         {
-            pages += wxString::Format("  %d. %s\n",
-                                      kv2.first,
-                                      book->GetPageText(kv2.second));
+            pages += wxString::Format("\nTab %d", ++tab);
+
+            wxArrayString extras;
+            if ( tabCtrl == book->GetMainTabCtrl() )
+                extras.push_back("main");
+
+            if ( tabCtrl == book->GetActiveTabCtrl() )
+                extras.push_back("active");
+
+            if ( !extras.empty() )
+                pages += wxString::Format(" (%s)", wxJoin(extras, ','));
+
+            pages += ":\n";
+        }
+
+        int pos = 0;
+        for ( auto idx : book->GetPagesInDisplayOrder(tabCtrl) )
+        {
+            pages += wxString::Format("%s %d. %s\n",
+                                      idx == sel ? "*" : "  ",
+                                      pos++,
+                                      book->GetPageText(idx));
         }
     }
+
+    pages += wxString::Format("\n* selected");
 
     wxMessageBox(pages, "wxAUI", wxOK | wxICON_INFORMATION, this);
 }

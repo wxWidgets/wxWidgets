@@ -133,7 +133,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     wxCoord tabHeight = tabSize.y;
     wxCoord tabWidth = tabSize.x;
     wxCoord tabX = in_rect.x;
-    wxCoord tabY = 0;
+    wxCoord tabY = in_rect.y;
 
     if (!page.active)
     {
@@ -150,7 +150,8 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     int clipWidth = tabWidth;
     if ( tabX + clipWidth > in_rect.x + in_rect.width )
         clipWidth = (in_rect.x + in_rect.width) - tabX;
-    dc.SetClippingRegion(tabX - wnd->FromDIP(2), tabY, clipWidth + wnd->FromDIP(4), tabHeight);
+
+    wxDCClipper clipper(dc, tabX - wnd->FromDIP(2), tabY, clipWidth + wnd->FromDIP(4), tabHeight);
 
 
     // draw tab
@@ -234,8 +235,6 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     }
 
     *out_tab_rect = wxRect(tabX, tabY, tabWidth, tabHeight);
-
-    dc.DestroyClippingRegion();
 }
 
 int wxAuiMSWTabArt::GetIndentSize()

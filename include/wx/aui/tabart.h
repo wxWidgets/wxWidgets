@@ -100,6 +100,21 @@ public:
                          int closeButtonState,
                          int* xExtent) = 0;
 
+    // This function is not pure virtual because it is only for multi-line
+    // tabs, but it must be implemented if wxAUI_NB_MULTILINE is used.
+    //
+    // If specified, the returned rectangle must be filled with the same value
+    // as DrawButton() puts into its "outRect" but here it can also be null in
+    // which case just its width is returned.
+    virtual int GetButtonRect(
+                         wxReadOnlyDC& dc,
+                         wxWindow* wnd,
+                         const wxRect& inRect,
+                         int bitmapId,
+                         int buttonState,
+                         int orientation,
+                         wxRect* outRect = nullptr) /* = 0 */;
+
     virtual int ShowDropDown(
                          wxWindow* wnd,
                          const wxAuiNotebookPageArray& items,
@@ -192,6 +207,15 @@ public:
                  int closeButtonState,
                  int* xExtent) override;
 
+    int GetButtonRect(
+                 wxReadOnlyDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect) override;
+
     int ShowDropDown(
                  wxWindow* wnd,
                  const wxAuiNotebookPageArray& items,
@@ -224,8 +248,18 @@ protected:
     wxBitmapBundle m_disabledWindowListBmp;
 
     int m_fixedTabWidth;
-    int m_tabCtrlHeight;
     unsigned int m_flags;
+
+private:
+    // Common part of DrawButton() and GetButtonRect().
+    bool DoGetButtonRectAndBitmap(
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect,
+                 wxBitmap* outBitmap = nullptr);
 };
 
 
@@ -298,6 +332,15 @@ public:
                  int closeButtonState,
                  int* xExtent) override;
 
+    int GetButtonRect(
+                 wxReadOnlyDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect) override;
+
     int ShowDropDown(
                  wxWindow* wnd,
                  const wxAuiNotebookPageArray& items,
@@ -328,6 +371,17 @@ protected:
 
     int m_fixedTabWidth;
     unsigned int m_flags;
+
+private:
+    // Common part of DrawButton() and GetButtonRect().
+    bool DoGetButtonRectAndBitmap(
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect,
+                 wxBitmap* outBitmap = nullptr);
 };
 
 #ifndef __WXUNIVERSAL__
