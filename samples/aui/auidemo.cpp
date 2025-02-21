@@ -1690,21 +1690,9 @@ public:
 
         AddDockLayout(node, tab);
 
-        // We don't need to save the pages order if the vector is empty, this
-        // means that this tab contains all the notebook pages in default order.
-        if ( !tab.pages.empty() )
-        {
-            wxString pagesList;
-            for ( auto page : tab.pages )
-            {
-                if ( !pagesList.empty() )
-                    pagesList << ',';
-
-                pagesList << page;
-            }
-
-            AddChild(node, "pages", pagesList);
-        }
+        AddPagesList(node, "pages", tab.pages);
+        AddPagesList(node, "pinned", tab.pinned);
+        AddPagesList(node, "locked", tab.locked);
 
         m_book->AddChild(node);
     }
@@ -1757,6 +1745,28 @@ private:
         AddChild(node, "position", layout.dock_pos);
         AddChild(node, "proportion", layout.dock_proportion);
         AddChild(node, "size", layout.dock_size);
+    }
+
+    // Helper of SaveNotebookTabControl(): add a node with the given name
+    // containing the comma-separated list of page indices if there are any.
+    void
+    AddPagesList(wxXmlNode* node,
+                 const wxString& name,
+                 const std::vector<int>& pages)
+    {
+        if ( !pages.empty() )
+        {
+            wxString pagesList;
+            for ( auto page : pages )
+            {
+                if ( !pagesList.empty() )
+                    pagesList << ',';
+
+                pagesList << page;
+            }
+
+            AddChild(node, name, pagesList);
+        }
     }
 
 
@@ -1992,12 +2002,25 @@ private:
                 if ( LoadDockLayout(child, tab) )
                     continue;
 
-                if ( child->GetName() != "pages" )
-                    throw std::runtime_error("Unexpected tab child node name");
-
-                for ( const auto& s : wxSplit(child->GetNodeContent(), ',') )
+                const auto& pageIndices = wxSplit(child->GetNodeContent(), ',');
+                if ( child->GetName() == "pages" )
                 {
-                    tab.pages.push_back(GetInt(s));
+                    for ( const auto& s : pageIndices )
+                        tab.pages.push_back(GetInt(s));
+                }
+                else if ( child->GetName() == "pinned" )
+                {
+                    for ( const auto& s : pageIndices )
+                        tab.pinned.push_back(GetInt(s));
+                }
+                else if ( child->GetName() == "locked" )
+                {
+                    for ( const auto& s : pageIndices )
+                        tab.locked.push_back(GetInt(s));
+                }
+                else
+                {
+                    throw std::runtime_error("Unexpected tab child node name");
                 }
             }
 

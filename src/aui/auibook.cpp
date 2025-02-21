@@ -4235,6 +4235,22 @@ wxAuiNotebook::SaveLayout(const wxString& name,
             }
 
             pages.push_back(idx);
+
+            // Also remember if this page has a non-default kind.
+            switch ( page.kind )
+            {
+                case wxAuiTabKind::Normal:
+                    // Nothing special to do.
+                    break;
+
+                case wxAuiTabKind::Pinned:
+                    tab.pinned.push_back(idx);
+                    break;
+
+                case wxAuiTabKind::Locked:
+                    tab.locked.push_back(idx);
+                    break;
+            }
         }
 
         // But if none of the conditions above is true, we can avoid saving
@@ -4369,6 +4385,31 @@ wxAuiNotebook::LoadLayout(const wxString& name,
             }
 
             tabCtrl->AddPage(info);
+        }
+
+        // Check if the element is present in the vector: we could convert
+        // vectors to sets first, but considering that they should normally be
+        // pretty small (how many pinned pages can there possibly be?), it
+        // doesn't seem to be worth it.
+        auto isPageIn = [](int page, const std::vector<int>& pages)
+        {
+            return std::find(pages.begin(), pages.end(), page) != pages.end();
+        };
+
+        // Restore page kinds, ignoring invalid page indices just as above.
+        for ( int i = 0; i < pageCount; ++i )
+        {
+            auto kind = wxAuiTabKind::Normal;
+            if ( isPageIn(i, tab.pinned) )
+            {
+                kind = wxAuiTabKind::Pinned;
+            }
+            else if ( isPageIn(i, tab.locked) )
+            {
+                kind = wxAuiTabKind::Locked;
+            }
+
+            SetPageKind(i, kind);
         }
 
         tabCtrl->DoUpdateActive();
