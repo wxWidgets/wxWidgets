@@ -110,8 +110,12 @@ struct wxAuiNotebookPosition
     splitter configurations, and toggle through different themes to customize
     the control's look and feel.
 
-    The default theme that is used is wxAuiDefaultTabArt, which provides a modern,
-    glossy look and feel.
+    The default theme depends on the platform and styles used: in wxMSW port
+    native-like theme is used provided that none of ::wxAUI_NB_BOTTOM,
+    ::wxAUI_NB_PIN_ON_ACTIVE_TAB and ::wxAUI_NB_UNPIN_ON_ALL_PINNED styles is
+    used, because the native theme doesn't support them. In the other ports, or
+    when these styles are used with wxMSW, wxAuiDefaultTabArt, providing a
+    glossy-looking appearance, is used.
     The theme can be changed by calling wxAuiNotebook::SetArtProvider.
 
     @section auibook_tabs Multiple Tab Controls
