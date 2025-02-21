@@ -639,8 +639,8 @@ private:
     {
         TabInfo() = default;
 
-        TabInfo(wxAuiTabCtrl* tabCtrl, int tabIdx, wxAuiNotebookPage* info)
-            : wxAuiNotebookPosition{tabCtrl, tabIdx}, pageInfo(info)
+        TabInfo(wxAuiTabCtrl* tabCtrl_, int tabIdx_, wxAuiNotebookPage* info)
+            : wxAuiNotebookPosition{tabCtrl_, tabIdx_}, pageInfo(info)
         {
         }
 
