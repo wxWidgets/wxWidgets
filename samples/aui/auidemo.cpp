@@ -742,7 +742,11 @@ MyFrame::MyFrame(wxWindow* parent,
     SetIcon(wxIcon(sample_xpm));
 
     // set up default notebook style
-    m_notebook_style = wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER;
+    m_notebook_style = wxAUI_NB_DEFAULT_STYLE |
+                       wxAUI_NB_TAB_EXTERNAL_MOVE |
+                       wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                       wxAUI_NB_UNPIN_ON_ALL_PINNED |
+                       wxNO_BORDER;
 
     // create menu
     wxMenuBar* mb = new wxMenuBar;
