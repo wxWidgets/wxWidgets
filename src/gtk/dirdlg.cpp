@@ -208,16 +208,35 @@ int wxDirDialog::ShowModal()
 #if GTK_CHECK_VERSION(3,20,0)
     if (m_fileChooser != (GtkFileChooser*)m_widget)
     {
+        m_returnCode = 0;
         int res = gtk_native_dialog_run(GTK_NATIVE_DIALOG(m_fileChooser));
         if (res == GTK_RESPONSE_ACCEPT)
         {
             GTKAccept();
-            return wxID_OK;
+            m_returnCode = wxID_OK;
         }
-        return wxID_CANCEL;
+        else if (m_returnCode == 0)
+            m_returnCode = wxID_CANCEL;
+
+        return m_returnCode;
     }
 #endif
     return BaseType::ShowModal();
+}
+
+void wxDirDialog::EndModal(int retCode)
+{
+#if GTK_CHECK_VERSION(3,20,0)
+    if (m_fileChooser != (GtkFileChooser*)m_widget)
+    {
+        m_returnCode = retCode;
+        gtk_native_dialog_hide(GTK_NATIVE_DIALOG(m_fileChooser));
+    }
+    else
+#endif
+    {
+        BaseType::EndModal(retCode);
+    }
 }
 
 void wxDirDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)
@@ -225,7 +244,7 @@ void wxDirDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (!m_wxwindow)
         return;
 
-    wxDirDialogBase::DoSetSize( x, y, width, height, sizeFlags );
+    BaseType::DoSetSize(x, y, width, height, sizeFlags);
 }
 
 void wxDirDialog::SetPath(const wxString& dir)

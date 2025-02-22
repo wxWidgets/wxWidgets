@@ -38,6 +38,7 @@ public:
     ~wxDirDialog();
 
     virtual int ShowModal() override;
+    virtual void EndModal(int retCode) override;
     void SetPath(const wxString& path) override;
 
     // Implementation only.

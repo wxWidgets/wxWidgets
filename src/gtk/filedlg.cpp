@@ -196,7 +196,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 {
     parent = GetParentForModalDialog(parent, style);
 
-    if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName,
+    if (!BaseType::Create(parent, message, defaultDir, defaultFileName,
                                   wildCard, style, pos, sz, name))
     {
         return false;
@@ -425,6 +425,7 @@ int wxFileDialog::ShowModal()
     }
     if (m_fileChooserNative)
     {
+        m_returnCode = 0;
         int res = gtk_native_dialog_run(GTK_NATIVE_DIALOG(m_fileChooserNative));
         if (res == GTK_RESPONSE_ACCEPT)
         {
@@ -434,13 +435,31 @@ int wxFileDialog::ShowModal()
                 wxGtkString dir(g_path_get_dirname(filename));
                 chdir(dir);
             }
-            return wxID_OK;
+            m_returnCode = wxID_OK;
         }
-        return wxID_CANCEL;
+        else if (m_returnCode == 0)
+            m_returnCode = wxID_CANCEL;
+
+        return m_returnCode;
     }
 #endif
 
-    return wxDialog::ShowModal();
+    return BaseType::ShowModal();
+}
+
+void wxFileDialog::EndModal(int retCode)
+{
+#if GTK_CHECK_VERSION(3,20,0)
+    if (m_fileChooserNative)
+    {
+        m_returnCode = retCode;
+        gtk_native_dialog_hide(GTK_NATIVE_DIALOG(m_fileChooserNative));
+    }
+    else
+#endif
+    {
+        BaseType::EndModal(retCode);
+    }
 }
 
 void wxFileDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
@@ -482,7 +501,7 @@ void wxFileDialog::SetMessage(const wxString& message)
 
 void wxFileDialog::SetPath(const wxString& path)
 {
-    wxFileDialogBase::SetPath(path);
+    BaseType::SetPath(path);
 
     // Don't do anything if no path is specified, in particular don't set the
     // path to m_dir below as this would result in opening the dialog in the
@@ -501,7 +520,7 @@ void wxFileDialog::SetPath(const wxString& path)
 
 void wxFileDialog::SetDirectory(const wxString& dir)
 {
-    wxFileDialogBase::SetDirectory(dir);
+    BaseType::SetDirectory(dir);
 
     m_fc.SetDirectory(dir);
     if (m_fcNative)
@@ -510,7 +529,7 @@ void wxFileDialog::SetDirectory(const wxString& dir)
 
 void wxFileDialog::SetFilename(const wxString& name)
 {
-    wxFileDialogBase::SetFilename(name);
+    BaseType::SetFilename(name);
 
     if (HasFdFlag(wxFD_SAVE))
     {
@@ -549,7 +568,7 @@ wxString wxFileDialog::GetFilename() const
 
 void wxFileDialog::SetWildcard(const wxString& wildCard)
 {
-    wxFileDialogBase::SetWildcard(wildCard);
+    BaseType::SetWildcard(wildCard);
     m_fc.SetWildcard( GetWildcard() );
     if (m_fcNative)
         m_fcNative->SetWildcard(wildCard);

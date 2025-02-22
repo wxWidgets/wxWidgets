@@ -57,6 +57,7 @@ public:
     virtual void SetFilterIndex(int filterIndex) override;
 
     virtual int ShowModal() override;
+    virtual void EndModal(int retCode) override;
 
     virtual bool AddShortcut(const wxString& directory, int flags = 0) override;
     virtual bool SupportsExtraControl() const override { return true; }
