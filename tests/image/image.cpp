@@ -1409,7 +1409,8 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMPLoadMethod", "[image][bmp]")
     CompareBMPImageLoad("image/horse_grey.bmp");
     CompareBMPImageLoad("image/horse_rle8.bmp");
     CompareBMPImageLoad("image/horse_rle4.bmp");
-    CompareBMPImageLoad("image/rgb16-3103.bmp");
+    if (!wxIsRunningUnderWine())
+        CompareBMPImageLoad("image/rgb16-3103.bmp");
     CompareBMPImageLoad("image/rgb32-7187.bmp");
     CompareBMPImageLoad("image/rle8-delta-320x240.bmp",
         wxIMAGE_HAVE_DELTA_RLE_BITMAP);
