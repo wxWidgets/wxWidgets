@@ -310,7 +310,7 @@ public:
 
     @since 3.3.0
  */
-class wxAuiDeserializer
+class wxAuiDeserializer : public wxAuiBookDeserializer
 {
 public:
     /**
