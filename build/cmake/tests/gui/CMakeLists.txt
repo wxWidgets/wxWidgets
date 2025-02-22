@@ -157,6 +157,8 @@ set(TEST_GUI_DATA
     image/badrle4.bmp
     image/rgb16-3103.bmp
     image/rgb32-7187.bmp
+    image/rgb32bf.bmp
+    image/rgba32.bmp
     image/rle4-delta-320x240.bmp
     image/rle8-delta-320x240-expected.bmp
     image/rle8-delta-320x240.bmp

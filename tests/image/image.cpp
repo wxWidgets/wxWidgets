@@ -1648,6 +1648,13 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMP", "[image][bmp]")
         // alpha is ignored for ICO if it is fully transparent
         REQUIRE(image.LoadFile("image/32bpp_rgb_a0.ico", wxBITMAP_TYPE_ICO));
         REQUIRE_FALSE(image.GetAlpha());
+
+        REQUIRE(image.LoadFile("image/rgb32bf.bmp", wxBITMAP_TYPE_BMP));
+        REQUIRE_FALSE(image.GetAlpha());
+        REQUIRE(image.LoadFile("image/rgba32.bmp", wxBITMAP_TYPE_BMP));
+        alpha = image.GetAlpha();
+        REQUIRE(alpha);
+        REQUIRE(alpha[0] == 0x80);
     }
 }
 
