@@ -31,6 +31,7 @@
 #include "wx/wfstream.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
+#include "wx/utils.h"
 
 // Check if we can use wxDIB::ConvertToBitmap(), which only exists for MSW and
 // which assumes the target is little-endian (matching the file format)
@@ -1447,9 +1448,10 @@ FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
 static void
 ASSERT_IMAGE_EQUAL_TO_FILE(const wxImage& image, const wxString& file)
 {
-    // The 0 below can be replaced with 1 to generate, instead of comparing with,
-    // the test files.
-    if ( 0 )
+    // This environment variable can be set to 1 to save the images instead of
+    // checking that the results match the existing files.
+    wxString value;
+    if ( wxGetEnv("WX_TEST_SAVE_SCALED_IMAGES", &value) && value == "1" )
     {
         INFO("Failed to save \"" << file << "\"");
         CHECK( image.SaveFile(file) );
