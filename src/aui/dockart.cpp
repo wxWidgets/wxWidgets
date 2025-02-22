@@ -518,11 +518,11 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow* window, const wxRect& _
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     wxRect rect = _rect;
-    int i, border_width = window->FromDIP(GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+    const int border_width = window->FromDIP(GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
 
     if (pane.IsToolbar())
     {
-        for (i = 0; i < border_width; ++i)
+        for (int i = 0; i < border_width; ++i)
         {
             dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW)));
             dc.DrawLine(rect.x, rect.y, rect.x+rect.width, rect.y);
@@ -547,7 +547,7 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow* window, const wxRect& _
             art->DrawBorder(dc, window, rect);
         else
         {
-            for (i = 0; i < border_width; ++i)
+            for (int i = 0; i < border_width; ++i)
             {
                 dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
                 rect.Deflate(1);
