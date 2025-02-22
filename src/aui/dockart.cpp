@@ -179,6 +179,40 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
     return ret;
 }
 
+// ----------------------------------------------------------------------------
+// wxAuiDockArt
+// ----------------------------------------------------------------------------
+
+int wxAuiDockArt::GetMetricForWindow(int id, wxWindow* window)
+{
+    // Most, but not all, metrics are adjusted to the window DPI.
+    bool scale = false;
+    switch (id)
+    {
+        case wxAUI_DOCKART_SASH_SIZE:
+        case wxAUI_DOCKART_PANE_BORDER_SIZE:
+            // These sizes are typically small values and we don't scale them
+            // by default to allow setting them to 1 pixel even in high DPI.
+            break;
+
+        case wxAUI_DOCKART_CAPTION_SIZE:
+        case wxAUI_DOCKART_GRIPPER_SIZE:
+        case wxAUI_DOCKART_PANE_BUTTON_SIZE:
+            scale = true;
+            break;
+
+        case wxAUI_DOCKART_GRADIENT_TYPE:
+            // This value is not in pixels at all and is never scaled.
+            break;
+    }
+
+    int value = GetMetric(id);
+    if ( scale )
+        value = wxWindow::FromDIP(value, window);
+
+    return value;
+}
+
 // -- wxAuiDefaultDockArt class implementation --
 
 // wxAuiDefaultDockArt is an art provider class which does all of the drawing for
@@ -518,7 +552,7 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow* window, const wxRect& _
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     wxRect rect = _rect;
-    const int border_width = window->FromDIP(GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+    const int border_width = GetMetricForWindow(wxAUI_DOCKART_PANE_BORDER_SIZE, window);
 
     if (pane.IsToolbar())
     {
@@ -639,12 +673,14 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
     wxRect clip_rect = rect;
     clip_rect.width -= window->FromDIP(3); // text offset
     clip_rect.width -= window->FromDIP(2); // button padding
+
+    const int buttonSize = GetMetricForWindow(wxAUI_DOCKART_PANE_BUTTON_SIZE, window);
     if (pane.HasCloseButton())
-        clip_rect.width -= window->FromDIP(m_buttonSize);
+        clip_rect.width -= buttonSize;
     if (pane.HasPinButton())
-        clip_rect.width -= window->FromDIP(m_buttonSize);
+        clip_rect.width -= buttonSize;
     if (pane.HasMaximizeButton())
-        clip_rect.width -= window->FromDIP(m_buttonSize);
+        clip_rect.width -= buttonSize;
 
     wxString draw_text = wxAuiChopText(dc, text, clip_rect.width);
 

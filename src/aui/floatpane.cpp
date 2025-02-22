@@ -147,10 +147,11 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
             size = m_paneWindow->GetSize();
         if (m_ownerMgr && pane.HasGripper())
         {
+            const int gripperSize = m_ownerMgr->m_art->GetMetricForWindow(wxAUI_DOCKART_GRIPPER_SIZE, m_paneWindow);
             if (pane.HasGripperTop())
-                size.y += m_paneWindow->FromDIP(m_ownerMgr->m_art->GetMetric(wxAUI_DOCKART_GRIPPER_SIZE));
+                size.y += gripperSize;
             else
-                size.x += m_paneWindow->FromDIP(m_ownerMgr->m_art->GetMetric(wxAUI_DOCKART_GRIPPER_SIZE));
+                size.x += gripperSize;
         }
 
         SetClientSize(size);
