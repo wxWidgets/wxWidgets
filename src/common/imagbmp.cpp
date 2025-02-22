@@ -526,11 +526,8 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     const int bpp = desc.bpp;
     const int ncolors = desc.ncolors;
 
-    wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0, amask = 0;
-    int             rshift = 0, gshift = 0, bshift = 0, ashift = 0;
-    wxInt8          bbuf[4];
-    wxUint8         aByte;
-    wxUint16        aWord;
+    wxUint32 rmask = 0, gmask = 0, bmask = 0, amask = 0;
+    unsigned rshift = 0, gshift = 0, bshift = 0, ashift = 0;
 
     BMPPalette cmapMono[2];
     BMPPalette* cmap = nullptr;
@@ -688,6 +685,7 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     for ( int row = 0; row < height; row++ )
     {
+        wxUint8 aByte;
         int line = isUpsideDown ? height - 1 - row : row;
 
         int linepos = 0;
@@ -909,17 +907,19 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             }
             else if ( bpp == 24 )
             {
+                wxUint8 bbuf[4];
                 if ( !stream.ReadAll(bbuf, 3) )
                     return false;
                 linepos += 3;
-                ptr[poffset    ] = (unsigned char)bbuf[2];
-                ptr[poffset + 1] = (unsigned char)bbuf[1];
-                ptr[poffset + 2] = (unsigned char)bbuf[0];
+                ptr[poffset    ] = bbuf[2];
+                ptr[poffset + 1] = bbuf[1];
+                ptr[poffset + 2] = bbuf[0];
                 column++;
             }
             else if ( bpp == 16 )
             {
                 unsigned char temp;
+                wxUint16 aWord;
                 if ( !stream.ReadAll(&aWord, 2) )
                     return false;
                 wxUINT16_SWAP_ON_BE_IN_PLACE(aWord);
@@ -937,10 +937,11 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             else
             {
                 unsigned char temp;
+                wxUint32 aDword;
                 if ( !stream.ReadAll(&aDword, 4) )
                     return false;
 
-                wxINT32_SWAP_ON_BE_IN_PLACE(aDword);
+                wxUINT32_SWAP_ON_BE_IN_PLACE(aDword);
                 linepos += 4;
                 temp = (unsigned char)((aDword & rmask) >> rshift);
                 ptr[poffset] = temp;
