@@ -359,6 +359,10 @@ public:
         Initialize() in your own constructor, to allow your own Initialize() or
         OnCreateFileHistory functions to be called.
 
+        Note that the last created wxDocManager object automatically becomes
+        the global document manager and can be retrieved using
+        GetDocumentManager().
+
         @param flags
             Currently unused.
         @param initialize
@@ -368,6 +372,8 @@ public:
 
     /**
         Destructor.
+
+        Destructor also resets the global document manager pointer to @NULL.
     */
     virtual ~wxDocManager();
 
@@ -582,6 +588,16 @@ public:
         @see GetAnyUsableView()
     */
     virtual wxView* GetCurrentView() const;
+
+    /**
+        Return the global instance of the document manager.
+
+        The last created wxDocManager instance becomes the global document
+        manager and this function returns it.
+
+        If no wxDocManager objects exist, returns @NULL.
+     */
+    static wxDocManager* GetDocumentManager();
 
     /**
         Returns a vector of wxDocument pointers.

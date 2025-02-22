@@ -74,6 +74,16 @@ if(POLICY CMP0072)
     cmake_policy(SET CMP0072 NEW)
 endif()
 
+if(POLICY CMP0079)
+    # target_link_libraries() allows use with targets in other directories.
+    cmake_policy(SET CMP0079 NEW)
+endif()
+
+if(POLICY CMP0091)
+    # MSVC runtime library flags are selected by an abstraction.
+    cmake_policy(SET CMP0091 NEW)
+endif()
+
 if(POLICY CMP0092)
     # MSVC warning flags are not in CMAKE_<LANG>_FLAGS by default.
     cmake_policy(SET CMP0092 NEW)

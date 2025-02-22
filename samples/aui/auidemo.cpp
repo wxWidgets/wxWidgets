@@ -864,7 +864,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
     tb5->AddTool(ID_SampleItem+32, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
     tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
-    tb5->AddTool(ID_SampleItem+34, "Test", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE));
+    tb5->AddTool(ID_SampleItem+34, "Test with help", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE), wxNullBitmap, wxITEM_NORMAL, "Short Help", "This is long help on the status bar", NULL);
     tb5->SetCustomOverflowItems(prepend_items, append_items);
     tb5->Realize();
 

@@ -100,6 +100,11 @@ wxCONSTRUCTOR_6( wxStaticText, wxWindow*, Parent, wxWindowID, Id, \
 // wxTextWrapper
 // ----------------------------------------------------------------------------
 
+struct wxTextWrapperWidthComparator
+{
+    bool operator()(int w1, int w2) const { return w1 <= w2; }
+};
+
 void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
     const wxClientDC dc(win);
@@ -130,9 +135,13 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             wxArrayInt widths;
             dc.GetPartialTextExtents(line, widths);
 
-            const size_t posEnd = std::lower_bound(widths.begin(),
-                                                   widths.end(),
-                                                   widthMax) - widths.begin();
+            const size_t posEnd = std::lower_bound
+                (
+                   widths.begin(),
+                   widths.end(),
+                   widthMax,
+                   wxTextWrapperWidthComparator()
+                ) - widths.begin();
 
             // Does the entire remaining line fit?
             if ( posEnd == line.length() )
@@ -141,20 +150,36 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
                 break;
             }
 
-            // Find the last word to chop off.
-            const size_t lastSpace = line.rfind(' ', posEnd);
-            if ( lastSpace == wxString::npos )
+            // If the overflowing character is a space, we can break right here.
+            if ( line[posEnd] == ' ' )
             {
-                // No spaces, so can't wrap.
-                DoOutputLine(line);
-                break;
+                DoOutputLine(line.substr(0, posEnd));
+                line = line.substr(posEnd + 1);
+                continue;
+            }
+
+            // Find the last word to chop off.
+            size_t posSpace = line.rfind(' ', posEnd);
+            if ( posSpace == wxString::npos )
+            {
+                // No spaces, so can't wrap, output until the end of the word
+                // which is defined here as just a sequence of non-space chars.
+                //
+                // TODO: Implement real Unicode word break algorithm.
+                posSpace = line.find(' ', posEnd);
+                if ( posSpace == wxString::npos )
+                {
+                    // No more spaces at all, output the rest of the line.
+                    DoOutputLine(line);
+                    break;
+                }
             }
 
             // Output the part that fits.
-            DoOutputLine(line.substr(0, lastSpace));
+            DoOutputLine(line.substr(0, posSpace));
 
             // And redo the layout with the rest.
-            line = line.substr(lastSpace + 1);
+            line = line.substr(posSpace + 1);
         }
     }
 }
