@@ -1444,27 +1444,30 @@ FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
 // even under the same architecture, see the example in
 // http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/151149/focus=151154
 
-// The 0 below can be replaced with 1 to generate, instead of comparing with,
-// the test files.
-#define ASSERT_IMAGE_EQUAL_TO_FILE(image, file) \
-    if ( 0 ) \
-    { \
-        INFO("Failed to save \"" << file << "\""); \
-        CHECK( image.SaveFile(file) ); \
-    } \
-    else \
-    { \
-        const wxImage imageFromFile(file); \
-        if ( imageFromFile.IsOk() ) \
-        { \
-            INFO("Wrong scaled \"" << file << "\" " << Catch::StringMaker<wxImage>::convert(image)); \
-            CHECK(FindMaxChannelDiff(imageFromFile, image) <= 1); \
-        } \
-        else \
-        { \
-            FAIL("Failed to load \"" << file << "\""); \
-        } \
+static void
+ASSERT_IMAGE_EQUAL_TO_FILE(const wxImage& image, const wxString& file)
+{
+    // The 0 below can be replaced with 1 to generate, instead of comparing with,
+    // the test files.
+    if ( 0 )
+    {
+        INFO("Failed to save \"" << file << "\"");
+        CHECK( image.SaveFile(file) );
     }
+    else
+    {
+        const wxImage imageFromFile(file);
+        if ( imageFromFile.IsOk() )
+        {
+            INFO("Wrong \"" << file << "\" " << Catch::StringMaker<wxImage>::convert(image));
+            CHECK(FindMaxChannelDiff(imageFromFile, image) <= 1);
+        }
+        else
+        {
+            FAIL("Failed to load \"" << file << "\"");
+        }
+    }
+}
 
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::ScaleCompare", "[image]")
 {
