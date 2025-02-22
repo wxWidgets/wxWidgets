@@ -1409,6 +1409,8 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMPLoadMethod", "[image][bmp]")
     CompareBMPImageLoad("image/horse_grey.bmp");
     CompareBMPImageLoad("image/horse_rle8.bmp");
     CompareBMPImageLoad("image/horse_rle4.bmp");
+    CompareBMPImageLoad("image/rgb16-3103.bmp");
+    CompareBMPImageLoad("image/rgb32-7187.bmp");
     CompareBMPImageLoad("image/rle8-delta-320x240.bmp",
         wxIMAGE_HAVE_DELTA_RLE_BITMAP);
     CompareBMPImageLoad("image/rle4-delta-320x240.bmp",
@@ -1646,11 +1648,6 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::BMP", "[image][bmp]")
         // alpha is ignored for ICO if it is fully transparent
         REQUIRE(image.LoadFile("image/32bpp_rgb_a0.ico", wxBITMAP_TYPE_ICO));
         REQUIRE_FALSE(image.GetAlpha());
-    }
-    SECTION("bitfields")
-    {
-        REQUIRE(image.LoadFile("image/rgb16-3103.bmp", wxBITMAP_TYPE_BMP));
-        REQUIRE(image.GetData()[0] == 0xff);
     }
 }
 

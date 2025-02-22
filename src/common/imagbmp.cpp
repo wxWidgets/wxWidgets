@@ -513,6 +513,19 @@ struct BMPDesc
     int rmask, gmask, bmask;
 };
 
+// This seems to be the method Windows uses for up-scaling color components.
+// It works well with 4 bits or more, not so well with less. But using it
+// allows tests to compare against native behavior under Windows.
+inline wxUint8 UpscaleTo8Bits(wxUint8 x, unsigned nbits)
+{
+    if (nbits < 8)
+    {
+        x <<= (8 - nbits);
+        x |= x >> nbits;
+    }
+    return x;
+}
+
 // Read the data in BMP format into the given image.
 //
 // The stream must be positioned at the start of the bitmap data
@@ -528,6 +541,7 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     wxUint32 rmask = 0, gmask = 0, bmask = 0, amask = 0;
     unsigned rshift = 0, gshift = 0, bshift = 0, ashift = 0;
+    unsigned rbits = 0, gbits = 0, bbits = 0;
 
     BMPPalette cmapMono[2];
     BMPPalette* cmap = nullptr;
@@ -607,8 +621,6 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
     {
         if ( desc.comp == BI_BITFIELDS )
         {
-            int bit;
-
             rmask = desc.rmask;
             gmask = desc.gmask;
             bmask = desc.bmask;
@@ -624,28 +636,14 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                 amask = 0xFF000000;
                 ashift = 24;
             }
-
-            // find shift amount (Least significant bit of mask)
-            for (bit = bpp-1; bit>=0; bit--)
-            {
-                if (bmask & (1 << bit))
-                    bshift = bit;
-                if (gmask & (1 << bit))
-                    gshift = bit;
-                if (rmask & (1 << bit))
-                    rshift = bit;
-            }
         }
         else if ( bpp == 16 )
         {
             rmask = 0x7C00;
             gmask = 0x03E0;
             bmask = 0x001F;
-            rshift = 10;
-            gshift = 5;
-            bshift = 0;
         }
-        else if ( bpp == 32 )
+        else // bpp == 32
         {
             rmask = 0x00FF0000;
             gmask = 0x0000FF00;
@@ -653,10 +651,23 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             amask = 0xFF000000;
 
             ashift = 24;
-            rshift = 16;
-            gshift = 8;
-            bshift = 0;
         }
+
+        // Determine shift counts and move masks to low byte,
+        // discarding lowest bits of any mask with more than 8 bits
+        for (; rmask && ((rmask & 1) == 0 || rmask > 0xff); rmask >>= 1)
+            rshift++;
+        for (; gmask && ((gmask & 1) == 0 || gmask > 0xff); gmask >>= 1)
+            gshift++;
+        for (; bmask && ((bmask & 1) == 0 || bmask > 0xff); bmask >>= 1)
+            bshift++;
+        // Count mask bits
+        for (; rmask; rmask >>= 1)
+            rbits++;
+        for (; gmask; gmask >>= 1)
+            gbits++;
+        for (; bmask; bmask >>= 1)
+            bbits++;
     }
 
     // RLE-compressed bitmaps do not necessarily specify every pixel explicitly,
@@ -918,20 +929,15 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             }
             else if ( bpp == 16 )
             {
-                unsigned char temp;
                 wxUint16 aWord;
                 if ( !stream.ReadAll(&aWord, 2) )
                     return false;
                 wxUINT16_SWAP_ON_BE_IN_PLACE(aWord);
                 linepos += 2;
 
-                // scale color components to 8 bits
-                temp = rmask ? (aWord & rmask) * 255 / rmask : 0;
-                ptr[poffset] = temp;
-                temp = gmask ? (aWord & gmask) * 255 / gmask : 0;
-                ptr[poffset + 1] = temp;
-                temp = bmask ? (aWord & bmask) * 255 / bmask : 0;
-                ptr[poffset + 2] = temp;
+                ptr[poffset    ] = UpscaleTo8Bits(aWord >> rshift, rbits);
+                ptr[poffset + 1] = UpscaleTo8Bits(aWord >> gshift, gbits);
+                ptr[poffset + 2] = UpscaleTo8Bits(aWord >> bshift, bbits);
                 column++;
             }
             else
@@ -943,12 +949,9 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
                 wxUINT32_SWAP_ON_BE_IN_PLACE(aDword);
                 linepos += 4;
-                temp = (unsigned char)((aDword & rmask) >> rshift);
-                ptr[poffset] = temp;
-                temp = (unsigned char)((aDword & gmask) >> gshift);
-                ptr[poffset + 1] = temp;
-                temp = (unsigned char)((aDword & bmask) >> bshift);
-                ptr[poffset + 2] = temp;
+                ptr[poffset    ] = UpscaleTo8Bits(aDword >> rshift, rbits);
+                ptr[poffset + 1] = UpscaleTo8Bits(aDword >> gshift, gbits);
+                ptr[poffset + 2] = UpscaleTo8Bits(aDword >> bshift, bbits);
                 if ( alpha )
                 {
                     temp = (unsigned char)((aDword & amask) >> ashift);
