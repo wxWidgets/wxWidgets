@@ -2479,6 +2479,101 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::LoadPath", "[.]")
             << " loaded");
 }
 
+#ifdef wxHAS_SVG
+
+#include "wx/bmpbndl.h"
+#include "wx/crt.h"
+
+static wxSize ParseEnvVarAsSize(const wxString& varname)
+{
+    wxString sizeStr;
+    REQUIRE( wxGetEnv(varname, &sizeStr) );
+
+    wxString heightStr;
+    unsigned width;
+    REQUIRE( sizeStr.BeforeFirst(',', &heightStr).ToUInt(&width) );
+
+    unsigned height;
+    if ( !heightStr.empty() )
+    {
+        REQUIRE( heightStr.ToUInt(&height) );
+    }
+    else
+    {
+        height = width;
+    }
+
+    return wxSize(width, height);
+}
+
+// Compute difference between the 2 images by summing up squares of (naively
+// computed, i.e. without any perception-based correction) distances between
+// colours for each pixel.
+static float ComputeImageDiff(const wxImage& img1, const wxImage& img2)
+{
+    const wxSize size = img1.GetSize();
+
+    REQUIRE( img2.GetSize() == size );
+
+    const auto sqr = [](int x) { return x * x; };
+
+    const auto numPixels = size.x * size.y;
+    const auto end = img1.GetData() + numPixels * 3;
+
+    // Should we take alpha into account here?
+    float diff = 0;
+    for ( auto p1 = img1.GetData(), p2 = img2.GetData();
+          p1 != end;
+          p1 += 3, p2 += 3 )
+    {
+        diff += sqrt(sqr(p1[0] - p2[0]) + sqr(p1[1] - p2[1]) + sqr(p1[2] - p2[2]));
+    }
+
+    return diff / numPixels;
+}
+
+// The purpose of this test is to compute "resize quality" which is defined as
+// the difference between resizing an image obtained by rendering an SVG at
+// some resolution to the target size and rendering the same SVG directly at
+// the target size.
+//
+// It requires the following environment variables to be set:
+//
+//  - WX_TEST_SVG_PATH: path to the SVG file to use
+//  - WX_TEST_INITIAL_SIZE: size of the first image to render
+//  - WX_TEST_TARGET_SIZE: size of the target image
+//
+// Sizes can be specified as either "x,y" or just "x" as a shorthand for "x,x".
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::ResizeQuality", "[.]")
+{
+    wxString path;
+    REQUIRE( wxGetEnv("WX_TEST_SVG_PATH", &path) );
+
+    const wxSize startSize = ParseEnvVarAsSize("WX_TEST_INITIAL_SIZE");
+    const wxSize targetSize = ParseEnvVarAsSize("WX_TEST_TARGET_SIZE");
+
+    const auto bb = wxBitmapBundle::FromSVGFile(path, startSize);
+    REQUIRE( bb.IsOk() );
+
+    const wxImage initial = bb.GetBitmap(startSize).ConvertToImage();
+    const wxImage rendered = bb.GetBitmap(targetSize).ConvertToImage();
+
+    wxFprintf(stderr, "Error per pixel when resizing %d*%d to %d*%d:\n",
+             startSize.x, startSize.y, targetSize.x, targetSize.y);
+    wxFprintf(stderr, "  Normal:   %f\n", ComputeImageDiff(rendered,
+                initial.Scale(targetSize)));
+    wxFprintf(stderr, "  Nearest:  %f\n", ComputeImageDiff(rendered,
+                initial.Scale(targetSize, wxIMAGE_QUALITY_NEAREST)));
+    wxFprintf(stderr, "  Box avg:  %f\n", ComputeImageDiff(rendered,
+                initial.Scale(targetSize, wxIMAGE_QUALITY_BOX_AVERAGE)));
+    wxFprintf(stderr, "  Bilinear: %f\n", ComputeImageDiff(rendered,
+                initial.Scale(targetSize, wxIMAGE_QUALITY_BILINEAR)));
+    wxFprintf(stderr, "  Bicubic:  %f\n", ComputeImageDiff(rendered,
+                initial.Scale(targetSize, wxIMAGE_QUALITY_BICUBIC)));
+}
+
+#endif // wxHAS_SVG
+
 TEST_CASE_METHOD(ImageHandlersInit, "wxImage::Cursor", "[image][cursor]")
 {
     // cursor from file
