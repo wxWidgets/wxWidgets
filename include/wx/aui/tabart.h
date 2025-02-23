@@ -248,6 +248,7 @@ protected:
     wxBitmapBundle m_disabledWindowListBmp;
 
     int m_fixedTabWidth;
+    int m_tabCtrlHeight; // Unused, kept only for compatibility.
     unsigned int m_flags;
 
 private:

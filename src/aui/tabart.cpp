@@ -193,6 +193,7 @@ wxAuiGenericTabArt::wxAuiGenericTabArt()
     m_measuringFont = m_selectedFont;
 
     m_fixedTabWidth = wxWindow::FromDIP(100, nullptr);
+    m_tabCtrlHeight = 0;
     m_flags = 0;
 
     UpdateColoursFromSystem();
@@ -278,6 +279,11 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
         m_fixedTabWidth = tot_width/2;
 
     m_fixedTabWidth = wxMin(m_fixedTabWidth, wnd->FromDIP(220));
+
+    // We don't use this member variable ourselves any longer but keep it for
+    // compatibility with the existing code, deriving from this class and using
+    // it for its own purposes.
+    m_tabCtrlHeight = tab_ctrl_size.y;
 }
 
 
