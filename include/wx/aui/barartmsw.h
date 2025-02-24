@@ -76,9 +76,6 @@ public:
         wxWindow* wnd,
         const wxAuiToolBarItem& item) override;
 
-    virtual int GetElementSize(int element) override;
-    virtual void SetElementSize(int elementId, int size) override;
-
     virtual int ShowDropDown(wxWindow* wnd,
         const wxAuiToolBarItemArray& items) override;
 
