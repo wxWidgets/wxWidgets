@@ -46,7 +46,8 @@ struct wxAuiDockLayoutInfo
     Contains information about the layout of a tab control in a wxAuiNotebook.
 
     This includes where it is docked, via the fields inherited from
-    wxAuiDockLayoutInfo, and the order of pages in it.
+    wxAuiDockLayoutInfo, and, optionally, the order of pages in it if it was
+    changed as well as locked and pinned pages indices, if any.
 
     @since 3.3.0
 */
@@ -59,6 +60,20 @@ struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
         notebook pages in natural order.
     */
     std::vector<int> pages;
+
+    /**
+        Indices of the locked pages in this tab control.
+
+        This vector can be empty if there are no locked pages.
+     */
+    std::vector<int> locked;
+
+    /**
+        Indices of the pinned pages in this tab control.
+
+        This vector can be empty if there are no pinned pages.
+     */
+    std::vector<int> pinned;
 };
 
 /**
