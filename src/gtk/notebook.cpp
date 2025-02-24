@@ -16,7 +16,6 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/utils.h"
     #include "wx/msgdlg.h"
     #include "wx/bitmap.h"
 #endif
@@ -500,8 +499,9 @@ bool wxNotebook::InsertPage( size_t position,
         pageData->m_image = nullptr;
     }
 
-    /* set the label text */
-    pageData->m_label = gtk_label_new(wxStripMenuCodes(text).utf8_str());
+    // Set the label text: we don't support mnemonics here, but we still need
+    // to strip them if there are any.
+    pageData->m_label = gtk_label_new(RemoveMnemonics(text).utf8_str());
 
     if (m_windowStyle & wxBK_LEFT)
         gtk_label_set_angle(GTK_LABEL(pageData->m_label), 90);
