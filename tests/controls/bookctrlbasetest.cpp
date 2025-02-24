@@ -80,9 +80,9 @@ void BookCtrlBaseTestCase::Text()
 
     CPPUNIT_ASSERT_EQUAL("Some other string", base->GetPageText(1));
 
-    base->SetPageText(2, "string with /nline break");
+    base->SetPageText(2, "string with\nline break");
 
-    CPPUNIT_ASSERT_EQUAL("string with /nline break", base->GetPageText(2));
+    CPPUNIT_ASSERT_EQUAL("string with\nline break", base->GetPageText(2));
 }
 
 void BookCtrlBaseTestCase::PageManagement()
