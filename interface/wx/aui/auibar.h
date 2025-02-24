@@ -102,7 +102,7 @@ enum wxAuiToolBarArtSetting
     /**
       Overflow button size in wxAuiToolBar.
     */
-    wxAUI_TBART_OVERFLOW_SIZE = 2
+    wxAUI_TBART_OVERFLOW_SIZE = 2,
 
     /**
       Drop down button size in wxAuiToolBar.
