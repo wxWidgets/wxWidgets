@@ -19,8 +19,6 @@
 
 #include <vector>
 
-#include <limits.h>             // for INT_MIN
-
 #include "wx/longlong.h"
 #include "wx/anystr.h"
 
