@@ -313,6 +313,7 @@ wxOSX:
 - Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
 - Fix regression in GetPreferredUILanguage() in some cases (#24804).
 - Fix CMake build with PCH disabled (Maarten Bent, #24851).
+- Fix truncating labels of newly added wxNotebook pages (#25194).
 - Fix truncating wxEvent time stamp after ~25 days (Artur Sochirca, #24960).
 - Implement clipboard events for single-line wxTextCtrl too (#25165).
 - Implement wxCursor::GetHotSpot() (Daniel Collins, #24961).
