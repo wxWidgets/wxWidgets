@@ -46,6 +46,7 @@ public:
     GtkWidget* m_label;
     GtkWidget* m_image;
     int m_imageIndex;
+    wxString m_text;
 };
 
 
@@ -214,8 +215,7 @@ wxString wxNotebook::GetPageText( size_t page ) const
 {
     wxCHECK_MSG(page < GetPageCount(), wxEmptyString, "invalid notebook index");
 
-    GtkLabel* label = GTK_LABEL(GetNotebookPage(page)->m_label);
-    return wxString::FromUTF8(gtk_label_get_text(label));
+    return GetNotebookPage(page)->m_text;
 }
 
 int wxNotebook::GetPageImage( size_t page ) const
@@ -268,8 +268,11 @@ bool wxNotebook::SetPageText( size_t page, const wxString &text )
 {
     wxCHECK_MSG(page < GetPageCount(), false, "invalid notebook index");
 
-    GtkLabel* label = GTK_LABEL(GetNotebookPage(page)->m_label);
-    gtk_label_set_text(label, text.utf8_str());
+    wxGtkNotebookPage* const pageData = GetNotebookPage(page);
+    pageData->m_text = text;
+
+    GtkLabel* label = GTK_LABEL(pageData->m_label);
+    gtk_label_set_text(label, RemoveMnemonics(text).utf8_str());
 
     return true;
 }
@@ -500,7 +503,9 @@ bool wxNotebook::InsertPage( size_t position,
     }
 
     // Set the label text: we don't support mnemonics here, but we still need
-    // to strip them if there are any.
+    // to strip them if there are any. Also store the original text to be able
+    // to return it from GetPageText() later.
+    pageData->m_text = text;
     pageData->m_label = gtk_label_new(RemoveMnemonics(text).utf8_str());
 
     if (m_windowStyle & wxBK_LEFT)
