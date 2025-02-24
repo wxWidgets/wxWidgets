@@ -1438,6 +1438,7 @@ wxAuiManager::CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
     layoutInfo.floating_size = pane.floating_size;
 
     layoutInfo.is_maximized = pane.HasFlag(wxAuiPaneInfo::optionMaximized);
+    layoutInfo.is_hidden = pane.HasFlag(wxAuiPaneInfo::optionHidden);
 }
 
 void
@@ -1450,6 +1451,7 @@ wxAuiManager::CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
     pane.floating_size = layoutInfo.floating_size;
 
     pane.SetFlag(wxAuiPaneInfo::optionMaximized, layoutInfo.is_maximized);
+    pane.SetFlag(wxAuiPaneInfo::optionHidden, layoutInfo.is_hidden);
 }
 
 void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const

@@ -67,8 +67,9 @@ struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
     This struct is used with wxAuiSerializer and wxAuiDeserializer to store the
     pane layout. Its fields, including the inherited ones from
     wxAuiDockLayoutInfo, have the same meaning as the corresponding fields in
-    wxAuiPaneInfo (with the exception of `is_maximized`), but it doesn't
-    contain the fields that it wouldn't make sense to serialize.
+    wxAuiPaneInfo (with the exception of `is_maximized` and `is_hidden`, which
+    rather correspond to the individual bits of its state field), but it
+    doesn't contain the fields that it wouldn't make sense to serialize.
 
     @since 3.3.0
  */
@@ -91,6 +92,9 @@ struct wxAuiPaneLayoutInfo : wxAuiDockLayoutInfo
 
     /// True if the pane is currently maximized.
     bool is_maximized   = false;
+
+    /// True if the pane is currently hidden.
+    bool is_hidden      = false;
 };
 
 /**

@@ -1587,6 +1587,10 @@ public:
         if ( pane.is_maximized )
             AddChild(node, "maximized", 1);
 
+        // Also don't mark visible pages (as most of them are) as being so.
+        if ( pane.is_hidden )
+            AddChild(node, "hidden", 1);
+
         m_panes->AddChild(node);
     }
 
@@ -1778,6 +1782,10 @@ public:
                     else if ( name == "maximized" )
                     {
                         pane.is_maximized = GetInt(content) != 0;
+                    }
+                    else if ( name == "hidden" )
+                    {
+                        pane.is_hidden = GetInt(content) != 0;
                     }
                     else
                     {

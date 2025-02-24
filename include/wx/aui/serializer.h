@@ -65,11 +65,16 @@ struct wxAuiPaneLayoutInfo : wxAuiDockLayoutInfo
     wxSize floating_size = wxDefaultSize;
 
 
+    // The remaining fields correspond to individual bits of the pane state
+    // flags instead of corresponding to wxAuiPaneInfo fields directly because
+    // we prefer not storing the entire state -- this would be less readable
+    // and extensible.
+
     // True if the pane is currently maximized.
-    //
-    // Note that it's the only field of this struct which doesn't directly
-    // correspond to a field of wxAuiPaneInfo.
     bool is_maximized   = false;
+
+    // True if the pane is currently hidden.
+    bool is_hidden      = false;
 };
 
 // wxAuiBookSerializer is used for serializing wxAuiNotebook layout.
