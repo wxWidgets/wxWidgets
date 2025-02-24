@@ -1137,17 +1137,6 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                            wxWindowGTK *win,
                            GdkEventKey *gdk_event)
 {
-    // VZ: it seems that GDK_KEY_RELEASE event doesn't set event->string
-    //     but only event->keyval which is quite useless to us, so remember
-    //     the last character from GDK_KEY_PRESS and reuse it as last resort
-    //
-    // NB: should be MT-safe as we're always called from the main thread only
-    static struct
-    {
-        KeySym keysym;
-        long   keycode;
-    } s_lastKeyPress = { 0, 0 };
-
     KeySym keysym = gdk_event->keyval;
 
     wxLogTrace(TRACE_KEYS, wxT("Key %s event: keysym = %lu"),
@@ -1226,23 +1215,6 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         {
             // by default, ignore it
             key_code = 0;
-
-            // but if we have cached information from the last KEY_PRESS
-            if ( gdk_event->type == GDK_KEY_RELEASE )
-            {
-                // then reuse it
-                if ( keysym == s_lastKeyPress.keysym )
-                {
-                    key_code = s_lastKeyPress.keycode;
-                }
-            }
-        }
-
-        if ( gdk_event->type == GDK_KEY_PRESS )
-        {
-            // remember it to be reused for KEY_UP event later
-            s_lastKeyPress.keysym = keysym;
-            s_lastKeyPress.keycode = key_code;
         }
     }
 
