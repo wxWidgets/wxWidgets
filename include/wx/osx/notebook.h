@@ -14,6 +14,8 @@
 // ----------------------------------------------------------------------------
 #include "wx/event.h"
 
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
@@ -128,8 +130,25 @@ protected:
 
   int DoSetSelection(size_t nPage, int flags = 0) override;
 
-  // the icon indices
-  wxArrayInt m_images;
+private:
+  // this vector is synchronized with m_pages in the base class
+  struct PageData
+  {
+      PageData(const wxString& text_, int image_)
+          : text{text_}, image{image_}
+      {
+      }
+
+      PageData(const PageData&) = default;
+      PageData& operator=(const PageData&) = default;
+
+      PageData(PageData&&) = default;
+      PageData& operator=(PageData&&) = default;
+
+      wxString text;
+      int image = wxNOT_FOUND;
+  };
+  std::vector<PageData> m_pagesData;
 
   wxDECLARE_DYNAMIC_CLASS(wxNotebook);
   wxDECLARE_EVENT_TABLE();

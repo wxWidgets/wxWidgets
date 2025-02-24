@@ -219,7 +219,7 @@ void wxListbook::UpdateSize()
 
 bool wxListbook::SetPageText(size_t n, const wxString& strText)
 {
-    GetListView()->SetItemText(n, strText);
+    GetListView()->SetItemText(n, RemoveMnemonics(strText));
 
     return true;
 }
@@ -320,7 +320,7 @@ wxListbook::InsertPage(size_t n,
     if ( !wxBookCtrlBase::InsertPage(n, page, text, bSelect, imageId) )
         return false;
 
-    GetListView()->InsertItem(n, text, imageId);
+    GetListView()->InsertItem(n, RemoveMnemonics(text), imageId);
 
     // if the inserted page is before the selected one, we must update the
     // index of the selected page

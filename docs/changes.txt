@@ -127,6 +127,10 @@ Changes in behaviour not resulting in compilation errors
   the page on screen, which doesn't make sense without reference to the tab
   control containing it, use GetPagePosition() to retrieve both of them.
 
+- wxListbook and wxChoicebook now interpret (but ignore) mnemonics in their
+  page titles, just as the other wx*book classes already did. Double "&"
+  in the page text if it should be interpreted as a literal "&".
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

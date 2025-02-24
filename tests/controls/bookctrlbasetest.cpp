@@ -40,7 +40,7 @@ void BookCtrlBaseTestCase::AddPanels()
     m_panel2 = new wxPanel(base);
     m_panel3 = new wxPanel(base);
 
-    base->AddPage(m_panel1, "Panel 1", false, 0);
+    base->AddPage(m_panel1, "Panel &1", false, 0);
     base->AddPage(m_panel2, "Panel 2", false, 1);
     base->AddPage(m_panel3, "Panel 3", false, 2);
 }
@@ -74,15 +74,22 @@ void BookCtrlBaseTestCase::Text()
 {
     wxBookCtrlBase * const base = GetBase();
 
-    CPPUNIT_ASSERT_EQUAL("Panel 1", base->GetPageText(0));
+    const wxString expected(HasBrokenMnemonics() ? "Panel 1" : "Panel &1");
+    CPPUNIT_ASSERT_EQUAL(expected, base->GetPageText(0));
 
     base->SetPageText(1, "Some other string");
 
     CPPUNIT_ASSERT_EQUAL("Some other string", base->GetPageText(1));
 
-    base->SetPageText(2, "string with /nline break");
+    base->SetPageText(2, "string with\nline break");
 
-    CPPUNIT_ASSERT_EQUAL("string with /nline break", base->GetPageText(2));
+    CPPUNIT_ASSERT_EQUAL("string with\nline break", base->GetPageText(2));
+
+    if ( !HasBrokenMnemonics() )
+    {
+        base->SetPageText(0, "With &mnemonic");
+        CPPUNIT_ASSERT_EQUAL("With &mnemonic", base->GetPageText(0));
+    }
 }
 
 void BookCtrlBaseTestCase::PageManagement()

@@ -187,7 +187,7 @@ enum ID_COMMANDS
 */
 
 #define I_WAS_INSERTED_PAGE_NAME        "Inserted"
-#define RADIOBUTTONS_PAGE_NAME          "Radiobuttons"
+#define RADIOBUTTONS_PAGE_NAME          "Radio &buttons"
 #define VETO_PAGE_NAME                  "Veto"
 #define TEXT_PAGE_NAME                  "Text"
 

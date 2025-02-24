@@ -26,6 +26,10 @@ protected:
 
     virtual wxEventType GetChangingEvent() const = 0;
 
+    // Some wxBookCtrlBase-derived classes strip mnemonics and don't return
+    // them from their GetPageText(), allow them to just return true from here.
+    virtual bool HasBrokenMnemonics() const { return false; }
+
     // this should be inserted in the derived class CPPUNIT_TEST_SUITE
     // definition to run all wxBookCtrlBase tests as part of it
     #define wxBOOK_CTRL_BASE_TESTS() \

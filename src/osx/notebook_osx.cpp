@@ -118,9 +118,11 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("SetPageText: invalid notebook page") );
 
-    wxNotebookPage *page = m_pages[nPage];
-    page->SetLabel(wxStripMenuCodes(strText));
-    MacSetupTabs();
+    if ( m_pagesData[nPage].text != strText )
+    {
+        m_pagesData[nPage].text = strText;
+        MacSetupTabs();
+    }
 
     return true;
 }
@@ -129,16 +131,14 @@ wxString wxNotebook::GetPageText(size_t nPage) const
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, wxT("GetPageText: invalid notebook page") );
 
-    wxNotebookPage *page = m_pages[nPage];
-
-    return page->GetLabel();
+    return m_pagesData[nPage].text;
 }
 
 int wxNotebook::GetPageImage(size_t nPage) const
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("GetPageImage: invalid notebook page") );
 
-    return m_images[nPage];
+    return m_pagesData[nPage].image;
 }
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
@@ -148,12 +148,12 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
     wxCHECK_MSG( HasImageList() && nImage < GetImageList()->GetImageCount(), false,
         wxT("SetPageImage: invalid image index") );
 
-    if ( nImage != m_images[nPage] )
+    if ( nImage != m_pagesData[nPage].image )
     {
         // if the item didn't have an icon before or, on the contrary, did have
         // it but has lost it now, its size will change - but if the icon just
         // changes, it won't
-        m_images[nPage] = nImage;
+        m_pagesData[nPage].image = nImage;
 
         MacSetupTabs() ;
     }
@@ -173,7 +173,7 @@ wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 
     wxNotebookPage* page = m_pages[nPage] ;
     m_pages.erase(m_pages.begin() + nPage);
-    m_images.RemoveAt(nPage);
+    m_pagesData.erase(m_pagesData.begin() + nPage);
 
     MacSetupTabs();
 
@@ -200,7 +200,7 @@ bool wxNotebook::DeleteAllPages()
 {
     wxBookCtrlBase::DeleteAllPages();
 
-    m_images.clear();
+    m_pagesData.clear();
     MacSetupTabs();
 
     return true;
@@ -221,9 +221,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     // don't show pages by default (we'll need to adjust their size first)
     pPage->Show( false ) ;
 
-    pPage->SetLabel( wxStripMenuCodes(strText) );
-
-    m_images.Insert( imageId, nPage );
+    m_pagesData.insert( m_pagesData.begin() + nPage, {strText, imageId} );
 
     MacSetupTabs();
 

@@ -106,7 +106,7 @@ wxChoicebook::Create(wxWindow *parent,
 
 bool wxChoicebook::SetPageText(size_t n, const wxString& strText)
 {
-    GetChoiceCtrl()->SetString(n, strText);
+    GetChoiceCtrl()->SetString(n, RemoveMnemonics(strText));
 
     return true;
 }
@@ -178,7 +178,7 @@ wxChoicebook::InsertPage(size_t n,
     if ( !wxBookCtrlBase::InsertPage(n, page, text, bSelect, imageId) )
         return false;
 
-    GetChoiceCtrl()->Insert(text, n);
+    GetChoiceCtrl()->Insert(RemoveMnemonics(text), n);
 
     // if the inserted page is before the selected one, we must update the
     // index of the selected page
