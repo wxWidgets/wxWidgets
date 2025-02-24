@@ -291,7 +291,7 @@ private:
     {
         wxNotebookPage* page = notebook.GetPage(i);
         [item setView:page->GetHandle() ];
-        wxCFStringRef cf( page->GetLabel() );
+        wxCFStringRef cf( wxControl::RemoveMnemonics(notebook.GetPageText(i)) );
         [item setLabel:cf.AsNSString()];
 
         const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
