@@ -1014,7 +1014,7 @@ MyFrame::MyFrame(wxWindow* parent,
     wxWindow* wnd10 = CreateTextCtrl("This pane will prompt the user before hiding.");
 
     // Give this pane an icon, too, just for testing.
-    int iconSize = FromDIP(m_mgr.GetArtProvider()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
+    int iconSize = m_mgr.GetArtProvider()->GetMetricForWindow(wxAUI_DOCKART_CAPTION_SIZE, this);
 
     // Make it even to use 16 pixel icons with default 17 caption height.
     iconSize &= ~1;

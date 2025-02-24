@@ -265,9 +265,33 @@ public:
     /**
         Get the value of a certain setting.
         @a id can be one of the size values of @b wxAuiPaneDockArtSetting.
-        Sizes are in DPI-independent pixel values.
+
+        This function returns the same value that was set by SetMetric(), use
+        GetMetricForWindow() to get the value appropriate for the given window
+        for metrics that express sizes.
     */
     virtual int GetMetric(int id) = 0;
+
+    /**
+        Get metric value scaled by the DPI of the given window if appropriate.
+
+        Call this function instead of GetMetric() to get the metric value
+        scaled by the window DPI for the metrics that are expressed in pixels
+        and must be scaled.
+
+        The default implementation doesn't scale ::wxAUI_DOCKART_SASH_SIZE and
+        ::wxAUI_DOCKART_PANE_BORDER_SIZE metrics in order to allow setting them
+        to just a single pixel (which is the default value for the latter in
+        wxAuiDefaultDockArt) even in high DPI. You may override this function
+        in your custom art implementation to scale these metrics too if you
+        prefer to have thicker borders in high DPI.
+
+        Note that values of ::wxAUI_DOCKART_GRADIENT_TYPE are not expressed in
+        pixels and so should never be scaled by this function.
+
+        @since 3.3.0
+     */
+    virtual int GetMetricForWindow(int id, wxWindow* window);
 
     /**
         Set a certain setting with the value @e colour.
@@ -282,8 +306,11 @@ public:
 
     /**
         Set a certain setting with the value @e new_val.
+
         @a id can be one of the size values of @b wxAuiPaneDockArtSetting.
-        Sizes should be in DPI-independent pixel values.
+
+        The interpretation of @a new_val depends on the metric being set, see
+        GetMetricForWindow().
     */
     virtual void SetMetric(int id, int new_val) = 0;
 };

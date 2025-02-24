@@ -664,7 +664,7 @@ int wxAuiGenericTabArt::GetBorderWidth(wxWindow* wnd)
     {
         wxAuiDockArt* art = mgr->GetArtProvider();
         if (art)
-            return wnd->FromDIP(art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+            return art->GetMetricForWindow(wxAUI_DOCKART_PANE_BORDER_SIZE, wnd);
     }
     return 1;
 }
@@ -1259,7 +1259,7 @@ int wxAuiSimpleTabArt::GetBorderWidth(wxWindow* wnd)
     {
        wxAuiDockArt*  art = mgr->GetArtProvider();
         if (art)
-            return wnd->FromDIP(art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+            return art->GetMetricForWindow(wxAUI_DOCKART_PANE_BORDER_SIZE, wnd);
     }
     return 1;
 }
