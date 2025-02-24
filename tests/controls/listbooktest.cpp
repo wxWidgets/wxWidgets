@@ -37,6 +37,8 @@ private:
     virtual wxEventType GetChangingEvent() const override
     { return wxEVT_LISTBOOK_PAGE_CHANGING; }
 
+    virtual bool HasBrokenMnemonics() const override { return true; }
+
     CPPUNIT_TEST_SUITE( ListbookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
         CPPUNIT_TEST( ListView );
