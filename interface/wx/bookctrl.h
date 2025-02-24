@@ -139,6 +139,10 @@ public:
 
     /**
         Sets the text for the given page.
+
+        The text may contain mnemonics, i.e. accelerator characters preceded by
+        the ampersand (`&`) character. If you need to include a literal
+        ampersand in the text, you need to double it, i.e. use `&&`.
     */
     virtual bool SetPageText(size_t page, const wxString& text) = 0;
     ///@}
@@ -257,7 +261,8 @@ public:
         @param page
             Specifies the new page.
         @param text
-            Specifies the text for the new page.
+            Specifies the text of the new page. Note that it may contain
+            mnemonic characters, see SetPageText() for more information.
         @param select
             Specifies whether the page should be selected.
         @param imageId
@@ -297,7 +302,8 @@ public:
         @param page
             Specifies the new page.
         @param text
-            Specifies the text for the new page.
+            Specifies the text of the new page. Note that it may contain
+            mnemonic characters, see SetPageText() for more information.
         @param select
             Specifies whether the page should be selected.
         @param imageId
