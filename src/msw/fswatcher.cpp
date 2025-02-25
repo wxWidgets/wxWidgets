@@ -320,17 +320,8 @@ void wxIOCPThread::ProcessNativeEvents(wxVector<wxEventProcessingData>& events)
                     FileNotifyInformationToString(e));
 
         const int flags = Native2WatcherFlags(e.Action);
-        if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
-        {
-            wxFileSystemWatcherEvent
-                event(flags,
-                      flags & wxFSW_EVENT_ERROR ? wxFSW_WARNING_NONE
-                                                : wxFSW_WARNING_GENERAL);
-            SendEvent(event);
-        }
-        // filter out ignored events and those not asked for.
-        // we never filter out warnings or exceptions
-        else if ((flags == 0) || !(flags & watch->GetFlags()))
+        // filter out ignored events (with flags == 0) and those not asked for.
+        if (!(flags & watch->GetFlags()))
         {
             return;
         }
