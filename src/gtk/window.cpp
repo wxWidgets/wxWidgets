@@ -1054,6 +1054,21 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
     return key_code;
 }
 
+#if wxDEBUG_LEVEL
+static wxString wxDumpUniChar(wxChar unichar)
+{
+    // Represent control characters as Ctrl-<char> for readability.
+    if ( unichar == 0 )
+        return "NUL";
+    else if ( unichar < 0x20 )
+        return wxString::Format("Ctrl-%c", unichar + 0x40);
+    else if ( unichar == 0x7F )
+        return "DEL";
+    else
+        return wxString::Format("'%c'", unichar);
+}
+#endif // wxDEBUG_LEVEL
+
 static inline bool wxIsAsciiKeysym(KeySym ks)
 {
     return ks < 256;
@@ -1475,7 +1490,9 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             if ( event.m_uniChar == WXK_DELETE )
                 eventChar.m_uniChar = 0;
 
-            wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), eventChar.m_keyCode);
+            wxLogTrace(TRACE_KEYS, "Char event: key=%ld, char=%s",
+                       eventChar.m_keyCode,
+                       wxDumpUniChar(eventChar.m_uniChar));
 
             ret = win->HandleWindowEvent(eventChar);
         }
@@ -1527,9 +1544,10 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
         event.m_uniChar = *pstr;
         // Backward compatible for ISO-8859-1
         event.m_keyCode = *pstr < 256 ? event.m_uniChar : 0;
-        wxLogTrace(TRACE_KEYS, wxT("IM sent character '%c'"), event.m_uniChar);
 
         AdjustCharEventKeyCodes(event);
+
+        wxLogTrace(TRACE_KEYS, "IM sent %s", wxDumpUniChar(event.m_uniChar));
 
         if ( HandleWindowEvent(event) )
             processed = true;
