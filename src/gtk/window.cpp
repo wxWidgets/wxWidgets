@@ -1259,52 +1259,6 @@ bool SendCharHookEvent(const wxKeyEvent& event, wxWindow *win)
     return false;
 }
 
-// Adjust wxEVT_CHAR event key code fields. This function takes care of two
-// conventions:
-// (a) Ctrl-letter key presses generate key codes in range 1..26
-// (b) Unicode key codes are same as key codes for the codes in ASCII range
-//
-// Return true if the key code was modified.
-bool AdjustCharEventKeyCodes(wxKeyEvent& event)
-{
-    bool modified = false;
-
-    const int code = event.m_keyCode;
-
-    // Check for (a) above.
-    if ( event.ControlDown() )
-    {
-        // We intentionally don't use isupper/lower() here, we really need
-        // ASCII letters only as it doesn't make sense to translate any other
-        // ones into this range which has only 26 slots.
-        if ( code >= 'a' && code <= 'z' )
-            event.m_keyCode = code - 'a' + 1;
-        else if ( code >= 'A' && code <= 'Z' )
-            event.m_keyCode = code - 'A' + 1;
-
-        // Adjust the Unicode equivalent in the same way too.
-        if ( event.m_keyCode != code )
-        {
-            event.m_uniChar = event.m_keyCode;
-            modified = true;
-        }
-    }
-
-    // Check for (b) from above.
-    if ( !event.m_uniChar && code < WXK_DELETE )
-    {
-        event.m_uniChar = code;
-        modified = true;
-    }
-    else if ( !event.m_keyCode && event.m_uniChar < WXK_DELETE )
-    {
-        event.m_keyCode = event.m_uniChar;
-        modified = true;
-    }
-
-    return modified;
-}
-
 // If a widget does not handle a key or mouse event, GTK+ sends it up the
 // parent chain until it is handled. These events are not supposed to propagate
 // in wxWidgets, so this code avoids handling them in any parent wxWindow,
@@ -1415,50 +1369,73 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
     // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
     // will only be sent if it is not in an accelerator table.
-    if (!ret)
+    //
+    // This "loop" is executed at most once and only exists to be able to break
+    // from it below.
+    while ( !ret )
     {
         KeySym keysym = gdk_event->keyval;
-        // Find key code for EVT_CHAR which may be different from the one for
-        // EVT_KEY_DOWN.
-        long key_code = wxTranslateKeySymToWXKey(keysym, true /* isChar */);
 
-        const auto uniChar = gdk_keyval_to_unicode(keysym);
-        if ( key_code || uniChar )
+        wxKeyEvent eventChar(wxEVT_CHAR, event);
+
+        if ( long keyCode = wxTranslateKeySymToWXKey(keysym, true /* isChar */) )
         {
-            wxKeyEvent eventChar(wxEVT_CHAR, event);
-
-            if ( !AdjustCharEventKeyCodes(eventChar) )
+            // Set Unicode value to the key code if possible, this is useful
+            // for keys such as BACKSPACE or ENTER.
+            eventChar.m_keyCode = keyCode;
+            eventChar.m_uniChar = keyCode < WXK_DELETE ? keyCode : 0;
+        }
+        else if ( guint32 uniChar = gdk_keyval_to_unicode(keysym) )
+        {
+            // We generate CHAR events for Ctrl-[@-_] key presses with key
+            // codes in 0..31 range because it may make sense to handle them in
+            // the same way as "real" CHARs (e.g. to handle Ctrl-H as backspace
+            // etc), but we don't generate them for Ctrl-anything-else because
+            // this just doesn't seem useful at all and wxMSW doesn't do it.
+            if ( eventChar.ControlDown() )
             {
-                // use Unicode values
-                eventChar.m_keyCode = key_code;
+                if ( uniChar >= 'a' && uniChar <= 'z' )
+                    uniChar = toupper(uniChar);
+
+                if ( (uniChar >= 'A' && uniChar <= 'Z') ||
+                        uniChar == '[' ||
+                        uniChar == '\\' ||
+                        uniChar == ']' ||
+                        uniChar == '^' ||
+                        uniChar == '_' )
+                {
+                    // Convert to ASCII control character.
+                    uniChar &= 0x1f;
+
+                    eventChar.m_keyCode = uniChar;
+                    eventChar.m_uniChar = uniChar;
+                }
+                else
+                {
+                    wxLogTrace(TRACE_KEYS, "Not generating char event for Ctrl-%s",
+                               wxDumpUniChar(uniChar));
+                    break;
+                }
+            }
+            else // Not a control character.
+            {
+                // Set the key code to the Unicode value if possible to allow
+                // even Unicode-unaware applications to handle ASCII keys.
+                eventChar.m_keyCode = uniChar < WXK_DELETE ? uniChar : 0;
                 eventChar.m_uniChar = uniChar;
             }
-
-            // We set m_uniChar for DELETE key in wxTranslateGTKKeyEventToWx()
-            // for compatibility but we shouldn't set it for CHAR events, this
-            // doesn't make much sense and wxMSW doesn't do it.
-            if ( event.m_uniChar == WXK_DELETE )
-                eventChar.m_uniChar = 0;
-
-            // We generate CHAR events for Ctrl-letter key presses because it
-            // may make sense to handle them in the same way as "real" CHARs
-            // (e.g. to handle Ctrl-H as backspace etc), but we don't generate
-            // them for Ctrl-non-letter combinations because this just doesn't
-            // seem useful at all and wxMSW doesn't do it.
-            if ( eventChar.ControlDown() && !eventChar.m_keyCode )
-            {
-                wxLogTrace(TRACE_KEYS, "Not generating char event for Ctrl-%s",
-                           wxDumpUniChar(eventChar.m_uniChar));
-            }
-            else
-            {
-                wxLogTrace(TRACE_KEYS, "Char event: key=%ld, char=%s",
-                           eventChar.m_keyCode,
-                           wxDumpUniChar(eventChar.m_uniChar));
-
-                ret = win->HandleWindowEvent(eventChar);
-            }
         }
+        else // Not a printable character nor one of recognized special keys.
+        {
+            break;
+        }
+
+        wxLogTrace(TRACE_KEYS, "Char event: key=%ld, char=%s",
+                   eventChar.m_keyCode,
+                   wxDumpUniChar(eventChar.m_uniChar));
+
+        ret = win->HandleWindowEvent(eventChar);
+        break;
     }
 
     return ret;
@@ -1506,7 +1483,9 @@ bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
     {
         event.m_uniChar = *pstr;
 
-        AdjustCharEventKeyCodes(event);
+        // Set key code to the Unicode value for ASCII characters.
+        if ( event.m_uniChar < WXK_DELETE )
+            event.m_keyCode = event.m_uniChar;
 
         wxLogTrace(TRACE_KEYS, "IM sent %s", wxDumpUniChar(event.m_uniChar));
 
