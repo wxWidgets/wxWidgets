@@ -319,8 +319,7 @@ void wxIOCPThread::ProcessNativeEvents(wxVector<wxEventProcessingData>& events)
         wxLogTrace( wxTRACE_FSWATCHER, "[iocp] %s",
                     FileNotifyInformationToString(e));
 
-        int nativeFlags = e.Action;
-        int flags = Native2WatcherFlags(nativeFlags);
+        const int flags = Native2WatcherFlags(e.Action);
         if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
         {
             wxFileSystemWatcherEvent
@@ -336,7 +335,7 @@ void wxIOCPThread::ProcessNativeEvents(wxVector<wxEventProcessingData>& events)
             return;
         }
         // rename case
-        else if (nativeFlags == FILE_ACTION_RENAMED_OLD_NAME)
+        else if (e.Action == FILE_ACTION_RENAMED_OLD_NAME)
         {
             wxFileName oldpath = GetEventPath(*watch, e);
             wxFileName newpath;
