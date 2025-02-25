@@ -1440,11 +1440,24 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             if ( event.m_uniChar == WXK_DELETE )
                 eventChar.m_uniChar = 0;
 
-            wxLogTrace(TRACE_KEYS, "Char event: key=%ld, char=%s",
-                       eventChar.m_keyCode,
-                       wxDumpUniChar(eventChar.m_uniChar));
+            // We generate CHAR events for Ctrl-letter key presses because it
+            // may make sense to handle them in the same way as "real" CHARs
+            // (e.g. to handle Ctrl-H as backspace etc), but we don't generate
+            // them for Ctrl-non-letter combinations because this just doesn't
+            // seem useful at all and wxMSW doesn't do it.
+            if ( eventChar.ControlDown() && !eventChar.m_keyCode )
+            {
+                wxLogTrace(TRACE_KEYS, "Not generating char event for Ctrl-%s",
+                           wxDumpUniChar(eventChar.m_uniChar));
+            }
+            else
+            {
+                wxLogTrace(TRACE_KEYS, "Char event: key=%ld, char=%s",
+                           eventChar.m_keyCode,
+                           wxDumpUniChar(eventChar.m_uniChar));
 
-            ret = win->HandleWindowEvent(eventChar);
+                ret = win->HandleWindowEvent(eventChar);
+            }
         }
     }
 
