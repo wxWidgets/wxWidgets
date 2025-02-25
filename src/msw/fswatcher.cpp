@@ -325,8 +325,9 @@ void wxIOCPThread::ProcessNativeEvents(wxVector<wxEventProcessingData>& events)
         {
             return;
         }
+
         // rename case
-        else if (e.Action == FILE_ACTION_RENAMED_OLD_NAME)
+        if (e.Action == FILE_ACTION_RENAMED_OLD_NAME)
         {
             wxFileName oldpath = GetEventPath(*watch, e);
             wxFileName newpath;
