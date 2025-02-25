@@ -1469,6 +1469,12 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                 eventChar.m_uniChar = uniChar;
             }
 
+            // We set m_uniChar for DELETE key in wxTranslateGTKKeyEventToWx()
+            // for compatibility but we shouldn't set it for CHAR events, this
+            // doesn't make much sense and wxMSW doesn't do it.
+            if ( event.m_uniChar == WXK_DELETE )
+                eventChar.m_uniChar = 0;
+
             wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), eventChar.m_keyCode);
 
             ret = win->HandleWindowEvent(eventChar);
