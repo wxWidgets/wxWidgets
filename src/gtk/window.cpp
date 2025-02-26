@@ -5617,14 +5617,25 @@ void wxWindowGTK::Update()
 {
     if (m_widget && gtk_widget_get_mapped(m_widget) && m_width > 0 && m_height > 0)
     {
+        GdkWindow* window = GTKGetDrawingWindow();
+        if (window == nullptr)
+            window = gtk_widget_get_window(m_widget);
+
+#ifdef GDK_WINDOWING_WAYLAND
+        if (wxGTKImpl::IsWayland(window))
+        {
+            // Using the functions below with Wayland seems to break something
+            // in the update logic, with future updates just getting lost, see
+            // #25036, so don't use it in this case, especially as it doesn't
+            // even seem to work anyhow.
+            return;
+        }
+#endif // GDK_WINDOWING_WAYLAND
+
         GdkDisplay* display = gtk_widget_get_display(m_widget);
         // If window has just been shown, drawing may not work unless pending
         // requests queued for the windowing system are flushed first.
         gdk_display_flush(display);
-
-        GdkWindow* window = GTKGetDrawingWindow();
-        if (window == nullptr)
-            window = gtk_widget_get_window(m_widget);
 
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gdk_window_process_updates(window, true);
