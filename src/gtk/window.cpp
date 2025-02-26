@@ -4609,10 +4609,7 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != nullptr), wxT("invalid window") );
 
-    GtkWidget* widget = m_widget;
-    if (m_wxwindow)
-        widget = m_wxwindow;
-    GdkWindow* source = gtk_widget_get_window(widget);
+    GdkWindow* const source = GTKGetMainWindow();
 
     if ((!m_isGtkPositionValid || source == nullptr) && !IsTopLevel() && m_parent)
     {
@@ -4683,10 +4680,7 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != nullptr), wxT("invalid window") );
 
-    GtkWidget* widget = m_widget;
-    if (m_wxwindow)
-        widget = m_wxwindow;
-    GdkWindow* source = gtk_widget_get_window(widget);
+    GdkWindow* const source = GTKGetMainWindow();
 
     if ((!m_isGtkPositionValid || source == nullptr) && !IsTopLevel() && m_parent)
     {
@@ -5421,13 +5415,9 @@ void wxWindowGTK::Raise()
 {
     wxCHECK_RET( (m_widget != nullptr), wxT("invalid window") );
 
-    if (m_wxwindow && gtk_widget_get_window(m_wxwindow))
+    if (auto const window = GTKGetMainWindow())
     {
-        gdk_window_raise(gtk_widget_get_window(m_wxwindow));
-    }
-    else if (gtk_widget_get_window(m_widget))
-    {
-        gdk_window_raise(gtk_widget_get_window(m_widget));
+        gdk_window_raise(window);
     }
 }
 
@@ -5435,13 +5425,9 @@ void wxWindowGTK::Lower()
 {
     wxCHECK_RET( (m_widget != nullptr), wxT("invalid window") );
 
-    if (m_wxwindow && gtk_widget_get_window(m_wxwindow))
+    if (auto const window = GTKGetMainWindow())
     {
-        gdk_window_lower(gtk_widget_get_window(m_wxwindow));
-    }
-    else if (gtk_widget_get_window(m_widget))
-    {
-        gdk_window_lower(gtk_widget_get_window(m_widget));
+        gdk_window_lower(window);
     }
 }
 
@@ -5617,9 +5603,7 @@ void wxWindowGTK::Update()
 {
     if (m_widget && gtk_widget_get_mapped(m_widget) && m_width > 0 && m_height > 0)
     {
-        GdkWindow* window = GTKGetDrawingWindow();
-        if (window == nullptr)
-            window = gtk_widget_get_window(m_widget);
+        GdkWindow* const window = GTKGetMainWindow();
 
 #ifdef GDK_WINDOWING_WAYLAND
         if (wxGTKImpl::IsWayland(window))
@@ -6400,7 +6384,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     menu->m_popupShown = true;
 #if GTK_CHECK_VERSION(3,22,0)
-    GdkWindow* window = gtk_widget_get_window(m_wxwindow ? m_wxwindow : m_widget);
+    GdkWindow* const window = GTKGetMainWindow();
     if (wxGTKImpl::IsWayland(window) && wx_is_at_least_gtk3(22))
     {
         GdkEvent* currentEvent = gtk_get_current_event();
@@ -6514,7 +6498,17 @@ bool wxWindowGTK::GTKIsOwnWindow(GdkWindow *window) const
 
 GdkWindow *wxWindowGTK::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return m_wxwindow ? GTKGetDrawingWindow() : gtk_widget_get_window(m_widget);
+    return GTKGetMainWindow();
+}
+
+GdkWindow* wxWindowGTK::GTKGetMainWindow() const
+{
+    return gtk_widget_get_window(m_wxwindow ? m_wxwindow : m_widget);
+}
+
+GdkWindow* wxWindowGTK::GTKGetConnectWindow() const
+{
+    return gtk_widget_get_window(GetConnectWidget());
 }
 
 #ifdef __WXGTK3__
@@ -6603,12 +6597,7 @@ void wxWindowGTK::DoCaptureMouse()
 {
     wxCHECK_RET( m_widget != nullptr, wxT("invalid window") );
 
-    GdkWindow *window = nullptr;
-    if (m_wxwindow)
-        window = GTKGetDrawingWindow();
-    else
-        window = gtk_widget_get_window(GetConnectWidget());
-
+    GdkWindow* const window = GTKGetConnectWindow();
     wxCHECK_RET( window, wxT("CaptureMouse() failed") );
 
 #if GTK_CHECK_VERSION(3,20,0)
@@ -6648,11 +6637,7 @@ void wxWindowGTK::DoReleaseMouse()
 
     g_captureWindow = nullptr;
 
-    GdkWindow *window = nullptr;
-    if (m_wxwindow)
-        window = GTKGetDrawingWindow();
-    else
-        window = gtk_widget_get_window(GetConnectWidget());
+    GdkWindow* const window = GTKGetConnectWindow();
 
     if (!window)
         return;

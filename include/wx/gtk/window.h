@@ -243,6 +243,18 @@ protected:
     // Check if the given window makes part of this widget
     bool GTKIsOwnWindow(GdkWindow *window) const;
 
+    // Return the GdkWindow associated with either m_wxwindow or m_widget.
+    //
+    // This may be different from GTKGetConnectWindow() for the native widgets
+    // using a different "connect widget".
+    //
+    // Unlike GTKGetDrawingWindow(), this function always returns something
+    // non-null for a mapped window.
+    GdkWindow* GTKGetMainWindow() const;
+
+    // Return the GdkWindow associated with GetConnectWidget().
+    GdkWindow* GTKGetConnectWindow() const;
+
 public:
     // Returns the default context which usually is anti-aliased
     PangoContext   *GTKGetPangoDefaultContext();
