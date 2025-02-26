@@ -6923,10 +6923,7 @@ void wxGetMousePosition(int* x, int* y)
 
 GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
 {
-    GdkWindow* window = nullptr;
-    if (m_wxwindow)
-        window = gtk_widget_get_window(m_wxwindow);
-    return window;
+    return m_wxwindow ? gtk_widget_get_window(m_wxwindow) : nullptr;
 }
 
 // ----------------------------------------------------------------------------
