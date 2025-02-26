@@ -45,7 +45,9 @@ wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
 
         // TP_DROPDOWNBUTTON is only 7px, too small to fit the dropdown arrow,
         // use 14px instead.
-        m_dropdownSize = window->FromDIP(14);
+        //
+        // Note that this value is intentionally in DIPs.
+        m_dropdownSize = 14;
 
         m_buttonSize = hThemeToolbar.GetTrueSize(TP_BUTTON);
     }
@@ -394,16 +396,6 @@ wxSize wxAuiMSWToolBarArt::GetToolSize(
     }
     else
         return wxAuiGenericToolBarArt::GetToolSize(dc, wnd, item);
-}
-
-int wxAuiMSWToolBarArt::GetElementSize(int element)
-{
-    return wxAuiGenericToolBarArt::GetElementSize(element);
-}
-
-void wxAuiMSWToolBarArt::SetElementSize(int elementId, int size)
-{
-    wxAuiGenericToolBarArt::SetElementSize(elementId, size);
 }
 
 int wxAuiMSWToolBarArt::ShowDropDown(wxWindow* wnd,

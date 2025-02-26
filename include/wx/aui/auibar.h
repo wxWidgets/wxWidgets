@@ -337,6 +337,12 @@ public:
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 
+    // This function should be used for querying element sizes in the new code,
+    // as it scales them by the DPI of the provided window. GetElementSize()
+    // still exists (and is simpler to override), but is usually _not_ what you
+    // need.
+    virtual int GetElementSizeForWindow(int elementId, const wxWindow* window);
+
     // Note that these functions work with the size in DIPs, not physical
     // pixels.
     virtual int GetElementSize(int elementId) = 0;
