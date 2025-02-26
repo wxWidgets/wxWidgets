@@ -39,7 +39,7 @@ msgstr "Internationale wxWidgets-Anwendung"
 
 #: internat.cpp:295
 msgid "&Test locale availability...\tCtrl-T"
-msgstr "&Teste Gebietsschemaverfügbarkeit...\tCtrl-T"
+msgstr "&Teste Gebietsschemaverfügbarkeit...\tStrg-T"
 
 #: internat.cpp:300
 msgid "E&xit"

@@ -167,7 +167,7 @@ public:
     wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHAR_OPERATOR)
 
 #undef wxDEFINE_UNICHAR_OPERATOR
-#undef wxDEFINE_UNCHAR_CMP_WITH_INT
+#undef wxDEFINE_UNICHAR_CMP_WITH_INT
 
     // this is needed for expressions like 'Z'-c
     int operator-(const wxUniChar& c) const { return m_value - c.m_value; }

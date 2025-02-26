@@ -387,8 +387,6 @@ int wxIOCPThread::Native2WatcherFlags(int flags)
 
         // ignored as it should always be matched with ***_OLD_NAME
         { FILE_ACTION_RENAMED_NEW_NAME, 0 },
-        // ignore invalid event
-        { 0, 0 },
     };
 
     for (unsigned int i=0; i < WXSIZEOF(flag_mapping); ++i) {
@@ -396,9 +394,9 @@ int wxIOCPThread::Native2WatcherFlags(int flags)
             return flag_mapping[i][1];
     }
 
-    // never reached
-    wxFAIL_MSG(wxString::Format("Unknown file notify change %u", flags));
-    return -1;
+    // We can get unknown values here, see #18953, just ignore them because we
+    // don't know what else to do with them.
+    return 0;
 }
 
 wxString wxIOCPThread::FileNotifyInformationToString(

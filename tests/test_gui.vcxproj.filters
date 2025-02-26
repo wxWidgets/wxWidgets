@@ -257,6 +257,9 @@
     <ClCompile Include="controls\textentrytest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="misc\textwrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\togglebuttontest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
