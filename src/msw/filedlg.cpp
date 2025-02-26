@@ -1126,6 +1126,10 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
         return;
     }
 
+// Note that this file can also be compiled as part of wxQt and we don't need
+// this code then.
+#ifdef __WXMSW__
+
     // set HWND so that our DoMoveWindow() works correctly
     TempHWNDSetter set(this, hDlg);
 
@@ -1144,6 +1148,8 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     {
         SetPosition(gs_rectDialog.GetPosition());
     }
+
+#endif // __WXMSW__
 }
 
 void wxFileDialog::MSWOnSelChange(const wxString& selectedFilename)
