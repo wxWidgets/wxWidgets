@@ -236,18 +236,9 @@ public:
         const int maximum = notebook.GetPageCount();
         for ( int i = 0; i < wxMin(maximum, cocoacount); ++i )
         {
-            NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
+            SetupTabItem(notebook, i,
+                         [(wxNSTabView*) m_osxView tabViewItemAtIndex:i]);
 
-            wxNotebookPage* page = notebook.GetPage(i);
-            [item setView:page->GetHandle() ];
-            wxCFStringRef cf( page->GetLabel() );
-            [item setLabel:cf.AsNSString()];
-
-            const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
-            if ( bitmap.IsOk() )
-            {
-                [(WXCTabViewImageItem*) item setImage: wxOSXGetImageFromBundle(bitmap)];
-            }
         }
 
         // Next also add new pages or delete the no more existing ones.
@@ -256,17 +247,7 @@ public:
             for ( int i = cocoacount ; i < maximum ; ++i )
             {
                 NSTabViewItem* item = [[WXCTabViewImageItem alloc] init];
-
-                wxNotebookPage* page = notebook.GetPage(i);
-                [item setView:page->GetHandle() ];
-                wxCFStringRef cf( page->GetLabel() );
-                [item setLabel:cf.AsNSString()];
-
-                const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
-                if ( bitmap.IsOk() )
-                {
-                    [(WXCTabViewImageItem*) item setImage: wxOSXGetImageFromBundle(bitmap)];
-                }
+                SetupTabItem(notebook, i, item);
 
                 [slf addTabViewItem:item];
                 [item release];
@@ -303,6 +284,21 @@ public:
         }
         
         return retval; 
+    }
+
+private:
+    void SetupTabItem(const wxNotebook& notebook, int i, NSTabViewItem* item)
+    {
+        wxNotebookPage* page = notebook.GetPage(i);
+        [item setView:page->GetHandle() ];
+        wxCFStringRef cf( wxControl::RemoveMnemonics(notebook.GetPageText(i)) );
+        [item setLabel:cf.AsNSString()];
+
+        const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
+        if ( bitmap.IsOk() )
+        {
+            [(WXCTabViewImageItem*) item setImage: wxOSXGetImageFromBundle(bitmap)];
+        }
     }
 };
 

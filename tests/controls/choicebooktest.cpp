@@ -36,6 +36,8 @@ private:
     virtual wxEventType GetChangingEvent() const override
     { return wxEVT_CHOICEBOOK_PAGE_CHANGING; }
 
+    virtual bool HasBrokenMnemonics() const override { return true; }
+
     CPPUNIT_TEST_SUITE( ChoicebookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
         CPPUNIT_TEST( Choice );
