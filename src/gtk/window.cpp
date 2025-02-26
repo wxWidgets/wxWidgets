@@ -6500,10 +6500,7 @@ void wxWindowGTK::SetDropTarget( wxDropTarget *dropTarget )
 
 GtkWidget* wxWindowGTK::GetConnectWidget()
 {
-    GtkWidget *connect_widget = m_widget;
-    if (m_wxwindow) connect_widget = m_wxwindow;
-
-    return connect_widget;
+    return m_wxwindow ? m_wxwindow : m_widget;
 }
 
 bool wxWindowGTK::GTKIsOwnWindow(GdkWindow *window) const
