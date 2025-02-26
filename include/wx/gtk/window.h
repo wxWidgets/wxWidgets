@@ -173,7 +173,7 @@ public:
     // also, it is not clear which native widget is the top
     // widget where (most of) the input goes. even tooltips have
     // to be applied to all subwidgets.
-    virtual GtkWidget* GetConnectWidget();
+    virtual GtkWidget* GetConnectWidget() const;
     void ConnectWidget( GtkWidget *widget );
 
 

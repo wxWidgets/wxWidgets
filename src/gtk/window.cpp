@@ -6498,7 +6498,7 @@ void wxWindowGTK::SetDropTarget( wxDropTarget *dropTarget )
 
 #endif // wxUSE_DRAG_AND_DROP
 
-GtkWidget* wxWindowGTK::GetConnectWidget()
+GtkWidget* wxWindowGTK::GetConnectWidget() const
 {
     return m_wxwindow ? m_wxwindow : m_widget;
 }

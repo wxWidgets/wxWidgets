@@ -862,7 +862,7 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
 // helpers
 // ----------------------------------------------------------------------------
 
-GtkWidget *wxListBox::GetConnectWidget()
+GtkWidget *wxListBox::GetConnectWidget() const
 {
     // the correct widget for listbox events (such as mouse clicks for example)
     // is m_treeview, not the parent scrolled window
