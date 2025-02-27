@@ -569,6 +569,7 @@ struct WXDLLIMPEXP_BASE wxStringEqual
 #define wxPTROP_NOP(pointer)
 
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
+wxCLANG_WARNING_SUPPRESS(unused-member-function) \
 _WX_DECLARE_PAIR( KEY_T, VALUE_T, CLASSNAME##_wxImplementation_Pair, CLASSEXP ) \
 _WX_DECLARE_HASH_MAP_KEY_EX( KEY_T, CLASSNAME##_wxImplementation_Pair, CLASSNAME##_wxImplementation_KeyEx, CLASSEXP ) \
 _WX_DECLARE_HASHTABLE( CLASSNAME##_wxImplementation_Pair, KEY_T, HASH_T, \
@@ -621,7 +622,8 @@ public: \
     { \
         return GetNode( key ) ? 1u : 0u; \
     } \
-}
+} \
+wxCLANG_WARNING_RESTORE(unused-member-function)
 
 #endif // wxNEEDS_WX_HASH_MAP
 

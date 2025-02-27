@@ -41,6 +41,7 @@ namespace
 class TempLocaleSetter
 {
 public:
+    wxCLANG_WARNING_SUPPRESS(unused-member-function)
     explicit TempLocaleSetter(int localeCategory,
                               const wxString& localeId = wxString())
         : m_localeCategory(localeCategory),
@@ -54,6 +55,7 @@ public:
         setlocale(m_localeCategory, m_localeOrig);
         free(m_localeOrig);
     }
+    wxCLANG_WARNING_RESTORE(unused-member-function)
 
 private:
     const int m_localeCategory;

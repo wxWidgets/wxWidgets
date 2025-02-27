@@ -83,12 +83,14 @@ typedef struct {
 
 typedef j_decompress *j_decompress_ptr;
 struct jpeg_color_quantizer {
+  wxCLANG_WARNING_SUPPRESS(unused-member-function)
   JMETHOD(void, start_pass, (j_decompress_ptr cinfo, bool is_pre_scan));
   JMETHOD(void, color_quantize, (j_decompress_ptr cinfo,
                  JSAMPARRAY input_buf, JSAMPARRAY output_buf,
                  int num_rows));
   JMETHOD(void, finish_pass, (j_decompress_ptr cinfo));
   JMETHOD(void, new_color_map, (j_decompress_ptr cinfo));
+  wxCLANG_WARNING_RESTORE(unused-member-function)
 };
 
 
