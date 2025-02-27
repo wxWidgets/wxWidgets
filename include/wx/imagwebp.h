@@ -16,6 +16,21 @@
 //-----------------------------------------------------------------------------
 
 #if wxUSE_LIBWEBP
+
+#define wxIMAGE_OPTION_WEBP_QUALITY  wxT("WebPQuality")
+#define wxIMAGE_OPTION_WEBP_LOSSLESS wxT("WebPLossless") // 0 = undefined (/mixed), 1 = lossy, 2 = lossless
+
+
+struct WXDLLIMPEXP_CORE wxWebPAnimationFrame
+{
+    wxImage image;
+    wxColour bgColour;
+    int duration;
+
+    wxWebPAnimationFrame();
+};
+
+
 class WXDLLIMPEXP_CORE wxWEBPHandler : public wxImageHandler
 {
 public:
@@ -27,13 +42,15 @@ public:
         m_mime = wxT("image/webp");
     }
 
+    static wxVersionInfo GetLibraryVersionInfo();
+
 #if wxUSE_STREAMS
-    virtual bool LoadFile(wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1) override;
-    virtual bool SaveFile(wxImage *image, wxOutputStream& stream, bool verbose=true) override;
+    virtual bool LoadFile(wxImage* image, wxInputStream& stream, bool verbose = true, int index = -1) override;
+    virtual bool SaveFile(wxImage* image, wxOutputStream& stream, bool verbose = true) override;
+    virtual bool LoadAnimation(wxVector<wxWebPAnimationFrame>& frames, wxInputStream& stream, bool verbose = true);
 protected:
     virtual bool DoCanRead(wxInputStream& stream) override;
-    // see implementation for why this is disabled:
-    //virtual int DoGetImageCount(wxInputStream &stream) override;
+    virtual int DoGetImageCount(wxInputStream& stream) override;
 #endif // wxUSE_STREAMS
 
 private:
