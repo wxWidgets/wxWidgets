@@ -1131,15 +1131,10 @@ wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
     wxASSERT_MSG(IsVisible(item), "this item itself should be visible");
 
     wxTreeItemId id = item;
-    if ( id.IsOk() )
-    {
-        while ( id = GetNext(id), id.IsOk() )
-        {
-            if ( IsVisible(id) )
-                return id;
-        }
-    }
-    return wxTreeItemId();
+    do
+        id = GetNext(id);
+    while (id.IsOk() && !IsVisible(id));
+    return id;
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
