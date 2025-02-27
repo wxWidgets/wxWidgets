@@ -80,10 +80,8 @@ void wxToolTip::Enable( bool flag )
     if (wx_is_at_least_gtk2(12))
     {
         GtkSettings* settings = gtk_settings_get_default();
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         if (settings)
-            gtk_settings_set_long_property(settings, "gtk-enable-tooltips", flag, nullptr);
-        wxGCC_WARNING_RESTORE()
+            g_object_set(settings, "gtk-enable-tooltips", flag, nullptr);
     }
     else
 #endif
@@ -110,10 +108,8 @@ void wxToolTip::SetDelay( long msecs )
     if (wx_is_at_least_gtk2(12))
     {
         GtkSettings* settings = gtk_settings_get_default();
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         if (settings)
-            gtk_settings_set_long_property(settings, "gtk-tooltip-timeout", msecs, nullptr);
-        wxGCC_WARNING_RESTORE()
+            g_object_set(settings, "gtk-tooltip-timeout", int(msecs), nullptr);
     }
     else
 #endif
