@@ -848,6 +848,7 @@ set(GUI_CMN_SRC
     src/common/validate.cpp
     src/common/valtext.cpp
     src/common/valnum.cpp
+    src/common/webpdecoder.cpp
     src/common/wincmn.cpp
     src/common/windowid.cpp
     src/common/wrapsizer.cpp
@@ -1224,6 +1225,7 @@ set(GUI_CMN_HDR
     wx/compositebookctrl.h
     wx/persist/combobox.h
     wx/power.h
+    wx/webpdecoder.h
 )
 
 set(UNIX_SRC
