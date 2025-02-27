@@ -543,10 +543,10 @@ void wxButtonToolBar::OnLeftUp(wxMouseEvent& event)
         wxButtonToolBarTool* tool = (wxButtonToolBarTool*) FindToolForPosition(event.GetX(), event.GetY());
         if (tool && tool->GetButton() && (event.GetY() > (tool->m_y + tool->GetButton()->GetSize().y)))
         {
-            wxCommandEvent event(wxEVT_BUTTON, tool->GetId());
-            event.SetEventObject(tool->GetButton());
-            if (!GetEventHandler()->ProcessEvent(event))
-                event.Skip();
+            wxCommandEvent evt(wxEVT_BUTTON, tool->GetId());
+            evt.SetEventObject(tool->GetButton());
+            if (!GetEventHandler()->ProcessEvent(evt))
+                evt.Skip();
         }
     }
 }

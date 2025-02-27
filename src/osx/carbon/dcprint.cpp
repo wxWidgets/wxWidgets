@@ -307,9 +307,9 @@ bool wxPrinterDCImpl::StartDoc( const wxString& message )
     m_ok = m_nativePrinterDC->IsOk() ;
     if ( !m_ok )
     {
-        wxString message ;
-        message.Printf( wxT("Print Error %u"), m_nativePrinterDC->GetStatus() ) ;
-        wxMessageDialog dialog( nullptr , message , wxEmptyString, wxICON_HAND | wxOK) ;
+        wxString msg;
+        msg.Printf("Print Error %u", m_nativePrinterDC->GetStatus());
+        wxMessageDialog dialog(nullptr, msg, wxString(), wxICON_HAND | wxOK);
         dialog.ShowModal();
     }
 

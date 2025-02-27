@@ -4354,12 +4354,12 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindNode( const wxDataViewItem &item
     }
 
     wxGtkTreeModelNode * node = m_root;
-    for ( const auto& item : list )
+    for ( const auto& itm : list )
     {
         wxGtkTreeModelNode* next = nullptr;
         for (auto child : node->GetNodes())
         {
-            if (child->GetItem() == item)
+            if (child->GetItem() == itm)
             {
                 next = child;
                 break;

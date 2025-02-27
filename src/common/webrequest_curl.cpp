@@ -1026,9 +1026,9 @@ void SourceSocketPoller::SendEvent(curl_socket_t sock, int result)
     {
         // Check if we have any sockets to clean up and do it now, it should be
         // safe.
-        for ( auto sock : m_socketsToCleanUp )
+        for ( auto sck : m_socketsToCleanUp )
         {
-            StopPolling(sock);
+            StopPolling(sck);
         }
 
         m_socketsToCleanUp.clear();

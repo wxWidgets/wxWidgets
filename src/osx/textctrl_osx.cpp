@@ -471,10 +471,10 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         case WXK_NUMPAD_ENTER:
             if (m_windowStyle & wxTE_PROCESS_ENTER)
             {
-                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
-                event.SetEventObject( this );
-                event.SetString( GetValue() );
-                if ( HandleWindowEvent(event) )
+                wxCommandEvent evt(wxEVT_TEXT_ENTER, m_windowId);
+                evt.SetEventObject(this);
+                evt.SetString(GetValue());
+                if (HandleWindowEvent(evt))
                     return;
             }
 
@@ -486,9 +486,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                     wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
-                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
-                        event.SetEventObject(def);
-                        def->Command(event);
+                        wxCommandEvent evt(wxEVT_BUTTON, def->GetId());
+                        evt.SetEventObject(def);
+                        def->Command(evt);
 
                         return ;
                     }

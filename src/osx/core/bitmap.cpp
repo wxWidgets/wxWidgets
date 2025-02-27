@@ -1198,7 +1198,7 @@ void wxBitmap::InitFromImage(const wxImage& image, int depth, double scale)
                 y++)
             {
                 unsigned char * destination = destinationRowStart;
-                unsigned char * destinationMask = destinationMaskRowStart;
+                destinationMask = destinationMaskRowStart;
                 for (int x = 0; x < width; x++)
                 {
                     if ( hasMask )

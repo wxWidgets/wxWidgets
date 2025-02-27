@@ -757,12 +757,12 @@ bool wxBitmap::CreateFromImageAsPixbuf(const wxImage& image)
     if ( image.HasMask() )
     {
         const size_t out_size = size_t((width + 7) / 8) * unsigned(height);
-        wxByte* out = new wxByte[out_size];
+        out = new wxByte[out_size];
         memset(out, 0xff, out_size);
         const wxByte r_mask = image.GetMaskRed();
         const wxByte g_mask = image.GetMaskGreen();
         const wxByte b_mask = image.GetMaskBlue();
-        const wxByte* in = image.GetData();
+        in = image.GetData();
         unsigned bit_index = 0;
         for (int y = 0; y < height; y++)
         {
