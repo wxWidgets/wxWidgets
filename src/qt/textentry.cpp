@@ -176,8 +176,7 @@ public:
     // The constructor associates us with the given text entry.
     explicit wxTextAutoCompleteData(wxTextEntry* entry,
                                     CompleterType type = CompleterType::StringCompleter)
-        : m_entry(entry),
-          m_win(entry->GetEditableWindow())
+        : m_win(entry->GetEditableWindow())
     {
         if ( m_win )
         {
@@ -313,9 +312,6 @@ private:
 
         event.Skip();
     }
-
-    // The text entry we're associated with.
-    wxTextEntry* const m_entry;
 
     // The window of this text entry.
     wxWindow* const m_win;
