@@ -248,6 +248,19 @@ MyCanvas::MyCanvas(wxWindow* parent)
     }
 #endif
 
+#if wxUSE_LIBWEBP
+    image.Destroy();
+
+    if (!image.LoadFile(dir + "horse.webp", wxBITMAP_TYPE_WEBP))
+    {
+        wxLogError("Can't load WebP image");
+    }
+    else
+    {
+        my_horse_webp = wxBitmap(image);
+    }
+#endif
+
     CreateAntiAliasedBitmap();
 
     my_smile_xbm = wxBitmap( (const char*)smile_bits, smile_width,
@@ -410,10 +423,10 @@ void MyCanvas::OnDPIChanged(wxDPIChangedEvent& event)
 wxSize MyCanvas::GetDrawingSize() const
 {
     // Aproximate the size used in OnPaint
-    // 4 rows, about 13 columns and 1 DPI dependent column
+    // 4 columns, about 14 rows and 1 DPI dependent row
     const int imageSize = 200;
     const int width = 4 * FromDIP(250);
-    const int height = 13 * (imageSize + 2 * GetCharHeight()) + FromDIP(imageSize);
+    const int height = 14 * (imageSize + 2 * GetCharHeight()) + FromDIP(imageSize);
 
     return wxSize(width, height);
 }
@@ -530,6 +543,12 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.DrawText("TGA handler", col1, y);
     if (my_horse_tga.IsOk())
         dc.DrawBitmap(my_horse_tga, col1, y + ch);
+
+    y += yOffset;
+
+    dc.DrawText("WebP handler", col1, y);
+    if (my_horse_webp.IsOk())
+        dc.DrawBitmap(my_horse_webp, col1, y + ch);
 
     y += yOffset;
 

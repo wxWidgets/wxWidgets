@@ -298,6 +298,9 @@ private:
 #if wxUSE_LIBTIFF
                                                 "TIFF files (*.tif)|*.tif|"
 #endif
+#if wxUSE_LIBWEBP
+                                                "WebP files (*.webp)|*.webp|"
+#endif
 #if wxUSE_PCX
                                                 "PCX files (*.pcx)|*.pcx|"
 #endif
@@ -1199,6 +1202,9 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 #endif
 #if wxUSE_LIBTIFF
     array.Add(wxTIFFHandler::GetLibraryVersionInfo().GetVersionString());
+#endif
+#if wxUSE_LIBWEBP
+    array.Add(wxWEBPHandler::GetLibraryVersionInfo().GetVersionString());
 #endif
 #if wxUSE_ZLIB && wxUSE_STREAMS
     // zlib is used by libpng
