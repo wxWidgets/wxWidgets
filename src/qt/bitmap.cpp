@@ -485,6 +485,8 @@ inline const char* wxQtConvertBitmapType(wxBitmapType type)
         case wxBITMAP_TYPE_TGA:
         case wxBITMAP_TYPE_MACCURSOR:
         case wxBITMAP_TYPE_MACCURSOR_RESOURCE:
+        case wxBITMAP_TYPE_WEBP:
+        case wxBITMAP_TYPE_WEBP_RESOURCE:
         case wxBITMAP_TYPE_MAX:
         case wxBITMAP_TYPE_ANY:
         default:
