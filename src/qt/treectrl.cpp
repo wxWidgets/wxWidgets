@@ -453,7 +453,7 @@ private:
         // QT doesn't update the selection until this signal has been processed.
         // Deferring this event ensures that wxTreeCtrl::GetSelections() returns
         // the new selection in the wx event handler.
-        GetHandler()->CallAfter([=]()
+        GetHandler()->CallAfter([this]()
             {
                 EmitSelectChangeEvent(wxEVT_TREE_SEL_CHANGED);
             });
