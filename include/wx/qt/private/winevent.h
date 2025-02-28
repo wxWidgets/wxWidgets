@@ -83,15 +83,7 @@ public:
         // Set immediately as it is used to check if wxWindow is alive
         wxWindow::QtStoreWindowPointer( this, handler );
 
-        // Handle QWidget destruction signal AFTER it gets deleted
-        QObject::connect( this, &QObject::destroyed, this,
-                          &wxQtEventSignalHandler::HandleDestroyedSignal );
-
         Widget::setMouseTracking(true);
-    }
-
-    void HandleDestroyedSignal()
-    {
     }
 
     virtual Handler *GetHandler() const override
@@ -383,42 +375,44 @@ protected:
 
     bool touchEvent(QTouchEvent *touch)
     {
-        wxWindow *win = wxWindow::QtRetrieveWindowPointer(this);
         bool handled = false;
 
-        for (const QTouchEvent::TouchPoint& tp : touch->touchPoints())
+        if ( wxWindow *win = wxWindow::QtRetrieveWindowPointer(this) )
         {
-            wxEventType evtype = wxEVT_NULL;
-
-            switch (tp.state())
+            for (const QTouchEvent::TouchPoint& tp : touch->touchPoints())
             {
-                case Qt::TouchPointPressed:
-                    evtype = wxEVT_TOUCH_BEGIN;
-                    break;
+                wxEventType evtype = wxEVT_NULL;
 
-                case Qt::TouchPointMoved:
-                    evtype = wxEVT_TOUCH_MOVE;
-                    break;
-                case Qt::TouchPointReleased:
-                    evtype = wxEVT_TOUCH_END;
-                    break;
+                switch (tp.state())
+                {
+                    case Qt::TouchPointPressed:
+                        evtype = wxEVT_TOUCH_BEGIN;
+                        break;
 
-                default:
-                    continue;
+                    case Qt::TouchPointMoved:
+                        evtype = wxEVT_TOUCH_MOVE;
+                        break;
+                    case Qt::TouchPointReleased:
+                        evtype = wxEVT_TOUCH_END;
+                        break;
+
+                    default:
+                        continue;
+                }
+
+                wxMultiTouchEvent evt(win->GetId(), evtype);
+
+                // Use screen position as the event might originate from a different
+                // Qt window than this one.
+                wxPoint2DDouble pt = wxQtConvertPointF(tp.screenPos().toPoint());
+                wxPoint ref = pt.GetFloor();
+
+                evt.SetPosition(win->ScreenToClient(ref) + (pt - ref));
+                evt.SetSequenceId(wxTouchSequenceId(wxUIntToPtr((unsigned)tp.id())));
+                // Qt doesn't provide the primary point flag
+
+                handled |= win->ProcessWindowEvent(evt);
             }
-
-            wxMultiTouchEvent evt(win->GetId(), evtype);
-
-            // Use screen position as the event might originate from a different
-            // Qt window than this one.
-            wxPoint2DDouble pt = wxQtConvertPointF(tp.screenPos().toPoint());
-            wxPoint ref = pt.GetFloor();
-
-            evt.SetPosition(win->ScreenToClient(ref) + (pt - ref));
-            evt.SetSequenceId(wxTouchSequenceId(wxUIntToPtr((unsigned)tp.id())));
-            // Qt doesn't provide the primary point flag
-
-            handled |= win->ProcessWindowEvent(evt);
         }
 
         return handled;
@@ -448,11 +442,9 @@ protected:
 
     void tapandholdTriggered(QTapAndHoldGesture *gesture, QEvent *event)
     {
-        wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
-
-        if (gesture->state() == Qt::GestureFinished)
+        if ( wxWindow *win = wxWindow::QtRetrieveWindowPointer( this ) )
         {
-            if ( win )
+            if (gesture->state() == Qt::GestureFinished)
             {
                 wxLongPressEvent ev(win->GetId());
                 ev.SetPosition( wxQtConvertPoint( gesture->position().toPoint() ) );
@@ -461,15 +453,14 @@ protected:
                 win->ProcessWindowEvent( ev );
                 event->accept();
             }
-
-        }
-        else if (gesture->state() == Qt::GestureStarted)
-        {
-            event->accept();
-        }
-        else
-        {
-            event->accept();
+            else if (gesture->state() == Qt::GestureStarted)
+            {
+                event->accept();
+            }
+            else
+            {
+                event->accept();
+            }
         }
     }
 

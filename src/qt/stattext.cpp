@@ -35,6 +35,11 @@ wxStaticText::wxStaticText(wxWindow *parent,
     Create( parent, id, label, pos, size, style, name );
 }
 
+wxStaticText::~wxStaticText()
+{
+    GetQLabel()->setBuddy( nullptr );
+}
+
 bool wxStaticText::Create(wxWindow *parent,
             wxWindowID id,
             const wxString &label,
