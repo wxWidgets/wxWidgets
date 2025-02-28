@@ -57,8 +57,6 @@ extern WXDLLIMPEXP_DATA_CORE(HFONT) wxSTATUS_LINE_FONT;
 // global data
 // ---------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
-
 extern "C"
 {
     WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();

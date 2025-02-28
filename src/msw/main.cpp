@@ -242,7 +242,7 @@ int wxEntry()
     return wxEntry(initData.argc, initData.argv);
 }
 
-HINSTANCE wxhInstance = 0;
+static HINSTANCE wxhInstance;
 
 extern "C" HINSTANCE wxGetInstance()
 {
