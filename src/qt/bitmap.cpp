@@ -141,38 +141,36 @@ static QImage ConvertImage( const wxImage &image, wxMask** mask = nullptr  )
 
 class wxBitmapRefData: public wxGDIRefData
 {
-    public:
-        wxBitmapRefData() { m_mask = nullptr; }
+public:
+    wxBitmapRefData() = default;
 
-        wxBitmapRefData( int width, int height, int depth )
-        {
-            if (depth == 1)
-                m_qtPixmap = QBitmap( width, height );
-            else
-                m_qtPixmap = QPixmap( width, height );
-            m_mask = nullptr;
-        }
+    wxBitmapRefData( int width, int height, int depth )
+    {
+        if (depth == 1)
+            m_qtPixmap = QBitmap( width, height );
+        else
+            m_qtPixmap = QPixmap( width, height );
+    }
 
-        wxBitmapRefData( QPixmap pix, wxMask* mask = nullptr )
-            : m_qtPixmap(pix)
-        {
-            m_mask = mask;
-        }
+    wxBitmapRefData( QPixmap pix, wxMask* mask = nullptr )
+        : m_qtPixmap(pix)
+    {
+        m_mask = mask;
+    }
 
-        virtual ~wxBitmapRefData() { delete m_mask; }
+    virtual ~wxBitmapRefData() { delete m_mask; }
 
-        virtual bool IsOk() const override
-        {
-            return !m_qtPixmap.isNull();
-        }
+    virtual bool IsOk() const override
+    {
+        return !m_qtPixmap.isNull();
+    }
 
-        QPixmap m_qtPixmap;
-        QImage m_rawPixelSource;
-        wxMask *m_mask;
+    QPixmap m_qtPixmap;
+    QImage m_rawPixelSource;
+    wxMask* m_mask = nullptr;
 
 private:
-    wxBitmapRefData(const wxBitmapRefData&other);
-    wxBitmapRefData& operator=(const wxBitmapRefData&other);
+    wxDECLARE_NO_COPY_CLASS(wxBitmapRefData);
 };
 
 //-----------------------------------------------------------------------------
@@ -435,7 +433,16 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& r) const
     if ( M_MASK && M_MASK->GetHandle() )
     {
         QBitmap* qtMask = M_MASK->GetHandle();
-        bmp.SetMask(new wxMask(new QBitmap{qtMask->copy(wxQtConvertRect(rect))}));
+        QBitmap* qtBitmap = new QBitmap;
+        QBitmap qtBmpCopy =
+    #if QT_VERSION_MAJOR >= 6
+            QBitmap::fromPixmap(qtMask->copy(wxQtConvertRect(rect)));
+    #else
+            qtMask->copy(wxQtConvertRect(rect));
+    #endif
+        qtBitmap->swap(qtBmpCopy);
+
+        bmp.SetMask(new wxMask(qtBitmap));
     }
 
     return bmp;

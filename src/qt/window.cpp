@@ -19,7 +19,7 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
-#include <QtWidgets/QShortcut>
+#include <QShortcut>
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
