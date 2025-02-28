@@ -52,11 +52,13 @@ public:
     {
         m_editorCtrl = editor;
         m_owner = owner;
-
         m_finished = false;
+        m_focusOnIdle = false;
     }
 
+#if defined(__WXGTK__) && !defined(wxHAS_GENERIC_DATAVIEWCTRL)
     void SetFocusOnIdle( bool focus = true ) { m_focusOnIdle = focus; }
+#endif
 
 protected:
     void OnChar( wxKeyEvent &event );
