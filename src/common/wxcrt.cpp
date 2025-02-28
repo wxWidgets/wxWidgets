@@ -1063,10 +1063,11 @@ static bool wxIsLocaleUtf8()
     //     because a) it may be unavailable in some builds and b) has slightly
     //     different semantics (default locale instead of current)
 
+    const char* charset;
 #if defined(HAVE_LANGINFO_H) && defined(CODESET)
     // GNU libc provides current character set this way (this conforms to
     // Unix98)
-    const char *charset = nl_langinfo(CODESET);
+    charset = nl_langinfo(CODESET);
     if ( charset && wxIsCharsetUtf8(charset) )
         return true;
 #endif // HAVE_LANGINFO_H
@@ -1083,7 +1084,7 @@ static bool wxIsLocaleUtf8()
 
         // any other locale can also use UTF-8 encoding if it's explicitly
         // specified
-        const char* charset = strrchr(lc_ctype, '.');
+        charset = strrchr(lc_ctype, '.');
         if ( charset && wxIsCharsetUtf8(charset + 1) )
             return true;
     }
