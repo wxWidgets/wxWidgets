@@ -15,7 +15,7 @@
 
 #include <QtCore/QStringListModel>
 #include <QtWidgets/QCompleter>
-#include <QtWidgets/QFileSystemModel>
+#include <QFileSystemModel>
 
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>

@@ -13,7 +13,7 @@
 #include "wx/accel.h"
 #include "wx/qt/private/converter.h"
 #include <QtCore/QVariant>
-#include <QtWidgets/QShortcut>
+#include <QShortcut>
 
 // ----------------------------------------------------------------------------
 // wxAccelRefData: the data used by wxAcceleratorTable
@@ -48,7 +48,14 @@ wxIMPLEMENT_DYNAMIC_CLASS( wxAcceleratorTable, wxObject );
 QShortcut *ConvertAccelerator( const wxAcceleratorEntry& e, QWidget *parent )
 {
     // TODO: Not all keys have the same string representation in wx and qt
-    QShortcut *s = new QShortcut( wxQtConvertString( e.ToString() ), parent );
+    const auto keySeq = QKeySequence(wxQtConvertString( e.ToString() ));
+
+#if QT_VERSION_MAJOR >= 6
+    const auto s = new QShortcut( keySeq, (QObject*)parent );
+#else
+    const auto s = new QShortcut( keySeq, parent );
+#endif
+
 
     // Set a property to save wx Command to send when activated
     s->setProperty( "wxQt_Command", e.GetCommand() );
