@@ -51,7 +51,6 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
         case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
         case wxBRUSHSTYLE_STIPPLE_MASK:
             return Qt::TexturePattern;
-            break;
     }
     return Qt::SolidPattern;
 }

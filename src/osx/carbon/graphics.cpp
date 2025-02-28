@@ -2965,8 +2965,9 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
 {
 #ifdef __WXMAC__
     return new wxMacCoreGraphicsContext(this, dc);
-#endif
+#else
     return nullptr;
+#endif
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -2974,8 +2975,9 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC&
 {
 #ifdef __WXMAC__
     return new wxMacCoreGraphicsContext(this, dc);
-#endif
+#else
     return nullptr;
+#endif
 }
 #endif
 

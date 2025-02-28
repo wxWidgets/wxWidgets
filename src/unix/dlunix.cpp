@@ -222,9 +222,9 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
 #else
     wxUnusedVar(addr);
     wxUnusedVar(path);
-#endif // HAVE_DLADDR
 
     return nullptr;
+#endif // HAVE_DLADDR
 }
 
 

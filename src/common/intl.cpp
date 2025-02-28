@@ -621,6 +621,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     case 65001:
         return wxFONTENCODING_UTF8;
     }
+    return wxFONTENCODING_SYSTEM;
 #elif defined(__WXMAC__)
     CFStringEncoding encoding = 0;
     encoding = CFStringGetSystemEncoding();
@@ -645,11 +646,11 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         {
             return enc;
         }
-        //else: return wxFONTENCODING_SYSTEM below
     }
-#endif // Win32/Unix
-
     return wxFONTENCODING_SYSTEM;
+#else
+    return wxFONTENCODING_SYSTEM;
+#endif
 }
 
 /* static */
