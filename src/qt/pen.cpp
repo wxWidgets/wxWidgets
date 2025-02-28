@@ -407,7 +407,7 @@ int wxPen::GetDashes(wxDash **ptr) const
 {
     wxCHECK_MSG( IsOk(), -1, "invalid pen" );
 
-    *ptr = (wxDash *)((wxPenRefData *)m_refData)->m_dashes;
+    *ptr = const_cast<wxDash*>(((wxPenRefData*)m_refData)->m_dashes);
     return ((wxPenRefData *)m_refData)->m_dashesSize;
 }
 
@@ -423,5 +423,5 @@ wxGDIRefData *wxPen::CreateGDIRefData() const
 
 wxGDIRefData *wxPen::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxPenRefData(*(wxPenRefData *)data);
+    return new wxPenRefData(*static_cast<const wxPenRefData*>(data));
 }

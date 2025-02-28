@@ -179,5 +179,5 @@ wxGDIRefData *wxCursor::CreateGDIRefData() const
 
 wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxCursorRefData(*(wxCursorRefData *)data);
+    return new wxCursorRefData(*static_cast<const wxCursorRefData*>(data));
 }

@@ -89,7 +89,7 @@ wxObjectRefData *wxAcceleratorTable::CreateRefData() const
 
 wxObjectRefData *wxAcceleratorTable::CloneRefData(const wxObjectRefData *data) const
 {
-    return new wxAccelRefData(*(wxAccelRefData *)data);
+    return new wxAccelRefData(*static_cast<const wxAccelRefData*>(data));
 }
 
 bool wxAcceleratorTable::IsOk() const

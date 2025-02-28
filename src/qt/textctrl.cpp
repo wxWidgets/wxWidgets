@@ -263,7 +263,7 @@ public:
     virtual wxTextCtrlHitTestResult
     HitTest(const wxPoint& pt, long* pos) const override
     {
-        auto qtEdit = static_cast<wxQtTextEdit*>(m_edit);
+        const auto qtEdit = static_cast<wxQtTextEdit*>(m_edit);
 
         auto cursor  = qtEdit->cursorForPosition( wxQtConvertPoint(pt) );
         auto curRect = qtEdit->cursorRect(cursor);
@@ -589,7 +589,7 @@ public:
     virtual wxTextCtrlHitTestResult
     HitTest(const wxPoint& pt, long *pos) const override
     {
-        auto qtEdit  = static_cast<wxQtLineEdit*>(m_edit);
+        const auto qtEdit = static_cast<wxQtLineEdit*>(m_edit);
         auto curPos  = qtEdit->cursorPositionAt( wxQtConvertPoint(pt) );
         auto curRect = qtEdit->cursorRect();
 
