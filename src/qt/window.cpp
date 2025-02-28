@@ -350,35 +350,22 @@ wxWindowQt::~wxWindowQt()
 {
     if ( !m_qtWindow )
     {
-        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is null"), GetName());
+        // Pseudo windows don't have a valid m_qtWindow, so just return.
         return;
     }
-
-    // Delete only if the qt widget was created or assigned to this base class
-    wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow=%p"), GetName(), m_qtWindow);
-
-    if ( !IsBeingDeleted() )
-    {
-        SendDestroyEvent();
-    }
-
-    // Avoid processing pending events which quite often would lead to crashes after this.
-    QCoreApplication::removePostedEvents(m_qtWindow);
-
-    // Block signals because the handlers access members of a derived class.
-    m_qtWindow->blockSignals(true);
 
     if ( s_capturedWindow == this )
         s_capturedWindow = nullptr;
 
-    DestroyChildren(); // This also destroys scrollbars
+    SendDestroyEvent();
 
-    if (m_qtWindow)
-        QtStoreWindowPointer( GetHandle(), nullptr );
+    QtStoreWindowPointer( GetHandle(), nullptr );
 
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(nullptr);
 #endif
+
+    DestroyChildren(); // This also destroys scrollbars
 
     delete m_qtWindow;
 }
