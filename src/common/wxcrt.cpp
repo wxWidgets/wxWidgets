@@ -810,6 +810,7 @@ wxCRT_StrftimeW(wchar_t *s, size_t maxsize, const wchar_t *fmt, const struct tm 
 }
 #endif // !wxCRT_StrftimeW
 
+#if !defined(wxCRT_StrtoullA) || !defined(wxCRT_StrtoullW)
 template<typename T>
 static wxULongLong_t
 wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
@@ -923,7 +924,9 @@ static wxULongLong_t wxCRT_DoStrtoull(const T* nptr, T** endptr, int base)
 
     return uval;
 }
+#endif // !defined(wxCRT_StrtoullA) || !defined(wxCRT_StrtoullW)
 
+#if !defined(wxCRT_StrtollA) || !defined(wxCRT_StrtollW)
 template<typename T>
 static wxLongLong_t wxCRT_DoStrtoll(const T* nptr, T** endptr, int base)
 {
@@ -953,6 +956,7 @@ static wxLongLong_t wxCRT_DoStrtoll(const T* nptr, T** endptr, int base)
 
     return val;
 }
+#endif // !defined(wxCRT_StrtollA) || !defined(wxCRT_StrtollW)
 
 #ifndef wxCRT_StrtollA
 wxLongLong_t wxCRT_StrtollA(const char* nptr, char** endptr, int base)
