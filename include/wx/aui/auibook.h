@@ -631,22 +631,7 @@ private:
                       int tab_page_idx, // Can be -1 to append.
                       bool select);
 
-    // More convenient version of FindTab(): returns all the results instead of
-    // requiring output parameters for returning some of them.
-    //
-    // Note that TabInfo returned by FindTab() is normally always valid.
-    struct TabInfo : wxAuiNotebookPosition
-    {
-        TabInfo() = default;
-
-        TabInfo(wxAuiTabCtrl* tabCtrl_, int tabIdx_, wxAuiNotebookPage* info)
-            : wxAuiNotebookPosition{tabCtrl_, tabIdx_}, pageInfo(info)
-        {
-        }
-
-        // Information about the page or nullptr if not found.
-        wxAuiNotebookPage* pageInfo = nullptr;
-    };
+    struct TabInfo;
 
     TabInfo FindTab(wxWindow* page) const;
 

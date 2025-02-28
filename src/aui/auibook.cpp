@@ -1856,6 +1856,23 @@ const int wxAuiBaseTabCtrlId = 5380;
 
 // -- wxAuiNotebook class implementation --
 
+// More convenient version of FindTab(): returns all the results instead of
+// requiring output parameters for returning some of them.
+//
+// Note that TabInfo returned by FindTab() is normally always valid.
+struct wxAuiNotebook::TabInfo : wxAuiNotebookPosition
+{
+    TabInfo() = default;
+
+    TabInfo(wxAuiTabCtrl* tabCtrl_, int tabIdx_, wxAuiNotebookPage* info)
+        : wxAuiNotebookPosition{tabCtrl_, tabIdx_}, pageInfo(info)
+    {
+    }
+
+    // Information about the page or nullptr if not found.
+    wxAuiNotebookPage* pageInfo = nullptr;
+};
+
 #define EVT_AUI_RANGE(id1, id2, event, func) \
     wx__DECLARE_EVT2(event, id1, id2, wxAuiNotebookEventHandler(func))
 
