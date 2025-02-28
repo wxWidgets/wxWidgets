@@ -44,24 +44,6 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
     const bool isVertical = IsVertical();
     m_widget = gtk_separator_new(GtkOrientation(isVertical));
     g_object_ref(m_widget);
-    if (isVertical)
-    {
-        if (size.x == -1)
-        {
-            wxSize new_size( size );
-            new_size.x = 4;
-            SetSize( new_size );
-        }
-    }
-    else
-    {
-        if (size.y == -1)
-        {
-            wxSize new_size( size );
-            new_size.y = 4;
-            SetSize( new_size );
-        }
-    }
 
     m_parent->DoAddChild( this );
 
