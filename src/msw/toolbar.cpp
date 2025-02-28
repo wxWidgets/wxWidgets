@@ -475,7 +475,8 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
     // default and so looks very ugly in dark mode.
     if ( wxMSWDarkMode::IsActive() )
     {
-        COLORSCHEME colScheme{sizeof(COLORSCHEME)};
+        COLORSCHEME colScheme;
+        colScheme.dwSize = sizeof(COLORSCHEME);
         colScheme.clrBtnHighlight =
         colScheme.clrBtnShadow = wxSysColourToRGB(wxSYS_COLOUR_WINDOW);
         ::SendMessage(GetHwnd(), TB_SETCOLORSCHEME, 0, (LPARAM)&colScheme);
@@ -1732,7 +1733,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                                   (WPARAM)nmtbcd->nmcd.dwItemSpec, (LPARAM)&bi);
                 if ( itemIndex >= 0 && bi.fsStyle & TBSTYLE_DROPDOWN )
                 {
-                    RECT ddrc = { 0 };
+                    RECT ddrc = { };
                     ::SendMessage(GetHwnd(), TB_GETITEMDROPDOWNRECT,
                                   (WPARAM)itemIndex, (LPARAM)&ddrc);
 

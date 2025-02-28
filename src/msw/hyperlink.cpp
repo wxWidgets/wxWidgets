@@ -171,7 +171,7 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
 
 bool wxHyperlinkCtrl::MSWAreCustomColoursEnabled() const
 {
-    LITEM litem = { 0 };
+    LITEM litem = { };
     litem.mask = LIF_ITEMINDEX | LIF_STATE;
     litem.stateMask = LIS_DEFAULTCOLORS;
     if ( !::SendMessage(GetHwnd(), LM_GETITEM, 0, (LPARAM)&litem) )
@@ -189,7 +189,7 @@ void wxHyperlinkCtrl::MSWEnableCustomColours()
     // need to explicitly enable this for them to be used.
     if ( !MSWAreCustomColoursEnabled() )
     {
-        LITEM litem = { 0 };
+        LITEM litem = { };
         litem.mask = LIF_ITEMINDEX | LIF_STATE;
         litem.state =
         litem.stateMask = LIS_DEFAULTCOLORS;

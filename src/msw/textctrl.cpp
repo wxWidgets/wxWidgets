@@ -1144,8 +1144,7 @@ wxString wxTextCtrl::GetRTFValue() const
     buffer.reserve(GetLastPosition() * 2);
 
     // Use a EDITSTREAMCALLBACK to stream text out from the control.
-    EDITSTREAM es{ 0 };
-    es.dwError = 0;
+    EDITSTREAM es = { };
     es.pfnCallback = MSWEditStreamOutCallback;
     // our callback will write to a char buffer (i.e., std::string)
     es.dwCookie = reinterpret_cast<DWORD_PTR>(&buffer);
@@ -1174,7 +1173,7 @@ void wxTextCtrl::SetRTFValue(const wxString& val)
 {
     wxCHECK_RET(IsRich(), "RTF support is only available for rich controls!");
 
-    SETTEXTEX textInfo{ 0 };
+    SETTEXTEX textInfo = { };
     textInfo.flags = ST_DEFAULT | ST_UNICODE;
     textInfo.codepage = 1200;
 
