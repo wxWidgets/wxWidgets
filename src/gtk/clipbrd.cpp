@@ -551,7 +551,7 @@ bool wxClipboard::DoIsSupported(const wxDataFormat& format)
     wxLogTrace(TRACE_CLIPBOARD, wxT("Checking if format %s is available"),
                format.GetId());
 
-    return DoGetTarget(format) != 0;
+    return DoGetTarget(format) != nullptr;
 }
 
 GdkAtom wxClipboard::DoGetTarget(const wxDataFormat& format)
@@ -572,7 +572,7 @@ GdkAtom wxClipboard::DoGetTarget(const wxDataFormat& format)
     }
 
     if ( !m_formatSupported )
-        return 0;
+        return nullptr;
 
     // This could have been changed by GTKOnTargetReceived().
     return m_targetRequested;

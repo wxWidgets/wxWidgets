@@ -984,12 +984,12 @@ void wxThreadInternal::Cleanup(wxThread *thread)
 // ----------------------------------------------------------------------------
 
 wxThreadInternal::wxThreadInternal()
+    : m_threadId()
 {
     m_state = STATE_NEW;
     m_created = false;
     m_cancelled = false;
     m_prio = wxPRIORITY_DEFAULT;
-    m_threadId = 0;
     m_exitcode = nullptr;
 
     // set to true only when the thread starts waiting on m_semSuspend

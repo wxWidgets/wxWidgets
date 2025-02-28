@@ -31,7 +31,9 @@
 #endif
 
 wxGCC_WARNING_SUPPRESS(cast-qual)
+wxGCC_WARNING_SUPPRESS(zero-as-null-pointer-constant)
 #include <gst/player/player.h>      // main gstreamer player header
+wxGCC_WARNING_RESTORE()
 wxGCC_WARNING_RESTORE()
 
 //=============================================================================
