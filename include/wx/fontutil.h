@@ -24,10 +24,6 @@
     #include "wx/msw/wrapwin.h"
 #endif
 
-#if defined(__WXQT__)
-    #include <QtGui/QFont>
-#endif
-
 #if defined(__WXOSX__)
 #include "wx/osx/core/cfref.h"
 #endif
@@ -140,7 +136,12 @@ private:
 
 public :
 #elif defined(__WXQT__)
-    QFont m_qtFont;
+    wxNativeFontInfo();
+    wxNativeFontInfo(const wxNativeFontInfo&);
+    ~wxNativeFontInfo();
+    wxNativeFontInfo& operator=(const wxNativeFontInfo&);
+
+    QFont& m_qtFont;
 #else // other platforms
     //
     //  This is a generic implementation that should work on all ports
@@ -158,8 +159,10 @@ public :
     wxFontEncoding encoding;
 #endif // platforms
 
+#ifndef __WXQT__
     // default ctor (default copy ctor is ok)
     wxNativeFontInfo() { Init(); }
+#endif
 
 #if wxUSE_PANGO
 private:

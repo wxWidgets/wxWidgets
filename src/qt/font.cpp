@@ -383,8 +383,26 @@ wxFontFamily wxFont::DoGetFamily() const
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
 
-void wxNativeFontInfo::Init()
+wxNativeFontInfo::wxNativeFontInfo()
+    : m_qtFont(*new QFont)
 {
+}
+
+wxNativeFontInfo::wxNativeFontInfo(const wxNativeFontInfo& that)
+    : m_qtFont(*new QFont(that.m_qtFont))
+{
+}
+
+wxNativeFontInfo::~wxNativeFontInfo()
+{
+    delete &m_qtFont;
+}
+
+wxNativeFontInfo& wxNativeFontInfo::operator=(const wxNativeFontInfo& that)
+{
+    if (this != &that)
+        m_qtFont = that.m_qtFont;
+    return *this;
 }
 
 double wxNativeFontInfo::GetFractionalPointSize() const
