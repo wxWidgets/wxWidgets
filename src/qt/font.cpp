@@ -18,7 +18,7 @@
 #include "wx/qt/private/converter.h"
 
 // Older versions of QT don't define all the QFont::Weight enum values, so just
-// do it ourselves here for all case instead.
+// do it ourselves here for all cases instead.
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
 #define wxQFontEnumOrInt(a, b) a
 #else
@@ -566,7 +566,13 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 
 void wxNativeFontInfo::SetNumericWeight(int weight)
 {
-    m_qtFont.setWeight(ConvertFontWeight(weight));
+#if QT_VERSION_MAJOR >= 6
+    const auto qtWeight = static_cast<QFont::Weight>(ConvertFontWeight(weight));
+#else
+    const auto qtWeight = ConvertFontWeight(weight);
+#endif
+
+    m_qtFont.setWeight(qtWeight);
 }
 
 void wxNativeFontInfo::SetUnderlined(bool underlined)
