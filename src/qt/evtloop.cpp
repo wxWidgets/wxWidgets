@@ -126,8 +126,15 @@ int wxQtEventLoopBase::DoRun()
 
 bool wxQtEventLoopBase::Pending() const
 {
-    QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
-    return instance->hasPendingEvents();
+    // Note that we are not using any of the QAbstractEventDispatcher::hasPendingEvents()
+    // or QCoreApplication::hasPendingEvents() functions here to check for pending events,
+    // as the functions were deprecated in Qt5.3 and removed entirely in Qt6 due to their
+    // unreliable way to check for pending events according to the Qt developers.
+    //
+    // So, in the absence of a replacement for these functions, this function is useless
+    // under wxQt as it just returns false.
+
+    return false;
 }
 
 bool wxQtEventLoopBase::Dispatch()

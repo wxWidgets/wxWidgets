@@ -133,6 +133,8 @@ public:
         Return true if any events are available.
 
         If this method returns @true, calling Dispatch() will not block.
+
+        @note This function always returns @false under wxQt since 3.3.0
      */
     virtual bool Pending() const = 0;
 
