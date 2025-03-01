@@ -18,7 +18,6 @@
 #include "wx/dynarray.h"
 #include "wx/arrstr.h"
 #include "wx/datetime.h"
-#include "wx/list.h"
 #include "wx/gdicmn.h"
 #include "wx/filesys.h"
 #include "wx/bitmap.h"

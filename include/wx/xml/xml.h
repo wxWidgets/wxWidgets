@@ -17,7 +17,6 @@
 
 #include "wx/string.h"
 #include "wx/object.h"
-#include "wx/list.h"
 #include "wx/textbuf.h"
 #include "wx/versioninfo.h"
 #include "wx/filefn.h"

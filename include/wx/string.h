@@ -27,10 +27,7 @@
 #endif
 
 #include <string.h>
-#include <stdio.h>
 #include <stdarg.h>
-#include <limits.h>
-#include <stdlib.h>
 
 #include "wx/chartype.h"    // for wxChar
 #include "wx/wxcrtbase.h"   // for wxChar, wxStrlen() etc.

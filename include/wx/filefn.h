@@ -10,7 +10,6 @@
 #ifndef   _FILEFN_H_
 #define   _FILEFN_H_
 
-#include "wx/list.h"
 #include "wx/arrstr.h"
 
 #include <time.h>
