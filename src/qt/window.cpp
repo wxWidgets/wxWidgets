@@ -1724,7 +1724,11 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
 
     // Use screen position as the event might originate from a different
     // Qt window than this one.
+#if QT_VERSION_MAJOR >= 6
+    const wxPoint mousePos = ScreenToClient(wxQtConvertPoint(event->globalPosition().toPoint()));
+#else
     const wxPoint mousePos = ScreenToClient(wxQtConvertPoint(event->globalPos()));
+#endif
 
     wxMouseEvent e( wxType );
     e.SetEventObject(this);
