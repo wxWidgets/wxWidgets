@@ -24,6 +24,13 @@
 // redeclare wxEVT_TEXT_ENTER here instead of including "wx/textctrl.h"
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TEXT_ENTER, wxCommandEvent);
 
+// The parameter of QWidget::enterEvent() is changed to QEnterEvent in Qt6
+#if QT_VERSION_MAJOR >= 6
+using wxQtEnterEvent = QEnterEvent;
+#else
+using wxQtEnterEvent = QEvent;
+#endif
+
 class QPaintEvent;
 
 
@@ -151,18 +158,6 @@ protected:
     //wxDropFilesEvent
     //virtual void dropEvent ( QDropEvent * event ) { }
 
-    //wxMouseEvent
-    virtual void enterEvent ( QEvent * event ) override
-    {
-        if ( !this->GetHandler() )
-            return;
-
-        if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
-            Widget::enterEvent(event);
-        else
-            event->accept();
-    }
-
     //wxFocusEvent.
     virtual void focusInEvent ( QFocusEvent * event ) override
     {
@@ -219,6 +214,18 @@ protected:
 
         if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
             Widget::keyReleaseEvent(event);
+        else
+            event->accept();
+    }
+
+    //wxMouseEvent
+    virtual void enterEvent ( wxQtEnterEvent * event ) override
+    {
+        if ( !this->GetHandler() )
+            return;
+
+        if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
+            Widget::enterEvent(event);
         else
             event->accept();
     }
