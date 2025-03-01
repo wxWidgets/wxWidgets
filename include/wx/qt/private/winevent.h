@@ -411,7 +411,12 @@ protected:
 
                 // Use screen position as the event might originate from a different
                 // Qt window than this one.
-                wxPoint2DDouble pt = wxQtConvertPointF(tp.screenPos().toPoint());
+#if QT_VERSION_MAJOR >= 6
+                const auto screenPos = tp.globalPosition();
+#else
+                const auto screenPos = tp.screenPos();
+#endif
+                wxPoint2DDouble pt = wxQtConvertPointF(screenPos.toPoint());
                 wxPoint ref = pt.GetFloor();
 
                 evt.SetPosition(win->ScreenToClient(ref) + (pt - ref));
