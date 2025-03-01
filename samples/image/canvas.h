@@ -39,6 +39,7 @@ private:
     wxBitmap  my_horse_pnm;
     wxBitmap  my_horse_tiff;
     wxBitmap  my_horse_tga;
+    wxBitmap  my_horse_webp;
     wxBitmap  my_horse_xpm;
     wxBitmap  my_horse_ico32;
     wxBitmap  my_horse_ico16;
