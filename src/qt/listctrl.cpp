@@ -1138,8 +1138,11 @@ protected:
             {
                 m_isDragging = false;
 
+#if QT_VERSION_MAJOR >= 6
+                const ListEventData eventData { m_parent->columnAt(event->position().x()), -1 };
+#else
                 const ListEventData eventData { m_parent->columnAt(event->x()), -1 };
-
+#endif
                 m_parent->EmitListEvent(wxEVT_LIST_COL_END_DRAG, QModelIndex(), &eventData);
             }
 
