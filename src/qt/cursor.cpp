@@ -110,7 +110,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
     {
     case wxCURSOR_BLANK:
     {
-        GetHandle() = QBitmap();
+        GetHandle() = QCursor();
         return;
     }
 //    case wxCURSOR_ARROW:
