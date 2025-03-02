@@ -427,7 +427,7 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_frame = nullptr;
     m_dockConstraintX = 0.3;
     m_dockConstraintY = 0.3;
-    m_hintFadeMax = 128;
+    m_hintFadeMax = 64;
 
     m_reserved = nullptr;
     m_currentDragItem = -1;
