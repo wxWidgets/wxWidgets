@@ -71,7 +71,6 @@ jobs:
       - name: Run httpbin
         run: |
             $env:PATH += ";${env:HOME}\go\bin"
-            ls $env:HOME\go\bin
             go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
             ls $env:HOME\go\bin
             go-httpbin --help
