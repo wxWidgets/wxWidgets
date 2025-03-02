@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Patriccollu di Santa Maria è Sichè <Patriccollu [at] gmail [dot] com>, 2022-2023.
+# Patriccollu di Santa Maria è Sichè <Patriccollu [at] gmail [dot] com>, 2022-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets in Corsican\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 16:44+0100\n"
-"PO-Revision-Date: 2023-07-07 01:15+0200\n"
+"PO-Revision-Date: 2025-03-02 15:21+0100\n"
 "Last-Translator: Patriccollu di Santa Maria è Sichè <https://github.com/"
 "Patriccollu/Lingua_Corsa-Infurmatica/#readme>\n"
 "Language-Team: Patriccollu di Santa Maria è Sichè\n"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.3.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.5.2\n"
 
 #: ../include/wx/defs.h:2596
 msgid "All files (*.*)|*.*"
@@ -1129,7 +1129,7 @@ msgstr "U ducumentu deve esse chjosu."
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr "Fiascu di l’arregistramentu di %s ; vulete pruvà torna ?"
+msgstr "Fiascu à l’arregistramentu di %s ; vulete pruvà torna ?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
@@ -1350,27 +1350,25 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" è dinù, u schedariu di cunfigurazione esistente hè statu rinuminatu in "
+"« %s » è ùn pò micca esse rinuminatu cum’ellu era nanzu ; ci vole à "
+"rinuminallu à u so chjassu d’origine « %s »"
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "È inchjude quelli schedarii :\n"
+msgstr " per via di quellu sbagliu :\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Fiascu per leghje u schedariu di testu « %s »."
+msgstr "fiascu per rinuminà u schedariu esistente"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Fiascu per ottene u cartulare di travagliu"
+msgstr "fiascu per creà u cartulare di schedariu novu"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr ""
-"Fiascu per definisce a vista di u web à u livellu di simulazione mudernu"
+msgstr "fiascu per dispiazzà u schedariu versu u locu novu"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1433,9 +1431,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "U nome d’elementu di cunfigurazione ùn pò micca principià cù « %c »."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Ùn si pò micca creà l’oggettu di cunfigurazione di grafia."
+msgstr "Ùn si pò micca creà u cartulare di u schedariu di cunfigurazione."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -2498,9 +2495,8 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF : Sbagliu à a scrittura di a fiura."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF : Sbagliu à l’arregistramentu di a fiura."
+msgstr "TIFF : Sbagliu à a squassatura di i dati."
 
 #: ../src/common/init.cpp:173
 #, c-format
@@ -2560,7 +2556,7 @@ msgstr "Fiascu per attribuisce memoria per a scumpressione LZMA."
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr "Fiascu à l'iniziu di a scumpressione LZMA : sbagliu imprevistu %u."
+msgstr "Fiascu à l’iniziu di a scumpressione LZMA : sbagliu imprevistu %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
@@ -2590,7 +2586,7 @@ msgstr "Fiascu per attribuisce memoria per a cumpressione LZMA."
 #: ../src/common/lzmastream.cpp:235
 #, c-format
 msgid "Failed to initialize LZMA compression: unexpected error %u."
-msgstr "Fiascu à l'iniziu di a cumpressione LZMA : sbagliu imprevistu %u."
+msgstr "Fiascu à l’iniziu di a cumpressione LZMA : sbagliu imprevistu %u."
 
 #: ../src/common/lzmastream.cpp:267 ../src/common/lzmastream.cpp:342
 #: ../src/html/chm.cpp:336
@@ -3186,7 +3182,7 @@ msgstr "Ultima pagina"
 
 #: ../src/common/prntbase.cpp:1630 ../src/common/stockitem.cpp:215
 msgid "Zoom Out"
-msgstr "Riduzione"
+msgstr "Riduzzione"
 
 #: ../src/common/prntbase.cpp:1644 ../src/common/stockitem.cpp:214
 msgid "Zoom In"
@@ -3792,7 +3788,7 @@ msgstr "&Riduce"
 
 #: ../src/common/stockitem.cpp:262
 msgid "Show about dialog"
-msgstr "Affissà a finestra d'apprupositu"
+msgstr "Affissà a finestra d’apprupositu"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Copy selection"
@@ -3986,15 +3982,17 @@ msgid "Error: %s (%d)"
 msgstr "Sbagliu : %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "Ùn basta u spaziu discu liberu per u scaricamentu."
+msgstr ""
+"Ùn ci hè abbastanza spaziu discu liberu per scaricà : %llu richiestu ma solu "
+"%llu dispunibule."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Fiascu per creà un nome di schedariu timpurariu"
+msgstr "Ùn si pò micca creà u schedariu timpurariu in %s"
 
 #: ../src/common/webrequest_curl.cpp:1075
 msgid "libcurl could not be initialized"
@@ -4007,36 +4005,37 @@ msgstr "RunScriptAsync ùn hè micca accettatu"
 #: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1075
 #, c-format
 msgid "Error running JavaScript: %s"
-msgstr "Sbagliu à l'esecuzione di JavaScript : %s"
+msgstr "Sbagliu à l’esecuzione di JavaScript : %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Fiascu per creà u cartulare « %s »"
+msgstr "Fiascu per definisce u proxy « %s » : %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so was't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Ùn si pò micca impiegà Chromium perchè libcef.so ùn hè statu caricatu "
+"abbastanza prestu ; ci vole à fà un « relink » di l’appiecazione o impiegà "
+"LD_PRELOAD per caricallu più prestu."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "Ùn si pò inizià OLE"
+msgstr "Ùn si pò micca inizià Chromium"
 
 #: ../src/common/webview_chromium.cpp:1617
 msgid "Show DevTools"
-msgstr ""
+msgstr "Affissà DevTools"
 
 #: ../src/common/webview_chromium.cpp:1618
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Tuttu chjode"
+msgstr "Chjode DevTools"
 
 #: ../src/common/webview_chromium.cpp:1624
 msgid "Inspect"
-msgstr ""
+msgstr "Ispettà"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4199,7 +4198,7 @@ msgstr "sbagliu à a lettura di l’intestatura lucale di u zip"
 
 #: ../src/common/zipstrm.cpp:1964
 msgid "bad zipfile offset to entry"
-msgstr "spustamentu incurrettu di l’elementu in u schedariu zip"
+msgstr "spustime incurrettu di l’elementu in u schedariu zip"
 
 #: ../src/common/zipstrm.cpp:2031
 msgid "stored file length not in Zip header"
@@ -4449,11 +4448,12 @@ msgstr "Diritta"
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
 msgstr ""
+"« %s » ùn hè micca in u furmatu di data aspettatu ; ci vole à stampittallu "
+"cum’è, per indettu, « %s »."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "PCX : fiura inaccettevule"
+msgstr "Data inaccettevule"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4870,36 +4870,38 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Sbagliu accadutu durante a copia dia quadrittera in u preme’papei. Sia e "
+"cellule selezziunate ùn eranu micca appicciate, o ùn ci era nisuna cellula "
+"selezziunata."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Scornu"
+msgstr "Scornu di a quadrittera"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Culonna %u"
+msgstr "Intestatura di culonna %s"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "Intestatura di linea %s"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Culonna %u"
+msgstr "Culonna %s : %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "Linea %i"
+msgstr "Linea %s : %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Linea %s, culonna %s : %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -5299,9 +5301,9 @@ msgid "Custom size"
 msgstr "Dimensione persunalizata"
 
 #: ../src/gtk/print.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Sbagliu durante a stampa : "
+msgstr "Sbagliu durante a stampa : %s"
 
 #: ../src/gtk/print.cpp:813
 msgid "Page Setup"
@@ -5317,10 +5319,14 @@ msgstr ""
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"A definizione di u proxy ùn hè micca accettata da WebKit ; a versione 2.16 "
+"minima hè richiesta."
 
 #: ../src/gtk/webview_webkit2.cpp:1105
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
+"Stu prugramma hè statu custruitu senza piglià in contu a definizione di u "
+"proxy WebKit."
 
 #: ../src/gtk/window.cpp:6249
 msgid ""
@@ -5722,9 +5728,9 @@ msgstr ": u schedariu ùn esiste micca !"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " Fighjulata"
+msgstr "Fighjulata %s"
 
 #: ../src/html/htmprint.cpp:750 ../src/richtext/richtextprint.cpp:615
 msgid ""
@@ -6051,10 +6057,12 @@ msgstr ""
 #: ../src/msw/filedlg.cpp:1233
 msgid "Access to the file system is not allowed from secure desktop."
 msgstr ""
+"L’accessu à u sistema di schedariu ùn hè micca permessu da u scagnu "
+"sicurizatu."
 
 #: ../src/msw/filedlg.cpp:1234
 msgid "Security warning"
-msgstr ""
+msgstr "Avertimentu di sicurità"
 
 #: ../src/msw/filedlg.cpp:1525
 #, c-format
@@ -6111,7 +6119,7 @@ msgstr "Ùn si pò micca creà u cuntestu OpenGL"
 
 #: ../src/msw/glcanvas.cpp:1294
 msgid "Failed to initialize OpenGL"
-msgstr "Fiascu à l'iniziu d’OpenGL"
+msgstr "Fiascu à l’iniziu d’OpenGL"
 
 #: ../src/msw/graphicsd2d.cpp:607
 msgid "Could not register custom DirectWrite font loader."
@@ -6128,7 +6136,7 @@ msgstr ""
 
 #: ../src/msw/helpchm.cpp:55
 msgid "Failed to initialize MS HTML Help."
-msgstr "Fiascu à l'iniziu di l’aiutu MS HTML."
+msgstr "Fiascu à l’iniziu di l’aiutu MS HTML."
 
 #: ../src/msw/iniconf.cpp:458
 #, c-format
@@ -6156,7 +6164,7 @@ msgstr "Musaica &verticale"
 
 #: ../src/msw/mdi.cpp:174
 msgid "&Arrange Icons"
-msgstr "&Aggalabà l'icone"
+msgstr "&Aggalabà l’icone"
 
 #: ../src/msw/mdi.cpp:621
 msgid "Failed to create MDI parent frame."
@@ -6541,6 +6549,8 @@ msgstr "Ùn si pò micca caricà l’icona da « %s »."
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr ""
+"Stu prugramma hè statu custruitu senza piglià in contu a definizione di u "
+"proxy Edge."
 
 #: ../src/msw/webview_ie.cpp:1012
 msgid "Failed to find web view emulation level in the registry"
@@ -6654,7 +6664,7 @@ msgstr "Piattà l’appiecazione"
 #: ../src/osx/menu_osx.cpp:526
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr "Piattà l'altre"
+msgstr "Piattà l’altre"
 
 #: ../src/osx/menu_osx.cpp:528
 msgctxt "macOS menu item"
@@ -6670,7 +6680,7 @@ msgstr "Esce di %s"
 #: ../src/osx/menu_osx.cpp:537
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Esce di l'appiecazione"
+msgstr "Esce di l’appiecazione"
 
 #: ../src/osx/webview_webkit.mm:448
 msgid "Printing is not supported by the system web control"
@@ -7170,12 +7180,12 @@ msgstr "Attiveghja un’umbria."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:211
 msgid "&Horizontal offset:"
-msgstr "Spustamentu &orizuntale :"
+msgstr "Spustime &orizuntale :"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:218
 #: ../src/richtext/richtextbackgroundpage.cpp:220
 msgid "The horizontal offset."
-msgstr "U spustamentu orizuntale."
+msgstr "U spustime orizuntale."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:224
 #: ../src/richtext/richtextbackgroundpage.cpp:227
@@ -7339,12 +7349,12 @@ msgstr "Unità per stu valore."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:234
 msgid "&Vertical offset:"
-msgstr "Spustamentu &verticale :"
+msgstr "Spustime &verticale :"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:241
 #: ../src/richtext/richtextbackgroundpage.cpp:243
 msgid "The vertical offset."
-msgstr "U spustamentu verticale."
+msgstr "U spustime verticale."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:257
 msgid "Shadow c&olour:"
@@ -7839,7 +7849,7 @@ msgstr "U numeru di l’elementu di a lista."
 #: ../src/richtext/richtextliststylepage.cpp:475
 #: ../src/richtext/richtextliststylepage.cpp:477
 msgid "Shows a preview of the bullet settings."
-msgstr "Affisseghja una fighjulata di e preferenze di puce."
+msgstr "Affisseghja una fighjulata di i parametri di puce."
 
 #: ../src/richtext/richtextbulletspage.cpp:276
 #: ../src/richtext/richtextliststylepage.cpp:484
@@ -8077,7 +8087,7 @@ msgstr "Selezziunà per squassà a tagliatura di e parolle."
 #: ../src/richtext/richtextfontpage.cpp:329
 #: ../src/richtext/richtextfontpage.cpp:331
 msgid "Shows a preview of the font settings."
-msgstr "Affisseghja una fighjulata di e preferenze di grafia."
+msgstr "Affisseghja una fighjulata di i parametri di grafia."
 
 #: ../src/richtext/richtextfontpage.cpp:348
 #: ../src/richtext/richtextfontpage.cpp:352
@@ -8195,7 +8205,7 @@ msgstr "&Indeterminatu"
 #: ../src/richtext/richtextliststylepage.cpp:361
 #: ../src/richtext/richtextliststylepage.cpp:363
 msgid "Use the current alignment setting."
-msgstr "Impiegà e preferenze currente d’aliniamentu."
+msgstr "Impiegà u parametru currente d’aliniamentu."
 
 #: ../src/richtext/richtextindentspage.cpp:183
 #: ../src/richtext/richtextliststylepage.cpp:375
@@ -8341,7 +8351,7 @@ msgstr "Framette un saltu di pagina nanzu à u paragrafu."
 #: ../src/richtext/richtextindentspage.cpp:302
 #: ../src/richtext/richtextindentspage.cpp:304
 msgid "Shows a preview of the paragraph settings."
-msgstr "Affisseghja una fighjulata di e preferenze di paragrafu."
+msgstr "Affisseghja una fighjulata di i parametri di paragrafu."
 
 #: ../src/richtext/richtextliststylepage.cpp:182
 msgid "&List level:"
@@ -8874,7 +8884,7 @@ msgstr "U nome di stilu."
 
 #: ../src/richtext/richtextstylepage.cpp:114
 msgid "&Based on:"
-msgstr "&Appughjatu nant'à :"
+msgstr "&Appughjatu nant’à :"
 
 #: ../src/richtext/richtextstylepage.cpp:119
 #: ../src/richtext/richtextstylepage.cpp:121
@@ -8995,7 +9005,7 @@ msgstr "Cliccu per squassà tutte e pusizioni di tabulazione selezziunate."
 #: ../src/univ/theme.cpp:110
 msgid "Failed to initialize GUI: no built-in themes found."
 msgstr ""
-"Fiascu à l'iniziu di l’interfaccia grafica : ùn si pò truvà alcunu tema "
+"Fiascu à l’iniziu di l’interfaccia grafica : ùn si pò truvà alcunu tema "
 "integratu."
 
 #: ../src/univ/themes/gtk.cpp:521
@@ -9380,9 +9390,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "Sbagliu d’analisa XML : « %s » à a linea %d"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "Pagina %d"
+msgstr "Pagina %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
