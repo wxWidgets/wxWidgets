@@ -1742,11 +1742,19 @@ class wxAuiTabFrame : public wxWindow
 {
 public:
 
-    wxAuiTabFrame() = default;
+    wxAuiTabFrame(wxAuiTabCtrl* tabs, const wxSize& size, int tabCtrlHeight) :
+        m_rect(size),
+        m_tabs(tabs),
+        m_tabCtrlHeight(tabCtrlHeight)
+    {
+    }
 
     ~wxAuiTabFrame()
     {
-        delete m_tabs;
+        // use pending delete because sometimes during
+        // window closing, refreshs are pending
+        if (!wxPendingDelete.Member(m_tabs))
+            wxPendingDelete.Append(m_tabs);
     }
 
     void SetTabCtrlHeight(int h)
@@ -1758,9 +1766,6 @@ public:
     // this window, so override it to return the appropriate DPI.
     wxSize GetDPI() const override
     {
-        if (!m_tabs)
-            return wxWindow::GetDPI();
-
         return m_tabs->GetDPI();
     }
 
@@ -1784,9 +1789,6 @@ public:
 
     void DoSizing()
     {
-        if (!m_tabs)
-            return;
-
         if (m_tabs->IsFrozen() || m_tabs->GetParent()->IsFrozen())
             return;
 
@@ -1846,7 +1848,7 @@ public:
 
     wxRect m_rect;
     wxRect m_tab_rect;
-    wxAuiTabCtrl* m_tabs = nullptr;
+    wxAuiTabCtrl* const m_tabs;
     int m_tabCtrlHeight = 0;
 };
 
@@ -2011,18 +2013,15 @@ void wxAuiNotebook::InitNotebook(long style)
 
 wxAuiTabFrame* wxAuiNotebook::CreateTabFrame(wxSize size)
 {
-    wxAuiTabFrame* tabframe = new wxAuiTabFrame;
-    tabframe->SetTabCtrlHeight(m_tabCtrlHeight);
-    tabframe->m_rect = wxRect(wxPoint(0, 0), size);
-    tabframe->m_tabs = new wxAuiTabCtrl(this,
+    auto* const tabs = new wxAuiTabCtrl(this,
                                         m_tabIdCounter++,
                                         wxDefaultPosition,
                                         wxDefaultSize,
                                         wxNO_BORDER|wxWANTS_CHARS);
-    tabframe->m_tabs->SetFlags(m_flags);
-    tabframe->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
+    tabs->SetFlags(m_flags);
+    tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
 
-    return tabframe;
+    return new wxAuiTabFrame(tabs, size, m_tabCtrlHeight);
 }
 
 wxAuiNotebook::~wxAuiNotebook()
@@ -3294,13 +3293,6 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
         if (tab_frame->m_tabs->GetPageCount() == 0)
         {
             m_mgr.DetachPane(tab_frame);
-
-            // use pending delete because sometimes during
-            // window closing, refreshs are pending
-            if (!wxPendingDelete.Member(tab_frame->m_tabs))
-                wxPendingDelete.Append(tab_frame->m_tabs);
-
-            tab_frame->m_tabs = nullptr;
 
             delete tab_frame;
         }
