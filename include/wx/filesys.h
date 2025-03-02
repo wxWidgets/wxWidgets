@@ -16,6 +16,7 @@
 #include "wx/stream.h"
 #include "wx/datetime.h"
 #include "wx/filename.h"
+#include "wx/list.h"
 
 #include <unordered_map>
 

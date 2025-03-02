@@ -14,7 +14,6 @@
 
 #if wxUSE_STREAMS
 
-#include <stdio.h>
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/filefn.h"  // for wxFileOffset, wxInvalidOffset and wxSeekMode

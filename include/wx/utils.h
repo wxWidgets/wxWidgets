@@ -15,7 +15,6 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/object.h"
-#include "wx/list.h"
 #include "wx/filefn.h"
 #include "wx/versioninfo.h"
 #include "wx/meta/implicitconversion.h"
@@ -47,8 +46,6 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
     #include <dirent.h>
     #include <unistd.h>
 #endif
-
-#include <stdio.h>
 
 #include <unordered_map>
 

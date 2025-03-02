@@ -15,8 +15,6 @@
 #include "wx/chartype.h"
 #include "wx/buffer.h"
 
-#include <stdlib.h>
-
 class WXDLLIMPEXP_FWD_BASE wxString;
 
 // the error value returned by wxMBConv methods
