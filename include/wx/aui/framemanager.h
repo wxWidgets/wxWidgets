@@ -46,13 +46,11 @@ enum wxAuiManagerOption
     wxAUI_MGR_VENETIAN_BLINDS_HINT     = 1 << 4,
     wxAUI_MGR_RECTANGLE_HINT           = 1 << 5,
     wxAUI_MGR_HINT_FADE                = 1 << 6,
-    wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
+    wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 0, // For compatibility only.
     wxAUI_MGR_LIVE_RESIZE              = 1 << 8,
 
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
-                        wxAUI_MGR_HINT_FADE |
-                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE |
                         wxAUI_MGR_LIVE_RESIZE
 };
 
