@@ -77,6 +77,22 @@ jobs:
             vsversion: 2019
 
     steps:
+      - name: Run httpbin
+        run: |
+            go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
+            Start-Job -Name wx_httpbin { go-httpbin -host 127.0.0.1 -port 8081 2>&1 > httpbin.log }
+            Start-Sleep -Seconds 5
+            curl.exe --silent --show-error http://127.0.0.1:8081/ip > $null
+            if ($lastExitCode -eq "0") {
+                $env:WX_TEST_WEBREQUEST_URL="http://127.0.0.1:8081"
+            }
+            else {
+                Write-Error "Disabling wxWebRequest tests as launching httpbin failed, log follows:"
+                Get-Content httpbin.log
+                $env:WX_TEST_WEBREQUEST_URL="0"
+            }
+            exit 1
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
