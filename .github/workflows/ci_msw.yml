@@ -66,15 +66,6 @@ jobs:
             platform: 'x64'
             vsversion: 2022
             use_utf8: true
-          - configuration: 'Release'
-            platform: 'arm64'
-            vsversion: 2022
-          - configuration: 'Debug'
-            platform: 'Win32'
-            vsversion: 2019
-          - configuration: 'DLL Release'
-            platform: 'x64'
-            vsversion: 2019
 
     steps:
       - name: Run httpbin
