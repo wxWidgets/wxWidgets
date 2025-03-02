@@ -2870,6 +2870,42 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx) const
     return true;
 }
 
+int
+wxAuiNotebook::GetDropIndex(const wxAuiNotebookPage& page_info,
+                            wxAuiTabCtrl* dest_tabs,
+                            const wxPoint& mouse_screen_pt) const
+{
+    int insert_idx = -1;
+
+    wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
+    if (auto const targetInfo = dest_tabs->TabHitTest(pt))
+    {
+        insert_idx = targetInfo.pos;
+
+        // Check that we don't try to insert a tab between tabs of
+        // inappropriate kind, kinds must always remain in a (non-strict)
+        // decreasing order.
+        if ( insert_idx > 0 )
+        {
+            if ( dest_tabs->GetPage(insert_idx - 1).kind < page_info.kind )
+                return wxNOT_FOUND;
+        }
+
+        if ( page_info.kind < dest_tabs->GetPage(insert_idx).kind )
+            return wxNOT_FOUND;
+    }
+    else // Append the tab if there is no existing tab under it.
+    {
+        insert_idx = dest_tabs->GetPageCount();
+
+        // When appending we need just a single test.
+        if ( dest_tabs->GetPage(insert_idx - 1).kind < page_info.kind )
+            return wxNOT_FOUND;
+    }
+
+    return insert_idx;
+}
+
 wxAuiNotebookPosition wxAuiNotebook::GetPagePosition(size_t page) const
 {
     return FindTab(GetPage(page));
@@ -3198,6 +3234,16 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
 
     if (dest_tabs)
     {
+        if (src_tabs)
+        {
+            const auto& src_page = src_tabs->GetPage(evt.GetSelection());
+            if (GetDropIndex(src_page, dest_tabs, screen_pt) == wxNOT_FOUND)
+            {
+                m_mgr.HideHint();
+                return;
+            }
+        }
+
         m_mgr.UpdateHint(dest_tabs->GetScreenRect());
     }
     else
@@ -3341,31 +3387,9 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             if (dest_tabs == src_tabs)
                 return;
 
-            wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
-            if (auto const targetInfo = dest_tabs->TabHitTest(pt))
-            {
-                insert_idx = targetInfo.pos;
-
-                // Check that we don't try to insert a tab between tabs of
-                // inappropriate kind, kinds must always remain in a (non-strict)
-                // decreasing order.
-                if ( insert_idx > 0 )
-                {
-                    if ( dest_tabs->GetPage(insert_idx - 1).kind < page_info.kind )
-                        return;
-                }
-
-                if ( page_info.kind < dest_tabs->GetPage(insert_idx).kind )
-                    return;
-            }
-            else // Append the tab if there is no existing tab under it.
-            {
-                insert_idx = dest_tabs->GetPageCount();
-
-                // When appending we need just a single test.
-                if ( dest_tabs->GetPage(insert_idx - 1).kind < page_info.kind )
-                    return;
-            }
+            insert_idx = GetDropIndex(page_info, dest_tabs, mouse_screen_pt);
+            if ( insert_idx == wxNOT_FOUND )
+                return;
         }
         else
         {

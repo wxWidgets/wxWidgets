@@ -685,6 +685,13 @@ private:
 
     TabInfo FindTab(wxWindow* page) const;
 
+    // Return the index at which the given page should be inserted in this tab
+    // control if it's dropped at the given (in screen coordinates) point or
+    // wxNOT_FOUND if dropping it is not allowed.
+    int GetDropIndex(const wxAuiNotebookPage& srcPage,
+                     wxAuiTabCtrl* tabCtrl,
+                     const wxPoint& ptScreen) const;
+
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);
     wxDECLARE_EVENT_TABLE();
