@@ -384,6 +384,23 @@ void wxSearchCtrl::PopupSearchMenu()
 
 #endif // wxUSE_MENUS
 
+wxSize wxSearchCtrl::DoGetBestSize() const
+{
+    wxSize size = GTKGetPreferredSize(m_widget);
+
+    // The GtkSearchEntry has a built-in search icon, which is always shown and
+    // can also show "Cancel" icon, but the preferred size doesn't seem to
+    // account for them at all, so ensure we have some reasonable minimum width
+    // no matter what.
+    constexpr int MIN_WIDTH = 100;
+    if ( HasGtkSearchEntry() && size.x < MIN_WIDTH )
+        size.x = MIN_WIDTH;
+
+    size.x += GTKGetEntryMargins(GetEntry()).x;
+
+    return size;
+}
+
 GdkWindow* wxSearchCtrl::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
 #ifdef __WXGTK3__

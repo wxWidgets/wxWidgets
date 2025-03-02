@@ -97,6 +97,8 @@ private:
     }
 
 protected:
+    virtual wxSize DoGetBestSize() const override;
+
     virtual GdkWindow* GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
 private:
