@@ -70,8 +70,10 @@ jobs:
     steps:
       - name: Run httpbin
         run: |
+            go env GOPATH
+            go env GOBIN
             go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
-            $env:PATH += ";$env:HOME\go\bin"
+            $env:PATH += ";${env:GOBIN}"
             go-httpbin --help
             Start-Job -Name wx_httpbin { go-httpbin -host 127.0.0.1 -port 8081 2>&1 > httpbin.log }
             Start-Sleep -Seconds 5
