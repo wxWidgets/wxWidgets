@@ -39,7 +39,14 @@ enum wxAuiManagerOption
     wxAUI_MGR_VENETIAN_BLINDS_HINT     = 1 << 4,
     /// The possible location for docking is indicated by a rectangular outline.
     wxAUI_MGR_RECTANGLE_HINT           = 1 << 5,
-    /// The translucent area where the pane could be docked appears gradually.
+    /**
+        The translucent area where the pane could be docked appears gradually.
+
+        Note that this flag was included in the default flags until wxWidgets
+        3.3.0 but this is not the case in the newer versions. If you'd like to
+        still show the hint progressively, you need to explicitly add it to
+        wxAUI_MGR_DEFAULT.
+     */
     wxAUI_MGR_HINT_FADE                = 1 << 6,
     /// Used in complement of wxAUI_MGR_VENETIAN_BLINDS_HINT to show the hint immediately.
     wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
@@ -50,7 +57,6 @@ enum wxAuiManagerOption
     /// Default behaviour.
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
-                        wxAUI_MGR_HINT_FADE |
                         wxAUI_MGR_NO_VENETIAN_BLINDS_FADE |
                         wxAUI_MGR_LIVE_RESIZE
 };
@@ -141,6 +147,8 @@ enum wxAuiManagerOption
            instead.
     @style{wxAUI_MGR_HINT_FADE}
            The translucent area where the pane could be docked appears gradually.
+           Note that this flag is not included in wxAUI_MGR_DEFAULT since
+           wxWidgets 3.3.0 any longer.
     @style{wxAUI_MGR_NO_VENETIAN_BLINDS_FADE}
            Used in complement of wxAUI_MGR_VENETIAN_BLINDS_HINT to show the
            docking hint immediately.
@@ -152,8 +160,8 @@ enum wxAuiManagerOption
            always enabled in wxGTK3 and wxOSX ports as non-live resizing is not
            implemented in them.
     @style{wxAUI_MGR_DEFAULT}
-           Default behaviour, combines: wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT |
-           wxAUI_MGR_HINT_FADE | wxAUI_MGR_NO_VENETIAN_BLINDS_FADE.
+           Default behaviour, combines ::wxAUI_MGR_ALLOW_FLOATING,
+           ::wxAUI_MGR_TRANSPARENT_HINT and ::wxAUI_MGR_NO_VENETIAN_BLINDS_FADE.
     @endStyleTable
 
     @beginEventEmissionTable{wxAuiManagerEvent}
