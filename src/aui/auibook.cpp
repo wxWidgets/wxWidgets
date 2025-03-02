@@ -3025,14 +3025,17 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
     }
 
 
+    wxRect hintRect;
     if (dest_tabs)
     {
-        m_mgr.UpdateHint(dest_tabs->GetHintScreenRect());
+        hintRect = dest_tabs->GetHintScreenRect();
     }
     else
     {
-        m_mgr.DrawHintRect(m_dummyWnd, client_pt);
+        hintRect = m_mgr.CalculateHintRect(m_dummyWnd, client_pt);
     }
+
+    m_mgr.UpdateHint(hintRect);
 }
 
 
