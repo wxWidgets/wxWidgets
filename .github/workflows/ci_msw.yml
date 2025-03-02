@@ -120,6 +120,21 @@ jobs:
         if: ${{ !contains(matrix.platform, 'arm64') }}
         working-directory: tests
         run: |
+            go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
+            $gopath = $(go env GOPATH)
+            $env:PATH += ";$gopath\bin"
+            Start-Job -Name wx_httpbin { go-httpbin -host 127.0.0.1 -port 8081 2>&1 > httpbin.log }
+            Start-Sleep -Seconds 5
+            curl.exe --silent --show-error http://127.0.0.1:8081/ip > $null
+            if ($lastExitCode -eq "0") {
+                $env:WX_TEST_WEBREQUEST_URL="http://127.0.0.1:8081"
+            }
+            else {
+                Write-Error "Disabling wxWebRequest tests as launching httpbin failed, log follows:"
+                Get-Content httpbin.log
+                $env:WX_TEST_WEBREQUEST_URL="0"
+            }
+
             .\vc*msw*\test.exe
 
       - name: Build GUI tests
