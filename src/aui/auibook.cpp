@@ -3328,6 +3328,8 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
 
     if ((m_flags & wxAUI_NB_TAB_SPLIT) && m_tabs.GetPageCount() >= 2)
     {
+        wxAuiNotebookPage page_info = src_tabs->GetPage(evt.GetSelection());
+
         // If the pointer is in an existing tab frame, do a tab insert
         wxWindow* hit_wnd = ::wxFindWindowAtPoint(mouse_screen_pt);
         wxAuiTabFrame* tab_frame = (wxAuiTabFrame*)GetTabFrameFromTabCtrl(hit_wnd);
@@ -3343,6 +3345,26 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             if (auto const targetInfo = dest_tabs->TabHitTest(pt))
             {
                 insert_idx = targetInfo.pos;
+
+                // Check that we don't try to insert a tab between tabs of
+                // inappropriate kind, kinds must always remain in a (non-strict)
+                // decreasing order.
+                if ( insert_idx > 0 )
+                {
+                    if ( dest_tabs->GetPage(insert_idx - 1).kind < page_info.kind )
+                        return;
+                }
+
+                if ( page_info.kind < dest_tabs->GetPage(insert_idx).kind )
+                    return;
+            }
+            else // Append the tab if there is no existing tab under it.
+            {
+                insert_idx = dest_tabs->GetPageCount();
+
+                // When appending we need just a single test.
+                if ( dest_tabs->GetPage(insert_idx - 1).kind < page_info.kind )
+                    return;
             }
         }
         else
@@ -3363,12 +3385,12 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                           mouse_client_pt);
             m_mgr.Update();
             dest_tabs = new_tabs->m_tabs;
+            insert_idx = 0;
         }
 
 
 
         // remove the page from the source tabs
-        wxAuiNotebookPage page_info = src_tabs->GetPage(evt.GetSelection());
         page_info.active = false;
         src_tabs->RemovePage(page_info.window);
         if (src_tabs->GetPageCount() > 0)
@@ -3380,8 +3402,6 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
 
 
         // add the page to the destination tabs
-        if (insert_idx == -1)
-            insert_idx = dest_tabs->GetPageCount();
         dest_tabs->InsertPage(page_info, insert_idx);
 
         if (src_tabs->GetPageCount() == 0)
