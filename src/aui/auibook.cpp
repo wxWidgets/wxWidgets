@@ -1210,6 +1210,9 @@ void wxAuiTabCtrl::DoEndDragging()
 
 void wxAuiTabCtrl::DoApplyRect(const wxRect& rect, int tabCtrlHeight)
 {
+    // Save the full rectangle for GetHintScreenRect().
+    m_fullRect = rect;
+
     // Save the height of a single tab row before possibly changing it below in
     // multi-line case.
     SetRowHeight(tabCtrlHeight);
@@ -1235,6 +1238,13 @@ void wxAuiTabCtrl::DoApplyRect(const wxRect& rect, int tabCtrlHeight)
 
     Refresh();
     Update();
+}
+
+wxRect wxAuiTabCtrl::GetHintScreenRect() const
+{
+    wxRect rect = m_fullRect;
+    GetParent()->ClientToScreen(&rect.x, &rect.y);
+    return rect;
 }
 
 void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
@@ -2968,20 +2978,22 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
         // make sure we are not over the hint window
         if (!wxDynamicCast(tab_ctrl, wxFrame))
         {
+            wxAuiTabCtrl* dest_tabs = nullptr;
             while (tab_ctrl)
             {
-                if (wxDynamicCast(tab_ctrl, wxAuiTabCtrl))
+                dest_tabs = wxDynamicCast(tab_ctrl, wxAuiTabCtrl);
+                if (dest_tabs)
                     break;
                 tab_ctrl = tab_ctrl->GetParent();
             }
 
-            if (tab_ctrl)
+            if (dest_tabs)
             {
                 wxAuiNotebook* nb = (wxAuiNotebook*)tab_ctrl->GetParent();
 
                 if (nb != this)
                 {
-                    m_mgr.UpdateHint(tab_ctrl->GetScreenRect());
+                    m_mgr.UpdateHint(dest_tabs->GetHintScreenRect());
                     return;
                 }
             }
@@ -3015,7 +3027,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
 
     if (dest_tabs)
     {
-        m_mgr.UpdateHint(dest_tabs->GetScreenRect());
+        m_mgr.UpdateHint(dest_tabs->GetHintScreenRect());
     }
     else
     {
