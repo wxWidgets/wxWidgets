@@ -47,6 +47,11 @@ struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
     // If this vector is empty, it means that the tab control contains all
     // notebook pages in natural order.
     std::vector<int> pages;
+
+    // Vectors contain indices of locked and pinned pages, if any, i.e. both of
+    // them can be empty.
+    std::vector<int> locked;
+    std::vector<int> pinned;
 };
 
 // This struct contains the pane name and information about its layout that can

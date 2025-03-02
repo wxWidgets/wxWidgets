@@ -121,6 +121,13 @@ Changes in behaviour not resulting in compilation errors
   under all platforms instead of behaving as SetValue() under MSW and doing
   nothing elsewhere.
 
+- If you have a custom class deriving from wxAuiGenericTabArt, possibly
+  indirectly, e.g. via wxAuiMSWTabArt, you need to update it to override the
+  new virtual functions DrawPageTab() and GetPageTabSize() instead of
+  overriding the old DrawTab() and GetTabSize(). Note that this is not needed
+  if your class inherits directly from wxAuiTabArt, as it will continue to work
+  in this case (but switching to the new functions is still recommended).
+
 - The meaning of page index in wxAuiNotebook has changed if the pages have
   been reordered (see wxAUI_NB_TAB_MOVE) and now always refers to the page
   logical index, which is not affected by reordering. To get the position of

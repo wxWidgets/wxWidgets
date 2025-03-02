@@ -51,6 +51,8 @@ enum wxAuiNotebookOption
     wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 12,
     wxAUI_NB_MIDDLE_CLICK_CLOSE  = 1 << 13,
     wxAUI_NB_MULTILINE           = 1 << 14,
+    wxAUI_NB_PIN_ON_ACTIVE_TAB   = 1 << 15,
+    wxAUI_NB_UNPIN_ON_ALL_PINNED = 1 << 16,
 
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
@@ -90,6 +92,37 @@ private:
 };
 
 
+class WXDLLIMPEXP_AUI wxAuiTabContainerButton
+{
+public:
+    wxAuiTabContainerButton() = default;
+
+    wxAuiTabContainerButton(
+            int id_,
+            int location_,
+            wxAuiPaneButtonState curState_ = wxAUI_BUTTON_STATE_NORMAL
+        ) : id(id_), curState(curState_), location(location_)
+    {
+    }
+
+    int id = 0;               // button's id
+    int curState = 0;         // current state (normal, hover, pressed, etc.)
+    int location = 0;         // buttons location (wxLEFT, wxRIGHT, or wxCENTER)
+    wxBitmapBundle bitmap;    // button's hover bitmap
+    wxBitmapBundle disBitmap; // button's disabled bitmap
+    wxRect rect;          // button's hit rectangle
+};
+
+
+// Possible tab states.
+enum class wxAuiTabKind
+{
+    Normal, // Can be closed and dragged by user.
+    Pinned, // Can be closed but can't be dragged. Can be unpinned by user.
+    Locked  // Can't be closed, dragged nor unlocked by user.
+};
+
+
 class WXDLLIMPEXP_AUI wxAuiNotebookPage
 {
 public:
@@ -97,24 +130,18 @@ public:
     wxString caption;     // caption displayed on the tab
     wxString tooltip;     // tooltip displayed when hovering over tab title
     wxBitmapBundle bitmap;// tab's bitmap
-    wxRect rect;          // tab's hit rectangle
+    wxAuiTabKind kind = wxAuiTabKind::Normal; // tab's kind
+
+    wxRect rect;          // tab's hit rectangle (only used internally)
     bool active = false;  // true if the page is currently active
 
     // These fields are internal, don't use them.
     bool hover = false;   // true if mouse hovering over tab
     bool rowEnd = false;  // true if the tab is the last in the row
-};
 
-class WXDLLIMPEXP_AUI wxAuiTabContainerButton
-{
-public:
-
-    int id;               // button's id
-    int curState;        // current state (normal, hover, pressed, etc.)
-    int location;         // buttons location (wxLEFT, wxRIGHT, or wxCENTER)
-    wxBitmapBundle bitmap;    // button's hover bitmap
-    wxBitmapBundle disBitmap; // button's disabled bitmap
-    wxRect rect;          // button's hit rectangle
+    // This vector contains per-page buttons, i.e. "close" and, optionally,
+    // "pin" buttons. It can be empty if none are used.
+    std::vector<wxAuiTabContainerButton> buttons;
 };
 
 
@@ -150,6 +177,7 @@ public:
     bool AddPage(const wxAuiNotebookPage& info);
     bool InsertPage(const wxAuiNotebookPage& info, size_t idx);
     bool MovePage(wxWindow* page, size_t newIdx);
+    bool MovePage(size_t oldIdx, size_t newIdx);
     bool RemovePage(wxWindow* page);
     void RemovePageAt(size_t idx);
     bool SetActivePage(wxWindow* page);
@@ -266,6 +294,11 @@ public:
         return LayoutMultiLineTabs(m_rect, wnd);
     }
 
+    // Get the index of the first tab of the given kind or of a different kind,
+    // returning GetPageCount() if there is no such tabs.
+    int GetFirstTabOfKind(wxAuiTabKind kind) const;
+    int GetFirstTabNotOfKind(wxAuiTabKind kind) const;
+
 protected:
 
     virtual void Render(wxDC* dc, wxWindow* wnd);
@@ -277,20 +310,13 @@ protected:
     // Contains pages in the display order.
     wxAuiNotebookPageArray m_pages;
 
-    wxAuiTabContainerButtonArray m_buttons;
-    wxAuiTabContainerButtonArray m_tabCloseButtons;
+    // This vector contains container-level buttons, e.g. left/right scroll
+    // buttons, close button if it's not per-tab, window list button etc.
+    std::vector<wxAuiTabContainerButton> m_buttons;
+
     wxRect m_rect;
     size_t m_tabOffset;
     unsigned int m_flags;
-
-    int GetCloseButtonState(const wxAuiNotebookPage& page) const
-    {
-        return GetCloseButtonState(page.active);
-    }
-
-    // Return wxAUI_BUTTON_STATE_{NORMAL,HIDDEN} corresponding to the current
-    // flags and the state of the page.
-    int GetCloseButtonState(bool isPageActive) const;
 
 private:
     // Return the width that can be used for the tabs, i.e. without the space
@@ -301,6 +327,12 @@ private:
     // on the left and right side.
     void RenderButtons(wxDC& dc, wxWindow* wnd,
                        int& left_buttons_width, int& right_buttons_width);
+
+    // Update the state of the page buttons depending on its state and flags.
+    //
+    // If forceActive is true, the page is always considered as active, see the
+    // comment in LayoutMultiLineTabs() for the reason why this is needed.
+    void UpdateButtonsState(wxAuiNotebookPage& page, bool forceActive = false);
 
     int m_tabRowHeight;
 };
@@ -458,6 +490,9 @@ public:
 
     bool SetPageBitmap(size_t page, const wxBitmapBundle& bitmap);
     wxBitmap GetPageBitmap(size_t pageIdx) const;
+
+    wxAuiTabKind GetPageKind(size_t pageIdx) const;
+    bool SetPageKind(size_t pageIdx, wxAuiTabKind kind);
 
     int SetSelection(size_t newPage) override;
     int GetSelection() const override;
@@ -634,6 +669,13 @@ private:
     struct TabInfo;
 
     TabInfo FindTab(wxWindow* page) const;
+
+    // Return the index at which the given page should be inserted in this tab
+    // control if it's dropped at the given (in screen coordinates) point or
+    // wxNOT_FOUND if dropping it is not allowed.
+    int GetDropIndex(const wxAuiNotebookPage& srcPage,
+                     wxAuiTabCtrl* tabCtrl,
+                     const wxPoint& ptScreen) const;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiNotebook);
