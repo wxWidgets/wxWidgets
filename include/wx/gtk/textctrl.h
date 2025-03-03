@@ -141,7 +141,7 @@ public:
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
 
-    GtkWidget* GetConnectWidget() override;
+    GtkWidget* GetConnectWidget() const override;
 
     void SetUpdateFont(bool WXUNUSED(update)) { }
 

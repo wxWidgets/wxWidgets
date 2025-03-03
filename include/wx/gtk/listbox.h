@@ -84,7 +84,7 @@ public:
 
     // implementation from now on
 
-    virtual GtkWidget *GetConnectWidget() override;
+    virtual GtkWidget *GetConnectWidget() const override;
 
     struct _GtkTreeView   *m_treeview;
     struct _GtkListStore  *m_liststore;

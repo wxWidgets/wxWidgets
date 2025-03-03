@@ -264,7 +264,7 @@ void wxComboBox::GTKEnableEvents()
         (gpointer)gtkcombobox_popupshown_callback, this);
 }
 
-GtkWidget* wxComboBox::GetConnectWidget()
+GtkWidget* wxComboBox::GetConnectWidget() const
 {
     return GTK_WIDGET( GetEntry() );
 }
