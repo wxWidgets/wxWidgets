@@ -292,6 +292,7 @@ void wxGenericAnimationCtrl::SetInactiveBitmap(const wxBitmapBundle &bmp)
 
 void wxGenericAnimationCtrl::FitToAnimation()
 {
+    InvalidateBestSize();
     SetSize(m_animation.GetSize());
 }
 
