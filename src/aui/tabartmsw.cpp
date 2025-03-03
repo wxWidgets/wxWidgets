@@ -103,37 +103,27 @@ void wxAuiMSWTabArt::DrawBackground(wxDC& dc,
     );
 }
 
-void wxAuiMSWTabArt::DrawTab(wxDC& dc,
+int wxAuiMSWTabArt::DrawPageTab(wxDC& dc,
     wxWindow* wnd,
-    const wxAuiNotebookPage& page,
-    const wxRect& in_rect,
-    int close_button_state,
-    wxRect* out_tab_rect,
-    wxRect* out_button_rect,
-    int* x_extent)
+    wxAuiNotebookPage& page,
+    const wxRect& rect)
 {
     if ( !IsThemed() )
     {
-        wxAuiGenericTabArt::DrawTab(dc, wnd, page, in_rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
-        return;
+        return wxAuiGenericTabArt::DrawPageTab(dc, wnd, page, rect);
     }
 
     if ( !m_closeBtnSize.IsFullySpecified() )
         InitSizes(wnd, dc);
 
     // figure out the size of the tab
-    wxSize tabSize = GetTabSize(dc,
-        wnd,
-        page.caption,
-        page.bitmap,
-        page.active,
-        close_button_state,
-        x_extent);
+    int x_extent = 0;
+    wxSize tabSize = GetPageTabSize(dc, wnd, page, &x_extent);
 
     wxCoord tabHeight = tabSize.y;
     wxCoord tabWidth = tabSize.x;
-    wxCoord tabX = in_rect.x;
-    wxCoord tabY = in_rect.y;
+    wxCoord tabX = rect.x;
+    wxCoord tabY = rect.y;
 
     if (!page.active)
     {
@@ -148,8 +138,8 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     }
 
     int clipWidth = tabWidth;
-    if ( tabX + clipWidth > in_rect.x + in_rect.width )
-        clipWidth = (in_rect.x + in_rect.width) - tabX;
+    if ( tabX + clipWidth > rect.x + rect.width )
+        clipWidth = (rect.x + rect.width) - tabX;
 
     wxDCClipper clipper(dc, tabX - wnd->FromDIP(2), tabY, clipWidth + wnd->FromDIP(4), tabHeight);
 
@@ -189,8 +179,43 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
     wxRect textRect = tabRect;
     if ( !page.active )
         textRect.Offset(0, wnd->FromDIP(1));
-    if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
-        textRect.width -= m_closeBtnSize.x + wnd->FromDIP(3);
+
+    for ( auto& button : page.buttons )
+    {
+        if ( button.curState & wxAUI_BUTTON_STATE_HIDDEN )
+            continue;
+
+        switch ( button.id )
+        {
+            case wxAUI_BUTTON_CLOSE:
+                {
+                    wxUxThemeHandle hToolTipTheme(wnd, L"TOOLTIP");
+
+                    int btnState;
+                    if ( button.curState & wxAUI_BUTTON_STATE_HOVER )
+                        btnState = TTCS_HOT;
+                    else if ( button.curState & wxAUI_BUTTON_STATE_PRESSED )
+                        btnState = TTCS_PRESSED;
+                    else
+                        btnState = TTCS_NORMAL;
+
+                    button.rect = wxRect(tabX + tabWidth - m_closeBtnSize.x - wnd->FromDIP(4),
+                        tabY + (tabHeight / 2) - (m_closeBtnSize.y / 2),
+                        m_closeBtnSize.x,
+                        m_closeBtnSize.y);
+
+                    hToolTipTheme.DrawBackground(
+                        GetHdcOf(dc.GetTempHDC()),
+                        button.rect,
+                        TTP_CLOSE,
+                        btnState
+                    );
+                }
+
+                textRect.width -= m_closeBtnSize.x + wnd->FromDIP(3);
+                break;
+        }
+    }
 
     dc.SetFont(wnd->GetFont());
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
@@ -205,36 +230,9 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
         wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
     }
 
-    // draw close button
-    if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
-    {
-        wxUxThemeHandle hToolTipTheme(wnd, L"TOOLTIP");
+    page.rect = wxRect(tabX, tabY, tabWidth, tabHeight);
 
-        int btnState;
-        if ( close_button_state == wxAUI_BUTTON_STATE_HOVER )
-            btnState = TTCS_HOT;
-        else if ( close_button_state == wxAUI_BUTTON_STATE_PRESSED )
-            btnState = TTCS_PRESSED;
-        else
-            btnState = TTCS_NORMAL;
-
-        wxRect rect(tabX + tabWidth - m_closeBtnSize.x - wnd->FromDIP(4),
-            tabY + (tabHeight / 2) - (m_closeBtnSize.y / 2),
-            m_closeBtnSize.x,
-            m_closeBtnSize.y);
-
-        hToolTipTheme.DrawBackground(
-            GetHdcOf(dc.GetTempHDC()),
-            rect,
-            TTP_CLOSE,
-            btnState
-        );
-
-        if ( out_button_rect )
-            *out_button_rect = rect;
-    }
-
-    *out_tab_rect = wxRect(tabX, tabY, tabWidth, tabHeight);
+    return x_extent;
 }
 
 int wxAuiMSWTabArt::GetIndentSize()
@@ -260,16 +258,13 @@ int wxAuiMSWTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
         return wxAuiGenericTabArt::GetAdditionalBorderSpace(wnd);
 }
 
-wxSize wxAuiMSWTabArt::GetTabSize(wxReadOnlyDC& dc,
+wxSize wxAuiMSWTabArt::GetPageTabSize(wxReadOnlyDC& dc,
     wxWindow* wnd,
-    const wxString& caption,
-    const wxBitmapBundle& bitmap,
-    bool active,
-    int close_button_state,
+    const wxAuiNotebookPage& page,
     int* x_extent)
 {
     if ( !IsThemed() )
-        return wxAuiGenericTabArt::GetTabSize(dc, wnd, caption, bitmap, active, close_button_state, x_extent);
+        return wxAuiGenericTabArt::GetPageTabSize(dc, wnd, page, x_extent);
 
     if ( !m_closeBtnSize.IsFullySpecified() )
         InitSizes(wnd, dc);
@@ -277,23 +272,31 @@ wxSize wxAuiMSWTabArt::GetTabSize(wxReadOnlyDC& dc,
     wxCoord textWidth, textHeight, tmp;
 
     dc.SetFont(wnd->GetFont());
-    dc.GetTextExtent(caption, &textWidth, &tmp);
+    dc.GetTextExtent(page.caption, &textWidth, &tmp);
     dc.GetTextExtent("ABCDEFXj", &tmp, &textHeight);
 
     wxCoord tabWidth = wxMax(m_tabSize.x, textWidth);
     wxCoord tabHeight = wxMax(m_tabSize.y, textHeight);
 
     // if the close button is showing, add space for it
-    if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
+    for ( const auto& button : page.buttons )
     {
-        tabWidth += m_closeBtnSize.x;
-        tabHeight = wxMax(tabHeight, m_closeBtnSize.y);
+        if ( button.curState & wxAUI_BUTTON_STATE_HIDDEN )
+            continue;
+
+        switch ( button.id )
+        {
+            case wxAUI_BUTTON_CLOSE:
+                tabWidth += m_closeBtnSize.x;
+                tabHeight = wxMax(tabHeight, m_closeBtnSize.y);
+                break;
+        }
     }
 
     // if there's a bitmap, add space for it
-    if ( bitmap.IsOk() )
+    if ( page.bitmap.IsOk() )
     {
-        const wxSize bitmapSize = bitmap.GetPreferredLogicalSizeFor(wnd);
+        const wxSize bitmapSize = page.bitmap.GetPreferredLogicalSizeFor(wnd);
 
         tabWidth += bitmapSize.x + wnd->FromDIP(3); // bitmap padding
         tabHeight = wxMax(tabHeight, bitmapSize.y + wnd->FromDIP(2));
@@ -314,7 +317,8 @@ wxSize wxAuiMSWTabArt::GetTabSize(wxReadOnlyDC& dc,
             tabWidth = minTabWidth;
     }
 
-    *x_extent = tabWidth;
+    if ( x_extent )
+        *x_extent = tabWidth;
 
     if (tabHeight > m_maxTabHeight)
         m_maxTabHeight = tabHeight;
@@ -441,6 +445,8 @@ bool wxAuiMSWTabArt::IsThemed() const
 {
     return
         m_themed &&
+        !(m_flags & wxAUI_NB_PIN_ON_ACTIVE_TAB) && // We don't draw pin
+        !(m_flags & wxAUI_NB_UNPIN_ON_ALL_PINNED) && // ...and unpin buttons yet
         !(m_flags & wxAUI_NB_BOTTOM); // Native theme does not support bottom tabs
 }
 

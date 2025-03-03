@@ -107,6 +107,8 @@ class MyFrame : public wxFrame
         ID_NotebookWindowList,
         ID_NotebookScrollButtons,
         ID_NotebookTabFixedWidth,
+        ID_NotebookTabPin,
+        ID_NotebookTabUnpin,
         ID_NotebookMultiLine,
         ID_NotebookNextTab,
         ID_NotebookPrevTab,
@@ -118,6 +120,9 @@ class MyFrame : public wxFrame
         ID_NotebookUnsplit,
         ID_NotebookNewTab,
         ID_NotebookDeleteTab,
+        ID_NotebookNormalTab,
+        ID_NotebookPinTab,
+        ID_NotebookLockTab,
         ID_3CHECK,
         ID_UI_2CHECK_UPDATED,
         ID_UI_3CHECK_UPDATED,
@@ -184,12 +189,14 @@ private:
     void OnManagerFlag(wxCommandEvent& evt);
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
+    void OnUpdateTabKindUI(wxUpdateUIEvent& evt);
 
     void OnNotebookNextOrPrev(wxCommandEvent& evt);
     void OnNotebookSplit(wxCommandEvent& evt);
     void OnNotebookUnsplit(wxCommandEvent& evt);
     void OnNotebookNewTab(wxCommandEvent& evt);
     void OnNotebookDeleteTab(wxCommandEvent& evt);
+    void OnNotebookSetTabKind(wxCommandEvent& evt);
 
     void OnPaneClose(wxAuiManagerEvent& evt);
 
@@ -637,6 +644,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_LiveUpdate, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NotebookTabFixedWidth, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookTabPin, MyFrame::OnNotebookFlag)
+    EVT_MENU(ID_NotebookTabUnpin, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookMultiLine, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookNoCloseButton, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookCloseButton, MyFrame::OnNotebookFlag)
@@ -657,6 +666,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookUnsplit, MyFrame::OnNotebookUnsplit)
     EVT_MENU(ID_NotebookNewTab, MyFrame::OnNotebookNewTab)
     EVT_MENU(ID_NotebookDeleteTab, MyFrame::OnNotebookDeleteTab)
+    EVT_MENU(ID_NotebookNormalTab, MyFrame::OnNotebookSetTabKind)
+    EVT_MENU(ID_NotebookPinTab, MyFrame::OnNotebookSetTabKind)
+    EVT_MENU(ID_NotebookLockTab, MyFrame::OnNotebookSetTabKind)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
@@ -672,6 +684,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_UPDATE_UI(ID_NotebookTabFixedWidth, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookTabPin, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookTabUnpin, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookMultiLine, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookNoCloseButton, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookCloseButton, MyFrame::OnUpdateUI)
@@ -682,6 +696,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_NotebookAllowTabSplit, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookScrollButtons, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookWindowList, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookNormalTab, MyFrame::OnUpdateTabKindUI)
+    EVT_UPDATE_UI(ID_NotebookPinTab, MyFrame::OnUpdateTabKindUI)
+    EVT_UPDATE_UI(ID_NotebookLockTab, MyFrame::OnUpdateTabKindUI)
     EVT_UPDATE_UI(ID_AllowFloating, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentHint, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_VenetianBlindsHint, MyFrame::OnUpdateUI)
@@ -725,7 +742,11 @@ MyFrame::MyFrame(wxWindow* parent,
     SetIcon(wxIcon(sample_xpm));
 
     // set up default notebook style
-    m_notebook_style = wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER;
+    m_notebook_style = wxAUI_NB_DEFAULT_STYLE |
+                       wxAUI_NB_TAB_EXTERNAL_MOVE |
+                       wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                       wxAUI_NB_UNPIN_ON_ALL_PINNED |
+                       wxNO_BORDER;
 
     // create menu
     wxMenuBar* mb = new wxMenuBar;
@@ -789,6 +810,8 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
+    notebook_menu->AppendCheckItem(ID_NotebookTabPin, _("Show &Pin Button"));
+    notebook_menu->AppendCheckItem(ID_NotebookTabUnpin, _("Show &Unpin Buttons"));
     notebook_menu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
     notebook_menu->AppendSeparator();
     notebook_menu->Append(ID_NotebookNextTab, _("Switch to next tab\tCtrl-F6"));
@@ -798,6 +821,10 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->Append(ID_NotebookUnsplit, _("&Unsplit Notebook"));
     notebook_menu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
     notebook_menu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
+    notebook_menu->AppendSeparator();
+    notebook_menu->AppendRadioItem(ID_NotebookNormalTab, _("Make Current Tab Normal\tCtrl-0"));
+    notebook_menu->AppendRadioItem(ID_NotebookPinTab, _("Pin Current Tab\tCtrl-1"));
+    notebook_menu->AppendRadioItem(ID_NotebookLockTab, _("Lock Current Tab\tCtrl-2"));
 
     m_perspectives_menu = new wxMenu;
     m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
@@ -1277,6 +1304,14 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     {
         m_notebook_style ^= wxAUI_NB_TAB_FIXED_WIDTH;
     }
+    else if (id == ID_NotebookTabPin)
+    {
+        m_notebook_style ^= wxAUI_NB_PIN_ON_ACTIVE_TAB;
+    }
+    else if (id == ID_NotebookTabUnpin)
+    {
+        m_notebook_style ^= wxAUI_NB_UNPIN_ON_ALL_PINNED;
+    }
     else if (id == ID_NotebookMultiLine)
     {
         m_notebook_style ^= wxAUI_NB_MULTILINE;
@@ -1407,6 +1442,12 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
         case ID_NotebookTabFixedWidth:
             event.Check((m_notebook_style & wxAUI_NB_TAB_FIXED_WIDTH) != 0);
             break;
+        case ID_NotebookTabPin:
+            event.Check((m_notebook_style & wxAUI_NB_PIN_ON_ACTIVE_TAB) != 0);
+            break;
+        case ID_NotebookTabUnpin:
+            event.Check((m_notebook_style & wxAUI_NB_UNPIN_ON_ALL_PINNED) != 0);
+            break;
         case ID_NotebookMultiLine:
             event.Check((m_notebook_style & wxAUI_NB_MULTILINE) != 0);
             break;
@@ -1418,6 +1459,46 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
     }
+}
+
+void MyFrame::OnUpdateTabKindUI(wxUpdateUIEvent& event)
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    if ( !book )
+    {
+        event.Enable(false);
+        return;
+    }
+
+    const auto sel = book->GetSelection();
+    if ( sel == wxNOT_FOUND )
+    {
+        event.Enable(false);
+        return;
+    }
+
+    const int kind = static_cast<int>(book->GetPageKind(sel));
+
+    event.Check(kind == event.GetId() - ID_NotebookNormalTab);
+}
+
+void MyFrame::OnNotebookSetTabKind(wxCommandEvent& event)
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    if ( !book )
+        return;
+
+    const auto sel = book->GetSelection();
+    if ( sel == wxNOT_FOUND )
+        return;
+
+    book->SetPageKind(sel,
+        static_cast<wxAuiTabKind>(event.GetId() - ID_NotebookNormalTab)
+    );
 }
 
 
@@ -1617,21 +1698,9 @@ public:
 
         AddDockLayout(node, tab);
 
-        // We don't need to save the pages order if the vector is empty, this
-        // means that this tab contains all the notebook pages in default order.
-        if ( !tab.pages.empty() )
-        {
-            wxString pagesList;
-            for ( auto page : tab.pages )
-            {
-                if ( !pagesList.empty() )
-                    pagesList << ',';
-
-                pagesList << page;
-            }
-
-            AddChild(node, "pages", pagesList);
-        }
+        AddPagesList(node, "pages", tab.pages);
+        AddPagesList(node, "pinned", tab.pinned);
+        AddPagesList(node, "locked", tab.locked);
 
         m_book->AddChild(node);
     }
@@ -1684,6 +1753,28 @@ private:
         AddChild(node, "position", layout.dock_pos);
         AddChild(node, "proportion", layout.dock_proportion);
         AddChild(node, "size", layout.dock_size);
+    }
+
+    // Helper of SaveNotebookTabControl(): add a node with the given name
+    // containing the comma-separated list of page indices if there are any.
+    void
+    AddPagesList(wxXmlNode* node,
+                 const wxString& name,
+                 const std::vector<int>& pages)
+    {
+        if ( !pages.empty() )
+        {
+            wxString pagesList;
+            for ( auto page : pages )
+            {
+                if ( !pagesList.empty() )
+                    pagesList << ',';
+
+                pagesList << page;
+            }
+
+            AddChild(node, name, pagesList);
+        }
     }
 
 
@@ -1923,12 +2014,25 @@ private:
                 if ( LoadDockLayout(child, tab) )
                     continue;
 
-                if ( child->GetName() != "pages" )
-                    throw std::runtime_error("Unexpected tab child node name");
-
-                for ( const auto& s : wxSplit(child->GetNodeContent(), ',') )
+                const auto& pageIndices = wxSplit(child->GetNodeContent(), ',');
+                if ( child->GetName() == "pages" )
                 {
-                    tab.pages.push_back(GetInt(s));
+                    for ( const auto& s : pageIndices )
+                        tab.pages.push_back(GetInt(s));
+                }
+                else if ( child->GetName() == "pinned" )
+                {
+                    for ( const auto& s : pageIndices )
+                        tab.pinned.push_back(GetInt(s));
+                }
+                else if ( child->GetName() == "locked" )
+                {
+                    for ( const auto& s : pageIndices )
+                        tab.locked.push_back(GetInt(s));
+                }
+                else
+                {
+                    throw std::runtime_error("Unexpected tab child node name");
                 }
             }
 
@@ -2130,8 +2234,25 @@ void MyFrame::OnNotebookTabBackgroundDClick(wxAuiNotebookEvent& WXUNUSED(evt))
         int pos = 0;
         for ( auto idx : book->GetPagesInDisplayOrder(tabCtrl) )
         {
-            pages += wxString::Format("%s %d. %s\n",
+            wxString kind;
+            switch ( book->GetPageKind(idx) )
+            {
+                case wxAuiTabKind::Normal:
+                    kind = "   "; // Don't show anything for normal tabs.
+                    break;
+
+                case wxAuiTabKind::Pinned:
+                    kind = wxString::FromUTF8("\xf0\x9f\x93\x8c"); // U+1F4CC
+                    break;
+
+                case wxAuiTabKind::Locked:
+                    kind = wxString::FromUTF8("\xf0\x9f\x94\x92"); // U+1F512
+                    break;
+            }
+
+            pages += wxString::Format("%s%s%d. %s\n",
                                       idx == sel ? "*" : "  ",
+                                      kind,
                                       pos++,
                                       book->GetPageText(idx));
         }
@@ -2403,7 +2524,8 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    wxBitmapBundle page_bmp = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
 
    ctrl->AddPage(CreateHTMLCtrl(ctrl), "Welcome to wxAUI" , false, page_bmp);
-   ctrl->SetPageToolTip(0, "Welcome to wxAUI (this is a page tooltip)");
+   ctrl->SetPageKind(0, wxAuiTabKind::Locked);
+   ctrl->SetPageToolTip(0, "Note that this page is locked and can't be moved or closed");
 
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 4, 2, 0, 0 );
