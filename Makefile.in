@@ -3798,7 +3798,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/imagtga.h \
 	wx/imagtiff.h \
 	wx/imagxpm.h \
-	wx/imagwebp.h \
 	wx/listbase.h \
 	wx/listbook.h \
 	wx/listctrl.h \
@@ -3915,6 +3914,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/compositebookctrl.h \
 	wx/persist/combobox.h \
 	wx/power.h \
+	wx/imagwebp.h \
+	wx/webpdecoder.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	wx/mediactrl.h \
@@ -4459,7 +4460,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_imagtga.o \
 	monodll_imagtiff.o \
 	monodll_imagxpm.o \
-	monodll_imagwebp.o \
 	monodll_layout.o \
 	monodll_lboxcmn.o \
 	monodll_listctrlcmn.o \
@@ -4589,7 +4589,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_rowheightcache.o \
 	monodll_common_bmpbndl.o \
 	monodll_bmpsvg.o \
-	monodll_powercmn.o
+	monodll_powercmn.o \
+	monodll_webpdecoder.o \
+	monodll_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
@@ -4725,7 +4727,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_imagtga.o \
 	monodll_imagtiff.o \
 	monodll_imagxpm.o \
-	monodll_imagwebp.o \
 	monodll_layout.o \
 	monodll_lboxcmn.o \
 	monodll_listctrlcmn.o \
@@ -4855,7 +4856,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_rowheightcache.o \
 	monodll_common_bmpbndl.o \
 	monodll_bmpsvg.o \
-	monodll_powercmn.o
+	monodll_powercmn.o \
+	monodll_webpdecoder.o \
+	monodll_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
@@ -6226,7 +6229,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_imagtga.o \
 	monolib_imagtiff.o \
 	monolib_imagxpm.o \
-	monolib_imagwebp.o \
 	monolib_layout.o \
 	monolib_lboxcmn.o \
 	monolib_listctrlcmn.o \
@@ -6356,7 +6358,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_rowheightcache.o \
 	monolib_common_bmpbndl.o \
 	monolib_bmpsvg.o \
-	monolib_powercmn.o
+	monolib_powercmn.o \
+	monolib_webpdecoder.o \
+	monolib_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
@@ -6492,7 +6496,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_imagtga.o \
 	monolib_imagtiff.o \
 	monolib_imagxpm.o \
-	monolib_imagwebp.o \
 	monolib_layout.o \
 	monolib_lboxcmn.o \
 	monolib_listctrlcmn.o \
@@ -6622,7 +6625,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_rowheightcache.o \
 	monolib_common_bmpbndl.o \
 	monolib_bmpsvg.o \
-	monolib_powercmn.o
+	monolib_powercmn.o \
+	monolib_webpdecoder.o \
+	monolib_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
@@ -8139,7 +8144,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_imagtga.o \
 	coredll_imagtiff.o \
 	coredll_imagxpm.o \
-	coredll_imagwebp.o \
 	coredll_layout.o \
 	coredll_lboxcmn.o \
 	coredll_listctrlcmn.o \
@@ -8269,7 +8273,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_rowheightcache.o \
 	coredll_common_bmpbndl.o \
 	coredll_bmpsvg.o \
-	coredll_powercmn.o
+	coredll_powercmn.o \
+	coredll_webpdecoder.o \
+	coredll_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
@@ -8405,7 +8411,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_imagtga.o \
 	coredll_imagtiff.o \
 	coredll_imagxpm.o \
-	coredll_imagwebp.o \
 	coredll_layout.o \
 	coredll_lboxcmn.o \
 	coredll_listctrlcmn.o \
@@ -8535,7 +8540,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_rowheightcache.o \
 	coredll_common_bmpbndl.o \
 	coredll_bmpsvg.o \
-	coredll_powercmn.o
+	coredll_powercmn.o \
+	coredll_webpdecoder.o \
+	coredll_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
@@ -9631,7 +9638,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_imagtga.o \
 	corelib_imagtiff.o \
 	corelib_imagxpm.o \
-	corelib_imagwebp.o \
 	corelib_layout.o \
 	corelib_lboxcmn.o \
 	corelib_listctrlcmn.o \
@@ -9761,7 +9767,9 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_rowheightcache.o \
 	corelib_common_bmpbndl.o \
 	corelib_bmpsvg.o \
-	corelib_powercmn.o
+	corelib_powercmn.o \
+	corelib_webpdecoder.o \
+	corelib_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
@@ -9897,7 +9905,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_imagtga.o \
 	corelib_imagtiff.o \
 	corelib_imagxpm.o \
-	corelib_imagwebp.o \
 	corelib_layout.o \
 	corelib_lboxcmn.o \
 	corelib_listctrlcmn.o \
@@ -10027,7 +10034,9 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_rowheightcache.o \
 	corelib_common_bmpbndl.o \
 	corelib_bmpsvg.o \
-	corelib_powercmn.o
+	corelib_powercmn.o \
+	corelib_webpdecoder.o \
+	corelib_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
@@ -19110,9 +19119,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_imagxpm.o: $(srcdir)/src/common/imagxpm.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagxpm.cpp
 
-@COND_USE_GUI_1@monodll_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
-
 @COND_USE_GUI_1@monodll_layout.o: $(srcdir)/src/common/layout.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/layout.cpp
 
@@ -19502,6 +19508,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
+@COND_USE_GUI_1@monodll_webpdecoder.o: $(srcdir)/src/common/webpdecoder.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/webpdecoder.cpp
+
+@COND_USE_GUI_1@monodll_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
@@ -23859,9 +23871,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_imagxpm.o: $(srcdir)/src/common/imagxpm.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagxpm.cpp
 
-@COND_USE_GUI_1@monolib_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
-
 @COND_USE_GUI_1@monolib_layout.o: $(srcdir)/src/common/layout.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/layout.cpp
 
@@ -24251,6 +24260,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
+@COND_USE_GUI_1@monolib_webpdecoder.o: $(srcdir)/src/common/webpdecoder.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/webpdecoder.cpp
+
+@COND_USE_GUI_1@monolib_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
@@ -28683,9 +28698,6 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_imagxpm.o: $(srcdir)/src/common/imagxpm.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagxpm.cpp
 
-@COND_USE_GUI_1@coredll_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
-
 @COND_USE_GUI_1@coredll_layout.o: $(srcdir)/src/common/layout.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/layout.cpp
 
@@ -29075,6 +29087,12 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
+@COND_USE_GUI_1@coredll_webpdecoder.o: $(srcdir)/src/common/webpdecoder.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/webpdecoder.cpp
+
+@COND_USE_GUI_1@coredll_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
 corelib_event.o: $(srcdir)/src/common/event.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
@@ -32397,9 +32415,6 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_imagxpm.o: $(srcdir)/src/common/imagxpm.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagxpm.cpp
 
-@COND_USE_GUI_1@corelib_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
-
 @COND_USE_GUI_1@corelib_layout.o: $(srcdir)/src/common/layout.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/layout.cpp
 
@@ -32789,6 +32804,12 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
+@COND_USE_GUI_1@corelib_webpdecoder.o: $(srcdir)/src/common/webpdecoder.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/webpdecoder.cpp
+
+@COND_USE_GUI_1@corelib_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_ADV
