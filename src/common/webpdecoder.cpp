@@ -13,12 +13,9 @@
 
 #include "wx/webpdecoder.h"
 
-
 wxWebPDecoder::wxWebPDecoder()
 {
-#if wxUSE_LIBWEBP
     wxImage::AddHandler(new wxWEBPHandler);
-#endif
 }
 
 wxWebPDecoder::~wxWebPDecoder()
