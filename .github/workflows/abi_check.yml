@@ -50,7 +50,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: ABI check
 
     steps:
@@ -62,7 +62,7 @@ jobs:
       - name: Install CCache
         uses: hendrikmuhs/ccache-action@v1.2.3
         with:
-          key: ubuntu-22.04-default
+          key: ubuntu-24.04-default
 
       - name: Set up build environment
         run: |
