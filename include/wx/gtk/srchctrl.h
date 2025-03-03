@@ -96,6 +96,10 @@ private:
 #endif // wxUSE_MENUS/!wxUSE_MENUS
     }
 
+protected:
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
+
 private:
     virtual GtkEntry *GetEntry() const wxOVERRIDE
         { return m_entry; }
