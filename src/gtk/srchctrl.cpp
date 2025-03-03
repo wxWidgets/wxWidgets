@@ -16,11 +16,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
+    #include "wx/utils.h"
 #endif //WX_PRECOMP
 
 #include "wx/utils.h"
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
+#include "wx/gtk/private/stylecontext.h"
 
 
 #if GTK_CHECK_VERSION(3,6,0)
@@ -178,6 +180,8 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     PostCreation(size);
 
     gtk_entry_set_text(entry, wxGTK_CONV(value));
+
+    PostCreation(size);
 
     SetHint(_("Search"));
 
@@ -358,5 +362,40 @@ void wxSearchCtrl::PopupSearchMenu()
 }
 
 #endif // wxUSE_MENUS
+
+wxSize wxSearchCtrl::DoGetBestSize() const
+{
+    return DoGetSizeFromTextSize(GetCharWidth() * 8);
+}
+
+wxSize wxSearchCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxSize size(GTKGetPreferredSize(m_widget));
+    size.x += xlen;
+    if (size.y < ylen)
+        size.y = ylen;
+
+#ifdef wxHAS_GTK_SEARCH_ENTRY
+    if (HasGtkSearchEntry() &&
+        gtk_entry_get_icon_storage_type(m_entry, GTK_ENTRY_ICON_SECONDARY) == GTK_IMAGE_EMPTY)
+    {
+        // If text is empty, there is no "clear" icon, and GtkEntry preferred size
+        // does not account for it. So add in size of primary icon as a substitute.
+        GdkPixbuf* pixbuf = gtk_entry_get_icon_pixbuf(m_entry, GTK_ENTRY_ICON_PRIMARY);
+        if (pixbuf)
+            size.x += gdk_pixbuf_get_width(pixbuf);
+
+        // Also account for secondary icon margin
+        wxGtkStyleContext sc(GetContentScaleFactor());
+        sc.Add(GTK_TYPE_ENTRY, "entry", "entry", NULL);
+        sc.Add(GTK_TYPE_IMAGE, "image", "right", NULL);
+        GtkBorder margin;
+        gtk_style_context_get_margin(sc, GTK_STATE_FLAG_NORMAL, &margin);
+        size.x += margin.left + margin.right;
+    }
+#endif // wxHAS_GTK_SEARCH_ENTRY
+
+    return size;
+}
 
 #endif // wxUSE_SEARCHCTRL
