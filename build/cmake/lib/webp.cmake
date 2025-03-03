@@ -39,8 +39,11 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
     mark_as_advanced(WEBP_USE_THREAD)
 
     get_property(webpTargets DIRECTORY "${WEBP_ROOT}" PROPERTY BUILDSYSTEM_TARGETS)
-    foreach(webpTarget IN LISTS webpTargets)
-        set_target_properties(${webpTarget} PROPERTIES FOLDER "Third Party Libraries/WebP")
+    foreach(target_name IN LISTS webpTargets)
+        set_target_properties(${target_name} PROPERTIES
+            FOLDER "Third Party Libraries/WebP"
+            OUTPUT_NAME "${target_name}"
+        )
     endforeach()
 
     set(WebP_LIBRARIES webp webpdemux)
