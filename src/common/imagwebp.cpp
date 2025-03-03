@@ -14,23 +14,15 @@
 
 #if wxUSE_IMAGE && wxUSE_LIBWEBP
 
-#include "wx/imagwebp.h"
-#include "webp/demux.h"
-#include "webp/decode.h"
-#include "webp/encode.h"
-#include <vector>
-
 #ifndef WX_PRECOMP
-    #include "wx/intl.h"
-    #include "wx/log.h"
+#include "wx/log.h"
 #endif
 
-wxWebPAnimationFrame::wxWebPAnimationFrame()
-    : image(wxNullImage)
-    , bgColour(wxNullColour)
-    , duration(0)
-{
-}
+#include "wx/imagwebp.h"
+
+#include <webp/demux.h>
+#include <webp/decode.h>
+#include <webp/encode.h>
 
 //-----------------------------------------------------------------------------
 // wxWEBPHandler
@@ -40,7 +32,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWEBPHandler, wxImageHandler);
 
 #if wxUSE_STREAMS
 
-#include <wx/mstream.h>
+#include "wx/mstream.h"
 #include <memory>
 #include <functional>
 
@@ -127,29 +119,28 @@ namespace
 
     WebPDemuxerPtr CreateDemuxer(wxInputStream& stream, bool verbose = false)
     {
-        wxMemoryOutputStream* mos = new wxMemoryOutputStream;
-        stream.Read(*mos); // this reads the entire file into memory
-        // TODO: Only read data as needed. WebPDemux can operate on partial data.
-        //       Could save some bandwidth with e.g. DoGetImageCount
-        wxStreamBuffer* mosb = mos->GetOutputStreamBuffer();
+        wxMemoryOutputStream mos;
+        stream.Read(mos);
+        wxStreamBuffer* mosb = mos.GetOutputStreamBuffer();
+        if (mosb == nullptr)
+            return nullptr;
+
         WebPData webp_data;
         webp_data.bytes = reinterpret_cast<uint8_t*>(mosb->GetBufferStart());
         webp_data.size = mosb->GetBufferSize();
         WebPDemuxerPtr demux
         (
             WebPDemux(&webp_data),
-            [mos](WebPDemuxer* demux)
+            [](WebPDemuxer* demux)
             {
                 // delete the demuxer
                 WebPDemuxDelete(demux);
-                delete mos;
             }
         );
         if (demux == nullptr)
         {
             // creating the demuxer failed, but the buffers still exist
             // and need to be cleaned up
-            delete mos;
             if (verbose)
             {
                 wxLogError("WebP: WebPDemux failed.");
@@ -189,7 +180,7 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
     else
     {
         // Use animation decoder, always RGBA
-        wxVector<wxWebPAnimationFrame> frames;
+        std::vector<wxWebPAnimationFrame> frames;
         LoadAnimation(frames, stream, verbose);
         if (index < frames.size())
         {
@@ -204,12 +195,12 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
     return ok;
 }
 
-bool wxWEBPHandler::LoadAnimation(wxVector<wxWebPAnimationFrame>& frames, wxInputStream& stream, bool verbose)
+bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxInputStream& stream, bool verbose)
 {
     wxMemoryOutputStream mos;
     stream.Read(mos);
     wxStreamBuffer* mosb = mos.GetOutputStreamBuffer();
-    WebPData webp_data;
+    WebPData webp_data{};
     webp_data.bytes = reinterpret_cast<uint8_t*>(mosb->GetBufferStart());
     webp_data.size = mosb->GetBufferSize();
 
@@ -305,7 +296,7 @@ bool wxWEBPHandler::SaveFile(wxImage *image, wxOutputStream& stream, bool)
     return (output_size > 0 && stream.LastWrite() == output_size);
 }
 
-int wxWEBPHandler::DoGetImageCount(wxInputStream & stream)
+int wxWEBPHandler::DoGetImageCount(wxInputStream& stream)
 {
     int frame_count = -1;
     WebPDemuxerPtr demux = CreateDemuxer(stream);

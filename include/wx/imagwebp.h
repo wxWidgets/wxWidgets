@@ -10,6 +10,7 @@
 #define _WX_IMAGWEBP_H_
 
 #include "wx/image.h"
+#include "wx/colour.h"
 
 //-----------------------------------------------------------------------------
 // wxWEBPHandler
@@ -21,13 +22,11 @@
 #define wxIMAGE_OPTION_WEBP_LOSSLESS wxT("WebPLossless") // 0 = undefined (/mixed), 1 = lossy, 2 = lossless
 
 
-struct WXDLLIMPEXP_CORE wxWebPAnimationFrame
+struct wxWebPAnimationFrame
 {
     wxImage image;
     wxColour bgColour;
-    int duration;
-
-    wxWebPAnimationFrame();
+    int duration = 0;
 };
 
 
@@ -47,7 +46,7 @@ public:
 #if wxUSE_STREAMS
     virtual bool LoadFile(wxImage* image, wxInputStream& stream, bool verbose = true, int index = -1) override;
     virtual bool SaveFile(wxImage* image, wxOutputStream& stream, bool verbose = true) override;
-    virtual bool LoadAnimation(wxVector<wxWebPAnimationFrame>& frames, wxInputStream& stream, bool verbose = true);
+    virtual bool LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxInputStream& stream, bool verbose = true);
 protected:
     virtual bool DoCanRead(wxInputStream& stream) override;
     virtual int DoGetImageCount(wxInputStream& stream) override;
