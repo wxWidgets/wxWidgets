@@ -1226,6 +1226,7 @@ set(GUI_CMN_HDR
     wx/persist/combobox.h
     wx/power.h
     wx/webpdecoder.h
+    wx/imagwebp.h
 )
 
 set(UNIX_SRC

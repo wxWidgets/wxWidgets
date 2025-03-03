@@ -159,6 +159,8 @@
 		97F60B2A9CE93BC8949A8CCD /* LexCrontab.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 16A093604BDB3C22BA66EA89 /* LexCrontab.cxx */; };
 		86AED49CEAFC3637B1F10537 /* dialog_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BDE76674C0F5391BAD2AFA2F /* dialog_osx.cpp */; };
 		0A406D2D1ADA343891E3664C /* powercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */; };
+		9030AB566C8F3B16BDAF5B58 /* webpdecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 856714738E773F72B643A0CB /* webpdecoder.cpp */; };
+		DDF006A98C2030D389D9C6FC /* imagwebp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409BB622FEE832069B4260DD /* imagwebp.cpp */; };
 		F55F3887CDE633D7877C607B /* LexSmalltalk.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 3551A51B4A493090B67CA216 /* LexSmalltalk.cxx */; };
 		87092C0C817D343DAB77E23E /* xh_scwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E97AE22E9F043AB6846B3BE7 /* xh_scwin.cpp */; };
 		0B792C3F31713850818EEFEA /* LexDMAP.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AC62806DE67F33E18C386D4F /* LexDMAP.cxx */; };
@@ -1390,6 +1392,8 @@
 		BAD9A0BFED6A37E4A305E1D7 /* filename.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filename.cpp; path = ../../src/common/filename.cpp; sourceTree = SOURCE_ROOT; };
 		0D9828C9BD9633C1A8F4E0CD /* LexRebol.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexRebol.cxx; path = ../../src/stc/lexilla/lexers/LexRebol.cxx; sourceTree = SOURCE_ROOT; };
 		99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = powercmn.cpp; path = ../../src/common/powercmn.cpp; sourceTree = SOURCE_ROOT; };
+		856714738E773F72B643A0CB /* webpdecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = webpdecoder.cpp; path = ../../src/common/webpdecoder.cpp; sourceTree = SOURCE_ROOT; };
+		409BB622FEE832069B4260DD /* imagwebp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagwebp.cpp; path = ../../src/common/imagwebp.cpp; sourceTree = SOURCE_ROOT; };
 		303ACF199BE431BD891C9301 /* overlaycmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = overlaycmn.cpp; path = ../../src/common/overlaycmn.cpp; sourceTree = SOURCE_ROOT; };
 		1CABAEA3B48333CB88B40F08 /* LexTCMD.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexTCMD.cxx; path = ../../src/stc/lexilla/lexers/LexTCMD.cxx; sourceTree = SOURCE_ROOT; };
 		C466F32CCBD13DBC87285B3D /* helpdata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helpdata.cpp; path = ../../src/html/helpdata.cpp; sourceTree = SOURCE_ROOT; };
@@ -2470,6 +2474,8 @@
 				26CC5C56BD493346B16854F9 /* bmpbndl.cpp */,
 				741E9B48274638CD9DD73698 /* bmpsvg.cpp */,
 				99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */,
+				856714738E773F72B643A0CB /* webpdecoder.cpp */,
+				409BB622FEE832069B4260DD /* imagwebp.cpp */,
 			);
 			name = core;
 			sourceTree = "<group>";
@@ -3518,6 +3524,8 @@
 				DB244DC0A09C379AAA63C0A4 /* bmpbndl.cpp in Sources */,
 				32988828498D32B2B3F8A982 /* bmpsvg.cpp in Sources */,
 				0A406D2D1ADA343891E3664C /* powercmn.cpp in Sources */,
+				9030AB566C8F3B16BDAF5B58 /* webpdecoder.cpp in Sources */,
+				DDF006A98C2030D389D9C6FC /* imagwebp.cpp in Sources */,
 				567A32722BA33AEE9FF93D7C /* fs_inet.cpp in Sources */,
 				65514CD6A9F23ED98436AC02 /* ftp.cpp in Sources */,
 				B84642DA949638A189032CE6 /* http.cpp in Sources */,

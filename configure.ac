@@ -7833,7 +7833,7 @@ if test "$wxUSE_LIBLZMA" = "yes"; then
     fi
 fi
 if test "$wxUSE_LIBWEBP" = "yes"; then
-    dnl no need to check for duplicates since webp is disabled in the our builtin tiff
+    dnl no need to check for duplicates since webp is disabled in our builtin tiff
     WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
 fi
 case "$wxUSE_ZLIB" in

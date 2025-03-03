@@ -231,6 +231,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_exec.o \
 	$(OBJS)\test_gui_fonttest.o \
 	$(OBJS)\test_gui_image.o \
+	$(OBJS)\test_gui_imagwebp.o \
 	$(OBJS)\test_gui_rawbmp.o \
 	$(OBJS)\test_gui_htmlparser.o \
 	$(OBJS)\test_gui_htmlwindow.o \
@@ -570,7 +571,7 @@ data:
 
 data-image-sample: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm horse.webp) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 data-images: 
 	if not exist image mkdir image

@@ -136,6 +136,7 @@ OBJECTS1=fs_inet.obj,\
 		imagtga.obj,\
 		imagtiff.obj,\
 		imagxpm.obj,\
+		imagwebp.obj,\
 		intl.obj,\
 		ipcbase.obj,\
 		layout.obj,\
@@ -198,6 +199,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		validate.obj,\
 		valtext.obj,\
 		variant.obj,\
+		webpdecoder.obj,\
 		wfstream.obj,\
 		wincmn.obj,\
 		wxcrt.obj,\
@@ -393,6 +395,7 @@ SOURCES = \
 		validate.cpp,\
 		valtext.cpp,\
 		variant.cpp,\
+		webpdecoder.cpp,\
 		wfstream.cpp,\
 		wincmn.cpp,\
 		wxcrt.cpp,\
@@ -630,6 +633,7 @@ valgen.obj : valgen.cpp
 validate.obj : validate.cpp
 valtext.obj : valtext.cpp
 variant.obj : variant.cpp
+webpdecoder.obj : webpdecoder.cpp
 wfstream.obj : wfstream.cpp
 wincmn.obj : wincmn.cpp
 wxcrt.obj : wxcrt.cpp

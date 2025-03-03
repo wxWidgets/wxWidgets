@@ -567,8 +567,6 @@
 
 #define wxUSE_LIBTIFF       0
 
-#define wxUSE_LIBWEBP       0
-
 #define wxUSE_NANOSVG       0
 
 #define wxUSE_NANOSVG_EXTERNAL 0
@@ -588,6 +586,8 @@
 #define wxUSE_ICO_CUR       0
 
 #define wxUSE_PALETTE       0
+
+#define wxUSE_LIBWEBP       0
 
 
 #define wxUSE_ALL_THEMES    0
