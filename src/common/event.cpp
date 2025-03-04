@@ -1663,7 +1663,6 @@ bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
     {
         return ProcessEvent(event);
     }
-    else
 #if wxUSE_EXCEPTIONS
     try
     {

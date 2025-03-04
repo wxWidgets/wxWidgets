@@ -506,12 +506,11 @@ void wxThreadInternal::DoThreadOnExit(wxThread *thread)
 {
     if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
     {
-        thread->OnExit();
+        return thread->OnExit();
     }
-    else
     wxTRY
     {
-        thread->OnExit();
+        return thread->OnExit();
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 }
@@ -538,20 +537,17 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 {
     wxON_BLOCK_EXIT1(DoThreadOnExit, thread);
 
-    THREAD_RETVAL rc = THREAD_ERROR_EXIT;
-
     if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
     {
-        rc = DoThreadStartWithoutExceptionHandling(thread);
+        return DoThreadStartWithoutExceptionHandling(thread);
     }
-    else
     wxTRY
     {
-        rc = DoThreadStartWithoutExceptionHandling(thread);
+        return DoThreadStartWithoutExceptionHandling(thread);
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
-    return rc;
+    return THREAD_ERROR_EXIT;
 }
 
 /* static */
