@@ -11,7 +11,7 @@
 
 #if wxUSE_TOOLBAR
 
-#include <QtWidgets/QActionGroup>
+#include <QActionGroup>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolBar>
 
@@ -72,7 +72,7 @@ public:
 private:
     void mouseReleaseEvent( QMouseEvent *event ) override;
     void mousePressEvent( QMouseEvent *event ) override;
-    void enterEvent( QEvent *event ) override;
+    void enterEvent( wxQtEnterEvent *event ) override;
 
     const wxWindowID m_toolId;
 };
@@ -91,11 +91,15 @@ void wxQtToolButton::mousePressEvent( QMouseEvent *event )
     QToolButton::mousePressEvent(event);
     if (event->button() == Qt::RightButton)
     {
+#if QT_VERSION_MAJOR >= 6
+        GetToolBar()->OnRightClick( m_toolId, event->position().x(), event->position().y() );
+#else
         GetToolBar()->OnRightClick( m_toolId, event->x(), event->y() );
+#endif
     }
 }
 
-void wxQtToolButton::enterEvent( QEvent *WXUNUSED(event) )
+void wxQtToolButton::enterEvent( wxQtEnterEvent *WXUNUSED(event) )
 {
     GetToolBar()->OnMouseEnter( m_toolId );
 }

@@ -273,7 +273,9 @@ int wxEventLoopManual::DoRun()
                 // QueueEvent(), so we need to call HasPendingEvents() to check
                 // for them too
                 while ( !m_shouldExit
+#ifndef __WXQT__ // See wxQtEventLoopBase::Pending() in src/qt/evtloop.cpp
                             && !Pending()
+#endif
                                 && !(wxTheApp && wxTheApp->HasPendingEvents())
                                     && ProcessIdle() )
                     ;

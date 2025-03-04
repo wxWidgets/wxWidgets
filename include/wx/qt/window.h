@@ -12,7 +12,6 @@
 #include <memory>
 
 class QShortcut;
-template < class T > class QList;
 
 class QAbstractScrollArea;
 class QPainter;

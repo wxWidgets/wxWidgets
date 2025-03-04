@@ -46,9 +46,15 @@ echo --- Note: ignoring possible test failures under Cygwin
 echo.
 exit /b 0
 
-:cmake_qt
+:cmake_qt5
 PATH=%QT5DIR%\bin;%PATH%
 set QT_QPA_PLATFORM_PLUGIN_PATH=%QT5DIR%\plugins\platforms
+set QT_USE_NATIVE_WINDOWS=1
+goto :cmake
+
+:cmake_qt6
+PATH=%QT6DIR%\bin;%PATH%
+set QT_QPA_PLATFORM_PLUGIN_PATH=%QT6DIR%\plugins\platforms
 set QT_USE_NATIVE_WINDOWS=1
 goto :cmake
 

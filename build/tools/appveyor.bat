@@ -62,10 +62,16 @@ bash -lc "g++ --version"
 bash -lc "LDFLAGS=-L/usr/lib/w32api ./configure --disable-optimise --disable-shared && make -j3 && make -j3 -C tests"
 goto :eof
 
-:cmake_qt
+:cmake_qt5
 set SKIPINSTALL=1
 set QT5DIR=C:\Qt\5.15.2\msvc2019_64
 set CMAKE_CONFIGURE_FLAGS=-DCMAKE_PREFIX_PATH="%QT5DIR%" -DwxBUILD_TOOLKIT="qt"
+goto cmake
+
+:cmake_qt6
+set SKIPINSTALL=1
+set QT6DIR=C:\Qt\6.8.1\msvc2022_64
+set CMAKE_CONFIGURE_FLAGS=-DCMAKE_PREFIX_PATH="%QT6DIR%" -DwxBUILD_TOOLKIT="qt"
 goto cmake
 
 :cmake

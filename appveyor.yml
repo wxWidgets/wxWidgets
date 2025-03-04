@@ -54,12 +54,18 @@ environment:
     SHARED: ON
     CONFIGURATION: Release
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-  - TOOLSET: cmake_qt
+  - TOOLSET: cmake_qt5
     GENERATOR: 'Visual Studio 16 2019'
     ARCH: x64
     SHARED: ON
     CONFIGURATION: Release
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+  - TOOLSET: cmake_qt6
+    GENERATOR: 'Visual Studio 17 2022'
+    ARCH: x64
+    SHARED: ON
+    CONFIGURATION: Release
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
 
 clone_depth: 1
 

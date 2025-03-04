@@ -133,6 +133,8 @@ public:
         Return true if any events are available.
 
         If this method returns @true, calling Dispatch() will not block.
+
+        @note This function always returns @true under wxQt since 3.3.0
      */
     virtual bool Pending() const = 0;
 
@@ -147,6 +149,16 @@ public:
         while (evtloop->Pending())
             evtloop->Dispatch();
         @endcode
+
+        Under wxQt you can simply use:
+
+        @code
+        while (evtloop->Dispatch())
+            ;
+        @endcode
+
+        Because Pending() always returns @true under wxQt and Dispatch()
+        is non-blocking and returns @false if there are no pending events.
 
         @return @false if the event loop should stop and @true otherwise.
 
