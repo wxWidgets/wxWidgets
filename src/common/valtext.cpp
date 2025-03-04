@@ -32,6 +32,7 @@
 
 #include "wx/clipbrd.h"
 #include "wx/combo.h"
+#include "wx/regex.h"
 
 // ----------------------------------------------------------------------------
 // global helpers
@@ -52,13 +53,79 @@ static bool wxIsNumeric(const wxString& val)
 }
 
 // ----------------------------------------------------------------------------
+// wxTextEntryValidator implementation
+// ----------------------------------------------------------------------------
+
+void wxTextEntryValidator::SetWindow(wxWindow* win)
+{
+    wxValidator::SetWindow(win);
+
+    if ( GetTextEntry() )
+    {
+        // Bind event handlers
+        Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPaste, this);
+    }
+    else
+    {
+        wxFAIL_MSG(
+            "wxTextEntryValidator can only be used with wxTextCtrl, wxComboBox "
+            "or wxComboCtrl"
+        );
+    }
+}
+
+wxTextEntry* wxTextEntryValidator::GetTextEntry() const
+{
+#if wxUSE_TEXTCTRL
+    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
+    {
+        return static_cast<wxTextCtrl*>(m_validatorWindow);
+    }
+#endif
+
+#if wxUSE_COMBOBOX
+    if (wxDynamicCast(m_validatorWindow, wxComboBox))
+    {
+        return static_cast<wxComboBox*>(m_validatorWindow);
+    }
+#endif
+
+#if wxUSE_COMBOCTRL
+    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
+    {
+        return static_cast<wxComboCtrl*>(m_validatorWindow);
+    }
+#endif
+
+    return nullptr;
+}
+
+void wxTextEntryValidator::OnPaste(wxClipboardTextEvent& event)
+{
+#if wxUSE_CLIPBOARD
+    wxClipboardLocker lock;
+    wxTextDataObject data;
+    wxTheClipboard->GetData(data);
+
+    if ( !CanPaste(data.GetText()) )
+    {
+        // Skip the call to wxEvent::Skip() below, preventing the normal
+        // paste from happening.
+        return;
+    }
+
+#endif // wxUSE_CLIPBOARD
+
+    event.Skip();
+}
+
+// ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
 wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
-    EVT_TEXT_PASTE(wxID_ANY, wxTextValidator::OnPaste)
 wxEND_EVENT_TABLE()
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
@@ -68,7 +135,7 @@ wxTextValidator::wxTextValidator(long style, wxString *val)
 }
 
 wxTextValidator::wxTextValidator(const wxTextValidator& val)
-    : wxValidator()
+    : wxTextEntryValidator()
 {
     Copy(val);
 }
@@ -91,37 +158,6 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     m_excludes     = val.m_excludes;
 
     return true;
-}
-
-wxTextEntry *wxTextValidator::GetTextEntry()
-{
-#if wxUSE_TEXTCTRL
-    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
-    {
-        return (wxTextCtrl*)m_validatorWindow;
-    }
-#endif
-
-#if wxUSE_COMBOBOX
-    if (wxDynamicCast(m_validatorWindow, wxComboBox))
-    {
-        return (wxComboBox*)m_validatorWindow;
-    }
-#endif
-
-#if wxUSE_COMBOCTRL
-    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
-    {
-        return (wxComboCtrl*)m_validatorWindow;
-    }
-#endif
-
-    wxFAIL_MSG(
-        "wxTextValidator can only be used with wxTextCtrl, wxComboBox, "
-        "or wxComboCtrl"
-    );
-
-    return nullptr;
 }
 
 // Called when the value in the window must be validated.
@@ -300,26 +336,8 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
     event.Skip(false);
 }
 
-void wxTextValidator::OnPaste(wxClipboardTextEvent& event)
+bool wxTextValidator::CanPaste(const wxString& text)
 {
-#if wxUSE_CLIPBOARD
-    // Filter out invalid characters from the clipboard contents as it
-    // shouldn't be possible to sneak them into the control in such a way.
-    //
-    // This seems better than not allowing to paste anything at all if there is
-    // anything invalid on the clipboard, e.g. it is more user-friendly to omit
-    // any trailing spaces in a control not allowing them than to refuse to
-    // paste a string with some spaces into it completely.
-    //
-    // Out of abundance of caution also prefer to let the control do its own
-    // thing if there are no invalid characters at all, as we can be sure it
-    // does the right thing in all cases, while our code might not deal with
-    // some edge cases correctly.
-    wxClipboardLocker lock;
-    wxTextDataObject data;
-    wxTheClipboard->GetData(data);
-    const wxString& text = data.GetText();
-
     wxString valid;
     valid.reserve(text.length());
 
@@ -352,15 +370,10 @@ void wxTextValidator::OnPaste(wxClipboardTextEvent& event)
         if ( entry )
         {
             entry->WriteText(valid);
-
-            // Skip the call to wxEvent::Skip() below, preventing the normal
-            // paste from happening.
-            return;
         }
     }
-#endif // wxUSE_CLIPBOARD
 
-    event.Skip();
+    return !hasInvalid;
 }
 
 bool wxTextValidator::IsValidChar(const wxUniChar& c) const
@@ -428,6 +441,76 @@ bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
 
     return false;
 }
+
+#if wxUSE_REGEX
+// ----------------------------------------------------------------------------
+// wxRegexValidator implementation
+// ----------------------------------------------------------------------------
+wxIMPLEMENT_DYNAMIC_CLASS(wxRegexValidator, wxTextValidator);
+
+wxRegexValidator::wxRegexValidator(long style, wxString* str)
+    : wxTextValidator(style, str)
+{
+}
+
+wxRegexValidator::wxRegexValidator(const wxString& pattern,
+                                           const wxString& purpose,
+                                           long style, wxString* str)
+    : wxTextValidator(style, str)
+{
+    SetRegEx(pattern, purpose);
+}
+
+void wxRegexValidator::SetPurpose(const wxString& purpose)
+{
+    m_purpose = purpose;
+
+    if ( m_purpose.empty() )
+        m_purpose = _("input");
+}
+
+void wxRegexValidator::SetRegEx(const wxString& pattern, const wxString& purpose)
+{
+    m_regex.reset(new wxRegEx);
+
+    // No need to check for a (possible) compilation error here
+    // as the object will be checked for validity when used anyhow.
+    m_regex->Compile(pattern);
+
+    SetPurpose(purpose);
+}
+
+void wxRegexValidator::SetRegEx(wxSharedPtr<wxRegEx> regex, const wxString& purpose)
+{
+    m_regex = regex;
+
+    SetPurpose(purpose);
+}
+
+wxObject* wxRegexValidator::Clone() const
+{
+    return new wxRegexValidator(*this);
+}
+
+wxString wxRegexValidator::IsValid(const wxString& str) const
+{
+    wxASSERT_MSG( (m_regex && m_regex->IsValid()),
+        "wxRegexValidator not properly initialized!" );
+
+    wxString errmsg;
+
+    if ( m_validatorStyle != wxFILTER_NONE )
+        errmsg = wxTextValidator::IsValid(str);
+
+    if ( errmsg.empty() && !m_regex->Matches(str) )
+    {
+        errmsg = wxString::Format(_("'%s' is not a valid %s"), str, m_purpose);
+    }
+
+    return errmsg;
+}
+
+#endif // wxUSE_REGEX
 
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
