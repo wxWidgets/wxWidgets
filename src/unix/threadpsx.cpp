@@ -27,6 +27,7 @@
 
 #include "wx/thread.h"
 #include "wx/except.h"
+#include "wx/sysopt.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -793,6 +794,16 @@ public:
 #endif // wxHAVE_PTHREAD_CLEANUP
 
 private:
+    static void CallThreadEntryWithoutExceptionHandling(wxThreadInternal *pthread,
+                                                        wxThread *thread)
+    {
+        pthread->m_exitcode = thread->Entry();
+
+        wxLogTrace(TRACE_THREADS,
+                   wxT("Thread %p Entry() returned %lu."),
+                   THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+    }
+
     pthread_t     m_threadId;   // id of the thread
     wxThreadState m_state;      // see wxThreadState enum
     int           m_prio;       // in wxWidgets units: from 0 to 100
@@ -879,13 +890,14 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
                    wxT("Thread %p about to enter its Entry()."),
                    THR_ID(pthread));
 
+        if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+        {
+            CallThreadEntryWithoutExceptionHandling(pthread, thread);
+        }
+        else
         wxTRY
         {
-            pthread->m_exitcode = thread->Entry();
-
-            wxLogTrace(TRACE_THREADS,
-                       wxT("Thread %p Entry() returned %lu."),
-                       THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+            CallThreadEntryWithoutExceptionHandling(pthread, thread);
         }
 #ifndef wxNO_EXCEPTIONS
 #ifdef HAVE_ABI_FORCEDUNWIND
@@ -1734,6 +1746,11 @@ void wxThread::Exit(ExitCode status)
     // might deadlock if, for example, it signals a condition in OnExit() (a
     // common case) while the main thread calls any of functions entering
     // m_critsect on us (almost all of them do)
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        OnExit();
+    }
+    else
     wxTRY
     {
         OnExit();
