@@ -892,11 +892,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 
         if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
         {
-            pthread->m_exitcode = thread->Entry();
-
-            wxLogTrace(TRACE_THREADS,
-                       wxT("Thread %p Entry() returned %lu."),
-                       THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+            CallThreadEntryWithoutExceptionHandling(pthread, thread);
         }
         else
         wxTRY
