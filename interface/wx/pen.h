@@ -67,14 +67,14 @@ enum wxPenStyle
 /**
     Possible values for pen quality.
 
-    Pen quality is currently only used in wxMSW, the other ports ignore it and
+    Pen quality is currently only used in wxMSW; the other ports ignore it and
     always use the same default pen quality.
 
-    In wxMSW the choice of quality affects whether "cosmetic" or "geometric"
+    In wxMSW, the choice of quality affects whether "cosmetic" or "geometric"
     native pens are used in situations when both are usable. Notably, for
     dotted and dashed pens of width 1, high quality geometric pens are used by
     default since wxWidgets 3.1.4, while previous versions used lower quality
-    but much faster cosmetic pens. If drawing performance is more important
+    (but much faster) cosmetic pens. If drawing performance is more important
     than the exact appearance of the lines drawn using this pen, low quality
     may be explicitly selected.
 
@@ -151,22 +151,49 @@ enum wxPenCap
 class wxPenInfo
 {
 public:
+    /**
+        Constructor, which can set the colour, width and style for the pen.
+    */
     explicit wxPenInfo(const wxColour& colour = wxColour(),
                        int width = 1,
                        wxPenStyle style = wxPENSTYLE_SOLID);
 
+    /**
+        Sets the colour for the pen.
+    */
     wxPenInfo& Colour(const wxColour& col);
 
+    /**
+        Sets the line width for the pen.
+    */
     wxPenInfo& Width(int width);
 
+    /**
+        Sets the style for the pen.
+    */
     wxPenInfo& Style(wxPenStyle style);
 
+    /**
+        Sets the bitmap used for stippling.
+
+        When the pen is used, a repeating pattern of this bitmap will be drawn.
+    */
     wxPenInfo& Stipple(const wxBitmap& stipple);
 
+    /**
+        Sets the dash pattern used to draw the pen's line.
+    */
     wxPenInfo& Dashes(int nb_dashes, const wxDash *dash);
 
+    /**
+        Sets the join for the pen, which is the appearance of
+        where two lines meet or overlap.
+    */
     wxPenInfo& Join(wxPenJoin join);
 
+    /**
+        Sets the cap (i.e., the end point) for the pen.
+    */
     wxPenInfo& Cap(wxPenCap cap);
 
     /**
@@ -198,16 +225,51 @@ public:
      */
     wxPenInfo& HighQuality();
 
+    /**
+        Returns the pen's colour.
+    */
     wxColour GetColour() const;
+    /**
+        Returns the pen's stipple bitmap.
+    */
     wxBitmap GetStipple() const;
+    /**
+        Returns the pen's style.
+    */
     wxPenStyle GetStyle() const;
+    /**
+        Returns the pen's joining method.
+    */
     wxPenJoin GetJoin() const;
+    /**
+        Returns the pen's cap (i.e., end-point style).
+    */
     wxPenCap GetCap() const;
+    /**
+        Returns the pen's quality.
+    */
     wxPenQuality GetQuality() const;
+    /**
+        Returns the pen's dash pattern and
+        number of dashes in the pattern.
+    */
     int GetDashes(wxDash **ptr);
+    /**
+        Returns the number of dashes in the
+        pen's dash pattern.
+    */
     int GetDashCount() const;
+    /**
+        Returns the pen's dash pattern.
+    */
     wxDash* GetDash() const;
+    /**
+        Returns whether the pen is transparent.
+    */
     bool IsTransparent() const;
+    /**
+        Returns the pen's line width.
+    */
     int GetWidth() const;
 };
 
@@ -216,7 +278,7 @@ public:
 /**
     @class wxPen
 
-    A pen is a drawing tool for drawing outlines. It is used for drawing
+    A pen is a tool for drawing outlines. It is used for drawing
     lines and painting the outline of rectangles, ellipses, etc.
     It has a colour, a width and a style.
 
@@ -229,15 +291,15 @@ public:
 
     An application may wish to dynamically create pens with different characteristics,
     and there is the consequent danger that a large number of duplicate pens will
-    be created. Therefore an application may wish to get a pointer to a pen by using
-    the global list of pens ::wxThePenList, and calling the member function
+    be created. Therefore, an application may wish to get a pointer to a pen by using
+    the global list of pens, ::wxThePenList, and calling the member function
     wxPenList::FindOrCreatePen().
     See wxPenList for more info.
 
     This class uses @ref overview_refcount "reference counting and copy-on-write" internally
     so that assignments between two instances of this class are very cheap.
     You can therefore use actual objects instead of pointers without efficiency problems.
-    If an instance of this class is changed it will create its own data internally
+    If an instance of this class is changed, it will create its own data internally
     so that other instances, which previously shared the data using the reference
     counting, are not affected.
 
@@ -287,7 +349,7 @@ public:
             The style may be one of the ::wxPenStyle values.
 
         @remarks Different versions of Windows and different versions of other
-                 platforms support very different subsets of the styles above
+                 platforms support very different subsets of the styles above,
                  so handle with care.
 
         @see SetStyle(), SetColour(), SetWidth()
@@ -320,7 +382,7 @@ public:
 
     /**
         Returns the pen cap style, which may be one of @c wxCAP_ROUND,
-        @c wxCAP_PROJECTING and @c wxCAP_BUTT.
+        @c wxCAP_PROJECTING or @c wxCAP_BUTT.
 
         The default is @c wxCAP_ROUND.
 
@@ -357,7 +419,7 @@ public:
 
     /**
         Returns the pen join style, which may be one of @c wxJOIN_BEVEL,
-        @c wxJOIN_ROUND and @c wxJOIN_MITER.
+        @c wxJOIN_ROUND or @c wxJOIN_MITER.
 
         The default is @c wxJOIN_ROUND.
 
@@ -427,7 +489,7 @@ public:
 
     /**
         Sets the pen cap style, which may be one of @c wxCAP_ROUND, @c wxCAP_PROJECTING
-        and @c wxCAP_BUTT. The default is @c wxCAP_ROUND.
+        or @c wxCAP_BUTT. The default is @c wxCAP_ROUND.
 
         @see GetCap()
     */
@@ -470,7 +532,7 @@ public:
 
     /**
         Sets the pen join style, which may be one of @c wxJOIN_BEVEL, @c wxJOIN_ROUND
-        and @c wxJOIN_MITER.
+        or @c wxJOIN_MITER.
 
         The default is @c wxJOIN_ROUND.
 
@@ -631,10 +693,10 @@ wxPen* wxLIGHT_GREY_PEN;
     counting mechanism applied to all GDI objects means that some sharing
     of underlying resources is possible. You don't have to keep track of pointers,
     working out when it is safe delete a pen, because the referencing counting does
-    it for you. For example, you can set a pen in a device context, and then
-    immediately delete the pen you passed, because the pen is 'copied'.
+    it for you. For example, you can set a pen in a device context and then
+    immediately delete the pen you passed because the pen is 'copied'.
 
-    So you may find it easier to ignore the pen list, and instead create
+    So you may find it easier to ignore the pen list and instead create
     and copy pens as you see fit. If your Windows resource meter suggests
     your application is using too many resources, you can resort to using
     GDI lists to share objects explicitly.
@@ -655,14 +717,14 @@ class wxPenList
 {
 public:
     /**
-        Constructor. The application should not construct its own pen list:
+        Constructor. The application should not construct its own pen list;
         use the object pointer ::wxThePenList.
     */
     wxPenList();
 
     /**
-        Finds a pen with the specified attributes and returns it, else creates a
-        new pen, adds it to the pen list, and returns it.
+        Finds a pen with the specified attributes and returns it; otherwise,
+        creates a new pen, adds it to the pen list, and returns it.
 
         @param colour
             Colour object.
