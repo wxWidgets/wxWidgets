@@ -18,8 +18,18 @@
 
 #if wxUSE_LIBWEBP
 
-#define wxIMAGE_OPTION_WEBP_QUALITY  wxT("WebPQuality")
-#define wxIMAGE_OPTION_WEBP_LOSSLESS wxT("WebPLossless") // 0 = undefined (/mixed), 1 = lossy, 2 = lossless
+namespace wxWebPImageOptions
+{
+    enum : int
+    {
+        Undefined = 0,
+        Lossy = 1,
+        Lossless = 2
+    };
+}
+
+#define wxIMAGE_OPTION_WEBP_QUALITY  "WebPQuality"
+#define wxIMAGE_OPTION_WEBP_LOSSLESS "WebPLossless"
 
 
 struct wxWebPAnimationFrame
@@ -35,10 +45,10 @@ class WXDLLIMPEXP_CORE wxWEBPHandler : public wxImageHandler
 public:
     inline wxWEBPHandler()
     {
-        m_name = wxT("WebP file");
-        m_extension = wxT("webp");
+        m_name = "WebP file";
+        m_extension = "webp";
         m_type = wxBITMAP_TYPE_WEBP;
-        m_mime = wxT("image/webp");
+        m_mime = "image/webp";
     }
 
     static wxVersionInfo GetLibraryVersionInfo();

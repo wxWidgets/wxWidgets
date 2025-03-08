@@ -288,7 +288,7 @@ bool wxWEBPHandler::SaveFile(wxImage* image, wxOutputStream& stream, bool)
     float quality_factor = 90; // if you change this, update the documentation, too
     if (image->HasOption(wxIMAGE_OPTION_WEBP_QUALITY))
         quality_factor = image->GetOptionInt(wxIMAGE_OPTION_WEBP_QUALITY);
-    bool lossless = image->GetOptionInt(wxIMAGE_OPTION_WEBP_LOSSLESS) == 2;
+    bool lossless = image->GetOptionInt(wxIMAGE_OPTION_WEBP_LOSSLESS) == wxWebPImageOptions::Lossless;
 
     size_t output_size = 0;
     uint8_t* output = nullptr;
