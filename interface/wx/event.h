@@ -1400,11 +1400,22 @@ enum wxKeyCategoryFlags
     26 for Ctrl-Z. This is convenient for terminal-like applications and can be
     completely ignored by all the other ones (if you need to handle Ctrl-A it
     is probably a better idea to use the key event rather than the char one).
-    Notice that currently no translation is done for the presses of @c [, @c
-    \\, @c ], @c ^ and @c _ keys which might be mapped to ASCII values from 27
-    to 31.
+    For completeness, the same translation is done for the presses of @c [, @c
+    \\, @c ], @c ^ and @c _ keys which are mapped to ASCII values from 27 to
+    31.
     Since version 2.9.2, the enum values @c WXK_CONTROL_A - @c WXK_CONTROL_Z
     can be used instead of the non-descriptive constant values 1-26.
+
+    @note Unfortunately, some keys don't generate consistent events when used
+    with the Control key. Notably:
+        - `Ctrl-Backspace` generates events with both key code and Unicode code
+          of ::WXK_DELETE in wxMSW, but ::WXK_BACK in wxGTK.
+        - `Ctrl-Enter` generates events with both key code and Unicode code of
+          ::WXK_CONTROL_J in wxMSW, but ::WXK_RETURN in wxGTK.
+        - `Ctrl-Letter` generates events corresponding to the control code even
+        when the letter is mapped to a non-Latin letter in the current keyboard
+        layout in wxMSW, but doesn't generate any `wxEVT_CHAR` events at all in
+        this case in wxGTK.
 
     Finally, modifier keys only generate key events but no char events at all.
     The modifiers keys are @c WXK_SHIFT, @c WXK_CONTROL, @c WXK_ALT and various
