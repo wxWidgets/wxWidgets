@@ -283,6 +283,7 @@ All (GUI):
 
 wxGTK:
 
+- Many fixes to key event generation (#25053, #25199, #25200).
 - Fix copy-pasting text under more Wayland compositors (Weston, kwin) (#24701).
 - Fix wxDropSource::DoDragDrop() sometimes not returning with Wayland (#25116).
 - Fix insufficient wxStaticBox borders size (#25045).
