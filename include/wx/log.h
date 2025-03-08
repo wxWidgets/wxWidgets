@@ -268,7 +268,7 @@ public:
 private:
     void Copy(const wxLogRecordInfo& other)
     {
-        memcpy(this, &other, sizeof(*this));
+        memcpy((void*)this, &other, sizeof(*this));
         if ( other.m_data )
            m_data = new ExtraData(*other.m_data);
     }
