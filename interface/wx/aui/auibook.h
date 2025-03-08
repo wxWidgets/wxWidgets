@@ -578,11 +578,11 @@ public:
         ones are simply ignored, so it is always possible to reuse the same
         flags for the main wxAuiManager and the one used by the notebook.
 
-        Example of using this function to disable the fade effect for the
-        notebook:
+        Example of using this function to enable the Venetian blinds effect for
+        the notebook:
         @code
             auiNotebook->SetManagerFlags(
-                wxAuiManager::GetManager()->GetFlags() & ~wxAUI_MGR_HINT_FADE
+                wxAuiManager::GetManager()->GetFlags() | ~wxAUI_MGR_VENETIAN_BLINDS_HINT
             );
         @endcode
 

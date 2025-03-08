@@ -427,7 +427,7 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_frame = nullptr;
     m_dockConstraintX = 0.3;
     m_dockConstraintY = 0.3;
-    m_hintFadeMax = 128;
+    m_hintFadeMax = 64;
 
     m_reserved = nullptr;
     m_currentDragItem = -1;
@@ -3446,27 +3446,25 @@ void wxAuiManager::DrawHintRect(wxWindow* pane_window,
                                 const wxPoint& pt,
                                 const wxPoint& offset)
 {
-    const wxRect rect = CalculateHintRect(pane_window, pt, offset);
-    if (rect != m_lastHint)
-        UpdateHint(rect);
+    UpdateHint(CalculateHintRect(pane_window, pt, offset));
 }
 
 void wxAuiManager::UpdateHint(const wxRect& rect)
 {
+    if (rect == m_lastHint)
+        return;
+
+    m_lastHint = rect;
+
     if (rect.IsEmpty())
     {
         HideHint();
     }
     else
     {
-        m_lastHint = rect;
-
         // Decide if we want to fade in the hint and set it to the end value if
         // we don't.
-        if ((m_flags & wxAUI_MGR_HINT_FADE)
-            && !((m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) &&
-                 (m_flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE))
-            )
+        if (m_flags & wxAUI_MGR_HINT_FADE)
             m_hintFadeAmt = 0;
         else
             m_hintFadeAmt = m_hintFadeMax;

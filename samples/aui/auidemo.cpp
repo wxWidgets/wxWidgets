@@ -87,7 +87,6 @@ class MyFrame : public wxFrame
         ID_RectangleHint,
         ID_NoHint,
         ID_HintFade,
-        ID_NoVenetianFade,
         ID_TransparentDrag,
         ID_NoGradient,
         ID_VerticalGradient,
@@ -639,7 +638,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_RectangleHint, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NoHint, MyFrame::OnManagerFlag)
     EVT_MENU(ID_HintFade, MyFrame::OnManagerFlag)
-    EVT_MENU(ID_NoVenetianFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentDrag, MyFrame::OnManagerFlag)
     EVT_MENU(ID_LiveUpdate, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
@@ -705,7 +703,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_RectangleHint, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NoHint, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_HintFade, MyFrame::OnUpdateUI)
-    EVT_UPDATE_UI(ID_NoVenetianFade, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentDrag, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_LiveUpdate, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NoGradient, MyFrame::OnUpdateUI)
@@ -777,7 +774,6 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendSeparator();
     options_menu->AppendCheckItem(ID_HintFade, _("Hint Fade-in"));
     options_menu->AppendCheckItem(ID_AllowFloating, _("Allow Floating"));
-    options_menu->AppendCheckItem(ID_NoVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
     options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
     options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
     // Only show "live resize" toggle if it's actually functional.
@@ -1232,7 +1228,6 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         case ID_AllowFloating: flag = wxAUI_MGR_ALLOW_FLOATING; break;
         case ID_TransparentDrag: flag = wxAUI_MGR_TRANSPARENT_DRAG; break;
         case ID_HintFade: flag = wxAUI_MGR_HINT_FADE; break;
-        case ID_NoVenetianFade: flag = wxAUI_MGR_NO_VENETIAN_BLINDS_FADE; break;
         case ID_AllowActivePane: flag = wxAUI_MGR_ALLOW_ACTIVE_PANE; break;
         case ID_TransparentHint: flag = wxAUI_MGR_TRANSPARENT_HINT; break;
         case ID_VenetianBlindsHint: flag = wxAUI_MGR_VENETIAN_BLINDS_HINT; break;
@@ -1407,9 +1402,6 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_HintFade:
             event.Check((flags & wxAUI_MGR_HINT_FADE) != 0);
-            break;
-        case ID_NoVenetianFade:
-            event.Check((flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE) != 0);
             break;
 
         case ID_NotebookNoCloseButton:

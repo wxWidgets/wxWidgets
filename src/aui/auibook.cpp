@@ -1300,6 +1300,9 @@ void wxAuiTabCtrl::DoEndDragging()
 
 void wxAuiTabCtrl::DoApplyRect(const wxRect& rect, int tabCtrlHeight)
 {
+    // Save the full rectangle for GetHintScreenRect().
+    m_fullRect = rect;
+
     // Save the height of a single tab row before possibly changing it below in
     // multi-line case.
     SetRowHeight(tabCtrlHeight);
@@ -1325,6 +1328,13 @@ void wxAuiTabCtrl::DoApplyRect(const wxRect& rect, int tabCtrlHeight)
 
     Refresh();
     Update();
+}
+
+wxRect wxAuiTabCtrl::GetHintScreenRect() const
+{
+    wxRect rect = m_fullRect;
+    GetParent()->ClientToScreen(&rect.x, &rect.y);
+    return rect;
 }
 
 void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
@@ -1849,11 +1859,19 @@ class wxAuiTabFrame : public wxWindow
 {
 public:
 
-    wxAuiTabFrame() = default;
+    wxAuiTabFrame(wxAuiTabCtrl* tabs, const wxSize& size, int tabCtrlHeight) :
+        m_rect(size),
+        m_tabs(tabs),
+        m_tabCtrlHeight(tabCtrlHeight)
+    {
+    }
 
     ~wxAuiTabFrame()
     {
-        delete m_tabs;
+        // use pending delete because sometimes during
+        // window closing, refreshs are pending
+        if (!wxPendingDelete.Member(m_tabs))
+            wxPendingDelete.Append(m_tabs);
     }
 
     void SetTabCtrlHeight(int h)
@@ -1865,9 +1883,6 @@ public:
     // this window, so override it to return the appropriate DPI.
     wxSize GetDPI() const override
     {
-        if (!m_tabs)
-            return wxWindow::GetDPI();
-
         return m_tabs->GetDPI();
     }
 
@@ -1891,9 +1906,6 @@ public:
 
     void DoSizing()
     {
-        if (!m_tabs)
-            return;
-
         if (m_tabs->IsFrozen() || m_tabs->GetParent()->IsFrozen())
             return;
 
@@ -1953,7 +1965,7 @@ public:
 
     wxRect m_rect;
     wxRect m_tab_rect;
-    wxAuiTabCtrl* m_tabs = nullptr;
+    wxAuiTabCtrl* const m_tabs;
     int m_tabCtrlHeight = 0;
 };
 
@@ -2118,18 +2130,15 @@ void wxAuiNotebook::InitNotebook(long style)
 
 wxAuiTabFrame* wxAuiNotebook::CreateTabFrame(wxSize size)
 {
-    wxAuiTabFrame* tabframe = new wxAuiTabFrame;
-    tabframe->SetTabCtrlHeight(m_tabCtrlHeight);
-    tabframe->m_rect = wxRect(wxPoint(0, 0), size);
-    tabframe->m_tabs = new wxAuiTabCtrl(this,
+    auto* const tabs = new wxAuiTabCtrl(this,
                                         m_tabIdCounter++,
                                         wxDefaultPosition,
                                         wxDefaultSize,
                                         wxNO_BORDER|wxWANTS_CHARS);
-    tabframe->m_tabs->SetFlags(m_flags);
-    tabframe->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
+    tabs->SetFlags(m_flags);
+    tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
 
-    return tabframe;
+    return new wxAuiTabFrame(tabs, size, m_tabCtrlHeight);
 }
 
 wxAuiNotebook::~wxAuiNotebook()
@@ -3204,20 +3213,22 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
         // make sure we are not over the hint window
         if (!wxDynamicCast(tab_ctrl, wxFrame))
         {
+            wxAuiTabCtrl* dest_tabs = nullptr;
             while (tab_ctrl)
             {
-                if (wxDynamicCast(tab_ctrl, wxAuiTabCtrl))
+                dest_tabs = wxDynamicCast(tab_ctrl, wxAuiTabCtrl);
+                if (dest_tabs)
                     break;
                 tab_ctrl = tab_ctrl->GetParent();
             }
 
-            if (tab_ctrl)
+            if (dest_tabs)
             {
                 wxAuiNotebook* nb = (wxAuiNotebook*)tab_ctrl->GetParent();
 
                 if (nb != this)
                 {
-                    m_mgr.UpdateHint(tab_ctrl->GetScreenRect());
+                    m_mgr.UpdateHint(dest_tabs->GetHintScreenRect());
                     return;
                 }
             }
@@ -3249,6 +3260,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
     }
 
 
+    wxRect hintRect;
     if (dest_tabs)
     {
         if (src_tabs)
@@ -3261,12 +3273,14 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
             }
         }
 
-        m_mgr.UpdateHint(dest_tabs->GetScreenRect());
+        hintRect = dest_tabs->GetHintScreenRect();
     }
     else
     {
-        m_mgr.DrawHintRect(m_dummyWnd, client_pt);
+        hintRect = m_mgr.CalculateHintRect(m_dummyWnd, client_pt);
     }
+
+    m_mgr.UpdateHint(hintRect);
 }
 
 
@@ -3537,13 +3551,6 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
         if (tab_frame->m_tabs->GetPageCount() == 0)
         {
             m_mgr.DetachPane(tab_frame);
-
-            // use pending delete because sometimes during
-            // window closing, refreshs are pending
-            if (!wxPendingDelete.Member(tab_frame->m_tabs))
-                wxPendingDelete.Append(tab_frame->m_tabs);
-
-            tab_frame->m_tabs = nullptr;
 
             delete tab_frame;
         }

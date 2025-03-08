@@ -366,6 +366,10 @@ public:
     // Also updates rowEnd for all pages in m_pages when using multiple rows.
     void DoApplyRect(const wxRect& rect, int tabCtrlHeight);
 
+    // Another internal helper: return the hint rectangle corresponding to this
+    // tab control in screen coordinates.
+    wxRect GetHintScreenRect() const;
+
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
@@ -409,6 +413,10 @@ private:
     wxDECLARE_CLASS(wxAuiTabCtrl);
     wxDECLARE_EVENT_TABLE();
 #endif
+
+    // Rectangle corresponding to the full tab control area, including both
+    // tabs (which is this window) and the page area.
+    wxRect m_fullRect;
 };
 
 

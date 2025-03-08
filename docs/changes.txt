@@ -138,6 +138,8 @@ Changes in behaviour not resulting in compilation errors
   page titles, just as the other wx*book classes already did. Double "&"
   in the page text if it should be interpreted as a literal "&".
 
+- wxAUI_MGR_HINT_FADE is not included in default wxAuiManager style any longer,
+  please add it explicitly if you really want to use it.
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
