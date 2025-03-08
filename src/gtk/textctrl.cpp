@@ -1898,7 +1898,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
     key_event.Skip();
 }
 
-GtkWidget* wxTextCtrl::GetConnectWidget()
+GtkWidget* wxTextCtrl::GetConnectWidget() const
 {
     return GTK_WIDGET(m_text);
 }

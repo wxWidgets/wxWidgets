@@ -169,7 +169,7 @@ wxBitmapComboBox::~wxBitmapComboBox()
 {
 }
 
-GtkWidget* wxBitmapComboBox::GetConnectWidget()
+GtkWidget* wxBitmapComboBox::GetConnectWidget() const
 {
     if ( GetEntry() )
         return wxComboBox::GetConnectWidget();

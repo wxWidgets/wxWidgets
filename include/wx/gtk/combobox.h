@@ -123,7 +123,7 @@ public:
 
     virtual void GTKDisableEvents() override;
     virtual void GTKEnableEvents() override;
-    GtkWidget* GetConnectWidget() override;
+    GtkWidget* GetConnectWidget() const override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

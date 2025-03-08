@@ -124,7 +124,7 @@ public:
     virtual bool IsEditable() const override;
     virtual void SetEditable(bool editable) override;
 
-    virtual GtkWidget* GetConnectWidget() override;
+    virtual GtkWidget* GetConnectWidget() const override;
 
 protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
