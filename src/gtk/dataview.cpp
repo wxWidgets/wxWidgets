@@ -4395,6 +4395,9 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem
 {
     wxCHECK_MSG( m_wx_model, nullptr, "no associated model?" );
 
+    if ( !item.IsOk() )
+        return nullptr;
+
     return FindNode( m_wx_model->GetParent(item) );
 }
 
