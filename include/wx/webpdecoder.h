@@ -32,13 +32,13 @@ public:
     virtual wxColour GetTransparentColour(unsigned int frame) const override;
 
     virtual bool Load(wxInputStream& stream) override;
-    bool ConvertToImage(unsigned int frame, wxImage* image) const override;
+    virtual bool ConvertToImage(unsigned int frame, wxImage* image) const override;
 
-    wxAnimationDecoder* Clone() const override
+    virtual wxAnimationDecoder* Clone() const override
     {
         return new wxWebPDecoder;
     }
-    wxAnimationType GetType() const override
+    virtual wxAnimationType GetType() const override
     {
         return wxANIMATION_TYPE_WEBP;
     }

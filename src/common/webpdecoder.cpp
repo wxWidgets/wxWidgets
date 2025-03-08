@@ -15,7 +15,8 @@
 
 wxWebPDecoder::wxWebPDecoder()
 {
-    wxImage::AddHandler(new wxWEBPHandler);
+    if (wxImage::FindHandler(wxBITMAP_TYPE_WEBP) == nullptr)
+        wxImage::AddHandler(new wxWEBPHandler);
 }
 
 wxWebPDecoder::~wxWebPDecoder()
@@ -68,8 +69,11 @@ bool wxWebPDecoder::DoCanRead(wxInputStream& stream) const
 
 bool wxWebPDecoder::Load(wxInputStream& stream)
 {
+    m_frames.clear();
+
     wxWEBPHandler webpHandler;
     webpHandler.LoadAnimation(m_frames, stream);
+
     m_nFrames = m_frames.size();
     if (m_nFrames > 0)
         m_szAnimation = m_frames.front().image.GetSize();

@@ -267,7 +267,7 @@ public:
             stream to be seekable; see wxStreamBase::IsSeekable).
 
         @return Number of available images. For most image handlers, this is 1
-                (exceptions are TIFF and ICO formats as well as animated GIFs
+                (exceptions are TIFF and ICO formats as well as animated GIF and WebP
                 for which this function returns the number of frames in the
                 animation).
     */
@@ -671,9 +671,9 @@ public:
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
         @param index
             Index of the image to load in the case that the image file contains
-            multiple images. This is only used by GIF, ICO and TIFF handlers.
+            multiple images. This is only used by GIF, ICO, TIFF and WebP handlers.
             The default value (-1) means "choose the default image" and is
-            interpreted as the first image (index=0) by the GIF and TIFF handler
+            interpreted as the first image (index=0) by the GIF, TIFF and WebP handlers,
             and as the largest and most colourful one by the ICO handler.
 
         @remarks Depending on how wxWidgets has been configured and by which
@@ -1559,9 +1559,9 @@ public:
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
         @param index
             Index of the image to load in the case that the image file contains
-            multiple images. This is only used by GIF, ICO and TIFF handlers.
+            multiple images. This is only used by GIF, ICO, TIFF and WebP handlers.
             The default value (-1) means "choose the default image" and is
-            interpreted as the first image (index=0) by the GIF and TIFF handler
+            interpreted as the first image (index=0) by the GIF, TIFF and WebP handlers,
             and as the largest and most colourful one by the ICO handler.
 
         @return @true if the operation succeeded, @false otherwise.
@@ -2098,7 +2098,7 @@ public:
         @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
 
         @return Number of available images. For most image handlers, this is 1
-                (exceptions are TIFF and ICO formats as well as animated GIFs
+                (exceptions are TIFF and ICO formats as well as animated GIF and WebP
                 for which this function returns the number of frames in the
                 animation).
     */
