@@ -15,7 +15,7 @@
 #if wxUSE_IMAGE && wxUSE_LIBWEBP
 
 #ifndef WX_PRECOMP
-#include "wx/log.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/imagwebp.h"
@@ -33,125 +33,142 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWEBPHandler, wxImageHandler);
 #if wxUSE_STREAMS
 
 #include "wx/mstream.h"
+
 #include <memory>
 #include <functional>
 
 namespace
 {
-    typedef std::unique_ptr<WebPDemuxer, std::function<void(WebPDemuxer*)>> WebPDemuxerPtr;
-    typedef std::unique_ptr<WebPAnimDecoder, std::function<void(WebPAnimDecoder*)>> WebPAnimDecoderPtr;
+typedef std::unique_ptr<WebPDemuxer, std::function<void(WebPDemuxer*)>> WebPDemuxerPtr;
+typedef std::unique_ptr<WebPAnimDecoder, std::function<void(WebPAnimDecoder*)>> WebPAnimDecoderPtr;
+typedef std::unique_ptr<uint8_t, std::function<void(uint8_t*)>> WebPDecodeRGBAPtr;
 
-    void rgbaToImage(wxImage* image, uint8_t* rgba)
+void rgbaToImage(wxImage* image, uint8_t* rgba)
+{
+    image->InitAlpha();
+    unsigned char* rgb = image->GetData();
+    unsigned char* alpha = image->GetAlpha();
+    size_t pixel_count = (size_t)image->GetWidth() * (size_t)image->GetHeight();
+    size_t rgba_index = 0, rgb_index = 0, alpha_index = 0;
+    for (size_t pixel_counter = 0; pixel_counter < pixel_count; pixel_counter++)
     {
-        image->InitAlpha();
-        unsigned char* rgb = image->GetData();
-        unsigned char* alpha = image->GetAlpha();
-        size_t pixel_count = (size_t)image->GetWidth() * (size_t)image->GetHeight();
-        size_t rgba_index = 0, rgb_index = 0, alpha_index = 0;
-        for (size_t pixel_counter = 0; pixel_counter < pixel_count; pixel_counter++)
-        {
-            rgb[rgb_index++] = rgba[rgba_index++]; // R
-            rgb[rgb_index++] = rgba[rgba_index++]; // G
-            rgb[rgb_index++] = rgba[rgba_index++]; // B
-            alpha[alpha_index++] = rgba[rgba_index++]; // A
-        }
-    }
-
-    void copyImageData(wxImage* to, wxImage& from)
-    {
-        to->Create(from.GetSize(), false);
-        size_t pixel_count = (size_t)from.GetWidth() * (size_t)from.GetHeight();
-        memcpy(to->GetData(), from.GetData(), pixel_count * 3);
-        if (from.HasAlpha())
-        {
-            to->InitAlpha();
-            memcpy(to->GetAlpha(), from.GetAlpha(), pixel_count);
-        }
-    }
-
-    bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
-    {
-        WebPBitstreamFeatures features;
-        VP8StatusCode status = WebPGetFeatures(webp_data->bytes, webp_data->size, &features);
-        if (status != VP8_STATUS_OK)
-        {
-            if (verbose)
-            {
-                wxLogError("WebP: GetFeatures not OK.");
-            }
-            return false;
-        }
-        image->Create(features.width, features.height, false);
-        image->SetOption(wxIMAGE_OPTION_WEBP_LOSSLESS, features.format);
-
-        if (features.has_alpha)
-        {
-            // image has alpha channel. needs to be decoded, then re-ordered.
-            uint8_t* rgba = WebPDecodeRGBA(webp_data->bytes, webp_data->size, &features.width, &features.height);
-            if (rgba == nullptr)
-            {
-                if (verbose)
-                {
-                    wxLogError("WebP: WebPDecodeRGBA failed.");
-                }
-                return false;
-            }
-            rgbaToImage(image, rgba);
-            WebPFree(rgba);
-        }
-        else
-        {
-            // image has no alpha channel. decode into target buffer directly.
-            size_t buffer_size = (size_t)image->GetWidth() * (size_t)image->GetHeight() * 3;
-            int stride = image->GetWidth() * 3;
-            uint8_t* output_buffer = WebPDecodeRGBInto(webp_data->bytes, webp_data->size, image->GetData(), buffer_size, stride);
-            if (output_buffer == nullptr)
-            {
-                if (verbose)
-                {
-                    wxLogError("WebP: WebPDecodeRGBInto failed.");
-                }
-                return false;
-            }
-        }
-        return true;
-    }
-
-    WebPDemuxerPtr CreateDemuxer(wxInputStream& stream, bool verbose = false)
-    {
-        wxMemoryOutputStream mos;
-        stream.Read(mos);
-        wxStreamBuffer* mosb = mos.GetOutputStreamBuffer();
-        if (mosb == nullptr)
-            return nullptr;
-
-        WebPData webp_data;
-        webp_data.bytes = reinterpret_cast<uint8_t*>(mosb->GetBufferStart());
-        webp_data.size = mosb->GetBufferSize();
-        WebPDemuxerPtr demux
-        (
-            WebPDemux(&webp_data),
-            [](WebPDemuxer* demux)
-            {
-                // delete the demuxer
-                WebPDemuxDelete(demux);
-            }
-        );
-        if (demux == nullptr)
-        {
-            // creating the demuxer failed, but the buffers still exist
-            // and need to be cleaned up
-            if (verbose)
-            {
-                wxLogError("WebP: WebPDemux failed.");
-            }
-        }
-        return demux;
+        rgb[rgb_index++] = rgba[rgba_index++]; // R
+        rgb[rgb_index++] = rgba[rgba_index++]; // G
+        rgb[rgb_index++] = rgba[rgba_index++]; // B
+        alpha[alpha_index++] = rgba[rgba_index++]; // A
     }
 }
 
+bool copyImageData(wxImage* to, wxImage& from)
+{
+    if (!to->Create(from.GetSize(), false))
+        return false;
+
+    size_t pixel_count = (size_t)from.GetWidth() * (size_t)from.GetHeight();
+    memcpy(to->GetData(), from.GetData(), pixel_count * 3);
+    if (from.HasAlpha())
+    {
+        to->InitAlpha();
+        memcpy(to->GetAlpha(), from.GetAlpha(), pixel_count);
+    }
+    return true;
+}
+
+bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
+{
+    WebPBitstreamFeatures features;
+    VP8StatusCode status = WebPGetFeatures(webp_data->bytes, webp_data->size, &features);
+    if (status != VP8_STATUS_OK)
+    {
+        if (verbose)
+        {
+            wxLogError("WebP: GetFeatures not OK.");
+        }
+        return false;
+    }
+
+    if (!image->Create(features.width, features.height, false)) {
+        if (verbose)
+        {
+            wxLogError("WebP: wxImage::Create failed.");
+        }
+        return false;
+    }
+    image->SetOption(wxIMAGE_OPTION_WEBP_LOSSLESS, features.format);
+
+    if (features.has_alpha)
+    {
+        // image has alpha channel. needs to be decoded, then re-ordered.
+        WebPDecodeRGBAPtr rgba(
+            WebPDecodeRGBA(webp_data->bytes, webp_data->size, &features.width, &features.height),
+            WebPFree
+        );
+        if (rgba == nullptr)
+        {
+            if (verbose)
+            {
+                wxLogError("WebP: WebPDecodeRGBA failed.");
+            }
+            return false;
+        }
+        rgbaToImage(image, rgba.get());
+    }
+    else
+    {
+        // image has no alpha channel. decode into target buffer directly.
+        size_t buffer_size = (size_t)image->GetWidth() * (size_t)image->GetHeight() * 3;
+        int stride = image->GetWidth() * 3;
+        uint8_t* output_buffer = WebPDecodeRGBInto(webp_data->bytes, webp_data->size, image->GetData(), buffer_size, stride);
+        if (output_buffer == nullptr)
+        {
+            if (verbose)
+            {
+                wxLogError("WebP: WebPDecodeRGBInto failed.");
+            }
+            return false;
+        }
+    }
+    return true;
+}
+
+WebPDemuxerPtr CreateDemuxer(wxMemoryOutputStream& mos, bool verbose = false)
+{
+    wxStreamBuffer* mosb = mos.GetOutputStreamBuffer();
+    if (mosb == nullptr)
+    {
+        if (verbose)
+        {
+            wxLogError("WebP: CreateDemuxer wxStreamBuffer failed.");
+        }
+        return nullptr;
+    }
+
+    WebPData webp_data{};
+    webp_data.bytes = reinterpret_cast<uint8_t*>(mosb->GetBufferStart());
+    webp_data.size = mosb->GetBufferSize();
+
+    WebPDemuxerPtr demux(
+        WebPDemux(&webp_data),
+        WebPDemuxDelete
+    );
+
+    if (demux == nullptr)
+    {
+        if (verbose)
+        {
+            wxLogError("WebP: CreateDemuxer WebPDemux failed.");
+        }
+    }
+    return demux;
+}
+
+} // namespace
+
 bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose, int index)
 {
+    if (image == nullptr)
+        return false;
+
     bool ok = false;
     image->Destroy();
 
@@ -166,7 +183,9 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
         // We can't use this for other frames, because the frame might be sub-frames, smaller than the
         // full image. It's size is known, but the x_offset and y_offset can not be queried, so we can't
         // reconstruct the full-size image.
-        WebPDemuxerPtr demux = CreateDemuxer(stream, verbose);
+        wxMemoryOutputStream mos;
+        stream.Read(mos);
+        WebPDemuxerPtr demux = CreateDemuxer(mos, verbose);
         if (demux != nullptr)
         {
             WebPIterator iter;
@@ -184,8 +203,7 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
         LoadAnimation(frames, stream, verbose);
         if (index < frames.size())
         {
-            copyImageData(image, frames.at(index).image);
-            ok = true;
+            ok = copyImageData(image, frames.at(index).image);
         }
     }
 
@@ -200,6 +218,15 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
     wxMemoryOutputStream mos;
     stream.Read(mos);
     wxStreamBuffer* mosb = mos.GetOutputStreamBuffer();
+    if (mosb == nullptr)
+    {
+        if (verbose)
+        {
+            wxLogError("WebP: LoadAnimation wxStreamBuffer failed.");
+        }
+        return false;
+    }
+
     WebPData webp_data{};
     webp_data.bytes = reinterpret_cast<uint8_t*>(mosb->GetBufferStart());
     webp_data.size = mosb->GetBufferSize();
@@ -209,7 +236,7 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
 
     WebPAnimDecoderPtr decoder(
         WebPAnimDecoderNew(&webp_data, &dec_options),
-        [](WebPAnimDecoder* dec) { WebPAnimDecoderDelete(dec); }
+        WebPAnimDecoderDelete
     );
 
     if (decoder == nullptr)
@@ -253,16 +280,19 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
     return true;
 }
 
-bool wxWEBPHandler::SaveFile(wxImage *image, wxOutputStream& stream, bool)
+bool wxWEBPHandler::SaveFile(wxImage* image, wxOutputStream& stream, bool)
 {
+    if (image == nullptr)
+        return false;
+
     float quality_factor = 90; // if you change this, update the documentation, too
     if (image->HasOption(wxIMAGE_OPTION_WEBP_QUALITY))
         quality_factor = image->GetOptionInt(wxIMAGE_OPTION_WEBP_QUALITY);
     bool lossless = image->GetOptionInt(wxIMAGE_OPTION_WEBP_LOSSLESS) == 2;
 
     size_t output_size = 0;
-    uint8_t * output = nullptr;
-    unsigned char * rgb = image->GetData();
+    uint8_t* output = nullptr;
+    unsigned char* rgb = image->GetData();
     if (image->HasAlpha())
     {
         unsigned char* alpha = image->GetAlpha();
@@ -298,8 +328,10 @@ bool wxWEBPHandler::SaveFile(wxImage *image, wxOutputStream& stream, bool)
 
 int wxWEBPHandler::DoGetImageCount(wxInputStream& stream)
 {
-    int frame_count = -1;
-    WebPDemuxerPtr demux = CreateDemuxer(stream);
+    int frame_count = 0;
+    wxMemoryOutputStream mos;
+    stream.Read(mos);
+    WebPDemuxerPtr demux = CreateDemuxer(mos);
     if (demux != nullptr)
     {
         frame_count = WebPDemuxGetI(demux.get(), WEBP_FF_FRAME_COUNT);
@@ -310,17 +342,12 @@ int wxWEBPHandler::DoGetImageCount(wxInputStream& stream)
 bool wxWEBPHandler::DoCanRead(wxInputStream& stream)
 {
     // check header according to https://developers.google.com/speed/webp/docs/riff_container
-    const std::string riff = "RIFF";
-    const std::string webp = "WEBP";
     const int buffer_size = 12;
     char buffer[buffer_size];
-    // it's ok to modify the stream position here
     stream.Read(buffer, buffer_size);
     if (stream.LastRead() != buffer_size)
-    {
         return false;
-    }
-    return std::string(buffer, 4) == riff && std::string(&buffer[8], 4) == webp;
+    return memcmp(buffer, "RIFF", 4) == 0 && memcmp(buffer + 8, "WEBP", 4) == 0;
 }
 
 #endif // wxUSE_STREAMS
