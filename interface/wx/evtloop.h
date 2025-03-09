@@ -150,6 +150,14 @@ public:
             evtloop->Dispatch();
         @endcode
 
+        Notice that since wxWidgets 3.3.0, Pending() always returns false under wxQt.
+        Therefore, the above code should be replaced with the following instead:
+
+        @code
+        while (evtloop->QtDispatch())
+            ;
+        @endcode
+
         @return @false if the event loop should stop and @true otherwise.
 
         @see Pending(), wxEventLoopBase
