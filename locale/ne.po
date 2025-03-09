@@ -675,23 +675,18 @@ msgstr "आदेश"
 
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
-msgid "ctrl"
+msgid "Ctrl"
 msgstr "नियन्त्रण"
 
 #: ../src/common/accelcmn.cpp:188
 msgctxt "keyboard key"
-msgid "alt"
+msgid "Alt"
 msgstr "Alt"
 
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
-msgid "shift"
-msgstr "shift"
-
-#: ../src/common/accelcmn.cpp:192
-msgctxt "keyboard key"
-msgid "rawctrl"
-msgstr "rawctrl"
+msgid "Shift"
+msgstr "Shift"
 
 #: ../src/common/accelcmn.cpp:194
 msgctxt "keyboard key"
