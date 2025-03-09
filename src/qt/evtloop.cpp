@@ -139,7 +139,11 @@ bool wxQtEventLoopBase::Pending() const
 
 bool wxQtEventLoopBase::Dispatch()
 {
-    m_qtEventLoop->processEvents();
+    if ( m_qtEventLoop->processEvents(QEventLoop::WaitForMoreEvents) )
+    {
+        return !m_qtEventLoop->isRunning();
+    }
+
     return true;
 }
 
