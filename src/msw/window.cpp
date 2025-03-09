@@ -93,6 +93,10 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
+#if wxUSE_CONTROLS
+    #include "wx/control.h"
+#endif // wxUSE_CONTROLS
+
 #if wxUSE_SPINCTRL
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
