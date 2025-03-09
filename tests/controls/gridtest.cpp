@@ -425,7 +425,8 @@ GridTestCase::~GridTestCase()
     if ( win )
         win->ReleaseMouse();
 
-    wxDELETE(m_grid);
+    m_grid->Hide(); // This fixes a crash in Github Actions when using wxQt
+    delete m_grid;
     delete m_tempGrid;
 }
 
@@ -832,8 +833,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Cursor", "[grid]")
     m_grid->SetCellValue(0, 1, "more text");
     m_grid->SetCellValue(3, 1, "extra text");
 
-    m_grid->Update();
     m_grid->Refresh();
+    m_grid->Update();
 
     m_grid->MoveCursorLeftBlock(false);
 
