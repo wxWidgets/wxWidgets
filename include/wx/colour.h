@@ -13,6 +13,7 @@
 
 #include "wx/defs.h"
 #include "wx/gdiobj.h"
+#include "wx/string.h"
 #include "wx/variant.h"
 
 class WXDLLIMPEXP_FWD_CORE wxColour;
