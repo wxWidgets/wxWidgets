@@ -681,7 +681,7 @@ void VerifyAccelAssigned( wxString labelText, int keycode )
         wxAcceleratorEntry::Create( labelText )
     );
 
-    CHECK( entry );
+    REQUIRE( entry );
     CHECK( entry->GetKeyCode() == keycode );
 }
 
