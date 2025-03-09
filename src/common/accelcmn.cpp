@@ -189,7 +189,9 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
                 accelFlags |= wxACCEL_ALT;
             else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "shift")) )
                 accelFlags |= wxACCEL_SHIFT;
-            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "rawctrl")) )
+            // Note that we don't need to check for translations of "RawCtrl",
+            // this is not something the end user should ever see.
+            else if ( current.CmpNoCase("rawctrl") == 0 )
                 accelFlags |= wxACCEL_RAW_CTRL;
             else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "num ")) )
             {
