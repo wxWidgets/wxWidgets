@@ -91,7 +91,7 @@ public:
     wxToolInfo(HWND hwndOwner, unsigned int id, const wxRect& rc)
     {
         // initialize all members
-        ::ZeroMemory(this, sizeof(TOOLINFO));
+        wxZeroMemory(*this);
 
         // the structure TOOLINFO has been extended with a 4 byte field in
         // version 4.70 of comctl32.dll and another one in 5.01 but we don't

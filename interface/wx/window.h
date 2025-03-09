@@ -2324,9 +2324,23 @@ public:
     void RefreshRect(const wxRect& rect, bool eraseBackground = true);
 
     /**
-        Calling this method immediately repaints the invalidated area of the window and
-        all of its children recursively (this normally only happens when the
-        flow of control returns to the event loop).
+        Immediately repaints the invalidated area of the window and all of its
+        children recursively.
+
+        @note
+            This function is not guaranteed to be implemented in all ports,
+            notably it doesn't do anything in wxGTK port when using Wayland.
+
+        Normally, windows are only repainted when a ::wxEVT_PAINT is generated,
+        which can't happen before the flow of control returns to the event
+        loop. This doesn't create any problems in well-written applications
+        that don't spend too much time in their event handlers. However, if
+        some event handler performs a long-running operation, this function may
+        be used to make the changes appear on the screen immediately, before
+        waiting for its completion. Please note that it is _not_ recommended to
+        do this and the preferred way to ensure that the UI is updated is to
+        perform all time consuming operations in background threads and avoid
+        blocking the main thread.
 
         Notice that this function doesn't invalidate any area of the window so
         nothing happens if nothing has been invalidated (i.e. marked as requiring

@@ -644,6 +644,12 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 #else
             tool->m_item = GTK_TOOL_ITEM(gtk_widget_get_parent(gtk_widget_get_parent(control->m_widget)));
 #endif
+            // The widget size is not controlled by wx, so at least make sure
+            // that its minimal size is respected by GTK (note that this works
+            // fine even if minSize is not set).
+            const wxSize minSize = control->GetBestSize();
+            gtk_widget_set_size_request(control->m_widget, minSize.x, minSize.y);
+
             if (gtk_toolbar_get_item_index(m_toolbar, tool->m_item) != int(pos))
             {
                 g_object_ref(tool->m_item);
