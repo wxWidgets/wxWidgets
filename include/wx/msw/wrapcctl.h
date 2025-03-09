@@ -17,6 +17,9 @@
 // define things which might be missing from our commctrl.h
 #include "wx/msw/missing.h"
 
+// For wxZeroMemory()
+#include "wx/msw/private.h"
+
 // Set Unicode format for a common control
 inline void wxSetCCUnicodeFormat(HWND hwnd)
 {
@@ -36,7 +39,7 @@ struct wxHDITEM : public HDITEM
 {
     wxHDITEM()
     {
-        ::ZeroMemory(this, sizeof(*this));
+        wxZeroMemory(*this);
     }
 };
 

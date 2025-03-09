@@ -117,8 +117,13 @@ extern LONG APIENTRY
 // useful macros and functions
 // ---------------------------------------------------------------------------
 
-// a wrapper macro for ZeroMemory()
-#define wxZeroMemory(obj)   ::ZeroMemory(&obj, sizeof(obj))
+// a wrapper for ZeroMemory()
+template <typename T>
+inline void wxZeroMemory(T& obj)
+{
+    // Cast is needed just to avoid clang "nontrivial-memcall" warning.
+    ::ZeroMemory(static_cast<void*>(&obj), sizeof(obj));
+}
 
 // This one is a macro so that it can be tested with #ifdef, it will be
 // undefined if it cannot be implemented for a given compiler.
@@ -183,7 +188,7 @@ struct WinStruct : public T
 {
     WinStruct()
     {
-        ::ZeroMemory(this, sizeof(T));
+        wxZeroMemory(*this);
 
         // explicit qualification is required here for this to be valid C++
         this->cbSize = sizeof(T);
