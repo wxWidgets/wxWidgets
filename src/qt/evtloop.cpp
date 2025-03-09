@@ -153,6 +153,11 @@ int wxQtEventLoopBase::DispatchTimeout(unsigned long timeout)
     return true;
 }
 
+bool wxQtEventLoopBase::QtDispatch() const
+{
+    return m_qtEventLoop->processEvents();
+}
+
 void wxQtEventLoopBase::WakeUp()
 {
     QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
