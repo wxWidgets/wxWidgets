@@ -172,12 +172,14 @@ wxFrameBase::wxFrameBase()
                 switch ( m_modality )
                 {
                     case wxWindowMode::AppModal:
+#if wxUSE_MENUS
                         if ( !gs_windowDisablers.empty() )
                         {
                             gs_windowDisablers.pop();
                             break;
 
                         }
+#endif
 
                         wxFAIL_MSG("Must have wxWindowDisabler if app modal");
                         break;
@@ -313,7 +315,9 @@ void wxFrameBase::SetWindowModality(wxWindowMode modality)
     {
         case wxWindowMode::AppModal:
             // Disable everything for this frame.
+#if wxUSE_MENUS
             gs_windowDisablers.emplace(wxWindowDisabler( this ));
+#endif
             isModal = true;
             break;
 
