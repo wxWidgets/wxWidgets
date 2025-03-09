@@ -121,10 +121,12 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
         // too big to fit the display
         wnd->ReplaceStaticWithEdit();
 
+#ifdef wxUSE_ANY_BUTTON
         // update the labels if necessary: we need to do it before centering
         // the dialog as this can change its size
         if ( wnd->HasCustomLabels() )
             wnd->AdjustButtonLabels();
+#endif // wxUSE_ANY_BUTTON
 
         // centre the message box on its parent if requested
         if ( wnd->GetMessageDialogStyle() & wxCENTER )
@@ -262,6 +264,7 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     }
 }
 
+#ifdef wxUSE_ANY_BUTTON
 void wxMessageDialog::AdjustButtonLabels()
 {
     // changing the button labels is the easy part but we also need to ensure
@@ -371,6 +374,7 @@ void wxMessageDialog::AdjustButtonLabels()
         rcBtn.right += wBtnNew + MARGIN_INNER;
     }
 }
+#endif // wxUSE_ANY_BUTTON
 
 /* static */
 wxFont wxMessageDialog::GetMessageFont()
