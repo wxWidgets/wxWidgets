@@ -585,7 +585,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-    const wxString& title = _("Testing _() (gettext)");
+    const wxString title = _("Testing _() (gettext)");
 
     // NOTE: using the wxTRANSLATE() macro here we won't show a localized
     //       string in the text entry dialog; we'll simply show the un-translated
@@ -608,7 +608,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 {
-    const wxString& title = _("Testing _N() (ngettext)");
+    const wxString title = _("Testing _N() (ngettext)");
     wxTextEntryDialog d(this,
         _("Please enter range for plural forms of \"n files deleted\" phrase"),
         title, "0-10");
