@@ -135,7 +135,7 @@ public:
     // default ctor creates an uninitialized object
     wxLogRecordInfo()
     {
-        memset(this, 0, sizeof(*this));
+        memset(static_cast<void*>(this), 0, sizeof(*this));
     }
 
     // normal ctor, used by wxLogger specifies the location of the log
@@ -268,7 +268,7 @@ public:
 private:
     void Copy(const wxLogRecordInfo& other)
     {
-        memcpy(this, &other, sizeof(*this));
+        memcpy(static_cast<void*>(this), &other, sizeof(*this));
         if ( other.m_data )
            m_data = new ExtraData(*other.m_data);
     }
