@@ -183,11 +183,11 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
         bool skip = false;
         if ( !skip && ( (label[n] == '+') || (label[n] == '-') ) )
         {
-            if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "ctrl")) )
+            if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "Ctrl")) )
                 accelFlags |= wxACCEL_CTRL;
-            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "alt")) )
+            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "Alt")) )
                 accelFlags |= wxACCEL_ALT;
-            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "shift")) )
+            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "Shift")) )
                 accelFlags |= wxACCEL_SHIFT;
             // Note that we don't need to check for translations of "RawCtrl",
             // this is not something the end user should ever see.
