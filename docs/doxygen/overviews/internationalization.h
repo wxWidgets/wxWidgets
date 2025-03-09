@@ -111,13 +111,19 @@ It is of course possible to use the Unix layout everywhere instead.
 
 @section overview_i18n_menuaccel Translating Menu Accelerators
 
-If you translate the accelerator modifier names (Ctrl, Alt and Shift) in your
-menu labels, you may find the accelerators no longer work. In your message
-catalogs, you need to provide individual translations of these modifiers from
-their lower case names (ctrl, alt, shift) so that the wxWidgets accelerator
-code can recognise them even when translated. wxWidgets does not provide
-translations for all of these currently. wxWidgets does not yet handle
-translated special key names such as Backspace, End, Insert, etc.
+For the translations of the accelerator modifier names (Ctrl, Alt and Shift)
+used in the menu labels to work, the translations of the names of these
+modifiers in the "keyboard key" context must be provided. The wxWidgets own
+translations do provide them for many languages, but not for all of them, so if
+you notice that the accelerators don't work when translated, please provide the
+translations for these strings in the message catalogs distributed with your
+own application or, even better, contribute these translations to wxWidgets
+itself.
+
+Note that the same is also true for all the other keys that can be used as
+accelerators, e.g. Backspace, End, Insert, etc: ideally, wxWidgets catalogs
+should contain their translations, but this is not the case in practice for all
+languages.
 
 
 @see
