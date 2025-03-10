@@ -349,12 +349,18 @@ wxString wxAcceleratorEntry::AsPossiblyLocalizedString(bool localized) const
     wxString text;
 
     int flags = GetFlags();
-    if ( flags & wxACCEL_ALT )
-        text += PossiblyLocalizedModPrefix(wxTRANSLATE_IN_CONTEXT("keyboard key", "Alt"), localized);
+
+    // Note that the order of prefixes here corresponds to the standard order
+    // of modifiers used under Windows: Ctrl, Shift, Alt. GTK uses different
+    // order (Shift, Ctrl, Alt) and Mac uses Raw Ctrl (Ctrl), Alt (Option),
+    // Shift, Ctrl (Command), but this function is not used under these ports,
+    // so for now just use this order everywhere.
     if ( flags & wxACCEL_CTRL )
         text += PossiblyLocalizedModPrefix(wxTRANSLATE_IN_CONTEXT("keyboard key", "Ctrl"), localized);
     if ( flags & wxACCEL_SHIFT )
         text += PossiblyLocalizedModPrefix(wxTRANSLATE_IN_CONTEXT("keyboard key", "Shift"), localized);
+    if ( flags & wxACCEL_ALT )
+        text += PossiblyLocalizedModPrefix(wxTRANSLATE_IN_CONTEXT("keyboard key", "Alt"), localized);
 
     // We need to check for wxACCEL_RAW_CTRL separately only under Mac, as it's
     // the same as wxACCEL_CTRL under the other platforms, and we always
