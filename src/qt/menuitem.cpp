@@ -15,8 +15,9 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenuBar>
+#include <QAction>
+#include <QMenuBar>
+#include <QRegularExpression>
 
 class wxQtAction : public QAction
 {
@@ -37,7 +38,7 @@ public:
     static wxString Normalize(const wxString& text)
     {
         QString normalized = wxQtConvertString( text );
-        normalized.replace(QRegExp("([^+-])[-](.)"), "\\1+\\2");
+        normalized.replace(QRegularExpression("([^+-])[-](.)"), "\\1+\\2");
         return wxQtConvertString( normalized );
     }
 

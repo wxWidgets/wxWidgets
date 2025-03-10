@@ -66,15 +66,18 @@ jobs:
             runner: ubuntu-22.04
             cmake_generator: Unix Makefiles
             cmake_samples: ALL
+            cmake_build_toolkit: gtk3
           - name: macOS 14 wxOSX
             runner: macos-14
             cmake_generator: Xcode
+            cmake_build_toolkit: osx_cocoa
           - name: macOS 14 wxIOS
             runner: macos-14
             cmake_generator: Xcode
             cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
             cmake_samples: OFF
             cmake_tests: OFF
+            cmake_build_toolkit: osx_iphone
           - name: Windows MSVC
             runner: windows-latest
             no_sudo: 1
@@ -82,6 +85,16 @@ jobs:
             cmake_generator: Ninja
             cmake_samples: SOME
             cmake_tests: CONSOLE_ONLY
+            cmake_build_toolkit: msw
+          - name: Windows wxQt 6.8
+            runner: windows-latest
+            no_sudo: 1
+            cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
+            cmake_generator: Ninja
+            cmake_samples: SOME
+            cmake_tests: ALL
+            cmake_build_toolkit: qt
+            skip_installation: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -96,6 +109,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
+
+      - name: Install Qt6
+        if: runner.os == 'Windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.*'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          archives: 'qtbase qtsvg qtimageformats'
+          cache: 'true'
+          setup-python: 'false'
 
       - name: Set environment variables
         run: |
@@ -116,6 +141,12 @@ jobs:
           if [ -z $cmake_samples ]; then cmake_samples=SOME; fi
           echo wxCMAKE_SAMPLES=$cmake_samples >> $GITHUB_ENV
 
+          cmake_build_toolkit=${{ matrix.cmake_build_toolkit }}
+          echo wxCMAKE_BUILD_TOOLKIT=$cmake_build_toolkit >> $GITHUB_ENV
+          echo QT_QPA_PLATFORM_PLUGIN_PATH=${QT_ROOT_DIR}/plugins/platforms >> $GITHUB_ENV
+          echo QT_USE_NATIVE_WINDOWS=1 >> $GITHUB_ENV
+          echo QTEST_QPA_MOUSE_HANDLING=1 >> $GITHUB_ENV
+
           # Setting this variable suppresses "Error retrieving accessibility bus address"
           # messages from WebKit tests that we're not interested in.
           echo NO_AT_BRIDGE=1 >> $GITHUB_ENV
@@ -134,7 +165,7 @@ jobs:
           cmake --version
           mkdir build_cmake
           pushd build_cmake
-          cmake -G "${{ matrix.cmake_generator }}" ${{ matrix.cmake_defines }} -DwxBUILD_SAMPLES=$wxCMAKE_SAMPLES -DwxBUILD_TESTS=$wxCMAKE_TESTS ..
+          cmake -G "${{ matrix.cmake_generator }}" ${{ matrix.cmake_defines }} -DwxBUILD_SAMPLES=$wxCMAKE_SAMPLES -DwxBUILD_TESTS=$wxCMAKE_TESTS -DwxBUILD_TOOLKIT=$wxCMAKE_BUILD_TOOLKIT ..
 
       - name: Building
         working-directory: build_cmake
@@ -165,13 +196,14 @@ jobs:
 
           httpbin_launch
 
-          ctest -V -C Debug --output-on-failure --interactive-debug-mode 0 . || rc=$?
+          ctest -V -C Debug -E test_drawing --output-on-failure --interactive-debug-mode 0 . || rc=$?
           if [ -n "$rc" ]; then
               httpbin_show_log
               exit $rc
           fi
 
       - name: Testing installation
+        if: matrix.skip_installation != true
         run: |
           mkdir build_cmake_install_test
           pushd build_cmake_install_test

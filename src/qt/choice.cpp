@@ -29,7 +29,14 @@ public:
         const QVariant leftData = sourceModel()->data( left );
         const QVariant rightData = sourceModel()->data( right );
 
-        if ( leftData.type() != QVariant::String )
+        const bool isStringType =
+#if QT_VERSION_MAJOR >= 6
+            leftData.metaType().id() == QMetaType::QString;
+#else
+            leftData.type() == QVariant::String;
+#endif
+
+        if ( !isStringType )
             return false;
 
         int insensitiveResult = QString::compare(

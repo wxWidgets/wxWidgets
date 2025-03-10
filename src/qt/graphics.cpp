@@ -14,11 +14,11 @@
 #if wxUSE_GRAPHICS_CONTEXT
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QBitmap>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPicture>
+#include <QWidget>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -728,11 +728,11 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
     public:
         OffsetHelper(bool shouldOffset, QPainter* qpainter)
         {
+            m_qtPainter = qpainter;
             m_shouldOffset = shouldOffset;
             if ( !m_shouldOffset )
                 return;
 
-            m_qtPainter = qpainter;
             m_qtPainter->translate(0.5, 0.5);
         }
 
