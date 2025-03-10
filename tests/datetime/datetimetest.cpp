@@ -1466,6 +1466,14 @@ void DateTimeTestCase::TestDateTimeParse()
         },
 
         {
+            "4242-04-02 4:20",
+            {  2, wxDateTime::Apr, 4242, 4, 20,  0 },
+            true,
+            "",
+            false
+        },
+
+        {
             "2010-01-04 14:30",
             {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
             true,

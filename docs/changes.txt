@@ -296,6 +296,7 @@ wxGTK:
 
 wxMSW:
 
+- Fix regression in wxDateTime support for years > 3000 in 3.2.5 (#25228).
 - Improve print preview in high DPI (taler21, #24815).
 - Fix position of the icons in the printout (#24673).
 - Fix events generated when toast-based notifications are dismissed (#24320).
