@@ -63,8 +63,10 @@ WXDLLIMPEXP_BASE void wxQsort(void* pbase, size_t total_elems,
 
 #endif // !wxQSORT_DECLARED
 
-// Fix using placement new in case it was redefined by wx/msw/msvcrt.h.
-#ifdef WXDEBUG_NEW
+// Fix using placement new in case it was redefined as something else, as is
+// done relatively commonly in MSVC debug builds.
+#ifdef __VISUALC__
+    #pragma push_macro("new")
     #undef new
 #endif
 
@@ -720,9 +722,9 @@ inline bool wxVectorContains(const wxVector<T>& v, const T& obj)
     return false;
 }
 
-// Redefine if it we undefined it above.
-#ifdef WXDEBUG_NEW
-    #define new WXDEBUG_NEW
+// Restore "new" definition if it we changed it above.
+#ifdef __VISUALC__
+    #pragma pop_macro("new")
 #endif
 
 #endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
