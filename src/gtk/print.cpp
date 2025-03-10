@@ -174,7 +174,7 @@ static const char* const gs_paperList[] = {
     "iso_a1"  // wxPAPER_A1
 };
 
-static GtkPaperSize* wxGetGtkPaperSize(wxPaperSize paperId, const wxSize& size)
+GtkPaperSize* wxGetGtkPaperSize(wxPaperSize paperId, const wxSize& size)
 {
     // if wxPaperSize is valid, get corresponding GtkPaperSize
     if (paperId > 0 && size_t(paperId) < WXSIZEOF(gs_paperList))
