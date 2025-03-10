@@ -5584,7 +5584,8 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS =  \
 	monodll_uuid.o \
 	monodll_safearray.o \
 	monodll_msw_sound.o \
-	monodll_automtn.o
+	monodll_automtn.o \
+	monodll_msw_power.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontmgrcmn.o \
@@ -7349,7 +7350,8 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_uuid.o \
 	monolib_safearray.o \
 	monolib_msw_sound.o \
-	monolib_automtn.o
+	monolib_automtn.o \
+	monolib_msw_power.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontmgrcmn.o \
@@ -9260,7 +9262,8 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2 =  \
 	coredll_uuid.o \
 	coredll_safearray.o \
 	coredll_msw_sound.o \
-	coredll_automtn.o
+	coredll_automtn.o \
+	coredll_msw_power.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontmgrcmn.o \
@@ -10750,7 +10753,8 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3 =  \
 	corelib_uuid.o \
 	corelib_safearray.o \
 	corelib_msw_sound.o \
-	corelib_automtn.o
+	corelib_automtn.o \
+	corelib_msw_power.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontmgrcmn.o \
@@ -17520,6 +17524,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_taskbarbutton.o: $(srcdir)/src/msw/taskbarbutton.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/taskbarbutton.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_msw_power.o: $(srcdir)/src/msw/power.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_power.o: $(srcdir)/src/msw/power.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
@@ -22265,6 +22272,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_taskbarbutton.o: $(srcdir)/src/msw/taskbarbutton.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/taskbarbutton.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_msw_power.o: $(srcdir)/src/msw/power.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_power.o: $(srcdir)/src/msw/power.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
@@ -27087,6 +27097,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_taskbarbutton.o: $(srcdir)/src/msw/taskbarbutton.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/taskbarbutton.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_msw_power.o: $(srcdir)/src/msw/power.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_power.o: $(srcdir)/src/msw/power.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
@@ -30797,6 +30810,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_taskbarbutton.o: $(srcdir)/src/msw/taskbarbutton.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/taskbarbutton.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_msw_power.o: $(srcdir)/src/msw/power.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_power.o: $(srcdir)/src/msw/power.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/power.cpp
