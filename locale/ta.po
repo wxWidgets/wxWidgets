@@ -673,23 +673,18 @@ msgstr "கட்டளை"
 
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
-msgid "ctrl"
+msgid "Ctrl"
 msgstr "கட்டுப்பாடு"
 
 #: ../src/common/accelcmn.cpp:188
 msgctxt "keyboard key"
-msgid "alt"
+msgid "Alt"
 msgstr "நிலைமாற்றி"
 
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
-msgid "shift"
+msgid "Shift"
 msgstr "மாற்றழுத்தி"
-
-#: ../src/common/accelcmn.cpp:192
-msgctxt "keyboard key"
-msgid "rawctrl"
-msgstr "rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
 msgctxt "keyboard key"

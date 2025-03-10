@@ -797,26 +797,20 @@ msgstr "Ukazovalka"
 # common/utilscmn.cpp:464
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
-msgid "ctrl"
-msgstr "krmilka"
+msgid "Ctrl"
+msgstr "Krmilka"
 
 # common/utilscmn.cpp:466
 #: ../src/common/accelcmn.cpp:188
 msgctxt "keyboard key"
-msgid "alt"
-msgstr "izmenjalka"
+msgid "Alt"
+msgstr "Izmenjalka"
 
 # common/utilscmn.cpp:468
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
-msgid "shift"
-msgstr "dvigalka"
-
-# common/utilscmn.cpp:464
-#: ../src/common/accelcmn.cpp:192
-msgctxt "keyboard key"
-msgid "rawctrl"
-msgstr "surovakrmilka"
+msgid "Shift"
+msgstr "Dvigalka"
 
 #: ../src/common/accelcmn.cpp:194
 msgctxt "keyboard key"

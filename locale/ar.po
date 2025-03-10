@@ -716,22 +716,17 @@ msgstr ""
 
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
-msgid "ctrl"
+msgid "Ctrl"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:188
 msgctxt "keyboard key"
-msgid "alt"
-msgstr "alt"
+msgid "Alt"
+msgstr "Alt"
 
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
-msgid "shift"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:192
-msgctxt "keyboard key"
-msgid "rawctrl"
+msgid "Shift"
 msgstr ""
 
 #: ../src/common/accelcmn.cpp:194
