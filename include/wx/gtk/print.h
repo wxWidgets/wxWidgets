@@ -26,6 +26,7 @@ typedef struct _GtkPageSetup GtkPageSetup;
 
 typedef struct _cairo cairo_t;
 
+typedef struct _GtkPaperSize GtkPaperSize;
 GtkPaperSize* wxGetGtkPaperSize(wxPaperSize paperId, const wxSize& size);
 
 //----------------------------------------------------------------------------
