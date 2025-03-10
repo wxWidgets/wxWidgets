@@ -183,13 +183,15 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
         bool skip = false;
         if ( !skip && ( (label[n] == '+') || (label[n] == '-') ) )
         {
-            if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "ctrl")) )
+            if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "Ctrl")) )
                 accelFlags |= wxACCEL_CTRL;
-            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "alt")) )
+            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "Alt")) )
                 accelFlags |= wxACCEL_ALT;
-            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "shift")) )
+            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "Shift")) )
                 accelFlags |= wxACCEL_SHIFT;
-            else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "rawctrl")) )
+            // Note that we don't need to check for translations of "RawCtrl",
+            // this is not something the end user should ever see.
+            else if ( current.CmpNoCase("rawctrl") == 0 )
                 accelFlags |= wxACCEL_RAW_CTRL;
             else if ( CompareAccelString(current, wxTRANSLATE_IN_CONTEXT("keyboard key", "num ")) )
             {
@@ -332,6 +334,14 @@ wxString PossiblyLocalize(const wxString& str, bool localize)
     return localize ? wxGetTranslation(str, wxString(), "keyboard key") : str;
 }
 
+// Modifier prefix is always followed by a '+'.
+wxString PossiblyLocalizedModPrefix(const wxString& str, bool localize)
+{
+    wxString prefix = PossiblyLocalize(str, localize);
+    prefix += wxS('+');
+    return prefix;
+}
+
 }
 
 wxString wxAcceleratorEntry::AsPossiblyLocalizedString(bool localized) const
@@ -339,15 +349,31 @@ wxString wxAcceleratorEntry::AsPossiblyLocalizedString(bool localized) const
     wxString text;
 
     int flags = GetFlags();
-    if ( flags & wxACCEL_ALT )
-        text += PossiblyLocalize(wxTRANSLATE_IN_CONTEXT("keyboard key", "Alt+"), localized);
+
+    // Note that the order of prefixes here corresponds to the standard order
+    // of modifiers used under Windows: Ctrl, Shift, Alt. GTK uses different
+    // order (Shift, Ctrl, Alt) and Mac uses Raw Ctrl (Ctrl), Alt (Option),
+    // Shift, Ctrl (Command), but this function is not used under these ports,
+    // so for now just use this order everywhere.
     if ( flags & wxACCEL_CTRL )
-        text += PossiblyLocalize(wxTRANSLATE_IN_CONTEXT("keyboard key", "Ctrl+"), localized);
+        text += PossiblyLocalizedModPrefix(wxTRANSLATE_IN_CONTEXT("keyboard key", "Ctrl"), localized);
     if ( flags & wxACCEL_SHIFT )
-        text += PossiblyLocalize(wxTRANSLATE_IN_CONTEXT("keyboard key", "Shift+"), localized);
+        text += PossiblyLocalizedModPrefix(wxTRANSLATE_IN_CONTEXT("keyboard key", "Shift"), localized);
+    if ( flags & wxACCEL_ALT )
+        text += PossiblyLocalizedModPrefix(wxTRANSLATE_IN_CONTEXT("keyboard key", "Alt"), localized);
+
+    // We need to check for wxACCEL_RAW_CTRL separately only under Mac, as it's
+    // the same as wxACCEL_CTRL under the other platforms, and we always
+    // translate it in the same way as "Ctrl" because "RawCtrl" is not
+    // something the end user should ever see.
 #if defined(__WXMAC__)
     if ( flags & wxACCEL_RAW_CTRL )
-        text += PossiblyLocalize(wxTRANSLATE_IN_CONTEXT("keyboard key", "RawCtrl+"), localized);
+    {
+        if ( localized )
+            text += wxGetTranslation("Ctrl", wxString(), "keyboard key");
+        else
+            text += wxS("RawCtrl+");
+    }
 #endif
 
     const int code = GetKeyCode();

@@ -679,23 +679,18 @@ msgstr "命令"
 
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
-msgid "ctrl"
+msgid "Ctrl"
 msgstr "控制键"
 
 #: ../src/common/accelcmn.cpp:188
 msgctxt "keyboard key"
-msgid "alt"
+msgid "Alt"
 msgstr "转换键"
 
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
-msgid "shift"
+msgid "Shift"
 msgstr "移位键"
-
-#: ../src/common/accelcmn.cpp:192
-msgctxt "keyboard key"
-msgid "rawctrl"
-msgstr "rawctrl"
 
 #: ../src/common/accelcmn.cpp:194
 msgctxt "keyboard key"

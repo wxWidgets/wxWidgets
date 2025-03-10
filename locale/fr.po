@@ -676,23 +676,18 @@ msgstr "Commande"
 
 #: ../src/common/accelcmn.cpp:186
 msgctxt "keyboard key"
-msgid "ctrl"
-msgstr "ctrl"
+msgid "Ctrl"
+msgstr "Ctrl"
 
 #: ../src/common/accelcmn.cpp:188
 msgctxt "keyboard key"
-msgid "alt"
-msgstr "alt"
+msgid "Alt"
+msgstr "Alt"
 
 #: ../src/common/accelcmn.cpp:190
 msgctxt "keyboard key"
-msgid "shift"
-msgstr "majuscule"
-
-#: ../src/common/accelcmn.cpp:192
-msgctxt "keyboard key"
-msgid "rawctrl"
-msgstr "rawctrl"
+msgid "Shift"
+msgstr "Majuscule"
 
 #: ../src/common/accelcmn.cpp:194
 msgctxt "keyboard key"
