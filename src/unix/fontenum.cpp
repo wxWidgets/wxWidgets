@@ -34,6 +34,8 @@
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
 
+#include "wx/gtk/private/object.h"
+
 // ----------------------------------------------------------------------------
 // Pango
 // ----------------------------------------------------------------------------
@@ -72,7 +74,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
     PangoFontFamily **families = nullptr;
     gint n_families = 0;
-    PangoContext* context = wxGetPangoContext();
+    wxGtkObject<PangoContext> context(wxGetPangoContext());
     pango_context_list_families(context, &families, &n_families);
     qsort (families, n_families, sizeof (PangoFontFamily *), wxCompareFamilies);
 
@@ -91,7 +93,6 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         }
     }
     g_free(families);
-    g_object_unref(context);
 
     return true;
 }
