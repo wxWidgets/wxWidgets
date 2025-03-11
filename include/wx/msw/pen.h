@@ -30,6 +30,8 @@ public:
 
     virtual ~wxPen() { }
 
+    wxDECLARE_DEFAULT_COPY(wxPen)
+
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }
 

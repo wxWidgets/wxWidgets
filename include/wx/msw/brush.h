@@ -27,6 +27,8 @@ public:
     wxBrush(const wxBitmap& stipple);
     virtual ~wxBrush();
 
+    wxDECLARE_DEFAULT_COPY(wxBrush)
+
     virtual void SetColour(const wxColour& col) wxOVERRIDE;
     virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) wxOVERRIDE;
     virtual void SetStyle(wxBrushStyle style) wxOVERRIDE;

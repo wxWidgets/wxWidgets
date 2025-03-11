@@ -57,6 +57,8 @@ public:
 
     virtual ~wxIcon();
 
+    wxDECLARE_DEFAULT_COPY(wxIcon)
+
     virtual bool LoadFile(const wxString& name,
                           wxBitmapType type = wxICON_DEFAULT_TYPE,
                           int desiredWidth = -1, int desiredHeight = -1);

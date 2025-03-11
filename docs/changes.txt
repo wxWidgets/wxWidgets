@@ -311,6 +311,7 @@ wxMSW:
 - Recognize Windows Server 2025 in wxGetOsDescription() (PB, #25066).
 - Fix spurious assert failures in wxFileSystemWatcher with Samba (#18953).
 - Fix build errors in wx/vector.h if "new" is redefined (#24994).
+- Fix -Wdeprecated-copy-dtor warnings in the headers with gcc 14 (#24248).
 
 wxOSX:
 
