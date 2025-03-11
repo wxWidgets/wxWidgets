@@ -42,19 +42,13 @@ private:
 class wxGtkCollatableString
 {
 public:
-    wxGtkCollatableString( const wxString &label, gchar *key )
-        : m_label(label)
+    wxGtkCollatableString( const wxString &label, const gchar *key )
+        : m_label(label), m_key(key)
     {
-        m_key = key;
-    }
-
-    ~wxGtkCollatableString()
-    {
-        g_free( m_key );
     }
 
     wxString     m_label;
-    gchar       *m_key;
+    wxGtkString  m_key;
 };
 
 class wxGtkCollatedArrayString
@@ -66,9 +60,8 @@ public:
     {
         int index = 0;
 
-        gchar *new_key_lower = g_utf8_casefold( new_label.utf8_str(), -1);
+        wxGtkString new_key_lower(g_utf8_casefold( new_label.utf8_str(), -1));
         gchar *new_key = g_utf8_collate_key( new_key_lower, -1);
-        g_free( new_key_lower );
 
         wxSharedPtr<wxGtkCollatableString> new_ptr( new wxGtkCollatableString( new_label, new_key ) );
 
@@ -77,7 +70,7 @@ public:
         {
             wxSharedPtr<wxGtkCollatableString> ptr = *iter;
 
-            gchar *key = ptr->m_key;
+            const gchar* key = ptr->m_key;
             if (strcmp(key,new_key) >= 0)
             {
                 m_list.insert( iter, new_ptr );
