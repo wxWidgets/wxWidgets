@@ -10,24 +10,19 @@
 #ifndef _WX_GTK_PRIVATE_STRING_H_
 #define _WX_GTK_PRIVATE_STRING_H_
 
+#include "wx/gtk/private/glibptr.h"
+
 // ----------------------------------------------------------------------------
 // Convenience class for g_freeing a gchar* on scope exit automatically
 // ----------------------------------------------------------------------------
 
-class wxGtkString
+class wxGtkString : public wxGlibPtr<gchar>
 {
 public:
-    explicit wxGtkString(gchar *s) : m_str(s) { }
-    ~wxGtkString() { g_free(m_str); }
+    explicit wxGtkString(const gchar *s) : wxGlibPtr<gchar>(s) { }
 
-    const gchar *c_str() const { return m_str; }
-
-    operator gchar *() const { return m_str; }
-
-private:
-    gchar *m_str;
-
-    wxDECLARE_NO_COPY_CLASS(wxGtkString);
+    // More string-like accessor.
+    const gchar *c_str() const { return get(); }
 };
 
 
