@@ -29,6 +29,7 @@
 
 #ifdef __WXGTK3__
     #include "wx/gtk/private/appearance.h"
+    #include "wx/gtk/private/glibptr.h"
     #include "wx/gtk/private/variant.h"
 #endif
 
@@ -256,10 +257,10 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
         return;
     }
 
-    char* themeName = nullptr;
+    wxGlibPtr<char> themeName;
     gboolean preferDarkPrev = FALSE;
     g_object_get(settings,
-        "gtk-theme-name", &themeName,
+        "gtk-theme-name", themeName.Out(),
         "gtk-application-prefer-dark-theme", &preferDarkPrev, nullptr);
 
     // This is not supposed to happen neither, but don't crash if it does.
@@ -269,10 +270,9 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
         return;
     }
 
-    wxLogTrace(TRACE_DARKMODE, "Current GTK theme is \"%s\"", themeName);
-
     const wxString theme = wxString::FromUTF8(themeName);
-    g_free(themeName);
+
+    wxLogTrace(TRACE_DARKMODE, "Current GTK theme is \"%s\"", theme);
 
     // Check if the current theme is a dark variant.
     constexpr const char* darkVariant = "-dark";

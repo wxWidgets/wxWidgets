@@ -33,6 +33,7 @@
 
 #include "wx/power.h"
 
+#include "wx/gtk/private/glibptr.h"
 #include "wx/gtk/private/error.h"
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/variant.h"
@@ -265,9 +266,8 @@ wxGDBusLoginManagerProxy::StartInhibit(const wxString& reason,
         return false;
     }
 
-    gint* const fds = g_unix_fd_list_steal_fds(fd_list, nullptr);
+    wxGlibPtr<gint> fds(g_unix_fd_list_steal_fds(fd_list, nullptr));
     m_fdInhibit = fds[0];
-    g_free(fds);
 
     // Remember them so that we could call Inhibit() with the same arguments
     // again later from RestartInhibit().

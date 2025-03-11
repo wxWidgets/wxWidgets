@@ -34,6 +34,7 @@
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
 
+#include "wx/gtk/private/glibptr.h"
 #include "wx/gtk/private/object.h"
 
 // ----------------------------------------------------------------------------
@@ -72,11 +73,14 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
         return false;
     }
 
-    PangoFontFamily **families = nullptr;
+    wxGlibPtr<PangoFontFamily*> families;
     gint n_families = 0;
     wxGtkObject<PangoContext> context(wxGetPangoContext());
-    pango_context_list_families(context, &families, &n_families);
-    qsort (families, n_families, sizeof (PangoFontFamily *), wxCompareFamilies);
+    pango_context_list_families(context, families.Out(), &n_families);
+    qsort (const_cast<PangoFontFamily**>(families.get()),
+           n_families,
+           sizeof (PangoFontFamily *),
+           wxCompareFamilies);
 
     for ( int i = 0; i < n_families; i++ )
     {
@@ -92,7 +96,6 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
             }
         }
     }
-    g_free(families);
 
     return true;
 }

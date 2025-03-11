@@ -270,14 +270,12 @@ static void file_set(GtkFileChooser* widget, wxDirButton* p)
 extern "C" {
 static void selection_changed(GtkFileChooser* chooser, wxDirButton* win)
 {
-    char* filename = gtk_file_chooser_get_filename(chooser);
+    wxGtkString filename(gtk_file_chooser_get_filename(chooser));
 
     if (wxString::FromUTF8(filename) == win->GetPath())
         win->m_bIgnoreNextChange = false;
     else if (!win->m_bIgnoreNextChange)
         file_set(chooser, win);
-
-    g_free(filename);
 }
 }
 

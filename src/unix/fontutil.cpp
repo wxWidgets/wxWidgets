@@ -156,11 +156,11 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 #if defined(__WXGTK__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
     else
     {
-        PangoFontFamily **families;
+        wxGlibPtr<PangoFontFamily*> families;
         PangoFontFamily  *family = nullptr;
         int n_families;
         wxGtkObject<PangoContext> context(wxGetPangoContext());
-        pango_context_list_families(context, &families, &n_families);
+        pango_context_list_families(context, families.Out(), &n_families);
 
         for (int i = 0; i < n_families; ++i)
         {
@@ -171,8 +171,6 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
                 break;
             }
         }
-
-        g_free(families);
 
         // Some gtk+ systems might query for a non-existing font from
         // wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) on initialization,

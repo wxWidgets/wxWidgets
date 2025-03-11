@@ -22,6 +22,8 @@
 
 #include <gdk/gdk.h>
 
+#include "wx/gtk/private/glibptr.h"
+
 // ----------------------------------------------------------------------------
 // wxRegionRefData: private class containing the information about the region
 // ----------------------------------------------------------------------------
@@ -508,15 +510,15 @@ void wxRegionIterator::CreateRects( const wxRegion& region )
     if (!gdkregion)
         return;
 
-    GdkRectangle* gdkrects;
-    gdk_region_get_rectangles(gdkregion, &gdkrects, &m_numRects);
+    wxGlibPtr<GdkRectangle> gdkrects;
+    gdk_region_get_rectangles(gdkregion, gdkrects.Out(), &m_numRects);
 
     if (m_numRects)
     {
         m_rects = new wxRect[m_numRects];
         for (int i = 0; i < m_numRects; ++i)
         {
-            GdkRectangle &gr = gdkrects[i];
+            const GdkRectangle &gr = gdkrects[i];
             wxRect &wr = m_rects[i];
             wr.x = gr.x;
             wr.y = gr.y;
@@ -524,7 +526,6 @@ void wxRegionIterator::CreateRects( const wxRegion& region )
             wr.height = gr.height;
         }
     }
-    g_free( gdkrects );
 #endif
 }
 

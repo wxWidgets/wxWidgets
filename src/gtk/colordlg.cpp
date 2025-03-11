@@ -160,21 +160,19 @@ void wxColourDialog::DialogToColourData()
     // Extract custom palette:
 
     GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(sel));
-    gchar *pal;
-    g_object_get(settings, "gtk-color-palette", &pal, nullptr);
+    wxGlibPtr<gchar> pal;
+    g_object_get(settings, "gtk-color-palette", pal.Out(), nullptr);
 
-    GdkColor *colors;
+    wxGlibPtr<GdkColor> colors;
     gint n_colors;
-    if (gtk_color_selection_palette_from_string(pal, &colors, &n_colors))
+    if (gtk_color_selection_palette_from_string(pal, colors.Out(), &n_colors))
     {
         for (int i = 0; i < n_colors && i < wxColourData::NUM_CUSTOM; i++)
         {
             m_data.SetCustomColour(i, wxColour(colors[i]));
         }
-        g_free(colors);
     }
 
-    g_free(pal);
     wxGCC_WARNING_RESTORE()
 #endif // !__WXGTK4__
 }

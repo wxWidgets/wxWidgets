@@ -50,14 +50,12 @@ static void wxGtkOnRemoveTag(GtkTextBuffer *buffer,
                              GtkTextIter * WXUNUSED(end),
                              char *prefix)
 {
-    gchar *name;
-    g_object_get (tag, "name", &name, nullptr);
+    wxGlibPtr<gchar> name;
+    g_object_get (tag, "name", name.Out(), nullptr);
 
     if (!name || strncmp(name, prefix, strlen(prefix)))
         // anonymous tag or not starting with prefix - don't remove
         g_signal_stop_emission_by_name (buffer, "remove_tag");
-
-    g_free(name);
 }
 }
 

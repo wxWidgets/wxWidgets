@@ -44,6 +44,7 @@
 #include "wx/link.h"
 wxFORCE_LINK_THIS_MODULE(gtk_print)
 
+#include "wx/gtk/private/glibptr.h"
 #include "wx/gtk/private/error.h"
 #include "wx/gtk/private/object.h"
 
@@ -998,8 +999,7 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
             GtkPageRange* range;
             range = gtk_print_settings_get_page_ranges (newSettings, &num_ranges);
 
-            std::unique_ptr<GtkPageRange, void (*)(void*)>
-                rangePtrDeleter(range, g_free);
+            wxGlibPtr<GtkPageRange> rangePtrDeleter(range);
 
             pageRanges.resize(num_ranges);
             for ( auto& pageRange : pageRanges )
