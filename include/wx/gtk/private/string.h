@@ -12,6 +12,9 @@
 
 #include "wx/gtk/private/glibptr.h"
 
+#include <utility>
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // Convenience class for g_freeing a gchar* on scope exit automatically
 // ----------------------------------------------------------------------------
@@ -19,7 +22,15 @@
 class wxGtkString : public wxGlibPtr<gchar>
 {
 public:
-    explicit wxGtkString(const gchar *s) : wxGlibPtr<gchar>(s) { }
+    using Base = wxGlibPtr<gchar>;
+
+    explicit wxGtkString(const gchar *s) : Base(s) { }
+    wxGtkString(wxGtkString&& other) : Base(std::move(other)) { }
+    wxGtkString& operator=(wxGtkString&& other)
+    {
+        Base::operator=(std::move(other));
+        return *this;
+    }
 
     // More string-like accessor.
     const gchar *c_str() const { return get(); }
@@ -31,9 +42,6 @@ public:
 // ----------------------------------------------------------------------------
 
 #include "wx/string.h"
-#include "wx/sharedptr.h"
-
-#include <vector>
 
 class wxGtkCollatableString
 {
@@ -59,22 +67,20 @@ public:
         wxGtkString new_key_lower(g_utf8_casefold( new_label.utf8_str(), -1));
         gchar *new_key = g_utf8_collate_key( new_key_lower, -1);
 
-        wxSharedPtr<wxGtkCollatableString> new_ptr( new wxGtkCollatableString( new_label, new_key ) );
+        wxGtkCollatableString new_str( new_label, new_key );
 
         for (auto iter = m_list.begin(); iter != m_list.end(); ++iter)
         {
-            wxSharedPtr<wxGtkCollatableString> ptr = *iter;
-
-            const gchar* key = ptr->m_key;
+            const gchar* key = iter->m_key;
             if (strcmp(key,new_key) >= 0)
             {
-                m_list.insert( iter, new_ptr );
+                m_list.insert( iter, std::move(new_str) );
                 return index;
             }
             index ++;
         }
 
-        m_list.push_back( new_ptr );
+        m_list.push_back( std::move(new_str) );
         return index;
     }
 
@@ -85,7 +91,7 @@ public:
 
     wxString At( size_t index )
     {
-        return m_list[index]->m_label;
+        return m_list.at(index).m_label;
     }
 
     void Clear()
@@ -99,7 +105,7 @@ public:
     }
 
 private:
-    std::vector< wxSharedPtr<wxGtkCollatableString> > m_list;
+    std::vector<wxGtkCollatableString> m_list;
 };
 
 

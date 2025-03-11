@@ -20,7 +20,20 @@ class wxGlibPtr
 public:
     wxGlibPtr() = default;
     explicit wxGlibPtr(const T *p) : m_ptr(const_cast<T*>(p)) { }
+    wxGlibPtr(wxGlibPtr&& other) : m_ptr(other.m_ptr) { other.m_ptr = nullptr; }
     ~wxGlibPtr() { g_free(m_ptr); }
+
+    wxGlibPtr& operator=(wxGlibPtr&& other)
+    {
+        if ( &other != this )
+        {
+            g_free(m_ptr);
+            m_ptr = other.m_ptr;
+            other.m_ptr = nullptr;
+        }
+
+        return *this;
+    }
 
     const T* get() const { return m_ptr; }
 
