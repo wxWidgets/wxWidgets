@@ -34,6 +34,7 @@
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/webkit.h"
 #include "wx/gtk/private/error.h"
+#include "wx/gtk/private/object.h"
 #include "wx/gtk/private/variant.h"
 #include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
@@ -1909,7 +1910,7 @@ void wxWebViewWebKit::SetupWebExtensionServer()
 {
     char *address = g_strdup_printf("unix:tmpdir=%s", g_get_tmp_dir());
     char *guid = g_dbus_generate_guid();
-    GDBusAuthObserver *observer = g_dbus_auth_observer_new();
+    wxGtkObject<GDBusAuthObserver> observer(g_dbus_auth_observer_new());
     wxGtkError error;
 
     g_signal_connect(observer, "authorize-authenticated-peer",
@@ -1936,7 +1937,6 @@ void wxWebViewWebKit::SetupWebExtensionServer()
 
     g_free(address);
     g_free(guid);
-    g_object_unref(observer);
 }
 
 GDBusProxy *wxWebViewWebKit::GetExtensionProxy() const
