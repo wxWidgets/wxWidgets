@@ -995,7 +995,6 @@ GTK_LIBS
 GTK_CFLAGS
 LIBCURL_LIBS
 LIBCURL_CFLAGS
-subdirs
 wxCFLAGS_C99
 LIBTIFF_LIBS
 LIBTIFF_CFLAGS
@@ -1462,7 +1461,7 @@ CAIRO_CFLAGS
 CAIRO_LIBS
 GST_CFLAGS
 GST_LIBS'
-ac_subdirs_all='src/expat/expat'
+
 
 # Initialize some variables set by options.
 ac_init_help=
@@ -27392,7 +27391,118 @@ fi
                         wxCFLAGS_C99=$ac_cv_prog_cc_c99
 
 
-                subdirs="$subdirs src/expat/expat"
+
+
+  # Various preliminary checks.
+
+
+
+
+
+    ax_dir="src/expat/expat"
+
+                    # Do not complain, so a configure script can configure whichever parts of a
+    # large source tree are present.
+    if test -d "$srcdir/$ax_dir"; then
+      ac_builddir=.
+
+case "$ax_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
+  ac_dir_suffix=/`$as_echo "$ax_dir" | sed 's|^\.[\\/]||'`
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
+ac_abs_top_builddir=$ac_pwd
+ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
+
+case $srcdir in
+  .)  # We are building in place.
+    ac_srcdir=.
+    ac_top_srcdir=$ac_top_builddir_sub
+    ac_abs_top_srcdir=$ac_pwd ;;
+  [\\/]* | ?:[\\/]* )  # Absolute name.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir
+    ac_abs_top_srcdir=$srcdir ;;
+  *) # Relative name.
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+esac
+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+
+      # Remove --cache-file, --srcdir, and --disable-option-checking arguments
+      # so they do not pile up.
+      ax_args=
+      ax_prev=
+      eval "set x $ac_configure_args"
+      shift
+      for ax_arg; do
+        if test -n "$ax_prev"; then
+          ax_prev=
+          continue
+        fi
+        case $ax_arg in
+          -cache-file | --cache-file | --cache-fil | --cache-fi | --cache-f \
+          | --cache- | --cache | --cach | --cac | --ca | --c)
+            ax_prev=cache_file ;;
+          -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+          | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
+          | --c=*)
+            ;;
+          --config-cache | -C)
+            ;;
+          -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+            ax_prev=srcdir ;;
+          -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+            ;;
+          -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+            ax_prev=prefix ;;
+          -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* \
+          | --p=*)
+            ;;
+          --disable-option-checking)
+            ;;
+          *) case $ax_arg in
+              *\'*) ax_arg=$($as_echo "$ax_arg" | sed "s/'/'\\\\\\\\''/g");;
+            esac
+            as_fn_append ax_args " '$ax_arg'" ;;
+        esac
+      done
+      # Always prepend --disable-option-checking to silence warnings, since
+      # different subdirs can have different --enable and --with options.
+      ax_args="--disable-option-checking $ax_args"
+      # Options that must be added as they are provided.
+      as_fn_append ax_args " '--without-docbook'"
+
+      # New options that may need to be merged with existing options.
+
+      # New options that must replace existing options.
+
+      # Options that must be removed.
+
+      as_fn_append ax_args " '--srcdir=$ac_srcdir'"
+
+      # Add the subdirectory to the list of target subdirectories.
+      ax_subconfigures="$ax_subconfigures $ax_dir"
+      # Save the argument list for this subdirectory.
+                              ax_var=$(printf "$ax_dir" | tr -c "0-9a-zA-Z_" "_")
+      eval "ax_sub_configure_args_$ax_var=\"$ax_args\""
+      eval "ax_sub_configure_$ax_var=\"yes\""
+    else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: could not find source tree for $ax_dir" >&5
+$as_echo "$as_me: WARNING: could not find source tree for $ax_dir" >&2;}
+    fi
+
+
+
 
     fi
 
@@ -46244,6 +46354,101 @@ $as_echo "$as_me: running $SHELL $ax_sub_configure $ax_sub_configure_args --cach
         cd "$ax_popdir"
       fi
 
+      ax_dir="src/expat/expat"
+
+      # Convert the path to the subdirectory into a shell variable name.
+      ax_var=$(printf "$ax_dir" | tr -c "0-9a-zA-Z_" "_")
+      ax_configure_ax_var=$(eval "echo \"\$ax_sub_configure_$ax_var\"")
+      if test "$no_recursion" != "yes" -a "x$ax_configure_ax_var" = "xyes"; then
+        subdirs_extra="$subdirs_extra $ax_dir"
+
+        ax_msg="=== configuring in $ax_dir ($(pwd)/$ax_dir)"
+        $as_echo "$as_me:${as_lineno-$LINENO}: $ax_msg" >&5
+        $as_echo "$ax_msg" >&6
+        as_dir="$ax_dir"; as_fn_mkdir_p
+        ac_builddir=.
+
+case "$ax_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
+  ac_dir_suffix=/`$as_echo "$ax_dir" | sed 's|^\.[\\/]||'`
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
+ac_abs_top_builddir=$ac_pwd
+ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
+
+case $srcdir in
+  .)  # We are building in place.
+    ac_srcdir=.
+    ac_top_srcdir=$ac_top_builddir_sub
+    ac_abs_top_srcdir=$ac_pwd ;;
+  [\\/]* | ?:[\\/]* )  # Absolute name.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir
+    ac_abs_top_srcdir=$srcdir ;;
+  *) # Relative name.
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+esac
+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+
+
+        ax_popdir=$(pwd)
+        cd "$ax_dir"
+
+        # Check for guested configure; otherwise get Cygnus style configure.
+        if test -f "$ac_srcdir/configure.gnu"; then
+          ax_sub_configure=$ac_srcdir/configure.gnu
+        elif test -f "$ac_srcdir/configure"; then
+          ax_sub_configure=$ac_srcdir/configure
+        elif test -f "$ac_srcdir/configure.in"; then
+          # This should be Cygnus configure.
+          ax_sub_configure=$ac_aux_dir/configure
+        else
+          { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: no configuration information is in $ax_dir" >&5
+$as_echo "$as_me: WARNING: no configuration information is in $ax_dir" >&2;}
+          ax_sub_configure=
+        fi
+
+        if test -n "$ax_sub_configure"; then
+          # Get the configure arguments for the current configure.
+          eval "ax_sub_configure_args=\"\$ax_sub_configure_args_${ax_var}\""
+
+          # Always prepend --prefix to ensure using the same prefix
+          # in subdir configurations.
+          ax_arg="--prefix=$prefix"
+          case $ax_arg in
+            *\'*) ax_arg=$($as_echo "$ax_arg" | sed "s/'/'\\\\\\\\''/g");;
+          esac
+          ax_sub_configure_args="'$ax_arg' $ax_sub_configure_args"
+          if test "$silent" = yes; then
+            ax_sub_configure_args="--silent $ax_sub_configure_args"
+          fi
+          # Make the cache file name correct relative to the subdirectory.
+          case $cache_file in
+            [\\/]* | ?:[\\/]* )
+              ax_sub_cache_file=$cache_file ;;
+            *) # Relative name.
+              ax_sub_cache_file=$ac_top_build_prefix$cache_file ;;
+          esac
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: running $SHELL $ax_sub_configure $ax_sub_configure_args --cache-file=$ac_sub_cache_file" >&5
+$as_echo "$as_me: running $SHELL $ax_sub_configure $ax_sub_configure_args --cache-file=$ac_sub_cache_file" >&6;}
+          eval "\$SHELL \"$ax_sub_configure\" $ax_sub_configure_args --cache-file=\"$ax_sub_cache_file\"" \
+              || as_fn_error $? "$ax_sub_configure failed for $ax_dir" "$LINENO" 5
+        fi
+
+        cd "$ax_popdir"
+      fi
+
 
 : "${CONFIG_STATUS=./config.status}"
 ac_write_fail=0
@@ -47450,151 +47655,6 @@ if test "$no_create" != yes; then
   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
   # would make configure fail if this is the last instruction.
   $ac_cs_success || as_fn_exit 1
-fi
-
-#
-# CONFIG_SUBDIRS section.
-#
-if test "$no_recursion" != yes; then
-
-  # Remove --cache-file, --srcdir, and --disable-option-checking arguments
-  # so they do not pile up.
-  ac_sub_configure_args=
-  ac_prev=
-  eval "set x $ac_configure_args"
-  shift
-  for ac_arg
-  do
-    if test -n "$ac_prev"; then
-      ac_prev=
-      continue
-    fi
-    case $ac_arg in
-    -cache-file | --cache-file | --cache-fil | --cache-fi \
-    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
-      ac_prev=cache_file ;;
-    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
-    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* \
-    | --c=*)
-      ;;
-    --config-cache | -C)
-      ;;
-    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
-      ac_prev=srcdir ;;
-    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
-      ;;
-    -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
-      ac_prev=prefix ;;
-    -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
-      ;;
-    --disable-option-checking)
-      ;;
-    *)
-      case $ac_arg in
-      *\'*) ac_arg=`$as_echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
-      esac
-      as_fn_append ac_sub_configure_args " '$ac_arg'" ;;
-    esac
-  done
-
-  # Always prepend --prefix to ensure using the same prefix
-  # in subdir configurations.
-  ac_arg="--prefix=$prefix"
-  case $ac_arg in
-  *\'*) ac_arg=`$as_echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
-  esac
-  ac_sub_configure_args="'$ac_arg' $ac_sub_configure_args"
-
-  # Pass --silent
-  if test "$silent" = yes; then
-    ac_sub_configure_args="--silent $ac_sub_configure_args"
-  fi
-
-  # Always prepend --disable-option-checking to silence warnings, since
-  # different subdirs can have different --enable and --with options.
-  ac_sub_configure_args="--disable-option-checking $ac_sub_configure_args"
-
-  ac_popdir=`pwd`
-  for ac_dir in : $subdirs; do test "x$ac_dir" = x: && continue
-
-    # Do not complain, so a configure script can configure whichever
-    # parts of a large source tree are present.
-    test -d "$srcdir/$ac_dir" || continue
-
-    ac_msg="=== configuring in $ac_dir (`pwd`/$ac_dir)"
-    $as_echo "$as_me:${as_lineno-$LINENO}: $ac_msg" >&5
-    $as_echo "$ac_msg" >&6
-    as_dir="$ac_dir"; as_fn_mkdir_p
-    ac_builddir=.
-
-case "$ac_dir" in
-.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
-*)
-  ac_dir_suffix=/`$as_echo "$ac_dir" | sed 's|^\.[\\/]||'`
-  # A ".." for each directory in $ac_dir_suffix.
-  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
-  case $ac_top_builddir_sub in
-  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
-  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
-  esac ;;
-esac
-ac_abs_top_builddir=$ac_pwd
-ac_abs_builddir=$ac_pwd$ac_dir_suffix
-# for backward compatibility:
-ac_top_builddir=$ac_top_build_prefix
-
-case $srcdir in
-  .)  # We are building in place.
-    ac_srcdir=.
-    ac_top_srcdir=$ac_top_builddir_sub
-    ac_abs_top_srcdir=$ac_pwd ;;
-  [\\/]* | ?:[\\/]* )  # Absolute name.
-    ac_srcdir=$srcdir$ac_dir_suffix;
-    ac_top_srcdir=$srcdir
-    ac_abs_top_srcdir=$srcdir ;;
-  *) # Relative name.
-    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_top_build_prefix$srcdir
-    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
-esac
-ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
-
-
-    cd "$ac_dir"
-
-    # Check for guested configure; otherwise get Cygnus style configure.
-    if test -f "$ac_srcdir/configure.gnu"; then
-      ac_sub_configure=$ac_srcdir/configure.gnu
-    elif test -f "$ac_srcdir/configure"; then
-      ac_sub_configure=$ac_srcdir/configure
-    elif test -f "$ac_srcdir/configure.in"; then
-      # This should be Cygnus configure.
-      ac_sub_configure=$ac_aux_dir/configure
-    else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: no configuration information is in $ac_dir" >&5
-$as_echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2;}
-      ac_sub_configure=
-    fi
-
-    # The recursion is here.
-    if test -n "$ac_sub_configure"; then
-      # Make the cache file name correct relative to the subdirectory.
-      case $cache_file in
-      [\\/]* | ?:[\\/]* ) ac_sub_cache_file=$cache_file ;;
-      *) # Relative name.
-	ac_sub_cache_file=$ac_top_build_prefix$cache_file ;;
-      esac
-
-      { $as_echo "$as_me:${as_lineno-$LINENO}: running $SHELL $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir" >&5
-$as_echo "$as_me: running $SHELL $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir" >&6;}
-      # The eval makes quoting arguments work.
-      eval "\$SHELL \"\$ac_sub_configure\" $ac_sub_configure_args \
-	   --cache-file=\"\$ac_sub_cache_file\" --srcdir=\"\$ac_srcdir\"" ||
-	as_fn_error $? "$ac_sub_configure failed for $ac_dir" "$LINENO" 5
-    fi
-
-    cd "$ac_popdir"
-  done
 fi
 if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
