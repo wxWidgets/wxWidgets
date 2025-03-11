@@ -2672,8 +2672,12 @@ if test "$wxUSE_EXPAT" != "no"; then
         wxCFLAGS_C99=$ac_cv_prog_cc_c99
         AC_SUBST(wxCFLAGS_C99)
 
-        dnl Expat needs this:
-        AC_CONFIG_SUBDIRS([src/expat/expat])
+        dnl Don't check for docbook: we don't need to generate the
+        dnl documentation and, worse, Expat configure can actually fail the
+        dnl build if docbook is found but docbook2man is not the expected
+        dnl variant.
+        AX_SUBDIRS_CONFIGURE([src/expat/expat],
+            [[--without-docbook]])
     fi
 
     wxUSE_XML=yes
