@@ -171,7 +171,7 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
            m_usingUniversal == t.m_usingUniversal &&
            m_bitness == t.m_bitness &&
            m_endian == t.m_endian &&
-           m_libversionExtraText == t.m_libversionExtraText;
+           m_libVersionExtraText == t.m_libVersionExtraText;
 }
 
 void wxPlatformInfo::InitForCurrentPlatform()
@@ -196,7 +196,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
                                            &m_tkVersionMicro);
         m_usingUniversal = traits->IsUsingUniversalWidgets();
         m_desktopEnv = traits->GetDesktopEnvironment();
-        m_libversionExtraText = traits->GetLibversionExtraText();
+        m_libVersionExtraText = traits->GetLibVersionExtraText();
     }
 
     m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor, &m_osVersionMicro);

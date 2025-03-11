@@ -66,7 +66,7 @@ public:
 #endif // __WXGTK____
 
 #if defined(__WXGTK__) || defined(__WXQT__)
-    virtual wxString GetLibversionExtraText() const override;
+    virtual wxString GetLibVersionExtraText() const override;
 #endif
 
 #if defined(__WXGTK__)

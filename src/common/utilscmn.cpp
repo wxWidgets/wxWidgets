@@ -1067,7 +1067,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                wxPlatformInfo::Get().GetToolkitMicroVersion()
               );
 
-    msg += wxPlatformInfo::Get().GetLibversionExtraText();
+    msg += wxPlatformInfo::Get().GetLibVersionExtraText();
 
     const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
 

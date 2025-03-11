@@ -88,7 +88,7 @@ public:
     virtual bool WriteToStderr(const wxString& WXUNUSED(text)) override
         { return false; }
     virtual WXHWND GetMainHWND() const override { return nullptr; }
-    virtual wxString GetLibversionExtraText() const override;
+    virtual wxString GetLibVersionExtraText() const override;
 };
 
 #elif defined(__WXQT__)
@@ -115,7 +115,7 @@ public:
     virtual bool CanUseStderr() override { return false; }
     virtual bool WriteToStderr(const wxString&) override { return false; }
     virtual WXHWND GetMainHWND() const override { return nullptr; }
-    virtual wxString GetLibversionExtraText() const override;
+    virtual wxString GetLibVersionExtraText() const override;
 };
 
 #endif

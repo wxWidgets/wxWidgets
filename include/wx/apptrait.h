@@ -173,7 +173,7 @@ public:
 
     // Text to be appended to the description. Currently used for getting
     // compile-time versions of GTK+ and Qt.
-    virtual wxString GetLibversionExtraText() const = 0;
+    virtual wxString GetLibVersionExtraText() const = 0;
 
 private:
     static wxSocketManager *ms_manager;
@@ -242,7 +242,7 @@ public:
 
     virtual bool IsUsingUniversalWidgets() const override { return false; }
     virtual wxString GetDesktopEnvironment() const override { return wxEmptyString; }
-    virtual wxString GetLibversionExtraText() const override { return wxEmptyString; }
+    virtual wxString GetLibVersionExtraText() const override { return wxEmptyString; }
 };
 
 // ----------------------------------------------------------------------------
@@ -283,7 +283,7 @@ public:
     }
 
     virtual wxString GetDesktopEnvironment() const override { return wxEmptyString; }
-    virtual wxString GetLibversionExtraText() const override { return wxEmptyString; }
+    virtual wxString GetLibVersionExtraText() const override { return wxEmptyString; }
 };
 
 #endif // wxUSE_GUI
