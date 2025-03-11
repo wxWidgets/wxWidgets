@@ -227,7 +227,7 @@ wxWebRequestURLSession::DoPrepare(void (^completionHandler)(NSData*, NSURLRespon
 wxWebRequest::Result wxWebRequestURLSession::Execute()
 {
     // Define the variables used inside the completion handler.
-    __block class Semaphore
+    class Semaphore
     {
     public:
         Semaphore()
@@ -252,19 +252,38 @@ wxWebRequest::Result wxWebRequestURLSession::Execute()
 
     private:
         dispatch_semaphore_t m_sem;
-    } sem;
 
-    __block struct TaskResult
+        wxDECLARE_NO_COPY_CLASS(Semaphore);
+    };
+
+    // Using __block with Semaphore object itself doesn't work for some reason:
+    // the compiler still wants to copy it. So wrap it in a (smart) pointer.
+    __block std::unique_ptr<Semaphore> sem(new Semaphore());
+
+    struct TaskResult
     {
         NSData* data = nil;
         NSError* error = nil;
+
+        TaskResult() = default;
+
+        TaskResult(const TaskResult& other)
+        {
+            data = [other.data retain];
+            error = [other.error retain];
+        }
+
+        TaskResult& operator=(const TaskResult&) = delete;
 
         ~TaskResult()
         {
             [data release];
             [error release];
         }
-    } taskResult;
+    };
+
+    // Here we can allow copying the object.
+    __block TaskResult taskResult;
 
     // Initialize the task with the completion handler that will wake us up
     // after copying the result into local variables.
@@ -275,7 +294,7 @@ wxWebRequest::Result wxWebRequestURLSession::Execute()
 
         taskResult.error = [error retain];
 
-        sem.Signal();
+        sem->Signal();
     });
 
     if ( !result )
@@ -285,7 +304,7 @@ wxWebRequest::Result wxWebRequestURLSession::Execute()
     [m_task resume];
 
     // Block until it completes.
-    sem.Wait();
+    sem->Wait();
 
     // Process the results.
     if ( taskResult.data )
