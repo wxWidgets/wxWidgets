@@ -50,8 +50,7 @@ public:
 
     ~wxGtkCollatableString()
     {
-        if (m_key)
-            g_free( m_key );
+        g_free( m_key );
     }
 
     wxString     m_label;
