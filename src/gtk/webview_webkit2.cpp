@@ -1910,7 +1910,7 @@ void wxWebViewWebKit::SetupWebExtensionServer()
     char *address = g_strdup_printf("unix:tmpdir=%s", g_get_tmp_dir());
     char *guid = g_dbus_generate_guid();
     GDBusAuthObserver *observer = g_dbus_auth_observer_new();
-    GError *error = nullptr;
+    wxGtkError error;
 
     g_signal_connect(observer, "authorize-authenticated-peer",
                      G_CALLBACK(wxgtk_authorize_authenticated_peer_cb), this);
@@ -1920,12 +1920,12 @@ void wxWebViewWebKit::SetupWebExtensionServer()
                                           guid,
                                           observer,
                                           nullptr,
-                                          &error);
+                                          error.Out());
 
     if (error)
     {
-        g_warning("Failed to start web extension server on %s: %s", address, error->message);
-        g_error_free(error);
+        g_warning("Failed to start web extension server on %s: %s",
+                  address, error.GetMessageStr());
     }
     else
     {
