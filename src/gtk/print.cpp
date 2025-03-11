@@ -47,6 +47,8 @@ wxFORCE_LINK_THIS_MODULE(gtk_print)
 #include "wx/gtk/private/error.h"
 #include "wx/gtk/private/object.h"
 
+#include <vector>
+
 // Useful to convert angles from degrees to radians.
 static const double DEG2RAD  = M_PI / 180.0;
 
@@ -1917,12 +1919,11 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
         {
             wxDash *wx_dashes;
             int num = m_pen.GetDashes (&wx_dashes);
-            gdouble *g_dashes = g_new( gdouble, num );
-            int i;
-            for (i = 0; i < num; ++i)
+
+            std::vector<gdouble> g_dashes(num);
+            for (int i = 0; i < num; ++i)
                 g_dashes[i] = (gdouble) wx_dashes[i];
-            cairo_set_dash( m_cairo, g_dashes, num, 0);
-            g_free( g_dashes );
+            cairo_set_dash( m_cairo, &g_dashes[0], num, 0);
         }
         break;
         case wxPENSTYLE_SOLID:
