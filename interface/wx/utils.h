@@ -231,6 +231,8 @@ void wxInfoMessageBox(wxWindow* parent);
     @see wxVersionInfo
 
     @header{wx/utils.h}
+
+    @library{wxbase}
 */
 wxVersionInfo wxGetLibraryVersionInfo();
 
