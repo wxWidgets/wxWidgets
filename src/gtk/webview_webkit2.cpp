@@ -34,6 +34,7 @@
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/webkit.h"
 #include "wx/gtk/private/error.h"
+#include "wx/gtk/private/object.h"
 #include "wx/gtk/private/variant.h"
 #include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
@@ -458,8 +459,8 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
                                    GParamSpec *,
                                    wxWebViewWebKit *webKitCtrl)
 {
-    gchar *title;
-    g_object_get(G_OBJECT(widget), "title", &title, nullptr);
+    wxGlibPtr<gchar> title;
+    g_object_get(G_OBJECT(widget), "title", title.Out(), nullptr);
 
     wxWebViewEvent event(wxEVT_WEBVIEW_TITLE_CHANGED,
                          webKitCtrl->GetId(),
@@ -469,8 +470,6 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
     event.SetString(wxString::FromUTF8(title));
 
     webKitCtrl->HandleWindowEvent(event);
-
-    g_free(title);
 }
 
 static void
@@ -1907,10 +1906,10 @@ wxWebViewWebKit::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
 void wxWebViewWebKit::SetupWebExtensionServer()
 {
-    char *address = g_strdup_printf("unix:tmpdir=%s", g_get_tmp_dir());
-    char *guid = g_dbus_generate_guid();
-    GDBusAuthObserver *observer = g_dbus_auth_observer_new();
-    GError *error = nullptr;
+    wxGtkString address(g_strdup_printf("unix:tmpdir=%s", g_get_tmp_dir()));
+    wxGtkString guid(g_dbus_generate_guid());
+    wxGtkObject<GDBusAuthObserver> observer(g_dbus_auth_observer_new());
+    wxGtkError error;
 
     g_signal_connect(observer, "authorize-authenticated-peer",
                      G_CALLBACK(wxgtk_authorize_authenticated_peer_cb), this);
@@ -1920,12 +1919,12 @@ void wxWebViewWebKit::SetupWebExtensionServer()
                                           guid,
                                           observer,
                                           nullptr,
-                                          &error);
+                                          error.Out());
 
     if (error)
     {
-        g_warning("Failed to start web extension server on %s: %s", address, error->message);
-        g_error_free(error);
+        g_warning("Failed to start web extension server on %s: %s",
+                  address.c_str(), error.GetMessageStr());
     }
     else
     {
@@ -1933,10 +1932,6 @@ void wxWebViewWebKit::SetupWebExtensionServer()
                          G_CALLBACK(wxgtk_new_connection_cb), &m_extension);
         g_dbus_server_start(m_dbusServer);
     }
-
-    g_free(address);
-    g_free(guid);
-    g_object_unref(observer);
 }
 
 GDBusProxy *wxWebViewWebKit::GetExtensionProxy() const

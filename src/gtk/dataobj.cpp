@@ -253,7 +253,7 @@ bool wxFileDataObject::GetDataHere(void *buf) const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        char* uri = g_filename_to_uri(m_filenames[i].mbc_str(), nullptr, nullptr);
+        wxGtkString uri(g_filename_to_uri(m_filenames[i].mbc_str(), nullptr, nullptr));
         if (uri)
         {
             size_t const len = strlen(uri);
@@ -261,7 +261,6 @@ bool wxFileDataObject::GetDataHere(void *buf) const
             out += len;
             *(out++) = '\r';
             *(out++) = '\n';
-            g_free(uri);
         }
     }
     *out = 0;
@@ -275,10 +274,10 @@ size_t wxFileDataObject::GetDataSize() const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        char* uri = g_filename_to_uri(m_filenames[i].mbc_str(), nullptr, nullptr);
-        if (uri) {
+        wxGtkString uri(g_filename_to_uri(m_filenames[i].mbc_str(), nullptr, nullptr));
+        if (uri)
+        {
             res += strlen(uri) + 2; // Including "\r\n"
-            g_free(uri);
         }
     }
 
@@ -327,16 +326,13 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
             break;
 
         // required to give it a trailing zero
-        gchar *uri = g_strndup( temp, len );
+        wxGtkString uri(g_strndup( temp, len ));
 
-        gchar *fn = g_filename_from_uri( uri, nullptr, nullptr );
-
-        g_free( uri );
+        wxGtkString fn(g_filename_from_uri( uri, nullptr, nullptr ));
 
         if (fn)
         {
             AddFile( wxConvFileName->cMB2WX( fn ) );
-            g_free( fn );
         }
     }
 

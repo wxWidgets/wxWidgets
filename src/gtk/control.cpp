@@ -311,18 +311,15 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     if (!attr.font.IsOk())
     {
         GtkSettings *settings = gtk_settings_get_default();
-        gchar *font_name = nullptr;
+        wxGlibPtr<gchar> font_name;
         g_object_get ( settings,
                        "gtk-font-name",
-                       &font_name,
+                       font_name.Out(),
                        nullptr);
         if (!font_name)
             attr.font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
         else
-        {
             attr.font = wxFont(wxString::FromUTF8(font_name));
-            g_free(font_name);
-        }
     }
 
     if (tlw)

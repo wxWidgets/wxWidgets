@@ -315,7 +315,6 @@ wxIconBundle
 wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
                                     const wxArtClient& WXUNUSED(client))
 {
-    wxIconBundle bundle;
     const wxString stockid = wxArtIDToStock(id);
 
 #ifndef __WXGTK4__
@@ -331,43 +330,39 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
 #endif
     if ( iconset )
     {
-        GtkIconSize *sizes;
+        wxGlibPtr<GtkIconSize> sizes;
         gint n_sizes;
-        gtk_icon_set_get_sizes(iconset, &sizes, &n_sizes);
-        bundle = DoCreateIconBundle
+        gtk_icon_set_get_sizes(iconset, sizes.Out(), &n_sizes);
+        return DoCreateIconBundle
                               (
                                   stockid.utf8_str(),
-                                  sizes, sizes + n_sizes,
+                                  sizes.get(), sizes.get() + n_sizes,
                                   &CreateStockIcon
                               );
-        g_free(sizes);
-        return bundle;
     }
     wxGCC_WARNING_RESTORE()
 #endif // !__WXGTK4__
 
     // otherwise try icon themes
-    gint *sizes = gtk_icon_theme_get_icon_sizes
+    wxGlibPtr<gint> sizes(gtk_icon_theme_get_icon_sizes
                   (
                       gtk_icon_theme_get_default(),
                       stockid.utf8_str()
-                  );
+                  ));
     if ( !sizes )
-        return bundle;
+        return {};
 
-    gint *last = sizes;
+    const gint* first = sizes;
+    const gint* last = first;
     while ( *last )
         last++;
 
-    bundle = DoCreateIconBundle
+    return DoCreateIconBundle
                           (
                               stockid.utf8_str(),
-                              sizes, last,
+                              first, last,
                               &CreateThemeIcon
                           );
-    g_free(sizes);
-
-    return bundle;
 }
 
 // ----------------------------------------------------------------------------
