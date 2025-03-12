@@ -16,6 +16,7 @@
 #include "wx/sharedptr.h"
 #include "wx/withimages.h"
 
+#include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/treeitemdelegate.h"
 
@@ -34,12 +35,14 @@ struct TreeItemDataQt
 
     explicit TreeItemDataQt(wxTreeItemData* data) : data(data)
     {
+#if QT_VERSION_MAJOR < 6
         static bool s_registered = false;
         if ( !s_registered )
         {
             qRegisterMetaTypeStreamOperators<TreeItemDataQt>("TreeItemDataQt");
             s_registered = true;
         }
+#endif
     }
 
     wxTreeItemData *getData() const
@@ -201,10 +204,17 @@ public:
         setSelectionModel(selection_model);
 
         // These signals must be reconnected if the model or selection model is reset or changed.
-        connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-                this, SLOT(_q_emitCurrentItemChanged(QModelIndex, QModelIndex)));
-        connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-                this, SLOT(_q_selectionChanged(QItemSelection, QItemSelection)));
+        connect(selectionModel(), &QItemSelectionModel::currentChanged,
+                [this](const QModelIndex& current, const QModelIndex& previous)
+                {
+                    emit currentItemChanged(itemFromIndex(current), itemFromIndex(previous));
+                });
+        connect(selectionModel(), &QItemSelectionModel::selectionChanged,
+                [this](const QItemSelection& selected, const QItemSelection& deselected)
+                {
+                    selectionChanged(selected, deselected);
+                    emit itemSelectionChanged();
+                });
     }
 
     virtual void paintEvent(QPaintEvent* event) override
@@ -427,6 +437,7 @@ protected:
     wxTreeItemId m_currentItem;
     wxTreeItemId m_previousItem;
 
+    friend class wxTreeCtrl;
     friend class wxQItemSelectionModel;
     using QTreeWidget::itemFromIndex; // wxQItemSelectionModel needs this function
 
@@ -573,7 +584,7 @@ private:
 
     virtual void dropEvent(QDropEvent* event) override
     {
-        endDrag(event->pos());
+        endDrag(wxQtGetEventPosition(event));
 
         // We don't want Qt to actually do the drop.
         event->ignore();
@@ -934,7 +945,8 @@ bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
     wxCHECK_MSG(item.IsOk(), false, "invalid tree item");
 
     const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    return qTreeItem->isSelected();
+    const QModelIndex& index = GetQTreeWidget()->indexFromItem(qTreeItem);
+    return GetQTreeWidget()->selectionModel()->isSelected(index);
 }
 
 bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const

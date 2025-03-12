@@ -9,9 +9,8 @@
 #ifndef _WX_QT_REGION_H_
 #define _WX_QT_REGION_H_
 
-class QRegion;
 class QRect;
-template<class T> class QVector;
+class QRegion;
 
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {
@@ -84,8 +83,8 @@ public:
     wxRect GetRect() const;
 
 private:
-    QVector < QRect > *m_qtRects;
-    int m_pos;
+    std::vector<QRect> m_qtRects;
+    unsigned int m_pos = 0;
 
     wxDECLARE_DYNAMIC_CLASS(wxRegionIterator);
 };
