@@ -125,7 +125,7 @@ bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )
     return QDesktopServices::openUrl( QUrl::fromLocalFile( wxQtConvertString( path ) ) );
 }
 
-wxString wxGUIAppTraits::GetLibversionExtraText() const {
+wxString wxGUIAppTraits::GetPlatformDescription() const {
     return wxString::Format("Compile-time QT version is %s.\n",
                             QT_VERSION_STR);
 }

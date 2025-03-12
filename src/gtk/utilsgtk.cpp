@@ -165,7 +165,7 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
     return wxPORT_GTK;
 }
 
-wxString wxGUIAppTraits::GetLibversionExtraText() const {
+wxString wxGUIAppTraits::GetPlatformDescription() const {
     return wxString::Format("Compile-time GTK+ version is %d.%d.%d.\n",
                             GTK_MAJOR_VERSION,
                             GTK_MINOR_VERSION,

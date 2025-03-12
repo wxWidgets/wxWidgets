@@ -171,9 +171,9 @@ public:
     virtual wxString GetAssertStackTrace();
 #endif // wxUSE_STACKWALKER
 
-    // Text to be appended to the description. Currently used for getting
-    // compile-time versions of GTK+ and Qt.
-    virtual wxString GetLibVersionExtraText() const = 0;
+    // Text to be appended to the description returned by wxGetLibraryVersionInfo().
+    // Currently used for getting compile-time versions of GTK+ and Qt.
+    virtual wxString GetPlatformDescription() const = 0;
 
 private:
     static wxSocketManager *ms_manager;
@@ -242,7 +242,7 @@ public:
 
     virtual bool IsUsingUniversalWidgets() const override { return false; }
     virtual wxString GetDesktopEnvironment() const override { return wxEmptyString; }
-    virtual wxString GetLibVersionExtraText() const override { return wxEmptyString; }
+    virtual wxString GetPlatformDescription() const override { return wxEmptyString; }
 };
 
 // ----------------------------------------------------------------------------
@@ -283,7 +283,7 @@ public:
     }
 
     virtual wxString GetDesktopEnvironment() const override { return wxEmptyString; }
-    virtual wxString GetLibVersionExtraText() const override { return wxEmptyString; }
+    virtual wxString GetPlatformDescription() const override { return wxEmptyString; }
 };
 
 #endif // wxUSE_GUI

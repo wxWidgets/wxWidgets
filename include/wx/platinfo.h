@@ -249,8 +249,8 @@ public:
     int GetToolkitMicroVersion() const
         { return m_tkVersionMicro; }
 
-    wxString GetLibVersionExtraText() const
-        { return m_libVersionExtraText; }
+    wxString GetPlatformDescription() const
+        { return m_platformDescription; }
 
     bool CheckToolkitVersion(int major, int minor, int micro = 0) const
     {
@@ -440,7 +440,7 @@ protected:
     wxString m_nativeCpuArch;
 
     // e.g. compile-time version of toolkit, possibly empty
-    wxString m_libVersionExtraText;
+    wxString m_platformDescription;
 };
 
 // Return true if running under Wine and fills the provided pointer with
