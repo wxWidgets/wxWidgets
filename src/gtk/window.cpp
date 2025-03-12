@@ -1353,8 +1353,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             // We generate CHAR events for Ctrl-[@-_] key presses with key
             // codes in 0..31 range because it may make sense to handle them in
             // the same way as "real" CHARs (e.g. to handle Ctrl-H as backspace
-            // etc), but we don't generate them for Ctrl-anything-else because
-            // this just doesn't seem useful at all and wxMSW doesn't do it.
+            // etc).
             if ( eventChar.ControlDown() )
             {
                 if ( uniChar >= 'a' && uniChar <= 'z' )
@@ -1369,18 +1368,23 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                 {
                     // Convert to ASCII control character.
                     uniChar &= 0x1f;
-
-                    eventChar.m_keyCode = uniChar;
-#if wxUSE_UNICODE
-                    eventChar.m_uniChar = uniChar;
-#endif // wxUSE_UNICODE
                 }
-                else
+                else if ( uniChar != ' ' )
                 {
+                    // For the printable characters other than Space (for which
+                    // we still do generate CHAR event, for compatibility with
+                    // both previous versions of wxGTK and wxMSW) we don't
+                    // generate these events at all, as this doesn't seem
+                    // very useful and wxMSW doesn't do it.
                     wxLogTrace(TRACE_KEYS, "Not generating char event for Ctrl-%s",
                                wxDumpUniChar(uniChar));
                     break;
                 }
+
+                eventChar.m_keyCode = uniChar;
+#if wxUSE_UNICODE
+                eventChar.m_uniChar = uniChar;
+#endif // wxUSE_UNICODE
             }
             else // Not a control character.
             {
