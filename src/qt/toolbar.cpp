@@ -20,8 +20,9 @@
 #endif // WX_PRECOMP
 
 #include "wx/toolbar.h"
-#include "wx/qt/private/winevent.h"
+#include "wx/qt/private/compat.h"
 #include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtToolButton;
@@ -91,11 +92,8 @@ void wxQtToolButton::mousePressEvent( QMouseEvent *event )
     QToolButton::mousePressEvent(event);
     if (event->button() == Qt::RightButton)
     {
-#if QT_VERSION_MAJOR >= 6
-        GetToolBar()->OnRightClick( m_toolId, event->position().x(), event->position().y() );
-#else
-        GetToolBar()->OnRightClick( m_toolId, event->x(), event->y() );
-#endif
+        const QPoint pos = wxQtGetEventPosition(event);
+        GetToolBar()->OnRightClick( m_toolId, pos.x(), pos.y() );
     }
 }
 

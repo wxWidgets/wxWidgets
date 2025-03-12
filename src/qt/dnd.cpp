@@ -14,6 +14,7 @@
 #include "wx/scopedarray.h"
 #include "wx/window.h"
 
+#include "wx/qt/private/compat.h"
 #include "wx/qt/private/converter.h"
 
 #include <QtGui/QDrag>
@@ -205,11 +206,7 @@ public:
 
         event->accept();
 
-#if QT_VERSION_MAJOR >= 6
-        const QPoint where = e->position().toPoint();
-#else
-        const QPoint where = e->pos();
-#endif
+        const QPoint where = wxQtGetEventPosition(e);
         const wxDragResult proposedResult =
             DropActionToDragResult(e->proposedAction());
         const wxDragResult result = m_dropTarget->OnEnter(where.x(),
@@ -233,11 +230,7 @@ public:
 
         const PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
 
-#if QT_VERSION_MAJOR >= 6
-        const QPoint where = e->position().toPoint();
-#else
-        const QPoint where = e->pos();
-#endif
+        const QPoint where = wxQtGetEventPosition(e);
         const wxDragResult proposedResult =
             DropActionToDragResult(e->proposedAction());
         const wxDragResult result = m_dropTarget->OnDragOver(where.x(),
@@ -255,11 +248,7 @@ public:
 
         const PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
 
-#if QT_VERSION_MAJOR >= 6
-        const QPoint where = e->position().toPoint();
-#else
-        const QPoint where = e->pos();
-#endif
+        const QPoint where = wxQtGetEventPosition(e);
         if ( m_dropTarget->OnDrop(where.x(), where.y()) )
         {
             m_dropTarget->OnData(where.x(),

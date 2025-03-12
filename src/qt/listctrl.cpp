@@ -25,6 +25,7 @@
 #include "wx/imaglist.h"
 #include "wx/recguard.h"
 
+#include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/treeitemfactory.h"
 
@@ -1138,11 +1139,8 @@ protected:
             {
                 m_isDragging = false;
 
-#if QT_VERSION_MAJOR >= 6
-                const ListEventData eventData { m_parent->columnAt(event->position().x()), -1 };
-#else
-                const ListEventData eventData { m_parent->columnAt(event->x()), -1 };
-#endif
+                const QPoint pos = wxQtGetEventPosition(event);
+                const ListEventData eventData { m_parent->columnAt(pos.x()), -1 };
                 m_parent->EmitListEvent(wxEVT_LIST_COL_END_DRAG, QModelIndex(), &eventData);
             }
 

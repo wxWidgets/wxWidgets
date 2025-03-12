@@ -16,6 +16,7 @@
 #include "wx/sharedptr.h"
 #include "wx/withimages.h"
 
+#include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/treeitemdelegate.h"
 
@@ -583,11 +584,7 @@ private:
 
     virtual void dropEvent(QDropEvent* event) override
     {
-#if QT_VERSION_MAJOR >= 6
-        endDrag(event->position().toPoint());
-#else
-        endDrag(event->pos());
-#endif
+        endDrag(wxQtGetEventPosition(event));
 
         // We don't want Qt to actually do the drop.
         event->ignore();
