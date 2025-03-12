@@ -648,18 +648,24 @@ wxRendererQt::DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect,
             return;
         }
 
+#if QT_VERSION_MAJOR < 6
         option.rect = option.rect.transposed();
+#endif
         option.invertedAppearance = true;
 
         const auto& r = option.rect;
 
         painter->save();
+#if QT_VERSION_MAJOR >= 6
+        painter->translate(0, r.height() * (1.0 - value/100.0));
+#else // QT_VERSION_MAJOR < 6
         auto m = painter->worldTransform();
         painter->resetTransform();
         painter->translate(option.rect.topLeft());
         painter->rotate(90);
         painter->translate(-r.topLeft() - QPoint(0, r.height()));
         painter->setWorldTransform(m, true);
+#endif // QT_VERSION_MAJOR >= 6
         qtStyle->drawControl(QStyle::CE_ProgressBarContents, &option, painter, qtWidget);
         painter->restore();
     }
