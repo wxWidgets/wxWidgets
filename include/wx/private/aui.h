@@ -10,9 +10,22 @@
 #ifndef _WX_PRIVATE_AUI_H_
 #define _WX_PRIVATE_AUI_H_
 
-// This is a utility function that creates a bitmap with mask corresponding to
-// the black bits of the given (as raw bits in XBM format) monochrome bitmap
-// and white bits mapped to the given colour.
+#include "wx/bmpbndl.h"
+
+// wxAuiCreateBitmap() is a utility function that creates a bitmap using the
+// given colour from monochrome image defined by either SVG (if supported in
+// this build) or XBM data.
+
+#ifdef wxHAS_SVG
+// SVG data must start with a new line (this is convenient when embedding it as
+// a raw string) and use "currentColor" for the colour to be mapped to the
+// given colour.
+wxBitmapBundle wxAuiCreateBitmap(const char* svgData, int w, int h,
+                                 const wxColour& color);
+#endif
+
+// When using XBM, the black bits of the given monochrome bitmap define the
+// mask of the returned bitmap and white bits are mapped to the given colour.
 wxBitmap wxAuiCreateBitmap(const unsigned char bits[], int w, int h,
                            const wxColour& color);
 

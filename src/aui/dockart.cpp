@@ -47,6 +47,8 @@
 #endif
 #endif
 
+#include "wx/private/aui.h"
+
 #include <math.h>
 
 wxColor wxAuiLightContrastColour(const wxColour& c)
@@ -82,8 +84,19 @@ float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2)
     return L1 > L2 ? (L1 + 0.05f) / (L2 + 0.05f) : (L2 + 0.05f) / (L1 + 0.05f);
 }
 
-// wxAuiBitmapFromBits() is a utility function that creates a
-// masked bitmap from raw bits (XBM format)
+#ifdef wxHAS_SVG
+wxBitmapBundle wxAuiCreateBitmap(const char* svgData, int w, int h,
+                                   const wxColour& color)
+{
+    // All data starts with a new line, use +1 to skip it.
+    wxString s = wxString::FromAscii(svgData + 1);
+
+    s.Replace("currentColor", color.GetAsString(wxC2S_HTML_SYNTAX));
+
+    return wxBitmapBundle::FromSVG(s.ToAscii(), wxSize(w, h));
+}
+#endif // wxHAS_SVG
+
 wxBitmap wxAuiCreateBitmap(const unsigned char bits[], int w, int h,
                            const wxColour& color)
 {
@@ -258,8 +271,34 @@ wxAuiDockArt* wxAuiDefaultDockArt::Clone()
 void
 wxAuiDefaultDockArt::InitBitmaps ()
 {
-    // some built in bitmaps
-    // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
+    // Initialize built in bitmaps, from SVG, if supported, or XBM otherwise.
+#ifdef wxHAS_SVG
+    static const char* const close_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <line x1="4" y1="4" x2="11" y2="11" stroke="currentColor" fill="none" stroke-linecap="round" stroke-width="1.5"/>
+    <line x1="4" y1="11" x2="11" y2="4" stroke="currentColor" fill="none" stroke-linecap="round" stroke-width="1.5"/>
+</svg>
+)svg";
+
+    static const char* const maximize_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <rect x="3" y="3" width="9" height="9" stroke="currentColor" fill="none" stroke-width="1"/>
+    <line x1="3" y1="5.5" x2="12" y2="5.5" stroke="currentColor" stroke-width="1"/>
+</svg>
+)svg";
+
+    static const char* const restore_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <path d="M 3 5 v 8 h 8 v -8 Z m 2 0 v -2 h 8 v 8 h -2" stroke="currentColor" fill="none" stroke-width="1"/>
+</svg>
+)svg";
+
+    static const char* const pin_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <path d="M 5 9 h 6 h -1 v -6 h -1 v 6 v -6 h -3 v 6 h 2 v 4" stroke="currentColor" fill="none" stroke-width="1"/>
+</svg>
+)svg";
+#else // !wxHAS_SVG
 #if defined( __WXMAC__ )
      static const unsigned char close_bitmap_data[]={
          0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFE, 0x03, 0xF8, 0x01, 0xF0, 0x19, 0xF3,
@@ -298,6 +337,7 @@ wxAuiDefaultDockArt::InitBitmaps ()
         0xff,0xff,0xff,0xff,0xff,0xff,0x1f,0xfc,0xdf,0xfc,0xdf,0xfc,
         0xdf,0xfc,0xdf,0xfc,0xdf,0xfc,0x0f,0xf8,0x7f,0xff,0x7f,0xff,
         0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+#endif // wxHAS_SVG/!wxHAS_SVG
 
 #ifdef __WXMAC__
     const wxColour inactive = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION);
