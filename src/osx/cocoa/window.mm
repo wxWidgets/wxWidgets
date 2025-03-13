@@ -4244,7 +4244,7 @@ void wxWidgetCocoaImpl::UseClippingView()
 {
 // starting from Sonoma child windows are bleeding through under the scrollbar
 // use native scrollviews therefore
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_14_0
+#if defined(MAC_OS_VERSION_14_0) && MAC_OS_VERSION_14_0 && __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_14_0
     if ( WX_IS_MACOS_AVAILABLE(14, 0) )
     {
         wxWindow* peer = m_wxPeer;
