@@ -175,9 +175,23 @@ void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
 
     // Note: update the bitmaps here as they depend on the system colours too.
 
-    // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
+#ifdef wxHAS_SVG
+    static const char* const buttonDropdownBitmapData = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="5" height="3">
+    <polygon points="0, 0 5 0 2.5, 2" stroke="currentColor" fill="currentColor" stroke-width="0"/>
+</svg>
+)svg";
+
+    static const char* const overflowBitmapData = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="7" height="6">
+    <rect x="0" y="0" width="7" height="1" stroke="currentColor" fill="currentColor" stroke-width="0"/>
+    <polygon points="0, 2 7 2 3.5, 6" stroke="currentColor" fill="currentColor" stroke-width="0"/>
+</svg>
+)svg";
+#else // !wxHAS_SVG
     static const unsigned char buttonDropdownBitmapData[] = { 0xe0, 0xf1, 0xfb };
     static const unsigned char overflowBitmapData[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
+#endif // wxHAS_SVG/!wxHAS_SVG
 
     m_buttonDropDownBmp = wxAuiCreateBitmap(buttonDropdownBitmapData, 5, 3,
                                               wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
