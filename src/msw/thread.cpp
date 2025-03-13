@@ -38,6 +38,7 @@
 
 #include "wx/except.h"
 #include "wx/dynlib.h"
+#include "wx/sysopt.h"
 
 // must have this symbol defined to get _beginthread/_endthread declarations
 #ifndef _MT
@@ -452,6 +453,9 @@ public:
     // really start the thread (if it's not already dead)
     static THREAD_RETVAL DoThreadStart(wxThread *thread);
 
+    // really really start the thread, without catching exceptions
+    static THREAD_RETVAL DoThreadStartWithoutExceptionHandling(wxThread *thread);
+
     // call OnExit() on the thread
     static void DoThreadOnExit(wxThread *thread);
 
@@ -500,11 +504,32 @@ private:
 /* static */
 void wxThreadInternal::DoThreadOnExit(wxThread *thread)
 {
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        return thread->OnExit();
+    }
     wxTRY
     {
-        thread->OnExit();
+        return thread->OnExit();
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+}
+
+/* static */
+THREAD_RETVAL wxThreadInternal::DoThreadStartWithoutExceptionHandling(wxThread* thread)
+{
+    // store the thread object in the TLS
+    wxASSERT_MSG(gs_tlsThisThread != TLS_OUT_OF_INDEXES,
+        "TLS index not set. Is wx initialized?");
+
+    if (!::TlsSetValue(gs_tlsThisThread, thread))
+    {
+        wxLogSysError(_("Cannot start thread: error writing TLS."));
+
+        return THREAD_ERROR_EXIT;
+    }
+
+    return wxPtrToUInt(thread->Entry());
 }
 
 /* static */
@@ -512,26 +537,17 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 {
     wxON_BLOCK_EXIT1(DoThreadOnExit, thread);
 
-    THREAD_RETVAL rc = THREAD_ERROR_EXIT;
-
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        return DoThreadStartWithoutExceptionHandling(thread);
+    }
     wxTRY
     {
-        // store the thread object in the TLS
-        wxASSERT_MSG( gs_tlsThisThread != TLS_OUT_OF_INDEXES,
-                      "TLS index not set. Is wx initialized?" );
-
-        if ( !::TlsSetValue(gs_tlsThisThread, thread) )
-        {
-            wxLogSysError(_("Cannot start thread: error writing TLS."));
-
-            return THREAD_ERROR_EXIT;
-        }
-
-        rc = wxPtrToUInt(thread->Entry());
+        return DoThreadStartWithoutExceptionHandling(thread);
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
-    return rc;
+    return THREAD_ERROR_EXIT;
 }
 
 /* static */
