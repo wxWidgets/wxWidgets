@@ -84,8 +84,8 @@ float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2)
 
 // wxAuiBitmapFromBits() is a utility function that creates a
 // masked bitmap from raw bits (XBM format)
-wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
-                             const wxColour& color)
+wxBitmap wxAuiCreateBitmap(const unsigned char bits[], int w, int h,
+                           const wxColour& color)
 {
     wxImage img = wxBitmap((const char*)bits, w, h).ConvertToImage();
     img.InitAlpha();
@@ -261,17 +261,17 @@ wxAuiDefaultDockArt::InitBitmaps ()
     // some built in bitmaps
     // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
 #if defined( __WXMAC__ )
-     static const unsigned char close_bits[]={
+     static const unsigned char close_bitmap_data[]={
          0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFE, 0x03, 0xF8, 0x01, 0xF0, 0x19, 0xF3,
          0xB8, 0xE3, 0xF0, 0xE1, 0xE0, 0xE0, 0xF0, 0xE1, 0xB8, 0xE3, 0x19, 0xF3,
          0x01, 0xF0, 0x03, 0xF8, 0x0F, 0xFE, 0xFF, 0xFF };
 #elif defined(__WXGTK__)
-     static const unsigned char close_bits[]={
+     static const unsigned char close_bitmap_data[]={
          0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xfb, 0xef, 0xdb, 0xed, 0x8b, 0xe8,
          0x1b, 0xec, 0x3b, 0xee, 0x1b, 0xec, 0x8b, 0xe8, 0xdb, 0xed, 0xfb, 0xef,
          0x07, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 #else
-    static const unsigned char close_bits[]={
+    static const unsigned char close_bitmap_data[]={
          // reduced height, symmetric
          0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xcf, 0xf3, 0x9f, 0xf9,
          0x3f, 0xfc, 0x7f, 0xfe, 0x3f, 0xfc, 0x9f, 0xf9, 0xcf, 0xf3, 0xff, 0xff,
@@ -284,17 +284,17 @@ wxAuiDefaultDockArt::InitBitmaps ()
       */
 #endif
 
-    static const unsigned char maximize_bits[] = {
+    static const unsigned char maximize_bitmap_data[] = {
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xf7, 0xf7, 0x07, 0xf0,
         0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0x07, 0xf0,
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-    static const unsigned char restore_bits[]={
+    static const unsigned char restore_bitmap_data[]={
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x1f, 0xf0, 0x1f, 0xf0, 0xdf, 0xf7,
         0x07, 0xf4, 0x07, 0xf4, 0xf7, 0xf5, 0xf7, 0xf1, 0xf7, 0xfd, 0xf7, 0xfd,
         0x07, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-    static const unsigned char pin_bits[]={
+    static const unsigned char pin_bitmap_data[]={
         0xff,0xff,0xff,0xff,0xff,0xff,0x1f,0xfc,0xdf,0xfc,0xdf,0xfc,
         0xdf,0xfc,0xdf,0xfc,0xdf,0xfc,0x0f,0xf8,0x7f,0xff,0x7f,0xff,
         0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
@@ -307,17 +307,17 @@ wxAuiDefaultDockArt::InitBitmaps ()
     const wxColor active = m_activeCaptionTextColour;
 #endif
 
-    m_inactiveCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, inactive);
-    m_activeCloseBitmap = wxAuiBitmapFromBits(close_bits, 16, 16, active);
+    m_inactiveCloseBitmap = wxAuiCreateBitmap(close_bitmap_data, 16, 16, inactive);
+    m_activeCloseBitmap = wxAuiCreateBitmap(close_bitmap_data, 16, 16, active);
 
-    m_inactiveMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, inactive);
-    m_activeMaximizeBitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, active);
+    m_inactiveMaximizeBitmap = wxAuiCreateBitmap(maximize_bitmap_data, 16, 16, inactive);
+    m_activeMaximizeBitmap = wxAuiCreateBitmap(maximize_bitmap_data, 16, 16, active);
 
-    m_inactiveRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, inactive);
-    m_activeRestoreBitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, active);
+    m_inactiveRestoreBitmap = wxAuiCreateBitmap(restore_bitmap_data, 16, 16, inactive);
+    m_activeRestoreBitmap = wxAuiCreateBitmap(restore_bitmap_data, 16, 16, active);
 
-    m_inactivePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, inactive);
-    m_activePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, active);
+    m_inactivePinBitmap = wxAuiCreateBitmap(pin_bitmap_data, 16, 16, inactive);
+    m_activePinBitmap = wxAuiCreateBitmap(pin_bitmap_data, 16, 16, active);
 }
 
 void wxAuiDefaultDockArt::UpdateColoursFromSystem()
