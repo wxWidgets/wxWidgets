@@ -321,6 +321,15 @@ TEST_CASE("URI::UserInfo", "[uri]")
 
     CHECK( uri.Create("https://u:pass%3Dword@h/") );
     CHECK( wxURI::Unescape(uri.GetPassword()) == "pass=word" );
+
+    // Also test that using SetUserAndPassword() works.
+    uri = "https://host/";
+    uri.SetUserAndPassword("me@here!");
+    CHECK( uri.BuildURI() == "https://me%40here!@host/" );
+
+    uri.SetUserAndPassword("you:", "?me");
+    INFO(DumpURI(uri));
+    CHECK( uri.BuildURI() == "https://you%3a:%3fme@host/" );
 }
 
 //examples taken from RFC 2396.bis

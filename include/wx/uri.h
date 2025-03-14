@@ -98,6 +98,11 @@ public:
     wxString GetUser() const;
     wxString GetPassword() const;
 
+    // Set username and password for the URI. This function is _not_ the exact
+    // counterpart of GetUserInfo() because it takes unescaped strings, unlike
+    // the latter, which returns them in the escaped form, hence it uses a
+    // deliberately different name.
+    void SetUserAndPassword(const wxString& user, const wxString& password = {});
 
     // combine all URI components into a single string
     //

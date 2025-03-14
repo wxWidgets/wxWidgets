@@ -287,6 +287,26 @@ public:
     void Resolve(const wxURI& base, int flags = wxURI_STRICT);
 
     /**
+        Sets the user and password for the URI.
+
+        Please note that this function is not the exact counterpart of
+        GetUserInfo() because it takes unescaped strings, unlike the latter,
+        which returns them in the escaped form, and hence it uses a slightly
+        different name. For example, passing `user@domain` as @a user to this
+        function will result in GetUser() returning `user%40domain` (which can
+        be turned back into the original string by passing it to Unescape()).
+
+        @param user
+            User name. If empty, resets any existing user information.
+        @param password
+            Password. If empty, the password is not set (and any existing
+            password is removed).
+
+        @since 3.3.0
+     */
+    void SetUserAndPassword(const wxString& user, const wxString& password = {});
+
+    /**
         Translates all escape sequences (normal characters and returns the result.
 
         If you want to unescape an entire wxURI, use BuildUnescapedURI()
