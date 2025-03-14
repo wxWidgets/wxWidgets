@@ -129,6 +129,9 @@ public:
         that this is explicitly depreciated by RFC 1396 and should generally be
         avoided if possible.
 
+        Note that the returned string may contain percent-escaped characters,
+        use Unescape() to retrieve the original user name value.
+
         @c "http://<user>:<password>@mysite.com/mypath"
     */
     wxString GetPassword() const;
@@ -193,6 +196,9 @@ public:
         Returns the username part of the userinfo component of this URI. Note
         that this is explicitly depreciated by RFC 1396 and should generally be
         avoided if possible.
+
+        Note that the returned string may contain percent-escaped characters,
+        use Unescape() to retrieve the original user name value.
 
         @c "http://<user>:<password>@mysite.com/mypath"
     */
