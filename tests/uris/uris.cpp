@@ -101,6 +101,19 @@ namespace Catch
     };
 }
 
+// Can be used to check that parsing the given URI fails and log the URI that
+// we created if it succeeded.
+static inline bool CheckBadURI(const wxString& uri)
+{
+    wxURI test;
+    if ( !test.Create(uri) )
+        return true;
+
+    WARN("Parsed \"" << uri << "\" as \"" << DumpURI(test) << "\"");
+
+    return false;
+}
+
 TEST_CASE("URI::IPv4", "[uri]")
 {
     URI_ASSERT_IPV4_TEST("192.168.1.100", "192.168.1.100");
@@ -266,6 +279,48 @@ TEST_CASE("URI::Paths", "[uri]")
     URI_ASSERT_PATH_EQUAL("http://good.com:8042/GOODPATH", "/GOODPATH");
     //When authority is not present, the path cannot begin with two slash characters ("//").
     URI_ASSERT_BADPATH("http:////BADPATH");
+}
+
+TEST_CASE("URI::UserInfo", "[uri]")
+{
+    wxURI uri;
+
+    // Simple cases.
+    CHECK( wxURI("https://host/").GetUser() == "" );
+    CHECK( wxURI("https://user@host/").GetUser() == "user" );
+
+    CHECK( uri.Create("https://user:password@host/") );
+    CHECK( uri.GetUser() == "user" );
+    CHECK( uri.GetPassword() == "password" );
+
+    // Percent-encoded characters should be accepted.
+    CHECK( uri.Create("https://me%40some%3awhere@host/") );
+    CHECK( wxURI::Unescape(uri.GetUser()) == "me@some:where" );
+
+    CHECK( uri.Create("https://u:p%3as@h/") );
+    CHECK( uri.GetUser() == "u" );
+    CHECK( wxURI::Unescape(uri.GetPassword()) == "p:s" );
+
+    // Non-percent encoded characters from gen-delims (RFC 3986 2.2) must be
+    // rejected. Note that in some cases the URI will still be parsed, but the
+    // user part will not be interpreted as the user name.
+    CHECK( wxURI::Unescape(wxURI("https://me@foo@host/").GetServer())
+                == "foo@host" );
+    CHECK( wxURI("https://me/foo@host/").GetServer() == "me" );
+    CHECK( wxURI("https://me#foo@host/").GetFragment() == "foo@host/" );
+    CHECK( CheckBadURI("https://me:pass?@host/") );
+
+    // But sub-delims (defined in the same section of the RFC) may be used
+    // either in the encoded or raw form.
+    CHECK( wxURI("https://me!@host/").GetUser() == "me!" );
+    CHECK( wxURI::Unescape(wxURI("https://me%21@host/").GetUser()) == "me!" );
+
+    CHECK( uri.Create("https://u:pass=word@h/") );
+    CHECK( uri.GetUser() == "u" );
+    CHECK( wxURI::Unescape(uri.GetPassword()) == "pass=word" );
+
+    CHECK( uri.Create("https://u:pass%3Dword@h/") );
+    CHECK( wxURI::Unescape(uri.GetPassword()) == "pass=word" );
 }
 
 //examples taken from RFC 2396.bis
