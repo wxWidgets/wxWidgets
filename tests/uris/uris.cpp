@@ -71,6 +71,36 @@
 #define URI_ASSERT_NORMALIZEDPATH_EQUAL(uri, expected) \
     { URI_ASSERT_NORMALIZEDENCODEDPATH_EQUAL(uri, expected); }
 
+// Helper function used to show components of wxURI.
+static wxString DumpURI(const wxURI& uri)
+{
+    return wxString::Format
+           (
+             "URI{[%s]://[%s]:[%s]@[%s]:[%s]/[%s]?[%s]#[%s]}",
+             uri.GetScheme(),
+             uri.GetUser(),
+             uri.GetPassword(),
+             uri.GetServer(),
+             uri.GetPort(),
+             uri.GetPath(),
+             uri.GetQuery(),
+             uri.GetFragment()
+           );
+}
+
+// Allow CATCH macros output wxURI objects unambiguously.
+namespace Catch
+{
+    template <>
+    struct StringMaker<wxURI>
+    {
+        static std::string convert(const wxURI& uri)
+        {
+            return DumpURI(uri).utf8_string();
+        }
+    };
+}
+
 TEST_CASE("URI::IPv4", "[uri]")
 {
     URI_ASSERT_IPV4_TEST("192.168.1.100", "192.168.1.100");
