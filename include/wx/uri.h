@@ -176,7 +176,8 @@ protected:
 
     wxURIHostType m_hostType;
 
-    size_t m_fields;
+    // This is a combination of wxURIFieldType flags.
+    unsigned m_fields = 0;
 
     wxDECLARE_DYNAMIC_CLASS(wxURI);
 };
