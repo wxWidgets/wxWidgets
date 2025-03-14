@@ -41,17 +41,6 @@ wxIMPLEMENT_CLASS(wxURI, wxObject);
 // Constructors and cleanup
 // ---------------------------------------------------------------------------
 
-wxURI::wxURI()
-     : m_hostType(wxURI_REGNAME)
-{
-}
-
-wxURI::wxURI(const wxString& uri)
-     : m_hostType(wxURI_REGNAME)
-{
-    Create(uri);
-}
-
 bool wxURI::Create(const wxString& uri)
 {
     if (m_fields)

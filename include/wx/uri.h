@@ -51,10 +51,12 @@ enum wxURIFlags
 class WXDLLIMPEXP_BASE wxURI : public wxObject
 {
 public:
-    wxURI();
-    wxURI(const wxString& uri);
+    wxURI() = default;
+    wxURI(const wxString& uri) { Create(uri); }
 
-    // default copy ctor, assignment operator and dtor are ok
+    wxURI(const wxURI& uri) = default;
+    wxURI& operator=(const wxURI& uri) = default;
+    ~wxURI() = default;
 
     bool Create(const wxString& uri);
 
@@ -174,7 +176,7 @@ protected:
     wxString m_server;
     wxString m_port;
 
-    wxURIHostType m_hostType;
+    wxURIHostType m_hostType = wxURI_REGNAME;
 
     // This is a combination of wxURIFieldType flags.
     unsigned m_fields = 0;
