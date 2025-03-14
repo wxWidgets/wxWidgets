@@ -56,6 +56,10 @@ public:
 
     wxURI(const wxURI& uri) = default;
     wxURI& operator=(const wxURI& uri) = default;
+
+    wxURI(wxURI&& uri) = default;
+    wxURI& operator=(wxURI&& uri) = default;
+
     ~wxURI() = default;
 
     bool Create(const wxString& uri);
@@ -69,6 +73,7 @@ public:
     bool operator==(const wxURI& uri) const;
 
     // various accessors
+    bool IsEmpty() const { return m_fields == 0; }
 
     bool HasScheme() const      { return (m_fields & wxURI_SCHEME) != 0;   }
     bool HasUserInfo() const    { return (m_fields & wxURI_USERINFO) != 0; }

@@ -29,8 +29,8 @@ enum wxURIHostType
     wxURI automatically escapes invalid characters in a string, so there is no
     chance of wxURI "failing" on construction/creation.
 
-    wxURI supports copy construction and standard assignment operators. wxURI
-    can also be inherited from to provide further functionality.
+    wxURI is a value-like type, and has both copy and move constructors and
+    the standard as well as a move-assignment operators.
 
     To obtain individual components you can use one of the GetXXX() methods.
     However, you should check HasXXX() before calling a get method, which
@@ -248,6 +248,15 @@ public:
         Returns @true if the User component of the URI exists.
     */
     bool HasUserInfo() const;
+
+    /**
+        Returns @true if the URI is empty.
+
+        Empty URI has no non-empty components.
+
+        @since 3.3.0
+    */
+    bool IsEmpty() const;
 
     /**
         Returns @true if a valid [absolute] URI, otherwise this URI is a URI

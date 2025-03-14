@@ -398,6 +398,23 @@ TEST_CASE("URI::BackwardsResolving", "[uri]")
     URI_TEST_RESOLVE_LAX("http:g", "http://a/b/c/g");
 }
 
+TEST_CASE("URI::Ctors", "[uri]")
+{
+    wxURI uri;
+    CHECK( uri.IsEmpty() );
+
+    wxURI uri2("http://foo.bar");
+    uri = uri2;
+    CHECK( !uri.IsEmpty() );
+    CHECK( uri == uri2 );
+
+    uri = wxURI();
+    CHECK( uri.IsEmpty() );
+
+    uri = std::move(uri2);
+    CHECK( !uri.IsEmpty() );
+}
+
 TEST_CASE("URI::Assignment", "[uri]")
 {
     wxURI uri1("http://mysite.com"),
