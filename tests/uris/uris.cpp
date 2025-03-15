@@ -38,25 +38,25 @@
     wxSTATEMENT_MACRO_BEGIN \
         const wxURI u(uri); \
         INFO(DumpURI(u)); \
-        CHECK(u.GetServer() == (expectedhost)); \
-        CHECK(u.GetHostType() == (expectedtype)); \
+        CHECK(u.GetServer() == expectedhost); \
+        CHECK(u.GetHostType() == expectedtype); \
     wxSTATEMENT_MACRO_END
 
 #define URI_ASSERT_HOST_TESTBAD(uri, ne) \
     wxSTATEMENT_MACRO_BEGIN \
         const wxURI u(uri); \
         INFO(DumpURI(u)); \
-        CHECK(u.GetHostType() != (ne)); \
+        CHECK(u.GetHostType() != ne); \
     wxSTATEMENT_MACRO_END
 
 #define URI_ASSERT_HOST_EQUAL(uri, expected) \
-    URI_ASSERT_PART_EQUAL((uri), (expected), GetServer())
+    URI_ASSERT_PART_EQUAL(uri, expected, GetServer())
 #define URI_ASSERT_PATH_EQUAL(uri, expected) \
     URI_ASSERT_PART_EQUAL((uri), (expected), GetPath())
 #define URI_ASSERT_HOSTTYPE_EQUAL(uri, expected) \
-    URI_ASSERT_PART_EQUAL((uri), (expected), GetHostType())
+    URI_ASSERT_PART_EQUAL(uri, expected, GetHostType())
 #define URI_ASSERT_USER_EQUAL(uri, expected) \
-    URI_ASSERT_PART_EQUAL((uri), (expected), GetUser())
+    URI_ASSERT_PART_EQUAL(uri, expected, GetUser())
 
 #define URI_ASSERT_BADPATH(uri) \
     wxSTATEMENT_MACRO_BEGIN \
