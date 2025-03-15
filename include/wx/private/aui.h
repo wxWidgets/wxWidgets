@@ -22,12 +22,12 @@
 // given colour.
 wxBitmapBundle wxAuiCreateBitmap(const char* svgData, int w, int h,
                                  const wxColour& color);
-#endif
-
+#else // !wxHAS_SVG
 // When using XBM, the black bits of the given monochrome bitmap define the
 // mask of the returned bitmap and white bits are mapped to the given colour.
 wxBitmap wxAuiCreateBitmap(const unsigned char bits[], int w, int h,
                            const wxColour& color);
+#endif // wxHAS_SVG/!wxHAS_SVG
 
 // Define some specialized functions to create bitmaps used in both dockart.cpp
 // and tabart.cpp.

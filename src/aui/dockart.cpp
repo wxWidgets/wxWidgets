@@ -95,8 +95,7 @@ wxBitmapBundle wxAuiCreateBitmap(const char* svgData, int w, int h,
 
     return wxBitmapBundle::FromSVG(s.ToAscii(), wxSize(w, h));
 }
-#endif // wxHAS_SVG
-
+#else // !wxHAS_SVG
 wxBitmap wxAuiCreateBitmap(const unsigned char bits[], int w, int h,
                            const wxColour& color)
 {
@@ -126,6 +125,7 @@ wxBitmap wxAuiCreateBitmap(const unsigned char bits[], int w, int h,
     }
     return wxBitmap(img);
 }
+#endif // wxHAS_SVG/!wxHAS_SVG
 
 static void DrawGradientRectangle(wxDC& dc,
                                   const wxRect& rect,
