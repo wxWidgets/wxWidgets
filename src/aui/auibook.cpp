@@ -3213,22 +3213,22 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
         // make sure we are not over the hint window
         if (!wxDynamicCast(tab_ctrl, wxFrame))
         {
-            wxAuiTabCtrl* dest_tabs = nullptr;
+            wxAuiTabCtrl* other_tabs = nullptr;
             while (tab_ctrl)
             {
-                dest_tabs = wxDynamicCast(tab_ctrl, wxAuiTabCtrl);
-                if (dest_tabs)
+                other_tabs = wxDynamicCast(tab_ctrl, wxAuiTabCtrl);
+                if (other_tabs)
                     break;
                 tab_ctrl = tab_ctrl->GetParent();
             }
 
-            if (dest_tabs)
+            if (other_tabs)
             {
                 wxAuiNotebook* nb = (wxAuiNotebook*)tab_ctrl->GetParent();
 
                 if (nb != this)
                 {
-                    m_mgr.UpdateHint(dest_tabs->GetHintScreenRect());
+                    m_mgr.UpdateHint(other_tabs->GetHintScreenRect());
                     return;
                 }
             }
