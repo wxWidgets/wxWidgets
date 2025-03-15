@@ -57,6 +57,8 @@
     URI_ASSERT_PART_EQUAL(uri, expected, GetHostType())
 #define URI_ASSERT_USER_EQUAL(uri, expected) \
     URI_ASSERT_PART_EQUAL(uri, expected, GetUser())
+#define URI_ASSERT_USERINFO_EQUAL(uri, expected) \
+    URI_ASSERT_PART_EQUAL(uri, expected, GetUserInfo())
 
 #define URI_ASSERT_BADPATH(uri) \
     wxSTATEMENT_MACRO_BEGIN \
@@ -314,8 +316,8 @@ TEST_CASE("URI::UserInfo", "[uri]")
     wxURI uri;
 
     // Simple cases.
-    CHECK( wxURI("https://host/").GetUser() == "" );
-    CHECK( wxURI("https://user@host/").GetUser() == "user" );
+    URI_ASSERT_USER_EQUAL( "https://host/", "" );
+    URI_ASSERT_USER_EQUAL( "https://user@host/", "user" );
 
     CHECK( uri.Create("https://user:password@host/") );
     CHECK( uri.GetUser() == "user" );
@@ -340,15 +342,11 @@ TEST_CASE("URI::UserInfo", "[uri]")
 
     // But sub-delims (defined in the same section of the RFC) may be used
     // either in the encoded or raw form.
-    CHECK( wxURI("https://me!@host/").GetUser() == "me!" );
-    CHECK( wxURI::Unescape(wxURI("https://me%21@host/").GetUser()) == "me!" );
+    URI_ASSERT_USER_EQUAL( "https://me!@host/", "me!" );
+    URI_ASSERT_USER_EQUAL( "https://me%21@host/", "me%21" );
 
-    CHECK( uri.Create("https://u:pass=word@h/") );
-    CHECK( uri.GetUser() == "u" );
-    CHECK( wxURI::Unescape(uri.GetPassword()) == "pass=word" );
-
-    CHECK( uri.Create("https://u:pass%3Dword@h/") );
-    CHECK( wxURI::Unescape(uri.GetPassword()) == "pass=word" );
+    URI_ASSERT_USERINFO_EQUAL( "https://u:pass=word@h/", "u:pass=word" );
+    URI_ASSERT_USERINFO_EQUAL( "https://u:pass%3Dword@h/", "u:pass%3Dword" );
 
     // Also test that using SetUserAndPassword() works.
     uri = "https://host/";
