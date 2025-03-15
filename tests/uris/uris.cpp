@@ -49,6 +49,8 @@
         CHECK(u.GetHostType() != ne); \
     wxSTATEMENT_MACRO_END
 
+#define URI_ASSERT_EQUAL(uri, expected) \
+    URI_ASSERT_PART_EQUAL(uri, expected, BuildURI())
 #define URI_ASSERT_HOST_EQUAL(uri, expected) \
     URI_ASSERT_PART_EQUAL(uri, expected, GetServer())
 #define URI_ASSERT_PATH_EQUAL(uri, expected) \
@@ -351,10 +353,10 @@ TEST_CASE("URI::UserInfo", "[uri]")
     // Also test that using SetUserAndPassword() works.
     uri = "https://host/";
     uri.SetUserAndPassword("me@here!");
-    CHECK( uri.BuildURI() == "https://me%40here!@host/" );
+    URI_ASSERT_EQUAL( uri, "https://me%40here!@host/" );
 
     uri.SetUserAndPassword("you:", "?me");
-    CHECK( uri.BuildURI() == "https://you%3a:%3fme@host/" );
+    URI_ASSERT_EQUAL( uri, "https://you%3a:%3fme@host/" );
 }
 
 //examples taken from RFC 2396.bis
