@@ -126,24 +126,6 @@ static void IndentPressedBitmap(const wxSize& offset, wxRect* rect, int button_s
 }
 
 // -- bitmaps --
-// TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
-
-#if defined( __WXMAC__ )
- static const unsigned char close_bitmap_data[]={
-     0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFE, 0x03, 0xF8, 0x01, 0xF0, 0x19, 0xF3,
-     0xB8, 0xE3, 0xF0, 0xE1, 0xE0, 0xE0, 0xF0, 0xE1, 0xB8, 0xE3, 0x19, 0xF3,
-     0x01, 0xF0, 0x03, 0xF8, 0x0F, 0xFE, 0xFF, 0xFF };
-#elif defined( __WXGTK__)
- static const unsigned char close_bitmap_data[]={
-     0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xfb, 0xef, 0xdb, 0xed, 0x8b, 0xe8,
-     0x1b, 0xec, 0x3b, 0xee, 0x1b, 0xec, 0x8b, 0xe8, 0xdb, 0xed, 0xfb, 0xef,
-     0x07, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
-#else
- static const unsigned char close_bitmap_data[]={
-     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xf3, 0xcf, 0xf9,
-     0x9f, 0xfc, 0x3f, 0xfe, 0x3f, 0xfe, 0x9f, 0xfc, 0xcf, 0xf9, 0xe7, 0xf3,
-     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-#endif
 
 static const unsigned char left_bitmap_data[] = {
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0xfe, 0x3f, 0xfe,
@@ -160,16 +142,10 @@ static const unsigned char list_bitmap_data[] = {
    0x0f, 0xf8, 0xff, 0xff, 0x0f, 0xf8, 0x1f, 0xfc, 0x3f, 0xfe, 0x7f, 0xff,
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-static const unsigned char pin_bitmap_data[] = {
+static const unsigned char unpin_bitmap_data[] = {
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xbf, 0xff, 0x3f, 0xe0,
    0xbf, 0xef, 0x87, 0xef, 0x3f, 0xe0, 0x3f, 0xe0, 0xbf, 0xff, 0xff, 0xff,
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-
-static const unsigned char unpin_bitmap_data[]={
-   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x1f, 0xfc, 0xdf, 0xfc, 0xdf, 0xfc,
-   0xdf, 0xfc, 0xdf, 0xfc, 0xdf, 0xfc, 0x0f, 0xf8, 0x7f, 0xff, 0x7f, 0xff,
-   0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-
 
 // wxAuiTabArt implementation
 
@@ -317,18 +293,23 @@ void wxAuiGenericTabArt::UpdateColoursFromSystem()
 
     const int disabledLightness = wxSystemSettings::GetAppearance().IsUsingDarkBackground() ? 130 : 70;
 
-    m_activeCloseBmp = wxAuiCreateBitmap(close_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledCloseBmp = wxAuiCreateBitmap(close_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness));
+    m_activeCloseBmp = wxAuiCreateCloseButtonBitmap(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledCloseBmp = wxAuiCreateCloseButtonBitmap(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness));
+
     m_activeLeftBmp = wxAuiCreateBitmap(left_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     m_disabledLeftBmp = wxAuiCreateBitmap(left_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     m_activeRightBmp = wxAuiCreateBitmap(right_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     m_disabledRightBmp = wxAuiCreateBitmap(right_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
     m_activeWindowListBmp = wxAuiCreateBitmap(list_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     m_disabledWindowListBmp = wxAuiCreateBitmap(list_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
-    m_activePinBmp = wxAuiCreateBitmap(pin_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledPinBmp = wxAuiCreateBitmap(pin_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
-    m_activeUnpinBmp = wxAuiCreateBitmap(unpin_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledUnpinBmp = wxAuiCreateBitmap(unpin_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+
+    // This is a bit confusing, but we use "pin" bitmap to indicate that the
+    // tab is currently pinned, i.e. for the "unpin" button, and vice versa.
+    m_activePinBmp = wxAuiCreateBitmap(unpin_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledPinBmp = wxAuiCreateBitmap(unpin_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+
+    m_activeUnpinBmp = wxAuiCreatePinButtonBitmap(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledUnpinBmp = wxAuiCreatePinButtonBitmap(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
 }
 
 wxAuiTabArt* wxAuiGenericTabArt::Clone()
@@ -1090,8 +1071,8 @@ wxFont wxAuiGenericTabArt::GetSelectedFont() const
 wxAuiSimpleTabArt::wxAuiSimpleTabArt()
     : m_normalFont(*wxNORMAL_FONT)
     , m_selectedFont(m_normalFont)
-    , m_activeCloseBmp(wxAuiCreateBitmap(close_bitmap_data, 16, 16, *wxBLACK))
-    , m_disabledCloseBmp(wxAuiCreateBitmap(close_bitmap_data, 16, 16, wxColour(128,128,128)))
+    , m_activeCloseBmp(wxAuiCreateCloseButtonBitmap(*wxBLACK))
+    , m_disabledCloseBmp(wxAuiCreateCloseButtonBitmap(wxColour(128,128,128)))
     , m_activeLeftBmp(wxAuiCreateBitmap(left_bitmap_data, 16, 16, *wxBLACK))
     , m_disabledLeftBmp(wxAuiCreateBitmap(left_bitmap_data, 16, 16, wxColour(128,128,128)))
     , m_activeRightBmp(wxAuiCreateBitmap(right_bitmap_data, 16, 16, *wxBLACK))

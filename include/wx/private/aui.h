@@ -29,4 +29,9 @@ wxBitmapBundle wxAuiCreateBitmap(const char* svgData, int w, int h,
 wxBitmap wxAuiCreateBitmap(const unsigned char bits[], int w, int h,
                            const wxColour& color);
 
+// Define some specialized functions to create bitmaps used in both dockart.cpp
+// and tabart.cpp.
+wxBitmapBundle wxAuiCreateCloseButtonBitmap(const wxColour& color);
+wxBitmapBundle wxAuiCreatePinButtonBitmap(const wxColour& color);
+
 #endif // _WX_PRIVATE_AUI_H_

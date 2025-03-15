@@ -268,34 +268,13 @@ wxAuiDockArt* wxAuiDefaultDockArt::Clone()
     return new wxAuiDefaultDockArt(*this);
 }
 
-void
-wxAuiDefaultDockArt::InitBitmaps ()
+wxBitmapBundle wxAuiCreateCloseButtonBitmap(const wxColour& color)
 {
-    // Initialize built in bitmaps, from SVG, if supported, or XBM otherwise.
 #ifdef wxHAS_SVG
     static const char* const close_bitmap_data = R"svg(
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
     <line x1="4" y1="4" x2="11" y2="11" stroke="currentColor" fill="none" stroke-linecap="round" stroke-width="1.5"/>
     <line x1="4" y1="11" x2="11" y2="4" stroke="currentColor" fill="none" stroke-linecap="round" stroke-width="1.5"/>
-</svg>
-)svg";
-
-    static const char* const maximize_bitmap_data = R"svg(
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-    <rect x="3" y="3" width="9" height="9" stroke="currentColor" fill="none" stroke-width="1"/>
-    <line x1="3" y1="5.5" x2="12" y2="5.5" stroke="currentColor" stroke-width="1"/>
-</svg>
-)svg";
-
-    static const char* const restore_bitmap_data = R"svg(
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-    <path d="M 3 5 v 8 h 8 v -8 Z m 2 0 v -2 h 8 v 8 h -2" stroke="currentColor" fill="none" stroke-width="1"/>
-</svg>
-)svg";
-
-    static const char* const pin_bitmap_data = R"svg(
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-    <path d="M 5 9 h 6 h -1 v -6 h -1 v 6 v -6 h -3 v 6 h 2 v 4" stroke="currentColor" fill="none" stroke-width="1"/>
 </svg>
 )svg";
 #else // !wxHAS_SVG
@@ -322,7 +301,47 @@ wxAuiDefaultDockArt::InitBitmaps ()
          0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
       */
 #endif
+#endif // wxHAS_SVG/!wxHAS_SVG
 
+    return wxAuiCreateBitmap(close_bitmap_data, 16, 16, color);
+}
+
+wxBitmapBundle wxAuiCreatePinButtonBitmap(const wxColour& color)
+{
+#ifdef wxHAS_SVG
+    static const char* const pin_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <path d="M 5 9 h 6 h -1 v -6 h -1 v 6 v -6 h -3 v 6 h 2 v 4" stroke="currentColor" fill="none" stroke-width="1"/>
+</svg>
+)svg";
+#else // !wxHAS_SVG
+    static const unsigned char pin_bitmap_data[]={
+        0xff,0xff,0xff,0xff,0xff,0xff,0x1f,0xfc,0xdf,0xfc,0xdf,0xfc,
+        0xdf,0xfc,0xdf,0xfc,0xdf,0xfc,0x0f,0xf8,0x7f,0xff,0x7f,0xff,
+        0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+#endif // wxHAS_SVG/!wxHAS_SVG
+
+    return wxAuiCreateBitmap(pin_bitmap_data, 16, 16, color);
+}
+
+void
+wxAuiDefaultDockArt::InitBitmaps ()
+{
+    // Initialize built in bitmaps, from SVG, if supported, or XBM otherwise.
+#ifdef wxHAS_SVG
+    static const char* const maximize_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <rect x="3" y="3" width="9" height="9" stroke="currentColor" fill="none" stroke-width="1"/>
+    <line x1="3" y1="5.5" x2="12" y2="5.5" stroke="currentColor" stroke-width="1"/>
+</svg>
+)svg";
+
+    static const char* const restore_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <path d="M 3 5 v 8 h 8 v -8 Z m 2 0 v -2 h 8 v 8 h -2" stroke="currentColor" fill="none" stroke-width="1"/>
+</svg>
+)svg";
+#else // !wxHAS_SVG
     static const unsigned char maximize_bitmap_data[] = {
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xf7, 0xf7, 0x07, 0xf0,
         0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0xf7, 0x07, 0xf0,
@@ -332,11 +351,6 @@ wxAuiDefaultDockArt::InitBitmaps ()
         0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x1f, 0xf0, 0x1f, 0xf0, 0xdf, 0xf7,
         0x07, 0xf4, 0x07, 0xf4, 0xf7, 0xf5, 0xf7, 0xf1, 0xf7, 0xfd, 0xf7, 0xfd,
         0x07, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-
-    static const unsigned char pin_bitmap_data[]={
-        0xff,0xff,0xff,0xff,0xff,0xff,0x1f,0xfc,0xdf,0xfc,0xdf,0xfc,
-        0xdf,0xfc,0xdf,0xfc,0xdf,0xfc,0x0f,0xf8,0x7f,0xff,0x7f,0xff,
-        0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 #endif // wxHAS_SVG/!wxHAS_SVG
 
 #ifdef __WXMAC__
@@ -347,8 +361,8 @@ wxAuiDefaultDockArt::InitBitmaps ()
     const wxColor active = m_activeCaptionTextColour;
 #endif
 
-    m_inactiveCloseBitmap = wxAuiCreateBitmap(close_bitmap_data, 16, 16, inactive);
-    m_activeCloseBitmap = wxAuiCreateBitmap(close_bitmap_data, 16, 16, active);
+    m_inactiveCloseBitmap = wxAuiCreateCloseButtonBitmap(inactive);
+    m_activeCloseBitmap = wxAuiCreateCloseButtonBitmap(active);
 
     m_inactiveMaximizeBitmap = wxAuiCreateBitmap(maximize_bitmap_data, 16, 16, inactive);
     m_activeMaximizeBitmap = wxAuiCreateBitmap(maximize_bitmap_data, 16, 16, active);
@@ -356,8 +370,8 @@ wxAuiDefaultDockArt::InitBitmaps ()
     m_inactiveRestoreBitmap = wxAuiCreateBitmap(restore_bitmap_data, 16, 16, inactive);
     m_activeRestoreBitmap = wxAuiCreateBitmap(restore_bitmap_data, 16, 16, active);
 
-    m_inactivePinBitmap = wxAuiCreateBitmap(pin_bitmap_data, 16, 16, inactive);
-    m_activePinBitmap = wxAuiCreateBitmap(pin_bitmap_data, 16, 16, active);
+    m_inactivePinBitmap = wxAuiCreatePinButtonBitmap(inactive);
+    m_activePinBitmap = wxAuiCreatePinButtonBitmap(active);
 }
 
 void wxAuiDefaultDockArt::UpdateColoursFromSystem()
