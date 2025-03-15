@@ -311,6 +311,9 @@ TEST_CASE("URI::Paths", "[uri]")
     URI_ASSERT_PATH_EQUAL("http://good.com:8042/GOODPATH", "/GOODPATH");
     //When authority is not present, the path cannot begin with two slash characters ("//").
     URI_ASSERT_BADPATH("http:////BADPATH");
+
+    // 8-bit characters in the path should be percent-encoded.
+    URI_ASSERT_PATH_EQUAL( wxString::FromUTF8("http://host/\xc3\xa9"), "/%c3%a9" );
 }
 
 TEST_CASE("URI::UserInfo", "[uri]")
@@ -357,6 +360,9 @@ TEST_CASE("URI::UserInfo", "[uri]")
 
     uri.SetUserAndPassword("you:", "?me");
     URI_ASSERT_EQUAL( uri, "https://you%3a:%3fme@host/" );
+
+    uri.SetUserAndPassword(wxString::FromUTF8("\xc3\xa7"));
+    URI_ASSERT_USER_EQUAL( uri, "%c3%a7");
 }
 
 //examples taken from RFC 2396.bis
