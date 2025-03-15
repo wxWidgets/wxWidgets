@@ -51,10 +51,16 @@ enum wxURIFlags
 class WXDLLIMPEXP_BASE wxURI : public wxObject
 {
 public:
-    wxURI();
-    wxURI(const wxString& uri);
+    wxURI() = default;
+    wxURI(const wxString& uri) { Create(uri); }
 
-    // default copy ctor, assignment operator and dtor are ok
+    wxURI(const wxURI& uri) = default;
+    wxURI& operator=(const wxURI& uri) = default;
+
+    wxURI(wxURI&& uri) = default;
+    wxURI& operator=(wxURI&& uri) = default;
+
+    ~wxURI() = default;
 
     bool Create(const wxString& uri);
 
@@ -67,6 +73,7 @@ public:
     bool operator==(const wxURI& uri) const;
 
     // various accessors
+    bool IsEmpty() const { return m_fields == 0; }
 
     bool HasScheme() const      { return (m_fields & wxURI_SCHEME) != 0;   }
     bool HasUserInfo() const    { return (m_fields & wxURI_USERINFO) != 0; }
@@ -91,6 +98,11 @@ public:
     wxString GetUser() const;
     wxString GetPassword() const;
 
+    // Set username and password for the URI. This function is _not_ the exact
+    // counterpart of GetUserInfo() because it takes unescaped strings, unlike
+    // the latter, which returns them in the escaped form, hence it uses a
+    // deliberately different name.
+    void SetUserAndPassword(const wxString& user, const wxString& password = {});
 
     // combine all URI components into a single string
     //
@@ -174,9 +186,10 @@ protected:
     wxString m_server;
     wxString m_port;
 
-    wxURIHostType m_hostType;
+    wxURIHostType m_hostType = wxURI_REGNAME;
 
-    size_t m_fields;
+    // This is a combination of wxURIFieldType flags.
+    unsigned m_fields = 0;
 
     wxDECLARE_DYNAMIC_CLASS(wxURI);
 };

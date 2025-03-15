@@ -41,19 +41,6 @@ wxIMPLEMENT_CLASS(wxURI, wxObject);
 // Constructors and cleanup
 // ---------------------------------------------------------------------------
 
-wxURI::wxURI()
-     : m_hostType(wxURI_REGNAME),
-       m_fields(0)
-{
-}
-
-wxURI::wxURI(const wxString& uri)
-     : m_hostType(wxURI_REGNAME),
-       m_fields(0)
-{
-    Create(uri);
-}
-
 bool wxURI::Create(const wxString& uri)
 {
     if (m_fields)
@@ -133,6 +120,15 @@ wxString wxURI::Unescape(const wxString& uri)
     return wxString::FromUTF8(buf);
 }
 
+static void AppendEscaped(wxString& s, char c)
+{
+    static const char* hexDigits = "0123456789abcdef";
+
+    s += '%';
+    s += hexDigits[(c >> 4) & 15];
+    s += hexDigits[c & 15];
+}
+
 void wxURI::AppendNextEscaped(wxString& s, const char *& p)
 {
     // check for an already encoded character:
@@ -146,13 +142,7 @@ void wxURI::AppendNextEscaped(wxString& s, const char *& p)
     }
     else // really needs escaping
     {
-        static const char* hexDigits = "0123456789abcdef";
-
-        const char c = *p++;
-
-        s += '%';
-        s += hexDigits[(c >> 4) & 15];
-        s += hexDigits[c & 15];
+        AppendEscaped(s, *p++);
     }
 }
 
@@ -177,6 +167,44 @@ wxString wxURI::GetPassword() const
           return wxString();
 
       return m_userinfo(posColon + 1, wxString::npos);
+}
+
+void wxURI::SetUserAndPassword(const wxString& user, const wxString& password)
+{
+    if ( user.empty() )
+    {
+        m_userinfo.clear();
+        m_fields &= ~wxURI_USERINFO;
+        return;
+    }
+
+    m_fields |= wxURI_USERINFO;
+
+    auto escapeAsUserInfo = [](const wxString& in)
+    {
+        wxString out;
+        out.reserve(in.length());
+
+        for ( auto c : in.utf8_string() )
+        {
+            // We could allow unencoded colon in the password (only), but it
+            // doesn't seem to be worth the trouble, so always encode it in
+            // both the username (where it has to be done) and the password.
+            if ( IsUnreserved(c) || IsSubDelim(c) )
+                out += c;
+            else
+                AppendEscaped(out, c);
+        }
+
+        return out;
+    };
+
+    m_userinfo = escapeAsUserInfo(user);
+    if ( !password.empty() )
+    {
+        m_userinfo += ':';
+        m_userinfo += escapeAsUserInfo(password);
+    }
 }
 
 // combine all URI fields in a single string, applying funcDecode to each

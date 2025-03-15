@@ -29,8 +29,8 @@ enum wxURIHostType
     wxURI automatically escapes invalid characters in a string, so there is no
     chance of wxURI "failing" on construction/creation.
 
-    wxURI supports copy construction and standard assignment operators. wxURI
-    can also be inherited from to provide further functionality.
+    wxURI is a value-like type, and has both copy and move constructors and
+    the standard as well as a move-assignment operators.
 
     To obtain individual components you can use one of the GetXXX() methods.
     However, you should check HasXXX() before calling a get method, which
@@ -129,6 +129,9 @@ public:
         that this is explicitly depreciated by RFC 1396 and should generally be
         avoided if possible.
 
+        Note that the returned string may contain percent-escaped characters,
+        use Unescape() to retrieve the original user name value.
+
         @c "http://<user>:<password>@mysite.com/mypath"
     */
     wxString GetPassword() const;
@@ -194,6 +197,9 @@ public:
         that this is explicitly depreciated by RFC 1396 and should generally be
         avoided if possible.
 
+        Note that the returned string may contain percent-escaped characters,
+        use Unescape() to retrieve the original user name value.
+
         @c "http://<user>:<password>@mysite.com/mypath"
     */
     wxString GetUser() const;
@@ -244,6 +250,15 @@ public:
     bool HasUserInfo() const;
 
     /**
+        Returns @true if the URI is empty.
+
+        Empty URI has no non-empty components.
+
+        @since 3.3.0
+    */
+    bool IsEmpty() const;
+
+    /**
         Returns @true if a valid [absolute] URI, otherwise this URI is a URI
         reference and not a full URI, and this function returns @false.
     */
@@ -270,6 +285,26 @@ public:
             to 2396.
     */
     void Resolve(const wxURI& base, int flags = wxURI_STRICT);
+
+    /**
+        Sets the user and password for the URI.
+
+        Please note that this function is not the exact counterpart of
+        GetUserInfo() because it takes unescaped strings, unlike the latter,
+        which returns them in the escaped form, and hence it uses a slightly
+        different name. For example, passing `user@domain` as @a user to this
+        function will result in GetUser() returning `user%40domain` (which can
+        be turned back into the original string by passing it to Unescape()).
+
+        @param user
+            User name. If empty, resets any existing user information.
+        @param password
+            Password. If empty, the password is not set (and any existing
+            password is removed).
+
+        @since 3.3.0
+     */
+    void SetUserAndPassword(const wxString& user, const wxString& password = {});
 
     /**
         Translates all escape sequences (normal characters and returns the result.
