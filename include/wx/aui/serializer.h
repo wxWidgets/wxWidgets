@@ -55,6 +55,9 @@ struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
     // them can be empty.
     std::vector<int> locked;
     std::vector<int> pinned;
+
+    // Currently active page in this tab control.
+    int active = 0;
 };
 
 // This struct contains the pane name and information about its layout that can

@@ -74,6 +74,15 @@ struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
         This vector can be empty if there are no pinned pages.
      */
     std::vector<int> pinned;
+
+    /**
+        Index of the currently selected page in this tab control.
+
+        Note that the value of this field is a page index in the notebook, not
+        the position of the active tab in this tab control, and should be one
+        of the elements of the `pages` vector if it is not empty.
+     */
+    int active = 0;
 };
 
 /**

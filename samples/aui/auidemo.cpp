@@ -1693,6 +1693,7 @@ public:
         AddPagesList(node, "pages", tab.pages);
         AddPagesList(node, "pinned", tab.pinned);
         AddPagesList(node, "locked", tab.locked);
+        AddChild(node, "active", tab.active);
 
         m_book->AddChild(node);
     }
@@ -2048,6 +2049,10 @@ private:
                 {
                     for ( const auto& s : pageIndices )
                         tab.locked.push_back(GetInt(s));
+                }
+                else if ( child->GetName() == "active" )
+                {
+                    tab.active = GetInt(child->GetNodeContent());
                 }
                 else
                 {

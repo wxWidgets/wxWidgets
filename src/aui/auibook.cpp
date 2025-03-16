@@ -2397,10 +2397,9 @@ void wxAuiNotebook::InsertPageAt(wxAuiNotebookPage& info,
     page->Reparent(this);
 
     // if there are currently no tabs, the first added
-    // tab must be active and selected, even if "select" is false
+    // tab must be selected, even if "select" is false
     if (m_tabs.GetPageCount() == 0)
     {
-        info.active = true;
         select = true;
     }
 
@@ -4193,8 +4192,6 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
 
         if ( const auto tabInfo = FindTab(wnd) )
         {
-            m_tabs.SetActivePage(wnd);
-
             wxAuiTabCtrl* const ctrl = tabInfo.tabCtrl;
 
             ctrl->SetActivePage(tabInfo.tabIdx);
@@ -4272,6 +4269,8 @@ wxAuiNotebook::SaveLayout(const wxString& name,
 
         const wxAuiTabCtrl* const
             tabCtrl = static_cast<wxAuiTabFrame*>(pane.window)->m_tabs;
+
+        tab.active = tabCtrl->GetActivePage();
 
         // As an optimization, don't bother with saving the pages order for the
         // main control if it hasn't been changed from the default.
@@ -4353,6 +4352,9 @@ wxAuiNotebook::LoadLayout(const wxString& name,
     // we may not have to do anything at all.
     bool useExistingPages = false;
 
+    // Remember the active page in the main tab control if we change it.
+    const wxWindow* activeInMainTab = nullptr;
+
     // Keep track of pages we've already added to some tab control: even if the
     // deserialized data is somehow incorrect and duplicates the page indices,
     // we don't want to try to have the same page in more than one tab control.
@@ -4391,7 +4393,10 @@ wxAuiNotebook::LoadLayout(const wxString& name,
                 if ( useExistingPages )
                 {
                     // All pages are in the main tab in the default order
-                    // already, so we don't have anything to do.
+                    // already, so we don't have anything to do except
+                    // restoring the active page -- which is in this case the
+                    // same as selection (tab indices == notebook indices).
+                    SetSelection(tab.active);
                     break;
                 }
 
@@ -4436,7 +4441,7 @@ wxAuiNotebook::LoadLayout(const wxString& name,
         }
 
         // In any case, add the pages that this tab control had before to it.
-        bool first = true;
+        const wxWindow* activeWindow = nullptr;
         for ( auto page : *pages )
         {
             // We just silently ignore invalid or duplicate page indices
@@ -4450,15 +4455,25 @@ wxAuiNotebook::LoadLayout(const wxString& name,
 
             auto info = m_tabs.GetPage(page);
 
-            // We don't save the last active page currently, so just make the
-            // first one active.
-            if ( first )
-            {
-                info.active = true;
-                first = false;
-            }
+            if ( page == tab.active )
+                activeWindow = info.window;
 
             tabCtrl->AddPage(info);
+        }
+
+        if ( !activeWindow )
+        {
+            // We must have some active page, so make the first one active if
+            // the deserialized data didn't define a valid active page.
+            activeWindow = tabCtrl->GetWindowFromIdx(0);
+        }
+
+        tabCtrl->SetActivePage(activeWindow);
+
+        if ( tabCtrl == tabMain )
+        {
+            // Remember it to set the selection to it below.
+            activeInMainTab = activeWindow;
         }
 
         // Check if the element is present in the vector: we could convert
@@ -4485,8 +4500,6 @@ wxAuiNotebook::LoadLayout(const wxString& name,
 
             SetPageKind(i, kind);
         }
-
-        tabCtrl->DoUpdateActive();
     }
 
     // Check if there were any existing pages not added to any tab control.
@@ -4551,6 +4564,20 @@ wxAuiNotebook::LoadLayout(const wxString& name,
 
         RemoveEmptyTabFrames();
     }
+
+    // Update the active pages visibility in all tab controls after adding and
+    // removing all the pages.
+    for ( auto tabCtrl : GetAllTabCtrls() )
+    {
+        tabCtrl->DoUpdateActive();
+    }
+
+    // We don't save information about the currently focused tab control, so
+    // always make the main one active after loading the layout by setting the
+    // selected page to the page active in it (if there is no such page, it
+    // means we're reusing the existing pages and so don't need to do anything).
+    if ( activeInMainTab )
+        m_curPage = m_tabs.GetIdxFromWindow(activeInMainTab);
 
     m_mgr.Update();
 }
