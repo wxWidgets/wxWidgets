@@ -51,9 +51,7 @@ struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
     // notebook pages in natural order.
     std::vector<int> pages;
 
-    // Vectors contain indices of locked and pinned pages, if any, i.e. both of
-    // them can be empty.
-    std::vector<int> locked;
+    // Vectors contain indices of pinned pages, if any, i.e. it can be empty.
     std::vector<int> pinned;
 
     // Currently active page in this tab control.

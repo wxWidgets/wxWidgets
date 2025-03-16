@@ -47,7 +47,7 @@ struct wxAuiDockLayoutInfo
 
     This includes where it is docked, via the fields inherited from
     wxAuiDockLayoutInfo, and, optionally, the order of pages in it if it was
-    changed as well as locked and pinned pages indices, if any.
+    changed as well as pinned pages indices, if any.
 
     @since 3.3.0
 */
@@ -62,16 +62,11 @@ struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
     std::vector<int> pages;
 
     /**
-        Indices of the locked pages in this tab control.
-
-        This vector can be empty if there are no locked pages.
-     */
-    std::vector<int> locked;
-
-    /**
         Indices of the pinned pages in this tab control.
 
-        This vector can be empty if there are no pinned pages.
+        This vector can be empty if there are no pinned pages in this tab
+        control. Otherwise it should be a subset of the `pages` vector if it is
+        not empty.
      */
     std::vector<int> pinned;
 
