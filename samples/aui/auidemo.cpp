@@ -1918,7 +1918,11 @@ public:
         {
             // We don't need to change tabCtrl, it's set to the main one by
             // default, but check that this is indeed the case.
-            wxASSERT( *tabCtrl == book.GetMainTabCtrl() );
+            if ( *tabCtrl != book.GetMainTabCtrl() )
+            {
+                wxLogWarning("Unexpected tab control for an orphaned page!");
+                return false;
+            }
 
             *tabIndex = 0;
 
