@@ -37,6 +37,7 @@
 #endif
 
 #include <algorithm>
+#include <stack>
 #include <unordered_set>
 
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEvent);
@@ -4348,6 +4349,10 @@ wxAuiNotebook::LoadLayout(const wxString& name,
     // Get the only remaining tab control.
     wxAuiTabCtrl* const tabMain = GetMainTabCtrl();
 
+    // If we don't have anything saved and the pages are in the default order
+    // we may not have to do anything at all.
+    bool useExistingPages = false;
+
     // Keep track of pages we've already added to some tab control: even if the
     // deserialized data is somehow incorrect and duplicates the page indices,
     // we don't want to try to have the same page in more than one tab control.
@@ -4372,17 +4377,18 @@ wxAuiNotebook::LoadLayout(const wxString& name,
             // the pages are already in the same order (which is a common case).
             if ( tab.pages.empty() )
             {
-                bool mustRestore = false;
+                useExistingPages = true;
+
                 for ( int i = 0; i < pageCount; ++i )
                 {
                     if ( tabMain->GetWindowFromIdx(i) != m_tabs.GetWindowFromIdx(i) )
                     {
-                        mustRestore = true;
+                        useExistingPages = false;
                         break;
                     }
                 }
 
-                if ( !mustRestore )
+                if ( useExistingPages )
                 {
                     // All pages are in the main tab in the default order
                     // already, so we don't have anything to do.
@@ -4481,6 +4487,69 @@ wxAuiNotebook::LoadLayout(const wxString& name,
         }
 
         tabCtrl->DoUpdateActive();
+    }
+
+    // Check if there were any existing pages not added to any tab control.
+    if ( !useExistingPages && static_cast<int>(addedPages.size()) < pageCount )
+    {
+        // Use a stack here to remove the pages from the end below.
+        std::stack<int> toRemove;
+
+        for ( int i = 0; i < pageCount; ++i )
+        {
+            if ( addedPages.count(i) == 0 )
+            {
+                wxAuiTabCtrl* tabCtrl = tabMain;
+                int tabIndex = wxNOT_FOUND;
+                if ( deserializer.HandleOrphanedPage(*this, i,
+                                                     &tabCtrl, &tabIndex) )
+                {
+                    // Try not to crash even if the deserializer implements
+                    // HandleOrphanedPage() incorrectly.
+                    if ( !tabCtrl )
+                    {
+                        wxFAIL_MSG
+                        (
+                            "HandleOrphanedPage() can't return null tab control"
+                        );
+
+                        tabCtrl = tabMain;
+                    }
+
+                    const int tabCount = tabCtrl->GetPageCount();
+                    if ( tabIndex != wxNOT_FOUND && tabIndex >= tabCount )
+                    {
+                        wxFAIL_MSG
+                        (
+                            "HandleOrphanedPage() must return valid tab index"
+                        );
+
+                        tabIndex = wxNOT_FOUND;
+                    }
+
+                    if ( tabIndex == wxNOT_FOUND )
+                        tabIndex = tabCount;
+
+                    tabCtrl->InsertPage(m_tabs.GetPage(i), tabIndex);
+                }
+                else // Remove this page.
+                {
+                    toRemove.push(i);
+                }
+            }
+        }
+
+        while ( !toRemove.empty() )
+        {
+            // Note that we shouldn't call DoRemovePage() because it supposes
+            // that the page is in some tab control and does nothing if this is
+            // not the case.
+            m_tabs.RemovePageAt(toRemove.top());
+
+            toRemove.pop();
+        }
+
+        RemoveEmptyTabFrames();
     }
 
     m_mgr.Update();

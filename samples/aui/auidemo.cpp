@@ -1903,6 +1903,33 @@ public:
         throw std::runtime_error("Notebook with the given name not found");
     }
 
+    // Overriding this function is optional and normally it is not going to be
+    // called at all. We only do it here to show the different possibilities,
+    // but the serialized pages need to be manually edited to see them.
+    virtual bool
+    HandleOrphanedPage(wxAuiNotebook& book,
+                       int page,
+                       wxAuiTabCtrl** tabCtrl,
+                       int* tabIndex) override
+    {
+        // If the first ("Welcome") page is not attached, insert it in the
+        // beginning of the main tab control.
+        if ( page == 0 )
+        {
+            // We don't need to change tabCtrl, it's set to the main one by
+            // default, but check that this is indeed the case.
+            wxASSERT( *tabCtrl == book.GetMainTabCtrl() );
+
+            *tabIndex = 0;
+
+            return true;
+        }
+
+        // This is completely artificial, but just remove the pages after the
+        // third one if they are not attached to any tab control.
+        return page <= 2;
+    }
+
     virtual wxWindow* CreatePaneWindow(wxAuiPaneInfo& pane) override
     {
         wxLogWarning("Unknown pane \"%s\"", pane.name);

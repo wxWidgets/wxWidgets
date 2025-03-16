@@ -309,6 +309,39 @@ public:
      */
     virtual std::vector<wxAuiTabLayoutInfo>
     LoadNotebookTabs(const wxString& name) = 0;
+
+    /**
+        Determine what should be done with the pages not attached to any tab
+        control after restoring the pages order.
+
+        It is possible that the data returned by LoadNotebookTabs() doesn't
+        contain the layout information for all the currently existing pages,
+        e.g. because data saved by an earlier program version is being loaded
+        into a newer version in which new pages were added. In this case, this
+        function is called for each @a page that wasn't assigned to any tab
+        after restoring the pages order and can be overridden to determine what
+        should be done with it.
+
+        The default implementation of this function just returns @true without
+        modifying the output arguments, which results in the page being
+        appended to the main tab control. The overridden version may return
+        @true but modify @a tabCtrl and @a tabIndex arguments to change where
+        the page should be inserted, e.g. by setting @a tabIndex to 0 to insert
+        the new pages at the beginning instead of appending them.
+
+        Finally, the overridden function may return @false to indicate that the
+        page should be removed from the notebook.
+
+        @note The @a book parameter can be used to retrieve the total number of
+            pages or to call functions such as wxAuiNotebook::GetMainTabCtrl()
+            or wxAuiNotebook::GetAllTabCtrls() on it, but this function must
+            not attempt to modify it by adding or removing pages to/from it.
+     */
+    virtual bool
+    HandleOrphanedPage(wxAuiNotebook& book,
+                       int page,
+                       wxAuiTabCtrl** tabCtrl,
+                       int* tabIndex);
 };
 
 /**
