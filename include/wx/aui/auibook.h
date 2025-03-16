@@ -180,7 +180,7 @@ public:
     bool MovePage(size_t oldIdx, size_t newIdx);
     bool RemovePage(wxWindow* page);
     void RemovePageAt(size_t idx);
-    bool SetActivePage(wxWindow* page);
+    bool SetActivePage(const wxWindow* page);
     bool SetActivePage(size_t page);
     void SetNoneActive();
     int GetActivePage() const;

@@ -296,7 +296,7 @@ void wxAuiTabContainer::RemoveAll()
     m_pages.Clear();
 }
 
-bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
+bool wxAuiTabContainer::SetActivePage(const wxWindow* wnd)
 {
     bool found = false;
 
