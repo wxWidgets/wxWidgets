@@ -248,7 +248,7 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.7: (released 2025-??-??)
+3.2.7: (released 2025-03-20)
 ----------------------------
 
 All:
@@ -261,7 +261,7 @@ All:
 - Fix compilation with clang 19 (Lauri Nurmi, #24922).
 - Fix crash in wxWebRequestCURL when connection was refused (#24885).
 - Fix build with libc++ v19 (#24959).
-- Add wxApp::SetErrorExitCode() to customize exit code on initialization error.
+- Add wxApp::SetErrorExitCode() to better handle initialization errors (#24770).
 - Fix buffer read overflow when compiling RE ending with backslash (#25040).
 - Fix crash in wxWebRequest::Close() with recent libcurl (#24969).
 - Make wxTempFile::Commit() really atomic (#25088).
@@ -319,7 +319,7 @@ wxOSX:
 - Fix not making dialogs modal in some circumstances (Dmitry Makarenko, #25087).
 - Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
 - Fix regression in GetPreferredUILanguage() in some cases (#24804).
-- Fix Z-order of auto-complete popup of wxStyledTextCtrl (##25202).
+- Fix Z-order of auto-complete popup of wxStyledTextCtrl (#25202).
 - Fix CMake build with PCH disabled (Maarten Bent, #24851).
 - Fix truncating labels of newly added wxNotebook pages (#25194).
 - Fix truncating wxEvent time stamp after ~25 days (Artur Sochirca, #24960).
