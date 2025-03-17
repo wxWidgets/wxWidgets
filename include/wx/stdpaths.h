@@ -219,10 +219,10 @@ protected:
     #if defined(__WINDOWS__)
         #include "wx/msw/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
-    #elif defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__) || defined(__DARWIN__)
+    #elif defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__)
         #include "wx/osx/cocoa/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
-    #elif defined(__UNIX__)
+    #elif defined(__UNIX__) || defined(__DARWIN__)
         #include "wx/unix/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
         #define wxHAS_STDPATHS_INSTALL_PREFIX
