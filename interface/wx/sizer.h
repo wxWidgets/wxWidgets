@@ -1611,7 +1611,7 @@ public:
     wxSizerFlags& Right();
 
     /**
-        Set the @c wx_SHAPED flag which indicates that the elements should
+        Sets the @c wxSHAPED flag which indicates that the elements should
         always keep the fixed width to height ratio equal to its original value.
     */
     wxSizerFlags& Shaped();
@@ -2071,5 +2071,12 @@ public:
             arguments had to be overridden in the derived classes instead.
     */
     virtual void RepositionChildren(const wxSize& minSize);
+
+    /**
+       Inform sizer about the first direction that has been decided (by
+       parent item).  Returns true if it made use of the information (and
+       recalculated min size).
+    */
+    virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
 };
 

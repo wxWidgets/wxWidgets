@@ -225,7 +225,7 @@ public:
             return [slf indexOfTabViewItem:selectedItem]+1;
     }
 
-    void SetMaximum( wxInt32 maximum ) wxOVERRIDE
+    void SetupTabs( const wxNotebook& notebook) wxOVERRIDE
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         int cocoacount = [slf numberOfTabViewItems ];
@@ -233,11 +233,42 @@ public:
         wxTabViewController* controller = [slf delegate];
         [slf setDelegate:nil];
 
+        // Update the existing pages in case their label or image changed.
+        const int maximum = notebook.GetPageCount();
+        for ( int i = 0; i < wxMin(maximum, cocoacount); ++i )
+        {
+            NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
+
+            wxNotebookPage* page = notebook.GetPage(i);
+            [item setView:page->GetHandle() ];
+            wxCFStringRef cf( page->GetLabel() );
+            [item setLabel:cf.AsNSString()];
+
+            const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
+            if ( bitmap.IsOk() )
+            {
+                [(WXCTabViewImageItem*) item setImage: wxOSXGetImageFromBundle(bitmap)];
+            }
+        }
+
+        // Next also add new pages or delete the no more existing ones.
         if ( maximum > cocoacount )
         {
             for ( int i = cocoacount ; i < maximum ; ++i )
             {
                 NSTabViewItem* item = [[WXCTabViewImageItem alloc] init];
+
+                wxNotebookPage* page = notebook.GetPage(i);
+                [item setView:page->GetHandle() ];
+                wxCFStringRef cf( page->GetLabel() );
+                [item setLabel:cf.AsNSString()];
+
+                const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
+                if ( bitmap.IsOk() )
+                {
+                    [(WXCTabViewImageItem*) item setImage: wxOSXGetImageFromBundle(bitmap)];
+                }
+
                 [slf addTabViewItem:item];
                 [item release];
             }
@@ -251,28 +282,6 @@ public:
             }
         }
         [slf setDelegate:controller];
-    }
-
-    void SetupTabs( const wxNotebook& notebook) wxOVERRIDE
-    {
-        int pcount = notebook.GetPageCount();
-
-        SetMaximum( pcount );
-
-        for ( int i = 0 ; i < pcount ; ++i )
-        {
-            wxNotebookPage* page = notebook.GetPage(i);
-            NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
-            [item setView:page->GetHandle() ];
-            wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
-            [item setLabel:cf.AsNSString()];
-
-            const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
-            if ( bitmap.IsOk() )
-            {
-                [(WXCTabViewImageItem*) item setImage: wxOSXGetImageFromBundle(bitmap)];
-            }
-        }
     }
 
     int TabHitTest(const wxPoint & pt, long* flags) wxOVERRIDE

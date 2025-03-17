@@ -1184,6 +1184,7 @@ unsigned wxTreeListCtrl::GetSelections(wxTreeListItems& selections) const
 void wxTreeListCtrl::Select(wxTreeListItem item)
 {
     wxCHECK_RET( m_view, "Must create first" );
+    wxCHECK_RET( item->GetParent(), "Can't select the invisible root item" );
 
     m_view->Select(m_model->ToNonRootDVI(item));
 }
@@ -1191,6 +1192,7 @@ void wxTreeListCtrl::Select(wxTreeListItem item)
 void wxTreeListCtrl::Unselect(wxTreeListItem item)
 {
     wxCHECK_RET( m_view, "Must create first" );
+    wxCHECK_RET( item->GetParent(), "Can't deselect the invisible root item" );
 
     m_view->Unselect(m_model->ToNonRootDVI(item));
 }
@@ -1198,6 +1200,7 @@ void wxTreeListCtrl::Unselect(wxTreeListItem item)
 bool wxTreeListCtrl::IsSelected(wxTreeListItem item) const
 {
     wxCHECK_MSG( m_view, false, "Must create first" );
+    wxCHECK_MSG( item->GetParent(), false, "Invisible root can't be selected" );
 
     return m_view->IsSelected(m_model->ToNonRootDVI(item));
 }

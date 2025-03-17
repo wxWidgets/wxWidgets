@@ -2068,7 +2068,6 @@ bool wxVariantDataList::Write(wxString& str) const
         wxVariant* var = node->GetData();
         if (node != m_value.GetFirst())
           str += wxT(" ");
-        wxString str1;
         str += var->MakeString();
         node = node->GetNext();
     }

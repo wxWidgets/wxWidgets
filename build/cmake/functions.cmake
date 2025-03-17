@@ -21,6 +21,12 @@ else()
 endif()
 
 
+# List of libraries added via wx_add_library() to use for wx-config
+# and headers added via wx_append_sources() to use for install.
+set(wxLIB_TARGETS)
+set(wxINSTALL_HEADERS)
+
+
 # This function adds a list of headers to a variable while prepending
 # include/ to the path
 macro(wx_add_headers src_var)
@@ -52,6 +58,14 @@ macro(wx_append_sources src_var source_base_name)
     endif()
     if(DEFINED ${source_base_name}_HDR)
         wx_add_headers(${src_var} ${${source_base_name}_HDR})
+
+        list(APPEND wxINSTALL_HEADERS ${${source_base_name}_HDR})
+        set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
+    endif()
+
+    if(DEFINED ${source_base_name}_RSC)
+        list(APPEND wxINSTALL_HEADERS ${${source_base_name}_RSC})
+        set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)
     endif()
 endmacro()
 
@@ -111,6 +125,14 @@ function(wx_set_common_target_properties target_name)
         set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     endif()
 
+    if(NOT WIN32 AND wxUSE_VISIBILITY)
+        set_target_properties(${target_name} PROPERTIES
+            C_VISIBILITY_PRESET hidden
+            CXX_VISIBILITY_PRESET hidden
+            VISIBILITY_INLINES_HIDDEN TRUE
+        )
+    endif()
+
     if(MSVC)
         if(wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
             set(MSVC_WARNING_LEVEL "/W3")
@@ -118,6 +140,15 @@ function(wx_set_common_target_properties target_name)
             set(MSVC_WARNING_LEVEL "/W4")
         endif()
         target_compile_options(${target_name} PRIVATE ${MSVC_WARNING_LEVEL})
+
+        if(CMAKE_VERSION GREATER_EQUAL "3.15")
+            set(msvc_runtime "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+            if(wxBUILD_USE_STATIC_RUNTIME)
+                set(msvc_runtime "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+            endif()
+            set_target_properties(${target_name} PROPERTIES MSVC_RUNTIME_LIBRARY ${msvc_runtime})
+        endif()
+
     elseif(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
         set(common_gcc_clang_compile_options
             -Wall
@@ -411,8 +442,21 @@ function(wx_set_target_properties target_name)
     wx_set_common_target_properties(${target_name})
 endfunction()
 
-# List of libraries added via wx_add_library() to use for wx-config
-set(wxLIB_TARGETS)
+macro(wx_get_install_dir artifact default)
+    string(TOUPPER ${artifact} artifact_upper)
+    if(wxBUILD_INSTALL_${artifact_upper}_DIR)
+        set(${artifact}_dir "${wxBUILD_INSTALL_${artifact_upper}_DIR}")
+    else()
+        set(${artifact}_dir ${default})
+    endif()
+    if(wxBUILD_INSTALL_PLATFORM_SUBDIR)
+        if(${artifact}_dir)
+            wx_string_append(${artifact}_dir ${GEN_EXPR_DIR})
+        endif()
+        wx_string_append(${artifact}_dir "${wxPLATFORM_LIB_DIR}")
+    endif()
+endmacro()
+
 
 # Add a wxWidgets library
 # wx_add_library(<target_name> [IS_BASE;IS_PLUGIN;IS_MONO] <src_files>...)
@@ -456,17 +500,27 @@ macro(wx_add_library name)
         # Setup install
         if(MSYS OR CYGWIN)
             # configure puts the .dll in the bin directory
-            set(runtime_dir "bin")
+            set(runtime_default_dir "bin")
         else()
-            set(runtime_dir "lib")
+            set(runtime_default_dir "lib")
         endif()
+
+        wx_get_install_dir(library "lib")
+        wx_get_install_dir(archive "lib")
+        wx_get_install_dir(runtime "${runtime_default_dir}")
+
         wx_install(TARGETS ${name}
             EXPORT wxWidgetsTargets
-            LIBRARY DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
-            ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
-            RUNTIME DESTINATION "${runtime_dir}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+            LIBRARY DESTINATION "${library_dir}"
+            ARCHIVE DESTINATION "${archive_dir}"
+            RUNTIME DESTINATION "${runtime_dir}"
             BUNDLE DESTINATION Applications/wxWidgets
-            )
+        )
+
+        if(wxBUILD_SHARED AND MSVC AND wxBUILD_INSTALL_PDB)
+            wx_install(FILES $<TARGET_PDB_FILE:${name}> DESTINATION "${runtime_dir}")
+        endif()
+
         wx_target_enable_precomp(${name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     endif()
 endmacro()
@@ -867,7 +921,7 @@ function(wx_add name group)
                 ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_dst})
         endforeach()
         add_custom_command(
-            TARGET ${target_name} ${cmds}
+            TARGET ${target_name} POST_BUILD ${cmds}
             COMMENT "Copying ${target_name} data files...")
     endif()
 

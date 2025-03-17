@@ -269,6 +269,7 @@
             misc/garbage.cpp
             misc/safearrayconverttest.cpp
             misc/settings.cpp
+            misc/textwrap.cpp
             <!--
                 This one is intentionally duplicated here (it is also part of
                 non-GUI test) as sockets behave differently in console and GUI

@@ -1403,7 +1403,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
 #if !wxUSE_REPRODUCIBLE_BUILD
                wxS("compiled at %s %s\n\n")
 #endif
-               wxS("Runtime version of toolkit used is %d.%d.\n"),
+               wxS("Runtime version of toolkit used is %d.%d.%d.\n"),
                wxPlatformInfo::Get().GetPortIdName(),
                ver,
 #if wxUSE_UNICODE_UTF8
@@ -1425,7 +1425,8 @@ wxVersionInfo wxGetLibraryVersionInfo()
                __TTIME__,
 #endif
                wxPlatformInfo::Get().GetToolkitMajorVersion(),
-               wxPlatformInfo::Get().GetToolkitMinorVersion()
+               wxPlatformInfo::Get().GetToolkitMinorVersion(),
+               wxPlatformInfo::Get().GetToolkitMicroVersion()
               );
 
 #ifdef __WXGTK__
@@ -1445,7 +1446,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxS("Copyright (c) 1992-2024 wxWidgets team"));
+                         wxS("Copyright (c) 1992-2025 wxWidgets team"));
 }
 
 void wxInfoMessageBox(wxWindow* parent)

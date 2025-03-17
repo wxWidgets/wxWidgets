@@ -9,6 +9,8 @@
 
 list(APPEND CMAKE_MODULE_PATH "${wxSOURCE_DIR}/build/cmake/modules")
 
+file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" CMAKE_INSTALL_PREFIX)
+
 include(build/cmake/files.cmake)            # Files list
 include(build/cmake/source_groups.cmake)    # Source group definitions
 include(build/cmake/functions.cmake)        # wxWidgets functions
@@ -16,6 +18,7 @@ include(build/cmake/toolkit.cmake)          # Platform/toolkit settings
 include(build/cmake/options.cmake)          # User options
 include(build/cmake/init.cmake)             # Init various global build vars
 include(build/cmake/pch.cmake)              # Precompiled header support
+include(build/cmake/locale.cmake)           # Locale files
 
 add_subdirectory(build/cmake/lib libs)
 add_subdirectory(build/cmake/utils utils)

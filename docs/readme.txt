@@ -32,29 +32,35 @@ installation instructions.
 
 
 
-Changes since 3.2.5
+Changes since 3.2.6
 -------------------
 
-This release contains multiple bug fixes, including some regressions, as well
-as improvements to the CMake build system. Some of the most important changes:
+This release contains more than a hundred bug fixes and improvements. Some of
+the most important fixes are:
 
-- Fix resource leak in wxBitmapBundle in some circumstances (#24703).
-- Fix crash when using static wx libraries in a Windows DLL (#24730).
-- Fix possible crash during drag-and-drop in wxGTK (#24677).
-- Fix wxDatePickerCtrl being unusable in some locales in wxGTK (#24533).
-- Fix regression in focus handling under macOS 14+ (#24605, #24667).
-- Fix regression in wxTranslations introduced in 3.2.3 (#24297).
+- Build fixes for gcc 14 (#24248, #24869) and clang 19 (#24922, #24959, #25064).
+- Fix build with macOS 15 SDK (#24724, #24879).
+- Many fixes to key event generation in wxGTK (#25053, #25199, #25200).
+- Avoid repaint problems when using wxWindow::Update() with Wayland (#25036).
+- Fix crashes when using wxWebRequest with libcurl (#24885, #24969).
+
+New in this release:
+
+- Add wxNO_UNUSED_VARIABLES to opt-in into getting helpful warnings (#24882).
+- Add wxApp::SetErrorExitCode() to better handle initialization errors (#24770).
 
 Other changes include:
 
-- High DPI fixes for wxBitmapComboBox (#24563), wxDataViewCtrl (#24648),
-  wxNotebook (#24606), wxPropertyGrid (#24607), wxWizard (#24743).
-- Improve wxSlider appearance under macOS (#24532, #24539).
-- Correctly use current keyboard layout in key events in wxGTK (#24772).
-- Fix handling of ligatures in wxStyledTextCtrl in wxGTK (#13168).
+- More high DPI fixes in wxMSW (#24650, #24651, #24815, #24850, #24821, #24941).
+- Improve wxInfoBar appearance (#24838, #24902, #25048).
+- Fix possible crash during session termination in wxMSW (#24903).
+- Wayland fixes to copy-pasting (#24701) and drag-and-drop (#25116) in wxGTK.
+- Fix truncating labels of newly added wxNotebook pages in wxOSX (#25194).
+- Fix Z-order of auto-complete popup of wxStyledTextCtrl in wxOSX (#25202).
+- Fix buffer read overflow when compiling RE ending with backslash (#25040).
+- Make wxTempFile::Commit() and wxRenameFile() really atomic (#25088).
 
-
-Please see the full change log for more details:
+and more, please see the full change log for more details:
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.7/docs/changes.txt
 
@@ -156,4 +162,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, September 2024
+The wxWidgets Team, March 2025

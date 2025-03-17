@@ -959,6 +959,12 @@ wxString wxGetOsDescription();
             <th>Build number</th>
         </tr>
         <tr>
+            <td>Windows Server 2025</td>
+            <td>10</td>
+            <td>0</td>
+            <td>26100</td>
+        </tr>
+        <tr>
             <td>Windows 11</td>
             <td>10</td>
             <td>0</td>

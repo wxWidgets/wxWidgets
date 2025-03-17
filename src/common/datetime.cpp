@@ -776,10 +776,12 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
                                   wxDateTime::NameFlags flags)
 {
     wxCHECK_MSG(month != Inv_Month, wxEmptyString, wxT("invalid month"));
+#if wxUSE_INTL
     wxString name = wxUILocale::GetCurrent().GetMonthName(month, flags);
-    if (name.empty())
-        name = GetEnglishMonthName(month, flags);
-    return name;
+    if (!name.empty())
+        return name;
+#endif // wxUSE_INTL
+    return GetEnglishMonthName(month, flags);
 }
 
 /* static */
@@ -806,10 +808,12 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
                                     wxDateTime::NameFlags flags)
 {
     wxCHECK_MSG(wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday"));
+#if wxUSE_INTL
     wxString name = wxUILocale::GetCurrent().GetWeekDayName(wday, flags);
-    if (name.empty())
-        name = GetEnglishWeekDayName(wday, flags);
-    return name;
+    if (!name.empty())
+        return name;
+#endif // wxUSE_INTL
+    return GetEnglishWeekDayName(wday, flags);
 }
 
 /* static */
@@ -1269,7 +1273,14 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
 
     // test only the year instead of testing for the exact end of the Unix
     // time_t range - it doesn't bring anything to do more precise checks
-    if ( year >= yearMinInRange && (sizeof(time_t) > 4 || year <= yearMaxInRange) )
+    if ( year >= yearMinInRange &&
+            ((sizeof(time_t) > 4
+#if defined(__VISUALC__) || defined(__MINGW64__)
+              // MSVC CRT (also used by MinGW) is documented not to support
+              // years > 3000, even when using 64-bit time_t.
+              && year <= 3000
+#endif // Using MSVC CRT
+             ) || year <= yearMaxInRange) )
     {
         // use the standard library version if the date is in range - this is
         // probably more efficient than our code

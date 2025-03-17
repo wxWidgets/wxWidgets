@@ -269,7 +269,8 @@ AC_TRY_COMPILE([#include <sys/types.h>
  not big endian
 #endif], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
 if test $ac_cv_c_bigendian = unknown; then
-AC_TRY_RUN([main () {
+AC_TRY_RUN([#include <stdlib.h>
+main () {
   /* Are we little or big endian?  From Harbison&Steele.  */
   union
   {
@@ -494,6 +495,23 @@ AC_DEFUN([WX_VERSIONED_SYMBOLS],
                   wx_cv_version_script=no
                 fi
 
+                dnl We also check for --undefined-version support, as we need
+                dnl it with our current approach of using the same version
+                dnl script for all libraries. This should ideally be changed...
+                if test $wx_cv_version_script = yes ; then
+                    if AC_TRY_COMMAND([
+                            $CXX -o conftest.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                            -Wl,--version-script,conftest.sym -Wl,--undefined-version >/dev/null 2>conftest.stderr]) ; then
+                      if test -s conftest.stderr ; then
+                          wx_cv_undefined_version=no
+                      else
+                          wx_cv_undefined_version=yes
+                      fi
+                    else
+                      wx_cv_undefined_version=no
+                    fi
+                fi
+
                 dnl There's a problem in some old linkers with --version-script that
                 dnl can cause linking to fail when you have objects with vtables in
                 dnl libs 3 deep.  This is known to happen in netbsd and openbsd with
@@ -535,6 +553,9 @@ AC_DEFUN([WX_VERSIONED_SYMBOLS],
 
             if test $wx_cv_version_script = yes ; then
                 LDFLAGS_VERSIONING="-Wl,--version-script,$1"
+                if test $wx_cv_undefined_version = yes ; then
+                    LDFLAGS_VERSIONING="$LDFLAGS_VERSIONING -Wl,--undefined-version"
+                fi
             fi
             ;;
     esac

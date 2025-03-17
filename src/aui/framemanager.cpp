@@ -75,6 +75,21 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
 wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
 
+// We can't add a member variable to wxAuiManager in 3.2 branch, so emulate it
+// by encoding the corresponding boolean value via the presence of "this"
+// pointer in the given hash set.
+#include "wx/hashset.h"
+
+namespace
+{
+
+// Define a set of wxAuiManager object pointers.
+WX_DECLARE_HASH_SET(wxAuiManager*, wxPointerHash, wxPointerEqual, wxAuiManagerSet);
+
+// And use it to remember for which objects we delayed updating them.
+wxAuiManagerSet gs_updateOnRestore;
+
+} // anonymous namespace
 
 
 const int auiToolBarLayer = 10;
@@ -629,6 +644,8 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
 
 wxAuiManager::~wxAuiManager()
 {
+    gs_updateOnRestore.erase(this);
+
     UnInit();
 
     // NOTE: It's possible that the windows have already been destroyed by the
@@ -2495,6 +2512,17 @@ void wxAuiManager::GetDockSizeConstraint(double* width_pct, double* height_pct) 
 
 void wxAuiManager::Update()
 {
+    wxTopLevelWindow * const
+        tlw = wxDynamicCast(wxGetTopLevelParent(m_frame), wxTopLevelWindow);
+    if ( tlw && tlw->IsIconized() )
+    {
+        // We can't compute the layout correctly when the frame is minimized
+        // because at least under MSW its client size is (0,0) in this case
+        // but, luckily, we don't need to do it right now anyhow.
+        gs_updateOnRestore.insert(this);
+        return;
+    }
+
     m_hoverButton = NULL;
     m_actionPart = NULL;
 
@@ -3982,8 +4010,19 @@ void wxAuiManager::OnSize(wxSizeEvent& event)
 {
     if (m_frame)
     {
-        DoFrameLayout();
-        Repaint();
+        if ( gs_updateOnRestore.count(this) )
+        {
+            // If we had postponed updating, do it now: we only receive size
+            // events once the window is restored.
+            gs_updateOnRestore.erase(this);
+
+            Update();
+        }
+        else // Otherwise just re-layout, without redoing the full update.
+        {
+            DoFrameLayout();
+            Repaint();
+        }
 
 #if wxUSE_MDI
         if (wxDynamicCast(m_frame, wxMDIParentFrame))

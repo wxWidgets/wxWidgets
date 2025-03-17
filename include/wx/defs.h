@@ -341,6 +341,21 @@ typedef short int WXTYPE;
     #define wxFALLTHROUGH ((void)0)
 #endif
 
+/* wxWARN_UNUSED is used as an attribute to a class, stating that unused instances
+   should be warned about (in case such warnings are enabled in the first place)
+   In 3.2.x this is an opt-in feature enabled by defining wxNO_UNUSED_VARIABLES. */
+
+#if defined(wxNO_UNUSED_VARIABLES) || defined(WXBUILDING)
+    #ifdef __has_attribute /* __has_cpp_attribute(warn_unused) would return false with Clang, */
+        #if __has_attribute(warn_unused) /* so use __has_attribute instead */
+            #define wxWARN_UNUSED __attribute__((warn_unused))
+        #endif
+    #endif
+#endif
+#ifndef wxWARN_UNUSED
+    #define wxWARN_UNUSED
+#endif
+
 /* these macros are obsolete, use the standard C++ casts directly now */
 #define wx_static_cast(t, x) static_cast<t>(x)
 #define wx_const_cast(t, x) const_cast<t>(x)
@@ -1159,20 +1174,36 @@ typedef double wxDouble;
 
 /* Define wxChar16 and wxChar32                                              */
 
+#ifdef __cplusplus
+
 #if SIZEOF_WCHAR_T == 2
     #define wxWCHAR_T_IS_WXCHAR16
     typedef wchar_t wxChar16;
 #else
-    typedef wxUint16 wxChar16;
+    // For compatibility, we keep using wxUint16 here, but this wouldn't
+    // compile with libc++ 19+, so use the (more correct but, more importantly,
+    // working) char16_t in this case as there is nothing to be compatible
+    // with in this case.
+    #if defined(_LIBCPP_VERSION) && (_LIBCPP_VERSION+0 >= 19000)
+        typedef char16_t wxChar16;
+    #else
+        typedef wxUint16 wxChar16;
+    #endif
 #endif
 
 #if SIZEOF_WCHAR_T == 4
     #define wxWCHAR_T_IS_WXCHAR32
     typedef wchar_t wxChar32;
 #else
-    typedef wxUint32 wxChar32;
+    // See the comment above for wxChar16 definition.
+    #if defined(_LIBCPP_VERSION) && (_LIBCPP_VERSION+0 >= 19000)
+        typedef char32_t wxChar32;
+    #else
+        typedef wxUint32 wxChar32;
+    #endif
 #endif
 
+#endif /* __cplusplus */
 
 /*
     Helper macro expanding into the given "m" macro invoked with each of the

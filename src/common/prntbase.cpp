@@ -17,9 +17,6 @@
 #include "wx/dcprint.h"
 
 #ifndef WX_PRECOMP
-    #if defined(__WXMSW__)
-        #include "wx/msw/wrapcdlg.h"
-    #endif // MSW
     #include "wx/utils.h"
     #include "wx/dc.h"
     #include "wx/app.h"
@@ -64,12 +61,6 @@
 #include "wx/generic/prntdlgg.h"
 #include "wx/dcps.h"
 #endif
-
-#ifdef __WXMSW__
-    #ifndef __WIN32__
-        #include <print.h>
-    #endif
-#endif // __WXMSW__
 
 // The value traditionally used as the default max page number and meaning
 // "infinitely many". It should probably be documented and exposed, but for now

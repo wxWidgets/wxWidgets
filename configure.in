@@ -2973,8 +2973,12 @@ if test "$wxUSE_EXPAT" != "no"; then
         wxCFLAGS_C99=$ac_cv_prog_cc_c99
         AC_SUBST(wxCFLAGS_C99)
 
-        dnl Expat needs this:
-        AC_CONFIG_SUBDIRS([src/expat/expat])
+        dnl Don't check for docbook: we don't need to generate the
+        dnl documentation and, worse, Expat configure can actually fail the
+        dnl build if docbook is found but docbook2man is not the expected
+        dnl variant.
+        AX_SUBDIRS_CONFIGURE([src/expat/expat],
+            [[--without-docbook]])
     fi
 
     wxUSE_XML=yes
@@ -4061,17 +4065,15 @@ if test "$wxUSE_SHARED" = "yes"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
             cat <<EOF >change-install-names
 #!/bin/sh
-libnames=\`cd lib ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
+libnames=\$(cd lib ; ls -1 libwx*${WX_RELEASE}.dylib)
 changes=''
 for dep in \${libnames} ; do
-    changes="\${changes} -change \${4}/\${dep} \${3}/\${dep}"
+    target=\$(readlink -f \${4}/\${dep})
+    changes="\${changes} -change \${target} \${3}/\${dep}"
 done
 for i in \${libnames} ; do
-    if test -L \${1}/\${i}; then
-        # skip symbolic links
-        continue
-    fi
-    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${1}/\${i}
+    lib=\$(readlink -f \${1}/\${i})
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${lib}
 done
 
 if test -f "\${2}/wxrc-${WX_RELEASE}" ; then
@@ -5806,6 +5808,9 @@ if test "$USE_UNIX" = 1 ; then
         AC_TRY_LINK([
                 #include <sys/ioctl.h>
                 #include <sys/soundcard.h>
+                #ifdef HAVE_UNISTD_H
+                # include <unistd.h> /* needed for ioctl() on Solaris */
+                #endif
             ],
             [
                 ioctl(0, SNDCTL_DSP_SPEED, 0);
@@ -5817,6 +5822,9 @@ if test "$USE_UNIX" = 1 ; then
                 AC_TRY_LINK([
                         #include <sys/ioctl.h>
                         #include <sys/soundcard.h>
+                        #ifdef HAVE_UNISTD_H
+                        # include <unistd.h> /* needed for ioctl() on Solaris */
+                        #endif
                     ],
                     [
                         ioctl(0, SNDCTL_DSP_SPEED, 0);

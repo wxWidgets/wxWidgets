@@ -558,7 +558,6 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
     {
         wxLayoutDirection layout = uiLocale.GetLayoutDirection();
         wxString strLayout = (layout == wxLayout_RightToLeft) ? "RTL" : "LTR";
-        wxString strLocale = uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_NATIVE);
         wxLogMessage(_("Locale \"%s\" is available.\nIdentifier: %s; Layout: %s\nEnglish name: %s\nLocalized name: %s"),
                      s_locale, uiLocale.GetName(), strLayout,
                      uiLocale.GetLocalizedName(wxLOCALE_NAME_LOCALE, wxLOCALE_FORM_ENGLISH),
@@ -586,7 +585,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-    const wxString& title = _("Testing _() (gettext)");
+    const wxString title = _("Testing _() (gettext)");
 
     // NOTE: using the wxTRANSLATE() macro here we won't show a localized
     //       string in the text entry dialog; we'll simply show the un-translated
@@ -609,7 +608,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 {
-    const wxString& title = _("Testing _N() (ngettext)");
+    const wxString title = _("Testing _N() (ngettext)");
     wxTextEntryDialog d(this,
         _("Please enter range for plural forms of \"n files deleted\" phrase"),
         title, "0-10");

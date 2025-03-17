@@ -822,7 +822,12 @@ void wxApp::MSWProcessPendingEventsIfNeeded()
     // both console and GUI applications.
     wxMSWEventLoopBase * const evtLoop =
         static_cast<wxMSWEventLoopBase *>(wxEventLoop::GetActive());
-    if ( evtLoop && evtLoop->MSWIsWakeUpRequested() )
+
+    // We don't want to do anything if we have an event loop which hadn't been
+    // woken up, but we need to do it if we don't have any event loop at all
+    // (which is uncommon but may happen), as otherwise pending events would
+    // just accumulate forever, without ever being processed.
+    if ( !evtLoop || evtLoop->MSWIsWakeUpRequested() )
         ProcessPendingEvents();
 }
 
@@ -840,7 +845,7 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
     // destroyed: this will result in a leak of a HWND, of course, but who
     // cares when the process is being killed anyhow
     if ( !wxTopLevelWindows.empty() )
-        wxTopLevelWindows[0]->SetHWND(0);
+        wxTopLevelWindows[0]->DissociateHandle();
 
     // Destroy all the remaining TLWs before calling OnExit() to have the same
     // sequence of events in this case as in case of the normal shutdown,

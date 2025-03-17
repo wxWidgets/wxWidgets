@@ -1227,6 +1227,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\misc\textwrap.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\persistence\tlw.cpp"
 				>
 			</File>

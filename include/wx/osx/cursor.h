@@ -38,6 +38,8 @@ public:
     void SetHCURSOR(WXHCURSOR cursor);
     WXHCURSOR GetHCURSOR() const;
 
+    virtual wxPoint GetHotSpot() const wxOVERRIDE;
+
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;

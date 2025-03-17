@@ -88,16 +88,17 @@ jobs:
             use_xvfb: true
             build_out_of_tree_samples: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
-            runner: ubuntu-20.04
+            runner: ubuntu-latest
+            container: ubuntu:20.04
             compiler: clang++-10
             configure_flags: --disable-sys-libs
             use_xvfb: true
-          - name: Ubuntu 20.04 wxGTK ANSI
-            runner: ubuntu-20.04
+          - name: Ubuntu 22.04 wxGTK ANSI
+            runner: ubuntu-22.04
             configure_flags: --disable-unicode
             skip_samples: true
-          - name: Ubuntu 22.04 wxGTK with ASAN
-            runner: ubuntu-22.04
+          - name: Ubuntu 24.04 wxGTK with ASAN
+            runner: ubuntu-24.04
             configure_flags: --disable-compat30 --disable-sys-libs
             skip_samples: true
             use_asan: true
@@ -149,16 +150,43 @@ jobs:
               fi
 
               compiler=${{ matrix.compiler }}
+              case "$compiler" in
+                clang++*)
+                  compiler_packages='clang libc++-dev libc++abi-dev'
+                  ;;
+
+                g++*)
+                  compiler_packages="${compiler}"
+                  ;;
+
+                '')
+                  # Assume gcc.
+                  compiler_packages='g++'
+                  ;;
+
+                *)
+                  echo '::error ::Unknown compiler kind.'
+                  exit 1
+              esac
 
               # Explanation for installing some less obvious packages:
               #   - coreutils contains nproc used in proc_count.sh called below.
               #   - locales contains locale-gen also used below.
-              #   - Python can't be installed using the action as usual because
-              #     it installs an ABI-incompatible version, see (wrongly, IMO)
-              #     closed https://github.com/actions/setup-python/issues/370
               #   - xvfb is used for running the GUI tests.
               apt-get update -qq
-              apt-get install -qq coreutils ${compiler-g++} git locales make pkg-config python3 python3-pip sudo xvfb
+              apt-get install -qq coreutils ${compiler_packages} git locales make pkg-config sudo xvfb
+
+              # Checkout action doesn't work under Ubuntu 18.04 any more, so
+              # run checkout manually.
+              git config --global --add safe.directory $GITHUB_WORKSPACE
+              git config --global gc.auto 0
+              git init $GITHUB_WORKSPACE
+              cd $GITHUB_WORKSPACE
+              git remote add origin $GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+              git fetch --depth=1 origin $GITHUB_REF
+              git checkout FETCH_HEAD
+              git submodule update --init --depth=1 --recursive
+              git log -1 --format='%H'
               ;;
 
             '')
@@ -170,12 +198,14 @@ jobs:
           esac
 
       - name: Checkout
-        uses: actions/checkout@v3
+        if: matrix.container != 'ubuntu:18.04'
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
       - name: Install CCache
-        uses: hendrikmuhs/ccache-action@v1.2.3
+        if: matrix.container != 'ubuntu:18.04'
+        uses: hendrikmuhs/ccache-action@v1.2.12
         with:
           key: ${{ matrix.name }}
 
@@ -187,6 +217,13 @@ jobs:
           echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
 
           echo "PATH=/usr/lib/ccache:$PATH" >> $GITHUB_ENV
+
+          if [ '${{ matrix.container }}' = 'ubuntu:18.04' ]; then
+            # We can't easily install Go, so skip the tests requiring httpbin.
+            echo 'Disabling httpbin under Ubuntu 18.04'
+            echo WX_TEST_WEBREQUEST_URL=0 >> $GITHUB_ENV
+            export WX_TEST_WEBREQUEST_URL=0
+          fi
 
           # Setting this variable suppresses "Error retrieving accessibility bus address"
           # messages from WebKit tests that we're not interested in.
@@ -200,6 +237,8 @@ jobs:
               echo LD=$compiler >> $GITHUB_ENV
 
               allow_warn_opt="-Wno-error=#warnings"
+
+              export WX_EXTRA_PACKAGES="libc++-dev"
               ;;
 
             g++*)
@@ -245,7 +284,7 @@ jobs:
           echo
 
           echo "ccache version:"
-          ccache --version
+          ccache --version || echo "ccache not available"
           echo
 
       - name: Configuring
@@ -294,11 +333,11 @@ jobs:
           make $wxBUILD_ARGS failtest
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
-      - name: Setup Python
-        if: matrix.container == ''
-        uses: actions/setup-python@v4
+      - name: Setup Go
+        if: matrix.container != 'ubuntu:18.04'
+        uses: actions/setup-go@v5
         with:
-          python-version: '3.10'
+          go-version: '1'
 
       - name: Testing
         working-directory: tests

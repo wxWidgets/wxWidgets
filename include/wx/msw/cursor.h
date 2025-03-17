@@ -35,6 +35,8 @@ public:
 
     virtual ~wxCursor();
 
+    wxDECLARE_DEFAULT_COPY(wxCursor)
+
     // implementation only
     void SetHCURSOR(WXHCURSOR cursor) { SetHandle((WXHANDLE)cursor); }
     WXHCURSOR GetHCURSOR() const { return (WXHCURSOR)GetHandle(); }

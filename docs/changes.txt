@@ -248,25 +248,84 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.7: (released 2025-??-??)
+3.2.7: (released 2025-03-20)
 ----------------------------
 
 All:
 
 - Avoid trailing space in `wx-config --c[xx]flags` (Tobiasz Laskowski, #24812).
+- Fix building using gcc 14 under Solaris (Alan Coopersmith, #24869).
+- Avoid warnings in event table macros with clang 19 (Lauri Nurmi, #25064).
+- Add wxNO_UNUSED_VARIABLES to enable warnings about them (Lauri Nurmi, #24882).
+- Install all translations in "make install" (Scott Talbert, #24880).
+- Fix compilation with clang 19 (Lauri Nurmi, #24922).
+- Fix crash in wxWebRequestCURL when connection was refused (#24885).
+- Fix build with libc++ v19 (#24959).
+- Add wxApp::SetErrorExitCode() to better handle initialization errors (#24770).
+- Fix buffer read overflow when compiling RE ending with backslash (#25040).
+- Fix crash in wxWebRequest::Close() with recent libcurl (#24969).
+- Make wxTempFile::Commit() really atomic (#25088).
+- Improve CMake install target and many other fixes (Maarten Bent, #24792).
+- Use full toolkit version in wxGetLibraryVersionInfo() (Lauri Nurmi, #25175).
 
 All (GUI):
 
 - Improve wxPropGrid checkboxes in high DPI (Alex Shvartzkop, #24650, #24651).
+- Don't break AUI layout if Update() called when window is iconized (#24930).
+- Improve wxInfoBar appearance (#24838, #24902, #25048).
+- Fix multiple bugs in wxStaticText::Wrap() (#23339).
+- Show wxAuiToolBar long help text in frame status bar (Bill Su, #25157).
+- Recognize "current" and "pressed" in wxBitmapButton XRC handler (#25114).
+- Fix wrong row parameter in wxEVT_GRID_ROW_MOVE events (Tony Kennedy).
+- Add subitem support to wxGenericListCtrl::HitTest() (Lauri Nurmi, #25153).
+- Fix off by one error in wxImage::ResampleNearest() (Alex Shvartzkop, #25171).
+- Fix WX_GL_COMPAT_PROFILE spelling (#24964).
+
+wxGTK:
+
+- Many fixes to key event generation (#25053, #25199, #25200).
+- Fix copy-pasting text under more Wayland compositors (Weston, kwin) (#24701).
+- Fix wxDropSource::DoDragDrop() sometimes not returning with Wayland (#25116).
+- Fix insufficient wxStaticBox borders size (#25045).
+- Fix unwanted "All pages" selection in the printing dialog (#24868).
+- Fix size of wxDataViewCustomRenderer which was ignored in some cases (#24227).
+- Respect the minimum size of controls in wxToolBar (#25210).
+- Don't consume Ctrl-C when using SDL-based wxSound (Kyriet, #25067).
+- Avoid repaint problems when using wxWindow::Update() with Wayland (#25036).
+- Generate wxEVT_ENTER_WINDOW in icon part of wxSearchCtrl too (#24245).
 
 wxMSW:
 
+- Fix regression in wxDateTime support for years > 3000 in 3.2.5 (#25228).
 - Improve print preview in high DPI (taler21, #24815).
+- Fix position of the icons in the printout (#24673).
+- Fix events generated when toast-based notifications are dismissed (#24320).
+- Fix height of wxOwnerDrawnComboBox popup in high DPI (Maarten Bent, #24850).
+- Fix background colour of owner-drawn wxListBox items (#24917).
+- Fix handling pending events without an event loop (Stefan Battmer, #18109).
+- Fix indent of imageless wxTreeCtrl in high DPI (taler21, #24941).
+- Fix possible crash during session termination (#24903).
+- Make wxKill(wxKILL_CHILDREN) work recursively (Wolfgang Dautermann, #25069).
+- Use ReplaceFile() in wxRenameFile() to make operation atomic (#25088).
+- Fix padding of wxMenu in high DPI (taler21, #24821).
+- Recognize Windows Server 2025 in wxGetOsDescription() (PB, #25066).
+- Fix spurious assert failures in wxFileSystemWatcher with Samba (#18953).
+- Fix build errors in wx/vector.h if "new" is redefined (#24994).
+- Fix -Wdeprecated-copy-dtor warnings in the headers with gcc 14 (#24248).
 
 wxOSX:
 
+- Fix build with macOS 15 SDK (#24724, #24879).
+- Fix not making dialogs modal in some circumstances (Dmitry Makarenko, #25087).
 - Fix missing mouse events in scrolled windows under macOS 14+ (#24790, #24809).
 - Fix regression in GetPreferredUILanguage() in some cases (#24804).
+- Fix Z-order of auto-complete popup of wxStyledTextCtrl (#25202).
+- Fix CMake build with PCH disabled (Maarten Bent, #24851).
+- Fix truncating labels of newly added wxNotebook pages (#25194).
+- Fix truncating wxEvent time stamp after ~25 days (Artur Sochirca, #24960).
+- Implement clipboard events for single-line wxTextCtrl too (#25165).
+- Implement wxCursor::GetHotSpot() (Daniel Collins, #24961).
+- Handle wxSYS_CURSOR_[XY] in wxSystemSettings (Daniel Collins, #24962).
 
 
 3.2.6: (released 2024-09-09)

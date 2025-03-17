@@ -568,6 +568,7 @@
     <ClCompile Include="misc\safearrayconverttest.cpp" />
     <ClCompile Include="misc\selstoretest.cpp" />
     <ClCompile Include="misc\settings.cpp" />
+    <ClCompile Include="misc\textwrap.cpp" />
     <ClCompile Include="net\socket.cpp" />
     <ClCompile Include="persistence\tlw.cpp" />
     <ClCompile Include="persistence\dataview.cpp" />

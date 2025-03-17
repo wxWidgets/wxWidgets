@@ -320,13 +320,15 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 
     wxString format = formatp;
 #ifdef __WXOSX__
+#if wxUSE_INTL
     if ( format.Contains("%c") )
         format.Replace("%c", wxUILocale::GetCurrent().GetInfo(wxLOCALE_DATE_TIME_FMT));
     if ( format.Contains("%x") )
         format.Replace("%x", wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT));
     if ( format.Contains("%X") )
         format.Replace("%X", wxUILocale::GetCurrent().GetInfo(wxLOCALE_TIME_FMT));
-#endif
+#endif // wxUSE_INTL
+#endif // __WXOSX__
     // we have to use our own implementation if the date is out of range of
     // strftime()
 #ifdef wxHAS_STRFTIME
@@ -393,7 +395,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     tmTimeOnly.tm_year = 76;
     tmTimeOnly.tm_isdst = 0;        // no DST, we adjust for tz ourselves
 
-    wxString tmp, res, fmt;
+    wxString res, fmt;
     for ( wxString::const_iterator p = format.begin(); p != format.end(); ++p )
     {
         if ( *p != wxT('%') )
@@ -1043,7 +1045,6 @@ wxDateTime::ParseFormat(const wxString& date,
     wxCHECK_MSG( !format.empty(), false, "format can't be empty" );
     wxCHECK_MSG( endParse, false, "end iterator pointer must be specified" );
 
-    wxString str;
     unsigned long num;
 
     // what fields have we found?

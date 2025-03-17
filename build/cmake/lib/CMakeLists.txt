@@ -103,3 +103,4 @@ endif()
 
 # Propagate variable(s) to parent scope
 set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
+set(wxINSTALL_HEADERS ${wxINSTALL_HEADERS} PARENT_SCOPE)

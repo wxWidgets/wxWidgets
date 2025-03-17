@@ -99,12 +99,12 @@ jobs:
           runner: self-hosted
           arch: arm64
           configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-debug --enable-optimise
-        - name: wxMac macOS 12
-          runner: macos-12
+        - name: wxMac macOS 14
+          runner: macos-14
           arch: x86_64
           configure_flags: --disable-sys-libs
         - name: wxiOS
-          runner: macos-12
+          runner: macos-14
           arch: x86_64
           configure_flags: --with-osx_iphone --enable-monolithic  --disable-sys-libs --host=i686-apple-darwin_sim --build=x86_64-apple-darwin17.7.0
           xcode_sdk: iphonesimulator
@@ -207,12 +207,11 @@ jobs:
         make -C tests $wxBUILD_ARGS failtest
         make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
-    - name: Setup Python
-      # actions/setup-python broken on self-hosted https://github.com/actions/setup-python/issues/108
-      if: matrix.runner != 'self-hosted'
-      uses: actions/setup-python@v4
+    - name: Setup Go
+      if: matrix.skip_testing != true
+      uses: actions/setup-go@v5
       with:
-        python-version: '3.10'
+        go-version: '1'
 
     - name: Testing
       if: matrix.skip_testing != true

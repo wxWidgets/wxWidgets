@@ -316,6 +316,16 @@ void wxCursor::MacInstall() const
 #endif
 }
 
+wxPoint wxCursor::GetHotSpot() const
+{
+#if wxOSX_USE_COCOA
+    if ( IsOk() )
+        return wxMacCocoaGetCursorHotSpot( M_CURSORDATA->m_hCursor );
+#endif
+
+    return wxDefaultPosition;
+}
+
 wxCursor::~wxCursor()
 {
 }

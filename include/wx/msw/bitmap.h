@@ -116,6 +116,8 @@ public:
 
     virtual ~wxBitmap();
 
+    wxDECLARE_DEFAULT_COPY(wxBitmap)
+
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
     wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
