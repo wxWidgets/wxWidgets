@@ -51,7 +51,7 @@ public:
     wxToastEventHandler(wxToastNotifMsgImpl* toastImpl) :
         m_impl(toastImpl)
     {
-
+        m_cRef = 0;
     }
 
     void Detach()
@@ -115,7 +115,7 @@ public:
     }
 
 private:
-    ULONG m_cRef = 0;
+    ULONG m_cRef;
 
     wxToastNotifMsgImpl* m_impl;
 };
