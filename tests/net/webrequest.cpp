@@ -21,6 +21,7 @@
 
 #include "wx/webrequest.h"
 #include "wx/filename.h"
+#include "wx/uri.h"
 #include "wx/wfstream.h"
 
 #include <memory>
@@ -140,23 +141,15 @@ protected:
                    const wxString& user,
                    const wxString& password)
     {
-        wxString schema;
-        wxString rest;
-        if ( baseURL.StartsWith("https://", &rest) )
-        {
-            schema = "https";
-        }
-        else if ( baseURL.StartsWith("http://", &rest) )
-        {
-            schema = "http";
-        }
-        else
-        {
-            FAIL("Base URL must be an HTTP(S) one: " << baseURL);
-        }
+        wxString url = baseURL;
+        if ( !url.EndsWith('/') && !relURL.StartsWith('/') )
+            url += '/';
+        url += relURL;
 
-        Create(wxString::Format("%s://%s:%s@%s/%s",
-                                schema, user, password, rest, relURL));
+        wxURI uri(url);
+        uri.SetUserAndPassword(user, password);
+
+        Create(uri.BuildURI());
     }
 
     virtual void Create(const wxString& url) = 0;
