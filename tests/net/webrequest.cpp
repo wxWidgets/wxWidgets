@@ -1131,7 +1131,23 @@ TEST_CASE_METHOD(SyncRequestFixture,
 
     SECTION("Reserved characters")
     {
-        CreateWithAuth("basic-auth/u%40d/1%3d2%3f", "u@d", "1=2?");
+        if ( wxWebSession::GetDefault().GetLibraryVersionInfo().GetName()
+                == "URLSession" )
+        {
+            // NSURLSession doesn't decode percent-encoded characters in the
+            // password (as indirectly confirmed by the documentation of NSURL
+            // password property, which says that "Any percent-encoded
+            // characters are not unescaped.", resulting in sending wrong
+            // password to the server if we use any reserved characters in it.
+            CreateWithAuth("basic-auth/u%40d/1=2", "u@d", "1=2");
+        }
+        else
+        {
+            // With the other backends, using reserved characters in the
+            // password does work.
+            CreateWithAuth("basic-auth/u%40d/1%3d2%3f", "u@d", "1=2?");
+        }
+
         REQUIRE( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );
