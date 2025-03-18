@@ -35,6 +35,7 @@
 #include "wx/osx/private.h"
 #endif
 
+#include "wx/private/aui.h"
 
 // -- GUI helper classes and functions --
 
@@ -67,10 +68,6 @@ private:
 // these functions live in dockart.cpp -- they'll eventually
 // be moved to a new utility cpp file
 
-wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
-                             const wxColour& color);
-
-// This function is defined in dockart.cpp.
 float wxAuiGetColourContrast(const wxColour& c1, const wxColour& c2);
 
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
@@ -129,50 +126,53 @@ static void IndentPressedBitmap(const wxSize& offset, wxRect* rect, int button_s
 }
 
 // -- bitmaps --
-// TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
 
-#if defined( __WXMAC__ )
- static const unsigned char close_bits[]={
-     0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFE, 0x03, 0xF8, 0x01, 0xF0, 0x19, 0xF3,
-     0xB8, 0xE3, 0xF0, 0xE1, 0xE0, 0xE0, 0xF0, 0xE1, 0xB8, 0xE3, 0x19, 0xF3,
-     0x01, 0xF0, 0x03, 0xF8, 0x0F, 0xFE, 0xFF, 0xFF };
-#elif defined( __WXGTK__)
- static const unsigned char close_bits[]={
-     0xff, 0xff, 0xff, 0xff, 0x07, 0xf0, 0xfb, 0xef, 0xdb, 0xed, 0x8b, 0xe8,
-     0x1b, 0xec, 0x3b, 0xee, 0x1b, 0xec, 0x8b, 0xe8, 0xdb, 0xed, 0xfb, 0xef,
-     0x07, 0xf0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
-#else
- static const unsigned char close_bits[]={
-     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xf3, 0xcf, 0xf9,
-     0x9f, 0xfc, 0x3f, 0xfe, 0x3f, 0xfe, 0x9f, 0xfc, 0xcf, 0xf9, 0xe7, 0xf3,
-     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-#endif
+#ifdef wxHAS_SVG
+    static const char* const left_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <polygon points="3, 8 9, 3 9, 13" stroke="currentColor" fill="currentColor" stroke-width="0"/>
+</svg>
+)svg";
 
-static const unsigned char left_bits[] = {
+    static const char* const right_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <polygon points="13, 8 7, 3 7, 13" stroke="currentColor" fill="currentColor" stroke-width="0"/>
+</svg>
+)svg";
+
+    static const char* const list_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <rect x="4.5" y="7" width="7" height="1" stroke="currentColor" fill="currentColor" stroke-width="0"/>
+    <polygon points="4.5, 9 11.5 9 8, 13" stroke="currentColor" fill="currentColor" stroke-width="0"/>
+</svg>
+)svg";
+
+    static const char* const unpin_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+    <path d="M 7 5 v 6 v -1 h 6 v -1 h -6 h 6 v -3 h -6 v 2 h -4" stroke="currentColor" fill="none" stroke-width="1"/>
+</svg>
+)svg";
+#else // !wxHAS_SVG
+static const unsigned char left_bitmap_data[] = {
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0xfe, 0x3f, 0xfe,
    0x1f, 0xfe, 0x0f, 0xfe, 0x1f, 0xfe, 0x3f, 0xfe, 0x7f, 0xfe, 0xff, 0xfe,
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-static const unsigned char right_bits[] = {
+static const unsigned char right_bitmap_data[] = {
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xdf, 0xff, 0x9f, 0xff, 0x1f, 0xff,
    0x1f, 0xfe, 0x1f, 0xfc, 0x1f, 0xfe, 0x1f, 0xff, 0x9f, 0xff, 0xdf, 0xff,
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-static const unsigned char list_bits[] = {
+static const unsigned char list_bitmap_data[] = {
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
    0x0f, 0xf8, 0xff, 0xff, 0x0f, 0xf8, 0x1f, 0xfc, 0x3f, 0xfe, 0x7f, 0xff,
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
-static const unsigned char pin_bits[] = {
+static const unsigned char unpin_bitmap_data[] = {
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xbf, 0xff, 0x3f, 0xe0,
    0xbf, 0xef, 0x87, 0xef, 0x3f, 0xe0, 0x3f, 0xe0, 0xbf, 0xff, 0xff, 0xff,
    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-
-static const unsigned char unpin_bits[]={
-   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x1f, 0xfc, 0xdf, 0xfc, 0xdf, 0xfc,
-   0xdf, 0xfc, 0xdf, 0xfc, 0xdf, 0xfc, 0x0f, 0xf8, 0x7f, 0xff, 0x7f, 0xff,
-   0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-
+#endif // wxHAS_SVG/!wxHAS_SVG
 
 // wxAuiTabArt implementation
 
@@ -320,18 +320,23 @@ void wxAuiGenericTabArt::UpdateColoursFromSystem()
 
     const int disabledLightness = wxSystemSettings::GetAppearance().IsUsingDarkBackground() ? 130 : 70;
 
-    m_activeCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness));
-    m_activeLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
-    m_activeRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
-    m_activeWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
-    m_activePinBmp = wxAuiBitmapFromBits(pin_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledPinBmp = wxAuiBitmapFromBits(pin_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
-    m_activeUnpinBmp = wxAuiBitmapFromBits(unpin_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    m_disabledUnpinBmp = wxAuiBitmapFromBits(unpin_bits, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+    m_activeCloseBmp = wxAuiCreateCloseButtonBitmap(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledCloseBmp = wxAuiCreateCloseButtonBitmap(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness));
+
+    m_activeLeftBmp = wxAuiCreateBitmap(left_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledLeftBmp = wxAuiCreateBitmap(left_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+    m_activeRightBmp = wxAuiCreateBitmap(right_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledRightBmp = wxAuiCreateBitmap(right_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+    m_activeWindowListBmp = wxAuiCreateBitmap(list_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledWindowListBmp = wxAuiCreateBitmap(list_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+
+    // This is a bit confusing, but we use "pin" bitmap to indicate that the
+    // tab is currently pinned, i.e. for the "unpin" button, and vice versa.
+    m_activePinBmp = wxAuiCreateBitmap(unpin_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledPinBmp = wxAuiCreateBitmap(unpin_bitmap_data, 16, 16, wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
+
+    m_activeUnpinBmp = wxAuiCreatePinButtonBitmap(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    m_disabledUnpinBmp = wxAuiCreatePinButtonBitmap(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT));
 }
 
 wxAuiTabArt* wxAuiGenericTabArt::Clone()
@@ -1093,14 +1098,14 @@ wxFont wxAuiGenericTabArt::GetSelectedFont() const
 wxAuiSimpleTabArt::wxAuiSimpleTabArt()
     : m_normalFont(*wxNORMAL_FONT)
     , m_selectedFont(m_normalFont)
-    , m_activeCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK))
-    , m_disabledCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128)))
-    , m_activeLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK))
-    , m_disabledLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128)))
-    , m_activeRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK))
-    , m_disabledRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, wxColour(128,128,128)))
-    , m_activeWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, *wxBLACK))
-    , m_disabledWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, wxColour(128,128,128)))
+    , m_activeCloseBmp(wxAuiCreateCloseButtonBitmap(*wxBLACK))
+    , m_disabledCloseBmp(wxAuiCreateCloseButtonBitmap(wxColour(128,128,128)))
+    , m_activeLeftBmp(wxAuiCreateBitmap(left_bitmap_data, 16, 16, *wxBLACK))
+    , m_disabledLeftBmp(wxAuiCreateBitmap(left_bitmap_data, 16, 16, wxColour(128,128,128)))
+    , m_activeRightBmp(wxAuiCreateBitmap(right_bitmap_data, 16, 16, *wxBLACK))
+    , m_disabledRightBmp(wxAuiCreateBitmap(right_bitmap_data, 16, 16, wxColour(128,128,128)))
+    , m_activeWindowListBmp(wxAuiCreateBitmap(list_bitmap_data, 16, 16, *wxBLACK))
+    , m_disabledWindowListBmp(wxAuiCreateBitmap(list_bitmap_data, 16, 16, wxColour(128,128,128)))
 {
     m_selectedFont.SetWeight(wxFONTWEIGHT_BOLD);
     m_measuringFont = m_selectedFont;
