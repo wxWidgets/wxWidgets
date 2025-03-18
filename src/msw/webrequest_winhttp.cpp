@@ -16,6 +16,8 @@
 
 #include "wx/mstream.h"
 #include "wx/dynlib.h"
+#include "wx/uri.h"
+
 #include "wx/msw/private.h"
 #include "wx/msw/private/webrequest_winhttp.h"
 
@@ -173,11 +175,12 @@ struct wxURLComponents : URL_COMPONENTS
 
     wxWebCredentials GetCredentials() const
     {
-        return wxWebCredentials
-               (
-                wxString(lpszUserName, dwUserNameLength),
-                wxSecretValue(wxString(lpszPassword, dwPasswordLength))
-               );
+        // WinHttpCrackUrl() leaves the URL components percent-encoded, but we
+        // need the actual username and password here, so decode them ourselves.
+        wxString user(wxURI::Unescape(wxString(lpszUserName, dwUserNameLength)));
+        wxString pass(wxURI::Unescape(wxString(lpszPassword, dwPasswordLength)));
+
+        return wxWebCredentials(user, wxSecretValue(pass));
     }
 };
 

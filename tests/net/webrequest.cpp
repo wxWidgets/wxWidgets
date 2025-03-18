@@ -1128,6 +1128,17 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK( response.GetStatus() == 401 );
         CHECK( state == wxWebRequest::State_Unauthorized );
     }
+
+    SECTION("Reserved characters")
+    {
+        CreateWithAuth("basic-auth/u%40d/1%3d2%3f", "u@d", "1=2?");
+        REQUIRE( Execute() );
+        CHECK( response.GetStatus() == 200 );
+        CHECK( state == wxWebRequest::State_Completed );
+
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+    }
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
