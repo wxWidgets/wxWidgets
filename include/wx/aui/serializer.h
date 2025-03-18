@@ -17,6 +17,9 @@
 #include <utility>
 #include <vector>
 
+class WXDLLIMPEXP_FWD_AUI wxAuiNotebook;
+class WXDLLIMPEXP_FWD_AUI wxAuiTabCtrl;
+
 // ----------------------------------------------------------------------------
 // Classes used to save/load wxAuiManager layout.
 // ----------------------------------------------------------------------------
@@ -48,10 +51,11 @@ struct wxAuiTabLayoutInfo : wxAuiDockLayoutInfo
     // notebook pages in natural order.
     std::vector<int> pages;
 
-    // Vectors contain indices of locked and pinned pages, if any, i.e. both of
-    // them can be empty.
-    std::vector<int> locked;
+    // Vectors contain indices of pinned pages, if any, i.e. it can be empty.
     std::vector<int> pinned;
+
+    // Currently active page in this tab control.
+    int active = 0;
 };
 
 // This struct contains the pane name and information about its layout that can
@@ -168,6 +172,22 @@ public:
     // wxAuiNotebook with the given name.
     virtual std::vector<wxAuiTabLayoutInfo>
     LoadNotebookTabs(const wxString& name) = 0;
+
+    // If any pages haven't been assigned to any tab control after restoring
+    // the pages order, they are passed to this function to determine what to
+    // do with them.
+    //
+    // By default, it returns true without modifying the output arguments,
+    // which results in the page being appended to the main tab control. It may
+    // also modify tabCtrl and tabIndex arguments to modify where the page
+    // should appear or return false to remove the page from the notebook
+    // completely.
+    virtual bool
+    HandleOrphanedPage(wxAuiNotebook& WXUNUSED(book),
+                       int WXUNUSED(page),
+                       wxAuiTabCtrl** WXUNUSED(tabCtrl),
+                       int* WXUNUSED(tabIndex))
+        { return true; }
 };
 
 // wxAuiDeserializer is used with wxAuiManager::LoadLayout().

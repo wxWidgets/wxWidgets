@@ -37,6 +37,7 @@
 #endif
 
 #include <algorithm>
+#include <stack>
 #include <unordered_set>
 
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEvent);
@@ -296,7 +297,7 @@ void wxAuiTabContainer::RemoveAll()
     m_pages.Clear();
 }
 
-bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
+bool wxAuiTabContainer::SetActivePage(const wxWindow* wnd)
 {
     bool found = false;
 
@@ -2396,10 +2397,9 @@ void wxAuiNotebook::InsertPageAt(wxAuiNotebookPage& info,
     page->Reparent(this);
 
     // if there are currently no tabs, the first added
-    // tab must be active and selected, even if "select" is false
+    // tab must be selected, even if "select" is false
     if (m_tabs.GetPageCount() == 0)
     {
-        info.active = true;
         select = true;
     }
 
@@ -4192,8 +4192,6 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
 
         if ( const auto tabInfo = FindTab(wnd) )
         {
-            m_tabs.SetActivePage(wnd);
-
             wxAuiTabCtrl* const ctrl = tabInfo.tabCtrl;
 
             ctrl->SetActivePage(tabInfo.tabIdx);
@@ -4272,6 +4270,8 @@ wxAuiNotebook::SaveLayout(const wxString& name,
         const wxAuiTabCtrl* const
             tabCtrl = static_cast<wxAuiTabFrame*>(pane.window)->m_tabs;
 
+        tab.active = tabCtrl->GetActivePage();
+
         // As an optimization, don't bother with saving the pages order for the
         // main control if it hasn't been changed from the default.
         bool mustSavePages = false;
@@ -4304,7 +4304,7 @@ wxAuiNotebook::SaveLayout(const wxString& name,
 
             pages.push_back(idx);
 
-            // Also remember if this page has a non-default kind.
+            // Also remember if this page is pinned.
             switch ( page.kind )
             {
                 case wxAuiTabKind::Normal:
@@ -4316,7 +4316,9 @@ wxAuiNotebook::SaveLayout(const wxString& name,
                     break;
 
                 case wxAuiTabKind::Locked:
-                    tab.locked.push_back(idx);
+                    // We don't store locked pages because their status can't
+                    // be changed by the user, so it would be pointless to save
+                    // and restore them.
                     break;
             }
         }
@@ -4348,6 +4350,28 @@ wxAuiNotebook::LoadLayout(const wxString& name,
     // Get the only remaining tab control.
     wxAuiTabCtrl* const tabMain = GetMainTabCtrl();
 
+    // If we don't have anything saved and the pages are in the default order
+    // we may not have to do anything at all.
+    bool useExistingPages = false;
+
+    // Reset the state of all pinned pages to normal, as this state will be
+    // restored from the deserialized data below.
+    //
+    // Note that we do not do this for the locked pages, as their state can't
+    // be changed by the user and so it's not necessarily to save nor restore
+    // it.
+    for ( auto& page : m_tabs.GetPages() )
+    {
+        if ( page.kind == wxAuiTabKind::Pinned )
+            const_cast<wxAuiNotebookPage&>(page).kind = wxAuiTabKind::Normal;
+    }
+
+    // This set will contain all the pages that should be pinned.
+    std::unordered_set<int> pinned;
+
+    // Remember the active page in the main tab control if we change it.
+    const wxWindow* activeInMainTab = nullptr;
+
     // Keep track of pages we've already added to some tab control: even if the
     // deserialized data is somehow incorrect and duplicates the page indices,
     // we don't want to try to have the same page in more than one tab control.
@@ -4357,6 +4381,10 @@ wxAuiNotebook::LoadLayout(const wxString& name,
     for ( const auto& tab : tabs )
     {
         wxAuiTabCtrl* tabCtrl = nullptr;
+
+        // We'll deal with the pinned pages outside of this loop below, after
+        // all pages are in their correct places, for now just remember them.
+        pinned.insert(tab.pinned.begin(), tab.pinned.end());
 
         // The pages pointer will be set to point to either tab.pages or
         // pageDefault in which case it will also be filled.
@@ -4372,20 +4400,24 @@ wxAuiNotebook::LoadLayout(const wxString& name,
             // the pages are already in the same order (which is a common case).
             if ( tab.pages.empty() )
             {
-                bool mustRestore = false;
+                useExistingPages = true;
+
                 for ( int i = 0; i < pageCount; ++i )
                 {
                     if ( tabMain->GetWindowFromIdx(i) != m_tabs.GetWindowFromIdx(i) )
                     {
-                        mustRestore = true;
+                        useExistingPages = false;
                         break;
                     }
                 }
 
-                if ( !mustRestore )
+                if ( useExistingPages )
                 {
                     // All pages are in the main tab in the default order
-                    // already, so we don't have anything to do.
+                    // already, so we don't have anything to do except
+                    // restoring the active page -- which is in this case the
+                    // same as selection (tab indices == notebook indices).
+                    SetSelection(tab.active);
                     break;
                 }
 
@@ -4430,7 +4462,16 @@ wxAuiNotebook::LoadLayout(const wxString& name,
         }
 
         // In any case, add the pages that this tab control had before to it.
-        bool first = true;
+        //
+        // There is one extra complication: we must ensure that any locked
+        // pages still come first, even if the deserializer positioned them
+        // wrongly, because this is an invariant of wxAuiNotebook and has to be
+        // respected. So instead of adding the pages directly, collect them in
+        // this vector first.
+        std::vector<int> pagesToAdd;
+        pagesToAdd.reserve(pages->size());
+
+        int lockedCount = 0;
         for ( auto page : *pages )
         {
             // We just silently ignore invalid or duplicate page indices
@@ -4442,46 +4483,186 @@ wxAuiNotebook::LoadLayout(const wxString& name,
             if ( !addedPages.insert(page).second )
                 continue;
 
-            auto info = m_tabs.GetPage(page);
-
-            // We don't save the last active page currently, so just make the
-            // first one active.
-            if ( first )
+            if ( m_tabs.GetPage(page).kind == wxAuiTabKind::Locked )
             {
-                info.active = true;
-                first = false;
+                // Locked pages must always come first, so insert them at the
+                // beginning (but keep their original order).
+                pagesToAdd.insert(pagesToAdd.begin() + lockedCount++, page);
             }
+            else
+            {
+                pagesToAdd.push_back(page);
+            }
+        }
+
+        // In the degenerate case when all pages are invalid, pagesToAdd may be
+        // empty here, but we can still execute the rest of the code below, it
+        // just won't do anything.
+
+        const wxWindow* activeWindow = nullptr;
+        for ( auto page : pagesToAdd )
+        {
+            const auto& info = m_tabs.GetPage(page);
+
+            if ( page == tab.active )
+                activeWindow = info.window;
 
             tabCtrl->AddPage(info);
         }
 
-        // Check if the element is present in the vector: we could convert
-        // vectors to sets first, but considering that they should normally be
-        // pretty small (how many pinned pages can there possibly be?), it
-        // doesn't seem to be worth it.
-        auto isPageIn = [](int page, const std::vector<int>& pages)
+        if ( !activeWindow )
         {
-            return std::find(pages.begin(), pages.end(), page) != pages.end();
-        };
-
-        // Restore page kinds, ignoring invalid page indices just as above.
-        for ( int i = 0; i < pageCount; ++i )
-        {
-            auto kind = wxAuiTabKind::Normal;
-            if ( isPageIn(i, tab.pinned) )
-            {
-                kind = wxAuiTabKind::Pinned;
-            }
-            else if ( isPageIn(i, tab.locked) )
-            {
-                kind = wxAuiTabKind::Locked;
-            }
-
-            SetPageKind(i, kind);
+            // We must have some active page, so make the first one active if
+            // the deserialized data didn't define a valid active page.
+            activeWindow = tabCtrl->GetWindowFromIdx(0);
         }
 
+        tabCtrl->SetActivePage(activeWindow);
+
+        if ( tabCtrl == tabMain )
+        {
+            // Remember it to set the selection to it below.
+            activeInMainTab = activeWindow;
+        }
+    }
+
+    // Check if there were any existing pages not added to any tab control.
+    if ( !useExistingPages && static_cast<int>(addedPages.size()) < pageCount )
+    {
+        // Use a stack here to remove the pages from the end below.
+        std::stack<int> toRemove;
+
+        for ( int i = 0; i < pageCount; ++i )
+        {
+            if ( addedPages.count(i) == 0 )
+            {
+                wxAuiTabCtrl* tabCtrl = tabMain;
+                int tabIndex = wxNOT_FOUND;
+                if ( deserializer.HandleOrphanedPage(*this, i,
+                                                     &tabCtrl, &tabIndex) )
+                {
+                    // Try not to crash even if the deserializer implements
+                    // HandleOrphanedPage() incorrectly.
+                    if ( !tabCtrl )
+                    {
+                        wxFAIL_MSG
+                        (
+                            "HandleOrphanedPage() can't return null tab control"
+                        );
+
+                        tabCtrl = tabMain;
+                    }
+
+                    const int tabCount = tabCtrl->GetPageCount();
+                    if ( tabIndex != wxNOT_FOUND && tabIndex >= tabCount )
+                    {
+                        wxFAIL_MSG
+                        (
+                            "HandleOrphanedPage() must return valid tab index"
+                        );
+
+                        tabIndex = wxNOT_FOUND;
+                    }
+
+                    if ( tabIndex == wxNOT_FOUND )
+                        tabIndex = tabCount;
+
+                    tabCtrl->InsertPage(m_tabs.GetPage(i), tabIndex);
+                }
+                else // Remove this page.
+                {
+                    toRemove.push(i);
+                }
+            }
+        }
+
+        while ( !toRemove.empty() )
+        {
+            // Note that we shouldn't call DoRemovePage() because it supposes
+            // that the page is in some tab control and does nothing if this is
+            // not the case.
+            m_tabs.RemovePageAt(toRemove.top());
+
+            toRemove.pop();
+        }
+
+        RemoveEmptyTabFrames();
+    }
+
+    // Now deal with the pinned pages: we must ensure that their positions are
+    // consistent, i.e. there are no non-pinned pages before a pinned one in
+    // any tab control.
+    if ( !pinned.empty() )
+    {
+        for ( auto tabCtrl : GetAllTabCtrls() )
+        {
+            bool stop = false;
+            for ( auto n : GetPagesInDisplayOrder(tabCtrl) )
+            {
+                auto& page = m_tabs.GetPage(n);
+                switch ( page.kind )
+                {
+                    case wxAuiTabKind::Normal:
+                        if ( pinned.count(n) )
+                        {
+                            // Make this page pinned. We don't need to call
+                            // SetPageKind() for this, as it's already in the
+                            // right place, just update its kind directly.
+                            page.kind = wxAuiTabKind::Pinned;
+
+                            int idx = tabCtrl->GetIdxFromWindow(page.window);
+                            if ( idx == wxNOT_FOUND )
+                            {
+                                // This would be a logic error in this code.
+                                wxFAIL_MSG("page not found in tab control");
+                                break;
+                            }
+
+                            tabCtrl->GetPage(idx).kind = wxAuiTabKind::Pinned;
+                        }
+                        else
+                        {
+                            // There can be no pinned pages after the first
+                            // normal one, so there is no point in continuing:
+                            // even if any other pages were marked as pinned in
+                            // the deserialized data, we would just ignore them
+                            // anyhow.
+                            stop = true;
+                        }
+                        break;
+
+                    case wxAuiTabKind::Pinned:
+                        // This would indicate a logic error in this function,
+                        // as we unpinned all the pages at the start of it.
+                        wxFAIL_MSG("all pages should be unpinned");
+                        break;
+
+                    case wxAuiTabKind::Locked:
+                        // We can't change the kind of a locked page, so either
+                        // it is before the pinned pages or data is invalid,
+                        // leave it as is in any case.
+                        break;
+                }
+
+                if ( stop )
+                    break;
+            }
+        }
+    }
+
+    // Update the active pages visibility in all tab controls after adding and
+    // removing all the pages.
+    for ( auto tabCtrl : GetAllTabCtrls() )
+    {
         tabCtrl->DoUpdateActive();
     }
+
+    // We don't save information about the currently focused tab control, so
+    // always make the main one active after loading the layout by setting the
+    // selected page to the page active in it (if there is no such page, it
+    // means we're reusing the existing pages and so don't need to do anything).
+    if ( activeInMainTab )
+        m_curPage = m_tabs.GetIdxFromWindow(activeInMainTab);
 
     m_mgr.Update();
 }
