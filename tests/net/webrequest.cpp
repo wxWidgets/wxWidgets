@@ -654,6 +654,28 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::Basic/Reserved", "[net][webrequest][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    // Use some reserved (in the RFC 3986 sense) characters in the user name and
+    // the password (as well as a sub-delimiter character '=' in the password).
+    Create("basic-auth/u%40d/1%3d2%3f");
+    Run(wxWebRequest::State_Unauthorized, 401);
+    REQUIRE( request.GetAuthChallenge().IsOk() );
+
+    UseCredentials("u@d", "1=2?");
+    RunLoopWithTimeout();
+    CHECK( request.GetState() == wxWebRequest::State_Completed );
+
+    const auto& response = request.GetResponse();
+    CHECK( response.GetStatus() == 200 );
+    CHECK_THAT( response.AsString().utf8_string(),
+                Catch::Contains(AUTHORIZED_SUBSTRING) );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Auth::Digest", "[net][webrequest][auth]")
 {
     if ( !InitBaseURL() )
