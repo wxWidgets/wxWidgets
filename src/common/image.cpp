@@ -537,6 +537,8 @@ wxImage wxImage::ResampleNearest(int width, int height) const
 {
     wxImage image;
 
+    wxCHECK_MSG( IsOk(), image, "invalid image" );
+
     // We use wxUIntPtr to rescale images of larger size in 64-bit builds:
     // using long wouldn't allow using images larger than 2^16 in either
     // direction because of the check below, as sizeof(long) == 4 even in 64
@@ -659,6 +661,8 @@ void ResampleBoxPrecalc(wxVector<BoxPrecalc>& boxes, int oldDim)
 
 wxImage wxImage::ResampleBox(int width, int height) const
 {
+    wxCHECK_MSG( IsOk(), {}, "invalid image" );
+
     // This function implements a simple pre-blur/box averaging method for
     // downsampling that gives reasonably smooth results To scale the image
     // down we will need to gather a grid of pixels of the size of the scale
@@ -819,6 +823,8 @@ void ResampleBilinearPrecalc(wxVector<BilinearPrecalc>& precalcs, int oldDim)
 
 wxImage wxImage::ResampleBilinear(int width, int height) const
 {
+    wxCHECK_MSG( IsOk(), {}, "invalid image" );
+
     // This function implements a Bilinear algorithm for resampling.
     wxImage ret_image(width, height, false);
     const unsigned char* src_data = M_IMGDATA->m_data;
@@ -972,6 +978,8 @@ void ResampleBicubicPrecalc(wxVector<BicubicPrecalc> &aWeight, int oldDim)
 // This is the bicubic resampling algorithm
 wxImage wxImage::ResampleBicubic(int width, int height) const
 {
+    wxCHECK_MSG( IsOk(), {}, "invalid image" );
+
     // This function implements a Bicubic B-Spline algorithm for resampling.
     // This method is certainly a little slower than wxImage's default pixel
     // replication method, however for most reasonably sized images not being
