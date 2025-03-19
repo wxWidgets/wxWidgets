@@ -19,6 +19,8 @@
 
 #include "wx/hyperlink.h"
 
+#include "wx/versioninfo.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/settings.h"
@@ -126,8 +128,9 @@ wxHyperlinkCtrl::~wxHyperlinkCtrl()
     if ( m_hWnd )
     {
         // Due to https://bugs.winehq.org/show_bug.cgi?id=54066 we have to
-        // reset the font before the native control destroys it.
-        if ( wxIsRunningUnderWine() )
+        // reset the font before the native control destroys it in Wine < 10.4.
+        wxVersionInfo wineVer;
+        if ( wxIsRunningUnderWine(&wineVer) && !wineVer.AtLeast(10, 4) )
             ::SendMessage(m_hWnd, WM_SETFONT, 0, FALSE);
     }
 }
