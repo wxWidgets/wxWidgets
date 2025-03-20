@@ -1740,19 +1740,7 @@ void wxEvtHandler::WXConsumeException()
         // consistently everywhere.
         if ( !stored )
         {
-            try
-            {
-                if ( wxTheApp )
-                    wxTheApp->OnUnhandledException();
-            }
-            catch ( ... )
-            {
-                // And OnUnhandledException() absolutely shouldn't throw,
-                // but we still must account for the possibility that it
-                // did. At least show some information about the exception
-                // in this case.
-                wxTheApp->wxAppConsoleBase::OnUnhandledException();
-            }
+            wxApp::CallOnUnhandledException();
 
             wxAbort();
         }

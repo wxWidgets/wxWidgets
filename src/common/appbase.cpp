@@ -35,6 +35,7 @@
 #include "wx/cmdline.h"
 #include "wx/confbase.h"
 #include "wx/evtloop.h"
+#include "wx/except.h"
 #include "wx/filename.h"
 #include "wx/msgout.h"
 #include "wx/scopedptr.h"
@@ -697,6 +698,23 @@ void wxAppConsoleBase::OnUnhandledException()
         what,
         wxIsMainThread() ? "the application" : "the thread in which it happened"
     );
+}
+
+/* static */
+void wxAppConsoleBase::CallOnUnhandledException()
+{
+    if ( wxTheApp )
+    {
+        wxTRY
+        {
+            wxTheApp->OnUnhandledException();
+        }
+        // And OnUnhandledException() absolutely shouldn't throw,
+        // but we still must account for the possibility that it
+        // did. At least show some information about the exception
+        // in this case by calling our, non-overridden version.
+        wxCATCH_ALL( wxTheApp->wxAppConsoleBase::OnUnhandledException(); )
+    }
 }
 
 // ----------------------------------------------------------------------------

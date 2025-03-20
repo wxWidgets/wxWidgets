@@ -575,7 +575,7 @@ int wxEntryReal(int& argc, wxChar **argv)
         return wxTheApp->OnRun();
     }
     wxCATCH_ALL(
-        wxTheApp->OnUnhandledException();
+        wxApp::CallOnUnhandledException();
         return wxApp::GetFatalErrorExitCode();
     )
 }

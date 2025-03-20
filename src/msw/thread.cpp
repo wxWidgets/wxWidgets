@@ -504,7 +504,7 @@ void wxThreadInternal::DoThreadOnExit(wxThread *thread)
     {
         thread->OnExit();
     }
-    wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+    wxCATCH_ALL( wxApp::CallOnUnhandledException(); )
 }
 
 /* static */
@@ -529,7 +529,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 
         rc = wxPtrToUInt(thread->Entry());
     }
-    wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+    wxCATCH_ALL( wxApp::CallOnUnhandledException(); )
 
     return rc;
 }

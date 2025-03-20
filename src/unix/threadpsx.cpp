@@ -902,7 +902,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 #endif // HAVE_ABI_FORCEDUNWIND
         catch ( ... )
         {
-            wxTheApp->OnUnhandledException();
+            wxApp::CallOnUnhandledException();
         }
 #endif // !wxNO_EXCEPTIONS
 
@@ -1738,7 +1738,7 @@ void wxThread::Exit(ExitCode status)
     {
         OnExit();
     }
-    wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+    wxCATCH_ALL( wxApp::CallOnUnhandledException(); )
 
     // delete C++ thread object if this is a detached thread - user is
     // responsible for doing this for joinable ones
