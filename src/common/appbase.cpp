@@ -35,7 +35,6 @@
 #include "wx/cmdline.h"
 #include "wx/confbase.h"
 #include "wx/evtloop.h"
-#include "wx/except.h"
 #include "wx/filename.h"
 #include "wx/msgout.h"
 #include "wx/scopedptr.h"
@@ -43,6 +42,8 @@
 #include "wx/tokenzr.h"
 #include "wx/thread.h"
 #include "wx/stdpaths.h"
+
+#include "wx/private/safecall.h"
 
 #if wxUSE_EXCEPTIONS
     #include <exception>        // for std::current_exception()
@@ -705,15 +706,17 @@ void wxAppConsoleBase::CallOnUnhandledException()
 {
     if ( wxTheApp )
     {
-        wxTRY
+        wxSafeCall<void>([]()
         {
             wxTheApp->OnUnhandledException();
-        }
-        // And OnUnhandledException() absolutely shouldn't throw,
-        // but we still must account for the possibility that it
-        // did. At least show some information about the exception
-        // in this case by calling our, non-overridden version.
-        wxCATCH_ALL( wxTheApp->wxAppConsoleBase::OnUnhandledException(); )
+        }, []()
+        {
+            // And OnUnhandledException() absolutely shouldn't throw,
+            // but we still must account for the possibility that it
+            // did. At least show some information about the exception
+            // in this case by calling our, non-overridden version.
+            wxTheApp->wxAppConsoleBase::OnUnhandledException();
+        });
     }
 }
 

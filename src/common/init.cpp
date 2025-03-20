@@ -28,8 +28,6 @@
 #include "wx/init.h"
 #include "wx/atomic.h"
 
-#include "wx/except.h"
-
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
     #include "wx/msw/msvcrt.h"
@@ -50,6 +48,7 @@
 
 #include "wx/private/init.h"
 #include "wx/private/localeset.h"
+#include "wx/private/safecall.h"
 
 #include <memory>
 
@@ -553,7 +552,7 @@ int wxEntryReal(int& argc, wxChar **argv)
         return wxApp::GetFatalErrorExitCode();
     }
 
-    wxTRY
+    return wxSafeCall<int>([]()
     {
         // app initialization
         if ( !wxTheApp->CallOnInit() )
@@ -573,11 +572,11 @@ int wxEntryReal(int& argc, wxChar **argv)
 
         // app execution
         return wxTheApp->OnRun();
-    }
-    wxCATCH_ALL(
+    }, []()
+    {
         wxApp::CallOnUnhandledException();
         return wxApp::GetFatalErrorExitCode();
-    )
+    });
 }
 
 // as with wxEntryStart, we provide an ANSI wrapper

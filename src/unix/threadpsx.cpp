@@ -26,7 +26,6 @@
 #if wxUSE_THREADS
 
 #include "wx/thread.h"
-#include "wx/except.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -38,6 +37,8 @@
     #include "wx/stopwatch.h"
     #include "wx/module.h"
 #endif
+
+#include "wx/private/safecall.h"
 
 #include <stdio.h>
 #include <unistd.h>
@@ -79,6 +80,7 @@
 #endif
 
 #include <atomic>
+#include <exception>
 
 #define THR_ID_CAST(id)  (reinterpret_cast<void*>(id))
 #define THR_ID(thr)      THR_ID_CAST((thr)->GetId())
@@ -879,32 +881,42 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
                    wxT("Thread %p about to enter its Entry()."),
                    THR_ID(pthread));
 
-        wxTRY
-        {
-            pthread->m_exitcode = thread->Entry();
-
-            wxLogTrace(TRACE_THREADS,
-                       wxT("Thread %p Entry() returned %lu."),
-                       THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
-        }
-#ifndef wxNO_EXCEPTIONS
-#ifdef HAVE_ABI_FORCEDUNWIND
         // When using common C++ ABI under Linux we must always rethrow this
         // special exception used to unwind the stack when the thread was
         // cancelled, otherwise the thread library would simply terminate the
         // program, see http://udrepper.livejournal.com/21541.html
-        catch ( abi::__forced_unwind& )
+#if defined(HAVE_ABI_FORCEDUNWIND) && wxUSE_EXCEPTIONS
+        #define CATCH_AND_RETHROW_FORCED_UNWIND
+
+        std::exception_ptr threadException;
+#endif
+
+        wxSafeCall([&]()
         {
-            wxCriticalSectionLocker lock(thread->m_critsect);
-            pthread->SetState(STATE_EXITED);
-            throw;
-        }
-#endif // HAVE_ABI_FORCEDUNWIND
-        catch ( ... )
-        {
-            wxApp::CallOnUnhandledException();
-        }
-#endif // !wxNO_EXCEPTIONS
+#ifdef CATCH_AND_RETHROW_FORCED_UNWIND
+            try
+            {
+#endif // CATCH_AND_RETHROW_FORCED_UNWIND
+                pthread->m_exitcode = thread->Entry();
+
+                wxLogTrace(TRACE_THREADS,
+                           wxT("Thread %p Entry() returned %lu."),
+                           THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
+#ifdef CATCH_AND_RETHROW_FORCED_UNWIND
+            }
+            catch ( abi::__forced_unwind& )
+            {
+                wxCriticalSectionLocker lock(thread->m_critsect);
+                pthread->SetState(STATE_EXITED);
+                threadException = std::current_exception();
+            }
+#endif // CATCH_AND_RETHROW_FORCED_UNWIND
+        });
+
+#ifdef CATCH_AND_RETHROW_FORCED_UNWIND
+        if ( threadException )
+            std::rethrow_exception(threadException);
+#endif // CATCH_AND_RETHROW_FORCED_UNWIND
 
         {
             wxCriticalSectionLocker lock(thread->m_critsect);
@@ -1734,11 +1746,10 @@ void wxThread::Exit(ExitCode status)
     // might deadlock if, for example, it signals a condition in OnExit() (a
     // common case) while the main thread calls any of functions entering
     // m_critsect on us (almost all of them do)
-    wxTRY
+    wxSafeCall([this]()
     {
         OnExit();
-    }
-    wxCATCH_ALL( wxApp::CallOnUnhandledException(); )
+    });
 
     // delete C++ thread object if this is a detached thread - user is
     // responsible for doing this for joinable ones
