@@ -61,9 +61,7 @@ public:
                                int *minVer = nullptr,
                                int *microVer = nullptr) const override;
 
-#ifdef __WXGTK__
     virtual wxString GetDesktopEnvironment() const override;
-#endif // __WXGTK____
 
 #if defined(__WXGTK__)
     virtual bool ShowAssertDialog(const wxString& msg) override;

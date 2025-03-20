@@ -7,7 +7,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__WXX11__) || defined(__WXGTK__)
+#if defined(__WXX11__) || defined(__WXGTK__) || defined(__WXQT__)
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"

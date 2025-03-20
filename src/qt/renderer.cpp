@@ -21,10 +21,12 @@
 #include "wx/renderer.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/apptrait.h"
 #include "wx/headerctrl.h" // for wxHD_BITMAP_ON_RIGHT
 #include "wx/qt/private/converter.h"
 
@@ -569,24 +571,6 @@ wxRendererQt::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int WXU
 
 namespace
 {
-#if QT_VERSION_MAJOR < 6
-bool wxIsKDEDesktop()
-{
-    wxString de = wxGetenv(wxS("XDG_CURRENT_DESKTOP"));
-
-    if ( !de.empty() )
-    {
-        // Can be a colon separated list according to
-        // https://wiki.archlinux.org/title/Environment_variables#Examples
-        de = de.BeforeFirst(':');
-    }
-
-    de.MakeUpper();
-
-    return de.Contains(wxS("KDE"));
-}
-#endif // QT_VERSION_MAJOR < 6
-
 // N.B.: Keep the Windows and non-Windows versions separate
 //       for the sake of maintainability and readibility.
 
@@ -619,6 +603,16 @@ wxDrawGauge(QStyleOptionProgressBar& option, QPainter* painter, QWidget* qtWidge
     qtStyle->drawControl(QStyle::CE_ProgressBarContents, &option, painter, qtWidget);
 }
 #else // !__WINDOWS__
+
+#if QT_VERSION_MAJOR < 6
+inline bool wxIsKDEDesktop()
+{
+    wxString de = wxTheApp->GetTraits()->GetDesktopEnvironment();
+
+    return de == wxS("KDE");
+}
+#endif // QT_VERSION_MAJOR < 6
+
 inline void
 wxDrawGauge(QStyleOptionProgressBar& option, QPainter* painter, QWidget* qtWidget, int flags, int WXUNUSED(value))
 {
