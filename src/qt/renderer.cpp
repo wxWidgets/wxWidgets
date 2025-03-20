@@ -21,10 +21,12 @@
 #include "wx/renderer.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/dcclient.h"
 #endif
 
+#include "wx/apptrait.h"
 #include "wx/headerctrl.h" // for wxHD_BITMAP_ON_RIGHT
 #include "wx/qt/private/converter.h"
 
@@ -33,25 +35,6 @@
 #include <QtWidgets/QStyleOptionButton>
 #include <QtWidgets/QStyleOptionFrame>
 #include <QtWidgets/QStyleOptionHeader>
-
-namespace
-{
-bool wxIsKDEDesktop()
-{
-    wxString de = wxGetenv(wxS("XDG_CURRENT_DESKTOP"));
-
-    if ( !de.empty() )
-    {
-        // Can be a colon separated list according to
-        // https://wiki.archlinux.org/title/Environment_variables#Examples
-        de = de.BeforeFirst(':');
-    }
-
-    de.MakeUpper();
-
-    return de.Contains(wxS("KDE"));
-}
-}
 
 // ----------------------------------------------------------------------------
 // wxRendererQt: our wxRendererNative implementation
@@ -586,6 +569,107 @@ wxRendererQt::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int WXU
     qtStyle->drawPrimitive(QStyle::PE_FrameFocusRect, &option, painter, qtWidget);
 }
 
+namespace
+{
+// N.B.: Keep the Windows and non-Windows versions separate
+//       for the sake of maintainability and readibility.
+
+#ifdef __WINDOWS__
+inline void
+wxDrawGauge(QStyleOptionProgressBar& option, QPainter* painter, QWidget* qtWidget, int flags, int value)
+{
+    auto qtStyle = qtWidget->style();
+
+    if ( flags & wxCONTROL_SPECIAL )
+    {
+        option.invertedAppearance = true;
+
+#if QT_VERSION_MAJOR < 6
+        option.orientation = Qt::Vertical;
+#endif
+    }
+    else
+    {
+        option.state |= QStyle::State_Horizontal;
+    }
+
+    qtStyle->drawControl(QStyle::CE_ProgressBarGroove, &option, painter, qtWidget);
+
+    if ( flags & wxCONTROL_SPECIAL )
+    {
+        painter->translate(0, option.rect.height() * (1.0 - value/100.0));
+    }
+
+    qtStyle->drawControl(QStyle::CE_ProgressBarContents, &option, painter, qtWidget);
+}
+#else // !__WINDOWS__
+
+#if QT_VERSION_MAJOR < 6
+inline bool wxIsKDEDesktop()
+{
+    wxString de = wxTheApp->GetTraits()->GetDesktopEnvironment();
+
+    return de == wxS("KDE");
+}
+#endif // QT_VERSION_MAJOR < 6
+
+inline void
+wxDrawGauge(QStyleOptionProgressBar& option, QPainter* painter, QWidget* qtWidget, int flags, int WXUNUSED(value))
+{
+    auto qtStyle = qtWidget->style();
+
+    if ( flags & wxCONTROL_SPECIAL )
+    {
+#if QT_VERSION_MAJOR < 6
+        if ( wxIsKDEDesktop() )
+        {
+            option.orientation = Qt::Vertical;
+        }
+        else
+#endif
+        {
+            option.invertedAppearance = true;
+        }
+    }
+    else
+    {
+        option.state |= QStyle::State_Horizontal;
+    }
+
+    const bool drawGrooveAndContents =
+#if QT_VERSION_MAJOR < 6
+        !wxIsKDEDesktop();
+#else
+        false;
+#endif
+
+    if ( drawGrooveAndContents )
+    {
+        qtStyle->drawControl(QStyle::CE_ProgressBarGroove, &option, painter, qtWidget);
+
+        if ( flags & wxCONTROL_SPECIAL )
+        {
+            option.rect = option.rect.transposed();
+            const auto& r = option.rect;
+
+            auto m = painter->worldTransform();
+            painter->resetTransform();
+            painter->translate(r.topLeft());
+            painter->rotate(90);
+            painter->translate(-r.topLeft() - QPoint(0, r.height()));
+            painter->setWorldTransform(m, true);
+        }
+
+        qtStyle->drawControl(QStyle::CE_ProgressBarContents, &option, painter, qtWidget);
+    }
+    else
+    {
+        qtStyle->drawControl(QStyle::CE_ProgressBar, &option, painter, qtWidget);
+    }
+}
+#endif // __WINDOWS__
+} // namespace
+
 void
 wxRendererQt::DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect,
                         int value, int max, int flags)
@@ -594,12 +678,9 @@ wxRendererQt::DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect,
 
     wxCHECK_RET( painter, "Invalid painter!" );
 
-    const bool isKDE = wxIsKDEDesktop();
-
     wxDCClipper clip(dc, rect);
 
     auto qtWidget = win->GetHandle();
-    auto qtStyle = qtWidget->style();
 
     QStyleOptionProgressBar option;
     option.initFrom(qtWidget);
@@ -621,48 +702,12 @@ wxRendererQt::DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect,
             option.state |= QStyle::State_MouseOver;
     }
 
-    if ( flags & wxCONTROL_SPECIAL )
-    {
-        if ( isKDE )
-            option.orientation = Qt::Vertical;
-    }
-    else
-    {
-        option.state |= QStyle::State_Horizontal;
-    }
+    painter->save();
 
-    if ( isKDE )
-    {
-        qtStyle->drawControl(QStyle::CE_ProgressBar, &option, painter, qtWidget);
-    }
-    else
-    {
-        qtStyle->drawControl(QStyle::CE_ProgressBarGroove, &option, painter, qtWidget);
+    wxDrawGauge(option, painter, qtWidget, flags, value);
 
-        if ( !(flags & wxCONTROL_SPECIAL) )
-        {
-            qtStyle->drawControl(QStyle::CE_ProgressBarContents, &option, painter, qtWidget);
-
-            return;
-        }
-
-        option.rect = option.rect.transposed();
-        option.invertedAppearance = true;
-
-        const auto& r = option.rect;
-
-        painter->save();
-        auto m = painter->worldTransform();
-        painter->resetTransform();
-        painter->translate(option.rect.topLeft());
-        painter->rotate(90);
-        painter->translate(-r.topLeft() - QPoint(0, r.height()));
-        painter->setWorldTransform(m, true);
-        qtStyle->drawControl(QStyle::CE_ProgressBarContents, &option, painter, qtWidget);
-        painter->restore();
-    }
+    painter->restore();
 }
-
 
 void
 wxRendererQt::DoDrawComboBox(wxWindow* win, wxDC& dc, const wxRect& origRect,

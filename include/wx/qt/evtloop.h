@@ -27,6 +27,19 @@ public:
 
     void ScheduleIdleCheck();
 
+    // Non-blocking Dispatch() version:
+    // Returns true if an event was processed, otherwise returns false.
+    // This function is added to address code like:
+    //
+    //      while (evtloop->Pending())
+    //          evtloop->Dispatch();
+    //
+    // which can simply replaced with:
+    //
+    //      while (evtloop->QtDispatch())
+    //          ;
+    bool QtDispatch() const;
+
 private:
     QEventLoop *m_qtEventLoop;
     wxObjectDataPtr<wxQtIdleTimer> m_qtIdleTimer;

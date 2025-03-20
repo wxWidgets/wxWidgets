@@ -23,4 +23,15 @@ wxQtGetWidthFromMetrics(const QFontMetrics& metrics, const QString& string)
 #endif
 }
 
+// Hide the difference in getting Qt event position in various Qt versions.
+template<typename T>
+inline QPoint wxQtGetEventPosition(T* event)
+{
+#if QT_VERSION_MAJOR >= 6
+    return event->position().toPoint();
+#else
+    return event->pos();
+#endif
+}
+
 #endif // _WX_QT_PRIVATE_COMPAT_H_

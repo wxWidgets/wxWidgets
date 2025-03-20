@@ -11,7 +11,7 @@
 
 #if wxUSE_TOOLBAR
 
-#include <QtWidgets/QActionGroup>
+#include <QActionGroup>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolBar>
 
@@ -20,8 +20,9 @@
 #endif // WX_PRECOMP
 
 #include "wx/toolbar.h"
-#include "wx/qt/private/winevent.h"
+#include "wx/qt/private/compat.h"
 #include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtToolButton;
@@ -72,7 +73,7 @@ public:
 private:
     void mouseReleaseEvent( QMouseEvent *event ) override;
     void mousePressEvent( QMouseEvent *event ) override;
-    void enterEvent( QEvent *event ) override;
+    void enterEvent( wxQtEnterEvent *event ) override;
 
     const wxWindowID m_toolId;
 };
@@ -91,11 +92,12 @@ void wxQtToolButton::mousePressEvent( QMouseEvent *event )
     QToolButton::mousePressEvent(event);
     if (event->button() == Qt::RightButton)
     {
-        GetToolBar()->OnRightClick( m_toolId, event->x(), event->y() );
+        const QPoint pos = wxQtGetEventPosition(event);
+        GetToolBar()->OnRightClick( m_toolId, pos.x(), pos.y() );
     }
 }
 
-void wxQtToolButton::enterEvent( QEvent *WXUNUSED(event) )
+void wxQtToolButton::enterEvent( wxQtEnterEvent *WXUNUSED(event) )
 {
     GetToolBar()->OnMouseEnter( m_toolId );
 }

@@ -19,9 +19,9 @@
 // NB: Content of this header is for wxWidgets' private use! It is not
 //     part of public API and may be modified or even disappear in the future!
 
-#if defined(__WXGTK__) || defined(__WXX11__)
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXQT__)
 
-#if defined(__WXGTK__)
+#if defined(__WXGTK__) || defined(__WXQT__)
 typedef void WXDisplay;
 typedef void* WXWindow;
 #endif

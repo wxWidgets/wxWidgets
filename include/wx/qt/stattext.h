@@ -23,6 +23,8 @@ public:
                  long style = 0,
                  const wxString &name = wxASCII_STR(wxStaticTextNameStr) );
 
+    ~wxStaticText();
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString &label,

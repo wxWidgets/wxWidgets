@@ -11,7 +11,6 @@
 
 #include <QtGui/QCursor>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
 #include <QtGui/QDesktopServices>
 #include <QtCore/QUrl>
 

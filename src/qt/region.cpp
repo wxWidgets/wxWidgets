@@ -14,6 +14,7 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
+#include <QtCore/QRect>
 #include <QtGui/QRegion>
 #include <QtGui/QBitmap>
 #include <QtGui/QPainter>
@@ -21,9 +22,7 @@
 class wxRegionRefData: public wxGDIRefData
 {
 public:
-    wxRegionRefData()
-    {
-    }
+    wxRegionRefData() = default;
 
     wxRegionRefData( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
     {
@@ -349,34 +348,28 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
 
 wxRegionIterator::wxRegionIterator()
 {
-    m_qtRects = nullptr;
-    m_pos = 0;
 }
 
 wxRegionIterator::wxRegionIterator(const wxRegion& region)
 {
-    m_qtRects = nullptr;
     Reset(region);
 }
 
 wxRegionIterator::wxRegionIterator(const wxRegionIterator& ri)
-    : wxObject()
+    : wxObject(ri)
 {
-    m_qtRects = new QVector< QRect >( *ri.m_qtRects );
-    m_pos = ri.m_pos;
+    *this = ri;
 }
 
 wxRegionIterator::~wxRegionIterator()
 {
-    delete m_qtRects;
 }
 
 wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
 {
     if (this != &ri)
     {
-        delete m_qtRects;
-        m_qtRects = new QVector< QRect >( *ri.m_qtRects );
+        m_qtRects = ri.m_qtRects;
         m_pos = ri.m_pos;
     }
     return *this;
@@ -389,22 +382,18 @@ void wxRegionIterator::Reset()
 
 void wxRegionIterator::Reset(const wxRegion& region)
 {
-    delete m_qtRects;
+    m_pos = 0;
+    m_qtRects.clear();
 
     auto qtRegion = region.GetHandle();
-    m_qtRects = new QVector< QRect >();
-    m_qtRects->reserve(qtRegion.rectCount());
+    m_qtRects.reserve(qtRegion.rectCount());
     for (const auto& r : qtRegion)
-        m_qtRects->push_back(r);
-
-    m_pos = 0;
+        m_qtRects.push_back(r);
 }
 
 bool wxRegionIterator::HaveRects() const
 {
-    wxCHECK_MSG( m_qtRects != nullptr, false, "Invalid iterator" );
-
-    return m_pos < m_qtRects->size();
+    return m_pos < m_qtRects.size();
 }
 
 wxRegionIterator::operator bool () const
@@ -414,7 +403,7 @@ wxRegionIterator::operator bool () const
 
 wxRegionIterator& wxRegionIterator::operator ++ ()
 {
-    m_pos++;
+    ++m_pos;
     return *this;
 }
 
@@ -427,18 +416,16 @@ wxRegionIterator wxRegionIterator::operator ++ (int)
 
 wxCoord wxRegionIterator::GetX() const
 {
-    wxCHECK_MSG( m_qtRects != nullptr, 0, "Invalid iterator" );
-    wxCHECK_MSG( m_pos < m_qtRects->size(), 0, "Invalid position" );
+    wxCHECK_MSG( m_pos < m_qtRects.size(), 0, "Invalid position" );
 
-    return m_qtRects->at( m_pos ).x();
+    return m_qtRects[m_pos].x();
 }
 
 wxCoord wxRegionIterator::GetY() const
 {
-    wxCHECK_MSG( m_qtRects != nullptr, 0, "Invalid iterator" );
-    wxCHECK_MSG( m_pos < m_qtRects->size(), 0, "Invalid position" );
+    wxCHECK_MSG( m_pos < m_qtRects.size(), 0, "Invalid position" );
 
-    return m_qtRects->at( m_pos ).y();
+    return m_qtRects[m_pos].y();
 }
 
 wxCoord wxRegionIterator::GetW() const
@@ -448,10 +435,9 @@ wxCoord wxRegionIterator::GetW() const
 
 wxCoord wxRegionIterator::GetWidth() const
 {
-    wxCHECK_MSG( m_qtRects != nullptr, 0, "Invalid iterator" );
-    wxCHECK_MSG( m_pos < m_qtRects->size(), 0, "Invalid position" );
+    wxCHECK_MSG( m_pos < m_qtRects.size(), 0, "Invalid position" );
 
-    return m_qtRects->at( m_pos ).width();
+    return m_qtRects[m_pos].width();
 }
 
 wxCoord wxRegionIterator::GetH() const
@@ -461,17 +447,15 @@ wxCoord wxRegionIterator::GetH() const
 
 wxCoord wxRegionIterator::GetHeight() const
 {
-    wxCHECK_MSG( m_qtRects != nullptr, 0, "Invalid iterator" );
-    wxCHECK_MSG( m_pos < m_qtRects->size(), 0, "Invalid position" );
+    wxCHECK_MSG( m_pos < m_qtRects.size(), 0, "Invalid position" );
 
-    return m_qtRects->at( m_pos ).height();
+    return m_qtRects[m_pos].height();
 }
 
 wxRect wxRegionIterator::GetRect() const
 {
-    wxCHECK_MSG( m_qtRects != nullptr, wxRect(), "Invalid iterator" );
-    wxCHECK_MSG( m_pos < m_qtRects->size(), wxRect(), "Invalid position" );
+    wxCHECK_MSG( m_pos < m_qtRects.size(), wxRect(), "Invalid position" );
 
-    return wxQtConvertRect( m_qtRects->at( m_pos ) );
+    return wxQtConvertRect( m_qtRects[m_pos] );
 }
 
