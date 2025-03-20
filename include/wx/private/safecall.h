@@ -14,6 +14,8 @@
 
 #if wxUSE_EXCEPTIONS
 
+#include "wx/sysopt.h"
+
 // General version calls the given function or function-like object and
 // executes the provided handler if an exception is thrown.
 //
@@ -22,6 +24,13 @@
 template <typename R, typename T1, typename T2>
 inline R wxSafeCall(const T1& func, const T2& handler)
 {
+    // This special option exists in order to avoid having try/catch blocks
+    // around potentially throwing code.
+    if ( wxSystemOptions::IsFalse("catch-unhandled-exceptions") )
+    {
+        return func();
+    }
+
     try
     {
         return func();
