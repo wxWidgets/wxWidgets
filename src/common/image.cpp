@@ -464,16 +464,25 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
     switch ( quality )
     {
         case wxIMAGE_QUALITY_NORMAL:
-            // When downscaling, we prefer to use bilinear resampling as it
-            // results in better quality at reasonable speed.
+            // When downscaling, use bilinear algorithm for shrinking to an
+            // integer multiple of the target size and then box average by the
+            // integer part.
             if ( width <= old_width && height <= old_height )
             {
-                image = ResampleBilinear(width, height);
-                break;
-            }
+                const double shrinkFactorX = double(old_width) / width;
+                const double shrinkFactorY = double(old_height) / height;
 
-            // Otherwise use NEAREST for upscaling.
-            wxFALLTHROUGH;
+                const int shrinkInt(wxMin(shrinkFactorX, shrinkFactorY));
+
+                image = ResampleBilinear(width * shrinkInt, height * shrinkInt);
+                if ( shrinkInt != 1 )
+                    image = image.ResampleBox(width, height);
+            }
+            else // Use box average algorithm for upscaling.
+            {
+                image = ResampleBox(width, height);
+            }
+            break;
 
         case wxIMAGE_QUALITY_FAST:
         case wxIMAGE_QUALITY_NEAREST:
@@ -527,6 +536,8 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
 wxImage wxImage::ResampleNearest(int width, int height) const
 {
     wxImage image;
+
+    wxCHECK_MSG( IsOk(), image, "invalid image" );
 
     // We use wxUIntPtr to rescale images of larger size in 64-bit builds:
     // using long wouldn't allow using images larger than 2^16 in either
@@ -650,6 +661,8 @@ void ResampleBoxPrecalc(wxVector<BoxPrecalc>& boxes, int oldDim)
 
 wxImage wxImage::ResampleBox(int width, int height) const
 {
+    wxCHECK_MSG( IsOk(), {}, "invalid image" );
+
     // This function implements a simple pre-blur/box averaging method for
     // downsampling that gives reasonably smooth results To scale the image
     // down we will need to gather a grid of pixels of the size of the scale
@@ -810,6 +823,8 @@ void ResampleBilinearPrecalc(wxVector<BilinearPrecalc>& precalcs, int oldDim)
 
 wxImage wxImage::ResampleBilinear(int width, int height) const
 {
+    wxCHECK_MSG( IsOk(), {}, "invalid image" );
+
     // This function implements a Bilinear algorithm for resampling.
     wxImage ret_image(width, height, false);
     const unsigned char* src_data = M_IMGDATA->m_data;
@@ -963,6 +978,8 @@ void ResampleBicubicPrecalc(wxVector<BicubicPrecalc> &aWeight, int oldDim)
 // This is the bicubic resampling algorithm
 wxImage wxImage::ResampleBicubic(int width, int height) const
 {
+    wxCHECK_MSG( IsOk(), {}, "invalid image" );
+
     // This function implements a Bicubic B-Spline algorithm for resampling.
     // This method is certainly a little slower than wxImage's default pixel
     // replication method, however for most reasonably sized images not being

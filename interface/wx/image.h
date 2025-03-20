@@ -55,10 +55,14 @@ enum wxImageResizeQuality
     /**
         Default image resizing algorithm used by wxImage::Scale().
 
-        Currently this is the same as wxIMAGE_QUALITY_NEAREST when enlarging
-        the image (in at least one direction) and wxIMAGE_QUALITY_BILINEAR when
-        reducing it, which produces relatively good results for the images
-        typically used for the icons in the GUI applications.
+        Currently this algorithm uses wxIMAGE_QUALITY_BILINEAR when reducing
+        the image size (in both directions) to resize the image to an integer
+        multiple of the target size and, after doing this, or as the only step
+        when enlarging the image, applies wxIMAGE_QUALITY_BOX_AVERAGE to obtain
+        the desired size.
+
+        This produces relatively good results for the images typically used for
+        the icons in the GUI applications.
     */
     wxIMAGE_QUALITY_NORMAL,
 
