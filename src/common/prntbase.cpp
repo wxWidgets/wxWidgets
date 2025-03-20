@@ -627,6 +627,9 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
 
 wxPrintPageRange wxPrintout::GetPagesInfo(wxPrintPageRanges& ranges)
 {
+    // We always override the provided range in the default implementation.
+    ranges.clear();
+
     int minPage = 0;
     int maxPage = 0;
     int fromPage = 0;
