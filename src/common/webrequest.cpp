@@ -1117,10 +1117,11 @@ wxString wxWebSessionBase::GetFullURL(const wxString& url) const
     wxURI absURL(url);
     absURL.Resolve(*baseURL);
 
-    wxLogTrace(wxTRACE_WEBREQUEST, "Relative URL: %s -> %s",
-               url, absURL.BuildURI());
+    wxString fullURL = absURL.BuildURI();
+    if ( fullURL != url )
+        wxLogTrace(wxTRACE_WEBREQUEST, "Relative URL: %s -> %s", url, fullURL);
 
-    return absURL.BuildURI();
+    return fullURL;
 }
 
 wxWebRequest

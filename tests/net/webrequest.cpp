@@ -21,6 +21,7 @@
 
 #include "wx/webrequest.h"
 #include "wx/filename.h"
+#include "wx/uri.h"
 #include "wx/wfstream.h"
 
 #include <memory>
@@ -140,23 +141,15 @@ protected:
                    const wxString& user,
                    const wxString& password)
     {
-        wxString schema;
-        wxString rest;
-        if ( baseURL.StartsWith("https://", &rest) )
-        {
-            schema = "https";
-        }
-        else if ( baseURL.StartsWith("http://", &rest) )
-        {
-            schema = "http";
-        }
-        else
-        {
-            FAIL("Base URL must be an HTTP(S) one: " << baseURL);
-        }
+        wxString url = baseURL;
+        if ( !url.EndsWith('/') && !relURL.StartsWith('/') )
+            url += '/';
+        url += relURL;
 
-        Create(wxString::Format("%s://%s:%s@%s/%s",
-                                schema, user, password, rest, relURL));
+        wxURI uri(url);
+        uri.SetUserAndPassword(user, password);
+
+        Create(uri.BuildURI());
     }
 
     virtual void Create(const wxString& url) = 0;
@@ -661,6 +654,28 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::Basic/Reserved", "[net][webrequest][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    // Use some reserved (in the RFC 3986 sense) characters in the user name and
+    // the password (as well as a sub-delimiter character '=' in the password).
+    Create("basic-auth/u%40d/1%3d2%3f");
+    Run(wxWebRequest::State_Unauthorized, 401);
+    REQUIRE( request.GetAuthChallenge().IsOk() );
+
+    UseCredentials("u@d", "1=2?");
+    RunLoopWithTimeout();
+    CHECK( request.GetState() == wxWebRequest::State_Completed );
+
+    const auto& response = request.GetResponse();
+    CHECK( response.GetStatus() == 200 );
+    CHECK_THAT( response.AsString().utf8_string(),
+                Catch::Contains(AUTHORIZED_SUBSTRING) );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Auth::Digest", "[net][webrequest][auth]")
 {
     if ( !InitBaseURL() )
@@ -1112,6 +1127,33 @@ TEST_CASE_METHOD(SyncRequestFixture,
         CHECK_FALSE( Execute() );
         CHECK( response.GetStatus() == 401 );
         CHECK( state == wxWebRequest::State_Unauthorized );
+    }
+
+    SECTION("Reserved characters")
+    {
+        if ( wxWebSession::GetDefault().GetLibraryVersionInfo().GetName()
+                == "URLSession" )
+        {
+            // NSURLSession doesn't decode percent-encoded characters in the
+            // password (as indirectly confirmed by the documentation of NSURL
+            // password property, which says that "Any percent-encoded
+            // characters are not unescaped.", resulting in sending wrong
+            // password to the server if we use any reserved characters in it.
+            CreateWithAuth("basic-auth/u%40d/1=2", "u@d", "1=2");
+        }
+        else
+        {
+            // With the other backends, using reserved characters in the
+            // password does work.
+            CreateWithAuth("basic-auth/u%40d/1%3d2%3f", "u@d", "1=2?");
+        }
+
+        REQUIRE( Execute() );
+        CHECK( response.GetStatus() == 200 );
+        CHECK( state == wxWebRequest::State_Completed );
+
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
     }
 }
 

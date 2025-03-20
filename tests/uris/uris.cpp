@@ -28,20 +28,47 @@
 
 // apply the given accessor to the URI, check that the result is as expected
 #define URI_ASSERT_PART_EQUAL(uri, expected, accessor) \
-    CHECK(wxURI(uri).accessor == expected)
+    wxSTATEMENT_MACRO_BEGIN \
+        const wxURI u(uri); \
+        INFO(DumpURI(u)); \
+        CHECK(u.accessor == expected); \
+    wxSTATEMENT_MACRO_END
+
 #define URI_ASSERT_HOST_TEST(uri, expectedhost, expectedtype) \
-    CHECK(wxURI(uri).GetServer() == (expectedhost)); \
-    CHECK(wxURI(uri).GetHostType() == (expectedtype))
-#define URI_ASSERT_HOST_TESTBAD(uri, ne) CHECK(wxURI(uri).GetHostType() != (ne))
+    wxSTATEMENT_MACRO_BEGIN \
+        const wxURI u(uri); \
+        INFO(DumpURI(u)); \
+        CHECK(u.GetServer() == expectedhost); \
+        CHECK(u.GetHostType() == expectedtype); \
+    wxSTATEMENT_MACRO_END
+
+#define URI_ASSERT_HOST_TESTBAD(uri, ne) \
+    wxSTATEMENT_MACRO_BEGIN \
+        const wxURI u(uri); \
+        INFO(DumpURI(u)); \
+        CHECK(u.GetHostType() != ne); \
+    wxSTATEMENT_MACRO_END
+
+#define URI_ASSERT_EQUAL(uri, expected) \
+    URI_ASSERT_PART_EQUAL(uri, expected, BuildURI())
 #define URI_ASSERT_HOST_EQUAL(uri, expected) \
-    URI_ASSERT_PART_EQUAL((uri), (expected), GetServer())
+    URI_ASSERT_PART_EQUAL(uri, expected, GetServer())
 #define URI_ASSERT_PATH_EQUAL(uri, expected) \
     URI_ASSERT_PART_EQUAL((uri), (expected), GetPath())
 #define URI_ASSERT_HOSTTYPE_EQUAL(uri, expected) \
-    URI_ASSERT_PART_EQUAL((uri), (expected), GetHostType())
+    URI_ASSERT_PART_EQUAL(uri, expected, GetHostType())
 #define URI_ASSERT_USER_EQUAL(uri, expected) \
-    URI_ASSERT_PART_EQUAL((uri), (expected), GetUser())
-#define URI_ASSERT_BADPATH(uri) CHECK(!wxURI(uri).HasPath())
+    URI_ASSERT_PART_EQUAL(uri, expected, GetUser())
+#define URI_ASSERT_USERINFO_EQUAL(uri, expected) \
+    URI_ASSERT_PART_EQUAL(uri, expected, GetUserInfo())
+
+#define URI_ASSERT_BADPATH(uri) \
+    wxSTATEMENT_MACRO_BEGIN \
+        const wxURI u(uri); \
+        INFO(DumpURI(u)); \
+        CHECK(!u.HasPath()); \
+    wxSTATEMENT_MACRO_END
+
 // IPv4
 #define URI_ASSERT_IPV4_TEST(ip, expected) \
     URI_ASSERT_HOST_TEST("http://user:password@" ip ":5050/path", expected, wxURI_IPV4ADDRESS)
@@ -54,11 +81,12 @@
     URI_ASSERT_HOST_TESTBAD("http://user:password@" ip ":5050/path", wxURI_IPV6ADDRESS)
 // Resolve
 #define URI_TEST_RESOLVE_IMPL(string, eq, strictness) \
-    {\
+    wxSTATEMENT_MACRO_BEGIN \
         wxURI uri(string); \
         uri.Resolve(masteruri, strictness); \
+        INFO(DumpURI(uri)); \
         CHECK(uri.BuildURI() == eq); \
-    }
+    wxSTATEMENT_MACRO_END
 #define URI_TEST_RESOLVE(string, eq) \
         URI_TEST_RESOLVE_IMPL(string, eq, wxURI_STRICT);
 #define URI_TEST_RESOLVE_LAX(string, eq) \
@@ -66,10 +94,14 @@
 
 // Normalization
 #define URI_ASSERT_NORMALIZEDENCODEDPATH_EQUAL(uri, expected) \
-    { wxURI nuri(uri); nuri.Resolve(wxURI("http://a/"));\
-      CHECK(nuri.GetPath() == expected); }
+    wxSTATEMENT_MACRO_BEGIN \
+      wxURI nuri(uri); \
+      nuri.Resolve(wxURI("http://a/")); \
+      INFO(DumpURI(nuri)); \
+      CHECK(nuri.GetPath() == expected); \
+    wxSTATEMENT_MACRO_END
 #define URI_ASSERT_NORMALIZEDPATH_EQUAL(uri, expected) \
-    { URI_ASSERT_NORMALIZEDENCODEDPATH_EQUAL(uri, expected); }
+    URI_ASSERT_NORMALIZEDENCODEDPATH_EQUAL(uri, expected);
 
 // Helper function used to show components of wxURI.
 static wxString DumpURI(const wxURI& uri)
@@ -279,6 +311,9 @@ TEST_CASE("URI::Paths", "[uri]")
     URI_ASSERT_PATH_EQUAL("http://good.com:8042/GOODPATH", "/GOODPATH");
     //When authority is not present, the path cannot begin with two slash characters ("//").
     URI_ASSERT_BADPATH("http:////BADPATH");
+
+    // 8-bit characters in the path should be percent-encoded.
+    URI_ASSERT_PATH_EQUAL( wxString::FromUTF8("http://host/\xc3\xa9"), "/%c3%a9" );
 }
 
 TEST_CASE("URI::UserInfo", "[uri]")
@@ -286,8 +321,8 @@ TEST_CASE("URI::UserInfo", "[uri]")
     wxURI uri;
 
     // Simple cases.
-    CHECK( wxURI("https://host/").GetUser() == "" );
-    CHECK( wxURI("https://user@host/").GetUser() == "user" );
+    URI_ASSERT_USER_EQUAL( "https://host/", "" );
+    URI_ASSERT_USER_EQUAL( "https://user@host/", "user" );
 
     CHECK( uri.Create("https://user:password@host/") );
     CHECK( uri.GetUser() == "user" );
@@ -312,24 +347,22 @@ TEST_CASE("URI::UserInfo", "[uri]")
 
     // But sub-delims (defined in the same section of the RFC) may be used
     // either in the encoded or raw form.
-    CHECK( wxURI("https://me!@host/").GetUser() == "me!" );
-    CHECK( wxURI::Unescape(wxURI("https://me%21@host/").GetUser()) == "me!" );
+    URI_ASSERT_USER_EQUAL( "https://me!@host/", "me!" );
+    URI_ASSERT_USER_EQUAL( "https://me%21@host/", "me%21" );
 
-    CHECK( uri.Create("https://u:pass=word@h/") );
-    CHECK( uri.GetUser() == "u" );
-    CHECK( wxURI::Unescape(uri.GetPassword()) == "pass=word" );
-
-    CHECK( uri.Create("https://u:pass%3Dword@h/") );
-    CHECK( wxURI::Unescape(uri.GetPassword()) == "pass=word" );
+    URI_ASSERT_USERINFO_EQUAL( "https://u:pass=word@h/", "u:pass=word" );
+    URI_ASSERT_USERINFO_EQUAL( "https://u:pass%3Dword@h/", "u:pass%3Dword" );
 
     // Also test that using SetUserAndPassword() works.
     uri = "https://host/";
     uri.SetUserAndPassword("me@here!");
-    CHECK( uri.BuildURI() == "https://me%40here!@host/" );
+    URI_ASSERT_EQUAL( uri, "https://me%40here!@host/" );
 
     uri.SetUserAndPassword("you:", "?me");
-    INFO(DumpURI(uri));
-    CHECK( uri.BuildURI() == "https://you%3a:%3fme@host/" );
+    URI_ASSERT_EQUAL( uri, "https://you%3a:%3fme@host/" );
+
+    uri.SetUserAndPassword(wxString::FromUTF8("\xc3\xa7"));
+    URI_ASSERT_USER_EQUAL( uri, "%c3%a7");
 }
 
 //examples taken from RFC 2396.bis
