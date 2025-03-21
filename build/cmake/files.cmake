@@ -396,14 +396,6 @@ set(MEDIA_QT_SRC
     src/qt/mediactrl.cpp
 )
 
-set(OPENGL_QT_HDR
-    wx/qt/glcanvas.h
-)
-
-set(OPENGL_QT_SRC
-    src/qt/glcanvas.cpp
-)
-
 set(BASE_CMN_SRC
     src/common/any.cpp
     src/common/appbase.cpp
@@ -2760,9 +2752,35 @@ set(OPENGL_OSX_COCOA_SRC
     src/osx/glcanvas_osx.cpp
 )
 
+set(OPENGL_OSX_COCOA_HDR
+    wx/osx/glcanvas.h
+)
+
 set(OPENGL_OSX_IPHONE_SRC
     src/osx/iphone/glcanvas.mm
     src/osx/glcanvas_osx.cpp
+)
+
+set(OPENGL_OSX_IPHONE_HDR
+    wx/osx/glcanvas.h
+)
+
+set(OPENGL_X11_SRC
+    src/x11/glcanvas.cpp
+    src/unix/glx11.cpp
+)
+
+set(OPENGL_X11_HDR
+    wx/x11/glcanvas.h
+    wx/unix/glx11.h
+)
+
+set(OPENGL_QT_SRC
+    src/qt/glcanvas.cpp
+)
+
+set(OPENGL_QT_HDR
+    wx/qt/glcanvas.h
 )
 
 set(UNIX_SOUND_SDL_SRC

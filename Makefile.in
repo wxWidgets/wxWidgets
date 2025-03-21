@@ -2253,7 +2253,7 @@ GLDLL_OBJCXXFLAGS = $(__gldll_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 GLDLL_OBJECTS =  \
 	$(__gldll___win32rc) \
 	gldll_glcmn.o \
-	$(__OPENGL_SRC_PLATFORM_OBJECTS)
+	$(__OPENGL_PLATFORM_SRC_OBJECTS)
 GLDLL_ODEP =  $(_____pch_wxprec_gldll_wx_wxprec_h_gch___depname)
 GLLIB_CXXFLAGS = $(__gllib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
@@ -2267,7 +2267,7 @@ GLLIB_OBJCXXFLAGS = $(__gllib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__THREAD_DEFINE_p) -DWXBUILDING $(CPPFLAGS) $(OBJCXXFLAGS)
 GLLIB_OBJECTS =  \
 	gllib_glcmn.o \
-	$(__OPENGL_SRC_PLATFORM_OBJECTS_1)
+	$(__OPENGL_PLATFORM_SRC_OBJECTS_1)
 GLLIB_ODEP =  $(_____pch_wxprec_gllib_wx_wxprec_h_gch___depname)
 SOUND_SDL_CXXFLAGS = $(WX_CPPFLAGS) -DWXUSINGDLL -DwxUSE_GUI=0 $(PIC_FLAG) \
 	$(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
@@ -2429,21 +2429,87 @@ COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM =  \
 	wx/msw/webview_ie.h \
 	wx/msw/webview_edge.h
 @COND_TOOLKIT_MSW@WEBVIEW_HDR_PLATFORM = $(COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM)
-@COND_TOOLKIT_COCOA@OPENGL_HDR_PLATFORM = wx/cocoa/glcanvas.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@OPENGL_HDR_PLATFORM \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= wx/gtk/glcanvas.h wx/unix/glx11.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@OPENGL_HDR_PLATFORM \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= wx/gtk/glcanvas.h wx/unix/glegl.h \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	wx/unix/glx11.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@OPENGL_HDR_PLATFORM \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@	= wx/gtk/glcanvas.h wx/unix/glegl.h \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@	wx/unix/glx11.h
-@COND_TOOLKIT_MSW@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
-@COND_TOOLKIT_OSX_COCOA@OPENGL_HDR_PLATFORM = wx/osx/glcanvas.h
-@COND_TOOLKIT_QT@OPENGL_HDR_PLATFORM = wx/qt/glcanvas.h
-@COND_TOOLKIT_X11@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h wx/unix/glx11.h
+@COND_TOOLKIT_GTK@OPENGL_PLATFORM_HDR = wx/unix/glx11.h \
+@COND_TOOLKIT_GTK@	wx/gtk/glcanvas.h wx/unix/glegl.h
+@COND_TOOLKIT_MSW@OPENGL_PLATFORM_HDR = wx/msw/glcanvas.h
+@COND_TOOLKIT_OSX_COCOA@OPENGL_PLATFORM_HDR = wx/osx/glcanvas.h
+@COND_TOOLKIT_OSX_IPHONE@OPENGL_PLATFORM_HDR = wx/osx/glcanvas.h
+@COND_TOOLKIT_QT@OPENGL_PLATFORM_HDR = wx/qt/glcanvas.h
+@COND_TOOLKIT_X11@OPENGL_PLATFORM_HDR = wx/unix/glx11.h wx/x11/glcanvas.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_GTK_HDR = wx/aui/tabartgtk.h
 @COND_TOOLKIT_MSW@AUI_PLATFORM_HDR = wx/aui/tabartmsw.h wx/aui/barartmsw.h
+COND_TOOLKIT__BASE_OSX_SRC =  \
+	src/common/fdiodispatcher.cpp \
+	src/common/selectdispatcher.cpp \
+	src/unix/appunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
+	src/unix/timerunx.cpp \
+	src/unix/threadpsx.cpp \
+	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
+	src/unix/fswatcher_kqueue.cpp \
+	src/unix/mimetype.cpp \
+	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
+	src/osx/core/strconv_cf.cpp \
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.mm
+@COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
+COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
+	src/common/fdiodispatcher.cpp \
+	src/common/selectdispatcher.cpp \
+	src/unix/appunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
+	src/unix/timerunx.cpp \
+	src/unix/threadpsx.cpp \
+	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
+	src/unix/fswatcher_kqueue.cpp \
+	src/unix/mimetype.cpp \
+	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
+	src/osx/core/strconv_cf.cpp \
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.mm
+@COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
+COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
+	src/common/fdiodispatcher.cpp \
+	src/common/selectdispatcher.cpp \
+	src/unix/appunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
+	src/unix/timerunx.cpp \
+	src/unix/threadpsx.cpp \
+	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
+	src/unix/fswatcher_kqueue.cpp \
+	src/unix/mimetype.cpp \
+	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
+	src/osx/core/strconv_cf.cpp \
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.mm
+@COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2496,54 +2562,6 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/fswatcher_fsevents.cpp \
 	src/osx/cocoa/stdpaths.mm
 @COND_TOOLKIT_OSX_IPHONE@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC)
-COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/uilocale.mm
-@COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
-COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/uilocale.mm
-@COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
 COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
@@ -2568,30 +2586,6 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/osx/core/secretstore.cpp \
 	src/osx/core/uilocale.mm
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
-COND_TOOLKIT__BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/uilocale.mm
-@COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
 COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
@@ -3939,7 +3933,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/html/forcelnk.h \
 	$(MSW_HTML_HDR) \
 	wx/glcanvas.h \
-	$(OPENGL_HDR_PLATFORM) \
+	$(OPENGL_PLATFORM_HDR) \
 	wx/debugrpt.h \
 	wx/xrc/xh_activityindicator.h \
 	wx/xrc/xh_all.h \
@@ -12154,25 +12148,15 @@ COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__gldll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__gldll___win32rc = gldll_version_rc.o
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= gldll_glegl.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	gldll_glx11.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	gldll_gtk_glcanvas.o
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	= gldll_glegl.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	gldll_glx11.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	gldll_gtk_glcanvas.o
-@COND_TOOLKIT_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS = \
-@COND_TOOLKIT_COCOA@	gldll_src_cocoa_glcanvas.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= gldll_gtk_glcanvas.o gldll_glx11.o
-@COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_msw_glcanvas.o
-@COND_TOOLKIT_OSX_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_TOOLKIT_OSX_COCOA@	= gldll_osx_cocoa_glcanvas.o gldll_glcanvas_osx.o
-@COND_TOOLKIT_OSX_IPHONE@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_TOOLKIT_OSX_IPHONE@	= gldll_iphone_glcanvas.o gldll_glcanvas_osx.o
-@COND_TOOLKIT_QT@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_qt_glcanvas.o
-@COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS = \
+@COND_TOOLKIT_GTK@__OPENGL_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_GTK@	gldll_glx11.o gldll_gtk_glcanvas.o gldll_glegl.o
+@COND_TOOLKIT_MSW@__OPENGL_PLATFORM_SRC_OBJECTS = gldll_msw_glcanvas.o
+@COND_TOOLKIT_OSX_COCOA@__OPENGL_PLATFORM_SRC_OBJECTS \
+@COND_TOOLKIT_OSX_COCOA@	= gldll_glcanvas_osx.o gldll_cocoa_glcanvas.o
+@COND_TOOLKIT_OSX_IPHONE@__OPENGL_PLATFORM_SRC_OBJECTS \
+@COND_TOOLKIT_OSX_IPHONE@	= gldll_glcanvas_osx.o gldll_iphone_glcanvas.o
+@COND_TOOLKIT_QT@__OPENGL_PLATFORM_SRC_OBJECTS = gldll_qt_glcanvas.o
+@COND_TOOLKIT_X11@__OPENGL_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_X11@	gldll_x11_glcanvas.o gldll_glx11.o
 COND_MONOLITHIC_0___WXLIBGLDEP_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -12195,25 +12179,15 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_gllib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_gllib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_gllib/wx/wxprec.h.gch
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= gllib_glegl.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	gllib_glx11.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	gllib_gtk_glcanvas.o
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	= gllib_glegl.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	gllib_glx11.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	gllib_gtk_glcanvas.o
-@COND_TOOLKIT_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS_1 = \
-@COND_TOOLKIT_COCOA@	gllib_src_cocoa_glcanvas.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= gllib_gtk_glcanvas.o gllib_glx11.o
-@COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_msw_glcanvas.o
-@COND_TOOLKIT_OSX_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_TOOLKIT_OSX_COCOA@	= gllib_osx_cocoa_glcanvas.o gllib_glcanvas_osx.o
-@COND_TOOLKIT_OSX_IPHONE@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_TOOLKIT_OSX_IPHONE@	= gllib_iphone_glcanvas.o gllib_glcanvas_osx.o
-@COND_TOOLKIT_QT@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_qt_glcanvas.o
-@COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS_1 = \
+@COND_TOOLKIT_GTK@__OPENGL_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_GTK@	gllib_glx11.o gllib_gtk_glcanvas.o gllib_glegl.o
+@COND_TOOLKIT_MSW@__OPENGL_PLATFORM_SRC_OBJECTS_1 = gllib_msw_glcanvas.o
+@COND_TOOLKIT_OSX_COCOA@__OPENGL_PLATFORM_SRC_OBJECTS_1 \
+@COND_TOOLKIT_OSX_COCOA@	= gllib_glcanvas_osx.o gllib_cocoa_glcanvas.o
+@COND_TOOLKIT_OSX_IPHONE@__OPENGL_PLATFORM_SRC_OBJECTS_1 \
+@COND_TOOLKIT_OSX_IPHONE@	= gllib_glcanvas_osx.o gllib_iphone_glcanvas.o
+@COND_TOOLKIT_QT@__OPENGL_PLATFORM_SRC_OBJECTS_1 = gllib_qt_glcanvas.o
+@COND_TOOLKIT_X11@__OPENGL_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_X11@	gllib_x11_glcanvas.o gllib_glx11.o
 @COND_SHARED_1@____wxgl_namedll_DEP = $(__gldll___depname)
 @COND_SHARED_0@____wxgl_namelib_DEP = $(__gllib___depname)
@@ -33871,14 +33845,17 @@ gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 gldll_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
 
-gldll_osx_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLDLL_ODEP)
+gldll_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 gldll_iphone_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
 
-gldll_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLDLL_ODEP)
-	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
+gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
+	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
+
+gldll_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLDLL_ODEP)
+	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
 
 gldll_qt_glcanvas.o: $(srcdir)/src/qt/glcanvas.cpp $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/qt/glcanvas.cpp
@@ -33895,44 +33872,26 @@ gldll_x11_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
 
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gldll_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gldll_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
+@COND_TOOLKIT_GTK@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
 @COND_TOOLKIT_X11@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
 gllib_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
 
-gllib_osx_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLLIB_ODEP)
+gllib_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 gllib_iphone_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
 
-gllib_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLLIB_ODEP)
-	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
+gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
+	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
+
+gllib_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLLIB_ODEP)
+	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
 
 gllib_qt_glcanvas.o: $(srcdir)/src/qt/glcanvas.cpp $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/qt/glcanvas.cpp
@@ -33949,32 +33908,11 @@ gllib_x11_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
 
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gllib_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gllib_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
+@COND_TOOLKIT_GTK@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
 @COND_TOOLKIT_X11@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
 
 sound_sdl_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp
 	$(CXXC) -c -o $@ $(SOUND_SDL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
