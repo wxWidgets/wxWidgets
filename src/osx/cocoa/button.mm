@@ -153,7 +153,6 @@ void wxButtonCocoaImpl::SetAcceleratorFromLabel(const wxString& label)
         }
         else
         {
-            wxString cancelLabel(_("&Cancel"));
             wxCFStringRef cfText(accelstring);
             [GetNSButton() setKeyEquivalent:cfText.AsNSString()];
             [GetNSButton() setKeyEquivalentModifierMask:NSCommandKeyMask];
