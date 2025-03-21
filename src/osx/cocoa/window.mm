@@ -1190,7 +1190,7 @@ void wxOSX_touchesEnded(NSView* self, SEL WXUNUSED(_cmd), NSEvent *event)
     impl->TouchesEnded(event);
 }
 
-void wxOSX_touchesCancel(NSView* self, SEL _cmd, NSEvent *event)
+void wxOSX_touchesCancel(NSView* self, SEL WXUNUSED(_cmd), NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl == nullptr )
