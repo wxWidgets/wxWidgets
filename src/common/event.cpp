@@ -43,6 +43,8 @@
 
 #include "wx/thread.h"
 
+#include "wx/private/safecall.h"
+
 #if wxUSE_BASE
     #include <memory>
 #endif // wxUSE_BASE
@@ -1666,20 +1668,17 @@ bool wxEvtHandler::TryHereOnly(wxEvent& event)
 
 bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
 {
-#if wxUSE_EXCEPTIONS
-    try
+    return wxSafeCall<bool>([&event, this]
     {
-#endif
         return ProcessEvent(event);
-#if wxUSE_EXCEPTIONS
-    }
-    catch ( ... )
+    }, []()
     {
+#if wxUSE_EXCEPTIONS
         WXConsumeException();
+#endif // wxUSE_EXCEPTIONS
 
         return false;
-    }
-#endif // wxUSE_EXCEPTIONS
+    });
 }
 
 #if wxUSE_EXCEPTIONS
@@ -1740,19 +1739,7 @@ void wxEvtHandler::WXConsumeException()
         // consistently everywhere.
         if ( !stored )
         {
-            try
-            {
-                if ( wxTheApp )
-                    wxTheApp->OnUnhandledException();
-            }
-            catch ( ... )
-            {
-                // And OnUnhandledException() absolutely shouldn't throw,
-                // but we still must account for the possibility that it
-                // did. At least show some information about the exception
-                // in this case.
-                wxTheApp->wxAppConsoleBase::OnUnhandledException();
-            }
+            wxApp::CallOnUnhandledException();
 
             wxAbort();
         }

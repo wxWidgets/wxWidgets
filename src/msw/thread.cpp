@@ -36,8 +36,9 @@
 #include "wx/msw/missing.h"
 #include "wx/msw/seh.h"
 
-#include "wx/except.h"
 #include "wx/dynlib.h"
+
+#include "wx/private/safecall.h"
 
 // must have this symbol defined to get _beginthread/_endthread declarations
 #ifndef _MT
@@ -500,11 +501,7 @@ private:
 /* static */
 void wxThreadInternal::DoThreadOnExit(wxThread *thread)
 {
-    wxTRY
-    {
-        thread->OnExit();
-    }
-    wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+    wxSafeCall([&thread] { thread->OnExit(); });
 }
 
 /* static */
@@ -514,7 +511,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 
     THREAD_RETVAL rc = THREAD_ERROR_EXIT;
 
-    wxTRY
+    wxSafeCall([&]()
     {
         // store the thread object in the TLS
         wxASSERT_MSG( gs_tlsThisThread != TLS_OUT_OF_INDEXES,
@@ -524,12 +521,12 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
         {
             wxLogSysError(_("Cannot start thread: error writing TLS."));
 
-            return THREAD_ERROR_EXIT;
+            rc = THREAD_ERROR_EXIT;
+            return;
         }
 
         rc = wxPtrToUInt(thread->Entry());
-    }
-    wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+    });
 
     return rc;
 }

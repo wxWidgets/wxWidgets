@@ -32,7 +32,8 @@
 #include "wx/msw/wrapshl.h"            // for DROPFILES structure
 
 #include "wx/dnd.h"
-#include "wx/except.h"
+
+#include "wx/private/safecall.h"
 
 #include "wx/msw/ole/oleutils.h"
 
@@ -110,7 +111,20 @@ protected:
 
         return E_UNEXPECTED;
     }
-#endif // wxUSE_EXCEPTIONS
+
+    // More convenient version of wxSafeCall() used in this class.
+    template <typename T>
+    HRESULT SafeCall(const T& func)
+    {
+        return wxSafeCall<HRESULT>(func, [&]() { return HandleException(); });
+    }
+#else // !wxUSE_EXCEPTIONS
+    template <typename T>
+    HRESULT SafeCall(const T& func)
+    {
+        return func();
+    }
+#endif // wxUSE_EXCEPTIONS/!wxUSE_EXCEPTIONS
 
     wxDECLARE_NO_COPY_CLASS(wxIDropTarget);
 };
@@ -195,7 +209,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
                                       POINTL       pt,
                                       DWORD       *pdwEffect)
 {
-    wxTRY
+    return SafeCall([&, this]()
     {
         wxLogTrace(wxTRACE_OleCalls, wxT("IDropTarget::DragEnter"));
 
@@ -258,8 +272,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
         m_pTarget->MSWUpdateDragImageOnDragOver(pt.x, pt.y, res);
 
         return S_OK;
-    }
-    wxCATCH_ALL( return HandleException(); )
+    });
 }
 
 
@@ -277,7 +290,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
                                      POINTL  pt,
                                      LPDWORD pdwEffect)
 {
-    wxTRY
+    return SafeCall([&, this]()
     {
         // there are too many of them... wxLogDebug("IDropTarget::DragOver");
 
@@ -311,8 +324,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
                                                 ConvertDragEffectToResult(*pdwEffect));
 
         return S_OK;
-    }
-    wxCATCH_ALL( return HandleException(); )
+    });
 }
 
 // Name    : wxIDropTarget::DragLeave
@@ -321,7 +333,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
 // Notes   : good place to do any clean-up
 STDMETHODIMP wxIDropTarget::DragLeave()
 {
-    wxTRY
+    return SafeCall([&, this]()
     {
         wxLogTrace(wxTRACE_OleCalls, wxT("IDropTarget::DragLeave"));
 
@@ -335,8 +347,7 @@ STDMETHODIMP wxIDropTarget::DragLeave()
         m_pTarget->MSWUpdateDragImageOnLeave();
 
         return S_OK;
-    }
-    wxCATCH_ALL( return HandleException(); )
+    });
 }
 
 // Name    : wxIDropTarget::Drop
@@ -353,7 +364,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                                  POINTL       pt,
                                  DWORD       *pdwEffect)
 {
-    wxTRY
+    return SafeCall([&, this]()
     {
         wxLogTrace(wxTRACE_OleCalls, wxT("IDropTarget::Drop"));
 
@@ -431,8 +442,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
         }
 
         return S_OK;
-    }
-    wxCATCH_ALL( return HandleException(); )
+    });
 }
 
 // ============================================================================

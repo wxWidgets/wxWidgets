@@ -523,8 +523,28 @@ public:
 
         The default implementation dumps information about the exception using
         wxMessageOutputBest.
+
+        @note This function should _not_ throw any exceptions itself.
     */
     virtual void OnUnhandledException();
+
+    /**
+        Call OnUnhandledException() on the current wxTheApp object if it exists.
+
+        This function is used by wxWidgets itself and is usually not meant to
+        be called by the application code. If you do call it, it must be done
+        from a `catch` clause of a `try` block, i.e. there must be a currently
+        handled exception.
+
+        The function checks if ::wxTheApp is not @NULL and if it is, calls
+        OnUnhandledException() on it.
+
+        Additionally, if this call results in an exception, it is caught and
+        wxAppConsole::OnUnhandledException() is called.
+
+        @since 3.3.0
+     */
+    static void CallOnUnhandledException();
 
     /**
         Method to store exceptions not handled by OnExceptionInMainLoop().

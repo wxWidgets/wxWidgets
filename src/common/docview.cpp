@@ -56,7 +56,6 @@
 #include "wx/vector.h"
 #include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
-#include "wx/except.h"
 
 #if wxUSE_STD_IOSTREAM
     #include "wx/beforestd.h"
@@ -894,16 +893,8 @@ wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 bool
 wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
 {
-    wxTRY
+    wxScopeGuard guard = wxMakeGuard([&, this]()
     {
-        doc->SetFilename(path);
-        doc->SetDocumentTemplate(this);
-        GetDocumentManager()->AddDocument(doc);
-        doc->SetCommandProcessor(doc->OnCreateCommandProcessor());
-
-        if ( doc->OnCreate(path, flags) )
-            return true;
-
         // The document may be already destroyed, this happens if its view
         // creation fails as then the view being created is destroyed
         // triggering the destruction of the document as this first view is
@@ -912,14 +903,19 @@ wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
         // to clean it up ourselves to avoid having a zombie document.
         if ( GetDocumentManager()->GetDocuments().Member(doc) )
             doc->DeleteAllViews();
+    });
 
+    doc->SetFilename(path);
+    doc->SetDocumentTemplate(this);
+    GetDocumentManager()->AddDocument(doc);
+    doc->SetCommandProcessor(doc->OnCreateCommandProcessor());
+
+    if ( !doc->OnCreate(path, flags) )
         return false;
-    }
-    wxCATCH_ALL(
-        if ( GetDocumentManager()->GetDocuments().Member(doc) )
-            doc->DeleteAllViews();
-        throw;
-    )
+
+    guard.Dismiss();
+
+    return true;
 }
 
 wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
@@ -1568,18 +1564,17 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
 
     docNew->SetDocumentName(temp->GetDocumentName());
 
-    wxTRY
+    wxScopeGuard guard = wxMakeObjGuard(*docNew, &wxDocument::DeleteAllViews);
+
+    // call the appropriate function depending on whether we're creating a
+    // new file or opening an existing one
+    if ( !(flags & wxDOC_NEW ? docNew->OnNewDocument()
+                             : docNew->OnOpenDocument(path)) )
     {
-        // call the appropriate function depending on whether we're creating a
-        // new file or opening an existing one
-        if ( !(flags & wxDOC_NEW ? docNew->OnNewDocument()
-                                 : docNew->OnOpenDocument(path)) )
-        {
-            docNew->DeleteAllViews();
-            return nullptr;
-        }
+        return nullptr;
     }
-    wxCATCH_ALL( docNew->DeleteAllViews(); throw; )
+
+    guard.Dismiss();
 
     // add the successfully opened file to MRU, but only if we're going to be
     // able to reopen it successfully later which requires the template for

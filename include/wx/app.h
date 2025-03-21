@@ -307,6 +307,9 @@ public:
     // OnExceptionInMainLoop()
     virtual void OnUnhandledException();
 
+    // Call OnUnhandledException() on the current wxTheApp object if it exists.
+    static void CallOnUnhandledException();
+
     // Function called if an uncaught exception is caught inside the main
     // event loop: it may return true to continue running the event loop or
     // false to stop it. If this function rethrows the exception, as it does by
@@ -336,7 +339,11 @@ public:
     // The default version does nothing when using C++98 and uses
     // std::rethrow_exception() in C++11.
     virtual void RethrowStoredException();
-#endif // wxUSE_EXCEPTIONS
+#else // !wxUSE_EXCEPTIONS
+    // For convenience, still define this to allow the code using it to avoid
+    // checking for wxUSE_EXCEPTIONS.
+    static void CallOnUnhandledException() { }
+#endif // wxUSE_EXCEPTIONS/!wxUSE_EXCEPTIONS
 
 
     // pending events

@@ -37,6 +37,16 @@
         this option allows changing it without modifying the program code and
         also applies to asserts which may happen before the wxApp object
         creation or after its destruction.
+    @flag{catch-unhandled-exceptions}
+        If set to zero, wxWidgets will not catch unhandled exceptions, but
+        rather lets the default behaviour of aborting the program take place.
+        Not catching unhandled exceptions makes debugging easier, as the
+        backtrace is more likely to show what actually happened, and where.
+        The same applies to any crash dumps generated due to unhandled exceptions.
+        By default unhandled exceptions are eventually caught by wxWidgets.
+        This flag should be set very early during program startup, within
+        the constructor of the wxApp derivative. This option has been added in
+        wxWidgets 3.3.0.
     @endFlagTable
 
     @section sysopt_win Windows

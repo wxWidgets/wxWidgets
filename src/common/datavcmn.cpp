@@ -34,6 +34,8 @@
     #include "wx/access.h"
 #endif // wxUSE_ACCESSIBILITY
 
+#include "wx/private/safecall.h"
+
 // Uncomment this line to, for custom renderers, visually show the extent
 // of both a cell and its item.
 //#define DEBUG_RENDER_EXTENTS
@@ -889,7 +891,7 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
 {
     // This method is called by the native control, so we shouldn't allow
     // exceptions to escape from it.
-    wxTRY
+    return wxSafeCall<bool>([&, this]()
     {
 
     // Now check if we have a value and remember it if we do.
@@ -917,14 +919,13 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
     SetEnabled(model->IsEnabled(item, column));
 
     return !value.IsNull();
-    }
-    wxCATCH_ALL
-    (
+    }, []()
+    {
         // There is not much we can do about it here, just log it and don't
         // show anything in this cell.
         wxLogDebug("Retrieving the value from the model threw an exception");
         return false;
-    )
+    });
 }
 
 
