@@ -2403,10 +2403,8 @@ MEDIA_GTK_SRC =
 
 # wxHTML
 
-HTML_MSW_SRC =
-    src/msw/helpbest.cpp
-    src/html/chm.cpp
 HTML_CMN_SRC =
+    src/html/chm.cpp
     src/html/helpctrl.cpp
     src/html/helpdata.cpp
     src/html/helpdlg.cpp
@@ -2433,8 +2431,7 @@ HTML_CMN_SRC =
     src/html/winpars.cpp
     # wxHTML users:
     src/generic/htmllbox.cpp
-HTML_MSW_HDR =
-    wx/msw/helpbest.h
+
 HTML_CMN_HDR =
     wx/html/forcelnk.h
     wx/html/helpctrl.h
@@ -2456,6 +2453,12 @@ HTML_CMN_HDR =
     wx/wxhtml.h
     # wxHTML users:
     wx/htmllbox.h
+
+HTML_MSW_SRC =
+    src/msw/helpbest.cpp
+
+HTML_MSW_HDR =
+    wx/msw/helpbest.h
 
 # wxWEBVIEW
 

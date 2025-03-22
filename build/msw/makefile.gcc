@@ -1124,7 +1124,6 @@ HTMLDLL_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_dummy.o \
 	$(OBJS)\htmldll_version_rc.o \
-	$(OBJS)\htmldll_helpbest.o \
 	$(OBJS)\htmldll_chm.o \
 	$(OBJS)\htmldll_helpctrl.o \
 	$(OBJS)\htmldll_helpdata.o \
@@ -1150,7 +1149,8 @@ HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_m_tables.o \
 	$(OBJS)\htmldll_styleparams.o \
 	$(OBJS)\htmldll_winpars.o \
-	$(OBJS)\htmldll_htmllbox.o
+	$(OBJS)\htmldll_htmllbox.o \
+	$(OBJS)\htmldll_helpbest.o
 HTMLLIB_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	-I..\..\src\zlib -I..\..\3rdparty\pcre\src\wx -I..\..\src\expat\expat\lib \
 	$(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ \
@@ -1161,7 +1161,6 @@ HTMLLIB_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
 	$(CPPFLAGS) $(CXXFLAGS)
 HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_dummy.o \
-	$(OBJS)\htmllib_helpbest.o \
 	$(OBJS)\htmllib_chm.o \
 	$(OBJS)\htmllib_helpctrl.o \
 	$(OBJS)\htmllib_helpdata.o \
@@ -1187,7 +1186,8 @@ HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_m_tables.o \
 	$(OBJS)\htmllib_styleparams.o \
 	$(OBJS)\htmllib_winpars.o \
-	$(OBJS)\htmllib_htmllbox.o
+	$(OBJS)\htmllib_htmllbox.o \
+	$(OBJS)\htmllib_helpbest.o
 WEBVIEWDLL_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\3rdparty\pcre\src\wx \
 	-I..\..\src\expat\expat\lib $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
@@ -1737,7 +1737,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_mediactrl_am.o \
 	$(OBJS)\monodll_mediactrl_wmp10.o \
 	$(OBJS)\monodll_mediactrl_qt.o \
-	$(OBJS)\monodll_helpbest.o \
 	$(OBJS)\monodll_chm.o \
 	$(OBJS)\monodll_helpctrl.o \
 	$(OBJS)\monodll_helpdata.o \
@@ -1764,6 +1763,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_styleparams.o \
 	$(OBJS)\monodll_winpars.o \
 	$(OBJS)\monodll_htmllbox.o \
+	$(OBJS)\monodll_helpbest.o \
 	$(OBJS)\monodll_webview_ie.o \
 	$(OBJS)\monodll_webview_edge.o \
 	$(OBJS)\monodll_webview.o \
@@ -2597,7 +2597,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_mediactrl_am.o \
 	$(OBJS)\monolib_mediactrl_wmp10.o \
 	$(OBJS)\monolib_mediactrl_qt.o \
-	$(OBJS)\monolib_helpbest.o \
 	$(OBJS)\monolib_chm.o \
 	$(OBJS)\monolib_helpctrl.o \
 	$(OBJS)\monolib_helpdata.o \
@@ -2624,6 +2623,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_styleparams.o \
 	$(OBJS)\monolib_winpars.o \
 	$(OBJS)\monolib_htmllbox.o \
+	$(OBJS)\monolib_helpbest.o \
 	$(OBJS)\monolib_webview_ie.o \
 	$(OBJS)\monolib_webview_edge.o \
 	$(OBJS)\monolib_webview.o \
@@ -7785,9 +7785,6 @@ $(OBJS)\monodll_mediactrl_wmp10.o: ../../src/msw/mediactrl_wmp10.cpp
 $(OBJS)\monodll_mediactrl_qt.o: ../../src/msw/mediactrl_qt.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_helpbest.o: ../../src/msw/helpbest.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_chm.o: ../../src/html/chm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7864,6 +7861,9 @@ $(OBJS)\monodll_winpars.o: ../../src/html/winpars.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_htmllbox.o: ../../src/generic/htmllbox.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_helpbest.o: ../../src/msw/helpbest.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_webview_ie.o: ../../src/msw/webview_ie.cpp
@@ -10387,9 +10387,6 @@ $(OBJS)\monolib_mediactrl_wmp10.o: ../../src/msw/mediactrl_wmp10.cpp
 $(OBJS)\monolib_mediactrl_qt.o: ../../src/msw/mediactrl_qt.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_helpbest.o: ../../src/msw/helpbest.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monolib_chm.o: ../../src/html/chm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10466,6 +10463,9 @@ $(OBJS)\monolib_winpars.o: ../../src/html/winpars.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_htmllbox.o: ../../src/generic/htmllbox.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_helpbest.o: ../../src/msw/helpbest.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_webview_ie.o: ../../src/msw/webview_ie.cpp
@@ -16612,9 +16612,6 @@ $(OBJS)\htmldll_dummy.o: ../../src/common/dummy.cpp
 $(OBJS)\htmldll_version_rc.o: ../../src/msw/version.rc
 	$(WINDRES) -i$< -o$@   --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../3rdparty/pcre/src/wx --include-dir ../../src/expat/expat/lib   --define __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG) --define WXUSINGDLL --define WXMAKINGDLL_HTML
 
-$(OBJS)\htmldll_helpbest.o: ../../src/msw/helpbest.cpp
-	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\htmldll_chm.o: ../../src/html/chm.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -16693,10 +16690,10 @@ $(OBJS)\htmldll_winpars.o: ../../src/html/winpars.cpp
 $(OBJS)\htmldll_htmllbox.o: ../../src/generic/htmllbox.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\htmllib_dummy.o: ../../src/common/dummy.cpp
-	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
+$(OBJS)\htmldll_helpbest.o: ../../src/msw/helpbest.cpp
+	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\htmllib_helpbest.o: ../../src/msw/helpbest.cpp
+$(OBJS)\htmllib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmllib_chm.o: ../../src/html/chm.cpp
@@ -16775,6 +16772,9 @@ $(OBJS)\htmllib_winpars.o: ../../src/html/winpars.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmllib_htmllbox.o: ../../src/generic/htmllbox.cpp
+	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\htmllib_helpbest.o: ../../src/msw/helpbest.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\webviewdll_dummy.o: ../../src/common/dummy.cpp

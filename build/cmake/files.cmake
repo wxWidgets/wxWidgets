@@ -2438,12 +2438,8 @@ set(MEDIA_UNIX_HDR
 set(MEDIA_GTK_SRC
 )
 
-set(HTML_MSW_SRC
-    src/msw/helpbest.cpp
-    src/html/chm.cpp
-)
-
 set(HTML_CMN_SRC
+    src/html/chm.cpp
     src/html/helpctrl.cpp
     src/html/helpdata.cpp
     src/html/helpdlg.cpp
@@ -2472,10 +2468,6 @@ set(HTML_CMN_SRC
     src/generic/htmllbox.cpp
 )
 
-set(HTML_MSW_HDR
-    wx/msw/helpbest.h
-)
-
 set(HTML_CMN_HDR
     wx/html/forcelnk.h
     wx/html/helpctrl.h
@@ -2497,6 +2489,14 @@ set(HTML_CMN_HDR
     wx/wxhtml.h
     # wxHTML users:
     wx/htmllbox.h
+)
+
+set(HTML_MSW_SRC
+    src/msw/helpbest.cpp
+)
+
+set(HTML_MSW_HDR
+    wx/msw/helpbest.h
 )
 
 set(WEBVIEW_CMN_SRC

@@ -2582,19 +2582,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                               wxHTML                                   -->
 <!-- ====================================================================== -->
 
-<set var="HTML_SRC_PLATFORM">
-    <if cond="TOOLKIT=='MSW'">
-        src/msw/helpbest.cpp
-        src/html/chm.cpp
-    </if>
-    <if cond="PLATFORM_UNIX=='1'">
-        src/html/chm.cpp
-    </if>
-    <if cond="PLATFORM_MACOSX=='1'">
-        src/html/chm.cpp
-    </if>
-</set>
 <set var="HTML_CMN_SRC" hints="files">
+    src/html/chm.cpp
     src/html/helpctrl.cpp
     src/html/helpdata.cpp
     src/html/helpdlg.cpp
@@ -2622,13 +2611,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxHTML users: -->
     src/generic/htmllbox.cpp
 </set>
-<set var="HTML_SRC" hints="files">
-    $(HTML_SRC_PLATFORM)
-    $(HTML_CMN_SRC)
-</set>
-<set var="MSW_HTML_HDR" hints="files">
-    <if cond="TOOLKIT=='MSW'">wx/msw/helpbest.h</if>
-</set>
+
 <set var="HTML_CMN_HDR" hints="files">
     wx/html/helpctrl.h
     wx/html/helpdata.h
@@ -2651,9 +2634,32 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/htmllbox.h
     wx/html/forcelnk.h
 </set>
+
+<set var="HTML_MSW_SRC" hints="files">
+    src/msw/helpbest.cpp
+</set>
+
+<set var="HTML_MSW_HDR" hints="files">
+    wx/msw/helpbest.h
+</set>
+
+<set var="HTML_PLATFORM_SRC">
+    <if cond="TOOLKIT=='MSW'">
+        $(HTML_MSW_SRC)
+    </if>
+</set>
+<set var="HTML_SRC" hints="files">
+    $(HTML_CMN_SRC)
+    $(HTML_PLATFORM_SRC)
+</set>
+<set var="HTML_PLATFORM_HDR">
+    <if cond="TOOLKIT=='MSW'">
+        $(HTML_MSW_HDR)
+    </if>
+</set>
 <set var="HTML_HDR" hints="files">
     $(HTML_CMN_HDR)
-    $(MSW_HTML_HDR)
+    $(HTML_PLATFORM_HDR)
 </set>
 
 <!-- ====================================================================== -->
