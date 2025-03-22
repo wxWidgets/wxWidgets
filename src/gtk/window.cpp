@@ -1153,9 +1153,15 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     wxString extraTraceInfo;
 
-    long key_code = 0;
+    // Check for special keys first: we need to do it even for the keys that
+    // could have an ASCII equivalent because we need to distinguish numpad
+    // keys from the ones on the main keyboard.
+    long key_code = wxTranslateKeySymToWXKey(keysym, false /* !isChar */);
 
-    const guint32 unichar = gdk_keyval_to_unicode(keysym);
+    guint32 unichar = 0;
+    if ( !key_code )
+        unichar = gdk_keyval_to_unicode(keysym);
+
     if ( unichar )
     {
         // The convention used here is rather strange, but conforms to what
@@ -1211,10 +1217,6 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         {
             key_code = toupper(key_code);
         }
-    }
-    else // This is not an alphanumeric key, check if we know it.
-    {
-        key_code = wxTranslateKeySymToWXKey(keysym, false /* !isChar */);
     }
 
     wxLogTrace(TRACE_KEYS, "Key %s event: %lu -> key=%ld%s",
