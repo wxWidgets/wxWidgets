@@ -2459,19 +2459,12 @@ HTML_CMN_HDR =
 
 # wxWEBVIEW
 
-WEBVIEW_MSW_SRC =
-    src/msw/webview_ie.cpp
-    src/msw/webview_edge.cpp
 WEBVIEW_CMN_SRC =
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
     src/common/webview_chromium.cpp
 
-WEBVIEW_MSW_HDR =
-    wx/msw/webviewhistoryitem_ie.h
-    wx/msw/webview_ie.h
-    wx/msw/webview_edge.h
 WEBVIEW_CMN_HDR =
     wx/webview.h
     wx/webviewarchivehandler.h
@@ -2479,23 +2472,30 @@ WEBVIEW_CMN_HDR =
     wx/webview_chromium.h
     wx/webview_chromium_impl.h
 
-WEBVIEW_OSX_SHARED_HDR =
-    wx/osx/webviewhistoryitem_webkit.h
-    wx/osx/webview_webkit.h
+WEBVIEW_MSW_SRC =
+    src/msw/webview_ie.cpp
+    src/msw/webview_edge.cpp
+
+WEBVIEW_MSW_HDR =
+    wx/msw/webviewhistoryitem_ie.h
+    wx/msw/webview_ie.h
+    wx/msw/webview_edge.h
 
 WEBVIEW_OSX_SHARED_SRC =
     src/osx/webview_chromium.mm
     src/osx/webview_webkit.mm
 
-WEBVIEW_GTK_HDR =
-    wx/gtk/webviewhistoryitem_webkit.h
-    wx/gtk/webview_webkit.h
+WEBVIEW_OSX_SHARED_HDR =
+    wx/osx/webviewhistoryitem_webkit.h
+    wx/osx/webview_webkit.h
 
 WEBVIEW_GTK_SRC =
     src/gtk/webview_webkit.cpp
-
-WEBVIEW2_GTK_SRC =
     src/gtk/webview_webkit2.cpp
+
+WEBVIEW_GTK_HDR =
+    wx/gtk/webviewhistoryitem_webkit.h
+    wx/gtk/webview_webkit.h
 
 WEBVIEW_WEBKIT2_EXTENSION_SRC =
     src/gtk/webview_webkit2_extension.cpp

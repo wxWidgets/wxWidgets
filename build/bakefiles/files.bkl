@@ -2660,46 +2660,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                                wxWEBVIEW                               -->
 <!-- ====================================================================== -->
 
-<set var="WEBVIEW_SRC_PLATFORM">
-    <if cond="TOOLKIT=='MSW'">
-        src/msw/webview_ie.cpp
-        src/msw/webview_edge.cpp
-    </if>
-    <if cond="TOOLKIT=='GTK'">
-        src/gtk/webview_webkit.cpp
-        src/gtk/webview_webkit2.cpp
-    </if>
-    <if cond="PLATFORM_MACOSX=='1'">
-        src/osx/webview_chromium.mm
-        src/osx/webview_webkit.mm
-    </if>
-</set>
 <set var="WEBVIEW_CMN_SRC" hints="files">
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
     src/common/webview_chromium.cpp
 </set>
-<set var="WEBVIEW_SRC" hints="files">
-    $(WEBVIEW_SRC_PLATFORM)
-    $(WEBVIEW_CMN_SRC)
-</set>
 
-<set var="WEBVIEW_HDR_PLATFORM" hints="files">
-    <if cond="TOOLKIT=='MSW'">
-        wx/msw/webviewhistoryitem_ie.h
-        wx/msw/webview_ie.h
-        wx/msw/webview_edge.h
-    </if>
-    <if cond="TOOLKIT=='GTK'">
-        wx/gtk/webviewhistoryitem_webkit.h
-        wx/gtk/webview_webkit.h
-    </if>
-    <if cond="PLATFORM_MACOSX=='1'">
-        wx/osx/webviewhistoryitem_webkit.h
-        wx/osx/webview_webkit.h
-    </if>
-</set>
 <set var="WEBVIEW_CMN_HDR" hints="files">
     wx/webview.h
     wx/webviewarchivehandler.h
@@ -2707,8 +2674,57 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/webview_chromium.h
     wx/webview_chromium_impl.h
 </set>
+
+<set var="WEBVIEW_MSW_SRC" hints="files">
+    src/msw/webview_ie.cpp
+    src/msw/webview_edge.cpp
+</set>
+
+<set var="WEBVIEW_MSW_HDR" hints="files">
+    wx/msw/webviewhistoryitem_ie.h
+    wx/msw/webview_ie.h
+    wx/msw/webview_edge.h
+</set>
+
+<set var="WEBVIEW_OSX_SHARED_SRC" hints="files">
+    src/osx/webview_chromium.mm
+    src/osx/webview_webkit.mm
+</set>
+
+<set var="WEBVIEW_OSX_SHARED_HDR" hints="files">
+    wx/osx/webviewhistoryitem_webkit.h
+    wx/osx/webview_webkit.h
+</set>
+
+<set var="WEBVIEW_GTK_SRC" hints="files">
+    src/gtk/webview_webkit.cpp
+    src/gtk/webview_webkit2.cpp
+</set>
+
+<set var="WEBVIEW_GTK_HDR" hints="files">
+    wx/gtk/webviewhistoryitem_webkit.h
+    wx/gtk/webview_webkit.h
+</set>
+
+<set var="WEBVIEW_PLATFORM_SRC" hints="files">
+    <if cond="TOOLKIT=='MSW'">$(WEBVIEW_MSW_SRC)</if>
+    <if cond="TOOLKIT=='GTK'">$(WEBVIEW_GTK_SRC)</if>
+    <if cond="PLATFORM_MACOSX=='1'">$(WEBVIEW_OSX_SHARED_SRC)</if>
+</set>
+
+<set var="WEBVIEW_SRC" hints="files">
+    $(WEBVIEW_PLATFORM_SRC)
+    $(WEBVIEW_CMN_SRC)
+</set>
+
+<set var="WEBVIEW_PLATFORM_HDR" hints="files">
+    <if cond="TOOLKIT=='MSW'">$(WEBVIEW_MSW_HDR)</if>
+    <if cond="TOOLKIT=='GTK'">$(WEBVIEW_GTK_HDR)</if>
+    <if cond="PLATFORM_MACOSX=='1'">$(WEBVIEW_OSX_SHARED_HDR)</if>
+</set>
+
 <set var="WEBVIEW_HDR" hints="files">
-    $(WEBVIEW_HDR_PLATFORM)
+    $(WEBVIEW_PLATFORM_HDR)
     $(WEBVIEW_CMN_HDR)
 </set>
 

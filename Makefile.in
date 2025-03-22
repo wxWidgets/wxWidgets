@@ -1793,7 +1793,7 @@ WEBVIEWDLL_OBJCXXFLAGS = $(__webviewdll_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	-DWXUSINGDLL -DWXMAKINGDLL_WEBVIEW -I$(top_srcdir)//3rdparty/cef \
 	$(PIC_FLAG) $(CPPFLAGS) $(OBJCXXFLAGS)
 WEBVIEWDLL_OBJECTS =  \
-	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_2) \
+	$(__WEBVIEW_PLATFORM_SRC_OBJECTS_2) \
 	webviewdll_webview.o \
 	webviewdll_webviewarchivehandler.o \
 	webviewdll_webviewfshandler.o \
@@ -1816,7 +1816,7 @@ WEBVIEWLIB_OBJCXXFLAGS = $(__webviewlib_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__webview_additional_include_wrl_p) $(__webview_additional_include_p) \
 	-I$(top_srcdir)//3rdparty/cef $(CPPFLAGS) $(OBJCXXFLAGS)
 WEBVIEWLIB_OBJECTS =  \
-	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_3) \
+	$(__WEBVIEW_PLATFORM_SRC_OBJECTS_3) \
 	webviewlib_webview.o \
 	webviewlib_webviewarchivehandler.o \
 	webviewlib_webviewfshandler.o \
@@ -2418,17 +2418,15 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 	wx/msw/init.h
 @COND_PLATFORM_WIN32_1@GTK_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR)
 @COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
-@COND_PLATFORM_MACOSX_1@WEBVIEW_HDR_PLATFORM = \
+@COND_PLATFORM_MACOSX_1@WEBVIEW_PLATFORM_HDR = \
 @COND_PLATFORM_MACOSX_1@	wx/osx/webviewhistoryitem_webkit.h \
 @COND_PLATFORM_MACOSX_1@	wx/osx/webview_webkit.h
-@COND_TOOLKIT_GTK@WEBVIEW_HDR_PLATFORM = \
+@COND_TOOLKIT_GTK@WEBVIEW_PLATFORM_HDR = \
 @COND_TOOLKIT_GTK@	wx/gtk/webviewhistoryitem_webkit.h \
 @COND_TOOLKIT_GTK@	wx/gtk/webview_webkit.h
-COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM =  \
-	wx/msw/webviewhistoryitem_ie.h \
-	wx/msw/webview_ie.h \
-	wx/msw/webview_edge.h
-@COND_TOOLKIT_MSW@WEBVIEW_HDR_PLATFORM = $(COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM)
+@COND_TOOLKIT_MSW@WEBVIEW_PLATFORM_HDR = \
+@COND_TOOLKIT_MSW@	wx/msw/webviewhistoryitem_ie.h wx/msw/webview_ie.h \
+@COND_TOOLKIT_MSW@	wx/msw/webview_edge.h
 @COND_TOOLKIT_GTK@OPENGL_PLATFORM_HDR = wx/unix/glx11.h \
 @COND_TOOLKIT_GTK@	wx/gtk/glcanvas.h wx/unix/glegl.h
 @COND_TOOLKIT_MSW@OPENGL_PLATFORM_HDR = wx/msw/glcanvas.h
@@ -4064,7 +4062,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_richtext.h \
 	wx/stc/stc.h \
 	wx/xrc/xh_styledtextctrl.h \
-	$(WEBVIEW_HDR_PLATFORM) \
+	$(WEBVIEW_PLATFORM_HDR) \
 	wx/webview.h \
 	wx/webviewarchivehandler.h \
 	wx/webviewfshandler.h \
@@ -4252,7 +4250,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_styleparams.o \
 	monodll_winpars.o \
 	monodll_htmllbox.o \
-	$(__WEBVIEW_SRC_PLATFORM_OBJECTS) \
+	$(__WEBVIEW_PLATFORM_SRC_OBJECTS) \
 	monodll_webview.o \
 	monodll_webviewarchivehandler.o \
 	monodll_webviewfshandler.o \
@@ -5864,12 +5862,12 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_helpbest.o monodll_chm.o
-@COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS \
+@COND_PLATFORM_MACOSX_1@__WEBVIEW_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= monodll_osx_webview_chromium.o \
 @COND_PLATFORM_MACOSX_1@	monodll_osx_webview_webkit.o
-@COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS = \
+@COND_TOOLKIT_GTK@__WEBVIEW_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_GTK@	monodll_gtk_webview_webkit.o monodll_webview_webkit2.o
-@COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS = \
+@COND_TOOLKIT_MSW@__WEBVIEW_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_webview_ie.o monodll_webview_edge.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_tabartgtk.o
@@ -6018,7 +6016,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_styleparams.o \
 	monolib_winpars.o \
 	monolib_htmllbox.o \
-	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_1) \
+	$(__WEBVIEW_PLATFORM_SRC_OBJECTS_1) \
 	monolib_webview.o \
 	monolib_webviewarchivehandler.o \
 	monolib_webviewfshandler.o \
@@ -7630,12 +7628,12 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_helpbest.o monolib_chm.o
-@COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 \
+@COND_PLATFORM_MACOSX_1@__WEBVIEW_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= monolib_osx_webview_chromium.o \
 @COND_PLATFORM_MACOSX_1@	monolib_osx_webview_webkit.o
-@COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 = \
+@COND_TOOLKIT_GTK@__WEBVIEW_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_GTK@	monolib_gtk_webview_webkit.o monolib_webview_webkit2.o
-@COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 = \
+@COND_TOOLKIT_MSW@__WEBVIEW_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_webview_ie.o monolib_webview_edge.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS_1 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_tabartgtk.o
@@ -11378,13 +11376,13 @@ COND_USE_SOTWOSYMLINKS_1___webviewdll___so_symlinks_uninst_cmd = rm -f \
 COND_USE_SOVERSOLARIS_1___webviewdll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__webviewdll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___webviewdll___so_symlinks_uninst_cmd)
-@COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS_2 \
+@COND_PLATFORM_MACOSX_1@__WEBVIEW_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MACOSX_1@	= webviewdll_osx_webview_chromium.o \
 @COND_PLATFORM_MACOSX_1@	webviewdll_osx_webview_webkit.o
-@COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS_2 = \
+@COND_TOOLKIT_GTK@__WEBVIEW_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_GTK@	webviewdll_gtk_webview_webkit.o \
 @COND_TOOLKIT_GTK@	webviewdll_webview_webkit2.o
-@COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS_2 = \
+@COND_TOOLKIT_MSW@__WEBVIEW_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_MSW@	webviewdll_webview_ie.o webviewdll_webview_edge.o
 @COND_PLATFORM_WIN32_1@__webviewdll___win32rc = webviewdll_version_rc.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_1___webviewlib___depname = \
@@ -11400,13 +11398,13 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_1___webviewlib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_webviewlib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_webviewlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_webviewlib/wx/wxprec.h.gch
-@COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS_3 \
+@COND_PLATFORM_MACOSX_1@__WEBVIEW_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MACOSX_1@	= webviewlib_osx_webview_chromium.o \
 @COND_PLATFORM_MACOSX_1@	webviewlib_osx_webview_webkit.o
-@COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS_3 = \
+@COND_TOOLKIT_GTK@__WEBVIEW_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_GTK@	webviewlib_gtk_webview_webkit.o \
 @COND_TOOLKIT_GTK@	webviewlib_webview_webkit2.o
-@COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS_3 = \
+@COND_TOOLKIT_MSW@__WEBVIEW_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_MSW@	webviewlib_webview_ie.o webviewlib_webview_edge.o
 @COND_SHARED_1@____wxwebview_namedll_DEP = $(__webviewdll___depname)
 @COND_SHARED_0@____wxwebview_namelib_DEP = $(__webviewlib___depname)

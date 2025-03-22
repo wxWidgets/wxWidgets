@@ -2499,35 +2499,30 @@ set(HTML_CMN_HDR
     wx/htmllbox.h
 )
 
-set(WEBVIEW_MSW_SRC
-    src/msw/webview_ie.cpp
-    src/msw/webview_edge.cpp
-)
-
 set(WEBVIEW_CMN_SRC
-    src/common/webview.cpp
+    src/common/webview_chromium.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
-    src/common/webview_chromium.cpp
-)
-
-set(WEBVIEW_MSW_HDR
-    wx/msw/webviewhistoryitem_ie.h
-    wx/msw/webview_ie.h
-    wx/msw/webview_edge.h
+    src/common/webview.cpp
 )
 
 set(WEBVIEW_CMN_HDR
-    wx/webview.h
-    wx/webviewarchivehandler.h
-    wx/webviewfshandler.h
-    wx/webview_chromium.h
     wx/webview_chromium_impl.h
+    wx/webviewarchivehandler.h
+    wx/webview_chromium.h
+    wx/webview.h
+    wx/webviewfshandler.h
 )
 
-set(WEBVIEW_OSX_SHARED_HDR
-    wx/osx/webviewhistoryitem_webkit.h
-    wx/osx/webview_webkit.h
+set(WEBVIEW_MSW_SRC
+    src/msw/webview_edge.cpp
+    src/msw/webview_ie.cpp
+)
+
+set(WEBVIEW_MSW_HDR
+    wx/msw/webview_ie.h
+    wx/msw/webview_edge.h
+    wx/msw/webviewhistoryitem_ie.h
 )
 
 set(WEBVIEW_OSX_SHARED_SRC
@@ -2535,32 +2530,23 @@ set(WEBVIEW_OSX_SHARED_SRC
     src/osx/webview_chromium.mm
 )
 
-set(WEBVIEW_GTK_HDR
-    wx/gtk/webviewhistoryitem_webkit.h
-    wx/gtk/webview_webkit.h
+set(WEBVIEW_OSX_SHARED_HDR
+    wx/osx/webviewhistoryitem_webkit.h
+    wx/osx/webview_webkit.h
 )
 
 set(WEBVIEW_GTK_SRC
     src/gtk/webview_webkit.cpp
+    src/gtk/webview_webkit2.cpp
 )
 
-set(WEBVIEW2_GTK_SRC
-    src/gtk/webview_webkit2.cpp
+set(WEBVIEW_GTK_HDR
+    wx/gtk/webview_webkit.h
+    wx/gtk/webviewhistoryitem_webkit.h
 )
 
 set(WEBVIEW_WEBKIT2_EXTENSION_SRC
     src/gtk/webview_webkit2_extension.cpp
-)
-
-set(WEBVIEWCHROMIUM_HDR
-    wx/webview.h
-    wx/webview_chromium.h
-)
-set(WEBVIEWCHROMIUM_SRC
-    src/common/webview_chromium.cpp
-)
-set(WEBVIEWCHROMIUM_OSX_SHARED_SRC
-    src/osx/webview_chromium.mm
 )
 
 set(XRC_SRC
