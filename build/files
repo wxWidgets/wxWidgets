@@ -2731,6 +2731,7 @@ AUI_CMN_SRC =
     src/aui/tabart.cpp
     src/xrc/xh_aui.cpp
     src/xrc/xh_auitoolb.cpp
+
 AUI_CMN_HDR =
     wx/aui/framemanager.h
     wx/aui/dockart.h
@@ -2744,12 +2745,13 @@ AUI_CMN_HDR =
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
 
-AUI_MSW_HDR =
-    wx/aui/tabartmsw.h
-    wx/aui/barartmsw.h
 AUI_MSW_SRC =
     src/aui/tabartmsw.cpp
     src/aui/barartmsw.cpp
+
+AUI_MSW_HDR =
+    wx/aui/tabartmsw.h
+    wx/aui/barartmsw.h
 
 AUI_GTK_SRC =
     src/aui/tabartgtk.cpp

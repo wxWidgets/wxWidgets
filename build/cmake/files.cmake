@@ -2799,14 +2799,14 @@ set(AUI_CMN_HDR
     wx/aui/serializer.h
 )
 
-set(AUI_MSW_HDR
-    wx/aui/tabartmsw.h
-    wx/aui/barartmsw.h
-)
-
 set(AUI_MSW_SRC
     src/aui/tabartmsw.cpp
     src/aui/barartmsw.cpp
+)
+
+set(AUI_MSW_HDR
+    wx/aui/tabartmsw.h
+    wx/aui/barartmsw.h
 )
 
 set(AUI_GTK_SRC

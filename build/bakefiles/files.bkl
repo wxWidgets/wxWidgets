@@ -3013,30 +3013,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                                  wxAUI                                 -->
 <!-- ====================================================================== -->
 
-<set var="AUI_GTK_SRC" hints="files">
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
-        src/aui/tabartgtk.cpp
-    </if>
-</set>
-<set var="AUI_GTK_HDR" hints="files">
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
-        wx/aui/tabartgtk.h
-    </if>
-</set>
-<set var="AUI_MSW_SRC" hints="files">
-    src/aui/tabartmsw.cpp
-    src/aui/barartmsw.cpp
-</set>
-<set var="AUI_MSW_HDR" hints="files">
-    wx/aui/tabartmsw.h
-    wx/aui/barartmsw.h
-</set>
-<set var="AUI_PLATFORM_SRC" hints="files">
-    <if cond="TOOLKIT=='MSW'">$(AUI_MSW_SRC)</if>
-</set>
-<set var="AUI_PLATFORM_HDR" hints="files">
-    <if cond="TOOLKIT=='MSW'">$(AUI_MSW_HDR)</if>
-</set>
 <set var="AUI_CMN_SRC" hints="files">
     src/aui/framemanager.cpp
     src/aui/dockart.cpp
@@ -3048,11 +3024,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_aui.cpp
     src/xrc/xh_auitoolb.cpp
 </set>
-<set var="AUI_SRC" hints="files">
-    $(AUI_CMN_SRC)
-    $(AUI_GTK_SRC)
-    $(AUI_PLATFORM_SRC)
-</set>
+
 <set var="AUI_CMN_HDR" hints="files">
     wx/aui/framemanager.h
     wx/aui/dockart.h
@@ -3066,9 +3038,42 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_auitoolb.h
     wx/aui/serializer.h
 </set>
+
+<set var="AUI_MSW_SRC" hints="files">
+    src/aui/tabartmsw.cpp
+    src/aui/barartmsw.cpp
+</set>
+
+<set var="AUI_MSW_HDR" hints="files">
+    wx/aui/tabartmsw.h
+    wx/aui/barartmsw.h
+</set>
+
+<set var="AUI_GTK_SRC" hints="files">
+    src/aui/tabartgtk.cpp
+</set>
+
+<set var="AUI_GTK_HDR" hints="files">
+    wx/aui/tabartgtk.h
+</set>
+
+<set var="AUI_PLATFORM_SRC" hints="files">
+    <if cond="TOOLKIT=='MSW'">$(AUI_MSW_SRC)</if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(AUI_GTK_SRC)</if>
+</set>
+
+<set var="AUI_SRC" hints="files">
+    $(AUI_CMN_SRC)
+    $(AUI_PLATFORM_SRC)
+</set>
+
+<set var="AUI_PLATFORM_HDR" hints="files">
+    <if cond="TOOLKIT=='MSW'">$(AUI_MSW_HDR)</if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(AUI_GTK_HDR)</if>
+</set>
+
 <set var="AUI_HDR" hints="files">
     $(AUI_CMN_HDR)
-    $(AUI_GTK_HDR)
     $(AUI_PLATFORM_HDR)
 </set>
 
