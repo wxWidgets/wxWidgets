@@ -254,6 +254,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Update Brazilian Portuguese translations (Felipe).
+- Ensure that all headers are installed by CMake (Maarten Bent, #25266).
 
 
 3.2.7: (released 2025-03-20)

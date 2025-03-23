@@ -2874,9 +2874,6 @@ set(WEBVIEW_GTK_HDR
 
 set(WEBVIEW_GTK_SRC
     src/gtk/webview_webkit.cpp
-)
-
-set(WEBVIEW2_GTK_SRC
     src/gtk/webview_webkit2.cpp
 )
 
@@ -3071,9 +3068,17 @@ set(OPENGL_OSX_COCOA_SRC
     src/osx/glcanvas_osx.cpp
 )
 
+set(OPENGL_OSX_COCOA_HDR
+    wx/osx/glcanvas.h
+)
+
 set(OPENGL_OSX_IPHONE_SRC
     src/osx/iphone/glcanvas.mm
     src/osx/glcanvas_osx.cpp
+)
+
+set(OPENGL_OSX_IPHONE_HDR
+    wx/osx/glcanvas.h
 )
 
 set(UNIX_SOUND_SDL_SRC
