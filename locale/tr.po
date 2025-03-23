@@ -1961,7 +1961,7 @@ msgstr " ince"
 
 #: ../src/common/fontcmn.cpp:946
 msgid " extra light"
-msgstr " ekstrs ince"
+msgstr " ekstra ince"
 
 #: ../src/common/fontcmn.cpp:950
 msgid " light"
