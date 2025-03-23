@@ -251,6 +251,10 @@ Changes in behaviour which may result in build errors
 3.2.8: (released 2025-??-??)
 ----------------------------
 
+All:
+
+- Update Brazilian Portuguese translations (Felipe).
+
 
 3.2.7: (released 2025-03-20)
 ----------------------------
