@@ -4,13 +4,14 @@
 #
 # Translators:
 # Kaya Zeren <kayazeren@gmail.com>, 2018,2021
+# Kerim Demirkaynak <kerim@post.com>, 2025
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 16:44+0100\n"
-"PO-Revision-Date: 2023-07-06 08:52+0300\n"
-"Last-Translator: Kaya Zeren <translator@zeron.net>\n"
+"PO-Revision-Date: 2025-03-24 02:03+0300\n"
+"Last-Translator: Kerim Demirkaynak <kerim@post.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/klyok/wxwidgets/"
 "language/tr_TR/)\n"
 "Language: tr_TR\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #: ../include/wx/defs.h:2596
 msgid "All files (*.*)|*.*"
@@ -1159,11 +1160,11 @@ msgstr ""
 
 #: ../src/common/docview.cpp:1300
 msgid "Print preview creation failed."
-msgstr "Yazdırma ön izlemesi oluşturulamadı."
+msgstr "Yazdırma önizlemesi oluşturulamadı."
 
 #: ../src/common/docview.cpp:1306
 msgid "Print Preview"
-msgstr "Yazdırma ön izlemesi"
+msgstr "Yazdırma önizlemesi"
 
 #: ../src/common/docview.cpp:1521
 #, c-format
@@ -1335,26 +1336,24 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" ve ayrıca, mevcut yapılandırma dosyası \"%s\" olarak yeniden adlandırıldı "
+"ve geri adlandırılamadı, lütfen orijinal yoluna \"%s\" yeniden adlandırın."
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "Ve aşağıdaki dosyaları içeriyor:\n"
+msgstr " aşağıdaki hata nedeniyle:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "\"%s\" metin dosyası okunamadı."
+msgstr "mevcut dosya yeniden adlandırılamadı."
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Çalışma klasörü alınamadı"
+msgstr "yeni dosya dizini oluşturulamadı."
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "İnternet görünümü modern benzetim düzeyine ayarlanamadı"
+msgstr "dosya yeni konuma taşınamadı."
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1412,9 +1411,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "Ayar kaydının adı '%c' ile başlayamaz."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Yazı türü yapılandırma nesnesi eklenemedi."
+msgstr "Font yapılandırma nesnesi eklenemedi."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -1951,11 +1949,11 @@ msgstr "bilinmiyor-%d"
 
 #: ../src/common/fontcmn.cpp:924 ../src/common/fontcmn.cpp:1130
 msgid "underlined"
-msgstr "altı çizili"
+msgstr "altıçizili"
 
 #: ../src/common/fontcmn.cpp:929
 msgid " strikethrough"
-msgstr " üstü çizili"
+msgstr " üstüçizili"
 
 #: ../src/common/fontcmn.cpp:942
 msgid " thin"
@@ -1963,11 +1961,11 @@ msgstr " ince"
 
 #: ../src/common/fontcmn.cpp:946
 msgid " extra light"
-msgstr " çok hafif"
+msgstr " ekstrs ince"
 
 #: ../src/common/fontcmn.cpp:950
 msgid " light"
-msgstr " açık"
+msgstr " ince"
 
 #: ../src/common/fontcmn.cpp:954
 msgid " medium"
@@ -1975,15 +1973,15 @@ msgstr " orta"
 
 #: ../src/common/fontcmn.cpp:958
 msgid " semi bold"
-msgstr " yarı koyu"
+msgstr " yarı kalın"
 
 #: ../src/common/fontcmn.cpp:962
 msgid " bold"
-msgstr " koyu"
+msgstr " kalın"
 
 #: ../src/common/fontcmn.cpp:966
 msgid " extra bold"
-msgstr " çok koyu"
+msgstr " ekstra kalın"
 
 #: ../src/common/fontcmn.cpp:970
 msgid " heavy"
@@ -1991,11 +1989,11 @@ msgstr " ağır"
 
 #: ../src/common/fontcmn.cpp:974
 msgid " extra heavy"
-msgstr " çok ağır"
+msgstr " ekstra ağır"
 
 #: ../src/common/fontcmn.cpp:990
 msgid " italic"
-msgstr " yatık"
+msgstr " italik"
 
 #: ../src/common/fontcmn.cpp:1134
 msgid "strikethrough"
@@ -2007,11 +2005,11 @@ msgstr "ince"
 
 #: ../src/common/fontcmn.cpp:1156
 msgid "extralight"
-msgstr "çokhafif"
+msgstr "ekstraince"
 
 #: ../src/common/fontcmn.cpp:1161
 msgid "light"
-msgstr "açık"
+msgstr "ince"
 
 #: ../src/common/fontcmn.cpp:1169 ../src/richtext/richtextstyles.cpp:775
 msgid "normal"
@@ -2023,15 +2021,15 @@ msgstr "orta"
 
 #: ../src/common/fontcmn.cpp:1179 ../src/common/fontcmn.cpp:1199
 msgid "semibold"
-msgstr "yarıkoyu"
+msgstr "yarıkalın"
 
 #: ../src/common/fontcmn.cpp:1184
 msgid "bold"
-msgstr "koyu"
+msgstr "kalın"
 
 #: ../src/common/fontcmn.cpp:1194
 msgid "extrabold"
-msgstr "çokkoyu"
+msgstr "ekstrakalın"
 
 #: ../src/common/fontcmn.cpp:1204
 msgid "heavy"
@@ -2039,11 +2037,11 @@ msgstr "ağır"
 
 #: ../src/common/fontcmn.cpp:1212
 msgid "extraheavy"
-msgstr "çokağır"
+msgstr "ekstraağır"
 
 #: ../src/common/fontcmn.cpp:1217
 msgid "italic"
-msgstr "yatık"
+msgstr "italik"
 
 #: ../src/common/fontmap.cpp:195
 msgid ": unknown charset"
@@ -2067,7 +2065,7 @@ msgstr "'%s' karakter kümesi için kodlama anımsanamadı."
 
 #: ../src/common/fontmap.cpp:321
 msgid "can't load any font, aborting"
-msgstr "herhangi bir yazı türü yüklenemedi, vazgeçiliyor"
+msgstr "herhangi bir font yüklenemedi, vazgeçiliyor"
 
 #: ../src/common/fontmap.cpp:409
 msgid ": unknown encoding"
@@ -2081,7 +2079,7 @@ msgid ""
 "Do you want to use this encoding (otherwise you will have to choose another "
 "one)?"
 msgstr ""
-"Metni '%s' kodlamasıyla görüntüleyecek bir yazı türü yok,\n"
+"Metni '%s' kodlamasıyla görüntüleyecek bir font yok,\n"
 "ancak onun yerine '%s' kodlama seçeneği kullanılabilir.\n"
 "Bu kodlamayı kullanmak istiyor musunuz (aksi halde başka bir tane "
 "seçmelisiniz) ?"
@@ -2093,8 +2091,8 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
-"Metni '%s' kodlamasıyla görüntüleyecek bir yazı türü yok.\n"
-"Bu kodlamayı kullanabileceğiniz bir yazı türü seçmek istiyor musunuz\n"
+"Metni '%s' kodlamasıyla görüntüleyecek bir font yok.\n"
+"Bu kodlamayı kullanabileceğiniz bir fontu seçmek istiyor musunuz\n"
 "(aksi halde bu kodlamadaki metin doğru olarak görüntülenmez) ?"
 
 #: ../src/common/fs_mem.cpp:169
@@ -2463,9 +2461,8 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: Görsel yazılırken sorun çıktı."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: Görsel kaydedilirken sorun çıktı."
+msgstr "TIFF: Veri boşaltma hatası."
 
 #: ../src/common/init.cpp:173
 #, c-format
@@ -3160,16 +3157,16 @@ msgstr "&Kapat"
 
 #: ../src/common/prntbase.cpp:2079
 msgid "Could not start document preview."
-msgstr "Belge ön izlemesi başlatılamadı."
+msgstr "Belge önizlemesi başlatılamadı."
 
 #: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2123
 #: ../src/common/prntbase.cpp:2131
 msgid "Print Preview Failure"
-msgstr "Yazdırma ön izleme hatası"
+msgstr "Yazdırma önizleme hatası"
 
 #: ../src/common/prntbase.cpp:2123 ../src/common/prntbase.cpp:2131
 msgid "Sorry, not enough memory to create a preview."
-msgstr "Ne yazık ki ön izlemeyi oluşturmak için yeterli bellek yok."
+msgstr "Ne yazık ki önizlemeyi oluşturmak için yeterli bellek yok."
 
 #: ../src/common/prntbase.cpp:2138
 #, c-format
@@ -3270,12 +3267,12 @@ msgstr "Geri"
 
 #: ../src/common/stockitem.cpp:148
 msgid "&Bold"
-msgstr "&Koyu"
+msgstr "&Kalın"
 
 #: ../src/common/stockitem.cpp:148 ../src/generic/fontdlgg.cpp:326
 #: ../src/richtext/richtextfontpage.cpp:354
 msgid "Bold"
-msgstr "Koyu"
+msgstr "Kalın"
 
 #: ../src/common/stockitem.cpp:149
 msgid "&Bottom"
@@ -3468,12 +3465,12 @@ msgstr "Bilgiler"
 
 #: ../src/common/stockitem.cpp:173
 msgid "&Italic"
-msgstr "&Yatık"
+msgstr "&İtalik"
 
 #: ../src/common/stockitem.cpp:173 ../src/generic/fontdlgg.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:350
 msgid "Italic"
-msgstr "Yatık"
+msgstr "İtalik"
 
 #: ../src/common/stockitem.cpp:174
 msgid "&Jump to"
@@ -3560,11 +3557,11 @@ msgstr "Ayarlar"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Print previe&w..."
-msgstr "Yazdırma ö&n izleme..."
+msgstr "Yazdırma ö&nizleme..."
 
 #: ../src/common/stockitem.cpp:187
 msgid "Print preview..."
-msgstr "Yazdırma ön izleme..."
+msgstr "Yazdırma önizleme..."
 
 #: ../src/common/stockitem.cpp:188
 msgid "&Print..."
@@ -3634,11 +3631,11 @@ msgstr "Renk"
 
 #: ../src/common/stockitem.cpp:199
 msgid "&Font"
-msgstr "&Yazı türü"
+msgstr "&Font"
 
 #: ../src/common/stockitem.cpp:199 ../src/richtext/richtextformatdlg.cpp:336
 msgid "Font"
-msgstr "Yazı türü"
+msgstr "Font"
 
 #: ../src/common/stockitem.cpp:200
 msgid "&Ascending"
@@ -3674,11 +3671,11 @@ msgstr "Durdur"
 
 #: ../src/common/stockitem.cpp:204 ../src/richtext/richtextfontpage.cpp:274
 msgid "&Strikethrough"
-msgstr "Ü&stü çizili"
+msgstr "Ü&stüçizili"
 
 #: ../src/common/stockitem.cpp:204
 msgid "Strikethrough"
-msgstr "Üstü çizili"
+msgstr "Üstüçizili"
 
 #: ../src/common/stockitem.cpp:205
 msgid "&Top"
@@ -3695,11 +3692,11 @@ msgstr "Silmeyi geri al"
 
 #: ../src/common/stockitem.cpp:207 ../src/generic/fontdlgg.cpp:437
 msgid "&Underline"
-msgstr "&Altı çizili"
+msgstr "&Altıçizili"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Underline"
-msgstr "Altı çizili"
+msgstr "Altıçizili"
 
 #: ../src/common/stockitem.cpp:208 ../src/stc/stc_i18n.cpp:15
 msgid "Undo"
@@ -3942,15 +3939,17 @@ msgid "Error: %s (%d)"
 msgstr "Hata: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "İndirme için yeterli boş disk alanı yok."
+msgstr ""
+"İndirme için yeterli boş disk alanı yok: %llu gerekli, ancak yalnızca %llu "
+"mevcut."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Geçici dosya adı oluşturulamadı"
+msgstr "%s konumunda geçici dosya oluşturulamadı."
 
 #: ../src/common/webrequest_curl.cpp:1075
 msgid "libcurl could not be initialized"
@@ -3966,33 +3965,34 @@ msgid "Error running JavaScript: %s"
 msgstr "JavaScript çalıştırılırken sorun çıktı: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "\"%s\" klasörü oluşturulamadı"
+msgstr "\"%s\" proxy'si ayarlanamadı: %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so was't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromium, libcef.so dosyası yeterince erken yüklenmediği için kullanılamaz; "
+"lütfen uygulamayı yeniden bağlayın veya LD_PRELOAD kullanarak daha erken "
+"yüklenmesini sağlayın."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "OLE başlatılamadı"
+msgstr "Chromium başlatılamadı."
 
 #: ../src/common/webview_chromium.cpp:1617
 msgid "Show DevTools"
-msgstr ""
+msgstr "Geliştirici Araçlarını Göster"
 
 #: ../src/common/webview_chromium.cpp:1618
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Tümünü kapat"
+msgstr "Geliştirici Araçlarını Kapat"
 
 #: ../src/common/webview_chromium.cpp:1624
 msgid "Inspect"
-msgstr ""
+msgstr "İnceleme"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4227,16 +4227,16 @@ msgstr "DirectFB tüneli engellemesiz kipe döndürülemedi"
 #: ../src/dfb/fontmgr.cpp:171
 #, c-format
 msgid "no fonts found in %s, using builtin font"
-msgstr "%s içinde yazı türü yok, iç yazı türü kullanılıyor"
+msgstr "%s içinde font yok, iç font kullanılıyor"
 
 #: ../src/dfb/fontmgr.cpp:177
 msgid "Default font"
-msgstr "Varsayılan yazı türü"
+msgstr "Varsayılan font"
 
 #: ../src/dfb/fontmgr.cpp:195
 #, c-format
 msgid "Fonts index file %s disappeared while loading fonts."
-msgstr "Yazı türleri yüklenirken %s yazı türü dizini dosyası kayboldu."
+msgstr "Fontlar yüklenirken %s font dizini dosyası kayboldu."
 
 #: ../src/dfb/wrapdfb.cpp:60
 #, c-format
@@ -4394,11 +4394,11 @@ msgstr "Sağ"
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
 msgstr ""
+"\"%s\" beklenen tarih formatında değil, lütfen şu şekilde girin: \"%s\"."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "PCX: Görsel geçersiz"
+msgstr "Geçersiz tarih"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4454,7 +4454,7 @@ msgstr "              Teşekkürler, yaşadığınız sorundan dolayı özür di
 
 #: ../src/generic/dbgrptg.cpp:333
 msgid "&Debug report preview:"
-msgstr "&Hata ayıklama raporu ön izlemesi:"
+msgstr "&Hata ayıklama raporu önizlemesi:"
 
 #: ../src/generic/dbgrptg.cpp:339
 msgid "&View..."
@@ -4741,31 +4741,31 @@ msgstr "Eğik"
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Light"
-msgstr "Açık"
+msgstr "İnce"
 
 #: ../src/generic/fontdlgg.cpp:363
 msgid "&Font family:"
-msgstr "&Yazı türü ailesi:"
+msgstr "&Font ailesi:"
 
 #: ../src/generic/fontdlgg.cpp:367 ../src/generic/fontdlgg.cpp:369
 msgid "The font family."
-msgstr "Yazı türü ailesi."
+msgstr "Font ailesi."
 
 #: ../src/generic/fontdlgg.cpp:374 ../src/richtext/richtextstylepage.cpp:105
 msgid "&Style:"
-msgstr "&Biçem:"
+msgstr "&Stil:"
 
 #: ../src/generic/fontdlgg.cpp:378 ../src/generic/fontdlgg.cpp:380
 msgid "The font style."
-msgstr "Yazı türü biçemi."
+msgstr "Font stili."
 
 #: ../src/generic/fontdlgg.cpp:385
 msgid "&Weight:"
-msgstr "&Yoğunluk:"
+msgstr "&Kalınlık:"
 
 #: ../src/generic/fontdlgg.cpp:389 ../src/generic/fontdlgg.cpp:391
 msgid "The font weight."
-msgstr "Yazı türü yoğunluğu."
+msgstr "Font kalınlığı."
 
 #: ../src/generic/fontdlgg.cpp:399
 msgid "C&olour:"
@@ -4773,7 +4773,7 @@ msgstr "&Renk:"
 
 #: ../src/generic/fontdlgg.cpp:407 ../src/generic/fontdlgg.cpp:409
 msgid "The font colour."
-msgstr "Yazı türü rengi."
+msgstr "Font rengi."
 
 #: ../src/generic/fontdlgg.cpp:415
 msgid "&Point size:"
@@ -4782,68 +4782,69 @@ msgstr "Yazı &boyutu:"
 #: ../src/generic/fontdlgg.cpp:420 ../src/generic/fontdlgg.cpp:422
 #: ../src/generic/fontdlgg.cpp:426 ../src/generic/fontdlgg.cpp:428
 msgid "The font point size."
-msgstr "Yazı türü punto boyutu."
+msgstr "Font punto boyutu."
 
 #: ../src/generic/fontdlgg.cpp:439 ../src/generic/fontdlgg.cpp:441
 msgid "Whether the font is underlined."
-msgstr "Yazı türünün altı çizili olup olmadığı."
+msgstr "Fontun altıçizili olup olmadığı."
 
 #: ../src/generic/fontdlgg.cpp:448 ../src/html/helpwnd.cpp:1215
 msgid "Preview:"
-msgstr "Ön izleme:"
+msgstr "Önizleme:"
 
 #: ../src/generic/fontdlgg.cpp:452 ../src/generic/fontdlgg.cpp:454
 msgid "Shows the font preview."
-msgstr "Yazı türünün ön izlemesini görüntüler."
+msgstr "Font önizlemesini gösterir."
 
 #: ../src/generic/fontdlgg.cpp:464 ../src/generic/fontdlgg.cpp:483
 msgid "Click to cancel the font selection."
-msgstr "Yazı türü seçiminden vazgeçmek için tıklayın."
+msgstr "Font seçiminden vazgeçmek için tıklayın."
 
 #: ../src/generic/fontdlgg.cpp:469 ../src/generic/fontdlgg.cpp:471
 #: ../src/generic/fontdlgg.cpp:476 ../src/generic/fontdlgg.cpp:478
 msgid "Click to confirm the font selection."
-msgstr "Yazı türü seçimini onaylamak için tıklayın."
+msgstr "Font seçimini onaylamak için tıklayın."
 
 #: ../src/generic/fontpickerg.cpp:50 ../src/gtk/fontdlg.cpp:77
 msgid "Choose font"
-msgstr "Yazı türü seçin"
+msgstr "Font seçin"
 
 #: ../src/generic/grid.cpp:6542
 msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Panoya ızgarayı kopyalarken hata oluştu. Seçilen hücreler birbirine bitişik "
+"değildi veya hiçbir hücre seçilmemişti."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Köşe"
+msgstr "Izgara Köşesi"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "%u. sütun"
+msgstr "Sütun %s Başlığı"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "Satır %s Başlığı"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "%u. sütun"
+msgstr "Sütun %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "%i. Satır"
+msgstr "Satır %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Satır %s, Sütun %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -5185,21 +5186,21 @@ msgid ""
 "Using private fonts is not supported on this system: Pango library is too "
 "old, 1.38 or later required."
 msgstr ""
-"Bu sistem üzerinde özel yazı türlerinin kullanımı desteklenmiyor: Pango "
-"kitaplığı çok eski. 1.38 ya da üzerindeki bir sürüm gereklidir."
+"Bu sistem üzerinde özel fontların kullanımı desteklenmiyor: Pango kitaplığı "
+"çok eski. 1.38 ya da üzerindeki bir sürüm gereklidir."
 
 #: ../src/gtk/font.cpp:558
 msgid "Failed to create font configuration object."
-msgstr "Yazı türü yapılandırma nesnesi eklenemedi."
+msgstr "Font yapılandırma nesnesi eklenemedi."
 
 #: ../src/gtk/font.cpp:568
 #, c-format
 msgid "Failed to add custom font \"%s\"."
-msgstr "\"%s\" özel yazı türü eklenemedi."
+msgstr "\"%s\" özel font eklenemedi."
 
 #: ../src/gtk/font.cpp:576
 msgid "Failed to register font configuration using private fonts."
-msgstr "Özel yazı türleri kullanılarak yazı türü yapılandırması kaydedilemedi."
+msgstr "Özel fontlar kullanılarak font yapılandırması kaydedilemedi."
 
 #: ../src/gtk/glcanvas.cpp:117 ../src/gtk/glcanvas.cpp:132
 msgid "Fatal Error"
@@ -5238,9 +5239,9 @@ msgid "Custom size"
 msgstr "Özel boyut"
 
 #: ../src/gtk/print.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Yazdırma sorunu: "
+msgstr "Yazdırırken hata oluştu: %s"
 
 #: ../src/gtk/print.cpp:813
 msgid "Page Setup"
@@ -5254,10 +5255,11 @@ msgstr "WebKit v1 üzerinde JavaScript çıktısının alınması desteklenmiyor
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"Proxy ayarı WebKit tarafından desteklenmiyor, en az 2.16 sürümü gereklidir."
 
 #: ../src/gtk/webview_webkit2.cpp:1105
 msgid "This program was compiled without support for setting WebKit proxy."
-msgstr ""
+msgstr "Bu program, WebKit proxy ayarları için destek olmadan derlendi."
 
 #: ../src/gtk/window.cpp:6249
 msgid ""
@@ -5517,43 +5519,43 @@ msgstr "Yardım tarayıcısı ayarları"
 
 #: ../src/html/helpwnd.cpp:1198
 msgid "Normal font:"
-msgstr "Normal yazı türü:"
+msgstr "Normal font:"
 
 #: ../src/html/helpwnd.cpp:1199
 msgid "Fixed font:"
-msgstr "Sabit yazı türü:"
+msgstr "Sabit font:"
 
 #: ../src/html/helpwnd.cpp:1200
 msgid "Font size:"
-msgstr "Yazı boyutu:"
+msgstr "Font boyutu:"
 
 #: ../src/html/helpwnd.cpp:1245
 msgid "font size"
-msgstr "yazı türü boyutu"
+msgstr "font boyutu"
 
 #: ../src/html/helpwnd.cpp:1256
 msgid "Normal face<br>and <u>underlined</u>. "
-msgstr "Normal yazı türü <br>ve <u>altı çizili</u>. "
+msgstr "Normal font<br>ve <u>altıçizili</u>. "
 
 #: ../src/html/helpwnd.cpp:1257
 msgid "<i>Italic face.</i> "
-msgstr "<i>Yatık şekil.</i> "
+msgstr "<i>İtalik şekil.</i> "
 
 #: ../src/html/helpwnd.cpp:1258
 msgid "<b>Bold face.</b> "
-msgstr "<b>Koyu şekil.</b> "
+msgstr "<b>Kalın şekil.</b> "
 
 #: ../src/html/helpwnd.cpp:1259
 msgid "<b><i>Bold italic face.</i></b><br>"
-msgstr "<b><i>Koyu yatık şekil.</i></b><br>"
+msgstr "<b><i>Kalın italik şekil.</i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1262
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
-msgstr "Sabit boyutlu tür.<br> <b>koyu</b> <i>eğik</i> "
+msgstr "Sabit boyutlu tür.<br> <b>kalın</b> <i>italik</i> "
 
 #: ../src/html/helpwnd.cpp:1263
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
-msgstr "<b><i>koyu yatık <u>altı çizili</u></i></b><br>"
+msgstr "<b><i>kalın italik<u>altıçizili</u></i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1524
 msgid "Help Printing"
@@ -5652,9 +5654,9 @@ msgstr ": dosya bulunamadı!"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " Ön izleme"
+msgstr "%s Önizlemesi"
 
 #: ../src/html/htmprint.cpp:750 ../src/richtext/richtextprint.cpp:615
 msgid ""
@@ -5959,11 +5961,11 @@ msgstr "Standart bul/değiştir penceresi oluşturulamadı (hata kodu %d)"
 
 #: ../src/msw/filedlg.cpp:1233
 msgid "Access to the file system is not allowed from secure desktop."
-msgstr ""
+msgstr "Güvenli masaüstünden dosya sistemine erişime izin verilmemektedir."
 
 #: ../src/msw/filedlg.cpp:1234
 msgid "Security warning"
-msgstr ""
+msgstr "Güvenlik Uyarısı"
 
 #: ../src/msw/filedlg.cpp:1525
 #, c-format
@@ -5973,7 +5975,7 @@ msgstr "Dosya penceresi %0lx hata koduyla kapandı."
 #: ../src/msw/font.cpp:1120
 #, c-format
 msgid "Font file \"%s\" couldn't be loaded"
-msgstr "\"%s\" yazı türü dosyası yüklenemedi"
+msgstr "\"%s\" font dosyası yüklenemedi"
 
 #: ../src/msw/fontdlg.cpp:220
 #, c-format
@@ -6021,7 +6023,7 @@ msgstr "OpenGL başlatılamadı"
 
 #: ../src/msw/graphicsd2d.cpp:607
 msgid "Could not register custom DirectWrite font loader."
-msgstr "Özel DirectWrite yazı türü yükleyicisi kayıt edilemedi."
+msgstr "Özel DirectWrite font yükleyicisi kayıt edilemedi."
 
 #: ../src/msw/helpchm.cpp:48
 msgid ""
@@ -6429,7 +6431,7 @@ msgstr "'%s' içinden simge yüklenemedi."
 
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
-msgstr ""
+msgstr "Bu program, Edge proxy ayarları için destek olmadan derlendi."
 
 #: ../src/msw/webview_ie.cpp:1012
 msgid "Failed to find web view emulation level in the registry"
@@ -6492,7 +6494,7 @@ msgstr "\"%s\" üzerinden ses yüklenemedi (hata %d)."
 #: ../src/osx/fontutil.cpp:80
 #, c-format
 msgid "Font file \"%s\" doesn't exist."
-msgstr "\"%s\" yazı türü dosyası bulunamadı."
+msgstr "\"%s\" font dosyası bulunamadı."
 
 #: ../src/osx/fontutil.cpp:88
 #, c-format
@@ -6500,8 +6502,7 @@ msgid ""
 "Font file \"%s\" cannot be used as it is not inside the font directory "
 "\"%s\"."
 msgstr ""
-"\"%s\" yazı türü dosyası, \"%s\" yazı türü klasöründe bulunamadığından "
-"kullanılamaz."
+"\"%s\" font dosyası, \"%s\" font klasöründe bulunamadığından kullanılamaz."
 
 #: ../src/osx/menu_osx.cpp:496
 #, c-format
@@ -6572,12 +6573,12 @@ msgstr "Punto boyutu"
 #. TRANSLATORS: Label of font face name
 #: ../src/propgrid/advprops.cpp:615
 msgid "Face Name"
-msgstr "Yazı türü adı"
+msgstr "Font Adı"
 
 #. TRANSLATORS: Label of font style
 #: ../src/propgrid/advprops.cpp:623 ../src/richtext/richtextformatdlg.cpp:331
 msgid "Style"
-msgstr "Biçem"
+msgstr "Stil"
 
 #. TRANSLATORS: Label of font weight
 #: ../src/propgrid/advprops.cpp:628
@@ -6587,7 +6588,7 @@ msgstr "Yoğunluk"
 #. TRANSLATORS: Label of underlined font
 #: ../src/propgrid/advprops.cpp:633 ../src/richtext/richtextfontpage.cpp:358
 msgid "Underlined"
-msgstr "Altı çizili"
+msgstr "Altıçizili"
 
 #. TRANSLATORS: Label of font family
 #: ../src/propgrid/advprops.cpp:637
@@ -7338,7 +7339,7 @@ msgstr "Sol sınır genişliği birimleri."
 #: ../src/richtext/richtextborderspage.cpp:536
 #: ../src/richtext/richtextborderspage.cpp:538
 msgid "The border line style."
-msgstr "Kenarlık çizgisi biçemi."
+msgstr "Kenarlık çizgisi stili."
 
 #: ../src/richtext/richtextborderspage.cpp:276
 #: ../src/richtext/richtextborderspage.cpp:444
@@ -7399,27 +7400,27 @@ msgstr "Tüm kenarlıklara aynı anda uygulanması için işaretleyin."
 #: ../src/richtext/richtextborderspage.cpp:397
 #: ../src/richtext/richtextborderspage.cpp:555
 msgid "Outline"
-msgstr "Taslak"
+msgstr "Kontur"
 
 #: ../src/richtext/richtextborderspage.cpp:425
 #: ../src/richtext/richtextborderspage.cpp:427
 msgid "Units for the left outline width."
-msgstr "Sol taslak genişliği birimleri."
+msgstr "Sol kontur genişliği birimleri."
 
 #: ../src/richtext/richtextborderspage.cpp:459
 #: ../src/richtext/richtextborderspage.cpp:461
 msgid "Units for the right outline width."
-msgstr "Sağ taslak genişliği birimleri."
+msgstr "Sağ kontur genişliği birimleri."
 
 #: ../src/richtext/richtextborderspage.cpp:493
 #: ../src/richtext/richtextborderspage.cpp:495
 msgid "Units for the top outline width."
-msgstr "Üst taslak genişliği birimleri."
+msgstr "Üst kontur genişliği birimleri."
 
 #: ../src/richtext/richtextborderspage.cpp:527
 #: ../src/richtext/richtextborderspage.cpp:529
 msgid "Units for the bottom outline width."
-msgstr "Alt taslak genişliğinin birimleri."
+msgstr "Alt kontur genişliğinin birimleri."
 
 #: ../src/richtext/richtextborderspage.cpp:565
 #: ../src/richtext/richtextborderspage.cpp:600
@@ -7485,11 +7486,11 @@ msgstr "Kabartma"
 
 #: ../src/richtext/richtextbuffer.cpp:3518
 msgid "Change Style"
-msgstr "Biçemi değiştir"
+msgstr "Stili değiştir"
 
 #: ../src/richtext/richtextbuffer.cpp:3701
 msgid "Change Object Style"
-msgstr "Nesne biçemini değiştir"
+msgstr "Nesne stilini değiştir"
 
 #: ../src/richtext/richtextbuffer.cpp:3974
 #: ../src/richtext/richtextbuffer.cpp:8174
@@ -7498,7 +7499,7 @@ msgstr "Özellikleri değiştir"
 
 #: ../src/richtext/richtextbuffer.cpp:4346
 msgid "Change List Style"
-msgstr "Liste biçemini değiştir"
+msgstr "Liste stilini değiştir"
 
 #: ../src/richtext/richtextbuffer.cpp:4519
 msgid "Renumber List"
@@ -7566,7 +7567,7 @@ msgstr "Hücre özellikleri"
 
 #: ../src/richtext/richtextbuffer.cpp:11258
 msgid "Set Cell Style"
-msgstr "Hücre biçemini ayarla"
+msgstr "Hücre stilini ayarla"
 
 #: ../src/richtext/richtextbuffer.cpp:11332
 msgid "Delete Row"
@@ -7600,14 +7601,14 @@ msgstr "görsel"
 #: ../src/richtext/richtextbulletspage.cpp:145
 #: ../src/richtext/richtextliststylepage.cpp:209
 msgid "&Bullet style:"
-msgstr "&Madde imi biçemi:"
+msgstr "&Madde imi stili:"
 
 #: ../src/richtext/richtextbulletspage.cpp:150
 #: ../src/richtext/richtextbulletspage.cpp:152
 #: ../src/richtext/richtextliststylepage.cpp:214
 #: ../src/richtext/richtextliststylepage.cpp:216
 msgid "The available bullet styles."
-msgstr "Kullanılabilecek madde imi biçemleri."
+msgstr "Kullanılabilecek madde imi stilleri."
 
 #: ../src/richtext/richtextbulletspage.cpp:158
 #: ../src/richtext/richtextliststylepage.cpp:221
@@ -7688,13 +7689,13 @@ msgstr "Bir simge seçmek için tıklayın."
 #: ../src/richtext/richtextbulletspage.cpp:230
 #: ../src/richtext/richtextliststylepage.cpp:291
 msgid "Symbol &font:"
-msgstr "Simge &yazı türü:"
+msgstr "Simge &fontu:"
 
 #: ../src/richtext/richtextbulletspage.cpp:235
 #: ../src/richtext/richtextbulletspage.cpp:237
 #: ../src/richtext/richtextliststylepage.cpp:297
 msgid "Available fonts."
-msgstr "Kullanılabilecek yazı türleri."
+msgstr "Kullanılabilecek fontlar."
 
 #: ../src/richtext/richtextbulletspage.cpp:242
 #: ../src/richtext/richtextliststylepage.cpp:302
@@ -7722,7 +7723,7 @@ msgstr "Liste ögesi numarası."
 #: ../src/richtext/richtextliststylepage.cpp:475
 #: ../src/richtext/richtextliststylepage.cpp:477
 msgid "Shows a preview of the bullet settings."
-msgstr "Madde imi ayarlarının ön izlemesini görüntüler."
+msgstr "Madde imi ayarlarının önizlemesini görüntüler."
 
 #: ../src/richtext/richtextbulletspage.cpp:276
 #: ../src/richtext/richtextliststylepage.cpp:484
@@ -7757,7 +7758,7 @@ msgstr "Küçük harf Romen rakamları"
 #: ../src/richtext/richtextbulletspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Numbered outline"
-msgstr "Numaralı taslak"
+msgstr "Numaralı kontur"
 
 #: ../src/richtext/richtextbulletspage.cpp:283
 #: ../src/richtext/richtextliststylepage.cpp:491
@@ -7822,12 +7823,12 @@ msgstr "Değiştir"
 #: ../src/richtext/richtextfontpage.cpp:146
 #: ../src/richtext/richtextsymboldlg.cpp:384
 msgid "&Font:"
-msgstr "&Yazı türü:"
+msgstr "&Font:"
 
 #: ../src/richtext/richtextfontpage.cpp:150
 #: ../src/richtext/richtextfontpage.cpp:152
 msgid "Type a font name."
-msgstr "Bir yazı türü adı yazın."
+msgstr "Bir font adı yazın."
 
 #: ../src/richtext/richtextfontpage.cpp:158
 msgid "&Size:"
@@ -7841,35 +7842,35 @@ msgstr "Punto olarak bir boyut yazın."
 #: ../src/richtext/richtextfontpage.cpp:180
 #: ../src/richtext/richtextfontpage.cpp:182
 msgid "The font size units, points or pixels."
-msgstr "Yazı türü boyutu birimi, punto ya da piksel."
+msgstr "Font boyutu birimi, punto ya da piksel."
 
 #: ../src/richtext/richtextfontpage.cpp:189
 #: ../src/richtext/richtextfontpage.cpp:191
 msgid "Lists the available fonts."
-msgstr "Kullanılabilecek yazı türleri listelenir."
+msgstr "Kullanılabilecek fontlar listelenir."
 
 #: ../src/richtext/richtextfontpage.cpp:196
 #: ../src/richtext/richtextfontpage.cpp:198
 msgid "Lists font sizes in points."
-msgstr "Yazı türü boyutları punto olarak listelenir."
+msgstr "Font boyutları punto olarak listelenir."
 
 #: ../src/richtext/richtextfontpage.cpp:207
 msgid "Font st&yle:"
-msgstr "Yazı &biçemi:"
+msgstr "Font &stili:"
 
 #: ../src/richtext/richtextfontpage.cpp:212
 #: ../src/richtext/richtextfontpage.cpp:214
 msgid "Select regular or italic style."
-msgstr "Normal ya da yatık biçemi seçin."
+msgstr "Normal ya da italik stil seçin."
 
 #: ../src/richtext/richtextfontpage.cpp:220
 msgid "Font &weight:"
-msgstr "Yazı &koyuluğu:"
+msgstr "Font &koyuluğu:"
 
 #: ../src/richtext/richtextfontpage.cpp:225
 #: ../src/richtext/richtextfontpage.cpp:227
 msgid "Select regular or bold."
-msgstr "Normal ya da koyu biçemi seçin."
+msgstr "Normal ya da kalın stil seçin."
 
 #: ../src/richtext/richtextfontpage.cpp:233
 msgid "&Underlining:"
@@ -7878,7 +7879,7 @@ msgstr "&Altını çizme:"
 #: ../src/richtext/richtextfontpage.cpp:238
 #: ../src/richtext/richtextfontpage.cpp:240
 msgid "Select underlining or no underlining."
-msgstr "Altı çizili ya da normal biçemi seçin."
+msgstr "Altıçizili ya da normal stili seçin."
 
 #: ../src/richtext/richtextfontpage.cpp:248
 msgid "&Colour:"
@@ -7960,7 +7961,7 @@ msgstr "Hecelemeyi engellemek için işaretleyin."
 #: ../src/richtext/richtextfontpage.cpp:329
 #: ../src/richtext/richtextfontpage.cpp:331
 msgid "Shows a preview of the font settings."
-msgstr "Yazı türü ayarlarının ön izlemesini görüntüler."
+msgstr "Font ayarlarının önizlemesini görüntüler."
 
 #: ../src/richtext/richtextfontpage.cpp:348
 #: ../src/richtext/richtextfontpage.cpp:352
@@ -7984,7 +7985,7 @@ msgstr "Normal"
 
 #: ../src/richtext/richtextfontpage.cpp:357
 msgid "Not underlined"
-msgstr "Altı çizili değil"
+msgstr "Altıçizili değil"
 
 #: ../src/richtext/richtextformatdlg.cpp:341
 msgid "Indents && Spacing"
@@ -8000,12 +8001,12 @@ msgstr "Madde imleri"
 
 #: ../src/richtext/richtextformatdlg.cpp:356
 msgid "List Style"
-msgstr "Liste biçemi"
+msgstr "Liste stili"
 
 #: ../src/richtext/richtextformatdlg.cpp:366
 #: ../src/richtext/richtextmarginspage.cpp:170
 msgid "Margins"
-msgstr "Kenar boşlukları"
+msgstr "Kenar Boşluğu"
 
 #: ../src/richtext/richtextformatdlg.cpp:371
 msgid "Borders"
@@ -8113,12 +8114,12 @@ msgstr "Sağ girinti."
 
 #: ../src/richtext/richtextindentspage.cpp:221
 msgid "&Outline level:"
-msgstr "Başlık &düzeyi:"
+msgstr "Kontur &düzeyi:"
 
 #: ../src/richtext/richtextindentspage.cpp:226
 #: ../src/richtext/richtextindentspage.cpp:228
 msgid "The outline level."
-msgstr "Taslak düzeyi."
+msgstr "Kontur düzeyi."
 
 #: ../src/richtext/richtextindentspage.cpp:241
 #: ../src/richtext/richtextliststylepage.cpp:420
@@ -8224,7 +8225,7 @@ msgstr "Paragraftan önce bir sayfa sonu ekler."
 #: ../src/richtext/richtextindentspage.cpp:302
 #: ../src/richtext/richtextindentspage.cpp:304
 msgid "Shows a preview of the paragraph settings."
-msgstr "Paragraf ayarlarının ön izlemesini görüntüler."
+msgstr "Paragraf ayarlarının önizlemesini görüntüler."
 
 #: ../src/richtext/richtextliststylepage.cpp:182
 msgid "&List level:"
@@ -8237,16 +8238,16 @@ msgstr "Düzenlenecek liste düzeyini seçer."
 
 #: ../src/richtext/richtextliststylepage.cpp:193
 msgid "&Font for Level..."
-msgstr "&Düzeyin yazı türü..."
+msgstr "&Düzeyin fontu..."
 
 #: ../src/richtext/richtextliststylepage.cpp:194
 #: ../src/richtext/richtextliststylepage.cpp:196
 msgid "Click to choose the font for this level."
-msgstr "Bu düzeyin yazı türünü seçmek için tıklayın."
+msgstr "Bu düzeyin fontunu seçmek için tıklayın."
 
 #: ../src/richtext/richtextliststylepage.cpp:312
 msgid "Bullet style"
-msgstr "Madde imi biçemi"
+msgstr "Madde imi stili"
 
 #: ../src/richtext/richtextliststylepage.cpp:429
 msgid "Before a paragraph:"
@@ -8350,7 +8351,7 @@ msgstr "Alt boşluk birimleri."
 
 #: ../src/richtext/richtextprint.cpp:589
 msgid " Preview"
-msgstr " Ön izleme"
+msgstr " Önizleme"
 
 #: ../src/richtext/richtextsizepage.cpp:228
 msgid "Floating"
@@ -8597,12 +8598,12 @@ msgstr "Nesneyi sonraki paragrafa taşır."
 
 #: ../src/richtext/richtextstyledlg.cpp:193
 msgid "&Styles:"
-msgstr "&Biçemler:"
+msgstr "&Stiller:"
 
 #: ../src/richtext/richtextstyledlg.cpp:197
 #: ../src/richtext/richtextstyledlg.cpp:199
 msgid "The available styles."
-msgstr "Kullanılabilecek biçemler."
+msgstr "Kullanılabilecek stiller."
 
 #: ../src/richtext/richtextstyledlg.cpp:205
 #: ../src/richtext/richtextstyledlg.cpp:217
@@ -8612,79 +8613,79 @@ msgstr " "
 #: ../src/richtext/richtextstyledlg.cpp:209
 #: ../src/richtext/richtextstyledlg.cpp:211
 msgid "The style preview."
-msgstr "Biçem ön izlemesi."
+msgstr "Stil önizlemesi."
 
 #: ../src/richtext/richtextstyledlg.cpp:220
 msgid "New &Character Style..."
-msgstr "Yeni &karakter biçemi..."
+msgstr "Yeni &Karakter Stili..."
 
 #: ../src/richtext/richtextstyledlg.cpp:221
 #: ../src/richtext/richtextstyledlg.cpp:223
 msgid "Click to create a new character style."
-msgstr "Yeni bir karakter biçemi oluşturmak için tıklayın."
+msgstr "Yeni bir karakter stili oluşturmak için tıklayın."
 
 #: ../src/richtext/richtextstyledlg.cpp:226
 msgid "New &Paragraph Style..."
-msgstr "Yeni &paragraf biçemi..."
+msgstr "Yeni &Paragraf Stili..."
 
 #: ../src/richtext/richtextstyledlg.cpp:227
 #: ../src/richtext/richtextstyledlg.cpp:229
 msgid "Click to create a new paragraph style."
-msgstr "Yeni bir paragraf biçemi oluşturmak için tıklayın."
+msgstr "Yeni bir paragraf stili oluşturmak için tıklayın."
 
 #: ../src/richtext/richtextstyledlg.cpp:232
 msgid "New &List Style..."
-msgstr "Yeni &liste biçemi..."
+msgstr "Yeni &Liste Stili..."
 
 #: ../src/richtext/richtextstyledlg.cpp:233
 #: ../src/richtext/richtextstyledlg.cpp:235
 msgid "Click to create a new list style."
-msgstr "Yeni bir liste biçemi oluşturmak için tıklayın."
+msgstr "Yeni bir liste stili oluşturmak için tıklayın."
 
 #: ../src/richtext/richtextstyledlg.cpp:238
 msgid "New &Box Style..."
-msgstr "Yeni &kutu biçemi..."
+msgstr "Yeni &Kutu Stili..."
 
 #: ../src/richtext/richtextstyledlg.cpp:239
 #: ../src/richtext/richtextstyledlg.cpp:241
 msgid "Click to create a new box style."
-msgstr "Yeni bir kutu biçemi oluşturmak için tıklayın."
+msgstr "Yeni bir kutu stili oluşturmak için tıklayın."
 
 #: ../src/richtext/richtextstyledlg.cpp:246
 msgid "&Apply Style"
-msgstr "Biçemi uygul&a"
+msgstr "Stili Uygul&a"
 
 #: ../src/richtext/richtextstyledlg.cpp:247
 #: ../src/richtext/richtextstyledlg.cpp:249
 msgid "Click to apply the selected style."
-msgstr "Seçili biçemi uygulamak için tıklayın."
+msgstr "Seçili stili uygulamak için tıklayın."
 
 #: ../src/richtext/richtextstyledlg.cpp:252
 msgid "&Rename Style..."
-msgstr "Biçemi &yeniden adlandır..."
+msgstr "Stili &Yeniden Adlandır..."
 
 #: ../src/richtext/richtextstyledlg.cpp:253
 #: ../src/richtext/richtextstyledlg.cpp:255
 msgid "Click to rename the selected style."
-msgstr "Seçili biçemi yeniden adlandırmak için tıklayın."
+msgstr "Seçili stili yeniden adlandırmak için tıklayın."
 
 #: ../src/richtext/richtextstyledlg.cpp:258
 msgid "&Edit Style..."
-msgstr "Biçemi düz&enle..."
+msgstr "Stili Düz&enle..."
 
 #: ../src/richtext/richtextstyledlg.cpp:259
 #: ../src/richtext/richtextstyledlg.cpp:261
 msgid "Click to edit the selected style."
-msgstr "Seçili biçemi düzenlemek için tıklayın."
+msgstr "Seçili stili düzenlemek için tıklayın."
 
 #: ../src/richtext/richtextstyledlg.cpp:264
 msgid "&Delete Style..."
-msgstr "&Biçemi sil..."
+msgstr "&Stili Sil..."
 
 #: ../src/richtext/richtextstyledlg.cpp:265
 #: ../src/richtext/richtextstyledlg.cpp:267
 msgid "Click to delete the selected style."
-msgstr "Seçili biçemi silmek için tıklayın."
+msgstr "Seçili stili silmek için tıklayın."
 
 #: ../src/richtext/richtextstyledlg.cpp:274
 #: ../src/richtext/richtextstyledlg.cpp:276
@@ -8702,7 +8703,7 @@ msgstr "Yeniden numaralandırmak için işaretleyin."
 
 #: ../src/richtext/richtextstyledlg.cpp:601
 msgid "Enter a character style name"
-msgstr "Bir karakter biçemi adı yazın"
+msgstr "Bir karakter stili adı yazın"
 
 #: ../src/richtext/richtextstyledlg.cpp:601
 #: ../src/richtext/richtextstyledlg.cpp:606
@@ -8715,7 +8716,7 @@ msgstr "Bir karakter biçemi adı yazın"
 #: ../src/richtext/richtextstyledlg.cpp:929
 #: ../src/richtext/richtextstyledlg.cpp:934
 msgid "New Style"
-msgstr "Yeni biçem"
+msgstr "Yeni Stil"
 
 #: ../src/richtext/richtextstyledlg.cpp:606
 #: ../src/richtext/richtextstyledlg.cpp:654
@@ -8727,33 +8728,33 @@ msgstr "Ne yazık ki bu ad kullanılmış. Lütfen başka bir ad seçin."
 
 #: ../src/richtext/richtextstyledlg.cpp:649
 msgid "Enter a paragraph style name"
-msgstr "Bir paragraf biçemi adı yazın"
+msgstr "Bir paragraf stili adı yazın"
 
 #: ../src/richtext/richtextstyledlg.cpp:777
 #, c-format
 msgid "Delete style %s?"
-msgstr "%s biçemi silinsin mi?"
+msgstr "%s stili silinsin mi?"
 
 #: ../src/richtext/richtextstyledlg.cpp:777
 msgid "Delete Style"
-msgstr "Biçemi sil"
+msgstr "Stili Sil"
 
 #: ../src/richtext/richtextstyledlg.cpp:815
 msgid "Enter a list style name"
-msgstr "Bir liste biçemi adı yazın"
+msgstr "Bir liste stili adı yazın"
 
 #: ../src/richtext/richtextstyledlg.cpp:888
 msgid "Enter a new style name"
-msgstr "Yeni bir biçemi adı yazın"
+msgstr "Yeni bir stil adı yazın"
 
 #: ../src/richtext/richtextstyledlg.cpp:929
 msgid "Enter a box style name"
-msgstr "Bir kutu biçemi adı yazın"
+msgstr "Bir kutu stili adı yazın"
 
 #: ../src/richtext/richtextstylepage.cpp:109
 #: ../src/richtext/richtextstylepage.cpp:111
 msgid "The style name."
-msgstr "Biçem adı."
+msgstr "Stil adı."
 
 #: ../src/richtext/richtextstylepage.cpp:114
 msgid "&Based on:"
@@ -8762,41 +8763,41 @@ msgstr "&Kaynak:"
 #: ../src/richtext/richtextstylepage.cpp:119
 #: ../src/richtext/richtextstylepage.cpp:121
 msgid "The style on which this style is based."
-msgstr "Bu biçemin temel alındığı biçem."
+msgstr "Bu stilin temel alındığı stil."
 
 #: ../src/richtext/richtextstylepage.cpp:124
 msgid "&Next style:"
-msgstr "So&nraki biçem:"
+msgstr "So&nraki stil:"
 
 #: ../src/richtext/richtextstylepage.cpp:129
 #: ../src/richtext/richtextstylepage.cpp:131
 msgid "The default style for the next paragraph."
-msgstr "Sonraki paragraf için varsayılan biçem."
+msgstr "Sonraki paragraf için varsayılan stil."
 
 #: ../src/richtext/richtextstyles.cpp:1057
 msgid "All styles"
-msgstr "Tüm biçemler"
+msgstr "Tüm stiller"
 
 #: ../src/richtext/richtextstyles.cpp:1058
 msgid "Paragraph styles"
-msgstr "Paragraf biçemleri"
+msgstr "Paragraf stilleri"
 
 #: ../src/richtext/richtextstyles.cpp:1059
 msgid "Character styles"
-msgstr "Karakter biçemleri"
+msgstr "Karakter stilleri"
 
 #: ../src/richtext/richtextstyles.cpp:1060
 msgid "List styles"
-msgstr "Liste biçemleri"
+msgstr "Liste stilleri"
 
 #: ../src/richtext/richtextstyles.cpp:1061
 msgid "Box styles"
-msgstr "Kutu biçemleri"
+msgstr "Kutu stilleri"
 
 #: ../src/richtext/richtextsymboldlg.cpp:389
 #: ../src/richtext/richtextsymboldlg.cpp:391
 msgid "The font from which to take the symbol."
-msgstr "Simgenin alınacağı yazı türü."
+msgstr "Simgenin alınacağı font."
 
 #: ../src/richtext/richtextsymboldlg.cpp:396
 msgid "&Subset:"
@@ -9237,9 +9238,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "XML işleme sorunu: '%s' %d satırında"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "%d. sayfa"
+msgstr "Sayfa %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
