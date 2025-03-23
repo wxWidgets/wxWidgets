@@ -2818,8 +2818,6 @@ WEBVIEW_GTK_HDR =
 
 WEBVIEW_GTK_SRC =
     src/gtk/webview_webkit.cpp
-
-WEBVIEW2_GTK_SRC =
     src/gtk/webview_webkit2.cpp
 
 WEBVIEW_WEBKIT2_EXTENSION_SRC =
@@ -3009,9 +3007,15 @@ OPENGL_OSX_COCOA_SRC =
     src/osx/cocoa/glcanvas.mm
     src/osx/glcanvas_osx.cpp
 
+OPENGL_OSX_COCOA_HDR =
+    wx/osx/glcanvas.h
+
 OPENGL_OSX_IPHONE_SRC =
     src/osx/iphone/glcanvas.mm
     src/osx/glcanvas_osx.cpp
+
+OPENGL_OSX_IPHONE_HDR =
+    wx/osx/glcanvas.h
 
 # Misc plugin sources:
 

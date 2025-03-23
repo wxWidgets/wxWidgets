@@ -3243,6 +3243,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OPENGL_HDR_PLATFORM" hints="files">
     <if cond="TOOLKIT=='OSX_COCOA'">wx/osx/glcanvas.h</if>
+    <if cond="TOOLKIT=='OSX_IPHONE'">wx/osx/glcanvas.h</if>
     <if cond="TOOLKIT=='COCOA'">wx/cocoa/glcanvas.h</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4'">
         wx/gtk/glcanvas.h
