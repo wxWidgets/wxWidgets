@@ -57,6 +57,8 @@ elseif(WXQT)
     elseif(WIN32)
         wx_append_sources(CORE_SRC QT_WIN32)
     endif()
+elseif(WXX11)
+    wx_append_sources(CORE_SRC X11_LOWLEVEL)
 endif()
 
 wx_add_library(wxcore ${CORE_SRC})

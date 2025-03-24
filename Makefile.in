@@ -1715,7 +1715,7 @@ HTMLDLL_CXXFLAGS = $(__htmldll_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(PIC_FLAG) $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 HTMLDLL_OBJECTS =  \
 	$(__htmldll___win32rc) \
-	$(__HTML_SRC_PLATFORM_OBJECTS_2) \
+	htmldll_chm.o \
 	htmldll_helpctrl.o \
 	htmldll_helpdata.o \
 	htmldll_helpdlg.o \
@@ -1740,7 +1740,8 @@ HTMLDLL_OBJECTS =  \
 	htmldll_m_tables.o \
 	htmldll_styleparams.o \
 	htmldll_winpars.o \
-	htmldll_htmllbox.o
+	htmldll_htmllbox.o \
+	$(__HTML_PLATFORM_SRC_OBJECTS_2)
 HTMLDLL_ODEP =  $(_____pch_wxprec_htmldll_wx_wxprec_h_gch___depname)
 HTMLLIB_CXXFLAGS = $(__htmllib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
@@ -1748,7 +1749,7 @@ HTMLLIB_CXXFLAGS = $(__htmllib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -DWXBUILDING $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 HTMLLIB_OBJECTS =  \
-	$(__HTML_SRC_PLATFORM_OBJECTS_3) \
+	htmllib_chm.o \
 	htmllib_helpctrl.o \
 	htmllib_helpdata.o \
 	htmllib_helpdlg.o \
@@ -1773,7 +1774,8 @@ HTMLLIB_OBJECTS =  \
 	htmllib_m_tables.o \
 	htmllib_styleparams.o \
 	htmllib_winpars.o \
-	htmllib_htmllbox.o
+	htmllib_htmllbox.o \
+	$(__HTML_PLATFORM_SRC_OBJECTS_3)
 HTMLLIB_ODEP =  $(_____pch_wxprec_htmllib_wx_wxprec_h_gch___depname)
 WEBVIEWDLL_CXXFLAGS = $(__webviewdll_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
@@ -1793,7 +1795,7 @@ WEBVIEWDLL_OBJCXXFLAGS = $(__webviewdll_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	-DWXUSINGDLL -DWXMAKINGDLL_WEBVIEW -I$(top_srcdir)//3rdparty/cef \
 	$(PIC_FLAG) $(CPPFLAGS) $(OBJCXXFLAGS)
 WEBVIEWDLL_OBJECTS =  \
-	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_2) \
+	$(__WEBVIEW_PLATFORM_SRC_OBJECTS_2) \
 	webviewdll_webview.o \
 	webviewdll_webviewarchivehandler.o \
 	webviewdll_webviewfshandler.o \
@@ -1816,7 +1818,7 @@ WEBVIEWLIB_OBJCXXFLAGS = $(__webviewlib_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__webview_additional_include_wrl_p) $(__webview_additional_include_p) \
 	-I$(top_srcdir)//3rdparty/cef $(CPPFLAGS) $(OBJCXXFLAGS)
 WEBVIEWLIB_OBJECTS =  \
-	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_3) \
+	$(__WEBVIEW_PLATFORM_SRC_OBJECTS_3) \
 	webviewlib_webview.o \
 	webviewlib_webviewarchivehandler.o \
 	webviewlib_webviewfshandler.o \
@@ -2034,7 +2036,6 @@ AUIDLL_OBJECTS =  \
 	auidll_tabart.o \
 	auidll_xh_aui.o \
 	auidll_xh_auitoolb.o \
-	$(__AUI_GTK_SRC_OBJECTS_2) \
 	$(__AUI_PLATFORM_SRC_OBJECTS_2)
 AUIDLL_ODEP =  $(_____pch_wxprec_auidll_wx_wxprec_h_gch___depname)
 AUILIB_CXXFLAGS = $(__auilib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
@@ -2052,7 +2053,6 @@ AUILIB_OBJECTS =  \
 	auilib_tabart.o \
 	auilib_xh_aui.o \
 	auilib_xh_auitoolb.o \
-	$(__AUI_GTK_SRC_OBJECTS_3) \
 	$(__AUI_PLATFORM_SRC_OBJECTS_3)
 AUILIB_ODEP =  $(_____pch_wxprec_auilib_wx_wxprec_h_gch___depname)
 RIBBONDLL_CXXFLAGS = $(__ribbondll_PCH_INC) $(__INC_TIFF_BUILD_p) \
@@ -2253,7 +2253,7 @@ GLDLL_OBJCXXFLAGS = $(__gldll_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 GLDLL_OBJECTS =  \
 	$(__gldll___win32rc) \
 	gldll_glcmn.o \
-	$(__OPENGL_SRC_PLATFORM_OBJECTS)
+	$(__OPENGL_PLATFORM_SRC_OBJECTS)
 GLDLL_ODEP =  $(_____pch_wxprec_gldll_wx_wxprec_h_gch___depname)
 GLLIB_CXXFLAGS = $(__gllib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
@@ -2267,7 +2267,7 @@ GLLIB_OBJCXXFLAGS = $(__gllib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
 	$(__THREAD_DEFINE_p) -DWXBUILDING $(CPPFLAGS) $(OBJCXXFLAGS)
 GLLIB_OBJECTS =  \
 	gllib_glcmn.o \
-	$(__OPENGL_SRC_PLATFORM_OBJECTS_1)
+	$(__OPENGL_PLATFORM_SRC_OBJECTS_1)
 GLLIB_ODEP =  $(_____pch_wxprec_gllib_wx_wxprec_h_gch___depname)
 SOUND_SDL_CXXFLAGS = $(WX_CPPFLAGS) -DWXUSINGDLL -DwxUSE_GUI=0 $(PIC_FLAG) \
 	$(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
@@ -2417,33 +2417,97 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 	wx/msw/taskbar.h \
 	wx/msw/init.h
 @COND_PLATFORM_WIN32_1@GTK_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR)
-@COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
-@COND_PLATFORM_MACOSX_1@WEBVIEW_HDR_PLATFORM = \
+@COND_TOOLKIT_MSW@HTML_PLATFORM_HDR = wx/msw/helpbest.h
+@COND_PLATFORM_MACOSX_1@WEBVIEW_PLATFORM_HDR = \
 @COND_PLATFORM_MACOSX_1@	wx/osx/webviewhistoryitem_webkit.h \
 @COND_PLATFORM_MACOSX_1@	wx/osx/webview_webkit.h
-@COND_TOOLKIT_GTK@WEBVIEW_HDR_PLATFORM = \
+@COND_TOOLKIT_GTK@WEBVIEW_PLATFORM_HDR = \
 @COND_TOOLKIT_GTK@	wx/gtk/webviewhistoryitem_webkit.h \
 @COND_TOOLKIT_GTK@	wx/gtk/webview_webkit.h
-COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM =  \
-	wx/msw/webviewhistoryitem_ie.h \
-	wx/msw/webview_ie.h \
-	wx/msw/webview_edge.h
-@COND_TOOLKIT_MSW@WEBVIEW_HDR_PLATFORM = $(COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM)
-@COND_TOOLKIT_COCOA@OPENGL_HDR_PLATFORM = wx/cocoa/glcanvas.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@OPENGL_HDR_PLATFORM \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= wx/gtk/glcanvas.h wx/unix/glx11.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@OPENGL_HDR_PLATFORM \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= wx/gtk/glcanvas.h wx/unix/glegl.h \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@	wx/unix/glx11.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@OPENGL_HDR_PLATFORM \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@	= wx/gtk/glcanvas.h wx/unix/glegl.h \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@	wx/unix/glx11.h
-@COND_TOOLKIT_MSW@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
-@COND_TOOLKIT_OSX_COCOA@OPENGL_HDR_PLATFORM = wx/osx/glcanvas.h
-@COND_TOOLKIT_QT@OPENGL_HDR_PLATFORM = wx/qt/glcanvas.h
-@COND_TOOLKIT_X11@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h wx/unix/glx11.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_GTK_HDR = wx/aui/tabartgtk.h
+@COND_TOOLKIT_MSW@WEBVIEW_PLATFORM_HDR = \
+@COND_TOOLKIT_MSW@	wx/msw/webviewhistoryitem_ie.h wx/msw/webview_ie.h \
+@COND_TOOLKIT_MSW@	wx/msw/webview_edge.h
+@COND_TOOLKIT_GTK@OPENGL_PLATFORM_HDR = wx/unix/glx11.h \
+@COND_TOOLKIT_GTK@	wx/gtk/glcanvas.h wx/unix/glegl.h
+@COND_TOOLKIT_MSW@OPENGL_PLATFORM_HDR = wx/msw/glcanvas.h
+@COND_TOOLKIT_OSX_COCOA@OPENGL_PLATFORM_HDR = wx/osx/glcanvas.h
+@COND_TOOLKIT_OSX_IPHONE@OPENGL_PLATFORM_HDR = wx/osx/glcanvas.h
+@COND_TOOLKIT_QT@OPENGL_PLATFORM_HDR = wx/qt/glcanvas.h
+@COND_TOOLKIT_X11@OPENGL_PLATFORM_HDR = wx/unix/glx11.h wx/x11/glcanvas.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_PLATFORM_HDR = wx/aui/tabartgtk.h
 @COND_TOOLKIT_MSW@AUI_PLATFORM_HDR = wx/aui/tabartmsw.h wx/aui/barartmsw.h
+COND_TOOLKIT__BASE_OSX_SRC =  \
+	src/common/fdiodispatcher.cpp \
+	src/common/selectdispatcher.cpp \
+	src/unix/appunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
+	src/unix/timerunx.cpp \
+	src/unix/threadpsx.cpp \
+	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
+	src/unix/fswatcher_kqueue.cpp \
+	src/unix/mimetype.cpp \
+	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
+	src/osx/core/strconv_cf.cpp \
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.mm
+@COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
+COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
+	src/common/fdiodispatcher.cpp \
+	src/common/selectdispatcher.cpp \
+	src/unix/appunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
+	src/unix/timerunx.cpp \
+	src/unix/threadpsx.cpp \
+	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
+	src/unix/fswatcher_kqueue.cpp \
+	src/unix/mimetype.cpp \
+	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
+	src/osx/core/strconv_cf.cpp \
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.mm
+@COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
+COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
+	src/common/fdiodispatcher.cpp \
+	src/common/selectdispatcher.cpp \
+	src/unix/appunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
+	src/unix/timerunx.cpp \
+	src/unix/threadpsx.cpp \
+	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
+	src/unix/fswatcher_kqueue.cpp \
+	src/unix/mimetype.cpp \
+	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
+	src/osx/core/strconv_cf.cpp \
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
+	src/osx/core/uilocale.mm
+@COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2496,54 +2560,6 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/fswatcher_fsevents.cpp \
 	src/osx/cocoa/stdpaths.mm
 @COND_TOOLKIT_OSX_IPHONE@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC)
-COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/uilocale.mm
-@COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
-COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/uilocale.mm
-@COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
 COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
@@ -2568,30 +2584,6 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/osx/core/secretstore.cpp \
 	src/osx/core/uilocale.mm
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
-COND_TOOLKIT__BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/uilocale.mm
-@COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
 COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
@@ -3937,9 +3929,9 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/wxhtml.h \
 	wx/htmllbox.h \
 	wx/html/forcelnk.h \
-	$(MSW_HTML_HDR) \
+	$(HTML_PLATFORM_HDR) \
 	wx/glcanvas.h \
-	$(OPENGL_HDR_PLATFORM) \
+	$(OPENGL_PLATFORM_HDR) \
 	wx/debugrpt.h \
 	wx/xrc/xh_activityindicator.h \
 	wx/xrc/xh_all.h \
@@ -4022,7 +4014,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_aui.h \
 	wx/xrc/xh_auitoolb.h \
 	wx/aui/serializer.h \
-	$(AUI_GTK_HDR) \
 	$(AUI_PLATFORM_HDR) \
 	wx/propgrid/advprops.h \
 	wx/propgrid/editors.h \
@@ -4070,7 +4061,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_richtext.h \
 	wx/stc/stc.h \
 	wx/xrc/xh_styledtextctrl.h \
-	$(WEBVIEW_HDR_PLATFORM) \
+	$(WEBVIEW_PLATFORM_HDR) \
 	wx/webview.h \
 	wx/webviewarchivehandler.h \
 	wx/webviewfshandler.h \
@@ -4232,7 +4223,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	$(__CORE_SRC_OBJECTS) \
 	monodll_mediactrlcmn.o \
 	$(__MEDIA_PLATFORM_SRC_OBJECTS) \
-	$(__HTML_SRC_PLATFORM_OBJECTS) \
+	monodll_chm.o \
 	monodll_helpctrl.o \
 	monodll_helpdata.o \
 	monodll_helpdlg.o \
@@ -4258,7 +4249,8 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_styleparams.o \
 	monodll_winpars.o \
 	monodll_htmllbox.o \
-	$(__WEBVIEW_SRC_PLATFORM_OBJECTS) \
+	$(__HTML_PLATFORM_SRC_OBJECTS) \
+	$(__WEBVIEW_PLATFORM_SRC_OBJECTS) \
 	monodll_webview.o \
 	monodll_webviewarchivehandler.o \
 	monodll_webviewfshandler.o \
@@ -4344,7 +4336,6 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_tabart.o \
 	monodll_xh_aui.o \
 	monodll_xh_auitoolb.o \
-	$(__AUI_GTK_SRC_OBJECTS) \
 	$(__AUI_PLATFORM_SRC_OBJECTS) \
 	monodll_advprops.o \
 	monodll_editors.o \
@@ -5866,18 +5857,15 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_qt_mediactrl.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_X11@	monodll_unix_mediactrl.o monodll_mediactrl_gstplayer.o
-@COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
-@COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
-@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = \
-@COND_TOOLKIT_MSW@	monodll_helpbest.o monodll_chm.o
-@COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS \
+@COND_TOOLKIT_MSW@__HTML_PLATFORM_SRC_OBJECTS = monodll_helpbest.o
+@COND_PLATFORM_MACOSX_1@__WEBVIEW_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= monodll_osx_webview_chromium.o \
 @COND_PLATFORM_MACOSX_1@	monodll_osx_webview_webkit.o
-@COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS = \
+@COND_TOOLKIT_GTK@__WEBVIEW_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_GTK@	monodll_gtk_webview_webkit.o monodll_webview_webkit2.o
-@COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS = \
+@COND_TOOLKIT_MSW@__WEBVIEW_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_webview_ie.o monodll_webview_edge.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_PLATFORM_SRC_OBJECTS \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_tabartmsw.o monodll_barartmsw.o
@@ -5998,7 +5986,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	$(__CORE_SRC_OBJECTS_1) \
 	monolib_mediactrlcmn.o \
 	$(__MEDIA_PLATFORM_SRC_OBJECTS_1) \
-	$(__HTML_SRC_PLATFORM_OBJECTS_1) \
+	monolib_chm.o \
 	monolib_helpctrl.o \
 	monolib_helpdata.o \
 	monolib_helpdlg.o \
@@ -6024,7 +6012,8 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_styleparams.o \
 	monolib_winpars.o \
 	monolib_htmllbox.o \
-	$(__WEBVIEW_SRC_PLATFORM_OBJECTS_1) \
+	$(__HTML_PLATFORM_SRC_OBJECTS_1) \
+	$(__WEBVIEW_PLATFORM_SRC_OBJECTS_1) \
 	monolib_webview.o \
 	monolib_webviewarchivehandler.o \
 	monolib_webviewfshandler.o \
@@ -6110,7 +6099,6 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_tabart.o \
 	monolib_xh_aui.o \
 	monolib_xh_auitoolb.o \
-	$(__AUI_GTK_SRC_OBJECTS_1) \
 	$(__AUI_PLATFORM_SRC_OBJECTS_1) \
 	monolib_advprops.o \
 	monolib_editors.o \
@@ -7632,18 +7620,15 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_qt_mediactrl.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_X11@	monolib_unix_mediactrl.o monolib_mediactrl_gstplayer.o
-@COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
-@COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
-@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = \
-@COND_TOOLKIT_MSW@	monolib_helpbest.o monolib_chm.o
-@COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 \
+@COND_TOOLKIT_MSW@__HTML_PLATFORM_SRC_OBJECTS_1 = monolib_helpbest.o
+@COND_PLATFORM_MACOSX_1@__WEBVIEW_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= monolib_osx_webview_chromium.o \
 @COND_PLATFORM_MACOSX_1@	monolib_osx_webview_webkit.o
-@COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 = \
+@COND_TOOLKIT_GTK@__WEBVIEW_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_GTK@	monolib_gtk_webview_webkit.o monolib_webview_webkit2.o
-@COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 = \
+@COND_TOOLKIT_MSW@__WEBVIEW_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_webview_ie.o monolib_webview_edge.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS_1 \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_tabartmsw.o monolib_barartmsw.o
@@ -11293,10 +11278,7 @@ COND_USE_SOVERSOLARIS_1___htmldll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__htmldll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___htmldll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__htmldll___win32rc = htmldll_version_rc.o
-@COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_chm.o
-@COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_chm.o
-@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_2 = \
-@COND_TOOLKIT_MSW@	htmldll_helpbest.o htmldll_chm.o
+@COND_TOOLKIT_MSW@__HTML_PLATFORM_SRC_OBJECTS_2 = htmldll_helpbest.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@__htmllib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname)
@@ -11309,10 +11291,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_htmllib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_htmllib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_htmllib/wx/wxprec.h.gch
-@COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_chm.o
-@COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_chm.o
-@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_3 = \
-@COND_TOOLKIT_MSW@	htmllib_helpbest.o htmllib_chm.o
+@COND_TOOLKIT_MSW@__HTML_PLATFORM_SRC_OBJECTS_3 = htmllib_helpbest.o
 @COND_SHARED_1@____wxhtml_namedll_DEP = $(__htmldll___depname)
 @COND_SHARED_0@____wxhtml_namelib_DEP = $(__htmllib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1___webviewdll___depname = \
@@ -11384,13 +11363,13 @@ COND_USE_SOTWOSYMLINKS_1___webviewdll___so_symlinks_uninst_cmd = rm -f \
 COND_USE_SOVERSOLARIS_1___webviewdll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__webviewdll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___webviewdll___so_symlinks_uninst_cmd)
-@COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS_2 \
+@COND_PLATFORM_MACOSX_1@__WEBVIEW_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MACOSX_1@	= webviewdll_osx_webview_chromium.o \
 @COND_PLATFORM_MACOSX_1@	webviewdll_osx_webview_webkit.o
-@COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS_2 = \
+@COND_TOOLKIT_GTK@__WEBVIEW_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_GTK@	webviewdll_gtk_webview_webkit.o \
 @COND_TOOLKIT_GTK@	webviewdll_webview_webkit2.o
-@COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS_2 = \
+@COND_TOOLKIT_MSW@__WEBVIEW_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_MSW@	webviewdll_webview_ie.o webviewdll_webview_edge.o
 @COND_PLATFORM_WIN32_1@__webviewdll___win32rc = webviewdll_version_rc.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_1___webviewlib___depname = \
@@ -11406,13 +11385,13 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_1___webviewlib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_webviewlib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_webviewlib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_webviewlib/wx/wxprec.h.gch
-@COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS_3 \
+@COND_PLATFORM_MACOSX_1@__WEBVIEW_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MACOSX_1@	= webviewlib_osx_webview_chromium.o \
 @COND_PLATFORM_MACOSX_1@	webviewlib_osx_webview_webkit.o
-@COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS_3 = \
+@COND_TOOLKIT_GTK@__WEBVIEW_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_GTK@	webviewlib_gtk_webview_webkit.o \
 @COND_TOOLKIT_GTK@	webviewlib_webview_webkit2.o
-@COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS_3 = \
+@COND_TOOLKIT_MSW@__WEBVIEW_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_MSW@	webviewlib_webview_ie.o webviewlib_webview_edge.o
 @COND_SHARED_1@____wxwebview_namedll_DEP = $(__webviewdll___depname)
 @COND_SHARED_0@____wxwebview_namelib_DEP = $(__webviewlib___depname)
@@ -11726,7 +11705,7 @@ COND_USE_SOVERSOLARIS_1___auidll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__auidll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___auidll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__auidll___win32rc = auidll_version_rc.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS_2 \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= auidll_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_MSW@	auidll_tabartmsw.o auidll_barartmsw.o
@@ -11742,7 +11721,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_AUI_1___auilib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_auilib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_auilib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_auilib/wx/wxprec.h.gch
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS_3 \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= auilib_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_MSW@	auilib_tabartmsw.o auilib_barartmsw.o
@@ -12154,25 +12133,15 @@ COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__gldll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__gldll___win32rc = gldll_version_rc.o
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= gldll_glegl.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	gldll_glx11.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	gldll_gtk_glcanvas.o
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	= gldll_glegl.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	gldll_glx11.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	gldll_gtk_glcanvas.o
-@COND_TOOLKIT_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS = \
-@COND_TOOLKIT_COCOA@	gldll_src_cocoa_glcanvas.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= gldll_gtk_glcanvas.o gldll_glx11.o
-@COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_msw_glcanvas.o
-@COND_TOOLKIT_OSX_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_TOOLKIT_OSX_COCOA@	= gldll_osx_cocoa_glcanvas.o gldll_glcanvas_osx.o
-@COND_TOOLKIT_OSX_IPHONE@__OPENGL_SRC_PLATFORM_OBJECTS \
-@COND_TOOLKIT_OSX_IPHONE@	= gldll_iphone_glcanvas.o gldll_glcanvas_osx.o
-@COND_TOOLKIT_QT@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_qt_glcanvas.o
-@COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS = \
+@COND_TOOLKIT_GTK@__OPENGL_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_GTK@	gldll_glx11.o gldll_gtk_glcanvas.o gldll_glegl.o
+@COND_TOOLKIT_MSW@__OPENGL_PLATFORM_SRC_OBJECTS = gldll_msw_glcanvas.o
+@COND_TOOLKIT_OSX_COCOA@__OPENGL_PLATFORM_SRC_OBJECTS \
+@COND_TOOLKIT_OSX_COCOA@	= gldll_glcanvas_osx.o gldll_cocoa_glcanvas.o
+@COND_TOOLKIT_OSX_IPHONE@__OPENGL_PLATFORM_SRC_OBJECTS \
+@COND_TOOLKIT_OSX_IPHONE@	= gldll_glcanvas_osx.o gldll_iphone_glcanvas.o
+@COND_TOOLKIT_QT@__OPENGL_PLATFORM_SRC_OBJECTS = gldll_qt_glcanvas.o
+@COND_TOOLKIT_X11@__OPENGL_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_X11@	gldll_x11_glcanvas.o gldll_glx11.o
 COND_MONOLITHIC_0___WXLIBGLDEP_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -12195,25 +12164,15 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_gllib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_gllib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_gllib/wx/wxprec.h.gch
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	= gllib_glegl.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	gllib_glx11.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	gllib_gtk_glcanvas.o
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	= gllib_glegl.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	gllib_glx11.o \
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	gllib_gtk_glcanvas.o
-@COND_TOOLKIT_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS_1 = \
-@COND_TOOLKIT_COCOA@	gllib_src_cocoa_glcanvas.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= gllib_gtk_glcanvas.o gllib_glx11.o
-@COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_msw_glcanvas.o
-@COND_TOOLKIT_OSX_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_TOOLKIT_OSX_COCOA@	= gllib_osx_cocoa_glcanvas.o gllib_glcanvas_osx.o
-@COND_TOOLKIT_OSX_IPHONE@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
-@COND_TOOLKIT_OSX_IPHONE@	= gllib_iphone_glcanvas.o gllib_glcanvas_osx.o
-@COND_TOOLKIT_QT@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_qt_glcanvas.o
-@COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS_1 = \
+@COND_TOOLKIT_GTK@__OPENGL_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_GTK@	gllib_glx11.o gllib_gtk_glcanvas.o gllib_glegl.o
+@COND_TOOLKIT_MSW@__OPENGL_PLATFORM_SRC_OBJECTS_1 = gllib_msw_glcanvas.o
+@COND_TOOLKIT_OSX_COCOA@__OPENGL_PLATFORM_SRC_OBJECTS_1 \
+@COND_TOOLKIT_OSX_COCOA@	= gllib_glcanvas_osx.o gllib_cocoa_glcanvas.o
+@COND_TOOLKIT_OSX_IPHONE@__OPENGL_PLATFORM_SRC_OBJECTS_1 \
+@COND_TOOLKIT_OSX_IPHONE@	= gllib_glcanvas_osx.o gllib_iphone_glcanvas.o
+@COND_TOOLKIT_QT@__OPENGL_PLATFORM_SRC_OBJECTS_1 = gllib_qt_glcanvas.o
+@COND_TOOLKIT_X11@__OPENGL_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_X11@	gllib_x11_glcanvas.o gllib_glx11.o
 @COND_SHARED_1@____wxgl_namedll_DEP = $(__gldll___depname)
 @COND_SHARED_0@____wxgl_namelib_DEP = $(__gllib___depname)
@@ -16024,8 +15983,8 @@ monodll_src_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MONODLL_ODEP)
 monodll_qt_mediactrl.o: $(srcdir)/src/qt/mediactrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/mediactrl.cpp
 
-monodll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
+monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 monodll_helpctrl.o: $(srcdir)/src/html/helpctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/helpctrl.cpp
@@ -16101,6 +16060,9 @@ monodll_winpars.o: $(srcdir)/src/html/winpars.cpp $(MONODLL_ODEP)
 
 monodll_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/htmllbox.cpp
+
+monodll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
 
 monodll_webview_ie.o: $(srcdir)/src/msw/webview_ie.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/webview_ie.cpp
@@ -16375,14 +16337,14 @@ monodll_xh_aui.o: $(srcdir)/src/xrc/xh_aui.cpp $(MONODLL_ODEP)
 monodll_xh_auitoolb.o: $(srcdir)/src/xrc/xh_auitoolb.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_auitoolb.cpp
 
-monodll_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
-
 monodll_tabartmsw.o: $(srcdir)/src/aui/tabartmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabartmsw.cpp
 
 monodll_barartmsw.o: $(srcdir)/src/aui/barartmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/barartmsw.cpp
+
+monodll_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
 
 monodll_advprops.o: $(srcdir)/src/propgrid/advprops.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/propgrid/advprops.cpp
@@ -19516,15 +19478,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-@COND_PLATFORM_UNIX_1_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
 monodll_version_rc.o: $(srcdir)/src/msw/version.rc $(MONODLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/src --define __WX__ --include-dir $(top_srcdir)/src/stc/lexilla/access --include-dir $(top_srcdir)/src/stc/lexilla/include --include-dir $(top_srcdir)/src/stc/lexilla/lexlib --include-dir $(top_srcdir)/src/stc/lexilla/include --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/src $(__webview_additional_include_wrl_p_0) $(__webview_additional_include_p_0) --define wxUSE_BASE=1 --define WXMAKINGDLL
 
@@ -20773,8 +20726,8 @@ monolib_src_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MONOLIB_ODEP)
 monolib_qt_mediactrl.o: $(srcdir)/src/qt/mediactrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/mediactrl.cpp
 
-monolib_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
+monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 monolib_helpctrl.o: $(srcdir)/src/html/helpctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/helpctrl.cpp
@@ -20850,6 +20803,9 @@ monolib_winpars.o: $(srcdir)/src/html/winpars.cpp $(MONOLIB_ODEP)
 
 monolib_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/htmllbox.cpp
+
+monolib_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
 
 monolib_webview_ie.o: $(srcdir)/src/msw/webview_ie.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/webview_ie.cpp
@@ -21124,14 +21080,14 @@ monolib_xh_aui.o: $(srcdir)/src/xrc/xh_aui.cpp $(MONOLIB_ODEP)
 monolib_xh_auitoolb.o: $(srcdir)/src/xrc/xh_auitoolb.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_auitoolb.cpp
 
-monolib_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
-
 monolib_tabartmsw.o: $(srcdir)/src/aui/tabartmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabartmsw.cpp
 
 monolib_barartmsw.o: $(srcdir)/src/aui/barartmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/barartmsw.cpp
+
+monolib_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
 
 monolib_advprops.o: $(srcdir)/src/propgrid/advprops.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/propgrid/advprops.cpp
@@ -24264,15 +24220,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-@COND_PLATFORM_UNIX_1_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 basedll_version_rc.o: $(srcdir)/src/msw/version.rc $(BASEDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define wxUSE_GUI=0 --define WXMAKINGDLL_BASE --define wxUSE_BASE=1
@@ -32872,8 +32819,8 @@ medialib_qt_mediactrl.o: $(srcdir)/src/qt/mediactrl.cpp $(MEDIALIB_ODEP)
 htmldll_version_rc.o: $(srcdir)/src/msw/version.rc $(HTMLDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_HTML
 
-htmldll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(HTMLDLL_ODEP)
-	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
+htmldll_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLDLL_ODEP)
+	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 htmldll_helpctrl.o: $(srcdir)/src/html/helpctrl.cpp $(HTMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/helpctrl.cpp
@@ -32950,17 +32897,11 @@ htmldll_winpars.o: $(srcdir)/src/html/winpars.cpp $(HTMLDLL_ODEP)
 htmldll_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(HTMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/generic/htmllbox.cpp
 
-@COND_TOOLKIT_MSW@htmldll_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLDLL_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
+htmldll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(HTMLDLL_ODEP)
+	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
 
-@COND_PLATFORM_UNIX_1@htmldll_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-@COND_PLATFORM_MACOSX_1@htmldll_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLDLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-htmllib_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(HTMLLIB_ODEP)
-	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
+htmllib_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLLIB_ODEP)
+	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 htmllib_helpctrl.o: $(srcdir)/src/html/helpctrl.cpp $(HTMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/helpctrl.cpp
@@ -33037,14 +32978,8 @@ htmllib_winpars.o: $(srcdir)/src/html/winpars.cpp $(HTMLLIB_ODEP)
 htmllib_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(HTMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/generic/htmllbox.cpp
 
-@COND_TOOLKIT_MSW@htmllib_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLLIB_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-@COND_PLATFORM_UNIX_1@htmllib_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
-
-@COND_PLATFORM_MACOSX_1@htmllib_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
+htmllib_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(HTMLLIB_ODEP)
+	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/msw/helpbest.cpp
 
 webviewdll_webview_ie.o: $(srcdir)/src/msw/webview_ie.cpp $(WEBVIEWDLL_ODEP)
 	$(CXXC) -c -o $@ $(WEBVIEWDLL_CXXFLAGS) $(srcdir)/src/msw/webview_ie.cpp
@@ -33592,14 +33527,14 @@ auidll_xh_aui.o: $(srcdir)/src/xrc/xh_aui.cpp $(AUIDLL_ODEP)
 auidll_xh_auitoolb.o: $(srcdir)/src/xrc/xh_auitoolb.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_auitoolb.cpp
 
-auidll_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(AUIDLL_ODEP)
-	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
-
 auidll_tabartmsw.o: $(srcdir)/src/aui/tabartmsw.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabartmsw.cpp
 
 auidll_barartmsw.o: $(srcdir)/src/aui/barartmsw.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/barartmsw.cpp
+
+auidll_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(AUIDLL_ODEP)
+	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
 
 auilib_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
@@ -33628,14 +33563,14 @@ auilib_xh_aui.o: $(srcdir)/src/xrc/xh_aui.cpp $(AUILIB_ODEP)
 auilib_xh_auitoolb.o: $(srcdir)/src/xrc/xh_auitoolb.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/xrc/xh_auitoolb.cpp
 
-auilib_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(AUILIB_ODEP)
-	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
-
 auilib_tabartmsw.o: $(srcdir)/src/aui/tabartmsw.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabartmsw.cpp
 
 auilib_barartmsw.o: $(srcdir)/src/aui/barartmsw.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/barartmsw.cpp
+
+auilib_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(AUILIB_ODEP)
+	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
 
 ribbondll_version_rc.o: $(srcdir)/src/msw/version.rc $(RIBBONDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_RIBBON
@@ -33871,14 +33806,17 @@ gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 gldll_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
 
-gldll_osx_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLDLL_ODEP)
+gldll_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 gldll_iphone_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
 
-gldll_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLDLL_ODEP)
-	$(CXXC) -c -o $@ $(GLDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
+gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
+	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
+
+gldll_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLDLL_ODEP)
+	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
 
 gldll_qt_glcanvas.o: $(srcdir)/src/qt/glcanvas.cpp $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/qt/glcanvas.cpp
@@ -33895,44 +33833,26 @@ gldll_x11_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
 
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gldll_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gldll_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
+@COND_TOOLKIT_GTK@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
 @COND_TOOLKIT_X11@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gldll_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
 gllib_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
 
-gllib_osx_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLLIB_ODEP)
+gllib_cocoa_glcanvas.o: $(srcdir)/src/osx/cocoa/glcanvas.mm $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/glcanvas.mm
 
 gllib_iphone_glcanvas.o: $(srcdir)/src/osx/iphone/glcanvas.mm $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/glcanvas.mm
 
-gllib_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLLIB_ODEP)
-	$(CXXC) -c -o $@ $(GLLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/glcanvas.mm
+gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
+	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
+
+gllib_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLLIB_ODEP)
+	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
 
 gllib_qt_glcanvas.o: $(srcdir)/src/qt/glcanvas.cpp $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/qt/glcanvas.cpp
@@ -33949,32 +33869,11 @@ gllib_x11_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
 
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gllib_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gllib_glegl.o: $(srcdir)/src/unix/glegl.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glegl.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
+@COND_TOOLKIT_GTK@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
 @COND_TOOLKIT_X11@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
-@COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@gllib_gtk_glcanvas.o: $(srcdir)/src/gtk/glcanvas.cpp $(GLLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk/glcanvas.cpp
 
 sound_sdl_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp
 	$(CXXC) -c -o $@ $(SOUND_SDL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
