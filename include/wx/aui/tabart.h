@@ -27,6 +27,8 @@
 #include "wx/brush.h"
 #include "wx/bmpbndl.h"
 
+#include "wx/aui/framemanager.h" // wxAuiPaneButtonState and wxAuiButtonId
+
 #include <vector>
 
 class wxAuiNotebookPage;
@@ -165,16 +167,12 @@ public:
 };
 
 
-class WXDLLIMPEXP_AUI wxAuiGenericTabArt : public wxAuiTabArt
+// Base, still abstract, class for the concrete tab art classes below.
+class WXDLLIMPEXP_AUI wxAuiTabArtBase : public wxAuiTabArt
 {
-
 public:
-
-    wxAuiGenericTabArt();
-    virtual ~wxAuiGenericTabArt();
-
-    wxAuiTabArt* Clone() override;
     void SetFlags(unsigned int flags) override;
+
     void SetSizingInfo(const wxSize& tabCtrlSize,
                        size_t tabCount,
                        wxWindow* wnd = nullptr) override;
@@ -182,11 +180,90 @@ public:
     void SetNormalFont(const wxFont& font) override;
     void SetSelectedFont(const wxFont& font) override;
     void SetMeasuringFont(const wxFont& font) override;
-    void SetColour(const wxColour& colour) override;
-    void SetActiveColour(const wxColour& colour) override;
 
     wxFont GetNormalFont() const override;
     wxFont GetSelectedFont() const override;
+
+    int GetButtonRect(
+                 wxReadOnlyDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect) override;
+
+protected:
+    // Ctor is protected, this class is only used as a base class.
+    //
+    // Remember to call InitBitmaps() after setting up the colours in the
+    // derived class ctor.
+    wxAuiTabArtBase();
+
+    // Initialize the bitmaps using the colours returned by GetButtonColour().
+    void InitBitmaps();
+
+    // Return pointer to our bitmap bundle corresponding to the button ID and
+    // state or null if we don't support this button (and also if it is hidden).
+    const wxBitmapBundle*
+    GetButtonBitmapBundle(const wxAuiTabContainerButton& button) const;
+
+    // Helper function for DrawButton() and GetButtonRect().
+    bool DoGetButtonRectAndBitmap(
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect,
+                 wxBitmap* outBitmap = nullptr);
+
+
+    // Note: all these fields are protected for compatibility reasons, but
+    // shouldn't be accessed directly.
+    wxFont m_normalFont;
+    wxFont m_selectedFont;
+    wxFont m_measuringFont;
+
+    wxBitmapBundle m_activeCloseBmp;
+    wxBitmapBundle m_disabledCloseBmp;
+    wxBitmapBundle m_activeLeftBmp;
+    wxBitmapBundle m_disabledLeftBmp;
+    wxBitmapBundle m_activeRightBmp;
+    wxBitmapBundle m_disabledRightBmp;
+    wxBitmapBundle m_activeWindowListBmp;
+    wxBitmapBundle m_disabledWindowListBmp;
+    wxBitmapBundle m_activePinBmp;
+    wxBitmapBundle m_disabledPinBmp;
+    wxBitmapBundle m_activeUnpinBmp;
+    wxBitmapBundle m_disabledUnpinBmp;
+
+    int m_fixedTabWidth;
+    int m_tabCtrlHeight; // Unused, kept only for compatibility.
+    unsigned int m_flags = 0;
+
+private:
+    // This is called by InitBitmaps().
+    //
+    // The state parameter is currently always either wxAUI_BUTTON_STATE_NORMAL
+    // or wxAUI_BUTTON_STATE_DISABLED, but the function could be called with
+    // other values in the future.
+    virtual wxColour
+    GetButtonColour(wxAuiButtonId button, wxAuiPaneButtonState state) const = 0;
+};
+
+
+class WXDLLIMPEXP_AUI wxAuiGenericTabArt : public wxAuiTabArtBase
+{
+
+public:
+
+    wxAuiGenericTabArt();
+
+    wxAuiTabArt* Clone() override;
+
+    void SetColour(const wxColour& colour) override;
+    void SetActiveColour(const wxColour& colour) override;
 
     void DrawBorder(
                  wxDC& dc,
@@ -227,15 +304,6 @@ public:
                  const wxAuiNotebookPage& page,
                  int* xExtent = nullptr) override;
 
-    int GetButtonRect(
-                 wxReadOnlyDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& inRect,
-                 int bitmapId,
-                 int buttonState,
-                 int orientation,
-                 wxRect* outRect) override;
-
     int ShowDropDown(
                  wxWindow* wnd,
                  const wxAuiNotebookPageArray& items,
@@ -250,72 +318,33 @@ public:
 
 protected:
 
-    wxFont m_normalFont;
-    wxFont m_selectedFont;
-    wxFont m_measuringFont;
     wxColour m_baseColour;
     wxPen m_baseColourPen;
     wxPen m_borderPen;
     wxBrush m_baseColourBrush;
     wxColour m_activeColour;
-    wxBitmapBundle m_activeCloseBmp;
-    wxBitmapBundle m_disabledCloseBmp;
-    wxBitmapBundle m_activeLeftBmp;
-    wxBitmapBundle m_disabledLeftBmp;
-    wxBitmapBundle m_activeRightBmp;
-    wxBitmapBundle m_disabledRightBmp;
-    wxBitmapBundle m_activeWindowListBmp;
-    wxBitmapBundle m_disabledWindowListBmp;
-    wxBitmapBundle m_activePinBmp;
-    wxBitmapBundle m_disabledPinBmp;
-    wxBitmapBundle m_activeUnpinBmp;
-    wxBitmapBundle m_disabledUnpinBmp;
-
-    int m_fixedTabWidth;
-    int m_tabCtrlHeight; // Unused, kept only for compatibility.
-    unsigned int m_flags;
 
 private:
-    // Common part of DrawButton() and GetButtonRect().
-    bool DoGetButtonRectAndBitmap(
-                 wxWindow* wnd,
-                 const wxRect& inRect,
-                 int bitmapId,
-                 int buttonState,
-                 int orientation,
-                 wxRect* outRect,
-                 wxBitmap* outBitmap = nullptr);
+    // Called from ctor and UpdateColoursFromSystem().
+    void InitColours();
 
-    // Return pointer to our bitmap bundle corresponding to the button ID and
-    // state or null if we don't support this button (and also if it is hidden).
-    const wxBitmapBundle*
-    GetButtonBitmapBundle(const wxAuiTabContainerButton& button) const;
+    virtual wxColour
+    GetButtonColour(wxAuiButtonId button,
+                    wxAuiPaneButtonState state) const override;
 };
 
 
-class WXDLLIMPEXP_AUI wxAuiSimpleTabArt : public wxAuiTabArt
+class WXDLLIMPEXP_AUI wxAuiSimpleTabArt : public wxAuiTabArtBase
 {
 
 public:
 
     wxAuiSimpleTabArt();
-    virtual ~wxAuiSimpleTabArt();
 
     wxAuiTabArt* Clone() override;
-    void SetFlags(unsigned int flags) override;
 
-    void SetSizingInfo(const wxSize& tabCtrlSize,
-                       size_t tabCount,
-                       wxWindow* wnd = nullptr) override;
-
-    void SetNormalFont(const wxFont& font) override;
-    void SetSelectedFont(const wxFont& font) override;
-    void SetMeasuringFont(const wxFont& font) override;
     void SetColour(const wxColour& colour) override;
     void SetActiveColour(const wxColour& colour) override;
-
-    wxFont GetNormalFont() const override;
-    wxFont GetSelectedFont() const override;
 
     void DrawBorder(
                  wxDC& dc,
@@ -362,15 +391,6 @@ public:
                  int closeButtonState,
                  int* xExtent) override;
 
-    int GetButtonRect(
-                 wxReadOnlyDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& inRect,
-                 int bitmapId,
-                 int buttonState,
-                 int orientation,
-                 wxRect* outRect) override;
-
     int ShowDropDown(
                  wxWindow* wnd,
                  const wxAuiNotebookPageArray& items,
@@ -382,36 +402,16 @@ public:
 
 protected:
 
-    wxFont m_normalFont;
-    wxFont m_selectedFont;
-    wxFont m_measuringFont;
     wxPen m_normalBkPen;
     wxPen m_selectedBkPen;
     wxBrush m_normalBkBrush;
     wxBrush m_selectedBkBrush;
     wxBrush m_bkBrush;
-    wxBitmapBundle m_activeCloseBmp;
-    wxBitmapBundle m_disabledCloseBmp;
-    wxBitmapBundle m_activeLeftBmp;
-    wxBitmapBundle m_disabledLeftBmp;
-    wxBitmapBundle m_activeRightBmp;
-    wxBitmapBundle m_disabledRightBmp;
-    wxBitmapBundle m_activeWindowListBmp;
-    wxBitmapBundle m_disabledWindowListBmp;
-
-    int m_fixedTabWidth;
-    unsigned int m_flags;
 
 private:
-    // Common part of DrawButton() and GetButtonRect().
-    bool DoGetButtonRectAndBitmap(
-                 wxWindow* wnd,
-                 const wxRect& inRect,
-                 int bitmapId,
-                 int buttonState,
-                 int orientation,
-                 wxRect* outRect,
-                 wxBitmap* outBitmap = nullptr);
+    virtual wxColour
+    GetButtonColour(wxAuiButtonId button,
+                    wxAuiPaneButtonState state) const override;
 };
 
 #ifndef __WXUNIVERSAL__
