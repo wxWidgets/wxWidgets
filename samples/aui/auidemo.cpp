@@ -1317,6 +1317,20 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     }
 
 
+    // If we've turned on pin or unpin buttons, check that it's compatible with
+    // the currently used tab art.
+    if ( m_notebookStyle & (wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                            wxAUI_NB_UNPIN_ON_ALL_PINNED) )
+    {
+        if ( m_notebookTheme == TabArt::Simple )
+        {
+            wxLogError("Pin icons not supported by the currently used theme.");
+
+            m_notebookStyle &= ~(wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                                 wxAUI_NB_UNPIN_ON_ALL_PINNED);
+        }
+    }
+
     for ( const auto& pane : m_mgr.GetAllPanes() )
     {
         if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
@@ -1329,8 +1343,18 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
             }
             else if (id == ID_NotebookArtSimple)
             {
-                m_notebookTheme = TabArt::Simple;
-                art = new wxAuiSimpleTabArt;
+                if ( m_notebookStyle & (wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                                        wxAUI_NB_UNPIN_ON_ALL_PINNED) )
+                {
+                    // wxAuiSimpleTabArt doesn't have any support for pin or
+                    // unpin icons.
+                    wxLogError("Simple theme does not support pinned tabs.");
+                }
+                else
+                {
+                    m_notebookTheme = TabArt::Simple;
+                    art = new wxAuiSimpleTabArt;
+                }
             }
 
             if (art)
