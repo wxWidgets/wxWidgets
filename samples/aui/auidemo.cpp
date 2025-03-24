@@ -1116,11 +1116,11 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxString perspectiveAll = m_mgr.SavePerspective();
 
-    int i, count;
-    wxAuiPaneInfoArray& allPanes = m_mgr.GetAllPanes();
-    for (i = 0, count = allPanes.GetCount(); i < count; ++i)
-        if (!allPanes.Item(i).IsToolbar())
-            allPanes.Item(i).Hide();
+    for ( auto& pane : m_mgr.GetAllPanes() )
+    {
+        if (!pane.IsToolbar())
+            pane.Hide();
+    }
     m_mgr.GetPane("tb1").Hide();
     m_mgr.GetPane("tb6").Hide();
     m_mgr.GetPane("test8").Show().Left().Layer(0).Row(0).Position(0);
@@ -1188,14 +1188,11 @@ void MyFrame::OnGradient(wxCommandEvent& event)
 
 void MyFrame::OnToolbarResizing(wxCommandEvent& WXUNUSED(evt))
 {
-    wxAuiPaneInfoArray& allPanes = m_mgr.GetAllPanes();
-    const size_t count = allPanes.GetCount();
-    for (size_t i = 0; i < count; ++i)
+    for ( auto& pane : m_mgr.GetAllPanes() )
     {
-        wxAuiToolBar* toolbar = wxDynamicCast(allPanes[i].window, wxAuiToolBar);
-        if (toolbar)
+        if ( wxDynamicCast(pane.window, wxAuiToolBar) )
         {
-            allPanes[i].Resizable(!allPanes[i].IsResizable());
+            pane.Resizable(!pane.IsResizable());
         }
     }
 
@@ -1249,7 +1246,7 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         // Propagate the flags to the notebooks too.
         for ( auto& pane : m_mgr.GetAllPanes() )
         {
-            if (auto* nb = wxDynamicCast(pane.window, wxAuiNotebook) )
+            if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
             {
                 nb->SetManagerFlags(m_mgr.GetFlags());
             }
@@ -1320,15 +1317,10 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
     }
 
 
-    size_t i, count;
-    wxAuiPaneInfoArray& allPanes = m_mgr.GetAllPanes();
-    for (i = 0, count = allPanes.GetCount(); i < count; ++i)
+    for ( const auto& pane : m_mgr.GetAllPanes() )
     {
-        wxAuiPaneInfo& pane = allPanes.Item(i);
-        if (pane.window->IsKindOf(CLASSINFO(wxAuiNotebook)))
+        if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
         {
-            wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
-
             wxAuiTabArt* art = nullptr;
             if (id == ID_NotebookArtGloss)
             {
@@ -1373,14 +1365,11 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_AllowToolbarResizing:
         {
-            wxAuiPaneInfoArray& allPanes = m_mgr.GetAllPanes();
-            const size_t count = allPanes.GetCount();
-            for (size_t i = 0; i < count; ++i)
+            for ( const auto& pane : m_mgr.GetAllPanes() )
             {
-                wxAuiToolBar* toolbar = wxDynamicCast(allPanes[i].window, wxAuiToolBar);
-                if (toolbar)
+                if ( wxDynamicCast(pane.window, wxAuiToolBar) )
                 {
-                    event.Check(allPanes[i].IsResizable());
+                    event.Check(pane.IsResizable());
                     break;
                 }
             }
@@ -2421,15 +2410,10 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
 
 void MyFrame::OnTabAlignment(wxCommandEvent &evt)
 {
-    size_t i, count;
-    wxAuiPaneInfoArray& allPanes = m_mgr.GetAllPanes();
-    for (i = 0, count = allPanes.GetCount(); i < count; ++i)
+    for ( const auto& pane : m_mgr.GetAllPanes() )
     {
-        wxAuiPaneInfo& pane = allPanes.Item(i);
-        if (pane.window->IsKindOf(CLASSINFO(wxAuiNotebook)))
+        if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
         {
-            wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
-
             long style = nb->GetWindowStyleFlag();
             style &= ~(wxAUI_NB_TOP | wxAUI_NB_BOTTOM);
             if (evt.GetId() == ID_NotebookAlignTop)
