@@ -207,6 +207,11 @@ private:
     wxArrayString m_perspectives;
     wxMenu* m_perspectivesMenu;
     long m_notebookStyle;
+    enum class TabArt
+    {
+        Gloss,
+        Simple
+    } m_notebookTheme = TabArt::Gloss;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -709,6 +714,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_VerticalGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_HorizontalGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_AllowToolbarResizing, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookArtGloss, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookArtSimple, MyFrame::OnUpdateUI)
     EVT_MENU_RANGE(MyFrame::ID_FirstPerspective, MyFrame::ID_FirstPerspective+1000,
                    MyFrame::OnRestorePerspective)
     EVT_AUITOOLBAR_TOOL_DROPDOWN(ID_DropDownToolbarItem, MyFrame::OnDropDownToolbarItem)
@@ -1325,10 +1332,12 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
             wxAuiTabArt* art = nullptr;
             if (id == ID_NotebookArtGloss)
             {
+                m_notebookTheme = TabArt::Gloss;
                 art = new wxAuiDefaultTabArt;
             }
             else if (id == ID_NotebookArtSimple)
             {
+                m_notebookTheme = TabArt::Simple;
                 art = new wxAuiSimpleTabArt;
             }
 
@@ -1444,10 +1453,10 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             event.Check((m_notebookStyle & wxAUI_NB_MULTILINE) != 0);
             break;
         case ID_NotebookArtGloss:
-            event.Check(m_notebookStyle == 0);
+            event.Check(m_notebookTheme == TabArt::Gloss);
             break;
         case ID_NotebookArtSimple:
-            event.Check(m_notebookStyle == 1);
+            event.Check(m_notebookTheme == TabArt::Simple);
             break;
 
     }
