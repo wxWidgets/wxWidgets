@@ -147,7 +147,7 @@ public:
         {
             // curSize = GetToolBar()->GetToolSize();
             NSRect best = [(wxNSToolBarButton*)m_controlHandle frame];
-            curSize = wxSize(best.size.width, best.size.height);
+            curSize = wxSize(int(best.size.width), int(best.size.height));
         }
         else
         {

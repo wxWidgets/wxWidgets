@@ -375,7 +375,7 @@ void wxWebViewIE::SetZoomFactor(float zoom)
 
     if (m_impl->m_zoomType == wxWEBVIEW_ZOOM_TYPE_LAYOUT)
     {
-        SetIEOpticalZoomFactor(zoom * 100);
+        SetIEOpticalZoomFactor(int(zoom * 100));
     }
     else if (m_impl->m_zoomType == wxWEBVIEW_ZOOM_TYPE_TEXT)
     {

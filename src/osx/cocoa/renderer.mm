@@ -300,7 +300,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
 {
 #if wxOSX_USE_NSCELL_RENDERER
     DrawMacHeaderCell(win, dc, GetTableHeaderCell(), rect, flags, sortArrow, params);
-    return GetTableHeaderCell().cellSize.width;
+    return int(GetTableHeaderCell().cellSize.width);
 #else
     if ( wxSystemSettings::GetAppearance().IsDark() )
         return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
@@ -375,7 +375,7 @@ int wxRendererMac::GetHeaderButtonHeight(wxWindow* win)
 {
 #if wxOSX_USE_NSCELL_RENDERER
     ApplyMacControlFlags( win, GetTableHeaderCell(), 0);
-    return GetTableHeaderCell().cellSize.height;
+    return int(GetTableHeaderCell().cellSize.height);
 #else
     SInt32      standardHeight;
     OSStatus        errStatus;
@@ -802,7 +802,7 @@ wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win, int flags)
 #if wxOSX_USE_NSCELL_RENDERER
     ApplyMacControlFlags( win, GetCheckBoxCell(), flags);
     NSSize sz = GetCheckBoxCell().cellSize;
-    return wxSize(sz.width, sz.height);
+    return wxSize(int(sz.width), int(sz.height));
 #else
     wxSize size;
     SInt32 width, height;

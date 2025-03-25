@@ -135,7 +135,7 @@ wxOSXImageBundleImpl::~wxOSXImageBundleImpl()
 wxSize wxOSXImageBundleImpl::GetDefaultSize() const
 {
     CGSize sz = wxOSXGetImageSize(wxOSXGetImageFromBundleImpl(this));
-    return wxSize(sz.width, sz.height);
+    return wxSize(int(sz.width), int(sz.height));
 }
 
 wxSize wxOSXImageBundleImpl::GetPreferredBitmapSizeAtScale(double scale) const

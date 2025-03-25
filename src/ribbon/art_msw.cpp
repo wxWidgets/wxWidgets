@@ -367,14 +367,14 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     const auto LikePrimary = [primary_hsl, primary_is_gray]
         (double h, double s, double l)
         {
-            return primary_hsl.ShiftHue(h).Saturated(primary_is_gray ? 0.0 : s)
-                .AdjustLuminance(l).ToRGB();
+            return primary_hsl.ShiftHue(float(h)).Saturated(primary_is_gray ? 0.0f : float(s))
+                .AdjustLuminance(float(l)).ToRGB();
         };
     const auto LikeSecondary = [secondary_hsl, secondary_is_gray]
         (double h, double s, double l)
         {
-            return secondary_hsl.ShiftHue(h).Saturated(secondary_is_gray ? 0.0 : s)
-                .AdjustLuminance(l).ToRGB();
+            return secondary_hsl.ShiftHue(float(h)).Saturated(secondary_is_gray ? 0.0f : float(s))
+                .AdjustLuminance(float(l)).ToRGB();
         };
 
     m_page_border_pen = LikePrimary(1.4, 0.00, -0.08);

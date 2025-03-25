@@ -2018,7 +2018,7 @@ void wxCocoaGesturesImpl::TouchesBegan(NSEvent* event)
     }
 
     // Time of event in milliseconds
-    const unsigned int eventTimeStamp = event.timestamp * 1000 + 0.5;
+    const unsigned int eventTimeStamp = wxRound(event.timestamp * 1000);
 
     if ( m_touchCount == 1 )
     {
@@ -2122,7 +2122,7 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
     m_touchCount -= touches.count;
 
     // Time of event in milliseconds
-    const unsigned int eventTimeStamp = event.timestamp * 1000 + 0.5;
+    const unsigned int eventTimeStamp = wxRound(event.timestamp * 1000);
 
     // Check if 2 fingers are lifted off together or if 2 fingers are lifted off within the time interval of 200 milliseconds
     if ( (!m_touchCount && (m_allowedGestures & two_finger_tap)) &&
@@ -3267,10 +3267,10 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
 void wxWidgetCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &bottom) const
 {
     NSEdgeInsets insets = [m_osxView alignmentRectInsets];
-    left = insets.left;
-    top = insets.top;
-    right = insets.right;
-    bottom = insets.bottom;
+    left = int(insets.left);
+    top = int(insets.top);
+    right = int(insets.right);
+    bottom = int(insets.bottom);
 }
 
 namespace

@@ -443,7 +443,7 @@ void wxAVMediaBackend::FinishLoad()
     AVPlayerItem *playerItem = [m_player currentItem];
 
     CGSize s = [playerItem presentationSize];
-    m_bestSize = wxSize(s.width, s.height);
+    m_bestSize = wxSize(int(s.width), int(s.height));
 
     NotifyMovieLoaded();
 }
@@ -498,7 +498,7 @@ bool wxAVMediaBackend::SetPosition(wxLongLong where)
 
 wxLongLong wxAVMediaBackend::GetPosition()
 {
-    return CMTimeGetSeconds([m_player currentTime])*1000.0;
+    return (long long)(CMTimeGetSeconds([m_player currentTime]) * 1000);
 }
 
 wxLongLong wxAVMediaBackend::GetDuration()
@@ -506,9 +506,9 @@ wxLongLong wxAVMediaBackend::GetDuration()
     AVPlayerItem *playerItem = [m_player currentItem];
 
     if ([playerItem status] == AVPlayerItemStatusReadyToPlay)
-        return CMTimeGetSeconds([[playerItem asset] duration])*1000.0;
-    else
-        return 0.f;
+        return (long long)(CMTimeGetSeconds([[playerItem asset] duration]) * 1000);
+
+    return 0;
 }
 
 wxMediaState wxAVMediaBackend::GetState()

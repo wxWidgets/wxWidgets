@@ -234,11 +234,11 @@ void wxRibbonAUIArtProvider::SetColourScheme(
 
     const auto LikePrimary = [primary_hsl](double luminance)
         {
-            return wxRibbonShiftLuminance(primary_hsl, luminance).ToRGB();
+            return wxRibbonShiftLuminance(primary_hsl, float(luminance)).ToRGB();
         };
     const auto LikeSecondary = [secondary_hsl](double luminance)
         {
-            return wxRibbonShiftLuminance(secondary_hsl, luminance).ToRGB();
+            return wxRibbonShiftLuminance(secondary_hsl, float(luminance)).ToRGB();
         };
 
     m_tab_ctrl_background_colour = LikePrimary(0.9);

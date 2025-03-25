@@ -472,7 +472,7 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
                 const double shrinkFactorX = double(old_width) / width;
                 const double shrinkFactorY = double(old_height) / height;
 
-                const int shrinkInt(wxMin(shrinkFactorX, shrinkFactorY));
+                const int shrinkInt(int(wxMin(shrinkFactorX, shrinkFactorY)));
 
                 image = ResampleBilinear(width * shrinkInt, height * shrinkInt);
                 if ( shrinkInt != 1 )

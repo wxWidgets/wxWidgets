@@ -99,8 +99,8 @@
 
         NSBitmapImageRep* bmp = [[NSBitmapImageRep alloc]
                          initWithBitmapDataPlanes:nullptr
-                         pixelsWide:backingBounds.size.width
-                         pixelsHigh:backingBounds.size.height
+                         pixelsWide:NSInteger(backingBounds.size.width)
+                         pixelsHigh:NSInteger(backingBounds.size.height)
                          bitsPerSample:8
                          samplesPerPixel:4
                          hasAlpha:YES
@@ -238,7 +238,7 @@ void wxOverlayImpl::BeginDrawing( wxDC* dc)
         {
             CGRect cgbounds ;
             cgbounds = CGDisplayBounds(CGMainDisplayID());
-            ySize = cgbounds.size.height;
+            ySize = int(cgbounds.size.height);
         }
 
         wxOSXOverlayWindow* wxoverlay = (wxOSXOverlayWindow*) m_overlayWindow;

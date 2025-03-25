@@ -265,7 +265,7 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage
 
         CGSize imageSize = wxOSXGetImageSize(nsimage);
 
-        hbitmap = CGBitmapContextCreate(nullptr, imageSize.width*scale, imageSize.height*scale, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
+        hbitmap = CGBitmapContextCreate(nullptr, size_t(imageSize.width*scale), size_t(imageSize.height*scale), 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
         CGContextScaleCTM( hbitmap, scale, scale );
         CGContextClearRect(hbitmap,CGRectMake(0, 0, imageSize.width, imageSize.height));
 
@@ -674,7 +674,7 @@ void  wxMacCocoaShowCursor()
 
 wxPoint wxMacCocoaGetCursorHotSpot(WX_NSCursor cursor)
 {
-    return wxPoint([cursor hotSpot].x, [cursor hotSpot].y);
+    return wxPoint(int([cursor hotSpot].x), int([cursor hotSpot].y));
 }
 #endif
 

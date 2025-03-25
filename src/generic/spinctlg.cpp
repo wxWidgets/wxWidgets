@@ -600,7 +600,7 @@ double wxSpinCtrlGenericBase::AdjustToFitInRange(double value) const
 void wxSpinCtrlGenericBase::DoSetRange(double min, double max)
 {
     // Negative values in the range are allowed only if base == 10
-    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(min, max, GetBase()) )
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(int(min), int(max), GetBase()) )
     {
         return;
     }
@@ -653,7 +653,7 @@ bool wxSpinCtrl::SetBase(int base)
         return true;
 
     // For negative values in the range only base == 10 is allowed
-    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(m_min, m_max, base) )
+    if ( !wxSpinCtrlImpl::IsBaseCompatibleWithRange(int(m_min), int(m_max), base) )
         return false;
 
     // Update the current control contents to show in the new base: be careful

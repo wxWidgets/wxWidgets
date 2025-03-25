@@ -375,10 +375,10 @@ public :
     virtual void GetMenuBarDimensions(int &x, int &y, int &width, int &height) const override
     {
         NSRect r = [(NSScreen*)[[NSScreen screens] objectAtIndex:0] frame];
-        height = [m_osxMenu menuBarHeight];
-        x = r.origin.x;
-        y = r.origin.y;
-        width = r.size.width;
+        height = int([m_osxMenu menuBarHeight]);
+        x = int(r.origin.x);
+        y = int(r.origin.y);
+        width = int(r.size.width);
     }
     
     void DisableAutoEnable()

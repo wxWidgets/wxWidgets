@@ -131,7 +131,7 @@ void wxSpinButtonCocoaImpl::SetIncrement(int value)
 
 int wxSpinButtonCocoaImpl::GetIncrement() const
 {
-    return [(NSStepper *) m_osxView increment];
+    return int([(NSStepper*)m_osxView increment]);
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
