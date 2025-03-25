@@ -341,9 +341,9 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUN
              return -1;
 
         default:
-            return -1;  // unsupported metric
+            break;
     }
-    return 0;
+    return -1;  // unsupported metric
 }
 
 bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
