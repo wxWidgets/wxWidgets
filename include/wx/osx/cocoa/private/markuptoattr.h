@@ -91,19 +91,19 @@ public:
 
 
     // Implement base class pure virtual methods to process markup tags.
-    virtual void OnText(const wxString& text)
+    virtual void OnText(const wxString& text) override
     {
         m_pos += PrepareText(text).length();
     }
 
-    virtual void OnAttrStart(const Attr& WXUNUSED(attr))
+    virtual void OnAttrStart(const Attr& WXUNUSED(attr)) override
     {
         // Just remember the starting position of the range, we can't really
         // set the attribute until we find the end of it.
         m_rangeStarts.push(m_pos);
     }
 
-    virtual void OnAttrEnd(const Attr& attr)
+    virtual void OnAttrEnd(const Attr& attr) override
     {
         unsigned start = m_rangeStarts.top();
         m_rangeStarts.pop();
@@ -150,7 +150,7 @@ public:
     }
 
 protected:
-    virtual wxString PrepareText(const wxString& text)
+    virtual wxString PrepareText(const wxString& text) override
     {
         return wxControl::RemoveMnemonics(text);
     }
@@ -170,7 +170,7 @@ public:
     }
 
 protected:
-    virtual wxString PrepareText(const wxString& text)
+    virtual wxString PrepareText(const wxString& text) override
     {
         return text;
     }

@@ -139,7 +139,7 @@ public:
     {}
 
     virtual void
-    select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command)
+    select(const QItemSelection& selection, QItemSelectionModel::SelectionFlags command) override
     {
         if ( m_isSelectionChangeAllowed )
         {
