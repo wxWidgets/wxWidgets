@@ -193,6 +193,15 @@ public:
                  int orientation,
                  wxRect* outRect) override;
 
+    void DrawButton(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& inRect,
+                 int bitmapId,
+                 int buttonState,
+                 int orientation,
+                 wxRect* outRect) override;
+
     int ShowDropDown(
                  wxWindow* wnd,
                  const wxAuiNotebookPageArray& items,
@@ -266,6 +275,17 @@ private:
     // other values in the future.
     virtual wxColour
     GetButtonColour(wxAuiButtonId button, wxAuiPaneButtonState state) const = 0;
+
+    // This is called by DrawButton().
+    //
+    // By default just draws the bitmap using wxDC::DrawBitmap().
+    virtual void
+    DrawButtonBitmap(wxDC& dc,
+                     const wxRect& rect,
+                     const wxBitmap& bmp,
+                     int buttonState);
+};
+
 };
 
 
@@ -291,15 +311,6 @@ public:
                  wxWindow* wnd,
                  wxAuiNotebookPage& page,
                  const wxRect& rect) override;
-
-    void DrawButton(
-                 wxDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& inRect,
-                 int bitmapId,
-                 int buttonState,
-                 int orientation,
-                 wxRect* outRect) override;
 
     int GetIndentSize() override;
 
@@ -360,15 +371,6 @@ public:
                  wxRect* outButtonRect,
                  int* xExtent) override;
 
-    void DrawButton(
-                 wxDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& inRect,
-                 int bitmapId,
-                 int buttonState,
-                 int orientation,
-                 wxRect* outRect) override;
-
     int GetIndentSize() override;
 
     wxSize GetTabSize(
@@ -396,6 +398,12 @@ private:
     virtual wxColour
     GetButtonColour(wxAuiButtonId button,
                     wxAuiPaneButtonState state) const override;
+
+    virtual void
+    DrawButtonBitmap(wxDC& dc,
+                     const wxRect& rect,
+                     const wxBitmap& bmp,
+                     int buttonState) override;
 };
 
 #ifndef __WXUNIVERSAL__

@@ -61,26 +61,6 @@ wxAuiEnsureSufficientContrast(wxColour* fg, const wxColour& bg)
           > wxAuiGetColourContrast(*wxBLACK, bg) ? *wxWHITE : *wxBLACK;
 }
 
-static void DrawButtons(wxDC& dc,
-                        const wxRect& rect,
-                        const wxBitmap& bmp,
-                        const wxColour& bkcolour,
-                        int button_state)
-{
-    if (button_state == wxAUI_BUTTON_STATE_HOVER ||
-        button_state == wxAUI_BUTTON_STATE_PRESSED)
-    {
-        dc.SetBrush(wxBrush(bkcolour.ChangeLightness(120)));
-        dc.SetPen(wxPen(bkcolour.ChangeLightness(75)));
-
-        // draw the background behind the button
-        dc.DrawRectangle(rect.x, rect.y, bmp.GetLogicalWidth(), bmp.GetLogicalHeight());
-    }
-
-    // draw the button itself
-    dc.DrawBitmap(bmp, rect.x, rect.y, true);
-}
-
 static void IndentPressedBitmap(const wxSize& offset, wxRect* rect, int button_state)
 {
     if (button_state == wxAUI_BUTTON_STATE_PRESSED)
@@ -458,6 +438,37 @@ wxAuiTabArtBase::GetButtonRect(wxReadOnlyDC& WXUNUSED(dc),
         *outRect = rect;
 
     return rect.width;
+}
+
+void
+wxAuiTabArtBase::DrawButtonBitmap(wxDC& dc,
+                                  const wxRect& rect,
+                                  const wxBitmap& bmp,
+                                  int WXUNUSED(buttonState))
+{
+    dc.DrawBitmap(bmp, rect.x, rect.y, true);
+}
+
+void
+wxAuiTabArtBase::DrawButton(wxDC& dc,
+                            wxWindow* wnd,
+                            const wxRect& in_rect,
+                            int bitmap_id,
+                            int button_state,
+                            int orientation,
+                            wxRect* out_rect)
+{
+    wxRect rect;
+    wxBitmap bmp;
+
+    if ( !DoGetButtonRectAndBitmap(wnd, in_rect,
+                                   bitmap_id, button_state, orientation,
+                                   &rect, &bmp) )
+        return;
+
+    DrawButtonBitmap(dc, rect, bmp, button_state);
+
+    *out_rect = rect;
 }
 
 int
@@ -1014,27 +1025,6 @@ wxSize wxAuiGenericTabArt::GetPageTabSize(
 }
 
 
-void wxAuiGenericTabArt::DrawButton(wxDC& dc,
-                                    wxWindow* wnd,
-                                    const wxRect& in_rect,
-                                    int bitmap_id,
-                                    int button_state,
-                                    int orientation,
-                                    wxRect* out_rect)
-{
-    wxRect rect;
-    wxBitmap bmp;
-
-    if ( !DoGetButtonRectAndBitmap(wnd, in_rect,
-                                   bitmap_id, button_state, orientation,
-                                   &rect, &bmp) )
-        return;
-
-    dc.DrawBitmap(bmp, rect.x, rect.y, true);
-
-    *out_rect = rect;
-}
-
 int wxAuiGenericTabArt::GetBestTabCtrlSize(wxWindow* wnd,
                                            const wxAuiNotebookPageArray& pages,
                                            const wxSize& requiredBmp_size)
@@ -1266,7 +1256,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                     tab_height - 1);
 
         IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, close_button_state);
-        DrawButtons(dc, rect, bmp, *wxWHITE, close_button_state);
+        DrawButtonBitmap(dc, rect, bmp, close_button_state);
 
         *out_button_rect = rect;
         close_button_width = bmp.GetLogicalWidth();
@@ -1347,25 +1337,25 @@ wxSize wxAuiSimpleTabArt::GetTabSize(wxReadOnlyDC& dc,
 }
 
 
-void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
-                                   wxWindow* wnd,
-                                   const wxRect& in_rect,
-                                   int bitmap_id,
-                                   int button_state,
-                                   int orientation,
-                                   wxRect* out_rect)
+void
+wxAuiSimpleTabArt::DrawButtonBitmap(wxDC& dc,
+                                    const wxRect& rect,
+                                    const wxBitmap& bmp,
+                                    int button_state)
 {
-    wxRect rect;
-    wxBitmap bmp;
+    if (button_state == wxAUI_BUTTON_STATE_HOVER ||
+        button_state == wxAUI_BUTTON_STATE_PRESSED)
+    {
+        const wxColour bkcolour = *wxWHITE;
+        dc.SetBrush(wxBrush(bkcolour.ChangeLightness(120)));
+        dc.SetPen(wxPen(bkcolour.ChangeLightness(75)));
 
-    if ( !DoGetButtonRectAndBitmap(wnd, in_rect,
-                                   bitmap_id, button_state, orientation,
-                                   &rect, &bmp) )
-        return;
+        // draw the background behind the button
+        dc.DrawRectangle(rect.x, rect.y, bmp.GetLogicalWidth(), bmp.GetLogicalHeight());
+    }
 
-    DrawButtons(dc, rect, bmp, *wxWHITE, button_state);
-
-    *out_rect = rect;
+    // draw the button itself
+    dc.DrawBitmap(bmp, rect.x, rect.y, true);
 }
 
 int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd,
