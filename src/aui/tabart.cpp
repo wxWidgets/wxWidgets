@@ -467,11 +467,11 @@ wxAuiTabArtBase::ShowDropDown(wxWindow* wnd,
 {
     wxMenu menuPopup;
 
-    size_t i, count = pages.GetCount();
-    for (i = 0; i < count; ++i)
-    {
-        const wxAuiNotebookPage& page = pages.Item(i);
+    constexpr int MENU_ID_BASE = 1000;
+    int id = MENU_ID_BASE;
 
+    for ( const auto& page : pages )
+    {
         // Preserve ampersands possibly present in the caption string by
         // escaping them before passing the caption to wxMenuItem.
         wxString caption = wxControl::EscapeMnemonics(page.caption);
@@ -481,7 +481,7 @@ wxAuiTabArtBase::ShowDropDown(wxWindow* wnd,
         if (caption.IsEmpty())
             caption = wxT(" ");
 
-        wxMenuItem* item = new wxMenuItem(nullptr, 1000+i, caption);
+        wxMenuItem* item = new wxMenuItem(nullptr, id++, caption);
         if (page.bitmap.IsOk())
             item->SetBitmap(page.bitmap.GetBitmapFor(wnd));
         menuPopup.Append(item);
@@ -497,10 +497,10 @@ wxAuiTabArtBase::ShowDropDown(wxWindow* wnd,
 
     const int command = wnd->GetPopupMenuSelectionFromUser(menuPopup, pt);
 
-    if (command >= 1000)
-        return command-1000;
+    if (command >= MENU_ID_BASE)
+        return command - MENU_ID_BASE;
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 // -- wxAuiGenericTabArt class implementation --
