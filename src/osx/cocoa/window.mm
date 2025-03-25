@@ -4069,9 +4069,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
         {
             wxLogTrace(TRACE_KEYS, "Emulating missing key down event");
 
-            wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-            SetupKeyEvent( wxevent, GetLastNativeKeyDownEvent() );
-            GetWXPeer()->OSXHandleKeyEvent(wxevent);
+            wxKeyEvent wxevt(wxEVT_KEY_DOWN);
+            SetupKeyEvent(wxevt, GetLastNativeKeyDownEvent());
+            GetWXPeer()->OSXHandleKeyEvent(wxevt);
         }
         return true;
     }

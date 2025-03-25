@@ -199,9 +199,9 @@ public :
     {
         value = [[(NSString*)v retain] autorelease];
     }
-    virtual void Set( const wxString& value ) override
+    virtual void Set( const wxString& v ) override
     {
-        Set( (CFStringRef) wxCFStringRef( value ) );
+        Set( (CFStringRef) wxCFStringRef( v ) );
     }
     virtual void Set( int v ) override
     {
@@ -516,10 +516,10 @@ void wxListWidgetCocoaImpl::ListDelete( unsigned int n )
         int maxWidth = 0;
         for ( NSNumber *number in m_widths )
         {
-            int n = [number intValue];
+            int nn = [number intValue];
 
-            if ( n > maxWidth )
-                maxWidth = n;
+            if ( nn > maxWidth )
+                maxWidth = nn;
         }
 
         if ( maxWidth < m_maxWidth )

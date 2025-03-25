@@ -265,8 +265,8 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                 {
                     wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
                     event.SetEventObject( wxpeer );
-                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
-                    wxTextEntry * const entry = impl->GetTextEntry();
+                    wxTextWidgetImpl* twimpl = (wxNSTextFieldControl*)wxWidgetImpl::FindFromWXWidget(self);
+                    wxTextEntry* const entry = twimpl->GetTextEntry();
                     event.SetString( entry->GetValue() );
                     handled = wxpeer->HandleWindowEvent( event );
                 }
@@ -299,8 +299,8 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                         [cevent keyCode] == 9 /* V */ &&
                             ([cevent modifierFlags] & NSCommandKeyMask) == NSCommandKeyMask )
                 {
-                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
-                    wxTextEntry * const entry = impl->GetTextEntry();
+                    wxTextWidgetImpl* twimpl = (wxNSTextFieldControl*)wxWidgetImpl::FindFromWXWidget(self);
+                    wxTextEntry* const entry = twimpl->GetTextEntry();
                     entry->Paste();
                     handled = YES;
                 }
