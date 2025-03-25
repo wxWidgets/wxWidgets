@@ -1045,11 +1045,10 @@ int wxAuiGenericTabArt::GetBestTabCtrlSize(wxWindow* wnd,
     // sometimes a standard bitmap size needs to be enforced, especially
     // if some tabs have bitmaps and others don't.  This is important because
     // it prevents the tab control from resizing when tabs are added.
-    wxBitmap measureBmp;
+    wxBitmapBundle measureBmp;
     if (requiredBmp_size.IsFullySpecified())
     {
-        measureBmp.Create(requiredBmp_size.x,
-                           requiredBmp_size.y);
+        measureBmp = wxBitmap(requiredBmp_size.x, requiredBmp_size.y);
     }
 
     // we don't use the caption text because we don't
