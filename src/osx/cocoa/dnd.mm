@@ -512,7 +512,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         [[[NSColor whiteColor] colorWithAlphaComponent:0.8] set];
         NSRectFill(fillRect);
         [[NSColor blackColor] set];
-        NSFrameRectWithWidthUsingOperation(fillRect,1.0f,NSCompositeDestinationOver);
+        NSFrameRectWithWidthUsingOperation(fillRect, 1, NSCompositeDestinationOver);
 
         [image unlockFocus];
 

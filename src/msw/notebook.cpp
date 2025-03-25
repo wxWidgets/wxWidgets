@@ -911,15 +911,15 @@ int wxNotebook::MSWHitTestLeftRight(const wxPoint& pt, long *flags) const
             // restart the app in between) and look where the hitbox is
             // located, then adjust the values until they look right.
             int displacement;
-            if (scale <= 1.0f)
+            if (scale <= 1.0)
                 displacement = 3;
-            else if (scale <= 1.25f)
+            else if (scale <= 1.25)
                 displacement = 8;
-            else if (scale <= 1.50f)
+            else if (scale <= 1.50)
                 displacement = 14;
-            else if (scale <= 1.75f)
+            else if (scale <= 1.75)
                 displacement = 3;
-            else if (scale <= 2.00f)
+            else if (scale <= 2.00)
                 displacement = 6;
             else
                 displacement = 12;
