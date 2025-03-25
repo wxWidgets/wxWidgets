@@ -3452,15 +3452,11 @@ void wxDataViewCheckIconTextRenderer::OSXOnCellChanged(NSObject *value,
     wxDataViewCheckIconText checkIconText;
     checkIconText << valueOld;
 
-    wxCheckBoxState checkedState ;
+    wxCheckBoxState checkedState = wxCHK_UNCHECKED;
     switch ( ObjectToLong(value) )
     {
         case 1:
             checkedState = wxCHK_CHECKED;
-            break;
-
-        case 0:
-            checkedState = wxCHK_UNCHECKED;
             break;
 
         case -1:
