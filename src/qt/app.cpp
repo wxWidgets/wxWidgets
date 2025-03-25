@@ -10,29 +10,25 @@
 
 #include "wx/app.h"
 #include "wx/apptrait.h"
+#include "wx/private/init.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include <QtCore/QStringList>
 #include <QtWidgets/QApplication>
 #include <QSurfaceFormat>
 
+#include <algorithm>
+#include <vector>
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
 wxApp::wxApp()
 {
-    m_qtArgc = 0;
-
     WXAppConstructed();
 }
 
-
 wxApp::~wxApp()
 {
-    // Delete command line arguments
-    for ( int i = 0; i < m_qtArgc; ++i )
-    {
-        free(m_qtArgv[i]);
-    }
 }
 
 bool wxApp::Initialize( int& argc_, wxChar** argv_ )
@@ -42,53 +38,56 @@ bool wxApp::Initialize( int& argc_, wxChar** argv_ )
 
     wxConvCurrent = &wxConvUTF8;
 
-    // (See: http://bugreports.qt.nokia.com/browse/QTBUG-7551)
-    // Need to store argc, argv. The argc, argv from wxAppBase are
-    // being initialized *after* Initialize();
-
-    // TODO: Check whether new/strdup etc. can be replaced with std::vector<>.
-
-    // Clone and store arguments
-    m_qtArgv.reset(new char* [argc_ + 1]);
-    for ( int i = 0; i < argc_; i++ )
-    {
-        m_qtArgv[i] = wxStrdupA(wxConvUTF8.cWX2MB(argv_[i]));
-    }
-    m_qtArgv[argc_] = nullptr;
-    m_qtArgc = argc_;
-
     // Use SingleBuffer mode by default to reduce latency.
     QSurfaceFormat format;
     format.setSwapBehavior(QSurfaceFormat::SwapBehavior::SingleBuffer);
     QSurfaceFormat::setDefaultFormat(format);
 
-    m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.get()));
+    const int argcA = argc_;
+    auto argvA = wxInitData::Get().argvA;
+
+#ifdef __WINDOWS__
+    // The arguments in argvA are allocated dynamically under Windows and need to be freed.
+    // See notice below.
+    std::vector<char*> qtConsumedArgs;
+    for ( int i = 0; i < argcA; ++i )
+    {
+        qtConsumedArgs.push_back(argvA[i]); // We only need shallow copies of the pointers
+    }
+#endif // __WINDOWS__
+
+    // Quoting the Qt documentation (QApplication ctor):
+    // -------------------------------------------------
+    // Warning: The data referred to by argc and argv must stay valid for the entire lifetime
+    // of the QApplication object. In addition, argc must be greater than zero and argv must
+    // contain at least one valid character string.
+
+    m_qtApplication.reset(new QApplication(argc_, argvA));
 
     if ( m_qtApplication->platformName() == "xcb" )
         m_qtApplication->processEvents(); // Avoids SIGPIPE on X11 when debugging
 
-    // Use the args returned by Qt as it may have deleted (processed) some of them
-    // Using QApplication::arguments() forces argument processing
-    QStringList qtArgs = m_qtApplication->arguments();
-    if ( qtArgs.size() != argc_ )
+    if ( argcA != argc_ )
     {
-        /* As per Qt 4.6: Here, qtArgc and qtArgv have been modified and can
-         * be used to replace our args (with Qt-flags removed). Also, they can be
-         * deleted as they are internally kept by Qt in a list after calling arguments().
-         * However, there isn't any guarantee of that in the docs, so we keep arguments
-         * ourselves and only delete then after the QApplication is deleted */
-
-        // Qt changed the arguments
-        delete [] argv_;
-        argv_ = new wxChar *[qtArgs.size() + 1];
-        for ( int i = 0; i < qtArgs.size(); i++ )
+#ifdef __WINDOWS__
+        // Notice that Qt removes command line arguments (from argvA) that it recognizes without
+        // deleting them, so we need to free them here ourselves to avoid memory leaks.
+        for ( int i = 0; i < argc_; ++i )
         {
-            argv_[i] = wxStrdupW( wxConvUTF8.cMB2WX( qtArgs[i].toUtf8().data() ) );
+            qtConsumedArgs.erase(std::remove(qtConsumedArgs.begin(), qtConsumedArgs.end(), argvA[i]),
+                                 qtConsumedArgs.end());
         }
 
-        argc_ = m_qtApplication->arguments().size();
+        for ( auto consumedArg : qtConsumedArgs )
+        {
+            free(consumedArg);
+        }
+#endif // __WINDOWS__
+
+        // argc_ is already updated by Qt
         argv_[argc_] = nullptr;
     }
+    //else: Qt didn't modify our parameters
 
     return true;
 }

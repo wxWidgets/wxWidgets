@@ -9,8 +9,6 @@
 #ifndef _WX_QT_APP_H_
 #define _WX_QT_APP_H_
 
-#include <wx/scopedarray.h>
-
 #include <memory>
 
 class QApplication;
@@ -24,8 +22,6 @@ public:
 
 private:
     std::unique_ptr<QApplication> m_qtApplication;
-    int m_qtArgc;
-    wxScopedArray<char*> m_qtArgv;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxApp );
 };
