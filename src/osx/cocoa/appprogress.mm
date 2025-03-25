@@ -26,7 +26,7 @@
 
 - (id)init
 {
-    if (self = [super init])
+    if ((self = [super init]))
     {
         m_dockTile = [NSApplication sharedApplication].dockTile;
         NSImageView* iv = [[NSImageView alloc] init];

@@ -289,7 +289,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 
 - (id)init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         dragFinished = NO;
         resultCode = NSDragOperationNone;

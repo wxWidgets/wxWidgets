@@ -37,7 +37,7 @@
 
 - (id) initWithTitle:(NSString*) title
 {
-    if ( self = [super initWithTitle:title] )
+    if ((self = [super initWithTitle:title]))
     {
         impl = nullptr;
     }

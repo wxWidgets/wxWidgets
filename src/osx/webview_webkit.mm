@@ -855,7 +855,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
-    if (self = [super init])
+    if ((self = [super init]))
     {
         webKitWindow = inWindow;    // non retained
     }
@@ -1184,7 +1184,7 @@ WX_API_AVAILABLE_MACOS(10, 13)
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
-    if (self = [super init])
+    if ((self = [super init]))
     {
         webKitWindow = inWindow;    // non retained
     }
@@ -1313,7 +1313,7 @@ WX_API_AVAILABLE_MACOS(10, 12)
 
 - (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
-    if (self = [super init])
+    if ((self = [super init]))
     {
         webKitWindow = inWindow;    // non retained
     }

@@ -2849,7 +2849,7 @@ double wxWidgetCocoaImpl::GetContentScaleFactor() const
 
 - (id)init:(wxWindow *)win
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         m_win = win;
         m_isDone = false;

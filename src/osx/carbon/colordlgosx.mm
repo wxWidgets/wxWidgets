@@ -55,7 +55,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 
 - (id)init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         m_bIsClosed = false;
     }

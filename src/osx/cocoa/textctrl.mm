@@ -137,7 +137,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (id)init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         maxLength = 0;
         forceUpper = false;

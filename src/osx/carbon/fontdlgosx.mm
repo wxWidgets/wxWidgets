@@ -59,7 +59,7 @@
 
 - (id)init
 {
-    if (self = [super init])
+    if ((self = [super init]))
     {
         m_isUnderline = false;
         m_isStrikethrough = false;
@@ -118,7 +118,7 @@
 @implementation wxMacFontPanelAccView : NSView
 - (id)initWithFrame:(NSRect)rectBox
 {
-    if ( self = [super initWithFrame:rectBox] )
+    if ((self = [super initWithFrame:rectBox]))
     {
         wxCFStringRef cfOkString( wxT("OK") );
         wxCFStringRef cfCancelString( wxT("Cancel") );

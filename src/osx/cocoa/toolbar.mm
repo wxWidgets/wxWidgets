@@ -354,7 +354,7 @@ private:
 
 - (id)initWithItemIdentifier: (NSString*) identifier
 {
-    if ( self = [super initWithItemIdentifier:identifier] )
+    if ((self = [super initWithItemIdentifier:identifier]))
     {
         impl = nullptr;
         [self setTarget: self];
@@ -394,7 +394,7 @@ private:
 
 - (id)init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         m_isSelectable = false;
     }
@@ -457,7 +457,7 @@ private:
 
 - (id)initWithIdentifier:(NSString *)identifier
 {
-    if (self = [super initWithIdentifier:identifier])
+    if ((self = [super initWithIdentifier:identifier]))
     {
         toolbarDelegate = [[wxNSToolbarDelegate alloc] init];
         [self setDelegate:toolbarDelegate];
@@ -479,7 +479,7 @@ private:
 
 - (id)initWithFrame:(NSRect)frame
 {
-    if ( self = [super initWithFrame:frame] )
+    if ((self = [super initWithFrame:frame]))
     {
         impl = nullptr;
         [self setTarget: self];

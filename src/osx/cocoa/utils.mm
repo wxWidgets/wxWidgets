@@ -293,7 +293,7 @@ void wxBell()
 @implementation ModalDialogDelegate
 - (id)init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         sheetFinished = NO;
         resultCode = -1;
@@ -354,7 +354,7 @@ void wxBell()
 
 - (id)init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         // further init
     }

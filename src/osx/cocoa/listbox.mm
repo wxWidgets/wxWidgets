@@ -167,7 +167,7 @@ protected :
 
 - (id) init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         column = nil;
     }
@@ -232,7 +232,7 @@ protected:
 
 - (id) init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         impl = nil;
     }

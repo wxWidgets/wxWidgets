@@ -116,7 +116,7 @@
     // avoid the annoying warning with 10.12 by explicitly disabling it.
     wxCLANG_WARNING_SUPPRESS(nonnull)
 
-    if (self = [super initWithIdentifier:nil])
+    if ((self = [super initWithIdentifier:nil]))
     {
         m_image = nil;
     }

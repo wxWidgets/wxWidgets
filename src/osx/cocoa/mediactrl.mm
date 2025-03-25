@@ -129,7 +129,7 @@ private:
 
 - (id) init
 {
-    if ( self = [super init] )
+    if ((self = [super init]))
     {
         [self addObserver:self forKeyPath:@"currentItem.status"
                   options:NSKeyValueObservingOptionNew context:AVSPPlayerItemStatusContext];
@@ -292,7 +292,7 @@ private:
 
 - (id) initWithFrame:(NSRect)rect player:(wxAVPlayer*) player
 {
-    if ( self = [super initWithFrame:rect] )
+    if ((self = [super initWithFrame:rect]))
     {
         self.player = player;
     }
@@ -328,7 +328,7 @@ private:
 
 - (id) initWithFrame:(NSRect)rect player:(wxAVPlayer*) player
 {
-    if ( self = [super initWithFrame:rect] )
+    if ((self = [super initWithFrame:rect]))
     {
         [self setWantsLayer:YES];
         AVPlayerLayer* playerlayer = [AVPlayerLayer playerLayerWithPlayer: player];
