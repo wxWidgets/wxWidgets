@@ -39,32 +39,6 @@
 
 // -- GUI helper classes and functions --
 
-class wxAuiCommandCapture : public wxEvtHandler
-{
-public:
-
-    wxAuiCommandCapture() { m_lastId = 0; }
-    int GetCommandId() const { return m_lastId; }
-
-    bool ProcessEvent(wxEvent& evt) override
-    {
-        if (evt.GetEventType() == wxEVT_MENU)
-        {
-            m_lastId = evt.GetId();
-            return true;
-        }
-
-        if (GetNextHandler())
-            return GetNextHandler()->ProcessEvent(evt);
-
-        return false;
-    }
-
-private:
-    int m_lastId;
-};
-
-
 // these functions live in dockart.cpp -- they'll eventually
 // be moved to a new utility cpp file
 
@@ -521,11 +495,7 @@ wxAuiTabArtBase::ShowDropDown(wxWindow* wnd,
     wxRect cli_rect = wnd->GetClientRect();
     pt.y = cli_rect.y + cli_rect.height;
 
-    wxAuiCommandCapture* cc = new wxAuiCommandCapture;
-    wnd->PushEventHandler(cc);
-    wnd->PopupMenu(&menuPopup, pt);
-    int command = cc->GetCommandId();
-    wnd->PopEventHandler(true);
+    const int command = wnd->GetPopupMenuSelectionFromUser(menuPopup, pt);
 
     if (command >= 1000)
         return command-1000;
