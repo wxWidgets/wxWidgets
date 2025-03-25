@@ -775,8 +775,8 @@ wxWidgetCocoaImpl::TranslateMouseEvent( NSEvent * nsEvent )
 
      case NSScrollWheel :
         {
-            float deltaX = 0.0;
-            float deltaY = 0.0;
+            CGFloat deltaX = 0;
+            CGFloat deltaY = 0;
 
             wxevent->SetEventType( wxEVT_MOUSEWHEEL ) ;
 
@@ -842,7 +842,7 @@ wxWidgetCocoaImpl::TranslateMouseEvent( NSEvent * nsEvent )
         
         case NSEventTypeMagnify:
             wxevent->SetEventType( wxEVT_MAGNIFY );
-            wxevent->m_magnification = [nsEvent magnification];
+            wxevent->m_magnification = (float)[nsEvent magnification];
             break;
             
         default :
@@ -3005,7 +3005,7 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
     // the number of layouts here is arbitrary, but 10 seems like too few (e.g.
     // controls in wxInfoBar visibly jump around)
     const int NUM_LAYOUTS = 20;
-    for ( float f = 1./NUM_LAYOUTS; f < 1.; f += 1./NUM_LAYOUTS )
+    for ( float f = 1.0f/NUM_LAYOUTS; f < 1.0f; f += 1.0f/NUM_LAYOUTS )
         [anim addProgressMark:f];
 
     wxNSAnimationDelegate * const
@@ -3615,7 +3615,7 @@ void wxWidgetCocoaImpl::SetValue( wxInt32 v )
     }
     else if (  [m_osxView respondsToSelector:@selector(setFloatValue:)] )
     {
-        [m_osxView setFloatValue:(double)v];
+        [m_osxView setFloatValue:(float)v];
     }
     else if (  [m_osxView respondsToSelector:@selector(setDoubleValue:)] )
     {

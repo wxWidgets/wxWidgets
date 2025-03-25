@@ -474,7 +474,7 @@ double wxAVMediaBackend::GetVolume()
 
 bool wxAVMediaBackend::SetVolume(double dVolume)
 {
-    [m_player setVolume:dVolume];
+    [m_player setVolume:(float)dVolume];
     return true;
 }
 double wxAVMediaBackend::GetPlaybackRate()
@@ -484,7 +484,7 @@ double wxAVMediaBackend::GetPlaybackRate()
 
 bool wxAVMediaBackend::SetPlaybackRate(double dRate)
 {
-    [m_player setRate:dRate];
+    [m_player setRate:(float)dRate];
     return true;
 }
 

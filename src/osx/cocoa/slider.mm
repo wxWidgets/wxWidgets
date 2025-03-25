@@ -113,7 +113,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
 
     [v setMinValue: minimum];
     [v setMaxValue: maximum];
-    [v setFloatValue: (double) value];
+    [v setFloatValue: value];
     wxWidgetCocoaImpl* c = new wxSliderCocoaImpl( wxpeer, v );
     return c;
 }
