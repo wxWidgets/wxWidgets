@@ -1065,7 +1065,6 @@ int wxAuiGenericTabArt::GetBestTabCtrlSize(wxWindow* wnd,
         // Make a copy of the page as we modify it below.
         wxAuiNotebookPage page = pages.Item(i);
 
-        wxBitmapBundle bmp;
         if (measureBmp.IsOk())
             page.bitmap = measureBmp;
 
