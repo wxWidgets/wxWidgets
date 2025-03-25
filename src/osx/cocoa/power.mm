@@ -25,8 +25,6 @@
 // ----------------------------------------------------------------------------
 
 wxAtomicInt g_powerResourceSystemRefCount = 0;
-
-IOPMAssertionID g_pmAssertionID = 0;
 NSObject* g_processInfoActivity = nil;
 
 bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)

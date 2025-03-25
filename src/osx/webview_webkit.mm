@@ -39,10 +39,6 @@
 
 using namespace wxOSXImpl;
 
-// using native types to get compile errors and warnings
-
-#define DEBUG_WEBKIT_SIZING 0
-
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------

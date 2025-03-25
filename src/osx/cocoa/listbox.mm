@@ -94,8 +94,6 @@ protected :
     bool m_editable;
 } ;
 
-NSString* column1 = @"1";
-
 class wxListWidgetCocoaImpl : public wxWidgetCocoaImpl, public wxListWidgetImpl
 {
 public :
