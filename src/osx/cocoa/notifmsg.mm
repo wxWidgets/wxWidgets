@@ -175,7 +175,7 @@ public:
                 
             default:
                 break;
-        };
+        }
     }
     
     static void NotificationActivated(const wxString& notificationId, NSUserNotificationActivationType activationType)
