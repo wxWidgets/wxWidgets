@@ -486,6 +486,53 @@ wxAuiTabArtBase::GetButtonRect(wxReadOnlyDC& WXUNUSED(dc),
     return rect.width;
 }
 
+int
+wxAuiTabArtBase::ShowDropDown(wxWindow* wnd,
+                              const wxAuiNotebookPageArray& pages,
+                              int /*active_idx*/)
+{
+    wxMenu menuPopup;
+
+    size_t i, count = pages.GetCount();
+    for (i = 0; i < count; ++i)
+    {
+        const wxAuiNotebookPage& page = pages.Item(i);
+
+        // Preserve ampersands possibly present in the caption string by
+        // escaping them before passing the caption to wxMenuItem.
+        wxString caption = wxControl::EscapeMnemonics(page.caption);
+
+        // if there is no caption, make it a space.  This will prevent
+        // an assert in the menu code.
+        if (caption.IsEmpty())
+            caption = wxT(" ");
+
+        wxMenuItem* item = new wxMenuItem(nullptr, 1000+i, caption);
+        if (page.bitmap.IsOk())
+            item->SetBitmap(page.bitmap.GetBitmapFor(wnd));
+        menuPopup.Append(item);
+    }
+
+    // find out where to put the popup menu of window items
+    wxPoint pt = ::wxGetMousePosition();
+    pt = wnd->ScreenToClient(pt);
+
+    // find out the screen coordinate at the bottom of the tab ctrl
+    wxRect cli_rect = wnd->GetClientRect();
+    pt.y = cli_rect.y + cli_rect.height;
+
+    wxAuiCommandCapture* cc = new wxAuiCommandCapture;
+    wnd->PushEventHandler(cc);
+    wnd->PopupMenu(&menuPopup, pt);
+    int command = cc->GetCommandId();
+    wnd->PopEventHandler(true);
+
+    if (command >= 1000)
+        return command-1000;
+
+    return -1;
+}
+
 // -- wxAuiGenericTabArt class implementation --
 
 wxAuiGenericTabArt::wxAuiGenericTabArt()
@@ -1018,52 +1065,6 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
     *out_rect = rect;
 }
 
-int wxAuiGenericTabArt::ShowDropDown(wxWindow* wnd,
-                                     const wxAuiNotebookPageArray& pages,
-                                     int /*active_idx*/)
-{
-    wxMenu menuPopup;
-
-    size_t i, count = pages.GetCount();
-    for (i = 0; i < count; ++i)
-    {
-        const wxAuiNotebookPage& page = pages.Item(i);
-
-        // Preserve ampersands possibly present in the caption string by
-        // escaping them before passing the caption to wxMenuItem.
-        wxString caption = wxControl::EscapeMnemonics(page.caption);
-
-        // if there is no caption, make it a space.  This will prevent
-        // an assert in the menu code.
-        if (caption.IsEmpty())
-            caption = wxT(" ");
-
-        wxMenuItem* item = new wxMenuItem(nullptr, 1000+i, caption);
-        if (page.bitmap.IsOk())
-            item->SetBitmap(page.bitmap.GetBitmapFor(wnd));
-        menuPopup.Append(item);
-    }
-
-    // find out where to put the popup menu of window items
-    wxPoint pt = ::wxGetMousePosition();
-    pt = wnd->ScreenToClient(pt);
-
-    // find out the screen coordinate at the bottom of the tab ctrl
-    wxRect cli_rect = wnd->GetClientRect();
-    pt.y = cli_rect.y + cli_rect.height;
-
-    wxAuiCommandCapture* cc = new wxAuiCommandCapture;
-    wnd->PushEventHandler(cc);
-    wnd->PopupMenu(&menuPopup, pt);
-    int command = cc->GetCommandId();
-    wnd->PopEventHandler(true);
-
-    if (command >= 1000)
-        return command-1000;
-
-    return -1;
-}
-
 int wxAuiGenericTabArt::GetBestTabCtrlSize(wxWindow* wnd,
                                            const wxAuiNotebookPageArray& pages,
                                            const wxSize& requiredBmp_size)
@@ -1426,51 +1427,6 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
     DrawButtons(dc, rect, bmp, *wxWHITE, button_state);
 
     *out_rect = rect;
-}
-
-int wxAuiSimpleTabArt::ShowDropDown(wxWindow* wnd,
-                                    const wxAuiNotebookPageArray& pages,
-                                    int active_idx)
-{
-    wxMenu menuPopup;
-
-    size_t i, count = pages.GetCount();
-    for (i = 0; i < count; ++i)
-    {
-        const wxAuiNotebookPage& page = pages.Item(i);
-        menuPopup.AppendCheckItem(1000+i, page.caption);
-    }
-
-    if (active_idx != -1)
-    {
-        menuPopup.Check(1000+active_idx, true);
-    }
-
-    // find out where to put the popup menu of window
-    // items.  Subtract 100 for now to center the menu
-    // a bit, until a better mechanism can be implemented
-    int offset = wnd->FromDIP(100);
-    wxPoint pt = ::wxGetMousePosition();
-    pt = wnd->ScreenToClient(pt);
-    if (pt.x < offset)
-        pt.x = 0;
-    else
-        pt.x -= offset;
-
-    // find out the screen coordinate at the bottom of the tab ctrl
-    wxRect cli_rect = wnd->GetClientRect();
-    pt.y = cli_rect.y + cli_rect.height;
-
-    wxAuiCommandCapture* cc = new wxAuiCommandCapture;
-    wnd->PushEventHandler(cc);
-    wnd->PopupMenu(&menuPopup, pt);
-    int command = cc->GetCommandId();
-    wnd->PopEventHandler(true);
-
-    if (command >= 1000)
-        return command-1000;
-
-    return -1;
 }
 
 int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd,

@@ -193,6 +193,11 @@ public:
                  int orientation,
                  wxRect* outRect) override;
 
+    int ShowDropDown(
+                 wxWindow* wnd,
+                 const wxAuiNotebookPageArray& items,
+                 int activeIdx) override;
+
 protected:
     // Ctor is protected, this class is only used as a base class.
     //
@@ -304,11 +309,6 @@ public:
                  const wxAuiNotebookPage& page,
                  int* xExtent = nullptr) override;
 
-    int ShowDropDown(
-                 wxWindow* wnd,
-                 const wxAuiNotebookPageArray& items,
-                 int activeIdx) override;
-
     int GetBestTabCtrlSize(wxWindow* wnd,
                  const wxAuiNotebookPageArray& pages,
                  const wxSize& requiredBmpSize) override;
@@ -390,11 +390,6 @@ public:
                  bool active,
                  int closeButtonState,
                  int* xExtent) override;
-
-    int ShowDropDown(
-                 wxWindow* wnd,
-                 const wxAuiNotebookPageArray& items,
-                 int activeIdx) override;
 
     int GetBestTabCtrlSize(wxWindow* wnd,
                  const wxAuiNotebookPageArray& pages,
