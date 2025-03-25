@@ -30,7 +30,7 @@ struct Mapping
     SEL action;
 };
 
-Mapping sActionToWXMapping[] =
+static const Mapping sActionToWXMapping[] =
 {
 // as we don't have NSUndoManager support we must not use the native actions
 #if 0

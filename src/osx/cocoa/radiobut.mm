@@ -21,8 +21,8 @@
 
 #include <objc/objc-runtime.h>
 
-const int maxAlternateActions = 100;
-NSString* alternateActionsSelector = @"controlAction%d:";
+static const int maxAlternateActions = 100;
+static NSString* const alternateActionsSelector = @"controlAction%d:";
 
 extern void wxOSX_controlAction(NSView* self, SEL _cmd, id sender);
 

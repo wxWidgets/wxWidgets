@@ -549,8 +549,8 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     }
 }
 
-UInt32 g_lastButton = 0 ;
-bool g_lastButtonWasFakeRight = false ;
+static UInt32 g_lastButton = 0;
+static bool g_lastButtonWasFakeRight = false;
 
 // better scroll wheel support 
 // see http://lists.apple.com/archives/cocoa-dev/2007/Feb/msg00050.html

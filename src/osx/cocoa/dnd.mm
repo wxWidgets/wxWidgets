@@ -243,7 +243,7 @@ size_t wxOSXPasteboard::GetItemCount() const
 
 #if wxUSE_DRAG_AND_DROP
 
-wxDropSource* gCurrentSource = nullptr;
+static wxDropSource* gCurrentSource = nullptr;
 
 wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 {
