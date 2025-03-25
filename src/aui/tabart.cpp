@@ -503,6 +503,35 @@ wxAuiTabArtBase::ShowDropDown(wxWindow* wnd,
     return wxNOT_FOUND;
 }
 
+int wxAuiTabArtBase::GetBorderWidth(wxWindow* wnd)
+{
+    wxAuiManager* mgr = wxAuiManager::GetManager(wnd);
+    if (mgr)
+    {
+        wxAuiDockArt* art = mgr->GetArtProvider();
+        if (art)
+            return art->GetMetricForWindow(wxAUI_DOCKART_PANE_BORDER_SIZE, wnd);
+    }
+    return 1;
+}
+
+int wxAuiTabArtBase::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
+{
+    return 0;
+}
+
+void wxAuiTabArtBase::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
+{
+    int i, border_width = GetBorderWidth(wnd);
+
+    wxRect theRect(rect);
+    for (i = 0; i < border_width; ++i)
+    {
+        dc.DrawRectangle(theRect.x, theRect.y, theRect.width, theRect.height);
+        theRect.Deflate(1);
+    }
+}
+
 // -- wxAuiGenericTabArt class implementation --
 
 wxAuiGenericTabArt::wxAuiGenericTabArt()
@@ -571,18 +600,6 @@ wxAuiGenericTabArt::GetButtonColour(wxAuiButtonId button,
 wxAuiTabArt* wxAuiGenericTabArt::Clone()
 {
     return new wxAuiGenericTabArt(*this);
-}
-
-void wxAuiGenericTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
-{
-    int i, border_width = GetBorderWidth(wnd);
-
-    wxRect theRect(rect);
-    for (i = 0; i < border_width; ++i)
-    {
-        dc.DrawRectangle(theRect.x, theRect.y, theRect.width, theRect.height);
-        theRect.Deflate(1);
-    }
 }
 
 void wxAuiGenericTabArt::DrawBackground(wxDC& dc,
@@ -942,23 +959,6 @@ int wxAuiGenericTabArt::GetIndentSize()
     return wxWindow::FromDIP(5, nullptr);
 }
 
-int wxAuiGenericTabArt::GetBorderWidth(wxWindow* wnd)
-{
-    wxAuiManager* mgr = wxAuiManager::GetManager(wnd);
-    if (mgr)
-    {
-        wxAuiDockArt* art = mgr->GetArtProvider();
-        if (art)
-            return art->GetMetricForWindow(wxAUI_DOCKART_PANE_BORDER_SIZE, wnd);
-    }
-    return 1;
-}
-
-int wxAuiGenericTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
-{
-    return 0;
-}
-
 wxSize wxAuiGenericTabArt::GetPageTabSize(
                                       wxReadOnlyDC& dc,
                                       wxWindow* wnd,
@@ -1139,18 +1139,6 @@ void wxAuiSimpleTabArt::SetActiveColour(const wxColour& colour)
     m_selectedBkPen = wxPen(colour);
 }
 
-void wxAuiSimpleTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
-{
-    int i, border_width = GetBorderWidth(wnd);
-
-    wxRect theRect(rect);
-    for (i = 0; i < border_width; ++i)
-    {
-        dc.DrawRectangle(theRect.x, theRect.y, theRect.width, theRect.height);
-        theRect.Deflate(1);
-    }
-}
-
 void wxAuiSimpleTabArt::DrawBackground(wxDC& dc,
                                        wxWindow* WXUNUSED(wnd),
                                        const wxRect& rect)
@@ -1324,23 +1312,6 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
 }
 
 int wxAuiSimpleTabArt::GetIndentSize()
-{
-    return 0;
-}
-
-int wxAuiSimpleTabArt::GetBorderWidth(wxWindow* wnd)
-{
-    wxAuiManager* mgr = wxAuiManager::GetManager(wnd);
-    if (mgr)
-    {
-       wxAuiDockArt*  art = mgr->GetArtProvider();
-        if (art)
-            return art->GetMetricForWindow(wxAUI_DOCKART_PANE_BORDER_SIZE, wnd);
-    }
-    return 1;
-}
-
-int wxAuiSimpleTabArt::GetAdditionalBorderSpace(wxWindow* WXUNUSED(wnd))
 {
     return 0;
 }

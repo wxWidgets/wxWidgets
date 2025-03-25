@@ -198,6 +198,17 @@ public:
                  const wxAuiNotebookPageArray& items,
                  int activeIdx) override;
 
+    int GetBorderWidth(
+                 wxWindow* wnd) override;
+
+    int GetAdditionalBorderSpace(
+                 wxWindow* wnd) override;
+
+    void DrawBorder(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& rect) override;
+
 protected:
     // Ctor is protected, this class is only used as a base class.
     //
@@ -270,11 +281,6 @@ public:
     void SetColour(const wxColour& colour) override;
     void SetActiveColour(const wxColour& colour) override;
 
-    void DrawBorder(
-                 wxDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& rect) override;
-
     void DrawBackground(
                  wxDC& dc,
                  wxWindow* wnd,
@@ -296,12 +302,6 @@ public:
                  wxRect* outRect) override;
 
     int GetIndentSize() override;
-
-    int GetBorderWidth(
-                 wxWindow* wnd) override;
-
-    int GetAdditionalBorderSpace(
-                 wxWindow* wnd) override;
 
     wxSize GetPageTabSize(
                  wxReadOnlyDC& dc,
@@ -346,11 +346,6 @@ public:
     void SetColour(const wxColour& colour) override;
     void SetActiveColour(const wxColour& colour) override;
 
-    void DrawBorder(
-                 wxDC& dc,
-                 wxWindow* wnd,
-                 const wxRect& rect) override;
-
     void DrawBackground(
                  wxDC& dc,
                  wxWindow* wnd,
@@ -375,12 +370,6 @@ public:
                  wxRect* outRect) override;
 
     int GetIndentSize() override;
-
-    int GetBorderWidth(
-                 wxWindow* wnd) override;
-
-    int GetAdditionalBorderSpace(
-                 wxWindow* wnd) override;
 
     wxSize GetTabSize(
                  wxReadOnlyDC& dc,
