@@ -677,7 +677,7 @@ void wxRendererMac::DrawMacCell(wxWindow *win,
             NSSetFocusRingStyle(NSFocusRingOnly);
             // we must draw into a separate layer, otherwise every single subcell eg in a combobox
             // will have its own focus rect drawn
-            CGContextBeginTransparencyLayerWithRect(cgContext, NSRectToCGRect(controlRect), 0);
+            CGContextBeginTransparencyLayerWithRect(cgContext, NSRectToCGRect(controlRect), nullptr);
             [cell drawFocusRingMaskWithFrame:controlRect inView:(NSView*) win->GetHandle()];
             CGContextEndTransparencyLayer(cgContext);
         }
