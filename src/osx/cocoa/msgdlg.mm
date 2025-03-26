@@ -100,7 +100,7 @@ int wxMessageDialog::ShowModal()
 
         NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
                 
-        int m_buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
+        int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
 
         if (style & wxYES_NO)
         {
@@ -108,32 +108,32 @@ int wxMessageDialog::ShowModal()
             {
                 defaultButtonTitle = cfNoString;
                 alternateButtonTitle = cfYesString;
-                m_buttonId[0] = wxID_NO;
-                m_buttonId[1] = wxID_YES;
+                buttonId[0] = wxID_NO;
+                buttonId[1] = wxID_YES;
             }
             else
             {
                 defaultButtonTitle = cfYesString;
                 alternateButtonTitle = cfNoString;
-                m_buttonId[0] = wxID_YES;
-                m_buttonId[1] = wxID_NO;
+                buttonId[0] = wxID_YES;
+                buttonId[1] = wxID_NO;
             }
             if (style & wxCANCEL)
             {
                 otherButtonTitle = cfCancelString;
-                m_buttonId[2] = wxID_CANCEL;
+                buttonId[2] = wxID_CANCEL;
             }
         }
         else
         {
             // the MSW implementation even shows an OK button if it is not specified, we'll do the same
-            m_buttonId[0] = wxID_OK;
+            buttonId[0] = wxID_OK;
             // using null as default title does not work on earlier systems
             defaultButtonTitle = cfOKString;
             if (style & wxCANCEL)
             {
                 alternateButtonTitle = cfCancelString;
-                m_buttonId[1] = wxID_CANCEL;
+                buttonId[1] = wxID_CANCEL;
             }
         }
 
@@ -144,7 +144,7 @@ int wxMessageDialog::ShowModal()
             0, alertType, nullptr, nullptr, nullptr, cfTitle, cfText,
             defaultButtonTitle, alternateButtonTitle, otherButtonTitle, &exitButton );
         if (err == noErr)
-            SetReturnCode( m_buttonId[exitButton] );
+            SetReturnCode( buttonId[exitButton] );
         else
             SetReturnCode( wxID_CANCEL );
     }
