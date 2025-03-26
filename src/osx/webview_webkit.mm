@@ -670,7 +670,7 @@ wxString wxWebViewWebKit::GetCurrentTitle() const
 
 float wxWebViewWebKit::GetZoomFactor() const
 {
-    return m_webView.magnification;
+    return float(m_webView.magnification);
 }
 
 void wxWebViewWebKit::SetZoomFactor(float zoom)

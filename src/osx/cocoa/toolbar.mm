@@ -807,7 +807,7 @@ void wxToolBar::DoGetSize( int *width, int *height ) const
     if ( ownToolbarInstalled )
     {
         WXWindow tlw = MacGetTopLevelWindowRef();
-        float toolbarHeight = 0.0;
+        CGFloat toolbarHeight = 0;
         NSRect windowFrame = NSMakeRect(0, 0, 0, 0);
 
         if(m_macToolbar && [(NSToolbar*)m_macToolbar isVisible])
@@ -840,7 +840,7 @@ void wxToolBar::DoGetPosition(int*x, int *y) const
     if ( ownToolbarInstalled )
     {
         WXWindow tlw = MacGetTopLevelWindowRef();
-        float toolbarHeight = 0.0;
+        CGFloat toolbarHeight = 0;
         NSRect windowFrame = NSMakeRect(0, 0, 0, 0);
         
         if(m_macToolbar && [(NSToolbar*)m_macToolbar isVisible])
