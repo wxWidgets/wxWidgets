@@ -678,9 +678,6 @@ void TextCtrlTestCase::LogTextCtrl()
 
 void TextCtrlTestCase::LongText()
 {
-    // In the other ports SetMaxLength() can't be used with multi line text
-    // controls.
-#if defined(__WXMSW__) || defined(__WXGTK__)
     delete m_text;
     CreateText(wxTE_MULTILINE|wxTE_DONTWRAP);
 
@@ -690,12 +687,14 @@ void TextCtrlTestCase::LongText()
     // Pattern for the line.
     const wxString linePattern = MakeLinePattern();
 
-    // Fill the control.
-    m_text->SetMaxLength(15000);
+    wxString content;
     for (i = 0; i < numLines; i++)
     {
-        m_text->AppendText(wxString::Format(wxT("[%3d] %s\n"), i, linePattern));
+        content << wxString::Format(wxT("[%3d] %s\n"), i, linePattern);
     }
+
+    // Fill the control.
+    m_text->AppendText(content);
 
     // Check the content.
     for (i = 0; i < numLines; i++)
@@ -704,7 +703,6 @@ void TextCtrlTestCase::LongText()
         wxString line = m_text->GetLineText(i);
         CPPUNIT_ASSERT_EQUAL( line, pattern );
     }
-#endif // __WXMSW__
 }
 
 void TextCtrlTestCase::PositionToCoords()
