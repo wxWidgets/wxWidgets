@@ -185,6 +185,9 @@ used to override this.
  * `--without-libtiff` \n
    Disables TIFF image format code. Don't use libtiff.
 
+ * `--without-libwebp` \n
+   Disables WebP image format code. Don't use libwebp.
+
  * `--without-expat` \n
    Disable XML classes based on Expat parser. Don't use expat library.
 
