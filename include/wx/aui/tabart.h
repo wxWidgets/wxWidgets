@@ -229,9 +229,21 @@ protected:
     void InitBitmaps();
 
     // Return pointer to our bitmap bundle corresponding to the button ID and
-    // state or null if we don't support this button (and also if it is hidden).
+    // state, returning a valid pointer even if the button is currently hidden.
+    const wxBitmapBundle*
+    GetButtonBitmapBundleEvenIfHidden(const wxAuiTabContainerButton& button) const;
+
+    // Return pointer to our bitmap bundle corresponding to the button ID and
+    // state or null if we don't support this button (and also if it is hidden,
+    // unlike the version above).
     const wxBitmapBundle*
     GetButtonBitmapBundle(const wxAuiTabContainerButton& button) const;
+
+    // This can be used to get the bitmap for the buttons even when they're
+    // hidden (normally the bitmap should always be valid).
+    wxBitmap
+    GetButtonBitmapEvenIfHidden(const wxAuiTabContainerButton& button,
+                                wxWindow* wnd) const;
 
     // Helper function for DrawButton() and GetButtonRect().
     bool DoGetButtonRectAndBitmap(
@@ -286,6 +298,58 @@ private:
                      int buttonState);
 };
 
+// This tab art provider draws flat tabs with a thin border.
+class WXDLLIMPEXP_AUI wxAuiFlatTabArt : public wxAuiTabArtBase
+{
+public:
+    wxAuiFlatTabArt();
+    virtual ~wxAuiFlatTabArt();
+
+    // Objects of this class are supposed to be used polymorphically, so
+    // copying them is not allowed, use Clone() instead.
+    wxAuiFlatTabArt(const wxAuiFlatTabArt&) = delete;
+    wxAuiFlatTabArt& operator=(const wxAuiFlatTabArt&) = delete;
+
+    wxAuiTabArt* Clone() override;
+
+    void SetColour(const wxColour& colour) override;
+    void SetActiveColour(const wxColour& colour) override;
+
+    void DrawBackground(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& rect) override;
+
+    int DrawPageTab(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 wxAuiNotebookPage& page,
+                 const wxRect& rect) override;
+
+    int GetIndentSize() override;
+
+    wxSize GetPageTabSize(
+                 wxReadOnlyDC& dc,
+                 wxWindow* wnd,
+                 const wxAuiNotebookPage& page,
+                 int* xExtent = nullptr) override;
+
+    int GetBestTabCtrlSize(wxWindow* wnd,
+                 const wxAuiNotebookPageArray& pages,
+                 const wxSize& requiredBmpSize) override;
+
+    void UpdateColoursFromSystem() override;
+
+private:
+    // Private pseudo-copy ctor used by Clone().
+    explicit wxAuiFlatTabArt(wxAuiFlatTabArt* other);
+
+    virtual wxColour
+    GetButtonColour(wxAuiButtonId button,
+                    wxAuiPaneButtonState state) const override;
+
+    struct Data;
+    Data* const m_data;
 };
 
 
