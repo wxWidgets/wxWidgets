@@ -79,7 +79,7 @@ public:
 
     virtual void SetData(wxDataFormat::NativeFormat format, const void *buf, size_t datasize) override
     {
-        wxCFRef<CFDataRef> data(CFDataCreate( kCFAllocatorDefault, (UInt8*)buf, datasize ));
+        wxCFRef<CFDataRef> data(CFDataCreate( kCFAllocatorDefault, (const UInt8*)buf, datasize ));
         DoSetData(format, data);
     }
 
@@ -141,7 +141,7 @@ public:
         if ( UTTypeConformsTo((CFStringRef)type, kPasteboardTypeFileURLPromise ) )
         {
             wxString tempdir = wxFileName::GetTempDir() + wxFILE_SEP_PATH + "wxtemp.XXXXXX";
-            char* result = mkdtemp((char*)tempdir.fn_str().data());
+            char* result = mkdtemp(const_cast<char*>(tempdir.fn_str().data()));
 
             wxCFRef<CFURLRef> dest(CFURLCreateFromFileSystemRepresentation(nullptr, (const UInt8*)result, strlen(result), true));
             PasteboardRef pboardRef = nullptr;

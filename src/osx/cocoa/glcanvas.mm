@@ -106,7 +106,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
 
     attribs = data;
 
-    return [[NSOpenGLPixelFormat alloc] initWithAttributes:(NSOpenGLPixelFormatAttribute*) attribs];
+    return [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
 }
 
 @interface wxNSCustomOpenGLView : NSOpenGLView
