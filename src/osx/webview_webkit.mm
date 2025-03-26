@@ -980,7 +980,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 - (void)webView:(WKWebView *)webView
     didFailNavigation:(WKNavigation *)navigation
-            withError:(NSError *)error;
+            withError:(NSError *)error
 {
     if (webKitWindow){
         NSString *url = webView.URL.absoluteString;
@@ -1003,7 +1003,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 - (void)webView:(WKWebView *)webView
     didFailProvisionalNavigation:(WKNavigation *)navigation
-                       withError:(NSError *)error;
+                       withError:(NSError *)error
 {
     if (webKitWindow){
         NSString *url = webView.URL.absoluteString;

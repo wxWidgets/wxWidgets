@@ -2961,7 +2961,7 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
         default:
             wxFAIL_MSG( "unknown animation effect" );
             return false;
-    };
+    }
 
     if ( show )
     {

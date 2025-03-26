@@ -52,7 +52,7 @@ public:
 
     wxOSXImageHolder( const wxOSXImageHolder& other ) : m_nsImage(other.m_nsImage)
     {
-        [m_nsImage retain];;
+        [m_nsImage retain];
     }
 
     ~wxOSXImageHolder()

@@ -95,7 +95,7 @@ wxString wxGetOsDescription()
             case 15:
                 osName = "Catalina";
                 break;
-        };
+        }
     }
     else if (majorVer > 10)
     {
