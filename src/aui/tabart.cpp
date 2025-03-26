@@ -61,6 +61,14 @@ wxAuiEnsureSufficientContrast(wxColour* fg, const wxColour& bg)
           > wxAuiGetColourContrast(*wxBLACK, bg) ? *wxWHITE : *wxBLACK;
 }
 
+// Create a "disabled" version of the given colour by adjusting its lightness
+// in the direction depending on the theme.
+static wxColour wxAuiDimColour(wxColour colour)
+{
+    const int ialpha = wxSystemSettings::GetAppearance().IsDark() ? 130 : 70;
+    return colour.ChangeLightness(ialpha);
+}
+
 static void IndentPressedBitmap(wxWindow* wnd, wxRect* rect, int button_state)
 {
     if (button_state == wxAUI_BUTTON_STATE_PRESSED)
@@ -593,9 +601,7 @@ wxAuiGenericTabArt::GetButtonColour(wxAuiButtonId button,
             // most important one.
             if ( button == wxAUI_BUTTON_CLOSE )
             {
-                const int disabledLightness = wxSystemSettings::GetAppearance().IsUsingDarkBackground() ? 130 : 70;
-
-                return wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT).ChangeLightness(disabledLightness);
+                return wxAuiDimColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
             }
 
             return wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
