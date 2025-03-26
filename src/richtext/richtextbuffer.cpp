@@ -12520,7 +12520,7 @@ bool wxRichTextImage::LoadImageCache(wxReadOnlyDC& dc, wxRichTextDrawingContext&
     // Don't repeat unless absolutely necessary
     if (m_imageCache.IsOk() && !resetCache && !context.GetLayingOut())
     {
-        retImageSize = wxSize(m_imageCache.GetLogicalWidth(), m_imageCache.GetLogicalHeight());
+        retImageSize = m_imageCache.GetLogicalSize();
         return true;
     }
 
@@ -12535,7 +12535,7 @@ bool wxRichTextImage::LoadImageCache(wxReadOnlyDC& dc, wxRichTextDrawingContext&
             m_imageCache = bitmap;
             m_imageState = ImageState_Loaded;
         }
-        retImageSize = wxSize(m_imageCache.GetLogicalWidth(), m_imageCache.GetLogicalHeight());
+        retImageSize = m_imageCache.GetLogicalSize();
         return true;
     }
 
@@ -12553,7 +12553,7 @@ bool wxRichTextImage::LoadImageCache(wxReadOnlyDC& dc, wxRichTextDrawingContext&
         {
             wxBitmap bitmap(image_placeholder24x24_xpm);
             m_imageCache = bitmap;
-            m_originalImageSize = wxSize(bitmap.GetLogicalWidth(), bitmap.GetLogicalHeight());
+            m_originalImageSize = bitmap.GetLogicalSize();
             m_imageState = ImageState_Bad;
             retImageSize = m_originalImageSize;
             return false;
