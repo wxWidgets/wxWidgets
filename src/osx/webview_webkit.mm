@@ -675,7 +675,7 @@ float wxWebViewWebKit::GetZoomFactor() const
 
 void wxWebViewWebKit::SetZoomFactor(float zoom)
 {
-    m_webView.magnification = zoom;
+    m_webView.magnification = double(zoom);
 }
 
 void wxWebViewWebKit::DoSetPage(const wxString& src, const wxString& baseUrl)

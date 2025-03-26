@@ -255,9 +255,9 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUN
         // TODO case wxSYS_EDGE_Y:
 
         case wxSYS_CURSOR_X:
-            return wxRound([[[NSCursor arrowCursor] image] size].width * GetCursorScale());
+            return wxRound(float([[[NSCursor arrowCursor] image] size].width) * GetCursorScale());
         case wxSYS_CURSOR_Y:
-            return wxRound([[[NSCursor arrowCursor] image] size].height * GetCursorScale());
+            return wxRound(float([[[NSCursor arrowCursor] image] size].height) * GetCursorScale());
 
         case wxSYS_HSCROLL_ARROW_X:
             return 16;

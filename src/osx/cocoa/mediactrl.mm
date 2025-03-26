@@ -469,7 +469,7 @@ bool wxAVMediaBackend::Stop()
 
 double wxAVMediaBackend::GetVolume()
 {
-    return [m_player volume];
+    return double([m_player volume]);
 }
 
 bool wxAVMediaBackend::SetVolume(double dVolume)
@@ -479,7 +479,7 @@ bool wxAVMediaBackend::SetVolume(double dVolume)
 }
 double wxAVMediaBackend::GetPlaybackRate()
 {
-    return [m_player rate];
+    return double([m_player rate]);
 }
 
 bool wxAVMediaBackend::SetPlaybackRate(double dRate)

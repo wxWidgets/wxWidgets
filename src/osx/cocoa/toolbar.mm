@@ -440,7 +440,7 @@ private:
             [view removeFromSuperview];
             [item setView:view];
             wxSize sz = tool->GetControl()->GetSize();
-            NSSize size = NSMakeSize((float)sz.x, (float)sz.y);
+            NSSize size = NSMakeSize(sz.x, sz.y);
             [item setMaxSize:size];
             [item setMinSize:size];
             [view setHidden:NO];
