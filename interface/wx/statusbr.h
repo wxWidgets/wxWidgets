@@ -274,7 +274,11 @@ public:
 
     /**
         Sets the styles of the fields in the status line which can make fields appear
-        flat or raised instead of the standard sunken 3D border.
+        flat or raised instead of the default appearance.
+
+        Please note that not all styles are supported on all platforms, i.e.
+        they may have no effect. In particular, these styles are completely
+        ignored in wxGTK and wxOSX and only partially supported in wxMSW.
 
         @param n
             The number of fields in the status bar. Must be equal to the
