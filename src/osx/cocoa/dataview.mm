@@ -3460,6 +3460,7 @@ void wxDataViewCheckIconTextRenderer::OSXOnCellChanged(NSObject *value,
             break;
 
         case 0:
+        default:
             checkedState = wxCHK_UNCHECKED;
             break;
 
