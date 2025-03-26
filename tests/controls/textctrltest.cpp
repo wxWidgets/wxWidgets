@@ -42,6 +42,7 @@
 #include "testableframe.h"
 #include "asserthelper.h"
 
+#include <algorithm>
 #include <memory>
 
 static const int TEXT_HEIGHT = 200;
@@ -157,6 +158,9 @@ private:
     // (or not) already contain wxTE_MULTILINE.
     void CreateText(long extraStyles);
 
+    // Return a string pattern of length _len_ used as text lines in multi-line control
+    static wxString MakeLinePattern(int len = 100);
+
     wxTextCtrl *m_text;
 
     static long ms_style;
@@ -185,6 +189,16 @@ void TextCtrlTestCase::CreateText(long extraStyles)
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
                             wxDefaultPosition, wxSize(400, h),
                             style);
+}
+
+wxString TextCtrlTestCase::MakeLinePattern(int len)
+{
+    wxString pattern;
+    pattern.reserve(len);
+    for ( int i = 0; i < len; i++ )
+        pattern += '0' + i % 10;
+
+    return pattern;
 }
 
 void TextCtrlTestCase::setUp()
@@ -671,16 +685,10 @@ void TextCtrlTestCase::LongText()
     CreateText(wxTE_MULTILINE|wxTE_DONTWRAP);
 
     const int numLines = 1000;
-    const int lenPattern = 100;
     int i;
 
     // Pattern for the line.
-    wxChar linePattern[lenPattern+1];
-    for (i = 0; i < lenPattern - 1; i++)
-    {
-        linePattern[i] = wxChar('0' + i % 10);
-    }
-    linePattern[WXSIZEOF(linePattern) - 1] = wxChar('\0');
+    const wxString linePattern = MakeLinePattern();
 
     // Fill the control.
     m_text->SetMaxLength(15000);
