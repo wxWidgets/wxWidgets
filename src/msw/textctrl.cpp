@@ -1301,7 +1301,7 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
     const int lenActuallyInserted = gs_lenOfInsertedText.top();
     gs_lenOfInsertedText.pop();
 
-    if ( lenActuallyInserted == -1 )
+    if ( lenActuallyInserted < 0 )
     {
         // Text size limit has been hit and added text has been truncated.
         // But the max length has been increased by the EN_MAXTEXT message
@@ -1312,6 +1312,8 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
                       selectionOnly ? 1 : 0, wxMSW_CONV_LPARAM(valueDos));
+
+        SetMaxLength(~lenActuallyInserted); // Restore the old max length
     }
 
     if ( !ucf.GotUpdate() && (flags & SetValue_SendEvent) )
@@ -2570,8 +2572,11 @@ bool wxTextCtrl::HasSpaceLimit(unsigned int *len) const
 bool wxTextCtrl::AdjustSpaceLimit()
 {
     unsigned int limit;
-    if ( HasSpaceLimit(&limit) )
+    if ( HasSpaceLimit(&limit) && gs_lenOfInsertedText.empty() )
+    {
+        // Do nothing if the text is entered interactively.
         return false;
+    }
 
     unsigned int len = ::GetWindowTextLength(GetHwnd());
     if ( len >= limit )
@@ -2586,8 +2591,9 @@ bool wxTextCtrl::AdjustSpaceLimit()
         {
             increaseBy = gs_lenOfInsertedText.top();
 
-            // Indicate to the caller that we increased the limit.
-            gs_lenOfInsertedText.top() = -1;
+            // Save the old max length (will be restored in DoWriteText())
+            // to Indicate to the caller that we increased the limit.
+            gs_lenOfInsertedText.top() = ~limit;
         }
         else // Not inserting text, must be text actually typed by user.
         {
