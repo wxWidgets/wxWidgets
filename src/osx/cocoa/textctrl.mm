@@ -912,7 +912,7 @@ wxTextSearchResult wxNSTextViewControl::SearchText(const wxTextSearch &search) c
 
     // return if passed an invalid starting point
     if ( search.m_startingPosition != -1 &&
-            search.m_startingPosition >= [viewString length] )
+            (NSUInteger)search.m_startingPosition >= [viewString length] )
         return wxTextSearchResult{};
 
     NSRange searchRange = NSMakeRange(0, [viewString length]);

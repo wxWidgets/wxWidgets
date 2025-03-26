@@ -2263,7 +2263,7 @@ void wxCocoaGesturesImpl::RawTouchEvent(NSEvent* event, wxEventType type, NSTouc
 
     // Iterate through all moving touches to check if the touch corresponding to "press"
     // in Press and Tap event is moving.
-    for ( int i = 0; i < [array count]; ++i )
+    for ( NSUInteger i = 0; i < [array count]; ++i )
     {
         NSTouch* touch = [array objectAtIndex:i];
 
