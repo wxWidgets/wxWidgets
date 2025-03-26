@@ -373,7 +373,7 @@ void wxBell()
 
 @end
 
-WX_NSObject appcontroller = nil;
+static WX_NSObject appcontroller = nil;
 
 NSLayoutManager* gNSLayoutManager = nil;
 
@@ -563,9 +563,9 @@ wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
     return new wxOSXTimerImpl(timer);
 }
 
-int gs_wxBusyCursorCount = 0;
+static int gs_wxBusyCursorCount = 0;
 extern wxCursor    gMacCurrentCursor;
-wxCursor        gMacStoredActiveCursor;
+static wxCursor gMacStoredActiveCursor;
 
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(const wxCursor *cursor)

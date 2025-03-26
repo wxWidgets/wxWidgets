@@ -24,8 +24,8 @@
 // wxPowerResource
 // ----------------------------------------------------------------------------
 
-wxAtomicInt g_powerResourceSystemRefCount = 0;
-NSObject* g_processInfoActivity = nil;
+static wxAtomicInt g_powerResourceSystemRefCount = 0;
+static NSObject* g_processInfoActivity = nil;
 
 bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
 {
