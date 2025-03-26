@@ -42,8 +42,6 @@
 // Constants used locally
 // ============================================================================
 
-#define DataViewPboardType @"OutlineViewItem"
-
 static const int MINIMUM_NATIVE_ROW_HEIGHT = 17;
 
 
