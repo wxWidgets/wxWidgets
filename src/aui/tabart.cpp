@@ -61,12 +61,11 @@ wxAuiEnsureSufficientContrast(wxColour* fg, const wxColour& bg)
           > wxAuiGetColourContrast(*wxBLACK, bg) ? *wxWHITE : *wxBLACK;
 }
 
-static void IndentPressedBitmap(const wxSize& offset, wxRect* rect, int button_state)
+static void IndentPressedBitmap(wxWindow* wnd, wxRect* rect, int button_state)
 {
     if (button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
-        rect->x += offset.x;
-        rect->y += offset.y;
+        rect->Offset(wnd->FromDIP(wxPoint(1, 1)));
     }
 }
 
@@ -411,7 +410,7 @@ wxAuiTabArtBase::DoGetButtonRectAndBitmap(wxWindow* wnd,
                       bmp.GetLogicalWidth(), bmp.GetLogicalHeight());
     }
 
-    IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, button_state);
+    IndentPressedBitmap(wnd, &rect, button_state);
 
     if ( outRect )
         *outRect = rect;
@@ -909,7 +908,7 @@ int wxAuiGenericTabArt::DrawPageTab(
                     bmp.GetLogicalWidth(),
                     tab_height);
 
-        IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, button.curState);
+        IndentPressedBitmap(wnd, &rect, button.curState);
         dc.DrawBitmap(bmp, rect.x, rect.y, true);
 
         button.rect = rect;
@@ -1255,7 +1254,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                     bmp.GetLogicalWidth(),
                     tab_height - 1);
 
-        IndentPressedBitmap(wnd->FromDIP(wxSize(1, 1)), &rect, close_button_state);
+        IndentPressedBitmap(wnd, &rect, close_button_state);
         DrawButtonBitmap(dc, rect, bmp, close_button_state);
 
         *out_button_rect = rect;
