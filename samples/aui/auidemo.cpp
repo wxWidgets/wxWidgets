@@ -205,8 +205,13 @@ private:
 
     wxAuiManager m_mgr;
     wxArrayString m_perspectives;
-    wxMenu* m_perspectives_menu;
-    long m_notebook_style;
+    wxMenu* m_perspectivesMenu;
+    long m_notebookStyle;
+    enum class TabArt
+    {
+        Gloss,
+        Simple
+    } m_notebookTheme = TabArt::Gloss;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -327,28 +332,28 @@ public:
         wxSize const elementSize = FromDIP(wxSize(180, 20));
 
         wxBoxSizer* s1 = new wxBoxSizer(wxHORIZONTAL);
-        m_border_size = new wxSpinCtrl(this, ID_PaneBorderSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+        m_borderSize = new wxSpinCtrl(this, ID_PaneBorderSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
         s1->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s1->Add(new wxStaticText(this, wxID_ANY, "Pane Border Size:"));
-        s1->Add(m_border_size);
+        s1->Add(m_borderSize);
         s1->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s1->SetItemMinSize((size_t)1, elementSize);
         //vert->Add(s1, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
         wxBoxSizer* s2 = new wxBoxSizer(wxHORIZONTAL);
-        m_sash_size = new wxSpinCtrl(this, ID_SashSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
+        m_sashSize = new wxSpinCtrl(this, ID_SashSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
         s2->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s2->Add(new wxStaticText(this, wxID_ANY, "Sash Size:"));
-        s2->Add(m_sash_size);
+        s2->Add(m_sashSize);
         s2->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s2->SetItemMinSize((size_t)1, elementSize);
         //vert->Add(s2, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
         wxBoxSizer* s3 = new wxBoxSizer(wxHORIZONTAL);
-        m_caption_size = new wxSpinCtrl(this, ID_CaptionSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
+        m_captionSize = new wxSpinCtrl(this, ID_CaptionSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
         s3->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s3->Add(new wxStaticText(this, wxID_ANY, "Caption Size:"));
-        s3->Add(m_caption_size);
+        s3->Add(m_captionSize);
         s3->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s3->SetItemMinSize((size_t)1, elementSize);
         //vert->Add(s3, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
@@ -360,103 +365,103 @@ public:
         wxSize const bitmapSize = FromDIP(wxSize(50, 25));
 
         wxBoxSizer* s4 = new wxBoxSizer(wxHORIZONTAL);
-        m_background_color = new wxBitmapButton(this, ID_BackgroundColor, b, wxDefaultPosition, bitmapSize);
+        m_backgroundColor = new wxBitmapButton(this, ID_BackgroundColor, b, wxDefaultPosition, bitmapSize);
         s4->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s4->Add(new wxStaticText(this, wxID_ANY, "Background Color:"));
-        s4->Add(m_background_color);
+        s4->Add(m_backgroundColor);
         s4->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s4->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s5 = new wxBoxSizer(wxHORIZONTAL);
-        m_sash_color = new wxBitmapButton(this, ID_SashColor, b, wxDefaultPosition, bitmapSize);
+        m_sashColor = new wxBitmapButton(this, ID_SashColor, b, wxDefaultPosition, bitmapSize);
         s5->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s5->Add(new wxStaticText(this, wxID_ANY, "Sash Color:"));
-        s5->Add(m_sash_color);
+        s5->Add(m_sashColor);
         s5->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s5->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s6 = new wxBoxSizer(wxHORIZONTAL);
-        m_inactive_caption_color = new wxBitmapButton(this, ID_InactiveCaptionColor, b, wxDefaultPosition, bitmapSize);
+        m_inactiveCaptionColor = new wxBitmapButton(this, ID_InactiveCaptionColor, b, wxDefaultPosition, bitmapSize);
         s6->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s6->Add(new wxStaticText(this, wxID_ANY, "Normal Caption:"));
-        s6->Add(m_inactive_caption_color);
+        s6->Add(m_inactiveCaptionColor);
         s6->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s6->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s7 = new wxBoxSizer(wxHORIZONTAL);
-        m_inactive_caption_gradient_color = new wxBitmapButton(this, ID_InactiveCaptionGradientColor, b, wxDefaultPosition, bitmapSize);
+        m_inactiveCaptionGradientColor = new wxBitmapButton(this, ID_InactiveCaptionGradientColor, b, wxDefaultPosition, bitmapSize);
         s7->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s7->Add(new wxStaticText(this, wxID_ANY, "Normal Caption Gradient:"));
-        s7->Add(m_inactive_caption_gradient_color);
+        s7->Add(m_inactiveCaptionGradientColor);
         s7->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s7->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s8 = new wxBoxSizer(wxHORIZONTAL);
-        m_inactive_caption_text_color = new wxBitmapButton(this, ID_InactiveCaptionTextColor, b, wxDefaultPosition, bitmapSize);
+        m_inactiveCaptionTextColor = new wxBitmapButton(this, ID_InactiveCaptionTextColor, b, wxDefaultPosition, bitmapSize);
         s8->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s8->Add(new wxStaticText(this, wxID_ANY, "Normal Caption Text:"));
-        s8->Add(m_inactive_caption_text_color);
+        s8->Add(m_inactiveCaptionTextColor);
         s8->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s8->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s9 = new wxBoxSizer(wxHORIZONTAL);
-        m_active_caption_color = new wxBitmapButton(this, ID_ActiveCaptionColor, b, wxDefaultPosition, bitmapSize);
+        m_activeCaptionColor = new wxBitmapButton(this, ID_ActiveCaptionColor, b, wxDefaultPosition, bitmapSize);
         s9->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s9->Add(new wxStaticText(this, wxID_ANY, "Active Caption:"));
-        s9->Add(m_active_caption_color);
+        s9->Add(m_activeCaptionColor);
         s9->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s9->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s10 = new wxBoxSizer(wxHORIZONTAL);
-        m_active_caption_gradient_color = new wxBitmapButton(this, ID_ActiveCaptionGradientColor, b, wxDefaultPosition, bitmapSize);
+        m_activeCaptionGradientColor = new wxBitmapButton(this, ID_ActiveCaptionGradientColor, b, wxDefaultPosition, bitmapSize);
         s10->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s10->Add(new wxStaticText(this, wxID_ANY, "Active Caption Gradient:"));
-        s10->Add(m_active_caption_gradient_color);
+        s10->Add(m_activeCaptionGradientColor);
         s10->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s10->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s11 = new wxBoxSizer(wxHORIZONTAL);
-        m_active_caption_text_color = new wxBitmapButton(this, ID_ActiveCaptionTextColor, b, wxDefaultPosition, bitmapSize);
+        m_activeCaptionTextColor = new wxBitmapButton(this, ID_ActiveCaptionTextColor, b, wxDefaultPosition, bitmapSize);
         s11->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s11->Add(new wxStaticText(this, wxID_ANY, "Active Caption Text:"));
-        s11->Add(m_active_caption_text_color);
+        s11->Add(m_activeCaptionTextColor);
         s11->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s11->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s12 = new wxBoxSizer(wxHORIZONTAL);
-        m_border_color = new wxBitmapButton(this, ID_BorderColor, b, wxDefaultPosition, bitmapSize);
+        m_borderColor = new wxBitmapButton(this, ID_BorderColor, b, wxDefaultPosition, bitmapSize);
         s12->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s12->Add(new wxStaticText(this, wxID_ANY, "Border Color:"));
-        s12->Add(m_border_color);
+        s12->Add(m_borderColor);
         s12->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s12->SetItemMinSize((size_t)1, elementSize);
 
         wxBoxSizer* s13 = new wxBoxSizer(wxHORIZONTAL);
-        m_gripper_color = new wxBitmapButton(this, ID_GripperColor, b, wxDefaultPosition, bitmapSize);
+        m_gripperColor = new wxBitmapButton(this, ID_GripperColor, b, wxDefaultPosition, bitmapSize);
         s13->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s13->Add(new wxStaticText(this, wxID_ANY, "Gripper Color:"));
-        s13->Add(m_gripper_color);
+        s13->Add(m_gripperColor);
         s13->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
         s13->SetItemMinSize((size_t)1, elementSize);
 
-        wxGridSizer* grid_sizer = new wxGridSizer(2);
-        grid_sizer->SetHGap(FromDIP(5));
-        grid_sizer->Add(s1);  grid_sizer->Add(s4);
-        grid_sizer->Add(s2);  grid_sizer->Add(s5);
-        grid_sizer->Add(s3);  grid_sizer->Add(s13);
-        grid_sizer->Add(FromDIP(1),FromDIP(1)); grid_sizer->Add(s12);
-        grid_sizer->Add(s6);  grid_sizer->Add(s9);
-        grid_sizer->Add(s7);  grid_sizer->Add(s10);
-        grid_sizer->Add(s8);  grid_sizer->Add(s11);
+        wxGridSizer* gridSizer = new wxGridSizer(2);
+        gridSizer->SetHGap(FromDIP(5));
+        gridSizer->Add(s1);  gridSizer->Add(s4);
+        gridSizer->Add(s2);  gridSizer->Add(s5);
+        gridSizer->Add(s3);  gridSizer->Add(s13);
+        gridSizer->Add(FromDIP(1),FromDIP(1)); gridSizer->Add(s12);
+        gridSizer->Add(s6);  gridSizer->Add(s9);
+        gridSizer->Add(s7);  gridSizer->Add(s10);
+        gridSizer->Add(s8);  gridSizer->Add(s11);
 
-        wxBoxSizer* cont_sizer = new wxBoxSizer(wxVERTICAL);
-        cont_sizer->Add(grid_sizer, 1, wxEXPAND | wxALL, FromDIP(5));
-        SetSizer(cont_sizer);
+        wxBoxSizer* contSizer = new wxBoxSizer(wxVERTICAL);
+        contSizer->Add(gridSizer, 1, wxEXPAND | wxALL, FromDIP(5));
+        SetSizer(contSizer);
         GetSizer()->SetSizeHints(this);
 
-        m_border_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
-        m_sash_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
-        m_caption_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
+        m_borderSize->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+        m_sashSize->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
+        m_captionSize->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
 
         UpdateColors();
     }
@@ -488,34 +493,34 @@ private:
     void UpdateColors()
     {
         wxColour bk = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_BACKGROUND_COLOUR);
-        m_background_color->SetBitmapLabel(CreateColorBitmap(bk));
+        m_backgroundColor->SetBitmapLabel(CreateColorBitmap(bk));
 
         wxColour cap = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR);
-        m_inactive_caption_color->SetBitmapLabel(CreateColorBitmap(cap));
+        m_inactiveCaptionColor->SetBitmapLabel(CreateColorBitmap(cap));
 
         wxColour capgrad = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR);
-        m_inactive_caption_gradient_color->SetBitmapLabel(CreateColorBitmap(capgrad));
+        m_inactiveCaptionGradientColor->SetBitmapLabel(CreateColorBitmap(capgrad));
 
         wxColour captxt = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR);
-        m_inactive_caption_text_color->SetBitmapLabel(CreateColorBitmap(captxt));
+        m_inactiveCaptionTextColor->SetBitmapLabel(CreateColorBitmap(captxt));
 
         wxColour acap = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR);
-        m_active_caption_color->SetBitmapLabel(CreateColorBitmap(acap));
+        m_activeCaptionColor->SetBitmapLabel(CreateColorBitmap(acap));
 
         wxColour acapgrad = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR);
-        m_active_caption_gradient_color->SetBitmapLabel(CreateColorBitmap(acapgrad));
+        m_activeCaptionGradientColor->SetBitmapLabel(CreateColorBitmap(acapgrad));
 
         wxColour acaptxt = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR);
-        m_active_caption_text_color->SetBitmapLabel(CreateColorBitmap(acaptxt));
+        m_activeCaptionTextColor->SetBitmapLabel(CreateColorBitmap(acaptxt));
 
         wxColour sash = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_SASH_COLOUR);
-        m_sash_color->SetBitmapLabel(CreateColorBitmap(sash));
+        m_sashColor->SetBitmapLabel(CreateColorBitmap(sash));
 
         wxColour border = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_BORDER_COLOUR);
-        m_border_color->SetBitmapLabel(CreateColorBitmap(border));
+        m_borderColor->SetBitmapLabel(CreateColorBitmap(border));
 
         wxColour gripper = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_GRIPPER_COLOUR);
-        m_gripper_color->SetBitmapLabel(CreateColorBitmap(gripper));
+        m_gripperColor->SetBitmapLabel(CreateColorBitmap(gripper));
     }
 
     void OnPaneBorderSize(wxSpinEvent& event)
@@ -570,19 +575,19 @@ private:
 private:
 
     MyFrame* m_frame;
-    wxSpinCtrl* m_border_size;
-    wxSpinCtrl* m_sash_size;
-    wxSpinCtrl* m_caption_size;
-    wxBitmapButton* m_inactive_caption_text_color;
-    wxBitmapButton* m_inactive_caption_gradient_color;
-    wxBitmapButton* m_inactive_caption_color;
-    wxBitmapButton* m_active_caption_text_color;
-    wxBitmapButton* m_active_caption_gradient_color;
-    wxBitmapButton* m_active_caption_color;
-    wxBitmapButton* m_sash_color;
-    wxBitmapButton* m_background_color;
-    wxBitmapButton* m_border_color;
-    wxBitmapButton* m_gripper_color;
+    wxSpinCtrl* m_borderSize;
+    wxSpinCtrl* m_sashSize;
+    wxSpinCtrl* m_captionSize;
+    wxBitmapButton* m_inactiveCaptionTextColor;
+    wxBitmapButton* m_inactiveCaptionGradientColor;
+    wxBitmapButton* m_inactiveCaptionColor;
+    wxBitmapButton* m_activeCaptionTextColor;
+    wxBitmapButton* m_activeCaptionGradientColor;
+    wxBitmapButton* m_activeCaptionColor;
+    wxBitmapButton* m_sashColor;
+    wxBitmapButton* m_backgroundColor;
+    wxBitmapButton* m_borderColor;
+    wxBitmapButton* m_gripperColor;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -709,6 +714,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_VerticalGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_HorizontalGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_AllowToolbarResizing, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookArtGloss, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_NotebookArtSimple, MyFrame::OnUpdateUI)
     EVT_MENU_RANGE(MyFrame::ID_FirstPerspective, MyFrame::ID_FirstPerspective+1000,
                    MyFrame::OnRestorePerspective)
     EVT_AUITOOLBAR_TOOL_DROPDOWN(ID_DropDownToolbarItem, MyFrame::OnDropDownToolbarItem)
@@ -739,108 +746,108 @@ MyFrame::MyFrame(wxWindow* parent,
     SetIcon(wxIcon(sample_xpm));
 
     // set up default notebook style
-    m_notebook_style = wxAUI_NB_DEFAULT_STYLE |
-                       wxAUI_NB_TAB_EXTERNAL_MOVE |
-                       wxAUI_NB_PIN_ON_ACTIVE_TAB |
-                       wxAUI_NB_UNPIN_ON_ALL_PINNED |
-                       wxNO_BORDER;
+    m_notebookStyle = wxAUI_NB_DEFAULT_STYLE |
+                      wxAUI_NB_TAB_EXTERNAL_MOVE |
+                      wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                      wxAUI_NB_UNPIN_ON_ALL_PINNED |
+                      wxNO_BORDER;
 
     // create menu
     wxMenuBar* mb = new wxMenuBar;
 
-    wxMenu* file_menu = new wxMenu;
-    file_menu->Append(wxID_EXIT);
+    wxMenu* fileMenu = new wxMenu;
+    fileMenu->Append(wxID_EXIT);
 
-    wxMenu* view_menu = new wxMenu;
-    view_menu->Append(ID_CreateText, _("Create Text Control"));
-    view_menu->Append(ID_CreateHTML, _("Create HTML Control"));
-    view_menu->Append(ID_CreateTree, _("Create Tree"));
-    view_menu->Append(ID_CreateGrid, _("Create Grid"));
-    view_menu->Append(ID_CreateNotebook, _("Create Notebook"));
-    view_menu->Append(ID_CreateSizeReport, _("Create Size Reporter"));
-    view_menu->AppendSeparator();
-    view_menu->Append(ID_GridContent, _("Use a Grid for the Content Pane"));
-    view_menu->Append(ID_TextContent, _("Use a Text Control for the Content Pane"));
-    view_menu->Append(ID_HTMLContent, _("Use an HTML Control for the Content Pane"));
-    view_menu->Append(ID_TreeContent, _("Use a Tree Control for the Content Pane"));
-    view_menu->Append(ID_NotebookContent, _("Use a wxAuiNotebook control for the Content Pane"));
-    view_menu->Append(ID_SizeReportContent, _("Use a Size Reporter for the Content Pane"));
+    wxMenu* viewMenu = new wxMenu;
+    viewMenu->Append(ID_CreateText, _("Create Text Control"));
+    viewMenu->Append(ID_CreateHTML, _("Create HTML Control"));
+    viewMenu->Append(ID_CreateTree, _("Create Tree"));
+    viewMenu->Append(ID_CreateGrid, _("Create Grid"));
+    viewMenu->Append(ID_CreateNotebook, _("Create Notebook"));
+    viewMenu->Append(ID_CreateSizeReport, _("Create Size Reporter"));
+    viewMenu->AppendSeparator();
+    viewMenu->Append(ID_GridContent, _("Use a Grid for the Content Pane"));
+    viewMenu->Append(ID_TextContent, _("Use a Text Control for the Content Pane"));
+    viewMenu->Append(ID_HTMLContent, _("Use an HTML Control for the Content Pane"));
+    viewMenu->Append(ID_TreeContent, _("Use a Tree Control for the Content Pane"));
+    viewMenu->Append(ID_NotebookContent, _("Use a wxAuiNotebook control for the Content Pane"));
+    viewMenu->Append(ID_SizeReportContent, _("Use a Size Reporter for the Content Pane"));
 
-    wxMenu* options_menu = new wxMenu;
-    options_menu->AppendRadioItem(ID_TransparentHint, _("Transparent Hint"));
-    options_menu->AppendRadioItem(ID_VenetianBlindsHint, _("Venetian Blinds Hint"));
-    options_menu->AppendRadioItem(ID_RectangleHint, _("Rectangle Hint"));
-    options_menu->AppendRadioItem(ID_NoHint, _("No Hint"));
-    options_menu->AppendSeparator();
-    options_menu->AppendCheckItem(ID_HintFade, _("Hint Fade-in"));
-    options_menu->AppendCheckItem(ID_AllowFloating, _("Allow Floating"));
-    options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
-    options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
+    wxMenu* optionsMenu = new wxMenu;
+    optionsMenu->AppendRadioItem(ID_TransparentHint, _("Transparent Hint"));
+    optionsMenu->AppendRadioItem(ID_VenetianBlindsHint, _("Venetian Blinds Hint"));
+    optionsMenu->AppendRadioItem(ID_RectangleHint, _("Rectangle Hint"));
+    optionsMenu->AppendRadioItem(ID_NoHint, _("No Hint"));
+    optionsMenu->AppendSeparator();
+    optionsMenu->AppendCheckItem(ID_HintFade, _("Hint Fade-in"));
+    optionsMenu->AppendCheckItem(ID_AllowFloating, _("Allow Floating"));
+    optionsMenu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
+    optionsMenu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
     // Only show "live resize" toggle if it's actually functional.
     if ( !wxAuiManager::AlwaysUsesLiveResize() )
-        options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
-    options_menu->AppendSeparator();
-    options_menu->AppendRadioItem(ID_NoGradient, _("No Caption Gradient"));
-    options_menu->AppendRadioItem(ID_VerticalGradient, _("Vertical Caption Gradient"));
-    options_menu->AppendRadioItem(ID_HorizontalGradient, _("Horizontal Caption Gradient"));
-    options_menu->AppendSeparator();
-    options_menu->AppendCheckItem(ID_AllowToolbarResizing, _("Allow Toolbar Resizing"));
-    options_menu->AppendSeparator();
-    options_menu->Append(ID_Settings, _("Settings Pane"));
+        optionsMenu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
+    optionsMenu->AppendSeparator();
+    optionsMenu->AppendRadioItem(ID_NoGradient, _("No Caption Gradient"));
+    optionsMenu->AppendRadioItem(ID_VerticalGradient, _("Vertical Caption Gradient"));
+    optionsMenu->AppendRadioItem(ID_HorizontalGradient, _("Horizontal Caption Gradient"));
+    optionsMenu->AppendSeparator();
+    optionsMenu->AppendCheckItem(ID_AllowToolbarResizing, _("Allow Toolbar Resizing"));
+    optionsMenu->AppendSeparator();
+    optionsMenu->Append(ID_Settings, _("Settings Pane"));
 
-    wxMenu* notebook_menu = new wxMenu;
-    notebook_menu->AppendRadioItem(ID_NotebookArtGloss, _("Glossy Theme (Default)"));
-    notebook_menu->AppendRadioItem(ID_NotebookArtSimple, _("Simple Theme"));
-    notebook_menu->AppendSeparator();
-    notebook_menu->AppendRadioItem(ID_NotebookNoCloseButton, _("No Close Button"));
-    notebook_menu->AppendRadioItem(ID_NotebookCloseButton, _("Close Button at Right"));
-    notebook_menu->AppendRadioItem(ID_NotebookCloseButtonAll, _("Close Button on All Tabs"));
-    notebook_menu->AppendRadioItem(ID_NotebookCloseButtonActive, _("Close Button on Active Tab"));
-    notebook_menu->AppendSeparator();
-    notebook_menu->AppendRadioItem(ID_NotebookAlignTop, _("Tab Top Alignment"));
-    notebook_menu->AppendRadioItem(ID_NotebookAlignBottom, _("Tab Bottom Alignment"));
-    notebook_menu->AppendSeparator();
-    notebook_menu->AppendCheckItem(ID_NotebookAllowTabMove, _("Allow Tab Move"));
-    notebook_menu->AppendCheckItem(ID_NotebookAllowTabExternalMove, _("Allow External Tab Move"));
-    notebook_menu->AppendCheckItem(ID_NotebookAllowTabSplit, _("Allow Notebook Split"));
-    notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
-    notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
-    notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
-    notebook_menu->AppendCheckItem(ID_NotebookTabPin, _("Show &Pin Button"));
-    notebook_menu->AppendCheckItem(ID_NotebookTabUnpin, _("Show &Unpin Buttons"));
-    notebook_menu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
-    notebook_menu->AppendSeparator();
-    notebook_menu->Append(ID_NotebookNextTab, _("Switch to next tab\tCtrl-F6"));
-    notebook_menu->Append(ID_NotebookPrevTab, _("Switch to previous tab\tShift-Ctrl-F6"));
-    notebook_menu->AppendSeparator();
-    notebook_menu->Append(ID_NotebookSplit, _("&Split Notebook"));
-    notebook_menu->Append(ID_NotebookUnsplit, _("&Unsplit Notebook"));
-    notebook_menu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
-    notebook_menu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
-    notebook_menu->AppendSeparator();
-    notebook_menu->AppendRadioItem(ID_NotebookNormalTab, _("Make Current Tab Normal\tCtrl-0"));
-    notebook_menu->AppendRadioItem(ID_NotebookPinTab, _("Pin Current Tab\tCtrl-1"));
-    notebook_menu->AppendRadioItem(ID_NotebookLockTab, _("Lock Current Tab\tCtrl-2"));
+    wxMenu* notebookMenu = new wxMenu;
+    notebookMenu->AppendRadioItem(ID_NotebookArtGloss, _("Glossy Theme (Default)"));
+    notebookMenu->AppendRadioItem(ID_NotebookArtSimple, _("Simple Theme"));
+    notebookMenu->AppendSeparator();
+    notebookMenu->AppendRadioItem(ID_NotebookNoCloseButton, _("No Close Button"));
+    notebookMenu->AppendRadioItem(ID_NotebookCloseButton, _("Close Button at Right"));
+    notebookMenu->AppendRadioItem(ID_NotebookCloseButtonAll, _("Close Button on All Tabs"));
+    notebookMenu->AppendRadioItem(ID_NotebookCloseButtonActive, _("Close Button on Active Tab"));
+    notebookMenu->AppendSeparator();
+    notebookMenu->AppendRadioItem(ID_NotebookAlignTop, _("Tab Top Alignment"));
+    notebookMenu->AppendRadioItem(ID_NotebookAlignBottom, _("Tab Bottom Alignment"));
+    notebookMenu->AppendSeparator();
+    notebookMenu->AppendCheckItem(ID_NotebookAllowTabMove, _("Allow Tab Move"));
+    notebookMenu->AppendCheckItem(ID_NotebookAllowTabExternalMove, _("Allow External Tab Move"));
+    notebookMenu->AppendCheckItem(ID_NotebookAllowTabSplit, _("Allow Notebook Split"));
+    notebookMenu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
+    notebookMenu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
+    notebookMenu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
+    notebookMenu->AppendCheckItem(ID_NotebookTabPin, _("Show &Pin Button"));
+    notebookMenu->AppendCheckItem(ID_NotebookTabUnpin, _("Show &Unpin Buttons"));
+    notebookMenu->AppendCheckItem(ID_NotebookMultiLine, _("Tabs on &Multiple Lines"));
+    notebookMenu->AppendSeparator();
+    notebookMenu->Append(ID_NotebookNextTab, _("Switch to next tab\tCtrl-F6"));
+    notebookMenu->Append(ID_NotebookPrevTab, _("Switch to previous tab\tShift-Ctrl-F6"));
+    notebookMenu->AppendSeparator();
+    notebookMenu->Append(ID_NotebookSplit, _("&Split Notebook"));
+    notebookMenu->Append(ID_NotebookUnsplit, _("&Unsplit Notebook"));
+    notebookMenu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
+    notebookMenu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
+    notebookMenu->AppendSeparator();
+    notebookMenu->AppendRadioItem(ID_NotebookNormalTab, _("Make Current Tab Normal\tCtrl-0"));
+    notebookMenu->AppendRadioItem(ID_NotebookPinTab, _("Pin Current Tab\tCtrl-1"));
+    notebookMenu->AppendRadioItem(ID_NotebookLockTab, _("Lock Current Tab\tCtrl-2"));
 
-    m_perspectives_menu = new wxMenu;
-    m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
-    m_perspectives_menu->Append(ID_CopyLayout, _("Copy Layout to Clipboard as XML\tCtrl-C"));
-    m_perspectives_menu->Append(ID_PasteLayout, _("Paste XML Layout from Clipboard\tCtrl-V"));
-    m_perspectives_menu->AppendSeparator();
-    m_perspectives_menu->Append(ID_EditNotebookLayout, _("Edit &Notebook Layout..."));
-    m_perspectives_menu->AppendSeparator();
-    m_perspectives_menu->Append(ID_FirstPerspective+0, _("Default Startup"));
-    m_perspectives_menu->Append(ID_FirstPerspective+1, _("All Panes"));
+    m_perspectivesMenu = new wxMenu;
+    m_perspectivesMenu->Append(ID_CreatePerspective, _("Create Perspective"));
+    m_perspectivesMenu->Append(ID_CopyLayout, _("Copy Layout to Clipboard as XML\tCtrl-C"));
+    m_perspectivesMenu->Append(ID_PasteLayout, _("Paste XML Layout from Clipboard\tCtrl-V"));
+    m_perspectivesMenu->AppendSeparator();
+    m_perspectivesMenu->Append(ID_EditNotebookLayout, _("Edit &Notebook Layout..."));
+    m_perspectivesMenu->AppendSeparator();
+    m_perspectivesMenu->Append(ID_FirstPerspective+0, _("Default Startup"));
+    m_perspectivesMenu->Append(ID_FirstPerspective+1, _("All Panes"));
 
-    wxMenu* help_menu = new wxMenu;
-    help_menu->Append(wxID_ABOUT);
+    wxMenu* helpMenu = new wxMenu;
+    helpMenu->Append(wxID_ABOUT);
 
-    mb->Append(file_menu, _("&File"));
-    mb->Append(view_menu, _("&View"));
-    mb->Append(m_perspectives_menu, _("&Perspectives"));
-    mb->Append(options_menu, _("&Options"));
-    mb->Append(notebook_menu, _("&Notebook"));
-    mb->Append(help_menu, _("&Help"));
+    mb->Append(fileMenu, _("&File"));
+    mb->Append(viewMenu, _("&View"));
+    mb->Append(m_perspectivesMenu, _("&Perspectives"));
+    mb->Append(optionsMenu, _("&Options"));
+    mb->Append(notebookMenu, _("&Notebook"));
+    mb->Append(helpMenu, _("&Help"));
 
     SetMenuBar(mb);
 
@@ -857,15 +864,15 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // prepare a few custom overflow elements for the toolbars' overflow buttons
 
-    wxAuiToolBarItemArray prepend_items;
-    wxAuiToolBarItemArray append_items;
+    wxAuiToolBarItemArray prependItems;
+    wxAuiToolBarItemArray appendItems;
     wxAuiToolBarItem item;
     item.SetKind(wxITEM_SEPARATOR);
-    append_items.Add(item);
+    appendItems.Add(item);
     item.SetKind(wxITEM_NORMAL);
     item.SetId(ID_CustomizeToolbar);
     item.SetLabel(_("Customize..."));
-    append_items.Add(item);
+    appendItems.Add(item);
 
 
     // If using wxUPDATE_UI_PROCESS_ALL (the default),
@@ -882,7 +889,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb1->AddTool(ID_SampleItem+3, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
     tb1->AddTool(ID_SampleItem+4, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
     tb1->AddTool(ID_SampleItem+5, "Test", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE));
-    tb1->SetCustomOverflowItems(prepend_items, append_items);
+    tb1->SetCustomOverflowItems(prependItems, appendItems);
     tb1->Realize();
 
 
@@ -903,7 +910,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb2->AddTool(ID_SampleItem+13, "Test", tb2_bmp1);
     tb2->AddTool(ID_SampleItem+14, "Test", tb2_bmp1);
     tb2->AddTool(ID_SampleItem+15, "Test", tb2_bmp1);
-    tb2->SetCustomOverflowItems(prepend_items, append_items);
+    tb2->SetCustomOverflowItems(prependItems, appendItems);
     tb2->EnableTool(ID_SampleItem+6, false);
     tb2->Realize();
 
@@ -924,7 +931,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb3->AddTool(ID_SampleItem+23, "Radio 1 (Group 2)", tb3_bmp1, "Radio 1 (Group 2)", wxITEM_RADIO);
     tb3->AddTool(ID_SampleItem+24, "Radio 2 (Group 2)", tb3_bmp1, "Radio 2 (Group 2)", wxITEM_RADIO);
     tb3->AddTool(ID_SampleItem+25, "Radio 3 (Group 2)", tb3_bmp1, "Radio 3 (Group 2)", wxITEM_RADIO);
-    tb3->SetCustomOverflowItems(prepend_items, append_items);
+    tb3->SetCustomOverflowItems(prependItems, appendItems);
     tb3->Realize();
 
 
@@ -947,7 +954,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb4->AddTool(ID_SampleItem+28, "Item 7", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+29, "Item 8", tb4_bmp1);
     tb4->SetToolDropDown(ID_DropDownToolbarItem, true);
-    tb4->SetCustomOverflowItems(prepend_items, append_items);
+    tb4->SetCustomOverflowItems(prependItems, appendItems);
     tb4->AddControl(new wxStaticText(tb4, wxID_ANY, "Choose wisely: "));
     wxChoice* choice = new wxChoice(tb4, ID_SampleItem+35);
     choice->AppendString("Good choice");
@@ -987,7 +994,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb5->AddTool(ID_SampleItem+32, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
     tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
     tb5->AddTool(ID_SampleItem+34, "Test with help", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE), wxNullBitmap, wxITEM_NORMAL, "Short Help", "This is long help on the status bar", nullptr);
-    tb5->SetCustomOverflowItems(prepend_items, append_items);
+    tb5->SetCustomOverflowItems(prependItems, appendItems);
     tb5->Realize();
 
     // add a bunch of panes
@@ -1107,22 +1114,22 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // make some default perspectives
 
-    wxString perspective_all = m_mgr.SavePerspective();
+    wxString perspectiveAll = m_mgr.SavePerspective();
 
-    int i, count;
-    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-    for (i = 0, count = all_panes.GetCount(); i < count; ++i)
-        if (!all_panes.Item(i).IsToolbar())
-            all_panes.Item(i).Hide();
+    for ( auto& pane : m_mgr.GetAllPanes() )
+    {
+        if (!pane.IsToolbar())
+            pane.Hide();
+    }
     m_mgr.GetPane("tb1").Hide();
     m_mgr.GetPane("tb6").Hide();
     m_mgr.GetPane("test8").Show().Left().Layer(0).Row(0).Position(0);
     m_mgr.GetPane("test10").Show().Bottom().Layer(0).Row(0).Position(0);
     m_mgr.GetPane("notebook_content").Show();
-    wxString perspective_default = m_mgr.SavePerspective();
+    wxString perspectiveDefault = m_mgr.SavePerspective();
 
-    m_perspectives.Add(perspective_default);
-    m_perspectives.Add(perspective_all);
+    m_perspectives.Add(perspectiveDefault);
+    m_perspectives.Add(perspectiveAll);
 
     // "commit" all changes made to wxAuiManager
     m_mgr.Update();
@@ -1151,10 +1158,10 @@ void MyFrame::OnSize(wxSizeEvent& event)
 void MyFrame::OnSettings(wxCommandEvent& WXUNUSED(evt))
 {
     // show the settings pane, and float it
-    wxAuiPaneInfo& floating_pane = m_mgr.GetPane("settings").Float().Show();
+    wxAuiPaneInfo& floatingPane = m_mgr.GetPane("settings").Float().Show();
 
-    if (floating_pane.floating_pos == wxDefaultPosition)
-        floating_pane.FloatingPosition(GetStartPosition());
+    if (floatingPane.floating_pos == wxDefaultPosition)
+        floatingPane.FloatingPosition(GetStartPosition());
 
     m_mgr.Update();
 }
@@ -1181,14 +1188,11 @@ void MyFrame::OnGradient(wxCommandEvent& event)
 
 void MyFrame::OnToolbarResizing(wxCommandEvent& WXUNUSED(evt))
 {
-    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-    const size_t count = all_panes.GetCount();
-    for (size_t i = 0; i < count; ++i)
+    for ( auto& pane : m_mgr.GetAllPanes() )
     {
-        wxAuiToolBar* toolbar = wxDynamicCast(all_panes[i].window, wxAuiToolBar);
-        if (toolbar)
+        if ( wxDynamicCast(pane.window, wxAuiToolBar) )
         {
-            all_panes[i].Resizable(!all_panes[i].IsResizable());
+            pane.Resizable(!pane.IsResizable());
         }
     }
 
@@ -1242,7 +1246,7 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         // Propagate the flags to the notebooks too.
         for ( auto& pane : m_mgr.GetAllPanes() )
         {
-            if (auto* nb = wxDynamicCast(pane.window, wxAuiNotebook) )
+            if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
             {
                 nb->SetManagerFlags(m_mgr.GetFlags());
             }
@@ -1262,74 +1266,95 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
         id == ID_NotebookCloseButtonAll ||
         id == ID_NotebookCloseButtonActive)
     {
-        m_notebook_style &= ~(wxAUI_NB_CLOSE_BUTTON |
+        m_notebookStyle &= ~(wxAUI_NB_CLOSE_BUTTON |
                               wxAUI_NB_CLOSE_ON_ACTIVE_TAB |
                               wxAUI_NB_CLOSE_ON_ALL_TABS);
 
         switch (id)
         {
             case ID_NotebookNoCloseButton: break;
-            case ID_NotebookCloseButton: m_notebook_style |= wxAUI_NB_CLOSE_BUTTON; break;
-            case ID_NotebookCloseButtonAll: m_notebook_style |= wxAUI_NB_CLOSE_ON_ALL_TABS; break;
-            case ID_NotebookCloseButtonActive: m_notebook_style |= wxAUI_NB_CLOSE_ON_ACTIVE_TAB; break;
+            case ID_NotebookCloseButton: m_notebookStyle |= wxAUI_NB_CLOSE_BUTTON; break;
+            case ID_NotebookCloseButtonAll: m_notebookStyle |= wxAUI_NB_CLOSE_ON_ALL_TABS; break;
+            case ID_NotebookCloseButtonActive: m_notebookStyle |= wxAUI_NB_CLOSE_ON_ACTIVE_TAB; break;
         }
     }
 
     if (id == ID_NotebookAllowTabMove)
     {
-        m_notebook_style ^= wxAUI_NB_TAB_MOVE;
+        m_notebookStyle ^= wxAUI_NB_TAB_MOVE;
     }
     if (id == ID_NotebookAllowTabExternalMove)
     {
-        m_notebook_style ^= wxAUI_NB_TAB_EXTERNAL_MOVE;
+        m_notebookStyle ^= wxAUI_NB_TAB_EXTERNAL_MOVE;
     }
      else if (id == ID_NotebookAllowTabSplit)
     {
-        m_notebook_style ^= wxAUI_NB_TAB_SPLIT;
+        m_notebookStyle ^= wxAUI_NB_TAB_SPLIT;
     }
      else if (id == ID_NotebookWindowList)
     {
-        m_notebook_style ^= wxAUI_NB_WINDOWLIST_BUTTON;
+        m_notebookStyle ^= wxAUI_NB_WINDOWLIST_BUTTON;
     }
      else if (id == ID_NotebookScrollButtons)
     {
-        m_notebook_style ^= wxAUI_NB_SCROLL_BUTTONS;
+        m_notebookStyle ^= wxAUI_NB_SCROLL_BUTTONS;
     }
      else if (id == ID_NotebookTabFixedWidth)
     {
-        m_notebook_style ^= wxAUI_NB_TAB_FIXED_WIDTH;
+        m_notebookStyle ^= wxAUI_NB_TAB_FIXED_WIDTH;
     }
     else if (id == ID_NotebookTabPin)
     {
-        m_notebook_style ^= wxAUI_NB_PIN_ON_ACTIVE_TAB;
+        m_notebookStyle ^= wxAUI_NB_PIN_ON_ACTIVE_TAB;
     }
     else if (id == ID_NotebookTabUnpin)
     {
-        m_notebook_style ^= wxAUI_NB_UNPIN_ON_ALL_PINNED;
+        m_notebookStyle ^= wxAUI_NB_UNPIN_ON_ALL_PINNED;
     }
     else if (id == ID_NotebookMultiLine)
     {
-        m_notebook_style ^= wxAUI_NB_MULTILINE;
+        m_notebookStyle ^= wxAUI_NB_MULTILINE;
     }
 
 
-    size_t i, count;
-    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-    for (i = 0, count = all_panes.GetCount(); i < count; ++i)
+    // If we've turned on pin or unpin buttons, check that it's compatible with
+    // the currently used tab art.
+    if ( m_notebookStyle & (wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                            wxAUI_NB_UNPIN_ON_ALL_PINNED) )
     {
-        wxAuiPaneInfo& pane = all_panes.Item(i);
-        if (pane.window->IsKindOf(CLASSINFO(wxAuiNotebook)))
+        if ( m_notebookTheme == TabArt::Simple )
         {
-            wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
+            wxLogError("Pin icons not supported by the currently used theme.");
 
+            m_notebookStyle &= ~(wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                                 wxAUI_NB_UNPIN_ON_ALL_PINNED);
+        }
+    }
+
+    for ( const auto& pane : m_mgr.GetAllPanes() )
+    {
+        if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
+        {
             wxAuiTabArt* art = nullptr;
             if (id == ID_NotebookArtGloss)
             {
+                m_notebookTheme = TabArt::Gloss;
                 art = new wxAuiDefaultTabArt;
             }
             else if (id == ID_NotebookArtSimple)
             {
-                art = new wxAuiSimpleTabArt;
+                if ( m_notebookStyle & (wxAUI_NB_PIN_ON_ACTIVE_TAB |
+                                        wxAUI_NB_UNPIN_ON_ALL_PINNED) )
+                {
+                    // wxAuiSimpleTabArt doesn't have any support for pin or
+                    // unpin icons.
+                    wxLogError("Simple theme does not support pinned tabs.");
+                }
+                else
+                {
+                    m_notebookTheme = TabArt::Simple;
+                    art = new wxAuiSimpleTabArt;
+                }
             }
 
             if (art)
@@ -1338,7 +1363,7 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
             }
 
 
-            nb->SetWindowStyleFlag(m_notebook_style);
+            nb->SetWindowStyleFlag(m_notebookStyle);
             nb->Refresh();
         }
     }
@@ -1364,14 +1389,11 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_AllowToolbarResizing:
         {
-            wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-            const size_t count = all_panes.GetCount();
-            for (size_t i = 0; i < count; ++i)
+            for ( const auto& pane : m_mgr.GetAllPanes() )
             {
-                wxAuiToolBar* toolbar = wxDynamicCast(all_panes[i].window, wxAuiToolBar);
-                if (toolbar)
+                if ( wxDynamicCast(pane.window, wxAuiToolBar) )
                 {
-                    event.Check(all_panes[i].IsResizable());
+                    event.Check(pane.IsResizable());
                     break;
                 }
             }
@@ -1405,49 +1427,49 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
         case ID_NotebookNoCloseButton:
-            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) == 0);
+            event.Check((m_notebookStyle & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) == 0);
             break;
         case ID_NotebookCloseButton:
-            event.Check((m_notebook_style & wxAUI_NB_CLOSE_BUTTON) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_CLOSE_BUTTON) != 0);
             break;
         case ID_NotebookCloseButtonAll:
-            event.Check((m_notebook_style & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0);
             break;
         case ID_NotebookCloseButtonActive:
-            event.Check((m_notebook_style & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0);
             break;
         case ID_NotebookAllowTabSplit:
-            event.Check((m_notebook_style & wxAUI_NB_TAB_SPLIT) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_TAB_SPLIT) != 0);
             break;
         case ID_NotebookAllowTabMove:
-            event.Check((m_notebook_style & wxAUI_NB_TAB_MOVE) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_TAB_MOVE) != 0);
             break;
         case ID_NotebookAllowTabExternalMove:
-            event.Check((m_notebook_style & wxAUI_NB_TAB_EXTERNAL_MOVE) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_TAB_EXTERNAL_MOVE) != 0);
             break;
         case ID_NotebookScrollButtons:
-            event.Check((m_notebook_style & wxAUI_NB_SCROLL_BUTTONS) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_SCROLL_BUTTONS) != 0);
             break;
         case ID_NotebookWindowList:
-            event.Check((m_notebook_style & wxAUI_NB_WINDOWLIST_BUTTON) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_WINDOWLIST_BUTTON) != 0);
             break;
         case ID_NotebookTabFixedWidth:
-            event.Check((m_notebook_style & wxAUI_NB_TAB_FIXED_WIDTH) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_TAB_FIXED_WIDTH) != 0);
             break;
         case ID_NotebookTabPin:
-            event.Check((m_notebook_style & wxAUI_NB_PIN_ON_ACTIVE_TAB) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_PIN_ON_ACTIVE_TAB) != 0);
             break;
         case ID_NotebookTabUnpin:
-            event.Check((m_notebook_style & wxAUI_NB_UNPIN_ON_ALL_PINNED) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_UNPIN_ON_ALL_PINNED) != 0);
             break;
         case ID_NotebookMultiLine:
-            event.Check((m_notebook_style & wxAUI_NB_MULTILINE) != 0);
+            event.Check((m_notebookStyle & wxAUI_NB_MULTILINE) != 0);
             break;
         case ID_NotebookArtGloss:
-            event.Check(m_notebook_style == 0);
+            event.Check(m_notebookTheme == TabArt::Gloss);
             break;
         case ID_NotebookArtSimple:
-            event.Check(m_notebook_style == 1);
+            event.Check(m_notebookTheme == TabArt::Simple);
             break;
 
     }
@@ -1607,10 +1629,10 @@ void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
 
     if (m_perspectives.GetCount() == 0)
     {
-        m_perspectives_menu->AppendSeparator();
+        m_perspectivesMenu->AppendSeparator();
     }
 
-    m_perspectives_menu->Append(ID_FirstPerspective + m_perspectives.GetCount(), dlg.GetValue());
+    m_perspectivesMenu->Append(ID_FirstPerspective + m_perspectives.GetCount(), dlg.GetValue());
     m_perspectives.Add(m_mgr.SavePerspective());
 }
 
@@ -2412,15 +2434,10 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
 
 void MyFrame::OnTabAlignment(wxCommandEvent &evt)
 {
-    size_t i, count;
-    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
-    for (i = 0, count = all_panes.GetCount(); i < count; ++i)
+    for ( const auto& pane : m_mgr.GetAllPanes() )
     {
-        wxAuiPaneInfo& pane = all_panes.Item(i);
-        if (pane.window->IsKindOf(CLASSINFO(wxAuiNotebook)))
+        if ( auto* const nb = wxDynamicCast(pane.window, wxAuiNotebook) )
         {
-            wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
-
             long style = nb->GetWindowStyleFlag();
             style &= ~(wxAUI_NB_TOP | wxAUI_NB_BOTTOM);
             if (evt.GetId() == ID_NotebookAlignTop)
@@ -2444,13 +2461,13 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(_("wxAUI Demo\nAn advanced window management library for wxWidgets\n(c) Copyright 2005-2006, Kirix Corporation"), _("About wxAUI Demo"), wxOK, this);
 }
 
-wxTextCtrl* MyFrame::CreateTextCtrl(const wxString& ctrl_text)
+wxTextCtrl* MyFrame::CreateTextCtrl(const wxString& ctrlText)
 {
     static int n = 0;
 
     wxString text;
-    if ( !ctrl_text.empty() )
-        text = ctrl_text;
+    if ( !ctrlText.empty() )
+        text = ctrlText;
     else
         text.Printf("This is text box %d", ++n);
 
@@ -2535,17 +2552,17 @@ wxHtmlWindow* MyFrame::CreateHTMLCtrl(wxWindow* parent)
 wxAuiNotebook* MyFrame::CreateNotebook()
 {
    // create the notebook off-window to avoid flicker
-   wxSize client_size = GetClientSize();
+   wxSize clientSize = GetClientSize();
 
    wxAuiNotebook* ctrl = new wxAuiNotebook(this, wxID_ANY,
-                                    wxPoint(client_size.x, client_size.y),
+                                    wxPoint(clientSize.x, clientSize.y),
                                     FromDIP(wxSize(430,200)),
-                                    m_notebook_style);
+                                    m_notebookStyle);
    ctrl->Freeze();
 
-   wxBitmapBundle page_bmp = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
+   wxBitmapBundle pageBmp = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
 
-   ctrl->AddPage(CreateHTMLCtrl(ctrl), "Welcome to wxAUI" , false, page_bmp);
+   ctrl->AddPage(CreateHTMLCtrl(ctrl), "Welcome to wxAUI" , false, pageBmp);
    ctrl->SetPageKind(0, wxAuiTabKind::Locked);
    ctrl->SetPageToolTip(0, "Note that this page is locked and can't be moved or closed");
 
@@ -2563,11 +2580,11 @@ wxAuiNotebook* MyFrame::CreateNotebook()
                 wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, FromDIP(5) );
    flex->Add( FromDIP(5), FromDIP(5) );   flex->Add( FromDIP(5), FromDIP(5) );
    panel->SetSizer( flex );
-   ctrl->AddPage( panel, "wxPanel", false, page_bmp );
+   ctrl->AddPage( panel, "wxPanel", false, pageBmp );
 
 
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some text",
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 1", false, page_bmp );
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 1", false, pageBmp );
 
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 2" );
