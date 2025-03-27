@@ -4686,6 +4686,9 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     gtk_tree_view_set_rules_hint( GTK_TREE_VIEW(m_treeview), (style & wxDV_ROW_LINES) != 0 );
     wxGCC_WARNING_RESTORE()
 #endif
+#ifdef __WXGTK3__
+    gtk_scrolled_window_set_overlay_scrolling(GTK_SCROLLED_WINDOW(m_widget), FALSE);
+#endif
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (m_widget),
         GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
