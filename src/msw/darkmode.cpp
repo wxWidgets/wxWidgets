@@ -322,7 +322,7 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
             return wxColour(0xe0e0e0);
 
         case wxSYS_COLOUR_HOTLIGHT:
-            return wxColour(0x474747);
+            return wxColour(0xe48435);
 
         case wxSYS_COLOUR_SCROLLBAR:
             return wxColour(0x4d4d4d);
@@ -337,11 +337,11 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_MENUBAR:
             return wxColour(0x626262);
 
+        case wxSYS_COLOUR_HIGHLIGHT:
         case wxSYS_COLOUR_MENUHILIGHT:
-            return wxColour(0x353535);
+            return wxColour(0x9e5315);
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:
-        case wxSYS_COLOUR_HIGHLIGHT:
             return wxColour(0x777777);
 
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
