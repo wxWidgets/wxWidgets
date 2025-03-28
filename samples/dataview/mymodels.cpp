@@ -484,8 +484,8 @@ void MyListModel::GetValueByRow( wxVariant &variant,
                 {
                     // These strings will look wrong without wxUSE_MARKUP, but
                     // it's just a sample, so we don't care.
-                    "<span color=\"#87ceeb\">light</span> and "
-                        "<span color=\"#000080\">dark</span> blue",
+                    ("<span color=\"#87ceeb\">light</span> and "
+                        "<span color=\"#000080\">dark</span> blue"),
                     "<big>growing green</big>",
                     "<i>emphatic &amp; red</i>",
                     "<b>bold &amp;&amp; cyan</b>",
