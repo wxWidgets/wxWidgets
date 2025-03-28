@@ -27,8 +27,8 @@ public:
 private:
     wxBitmap m_selected;
 
-    DECLARE_CLASS(wxMemoryDCImpl);
-    DECLARE_NO_COPY_CLASS(wxMemoryDCImpl);
+    wxDECLARE_CLASS(wxMemoryDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxMemoryDCImpl);
 };
 
 #endif // _WX_QT_DCMEMORY_H_
