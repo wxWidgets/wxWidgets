@@ -269,13 +269,13 @@ wxDataViewItem MyMusicTreeModel::GetParent( const wxDataViewItem &item ) const
 {
     // the invisible root node has no parent
     if (!item.IsOk())
-        return wxDataViewItem(0);
+        return wxDataViewItem(nullptr);
 
     MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
 
     // "MyMusic" also has no parent
     if (node == m_root)
-        return wxDataViewItem(0);
+        return wxDataViewItem(nullptr);
 
     return wxDataViewItem( (void*) node->GetParent() );
 }

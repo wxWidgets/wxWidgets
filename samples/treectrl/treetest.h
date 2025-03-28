@@ -104,7 +104,7 @@ public:
 
     wxTreeItemId GetLastTreeITem() const;
     void GetItemsRecursively(const wxTreeItemId& idParent,
-                             wxTreeItemIdValue cookie = 0);
+                             wxTreeItemIdValue cookie = nullptr);
 
     // This function behaves differently depending on the value of size:
     //  - If it's -1, it turns off the use of images entirely.
@@ -137,7 +137,7 @@ public:
     {
         const size_t count = GetStateImageList()->GetImageCount();
         int state = count > 0 ? count - 1 : wxTREE_ITEMSTATE_NONE;
-        DoResetBrokenStateImages(GetRootItem(), 0, state);
+        DoResetBrokenStateImages(GetRootItem(), nullptr, state);
     }
 
 protected:

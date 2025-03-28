@@ -1017,7 +1017,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel,
             tc->SetImages(images);
 
             const wxDataViewItem root =
-                tc->AppendContainer( wxDataViewItem(0), "The Root", 0 );
+                tc->AppendContainer( wxDataViewItem(nullptr), "The Root", 0 );
             tc->AppendItem( root, "Child 1", 0 );
             tc->AppendItem( root, "Child 2", 0 );
             tc->AppendItem( root, "Child 3, very long, long, long, long", 0 );

@@ -82,7 +82,7 @@ const ArchiveApp::ArchiveCommandDesc ArchiveApp::s_cmdDesc[] =
     {CMD_LIST, "l", "list"},
     {CMD_EXTRACT, "x", "extract"},
 
-    {CMD_NONE, 0, 0}
+    {CMD_NONE, nullptr, nullptr}
 };
 
 // Helper function iterating over all factories of the given type (assumed to

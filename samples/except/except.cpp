@@ -62,7 +62,7 @@ static void DoCrash()
 {
     wxGCC_WARNING_SUPPRESS(nonnull)
 
-    char *p = 0;
+    char *p = nullptr;
     strcpy(p, "Let's crash");
 
     wxGCC_WARNING_RESTORE(nonnull)
@@ -587,7 +587,7 @@ void MyFrame::OnShowAssertInThread(wxCommandEvent& WXUNUSED(event))
         {
             wxFAIL_MSG("Test assert in another thread.");
 
-            return 0;
+            return nullptr;
         }
     };
 

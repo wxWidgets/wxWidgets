@@ -644,12 +644,12 @@ void myOGLTriangles::SetBuffers(myOGLShaders* theShader,
     glBindBuffer(GL_ARRAY_BUFFER, m_bufVertId);
     GLuint loc = m_triangShaders->GetAttribLoc("in_Position");
     glEnableVertexAttribArray(loc);
-    glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+    glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     // Colours
     glBindBuffer(GL_ARRAY_BUFFER, m_bufColNorId);
     loc = m_triangShaders->GetAttribLoc("in_Colour");
     glEnableVertexAttribArray(loc);
-    glVertexAttribPointer(loc, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+    glVertexAttribPointer(loc, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
     // Normals. Their position in buffer starts at bufoffset
     loc = m_triangShaders->GetAttribLoc("in_Normal");
     glEnableVertexAttribArray(loc);
@@ -691,7 +691,7 @@ void myOGLTriangles::Draw(const GLfloat* unifMvp, const GLfloat* unifToVw,
     glProvokingVertex(GL_FIRST_VERTEX_CONVENTION);
 
     // Indexed drawing the triangles in strip mode, using 6 indices
-    glDrawElements(GL_TRIANGLE_STRIP, 6, GL_UNSIGNED_SHORT, (GLvoid *)0);
+    glDrawElements(GL_TRIANGLE_STRIP, 6, GL_UNSIGNED_SHORT, nullptr);
 
     MyOnGLError(myoglERR_DRAWING_TRI);
 
@@ -803,7 +803,7 @@ void myOGLString::SetStringWithVerts(myOGLShaders* theShader,
     // Vertices positions
     GLuint loc = m_stringShaders->GetAttribLoc("in_sPosition");
     glEnableVertexAttribArray(loc);
-    glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+    glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     // Normals. Their position in buffer starts at bufoffset
     bufoffset = 12 * sizeof(GLfloat);
     if ( norm )

@@ -118,7 +118,7 @@ public:
 // just some functions to get a slightly deeper stack trace
 static void bar(const char *p)
 {
-    char *pc = 0;
+    char *pc = nullptr;
     *pc = *p;
 
     printf("bar: %s\n", p);
@@ -317,7 +317,7 @@ void MyFrame::OnListLoadedDLLs(wxCommandEvent& WXUNUSED(event))
             return;
 
         const wxDynamicLibraryDetails& det = loaded[sel];
-        void *addr = 0;
+        void *addr = nullptr;
         size_t len = 0;
         det.GetAddress(&addr, &len);
         wxLogMessage("Full path is \"%s\", memory range %p:%p, version \"%s\"",

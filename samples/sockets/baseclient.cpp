@@ -729,6 +729,6 @@ wxThread::ExitCode ThreadWorker::Entry()
     WorkerEvent e(this,etype);
     if (failed) e.setFailed();
     wxGetApp().AddPendingEvent(e);
-    return 0;
+    return nullptr;
 }
 

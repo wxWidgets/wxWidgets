@@ -1318,7 +1318,7 @@ void MyTreeCtrl::DoResetBrokenStateImages(const wxTreeItemId& idParent,
         SetItemState(id, state);
 
     if (ItemHasChildren(id))
-        DoResetBrokenStateImages(id, 0, state);
+        DoResetBrokenStateImages(id, nullptr, state);
 
     DoResetBrokenStateImages(idParent, cookie, state);
 }
@@ -1531,7 +1531,7 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
 {
     wxTreeItemId itemSrc = m_draggedItem,
                  itemDst = event.GetItem();
-    m_draggedItem = (wxTreeItemId)0l;
+    m_draggedItem = nullptr;
 
     // where to copy the item?
     if ( itemDst.IsOk() && !ItemHasChildren(itemDst) )

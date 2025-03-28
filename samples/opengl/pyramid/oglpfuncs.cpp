@@ -52,7 +52,7 @@ void* MyGetGLFuncAddress(const char* fname)
 
     // Some drivers return -apart from 0-, -1, 1, 2 or 3
     if ( pret == (void*)-1 || pret == (void*)1 || pret == (void*)2 || pret == (void*)3 )
-        pret = (void*)0;
+        pret = nullptr;
 
     return pret;
 }
@@ -97,7 +97,7 @@ PFNGLVERTEXATTRIBPOINTERPROC my_glVertexAttribPointer = nullptr;
 // Retrieve the pointers
 #define GETANDTEST(type, name)                       \
     my_ ## name = (type) MyGetGLFuncAddress(#name);  \
-    if (name == 0)                                   \
+    if (name == nullptr)                                   \
         return false;
 
 bool MyInitGLPointers()

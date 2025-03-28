@@ -430,7 +430,7 @@ void TestGLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event))
 wxString glGetwxString(GLenum name)
 {
     const GLubyte *v = glGetString(name);
-    if ( v == 0 )
+    if ( v == nullptr )
     {
         // The error is not important. It is GL_INVALID_ENUM.
         // We just want to clear the error stack.

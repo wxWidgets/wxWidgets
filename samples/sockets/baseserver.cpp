@@ -495,7 +495,7 @@ wxThread::ExitCode ThreadWorker::Entry()
     if (!m_socket->IsConnected())
     {
         LogWorker("ThreadWorker: not connected",wxLOG_Error);
-        return 0;
+        return nullptr;
     }
     int to_process = -1;
     if (m_socket->IsConnected())
@@ -510,7 +510,7 @@ wxThread::ExitCode ThreadWorker::Entry()
             {
                 LogWorker("ThreadWorker: Read error",wxLOG_Error);
                 wxGetApp().AddPendingEvent(e);
-                return 0;
+                return nullptr;
             }
             to_process -= m_socket->LastCount();
             LogWorker(wxString::Format("to_process: %d",to_process));
@@ -521,7 +521,7 @@ wxThread::ExitCode ThreadWorker::Entry()
         if (signature[0] == 0)
         {
             e.m_exit = true;
-            return 0;
+            return nullptr;
         }
 
         if (signature[0] == 0xCE)
@@ -529,7 +529,7 @@ wxThread::ExitCode ThreadWorker::Entry()
             LogWorker("This server does not support test2 from GUI client",wxLOG_Error);
             e.m_workerFailed = true;
             e.m_exit = true;
-            return 0;
+            return nullptr;
         }
         int size = signature[1] * (signature[0] == 0xBE ? 1 : 1024);
         char* buf = new char[size];
@@ -545,7 +545,7 @@ wxThread::ExitCode ThreadWorker::Entry()
             {
                 LogWorker("ThreadWorker: Read error",wxLOG_Error);
                 wxGetApp().AddPendingEvent(e);
-                return 0;
+                return nullptr;
             }
             to_process -= m_socket->LastCount();
             LogWorker(wxString::Format("ThreadWorker: %d bytes readed, %d todo",m_socket->LastCount(),to_process));
@@ -573,7 +573,7 @@ wxThread::ExitCode ThreadWorker::Entry()
     e.m_workerFailed = to_process != 0;
     m_socket->Destroy();
     wxGetApp().AddPendingEvent(e);
-    return 0;
+    return nullptr;
 }
 
 EventWorker::EventWorker(wxSocketBase* pSock)
