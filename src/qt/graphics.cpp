@@ -103,6 +103,7 @@ public:
         : wxGraphicsObjectRefData(renderer),
           m_pen(CreatePenFromInfo(info))
     {
+        m_pen.setWidthF(info.GetWidth());
     }
 
     const QPen& GetPen() const
@@ -113,7 +114,7 @@ public:
 private:
     static QPen CreatePenFromInfo(const wxGraphicsPenInfo& info)
     {
-        wxPen wxpen(info.GetColour(), info.GetWidth(), info.GetStyle());
+        wxPen wxpen(info.GetColour(), 1, info.GetStyle());
         wxpen.SetDashes(info.GetDashCount(), info.GetDash());
         wxpen.SetJoin(info.GetJoin());
         wxpen.SetCap(info.GetCap());
@@ -719,7 +720,7 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
     void SetInitialClipping()
     {
         m_qtPainter->setWorldMatrixEnabled(false);
-        m_qtPainter->setClipRect(0, 0, m_width, m_height);
+        m_qtPainter->setClipRect(QRectF(0, 0, m_width, m_height));
         m_qtPainter->setWorldMatrixEnabled(true);
     }
 
@@ -837,7 +838,7 @@ public:
     // clips drawings to the rect
     virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override
     {
-        m_qtPainter->setClipRect(x, y, w, h, Qt::IntersectClip);
+        m_qtPainter->setClipRect(QRectF(x, y, w, h), Qt::IntersectClip);
     }
 
     // resets the clipping to original extent
@@ -1004,7 +1005,7 @@ public:
     virtual void
     ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override
     {
-        m_qtPainter->fillRect(x, y, w, h, QBrush(QColor(0, 0, 0, 0)));
+        m_qtPainter->fillRect(QRectF(x, y, w, h), QBrush(QColor(0, 0, 0, 0)));
     }
 
     virtual void Translate(wxDouble dx, wxDouble dy) override
@@ -1070,7 +1071,7 @@ public:
                wxDouble x, wxDouble y, wxDouble w, wxDouble h) override
     {
         const auto pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
-        m_qtPainter->drawPixmap(x, y, w, h, pixmap);
+        m_qtPainter->drawPixmap(QRectF(x, y, w, h), pixmap, QRectF());
     }
 
     virtual void
@@ -1197,7 +1198,7 @@ protected:
         while ( tokenizer.HasMoreTokens() )
         {
             const wxString line = tokenizer.GetNextToken();
-            m_qtPainter->drawText(x, y + metrics.ascent(), wxQtConvertString(line));
+            m_qtPainter->drawText(QPointF(x, y + metrics.ascent()), wxQtConvertString(line));
             y += metrics.lineSpacing();
         }
     }
@@ -1212,7 +1213,7 @@ protected:
         if (useMask && bmp.GetMask() && bmp.GetMask()->GetHandle())
             pix.setMask(*bmp.GetMask()->GetHandle());
 
-        m_qtPainter->drawPixmap(x, y, w, h, pix);
+        m_qtPainter->drawPixmap(QRectF(x, y, w, h), pix, QRectF());
     }
 
     QPainter*  m_qtPainter;
