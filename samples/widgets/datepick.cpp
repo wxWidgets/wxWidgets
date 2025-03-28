@@ -182,7 +182,7 @@ void DatePickerWidgetsPage::CreateContent()
                      ),
                      wxSizerFlags().Expand().Border());
 
-    m_textCur->SetMinSize(wxSize(GetTextExtent("  9999-99-99  ").x, -1));
+    m_textCur->SetMinSize(m_textCur->GetSizeFromText("9999-99-99"));
 
     sizerMiddle->AddSpacer(10);
 

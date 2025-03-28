@@ -148,7 +148,7 @@ void TimePickerWidgetsPage::CreateContent()
                      ),
                      wxSizerFlags().Expand().Border());
 
-    m_textCur->SetMinSize(wxSize(GetTextExtent("  99:99:99  ").x, -1));
+    m_textCur->SetMinSize(m_textCur->GetSizeFromText("00:00:00 AM"));
 
 
     // right pane: control itself
