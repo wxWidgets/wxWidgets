@@ -467,16 +467,8 @@ protected:
 
                 ev.SetGestureEnd();
                 win->ProcessWindowEvent( ev );
-                event->accept();
             }
-            else if (gesture->state() == Qt::GestureStarted)
-            {
-                event->accept();
-            }
-            else
-            {
-                event->accept();
-            }
+            event->accept();
         }
     }
 
