@@ -60,6 +60,9 @@
 #define XLOG2DEV(x) ((x) + (m_deviceOriginX / m_scaleX))
 #define YLOG2DEV(y) ((y) + (m_deviceOriginY / m_scaleY))
 
+// This variable is used in src/msw/printwin.cpp.
+bool wxPrinterOperationCancelled = false;
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -136,7 +139,19 @@ bool wxPrinterDCImpl::StartDoc(const wxString& message)
 
     if ( ::StartDoc(GetHdc(), &docinfo) <= 0 )
     {
-        wxLogLastError(wxT("StartDoc"));
+        if ( ::GetLastError() == ERROR_CANCELLED )
+        {
+            // No need to log anything, this is not an unexpected error.
+            //
+            // Also indicate this to wxWindowsPrinter::Print() by setting this
+            // variable.
+            wxPrinterOperationCancelled = true;
+        }
+        else
+        {
+            wxLogLastError(wxT("StartDoc"));
+        }
+
         return false;
     }
 

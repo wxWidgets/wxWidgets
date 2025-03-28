@@ -50,6 +50,9 @@
 
 #include <stdlib.h>
 
+// This variable is defined in src/msw/dcprint.cpp.
+extern bool wxPrinterOperationCancelled;
+
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
@@ -212,10 +215,25 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
                              ? m_printDialogData.GetNoCopies() : 1;
     for ( int copyCount = 1; copyCount <= maxCopyCount; copyCount++ )
     {
+        // We have no good way to return the fact that starting printing was
+        // cancelled, as can be the case e.g. when showing a dialog when
+        // printing to file, from wxPrinterDCImpl::StartDoc() which is called
+        // by OnBeginDocument() by default, so pass this information out of
+        // band using this global variable.
+        wxPrinterOperationCancelled = false;
+
         if ( !printout->OnBeginDocument(allPages.fromPage, allPages.toPage) )
         {
-            wxLogError(_("Could not start printing."));
-            sm_lastError = wxPRINTER_ERROR;
+            if ( wxPrinterOperationCancelled )
+            {
+                // No need to log an error if printing was cancelled by user.
+                sm_lastError = wxPRINTER_CANCELLED;
+            }
+            else
+            {
+                wxLogError(_("Could not start printing."));
+                sm_lastError = wxPRINTER_ERROR;
+            }
             break;
         }
         if (sm_abortIt)
