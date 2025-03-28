@@ -1796,7 +1796,7 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
     {
         dc.DrawText(wxString::Format("%s: %s", what, dark ? "dark" : "light"),
                     x, r.y);
-        r.y += 1.5*lineHeight;
+        r.y += lineHeight * 3 / 2;
     };
 
     showDarkOrLight("System", appearance.IsSystemDark());
