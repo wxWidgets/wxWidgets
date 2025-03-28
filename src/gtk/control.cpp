@@ -102,6 +102,11 @@ void wxControl::PostCreation(const wxSize& size)
 #endif
 
     SetInitialSize(size);
+
+#ifdef __WXGTK3__
+    // Best size can change when TLW is realized, so don't cache it yet
+    InvalidateBestSize();
+#endif
 }
 
 void wxControl::GTKRemoveBorder()
