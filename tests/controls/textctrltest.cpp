@@ -277,7 +277,7 @@ void TextCtrlTestCase::MaxLength()
 
     if ( ms_style == wxTE_MULTILINE )
     {
-#if defined(__WXMSW__) || defined(__WXGTK3__)
+#if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXQT__)
         delete m_text;
         CreateText(wxTE_DONTWRAP);
         EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
@@ -351,7 +351,7 @@ void TextCtrlTestCase::MaxLength()
         m_text->AppendText(wxString::Format("\n%s", linePattern));
         CPPUNIT_ASSERT_EQUAL(4, m_text->GetNumberOfLines());
         CPPUNIT_ASSERT_EQUAL(0, maxlen.GetCount());
-#endif // __WXMSW__ || __WXGTK3__
+#endif // __WXMSW__ || __WXGTK3__ || __WXQT__
     }
     else // !wxTE_MULTILINE
     {
