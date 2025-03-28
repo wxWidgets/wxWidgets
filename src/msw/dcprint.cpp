@@ -117,6 +117,9 @@ void wxPrinterDCImpl::Init()
 
 bool wxPrinterDCImpl::StartDoc(const wxString& message)
 {
+    if (!m_hDC)
+        return false;
+
     DOCINFO docinfo;
     docinfo.cbSize = sizeof(DOCINFO);
     docinfo.lpszDocName = message.t_str();
@@ -130,9 +133,6 @@ bool wxPrinterDCImpl::StartDoc(const wxString& message)
 
     docinfo.lpszDatatype = nullptr;
     docinfo.fwType = 0;
-
-    if (!m_hDC)
-        return false;
 
     if ( ::StartDoc(GetHdc(), &docinfo) <= 0 )
     {
