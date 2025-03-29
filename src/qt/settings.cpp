@@ -120,6 +120,9 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break;
 
         case wxSYS_COLOUR_HOTLIGHT:
+            color = pal.color(QPalette::Link);
+            break;
+
         case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
             // TODO
