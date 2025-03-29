@@ -6894,12 +6894,55 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
             // ASCII characters, not Latin-1 ones).
             if ( wxk > 255 )
             {
-                // But for anything beyond this we can only return the key
-                // value as a real Unicode character, not a wxKeyCode
-                // because this enum values clash with Unicode characters
-                // (e.g. WXK_LBUTTON also happens to be U+012C a.k.a.
-                // "LATIN CAPITAL LETTER I WITH BREVE").
-                wxk = WXK_NONE;
+                // If the key generates a non-Latin character, return the key
+                // code that it would have generated in the US layout. It's not
+                // clear if we should use the VK directly here or map it to the
+                // scan code and then return the value corresponding to the key
+                // with this scan code instead in the US layout, for now we
+                // choose to do the former but we may want to change it.
+                switch ( vk )
+                {
+                    case VK_OEM_1:          wxk = ';'; break;
+                    case VK_OEM_PLUS:       wxk = '='; break;
+                    case VK_OEM_COMMA:      wxk = ','; break;
+                    case VK_OEM_MINUS:      wxk = '-'; break;
+                    case VK_OEM_PERIOD:     wxk = '.'; break;
+                    case VK_OEM_2:          wxk = '/'; break;
+                    case VK_OEM_3:          wxk = '`'; break;
+                    case VK_OEM_4:          wxk = '['; break;
+                    case VK_OEM_5:          wxk = '\\'; break;
+                    case VK_OEM_6:          wxk = ']'; break;
+                    case VK_OEM_7:          wxk = '\''; break;
+
+                    case VK_OEM_8:
+                    case VK_OEM_102:
+                        // These keys are not present in the US layout, so we
+                        // can only use their scan codes.
+                        switch ( ::MapVirtualKey(vk, MAPVK_VK_TO_VSC) )
+                        {
+                            // VK_OEM_8 can be mapped to any of those.
+                            case 0x0c: wxk = '-'; break;
+                            case 0x0d: wxk = '='; break;
+                            case 0x29: wxk = '`'; break;
+                            case 0x2b: wxk = '\\'; break;
+                            case 0x32: wxk = 'M'; break;
+                            case 0x33: wxk = ','; break;
+                            case 0x35: wxk = '/'; break;
+
+                            // This is the usual scan code for VK_OEM_102.
+                            case 0x56: wxk = '\\'; break;
+
+                            default:
+                                // Unexpected, but surely may happen, at least
+                                // in custom layouts.
+                                wxk = WXK_NONE;
+                        }
+                        break;
+
+                    default:
+                        wxFAIL_MSG( "unreachable" );
+                        wxk = WXK_NONE;
+                }
             }
             break;
 
