@@ -60,7 +60,7 @@ enum
     internal top level window list.
 
     @beginEventEmissionTable
-    @event{EVT_MAXIMIZE(id, func)}
+    @event{EVT_MAXIMIZE(func)}
         Process a @c wxEVT_MAXIMIZE event. See wxMaximizeEvent.
     @event{EVT_MOVE(func)}
         Process a @c wxEVT_MOVE event, which is generated when a window is moved.
@@ -75,7 +75,7 @@ enum
         See wxMoveEvent.
     @event{EVT_SHOW(func)}
         Process a @c wxEVT_SHOW event. See wxShowEvent.
-    @event{EVT_FULLSCREEN(id, func)}
+    @event{EVT_FULLSCREEN(func)}
         Process a @c wxEVT_FULLSCREEN event. See wxFullScreenEvent.
     @endEventTable
 
