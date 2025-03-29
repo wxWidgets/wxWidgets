@@ -554,7 +554,7 @@ protected:
         );
     }
 
-#ifdef __WXGTK3__
+#if defined(__WXGTK3__) && !defined(__WIN32__)
     // This factor must be applied to the font before actually using it, for
     // consistency with the text drawn by GTK itself.
     float m_fontScalingFactor;
@@ -2540,7 +2540,7 @@ wxCairoContext::~wxCairoContext()
 
 void wxCairoContext::Init(cairo_t *context, bool storeInitClip)
 {
-#ifdef __WXGTK3__
+#if defined(__WXGTK3__) && !defined(__WIN32__)
     // Attempt to find the system font scaling parameter (e.g. "Fonts->Scaling
     // Factor" in Gnome Tweaks, "Force font DPI" in KDE System Settings or
     // GDK_DPI_SCALE environment variable).
