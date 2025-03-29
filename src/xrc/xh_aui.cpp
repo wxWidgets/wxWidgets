@@ -278,6 +278,10 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
         wxString provider = GetText("art-provider", false);
         if (provider == "default" || provider.IsEmpty())
             anb->SetArtProvider(new wxAuiDefaultTabArt);
+        else if (provider.CmpNoCase("flat") == 0)
+            anb->SetArtProvider(new wxAuiFlatTabArt);
+        else if (provider.CmpNoCase("generic") == 0)
+            anb->SetArtProvider(new wxAuiGenericTabArt);
         else if (provider.CmpNoCase("simple") == 0)
             anb->SetArtProvider(new wxAuiSimpleTabArt);
         else

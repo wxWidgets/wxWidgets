@@ -767,7 +767,9 @@ wxAuiPaneInfo objects have the following properties:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{art-provider, @ref overview_xrcformat_type_string,
-    One of @c default for wxAuiDefaultTabArt or @c simple for wxAuiSimpleTabArt
+    One of @c default for wxAuiDefaultTabArt, @c flat for wxAuiFlatTabArt (only
+    available since wxWidgets 3.3.0), @c generic for wxAuiGenericTabArt (also
+    available only since wxWidgets 3.3.0) or @c simple for wxAuiSimpleTabArt
     (default: @c default).
     @since 3.2.0}
 @endTable
