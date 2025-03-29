@@ -7111,7 +7111,11 @@ WXWORD WXToVK(int wxk, bool *isExtended)
             break;
 
         default:
-            // check to see if its one of the OEM key codes.
+            // Special handling for OEM key codes. First, we try to check if
+            // there is a key corresponding to them in the current keyboard
+            // layout: if there is one, we consider that the VK corresponding
+            // to this wx key is this one, even if it's a completely different
+            // physical key (e.g. VK for "-" in French AZERTY layout is "6").
             BYTE vks = LOBYTE(VkKeyScan(wxk));
             if ( vks != 0xff )
             {
@@ -7119,7 +7123,30 @@ WXWORD WXToVK(int wxk, bool *isExtended)
             }
             else
             {
-                vk = (WXWORD)wxk;
+                // If there is no corresponding key, we still want to be able
+                // to find some VK that could be used to trigger accelerators
+                // using this key, for example. So we use the key that would
+                // generate this wx key in the US keyboard layout as fallback
+                // if we know it (see the conversion in VKToWX() above).
+                switch ( wxk )
+                {
+                    case ';':  vk = VK_OEM_1;       break;
+                    case '=':  vk = VK_OEM_PLUS;    break;
+                    case ',':  vk = VK_OEM_COMMA;   break;
+                    case '-':  vk = VK_OEM_MINUS;   break;
+                    case '.':  vk = VK_OEM_PERIOD;  break;
+                    case '/':  vk = VK_OEM_2;       break;
+                    case '`':  vk = VK_OEM_3;       break;
+                    case '[':  vk = VK_OEM_4;       break;
+                    case '\\': vk = VK_OEM_5;       break;
+                    case ']':  vk = VK_OEM_6;       break;
+                    case '\'': vk = VK_OEM_7;       break;
+
+                    default:
+                        // Use the value of the wx key itself for compatibility
+                        // but it would probably make more sense to return 0.
+                        vk = (WXWORD)wxk;
+                }
             }
             break;
     }

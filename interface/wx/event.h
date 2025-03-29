@@ -1390,7 +1390,12 @@ enum wxKeyCategoryFlags
         = key corresponds to Shift-0 key combination in this layout and the key
         code for it is @c 0, not @c =. Because of this you should avoid
         requiring your users to type key events that might be impossible to
-        enter on their keyboard.
+        enter on their keyboard. Similarly, not all possible accelerator can be
+        used in all keyboard layouts, e.g. `Ctrl-;` can't be activated when
+        using the standard French AZERTY layout because `;` is on the same key
+        as `.` in this layout and pressing it generates `Ctrl-.`. Hence it is
+        best to avoid using accelerators using non-alphanumeric characters for
+        the programs that can be used with different keyboard layouts.
 
 
     Another difference between key and char events is that another kind of
