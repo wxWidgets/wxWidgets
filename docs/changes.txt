@@ -267,6 +267,7 @@ All (GUI):
 wxGTK:
 
 - Fix regression in numpad key event generation in 3.2.7 (#25263).
+- Make key events for punctuation keys more consistent with wxMSW.
 - Fix handling exceptions in wxApp idle event handler (#25312).
 
 wxMSW:
