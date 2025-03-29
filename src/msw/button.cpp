@@ -174,7 +174,7 @@ wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
         // part of the button are not scaled correctly in higher than normal
         // DPI, so add them without scaling.
         s_sizeBtn.SetAtNewDPI(
-            wxWindow::FromDIP(wxSize(73, 21), win) + wxSize(2, 2)
+            wxWindow::FromDIP(wxSize(86, 24), win) + wxSize(2, 2)
         );
     }
 
