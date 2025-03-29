@@ -253,6 +253,9 @@ protected:
     int m_exitcode;
 
 private:
+    // run the event loop until it exits, either normally or via exception
+    void DoRunLoop();
+
     // process all already pending events and dispatch a new one (blocking
     // until it appears in the event queue if necessary)
     //
