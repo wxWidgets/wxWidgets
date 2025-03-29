@@ -39,6 +39,9 @@
 
 #include <stdlib.h>
 
+// This variable is used from src/msw/window.cpp.
+bool wxPrinterDialogShown = false;
+
 // smart pointer like class using OpenPrinter and ClosePrinter
 class WinPrinter
 {
@@ -830,7 +833,18 @@ int wxWindowsPrintDialog::ShowModal()
     PRINTDLGEX* pd = (PRINTDLGEX*) m_printDlg;
     pd->hwndOwner = hWndParent;
 
+    // Printer dialog sends WM_ACTIVATE to the parent window before destroying
+    // itself for some reason, which results in our handler trying to set the
+    // focus back to the last focused window -- and failing, because the window
+    // doesn't have activation yet (it will only once the dialog will have been
+    // destroyed). So ignore these events while it is shown by setting this
+    // variable -- see also the code using it in wxWindow::HandleActivate().
+    wxPrinterDialogShown = true;
+
     HRESULT dlgRes = PrintDlgEx(pd);
+
+    wxPrinterDialogShown = false;
+
     bool ret = (dlgRes == S_OK && pd->dwResultAction == PD_RESULT_PRINT);
 
     pd->hwndOwner = 0;

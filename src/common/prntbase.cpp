@@ -627,9 +627,6 @@ void wxPrintout::GetPageInfo(int *minPage, int *maxPage, int *fromPage, int *toP
 
 wxPrintPageRange wxPrintout::GetPagesInfo(wxPrintPageRanges& ranges)
 {
-    // We always override the provided range in the default implementation.
-    ranges.clear();
-
     int minPage = 0;
     int maxPage = 0;
     int fromPage = 0;
@@ -637,8 +634,14 @@ wxPrintPageRange wxPrintout::GetPagesInfo(wxPrintPageRanges& ranges)
 
     GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
 
-    if ( fromPage > 0 && toPage >= fromPage )
-        ranges.push_back({fromPage, toPage});
+    // We intentionally ignore fromPage and toPage here as we want to keep
+    // using the page ranges as they were set by the user in the print dialog
+    // but existing code dating from before support for multiple print ranges
+    // always returns something from its GetPageInfo() -- which is incompatible
+    // with multiple pages ranges selection (in fact, it's not even compatible
+    // with a single range selection because the values returned in these
+    // parameters used to be ignored in at least wxMSW anyhow).
+    wxUnusedVar(ranges);
 
     return { minPage, maxPage };
 }
