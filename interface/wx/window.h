@@ -282,7 +282,7 @@ enum wxWindowVariant
     @endExtraStyleTable
 
     @beginEventEmissionTable
-    @event{EVT_ACTIVATE(id, func)}
+    @event{EVT_ACTIVATE(func)}
         Process a @c wxEVT_ACTIVATE event. See wxActivateEvent.
     @event{EVT_CHILD_FOCUS(func)}
         Process a @c wxEVT_CHILD_FOCUS event. See wxChildFocusEvent.
