@@ -96,9 +96,11 @@ TEST_CASE("StringFormat", "[wxString]")
 
 TEST_CASE("StringFormatUnicode", "[wxString]")
 {
+#ifndef __WINDOWS__
     // At least under FreeBSD vsnprintf(), used by wxString::Format(), doesn't
     // work with Unicode strings unless a UTF-8 locale is used, so set it.
     wxLocaleSetter loc("C.UTF-8");
+#endif // !__WINDOWS__
 
     const char *UNICODE_STR = "Iestat\xC4\xAB %i%i";
     //const char *UNICODE_STR = "Iestat\xCC\x84 %i%i";
