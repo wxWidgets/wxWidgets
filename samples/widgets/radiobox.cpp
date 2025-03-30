@@ -71,7 +71,7 @@ static const int TEST_BUTTON = 1;
 class RadioWidgetsPage : public WidgetsPage
 {
 public:
-    RadioWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    RadioWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_radio; }
     virtual void RecreateWidget() override { CreateRadio(); }
@@ -174,7 +174,7 @@ IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, "Radio",
                        );
 
 RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
-                                   wxImageList *imaglist)
+                                   wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, radio_xpm)
 {
     // init everything

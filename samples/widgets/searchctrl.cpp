@@ -65,7 +65,7 @@ enum
 class SearchCtrlWidgetsPage : public WidgetsPage
 {
 public:
-    SearchCtrlWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    SearchCtrlWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_srchCtrl; }
     virtual wxTextEntryBase *GetTextEntry() const override { return m_srchCtrl; }
@@ -137,7 +137,7 @@ IMPLEMENT_WIDGETS_PAGE(SearchCtrlWidgetsPage, "SearchCtrl",
                        FAMILY_CTRLS | EDITABLE_CTRLS | ALL_CTRLS);
 
 SearchCtrlWidgetsPage::SearchCtrlWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, text_xpm)
 {
 }

@@ -631,10 +631,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
 void WidgetsFrame::InitBook()
 {
-    wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
-
-    wxImage img(sample_xpm);
-    imageList->Add(wxBitmap(img.Scale(ICON_SIZE, ICON_SIZE)));
+    wxVector<wxBitmapBundle> imageList;
+    imageList.push_back(WidgetsPage::CreateBitmapBundle(sample_xpm));
 
 #if !USE_TREEBOOK
     WidgetsBookCtrl *books[MAX_PAGES];
@@ -702,7 +700,7 @@ void WidgetsFrame::InitBook()
 
     GetMenuBar()->Append(menuPages, "&Page");
 
-    m_book->AssignImageList(imageList);
+    m_book->SetImages(imageList);
 
     for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
@@ -746,6 +744,7 @@ void WidgetsFrame::InitBook()
 
     wxTreeItemIdValue cookie;
     tree->EnsureVisible(tree->GetFirstChild(tree->GetRootItem(), cookie));
+    tree->SetMinSize(wxSize(tree->GetBestSize().GetWidth() * 1.1, wxDefaultCoord));
 #else
     if ( !pageSet || !m_book->GetCurrentPage() )
     {
@@ -1363,16 +1362,57 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxString& label, int ca
 // WidgetsPage
 // ----------------------------------------------------------------------------
 
+namespace
+{
+    class FixedSizeImpl : public wxBitmapBundleImpl
+    {
+    public:
+        FixedSizeImpl(const wxSize& sizeDef, const wxImage& img)
+            : m_sizeDef(sizeDef)
+            , m_image(img)
+        {
+        }
+
+        wxSize GetDefaultSize() const override
+        {
+            return m_sizeDef;
+        }
+
+        wxSize GetPreferredBitmapSizeAtScale(double scale) const override
+        {
+            return m_sizeDef * scale;
+        }
+
+        wxBitmap GetBitmap(const wxSize& size) override
+        {
+            wxBitmap bmp(m_image);
+            if (size != bmp.GetSize())
+                wxBitmap::Rescale(bmp, size);
+
+            return bmp;
+        }
+
+    private:
+        const wxSize m_sizeDef;
+        const wxImage m_image;
+    };
+} // anonymous namespace
+
 WidgetsPageInfo *WidgetsPage::ms_widgetPages = nullptr;
 
 WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
-                         wxImageList *imaglist,
+                         wxVector<wxBitmapBundle>& imaglist,
                          const char *const icon[])
            : wxScrolledWindow(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxCLIP_CHILDREN | wxTAB_TRAVERSAL)
 {
-    imaglist->Add(wxBitmap(wxImage(icon).Scale(ICON_SIZE, ICON_SIZE)));
+    imaglist.push_back(CreateBitmapBundle(icon));
+}
+
+wxBitmapBundle WidgetsPage::CreateBitmapBundle(const char* const icon[])
+{
+    return wxBitmapBundle::FromImpl(new FixedSizeImpl(wxSize(16, 16), wxImage(icon)));
 }
 
 /* static */

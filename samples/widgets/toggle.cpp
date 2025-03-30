@@ -84,7 +84,7 @@ enum
 class ToggleWidgetsPage : public WidgetsPage
 {
 public:
-    ToggleWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    ToggleWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_toggle; }
     virtual void RecreateWidget() override { CreateToggle(); }
@@ -184,7 +184,7 @@ IMPLEMENT_WIDGETS_PAGE(ToggleWidgetsPage, "ToggleButton",
                        );
 
 ToggleWidgetsPage::ToggleWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                       :WidgetsPage(book, imaglist, toggle_xpm)
 {
     m_chkFit =

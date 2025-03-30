@@ -98,7 +98,7 @@ enum
 class BitmapComboBoxWidgetsPage : public ItemContainerWidgetsPage
 {
 public:
-    BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_combobox; }
     virtual wxItemContainer* GetContainer() const override { return m_combobox; }
@@ -247,7 +247,7 @@ IMPLEMENT_WIDGETS_PAGE(BitmapComboBoxWidgetsPage, "BitmapCombobox",
 
 
 BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
-                                             wxImageList *imaglist)
+                                             wxVector<wxBitmapBundle>& imaglist)
                   : ItemContainerWidgetsPage(book, imaglist, bmpcombobox_xpm)
 {
     // init everything

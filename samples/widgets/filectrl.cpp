@@ -64,7 +64,7 @@ enum
 class FileCtrlWidgetsPage : public WidgetsPage
 {
 public:
-    FileCtrlWidgetsPage( WidgetsBookCtrl *book, wxImageList *imaglist );
+    FileCtrlWidgetsPage( WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist );
     virtual ~FileCtrlWidgetsPage() {}
 
     virtual wxWindow *GetWidget() const override { return m_fileCtrl; }
@@ -146,7 +146,7 @@ IMPLEMENT_WIDGETS_PAGE( FileCtrlWidgetsPage, "FileCtrl",
                         FAMILY_CTRLS );
 
 FileCtrlWidgetsPage::FileCtrlWidgetsPage( WidgetsBookCtrl *book,
-        wxImageList *imaglist )
+        wxVector<wxBitmapBundle>& imaglist )
         : WidgetsPage( book, imaglist, dirctrl_xpm )
 {
 }

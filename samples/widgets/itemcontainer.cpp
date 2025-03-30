@@ -63,9 +63,9 @@ private:
 // ============================================================================
 
 ItemContainerWidgetsPage::ItemContainerWidgetsPage(WidgetsBookCtrl *book,
-                                                   wxImageList *image_list,
+                                                   wxVector<wxBitmapBundle>& imaglist,
                                                    const char *const icon[])
-: WidgetsPage(book, image_list, icon)
+: WidgetsPage(book, imaglist, icon)
 #if defined(__WXMSW__) || defined(__WXGTK__)
 // Reference data needs to be sorted in a dictionary order
 // since control's items are sorted in this order too.

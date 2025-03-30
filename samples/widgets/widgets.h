@@ -35,8 +35,6 @@
     #define USE_LOG 0
 #endif
 
-#define ICON_SIZE         16
-
 class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
@@ -123,7 +121,7 @@ class WidgetsPage : public wxScrolledWindow
 {
 public:
     WidgetsPage(WidgetsBookCtrl *book,
-                wxImageList *imaglist,
+                wxVector<wxBitmapBundle>& imaglist,
                 const char *const icon[]);
 
     // return the control shown by this page
@@ -165,6 +163,8 @@ public:
     // return true if we're showing logs in the log window (always the case
     // except during startup and shutdown)
     static bool IsUsingLogWindow();
+
+    static wxBitmapBundle CreateBitmapBundle(const char* const icon[]);
 
 protected:
     // several helper functions for page creation
@@ -211,7 +211,7 @@ class WidgetsPageInfo
 {
 public:
     typedef WidgetsPage *(*Constructor)(WidgetsBookCtrl *book,
-                                        wxImageList *imaglist);
+                                        wxVector<wxBitmapBundle>& imaglist);
 
     // our ctor
     WidgetsPageInfo(Constructor ctor, const wxString& label, int categories);
@@ -249,7 +249,7 @@ private:
 // and this one must be inserted somewhere in the source file
 #define IMPLEMENT_WIDGETS_PAGE(classname, label, categories)                \
     WidgetsPage *wxCtorFor##classname(WidgetsBookCtrl *book,                \
-                                      wxImageList *imaglist)                \
+                                      wxVector<wxBitmapBundle>& imaglist)   \
         { return new classname(book, imaglist); }                           \
     WidgetsPageInfo classname::                                             \
         ms_info##classname(wxCtorFor##classname, label, ALL_CTRLS | categories)

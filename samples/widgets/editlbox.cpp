@@ -64,7 +64,7 @@ enum
 class EditableListboxWidgetsPage : public WidgetsPage
 {
 public:
-    EditableListboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    EditableListboxWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_lbox->GetListCtrl(); }
     virtual void RecreateWidget() override { CreateLbox(); }
@@ -115,7 +115,7 @@ wxEND_EVENT_TABLE()
 IMPLEMENT_WIDGETS_PAGE(EditableListboxWidgetsPage, "EditableListbox", GENERIC_CTRLS);
 
 EditableListboxWidgetsPage::EditableListboxWidgetsPage(WidgetsBookCtrl *book,
-                                                       wxImageList *imaglist)
+                                                       wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, listbox_xpm)
 {
 

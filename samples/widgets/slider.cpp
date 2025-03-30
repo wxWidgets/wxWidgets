@@ -94,7 +94,7 @@ enum
 class SliderWidgetsPage : public WidgetsPage
 {
 public:
-    SliderWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    SliderWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_slider; }
     virtual void RecreateWidget() override { CreateSlider(); }
@@ -251,7 +251,7 @@ wxEND_EVENT_TABLE()
 IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, "Slider", FAMILY_CTRLS );
 
 SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, slider_xpm)
 {
     // init everything

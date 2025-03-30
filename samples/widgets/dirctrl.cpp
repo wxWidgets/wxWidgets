@@ -92,7 +92,7 @@ enum
 class DirCtrlWidgetsPage : public WidgetsPage
 {
 public:
-    DirCtrlWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    DirCtrlWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
     virtual ~DirCtrlWidgetsPage() {}
 
     virtual wxWindow *GetWidget() const override { return m_dirCtrl; }
@@ -166,7 +166,7 @@ IMPLEMENT_WIDGETS_PAGE(DirCtrlWidgetsPage, "DirCtrl",
                        );
 
 DirCtrlWidgetsPage::DirCtrlWidgetsPage(WidgetsBookCtrl *book,
-                                       wxImageList *imaglist)
+                                       wxVector<wxBitmapBundle>& imaglist)
                    :WidgetsPage(book, imaglist, dirctrl_xpm)
 {
     m_dirCtrl = nullptr;

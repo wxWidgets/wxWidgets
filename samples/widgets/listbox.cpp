@@ -81,7 +81,7 @@ enum
 class ListboxWidgetsPage : public ItemContainerWidgetsPage
 {
 public:
-    ListboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    ListboxWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_lbox; }
     virtual wxItemContainer* GetContainer() const override { return m_lbox; }
@@ -246,7 +246,7 @@ IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, "Listbox",
                        );
 
 ListboxWidgetsPage::ListboxWidgetsPage(WidgetsBookCtrl *book,
-                                       wxImageList *imaglist)
+                                       wxVector<wxBitmapBundle>& imaglist)
                   : ItemContainerWidgetsPage(book, imaglist, listbox_xpm)
 {
     // init everything

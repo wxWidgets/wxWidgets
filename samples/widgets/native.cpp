@@ -250,7 +250,7 @@ public:
 class NativeWidgetsPage : public WidgetsPage
 {
 public:
-    NativeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    NativeWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_nativeWindow; }
     virtual void RecreateWidget() override;
@@ -275,7 +275,7 @@ private:
 
 IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, "Native", NATIVE_CTRLS);
 
-NativeWidgetsPage::NativeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
+NativeWidgetsPage::NativeWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
                  : WidgetsPage(book, imaglist, native_xpm)
 {
     m_nativeWindow = nullptr;

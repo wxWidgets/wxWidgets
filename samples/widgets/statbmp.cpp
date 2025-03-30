@@ -46,7 +46,7 @@
 class StatBmpWidgetsPage : public WidgetsPage
 {
 public:
-    StatBmpWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
+    StatBmpWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
         : WidgetsPage(book, imaglist, statbmp_xpm) {}
 
     virtual void CreateContent() override;

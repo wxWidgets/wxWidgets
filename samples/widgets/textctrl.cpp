@@ -147,7 +147,7 @@ class TextWidgetsPage : public WidgetsPage
 {
 public:
     // ctor(s) and dtor
-    TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    TextWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_text; }
     virtual wxTextEntryBase *GetTextEntry() const override { return m_text; }
@@ -372,7 +372,7 @@ IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, "Text",
 // TextWidgetsPage creation
 // ----------------------------------------------------------------------------
 
-TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
+TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
                : WidgetsPage(book, imaglist, text_xpm)
 {
     // init everything

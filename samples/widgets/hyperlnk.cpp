@@ -73,7 +73,7 @@ enum
 class HyperlinkWidgetsPage : public WidgetsPage
 {
 public:
-    HyperlinkWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    HyperlinkWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
     virtual ~HyperlinkWidgetsPage() {}
 
     virtual wxWindow *GetWidget() const override { return m_hyperlink; }
@@ -144,7 +144,7 @@ IMPLEMENT_WIDGETS_PAGE(HyperlinkWidgetsPage, "Hyperlink",
                        );
 
 HyperlinkWidgetsPage::HyperlinkWidgetsPage(WidgetsBookCtrl *book,
-                                           wxImageList *imaglist)
+                                           wxVector<wxBitmapBundle>& imaglist)
                      :WidgetsPage(book, imaglist, hyperlnk_xpm)
 {
 }

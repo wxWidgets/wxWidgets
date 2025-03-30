@@ -55,7 +55,7 @@ enum
 class ActivityIndicatorWidgetsPage : public WidgetsPage
 {
 public:
-    ActivityIndicatorWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
+    ActivityIndicatorWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
         : WidgetsPage(book, imaglist, activityindicator_xpm)
     {
         m_indicator = nullptr;

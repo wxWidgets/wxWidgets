@@ -82,7 +82,7 @@ enum
 class SpinBtnWidgetsPage : public WidgetsPage
 {
 public:
-    SpinBtnWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    SpinBtnWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_spinbtn; }
     virtual Widgets GetWidgets() const override
@@ -220,7 +220,7 @@ IMPLEMENT_WIDGETS_PAGE(SpinBtnWidgetsPage, "Spin",
                        );
 
 SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
-                                       wxImageList *imaglist)
+                                       wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, spinbtn_xpm)
 {
     m_chkVert = nullptr;

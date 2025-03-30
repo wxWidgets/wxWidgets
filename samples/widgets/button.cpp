@@ -87,7 +87,7 @@ enum
 class ButtonWidgetsPage : public WidgetsPage
 {
 public:
-    ButtonWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    ButtonWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_button; }
     virtual void RecreateWidget() override { CreateButton(); }
@@ -206,7 +206,7 @@ wxEND_EVENT_TABLE()
 IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, "Button", FAMILY_CTRLS );
 
 ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, button_xpm)
 {
     // init everything
