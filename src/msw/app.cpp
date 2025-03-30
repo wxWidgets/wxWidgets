@@ -414,7 +414,7 @@ bool wxConsoleStderr::Write(const wxString& text)
 
     // This fails, for not very clear reasons, when running under a Cygwin
     // shell, so try to use the standard output functions as a fallback.
-    if ( fwprintf(stderr, L"%s", text.t_str()) != -1 )
+    if ( fwprintf(stderr, L"%s", static_cast<const wchar_t*>(text.t_str())) != -1 )
         return true;
 
     return false;
