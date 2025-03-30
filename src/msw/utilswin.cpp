@@ -32,6 +32,8 @@ AutoSystemDpiAware::ms_pfnSetThreadDpiAwarenessContext =
 
 } // namespace wxMSWImpl
 
+#ifndef __WXQT__
+
 // ----------------------------------------------------------------------------
 // Launch document with default app
 // ----------------------------------------------------------------------------
@@ -156,6 +158,8 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 
     return false;
 }
+
+#endif // !__WXQT__
 
 bool wxMSWIsOnSecureScreen()
 {

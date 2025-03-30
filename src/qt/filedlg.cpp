@@ -8,7 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FILEDLG
+// This implementation is not used under Windows where wxMSW one is.
+#if wxUSE_FILEDLG && !defined(__WINDOWS__)
 
 #include "wx/filename.h"
 
@@ -260,4 +261,4 @@ QFileDialog *wxDirDialog::GetQFileDialog() const
     return static_cast<QFileDialog *>(m_qtWindow);
 }
 
-#endif // wxUSE_FILEDLG
+#endif // wxUSE_FILEDLG  && !defined(__WINDOWS__)
