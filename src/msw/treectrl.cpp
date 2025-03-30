@@ -950,6 +950,19 @@ void wxTreeCtrl::DoSetIndent()
     // the DPI scaling factor as Windows doesn't do it and the "+" buttons
     // would be displayed too small if the tree is used without images.
     int indent = FromDIP(m_indent);
+
+    // When the images in the imageList are smaller than FromDIP(16),
+    // the scaled indent has to be reduced to the width of the images.
+    // Otherwise the hitbox of the collapse/expand button will be shifted
+    // too much to the right.
+    wxImageList* imgList = GetImageList();
+    if (imgList != nullptr)
+    {
+        int diff = imgList->GetSize().GetWidth() - FromDIP(16);
+        if (diff < 0)
+            indent += diff;
+    }
+
     (void)TreeView_SetIndent(GetHwnd(), indent);
 }
 
@@ -959,6 +972,7 @@ void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
     (void) TreeView_SetImageList(GetHwnd(),
                                  imageList ? imageList->GetHIMAGELIST() : 0,
                                  which);
+    DoSetIndent();
 }
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
