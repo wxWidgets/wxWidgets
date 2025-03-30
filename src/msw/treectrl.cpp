@@ -815,11 +815,8 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         EnableSystemThemeByDefault();
     }
 
-    // When using non-standard DPI, we need to scale the default indent with
-    // the DPI scaling factor as Windows doesn't do it and the "+" buttons
-    // would be displayed too small if the tree is used without images.
-    if ( GetDPIScaleFactor() > 1.0 )
-        SetIndent(FromDIP(GetIndent()));
+    m_indent = DoGetIndent();
+    DoSetIndent();
 
     // And ensure we adjust it again if the DPI changes in the future.
     Bind(wxEVT_DPI_CHANGED, &wxTreeCtrl::OnDPIChanged, this);
@@ -933,11 +930,26 @@ unsigned int wxTreeCtrl::GetCount() const
 
 unsigned int wxTreeCtrl::GetIndent() const
 {
+    return m_indent;
+}
+
+unsigned int wxTreeCtrl::DoGetIndent() const
+{
     return TreeView_GetIndent(GetHwnd());
 }
 
 void wxTreeCtrl::SetIndent(unsigned int indent)
 {
+    m_indent = indent;
+    DoSetIndent();
+}
+
+void wxTreeCtrl::DoSetIndent()
+{
+    // When using non-standard DPI, we need to scale the default indent with
+    // the DPI scaling factor as Windows doesn't do it and the "+" buttons
+    // would be displayed too small if the tree is used without images.
+    int indent = FromDIP(m_indent);
     (void)TreeView_SetIndent(GetHwnd(), indent);
 }
 
@@ -2322,7 +2334,7 @@ void wxTreeCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 void wxTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
 {
     // Adjust the indent to the new DPI scaling factor as Windows doesn't do it.
-    SetIndent(event.ScaleX(GetIndent()));
+    DoSetIndent();
 
     event.Skip();
 }

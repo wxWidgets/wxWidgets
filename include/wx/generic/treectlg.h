@@ -357,8 +357,6 @@ protected:
     virtual wxSize DoGetBestSize() const override;
 
 private:
-    void OnDPIChanged(wxDPIChangedEvent& event);
-
     void OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     {
         InitVisualAttributes();

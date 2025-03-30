@@ -517,13 +517,15 @@ public:
     virtual void SetFocusedItem(const wxTreeItemId& item);
 
     /**
-        Returns the current tree control indentation.
+        Returns the current tree control indentation in DPI independent
+        pixels.
     */
     virtual unsigned int GetIndent() const;
 
     /**
         Returns the current tree control spacing.  This is the number of
-        horizontal pixels between the buttons and the state images.
+        horizontal DIPs (DPI independent pixels) between the buttons and the
+        state images.
     */
     unsigned int GetSpacing() const;
 
@@ -884,13 +886,15 @@ public:
     void SetButtonsImageList(wxImageList* imageList);
 
     /**
-        Sets the indentation for the tree control.
+        Sets the indentation for the tree control, in DIP (DPI independent
+        pixels).
     */
     virtual void SetIndent(unsigned int indent);
 
     /**
         Sets the spacing for the tree control. Spacing is the number of
-        horizontal pixels between the buttons and the state images.
+        horizontal DIPs (DPI independent pixels) between the buttons and the
+        state images.
         This has no effect under wxMSW.
     */
     void SetSpacing(unsigned int spacing);
