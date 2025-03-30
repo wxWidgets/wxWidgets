@@ -2447,6 +2447,8 @@ void wxGenericTreeCtrl::OnImagesChanged()
     // of ensuring that we can always get the size to use for the images.
     GetUpdatedImageListFor(this);
 
+    m_imagesState.GetUpdatedImageListFor(this);
+
     UpdateAfterImageListChange();
 }
 
