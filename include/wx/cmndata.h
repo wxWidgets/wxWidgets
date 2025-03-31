@@ -197,6 +197,8 @@ public:
     bool GetAllPages() const { return m_printAllPages; }
     bool GetSelection() const { return m_printSelection; }
     bool GetCurrentPage() const { return m_printCurrentPage; }
+    bool GetSpecifiedPages() const
+        { return !(m_printAllPages || m_printSelection || m_printCurrentPage); }
     bool GetCollate() const { return m_printCollate; }
     bool GetPrintToFile() const { return m_printToFile; }
 

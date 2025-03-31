@@ -607,6 +607,15 @@ public:
     bool GetCurrentPage() const;
 
     /**
+        Returns @true if the user requested printing only the specified pages.
+
+        The pages to print can be retrieved using GetPageRanges().
+
+        @since 3.3.0
+    */
+    bool GetSpecifiedPages() const;
+
+    /**
         Returns the @e "print to" page number, as entered by the user.
 
         This function can't be used if multiple page ranges were specified, use
