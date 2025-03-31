@@ -631,6 +631,18 @@ public:
     bool IsOk() const;
 
     /**
+        Selects the "All pages" radio button.
+
+        When called with @true value, enables printing all pages. This is the
+        default behaviour.
+
+        If @a flag is @false, this function doesn't do anything unless it had
+        been called with @true value before and in this case it switches to
+        printing the selected pages only (see GetSpecifiedPages()).
+    */
+    void SetAllPages(bool flag = true);
+
+    /**
         Sets the "Collate" checkbox to @true or @false.
     */
     void SetCollate(bool flag);
@@ -674,11 +686,19 @@ public:
     void SetPrintToFile(bool flag);
 
     /**
-        Selects the "Selection" radio button. The effect of printing the
-        selection depends on how the application implements this command, if at
-        all.
+        Selects the "Selection" radio button.
+
+        The effect of printing the selection depends on how the application
+        implements this command, if at all.
+
+        This function should only be called when EnableSelection() is used as
+        well.
+
+        If @a flag is @false, this function doesn't do anything unless it had
+        been called with @true value before and in this case it switches to
+        printing the selected pages only (see GetSpecifiedPages()).
     */
-    void SetSelection(bool flag);
+    void SetSelection(bool flag = true);
 
     /**
         Selects the "Current Page" radio button when the dialog is initially
@@ -687,11 +707,15 @@ public:
         This function can only be called when EnableCurrentPage() is used as
         well.
 
+        If @a flag is @false, this function doesn't do anything unless it had
+        been called with @true value before and in this case it switches to
+        printing the selected pages only (see GetSpecifiedPages()).
+
         @see GetCurrentPage()
 
         @since 3.3.0
     */
-    void SetCurrentPage(bool flag);
+    void SetCurrentPage(bool flag = true);
 
     /**
         @deprecated This function has been deprecated since version 2.5.4.

@@ -141,6 +141,10 @@ Changes in behaviour not resulting in compilation errors
 - wxAUI_MGR_HINT_FADE is not included in default wxAuiManager style any longer,
   please add it explicitly if you really want to use it.
 
+- Behaviour of wxPrintDialogData::SetAllPages() and SetSelection() has
+  changed when called with "false" argument, please review the documentation
+  and update your code if you called them with "false" (which is rarely done).
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
