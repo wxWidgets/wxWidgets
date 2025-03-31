@@ -154,8 +154,13 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     // Initialize page ranges with the value from the dialog, but then allow
     // the printout to customize them.
-    std::vector<wxPrintPageRange>
+    std::vector<wxPrintPageRange> pageRanges;
+    if ( !(m_printDialogData.GetAllPages() ||
+            m_printDialogData.GetSelection() ||
+                m_printDialogData.GetCurrentPage()) )
+    {
         pageRanges = m_printDialogData.GetPageRanges();
+    }
     const wxPrintPageRange allPages = printout->GetPagesInfo(pageRanges);
 
     if (!allPages.IsValid())
