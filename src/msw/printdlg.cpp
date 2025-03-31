@@ -904,7 +904,6 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     pd->nCopies = (DWORD)data.GetNoCopies();
 
     // Required only if PD_NOPAGENUMS flag is not set.
-    // Currently only one page range is supported.
     if ( data.GetEnablePageNumbers() )
     {
         pd->nMaxPageRanges = (DWORD)data.GetMaxPageRanges();
@@ -929,6 +928,14 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
         const wxVector<wxPrintPageRange>& ranges = data.GetPageRanges();
         if ( ranges.empty() )
         {
+            // Use values for from/to page here to define a single range (which
+            // will usually be just "1") for compatibility: it would arguably
+            // make more sense to not define any ranges at all by setting
+            // nPageRanges to 0 (which is allowed, only lpPageRanges must be
+            // non-null), but this would change the behaviour of the existing
+            // code without any real gain, so don't do it, even if this means
+            // that there is currently no way to not show anything at all in
+            // the "Pages" text box of the print dialog.
             pd->nPageRanges = 1;
             pd->lpPageRanges = new PRINTPAGERANGE[pd->nMaxPageRanges];
 
