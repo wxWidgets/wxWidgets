@@ -37,6 +37,15 @@
     #include <unistd.h>
 #endif
 
+#if defined(__FreeBSD__)
+    // for GetExecutablePath
+    #include <sys/param.h>
+    #include <sys/queue.h>
+    #include <sys/socket.h>
+    #include <sys/sysctl.h>
+    #include <libprocstat.h>
+#endif
+
 // ============================================================================
 // common VMS/Unix part of wxStandardPaths implementation
 // ============================================================================
@@ -166,6 +175,37 @@ wxString wxStandardPaths::GetExecutablePath() const
     }
 
     if ( !exeStr.empty() )
+        return exeStr;
+#elif defined(__FreeBSD__)
+    struct procstat *ps = nullptr;
+    struct kinfo_proc *procs = nullptr;
+    char pathname[PATH_MAX];
+
+    do {
+        unsigned int n_proc;
+
+        ps = procstat_open_sysctl();
+        if (ps == nullptr)
+            break;
+
+        procs = procstat_getprocs(ps, KERN_PROC_PID, getpid(), &n_proc);
+        if (procs == nullptr)
+            break;
+
+        if (n_proc != 1)
+            break;
+
+        procstat_getpathname(ps, procs, pathname, sizeof(pathname));
+    } while (false);
+
+    if (procs)
+        procstat_freeprocs(ps, procs);
+
+    if (ps)
+        procstat_close(ps);
+
+    wxString exeStr(pathname);
+    if (!exeStr.empty())
         return exeStr;
 #endif // __LINUX__
 
