@@ -6895,54 +6895,48 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
             if ( wxk > 255 )
             {
                 // If the key generates a non-Latin character, return the key
-                // code that it would have generated in the US layout. It's not
-                // clear if we should use the VK directly here or map it to the
-                // scan code and then return the value corresponding to the key
-                // with this scan code instead in the US layout, for now we
-                // choose to do the former but we may want to change it.
-                switch ( vk )
+                // code that it would have generated in the US layout.
+                //
+                // We could also use Windows to map the key in the US layout,
+                // but this would require creating such layout which might have
+                // unknown side effects, so for now just hardcode it here.
+                static const int keys[] =
                 {
-                    case VK_OEM_1:          wxk = ';'; break;
-                    case VK_OEM_PLUS:       wxk = '='; break;
-                    case VK_OEM_COMMA:      wxk = ','; break;
-                    case VK_OEM_MINUS:      wxk = '-'; break;
-                    case VK_OEM_PERIOD:     wxk = '.'; break;
-                    case VK_OEM_2:          wxk = '/'; break;
-                    case VK_OEM_3:          wxk = '`'; break;
-                    case VK_OEM_4:          wxk = '['; break;
-                    case VK_OEM_5:          wxk = '\\'; break;
-                    case VK_OEM_6:          wxk = ']'; break;
-                    case VK_OEM_7:          wxk = '\''; break;
+                    WXK_NONE,
+                    WXK_ESCAPE,
+                    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
+                    WXK_BACK,
+                    WXK_TAB,
+                    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']',
+                    WXK_RETURN,
+                    WXK_CONTROL,
+                    'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', '`',
+                    WXK_SHIFT,
+                    '\\', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/',
+                    WXK_SHIFT,
+                    WXK_NUMPAD_MULTIPLY,
+                    WXK_ALT,
+                    WXK_SPACE,
+                    WXK_CAPITAL,
+                    WXK_F1, WXK_F2, WXK_F3, WXK_F4, WXK_F5,
+                    WXK_F6, WXK_F7, WXK_F8, WXK_F9, WXK_F10,
+                    WXK_NUMLOCK, WXK_SCROLL,
+                    WXK_NUMPAD7, WXK_NUMPAD8, WXK_NUMPAD9,
+                    WXK_NUMPAD_SUBTRACT,
+                    WXK_NUMPAD4, WXK_NUMPAD5, WXK_NUMPAD6,
+                    WXK_NUMPAD_ADD,
+                    WXK_NUMPAD1, WXK_NUMPAD2, WXK_NUMPAD3,
+                    WXK_NUMPAD0,
+                    WXK_NUMPAD_DECIMAL,
+                    WXK_NONE,
+                    WXK_NONE,
+                    WXK_NONE,
+                    WXK_F11,
+                    WXK_F12
+                };
 
-                    case VK_OEM_8:
-                    case VK_OEM_102:
-                        // These keys are not present in the US layout, so we
-                        // can only use their scan codes.
-                        switch ( ::MapVirtualKey(vk, MAPVK_VK_TO_VSC) )
-                        {
-                            // VK_OEM_8 can be mapped to any of those.
-                            case 0x0c: wxk = '-'; break;
-                            case 0x0d: wxk = '='; break;
-                            case 0x29: wxk = '`'; break;
-                            case 0x2b: wxk = '\\'; break;
-                            case 0x32: wxk = 'M'; break;
-                            case 0x33: wxk = ','; break;
-                            case 0x35: wxk = '/'; break;
-
-                            // This is the usual scan code for VK_OEM_102.
-                            case 0x56: wxk = '\\'; break;
-
-                            default:
-                                // Unexpected, but surely may happen, at least
-                                // in custom layouts.
-                                wxk = WXK_NONE;
-                        }
-                        break;
-
-                    default:
-                        wxFAIL_MSG( "unreachable" );
-                        wxk = WXK_NONE;
-                }
+                const UINT sc = ::MapVirtualKey(vk, MAPVK_VK_TO_VSC);
+                wxk = sc < WXSIZEOF(keys) ? keys[sc] : WXK_NONE;
             }
             break;
 
