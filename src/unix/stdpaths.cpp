@@ -31,6 +31,7 @@
 
 #include "wx/filename.h"
 #include "wx/log.h"
+#include "wx/scopeguard.h"
 #include "wx/textfile.h"
 
 #if defined( __LINUX__ ) || defined( __VMS )
@@ -176,33 +177,24 @@ wxString wxStandardPaths::GetExecutablePath() const
 
     if ( !exeStr.empty() )
         return exeStr;
-#elif defined(__FreeBSD__)
-    struct procstat *ps = nullptr;
-    struct kinfo_proc *procs = nullptr;
+#elif defined(__FreeBSD__) && wxHAS_PROCSTAT
+    unsigned int n_proc;
     char pathname[PATH_MAX];
 
-    do {
-        unsigned int n_proc;
+    auto *ps = procstat_open_sysctl();
+    if (!ps)
+        return wxStandardPathsBase::GetExecutablePath();
 
-        ps = procstat_open_sysctl();
-        if (ps == nullptr)
-            break;
+    auto *procs = procstat_getprocs(ps, KERN_PROC_PID, getpid(), &n_proc);
+    if (!procs || n_proc != 1)
+        return wxStandardPathsBase::GetExecutablePath();
 
-        procs = procstat_getprocs(ps, KERN_PROC_PID, getpid(), &n_proc);
-        if (procs == nullptr)
-            break;
+    // procstat_freeprocs should be called before procstat_close
+    wxON_BLOCK_EXIT2(procstat_freeprocs, ps, procs);
+    wxON_BLOCK_EXIT1(procstat_close, ps);
 
-        if (n_proc != 1)
-            break;
-
-        procstat_getpathname(ps, procs, pathname, sizeof(pathname));
-    } while (false);
-
-    if (procs)
-        procstat_freeprocs(ps, procs);
-
-    if (ps)
-        procstat_close(ps);
+    if (procstat_getpathname(ps, procs, pathname, sizeof(pathname)) != 0)
+        return wxStandardPathsBase::GetExecutablePath();
 
     wxString exeStr(pathname);
     if (!exeStr.empty())
