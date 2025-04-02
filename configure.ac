@@ -3434,7 +3434,7 @@ if test "$wxUSE_PROCSTAT" = "yes"; then
       *-*-freebsd*)
         AC_MSG_CHECKING([for libprocstat])
         AC_CHECK_LIB(procstat, procstat_getpathname, [
-                        PROCSTAT_LINK=" -lprocstat"
+                        PROCSTAT_LINK=" -L/usr/lib -lprocstat"
                         PROCSTAT_FOUND=1
                         ])
         if test "$PROCSTAT_FOUND"; then
