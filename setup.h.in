@@ -624,6 +624,12 @@
  */
 #define wxUSE_XTEST 0
 
+/*
+   On FreeBSD use libprocstat to get executable path name.
+*/
+#define wxHAS_PROCSTAT 0
+
+
 /* --- start MSW options --- */
 
 

@@ -67,6 +67,19 @@ if(wxUSE_GUI)
     add_opt_lib(webview_chromium wxUSE_WEBVIEW wxUSE_WEBVIEW_CHROMIUM)
 endif() # wxUSE_GUI
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+    find_library(PROCSTAT_LIBRARY
+        NAMES procstat
+        HINTS "/usr/lib"
+        )
+    if (${PROCSTAT_LIBRARY})
+        set(wxUSE_PROCSTAT 1)
+        add_opt_lib(procstat wxUSE_PROCSTAT)
+        target_link_libraries(procstat PRIVATE ${wxMONO_LIBS_${vis}})
+        target_compile_definitions(wxHAS_PROCSTAT 1)
+    endif()
+endif()
+
 # Include XML library last
 # In the monolithic build, where all target properties (include dirs) from different targets are concatenated,
 # wxml might include system expat, which might use Mono, which has it's own copy of png.
