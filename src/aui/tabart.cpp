@@ -350,13 +350,6 @@ wxAuiTabArtBase::GetButtonBitmapBundle(const wxAuiTabContainerButton& button) co
     if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
         return nullptr;
 
-    return GetButtonBitmapBundleEvenIfHidden(button);
-}
-
-const wxBitmapBundle*
-wxAuiTabArtBase::GetButtonBitmapBundleEvenIfHidden(
-    const wxAuiTabContainerButton& button) const
-{
     const auto active = button.curState & (wxAUI_BUTTON_STATE_HOVER |
                                            wxAUI_BUTTON_STATE_PRESSED);
 
@@ -372,18 +365,6 @@ wxAuiTabArtBase::GetButtonBitmapBundleEvenIfHidden(
     }
 
     return nullptr;
-}
-
-wxBitmap
-wxAuiTabArtBase::GetButtonBitmapEvenIfHidden(
-    const wxAuiTabContainerButton& button,
-    wxWindow* wnd) const
-{
-    wxBitmap bmp;
-    if ( const wxBitmapBundle* bb = GetButtonBitmapBundleEvenIfHidden(button) )
-        bmp = bb->GetBitmapFor(wnd);
-
-    return bmp;
 }
 
 bool
@@ -760,8 +741,11 @@ wxAuiFlatTabArt::DrawPageTab(wxDC& dc,
     int buttonsWidth = 0;
     for ( const auto& button : page.buttons )
     {
-        const wxBitmap bmp = GetButtonBitmapEvenIfHidden(button, wnd);
-        buttonsWidth += bmp.GetLogicalWidth();
+        const wxBitmapBundle* const bb = GetButtonBitmapBundle(button);
+        if ( !bb )
+            continue;
+
+        buttonsWidth += bb->GetBitmapFor(wnd).GetLogicalWidth();
     }
 
     // Now draw them and update their rectangles.
@@ -773,8 +757,6 @@ wxAuiFlatTabArt::DrawPageTab(wxDC& dc,
         int buttonX = xEnd;
         for ( auto& button : page.buttons )
         {
-            // Here we only need to draw the button if it's not hidden, so
-            // don't use GetButtonBitmapEvenIfHidden() unlike above.
             const wxBitmapBundle* const bb = GetButtonBitmapBundle(button);
             if ( !bb )
                 continue;
@@ -827,7 +809,9 @@ wxAuiFlatTabArt::GetPageTabSize(wxReadOnlyDC& dc,
     bool firstButton = true;
     for ( const auto& button : page.buttons )
     {
-        const wxBitmap bmp = GetButtonBitmapEvenIfHidden(button, wnd);
+        const wxBitmapBundle* const bb = GetButtonBitmapBundle(button);
+        if ( !bb )
+            continue;
 
         if ( firstButton )
         {
@@ -835,7 +819,7 @@ wxAuiFlatTabArt::GetPageTabSize(wxReadOnlyDC& dc,
             firstButton = false;
         }
 
-        size.x += bmp.GetLogicalWidth();
+        size.x += bb->GetBitmapFor(wnd).GetLogicalWidth();
     }
 
     // Add space for the optional bitmap too.

@@ -229,21 +229,9 @@ protected:
     void InitBitmaps();
 
     // Return pointer to our bitmap bundle corresponding to the button ID and
-    // state, returning a valid pointer even if the button is currently hidden.
-    const wxBitmapBundle*
-    GetButtonBitmapBundleEvenIfHidden(const wxAuiTabContainerButton& button) const;
-
-    // Return pointer to our bitmap bundle corresponding to the button ID and
-    // state or null if we don't support this button (and also if it is hidden,
-    // unlike the version above).
+    // state or null if we don't support this button or if it is hidden.
     const wxBitmapBundle*
     GetButtonBitmapBundle(const wxAuiTabContainerButton& button) const;
-
-    // This can be used to get the bitmap for the buttons even when they're
-    // hidden (normally the bitmap should always be valid).
-    wxBitmap
-    GetButtonBitmapEvenIfHidden(const wxAuiTabContainerButton& button,
-                                wxWindow* wnd) const;
 
     // Helper function for DrawButton() and GetButtonRect().
     bool DoGetButtonRectAndBitmap(
