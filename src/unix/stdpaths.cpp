@@ -38,7 +38,7 @@
     #include <unistd.h>
 #endif
 
-#if defined(__FreeBSD__)
+#ifdef wxHAS_PROCSTAT
     // for GetExecutablePath
     #include <sys/param.h>
     #include <sys/queue.h>
@@ -177,21 +177,19 @@ wxString wxStandardPaths::GetExecutablePath() const
 
     if ( !exeStr.empty() )
         return exeStr;
-#elif defined(__FreeBSD__) && wxHAS_PROCSTAT
+#elif defined(wxHAS_PROCSTAT)
     unsigned int n_proc;
     char pathname[PATH_MAX];
 
     auto *ps = procstat_open_sysctl();
     if (!ps)
         return wxStandardPathsBase::GetExecutablePath();
+    wxON_BLOCK_EXIT1(procstat_close, ps);
 
     auto *procs = procstat_getprocs(ps, KERN_PROC_PID, getpid(), &n_proc);
     if (!procs || n_proc != 1)
         return wxStandardPathsBase::GetExecutablePath();
-
-    // procstat_freeprocs should be called before procstat_close
     wxON_BLOCK_EXIT2(procstat_freeprocs, ps, procs);
-    wxON_BLOCK_EXIT1(procstat_close, ps);
 
     if (procstat_getpathname(ps, procs, pathname, sizeof(pathname)) != 0)
         return wxStandardPathsBase::GetExecutablePath();

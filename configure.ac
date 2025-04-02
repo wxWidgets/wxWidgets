@@ -200,7 +200,6 @@ case "${host}" in
     AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
-    wxUSE_PROCSTAT=yes
   ;;
   *-*-openbsd*|*-*-mirbsd*)
     USE_BSD=1
@@ -3429,20 +3428,15 @@ dnl ---------------------------------------------------------------------------
 dnl libprocstat on FreeBSD
 dnl ---------------------------------------------------------------------------
 
-if test "$wxUSE_PROCSTAT" = "yes"; then
-    case "${host}" in
-      *-*-freebsd*)
-        AC_MSG_CHECKING([for libprocstat])
-        AC_CHECK_LIB(procstat, procstat_getpathname, [
-                        PROCSTAT_LINK=" -L/usr/lib -lprocstat"
-                        PROCSTAT_FOUND=1
-                        ])
-        if test "$PROCSTAT_FOUND"; then
-            AC_DEFINE(wxHAS_PROCSTAT, 1)
-        fi
-        ;;
-    esac
-fi
+case "${host}" in
+  *-*-freebsd*)
+    AC_MSG_CHECKING([for libprocstat])
+    AC_CHECK_LIB(procstat, procstat_getpathname, [
+                    PROCSTAT_LINK=" -L/usr/lib -lprocstat"
+                    PROCSTAT_FOUND=1
+                    ])
+    ;;
+esac
 
 dnl the symbol which allows conditional compilation for the given toolkit
 if test -n "$TOOLKIT" ; then
@@ -7751,10 +7745,10 @@ case "$wxUSE_ZLIB" in
         ;;
 esac
 
-if test "$wxUSE_PROCSTAT" = "yes"; then
-    WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -DwxHAS_PROCSTAT=1"
+case "${host}" in
+  *-*-freebsd*)
     WXCONFIG_LIBS="$PROCSTAT_LINK $WXCONFIG_LIBS"
-fi
+esac
 
 for i in $wxconfig_3rdparty ; do
     WXCONFIG_LIBS="-lwx${i}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"
