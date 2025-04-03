@@ -21,6 +21,10 @@
 #if wxUSE_INTL
 
 #include <locale.h>
+#ifdef __APPLE__
+    #include <xlocale.h>
+#endif
+
 #ifdef HAVE_LANGINFO_H
     #include <langinfo.h>
 #endif
