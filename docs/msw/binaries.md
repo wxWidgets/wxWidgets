@@ -7,35 +7,31 @@ Supported Compilers
 -------------------
 We provide pre-built binary files for the following compilers:
 
-* Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0, 12.0, 14.0, 14.1 and 14.2
-  (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017 and 2019 respectively). Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
+* Microsoft Visual C++ compiler versions 14.0, 14.1, 14.2 and 14.3
+  (corresponding to marketing product names of Microsoft Visual Studio 2015, 2017, 2019 and 2022 respectively).
+  Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
 * MinGW-w64 versions 7.3 and 8.1 (32-bit binaries use SJLJ exceptions, 64-bit ones use SEH, and all binaries use Win32 threads).
 * [TDM-GCC](https://jmeubank.github.io/tdm-gcc/) 10.3.0.
-* [MSYS2](https://www.msys2.org/) MinGW 12.1.0.
+* [MSYS2](https://www.msys2.org/) MinGW 12.2.0 and 13.2.0.
 
 Getting the files
 -----------------
 
 First, you need to get the correct files. You will always need the
-`wxWidgets-3.2.0-headers.7z` one but the rest depends on your compiler version
-and architecture: as different versions of MSVC compiler are not binary
-compatible, you should select the files with the correct
-`vc80`, `vc90`, `vc100`, `vc110`, `vc120`, or `vc14x`
-suffix depending on whether you use
-Visual Studio 2005, 2008, 2010, 2012, 2013, or 2015/2017/2019 respectively (the Visual Studio 2015/2017/2019 compilers are binary compatible).
-You also need to decide whether you use the `x64` files for 64-bit development
-or the ones without this suffix for the still more common 32-bit builds. After
-determining the combination of suffixes you need, you should download the
-"Dev" and the "ReleaseDLL" files in addition to the "Headers" one above,
-e.g. for 32-bit MSVS 2017 development you need
-`wxMSW-3.2.0_vc14x_Dev.7z` and `wxMSW-3.2.0_vc14x_ReleaseDLL.7z`.
+`wxWidgets-3.3.0-headers.7z` one but the "Dev" and the "ReleaseDLL"
+files depend on your compiler and CPU architecture.
+For example, for MSVS 2015/2017/2019/2022 and 64-bit (x86_64) architecture
+you will need `wxMSW-3.3.0_vc14x_x64_Dev.7z` and `wxMSW-3.3.0_vc14x_x64_ReleaseDLL.7z`.
+If you are using MinGW-w64 v8.1 and 32-bit (x86) architecture, you will need
+`wxMSW-3.3.0_gcc810_Dev.7z` and `wxMSW-3.3.0_gcc810_ReleaseDLL.7z` (32-bit
+packages do not include the architecture suffix in their file name).
 
 All binaries are available at:
 
-https://www.wxwidgets.org/downloads#v3.2.0_msw
+https://www.wxwidgets.org/downloads#v3.3.0_msw
 
 Once you have the files you need, unzip all of them into the same directory, for
-example `c:\wx\3.2.0`. You should have `include` and `lib` subdirectories under
+example `c:\wx\3.3.0`. You should have `include` and `lib` subdirectories under
 this directory, as well as files such as `wxwidgets.props`.
 
 Note: To avoid hard-coding this path into your projects, define `wxwin`

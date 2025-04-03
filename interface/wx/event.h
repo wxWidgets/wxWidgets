@@ -551,10 +551,6 @@ public:
 
          @param functor The functor to call.
 
-         @note This method is not available with Visual C++ before version 8
-               (Visual Studio 2005) as earlier versions of the compiler don't
-               have the required support for C++ templates to implement it.
-
          @since 3.0
      */
     template<typename T>
