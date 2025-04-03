@@ -19,7 +19,8 @@ theory, this section describes such changes as they exist in practice:
   wxArrayString. Such problems can be fixed by explicitly specifying the class
   to use but it is also possible to predefine wxNO_INITIALIZER_LIST to disable
   support for std::initializer_list<> in wxWidgets and fix compilation without
-  modifying the application code.
+  modifying the application code. wxWidgets 3.2.8 extended initializer_list<>
+  support to wxVector, so the same considerations apply to it too.
 
 
 INCOMPATIBLE CHANGES SINCE 3.0.x:
@@ -253,6 +254,7 @@ Changes in behaviour which may result in build errors
 
 All:
 
+- Allow initializing wxVector<> from std::initializer_list<> (#25290).
 - Update Brazilian Portuguese translations (Felipe).
 - Ensure that all headers are installed by CMake (Maarten Bent, #25266).
 

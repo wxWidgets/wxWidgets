@@ -19,6 +19,10 @@
 #include <vector>
 #include <algorithm>
 
+#ifdef wxHAVE_INITIALIZER_LIST
+    #include <initializer_list>
+#endif
+
 #define wxVector std::vector
 template<typename T>
 inline void wxVectorSort(wxVector<T>& v)
@@ -344,6 +348,11 @@ public:
     {
         assign(first, last);
     }
+
+#ifdef wxHAVE_INITIALIZER_LIST
+    template<typename U>
+    wxVector(std::initializer_list<U> list) : wxVector(list.begin(), list.end()) {}
+#endif
 
     ~wxVector()
     {
