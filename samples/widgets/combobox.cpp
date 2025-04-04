@@ -90,7 +90,7 @@ enum
 class ComboboxWidgetsPage : public ItemContainerWidgetsPage
 {
 public:
-    ComboboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    ComboboxWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_combobox; }
     virtual wxTextEntryBase *GetTextEntry() const override { return m_combobox; }
@@ -236,7 +236,7 @@ IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, "Combobox",
                        );
 
 ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
-                                         wxImageList *imaglist)
+                                         wxVector<wxBitmapBundle>& imaglist)
                   : ItemContainerWidgetsPage(book, imaglist, combobox_xpm)
 {
     // init everything

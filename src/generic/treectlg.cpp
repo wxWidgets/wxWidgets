@@ -720,7 +720,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
             else
                 flags |= wxTREE_HITTEST_ONITEMLOWERPART;
 
-            int xCross = m_x - theCtrl->GetSpacing();
+            int xCross = m_x - theCtrl->FromDIP(theCtrl->GetSpacing());
 #ifdef __WXMAC__
             // according to the drawing code the triangels are drawn
             // at -4 , -4  from the position up to +10/+10 max
@@ -947,7 +947,6 @@ wxBEGIN_EVENT_TABLE(wxGenericTreeCtrl, wxTreeCtrlBase)
     EVT_KILL_FOCUS     (wxGenericTreeCtrl::OnKillFocus)
     EVT_TREE_ITEM_GETTOOLTIP(wxID_ANY, wxGenericTreeCtrl::OnGetToolTip)
     EVT_SYS_COLOUR_CHANGED(wxGenericTreeCtrl::OnSysColourChanged)
-    EVT_DPI_CHANGED(wxGenericTreeCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // -----------------------------------------------------------------------------
@@ -1064,8 +1063,8 @@ void wxGenericTreeCtrl::InitVisualAttributes()
 #endif
     m_boldFont = m_normalFont.Bold();
 
-    m_indent = FromDIP(10);
-    m_spacing = FromDIP(10);
+    m_indent = 10;
+    m_spacing = 10;
 }
 
 // -----------------------------------------------------------------------------
@@ -2448,6 +2447,8 @@ void wxGenericTreeCtrl::OnImagesChanged()
     // of ensuring that we can always get the size to use for the images.
     GetUpdatedImageListFor(this);
 
+    m_imagesState.GetUpdatedImageListFor(this);
+
     UpdateAfterImageListChange();
 }
 
@@ -2744,10 +2745,13 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
                               int level,
                               int &y)
 {
-    int x = level*m_indent;
+    int indent = FromDIP(m_indent);
+    int spacing = FromDIP(m_spacing);
+
+    int x = level*indent;
     if (!HasFlag(wxTR_HIDE_ROOT))
     {
-        x += m_indent;
+        x += indent;
     }
     else if (level == 0)
     {
@@ -2775,7 +2779,7 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
         return;
     }
 
-    item->SetX(x+m_spacing);
+    item->SetX(x+spacing);
     item->SetY(y);
 
     int h = GetLineHeight(item);
@@ -2840,11 +2844,11 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
         {
             // draw the horizontal line here
             int x_start = x;
-            if (x > (int)m_indent)
-                x_start -= m_indent;
+            if (x > (int)indent)
+                x_start -= indent;
             else if (HasFlag(wxTR_LINES_AT_ROOT))
                 x_start = 3;
-            dc.DrawLine(x_start, y_mid, x + m_spacing, y_mid);
+            dc.DrawLine(x_start, y_mid, x + spacing, y_mid);
         }
 
         // should the item show a button?
@@ -3985,10 +3989,13 @@ wxGenericTreeCtrl::CalculateLevel(wxGenericTreeItem *item,
                                   int level,
                                   int &y )
 {
-    int x = level*m_indent;
+    int indent = FromDIP(m_indent);
+    int spacing = FromDIP(m_spacing);
+
+    int x = level*indent;
     if (!HasFlag(wxTR_HIDE_ROOT))
     {
-        x += m_indent;
+        x += indent;
     }
     else if (level == 0)
     {
@@ -4000,7 +4007,7 @@ wxGenericTreeCtrl::CalculateLevel(wxGenericTreeItem *item,
     item->CalculateSize(this, dc);
 
     // set its position
-    item->SetX( x+m_spacing );
+    item->SetX( x+spacing );
     item->SetY( y );
     y += GetLineHeight(item);
 
@@ -4216,18 +4223,6 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
         size.y += PIXELS_PER_UNIT - dy;
 
     return size;
-}
-
-void wxGenericTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
-{
-    // For the platforms using DPI-dependent pixels we need to adjust various
-    // metrics after the DPI change.
-#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
-    m_indent = event.ScaleX(m_indent);
-    m_spacing = event.ScaleX(m_spacing);
-#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
-
-    event.Skip();
 }
 
 #endif // wxUSE_TREECTRL

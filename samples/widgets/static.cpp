@@ -78,7 +78,7 @@ enum
 class StaticWidgetsPage : public WidgetsPage
 {
 public:
-    StaticWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    StaticWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_statText; }
     virtual Widgets GetWidgets() const override
@@ -181,7 +181,7 @@ IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, "Static",
                        );
 
 StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, statbox_xpm)
 {
     // init everything

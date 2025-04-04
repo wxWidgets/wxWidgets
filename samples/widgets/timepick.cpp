@@ -60,7 +60,7 @@ enum
 class TimePickerWidgetsPage : public WidgetsPage
 {
 public:
-    TimePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    TimePickerWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_timePicker; }
     virtual void RecreateWidget() override { CreateTimePicker(); }
@@ -121,7 +121,7 @@ IMPLEMENT_WIDGETS_PAGE(TimePickerWidgetsPage, "TimePicker",
                        );
 
 TimePickerWidgetsPage::TimePickerWidgetsPage(WidgetsBookCtrl *book,
-                                         wxImageList *imaglist)
+                                         wxVector<wxBitmapBundle>& imaglist)
                      : WidgetsPage(book, imaglist, timepick_xpm)
 {
 }

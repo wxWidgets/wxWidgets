@@ -72,7 +72,7 @@ enum
 class ChoiceWidgetsPage : public ItemContainerWidgetsPage
 {
 public:
-    ChoiceWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    ChoiceWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_choice; }
     virtual wxItemContainer* GetContainer() const override { return m_choice; }
@@ -180,7 +180,7 @@ IMPLEMENT_WIDGETS_PAGE(ChoiceWidgetsPage, "Choice",
                        );
 
 ChoiceWidgetsPage::ChoiceWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                   : ItemContainerWidgetsPage(book, imaglist, choice_xpm)
 {
     // init everything

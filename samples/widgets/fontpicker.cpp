@@ -60,7 +60,7 @@ enum
 class FontPickerWidgetsPage : public WidgetsPage
 {
 public:
-    FontPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    FontPickerWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_fontPicker; }
     virtual void RecreateWidget() override { RecreatePicker(); }
@@ -127,7 +127,7 @@ IMPLEMENT_WIDGETS_PAGE(FontPickerWidgetsPage, "FontPicker",
                        PICKER_CTRLS | FAMILY_CTRLS);
 
 FontPickerWidgetsPage::FontPickerWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, fontpicker_xpm)
 {
 }

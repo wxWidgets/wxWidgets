@@ -85,7 +85,7 @@ enum
 class ODComboboxWidgetsPage : public ItemContainerWidgetsPage
 {
 public:
-    ODComboboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    ODComboboxWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_combobox; }
     virtual wxTextEntryBase *GetTextEntry() const override
@@ -301,7 +301,7 @@ IMPLEMENT_WIDGETS_PAGE(ODComboboxWidgetsPage, "OwnerDrawnCombobox",
                        );
 
 ODComboboxWidgetsPage::ODComboboxWidgetsPage(WidgetsBookCtrl *book,
-                                             wxImageList *imaglist)
+                                             wxVector<wxBitmapBundle>& imaglist)
                   : ItemContainerWidgetsPage(book, imaglist, odcombobox_xpm)
 {
     // init everything

@@ -60,7 +60,7 @@ enum
 class ColourPickerWidgetsPage : public WidgetsPage
 {
 public:
-    ColourPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    ColourPickerWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_clrPicker; }
     virtual void RecreateWidget() override { RecreatePicker(); }
@@ -132,7 +132,7 @@ IMPLEMENT_WIDGETS_PAGE(ColourPickerWidgetsPage, "ColourPicker",
                        PICKER_CTRLS | FAMILY_CTRLS);
 
 ColourPickerWidgetsPage::ColourPickerWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, clrpicker_xpm)
 {
 }

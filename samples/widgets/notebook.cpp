@@ -80,7 +80,7 @@ enum Orient
 class BookWidgetsPage : public WidgetsPage
 {
 public:
-    BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, const char *const icon[]);
+    BookWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist, const char *const icon[]);
     virtual ~BookWidgetsPage();
 
     virtual wxWindow *GetWidget() const override { return m_book; }
@@ -182,7 +182,7 @@ wxEND_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-BookWidgetsPage::BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, const char *const icon[])
+BookWidgetsPage::BookWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist, const char *const icon[])
                 :WidgetsPage(book, imaglist, icon)
 {
     // init everything
@@ -531,7 +531,7 @@ void BookWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 class NotebookWidgetsPage : public BookWidgetsPage
 {
 public:
-    NotebookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
+    NotebookWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
         : BookWidgetsPage(book, imaglist, notebook_xpm)
     {
         RecreateBook();
@@ -610,7 +610,7 @@ void NotebookWidgetsPage::OnPageChanged(wxNotebookEvent& event)
 class ListbookWidgetsPage : public BookWidgetsPage
 {
 public:
-    ListbookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
+    ListbookWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
         : BookWidgetsPage(book, imaglist, listbook_xpm)
     {
         RecreateBook();
@@ -683,7 +683,7 @@ void ListbookWidgetsPage::OnPageChanged(wxListbookEvent& event)
 class ChoicebookWidgetsPage : public BookWidgetsPage
 {
 public:
-    ChoicebookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
+    ChoicebookWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist)
         : BookWidgetsPage(book, imaglist, choicebk_xpm)
     {
         RecreateBook();

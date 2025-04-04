@@ -69,7 +69,7 @@ enum
 class CheckBoxWidgetsPage : public WidgetsPage
 {
 public:
-    CheckBoxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    CheckBoxWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_checkbox; }
     virtual void RecreateWidget() override { CreateCheckbox(); }
@@ -155,7 +155,7 @@ wxEND_EVENT_TABLE()
 IMPLEMENT_WIDGETS_PAGE(CheckBoxWidgetsPage, "CheckBox", FAMILY_CTRLS );
 
 CheckBoxWidgetsPage::CheckBoxWidgetsPage(WidgetsBookCtrl *book,
-                                         wxImageList *imaglist)
+                                         wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, checkbox_xpm)
 {
 }

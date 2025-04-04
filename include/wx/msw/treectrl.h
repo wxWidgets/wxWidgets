@@ -289,6 +289,9 @@ private:
 
     void DeleteTextCtrl();
 
+    unsigned int DoGetIndent() const;
+    void DoSetIndent();
+
     // return true if the item is the hidden root one (i.e. it's the root item
     // and the tree has wxTR_HIDE_ROOT style)
     bool IsHiddenRoot(const wxTreeItemId& item) const;
@@ -347,6 +350,9 @@ private:
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;
+
+    // indentation in DIP
+    unsigned int m_indent;
 
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);

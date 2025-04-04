@@ -70,7 +70,7 @@ enum
 class FilePickerWidgetsPage : public WidgetsPage
 {
 public:
-    FilePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    FilePickerWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_filePicker; }
     virtual void RecreateWidget() override { RecreatePicker(); }
@@ -153,7 +153,7 @@ IMPLEMENT_WIDGETS_PAGE(FilePickerWidgetsPage, "FilePicker",
                        PICKER_CTRLS | FAMILY_CTRLS);
 
 FilePickerWidgetsPage::FilePickerWidgetsPage(WidgetsBookCtrl *book,
-                                     wxImageList *imaglist)
+                                     wxVector<wxBitmapBundle>& imaglist)
                   : WidgetsPage(book, imaglist, filepicker_xpm)
 {
 }

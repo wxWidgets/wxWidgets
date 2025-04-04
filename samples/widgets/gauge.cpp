@@ -69,7 +69,7 @@ enum
 class GaugeWidgetsPage : public WidgetsPage
 {
 public:
-    GaugeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    GaugeWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
     virtual ~GaugeWidgetsPage();
 
     virtual wxWindow *GetWidget() const override { return m_gauge; }
@@ -175,7 +175,7 @@ wxEND_EVENT_TABLE()
 IMPLEMENT_WIDGETS_PAGE(GaugeWidgetsPage, "Gauge", FAMILY_CTRLS );
 
 GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
-                                   wxImageList *imaglist)
+                                   wxVector<wxBitmapBundle>& imaglist)
                  :WidgetsPage(book, imaglist, gauge_xpm)
 {
     // init everything

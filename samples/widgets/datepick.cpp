@@ -65,7 +65,7 @@ enum
 class DatePickerWidgetsPage : public WidgetsPage
 {
 public:
-    DatePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
+    DatePickerWidgetsPage(WidgetsBookCtrl *book, wxVector<wxBitmapBundle>& imaglist);
 
     virtual wxWindow *GetWidget() const override { return m_datePicker; }
     virtual void RecreateWidget() override { CreateDatePicker(); }
@@ -140,7 +140,7 @@ IMPLEMENT_WIDGETS_PAGE(DatePickerWidgetsPage, "DatePicker",
                        );
 
 DatePickerWidgetsPage::DatePickerWidgetsPage(WidgetsBookCtrl *book,
-                                         wxImageList *imaglist)
+                                         wxVector<wxBitmapBundle>& imaglist)
                       :WidgetsPage(book, imaglist, datepick_xpm)
 {
 }
