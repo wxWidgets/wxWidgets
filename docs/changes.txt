@@ -262,6 +262,10 @@ All (GUI):
 
 - Fix crash when using wxPropertyGrid on high DPI screen (#25286).
 
+wxOSX:
+
+- Fix building third party libraries with Xcode 16.3 (David Connet).
+
 
 3.2.7: (released 2025-03-20)
 ----------------------------
