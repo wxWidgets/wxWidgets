@@ -710,23 +710,21 @@ public:
     void GetPPIScreen(int* w, int* h) const;
 
     /**
-        Called by the framework to obtain information from the application about minimum
-        and maximum page values that the user can select, and the required page range to
-        be printed.
+        Called by the framework to obtain information from the application
+        about minimum and maximum page numbers to print.
 
-        @note This function is only called if GetPagesInfo() is not overridden.
+        @note This function is only called if GetPagesInfo() is not overridden
+        and new code should override that function instead of this one.
 
-        If the user chose to print the current page, then @a pageFrom and
-        @a pageTo should be both set to the current page number.
+        The values returned in @a pageFrom and @a pageTo are ignored, and the
+        page ranges selected by user in the print dialog are always used
+        instead. Override GetPagesInfo() if you need to customize the page
+        ranges to be printed.
 
-        By default this returns (1, 32000) for the page minimum and maximum values, and
-        (1, 1) for the required page range.
+        By default returns (1, 32000) for the page minimum and maximum values.
 
         @a minPage must be greater than zero and @a maxPage must be greater
-        than @a minPage.
-
-        This function allows to indicate only a single range of pages to print,
-        consider overriding GetPagesInfo() to allow specifying multiple ranges.
+        than @a minPage, otherwise printing is aborted.
     */
     virtual void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
                              int* pageTo);
@@ -736,14 +734,24 @@ public:
         about the entire range of pages and sub-ranges to be printed.
 
         The implementation of this function in the derived class should return
-        the total range of pages and fill in the provided @a ranges parameter
-        with the ranges of pages that should be printed if necessary (if @a
-        ranges remains empty, all pages are printed).
+        the total range of pages and may also return one or more ranges of
+        pages to print.
 
-        To print a single page, add a single range with both @c fromPage and @c
-        toPage set to the page index, in @a ranges.
+        Note that @a ranges vector is filled with the values selected by the
+        user in the print dialog on entry to this function, so in many cases it
+        shouldn't be changed to respect the user's choice. However, you may
+        override it if desired and you should set the range if the associated
+        wxPrintDialogData indicates that only the current or only the selected
+        pages should be printed, e.g. when printing the current page you need
+        to clear @a ranges vector and add a single range with both @c fromPage
+        and @c toPage set to the current page index to it.
 
-        The default implementation forwards to GetPageInfo().
+        As a special case, if @a ranges is empty on return from this function,
+        all pages are printed.
+
+        The default implementation forwards to GetPageInfo() for compatibility
+        but it is recommended to override this function in the new code, and
+        this is required to support printing the current page or selection.
 
         @since 3.3.0.
     */

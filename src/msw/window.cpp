@@ -126,6 +126,11 @@
 // global variables
 // ---------------------------------------------------------------------------
 
+#ifndef __WXUNIVERSAL__
+// This variable is defined in src/msw/printdlg.cpp.
+extern bool wxPrinterDialogShown;
+#endif // !__WXUNIVERSAL__
+
 #if wxUSE_MENUS_NATIVE
 extern wxMenu *wxCurrentPopupMenu;
 #endif
@@ -4405,6 +4410,15 @@ bool wxWindowMSW::HandleActivate(int state,
         // (still existent) hidden parent, see #18970.
         return false;
     }
+
+#ifndef __WXUNIVERSAL__
+    if ( wxPrinterDialogShown )
+    {
+        // Finally, there is a weird case of WM_ACTIVATE synthesized by the
+        // native print dialog, see the code in src/msw/printdlg.cpp.
+        return false;
+    }
+#endif // !__WXUNIVERSAL__
 
     wxActivateEvent event(wxEVT_ACTIVATE,
                           (state == WA_ACTIVE) || (state == WA_CLICKACTIVE),

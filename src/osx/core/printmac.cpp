@@ -502,7 +502,6 @@ void wxOSXPrintData::TransferTo( wxPrintDialogData* data )
 
 void wxOSXPrintData::TransferFrom( const wxPrintDialogData* data )
 {
-    // Respect the value of m_printAllPages
     if ( data->GetAllPages() )
         PMSetPageRange( m_macPrintSettings , data->GetMinPage() , (UInt32) kPMPrintAllPages ) ;
     else

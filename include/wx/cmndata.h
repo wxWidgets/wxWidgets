@@ -194,9 +194,10 @@ public:
     int GetMinPage() const { return m_printMinPage; }
     int GetMaxPage() const { return m_printMaxPage; }
     int GetNoCopies() const { return m_printNoCopies; }
-    bool GetAllPages() const { return m_printAllPages; }
-    bool GetSelection() const { return m_printSelection; }
-    bool GetCurrentPage() const { return m_printCurrentPage; }
+    bool GetAllPages() const { return m_printWhat == Print::AllPages; }
+    bool GetSelection() const { return m_printWhat == Print::Selection; }
+    bool GetCurrentPage() const { return m_printWhat == Print::CurrentPage; }
+    bool GetSpecifiedPages() const { return m_printWhat == Print::SpecifiedPages; }
     bool GetCollate() const { return m_printCollate; }
     bool GetPrintToFile() const { return m_printToFile; }
 
@@ -210,9 +211,13 @@ public:
     void SetMinPage(int v) { m_printMinPage = v; }
     void SetMaxPage(int v) { m_printMaxPage = v; }
     void SetNoCopies(int v) { m_printNoCopies = v; }
-    void SetAllPages(bool flag) { m_printAllPages = flag; }
-    void SetSelection(bool flag) { m_printSelection = flag; }
-    void SetCurrentPage(bool flag) { m_printCurrentPage = flag; }
+
+    // Avoid calling these functions with flag == false as it's not really
+    // obvious what they do in this case.
+    void SetAllPages(bool flag = true) { DoSetWhat(Print::AllPages, flag); }
+    void SetSelection(bool flag = true) { DoSetWhat(Print::Selection, flag); }
+    void SetCurrentPage(bool flag = true) { DoSetWhat(Print::CurrentPage, flag); }
+
     void SetCollate(bool flag) { m_printCollate = flag; }
     void SetPrintToFile(bool flag) { m_printToFile = flag; }
 
@@ -245,14 +250,24 @@ public:
     void operator=(const wxPrintData& data); // Sets internal m_printData member
 
 private:
+    enum class Print
+    {
+        SpecifiedPages, // Default used if none of the other flags are selected.
+        AllPages,
+        Selection,
+        CurrentPage
+    };
+
+    void DoSetWhat(Print what, bool flag);
+
+    Print           m_printWhat = Print::AllPages;
+
     int             m_printMinPage = 0;
     int             m_printMaxPage = 0;
     int             m_printNoCopies = 1;
-    bool            m_printAllPages = false;
+
     bool            m_printCollate = false;
     bool            m_printToFile = false;
-    bool            m_printSelection = false;
-    bool            m_printCurrentPage = false;
     bool            m_printEnableSelection = false;
     bool            m_printEnableCurrentPage = false;
     bool            m_printEnablePageNumbers = true;

@@ -107,10 +107,6 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
 {
     m_printMinPage = 1;
     m_printMaxPage = 9999;
-    // On Mac the Print dialog always defaults to "All Pages"
-#ifdef __WXMAC__
-    m_printAllPages = true;
-#endif
 }
 
 wxPrintDialogData::~wxPrintDialogData()
@@ -120,6 +116,15 @@ wxPrintDialogData::~wxPrintDialogData()
 void wxPrintDialogData::operator=(const wxPrintData& data)
 {
     m_printData = data;
+}
+
+void wxPrintDialogData::DoSetWhat(Print what, bool flag)
+{
+    if ( flag )
+        m_printWhat = what;
+    else if ( m_printWhat == what )
+        m_printWhat = Print::SpecifiedPages;
+    //else: the current value is not the one we're clearing, don't do anything
 }
 
 void wxPrintDialogData::SetFromPage(int v)

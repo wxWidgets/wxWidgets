@@ -39,6 +39,9 @@
 
 #include <stdlib.h>
 
+// This variable is used from src/msw/window.cpp.
+bool wxPrinterDialogShown = false;
+
 // smart pointer like class using OpenPrinter and ClosePrinter
 class WinPrinter
 {
@@ -830,7 +833,18 @@ int wxWindowsPrintDialog::ShowModal()
     PRINTDLGEX* pd = (PRINTDLGEX*) m_printDlg;
     pd->hwndOwner = hWndParent;
 
+    // Printer dialog sends WM_ACTIVATE to the parent window before destroying
+    // itself for some reason, which results in our handler trying to set the
+    // focus back to the last focused window -- and failing, because the window
+    // doesn't have activation yet (it will only once the dialog will have been
+    // destroyed). So ignore these events while it is shown by setting this
+    // variable -- see also the code using it in wxWindow::HandleActivate().
+    wxPrinterDialogShown = true;
+
     HRESULT dlgRes = PrintDlgEx(pd);
+
+    wxPrinterDialogShown = false;
+
     bool ret = (dlgRes == S_OK && pd->dwResultAction == PD_RESULT_PRINT);
 
     pd->hwndOwner = 0;
@@ -890,7 +904,6 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     pd->nCopies = (DWORD)data.GetNoCopies();
 
     // Required only if PD_NOPAGENUMS flag is not set.
-    // Currently only one page range is supported.
     if ( data.GetEnablePageNumbers() )
     {
         pd->nMaxPageRanges = (DWORD)data.GetMaxPageRanges();
@@ -915,6 +928,14 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
         const wxVector<wxPrintPageRange>& ranges = data.GetPageRanges();
         if ( ranges.empty() )
         {
+            // Use values for from/to page here to define a single range (which
+            // will usually be just "1") for compatibility: it would arguably
+            // make more sense to not define any ranges at all by setting
+            // nPageRanges to 0 (which is allowed, only lpPageRanges must be
+            // non-null), but this would change the behaviour of the existing
+            // code without any real gain, so don't do it, even if this means
+            // that there is currently no way to not show anything at all in
+            // the "Pages" text box of the print dialog.
             pd->nPageRanges = 1;
             pd->lpPageRanges = new PRINTPAGERANGE[pd->nMaxPageRanges];
 
