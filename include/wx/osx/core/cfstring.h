@@ -64,7 +64,7 @@ public:
 
     static wxString AsString( CFStringRef ref ) ;
     static wxString AsStringWithNormalizationFormC( CFStringRef ref ) ;
-#ifdef __WXMAC__
+#if defined(__WXMAC__) || defined(__OBJC__)
     static wxString AsString( WX_NSString ref ) ;
     static wxString AsStringWithNormalizationFormC( WX_NSString ref ) ;
 #endif
@@ -85,7 +85,7 @@ inline wxCFStringRef wxCFStringRefFromGet(CFStringRef p)
     return wxCFStringRef(wxCFRetain(p));
 }
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) || defined(__OBJC__)
 /*! @function   wxCFStringRefFromGet
     @abstract   Factory function to create wxCFStringRefRef from a NSString* obtained from a Get-rule function
     @param  p           The NSString pointer to retain and create a wxCFStringRefRef from.  May be null.

@@ -674,7 +674,7 @@ wxString wxCFStringRef::AsString() const
     return AsString( get() );
 }
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) || defined(__OBJC__)
 
 wxString wxCFStringRef::AsString( NSString* ref )
 {
