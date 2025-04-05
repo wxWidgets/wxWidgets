@@ -2,7 +2,9 @@
 // Name:        imagwebp.h
 // Purpose:     interface of wxWEBPHandler
 // Author:      Hermann Höhne
-// Licence:     wxWidgets licence
+// Created:     2024-03-08
+// Copyright:   (c) Hermann Höhne
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**

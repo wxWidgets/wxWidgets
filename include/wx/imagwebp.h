@@ -2,8 +2,9 @@
 // Name:        wx/imagwebp.h
 // Purpose:     wxImage WebP handler
 // Author:      Hermann Höhne
+// Created:     2024-03-08
 // Copyright:   (c) Hermann Höhne
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_IMAGWEBP_H_

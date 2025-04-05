@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/webpdecoder.cpp
 // Purpose:     wxWebPDecoder, WebP Animation decoder
-// Author:
-// Copyright:
+// Author:      Maarten Bent
+// Created:     2025-02-27
+// Copyright:   (c) Maarten Bent
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

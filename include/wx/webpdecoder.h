@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/webpdecoder.h
 // Purpose:     wxWebPDecoder, WebP Animation decoder
-// Author:
-// Copyright:
+// Author:      Maarten Bent
+// Created:     2025-02-27
+// Copyright:   (c) 2025 Maarten Bent
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

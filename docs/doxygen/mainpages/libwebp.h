@@ -2,6 +2,8 @@
 // Name:        libwebp.h
 // Purpose:     Documentation of the use of libwebp with wxWidgets
 // Author:      Hermann Höhne <hoehermann@gmx.de>
+// Created:     2024-03-08
+// Copyright:   (c) Hermann Höhne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

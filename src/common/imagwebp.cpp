@@ -2,8 +2,9 @@
 // Name:        src/common/imagwebp.cpp
 // Purpose:     wxImage WebP handler
 // Author:      Hermann Höhne
+// Created:     2024-03-08
 // Copyright:   (c) Hermann Höhne
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // based on code by Sylvain Bougnoux, Khral Steelforge and Markus Juergens
