@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/translation.h"
 #endif
 
 #include "wx/imagwebp.h"
