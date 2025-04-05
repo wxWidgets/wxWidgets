@@ -83,7 +83,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
     {
         if (verbose)
         {
-            wxLogError("WebP: GetFeatures not OK.");
+            wxLogError(_("WebP: GetFeatures not OK."));
         }
         return false;
     }
@@ -91,7 +91,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
     if (!image->Create(features.width, features.height, false)) {
         if (verbose)
         {
-            wxLogError("WebP: wxImage::Create failed.");
+            wxLogError(_("WebP: wxImage::Create failed."));
         }
         return false;
     }
@@ -108,7 +108,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
         {
             if (verbose)
             {
-                wxLogError("WebP: WebPDecodeRGBA failed.");
+                wxLogError(_("WebP: WebPDecodeRGBA failed."));
             }
             return false;
         }
@@ -124,7 +124,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
         {
             if (verbose)
             {
-                wxLogError("WebP: WebPDecodeRGBInto failed.");
+                wxLogError(_("WebP: WebPDecodeRGBInto failed."));
             }
             return false;
         }
@@ -139,7 +139,7 @@ WebPDemuxerPtr CreateDemuxer(wxMemoryOutputStream& mos, bool verbose = false)
     {
         if (verbose)
         {
-            wxLogError("WebP: CreateDemuxer wxStreamBuffer failed.");
+            wxLogError(_("WebP: CreateDemuxer wxStreamBuffer failed."));
         }
         return nullptr;
     }
@@ -157,7 +157,7 @@ WebPDemuxerPtr CreateDemuxer(wxMemoryOutputStream& mos, bool verbose = false)
     {
         if (verbose)
         {
-            wxLogError("WebP: CreateDemuxer WebPDemux failed.");
+            wxLogError(_("WebP: CreateDemuxer WebPDemux failed."));
         }
     }
     return demux;
@@ -182,7 +182,7 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
     {
         // Default first frame, Use RGB(A) decoder
         // We can't use this for other frames, because the frame might be sub-frames, smaller than the
-        // full image. It's size is known, but the x_offset and y_offset can not be queried, so we can't
+        // full image. Its size is known, but the x_offset and y_offset can not be queried, so we can't
         // reconstruct the full-size image.
         wxMemoryOutputStream mos;
         stream.Read(mos);
@@ -223,7 +223,7 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
     {
         if (verbose)
         {
-            wxLogError("WebP: LoadAnimation wxStreamBuffer failed.");
+            wxLogError(_("WebP: LoadAnimation wxStreamBuffer failed."));
         }
         return false;
     }
@@ -244,7 +244,7 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
     {
         if (verbose)
         {
-            wxLogError("WebP: WebPAnimDecoderNew failed.");
+            wxLogError(_("WebP: WebPAnimDecoderNew failed."));
         }
         return false;
     }
@@ -262,7 +262,7 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
         {
             if (verbose)
             {
-                wxLogError("WebP: WebPAnimDecoderGetNext failed.");
+                wxLogError(_("WebP: WebPAnimDecoderGetNext failed."));
             }
             break;
         }
