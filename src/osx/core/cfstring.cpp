@@ -674,8 +674,6 @@ wxString wxCFStringRef::AsString() const
     return AsString( get() );
 }
 
-#ifdef __WXMAC__
-
 wxString wxCFStringRef::AsString( NSString* ref )
 {
     return AsString( (CFStringRef) ref );
@@ -685,5 +683,3 @@ wxString wxCFStringRef::AsStringWithNormalizationFormC( NSString* ref )
 {
     return AsStringWithNormalizationFormC( (CFStringRef) ref );
 }
-
-#endif
