@@ -33632,6 +33632,9 @@ then :
 
 fi
 
+    if test "$PROCSTAT_FOUND"; then
+        CXXFLAGS="${CXXFLAGS} -DwxHAVE_PROCSTAT"
+    fi
     ;;
 esac
 
