@@ -225,8 +225,6 @@
 
 #cmakedefine01 wxUSE_LIBLZMA
 
-#cmakedefine01 wxUSE_LIBWEBP
-
 #cmakedefine01 wxUSE_APPLE_IEEE
 
 #cmakedefine01 wxUSE_JOYSTICK
@@ -579,6 +577,8 @@
 #cmakedefine01 wxUSE_ICO_CUR
 
 #cmakedefine01 wxUSE_PALETTE
+
+#cmakedefine01 wxUSE_LIBWEBP
 
 
 #cmakedefine01 wxUSE_ALL_THEMES
