@@ -3435,6 +3435,9 @@ case "${host}" in
                     PROCSTAT_LINK=" -L/usr/lib -lprocstat"
                     PROCSTAT_FOUND=1
                     ])
+    if test "$PROCSTAT_FOUND"; then
+        CXXFLAGS="${CXXFLAGS} -DwxHAVE_PROCSTAT"
+    fi
     ;;
 esac
 

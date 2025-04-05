@@ -38,7 +38,7 @@
     #include <unistd.h>
 #endif
 
-#ifdef wxHAS_PROCSTAT
+#ifdef wxHAVE_PROCSTAT
     // for GetExecutablePath
     #include <sys/param.h>
     #include <sys/queue.h>
@@ -177,7 +177,7 @@ wxString wxStandardPaths::GetExecutablePath() const
 
     if ( !exeStr.empty() )
         return exeStr;
-#elif defined(wxHAS_PROCSTAT)
+#elif defined(wxHAVE_PROCSTAT)
     unsigned int n_proc;
     char pathname[PATH_MAX];
 
