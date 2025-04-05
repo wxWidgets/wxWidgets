@@ -24,6 +24,10 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
+#ifndef __WXOSX_IPHONE__
+#include <AppKit/AppKit.h>
+#endif
+
 #if wxUSE_SOCKETS
 // global pointer which lives in the base library, set from the net one (see
 // sockosx.cpp) and used from the GUI code (see utilsexc_cf.cpp) -- ugly but
