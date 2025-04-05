@@ -148,6 +148,7 @@
 
 #if defined(__DARWIN__)
     #include <sys/sysctl.h>
+    #include <AvailabilityMacros.h>
 #endif
 
 // ----------------------------------------------------------------------------
@@ -223,7 +224,8 @@ void wxSecureZeroMemory(void* v, size_t n)
     // but may be found in a non-standard header file, or in a library that is
     // not linked by default.
     explicit_bzero(v, n);
-#elif defined(__DARWIN__) || defined(__STDC_LIB_EXT1__)
+#elif (defined(__DARWIN__) && (MAC_OS_X_VERSION_MIN_REQUIRED >= 1090)) || \
+    defined(__STDC_LIB_EXT1__)
     // memset_s() is available since OS X 10.9, and may be available on
     // other platforms.
     memset_s(v, n, 0, n);
