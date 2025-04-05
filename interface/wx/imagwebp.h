@@ -7,6 +7,26 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxIMAGE_OPTION_WEBP_QUALITY  wxString("WebPQuality")
+#define wxIMAGE_OPTION_WEBP_LOSSLESS wxString("WebPLossless")
+
+/**
+    Simple struct containing WebP animated frame information.
+
+    @since 3.3.0
+*/
+struct wxWebPAnimationFrame
+{
+    /// Image of the frame.
+    wxImage image;
+
+    /// Background colour of the frame.
+    wxColour bgColour;
+
+    /// Duration of the frame.
+    int duration = 0;
+};
+
 /**
     @class wxWEBPHandler
 
@@ -18,19 +38,39 @@
     @library{wxcore}
     @category{gdi}
 
+    @since 3.3.0
+
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()
 */
 class wxWEBPHandler : public wxImageHandler
 {
 public:
-    virtual bool LoadFile(wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1);
+    /**
+    Default constructor for wxWEBPHandler
+    */
+    wxWEBPHandler();
 
-    /** @copybrief wxImageHandler::SaveFile
-     *
-     * By default, WebP operates in lossy mode. You may want to set @c wxIMAGE_OPTION_QUALITY to control the quality. @n
-     * 100 means "best quality, but large file size". 0 means "small file size, but worst quality". Default is 90.
-     *
-     * @copydetails wxImageHandler::SaveFile
-     */
-    virtual bool SaveFile(wxImage *image, wxOutputStream& stream, bool verbose=true);
+    virtual bool LoadFile(wxImage *image, wxInputStream& stream, bool verbose = true,
+                            int index = -1);
+    virtual bool SaveFile(wxImage *image, wxOutputStream& stream, bool verbose = true);
+
+    /**
+        Load an animated WebP image.
+
+        @param frames
+            Vector that will be filled with all wxWebPAnimationFrame of the image.
+        @param stream
+            Opened input stream for reading the data.
+        @param verbose
+            If set to @true, errors reported by the image handler will produce wxLogMessages
+
+        @return @true if the operation succeeded, @false otherwise.
+
+    */
+    virtual bool LoadAnimation(std::vector<wxWebPAnimationFrame>& frames,
+                                wxInputStream& stream, bool verbose = true);
+
+protected:
+    virtual bool DoCanRead(wxInputStream& stream);
+    virtual int DoGetImageCount(wxInputStream& stream);
 };

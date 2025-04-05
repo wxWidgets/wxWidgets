@@ -155,6 +155,9 @@ enum wxImagePNGType
 #define wxIMAGE_OPTION_TIFF_PHOTOMETRIC                 wxString("Photometric")
 #define wxIMAGE_OPTION_TIFF_IMAGEDESCRIPTOR             wxString("ImageDescriptor")
 
+#define wxIMAGE_OPTION_WEBP_QUALITY                     wxString("WebPQuality")
+#define wxIMAGE_OPTION_WEBP_LOSSLESS                    wxString("WebPLossless")
+
 
 enum
 {
@@ -667,7 +670,7 @@ public:
             @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
             @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
             @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
-            @li wxBITMAP_TYPE_WEBP: Load a WebP file.
+            @li wxBITMAP_TYPE_WEBP: Load a WebP file (since 3.3.0).
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
         @param index
             Index of the image to load in the case that the image file contains
@@ -1437,6 +1440,16 @@ public:
             Use @c wxIMAGE_OPTION_GIF_TRANSPARENCY_HIGHLIGHT to convert transparent pixels
             to pink (default).
             This option has been added in wxWidgets 3.1.1.
+
+        Options specific to wxWEBPHandler:
+        @li @c wxIMAGE_OPTION_WEBP_QUALITY: WebP quality used when saving lossy image.
+            This is an integer ranging from 0 (smaller output, lower quality) to 100
+            (best quality, larger output).
+            When unspecified, quality 90 will be used.
+        @li @c wxIMAGE_OPTION_WEBP_LOSSLESS: Format type of the image that is read, matching
+            the WebPBitstreamFeatures format with: 0 = undefined (/mixed), 1 = lossy, 2 = lossless
+            (see https://developers.google.com/speed/webp/docs/api#simple_decoding_api).
+            When saving an image, lossy will be used, unless this option is set to lossless.
 
         @note
         Be careful when combining the options @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL,
