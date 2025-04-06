@@ -621,6 +621,10 @@
  */
 #cmakedefine01 wxUSE_XTEST
 
+/*
+    On FreeBSD procstat provides the path to executable
+*/
+#cmakedefine wxHAVE_PROCSTAT 1
 
 /* --- start MSW options --- */
 

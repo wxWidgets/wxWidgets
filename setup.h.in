@@ -905,6 +905,9 @@
 /* Define if you have wcsnlen() function */
 #undef HAVE_WCSNLEN
 
+/* define if you have procstat (FreeBSD) */
+#undef wxHAVE_PROCSTAT
+
 /* The number of bytes in a wchar_t.  */
 #undef SIZEOF_WCHAR_T
 

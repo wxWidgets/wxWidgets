@@ -3436,7 +3436,7 @@ case "${host}" in
                     PROCSTAT_FOUND=1
                     ])
     if test "$PROCSTAT_FOUND"; then
-        CXXFLAGS="${CXXFLAGS} -DwxHAVE_PROCSTAT"
+        AC_DEFINE(wxHAVE_PROCSTAT)
     fi
     ;;
 esac

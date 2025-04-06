@@ -540,6 +540,11 @@ check_include_file(unistd.h HAVE_UNISTD_H)
 check_include_file(wchar.h HAVE_WCHAR_H)
 check_include_file(wcstr.h HAVE_WCSTR_H)
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+    set(wxHAVE_PROCSTAT 1)
+    wx_lib_link_libraries(wxbase PUBLIC "procstat")
+endif()
+
 if(wxUSE_DATETIME)
     # check for timezone variable
     #   doesn't exist under Darwin / Mac OS X which uses tm_gmtoff instead

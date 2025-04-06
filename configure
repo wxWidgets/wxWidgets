@@ -33633,7 +33633,8 @@ then :
 fi
 
     if test "$PROCSTAT_FOUND"; then
-        CXXFLAGS="${CXXFLAGS} -DwxHAVE_PROCSTAT"
+        printf "%s\n" "#define wxHAVE_PROCSTAT 1" >>confdefs.h
+
     fi
     ;;
 esac
