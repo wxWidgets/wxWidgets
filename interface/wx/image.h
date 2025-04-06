@@ -1772,6 +1772,20 @@ public:
                  bool static_data = false);
 
     /**
+        Sets the image data without performing checks.
+
+        The data given must have the size (width*height*4) or results will be
+        unexpected. Don't use this method if you aren't sure you know what you
+        are doing.
+
+        Due to the internal data representation, wxImage will always create a
+        copy of the data.
+
+        @since 3.3.0
+    */
+    void SetDataRGBA(unsigned char* data);
+
+    /**
         Sets the default value for the flags used for loading image files.
 
         This method changes the global value of the flags used for all the
