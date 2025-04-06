@@ -66,7 +66,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
         }
         return false;
     }
-    image->SetOption(wxIMAGE_OPTION_WEBP_LOSSLESS, features.format);
+    image->SetOption(wxIMAGE_OPTION_WEBP_FORMAT, features.format);
 
     if (features.has_alpha)
     {
@@ -170,14 +170,14 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
             }
         }
     }
-    else
+    else if (index >= 0)
     {
         // Use animation decoder, always RGBA
         std::vector<wxWebPAnimationFrame> frames;
         LoadAnimation(frames, stream, verbose);
-        if (index < frames.size())
+        if (static_cast<size_t>(index) < frames.size())
         {
-            *image = frames.at(index).image.Copy();
+            *image = frames.at(static_cast<size_t>(index)).image.Copy();
             ok = true;
         }
     }
@@ -263,7 +263,7 @@ bool wxWEBPHandler::SaveFile(wxImage* image, wxOutputStream& stream, bool)
     float quality_factor = 90; // if you change this, update the documentation, too
     if (image->HasOption(wxIMAGE_OPTION_WEBP_QUALITY))
         quality_factor = image->GetOptionInt(wxIMAGE_OPTION_WEBP_QUALITY);
-    bool lossless = image->GetOptionInt(wxIMAGE_OPTION_WEBP_LOSSLESS) == wxWebPImageOptions::Lossless;
+    bool lossless = image->GetOptionInt(wxIMAGE_OPTION_WEBP_FORMAT) == wxWebPImageFormat::Lossless;
 
     size_t output_size = 0;
     uint8_t* output = nullptr;

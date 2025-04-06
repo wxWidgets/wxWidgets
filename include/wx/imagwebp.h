@@ -10,18 +10,21 @@
 #ifndef _WX_IMAGWEBP_H_
 #define _WX_IMAGWEBP_H_
 
-#include "wx/image.h"
+#include "wx/defs.h"
+
+#if wxUSE_LIBWEBP
+
 #include "wx/colour.h"
+#include "wx/image.h"
+#include "wx/versioninfo.h"
 
 //-----------------------------------------------------------------------------
 // wxWEBPHandler
 //-----------------------------------------------------------------------------
 
-#if wxUSE_LIBWEBP
-
-namespace wxWebPImageOptions
+namespace wxWebPImageFormat
 {
-    enum : int
+    enum wxWebPImageFormat : int
     {
         Undefined = 0,
         Lossy = 1,
@@ -29,8 +32,8 @@ namespace wxWebPImageOptions
     };
 }
 
-#define wxIMAGE_OPTION_WEBP_QUALITY  "WebPQuality"
-#define wxIMAGE_OPTION_WEBP_LOSSLESS "WebPLossless"
+#define wxIMAGE_OPTION_WEBP_QUALITY wxS("WebPQuality")
+#define wxIMAGE_OPTION_WEBP_FORMAT  wxS("WebPFormat")
 
 
 struct wxWebPAnimationFrame
@@ -46,10 +49,10 @@ class WXDLLIMPEXP_CORE wxWEBPHandler : public wxImageHandler
 public:
     wxWEBPHandler()
     {
-        m_name = "WebP file";
-        m_extension = "webp";
+        m_name = wxS("WebP file");
+        m_extension = wxS("webp");
         m_type = wxBITMAP_TYPE_WEBP;
-        m_mime = "image/webp";
+        m_mime = wxS("image/webp");
     }
 
     static wxVersionInfo GetLibraryVersionInfo();

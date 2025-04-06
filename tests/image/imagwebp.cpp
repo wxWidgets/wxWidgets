@@ -48,7 +48,7 @@ TEST_CASE("wxWEBPHandler::LossysRoundtrip", "[image][webp]")
     wxImage reference;
     reference.LoadFile("horse.webp");
     REQUIRE(reference.IsOk());
-    reference.SetOption(wxIMAGE_OPTION_WEBP_LOSSLESS, wxWebPImageOptions::Lossy);
+    reference.SetOption(wxIMAGE_OPTION_WEBP_FORMAT, wxWebPImageFormat::Lossy);
     reference.SetOption(wxIMAGE_OPTION_WEBP_QUALITY, 100);
 
     wxImage loaded;
@@ -63,7 +63,7 @@ TEST_CASE("wxWEBPHandler::LosslessRoundtrip", "[image][webp]")
     wxImage reference;
     reference.LoadFile("horse.webp");
     REQUIRE(reference.IsOk());
-    reference.SetOption(wxIMAGE_OPTION_WEBP_LOSSLESS, wxWebPImageOptions::Lossless);
+    reference.SetOption(wxIMAGE_OPTION_WEBP_FORMAT, wxWebPImageFormat::Lossless);
 
     wxImage loaded;
     REQUIRE(WebPRoundtrip(reference, loaded));

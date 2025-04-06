@@ -156,7 +156,7 @@ enum wxImagePNGType
 #define wxIMAGE_OPTION_TIFF_IMAGEDESCRIPTOR             wxString("ImageDescriptor")
 
 #define wxIMAGE_OPTION_WEBP_QUALITY                     wxString("WebPQuality")
-#define wxIMAGE_OPTION_WEBP_LOSSLESS                    wxString("WebPLossless")
+#define wxIMAGE_OPTION_WEBP_FORMAT                      wxString("WebPFormat")
 
 
 enum
@@ -1446,10 +1446,9 @@ public:
             This is an integer ranging from 0 (smaller output, lower quality) to 100
             (best quality, larger output).
             When unspecified, quality 90 will be used.
-        @li @c wxIMAGE_OPTION_WEBP_LOSSLESS: Format type of the image that is read, matching
-            the WebPBitstreamFeatures format with: 0 = undefined (/mixed), 1 = lossy, 2 = lossless
-            (see https://developers.google.com/speed/webp/docs/api#simple_decoding_api).
-            When saving an image, lossy will be used, unless this option is set to lossless.
+        @li @c wxIMAGE_OPTION_WEBP_FORMAT: wxWebPImageFormat type of the image that is
+            loaded or saved.
+            When unspecified or undefined, the image is saved as wxWebPImageFormat::Lossy.
 
         @note
         Be careful when combining the options @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL,

@@ -7,8 +7,24 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#define wxIMAGE_OPTION_WEBP_QUALITY  wxString("WebPQuality")
-#define wxIMAGE_OPTION_WEBP_LOSSLESS wxString("WebPLossless")
+#define wxIMAGE_OPTION_WEBP_QUALITY wxString("WebPQuality")
+#define wxIMAGE_OPTION_WEBP_FORMAT  wxString("WebPLossless")
+
+/**
+    Format of the WebP image.
+
+    These are the same values as the WebPBitstreamFeatures format from libwebp
+    (see https://developers.google.com/speed/webp/docs/api#simple_decoding_api).
+
+    @since 3.3.0
+*/
+enum wxWebPImageFormat
+{
+    Undefined = 0,
+    Lossy = 1,
+    Lossless = 2
+
+};
 
 /**
     Simple struct containing WebP animated frame information.
