@@ -542,7 +542,6 @@ check_include_file(wcstr.h HAVE_WCSTR_H)
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
     set(wxHAVE_PROCSTAT 1)
-    wx_lib_link_libraries(wxbase PUBLIC "procstat")
 endif()
 
 if(wxUSE_DATETIME)
