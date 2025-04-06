@@ -31,7 +31,7 @@ TEST_CASE("wxWEBPHandler::LoadCorruptWebP", "[image][webp]")
     CHECK(!webpHandler.LoadFile(&loadingImage, inputStream, false));
 }
 
-static bool WebPRoudtrip(wxImage& savingImage, wxImage& loadingImage)
+static bool WebPRoundtrip(wxImage& savingImage, wxImage& loadingImage)
 {
     // set quality to maximum so the images hopefully won't differ too much
     wxMemoryOutputStream outputStream;
@@ -52,7 +52,7 @@ TEST_CASE("wxWEBPHandler::LossysRoundtrip", "[image][webp]")
     reference.SetOption(wxIMAGE_OPTION_WEBP_QUALITY, 100);
 
     wxImage loaded;
-    REQUIRE(WebPRoudtrip(reference, loaded));
+    REQUIRE(WebPRoundtrip(reference, loaded));
 
     int tolerance = 32;
     CHECK_THAT(loaded, RGBSimilarTo(reference, tolerance));
@@ -66,7 +66,7 @@ TEST_CASE("wxWEBPHandler::LosslessRoundtrip", "[image][webp]")
     reference.SetOption(wxIMAGE_OPTION_WEBP_LOSSLESS, wxWebPImageOptions::Lossless);
 
     wxImage loaded;
-    REQUIRE(WebPRoudtrip(reference, loaded));
+    REQUIRE(WebPRoundtrip(reference, loaded));
 
     CHECK_THAT(loaded, RGBASameAs(reference));
 }

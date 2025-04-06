@@ -45,37 +45,6 @@ typedef std::unique_ptr<WebPDemuxer, std::function<void(WebPDemuxer*)>> WebPDemu
 typedef std::unique_ptr<WebPAnimDecoder, std::function<void(WebPAnimDecoder*)>> WebPAnimDecoderPtr;
 typedef std::unique_ptr<uint8_t, std::function<void(uint8_t*)>> WebPDecodeRGBAPtr;
 
-void rgbaToImage(wxImage* image, uint8_t* rgba)
-{
-    image->InitAlpha();
-    unsigned char* rgb = image->GetData();
-    unsigned char* alpha = image->GetAlpha();
-    size_t pixel_count = (size_t)image->GetWidth() * (size_t)image->GetHeight();
-    size_t rgba_index = 0, rgb_index = 0, alpha_index = 0;
-    for (size_t pixel_counter = 0; pixel_counter < pixel_count; pixel_counter++)
-    {
-        rgb[rgb_index++] = rgba[rgba_index++]; // R
-        rgb[rgb_index++] = rgba[rgba_index++]; // G
-        rgb[rgb_index++] = rgba[rgba_index++]; // B
-        alpha[alpha_index++] = rgba[rgba_index++]; // A
-    }
-}
-
-bool copyImageData(wxImage* to, wxImage& from)
-{
-    if (!to->Create(from.GetSize(), false))
-        return false;
-
-    size_t pixel_count = (size_t)from.GetWidth() * (size_t)from.GetHeight();
-    memcpy(to->GetData(), from.GetData(), pixel_count * 3);
-    if (from.HasAlpha())
-    {
-        to->InitAlpha();
-        memcpy(to->GetAlpha(), from.GetAlpha(), pixel_count);
-    }
-    return true;
-}
-
 bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
 {
     WebPBitstreamFeatures features;
@@ -89,7 +58,8 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
         return false;
     }
 
-    if (!image->Create(features.width, features.height, false)) {
+    if (!image->Create(features.width, features.height, false))
+    {
         if (verbose)
         {
             wxLogError(_("WebP: wxImage::Create failed."));
@@ -113,7 +83,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
             }
             return false;
         }
-        rgbaToImage(image, rgba.get());
+        image->SetDataRGBA(rgba.get());
     }
     else
     {
@@ -182,8 +152,10 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
     if (useFrameDemuxer)
     {
         // Default first frame, Use RGB(A) decoder
-        // We can't use this for other frames, because the frame might be sub-frames, smaller than the
-        // full image. Its size is known, but the x_offset and y_offset can not be queried, so we can't
+        //
+        // We can't use this for other frame indices, because the frame might
+        // be a sub-frame, smaller than the full image. Its size is known, but
+        // the x_offset and y_offset can not be queried, so we can't
         // reconstruct the full-size image.
         wxMemoryOutputStream mos;
         stream.Read(mos);
@@ -205,7 +177,8 @@ bool wxWEBPHandler::LoadFile(wxImage* image, wxInputStream& stream, bool verbose
         LoadAnimation(frames, stream, verbose);
         if (index < frames.size())
         {
-            ok = copyImageData(image, frames.at(index).image);
+            *image = frames.at(index).image.Copy();
+            ok = true;
         }
     }
 
@@ -270,8 +243,8 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
 
         wxWebPAnimationFrame frame;
         frame.image.Create(anim_info.canvas_width, anim_info.canvas_height, false);
+        frame.image.SetDataRGBA(buf);
         frame.bgColour.SetRGBA(anim_info.bgcolor);
-        rgbaToImage(&frame.image, buf);
         frame.duration = timestamp - prevTimestamp;
         prevTimestamp = timestamp;
         frames.push_back(std::move(frame));

@@ -44,7 +44,7 @@ struct wxWebPAnimationFrame
 class WXDLLIMPEXP_CORE wxWEBPHandler : public wxImageHandler
 {
 public:
-    inline wxWEBPHandler()
+    wxWEBPHandler()
     {
         m_name = "WebP file";
         m_extension = "webp";

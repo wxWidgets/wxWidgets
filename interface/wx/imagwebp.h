@@ -50,25 +50,34 @@ public:
     */
     wxWEBPHandler();
 
-    virtual bool LoadFile(wxImage *image, wxInputStream& stream, bool verbose = true,
-                            int index = -1);
-    virtual bool SaveFile(wxImage *image, wxOutputStream& stream, bool verbose = true);
+    /**
+        Retrieve the version information about the WebP library used by this
+        handler.
+    */
+    static wxVersionInfo GetLibraryVersionInfo();
+
+    virtual bool LoadFile(wxImage *image, wxInputStream& stream,
+                          bool verbose = true, int index = -1);
+    virtual bool SaveFile(wxImage *image, wxOutputStream& stream,
+                          bool verbose = true);
 
     /**
         Load an animated WebP image.
 
         @param frames
-            Vector that will be filled with all wxWebPAnimationFrame of the image.
+            Vector that will be filled with all wxWebPAnimationFrame of the
+            image.
         @param stream
             Opened input stream for reading the data.
         @param verbose
-            If set to @true, errors reported by the image handler will produce wxLogMessages
+            If set to @true, errors reported by the image handler will produce
+            wxLogMessages
 
         @return @true if the operation succeeded, @false otherwise.
 
     */
     virtual bool LoadAnimation(std::vector<wxWebPAnimationFrame>& frames,
-                                wxInputStream& stream, bool verbose = true);
+                               wxInputStream& stream, bool verbose = true);
 
 protected:
     virtual bool DoCanRead(wxInputStream& stream);
