@@ -95,6 +95,7 @@ public:
     void OnSpinButton(wxSpinEvent& event);
     void OnTextLostFocus(wxFocusEvent& event);
     void OnTextChar(wxKeyEvent& event);
+    void OnMouseWheel(wxMouseEvent& event);
 
     // this window itself is used only as a container for its sub windows so it
     // shouldn't accept the focus at all and any attempts to explicitly set
