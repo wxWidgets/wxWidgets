@@ -36,8 +36,6 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        wxMenu *pSubMenu)
            :wxMenuItemBase(pParentMenu, id, t, strHelp, kind, pSubMenu)
 {
-    wxASSERT_MSG( id != 0 || pSubMenu != nullptr , wxT("A MenuItem ID of Zero does not work under Mac") ) ;
-
     // In other languages there is no difference in naming the Exit/Quit menu item between MacOS and Windows guidelines
     // therefore these item must not be translated
     if (pParentMenu != nullptr && !pParentMenu->GetNoEventsMode())
