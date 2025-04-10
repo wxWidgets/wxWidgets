@@ -71,3 +71,7 @@ if(APPLE)
 elseif(UNIX)
     wx_lib_link_libraries(wxbase PRIVATE ${CMAKE_DL_LIBS})
 endif()
+
+if (${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+    wx_lib_link_libraries(wxbase PUBLIC "procstat")
+endif()
