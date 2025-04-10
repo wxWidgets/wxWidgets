@@ -428,7 +428,10 @@ bool wxAppConsoleBase::ProcessIdle()
     // synthesize an idle event and check if more of them are needed
     wxIdleEvent event;
     event.SetEventObject(this);
-    ProcessEvent(event);
+
+    // Don't let exceptions propagate from the user-defined handler, we may be
+    // called from an extern "C" callback (e.g. this is the case in wxGTK).
+    SafelyProcessEvent(event);
 
 #if wxUSE_LOG
     // flush the logged messages if any (do this after processing the events
