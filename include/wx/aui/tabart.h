@@ -462,17 +462,19 @@ private:
     #if defined(__WXGTK__) && !defined(__WXGTK3__)
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartgtk.h"
-        #define wxAuiDefaultTabArt wxAuiGtkTabArt
+        using wxAuiNativeTabArt = wxAuiGtkTabArt;
     #elif defined(__WXMSW__) && wxUSE_UXTHEME
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartmsw.h"
-        #define wxAuiDefaultTabArt wxAuiMSWTabArt
+        using wxAuiNativeTabArt = wxAuiMSWTabArt;
     #endif
 #endif // !__WXUNIVERSAL__
 
 #ifndef wxHAS_NATIVE_TABART
-    #define wxAuiDefaultTabArt wxAuiGenericTabArt
+    using wxAuiNativeTabArt = wxAuiGenericTabArt;
 #endif
+
+#define wxAuiDefaultTabArt wxAuiFlatTabArt
 
 #endif  // wxUSE_AUI
 

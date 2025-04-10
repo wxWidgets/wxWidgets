@@ -767,11 +767,11 @@ wxAuiPaneInfo objects have the following properties:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{art-provider, @ref overview_xrcformat_type_string,
-    One of @c default for wxAuiDefaultTabArt, @c flat for wxAuiFlatTabArt (only
-    available since wxWidgets 3.3.0), @c generic for wxAuiGenericTabArt (also
-    available only since wxWidgets 3.3.0) or @c simple for wxAuiSimpleTabArt
-    (default: @c default).
-    @since 3.2.0}
+    One of @c default for wxAuiDefaultTabArt, @c native for wxAuiNativeTabArt,
+    @c flat for wxAuiFlatTabArt, @c generic for wxAuiGenericTabArt or @c simple
+    for wxAuiSimpleTabArt (default: @c default). This attribute and its
+    "default" and "simple" values are available since wxWidgets 3.2.0, the
+    values "native", "flat" and "generic" are available since wxWidgets 3.3.0.}
 @endTable
 
 A wxAuiNotebook can have one or more child objects of the @c notebookpage
