@@ -316,7 +316,14 @@ typedef wxULongLong_t wxUint64;
         #include <sys/types.h>
     #endif
 #else /* !HAVE_SSIZE_T */
-    #if SIZEOF_SIZE_T == 4
+    /* Under Windows use definitions compatible with SSIZE_T in windows.h */
+    #ifdef __WINDOWS__
+        #ifdef __WIN64__
+            typedef __int64 ssize_t;
+        #else
+            typedef long ssize_t;
+        #endif
+    #elif SIZEOF_SIZE_T == 4
         typedef wxInt32 ssize_t;
     #elif SIZEOF_SIZE_T == 8
         typedef wxInt64 ssize_t;
