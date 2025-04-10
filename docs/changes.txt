@@ -262,6 +262,10 @@ All (GUI):
 
 - Fix crash when using wxPropertyGrid on high DPI screen (#25286).
 
+wxGTK:
+
+- Fix handling exceptions in wxApp idle event handler (#25312).
+
 wxMSW:
 
 - Fix menu padding regression in high DPI under Windows 11 (taler21, #25117).
