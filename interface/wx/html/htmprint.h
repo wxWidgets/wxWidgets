@@ -320,11 +320,13 @@ public:
 
     /**
         Set page footer. The following macros can be used inside it:
-         @@DATE@ is replaced by the current date in default format
-         @@PAGENUM@ is replaced by page number
-         @@PAGESCNT@ is replaced by total number of pages
-         @@TIME@ is replaced by the current time in default format
-         @@TITLE@ is replaced with the title of the document
+         - @@DATE@ is replaced by the current date in default format
+         - @@PAGENUM@ is replaced by page number
+         - @@PAGESCNT@ is replaced by total number of pages
+         - @@TIME@ is replaced by the current time in default format
+         - @@TITLE@ is replaced with the title of the document
+         - @@USER@ is replaced with the user's name (support for this
+         macro was added in wxWidgets 3.2.8)
 
         @param footer
             HTML text to be used as footer.
@@ -340,6 +342,8 @@ public:
         - @@PAGESCNT@ is replaced by total number of pages
         - @@TIME@ is replaced by the current time in default format
         - @@TITLE@ is replaced with the title of the document
+        - @@USER@ is replaced with the user's name (support for this
+        macro was added in wxWidgets 3.2.8)
 
         @param header
             HTML text to be used as header.
@@ -447,6 +451,8 @@ public:
         - @@PAGESCNT@ is replaced by total number of pages
         - @@TIME@ is replaced by the current time in default format
         - @@TITLE@ is replaced with the title of the document
+        - @@USER@ is replaced with the user's name (support for this
+        macro was added in wxWidgets 3.2.8)
 
         @param footer
             HTML text to be used as footer.
@@ -462,6 +468,8 @@ public:
         - @@PAGESCNT@ is replaced by total number of pages
         - @@TIME@ is replaced by the current time in default format
         - @@TITLE@ is replaced with the title of the document
+        - @@USER@ is replaced with the user's name (support for this
+        macro was added in wxWidgets 3.2.8)
 
         @param header
             HTML text to be used as header.
