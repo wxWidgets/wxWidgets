@@ -45,6 +45,10 @@ Changes in behaviour not resulting in compilation errors
   values from the CSS standard. Use wxColourDatabase::UseScheme() to revert to
   using the traditional values if your application appearance depends on them.
 
+- Default art provider (theme) used by wxAuiNotebook has changed. Set the art
+  provider to wxAuiNativeTabArt in the code or use "native" in XRC to switch
+  to the previously used default theme.
+
 - As first mentioned in 3.0 release notes, the value of wxTHREAD_WAIT_DEFAULT,
   used by wxThread::Delete() and Wait() by default, has changed from
   wxTHREAD_WAIT_YIELD to wxTHREAD_WAIT_BLOCK for safety and consistency.

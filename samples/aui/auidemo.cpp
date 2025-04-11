@@ -113,6 +113,9 @@ class MyFrame : public wxFrame
         ID_NotebookPrevTab,
         ID_NotebookArtDefault,
         ID_NotebookArtFlat,
+#ifdef wxHAS_NATIVE_TABART
+        ID_NotebookArtNative,
+#endif // wxHAS_NATIVE_TABART
         ID_NotebookArtGloss,
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
@@ -212,6 +215,9 @@ private:
     enum class TabArt
     {
         Default,
+#ifdef wxHAS_NATIVE_TABART
+        Native,
+#endif // wxHAS_NATIVE_TABART
         Flat,
         Gloss,
         Simple
@@ -665,6 +671,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookWindowList, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtDefault, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtFlat, MyFrame::OnNotebookFlag)
+#ifdef wxHAS_NATIVE_TABART
+    EVT_MENU(ID_NotebookArtNative, MyFrame::OnNotebookFlag)
+#endif // wxHAS_NATIVE_TABART
     EVT_MENU(ID_NotebookArtGloss, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookNextTab, MyFrame::OnNotebookNextOrPrev)
@@ -722,6 +731,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_AllowToolbarResizing, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookArtDefault, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookArtFlat, MyFrame::OnUpdateUI)
+#ifdef wxHAS_NATIVE_TABART
+    EVT_UPDATE_UI(ID_NotebookArtNative, MyFrame::OnUpdateUI)
+#endif // wxHAS_NATIVE_TABART
     EVT_UPDATE_UI(ID_NotebookArtGloss, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NotebookArtSimple, MyFrame::OnUpdateUI)
     EVT_MENU_RANGE(MyFrame::ID_FirstPerspective, MyFrame::ID_FirstPerspective+1000,
@@ -806,6 +818,9 @@ MyFrame::MyFrame(wxWindow* parent,
     wxMenu* notebookMenu = new wxMenu;
     notebookMenu->AppendRadioItem(ID_NotebookArtDefault, _("Default Theme"));
     notebookMenu->AppendRadioItem(ID_NotebookArtFlat, _("Flat Theme"));
+#ifdef wxHAS_NATIVE_TABART
+    notebookMenu->AppendRadioItem(ID_NotebookArtNative, _("Native-like Theme"));
+#endif // wxHAS_NATIVE_TABART
     notebookMenu->AppendRadioItem(ID_NotebookArtGloss, _("Glossy Theme"));
     notebookMenu->AppendRadioItem(ID_NotebookArtSimple, _("Simple Theme"));
     notebookMenu->AppendSeparator();
@@ -1356,6 +1371,13 @@ void MyFrame::OnNotebookFlag(wxCommandEvent& event)
                 m_notebookTheme = TabArt::Flat;
                 art = new wxAuiFlatTabArt;
             }
+#ifdef wxHAS_NATIVE_TABART
+            else if (id == ID_NotebookArtNative)
+            {
+                m_notebookTheme = TabArt::Native;
+                art = new wxAuiNativeTabArt;
+            }
+#endif // wxHAS_NATIVE_TABART
             else if (id == ID_NotebookArtGloss)
             {
                 m_notebookTheme = TabArt::Gloss;
@@ -1491,6 +1513,11 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
         case ID_NotebookArtFlat:
             event.Check(m_notebookTheme == TabArt::Flat);
             break;
+#ifdef wxHAS_NATIVE_TABART
+        case ID_NotebookArtNative:
+            event.Check(m_notebookTheme == TabArt::Native);
+            break;
+#endif // wxHAS_NATIVE_TABART
         case ID_NotebookArtGloss:
             event.Check(m_notebookTheme == TabArt::Gloss);
             break;

@@ -110,12 +110,13 @@ struct wxAuiNotebookPosition
     splitter configurations, and toggle through different themes to customize
     the control's look and feel.
 
-    The default theme depends on the platform and styles used: in wxMSW port
-    native-like theme is used provided that none of ::wxAUI_NB_BOTTOM,
-    ::wxAUI_NB_PIN_ON_ACTIVE_TAB and ::wxAUI_NB_UNPIN_ON_ALL_PINNED styles is
-    used, because the native theme doesn't support them. In the other ports, or
-    when these styles are used with wxMSW, wxAuiDefaultTabArt is used.
-    The theme can be changed by calling wxAuiNotebook::SetArtProvider.
+    The default theme since wxWidgets 3.3.0 is wxAuiFlatTabArt. If you would
+    prefer to use the theme which used to be default in the previous versions,
+    you can call wxAuiNotebook::SetArtProvider() with wxAuiNativeTabArt as the
+    argument. Notice that wxAuiNativeTabArt may be not compatible with
+    ::wxAUI_NB_BOTTOM, ::wxAUI_NB_PIN_ON_ACTIVE_TAB and
+    ::wxAUI_NB_UNPIN_ON_ALL_PINNED styles, so using it is not recommended if
+    you use any of them.
 
     @section auibook_tabs Multiple Tab Controls
 
@@ -1247,18 +1248,34 @@ public:
 };
 
 /**
-    wxAuiDefaultTabArt is an alias for wxAuiTabArt-derived art provider used by
-    default by wxAuiNotebook.
+    wxAuiNativeTabArt is an alias for either the art provider providing
+    native-like appearance or wxAuiGenericTabArt if not available.
 
-    Currently it uses platform-specific implementation in wxMSW port and
-    wxAuiGenericTabArt elsewhere.
+    Currently wxAuiNativeTabArt uses platform-specific implementation in wxMSW
+    and wxGTK2 ports and wxAuiGenericTabArt elsewhere. The preprocessor symbol
+    @c wxHAS_NATIVE_TABART is defined if the native implementation is available
+    (but note that at least under MSW even the native implementation falls back
+    to wxAuiGenericTabArt if dark mode or any wxAuiNotebook styles not
+    supported by it are used).
+
+    This art provided used to be the default tab art provider in wxAuiNotebook
+    before wxWidgets 3.3.0.
 
     @library{wxaui}
     @category{aui}
+
+    @since 3.3.0
 */
-class wxAuiDefaultTabArt : public wxAuiTabArt
-{
-};
+using wxAuiNativeTabArt = wxAuiGenericTabArt;
+
+/**
+    wxAuiDefaultTabArt is an alias for the tab art provider used by
+    wxAuiNotebook by default.
+
+    Since wxWidgets 3.3.0, this is wxAuiFlatTabArt under all platforms. In the
+    previous versions, this was wxAuiNativeTabArt.
+ */
+using wxAuiDefaultTabArt = wxAuiFlatTabArt;
 
 /**
     @class wxAuiNotebookEvent
@@ -1338,9 +1355,27 @@ wxEventType wxEVT_AUINOTEBOOK_DRAG_DONE;
 wxEventType wxEVT_AUINOTEBOOK_BG_DCLICK;
 
 /**
-    An art provider for wxAuiNotebook implementing "glossy" look.
+    An art provider for wxAuiNotebook implementing "flat" look.
 
     This art provider is currently used as the default art provider.
+
+    @library{wxaui}
+    @category{aui}
+
+    @since 3.3.0
+ */
+class wxAuiFlatTabArt : public wxAuiTabArt
+{
+public:
+    /// Default constructor.
+    wxAuiFlatTabArt();
+};
+
+/**
+    An art provider for wxAuiNotebook implementing "glossy" look.
+
+    This art provider is used as fallback art provider for wxAuiNativeTabArt if
+    there is no native tab art provider, but may also be used directly.
 
     @see wxAuiTabArt
 
