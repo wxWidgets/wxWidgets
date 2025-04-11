@@ -29,6 +29,7 @@
 #include "wx/wxhtml.h"
 #include "wx/wfstream.h"
 #include "wx/infobar.h"
+#include "wx/numformatter.h"
 
 
 // default font size of normal text (HTML font size 0) for printing, in points:
@@ -557,13 +558,14 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
 wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
 {
     wxString r = instr;
-    wxString num;
 
-    num.Printf("%i", page);
-    r.Replace("@PAGENUM@", num);
+    r.Replace("@PAGENUM@",
+        wxNumberFormatter::ToString(page, 0,
+            wxNumberFormatter::Style::Style_WithThousandsSep));
 
-    num.Printf("%zu", m_PageBreaks.empty() ? 1 : m_PageBreaks.size() - 1, 0);
-    r.Replace("@PAGESCNT@", num);
+    r.Replace("@PAGESCNT@",
+        wxNumberFormatter::ToString(m_PageBreaks.empty() ? 1 : m_PageBreaks.size() - 1, 0,
+            wxNumberFormatter::Style::Style_WithThousandsSep));
 
 #if wxUSE_DATETIME
     const wxDateTime now = wxDateTime::Now();
