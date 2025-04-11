@@ -581,6 +581,8 @@
 
 #define wxUSE_PALETTE       0
 
+#define wxUSE_LIBWEBP       0
+
 
 #define wxUSE_ALL_THEMES    0
 

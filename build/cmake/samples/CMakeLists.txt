@@ -67,7 +67,7 @@ if(wxUSE_HTML)
     include(html.cmake)
 endif()
 wx_add_sample(image image.cpp canvas.cpp canvas.h RES image.rc
-    DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
+    DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse.webp
     horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur
     horse.ico horse3.ani horse.svg smile.xbm toucan.png cmyk.jpg cursor.png
     NAME imagesample DEPENDS wxUSE_IMAGE)
