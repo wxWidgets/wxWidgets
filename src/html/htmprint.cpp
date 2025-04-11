@@ -574,6 +574,8 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     r.Replace("@TIME@", wxEmptyString);
 #endif
 
+    r.Replace("@USER@", wxGetUserName());
+
     r.Replace("@TITLE@", GetTitle());
 
     return r;

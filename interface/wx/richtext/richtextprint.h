@@ -50,6 +50,7 @@ enum wxRichTextPageLocation {
     - @@TIME@@: the current time.
     - @@TITLE@@: the title of the document, as passed to the wxRichTextPrinting or
       wxRichTextLayout constructor.
+    - @@USER@@: the user's name.
 
     @library{wxrichtext}
     @category{richtext}
