@@ -325,7 +325,7 @@ public:
          - @@PAGESCNT@ is replaced by total number of pages
          - @@TIME@ is replaced by the current time in default format
          - @@TITLE@ is replaced with the title of the document
-         - @@USER@@: is replaced with the user's name.
+         - @@USER@: is replaced with the user's name.
 
         @param footer
             HTML text to be used as footer.
