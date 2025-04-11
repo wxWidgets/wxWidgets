@@ -26,6 +26,7 @@
 #include "wx/printdlg.h"
 #include "wx/richtext/richtextprint.h"
 #include "wx/wfstream.h"
+#include "wx/numformatter.h"
 
 /*!
  * wxRichTextPrintout
@@ -416,16 +417,16 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
 
 bool wxRichTextPrintout::SubstituteKeywords(wxString& str, const wxString& title, int pageNum, int pageCount)
 {
-    wxString num;
+    str.Replace("@PAGENUM@",
+        wxNumberFormatter::ToString(pageNum, 0,
+            wxNumberFormatter::Style::Style_WithThousandsSep));
 
-    num.Printf(wxT("%i"), pageNum);
-    str.Replace(wxT("@PAGENUM@"), num);
-
-    num.Printf(wxT("%lu"), (unsigned long) pageCount);
-    str.Replace(wxT("@PAGESCNT@"), num);
+    str.Replace("@PAGESCNT@",
+        wxNumberFormatter::ToString(pageCount, 0,
+            wxNumberFormatter::Style::Style_WithThousandsSep));
 
 #if wxUSE_DATETIME
-    wxDateTime now = wxDateTime::Now();
+    const wxDateTime now = wxDateTime::Now();
 
     str.Replace(wxT("@DATE@"), now.FormatDate());
     str.Replace(wxT("@TIME@"), now.FormatTime());
