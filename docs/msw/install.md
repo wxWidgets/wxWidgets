@@ -77,25 +77,32 @@ by MSVS installation.
 
 In this window, change directory to `%%WXWIN%\build\msw` and type
 
+        > msbuild /m /p:Configuration=Debug /p:Platform=x64 wx_vc17.sln
+
+to build wxWidgets in the debug configuration as a static library using MSVS
+2022 (MSVC 17) toolset. Use "Release" configuration instead of "Debug" for the
+release version build and `wx_vc14.sln`, `wx_vc15.sln` or `wx_vc16.sln` for
+MSVS 2015, 2017 or 2019 respectively.
+
+After the build completes, open `%%WXWIN%\samples\samples_vc17.sln` solution
+and try building and running the minimal sample to verify that your build is
+functional.
+
+
+### From the command line using nmake (legacy)
+
+Note that using MSBuild is strongly recommended, as it can use multiple
+processors for building, resulting in significant speedup, but it is also
+possible to use `nmake` with the provided makefiles. For example, use
+
         > nmake /f makefile.vc
 
 to build wxWidgets in the default debug configuration as a static library. You
-can also do
+can specify `BUILD=release`, `SHARED=1` and `TARGET_CPU=X86` to choose the
+release, DLL and 32-bit builds respectively.
 
-        > nmake /f makefile.vc BUILD=release
-
-to build a release version or
-
-        > nmake /f makefile.vc BUILD=release SHARED=1 TARGET_CPU=X86
-
-to build a 32 bit release DLL version from an x86 command prompt, or
-
-        > nmake /f makefile.vc BUILD=release SHARED=1 TARGET_CPU=X64
-
-to build a 64 bit release DLL version from an x64 command prompt.
-
-TARGET_CPU=ARM64 is supported while TARGET_CPU=ARM64EC is, at present, not
-supported.
+Note that `TARGET_CPU=ARM64` is supported while `TARGET_CPU=ARM64EC` is, at
+present, not supported here.
 
 See [Make Parameters](#msw_build_make_params) for more information about the
 additional parameters that can be specified on the command line.
