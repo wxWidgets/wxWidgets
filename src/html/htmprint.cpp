@@ -562,7 +562,7 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     num.Printf(wxT("%i"), page);
     r.Replace(wxT("@PAGENUM@"), num);
 
-    num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.size() - 1));
+    num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.empty() ? 1 : m_PageBreaks.size() - 1));
     r.Replace(wxT("@PAGESCNT@"), num);
 
 #if wxUSE_DATETIME

@@ -262,6 +262,7 @@ All (GUI):
 
 - Fix crash when using wxPropertyGrid on high DPI screen (#25286).
 - Add "@USER@" macro to HTML and richtext printing (Blake-Madden, #25318).
+- Fix "@PAGECNT@" when there is only one page (Blake-Madden, #25320).
 
 wxGTK:
 
