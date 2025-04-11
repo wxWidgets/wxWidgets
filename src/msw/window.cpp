@@ -6908,12 +6908,49 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
             // ASCII characters, not Latin-1 ones).
             if ( wxk > 255 )
             {
-                // But for anything beyond this we can only return the key
-                // value as a real Unicode character, not a wxKeyCode
-                // because this enum values clash with Unicode characters
-                // (e.g. WXK_LBUTTON also happens to be U+012C a.k.a.
-                // "LATIN CAPITAL LETTER I WITH BREVE").
-                wxk = WXK_NONE;
+                // If the key generates a non-Latin character, return the key
+                // code that it would have generated in the US layout.
+                //
+                // We could also use Windows to map the key in the US layout,
+                // but this would require creating such layout which might have
+                // unknown side effects, so for now just hardcode it here.
+                static const int keys[] =
+                {
+                    WXK_NONE,
+                    WXK_ESCAPE,
+                    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
+                    WXK_BACK,
+                    WXK_TAB,
+                    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']',
+                    WXK_RETURN,
+                    WXK_CONTROL,
+                    'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', '`',
+                    WXK_SHIFT,
+                    '\\', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/',
+                    WXK_SHIFT,
+                    WXK_NUMPAD_MULTIPLY,
+                    WXK_ALT,
+                    WXK_SPACE,
+                    WXK_CAPITAL,
+                    WXK_F1, WXK_F2, WXK_F3, WXK_F4, WXK_F5,
+                    WXK_F6, WXK_F7, WXK_F8, WXK_F9, WXK_F10,
+                    WXK_NUMLOCK, WXK_SCROLL,
+                    WXK_NUMPAD7, WXK_NUMPAD8, WXK_NUMPAD9,
+                    WXK_NUMPAD_SUBTRACT,
+                    WXK_NUMPAD4, WXK_NUMPAD5, WXK_NUMPAD6,
+                    WXK_NUMPAD_ADD,
+                    WXK_NUMPAD1, WXK_NUMPAD2, WXK_NUMPAD3,
+                    WXK_NUMPAD0,
+                    WXK_NUMPAD_DECIMAL,
+                    WXK_NONE,
+                    WXK_NONE,
+                    WXK_NONE,
+                    WXK_F11,
+                    WXK_F12
+                };
+
+                const UINT sc = ::MapVirtualKey(vk, MAPVK_VK_TO_VSC);
+                wxk = sc < WXSIZEOF(keys) ? keys[sc] : WXK_NONE;
             }
             break;
 
@@ -7082,7 +7119,11 @@ WXWORD WXToVK(int wxk, bool *isExtended)
             break;
 
         default:
-            // check to see if its one of the OEM key codes.
+            // Special handling for OEM key codes. First, we try to check if
+            // there is a key corresponding to them in the current keyboard
+            // layout: if there is one, we consider that the VK corresponding
+            // to this wx key is this one, even if it's a completely different
+            // physical key (e.g. VK for "-" in French AZERTY layout is "6").
             BYTE vks = LOBYTE(VkKeyScan(wxk));
             if ( vks != 0xff )
             {
@@ -7090,7 +7131,30 @@ WXWORD WXToVK(int wxk, bool *isExtended)
             }
             else
             {
-                vk = (WXWORD)wxk;
+                // If there is no corresponding key, we still want to be able
+                // to find some VK that could be used to trigger accelerators
+                // using this key, for example. So we use the key that would
+                // generate this wx key in the US keyboard layout as fallback
+                // if we know it (see the conversion in VKToWX() above).
+                switch ( wxk )
+                {
+                    case ';':  vk = VK_OEM_1;       break;
+                    case '=':  vk = VK_OEM_PLUS;    break;
+                    case ',':  vk = VK_OEM_COMMA;   break;
+                    case '-':  vk = VK_OEM_MINUS;   break;
+                    case '.':  vk = VK_OEM_PERIOD;  break;
+                    case '/':  vk = VK_OEM_2;       break;
+                    case '`':  vk = VK_OEM_3;       break;
+                    case '[':  vk = VK_OEM_4;       break;
+                    case '\\': vk = VK_OEM_5;       break;
+                    case ']':  vk = VK_OEM_6;       break;
+                    case '\'': vk = VK_OEM_7;       break;
+
+                    default:
+                        // Use the value of the wx key itself for compatibility
+                        // but it would probably make more sense to return 0.
+                        vk = (WXWORD)wxk;
+                }
             }
             break;
     }
