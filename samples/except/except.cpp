@@ -117,11 +117,17 @@ public:
                                  const wxChar *cond,
                                  const wxChar *msg) override;
 
+
+    // Dynamically bound event handler to throw an exception for testing.
+    void OnIdle(wxIdleEvent& event);
+
 private:
     // This stores the number of times StoreCurrentException() was called,
     // typically at most 1.
     int m_numStoredExceptions;
 };
+
+wxDECLARE_APP(MyApp);
 
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
@@ -140,6 +146,7 @@ public:
     void OnThrowObject(wxCommandEvent& event);
     void OnThrowUnhandled(wxCommandEvent& event);
     void OnThrowFromYield(wxCommandEvent& event);
+    void OnThrowFromIdle(wxCommandEvent& event);
 
     void OnCrash(wxCommandEvent& event);
     void OnTrap(wxCommandEvent& event);
@@ -215,6 +222,7 @@ enum
     Except_ThrowObject,
     Except_ThrowUnhandled,
     Except_ThrowFromYield,
+    Except_ThrowFromIdle,
     Except_Crash,
     Except_Trap,
 #if wxUSE_ON_FATAL_EXCEPTION
@@ -246,6 +254,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Except_ThrowObject, MyFrame::OnThrowObject)
     EVT_MENU(Except_ThrowUnhandled, MyFrame::OnThrowUnhandled)
     EVT_MENU(Except_ThrowFromYield, MyFrame::OnThrowFromYield)
+    EVT_MENU(Except_ThrowFromIdle, MyFrame::OnThrowFromIdle)
     EVT_MENU(Except_Crash, MyFrame::OnCrash)
     EVT_MENU(Except_Trap, MyFrame::OnTrap)
 #if wxUSE_ON_FATAL_EXCEPTION
@@ -397,6 +406,14 @@ void MyApp::OnAssertFailure(const wxChar *file,
     }
 }
 
+void MyApp::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+    // Don't call this handler repeatedly, this would most likely crash.
+    Unbind(wxEVT_IDLE, &MyApp::OnIdle, this);
+
+    throw MyException("Exception thrown from idle event handler");
+}
+
 // ============================================================================
 // MyFrame implementation
 // ============================================================================
@@ -421,6 +438,8 @@ MyFrame::MyFrame()
                         "Throw &unhandled exception\tCtrl-U");
     menuFile->Append(Except_ThrowFromYield,
                         "Throw from wx&Yield()\tCtrl-Y");
+    menuFile->Append(Except_ThrowFromIdle,
+                        "Throw from &idle handler\tCtrl-J");
     menuFile->Append(Except_Crash, "&Crash\tCtrl-C");
     menuFile->Append(Except_Trap, "&Trap\tCtrl-T",
                      "Break into the debugger (if one is running)");
@@ -542,6 +561,12 @@ void MyFrame::OnThrowFromYield(wxCommandEvent& WXUNUSED(event))
                "without wxUIActionSimulator, please rebuild "
                "with wxUSE_UIACTIONSIMULATOR=1.");
 #endif // wxUSE_UIACTIONSIMULATOR/!wxUSE_UIACTIONSIMULATOR
+}
+
+void MyFrame::OnThrowFromIdle(wxCommandEvent& WXUNUSED(event))
+{
+    auto& app = wxGetApp();
+    app.Bind(wxEVT_IDLE, &MyApp::OnIdle, &app);
 }
 
 void MyFrame::OnCrash(wxCommandEvent& WXUNUSED(event))
