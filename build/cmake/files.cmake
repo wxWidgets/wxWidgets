@@ -186,6 +186,9 @@ set(QT_WIN32_SRC
     src/msw/dib.cpp
     src/msw/joystick.cpp
     src/msw/power.cpp
+    src/msw/filedlg.cpp
+    src/msw/dirdlg.cpp
+    src/msw/utilswin.cpp
 )
 
 set(QT_WIN32_HDR
@@ -197,6 +200,8 @@ set(QT_WIN32_HDR
     wx/msw/sound.h
     wx/msw/ole/oleutils.h
     wx/msw/ole/comimpl.h
+    wx/msw/filedlg.h
+    wx/msw/dirdlg.h
 )
 
 set(QT_HDR

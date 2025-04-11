@@ -81,6 +81,14 @@ private:
     // it should be created on demand.
     wxFileDialogMSWData* m_data = nullptr;
 
+    // This class is also used as part of wxQt, provide the functions normally
+    // defined in the base wxWindow in wxMSW port in this case.
+#if defined(__WXQT__)
+    WXHWND GetHWND() const { return m_hWnd; }
+    void SetHWND(WXHWND hwnd) { m_hWnd = hwnd; }
+
+    WXHWND m_hWnd = nullptr;
+#endif // __WXQT__
 
     wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
     wxDECLARE_NO_COPY_CLASS(wxFileDialog);

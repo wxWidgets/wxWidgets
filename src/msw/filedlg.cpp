@@ -46,6 +46,7 @@
 #include "wx/msw/wrapcdlg.h"
 #include "wx/msw/private/dpiaware.h"
 #include "wx/msw/private/filedialog.h"
+#include "wx/msw/private/gethwnd.h"
 
 // Note: this must be done after including the header above, as this is where
 // wxUSE_IFILEOPENDIALOG is defined.
@@ -1120,6 +1121,10 @@ void wxFileDialog::DoCentre(int dir)
 
 void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
 {
+    // We can't position the dialog when using Qt, we'd need a working
+    // equivalent of TempHWNDSetter for it to allow us to set position of a
+    // window not created by Qt.
+#ifdef __WXMSW__
     if ( !m_data || !m_data->m_bMovedWindow )
     {
         // We only use this to position the dialog, so nothing to do.
@@ -1144,6 +1149,9 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     {
         SetPosition(gs_rectDialog.GetPosition());
     }
+#else // __WXQT__
+    wxUnusedVar(hDlg);
+#endif // __WXMSW__/__WXQT__
 }
 
 void wxFileDialog::MSWOnSelChange(const wxString& selectedFilename)
@@ -1241,7 +1249,7 @@ int wxFileDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
 
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
-    WXHWND hWndParent = parent ? GetHwndOf(parent) : nullptr;
+    const WXHWND hWndParent = wxGetHWND(parent);
 
     wxWindowDisabler disableOthers(this, parent);
 

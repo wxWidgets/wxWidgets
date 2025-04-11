@@ -85,7 +85,7 @@ public:
 private:
     WXDPI_AWARENESS_CONTEXT m_prevContext;
 
-    // This static member is defined in src/msw/window.cpp.
+    // This static member is defined in src/msw/utilswin.cpp.
     static SetThreadDpiAwarenessContext_t ms_pfnSetThreadDpiAwarenessContext;
 };
 

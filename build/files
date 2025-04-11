@@ -206,9 +206,12 @@ QT_WIN32_SRC=
     src/msw/ole/uuid.cpp
     src/msw/dialup.cpp
     src/msw/dib.cpp
+    src/msw/dirdlg.cpp
+    src/msw/filedlg.cpp
     src/msw/joystick.cpp
     src/msw/power.cpp
     src/msw/sound.cpp
+    src/msw/utilswin.cpp
 
 QT_WIN32_HDR=
     wx/msw/ole/automtn.h
@@ -217,6 +220,8 @@ QT_WIN32_HDR=
     wx/msw/ole/safearray.h
     wx/msw/ole/uuid.h
     wx/msw/dib.h
+    wx/msw/dirdlg.h
+    wx/msw/filedlg.h
     wx/msw/joystick.h
     wx/msw/sound.h
 
