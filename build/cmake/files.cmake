@@ -34,6 +34,7 @@ set(BASE_UNIX_AND_DARWIN_HDR
 set(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC
     ${BASE_UNIX_AND_DARWIN_SRC}
     src/unix/mimetype.cpp
+    src/unix/uilocale.cpp
 )
 
 set(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR
@@ -46,7 +47,6 @@ set(BASE_UNIX_SRC
     src/unix/fswatcher_inotify.cpp
     src/unix/secretstore.cpp
     src/unix/stdpaths.cpp
-    src/unix/uilocale.cpp
 )
 
 set(BASE_UNIX_HDR
@@ -114,7 +114,7 @@ set(BASE_COREFOUNDATION_SRC
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
-    src/osx/core/uilocale.mm
+    src/osx/cocoa/stdpaths.mm
 )
 
 set(BASE_COREFOUNDATION_HDR
@@ -138,9 +138,9 @@ set(BASE_COREFOUNDATION_HDR
 set(BASE_OSX_SHARED_SRC
     src/osx/core/mimetype.cpp
     src/osx/fswatcher_fsevents.cpp
-    src/osx/cocoa/stdpaths.mm
     ${BASE_COREFOUNDATION_SRC}
     ${BASE_UNIX_AND_DARWIN_SRC}
+    src/osx/core/uilocale.mm
 )
 
 set(BASE_OSX_SHARED_HDR

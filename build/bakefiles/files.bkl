@@ -96,6 +96,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_SRC)
     src/unix/mimetype.cpp
+    src/unix/uilocale.cpp
 </set>
 
 <set var="BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR" hints="files">
@@ -114,7 +115,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/fswatcher_inotify.cpp
     src/unix/stdpaths.cpp
     src/unix/secretstore.cpp
-    src/unix/uilocale.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
@@ -187,7 +187,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
     src/osx/core/secretstore.cpp
-    src/osx/core/uilocale.mm
+    src/osx/cocoa/stdpaths.mm
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/osx/core/cfdataref.h
@@ -213,7 +213,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(BASE_COREFOUNDATION_SRC)
     $(BASE_UNIX_AND_DARWIN_SRC)
     src/osx/fswatcher_fsevents.cpp
-    src/osx/cocoa/stdpaths.mm
+    src/osx/core/uilocale.mm
 </set>
 <set var="BASE_OSX_SHARED_HDR" hints="files">
     $(BASE_COREFOUNDATION_HDR)
