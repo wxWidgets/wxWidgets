@@ -97,7 +97,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 {
 #if defined(wxHAS_FILESYSTEM_VOLUMES) || defined(__APPLE__)
 
-#if (defined(__WIN32__) || defined(__WXOSX__)) && wxUSE_FSVOLUME
+#if (defined(__WIN32__) || defined(__APPLE__)) && wxUSE_FSVOLUME
     // TODO: this code (using wxFSVolumeBase) should be used for all platforms
     //       but unfortunately wxFSVolumeBase is not implemented everywhere
     const wxArrayString as = wxFSVolumeBase::GetVolumes();

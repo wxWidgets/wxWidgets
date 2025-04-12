@@ -2600,10 +2600,6 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 #define DECLARE_WXOSX_OPAQUE_CFREF( name ) typedef struct __##name* name##Ref;
 #define DECLARE_WXOSX_OPAQUE_CONST_CFREF( name ) typedef const struct __##name* name##Ref;
 
-#endif
-
-#ifdef __WXMAC__
-
 #define WX_OPAQUE_TYPE( name ) struct wxOpaque##name
 
 typedef void*       WXHCURSOR;
@@ -2620,8 +2616,6 @@ typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 
 typedef WX_OPAQUE_TYPE(PicHandle ) * WXHMETAFILE ;
-
-typedef void*       WXDisplay;
 
 /*
  * core frameworks
@@ -2699,7 +2693,7 @@ typedef HIShapeRef WXHRGN;
 
 #endif // __WXMAC__
 
-#if defined(__WXMAC__)
+#ifdef __DARWIN__
 
 /* Objective-C type declarations.
  * These are to be used in public headers in lieu of NSSomething* because
