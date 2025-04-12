@@ -181,7 +181,7 @@ void wxHtmlDCRenderer::Render(int x, int y, int from, int to)
 {
     wxCHECK_RET( m_DC, "SetDC() must be called before Render()" );
 
-    const int hght = to == INT_MAX ? m_Height : to - from;
+    const int hght = to == std::numeric_limits<int>::max() ? m_Height : to - from;
 
     wxHtmlRenderingInfo rinfo;
     wxDefaultHtmlRenderingStyle rstyle;
@@ -405,12 +405,17 @@ bool wxHtmlPrintout::OnPrintPage(int page)
 void wxHtmlPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
 {
     *minPage = 1;
-    if ( m_PageBreaks.empty() )
-        *maxPage = INT_MAX;
-    else
-        *maxPage = (signed)m_PageBreaks.size()-1;
     *selPageFrom = 1;
-    *selPageTo = (signed)m_PageBreaks.size()-1;
+    if (m_PageBreaks.empty())
+    {
+        *maxPage = std::numeric_limits<int>::max();
+        *selPageTo = std::numeric_limits<int>::max();
+    }
+    else
+    {
+        *maxPage = static_cast<int>(m_PageBreaks.size() - 1);
+        *selPageTo = static_cast<int>(m_PageBreaks.size() - 1);
+    }
 }
 
 
