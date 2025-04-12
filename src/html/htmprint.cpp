@@ -409,9 +409,9 @@ void wxHtmlPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, i
     if ( m_PageBreaks.empty() )
         *maxPage = std::numeric_limits<int>::max();
     else
-        *maxPage = (signed)m_PageBreaks.size()-1;
+        *maxPage = wxSsize(m_PageBreaks)-1;
     *selPageFrom = 1;
-    *selPageTo = (signed)m_PageBreaks.size()-1;
+    *selPageTo = *maxPage;
 }
 
 
