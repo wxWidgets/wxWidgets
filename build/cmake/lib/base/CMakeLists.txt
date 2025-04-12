@@ -48,9 +48,6 @@ if(wxUSE_LIBICONV)
     wx_lib_include_directories(wxbase ${ICONV_INCLUDE_DIR})
     wx_lib_link_libraries(wxbase PRIVATE ${ICONV_LIBRARIES})
 endif()
-if(wxUSE_THREADS AND CMAKE_THREAD_LIBS_INIT)
-    wx_lib_link_libraries(wxbase PRIVATE ${CMAKE_THREAD_LIBS_INIT})
-endif()
 
 if(APPLE)
     wx_lib_link_libraries(wxbase
