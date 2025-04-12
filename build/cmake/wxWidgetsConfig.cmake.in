@@ -145,6 +145,9 @@ if(TARGET wx::wxgl)
     find_package(OpenGL QUIET)
 endif()
 
+# make sure Threads targets are available
+find_package(Threads QUIET)
+
 # if no components are specified in find_package, check all of them
 if(NOT @PROJECT_NAME@_FIND_COMPONENTS)
     set(@PROJECT_NAME@_FIND_COMPONENTS ${@PROJECT_NAME@_COMPONENTS})
