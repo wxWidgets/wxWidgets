@@ -543,7 +543,7 @@ check_include_file(wcstr.h HAVE_WCSTR_H)
 if(wxUSE_DATETIME)
     # check for timezone variable
     #   doesn't exist under Darwin / Mac OS X which uses tm_gmtoff instead
-    foreach(timezone_def timezone _timezone __timezone)
+    foreach(timezone_def _timezone __timezone timezone)
         wx_check_cxx_source_compiles("
             int tz;
             tz = ${timezone_def};"
