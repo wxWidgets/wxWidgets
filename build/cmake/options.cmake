@@ -56,7 +56,7 @@ else()
     set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
 endif()
 wx_option(wxBUILD_CXX_STANDARD "C++ standard used to build wxWidgets targets"
-          ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 11 14 17 20)
+          ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 11 14 17 20 23 26)
 
 if(UNIX)
     wx_option(wxBUILD_LARGEFILE_SUPPORT "support for large files")
