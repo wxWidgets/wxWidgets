@@ -18,8 +18,8 @@ include(build/cmake/toolkit.cmake)          # Platform/toolkit settings
 include(build/cmake/options.cmake)          # User options
 include(build/cmake/init.cmake)             # Init various global build vars
 include(build/cmake/pch.cmake)              # Precompiled header support
-include(build/cmake/locale.cmake)           # Locale files
 
+add_subdirectory(build/cmake/locale locale)
 add_subdirectory(build/cmake/lib libs)
 add_subdirectory(build/cmake/utils utils)
 
