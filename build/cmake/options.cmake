@@ -305,7 +305,7 @@ else()
     endif()
 endif()
 
-if(WXGTK)
+if(WXGTK OR (WXQT AND NOT WIN32))
     set(wxUSE_CAIRO_DEFAULT ON)
 else()
     set(wxUSE_CAIRO_DEFAULT OFF)

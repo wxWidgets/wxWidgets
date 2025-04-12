@@ -645,6 +645,11 @@ if(wxUSE_GUI)
         if(NOT CAIRO_FOUND)
             message(WARNING "Cairo not found, Cairo renderer won't be available")
             wx_option_force_value(wxUSE_CAIRO OFF)
+            if(WXQT AND NOT WIN32)
+                # Cairo is the only renderer for wxGraphicsContext
+                message(WARNING "No graphics renderer found, wxGraphicsContext won't be available")
+                wx_option_force_value(wxUSE_GRAPHICS_CONTEXT OFF)
+            endif()
         endif()
     endif()
 
