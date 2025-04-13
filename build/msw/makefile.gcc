@@ -47,6 +47,7 @@ WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_auto_possess.o \
 	$(OBJS)\wxregex_pcre2_chkdint.o \
 	$(OBJS)\wxregex_pcre2_compile.o \
+	$(OBJS)\wxregex_pcre2_compile_class.o \
 	$(OBJS)\wxregex_pcre2_config.o \
 	$(OBJS)\wxregex_pcre2_context.o \
 	$(OBJS)\wxregex_pcre2_convert.o \
@@ -6082,6 +6083,9 @@ $(OBJS)\wxregex_pcre2_chkdint.o: ../../3rdparty/pcre/src/pcre2_chkdint.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxregex_pcre2_compile.o: ../../3rdparty/pcre/src/pcre2_compile.c
+	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxregex_pcre2_compile_class.o: ../../3rdparty/pcre/src/pcre2_compile_class.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxregex_pcre2_config.o: ../../3rdparty/pcre/src/pcre2_config.c

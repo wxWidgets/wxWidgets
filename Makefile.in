@@ -95,6 +95,7 @@ WXREGEX_OBJECTS =  \
 	wxregex_pcre2_auto_possess.o \
 	wxregex_pcre2_chkdint.o \
 	wxregex_pcre2_compile.o \
+	wxregex_pcre2_compile_class.o \
 	wxregex_pcre2_config.o \
 	wxregex_pcre2_context.o \
 	wxregex_pcre2_convert.o \
@@ -13765,6 +13766,9 @@ wxregex_pcre2_chkdint.o: $(srcdir)/3rdparty/pcre/src/pcre2_chkdint.c
 
 wxregex_pcre2_compile.o: $(srcdir)/3rdparty/pcre/src/pcre2_compile.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/3rdparty/pcre/src/pcre2_compile.c
+
+wxregex_pcre2_compile_class.o: $(srcdir)/3rdparty/pcre/src/pcre2_compile_class.c
+	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/3rdparty/pcre/src/pcre2_compile_class.c
 
 wxregex_pcre2_config.o: $(srcdir)/3rdparty/pcre/src/pcre2_config.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/3rdparty/pcre/src/pcre2_config.c
