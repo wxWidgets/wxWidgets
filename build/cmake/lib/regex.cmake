@@ -14,6 +14,7 @@ if(wxUSE_REGEX STREQUAL "builtin")
         3rdparty/pcre/src/pcre2_auto_possess.c
         3rdparty/pcre/src/pcre2_chkdint.c
         3rdparty/pcre/src/pcre2_compile.c
+        3rdparty/pcre/src/pcre2_compile_class.c
         3rdparty/pcre/src/pcre2_config.c
         3rdparty/pcre/src/pcre2_context.c
         3rdparty/pcre/src/pcre2_convert.c
