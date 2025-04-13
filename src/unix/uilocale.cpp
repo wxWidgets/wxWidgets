@@ -21,6 +21,11 @@
 #if wxUSE_INTL
 
 #include <locale.h>
+
+#ifdef HAVE_XLOCALE_H
+    #include <xlocale.h>
+#endif
+
 #ifdef HAVE_LANGINFO_H
     #include <langinfo.h>
 #endif
