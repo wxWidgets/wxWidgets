@@ -208,10 +208,10 @@ function(wx_set_common_target_properties target_name)
         target_compile_definitions(${target_name} PUBLIC "-D_FILE_OFFSET_BITS=64")
     endif()
 
-    if(CMAKE_THREAD_LIBS_INIT)
-        target_compile_options(${target_name} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
-        target_link_libraries(${target_name} PUBLIC ${CMAKE_THREAD_LIBS_INIT})
+    if(wxUSE_THREADS)
+        target_link_libraries(${target_name} PRIVATE Threads::Threads)
     endif()
+
     wx_set_source_groups()
 endfunction()
 
