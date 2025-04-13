@@ -1411,7 +1411,7 @@ private:
         });
 
         int i = 0;
-        const int n = static_cast<int>(points.size());
+        const int n = wxSsize(points);
 
         while ( i < n )
         {
@@ -1432,7 +1432,7 @@ private:
         std::sort(sortedPointsX.begin(), sortedPointsX.end(), wxPointCmp{});
 
         int i = 0;
-        const int n = static_cast<int>(points.size());
+        const int n = wxSsize(points);
 
         while ( i < n )
         {

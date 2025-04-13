@@ -346,6 +346,13 @@ typedef short int WXTYPE;
 /* for consistency with wxStatic/DynamicCast defined in wx/object.h */
 #define wxConstCast(obj, className) const_cast<className *>(obj)
 
+/* Poor man's version of C++20 std::ssize(). */
+template <class C>
+int wxSsize(const C& c)
+{
+    return static_cast<int>(c.size());
+}
+
 #endif /* __cplusplus */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */

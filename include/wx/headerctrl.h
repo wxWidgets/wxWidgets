@@ -369,7 +369,7 @@ private:
     // bring the column count in sync with the number of columns we store
     void UpdateColumnCount()
     {
-        SetColumnCount(static_cast<int>(m_cols.size()));
+        SetColumnCount(wxSsize(m_cols));
     }
 
 

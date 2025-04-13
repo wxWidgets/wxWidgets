@@ -128,7 +128,7 @@ public:
     // set the number of fields and call SetStatusWidths(widths) if widths are
     // given
     virtual void SetFieldsCount(int number = 1, const int *widths = nullptr);
-    int GetFieldsCount() const { return static_cast<int>(m_panes.size()); }
+    int GetFieldsCount() const { return wxSsize(m_panes); }
 
     // field text
     // ----------

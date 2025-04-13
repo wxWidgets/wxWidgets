@@ -1165,7 +1165,7 @@ void* wxWebViewChromium::GetNativeBackend() const
 bool wxWebViewChromium::CanGoForward() const
 {
     if ( m_historyEnabled )
-        return m_historyPosition != static_cast<int>(m_historyList.size()) - 1;
+        return m_historyPosition != wxSsize(m_historyList) - 1;
     else
         return false;
 }
@@ -1187,8 +1187,7 @@ void wxWebViewChromium::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
         if(m_historyList[i].get() == item.get())
             pos = i;
     }
-    wxASSERT_MSG(pos != static_cast<int>(m_historyList.size()),
-                 "invalid history item");
+    wxASSERT_MSG(pos != wxSsize(m_historyList), "invalid history item");
     m_historyLoadingFromList = true;
     LoadURL(item->GetUrl());
     m_historyPosition = pos;
@@ -1211,7 +1210,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewChromium::GetForwardHistor
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist;
     //As we don't have std::copy or an iterator constructor in the wxwidgets
     //native vector we construct it by hand
-    for ( int i = m_historyPosition + 1; i < static_cast<int>(m_historyList.size()); i++ )
+    for ( int i = m_historyPosition + 1; i < wxSsize(m_historyList); i++ )
     {
         forwardhist.push_back(m_historyList[i]);
     }
@@ -1779,7 +1778,7 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> WXUNUSED(browser),
         {
             //If we are not at the end of the list, then erase everything
             //between us and the end before adding the new page
-            if ( m_webview.m_historyPosition != static_cast<int>(m_webview.m_historyList.size()) - 1 )
+            if ( m_webview.m_historyPosition != wxSsize(m_webview.m_historyList) - 1 )
             {
                 m_webview.m_historyList.erase(m_webview.m_historyList.begin() + m_webview.m_historyPosition + 1,
                                               m_webview.m_historyList.end());

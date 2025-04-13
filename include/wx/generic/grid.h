@@ -1459,7 +1459,7 @@ public:
 
     // these are pure virtual in wxGridTableBase
     //
-    virtual int GetNumberRows() override { return static_cast<int>(m_data.size()); }
+    virtual int GetNumberRows() override { return wxSsize(m_data); }
     virtual int GetNumberCols() override { return m_numCols; }
     virtual wxString GetValue( int row, int col ) override;
     virtual void SetValue( int row, int col, const wxString& s ) override;

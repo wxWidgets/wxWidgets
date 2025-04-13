@@ -104,7 +104,7 @@ public:
 
     char* GetPrivData() { return m_privData.empty() ? nullptr : &m_privData[0]; }
     const char* GetPrivData() const { return m_privData.empty() ? nullptr : &m_privData[0]; }
-    int GetPrivDataLen() const { return static_cast<int>(m_privData.size()); }
+    int GetPrivDataLen() const { return wxSsize(m_privData); }
     void SetPrivData( char *privData, int len );
 
 

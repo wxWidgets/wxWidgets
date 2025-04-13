@@ -4527,7 +4527,7 @@ wxAuiNotebook::LoadLayout(const wxString& name,
     }
 
     // Check if there were any existing pages not added to any tab control.
-    if ( !useExistingPages && static_cast<int>(addedPages.size()) < pageCount )
+    if ( !useExistingPages && wxSsize(addedPages) < pageCount )
     {
         // Use a stack here to remove the pages from the end below.
         std::stack<int> toRemove;

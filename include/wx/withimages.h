@@ -49,7 +49,7 @@ public:
         if ( !m_images.empty() )
         {
             // Cast is safe, we don't risk having more than INT_MAX images.
-            return static_cast<int>(m_images.size());
+            return wxSsize(m_images);
         }
 
         return m_imageList ? m_imageList->GetImageCount() : 0;

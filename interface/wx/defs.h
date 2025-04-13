@@ -1870,6 +1870,19 @@ template <typename T> void wxDELETEA(T*& array);
 #define wxWARN_UNUSED __attribute__((warn_unused))
 
 /**
+    Return the size of the container as int.
+
+    This is similar to C++20 std::ssize() but can be used even even when not
+    using C++20 (if you do use it, please use the standard function).
+
+    @header{wx/defs.h}
+
+    @since 3.3.0
+ */
+template <class C>
+int wxSsize(const C& c);
+
+/**
     Swaps the contents of two variables.
 
     This is similar to std::swap() but can be used even on the platforms where
