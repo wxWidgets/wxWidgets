@@ -38,8 +38,6 @@
 @WX_VERSION_TAG@.6 {
     extern "C++" {
         "wxTranslations::AddAvailableCatalog(wxString const&, wxLanguage)";
-        "wxEventTableEntry::wxEventTableEntry(wxEventTableEntry const&)";
-        "wxSystemSettingsNative::SelectLightDark(wxColour, wxColour)";
     };
 };
 
@@ -59,9 +57,6 @@
 @WX_VERSION_TAG@.2 {
     extern "C++" {
         "wxUILocale::GetSystemLocaleId()";
-        "wxWithImages::GetImageLogicalSize(wxWindow const*, int)";
-        "wxWithImages::GetImageLogicalSize(wxWindow const*, int, int&, int&)";
-        "wxWithImages::GetImageBitmapFor(wxWindow const*, int)";
     };
 };
 
