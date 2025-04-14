@@ -49,6 +49,8 @@
 #include "wx/private/threadinfo.h"
 #include "wx/uilocale.h"
 
+#include "wx/private/elfversion.h"
+
 #ifdef __WINDOWS__
     #include "wx/dynlib.h"
     #include "wx/scopedarray.h"
@@ -1420,11 +1422,13 @@ bool wxTranslations::AddCatalog(const wxString& domain,
 }
 #endif // !wxUSE_UNICODE
 
+wxELF_VERSION_COMPAT("_ZN14wxTranslations19AddAvailableCatalogERK8wxString", "3.2.3")
 bool wxTranslations::AddAvailableCatalog(const wxString& domain)
 {
     return AddAvailableCatalog(domain, wxLANGUAGE_ENGLISH_US);
 }
 
+wxELF_VERSION_COMPAT("_ZN14wxTranslations19AddAvailableCatalogERK8wxString10wxLanguage", "3.2.6")
 bool wxTranslations::AddAvailableCatalog(const wxString& domain, wxLanguage msgIdLanguage)
 {
     return DoAddCatalog(domain, msgIdLanguage) == Translations_Found;
@@ -1563,6 +1567,7 @@ wxString wxTranslations::GetBestTranslation(const wxString& domain,
     return lang;
 }
 
+wxELF_VERSION_COMPAT("_ZN14wxTranslations27GetBestAvailableTranslationERK8wxString", "3.2.3")
 wxString wxTranslations::GetBestAvailableTranslation(const wxString& domain)
 {
     // Determine the best language from the ones with actual translation file:

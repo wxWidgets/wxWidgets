@@ -18,9 +18,10 @@
 #   };
 #
 # If a symbols should have been added in this way, but is forgotten then it
-# cannot be added in the next release. This is because it has already been
-# released with the generic branch version due to the final wildcard below,
-# and once released its version cannot be changed.
+# cannot be added to the next release version tag, but we can workaround the
+# problem by using wxELF_VERSION_COMPAT() macro in the source code. Note that
+# this is why some version tags are defined here even if no symbols are
+# assigned to them: they are used by that macro.
 
 # When adding a new section here, don't forget to modify the version in
 # build/bakefiles/version.bkl to indicate that new APIs have been added and
@@ -36,35 +37,20 @@
 
 # public symbols added in 3.2.6 (please keep in alphabetical order):
 @WX_VERSION_TAG@.6 {
-    extern "C++" {
-        "wxTranslations::AddAvailableCatalog(wxString const&, wxLanguage)";
-    };
 };
 
 # public symbols added in 3.2.3 (please keep in alphabetical order):
 @WX_VERSION_TAG@.3 {
-    extern "C++" {
-        "wxGLCanvasEGL::CreateWaylandSubsurface()";
-        "wxGLCanvasEGL::DestroyWaylandSubsurface()";
-        "wxTranslations::AddAvailableCatalog(wxString const&)";
-        "wxTranslations::GetBestAvailableTranslation(wxString const&)";
-        "wxUILocale::GetMonthName(wxDateTime::Month, wxDateTime::NameFlags) const";
-        "wxUILocale::GetWeekDayName(wxDateTime::WeekDay, wxDateTime::NameFlags) const";
-    };
 };
 
 # public symbols added in 3.2.2 (please keep in alphabetical order):
 @WX_VERSION_TAG@.2 {
-    extern "C++" {
-        "wxUILocale::GetSystemLocaleId()";
-    };
 };
 
 # public symbols added in 3.2.1
 @WX_VERSION_TAG@.1 {
     extern "C++" {
         "wxApp::GTKAllowDiagnosticsControl()";
-        "wxFileDialogBase::AddShortcut(wxString const&, int)";
     };
 };
 
