@@ -57,7 +57,7 @@ if(NOT MSVC OR MSVC_VERSION GREATER 1800)
         set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
     endif()
     wx_option(wxBUILD_CXX_STANDARD "C++ standard used to build wxWidgets targets"
-              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17 20)
+              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17 20 23 26)
 endif()
 
 if(UNIX)
@@ -305,7 +305,7 @@ else()
     endif()
 endif()
 
-if(WXGTK)
+if(WXGTK OR (WXQT AND NOT WIN32))
     set(wxUSE_CAIRO_DEFAULT ON)
 else()
     set(wxUSE_CAIRO_DEFAULT OFF)
