@@ -49,6 +49,11 @@ wxMDIParentFrame::wxMDIParentFrame(wxWindow *parent,
     (void)Create(parent, id, title, pos, size, style, name);
 }
 
+wxMDIParentFrame::~wxMDIParentFrame()
+{
+    delete m_clientWindow;
+}
+
 bool wxMDIParentFrame::Create(wxWindow *parent,
             wxWindowID id,
             const wxString& title,

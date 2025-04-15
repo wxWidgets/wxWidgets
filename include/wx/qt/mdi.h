@@ -21,6 +21,8 @@ public:
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const wxString& name = wxASCII_STR(wxFrameNameStr));
 
+    ~wxMDIParentFrame();
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
