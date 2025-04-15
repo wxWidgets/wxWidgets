@@ -33818,6 +33818,8 @@ fi
 $as_echo "$wx_cv_version_script" >&6; }
 
             if test $wx_cv_version_script = yes ; then
+                $as_echo "#define wxHAVE_VERSION_SCRIPT 1" >>confdefs.h
+
                 LDFLAGS_VERSIONING="-Wl,--version-script,\$(wx_top_builddir)/version-script"
                 if test $wx_cv_undefined_version = yes ; then
                     LDFLAGS_VERSIONING="$LDFLAGS_VERSIONING -Wl,--undefined-version"

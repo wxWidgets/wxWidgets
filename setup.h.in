@@ -17,6 +17,9 @@
 /* the installation location prefix from configure */
 #undef wxINSTALL_PREFIX
 
+/* Is linker version script used? */
+#undef wxHAVE_VERSION_SCRIPT
+
 /* Define if ssize_t type is available.  */
 #undef HAVE_SSIZE_T
 
