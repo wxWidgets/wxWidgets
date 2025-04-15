@@ -10,9 +10,8 @@
 #ifndef _WX_PRIVATE_ELFVERSION_H_
 #define _WX_PRIVATE_ELFVERSION_H_
 
-// We suppose that if version script is supported, then .symver assembler
-// directive is also supported.
-#ifdef wxHAVE_VERSION_SCRIPT
+// This symbol is defined by configure if .symver directive is supported.
+#ifdef wxHAVE_ELF_SYMVER
     // Prefer to use the attribute if it is available, as it works with LTO,
     // unlike the assembler directive.
     #ifdef __has_attribute
@@ -23,6 +22,16 @@
 
     #ifndef wxELF_SYMVER
         #define wxELF_SYMVER(sym, symver) __asm__(".symver " sym "," symver);
+    #endif
+
+    // Using multiple versions for the same symbols may be not supported, in
+    // which case we omit it: this results in generating 2 default versions for
+    // the same symbol, which looks wrong, but doesn't seem to cause any
+    // problems.
+    #ifdef wxHAVE_ELF_SYMVER_MULTIPLE
+        #define wxELF_SYMVER_NON_DEFAULT(sym, ver) wxELF_SYMVER(sym, ver)
+    #else
+        #define wxELF_SYMVER_NON_DEFAULT(sym, ver)
     #endif
 
     // Our version tag depends on whether we're using Unicode or not.
@@ -49,7 +58,7 @@
     // Note that this macro takes strings, not symbols, and that it includes
     // the trailing semicolon for consistency with the empty version below.
     #define wxELF_VERSION_COMPAT(sym, ver) \
-        wxELF_SYMVER(sym, sym "@" wxMAKE_ELF_VERSION_TAG("3.2")) \
+        wxELF_SYMVER_NON_DEFAULT(sym, sym "@" wxMAKE_ELF_VERSION_TAG("3.2")) \
         wxELF_SYMVER(sym, sym "@@" wxMAKE_ELF_VERSION_TAG(ver))
 #else
     #define wxELF_VERSION_COMPAT(sym, ver)

@@ -552,7 +552,6 @@ AC_DEFUN([WX_VERSIONED_SYMBOLS],
             ])
 
             if test $wx_cv_version_script = yes ; then
-                AC_DEFINE(wxHAVE_VERSION_SCRIPT)
                 LDFLAGS_VERSIONING="-Wl,--version-script,$1"
                 if test $wx_cv_undefined_version = yes ; then
                     LDFLAGS_VERSIONING="$LDFLAGS_VERSIONING -Wl,--undefined-version"

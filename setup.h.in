@@ -17,8 +17,11 @@
 /* the installation location prefix from configure */
 #undef wxINSTALL_PREFIX
 
-/* Is linker version script used? */
-#undef wxHAVE_VERSION_SCRIPT
+/* Is .symver assembler directive supported? */
+#undef wxHAVE_ELF_SYMVER
+
+/* Are multiple versions of the same symbol supported? */
+#undef wxHAVE_ELF_SYMVER_MULTIPLE
 
 /* Define if ssize_t type is available.  */
 #undef HAVE_SSIZE_T

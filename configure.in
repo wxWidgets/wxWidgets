@@ -4007,6 +4007,60 @@ if test "$wxUSE_SHARED" = "yes"; then
     dnl use versioned symbols if available on the platform and not disabled
     if test "$wxUSE_ELF_SYMVER" != "no"; then
         WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
+
+        if test "$wx_cv_version_script" = "yes"; then
+            saveLdflags="$LDFLAGS"
+            LDFLAGS="$saveLdflags -Wl,--version-script,conftest.sym"
+
+            AC_CACHE_CHECK([if using multiple ELF symbol versions is supported],
+                wx_cv_elf_symver_multiple,
+                [
+                    echo "lib_new {}; lib_old { *; };" >conftest.sym
+                    AC_LINK_IFELSE([
+                        AC_LANG_SOURCE([
+                            __asm__(".symver foo,foo@lib_old");
+                            __asm__(".symver foo,foo@@lib_new");
+                            void foo() {}
+                            int main() { return 0; }
+                        ])],
+                        wx_cv_elf_symver_multiple=yes,
+                        wx_cv_elf_symver_multiple=no
+                    )
+                    rm -f conftest.sym
+                ]
+            )
+
+            if test "$wx_cv_elf_symver_multiple" = "yes"; then
+                wx_cv_elf_symver=yes
+            else
+                AC_CACHE_CHECK([if using ELF symbol versions is supported],
+                    wx_cv_elf_symver,
+                    [
+                        echo "lib_new {}; lib_old { *; };" >conftest.sym
+                        AC_LINK_IFELSE([
+                            AC_LANG_SOURCE([
+                                __asm__(".symver foo,foo@@lib_new");
+                                void foo() {}
+                                int main() { return 0; }
+                            ])],
+                            wx_cv_elf_symver=yes,
+                            wx_cv_elf_symver=no
+                        )
+                        rm -f conftest.sym
+                    ]
+                )
+            fi
+
+            if test "$wx_cv_elf_symver" = "yes"; then
+                AC_DEFINE(wxHAVE_ELF_SYMVER)
+            fi
+
+            if test "$wx_cv_elf_symver_multiple" = "yes"; then
+                AC_DEFINE(wxHAVE_ELF_SYMVER_MULTIPLE)
+            fi
+
+            LDFLAGS="$saveLdflags"
+        fi
     fi
 
     dnl test for GCC's visibility support (sets CFLAGS_VISIBILITY, which is
