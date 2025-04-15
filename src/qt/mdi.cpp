@@ -129,6 +129,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long WXUNUSED(sty
 {
     // create the MDI client area where the children window are displayed:
     m_qtWindow = new wxQtMdiArea( parent, this );
+    m_qtContainer = dynamic_cast<QAbstractScrollArea*>(m_qtWindow);
     return true;
 }
 
