@@ -128,7 +128,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow,wxMDIClientWindowBase)
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long WXUNUSED(style))
 {
     // create the MDI client area where the children window are displayed:
-    m_qtWindow = new wxQtMdiArea( parent, this );
+    m_qtWindow = new wxQtMdiArea(parent, this);
+    // The cast is safe and returns a non-null pointer because wxQtMdiArea derives
+    // from QMdiArea which in turn derives from QAbstractScrollArea.
+    m_qtContainer = static_cast<QAbstractScrollArea*>(m_qtWindow);
     return true;
 }
 
