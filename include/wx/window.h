@@ -1107,7 +1107,7 @@ public:
 
         // does this window have the capture?
     virtual bool HasCapture() const
-        { return reinterpret_cast<const wxWindow*>(this) == GetCapture(); }
+        { return AsWindow() == GetCapture(); }
 
         // enable the specified touch events for this window, return false if
         // the requested events are not supported
@@ -1573,6 +1573,16 @@ public:
     // implementation
     // --------------
 
+    // All wxWindowBase objects in the program are actually wxWindow objects,
+    // but we need a cast to convert to wxWindow, so provide these helper
+    // functions to make it slightly less painful.
+    inline wxWindow* AsWindow();
+    inline const wxWindow* AsWindow() const;
+
+    // This version can be used even if win is null.
+    static inline wxWindow* AsWindow(wxWindowBase* win);
+    static inline const wxWindow* AsWindow(const wxWindowBase* win);
+
         // event handlers
     void OnSysColourChanged( wxSysColourChangedEvent& event );
     void OnInitDialog( wxInitDialogEvent &event );
@@ -1655,7 +1665,7 @@ public:
     // that FindFocus returns if the focus is in one of composite control's
     // windows
     virtual wxWindow *GetMainWindowOfCompositeControl()
-        { return (wxWindow*)this; }
+        { return AsWindow(); }
 
     enum NavigationKind
     {
@@ -2085,10 +2095,30 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
     return m_parent ? m_parent->GetParent() : nullptr;
 }
 
+inline const wxWindow* wxWindowBase::AsWindow(const wxWindowBase* win)
+{
+    return static_cast<const wxWindow*>(win);
+}
+
+inline wxWindow* wxWindowBase::AsWindow(wxWindowBase* win)
+{
+    return static_cast<wxWindow*>(win);
+}
+
+inline wxWindow* wxWindowBase::AsWindow()
+{
+    return static_cast<wxWindow*>(this);
+}
+
+inline const wxWindow* wxWindowBase::AsWindow() const
+{
+    return static_cast<const wxWindow*>(this);
+}
+
 template <typename T>
 void wxWindowBase::CallForEachChild(const T& fn)
 {
-    fn(static_cast<wxWindow*>(this));
+    fn(AsWindow());
 
     for ( auto& child : GetChildren() )
         child->CallForEachChild(fn);
