@@ -1156,6 +1156,7 @@ enable_macosx_arch
 enable_compat28
 enable_compat30
 enable_rpath
+enable_symver
 enable_visibility
 enable_tls
 enable_repro_build
@@ -2131,6 +2132,7 @@ Optional Features:
   --enable-compat28       enable wxWidgets 2.8 compatibility
   --disable-compat30      disable wxWidgets 3.0 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
+  --disable-symver        disable use of ELF symbols versioning even if supported
   --disable-visibility    disable use of ELF symbols visibility even if supported
   --disable-tls           disable use of compiler TLS support
   --enable-repro-build    enable reproducible build mode
@@ -6401,6 +6403,35 @@ fi
 
           eval "$wx_cv_use_rpath"
 
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-symver was given.
+if test "${enable_symver+set}" = set; then :
+  enableval=$enable_symver;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_symver='wxUSE_ELF_SYMVER=yes'
+                          else
+                            wx_cv_use_symver='wxUSE_ELF_SYMVER=no'
+                          fi
+
+else
+
+                          wx_cv_use_symver='wxUSE_ELF_SYMVER=${'DEFAULT_wxUSE_ELF_SYMVER":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_symver"
 
 
           enablestring=disable
@@ -33719,6 +33750,7 @@ fi
 
 if test "$wxUSE_SHARED" = "yes"; then
 
+        if test "$wxUSE_ELF_SYMVER" != "no"; then
 
     case "${host}" in
         *-*-cygwin* | *-*-mingw* )
@@ -33828,6 +33860,7 @@ $as_echo "$wx_cv_version_script" >&6; }
             ;;
     esac
 
+    fi
 
             if test "$wxUSE_VISIBILITY" != "no"; then
 
