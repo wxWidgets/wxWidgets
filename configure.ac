@@ -666,6 +666,7 @@ WX_ARG_DISABLE(compat32,     [  --disable-compat32      disable wxWidgets 3.2 co
 
 WX_ARG_DISABLE(rpath,        [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
+WX_ARG_DISABLE(symver,       [  --disable-symver        disable use of ELF symbols versioning even if supported], wxUSE_ELF_SYMVER)
 WX_ARG_DISABLE(visibility,   [  --disable-visibility    disable use of ELF symbols visibility even if supported], wxUSE_VISIBILITY)
 
 WX_ARG_ENABLE(repro_build,   [  --enable-repro-build    enable reproducible build mode], wxUSE_REPRODUCIBLE_BUILD)
@@ -3435,8 +3436,10 @@ dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
 if test "$wxUSE_SHARED" = "yes"; then
 
-    dnl use versioned symbols if available on the platform
-    WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
+    dnl use versioned symbols if available on the platform and not disabled
+    if test "$wxUSE_ELF_SYMVER" != "no"; then
+        WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
+    fi
 
     dnl test for GCC's visibility support (sets CFLAGS_VISIBILITY, which is
     dnl assigned to CFLAGS and CXXFLAGS below)
