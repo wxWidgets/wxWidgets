@@ -32,6 +32,7 @@
     #include "wx/language.h"
 #endif
 
+#include "wx/private/elfversion.h"
 #include "wx/private/uilocale.h"
 
 #define TRACE_I18N wxS("i18n")
@@ -612,6 +613,7 @@ wxString wxUILocale::GetLocalizedName(wxLocaleName name, wxLocaleForm form) cons
 }
 
 #if wxUSE_DATETIME
+wxELF_VERSION_COMPAT("_ZNK10wxUILocale12GetMonthNameEN10wxDateTime5MonthENS0_9NameFlagsE", "3.2.3")
 wxString wxUILocale::GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const
 {
     if (!m_impl)
@@ -620,6 +622,7 @@ wxString wxUILocale::GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags
     return m_impl->GetMonthName(month, flags);
 }
 
+wxELF_VERSION_COMPAT("_ZNK10wxUILocale14GetWeekDayNameEN10wxDateTime7WeekDayENS0_9NameFlagsE", "3.2.3")
 wxString wxUILocale::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const
 {
     if (!m_impl)
@@ -677,6 +680,7 @@ wxUILocale::~wxUILocale()
 
 
 /* static */
+wxELF_VERSION_COMPAT("_ZN10wxUILocale17GetSystemLocaleIdEv", "3.2.2")
 wxLocaleIdent wxUILocale::GetSystemLocaleId()
 {
     wxUILocale defaultLocale(wxUILocaleImpl::CreateUserDefault());

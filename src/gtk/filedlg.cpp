@@ -32,6 +32,8 @@
 #include "wx/filefn.h" // ::wxGetCwd
 #include "wx/modalhook.h"
 
+#include "wx/private/elfversion.h"
+
 //-----------------------------------------------------------------------------
 // "clicked" for OK-button
 //-----------------------------------------------------------------------------
@@ -500,6 +502,7 @@ void wxFileDialog::GTKSelectionChanged(const wxString& filename)
     UpdateExtraControlUI();
 }
 
+wxELF_VERSION_COMPAT("_ZN12wxFileDialog11AddShortcutERK8wxStringi", "3.2.1")
 bool wxFileDialog::AddShortcut(const wxString& directory, int WXUNUSED(flags))
 {
     wxGtkError error;

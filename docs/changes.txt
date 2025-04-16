@@ -257,6 +257,7 @@ All:
 - Allow initializing wxVector<> from std::initializer_list<> (#25290).
 - Update Brazilian Portuguese translations (Felipe).
 - Ensure that all headers are installed by CMake (Maarten Bent, #25266).
+- Fix ABI breakage for versioned symbols in 3.2.7 under Unix (#25327).
 
 All (GUI):
 
