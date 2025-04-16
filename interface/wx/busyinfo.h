@@ -75,7 +75,32 @@
 
     but take care to not cause undesirable reentrancies when doing it (see
     wxApp::Yield for more details). The simplest way to do it is to use
-    wxWindowDisabler class as illustrated in the above example.
+    wxWindowDisabler class, as illustrated in the above example.
+
+    Under GTK, it is recommended to call `wxTheApp->Yield()` after a short
+    operation (or pause) following a wxBusyInfo's construction.
+    This will ensure that it is visible. For example:
+
+    @code
+        wxWindowDisabler disableAll;
+        wxBusyInfo wait("Please wait, working...");
+
+        DoACalculation();
+        wxTheApp->Yield();
+        MoreCalculations();
+    @endcode
+
+    or
+
+    @code
+        wxWindowDisabler disableAll;
+        wxBusyInfo wait("Please wait, working...");
+
+        wxMilliSleep(100);
+        wxTheApp->Yield();
+        DoACalculation();
+        MoreCalculations();
+    @endcode
 
     Note that a wxBusyInfo is always built with the @c wxSTAY_ON_TOP window style
     (see wxFrame window styles for more info).
