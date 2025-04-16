@@ -78,7 +78,7 @@ For example, the following will build a "universal binary 2" (i.e., ARM64 and In
 ~~~{.sh}
     cmake ~/Downloads/wxWidgets_3.1 \
       -DCMAKE_INSTALL_PREFIX=~/wx_install \
-      -DwxBUILD_SHARED=OFF
+      -DwxBUILD_SHARED=OFF \
       -D"CMAKE_OSX_ARCHITECTURES:STRING=arm64;x86_64"
     cmake --build . --target install
 ~~~
