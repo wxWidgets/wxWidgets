@@ -33860,6 +33860,9 @@ $as_echo "$wx_cv_version_script" >&6; }
 
 
         if test "$wx_cv_version_script" = "yes"; then
+                                                                                    saveCppflags="$CPPFLAGS"
+            CPPFLAGS="$saveCppflags -I${srcdir}/include -DwxHAVE_ELF_SYMVER"
+
             saveLdflags="$LDFLAGS"
             LDFLAGS="$saveLdflags -Wl,--version-script,conftest.sym"
 
@@ -33874,8 +33877,9 @@ else
 /* end confdefs.h.  */
 
 
-                            __asm__(".symver foo,foo@lib_old");
-                            __asm__(".symver foo,foo@@lib_new");
+                            #include "wx/private/elfversion.h"
+                            wxELF_SYMVER("foo","foo@lib_old")
+                            wxELF_SYMVER("foo","foo@@lib_new")
                             void foo() {}
                             int main() { return 0; }
 
@@ -33909,7 +33913,8 @@ else
 /* end confdefs.h.  */
 
 
-                                __asm__(".symver foo,foo@@lib_new");
+                                #include "wx/private/elfversion.h"
+                                wxELF_SYMVER("foo","foo@@lib_new")
                                 void foo() {}
                                 int main() { return 0; }
 
@@ -33941,6 +33946,7 @@ $as_echo "$wx_cv_elf_symver" >&6; }
             fi
 
             LDFLAGS="$saveLdflags"
+            CPPFLAGS="$saveCppflags"
         fi
     fi
 

@@ -4009,6 +4009,15 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
 
         if test "$wx_cv_version_script" = "yes"; then
+            dnl We want to use either __symver__ attribute (preferably, as it
+            dnl works with LTO) or .symver, but to avoid checking for both of
+            dnl them, use the header file which can check if the attribute is
+            dnl available. Just remember to pretend that we do have support
+            dnl for this before including it, as it relies on this symbol,
+            dnl which we'll define below only if things do indeed work.
+            saveCppflags="$CPPFLAGS"
+            CPPFLAGS="$saveCppflags -I${srcdir}/include -DwxHAVE_ELF_SYMVER"
+
             saveLdflags="$LDFLAGS"
             LDFLAGS="$saveLdflags -Wl,--version-script,conftest.sym"
 
@@ -4018,8 +4027,9 @@ if test "$wxUSE_SHARED" = "yes"; then
                     echo "lib_new {}; lib_old { *; };" >conftest.sym
                     AC_LINK_IFELSE([
                         AC_LANG_SOURCE([
-                            __asm__(".symver foo,foo@lib_old");
-                            __asm__(".symver foo,foo@@lib_new");
+                            #include "wx/private/elfversion.h"
+                            wxELF_SYMVER("foo","foo@lib_old")
+                            wxELF_SYMVER("foo","foo@@lib_new")
                             void foo() {}
                             int main() { return 0; }
                         ])],
@@ -4039,7 +4049,8 @@ if test "$wxUSE_SHARED" = "yes"; then
                         echo "lib_new {}; lib_old { *; };" >conftest.sym
                         AC_LINK_IFELSE([
                             AC_LANG_SOURCE([
-                                __asm__(".symver foo,foo@@lib_new");
+                                #include "wx/private/elfversion.h"
+                                wxELF_SYMVER("foo","foo@@lib_new")
                                 void foo() {}
                                 int main() { return 0; }
                             ])],
@@ -4060,6 +4071,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             fi
 
             LDFLAGS="$saveLdflags"
+            CPPFLAGS="$saveCppflags"
         fi
     fi
 
