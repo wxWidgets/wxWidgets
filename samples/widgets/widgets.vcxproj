@@ -151,7 +151,7 @@
       <AdditionalIncludeDirectories>.\..\..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(wxToolkitLibNamePrefix)core.lib;$(wxBaseLibNamePrefix).lib;wxtiff$(wxSuffixDebug).lib;wxjpeg$(wxSuffixDebug).lib;wxpng$(wxSuffixDebug).lib;wxwebp$(wxSuffixDebug).lib;wxzlib$(wxSuffixDebug).lib;wxregexu$(wxSuffixDebug).lib;wxexpat$(wxSuffixDebug).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -188,7 +188,7 @@
       <AdditionalIncludeDirectories>.\..\..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(wxToolkitLibNamePrefix)core.lib;$(wxBaseLibNamePrefix).lib;wxtiff$(wxSuffixDebug).lib;wxjpeg$(wxSuffixDebug).lib;wxpng$(wxSuffixDebug).lib;wxwebp$(wxSuffixDebug).lib;wxzlib$(wxSuffixDebug).lib;wxregexu$(wxSuffixDebug).lib;wxexpat$(wxSuffixDebug).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -229,7 +229,7 @@
       <AdditionalIncludeDirectories>.\..\..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(wxToolkitLibNamePrefix)core.lib;$(wxBaseLibNamePrefix).lib;wxtiff$(wxSuffixDebug).lib;wxjpeg$(wxSuffixDebug).lib;wxpng$(wxSuffixDebug).lib;wxwebp$(wxSuffixDebug).lib;wxzlib$(wxSuffixDebug).lib;wxregexu$(wxSuffixDebug).lib;wxexpat$(wxSuffixDebug).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -266,7 +266,7 @@
       <AdditionalIncludeDirectories>.\..\..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(wxToolkitLibNamePrefix)core.lib;$(wxBaseLibNamePrefix).lib;wxtiff$(wxSuffixDebug).lib;wxjpeg$(wxSuffixDebug).lib;wxpng$(wxSuffixDebug).lib;wxwebp$(wxSuffixDebug).lib;wxzlib$(wxSuffixDebug).lib;wxregexu$(wxSuffixDebug).lib;wxexpat$(wxSuffixDebug).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -307,7 +307,7 @@
       <AdditionalIncludeDirectories>.\..\..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(wxToolkitLibNamePrefix)core.lib;$(wxBaseLibNamePrefix).lib;wxtiff$(wxSuffixDebug).lib;wxjpeg$(wxSuffixDebug).lib;wxpng$(wxSuffixDebug).lib;wxwebp$(wxSuffixDebug).lib;wxzlib$(wxSuffixDebug).lib;wxregexu$(wxSuffixDebug).lib;wxexpat$(wxSuffixDebug).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -344,7 +344,7 @@
       <AdditionalIncludeDirectories>.\..\..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(wxToolkitLibNamePrefix)core.lib;$(wxBaseLibNamePrefix).lib;wxtiff$(wxSuffixDebug).lib;wxjpeg$(wxSuffixDebug).lib;wxpng$(wxSuffixDebug).lib;wxwebp$(wxSuffixDebug).lib;wxzlib$(wxSuffixDebug).lib;wxregexu$(wxSuffixDebug).lib;wxexpat$(wxSuffixDebug).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -385,7 +385,7 @@
       <AdditionalIncludeDirectories>.\..\..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(wxToolkitLibNamePrefix)core.lib;$(wxBaseLibNamePrefix).lib;wxtiff$(wxSuffixDebug).lib;wxjpeg$(wxSuffixDebug).lib;wxpng$(wxSuffixDebug).lib;wxwebp$(wxSuffixDebug).lib;wxzlib$(wxSuffixDebug).lib;wxregexu$(wxSuffixDebug).lib;wxexpat$(wxSuffixDebug).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -422,7 +422,7 @@
       <AdditionalIncludeDirectories>.\..\..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\..\include;.;.\..\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;shlwapi.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;version.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(wxToolkitLibNamePrefix)core.lib;$(wxBaseLibNamePrefix).lib;wxtiff$(wxSuffixDebug).lib;wxjpeg$(wxSuffixDebug).lib;wxpng$(wxSuffixDebug).lib;wxwebp$(wxSuffixDebug).lib;wxzlib$(wxSuffixDebug).lib;wxregexu$(wxSuffixDebug).lib;wxexpat$(wxSuffixDebug).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>.\..\..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
