@@ -202,6 +202,7 @@
 #include <wx/imagpnm.h>
 #include <wx/imagtga.h>
 #include <wx/imagtiff.h>
+#include <wx/imagwebp.h>
 #include <wx/imagxpm.h>
 #include <wx/infobar.h>
 #include <wx/init.h>
@@ -395,6 +396,7 @@
 #include <wx/volume.h>
 #include <wx/vscroll.h>
 #include <wx/weakref.h>
+#include <wx/webpdecoder.h>
 #include <wx/webrequest.h>
 #include <wx/webview_chromium.h>
 #include <wx/webviewarchivehandler.h>
