@@ -603,21 +603,6 @@ bool wxAuiPaneInfo::IsValid() const
 
 
 wxBEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
-    EVT_AUI_PANE_BUTTON(wxAuiManager::OnPaneButton)
-    EVT_AUI_RENDER(wxAuiManager::OnRender)
-    EVT_WINDOW_DESTROY(wxAuiManager::OnDestroy)
-    EVT_PAINT(wxAuiManager::OnPaint)
-    EVT_ERASE_BACKGROUND(wxAuiManager::OnEraseBackground)
-    EVT_SIZE(wxAuiManager::OnSize)
-    EVT_SET_CURSOR(wxAuiManager::OnSetCursor)
-    EVT_LEFT_DOWN(wxAuiManager::OnLeftDown)
-    EVT_LEFT_UP(wxAuiManager::OnLeftUp)
-    EVT_MOTION(wxAuiManager::OnMotion)
-    EVT_LEAVE_WINDOW(wxAuiManager::OnLeaveWindow)
-    EVT_MOUSE_CAPTURE_LOST(wxAuiManager::OnCaptureLost)
-    EVT_CHILD_FOCUS(wxAuiManager::OnChildFocus)
-    EVT_AUI_FIND_MANAGER(wxAuiManager::OnFindManager)
-    EVT_SYS_COLOUR_CHANGED(wxAuiManager::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 
@@ -933,7 +918,21 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
     UnInit();
 
     m_frame = wnd;
-    m_frame->PushEventHandler(this);
+    m_frame->Bind(wxEVT_AUI_PANE_BUTTON, &wxAuiManager::OnPaneButton, this);
+    m_frame->Bind(wxEVT_AUI_RENDER, &wxAuiManager::OnRender, this);
+    m_frame->Bind(wxEVT_DESTROY, &wxAuiManager::OnDestroy, this);
+    m_frame->Bind(wxEVT_PAINT, &wxAuiManager::OnPaint, this);
+    m_frame->Bind(wxEVT_ERASE_BACKGROUND, &wxAuiManager::OnEraseBackground, this);
+    m_frame->Bind(wxEVT_SIZE, &wxAuiManager::OnSize, this);
+    m_frame->Bind(wxEVT_SET_CURSOR, &wxAuiManager::OnSetCursor, this);
+    m_frame->Bind(wxEVT_LEFT_DOWN, &wxAuiManager::OnLeftDown, this);
+    m_frame->Bind(wxEVT_LEFT_UP, &wxAuiManager::OnLeftUp, this);
+    m_frame->Bind(wxEVT_MOTION, &wxAuiManager::OnMotion, this);
+    m_frame->Bind(wxEVT_LEAVE_WINDOW, &wxAuiManager::OnLeaveWindow, this);
+    m_frame->Bind(wxEVT_MOUSE_CAPTURE_LOST, &wxAuiManager::OnCaptureLost, this);
+    m_frame->Bind(wxEVT_CHILD_FOCUS, &wxAuiManager::OnChildFocus, this);
+    m_frame->Bind(wxEVT_AUI_FIND_MANAGER, &wxAuiManager::OnFindManager, this);
+    m_frame->Bind(wxEVT_SYS_COLOUR_CHANGED, &wxAuiManager::OnSysColourChanged, this);
 
 #if wxUSE_MDI
     // if the owner is going to manage an MDI parent frame,
@@ -976,7 +975,21 @@ void wxAuiManager::UnInit()
 {
     if (m_frame)
     {
-        m_frame->RemoveEventHandler(this);
+        m_frame->Unbind(wxEVT_AUI_PANE_BUTTON, &wxAuiManager::OnPaneButton, this);
+        m_frame->Unbind(wxEVT_AUI_RENDER, &wxAuiManager::OnRender, this);
+        m_frame->Unbind(wxEVT_DESTROY, &wxAuiManager::OnDestroy, this);
+        m_frame->Unbind(wxEVT_PAINT, &wxAuiManager::OnPaint, this);
+        m_frame->Unbind(wxEVT_ERASE_BACKGROUND, &wxAuiManager::OnEraseBackground, this);
+        m_frame->Unbind(wxEVT_SIZE, &wxAuiManager::OnSize, this);
+        m_frame->Unbind(wxEVT_SET_CURSOR, &wxAuiManager::OnSetCursor, this);
+        m_frame->Unbind(wxEVT_LEFT_DOWN, &wxAuiManager::OnLeftDown, this);
+        m_frame->Unbind(wxEVT_LEFT_UP, &wxAuiManager::OnLeftUp, this);
+        m_frame->Unbind(wxEVT_MOTION, &wxAuiManager::OnMotion, this);
+        m_frame->Unbind(wxEVT_LEAVE_WINDOW, &wxAuiManager::OnLeaveWindow, this);
+        m_frame->Unbind(wxEVT_MOUSE_CAPTURE_LOST, &wxAuiManager::OnCaptureLost, this);
+        m_frame->Unbind(wxEVT_CHILD_FOCUS, &wxAuiManager::OnChildFocus, this);
+        m_frame->Unbind(wxEVT_AUI_FIND_MANAGER, &wxAuiManager::OnFindManager, this);
+        m_frame->Unbind(wxEVT_SYS_COLOUR_CHANGED, &wxAuiManager::OnSysColourChanged, this);
         m_frame = NULL;
     }
 }
