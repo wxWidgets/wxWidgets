@@ -1226,7 +1226,6 @@ wxEvtHandler::~wxEvtHandler()
             delete entry->m_callbackUserData;
             delete entry;
         }
-        delete m_dynamicEvents;
     }
 
     // Remove us from the list of the pending events if necessary.
@@ -1786,7 +1785,7 @@ void wxEvtHandler::DoBind(int id,
     // We prefer to push back the entry here and then iterate over the vector
     // in reverse direction in GetNextDynamicEntry() as it's more efficient
     // than inserting the element at the front.
-    m_dynamicEvents->push_back(entry);
+    m_dynamicEvents->m_entries.push_back(entry);
 
     // Make sure we get to know when a sink is destroyed
     wxEvtHandler *eventSink = func->GetEvtHandler();
@@ -1840,7 +1839,7 @@ wxEvtHandler::DoUnbind(int id,
             // Notice that we rely on "cookie" being just the index into the
             // vector, which is not guaranteed by our API, but here we can use
             // this implementation detail.
-            (*m_dynamicEvents)[cookie] = nullptr;
+            m_dynamicEvents->m_entries[cookie] = nullptr;
 
             delete entry;
             return true;
@@ -1856,7 +1855,7 @@ wxEvtHandler::GetFirstDynamicEntry(size_t& cookie) const
         return nullptr;
 
     // The handlers are in LIFO order, so we must start at the end.
-    cookie = m_dynamicEvents->size();
+    cookie = m_dynamicEvents->m_entries.size();
     return GetNextDynamicEntry(cookie);
 }
 
@@ -1869,7 +1868,7 @@ wxEvtHandler::GetNextDynamicEntry(size_t& cookie) const
     {
         // Otherwise return the element at the previous index, skipping any
         // null elements which indicate removed entries.
-        wxDynamicEventTableEntry* const entry = m_dynamicEvents->at(--cookie);
+        wxDynamicEventTableEntry* const entry = m_dynamicEvents->m_entries.at(--cookie);
         if ( entry )
             return entry;
     }
@@ -1882,24 +1881,39 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
     wxCHECK_MSG( m_dynamicEvents, false,
                  wxT("caller should check that we have dynamic events") );
 
+    // Make sure that m_dynamicEvents remains valid until the end of this function,
+    // even if this object itself gets deleted by one of the event handlers called
+    // from here.
+    //
+    // We need to use m_dynamicEvents as we use its m_flag to record whether we're
+    // iterating over its entries and check it at the end, at which time this object
+    // itself might not exist any more.
+    //
+    // Note that we can't just use a local variable instead, as this function can
+    // also be called recursively, if an event handler dispatches another event while
+    // processing this one.
+    wxSharedPtr<DynamicEvents> localCopy(m_dynamicEvents);
     DynamicEvents& dynamicEvents = *m_dynamicEvents;
 
+    wxRecursionGuard guard(dynamicEvents.m_flag);
     bool needToPruneDeleted = false;
 
     // We can't use Get{First,Next}DynamicEntry() here as they hide the deleted
     // but not yet pruned entries from the caller, but here we do want to know
     // about them, so iterate directly. Remember to do it in the reverse order
     // to honour the order of handlers connection.
-    for ( size_t n = dynamicEvents.size(); n; n-- )
+    for ( size_t n = dynamicEvents.m_entries.size(); n; n-- )
     {
-        wxDynamicEventTableEntry* const entry = dynamicEvents[n - 1];
+        wxDynamicEventTableEntry* const entry = dynamicEvents.m_entries[n - 1];
 
         if ( !entry )
         {
             // This entry must have been unbound at some time in the past, so
             // skip it now and really remove it from the vector below, once we
             // finish iterating.
-            needToPruneDeleted = true;
+            // N.B.:  If we are in a nested call, then we can't be done
+            // iterating during this call
+            needToPruneDeleted = !guard.IsInside();
             continue;
         }
 
@@ -1931,14 +1945,14 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
     if ( needToPruneDeleted )
     {
         size_t nNew = 0;
-        for ( size_t n = 0; n != dynamicEvents.size(); n++ )
+        for ( size_t n = 0; n != dynamicEvents.m_entries.size(); n++ )
         {
-            if ( dynamicEvents[n] )
-                dynamicEvents[nNew++] = dynamicEvents[n];
+            if ( dynamicEvents.m_entries[n] )
+                dynamicEvents.m_entries[nNew++] = dynamicEvents.m_entries[n];
         }
 
-        wxASSERT( nNew != dynamicEvents.size() );
-        dynamicEvents.resize(nNew);
+        wxASSERT( nNew != dynamicEvents.m_entries.size() );
+        dynamicEvents.m_entries.resize(nNew);
     }
 
     return false;
@@ -2019,7 +2033,7 @@ void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
 
             // Just as in DoUnbind(), we use our knowledge of
             // GetNextDynamicEntry() implementation here.
-            (*m_dynamicEvents)[cookie] = nullptr;
+            m_dynamicEvents->m_entries[cookie] = nullptr;
         }
     }
 }
