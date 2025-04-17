@@ -100,7 +100,16 @@ wxWindow *wxButtonBase::SetDefault()
 
     wxCHECK_MSG( tlw, NULL, wxT("button without top level window?") );
 
+    // Avoid spurious warning from gcc 15 when using -O2, see #25338.
+#if wxCHECK_GCC_VERSION(15, 0)
+    wxGCC_WARNING_SUPPRESS(dangling-pointer)
+#endif
+
     return tlw->SetDefaultItem(this);
+
+#if wxCHECK_GCC_VERSION(15, 0)
+    wxGCC_WARNING_RESTORE(dangling-pointer)
+#endif
 }
 
 void wxAnyButtonBase::SetBitmapPosition(wxDirection dir)
