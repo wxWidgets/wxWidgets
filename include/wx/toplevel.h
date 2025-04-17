@@ -232,16 +232,14 @@ public:
         { return m_winTmpDefault ? m_winTmpDefault : m_winDefault; }
 
     // set the permanent default item, return the old default
-    wxWindow *SetDefaultItem(wxWindow *win)
-        { wxWindow *old = GetDefaultItem(); m_winDefault = win; return old; }
+    wxWindow *SetDefaultItem(wxWindow *win);
 
     // return the temporary default item, can be null
     wxWindow *GetTmpDefaultItem() const { return m_winTmpDefault; }
 
     // set a temporary default item, SetTmpDefaultItem(nullptr) should be called
     // soon after a call to SetTmpDefaultItem(window), return the old default
-    wxWindow *SetTmpDefaultItem(wxWindow *win)
-        { wxWindow *old = GetDefaultItem(); m_winTmpDefault = win; return old; }
+    wxWindow *SetTmpDefaultItem(wxWindow *win);
 
 
     // Class for saving/restoring fields describing the window geometry.

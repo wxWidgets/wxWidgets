@@ -312,6 +312,24 @@ void wxTopLevelWindowBase::DoCentre(int dir)
 }
 
 // ----------------------------------------------------------------------------
+// Default item management
+// ----------------------------------------------------------------------------
+
+wxWindow* wxTopLevelWindowBase::SetDefaultItem(wxWindow* win)
+{
+    wxWindow* const old = GetDefaultItem();
+    m_winDefault = win;
+    return old;
+}
+
+wxWindow* wxTopLevelWindowBase::SetTmpDefaultItem(wxWindow* win)
+{
+    wxWindow* const old = GetDefaultItem();
+    m_winTmpDefault = win;
+    return old;
+}
+
+// ----------------------------------------------------------------------------
 // Saving/restoring geometry
 // ----------------------------------------------------------------------------
 
