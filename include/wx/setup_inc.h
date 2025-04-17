@@ -1498,7 +1498,7 @@
 #define wxUSE_PALETTE       1
 
 // Set to 1 for WebP format support (requires libwebp)
-#define wxUSE_LIBWEBP       0
+#define wxUSE_LIBWEBP       1
 
 // ----------------------------------------------------------------------------
 // wxUniversal-only options
