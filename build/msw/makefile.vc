@@ -50,6 +50,7 @@ WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_auto_possess.obj \
 	$(OBJS)\wxregex_pcre2_chkdint.obj \
 	$(OBJS)\wxregex_pcre2_compile.obj \
+	$(OBJS)\wxregex_pcre2_compile_class.obj \
 	$(OBJS)\wxregex_pcre2_config.obj \
 	$(OBJS)\wxregex_pcre2_context.obj \
 	$(OBJS)\wxregex_pcre2_convert.obj \
@@ -6564,6 +6565,9 @@ $(OBJS)\wxregex_pcre2_chkdint.obj: ..\..\3rdparty\pcre\src\pcre2_chkdint.c
 
 $(OBJS)\wxregex_pcre2_compile.obj: ..\..\3rdparty\pcre\src\pcre2_compile.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXREGEX_CFLAGS) ..\..\3rdparty\pcre\src\pcre2_compile.c
+
+$(OBJS)\wxregex_pcre2_compile_class.obj: ..\..\3rdparty\pcre\src\pcre2_compile_class.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXREGEX_CFLAGS) ..\..\3rdparty\pcre\src\pcre2_compile_class.c
 
 $(OBJS)\wxregex_pcre2_config.obj: ..\..\3rdparty\pcre\src\pcre2_config.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXREGEX_CFLAGS) ..\..\3rdparty\pcre\src\pcre2_config.c

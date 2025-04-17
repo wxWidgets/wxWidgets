@@ -482,6 +482,7 @@
 		1C544DADDA6F3D62A5E25E93 /* LexerSimple.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CF502E0E4D853CBBBEC885EF /* LexerSimple.cxx */; };
 		CEE0D7A7D5D8323B9957A780 /* notifmsgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 924AA3A156F834BCA1A57976 /* notifmsgg.cpp */; };
 		6463C9BE78C0394CB7B451FA /* pcre2_compile.c in Sources */ = {isa = PBXBuildFile; fileRef = BDADEB1DA6433E52972C8934 /* pcre2_compile.c */; };
+		AB6677BE66733F91B8F773CA /* pcre2_compile_class.c in Sources */ = {isa = PBXBuildFile; fileRef = 820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */; };
 		D6B73239BF0E32288161679C /* platinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 97FFB03FF6793506B246BAC6 /* platinfo.cpp */; };
 		2989056891153968B372EA14 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 45D7558DF5E03A2EB41883F0 /* pngwutil.c */; };
 		20F10669703137E68318C6FD /* cmndata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0510EE0FB3FF36EF8670ABD1 /* cmndata.cpp */; };
@@ -1732,6 +1733,7 @@
 		5F2C2A46781739D897CF293E /* xh_chckl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA3F8832890138E9AB6E65D8 /* xh_chckl.cpp */; };
 		5F57C4908E5038D19D68ED7A /* gallery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F1C1EB5C0B3302C86D91315 /* gallery.cpp */; };
 		6463C9BE78C0394CB7B451FB /* pcre2_compile.c in Sources */ = {isa = PBXBuildFile; fileRef = BDADEB1DA6433E52972C8934 /* pcre2_compile.c */; };
+		AB6677BE66733F91B8F773CB /* pcre2_compile_class.c in Sources */ = {isa = PBXBuildFile; fileRef = 820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */; };
 		52C0984A2A4F31BC885519B2 /* xtistrm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDAEFCE0ED9D30DA94340A3B /* xtistrm.cpp */; };
 		E39021D3CDCD33BAA646B006 /* sckaddr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE8238DA30FF3FB984511250 /* sckaddr.cpp */; };
 		DF8124E5E17D386A84CEEA28 /* LexLisp.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 40586C8986443431A64EB066 /* LexLisp.cxx */; };
@@ -2770,6 +2772,7 @@
 		D5C304182151365FA9FF8A3F /* xh_bttn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0785AD527D033586A7DCE8B8 /* xh_bttn.cpp */; };
 		B8FEEC2C94183AB69C963178 /* headercolcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B558F1ED9346332D8C4BDFBC /* headercolcmn.cpp */; };
 		6463C9BE78C0394CB7B451FC /* pcre2_compile.c in Sources */ = {isa = PBXBuildFile; fileRef = BDADEB1DA6433E52972C8934 /* pcre2_compile.c */; };
+		AB6677BE66733F91B8F773CC /* pcre2_compile_class.c in Sources */ = {isa = PBXBuildFile; fileRef = 820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */; };
 		A53B8C3ED0D33A1D9AA8219B /* toolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3BF8C9FF2D5314591329D0D /* toolbar.mm */; };
 		2F7F5B9BBCD83D90B237A1A1 /* markupparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA7F7633279936EFA0B9C5CF /* markupparser.cpp */; };
 		7FC3D17B3C853FE58841002E /* timercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7195E665E0F233839B967FC9 /* timercmn.cpp */; };
@@ -4859,6 +4862,7 @@
 		6831AA74AB5B38D5AA6946D7 /* settings.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = settings.mm; path = ../../src/osx/cocoa/settings.mm; sourceTree = SOURCE_ROOT; };
 		933D7637CAA43F6C99814BC5 /* arm_init.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = arm_init.c; path = ../../src/png/arm/arm_init.c; sourceTree = SOURCE_ROOT; };
 		BDADEB1DA6433E52972C8934 /* pcre2_compile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_compile.c; path = ../../3rdparty/pcre/src/pcre2_compile.c; sourceTree = SOURCE_ROOT; };
+		820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_compile_class.c; path = ../../3rdparty/pcre/src/pcre2_compile_class.c; sourceTree = SOURCE_ROOT; };
 		B2D390E5D5BF32D4AAA1E15A /* jdmainct.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jdmainct.c; path = ../../src/jpeg/jdmainct.c; sourceTree = SOURCE_ROOT; };
 		9D602B5F09E8314CB9F65C11 /* filter_sse2_intrinsics.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = filter_sse2_intrinsics.c; path = ../../src/png/intel/filter_sse2_intrinsics.c; sourceTree = SOURCE_ROOT; };
 		A436B55DC44E3827A757A6D8 /* accelcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = accelcmn.cpp; path = ../../src/common/accelcmn.cpp; sourceTree = SOURCE_ROOT; };
@@ -6530,6 +6534,7 @@
 				C3904351139F3F0DB4B72F94 /* pcre2_auto_possess.c */,
 				5C801D9ACC573E0C9AED2C73 /* pcre2_chkdint.c */,
 				BDADEB1DA6433E52972C8934 /* pcre2_compile.c */,
+				820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */,
 				FC6A8FAE9CA63EEB8883B6BD /* pcre2_config.c */,
 				3026D20A03E53F1DB40FB35A /* pcre2_context.c */,
 				BCED9B1D0D7E3FBBAC78CE5B /* pcre2_convert.c */,
@@ -9422,6 +9427,7 @@
 				9FA6C4275F0D3E1A884ED562 /* pcre2_auto_possess.c in Sources */,
 				F325D523A82F33B39C76125D /* pcre2_chkdint.c in Sources */,
 				6463C9BE78C0394CB7B451FC /* pcre2_compile.c in Sources */,
+				AB6677BE66733F91B8F773CC /* pcre2_compile_class.c in Sources */,
 				D7F14BDFFB7F369B842AFC13 /* pcre2_config.c in Sources */,
 				27B5431DC79733CD8D403E88 /* pcre2_context.c in Sources */,
 				EB206A0264AD3CAA9F68B8FE /* pcre2_convert.c in Sources */,
@@ -9807,6 +9813,7 @@
 				9FA6C4275F0D3E1A884ED563 /* pcre2_auto_possess.c in Sources */,
 				F325D523A82F33B39C76125C /* pcre2_chkdint.c in Sources */,
 				6463C9BE78C0394CB7B451FA /* pcre2_compile.c in Sources */,
+				AB6677BE66733F91B8F773CA /* pcre2_compile_class.c in Sources */,
 				D7F14BDFFB7F369B842AFC14 /* pcre2_config.c in Sources */,
 				27B5431DC79733CD8D403E89 /* pcre2_context.c in Sources */,
 				EB206A0264AD3CAA9F68B8FD /* pcre2_convert.c in Sources */,
@@ -10638,6 +10645,7 @@
 				9FA6C4275F0D3E1A884ED561 /* pcre2_auto_possess.c in Sources */,
 				F325D523A82F33B39C76125E /* pcre2_chkdint.c in Sources */,
 				6463C9BE78C0394CB7B451FB /* pcre2_compile.c in Sources */,
+				AB6677BE66733F91B8F773CB /* pcre2_compile_class.c in Sources */,
 				D7F14BDFFB7F369B842AFC15 /* pcre2_config.c in Sources */,
 				27B5431DC79733CD8D403E8A /* pcre2_context.c in Sources */,
 				EB206A0264AD3CAA9F68B8FC /* pcre2_convert.c in Sources */,

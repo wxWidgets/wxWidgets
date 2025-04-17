@@ -539,6 +539,7 @@
 		45D88A74B3EE3837B9F79595 /* LexFlagship.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F32C0D20638232CE8F43BF33 /* LexFlagship.cxx */; };
 		527054445A0D3A00A5C2EC44 /* tif_thunder.c in Sources */ = {isa = PBXBuildFile; fileRef = 68BEC0AB8A933CF2B5ACA149 /* tif_thunder.c */; };
 		6463C9BE78C0394CB7B451FA /* pcre2_compile.c in Sources */ = {isa = PBXBuildFile; fileRef = BDADEB1DA6433E52972C8934 /* pcre2_compile.c */; };
+		AB6677BE66733F91B8F773CA /* pcre2_compile_class.c in Sources */ = {isa = PBXBuildFile; fileRef = 820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */; };
 		825EAD51920B387DB4F8C426 /* LexAsn1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A46D50BEBF523B3F88831086 /* LexAsn1.cxx */; };
 		BAFF04F1680F32DA988EB03D /* stockitem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B180290089B139F18B0C7BBA /* stockitem.cpp */; };
 		72AD4417FF7C3094BB1FF62C /* xh_grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93B77251C0E0382D9A8E113D /* xh_grid.cpp */; };
@@ -1399,6 +1400,7 @@
 		53B95C9A1BCB30CC87495DA3 /* xh_text.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_text.cpp; path = ../../src/xrc/xh_text.cpp; sourceTree = SOURCE_ROOT; };
 		0BF1F491B8A8376E8E2E8182 /* cursor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cursor.cpp; path = ../../src/osx/carbon/cursor.cpp; sourceTree = SOURCE_ROOT; };
 		BDADEB1DA6433E52972C8934 /* pcre2_compile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_compile.c; path = ../../3rdparty/pcre/src/pcre2_compile.c; sourceTree = SOURCE_ROOT; };
+		820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pcre2_compile_class.c; path = ../../3rdparty/pcre/src/pcre2_compile_class.c; sourceTree = SOURCE_ROOT; };
 		9E5C91072D533919A78D8ED2 /* LexTACL.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexTACL.cxx; path = ../../src/stc/lexilla/lexers/LexTACL.cxx; sourceTree = SOURCE_ROOT; };
 		9FEB8204E530329FA085E5B8 /* strconv.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = strconv.cpp; path = ../../src/common/strconv.cpp; sourceTree = SOURCE_ROOT; };
 		1BB59DD194923D6399087A75 /* graphcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graphcmn.cpp; path = ../../src/common/graphcmn.cpp; sourceTree = SOURCE_ROOT; };
@@ -2478,6 +2480,7 @@
 				C3904351139F3F0DB4B72F94 /* pcre2_auto_possess.c */,
 				5C801D9ACC573E0C9AED2C73 /* pcre2_chkdint.c */,
 				BDADEB1DA6433E52972C8934 /* pcre2_compile.c */,
+				820B7C6E3EA23992AD35C506 /* pcre2_compile_class.c */,
 				FC6A8FAE9CA63EEB8883B6BD /* pcre2_config.c */,
 				3026D20A03E53F1DB40FB35A /* pcre2_context.c */,
 				BCED9B1D0D7E3FBBAC78CE5B /* pcre2_convert.c */,
@@ -3812,6 +3815,7 @@
 				9FA6C4275F0D3E1A884ED561 /* pcre2_auto_possess.c in Sources */,
 				F325D523A82F33B39C76125C /* pcre2_chkdint.c in Sources */,
 				6463C9BE78C0394CB7B451FA /* pcre2_compile.c in Sources */,
+				AB6677BE66733F91B8F773CA /* pcre2_compile_class.c in Sources */,
 				D7F14BDFFB7F369B842AFC13 /* pcre2_config.c in Sources */,
 				27B5431DC79733CD8D403E88 /* pcre2_context.c in Sources */,
 				EB206A0264AD3CAA9F68B8FC /* pcre2_convert.c in Sources */,
