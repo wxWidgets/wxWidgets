@@ -1128,9 +1128,15 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     wxString extraTraceInfo;
 
-    long key_code = 0;
+    // Check for special keys first: we need to do it even for the keys that
+    // could have an ASCII equivalent because we need to distinguish numpad
+    // keys from the ones on the main keyboard.
+    long key_code = wxTranslateKeySymToWXKey(keysym, false /* !isChar */);
 
-    const guint32 unichar = gdk_keyval_to_unicode(keysym);
+    guint32 unichar = 0;
+    if ( !key_code )
+        unichar = gdk_keyval_to_unicode(keysym);
+
     if ( unichar )
     {
         // The convention used here is rather strange, but conforms to what
@@ -1146,6 +1152,9 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         // key codes that can't be generated in the US layout (e.g. continuing
         // with the French example, "1" would generate "&" key code which can
         // never be entered in the standard US layout).
+        //
+        // However see also the hack inside the hack for some non-letter
+        // characters below.
         if ( (unichar >= 'A' && unichar <= 'Z') ||
                 (unichar >= 'a' && unichar <= 'z') )
         {
@@ -1165,6 +1174,32 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
                 extraTraceInfo = " [XKB]";
 
                 key_code = key_code_str[0];
+
+                // Another hack for wxMSW compatibility: for the non-digit keys
+                // (not characters), we still use their value if it is ASCII,
+                // so that the key marked as "$" on a French keyboard generates
+                // this key and not "]" that it would generate in the US layout
+                // but which is located on a completely different key of the
+                // French keyboard.
+                //
+                // See also the code handling VK_OEM_xxx keys in wxMSW.
+                switch ( key_code )
+                {
+                    case ';':
+                    case '=':
+                    case ',':
+                    case '-':
+                    case '.':
+                    case '/':
+                    case '`':
+                    case '[':
+                    case '\\':
+                    case ']':
+                    case '\'':
+                        if ( unichar < 0x100 )
+                            key_code = unichar;
+                        break;
+                }
             }
             else
 #endif // wxHAS_XKB
@@ -1187,24 +1222,21 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             key_code = toupper(key_code);
         }
     }
-    else // This is not an alphanumeric key, check if we know it.
-    {
-        key_code = wxTranslateKeySymToWXKey(keysym, false /* !isChar */);
-    }
 
-    wxLogTrace(TRACE_KEYS, "Key %s event: %lu -> key=%ld%s",
+    wxLogTrace(TRACE_KEYS, "Key %s event: %lu -> char='%c' key=%ld%s",
                event.GetEventType() == wxEVT_KEY_UP ? "release" : "press",
                static_cast<unsigned long>(keysym),
+               unichar,
                key_code,
                extraTraceInfo);
 
     event.m_keyCode = key_code;
 
 #if wxUSE_UNICODE
-    if ( event.m_keyCode <= WXK_DELETE )
+    if ( event.m_keyCode < 0x100 )
     {
-        // Set Unicode key code to the ASCII equivalent for compatibility. E.g.
-        // let RETURN generate the key event with both key and Unicode key
+        // Set Unicode key code to the Latin-1 equivalent for compatibility.
+        // E.g. let RETURN generate the key event with both key and Unicode key
         // codes of 13.
         event.m_uniChar = event.m_keyCode;
     }
