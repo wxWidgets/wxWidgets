@@ -38,3 +38,6 @@
 	path = src/stc/lexilla
 	url = https://github.com/wxWidgets/lexilla.git
 	branch = wx
+[submodule "src/webp"]
+	path = src/webp
+	url = https://github.com/webmproject/libwebp.git

@@ -246,6 +246,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_exec.obj \
 	$(OBJS)\test_gui_fonttest.obj \
 	$(OBJS)\test_gui_image.obj \
+	$(OBJS)\test_gui_imagwebp.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_htmlparser.obj \
 	$(OBJS)\test_gui_htmlwindow.obj \
@@ -871,7 +872,7 @@ data:
 
 data-image-sample: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm horse.webp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 data-images: 
 	if not exist image mkdir image
@@ -1432,6 +1433,9 @@ $(OBJS)\test_gui_fonttest.obj: .\font\fonttest.cpp
 
 $(OBJS)\test_gui_image.obj: .\image\image.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\image\image.cpp
+
+$(OBJS)\test_gui_imagwebp.obj: .\image\imagwebp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\image\imagwebp.cpp
 
 $(OBJS)\test_gui_rawbmp.obj: .\image\rawbmp.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\image\rawbmp.cpp
