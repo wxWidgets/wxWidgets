@@ -16,9 +16,23 @@
 
 #include "wx/private/launchbrowser.h"
 #include "wx/msw/private.h"     // includes <windows.h>
+#include "wx/msw/private/dpiaware.h"
+
 #include "wx/msw/registry.h"
+
 #include <shellapi.h> // needed for SHELLEXECUTEINFO
 #include <wchar.h>
+
+namespace wxMSWImpl
+{
+
+AutoSystemDpiAware::SetThreadDpiAwarenessContext_t
+AutoSystemDpiAware::ms_pfnSetThreadDpiAwarenessContext =
+    (AutoSystemDpiAware::SetThreadDpiAwarenessContext_t)-1;
+
+} // namespace wxMSWImpl
+
+#ifndef __WXQT__
 
 // ----------------------------------------------------------------------------
 // Launch document with default app
@@ -144,6 +158,8 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 
     return false;
 }
+
+#endif // !__WXQT__
 
 bool wxMSWIsOnSecureScreen()
 {

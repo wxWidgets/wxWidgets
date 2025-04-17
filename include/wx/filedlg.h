@@ -274,7 +274,10 @@ wxSaveFileSelector(const wxString& what,
 #if defined (__WXUNIVERSAL__)
     #define wxHAS_GENERIC_FILEDIALOG
     #include "wx/generic/filedlgg.h"
-#elif defined(__WXMSW__)
+#elif defined(__WXMSW__) || (defined(__WXQT__) && defined(__WINDOWS__))
+    // Note that we use wxMSW version in wxQt under Windows too because it
+    // provides functionality not available in the wxQt version (custom
+    // controls).
     #include "wx/msw/filedlg.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/filedlg.h"     // GTK+ > 2.4 has native version
