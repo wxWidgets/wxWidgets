@@ -15,6 +15,9 @@
     (e.g. HTTP/2, TLS 1.3).
     System-wide configuration like proxy and SSL certificates will be used
     when possible.
+    When using libcurl backend, environment variables `CURL_CA_BUNDLE`,
+    `SSL_CERT_FILE` and `SSL_CERT_DIR` are used to change the trusted
+    certificates location if they are defined.
 
     Instances of wxWebRequest are created by using
     wxWebSession::CreateRequest().

@@ -169,6 +169,22 @@ CURL* wxCURLEasyInit()
         return nullptr;
     }
 
+    // Honour the same environment variables that curl tool itself uses for
+    // customizing the certificates locations.
+    wxString path;
+    if ( wxGetEnv("CURL_CA_BUNDLE", &path) )
+    {
+        wxCURLSetOpt(handle, CURLOPT_CAINFO, path);
+    }
+    else // CURL_CA_BUNDLE overrides SSL_CERT_XXX
+    {
+        if ( wxGetEnv("SSL_CERT_DIR", &path) )
+            wxCURLSetOpt(handle, CURLOPT_CAPATH, path);
+
+        if ( wxGetEnv("SSL_CERT_FILE", &path) )
+            wxCURLSetOpt(handle, CURLOPT_CAINFO, path);
+    }
+
     return handle;
 }
 
