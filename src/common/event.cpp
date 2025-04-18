@@ -22,6 +22,7 @@
 #include "wx/event.h"
 #include "wx/eventfilter.h"
 #include "wx/evtloop.h"
+#include "wx/recguard.h"
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
@@ -1884,6 +1885,8 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 
     DynamicEvents& dynamicEvents = *m_dynamicEvents;
 
+    static wxRecursionGuardFlag s_flag;
+    wxRecursionGuard guard(s_flag);
     bool needToPruneDeleted = false;
 
     // We can't use Get{First,Next}DynamicEntry() here as they hide the deleted
@@ -1899,7 +1902,9 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
             // This entry must have been unbound at some time in the past, so
             // skip it now and really remove it from the vector below, once we
             // finish iterating.
-            needToPruneDeleted = true;
+            // N.B.:  If we are in a nested call, then we can't be done
+            // iterating during this call
+            needToPruneDeleted = !guard.IsInside();
             continue;
         }
 
