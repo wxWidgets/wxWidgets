@@ -654,8 +654,6 @@ private:
     bool m_updateOnRestore = false;
 
 #ifndef SWIG
-    void FrameBind();
-    void FrameUnbind();
     wxDECLARE_CLASS(wxAuiManager);
 #endif // SWIG
 };
