@@ -18,22 +18,12 @@
 #include <QtWidgets/QMdiArea>
 #include <QtWidgets/QMainWindow>
 
-// Main MDI window helper
-
-class wxQtMDIParentFrame : public wxQtEventSignalHandler< QMainWindow, wxMDIParentFrame >
-{
-public:
-    wxQtMDIParentFrame( wxWindow *parent, wxMDIParentFrame *handler );
-
-private:
-};
-
-// Central widget helper (container to show scroll bars and receive events):
+// Central widget helper (provides an area in which MDI windows are displayed):
 
 class wxQtMdiArea : public wxQtEventSignalHandler< QMdiArea, wxMDIClientWindow >
 {
-    public:
-        wxQtMdiArea( wxWindow *parent, wxMDIClientWindow *handler );
+public:
+    wxQtMdiArea(wxWindow *parent, wxMDIClientWindow *handler);
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame);
@@ -46,7 +36,7 @@ wxMDIParentFrame::wxMDIParentFrame(wxWindow *parent,
                  long style,
                  const wxString& name)
 {
-    (void)Create(parent, id, title, pos, size, style, name);
+    Create(parent, id, title, pos, size, style, name);
 }
 
 wxMDIParentFrame::~wxMDIParentFrame()
@@ -62,19 +52,17 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
             long style,
             const wxString& name)
 {
-    m_qtWindow = new wxQtMDIParentFrame( parent, this );
-
-    if (!wxFrameBase::Create( parent, id, title, pos, size, style, name ))
+    if ( !wxFrame::Create(parent, id, title, pos, size, style, name) )
         return false;
 
-    wxMDIClientWindow *client = OnCreateClient();
+    wxMDIClientWindow* client = OnCreateClient();
     m_clientWindow = client;
+
     if ( !m_clientWindow->CreateClient(this, GetWindowStyleFlag()) )
         return false;
 
+    // Replace the central widget set in wxFrame with our wxQtMdiArea.
     GetQMainWindow()->setCentralWidget( client->GetHandle() );
-
-    PostCreation();
 
     return true;
 }
@@ -89,7 +77,7 @@ void wxMDIParentFrame::ActivatePrevious()
 
 //##############################################################################
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxMDIChildFrameBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxMDIChildFrameBase)
 
 wxMDIChildFrame::wxMDIChildFrame(wxMDIParentFrame *parent,
                 wxWindowID id,
@@ -141,11 +129,6 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long WXUNUSED(sty
 }
 
 // Helper implementation:
-
-wxQtMDIParentFrame::wxQtMDIParentFrame( wxWindow *parent, wxMDIParentFrame *handler )
-    : wxQtEventSignalHandler< QMainWindow, wxMDIParentFrame >( parent, handler )
-{
-}
 
 wxQtMdiArea::wxQtMdiArea(wxWindow *parent, wxMDIClientWindow *handler )
     : wxQtEventSignalHandler< QMdiArea, wxMDIClientWindow >( parent, handler )
