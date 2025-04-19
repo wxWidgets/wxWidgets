@@ -67,6 +67,11 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     return true;
 }
 
+QMdiArea* wxMDIParentFrame::GetQtMdiArea() const
+{
+    return static_cast<QMdiArea*>(m_clientWindow->GetHandle());
+}
+
 void wxMDIParentFrame::ActivateNext()
 {
 }
