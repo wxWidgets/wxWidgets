@@ -18,6 +18,12 @@
 #include <QtWidgets/QMdiArea>
 #include <QtWidgets/QMdiSubWindow>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
+
+namespace
+{
+static QMdiSubWindow* gs_qtActiveSubWindow = nullptr;
+}
 
 // Central widget helper (provides an area in which MDI windows are displayed):
 
@@ -96,6 +102,18 @@ wxMDIChildFrame::wxMDIChildFrame(wxMDIParentFrame *parent,
     Create(parent, id, title, pos, size, style, name);
 }
 
+wxMDIChildFrame::~wxMDIChildFrame()
+{
+    if ( gs_qtActiveSubWindow == m_qtSubWindow )
+    {
+        m_mdiParent->GetQtMdiArea()->closeActiveSubWindow();
+        m_mdiParent->SetActiveChild(nullptr);
+        gs_qtActiveSubWindow = nullptr;
+    }
+
+    delete m_menuBar;
+}
+
 bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
             wxWindowID id,
             const wxString& title,
@@ -116,6 +134,55 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     if ( size != wxDefaultSize )
         m_qtSubWindow->setMinimumSize(wxQtConvertSize(size));
 
+    QObject::connect(m_qtSubWindow, &QMdiSubWindow::aboutToActivate, [this]()
+        {
+            // m_qtSubWindow will be the active window, so we need to restore m_mdiParent's
+            // menubar stored in the previouse active one "gs_qtActiveSubWindow".
+            if ( m_qtSubWindow != gs_qtActiveSubWindow && gs_qtActiveSubWindow )
+            {
+                auto win = wxWindowQt::QtRetrieveWindowPointer(gs_qtActiveSubWindow->widget());
+                static_cast<wxMDIChildFrame*>(win)->InternalSetMenuBar();
+            }
+        });
+
+    QObject::connect(m_mdiParent->GetQtMdiArea(), &QMdiArea::subWindowActivated,
+        [this](QMdiSubWindow* window)
+        {
+            QWidget* qtWidget = nullptr;
+
+            bool activated = false;
+
+            if ( window )
+            {
+                if ( window != gs_qtActiveSubWindow )
+                {
+                    // window is the active window and it's menubar will be attached to m_mdiParent
+                    // with InternalSetMenuBar() call below.
+                    qtWidget = window->widget();
+
+                    activated = true;
+                }
+            }
+            else if ( gs_qtActiveSubWindow )
+            {
+                // the old active window "gs_qtActiveSubWindow" should restore the m_mdiParent's
+                // menubar with InternalSetMenuBar() call below.
+                qtWidget = gs_qtActiveSubWindow->widget();
+            }
+
+            if ( qtWidget )
+            {
+                const auto win = wxWindowQt::QtRetrieveWindowPointer(qtWidget);
+                const auto childFrame = static_cast<wxMDIChildFrame*>(win);
+
+                childFrame->InternalSetMenuBar();
+
+                childFrame->GetMDIParent()->SetActiveChild(activated ? childFrame : nullptr);
+            }
+
+            gs_qtActiveSubWindow = window;
+        });
+
     return true;
 }
 
@@ -126,6 +193,44 @@ void wxMDIChildFrame::SetWindowStyleFlag(long style)
 
 void wxMDIChildFrame::Activate()
 {
+}
+
+void wxMDIChildFrame::SetMenuBar(wxMenuBar* menuBar)
+{
+    if ( m_menuBar )
+    {
+        if ( m_mdiParent->GetQtMdiArea()->activeSubWindow() == m_qtSubWindow )
+        {
+            // This window is the active one and it's menubar is attached to
+            // m_mdiParent window. Restore the parent's menubar by calling
+            // InternalSetMenuBar() before deleting the old m_menuBar.
+
+            InternalSetMenuBar();
+
+            delete m_menuBar;
+        }
+    }
+
+    m_menuBar = menuBar;
+
+    // Don't call wxFrameBase::SetMenuBar() here because m_menuBar will be
+    // attached to m_mdiParent later when this child frame becomes active.
+}
+
+void wxMDIChildFrame::InternalSetMenuBar()
+{
+    wxCHECK_RET(m_mdiParent, "Invalid MDI parent window");
+
+    auto oldMenuBar = m_mdiParent->GetMenuBar();
+
+    if ( m_menuBar != oldMenuBar )
+    {
+        m_mdiParent->SetMenuBar(m_menuBar);
+
+        m_menuBar->Show(); // Show the attached menubar
+        m_menuBar = oldMenuBar;
+        m_menuBar->Hide(); // Hide the detached menubar
+    }
 }
 
 //##############################################################################
