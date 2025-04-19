@@ -207,7 +207,9 @@ MyCanvas::MyCanvas(wxView *view, wxWindow *parent)
     m_currentSegment = nullptr;
     m_lastMousePos = wxDefaultPosition;
 
+#ifndef __WXQT__
     SetCursor(wxCursor(wxCURSOR_PENCIL));
+#endif
 
     // this is completely arbitrary and is done just for illustration purposes
     SetVirtualSize(1000, 1000);
