@@ -63,6 +63,8 @@ public:
                     long style = wxDEFAULT_FRAME_STYLE,
                     const wxString& name = wxASCII_STR(wxFrameNameStr));
 
+    ~wxMDIChildFrame();
+
     bool Create(wxMDIParentFrame *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -72,6 +74,13 @@ public:
                 const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual void Activate() override;
+
+    virtual void SetMenuBar(wxMenuBar* menubar) override;
+
+    // This function is responsible for attaching/detaching this frame's menubar
+    // to m_mdiParent. i.e. the menubar is attached when this frame becomes active
+    // Otherwise, it will be detached and the m_mdiParent's menubar will be restored.
+    void InternalSetMenuBar();
 
     // wxMDIChildFrame doesn't have toolbar nor statusbar
     // --------------------------------------------------
@@ -95,6 +104,8 @@ protected:
     virtual QWidget* QtGetParentWidget() const override { return GetHandle(); }
 
 private:
+
+    wxMenuBar* m_menuBar = nullptr;
 
     QMdiSubWindow* m_qtSubWindow = nullptr;
 
