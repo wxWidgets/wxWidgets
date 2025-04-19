@@ -11,6 +11,7 @@
 #if wxUSE_MDI
 
 #include "wx/mdi.h"
+#include "wx/stockitem.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -48,6 +49,10 @@ wxMDIParentFrame::wxMDIParentFrame(wxWindow *parent,
 
 wxMDIParentFrame::~wxMDIParentFrame()
 {
+    // Avoid double deletion by preventing the parent window from deleting
+    // m_windowMenu which will be deleted by this frame's menubar.
+    m_windowMenu = nullptr;
+
     delete m_clientWindow;
 }
 
@@ -127,6 +132,120 @@ void wxMDIParentFrame::OnMDICommand(wxCommandEvent& event)
     }
 }
 
+int wxMDIParentFrame::GetChildFramesCount() const
+{
+    const auto parent = GetClientWindow(); // The parent of our wxMDIChildFrames
+
+    int count = 0;
+    for ( wxWindowList::const_iterator i = parent->GetChildren().begin();
+          i != parent->GetChildren().end();
+          ++i )
+    {
+        if ( wxDynamicCast(*i, wxMDIChildFrame) )
+            count++;
+    }
+
+    return count;
+}
+
+#if wxUSE_MENUS
+void wxMDIParentFrame::AddMDIChild(wxMDIChildFrame* WXUNUSED(child))
+{
+    switch ( GetChildFramesCount() )
+    {
+        case 1:
+            // first MDI child was just added, we need to insert the window
+            // menu now if we have it
+            AddWindowMenu();
+
+            // and disable the items which can't be used until we have more
+            // than one child
+            UpdateWindowMenu(false);
+            break;
+
+        case 2:
+            // second MDI child was added, enable the menu items which were
+            // disabled because they didn't make sense for a single window
+            UpdateWindowMenu(true);
+            break;
+    }
+}
+
+void wxMDIParentFrame::RemoveMDIChild(wxMDIChildFrame* WXUNUSED(child))
+{
+    switch ( GetChildFramesCount() )
+    {
+        case 1:
+            // last MDI child is being removed, remove the now unnecessary
+            // window menu too
+            RemoveWindowMenu();
+
+            // wxWidgets just deletes the windows contained in m_qtSubWindows
+            // when closing all frames from the "clear" menu. So we need to
+            // close them explicitly with closeAllSubWindows().
+            GetQtMdiArea()->closeAllSubWindows();
+
+            gs_qtActiveSubWindow = nullptr;
+
+            // there is no need to call UpdateWindowMenu(true) here so this is
+            // not quite symmetric to AddMDIChild() above
+            break;
+
+        case 2:
+            // only one MDI child is going to remain, disable the menu commands
+            // which don't make sense for a single child window
+            UpdateWindowMenu(false);
+            break;
+    }
+}
+
+void wxMDIParentFrame::AddWindowMenu()
+{
+    // this style can be used to prevent a window from having the standard MDI
+    // "Window" menu
+    if ( !(GetWindowStyleFlag() & wxFRAME_NO_WINDOW_MENU) && !m_windowMenu )
+    {
+        m_windowMenu = new wxMenu;
+
+        // Qt offers only "Tile" without specifying any direction, so just
+        // reuse one of the predifined ids.
+
+        m_windowMenu->Append(wxID_MDI_WINDOW_CASCADE, _("&Cascade"));
+        m_windowMenu->Append(wxID_MDI_WINDOW_TILE_HORZ, _("&Tile"));
+        m_windowMenu->AppendSeparator();
+        m_windowMenu->Append(wxID_MDI_WINDOW_NEXT, _("&Next"));
+        m_windowMenu->Append(wxID_MDI_WINDOW_PREV, _("&Previous"));
+
+        Bind(wxEVT_MENU, &wxMDIParentFrame::OnMDICommand, this,
+             wxID_MDI_WINDOW_FIRST, wxID_MDI_WINDOW_LAST);
+    }
+}
+
+void wxMDIParentFrame::RemoveWindowMenu()
+{
+    if ( m_windowMenu )
+    {
+        auto pos = GetMenuBar()->FindMenu(m_windowMenu->GetTitle());
+        if ( pos != wxNOT_FOUND )
+        {
+            GetMenuBar()->Remove(pos);
+        }
+
+        delete m_windowMenu;
+        m_windowMenu = nullptr;
+    }
+}
+
+void wxMDIParentFrame::UpdateWindowMenu(bool enable)
+{
+    if ( m_windowMenu )
+    {
+        m_windowMenu->Enable(wxID_MDI_WINDOW_NEXT, enable);
+        m_windowMenu->Enable(wxID_MDI_WINDOW_PREV, enable);
+    }
+}
+#endif // wxUSE_MENUS
+
 //##############################################################################
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxMDIChildFrameBase)
@@ -146,10 +265,15 @@ wxMDIChildFrame::~wxMDIChildFrame()
 {
     if ( gs_qtActiveSubWindow == m_qtSubWindow )
     {
+        // wxWidgets just deletes the window contained in m_qtSubWindow
+        // when Closing this frame from the menu or by Ctrl+W. So we need
+        // to close it explicitly with closeActiveSubWindow().
         m_mdiParent->GetQtMdiArea()->closeActiveSubWindow();
         m_mdiParent->SetActiveChild(nullptr);
         gs_qtActiveSubWindow = nullptr;
     }
+
+    m_mdiParent->RemoveMDIChild(this);
 
     delete m_menuBar;
 }
@@ -223,6 +347,8 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
             gs_qtActiveSubWindow = window;
         });
 
+    m_mdiParent->AddMDIChild(this);
+
     return true;
 }
 
@@ -269,9 +395,37 @@ void wxMDIChildFrame::InternalSetMenuBar()
     {
         m_mdiParent->SetMenuBar(m_menuBar);
 
+        AttachWindowMenuTo(m_menuBar, oldMenuBar);
+
         m_menuBar->Show(); // Show the attached menubar
         m_menuBar = oldMenuBar;
         m_menuBar->Hide(); // Hide the detached menubar
+    }
+}
+
+void wxMDIChildFrame::AttachWindowMenuTo(wxMenuBar* attachedMenuBar,
+                                         wxMenuBar* detachedMenuBar)
+{
+    const wxString windowMenuTitle = _("&Window");
+
+    if ( detachedMenuBar )
+    {
+        auto pos = detachedMenuBar->FindMenu(windowMenuTitle);
+        if ( pos != wxNOT_FOUND )
+        {
+            detachedMenuBar->Remove(pos);
+        }
+    }
+
+    auto windowMenu = m_mdiParent->GetWindowMenu();
+
+    if ( windowMenu && attachedMenuBar )
+    {
+        auto pos = attachedMenuBar->FindMenu(wxGetStockLabel(wxID_HELP));
+        if ( pos != wxNOT_FOUND )
+        {
+            attachedMenuBar->Insert(pos, windowMenu, windowMenuTitle);
+        }
     }
 }
 

@@ -46,7 +46,33 @@ public:
     virtual void ActivateNext() override;
     virtual void ActivatePrevious() override;
 
+    // implementation only from now on
+
+    // MDI helpers
+    // -----------
+
+#if wxUSE_MENUS
+    // called by wxMDIChildFrame after it was successfully created
+    void AddMDIChild(wxMDIChildFrame* child);
+
+    // called by wxMDIChildFrame just before it is destroyed
+    void RemoveMDIChild(wxMDIChildFrame* child);
+#endif // wxUSE_MENUS
+
 private:
+    void OnMDICommand(wxCommandEvent& event);
+
+    // add/remove window menu if we have it (i.e. m_windowMenu != nullptr)
+    void AddWindowMenu();
+    void RemoveWindowMenu();
+
+    // update the window menu (if we have it) to enable or disable the commands
+    // which only make sense when we have more than one child
+    void UpdateWindowMenu(bool enable);
+
+    // return the number of child frames we currently have (maybe 0)
+    int GetChildFramesCount() const;
+
     wxDECLARE_DYNAMIC_CLASS(wxMDIParentFrame);
 };
 
@@ -106,6 +132,7 @@ protected:
     virtual QWidget* QtGetParentWidget() const override { return GetHandle(); }
 
 private:
+    void AttachWindowMenuTo(wxMenuBar* attachedMenuBar, wxMenuBar* detachedMenuBar);
 
     wxMenuBar* m_menuBar = nullptr;
 
