@@ -9,6 +9,7 @@
 #define _WX_QT_MDI_H_
 
 class QMdiArea;
+class QMdiSubWindow;
 
 class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {
@@ -71,6 +72,31 @@ public:
                 const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual void Activate() override;
+
+    // wxMDIChildFrame doesn't have toolbar nor statusbar
+    // --------------------------------------------------
+
+#if wxUSE_STATUSBAR
+    virtual void SetStatusBar(wxStatusBar* WXUNUSED(statusBar)) override {}
+#endif // wxUSE_STATUSBAR
+
+#if wxUSE_TOOLBAR
+    virtual void SetToolBar(wxToolBar* WXUNUSED(toolbar)) override {}
+#endif // wxUSE_TOOLBAR
+
+    virtual void SetWindowStyleFlag( long style ) override;
+
+protected:
+    virtual wxPoint GetClientAreaOrigin() const override
+    {
+        return wxWindow::GetClientAreaOrigin();
+    }
+
+    virtual QWidget* QtGetParentWidget() const override { return GetHandle(); }
+
+private:
+
+    QMdiSubWindow* m_qtSubWindow = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxMDIChildFrame);
 };
