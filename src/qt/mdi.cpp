@@ -26,6 +26,14 @@ namespace
 static QMdiSubWindow* gs_qtActiveSubWindow = nullptr;
 }
 
+/*static*/
+bool wxMDIParentFrame::ms_isTDI =
+#if defined(__WINDOWS__)
+    false;
+#else // !__WINDOWS__
+    true;
+#endif // __WINDOWS__
+
 // Central widget helper (provides an area in which MDI windows are displayed):
 
 class wxQtMdiArea : public wxQtEventSignalHandler< QMdiArea, wxMDIClientWindow >
@@ -76,7 +84,16 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     // Replace the central widget set in wxFrame with our wxQtMdiArea.
     GetQMainWindow()->setCentralWidget( client->GetHandle() );
 
+    QtSetPreferredDI(ms_isTDI);
+
     return true;
+}
+
+void wxMDIParentFrame::QtSetPreferredDI(bool isTDI)
+{
+    ms_isTDI = isTDI;
+
+    GetQtMdiArea()->setViewMode(isTDI ? QMdiArea::TabbedView : QMdiArea::SubWindowView);
 }
 
 QMdiArea* wxMDIParentFrame::GetQtMdiArea() const
@@ -210,9 +227,16 @@ void wxMDIParentFrame::AddWindowMenu()
         // Qt offers only "Tile" without specifying any direction, so just
         // reuse one of the predifined ids.
 
-        m_windowMenu->Append(wxID_MDI_WINDOW_CASCADE, _("&Cascade"));
-        m_windowMenu->Append(wxID_MDI_WINDOW_TILE_HORZ, _("&Tile"));
-        m_windowMenu->AppendSeparator();
+        if ( !ms_isTDI )
+        {
+            // Qt offers only "Tile" without specifying any direction, so just
+            // reuse one of the predifined ids.
+
+            m_windowMenu->Append(wxID_MDI_WINDOW_CASCADE, _("&Cascade"));
+            m_windowMenu->Append(wxID_MDI_WINDOW_TILE_HORZ, _("&Tile"));
+            m_windowMenu->AppendSeparator();
+        }
+
         m_windowMenu->Append(wxID_MDI_WINDOW_NEXT, _("&Next"));
         m_windowMenu->Append(wxID_MDI_WINDOW_PREV, _("&Previous"));
 

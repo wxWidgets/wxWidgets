@@ -36,10 +36,15 @@ public:
 
     QMdiArea* GetQtMdiArea() const;
 
+    void QtSetPreferredDI(bool isTDI = true);
+
     // override/implement base class [pure] virtual methods
     // ----------------------------------------------------
 
-    static bool IsTDI() { return false; }
+    // The default is to return what wxMDIParentFrame::IsTDI() is supposed to
+    // return under the target platform. i.e. wxMSW and wxOSX return false,
+    // while wxGTK returns true. Use QtSetPreferredDI() to change the default.
+    static bool IsTDI() { return ms_isTDI; }
 
     virtual void Cascade() override;
     virtual void Tile(wxOrientation orient = wxHORIZONTAL) override;
@@ -72,6 +77,10 @@ private:
 
     // return the number of child frames we currently have (maybe 0)
     int GetChildFramesCount() const;
+
+    // TDI=true, MDI=false
+    // Default to false under Windows, true otherwise.
+    static bool ms_isTDI;
 
     wxDECLARE_DYNAMIC_CLASS(wxMDIParentFrame);
 };
