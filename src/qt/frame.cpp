@@ -49,8 +49,12 @@ public:
 
 wxFrame::~wxFrame()
 {
-    // central widget should be deleted by qt when the main window is destroyed
-    QtStoreWindowPointer( GetQMainWindow()->centralWidget(), nullptr );
+    // Always false for MDI children
+    if ( GetQMainWindow() && GetQMainWindow()->centralWidget() )
+    {
+        // central widget should be deleted by qt when the main window is destroyed
+        QtStoreWindowPointer(GetQMainWindow()->centralWidget(), nullptr);
+    }
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
@@ -227,5 +231,10 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 
 QMainWindow *wxFrame::GetQMainWindow() const
 {
-    return static_cast<QMainWindow*>(m_qtWindow);
+    // Notice that we intentionally use qobject_cast<> here (and not static_cast<>)
+    // because when this function is called on an object of wxMDIChildFrame (which
+    // derives from this class) m_qtWindow is not a QMainWindow, and we want to
+    // return nullptr in this case.
+
+    return qobject_cast<QMainWindow*>(m_qtWindow);
 }
