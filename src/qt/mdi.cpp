@@ -342,6 +342,11 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                 childFrame->InternalSetMenuBar();
 
                 childFrame->GetMDIParent()->SetActiveChild(activated ? childFrame : nullptr);
+
+                wxActivateEvent event(wxEVT_ACTIVATE, activated, win->GetId());
+                event.SetEventObject(win);
+
+                win->HandleWindowEvent(event);
             }
 
             gs_qtActiveSubWindow = window;
