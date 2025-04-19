@@ -8,6 +8,8 @@
 #ifndef _WX_QT_MDI_H_
 #define _WX_QT_MDI_H_
 
+class QMdiArea;
+
 class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {
 public:
@@ -30,6 +32,8 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                 const wxString& name = wxASCII_STR(wxFrameNameStr));
+
+    QMdiArea* GetQtMdiArea() const;
 
     // override/implement base class [pure] virtual methods
     // ----------------------------------------------------
