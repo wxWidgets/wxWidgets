@@ -26,6 +26,14 @@ namespace
 static QMdiSubWindow* gs_qtActiveSubWindow = nullptr;
 }
 
+/*static*/
+wxMDIParentFrame::Layout wxMDIParentFrame::ms_layout =
+#if defined(__WINDOWS__)
+    Layout::MDI;
+#else // !__WINDOWS__
+    Layout::Tabbed;
+#endif // __WINDOWS__
+
 // Central widget helper (provides an area in which MDI windows are displayed):
 
 class wxQtMdiArea : public wxQtEventSignalHandler< QMdiArea, wxMDIClientWindow >
@@ -76,7 +84,34 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     // Replace the central widget set in wxFrame with our wxQtMdiArea.
     GetQMainWindow()->setCentralWidget( client->GetHandle() );
 
+    QtSetPreferredDILayout(ms_layout);
+
     return true;
+}
+
+void wxMDIParentFrame::QtSetPreferredDILayout(Layout layout)
+{
+    ms_layout = layout;
+
+    QMdiArea::ViewMode viewMode;
+
+    switch ( layout )
+    {
+    case Layout::MDI:
+        viewMode = QMdiArea::SubWindowView;
+        break;
+
+    case Layout::Tabbed:
+        viewMode = QMdiArea::TabbedView;
+        break;
+
+    default:
+        viewMode = QMdiArea::SubWindowView;
+        wxFAIL_MSG("Unknown layout passed to QtSetPreferredDILayout()");
+        break;
+    }
+
+    GetQtMdiArea()->setViewMode(viewMode);
 }
 
 QMdiArea* wxMDIParentFrame::GetQtMdiArea() const
@@ -210,9 +245,16 @@ void wxMDIParentFrame::AddWindowMenu()
         // Qt offers only "Tile" without specifying any direction, so just
         // reuse one of the predifined ids.
 
-        m_windowMenu->Append(wxID_MDI_WINDOW_CASCADE, _("&Cascade"));
-        m_windowMenu->Append(wxID_MDI_WINDOW_TILE_HORZ, _("&Tile"));
-        m_windowMenu->AppendSeparator();
+        if ( ms_layout == Layout::MDI )
+        {
+            // Qt offers only "Tile" without specifying any direction, so just
+            // reuse one of the predifined ids.
+
+            m_windowMenu->Append(wxID_MDI_WINDOW_CASCADE, _("&Cascade"));
+            m_windowMenu->Append(wxID_MDI_WINDOW_TILE_HORZ, _("&Tile"));
+            m_windowMenu->AppendSeparator();
+        }
+
         m_windowMenu->Append(wxID_MDI_WINDOW_NEXT, _("&Next"));
         m_windowMenu->Append(wxID_MDI_WINDOW_PREV, _("&Previous"));
 

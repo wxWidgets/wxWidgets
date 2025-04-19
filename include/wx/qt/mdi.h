@@ -36,10 +36,21 @@ public:
 
     QMdiArea* GetQtMdiArea() const;
 
+    enum class Layout
+    {
+        MDI,
+        Tabbed
+    };
+
+    void QtSetPreferredDILayout(Layout layout);
+
     // override/implement base class [pure] virtual methods
     // ----------------------------------------------------
 
-    static bool IsTDI() { return false; }
+    // The default is to return what wxMDIParentFrame::IsTDI() is supposed to
+    // return under the target platform. i.e. wxMSW and wxOSX return false,
+    // while wxGTK returns true. Use QtSetPreferredDILayout() to change that.
+    static bool IsTDI() { return ms_layout == Layout::Tabbed; }
 
     virtual void Cascade() override;
     virtual void Tile(wxOrientation orient = wxHORIZONTAL) override;
@@ -72,6 +83,10 @@ private:
 
     // return the number of child frames we currently have (maybe 0)
     int GetChildFramesCount() const;
+
+    // TDI=true, MDI=false
+    // Default to false under Windows, true otherwise.
+    static Layout ms_layout;
 
     wxDECLARE_DYNAMIC_CLASS(wxMDIParentFrame);
 };
