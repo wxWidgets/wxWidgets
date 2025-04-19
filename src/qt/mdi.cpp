@@ -79,12 +79,52 @@ QMdiArea* wxMDIParentFrame::GetQtMdiArea() const
     return static_cast<QMdiArea*>(m_clientWindow->GetHandle());
 }
 
+void wxMDIParentFrame::Cascade()
+{
+    GetQtMdiArea()->cascadeSubWindows();
+}
+
+void wxMDIParentFrame::Tile(wxOrientation WXUNUSED(orient))
+{
+    GetQtMdiArea()->tileSubWindows();
+}
+
 void wxMDIParentFrame::ActivateNext()
 {
+    GetQtMdiArea()->activateNextSubWindow();
 }
 
 void wxMDIParentFrame::ActivatePrevious()
 {
+    GetQtMdiArea()->activatePreviousSubWindow();
+}
+
+void wxMDIParentFrame::OnMDICommand(wxCommandEvent& event)
+{
+    switch ( event.GetId() )
+    {
+    case wxID_MDI_WINDOW_CASCADE:
+        Cascade();
+        break;
+
+    case wxID_MDI_WINDOW_TILE_HORZ:
+        wxFALLTHROUGH;
+    case wxID_MDI_WINDOW_TILE_VERT:
+        Tile();
+        break;
+
+    case wxID_MDI_WINDOW_NEXT:
+        ActivateNext();
+        break;
+
+    case wxID_MDI_WINDOW_PREV:
+        ActivatePrevious();
+        break;
+
+    default:
+        wxFAIL_MSG("unknown MDI command");
+        break;
+    }
 }
 
 //##############################################################################
@@ -193,6 +233,8 @@ void wxMDIChildFrame::SetWindowStyleFlag(long style)
 
 void wxMDIChildFrame::Activate()
 {
+    m_mdiParent->GetQtMdiArea()->setActiveSubWindow(m_qtSubWindow);
+    m_mdiParent->SetActiveChild(this);
 }
 
 void wxMDIChildFrame::SetMenuBar(wxMenuBar* menuBar)
