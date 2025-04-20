@@ -16,9 +16,10 @@
 #   };
 #
 # If a symbols should have been added in this way, but is forgotten then it
-# cannot be added in the next release. This is because it has already been
-# released with the generic branch version due to the final wildcard below,
-# and once released its version cannot be changed.
+# cannot be added to the next release version tag, but we can workaround the
+# problem by using wxELF_VERSION_COMPAT() macro in the source code. Note that
+# this is why some version tags are defined here even if no symbols are
+# assigned to them: they are used by that macro.
 
 
 # symbols available since the beginning of this branch are only given

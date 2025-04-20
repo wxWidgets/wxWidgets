@@ -3439,6 +3439,72 @@ if test "$wxUSE_SHARED" = "yes"; then
     dnl use versioned symbols if available on the platform and not disabled
     if test "$wxUSE_ELF_SYMVER" != "no"; then
         WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
+
+        if test "$wx_cv_version_script" = "yes"; then
+            dnl We want to use either __symver__ attribute (preferably, as it
+            dnl works with LTO) or .symver, but to avoid checking for both of
+            dnl them, use the header file which can check if the attribute is
+            dnl available. Just remember to pretend that we do have support
+            dnl for this before including it, as it relies on this symbol,
+            dnl which we'll define below only if things do indeed work.
+            saveCppflags="$CPPFLAGS"
+            CPPFLAGS="$saveCppflags -I${srcdir}/include -DwxHAVE_ELF_SYMVER"
+
+            saveLdflags="$LDFLAGS"
+            LDFLAGS="$saveLdflags -Wl,--version-script,conftest.sym"
+
+            AC_CACHE_CHECK([if using multiple ELF symbol versions is supported],
+                wx_cv_elf_symver_multiple,
+                [
+                    echo "lib_new {}; lib_old { *; };" >conftest.sym
+                    AC_LINK_IFELSE([
+                        AC_LANG_SOURCE([
+                            #include "wx/private/elfversion.h"
+                            wxELF_SYMVER("foo","foo@lib_old")
+                            wxELF_SYMVER("foo","foo@@lib_new")
+                            void foo() {}
+                            int main() { return 0; }
+                        ])],
+                        wx_cv_elf_symver_multiple=yes,
+                        wx_cv_elf_symver_multiple=no
+                    )
+                    rm -f conftest.sym
+                ]
+            )
+
+            if test "$wx_cv_elf_symver_multiple" = "yes"; then
+                wx_cv_elf_symver=yes
+            else
+                AC_CACHE_CHECK([if using ELF symbol versions is supported],
+                    wx_cv_elf_symver,
+                    [
+                        echo "lib_new {}; lib_old { *; };" >conftest.sym
+                        AC_LINK_IFELSE([
+                            AC_LANG_SOURCE([
+                                #include "wx/private/elfversion.h"
+                                wxELF_SYMVER("foo","foo@@lib_new")
+                                void foo() {}
+                                int main() { return 0; }
+                            ])],
+                            wx_cv_elf_symver=yes,
+                            wx_cv_elf_symver=no
+                        )
+                        rm -f conftest.sym
+                    ]
+                )
+            fi
+
+            if test "$wx_cv_elf_symver" = "yes"; then
+                AC_DEFINE(wxHAVE_ELF_SYMVER)
+            fi
+
+            if test "$wx_cv_elf_symver_multiple" = "yes"; then
+                AC_DEFINE(wxHAVE_ELF_SYMVER_MULTIPLE)
+            fi
+
+            LDFLAGS="$saveLdflags"
+            CPPFLAGS="$saveCppflags"
+        fi
     fi
 
     dnl test for GCC's visibility support (sets CFLAGS_VISIBILITY, which is

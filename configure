@@ -31607,6 +31607,96 @@ $as_echo "$wx_cv_version_script" >&6; }
             ;;
     esac
 
+
+        if test "$wx_cv_version_script" = "yes"; then
+                                                                                    saveCppflags="$CPPFLAGS"
+            CPPFLAGS="$saveCppflags -I${srcdir}/include -DwxHAVE_ELF_SYMVER"
+
+            saveLdflags="$LDFLAGS"
+            LDFLAGS="$saveLdflags -Wl,--version-script,conftest.sym"
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if using multiple ELF symbol versions is supported" >&5
+$as_echo_n "checking if using multiple ELF symbol versions is supported... " >&6; }
+if ${wx_cv_elf_symver_multiple+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                    echo "lib_new {}; lib_old { *; };" >conftest.sym
+                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                            #include "wx/private/elfversion.h"
+                            wxELF_SYMVER("foo","foo@lib_old")
+                            wxELF_SYMVER("foo","foo@@lib_new")
+                            void foo() {}
+                            int main() { return 0; }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  wx_cv_elf_symver_multiple=yes
+else
+  wx_cv_elf_symver_multiple=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+                    rm -f conftest.sym
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_elf_symver_multiple" >&5
+$as_echo "$wx_cv_elf_symver_multiple" >&6; }
+
+            if test "$wx_cv_elf_symver_multiple" = "yes"; then
+                wx_cv_elf_symver=yes
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if using ELF symbol versions is supported" >&5
+$as_echo_n "checking if using ELF symbol versions is supported... " >&6; }
+if ${wx_cv_elf_symver+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                        echo "lib_new {}; lib_old { *; };" >conftest.sym
+                        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                                #include "wx/private/elfversion.h"
+                                wxELF_SYMVER("foo","foo@@lib_new")
+                                void foo() {}
+                                int main() { return 0; }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  wx_cv_elf_symver=yes
+else
+  wx_cv_elf_symver=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+                        rm -f conftest.sym
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_elf_symver" >&5
+$as_echo "$wx_cv_elf_symver" >&6; }
+            fi
+
+            if test "$wx_cv_elf_symver" = "yes"; then
+                $as_echo "#define wxHAVE_ELF_SYMVER 1" >>confdefs.h
+
+            fi
+
+            if test "$wx_cv_elf_symver_multiple" = "yes"; then
+                $as_echo "#define wxHAVE_ELF_SYMVER_MULTIPLE 1" >>confdefs.h
+
+            fi
+
+            LDFLAGS="$saveLdflags"
+            CPPFLAGS="$saveCppflags"
+        fi
     fi
 
             if test "$wxUSE_VISIBILITY" != "no"; then
