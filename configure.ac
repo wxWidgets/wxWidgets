@@ -3439,8 +3439,12 @@ if test "$wxUSE_SHARED" = "yes"; then
     dnl use versioned symbols if available on the platform and not disabled
     if test "$wxUSE_ELF_SYMVER" != "no"; then
         WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
+    fi
 
-        if test "$wx_cv_version_script" = "yes"; then
+    if test "$wx_cv_version_script" = "yes"; then
+        dnl We only need wxELF_SYMVER etc in stable releases, so don't bother
+        dnl checking for them in the development branch.
+        if test `expr ${wx_minor_version_number} % 2` -eq 0; then
             dnl We want to use either __symver__ attribute (preferably, as it
             dnl works with LTO) or .symver, but to avoid checking for both of
             dnl them, use the header file which can check if the attribute is

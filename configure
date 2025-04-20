@@ -31607,8 +31607,10 @@ $as_echo "$wx_cv_version_script" >&6; }
             ;;
     esac
 
+    fi
 
-        if test "$wx_cv_version_script" = "yes"; then
+    if test "$wx_cv_version_script" = "yes"; then
+                        if test `expr ${wx_minor_version_number} % 2` -eq 0; then
                                                                                     saveCppflags="$CPPFLAGS"
             CPPFLAGS="$saveCppflags -I${srcdir}/include -DwxHAVE_ELF_SYMVER"
 
