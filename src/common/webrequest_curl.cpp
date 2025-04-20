@@ -159,6 +159,35 @@ void wxCURLSetOpt(CURL* handle, CURLoption option, const wxString& value)
     wxCURLSetOpt(handle, option, value.utf8_str().data());
 }
 
+// Define wrapper function for initializing CURL handles.
+CURL* wxCURLEasyInit()
+{
+    CURL* handle = curl_easy_init();
+    if ( !handle )
+    {
+        wxLogDebug("curl_easy_init() failed");
+        return nullptr;
+    }
+
+    // Honour the same environment variables that curl tool itself uses for
+    // customizing the certificates locations.
+    wxString path;
+    if ( wxGetEnv("CURL_CA_BUNDLE", &path) )
+    {
+        wxCURLSetOpt(handle, CURLOPT_CAINFO, path);
+    }
+    else // CURL_CA_BUNDLE overrides SSL_CERT_XXX
+    {
+        if ( wxGetEnv("SSL_CERT_DIR", &path) )
+            wxCURLSetOpt(handle, CURLOPT_CAPATH, path);
+
+        if ( wxGetEnv("SSL_CERT_FILE", &path) )
+            wxCURLSetOpt(handle, CURLOPT_CAINFO, path);
+    }
+
+    return handle;
+}
+
 } // anonymous namespace
 
 wxWebResponseCURL::wxWebResponseCURL(wxWebRequestCURL& request) :
@@ -310,7 +339,7 @@ wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
                                    int id):
     wxWebRequestImpl(session, sessionImpl, handler, id),
     m_sessionCURL(&sessionImpl),
-    m_handle(curl_easy_init())
+    m_handle(wxCURLEasyInit())
 {
 
     DoStartPrepare(url);
@@ -1114,7 +1143,7 @@ wxWebSessionSyncCURL::CreateRequestSync(wxWebSessionSync& WXUNUSED(session),
     if ( !m_handle )
     {
         // Allocate it the first time we need it and keep it later.
-        m_handle = curl_easy_init();
+        m_handle = wxCURLEasyInit();
     }
     else
     {
