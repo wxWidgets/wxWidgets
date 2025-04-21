@@ -120,6 +120,7 @@ jobs:
           arch: 'win64_msvc2022_64'
           archives: 'qtbase qtsvg qtimageformats'
           cache: 'true'
+          aqtversion: '==3.1.*'
           setup-python: 'false'
 
       - name: Set environment variables
