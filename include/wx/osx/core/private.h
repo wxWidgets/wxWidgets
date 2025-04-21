@@ -12,12 +12,6 @@
 #ifndef _WX_PRIVATE_CORE_H_
 #define _WX_PRIVATE_CORE_H_
 
-// Without this MachineExceptions.h of CarbonCore cannot be parsed
-// when C++11 or higher standard is used.
-#ifdef __APPLE_ALTIVEC__
-#undef __APPLE_ALTIVEC__
-#endif
-
 #include "wx/defs.h"
 
 #include <CoreFoundation/CoreFoundation.h>
