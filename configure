@@ -752,8 +752,6 @@ COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_PLATFORM_WIN32_1_SHARED_0
 COND_PLATFORM_WIN32_1
-COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4
-COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_WIN32_0
 COND_PLATFORM_UNIX_1_USE_WEBVIEW_CHROMIUM_1
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0
@@ -1144,6 +1142,7 @@ enable_macosx_arch
 enable_compat30
 enable_compat32
 enable_rpath
+enable_symver
 enable_visibility
 enable_repro_build
 enable_pch
@@ -2114,6 +2113,7 @@ Optional Features:
   --enable-compat30       enable wxWidgets 3.0 compatibility
   --disable-compat32      disable wxWidgets 3.2 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
+  --disable-symver        disable use of ELF symbols versioning even if supported
   --disable-visibility    disable use of ELF symbols visibility even if supported
   --enable-repro-build    enable reproducible build mode
   --enable-pch            use precompiled headers if possible (off by default)
@@ -6111,6 +6111,35 @@ fi
 
           eval "$wx_cv_use_rpath"
 
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-symver was given.
+if test "${enable_symver+set}" = set; then :
+  enableval=$enable_symver;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_symver='wxUSE_ELF_SYMVER=yes'
+                          else
+                            wx_cv_use_symver='wxUSE_ELF_SYMVER=no'
+                          fi
+
+else
+
+                          wx_cv_use_symver='wxUSE_ELF_SYMVER=${'DEFAULT_wxUSE_ELF_SYMVER":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_symver"
 
 
           enablestring=disable
@@ -31470,6 +31499,7 @@ fi
 
 if test "$wxUSE_SHARED" = "yes"; then
 
+        if test "$wxUSE_ELF_SYMVER" != "no"; then
 
     case "${host}" in
         *-*-cygwin* | *-*-mingw* )
@@ -31577,6 +31607,99 @@ $as_echo "$wx_cv_version_script" >&6; }
             ;;
     esac
 
+    fi
+
+    if test "$wx_cv_version_script" = "yes"; then
+                        if test `expr ${wx_minor_version_number} % 2` -eq 0; then
+                                                                                    saveCppflags="$CPPFLAGS"
+            CPPFLAGS="$saveCppflags -I${srcdir}/include -DwxHAVE_ELF_SYMVER"
+
+            saveLdflags="$LDFLAGS"
+            LDFLAGS="$saveLdflags -Wl,--version-script,conftest.sym"
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if using multiple ELF symbol versions is supported" >&5
+$as_echo_n "checking if using multiple ELF symbol versions is supported... " >&6; }
+if ${wx_cv_elf_symver_multiple+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                    echo "lib_new {}; lib_old { *; };" >conftest.sym
+                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                            #include "wx/private/elfversion.h"
+                            wxELF_SYMVER("foo","foo@lib_old")
+                            wxELF_SYMVER("foo","foo@@lib_new")
+                            void foo() {}
+                            int main() { return 0; }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  wx_cv_elf_symver_multiple=yes
+else
+  wx_cv_elf_symver_multiple=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+                    rm -f conftest.sym
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_elf_symver_multiple" >&5
+$as_echo "$wx_cv_elf_symver_multiple" >&6; }
+
+            if test "$wx_cv_elf_symver_multiple" = "yes"; then
+                wx_cv_elf_symver=yes
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if using ELF symbol versions is supported" >&5
+$as_echo_n "checking if using ELF symbol versions is supported... " >&6; }
+if ${wx_cv_elf_symver+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                        echo "lib_new {}; lib_old { *; };" >conftest.sym
+                        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                                #include "wx/private/elfversion.h"
+                                wxELF_SYMVER("foo","foo@@lib_new")
+                                void foo() {}
+                                int main() { return 0; }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  wx_cv_elf_symver=yes
+else
+  wx_cv_elf_symver=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+                        rm -f conftest.sym
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_elf_symver" >&5
+$as_echo "$wx_cv_elf_symver" >&6; }
+            fi
+
+            if test "$wx_cv_elf_symver" = "yes"; then
+                $as_echo "#define wxHAVE_ELF_SYMVER 1" >>confdefs.h
+
+            fi
+
+            if test "$wx_cv_elf_symver_multiple" = "yes"; then
+                $as_echo "#define wxHAVE_ELF_SYMVER_MULTIPLE 1" >>confdefs.h
+
+            fi
+
+            LDFLAGS="$saveLdflags"
+            CPPFLAGS="$saveCppflags"
+        fi
+    fi
 
             if test "$wxUSE_VISIBILITY" != "no"; then
 
@@ -42829,16 +42952,6 @@ EOF
     COND_PLATFORM_WIN32_0="#"
     if test "x$PLATFORM_WIN32" = "x0" ; then
         COND_PLATFORM_WIN32_0=""
-    fi
-
-    COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_WIN32" = "x0" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-
-    COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_WIN32" = "x0" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
     fi
 
     COND_PLATFORM_WIN32_1="#"
