@@ -610,12 +610,7 @@ void EventPropagationTestCase::DocView()
 
     // Check that wxDocument, wxView, wxDocManager, child frame and the parent
     // get the event in order.
-#ifndef __WXQT__
     ASSERT_MENU_EVENT_RESULT( menuChild, "advmcpA" );
-#else
-    wxUnusedVar(menuChild);
-    WARN("We don't get paint event under wxQt for some reason... test skipped.");
-#endif
 
 #if wxUSE_TOOLBAR
     // Also check that toolbar events get forwarded to the active child.
@@ -629,11 +624,7 @@ void EventPropagationTestCase::DocView()
     g_str.clear();
     tb->OnLeftClick(wxID_APPLY, true /* doesn't matter */);
 
-#ifndef __WXQT__
     CPPUNIT_ASSERT_EQUAL( "advmcpA", g_str );
-#else
-    WARN("Skipping test not working under wxQt");
-#endif
 #endif // wxUSE_TOOLBAR
 }
 
