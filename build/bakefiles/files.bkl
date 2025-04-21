@@ -205,6 +205,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/joystick.h
     wx/osx/core/mimetype.h
     wx/osx/core/dataview.h
+    wx/osx/cocoa/stdpaths.h
 </set>
 
 <!-- Base files used by OS X ports (not Carbon) -->
@@ -2351,7 +2352,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
     wx/generic/region.h
-    wx/osx/cocoa/stdpaths.h
     wx/osx/sound.h
     wx/osx/dvrenderer.h
     wx/osx/cocoa/dataview.h

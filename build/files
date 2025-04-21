@@ -144,6 +144,7 @@ BASE_COREFOUNDATION_SRC =
 
 BASE_COREFOUNDATION_HDR =
     wx/osx/carbon/region.h
+    wx/osx/cocoa/stdpaths.h
     wx/osx/core/cfarray.h
     wx/osx/core/cfdataref.h
     wx/osx/core/cfdictionary.h
@@ -2205,7 +2206,6 @@ OSX_COCOA_HDR =
     wx/osx/cocoa/dataview.h
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
-    wx/osx/cocoa/stdpaths.h
     wx/osx/dataview.h
     wx/osx/datectrl.h
     wx/osx/datetimectrl.h

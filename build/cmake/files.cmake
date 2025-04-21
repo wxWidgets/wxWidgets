@@ -133,6 +133,7 @@ set(BASE_COREFOUNDATION_HDR
     wx/osx/core/joystick.h
     wx/osx/core/mimetype.h
     wx/osx/core/dataview.h
+    wx/osx/cocoa/stdpaths.h
 )
 
 set(BASE_OSX_SHARED_SRC
@@ -2217,7 +2218,6 @@ set(OSX_COCOA_HDR
     wx/osx/cocoa/chkconf.h
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
-    wx/osx/cocoa/stdpaths.h
     wx/generic/region.h
     wx/osx/activityindicator.h
     wx/osx/datectrl.h
