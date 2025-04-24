@@ -317,7 +317,6 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
-DEFAULT_wxUSE_LIBWEBP=auto
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
@@ -513,6 +512,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_SYS_WITH(libwebp,   [  --with-libwebp          use libwebp (WebP file format)], wxUSE_LIBWEBP)
 
 dnl We don't provide built-in version of this library, so if the use of system
 dnl libraries is explicitly disabled, we can't use it at all.
@@ -523,7 +523,6 @@ else
 fi
 
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
-WX_ARG_WITH(libwebp,       [  --with-libwebp          use libwebp (WebP file format)], wxUSE_LIBWEBP)
 WX_ARG_WITH(libiconv,      [  --with-libiconv         use libiconv (character conversion)], wxUSE_LIBICONV)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
@@ -2509,29 +2508,55 @@ dnl Check for webp library
 dnl ------------------------------------------------------------------------
 
 WEBP_LINK=
-if test "$wxUSE_LIBWEBP" != "no"; then
-    PKG_CHECK_MODULES(
-        WebP,
-        [
-            libwebp
-            libwebpdemux
-        ],
-        [
-            WEBP_LINK=$WebP_LIBS
-            CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
-        ],
-        [
-            wxUSE_LIBWEBP="no"
-            AC_MSG_RESULT([not found via pkg-config])
-        ]
-    )
-fi
-if test "$wxUSE_LIBWEBP" = "auto"; then
-    dnl if we are here, then auto-detection did not fail. Set result to "yes"
-    wxUSE_LIBWEBP=yes
-fi
-if test "$wxUSE_LIBWEBP" = "yes"; then
+if test "$wxUSE_LIBWEBP" != "no" ; then
     AC_DEFINE(wxUSE_LIBWEBP)
+    if test "$wxUSE_LIBWEBP" = "sys" -o "$wxUSE_LIBWEBP" = "yes" ; then
+        PKG_CHECK_MODULES(
+            WebP,
+            [
+                libwebp
+                libwebpdemux
+            ],
+            [
+                WEBP_LINK=$WebP_LIBS
+                CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
+            ],
+            [
+            ]
+        )
+
+        if test "x$WEBP_LINK" = "x" ; then
+            if test "$wxUSE_LIBWEBP" = "sys" ; then
+                AC_MSG_ERROR([system webp library not found! Use --with-libwebp=builtin to use built-in version])
+            else
+                AC_MSG_WARN([system webp library not found, will use built-in instead])
+                wxUSE_LIBWEBP=builtin
+            fi
+        else
+            dnl we are using the system library
+            wxUSE_LIBWEBP=sys
+        fi
+    fi
+
+    dnl We should test if built-in webp library is avalable, preferably
+    dnl downloaded through --recurse-submodules option if cloned from git.
+    dnl Would be available when downloaded as a zipped or tarball release.
+    if test "$wxUSE_LIBWEBP" = "builtin" ; then
+        AC_MSG_CHECKING([whether webp_dec.c file exists])
+        if ! test -f "$srcdir/3rdparty/libwebp/src/dec/webp_dec.c" ; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    Configured to use built-in webp library, but the required file
+    $srcdir/3rdparty/libwebp/src/dec/webp_dec.c couldn't be found.
+    You might need to run
+
+        git submodule update --init 3rdparty/libwebp
+
+    to fix this.])
+        else
+            AC_MSG_RESULT([yes])
+        fi
+    fi
 fi
 
 dnl ------------------------------------------------------------------------
@@ -7808,6 +7833,14 @@ if test "$wxUSE_GUI" = "yes"; then
             WXCONFIG_LIBS="$PNG_LINK $WXCONFIG_LIBS"
             ;;
     esac
+    case "$wxUSE_LIBWEBP" in
+        builtin)
+            wxconfig_3rdparty="webp $wxconfig_3rdparty"
+            ;;
+        sys)
+            WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
+            ;;
+    esac
 fi
 case "$wxUSE_REGEX" in
     builtin)
@@ -7831,10 +7864,6 @@ if test "$wxUSE_LIBLZMA" = "yes"; then
     if test "$wxUSE_GUI" != "yes" -o "$wxUSE_LIBTIFF" != "sys"; then
         WXCONFIG_LIBS="$LZMA_LINK $WXCONFIG_LIBS"
     fi
-fi
-if test "$wxUSE_LIBWEBP" = "yes"; then
-    dnl no need to check for duplicates since webp is disabled in our builtin tiff
-    WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
 fi
 case "$wxUSE_ZLIB" in
     builtin)
@@ -7873,6 +7902,7 @@ AC_SUBST(wxUSE_XML)
 AC_SUBST(wxUSE_EXPAT)
 AC_SUBST(wxUSE_LIBJPEG)
 AC_SUBST(wxUSE_LIBPNG)
+AC_SUBST(wxUSE_LIBWEBP)
 AC_SUBST(wxUSE_LIBTIFF)
 
 if test $wxUSE_MONOLITHIC = "yes" ; then
@@ -8377,10 +8407,10 @@ echo "                                       jpeg               ${wxUSE_LIBJPEG-
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
+echo "                                       webp               ${wxUSE_LIBWEBP-none}"
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
-echo "                                       webp               ${wxUSE_LIBWEBP}"
 echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
