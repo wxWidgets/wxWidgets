@@ -32,35 +32,35 @@ installation instructions.
 
 
 
-Changes since 3.2.6
+Changes since 3.2.7
 -------------------
 
-This release contains more than a hundred bug fixes and improvements. Some of
-the most important fixes are:
+This is mostly a bug fix release correcting several problems found in the
+previous 3.2.7 release:
 
-- Build fixes for gcc 14 (#24248, #24869) and clang 19 (#24922, #24959, #25064).
-- Fix build with macOS 15 SDK (#24724, #24879).
-- Many fixes to key event generation in wxGTK (#25053, #25199, #25200).
-- Avoid repaint problems when using wxWindow::Update() with Wayland (#25036).
-- Fix crashes when using wxWebRequest with libcurl (#24885, #24969).
+- Fix crash in wxPropertyGrid with wxGTK3 after recent change (#25286).
+- Fix padding of wxMenu in high DPI under Windows 11 (#25117).
+- Fix key codes in WXK_NUMPADx events in wxGTK (#25263).
+- Fix ABI breakage for versioned symbols in 3.2.7 (#25327).
+- Fix third party libraries build with Xcode 16.3.
+- Fix using OpenGL and WebView when using CMake install (#25266).
 
-New in this release:
+But it still contains a couple of enhancements, including:
 
-- Add wxNO_UNUSED_VARIABLES to opt-in into getting helpful warnings (#24882).
-- Add wxApp::SetErrorExitCode() to better handle initialization errors (#24770).
+- Add wxVector(std::initializer_list<U> list) ctor (#25290).
+- Add mouse scrolling support to generic wxSpinCtrl (#24935).
+- Add @USER@ macro to HTML and RichText printers (#25318).
 
 Other changes include:
 
-- More high DPI fixes in wxMSW (#24650, #24651, #24815, #24850, #24821, #24941).
-- Improve wxInfoBar appearance (#24838, #24902, #25048).
-- Fix possible crash during session termination in wxMSW (#24903).
-- Wayland fixes to copy-pasting (#24701) and drag-and-drop (#25116) in wxGTK.
-- Fix truncating labels of newly added wxNotebook pages in wxOSX (#25194).
-- Fix Z-order of auto-complete popup of wxStyledTextCtrl in wxOSX (#25202).
-- Fix buffer read overflow when compiling RE ending with backslash (#25040).
-- Make wxTempFile::Commit() and wxRenameFile() really atomic (#25088).
+- Call OnExceptionInMainLoop() in wxGTK if idle event handler throws (#25312).
+- Compute wxStaticText best size ourselves if GTK does it wrongly (#24781).
+- Fix page count display in wxHtmlPrintout when there is only one page (#25320).
+- Miscellaneous CMake build improvements (#25324).
+- Fix new warnings with gcc 15 (#25338).
+- Update Brazilian Portuguese translations.
 
-and more, please see the full change log for more details:
+Please see the full change log for more details:
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.8/docs/changes.txt
 
@@ -77,7 +77,7 @@ Supported Platforms
 This version of wxWidgets supports the following primary platforms:
 
 * Windows XP, Vista, 7, 8, 10 and 11 (32/64 bits).
-* Most Unix variants using the GTK toolkit (version 2.6 or newer)
+* Most Unix variants using the GTK toolkit (version 2.6 or newer or 3.x)
 * macOS (10.10 or newer) using Cocoa (x86-64 or ARM).
 
 There is some support for the following platforms:
@@ -162,4 +162,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, March 2025
+The wxWidgets Team, April 2025
