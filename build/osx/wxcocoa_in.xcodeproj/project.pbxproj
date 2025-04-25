@@ -29,6 +29,7 @@
 				40926E03199902D10012D04A /* PBXTargetDependency */,
 				40926E05199902D10012D04A /* PBXTargetDependency */,
 				40926E07199902D10012D04A /* PBXTargetDependency */,
+				6B3F304FE1A03D069D8C9F3F /* PBXTargetDependency */,
 				40926E09199902D10012D04A /* PBXTargetDependency */,
 				40926E0B199902D10012D04A /* PBXTargetDependency */,
 				40926E0D199902D10012D04A /* PBXTargetDependency */,
@@ -52,6 +53,7 @@
 		405EB6C01998BC890062EE0F /* libwx_baseu.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DDED1997E244008DB584 /* libwx_baseu.dylib */; };
 		405EB6C11998BC890062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB6C21998BC890062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A010069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB6C31998BC890062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB6C41998BC890062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB6C51998BC890062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -60,6 +62,7 @@
 		405EB6D81998BCC60062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB6D91998BCC60062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB6DA1998BCC60062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A011069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB6DB1998BCC60062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB6DC1998BCC60062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB6DD1998BCC60062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -68,6 +71,7 @@
 		405EB6F21998BCFF0062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB6F31998BCFF0062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB6F41998BCFF0062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A012069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB6F51998BCFF0062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB6F61998BCFF0062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB6F71998BCFF0062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -76,6 +80,7 @@
 		405EB70A1998C9AF0062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB70B1998C9AF0062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB70C1998C9AF0062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A013069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB70D1998C9AF0062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB70E1998C9AF0062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB70F1998C9AF0062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -84,6 +89,7 @@
 		405EB7221998E59E0062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB7231998E59E0062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB7241998E59E0062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A014069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB7251998E59E0062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB7261998E59E0062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB7271998E59E0062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -92,6 +98,7 @@
 		405EB73A1998E5C70062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB73B1998E5C70062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB73C1998E5C70062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A015069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB73D1998E5C70062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB73E1998E5C70062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB73F1998E5C70062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -105,6 +112,7 @@
 		405EB7731998E6920062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB7741998E6920062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB7751998E6920062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A016069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB7761998E6920062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB7771998E6920062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB7781998E6920062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -116,6 +124,7 @@
 		405EB7941998E6E40062EE0F /* libwx_baseu_xml.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE3F1997ED6D008DB584 /* libwx_baseu_xml.dylib */; };
 		405EB7951998E6E40062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB7961998E6E40062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A017069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB7971998E6E40062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB7981998E6E40062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB7991998E6E40062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -124,6 +133,7 @@
 		405EB7AE1998E7470062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB7AF1998E7470062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB7B01998E7470062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A018069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB7B11998E7470062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB7B21998E7470062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB7B31998E7470062EE0F /* libwxscintilla.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B942199897AF00A0D4DC /* libwxscintilla.a */; };
@@ -134,6 +144,7 @@
 		405EB7C71998E7950062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB7C81998E7950062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB7C91998E7950062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A019069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB7CA1998E7950062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB7CB1998E7950062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB7CC1998E7950062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -149,6 +160,7 @@
 		405EB7F41998E8960062EE0F /* libwx_baseu_xml.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE3F1997ED6D008DB584 /* libwx_baseu_xml.dylib */; };
 		405EB7F51998E8960062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB7F61998E8960062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A01A069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB7F71998E8960062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB7F81998E8960062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB7F91998E8960062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -157,6 +169,7 @@
 		405EB8111998E8C10062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		405EB8121998E8C10062EE0F /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		405EB8131998E8C10062EE0F /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A01B069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		405EB8141998E8C10062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB8151998E8C10062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB8161998E8C10062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -167,6 +180,7 @@
 		40926DCC1998EFCD0012D04A /* libwx_osx_cocoau_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DE001997E310008DB584 /* libwx_osx_cocoau_core.dylib */; };
 		40926DCD1998EFCD0012D04A /* libwxexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B8F2199892A500A0D4DC /* libwxexpat.a */; };
 		40926DCE1998EFCD0012D04A /* libwxjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9151998976600A0D4DC /* libwxjpeg.a */; };
+		6B3F304FE1A01C069D8C9F3F /* libwxwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */; };
 		40926DCF1998EFCD0012D04A /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		40926DD01998EFCD0012D04A /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		40926DD11998EFCD0012D04A /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
@@ -230,6 +244,13 @@
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
 		};
+		6B3F304FE1A020069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
+		};
 		405EB6B81998BC7C0062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -285,6 +306,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
+		};
+		6B3F304FE1A021069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
 		};
 		405EB6CF1998BCB70062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -349,6 +377,13 @@
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
 		};
+		6B3F304FE1A022069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
+		};
 		405EB6E91998BCF10062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -404,6 +439,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
+		};
+		6B3F304FE1A023069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
 		};
 		405EB7011998C9A10062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -461,6 +503,13 @@
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
 		};
+		6B3F304FE1A024069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
+		};
 		405EB7191998E58A0062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -516,6 +565,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
+		};
+		6B3F304FE1A025069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
 		};
 		405EB7311998E5B80062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -608,6 +664,13 @@
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
 		};
+		6B3F304FE1A026069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
+		};
 		405EB7571998E6520062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -670,6 +733,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
+		};
+		6B3F304FE1A027069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
 		};
 		405EB7691998E67C0062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -741,6 +811,13 @@
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
 		};
+		6B3F304FE1A028069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
+		};
 		405EB7861998E6CC0062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -803,6 +880,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
+		};
+		6B3F304FE1A029069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
 		};
 		405EB7A31998E71B0062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -873,6 +957,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
+		};
+		6B3F304FE1A02A069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
 		};
 		405EB7BE1998E7790062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -972,6 +1063,13 @@
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
 		};
+		6B3F304FE1A02B069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
+		};
 		405EB7E61998E87A0062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -1034,6 +1132,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
+		};
+		6B3F304FE1A02C069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
 		};
 		405EB8051998E8C10062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1182,6 +1287,13 @@
 			remoteGlobalIDString = 40D9B90D1998976600A0D4DC;
 			remoteInfo = wxjpeg;
 		};
+		6B3F304FE1A02D069D8C9F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6B3F304FE1A000069D8C9F3F;
+			remoteInfo = wxwebp;
+		};
 		40926E08199902D10012D04A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -1267,6 +1379,7 @@
 		4078700813B25D34008AFE5A /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = wxrelease.xcconfig; sourceTree = "<group>"; };
 		40D9B8F2199892A500A0D4DC /* libwxexpat.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxexpat.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D9B9151998976600A0D4DC /* libwxjpeg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxjpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B3F304FE1A001069D8C9F3F /* libwxwebp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxwebp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D9B91E1998977F00A0D4DC /* libwxtiff.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxtiff.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D9B9271998978A00A0D4DC /* libwxzlib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxzlib.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D9B9301998979C00A0D4DC /* libwxpng.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxpng.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1305,6 +1418,7 @@
 				405EB6C01998BC890062EE0F /* libwx_baseu.dylib in Frameworks */,
 				405EB6C11998BC890062EE0F /* libwxexpat.a in Frameworks */,
 				405EB6C21998BC890062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A010069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB6C31998BC890062EE0F /* libwxpng.a in Frameworks */,
 				405EB6C41998BC890062EE0F /* libwxregex.a in Frameworks */,
 				405EB6C51998BC890062EE0F /* libwxtiff.a in Frameworks */,
@@ -1320,6 +1434,7 @@
 				405EB6D81998BCC60062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB6D91998BCC60062EE0F /* libwxexpat.a in Frameworks */,
 				405EB6DA1998BCC60062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A011069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB6DB1998BCC60062EE0F /* libwxpng.a in Frameworks */,
 				405EB6DC1998BCC60062EE0F /* libwxregex.a in Frameworks */,
 				405EB6DD1998BCC60062EE0F /* libwxtiff.a in Frameworks */,
@@ -1335,6 +1450,7 @@
 				405EB73A1998E5C70062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB73B1998E5C70062EE0F /* libwxexpat.a in Frameworks */,
 				405EB73C1998E5C70062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A015069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB73D1998E5C70062EE0F /* libwxpng.a in Frameworks */,
 				405EB73E1998E5C70062EE0F /* libwxregex.a in Frameworks */,
 				405EB73F1998E5C70062EE0F /* libwxtiff.a in Frameworks */,
@@ -1350,6 +1466,7 @@
 				405EB7221998E59E0062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB7231998E59E0062EE0F /* libwxexpat.a in Frameworks */,
 				405EB7241998E59E0062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A014069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB7251998E59E0062EE0F /* libwxpng.a in Frameworks */,
 				405EB7261998E59E0062EE0F /* libwxregex.a in Frameworks */,
 				405EB7271998E59E0062EE0F /* libwxtiff.a in Frameworks */,
@@ -1365,6 +1482,7 @@
 				405EB7C71998E7950062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB7C81998E7950062EE0F /* libwxexpat.a in Frameworks */,
 				405EB7C91998E7950062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A019069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB7CA1998E7950062EE0F /* libwxpng.a in Frameworks */,
 				405EB7CB1998E7950062EE0F /* libwxregex.a in Frameworks */,
 				405EB7CC1998E7950062EE0F /* libwxtiff.a in Frameworks */,
@@ -1394,6 +1512,7 @@
 				405EB7F41998E8960062EE0F /* libwx_baseu_xml.dylib in Frameworks */,
 				405EB7F51998E8960062EE0F /* libwxexpat.a in Frameworks */,
 				405EB7F61998E8960062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A01A069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB7F71998E8960062EE0F /* libwxpng.a in Frameworks */,
 				405EB7F81998E8960062EE0F /* libwxregex.a in Frameworks */,
 				405EB7F91998E8960062EE0F /* libwxtiff.a in Frameworks */,
@@ -1409,6 +1528,7 @@
 				405EB6F21998BCFF0062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB6F31998BCFF0062EE0F /* libwxexpat.a in Frameworks */,
 				405EB6F41998BCFF0062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A012069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB6F51998BCFF0062EE0F /* libwxpng.a in Frameworks */,
 				405EB6F61998BCFF0062EE0F /* libwxregex.a in Frameworks */,
 				405EB6F71998BCFF0062EE0F /* libwxtiff.a in Frameworks */,
@@ -1423,6 +1543,7 @@
 				405EB7731998E6920062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB7741998E6920062EE0F /* libwxexpat.a in Frameworks */,
 				405EB7751998E6920062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A016069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB7761998E6920062EE0F /* libwxpng.a in Frameworks */,
 				405EB7771998E6920062EE0F /* libwxregex.a in Frameworks */,
 				405EB7781998E6920062EE0F /* libwxtiff.a in Frameworks */,
@@ -1441,6 +1562,7 @@
 				40926DCC1998EFCD0012D04A /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				40926DCD1998EFCD0012D04A /* libwxexpat.a in Frameworks */,
 				40926DCE1998EFCD0012D04A /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A01C069D8C9F3F /* libwxwebp.a in Frameworks */,
 				40926DCF1998EFCD0012D04A /* libwxpng.a in Frameworks */,
 				40926DD01998EFCD0012D04A /* libwxregex.a in Frameworks */,
 				40926DD11998EFCD0012D04A /* libwxtiff.a in Frameworks */,
@@ -1459,6 +1581,7 @@
 				405EB7941998E6E40062EE0F /* libwx_baseu_xml.dylib in Frameworks */,
 				405EB7951998E6E40062EE0F /* libwxexpat.a in Frameworks */,
 				405EB7961998E6E40062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A017069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB7971998E6E40062EE0F /* libwxpng.a in Frameworks */,
 				405EB7981998E6E40062EE0F /* libwxregex.a in Frameworks */,
 				405EB7991998E6E40062EE0F /* libwxtiff.a in Frameworks */,
@@ -1474,6 +1597,7 @@
 				405EB7AE1998E7470062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB7AF1998E7470062EE0F /* libwxexpat.a in Frameworks */,
 				405EB7B01998E7470062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A018069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB7B11998E7470062EE0F /* libwxpng.a in Frameworks */,
 				405EB7B21998E7470062EE0F /* libwxregex.a in Frameworks */,
 				405EB7B31998E7470062EE0F /* libwxscintilla.a in Frameworks */,
@@ -1498,6 +1622,7 @@
 				405EB70A1998C9AF0062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB70B1998C9AF0062EE0F /* libwxexpat.a in Frameworks */,
 				405EB70C1998C9AF0062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A013069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB70D1998C9AF0062EE0F /* libwxpng.a in Frameworks */,
 				405EB70E1998C9AF0062EE0F /* libwxregex.a in Frameworks */,
 				405EB70F1998C9AF0062EE0F /* libwxtiff.a in Frameworks */,
@@ -1514,6 +1639,7 @@
 				405EB8111998E8C10062EE0F /* libwx_osx_cocoau_core.dylib in Frameworks */,
 				405EB8121998E8C10062EE0F /* libwxexpat.a in Frameworks */,
 				405EB8131998E8C10062EE0F /* libwxjpeg.a in Frameworks */,
+				6B3F304FE1A01B069D8C9F3F /* libwxwebp.a in Frameworks */,
 				405EB8141998E8C10062EE0F /* libwxpng.a in Frameworks */,
 				405EB8151998E8C10062EE0F /* libwxregex.a in Frameworks */,
 				405EB8161998E8C10062EE0F /* libwxtiff.a in Frameworks */,
@@ -1529,6 +1655,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40D9B9111998976600A0D4DC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B3F304FE1A008069D8C9F3F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1610,6 +1743,7 @@
 				4046DE751997EF2E008DB584 /* libwx_osx_cocoau_stc.dylib */,
 				40D9B8F2199892A500A0D4DC /* libwxexpat.a */,
 				40D9B9151998976600A0D4DC /* libwxjpeg.a */,
+				6B3F304FE1A001069D8C9F3F /* libwxwebp.a */,
 				40D9B91E1998977F00A0D4DC /* libwxtiff.a */,
 				40D9B9271998978A00A0D4DC /* libwxzlib.a */,
 				40D9B9301998979C00A0D4DC /* libwxpng.a */,
@@ -1773,6 +1907,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6B3F304FE1A006069D8C9F3F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		40D9B9181998977F00A0D4DC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1883,6 +2024,7 @@
 				405EB6B31998BC7C0062EE0F /* PBXTargetDependency */,
 				405EB6B51998BC7C0062EE0F /* PBXTargetDependency */,
 				405EB6B71998BC7C0062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A030069D8C9F3F /* PBXTargetDependency */,
 				405EB6B91998BC7C0062EE0F /* PBXTargetDependency */,
 				405EB6BB1998BC7C0062EE0F /* PBXTargetDependency */,
 				405EB6BD1998BC7C0062EE0F /* PBXTargetDependency */,
@@ -1909,6 +2051,7 @@
 				405EB6CA1998BCB70062EE0F /* PBXTargetDependency */,
 				405EB6CC1998BCB70062EE0F /* PBXTargetDependency */,
 				405EB6CE1998BCB70062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A031069D8C9F3F /* PBXTargetDependency */,
 				405EB6D01998BCB70062EE0F /* PBXTargetDependency */,
 				405EB6D21998BCB70062EE0F /* PBXTargetDependency */,
 				405EB6D41998BCB70062EE0F /* PBXTargetDependency */,
@@ -1935,6 +2078,7 @@
 				405EB72C1998E5B80062EE0F /* PBXTargetDependency */,
 				405EB72E1998E5B80062EE0F /* PBXTargetDependency */,
 				405EB7301998E5B80062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A035069D8C9F3F /* PBXTargetDependency */,
 				405EB7321998E5B80062EE0F /* PBXTargetDependency */,
 				405EB7341998E5B80062EE0F /* PBXTargetDependency */,
 				405EB7361998E5B80062EE0F /* PBXTargetDependency */,
@@ -1961,6 +2105,7 @@
 				405EB7141998E58A0062EE0F /* PBXTargetDependency */,
 				405EB7161998E58A0062EE0F /* PBXTargetDependency */,
 				405EB7181998E58A0062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A034069D8C9F3F /* PBXTargetDependency */,
 				405EB71A1998E58A0062EE0F /* PBXTargetDependency */,
 				405EB71C1998E58A0062EE0F /* PBXTargetDependency */,
 				405EB71E1998E58A0062EE0F /* PBXTargetDependency */,
@@ -1987,6 +2132,7 @@
 				405EB7B91998E7790062EE0F /* PBXTargetDependency */,
 				405EB7BB1998E7790062EE0F /* PBXTargetDependency */,
 				405EB7BD1998E7790062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A03A069D8C9F3F /* PBXTargetDependency */,
 				405EB7BF1998E7790062EE0F /* PBXTargetDependency */,
 				405EB7C11998E7790062EE0F /* PBXTargetDependency */,
 				405EB7C31998E7790062EE0F /* PBXTargetDependency */,
@@ -2037,6 +2183,7 @@
 				405EB7E11998E87A0062EE0F /* PBXTargetDependency */,
 				405EB7E31998E87A0062EE0F /* PBXTargetDependency */,
 				405EB7E51998E87A0062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A03B069D8C9F3F /* PBXTargetDependency */,
 				405EB7E71998E87A0062EE0F /* PBXTargetDependency */,
 				405EB7E91998E87A0062EE0F /* PBXTargetDependency */,
 				405EB7EB1998E87A0062EE0F /* PBXTargetDependency */,
@@ -2065,6 +2212,7 @@
 				405EB6E41998BCF10062EE0F /* PBXTargetDependency */,
 				405EB6E61998BCF10062EE0F /* PBXTargetDependency */,
 				405EB6E81998BCF10062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A032069D8C9F3F /* PBXTargetDependency */,
 				405EB6EA1998BCF10062EE0F /* PBXTargetDependency */,
 				405EB6EC1998BCF10062EE0F /* PBXTargetDependency */,
 				405EB6EE1998BCF10062EE0F /* PBXTargetDependency */,
@@ -2092,6 +2240,7 @@
 				405EB7641998E67C0062EE0F /* PBXTargetDependency */,
 				405EB7661998E67C0062EE0F /* PBXTargetDependency */,
 				405EB7681998E67C0062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A037069D8C9F3F /* PBXTargetDependency */,
 				405EB76A1998E67C0062EE0F /* PBXTargetDependency */,
 				405EB76C1998E67C0062EE0F /* PBXTargetDependency */,
 				405EB76E1998E67C0062EE0F /* PBXTargetDependency */,
@@ -2119,6 +2268,7 @@
 				405EB7521998E6520062EE0F /* PBXTargetDependency */,
 				405EB7541998E6520062EE0F /* PBXTargetDependency */,
 				405EB7561998E6520062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A036069D8C9F3F /* PBXTargetDependency */,
 				405EB7581998E6520062EE0F /* PBXTargetDependency */,
 				405EB75A1998E6520062EE0F /* PBXTargetDependency */,
 				405EB75C1998E6520062EE0F /* PBXTargetDependency */,
@@ -2147,6 +2297,7 @@
 				405EB7811998E6CC0062EE0F /* PBXTargetDependency */,
 				405EB7831998E6CC0062EE0F /* PBXTargetDependency */,
 				405EB7851998E6CC0062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A038069D8C9F3F /* PBXTargetDependency */,
 				405EB7871998E6CC0062EE0F /* PBXTargetDependency */,
 				405EB7891998E6CC0062EE0F /* PBXTargetDependency */,
 				405EB78B1998E6CC0062EE0F /* PBXTargetDependency */,
@@ -2174,6 +2325,7 @@
 				405EB79E1998E71B0062EE0F /* PBXTargetDependency */,
 				405EB7A01998E71B0062EE0F /* PBXTargetDependency */,
 				405EB7A21998E71B0062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A039069D8C9F3F /* PBXTargetDependency */,
 				405EB7A41998E71B0062EE0F /* PBXTargetDependency */,
 				405EB7A61998E71B0062EE0F /* PBXTargetDependency */,
 				405EB7A81998E71B0062EE0F /* PBXTargetDependency */,
@@ -2220,6 +2372,7 @@
 				405EB6FC1998C9A10062EE0F /* PBXTargetDependency */,
 				405EB6FE1998C9A10062EE0F /* PBXTargetDependency */,
 				405EB7001998C9A10062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A033069D8C9F3F /* PBXTargetDependency */,
 				405EB7021998C9A10062EE0F /* PBXTargetDependency */,
 				405EB7041998C9A10062EE0F /* PBXTargetDependency */,
 				405EB7061998C9A10062EE0F /* PBXTargetDependency */,
@@ -2247,6 +2400,7 @@
 				405EB81D1998E98B0062EE0F /* PBXTargetDependency */,
 				405EB8001998E8C10062EE0F /* PBXTargetDependency */,
 				405EB8021998E8C10062EE0F /* PBXTargetDependency */,
+				6B3F304FE1A03C069D8C9F3F /* PBXTargetDependency */,
 				405EB8041998E8C10062EE0F /* PBXTargetDependency */,
 				405EB8061998E8C10062EE0F /* PBXTargetDependency */,
 				405EB8081998E8C10062EE0F /* PBXTargetDependency */,
@@ -2291,6 +2445,24 @@
 			name = wxjpeg;
 			productName = wxcocoa;
 			productReference = 40D9B9151998976600A0D4DC /* libwxjpeg.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6B3F304FE1A000069D8C9F3F /* wxwebp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6B3F304FE1A002069D8C9F3F /* Build configuration list for PBXNativeTarget "wxwebp" */;
+			buildPhases = (
+				6B3F304FE1A005069D8C9F3F /* ShellScript */,
+				6B3F304FE1A006069D8C9F3F /* Headers */,
+				6B3F304FE1A007069D8C9F3F /* Sources */,
+				6B3F304FE1A008069D8C9F3F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = wxwebp;
+			productName = wxcocoa;
+			productReference = 6B3F304FE1A001069D8C9F3F /* libwxwebp.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		40D9B9161998977F00A0D4DC /* wxtiff */ = {
@@ -2461,6 +2633,7 @@
 				4046DE2D1997ED10008DB584 /* webview */,
 				40D9B8EA199892A500A0D4DC /* wxexpat */,
 				40D9B90D1998976600A0D4DC /* wxjpeg */,
+				6B3F304FE1A000069D8C9F3F /* wxwebp */,
 				40D9B9281998979C00A0D4DC /* wxpng */,
 				40D9B931199897A400A0D4DC /* wxregex */,
 				40D9B93A199897AF00A0D4DC /* wxscintilla */,
@@ -2735,6 +2908,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${WXROOT}/distrib/mac/pbsetup-sh\" \"${WXROOT}/src\" \"${WXROOT}/build/osx/setup/${WXTOOLKIT}\"";
 		};
+		6B3F304FE1A005069D8C9F3F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${WXROOT}/distrib/mac/pbsetup-sh\" \"${WXROOT}/src\" \"${WXROOT}/build/osx/setup/${WXTOOLKIT}\"";
+		};
 		40D9B9171998977F00A0D4DC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2949,6 +3135,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6B3F304FE1A007069D8C9F3F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		40D9B9191998977F00A0D4DC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3041,6 +3234,11 @@
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB6B61998BC7C0062EE0F /* PBXContainerItemProxy */;
 		};
+		6B3F304FE1A030069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A020069D8C9F3F /* PBXContainerItemProxy */;
+		};
 		405EB6B91998BC7C0062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 40D9B9281998979C00A0D4DC /* wxpng */;
@@ -3080,6 +3278,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB6CD1998BCB70062EE0F /* PBXContainerItemProxy */;
+		};
+		6B3F304FE1A031069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A021069D8C9F3F /* PBXContainerItemProxy */;
 		};
 		405EB6D01998BCB70062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3126,6 +3329,11 @@
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB6E71998BCF10062EE0F /* PBXContainerItemProxy */;
 		};
+		6B3F304FE1A032069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A022069D8C9F3F /* PBXContainerItemProxy */;
+		};
 		405EB6EA1998BCF10062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 40D9B9281998979C00A0D4DC /* wxpng */;
@@ -3165,6 +3373,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB6FF1998C9A10062EE0F /* PBXContainerItemProxy */;
+		};
+		6B3F304FE1A033069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A023069D8C9F3F /* PBXContainerItemProxy */;
 		};
 		405EB7021998C9A10062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3206,6 +3419,11 @@
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB7171998E58A0062EE0F /* PBXContainerItemProxy */;
 		};
+		6B3F304FE1A034069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A024069D8C9F3F /* PBXContainerItemProxy */;
+		};
 		405EB71A1998E58A0062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 40D9B9281998979C00A0D4DC /* wxpng */;
@@ -3245,6 +3463,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB72F1998E5B80062EE0F /* PBXContainerItemProxy */;
+		};
+		6B3F304FE1A035069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A025069D8C9F3F /* PBXContainerItemProxy */;
 		};
 		405EB7321998E5B80062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3311,6 +3534,11 @@
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB7551998E6520062EE0F /* PBXContainerItemProxy */;
 		};
+		6B3F304FE1A036069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A026069D8C9F3F /* PBXContainerItemProxy */;
+		};
 		405EB7581998E6520062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 40D9B9281998979C00A0D4DC /* wxpng */;
@@ -3355,6 +3583,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB7671998E67C0062EE0F /* PBXContainerItemProxy */;
+		};
+		6B3F304FE1A037069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A027069D8C9F3F /* PBXContainerItemProxy */;
 		};
 		405EB76A1998E67C0062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3406,6 +3639,11 @@
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB7841998E6CC0062EE0F /* PBXContainerItemProxy */;
 		};
+		6B3F304FE1A038069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A028069D8C9F3F /* PBXContainerItemProxy */;
+		};
 		405EB7871998E6CC0062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 40D9B9281998979C00A0D4DC /* wxpng */;
@@ -3450,6 +3688,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB7A11998E71B0062EE0F /* PBXContainerItemProxy */;
+		};
+		6B3F304FE1A039069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A029069D8C9F3F /* PBXContainerItemProxy */;
 		};
 		405EB7A41998E71B0062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3500,6 +3743,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB7BC1998E7790062EE0F /* PBXContainerItemProxy */;
+		};
+		6B3F304FE1A03A069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A02A069D8C9F3F /* PBXContainerItemProxy */;
 		};
 		405EB7BF1998E7790062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3571,6 +3819,11 @@
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB7E41998E87A0062EE0F /* PBXContainerItemProxy */;
 		};
+		6B3F304FE1A03B069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A02B069D8C9F3F /* PBXContainerItemProxy */;
+		};
 		405EB7E71998E87A0062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 40D9B9281998979C00A0D4DC /* wxpng */;
@@ -3615,6 +3868,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 405EB8031998E8C10062EE0F /* PBXContainerItemProxy */;
+		};
+		6B3F304FE1A03C069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A02C069D8C9F3F /* PBXContainerItemProxy */;
 		};
 		405EB8041998E8C10062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3720,6 +3978,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B90D1998976600A0D4DC /* wxjpeg */;
 			targetProxy = 40926E06199902D10012D04A /* PBXContainerItemProxy */;
+		};
+		6B3F304FE1A03D069D8C9F3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6B3F304FE1A000069D8C9F3F /* wxwebp */;
+			targetProxy = 6B3F304FE1A02D069D8C9F3F /* PBXContainerItemProxy */;
 		};
 		40926E09199902D10012D04A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4210,6 +4473,26 @@
 			};
 			name = Release;
 		};
+		6B3F304FE1A003069D8C9F3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 400BF7301998B591006A2363 /* wxcocoa_ml3rd.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@executable_path/../Frameworks/";
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
+			};
+			name = Debug;
+		};
+		6B3F304FE1A004069D8C9F3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 400BF7301998B591006A2363 /* wxcocoa_ml3rd.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				INSTALL_PATH = "@executable_path/../Frameworks/";
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
+			};
+			name = Release;
+		};
 		40D9B91C1998977F00A0D4DC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 400BF7301998B591006A2363 /* wxcocoa_ml3rd.xcconfig */;
@@ -4545,6 +4828,15 @@
 			buildConfigurations = (
 				40D9B9131998976600A0D4DC /* Debug */,
 				40D9B9141998976600A0D4DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6B3F304FE1A002069D8C9F3F /* Build configuration list for PBXNativeTarget "wxwebp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B3F304FE1A003069D8C9F3F /* Debug */,
+				6B3F304FE1A004069D8C9F3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
