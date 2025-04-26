@@ -17,8 +17,6 @@
 class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 {
 public:
-    virtual ~wxStandardPaths();
-
     // implement base class pure virtuals
     virtual wxString GetExecutablePath() const override;
     virtual wxString GetConfigDir() const override;
@@ -40,7 +38,7 @@ public:
 protected:
     // Ctor is protected, use wxStandardPaths::Get() instead of instantiating
     // objects of this class directly.
-    wxStandardPaths();
+    wxStandardPaths() = default;
 };
 
 

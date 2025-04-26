@@ -41,16 +41,6 @@ static wxString GetFMDirectory(
     return wxCFStringRef::AsString((CFStringRef)url.path);
 }
 
-wxStandardPaths::wxStandardPaths()
-{
-    
-}
-
-wxStandardPaths::~wxStandardPaths()
-{
-    
-}
-
 wxString wxStandardPaths::GetExecutablePath() const
 {
     return wxCFStringRef::AsString((CFStringRef)[NSBundle mainBundle].executablePath);
