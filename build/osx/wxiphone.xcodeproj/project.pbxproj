@@ -1050,7 +1050,7 @@
 		07CDBBC10C8E37BBA8600DD6 /* xh_bmp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_bmp.cpp; path = ../../src/xrc/xh_bmp.cpp; sourceTree = SOURCE_ROOT; };
 		1DAF0931E4AD3E6581D7FDBC /* jidctint.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jidctint.c; path = ../../src/jpeg/jidctint.c; sourceTree = SOURCE_ROOT; };
 		E685D81FB9FF3081B6C5C321 /* EditModel.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EditModel.cxx; path = ../../src/stc/scintilla/src/EditModel.cxx; sourceTree = SOURCE_ROOT; };
-		190409DF8A3C3D9580FBB8AA /* stdpaths.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = stdpaths.mm; path = ../../src/osx/cocoa/stdpaths.mm; sourceTree = SOURCE_ROOT; };
+		190409DF8A3C3D9580FBB8AA /* stdpaths.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = stdpaths.mm; path = ../../src/osx/core/stdpaths.mm; sourceTree = SOURCE_ROOT; };
 		E1F2E9C9052D3E53BBD17DE3 /* statbrma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = statbrma.cpp; path = ../../src/osx/carbon/statbrma.cpp; sourceTree = SOURCE_ROOT; };
 		2B5967A63ACC346B91A6DB19 /* tif_lerc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_lerc.c; path = ../../src/tiff/libtiff/tif_lerc.c; sourceTree = SOURCE_ROOT; };
 		EC28591B403B32B7AFCC079D /* gauge_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gauge_osx.cpp; path = ../../src/osx/gauge_osx.cpp; sourceTree = SOURCE_ROOT; };

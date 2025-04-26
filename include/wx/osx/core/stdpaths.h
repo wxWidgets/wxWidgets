@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/osx/cocoa/stdpaths.h
+// Name:        wx/osx/core/stdpaths.h
 // Purpose:     wxStandardPaths for Cocoa
 // Author:      Tobias Taschner
 // Created:     2015-09-09
