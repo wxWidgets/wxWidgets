@@ -2,6 +2,8 @@
 // Name:        libwebp.h
 // Purpose:     Documentation of the use of libwebp with wxWidgets
 // Author:      Hermann Höhne <hoehermann@gmx.de>
+// Created:     2024-03-08
+// Copyright:   (c) Hermann Höhne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -32,8 +34,9 @@ locations, @c ./configure will automatically detect the availability of libwebp.
 
 @subsection page_build_libwebp_cmake Use libwebp with CMake
 
-When using CMake, add @c -DwxUSE_LIBWEBP=ON to CMake command line to enable
-using libwebp.
+When using CMake, the built-in libwebp is enabled by default. To use the system version,
+add @c -DwxUSE_LIBWEBP=sys to the commandline or change it in the GUI.
+Use @c -DwxUSE_LIBWEBP=OFF to disable libwebp.
 
 Note: At time of writing, the @c WebPConfig.cmake file supplied by libwebp
 is affected by a <a href="https://chromium-review.googlesource.com/c/webm/libwebp/+/4868215">bug</a>.

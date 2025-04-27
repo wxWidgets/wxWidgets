@@ -18,6 +18,9 @@ enum wxAnimationType
     /** represents an ANI file. */
     wxANIMATION_TYPE_ANI,
 
+    /** represents an animated WebP file. */
+    wxANIMATION_TYPE_WEBP, ///< @since 3.3.0
+
     /** autodetect the filetype. */
     wxANIMATION_TYPE_ANY
 };
@@ -530,8 +533,8 @@ public:
     static const wxAnimationDecoder *FindHandler( wxAnimationType animType );
 
     /**
-       Load the stock animation decoders (currently GIF and ANI) into the list
-       of decoders. This is called automatically at program startup.
+       Load the stock animation decoders (currently GIF, ANI and WebP) into the
+       list of decoders. This is called automatically at program startup.
     */
     static void InitStandardHandlers();
 

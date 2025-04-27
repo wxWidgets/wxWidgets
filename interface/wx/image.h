@@ -155,6 +155,9 @@ enum wxImagePNGType
 #define wxIMAGE_OPTION_TIFF_PHOTOMETRIC                 wxString("Photometric")
 #define wxIMAGE_OPTION_TIFF_IMAGEDESCRIPTOR             wxString("ImageDescriptor")
 
+#define wxIMAGE_OPTION_WEBP_QUALITY                     wxString("WebPQuality")
+#define wxIMAGE_OPTION_WEBP_FORMAT                      wxString("WebPFormat")
+
 
 enum
 {
@@ -267,7 +270,7 @@ public:
             stream to be seekable; see wxStreamBase::IsSeekable).
 
         @return Number of available images. For most image handlers, this is 1
-                (exceptions are TIFF and ICO formats as well as animated GIFs
+                (exceptions are TIFF and ICO formats as well as animated GIF and WebP
                 for which this function returns the number of frames in the
                 animation).
     */
@@ -667,13 +670,13 @@ public:
             @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
             @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
             @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
-            @li wxBITMAP_TYPE_WEBP: Load a WebP file.
+            @li wxBITMAP_TYPE_WEBP: Load a WebP file (since 3.3.0).
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
         @param index
             Index of the image to load in the case that the image file contains
-            multiple images. This is only used by GIF, ICO and TIFF handlers.
+            multiple images. This is only used by GIF, ICO, TIFF and WebP handlers.
             The default value (-1) means "choose the default image" and is
-            interpreted as the first image (index=0) by the GIF and TIFF handler
+            interpreted as the first image (index=0) by the GIF, TIFF and WebP handlers,
             and as the largest and most colourful one by the ICO handler.
 
         @remarks Depending on how wxWidgets has been configured and by which
@@ -1438,6 +1441,15 @@ public:
             to pink (default).
             This option has been added in wxWidgets 3.1.1.
 
+        Options specific to wxWEBPHandler:
+        @li @c wxIMAGE_OPTION_WEBP_QUALITY: WebP quality used when saving lossy image.
+            This is an integer ranging from 0 (smaller output, lower quality) to 100
+            (best quality, larger output).
+            When unspecified, quality 90 will be used.
+        @li @c wxIMAGE_OPTION_WEBP_FORMAT: wxWebPImageFormat type of the image that is
+            loaded or saved.
+            When unspecified or undefined, the image is saved as wxWebPImageFormat::Lossy.
+
         @note
         Be careful when combining the options @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL,
         @c wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, and @c wxIMAGE_OPTION_TIFF_PHOTOMETRIC.
@@ -1559,9 +1571,9 @@ public:
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
         @param index
             Index of the image to load in the case that the image file contains
-            multiple images. This is only used by GIF, ICO and TIFF handlers.
+            multiple images. This is only used by GIF, ICO, TIFF and WebP handlers.
             The default value (-1) means "choose the default image" and is
-            interpreted as the first image (index=0) by the GIF and TIFF handler
+            interpreted as the first image (index=0) by the GIF, TIFF and WebP handlers,
             and as the largest and most colourful one by the ICO handler.
 
         @return @true if the operation succeeded, @false otherwise.
@@ -2112,7 +2124,7 @@ public:
         @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
 
         @return Number of available images. For most image handlers, this is 1
-                (exceptions are TIFF and ICO formats as well as animated GIFs
+                (exceptions are TIFF and ICO formats as well as animated GIF and WebP
                 for which this function returns the number of frames in the
                 animation).
     */

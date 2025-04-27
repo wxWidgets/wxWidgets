@@ -46,7 +46,8 @@ enum wxBitmapType
     wxBITMAP_TYPE_TGA,
     wxBITMAP_TYPE_MACCURSOR,
     wxBITMAP_TYPE_MACCURSOR_RESOURCE,
-    wxBITMAP_TYPE_WEBP,
+    wxBITMAP_TYPE_WEBP, ///< @since 3.3.0
+    wxBITMAP_TYPE_WEBP_RESOURCE, ///< @since 3.3.0
     wxBITMAP_TYPE_ANY = 50
 };
 
