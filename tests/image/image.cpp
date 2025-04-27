@@ -847,12 +847,13 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::CompareLoadedImage", "[image]")
         wxINFO_FMT("Compare test '%s' for loading", g_testfiles[i].file);
         wxImage & expected = g_testfiles[i].bitDepth == 8 ? expected8 : expected24;
         int tolerance = 0;
-        switch (g_testfiles[i].type) {
+        switch (g_testfiles[i].type)
+        {
             case wxBITMAP_TYPE_JPEG:
             case wxBITMAP_TYPE_WEBP:
                 tolerance = 42; // lossy formats can have a substantial difference
                 // this value has been chosen to be okay for the existing JPEG sample
-            break;
+                break;
             default:
                 tolerance = 0; // all other formats must match exactly
         }

@@ -1010,6 +1010,7 @@
     <ClCompile Include="html\htmlwindow.cpp" />
     <ClCompile Include="html\htmprint.cpp" />
     <ClCompile Include="image\image.cpp" />
+    <ClCompile Include="image\imagwebp.cpp" />
     <ClCompile Include="image\rawbmp.cpp" />
     <ClCompile Include="menu\accelentry.cpp" />
     <ClCompile Include="menu\menu.cpp" />
