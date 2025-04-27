@@ -667,6 +667,7 @@ WX_LIBRARY_BASENAME_NOGUI
 SHARED
 COND_wxUSE_ZLIB_builtin
 COND_wxUSE_REGEX_builtin
+COND_wxUSE_LIBWEBP_builtin
 COND_wxUSE_LIBTIFF_builtin
 COND_wxUSE_LIBPNG_builtin
 COND_wxUSE_LIBJPEG_builtin
@@ -690,6 +691,7 @@ COND_USE_RTTI_0
 COND_USE_PLUGINS_0
 COND_USE_PCH_1
 COND_USE_OPENGL_1
+COND_USE_GUI_1_wxUSE_LIBWEBP_builtin
 COND_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_USE_GUI_1_wxUSE_LIBJPEG_builtin
@@ -739,6 +741,7 @@ COND_SHARED_0_wxUSE_ZLIB_builtin
 COND_SHARED_0_wxUSE_REGEX_builtin
 COND_SHARED_0_wxUSE_EXPAT_builtin
 COND_SHARED_0_USE_STC_1
+COND_SHARED_0_USE_GUI_1_wxUSE_LIBWEBP_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin
@@ -914,6 +917,7 @@ WX_FLAVOUR
 OFFICIAL_BUILD
 VENDOR
 wxUSE_LIBTIFF
+wxUSE_LIBWEBP
 wxUSE_LIBPNG
 wxUSE_LIBJPEG
 wxUSE_EXPAT
@@ -1043,7 +1047,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1095,9 +1098,9 @@ enable_nanox
 with_libpng
 with_libjpeg
 with_libtiff
+with_libwebp
 with_libjbig
 with_libxpm
-with_libwebp
 with_libiconv
 with_libmspack
 with_gtkprint
@@ -1492,7 +1495,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1745,15 +1747,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1891,7 +1884,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -2044,7 +2037,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2374,9 +2366,9 @@ Optional Packages:
   --with-libpng           use libpng (PNG image format)
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
+  --with-libwebp          use libwebp (WebP file format)
   --without-libjbig       don't use libjbig in libtiff even if available
   --with-libxpm           use libxpm (XPM file format)
-  --with-libwebp          use libwebp (WebP file format)
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
   --without-gtkprint      don't use GTK printing support
@@ -2918,7 +2910,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 $4
 int
-main ()
+main (void)
 {
 static int test_array [1 - 2 * !(($2) >= 0)];
 test_array [0] = 0;
@@ -2935,7 +2927,7 @@ if ac_fn_c_try_compile "$LINENO"; then :
 /* end confdefs.h.  */
 $4
 int
-main ()
+main (void)
 {
 static int test_array [1 - 2 * !(($2) <= $ac_mid)];
 test_array [0] = 0;
@@ -2962,7 +2954,7 @@ else
 /* end confdefs.h.  */
 $4
 int
-main ()
+main (void)
 {
 static int test_array [1 - 2 * !(($2) < 0)];
 test_array [0] = 0;
@@ -2979,7 +2971,7 @@ if ac_fn_c_try_compile "$LINENO"; then :
 /* end confdefs.h.  */
 $4
 int
-main ()
+main (void)
 {
 static int test_array [1 - 2 * !(($2) >= $ac_mid)];
 test_array [0] = 0;
@@ -3014,7 +3006,7 @@ while test "x$ac_lo" != "x$ac_hi"; do
 /* end confdefs.h.  */
 $4
 int
-main ()
+main (void)
 {
 static int test_array [1 - 2 * !(($2) <= $ac_mid)];
 test_array [0] = 0;
@@ -3039,12 +3031,12 @@ esac
     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 $4
-static long int longval () { return $2; }
-static unsigned long int ulongval () { return $2; }
+static long int longval (void) { return $2; }
+static unsigned long int ulongval (void) { return $2; }
 #include <stdio.h>
 #include <stdlib.h>
 int
-main ()
+main (void)
 {
 
   FILE *f = fopen ("conftest.val", "w");
@@ -3105,7 +3097,7 @@ else
 #define $2 innocuous_$2
 
 /* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $2 (); below.
+    which can conflict with char $2 (void); below.
     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
     <limits.h> exists even on freestanding compilers.  */
 
@@ -3123,7 +3115,7 @@ else
 #ifdef __cplusplus
 extern "C"
 #endif
-char $2 ();
+char $2 (void);
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
@@ -3132,7 +3124,7 @@ choke me
 #endif
 
 int
-main ()
+main (void)
 {
 return $2 ();
   ;
@@ -3171,7 +3163,7 @@ else
 /* end confdefs.h.  */
 $4
 int
-main ()
+main (void)
 {
 if (sizeof ($2))
 	 return 0;
@@ -3184,7 +3176,7 @@ if ac_fn_c_try_compile "$LINENO"; then :
 /* end confdefs.h.  */
 $4
 int
-main ()
+main (void)
 {
 if (sizeof (($2)))
 	    return 0;
@@ -4055,7 +4047,6 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
-DEFAULT_wxUSE_LIBWEBP=auto
 
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_UNICODE_UTF8=no
@@ -4752,6 +4743,42 @@ fi
           eval "$wx_cv_use_libtiff"
 
 
+
+# Check whether --with-libwebp was given.
+if test "${with_libwebp+set}" = set; then :
+  withval=$with_libwebp;
+                        if test "$withval" = yes; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=yes'
+                        elif test "$withval" = no; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=no'
+                        elif test "$withval" = sys; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=sys'
+                        elif test "$withval" = builtin; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=builtin'
+                        else
+                          as_fn_error $? "Invalid value for --with-libwebp: should be yes, no, sys, or builtin" "$LINENO" 5
+                        fi
+
+else
+
+                        if test "DEFAULT_wxUSE_LIBWEBP" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_libwebp="wxUSE_LIBWEBP=$value"
+
+fi
+
+
+          eval "$wx_cv_use_libwebp"
+
+
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
     wxUSE_LIBJBIG=no
 else
@@ -4821,35 +4848,6 @@ fi
 
 
           eval "$wx_cv_use_libxpm"
-
-
-          withstring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$withstring" = xwithout; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-# Check whether --with-libwebp was given.
-if test "${with_libwebp+set}" = set; then :
-  withval=$with_libwebp;
-                        if test "$withval" = yes; then
-                          wx_cv_use_libwebp='wxUSE_LIBWEBP=yes'
-                        else
-                          wx_cv_use_libwebp='wxUSE_LIBWEBP=no'
-                        fi
-
-else
-
-                        wx_cv_use_libwebp='wxUSE_LIBWEBP=${'DEFAULT_wxUSE_LIBWEBP":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_libwebp"
 
 
           withstring=
@@ -13245,7 +13243,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -13385,7 +13383,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <stdio.h>
 int
-main ()
+main (void)
 {
 FILE *f = fopen ("conftest.out", "w");
  return ferror (f) || fclose (f) != 0;
@@ -13449,7 +13447,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -13500,7 +13498,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 #ifndef __GNUC__
        choke me
@@ -13541,7 +13539,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -13556,7 +13554,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -13572,7 +13570,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -13621,9 +13619,7 @@ struct stat;
 /* Most of the following tests are stolen from RCS 5.7's src/conf.sh.  */
 struct buf { int x; };
 FILE * (*rcsopen) (struct buf *, struct stat *, int);
-static char *e (p, i)
-     char **p;
-     int i;
+static char *e (char **p, int i)
 {
   return p[i];
 }
@@ -13658,7 +13654,7 @@ int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, i
 int argc;
 char **argv;
 int
-main ()
+main (void)
 {
 return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];
   ;
@@ -13724,7 +13720,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __INTEL_COMPILER
@@ -13779,7 +13775,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __INTEL_COMPILER || __INTEL_COMPILER < 800
@@ -13832,7 +13828,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __INTEL_COMPILER || __INTEL_COMPILER < 1000
@@ -13890,7 +13886,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __xlC__
@@ -13946,7 +13942,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __xlC__
@@ -14002,7 +13998,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef _SGI_COMPILER_VERSION
@@ -14059,7 +14055,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __SUNPRO_C
@@ -14116,7 +14112,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __HP_cc
@@ -14172,7 +14168,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __DECC
@@ -14228,7 +14224,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __SUNPRO_C
@@ -14727,7 +14723,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 #ifndef __GNUC__
        choke me
@@ -14768,7 +14764,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -14783,7 +14779,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -14799,7 +14795,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -14861,7 +14857,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __INTEL_COMPILER
@@ -14916,7 +14912,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __INTEL_COMPILER || __INTEL_COMPILER < 800
@@ -14969,7 +14965,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __INTEL_COMPILER || __INTEL_COMPILER < 1000
@@ -15027,7 +15023,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __xlC__
@@ -15083,7 +15079,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __xlC__
@@ -15139,7 +15135,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef _SGI_COMPILER_VERSION
@@ -15196,7 +15192,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __SUNPRO_CC
@@ -15253,7 +15249,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __HP_aCC
@@ -15309,7 +15305,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __DECCXX
@@ -15365,7 +15361,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
              #ifndef __SUNPRO_CC
@@ -23110,7 +23106,7 @@ $as_echo_n "checking if C compiler ($CC) works with SDK/version options... " >&6
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -23150,7 +23146,7 @@ $as_echo_n "checking if C++ compiler ($CXX) works with SDK/version options... " 
             #include <Availability.h>
 
 int
-main ()
+main (void)
 {
 
             #if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
@@ -23226,7 +23222,7 @@ $as_echo_n "checking if CoreFoundation/CFBase.h is usable... " >&6; }
 /* end confdefs.h.  */
 #include <CoreFoundation/CFBase.h>
 int
-main ()
+main (void)
 {
 
   ;
@@ -23247,7 +23243,7 @@ $as_echo_n "checking if __CF_USE_FRAMEWORK_INCLUDES__ is required... " >&6; }
 #include <CoreFoundation/CFBase.h>
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -23290,7 +23286,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
                         #ifdef __MINGW32__
@@ -23381,7 +23377,7 @@ else
 #include <float.h>
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -23451,7 +23447,7 @@ else
 
 #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
 int
-main ()
+main (void)
 {
   int i;
   for (i = 0; i < 256; i++)
@@ -23580,7 +23576,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
 #ifndef __cplusplus
@@ -23663,8 +23659,8 @@ for ac_kw in inline __inline__ __inline; do
 /* end confdefs.h.  */
 #ifndef __cplusplus
 typedef int foo_t;
-static $ac_kw foo_t static_foo () {return 0; }
-$ac_kw foo_t foo () {return 0; }
+static $ac_kw foo_t static_foo (void) {return 0; }
+$ac_kw foo_t foo (void) {return 0; }
 #endif
 
 _ACEOF
@@ -24154,7 +24150,7 @@ else
 #define _FILE_OFFSET_BITS 64
                           #include <sys/types.h>
 int
-main ()
+main (void)
 {
 typedef struct {
     unsigned int field: sizeof(off_t) == 8;
@@ -24197,7 +24193,7 @@ else
 #define _LARGE_FILES 1
                           #include <sys/types.h>
 int
-main ()
+main (void)
 {
 typedef struct {
     unsigned int field: sizeof(off_t) == 8;
@@ -24265,7 +24261,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
                         #ifndef __STDC_EXT__
@@ -24319,7 +24315,7 @@ else
 #include <sys/types.h> /* for off_t */
      #include <stdio.h>
 int
-main ()
+main (void)
 {
 int (*fp) (FILE *, off_t, int) = fseeko;
      return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
@@ -24338,7 +24334,7 @@ rm -f core conftest.err conftest.$ac_objext \
 #include <sys/types.h> /* for off_t */
      #include <stdio.h>
 int
-main ()
+main (void)
 {
 int (*fp) (FILE *, off_t, int) = fseeko;
      return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
@@ -24435,7 +24431,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 	     #include <sys/param.h>
 
 int
-main ()
+main (void)
 {
 #if ! (defined BYTE_ORDER && defined BIG_ENDIAN \
 		     && defined LITTLE_ENDIAN && BYTE_ORDER && BIG_ENDIAN \
@@ -24455,7 +24451,7 @@ if ac_fn_c_try_compile "$LINENO"; then :
 		#include <sys/param.h>
 
 int
-main ()
+main (void)
 {
 #if BYTE_ORDER != BIG_ENDIAN
 		 not big endian
@@ -24481,7 +24477,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 #include <limits.h>
 
 int
-main ()
+main (void)
 {
 #if ! (defined _LITTLE_ENDIAN || defined _BIG_ENDIAN)
 	      bogus endian macros
@@ -24498,7 +24494,7 @@ if ac_fn_c_try_compile "$LINENO"; then :
 #include <limits.h>
 
 int
-main ()
+main (void)
 {
 #ifndef _BIG_ENDIAN
 		 not big endian
@@ -24540,7 +24536,7 @@ short int ascii_mm[] =
 		extern int foo;
 
 int
-main ()
+main (void)
 {
 return use_ascii (foo) == use_ebcdic (foo);
   ;
@@ -24566,7 +24562,7 @@ else
 /* end confdefs.h.  */
 $ac_includes_default
 int
-main ()
+main (void)
 {
 
 	     /* Are we little or big endian?  From Harbison&Steele.  */
@@ -24631,7 +24627,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
                     #if _SGI_COMPILER_VERSION >= 744
@@ -24676,7 +24672,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
                     #if _SGI_COMPILER_VERSION >= 744
@@ -24735,7 +24731,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
           unsigned int value=0;
@@ -25563,9 +25559,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char deflate ();
+char deflate (void);
 int
-main ()
+main (void)
 {
 return deflate ();
   ;
@@ -25700,9 +25696,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char png_sig_cmp ();
+char png_sig_cmp (void);
 int
-main ()
+main (void)
 {
 return png_sig_cmp ();
   ;
@@ -25780,7 +25776,7 @@ else
                     #include <jpeglib.h>
 
 int
-main ()
+main (void)
 {
 
 
@@ -25818,9 +25814,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char jpeg_read_header ();
+char jpeg_read_header (void);
 int
-main ()
+main (void)
 {
 return jpeg_read_header ();
   ;
@@ -25961,9 +25957,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char lzma_code ();
+char lzma_code (void);
 int
-main ()
+main (void)
 {
 return lzma_code ();
   ;
@@ -26017,9 +26013,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char jbg_dec_init ();
+char jbg_dec_init (void);
 int
-main ()
+main (void)
 {
 return jbg_dec_init ();
   ;
@@ -26045,37 +26041,40 @@ fi
 
 
 WEBP_LINK=
-if test "$wxUSE_LIBWEBP" != "no"; then
+if test "$wxUSE_LIBWEBP" != "no" ; then
+    $as_echo "#define wxUSE_LIBWEBP 1" >>confdefs.h
+
+    if test "$wxUSE_LIBWEBP" = "sys" -o "$wxUSE_LIBWEBP" = "yes" ; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for
-            libwebp
-            libwebpdemux
-        " >&5
+                libwebp
+                libwebpdemux
+            " >&5
 $as_echo_n "checking for
-            libwebp
-            libwebpdemux
-        ... " >&6; }
+                libwebp
+                libwebpdemux
+            ... " >&6; }
 
 if test -n "$WebP_CFLAGS"; then
     pkg_cv_WebP_CFLAGS="$WebP_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
-            libwebp
-            libwebpdemux
-        \""; } >&5
+                libwebp
+                libwebpdemux
+            \""; } >&5
   ($PKG_CONFIG --exists --print-errors "
-            libwebp
-            libwebpdemux
-        ") 2>&5
+                libwebp
+                libwebpdemux
+            ") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WebP_CFLAGS=`$PKG_CONFIG --cflags "
-            libwebp
-            libwebpdemux
-        " 2>/dev/null`
+                libwebp
+                libwebpdemux
+            " 2>/dev/null`
               test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -26088,20 +26087,20 @@ if test -n "$WebP_LIBS"; then
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
-            libwebp
-            libwebpdemux
-        \""; } >&5
+                libwebp
+                libwebpdemux
+            \""; } >&5
   ($PKG_CONFIG --exists --print-errors "
-            libwebp
-            libwebpdemux
-        ") 2>&5
+                libwebp
+                libwebpdemux
+            ") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
   pkg_cv_WebP_LIBS=`$PKG_CONFIG --libs "
-            libwebp
-            libwebpdemux
-        " 2>/dev/null`
+                libwebp
+                libwebpdemux
+            " 2>/dev/null`
               test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -26123,31 +26122,25 @@ else
 fi
         if test $_pkg_short_errors_supported = yes; then
             WebP_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "
-            libwebp
-            libwebpdemux
-        " 2>&1`
+                libwebp
+                libwebpdemux
+            " 2>&1`
         else
             WebP_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "
-            libwebp
-            libwebpdemux
-        " 2>&1`
+                libwebp
+                libwebpdemux
+            " 2>&1`
         fi
     # Put the nasty error message in config.log where it belongs
     echo "$WebP_PKG_ERRORS" >&5
 
 
-            wxUSE_LIBWEBP="no"
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found via pkg-config" >&5
-$as_echo "not found via pkg-config" >&6; }
 
 
 elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-            wxUSE_LIBWEBP="no"
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found via pkg-config" >&5
-$as_echo "not found via pkg-config" >&6; }
 
 
 else
@@ -26156,17 +26149,43 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-            WEBP_LINK=$WebP_LIBS
-            CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
+                WEBP_LINK=$WebP_LIBS
+                CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
 
 fi
-fi
-if test "$wxUSE_LIBWEBP" = "auto"; then
-        wxUSE_LIBWEBP=yes
-fi
-if test "$wxUSE_LIBWEBP" = "yes"; then
-    $as_echo "#define wxUSE_LIBWEBP 1" >>confdefs.h
 
+        if test "x$WEBP_LINK" = "x" ; then
+            if test "$wxUSE_LIBWEBP" = "sys" ; then
+                as_fn_error $? "system webp library not found! Use --with-libwebp=builtin to use built-in version" "$LINENO" 5
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: system webp library not found, will use built-in instead" >&5
+$as_echo "$as_me: WARNING: system webp library not found, will use built-in instead" >&2;}
+                wxUSE_LIBWEBP=builtin
+            fi
+        else
+                        wxUSE_LIBWEBP=sys
+        fi
+    fi
+
+                if test "$wxUSE_LIBWEBP" = "builtin" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether webp_dec.c file exists" >&5
+$as_echo_n "checking whether webp_dec.c file exists... " >&6; }
+        if ! test -f "$srcdir/3rdparty/libwebp/src/dec/webp_dec.c" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in webp library, but the required file
+    $srcdir/3rdparty/libwebp/src/dec/webp_dec.c couldn't be found.
+    You might need to run
+
+        git submodule update --init 3rdparty/libwebp
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        fi
+    fi
 fi
 
 
@@ -26274,9 +26293,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char TIFFError ();
+char TIFFError (void);
 int
-main ()
+main (void)
 {
 return TIFFError ();
   ;
@@ -26345,9 +26364,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char TIFFError ();
+char TIFFError (void);
 int
-main ()
+main (void)
 {
 return TIFFError ();
   ;
@@ -26576,7 +26595,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 /* end confdefs.h.  */
 #include <expat.h>
 int
-main ()
+main (void)
 {
 
   ;
@@ -26618,9 +26637,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char XML_ParserCreate ();
+char XML_ParserCreate (void);
 int
-main ()
+main (void)
 {
 return XML_ParserCreate ();
   ;
@@ -27013,7 +27032,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 #ifndef __GNUC__
        choke me
@@ -27054,7 +27073,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -27069,7 +27088,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -27085,7 +27104,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -27134,9 +27153,7 @@ struct stat;
 /* Most of the following tests are stolen from RCS 5.7's src/conf.sh.  */
 struct buf { int x; };
 FILE * (*rcsopen) (struct buf *, struct stat *, int);
-static char *e (p, i)
-     char **p;
-     int i;
+static char *e (char **p, int i)
 {
   return p[i];
 }
@@ -27171,7 +27188,7 @@ int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, i
 int argc;
 char **argv;
 int
-main ()
+main (void)
 {
 return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];
   ;
@@ -27383,9 +27400,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char mspack_create_chm_decompressor ();
+char mspack_create_chm_decompressor (void);
 int
-main ()
+main (void)
 {
 return mspack_create_chm_decompressor ();
   ;
@@ -28038,7 +28055,7 @@ else
                                 #include <gtk/gtk.h>
 
 int
-main ()
+main (void)
 {
 
                                 #if !GTK_CHECK_VERSION(2,20,0)
@@ -28078,7 +28095,7 @@ else
                                     #include <gtk/gtk.h>
 
 int
-main ()
+main (void)
 {
 
                                     #if !GTK_CHECK_VERSION(2,18,0)
@@ -28119,7 +28136,7 @@ else
                                     #include <gtk/gtk.h>
 
 int
-main ()
+main (void)
 {
 
                                     #if !GTK_CHECK_VERSION(2,10,0)
@@ -28171,7 +28188,7 @@ else
                             #include <gdk/gdk.h>
 
 int
-main ()
+main (void)
 {
 
                             #ifndef GDK_WINDOWING_WAYLAND
@@ -28415,7 +28432,7 @@ if test "$ac_x_libraries" = no; then
 /* end confdefs.h.  */
 #include <X11/Xlib.h>
 int
-main ()
+main (void)
 {
 XrmInitialize ()
   ;
@@ -28501,7 +28518,7 @@ $as_echo_n "checking whether -R must be followed by a space... " >&6; }
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -28518,7 +28535,7 @@ else
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -28562,9 +28579,9 @@ rm -f core conftest.err conftest.$ac_objext \
 #ifdef __cplusplus
 extern "C"
 #endif
-char XOpenDisplay ();
+char XOpenDisplay (void);
 int
-main ()
+main (void)
 {
 return XOpenDisplay ();
   ;
@@ -28590,9 +28607,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char dnet_ntoa ();
+char dnet_ntoa (void);
 int
-main ()
+main (void)
 {
 return dnet_ntoa ();
   ;
@@ -28631,9 +28648,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char dnet_ntoa ();
+char dnet_ntoa (void);
 int
-main ()
+main (void)
 {
 return dnet_ntoa ();
   ;
@@ -28691,9 +28708,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char gethostbyname ();
+char gethostbyname (void);
 int
-main ()
+main (void)
 {
 return gethostbyname ();
   ;
@@ -28732,9 +28749,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char gethostbyname ();
+char gethostbyname (void);
 int
-main ()
+main (void)
 {
 return gethostbyname ();
   ;
@@ -28788,9 +28805,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char connect ();
+char connect (void);
 int
-main ()
+main (void)
 {
 return connect ();
   ;
@@ -28837,9 +28854,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char remove ();
+char remove (void);
 int
-main ()
+main (void)
 {
 return remove ();
   ;
@@ -28886,9 +28903,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char shmat ();
+char shmat (void);
 int
-main ()
+main (void)
 {
 return shmat ();
   ;
@@ -28938,9 +28955,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char IceConnectionNumber ();
+char IceConnectionNumber (void);
 int
-main ()
+main (void)
 {
 return IceConnectionNumber ();
   ;
@@ -29232,7 +29249,7 @@ else
                                 #include <X11/xpm.h>
 
 int
-main ()
+main (void)
 {
 
                                 int version;
@@ -29285,9 +29302,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char XShapeQueryExtension ();
+char XShapeQueryExtension (void);
 int
-main ()
+main (void)
 {
 return XShapeQueryExtension ();
   ;
@@ -29326,7 +29343,7 @@ $as_echo_n "checking for X11/extensions/shape.h... " >&6; }
                             #include <X11/extensions/shape.h>
 
 int
-main ()
+main (void)
 {
 
                             int dummy1, dummy2;
@@ -29734,9 +29751,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char XineramaQueryScreens ();
+char XineramaQueryScreens (void);
 int
-main ()
+main (void)
 {
 return XineramaQueryScreens ();
   ;
@@ -29807,9 +29824,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char XineramaQueryScreens ();
+char XineramaQueryScreens (void);
 int
-main ()
+main (void)
 {
 return XineramaQueryScreens ();
   ;
@@ -30111,9 +30128,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char XF86VidModeQueryExtension ();
+char XF86VidModeQueryExtension (void);
 int
-main ()
+main (void)
 {
 return XF86VidModeQueryExtension ();
   ;
@@ -30184,9 +30201,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char XF86VidModeQueryExtension ();
+char XF86VidModeQueryExtension (void);
 int
-main ()
+main (void)
 {
 return XF86VidModeQueryExtension ();
   ;
@@ -30483,9 +30500,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char SmcOpenConnection ();
+char SmcOpenConnection (void);
 int
-main ()
+main (void)
 {
 return SmcOpenConnection ();
   ;
@@ -30556,9 +30573,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char SmcOpenConnection ();
+char SmcOpenConnection (void);
 int
-main ()
+main (void)
 {
 return SmcOpenConnection ();
   ;
@@ -30911,9 +30928,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char glBegin ();
+char glBegin (void);
 int
-main ()
+main (void)
 {
 return glBegin ();
   ;
@@ -30984,9 +31001,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char glBegin ();
+char glBegin (void);
 int
-main ()
+main (void)
 {
 return glBegin ();
   ;
@@ -31452,9 +31469,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char glEnable ();
+char glEnable (void);
 int
-main ()
+main (void)
 {
 return glEnable ();
   ;
@@ -31525,9 +31542,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char glEnable ();
+char glEnable (void);
 int
-main ()
+main (void)
 {
 return glEnable ();
   ;
@@ -31926,7 +31943,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
          };
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -31973,7 +31990,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
             #include <string>
 
 int
-main ()
+main (void)
 {
 
             std::string s("hello");
@@ -32024,7 +32041,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
               #pragma GCC visibility pop
 
 int
-main ()
+main (void)
 {
 
               std::string s("hello");
@@ -32098,7 +32115,7 @@ $as_echo_n "checking if the linker accepts -rpath... " >&6; }
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -32123,7 +32140,7 @@ $as_echo_n "checking if the linker accepts -R... " >&6; }
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -32260,7 +32277,7 @@ else
 /* end confdefs.h.  */
 #include <stddef.h>
 int
-main ()
+main (void)
 {
 
             return 0; }
@@ -32299,7 +32316,7 @@ else
 /* end confdefs.h.  */
 #include <stddef.h>
 int
-main ()
+main (void)
 {
 
                 return 0; }
@@ -32339,7 +32356,7 @@ else
 /* end confdefs.h.  */
 #include <wchar.h>
 int
-main ()
+main (void)
 {
 
             return 0; }
@@ -32392,7 +32409,7 @@ else
 /* end confdefs.h.  */
 #include <pwd.h>
 int
-main ()
+main (void)
 {
 
                 char *p;
@@ -32458,9 +32475,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char wcslen ();
+char wcslen (void);
 int
-main ()
+main (void)
 {
 return wcslen ();
   ;
@@ -32499,9 +32516,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char wcslen ();
+char wcslen (void);
 int
-main ()
+main (void)
 {
 return wcslen ();
   ;
@@ -32604,7 +32621,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -32664,7 +32681,7 @@ else
                     #include <stdarg.h>
 
 int
-main ()
+main (void)
 {
 
                     char *buf;
@@ -32766,7 +32783,7 @@ else
                     #include <stdarg.h>
 
 int
-main ()
+main (void)
 {
 
                     const char *buf;
@@ -32842,7 +32859,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -32888,7 +32905,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <wchar.h>
 int
-main ()
+main (void)
 {
 &_vsnwprintf;
   ;
@@ -32924,7 +32941,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -33001,7 +33018,7 @@ else
 #include <stdlib.h>
 #include <iconv.h>
 int
-main ()
+main (void)
 {
 iconv_t cd = iconv_open("","");
        iconv(cd,NULL,NULL,NULL,NULL);
@@ -33023,7 +33040,7 @@ rm -f core conftest.err conftest.$ac_objext \
 #include <stdlib.h>
 #include <iconv.h>
 int
-main ()
+main (void)
 {
 iconv_t cd = iconv_open("","");
          iconv(cd,NULL,NULL,NULL,NULL);
@@ -33069,7 +33086,7 @@ size_t iconv();
 #endif
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -33151,7 +33168,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 /* end confdefs.h.  */
 #include <execinfo.h>
 int
-main ()
+main (void)
 {
 
 
@@ -33198,9 +33215,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char backtrace ();
+char backtrace (void);
 int
-main ()
+main (void)
 {
 return backtrace ();
   ;
@@ -33264,7 +33281,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 /* end confdefs.h.  */
 #include <cxxabi.h>
 int
-main ()
+main (void)
 {
 
                             int rc;
@@ -33336,7 +33353,7 @@ else
             #include <sys/statvfs.h>
 
 int
-main ()
+main (void)
 {
 
             statvfs("/", NULL);
@@ -33375,7 +33392,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
                 #include <sys/statvfs.h>
 
 int
-main ()
+main (void)
 {
 
                 long l;
@@ -33399,7 +33416,7 @@ else
                         #include <sys/statvfs.h>
 
 int
-main ()
+main (void)
 {
 
                         long l;
@@ -33460,7 +33477,7 @@ else
                  #endif
 
 int
-main ()
+main (void)
 {
 
                  long l;
@@ -33509,7 +33526,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
                      #endif
 
 int
-main ()
+main (void)
 {
 
                     struct statfs fs;
@@ -33637,9 +33654,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char nanosleep ();
+char nanosleep (void);
 int
-main ()
+main (void)
 {
 return nanosleep ();
   ;
@@ -33682,7 +33699,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -33750,7 +33767,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -33807,7 +33824,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -33865,7 +33882,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -33933,9 +33950,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char inet_addr ();
+char inet_addr (void);
 int
-main ()
+main (void)
 {
 return inet_addr ();
   ;
@@ -33973,9 +33990,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char inet_addr ();
+char inet_addr (void);
 int
-main ()
+main (void)
 {
 return inet_addr ();
   ;
@@ -34013,9 +34030,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char inet_addr ();
+char inet_addr (void);
 int
-main ()
+main (void)
 {
 return inet_addr ();
   ;
@@ -34053,9 +34070,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char inet_addr ();
+char inet_addr (void);
 int
-main ()
+main (void)
 {
 return inet_addr ();
   ;
@@ -34124,9 +34141,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char inet_aton ();
+char inet_aton (void);
 int
-main ()
+main (void)
 {
 return inet_aton ();
   ;
@@ -34178,7 +34195,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -34236,7 +34253,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -34296,7 +34313,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -34360,7 +34377,7 @@ else
                 $ac_includes_default
 
 int
-main ()
+main (void)
 {
 
                 #ifndef $wx_func
@@ -34599,7 +34616,7 @@ $as_echo_n "checking for the pthreads library -l$flag... " >&6; }
 /* end confdefs.h.  */
 #include <pthread.h>
 int
-main ()
+main (void)
 {
 pthread_create(0,0,0,0);
   ;
@@ -34716,7 +34733,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
                void ThreadCleanupFunc(void *p);
 
 int
-main ()
+main (void)
 {
 
                 void *p;
@@ -34789,9 +34806,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char sched_yield ();
+char sched_yield (void);
 int
-main ()
+main (void)
 {
 return sched_yield ();
   ;
@@ -34849,9 +34866,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char sched_get_priority_max ();
+char sched_get_priority_max (void);
 int
-main ()
+main (void)
 {
 return sched_get_priority_max ();
   ;
@@ -34932,7 +34949,7 @@ else
 /* end confdefs.h.  */
 #include <pthread.h>
 int
-main ()
+main (void)
 {
 
                pthread_mutexattr_t attr;
@@ -34968,7 +34985,7 @@ else
 /* end confdefs.h.  */
 #include <pthread.h>
 int
-main ()
+main (void)
 {
 
                                pthread_mutexattr_t attr;
@@ -35004,7 +35021,7 @@ else
 /* end confdefs.h.  */
 #include <pthread.h>
 int
-main ()
+main (void)
 {
 
                     pthread_mutex_t attr = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
@@ -35054,7 +35071,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 /* end confdefs.h.  */
 #include <cxxabi.h>
 int
-main ()
+main (void)
 {
 
                         void foo(abi::__forced_unwind&);
@@ -35136,7 +35153,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <netdb.h>
 int
-main ()
+main (void)
 {
 
             char *name = "www.gnu.org";
@@ -35162,7 +35179,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <netdb.h>
 int
-main ()
+main (void)
 {
 
             char *name = "www.gnu.org";
@@ -35194,7 +35211,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <netdb.h>
 int
-main ()
+main (void)
 {
 
             char *name = "www.gnu.org";
@@ -35226,7 +35243,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <netdb.h>
 int
-main ()
+main (void)
 {
 
             char *name = "www.gnu.org";
@@ -35345,7 +35362,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 /* end confdefs.h.  */
 #include <netdb.h>
 int
-main ()
+main (void)
 {
 
 
@@ -35368,7 +35385,7 @@ else
 /* end confdefs.h.  */
 #include <netdb.h>
 int
-main ()
+main (void)
 {
 
 
@@ -35391,7 +35408,7 @@ else
 /* end confdefs.h.  */
 #include <netdb.h>
 int
-main ()
+main (void)
 {
 
                                 char *name;
@@ -35667,9 +35684,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char dlopen ();
+char dlopen (void);
 int
-main ()
+main (void)
 {
 return dlopen ();
   ;
@@ -35729,9 +35746,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char dladdr ();
+char dladdr (void);
 int
-main ()
+main (void)
 {
 return dladdr ();
   ;
@@ -36237,7 +36254,7 @@ else
                 #endif
 
 int
-main ()
+main (void)
 {
 
                 ioctl(0, SNDCTL_DSP_SPEED, 0);
@@ -36262,7 +36279,7 @@ else
                         #endif
 
 int
-main ()
+main (void)
 {
 
                         ioctl(0, SNDCTL_DSP_SPEED, 0);
@@ -36577,7 +36594,7 @@ $as_echo "no" >&6; }
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -36843,7 +36860,7 @@ $as_echo "no" >&6; }
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
   ;
@@ -37622,7 +37639,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
         #include <stdlib.h>
 
 int
-main ()
+main (void)
 {
 
         locale_t t;
@@ -37778,7 +37795,7 @@ else
                 #include <unistd.h>
 
 int
-main ()
+main (void)
 {
 
                 struct timeval tv;
@@ -37798,7 +37815,7 @@ else
                     #include <unistd.h>
 
 int
-main ()
+main (void)
 {
 
                     struct timeval tv;
@@ -37852,7 +37869,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
                                 #include <time.h>
 
 int
-main ()
+main (void)
 {
 
                                 int tz;
@@ -37874,7 +37891,7 @@ else
                                         #include <time.h>
 
 int
-main ()
+main (void)
 {
 
                                         int tz;
@@ -37896,7 +37913,7 @@ else
                                                 #include <time.h>
 
 int
-main ()
+main (void)
 {
 
                                                 int tz;
@@ -37972,7 +37989,7 @@ else
                     #include <time.h>
 
 int
-main ()
+main (void)
 {
 
                     struct tm tm;
@@ -38015,7 +38032,7 @@ else
                      #include <langinfo.h>
 
 int
-main ()
+main (void)
 {
 
                      _NL_TIME_FIRST_WEEKDAY;
@@ -38083,9 +38100,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char socket ();
+char socket (void);
 int
-main ()
+main (void)
 {
 return socket ();
   ;
@@ -38125,9 +38142,9 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char socket ();
+char socket (void);
 int
-main ()
+main (void)
 {
 return socket ();
   ;
@@ -38190,7 +38207,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
                         #include <sys/socket.h>
 
 int
-main ()
+main (void)
 {
 
                         socklen_t len;
@@ -38216,7 +38233,7 @@ else
                                 #include <sys/socket.h>
 
 int
-main ()
+main (void)
 {
 
                                 size_t len;
@@ -38236,7 +38253,7 @@ else
                                     #include <sys/socket.h>
 
 int
-main ()
+main (void)
 {
 
                                     int len;
@@ -38302,7 +38319,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
                         #include <sys/socket.h>
 
 int
-main ()
+main (void)
 {
 
                         socklen_t len;
@@ -38323,7 +38340,7 @@ else
                                 #include <sys/socket.h>
 
 int
-main ()
+main (void)
 {
 
                                 size_t len;
@@ -38343,7 +38360,7 @@ else
                                     #include <sys/socket.h>
 
 int
-main ()
+main (void)
 {
 
                                     int len;
@@ -38407,7 +38424,7 @@ else
                         #include <netinet/in.h>
 
 int
-main ()
+main (void)
 {
 
                         struct sockaddr_in6 sa6;
@@ -40017,7 +40034,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 /* end confdefs.h.  */
 #include "include/cef_version.h"
 int
-main ()
+main (void)
 {
 
   ;
@@ -40296,7 +40313,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 #include <windows.h>
                      #include <imagehlp.h>
 int
-main ()
+main (void)
 {
 
                         #ifndef API_VERSION_NUMBER
@@ -40470,7 +40487,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 #include <windows.h>
                      #include <gdiplus.h>
 int
-main ()
+main (void)
 {
 
                         using namespace Gdiplus;
@@ -40521,7 +40538,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
                         #include <dwrite.h>
 
 int
-main ()
+main (void)
 {
 
                             ID2D1Factory* factory = NULL;
@@ -40861,7 +40878,7 @@ $as_echo_n "checking if AVKit is available... " >&6; }
 /* end confdefs.h.  */
 #include "AvailabilityMacros.h"
 int
-main ()
+main (void)
 {
 
                     #if defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
@@ -41095,7 +41112,7 @@ do CXXFLAGS="$ac_save_CXXFLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 return 0;
   ;
@@ -41209,6 +41226,14 @@ if test "$wxUSE_GUI" = "yes"; then
             WXCONFIG_LIBS="$PNG_LINK $WXCONFIG_LIBS"
             ;;
     esac
+    case "$wxUSE_LIBWEBP" in
+        builtin)
+            wxconfig_3rdparty="webp $wxconfig_3rdparty"
+            ;;
+        sys)
+            WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
+            ;;
+    esac
 fi
 case "$wxUSE_REGEX" in
     builtin)
@@ -41230,9 +41255,6 @@ if test "$wxUSE_LIBLZMA" = "yes"; then
             if test "$wxUSE_GUI" != "yes" -o "$wxUSE_LIBTIFF" != "sys"; then
         WXCONFIG_LIBS="$LZMA_LINK $WXCONFIG_LIBS"
     fi
-fi
-if test "$wxUSE_LIBWEBP" = "yes"; then
-        WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
 fi
 case "$wxUSE_ZLIB" in
     builtin)
@@ -41268,6 +41290,7 @@ _ACEOF
 else
     WXUNIV=0
 fi
+
 
 
 
@@ -42577,7 +42600,7 @@ $as_echo_n "checking if the compiler supports precompiled headers... " >&6; }
 /* end confdefs.h.  */
 
 int
-main ()
+main (void)
 {
 
                     #if !defined(__GNUC__) || !defined(__GNUC_MINOR__)
@@ -43186,6 +43209,11 @@ EOF
         COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin=""
     fi
 
+    COND_SHARED_0_USE_GUI_1_wxUSE_LIBWEBP_builtin="#"
+    if test "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$wxUSE_LIBWEBP" = "xbuiltin" ; then
+        COND_SHARED_0_USE_GUI_1_wxUSE_LIBWEBP_builtin=""
+    fi
+
     COND_SHARED_0_USE_STC_1="#"
     if test "x$SHARED" = "x0" -a "x$USE_STC" = "x1" ; then
         COND_SHARED_0_USE_STC_1=""
@@ -43431,6 +43459,11 @@ EOF
         COND_USE_GUI_1_wxUSE_LIBTIFF_builtin=""
     fi
 
+    COND_USE_GUI_1_wxUSE_LIBWEBP_builtin="#"
+    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBWEBP" = "xbuiltin" ; then
+        COND_USE_GUI_1_wxUSE_LIBWEBP_builtin=""
+    fi
+
     COND_USE_OPENGL_1="#"
     if test "x$USE_OPENGL" = "x1" ; then
         COND_USE_OPENGL_1=""
@@ -43544,6 +43577,11 @@ EOF
     COND_wxUSE_LIBTIFF_builtin="#"
     if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
         COND_wxUSE_LIBTIFF_builtin=""
+    fi
+
+    COND_wxUSE_LIBWEBP_builtin="#"
+    if test "x$wxUSE_LIBWEBP" = "xbuiltin" ; then
+        COND_wxUSE_LIBWEBP_builtin=""
     fi
 
     COND_wxUSE_REGEX_builtin="#"
@@ -45494,10 +45532,10 @@ echo "                                       jpeg               ${wxUSE_LIBJPEG-
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
+echo "                                       webp               ${wxUSE_LIBWEBP-none}"
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
-echo "                                       webp               ${wxUSE_LIBWEBP}"
 echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
