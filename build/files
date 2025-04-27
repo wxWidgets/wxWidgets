@@ -138,13 +138,12 @@ BASE_COREFOUNDATION_SRC =
     src/osx/core/cfstring.cpp
     src/osx/core/evtloop_cf.cpp
     src/osx/core/secretstore.cpp
+    src/osx/core/stdpaths.mm
     src/osx/core/strconv_cf.cpp
-    src/osx/cocoa/stdpaths.mm
     src/osx/cocoa/utils_base.mm
 
 BASE_COREFOUNDATION_HDR =
     wx/osx/carbon/region.h
-    wx/osx/cocoa/stdpaths.h
     wx/osx/core/cfarray.h
     wx/osx/core/cfdataref.h
     wx/osx/core/cfdictionary.h
@@ -159,6 +158,7 @@ BASE_COREFOUNDATION_HDR =
     wx/osx/core/mimetype.h
     wx/osx/core/objcid.h
     wx/osx/core/private.h
+    wx/osx/core/stdpaths.h
 
 # Base files used by OS X ports (not Carbon)
 BASE_OSX_SHARED_SRC =

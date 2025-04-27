@@ -2462,7 +2462,7 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
-	src/osx/cocoa/stdpaths.mm
+	src/osx/core/stdpaths.mm
 @COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
 COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2487,7 +2487,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
-	src/osx/cocoa/stdpaths.mm
+	src/osx/core/stdpaths.mm
 @COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2512,7 +2512,7 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
-	src/osx/cocoa/stdpaths.mm
+	src/osx/core/stdpaths.mm
 @COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
@@ -2521,7 +2521,7 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
-	src/osx/cocoa/stdpaths.mm \
+	src/osx/core/stdpaths.mm \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -2547,7 +2547,7 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
-	src/osx/cocoa/stdpaths.mm \
+	src/osx/core/stdpaths.mm \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -2589,7 +2589,7 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/cocoa/utils_base.mm \
 	src/osx/core/secretstore.cpp \
-	src/osx/cocoa/stdpaths.mm
+	src/osx/core/stdpaths.mm
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
 COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2617,7 +2617,7 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/osx/core/joystick.h \
 	wx/osx/core/mimetype.h \
 	wx/osx/core/dataview.h \
-	wx/osx/cocoa/stdpaths.h
+	wx/osx/core/stdpaths.h
 @COND_TOOLKIT_@BASE_OSX_HDR = $(COND_TOOLKIT__BASE_OSX_HDR)
 COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2645,7 +2645,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/joystick.h \
 	wx/osx/core/mimetype.h \
 	wx/osx/core/dataview.h \
-	wx/osx/cocoa/stdpaths.h
+	wx/osx/core/stdpaths.h
 @COND_TOOLKIT_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_COCOA_BASE_OSX_HDR)
 COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2673,7 +2673,7 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/osx/core/joystick.h \
 	wx/osx/core/mimetype.h \
 	wx/osx/core/dataview.h \
-	wx/osx/cocoa/stdpaths.h
+	wx/osx/core/stdpaths.h
 @COND_TOOLKIT_GTK@BASE_OSX_HDR = $(COND_TOOLKIT_GTK_BASE_OSX_HDR)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfdataref.h \
@@ -2691,7 +2691,7 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/joystick.h \
 	wx/osx/core/mimetype.h \
 	wx/osx/core/dataview.h \
-	wx/osx/cocoa/stdpaths.h \
+	wx/osx/core/stdpaths.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2729,7 +2729,7 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/osx/core/joystick.h \
 	wx/osx/core/mimetype.h \
 	wx/osx/core/dataview.h \
-	wx/osx/cocoa/stdpaths.h
+	wx/osx/core/stdpaths.h
 @COND_TOOLKIT_X11@BASE_OSX_HDR = $(COND_TOOLKIT_X11_BASE_OSX_HDR)
 @COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(BASE_OSX_HDR)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
@@ -4152,7 +4152,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_strconv_cf.o \
 	monodll_utils_base.o \
 	monodll_core_secretstore.o \
-	monodll_cocoa_stdpaths.o \
+	monodll_core_stdpaths.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -5918,7 +5918,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_strconv_cf.o \
 	monolib_utils_base.o \
 	monolib_core_secretstore.o \
-	monolib_cocoa_stdpaths.o \
+	monolib_core_stdpaths.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -7734,7 +7734,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_strconv_cf.o \
 	basedll_utils_base.o \
 	basedll_core_secretstore.o \
-	basedll_cocoa_stdpaths.o \
+	basedll_core_stdpaths.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -7819,7 +7819,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_strconv_cf.o \
 	baselib_utils_base.o \
 	baselib_core_secretstore.o \
-	baselib_cocoa_stdpaths.o \
+	baselib_core_stdpaths.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -15115,8 +15115,8 @@ monodll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONODLL_ODEP)
 monodll_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
 
-monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+monodll_core_stdpaths.o: $(srcdir)/src/osx/core/stdpaths.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/stdpaths.mm
 
 monodll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -19867,8 +19867,8 @@ monolib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONOLIB_ODEP)
 monolib_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
 
-monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+monolib_core_stdpaths.o: $(srcdir)/src/osx/core/stdpaths.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/stdpaths.mm
 
 monolib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -24619,8 +24619,8 @@ basedll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASEDLL_ODEP)
 basedll_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
 
-basedll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+basedll_core_stdpaths.o: $(srcdir)/src/osx/core/stdpaths.mm $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/core/stdpaths.mm
 
 basedll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
@@ -25093,8 +25093,8 @@ baselib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASELIB_ODEP)
 baselib_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/secretstore.cpp
 
-baselib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+baselib_core_stdpaths.o: $(srcdir)/src/osx/core/stdpaths.mm $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/core/stdpaths.mm
 
 baselib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp

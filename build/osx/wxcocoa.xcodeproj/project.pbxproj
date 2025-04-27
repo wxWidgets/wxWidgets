@@ -4894,7 +4894,7 @@
 		1197B997B1D139C5AE4D198A /* dseldlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dseldlg.cpp; path = ../../src/common/dseldlg.cpp; sourceTree = SOURCE_ROOT; };
 		772AD4682A3E38538511D341 /* bmpbtncmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpbtncmn.cpp; path = ../../src/common/bmpbtncmn.cpp; sourceTree = SOURCE_ROOT; };
 		4692909E4B823F71822B13F8 /* taskbarcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = taskbarcmn.cpp; path = ../../src/common/taskbarcmn.cpp; sourceTree = SOURCE_ROOT; };
-		190409DF8A3C3D9580FBB8AA /* stdpaths.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = stdpaths.mm; path = ../../src/osx/cocoa/stdpaths.mm; sourceTree = SOURCE_ROOT; };
+		190409DF8A3C3D9580FBB8AA /* stdpaths.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = stdpaths.mm; path = ../../src/osx/core/stdpaths.mm; sourceTree = SOURCE_ROOT; };
 		FDB0E2D0966C3E408C4A2D3D /* infback.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = infback.c; path = ../../src/zlib/infback.c; sourceTree = SOURCE_ROOT; };
 		194ADD28300E329E80F7892E /* htmprint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = htmprint.cpp; path = ../../src/html/htmprint.cpp; sourceTree = SOURCE_ROOT; };
 		9988CBB0772A3539970162FA /* arttango.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = arttango.cpp; path = ../../src/common/arttango.cpp; sourceTree = SOURCE_ROOT; };

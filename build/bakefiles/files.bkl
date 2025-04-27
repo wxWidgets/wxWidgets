@@ -187,7 +187,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
     src/osx/core/secretstore.cpp
-    src/osx/cocoa/stdpaths.mm
+    src/osx/core/stdpaths.mm
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/osx/core/cfdataref.h
@@ -205,7 +205,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/joystick.h
     wx/osx/core/mimetype.h
     wx/osx/core/dataview.h
-    wx/osx/cocoa/stdpaths.h
+    wx/osx/core/stdpaths.h
 </set>
 
 <!-- Base files used by OS X ports (not Carbon) -->

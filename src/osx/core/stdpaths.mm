@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/cocoa/stdpaths.mm
+// Name:        src/osx/core/stdpaths.mm
 // Purpose:     wxStandardPaths for Cocoa
 // Author:      Tobias Taschner
 // Created:     2015-09-09
@@ -39,16 +39,6 @@ static wxString GetFMDirectory(
                                   appropriateForURL:nil
                                              create:NO error:nil];
     return wxCFStringRef::AsString((CFStringRef)url.path);
-}
-
-wxStandardPaths::wxStandardPaths()
-{
-    
-}
-
-wxStandardPaths::~wxStandardPaths()
-{
-    
 }
 
 wxString wxStandardPaths::GetExecutablePath() const

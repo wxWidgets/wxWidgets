@@ -114,7 +114,7 @@ set(BASE_COREFOUNDATION_SRC
     src/osx/core/secretstore.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
-    src/osx/cocoa/stdpaths.mm
+    src/osx/core/stdpaths.mm
 )
 
 set(BASE_COREFOUNDATION_HDR
@@ -133,7 +133,7 @@ set(BASE_COREFOUNDATION_HDR
     wx/osx/core/joystick.h
     wx/osx/core/mimetype.h
     wx/osx/core/dataview.h
-    wx/osx/cocoa/stdpaths.h
+    wx/osx/core/stdpaths.h
 )
 
 set(BASE_OSX_SHARED_SRC
