@@ -168,13 +168,13 @@ wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
         // 75*23 relative pixels (what we call DIPs). But dialog units don't
         // work well in high DPI (and not just because of rounding errors, i.e.
         // the values differ from the actual default button size used by
-        // Windows itself in high DPI by too much), so just use DIPs directly.
-        //
-        // Moreover, it looks like the extra 2px borders around the visible
-        // part of the button are not scaled correctly in higher than normal
-        // DPI, so add them without scaling.
+        // Windows itself in high DPI by too much), so we use the ad hoc
+        // formula fitting the sizes of the buttons in the standard message box
+        // (which differ from the sizes of the buttons used by "Explorer"
+        // which, in turn, differ from the sizes of the buttons in "Open file"
+        // dialogs -- in short, it's a mess).
         s_sizeBtn.SetAtNewDPI(
-            wxWindow::FromDIP(wxSize(73, 21), win) + wxSize(2, 2)
+            wxWindow::FromDIP(wxSize(77, 25), win) - wxSize(2, 2)
         );
     }
 
