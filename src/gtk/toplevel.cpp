@@ -1565,7 +1565,19 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
             }
             DoSetSizeHints(m_minWidth, m_minHeight, m_maxWidth, m_maxHeight, m_incWidth, m_incHeight);
         }
-        if (m_deferShow)
+
+        // We decide to defer showing the window only when its total (and not
+        // client) size had been set, and in this case we didn't set it
+        // correctly because we didn't have the correct decorations sizes when
+        // we did it -- but now that we do, we can adjust the size to the
+        // desired value.
+        //
+        // Note that we can't test for m_deferShow itself here because it may
+        // have been already reset to false if a WM had generated a
+        // notification with wrong _NET_REQUEST_FRAME_EXTENTS values first (as
+        // mutter does, at least in GNOME 3.48, where it sends 0 values for the
+        // not yet mapped window).
+        if (m_deferShowAllowed)
         {
             const bool isResizeable = gtk_window_get_resizable(GTK_WINDOW(m_widget));
 
@@ -1584,7 +1596,11 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
         }
         if (!resized)
         {
-            // adjust overall size to match change in frame extents
+            // We can't resize the window, either because it's already shown
+            // (i.e. we didn't defer showing it) or because resizing it would
+            // make it smaller than its minimum size. In this case we have to
+            // adjust the stored size to accurately reflect the actual size of
+            // the window.
             m_width  += diff.x;
             m_height += diff.y;
             if (m_width  < 1) m_width  = 1;
