@@ -1144,13 +1144,19 @@ bool wxTopLevelWindowGTK::Show( bool show )
         if (deferShow)
         {
             GdkAtom atom = gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false);
-            deferShow = gdk_x11_screen_supports_net_wm_hint(screen, atom) != 0;
 
-            // If _NET_REQUEST_FRAME_EXTENTS not supported, don't allow changes
-            // to m_decorSize, it breaks saving/restoring window size with
-            // GetSize()/SetSize() because it makes window bigger between each
-            // restore and save.
-            m_updateDecorSize = deferShow;
+            if ( !gdk_x11_screen_supports_net_wm_hint(screen, atom) )
+            {
+                wxLogTrace(TRACE_TLWSIZE, "WM doesn't support _NET_REQUEST_FRAME_EXTENTS");
+
+                deferShow = false;
+
+                // If _NET_REQUEST_FRAME_EXTENTS not supported, don't allow changes
+                // to m_decorSize, it breaks saving/restoring window size with
+                // GetSize()/SetSize() because it makes window bigger between each
+                // restore and save.
+                m_updateDecorSize = false;
+            }
         }
 
         m_deferShow = deferShow;
