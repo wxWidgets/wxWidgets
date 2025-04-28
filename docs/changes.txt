@@ -252,6 +252,10 @@ Changes in behaviour which may result in build errors
 3.2.9: (released 2025-??-??)
 ----------------------------
 
+wxGTK:
+
+- Fix handling total window size with GNOME with X11 (#25348).
+
 wxOSX:
 
 - Do not activate "Close" button on Cmd-C (nobugshere, #25346).
