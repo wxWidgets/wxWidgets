@@ -1287,8 +1287,8 @@ void wxTopLevelWindowGTK::GTKDoGetSize(int *width, int *height) const
     wxSize size(m_width, m_height);
     size.x -= m_decorSize.left + m_decorSize.right;
     size.y -= m_decorSize.top + m_decorSize.bottom;
-    if (size.x < 0) size.x = 0;
-    if (size.y < 0) size.y = 0;
+    size.IncTo(wxSize(0, 0));
+
     *width  = size.x;
     *height = size.y;
 }
