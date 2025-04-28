@@ -1289,8 +1289,8 @@ void wxTopLevelWindowGTK::GTKDoGetSize(int *width, int *height) const
     size.y -= m_decorSize.top + m_decorSize.bottom;
     if (size.x < 0) size.x = 0;
     if (size.y < 0) size.y = 0;
-    if (width)  *width  = size.x;
-    if (height) *height = size.y;
+    *width  = size.x;
+    *height = size.y;
 }
 
 void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
