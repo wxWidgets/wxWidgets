@@ -398,6 +398,8 @@ static void findTitlebar(GtkWidget* widget, void* data)
 
 void wxTopLevelWindowGTK::GTKHandleRealized()
 {
+    wxLogTrace(TRACE_TLWSIZE, "Realized for %s", wxDumpWindow(this));
+
     wxNonOwnedWindow::GTKHandleRealized();
 
     GdkWindow* window = gtk_widget_get_window(m_widget);
@@ -464,6 +466,8 @@ gtk_frame_map_callback( GtkWidget*,
                         GdkEvent * WXUNUSED(event),
                         wxTopLevelWindow *win )
 {
+    wxLogTrace(TRACE_TLWSIZE, "Mapped for %s", wxDumpWindow(win));
+
     const bool wasIconized = win->IsIconized();
     if (wasIconized)
     {
@@ -610,6 +614,7 @@ static gboolean property_notify_event(
         if (win->m_netFrameExtentsTimerId)
         {
             // WM support for _NET_REQUEST_FRAME_EXTENTS is working
+            wxLogTrace(TRACE_TLWSIZE, "WM supports _NET_REQUEST_FRAME_EXTENTS");
             gs_requestFrameExtentsStatus = RFE_STATUS_WORKING;
             g_source_remove(win->m_netFrameExtentsTimerId);
             win->m_netFrameExtentsTimerId = 0;
@@ -628,6 +633,7 @@ extern "C" {
 static gboolean request_frame_extents_timeout(void* data)
 {
     // WM support for _NET_REQUEST_FRAME_EXTENTS is broken
+    wxLogTrace(TRACE_TLWSIZE, "WM support for _NET_REQUEST_FRAME_EXTENTS is broken");
     gs_requestFrameExtentsStatus = RFE_STATUS_BROKEN;
 
     wxGDKThreadsLock threadsLock;
@@ -1509,6 +1515,10 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
 
 void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
 {
+    wxLogTrace(TRACE_TLWSIZE, "Decorations sizes are %d,%d,%d,%d",
+               decorSize.left, decorSize.top,
+               decorSize.right, decorSize.bottom);
+
     if (!IsMaximized() && !IsFullScreen())
         GetCachedDecorSize() = decorSize;
 
