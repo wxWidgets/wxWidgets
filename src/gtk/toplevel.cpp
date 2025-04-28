@@ -556,22 +556,34 @@ wxGetFrameExtents(GdkWindow* window, wxTopLevelWindow::DecorSize* decorSize)
         xproperty,
         0, 4, false, XA_CARDINAL,
         &type, &format, &nitems, &bytes_after, data.Out());
-    const bool success = status == Success && data && nitems == 4;
-    if (success)
+
+    if ( status != Success )
     {
-        // We need to convert the X11 physical extents to GTK+ "logical" units
-        int scale = 1;
-#if GTK_CHECK_VERSION(3,10,0)
-        if (wx_is_at_least_gtk3(10))
-            scale = gdk_window_get_scale_factor(window);
-#endif
-        long* p = (long*)data.get();
-        decorSize->left   = int(p[0]) / scale;
-        decorSize->right  = int(p[1]) / scale;
-        decorSize->top    = int(p[2]) / scale;
-        decorSize->bottom = int(p[3]) / scale;
+        wxLogTrace(TRACE_TLWSIZE, "Failed to get _NET_FRAME_EXTENTS: %d",
+                   status);
+        return false;
     }
-    return success;
+
+    if ( !data || nitems != 4 )
+    {
+        wxLogTrace(TRACE_TLWSIZE, "Invalid _NET_FRAME_EXTENTS: %d items",
+                   nitems);
+        return false;
+    }
+
+    // We need to convert the X11 physical extents to GTK+ "logical" units
+    int scale = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+    if (wx_is_at_least_gtk3(10))
+        scale = gdk_window_get_scale_factor(window);
+#endif
+    long* p = (long*)data.get();
+    decorSize->left   = int(p[0]) / scale;
+    decorSize->right  = int(p[1]) / scale;
+    decorSize->top    = int(p[2]) / scale;
+    decorSize->bottom = int(p[3]) / scale;
+
+    return true;
 #else
     wxUnusedVar(window);
     wxUnusedVar(left);
