@@ -533,7 +533,8 @@ static void notify_gtk_theme_name(GObject*, GParamSpec*, wxTopLevelWindowGTK* wi
 
 //-----------------------------------------------------------------------------
 
-bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
+bool
+wxGetFrameExtents(GdkWindow* window, wxTopLevelWindow::DecorSize* decorSize)
 {
 #ifdef GDK_WINDOWING_X11
     GdkDisplay* display = gdk_window_get_display(window);
@@ -565,10 +566,10 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
             scale = gdk_window_get_scale_factor(window);
 #endif
         long* p = (long*)data;
-        if (left)   *left   = int(p[0]) / scale;
-        if (right)  *right  = int(p[1]) / scale;
-        if (top)    *top    = int(p[2]) / scale;
-        if (bottom) *bottom = int(p[3]) / scale;
+        decorSize->left   = int(p[0]) / scale;
+        decorSize->right  = int(p[1]) / scale;
+        decorSize->top    = int(p[2]) / scale;
+        decorSize->bottom = int(p[3]) / scale;
     }
     if (data)
         XFree(data);
@@ -605,8 +606,7 @@ static gboolean property_notify_event(
         }
 
         wxTopLevelWindowGTK::DecorSize decorSize = win->m_decorSize;
-        gs_decorCacheValid = wxGetFrameExtents(event->window,
-            &decorSize.left, &decorSize.right, &decorSize.top, &decorSize.bottom);
+        gs_decorCacheValid = wxGetFrameExtents(event->window, &decorSize);
 
         win->GTKUpdateDecorSize(decorSize);
     }
@@ -624,8 +624,7 @@ static gboolean request_frame_extents_timeout(void* data)
     wxTopLevelWindowGTK* win = static_cast<wxTopLevelWindowGTK*>(data);
     win->m_netFrameExtentsTimerId = 0;
     wxTopLevelWindowGTK::DecorSize decorSize = win->m_decorSize;
-    wxGetFrameExtents(gtk_widget_get_window(win->m_widget),
-        &decorSize.left, &decorSize.right, &decorSize.top, &decorSize.bottom);
+    wxGetFrameExtents(gtk_widget_get_window(win->m_widget), &decorSize);
     win->GTKUpdateDecorSize(decorSize);
     return false;
 }
