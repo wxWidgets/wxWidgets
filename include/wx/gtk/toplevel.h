@@ -168,8 +168,9 @@ private:
     void Init();
     DecorSize& GetCachedDecorSize();
 
-    // return the size of the window without WM decorations
-    void GTKDoGetSize(int *width, int *height) const;
+    // return the size of the window without WM (i.e. SSD, as opposed to CSD)
+    // decorations but only take them into account for resizeable windows
+    void GTKDoGetSize(bool isResizeable, int *width, int *height) const;
 
 
     // size hint increments
