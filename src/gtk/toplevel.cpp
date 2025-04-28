@@ -901,13 +901,11 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     m_decorSize = GetCachedDecorSize();
 
     const bool isResizeable = (style & wxRESIZE_BORDER) != 0;
-    int w = m_width;
-    int h = m_height;
-    GTKDoGetSize(isResizeable, &w, &h);
+    const wxSize sizeGTK = GTKDoGetSize(isResizeable);
 
     if (isResizeable)
     {
-        gtk_window_set_default_size(GTK_WINDOW(m_widget), w, h);
+        gtk_window_set_default_size(GTK_WINDOW(m_widget), sizeGTK.x, sizeGTK.y);
 #ifndef __WXGTK3__
         gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
 #endif
@@ -918,7 +916,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         // gtk_window_set_default_size() does not work for un-resizable windows,
         // unless you set the size hints, but that causes Ubuntu's WM to make
         // the window resizable even though GDK_FUNC_RESIZE is not set.
-        gtk_widget_set_size_request(m_widget, w, h);
+        gtk_widget_set_size_request(m_widget, sizeGTK.x, sizeGTK.y);
     }
 
     // Note that we need to connect after this signal in order to let the
@@ -1282,9 +1280,7 @@ void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXU
 // window geometry
 // ----------------------------------------------------------------------------
 
-void
-wxTopLevelWindowGTK::GTKDoGetSize(bool isResizeable,
-                                  int *width, int *height) const
+wxSize wxTopLevelWindowGTK::GTKDoGetSize(bool isResizeable) const
 {
     wxSize size(m_width, m_height);
 
@@ -1295,8 +1291,7 @@ wxTopLevelWindowGTK::GTKDoGetSize(bool isResizeable,
         size.IncTo(wxSize(0, 0));
     }
 
-    *width  = size.x;
-    *height = size.y;
+    return size;
 }
 
 void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
@@ -1360,18 +1355,15 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 #endif // __WXGTK3__
 
         const bool isResizeable = gtk_window_get_resizable(GTK_WINDOW(m_widget));
-
-        int w = m_width;
-        int h = m_height;
-        GTKDoGetSize(isResizeable, &w, &h);
+        const wxSize size = GTKDoGetSize(isResizeable);
 
         if (isResizeable)
         {
-            gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+            gtk_window_resize(GTK_WINDOW(m_widget), size.x, size.y);
         }
         else
         {
-            gtk_widget_set_size_request(GTK_WIDGET(m_widget), w, h);
+            gtk_widget_set_size_request(GTK_WIDGET(m_widget), size.x, size.y);
         }
 
         DoGetClientSize(&m_clientWidth, &m_clientHeight);
@@ -1572,15 +1564,15 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
             const bool isResizeable = gtk_window_get_resizable(GTK_WINDOW(m_widget));
 
             // keep overall size unchanged by shrinking m_widget
-            int w, h;
-            GTKDoGetSize(isResizeable, &w, &h);
+            const wxSize size = GTKDoGetSize(isResizeable);
+
             // but not if size would be less than minimum, it won't take effect
-            if (w >= m_minWidth - (decorSize.left + decorSize.right) &&
-                h >= m_minHeight - (decorSize.top + decorSize.bottom))
+            if (size.x >= m_minWidth - (decorSize.left + decorSize.right) &&
+                size.y >= m_minHeight - (decorSize.top + decorSize.bottom))
             {
-                gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+                gtk_window_resize(GTK_WINDOW(m_widget), size.x, size.y);
                 if (!isResizeable)
-                    gtk_widget_set_size_request(GTK_WIDGET(m_widget), w, h);
+                    gtk_widget_set_size_request(GTK_WIDGET(m_widget), size.x, size.y);
                 resized = true;
             }
         }
