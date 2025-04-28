@@ -126,9 +126,6 @@ public:
     // timer for detecting WM with broken _NET_REQUEST_FRAME_EXTENTS handling
     unsigned m_netFrameExtentsTimerId;
 
-    // return the size of the window without WM decorations
-    void GTKDoGetSize(int *width, int *height) const;
-
     void GTKUpdateDecorSize(const DecorSize& decorSize);
 
     void GTKDoAfterShow();
@@ -170,6 +167,10 @@ protected:
 private:
     void Init();
     DecorSize& GetCachedDecorSize();
+
+    // return the size of the window without WM decorations
+    void GTKDoGetSize(int *width, int *height) const;
+
 
     // size hint increments
     int m_incWidth, m_incHeight;
