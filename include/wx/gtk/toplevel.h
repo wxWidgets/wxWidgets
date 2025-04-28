@@ -113,15 +113,10 @@ public:
     // size of WM decorations
     struct DecorSize
     {
-        DecorSize()
-        {
-            left =
-            right =
-            top =
+        int left = 0,
+            right = 0,
+            top = 0,
             bottom = 0;
-        }
-
-        int left, right, top, bottom;
     };
     DecorSize m_decorSize;
 
