@@ -1290,6 +1290,9 @@ wxSize wxTopLevelWindowGTK::GTKDoGetSize(bool isResizeable) const
 {
     wxSize size(m_width, m_height);
 
+    // GTK doesn't add the decoration sizes in gtk_widget_set_size_request(),
+    // so we don't have to account for them if the window is not resizeable,
+    // see 8f47d9ad48 (Fix size of un-resizeable TLW with Wayland, 2022-03-16).
     if ( isResizeable || !HasClientDecor(m_widget) )
     {
         size.x -= m_decorSize.left + m_decorSize.right;
