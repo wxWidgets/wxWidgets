@@ -602,10 +602,18 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         hicon = (HICON)::LoadImage(wxGetInstance(), name.t_str(), IMAGE_ICON,
                                     desiredWidth, desiredHeight,
                                     LR_DEFAULTCOLOR);
+        if ( !hicon )
+        {
+            wxLogLastError(wxString::Format("LoadImage(%s)", name));
+        }
     }
     else
     {
         hicon = ::LoadIcon(wxGetInstance(), name.t_str());
+        if ( !hicon )
+        {
+            wxLogLastError(wxString::Format("LoadIcon(%s)", name));
+        }
     }
 
     // next check if it's not a standard icon
@@ -628,6 +636,10 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
             if ( name == stdIcons[nIcon].name )
             {
                 hicon = ::LoadIcon((HINSTANCE)nullptr, stdIcons[nIcon].id);
+                if ( !hicon )
+                {
+                    wxLogLastError(wxString::Format("LoadIcon(%s)", stdIcons[nIcon].name));
+                }
                 break;
             }
         }
