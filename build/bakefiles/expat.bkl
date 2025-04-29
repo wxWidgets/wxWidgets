@@ -23,7 +23,7 @@
         <if cond="wxUSE_EXPAT=='builtin'">$(TOP_SRCDIR)src/expat/expat/lib</if>
     </set>
 
-    <lib id="wxexpat" template="3rdparty_lib"
+    <lib id="wxexpat" template_append="3rdparty_lib"
          cond="wxUSE_EXPAT=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>

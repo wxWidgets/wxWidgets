@@ -21,7 +21,7 @@
         <if cond="wxUSE_LIBJPEG=='builtin'">$(TOP_SRCDIR)src/jpeg</if>
     </set>
 
-    <lib id="wxjpeg" template="3rdparty_lib"
+    <lib id="wxjpeg" template_append="3rdparty_lib"
          cond="wxUSE_LIBJPEG=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>

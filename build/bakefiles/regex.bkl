@@ -29,14 +29,8 @@
         </if>
     </set>
 
-    <lib id="wxregex" template="msvc_setup_h,3rdparty_lib"
+    <lib id="wxregex" template_append="msvc_setup_h,3rdparty_lib_u"
          cond="wxUSE_REGEX=='builtin' and BUILDING_LIB=='1'">
-        <libname cond="FORMAT=='autoconf'">
-            $(id)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-        </libname>
-        <libname cond="FORMAT!='autoconf'">
-            $(id)u$(WXDEBUGFLAG)$(HOST_SUFFIX)
-        </libname>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(INC_REGEX)</include>

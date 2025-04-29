@@ -87,10 +87,9 @@ WX_RELEASE_NODOT = 33
 WX_VERSION = $(WX_RELEASE).0
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 LIBDIRNAME = $(wx_top_builddir)/lib
-WXREGEX_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG \
-	-I$(wx_top_builddir)/3rdparty/pcre/src -D__WX__ -DHAVE_CONFIG_H \
-	-DPCRE2_CODE_UNIT_WIDTH=$(wxPCRE2_CODE_UNIT_WIDTH) $(WX_CFLAGS) \
-	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXREGEX_CFLAGS = -I$(wx_top_builddir)/3rdparty/pcre/src -D__WX__ \
+	-DHAVE_CONFIG_H -DPCRE2_CODE_UNIT_WIDTH=$(wxPCRE2_CODE_UNIT_WIDTH) \
+	$(WX_CPPFLAGS) -DNDEBUG $(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	wxregex_pcre2_auto_possess.o \
 	wxregex_pcre2_chkdint.o \
@@ -139,7 +138,7 @@ WXZLIB_OBJECTS =  \
 	wxzlib_trees.o \
 	wxzlib_uncompr.o \
 	wxzlib_zutil.o
-WXPNG_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG $(__INC_ZLIB_p) -DPNG_INTEL_SSE \
+WXPNG_CFLAGS = $(__INC_ZLIB_p) -DPNG_INTEL_SSE $(WX_CPPFLAGS) -DNDEBUG \
 	$(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	wxpng_png.o \
@@ -337,9 +336,9 @@ WXJPEG_OBJECTS =  \
 	wxjpeg_jquant1.o \
 	wxjpeg_jquant2.o \
 	wxjpeg_jutils.o
-WXTIFF_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG $(__INC_ZLIB_p) $(__INC_JPEG_p) \
-	$(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) $(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) \
-	$(CFLAGS)
+WXTIFF_CFLAGS = $(__INC_ZLIB_p) $(__INC_JPEG_p) $(__INC_TIFF_BUILD_p) \
+	$(__INC_TIFF_p) $(WX_CPPFLAGS) -DNDEBUG $(WX_CFLAGS) $(____SHARED) \
+	$(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(__TIFF_PLATFORM_SRC_OBJECTS) \
 	wxtiff_tif_aux.o \
@@ -383,17 +382,16 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_write.o \
 	wxtiff_tif_zip.o \
 	wxtiff_tif_zstd.o
-WXEXPAT_CFLAGS = $(WX_CPPFLAGS) -DNDEBUG -I./src/expat/expat \
-	-DHAVE_EXPAT_CONFIG_H $(WX_CFLAGS) $(____SHARED) $(wxCFLAGS_C99) $(CPPFLAGS) \
-	$(CFLAGS)
+WXEXPAT_CFLAGS = -I./src/expat/expat -DHAVE_EXPAT_CONFIG_H $(WX_CPPFLAGS) \
+	-DNDEBUG $(wxCFLAGS_C99) $(WX_CFLAGS) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
 	wxexpat_xmltok.o
-WXSCINTILLA_CXXFLAGS = $(WX_CPPFLAGS) -DNDEBUG \
+WXSCINTILLA_CXXFLAGS = $(__wx) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(WX_CPPFLAGS) -DNDEBUG \
 	-I$(top_srcdir)/src/stc/scintilla/include \
-	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ $(__wx) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(WX_CXXFLAGS) $(____SHARED) \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ $(WX_CXXFLAGS) $(____SHARED) \
 	$(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	wxscintilla_AutoComplete.o \
@@ -426,14 +424,14 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_UniqueString.o \
 	wxscintilla_ViewStyle.o \
 	wxscintilla_XPM.o
-WXLEXILLA_CXXFLAGS = $(WX_CPPFLAGS) -DNDEBUG \
+WXLEXILLA_CXXFLAGS = $(__wx) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(WX_CPPFLAGS) -DNDEBUG \
 	-I$(top_srcdir)/src/stc/lexilla/access \
 	-I$(top_srcdir)/src/stc/lexilla/include \
 	-I$(top_srcdir)/src/stc/lexilla/lexlib \
 	-I$(top_srcdir)/src/stc/lexilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/include \
-	-I$(top_srcdir)/src/stc/scintilla/src $(__wx) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(WX_CXXFLAGS) $(____SHARED) \
+	-I$(top_srcdir)/src/stc/scintilla/src $(WX_CXXFLAGS) $(____SHARED) \
 	$(CPPFLAGS) $(CXXFLAGS)
 WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexillaAccess.o \
@@ -2489,13 +2487,13 @@ COND_USE_GUI_1_wxUSE_LIBJPEG_builtin___wxjpeg___depname = \
 COND_USE_GUI_1_wxUSE_LIBTIFF_builtin___wxtiff___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wxtiff$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@__wxtiff___depname = $(COND_USE_GUI_1_wxUSE_LIBTIFF_builtin___wxtiff___depname)
+@COND_PLATFORM_MACOSX_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_unix.o
+@COND_PLATFORM_UNIX_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_unix.o
+@COND_PLATFORM_WIN32_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_win32.o
 @COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin@__install_wxtiff___depname \
 @COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= install_wxtiff
 @COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin@__uninstall_wxtiff___depname \
 @COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= uninstall_wxtiff
-@COND_PLATFORM_MACOSX_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_unix.o
-@COND_PLATFORM_UNIX_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_unix.o
-@COND_PLATFORM_WIN32_1@__TIFF_PLATFORM_SRC_OBJECTS = wxtiff_tif_win32.o
 COND_wxUSE_EXPAT_builtin___wxexpat___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wxexpat$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_wxUSE_EXPAT_builtin@__wxexpat___depname = $(COND_wxUSE_EXPAT_builtin___wxexpat___depname)
@@ -12379,9 +12377,9 @@ COND_USE_WEBVIEW_WEBKIT2_1___webkit2_ext___depname = \
 @COND_USE_XML_1@__clean_wxrc___depname = clean-wxrc
 @COND_USE_XML_1@__install_wxrc___depname = install-wxrc
 @COND_TOOLKIT_MSW@RCDEFS_H = msw/rcdefs.h
+@COND_MONOLITHIC_0_SHARED_1@__wx = -DWXUSINGDLL
 @COND_SHARED_0@____SHARED = 
 @COND_SHARED_1@____SHARED = $(PIC_FLAG)
-@COND_MONOLITHIC_0_SHARED_1@__wx = -DWXUSINGDLL
 @COND_TOOLKIT_MSW@__webview_additional_include_wrl_p_0 = \
 @COND_TOOLKIT_MSW@	--include-dir $(top_srcdir)/include/wx/msw/wrl
 @COND_TOOLKIT_MSW@__webview_additional_include_p_0 = \

@@ -21,7 +21,7 @@
         <if cond="wxUSE_ZLIB=='builtin'">$(TOP_SRCDIR)src/zlib</if>
     </set>
 
-    <lib id="wxzlib" template="3rdparty_lib"
+    <lib id="wxzlib" template_append="3rdparty_lib"
          cond="wxUSE_ZLIB=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <cflags-borland>

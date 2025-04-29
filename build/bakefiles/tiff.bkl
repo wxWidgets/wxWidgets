@@ -35,7 +35,7 @@
         <if cond="PLATFORM_WIN32=='1'">src/tiff/libtiff/tif_win32.c</if>
     </set>
 
-    <lib id="wxtiff" template="3rdparty_lib"
+    <lib id="wxtiff" template_append="3rdparty_lib"
          cond="wxUSE_LIBTIFF=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <include>$(INC_ZLIB)</include>
