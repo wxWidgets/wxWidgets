@@ -638,7 +638,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
                 hicon = ::LoadIcon((HINSTANCE)nullptr, stdIcons[nIcon].id);
                 if ( !hicon )
                 {
-                    wxLogLastError("LoadIcon");
+                    wxLogLastError(wxString::Format("LoadIcon(%s)", stdIcons[nIcon].name));
                 }
                 break;
             }
