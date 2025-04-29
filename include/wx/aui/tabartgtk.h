@@ -30,7 +30,7 @@ class WXDLLIMPEXP_AUI wxAuiGtkTabArt : public wxAuiGenericTabArt
 public:
     wxAuiGtkTabArt();
 
-    virtual wxAuiTabArt* Clone() override;
+    wxNODISCARD virtual wxAuiTabArt* Clone() override;
     virtual void DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect) override;
     virtual void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect) override;
     virtual void DrawTab(wxDC& dc,

@@ -406,7 +406,7 @@ public:
         return m_data.pt.y;
     }
 
-    virtual wxEvent *Clone() const override { return new wxSplitterEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxSplitterEvent(*this); }
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxSplitterWindow;

@@ -107,7 +107,7 @@ public:
     // Allocates a copy of this object.
     // Required for wxEvtHandler::AddPendingEvent
     // ------------------------------------------------------------------------
-    virtual wxEvent *Clone() const override
+    wxNODISCARD virtual wxEvent *Clone() const override
     {   return new wxMediaEvent(*this);     }
 
 

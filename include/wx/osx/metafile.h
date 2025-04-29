@@ -56,7 +56,7 @@ public:
     void SetHMETAFILE(WXHMETAFILE mf) ;
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const override;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxMetafile);
 };

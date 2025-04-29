@@ -49,7 +49,7 @@ public:
     void SetPath(const wxString &p) { m_path = p; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const override { return new wxFileDirPickerEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxFileDirPickerEvent(*this); }
 
 private:
     wxString m_path;

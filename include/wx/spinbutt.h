@@ -107,7 +107,7 @@ public:
     int GetPosition() const { return m_commandInt; }
     void SetPosition(int pos) { m_commandInt = pos; }
 
-    virtual wxEvent *Clone() const override { return new wxSpinEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxSpinEvent(*this); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinEvent);

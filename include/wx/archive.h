@@ -55,7 +55,7 @@ public:
     virtual void SetName(const wxString& name,
                          wxPathFormat format = wxPATH_NATIVE) = 0;
 
-    wxArchiveEntry *Clone() const { return DoClone(); }
+    wxNODISCARD wxArchiveEntry *Clone() const { return DoClone(); }
 
     void SetNotifier(wxArchiveNotifier& notifier);
     virtual void UnsetNotifier() { m_notifier = nullptr; }

@@ -1971,7 +1971,7 @@ public:
     ~wxPropertyGridEvent();
 
     // Copyer.
-    virtual wxEvent* Clone() const override;
+    wxNODISCARD virtual wxEvent* Clone() const override;
 
     // Returns the column index associated with this event.
     // For the column dragging events, it is the column to the left

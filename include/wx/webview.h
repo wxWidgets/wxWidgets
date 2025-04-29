@@ -426,7 +426,7 @@ public:
     const wxString& GetMessageHandler() const { return m_messageHandler; }
     wxWebViewWindowFeatures* GetTargetWindowFeatures() const { return (wxWebViewWindowFeatures*)m_clientData; }
 
-    virtual wxEvent* Clone() const override { return new wxWebViewEvent(*this); }
+    wxNODISCARD virtual wxEvent* Clone() const override { return new wxWebViewEvent(*this); }
 private:
     wxString m_url;
     wxString m_target;

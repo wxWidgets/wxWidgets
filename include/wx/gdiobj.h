@@ -77,13 +77,13 @@ protected:
         return CreateGDIRefData();
     }
 
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override
+    wxNODISCARD virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override
     {
         return CloneGDIRefData(static_cast<const wxGDIRefData *>(data));
     }
 
     virtual wxGDIRefData *CreateGDIRefData() const = 0;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const = 0;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const = 0;
 
     wxDECLARE_DYNAMIC_CLASS(wxGDIObject);
 };

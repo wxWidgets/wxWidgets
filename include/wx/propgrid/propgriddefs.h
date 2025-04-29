@@ -483,7 +483,7 @@ public:\
 \
     virtual wxString GetType() const override; \
 \
-    virtual wxVariantData* Clone() const override { return new classname##VariantData(m_value); } \
+    wxNODISCARD virtual wxVariantData* Clone() const override { return new classname##VariantData(m_value); } \
 \
     DECLARE_WXANY_CONVERSION() \
 protected:\

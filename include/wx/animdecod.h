@@ -100,7 +100,7 @@ public:
                     CallIfCanSeek(&wxAnimationDecoder::DoCanRead, this);
     }
 
-    virtual wxAnimationDecoder *Clone() const = 0;
+    wxNODISCARD virtual wxAnimationDecoder *Clone() const = 0;
     virtual wxAnimationType GetType() const = 0;
 
     // convert given frame to wxImage

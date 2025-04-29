@@ -389,7 +389,7 @@ public:
     int GetReturnCode() const
         { return GetDialog()->GetReturnCode(); }
 
-    virtual wxEvent *Clone() const override { return new wxWindowModalDialogEvent (*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxWindowModalDialogEvent (*this); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWindowModalDialogEvent);

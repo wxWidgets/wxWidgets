@@ -73,7 +73,7 @@ protected :
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) override;
 
     virtual wxGDIRefData *CreateGDIRefData() const override;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
 
@@ -96,7 +96,7 @@ public:
 
     virtual CGColorRef GetCGColor() const = 0;
 
-    virtual wxColourRefData* Clone() const = 0;
+    wxNODISCARD virtual wxColourRefData* Clone() const = 0;
 
 #if wxOSX_USE_COCOA
     virtual WX_NSColor GetNSColor() const;

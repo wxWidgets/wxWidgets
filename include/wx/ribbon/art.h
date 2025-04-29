@@ -212,7 +212,7 @@ public:
     wxRibbonArtProvider();
     virtual ~wxRibbonArtProvider();
 
-    virtual wxRibbonArtProvider* Clone() const = 0;
+    wxNODISCARD virtual wxRibbonArtProvider* Clone() const = 0;
     virtual void SetFlags(long flags) = 0;
     virtual long GetFlags() const = 0;
 
@@ -423,7 +423,7 @@ public:
     wxRibbonMSWArtProvider(bool set_colour_scheme = true);
     virtual ~wxRibbonMSWArtProvider();
 
-    wxRibbonArtProvider* Clone() const override;
+    wxNODISCARD wxRibbonArtProvider* Clone() const override;
     void SetFlags(long flags) override;
     long GetFlags() const override;
 
@@ -796,7 +796,7 @@ public:
     wxRibbonAUIArtProvider();
     virtual ~wxRibbonAUIArtProvider();
 
-    wxRibbonArtProvider* Clone() const override;
+    wxNODISCARD wxRibbonArtProvider* Clone() const override;
 
     wxColour GetColour(int id) const override;
     void SetColour(int id, const wxColor& colour) override;

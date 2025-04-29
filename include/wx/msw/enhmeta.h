@@ -75,7 +75,7 @@ protected:
     // we don't use these functions (but probably should) but have to implement
     // them as they're pure virtual in the base class
     virtual wxGDIRefData *CreateGDIRefData() const override;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     wxString m_filename;

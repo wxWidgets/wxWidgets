@@ -56,7 +56,7 @@ public:
     wxColour GetColour() const { return m_colour; }
     void SetColour(const wxColour& colour) { m_colour = colour; }
 
-    virtual wxEvent *Clone() const override
+    wxNODISCARD virtual wxEvent *Clone() const override
     {
         return new wxColourDialogEvent(*this);
     }

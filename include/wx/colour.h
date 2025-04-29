@@ -203,7 +203,7 @@ protected:
         return nullptr;
     }
 
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const override
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const override
     {
         wxFAIL_MSG( "must be overridden if used" );
 

@@ -385,7 +385,7 @@ public:
     this->SetMax(max);
   }
 
-    virtual wxObject *Clone() const override { return new wxIntegerValidator(*this); }
+    wxNODISCARD virtual wxObject *Clone() const override { return new wxIntegerValidator(*this); }
 
     virtual bool IsInRange(LongestValueType value) const override
     {
@@ -525,7 +525,7 @@ public:
         this->SetPrecision(precision);
     }
 
-    virtual wxObject *Clone() const override
+    wxNODISCARD virtual wxObject *Clone() const override
     {
         return new wxFloatingPointValidator(*this);
     }

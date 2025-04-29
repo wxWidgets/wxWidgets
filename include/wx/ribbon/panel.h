@@ -151,7 +151,7 @@ public:
     }
 
     wxRibbonPanelEvent(const wxRibbonPanelEvent& e) = default;
-    wxEvent *Clone() const override { return new wxRibbonPanelEvent(*this); }
+    wxNODISCARD wxEvent *Clone() const override { return new wxRibbonPanelEvent(*this); }
 
     wxRibbonPanel* GetPanel() {return m_panel;}
     void SetPanel(wxRibbonPanel* panel) {m_panel = panel;}

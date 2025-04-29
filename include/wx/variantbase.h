@@ -129,7 +129,7 @@ public:
         { return GetTypeInfo()->GetTypeName(); }
 
     // return a heap allocated duplicate
-    //virtual wxVariantData* Clone() const { return new wxVariantDataT<T>( Get() ); }
+    wxNODISCARD //virtual wxVariantData* Clone() const { return new wxVariantDataT<T>( Get() ); }
 
     // returns the type info of the contentc
     virtual const wxTypeInfo* GetTypeInfo() const { return wxGetTypeInfo( (T*) nullptr ); }

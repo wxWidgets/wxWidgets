@@ -68,7 +68,7 @@ public:
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const override;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
     // wxRegionBase pure virtuals
     virtual bool DoIsEqual(const wxRegion& region) const override;

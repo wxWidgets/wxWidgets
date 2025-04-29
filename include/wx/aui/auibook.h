@@ -77,7 +77,7 @@ public:
     {
         m_dragSource = nullptr;
     }
-    wxEvent *Clone() const override { return new wxAuiNotebookEvent(*this); }
+    wxNODISCARD wxEvent *Clone() const override { return new wxAuiNotebookEvent(*this); }
 
     void SetDragSource(wxAuiNotebook* s) { m_dragSource = s; }
     wxAuiNotebook* GetDragSource() const { return m_dragSource; }

@@ -2993,7 +2993,7 @@ public:
     /**
         Clones the object.
     */
-    virtual wxRichTextObject* Clone() const { return nullptr; }
+    wxNODISCARD virtual wxRichTextObject* Clone() const { return nullptr; }
 
     /**
         Copies the object.
@@ -3685,7 +3685,7 @@ public:
     */
     virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const;
 
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextParagraphLayoutBox(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextParagraphLayoutBox(*this); }
 
     /**
         Prepares the content just before insertion (or after buffer reset).
@@ -3867,7 +3867,7 @@ public:
 
 // Operations
 
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextBox(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextBox(*this); }
 
     void Copy(const wxRichTextBox& obj);
 
@@ -3975,7 +3975,7 @@ public:
      */
     virtual bool UpdateField(wxRichTextBuffer* buffer);
 
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextField(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextField(*this); }
 
     void Copy(const wxRichTextField& obj);
 
@@ -4453,7 +4453,7 @@ public:
     */
     void Copy(const wxRichTextLine& obj);
 
-    virtual wxRichTextLine* Clone() const { return new wxRichTextLine(*this); }
+    wxNODISCARD virtual wxRichTextLine* Clone() const { return new wxRichTextLine(*this); }
 
 protected:
 
@@ -4538,7 +4538,7 @@ public:
     */
     void Copy(const wxRichTextParagraph& obj);
 
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextParagraph(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextParagraph(*this); }
 
     /**
         Clears the cached lines.
@@ -4762,7 +4762,7 @@ public:
     void Copy(const wxRichTextPlainText& obj);
 
     // Clones the text object.
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextPlainText(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextPlainText(*this); }
 
 private:
     bool DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, wxString& str, wxCoord& x, wxCoord& y, bool selected);
@@ -5058,7 +5058,7 @@ public:
     /**
         Clones the image object.
     */
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextImage(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextImage(*this); }
 
     /**
         Creates a cached image at the required size.
@@ -5621,7 +5621,7 @@ public:
     /**
         Clones the buffer.
     */
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextBuffer(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextBuffer(*this); }
 
     /**
         Submits a command to insert paragraphs.
@@ -5984,7 +5984,7 @@ public:
 
 // Operations
 
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextCell(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextCell(*this); }
 
     void Copy(const wxRichTextCell& obj);
 
@@ -6168,7 +6168,7 @@ public:
     virtual bool AddColumns(int startCol, int noCols = 1, const wxRichTextAttr& attr = wxRichTextAttr());
 
     // Makes a clone of this object.
-    virtual wxRichTextObject* Clone() const override { return new wxRichTextTable(*this); }
+    wxNODISCARD virtual wxRichTextObject* Clone() const override { return new wxRichTextTable(*this); }
 
     // Copies this object.
     void Copy(const wxRichTextTable& obj);

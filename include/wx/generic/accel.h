@@ -38,7 +38,7 @@ public:
 protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const override;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override;
+    wxNODISCARD virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxAcceleratorTable);

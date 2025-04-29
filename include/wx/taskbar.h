@@ -107,7 +107,7 @@ public:
         SetEventObject(tbIcon);
     }
 
-    virtual wxEvent *Clone() const override { return new wxTaskBarIconEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxTaskBarIconEvent(*this); }
 
 private:
     wxDECLARE_NO_ASSIGN_DEF_COPY(wxTaskBarIconEvent);

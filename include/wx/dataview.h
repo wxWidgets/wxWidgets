@@ -953,7 +953,7 @@ public:
     void InitData(wxDataObjectComposite* obj, wxDataFormat format);
 #endif // wxUSE_DRAG_AND_DROP
 
-    virtual wxEvent *Clone() const override { return new wxDataViewEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxDataViewEvent(*this); }
 
     // These methods shouldn't be used outside of wxWidgets and wxWidgets
     // itself doesn't use them any longer either as it constructs the events

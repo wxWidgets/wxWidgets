@@ -146,7 +146,7 @@ protected:
     virtual wxFontFamily DoGetFamily() const override;
 
     virtual wxGDIRefData *CreateGDIRefData() const override;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
 

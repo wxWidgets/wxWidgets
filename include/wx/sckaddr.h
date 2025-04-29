@@ -53,7 +53,7 @@ public:
 
     // we need to be able to create copies of the addresses polymorphically
     // (i.e. without knowing the exact address class)
-    virtual wxSockAddress *Clone() const = 0;
+    wxNODISCARD virtual wxSockAddress *Clone() const = 0;
 
 
     // implementation only, don't use
@@ -116,7 +116,7 @@ class WXDLLIMPEXP_NET wxIPV4address : public wxIPaddress
 public:
     // implement wxSockAddress pure virtuals:
     virtual Family Type() override { return IPV4; }
-    virtual wxSockAddress *Clone() const override { return new wxIPV4address(*this); }
+    wxNODISCARD virtual wxSockAddress *Clone() const override { return new wxIPV4address(*this); }
 
 
     // implement wxIPaddress pure virtuals:
@@ -148,7 +148,7 @@ class WXDLLIMPEXP_NET wxIPV6address : public wxIPaddress
 public:
     // implement wxSockAddress pure virtuals:
     virtual Family Type() override { return IPV6; }
-    virtual wxSockAddress *Clone() const override { return new wxIPV6address(*this); }
+    wxNODISCARD virtual wxSockAddress *Clone() const override { return new wxIPV6address(*this); }
 
 
     // implement wxIPaddress pure virtuals:
@@ -184,7 +184,7 @@ public:
     wxString Filename() const;
 
     virtual Family Type() override { return UNIX; }
-    virtual wxSockAddress *Clone() const override { return new wxUNIXaddress(*this); }
+    wxNODISCARD virtual wxSockAddress *Clone() const override { return new wxUNIXaddress(*this); }
 
 private:
     wxSockAddressImpl& GetUNIX();

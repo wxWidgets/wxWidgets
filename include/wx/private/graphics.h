@@ -20,7 +20,7 @@ class WXDLLIMPEXP_CORE wxGraphicsObjectRefData : public wxObjectRefData
     wxGraphicsObjectRefData( wxGraphicsRenderer* renderer );
     wxGraphicsObjectRefData( const wxGraphicsObjectRefData* data );
     wxGraphicsRenderer* GetRenderer() const ;
-    virtual wxGraphicsObjectRefData* Clone() const ;
+    wxNODISCARD virtual wxGraphicsObjectRefData* Clone() const ;
 
     protected :
     wxGraphicsRenderer* m_renderer;

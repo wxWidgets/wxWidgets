@@ -116,7 +116,7 @@ public:
     bool SupportsFormat(const wxDataFormat& format) const;
     void AddFormat(const wxDataFormat& format);
 
-    virtual wxEvent *Clone() const override
+    wxNODISCARD virtual wxEvent *Clone() const override
     {
         return new wxClipboardEvent(*this);
     }

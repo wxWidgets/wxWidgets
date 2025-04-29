@@ -45,7 +45,7 @@ protected:
 #endif
 
     virtual wxGDIRefData *CreateGDIRefData() const override;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxCursor);

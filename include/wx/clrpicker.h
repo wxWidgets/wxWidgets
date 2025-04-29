@@ -177,7 +177,7 @@ public:
 
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const override { return new wxColourPickerEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxColourPickerEvent(*this); }
 
 private:
     wxColour m_colour;

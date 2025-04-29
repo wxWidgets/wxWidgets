@@ -1008,7 +1008,7 @@ public:
     // get the end of the URL
     long GetURLEnd() const { return m_end; }
 
-    virtual wxEvent *Clone() const override { return new wxTextUrlEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxTextUrlEvent(*this); }
 
 protected:
     // the corresponding mouse event
