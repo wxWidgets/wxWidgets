@@ -492,7 +492,7 @@ public:
 
     void SetDataBuffer(const wxMemoryBuffer& dataBuf) { m_dataBuf = dataBuf; }
 
-    wxEvent* Clone() const override { return new wxWebRequestEvent(*this); }
+    wxNODISCARD wxEvent* Clone() const override { return new wxWebRequestEvent(*this); }
 
 private:
     wxWebRequest::State m_state;

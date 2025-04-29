@@ -213,7 +213,7 @@ private:
     DISPID m_dispid;
 
 public:
-    virtual wxEvent *Clone() const override
+    wxNODISCARD virtual wxEvent *Clone() const override
     { return new wxActiveXEvent(*this); }
 
     size_t ParamCount() const;

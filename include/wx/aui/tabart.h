@@ -48,7 +48,7 @@ public:
     wxAuiTabArt() = default;
     virtual ~wxAuiTabArt() = default;
 
-    virtual wxAuiTabArt* Clone() = 0;
+    wxNODISCARD virtual wxAuiTabArt* Clone() = 0;
     virtual void SetFlags(unsigned int flags) = 0;
 
     virtual void SetSizingInfo(const wxSize& tabCtrlSize,
@@ -298,7 +298,7 @@ public:
     wxAuiFlatTabArt(const wxAuiFlatTabArt&) = delete;
     wxAuiFlatTabArt& operator=(const wxAuiFlatTabArt&) = delete;
 
-    wxAuiTabArt* Clone() override;
+    wxNODISCARD wxAuiTabArt* Clone() override;
 
     void SetColour(const wxColour& colour) override;
     void SetActiveColour(const wxColour& colour) override;
@@ -348,7 +348,7 @@ public:
 
     wxAuiGenericTabArt();
 
-    wxAuiTabArt* Clone() override;
+    wxNODISCARD wxAuiTabArt* Clone() override;
 
     void SetColour(const wxColour& colour) override;
     void SetActiveColour(const wxColour& colour) override;
@@ -404,7 +404,7 @@ public:
 
     wxAuiSimpleTabArt();
 
-    wxAuiTabArt* Clone() override;
+    wxNODISCARD wxAuiTabArt* Clone() override;
 
     void SetColour(const wxColour& colour) override;
     void SetActiveColour(const wxColour& colour) override;

@@ -113,7 +113,7 @@ public:
     void SetURL(const wxString &url) { m_url=url; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const override { return new wxHyperlinkEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxHyperlinkEvent(*this); }
 
 private:
 

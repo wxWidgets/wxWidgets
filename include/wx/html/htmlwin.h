@@ -595,7 +595,7 @@ public:
     bool GetLinkClicked() const { return m_bLinkWasClicked; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const override { return new wxHtmlCellEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxHtmlCellEvent(*this); }
 
 private:
     wxHtmlCell *m_cell;
@@ -626,7 +626,7 @@ public:
     const wxHtmlLinkInfo &GetLinkInfo() const { return m_linkInfo; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const override { return new wxHtmlLinkEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxHtmlLinkEvent(*this); }
 
 private:
     wxHtmlLinkInfo m_linkInfo;

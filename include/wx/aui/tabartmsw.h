@@ -22,7 +22,7 @@ public:
     wxAuiMSWTabArt();
     virtual ~wxAuiMSWTabArt();
 
-    wxAuiTabArt* Clone() override;
+    wxNODISCARD wxAuiTabArt* Clone() override;
 
     void DrawBorder(
         wxDC& dc,

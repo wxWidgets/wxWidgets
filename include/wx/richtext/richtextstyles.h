@@ -77,7 +77,7 @@ public:
     bool operator ==(const wxRichTextStyleDefinition& def) const { return Eq(def); }
 
     /// Override to clone the object
-    virtual wxRichTextStyleDefinition* Clone() const = 0;
+    wxNODISCARD virtual wxRichTextStyleDefinition* Clone() const = 0;
 
     /// Sets and gets the name of the style
     void SetName(const wxString& name) { m_name = name; }
@@ -139,7 +139,7 @@ public:
     virtual ~wxRichTextCharacterStyleDefinition() = default;
 
     /// Clones the object
-    virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextCharacterStyleDefinition(*this); }
+    wxNODISCARD virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextCharacterStyleDefinition(*this); }
 
 protected:
 };
@@ -177,7 +177,7 @@ public:
     bool operator ==(const wxRichTextParagraphStyleDefinition& def) const;
 
     /// Clones the object
-    virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextParagraphStyleDefinition(*this); }
+    wxNODISCARD virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextParagraphStyleDefinition(*this); }
 
 protected:
 
@@ -214,7 +214,7 @@ public:
     bool operator ==(const wxRichTextListStyleDefinition& def) const;
 
     /// Clones the object
-    virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextListStyleDefinition(*this); }
+    wxNODISCARD virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextListStyleDefinition(*this); }
 
     /// Sets/gets the attributes for the given level
     void SetLevelAttributes(int i, const wxRichTextAttr& attr);
@@ -280,7 +280,7 @@ public:
     bool operator ==(const wxRichTextBoxStyleDefinition& def) const;
 
     /// Clones the object
-    virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextBoxStyleDefinition(*this); }
+    wxNODISCARD virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextBoxStyleDefinition(*this); }
 
 protected:
 };

@@ -78,7 +78,7 @@ public:
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const override;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
     virtual wxFontFamily DoGetFamily() const override;
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info) override;
 

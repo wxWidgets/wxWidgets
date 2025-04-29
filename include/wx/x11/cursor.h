@@ -40,7 +40,7 @@ protected:
     void InitFromStock(wxStockCursor);
 
     virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxCursor);

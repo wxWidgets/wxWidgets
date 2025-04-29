@@ -177,7 +177,7 @@ public:
     bool IsOwnEvent() const { return m_id != 0; }
 
     // implement the base class pure virtual
-    virtual wxEvent *Clone() const override { return new wxDialUpEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxDialUpEvent(*this); }
 
 private:
     wxDECLARE_NO_ASSIGN_DEF_COPY(wxDialUpEvent);

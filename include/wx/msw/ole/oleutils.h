@@ -130,7 +130,7 @@ public:
 #endif
     virtual bool Write(wxString& str) const override;
 
-    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataCurrency(m_value); }
+    wxNODISCARD wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataCurrency(m_value); }
     virtual wxString GetType() const override { return wxS("currency"); }
 
     DECLARE_WXANY_CONVERSION()
@@ -156,7 +156,7 @@ public:
 #endif
     virtual bool Write(wxString& str) const override;
 
-    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataErrorCode(m_value); }
+    wxNODISCARD wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataErrorCode(m_value); }
     virtual wxString GetType() const override { return wxS("errorcode"); }
 
     DECLARE_WXANY_CONVERSION()
@@ -184,7 +184,7 @@ public:
 #endif
     virtual bool Write(wxString& str) const override;
 
-    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataSafeArray(m_value); }
+    wxNODISCARD wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataSafeArray(m_value); }
     virtual wxString GetType() const override { return wxS("safearray"); }
 
     DECLARE_WXANY_CONVERSION()

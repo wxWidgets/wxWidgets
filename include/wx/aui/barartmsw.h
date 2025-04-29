@@ -19,7 +19,7 @@ class WXDLLIMPEXP_AUI wxAuiMSWToolBarArt : public wxAuiGenericToolBarArt
 public:
     wxAuiMSWToolBarArt();
 
-    virtual wxAuiToolBarArt* Clone() override;
+    wxNODISCARD virtual wxAuiToolBarArt* Clone() override;
 
     virtual void DrawBackground(
         wxDC& dc,

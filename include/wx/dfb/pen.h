@@ -68,7 +68,7 @@ public:
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     wxDECLARE_DYNAMIC_CLASS(wxPen);
 };

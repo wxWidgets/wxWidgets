@@ -114,7 +114,7 @@ public:
                                     wxPathFormat format = wxPATH_NATIVE,
                                     bool *pIsDir = nullptr);
 
-    wxTarEntry *Clone() const { return new wxTarEntry(*this); }
+    wxNODISCARD wxTarEntry *Clone() const { return new wxTarEntry(*this); }
 
     void SetNotifier(wxTarNotifier& WXUNUSED(notifier)) { }
 

@@ -608,7 +608,7 @@ protected:
     long XYToIndex(int x, int y) const;
 
     virtual wxObjectRefData* CreateRefData() const override;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
+    wxNODISCARD virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxImageHandler;

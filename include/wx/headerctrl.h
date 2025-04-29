@@ -420,7 +420,7 @@ public:
     unsigned int GetNewOrder() const { return m_order; }
     void SetNewOrder(unsigned int order) { m_order = order; }
 
-    virtual wxEvent *Clone() const override { return new wxHeaderCtrlEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxHeaderCtrlEvent(*this); }
 
 protected:
     // the column affected by the event

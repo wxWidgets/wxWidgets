@@ -225,7 +225,7 @@ public:
     void SetDragStatus(wxSashDragStatus status) { m_dragStatus = status; }
     wxSashDragStatus GetDragStatus() const { return m_dragStatus; }
 
-    virtual wxEvent *Clone() const override { return new wxSashEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxSashEvent(*this); }
 
 private:
     wxSashEdgePosition  m_edge;

@@ -160,7 +160,7 @@ public:
         return m_changeType;
     }
 
-    virtual wxEvent* Clone() const override
+    wxNODISCARD virtual wxEvent* Clone() const override
     {
         wxFileSystemWatcherEvent* evt = new wxFileSystemWatcherEvent(*this);
         evt->m_errorMsg = m_errorMsg.Clone();

@@ -63,7 +63,7 @@ public:
     // if you're passing a reference to a validator.
     // Another possibility is to always pass a pointer to a new validator
     // (so the calling code can use a copy constructor of the relevant class).
-    virtual wxObject *Clone() const override { return new wxGenericValidator(*this); }
+    wxNODISCARD virtual wxObject *Clone() const override { return new wxGenericValidator(*this); }
     bool Copy(const wxGenericValidator& val);
 
     // Called when the value in the window must be validated: this is not used

@@ -401,7 +401,7 @@ public:
         m_nOldSel = event.m_nOldSel;
     }
 
-    virtual wxEvent *Clone() const override { return new wxBookCtrlEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxBookCtrlEvent(*this); }
 
     // accessors
         // the currently selected page (wxNOT_FOUND if none)

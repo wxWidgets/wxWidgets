@@ -53,7 +53,7 @@ public:
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     virtual void
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);

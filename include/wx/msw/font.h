@@ -168,7 +168,7 @@ protected:
 
     // implement wxObject virtuals which are used by AllocExclusive()
     virtual wxGDIRefData *CreateGDIRefData() const override;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxFont);

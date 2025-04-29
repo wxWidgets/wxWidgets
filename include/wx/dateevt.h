@@ -33,7 +33,7 @@ public:
     void SetDate(const wxDateTime &date) { m_date = date; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const override { return new wxDateEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxDateEvent(*this); }
 
 private:
     wxDateTime m_date;

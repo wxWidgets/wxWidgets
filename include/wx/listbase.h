@@ -561,7 +561,7 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
-    virtual wxEvent *Clone() const override { return new wxListEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxListEvent(*this); }
 
 //protected: -- not for backwards compatibility
     int           m_code;

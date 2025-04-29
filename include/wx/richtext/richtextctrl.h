@@ -2643,7 +2643,7 @@ public:
     */
     void SetOldContainer(wxRichTextParagraphLayoutBox* container) { m_oldContainer = container; }
 
-    virtual wxEvent *Clone() const override { return new wxRichTextEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxRichTextEvent(*this); }
 
 protected:
     int                             m_flags;

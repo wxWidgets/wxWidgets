@@ -247,7 +247,7 @@ public:
     }
 
     // create a new object which is the copy of this one
-    virtual wxGridCellRenderer *Clone() const = 0;
+    wxNODISCARD virtual wxGridCellRenderer *Clone() const = 0;
 
 
     // These functions still exist for compatibility and are the ones actually
@@ -504,7 +504,7 @@ public:
     virtual void Destroy();
 
     // create a new object which is the copy of this one
-    virtual wxGridCellEditor *Clone() const = 0;
+    wxNODISCARD virtual wxGridCellEditor *Clone() const = 0;
 
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const = 0;
@@ -821,7 +821,7 @@ public:
     }
 
     // creates a new copy of this object
-    wxGridCellAttr *Clone() const;
+    wxNODISCARD wxGridCellAttr *Clone() const;
     void MergeWith(wxGridCellAttr *mergefrom);
 
     // setters
@@ -3294,7 +3294,7 @@ public:
     wxPoint GetPosition() const { return wxPoint( m_x, m_y ); }
     bool Selecting() const { return m_selecting; }
 
-    virtual wxEvent *Clone() const override { return new wxGridEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxGridEvent(*this); }
 
 protected:
     int         m_row;
@@ -3354,7 +3354,7 @@ public:
     int GetRowOrCol() const { return m_rowOrCol; }
     wxPoint GetPosition() const { return wxPoint( m_x, m_y ); }
 
-    virtual wxEvent *Clone() const override { return new wxGridSizeEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxGridSizeEvent(*this); }
 
 protected:
     int         m_rowOrCol;
@@ -3418,7 +3418,7 @@ public:
     int GetRightCol() const { return m_bottomRight.GetCol(); }
     bool Selecting() const { return m_selecting; }
 
-    virtual wxEvent *Clone() const override { return new wxGridRangeSelectEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxGridRangeSelectEvent(*this); }
 
 protected:
     void Init(const wxGridCellCoords& topLeft,
@@ -3464,7 +3464,7 @@ public:
     wxControl* GetControl()             { return wxDynamicCast(m_window, wxControl); }
     void SetControl(wxControl* ctrl)    { m_window = ctrl; }
 
-    virtual wxEvent *Clone() const override { return new wxGridEditorCreatedEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxGridEditorCreatedEvent(*this); }
 
 private:
     int m_row;

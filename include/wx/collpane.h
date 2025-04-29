@@ -86,7 +86,7 @@ public:
 
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const override { return new wxCollapsiblePaneEvent(*this); }
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxCollapsiblePaneEvent(*this); }
 
 private:
     bool m_bCollapsed;

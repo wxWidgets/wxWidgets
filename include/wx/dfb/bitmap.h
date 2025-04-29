@@ -87,7 +87,7 @@ public:
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    wxNODISCARD virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     void InitFromImage(const wxImage& image, int depth, double scale);
 

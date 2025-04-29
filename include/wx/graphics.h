@@ -136,7 +136,7 @@ public:
     wxGraphicsObjectRefData* GetGraphicsData() const;
 protected:
     virtual wxObjectRefData* CreateRefData() const override;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
+    wxNODISCARD virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };

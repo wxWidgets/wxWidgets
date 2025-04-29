@@ -86,7 +86,7 @@ public:
     virtual void SetValidator(const wxValidator& validator);
 #endif
 
-    virtual wxGridCellEditor *Clone() const override
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellTextEditor(*this); }
 
     // added GetValue so we can get the value which is in the control
@@ -149,7 +149,7 @@ public:
     // parameters string format is "min,max"
     virtual void SetParameters(const wxString& params) override;
 
-    virtual wxGridCellEditor *Clone() const override
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellNumberEditor(*this); }
 
     // added GetValue so we can get the value which is in the control
@@ -244,7 +244,7 @@ public:
     virtual void Reset() override;
     virtual void StartingKey(wxKeyEvent& event) override;
 
-    virtual wxGridCellEditor *Clone() const override
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellFloatEditor(*this); }
 
     // parameters string format is "width[,precision[,format]]"
@@ -306,7 +306,7 @@ public:
     virtual void StartingClick() override;
     virtual void StartingKey(wxKeyEvent& event) override;
 
-    virtual wxGridCellEditor *Clone() const override
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellBoolEditor(*this); }
 
     // added GetValue so we can get the value which is in the control, see
@@ -384,7 +384,7 @@ public:
     // parameters string format is "item1[,item2[...,itemN]]"
     virtual void SetParameters(const wxString& params) override;
 
-    virtual wxGridCellEditor *Clone() const override
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellChoiceEditor(*this); }
 
     // added GetValue so we can get the value which is in the control
@@ -417,7 +417,7 @@ public:
 
     virtual ~wxGridCellEnumEditor() = default;
 
-    virtual wxGridCellEditor* Clone() const override
+    wxNODISCARD virtual wxGridCellEditor* Clone() const override
         { return new wxGridCellEnumEditor(*this); }
 
     virtual void BeginEdit(int row, int col, wxGrid* grid) override;
@@ -448,7 +448,7 @@ public:
                         wxWindowID id,
                         wxEvtHandler* evtHandler) override;
 
-    virtual wxGridCellEditor *Clone() const override
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellAutoWrapStringEditor(*this); }
 };
 
@@ -481,7 +481,7 @@ public:
 
     virtual void Reset() override;
 
-    virtual wxGridCellEditor *Clone() const override
+    wxNODISCARD virtual wxGridCellEditor *Clone() const override
         { return new wxGridCellDateEditor(*this); }
 
     virtual wxString GetValue() const override;

@@ -204,7 +204,7 @@ public:
     inline void SetIsReadOnly(bool isReadOnly = true) override;
     inline void SetIsText(bool isText = true);
 
-    wxZipEntry *Clone() const                   { return ZipClone(); }
+    wxNODISCARD wxZipEntry *Clone() const       { return ZipClone(); }
 
     void SetNotifier(wxZipNotifier& notifier);
     void UnsetNotifier() override;

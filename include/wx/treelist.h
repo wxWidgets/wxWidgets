@@ -471,7 +471,7 @@ public:
     // COLUMN_SORTED event.
     unsigned GetColumn() const { return m_column; }
 
-    virtual wxEvent* Clone() const override { return new wxTreeListEvent(*this); }
+    wxNODISCARD virtual wxEvent* Clone() const override { return new wxTreeListEvent(*this); }
 
 private:
     // Common part of all ctors.

@@ -276,7 +276,7 @@ template <typename T>
 class wxDefaultBaseObjectArrayTraits
 {
 public:
-    static T* Clone(const T& value) { return new T{value}; }
+    wxNODISCARD static T* Clone(const T& value) { return new T{value}; }
     static void Free(T* p) { delete p; }
 };
 
@@ -694,7 +694,7 @@ private:
     classdecl wxObjectArrayTraitsFor##name                                    \
     {                                                                         \
     public:                                                                   \
-        static T* Clone(T const& item);                                       \
+        wxNODISCARD static T* Clone(T const& item);                           \
         static void Free(T* p);                                               \
     };                                                                        \
     typedef wxBaseObjectArray<T, wxObjectArrayTraitsFor##name>                \

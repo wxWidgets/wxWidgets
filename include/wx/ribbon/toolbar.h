@@ -212,7 +212,7 @@ public:
     }
 
     wxRibbonToolBarEvent(const wxRibbonToolBarEvent& e) = default;
-    wxEvent *Clone() const override { return new wxRibbonToolBarEvent(*this); }
+    wxNODISCARD wxEvent *Clone() const override { return new wxRibbonToolBarEvent(*this); }
 
     wxRibbonToolBar* GetBar() {return m_bar;}
     void SetBar(wxRibbonToolBar* bar) {m_bar = bar;}

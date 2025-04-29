@@ -76,7 +76,7 @@ public:
 
     // Implement this to make wxVariant::UnShare work. Returns
     // a copy of the data.
-    virtual wxVariantData* Clone() const { return nullptr; }
+    wxNODISCARD virtual wxVariantData* Clone() const { return nullptr; }
 
 #if wxUSE_ANY
     // Converts value to wxAny, if possible. Return true if successful.
@@ -379,7 +379,7 @@ public:
 // Attributes
 protected:
     virtual wxObjectRefData *CreateRefData() const override;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override;
+    wxNODISCARD virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override;
 
     wxString        m_name;
 
@@ -505,7 +505,7 @@ public:\
     virtual wxString GetType() const override; \
     virtual wxClassInfo* GetValueClassInfo() override; \
 \
-    virtual wxVariantData* Clone() const override { return new classname##VariantData(m_value); } \
+    wxNODISCARD virtual wxVariantData* Clone() const override { return new classname##VariantData(m_value); } \
 \
     DECLARE_WXANY_CONVERSION() \
 protected:\
