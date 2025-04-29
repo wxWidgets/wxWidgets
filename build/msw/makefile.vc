@@ -40,12 +40,12 @@ LIBDIRNAME = \
 	..\..\lib\$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)
 WXREGEX_CFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxregexu$(WXDEBUGFLAG).pdb \
+	/I..\..\include /I$(SETUPHDIR) /I..\..\3rdparty\pcre\src\wx /D__WX__ \
+	/DHAVE_CONFIG_H $(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxregexu$(WXDEBUGFLAG).pdb \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
-	/D_CRT_SECURE_NO_WARNINGS /I..\..\include /I$(SETUPHDIR) \
-	/I..\..\3rdparty\pcre\src\wx /D__WX__ /DHAVE_CONFIG_H $(CPPFLAGS) $(CFLAGS)
+	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_auto_possess.obj \
 	$(OBJS)\wxregex_pcre2_chkdint.obj \
@@ -76,12 +76,13 @@ WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_valid_utf.obj \
 	$(OBJS)\wxregex_pcre2_xclass.obj \
 	$(OBJS)\wxregex_pcre2_chartables.obj
-WXZLIB_CFLAGS = /M$(__RUNTIME_LIBS_25)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
+WXZLIB_CFLAGS = /M$(__RUNTIME_LIBS_25)$(__DEBUGRUNTIME) /DWIN32 \
+	/D_CRT_NONSTDC_NO_WARNINGS $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
-	/D_CRT_SECURE_NO_WARNINGS /D_CRT_NONSTDC_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
+	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_adler32.obj \
 	$(OBJS)\wxzlib_compress.obj \
@@ -98,13 +99,13 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_trees.obj \
 	$(OBJS)\wxzlib_uncompr.obj \
 	$(OBJS)\wxzlib_zutil.obj
-WXPNG_CFLAGS = /M$(__RUNTIME_LIBS_40)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
+WXPNG_CFLAGS = /M$(__RUNTIME_LIBS_40)$(__DEBUGRUNTIME) /DWIN32 \
+	/I..\..\src\zlib /DPNG_INTEL_SSE $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxpng$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
-	/D_CRT_SECURE_NO_WARNINGS /I..\..\src\zlib /DPNG_INTEL_SSE $(CPPFLAGS) \
-	$(CFLAGS)
+	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.obj \
 	$(OBJS)\wxpng_pngerror.obj \
@@ -253,12 +254,12 @@ WXWEBP_OBJECTS =  \
 	$(OBJS)\wxwebp_rescaler_utils.obj \
 	$(OBJS)\wxwebp_thread_utils.obj \
 	$(OBJS)\wxwebp_utils.obj
-WXJPEG_CFLAGS = /M$(__RUNTIME_LIBS_70)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
-	/Fd$(LIBDIRNAME)\wxjpeg$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
-	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
+WXJPEG_CFLAGS = /M$(__RUNTIME_LIBS_70)$(__DEBUGRUNTIME) /DWIN32 /I$(SETUPHDIR) \
+	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxjpeg$(WXDEBUGFLAG).pdb \
+	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
-	/D_CRT_SECURE_NO_WARNINGS /I$(SETUPHDIR) $(CPPFLAGS) $(CFLAGS)
+	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jaricom.obj \
 	$(OBJS)\wxjpeg_jcapimin.obj \
@@ -306,13 +307,14 @@ WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jquant1.obj \
 	$(OBJS)\wxjpeg_jquant2.obj \
 	$(OBJS)\wxjpeg_jutils.obj
-WXTIFF_CFLAGS = /M$(__RUNTIME_LIBS_85)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
+WXTIFF_CFLAGS = /M$(__RUNTIME_LIBS_85)$(__DEBUGRUNTIME) /DWIN32 \
+	/I..\..\src\zlib /I..\..\src\jpeg /I..\..\src\tiff\libtiff \
+	/D_CRT_NONSTDC_NO_WARNINGS $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
-	/D_CRT_SECURE_NO_WARNINGS /I..\..\src\zlib /I..\..\src\jpeg \
-	/I..\..\src\tiff\libtiff /D_CRT_NONSTDC_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
+	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_win32.obj \
 	$(OBJS)\wxtiff_tif_aux.obj \
@@ -357,24 +359,25 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_zip.obj \
 	$(OBJS)\wxtiff_tif_zstd.obj
 WXEXPAT_CFLAGS = /M$(__RUNTIME_LIBS_100)$(__DEBUGRUNTIME) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).pdb \
+	/I$(LIBDIRNAME) $(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).pdb \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
-	/D_CRT_SECURE_NO_WARNINGS /I$(LIBDIRNAME) $(CPPFLAGS) $(CFLAGS)
+	/D_CRT_SECURE_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \
 	$(OBJS)\wxexpat_xmltok.obj
 WXSCINTILLA_CXXFLAGS = /M$(__RUNTIME_LIBS_115)$(__DEBUGRUNTIME) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
+	/I$(SETUPHDIR) /I..\..\include $(__wx) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__DEBUGINFO) \
+	/Fd$(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS /I..\..\src\stc\scintilla\include \
-	/I..\..\src\stc\scintilla\src /D__WX__ /I$(SETUPHDIR) /I..\..\include \
-	$(__wx) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\stc\scintilla\src /D__WX__ $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_AutoComplete.obj \
 	$(OBJS)\wxscintilla_CallTip.obj \
@@ -407,16 +410,17 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_ViewStyle.obj \
 	$(OBJS)\wxscintilla_XPM.obj
 WXLEXILLA_CXXFLAGS = /M$(__RUNTIME_LIBS_130)$(__DEBUGRUNTIME) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxlexilla$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
+	/I$(SETUPHDIR) /I..\..\include $(__wx) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__DEBUGINFO) \
+	/Fd$(LIBDIRNAME)\wxlexilla$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
 	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
 	$(__NO_VC_CRTDBG_p) $(__TARGET_CPU_COMPFLAG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS /I..\..\src\stc\lexilla\access \
 	/I..\..\src\stc\lexilla\include /I..\..\src\stc\lexilla\lexlib \
 	/I..\..\src\stc\lexilla\include /I..\..\src\stc\scintilla\include \
-	/I..\..\src\stc\scintilla\src /I$(SETUPHDIR) /I..\..\include $(__wx) \
-	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\stc\scintilla\src $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
+	$(CXXFLAGS)
 WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexillaAccess.obj \
 	$(OBJS)\wxlexilla_LexA68k.obj \

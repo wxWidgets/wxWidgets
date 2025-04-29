@@ -407,13 +407,7 @@
         <install-to>$(LIBDIR)</install-to>
     </template>
 
-    <template id="3rdparty_lib" template="common_settings,anylib">
-        <if cond="FORMAT=='autoconf'">
-            <libname>$(id)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
-        </if>
-        <if cond="FORMAT!='autoconf'">
-            <libname>$(id)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
-        </if>
+    <template id="3rdparty_lib_base" template="common_settings,anylib">
         <!--
         we want to install 3rd party libs system-wide only with static
         version of wxWidgets; otherwise they are embedded in shared libs:
@@ -438,6 +432,33 @@
         </if>
     </template>
 
+    <!--
+        This template is used for most third party libraries.
+
+        Note: when inheriting from this template, template_append should
+        be normally used instead of just template, to ensure that the built-in
+        third party libraries include directories appear before the ones
+        defined here (which could include the same headers).
+    -->
+    <template id="3rdparty_lib" template="3rdparty_lib_base">
+        <if cond="FORMAT=='autoconf'">
+            <libname>$(id)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
+        </if>
+        <if cond="FORMAT!='autoconf'">
+            <libname>$(id)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
+        </if>
+    </template>
+
+    <!-- This one is only used by wxregex currently and additionally includes
+         "u" suffix in the library name for compatibility. -->
+    <template id="3rdparty_lib_u" template="3rdparty_lib_base">
+        <libname cond="FORMAT=='autoconf'">
+            $(id)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+        </libname>
+        <libname cond="FORMAT!='autoconf'">
+            $(id)u$(WXDEBUGFLAG)$(HOST_SUFFIX)
+        </libname>
+    </template>
 
     <!-- deal with the need to copy setup.h here: -->
 

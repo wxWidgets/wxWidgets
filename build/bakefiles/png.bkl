@@ -21,7 +21,7 @@
         <if cond="wxUSE_LIBPNG=='builtin'">$(TOP_SRCDIR)src/png</if>
     </set>
 
-    <lib id="wxpng" template="3rdparty_lib"
+    <lib id="wxpng" template_append="3rdparty_lib"
          cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <include>$(INC_ZLIB)</include>

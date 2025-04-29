@@ -40,9 +40,9 @@ OBJS = \
 LIBDIRNAME = \
 	..\..\lib\$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)
-WXREGEX_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
-	-I..\..\include -I$(SETUPHDIR) -I..\..\3rdparty\pcre\src\wx -D__WX__ \
-	-DHAVE_CONFIG_H $(CPPFLAGS) $(CFLAGS)
+WXREGEX_CFLAGS = -I..\..\include -I$(SETUPHDIR) -I..\..\3rdparty\pcre\src\wx \
+	-D__WX__ -DHAVE_CONFIG_H $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
+	-DNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_auto_possess.o \
 	$(OBJS)\wxregex_pcre2_chkdint.o \
@@ -91,8 +91,8 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_trees.o \
 	$(OBJS)\wxzlib_uncompr.o \
 	$(OBJS)\wxzlib_zutil.o
-WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
-	-I..\..\src\zlib -DPNG_INTEL_SSE $(CPPFLAGS) $(CFLAGS)
+WXPNG_CFLAGS = -I..\..\src\zlib -DPNG_INTEL_SSE $(__DEBUGINFO) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.o \
 	$(OBJS)\wxpng_pngerror.o \
@@ -240,8 +240,8 @@ WXWEBP_OBJECTS =  \
 	$(OBJS)\wxwebp_rescaler_utils.o \
 	$(OBJS)\wxwebp_thread_utils.o \
 	$(OBJS)\wxwebp_utils.o
-WXJPEG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
-	-I$(SETUPHDIR) $(CPPFLAGS) $(CFLAGS)
+WXJPEG_CFLAGS = -I$(SETUPHDIR) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
+	$(__THREADSFLAG) -DNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jaricom.o \
 	$(OBJS)\wxjpeg_jcapimin.o \
@@ -289,8 +289,8 @@ WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jquant1.o \
 	$(OBJS)\wxjpeg_jquant2.o \
 	$(OBJS)\wxjpeg_jutils.o
-WXTIFF_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
-	-I..\..\src\zlib -I..\..\src\jpeg -I..\..\src\tiff\libtiff $(CPPFLAGS) \
+WXTIFF_CFLAGS = -I..\..\src\zlib -I..\..\src\jpeg -I..\..\src\tiff\libtiff \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG $(CPPFLAGS) \
 	$(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_win32.o \
@@ -335,16 +335,16 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_write.o \
 	$(OBJS)\wxtiff_tif_zip.o \
 	$(OBJS)\wxtiff_tif_zstd.o
-WXEXPAT_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
-	-I$(LIBDIRNAME) $(CPPFLAGS) $(CFLAGS)
+WXEXPAT_CFLAGS = -I$(LIBDIRNAME) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
+	$(__THREADSFLAG) -DNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmlparse.o \
 	$(OBJS)\wxexpat_xmlrole.o \
 	$(OBJS)\wxexpat_xmltok.o
-WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
-	-DNDEBUG -I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src \
-	-D__WX__ -I$(SETUPHDIR) -I..\..\include $(__wx) -D__WXMSW__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+WXSCINTILLA_CXXFLAGS = -I$(SETUPHDIR) -I..\..\include $(__wx) -D__WXMSW__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
+	$(__THREADSFLAG) -DNDEBUG -I..\..\src\stc\scintilla\include \
+	-I..\..\src\stc\scintilla\src -D__WX__ $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	$(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_AutoComplete.o \
@@ -377,12 +377,12 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_UniqueString.o \
 	$(OBJS)\wxscintilla_ViewStyle.o \
 	$(OBJS)\wxscintilla_XPM.o
-WXLEXILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
-	-I..\..\src\stc\lexilla\access -I..\..\src\stc\lexilla\include \
-	-I..\..\src\stc\lexilla\lexlib -I..\..\src\stc\lexilla\include \
-	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src \
-	-I$(SETUPHDIR) -I..\..\include $(__wx) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
+WXLEXILLA_CXXFLAGS = -I$(SETUPHDIR) -I..\..\include $(__wx) -D__WXMSW__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
+	$(__THREADSFLAG) -DNDEBUG -I..\..\src\stc\lexilla\access \
+	-I..\..\src\stc\lexilla\include -I..\..\src\stc\lexilla\lexlib \
+	-I..\..\src\stc\lexilla\include -I..\..\src\stc\scintilla\include \
+	-I..\..\src\stc\scintilla\src $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
 	$(CXXFLAGS)
 WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexillaAccess.o \

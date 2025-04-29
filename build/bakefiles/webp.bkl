@@ -24,18 +24,10 @@
         <if cond="wxUSE_LIBWEBP=='builtin'">$(TOP_SRCDIR)3rdparty/libwebp</if>
     </set>
 
-    <!--
-        By using this template before 3rdparty_lib template, the include will
-        be before includes inherited from 3rdparty_lib (i.e. all WX_CPPFLAGS),
-        which could contain system-specific webp paths.
-    -->
-    <template id="webp_include">
-        <include>$(INC_WEBP_BUILD)</include>
-    </template>
-
-    <lib id="wxwebp" template="webp_include,3rdparty_lib"
+    <lib id="wxwebp" template_append="3rdparty_lib"
          cond="wxUSE_LIBWEBP=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
+        <include>$(INC_WEBP_BUILD)</include>
         <sources>
             3rdparty/libwebp/sharpyuv/sharpyuv.c
             3rdparty/libwebp/sharpyuv/sharpyuv_cpu.c
