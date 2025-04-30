@@ -5088,7 +5088,10 @@ if test "$wxUSE_SECRETSTORE" = "yes"; then
         PKG_CHECK_MODULES(LIBSECRET, [libsecret-1],
             [
                 CXXFLAGS="$LIBSECRET_CFLAGS $CXXFLAGS"
-                LIBS="$LIBSECRET_LIBS $LIBS"
+                dnl Avoid linking with libsecret-1.so directly, we load this
+                dnl library dynamically in wxSecretStoreLibSecretImpl to avoid
+                dnl requiring it being installed on the target system.
+                LIBS="`echo $LIBSECRET_LIBS | sed s/-lsecret-1//g` $LIBS"
             ],
             [
                 AC_MSG_WARN([libsecret not found, wxSecretStore won't be available])
