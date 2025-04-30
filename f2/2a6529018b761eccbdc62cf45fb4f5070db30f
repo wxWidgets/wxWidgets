@@ -1,0 +1,1 @@
+wxGTK: Don't require libsecret-1.so presence at run-time (#25355).
