@@ -42,6 +42,10 @@ if(wxUSE_LIBLZMA)
 endif()
 if(UNIX AND wxUSE_SECRETSTORE)
     wx_lib_include_directories(wxbase ${LIBSECRET_INCLUDE_DIRS})
+    # Avoid linking with libsecret-1.so directly, we load this
+    # library dynamically in wxSecretStoreLibSecretImpl to avoid
+    # requiring it being installed on the target system.
+    list(REMOVE_ITEM LIBSECRET_LIBRARIES secret-1)
     wx_lib_link_libraries(wxbase PRIVATE ${LIBSECRET_LIBRARIES})
 endif()
 if(wxUSE_LIBICONV)

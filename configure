@@ -35917,7 +35917,7 @@ else
 $as_echo "yes" >&6; }
 
                 CXXFLAGS="$LIBSECRET_CFLAGS $CXXFLAGS"
-                LIBS="$LIBSECRET_LIBS $LIBS"
+                                                                LIBS="`echo $LIBSECRET_LIBS | sed s/-lsecret-1//g` $LIBS"
 
 fi
     fi
