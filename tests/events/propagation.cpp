@@ -29,9 +29,7 @@
 
 #include <memory>
 
-#if defined(__WXGTK__) || defined(__WXQT__)
-    #include "waitfor.h"
-#endif
+#include "waitfor.h"
 
 // FIXME: Currently under OS X testing paint event doesn't work because neither
 //        calling Refresh()+Update() nor even sending wxPaintEvent directly to
@@ -581,7 +579,6 @@ void EventPropagationTestCase::DocView()
     // Ensure that the child that we've just created is the active one.
     child->Activate();
 
-#ifdef __WXGTK__
     // There are a lot of hacks related to child frame menu bar handling in
     // wxGTK and, in particular, the code in src/gtk/mdi.cpp relies on getting
     // idle events to really put everything in place. Moreover, as wxGTK uses
@@ -593,8 +590,8 @@ void EventPropagationTestCase::DocView()
     // make things work "as usual".
     child->Show();
     parent->Show();
-    wxYield();
-#endif // __WXGTK__
+    child->SetFocus(); // Without this, the test would fail on wxGTK2
+    YieldForAWhile();
 
     TestEvtSink sinkDoc('d');
     doc->Connect(wxEVT_MENU,
@@ -610,12 +607,25 @@ void EventPropagationTestCase::DocView()
 
     // Check that wxDocument, wxView, wxDocManager, child frame and the parent
     // get the event in order.
-#ifndef __WXQT__
-    ASSERT_MENU_EVENT_RESULT( menuChild, "advmcpA" );
-#else
+#if wxUSE_UIACTIONSIMULATOR
+    // We use wxUIActionSimulator instead of ASSERT_MENU_EVENT_RESULT because
+    // using the latter fails with wxQt on Linux.
     wxUnusedVar(menuChild);
-    WARN("We don't get paint event under wxQt for some reason... test skipped.");
-#endif
+    g_str.clear();
+
+    wxUIActionSimulator sim;
+    sim.Char('m', wxMOD_ALT);
+    // N.B.: Don't call wxYield() here, as this will cause the menu to appear
+    // immediately (and enter its internal message loop) and the next line will
+    // never be executed under wxMSW. In other words, the execution would block
+    // indefinitely.
+    sim.Char('a');
+    wxYield();
+
+    CHECK( g_str == "advmcpA" );
+#else // !wxUSE_UIACTIONSIMULATOR
+    ASSERT_MENU_EVENT_RESULT( menuChild, "advmcpA" );
+#endif // wxUSE_UIACTIONSIMULATOR
 
 #if wxUSE_TOOLBAR
     // Also check that toolbar events get forwarded to the active child.
@@ -629,11 +639,7 @@ void EventPropagationTestCase::DocView()
     g_str.clear();
     tb->OnLeftClick(wxID_APPLY, true /* doesn't matter */);
 
-#ifndef __WXQT__
     CPPUNIT_ASSERT_EQUAL( "advmcpA", g_str );
-#else
-    WARN("Skipping test not working under wxQt");
-#endif
 #endif // wxUSE_TOOLBAR
 }
 

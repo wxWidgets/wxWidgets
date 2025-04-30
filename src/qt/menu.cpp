@@ -354,7 +354,5 @@ void wxMenuBar::Attach(wxFrame *frame)
 
 void wxMenuBar::Detach()
 {
-    // the QMenuBar probably was deleted by Qt as setMenuBar takes ownership
-    m_qtWindow = nullptr;
     wxMenuBarBase::Detach();
 }

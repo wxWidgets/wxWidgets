@@ -49,8 +49,12 @@ public:
 
 wxFrame::~wxFrame()
 {
-    // central widget should be deleted by qt when the main window is destroyed
-    QtStoreWindowPointer( GetQMainWindow()->centralWidget(), nullptr );
+    // Always false for MDI children
+    if ( GetQMainWindow() && GetQMainWindow()->centralWidget() )
+    {
+        // central widget should be deleted by qt when the main window is destroyed
+        QtStoreWindowPointer(GetQMainWindow()->centralWidget(), nullptr);
+    }
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
@@ -77,20 +81,24 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
     if ( menuBar )
     {
-        // The current menu bar could be deleted by Qt when dereferencing it so
-        // then that QMenuBar will raise a segmentation fault when using it again
-        wxCHECK_RET( menuBar->GetHandle(),
-                     "Using a replaced menu bar is not supported in wxQT");
-        // Warning: Qt main window takes ownership of the QMenuBar pointer:
-        GetQMainWindow()->setMenuBar( menuBar->GetQMenuBar() );
+        // To prevent QtMainWindow from deleting the old QMenuBar pointer (so that
+        // the old wxMenuBar can be reused, which is the case in the MDI framework
+        // for example) we reparent the old QMenuBar before calling setMenuBar().
+        // Also note that we call menuWidget() and not menuBar() because the latter
+        // creates a new one if one doesn't exist before.
+
+        auto oldMenuBar = GetQMainWindow()->menuWidget();
+        if ( oldMenuBar )
+            oldMenuBar->setParent(nullptr);
+
+        GetQMainWindow()->setMenuBar(menuBar->GetQMenuBar());
     }
     else
     {
-        // Creating an empty menu bar should hide it and free the previous:
-        QMenuBar *qmenubar = new QMenuBar(GetHandle());
-        GetQMainWindow()->setMenuBar( qmenubar );
+        GetQMainWindow()->setMenuBar(nullptr);
     }
-    wxFrameBase::SetMenuBar( menuBar );
+
+    wxFrameBase::SetMenuBar(menuBar);
 }
 
 #if wxUSE_STATUSBAR
@@ -223,5 +231,10 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 
 QMainWindow *wxFrame::GetQMainWindow() const
 {
-    return static_cast<QMainWindow*>(m_qtWindow);
+    // Notice that we intentionally use qobject_cast<> here (and not static_cast<>)
+    // because when this function is called on an object of wxMDIChildFrame (which
+    // derives from this class) m_qtWindow is not a QMainWindow, and we want to
+    // return nullptr in this case.
+
+    return qobject_cast<QMainWindow*>(m_qtWindow);
 }
