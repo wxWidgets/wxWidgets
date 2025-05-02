@@ -5042,12 +5042,27 @@ public:
     const wxCursor& GetCursor() const;
 
     /**
+        Returns the mouse position for which the cursor is requested.
+
+        This position is expressed in the client coordinates of the window.
+
+        @see GetX(), GetY()
+
+        @since 3.3.0
+    */
+    wxPoint GetPosition() const;
+
+    /**
         Returns the X coordinate of the mouse in client coordinates.
+
+        @see GetPosition()
     */
     wxCoord GetX() const;
 
     /**
         Returns the Y coordinate of the mouse in client coordinates.
+
+        @see GetPosition()
     */
     wxCoord GetY() const;
 
