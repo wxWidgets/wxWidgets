@@ -378,7 +378,7 @@ public:
                                                 // chain needs update
     bool                 m_mouseButtonDown:1;
     bool                 m_showOnIdle:1;        // postpone showing the window until idle
-    bool m_needCursorReset:1;
+    bool                 m_needCursorReset:1;   // true if cursor set by wxEVT_SET_CURSOR
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
