@@ -5421,23 +5421,31 @@ static GdkCursor* wxGetOverrideCursor(wxWindowGTK* w)
     return nullptr;
 }
 
-GdkWindow* wxWindowGTK::GTKSetCursorForAllWindows(GdkCursor* cursor)
+wxArrayGdkWindows wxWindowGTK::GTKSetCursorForAllWindows(GdkCursor* cursor)
 {
+    wxArrayGdkWindows changed;
+
     wxArrayGdkWindows windows;
     GdkWindow* window = GTKGetWindow(windows);
     if (window)
+    {
         gdk_window_set_cursor(window, cursor);
+        changed.push_back(window);
+    }
     else
     {
         for (size_t i = windows.size(); i--;)
         {
             window = windows[i];
             if (window)
+            {
                 gdk_window_set_cursor(window, cursor);
+                changed.push_back(window);
+            }
         }
     }
 
-    return window;
+    return changed;
 }
 
 void wxWindowGTK::GTKSetCursor(const wxCursor& cursor)
@@ -5488,8 +5496,14 @@ void wxWindowGTK::GTKUpdateCursor(GdkCursor* overrideCursor)
 
     GdkCursor* const cursor = m_cursor.GetCursor();
 
-    GdkWindow* const window = GTKSetCursorForAllWindows(cursor);
-    if (window && cursor == nullptr && m_wxwindow == nullptr)
+    const wxArrayGdkWindows& windows = GTKSetCursorForAllWindows(cursor);
+
+    // We don't need to do anything else if we set a valid cursor or if this is
+    // not a native widget.
+    if (cursor || m_wxwindow)
+        return;
+
+    for (auto* window : windows)
     {
         void* data;
         gdk_window_get_user_data(window, &data);

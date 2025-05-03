@@ -510,8 +510,8 @@ private:
 
     // Set the given (possibly null) cursor for all GdkWindows of this window.
     //
-    // Return the window for which we changed the cursor or null.
-    GdkWindow* GTKSetCursorForAllWindows(GdkCursor* cursor);
+    // Return all windows for which we changed the cursor (may be empty).
+    wxArrayGdkWindows GTKSetCursorForAllWindows(GdkCursor* cursor);
 
 #ifdef __WXGTK3__
     // paint context is stashed here so wxPaintDC can use it
