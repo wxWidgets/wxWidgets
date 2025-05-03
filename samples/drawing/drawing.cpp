@@ -176,6 +176,7 @@ protected:
     void DrawGradients(wxDC& dc);
     void DrawSystemColours(wxDC& dc);
     void DrawDatabaseColours(wxDC& dc);
+    void DrawCursors(wxDC& dc);
     void DrawColour(wxDC& dc, const wxFont& mono, wxCoord x, const wxRect& r, const wxString& colourName, const wxColour& col);
 
     void DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime);
@@ -331,6 +332,7 @@ enum
 #endif
     File_ShowSystemColours,
     File_ShowDatabaseColours,
+    File_ShowCursors,
     File_ShowGradients,
     MenuShow_Last = File_ShowGradients,
 
@@ -1883,6 +1885,18 @@ void MyCanvas::DrawDatabaseColours(wxDC& dc)
     }
 }
 
+void MyCanvas::DrawCursors(wxDC& dc)
+{
+    wxCoord x(FromDIP(10));
+    wxCoord y = x;
+
+    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.DrawText(wxString::Format("System cursor size: %dx%d",
+                                 wxSystemSettings::GetMetric(wxSYS_CURSOR_X, this),
+                                 wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this)),
+                x, y);
+}
+
 void MyCanvas::DrawColour(wxDC& dc, const wxFont& mono, wxCoord x, const wxRect& r, const wxString& colourName, const wxColour& col)
 {
     {
@@ -2111,6 +2125,10 @@ void MyCanvas::Draw(wxDC& pdc)
 
         case File_ShowDatabaseColours:
             DrawDatabaseColours(dc);
+            break;
+
+        case File_ShowCursors:
+            DrawCursors(dc);
             break;
 
         default:
@@ -2411,6 +2429,7 @@ MyFrame::MyFrame(const wxString& title)
 #endif
     menuScreen->Append(File_ShowSystemColours, "System &colours");
     menuScreen->Append(File_ShowDatabaseColours, "Databa&se colours");
+    menuScreen->Append(File_ShowCursors, "C&ursors screen");
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
