@@ -537,8 +537,9 @@ enum wxBackgroundStyle
         Indicates that the window background is not erased, letting the parent
         window show through.
 
-        Currently this style is only supported in wxOSX and wxGTK with
-        compositing available, see wxWindow::IsTransparentBackgroundSupported().
+        This style is only supported in wxOSX, wxGTK with compositing available,
+        wxMSW since 3.3.0 and wxQt.
+        see wxWindow::IsTransparentBackgroundSupported().
      */
     wxBG_STYLE_TRANSPARENT,
 };
