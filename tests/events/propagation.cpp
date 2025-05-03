@@ -274,6 +274,15 @@ private:
     #if wxUSE_AUI
         void DocViewAui();
     #endif
+    void DocViewCommon(wxFrame* (*newParent)(wxDocManager *manager,
+                                                wxFrame *parent,
+                                                wxWindowID id,
+                                                const wxString& title),
+                        wxFrame* (*newChild)(wxDocument *doc,
+                                                wxView *view,
+                                                wxFrame *parent,
+                                                wxWindowID id,
+                                                const wxString& title));
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 #if wxUSE_UIACTIONSIMULATOR
     void ContextMenuEvent();
@@ -544,11 +553,102 @@ wxIMPLEMENT_DYNAMIC_CLASS(EventTestView, wxView);
 
 void EventPropagationTestCase::DocView()
 {
+    class NewParent
+    {
+    public:
+        static wxFrame* Func(wxDocManager* manager,
+                                wxFrame* parent,
+                                wxWindowID id,
+                                const wxString& title)
+        {
+            return new wxDocMDIParentFrame(manager, parent, id, title);
+        }
+    };
+
+    class NewChild
+    {
+    public:
+        static wxFrame* Func(wxDocument* doc,
+                                wxView* view,
+                                wxFrame* parent,
+                                wxWindowID id,
+                                const wxString& title)
+        {
+            wxDocMDIChildFrame* child = new wxDocMDIChildFrame(doc, view, dynamic_cast<wxDocMDIParentFrame*>(parent), id, title);
+            // Ensure that the child that we've just created is the active one.
+            child->Activate();
+            return child;
+        }
+    };
+
+    DocViewCommon(NewParent::Func, NewChild::Func);
+}
+
+#if wxUSE_AUI
+void EventPropagationTestCase::DocViewAui()
+{
+    class NewParent
+    {
+    public:
+        static wxFrame* Func(wxDocManager* manager,
+                                wxFrame* parent,
+                                wxWindowID id,
+                                const wxString& title)
+        {
+            class AuiParentFrame : public wxDocParentFrameAny<wxAuiMDIParentFrame>
+            {
+            public:
+                AuiParentFrame(wxDocManager* manager,
+                                wxFrame* parent,
+                                wxWindowID id,
+                                const wxString& title) :
+                    wxDocParentFrameAny<wxAuiMDIParentFrame>(manager, parent, id, title),
+                    auiMgr(this)
+                {
+                }
+            private:
+                wxAuiManager auiMgr;
+            };
+            return new AuiParentFrame(manager, parent, id, title);
+        }
+    };
+
+    class NewChild
+    {
+    public:
+        static wxFrame* Func(wxDocument* doc,
+                                wxView* view,
+                                wxFrame* parentBase,
+                                wxWindowID id,
+                                const wxString& title)
+        {
+            typedef wxDocParentFrameAny<wxAuiMDIParentFrame> ParentType;
+            ParentType* parent = dynamic_cast<ParentType*>(parentBase);
+            wxFrame* child = new wxDocChildFrameAny<wxAuiMDIChildFrame, wxAuiMDIParentFrame>(doc, view, parent, id, title);
+            CHECK( parent->GetActiveChild() == child );
+            return child;
+        }
+    };
+
+    DocViewCommon(NewParent::Func, NewChild::Func);
+}
+#endif // wxUSE_AUI
+
+void EventPropagationTestCase::DocViewCommon(wxFrame* (*newParent)(wxDocManager *manager,
+                                                                        wxFrame *parent,
+                                                                        wxWindowID id,
+                                                                        const wxString& title),
+                                                wxFrame* (*newChild)(wxDocument *doc,
+                                                                        wxView *view,
+                                                                        wxFrame *parent,
+                                                                        wxWindowID id,
+                                                                        const wxString& title))
+{
     // Set up the parent frame and its menu bar.
     wxDocManager docManager;
 
-    wxScopedPtr<wxDocMDIParentFrame>
-        parent(new wxDocMDIParentFrame(&docManager, NULL, wxID_ANY, "Parent"));
+    wxScopedPtr<wxFrame>
+        parent((*newParent)(&docManager, NULL, wxID_ANY, "Parent"));
 
     wxMenu* const menu = CreateTestMenu(parent.get());
 
@@ -575,13 +675,10 @@ void EventPropagationTestCase::DocView()
     wxDocument* const doc = docTemplate.CreateDocument("");
     wxView* const view = doc->GetFirstView();
 
-    wxScopedPtr<wxMDIChildFrame>
-        child(new wxDocMDIChildFrame(doc, view, parent.get(), wxID_ANY, "Child"));
+    wxScopedPtr<wxFrame>
+        child((*newChild)(doc, view, parent.get(), wxID_ANY, "Child"));
 
     wxMenu* const menuChild = CreateTestMenu(child.get());
-
-    // Ensure that the child that we've just created is the active one.
-    child->Activate();
 
 #ifdef __WXGTK__
     // There are a lot of hacks related to child frame menu bar handling in
@@ -630,119 +727,6 @@ void EventPropagationTestCase::DocView()
     CPPUNIT_ASSERT_EQUAL( "advmcpA", g_str );
 #endif // wxUSE_TOOLBAR
 }
-
-#if wxUSE_AUI
-void EventPropagationTestCase::DocViewAui()
-{
-    // Set up the parent frame and its menu bar.
-    wxDocManager docManager;
-
-    std::unique_ptr<wxDocParentFrameAny<wxAuiMDIParentFrame>>
-        parent(new wxDocParentFrameAny<wxAuiMDIParentFrame>(&docManager, nullptr, wxID_ANY, "Parent"));
-    wxAuiManager auiMgr(parent.get());
-
-    wxMenu* const menu = CreateTestMenu(parent.get());
-
-
-    // Set up the event handlers.
-    TestEvtSink sinkDM('m');
-    docManager.Connect(wxEVT_MENU,
-                       wxEventHandler(TestEvtSink::Handle), nullptr, &sinkDM);
-
-    TestEvtSink sinkParent('p');
-    parent->Connect(wxEVT_MENU,
-                    wxEventHandler(TestEvtSink::Handle), nullptr, &sinkParent);
-
-
-    // Check that wxDocManager and wxFrame get the event in order.
-    ASSERT_MENU_EVENT_RESULT( menu, "ampA" );
-
-
-    // The document template must be heap-allocated as wxDocManager owns it.
-    wxDocTemplate* const docTemplate = new wxDocTemplate
-                                           (
-                                            &docManager, "Test", "", "", "",
-                                            "Test Document", "Test View",
-                                            wxCLASSINFO(EventTestDocument),
-                                            wxCLASSINFO(EventTestView)
-                                           );
-
-    // Now check what happens if we have an active document.
-    wxDocument* const doc = docTemplate->CreateDocument("");
-    wxView* const view = doc->GetFirstView();
-
-    std::unique_ptr<wxDocChildFrameAny<wxAuiMDIChildFrame, wxAuiMDIParentFrame>>
-        child(new wxDocChildFrameAny<wxAuiMDIChildFrame, wxAuiMDIParentFrame>(doc, view, parent.get(), wxID_ANY, "Child"));
-
-    wxMenu* const menuChild = CreateTestMenu(child.get());
-
-    CHECK( parent->GetActiveChild() == child.get() );
-
-#ifdef __WXGTK__
-    // There are a lot of hacks related to child frame menu bar handling in
-    // wxGTK and, in particular, the code in src/gtk/mdi.cpp relies on getting
-    // idle events to really put everything in place. Moreover, as wxGTK uses
-    // GtkNotebook as its MDI pages container, the frame must be shown for all
-    // this to work as gtk_notebook_set_current_page() doesn't do anything if
-    // called for a hidden window (this incredible fact cost me quite some time
-    // to find empirically -- only to notice its confirmation in GTK+
-    // documentation immediately afterwards). So just do whatever it takes to
-    // make things work "as usual".
-    child->Show();
-    parent->Show();
-    wxYield();
-#endif // __WXGTK__
-
-    TestEvtSink sinkDoc('d');
-    doc->Connect(wxEVT_MENU,
-                 wxEventHandler(TestEvtSink::Handle), nullptr, &sinkDoc);
-
-    TestEvtSink sinkView('v');
-    view->Connect(wxEVT_MENU,
-                  wxEventHandler(TestEvtSink::Handle), nullptr, &sinkView);
-
-    TestEvtSink sinkChild('c');
-    child->Connect(wxEVT_MENU,
-                   wxEventHandler(TestEvtSink::Handle), nullptr, &sinkChild);
-
-    // Check that wxDocument, wxView, wxDocManager, child frame and the parent
-    // get the event in order.
-#if wxUSE_UIACTIONSIMULATOR
-    // We use wxUIActionSimulator instead of ASSERT_MENU_EVENT_RESULT because
-    // using the latter fails with wxQt on Linux.
-    wxUnusedVar(menuChild);
-    g_str.clear();
-
-    wxUIActionSimulator sim;
-    sim.Char('m', wxMOD_ALT);
-    // N.B.: Don't call wxYield() here, as this will cause the menu to appear
-    // immediately (and enter its internal message loop) and the next line will
-    // never be executed under wxMSW. In other words, the execution would block
-    // indefinitely.
-    sim.Char('a');
-    wxYield();
-
-    CHECK( g_str == "advmcpA" );
-#else // !wxUSE_UIACTIONSIMULATOR
-    ASSERT_MENU_EVENT_RESULT( menuChild, "advmcpA" );
-#endif // wxUSE_UIACTIONSIMULATOR
-
-#if wxUSE_TOOLBAR
-    // Also check that toolbar events get forwarded to the active child.
-    wxToolBar* const tb = parent->CreateToolBar(wxTB_NOICONS);
-    tb->AddTool(wxID_APPLY, "Apply", wxNullBitmap);
-    tb->Realize();
-
-    // As in CheckMenuEvent(), use toolbar method actually sending the event
-    // instead of bothering with wxUIActionSimulator which would have been
-    // trickier.
-    g_str.clear();
-    tb->OnLeftClick(wxID_APPLY, true /* doesn't matter */);
-
-    CPPUNIT_ASSERT_EQUAL( "advmcpA", g_str );
-#endif // wxUSE_TOOLBAR
-}
-#endif // wxUSE_AUI
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 
 #if wxUSE_UIACTIONSIMULATOR
