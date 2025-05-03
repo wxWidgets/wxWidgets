@@ -454,7 +454,7 @@ void wxWindowQt::PostCreation(bool generic)
     // (only for generic controls, to use qt defaults elsewere)
     if (generic)
         QtSetBackgroundStyle();
-    else
+    else if (m_backgroundStyle != wxBG_STYLE_TRANSPARENT)
         SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
 //    // Use custom Qt window flags (allow to turn on or off
