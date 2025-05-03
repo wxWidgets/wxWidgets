@@ -390,6 +390,10 @@ public:
         This can be useful to display a cursor as it cannot be drawn directly
         on a window.
 
+        @note This constructor creates invalid bitmap in wxGTK when using
+            Wayland as there is no way to retrieve the cursor bitmap under this
+            platform.
+
         @param cursor A valid wxCursor.
 
         @since 3.1.0
