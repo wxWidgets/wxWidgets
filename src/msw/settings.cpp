@@ -299,6 +299,29 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* win)
         return blinkTime;
     }
 
+    // Avoid using SM_C[XY]CURSOR: these are legacy values preserved only for
+    // compatibility and don't actually describe the current cursor size.
+    if ( index == wxSYS_CURSOR_X || index == wxSYS_CURSOR_Y )
+    {
+        wxRegKey rk(wxRegKey::HKCU, "Control Panel\\Cursors");
+        constexpr char CURSOR_SIZE[] = "CursorBaseSize";
+        if ( rk.Exists() && rk.HasValue(CURSOR_SIZE) )
+        {
+            // We expect the base cursor size to be a multiple of 16 between 32
+            // and 256, so check at least the first part (maybe even bigger
+            // cursors will be allowed in the future...) before using it.
+            long value = -1;
+            if ( rk.QueryValue(CURSOR_SIZE, &value) && !(value % 16) )
+            {
+                // The value in the registry doesn't depend on the current DPI,
+                // so scale it accordingly.
+                return wxWindow::FromDIP(value, win);
+            }
+        }
+        //else: If we failed to get the value from the registry, fall back to
+        //      the old method.
+    }
+
     int indexMSW = gs_metricsMap[index];
     if ( indexMSW == -1 )
     {
