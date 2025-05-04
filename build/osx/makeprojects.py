@@ -105,7 +105,7 @@ def makeProject(projectName, conditions):
     populateProject(projectFile + "/project.pbxproj", fileGroups, nodes)
     processFile(projectFile + "/project.pbxproj")
 
-osxBuildFolder = os.getcwd()
+osxBuildFolder = os.path.dirname(os.path.realpath(__file__))
 
 makeProject("wxcocoa", ["PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_COCOA'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"])
 makeProject("wxiphone", ["PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_IPHONE'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"])
