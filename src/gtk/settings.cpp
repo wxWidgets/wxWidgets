@@ -18,6 +18,7 @@
     #include "wx/module.h"
 #endif
 
+#include "wx/display.h"
 #include "wx/fontutil.h"
 #include "wx/fontenum.h"
 
@@ -1242,7 +1243,15 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
                 g_object_get(GetSettingsForWindowScreen(window),
                                 "gtk-cursor-theme-size", &cursor_size, nullptr);
                 if (cursor_size)
-                    return cursor_size;
+                {
+                    // Cursor size should be expressed in physical pixels, as
+                    // it is similar to a bitmap size, so we need to scale it
+                    // by the DPI scaling factor.
+                    double scale = window ? win->GetDPIScaleFactor()
+                                          : wxDisplay().GetScaleFactor();
+
+                    return wxRound(cursor_size * scale);
+                }
 
                 return gdk_display_get_default_cursor_size(
                             window ? gdk_window_get_display(window)

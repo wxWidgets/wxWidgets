@@ -152,8 +152,8 @@ enum wxSystemMetric
     wxSYS_MOUSE_BUTTONS,      //!< Number of buttons on mouse, or zero if no mouse was installed.
     wxSYS_BORDER_X,           //!< Width of single border.
     wxSYS_BORDER_Y,           //!< Height of single border.
-    wxSYS_CURSOR_X,           //!< Width of cursor.
-    wxSYS_CURSOR_Y,           //!< Height of cursor.
+    wxSYS_CURSOR_X,           //!< Width of cursor in physical pixels.
+    wxSYS_CURSOR_Y,           //!< Height of cursor in physical pixels.
     wxSYS_DCLICK_X,           //!< Width in pixels of rectangle within which two successive mouse clicks must fall to generate a double-click.
     wxSYS_DCLICK_Y,           //!< Height in pixels of rectangle within which two successive mouse clicks must fall to generate a double-click.
     wxSYS_DRAG_X,             //!< Width in pixels of a rectangle centered on a drag point to allow for limited movement of the mouse pointer before a drag operation begins.
