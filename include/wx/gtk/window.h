@@ -364,10 +364,23 @@ public:
     // find the direction of the given scrollbar (must be one of ours)
     ScrollDir ScrollDirFromRange(GtkRange *range) const;
 
-    void GTKUpdateCursor(
-        bool isBusyOrGlobalCursor = false,
-        bool isRealize = false,
-        const wxCursor* overrideCursor = nullptr);
+    // Set the given cursor for the window.
+    void GTKSetCursor(const wxCursor& cursor);
+
+    // Apply the current cursor: called initially, after realizing the window,
+    // but may also called later after temporarily changing the cursor.
+    void GTKApplyCursor();
+
+    // Update the cursor for the window, taking into account the currently set
+    // global cursor, if any.
+    void GTKUpdateCursor();
+
+    // This overload can be used if we already know whether there is a globally
+    // set cursor overriding the normal one, it's just an optimization allowing
+    // to avoid checking for such cursor existence inside GTKUpdateCursor()
+    // itself.
+    void GTKUpdateCursor(GdkCursor* overrideCursor);
+
 
     // extra (wxGTK-specific) flags
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
@@ -378,7 +391,7 @@ public:
                                                 // chain needs update
     bool                 m_mouseButtonDown:1;
     bool                 m_showOnIdle:1;        // postpone showing the window until idle
-    bool m_needCursorReset:1;
+    bool                 m_needCursorReset:1;   // true if cursor set by wxEVT_SET_CURSOR
 
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
 
@@ -494,6 +507,11 @@ private:
     // are already at the end)
     bool DoScrollByUnits(ScrollDir dir, ScrollUnit unit, int units);
     virtual void AddChildGTK(wxWindowGTK* child);
+
+    // Set the given (possibly null) cursor for all GdkWindows of this window.
+    //
+    // Return all windows for which we changed the cursor (may be empty).
+    wxArrayGdkWindows GTKSetCursorForAllWindows(GdkCursor* cursor);
 
 #ifdef __WXGTK3__
     // paint context is stashed here so wxPaintDC can use it

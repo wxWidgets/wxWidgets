@@ -666,7 +666,7 @@ extern "C" {
 static void state_flags_changed(GtkWidget*, GtkStateFlags, wxTextCtrl* win)
 {
     // restore non-default cursor, if any
-    win->GTKUpdateCursor(false, true);
+    win->GTKApplyCursor();
 }
 }
 #endif // __WXGTK3__

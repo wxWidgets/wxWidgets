@@ -215,6 +215,7 @@ bool g_blockEventsOnDrag;
 // Don't allow mouse event propagation during scroll
 bool g_blockEventsOnScroll;
 extern wxCursor g_globalCursor;
+extern wxCursor g_busyCursor;
 
 // mouse capture state: the window which has it and if the mouse is currently
 // inside it
@@ -1985,7 +1986,7 @@ static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
 
         if (w->GTKProcessEvent(event))
         {
-            win->GTKUpdateCursor(false, false, &event.GetCursor());
+            win->GTKSetCursor(event.GetCursor());
             win->m_needCursorReset = true;
             return;
         }
@@ -2745,7 +2746,7 @@ void wxWindowGTK::GTKHandleRealized()
     event.SetEventObject( this );
     GTKProcessEvent( event );
 
-    GTKUpdateCursor(false, true);
+    GTKApplyCursor();
 }
 
 void wxWindowGTK::GTKHandleUnrealize()
@@ -5399,6 +5400,67 @@ void wxWindowGTK::Lower()
     }
 }
 
+// ----------------------------------------------------------------------------
+// Cursor stuff
+// ----------------------------------------------------------------------------
+
+// Return non-null pointer if there some globally set cursor overriding all the
+// other ones.
+static GdkCursor* wxGetOverrideCursor(wxWindowGTK* w)
+{
+    if (g_globalCursor.IsOk())
+        return g_globalCursor.GetCursor();
+
+    if (wxIsBusy())
+    {
+        wxWindow* win = wxGetTopLevelParent(w);
+        if (win && win->m_widget && !gtk_window_get_modal(GTK_WINDOW(win->m_widget)))
+            return g_busyCursor.GetCursor();
+    }
+
+    return nullptr;
+}
+
+wxArrayGdkWindows wxWindowGTK::GTKSetCursorForAllWindows(GdkCursor* cursor)
+{
+    wxArrayGdkWindows changed;
+
+    wxArrayGdkWindows windows;
+    GdkWindow* window = GTKGetWindow(windows);
+    if (window)
+    {
+        gdk_window_set_cursor(window, cursor);
+        changed.push_back(window);
+    }
+    else
+    {
+        for (size_t i = windows.size(); i--;)
+        {
+            window = windows[i];
+            if (window)
+            {
+                gdk_window_set_cursor(window, cursor);
+                changed.push_back(window);
+            }
+        }
+    }
+
+    return changed;
+}
+
+void wxWindowGTK::GTKSetCursor(const wxCursor& cursor)
+{
+    if (wxGetOverrideCursor(this))
+    {
+        GTKSetCursorForAllWindows(nullptr);
+        return;
+    }
+
+    GdkCursor* const gcursor = cursor.GetCursor();
+    if (gcursor)
+        GTKSetCursorForAllWindows(gcursor);
+}
+
 bool wxWindowGTK::SetCursor( const wxCursor &cursor )
 {
     if (!wxWindowBase::SetCursor(cursor))
@@ -5409,47 +5471,39 @@ bool wxWindowGTK::SetCursor( const wxCursor &cursor )
     return true;
 }
 
-void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize, const wxCursor* overrideCursor)
+void wxWindowGTK::GTKApplyCursor()
+{
+    m_needCursorReset = false;
+
+    GTKSetCursor(m_cursor);
+}
+
+void wxWindowGTK::GTKUpdateCursor()
+{
+    GTKUpdateCursor(wxGetOverrideCursor(this));
+}
+
+void wxWindowGTK::GTKUpdateCursor(GdkCursor* overrideCursor)
 {
     m_needCursorReset = false;
 
     if (m_widget == nullptr || !gtk_widget_get_realized(m_widget))
         return;
 
-    // if we don't already know there is a busy/global cursor, we have to check for one
-    if (!isBusyOrGlobalCursor)
-    {
-        if (g_globalCursor.IsOk())
-            isBusyOrGlobalCursor = true;
-        else if (wxIsBusy())
-        {
-            wxWindow* win = wxGetTopLevelParent(static_cast<wxWindow*>(this));
-            if (win && win->m_widget && !gtk_window_get_modal(GTK_WINDOW(win->m_widget)))
-                isBusyOrGlobalCursor = true;
-        }
-    }
-    GdkCursor* cursor = nullptr;
-    if (!isBusyOrGlobalCursor)
-        cursor = (overrideCursor ? *overrideCursor : m_cursor).GetCursor();
+    // Globally set cursor overrides all the other ones.
+    if (overrideCursor)
+        return;
 
-    GdkWindow* window = nullptr;
-    if (cursor || isBusyOrGlobalCursor || !isRealize)
-    {
-        wxArrayGdkWindows windows;
-        window = GTKGetWindow(windows);
-        if (window)
-            gdk_window_set_cursor(window, cursor);
-        else
-        {
-            for (size_t i = windows.size(); i--;)
-            {
-                window = windows[i];
-                if (window)
-                    gdk_window_set_cursor(window, cursor);
-            }
-        }
-    }
-    if (window && cursor == nullptr && m_wxwindow == nullptr && !isBusyOrGlobalCursor && !isRealize)
+    GdkCursor* const cursor = m_cursor.GetCursor();
+
+    const wxArrayGdkWindows& windows = GTKSetCursorForAllWindows(cursor);
+
+    // We don't need to do anything else if we set a valid cursor or if this is
+    // not a native widget.
+    if (cursor || m_wxwindow)
+        return;
+
+    for (auto* window : windows)
     {
         void* data;
         gdk_window_get_user_data(window, &data);

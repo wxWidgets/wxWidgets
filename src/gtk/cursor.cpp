@@ -368,13 +368,13 @@ const wxCursor wxBusyCursor::GetBusyCursor()
     return g_busyCursor;
 }
 
-static void UpdateCursors(wxWindow* win, bool isBusyOrGlobalCursor)
+static void UpdateCursors(wxWindow* win, GdkCursor* globalCursor)
 {
-    win->GTKUpdateCursor(isBusyOrGlobalCursor);
+    win->GTKUpdateCursor(globalCursor);
     const wxWindowList& children = win->GetChildren(); 
     wxWindowList::const_iterator i = children.begin();
     for (size_t n = children.size(); n--; ++i)
-        UpdateCursors(*i, isBusyOrGlobalCursor);
+        UpdateCursors(*i, globalCursor);
 }
 
 static void SetGlobalCursor(const wxCursor& cursor)
@@ -389,7 +389,7 @@ static void SetGlobalCursor(const wxCursor& cursor)
         if (win->m_widget && (window = gtk_widget_get_window(win->m_widget)))
         {
             gdk_window_set_cursor(window, gdk_cursor);
-            UpdateCursors(win, gdk_cursor != nullptr);
+            UpdateCursors(win, gdk_cursor);
             if (display == nullptr)
                 display = gdk_window_get_display(window);
         }

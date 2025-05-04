@@ -41,6 +41,7 @@ private:
     void OnPaint(wxPaintEvent& event);
     void OnMouseLeftDown(wxMouseEvent& event);
     void OnMouseLeftUp(wxMouseEvent& event);
+    void OnSetCursor(wxSetCursorEvent& event);
 
     virtual wxSize DoGetBestClientSize() const override;
 };
@@ -55,6 +56,7 @@ ChessBoard::ChessBoard(wxWindow* parent)
     Bind(wxEVT_PAINT, &ChessBoard::OnPaint, this);
     Bind(wxEVT_LEFT_DOWN, &ChessBoard::OnMouseLeftDown, this);
     Bind(wxEVT_LEFT_UP, &ChessBoard::OnMouseLeftUp, this);
+    Bind(wxEVT_SET_CURSOR, &ChessBoard::OnSetCursor, this);
 }
 
  bool ChessBoard::ConvertMousePosToFileAndRank(const wxPoint& pos,
@@ -161,6 +163,22 @@ void ChessBoard::OnMouseLeftUp(wxMouseEvent& event)
     }
 
     ProcessWindowEvent(chessBoardEvent);
+}
+
+void ChessBoard::OnSetCursor(wxSetCursorEvent& event)
+{
+    char file;
+    wxUint8 rank;
+
+    if ( !ConvertMousePosToFileAndRank(event.GetPosition(), file, rank) )
+        return; // mouse cursor not on a square
+
+    // Set question cursor on white squares, just for testing: for the other
+    // ones we use our default (hand) cursor.
+    if ((file - 'a') % 2 == (rank % 2))
+        event.SetCursor(wxCursor(wxCURSOR_QUESTION_ARROW));
+    else
+        event.Skip();
 }
 
 wxSize ChessBoard::DoGetBestClientSize() const

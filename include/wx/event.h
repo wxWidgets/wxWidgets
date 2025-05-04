@@ -1948,6 +1948,7 @@ public:
           m_cursor(event.m_cursor)
         { }
 
+    wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
     wxCoord GetX() const { return m_x; }
     wxCoord GetY() const { return m_y; }
 
