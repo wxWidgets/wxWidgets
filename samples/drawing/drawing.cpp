@@ -127,6 +127,7 @@ public:
     void OnMouseDown(wxMouseEvent &event);
     void OnMouseUp(wxMouseEvent &event);
     void OnMouseCaptureLost(wxMouseCaptureLostEvent &event);
+    void OnSetCursor(wxSetCursorEvent &event);
 
     void ToShow(int show) { m_show = show; Refresh(); }
     int GetPage() { return m_show; }
@@ -203,6 +204,10 @@ private:
     bool         m_useBuffer;
     bool         m_showBBox;
     wxSize       m_sizeDIP;
+
+    // Filled by DrawCursors() with the rectangle demonstrating wxStockCursor
+    // value equal to the index in this vector.
+    std::vector<wxRect> m_cursorRects;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -602,6 +607,7 @@ wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_LEFT_DOWN (MyCanvas::OnMouseDown)
     EVT_LEFT_UP (MyCanvas::OnMouseUp)
     EVT_MOUSE_CAPTURE_LOST (MyCanvas::OnMouseCaptureLost)
+    EVT_SET_CURSOR(MyCanvas::OnSetCursor)
 wxEND_EVENT_TABLE()
 
 #include "smile.xpm"
@@ -1885,6 +1891,29 @@ void MyCanvas::DrawDatabaseColours(wxDC& dc)
     }
 }
 
+void MyCanvas::OnSetCursor(wxSetCursorEvent& event)
+{
+    // Only show cursors on the cursors screen.
+    if ( m_show != File_ShowCursors )
+    {
+        event.Skip();
+        return;
+    }
+
+    const wxPoint pos = event.GetPosition();
+    for ( int n = 0; n < wxSsize(m_cursorRects); ++n )
+    {
+        if ( m_cursorRects[n].Contains(pos) )
+        {
+            // Stock cursor IDs start from 1 as we don't count wxCURSOR_NONE.
+            event.SetCursor(wxCursor(static_cast<wxStockCursor>(n + 1)));
+            return;
+        }
+    }
+
+    event.Skip();
+}
+
 void MyCanvas::DrawCursors(wxDC& dc)
 {
     wxCoord x(FromDIP(10));
@@ -1895,6 +1924,63 @@ void MyCanvas::DrawCursors(wxDC& dc)
                                  wxSystemSettings::GetMetric(wxSYS_CURSOR_X, this),
                                  wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this)),
                 x, y);
+
+    const int w = FromDIP(200);
+    const int h = FromPhys(wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this));
+    const int margin = dc.GetCharWidth();
+
+    y += h;
+    dc.DrawText("Hover over a rectangle to see the corresponding stock cursor",
+                x, y);
+
+    static constexpr const char* stockNames[] =
+    {
+        "ARROW",
+        "RIGHT_ARROW",
+        "BULLSEYE",
+        "CHAR",
+        "CROSS",
+        "HAND",
+        "IBEAM",
+        "LEFT_BUTTON",
+        "MAGNIFIER",
+        "MIDDLE_BUTTON",
+        "NO_ENTRY",
+        "PAINT_BRUSH",
+        "PENCIL",
+        "POINT_LEFT",
+        "POINT_RIGHT",
+        "QUESTION_ARROW",
+        "RIGHT_BUTTON",
+        "SIZENESW",
+        "SIZENS",
+        "SIZENWSE",
+        "SIZEWE",
+        "SIZING",
+        "SPRAYCAN",
+        "WAIT",
+        "WATCH",
+        "BLANK",
+    };
+
+    y += h;
+
+    constexpr int stockNamesCount = WXSIZEOF(stockNames);
+    m_cursorRects.resize(stockNamesCount);
+    for ( int n = 0; n < stockNamesCount; ++n )
+    {
+        wxRect r(x, y, w, h);
+        if ( n % 2 )
+            y += h + margin;
+        else
+            r.x += w + margin;
+
+        m_cursorRects[n] = r;
+        dc.DrawRectangle(r);
+
+        r.x += margin;
+        dc.DrawLabel(stockNames[n], r, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+    }
 }
 
 void MyCanvas::DrawColour(wxDC& dc, const wxFont& mono, wxCoord x, const wxRect& r, const wxString& colourName, const wxColour& col)
