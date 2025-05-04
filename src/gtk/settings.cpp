@@ -1237,9 +1237,17 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
 
         case wxSYS_CURSOR_X:
         case wxSYS_CURSOR_Y:
+            {
+                gint cursor_size = 0;
+                g_object_get(GetSettingsForWindowScreen(window),
+                                "gtk-cursor-theme-size", &cursor_size, nullptr);
+                if (cursor_size)
+                    return cursor_size;
+
                 return gdk_display_get_default_cursor_size(
                             window ? gdk_window_get_display(window)
                                    : gdk_display_get_default());
+            }
 
         case wxSYS_DCLICK_X:
         case wxSYS_DCLICK_Y:
