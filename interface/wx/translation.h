@@ -11,7 +11,7 @@
 
     In wxWidgets, this class manages message catalogs which contain the
     translations of the strings used for the current language.
-    Unlike the deprecated wxLocale, it isn't bound to locale.
+    Unlike the (unadvised) wxLocale, it isn't bound to locale.
     It can be used either independently of, or in
     conjunction with wxLocale. In the latter case, you should initialize
     wxLocale (which creates the wxTranslations instance) first; in the former, you
