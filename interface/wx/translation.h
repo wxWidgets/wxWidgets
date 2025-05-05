@@ -9,12 +9,20 @@
 /**
     This class allows getting translations for strings.
 
-    In wxWidgets this class manages message catalogs which contain the
-    translations of the strings used to the current language. Unlike wxLocale,
-    it isn't bound to locale. It can be used either independently of, or in
+    In wxWidgets, this class manages message catalogs which contain the
+    translations of the strings used for the current language.
+    Unlike the deprecated wxLocale, it isn't bound to locale.
+    It can be used either independently of, or in
     conjunction with wxLocale. In the latter case, you should initialize
-    wxLocale (which creates wxTranslations instance) first; in the former, you
+    wxLocale (which creates the wxTranslations instance) first; in the former, you
     need to create a wxTranslations object and Set() it manually.
+
+    Likewise, it is also independent of wxUILocale. While calling
+    wxUILocale::UseDefault() can inform the program of how to format numbers and
+    such (see wxNumberFormatter), wxTranslations offers the ability to load
+    translations separate from the locale. In other words, the program
+    can respect the user's regional formatting while providing them a choice
+    different display languages.
 
     Only one wxTranslations instance is active at a time; it is set with the
     Set() method and obtained using Get().
