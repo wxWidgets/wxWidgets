@@ -88,6 +88,27 @@ public:
     wxCursor();
 
     /**
+        Constructs a cursor from the provided bitmap and hotspot position.
+
+        @param bitmap
+            The bitmap to use for the cursor, should be valid.
+        @param hotSpotX
+            Hotspot x coordinate (relative to the top left of the image).
+        @param hotSpotY
+            Hotspot y coordinate (relative to the top left of the image).
+
+        @since 3.3.0
+     */
+    wxCursor(const wxBitmap& bitmap, int hotSpotX = 0, int hotSpotY = 0);
+
+    /**
+        @overload
+
+        @since 3.3.0
+     */
+    wxCursor(const wxBitmap& bitmap, const wxPoint& hotSpot);
+
+    /**
         Constructs a cursor by passing a string resource name or filename.
 
         The arguments @a hotSpotX and @a hotSpotY are only used when there's no

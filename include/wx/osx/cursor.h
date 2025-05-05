@@ -18,6 +18,9 @@ class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 public:
     wxCursor();
 
+    wxCursor(const wxBitmap& bitmap, const wxPoint& hotSpot)
+        : wxCursor(bitmap, hotSpot.x, hotSpot.y) { }
+    wxCursor(const wxBitmap& bitmap, int hotSpotX = 0, int hotSpotY = 0);
 #if wxUSE_IMAGE
     wxCursor(const wxImage & image) ;
     wxCursor(const char* const* xpmData);
@@ -43,6 +46,7 @@ protected:
 
 private:
     void InitFromStock(wxStockCursor);
+    void InitFromBitmap(const wxBitmap& bitmap, int hotSpotX, int hotSpotY);
 
 #if wxUSE_IMAGE
     void InitFromImage(const wxImage & image) ;

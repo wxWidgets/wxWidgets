@@ -69,6 +69,12 @@ wxCursor::wxCursor()
 
 }
 
+wxCursor::wxCursor(const wxBitmap& WXUNUSED(bitmap),
+                   int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY))
+{
+    wxFAIL_MSG( "wxCursor creation from bitmaps not implemented" );
+}
+
 void wxCursor::InitFromStock( wxStockCursor cursorId )
 {
     m_refData = new wxCursorRefData();

@@ -2599,7 +2599,12 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::Cursor", "[image][cursor]")
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-    wxImage img = wxBitmap((const char*)xbm_horse, 32, 32).ConvertToImage();
+    wxBitmap bmp((const char*)xbm_horse, 32, 32);
+    REQUIRE( bmp.IsOk() );
+    wxCursor cursorFromBmp(bmp, 16, 23);
+    CHECK( cursorFromBmp.IsOk() );
+
+    wxImage img = bmp.ConvertToImage();
     REQUIRE( img.IsOk() );
     img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 16);
     img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 23);
