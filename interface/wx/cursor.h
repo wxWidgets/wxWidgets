@@ -121,6 +121,13 @@ public:
              int hotSpotX = 0, int hotSpotY = 0);
 
     /**
+        @overload
+
+        @since 3.3.0
+     */
+    wxCursor(const wxString& name, wxBitmapType type, const wxPoint& hotSpot);
+
+    /**
         Constructs a cursor using a cursor identifier.
 
         @param cursorId
