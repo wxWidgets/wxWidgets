@@ -88,40 +88,6 @@ public:
     wxCursor();
 
     /**
-        Constructs a cursor by passing an array of bits (XBM data).
-
-        The parameters @a fg and @a bg have an effect only on GTK+, and force
-        the cursor to use particular background and foreground colours.
-
-        @param bits
-            An array of XBM data bits.
-        @param width
-            Cursor width.
-        @param height
-            Cursor height.
-        @param hotSpotX
-            Hotspot x coordinate (relative to the top left of the image).
-        @param hotSpotY
-            Hotspot y coordinate (relative to the top left of the image).
-        @param maskBits
-            Bits for a mask bitmap.
-        @param fg
-            Foreground colour.
-        @param bg
-            Background colour.
-
-        @onlyfor{wxgtk}
-
-        @beginWxPerlOnly
-        In wxPerl use Wx::Cursor->newData(bits, width, height, hotSpotX = -1, hotSpotY = -1, maskBits = 0).
-        @endWxPerlOnly
-    */
-    wxCursor(const char bits[], int width, int height,
-             int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = nullptr,
-             const wxColour* fg = nullptr, const wxColour* bg = nullptr);
-
-    /**
         Constructs a cursor by passing a string resource name or filename.
 
         The arguments @a hotSpotX and @a hotSpotY are only used when there's no
@@ -198,6 +164,40 @@ public:
         though wxImage constructor from XPM is now @c explicit.
      */
     wxCursor(const char* const* xpmData);
+
+    /**
+        wxGTK-specific constructor from data in XBM format.
+
+        The parameters @a fg and @a bg have an effect only on GTK+, and force
+        the cursor to use particular background and foreground colours.
+
+        @param bits
+            An array of XBM data bits.
+        @param width
+            Cursor width.
+        @param height
+            Cursor height.
+        @param hotSpotX
+            Hotspot x coordinate (relative to the top left of the image).
+        @param hotSpotY
+            Hotspot y coordinate (relative to the top left of the image).
+        @param maskBits
+            Bits for a mask bitmap.
+        @param fg
+            Foreground colour.
+        @param bg
+            Background colour.
+
+        @onlyfor{wxgtk}
+
+        @beginWxPerlOnly
+        In wxPerl use Wx::Cursor->newData(bits, width, height, hotSpotX = -1, hotSpotY = -1, maskBits = 0).
+        @endWxPerlOnly
+    */
+    wxCursor(const char bits[], int width, int height,
+             int hotSpotX = -1, int hotSpotY = -1,
+             const char maskBits[] = nullptr,
+             const wxColour* fg = nullptr, const wxColour* bg = nullptr);
 
     /**
         Copy constructor, uses @ref overview_refcount "reference counting".
