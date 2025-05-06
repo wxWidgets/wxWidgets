@@ -32,7 +32,7 @@
     Note that this class is used by wxLocale internally; the use
     of wxLocale is, however, no longer recommended. Rather, it is recommended
     to use wxTranslations and wxUILocale together for managing translations
-    and regional settings. 
+    and regional settings.
 
     @since 2.9.1
 
