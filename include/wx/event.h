@@ -3076,7 +3076,6 @@ private:
  wxEVT_SYS_COLOUR_CHANGED
  */
 
-// TODO: shouldn't all events record the window ID?
 class WXDLLIMPEXP_CORE wxSysColourChangedEvent : public wxEvent
 {
 public:
