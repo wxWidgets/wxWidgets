@@ -56,8 +56,7 @@ public:
 
     // return the size of the standard cursor: notice that the system only
     // supports the cursors of this size
-    static wxCoord GetStandardWidth();
-    static wxCoord GetStandardHeight();
+    static wxSize GetStandardSize();
 
 private:
     bool m_destroyCursor;
@@ -106,16 +105,12 @@ public:
 // ----------------------------------------------------------------------------
 
 
-wxCoord wxCursorRefData::GetStandardWidth()
+wxSize wxCursorRefData::GetStandardSize()
 {
     const wxWindow* win = wxApp::GetMainTopWindow();
-    return wxSystemSettings::GetMetric(wxSYS_CURSOR_X, win);
-}
-
-wxCoord wxCursorRefData::GetStandardHeight()
-{
-    const wxWindow* win = wxApp::GetMainTopWindow();
-    return wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, win);
+    // Cursors are always square, so using just wxSYS_CURSOR_X is good enough.
+    const int size = wxSystemSettings::GetMetric(wxSYS_CURSOR_X, win);
+    return wxSize(size, size);
 }
 
 wxCursorRefData::wxCursorRefData(HCURSOR hcursor, bool destroy)
@@ -124,8 +119,9 @@ wxCursorRefData::wxCursorRefData(HCURSOR hcursor, bool destroy)
 
     if ( m_hCursor )
     {
-        m_width = GetStandardWidth();
-        m_height = GetStandardHeight();
+        const wxSize size = GetStandardSize();
+        m_width = size.x;
+        m_height = size.y;
     }
 
     m_destroyCursor = destroy;
@@ -183,35 +179,35 @@ void wxCursor::InitFromImage(const wxImage& image)
 {
     // image has to be of the standard cursor size, otherwise we won't be able
     // to create it
-    const int w = wxCursorRefData::GetStandardWidth();
-    const int h = wxCursorRefData::GetStandardHeight();
+    const wxSize cursorSize = wxCursorRefData::GetStandardSize();
 
     int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
     int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
-    int image_w = image.GetWidth();
-    int image_h = image.GetHeight();
+    const wxSize imageSize = image.GetSize();
 
-    wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < image_w &&
-                  hotSpotY >= 0 && hotSpotY < image_h,
+    wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < imageSize.x &&
+                  hotSpotY >= 0 && hotSpotY < imageSize.y,
                   wxT("invalid cursor hot spot coordinates") );
 
     wxImage imageSized(image); // final image of correct size
 
+    const wxSize diff = cursorSize - imageSize;
+
     // if image is too small then place it in the center, resize it if too big
-    if ((w > image_w) && (h > image_h))
+    if ((diff.x > 0) && (diff.y > 0))
     {
-        wxPoint offset((w - image_w)/2, (h - image_h)/2);
+        wxPoint offset(diff.x/2, diff.y/2);
         hotSpotX = hotSpotX + offset.x;
         hotSpotY = hotSpotY + offset.y;
 
-        imageSized = image.Size(wxSize(w, h), offset);
+        imageSized = image.Size(cursorSize, offset);
     }
-    else if ((w != image_w) || (h != image_h))
+    else if (diff != wxSize(0, 0))
     {
-        hotSpotX = int(hotSpotX * double(w) / double(image_w));
-        hotSpotY = int(hotSpotY * double(h) / double(image_h));
+        hotSpotX = int(hotSpotX * double(cursorSize.x) / double(imageSize.x));
+        hotSpotY = int(hotSpotY * double(cursorSize.y) / double(imageSize.y));
 
-        imageSized = image.Scale(w, h);
+        imageSized = image.Scale(cursorSize);
     }
 
     InitFromBitmap(imageSized, hotSpotX, hotSpotY);
