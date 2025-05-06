@@ -37,6 +37,8 @@
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h" // IDC_HAND
 
+#include "wx/private/rescale.h"
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -146,14 +148,14 @@ wxCursor::wxCursor()
 {
 }
 
-wxCursor::wxCursor(const wxBitmap& bitmap, int hotSpotX, int hotSpotY)
+wxCursor::wxCursor(const wxBitmap& bitmap, const wxPoint& hotSpot)
 {
-    InitFromBitmap(bitmap, hotSpotX, hotSpotY);
+    InitFromBitmap(bitmap, hotSpot);
 }
 
-void wxCursor::InitFromBitmap(const wxBitmap& bmp, int hotSpotX, int hotSpotY)
+void wxCursor::InitFromBitmap(const wxBitmap& bmp, const wxPoint& hotSpot)
 {
-    HCURSOR hcursor = wxBitmapToHCURSOR( bmp, hotSpotX, hotSpotY );
+    HCURSOR hcursor = wxBitmapToHCURSOR( bmp, hotSpot.x, hotSpot.y );
 
     if ( !hcursor )
     {
@@ -181,12 +183,15 @@ void wxCursor::InitFromImage(const wxImage& image)
     // to create it
     const wxSize cursorSize = wxCursorRefData::GetStandardSize();
 
-    int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
-    int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
+    wxPoint hotSpot
+            (
+                image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X),
+                image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y)
+            );
     const wxSize imageSize = image.GetSize();
 
-    wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < imageSize.x &&
-                  hotSpotY >= 0 && hotSpotY < imageSize.y,
+    wxASSERT_MSG( hotSpot.x >= 0 && hotSpot.x < imageSize.x &&
+                  hotSpot.y >= 0 && hotSpot.y < imageSize.y,
                   wxT("invalid cursor hot spot coordinates") );
 
     wxImage imageSized(image); // final image of correct size
@@ -197,20 +202,18 @@ void wxCursor::InitFromImage(const wxImage& image)
     if ((diff.x > 0) && (diff.y > 0))
     {
         wxPoint offset(diff.x/2, diff.y/2);
-        hotSpotX = hotSpotX + offset.x;
-        hotSpotY = hotSpotY + offset.y;
+        hotSpot += offset;
 
         imageSized = image.Size(cursorSize, offset);
     }
     else if (diff != wxSize(0, 0))
     {
-        hotSpotX = int(hotSpotX * double(cursorSize.x) / double(imageSize.x));
-        hotSpotY = int(hotSpotY * double(cursorSize.y) / double(imageSize.y));
+        hotSpot = wxRescaleCoord(hotSpot).From(imageSize).To(cursorSize);
 
         imageSized = image.Scale(cursorSize);
     }
 
-    InitFromBitmap(imageSized, hotSpotX, hotSpotY);
+    InitFromBitmap(imageSized, hotSpot);
 }
 #endif // wxUSE_IMAGE
 
