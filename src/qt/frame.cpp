@@ -205,7 +205,8 @@ void wxFrame::SetWindowStyleFlag( long style )
 
 QWidget* wxFrame::QtGetParentWidget() const
 {
-    return GetQMainWindow()->centralWidget();
+    // GetQMainWindow() always returns nullptr for MDI children
+    return GetQMainWindow() ? GetQMainWindow()->centralWidget() : GetHandle();
 }
 
 void wxFrame::AddChild( wxWindowBase *child )
@@ -226,7 +227,13 @@ void wxFrame::RemoveChild( wxWindowBase *child )
 // excluding any menubar and toolbar if any.
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
-    return wxQtConvertPoint( GetQMainWindow()->centralWidget()->pos() );
+    // GetQMainWindow() always returns nullptr for MDI children
+    if ( GetQMainWindow() )
+    {
+        return wxQtConvertPoint( GetQMainWindow()->centralWidget()->pos() );
+    }
+
+    return wxWindow::GetClientAreaOrigin();
 }
 
 QMainWindow *wxFrame::GetQMainWindow() const

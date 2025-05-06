@@ -138,14 +138,6 @@ public:
 
     virtual void SetWindowStyleFlag( long style ) override;
 
-protected:
-    virtual wxPoint GetClientAreaOrigin() const override
-    {
-        return wxWindow::GetClientAreaOrigin();
-    }
-
-    virtual QWidget* QtGetParentWidget() const override { return GetHandle(); }
-
 private:
     void AttachWindowMenuTo(wxMenuBar* attachedMenuBar, wxMenuBar* detachedMenuBar);
 
