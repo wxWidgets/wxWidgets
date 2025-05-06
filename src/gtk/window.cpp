@@ -1698,6 +1698,24 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
     return win;
 }
 
+#ifdef __WXGTK3__
+
+extern "C" {
+
+static void
+gtk_window_scale_factor_notify(GtkWidget* WXUNUSED(widget),
+                               GParamSpec* WXUNUSED(pspec),
+                               wxWindowGTK *win)
+{
+    // Window cursor may depend on the scale factor, so update it to reflect
+    // the new value.
+    win->WXUpdateCursor();
+}
+
+} // extern "C"
+
+#endif // __WXGTK3__
+
 // ----------------------------------------------------------------------------
 // common event handlers helpers
 // ----------------------------------------------------------------------------
@@ -4215,6 +4233,11 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_enter_callback), this);
     g_signal_connect (widget, "leave_notify_event",
                       G_CALLBACK (gtk_window_leave_callback), this);
+
+#ifdef __WXGTK3__
+    g_signal_connect (widget, "notify::scale-factor",
+                      G_CALLBACK (gtk_window_scale_factor_notify), this);
+#endif // __WXGTK3__
 }
 
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
@@ -5461,21 +5484,11 @@ void wxWindowGTK::GTKSetCursor(const wxCursor& cursor)
         GTKSetCursorForAllWindows(gcursor);
 }
 
-bool wxWindowGTK::SetCursor( const wxCursor &cursor )
-{
-    if (!wxWindowBase::SetCursor(cursor))
-        return false;
-
-    GTKUpdateCursor();
-
-    return true;
-}
-
 void wxWindowGTK::GTKApplyCursor()
 {
     m_needCursorReset = false;
 
-    GTKSetCursor(m_cursor);
+    GTKSetCursor(GetCursor());
 }
 
 void wxWindowGTK::GTKUpdateCursor()
@@ -5522,6 +5535,15 @@ void wxWindowGTK::GTKUpdateCursor(GdkCursor* overrideCursor)
             g_signal_emit(data, sig_id, 0, state);
         }
     }
+}
+
+void wxWindowGTK::WXUpdateCursor()
+{
+    // As GTKUpdateCursor() uses m_cursor, call the base class version to
+    // update it first.
+    wxWindowBase::WXUpdateCursor();
+
+    GTKUpdateCursor();
 }
 
 void wxWindowGTK::WarpPointer( int x, int y )

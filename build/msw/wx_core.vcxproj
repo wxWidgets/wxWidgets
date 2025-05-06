@@ -1726,6 +1726,7 @@
     <ClCompile Include="..\..\src\msw\overlay.cpp" />
     <ClCompile Include="..\..\src\msw\power.cpp" />
     <ClCompile Include="..\..\src\common\powercmn.cpp" />
+    <ClCompile Include="..\..\src\common\curbndl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">

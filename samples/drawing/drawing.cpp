@@ -205,8 +205,12 @@ private:
     bool         m_showBBox;
     wxSize       m_sizeDIP;
 
+    // A custom cursor used for demonstrating using it on the cursors page.
+    wxCursorBundle m_customCursor;
+
     // Filled by DrawCursors() with the rectangle demonstrating wxStockCursor
-    // value equal to the index in this vector.
+    // value equal to the index in this vector except for the index 0 which is
+    // used to show m_customCursor.
     std::vector<wxRect> m_cursorRects;
 
     wxDECLARE_EVENT_TABLE();
@@ -612,6 +616,9 @@ wxEND_EVENT_TABLE()
 
 #include "smile.xpm"
 
+#include "cursor.xpm"
+#include "cursor_2x.xpm"
+
 MyCanvas::MyCanvas(MyFrame *parent)
         : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                            wxHSCROLL | wxVSCROLL)
@@ -629,6 +636,10 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_useBuffer = false;
     m_showBBox = false;
     m_sizeDIP = wxSize(0, 0);
+
+    auto cursorBitmaps = wxBitmapBundle::FromBitmaps(wxBitmap(cursor_xpm),
+                                                     wxBitmap(cursor_2x_xpm));
+    m_customCursor = wxCursorBundle(cursorBitmaps, wxPoint(4, 4));
 
     Bind(wxEVT_SYS_COLOUR_CHANGED, [this](wxSysColourChangedEvent& event) {
         event.Skip();
@@ -1913,8 +1924,9 @@ void MyCanvas::OnSetCursor(wxSetCursorEvent& event)
     {
         if ( m_cursorRects[n].Contains(pos) )
         {
-            // Stock cursor IDs start from 1 as we don't count wxCURSOR_NONE.
-            event.SetCursor(wxCursor(static_cast<wxStockCursor>(n + 1)));
+            // First index is special, it corresponds to the custom cursor.
+            event.SetCursor(n == 0 ? m_customCursor.GetCursorFor(this)
+                                   : wxCursor(static_cast<wxStockCursor>(n)));
             return;
         }
     }
@@ -1924,25 +1936,9 @@ void MyCanvas::OnSetCursor(wxSetCursorEvent& event)
 
 void MyCanvas::DrawCursors(wxDC& dc)
 {
-    wxCoord x(FromDIP(10));
-    wxCoord y = x;
-
-    dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.DrawText(wxString::Format("System cursor size: %dx%d",
-                                 wxSystemSettings::GetMetric(wxSYS_CURSOR_X, this),
-                                 wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this)),
-                x, y);
-
-    const int w = FromDIP(200);
-    const int h = FromPhys(wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this));
-    const int margin = dc.GetCharWidth();
-
-    y += h;
-    dc.DrawText("Hover over a rectangle to see the corresponding stock cursor",
-                x, y);
-
     static constexpr const char* stockNames[] =
     {
+        "NONE", // not used, just to keep names and wxStockCursor IDs in sync
         "ARROW",
         "RIGHT_ARROW",
         "BULLSEYE",
@@ -1970,18 +1966,44 @@ void MyCanvas::DrawCursors(wxDC& dc)
         "WATCH",
         "BLANK",
     };
+    constexpr int stockNamesCount = WXSIZEOF(stockNames);
+    m_cursorRects.resize(stockNamesCount);
+
+    wxCoord x(FromDIP(10));
+    wxCoord y = x;
+
+    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.DrawText(wxString::Format("System cursor size: %dx%d",
+                                 wxSystemSettings::GetMetric(wxSYS_CURSOR_X, this),
+                                 wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this)),
+                x, y);
+
+    const int w = FromDIP(200);
+    const int h = FromPhys(wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this));
+    const int margin = dc.GetCharWidth();
+
+    y += h;
+    wxRect r(x, y, 2*w + margin, h);
+    m_cursorRects[0] = r;
+    dc.DrawRectangle(r);
+
+    r.x += margin;
+    dc.DrawLabel("Hover over this rectangle to see the custom cursor", r,
+                 wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+
+    y += h + margin;
+    dc.DrawText("Hover over a rectangle to see the corresponding stock cursor",
+                x, y);
 
     y += h;
 
-    constexpr int stockNamesCount = WXSIZEOF(stockNames);
-    m_cursorRects.resize(stockNamesCount);
-    for ( int n = 0; n < stockNamesCount; ++n )
+    for ( int n = 1; n < stockNamesCount; ++n )
     {
-        wxRect r(x, y, w, h);
+        r = wxRect(x, y, w, h);
         if ( n % 2 )
-            y += h + margin;
-        else
             r.x += w + margin;
+        else
+            y += h + margin;
 
         m_cursorRects[n] = r;
         dc.DrawRectangle(r);

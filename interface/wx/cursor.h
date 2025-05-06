@@ -18,6 +18,13 @@
     some lengthy operation is in progress and wxBusyCursor can be used for
     this.
 
+    Because a custom cursor of a fixed size would look either inappropriately
+    big in standard resolution or too small in high resolution, wxCursorBundle
+    class allows to define a set of cursors of different sizes, letting
+    wxWidgets to automatically select the most appropriate one for the current
+    resolution and user's preferred cursor size. Using this class with
+    wxWindow::SetCursorBundle() is the recommended way to use custom cursors.
+
     @section cursor_custom Creating a Custom Cursor
 
     The following is an example of creating a cursor from 32x32 bitmap data
@@ -269,3 +276,103 @@ wxCursor* wxHOURGLASS_CURSOR;
 wxCursor* wxCROSS_CURSOR;
 ///@}
 
+/**
+    @class wxCursorBundle
+
+    A cursor bundle is a set of different versions of the same cursor at
+    different sizes.
+
+    This class relationship with wxCursor is similar to that of wxBitmapBundle
+    with wxBitmap, but it has a simpler interface because cursors are never
+    scaled and always use the closest available size. It is typically used like
+    the following:
+
+    @code
+    MyFrame::MyFrame()
+    {
+        SetCursorBundle(wxCursorBundle(wxBitmapBundle::FromResources("mycursor"),
+                                       wxPoint(1, 1)));
+    }
+    @endcode
+
+    Please see wxBitmapBundle documentation for more information about
+    different ways of creating it.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @since 3.3.0
+ */
+class wxCursorBundle
+{
+public:
+    /**
+        Default ctor constructs an empty bundle.
+
+        Such bundle represents the absence of any custom cursor but not an
+        empty cursor (::wxCURSOR_BLANK can be used if this is really needed).
+
+        You can use the assignment operator to set the bundle contents later.
+     */
+    wxCursorBundle();
+
+    /**
+        Create a cursor bundle from the given bitmap bundle.
+
+        @param bitmaps
+            The bitmap bundle to use for the cursor, typically containing
+            bitmap in at least two sizes.
+        @param hotSpot
+            Hotspot coordinates (relative to the top left of the image).
+            The coordinates are relative to the default size of the bitmap
+            bundle and are scaled by wxWidgets for other sizes.
+     */
+    explicit wxCursorBundle(const wxBitmapBundle& bitmaps,
+                            const wxPoint& hotSpot);
+
+    /// @overload
+    explicit wxCursorBundle(const wxBitmapBundle& bitmaps,
+                            int hotSpotX = 0, int hotSpotY = 0);
+
+    /**
+        Copy constructor performs a shallow copy of the bundle.
+
+        This operation is cheap as it doesn't copy any bitmaps.
+     */
+    wxCursorBundle(const wxCursorBundle& other);
+
+    /**
+        Assignment operator performs a shallow copy of the bundle.
+
+        This operation is cheap as it doesn't copy any bitmaps.
+     */
+    wxCursorBundle& operator=(const wxCursorBundle& other);
+
+    /**
+        Check if cursor bundle is non-empty.
+     */
+    bool IsOk() const;
+
+    /**
+        Clear the bundle contents.
+
+        IsOk() will return false after doing this.
+
+        Use the assignment operator to set the bundle contents later.
+     */
+    void Clear();
+
+    /**
+        Get the cursor of the size suitable for the given window.
+     */
+    wxCursor GetCursorFor(const wxWindow* window) const;
+
+    /**
+        Check if two objects refer to the same bundle.
+
+        Note that this compares the object identity, i.e. this function returns
+        @true only for copies of the same bundle, but @false for two bundles
+        created from the same bitmap bundle and same hotspot coordinates.
+     */
+    bool IsSameAs(const wxCursorBundle& other) const;
+};

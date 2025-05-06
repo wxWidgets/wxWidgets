@@ -90,7 +90,6 @@ public:
 
     virtual bool SetBackgroundColour( const wxColour &colour ) override;
     virtual bool SetForegroundColour( const wxColour &colour ) override;
-    virtual bool SetCursor( const wxCursor &cursor ) override;
     virtual bool SetFont( const wxFont &font ) override;
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) override ;
@@ -381,6 +380,8 @@ public:
     // itself.
     void GTKUpdateCursor(GdkCursor* overrideCursor);
 
+    // Override the base class function to call GTKUpdateCursor() too.
+    virtual void WXUpdateCursor() override;
 
     // extra (wxGTK-specific) flags
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing

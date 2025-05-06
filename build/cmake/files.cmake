@@ -929,6 +929,7 @@ set(GUI_CMN_SRC
     src/common/bmpbndl.cpp
     src/generic/bmpsvg.cpp
     src/common/powercmn.cpp
+    src/common/curbndl.cpp
 )
 
 set(GUI_CMN_HDR

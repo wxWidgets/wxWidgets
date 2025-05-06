@@ -771,6 +771,7 @@ GUI_CMN_SRC =
     src/common/cshelp.cpp
     src/common/ctrlcmn.cpp
     src/common/ctrlsub.cpp
+    src/common/curbndl.cpp
     src/common/datavcmn.cpp
     src/common/dcbase.cpp
     src/common/dcbufcmn.cpp
