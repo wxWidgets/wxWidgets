@@ -84,25 +84,39 @@ public:
         // user may increase the cursor size even in standard DPI, so get the
         // size that we need (or rather just one of its components as cursors
         // are always square anyhow).
-        const double
+        const int
             h = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, window);
+
+        // Check if we can reuse the last returned cursor.
+        if ( h == m_lastCursorSize )
+            return m_lastCursor;
 
         const wxSize
             sizeDef = m_bitmaps.GetDefaultSize();
 
         const wxSize
-            size = m_bitmaps.GetPreferredBitmapSizeAtScale(h / sizeDef.y);
+            size = m_bitmaps.GetPreferredBitmapSizeAtScale(double(h) / sizeDef.y);
 
         const wxPoint
             hotSpot = wxRescaleCoord(m_hotSpot).From(sizeDef).To(size);
 
-        return wxCursor(m_bitmaps.GetBitmap(size), hotSpot);
+        m_lastCursor = wxCursor(m_bitmaps.GetBitmap(size), hotSpot);
+        m_lastCursorSize = h;
+
+        return m_lastCursor;
     }
 
 private:
     const wxBitmapBundle m_bitmaps;
 
     const wxPoint m_hotSpot;
+
+    // Cache the last returned cursor: at least in wxMSW we don't always keep
+    // it alive and just use its handle, which would become invalid if it is
+    // destroyed too soon.
+    mutable wxCursor m_lastCursor;
+
+    mutable int m_lastCursorSize = 0;
 };
 
 } // anonymous namespace
