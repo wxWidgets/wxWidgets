@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-08 16:44+0100\n"
-"PO-Revision-Date: 2023-02-08 12:20+0100\n"
-"Last-Translator: Miguel Giménez <tecnico@solener.com>\n"
+"PO-Revision-Date: 2025-05-05 20:11-0400\n"
+"Last-Translator: Blake Madden\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: ../include/wx/defs.h:2596
 msgid "All files (*.*)|*.*"
@@ -1331,26 +1331,25 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" Y además, el archivo de configuración existente fue renombrado a \"%s\" y "
+"no se pudo volver a nombrar, por favor cámbiele el nombre a su ruta original "
+"\"%s\""
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "E incluye los siguientes archivos:\n"
+msgstr " debido al siguiente error:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Falló la lectura del archivo de texto  '%s'."
+msgstr "no se pudo cambiar el nombre del archivo existente"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Error al obtener el directorio de trabajo"
+msgstr "no se pudo crear el nuevo directorio de archivos"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "No se pudo cambiar el nivel moderno de emuilación web"
+msgstr "no se pudo mover el archivo a la nueva ubicación"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1411,9 +1410,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "Un nombre de entrada de configuración no puede empezar por «%c»."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Fallo creando el objeto de configuración de fuente."
+msgstr "Error al crear la carpeta de configuración del archivo."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -2469,9 +2467,8 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: error al escribir la imagen."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: error al guardar la imagen."
+msgstr "TIFF: Error al vaciar los datos."
 
 #: ../src/common/init.cpp:173
 #, c-format
@@ -3957,9 +3954,9 @@ msgid ""
 msgstr "No hay espacio suficiente en el disco para la descarga."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "No se pudo crear un nombre temporal de archivo"
+msgstr "No se pudo crear un archivo temporal en %s"
 
 #: ../src/common/webrequest_curl.cpp:1075
 msgid "libcurl could not be initialized"
@@ -3975,9 +3972,9 @@ msgid "Error running JavaScript: %s"
 msgstr "Error ejecutando JavaScript: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Falló la creación del directorio «%s»"
+msgstr "No se pudo establecer el proxy «%s»: %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
@@ -3986,18 +3983,16 @@ msgid ""
 msgstr ""
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "No se pudo inicializar libnotify."
+msgstr "No se pudo inicializar Chromium"
 
 #: ../src/common/webview_chromium.cpp:1617
 msgid "Show DevTools"
 msgstr ""
 
 #: ../src/common/webview_chromium.cpp:1618
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Cerrar Todo"
+msgstr "Cerrar DevTools"
 
 #: ../src/common/webview_chromium.cpp:1624
 msgid "Inspect"
@@ -4412,9 +4407,8 @@ msgid ""
 msgstr ""
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "PCX: imagen no válida"
+msgstr "Fecha no válida"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4833,14 +4827,13 @@ msgid ""
 msgstr ""
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Esquina"
+msgstr "Esquina de la cuadrícula"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Columna %u"
+msgstr "Encabezado de Columna %s"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
@@ -4848,14 +4841,14 @@ msgid "Row %s Header"
 msgstr ""
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Columna %u"
+msgstr "Columna %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "Fila %i"
+msgstr "Fila %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
@@ -5255,9 +5248,9 @@ msgid "Custom size"
 msgstr "Tamaño personalizado"
 
 #: ../src/gtk/print.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Error al imprimir: "
+msgstr "Error al imprimir: %s"
 
 #: ../src/gtk/print.cpp:813
 msgid "Page Setup"
@@ -5990,7 +5983,7 @@ msgstr ""
 
 #: ../src/msw/filedlg.cpp:1234
 msgid "Security warning"
-msgstr ""
+msgstr "Advertencia de seguridad"
 
 #: ../src/msw/filedlg.cpp:1525
 #, c-format
@@ -9285,9 +9278,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "Error de parseo de XML: '%s' en la línea %d"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "Página %d"
+msgstr "Página %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
