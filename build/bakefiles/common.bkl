@@ -774,7 +774,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     </template>
 
     <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'"
-              template_append="wx_3rdparty_includes_base">
+              template="wx_3rdparty_includes_base">
         <include>$(INC_TIFF_BUILD)</include>
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
