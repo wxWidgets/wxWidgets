@@ -8,18 +8,15 @@
 /**
     @class wxCursor
 
-    A cursor is a small bitmap usually used for denoting where the mouse
-    pointer is, with a picture that might indicate the interpretation of a
-    mouse click. As with icons, cursors in X and MS Windows are created in a
-    different manner. Therefore, separate cursors will be created for the
-    different environments. Platform-specific methods for creating a wxCursor
-    object are catered for, and this is an occasion where conditional
-    compilation will probably be required (see wxIcon for an example).
+    A cursor is a small bitmap used for denoting where the mouse pointer is,
+    with a picture that indicates the point of a mouse click.
 
-    A single cursor object may be used in many windows (any subwindow type).
-    The wxWidgets convention is to set the cursor for a window, as in X, rather
-    than to set it globally as in MS Windows, although a global wxSetCursor()
-    function is also available for MS Windows use.
+    A cursor may be associated either with the given window (and all its
+    children, unless any of them defines its own cursor) using
+    wxWindow::SetCursor(), or set globally using wxSetCursor(). It is also
+    common to temporarily change the cursor to a "busy cursor" indicating that
+    some lengthy operation is in progress and wxBusyCursor can be used for
+    this.
 
     @section cursor_custom Creating a Custom Cursor
 
