@@ -73,6 +73,11 @@ wxCursor::wxCursor()
 {
 }
 
+wxCursor::wxCursor(const wxBitmap& bitmap, int hotSpotX, int hotSpotY)
+{
+    InitFromBitmap(bitmap, hotSpotX, hotSpotY);
+}
+
 wxCursor::wxCursor(const wxString& cursor_file,
                    wxBitmapType type,
                    int hotSpotX, int hotSpotY)
@@ -108,15 +113,26 @@ wxCursor::wxCursor(const char bits[], int width, int height,
                    int hotSpotX, int hotSpotY,
                    const char maskBits[], const wxColour *fg, const wxColour *bg)
 {
+    wxBitmap bitmap(bits, width, height);
+    if (maskBits)
+        bitmap.SetMask(new wxMask(wxBitmap(maskBits, width, height), *wxWHITE));
+
+    InitFromBitmap(bitmap, hotSpotX, hotSpotY, fg, bg);
+}
+
+void
+wxCursor::InitFromBitmap(const wxBitmap& bitmap, int hotSpotX, int hotSpotY,
+                         const wxColour *fg, const wxColour *bg)
+{
+    const int width = bitmap.GetWidth();
+    const int height = bitmap.GetHeight();
+
     m_refData = new wxCursorRefData;
     if (hotSpotX < 0 || hotSpotX >= width)
         hotSpotX = 0;
     if (hotSpotY < 0 || hotSpotY >= height)
         hotSpotY = 0;
 #ifdef __WXGTK3__
-    wxBitmap bitmap(bits, width, height);
-    if (maskBits)
-        bitmap.SetMask(new wxMask(wxBitmap(maskBits, width, height), *wxWHITE));
     GdkPixbuf* pixbuf = bitmap.GetPixbuf();
     if ((fg && *fg != *wxBLACK) || (bg && *bg != *wxWHITE))
     {
@@ -152,24 +168,18 @@ wxCursor::wxCursor(const char bits[], int width, int height,
     M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf(
         gdk_window_get_display(wxGetTopLevelGDK()), pixbuf, hotSpotX, hotSpotY);
 #else
-    if (!maskBits)
-        maskBits = bits;
     if (!fg)
         fg = wxBLACK;
     if (!bg)
         bg = wxWHITE;
 
-    GdkBitmap* data = gdk_bitmap_create_from_data(
-        wxGetTopLevelGDK(), const_cast<char*>(bits), width, height);
-    GdkBitmap* mask = gdk_bitmap_create_from_data(
-        wxGetTopLevelGDK(), const_cast<char*>(maskBits), width, height);
+    wxBitmap mask(bitmap.GetMask() ? bitmap.GetMask()->GetBitmap() : bitmap);
 
     M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(
-                 data, mask, fg->GetColor(), bg->GetColor(),
+                 bitmap.GetPixmap(),
+                 mask.GetPixmap(),
+                 fg->GetColor(), bg->GetColor(),
                  hotSpotX, hotSpotY );
-
-    g_object_unref (data);
-    g_object_unref (mask);
 #endif
 }
 

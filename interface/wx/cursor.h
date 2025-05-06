@@ -88,38 +88,25 @@ public:
     wxCursor();
 
     /**
-        Constructs a cursor by passing an array of bits (XBM data).
+        Constructs a cursor from the provided bitmap and hotspot position.
 
-        The parameters @a fg and @a bg have an effect only on GTK+, and force
-        the cursor to use particular background and foreground colours.
-
-        @param bits
-            An array of XBM data bits.
-        @param width
-            Cursor width.
-        @param height
-            Cursor height.
+        @param bitmap
+            The bitmap to use for the cursor, should be valid.
         @param hotSpotX
             Hotspot x coordinate (relative to the top left of the image).
         @param hotSpotY
             Hotspot y coordinate (relative to the top left of the image).
-        @param maskBits
-            Bits for a mask bitmap.
-        @param fg
-            Foreground colour.
-        @param bg
-            Background colour.
 
-        @onlyfor{wxgtk}
+        @since 3.3.0
+     */
+    wxCursor(const wxBitmap& bitmap, int hotSpotX = 0, int hotSpotY = 0);
 
-        @beginWxPerlOnly
-        In wxPerl use Wx::Cursor->newData(bits, width, height, hotSpotX = -1, hotSpotY = -1, maskBits = 0).
-        @endWxPerlOnly
-    */
-    wxCursor(const char bits[], int width, int height,
-             int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = nullptr,
-             const wxColour* fg = nullptr, const wxColour* bg = nullptr);
+    /**
+        @overload
+
+        @since 3.3.0
+     */
+    wxCursor(const wxBitmap& bitmap, const wxPoint& hotSpot);
 
     /**
         Constructs a cursor by passing a string resource name or filename.
@@ -153,6 +140,13 @@ public:
     wxCursor(const wxString& cursorName,
              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
+
+    /**
+        @overload
+
+        @since 3.3.0
+     */
+    wxCursor(const wxString& name, wxBitmapType type, const wxPoint& hotSpot);
 
     /**
         Constructs a cursor using a cursor identifier.
@@ -198,6 +192,40 @@ public:
         though wxImage constructor from XPM is now @c explicit.
      */
     wxCursor(const char* const* xpmData);
+
+    /**
+        wxGTK-specific constructor from data in XBM format.
+
+        The parameters @a fg and @a bg have an effect only on GTK+, and force
+        the cursor to use particular background and foreground colours.
+
+        @param bits
+            An array of XBM data bits.
+        @param width
+            Cursor width.
+        @param height
+            Cursor height.
+        @param hotSpotX
+            Hotspot x coordinate (relative to the top left of the image).
+        @param hotSpotY
+            Hotspot y coordinate (relative to the top left of the image).
+        @param maskBits
+            Bits for a mask bitmap.
+        @param fg
+            Foreground colour.
+        @param bg
+            Background colour.
+
+        @onlyfor{wxgtk}
+
+        @beginWxPerlOnly
+        In wxPerl use Wx::Cursor->newData(bits, width, height, hotSpotX = -1, hotSpotY = -1, maskBits = 0).
+        @endWxPerlOnly
+    */
+    wxCursor(const char bits[], int width, int height,
+             int hotSpotX = -1, int hotSpotY = -1,
+             const char maskBits[] = nullptr,
+             const wxColour* fg = nullptr, const wxColour* bg = nullptr);
 
     /**
         Copy constructor, uses @ref overview_refcount "reference counting".

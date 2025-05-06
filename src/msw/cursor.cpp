@@ -150,6 +150,24 @@ wxCursor::wxCursor()
 {
 }
 
+wxCursor::wxCursor(const wxBitmap& bitmap, int hotSpotX, int hotSpotY)
+{
+    InitFromBitmap(bitmap, hotSpotX, hotSpotY);
+}
+
+void wxCursor::InitFromBitmap(const wxBitmap& bmp, int hotSpotX, int hotSpotY)
+{
+    HCURSOR hcursor = wxBitmapToHCURSOR( bmp, hotSpotX, hotSpotY );
+
+    if ( !hcursor )
+    {
+        wxLogWarning(_("Failed to create cursor."));
+        return;
+    }
+
+    m_refData = new wxCursorRefData(hcursor, true /* delete it later */);
+}
+
 #if wxUSE_IMAGE
 wxCursor::wxCursor(const wxImage& image)
 {
@@ -196,16 +214,7 @@ void wxCursor::InitFromImage(const wxImage& image)
         imageSized = image.Scale(w, h);
     }
 
-    HCURSOR hcursor = wxBitmapToHCURSOR( wxBitmap(imageSized),
-                                         hotSpotX, hotSpotY );
-
-    if ( !hcursor )
-    {
-        wxLogWarning(_("Failed to create cursor."));
-        return;
-    }
-
-    m_refData = new wxCursorRefData(hcursor, true /* delete it later */);
+    InitFromBitmap(imageSized, hotSpotX, hotSpotY);
 }
 #endif // wxUSE_IMAGE
 

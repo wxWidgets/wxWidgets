@@ -53,6 +53,11 @@ void wxCursor::InitFromStock(wxStockCursor cursorId)
 #warning "FIXME -- implement the cursor as bitmaps (that's what DFB uses)"
 }
 
+wxCursor::wxCursor(const wxBitmap& bitmap, int hotSpotX, int hotSpotY)
+{
+#warning "FIXME"
+}
+
 #if wxUSE_IMAGE
 
 wxCursor::wxCursor(const wxImage& image)

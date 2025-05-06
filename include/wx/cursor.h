@@ -30,6 +30,9 @@ public:
 
     wxCursor();
     wxCursor(const wxImage& image);
+    wxCursor(const wxBitmap& bitmap, const wxPoint& hotSpot);
+    wxCursor(const wxBitmap& bitmap, int hotSpotX = 0, int hotSpotY = 0);
+    wxCursor(const wxString& name, wxBitmapType type, const wxPoint& hotSpot);
     wxCursor(const wxString& name,
              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
