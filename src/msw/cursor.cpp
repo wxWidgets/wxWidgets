@@ -179,18 +179,12 @@ wxCursor::wxCursor(const char* const* xpmData)
 
 void wxCursor::InitFromImage(const wxImage& image)
 {
-    wxPoint hotSpot
-            (
-                image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X),
-                image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y)
-            );
-    const wxSize imageSize = image.GetSize();
-
-    wxASSERT_MSG( hotSpot.x >= 0 && hotSpot.x < imageSize.x &&
-                  hotSpot.y >= 0 && hotSpot.y < imageSize.y,
-                  wxT("invalid cursor hot spot coordinates") );
-
-    InitFromBitmap(image, hotSpot);
+    InitFromBitmap
+    (
+        image,
+        wxPoint(image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X),
+                image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y))
+    );
 }
 #endif // wxUSE_IMAGE
 
