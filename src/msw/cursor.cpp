@@ -179,10 +179,6 @@ wxCursor::wxCursor(const char* const* xpmData)
 
 void wxCursor::InitFromImage(const wxImage& image)
 {
-    // image has to be of the standard cursor size, otherwise we won't be able
-    // to create it
-    const wxSize cursorSize = wxCursorRefData::GetStandardSize();
-
     wxPoint hotSpot
             (
                 image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X),
@@ -194,26 +190,7 @@ void wxCursor::InitFromImage(const wxImage& image)
                   hotSpot.y >= 0 && hotSpot.y < imageSize.y,
                   wxT("invalid cursor hot spot coordinates") );
 
-    wxImage imageSized(image); // final image of correct size
-
-    const wxSize diff = cursorSize - imageSize;
-
-    // if image is too small then place it in the center, resize it if too big
-    if ((diff.x > 0) && (diff.y > 0))
-    {
-        wxPoint offset(diff.x/2, diff.y/2);
-        hotSpot += offset;
-
-        imageSized = image.Size(cursorSize, offset);
-    }
-    else if (diff != wxSize(0, 0))
-    {
-        hotSpot = wxRescaleCoord(hotSpot).From(imageSize).To(cursorSize);
-
-        imageSized = image.Scale(cursorSize);
-    }
-
-    InitFromBitmap(imageSized, hotSpot);
+    InitFromBitmap(image, hotSpot);
 }
 #endif // wxUSE_IMAGE
 
