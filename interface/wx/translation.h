@@ -11,29 +11,28 @@
 
     In wxWidgets, this class manages message catalogs which contain the
     translations of the strings used for the current language.
-    Unlike the (unadvised) wxLocale, it isn't bound to locale.
-    It can be used either independently of, or in
-    conjunction with wxLocale. In the latter case, you should initialize
-    wxLocale (which creates the wxTranslations instance) first; in the former, you
-    need to create a wxTranslations object and Set() it manually.
+    Only one wxTranslations instance is active at a time; it is set with the
+    Set() method and obtained using Get().
 
-    Likewise, it is also independent of wxUILocale. While calling
+    wxTranslations's primary mean of identifying language
+    is by its "canonical name", i.e. ISO 639 code, possibly combined with
+    ISO 3166 country code and additional modifiers (examples include
+    "fr", "en_GB" or "ca@valencia"; see wxLocale::GetCanonicalName() for
+    more information). This allows apps using wxTranslations API to use
+    languages not recognized by the operating system or not listed in the
+    wxLanguage enum.
+
+    This class works in conjunction with wxUILocale. While calling
     wxUILocale::UseDefault() can inform the program of how to format numbers and
     such (see wxNumberFormatter), wxTranslations offers the ability to load
     translations separate from the locale. In other words, the program
     can respect the user's regional formatting while providing them a choice
     different display languages.
 
-    Only one wxTranslations instance is active at a time; it is set with the
-    Set() method and obtained using Get().
-
-    Unlike wxLocale, wxTranslations' primary mean of identifying language
-    is by its "canonical name", i.e. ISO 639 code, possibly combined with
-    ISO 3166 country code and additional modifiers (examples include
-    "fr", "en_GB" or "ca@valencia"; see wxLocale::GetCanonicalName() for
-    more information). This allows apps using wxTranslations API to use even
-    languages not recognized by the operating system or not listed in
-    wxLanguage enum.
+    Note that this class is used by wxLocale internally; the use
+    of wxLocale is, however, no longer recommended. Rather, it is recommended
+    to use wxTranslations and wxUILocale together for managing translations
+    and regional settings. 
 
     @since 2.9.1
 
