@@ -29,7 +29,6 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/image.h"
-    #include "wx/module.h"
 #endif
 
 #include "wx/display.h"
@@ -76,27 +75,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject);
 
 // Current cursor, in order to hang on to cursor handle when setting the cursor
 // globally
-static wxCursor *gs_globalCursor = nullptr;
-
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
-class wxCursorModule : public wxModule
-{
-public:
-    virtual bool OnInit() override
-    {
-        gs_globalCursor = new wxCursor;
-
-        return true;
-    }
-
-    virtual void OnExit() override
-    {
-        wxDELETE(gs_globalCursor);
-    }
-};
+static wxCursor gs_globalCursor;
 
 // ============================================================================
 // implementation
@@ -395,7 +374,7 @@ wxGDIImageRefData *wxCursor::CreateData() const
 
 const wxCursor *wxGetGlobalCursor()
 {
-    return gs_globalCursor;
+    return &gs_globalCursor;
 }
 
 void wxSetCursor(const wxCursor& cursor)
@@ -403,6 +382,5 @@ void wxSetCursor(const wxCursor& cursor)
     if ( cursor.IsOk() )
         ::SetCursor(GetHcursorOf(cursor));
 
-    if ( gs_globalCursor )
-        *gs_globalCursor = cursor;
+    gs_globalCursor = cursor;
 }
