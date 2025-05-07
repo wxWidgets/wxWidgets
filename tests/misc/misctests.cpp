@@ -171,6 +171,24 @@ TEST_CASE("RTTI::ClassInfo", "[rtti]")
 #endif // wxUSE_ZIPSTREAM
 }
 
+TEST_CASE("wxObjectDataPtr", "[ptr]")
+{
+    struct Foo : wxObjectRefData
+    {
+        explicit Foo(int value) : m_value{value} {}
+        int m_value;
+    };
+
+    wxObjectDataPtr<Foo> p1, p2;
+    CHECK( p1 == p2 );
+
+    p1 = new Foo(1);
+    CHECK( p1 != p2 );
+
+    p2 = new Foo(2);
+    CHECK( p1 != p2 );
+}
+
 TEST_CASE("wxCTZ", "[math]")
 {
     CHECK( wxCTZ(1) == 0 );
