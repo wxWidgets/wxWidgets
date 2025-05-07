@@ -827,17 +827,14 @@ bool wxWindowMSW::IsTransparentBackgroundSupported(wxString* WXUNUSED(reason)) c
     return true;
 }
 
-bool wxWindowMSW::SetCursor(const wxCursor& cursor)
+void wxWindowMSW::WXUpdateCursor()
 {
-    if ( !wxWindowBase::SetCursor(cursor) )
-    {
-        // no change
-        return false;
-    }
+    // Call the base class version to update m_cursor.
+    wxWindowBase::WXUpdateCursor();
 
     // don't "overwrite" busy cursor
     if ( wxIsBusy() )
-        return true;
+        return;
 
     if ( m_cursor.IsOk() )
     {
@@ -878,8 +875,6 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
                       (WPARAM)GetHwndOf(win),
                       MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
     }
-
-    return true;
 }
 
 void wxWindowMSW::WarpPointer(int x, int y)
@@ -5063,6 +5058,9 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 
     InvalidateBestSize();
 
+    // update cursor size
+    WXUpdateCursor();
+
     // update font if necessary
     MSWUpdateFontOnDPIChange(newDPI);
 
@@ -5212,6 +5210,8 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
     // changes the mouse pointer size in the Control Panel.
     if ( wParam == 0x2029 )
     {
+        WXUpdateCursor();
+
         wxSysMetricChangedEvent event(wxSysMetric::CursorSize);
         event.SetEventObject(this);
 
