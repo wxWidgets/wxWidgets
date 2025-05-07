@@ -5208,6 +5208,16 @@ bool wxWindowMSW::HandleSettingChange(WXWPARAM wParam, WXLPARAM lParam)
         HandleSysColorChange();
     }
 
+    // Another special case: even with this wParam value is sent when the user
+    // changes the mouse pointer size in the Control Panel.
+    if ( wParam == 0x2029 )
+    {
+        wxSysMetricChangedEvent event(wxSysMetric::CursorSize);
+        event.SetEventObject(this);
+
+        (void)HandleWindowEvent(event);
+    }
+
     // despite MSDN saying "(This message cannot be sent directly to a window.)"
     // we need to send this to child windows (it is only sent to top-level
     // windows) so {list,tree}ctrls can adjust their font size if necessary

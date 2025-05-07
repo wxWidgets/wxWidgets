@@ -636,6 +636,14 @@ MyCanvas::MyCanvas(MyFrame *parent)
         if ( m_show == File_ShowSystemColours )
             Refresh();
     });
+
+    Bind(wxEVT_SYS_METRIC_CHANGED, [this](wxSysMetricChangedEvent& event) {
+        event.Skip();
+
+        if ( m_show == File_ShowCursors &&
+                event.GetMetric() == wxSysMetric::CursorSize )
+            Refresh();
+    });
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)

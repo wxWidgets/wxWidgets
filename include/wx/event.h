@@ -679,6 +679,7 @@ class WXDLLIMPEXP_FWD_CORE wxNcPaintEvent;
 class WXDLLIMPEXP_FWD_CORE wxMenuEvent;
 class WXDLLIMPEXP_FWD_CORE wxContextMenuEvent;
 class WXDLLIMPEXP_FWD_CORE wxSysColourChangedEvent;
+class WXDLLIMPEXP_FWD_CORE wxSysMetricChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxDisplayChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxDPIChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxQueryNewPaletteEvent;
@@ -840,6 +841,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_MENU_CLOSE, wxMenuEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_MENU_HIGHLIGHT, wxMenuEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_CONTEXT_MENU, wxContextMenuEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SYS_METRIC_CHANGED, wxSysMetricChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DISPLAY_CHANGED, wxDisplayChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DPI_CHANGED, wxDPIChangedEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_QUERY_NEW_PALETTE, wxQueryNewPaletteEvent);
@@ -3090,6 +3092,34 @@ private:
 };
 
 /*
+ wxEVT_SYS_METRIC_CHANGED
+ */
+
+enum class wxSysMetric
+{
+    Other,
+    CursorSize
+};
+
+class WXDLLIMPEXP_CORE wxSysMetricChangedEvent : public wxEvent
+{
+public:
+    explicit wxSysMetricChangedEvent(wxSysMetric metric = wxSysMetric::Other)
+        : wxEvent(0, wxEVT_SYS_METRIC_CHANGED),
+          m_metric(metric)
+        { }
+
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxSysMetricChangedEvent(*this); }
+
+    wxSysMetric GetMetric() const { return m_metric; }
+
+private:
+    const wxSysMetric m_metric;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxSysMetricChangedEvent);
+};
+
+/*
  wxEVT_MOUSE_CAPTURE_CHANGED
  The window losing the capture receives this message
  (even if it released the capture itself).
@@ -4254,6 +4284,7 @@ typedef void (wxEvtHandler::*wxJoystickEventFunction)(wxJoystickEvent&);
 typedef void (wxEvtHandler::*wxDropFilesEventFunction)(wxDropFilesEvent&);
 typedef void (wxEvtHandler::*wxInitDialogEventFunction)(wxInitDialogEvent&);
 typedef void (wxEvtHandler::*wxSysColourChangedEventFunction)(wxSysColourChangedEvent&);
+typedef void (wxEvtHandler::*wxSysMetricChangedEventFunction)(wxSysMetricChangedEvent&);
 typedef void (wxEvtHandler::*wxDisplayChangedEventFunction)(wxDisplayChangedEvent&);
 typedef void (wxEvtHandler::*wxDPIChangedEventFunction)(wxDPIChangedEvent&);
 typedef void (wxEvtHandler::*wxUpdateUIEventFunction)(wxUpdateUIEvent&);
@@ -4319,6 +4350,8 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     wxEVENT_HANDLER_CAST(wxInitDialogEventFunction, func)
 #define wxSysColourChangedEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxSysColourChangedEventFunction, func)
+#define wxSysMetricChangedEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxSysMetricChangedEventFunction, func)
 #define wxDisplayChangedEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxDisplayChangedEventFunction, func)
 #define wxDPIChangedEventHandler(func) \
@@ -4581,6 +4614,7 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
 #define EVT_DROP_FILES(func)  wx__DECLARE_EVT0(wxEVT_DROP_FILES, wxDropFilesEventHandler(func))
 #define EVT_INIT_DIALOG(func)  wx__DECLARE_EVT0(wxEVT_INIT_DIALOG, wxInitDialogEventHandler(func))
 #define EVT_SYS_COLOUR_CHANGED(func) wx__DECLARE_EVT0(wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler(func))
+#define EVT_SYS_METRIC_CHANGED(func) wx__DECLARE_EVT0(wxEVT_SYS_METRIC_CHANGED, wxSysMetricChangedEventHandler(func))
 #define EVT_DISPLAY_CHANGED(func)  wx__DECLARE_EVT0(wxEVT_DISPLAY_CHANGED, wxDisplayChangedEventHandler(func))
 #define EVT_DPI_CHANGED(func)  wx__DECLARE_EVT0(wxEVT_DPI_CHANGED, wxDPIChangedEventHandler(func))
 #define EVT_SHOW(func) wx__DECLARE_EVT0(wxEVT_SHOW, wxShowEventHandler(func))
