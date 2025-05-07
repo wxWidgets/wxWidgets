@@ -1062,6 +1062,7 @@ set(GUI_CMN_HDR
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h
+    wx/busycursor.h
     wx/busyinfo.h
     wx/generic/busyinfo.h
     wx/caret.h

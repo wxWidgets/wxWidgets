@@ -1165,6 +1165,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h
+    wx/busycursor.h
     wx/busyinfo.h
     wx/generic/busyinfo.h
     wx/caret.h

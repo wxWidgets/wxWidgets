@@ -137,13 +137,8 @@ private:
     ImplPtr m_impl;
 };
 
-// This class only exists for compatibility, it never did anything really
-// useful and now doesn't do anything at all.
-class wxDEPRECATED_MSG("Does nothing, stop using it") wxBusyCursorSuspender
-{
-public:
-    wxBusyCursorSuspender() = default;
-    ~wxBusyCursorSuspender() = default;
-};
+// For compatibility, include busy cursor-related stuff which used to be pulled
+// in by this header via wx/utils.h.
+#include "wx/busycursor.h"
 
 #endif // _WX_CURSOR_H_BASE_

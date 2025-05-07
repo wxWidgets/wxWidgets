@@ -967,6 +967,7 @@ GUI_CMN_HDR =
     wx/bmpcbox.h
     wx/bookctrl.h
     wx/brush.h
+    wx/busycursor.h
     wx/busyinfo.h
     wx/button.h
     wx/calctrl.h

@@ -1150,6 +1150,9 @@
     <ClInclude Include="..\..\include\wx\brush.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\busycursor.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\busyinfo.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

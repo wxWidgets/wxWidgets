@@ -55,6 +55,7 @@
 #include <wx/bookctrl.h>
 #include <wx/brush.h>
 #include <wx/buffer.h>
+#include <wx/busycursor.h>
 #include <wx/busyinfo.h>
 #include <wx/button.h>
 #include <wx/calctrl.h>
