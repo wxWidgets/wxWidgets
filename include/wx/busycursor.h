@@ -25,7 +25,7 @@ WXDLLIMPEXP_CORE bool wxIsBusy();
 class WXDLLIMPEXP_CORE wxBusyCursor
 {
 public:
-    wxBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR)
+    explicit wxBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR)
         { wxBeginBusyCursor(cursor); }
     ~wxBusyCursor()
         { wxEndBusyCursor(); }
