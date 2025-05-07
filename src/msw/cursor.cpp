@@ -377,8 +377,9 @@ const wxCursor *wxGetGlobalCursor()
     return &gs_globalCursor;
 }
 
-void wxSetCursor(const wxCursor& cursor)
+void wxSetCursor(const wxCursorBundle& cursors)
 {
+    const wxCursor& cursor = cursors.GetCursorForMainWindow();
     if ( cursor.IsOk() )
         ::SetCursor(GetHcursorOf(cursor));
 

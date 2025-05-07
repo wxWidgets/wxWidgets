@@ -145,6 +145,11 @@ wxCursorBundle::wxCursorBundle(const wxCursor& cursor)
 {
 }
 
+wxCursorBundle::wxCursorBundle(wxStockCursor id)
+    : m_impl(new wxCursorBundleSingleImpl(wxCursor(id)))
+{
+}
+
 wxCursorBundle::wxCursorBundle(const wxCursorBundle&) = default;
 
 wxCursorBundle& wxCursorBundle::operator=(const wxCursorBundle&) = default;
@@ -194,9 +199,4 @@ void wxBeginBusyCursor(const wxCursorBundle& cursors)
 {
     const wxCursor cursor = cursors.GetCursorForMainWindow();
     wxBeginBusyCursor(cursor.IsOk() ? &cursor : nullptr);
-}
-
-void wxSetCursor(const wxCursorBundle& cursors)
-{
-    wxSetCursor(cursors.GetCursorForMainWindow());
 }

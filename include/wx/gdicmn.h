@@ -1188,7 +1188,6 @@ extern void WXDLLIMPEXP_CORE wxClientDisplayRect(int *x, int *y, int *width, int
 extern wxRect WXDLLIMPEXP_CORE wxGetClientDisplayRect();
 
 // set global cursor
-extern void WXDLLIMPEXP_CORE wxSetCursor(const wxCursor& cursor);
 extern void WXDLLIMPEXP_CORE wxSetCursor(const wxCursorBundle& cursors);
 
 #endif

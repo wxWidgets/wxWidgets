@@ -104,6 +104,10 @@ public:
     // interoperability with the existing code using wxCursor.
     wxCursorBundle(const wxCursor& cursor);
 
+    // This is another conversion ctor existing to allow existing code using
+    // wxCursor to work without changes with wxCursorBundle.
+    wxCursorBundle(wxStockCursor id);
+
     // Default copy ctor and assignment operator and dtor would be ok, but need
     // to be defined out of line, where wxCursorBundleImpl is fully declared.
 

@@ -94,7 +94,7 @@ wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
 // Global cursor setting
 // ----------------------------------------------------------------------------
 
-void wxSetCursor(const wxCursor& cursor)
+void wxSetCursor(const wxCursorBundle& cursors)
 {
 #warning "FIXME: implement"
 }

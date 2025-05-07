@@ -424,8 +424,9 @@ bool wxIsBusy()
     return gs_busyCount > 0;
 }
 
-void wxSetCursor( const wxCursor& cursor )
+void wxSetCursor( const wxCursorBundle& cursors )
 {
+    const wxCursor& cursor = cursors.GetCursorForMainWindow();
     if (cursor.IsOk() || g_globalCursor.IsOk())
     {
         g_globalCursor = cursor;
