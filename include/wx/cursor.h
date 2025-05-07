@@ -121,6 +121,11 @@ public:
     // Get the cursor of the size suitable for the DPI used by the given window.
     wxNODISCARD wxCursor GetCursorFor(const wxWindow* window) const;
 
+    // Get the cursor of the default size: prefer to use GetCursorFor() instead
+    // if there is a suitable window available, this function only exists as
+    // last resort.
+    wxNODISCARD wxCursor GetCursorForMainWindow() const;
+
     // Check if two objects refer to the same bundle.
     wxNODISCARD bool IsSameAs(const wxCursorBundle& other) const
     {

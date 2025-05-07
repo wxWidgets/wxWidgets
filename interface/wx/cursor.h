@@ -368,6 +368,14 @@ public:
     wxCursor GetCursorFor(const wxWindow* window) const;
 
     /**
+        Get the cursor of the default size.
+
+        Prefer to use GetCursorFor() instead if there is a suitable window
+        available, this function only exists as last resort.
+     */
+    wxCursor GetCursorForMainWindow() const;
+
+    /**
         Check if two objects refer to the same bundle.
 
         Note that this compares the object identity, i.e. this function returns
