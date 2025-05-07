@@ -1336,14 +1336,39 @@ bool wxColourDisplay();
 int wxDisplayDepth();
 
 /**
-    Globally sets the cursor; only has an effect on Windows, Mac and GTK+. You
-    should call this function with wxNullCursor to restore the system cursor.
+    Globally sets the cursor.
+
+    The globally set cursor overrides any cursor set for the individual
+    windows, i.e. the specified cursor will be used for all windows of the
+    application until this function is called again with wxNullCursor to
+    restore the default behaviour of using the window-specific cursors.
 
     @see wxCursor, wxWindow::SetCursor()
 
     @header{wx/gdicmn.h}
 */
 void wxSetCursor(const wxCursor& cursor);
+
+/**
+    Globally sets the cursor.
+
+    This overload selects the best available cursor size from the provided
+    cursor bundle and sets it as the global cursor.
+
+    If the bundle is invalid, this function resets any current global cursor,
+    i.e. has the same effect as `wxSetCursor(wxNullCursor)`.
+
+    Note that this function won't update the cursor size if the DPI or user
+    preferred cursor size changes, as this is considered unlikely to happen
+    while this temporary cursor is shown. If you do want to update the cursor
+    size, you need to handle ::wxEVT_DPI_CHANGED and ::wxEVT_SYS_METRIC_CHANGED
+    events and call this function again from their handlers.
+
+    @see wxCursor, wxWindow::SetCursorBundle()
+
+    @header{wx/gdicmn.h}
+ */
+void wxSetCursor(const wxCursorBundle& cursors);
 
 ///@}
 

@@ -19,9 +19,11 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/bitmap.h"
     #include "wx/bmpbndl.h"
     #include "wx/cursor.h"
+    #include "wx/gdicmn.h"
     #include "wx/settings.h"
     #include "wx/window.h"
 #endif // WX_PRECOMP
@@ -161,4 +163,9 @@ wxCursor wxCursorBundle::GetCursorFor(const wxWindow* window) const
     // time (e.g. when wxGTK updates the cursor for a window for which no
     // special cursor had been set).
     return m_impl ? m_impl->GetCursorFor(window) : wxCursor{};
+}
+
+void wxSetCursor(const wxCursorBundle& cursors)
+{
+    wxSetCursor(cursors.GetCursorFor(wxApp::GetMainTopWindow()));
 }
