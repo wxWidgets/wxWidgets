@@ -301,6 +301,9 @@ public:
     wxDataViewCtrl *GetOwner() const
         { return static_cast<wxDataViewCtrl *>(GetParent()); }
 
+    virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE
+        { return GetOwner(); }
+
     // Add/Remove additional column to sorting columns
     void ToggleSortByColumn(int column)
     {
@@ -773,6 +776,9 @@ public:
 
     wxDataViewModel* GetModel() { return GetOwner()->GetModel(); }
     const wxDataViewModel* GetModel() const { return GetOwner()->GetModel(); }
+
+    virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE
+        { return GetOwner(); }
 
 #if wxUSE_DRAG_AND_DROP
     wxBitmap CreateItemBitmap( unsigned int row, int &indent );
