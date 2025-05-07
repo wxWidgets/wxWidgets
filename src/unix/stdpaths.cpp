@@ -31,10 +31,20 @@
 
 #include "wx/filename.h"
 #include "wx/log.h"
+#include "wx/scopeguard.h"
 #include "wx/textfile.h"
 
 #if defined( __LINUX__ ) || defined( __VMS )
     #include <unistd.h>
+#endif
+
+#ifdef wxHAVE_PROCSTAT
+    // for GetExecutablePath
+    #include <sys/param.h>
+    #include <sys/queue.h>
+    #include <sys/socket.h>
+    #include <sys/sysctl.h>
+    #include <libprocstat.h>
 #endif
 
 // ============================================================================
@@ -166,6 +176,26 @@ wxString wxStandardPaths::GetExecutablePath() const
     }
 
     if ( !exeStr.empty() )
+        return exeStr;
+#elif defined(wxHAVE_PROCSTAT)
+    unsigned int n_proc;
+    char pathname[PATH_MAX];
+
+    auto *ps = procstat_open_sysctl();
+    if (!ps)
+        return wxStandardPathsBase::GetExecutablePath();
+    wxON_BLOCK_EXIT1(procstat_close, ps);
+
+    auto *procs = procstat_getprocs(ps, KERN_PROC_PID, getpid(), &n_proc);
+    if (!procs || n_proc != 1)
+        return wxStandardPathsBase::GetExecutablePath();
+    wxON_BLOCK_EXIT2(procstat_freeprocs, ps, procs);
+
+    if (procstat_getpathname(ps, procs, pathname, sizeof(pathname)) != 0)
+        return wxStandardPathsBase::GetExecutablePath();
+
+    wxString exeStr(pathname);
+    if (!exeStr.empty())
         return exeStr;
 #endif // __LINUX__
 
