@@ -190,6 +190,12 @@ wxCursor wxBusyCursor::GetBusyCursor()
 
 #endif // WXWIN_COMPATIBILITY_3_2
 
+void wxBeginBusyCursor(const wxCursorBundle& cursors)
+{
+    const wxCursor cursor = cursors.GetCursorForMainWindow();
+    wxBeginBusyCursor(cursor.IsOk() ? &cursor : nullptr);
+}
+
 void wxSetCursor(const wxCursorBundle& cursors)
 {
     wxSetCursor(cursors.GetCursorForMainWindow());

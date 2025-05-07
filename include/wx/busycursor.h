@@ -14,6 +14,7 @@
 
 // Set the cursor to the busy cursor for all windows
 WXDLLIMPEXP_CORE void wxBeginBusyCursor(const wxCursor *cursor = wxHOURGLASS_CURSOR);
+WXDLLIMPEXP_CORE void wxBeginBusyCursor(const wxCursorBundle& cursors);
 
 // Restore cursor to normal
 WXDLLIMPEXP_CORE void wxEndBusyCursor();
@@ -27,6 +28,8 @@ class WXDLLIMPEXP_CORE wxBusyCursor
 public:
     explicit wxBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR)
         { wxBeginBusyCursor(cursor); }
+    explicit wxBusyCursor(const wxCursorBundle& cursors)
+        { wxBeginBusyCursor(cursors); }
     ~wxBusyCursor()
         { wxEndBusyCursor(); }
 

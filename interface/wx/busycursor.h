@@ -24,6 +24,20 @@
 void wxBeginBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR);
 
 /**
+    Overload of wxBeginBusyCursor() taking a cursor bundle.
+
+    This overload selects the cursor of the appropriate size from @a cursors.
+
+    As with wxSetCursor() overload taking a cursor bundle, the busy cursor is
+    currently not updated automatically if the DPI or preferred cursor size
+    changes because this is considered to be unlikely to happen during the
+    brief time while the busy cursor is shown.
+
+    @since 3.3.0
+ */
+void wxBeginBusyCursor(const wxCursorBundle& cursors);
+
+/**
     Changes the cursor back to the original cursor, for all windows in the
     application. Use with wxBeginBusyCursor().
 
@@ -79,6 +93,14 @@ public:
         Constructs a busy cursor object, calling wxBeginBusyCursor().
     */
     explicit wxBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR);
+
+    /**
+        Constructs a busy cursor object, calling wxBeginBusyCursor() with the
+        given cursor bundle.
+
+        @since 3.3.0
+    */
+    explicit wxBusyCursor(const wxCursorBundle& cursors);
 
     /**
         Destroys the busy cursor object, calling wxEndBusyCursor().
