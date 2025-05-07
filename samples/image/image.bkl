@@ -3,10 +3,10 @@
 <makefile>
 
     <!--
-        This file is loaded using wxBITMAP_TYPE_PNG_RESOURCE and so must be
+        These files are loaded using wxBITMAP_TYPE_PNG_RESOURCE and so must be
         copied to the resources directory under Mac.
      -->
-    <set var="BUNDLE_RESOURCES">$(SRCDIR)/cursor.png</set>
+    <set var="BUNDLE_RESOURCES">$(SRCDIR)/cursor.png $(SRCDIR)/cursor_2x.png</set>
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 

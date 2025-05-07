@@ -52,6 +52,7 @@
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
     #include "cursor_png.c"
+    #include "cursor_2x_png.c"
 #endif
 
 // ============================================================================
@@ -1166,7 +1167,7 @@ MyFrame::MyFrame()
     m_canvas = new MyCanvas(this);
     wxSize cz = m_canvas->GetDrawingSize();
     m_canvas->SetScrollbars(10, 10, cz.GetWidth() / 10, cz.GetHeight() / 10);
-    m_canvas->SetCursor(wxBITMAP_PNG(cursor));
+    m_canvas->SetCursorBundle(wxCursorBundle(wxBITMAP_BUNDLE_2(cursor), wxPoint(21, 0)));
 
     // slightly wider than the canvas
     SetSize(wxSize(cz.GetWidth() + FromDIP(50), FromDIP(700)));
