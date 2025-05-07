@@ -401,10 +401,8 @@ const wxCursor *wxGetGlobalCursor()
 void wxSetCursor(const wxCursor& cursor)
 {
     if ( cursor.IsOk() )
-    {
         ::SetCursor(GetHcursorOf(cursor));
 
-        if ( gs_globalCursor )
-            *gs_globalCursor = cursor;
-    }
+    if ( gs_globalCursor )
+        *gs_globalCursor = cursor;
 }
