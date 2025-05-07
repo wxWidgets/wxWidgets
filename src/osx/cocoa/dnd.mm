@@ -422,10 +422,9 @@ wxDropSource::wxDropSource(wxDataObject& data,
                            const wxCursor &cursorCopy,
                            const wxCursor &cursorMove,
                            const wxCursor &cursorStop)
-            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
+            : wxDropSource(win, cursorCopy, cursorMove, cursorStop)
 {
     SetData( data );
-    m_window = win;
 }
 
 wxDropSource* wxDropSource::GetCurrentDropSource()

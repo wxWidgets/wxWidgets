@@ -356,8 +356,7 @@ wxDropSource::wxDropSource(wxDataObject& data,
               const wxCursor &copy,
               const wxCursor &move,
               const wxCursor &none)
-    : wxDropSourceBase(copy, move, none),
-      m_parentWindow(win)
+    : wxDropSource(win, copy, move, none)
 {
     SetData(data);
 }

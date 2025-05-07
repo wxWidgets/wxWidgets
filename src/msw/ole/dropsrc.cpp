@@ -152,13 +152,12 @@ wxDropSource::wxDropSource(wxWindow* WXUNUSED(win),
 }
 
 wxDropSource::wxDropSource(wxDataObject& data,
-                           wxWindow* WXUNUSED(win),
+                           wxWindow* win,
                            const wxCursor &cursorCopy,
                            const wxCursor &cursorMove,
                            const wxCursor &cursorStop)
-            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
+            : wxDropSource(win, cursorCopy, cursorMove, cursorStop)
 {
-    Init();
     SetData(data);
 }
 
