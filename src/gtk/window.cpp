@@ -5490,11 +5490,11 @@ void wxWindowGTK::GTKUpdateCursor(GdkCursor* overrideCursor)
     if (m_widget == nullptr || !gtk_widget_get_realized(m_widget))
         return;
 
-    // Globally set cursor overrides all the other ones.
-    if (overrideCursor)
-        return;
-
-    GdkCursor* const cursor = m_cursor.GetCursor();
+    // Globally set cursor overrides all the other ones, but we don't actually
+    // even need to use it: as by default the cursors are inherited from the
+    // (TLW) parent and because SetGlobalCursor() in src/gtk/cursor.cpp sets
+    // the global cursor for them, it's enough to reset the cursor to show it.
+    GdkCursor* const cursor = overrideCursor ? nullptr : m_cursor.GetCursor();
 
     const wxArrayGdkWindows& windows = GTKSetCursorForAllWindows(cursor);
 
