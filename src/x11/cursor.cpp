@@ -179,16 +179,6 @@ WXCursor wxCursor::GetCursor() const
 static wxCursor  gs_savedCursor;
 static int       gs_busyCount = 0;
 
-const wxCursor &wxBusyCursor::GetStoredCursor()
-{
-    return gs_savedCursor;
-}
-
-const wxCursor wxBusyCursor::GetBusyCursor()
-{
-    return wxCursor(wxCURSOR_WATCH);
-}
-
 void wxEndBusyCursor()
 {
     if (--gs_busyCount > 0)

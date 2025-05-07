@@ -137,46 +137,13 @@ private:
     ImplPtr m_impl;
 };
 
-// ----------------------------------------------------------------------------
-// Other cursor-related stuff
-// ----------------------------------------------------------------------------
-
-#include "wx/utils.h"
-
-/* This is a small class which can be used by all ports
-   to temporarily suspend the busy cursor. Useful in modal
-   dialogs.
-
-   Actually that is not (any longer) quite true..  currently it is
-   only used in wxGTK Dialog::ShowModal() and now uses static
-   wxBusyCursor methods that are only implemented for wxGTK so far.
-   The BusyCursor handling code should probably be implemented in
-   common code somewhere instead of the separate implementations we
-   currently have.  Also the name BusyCursorSuspender is a little
-   misleading since it doesn't actually suspend the BusyCursor, just
-   masks one that is already showing.
-   If another call to wxBeginBusyCursor is made while this is active
-   the Busy Cursor will again be shown.  But at least now it doesn't
-   interfere with the state of wxIsBusy() -- RL
-
-*/
-class wxBusyCursorSuspender
+// This class only exists for compatibility, it never did anything really
+// useful and now doesn't do anything at all.
+class wxDEPRECATED_MSG("Does nothing, stop using it") wxBusyCursorSuspender
 {
 public:
-    wxBusyCursorSuspender()
-    {
-        if( wxIsBusy() )
-        {
-            wxSetCursor( wxBusyCursor::GetStoredCursor() );
-        }
-    }
-    ~wxBusyCursorSuspender()
-    {
-        if( wxIsBusy() )
-        {
-            wxSetCursor( wxBusyCursor::GetBusyCursor() );
-        }
-    }
+    wxBusyCursorSuspender() = default;
+    ~wxBusyCursorSuspender() = default;
 };
-#endif
-    // _WX_CURSOR_H_BASE_
+
+#endif // _WX_CURSOR_H_BASE_

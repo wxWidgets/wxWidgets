@@ -368,16 +368,6 @@ wxCursor g_busyCursor;
 static wxCursor gs_storedCursor;
 static int       gs_busyCount = 0;
 
-const wxCursor& wxBusyCursor::GetStoredCursor()
-{
-    return gs_storedCursor;
-}
-
-const wxCursor wxBusyCursor::GetBusyCursor()
-{
-    return g_busyCursor;
-}
-
 static void UpdateCursors(wxWindow* win, GdkCursor* globalCursor)
 {
     win->GTKUpdateCursor(globalCursor);

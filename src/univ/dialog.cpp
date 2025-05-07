@@ -186,10 +186,6 @@ int wxDialog::ShowModal()
 
     wxASSERT_MSG( !m_windowDisabler, wxT("disabling windows twice?") );
 
-#if defined(__WXGTK__)
-    wxBusyCursorSuspender suspender;
-#endif
-
     m_windowDisabler = new wxWindowDisabler(this);
     if ( !m_eventLoop )
         m_eventLoop = new wxEventLoop;

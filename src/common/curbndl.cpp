@@ -165,6 +165,26 @@ wxCursor wxCursorBundle::GetCursorFor(const wxWindow* window) const
     return m_impl ? m_impl->GetCursorFor(window) : wxCursor{};
 }
 
+// ----------------------------------------------------------------------------
+// Global functions
+// ----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_3_2
+
+/* static */
+wxCursor wxBusyCursor::GetStoredCursor()
+{
+    return wxCursor{};
+}
+
+/* static */
+wxCursor wxBusyCursor::GetBusyCursor()
+{
+    return wxCursor{};
+}
+
+#endif // WXWIN_COMPATIBILITY_3_2
+
 void wxSetCursor(const wxCursorBundle& cursors)
 {
     wxSetCursor(cursors.GetCursorFor(wxApp::GetMainTopWindow()));

@@ -721,13 +721,15 @@ public:
     ~wxBusyCursor()
         { wxEndBusyCursor(); }
 
-    // FIXME: These two methods are currently only implemented (and needed?)
-    //        in wxGTK.  BusyCursor handling should probably be moved to
-    //        common code since the wxGTK and wxMSW implementations are very
-    //        similar except for wxMSW using HCURSOR directly instead of
-    //        wxCursor..  -- RL.
-    static const wxCursor &GetStoredCursor();
-    static const wxCursor GetBusyCursor();
+#if WXWIN_COMPATIBILITY_3_2
+    // These functions are kept only for compatibility, they were never
+    // available in all ports and never did anything really useful.
+    wxDEPRECATED_MSG("Returns invalid cursor, don't use it")
+    static wxCursor GetStoredCursor();
+
+    wxDEPRECATED_MSG("Returns invalid cursor, don't use it")
+    static wxCursor GetBusyCursor();
+#endif // WXWIN_COMPATIBILITY_3_2
 };
 
 void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
