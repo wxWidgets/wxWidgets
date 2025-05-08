@@ -474,8 +474,8 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 
         // This is more interesting and shows that CompareStrings() uses German
         // dictionary rules (DIN 5007-1 variant 1).
-        CHECK( l.CompareStrings("a",  u8("ä")) == -1 );
-        CHECK( l.CompareStrings(u8("ä"), "ae") == -1 );
+        CHECK( l.CompareStrings("a",  u8("\xC3\xA4") /* ä */) == -1 );
+        CHECK( l.CompareStrings(u8("\xC3\xA4") /* ä */, "ae") == -1 );
 
 #if defined(__WINDOWS__) || defined(__WXOSX__)
         // CompareStringsEx() was only implemented correctly in Wine 7.10.
@@ -483,7 +483,7 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         if ( wxIsRunningUnderWine(&wineVer) && !wineVer.AtLeast(7, 10) )
             return;
 
-        CHECK( l.CompareStrings(u8("ß"), "ss", wxCompare_CaseInsensitive) == 0 );
+        CHECK( l.CompareStrings(u8("\xC3\x9F") /* ß */, "ss", wxCompare_CaseInsensitive) == 0 );
 #endif
     }
 
@@ -499,8 +499,8 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
             return;
 
         // And this shows that sort order really depends on the language.
-        CHECK( l.CompareStrings(u8("ä"), "ae") == 1 );
-        CHECK( l.CompareStrings(u8("ö"), "z" ) == 1 );
+        CHECK( l.CompareStrings(u8("\xC3\xA4") /* ä */, "ae") == 1 );
+        CHECK( l.CompareStrings(u8("\xC3\xB6") /* ö */, "z" ) == 1 );
     }
 }
 
