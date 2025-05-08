@@ -112,9 +112,6 @@ if(MSVC)
         wx_string_append(CMAKE_CXX_FLAGS " /MP")
     endif()
 
-    wx_string_append(CMAKE_C_FLAGS " /source-charset:utf-8")
-    wx_string_append(CMAKE_CXX_FLAGS " /source-charset:utf-8")
-
     if(NOT POLICY CMP0092)
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
