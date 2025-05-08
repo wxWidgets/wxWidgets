@@ -590,10 +590,7 @@ wxGetFrameExtents(GdkWindow* window, wxTopLevelWindow::DecorSize* decorSize)
     return true;
 #else
     wxUnusedVar(window);
-    wxUnusedVar(left);
-    wxUnusedVar(right);
-    wxUnusedVar(top);
-    wxUnusedVar(bottom);
+    wxUnusedVar(decorSize);
     return false;
 #endif
 }
