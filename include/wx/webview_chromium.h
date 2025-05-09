@@ -12,7 +12,12 @@
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
 
 #include "wx/webview.h"
+#include "wx/mstream.h"
 #include "wx/timer.h"
+
+#include <future>
+#include <map>
+#include <vector>
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 
