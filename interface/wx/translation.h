@@ -159,9 +159,17 @@ public:
         Add standard wxWidgets catalogs ("wxstd" and possible port-specific
         catalogs).
 
-        @return @true if a suitable catalog was found, @false otherwise
+        @return @true if a suitable catalog was found, @false otherwise.
 
         @see AddAvailableCatalog()
+
+        @note
+        For client systems that may not have wxWidget message catalogs installed
+        (e.g., Windows), be sure to include your own copy of various "wxstd.mo"
+        files with your distributions. For example, you can do the following for Spanish:
+        - compile "locale/es.po" into a *.mo file
+        - rename it "wxstd.mo"
+        - include it with your program in a folder named "es"
      */
     bool AddStdCatalog();
 
