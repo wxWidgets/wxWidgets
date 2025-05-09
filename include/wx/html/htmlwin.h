@@ -22,7 +22,6 @@
 #include "wx/html/htmlfilt.h"
 #include "wx/filename.h"
 #include "wx/bmpbndl.h"
-#include "wx/cursor.h"
 
 class wxHtmlProcessor;
 class wxHtmlWinModule;
@@ -553,11 +552,6 @@ private:
     // Flag used to communicate between OnPaint() and OnEraseBackground(), see
     // the comments near its use.
     bool m_isBgReallyErased;
-
-    // standard mouse cursors
-    static wxCursorBundle ms_cursorLink;
-    static wxCursorBundle ms_cursorText;
-    static wxCursorBundle ms_cursorDefault;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHtmlWindow);
