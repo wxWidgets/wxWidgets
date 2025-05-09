@@ -104,7 +104,7 @@ public:
     /**
         Returns the best available translation for the required language.
 
-        For wxLANGUAGE_DEFAULT, this function returns the available translation
+        For @c wxLANGUAGE_DEFAULT, this function returns the available translation
         best matching one of wxUILocale::GetPreferredUILanguages(). Otherwise
         it simply returns the language set with SetLanguage() if it's available
         or empty string otherwise.
