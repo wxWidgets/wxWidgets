@@ -103,6 +103,9 @@
                           const wxString& cond,
                           const wxString& msg,
                           wxAppTraits *traits = nullptr);
+
+    // Used to pass the function name from wxDefaultAssertHandler().
+    static wxString gs_assertFunc;
 #endif // wxDEBUG_LEVEL
 
 #ifdef __WXDEBUG__
@@ -887,7 +890,11 @@ void wxAppConsoleBase::OnAssert(const wxChar *file,
                                 const wxChar *cond,
                                 const wxChar *msg)
 {
+#if wxDEBUG_LEVEL
+    OnAssertFailure(file, line, gs_assertFunc.wc_str(), cond, msg);
+#else
     OnAssertFailure(file, line, nullptr, cond, msg);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1184,8 +1191,11 @@ wxDefaultAssertHandler(const wxString& file,
     else
     {
         // let the app process it as it wants
-        wxTheApp->OnAssertFailure(file.wc_str(), line, func.wc_str(),
-                                  cond.wc_str(), msg.wc_str());
+
+        // for compatibility, call the old function after stashing the function
+        // name into a global, so that it could pass it to the new one
+        gs_assertFunc = func;
+        wxTheApp->OnAssert(file.wc_str(), line, cond.wc_str(), msg.wc_str());
     }
 }
 
