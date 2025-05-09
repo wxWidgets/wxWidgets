@@ -86,7 +86,7 @@ jobs:
           runner: self-hosted
           scheme: 'app-dynamic'
           destination: 'generic/platform=macOS'
-          arch: x86_64
+          arch: arm64
           configuration: 'Release'
           project: samples/minimal/minimal_cocoa.xcodeproj
         - name: iOS static Debug
@@ -100,7 +100,7 @@ jobs:
           runner: macos-latest
           scheme: 'app-static'
           destination: 'generic/platform=iOS Simulator'
-          arch: x86_64
+          arch: arm64
           configuration: 'Release'
           project: samples/minimal/minimal_iphone.xcodeproj
 
