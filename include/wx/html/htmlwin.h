@@ -22,6 +22,7 @@
 #include "wx/html/htmlfilt.h"
 #include "wx/filename.h"
 #include "wx/bmpbndl.h"
+#include "wx/cursor.h"
 
 class wxHtmlProcessor;
 class wxHtmlWinModule;
@@ -386,8 +387,9 @@ public:
     virtual void OnInternalIdle() override;
 
     /// Returns standard HTML cursor as used by wxHtmlWindow
-    static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
-    static void SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor);
+    static wxCursor GetDefaultHTMLCursor(HTMLCursor type,
+                                         const wxWindow* window = nullptr);
+    static void SetDefaultHTMLCursor(HTMLCursor type, const wxCursorBundle& cursor);
 
 protected:
     void Init();
@@ -553,9 +555,9 @@ private:
     bool m_isBgReallyErased;
 
     // standard mouse cursors
-    static wxCursor *ms_cursorLink;
-    static wxCursor *ms_cursorText;
-    static wxCursor *ms_cursorDefault;
+    static wxCursorBundle ms_cursorLink;
+    static wxCursorBundle ms_cursorText;
+    static wxCursorBundle ms_cursorDefault;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHtmlWindow);

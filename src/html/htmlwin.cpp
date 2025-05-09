@@ -286,18 +286,18 @@ void wxHtmlWindowMouseHelper::OnCellMouseHover(wxHtmlCell * cell,
 wxList wxHtmlWindow::m_Filters;
 wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = nullptr;
 wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = nullptr;
-wxCursor *wxHtmlWindow::ms_cursorLink = nullptr;
-wxCursor *wxHtmlWindow::ms_cursorText = nullptr;
-wxCursor *wxHtmlWindow::ms_cursorDefault = nullptr;
+wxCursorBundle wxHtmlWindow::ms_cursorLink;
+wxCursorBundle wxHtmlWindow::ms_cursorText;
+wxCursorBundle wxHtmlWindow::ms_cursorDefault;
 
 void wxHtmlWindow::CleanUpStatics()
 {
     wxDELETE(m_DefaultFilter);
     wxClearList(m_Filters);
     wxDELETE(m_GlobalProcessors);
-    wxDELETE(ms_cursorLink);
-    wxDELETE(ms_cursorText);
-    wxDELETE(ms_cursorDefault);
+    ms_cursorLink.Clear();
+    ms_cursorText.Clear();
+    ms_cursorDefault.Clear();
 }
 
 void wxHtmlWindow::Init()
@@ -1871,52 +1871,51 @@ void wxHtmlWindow::SetHTMLStatusText(const wxString& text)
 }
 
 /*static*/
-wxCursor wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor type)
+wxCursor
+wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor type, const wxWindow* window)
 {
     switch (type)
     {
         case HTMLCursor_Link:
-            if ( !ms_cursorLink )
-                ms_cursorLink = new wxCursor(wxCURSOR_HAND);
-            return *ms_cursorLink;
+            if ( !ms_cursorLink.IsOk() )
+                ms_cursorLink = wxCursorBundle(wxCURSOR_HAND);
+            return ms_cursorLink.GetCursorFor(window);
 
         case HTMLCursor_Text:
-            if ( !ms_cursorText )
-                ms_cursorText = new wxCursor(wxCURSOR_IBEAM);
-            return *ms_cursorText;
+            if ( !ms_cursorText.IsOk() )
+                ms_cursorText = wxCursorBundle(wxCURSOR_IBEAM);
+            return ms_cursorText.GetCursorFor(window);
 
         case HTMLCursor_Default:
         default:
-            if ( !ms_cursorDefault )
-                ms_cursorDefault = new wxCursor(wxCURSOR_ARROW);
-            return *ms_cursorDefault;
+            if ( !ms_cursorDefault.IsOk() )
+                ms_cursorDefault = wxCursorBundle(wxCURSOR_ARROW);
+            return ms_cursorDefault.GetCursorFor(window);
     }
 }
 
 wxCursor wxHtmlWindow::GetHTMLCursor(HTMLCursor type) const
 {
-    return GetDefaultHTMLCursor(type);
+    return GetDefaultHTMLCursor(type, this);
 }
 
 /*static*/
-void wxHtmlWindow::SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor)
+void
+wxHtmlWindow::SetDefaultHTMLCursor(HTMLCursor type, const wxCursorBundle& cursor)
 {
     switch (type)
     {
         case HTMLCursor_Link:
-            delete ms_cursorLink;
-            ms_cursorLink = new wxCursor(cursor);
+            ms_cursorLink = cursor;
             return;
 
         case HTMLCursor_Text:
-            delete ms_cursorText;
-            ms_cursorText = new wxCursor(cursor);
+            ms_cursorText = cursor;
             return;
 
         case HTMLCursor_Default:
         default:
-            delete ms_cursorText;
-            ms_cursorDefault = new wxCursor(cursor);
+            ms_cursorDefault = cursor;
     }
 }
 

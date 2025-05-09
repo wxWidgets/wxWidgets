@@ -497,10 +497,10 @@ wxCursor wxHtmlListBox::GetHTMLCursor(HTMLCursor type) const
 {
     // we don't want to show text selection cursor in listboxes
     if (type == HTMLCursor_Text)
-        return wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor_Default);
+        return wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor_Default, this);
 
     // in all other cases, use the same cursor as wxHtmlWindow:
-    return wxHtmlWindow::GetDefaultHTMLCursor(type);
+    return wxHtmlWindow::GetDefaultHTMLCursor(type, this);
 }
 
 // ----------------------------------------------------------------------------
