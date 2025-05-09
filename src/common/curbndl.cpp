@@ -81,6 +81,12 @@ public:
 
     virtual wxCursor GetCursorFor(const wxWindow* window) const override
     {
+        // If the window is not specified, try to use the main window (note
+        // that it can still be null, but this is not an error, we'll just use
+        // the default system cursor size in this case).
+        if ( !window )
+            window = wxApp::GetMainTopWindow();
+
         // Just calling GetBitmapFor(window) here would be wrong as cursor size
         // is not always just the standard size scaled by DPI, for example, the
         // user may increase the cursor size even in standard DPI, so get the
@@ -172,7 +178,7 @@ wxCursor wxCursorBundle::GetCursorFor(const wxWindow* window) const
 
 wxCursor wxCursorBundle::GetCursorForMainWindow() const
 {
-    return GetCursorFor(wxApp::GetMainTopWindow());
+    return GetCursorFor(nullptr);
 }
 
 // ----------------------------------------------------------------------------
