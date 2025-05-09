@@ -151,6 +151,13 @@ jobs:
         fi
         echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
 
+        echo "PATH=/opt/homebrew/bin:/opt/homebrew/opt/ccache/libexec:$PATH" >> $GITHUB_ENV
+
+    - name: Install CCache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ matrix.name }}
+
     - name: Before install
       run: |
         ./build/tools/before_install.sh
