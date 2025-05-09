@@ -213,6 +213,9 @@ public:
     // value for it is 9223).
     int m_remoteDebuggingPort = 0;
 
+    // Set to true to block CEF from accessing local files.
+    bool m_disableFileAccess = false;
+
     // Function to create the custom CefClient to use if non-null.
     //
     // The CefClient subclass must delegate all not otherwise implemented
