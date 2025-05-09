@@ -341,6 +341,13 @@ public:
     static const wxLanguageInfo* GetLanguageInfo(int lang);
 
     /**
+        Tries to retrieve a list of the user's (or OS's) preferred UI languages.
+
+        @return An empty list if language-guessing algorithm failed.
+    */
+    static wxVector<wxString> GetPreferredUILanguages();
+
+    /**
         Returns English name of the given language or empty string if this
         language is unknown.
 
