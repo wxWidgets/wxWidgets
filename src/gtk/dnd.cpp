@@ -730,11 +730,8 @@ wxDropSource::wxDropSource(wxDataObject& data,
                            const wxIcon &iconCopy,
                            const wxIcon &iconMove,
                            const wxIcon &iconNone)
-    : m_iconCopy(iconCopy)
-    , m_iconMove(iconMove)
-    , m_iconNone(iconNone)
+    : wxDropSource(win, iconCopy, iconMove, iconNone)
 {
-    Init(win);
     SetData( data );
 }
 

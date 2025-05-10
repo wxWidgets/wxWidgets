@@ -142,23 +142,23 @@ void wxDropSource::Init()
     m_pIDropSource->AddRef();
 }
 
-wxDropSource::wxDropSource(wxWindow* WXUNUSED(win),
-                           const wxCursor &cursorCopy,
-                           const wxCursor &cursorMove,
-                           const wxCursor &cursorStop)
-            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
+wxDropSource::wxDropSource(wxWindow* win,
+                           const wxCursorBundle& cursorCopy,
+                           const wxCursorBundle& cursorMove,
+                           const wxCursorBundle& cursorStop)
+            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop),
+              m_win(win)
 {
     Init();
 }
 
 wxDropSource::wxDropSource(wxDataObject& data,
-                           wxWindow* WXUNUSED(win),
-                           const wxCursor &cursorCopy,
-                           const wxCursor &cursorMove,
-                           const wxCursor &cursorStop)
-            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
+                           wxWindow* win,
+                           const wxCursorBundle& cursorCopy,
+                           const wxCursorBundle& cursorMove,
+                           const wxCursorBundle& cursorStop)
+            : wxDropSource(win, cursorCopy, cursorMove, cursorStop)
 {
-    Init();
     SetData(data);
 }
 
@@ -222,10 +222,10 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 // Notes   : here we just leave this stuff for default implementation
 bool wxDropSource::GiveFeedback(wxDragResult effect)
 {
-    const wxCursor& cursor = GetCursor(effect);
-    if ( cursor.IsOk() )
+    m_feedbackCursor = GetCursorBundle(effect).GetCursorFor(m_win);
+    if ( m_feedbackCursor.IsOk() )
     {
-        ::SetCursor((HCURSOR)cursor.GetHCURSOR());
+        ::SetCursor((HCURSOR)m_feedbackCursor.GetHCURSOR());
 
         return true;
     }

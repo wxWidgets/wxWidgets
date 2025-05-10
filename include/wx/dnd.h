@@ -55,9 +55,9 @@ WXDLLIMPEXP_CORE bool wxIsDragResultOk(wxDragResult res);
 class WXDLLIMPEXP_CORE wxDropSourceBase
 {
 public:
-    wxDropSourceBase(const wxCursor &cursorCopy = wxNullCursor,
-                     const wxCursor &cursorMove = wxNullCursor,
-                     const wxCursor &cursorStop = wxNullCursor)
+    wxDropSourceBase(const wxCursorBundle& cursorCopy = {},
+                     const wxCursorBundle& cursorMove = {},
+                     const wxCursorBundle& cursorStop = {})
         : m_cursorCopy(cursorCopy),
           m_cursorMove(cursorMove),
           m_cursorStop(cursorStop)
@@ -72,7 +72,7 @@ public:
       { return m_data; }
 
     // set the icon corresponding to given drag result
-    void SetCursor(wxDragResult res, const wxCursor& cursor)
+    void SetCursor(wxDragResult res, const wxCursorBundle& cursor)
     {
         if ( res == wxDragCopy )
             m_cursorCopy = cursor;
@@ -95,7 +95,7 @@ public:
     virtual bool GiveFeedback(wxDragResult WXUNUSED(effect)) { return false; }
 
 protected:
-    const wxCursor& GetCursor(wxDragResult res) const
+    const wxCursorBundle& GetCursorBundle(wxDragResult res) const
     {
         if ( res == wxDragCopy )
             return m_cursorCopy;
@@ -109,9 +109,9 @@ protected:
     wxDataObject *m_data;
 
     // the cursors to use for feedback
-    wxCursor m_cursorCopy,
-             m_cursorMove,
-             m_cursorStop;
+    wxCursorBundle m_cursorCopy,
+                   m_cursorMove,
+                   m_cursorStop;
 
     wxDECLARE_NO_COPY_CLASS(wxDropSourceBase);
 };

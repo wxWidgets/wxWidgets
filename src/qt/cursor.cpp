@@ -19,8 +19,10 @@
 #include "wx/cursor.h"
 #include "wx/qt/private/converter.h"
 
-void wxSetCursor(const wxCursor& cursor)
+void wxSetCursor( const wxCursorBundle& cursors )
 {
+    const wxCursor& cursor = cursors.GetCursorForMainWindow();
+
     if (cursor.GetHandle().shape() == Qt::ArrowCursor)
         QApplication::restoreOverrideCursor();
     else

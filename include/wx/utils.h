@@ -20,6 +20,7 @@
 #include "wx/meta/implicitconversion.h"
 
 #if wxUSE_GUI
+    #include "wx/busycursor.h"
     #include "wx/gdicmn.h"
     #include "wx/mousestate.h"
     #include "wx/vector.h"
@@ -700,35 +701,8 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// Cursors
+// Miscellaneous GUI functions
 // ----------------------------------------------------------------------------
-
-// Set the cursor to the busy cursor for all windows
-WXDLLIMPEXP_CORE void wxBeginBusyCursor(const wxCursor *cursor = wxHOURGLASS_CURSOR);
-
-// Restore cursor to normal
-WXDLLIMPEXP_CORE void wxEndBusyCursor();
-
-// true if we're between the above two calls
-WXDLLIMPEXP_CORE bool wxIsBusy();
-
-// Convenience class so we can just create a wxBusyCursor object on the stack
-class WXDLLIMPEXP_CORE wxBusyCursor
-{
-public:
-    wxBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR)
-        { wxBeginBusyCursor(cursor); }
-    ~wxBusyCursor()
-        { wxEndBusyCursor(); }
-
-    // FIXME: These two methods are currently only implemented (and needed?)
-    //        in wxGTK.  BusyCursor handling should probably be moved to
-    //        common code since the wxGTK and wxMSW implementations are very
-    //        similar except for wxMSW using HCURSOR directly instead of
-    //        wxCursor..  -- RL.
-    static const wxCursor &GetStoredCursor();
-    static const wxCursor GetBusyCursor();
-};
 
 void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
 

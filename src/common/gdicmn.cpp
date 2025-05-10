@@ -29,6 +29,7 @@
     #include "wx/colour.h"
     #include "wx/font.h"
     #include "wx/math.h"
+    #include "wx/utils.h"
 #endif
 
 #include <unordered_map>

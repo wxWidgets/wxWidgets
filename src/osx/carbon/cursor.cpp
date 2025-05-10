@@ -363,8 +363,9 @@ wxPoint wxCursor::GetHotSpot() const
 
 // Global cursor setting
 wxCursor gGlobalCursor;
-void wxSetCursor(const wxCursor& cursor)
+void wxSetCursor( const wxCursorBundle& cursors )
 {
+    wxCursor cursor = cursors.GetCursorForMainWindow();
     cursor.MacInstall() ;
     gGlobalCursor = cursor;
 }

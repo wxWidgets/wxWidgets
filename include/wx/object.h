@@ -226,6 +226,16 @@ public:
 
     T *get() const { return m_ptr; }
 
+    bool operator==(const wxObjectDataPtr<T>& other) const
+    {
+        return m_ptr == other.m_ptr;
+    }
+
+    bool operator!=(const wxObjectDataPtr<T>& other) const
+    {
+        return !(*this == other);
+    }
+
     // test for pointer validity: defining conversion to unspecified_bool_type
     // and not more obvious bool to avoid implicit conversions to integer types
     typedef T *(wxObjectDataPtr<T>::*unspecified_bool_type)() const;

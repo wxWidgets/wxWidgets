@@ -115,7 +115,7 @@ wxDropSource::~wxDropSource()
 
 bool wxDropSource::MacInstallDefaultCursor(wxDragResult effect)
 {
-    const wxCursor& cursor = GetCursor(effect);
+    wxCursor cursor = GetCursorBundle(effect).GetCursorFor(m_window);
     bool result = cursor.IsOk();
 
     if ( result )

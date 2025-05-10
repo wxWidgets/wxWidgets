@@ -1952,6 +1952,65 @@ public:
 };
 
 
+/**
+    Possible values for wxSysMetricChangedEvent::GetMetric().
+
+    @since 3.3.0
+ */
+enum class wxSysMetric
+{
+    /**
+        Undetermined or unknown system metric has changed.
+     */
+    Other,
+
+    /**
+        The default system cursor size has changed.
+
+        The new value can be obtained by calling wxSystemSettings::GetMetric()
+        with ::wxSYS_CURSOR_SIZE parameter.
+     */
+    CursorSize
+};
+
+/**
+    @class wxSysMetricChangedEvent
+
+    Notification about a change in one of the global system metrics.
+
+    Currently this event is only sent by wxMSW.
+
+    Event handlers for this event can access the new system metric values through
+    wxSystemSettings::GetMetric().
+
+    @remarks
+        The default event handler for this event propagates the event to child windows,
+        since the system events are only sent to top-level windows.
+        If intercepting this event for a top-level window, remember to either call
+        wxEvent::Skip() on the event, call the base class handler, or pass the event
+        on to the window's children explicitly.
+
+    @beginEventTable{wxSysMetricChangedEvent}
+    @event{EVT_SYS_METRIC_CHANGED(func)}
+        Process a @c wxEVT_SYS_METRIC_CHANGED event.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @see @ref overview_events
+
+    @since 3.3.0
+*/
+class wxSysMetricChangedEvent : public wxEvent
+{
+public:
+    /**
+        Return the metric which has changed.
+     */
+    wxSysMetric GetMetric() const;
+};
+
 
 /**
     @class wxCommandEvent
@@ -5400,6 +5459,7 @@ wxEventType wxEVT_MENU_CLOSE;
 wxEventType wxEVT_MENU_HIGHLIGHT;
 wxEventType wxEVT_CONTEXT_MENU;
 wxEventType wxEVT_SYS_COLOUR_CHANGED;
+wxEventType wxEVT_SYS_METRIC_CHANGED;
 wxEventType wxEVT_DISPLAY_CHANGED;
 wxEventType wxEVT_DPI_CHANGED;
 wxEventType wxEVT_QUERY_NEW_PALETTE;

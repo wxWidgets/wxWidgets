@@ -112,7 +112,6 @@ public:
 
     virtual void SetWindowStyleFlag(long style) override;
     virtual void SetExtraStyle(long exStyle) override;
-    virtual bool SetCursor( const wxCursor &cursor ) override;
     virtual bool SetFont( const wxFont &font ) override;
 
     virtual bool IsTransparentBackgroundSupported(wxString* reason = nullptr) const override;
@@ -207,6 +206,8 @@ public:
 
     // implementation from now on
     // ==========================
+
+    virtual void WXUpdateCursor() override;
 
     // event handlers
     // --------------

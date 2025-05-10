@@ -1262,6 +1262,12 @@ public:
     }
     wxFont GetFont() const;
 
+        // Set/get the cursor bundle used by this window: having a bundle of
+        // cursors instead of just a single one allows the window to show the
+        // cursor appropriate for the current DPI scaling automatically.
+    virtual bool SetCursorBundle(const wxCursorBundle& cursors);
+    wxCursorBundle GetCursorBundle() const { return m_cursors; }
+
         // set/retrieve the cursor for this window (SetCursor() returns true
         // if the cursor was really changed)
     virtual bool SetCursor( const wxCursor &cursor );
@@ -1688,6 +1694,10 @@ public:
     // This is an internal helper function implemented by text-like controls.
     virtual const wxTextEntry* WXGetTextEntry() const { return nullptr; }
 
+    // Internal function used to update the shown cursor when the cursor size
+    // changes.
+    virtual void WXUpdateCursor();
+
 
     // DPI-related helpers for ports using DIPs.
 
@@ -1784,7 +1794,7 @@ protected:
 #endif // wxUSE_DRAG_AND_DROP
 
     // visual window attributes
-    wxCursor             m_cursor;
+    wxCursor             m_cursor;              // don't use (see m_cursors)!
     wxFont               m_font;                // see m_hasFont
     wxColour             m_backgroundColour,    //     m_hasBgCol
                          m_foregroundColour;    //     m_hasFgCol
@@ -2019,6 +2029,12 @@ private:
     // base for dialog unit conversion, i.e. average character size
     wxSize GetDlgUnitBase() const;
 
+
+    // Cursor bundle for this window.
+    //
+    // When it is changed, m_cursor is also updated to preserve compatibility
+    // with the old code using it directly by calling WXUpdateCursor().
+    wxCursorBundle m_cursors;
 
     // number of Freeze() calls minus the number of Thaw() calls: we're frozen
     // (i.e. not being updated) if it is positive

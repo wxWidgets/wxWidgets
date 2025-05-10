@@ -154,6 +154,15 @@ enum wxSystemMetric
     wxSYS_BORDER_Y,           //!< Height of single border.
     wxSYS_CURSOR_X,           //!< Width of cursor in physical pixels.
     wxSYS_CURSOR_Y,           //!< Height of cursor in physical pixels.
+    /**
+        Width or height of cursor in physical pixels.
+
+        This is the same as wxSYS_CURSOR_X and wxSYS_CURSOR_Y as cursors are
+        always square.
+
+        @since 3.3.0
+     */
+    wxSYS_CURSOR_SIZE,
     wxSYS_DCLICK_X,           //!< Width in pixels of rectangle within which two successive mouse clicks must fall to generate a double-click.
     wxSYS_DCLICK_Y,           //!< Height in pixels of rectangle within which two successive mouse clicks must fall to generate a double-click.
     wxSYS_DRAG_X,             //!< Width in pixels of a rectangle centered on a drag point to allow for limited movement of the mouse pointer before a drag operation begins.

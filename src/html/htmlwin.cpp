@@ -29,6 +29,7 @@
 #include "wx/clipbrd.h"
 #include "wx/recguard.h"
 
+#include <array>
 #include <list>
 
 // uncomment this line to visually show the extent of the selection
@@ -286,18 +287,39 @@ void wxHtmlWindowMouseHelper::OnCellMouseHover(wxHtmlCell * cell,
 wxList wxHtmlWindow::m_Filters;
 wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = nullptr;
 wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = nullptr;
-wxCursor *wxHtmlWindow::ms_cursorLink = nullptr;
-wxCursor *wxHtmlWindow::ms_cursorText = nullptr;
-wxCursor *wxHtmlWindow::ms_cursorDefault = nullptr;
+
+namespace
+{
+
+constexpr int HTML_CURSORS_COUNT = 3;
+
+static_assert(wxHtmlWindowInterface::HTMLCursor_Text + 1 == HTML_CURSORS_COUNT,
+              "HTMLCursor enum values must be contiguous and start from 0");
+
+wxCursorBundle& DefaultCursor(int type)
+{
+    static std::array<wxCursorBundle, HTML_CURSORS_COUNT> s_cursors;
+
+    // For compatibility with the existing code we handle all unknown cursors
+    // as HTMLCursor_Default, but this really shouldn't ever happen.
+    if ( type < 0 || type >= HTML_CURSORS_COUNT )
+        return s_cursors[wxHtmlWindowInterface::HTMLCursor_Default];
+
+    return s_cursors[type];
+}
+
+} // anonymous namespace
 
 void wxHtmlWindow::CleanUpStatics()
 {
     wxDELETE(m_DefaultFilter);
     wxClearList(m_Filters);
     wxDELETE(m_GlobalProcessors);
-    wxDELETE(ms_cursorLink);
-    wxDELETE(ms_cursorText);
-    wxDELETE(ms_cursorDefault);
+
+    for ( int i = 0; i < HTML_CURSORS_COUNT; ++i )
+    {
+        DefaultCursor(i).Clear();
+    }
 }
 
 void wxHtmlWindow::Init()
@@ -1871,53 +1893,47 @@ void wxHtmlWindow::SetHTMLStatusText(const wxString& text)
 }
 
 /*static*/
-wxCursor wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor type)
+wxCursor
+wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor type, const wxWindow* window)
 {
-    switch (type)
+    wxCursorBundle& cursor = DefaultCursor(type);
+
+    if ( !cursor.IsOk() )
     {
-        case HTMLCursor_Link:
-            if ( !ms_cursorLink )
-                ms_cursorLink = new wxCursor(wxCURSOR_HAND);
-            return *ms_cursorLink;
+        wxStockCursor defCursor = wxCURSOR_NONE;
+        switch (type)
+        {
+            case HTMLCursor_Link:
+                defCursor = wxCURSOR_HAND;
+                break;
 
-        case HTMLCursor_Text:
-            if ( !ms_cursorText )
-                ms_cursorText = new wxCursor(wxCURSOR_IBEAM);
-            return *ms_cursorText;
+            case HTMLCursor_Text:
+                defCursor = wxCURSOR_IBEAM;
+                break;
 
-        case HTMLCursor_Default:
-        default:
-            if ( !ms_cursorDefault )
-                ms_cursorDefault = new wxCursor(wxCURSOR_ARROW);
-            return *ms_cursorDefault;
+            case HTMLCursor_Default:
+                defCursor = wxCURSOR_ARROW;
+                break;
+        }
+
+        wxASSERT_MSG( defCursor != wxCURSOR_NONE, "invalid cursor type");
+
+        cursor = wxCursorBundle(defCursor);
     }
+
+    return cursor.GetCursorFor(window);
 }
 
 wxCursor wxHtmlWindow::GetHTMLCursor(HTMLCursor type) const
 {
-    return GetDefaultHTMLCursor(type);
+    return GetDefaultHTMLCursor(type, this);
 }
 
 /*static*/
-void wxHtmlWindow::SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor)
+void
+wxHtmlWindow::SetDefaultHTMLCursor(HTMLCursor type, const wxCursorBundle& cursor)
 {
-    switch (type)
-    {
-        case HTMLCursor_Link:
-            delete ms_cursorLink;
-            ms_cursorLink = new wxCursor(cursor);
-            return;
-
-        case HTMLCursor_Text:
-            delete ms_cursorText;
-            ms_cursorText = new wxCursor(cursor);
-            return;
-
-        case HTMLCursor_Default:
-        default:
-            delete ms_cursorText;
-            ms_cursorDefault = new wxCursor(cursor);
-    }
+    DefaultCursor(type) = cursor;
 }
 
 //-----------------------------------------------------------------------------

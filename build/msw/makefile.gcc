@@ -2233,7 +2233,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_rowheightcache.o \
 	$(OBJS)\monodll_common_bmpbndl.o \
 	$(OBJS)\monodll_bmpsvg.o \
-	$(OBJS)\monodll_powercmn.o
+	$(OBJS)\monodll_powercmn.o \
+	$(OBJS)\monodll_curbndl.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -2569,7 +2570,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_rowheightcache.o \
 	$(OBJS)\monodll_common_bmpbndl.o \
 	$(OBJS)\monodll_bmpsvg.o \
-	$(OBJS)\monodll_powercmn.o
+	$(OBJS)\monodll_powercmn.o \
+	$(OBJS)\monodll_curbndl.o
 endif
 endif
 ifeq ($(USE_STC),1)
@@ -3093,7 +3095,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_rowheightcache.o \
 	$(OBJS)\monolib_common_bmpbndl.o \
 	$(OBJS)\monolib_bmpsvg.o \
-	$(OBJS)\monolib_powercmn.o
+	$(OBJS)\monolib_powercmn.o \
+	$(OBJS)\monolib_curbndl.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -3429,7 +3432,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_rowheightcache.o \
 	$(OBJS)\monolib_common_bmpbndl.o \
 	$(OBJS)\monolib_bmpsvg.o \
-	$(OBJS)\monolib_powercmn.o
+	$(OBJS)\monolib_powercmn.o \
+	$(OBJS)\monolib_curbndl.o
 endif
 endif
 ifeq ($(USE_STC),1)
@@ -3829,7 +3833,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_rowheightcache.o \
 	$(OBJS)\coredll_common_bmpbndl.o \
 	$(OBJS)\coredll_bmpsvg.o \
-	$(OBJS)\coredll_powercmn.o
+	$(OBJS)\coredll_powercmn.o \
+	$(OBJS)\coredll_curbndl.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -4165,7 +4170,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_rowheightcache.o \
 	$(OBJS)\coredll_common_bmpbndl.o \
 	$(OBJS)\coredll_bmpsvg.o \
-	$(OBJS)\coredll_powercmn.o
+	$(OBJS)\coredll_powercmn.o \
+	$(OBJS)\coredll_curbndl.o
 endif
 endif
 ifeq ($(MONOLITHIC),0)
@@ -4522,7 +4528,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_rowheightcache.o \
 	$(OBJS)\corelib_common_bmpbndl.o \
 	$(OBJS)\corelib_bmpsvg.o \
-	$(OBJS)\corelib_powercmn.o
+	$(OBJS)\corelib_powercmn.o \
+	$(OBJS)\corelib_curbndl.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -4858,7 +4865,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_rowheightcache.o \
 	$(OBJS)\corelib_common_bmpbndl.o \
 	$(OBJS)\corelib_bmpsvg.o \
-	$(OBJS)\corelib_powercmn.o
+	$(OBJS)\corelib_powercmn.o \
+	$(OBJS)\corelib_curbndl.o
 endif
 endif
 ifeq ($(SHARED),1)
@@ -9653,6 +9661,11 @@ $(OBJS)\monodll_powercmn.o: ../../src/common/powercmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_curbndl.o: ../../src/common/curbndl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\monodll_version_rc.o: ../../src/msw/version.rc
 	$(WINDRES) -i$< -o$@   --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../3rdparty/pcre/src/wx --include-dir ../../src/expat/expat/lib   --define __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG) --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --define __WX__ --include-dir ../../src/stc/lexilla/access --include-dir ../../src/stc/lexilla/include --include-dir ../../src/stc/lexilla/lexlib --include-dir ../../src/stc/lexilla/include --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --include-dir ../../include/wx/msw/wrl --include-dir ../../3rdparty/webview2/build/native/include --define wxUSE_BASE=1 --define WXMAKINGDLL
 
@@ -12255,6 +12268,11 @@ $(OBJS)\monolib_powercmn.o: ../../src/common/powercmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_curbndl.o: ../../src/common/curbndl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\basedll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14803,6 +14821,11 @@ $(OBJS)\coredll_powercmn.o: ../../src/common/powercmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_curbndl.o: ../../src/common/curbndl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\corelib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -16565,6 +16588,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_powercmn.o: ../../src/common/powercmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_curbndl.o: ../../src/common/curbndl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

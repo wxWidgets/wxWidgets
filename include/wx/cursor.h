@@ -22,6 +22,9 @@
     typedef wxGDIObject wxGDIImage;
 #endif
 
+class WXDLLIMPEXP_FWD_CORE wxBitmapBundle;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 class WXDLLIMPEXP_CORE wxCursorBase : public wxGDIImage
 {
 public:
@@ -70,42 +73,81 @@ public:
     #include "wx/qt/cursor.h"
 #endif
 
-#include "wx/utils.h"
+// ----------------------------------------------------------------------------
+// wxCursorBundle stores 1 or more versions of the same cursor, to be used at
+// different DPI scaling levels.
+// ----------------------------------------------------------------------------
 
-/* This is a small class which can be used by all ports
-   to temporarily suspend the busy cursor. Useful in modal
-   dialogs.
+class wxCursorBundleImpl;
 
-   Actually that is not (any longer) quite true..  currently it is
-   only used in wxGTK Dialog::ShowModal() and now uses static
-   wxBusyCursor methods that are only implemented for wxGTK so far.
-   The BusyCursor handling code should probably be implemented in
-   common code somewhere instead of the separate implementations we
-   currently have.  Also the name BusyCursorSuspender is a little
-   misleading since it doesn't actually suspend the BusyCursor, just
-   masks one that is already showing.
-   If another call to wxBeginBusyCursor is made while this is active
-   the Busy Cursor will again be shown.  But at least now it doesn't
-   interfere with the state of wxIsBusy() -- RL
-
-*/
-class wxBusyCursorSuspender
+class WXDLLIMPEXP_CORE wxCursorBundle
 {
 public:
-    wxBusyCursorSuspender()
+    // Default ctor constructs an empty bundle which can't be used for
+    // anything, but can be assigned something later.
+    wxCursorBundle();
+
+    // Create a cursor bundle from the given bitmap bundle.
+    //
+    // Note that the hotspot coordinates must be relative to the default size
+    // of the bitmap bundle and are scaled for other sizes.
+    explicit wxCursorBundle(const wxBitmapBundle& bitmaps,
+                            const wxPoint& hotSpot);
+
+    explicit wxCursorBundle(const wxBitmapBundle& bitmaps,
+                            int hotSpotX = 0, int hotSpotY = 0)
+        : wxCursorBundle(bitmaps, wxPoint(hotSpotX, hotSpotY))
     {
-        if( wxIsBusy() )
-        {
-            wxSetCursor( wxBusyCursor::GetStoredCursor() );
-        }
     }
-    ~wxBusyCursorSuspender()
+
+    // This conversion ctor from a single cursor only exists for
+    // interoperability with the existing code using wxCursor.
+    wxCursorBundle(const wxCursor& cursor);
+
+    // This is another conversion ctor existing to allow existing code using
+    // wxCursor to work without changes with wxCursorBundle.
+    wxCursorBundle(wxStockCursor id);
+
+    // Default copy ctor and assignment operator and dtor would be ok, but need
+    // to be defined out of line, where wxCursorBundleImpl is fully declared.
+
+    wxCursorBundle(const wxCursorBundle& other);
+    wxCursorBundle& operator=(const wxCursorBundle& other);
+
+    ~wxCursorBundle();
+
+    // Check if cursor bundle is non-empty.
+    wxNODISCARD bool IsOk() const { return m_impl.get() != nullptr; }
+
+    // Clear the bundle contents, IsOk() will return false after doing this.
+    void Clear();
+
+    // Get the cursor of the size suitable for the DPI used by the given window.
+    wxNODISCARD wxCursor GetCursorFor(const wxWindow* window) const;
+
+    // Get the cursor of the default size: prefer to use GetCursorFor() instead
+    // if there is a suitable window available, this function only exists as
+    // last resort.
+    wxNODISCARD wxCursor GetCursorForMainWindow() const;
+
+    // Check if two objects refer to the same bundle.
+    wxNODISCARD bool IsSameAs(const wxCursorBundle& other) const
     {
-        if( wxIsBusy() )
-        {
-            wxSetCursor( wxBusyCursor::GetBusyCursor() );
-        }
+        return m_impl == other.m_impl;
     }
+
+private:
+    using ImplPtr = wxObjectDataPtr<wxCursorBundleImpl>;
+
+    // Private ctor used by static factory functions to create objects of this
+    // class. It takes ownership of the pointer (which must be non-null).
+    explicit wxCursorBundle(const ImplPtr& impl);
+
+    ImplPtr m_impl;
 };
-#endif
-    // _WX_CURSOR_H_BASE_
+
+// For compatibility, include busy cursor-related stuff which used to be pulled
+// in by this header via wx/utils.h.
+#include "wx/busycursor.h"
+
+#endif // _WX_CURSOR_H_BASE_

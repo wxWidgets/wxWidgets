@@ -96,9 +96,11 @@ QMimeData* CreateMimeData(wxDataObject* dataObject)
 }
 
 void SetDragCursor(QDrag& drag,
-                   const wxCursor& cursor,
+                   const wxCursorBundle& cursors,
                    Qt::DropAction action)
 {
+    wxCursor cursor = cursors.GetCursorForMainWindow();
+
     if ( cursor.IsOk() )
         drag.setDragCursor(cursor.GetHandle().pixmap(), action);
 }
@@ -343,9 +345,9 @@ void wxDropTarget::Disconnect()
 //###########################################################################
 
 wxDropSource::wxDropSource(wxWindow *win,
-              const wxCursor &copy,
-              const wxCursor &move,
-              const wxCursor &none)
+              const wxCursorBundle& copy,
+              const wxCursorBundle& move,
+              const wxCursorBundle& none)
     : wxDropSourceBase(copy, move, none),
       m_parentWindow(win)
 {
@@ -353,11 +355,10 @@ wxDropSource::wxDropSource(wxWindow *win,
 
 wxDropSource::wxDropSource(wxDataObject& data,
               wxWindow *win,
-              const wxCursor &copy,
-              const wxCursor &move,
-              const wxCursor &none)
-    : wxDropSourceBase(copy, move, none),
-      m_parentWindow(win)
+              const wxCursorBundle& copy,
+              const wxCursorBundle& move,
+              const wxCursorBundle& none)
+    : wxDropSource(win, copy, move, none)
 {
     SetData(data);
 }

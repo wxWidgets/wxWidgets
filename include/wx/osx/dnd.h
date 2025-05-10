@@ -78,16 +78,16 @@ public:
     // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
     //     compatibility, as well as both icon parameters
     wxDropSource( wxWindow *win = nullptr,
-                 const wxCursor &cursorCopy = wxNullCursor,
-                 const wxCursor &cursorMove = wxNullCursor,
-                 const wxCursor &cursorStop = wxNullCursor);
+                 const wxCursorBundle& cursorCopy = {},
+                 const wxCursorBundle& cursorMove = {},
+                 const wxCursorBundle& cursorStop = {});
 
     /* constructor for setting one data object */
     wxDropSource( wxDataObject& data,
                   wxWindow *win,
-                 const wxCursor &cursorCopy = wxNullCursor,
-                 const wxCursor &cursorMove = wxNullCursor,
-                 const wxCursor &cursorStop = wxNullCursor);
+                 const wxCursorBundle& cursorCopy = {},
+                 const wxCursorBundle& cursorMove = {},
+                 const wxCursorBundle& cursorStop = {});
 
     virtual ~wxDropSource();
 
