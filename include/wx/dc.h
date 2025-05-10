@@ -1456,15 +1456,24 @@ private:
 class WXDLLIMPEXP_CORE wxDCPenChanger
 {
 public:
-    wxDCPenChanger(wxDC& dc, const wxPen& pen) : m_dc(dc), m_penOld(dc.GetPen())
+    wxDCPenChanger(wxDC& dc) : m_dc(dc) { }
+
+    wxDCPenChanger(wxDC& dc, const wxPen& pen) : m_dc(dc)
     {
-        m_dc.SetPen(pen);
+        Set(pen);
     }
 
     ~wxDCPenChanger()
     {
         if ( m_penOld.IsOk() )
             m_dc.SetPen(m_penOld);
+    }
+
+    void Set(const wxPen& pen)
+    {
+        if ( !m_penOld.IsOk() )
+            m_penOld = m_dc.GetPen();
+        m_dc.SetPen(pen);
     }
 
 private:
@@ -1483,15 +1492,24 @@ private:
 class WXDLLIMPEXP_CORE wxDCBrushChanger
 {
 public:
-    wxDCBrushChanger(wxDC& dc, const wxBrush& brush) : m_dc(dc), m_brushOld(dc.GetBrush())
+    wxDCBrushChanger(wxDC& dc) : m_dc(dc) { }
+
+    wxDCBrushChanger(wxDC& dc, const wxBrush& brush) : m_dc(dc)
     {
-        m_dc.SetBrush(brush);
+        Set(brush);
     }
 
     ~wxDCBrushChanger()
     {
         if ( m_brushOld.IsOk() )
             m_dc.SetBrush(m_brushOld);
+    }
+
+    void Set(const wxBrush& brush)
+    {
+        if ( !m_brushOld.IsOk() )
+            m_brushOld = m_dc.GetBrush();
+        m_dc.SetBrush(brush);
     }
 
 private:
