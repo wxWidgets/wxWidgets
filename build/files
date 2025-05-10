@@ -820,6 +820,7 @@ GUI_CMN_SRC =
     src/common/imagpnm.cpp
     src/common/imagtga.cpp
     src/common/imagtiff.cpp
+    src/common/imagwebp.cpp
     src/common/imagxpm.cpp
     src/common/layout.cpp
     src/common/lboxcmn.cpp
@@ -873,6 +874,7 @@ GUI_CMN_SRC =
     src/common/validate.cpp
     src/common/valnum.cpp
     src/common/valtext.cpp
+    src/common/webpdecoder.cpp
     src/common/wincmn.cpp
     src/common/windowid.cpp
     src/common/wrapsizer.cpp
@@ -1115,6 +1117,7 @@ GUI_CMN_HDR =
     wx/imagpnm.h
     wx/imagtga.h
     wx/imagtiff.h
+    wx/imagwebp.h
     wx/imagxpm.h
     wx/infobar.h
     wx/itemattr.h
@@ -1228,6 +1231,7 @@ GUI_CMN_HDR =
     wx/vlbox.h
     wx/vms_x_fix.h
     wx/vscroll.h
+    wx/webpdecoder.h
     wx/window.h
     wx/windowid.h
     wx/windowptr.h

@@ -1726,6 +1726,8 @@
     <ClCompile Include="..\..\src\msw\overlay.cpp" />
     <ClCompile Include="..\..\src\msw\power.cpp" />
     <ClCompile Include="..\..\src\common\powercmn.cpp" />
+    <ClCompile Include="..\..\src\common\imagwebp.cpp" />
+    <ClCompile Include="..\..\src\common\webpdecoder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -2187,6 +2189,8 @@
     <ClInclude Include="..\..\include\wx\msw\darkmode.h" />
     <ClInclude Include="..\..\include\wx\persist\combobox.h" />
     <ClInclude Include="..\..\include\wx\power.h" />
+    <ClInclude Include="..\..\include\wx\webpdecoder.h" />
+    <ClInclude Include="..\..\include\wx\imagwebp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

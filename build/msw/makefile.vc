@@ -2578,7 +2578,9 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_rowheightcache.obj \
 	$(OBJS)\monodll_common_bmpbndl.obj \
 	$(OBJS)\monodll_bmpsvg.obj \
-	$(OBJS)\monodll_powercmn.obj
+	$(OBJS)\monodll_powercmn.obj \
+	$(OBJS)\monodll_webpdecoder.obj \
+	$(OBJS)\monodll_imagwebp.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_OBJECTS =  \
@@ -2912,7 +2914,9 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_rowheightcache.obj \
 	$(OBJS)\monodll_common_bmpbndl.obj \
 	$(OBJS)\monodll_bmpsvg.obj \
-	$(OBJS)\monodll_powercmn.obj
+	$(OBJS)\monodll_powercmn.obj \
+	$(OBJS)\monodll_webpdecoder.obj \
+	$(OBJS)\monodll_imagwebp.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_OBJECTS =  \
@@ -3438,7 +3442,9 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_rowheightcache.obj \
 	$(OBJS)\monolib_common_bmpbndl.obj \
 	$(OBJS)\monolib_bmpsvg.obj \
-	$(OBJS)\monolib_powercmn.obj
+	$(OBJS)\monolib_powercmn.obj \
+	$(OBJS)\monolib_webpdecoder.obj \
+	$(OBJS)\monolib_imagwebp.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_1_OBJECTS =  \
@@ -3772,7 +3778,9 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_rowheightcache.obj \
 	$(OBJS)\monolib_common_bmpbndl.obj \
 	$(OBJS)\monolib_bmpsvg.obj \
-	$(OBJS)\monolib_powercmn.obj
+	$(OBJS)\monolib_powercmn.obj \
+	$(OBJS)\monolib_webpdecoder.obj \
+	$(OBJS)\monolib_imagwebp.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_1_OBJECTS =  \
@@ -4224,7 +4232,9 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_rowheightcache.obj \
 	$(OBJS)\coredll_common_bmpbndl.obj \
 	$(OBJS)\coredll_bmpsvg.obj \
-	$(OBJS)\coredll_powercmn.obj
+	$(OBJS)\coredll_powercmn.obj \
+	$(OBJS)\coredll_webpdecoder.obj \
+	$(OBJS)\coredll_imagwebp.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_2_OBJECTS =  \
@@ -4558,7 +4568,9 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_rowheightcache.obj \
 	$(OBJS)\coredll_common_bmpbndl.obj \
 	$(OBJS)\coredll_bmpsvg.obj \
-	$(OBJS)\coredll_powercmn.obj
+	$(OBJS)\coredll_powercmn.obj \
+	$(OBJS)\coredll_webpdecoder.obj \
+	$(OBJS)\coredll_imagwebp.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __corelib___depname = \
@@ -4915,7 +4927,9 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_rowheightcache.obj \
 	$(OBJS)\corelib_common_bmpbndl.obj \
 	$(OBJS)\corelib_bmpsvg.obj \
-	$(OBJS)\corelib_powercmn.obj
+	$(OBJS)\corelib_powercmn.obj \
+	$(OBJS)\corelib_webpdecoder.obj \
+	$(OBJS)\corelib_imagwebp.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_3_OBJECTS =  \
@@ -5249,7 +5263,9 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_rowheightcache.obj \
 	$(OBJS)\corelib_common_bmpbndl.obj \
 	$(OBJS)\corelib_bmpsvg.obj \
-	$(OBJS)\corelib_powercmn.obj
+	$(OBJS)\corelib_powercmn.obj \
+	$(OBJS)\corelib_webpdecoder.obj \
+	$(OBJS)\corelib_imagwebp.obj
 !endif
 !if "$(SHARED)" == "1"
 ____wxcore_namedll_DEP = $(__coredll___depname)
@@ -10122,6 +10138,16 @@ $(OBJS)\monodll_powercmn.obj: ..\..\src\common\powercmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\powercmn.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_webpdecoder.obj: ..\..\src\common\webpdecoder.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webpdecoder.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_imagwebp.obj: ..\..\src\common\imagwebp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\imagwebp.cpp
+!endif
+
 $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\3rdparty\pcre\src\wx /i ..\..\src\expat\expat\lib $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_73)  $(__TARGET_CPU_COMPFLAG_p_73) /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG) /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\src /d __WX__ /i ..\..\src\stc\lexilla\access /i ..\..\src\stc\lexilla\include /i ..\..\src\stc\lexilla\lexlib /i ..\..\src\stc\lexilla\include /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\src  /i ..\..\3rdparty\webview2\build\native\include /d wxUSE_BASE=1 /d WXMAKINGDLL ..\..\src\msw\version.rc
 
@@ -12724,6 +12750,16 @@ $(OBJS)\monolib_powercmn.obj: ..\..\src\common\powercmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\powercmn.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_webpdecoder.obj: ..\..\src\common\webpdecoder.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webpdecoder.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_imagwebp.obj: ..\..\src\common\imagwebp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\imagwebp.cpp
+!endif
+
 $(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -15272,6 +15308,16 @@ $(OBJS)\coredll_powercmn.obj: ..\..\src\common\powercmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\powercmn.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_webpdecoder.obj: ..\..\src\common\webpdecoder.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\webpdecoder.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_imagwebp.obj: ..\..\src\common\imagwebp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\imagwebp.cpp
+!endif
+
 $(OBJS)\corelib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -17035,6 +17081,16 @@ $(OBJS)\corelib_bmpsvg.obj: ..\..\src\generic\bmpsvg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_powercmn.obj: ..\..\src\common\powercmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\powercmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_webpdecoder.obj: ..\..\src\common\webpdecoder.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\webpdecoder.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_imagwebp.obj: ..\..\src\common\imagwebp.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\imagwebp.cpp
 !endif
 
 $(OBJS)\advdll_dummy.obj: ..\..\src\common\dummy.cpp

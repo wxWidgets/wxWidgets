@@ -989,6 +989,8 @@ LIBCURL_CFLAGS
 wxCFLAGS_C99
 LIBTIFF_LIBS
 LIBTIFF_CFLAGS
+WebP_LIBS
+WebP_CFLAGS
 wxPCRE2_CODE_UNIT_WIDTH
 LIBPCRE_LIBS
 LIBPCRE_CFLAGS
@@ -1095,6 +1097,7 @@ with_libjpeg
 with_libtiff
 with_libjbig
 with_libxpm
+with_libwebp
 with_libiconv
 with_libmspack
 with_gtkprint
@@ -1394,6 +1397,8 @@ PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 LIBPCRE_CFLAGS
 LIBPCRE_LIBS
+WebP_CFLAGS
+WebP_LIBS
 LIBTIFF_CFLAGS
 LIBTIFF_LIBS
 LIBCURL_CFLAGS
@@ -2371,6 +2376,7 @@ Optional Packages:
   --with-libtiff          use libtiff (TIFF file format)
   --without-libjbig       don't use libjbig in libtiff even if available
   --with-libxpm           use libxpm (XPM file format)
+  --with-libwebp          use libwebp (WebP file format)
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
   --without-gtkprint      don't use GTK printing support
@@ -2417,6 +2423,8 @@ Some influential environment variables:
               C compiler flags for LIBPCRE, overriding pkg-config
   LIBPCRE_LIBS
               linker flags for LIBPCRE, overriding pkg-config
+  WebP_CFLAGS C compiler flags for WebP, overriding pkg-config
+  WebP_LIBS   linker flags for WebP, overriding pkg-config
   LIBTIFF_CFLAGS
               C compiler flags for LIBTIFF, overriding pkg-config
   LIBTIFF_LIBS
@@ -4047,6 +4055,7 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
+DEFAULT_wxUSE_LIBWEBP=auto
 
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_UNICODE_UTF8=no
@@ -4812,6 +4821,35 @@ fi
 
 
           eval "$wx_cv_use_libxpm"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-libwebp was given.
+if test "${with_libwebp+set}" = set; then :
+  withval=$with_libwebp;
+                        if test "$withval" = yes; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=yes'
+                        else
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=no'
+                        fi
+
+else
+
+                        wx_cv_use_libwebp='wxUSE_LIBWEBP=${'DEFAULT_wxUSE_LIBWEBP":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_libwebp"
 
 
           withstring=
@@ -26006,6 +26044,132 @@ fi
 fi
 
 
+WEBP_LINK=
+if test "$wxUSE_LIBWEBP" != "no"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for
+            libwebp
+            libwebpdemux
+        " >&5
+$as_echo_n "checking for
+            libwebp
+            libwebpdemux
+        ... " >&6; }
+
+if test -n "$WebP_CFLAGS"; then
+    pkg_cv_WebP_CFLAGS="$WebP_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
+            libwebp
+            libwebpdemux
+        \""; } >&5
+  ($PKG_CONFIG --exists --print-errors "
+            libwebp
+            libwebpdemux
+        ") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WebP_CFLAGS=`$PKG_CONFIG --cflags "
+            libwebp
+            libwebpdemux
+        " 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$WebP_LIBS"; then
+    pkg_cv_WebP_LIBS="$WebP_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
+            libwebp
+            libwebpdemux
+        \""; } >&5
+  ($PKG_CONFIG --exists --print-errors "
+            libwebp
+            libwebpdemux
+        ") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WebP_LIBS=`$PKG_CONFIG --libs "
+            libwebp
+            libwebpdemux
+        " 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+            WebP_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "
+            libwebp
+            libwebpdemux
+        " 2>&1`
+        else
+            WebP_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "
+            libwebp
+            libwebpdemux
+        " 2>&1`
+        fi
+    # Put the nasty error message in config.log where it belongs
+    echo "$WebP_PKG_ERRORS" >&5
+
+
+            wxUSE_LIBWEBP="no"
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found via pkg-config" >&5
+$as_echo "not found via pkg-config" >&6; }
+
+
+elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+            wxUSE_LIBWEBP="no"
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found via pkg-config" >&5
+$as_echo "not found via pkg-config" >&6; }
+
+
+else
+    WebP_CFLAGS=$pkg_cv_WebP_CFLAGS
+    WebP_LIBS=$pkg_cv_WebP_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+            WEBP_LINK=$WebP_LIBS
+            CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
+
+fi
+fi
+if test "$wxUSE_LIBWEBP" = "auto"; then
+        wxUSE_LIBWEBP=yes
+fi
+if test "$wxUSE_LIBWEBP" = "yes"; then
+    $as_echo "#define wxUSE_LIBWEBP 1" >>confdefs.h
+
+fi
+
+
 TIFF_LINK=
 if test "$wxUSE_LIBTIFF" != "no" ; then
     $as_echo "#define wxUSE_LIBTIFF 1" >>confdefs.h
@@ -41010,7 +41174,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBP_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -41066,6 +41230,9 @@ if test "$wxUSE_LIBLZMA" = "yes"; then
             if test "$wxUSE_GUI" != "yes" -o "$wxUSE_LIBTIFF" != "sys"; then
         WXCONFIG_LIBS="$LZMA_LINK $WXCONFIG_LIBS"
     fi
+fi
+if test "$wxUSE_LIBWEBP" = "yes"; then
+        WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
 fi
 case "$wxUSE_ZLIB" in
     builtin)
@@ -45330,6 +45497,7 @@ echo "                                       tiff               ${wxUSE_LIBTIFF-
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
+echo "                                       webp               ${wxUSE_LIBWEBP}"
 echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
