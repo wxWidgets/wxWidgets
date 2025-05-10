@@ -2764,7 +2764,7 @@ void wxWindowGTK::GTKHandleRealized()
     event.SetEventObject( this );
     GTKProcessEvent( event );
 
-    GTKApplyCursor();
+    WXUpdateCursor();
 }
 
 void wxWindowGTK::GTKHandleUnrealize()
