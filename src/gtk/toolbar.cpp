@@ -218,6 +218,14 @@ static void arrow_toggled(GtkToggleButton* button, wxToolBarTool* tool)
 }
 }
 
+extern "C"
+{
+static gboolean context_menu(GtkToolbar *WXUNUSED(self), gint WXUNUSED(x), gint WXUNUSED(y), gint WXUNUSED(button), gpointer WXUNUSED(user_data))
+{
+    return TRUE;
+}
+}
+
 //-----------------------------------------------------------------------------
 // "button_press_event" from dropdown menu button
 //-----------------------------------------------------------------------------
@@ -462,6 +470,7 @@ bool wxToolBar::Create( wxWindow *parent,
     wxGCC_WARNING_RESTORE()
 #endif // !__WXGTK4__
     g_object_ref(m_widget);
+    g_signal_connect( m_toolbar, "popup-context-menu", G_CALLBACK( context_menu ), nullptr );
     gtk_widget_show(GTK_WIDGET(m_toolbar));
 
     m_parent->DoAddChild( this );
