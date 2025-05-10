@@ -101,7 +101,7 @@ Changes in behaviour not resulting in compilation errors
   in the applications supporting high DPI.
 
 - wxWebRequest doesn't use persistent storage under Mac any longer, as this
-  made is behaviour there incompatible with the other platforms. Please call
+  made its behaviour there incompatible with the other platforms. Please call
   wxWebRequest::EnablePersistentStorage() explicitly if you need it.
 
 - In wxMSW, behaviour of wxBitmap::Create(size, dc) overload has changed to
@@ -164,7 +164,7 @@ Changes in behaviour which may result in build errors
   compiling the library to preserve full compatibility with the old versions.
 
 - wxUSE_STL option doesn't exist any longer, standard library is always used.
-  However previously setting wxUSE_STL=1 enabled implicit conversion from
+  However, previously setting wxUSE_STL=1 enabled implicit conversion from
   wxString to std::[w]string which are not enabled by default now, please set
   wxUSE_STD_STRING_CONV_IN_WXSTRING=1 explicitly if you need them.
 
