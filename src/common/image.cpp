@@ -2137,7 +2137,7 @@ void wxImage::SetData( unsigned char *data, int new_width, int new_height, bool 
     m_refData = newRefData;
 }
 
-void wxImage::SetDataRGBA(unsigned char* data)
+void wxImage::SetDataRGBA(const unsigned char* const data)
 {
     wxCHECK_RET(IsOk(), wxT("invalid image"));
 
