@@ -28,6 +28,8 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/display.h"
+
 #include "wx/private/rescale.h"
 
 // ----------------------------------------------------------------------------
@@ -90,8 +92,8 @@ public:
         // Just calling GetBitmapFor(window) here would be wrong as cursor size
         // is not always just the standard size scaled by DPI, for example, the
         // user may increase the cursor size even in standard DPI, so get the
-        // size that we need (or rather just one of its components as cursors
-        // are always square anyhow).
+        // size at the effectively used scale which is obtained by comparing
+        // the currently used cursor size with the default one.
         const int
             h = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, window);
 
@@ -99,16 +101,33 @@ public:
         if ( h == m_lastCursorSize )
             return m_lastCursor;
 
+        // Determining the default size is tricky because wxSystemSetting tries
+        // hard to return the correct size for the current system, but this is
+        // not what we want here, so hardcode the size instead.
+#if defined(__WXGTK__) || defined(__WXX11__)
+        constexpr int hDef = 24;
+#else
+        // This is the default size for Windows and macOS and hopefully should
+        // be fine for everyone else too.
+        constexpr int hDef = 32;
+#endif
+
         const wxSize
             sizeDef = m_bitmaps.GetDefaultSize();
 
         const wxSize
-            size = m_bitmaps.GetPreferredBitmapSizeAtScale(double(h) / sizeDef.y);
+            size = m_bitmaps.GetPreferredBitmapSizeAtScale(double(h) / hDef);
 
         const wxPoint
             hotSpot = wxRescaleCoord(m_hotSpot).From(sizeDef).To(size);
 
-        m_lastCursor = wxCursor(m_bitmaps.GetBitmap(size), hotSpot);
+        // The bitmap used for the cursor must always be use the current scale
+        // factor to avoid being rescaled.
+        wxBitmap bitmap = m_bitmaps.GetBitmap(size);
+        bitmap.SetScaleFactor(window ? window->GetDPIScaleFactor()
+                                     : wxDisplay().GetScaleFactor());
+
+        m_lastCursor = wxCursor(bitmap, hotSpot);
         m_lastCursorSize = h;
 
         return m_lastCursor;
