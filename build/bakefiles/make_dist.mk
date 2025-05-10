@@ -22,6 +22,7 @@ SCINTILLADIR = $(WXDIR)/src/stc/scintilla
 LEXILLADIR = $(WXDIR)/src/stc/lexilla
 UNIXDIR  = $(WXDIR)/src/unix
 PNGDIR   = $(WXDIR)/src/png
+WEBPDIR  = $(WXDIR)/3rdparty/libwebp
 JPEGDIR  = $(WXDIR)/src/jpeg
 TIFFDIR  = $(WXDIR)/src/tiff
 ZLIBDIR  = $(WXDIR)/src/zlib
@@ -229,6 +230,9 @@ ALL_GUI_DIST: ALL_DIST
 
 	mkdir $(DISTDIR)/src/png
 	$(CP_PR) $(PNGDIR)/* $(DISTDIR)/src/png
+
+	mkdir $(DISTDIR)/3rdparty/libwebp
+	$(CP_PR) $(WEBPDIR)/* $(DISTDIR)/3rdparty/libwebp
 
 	mkdir $(DISTDIR)/src/jpeg
 	$(CP_P) $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg

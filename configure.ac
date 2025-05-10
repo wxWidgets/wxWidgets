@@ -512,6 +512,7 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_SYS_WITH(libwebp,   [  --with-libwebp          use libwebp (WebP file format)], wxUSE_LIBWEBP)
 
 dnl We don't provide built-in version of this library, so if the use of system
 dnl libraries is explicitly disabled, we can't use it at all.
@@ -2503,6 +2504,62 @@ if test "$wxUSE_LIBJBIG" = "yes"; then
 fi
 
 dnl ------------------------------------------------------------------------
+dnl Check for webp library
+dnl ------------------------------------------------------------------------
+
+WEBP_LINK=
+if test "$wxUSE_LIBWEBP" != "no" ; then
+    AC_DEFINE(wxUSE_LIBWEBP)
+    if test "$wxUSE_LIBWEBP" = "sys" -o "$wxUSE_LIBWEBP" = "yes" ; then
+        PKG_CHECK_MODULES(
+            WebP,
+            [
+                libwebp
+                libwebpdemux
+            ],
+            [
+                WEBP_LINK=$WebP_LIBS
+                CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
+            ],
+            [
+            ]
+        )
+
+        if test "x$WEBP_LINK" = "x" ; then
+            if test "$wxUSE_LIBWEBP" = "sys" ; then
+                AC_MSG_ERROR([system webp library not found! Use --with-libwebp=builtin to use built-in version])
+            else
+                AC_MSG_WARN([system webp library not found, will use built-in instead])
+                wxUSE_LIBWEBP=builtin
+            fi
+        else
+            dnl we are using the system library
+            wxUSE_LIBWEBP=sys
+        fi
+    fi
+
+    dnl We should test if built-in webp library is avalable, preferably
+    dnl downloaded through --recurse-submodules option if cloned from git.
+    dnl Would be available when downloaded as a zipped or tarball release.
+    if test "$wxUSE_LIBWEBP" = "builtin" ; then
+        AC_MSG_CHECKING([whether webp_dec.c file exists])
+        if ! test -f "$srcdir/3rdparty/libwebp/src/dec/webp_dec.c" ; then
+            AC_MSG_RESULT([no])
+            AC_MSG_ERROR([
+    Configured to use built-in webp library, but the required file
+    $srcdir/3rdparty/libwebp/src/dec/webp_dec.c couldn't be found.
+    You might need to run
+
+        git submodule update --init 3rdparty/libwebp
+
+    to fix this.])
+        else
+            AC_MSG_RESULT([yes])
+        fi
+    fi
+fi
+
+dnl ------------------------------------------------------------------------
 dnl Check for tiff library
 dnl ------------------------------------------------------------------------
 
@@ -2598,6 +2655,7 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             tiff_jpeg_option=--enable-jpeg
         fi
 
+        dnl if you ever want to enable webp, check if it clashes with the wxUSE_LIBWBP setting
         AX_SUBDIRS_CONFIGURE([src/tiff],
             [[--disable-jbig],
              [--disable-lerc],
@@ -7733,7 +7791,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBP_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -7773,6 +7831,14 @@ if test "$wxUSE_GUI" = "yes"; then
             ;;
         sys)
             WXCONFIG_LIBS="$PNG_LINK $WXCONFIG_LIBS"
+            ;;
+    esac
+    case "$wxUSE_LIBWEBP" in
+        builtin)
+            wxconfig_3rdparty="webp $wxconfig_3rdparty"
+            ;;
+        sys)
+            WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
             ;;
     esac
 fi
@@ -7836,6 +7902,7 @@ AC_SUBST(wxUSE_XML)
 AC_SUBST(wxUSE_EXPAT)
 AC_SUBST(wxUSE_LIBJPEG)
 AC_SUBST(wxUSE_LIBPNG)
+AC_SUBST(wxUSE_LIBWEBP)
 AC_SUBST(wxUSE_LIBTIFF)
 
 if test $wxUSE_MONOLITHIC = "yes" ; then
@@ -8340,6 +8407,7 @@ echo "                                       jpeg               ${wxUSE_LIBJPEG-
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
+echo "                                       webp               ${wxUSE_LIBWEBP-none}"
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
