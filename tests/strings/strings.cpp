@@ -99,7 +99,7 @@ TEST_CASE("StringFormatUnicode", "[wxString]")
     // For some completely mysterious reason, the test below sometimes crashes
     // when run on GitHub Actions with MSVS 2019 in static debug build (see
     // #25056), so skip it in this case.
-#ifdef _MSC_VER && defined(_DEBUG) && !defined(WXUSINGDLL)
+#if defined(_MSC_VER) && defined(_DEBUG) && !defined(WXUSINGDLL)
     #if _MSC_VER >= 1920 && _MSC_VER < 1930
         if ( IsAutomaticTest() )
         {
