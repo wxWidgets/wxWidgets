@@ -986,7 +986,7 @@ bool CheckCEFLoadOrder()
             if ( foundLibc )
             {
                 wxLogError(
-                    _("Chromium can't be used because libcef.so was't "
+                    _("Chromium can't be used because libcef.so wasn't "
                       "loaded early enough; please relink the application "
                       "or use LD_PRELOAD to load it earlier.")
                 );
