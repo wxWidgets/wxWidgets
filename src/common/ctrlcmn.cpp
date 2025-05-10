@@ -289,7 +289,9 @@ struct EllipsizeCalculator
           m_maxFinalWidthPx(maxFinalWidthPx),
           m_replacementWidthPx(replacementWidthPx)
     {
+#if wxDEBUG_LEVEL
         size_t expectedOffsetsCount = s.length();
+#endif
 
         // Where ampersands are used as mnemonic indicator they should not
         // affect the overall width of the string and must be removed from the
@@ -321,6 +323,7 @@ struct EllipsizeCalculator
                         m_charOffsetsPx.Insert(w, n);
                         lastWasMnemonic = true;
                     }
+#if wxDEBUG_LEVEL
                     else // Last character is an ampersand.
                     {
                         // This ampersand is removed by RemoveMnemonics() and
@@ -329,6 +332,7 @@ struct EllipsizeCalculator
                         // just account for this in the assert below.
                         expectedOffsetsCount--;
                     }
+#endif // wxDEBUG_LEVEL
                 }
                 else // Not an ampersand used to introduce a mnemonic.
                 {

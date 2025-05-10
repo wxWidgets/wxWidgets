@@ -846,7 +846,9 @@ using SocketPollerBase = WinSock1SocketPoller;
 
 #else
 
+#if wxUSE_LOG_TRACE
 constexpr const char* TRACE_CURL = "curl";
+#endif
 
 // SocketPollerSourceHandler - a source handler used by the SocketPoller class.
 

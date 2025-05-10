@@ -87,17 +87,13 @@ jobs:
           arch: arm64
           use_asan: true
         - name: wxMac Intel C++17
-          runner: self-hosted
-          arch: x86_64
-          configure_flags: --with-cxx=17 --with-macosx-version-min=10.12 --enable-debug
-        - name: wxMac Universal C++14
-          runner: self-hosted
-          arch: arm64
-          configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-debug --enable-optimise
-        - name: wxMac macOS 14
           runner: macos-14
           arch: x86_64
-          configure_flags: --disable-sys-libs
+          configure_flags: --with-cxx=17 --with-macosx-version-min=10.12
+        - name: wxMac Universal C++14
+          runner: macos-14
+          arch: arm64
+          configure_flags: --with-cxx=14 --enable-universal_binary=arm64,x86_64 --disable-shared --disable-sys-libs --disable-debug --enable-optimise
         - name: wxiOS
           runner: macos-14
           arch: x86_64
@@ -150,6 +146,13 @@ jobs:
           echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
         fi
         echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
+
+        echo "PATH=/opt/homebrew/bin:/opt/homebrew/opt/ccache/libexec:$PATH" >> $GITHUB_ENV
+
+    - name: Install CCache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ matrix.name }}
 
     - name: Before install
       run: |
