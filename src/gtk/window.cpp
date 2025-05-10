@@ -1426,20 +1426,21 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             // etc).
             if ( eventChar.ControlDown() )
             {
-                if ( uniChar >= 'a' && uniChar <= 'z' )
-                    uniChar = toupper(uniChar);
+                // We should already have the corresponding key in US layout,
+                // translated from GTK using XKB, in the event.
+                long keyCode = event.m_keyCode;
 
-                if ( (uniChar >= 'A' && uniChar <= 'Z') ||
-                        uniChar == '[' ||
-                        uniChar == '\\' ||
-                        uniChar == ']' ||
-                        uniChar == '^' ||
-                        uniChar == '_' )
+                if ( (keyCode >= 'A' && keyCode <= 'Z') ||
+                        keyCode == '[' ||
+                        keyCode == '\\' ||
+                        keyCode == ']' ||
+                        keyCode == '^' ||
+                        keyCode == '_' )
                 {
                     // Convert to ASCII control character.
-                    uniChar &= 0x1f;
+                    keyCode &= 0x1f;
                 }
-                else if ( uniChar != ' ' )
+                else if ( keyCode != ' ' )
                 {
                     // For the printable characters other than Space (for which
                     // we still do generate CHAR event, for compatibility with
@@ -1451,8 +1452,8 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                     break;
                 }
 
-                eventChar.m_keyCode = uniChar;
-                eventChar.m_uniChar = uniChar;
+                eventChar.m_keyCode = keyCode;
+                eventChar.m_uniChar = keyCode;
             }
             else // Not a control character.
             {
