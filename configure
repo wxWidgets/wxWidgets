@@ -627,6 +627,8 @@ enable_option_checking=fatal
 ac_subst_vars='subdirs_extra
 LTLIBOBJS
 LIBOBJS
+CATCH2_LIBS
+CATCH2_CFLAGS
 RESCOMP
 DLLTOOL
 GCC
@@ -1093,6 +1095,7 @@ enable_nanox
 with_libpng
 with_libjpeg
 with_libtiff
+with_catch2
 with_libjbig
 with_libxpm
 with_libiconv
@@ -1448,7 +1451,9 @@ WEBKIT_LIBS
 CAIRO_CFLAGS
 CAIRO_LIBS
 GST_CFLAGS
-GST_LIBS'
+GST_LIBS
+CATCH2_CFLAGS
+CATCH2_LIBS'
 
 
 # Initialize some variables set by options.
@@ -2369,6 +2374,7 @@ Optional Packages:
   --with-libpng           use libpng (PNG image format)
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
+  --with-catch2           use CATCH2 (testing framework)
   --without-libjbig       don't use libjbig in libtiff even if available
   --with-libxpm           use libxpm (XPM file format)
   --with-libiconv         use libiconv (character conversion)
@@ -2506,6 +2512,9 @@ Some influential environment variables:
   CAIRO_LIBS  linker flags for CAIRO, overriding pkg-config
   GST_CFLAGS  C compiler flags for GST, overriding pkg-config
   GST_LIBS    linker flags for GST, overriding pkg-config
+  CATCH2_CFLAGS
+              C compiler flags for CATCH2, overriding pkg-config
+  CATCH2_LIBS linker flags for CATCH2, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -4066,6 +4075,8 @@ DEFAULT_wxUSE_OFFICIAL_BUILD=no
 
 DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
 
+DEFAULT_wxUSE_CATCH2=builtin
+
 
 
 
@@ -4653,8 +4664,8 @@ if test "${with_libpng+set}" = set; then :
 
 else
 
-                        if test "DEFAULT_wxUSE_LIBPNG" = no; then
-                            value=no
+                        if test -n "${DEFAULT_wxUSE_LIBPNG}"; then
+                            value=${DEFAULT_wxUSE_LIBPNG}
                         elif test "$wxUSE_ALL_FEATURES" = no; then
                             value=no
                         elif test "$wxUSE_SYS_LIBS" = no; then
@@ -4689,8 +4700,8 @@ if test "${with_libjpeg+set}" = set; then :
 
 else
 
-                        if test "DEFAULT_wxUSE_LIBJPEG" = no; then
-                            value=no
+                        if test -n "${DEFAULT_wxUSE_LIBJPEG}"; then
+                            value=${DEFAULT_wxUSE_LIBJPEG}
                         elif test "$wxUSE_ALL_FEATURES" = no; then
                             value=no
                         elif test "$wxUSE_SYS_LIBS" = no; then
@@ -4725,8 +4736,8 @@ if test "${with_libtiff+set}" = set; then :
 
 else
 
-                        if test "DEFAULT_wxUSE_LIBTIFF" = no; then
-                            value=no
+                        if test -n "${DEFAULT_wxUSE_LIBTIFF}"; then
+                            value=${DEFAULT_wxUSE_LIBTIFF}
                         elif test "$wxUSE_ALL_FEATURES" = no; then
                             value=no
                         elif test "$wxUSE_SYS_LIBS" = no; then
@@ -4741,6 +4752,42 @@ fi
 
 
           eval "$wx_cv_use_libtiff"
+
+
+
+# Check whether --with-catch2 was given.
+if test "${with_catch2+set}" = set; then :
+  withval=$with_catch2;
+                        if test "$withval" = yes; then
+                          wx_cv_use_catch2='wxUSE_CATCH2=yes'
+                        elif test "$withval" = no; then
+                          wx_cv_use_catch2='wxUSE_CATCH2=no'
+                        elif test "$withval" = sys; then
+                          wx_cv_use_catch2='wxUSE_CATCH2=sys'
+                        elif test "$withval" = builtin; then
+                          wx_cv_use_catch2='wxUSE_CATCH2=builtin'
+                        else
+                          as_fn_error $? "Invalid value for --with-catch2: should be yes, no, sys, or builtin" "$LINENO" 5
+                        fi
+
+else
+
+                        if test -n "${DEFAULT_wxUSE_CATCH2}"; then
+                            value=${DEFAULT_wxUSE_CATCH2}
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_catch2="wxUSE_CATCH2=$value"
+
+fi
+
+
+          eval "$wx_cv_use_catch2"
 
 
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
@@ -4796,8 +4843,8 @@ if test "${with_libxpm+set}" = set; then :
 
 else
 
-                        if test "DEFAULT_wxUSE_LIBXPM" = no; then
-                            value=no
+                        if test -n "${DEFAULT_wxUSE_LIBXPM}"; then
+                            value=${DEFAULT_wxUSE_LIBXPM}
                         elif test "$wxUSE_ALL_FEATURES" = no; then
                             value=no
                         elif test "$wxUSE_SYS_LIBS" = no; then
@@ -5161,8 +5208,8 @@ if test "${with_regex+set}" = set; then :
 
 else
 
-                        if test "DEFAULT_wxUSE_REGEX" = no; then
-                            value=no
+                        if test -n "${DEFAULT_wxUSE_REGEX}"; then
+                            value=${DEFAULT_wxUSE_REGEX}
                         elif test "$wxUSE_ALL_FEATURES" = no; then
                             value=no
                         elif test "$wxUSE_SYS_LIBS" = no; then
@@ -5226,8 +5273,8 @@ if test "${with_zlib+set}" = set; then :
 
 else
 
-                        if test "DEFAULT_wxUSE_ZLIB" = no; then
-                            value=no
+                        if test -n "${DEFAULT_wxUSE_ZLIB}"; then
+                            value=${DEFAULT_wxUSE_ZLIB}
                         elif test "$wxUSE_ALL_FEATURES" = no; then
                             value=no
                         elif test "$wxUSE_SYS_LIBS" = no; then
@@ -5262,8 +5309,8 @@ if test "${with_expat+set}" = set; then :
 
 else
 
-                        if test "DEFAULT_wxUSE_EXPAT" = no; then
-                            value=no
+                        if test -n "${DEFAULT_wxUSE_EXPAT}"; then
+                            value=${DEFAULT_wxUSE_EXPAT}
                         elif test "$wxUSE_ALL_FEATURES" = no; then
                             value=no
                         elif test "$wxUSE_SYS_LIBS" = no; then
@@ -43621,24 +43668,126 @@ fi
 if test "$wxUSE_TESTS_SUBDIR" != "no"; then
         SUBDIRS="$SUBDIRS tests"
 
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether catch2/catch.hpp exists" >&5
-$as_echo_n "checking whether catch2/catch.hpp exists... " >&6; }
-    if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp" ; then
+    if test "$wxUSE_CATCH2" = "no"; then
+        as_fn_error $? "CATCH is required for building tests, use --disable-tests option to disable them" "$LINENO" 5
+    fi
+
+        if test "$wxUSE_CATCH2" != "builtin"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for catch2 < 3" >&5
+$as_echo_n "checking for catch2 < 3... " >&6; }
+
+if test -n "$CATCH2_CFLAGS"; then
+    pkg_cv_CATCH2_CFLAGS="$CATCH2_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"catch2 < 3\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "catch2 < 3") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CATCH2_CFLAGS=`$PKG_CONFIG --cflags "catch2 < 3" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$CATCH2_LIBS"; then
+    pkg_cv_CATCH2_LIBS="$CATCH2_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"catch2 < 3\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "catch2 < 3") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CATCH2_LIBS=`$PKG_CONFIG --libs "catch2 < 3" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-        as_fn_error $? "
-    CATCH (C++ Automated Test Cases in Headers) is required, the required file
-    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp couldn't be found.
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+            CATCH2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "catch2 < 3" 2>&1`
+        else
+            CATCH2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "catch2 < 3" 2>&1`
+        fi
+    # Put the nasty error message in config.log where it belongs
+    echo "$CATCH2_PKG_ERRORS" >&5
+
+
+            if test "$wxUSE_CATCH2" = "sys"; then
+                as_fn_error $? "system catch2 library not found! \
+Use --with-catch2=builtin to use built-in version" "$LINENO" 5
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: system catch2 library not found, \
+will use built-in instead" >&5
+$as_echo "$as_me: WARNING: system catch2 library not found, \
+will use built-in instead" >&2;}
+                wxUSE_CATCH2=builtin
+            fi
+elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+            if test "$wxUSE_CATCH2" = "sys"; then
+                as_fn_error $? "system catch2 library not found! \
+Use --with-catch2=builtin to use built-in version" "$LINENO" 5
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: system catch2 library not found, \
+will use built-in instead" >&5
+$as_echo "$as_me: WARNING: system catch2 library not found, \
+will use built-in instead" >&2;}
+                wxUSE_CATCH2=builtin
+            fi
+else
+    CATCH2_CFLAGS=$pkg_cv_CATCH2_CFLAGS
+    CATCH2_LIBS=$pkg_cv_CATCH2_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+fi
+    fi
+
+    if test "$wxUSE_CATCH2" = "builtin"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether catch2/catch.hpp exists" >&5
+$as_echo_n "checking whether catch2/catch.hpp exists... " >&6; }
+        if ! test -f "$srcdir/3rdparty/catch/single_include/catch2/catch.hpp"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    CATCH2 (C++ Automated Test Cases in Headers) is required, but the file
+    $srcdir/3rdparty/catch/single_include/catch2/catch.hpp cannot be found.
 
     You might need to run
 
         git submodule update --init 3rdparty/catch
 
     to fix this." "$LINENO" 5
-    else
+        fi
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+        CATCH2_CFLAGS="-I$wx_top_builddir/3rdparty/catch/single_include"
     fi
+
+
 fi
 
 for subdir in $SUBDIRS; do

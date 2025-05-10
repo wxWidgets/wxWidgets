@@ -1086,9 +1086,11 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
         glyphColor = wxColour(145, 147, 149);
     }
 
+    wxDCPenChanger penChanger(dc);
+
     if ( drawCircle )
     {
-        wxDCPenChanger setPen(dc, circleBorderCol);
+        penChanger.Set(circleBorderCol);
         wxDCBrushChanger setBrush(dc, circleInteriorCol);
 
         wxRect circleRect(rect);
@@ -1097,7 +1099,7 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
         dc.DrawEllipse(circleRect);
     }
 
-    wxDCPenChanger setPen(dc, glyphColor);
+    penChanger.Set(glyphColor);
 
     wxRect centerRect(rect);
     centerRect.Deflate(5);

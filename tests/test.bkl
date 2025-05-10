@@ -15,8 +15,11 @@
         <if cond="FORMAT=='autoconf'">
             <res-include>$(RCDEFDIR)</res-include>
             <res-include>$(TOP_SRCDIR)include</res-include>
+            <cxxflags>$(CATCH2_CFLAGS)</cxxflags>
         </if>
-        <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
+        <if cond="FORMAT!='autoconf'">
+            <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
+        </if>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
             <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
