@@ -669,6 +669,7 @@ WX_LIBRARY_BASENAME_NOGUI
 SHARED
 COND_wxUSE_ZLIB_builtin
 COND_wxUSE_REGEX_builtin
+COND_wxUSE_LIBWEBP_builtin
 COND_wxUSE_LIBTIFF_builtin
 COND_wxUSE_LIBPNG_builtin
 COND_wxUSE_LIBJPEG_builtin
@@ -692,6 +693,7 @@ COND_USE_RTTI_0
 COND_USE_PLUGINS_0
 COND_USE_PCH_1
 COND_USE_OPENGL_1
+COND_USE_GUI_1_wxUSE_LIBWEBP_builtin
 COND_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_USE_GUI_1_wxUSE_LIBJPEG_builtin
@@ -741,6 +743,7 @@ COND_SHARED_0_wxUSE_ZLIB_builtin
 COND_SHARED_0_wxUSE_REGEX_builtin
 COND_SHARED_0_wxUSE_EXPAT_builtin
 COND_SHARED_0_USE_STC_1
+COND_SHARED_0_USE_GUI_1_wxUSE_LIBWEBP_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin
@@ -916,6 +919,7 @@ WX_FLAVOUR
 OFFICIAL_BUILD
 VENDOR
 wxUSE_LIBTIFF
+wxUSE_LIBWEBP
 wxUSE_LIBPNG
 wxUSE_LIBJPEG
 wxUSE_EXPAT
@@ -1097,10 +1101,10 @@ enable_nanox
 with_libpng
 with_libjpeg
 with_libtiff
+with_libwebp
 with_catch2
 with_libjbig
 with_libxpm
-with_libwebp
 with_libiconv
 with_libmspack
 with_gtkprint
@@ -2379,10 +2383,10 @@ Optional Packages:
   --with-libpng           use libpng (PNG image format)
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
+  --with-libwebp          use libwebp (WebP file format)
   --with-catch2           use CATCH2 (testing framework)
   --without-libjbig       don't use libjbig in libtiff even if available
   --with-libxpm           use libxpm (XPM file format)
-  --with-libwebp          use libwebp (WebP file format)
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
   --without-gtkprint      don't use GTK printing support
@@ -4763,6 +4767,42 @@ fi
 
 
 
+# Check whether --with-libwebp was given.
+if test "${with_libwebp+set}" = set; then :
+  withval=$with_libwebp;
+                        if test "$withval" = yes; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=yes'
+                        elif test "$withval" = no; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=no'
+                        elif test "$withval" = sys; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=sys'
+                        elif test "$withval" = builtin; then
+                          wx_cv_use_libwebp='wxUSE_LIBWEBP=builtin'
+                        else
+                          as_fn_error $? "Invalid value for --with-libwebp: should be yes, no, sys, or builtin" "$LINENO" 5
+                        fi
+
+else
+
+                        if test -n "${DEFAULT_wxUSE_LIBWEBP}"; then
+                            value=${DEFAULT_wxUSE_LIBWEBP}
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_libwebp="wxUSE_LIBWEBP=$value"
+
+fi
+
+
+          eval "$wx_cv_use_libwebp"
+
+
+
 # Check whether --with-catch2 was given.
 if test "${with_catch2+set}" = set; then :
   withval=$with_catch2;
@@ -4867,35 +4907,6 @@ fi
 
 
           eval "$wx_cv_use_libxpm"
-
-
-          withstring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$withstring" = xwithout; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-# Check whether --with-libwebp was given.
-if test "${with_libwebp+set}" = set; then :
-  withval=$with_libwebp;
-                        if test "$withval" = yes; then
-                          wx_cv_use_libwebp='wxUSE_LIBWEBP=yes'
-                        else
-                          wx_cv_use_libwebp='wxUSE_LIBWEBP=no'
-                        fi
-
-else
-
-                        wx_cv_use_libwebp='wxUSE_LIBWEBP=${'DEFAULT_wxUSE_LIBWEBP":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_libwebp"
 
 
           withstring=
@@ -26091,12 +26102,10 @@ fi
 
 
 WEBP_LINK=
-if test "$wxUSE_LIBWEBP" != "no"; then
-    if test "$wxUSE_LIBWEBP" = "builtin"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Using built-in libwebp not supported yet, will try the system one" >&5
-$as_echo "$as_me: WARNING: Using built-in libwebp not supported yet, will try the system one" >&2;}
-    fi
+if test "$wxUSE_LIBWEBP" != "no" ; then
+    $as_echo "#define wxUSE_LIBWEBP 1" >>confdefs.h
 
+    if test "$wxUSE_LIBWEBP" = "sys" -o "$wxUSE_LIBWEBP" = "yes" ; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libwebp libwebpdemux" >&5
@@ -26157,18 +26166,12 @@ fi
     echo "$WebP_PKG_ERRORS" >&5
 
 
-            wxUSE_LIBWEBP="no"
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found via pkg-config" >&5
-$as_echo "not found via pkg-config" >&6; }
 
 
 elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-            wxUSE_LIBWEBP="no"
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found via pkg-config" >&5
-$as_echo "not found via pkg-config" >&6; }
 
 
 else
@@ -26177,13 +26180,43 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-            WEBP_LINK=$WebP_LIBS
-            CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
-            $as_echo "#define wxUSE_LIBWEBP 1" >>confdefs.h
-
-            wxUSE_LIBWEBP="sys"
+                WEBP_LINK=$WebP_LIBS
+                CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
 
 fi
+
+        if test "x$WEBP_LINK" = "x" ; then
+            if test "$wxUSE_LIBWEBP" = "sys" ; then
+                as_fn_error $? "system webp library not found! Use --with-libwebp=builtin to use built-in version" "$LINENO" 5
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: system webp library not found, will use built-in instead" >&5
+$as_echo "$as_me: WARNING: system webp library not found, will use built-in instead" >&2;}
+                wxUSE_LIBWEBP=builtin
+            fi
+        else
+                        wxUSE_LIBWEBP=sys
+        fi
+    fi
+
+                if test "$wxUSE_LIBWEBP" = "builtin" ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether webp_dec.c file exists" >&5
+$as_echo_n "checking whether webp_dec.c file exists... " >&6; }
+        if ! test -f "$srcdir/3rdparty/libwebp/src/dec/webp_dec.c" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+            as_fn_error $? "
+    Configured to use built-in webp library, but the required file
+    $srcdir/3rdparty/libwebp/src/dec/webp_dec.c couldn't be found.
+    You might need to run
+
+        git submodule update --init 3rdparty/libwebp
+
+    to fix this." "$LINENO" 5
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+        fi
+    fi
 fi
 
 
@@ -41226,6 +41259,14 @@ if test "$wxUSE_GUI" = "yes"; then
             WXCONFIG_LIBS="$PNG_LINK $WXCONFIG_LIBS"
             ;;
     esac
+    case "$wxUSE_LIBWEBP" in
+        builtin)
+            wxconfig_3rdparty="webp $wxconfig_3rdparty"
+            ;;
+        sys)
+            WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
+            ;;
+    esac
 fi
 case "$wxUSE_REGEX" in
     builtin)
@@ -41247,9 +41288,6 @@ if test "$wxUSE_LIBLZMA" = "yes"; then
             if test "$wxUSE_GUI" != "yes" -o "$wxUSE_LIBTIFF" != "sys"; then
         WXCONFIG_LIBS="$LZMA_LINK $WXCONFIG_LIBS"
     fi
-fi
-if test "$wxUSE_LIBWEBP" = "yes"; then
-        WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
 fi
 case "$wxUSE_ZLIB" in
     builtin)
@@ -41285,6 +41323,7 @@ _ACEOF
 else
     WXUNIV=0
 fi
+
 
 
 
@@ -43203,6 +43242,11 @@ EOF
         COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin=""
     fi
 
+    COND_SHARED_0_USE_GUI_1_wxUSE_LIBWEBP_builtin="#"
+    if test "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$wxUSE_LIBWEBP" = "xbuiltin" ; then
+        COND_SHARED_0_USE_GUI_1_wxUSE_LIBWEBP_builtin=""
+    fi
+
     COND_SHARED_0_USE_STC_1="#"
     if test "x$SHARED" = "x0" -a "x$USE_STC" = "x1" ; then
         COND_SHARED_0_USE_STC_1=""
@@ -43448,6 +43492,11 @@ EOF
         COND_USE_GUI_1_wxUSE_LIBTIFF_builtin=""
     fi
 
+    COND_USE_GUI_1_wxUSE_LIBWEBP_builtin="#"
+    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBWEBP" = "xbuiltin" ; then
+        COND_USE_GUI_1_wxUSE_LIBWEBP_builtin=""
+    fi
+
     COND_USE_OPENGL_1="#"
     if test "x$USE_OPENGL" = "x1" ; then
         COND_USE_OPENGL_1=""
@@ -43561,6 +43610,11 @@ EOF
     COND_wxUSE_LIBTIFF_builtin="#"
     if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
         COND_wxUSE_LIBTIFF_builtin=""
+    fi
+
+    COND_wxUSE_LIBWEBP_builtin="#"
+    if test "x$wxUSE_LIBWEBP" = "xbuiltin" ; then
+        COND_wxUSE_LIBWEBP_builtin=""
     fi
 
     COND_wxUSE_REGEX_builtin="#"
@@ -45613,10 +45667,10 @@ echo "                                       jpeg               ${wxUSE_LIBJPEG-
 echo "                                       png                ${wxUSE_LIBPNG-none}"
 echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
+echo "                                       webp               ${wxUSE_LIBWEBP-none}"
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
-echo "                                       webp               ${wxUSE_LIBWEBP}"
 echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
