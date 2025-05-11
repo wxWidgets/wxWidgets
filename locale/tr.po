@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 16:44+0100\n"
+"POT-Creation-Date: 2025-05-14 20:23+0200\n"
 "PO-Revision-Date: 2025-03-24 02:03+0300\n"
 "Last-Translator: Kerim Demirkaynak <kerim@post.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/klyok/wxwidgets/"
@@ -21,11 +21,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.5\n"
 
-#: ../include/wx/defs.h:2596
+#: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
 msgstr "Tüm dosyalar (*.*)|*.*"
 
-#: ../include/wx/defs.h:2599
+#: ../include/wx/defs.h:2585
 msgid "All files (*)|*"
 msgstr "Tüm dosyalar (*)|*"
 
@@ -43,13 +43,13 @@ msgstr "Kalan süre:"
 
 #. TRANSLATORS: HTML printout default title.
 #: ../include/wx/html/htmprint.h:121 ../include/wx/prntbase.h:273
-#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2166
+#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2161
 msgid "Printout"
 msgstr "Çıktı"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:289
+#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:291
 msgid "Printing"
 msgstr "Yazdırılıyor"
 
@@ -206,17 +206,19 @@ msgid "Close All"
 msgstr "Tümünü kapat"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
+#: ../src/qt/mdi.cpp:258
 msgid "&Next"
 msgstr "So&nraki"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
+#: ../src/qt/mdi.cpp:259
 msgid "&Previous"
 msgstr "Ö&nceki"
 
 #: ../src/aui/tabmdi.cpp:332 ../src/aui/tabmdi.cpp:348
 #: ../src/aui/tabmdi.cpp:350 ../src/generic/mdig.cpp:291
 #: ../src/generic/mdig.cpp:307 ../src/generic/mdig.cpp:311
-#: ../src/msw/mdi.cpp:337
+#: ../src/msw/mdi.cpp:337 ../src/qt/mdi.cpp:462
 msgid "&Window"
 msgstr "&Pencere"
 
@@ -680,71 +682,56 @@ msgctxt "keyboard key"
 msgid "Command"
 msgstr "Komut"
 
-#: ../src/common/accelcmn.cpp:186
+#: ../src/common/accelcmn.cpp:186 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:188
+#: ../src/common/accelcmn.cpp:188 ../src/common/accelcmn.cpp:363
 msgctxt "keyboard key"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../src/common/accelcmn.cpp:190
+#: ../src/common/accelcmn.cpp:190 ../src/common/accelcmn.cpp:361
 msgctxt "keyboard key"
 msgid "Shift"
 msgstr "Shift"
 
-#: ../src/common/accelcmn.cpp:194
+#: ../src/common/accelcmn.cpp:196
 msgctxt "keyboard key"
 msgid "num "
 msgstr "num "
 
-#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
+#: ../src/common/accelcmn.cpp:260 ../src/common/accelcmn.cpp:382
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
 
-#: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
+#: ../src/common/accelcmn.cpp:277 ../src/common/accelcmn.cpp:385
 msgctxt "keyboard key"
 msgid "KP_F"
 msgstr "TT_F"
 
-#: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
+#: ../src/common/accelcmn.cpp:280 ../src/common/accelcmn.cpp:388
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "KP_"
 
-#: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
+#: ../src/common/accelcmn.cpp:283 ../src/common/accelcmn.cpp:391
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "SPECIAL"
 
-#: ../src/common/accelcmn.cpp:343
-msgctxt "keyboard key"
-msgid "Alt+"
-msgstr "Alt+"
+#: ../src/common/accelcmn.cpp:373
+#, fuzzy
+msgid "Ctrl"
+msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:345
-msgctxt "keyboard key"
-msgid "Ctrl+"
-msgstr "Ctrl+"
-
-#: ../src/common/accelcmn.cpp:347
-msgctxt "keyboard key"
-msgid "Shift+"
-msgstr "Shift+"
-
-#: ../src/common/accelcmn.cpp:350
-msgctxt "keyboard key"
-msgid "RawCtrl+"
-msgstr "HamCtrl+"
-
-#: ../src/common/appbase.cpp:759
+#: ../src/common/appbase.cpp:786
 msgid "show this help message"
 msgstr "bu yardım iletisi görüntülensin"
 
-#: ../src/common/appbase.cpp:769
+#: ../src/common/appbase.cpp:796
 msgid "generate verbose log messages"
 msgstr "ayrıntılı günlük iletileri oluşturulsun"
 
@@ -862,7 +849,7 @@ msgid "Can't &Undo "
 msgstr "&Geri alınamıyor "
 
 #: ../src/common/cmdproc.cpp:259 ../src/common/stockitem.cpp:208
-#: ../src/msw/textctrl.cpp:2862 ../src/osx/textctrl_osx.cpp:649
+#: ../src/msw/textctrl.cpp:2880 ../src/osx/textctrl_osx.cpp:649
 #: ../src/richtext/richtextctrl.cpp:327
 msgid "&Undo"
 msgstr "&Geri al"
@@ -872,7 +859,7 @@ msgid "&Redo "
 msgstr "&Yinele "
 
 #: ../src/common/cmdproc.cpp:281 ../src/common/cmdproc.cpp:288
-#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2863
+#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2881
 #: ../src/osx/textctrl_osx.cpp:650 ../src/richtext/richtextctrl.cpp:328
 msgid "&Redo"
 msgstr "&Yinele"
@@ -899,17 +886,17 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' içindeki fazladan '..' yok sayıldı."
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2163 ../src/generic/datavgen.cpp:1424
+#: ../src/common/datavcmn.cpp:2166 ../src/generic/datavgen.cpp:1430
 msgid "checked"
 msgstr "işaretlenmiş"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2167 ../src/generic/datavgen.cpp:1426
+#: ../src/common/datavcmn.cpp:2170 ../src/generic/datavgen.cpp:1432
 msgid "unchecked"
 msgstr "işaretlenmemiş"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2171
+#: ../src/common/datavcmn.cpp:2174
 msgid "undetermined"
 msgstr "belirlenmemiş"
 
@@ -1076,80 +1063,80 @@ msgstr "cURL yürütülemedi, lütfen PATH içine yükleyin."
 msgid "Failed to upload the debug report (error code %d)."
 msgstr "Hata ayıklama raporu yüklenemedi (hata kodu %d)."
 
-#: ../src/common/docview.cpp:367
+#: ../src/common/docview.cpp:366
 msgid "Save As"
 msgstr "Farklı kaydet"
 
-#: ../src/common/docview.cpp:458
+#: ../src/common/docview.cpp:457
 msgid "Discard changes and reload the last saved version?"
 msgstr "Değişiklikler iptal edilip son kaydedilmiş sürüme dönülsün mü?"
 
-#: ../src/common/docview.cpp:489
+#: ../src/common/docview.cpp:488
 msgid "unnamed"
 msgstr "adsız"
 
-#: ../src/common/docview.cpp:514
+#: ../src/common/docview.cpp:513
 #, c-format
 msgid "Do you want to save changes to %s?"
 msgstr "%s üzerinde yapılan değişiklikleri kaydetmek istiyor musunuz?"
 
-#: ../src/common/docview.cpp:522 ../src/common/docview.cpp:561
+#: ../src/common/docview.cpp:521 ../src/common/docview.cpp:560
 #: ../src/common/stockitem.cpp:195
 msgid "&Save"
 msgstr "Kay&det"
 
-#: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
+#: ../src/common/docview.cpp:522 ../src/common/docview.cpp:560
 msgid "&Discard changes"
 msgstr "&Değişiklikleri yok say"
 
-#: ../src/common/docview.cpp:524
+#: ../src/common/docview.cpp:523
 msgid "Do&n't close"
 msgstr "&Kapatılmasın"
 
-#: ../src/common/docview.cpp:554
+#: ../src/common/docview.cpp:553
 #, c-format
 msgid "Do you want to save changes to %s before closing it?"
 msgstr ""
 "Kapatmadan önce %s üzerinde yapılan değişiklikleri kaydetmek istiyor musunuz?"
 
-#: ../src/common/docview.cpp:560
+#: ../src/common/docview.cpp:559
 msgid "The document must be closed."
 msgstr "Belge kapatılmalıdır."
 
-#: ../src/common/docview.cpp:572
+#: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
 msgstr "%s kaydedilemedi. Yeniden denemek ister misiniz?"
 
-#: ../src/common/docview.cpp:578
+#: ../src/common/docview.cpp:577
 msgid "Retry"
 msgstr "Yeniden dene"
 
-#: ../src/common/docview.cpp:578
+#: ../src/common/docview.cpp:577
 msgid "Discard changes"
 msgstr "Değişiklikleri yok say"
 
-#: ../src/common/docview.cpp:680
+#: ../src/common/docview.cpp:679
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "\"%s\" dosyası yazılmak üzere açılamadı."
 
-#: ../src/common/docview.cpp:686
+#: ../src/common/docview.cpp:685
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "Belge \"%s\" dosyasına kaydedilemedi."
 
-#: ../src/common/docview.cpp:703
+#: ../src/common/docview.cpp:702
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "\"%s\" dosyası okunmak üzere açılamadı."
 
-#: ../src/common/docview.cpp:715
+#: ../src/common/docview.cpp:714
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "\"%s\" dosyasından belge okunamadı."
 
-#: ../src/common/docview.cpp:1240
+#: ../src/common/docview.cpp:1236
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -1158,57 +1145,57 @@ msgstr ""
 "'%s' dosyası yok ve açılamadı.\n"
 "Son kullanılan dosyalar listesinden kaldırıldı."
 
-#: ../src/common/docview.cpp:1300
+#: ../src/common/docview.cpp:1296
 msgid "Print preview creation failed."
 msgstr "Yazdırma önizlemesi oluşturulamadı."
 
-#: ../src/common/docview.cpp:1306
+#: ../src/common/docview.cpp:1302
 msgid "Print Preview"
 msgstr "Yazdırma önizlemesi"
 
-#: ../src/common/docview.cpp:1521
+#: ../src/common/docview.cpp:1517
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "'%s' dosyasının biçimi belirlenemedi."
 
-#: ../src/common/docview.cpp:1648
+#: ../src/common/docview.cpp:1643
 #, c-format
 msgid "unnamed%d"
 msgstr "adsız%d"
 
-#: ../src/common/docview.cpp:1665
+#: ../src/common/docview.cpp:1660
 msgid " - "
 msgstr " - "
 
-#: ../src/common/docview.cpp:1796 ../src/common/docview.cpp:1849
+#: ../src/common/docview.cpp:1791 ../src/common/docview.cpp:1844
 msgid "Open File"
 msgstr "Dosya aç"
 
-#: ../src/common/docview.cpp:1812
+#: ../src/common/docview.cpp:1807
 msgid "File error"
 msgstr "Dosya hatası"
 
-#: ../src/common/docview.cpp:1814
+#: ../src/common/docview.cpp:1809
 msgid "Sorry, could not open this file."
 msgstr "Ne yazık ki bu dosya açılamıyor."
 
-#: ../src/common/docview.cpp:1848
+#: ../src/common/docview.cpp:1843
 msgid "Sorry, the format for this file is unknown."
 msgstr "Ne yazık ki bu dosyanın biçimi bilinmiyor."
 
-#: ../src/common/docview.cpp:1929
+#: ../src/common/docview.cpp:1924
 msgid "Select a document template"
 msgstr "Bir belge kalıbı seçin"
 
-#: ../src/common/docview.cpp:1930
+#: ../src/common/docview.cpp:1925
 msgid "Templates"
 msgstr "Kalıplar"
 
-#: ../src/common/docview.cpp:2003
+#: ../src/common/docview.cpp:1998
 msgid "Select a document view"
 msgstr "Bir belge görünümü seçin"
 
-#: ../src/common/docview.cpp:2004
+#: ../src/common/docview.cpp:1999
 msgid "Views"
 msgstr "Görünümler"
 
@@ -2202,130 +2189,130 @@ msgstr "BMP: RGB renk haritası yazılamadı."
 msgid "BMP: Couldn't write data."
 msgstr "BMP: Veri yazılamadı."
 
-#: ../src/common/imagbmp.cpp:556 ../src/common/imagbmp.cpp:572
+#: ../src/common/imagbmp.cpp:561 ../src/common/imagbmp.cpp:642
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: bellek ayrılamadı."
 
-#: ../src/common/imagbmp.cpp:1046
+#: ../src/common/imagbmp.cpp:1041
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "DIB başlık bilgisi: Dosya için görsel genişliği > 32767 piksel."
 
-#: ../src/common/imagbmp.cpp:1054
+#: ../src/common/imagbmp.cpp:1049
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "DIB başlık bilgisi: Dosya için görsel yüksekliği > 32767 piksel."
 
-#: ../src/common/imagbmp.cpp:1086
+#: ../src/common/imagbmp.cpp:1081
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB başlık bilgisi: Dosyada bilinmeyen bit derinliği."
 
-#: ../src/common/imagbmp.cpp:1160
+#: ../src/common/imagbmp.cpp:1156
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB başlık bilgisi: Dosyada bilinmeyen kodlama."
 
-#: ../src/common/imagbmp.cpp:1169
+#: ../src/common/imagbmp.cpp:1165
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB başlık bilgisi: Kodlama, bit derinliğine uymuyor."
 
-#: ../src/common/imagbmp.cpp:1185
+#: ../src/common/imagbmp.cpp:1180
 #, c-format
-msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr "BMP: biBitCount=%d iken üst bilgide biClrUsed=%d."
+msgid "BMP Header: Invalid number of colors (%d)."
+msgstr ""
 
-#: ../src/common/imagbmp.cpp:1279
+#: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
 msgstr "DIB görüntüsü okunurken sorun çıktı."
 
-#: ../src/common/imagbmp.cpp:1300
+#: ../src/common/imagbmp.cpp:1294
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: DIB maskesi okuma hatası."
 
-#: ../src/common/imagbmp.cpp:1359
+#: ../src/common/imagbmp.cpp:1353
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Görsel simge için çok uzun."
 
-#: ../src/common/imagbmp.cpp:1367
+#: ../src/common/imagbmp.cpp:1361
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Görsel simge için çok geniş."
 
-#: ../src/common/imagbmp.cpp:1394 ../src/common/imagbmp.cpp:1494
-#: ../src/common/imagbmp.cpp:1509 ../src/common/imagbmp.cpp:1520
-#: ../src/common/imagbmp.cpp:1534 ../src/common/imagbmp.cpp:1582
-#: ../src/common/imagbmp.cpp:1597 ../src/common/imagbmp.cpp:1611
-#: ../src/common/imagbmp.cpp:1622
+#: ../src/common/imagbmp.cpp:1388 ../src/common/imagbmp.cpp:1488
+#: ../src/common/imagbmp.cpp:1503 ../src/common/imagbmp.cpp:1514
+#: ../src/common/imagbmp.cpp:1528 ../src/common/imagbmp.cpp:1576
+#: ../src/common/imagbmp.cpp:1591 ../src/common/imagbmp.cpp:1605
+#: ../src/common/imagbmp.cpp:1616
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Görsel dosyasına yazılırken sorun çıktı!"
 
-#: ../src/common/imagbmp.cpp:1707
+#: ../src/common/imagbmp.cpp:1701
 msgid "ICO: Invalid icon index."
 msgstr "ICO: Simge dizini geçersiz."
 
-#: ../src/common/image.cpp:2358
+#: ../src/common/image.cpp:2410
 msgid "Image and mask have different sizes."
 msgstr "Görsel ve maske farklı boyutlarda."
 
-#: ../src/common/image.cpp:2366 ../src/common/image.cpp:2407
+#: ../src/common/image.cpp:2418 ../src/common/image.cpp:2459
 msgid "No unused colour in image being masked."
 msgstr "Maskelenen görselde kullanılmamış renk yok."
 
-#: ../src/common/image.cpp:2589
+#: ../src/common/image.cpp:2641
 #, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
 msgstr "Kaynaklardan \"%s\" bit eşlemi yüklenemedi."
 
-#: ../src/common/image.cpp:2598
+#: ../src/common/image.cpp:2650
 #, c-format
 msgid "Failed to load icon \"%s\" from resources."
 msgstr "Kaynaklardan \"%s\" simgesi yüklenemedi."
 
-#: ../src/common/image.cpp:2676 ../src/common/image.cpp:2695
+#: ../src/common/image.cpp:2728 ../src/common/image.cpp:2747
 #, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "\"%s\" dosyasından görsel yüklenemedi."
 
-#: ../src/common/image.cpp:2709
+#: ../src/common/image.cpp:2761
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Görüntü '%s' dosyasına kaydedilemedi: bilinmeyen uzantı."
 
-#: ../src/common/image.cpp:2817
+#: ../src/common/image.cpp:2869
 msgid "No handler found for image type."
 msgstr "Görüntü türünün işleyicisi bulunamadı."
 
-#: ../src/common/image.cpp:2825 ../src/common/image.cpp:2948
-#: ../src/common/image.cpp:3014
+#: ../src/common/image.cpp:2877 ../src/common/image.cpp:3000
+#: ../src/common/image.cpp:3066
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "%d türünün görüntü işleyicisi tanımlanmamış."
 
-#: ../src/common/image.cpp:2835
+#: ../src/common/image.cpp:2887
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "Görsel dosyası %d türünde değil."
 
-#: ../src/common/image.cpp:2918
+#: ../src/common/image.cpp:2970
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr "Aranamayan giriş için görsel biçimi kendiliğinden belirlenemiyor."
 
-#: ../src/common/image.cpp:2936
+#: ../src/common/image.cpp:2988
 msgid "Unknown image data format."
 msgstr "Görsel veri biçimi bilinmiyor."
 
-#: ../src/common/image.cpp:2957
+#: ../src/common/image.cpp:3009
 #, c-format
 msgid "This is not a %s."
 msgstr "Bu bir %s değil."
 
-#: ../src/common/image.cpp:2980 ../src/common/image.cpp:3028
+#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "%s türünün görüntü işleyicisi tanımlanmamış."
 
-#: ../src/common/image.cpp:2989
+#: ../src/common/image.cpp:3041
 #, c-format
 msgid "Image is not of type %s."
 msgstr "Görsel dosyası %s türünde değil."
 
-#: ../src/common/image.cpp:3457
+#: ../src/common/image.cpp:3509
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "\"%s\" görsel dosyasının biçimi denetlenemedi."
@@ -2464,14 +2451,48 @@ msgstr "TIFF: Görsel yazılırken sorun çıktı."
 msgid "TIFF: Error flushing data."
 msgstr "TIFF: Veri boşaltma hatası."
 
-#: ../src/common/init.cpp:173
+#: ../src/common/imagwebp.cpp:56
+msgid "WebP: Invalid data (failed to get features)."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:65
+msgid "WebP: Allocating image memory failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:82
+msgid "WebP: Decoding RGBA image data failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:98
+msgid "WebP: Decoding RGB image data failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
+msgid "WebP: Allocating stream buffer failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:131
+#, fuzzy
+msgid "WebP: Failed to parse container data."
+msgstr "Pano verisi ayarlanamadı."
+
+#: ../src/common/imagwebp.cpp:222
+#, fuzzy
+msgid "WebP: Error decoding animation."
+msgstr "Ayarlar okunurken sorun çıktı."
+
+#: ../src/common/imagwebp.cpp:240
+msgid "WebP: Error getting next animation frame."
+msgstr ""
+
+#: ../src/common/init.cpp:172
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
 "ignored."
 msgstr "%d komut satırı değişkeni Unikoda çevrilemediğinden yok sayılacak."
 
-#: ../src/common/init.cpp:343
+#: ../src/common/init.cpp:344
 msgid "Initialization failed in post init, aborting."
 msgstr "Hazırlığın ardından başlatılamadı, vazgeçiliyor."
 
@@ -3085,9 +3106,9 @@ msgstr "Hazır"
 msgid "Printing Error"
 msgstr "Yazdırma hatası"
 
-#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1591
+#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1597
 #: ../src/generic/prntdlgg.cpp:135 ../src/generic/prntdlgg.cpp:149
-#: ../src/gtk/print.cpp:625 ../src/gtk/print.cpp:643
+#: ../src/gtk/print.cpp:628 ../src/gtk/print.cpp:646
 msgid "Print"
 msgstr "Yazdır"
 
@@ -3126,54 +3147,54 @@ msgstr "Yazdırılan sayfa %d / %d"
 msgid " (copy %d of %d)"
 msgstr " (kopya %d / %d)"
 
-#: ../src/common/prntbase.cpp:1598
+#: ../src/common/prntbase.cpp:1604
 msgid "First page"
 msgstr "İlk sayfa"
 
-#: ../src/common/prntbase.cpp:1603 ../src/html/helpwnd.cpp:659
+#: ../src/common/prntbase.cpp:1609 ../src/html/helpwnd.cpp:659
 msgid "Previous page"
 msgstr "Önceki sayfa"
 
-#: ../src/common/prntbase.cpp:1617 ../src/html/helpwnd.cpp:660
+#: ../src/common/prntbase.cpp:1623 ../src/html/helpwnd.cpp:660
 msgid "Next page"
 msgstr "Sonraki sayfa"
 
-#: ../src/common/prntbase.cpp:1622
+#: ../src/common/prntbase.cpp:1628
 msgid "Last page"
 msgstr "Son sayfa"
 
-#: ../src/common/prntbase.cpp:1630 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1636 ../src/common/stockitem.cpp:215
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
-#: ../src/common/prntbase.cpp:1644 ../src/common/stockitem.cpp:214
+#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:214
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
-#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:153
+#: ../src/common/prntbase.cpp:1656 ../src/common/stockitem.cpp:153
 #: ../src/generic/logg.cpp:553 ../src/univ/themes/win32.cpp:3752
 msgid "&Close"
 msgstr "&Kapat"
 
-#: ../src/common/prntbase.cpp:2079
+#: ../src/common/prntbase.cpp:2085
 msgid "Could not start document preview."
 msgstr "Belge önizlemesi başlatılamadı."
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2123
-#: ../src/common/prntbase.cpp:2131
+#: ../src/common/prntbase.cpp:2085 ../src/common/prntbase.cpp:2129
+#: ../src/common/prntbase.cpp:2137
 msgid "Print Preview Failure"
 msgstr "Yazdırma önizleme hatası"
 
-#: ../src/common/prntbase.cpp:2123 ../src/common/prntbase.cpp:2131
+#: ../src/common/prntbase.cpp:2129 ../src/common/prntbase.cpp:2137
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Ne yazık ki önizlemeyi oluşturmak için yeterli bellek yok."
 
-#: ../src/common/prntbase.cpp:2138
+#: ../src/common/prntbase.cpp:2144
 #, c-format
 msgid "Page %d of %d"
 msgstr "Sayfa %d / %d"
 
-#: ../src/common/prntbase.cpp:2140
+#: ../src/common/prntbase.cpp:2146
 #, c-format
 msgid "Page %d"
 msgstr "%d. sayfa"
@@ -3284,7 +3305,6 @@ msgstr "Alt"
 
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
-#: ../src/osx/cocoa/button.mm:156
 msgid "&Cancel"
 msgstr "İ&ptal"
 
@@ -3320,7 +3340,7 @@ msgstr "&Dönüştür"
 msgid "Convert"
 msgstr "Dönüştür"
 
-#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2866
+#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2884
 #: ../src/osx/textctrl_osx.cpp:653 ../src/richtext/richtextctrl.cpp:331
 msgid "&Copy"
 msgstr "K&opyala"
@@ -3329,7 +3349,7 @@ msgstr "K&opyala"
 msgid "Copy"
 msgstr "Kopyala"
 
-#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2865
+#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2883
 #: ../src/osx/textctrl_osx.cpp:652 ../src/richtext/richtextctrl.cpp:330
 msgid "Cu&t"
 msgstr "&Kes"
@@ -3338,7 +3358,7 @@ msgstr "&Kes"
 msgid "Cut"
 msgstr "Kes"
 
-#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2868
+#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2886
 #: ../src/osx/textctrl_osx.cpp:655 ../src/richtext/richtextctrl.cpp:333
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
@@ -3537,7 +3557,7 @@ msgstr "&Aç..."
 msgid "Open..."
 msgstr "Aç..."
 
-#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2867
+#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2885
 #: ../src/osx/textctrl_osx.cpp:654 ../src/richtext/richtextctrl.cpp:332
 msgid "&Paste"
 msgstr "Ya&pıştır"
@@ -3612,7 +3632,7 @@ msgstr "&Farklı kaydet..."
 msgid "Save As..."
 msgstr "Farklı kaydet..."
 
-#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2870
+#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2888
 #: ../src/osx/textctrl_osx.cpp:657 ../src/richtext/richtextctrl.cpp:335
 msgid "Select &All"
 msgstr "&Tümünü seç"
@@ -3811,42 +3831,42 @@ msgstr "Geçerli belgeyi farklı bir adla kaydet"
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "'%s' karakter kümesine dönüşüm çalışmıyor."
 
-#: ../src/common/tarstrm.cpp:359 ../src/common/tarstrm.cpp:382
-#: ../src/common/tarstrm.cpp:413 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
 msgid "unknown"
 msgstr "bilinmiyor"
 
-#: ../src/common/tarstrm.cpp:781
+#: ../src/common/tarstrm.cpp:774
 msgid "incomplete header block in tar"
 msgstr "tar üst bilgi bloğu eksik"
 
-#: ../src/common/tarstrm.cpp:805
+#: ../src/common/tarstrm.cpp:798
 msgid "checksum failure reading tar header block"
 msgstr "tar üst bilgi bloğu okunurken sağlama toplamı hatası"
 
-#: ../src/common/tarstrm.cpp:978
+#: ../src/common/tarstrm.cpp:971
 msgid "invalid data in extended tar header"
 msgstr "ek tar üst bilgisindeki veriler geçersiz"
 
-#: ../src/common/tarstrm.cpp:988 ../src/common/tarstrm.cpp:1010
-#: ../src/common/tarstrm.cpp:1484 ../src/common/tarstrm.cpp:1506
+#: ../src/common/tarstrm.cpp:981 ../src/common/tarstrm.cpp:1003
+#: ../src/common/tarstrm.cpp:1477 ../src/common/tarstrm.cpp:1499
 msgid "tar entry not open"
 msgstr "tar kaydı açık değil"
 
-#: ../src/common/tarstrm.cpp:1030
+#: ../src/common/tarstrm.cpp:1023
 msgid "unexpected end of file"
 msgstr "beklenmeyen dosya sonu"
 
-#: ../src/common/tarstrm.cpp:1304
+#: ../src/common/tarstrm.cpp:1297
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s '%s' kaydının tar başlığına sığmadı"
 
-#: ../src/common/tarstrm.cpp:1366
+#: ../src/common/tarstrm.cpp:1359
 msgid "incorrect size given for tar entry"
 msgstr "tar kaydının boyutu hatalı verilmiş"
 
-#: ../src/common/textbuf.cpp:233
+#: ../src/common/textbuf.cpp:232
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' muhtemelen ikili ara bellek."
@@ -3901,11 +3921,11 @@ msgstr "'%s' kaynağı geçerli bir ileti kataloğu değil."
 msgid "Couldn't enumerate translations"
 msgstr "Çeviriler sayılamadı"
 
-#: ../src/common/utilscmn.cpp:1087
+#: ../src/common/utilscmn.cpp:1145
 msgid "No default application configured for HTML files."
 msgstr "HTML dosyaları için varsayılan uygulama ayarlanmamış."
 
-#: ../src/common/utilscmn.cpp:1132
+#: ../src/common/utilscmn.cpp:1190
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "'%s' adresi varsayılan tarayıcıyla açılamadı."
@@ -3951,7 +3971,7 @@ msgstr ""
 msgid "Failed to create temporary file in %s"
 msgstr "%s konumunda geçici dosya oluşturulamadı."
 
-#: ../src/common/webrequest_curl.cpp:1075
+#: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
 msgstr "libcurl başlatılamadı"
 
@@ -3959,7 +3979,7 @@ msgstr "libcurl başlatılamadı"
 msgid "RunScriptAsync not supported"
 msgstr "RunScriptAsync desteklenmiyor"
 
-#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1075
+#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1073
 #, c-format
 msgid "Error running JavaScript: %s"
 msgstr "JavaScript çalıştırılırken sorun çıktı: %s"
@@ -3970,8 +3990,9 @@ msgid "Failed to set proxy \"%s\": %s"
 msgstr "\"%s\" proxy'si ayarlanamadı: %s"
 
 #: ../src/common/webview_chromium.cpp:989
+#, fuzzy
 msgid ""
-"Chromium can't be used because libcef.so was't loaded early enough; please "
+"Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
 "Chromium, libcef.so dosyası yeterince erken yüklenmediği için kullanılamaz; "
@@ -3982,15 +4003,15 @@ msgstr ""
 msgid "Could not initialize Chromium"
 msgstr "Chromium başlatılamadı."
 
-#: ../src/common/webview_chromium.cpp:1617
+#: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
 msgstr "Geliştirici Araçlarını Göster"
 
-#: ../src/common/webview_chromium.cpp:1618
+#: ../src/common/webview_chromium.cpp:1617
 msgid "Close DevTools"
 msgstr "Geliştirici Araçlarını Kapat"
 
-#: ../src/common/webview_chromium.cpp:1624
+#: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
 msgstr "İnceleme"
 
@@ -3998,7 +4019,7 @@ msgstr "İnceleme"
 msgid "This platform does not support background transparency."
 msgstr "Bu platformda arka plan saydamlığı desteklenmiyor."
 
-#: ../src/common/wincmn.cpp:2082
+#: ../src/common/wincmn.cpp:2097
 msgid "Could not transfer data to window"
 msgstr "Veri pencereye aktarılamadı"
 
@@ -4336,43 +4357,43 @@ msgid "Password:"
 msgstr "Parola:"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/generic/datavgen.cpp:1172
+#: ../src/generic/datavgen.cpp:1178
 msgid "true"
 msgstr "doğru"
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/generic/datavgen.cpp:1174
+#: ../src/generic/datavgen.cpp:1180
 msgid "false"
 msgstr "yanlış"
 
-#: ../src/generic/datavgen.cpp:6891
+#: ../src/generic/datavgen.cpp:6897
 #, c-format
 msgid "Row %i"
 msgstr "%i. Satır"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6981
+#: ../src/generic/datavgen.cpp:6987
 msgid "Collapse"
 msgstr "Daralt"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6984
+#: ../src/generic/datavgen.cpp:6990
 msgid "Expand"
 msgstr "Genişlet"
 
 #. TRANSLATORS: Name of data view control and number of rows
-#: ../src/generic/datavgen.cpp:7005
+#: ../src/generic/datavgen.cpp:7011
 #, c-format
 msgid "%s (%d items)"
 msgstr "%s (%d öge)"
 
-#: ../src/generic/datavgen.cpp:7056
+#: ../src/generic/datavgen.cpp:7062
 #, c-format
 msgid "Column %u"
 msgstr "%u. sütun"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7125 ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/generic/datavgen.cpp:7131 ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:192
 #: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextliststylepage.cpp:252
@@ -4383,7 +4404,7 @@ msgid "Left"
 msgstr "Sol"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7128 ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/generic/datavgen.cpp:7134 ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Right"
@@ -4502,7 +4523,7 @@ msgstr "Klasör adı geçersiz."
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:752
 #: ../src/generic/filectrlg.cpp:766 ../src/generic/filectrlg.cpp:782
 #: ../src/generic/filectrlg.cpp:1356 ../src/generic/filectrlg.cpp:1387
-#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:76
 msgid "Error"
 msgstr "Hata"
 
@@ -4686,16 +4707,16 @@ msgstr "Dosyalar ayrıntı görünümünde görüntülensin"
 msgid "Go to parent directory"
 msgstr "Üst klasöre git"
 
-#: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:58
+#: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:59
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "'%s' dosyası zaten var, üzerine yazılsın mı?"
 
-#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:61
+#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:62
 msgid "Confirm"
 msgstr "Onayla"
 
-#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:74
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
 msgid "Please choose an existing file."
 msgstr "Lütfen var olan bir dosya seçin."
 
@@ -4968,7 +4989,7 @@ msgstr "ileti penceresi dönüş değeri geçersiz"
 msgid "Notice"
 msgstr "Bildirim"
 
-#: ../src/generic/preferencesg.cpp:116
+#: ../src/generic/preferencesg.cpp:118
 #, c-format
 msgid "%s Preferences"
 msgstr "%s ayarları"
@@ -4977,8 +4998,8 @@ msgstr "%s ayarları"
 msgid "Printing..."
 msgstr "Yazdırılıyor..."
 
-#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1074
-#: ../src/msw/printwin.cpp:217
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1076
+#: ../src/msw/printwin.cpp:235
 msgid "Could not start printing."
 msgstr "Yazdırma başlatılamadı."
 
@@ -5117,7 +5138,7 @@ msgstr "Bilinmeyen"
 msgid "Done."
 msgstr "Tamamlandı."
 
-#: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:205
+#: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:206
 #: ../src/html/helpwnd.cpp:530 ../src/html/helpwnd.cpp:545
 msgid "Search"
 msgstr "Arama"
@@ -5176,7 +5197,7 @@ msgstr ""
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "GTK+ başlatılamadı, DISPLAY düzgün ayarlanmış mı?"
 
-#: ../src/gtk/filedlg.cpp:88 ../src/gtk/filepicker.cpp:255
+#: ../src/gtk/filedlg.cpp:89 ../src/gtk/filepicker.cpp:255
 #, c-format
 msgid "Changing current directory to \"%s\" failed"
 msgstr "Geçerli klasör \"%s\" olarak değiştirilemedi"
@@ -5234,16 +5255,43 @@ msgstr ""
 msgid "MDI child"
 msgstr "MDI alt"
 
-#: ../src/gtk/print.cpp:215
+#: ../src/gtk/power.cpp:188
+#, fuzzy, c-format
+msgid "Failed to open D-Bus connection to the login manager: %s"
+msgstr "'%s' sunucusuna '%s' konusundan bağlantı kurulamadı"
+
+#: ../src/gtk/power.cpp:214
+#, fuzzy
+msgid "wxWidgets application"
+msgstr "Uygulamayı gizle"
+
+#: ../src/gtk/power.cpp:226
+msgid "Application needs to keep running"
+msgstr ""
+
+#: ../src/gtk/power.cpp:233
+msgid "Clean up before suspend"
+msgstr ""
+
+#: ../src/gtk/power.cpp:259
+#, fuzzy, c-format
+msgid "Failed to inhibit sleep: %s"
+msgstr "Çevirmeli bağlantı başlatılamadı: %s"
+
+#: ../src/gtk/power.cpp:265
+msgid "Unexpected response to D-Bus \"Inhibit\" request."
+msgstr ""
+
+#: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Özel boyut"
 
-#: ../src/gtk/print.cpp:749
+#: ../src/gtk/print.cpp:752
 #, c-format
 msgid "Error while printing: %s"
 msgstr "Yazdırırken hata oluştu: %s"
 
-#: ../src/gtk/print.cpp:813
+#: ../src/gtk/print.cpp:816
 msgid "Page Setup"
 msgstr "Sayfa düzeni"
 
@@ -5251,17 +5299,17 @@ msgstr "Sayfa düzeni"
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr "WebKit v1 üzerinde JavaScript çıktısının alınması desteklenmiyor"
 
-#: ../src/gtk/webview_webkit2.cpp:1099
+#: ../src/gtk/webview_webkit2.cpp:1098
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
 "Proxy ayarı WebKit tarafından desteklenmiyor, en az 2.16 sürümü gereklidir."
 
-#: ../src/gtk/webview_webkit2.cpp:1105
+#: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr "Bu program, WebKit proxy ayarları için destek olmadan derlendi."
 
-#: ../src/gtk/window.cpp:6249
+#: ../src/gtk/window.cpp:6289
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -5269,7 +5317,7 @@ msgstr ""
 "Yüklü GTK+ çok eski ve ekran karmayı desteklemiyor. Lütfen GTK+ 2.12 ya da "
 "üzeri bir sürüm yükleyin."
 
-#: ../src/gtk/window.cpp:6267
+#: ../src/gtk/window.cpp:6307
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -5277,7 +5325,7 @@ msgstr ""
 "Sistemin birleştirme (compositing) desteği etkin değil. Lütfen Pencere "
 "Yöneticinizden etkinleştirin."
 
-#: ../src/gtk/window.cpp:6278
+#: ../src/gtk/window.cpp:6318
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -5596,40 +5644,40 @@ msgstr "%u / %u"
 msgid "Cannot open HTML document: %s"
 msgstr "%s HTML belgesi açılamadı"
 
-#: ../src/html/htmlwin.cpp:577
+#: ../src/html/htmlwin.cpp:599
 msgid "Connecting..."
 msgstr "Bağlantı kuruluyor.."
 
-#: ../src/html/htmlwin.cpp:594
+#: ../src/html/htmlwin.cpp:616
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "İstenen HTML belgesi açılamıyor: %s"
 
-#: ../src/html/htmlwin.cpp:608
+#: ../src/html/htmlwin.cpp:630
 msgid "Loading : "
 msgstr "Yükleniyor : "
 
-#: ../src/html/htmlwin.cpp:651
+#: ../src/html/htmlwin.cpp:673
 msgid "Done"
 msgstr "Tamamlandı"
 
-#: ../src/html/htmlwin.cpp:701
+#: ../src/html/htmlwin.cpp:723
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "%s HTML çapası bulunamadı."
 
-#: ../src/html/htmlwin.cpp:1035
+#: ../src/html/htmlwin.cpp:1057
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "\"%s\" panoya kopyalandı."
 
-#: ../src/html/htmprint.cpp:267
+#: ../src/html/htmprint.cpp:269
 msgid ""
 "This document doesn't fit on the page horizontally and will be truncated "
 "when it is printed."
 msgstr "Bu belge sayfaya yatay olarak sığmıyor ve yazdırılırsa budanacak."
 
-#: ../src/html/htmprint.cpp:283
+#: ../src/html/htmprint.cpp:285
 #, c-format
 msgid ""
 "The document \"%s\" doesn't fit on the page horizontally and will be "
@@ -5641,24 +5689,24 @@ msgstr ""
 "\n"
 "Buna rağmen yazdırmak istiyor musunuz?"
 
-#: ../src/html/htmprint.cpp:294
+#: ../src/html/htmprint.cpp:296
 msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
 msgstr ""
 "Olabiliyorsa, çıktıyı daraltmak için sayfa ayarlarını değiştirmeyi deneyin."
 
-#: ../src/html/htmprint.cpp:443
+#: ../src/html/htmprint.cpp:445
 msgid ": file does not exist!"
 msgstr ": dosya bulunamadı!"
 
 #. TRANSLATORS: %s may be a document title.
-#: ../src/html/htmprint.cpp:712
+#: ../src/html/htmprint.cpp:717
 #, c-format
 msgid "%s Preview"
 msgstr "%s Önizlemesi"
 
-#: ../src/html/htmprint.cpp:750 ../src/richtext/richtextprint.cpp:615
+#: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -5694,7 +5742,7 @@ msgstr "Desteklenen pano biçimleri alınamadı"
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Renk seçimi penceresi %0lx hatasıyla kapandı."
 
-#: ../src/msw/cursor.cpp:204
+#: ../src/msw/cursor.cpp:141
 msgid "Failed to create cursor."
 msgstr "İmleç oluşturulamadı."
 
@@ -5935,7 +5983,7 @@ msgstr "Bit eşlem verisi için %luKb bellek ayrılamadı."
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "'%s' klasöründeki dosyalar sayılamadı"
 
-#: ../src/msw/dirdlg.cpp:359
+#: ../src/msw/dirdlg.cpp:368
 msgid "Couldn't obtain folder name"
 msgstr "Klasör adı alınamadı"
 
@@ -5959,15 +6007,15 @@ msgstr "\"%s\" dosyasından metafile yüklenemedi."
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr "Standart bul/değiştir penceresi oluşturulamadı (hata kodu %d)"
 
-#: ../src/msw/filedlg.cpp:1233
+#: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
 msgstr "Güvenli masaüstünden dosya sistemine erişime izin verilmemektedir."
 
-#: ../src/msw/filedlg.cpp:1234
+#: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
 msgstr "Güvenlik Uyarısı"
 
-#: ../src/msw/filedlg.cpp:1525
+#: ../src/msw/filedlg.cpp:1533
 #, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr "Dosya penceresi %0lx hata koduyla kapandı."
@@ -6003,17 +6051,17 @@ msgstr "Tek tek dosyaların değişiminin izlenmesi şu anda desteklenmiyor."
 msgid "Unable to set up watch for '%s'"
 msgstr "'%s' izlemesi kurulamadı"
 
-#: ../src/msw/fswatcher.cpp:477
+#: ../src/msw/fswatcher.cpp:466
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr "\"%s\" klasörü bulunamadığından değişiklikleri izlenemiyor."
 
-#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:505
+#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:507
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
 msgstr "OpenGL sürücüsü OpenGl 3.0 ve üzerini desteklemez."
 
 #: ../src/msw/glcanvas.cpp:601 ../src/osx/glcanvas_osx.cpp:395
-#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:551
+#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:553
 msgid "Couldn't create OpenGL context"
 msgstr "OpenGL içeriği oluşturulamadı"
 
@@ -6047,7 +6095,7 @@ msgstr "'%s' INI dosyası silinemedi"
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "%d liste denetimi ögesi hakkında bilgi alınamadı."
 
-#: ../src/msw/mdi.cpp:170
+#: ../src/msw/mdi.cpp:170 ../src/qt/mdi.cpp:253
 msgid "&Cascade"
 msgstr "Ard arda &diz"
 
@@ -6315,7 +6363,7 @@ msgstr "Desteklenmeyen %d türünün değeri verilemedi."
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "\"%s\" değeri \"%s\" anahtarı için yok sayılıyor."
 
-#: ../src/msw/textctrl.cpp:585
+#: ../src/msw/textctrl.cpp:596
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -6323,47 +6371,47 @@ msgstr ""
 "Zengin metin denetimi oluşturulamıyor. Onun yerine basit metin denetimi "
 "kullanılacak. Lütfen riched32.dll kitaplığını yeniden yükleyin"
 
-#: ../src/msw/thread.cpp:525 ../src/unix/threadpsx.cpp:848
+#: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:850
 msgid "Cannot start thread: error writing TLS."
 msgstr "İş parçacığı başlatılamadı: TLS yazma hatası."
 
-#: ../src/msw/thread.cpp:616
+#: ../src/msw/thread.cpp:613
 msgid "Can't set thread priority"
 msgstr "İş parçacığının önceliği ayarlanamadı"
 
-#: ../src/msw/thread.cpp:652
+#: ../src/msw/thread.cpp:649
 msgid "Can't create thread"
 msgstr "İş parçacığı oluşturulamadı"
 
-#: ../src/msw/thread.cpp:671
+#: ../src/msw/thread.cpp:668
 msgid "Couldn't terminate thread"
 msgstr "İş parçacığı sonlandırılamadı"
 
-#: ../src/msw/thread.cpp:802
+#: ../src/msw/thread.cpp:799
 msgid "Cannot wait for thread termination"
 msgstr "İş parçacığının sonlanması beklenemiyor"
 
-#: ../src/msw/thread.cpp:876
+#: ../src/msw/thread.cpp:873
 #, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "%lx iş parçacığı beklemeye alınamadı"
 
-#: ../src/msw/thread.cpp:906
+#: ../src/msw/thread.cpp:903
 #, c-format
 msgid "Cannot resume thread %lx"
 msgstr "%lx iş parçacığı sürdürülemiyor"
 
-#: ../src/msw/thread.cpp:935
+#: ../src/msw/thread.cpp:932
 msgid "Couldn't get the current thread pointer"
 msgstr "Geçerli iş parçacığı imleci alınamadı"
 
-#: ../src/msw/thread.cpp:1336
+#: ../src/msw/thread.cpp:1333
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr "İş parçacığı modülü başlatılamadı: Yerel depoda dizin oluşturulamıyor"
 
-#: ../src/msw/thread.cpp:1348
+#: ../src/msw/thread.cpp:1345
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -6419,12 +6467,12 @@ msgstr "'%s' komutu yürütülemedi"
 msgid "Failed to load mpr.dll."
 msgstr "mpr.dll yüklenemedi."
 
-#: ../src/msw/volume.cpp:507
+#: ../src/msw/volume.cpp:506
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "'%s' içinden tür adı okunamadı!"
 
-#: ../src/msw/volume.cpp:616
+#: ../src/msw/volume.cpp:615
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "'%s' içinden simge yüklenemedi."
@@ -6433,27 +6481,27 @@ msgstr "'%s' içinden simge yüklenemedi."
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr "Bu program, Edge proxy ayarları için destek olmadan derlendi."
 
-#: ../src/msw/webview_ie.cpp:1012
+#: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
 msgstr "Kayıt defterinde internet görünümü benzetimi düzeyi bulunamadı"
 
-#: ../src/msw/webview_ie.cpp:1021
+#: ../src/msw/webview_ie.cpp:1019
 msgid "Failed to set web view to modern emulation level"
 msgstr "İnternet görünümü modern benzetim düzeyine ayarlanamadı"
 
-#: ../src/msw/webview_ie.cpp:1029
+#: ../src/msw/webview_ie.cpp:1027
 msgid "Failed to reset web view to standard emulation level"
 msgstr "İnternet görünümü standart benzetim düzeyine sıfırlanamadı"
 
-#: ../src/msw/webview_ie.cpp:1051
+#: ../src/msw/webview_ie.cpp:1049
 msgid "Can't run JavaScript script without a valid HTML document"
 msgstr "Geçerli bir HTML belgesi olmadan JavaScript betiği çalıştırılamaz"
 
-#: ../src/msw/webview_ie.cpp:1058
+#: ../src/msw/webview_ie.cpp:1056
 msgid "Can't get the JavaScript object"
 msgstr "JavaScript nesnesi alınamadı"
 
-#: ../src/msw/webview_ie.cpp:1072
+#: ../src/msw/webview_ie.cpp:1070
 msgid "failed to evaluate"
 msgstr "değerlendirilemedi"
 
@@ -6557,11 +6605,11 @@ msgctxt "macOS menu item"
 msgid "Quit Application"
 msgstr "Uygulamadan çık"
 
-#: ../src/osx/webview_webkit.mm:448
+#: ../src/osx/webview_webkit.mm:444
 msgid "Printing is not supported by the system web control"
 msgstr "Sistem web denetimi tarafından yazdırma desteklenmiyor"
 
-#: ../src/osx/webview_webkit.mm:457
+#: ../src/osx/webview_webkit.mm:453
 msgid "Print operation could not be initialized"
 msgstr "Yazdırma işlemi başlatılamadı"
 
@@ -7019,6 +7067,10 @@ msgstr "Bir klasör seçin:"
 #: ../src/propgrid/props.cpp:2055
 msgid "Choose a file"
 msgstr "Bir dosya seçin"
+
+#: ../src/qt/mdi.cpp:254
+msgid "&Tile"
+msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -7513,7 +7565,7 @@ msgid "Insert Text"
 msgstr "Metin ekle"
 
 #: ../src/richtext/richtextbuffer.cpp:8023
-#: ../src/richtext/richtextbuffer.cpp:8981
+#: ../src/richtext/richtextbuffer.cpp:8979
 msgid "Insert Image"
 msgstr "Görsel ekle"
 
@@ -7533,68 +7585,68 @@ msgstr "Çok fazla EndStyle çağrısı!"
 msgid "files"
 msgstr "dosyalar"
 
-#: ../src/richtext/richtextbuffer.cpp:9382
+#: ../src/richtext/richtextbuffer.cpp:9380
 msgid "standard/circle"
 msgstr "standart/daire"
 
-#: ../src/richtext/richtextbuffer.cpp:9383
+#: ../src/richtext/richtextbuffer.cpp:9381
 msgid "standard/circle-outline"
 msgstr "standart/daire-çerçeve"
 
-#: ../src/richtext/richtextbuffer.cpp:9384
+#: ../src/richtext/richtextbuffer.cpp:9382
 msgid "standard/square"
 msgstr "standart/kare"
 
-#: ../src/richtext/richtextbuffer.cpp:9385
+#: ../src/richtext/richtextbuffer.cpp:9383
 msgid "standard/diamond"
 msgstr "standart/elmas"
 
-#: ../src/richtext/richtextbuffer.cpp:9386
+#: ../src/richtext/richtextbuffer.cpp:9384
 msgid "standard/triangle"
 msgstr "standart/üçgen"
 
-#: ../src/richtext/richtextbuffer.cpp:9425
+#: ../src/richtext/richtextbuffer.cpp:9423
 msgid "Box Properties"
 msgstr "Kutu Özellikleri"
 
-#: ../src/richtext/richtextbuffer.cpp:10008
+#: ../src/richtext/richtextbuffer.cpp:10006
 msgid "Multiple Cell Properties"
 msgstr "Çoklu hücre özellikleri"
 
-#: ../src/richtext/richtextbuffer.cpp:10010
+#: ../src/richtext/richtextbuffer.cpp:10008
 msgid "Cell Properties"
 msgstr "Hücre özellikleri"
 
-#: ../src/richtext/richtextbuffer.cpp:11258
+#: ../src/richtext/richtextbuffer.cpp:11256
 msgid "Set Cell Style"
 msgstr "Hücre stilini ayarla"
 
-#: ../src/richtext/richtextbuffer.cpp:11332
+#: ../src/richtext/richtextbuffer.cpp:11330
 msgid "Delete Row"
 msgstr "Satırı sil"
 
-#: ../src/richtext/richtextbuffer.cpp:11382
+#: ../src/richtext/richtextbuffer.cpp:11380
 msgid "Delete Column"
 msgstr "Sütunu sil"
 
-#: ../src/richtext/richtextbuffer.cpp:11433
+#: ../src/richtext/richtextbuffer.cpp:11431
 msgid "Add Row"
 msgstr "Satır ekle"
 
-#: ../src/richtext/richtextbuffer.cpp:11496
+#: ../src/richtext/richtextbuffer.cpp:11494
 msgid "Add Column"
 msgstr "Sütun ekle"
 
-#: ../src/richtext/richtextbuffer.cpp:11539
+#: ../src/richtext/richtextbuffer.cpp:11537
 msgid "Table Properties"
 msgstr "Tablo özellikleri"
 
-#: ../src/richtext/richtextbuffer.cpp:12901
+#: ../src/richtext/richtextbuffer.cpp:12899
 msgid "Picture Properties"
 msgstr "Görsel özellikleri"
 
-#: ../src/richtext/richtextbuffer.cpp:13171
-#: ../src/richtext/richtextbuffer.cpp:13281
+#: ../src/richtext/richtextbuffer.cpp:13169
+#: ../src/richtext/richtextbuffer.cpp:13279
 msgid "image"
 msgstr "görsel"
 
@@ -8349,7 +8401,7 @@ msgstr "Alt boşluk boyutu."
 msgid "Units for the bottom padding."
 msgstr "Alt boşluk birimleri."
 
-#: ../src/richtext/richtextprint.cpp:589
+#: ../src/richtext/richtextprint.cpp:592
 msgid " Preview"
 msgstr " Önizleme"
 
@@ -9124,20 +9176,20 @@ msgstr "Ses verisi desteklenmeyen bir biçimde."
 msgid "Couldn't open audio: %s"
 msgstr "Ses açılamadı: %s"
 
-#: ../src/unix/threadpsx.cpp:1021
+#: ../src/unix/threadpsx.cpp:1033
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "İş parçacığı zamanlama ilkesi alınamadı."
 
-#: ../src/unix/threadpsx.cpp:1046
+#: ../src/unix/threadpsx.cpp:1058
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Zamanlama ilkesi %d için öncelik aralığı alınamadı."
 
-#: ../src/unix/threadpsx.cpp:1054
+#: ../src/unix/threadpsx.cpp:1066
 msgid "Thread priority setting is ignored."
 msgstr "İş parçacığı öncelik ayarları yok sayıldı."
 
-#: ../src/unix/threadpsx.cpp:1209
+#: ../src/unix/threadpsx.cpp:1221
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -9145,59 +9197,59 @@ msgstr ""
 "İş parçacığına katılınamadı, olası bellek taşması bulundu - lütfen programı "
 "yeniden başlatın"
 
-#: ../src/unix/threadpsx.cpp:1340
+#: ../src/unix/threadpsx.cpp:1352
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "%lu iş parçacığı öncelik düzeyi ayarlanamadı"
 
-#: ../src/unix/threadpsx.cpp:1469
+#: ../src/unix/threadpsx.cpp:1481
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "%d iş parçacığı önceliği ayarlanamadı."
 
-#: ../src/unix/threadpsx.cpp:1654
+#: ../src/unix/threadpsx.cpp:1666
 msgid "Failed to terminate a thread."
 msgstr "Bir iş parçacığı sonlandırılamadı."
 
-#: ../src/unix/threadpsx.cpp:1882
+#: ../src/unix/threadpsx.cpp:1893
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 "İş parçacığı modülü başlatılamadı: İş parçacığı anahtarı oluşturulamadı"
 
-#: ../src/unix/utilsunx.cpp:338
+#: ../src/unix/utilsunx.cpp:340
 msgid "Impossible to get child process input"
 msgstr "Alt iş girdisi alınamıyor"
 
-#: ../src/unix/utilsunx.cpp:388
+#: ../src/unix/utilsunx.cpp:390
 msgid "Can't write to child process's stdin"
 msgstr "Alt işlem stdin yazılamadı"
 
-#: ../src/unix/utilsunx.cpp:642
+#: ../src/unix/utilsunx.cpp:644
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "'%s' yürütülemedi\n"
 
-#: ../src/unix/utilsunx.cpp:676
+#: ../src/unix/utilsunx.cpp:678
 msgid "Fork failed"
 msgstr "Ayrılma başarısız"
 
-#: ../src/unix/utilsunx.cpp:699
+#: ../src/unix/utilsunx.cpp:701
 msgid "Failed to set process priority"
 msgstr "İşlem önceliği ayarlanamadı"
 
-#: ../src/unix/utilsunx.cpp:710
+#: ../src/unix/utilsunx.cpp:712
 msgid "Failed to redirect child process input/output"
 msgstr "Alt iş giriş/çıkışı yönlendirilemedi"
 
-#: ../src/unix/utilsunx.cpp:814
+#: ../src/unix/utilsunx.cpp:816
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr "Engellemesiz tünel kurulamadı, program takılabilir."
 
-#: ../src/unix/utilsunx.cpp:1021
+#: ../src/unix/utilsunx.cpp:1023
 msgid "Cannot get the hostname"
 msgstr "Sunucu adı alınamadı"
 
-#: ../src/unix/utilsunx.cpp:1057
+#: ../src/unix/utilsunx.cpp:1059
 msgid "Cannot get the official hostname"
 msgstr "Resmi sunucu adı alınamadı"
 
@@ -9257,19 +9309,36 @@ msgstr "'%s' kaynak dosyası açılamadı."
 msgid "Cannot load resources from file '%s'."
 msgstr "Kaynaklar '%s' dosyasından yüklenemedi."
 
-#: ../src/xrc/xmlres.cpp:2766
+#: ../src/xrc/xmlres.cpp:2767
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "%s \"%s\" oluşturulamadı."
+
+#, c-format
+#~ msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
+#~ msgstr "BMP: biBitCount=%d iken üst bilgide biClrUsed=%d."
+
+#~ msgctxt "keyboard key"
+#~ msgid "Alt+"
+#~ msgstr "Alt+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "Ctrl+"
+#~ msgstr "Ctrl+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "Shift+"
+#~ msgstr "Shift+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "RawCtrl+"
+#~ msgstr "HamCtrl+"
 
 #~ msgid "Copying more than one selected block to clipboard is not supported."
 #~ msgstr "Seçilmiş bir bloktan fazlasının panoya kopyalanması desteklenmiyor."
 
 #~ msgid "Unsupported clipboard format."
 #~ msgstr "Pano biçimi desteklenmiyor."
-
-#~ msgid "Failed to set clipboard data."
-#~ msgstr "Pano verisi ayarlanamadı."
 
 #~ msgid "Background colour"
 #~ msgstr "Arka plan rengi"

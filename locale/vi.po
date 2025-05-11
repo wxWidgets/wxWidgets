@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 16:44+0100\n"
+"POT-Creation-Date: 2025-05-14 20:23+0200\n"
 "PO-Revision-Date: 2014-03-30 09:14+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.5.5\n"
 
-#: ../include/wx/defs.h:2596
+#: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
 msgstr "Mọi tập tin (*.*)|*.*"
 
-#: ../include/wx/defs.h:2599
+#: ../include/wx/defs.h:2585
 msgid "All files (*)|*"
 msgstr "Mọi tập tin (*)|*"
 
@@ -40,13 +40,13 @@ msgstr "Thời gian còn lại:"
 
 #. TRANSLATORS: HTML printout default title.
 #: ../include/wx/html/htmprint.h:121 ../include/wx/prntbase.h:273
-#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2166
+#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2161
 msgid "Printout"
 msgstr "Dữ liệu in"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:289
+#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:291
 msgid "Printing"
 msgstr "In ấn"
 
@@ -201,17 +201,19 @@ msgid "Close All"
 msgstr "Đóng hết"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
+#: ../src/qt/mdi.cpp:258
 msgid "&Next"
 msgstr "Tiếp &theo"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
+#: ../src/qt/mdi.cpp:259
 msgid "&Previous"
 msgstr "&Trước"
 
 #: ../src/aui/tabmdi.cpp:332 ../src/aui/tabmdi.cpp:348
 #: ../src/aui/tabmdi.cpp:350 ../src/generic/mdig.cpp:291
 #: ../src/generic/mdig.cpp:307 ../src/generic/mdig.cpp:311
-#: ../src/msw/mdi.cpp:337
+#: ../src/msw/mdi.cpp:337 ../src/qt/mdi.cpp:462
 msgid "&Window"
 msgstr "&Cửa sổ"
 
@@ -708,71 +710,56 @@ msgctxt "keyboard key"
 msgid "Command"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:186
+#: ../src/common/accelcmn.cpp:186 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:188
+#: ../src/common/accelcmn.cpp:188 ../src/common/accelcmn.cpp:363
 msgctxt "keyboard key"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../src/common/accelcmn.cpp:190
+#: ../src/common/accelcmn.cpp:190 ../src/common/accelcmn.cpp:361
 msgctxt "keyboard key"
 msgid "Shift"
 msgstr "Shift"
 
-#: ../src/common/accelcmn.cpp:194
+#: ../src/common/accelcmn.cpp:196
 msgctxt "keyboard key"
 msgid "num "
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
+#: ../src/common/accelcmn.cpp:260 ../src/common/accelcmn.cpp:382
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
 
-#: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
+#: ../src/common/accelcmn.cpp:277 ../src/common/accelcmn.cpp:385
 msgctxt "keyboard key"
 msgid "KP_F"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
+#: ../src/common/accelcmn.cpp:280 ../src/common/accelcmn.cpp:388
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "KP_"
 
-#: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
+#: ../src/common/accelcmn.cpp:283 ../src/common/accelcmn.cpp:391
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "SPECIAL"
 
-#: ../src/common/accelcmn.cpp:343
-msgctxt "keyboard key"
-msgid "Alt+"
-msgstr "Alt+"
+#: ../src/common/accelcmn.cpp:373
+#, fuzzy
+msgid "Ctrl"
+msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:345
-msgctxt "keyboard key"
-msgid "Ctrl+"
-msgstr "Ctrl+"
-
-#: ../src/common/accelcmn.cpp:347
-msgctxt "keyboard key"
-msgid "Shift+"
-msgstr "Shift+"
-
-#: ../src/common/accelcmn.cpp:350
-msgctxt "keyboard key"
-msgid "RawCtrl+"
-msgstr "RawCtrl+"
-
-#: ../src/common/appbase.cpp:759
+#: ../src/common/appbase.cpp:786
 msgid "show this help message"
 msgstr "hiển thị thông tin trợ giúp này"
 
-#: ../src/common/appbase.cpp:769
+#: ../src/common/appbase.cpp:796
 msgid "generate verbose log messages"
 msgstr "tạo ra nhật ký thông tin đầy đủ"
 
@@ -890,7 +877,7 @@ msgid "Can't &Undo "
 msgstr "Không thể &Undo"
 
 #: ../src/common/cmdproc.cpp:259 ../src/common/stockitem.cpp:208
-#: ../src/msw/textctrl.cpp:2862 ../src/osx/textctrl_osx.cpp:649
+#: ../src/msw/textctrl.cpp:2880 ../src/osx/textctrl_osx.cpp:649
 #: ../src/richtext/richtextctrl.cpp:327
 msgid "&Undo"
 msgstr "&Undo"
@@ -900,7 +887,7 @@ msgid "&Redo "
 msgstr "&Redo "
 
 #: ../src/common/cmdproc.cpp:281 ../src/common/cmdproc.cpp:288
-#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2863
+#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2881
 #: ../src/osx/textctrl_osx.cpp:650 ../src/richtext/richtextctrl.cpp:328
 msgid "&Redo"
 msgstr "&Redo"
@@ -930,17 +917,17 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' có thêm '..', bỏ qua."
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2163 ../src/generic/datavgen.cpp:1424
+#: ../src/common/datavcmn.cpp:2166 ../src/generic/datavgen.cpp:1430
 msgid "checked"
 msgstr ""
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2167 ../src/generic/datavgen.cpp:1426
+#: ../src/common/datavcmn.cpp:2170 ../src/generic/datavgen.cpp:1432
 msgid "unchecked"
 msgstr ""
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2171
+#: ../src/common/datavcmn.cpp:2174
 #, fuzzy
 msgid "undetermined"
 msgstr "gạch chân"
@@ -1107,81 +1094,81 @@ msgstr "Thực thi curl gặp lỗi, xin thiết đặt nó trong ĐƯỜNG DẪ
 msgid "Failed to upload the debug report (error code %d)."
 msgstr "Tải lên báo cáo lỗi gặp lỗi (mã lỗi %d)."
 
-#: ../src/common/docview.cpp:367
+#: ../src/common/docview.cpp:366
 msgid "Save As"
 msgstr "Ghi Lại Bằng Tên Mới"
 
-#: ../src/common/docview.cpp:458
+#: ../src/common/docview.cpp:457
 msgid "Discard changes and reload the last saved version?"
 msgstr "Không dùng những thay đổi này và tải lại dữ liệu đã lưu lần trước?"
 
-#: ../src/common/docview.cpp:489
+#: ../src/common/docview.cpp:488
 msgid "unnamed"
 msgstr "không_tên"
 
-#: ../src/common/docview.cpp:514
+#: ../src/common/docview.cpp:513
 #, c-format
 msgid "Do you want to save changes to %s?"
 msgstr "Bạn có muốn ghi lại các thay đổi với %s không?"
 
-#: ../src/common/docview.cpp:522 ../src/common/docview.cpp:561
+#: ../src/common/docview.cpp:521 ../src/common/docview.cpp:560
 #: ../src/common/stockitem.cpp:195
 msgid "&Save"
 msgstr "&Ghi lại"
 
-#: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
+#: ../src/common/docview.cpp:522 ../src/common/docview.cpp:560
 msgid "&Discard changes"
 msgstr ""
 
-#: ../src/common/docview.cpp:524
+#: ../src/common/docview.cpp:523
 #, fuzzy
 msgid "Do&n't close"
 msgstr "Không Ghi Lại"
 
-#: ../src/common/docview.cpp:554
+#: ../src/common/docview.cpp:553
 #, fuzzy, c-format
 msgid "Do you want to save changes to %s before closing it?"
 msgstr "Bạn có muốn ghi lại các thay đổi với %s không?"
 
-#: ../src/common/docview.cpp:560
+#: ../src/common/docview.cpp:559
 #, fuzzy
 msgid "The document must be closed."
 msgstr "Dữ liệu dạng chữ không thể được ghi lại."
 
-#: ../src/common/docview.cpp:572
+#: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
 msgstr ""
 
-#: ../src/common/docview.cpp:578
+#: ../src/common/docview.cpp:577
 msgid "Retry"
 msgstr ""
 
-#: ../src/common/docview.cpp:578
+#: ../src/common/docview.cpp:577
 msgid "Discard changes"
 msgstr ""
 
-#: ../src/common/docview.cpp:680
+#: ../src/common/docview.cpp:679
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "Tập tin  \"%s\" không thể mở để ghi."
 
-#: ../src/common/docview.cpp:686
+#: ../src/common/docview.cpp:685
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "Gặp lỗi khi ghi tài liệu vào tập tin \"%s\"."
 
-#: ../src/common/docview.cpp:703
+#: ../src/common/docview.cpp:702
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "Tập tin  \"%s\" không thể mở để đọc."
 
-#: ../src/common/docview.cpp:715
+#: ../src/common/docview.cpp:714
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "Lỗi đọc từ tập tin \"%s\" gặp lỗi."
 
-#: ../src/common/docview.cpp:1240
+#: ../src/common/docview.cpp:1236
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -1190,57 +1177,57 @@ msgstr ""
 "Tập tin '%s' không tồn tại và không thể mở được.\n"
 "Nó đã bị gỡ bỏ từ danh sách tập tin mới được dùng gần đây nhất."
 
-#: ../src/common/docview.cpp:1300
+#: ../src/common/docview.cpp:1296
 msgid "Print preview creation failed."
 msgstr "Tạo bản xem thử khi in gặp lỗi."
 
-#: ../src/common/docview.cpp:1306
+#: ../src/common/docview.cpp:1302
 msgid "Print Preview"
 msgstr "Mô Phỏng Bản In"
 
-#: ../src/common/docview.cpp:1521
+#: ../src/common/docview.cpp:1517
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Định dạng của tập tin '%s' không phân tách đúng định dạng."
 
-#: ../src/common/docview.cpp:1648
+#: ../src/common/docview.cpp:1643
 #, c-format
 msgid "unnamed%d"
 msgstr "Không_tên%d"
 
-#: ../src/common/docview.cpp:1665
+#: ../src/common/docview.cpp:1660
 msgid " - "
 msgstr " - "
 
-#: ../src/common/docview.cpp:1796 ../src/common/docview.cpp:1849
+#: ../src/common/docview.cpp:1791 ../src/common/docview.cpp:1844
 msgid "Open File"
 msgstr "Mở tập tin"
 
-#: ../src/common/docview.cpp:1812
+#: ../src/common/docview.cpp:1807
 msgid "File error"
 msgstr "Lỗi tập tin"
 
-#: ../src/common/docview.cpp:1814
+#: ../src/common/docview.cpp:1809
 msgid "Sorry, could not open this file."
 msgstr "Xin lỗi, không thể mở tập tin này."
 
-#: ../src/common/docview.cpp:1848
+#: ../src/common/docview.cpp:1843
 msgid "Sorry, the format for this file is unknown."
 msgstr "Rất tiếc, định dạng tập tin này không hiểu."
 
-#: ../src/common/docview.cpp:1929
+#: ../src/common/docview.cpp:1924
 msgid "Select a document template"
 msgstr "Chọn một tài liệu tạm thời"
 
-#: ../src/common/docview.cpp:1930
+#: ../src/common/docview.cpp:1925
 msgid "Templates"
 msgstr "Biểu mẫu"
 
-#: ../src/common/docview.cpp:2003
+#: ../src/common/docview.cpp:1998
 msgid "Select a document view"
 msgstr "Chọn một bộ hiển thị tài liệu"
 
-#: ../src/common/docview.cpp:2004
+#: ../src/common/docview.cpp:1999
 msgid "Views"
 msgstr "Trình bày"
 
@@ -2238,132 +2225,132 @@ msgstr "BMP: Không thể ghi bản đồ màu RGB."
 msgid "BMP: Couldn't write data."
 msgstr "BMP: Không thể ghi dữ liệu."
 
-#: ../src/common/imagbmp.cpp:556 ../src/common/imagbmp.cpp:572
+#: ../src/common/imagbmp.cpp:561 ../src/common/imagbmp.cpp:642
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: Không thể cấp phát bộ nhớ."
 
-#: ../src/common/imagbmp.cpp:1046
+#: ../src/common/imagbmp.cpp:1041
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "Phần đầu DIB: Độ rộng ảnh > 32767 điểm ảnh cho tập tin."
 
-#: ../src/common/imagbmp.cpp:1054
+#: ../src/common/imagbmp.cpp:1049
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "Phần đầu DIB: Độ cao ảnh > 32767 điểm ảnh cho tập tin."
 
-#: ../src/common/imagbmp.cpp:1086
+#: ../src/common/imagbmp.cpp:1081
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "Phần đầu DIB: Không rõ độ sâu bit trong tập tin."
 
-#: ../src/common/imagbmp.cpp:1160
+#: ../src/common/imagbmp.cpp:1156
 msgid "DIB Header: Unknown encoding in file."
 msgstr "Phần Đầu DIB: Không hiểu bộ giải mã trong tập tin."
 
-#: ../src/common/imagbmp.cpp:1169
+#: ../src/common/imagbmp.cpp:1165
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "Phần đầu DIB: Bộ giải mã không khớp với độ sâu bit."
 
-#: ../src/common/imagbmp.cpp:1185
+#: ../src/common/imagbmp.cpp:1180
 #, c-format
-msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
+msgid "BMP Header: Invalid number of colors (%d)."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1279
+#: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
 msgstr "Lỗi trong việc đọc ảnh DIB."
 
-#: ../src/common/imagbmp.cpp:1300
+#: ../src/common/imagbmp.cpp:1294
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Lỗi trong việc đọc mặt nạ DIB."
 
-#: ../src/common/imagbmp.cpp:1359
+#: ../src/common/imagbmp.cpp:1353
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Ảnh quá cao đối với biểu tượng."
 
-#: ../src/common/imagbmp.cpp:1367
+#: ../src/common/imagbmp.cpp:1361
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Ảnh quá rộng đối với biểu tượng."
 
-#: ../src/common/imagbmp.cpp:1394 ../src/common/imagbmp.cpp:1494
-#: ../src/common/imagbmp.cpp:1509 ../src/common/imagbmp.cpp:1520
-#: ../src/common/imagbmp.cpp:1534 ../src/common/imagbmp.cpp:1582
-#: ../src/common/imagbmp.cpp:1597 ../src/common/imagbmp.cpp:1611
-#: ../src/common/imagbmp.cpp:1622
+#: ../src/common/imagbmp.cpp:1388 ../src/common/imagbmp.cpp:1488
+#: ../src/common/imagbmp.cpp:1503 ../src/common/imagbmp.cpp:1514
+#: ../src/common/imagbmp.cpp:1528 ../src/common/imagbmp.cpp:1576
+#: ../src/common/imagbmp.cpp:1591 ../src/common/imagbmp.cpp:1605
+#: ../src/common/imagbmp.cpp:1616
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Lỗi khi đang ghi tập tin ảnh!"
 
-#: ../src/common/imagbmp.cpp:1707
+#: ../src/common/imagbmp.cpp:1701
 msgid "ICO: Invalid icon index."
 msgstr "ICO: Chỉ mục biểu tượng không hợp lệ."
 
-#: ../src/common/image.cpp:2358
+#: ../src/common/image.cpp:2410
 msgid "Image and mask have different sizes."
 msgstr "Ảnh và mặt nạ có sự khác biệt kích thước."
 
-#: ../src/common/image.cpp:2366 ../src/common/image.cpp:2407
+#: ../src/common/image.cpp:2418 ../src/common/image.cpp:2459
 msgid "No unused colour in image being masked."
 msgstr "Không có màu không dùng đến trong mặt nạ ảnh này."
 
-#: ../src/common/image.cpp:2589
+#: ../src/common/image.cpp:2641
 #, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
 msgstr "Gặp lỗi tải ảnh \"%s\" từ nguồn tài nguyên."
 
-#: ../src/common/image.cpp:2598
+#: ../src/common/image.cpp:2650
 #, c-format
 msgid "Failed to load icon \"%s\" from resources."
 msgstr "Tải biểu tượng \"%s\" từ nguồn tài nguyên gặp lỗi."
 
-#: ../src/common/image.cpp:2676 ../src/common/image.cpp:2695
+#: ../src/common/image.cpp:2728 ../src/common/image.cpp:2747
 #, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "Tải ảnh từ tập tin \"%s\" gặp lỗi."
 
-#: ../src/common/image.cpp:2709
+#: ../src/common/image.cpp:2761
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Không thể ghi ảnh ra tập tin '%s': không hiểu phần mở rộng."
 
-#: ../src/common/image.cpp:2817
+#: ../src/common/image.cpp:2869
 msgid "No handler found for image type."
 msgstr "Không có phần điều khiển cho kiểu ảnh này."
 
-#: ../src/common/image.cpp:2825 ../src/common/image.cpp:2948
-#: ../src/common/image.cpp:3014
+#: ../src/common/image.cpp:2877 ../src/common/image.cpp:3000
+#: ../src/common/image.cpp:3066
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Không có bộ điều khiển ảnh cho kiểu %d được định nghĩa."
 
-#: ../src/common/image.cpp:2835
+#: ../src/common/image.cpp:2887
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "Tập tin ảnh không thuộc kiểu %d."
 
-#: ../src/common/image.cpp:2918
+#: ../src/common/image.cpp:2970
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
 "Không thể tự động dò tìm định dạng ảnh cho đầu vào không-di-chuyển-vị-trí-"
 "đọc-được."
 
-#: ../src/common/image.cpp:2936
+#: ../src/common/image.cpp:2988
 msgid "Unknown image data format."
 msgstr "Không hiểu định dạng dữ liệu ảnh"
 
-#: ../src/common/image.cpp:2957
+#: ../src/common/image.cpp:3009
 #, c-format
 msgid "This is not a %s."
 msgstr "Cái này không phải là một %s."
 
-#: ../src/common/image.cpp:2980 ../src/common/image.cpp:3028
+#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Không có bộ điều khiển ảnh cho kiểu %s được định nghĩa."
 
-#: ../src/common/image.cpp:2989
+#: ../src/common/image.cpp:3041
 #, c-format
 msgid "Image is not of type %s."
 msgstr "Ảnh không thuộc kiểu %s."
 
-#: ../src/common/image.cpp:3457
+#: ../src/common/image.cpp:3509
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "Gặp lỗi khi kiểm tra định dạng của tập tin ảnh \"%s\"."
@@ -2503,7 +2490,41 @@ msgstr "TIFF: Gặp lỗi khi ghi tập tin ảnh."
 msgid "TIFF: Error flushing data."
 msgstr "TIFF: Gặp lỗi khi ghi tập tin ảnh."
 
-#: ../src/common/init.cpp:173
+#: ../src/common/imagwebp.cpp:56
+msgid "WebP: Invalid data (failed to get features)."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:65
+msgid "WebP: Allocating image memory failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:82
+msgid "WebP: Decoding RGBA image data failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:98
+msgid "WebP: Decoding RGB image data failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
+msgid "WebP: Allocating stream buffer failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:131
+#, fuzzy
+msgid "WebP: Failed to parse container data."
+msgstr "Đặt dữ liệu clipboard gặp lỗi."
+
+#: ../src/common/imagwebp.cpp:222
+#, fuzzy
+msgid "WebP: Error decoding animation."
+msgstr "Lỗi trong việc đọc các tùy chọn cấu hình."
+
+#: ../src/common/imagwebp.cpp:240
+msgid "WebP: Error getting next animation frame."
+msgstr ""
+
+#: ../src/common/init.cpp:172
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
@@ -2511,7 +2532,7 @@ msgid ""
 msgstr ""
 "Tham số dòng lệnh %d không thể chuyển đổi sang Unicode và sẽ bị bỏ qua."
 
-#: ../src/common/init.cpp:343
+#: ../src/common/init.cpp:344
 msgid "Initialization failed in post init, aborting."
 msgstr "Khởi tạo lỗi trong việc post init, đang bãi bỏ."
 
@@ -3127,9 +3148,9 @@ msgstr "Sẵn sàng"
 msgid "Printing Error"
 msgstr "Lỗi In"
 
-#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1591
+#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1597
 #: ../src/generic/prntdlgg.cpp:135 ../src/generic/prntdlgg.cpp:149
-#: ../src/gtk/print.cpp:625 ../src/gtk/print.cpp:643
+#: ../src/gtk/print.cpp:628 ../src/gtk/print.cpp:646
 msgid "Print"
 msgstr "In"
 
@@ -3168,54 +3189,54 @@ msgstr "Đang in trang %d trong tổng số %d"
 msgid " (copy %d of %d)"
 msgstr " (chép %d trong số %d)"
 
-#: ../src/common/prntbase.cpp:1598
+#: ../src/common/prntbase.cpp:1604
 msgid "First page"
 msgstr "Trang đầu"
 
-#: ../src/common/prntbase.cpp:1603 ../src/html/helpwnd.cpp:659
+#: ../src/common/prntbase.cpp:1609 ../src/html/helpwnd.cpp:659
 msgid "Previous page"
 msgstr "Trang trước"
 
-#: ../src/common/prntbase.cpp:1617 ../src/html/helpwnd.cpp:660
+#: ../src/common/prntbase.cpp:1623 ../src/html/helpwnd.cpp:660
 msgid "Next page"
 msgstr "Trang tiếp theo"
 
-#: ../src/common/prntbase.cpp:1622
+#: ../src/common/prntbase.cpp:1628
 msgid "Last page"
 msgstr "Trang cuối"
 
-#: ../src/common/prntbase.cpp:1630 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1636 ../src/common/stockitem.cpp:215
 msgid "Zoom Out"
 msgstr "Thu nhỏ"
 
-#: ../src/common/prntbase.cpp:1644 ../src/common/stockitem.cpp:214
+#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:214
 msgid "Zoom In"
 msgstr "Phóng to"
 
-#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:153
+#: ../src/common/prntbase.cpp:1656 ../src/common/stockitem.cpp:153
 #: ../src/generic/logg.cpp:553 ../src/univ/themes/win32.cpp:3752
 msgid "&Close"
 msgstr "Đó&ng"
 
-#: ../src/common/prntbase.cpp:2079
+#: ../src/common/prntbase.cpp:2085
 msgid "Could not start document preview."
 msgstr "Không thể bắt đầu việc xem thử tài liệu."
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2123
-#: ../src/common/prntbase.cpp:2131
+#: ../src/common/prntbase.cpp:2085 ../src/common/prntbase.cpp:2129
+#: ../src/common/prntbase.cpp:2137
 msgid "Print Preview Failure"
 msgstr "Mô Phỏng Bản In Bị Lỗi"
 
-#: ../src/common/prntbase.cpp:2123 ../src/common/prntbase.cpp:2131
+#: ../src/common/prntbase.cpp:2129 ../src/common/prntbase.cpp:2137
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Rất tiếc, không đủ bộ nhớ để tạo lập việc xem thử."
 
-#: ../src/common/prntbase.cpp:2138
+#: ../src/common/prntbase.cpp:2144
 #, c-format
 msgid "Page %d of %d"
 msgstr "Trang %d của %d"
 
-#: ../src/common/prntbase.cpp:2140
+#: ../src/common/prntbase.cpp:2146
 #, c-format
 msgid "Page %d"
 msgstr "Trang %d"
@@ -3329,7 +3350,6 @@ msgstr "Dưới"
 
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
-#: ../src/osx/cocoa/button.mm:156
 msgid "&Cancel"
 msgstr "&Hủy bỏ"
 
@@ -3367,7 +3387,7 @@ msgstr "&Chuyển đổi"
 msgid "Convert"
 msgstr "Chuyển đổi"
 
-#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2866
+#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2884
 #: ../src/osx/textctrl_osx.cpp:653 ../src/richtext/richtextctrl.cpp:331
 msgid "&Copy"
 msgstr "&Sao chép"
@@ -3376,7 +3396,7 @@ msgstr "&Sao chép"
 msgid "Copy"
 msgstr "Chép"
 
-#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2865
+#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2883
 #: ../src/osx/textctrl_osx.cpp:652 ../src/richtext/richtextctrl.cpp:330
 msgid "Cu&t"
 msgstr "Cắ&t"
@@ -3385,7 +3405,7 @@ msgstr "Cắ&t"
 msgid "Cut"
 msgstr "Cắt"
 
-#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2868
+#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2886
 #: ../src/osx/textctrl_osx.cpp:655 ../src/richtext/richtextctrl.cpp:333
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
@@ -3586,7 +3606,7 @@ msgstr "&Mở..."
 msgid "Open..."
 msgstr "Mở..."
 
-#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2867
+#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2885
 #: ../src/osx/textctrl_osx.cpp:654 ../src/richtext/richtextctrl.cpp:332
 msgid "&Paste"
 msgstr "&Dán"
@@ -3664,7 +3684,7 @@ msgstr "&Ghi Lại Bằng Tên Mới..."
 msgid "Save As..."
 msgstr "&Ghi Lại Bằng Tên Mới..."
 
-#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2870
+#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2888
 #: ../src/osx/textctrl_osx.cpp:657 ../src/richtext/richtextctrl.cpp:335
 msgid "Select &All"
 msgstr "Chọn &Hết"
@@ -3866,42 +3886,42 @@ msgstr "Ghi lại tài liệu hiện hành với một cái tên khác"
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Việc chuyển đổi bộ ký tự thành '%s' không làm việc."
 
-#: ../src/common/tarstrm.cpp:359 ../src/common/tarstrm.cpp:382
-#: ../src/common/tarstrm.cpp:413 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
 msgid "unknown"
 msgstr "không rõ"
 
-#: ../src/common/tarstrm.cpp:781
+#: ../src/common/tarstrm.cpp:774
 msgid "incomplete header block in tar"
 msgstr "không hoàn thành khối đầu trong gói tar"
 
-#: ../src/common/tarstrm.cpp:805
+#: ../src/common/tarstrm.cpp:798
 msgid "checksum failure reading tar header block"
 msgstr "tổng kiểm tra việc đọc khối đầu gói tar bị thất bại"
 
-#: ../src/common/tarstrm.cpp:978
+#: ../src/common/tarstrm.cpp:971
 msgid "invalid data in extended tar header"
 msgstr "dữ liệu trong phần đầu mở rộng của gói tar không hợp lệ"
 
-#: ../src/common/tarstrm.cpp:988 ../src/common/tarstrm.cpp:1010
-#: ../src/common/tarstrm.cpp:1484 ../src/common/tarstrm.cpp:1506
+#: ../src/common/tarstrm.cpp:981 ../src/common/tarstrm.cpp:1003
+#: ../src/common/tarstrm.cpp:1477 ../src/common/tarstrm.cpp:1499
 msgid "tar entry not open"
 msgstr "mục tin tar không mở được"
 
-#: ../src/common/tarstrm.cpp:1030
+#: ../src/common/tarstrm.cpp:1023
 msgid "unexpected end of file"
 msgstr "kết thúc tập tin đột xuất"
 
-#: ../src/common/tarstrm.cpp:1304
+#: ../src/common/tarstrm.cpp:1297
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s không vừa khớp với phần đầu tar cho mục vào '%s'"
 
-#: ../src/common/tarstrm.cpp:1366
+#: ../src/common/tarstrm.cpp:1359
 msgid "incorrect size given for tar entry"
 msgstr "kích thước định sẵn cho mục tin của gói tar không hợp lệ"
 
-#: ../src/common/textbuf.cpp:233
+#: ../src/common/textbuf.cpp:232
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' chắc chắn là một bộ đệm nhị phân."
@@ -3956,11 +3976,11 @@ msgstr "Tài nguyên '%s' không đúng định dạng."
 msgid "Couldn't enumerate translations"
 msgstr "Không thể liệt kê các bản dịch"
 
-#: ../src/common/utilscmn.cpp:1087
+#: ../src/common/utilscmn.cpp:1145
 msgid "No default application configured for HTML files."
 msgstr "Không có ứng dụng mặc định được cấu hình tập tin HTML."
 
-#: ../src/common/utilscmn.cpp:1132
+#: ../src/common/utilscmn.cpp:1190
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "Mở URL \"%s\" trong trình duyệt mặc định gặp lỗi."
@@ -4004,7 +4024,7 @@ msgstr ""
 msgid "Failed to create temporary file in %s"
 msgstr "Tạo tên tập tin tạm gặp lỗi"
 
-#: ../src/common/webrequest_curl.cpp:1075
+#: ../src/common/webrequest_curl.cpp:1106
 #, fuzzy
 msgid "libcurl could not be initialized"
 msgstr "Phần miêu tả cột không thể được khởi tạo."
@@ -4013,7 +4033,7 @@ msgstr "Phần miêu tả cột không thể được khởi tạo."
 msgid "RunScriptAsync not supported"
 msgstr ""
 
-#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1075
+#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1073
 #, c-format
 msgid "Error running JavaScript: %s"
 msgstr ""
@@ -4025,7 +4045,7 @@ msgstr "Tạo thư mục \"%s\" gặp lỗi"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
-"Chromium can't be used because libcef.so was't loaded early enough; please "
+"Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
 
@@ -4034,16 +4054,16 @@ msgstr ""
 msgid "Could not initialize Chromium"
 msgstr "Không thể đặt sự căn chỉnh."
 
-#: ../src/common/webview_chromium.cpp:1617
+#: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
 msgstr ""
 
-#: ../src/common/webview_chromium.cpp:1618
+#: ../src/common/webview_chromium.cpp:1617
 #, fuzzy
 msgid "Close DevTools"
 msgstr "Đóng hết"
 
-#: ../src/common/webview_chromium.cpp:1624
+#: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
 msgstr ""
 
@@ -4051,7 +4071,7 @@ msgstr ""
 msgid "This platform does not support background transparency."
 msgstr "Hệ thống này không hỗ trợ làm trong suốt nền"
 
-#: ../src/common/wincmn.cpp:2082
+#: ../src/common/wincmn.cpp:2097
 msgid "Could not transfer data to window"
 msgstr "Không thể truyền dữ liệu tới cửa sổ"
 
@@ -4393,44 +4413,44 @@ msgid "Password:"
 msgstr ""
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/generic/datavgen.cpp:1172
+#: ../src/generic/datavgen.cpp:1178
 msgid "true"
 msgstr ""
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/generic/datavgen.cpp:1174
+#: ../src/generic/datavgen.cpp:1180
 #, fuzzy
 msgid "false"
 msgstr "Sai"
 
-#: ../src/generic/datavgen.cpp:6891
+#: ../src/generic/datavgen.cpp:6897
 #, c-format
 msgid "Row %i"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6981
+#: ../src/generic/datavgen.cpp:6987
 msgid "Collapse"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6984
+#: ../src/generic/datavgen.cpp:6990
 msgid "Expand"
 msgstr ""
 
 #. TRANSLATORS: Name of data view control and number of rows
-#: ../src/generic/datavgen.cpp:7005
+#: ../src/generic/datavgen.cpp:7011
 #, fuzzy, c-format
 msgid "%s (%d items)"
 msgstr "%s (hoặc %s)"
 
-#: ../src/generic/datavgen.cpp:7056
+#: ../src/generic/datavgen.cpp:7062
 #, fuzzy, c-format
 msgid "Column %u"
 msgstr "Thêm cột"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7125 ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/generic/datavgen.cpp:7131 ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:192
 #: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextliststylepage.cpp:252
@@ -4441,7 +4461,7 @@ msgid "Left"
 msgstr "Trái"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7128 ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/generic/datavgen.cpp:7134 ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Right"
@@ -4563,7 +4583,7 @@ msgstr "Tên thư mục không hợp lệ."
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:752
 #: ../src/generic/filectrlg.cpp:766 ../src/generic/filectrlg.cpp:782
 #: ../src/generic/filectrlg.cpp:1356 ../src/generic/filectrlg.cpp:1387
-#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:76
 msgid "Error"
 msgstr "Lỗi"
 
@@ -4746,16 +4766,16 @@ msgstr "Hiển thị tập tin dạng chi tiết"
 msgid "Go to parent directory"
 msgstr "Chuyển sang thư mục cha"
 
-#: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:58
+#: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:59
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Tập tin '%s' đã tồn tại. Bạn có muốn ghi đè lên nó không?"
 
-#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:61
+#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:62
 msgid "Confirm"
 msgstr "Xác nhận"
 
-#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:74
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
 msgid "Please choose an existing file."
 msgstr "Xin hãy chọn một tập tin đã tồn tại."
 
@@ -5025,7 +5045,7 @@ msgstr "hộp thoại thông điệp trả về giá trị không hợp lệ"
 msgid "Notice"
 msgstr "Chú ý"
 
-#: ../src/generic/preferencesg.cpp:116
+#: ../src/generic/preferencesg.cpp:118
 #, c-format
 msgid "%s Preferences"
 msgstr "Cá nhân hóa %s"
@@ -5034,8 +5054,8 @@ msgstr "Cá nhân hóa %s"
 msgid "Printing..."
 msgstr "Đang in..."
 
-#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1074
-#: ../src/msw/printwin.cpp:217
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1076
+#: ../src/msw/printwin.cpp:235
 msgid "Could not start printing."
 msgstr "Không thể bắt đầu in."
 
@@ -5174,7 +5194,7 @@ msgstr "Không hiểu"
 msgid "Done."
 msgstr "Hoàn tất."
 
-#: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:205
+#: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:206
 #: ../src/html/helpwnd.cpp:530 ../src/html/helpwnd.cpp:545
 msgid "Search"
 msgstr "Tìm kiếm"
@@ -5231,7 +5251,7 @@ msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr ""
 "Không thể khởi tạo GTK+, BỘ HIỂN THỊ đã cài đặt các thuộc tính hay chưa?"
 
-#: ../src/gtk/filedlg.cpp:88 ../src/gtk/filepicker.cpp:255
+#: ../src/gtk/filedlg.cpp:89 ../src/gtk/filepicker.cpp:255
 #, fuzzy, c-format
 msgid "Changing current directory to \"%s\" failed"
 msgstr "Tạo thư mục \"%s\" gặp lỗi"
@@ -5282,16 +5302,43 @@ msgstr ""
 msgid "MDI child"
 msgstr "cửa sổ MDI con"
 
-#: ../src/gtk/print.cpp:215
+#: ../src/gtk/power.cpp:188
+#, fuzzy, c-format
+msgid "Failed to open D-Bus connection to the login manager: %s"
+msgstr "Kết nối tới quản lý session gặp lỗi: %s"
+
+#: ../src/gtk/power.cpp:214
+#, fuzzy
+msgid "wxWidgets application"
+msgstr "Ứng dụng"
+
+#: ../src/gtk/power.cpp:226
+msgid "Application needs to keep running"
+msgstr ""
+
+#: ../src/gtk/power.cpp:233
+msgid "Clean up before suspend"
+msgstr ""
+
+#: ../src/gtk/power.cpp:259
+#, fuzzy, c-format
+msgid "Failed to inhibit sleep: %s"
+msgstr "Khởi tạo kết nối quay số gặp lỗi: %s"
+
+#: ../src/gtk/power.cpp:265
+msgid "Unexpected response to D-Bus \"Inhibit\" request."
+msgstr ""
+
+#: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Cỡ riêng"
 
-#: ../src/gtk/print.cpp:749
+#: ../src/gtk/print.cpp:752
 #, fuzzy, c-format
 msgid "Error while printing: %s"
 msgstr "Lỗi trong khi in: "
 
-#: ../src/gtk/print.cpp:813
+#: ../src/gtk/print.cpp:816
 msgid "Page Setup"
 msgstr "Cài đặt giấy"
 
@@ -5299,16 +5346,16 @@ msgstr "Cài đặt giấy"
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
 
-#: ../src/gtk/webview_webkit2.cpp:1099
+#: ../src/gtk/webview_webkit2.cpp:1098
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
 
-#: ../src/gtk/webview_webkit2.cpp:1105
+#: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
 
-#: ../src/gtk/window.cpp:6249
+#: ../src/gtk/window.cpp:6289
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -5316,7 +5363,7 @@ msgstr ""
 "GTK+ đã cài đặt trên máy này quá cũ để nó có thể hỗ trợ ghép màn hình, hãy "
 "cài GTK+ 2.12 hay mới hơn."
 
-#: ../src/gtk/window.cpp:6267
+#: ../src/gtk/window.cpp:6307
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -5324,7 +5371,7 @@ msgstr ""
 "Sự kết hợp không được hỗ trợ bởi hệ thống này, xin hãy bật nó lên trong "
 "Window Manager."
 
-#: ../src/gtk/window.cpp:6278
+#: ../src/gtk/window.cpp:6318
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -5645,34 +5692,34 @@ msgstr "%u của %u"
 msgid "Cannot open HTML document: %s"
 msgstr "Không thể mở tài liệu HTML: %s"
 
-#: ../src/html/htmlwin.cpp:577
+#: ../src/html/htmlwin.cpp:599
 msgid "Connecting..."
 msgstr "Đang kết nối..."
 
-#: ../src/html/htmlwin.cpp:594
+#: ../src/html/htmlwin.cpp:616
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Không thể mở tài liệu HTML đã yêu cầu: %s"
 
-#: ../src/html/htmlwin.cpp:608
+#: ../src/html/htmlwin.cpp:630
 msgid "Loading : "
 msgstr "Đang tải :"
 
-#: ../src/html/htmlwin.cpp:651
+#: ../src/html/htmlwin.cpp:673
 msgid "Done"
 msgstr "Hoàn tất"
 
-#: ../src/html/htmlwin.cpp:701
+#: ../src/html/htmlwin.cpp:723
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "Điểm neo HTML %s không tồn tại."
 
-#: ../src/html/htmlwin.cpp:1035
+#: ../src/html/htmlwin.cpp:1057
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Đã sao chép vào clipboard:\"%s\""
 
-#: ../src/html/htmprint.cpp:267
+#: ../src/html/htmprint.cpp:269
 msgid ""
 "This document doesn't fit on the page horizontally and will be truncated "
 "when it is printed."
@@ -5680,7 +5727,7 @@ msgstr ""
 "Tài liệu này không vừa khớp theo chiều ngang của giấy và sẽ bị cắt cụt đi "
 "khi được in."
 
-#: ../src/html/htmprint.cpp:283
+#: ../src/html/htmprint.cpp:285
 #, c-format
 msgid ""
 "The document \"%s\" doesn't fit on the page horizontally and will be "
@@ -5693,7 +5740,7 @@ msgstr ""
 "\n"
 "Bạn có thực sự muốn in nó không?"
 
-#: ../src/html/htmprint.cpp:294
+#: ../src/html/htmprint.cpp:296
 msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
@@ -5701,17 +5748,17 @@ msgstr ""
 "Nếu có thể, hay thử thay đổi cách bố trí các tham số để mà in ra nhiều mũi "
 "tên hơn."
 
-#: ../src/html/htmprint.cpp:443
+#: ../src/html/htmprint.cpp:445
 msgid ": file does not exist!"
 msgstr ": tập tin không tồn tại!"
 
 #. TRANSLATORS: %s may be a document title.
-#: ../src/html/htmprint.cpp:712
+#: ../src/html/htmprint.cpp:717
 #, fuzzy, c-format
 msgid "%s Preview"
 msgstr " Xem trước"
 
-#: ../src/html/htmprint.cpp:750 ../src/richtext/richtextprint.cpp:615
+#: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -5747,7 +5794,7 @@ msgstr "Khôi phục định dạng clipboard được hỗ trợ gặp lỗi"
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Hộp thoại chọn màu gặp lỗi %0lx."
 
-#: ../src/msw/cursor.cpp:204
+#: ../src/msw/cursor.cpp:141
 msgid "Failed to create cursor."
 msgstr "Tạo con trỏ chuột gặp lỗi."
 
@@ -5989,7 +6036,7 @@ msgstr "Việc cấp phát %luKb bộ nhớ cho dữ liệu ảnh bitmap gặp l
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "Không thể đếm các tập tin trong thư mục '%s'"
 
-#: ../src/msw/dirdlg.cpp:359
+#: ../src/msw/dirdlg.cpp:368
 msgid "Couldn't obtain folder name"
 msgstr "Không thể lấy được tên thư mục"
 
@@ -6013,15 +6060,15 @@ msgstr "Tải metafile từ tập tin \"%s\" gặp lỗi."
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr "Tạo hộp thoại tìm/thay thế tiêu chuẩn gặp lỗi (mã lỗi %d)"
 
-#: ../src/msw/filedlg.cpp:1233
+#: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
 msgstr ""
 
-#: ../src/msw/filedlg.cpp:1234
+#: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
 msgstr ""
 
-#: ../src/msw/filedlg.cpp:1525
+#: ../src/msw/filedlg.cpp:1533
 #, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr "Hộp thoại chọn tập tin bị lỗi %0lx."
@@ -6059,18 +6106,18 @@ msgstr ""
 msgid "Unable to set up watch for '%s'"
 msgstr "Không thể cài đặt cửa sổ theo dõi cho '%s'"
 
-#: ../src/msw/fswatcher.cpp:477
+#: ../src/msw/fswatcher.cpp:466
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr ""
 "Không thể theo dõi thư mục không-hiện-có \"%s\" để thấy được các thay đổi."
 
-#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:505
+#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:507
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
 msgstr ""
 
 #: ../src/msw/glcanvas.cpp:601 ../src/osx/glcanvas_osx.cpp:395
-#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:551
+#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:553
 #, fuzzy
 msgid "Couldn't create OpenGL context"
 msgstr "Không tạo được một timer"
@@ -6105,7 +6152,7 @@ msgstr "Không thể xóa tập tin INI '%s'"
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Không thể phục hồi thông tin về điều khiển danh sách mục tin %d."
 
-#: ../src/msw/mdi.cpp:170
+#: ../src/msw/mdi.cpp:170 ../src/qt/mdi.cpp:253
 msgid "&Cascade"
 msgstr "&Kiểu xếp chồng"
 
@@ -6374,7 +6421,7 @@ msgstr "Không thể xuất ra giá trị của kiểu không được hỗ tr�
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "Bỏ qua giá trị \"%s\" của khóa \"%s\"."
 
-#: ../src/msw/textctrl.cpp:585
+#: ../src/msw/textctrl.cpp:596
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -6382,41 +6429,41 @@ msgstr ""
 "Không thể nào khởi tạo điều khiển văn bản (rich edit), đang sử dụng điều "
 "khiển văn bản đơn giản để thay thế. Xin hãy cài lại riched32.dll"
 
-#: ../src/msw/thread.cpp:525 ../src/unix/threadpsx.cpp:848
+#: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:850
 msgid "Cannot start thread: error writing TLS."
 msgstr "Không thể khởi động tuyến trình: lỗi ghi TLS."
 
-#: ../src/msw/thread.cpp:616
+#: ../src/msw/thread.cpp:613
 msgid "Can't set thread priority"
 msgstr "Không thể đặt mức ưu tiên tuyến trình"
 
-#: ../src/msw/thread.cpp:652
+#: ../src/msw/thread.cpp:649
 msgid "Can't create thread"
 msgstr "Không thể tạo tuyến trình"
 
-#: ../src/msw/thread.cpp:671
+#: ../src/msw/thread.cpp:668
 msgid "Couldn't terminate thread"
 msgstr "Không thể chấm dứt tuyến trình"
 
-#: ../src/msw/thread.cpp:802
+#: ../src/msw/thread.cpp:799
 msgid "Cannot wait for thread termination"
 msgstr "Không thể chờ tuyến trình thiết bị cuối"
 
-#: ../src/msw/thread.cpp:876
+#: ../src/msw/thread.cpp:873
 #, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "Không thể đình chỉ tuyến trình %lx"
 
-#: ../src/msw/thread.cpp:906
+#: ../src/msw/thread.cpp:903
 #, c-format
 msgid "Cannot resume thread %lx"
 msgstr "Không thể phục hồi tuyến trình %lx"
 
-#: ../src/msw/thread.cpp:935
+#: ../src/msw/thread.cpp:932
 msgid "Couldn't get the current thread pointer"
 msgstr "Không thể lấy con trỏ tuyến trình hiện hành"
 
-#: ../src/msw/thread.cpp:1336
+#: ../src/msw/thread.cpp:1333
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -6424,7 +6471,7 @@ msgstr ""
 "Khởi tạo mô đun tuyến trình gặp lỗi: không thể cấp phát chỉ số trong phần "
 "lưu trữ nội bộ tuyến trình"
 
-#: ../src/msw/thread.cpp:1348
+#: ../src/msw/thread.cpp:1345
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -6483,12 +6530,12 @@ msgstr "Thi hành lệnh '%s' gặp lỗi"
 msgid "Failed to load mpr.dll."
 msgstr "Tải thư viện mpr.dll gặp lỗi."
 
-#: ../src/msw/volume.cpp:507
+#: ../src/msw/volume.cpp:506
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Không thể đọc kiểu tên từ '%s'!"
 
-#: ../src/msw/volume.cpp:616
+#: ../src/msw/volume.cpp:615
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Không thể tải biểu tượng từ '%s'."
@@ -6497,28 +6544,28 @@ msgstr "Không thể tải biểu tượng từ '%s'."
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1012
+#: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1021
+#: ../src/msw/webview_ie.cpp:1019
 msgid "Failed to set web view to modern emulation level"
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1029
+#: ../src/msw/webview_ie.cpp:1027
 msgid "Failed to reset web view to standard emulation level"
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1051
+#: ../src/msw/webview_ie.cpp:1049
 msgid "Can't run JavaScript script without a valid HTML document"
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1058
+#: ../src/msw/webview_ie.cpp:1056
 #, fuzzy
 msgid "Can't get the JavaScript object"
 msgstr "Không thể đặt mức ưu tiên tuyến trình"
 
-#: ../src/msw/webview_ie.cpp:1072
+#: ../src/msw/webview_ie.cpp:1070
 #, fuzzy
 msgid "failed to evaluate"
 msgstr "Thực thi '%s' gặp lỗi\n"
@@ -6629,12 +6676,12 @@ msgctxt "macOS menu item"
 msgid "Quit Application"
 msgstr "Ứng dụng"
 
-#: ../src/osx/webview_webkit.mm:448
+#: ../src/osx/webview_webkit.mm:444
 #, fuzzy
 msgid "Printing is not supported by the system web control"
 msgstr "Gzip không được hỗ trợ bởi phiên bản này của zlib"
 
-#: ../src/osx/webview_webkit.mm:457
+#: ../src/osx/webview_webkit.mm:453
 #, fuzzy
 msgid "Print operation could not be initialized"
 msgstr "Phần miêu tả cột không thể được khởi tạo."
@@ -7115,6 +7162,10 @@ msgstr "Chọn thư mục:"
 #: ../src/propgrid/props.cpp:2055
 msgid "Choose a file"
 msgstr "Chọn một tập tin"
+
+#: ../src/qt/mdi.cpp:254
+msgid "&Tile"
+msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -7621,7 +7672,7 @@ msgid "Insert Text"
 msgstr "Chèn Chữ"
 
 #: ../src/richtext/richtextbuffer.cpp:8023
-#: ../src/richtext/richtextbuffer.cpp:8981
+#: ../src/richtext/richtextbuffer.cpp:8979
 msgid "Insert Image"
 msgstr "Chèn Ảnh"
 
@@ -7641,68 +7692,68 @@ msgstr "Quá nhiều cú gọi EndStyle!"
 msgid "files"
 msgstr "tập tin"
 
-#: ../src/richtext/richtextbuffer.cpp:9382
+#: ../src/richtext/richtextbuffer.cpp:9380
 msgid "standard/circle"
 msgstr "Tiêu chuẩn/ hình tròn"
 
-#: ../src/richtext/richtextbuffer.cpp:9383
+#: ../src/richtext/richtextbuffer.cpp:9381
 msgid "standard/circle-outline"
 msgstr "tiêu-chuẩn/viền-tròn"
 
-#: ../src/richtext/richtextbuffer.cpp:9384
+#: ../src/richtext/richtextbuffer.cpp:9382
 msgid "standard/square"
 msgstr "Tiêu chuẩn/vuông"
 
-#: ../src/richtext/richtextbuffer.cpp:9385
+#: ../src/richtext/richtextbuffer.cpp:9383
 msgid "standard/diamond"
 msgstr "Tiêu chuẩn/Thoi"
 
-#: ../src/richtext/richtextbuffer.cpp:9386
+#: ../src/richtext/richtextbuffer.cpp:9384
 msgid "standard/triangle"
 msgstr "Tiêu chuẩn/chữ nhật"
 
-#: ../src/richtext/richtextbuffer.cpp:9425
+#: ../src/richtext/richtextbuffer.cpp:9423
 msgid "Box Properties"
 msgstr "Các tính chất Hộp"
 
-#: ../src/richtext/richtextbuffer.cpp:10008
+#: ../src/richtext/richtextbuffer.cpp:10006
 msgid "Multiple Cell Properties"
 msgstr "Thuộc tính Đa Ô"
 
-#: ../src/richtext/richtextbuffer.cpp:10010
+#: ../src/richtext/richtextbuffer.cpp:10008
 msgid "Cell Properties"
 msgstr "Các thuộc tính của ô"
 
-#: ../src/richtext/richtextbuffer.cpp:11258
+#: ../src/richtext/richtextbuffer.cpp:11256
 msgid "Set Cell Style"
 msgstr "Đặt Kiểu Dáng Ô"
 
-#: ../src/richtext/richtextbuffer.cpp:11332
+#: ../src/richtext/richtextbuffer.cpp:11330
 msgid "Delete Row"
 msgstr "Xóa hàng"
 
-#: ../src/richtext/richtextbuffer.cpp:11382
+#: ../src/richtext/richtextbuffer.cpp:11380
 msgid "Delete Column"
 msgstr "Xóa cột"
 
-#: ../src/richtext/richtextbuffer.cpp:11433
+#: ../src/richtext/richtextbuffer.cpp:11431
 msgid "Add Row"
 msgstr "Thêm hàng"
 
-#: ../src/richtext/richtextbuffer.cpp:11496
+#: ../src/richtext/richtextbuffer.cpp:11494
 msgid "Add Column"
 msgstr "Thêm cột"
 
-#: ../src/richtext/richtextbuffer.cpp:11539
+#: ../src/richtext/richtextbuffer.cpp:11537
 msgid "Table Properties"
 msgstr "Các thuộc tính Bảng"
 
-#: ../src/richtext/richtextbuffer.cpp:12901
+#: ../src/richtext/richtextbuffer.cpp:12899
 msgid "Picture Properties"
 msgstr "Các thuộc tính Hình ảnh"
 
-#: ../src/richtext/richtextbuffer.cpp:13171
-#: ../src/richtext/richtextbuffer.cpp:13281
+#: ../src/richtext/richtextbuffer.cpp:13169
+#: ../src/richtext/richtextbuffer.cpp:13279
 msgid "image"
 msgstr "hình ảnh"
 
@@ -8459,7 +8510,7 @@ msgstr "Kích thước đệm dưới đáy."
 msgid "Units for the bottom padding."
 msgstr "Đơn vị cho đệm đáy."
 
-#: ../src/richtext/richtextprint.cpp:589
+#: ../src/richtext/richtextprint.cpp:592
 msgid " Preview"
 msgstr " Xem trước"
 
@@ -9238,20 +9289,20 @@ msgstr "Có vẻ như dữ liệu có định dạng không được hỗ trợ.
 msgid "Couldn't open audio: %s"
 msgstr "Không mở âm thanh: %s"
 
-#: ../src/unix/threadpsx.cpp:1021
+#: ../src/unix/threadpsx.cpp:1033
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "Không thể khôi phục chính sách tạo lập tác vụ tuyến trình."
 
-#: ../src/unix/threadpsx.cpp:1046
+#: ../src/unix/threadpsx.cpp:1058
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Không thể nhận vùng ưu tiên cho việc tạo lập chính sách %d."
 
-#: ../src/unix/threadpsx.cpp:1054
+#: ../src/unix/threadpsx.cpp:1066
 msgid "Thread priority setting is ignored."
 msgstr "Cài đặt quyền ưu tiên tuyến trình bị bỏ qua."
 
-#: ../src/unix/threadpsx.cpp:1209
+#: ../src/unix/threadpsx.cpp:1221
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -9259,60 +9310,60 @@ msgstr ""
 "Gia nhập tuyến trình gặp lỗi, đã phát hiện lỗ thủng bộ nhớ tiềm tàng - xin "
 "hãy khởi động lại chương trình"
 
-#: ../src/unix/threadpsx.cpp:1340
+#: ../src/unix/threadpsx.cpp:1352
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "Gặp lỗi khi đặt mức tuyến trình đồng thời thành %lu"
 
-#: ../src/unix/threadpsx.cpp:1469
+#: ../src/unix/threadpsx.cpp:1481
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Đặt mức ưu tiên tuyến trình %d gặp lỗi."
 
-#: ../src/unix/threadpsx.cpp:1654
+#: ../src/unix/threadpsx.cpp:1666
 msgid "Failed to terminate a thread."
 msgstr "Chấm dứt một tuyến trình gặp lỗi."
 
-#: ../src/unix/threadpsx.cpp:1882
+#: ../src/unix/threadpsx.cpp:1893
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Khởi tạo mô đun tuyến trình gặp lỗi: lỗi tạo khóa tuyến trình"
 
-#: ../src/unix/utilsunx.cpp:338
+#: ../src/unix/utilsunx.cpp:340
 msgid "Impossible to get child process input"
 msgstr "Không thể lấy đầu vào của tiến trình con"
 
-#: ../src/unix/utilsunx.cpp:388
+#: ../src/unix/utilsunx.cpp:390
 msgid "Can't write to child process's stdin"
 msgstr "Không thể ghi ra đầu vào chuẩn của quá trình con"
 
-#: ../src/unix/utilsunx.cpp:642
+#: ../src/unix/utilsunx.cpp:644
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Thực thi '%s' gặp lỗi\n"
 
-#: ../src/unix/utilsunx.cpp:676
+#: ../src/unix/utilsunx.cpp:678
 msgid "Fork failed"
 msgstr "Gặp lỗi khi rẽ nhánh tiến trình"
 
-#: ../src/unix/utilsunx.cpp:699
+#: ../src/unix/utilsunx.cpp:701
 msgid "Failed to set process priority"
 msgstr "Gặp lỗi khi đặt mức ưu tiên tuyến trình"
 
-#: ../src/unix/utilsunx.cpp:710
+#: ../src/unix/utilsunx.cpp:712
 msgid "Failed to redirect child process input/output"
 msgstr "Chuyển hướng quá trình kết nhập/kết xuất của tiến trình con gặp lỗi"
 
-#: ../src/unix/utilsunx.cpp:814
+#: ../src/unix/utilsunx.cpp:816
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 "Gặp lỗi khi cài đặt đường ống không-khối (non-blocking pipe), chương trình "
 "có lẽ bị treo."
 
-#: ../src/unix/utilsunx.cpp:1021
+#: ../src/unix/utilsunx.cpp:1023
 msgid "Cannot get the hostname"
 msgstr "Không thể lấy được tên máy chủ"
 
-#: ../src/unix/utilsunx.cpp:1057
+#: ../src/unix/utilsunx.cpp:1059
 msgid "Cannot get the official hostname"
 msgstr "Không lấy được tên máy chủ văn phòng"
 
@@ -9372,16 +9423,29 @@ msgstr "Không thể mở tập tin tài nguyên '%s'."
 msgid "Cannot load resources from file '%s'."
 msgstr "Không thể tải tài nguyên từ tập tin '%s'."
 
-#: ../src/xrc/xmlres.cpp:2766
+#: ../src/xrc/xmlres.cpp:2767
 #, fuzzy, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Rút trích '%s' vào '%s' gặp lỗi."
 
+#~ msgctxt "keyboard key"
+#~ msgid "Alt+"
+#~ msgstr "Alt+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "Ctrl+"
+#~ msgstr "Ctrl+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "Shift+"
+#~ msgstr "Shift+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "RawCtrl+"
+#~ msgstr "RawCtrl+"
+
 #~ msgid "Unsupported clipboard format."
 #~ msgstr "Dạng thức clipboard không được hỗ trợ."
-
-#~ msgid "Failed to set clipboard data."
-#~ msgstr "Đặt dữ liệu clipboard gặp lỗi."
 
 #~ msgid "Background colour"
 #~ msgstr "Màu nền"
@@ -10362,9 +10426,6 @@ msgstr "Rút trích '%s' vào '%s' gặp lỗi."
 
 #~ msgid "Error while waiting on semaphore"
 #~ msgstr "Lỗi khi chờ cờ hiệu"
-
-#~ msgid "Failed to connect to session manager: %s"
-#~ msgstr "Kết nối tới quản lý session gặp lỗi: %s"
 
 #~ msgid "Failed to register OpenGL window class."
 #~ msgstr "Đăng ký một lớp cửa sổ OpenGL gặp lỗi."
