@@ -1795,7 +1795,7 @@ public:
 
         @since 3.3.0
     */
-    void SetDataRGBA(const unsigned char* const data);
+    void SetDataRGBA(const unsigned char* data);
 
     /**
         Sets the default value for the flags used for loading image files.
