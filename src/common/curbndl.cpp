@@ -115,8 +115,12 @@ public:
         const wxSize
             sizeDef = m_bitmaps.GetDefaultSize();
 
+        // Note that we add 1 to the height to break the tie in favour of a
+        // larger cursor: by default, wxBitmapBundle prefers smaller bitmaps,
+        // but for the cursors choosing the larger one seems preferable and
+        // MSW does it like this for its default cursor.
         const wxSize
-            size = m_bitmaps.GetPreferredBitmapSizeAtScale(double(h) / hDef);
+            size = m_bitmaps.GetPreferredBitmapSizeAtScale(double(h + 1) / hDef);
 
         const wxPoint
             hotSpot = wxRescaleCoord(m_hotSpot).From(sizeDef).To(size);
