@@ -2391,7 +2391,7 @@ gboolean SendEnterLeaveEvents(wxWindowGTK* win, EventType* gdk_event)
 
 // This is a (internally) public function used by wxChoice too.
 gboolean
-wxGTKImpl::WindowEnterCallback(GtkWidget* widget,
+wxGTKImpl::WindowEnterCallback(GtkWidget* WXUNUSED_UNLESS_DEBUG(widget),
                                GdkEventCrossing* gdk_event,
                                wxWindowGTK* win)
 {
@@ -2436,7 +2436,7 @@ gtk_window_enter_callback( GtkWidget* widget,
 //-----------------------------------------------------------------------------
 
 gboolean
-wxGTKImpl::WindowLeaveCallback(GtkWidget* widget,
+wxGTKImpl::WindowLeaveCallback(GtkWidget* WXUNUSED_UNLESS_DEBUG(widget),
                                GdkEventCrossing* gdk_event,
                                wxWindowGTK* win)
 {
