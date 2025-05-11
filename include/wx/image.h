@@ -506,6 +506,7 @@ public:
     unsigned char *GetData() const;
     void SetData( unsigned char *data, bool static_data=false );
     void SetData( unsigned char *data, int new_width, int new_height, bool static_data=false );
+    void SetDataRGBA(const unsigned char* data);
 
     unsigned char *GetAlpha() const;    // may return nullptr!
     bool HasAlpha() const { return GetAlpha() != nullptr; }
@@ -667,6 +668,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxImage)    wxNullImage;
 #include "wx/imagtiff.h"
 #include "wx/imagpnm.h"
 #include "wx/imagxpm.h"
+#include "wx/imagwebp.h"
 #include "wx/imagiff.h"
 
 #endif // wxUSE_IMAGE

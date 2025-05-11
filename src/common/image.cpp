@@ -2137,6 +2137,41 @@ void wxImage::SetData( unsigned char *data, int new_width, int new_height, bool 
     m_refData = newRefData;
 }
 
+void wxImage::SetDataRGBA(const unsigned char* data)
+{
+    wxCHECK_RET(IsOk(), wxT("invalid image"));
+
+    wxImageRefData* newRefData = new wxImageRefData();
+
+    newRefData->m_width = M_IMGDATA->m_width;
+    newRefData->m_height = M_IMGDATA->m_height;
+
+    size_t pixel_count = (size_t)newRefData->m_width * (size_t)newRefData->m_height;
+    newRefData->m_data = (unsigned char*)malloc(3 * pixel_count);
+    newRefData->m_alpha = (unsigned char*)malloc(pixel_count);
+
+    size_t rgba_index = 0, rgb_index = 0, alpha_index = 0;
+    for (size_t pixel_counter = 0; pixel_counter < pixel_count; pixel_counter++)
+    {
+        newRefData->m_data[rgb_index++] = data[rgba_index++]; // R
+        newRefData->m_data[rgb_index++] = data[rgba_index++]; // G
+        newRefData->m_data[rgb_index++] = data[rgba_index++]; // B
+        newRefData->m_alpha[alpha_index++] = data[rgba_index++]; // A
+    }
+
+    newRefData->m_ok = true;
+    newRefData->m_maskRed = M_IMGDATA->m_maskRed;
+    newRefData->m_maskGreen = M_IMGDATA->m_maskGreen;
+    newRefData->m_maskBlue = M_IMGDATA->m_maskBlue;
+    newRefData->m_hasMask = M_IMGDATA->m_hasMask;
+    newRefData->m_static = false;
+    newRefData->m_staticAlpha = false;
+
+    UnRef();
+
+    m_refData = newRefData;
+}
+
 // ----------------------------------------------------------------------------
 // alpha channel support
 // ----------------------------------------------------------------------------

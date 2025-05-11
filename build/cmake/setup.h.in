@@ -578,6 +578,8 @@
 
 #cmakedefine01 wxUSE_PALETTE
 
+#cmakedefine01 wxUSE_LIBWEBP
+
 
 #cmakedefine01 wxUSE_ALL_THEMES
 

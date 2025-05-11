@@ -16,7 +16,7 @@ while IFS= read -r -d '' file; do
 
     # skip binary files
     case "$file" in
-    *.ani | *.bmp | *.chm | *.cur | *.dia | *.gif | *.gz | *.hlp | *.icns | *.ico | *.jpg | *.mo | *.mpg | *.pcx | *.pdf | *.png | *.pnm | *.pyc | *.tga | *.tif | *.ttf | *.wav | *.zip )
+    *.ani | *.bmp | *.chm | *.cur | *.dia | *.gif | *.gz | *.hlp | *.icns | *.ico | *.jpg | *.mo | *.mpg | *.pcx | *.pdf | *.png | *.pnm | *.pyc | *.tga | *.tif | *.ttf | *.wav | *.webp | *.zip )
         continue
         ;;
     esac

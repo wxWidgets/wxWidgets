@@ -258,6 +258,8 @@
 		6F8129E317EE3486A89D8548 /* LexSpecman.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 508B04B4FF913BECBC9DBFFB /* LexSpecman.cxx */; };
 		5AB2182C858D366B8922020C /* tif_hash_set.c in Sources */ = {isa = PBXBuildFile; fileRef = 4590505ABC5F373793C4D664 /* tif_hash_set.c */; };
 		0A406D2D1ADA343891E3664C /* powercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */; };
+		9030AB566C8F3B16BDAF5B58 /* webpdecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 856714738E773F72B643A0CB /* webpdecoder.cpp */; };
+		DDF006A98C2030D389D9C6FC /* imagwebp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409BB622FEE832069B4260DD /* imagwebp.cpp */; };
 		3D424F4B33653A00AE9B623A /* m_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 082CA018FB883999839C1DCE /* m_tables.cpp */; };
 		15048519756B33959B15B161 /* floatpane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A881F49ADCF33C299B041584 /* floatpane.cpp */; };
 		89200B144075388BA69A07E2 /* xh_timectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25A81E9028793C109D868068 /* xh_timectrl.cpp */; };
@@ -2893,6 +2895,8 @@
 		8A4046BD38873D9CAC9C2B5B /* filesys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F263022F3FEA3F75895B644D /* filesys.cpp */; };
 		25B0940CABAB39CD90C6F3C7 /* intel_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 994AF74DF2A13FF09A215853 /* intel_init.c */; };
 		0A406D2D1ADA343891E3664D /* powercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */; };
+		9030AB566C8F3B16BDAF5B59 /* webpdecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 856714738E773F72B643A0CB /* webpdecoder.cpp */; };
+		DDF006A98C2030D389D9C6FD /* imagwebp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409BB622FEE832069B4260DD /* imagwebp.cpp */; };
 		22AE900003F73134BBEE8BB8 /* dirctrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91292D8E11203A6B8E9767DA /* dirctrlg.cpp */; };
 		A80D00249A693F43A9CBE779 /* rgncmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 63867276260C3F4A980E83D8 /* rgncmn.cpp */; };
 		F2F2963D8ECC32D39FDBF103 /* tif_write.c in Sources */ = {isa = PBXBuildFile; fileRef = E9B992CB6C28339FB0CA5E27 /* tif_write.c */; };
@@ -2975,6 +2979,8 @@
 		4E2737AC738431EB9898B8B8 /* gzwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 1E4E3EB1CCA53E0EA322A1AF /* gzwrite.c */; };
 		B8FEEC2C94183AB69C963179 /* headercolcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B558F1ED9346332D8C4BDFBC /* headercolcmn.cpp */; };
 		0A406D2D1ADA343891E3664E /* powercmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */; };
+		9030AB566C8F3B16BDAF5B5A /* webpdecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 856714738E773F72B643A0CB /* webpdecoder.cpp */; };
+		DDF006A98C2030D389D9C6FE /* imagwebp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 409BB622FEE832069B4260DD /* imagwebp.cpp */; };
 		66FD099CE5A338C18329FC38 /* LexAbaqus.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CD72950967F33809931D4968 /* LexAbaqus.cxx */; };
 		D4C87E227A28391891D8908A /* filename.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BAD9A0BFED6A37E4A305E1D7 /* filename.cpp */; };
 		438EAEA4B30C325C827F6199 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
@@ -5071,6 +5077,8 @@
 		EDD97DF408EC347A8CB8EF45 /* filedlgg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filedlgg.cpp; path = ../../src/generic/filedlgg.cpp; sourceTree = SOURCE_ROOT; };
 		741578B590AF3F2CABE615EB /* timectrlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = timectrlg.cpp; path = ../../src/generic/timectrlg.cpp; sourceTree = SOURCE_ROOT; };
 		99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = powercmn.cpp; path = ../../src/common/powercmn.cpp; sourceTree = SOURCE_ROOT; };
+		856714738E773F72B643A0CB /* webpdecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = webpdecoder.cpp; path = ../../src/common/webpdecoder.cpp; sourceTree = SOURCE_ROOT; };
+		409BB622FEE832069B4260DD /* imagwebp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagwebp.cpp; path = ../../src/common/imagwebp.cpp; sourceTree = SOURCE_ROOT; };
 		BEF6B3FB66243812969E5BD1 /* palette.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = palette.cpp; path = ../../src/osx/palette.cpp; sourceTree = SOURCE_ROOT; };
 		8D2549709E0133C9A267E3A5 /* evtloop.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = evtloop.mm; path = ../../src/osx/cocoa/evtloop.mm; sourceTree = SOURCE_ROOT; };
 		7906BD74118A3B4DAC515BC2 /* odcombo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = odcombo.cpp; path = ../../src/generic/odcombo.cpp; sourceTree = SOURCE_ROOT; };
@@ -6429,6 +6437,8 @@
 				26CC5C56BD493346B16854F9 /* bmpbndl.cpp */,
 				741E9B48274638CD9DD73698 /* bmpsvg.cpp */,
 				99BC7A16DBCA36EDA9D6F1DB /* powercmn.cpp */,
+				856714738E773F72B643A0CB /* webpdecoder.cpp */,
+				409BB622FEE832069B4260DD /* imagwebp.cpp */,
 			);
 			name = core;
 			sourceTree = "<group>";
@@ -8441,6 +8451,8 @@
 				DB244DC0A09C379AAA63C0A5 /* bmpbndl.cpp in Sources */,
 				32988828498D32B2B3F8A983 /* bmpsvg.cpp in Sources */,
 				0A406D2D1ADA343891E3664D /* powercmn.cpp in Sources */,
+				9030AB566C8F3B16BDAF5B59 /* webpdecoder.cpp in Sources */,
+				DDF006A98C2030D389D9C6FD /* imagwebp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9129,6 +9141,8 @@
 				DB244DC0A09C379AAA63C0A6 /* bmpbndl.cpp in Sources */,
 				32988828498D32B2B3F8A982 /* bmpsvg.cpp in Sources */,
 				0A406D2D1ADA343891E3664E /* powercmn.cpp in Sources */,
+				9030AB566C8F3B16BDAF5B58 /* webpdecoder.cpp in Sources */,
+				DDF006A98C2030D389D9C6FC /* imagwebp.cpp in Sources */,
 				567A32722BA33AEE9FF93D7C /* fs_inet.cpp in Sources */,
 				65514CD6A9F23ED98436AC02 /* ftp.cpp in Sources */,
 				B84642DA949638A189032CE8 /* http.cpp in Sources */,
@@ -10347,6 +10361,8 @@
 				DB244DC0A09C379AAA63C0A4 /* bmpbndl.cpp in Sources */,
 				32988828498D32B2B3F8A984 /* bmpsvg.cpp in Sources */,
 				0A406D2D1ADA343891E3664C /* powercmn.cpp in Sources */,
+				9030AB566C8F3B16BDAF5B5A /* webpdecoder.cpp in Sources */,
+				DDF006A98C2030D389D9C6FE /* imagwebp.cpp in Sources */,
 				567A32722BA33AEE9FF93D7E /* fs_inet.cpp in Sources */,
 				65514CD6A9F23ED98436AC03 /* ftp.cpp in Sources */,
 				B84642DA949638A189032CE6 /* http.cpp in Sources */,

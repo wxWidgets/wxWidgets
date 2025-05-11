@@ -55,6 +55,9 @@ void wxInitAllImageHandlers()
 #if wxUSE_XPM
   wxImage::AddHandler( new wxXPMHandler );
 #endif
+#if wxUSE_LIBWEBP
+  wxImage::AddHandler( new wxWEBPHandler );
+#endif
 }
 
 #endif // wxUSE_IMAGE

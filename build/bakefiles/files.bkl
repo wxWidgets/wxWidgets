@@ -1036,6 +1036,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/bmpbndl.cpp
     src/generic/bmpsvg.cpp
     src/common/powercmn.cpp
+    src/common/webpdecoder.cpp
+    src/common/imagwebp.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1330,6 +1332,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/compositebookctrl.h
     wx/persist/combobox.h
     wx/power.h
+    wx/imagwebp.h
+    wx/webpdecoder.h
 </set>
 
 <!-- ====================================================================== -->

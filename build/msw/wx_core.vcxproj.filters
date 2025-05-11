@@ -279,6 +279,9 @@
     <ClCompile Include="..\..\src\common\imagtiff.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\imagwebp.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\imagxpm.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -445,6 +448,9 @@
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\valtext.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\webpdecoder.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\wincmn.cpp">
@@ -1609,6 +1615,9 @@
     <ClInclude Include="..\..\include\wx\imagtiff.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\imagwebp.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\imagxpm.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -2288,6 +2297,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\vscroll.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\webpdecoder.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\window.h">

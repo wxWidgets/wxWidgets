@@ -29,6 +29,7 @@
 
 #include "wx/gifdecod.h"
 #include "wx/anidecod.h"
+#include "wx/webpdecoder.h"
 
 #include "wx/private/animate.h"
 
@@ -280,6 +281,9 @@ void wxAnimation::InitStandardHandlers()
 #if wxUSE_ICO_CUR
     AddHandler(new wxANIDecoder);
 #endif // wxUSE_ICO_CUR
+#if wxUSE_LIBWEBP
+    AddHandler(new wxWebPDecoder);
+#endif // wxUSE_LIBWEBP
 }
 
 void wxAnimation::CleanUpHandlers()

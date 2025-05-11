@@ -21,9 +21,7 @@ class MyFrame : public wxFrame
 {
 public:
 
-    MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
-            const wxPoint& pos, const wxSize& size, const long style);
-    ~MyFrame();
+    MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title);
 
     void OnAbout(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
