@@ -4055,7 +4055,6 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
-DEFAULT_wxUSE_LIBWEBP=auto
 
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_UNICODE_UTF8=no
@@ -26046,36 +26045,26 @@ fi
 
 WEBP_LINK=
 if test "$wxUSE_LIBWEBP" != "no"; then
+    if test "$wxUSE_LIBWEBP" = "builtin"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Using built-in libwebp not supported yet, will try the system one" >&5
+$as_echo "$as_me: WARNING: Using built-in libwebp not supported yet, will try the system one" >&2;}
+    fi
+
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for
-            libwebp
-            libwebpdemux
-        " >&5
-$as_echo_n "checking for
-            libwebp
-            libwebpdemux
-        ... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libwebp libwebpdemux" >&5
+$as_echo_n "checking for libwebp libwebpdemux... " >&6; }
 
 if test -n "$WebP_CFLAGS"; then
     pkg_cv_WebP_CFLAGS="$WebP_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
-            libwebp
-            libwebpdemux
-        \""; } >&5
-  ($PKG_CONFIG --exists --print-errors "
-            libwebp
-            libwebpdemux
-        ") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libwebp libwebpdemux\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libwebp libwebpdemux") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_WebP_CFLAGS=`$PKG_CONFIG --cflags "
-            libwebp
-            libwebpdemux
-        " 2>/dev/null`
+  pkg_cv_WebP_CFLAGS=`$PKG_CONFIG --cflags "libwebp libwebpdemux" 2>/dev/null`
               test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -26087,21 +26076,12 @@ if test -n "$WebP_LIBS"; then
     pkg_cv_WebP_LIBS="$WebP_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
-            libwebp
-            libwebpdemux
-        \""; } >&5
-  ($PKG_CONFIG --exists --print-errors "
-            libwebp
-            libwebpdemux
-        ") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libwebp libwebpdemux\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libwebp libwebpdemux") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_WebP_LIBS=`$PKG_CONFIG --libs "
-            libwebp
-            libwebpdemux
-        " 2>/dev/null`
+  pkg_cv_WebP_LIBS=`$PKG_CONFIG --libs "libwebp libwebpdemux" 2>/dev/null`
               test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -26122,15 +26102,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-            WebP_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "
-            libwebp
-            libwebpdemux
-        " 2>&1`
+            WebP_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libwebp libwebpdemux" 2>&1`
         else
-            WebP_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "
-            libwebp
-            libwebpdemux
-        " 2>&1`
+            WebP_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libwebp libwebpdemux" 2>&1`
         fi
     # Put the nasty error message in config.log where it belongs
     echo "$WebP_PKG_ERRORS" >&5
@@ -26158,15 +26132,11 @@ $as_echo "yes" >&6; }
 
             WEBP_LINK=$WebP_LIBS
             CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
+            $as_echo "#define wxUSE_LIBWEBP 1" >>confdefs.h
+
+            wxUSE_LIBWEBP="sys"
 
 fi
-fi
-if test "$wxUSE_LIBWEBP" = "auto"; then
-        wxUSE_LIBWEBP=yes
-fi
-if test "$wxUSE_LIBWEBP" = "yes"; then
-    $as_echo "#define wxUSE_LIBWEBP 1" >>confdefs.h
-
 fi
 
 

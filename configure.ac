@@ -317,7 +317,6 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
-DEFAULT_wxUSE_LIBWEBP=auto
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
@@ -2510,28 +2509,23 @@ dnl ------------------------------------------------------------------------
 
 WEBP_LINK=
 if test "$wxUSE_LIBWEBP" != "no"; then
+    if test "$wxUSE_LIBWEBP" = "builtin"; then
+        AC_MSG_WARN([Using built-in libwebp not supported yet, will try the system one])
+    fi
+
     PKG_CHECK_MODULES(
-        WebP,
-        [
-            libwebp
-            libwebpdemux
-        ],
+        WebP, [libwebp libwebpdemux],
         [
             WEBP_LINK=$WebP_LIBS
             CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
+            AC_DEFINE(wxUSE_LIBWEBP)
+            wxUSE_LIBWEBP="sys"
         ],
         [
             wxUSE_LIBWEBP="no"
             AC_MSG_RESULT([not found via pkg-config])
         ]
     )
-fi
-if test "$wxUSE_LIBWEBP" = "auto"; then
-    dnl if we are here, then auto-detection did not fail. Set result to "yes"
-    wxUSE_LIBWEBP=yes
-fi
-if test "$wxUSE_LIBWEBP" = "yes"; then
-    AC_DEFINE(wxUSE_LIBWEBP)
 fi
 
 dnl ------------------------------------------------------------------------
