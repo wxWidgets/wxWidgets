@@ -1177,9 +1177,8 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         {
             if ( verbose )
             {
-                wxLogError(
-                    _("BMP: header has biClrUsed=%d when biBitCount=%d."),
-                    desc.ncolors, desc.bpp);
+                wxLogError(_("BMP Header: Invalid number of colors (%d)."),
+                           desc.ncolors);
             }
             return false;
         }

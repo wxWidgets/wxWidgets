@@ -53,7 +53,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
     {
         if (verbose)
         {
-            wxLogError(_("WebP: GetFeatures not OK."));
+            wxLogError(_("WebP: Invalid data (failed to get features)."));
         }
         return false;
     }
@@ -62,7 +62,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
     {
         if (verbose)
         {
-            wxLogError(_("WebP: wxImage::Create failed."));
+            wxLogError(_("WebP: Allocating image memory failed."));
         }
         return false;
     }
@@ -79,7 +79,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
         {
             if (verbose)
             {
-                wxLogError(_("WebP: WebPDecodeRGBA failed."));
+                wxLogError(_("WebP: Decoding RGBA image data failed."));
             }
             return false;
         }
@@ -95,7 +95,7 @@ bool DecodeWebPDataIntoImage(wxImage* image, WebPData* webp_data, bool verbose)
         {
             if (verbose)
             {
-                wxLogError(_("WebP: WebPDecodeRGBInto failed."));
+                wxLogError(_("WebP: Decoding RGB image data failed."));
             }
             return false;
         }
@@ -110,7 +110,7 @@ WebPDemuxerPtr CreateDemuxer(wxMemoryOutputStream& mos, bool verbose = false)
     {
         if (verbose)
         {
-            wxLogError(_("WebP: CreateDemuxer wxStreamBuffer failed."));
+            wxLogError(_("WebP: Allocating stream buffer failed."));
         }
         return nullptr;
     }
@@ -128,7 +128,7 @@ WebPDemuxerPtr CreateDemuxer(wxMemoryOutputStream& mos, bool verbose = false)
     {
         if (verbose)
         {
-            wxLogError(_("WebP: CreateDemuxer WebPDemux failed."));
+            wxLogError(_("WebP: Failed to parse container data."));
         }
     }
     return demux;
@@ -198,7 +198,7 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
     {
         if (verbose)
         {
-            wxLogError(_("WebP: LoadAnimation wxStreamBuffer failed."));
+            wxLogError(_("WebP: Allocating stream buffer failed."));
         }
         return false;
     }
@@ -219,7 +219,7 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
     {
         if (verbose)
         {
-            wxLogError(_("WebP: WebPAnimDecoderNew failed."));
+            wxLogError(_("WebP: Error decoding animation."));
         }
         return false;
     }
@@ -237,7 +237,7 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
         {
             if (verbose)
             {
-                wxLogError(_("WebP: WebPAnimDecoderGetNext failed."));
+                wxLogError(_("WebP: Error getting next animation frame."));
             }
             break;
         }
