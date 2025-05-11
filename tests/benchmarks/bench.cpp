@@ -285,7 +285,7 @@ bool BenchApp::RunSingleBenchmark(Bench::Function* func)
     if ( !func->Init() )
         return false;
 
-    wxPrintf("Benchmarking %s: ", func->GetName());
+    wxPrintf("%-30s", wxString(func->GetName()) + ':');
     fflush(stdout);
 
     // We use the algorithm for iteratively computing the mean and the
@@ -357,7 +357,7 @@ bool BenchApp::RunSingleBenchmark(Bench::Function* func)
 
         wxPrintf
         (
-            "%ld runs, %.0fus avg, %.0f std dev (%.0f/%.0f min/max)\n",
+            "%12ld runs, %.0fus avg, %.0f std dev (%.0f/%.0f min/max)\n",
             n, m, s, timeMin, timeMax
         );
     }
