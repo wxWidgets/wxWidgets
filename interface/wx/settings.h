@@ -152,10 +152,10 @@ enum wxSystemMetric
     wxSYS_MOUSE_BUTTONS,      //!< Number of buttons on mouse, or zero if no mouse was installed.
     wxSYS_BORDER_X,           //!< Width of single border.
     wxSYS_BORDER_Y,           //!< Height of single border.
-    wxSYS_CURSOR_X,           //!< Width of cursor in physical pixels.
-    wxSYS_CURSOR_Y,           //!< Height of cursor in physical pixels.
+    wxSYS_CURSOR_X,           //!< Width of cursor in logical pixels.
+    wxSYS_CURSOR_Y,           //!< Height of cursor in logical pixels.
     /**
-        Width or height of cursor in physical pixels.
+        Width or height of cursor in logical pixels.
 
         This is the same as wxSYS_CURSOR_X and wxSYS_CURSOR_Y as cursors are
         always square.

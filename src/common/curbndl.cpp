@@ -94,8 +94,10 @@ public:
         // user may increase the cursor size even in standard DPI, so get the
         // size at the effectively used scale which is obtained by comparing
         // the currently used cursor size with the default one.
-        const int
-            h = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, window);
+        int h = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, window);
+
+        // We need the physical size of the cursor bitmap.
+        h = wxWindow::ToPhys(h, window);
 
         // Check if we can reuse the last returned cursor.
         if ( h == m_lastCursorSize )
