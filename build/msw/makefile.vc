@@ -2745,6 +2745,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_common_bmpbndl.obj \
 	$(OBJS)\monodll_bmpsvg.obj \
 	$(OBJS)\monodll_powercmn.obj \
+	$(OBJS)\monodll_curbndl.obj \
 	$(OBJS)\monodll_webpdecoder.obj \
 	$(OBJS)\monodll_imagwebp.obj
 !endif
@@ -3081,6 +3082,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_common_bmpbndl.obj \
 	$(OBJS)\monodll_bmpsvg.obj \
 	$(OBJS)\monodll_powercmn.obj \
+	$(OBJS)\monodll_curbndl.obj \
 	$(OBJS)\monodll_webpdecoder.obj \
 	$(OBJS)\monodll_imagwebp.obj
 !endif
@@ -3609,6 +3611,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_common_bmpbndl.obj \
 	$(OBJS)\monolib_bmpsvg.obj \
 	$(OBJS)\monolib_powercmn.obj \
+	$(OBJS)\monolib_curbndl.obj \
 	$(OBJS)\monolib_webpdecoder.obj \
 	$(OBJS)\monolib_imagwebp.obj
 !endif
@@ -3945,6 +3948,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_common_bmpbndl.obj \
 	$(OBJS)\monolib_bmpsvg.obj \
 	$(OBJS)\monolib_powercmn.obj \
+	$(OBJS)\monolib_curbndl.obj \
 	$(OBJS)\monolib_webpdecoder.obj \
 	$(OBJS)\monolib_imagwebp.obj
 !endif
@@ -4399,6 +4403,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_common_bmpbndl.obj \
 	$(OBJS)\coredll_bmpsvg.obj \
 	$(OBJS)\coredll_powercmn.obj \
+	$(OBJS)\coredll_curbndl.obj \
 	$(OBJS)\coredll_webpdecoder.obj \
 	$(OBJS)\coredll_imagwebp.obj
 !endif
@@ -4735,6 +4740,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_common_bmpbndl.obj \
 	$(OBJS)\coredll_bmpsvg.obj \
 	$(OBJS)\coredll_powercmn.obj \
+	$(OBJS)\coredll_curbndl.obj \
 	$(OBJS)\coredll_webpdecoder.obj \
 	$(OBJS)\coredll_imagwebp.obj
 !endif
@@ -5094,6 +5100,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_common_bmpbndl.obj \
 	$(OBJS)\corelib_bmpsvg.obj \
 	$(OBJS)\corelib_powercmn.obj \
+	$(OBJS)\corelib_curbndl.obj \
 	$(OBJS)\corelib_webpdecoder.obj \
 	$(OBJS)\corelib_imagwebp.obj
 !endif
@@ -5430,6 +5437,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_common_bmpbndl.obj \
 	$(OBJS)\corelib_bmpsvg.obj \
 	$(OBJS)\corelib_powercmn.obj \
+	$(OBJS)\corelib_curbndl.obj \
 	$(OBJS)\corelib_webpdecoder.obj \
 	$(OBJS)\corelib_imagwebp.obj
 !endif
@@ -10674,6 +10682,11 @@ $(OBJS)\monodll_powercmn.obj: ..\..\src\common\powercmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_curbndl.obj: ..\..\src\common\curbndl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\curbndl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_webpdecoder.obj: ..\..\src\common\webpdecoder.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webpdecoder.cpp
 !endif
@@ -13286,6 +13299,11 @@ $(OBJS)\monolib_powercmn.obj: ..\..\src\common\powercmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_curbndl.obj: ..\..\src\common\curbndl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\curbndl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_webpdecoder.obj: ..\..\src\common\webpdecoder.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webpdecoder.cpp
 !endif
@@ -15844,6 +15862,11 @@ $(OBJS)\coredll_powercmn.obj: ..\..\src\common\powercmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_curbndl.obj: ..\..\src\common\curbndl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\curbndl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_webpdecoder.obj: ..\..\src\common\webpdecoder.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\webpdecoder.cpp
 !endif
@@ -17616,6 +17639,11 @@ $(OBJS)\corelib_bmpsvg.obj: ..\..\src\generic\bmpsvg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_powercmn.obj: ..\..\src\common\powercmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\powercmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_curbndl.obj: ..\..\src\common\curbndl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\curbndl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

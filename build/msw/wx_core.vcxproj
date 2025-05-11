@@ -1726,6 +1726,7 @@
     <ClCompile Include="..\..\src\msw\overlay.cpp" />
     <ClCompile Include="..\..\src\msw\power.cpp" />
     <ClCompile Include="..\..\src\common\powercmn.cpp" />
+    <ClCompile Include="..\..\src\common\curbndl.cpp" />
     <ClCompile Include="..\..\src\common\imagwebp.cpp" />
     <ClCompile Include="..\..\src\common\webpdecoder.cpp" />
   </ItemGroup>
@@ -1927,6 +1928,7 @@
     <ClInclude Include="..\..\include\wx\bookctrl.h" />
     <ClInclude Include="..\..\include\wx\persist\bookctrl.h" />
     <ClInclude Include="..\..\include\wx\brush.h" />
+    <ClInclude Include="..\..\include\wx\busycursor.h" />
     <ClInclude Include="..\..\include\wx\busyinfo.h" />
     <ClInclude Include="..\..\include\wx\button.h" />
     <ClInclude Include="..\..\include\wx\caret.h" />

@@ -40,15 +40,15 @@ class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
     wxDropSource(wxWindow *win = nullptr,
-                 const wxCursor &copy = wxNullCursor,
-                 const wxCursor &move = wxNullCursor,
-                 const wxCursor &none = wxNullCursor);
+                 const wxCursorBundle& copy = {},
+                 const wxCursorBundle& move = {},
+                 const wxCursorBundle& none = {});
 
     wxDropSource(wxDataObject& data,
                  wxWindow *win,
-                 const wxCursor &copy = wxNullCursor,
-                 const wxCursor &move = wxNullCursor,
-                 const wxCursor &none = wxNullCursor);
+                 const wxCursorBundle& copy = {},
+                 const wxCursorBundle& move = {},
+                 const wxCursorBundle& none = {});
 
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) override;
 

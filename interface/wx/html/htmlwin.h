@@ -479,10 +479,16 @@ public:
 
         @param type
             HTMLCursor type to retrieve.
+        @param window
+            The window for which the cursor is requested, should be non-@NULL
+            to use the appropriate DPI. If @NULL, default application window is
+            used to determine the desired cursor size. This parameter is new
+            since wxWidgets 3.3.0.
 
         @since 3.1.0
     */
-    static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
+    static wxCursor GetDefaultHTMLCursor(HTMLCursor type,
+                                         const wxWindow* window = nullptr);
 
     /**
         Sets the default cursor for a given HTMLCursor type.

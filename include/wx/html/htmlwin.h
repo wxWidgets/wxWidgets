@@ -386,8 +386,9 @@ public:
     virtual void OnInternalIdle() override;
 
     /// Returns standard HTML cursor as used by wxHtmlWindow
-    static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
-    static void SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor);
+    static wxCursor GetDefaultHTMLCursor(HTMLCursor type,
+                                         const wxWindow* window = nullptr);
+    static void SetDefaultHTMLCursor(HTMLCursor type, const wxCursorBundle& cursor);
 
 protected:
     void Init();
@@ -551,11 +552,6 @@ private:
     // Flag used to communicate between OnPaint() and OnEraseBackground(), see
     // the comments near its use.
     bool m_isBgReallyErased;
-
-    // standard mouse cursors
-    static wxCursor *ms_cursorLink;
-    static wxCursor *ms_cursorText;
-    static wxCursor *ms_cursorDefault;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHtmlWindow);

@@ -931,6 +931,7 @@ set(GUI_CMN_SRC
     src/common/bmpbndl.cpp
     src/generic/bmpsvg.cpp
     src/common/powercmn.cpp
+    src/common/curbndl.cpp
 )
 
 set(GUI_CMN_HDR
@@ -1063,6 +1064,7 @@ set(GUI_CMN_HDR
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h
+    wx/busycursor.h
     wx/busyinfo.h
     wx/generic/busyinfo.h
     wx/caret.h

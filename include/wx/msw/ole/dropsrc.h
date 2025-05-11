@@ -43,14 +43,14 @@ public:
     // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
     //     compatibility, as well as both icon parameters
     wxDropSource(wxWindow *win = nullptr,
-                 const wxCursor &cursorCopy = wxNullCursor,
-                 const wxCursor &cursorMove = wxNullCursor,
-                 const wxCursor &cursorStop = wxNullCursor);
+                 const wxCursorBundle& cursorCopy = {},
+                 const wxCursorBundle& cursorMove = {},
+                 const wxCursorBundle& cursorStop = {});
     wxDropSource(wxDataObject& data,
                  wxWindow *win = nullptr,
-                 const wxCursor &cursorCopy = wxNullCursor,
-                 const wxCursor &cursorMove = wxNullCursor,
-                 const wxCursor &cursorStop = wxNullCursor);
+                 const wxCursorBundle& cursorCopy = {},
+                 const wxCursorBundle& cursorMove = {},
+                 const wxCursorBundle& cursorStop = {});
 
     virtual ~wxDropSource();
 
@@ -67,7 +67,14 @@ protected:
     void Init();
 
 private:
+    // The window passed to the ctor.
+    wxWindow* const m_win;
+
     wxIDropSource *m_pIDropSource;  // the pointer to COM interface
+
+    // Last cursor used in GiveFeedback(): we need to keep it alive to ensure
+    // its HCURSOR remains valid.
+    wxCursor m_feedbackCursor;
 
     wxDECLARE_NO_COPY_CLASS(wxDropSource);
 };

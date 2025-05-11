@@ -195,9 +195,9 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = nullptr,
-                 const wxCursor& iconCopy = wxNullCursor,
-                 const wxCursor& iconMove = wxNullCursor,
-                 const wxCursor& iconNone = wxNullCursor);
+                 const wxCursorBundle& iconCopy = {},
+                 const wxCursorBundle& iconMove = {},
+                 const wxCursorBundle& iconNone = {});
 
     /**
         The constructor taking a wxDataObject.
@@ -221,9 +221,9 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxDataObject& data, wxWindow* win = nullptr,
-                 const wxCursor& iconCopy = wxNullCursor,
-                 const wxCursor& iconMove = wxNullCursor,
-                 const wxCursor& iconNone = wxNullCursor);
+                 const wxCursorBundle& iconCopy = {},
+                 const wxCursorBundle& iconMove = {},
+                 const wxCursorBundle& iconNone = {});
 
     /**
         This constructor requires that you must call SetData() later.
@@ -318,7 +318,7 @@ public:
 
         @onlyfor{wxmsw,wxosx}
     */
-    void SetCursor(wxDragResult res, const wxCursor& cursor);
+    void SetCursor(wxDragResult res, const wxCursorBundle& cursor);
 
     /**
         Set the icon to use for a certain drag result.

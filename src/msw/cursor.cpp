@@ -29,13 +29,14 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/image.h"
-    #include "wx/module.h"
 #endif
 
 #include "wx/display.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h" // IDC_HAND
+
+#include "wx/private/rescale.h"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -56,8 +57,7 @@ public:
 
     // return the size of the standard cursor: notice that the system only
     // supports the cursors of this size
-    static wxCoord GetStandardWidth();
-    static wxCoord GetStandardHeight();
+    static wxSize GetStandardSize();
 
 private:
     bool m_destroyCursor;
@@ -75,27 +75,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject);
 
 // Current cursor, in order to hang on to cursor handle when setting the cursor
 // globally
-static wxCursor *gs_globalCursor = nullptr;
-
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
-class wxCursorModule : public wxModule
-{
-public:
-    virtual bool OnInit() override
-    {
-        gs_globalCursor = new wxCursor;
-
-        return true;
-    }
-
-    virtual void OnExit() override
-    {
-        wxDELETE(gs_globalCursor);
-    }
-};
+static wxCursor gs_globalCursor;
 
 // ============================================================================
 // implementation
@@ -106,16 +86,12 @@ public:
 // ----------------------------------------------------------------------------
 
 
-wxCoord wxCursorRefData::GetStandardWidth()
+wxSize wxCursorRefData::GetStandardSize()
 {
     const wxWindow* win = wxApp::GetMainTopWindow();
-    return wxSystemSettings::GetMetric(wxSYS_CURSOR_X, win);
-}
-
-wxCoord wxCursorRefData::GetStandardHeight()
-{
-    const wxWindow* win = wxApp::GetMainTopWindow();
-    return wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, win);
+    // Cursors are always square, so using just wxSYS_CURSOR_X is good enough.
+    const int size = wxSystemSettings::GetMetric(wxSYS_CURSOR_X, win);
+    return wxSize(size, size);
 }
 
 wxCursorRefData::wxCursorRefData(HCURSOR hcursor, bool destroy)
@@ -124,8 +100,9 @@ wxCursorRefData::wxCursorRefData(HCURSOR hcursor, bool destroy)
 
     if ( m_hCursor )
     {
-        m_width = GetStandardWidth();
-        m_height = GetStandardHeight();
+        const wxSize size = GetStandardSize();
+        m_width = size.x;
+        m_height = size.y;
     }
 
     m_destroyCursor = destroy;
@@ -150,14 +127,14 @@ wxCursor::wxCursor()
 {
 }
 
-wxCursor::wxCursor(const wxBitmap& bitmap, int hotSpotX, int hotSpotY)
+wxCursor::wxCursor(const wxBitmap& bitmap, const wxPoint& hotSpot)
 {
-    InitFromBitmap(bitmap, hotSpotX, hotSpotY);
+    InitFromBitmap(bitmap, hotSpot);
 }
 
-void wxCursor::InitFromBitmap(const wxBitmap& bmp, int hotSpotX, int hotSpotY)
+void wxCursor::InitFromBitmap(const wxBitmap& bmp, const wxPoint& hotSpot)
 {
-    HCURSOR hcursor = wxBitmapToHCURSOR( bmp, hotSpotX, hotSpotY );
+    HCURSOR hcursor = wxBitmapToHCURSOR( bmp, hotSpot.x, hotSpot.y );
 
     if ( !hcursor )
     {
@@ -181,40 +158,12 @@ wxCursor::wxCursor(const char* const* xpmData)
 
 void wxCursor::InitFromImage(const wxImage& image)
 {
-    // image has to be of the standard cursor size, otherwise we won't be able
-    // to create it
-    const int w = wxCursorRefData::GetStandardWidth();
-    const int h = wxCursorRefData::GetStandardHeight();
-
-    int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
-    int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
-    int image_w = image.GetWidth();
-    int image_h = image.GetHeight();
-
-    wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < image_w &&
-                  hotSpotY >= 0 && hotSpotY < image_h,
-                  wxT("invalid cursor hot spot coordinates") );
-
-    wxImage imageSized(image); // final image of correct size
-
-    // if image is too small then place it in the center, resize it if too big
-    if ((w > image_w) && (h > image_h))
-    {
-        wxPoint offset((w - image_w)/2, (h - image_h)/2);
-        hotSpotX = hotSpotX + offset.x;
-        hotSpotY = hotSpotY + offset.y;
-
-        imageSized = image.Size(wxSize(w, h), offset);
-    }
-    else if ((w != image_w) || (h != image_h))
-    {
-        hotSpotX = int(hotSpotX * double(w) / double(image_w));
-        hotSpotY = int(hotSpotY * double(h) / double(image_h));
-
-        imageSized = image.Scale(w, h);
-    }
-
-    InitFromBitmap(imageSized, hotSpotX, hotSpotY);
+    InitFromBitmap
+    (
+        image,
+        wxPoint(image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X),
+                image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y))
+    );
 }
 #endif // wxUSE_IMAGE
 
@@ -425,16 +374,14 @@ wxGDIImageRefData *wxCursor::CreateData() const
 
 const wxCursor *wxGetGlobalCursor()
 {
-    return gs_globalCursor;
+    return &gs_globalCursor;
 }
 
-void wxSetCursor(const wxCursor& cursor)
+void wxSetCursor(const wxCursorBundle& cursors)
 {
+    const wxCursor& cursor = cursors.GetCursorForMainWindow();
     if ( cursor.IsOk() )
-    {
         ::SetCursor(GetHcursorOf(cursor));
 
-        if ( gs_globalCursor )
-            *gs_globalCursor = cursor;
-    }
+    gs_globalCursor = cursor;
 }

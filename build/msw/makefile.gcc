@@ -2371,6 +2371,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_common_bmpbndl.o \
 	$(OBJS)\monodll_bmpsvg.o \
 	$(OBJS)\monodll_powercmn.o \
+	$(OBJS)\monodll_curbndl.o \
 	$(OBJS)\monodll_webpdecoder.o \
 	$(OBJS)\monodll_imagwebp.o
 endif
@@ -2709,6 +2710,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_common_bmpbndl.o \
 	$(OBJS)\monodll_bmpsvg.o \
 	$(OBJS)\monodll_powercmn.o \
+	$(OBJS)\monodll_curbndl.o \
 	$(OBJS)\monodll_webpdecoder.o \
 	$(OBJS)\monodll_imagwebp.o
 endif
@@ -3235,6 +3237,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_common_bmpbndl.o \
 	$(OBJS)\monolib_bmpsvg.o \
 	$(OBJS)\monolib_powercmn.o \
+	$(OBJS)\monolib_curbndl.o \
 	$(OBJS)\monolib_webpdecoder.o \
 	$(OBJS)\monolib_imagwebp.o
 endif
@@ -3573,6 +3576,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_common_bmpbndl.o \
 	$(OBJS)\monolib_bmpsvg.o \
 	$(OBJS)\monolib_powercmn.o \
+	$(OBJS)\monolib_curbndl.o \
 	$(OBJS)\monolib_webpdecoder.o \
 	$(OBJS)\monolib_imagwebp.o
 endif
@@ -3975,6 +3979,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_common_bmpbndl.o \
 	$(OBJS)\coredll_bmpsvg.o \
 	$(OBJS)\coredll_powercmn.o \
+	$(OBJS)\coredll_curbndl.o \
 	$(OBJS)\coredll_webpdecoder.o \
 	$(OBJS)\coredll_imagwebp.o
 endif
@@ -4313,6 +4318,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_common_bmpbndl.o \
 	$(OBJS)\coredll_bmpsvg.o \
 	$(OBJS)\coredll_powercmn.o \
+	$(OBJS)\coredll_curbndl.o \
 	$(OBJS)\coredll_webpdecoder.o \
 	$(OBJS)\coredll_imagwebp.o
 endif
@@ -4672,6 +4678,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_common_bmpbndl.o \
 	$(OBJS)\corelib_bmpsvg.o \
 	$(OBJS)\corelib_powercmn.o \
+	$(OBJS)\corelib_curbndl.o \
 	$(OBJS)\corelib_webpdecoder.o \
 	$(OBJS)\corelib_imagwebp.o
 endif
@@ -5010,6 +5017,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_common_bmpbndl.o \
 	$(OBJS)\corelib_bmpsvg.o \
 	$(OBJS)\corelib_powercmn.o \
+	$(OBJS)\corelib_curbndl.o \
 	$(OBJS)\corelib_webpdecoder.o \
 	$(OBJS)\corelib_imagwebp.o
 endif
@@ -10178,6 +10186,11 @@ $(OBJS)\monodll_powercmn.o: ../../src/common/powercmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_curbndl.o: ../../src/common/curbndl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_webpdecoder.o: ../../src/common/webpdecoder.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12790,6 +12803,11 @@ $(OBJS)\monolib_powercmn.o: ../../src/common/powercmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_curbndl.o: ../../src/common/curbndl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_webpdecoder.o: ../../src/common/webpdecoder.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -15348,6 +15366,11 @@ $(OBJS)\coredll_powercmn.o: ../../src/common/powercmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_curbndl.o: ../../src/common/curbndl.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_webpdecoder.o: ../../src/common/webpdecoder.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -17119,6 +17142,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_powercmn.o: ../../src/common/powercmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_curbndl.o: ../../src/common/curbndl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

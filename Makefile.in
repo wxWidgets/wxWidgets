@@ -3898,6 +3898,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/artprov.h \
 	wx/bitmap.h \
 	wx/bookctrl.h \
+	wx/busycursor.h \
 	wx/busyinfo.h \
 	wx/generic/busyinfo.h \
 	wx/caret.h \
@@ -4739,6 +4740,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_common_bmpbndl.o \
 	monodll_bmpsvg.o \
 	monodll_powercmn.o \
+	monodll_curbndl.o \
 	monodll_webpdecoder.o \
 	monodll_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
@@ -5006,6 +5008,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_common_bmpbndl.o \
 	monodll_bmpsvg.o \
 	monodll_powercmn.o \
+	monodll_curbndl.o \
 	monodll_webpdecoder.o \
 	monodll_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
@@ -6509,6 +6512,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_common_bmpbndl.o \
 	monolib_bmpsvg.o \
 	monolib_powercmn.o \
+	monolib_curbndl.o \
 	monolib_webpdecoder.o \
 	monolib_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
@@ -6776,6 +6780,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_common_bmpbndl.o \
 	monolib_bmpsvg.o \
 	monolib_powercmn.o \
+	monolib_curbndl.o \
 	monolib_webpdecoder.o \
 	monolib_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
@@ -8425,6 +8430,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_common_bmpbndl.o \
 	coredll_bmpsvg.o \
 	coredll_powercmn.o \
+	coredll_curbndl.o \
 	coredll_webpdecoder.o \
 	coredll_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
@@ -8692,6 +8698,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_common_bmpbndl.o \
 	coredll_bmpsvg.o \
 	coredll_powercmn.o \
+	coredll_curbndl.o \
 	coredll_webpdecoder.o \
 	coredll_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
@@ -9923,6 +9930,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_common_bmpbndl.o \
 	corelib_bmpsvg.o \
 	corelib_powercmn.o \
+	corelib_curbndl.o \
 	corelib_webpdecoder.o \
 	corelib_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
@@ -10190,6 +10198,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_common_bmpbndl.o \
 	corelib_bmpsvg.o \
 	corelib_powercmn.o \
+	corelib_curbndl.o \
 	corelib_webpdecoder.o \
 	corelib_imagwebp.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
@@ -20038,6 +20047,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
 
+@COND_USE_GUI_1@monodll_curbndl.o: $(srcdir)/src/common/curbndl.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/curbndl.cpp
+
 @COND_USE_GUI_1@monodll_webpdecoder.o: $(srcdir)/src/common/webpdecoder.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/webpdecoder.cpp
 
@@ -24795,6 +24807,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
+@COND_USE_GUI_1@monolib_curbndl.o: $(srcdir)/src/common/curbndl.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/curbndl.cpp
 
 @COND_USE_GUI_1@monolib_webpdecoder.o: $(srcdir)/src/common/webpdecoder.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/webpdecoder.cpp
@@ -29626,6 +29641,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
 
+@COND_USE_GUI_1@coredll_curbndl.o: $(srcdir)/src/common/curbndl.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/curbndl.cpp
+
 @COND_USE_GUI_1@coredll_webpdecoder.o: $(srcdir)/src/common/webpdecoder.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/webpdecoder.cpp
 
@@ -33354,6 +33372,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_powercmn.o: $(srcdir)/src/common/powercmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/powercmn.cpp
+
+@COND_USE_GUI_1@corelib_curbndl.o: $(srcdir)/src/common/curbndl.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/curbndl.cpp
 
 @COND_USE_GUI_1@corelib_webpdecoder.o: $(srcdir)/src/common/webpdecoder.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/webpdecoder.cpp

@@ -21,6 +21,7 @@
 #include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/backend.h"
+#include "wx/gtk/private/gtk3-compat.h"
 
 GdkWindow* wxGetTopLevelGDK();
 
@@ -165,8 +166,30 @@ wxCursor::InitFromBitmap(const wxBitmap& bitmap, int hotSpotX, int hotSpotY,
             }
         }
     }
-    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf(
-        gdk_window_get_display(wxGetTopLevelGDK()), pixbuf, hotSpotX, hotSpotY);
+
+    GdkDisplay* const display = gdk_window_get_display(wxGetTopLevelGDK());
+
+    // Prefer to create cursor from surface as this allows us to specify the
+    // bitmap scaling factor.
+#if GTK_CHECK_VERSION(3,10,0)
+    if (wx_is_at_least_gtk3(10))
+    {
+        cairo_surface_t* const
+            surface = gdk_cairo_surface_create_from_pixbuf(pixbuf, 1, nullptr);
+        const double scaleFactor = bitmap.GetScaleFactor();
+        cairo_surface_set_device_scale(surface, scaleFactor, scaleFactor);
+
+        M_CURSORDATA->m_cursor = gdk_cursor_new_from_surface(
+            display, surface, hotSpotX / scaleFactor, hotSpotY / scaleFactor);
+
+        cairo_surface_destroy(surface);
+    }
+    else
+#endif // GTK 3 > 3.10
+    {
+        M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf(
+            display, pixbuf, hotSpotX, hotSpotY);
+    }
 #else
     if (!fg)
         fg = wxBLACK;
@@ -368,16 +391,6 @@ wxCursor g_busyCursor;
 static wxCursor gs_storedCursor;
 static int       gs_busyCount = 0;
 
-const wxCursor& wxBusyCursor::GetStoredCursor()
-{
-    return gs_storedCursor;
-}
-
-const wxCursor wxBusyCursor::GetBusyCursor()
-{
-    return g_busyCursor;
-}
-
 static void UpdateCursors(wxWindow* win, GdkCursor* globalCursor)
 {
     win->GTKUpdateCursor(globalCursor);
@@ -434,8 +447,9 @@ bool wxIsBusy()
     return gs_busyCount > 0;
 }
 
-void wxSetCursor( const wxCursor& cursor )
+void wxSetCursor( const wxCursorBundle& cursors )
 {
+    const wxCursor& cursor = cursors.GetCursorForMainWindow();
     if (cursor.IsOk() || g_globalCursor.IsOk())
     {
         g_globalCursor = cursor;

@@ -1655,19 +1655,34 @@ bool wxWindowBase::SetForegroundColour( const wxColour &colour )
     return true;
 }
 
-bool wxWindowBase::SetCursor(const wxCursor& cursor)
+bool wxWindowBase::SetCursorBundle(const wxCursorBundle& cursors)
 {
     // setting an invalid cursor is ok, it means that we don't have any special
     // cursor
-    if ( m_cursor.IsSameAs(cursor) )
+    if ( m_cursors.IsSameAs(cursors) )
     {
         // no change
         return false;
     }
 
-    m_cursor = cursor;
+    m_cursors = cursors;
+
+    // Update m_cursor both for compatibility with the existing code using it
+    // directly and to optimize GetCursor(): like this, wxCursorBundle itself
+    // doesn't need to cache the cursors it creates, as we do it here.
+    WXUpdateCursor();
 
     return true;
+}
+
+bool wxWindowBase::SetCursor(const wxCursor& cursor)
+{
+    return SetCursorBundle(cursor);
+}
+
+void wxWindowBase::WXUpdateCursor()
+{
+    m_cursor = m_cursors.GetCursorFor(AsWindow());
 }
 
 wxFont wxWindowBase::GetFont() const
