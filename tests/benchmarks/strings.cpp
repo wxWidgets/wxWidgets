@@ -663,6 +663,58 @@ BENCHMARK_FUNC(PrintfDouble)
     return true;
 }
 
+BENCHMARK_FUNC(AppendString)
+{
+    static wxString s;
+    long num = Bench::GetNumericParameter();
+    if ( !num )
+        num = 1;
+
+    s.clear();
+    for ( int n = 0; n < num; n++ )
+    {
+        s << wxS("123");
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(AppendIntDirect)
+{
+    static wxString s;
+    long num = Bench::GetNumericParameter();
+    if ( !num )
+        num = 1;
+
+    s.clear();
+    for ( int n = 0; n < num; n++ )
+    {
+        s << n;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(AppendIntViaString)
+{
+    static wxString s;
+    long num = Bench::GetNumericParameter();
+    if ( !num )
+        num = 1;
+
+    s.clear();
+    for ( int n = 0; n < num; n++ )
+    {
+#if wxUSE_UNICODE_WCHAR
+        s << std::to_wstring(n);
+#else
+        s << std::to_string(n);
+#endif
+    }
+
+    return true;
+}
+
 #if wxHAS_CXX17_INCLUDE(<charconv>)
 
 #include <charconv>
