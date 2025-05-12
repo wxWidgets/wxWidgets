@@ -30,7 +30,7 @@
     #include "wx/settings.h"
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
-    #include "wx/sizer.h"    
+    #include "wx/sizer.h"
 #endif // WX_PRECOMP
 
 #include "wx/artprov.h"
