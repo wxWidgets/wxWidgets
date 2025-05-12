@@ -86,7 +86,7 @@ public:
     bool IsIncludingDontShowAgainCheckbox() const { return m_includeDontShowAgain; }
 
     // Sets whether the "Do not show this again" checkbox should be shown.
-    void IncludeDontShowAgainCheckbox(const bool includeCheckbox)
+    void IncludeDontShowAgainCheckbox(bool includeCheckbox)
     {
         m_includeDontShowAgain = includeCheckbox;
         GetSizer()->Show(m_dontShowAgainCheckbox, m_includeDontShowAgain, true);
