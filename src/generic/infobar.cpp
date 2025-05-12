@@ -36,7 +36,7 @@
 #include "wx/artprov.h"
 #include "wx/scopeguard.h"
 #include "wx/valgen.h"
-#include <wx/checkbox.h>
+#include "wx/checkbox.h"
 
 #ifdef __WXGTK3__
     #include "wx/gtk/private/wrapgtk.h"
