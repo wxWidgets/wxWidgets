@@ -490,4 +490,10 @@ void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
     DoHide();
 }
 
+void wxInfoBarGeneric::IncludeDontShowAgainCheckbox(bool includeCheckbox)
+{
+    m_includeDontShowAgain = includeCheckbox;
+    GetSizer()->Show(m_dontShowAgainCheckbox, m_includeDontShowAgain, true);
+}
+
 #endif // wxUSE_INFOBAR
