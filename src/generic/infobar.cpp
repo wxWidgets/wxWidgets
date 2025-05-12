@@ -121,7 +121,7 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     m_button->SetToolTip(_("Hide this notification message."));
 
     m_dontShowAgainCheckbox =
-        new wxCheckBox(this, wxID_ANY, _(L"Do not show this again."), wxDefaultPosition,
+        new wxCheckBox(this, wxID_ANY, _("Do not show this again."), wxDefaultPosition,
             wxDefaultSize, 0, wxGenericValidator(&m_dontShowAgain));
     m_dontShowAgainCheckbox->SetForegroundColour(
         wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
