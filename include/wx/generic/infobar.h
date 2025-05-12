@@ -13,6 +13,7 @@
 class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 
 // ----------------------------------------------------------------------------
 // wxInfoBar
