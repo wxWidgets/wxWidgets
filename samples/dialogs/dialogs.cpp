@@ -942,6 +942,13 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
 {
     static int s_count = 0;
+    static bool s_dontShowAgain = false;
+
+    if (s_dontShowAgain)
+    {
+        wxMessageBox("You asked to not see this again. Remember?");
+        return;
+    }
 
     wxString msg;
     if ( ++s_count % 2 )
@@ -959,7 +966,22 @@ void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
                    s_count);
     }
 
+    m_infoBarSimple->IncludeDontShowAgainCheckbox(true);
     m_infoBarSimple->ShowMessage(msg);
+    // intercept the close button being clicked
+    m_infoBarSimple->Bind(wxEVT_BUTTON,
+        [this](wxCommandEvent& WXUNUSED(event))
+        {
+            // dismiss the message and (if a generic control)
+            // see if the "don't show this again" checkbox
+            // was checked and handle that for next time
+            m_infoBarSimple->Dismiss();
+            if (m_infoBarSimple->IsIncludingDontShowAgainCheckbox() &&
+                m_infoBarSimple->IsDontShowAgainChecked())
+            {
+                s_dontShowAgain = true;
+            };
+        }, wxID_CLOSE);
 }
 
 void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))

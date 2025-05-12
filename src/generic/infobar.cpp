@@ -30,11 +30,12 @@
     #include "wx/settings.h"
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
-    #include "wx/sizer.h"
+    #include "wx/sizer.h"    
 #endif // WX_PRECOMP
 
 #include "wx/artprov.h"
 #include "wx/scopeguard.h"
+#include "wx/valgen.h"
 
 #ifdef __WXGTK3__
     #include "wx/gtk/private/wrapgtk.h"
@@ -45,6 +46,7 @@
 
 wxBEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
     EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)
+    EVT_BUTTON(wxID_CLOSE, wxInfoBarGeneric::OnButton)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -115,8 +117,14 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     if(!m_hasFgCol)
         m_text->SetForegroundColour(colFg);
 
-    m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
+    m_button = wxBitmapButton::NewCloseButton(this, wxID_CLOSE);
     m_button->SetToolTip(_("Hide this notification message."));
+
+    m_dontShowAgainCheckbox =
+        new wxCheckBox(this, wxID_ANY, _(L"Do not show this again."), wxDefaultPosition,
+            wxDefaultSize, 0, wxGenericValidator(&m_dontShowAgain));
+    m_dontShowAgainCheckbox->SetForegroundColour(
+        wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
 
     // center the text inside the sizer with an icon to the left of it and a
     // button at the very right
@@ -124,10 +132,22 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     // NB: AddButton() relies on the button being the last control in the sizer
     //     and being preceded by a spacer
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(m_icon, wxSizerFlags().Centre().Border());
-    sizer->Add(m_text, wxSizerFlags().Proportion(1).Centre());
-    sizer->AddSpacer(0); // This spacer only exists for compatibility.
-    sizer->Add(m_button, wxSizerFlags().Centre().Border());
+    wxSizer * const defaultControlSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* const firstRowSizer = new wxBoxSizer(wxHORIZONTAL);
+    firstRowSizer->Add(m_icon, wxSizerFlags{}.Centre().Border());
+    firstRowSizer->Add(m_text, wxSizerFlags{}.Proportion(1).Centre());
+    firstRowSizer->AddSpacer(0); // This spacer only exists for compatibility.
+    firstRowSizer->Add(m_button, wxSizerFlags{}.Centre().Border());
+
+    wxBoxSizer* const secondRowSizer = new wxBoxSizer(wxHORIZONTAL);
+    secondRowSizer->Add(m_dontShowAgainCheckbox, wxSizerFlags{}.CentreVertical().Border());
+
+    defaultControlSizer->Add(firstRowSizer, wxSizerFlags{ 1 }.Expand());
+    defaultControlSizer->Add(secondRowSizer);
+    defaultControlSizer->Show(m_dontShowAgainCheckbox, m_includeDontShowAgain, true);
+
+    sizer->Add(defaultControlSizer, wxSizerFlags{ 1 }.Expand());
+
     SetSizer(sizer);
 
     return true;
@@ -223,6 +243,8 @@ void wxInfoBarGeneric::UpdateParent()
 
 void wxInfoBarGeneric::DoHide()
 {
+    TransferDataFromWindow();
+
     HideWithEffect(GetHideEffect(), GetEffectDuration());
 
     UpdateParent();
@@ -230,6 +252,8 @@ void wxInfoBarGeneric::DoHide()
 
 void wxInfoBarGeneric::DoShow()
 {
+    TransferDataToWindow();
+
     // re-layout the parent first so that the window expands into an already
     // unoccupied by the other controls area: for this we need to change our
     // internal visibility flag to force Layout() to take us into account (an
