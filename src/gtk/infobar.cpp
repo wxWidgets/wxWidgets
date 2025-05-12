@@ -75,17 +75,6 @@ public:
 // local functions
 // ----------------------------------------------------------------------------
 
-namespace
-{
-
-inline bool UseNative()
-{
-    // native GtkInfoBar widget is only available in GTK+ 2.18 and later
-    return wx_is_at_least_gtk2(18);
-}
-
-} // anonymous namespace
-
 extern "C"
 {
 
@@ -108,10 +97,19 @@ static void wxgtk_infobar_close(GtkInfoBar * WXUNUSED(infobar),
 // wxInfoBar implementation
 // ============================================================================
 
-bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
+bool wxInfoBar::UseNative() const
 {
+    // Native GtkInfoBar widget is only available in GTK+ 2.18 and later.
+    // Also, if the checkbox is included, then we need to use
+    // the generic version.
+    return wx_is_at_least_gtk2(18) && !HasFlag(wxINFOBAR_CHECKBOX);
+}
+
+bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid, long style)
+{
+    SetWindowStyle(style);
     if ( !UseNative() )
-        return wxInfoBarGeneric::Create(parent, winid);
+        return wxInfoBarGeneric::Create(parent, winid, style);
 
     m_impl = new wxInfoBarGTKImpl;
 

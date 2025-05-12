@@ -314,6 +314,7 @@ All (GUI):
 - Add wxApp::SetAppearance() to explicitly set dark or light mode (#24461).
 - Add wxAuiManager::{Save,Load}Layout() (#24235).
 - Add wxGrid::CopySelection() (Blake Madden, #24124).
+- Add wxInfoBar::ShowCheckBox() (Blake Madden, #25394).
 - Add wxRadioButton group support to wxGenericValidator (Bill Su, #24264).
 - Add wxRibbonBar::GetPageById() (Blake Madden, #24211).
 - Add wxStatusBar::AddFieldControl() (AliKet, #24092).

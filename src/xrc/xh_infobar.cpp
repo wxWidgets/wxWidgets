@@ -36,6 +36,9 @@ wxInfoBarXmlHandler::wxInfoBarXmlHandler()
     XRC_ADD_SHOW_EFFECT(wxSHOW_EFFECT_SLIDE_TO_BOTTOM);
     XRC_ADD_SHOW_EFFECT(wxSHOW_EFFECT_BLEND);
     XRC_ADD_SHOW_EFFECT(wxSHOW_EFFECT_EXPAND);
+
+    XRC_ADD_STYLE(wxINFOBAR_CHECKBOX);
+    AddWindowStyles();
 }
 
 wxObject *wxInfoBarXmlHandler::DoCreateResource()
@@ -44,7 +47,18 @@ wxObject *wxInfoBarXmlHandler::DoCreateResource()
     {
         XRC_MAKE_INSTANCE(control, wxInfoBar)
 
-        control->Create(m_parentAsWindow, GetID());
+        const wxString& checkboxLabel = GetText("checkboxlabel");
+        const bool hasCheckbox = !checkboxLabel.empty();
+
+        long style = GetStyle();
+        if ( hasCheckbox )
+        {
+            // If we have a checkbox, we need to add the wxINFOBAR_CHECKBOX
+            // style to allow using it.
+            style |= wxINFOBAR_CHECKBOX;
+        }
+
+        control->Create(m_parentAsWindow, GetID(), style);
 
         SetupWindow(control);
 
@@ -56,6 +70,24 @@ wxObject *wxInfoBarXmlHandler::DoCreateResource()
 
         if ( HasParam("effectduration") )
             control->SetEffectDuration(GetLong("effectduration"));
+
+        bool checked = false;
+        if ( HasParam("checked") )
+        {
+            if ( !hasCheckbox )
+            {
+                ReportError
+                (
+                    R"(The "checked" parameter can only be specified when )"
+                    R"(the "checkboxlabel" parameter is set.)"
+                );
+            }
+
+            checked = GetBool("checked");
+        }
+
+        if ( hasCheckbox )
+            control->ShowCheckBox(checkboxLabel, checked);
 
         m_insideBar = true;
         CreateChildrenPrivately(control);

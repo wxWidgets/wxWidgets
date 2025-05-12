@@ -35,6 +35,8 @@
 
 #include "wx/artprov.h"
 #include "wx/scopeguard.h"
+#include "wx/valgen.h"
+#include "wx/checkbox.h"
 
 #ifdef __WXGTK3__
     #include "wx/gtk/private/wrapgtk.h"
@@ -45,6 +47,7 @@
 
 wxBEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
     EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)
+    EVT_BUTTON(wxID_CLOSE, wxInfoBarGeneric::OnButton)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -64,11 +67,12 @@ void wxInfoBarGeneric::Init()
     m_effectDuration = 0;
 }
 
-bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
+bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
 {
     // calling Hide() before Create() ensures that we're created initially
     // hidden
     Hide();
+    SetWindowStyle(style);
     if ( !wxWindow::Create(parent, winid) )
         return false;
 
@@ -115,8 +119,14 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     if(!m_hasFgCol)
         m_text->SetForegroundColour(colFg);
 
-    m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
+    m_button = wxBitmapButton::NewCloseButton(this, wxID_CLOSE);
     m_button->SetToolTip(_("Hide this notification message."));
+
+    m_checkbox =
+        new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+            wxDefaultSize, 0, wxGenericValidator(&m_checked));
+    m_checkbox->SetForegroundColour(
+        wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
 
     // center the text inside the sizer with an icon to the left of it and a
     // button at the very right
@@ -124,10 +134,22 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     // NB: AddButton() relies on the button being the last control in the sizer
     //     and being preceded by a spacer
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(m_icon, wxSizerFlags().Centre().Border());
-    sizer->Add(m_text, wxSizerFlags().Proportion(1).Centre());
-    sizer->AddSpacer(0); // This spacer only exists for compatibility.
-    sizer->Add(m_button, wxSizerFlags().Centre().Border());
+    wxSizer * const defaultControlSizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* const firstRowSizer = new wxBoxSizer(wxHORIZONTAL);
+    firstRowSizer->Add(m_icon, wxSizerFlags{}.Centre().Border());
+    firstRowSizer->Add(m_text, wxSizerFlags{}.Proportion(1).Centre());
+    firstRowSizer->AddSpacer(0); // This spacer only exists for compatibility.
+    firstRowSizer->Add(m_button, wxSizerFlags{}.Centre().Border());
+
+    wxBoxSizer* const secondRowSizer = new wxBoxSizer(wxHORIZONTAL);
+    secondRowSizer->Add(m_checkbox, wxSizerFlags{}.CentreVertical().Border());
+
+    defaultControlSizer->Add(firstRowSizer, wxSizerFlags{ 1 }.Expand());
+    defaultControlSizer->Add(secondRowSizer);
+    defaultControlSizer->Show(m_checkbox, !m_checkbox->GetLabel().empty(), true);
+
+    sizer->Add(defaultControlSizer, wxSizerFlags{ 1 }.Expand());
+
     SetSizer(sizer);
 
     return true;
@@ -223,6 +245,8 @@ void wxInfoBarGeneric::UpdateParent()
 
 void wxInfoBarGeneric::DoHide()
 {
+    TransferDataFromWindow();
+
     HideWithEffect(GetHideEffect(), GetEffectDuration());
 
     UpdateParent();
@@ -230,6 +254,8 @@ void wxInfoBarGeneric::DoHide()
 
 void wxInfoBarGeneric::DoShow()
 {
+    TransferDataToWindow();
+
     // re-layout the parent first so that the window expands into an already
     // unoccupied by the other controls area: for this we need to change our
     // internal visibility flag to force Layout() to take us into account (an
@@ -464,6 +490,18 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
 void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
 {
     DoHide();
+}
+
+void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
+{
+    wxASSERT_MSG( HasFlag(wxINFOBAR_CHECKBOX),
+                  "wxINFOBAR_CHECKBOX style should be set if calling ShowCheckBox()!");
+    m_checked = checked;
+    if (m_checkbox != nullptr)
+    {
+        m_checkbox->SetLabel(checkBoxText);
+        GetSizer()->Show(m_checkbox, !checkBoxText.empty(), true);
+    }
 }
 
 #endif // wxUSE_INFOBAR

@@ -13,10 +13,16 @@
 class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 
 // ----------------------------------------------------------------------------
 // wxInfoBar
 // ----------------------------------------------------------------------------
+
+enum
+{
+    wxINFOBAR_CHECKBOX = 0x0010
+};
 
 class WXDLLIMPEXP_CORE wxInfoBarGeneric : public wxInfoBarBase
 {
@@ -25,13 +31,13 @@ public:
     // hidden
     wxInfoBarGeneric() { Init(); }
 
-    wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY)
+    wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0)
     {
         Init();
-        Create(parent, winid);
+        Create(parent, winid, style);
     }
 
-    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY);
+    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0);
 
 
     // implement base class methods
@@ -75,6 +81,14 @@ public:
     // get the currently used effect animation duration
     int GetEffectDuration() const { return m_effectDuration; }
 
+    // Whether the checkbox was checked at the time of the window
+    // being closed.
+    // This should be called in a client's handler for the
+    // wxID_CLOSE button being clicked.
+    bool IsCheckBoxChecked() const { return m_checked; }
+
+    // Sets whether the checkbox should be shown.
+    void ShowCheckBox(const wxString& checkBoxText, bool checked);
 
     // overridden base class methods
     // -----------------------------
@@ -100,6 +114,8 @@ private:
     // common part of all ctors
     void Init();
 
+    virtual bool UseNative() const { return false; }
+
     // handler for the close button
     void OnButton(wxCommandEvent& event);
 
@@ -120,9 +136,10 @@ private:
 
 
     // different controls making up the bar
-    wxStaticBitmap *m_icon;
-    wxStaticText *m_text;
-    wxBitmapButton *m_button;
+    wxStaticBitmap *m_icon = nullptr;
+    wxStaticText *m_text = nullptr;
+    wxBitmapButton *m_button = nullptr;
+    wxCheckBox *m_checkbox = nullptr;
 
     // the effects to use when showing/hiding and duration for them: by default
     // the effect is determined by the info bar automatically depending on its
@@ -130,6 +147,8 @@ private:
     wxShowEffect m_showEffect,
                  m_hideEffect;
     int m_effectDuration;
+
+    bool m_checked = false;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxInfoBarGeneric);
