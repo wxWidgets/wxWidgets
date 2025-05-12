@@ -76,17 +76,14 @@ public:
     // get the currently used effect animation duration
     int GetEffectDuration() const { return m_effectDuration; }
 
-    // Whether the "Do not show this again" checkbox was checked at the
-    // time of the window being closed.
+    // Whether the checkbox was checked at the time of the window
+    // being closed.
     // This should be called in a client's handler for the
     // wxID_CLOSE button being clicked.
-    bool IsDontShowAgainChecked() const { return m_dontShowAgain; }
+    bool IsCheckBoxChecked() const { return m_checked; }
 
-    // Whether the "Do not show this again" checkbox is being shown.
-    bool IsIncludingDontShowAgainCheckbox() const { return m_includeDontShowAgain; }
-
-    // Sets whether the "Do not show this again" checkbox should be shown.
-    void IncludeDontShowAgainCheckbox(bool includeCheckbox);
+    // Sets whether the checkbox should be shown.
+    void ShowCheckBox(const wxString& checkBoxText, bool checked);
 
     // overridden base class methods
     // -----------------------------
@@ -135,7 +132,7 @@ private:
     wxStaticBitmap *m_icon = nullptr;
     wxStaticText *m_text = nullptr;
     wxBitmapButton *m_button = nullptr;
-    wxCheckBox *m_dontShowAgainCheckbox = nullptr;
+    wxCheckBox *m_checkbox = nullptr;
 
     // the effects to use when showing/hiding and duration for them: by default
     // the effect is determined by the info bar automatically depending on its
@@ -144,8 +141,7 @@ private:
                  m_hideEffect;
     int m_effectDuration;
 
-    bool m_includeDontShowAgain = false;
-    bool m_dontShowAgain = false;
+    bool m_checked = false;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxInfoBarGeneric);

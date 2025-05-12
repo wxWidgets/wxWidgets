@@ -966,7 +966,7 @@ void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
                    s_count);
     }
 
-    m_infoBarSimple->IncludeDontShowAgainCheckbox(true);
+    m_infoBarSimple->ShowCheckBox(_("Do not show this again"), false);
     m_infoBarSimple->ShowMessage(msg);
     // intercept the close button being clicked
     m_infoBarSimple->Bind(wxEVT_BUTTON,
@@ -976,8 +976,7 @@ void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
             // see if the "don't show this again" checkbox
             // was checked and handle that for next time
             m_infoBarSimple->Dismiss();
-            if (m_infoBarSimple->IsIncludingDontShowAgainCheckbox() &&
-                m_infoBarSimple->IsDontShowAgainChecked())
+            if (m_infoBarSimple->IsCheckBoxChecked())
             {
                 s_dontShowAgain = true;
             };

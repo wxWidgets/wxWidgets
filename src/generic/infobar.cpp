@@ -120,10 +120,10 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     m_button = wxBitmapButton::NewCloseButton(this, wxID_CLOSE);
     m_button->SetToolTip(_("Hide this notification message."));
 
-    m_dontShowAgainCheckbox =
-        new wxCheckBox(this, wxID_ANY, _("Do not show this again."), wxDefaultPosition,
-            wxDefaultSize, 0, wxGenericValidator(&m_dontShowAgain));
-    m_dontShowAgainCheckbox->SetForegroundColour(
+    m_checkbox =
+        new wxCheckBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+            wxDefaultSize, 0, wxGenericValidator(&m_checked));
+    m_checkbox->SetForegroundColour(
         wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
 
     // center the text inside the sizer with an icon to the left of it and a
@@ -140,11 +140,11 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     firstRowSizer->Add(m_button, wxSizerFlags{}.Centre().Border());
 
     wxBoxSizer* const secondRowSizer = new wxBoxSizer(wxHORIZONTAL);
-    secondRowSizer->Add(m_dontShowAgainCheckbox, wxSizerFlags{}.CentreVertical().Border());
+    secondRowSizer->Add(m_checkbox, wxSizerFlags{}.CentreVertical().Border());
 
     defaultControlSizer->Add(firstRowSizer, wxSizerFlags{ 1 }.Expand());
     defaultControlSizer->Add(secondRowSizer);
-    defaultControlSizer->Show(m_dontShowAgainCheckbox, m_includeDontShowAgain, true);
+    defaultControlSizer->Show(m_checkbox, !m_checkbox->GetLabel().empty(), true);
 
     sizer->Add(defaultControlSizer, wxSizerFlags{ 1 }.Expand());
 
@@ -490,10 +490,11 @@ void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
     DoHide();
 }
 
-void wxInfoBarGeneric::IncludeDontShowAgainCheckbox(bool includeCheckbox)
+void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
 {
-    m_includeDontShowAgain = includeCheckbox;
-    GetSizer()->Show(m_dontShowAgainCheckbox, m_includeDontShowAgain, true);
+    m_checked = checked;
+    m_checkbox->SetLabel(checkBoxText);
+    GetSizer()->Show(m_checkbox, !checkBoxText.empty(), true);
 }
 
 #endif // wxUSE_INFOBAR
