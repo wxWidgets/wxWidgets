@@ -157,6 +157,16 @@ extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
 #define   wxMBSTRINGCAST (char *)(const char *)
 #define   wxWCSTRINGCAST (wchar_t *)(const wchar_t *)
 
+template <typename T>
+inline wxStdString wxToStdString(T x)
+{
+#if wxUSE_UNICODE_WCHAR
+    return std::to_wstring(x);
+#else
+    return std::to_string(x);
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -2093,32 +2103,32 @@ public:
   // stream-like functions
       // insert an int into string
   wxString& operator<<(int i)
-    { return (*this) << Format(wxT("%d"), i); }
+    { return append(wxToStdString(i)); }
       // insert an unsigned int into string
   wxString& operator<<(unsigned int ui)
-    { return (*this) << Format(wxT("%u"), ui); }
+    { return append(wxToStdString(ui)); }
       // insert a long into string
   wxString& operator<<(long l)
-    { return (*this) << Format(wxT("%ld"), l); }
+    { return append(wxToStdString(l)); }
       // insert an unsigned long into string
   wxString& operator<<(unsigned long ul)
-    { return (*this) << Format(wxT("%lu"), ul); }
+    { return append(wxToStdString(ul)); }
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a long long if they exist and aren't longs
   wxString& operator<<(wxLongLong_t ll)
-    {
-      return (*this) << Format(wxASCII_STR("%" wxLongLongFmtSpec "d"), ll);
-    }
+    { return append(wxToStdString(ll)); }
       // insert an unsigned long long
   wxString& operator<<(wxULongLong_t ull)
-    {
-      return (*this) << Format(wxASCII_STR("%" wxLongLongFmtSpec "u") , ull);
-    }
+    { return append(wxToStdString(ull)); }
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
       // insert a float into string
   wxString& operator<<(float f)
-    { return *this << Format(wxS("%f"), static_cast<double>(f)); }
+    { return append(wxToStdString(f)); }
       // insert a double into string
+      //
+      // This doesn't use std::to_[w]string because this would use "%f" format
+      // while this function needs to use "%g" for compatibility. Prefer using
+      // wxString::From[C]Double() instead in performance-sensitive code.
   wxString& operator<<(double d)
     { return (*this) << Format(wxT("%g"), d); }
 
