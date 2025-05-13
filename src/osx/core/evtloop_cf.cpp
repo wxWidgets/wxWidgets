@@ -325,6 +325,8 @@ int wxCFEventLoop::DoRun()
 
             OSXDoRun();
 
+            OnExit();
+
 #if wxUSE_EXCEPTIONS
             // exit the outer loop as well
             break;
