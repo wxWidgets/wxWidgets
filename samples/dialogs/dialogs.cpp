@@ -720,8 +720,9 @@ MyFrame::MyFrame(const wxString& title)
     m_canvas = new MyCanvas(this);
 
 #if wxUSE_INFOBAR
-    // an info bar can be created very simply and used without any extra effort
-    m_infoBarSimple = new wxInfoBar(this);
+    // An info bar can be created very simply and used without any extra effort.
+    // Note that we request the generic version to ensure we can call ShowCheckBox().
+    m_infoBarSimple = new wxInfoBar(this, wxID_ANY, wxINFOBAR_GENERIC);
 
     // or it can also be customized by
     m_infoBarAdvanced = new wxInfoBar(this);

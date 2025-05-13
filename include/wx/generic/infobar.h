@@ -19,6 +19,15 @@ class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 // wxInfoBar
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// wxInfoBar flags
+// ----------------------------------------------------------------------------
+
+enum
+{
+    wxINFOBAR_GENERIC = 0x0010
+};
+
 class WXDLLIMPEXP_CORE wxInfoBarGeneric : public wxInfoBarBase
 {
 public:
@@ -26,13 +35,13 @@ public:
     // hidden
     wxInfoBarGeneric() { Init(); }
 
-    wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY)
+    wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0)
     {
         Init();
-        Create(parent, winid);
+        Create(parent, winid, style);
     }
 
-    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY);
+    bool Create(wxWindow* parent, wxWindowID winid = wxID_ANY, long style = 0);
 
 
     // implement base class methods

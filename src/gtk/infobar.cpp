@@ -108,10 +108,10 @@ static void wxgtk_infobar_close(GtkInfoBar * WXUNUSED(infobar),
 // wxInfoBar implementation
 // ============================================================================
 
-bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
+bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid, long style = 0)
 {
-    if ( !UseNative() )
-        return wxInfoBarGeneric::Create(parent, winid);
+    if ( !UseNative() || (style & wxINFOBAR_GENERIC) != 0)
+        return wxInfoBarGeneric::Create(parent, winid, style);
 
     m_impl = new wxInfoBarGTKImpl;
 
@@ -177,7 +177,7 @@ wxInfoBar::~wxInfoBar()
 
 void wxInfoBar::ShowMessage(const wxString& msg, int flags)
 {
-    if ( !UseNative() )
+    if ( !UseNative() || HasFlag(wxINFOBAR_GENERIC) )
     {
         wxInfoBarGeneric::ShowMessage(msg, flags);
         return;
@@ -208,7 +208,7 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
 
 void wxInfoBar::Dismiss()
 {
-    if ( !UseNative() )
+    if ( !UseNative() || HasFlag(wxINFOBAR_GENERIC) )
     {
         wxInfoBarGeneric::Dismiss();
         return;
@@ -249,7 +249,7 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
 
 size_t wxInfoBar::GetButtonCount() const
 {
-    if ( !UseNative() )
+    if ( !UseNative() || HasFlag(wxINFOBAR_GENERIC) )
         return wxInfoBarGeneric::GetButtonCount();
 
     return m_impl->m_buttons.size();
@@ -257,7 +257,7 @@ size_t wxInfoBar::GetButtonCount() const
 
 wxWindowID wxInfoBar::GetButtonId(size_t idx) const
 {
-    if ( !UseNative() )
+    if ( !UseNative() || HasFlag(wxINFOBAR_GENERIC) )
         return wxInfoBarGeneric::GetButtonId(idx);
 
     wxCHECK_MSG( idx < m_impl->m_buttons.size(), wxID_NONE,
@@ -268,7 +268,7 @@ wxWindowID wxInfoBar::GetButtonId(size_t idx) const
 
 void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
 {
-    if ( !UseNative() )
+    if ( !UseNative() || HasFlag(wxINFOBAR_GENERIC) )
     {
         wxInfoBarGeneric::AddButton(btnid, label);
         return;
@@ -289,7 +289,7 @@ void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
 
 bool wxInfoBar::HasButtonId(wxWindowID btnid) const
 {
-    if ( !UseNative() )
+    if ( !UseNative() || HasFlag(wxINFOBAR_GENERIC) )
         return wxInfoBarGeneric::HasButtonId(btnid);
 
     // as in the generic version, look for the button starting from the end
@@ -307,7 +307,7 @@ bool wxInfoBar::HasButtonId(wxWindowID btnid) const
 
 void wxInfoBar::RemoveButton(wxWindowID btnid)
 {
-    if ( !UseNative() )
+    if ( !UseNative() || HasFlag(wxINFOBAR_GENERIC) )
     {
         wxInfoBarGeneric::RemoveButton(btnid);
         return;
@@ -338,7 +338,7 @@ void wxInfoBar::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     wxInfoBarGeneric::DoApplyWidgetStyle(style);
 
-    if ( UseNative() )
+    if ( UseNative() || HasFlag(wxINFOBAR_GENERIC) )
         GTKApplyStyle(m_impl->m_label, style);
 }
 
