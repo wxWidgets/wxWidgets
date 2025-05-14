@@ -1706,18 +1706,6 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/ctrlsub.h
 )
 
-set(MSW_DESKTOP_LOWLEVEL_SRC
-    src/msw/helpchm.cpp
-    src/msw/helpwin.cpp
-    src/msw/ole/automtn.cpp
-    src/msw/ole/uuid.cpp
-)
-
-set(MSW_DESKTOP_LOWLEVEL_HDR
-    wx/msw/helpchm.h
-    wx/msw/helpwin.h
-)
-
 set(MSW_SRC
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
@@ -1785,6 +1773,9 @@ set(MSW_SRC
     src/msw/hyperlink.cpp
     src/generic/activityindicator.cpp
     src/msw/imaglist.cpp
+    src/msw/checklst.cpp
+    src/msw/fdrepdlg.cpp
+    src/msw/fontdlg.cpp
 )
 
 set(MSW_HDR
@@ -1854,6 +1845,11 @@ set(MSW_HDR
     wx/msw/timectrl.h
     wx/generic/activityindicator.h
     wx/msw/mfc.h
+    wx/msw/checklst.h
+    wx/msw/fdrepdlg.h
+    wx/msw/fontdlg.h
+    wx/msw/ole/automtn.h
+    wx/msw/ole/uuid.h
 )
 
 set(MSW_RSC
@@ -1889,20 +1885,6 @@ set(MSW_RSC
     wx/msw/question.ico
     wx/msw/removble.ico
     wx/msw/std.ico
-)
-
-set(MSW_DESKTOP_SRC
-    src/msw/checklst.cpp
-    src/msw/fdrepdlg.cpp
-    src/msw/fontdlg.cpp
-)
-
-set(MSW_DESKTOP_HDR
-    wx/msw/checklst.h
-    wx/msw/fdrepdlg.h
-    wx/msw/fontdlg.h
-    wx/msw/ole/automtn.h
-    wx/msw/ole/uuid.h
 )
 
 set(DFB_LOWLEVEL_SRC
@@ -2410,12 +2392,6 @@ set(MEDIA_MSW_SRC
 )
 
 set(MEDIA_MSW_HDR
-)
-
-set(MEDIA_MSW_DESKTOP_SRC
-)
-
-set(MEDIA_MSW_DESKTOP_HDR
 )
 
 set(MEDIA_OSX_COCOA_SRC

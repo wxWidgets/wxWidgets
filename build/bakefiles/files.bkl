@@ -29,9 +29,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
        XWIN_LOWLEVEL                 low-level classes for X Window System
                                      ports (wxGTK, wxX11)
 
-       MSW_DESKTOP                   files used only on desktop Windows
-                                     versions
-
        xxx_NATIVE                    native files not used by wxUniv (used as
                                      complement of LOWLEVEL when most of the
                                      files are lowlevel and only few are native)
@@ -1904,6 +1901,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/datecontrols.cpp
     src/generic/activityindicator.cpp
     src/msw/imaglist.cpp
+    src/msw/checklst.cpp
+    src/msw/fdrepdlg.cpp
+    src/msw/fontdlg.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1972,6 +1972,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/calctrl.h
     wx/generic/activityindicator.h
     wx/msw/mfc.h
+    wx/msw/checklst.h
+    wx/msw/fdrepdlg.h
+    wx/msw/fontdlg.h
+    wx/msw/ole/automtn.h
+    wx/msw/ole/uuid.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -2006,20 +2011,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/question.ico
     wx/msw/removble.ico
     wx/msw/std.ico
-</set>
-
-<!-- Files used only by desktop MSW port, but *not* WindowsCE one: -->
-<set var="MSW_DESKTOP_SRC" hints="files">
-    src/msw/checklst.cpp
-    src/msw/fdrepdlg.cpp
-    src/msw/fontdlg.cpp
-</set>
-<set var="MSW_DESKTOP_HDR" hints="files">
-    wx/msw/checklst.h
-    wx/msw/fdrepdlg.h
-    wx/msw/fontdlg.h
-    wx/msw/ole/automtn.h
-    wx/msw/ole/uuid.h
 </set>
 
 
@@ -2554,11 +2545,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/mediactrl_qt.cpp
 </set>
 <set var="MEDIA_MSW_HDR" hints="files">
-</set>
-<!-- not built on WindowsCE: -->
-<set var="MEDIA_MSW_DESKTOP_SRC" hints="files">
-</set>
-<set var="MEDIA_MSW_DESKTOP_HDR" hints="files">
 </set>
 
 <set var="MEDIA_OSX_COCOA_SRC" hints="files">
@@ -3321,7 +3307,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK2_SRC)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_SRC) $(MSW_DESKTOP_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_IPHONE_SRC)</if>
         <if cond="TOOLKIT=='QT'">$(QT_SRC)</if>
@@ -3330,7 +3316,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='4'">$(GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK2_HDR)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_DESKTOP_HDR) $(MSW_RSC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_RSC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_SHARED_HDR) $(OSX_IPHONE_HDR)</if>
         <if cond="TOOLKIT=='QT'">$(QT_HDR)</if>
@@ -3361,7 +3347,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <!-- wxMedia files: -->
     <set var="MEDIA_PLATFORM_SRC" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_SRC) $(MEDIA_MSW_DESKTOP_SRC)</if>
+        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(MEDIA_OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(MEDIA_OSX_IPHONE_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(MEDIA_COCOA_SRC)</if>
@@ -3370,7 +3356,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='QT'">$(MEDIA_QT_SRC)</if>
     </set>
     <set var="MEDIA_PLATFORM_HDR" hints="files">
-        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_HDR) $(MEDIA_MSW_DESKTOP_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_HDR)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(MEDIA_OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(MEDIA_OSX_IPHONE_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(MEDIA_COCOA_HDR)</if>
