@@ -38,7 +38,8 @@
 namespace
 {
 
-// Keys of this map are lower case option names.
+// Keys of this map are option names and values are their (potentially empty)
+// values.
 std::unordered_map<wxString, wxString> gs_options;
 
 } // anonymous namespace
@@ -50,7 +51,7 @@ std::unordered_map<wxString, wxString> gs_options;
 // Option functions (arbitrary name/value mapping)
 void wxSystemOptions::SetOption(const wxString& name, const wxString& value)
 {
-    gs_options[name.Lower()] = value;
+    gs_options[name] = value;
 }
 
 void wxSystemOptions::SetOption(const wxString& name, int value)
@@ -60,9 +61,7 @@ void wxSystemOptions::SetOption(const wxString& name, int value)
 
 wxString wxSystemOptions::GetOption(const wxString& name)
 {
-    const auto& key = name.Lower();
-
-    auto it = gs_options.find(key);
+    auto it = gs_options.find(name);
 
     if ( it == gs_options.end() )
     {
@@ -86,7 +85,7 @@ wxString wxSystemOptions::GetOption(const wxString& name)
 
         // save it even if it is empty to avoid calling wxGetenv() in the
         // future if this option is requested again
-        it = gs_options.insert({key, val}).first;
+        it = gs_options.insert({name, val}).first;
     }
 
     return it->second;
