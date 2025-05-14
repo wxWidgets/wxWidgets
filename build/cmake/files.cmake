@@ -1853,6 +1853,7 @@ set(MSW_HDR
     wx/msw/datetimectrl.h
     wx/msw/timectrl.h
     wx/generic/activityindicator.h
+    wx/msw/mfc.h
 )
 
 set(MSW_RSC
