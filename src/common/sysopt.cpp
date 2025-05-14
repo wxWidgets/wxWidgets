@@ -29,6 +29,9 @@
     #include "wx/arrstr.h"
 #endif
 
+// Include header containing wxIsCatchUnhandledExceptionsDisabled() declaration.
+#include "wx/private/safecall.h"
+
 #include <unordered_map>
 
 // ----------------------------------------------------------------------------
@@ -42,6 +45,12 @@ namespace
 // values.
 std::unordered_map<wxString, wxString> gs_options;
 
+// Name of a system option that we handle specially for performance reasons.
+constexpr char CATCH_UNHANDLED_EXCEPTIONS[] = "catch-unhandled-exceptions";
+
+// Cached return value of wxIsCatchUnhandledExceptionsDisabled().
+int gs_catchUnhandledExceptionsDisabled = -1;
+
 } // anonymous namespace
 
 // ============================================================================
@@ -51,6 +60,12 @@ std::unordered_map<wxString, wxString> gs_options;
 // Option functions (arbitrary name/value mapping)
 void wxSystemOptions::SetOption(const wxString& name, const wxString& value)
 {
+    if ( name == CATCH_UNHANDLED_EXCEPTIONS )
+    {
+        // Invalidate the cached value.
+        gs_catchUnhandledExceptionsDisabled = -1;
+    }
+
     gs_options[name] = value;
 }
 
@@ -99,6 +114,17 @@ int wxSystemOptions::GetOptionInt(const wxString& name)
 bool wxSystemOptions::HasOption(const wxString& name)
 {
     return !GetOption(name).empty();
+}
+
+bool wxIsCatchUnhandledExceptionsDisabled()
+{
+    if ( gs_catchUnhandledExceptionsDisabled == -1 )
+    {
+        gs_catchUnhandledExceptionsDisabled =
+            wxSystemOptions::IsFalse(CATCH_UNHANDLED_EXCEPTIONS);
+    }
+
+    return gs_catchUnhandledExceptionsDisabled;
 }
 
 #endif // wxUSE_SYSTEM_OPTIONS
