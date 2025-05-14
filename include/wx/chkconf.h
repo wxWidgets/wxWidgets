@@ -1951,6 +1951,15 @@
 #        endif
 #   endif
 
+#   if wxUSE_LIBWEBP
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_LIBWEBP requires wxUSE_IMAGE"
+#        else
+#            undef wxUSE_LIBWEBP
+#            define wxUSE_LIBWEBP 0
+#        endif
+#   endif
+
 #   if wxUSE_GIF
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "wxUSE_GIF requires wxUSE_IMAGE"
