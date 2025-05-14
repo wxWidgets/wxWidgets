@@ -3706,13 +3706,6 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/datectrl.h \
 	wx/qt/timectrl.h
 @COND_TOOLKIT_QT@GUI_HDR = $(COND_TOOLKIT_QT_GUI_HDR)
-@COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
-@COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
-@COND_TOOLKIT_MSW@MEDIA_PLATFORM_HDR =  
-@COND_TOOLKIT_OSX_COCOA@MEDIA_PLATFORM_HDR = 
-@COND_TOOLKIT_OSX_IPHONE@MEDIA_PLATFORM_HDR = 
-@COND_TOOLKIT_QT@MEDIA_PLATFORM_HDR = 
-@COND_TOOLKIT_X11@MEDIA_PLATFORM_HDR = 
 @COND_USE_GUI_1_WXUNIV_0@GUI_CORE_HEADERS = $(GUI_HDR)
 COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/generic/accel.h \
@@ -4071,7 +4064,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	wx/mediactrl.h \
-	$(MEDIA_PLATFORM_HDR) \
 	wx/html/helpctrl.h \
 	wx/html/helpdata.h \
 	wx/html/helpdlg.h \
@@ -11363,11 +11355,9 @@ COND_USE_SOVERSOLARIS_1___mediadll___so_symlinks_uninst_cmd = rm -f \
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_GTK@	mediadll_unix_mediactrl.o \
 @COND_TOOLKIT_GTK@	mediadll_mediactrl_gstplayer.o
-COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
-	mediadll_mediactrl_am.o \
-	mediadll_mediactrl_wmp10.o \
-	mediadll_mediactrl_qt.o
-@COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2)
+@COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_MSW@	mediadll_mediactrl_am.o mediadll_mediactrl_wmp10.o \
+@COND_TOOLKIT_MSW@	mediadll_mediactrl_qt.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_2 \
 @COND_TOOLKIT_OSX_COCOA@	= mediadll_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_2 \
@@ -11393,11 +11383,9 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_GTK@	medialib_unix_mediactrl.o \
 @COND_TOOLKIT_GTK@	medialib_mediactrl_gstplayer.o
-COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
-	medialib_mediactrl_am.o \
-	medialib_mediactrl_wmp10.o \
-	medialib_mediactrl_qt.o
-@COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3)
+@COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_MSW@	medialib_mediactrl_am.o medialib_mediactrl_wmp10.o \
+@COND_TOOLKIT_MSW@	medialib_mediactrl_qt.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_3 \
 @COND_TOOLKIT_OSX_COCOA@	= medialib_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_3 \

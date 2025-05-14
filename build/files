@@ -1729,6 +1729,7 @@ MSW_SRC =
     src/msw/button.cpp
     src/msw/calctrl.cpp
     src/msw/checkbox.cpp
+    src/msw/checklst.cpp
     src/msw/choice.cpp
     src/msw/colordlg.cpp
     src/msw/combo.cpp
@@ -1742,7 +1743,9 @@ MSW_SRC =
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
+    src/msw/fdrepdlg.cpp
     src/msw/filedlg.cpp
+    src/msw/fontdlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
     src/msw/headerctrl.cpp
@@ -1794,6 +1797,7 @@ MSW_HDR =
     wx/msw/button.h
     wx/msw/calctrl.h
     wx/msw/checkbox.h
+    wx/msw/checklst.h
     wx/msw/choice.h
     wx/msw/colordlg.h
     wx/msw/combo.h
@@ -1806,7 +1810,9 @@ MSW_HDR =
     wx/msw/dialog.h
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
+    wx/msw/fdrepdlg.h
     wx/msw/filedlg.h
+    wx/msw/fontdlg.h
     wx/msw/frame.h
     wx/msw/gauge.h
     wx/msw/headerctrl.h
@@ -1825,6 +1831,8 @@ MSW_HDR =
     wx/msw/msgdlg.h
     wx/msw/msvcrt.h
     wx/msw/notebook.h
+    wx/msw/ole/automtn.h
+    wx/msw/ole/uuid.h
     wx/msw/ownerdrawnbutton.h
     wx/msw/ownerdrw.h
     wx/msw/progdlg.h
@@ -1882,18 +1890,6 @@ MSW_RSC =
     wx/msw/question.ico
     wx/msw/removble.ico
     wx/msw/std.ico
-
-# Files used only by desktop MSW port, but *not* WindowsCE one:
-MSW_DESKTOP_SRC =
-    src/msw/checklst.cpp
-    src/msw/fdrepdlg.cpp
-    src/msw/fontdlg.cpp
-MSW_DESKTOP_HDR =
-    wx/msw/checklst.h
-    wx/msw/fdrepdlg.h
-    wx/msw/fontdlg.h
-    wx/msw/ole/automtn.h
-    wx/msw/ole/uuid.h
 
 # wxDFB
 
@@ -2390,9 +2386,6 @@ MEDIA_MSW_SRC =
     src/msw/mediactrl_wmp10.cpp
     src/msw/mediactrl_qt.cpp
 MEDIA_MSW_HDR =
-# not built on WindowsCE:
-MEDIA_MSW_DESKTOP_SRC =
-MEDIA_MSW_DESKTOP_HDR =
 
 MEDIA_OSX_COCOA_SRC =
     src/osx/cocoa/mediactrl.mm
