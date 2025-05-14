@@ -60,15 +60,11 @@ void wxSystemOptions::SetOption(const wxString& name, int value)
 
 wxString wxSystemOptions::GetOption(const wxString& name)
 {
-    auto it = gs_options.find(name.Lower());
+    const auto& key = name.Lower();
 
-    wxString val;
+    auto it = gs_options.find(key);
 
-    if ( it != gs_options.end() )
-    {
-        val = it->second;
-    }
-    else // not set explicitly
+    if ( it == gs_options.end() )
     {
         // look in the environment: first for a variable named "wx_appname_name"
         // which can be set to affect the behaviour or just this application
@@ -81,14 +77,19 @@ wxString wxSystemOptions::GetOption(const wxString& name)
         if ( wxTheApp )
             appname = wxTheApp->GetAppName();
 
+        wxString val;
         if ( !appname.empty() )
             val = wxGetenv(wxT("wx_") + appname + wxT('_') + var);
 
         if ( val.empty() )
             val = wxGetenv(wxT("wx_") + var);
+
+        // save it even if it is empty to avoid calling wxGetenv() in the
+        // future if this option is requested again
+        it = gs_options.insert({key, val}).first;
     }
 
-    return val;
+    return it->second;
 }
 
 int wxSystemOptions::GetOptionInt(const wxString& name)
