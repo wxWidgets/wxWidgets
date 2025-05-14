@@ -29,12 +29,19 @@
     #include "wx/arrstr.h"
 #endif
 
+#include <unordered_map>
+
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
 
-static wxArrayString gs_optionNames,
-                     gs_optionValues;
+namespace
+{
+
+// Keys of this map are lower case option names.
+std::unordered_map<wxString, wxString> gs_options;
+
+} // anonymous namespace
 
 // ============================================================================
 // wxSystemOptions implementation
@@ -43,17 +50,7 @@ static wxArrayString gs_optionNames,
 // Option functions (arbitrary name/value mapping)
 void wxSystemOptions::SetOption(const wxString& name, const wxString& value)
 {
-    int idx = gs_optionNames.Index(name, false);
-    if (idx == wxNOT_FOUND)
-    {
-        gs_optionNames.Add(name);
-        gs_optionValues.Add(value);
-    }
-    else
-    {
-        gs_optionNames[idx] = name;
-        gs_optionValues[idx] = value;
-    }
+    gs_options[name.Lower()] = value;
 }
 
 void wxSystemOptions::SetOption(const wxString& name, int value)
@@ -63,12 +60,13 @@ void wxSystemOptions::SetOption(const wxString& name, int value)
 
 wxString wxSystemOptions::GetOption(const wxString& name)
 {
+    auto it = gs_options.find(name.Lower());
+
     wxString val;
 
-    int idx = gs_optionNames.Index(name, false);
-    if ( idx != wxNOT_FOUND )
+    if ( it != gs_options.end() )
     {
-        val = gs_optionValues[idx];
+        val = it->second;
     }
     else // not set explicitly
     {
