@@ -11,6 +11,8 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
     set(WEBP_ROOT "${wxSOURCE_DIR}/3rdparty/libwebp")
     set(WEBP_BUILD_ROOT "${CMAKE_CURRENT_BINARY_DIR}/webp-build")
 
+    # No flags to enable or disable SIMD
+    set(WEBP_CHECK_SIMD       OFF CACHE BOOL "")
     # static library
     set(WEBP_LINK_STATIC       ON)
     # disable tools
@@ -28,6 +30,7 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
 
     add_subdirectory("${WEBP_ROOT}" "${WEBP_BUILD_ROOT}" EXCLUDE_FROM_ALL)
 
+    mark_as_advanced(WEBP_CHECK_SIMD)
     mark_as_advanced(WEBP_BITTRACE)
     mark_as_advanced(WEBP_BUILD_LIBWEBPMUX)
     mark_as_advanced(WEBP_ENABLE_SIMD)
