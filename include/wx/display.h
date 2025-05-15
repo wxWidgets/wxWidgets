@@ -57,7 +57,9 @@ public:
 
     // dtor is not virtual as this is a concrete class not meant to be derived
     // from
-
+    // dtor must not be inline because the implementation of
+    // wxDisplayImpl::DecRef() is unknown at this place 
+    ~wxDisplay();
 
     // return the number of available displays, valid parameters to
     // wxDisplay ctor are from 0 up to this number
@@ -78,6 +80,9 @@ public:
 
     // return true if the object was initialized successfully
     bool IsOk() const { return m_impl != nullptr; }
+
+    // return true if the display has not been unplugged yet
+    bool IsConnected() const;
 
     // get the full display size
     wxRect GetGeometry() const;
@@ -159,7 +164,7 @@ private:
 
 
     // the real implementation
-    wxDisplayImpl *m_impl;
+    wxObjectDataPtr<wxDisplayImpl> m_impl;
 
 
     wxDECLARE_NO_COPY_CLASS(wxDisplay);

@@ -26,7 +26,7 @@ public:
 
     // Create the display if necessary using CreateDisplay(), otherwise just
     // get it from cache.
-    wxDisplayImpl* GetDisplay(unsigned n)
+    wxObjectDataPtr<wxDisplayImpl> GetDisplay(unsigned n)
     {
         // Normally, m_impls should be cleared if the number of displays in the
         // system changes because InvalidateCache() must be called. However in
@@ -60,7 +60,7 @@ public:
     }
 
     // Return the primary display object, creating it if necessary.
-    wxDisplayImpl* GetPrimaryDisplay();
+    wxObjectDataPtr<wxDisplayImpl> GetPrimaryDisplay();
 
     // get the total number of displays
     virtual unsigned GetCount() = 0;
@@ -78,7 +78,7 @@ public:
     virtual int GetFromWindow(const wxWindow *window);
 
     // Trigger recreation of wxDisplayImpl when they're needed the next time.
-    virtual void InvalidateCache() { ClearImpls(); }
+    virtual void InvalidateCache() { UpdateDisplayChanges(); }
 
 protected:
     // create a new display object
@@ -86,12 +86,22 @@ protected:
     // it can return a null pointer if the display creation failed
     virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
 
+    // check if the input display is still connected and update properties
+    // if this is the case
+    //
+    // mark display as disconnected and return false otherwise
+    virtual bool UpdateDisplayChange(wxDisplayImpl *impl) const;
+
 private:
     // Delete all the elements of m_impls vector and clear it.
     void ClearImpls();
 
+    // Trigger recreation of wxDisplayImpl or update its properties if
+    // a reference to it is still in scope.
+    void UpdateDisplayChanges();
+
     // On-demand populated vector of wxDisplayImpl objects.
-    wxVector<wxDisplayImpl*> m_impls;
+    wxVector<wxObjectDataPtr<wxDisplayImpl> > m_impls;
 
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactory);
 };
@@ -100,7 +110,7 @@ private:
 // wxDisplayImpl: base class for all wxDisplay implementations
 // ----------------------------------------------------------------------------
 
-class wxDisplayImpl
+class wxDisplayImpl : public wxObjectRefData
 {
 public:
     // virtual dtor for this base class
@@ -144,14 +154,22 @@ public:
     virtual bool ChangeMode(const wxVideoMode& mode) = 0;
 #endif // wxUSE_DISPLAY
 
+    // return true, if this display is still connected physically to system
+    virtual bool IsConnected() const { return m_isConnected; }
+
+    // indicate that this display is not connected to system anymore
+    virtual void Disconnect() { m_isConnected = false; }
+
 protected:
     // create the object providing access to the display with the given index
-    wxDisplayImpl(unsigned n) : m_index(n) { }
+    wxDisplayImpl(unsigned n) : m_index(n), m_isConnected(true) { }
 
 
     // the index of this display (0 is always the primary one)
-    const unsigned m_index;
+    unsigned m_index;
 
+    // true, if this display is still connected physically to system
+    bool m_isConnected;
 
     friend class wxDisplayFactory;
 
