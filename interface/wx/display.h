@@ -208,6 +208,26 @@ public:
     static wxSize GetStdPPI();
 
     /**
+        Returns @true if the display has not been unplugged yet.
+
+        This function can return @false if the display configuration has
+        changed since this wxDisplay object has been created and either this
+        display is known not to be connected to the system any more (support
+        for detecting this is currently only implemented in wxMSW) or the
+        display status is now unknown (which happens in all the other ports
+        detecting the display configuration changes, e.g. wxOSX).
+
+        A disconnected object is still usable, but all accessor functions
+        return invalid fallback values (e.g. 0 for the width and height) and so
+        such objects are not really useful any more. It is recommended to
+        recreate them when the display configuration changes, which can be done
+        in wxEVT_DISPLAY_CHANGED handler of any top-level window.
+
+        @since 3.3.0
+    */
+    bool IsConnected() const;
+
+    /**
         Returns @true if the display is the primary display. The primary
         display is the one whose index is 0.
     */

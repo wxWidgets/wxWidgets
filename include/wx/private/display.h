@@ -26,41 +26,10 @@ public:
 
     // Create the display if necessary using CreateDisplay(), otherwise just
     // get it from cache.
-    wxDisplayImpl* GetDisplay(unsigned n)
-    {
-        // Normally, m_impls should be cleared if the number of displays in the
-        // system changes because InvalidateCache() must be called. However in
-        // some ports (e.g. Mac right now, see #18318), cache invalidation never
-        // happens, so we can end up with m_impls size being out of sync with
-        // the actual number of monitors. Compensate for this here by checking
-        // if the index is invalid and invalidating the cache at least in this
-        // case.
-        //
-        // Note that this is still incorrect because we continue using outdated
-        // information if the first monitor is disconnected, for example. The
-        // only real solution is to ensure that InvalidateCache() is called,
-        // but for now this at least avoids crashes when a new display is
-        // connected.
-        if ( n >= m_impls.size() )
-        {
-            // This strange two-step resize is done to clear all the existing
-            // elements: they may not be valid any longer if the number of
-            // displays has changed.
-            m_impls.resize(0);
-            m_impls.resize(GetCount());
-        }
-        else if ( m_impls[n] )
-        {
-            // Just return the existing display if we have it.
-            return m_impls[n];
-        }
-
-        m_impls[n] = CreateDisplay(n);
-        return m_impls[n];
-    }
+    wxObjectDataPtr<wxDisplayImpl> GetDisplay(unsigned n);
 
     // Return the primary display object, creating it if necessary.
-    wxDisplayImpl* GetPrimaryDisplay();
+    wxObjectDataPtr<wxDisplayImpl> GetPrimaryDisplay();
 
     // get the total number of displays
     virtual unsigned GetCount() = 0;
@@ -78,7 +47,7 @@ public:
     virtual int GetFromWindow(const wxWindow *window);
 
     // Trigger recreation of wxDisplayImpl when they're needed the next time.
-    virtual void InvalidateCache() { ClearImpls(); }
+    virtual void UpdateOnDisplayChange();
 
 protected:
     // create a new display object
@@ -86,12 +55,22 @@ protected:
     // it can return a null pointer if the display creation failed
     virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
 
+    // check if the given display is still connected and update its properties
+    // if this is the case (notably its index)
+    //
+    // mark display as disconnected and return false otherwise
+    //
+    // default implementation considers all displays as being not connected any
+    // longer, port-specific implementations should override it to keep the
+    // objects corresponding to the still connected displays valid
+    virtual bool RefreshOnDisplayChange(wxDisplayImpl& impl) const;
+
 private:
     // Delete all the elements of m_impls vector and clear it.
     void ClearImpls();
 
     // On-demand populated vector of wxDisplayImpl objects.
-    wxVector<wxDisplayImpl*> m_impls;
+    wxVector<wxObjectDataPtr<wxDisplayImpl>> m_impls;
 
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactory);
 };
@@ -100,7 +79,7 @@ private:
 // wxDisplayImpl: base class for all wxDisplay implementations
 // ----------------------------------------------------------------------------
 
-class wxDisplayImpl
+class wxDisplayImpl : public wxObjectRefData
 {
 public:
     // virtual dtor for this base class
@@ -144,14 +123,22 @@ public:
     virtual bool ChangeMode(const wxVideoMode& mode) = 0;
 #endif // wxUSE_DISPLAY
 
+    // return true, if this display is still connected physically to system
+    bool IsConnected() const { return m_isConnected; }
+
+    // indicate that this display is not connected to system anymore
+    void Disconnect() { m_isConnected = false; }
+
 protected:
     // create the object providing access to the display with the given index
     wxDisplayImpl(unsigned n) : m_index(n) { }
 
 
     // the index of this display (0 is always the primary one)
-    const unsigned m_index;
+    unsigned m_index;
 
+    // true, if this display is still connected physically to system
+    bool m_isConnected = true;
 
     friend class wxDisplayFactory;
 

@@ -420,6 +420,7 @@ wxMSW:
 - Fix saving geometry of Aero-snapped windows (Randalphwa).
 - Fix security issue when running on secure desktop (Sean Budd).
 - Fix using strings with Unicode characters outside of BMP (#25128).
+- Fix wxDisplay invalidation on connected display change (Marcel Pham, #25396).
 - Fix wxOverlay and wxScrolled auto-scrolling in RTL layout (AliKet, #25413).
 - Fix wxPropertyGrid expander buttons appearance in high DPI (#24304).
 - Implement support for wxBG_STYLE_TRANSPARENT (Maarten Bent, #23412).

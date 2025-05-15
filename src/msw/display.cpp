@@ -140,6 +140,10 @@ public:
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
     virtual bool ChangeMode(const wxVideoMode& mode) override;
 
+    // Check if this display is still found in the given vector and update both
+    // its properties and the index to the new values if it is.
+    bool DoRefreshOnDisplayChange(const wxVector<wxDisplayInfo>& displays);
+
 protected:
     // convert a DEVMODE to our wxVideoMode
     static wxVideoMode ConvertToVideoMode(const DEVMODE& dm)
@@ -183,10 +187,21 @@ public:
     virtual int GetFromRect(const wxRect& rect) override;
     virtual int GetFromWindow(const wxWindow *window) override;
 
-    void InvalidateCache() override
+    void UpdateOnDisplayChange() override
     {
-        wxDisplayFactory::InvalidateCache();
+        // Update m_displays first, before calling the base class version which
+        // will call our RefreshOnDisplayChange() that uses it.
         DoRefreshMonitors();
+        wxDisplayFactory::UpdateOnDisplayChange();
+    }
+
+    virtual bool RefreshOnDisplayChange(wxDisplayImpl& impl) const override
+    {
+        // All wxDisplayImpl in a program using this factory are of type
+        // wxDisplayMSW, so the cast is safe.
+        auto& implMSW = static_cast<wxDisplayMSW&>(impl);
+
+        return implMSW.DoRefreshOnDisplayChange(m_displays);
     }
 
     // Declare the second argument as int to avoid problems with older SDKs not
@@ -487,6 +502,22 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
     return false;
 }
 
+bool
+wxDisplayMSW::DoRefreshOnDisplayChange(const wxVector<wxDisplayInfo>& displays)
+{
+    for ( size_t n = 0; n < displays.size(); ++n )
+    {
+        if ( displays[n].hmon == displays[n].hmon )
+        {
+            m_info = displays[n];
+            m_index = n;
+            return true;
+        }
+    }
+
+    Disconnect();
+    return false;
+}
 
 // ----------------------------------------------------------------------------
 // wxDisplayFactoryMSW implementation
