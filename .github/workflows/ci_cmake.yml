@@ -67,9 +67,16 @@ jobs:
             cmake_generator: Unix Makefiles
             cmake_samples: ALL
             cmake_build_toolkit: gtk3
-          - name: macOS 14 wxOSX
+          - name: macOS 14 wxOSX Xcode
             runner: macos-14
             cmake_generator: Xcode
+            cmake_build_toolkit: osx_cocoa
+          - name: macOS latest wxOSX Ninja
+            runner: macos-latest
+            cmake_generator: Ninja
+            cmake_defines: -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DwxUSE_SYS_LIBS=OFF -DCMAKE_CXX_STANDARD=20 -DwxUSE_WEBVIEW_CHROMIUM=ON -DCMAKE_OSX_DEPLOYMENT_TARGET="10.15"
+            cmake_samples: ALL
+            cmake_tests: OFF
             cmake_build_toolkit: osx_cocoa
           - name: macOS 14 wxIOS
             runner: macos-14
