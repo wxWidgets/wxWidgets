@@ -149,8 +149,7 @@ private:
         // the next position every time.
         gc->Rotate(m_frame*angle);
 
-        // Choose a contrasting background colour.
-        wxColour colBg = wxSystemSettings::SelectLightDark(*wxBLACK, *wxWHITE);
+        wxColour colDot = m_win->GetForegroundColour();
 
         const bool isEnabled = m_win->IsThisEnabled();
         for ( int n = 0; n < NUM_DOTS; n++ )
@@ -164,8 +163,8 @@ private:
             // it in 0..wxALPHA_OPAQUE range.
             const int opacity = opacityIndex*(wxALPHA_OPAQUE + 1)/NUM_DOTS - 1;
 
-            colBg.Set(colBg.Red(), colBg.Green(), colBg.Blue(), opacity);
-            gc->SetBrush(colBg);
+            colDot.Set(colDot.Red(), colDot.Green(), colDot.Blue(), opacity);
+            gc->SetBrush(colDot);
 
             gc->FillPath(path);
             gc->Rotate(angle);
