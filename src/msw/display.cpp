@@ -678,7 +678,7 @@ bool wxDisplayFactoryMSW::UpdateDisplayChange(wxDisplayImpl *impl) const
             if (implMsw->UpdateStateIfHandleMatches((unsigned) n, m_displays[n]))
                 return true;
         }
-    }    
+    }
     impl->Disconnect();
     return false;
 }

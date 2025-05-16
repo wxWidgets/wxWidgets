@@ -58,7 +58,7 @@ public:
     // dtor is not virtual as this is a concrete class not meant to be derived
     // from
     // dtor must not be inline because the implementation of
-    // wxDisplayImpl::DecRef() is unknown at this place 
+    // wxDisplayImpl::DecRef() is unknown at this place
     ~wxDisplay();
 
     // return the number of available displays, valid parameters to
