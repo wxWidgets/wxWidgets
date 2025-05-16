@@ -94,6 +94,18 @@ void wxEventLoopBase::Exit(int rc)
 
     ScheduleExit(rc);
 }
+
+void wxEventLoopBase::ScheduleExit(int rc)
+{
+    wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not running") );
+
+    m_shouldExit = true;
+
+    OnExit();
+
+    DoStop(rc);
+}
+
 void wxEventLoopBase::OnExit()
 {
     if (wxTheApp)
@@ -373,14 +385,9 @@ int wxEventLoopManual::DoRun()
     return m_exitcode;
 }
 
-void wxEventLoopManual::ScheduleExit(int rc)
+void wxEventLoopManual::DoStop(int rc)
 {
-    wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not running") );
-
     m_exitcode = rc;
-    m_shouldExit = true;
-
-    OnExit();
 
     // all we have to do to exit from the loop is to (maybe) wake it up so that
     // it can notice that Exit() had been called
