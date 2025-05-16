@@ -29,12 +29,29 @@
     #include "wx/arrstr.h"
 #endif
 
+// Include header containing wxIsCatchUnhandledExceptionsDisabled() declaration.
+#include "wx/private/safecall.h"
+
+#include <unordered_map>
+
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
 
-static wxArrayString gs_optionNames,
-                     gs_optionValues;
+namespace
+{
+
+// Keys of this map are option names and values are their (potentially empty)
+// values.
+std::unordered_map<wxString, wxString> gs_options;
+
+// Name of a system option that we handle specially for performance reasons.
+constexpr char CATCH_UNHANDLED_EXCEPTIONS[] = "catch-unhandled-exceptions";
+
+// Cached return value of wxIsCatchUnhandledExceptionsDisabled().
+int gs_catchUnhandledExceptionsDisabled = -1;
+
+} // anonymous namespace
 
 // ============================================================================
 // wxSystemOptions implementation
@@ -43,17 +60,13 @@ static wxArrayString gs_optionNames,
 // Option functions (arbitrary name/value mapping)
 void wxSystemOptions::SetOption(const wxString& name, const wxString& value)
 {
-    int idx = gs_optionNames.Index(name, false);
-    if (idx == wxNOT_FOUND)
+    if ( name == CATCH_UNHANDLED_EXCEPTIONS )
     {
-        gs_optionNames.Add(name);
-        gs_optionValues.Add(value);
+        // Invalidate the cached value.
+        gs_catchUnhandledExceptionsDisabled = -1;
     }
-    else
-    {
-        gs_optionNames[idx] = name;
-        gs_optionValues[idx] = value;
-    }
+
+    gs_options[name] = value;
 }
 
 void wxSystemOptions::SetOption(const wxString& name, int value)
@@ -63,14 +76,9 @@ void wxSystemOptions::SetOption(const wxString& name, int value)
 
 wxString wxSystemOptions::GetOption(const wxString& name)
 {
-    wxString val;
+    auto it = gs_options.find(name);
 
-    int idx = gs_optionNames.Index(name, false);
-    if ( idx != wxNOT_FOUND )
-    {
-        val = gs_optionValues[idx];
-    }
-    else // not set explicitly
+    if ( it == gs_options.end() )
     {
         // look in the environment: first for a variable named "wx_appname_name"
         // which can be set to affect the behaviour or just this application
@@ -83,14 +91,19 @@ wxString wxSystemOptions::GetOption(const wxString& name)
         if ( wxTheApp )
             appname = wxTheApp->GetAppName();
 
+        wxString val;
         if ( !appname.empty() )
             val = wxGetenv(wxT("wx_") + appname + wxT('_') + var);
 
         if ( val.empty() )
             val = wxGetenv(wxT("wx_") + var);
+
+        // save it even if it is empty to avoid calling wxGetenv() in the
+        // future if this option is requested again
+        it = gs_options.insert({name, val}).first;
     }
 
-    return val;
+    return it->second;
 }
 
 int wxSystemOptions::GetOptionInt(const wxString& name)
@@ -101,6 +114,17 @@ int wxSystemOptions::GetOptionInt(const wxString& name)
 bool wxSystemOptions::HasOption(const wxString& name)
 {
     return !GetOption(name).empty();
+}
+
+bool wxIsCatchUnhandledExceptionsDisabled()
+{
+    if ( gs_catchUnhandledExceptionsDisabled == -1 )
+    {
+        gs_catchUnhandledExceptionsDisabled =
+            wxSystemOptions::IsFalse(CATCH_UNHANDLED_EXCEPTIONS);
+    }
+
+    return gs_catchUnhandledExceptionsDisabled;
 }
 
 #endif // wxUSE_SYSTEM_OPTIONS
