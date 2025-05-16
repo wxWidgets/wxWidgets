@@ -22,10 +22,6 @@ public:
     wxCFEventLoop();
     virtual ~wxCFEventLoop();
 
-    // sets the "should exit" flag and wakes up the loop so that it terminates
-    // soon
-    virtual void ScheduleExit(int rc = 0) override;
-
     // return true if any events are available
     virtual bool Pending() const override;
 
@@ -53,6 +49,9 @@ protected:
     // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
     // terminating when Exit() is called
     virtual int DoRun() override;
+
+    // actually stops the currently running loop
+    virtual void DoStop(int rc) override;
 
     // may be overridden to perform some action at the start of each new event
     // loop iteration

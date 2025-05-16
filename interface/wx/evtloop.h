@@ -127,7 +127,7 @@ public:
 
         @since 2.9.5
      */
-    virtual void ScheduleExit(int rc = 0) = 0;
+    void ScheduleExit(int rc = 0);
 
     /**
         Return true if any events are available.

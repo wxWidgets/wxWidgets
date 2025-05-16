@@ -18,7 +18,7 @@ public:
     ~wxQtEventLoopBase();
 
     virtual int DoRun() override;
-    virtual void ScheduleExit(int rc = 0) override;
+    virtual void DoStop(int rc) override;
     virtual bool Pending() const override;
     virtual bool Dispatch() override;
     virtual int DispatchTimeout(unsigned long timeout) override;

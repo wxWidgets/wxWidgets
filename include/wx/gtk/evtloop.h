@@ -24,7 +24,6 @@ public:
     wxGUIEventLoop();
     virtual ~wxGUIEventLoop();
 
-    virtual void ScheduleExit(int rc = 0) override;
     virtual bool Pending() const override;
     virtual bool Dispatch() override;
     virtual int DispatchTimeout(unsigned long timeout) override;
@@ -41,6 +40,7 @@ public:
 
 protected:
     virtual int DoRun() override;
+    virtual void DoStop(int rc) override;
     virtual void DoYieldFor(long eventsToProcess) override;
 
 private:
