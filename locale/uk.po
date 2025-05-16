@@ -1,22 +1,22 @@
 # translation of wxstd.pot to Ukrainian
 # This file is distributed under the same license as the wxWidgets package.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2007-2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007-2022, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2022-06-23 21:03+0300\n"
+"PO-Revision-Date: 2025-05-16 19:34+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 23.04.3\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
@@ -718,7 +718,6 @@ msgid "SPECIAL"
 msgstr "SPECIAL"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
@@ -1086,35 +1085,33 @@ msgstr "&Зберегти"
 
 #: ../src/common/docview.cpp:522 ../src/common/docview.cpp:560
 msgid "&Discard changes"
-msgstr ""
+msgstr "&Відкинути зміни"
 
 #: ../src/common/docview.cpp:523
-#, fuzzy
 msgid "Do&n't close"
-msgstr "Не зберігати"
+msgstr "Не з&акривати"
 
 #: ../src/common/docview.cpp:553
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "Записати зміни до %s?"
+msgstr "Зберегти зміни до %s до закриття файла?"
 
 #: ../src/common/docview.cpp:559
-#, fuzzy
 msgid "The document must be closed."
-msgstr "Текст не може бути записаний."
+msgstr "Документ доведеться закрити."
 
 #: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "Не вдалося зберегти %s, хочете повторити спробу?"
 
 #: ../src/common/docview.cpp:577
 msgid "Retry"
-msgstr ""
+msgstr "Повторити спробу"
 
 #: ../src/common/docview.cpp:577
 msgid "Discard changes"
-msgstr ""
+msgstr "Відкинути зміни"
 
 #: ../src/common/docview.cpp:679
 #, c-format
@@ -1319,28 +1316,25 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" і додатково, наявний файл налаштувань було перейменовано на «%s» — його не"
+" може бути перейменовано знову; будь ласка, перемістіть його до попереднього"
+" місця — «%s»"
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "Та містить такі файли:\n"
+msgstr " через таку помилку:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Не вдалося прочитати текстовий файл «%s»."
+msgstr "не вдалося перейменувати наявний файл"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Не вдалося отримати робочий каталог"
+msgstr "не вдалося створити каталог нового файла"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr ""
-"Не вдалося встановити для перегляду сторінок інтернету сучасний рівень "
-"емуляції"
+msgstr "не вдалося перемістити файл до нового каталогу"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1396,9 +1390,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "Назва поля в файлі налаштування не може починатися з «%c»."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Не вдалося створити об'єкт налаштовування шрифтів."
+msgstr "Не вдалося створити каталог файла налаштувань."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -2214,7 +2207,7 @@ msgstr "Заголовок DIB: Кодування не відповідає г�
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "Заголовок BMP: некоректна кількість кольорів (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2450,43 +2443,40 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: Помилка запису зображення."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: Помилка запису зображення."
+msgstr "TIFF: Помилка витирання даних."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: некоректні дані (не вдалося отримати список можливостей)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: не вдалося отримати об'єм пам'яті для зображення."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: не вдалося декодувати дані зображення RGBA."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: не вдалося декодувати дані зображення RGB."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: не вдалося розмістити у пам'яті буфер потоку даних."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "Не вдалося встановити дані clipboard."
+msgstr "WebP: не вдалося обробити дані контейнера."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "Помилка під час читання параметрів налаштування."
+msgstr "WebP: помилка під час спроби декодування анімації."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: помилка при отриманні наступного кадру анімації."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -2548,7 +2538,8 @@ msgstr "Не вдалося отримати область пам'яті для
 #: ../src/common/lzmastream.cpp:125
 #, c-format
 msgid "Failed to initialize LZMA decompression: unexpected error %u."
-msgstr "Не вдалося ініціалізувати розпаковування LZMA: неочікувана помилка %u."
+msgstr ""
+"Не вдалося ініціалізувати розпаковування LZMA: неочікувана помилка %u."
 
 #: ../src/common/lzmastream.cpp:179
 msgid "input is not in XZ format"
@@ -3969,15 +3960,17 @@ msgid "Error: %s (%d)"
 msgstr "Помилка: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "Недостатньо вільного місця для отримання даних."
+msgstr ""
+"Недостатньо вільного місця для отримання даних: потрібно %llu, але маємо"
+" лише %llu."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Помилка створення назви тимчасового файла"
+msgstr "Не вдалося створити тимчасовий файл у %s"
 
 #: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
@@ -3993,33 +3986,35 @@ msgid "Error running JavaScript: %s"
 msgstr "Помилка під час спроби запустити JavaScript: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Не вдалося створити теку «%s»"
+msgstr "Не вдалося встановити проксі-сервер «%s»: %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromium не можна скористатися, оскільки libcef.so не було завантажено"
+" досить рано; будь ласка, повторно скомпонуйте програму з бібліотеками або"
+" скористайтеся LD_PRELOAD для завантаження бібліотеки на раніших кроках"
+" запуску."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "Не вдалося встановити вирівнювання."
+msgstr "Не вдалося ініціалізувати Chromium"
 
 #: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
-msgstr ""
+msgstr "Показати інструменти розробника"
 
 #: ../src/common/webview_chromium.cpp:1617
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Закрити все"
+msgstr "Закрити інструменти розробника"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "Інспектор"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4428,11 +4423,12 @@ msgstr "Праворуч"
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
 msgstr ""
+"«%s» не є очікуваним форматом дати, будь ласка, введіть її як, наприклад» «"
+"%s»."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "Некоректний пункт перегляду даних"
+msgstr "Некоректна дата"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4851,36 +4847,37 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Помилка копіювання таблиці до буфера обміну даними. Або позначені комірки не"
+" є неперервним блоком, або не позначено жодної комірки."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Кут"
+msgstr "Кут таблиці"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Стовпчик %u"
+msgstr "Заголовок стовпчика %s"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "Заголовок рядка %s"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Стовпчик %u"
+msgstr "Стовпчик %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "Рядок %i"
+msgstr "Рядок %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Рядок %s, стовпчик %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -5274,40 +5271,39 @@ msgid "MDI child"
 msgstr "Нащадок MDI"
 
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr "Не вдалося з’єднатися інструментом керування сеансів: %s"
+msgstr "Не вдалося встановити з'єднання D-Bus із засобом керування входом: %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "Приховати програму"
+msgstr "Програма wxWidgets"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "Програма потребує продовження виконання"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "Очистити до присипляння"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Не вдалося ініціалізувати комутоване з’єднання: %s"
+msgstr "Не вдалося заборонити присипляння: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "Неочікувана відповідь на запит D-Bus «Inhibit»."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Нетиповий розмір"
 
 #: ../src/gtk/print.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Помилка під час друку: "
+msgstr "Помилка під час друку: %s"
 
 #: ../src/gtk/print.cpp:816
 msgid "Page Setup"
@@ -5323,10 +5319,13 @@ msgstr ""
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"Підтримки встановлення проксі-сервера не передбачено у WebKit, потрібна"
+" принаймні версія 2.16."
 
 #: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
+"Цю програму було зібрано без підтримки встановлення проксі-сервера у WebKit."
 
 #: ../src/gtk/window.cpp:6289
 msgid ""
@@ -5726,9 +5725,9 @@ msgstr ": файл не існує!"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " Перегляд"
+msgstr "Попередній перегляд %s"
 
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
@@ -5898,7 +5897,8 @@ msgstr "внутрішня помилка у DDEML."
 
 #: ../src/msw/dde.cpp:1183
 msgid "a request to end an advise transaction has timed out."
-msgstr "строк виконання запиту щодо завершення дії з надання поради вичерпано."
+msgstr ""
+"строк виконання запиту щодо завершення дії з надання поради вичерпано."
 
 #: ../src/msw/dde.cpp:1186
 msgid ""
@@ -5971,7 +5971,8 @@ msgstr "Оберіть інтернет провайдера"
 
 #: ../src/msw/dialup.cpp:733
 msgid "Please choose which ISP do you want to connect to"
-msgstr "Будь ласка, виберіть надавача послуг інтернету, з яким слід з’єднатися"
+msgstr ""
+"Будь ласка, виберіть надавача послуг інтернету, з яким слід з’єднатися"
 
 #: ../src/msw/dialup.cpp:766
 msgid "Failed to connect: missing username/password."
@@ -6037,11 +6038,11 @@ msgstr ""
 
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
-msgstr ""
+msgstr "Доступ до файлової системи заборонено засобами захисту стільниці."
 
 #: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "Попередження безпеки"
 
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
@@ -6381,7 +6382,8 @@ msgstr "Не вдалося підрахувати підключі ключа �
 #, c-format
 msgid ""
 "Exporting registry key: file \"%s\" already exists and won't be overwritten."
-msgstr "Експорт ключа реєстру: файл «%s» вже існує, його не буде перезаписано."
+msgstr ""
+"Експорт ключа реєстру: файл «%s» вже існує, його не буде перезаписано."
 
 #: ../src/msw/registry.cpp:1411
 #, c-format
@@ -6516,6 +6518,7 @@ msgstr "Не вдалося завантажити піктограму з «%s�
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr ""
+"Цю програму було зібрано без підтримки встановлення проксі-сервера у Edge."
 
 #: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
@@ -6551,31 +6554,26 @@ msgid "File type:"
 msgstr "Тип файлів:"
 
 #: ../src/osx/cocoa/menu.mm:242
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Вікно"
 
 #: ../src/osx/cocoa/menu.mm:259
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Довідка"
 
 #: ../src/osx/cocoa/menu.mm:298
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Мінімізувати"
 
 #: ../src/osx/cocoa/menu.mm:303
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
 msgstr "Масштаб"
 
 #: ../src/osx/cocoa/menu.mm:309
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "Пересунути все на передній план"
@@ -7117,7 +7115,7 @@ msgstr "Виберіть файл"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&Мозаїка"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -9343,9 +9341,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "Помилка розбору XML: «%s» у рядку %d"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "Сторінка %d"
+msgstr "Сторінка %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
