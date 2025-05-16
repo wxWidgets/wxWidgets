@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 16:44+0100\n"
+"POT-Creation-Date: 2025-05-14 20:23+0200\n"
 "PO-Revision-Date: 2022-04-10 12:52+0200\n"
 "Last-Translator: Gérard DURAND <gerard-florence.durand@orange.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "plural-forms: nplurals=2; plural=n > 1\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: ../include/wx/defs.h:2596
+#: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
 msgstr "Tous les fichiers (*.*)|*.*"
 
-#: ../include/wx/defs.h:2599
+#: ../include/wx/defs.h:2585
 msgid "All files (*)|*"
 msgstr "Tous les fichiers (*)|*"
 
@@ -38,13 +38,13 @@ msgstr "Temps restant :"
 
 #. TRANSLATORS: HTML printout default title.
 #: ../include/wx/html/htmprint.h:121 ../include/wx/prntbase.h:273
-#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2166
+#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2161
 msgid "Printout"
 msgstr "Impression"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:289
+#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:291
 msgid "Printing"
 msgstr "Impression"
 
@@ -200,17 +200,19 @@ msgid "Close All"
 msgstr "Fermer tout"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
+#: ../src/qt/mdi.cpp:258
 msgid "&Next"
 msgstr "&Suivant"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
+#: ../src/qt/mdi.cpp:259
 msgid "&Previous"
 msgstr "&Précédent"
 
 #: ../src/aui/tabmdi.cpp:332 ../src/aui/tabmdi.cpp:348
 #: ../src/aui/tabmdi.cpp:350 ../src/generic/mdig.cpp:291
 #: ../src/generic/mdig.cpp:307 ../src/generic/mdig.cpp:311
-#: ../src/msw/mdi.cpp:337
+#: ../src/msw/mdi.cpp:337 ../src/qt/mdi.cpp:462
 msgid "&Window"
 msgstr "&Fenêtre"
 
@@ -674,71 +676,55 @@ msgctxt "keyboard key"
 msgid "Command"
 msgstr "Commande"
 
-#: ../src/common/accelcmn.cpp:186
+#: ../src/common/accelcmn.cpp:186 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:188
+#: ../src/common/accelcmn.cpp:188 ../src/common/accelcmn.cpp:363
 msgctxt "keyboard key"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../src/common/accelcmn.cpp:190
+#: ../src/common/accelcmn.cpp:190 ../src/common/accelcmn.cpp:361
 msgctxt "keyboard key"
 msgid "Shift"
 msgstr "Majuscule"
 
-#: ../src/common/accelcmn.cpp:194
+#: ../src/common/accelcmn.cpp:196
 msgctxt "keyboard key"
 msgid "num "
 msgstr "num "
 
-#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
+#: ../src/common/accelcmn.cpp:260 ../src/common/accelcmn.cpp:382
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
 
-#: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
+#: ../src/common/accelcmn.cpp:277 ../src/common/accelcmn.cpp:385
 msgctxt "keyboard key"
 msgid "KP_F"
 msgstr "KP_F"
 
-#: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
+#: ../src/common/accelcmn.cpp:280 ../src/common/accelcmn.cpp:388
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "KP_"
 
-#: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
+#: ../src/common/accelcmn.cpp:283 ../src/common/accelcmn.cpp:391
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "SPECIAL"
 
-#: ../src/common/accelcmn.cpp:343
-msgctxt "keyboard key"
-msgid "Alt+"
-msgstr "Alt+"
+#: ../src/common/accelcmn.cpp:373
+msgid "Ctrl"
+msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:345
-msgctxt "keyboard key"
-msgid "Ctrl+"
-msgstr "Ctrl+"
-
-#: ../src/common/accelcmn.cpp:347
-msgctxt "keyboard key"
-msgid "Shift+"
-msgstr "Majuscule+"
-
-#: ../src/common/accelcmn.cpp:350
-msgctxt "keyboard key"
-msgid "RawCtrl+"
-msgstr "RawCtrl+"
-
-#: ../src/common/appbase.cpp:759
+#: ../src/common/appbase.cpp:786
 msgid "show this help message"
 msgstr "montrer ce message d'aide"
 
-#: ../src/common/appbase.cpp:769
+#: ../src/common/appbase.cpp:796
 msgid "generate verbose log messages"
 msgstr "créer des messages de journalisation verbeux"
 
@@ -856,7 +842,7 @@ msgid "Can't &Undo "
 msgstr "Impossible d'&annuler "
 
 #: ../src/common/cmdproc.cpp:259 ../src/common/stockitem.cpp:208
-#: ../src/msw/textctrl.cpp:2862 ../src/osx/textctrl_osx.cpp:649
+#: ../src/msw/textctrl.cpp:2880 ../src/osx/textctrl_osx.cpp:649
 #: ../src/richtext/richtextctrl.cpp:327
 msgid "&Undo"
 msgstr "&Annuler"
@@ -866,7 +852,7 @@ msgid "&Redo "
 msgstr "&Refaire "
 
 #: ../src/common/cmdproc.cpp:281 ../src/common/cmdproc.cpp:288
-#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2863
+#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2881
 #: ../src/osx/textctrl_osx.cpp:650 ../src/richtext/richtextctrl.cpp:328
 msgid "&Redo"
 msgstr "&Refaire"
@@ -899,17 +885,17 @@ msgid "'%s' has extra '..', ignored."
 msgstr "« %s » a trop de « .. » : ils sont ignorés."
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2163 ../src/generic/datavgen.cpp:1424
+#: ../src/common/datavcmn.cpp:2166 ../src/generic/datavgen.cpp:1430
 msgid "checked"
 msgstr "coché"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2167 ../src/generic/datavgen.cpp:1426
+#: ../src/common/datavcmn.cpp:2170 ../src/generic/datavgen.cpp:1432
 msgid "unchecked"
 msgstr "décoché"
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2171
+#: ../src/common/datavcmn.cpp:2174
 msgid "undetermined"
 msgstr "indéterminé"
 
@@ -1077,80 +1063,80 @@ msgstr "Échec de l'exécution de curl, veuillez l'installer dans le PATH."
 msgid "Failed to upload the debug report (error code %d)."
 msgstr "Échec de l'envoi du rapport de bogue (code d'erreur %d)."
 
-#: ../src/common/docview.cpp:367
+#: ../src/common/docview.cpp:366
 msgid "Save As"
 msgstr "Enregistrer Sous"
 
-#: ../src/common/docview.cpp:458
+#: ../src/common/docview.cpp:457
 msgid "Discard changes and reload the last saved version?"
 msgstr ""
 "Ignorer les modifications et recharger la dernière version enregistrée ?"
 
-#: ../src/common/docview.cpp:489
+#: ../src/common/docview.cpp:488
 msgid "unnamed"
 msgstr "sans nom"
 
-#: ../src/common/docview.cpp:514
+#: ../src/common/docview.cpp:513
 #, c-format
 msgid "Do you want to save changes to %s?"
 msgstr "Faut-il enregistrer les modifications vers %s ?"
 
-#: ../src/common/docview.cpp:522 ../src/common/docview.cpp:561
+#: ../src/common/docview.cpp:521 ../src/common/docview.cpp:560
 #: ../src/common/stockitem.cpp:195
 msgid "&Save"
 msgstr "&Enregistrer"
 
-#: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
+#: ../src/common/docview.cpp:522 ../src/common/docview.cpp:560
 msgid "&Discard changes"
 msgstr "&Ne pas enregistrer"
 
-#: ../src/common/docview.cpp:524
+#: ../src/common/docview.cpp:523
 msgid "Do&n't close"
 msgstr "Ne p&as fermer"
 
-#: ../src/common/docview.cpp:554
+#: ../src/common/docview.cpp:553
 #, c-format
 msgid "Do you want to save changes to %s before closing it?"
 msgstr "Voulez-vous enregistrer les modifications vers %s ?"
 
-#: ../src/common/docview.cpp:560
+#: ../src/common/docview.cpp:559
 msgid "The document must be closed."
 msgstr "Le document doit être fermé."
 
-#: ../src/common/docview.cpp:572
+#: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
 msgstr "L'enregistrement de %s a échoué, voulez-vous réessayer ?"
 
-#: ../src/common/docview.cpp:578
+#: ../src/common/docview.cpp:577
 msgid "Retry"
 msgstr "Réessayer"
 
-#: ../src/common/docview.cpp:578
+#: ../src/common/docview.cpp:577
 msgid "Discard changes"
 msgstr "Ne pas enregistrer"
 
-#: ../src/common/docview.cpp:680
+#: ../src/common/docview.cpp:679
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "Le fichier « %s » n'a pas pu être ouvert en écriture."
 
-#: ../src/common/docview.cpp:686
+#: ../src/common/docview.cpp:685
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "Échec de l'enregistrement du document dans le fichier « %s »."
 
-#: ../src/common/docview.cpp:703
+#: ../src/common/docview.cpp:702
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "Le fichier « %s » n'a pas pu être ouvert en lecture."
 
-#: ../src/common/docview.cpp:715
+#: ../src/common/docview.cpp:714
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "Échec de la lecture du document depuis le fichier « %s »."
 
-#: ../src/common/docview.cpp:1240
+#: ../src/common/docview.cpp:1236
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -1159,57 +1145,57 @@ msgstr ""
 "Le fichier « %s » n'existe pas et n'a pas pu être ouvert.\n"
 "Il a été retiré de la liste des fichiers récemment utilisés."
 
-#: ../src/common/docview.cpp:1300
+#: ../src/common/docview.cpp:1296
 msgid "Print preview creation failed."
 msgstr "Échec de la création de l'aperçu avant impression."
 
-#: ../src/common/docview.cpp:1306
+#: ../src/common/docview.cpp:1302
 msgid "Print Preview"
 msgstr "Aperçu avant impression"
 
-#: ../src/common/docview.cpp:1521
+#: ../src/common/docview.cpp:1517
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Le format du fichier « %s » n'a pas pu être déterminé."
 
-#: ../src/common/docview.cpp:1648
+#: ../src/common/docview.cpp:1643
 #, c-format
 msgid "unnamed%d"
 msgstr "sans nom %d"
 
-#: ../src/common/docview.cpp:1665
+#: ../src/common/docview.cpp:1660
 msgid " - "
 msgstr " - "
 
-#: ../src/common/docview.cpp:1796 ../src/common/docview.cpp:1849
+#: ../src/common/docview.cpp:1791 ../src/common/docview.cpp:1844
 msgid "Open File"
 msgstr "Ouvrir un Fichier"
 
-#: ../src/common/docview.cpp:1812
+#: ../src/common/docview.cpp:1807
 msgid "File error"
 msgstr "Erreur fichier"
 
-#: ../src/common/docview.cpp:1814
+#: ../src/common/docview.cpp:1809
 msgid "Sorry, could not open this file."
 msgstr "Impossible d'ouvrir ce fichier."
 
-#: ../src/common/docview.cpp:1848
+#: ../src/common/docview.cpp:1843
 msgid "Sorry, the format for this file is unknown."
 msgstr "Format de fichier inconnu."
 
-#: ../src/common/docview.cpp:1929
+#: ../src/common/docview.cpp:1924
 msgid "Select a document template"
 msgstr "Sélectionner un modèle de document"
 
-#: ../src/common/docview.cpp:1930
+#: ../src/common/docview.cpp:1925
 msgid "Templates"
 msgstr "Modèles"
 
-#: ../src/common/docview.cpp:2003
+#: ../src/common/docview.cpp:1998
 msgid "Select a document view"
 msgstr "Sélectionner une vue du document"
 
-#: ../src/common/docview.cpp:2004
+#: ../src/common/docview.cpp:1999
 msgid "Views"
 msgstr "Vues"
 
@@ -1341,26 +1327,25 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" et de plus, le fichier de configuration existant a été renommé en « %s » "
+"et son nom n'a pas pu être rétablie, veuillez le renommer vers son chemin "
+"d'origine « %s »"
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "Et inclut les fichiers suivants :\n"
+msgstr " à cause de l'erreur suivante:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Échec de la lecture du fichier texte \"%s\"."
+msgstr "échec de la tentative de renommer le fichier existant"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Échec de l'obtention du répertoire courant"
+msgstr "échec de la création du répertoire du nouveau fichier"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "Impossible de définir la vue Web avec un niveau d’émulation moderne"
+msgstr "échec du déplacement du fichier vers le nouvel emplacement"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1422,9 +1407,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "Le nom d'entrée de configuration ne peut pas commencer par « %c »."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Échec de création d'un objet de configuration de police."
+msgstr "Échec de la création du répertoire pour le fichier de configuration."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -2215,134 +2199,134 @@ msgstr "BMP : impossible d'écrire la palette de couleurs RGB."
 msgid "BMP: Couldn't write data."
 msgstr "BMP : impossible d'écrire les données."
 
-#: ../src/common/imagbmp.cpp:556 ../src/common/imagbmp.cpp:572
+#: ../src/common/imagbmp.cpp:561 ../src/common/imagbmp.cpp:642
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP : impossible d'allouer de la mémoire."
 
-#: ../src/common/imagbmp.cpp:1046
+#: ../src/common/imagbmp.cpp:1041
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr ""
 "En-tête DIB : largeur de l'image supérieure à 32 767 pixels pour le fichier."
 
-#: ../src/common/imagbmp.cpp:1054
+#: ../src/common/imagbmp.cpp:1049
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr ""
 "En-tête DIB : hauteur de l'image supérieure à 32 767 pixels pour le fichier."
 
-#: ../src/common/imagbmp.cpp:1086
+#: ../src/common/imagbmp.cpp:1081
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "En-tête DIB : nombre de bits par pixel inconnu dans le fichier."
 
-#: ../src/common/imagbmp.cpp:1160
+#: ../src/common/imagbmp.cpp:1156
 msgid "DIB Header: Unknown encoding in file."
 msgstr "En-tête DIB : codage inconnu dans le fichier."
 
-#: ../src/common/imagbmp.cpp:1169
+#: ../src/common/imagbmp.cpp:1165
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "En-tête DIB : le codage ne correspond pas au nombre de bits par pixel."
 
-#: ../src/common/imagbmp.cpp:1185
+#: ../src/common/imagbmp.cpp:1180
 #, c-format
-msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-msgstr ""
+msgid "BMP Header: Invalid number of colors (%d)."
+msgstr "En-tête BMP : nombre de couleurs non valable (%d)."
 
-#: ../src/common/imagbmp.cpp:1279
+#: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
 msgstr "Erreur lors de la lecture d'une image DIB."
 
-#: ../src/common/imagbmp.cpp:1300
+#: ../src/common/imagbmp.cpp:1294
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO : erreur à la lecture du masque DIB."
 
-#: ../src/common/imagbmp.cpp:1359
+#: ../src/common/imagbmp.cpp:1353
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO : image trop grande pour une icône."
 
-#: ../src/common/imagbmp.cpp:1367
+#: ../src/common/imagbmp.cpp:1361
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO : image trop large pour une icône."
 
-#: ../src/common/imagbmp.cpp:1394 ../src/common/imagbmp.cpp:1494
-#: ../src/common/imagbmp.cpp:1509 ../src/common/imagbmp.cpp:1520
-#: ../src/common/imagbmp.cpp:1534 ../src/common/imagbmp.cpp:1582
-#: ../src/common/imagbmp.cpp:1597 ../src/common/imagbmp.cpp:1611
-#: ../src/common/imagbmp.cpp:1622
+#: ../src/common/imagbmp.cpp:1388 ../src/common/imagbmp.cpp:1488
+#: ../src/common/imagbmp.cpp:1503 ../src/common/imagbmp.cpp:1514
+#: ../src/common/imagbmp.cpp:1528 ../src/common/imagbmp.cpp:1576
+#: ../src/common/imagbmp.cpp:1591 ../src/common/imagbmp.cpp:1605
+#: ../src/common/imagbmp.cpp:1616
 msgid "ICO: Error writing the image file!"
 msgstr "ICO : erreur à l'écriture du fichier image !"
 
-#: ../src/common/imagbmp.cpp:1707
+#: ../src/common/imagbmp.cpp:1701
 msgid "ICO: Invalid icon index."
 msgstr "ICO : index de l'icône non valable."
 
-#: ../src/common/image.cpp:2358
+#: ../src/common/image.cpp:2410
 msgid "Image and mask have different sizes."
 msgstr "L'image et le masque sont de tailles différentes."
 
-#: ../src/common/image.cpp:2366 ../src/common/image.cpp:2407
+#: ../src/common/image.cpp:2418 ../src/common/image.cpp:2459
 msgid "No unused colour in image being masked."
 msgstr "Aucune couleur n'est disponible dans l'image en cours de masquage."
 
-#: ../src/common/image.cpp:2589
+#: ../src/common/image.cpp:2641
 #, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
 msgstr "Échec du chargement du bitmap « %s » depuis les ressources."
 
-#: ../src/common/image.cpp:2598
+#: ../src/common/image.cpp:2650
 #, c-format
 msgid "Failed to load icon \"%s\" from resources."
 msgstr "Échec du chargement de l'icône « %s » depuis les ressources."
 
-#: ../src/common/image.cpp:2676 ../src/common/image.cpp:2695
+#: ../src/common/image.cpp:2728 ../src/common/image.cpp:2747
 #, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "Échec du chargement de l'image depuis le fichier « %s »."
 
-#: ../src/common/image.cpp:2709
+#: ../src/common/image.cpp:2761
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr ""
 "Impossible d'enregistrer l'image dans le fichier « %s » : extension inconnue."
 
-#: ../src/common/image.cpp:2817
+#: ../src/common/image.cpp:2869
 msgid "No handler found for image type."
 msgstr "Aucun gestionnaire trouvé pour le type d'image."
 
-#: ../src/common/image.cpp:2825 ../src/common/image.cpp:2948
-#: ../src/common/image.cpp:3014
+#: ../src/common/image.cpp:2877 ../src/common/image.cpp:3000
+#: ../src/common/image.cpp:3066
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Aucun gestionnaire d'image défini pour le type %d."
 
-#: ../src/common/image.cpp:2835
+#: ../src/common/image.cpp:2887
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "Le fichier image n'est pas du type %d."
 
-#: ../src/common/image.cpp:2918
+#: ../src/common/image.cpp:2970
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
 "Impossible de déterminer le format d'image pour une entrée non positionnable."
 
-#: ../src/common/image.cpp:2936
+#: ../src/common/image.cpp:2988
 msgid "Unknown image data format."
 msgstr "Format de données d'image inconnu."
 
-#: ../src/common/image.cpp:2957
+#: ../src/common/image.cpp:3009
 #, c-format
 msgid "This is not a %s."
 msgstr "Ceci n'est pas un %s."
 
-#: ../src/common/image.cpp:2980 ../src/common/image.cpp:3028
+#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Aucun gestionnaire d'image défini pour le type %s."
 
-#: ../src/common/image.cpp:2989
+#: ../src/common/image.cpp:3041
 #, c-format
 msgid "Image is not of type %s."
 msgstr "Le fichier image n'est pas du type %s."
 
-#: ../src/common/image.cpp:3457
+#: ../src/common/image.cpp:3509
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "Échec de la vérification de format du fichier image « %s »."
@@ -2480,11 +2464,42 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF : erreur à l'écriture de l'image."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF : erreur à la sauvegarde de l'image."
+msgstr "TIFF : erreur à la vidange des données."
 
-#: ../src/common/init.cpp:173
+#: ../src/common/imagwebp.cpp:56
+msgid "WebP: Invalid data (failed to get features)."
+msgstr "WebP : données non valables (échec de la récupération des caractéristiques)."
+
+#: ../src/common/imagwebp.cpp:65
+msgid "WebP: Allocating image memory failed."
+msgstr "WebP : échec d'allocation de mémoire pour l'image."
+
+#: ../src/common/imagwebp.cpp:82
+msgid "WebP: Decoding RGBA image data failed."
+msgstr "WebP : échec du décodage des données d'image RGBA."
+
+#: ../src/common/imagwebp.cpp:98
+msgid "WebP: Decoding RGB image data failed."
+msgstr "WebP : échec du décodage des données d'image RGB."
+
+#: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
+msgid "WebP: Allocating stream buffer failed."
+msgstr "WebP : échec d'allocation du tampon de flux."
+
+#: ../src/common/imagwebp.cpp:131
+msgid "WebP: Failed to parse container data."
+msgstr "WebP : échec de l'analyse des données du conteneur."
+
+#: ../src/common/imagwebp.cpp:222
+msgid "WebP: Error decoding animation."
+msgstr "WebP : erreur de décodage de l'animation."
+
+#: ../src/common/imagwebp.cpp:240
+msgid "WebP: Error getting next animation frame."
+msgstr "WebP : erreur à la récupération de la trame d'animation suivante."
+
+#: ../src/common/init.cpp:172
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
@@ -2493,7 +2508,7 @@ msgstr ""
 "L'argument %d de la ligne de commande n'a pas pu être converti en Unicode et "
 "sera ignoré."
 
-#: ../src/common/init.cpp:343
+#: ../src/common/init.cpp:344
 msgid "Initialization failed in post init, aborting."
 msgstr "L'initialisation a échoué dans post init, abandon."
 
@@ -3107,9 +3122,9 @@ msgstr "Prêt"
 msgid "Printing Error"
 msgstr "Erreur d'impression"
 
-#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1591
+#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1597
 #: ../src/generic/prntdlgg.cpp:135 ../src/generic/prntdlgg.cpp:149
-#: ../src/gtk/print.cpp:625 ../src/gtk/print.cpp:643
+#: ../src/gtk/print.cpp:628 ../src/gtk/print.cpp:646
 msgid "Print"
 msgstr "Imprimer"
 
@@ -3148,54 +3163,54 @@ msgstr "Impression de la page %d sur %d"
 msgid " (copy %d of %d)"
 msgstr " (copie %d sur %d)"
 
-#: ../src/common/prntbase.cpp:1598
+#: ../src/common/prntbase.cpp:1604
 msgid "First page"
 msgstr "Première page"
 
-#: ../src/common/prntbase.cpp:1603 ../src/html/helpwnd.cpp:659
+#: ../src/common/prntbase.cpp:1609 ../src/html/helpwnd.cpp:659
 msgid "Previous page"
 msgstr "Page précédente"
 
-#: ../src/common/prntbase.cpp:1617 ../src/html/helpwnd.cpp:660
+#: ../src/common/prntbase.cpp:1623 ../src/html/helpwnd.cpp:660
 msgid "Next page"
 msgstr "Page suivante"
 
-#: ../src/common/prntbase.cpp:1622
+#: ../src/common/prntbase.cpp:1628
 msgid "Last page"
 msgstr "Dernière page"
 
-#: ../src/common/prntbase.cpp:1630 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1636 ../src/common/stockitem.cpp:215
 msgid "Zoom Out"
 msgstr "Zoom Arrière"
 
-#: ../src/common/prntbase.cpp:1644 ../src/common/stockitem.cpp:214
+#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:214
 msgid "Zoom In"
 msgstr "Zoom Avant"
 
-#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:153
+#: ../src/common/prntbase.cpp:1656 ../src/common/stockitem.cpp:153
 #: ../src/generic/logg.cpp:553 ../src/univ/themes/win32.cpp:3752
 msgid "&Close"
 msgstr "&Fermer"
 
-#: ../src/common/prntbase.cpp:2079
+#: ../src/common/prntbase.cpp:2085
 msgid "Could not start document preview."
 msgstr "Impossible de lancer l'aperçu du document."
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2123
-#: ../src/common/prntbase.cpp:2131
+#: ../src/common/prntbase.cpp:2085 ../src/common/prntbase.cpp:2129
+#: ../src/common/prntbase.cpp:2137
 msgid "Print Preview Failure"
 msgstr "Erreur de l'aperçu avant impression"
 
-#: ../src/common/prntbase.cpp:2123 ../src/common/prntbase.cpp:2131
+#: ../src/common/prntbase.cpp:2129 ../src/common/prntbase.cpp:2137
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Mémoire insuffisante pour créer un aperçu."
 
-#: ../src/common/prntbase.cpp:2138
+#: ../src/common/prntbase.cpp:2144
 #, c-format
 msgid "Page %d of %d"
 msgstr "Page %d de %d"
 
-#: ../src/common/prntbase.cpp:2140
+#: ../src/common/prntbase.cpp:2146
 #, c-format
 msgid "Page %d"
 msgstr "Page %d"
@@ -3309,7 +3324,6 @@ msgstr "Bas"
 
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
-#: ../src/osx/cocoa/button.mm:156
 msgid "&Cancel"
 msgstr "&Annuler"
 
@@ -3345,7 +3359,7 @@ msgstr "&Convertir"
 msgid "Convert"
 msgstr "Convertir"
 
-#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2866
+#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2884
 #: ../src/osx/textctrl_osx.cpp:653 ../src/richtext/richtextctrl.cpp:331
 msgid "&Copy"
 msgstr "&Copier"
@@ -3354,7 +3368,7 @@ msgstr "&Copier"
 msgid "Copy"
 msgstr "Copier"
 
-#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2865
+#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2883
 #: ../src/osx/textctrl_osx.cpp:652 ../src/richtext/richtextctrl.cpp:330
 msgid "Cu&t"
 msgstr "Cou&per"
@@ -3363,7 +3377,7 @@ msgstr "Cou&per"
 msgid "Cut"
 msgstr "Couper"
 
-#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2868
+#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2886
 #: ../src/osx/textctrl_osx.cpp:655 ../src/richtext/richtextctrl.cpp:333
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
@@ -3562,7 +3576,7 @@ msgstr "&Ouvrir..."
 msgid "Open..."
 msgstr "Ouvrir..."
 
-#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2867
+#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2885
 #: ../src/osx/textctrl_osx.cpp:654 ../src/richtext/richtextctrl.cpp:332
 msgid "&Paste"
 msgstr "&Coller"
@@ -3637,7 +3651,7 @@ msgstr "Enregistrer &sous..."
 msgid "Save As..."
 msgstr "Enregistrer sous..."
 
-#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2870
+#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2888
 #: ../src/osx/textctrl_osx.cpp:657 ../src/richtext/richtextctrl.cpp:335
 msgid "Select &All"
 msgstr "&Tout sélectionner"
@@ -3836,43 +3850,43 @@ msgstr "Enregistrer le document courant avec un nouveau nom"
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "La conversion vers le jeu de caractères « %s » ne fonctionne pas."
 
-#: ../src/common/tarstrm.cpp:359 ../src/common/tarstrm.cpp:382
-#: ../src/common/tarstrm.cpp:413 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
 msgid "unknown"
 msgstr "inconnu"
 
-#: ../src/common/tarstrm.cpp:781
+#: ../src/common/tarstrm.cpp:774
 msgid "incomplete header block in tar"
 msgstr "le bloc d'entête de tar est incomplet"
 
-#: ../src/common/tarstrm.cpp:805
+#: ../src/common/tarstrm.cpp:798
 msgid "checksum failure reading tar header block"
 msgstr ""
 "erreur de la somme de contrôle lors de la lecture du bloc d'entête de tar"
 
-#: ../src/common/tarstrm.cpp:978
+#: ../src/common/tarstrm.cpp:971
 msgid "invalid data in extended tar header"
 msgstr "donnée incorrectes dans l'entête étendu de tar"
 
-#: ../src/common/tarstrm.cpp:988 ../src/common/tarstrm.cpp:1010
-#: ../src/common/tarstrm.cpp:1484 ../src/common/tarstrm.cpp:1506
+#: ../src/common/tarstrm.cpp:981 ../src/common/tarstrm.cpp:1003
+#: ../src/common/tarstrm.cpp:1477 ../src/common/tarstrm.cpp:1499
 msgid "tar entry not open"
 msgstr "l'entrée tar n'est pas ouverte"
 
-#: ../src/common/tarstrm.cpp:1030
+#: ../src/common/tarstrm.cpp:1023
 msgid "unexpected end of file"
 msgstr "fin de fichier inattendue"
 
-#: ../src/common/tarstrm.cpp:1304
+#: ../src/common/tarstrm.cpp:1297
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s ne rentre pas dans l'entête tar pour l'entrée « %s »"
 
-#: ../src/common/tarstrm.cpp:1366
+#: ../src/common/tarstrm.cpp:1359
 msgid "incorrect size given for tar entry"
 msgstr "la taille fournie pour l'entrée tar est incorrecte"
 
-#: ../src/common/textbuf.cpp:233
+#: ../src/common/textbuf.cpp:232
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "« %s » est probablement un tampon binaire."
@@ -3927,11 +3941,11 @@ msgstr "La ressource « %s » n'est pas un catalogue messages valable."
 msgid "Couldn't enumerate translations"
 msgstr "Impossible d'énumérer les traductions"
 
-#: ../src/common/utilscmn.cpp:1087
+#: ../src/common/utilscmn.cpp:1145
 msgid "No default application configured for HTML files."
 msgstr "Pas d'application configurée pour les fichiers HTML."
 
-#: ../src/common/utilscmn.cpp:1132
+#: ../src/common/utilscmn.cpp:1190
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "Échec de l'ouverture de l'URL « %s » avec le navigateur par défaut."
@@ -3965,17 +3979,17 @@ msgid "Error: %s (%d)"
 msgstr "Erreur : %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "Pas assez de place disque pour télécharger."
+msgstr "Pas assez d'espace disque libre pour le téléchargement : %llu requis mais seulement %llu disponible."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Échec de la création d'un nom de fichier temporaire"
+msgstr "Échec de la création d'un fichier temporaire dans %s"
 
-#: ../src/common/webrequest_curl.cpp:1075
+#: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
 msgstr "libcurl n'a pas pu être initialisé"
 
@@ -3983,45 +3997,46 @@ msgstr "libcurl n'a pas pu être initialisé"
 msgid "RunScriptAsync not supported"
 msgstr "RunScriptAsync non supporté"
 
-#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1075
+#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1073
 #, c-format
 msgid "Error running JavaScript: %s"
 msgstr "Erreur à l'exécution du JavaScript : %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Échec de la création du répertoire « %s »"
+msgstr "Échec de la définition du proxy « %s » : %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
-"Chromium can't be used because libcef.so was't loaded early enough; please "
+"Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromium ne peut pas être utilisé car libcef.so n'a pas été chargé assez "
+"tôt ; veuillez relier l'application ou utiliser LD_PRELOAD pour le charger "
+"plus tôt."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "N'a pas pu initialiser libnotify."
+msgstr "Impossible d'initialiser Chromium"
+
+#: ../src/common/webview_chromium.cpp:1616
+msgid "Show DevTools"
+msgstr "Afficher DevTools"
 
 #: ../src/common/webview_chromium.cpp:1617
-msgid "Show DevTools"
-msgstr ""
-
-#: ../src/common/webview_chromium.cpp:1618
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Fermer tout"
+msgstr "Fermer DevTools"
 
-#: ../src/common/webview_chromium.cpp:1624
+#: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "Inspecter"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
 msgstr "Cette plateforme ne supporte pas la transparence d'arrière plan."
 
-#: ../src/common/wincmn.cpp:2082
+#: ../src/common/wincmn.cpp:2097
 msgid "Could not transfer data to window"
 msgstr "Impossible de transférer les données à la fenêtre"
 
@@ -4364,43 +4379,43 @@ msgid "Password:"
 msgstr "Mot de passe :"
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/generic/datavgen.cpp:1172
+#: ../src/generic/datavgen.cpp:1178
 msgid "true"
 msgstr "vrai"
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/generic/datavgen.cpp:1174
+#: ../src/generic/datavgen.cpp:1180
 msgid "false"
 msgstr "faux"
 
-#: ../src/generic/datavgen.cpp:6891
+#: ../src/generic/datavgen.cpp:6897
 #, c-format
 msgid "Row %i"
 msgstr "Ligne %i"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6981
+#: ../src/generic/datavgen.cpp:6987
 msgid "Collapse"
 msgstr "Compacter"
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6984
+#: ../src/generic/datavgen.cpp:6990
 msgid "Expand"
 msgstr "Étendre"
 
 #. TRANSLATORS: Name of data view control and number of rows
-#: ../src/generic/datavgen.cpp:7005
+#: ../src/generic/datavgen.cpp:7011
 #, c-format
 msgid "%s (%d items)"
 msgstr "%s (%d éléments)"
 
-#: ../src/generic/datavgen.cpp:7056
+#: ../src/generic/datavgen.cpp:7062
 #, c-format
 msgid "Column %u"
 msgstr "Colonne %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7125 ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/generic/datavgen.cpp:7131 ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:192
 #: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextliststylepage.cpp:252
@@ -4411,7 +4426,7 @@ msgid "Left"
 msgstr "Gauche"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7128 ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/generic/datavgen.cpp:7134 ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Right"
@@ -4422,11 +4437,12 @@ msgstr "Droite"
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
 msgstr ""
+"« %s » n'est pas au format de date attendu, veuillez l'indiquer comme "
+"par exemple « %s »."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "Item de visualisation de données non valable"
+msgstr "Date non valable"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4530,7 +4546,7 @@ msgstr "Nom de répertoire illégal."
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:752
 #: ../src/generic/filectrlg.cpp:766 ../src/generic/filectrlg.cpp:782
 #: ../src/generic/filectrlg.cpp:1356 ../src/generic/filectrlg.cpp:1387
-#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:76
 msgid "Error"
 msgstr "Erreur"
 
@@ -4714,16 +4730,16 @@ msgstr "Voir les fichiers en vue détaillée"
 msgid "Go to parent directory"
 msgstr "Aller au dossier parent"
 
-#: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:58
+#: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:59
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Le fichier « %s » existe déjà, faut-il vraiment l'écraser ?"
 
-#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:61
+#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:62
 msgid "Confirm"
 msgstr "Confirmer"
 
-#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:74
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
 msgid "Please choose an existing file."
 msgstr "Choisir un fichier existant."
 
@@ -4842,36 +4858,38 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Erreur à la copie de la grille dans le presse-papiers. Soit les cellules "
+"sélectionnées ne sont pas contiguës, soit aucune cellule n'a été "
+"sélectionnée."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Coin"
+msgstr "Coin de la grille"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Colonne %u"
+msgstr "En-tête de colonne %s"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "En-tête de ligne %s"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Colonne %u"
+msgstr "Colonne %s : %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "\t%s : %s\n"
+msgstr "Ligne %s : %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Ligne %s, colonne %s : %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -4894,8 +4912,8 @@ msgstr ""
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
 msgstr ""
-"Aucune table de correspondance valablee n'a été trouvée dans le fichier « %s "
-"»."
+"Aucune table de correspondance valable n'a été trouvée dans le fichier "
+"« %s »."
 
 #: ../src/generic/helpext.cpp:435
 msgid "No entries found."
@@ -4998,7 +5016,7 @@ msgstr "la boîte de message a renvoyé une valeur non valable"
 msgid "Notice"
 msgstr "Note"
 
-#: ../src/generic/preferencesg.cpp:116
+#: ../src/generic/preferencesg.cpp:118
 #, c-format
 msgid "%s Preferences"
 msgstr "Préférences %s"
@@ -5007,8 +5025,8 @@ msgstr "Préférences %s"
 msgid "Printing..."
 msgstr "Impression en cours..."
 
-#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1074
-#: ../src/msw/printwin.cpp:217
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1076
+#: ../src/msw/printwin.cpp:235
 msgid "Could not start printing."
 msgstr "Impossible de lancer l'impression."
 
@@ -5147,7 +5165,7 @@ msgstr "Inconnu"
 msgid "Done."
 msgstr "Terminé."
 
-#: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:205
+#: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:206
 #: ../src/html/helpwnd.cpp:530 ../src/html/helpwnd.cpp:545
 msgid "Search"
 msgstr "Chercher"
@@ -5206,7 +5224,7 @@ msgstr ""
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "Impossible d'initialiser GTK+, l'AFFICHAGE est-il correctement réglé ?"
 
-#: ../src/gtk/filedlg.cpp:88 ../src/gtk/filepicker.cpp:255
+#: ../src/gtk/filedlg.cpp:89 ../src/gtk/filepicker.cpp:255
 #, c-format
 msgid "Changing current directory to \"%s\" failed"
 msgstr "Échec de la modification du dossier courant en « %s »"
@@ -5266,16 +5284,42 @@ msgstr ""
 msgid "MDI child"
 msgstr "Fils MDI"
 
-#: ../src/gtk/print.cpp:215
+#: ../src/gtk/power.cpp:188
+#, c-format
+msgid "Failed to open D-Bus connection to the login manager: %s"
+msgstr "Échec de l'ouverture de la connexion D-Bus au gestionnaire de connexion : %s"
+
+#: ../src/gtk/power.cpp:214
+msgid "wxWidgets application"
+msgstr "Application wxWidgets"
+
+#: ../src/gtk/power.cpp:226
+msgid "Application needs to keep running"
+msgstr "L'application doit continuer à s'exécuter"
+
+#: ../src/gtk/power.cpp:233
+msgid "Clean up before suspend"
+msgstr "Nettoyer avant la mise en veille"
+
+#: ../src/gtk/power.cpp:259
+#, c-format
+msgid "Failed to inhibit sleep: %s"
+msgstr "Échec de l'inhibition de la mise en veille : %s"
+
+#: ../src/gtk/power.cpp:265
+msgid "Unexpected response to D-Bus \"Inhibit\" request."
+msgstr "Réponse inattendue à la demande D-Bus \"Inhiber\"."
+
+#: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Taille personnalisée"
 
-#: ../src/gtk/print.cpp:749
-#, fuzzy, c-format
+#: ../src/gtk/print.cpp:752
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Erreur lors de l'impression : "
+msgstr "Erreur lors de l'impression : %s"
 
-#: ../src/gtk/print.cpp:813
+#: ../src/gtk/print.cpp:816
 msgid "Page Setup"
 msgstr "Mise en Page"
 
@@ -5284,16 +5328,19 @@ msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
 "Récupérer la sortie du script JavaScript n'est pas supportée sous WebKit v1"
 
-#: ../src/gtk/webview_webkit2.cpp:1099
+#: ../src/gtk/webview_webkit2.cpp:1098
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"Définition du proxy n'est pas supporté par WebKit, au moins la version 2.16 "
+"est requise."
 
-#: ../src/gtk/webview_webkit2.cpp:1105
+#: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
+"Ce programme a été compilé sans le support de la définition du proxy WebKit."
 
-#: ../src/gtk/window.cpp:6249
+#: ../src/gtk/window.cpp:6289
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -5302,7 +5349,7 @@ msgstr ""
 "reconnaitre la composition d'écran, il faut installer GTK+ 2.12 ou plus "
 "récent."
 
-#: ../src/gtk/window.cpp:6267
+#: ../src/gtk/window.cpp:6307
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -5310,7 +5357,7 @@ msgstr ""
 "La composition d'écran n'est pas reconnue par ce système, il faut l'activer "
 "dans le Gestionnaire de Fenêtre."
 
-#: ../src/gtk/window.cpp:6278
+#: ../src/gtk/window.cpp:6318
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -5631,34 +5678,34 @@ msgstr "%u sur %u"
 msgid "Cannot open HTML document: %s"
 msgstr "Impossible d'ouvrir le document HTML : %s"
 
-#: ../src/html/htmlwin.cpp:577
+#: ../src/html/htmlwin.cpp:599
 msgid "Connecting..."
 msgstr "Connexion en cours..."
 
-#: ../src/html/htmlwin.cpp:594
+#: ../src/html/htmlwin.cpp:616
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Impossible d'ouvrir le document HTML demandé : %s"
 
-#: ../src/html/htmlwin.cpp:608
+#: ../src/html/htmlwin.cpp:630
 msgid "Loading : "
 msgstr "Chargement : "
 
-#: ../src/html/htmlwin.cpp:651
+#: ../src/html/htmlwin.cpp:673
 msgid "Done"
 msgstr "Terminé"
 
-#: ../src/html/htmlwin.cpp:701
+#: ../src/html/htmlwin.cpp:723
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "Ancre HTML %s inexistante."
 
-#: ../src/html/htmlwin.cpp:1035
+#: ../src/html/htmlwin.cpp:1057
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Copié dans le presse-papiers « %s »"
 
-#: ../src/html/htmprint.cpp:267
+#: ../src/html/htmprint.cpp:269
 msgid ""
 "This document doesn't fit on the page horizontally and will be truncated "
 "when it is printed."
@@ -5666,7 +5713,7 @@ msgstr ""
 "Ce document ne tient pas sur la page horizontalement et sera tronqué lors de "
 "l'impression."
 
-#: ../src/html/htmprint.cpp:283
+#: ../src/html/htmprint.cpp:285
 #, c-format
 msgid ""
 "The document \"%s\" doesn't fit on the page horizontally and will be "
@@ -5679,7 +5726,7 @@ msgstr ""
 "\n"
 "Faut-il néanmoins procéder à l'impression ?"
 
-#: ../src/html/htmprint.cpp:294
+#: ../src/html/htmprint.cpp:296
 msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
@@ -5687,17 +5734,17 @@ msgstr ""
 "Si possible, essayer de modifier les paramètres de mise en page pour rendre "
 "l'imprimé plus étroit."
 
-#: ../src/html/htmprint.cpp:443
+#: ../src/html/htmprint.cpp:445
 msgid ": file does not exist!"
 msgstr ": le fichier n'existe pas !"
 
 #. TRANSLATORS: %s may be a document title.
-#: ../src/html/htmprint.cpp:712
-#, fuzzy, c-format
+#: ../src/html/htmprint.cpp:717
+#, c-format
 msgid "%s Preview"
-msgstr " Aperçu"
+msgstr "Aperçu de %s"
 
-#: ../src/html/htmprint.cpp:750 ../src/richtext/richtextprint.cpp:615
+#: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -5733,7 +5780,7 @@ msgstr "Échec de la récupération des formats de presse-papiers reconnus"
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Échec du dialogue de sélection de couleur avec l'erreur %0lx."
 
-#: ../src/msw/cursor.cpp:204
+#: ../src/msw/cursor.cpp:141
 msgid "Failed to create cursor."
 msgstr "Échec de la création d'un curseur."
 
@@ -5976,7 +6023,7 @@ msgstr "Échec de l'allocation de %lu Ko de mémoire pour les données bitmap."
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "Impossible d'énumérer les fichiers dans le répertoire « %s »"
 
-#: ../src/msw/dirdlg.cpp:359
+#: ../src/msw/dirdlg.cpp:368
 msgid "Couldn't obtain folder name"
 msgstr "Impossible d'obtenir le nom du dossier"
 
@@ -6002,15 +6049,16 @@ msgstr ""
 "Échec de la création de la boîte de dialogue standard rechercher/remplacer "
 "(code d'erreur %d)"
 
-#: ../src/msw/filedlg.cpp:1233
+#: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
 msgstr ""
+"L'accès au système de fichiers n'est pas autorisé depuis le bureau sécurisé."
 
-#: ../src/msw/filedlg.cpp:1234
+#: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "Avertissement de sécurité"
 
-#: ../src/msw/filedlg.cpp:1525
+#: ../src/msw/filedlg.cpp:1533
 #, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr "Échec du dialogue de fichier avec le code d'erreur %0lx."
@@ -6048,17 +6096,17 @@ msgstr ""
 msgid "Unable to set up watch for '%s'"
 msgstr "Impossible d'établir un scrutateur pour « %s »"
 
-#: ../src/msw/fswatcher.cpp:477
+#: ../src/msw/fswatcher.cpp:466
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr "Impossible de surveiller les changements du dossier inexistant « %s »."
 
-#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:505
+#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:507
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
 msgstr "OpenGL 3.0 et au-dessus n'est pas reconnu par le pilote OpenGL."
 
 #: ../src/msw/glcanvas.cpp:601 ../src/osx/glcanvas_osx.cpp:395
-#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:551
+#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:553
 msgid "Couldn't create OpenGL context"
 msgstr "N'a pas pu créer le contexte OpenGL"
 
@@ -6094,7 +6142,7 @@ msgstr ""
 "Impossible de récupérer des informations sur l'élément « %d » de contrôle "
 "des listes."
 
-#: ../src/msw/mdi.cpp:170
+#: ../src/msw/mdi.cpp:170 ../src/qt/mdi.cpp:253
 msgid "&Cascade"
 msgstr "&Cascade"
 
@@ -6366,7 +6414,7 @@ msgstr "Impossible d'exporter les valeurs de type non reconnu %d."
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "Valeur « %s » de la clé « %s » ignorée."
 
-#: ../src/msw/textctrl.cpp:585
+#: ../src/msw/textctrl.cpp:596
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -6374,41 +6422,41 @@ msgstr ""
 "Impossible de créer un contrôle d'édition riche, utilisation d'un contrôle "
 "de texte simple à la place. Réinstaller riched32.dll"
 
-#: ../src/msw/thread.cpp:525 ../src/unix/threadpsx.cpp:848
+#: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:850
 msgid "Cannot start thread: error writing TLS."
 msgstr "Impossible de lancer le processus : erreur lors de l'écriture de TLS."
 
-#: ../src/msw/thread.cpp:616
+#: ../src/msw/thread.cpp:613
 msgid "Can't set thread priority"
 msgstr "Impossible de spécifier la priorité du processus"
 
-#: ../src/msw/thread.cpp:652
+#: ../src/msw/thread.cpp:649
 msgid "Can't create thread"
 msgstr "Impossible de créer le processus"
 
-#: ../src/msw/thread.cpp:671
+#: ../src/msw/thread.cpp:668
 msgid "Couldn't terminate thread"
 msgstr "Impossible d'arrêter le processus"
 
-#: ../src/msw/thread.cpp:802
+#: ../src/msw/thread.cpp:799
 msgid "Cannot wait for thread termination"
 msgstr "Impossible d'attendre la fin du processus"
 
-#: ../src/msw/thread.cpp:876
+#: ../src/msw/thread.cpp:873
 #, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "Impossible de suspendre le thread %lx"
 
-#: ../src/msw/thread.cpp:906
+#: ../src/msw/thread.cpp:903
 #, c-format
 msgid "Cannot resume thread %lx"
 msgstr "Impossible de reprendre le thread %lx"
 
-#: ../src/msw/thread.cpp:935
+#: ../src/msw/thread.cpp:932
 msgid "Couldn't get the current thread pointer"
 msgstr "Impossible d'obtenir le pointeur du processus actuel"
 
-#: ../src/msw/thread.cpp:1336
+#: ../src/msw/thread.cpp:1333
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -6416,7 +6464,7 @@ msgstr ""
 "Échec de l'initialisation du module du processus : impossible d'allouer un "
 "index dans le stockage local des processus"
 
-#: ../src/msw/thread.cpp:1348
+#: ../src/msw/thread.cpp:1345
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -6476,12 +6524,12 @@ msgstr "Échec de l'exécution de la commande « %s »"
 msgid "Failed to load mpr.dll."
 msgstr "Échec du chargement de mpr.dll."
 
-#: ../src/msw/volume.cpp:507
+#: ../src/msw/volume.cpp:506
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Impossible de lire le nom de type de « %s » !"
 
-#: ../src/msw/volume.cpp:616
+#: ../src/msw/volume.cpp:615
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Impossible de charger l'icône depuis « %s »."
@@ -6489,31 +6537,32 @@ msgstr "Impossible de charger l'icône depuis « %s »."
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr ""
+"Ce programme a été compilé sans support pour la configuration du proxy Edge."
 
-#: ../src/msw/webview_ie.cpp:1012
+#: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
 msgstr ""
 "Impossible de trouver le niveau d’émulation de la vue Web dans le Registre"
 
-#: ../src/msw/webview_ie.cpp:1021
+#: ../src/msw/webview_ie.cpp:1019
 msgid "Failed to set web view to modern emulation level"
 msgstr "Impossible de définir la vue Web avec un niveau d’émulation moderne"
 
-#: ../src/msw/webview_ie.cpp:1029
+#: ../src/msw/webview_ie.cpp:1027
 msgid "Failed to reset web view to standard emulation level"
 msgstr ""
 "Impossible de réinitialiser l’affichage Web avec un niveau d’émulation "
 "standard"
 
-#: ../src/msw/webview_ie.cpp:1051
+#: ../src/msw/webview_ie.cpp:1049
 msgid "Can't run JavaScript script without a valid HTML document"
 msgstr "Ne peut lancer un script JavaScript sans document HTML valide"
 
-#: ../src/msw/webview_ie.cpp:1058
+#: ../src/msw/webview_ie.cpp:1056
 msgid "Can't get the JavaScript object"
 msgstr "Ne peut pas accéder à l'objet JavaScript"
 
-#: ../src/msw/webview_ie.cpp:1072
+#: ../src/msw/webview_ie.cpp:1070
 msgid "failed to evaluate"
 msgstr "échec de l'évaluation"
 
@@ -6522,34 +6571,29 @@ msgid "File type:"
 msgstr "Type de fichier :"
 
 #: ../src/osx/cocoa/menu.mm:242
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Fenêtre"
 
 #: ../src/osx/cocoa/menu.mm:259
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Aide"
 
 #: ../src/osx/cocoa/menu.mm:298
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
-msgstr "Minimiser"
+msgstr "Réduire"
 
 #: ../src/osx/cocoa/menu.mm:303
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
-msgstr "Zoom"
+msgstr "Agrandir"
 
 #: ../src/osx/cocoa/menu.mm:309
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
-msgstr "Tout amener au-dessus"
+msgstr "Tout mettre au premier plan"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
@@ -6598,10 +6642,9 @@ msgid "Hide %s"
 msgstr "Cacher %s"
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "Application"
+msgstr "Cacher l'Application"
 
 #: ../src/osx/menu_osx.cpp:526
 msgctxt "macOS menu item"
@@ -6620,16 +6663,15 @@ msgid "Quit %s"
 msgstr "Quitter %s"
 
 #: ../src/osx/menu_osx.cpp:537
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "Application"
+msgstr "Quitter l'Application"
 
-#: ../src/osx/webview_webkit.mm:448
+#: ../src/osx/webview_webkit.mm:444
 msgid "Printing is not supported by the system web control"
 msgstr "Impression non supportée par le système de contrôle web"
 
-#: ../src/osx/webview_webkit.mm:457
+#: ../src/osx/webview_webkit.mm:453
 msgid "Print operation could not be initialized"
 msgstr "L'impression n'a pas pu être initialisée"
 
@@ -6857,169 +6899,141 @@ msgid "White"
 msgstr "Blanc"
 
 #: ../src/propgrid/advprops.cpp:1718
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
-msgstr "Par défaut"
+msgstr "Défaut"
 
 #: ../src/propgrid/advprops.cpp:1719
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "Flèche"
 
 #: ../src/propgrid/advprops.cpp:1720
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "Flèche Droite"
 
 #: ../src/propgrid/advprops.cpp:1721
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "Vide"
 
 #: ../src/propgrid/advprops.cpp:1722
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
-msgstr "Carton"
+msgstr "Cible"
 
 #: ../src/propgrid/advprops.cpp:1723
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "Caractère"
 
 #: ../src/propgrid/advprops.cpp:1724
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "Croix"
 
 #: ../src/propgrid/advprops.cpp:1725
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "Main"
 
 #: ../src/propgrid/advprops.cpp:1726
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "I-Beam"
 
 #: ../src/propgrid/advprops.cpp:1727
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "Bouton gauche"
 
 #: ../src/propgrid/advprops.cpp:1728
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "Loupe"
 
 #: ../src/propgrid/advprops.cpp:1729
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "Bouton du milieu"
 
 #: ../src/propgrid/advprops.cpp:1730
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "Pas d'entrée"
 
 #: ../src/propgrid/advprops.cpp:1731
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "Brosse à peinture"
 
 #: ../src/propgrid/advprops.cpp:1732
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "Crayon"
 
 #: ../src/propgrid/advprops.cpp:1733
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
-msgstr "Point Gauche"
+msgstr "À Gauche"
 
 #: ../src/propgrid/advprops.cpp:1734
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
-msgstr "Point Droite"
+msgstr "À Droite"
 
 #: ../src/propgrid/advprops.cpp:1735
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
-msgstr "Point d'Interrogation"
+msgstr "Flèche d'interrogation"
 
 #: ../src/propgrid/advprops.cpp:1736
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "Bouton droit"
 
 #: ../src/propgrid/advprops.cpp:1737
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
 msgstr "Dimensionnement NE-SO"
 
 #: ../src/propgrid/advprops.cpp:1738
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
 msgstr "Dimensionnement N-S"
 
 #: ../src/propgrid/advprops.cpp:1739
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
 msgstr "Dimensionnement NW-SE"
 
 #: ../src/propgrid/advprops.cpp:1740
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
 msgstr "Dimensionnement O-E"
 
 #: ../src/propgrid/advprops.cpp:1741
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
 msgstr "Dimensionnement"
 
 #: ../src/propgrid/advprops.cpp:1742
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
-msgstr "Vaporisateur"
+msgstr "Aérosol"
 
 #: ../src/propgrid/advprops.cpp:1743
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
-msgstr "Attente"
+msgstr "Attendre"
 
 #: ../src/propgrid/advprops.cpp:1744
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
-msgstr "Scrutateur"
+msgstr "Montre"
 
 #: ../src/propgrid/advprops.cpp:1745
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "Flèche d'attente"
@@ -7115,6 +7129,10 @@ msgstr "Choisir un dossier :"
 #: ../src/propgrid/props.cpp:2055
 msgid "Choose a file"
 msgstr "Choisir un fichier"
+
+#: ../src/qt/mdi.cpp:254
+msgid "&Tile"
+msgstr "&Répartir"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -7609,7 +7627,7 @@ msgid "Insert Text"
 msgstr "Insérer du texte"
 
 #: ../src/richtext/richtextbuffer.cpp:8023
-#: ../src/richtext/richtextbuffer.cpp:8981
+#: ../src/richtext/richtextbuffer.cpp:8979
 msgid "Insert Image"
 msgstr "Insérer une image"
 
@@ -7629,68 +7647,68 @@ msgstr "Trop d'appels à EndStyle !"
 msgid "files"
 msgstr "fichiers"
 
-#: ../src/richtext/richtextbuffer.cpp:9382
+#: ../src/richtext/richtextbuffer.cpp:9380
 msgid "standard/circle"
 msgstr "standard/circulaire"
 
-#: ../src/richtext/richtextbuffer.cpp:9383
+#: ../src/richtext/richtextbuffer.cpp:9381
 msgid "standard/circle-outline"
 msgstr "standard/contour circulaire"
 
-#: ../src/richtext/richtextbuffer.cpp:9384
+#: ../src/richtext/richtextbuffer.cpp:9382
 msgid "standard/square"
 msgstr "standard/carré"
 
-#: ../src/richtext/richtextbuffer.cpp:9385
+#: ../src/richtext/richtextbuffer.cpp:9383
 msgid "standard/diamond"
 msgstr "standard/diamant"
 
-#: ../src/richtext/richtextbuffer.cpp:9386
+#: ../src/richtext/richtextbuffer.cpp:9384
 msgid "standard/triangle"
 msgstr "standard/triangle"
 
-#: ../src/richtext/richtextbuffer.cpp:9425
+#: ../src/richtext/richtextbuffer.cpp:9423
 msgid "Box Properties"
 msgstr "Propriétés de la boîte"
 
-#: ../src/richtext/richtextbuffer.cpp:10008
+#: ../src/richtext/richtextbuffer.cpp:10006
 msgid "Multiple Cell Properties"
 msgstr "Propriétés de Plusieurs Cellules"
 
-#: ../src/richtext/richtextbuffer.cpp:10010
+#: ../src/richtext/richtextbuffer.cpp:10008
 msgid "Cell Properties"
 msgstr "Propriétés de Cellule"
 
-#: ../src/richtext/richtextbuffer.cpp:11258
+#: ../src/richtext/richtextbuffer.cpp:11256
 msgid "Set Cell Style"
 msgstr "Définir le Style de Cellule"
 
-#: ../src/richtext/richtextbuffer.cpp:11332
+#: ../src/richtext/richtextbuffer.cpp:11330
 msgid "Delete Row"
 msgstr "Supprimer la ligne"
 
-#: ../src/richtext/richtextbuffer.cpp:11382
+#: ../src/richtext/richtextbuffer.cpp:11380
 msgid "Delete Column"
 msgstr "Supprimer la colonne"
 
-#: ../src/richtext/richtextbuffer.cpp:11433
+#: ../src/richtext/richtextbuffer.cpp:11431
 msgid "Add Row"
 msgstr "Ajouter une ligne"
 
-#: ../src/richtext/richtextbuffer.cpp:11496
+#: ../src/richtext/richtextbuffer.cpp:11494
 msgid "Add Column"
 msgstr "Ajouter une colonne"
 
-#: ../src/richtext/richtextbuffer.cpp:11539
+#: ../src/richtext/richtextbuffer.cpp:11537
 msgid "Table Properties"
 msgstr "Propriétés du Tableau"
 
-#: ../src/richtext/richtextbuffer.cpp:12901
+#: ../src/richtext/richtextbuffer.cpp:12899
 msgid "Picture Properties"
 msgstr "Propriétés de l'Image"
 
-#: ../src/richtext/richtextbuffer.cpp:13171
-#: ../src/richtext/richtextbuffer.cpp:13281
+#: ../src/richtext/richtextbuffer.cpp:13169
+#: ../src/richtext/richtextbuffer.cpp:13279
 msgid "image"
 msgstr "image"
 
@@ -8445,7 +8463,7 @@ msgstr "La taille de l'espacement inférieur."
 msgid "Units for the bottom padding."
 msgstr "Unités pour l'espacement inférieur."
 
-#: ../src/richtext/richtextprint.cpp:589
+#: ../src/richtext/richtextprint.cpp:592
 msgid " Preview"
 msgstr " Aperçu"
 
@@ -9229,22 +9247,22 @@ msgstr "Format des données sonores non reconnu."
 msgid "Couldn't open audio: %s"
 msgstr "Impossible d'ouvrir le fichier audio : %s"
 
-#: ../src/unix/threadpsx.cpp:1021
+#: ../src/unix/threadpsx.cpp:1033
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "Impossible de récupérer la charte de planification des processus."
 
-#: ../src/unix/threadpsx.cpp:1046
+#: ../src/unix/threadpsx.cpp:1058
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr ""
 "Impossible d'obtenir une gamme de priorités pour la stratégie de "
 "planification %d."
 
-#: ../src/unix/threadpsx.cpp:1054
+#: ../src/unix/threadpsx.cpp:1066
 msgid "Thread priority setting is ignored."
 msgstr "La priorité donnée au processus est ignorée."
 
-#: ../src/unix/threadpsx.cpp:1209
+#: ../src/unix/threadpsx.cpp:1221
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -9252,62 +9270,62 @@ msgstr ""
 "Échec de l'adjonction d'un processus : fuite potentielle de mémoire "
 "détectée, redémarrer le programme"
 
-#: ../src/unix/threadpsx.cpp:1340
+#: ../src/unix/threadpsx.cpp:1352
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "Échec de l'établissement du niveau de concurrence de processus à %lu"
 
-#: ../src/unix/threadpsx.cpp:1469
+#: ../src/unix/threadpsx.cpp:1481
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Échec de la configuration de la priorité %d du processus."
 
-#: ../src/unix/threadpsx.cpp:1654
+#: ../src/unix/threadpsx.cpp:1666
 msgid "Failed to terminate a thread."
 msgstr "Échec de la terminaison d'un processus."
 
-#: ../src/unix/threadpsx.cpp:1882
+#: ../src/unix/threadpsx.cpp:1893
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 "Échec de l'initialisation du module du processus : échec de la création de "
 "la clé du processus"
 
-#: ../src/unix/utilsunx.cpp:338
+#: ../src/unix/utilsunx.cpp:340
 msgid "Impossible to get child process input"
 msgstr "Impossible d'obtenir l'entrée du processus fils"
 
-#: ../src/unix/utilsunx.cpp:388
+#: ../src/unix/utilsunx.cpp:390
 msgid "Can't write to child process's stdin"
 msgstr "Impossible d'écrire sur l'entrée du processus enfant"
 
-#: ../src/unix/utilsunx.cpp:642
+#: ../src/unix/utilsunx.cpp:644
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Échec de l'exécution de « %s »\n"
 
-#: ../src/unix/utilsunx.cpp:676
+#: ../src/unix/utilsunx.cpp:678
 msgid "Fork failed"
 msgstr "Échec du clonage"
 
-#: ../src/unix/utilsunx.cpp:699
+#: ../src/unix/utilsunx.cpp:701
 msgid "Failed to set process priority"
 msgstr "Échec de la définition de la priorité du processus"
 
-#: ../src/unix/utilsunx.cpp:710
+#: ../src/unix/utilsunx.cpp:712
 msgid "Failed to redirect child process input/output"
 msgstr "Échec de la redirection des entrées et sorties du processus fils"
 
-#: ../src/unix/utilsunx.cpp:814
+#: ../src/unix/utilsunx.cpp:816
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 "Échec de l'établissement du tube (pipe) non bloquant, le prgramme pourrait "
 "s'arrêter inopinément."
 
-#: ../src/unix/utilsunx.cpp:1021
+#: ../src/unix/utilsunx.cpp:1023
 msgid "Cannot get the hostname"
 msgstr "Impossible d'obtenir le nom d'hôte"
 
-#: ../src/unix/utilsunx.cpp:1057
+#: ../src/unix/utilsunx.cpp:1059
 msgid "Cannot get the official hostname"
 msgstr "Impossible d'obtenir le nom d'hôte officiel"
 
@@ -9351,7 +9369,7 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "Erreur d'analyse XML : « %s » à la ligne %d"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
 msgstr "Page %d"
 
@@ -9370,1242 +9388,7 @@ msgstr "Impossible d'ouvrir le fichier de ressources « %s »."
 msgid "Cannot load resources from file '%s'."
 msgstr "Impossible de charger les ressources du fichier « %s »."
 
-#: ../src/xrc/xmlres.cpp:2766
+#: ../src/xrc/xmlres.cpp:2767
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Échec de la création de %s « %s »."
-
-#~ msgid "Copying more than one selected block to clipboard is not supported."
-#~ msgstr ""
-#~ "Copier plus d'un bloc sélectionné dans le bloc-note n'est pas supporté."
-
-#~ msgid "Unsupported clipboard format."
-#~ msgstr "Format de presse-papiers non reconnu."
-
-#~ msgid "Failed to set clipboard data."
-#~ msgstr "Échec de la configuration des données du presse-papiers."
-
-#~ msgid "Background colour"
-#~ msgstr "Couleur d'arrière plan"
-
-#~ msgid "Font:"
-#~ msgstr "Police de caractères :"
-
-#~ msgid "Size:"
-#~ msgstr "Taille :"
-
-#~ msgid "The font size in points."
-#~ msgstr "Taille de la police en points."
-
-#~ msgid "Style:"
-#~ msgstr "Style :"
-
-#~ msgid "Check to make the font bold."
-#~ msgstr "Cocher pour mettre la police en gras."
-
-#~ msgid "Check to make the font italic."
-#~ msgstr "Cocher pour mettre la police en italique."
-
-#~ msgid "Check to make the font underlined."
-#~ msgstr "Cocher pour mettre la police en souligné."
-
-#~ msgid "Colour:"
-#~ msgstr "Couleur :"
-
-#~ msgid "Click to change the font colour."
-#~ msgstr "Cliquez pour changer la couleur de la police."
-
-#~ msgid "Shows a preview of the font."
-#~ msgstr "Montre un aperçu de la liste."
-
-#~ msgid "Click to cancel changes to the font."
-#~ msgstr "Cliquer pour annuler les modifications sur la police."
-
-#~ msgid "Click to confirm changes to the font."
-#~ msgstr "Cliquer pour confirmer les modifications de la police."
-
-#~ msgid "<Any>"
-#~ msgstr "<Quelconque>"
-
-#~ msgid "<Any Roman>"
-#~ msgstr "<N'importe quel Roman>"
-
-#~ msgid "<Any Decorative>"
-#~ msgstr "<N'importe quelle Décoration>"
-
-#~ msgid "<Any Modern>"
-#~ msgstr "<N'importe quel Moderne>"
-
-#~ msgid "<Any Script>"
-#~ msgstr "<N'importe quel Script>"
-
-#~ msgid "<Any Swiss>"
-#~ msgstr "<N'importe quel Suisse>"
-
-#~ msgid "<Any Teletype>"
-#~ msgstr "<N'importe quel Télétype>"
-
-#~ msgid "Printing "
-#~ msgstr "Impression en cours "
-
-#~ msgid "Failed to insert text in the control."
-#~ msgstr "Échec de l'insertion de texte dans le contrôle."
-
-#~ msgid "Please choose a valid font."
-#~ msgstr "Choisir une police valable."
-
-#, c-format
-#~ msgid "Failed to display HTML document in %s encoding"
-#~ msgstr "Échec de l'affichage du document HTML avec le codage %s"
-
-#, c-format
-#~ msgid "wxWidgets could not open display for '%s': exiting."
-#~ msgstr "wxWidgets n'a pas pu ouvrir d'affichage pour %s : abandon."
-
-#~ msgid "Filter"
-#~ msgstr "Filtre"
-
-#~ msgid "Directories"
-#~ msgstr "Dossiers"
-
-#~ msgid "Files"
-#~ msgstr "Fichiers"
-
-#~ msgid "Selection"
-#~ msgstr "Sélection"
-
-#~ msgid "conversion to 8-bit encoding failed"
-#~ msgstr "échec de la conversion dans un codage 8 bits"
-
-#~ msgid "failed to retrieve execution result"
-#~ msgstr "échec de la récupération du résultat d'exécution"
-
-#~ msgid "&Save as"
-#~ msgstr "Enregistrer &Sous"
-
-#~ msgid " (while overwriting an existing item)"
-#~ msgstr " (lors de la réécriture d'un élément existant)"
-
-#~ msgid "'%s' doesn't consist only of valid characters"
-#~ msgstr "'%s' ne consiste pas uniquement de caractères valables"
-
-#~ msgid "'%s' should be numeric."
-#~ msgstr "« %s » doit être numérique."
-
-#~ msgid "'%s' should only contain ASCII characters."
-#~ msgstr "« %s » ne doit contenir que des caractères ASCII."
-
-#~ msgid "'%s' should only contain alphabetic characters."
-#~ msgstr "« %s » ne doit contenir que des caractères alphabétiques."
-
-#~ msgid "'%s' should only contain alphabetic or numeric characters."
-#~ msgstr "« %s » ne doit contenir que des caractères alphanumériques."
-
-#~ msgid "'%s' should only contain digits."
-#~ msgstr "« %s » ne doit contenir que des chiffres."
-
-#~ msgid "Can't create window of class %s"
-#~ msgstr "Impossible de créer la fenêtre de classe %s"
-
-#~ msgid "Couldn't create the overlay window"
-#~ msgstr "Impossible de créer une fenêtre de recouvrement"
-
-#~ msgid "Couldn't init the context on the overlay window"
-#~ msgstr "Impossible d'initialiser le contexte de la fenêtre de recouvrement"
-
-#~ msgid "Failed to convert file \"%s\" to Unicode."
-#~ msgstr "Échec de la conversion du fichier « %s » en Unicode."
-
-#~ msgid "Failed to set text in the text control."
-#~ msgstr "Échec: le texte n'a pas pu être placé dans le contrôle de texte."
-
-#~ msgid "Invalid GTK+ command line option, use \"%s --help\""
-#~ msgstr "Option de ligne de commandeGTK+ non valable, utiliser « %s --help »"
-
-#~ msgid "No unused colour in image."
-#~ msgstr "Aucune couleur n'est disponible dans l'image."
-
-#~ msgid "Not available"
-#~ msgstr "Non disponible"
-
-#~ msgid "Replace selection"
-#~ msgstr "Remplacer la sélection"
-
-#~ msgid "Save as"
-#~ msgstr "Enregistrer sous"
-
-#~ msgid "Style Organiser"
-#~ msgstr "Organiseur de styles"
-
-#~ msgid "The following standard GTK+ options are also supported:\n"
-#~ msgstr "Les options standards GTK+ suivantes sont également reconnues :\n"
-
-#~ msgid "You cannot Clear an overlay that is not inited"
-#~ msgstr ""
-#~ "Il n'est pas possible d'effectuer un effacement sur une superposition "
-#~ "(overlay) avant qu'elle ne soit initialisée"
-
-#~ msgid "You cannot Init an overlay twice"
-#~ msgstr ""
-#~ "Il n'est pas possible d'initialiser deux fois une superpopsition (overlay)"
-
-#~ msgid "locale '%s' cannot be set."
-#~ msgstr "la localisation « %s » ne peut pas être établie."
-
-#~ msgid "Adding flavor TEXT failed"
-#~ msgstr "Échec de l'ajout de la variété TEXT"
-
-#~ msgid "Adding flavor utxt failed"
-#~ msgstr "Échec de l'ajout de la variété utext"
-
-#~ msgid "Bitmap renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Le moteur de rendu bitmap ne peut pas restituer une valeur ; type de "
-#~ "valeur :"
-
-#~ msgid ""
-#~ "Cannot create new column's ID. Probably max. number of columns reached."
-#~ msgstr ""
-#~ "Impossible de créer un nouvel ID de colonne. Le nombre max. de colonnes a "
-#~ "probablement été atteint."
-
-#~ msgid "Column could not be added."
-#~ msgstr "La colonne n'a pas pu être ajoutée."
-
-#~ msgid "Column index not found."
-#~ msgstr "Index de colonne non trouvé."
-
-#~ msgid "Column width could not be determined"
-#~ msgstr "La largeur de la colonne n'a pas pu être déterminée"
-
-#~ msgid "Column width could not be set."
-#~ msgstr "La largeur de la colonne n'a pas pu être définie."
-
-#~ msgid "Confirm registry update"
-#~ msgstr "Confirmer la mise à jour du registre"
-
-#~ msgid "Could not determine column index."
-#~ msgstr "Impossible de déterminer l'index de la colonne."
-
-#~ msgid "Could not determine column's position"
-#~ msgstr "Impossible de déterminer la position de la colonne"
-
-#~ msgid "Could not determine number of columns."
-#~ msgstr "Impossible de déterminer le nombre de colonnes."
-
-#~ msgid "Could not determine number of items"
-#~ msgstr "Impossible de déterminer le nombre d'éléments"
-
-#~ msgid "Could not get header description."
-#~ msgstr "Impossible d'obtenir la description de l'en-tête."
-
-#~ msgid "Could not get items."
-#~ msgstr "Impossible d'obtenir les éléments."
-
-#~ msgid "Could not get property flags."
-#~ msgstr "Impossible d'obtenir les drapeux de propriétés."
-
-#~ msgid "Could not get selected items."
-#~ msgstr "Impossible d'obtenir les éléments sélectionnés."
-
-#~ msgid "Could not remove column."
-#~ msgstr "Impossible de supprimer la colonne."
-
-#~ msgid "Could not retrieve number of items"
-#~ msgstr "Impossible de retrouver le nombre d'éléments"
-
-#~ msgid "Could not set column width."
-#~ msgstr "Impossible de définir la largeur de la colonne."
-
-#~ msgid "Could not set header description."
-#~ msgstr "Impossible de définir la description de l'en-tête."
-
-#~ msgid "Could not set icon."
-#~ msgstr "Impossible de définir l'icône."
-
-#~ msgid "Could not set maximum width."
-#~ msgstr "Impossible de définir la largeur maximale."
-
-#~ msgid "Could not set minimum width."
-#~ msgstr "Impossible de définir la largeur minimale."
-
-#~ msgid "Could not set property flags."
-#~ msgstr "Impossible d'établir les drapeux de propriétés."
-
-#~ msgid "Data object has invalid data format"
-#~ msgstr "L'objet de données a un format de données incorrect"
-
-#~ msgid "Date renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Le moteur de rendu de date ne peut pas restituer une valeur ; type de "
-#~ "valeur :"
-
-#~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension "
-#~ "\"%s\" ?\n"
-#~ "Current value is \n"
-#~ "%s, \n"
-#~ "New value is \n"
-#~ "%s %1"
-#~ msgstr ""
-#~ "Faut-il remplacer la commande utilisée pour %s les fichiers avec "
-#~ "l'extension « %s » ?\n"
-#~ "La valeur actuelle est \n"
-#~ "%s, \n"
-#~ "La nouvelle valeur est \n"
-#~ "%s %1"
-
-#~ msgid "Failed to retrieve data from the clipboard."
-#~ msgstr "Échec de la récupération de données du presse-papiers."
-
-#~ msgid "GIF: Invalid gif index."
-#~ msgstr "GIF : index gif non valable."
-
-#~ msgid "GIF: unknown error!!!"
-#~ msgstr "GIF : erreur non référencée."
-
-#~ msgid "Icon & text renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Le moteur de rendu texte & icône ne peut pas restituer une valeur ; type "
-#~ "de valeur :"
-
-#~ msgid "New directory"
-#~ msgstr "Nouveau répertoire"
-
-#~ msgid "Next"
-#~ msgstr "Suivant"
-
-#~ msgid "No column existing."
-#~ msgstr "Pas de colonne existante."
-
-#~ msgid "No column for the specified column existing."
-#~ msgstr "Pas de colonne existante pour la colonne spécifiée."
-
-#~ msgid "No column for the specified column position existing."
-#~ msgstr "Pas de colonne existante pour la position de colonne spécifiée."
-
-#~ msgid ""
-#~ "No renderer or invalid renderer type specified for custom data column."
-#~ msgstr ""
-#~ "Aucun moteur de rendu ou type de moteur de rendu spécifié non valable "
-#~ "pour la colonne de données personnalisées."
-
-#~ msgid "No renderer specified for column."
-#~ msgstr "Aucun moteur de rendu spécifié pour la colonne."
-
-#~ msgid "Number of columns could not be determined."
-#~ msgstr "Le nombre de colonnes n'a pas pu être déterminé."
-
-#~ msgid "OpenGL function \"%s\" failed: %s (error %d)"
-#~ msgstr "La fonction OpenGL « %s » a échoué : %s (erreur %d)"
-
-#~ msgid ""
-#~ "Please install a newer version of comctl32.dll\n"
-#~ "(at least version 4.70 is required but you have %d.%02d)\n"
-#~ "or this program won't operate correctly."
-#~ msgstr ""
-#~ "Installer une nouvelle version de comctl32.dll\n"
-#~ "(la version 4.70 au minimum est nécessaire, contre la version %d.%02d\n"
-#~ "actuellement), sinon ce programme ne fonctionnera pas correctement."
-
-#~ msgid "Pointer to data view control not set correctly."
-#~ msgstr ""
-#~ "Le pointeur du contrôle de visualisation de données n'est pas "
-#~ "correctement établi."
-
-#~ msgid "Pointer to model not set correctly."
-#~ msgstr "Le pointeur vers le modèle n'est pas correctement établi."
-
-#~ msgid "Progress renderer cannot render value type; value type: "
-#~ msgstr ""
-#~ "Le moteur de rendu de progression ne peut pas restituer une valeur ; type "
-#~ "de valeur :"
-
-#~ msgid "Rendering failed."
-#~ msgstr "Échec du rendu."
-
-#~ msgid ""
-#~ "Setting directory access times is not supported under this OS version"
-#~ msgstr ""
-#~ "L'établissement du nombre d'accès aux dossiers n'est pas reconnu par "
-#~ "cette version du SE"
-
-#~ msgid "Show hidden directories"
-#~ msgstr "Montrer les répertoires cachés"
-
-#~ msgid "Text renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Le moteur de rendu texte ne peut pas restituer une valeur ; type de "
-#~ "valeur :"
-
-#~ msgid "There is no column or renderer for the specified column index."
-#~ msgstr "Aucune colonne ou moteur de rendu pour l'index de colonne spécifié."
-
-#~ msgid ""
-#~ "This system doesn't support date controls, please upgrade your version of "
-#~ "comctl32.dll"
-#~ msgstr ""
-#~ "Ce système ne gère pas les contrôles de date, mettre à niveau la version "
-#~ "de comctl32.dll"
-
-#~ msgid "Toggle renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Le moteur de rendu ne peut pas rendre cette valeur ; type de valeur :"
-
-#~ msgid "Too many colours in PNG, the image may be slightly blurred."
-#~ msgstr ""
-#~ "Trop de couleurs dans l'image PNG, elle peut être légèrement trouble."
-
-#~ msgid "Unable to handle native drag&drop data"
-#~ msgstr "Impossible de gérer les données de glissé-déposé natif"
-
-#~ msgid "Unable to initialize Hildon program"
-#~ msgstr "Impossible d'initialiser le programme Hildon"
-
-#~ msgid "Unknown data format"
-#~ msgstr "Format de donnée inconnu"
-
-#~ msgid "Valid pointer to native data view control does not exist"
-#~ msgstr ""
-#~ "Un pointeur valable vers le contrôle de visualisation de données n'existe "
-#~ "pas"
-
-#~ msgid "Win32s on Windows 3.1"
-#~ msgstr "Win32s sur Windows 3.1"
-
-#~ msgid "Windows 10"
-#~ msgstr "Windows 10"
-
-#~ msgid "Windows 2000"
-#~ msgstr "Windows 2000"
-
-#~ msgid "Windows 7"
-#~ msgstr "Windows 7"
-
-#~ msgid "Windows 8"
-#~ msgstr "Windows 8"
-
-#~ msgid "Windows 8.1"
-#~ msgstr "Windows 8.1"
-
-#~ msgid "Windows 95"
-#~ msgstr "Windows 95"
-
-#~ msgid "Windows 95 OSR2"
-#~ msgstr "Windows 95 OSR2"
-
-#~ msgid "Windows 98"
-#~ msgstr "Windows 98"
-
-#~ msgid "Windows 98 SE"
-#~ msgstr "Windows 98 SE"
-
-#~ msgid "Windows 9x (%d.%d)"
-#~ msgstr "Windows 9x (%d.%d)"
-
-#~ msgid "Windows CE (%d.%d)"
-#~ msgstr "Windows CE (%d.%d)"
-
-#~ msgid "Windows ME"
-#~ msgstr "Windows ME"
-
-#~ msgid "Windows NT %lu.%lu"
-#~ msgstr "Windows NT %lu.%lu"
-
-#~ msgid "Windows Server 10"
-#~ msgstr "Windows Server 10"
-
-#~ msgid "Windows Server 2003"
-#~ msgstr "Windows Server 2003"
-
-#~ msgid "Windows Server 2008"
-#~ msgstr "Windows Server 2008"
-
-#~ msgid "Windows Server 2008 R2"
-#~ msgstr "Windows Server 2008 R2"
-
-#~ msgid "Windows Server 2012"
-#~ msgstr "Windows Server 2012"
-
-#~ msgid "Windows Server 2012 R2"
-#~ msgstr "Windows Server 2012 R2"
-
-#~ msgid "Windows Vista"
-#~ msgstr "Windows Vista"
-
-#~ msgid "Windows XP"
-#~ msgstr "Windows XP"
-
-#~ msgid "can't execute '%s'"
-#~ msgstr "échec de l'exécution de « %s »"
-
-#~ msgid "error opening '%s'"
-#~ msgstr "erreur à l'ouverture du fichier « %s »"
-
-#~ msgid "unknown seek origin"
-#~ msgstr "origine de la recherche inconnue"
-
-#~ msgid "wxWidget control pointer is not a data view pointer"
-#~ msgstr ""
-#~ "Le pointeur de contrôle wxWidget n'est pas un pointeur de visualisation "
-#~ "de données"
-
-#~ msgid "wxWidget's control not initialized."
-#~ msgstr "Contrôle wxWidgets non initialisé."
-
-#~ msgid "ADD"
-#~ msgstr "AJOUTER"
-
-#~ msgid "BACK"
-#~ msgstr "RETOUR"
-
-#~ msgid "CANCEL"
-#~ msgstr "ANNULER"
-
-#~ msgid "CAPITAL"
-#~ msgstr "MAJUSCULE"
-
-#~ msgid "CLEAR"
-#~ msgstr "SUPPRIMER"
-
-#~ msgid "COMMAND"
-#~ msgstr "COMMANDE"
-
-#~ msgid "Cannot create mutex."
-#~ msgstr "Impossible de créer le mutex."
-
-#~ msgid "Cannot resume thread %lu"
-#~ msgstr "Impossible de reprendre le processus %lu"
-
-#~ msgid "Cannot suspend thread %lu"
-#~ msgstr "Impossible de suspendre le processus %lu"
-
-#~ msgid "Couldn't acquire a mutex lock"
-#~ msgstr "Impossible de récupérer un verrou pour le mutex"
-
-#~ msgid "Couldn't get hatch style from wxBrush."
-#~ msgstr "Impossible d'obtenir le type de hachure depuis wxBrush."
-
-#~ msgid "Couldn't release a mutex"
-#~ msgstr "Impossible de libérer un mutex"
-
-#~ msgid "DECIMAL"
-#~ msgstr "DECIMAL"
-
-#~ msgid "DEL"
-#~ msgstr "EFFACER"
-
-#~ msgid "DELETE"
-#~ msgstr "EFFACER"
-
-#~ msgid "DIVIDE"
-#~ msgstr "DIVISER"
-
-#~ msgid "DOWN"
-#~ msgstr "BAS"
-
-#~ msgid "END"
-#~ msgstr "FIN"
-
-#~ msgid "ENTER"
-#~ msgstr "ENTRÉE"
-
-#~ msgid "ESC"
-#~ msgstr "ÉCHAP"
-
-#~ msgid "ESCAPE"
-#~ msgstr "ÉCHAPPEMENT"
-
-#~ msgid "EXECUTE"
-#~ msgstr "ÉXÉCUTER"
-
-#~ msgid "Execution of command '%s' failed with error: %ul"
-#~ msgstr "Échec de l'exécution de la commande « %s » avec l'erreur : %ul"
-
-#~ msgid ""
-#~ "File '%s' already exists.\n"
-#~ "Do you want to replace it?"
-#~ msgstr ""
-#~ "Le fichier « %s » existe déjà.\n"
-#~ "Voulez-vous le remplacer ?"
-
-#~ msgid "HELP"
-#~ msgstr "AIDE"
-
-#~ msgid "HOME"
-#~ msgstr "DEBUT"
-
-#~ msgid "INS"
-#~ msgstr "INS"
-
-#~ msgid "INSERT"
-#~ msgstr "INSERTION"
-
-#~ msgid "KP_BEGIN"
-#~ msgstr "KP_DEBUT"
-
-#~ msgid "KP_DECIMAL"
-#~ msgstr "KP_VIRGULE"
-
-#~ msgid "KP_DELETE"
-#~ msgstr "KP_EFFACER"
-
-#~ msgid "KP_DIVIDE"
-#~ msgstr "KP_DIVISER"
-
-#~ msgid "KP_DOWN"
-#~ msgstr "KP_BAS"
-
-#~ msgid "KP_ENTER"
-#~ msgstr "KP_ENTRER"
-
-#~ msgid "KP_EQUAL"
-#~ msgstr "KP_EGAL"
-
-#~ msgid "KP_HOME"
-#~ msgstr "KP_DEBUT"
-
-#~ msgid "KP_INSERT"
-#~ msgstr "KP_INSERER"
-
-#~ msgid "KP_LEFT"
-#~ msgstr "KP_GAUCHE"
-
-#~ msgid "KP_MULTIPLY"
-#~ msgstr "KP_MULTIPLIER"
-
-#~ msgid "KP_NEXT"
-#~ msgstr "KP_SUIVANT"
-
-#~ msgid "KP_PAGEDOWN"
-#~ msgstr "KP_PAGESUIVANTE"
-
-#~ msgid "KP_PAGEUP"
-#~ msgstr "KP_PAGEPRECEDENTE"
-
-#~ msgid "KP_PRIOR"
-#~ msgstr "KP_PRECEDENT"
-
-#~ msgid "KP_RIGHT"
-#~ msgstr "KP_DROITE"
-
-#~ msgid "KP_SEPARATOR"
-#~ msgstr "KP_SEPARATEUR"
-
-#~ msgid "KP_SPACE"
-#~ msgstr "KP_ESPACE"
-
-#~ msgid "KP_SUBTRACT"
-#~ msgstr "KP_MOINS"
-
-#~ msgid "LEFT"
-#~ msgstr "GAUCHE"
-
-#~ msgid "MENU"
-#~ msgstr "MENU"
-
-#~ msgid "NUM_LOCK"
-#~ msgstr "NUM_LOCK"
-
-#~ msgid "PAGEDOWN"
-#~ msgstr "PAGESUIVANTE"
-
-#~ msgid "PAGEUP"
-#~ msgstr "PAGEPRECEDENTE"
-
-#~ msgid "PAUSE"
-#~ msgstr "PAUSE"
-
-#~ msgid "PGDN"
-#~ msgstr "PAGESUIVANTE"
-
-#~ msgid "PGUP"
-#~ msgstr "PAGEPRECEDENTE"
-
-#~ msgid "PRINT"
-#~ msgstr "IMPRIMER"
-
-#~ msgid "RETURN"
-#~ msgstr "RETOUR"
-
-#~ msgid "RIGHT"
-#~ msgstr "DROITE"
-
-#~ msgid "SCROLL_LOCK"
-#~ msgstr "SCROLL_LOCK"
-
-#~ msgid "SELECT"
-#~ msgstr "SELECTION"
-
-#~ msgid "SEPARATOR"
-#~ msgstr "SEPARATEUR"
-
-#~ msgid "SNAPSHOT"
-#~ msgstr "CAPTURE_D_ECRAN"
-
-#~ msgid "SPACE"
-#~ msgstr "ESPACE"
-
-#~ msgid "SUBTRACT"
-#~ msgstr "SOUSTRAIRE"
-
-#~ msgid "TAB"
-#~ msgstr "TAB"
-
-#~ msgid "The print dialog returned an error."
-#~ msgstr "Le dialogue d'impression a retourné une erreur."
-
-#~ msgid "The wxGtkPrinterDC cannot be used."
-#~ msgstr "Le wxGtkPrinterDC ne peut être utilisé."
-
-#~ msgid "Timer creation failed."
-#~ msgstr "Échec de la création d'un minuteur."
-
-#~ msgid "UP"
-#~ msgstr "HAUT"
-
-#~ msgid "WINDOWS_LEFT"
-#~ msgstr "WINDOWS_GAUCHE"
-
-#~ msgid "WINDOWS_MENU"
-#~ msgstr "WINDOWS_MENU"
-
-#~ msgid "WINDOWS_RIGHT"
-#~ msgstr "WINDOWS_DROITE"
-
-#~ msgid "buffer is too small for Windows directory."
-#~ msgstr "Le tampon est trop petit pour le dossier Windows."
-
-#~ msgid "not implemented"
-#~ msgstr "non implémenté"
-
-#~ msgid "percent"
-#~ msgstr "pourcent"
-
-#~ msgid "Print preview"
-#~ msgstr "Aperçu avant impression"
-
-#~ msgid "&Preview..."
-#~ msgstr " Aperçu..."
-
-#~ msgid "Preview..."
-#~ msgstr " Aperçu..."
-
-#, fuzzy
-#~ msgid "The vertical offset relative to the paragraph."
-#~ msgstr "Le style par défaut pour le paragraphe suivant."
-
-#~ msgid "&Save..."
-#~ msgstr "&Enregistrer..."
-
-#~ msgid "About "
-#~ msgstr "À propos"
-
-#~ msgid "All files (*.*)|*"
-#~ msgstr "Tous les fichiers (*.*)|*"
-
-#~ msgid "Cannot initialize SciTech MGL!"
-#~ msgstr "Impossible d'initialiser SciTech MGL."
-
-#~ msgid "Cannot initialize display."
-#~ msgstr "Impossible d'initialiser l'affichage."
-
-#~ msgid "Cannot start thread: error writing TLS"
-#~ msgstr ""
-#~ "Impossible de lancer le processus : erreur lors de l'écriture de TLS"
-
-#~ msgid "Close\tAlt-F4"
-#~ msgstr "Fermer\tAlt-F4"
-
-#~ msgid "Couldn't create cursor."
-#~ msgstr "Impossible de créer un curseur."
-
-#~ msgid "Directory '%s' doesn't exist!"
-#~ msgstr "Répertoire « %s » inexistant."
-
-#~ msgid "Mode %ix%i-%i not available."
-#~ msgstr "Le mode %ix%i-%i n'est pas disponible."
-
-#~ msgid "Paper Size"
-#~ msgstr "Taille de la page"
-
-#~ msgid "%.*f GB"
-#~ msgstr "%.*f GB"
-
-#~ msgid "%.*f MB"
-#~ msgstr "%.*f MB"
-
-#~ msgid "%.*f TB"
-#~ msgstr "%.*f TB"
-
-#~ msgid "%.*f kB"
-#~ msgstr "%.*f kB"
-
-#~ msgid "%s B"
-#~ msgstr "%s B"
-
-#~ msgid "&Goto..."
-#~ msgstr "&Aller à..."
-
-#~ msgid "<<"
-#~ msgstr "<<"
-
-#~ msgid ">>"
-#~ msgstr ">>"
-
-#~ msgid ">>|"
-#~ msgstr ">>|"
-
-#~ msgid "Archive doesnt contain #SYSTEM file"
-#~ msgstr "L'archive ne contient pas de fichier #SYSTEM"
-
-#~ msgid "BIG5"
-#~ msgstr "BIG5"
-
-#~ msgid "Can't check image format of file '%s': file does not exist."
-#~ msgstr ""
-#~ "Impossible de vérifier le format d'image du fichier « %s » : le fichier "
-#~ "n'existe pas."
-
-#~ msgid "Can't load image from file '%s': file does not exist."
-#~ msgstr ""
-#~ "Impossible de charger l'image du fichier « %s » : le fichier n'existe pas."
-
-#~ msgid "Cannot convert dialog units: dialog unknown."
-#~ msgstr ""
-#~ "Impossible de convertir les unités de la fenêtre de dialogue : fenêtre de "
-#~ "dialogue inconnue."
-
-#~ msgid "Cannot convert from the charset '%s'!"
-#~ msgstr "Impossible de convertir depuis le jeu de caractères « %s »."
-
-#~ msgid "Cannot find container for unknown control '%s'."
-#~ msgstr "Impossible de trouver un conteneur pour le contrôle inconnu « %s »"
-
-#~ msgid "Cannot find font node '%s'."
-#~ msgstr "Impossible de trouver le noeud de la police de caractères « %s »."
-
-#~ msgid "Cannot open file '%s'."
-#~ msgstr "Impossible d'ouvrir le fichier « %s »."
-
-#~ msgid "Cannot parse coordinates from '%s'."
-#~ msgstr "Impossible de parcourir les coordonnées dans « %s »."
-
-#~ msgid "Cannot parse dimension from '%s'."
-#~ msgstr "Impossible de parcourir les dimensions dans « %s »."
-
-#~ msgid "Cant create the thread event queue"
-#~ msgstr "Impossible de créer la queue d'événements du processus"
-
-#~ msgid "Click to cancel this window."
-#~ msgstr "Cliquez pour annuler cette fenêtre."
-
-#~ msgid "Click to confirm your selection."
-#~ msgstr "Cliquez pour confirmer votre sélection."
-
-#~ msgid "Could not unlock mutex"
-#~ msgstr "Impossible de déverrouiller le mutex"
-
-#~ msgid "Error while waiting on semaphore"
-#~ msgstr "Erreur lors de l'attente d'une sémaphore"
-
-#, fuzzy
-#~ msgid "Failed to connect to session manager: %s"
-#~ msgstr "N'a pas réussi à %s la connexion : %s"
-
-#~ msgid "Failed to create a status bar."
-#~ msgstr "Échec de la création d'une barre d'état."
-
-#~ msgid "Failed to register OpenGL window class."
-#~ msgstr "Échec de l'enregistrement de la classe de fenêtres OpenGL."
-
-#~ msgid "Fatal error: "
-#~ msgstr "Erreur fatale : "
-
-#~ msgid "GB-2312"
-#~ msgstr "GB-2312"
-
-#~ msgid "Go forward to the next HTML page"
-#~ msgstr "Aller vers la page HTML suivante"
-
-#~ msgid "Goto Page"
-#~ msgstr "Aller à la page"
-
-#, fuzzy
-#~ msgid ""
-#~ "HTML pagination algorithm generated more than the allowed maximum number "
-#~ "of pages and it can't continue any longer!"
-#~ msgstr ""
-#~ "L'algorithme de mise en page a généré plus de pages que le nombre maximum "
-#~ "admissible et il ne peut poursuivre !"
-
-#~ msgid "Help : %s"
-#~ msgstr "Aide : %s"
-
-#~ msgid "I64"
-#~ msgstr "I64"
-
-#~ msgid "Internal error, illegal wxCustomTypeInfo"
-#~ msgstr "Erreur interne : wxCustomTypeInfo illégal"
-
-#~ msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
-#~ msgstr ""
-#~ "Ressource XRC « %s » non valable : absence du noeud racine « resource »."
-
-#~ msgid "No handler found for XML node '%s', class '%s'!"
-#~ msgstr ""
-#~ "Aucun gestionnaire trouvé pour le noeud XML « %s » de la classe « %s »."
-
-#~ msgid "No image handler for type %ld defined."
-#~ msgstr "Aucun gestionnaire d'image défini pour le type %ld."
-
-#, fuzzy
-#~ msgid "Owner not initialized."
-#~ msgstr "Impossible d'initialiser l'affichage."
-
-#, fuzzy
-#~ msgid "Passed item is invalid."
-#~ msgstr "« %s » n'est pas valable"
-
-#~ msgid "Passing a already registered object to SetObjectName"
-#~ msgstr "Objet déjà enregistré indiqué à SetObjectName"
-
-#~ msgid "Preparing help window..."
-#~ msgstr "Préparation de la fenêtre d'aide..."
-
-#~ msgid "Program aborted."
-#~ msgstr "Programme interrompu."
-
-#~ msgid "Referenced object node with ref=\"%s\" not found!"
-#~ msgstr "Le noeud objet référencé par ref=\"%s\" est introuvable."
-
-#~ msgid "Resource files must have same version number!"
-#~ msgstr "Les fichiers de ressource doivent avoir le même numéro de version."
-
-#~ msgid "SHIFT-JIS"
-#~ msgstr "SHIFT-JIS"
-
-#~ msgid "Search!"
-#~ msgstr "Chercher !"
-
-#~ msgid "Sorry, could not open this file for saving."
-#~ msgstr "Impossible d'ouvrir ce fichier pour l'enregistrement."
-
-#~ msgid "Sorry, could not save this file."
-#~ msgstr "Impossible d'enregistrer ce fichier."
-
-#~ msgid "Sorry, print preview needs a printer to be installed."
-#~ msgstr "L'aperçu avant impression nécessite une imprimante installée."
-
-#~ msgid "Status: "
-#~ msgstr "État : "
-
-#~ msgid ""
-#~ "Streaming delegates for not already streamed objects not yet supported"
-#~ msgstr ""
-#~ "Les flux délégués pour les objets non transformés en flux ne sont pas "
-#~ "encore gérés"
-
-#~ msgid "Subclass '%s' not found for resource '%s', not subclassing!"
-#~ msgstr ""
-#~ "Sous-classe « %s » non trouvée pour la ressource « %s », pas de sous-"
-#~ "classement."
-
-#~ msgid "TIFF library error."
-#~ msgstr "Erreur dans la bibliothèque TIFF"
-
-#~ msgid "TIFF library warning."
-#~ msgstr "Alarme dans la bibliothèque TIFF"
-
-#~ msgid ""
-#~ "The file '%s' couldn't be opened.\n"
-#~ "It has been removed from the most recently used files list."
-#~ msgstr ""
-#~ "Le fichier « %s » n'a pas pu être ouvert et a été retiré\n"
-#~ "de la liste des fichiers récemment utilisés."
-
-#~ msgid "The path '%s' contains too many \"..\"!"
-#~ msgstr "Le chemin « %s » contient trop de « .. »."
-
-#~ msgid "Trying to solve a NULL hostname: giving up"
-#~ msgstr "Tentative de résoudre le nom d'hôte NULL : abandon"
-
-#~ msgid "Unknown style flag "
-#~ msgstr "Indicateur de style inconnu"
-
-#~ msgid "Warning"
-#~ msgstr "Avertissement"
-
-#~ msgid "Windows 2000 (build %lu"
-#~ msgstr "Windows 2000 (construction %lu"
-
-#~ msgid "XRC resource '%s' (class '%s') not found!"
-#~ msgstr "Ressource XRC « %s » (classe « %s ») introuvable."
-
-#~ msgid "XRC resource: Cannot create animation from '%s'."
-#~ msgstr "Ressource XRC : impossible de créer une animation de « %s »."
-
-#~ msgid "XRC resource: Cannot create bitmap from '%s'."
-#~ msgstr ""
-#~ "Ressource XRC : impossible de créer une image bitmap à partir de « %s »."
-
-#, fuzzy
-#~ msgid ""
-#~ "XRC resource: Incorrect colour specification '%s' for attribute '%s'."
-#~ msgstr ""
-#~ "Ressource XRC : spécification de couleur « %s » non valable pour la "
-#~ "propriété « %s »."
-
-#~ msgid "[EMPTY]"
-#~ msgstr "[VIDE]"
-
-#~ msgid "catalog file for domain '%s' not found."
-#~ msgstr "fichier catalogue introuvable pour le domaine « %s »."
-
-#~ msgid "delegate has no type info"
-#~ msgstr "Le délégué n'a pas d'information sur le type"
-
-#~ msgid "encoding %i"
-#~ msgstr "codage %i"
-
-#~ msgid "looking for catalog '%s' in path '%s'."
-#~ msgstr "recherche le catalogue « %s » dans « %s »."
-
-#~ msgid "wxRichTextFontPage"
-#~ msgstr "wxRichTextFontPage"
-
-#~ msgid "wxSearchEngine::LookFor must be called before scanning!"
-#~ msgstr "wxSearchEngine::LookFor doit être appelé avant de scanner !"
-
-#~ msgid "wxSocket: invalid signature in ReadMsg."
-#~ msgstr "wxSocket : signature non valable dans ReadMsg."
-
-#~ msgid "wxSocket: unknown event!."
-#~ msgstr "wxSocket : événement inconnu."
-
-#~ msgid "|<<"
-#~ msgstr "|<<"
-
-#~ msgid " Couldn't create the UnicodeConverter"
-#~ msgstr "Impossible de créer le UnicodeConverter"
-
-#~ msgid "#define %s must be an integer."
-#~ msgstr "#define %s doit être un entier."
-
-#~ msgid "%s not a bitmap resource specification."
-#~ msgstr "%s n'est pas une spécification d'une ressource bitmap."
-
-#~ msgid "%s not an icon resource specification."
-#~ msgstr "%s n'est pas une spécification d'une ressource icône."
-
-#~ msgid "%s: ill-formed resource file syntax."
-#~ msgstr "%s : syntaxe du fichier de ressource malformée."
-
-#~ msgid "&Open"
-#~ msgstr "&Ouvrir"
-
-#~ msgid "&Print"
-#~ msgstr "&Imprimer"
-
-#~ msgid "*** It can be found in \"%s\"\n"
-#~ msgstr "*** Il peut être trouvé dans « %s »\n"
-
-#~ msgid ""
-#~ ", expected static, #include or #define\n"
-#~ "while parsing resource."
-#~ msgstr ""
-#~ ", static, #include ou #define\n"
-#~ "attendu lors de l'analyse des ressources."
-
-#~ msgid "Bitmap resource specification %s not found."
-#~ msgstr "Spécification %s de la ressource bitmap introuvable."
-
-#~ msgid "Closes the dialog without inserting a symbol."
-#~ msgstr "Ferme la fenêtre sans insérer de symbole."
-
-#~ msgid ""
-#~ "Could not resolve control class or id '%s'. Use (non-zero) integer "
-#~ "instead\n"
-#~ " or provide #define (see manual for caveats)"
-#~ msgstr ""
-#~ "Impossible de résoudre la classe de contrôle ou l'identifiant « %s ».\n"
-#~ "Utiliser à la place un entier (non nul) ou spécifier un #define\n"
-#~ "(voir le manuel pour les mises en garde)"
-
-#~ msgid ""
-#~ "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
-#~ "or provide #define (see manual for caveats)"
-#~ msgstr ""
-#~ "Impossible de résoudre l'identifiant « %s » du menu. Utiliser à la place\n"
-#~ "un entier (non nul) ou spécifier un #define (voir le manuel pour les "
-#~ "mises\n"
-#~ "en garde)"
-
-#~ msgid "Couldn't end the context on the overlay window"
-#~ msgstr "Impossible de changer le contexte de le fenêtre de recouvrement"
-
-#~ msgid "Expected '*' while parsing resource."
-#~ msgstr "« * » attendue lors du parcours de la ressource."
-
-#~ msgid "Expected '=' while parsing resource."
-#~ msgstr "« = » attendu lors du parcours de la ressource."
-
-#~ msgid "Expected 'char' while parsing resource."
-#~ msgstr "« char » attendu lors du parcours de la ressource."
-
-#~ msgid ""
-#~ "Failed to find XBM resource %s.\n"
-#~ "Forgot to use wxResourceLoadBitmapData?"
-#~ msgstr ""
-#~ "Ressource XBM %s introuvable.\n"
-#~ "Avez-vous oublié d'utiliser wxResourceLoadBitmapData ?"
-
-#~ msgid ""
-#~ "Failed to find XBM resource %s.\n"
-#~ "Forgot to use wxResourceLoadIconData?"
-#~ msgstr ""
-#~ "Ressource XBM %s introuvable.\n"
-#~ "Avez-vous oublié d'utiliser wxResourceLoadIconData ?"
-
-#~ msgid ""
-#~ "Failed to find XPM resource %s.\n"
-#~ "Forgot to use wxResourceLoadBitmapData?"
-#~ msgstr ""
-#~ "Ressource XPM %s introuvable.\n"
-#~ "Avez-vous oublié d'utiliser wxResourceLoadBitmapData ?"
-
-#~ msgid "Failed to get clipboard data."
-#~ msgstr "Échec de l'obtention des données du presse-papiers."
-
-#~ msgid "Failed to load shared library '%s' Error '%s'"
-#~ msgstr ""
-#~ "Échec du chargement de la bibliothèque partagée « %s » : erreur « %s »"
-
-#~ msgid "Found "
-#~ msgstr "A trouvé "
-
-#~ msgid "Icon resource specification %s not found."
-#~ msgstr "Spécification %s de la ressource de l'icône non trouvée."
-
-#~ msgid "Ill-formed resource file syntax."
-#~ msgstr "Syntaxe du fichier de ressource malformée."
-
-#~ msgid "Inserts the chosen symbol."
-#~ msgstr "Insérer le symbole choisi."
-
-#~ msgid "Long Conversions not supported"
-#~ msgstr "Conversions longues non gérées"
-
-#~ msgid "No XPM icon facility available!"
-#~ msgstr "Aucune fonctionnalité disponible pour les icônes XPM."
-
-#~ msgid "Option '%s' requires a value, '=' expected."
-#~ msgstr "L'option « %s » nécessite une valeur, « = » attendu."
-
-#~ msgid "Select all"
-#~ msgstr "Tout sélectionner"
-
-#~ msgid ""
-#~ "Sorry, docking is not supported for ports other than wxMSW, wxMac and "
-#~ "wxGTK"
-#~ msgstr "Désolé, l'arrimage n'est supporté que pour wxMSW, wxMAC et wxGTK"
-
-#~ msgid "Unexpected end of file while parsing resource."
-#~ msgstr "Fin de fichier inattendue lors de l'analyse des ressources."
-
-#~ msgid "Unrecognized style %s while parsing resource."
-#~ msgstr "Style %s non reconnu pendant l'analyse des ressources."
-
-#~ msgid "Video Output"
-#~ msgstr "Sortie vidéo"
-
-#~ msgid "Warning: attempt to remove HTML tag handler from empty stack."
-#~ msgstr ""
-#~ "Avertissement : tentative de suppression d'un gestionnaire d'étiquette "
-#~ "HTML d'une pile vide."
-
-#~ msgid "establish"
-#~ msgstr "établir"
-
-#~ msgid "initiate"
-#~ msgstr "initialiser"
-
-#~ msgid "invalid eof() return value."
-#~ msgstr "eof() a renvoyé une valeur non valable."
-
-#~ msgid "unknown line terminator"
-#~ msgstr "fin de ligne inconnue"
-
-#~ msgid "writing"
-#~ msgstr "écriture"
-
-#~ msgid "wxRichTextBulletsPage"
-#~ msgstr "wxRichTextBulletsPage"
-
-#~ msgid "wxRichTextListStylePage"
-#~ msgstr "wxRichTextListStylePage"
-
-#~ msgid "wxRichTextStylePage"
-#~ msgstr "wxRichTextStylePage"
-
-#~ msgid "."
-#~ msgstr "."
-
-#~ msgid "Cannot open URL '%s'"
-#~ msgstr "Impossible d'ouvrir le lien « %s »"
-
-#~ msgid "Error "
-#~ msgstr "Erreur "
-
-#~ msgid "Failed to create directory %s/.gnome."
-#~ msgstr "Échec de la création du répertoire %s/.gnome."
-
-#~ msgid "Failed to create directory %s/mime-info."
-#~ msgstr "Échec de la création du répertoire %s/mime-info."
-
-#~ msgid ""
-#~ "Failed to get stack backtrace:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Échec de l'obtention de la pile d'appel :\n"
-#~ "%s"
-
-#~ msgid "Loading Grey Ascii PNM image is not yet implemented."
-#~ msgstr ""
-#~ "Le chargement d'une image PNM ASCII en niveau de gris n'est pas encore "
-#~ "implémenté."
-
-#~ msgid "Loading Grey Raw PNM image is not yet implemented."
-#~ msgstr ""
-#~ "Le chargement d'une image PNM source en niveau de gris n'est pas encore "
-#~ "implémenté."
-
-#~ msgid "MP Thread Support is not available on this System"
-#~ msgstr "Gestion des processus MP non disponible sur ce système"
-
-#~ msgid "Mailcap file %s, line %d: incomplete entry ignored."
-#~ msgstr "Fichier mailcap %s, ligne %d : entrée incomplète ignorée."
-
-#~ msgid "Mime.types file %s, line %d: unterminated quoted string."
-#~ msgstr ""
-#~ "Fichier mime.types %s, ligne %d : chaîne entre guillemets non terminée."
-
-#~ msgid "Unknown field in file %s, line %d: '%s'."
-#~ msgstr "Champ inconnu dans le fichier %s, ligne %d : « %s »."
-
-#~ msgid "bold "
-#~ msgstr "gras "
-
-#~ msgid "can't query for GUI plugins name in console applications"
-#~ msgstr ""
-#~ "ne peut chercher des noms de greffon graphique dans les applications en "
-#~ "console"
-
-#~ msgid "light "
-#~ msgstr "léger "
-
-#~ msgid "underlined "
-#~ msgstr "souligné "
-
-#~ msgid "unsupported zip archive"
-#~ msgstr "archive zip non gérée"

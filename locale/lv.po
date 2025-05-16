@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 16:44+0100\n"
+"POT-Creation-Date: 2025-05-14 20:23+0200\n"
 "PO-Revision-Date: 2013-01-23 13:14+0300\n"
 "Last-Translator: Jānis Eisaks <jancs@dv.lv>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "X-Poedit-Country: LATVIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../include/wx/defs.h:2596
+#: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
 msgstr "Visus failus (*.*)|*.*"
 
-#: ../include/wx/defs.h:2599
+#: ../include/wx/defs.h:2585
 msgid "All files (*)|*"
 msgstr "Visus failus (*)|*"
 
@@ -42,13 +42,13 @@ msgstr "Atlikušais laiks:"
 
 #. TRANSLATORS: HTML printout default title.
 #: ../include/wx/html/htmprint.h:121 ../include/wx/prntbase.h:273
-#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2166
+#: ../include/wx/richtext/richtextprint.h:109 ../src/common/docview.cpp:2161
 msgid "Printout"
 msgstr "Izdruka"
 
 #. TRANSLATORS: HTML easy print default title.
 #: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:289
+#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:291
 msgid "Printing"
 msgstr "Drukāšana"
 
@@ -203,17 +203,19 @@ msgid "Close All"
 msgstr "Aizvērt Visus"
 
 #: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:97 ../src/msw/mdi.cpp:175
+#: ../src/qt/mdi.cpp:258
 msgid "&Next"
 msgstr "&Nākošais"
 
 #: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:98 ../src/msw/mdi.cpp:176
+#: ../src/qt/mdi.cpp:259
 msgid "&Previous"
 msgstr "Ie&priekšējais"
 
 #: ../src/aui/tabmdi.cpp:332 ../src/aui/tabmdi.cpp:348
 #: ../src/aui/tabmdi.cpp:350 ../src/generic/mdig.cpp:291
 #: ../src/generic/mdig.cpp:307 ../src/generic/mdig.cpp:311
-#: ../src/msw/mdi.cpp:337
+#: ../src/msw/mdi.cpp:337 ../src/qt/mdi.cpp:462
 msgid "&Window"
 msgstr "&Logs"
 
@@ -710,71 +712,56 @@ msgctxt "keyboard key"
 msgid "Command"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:186
+#: ../src/common/accelcmn.cpp:186 ../src/common/accelcmn.cpp:359
 msgctxt "keyboard key"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:188
+#: ../src/common/accelcmn.cpp:188 ../src/common/accelcmn.cpp:363
 msgctxt "keyboard key"
 msgid "Alt"
 msgstr "Alt"
 
-#: ../src/common/accelcmn.cpp:190
+#: ../src/common/accelcmn.cpp:190 ../src/common/accelcmn.cpp:361
 msgctxt "keyboard key"
 msgid "Shift"
 msgstr "Shift"
 
-#: ../src/common/accelcmn.cpp:194
+#: ../src/common/accelcmn.cpp:196
 msgctxt "keyboard key"
 msgid "num "
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:356
+#: ../src/common/accelcmn.cpp:260 ../src/common/accelcmn.cpp:382
 msgctxt "keyboard key"
 msgid "F"
 msgstr "F"
 
-#: ../src/common/accelcmn.cpp:275 ../src/common/accelcmn.cpp:359
+#: ../src/common/accelcmn.cpp:277 ../src/common/accelcmn.cpp:385
 msgctxt "keyboard key"
 msgid "KP_F"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:278 ../src/common/accelcmn.cpp:362
+#: ../src/common/accelcmn.cpp:280 ../src/common/accelcmn.cpp:388
 msgctxt "keyboard key"
 msgid "KP_"
 msgstr "KP_"
 
-#: ../src/common/accelcmn.cpp:281 ../src/common/accelcmn.cpp:365
+#: ../src/common/accelcmn.cpp:283 ../src/common/accelcmn.cpp:391
 msgctxt "keyboard key"
 msgid "SPECIAL"
 msgstr "Speciāls"
 
-#: ../src/common/accelcmn.cpp:343
-msgctxt "keyboard key"
-msgid "Alt+"
-msgstr "Alt+"
+#: ../src/common/accelcmn.cpp:373
+#, fuzzy
+msgid "Ctrl"
+msgstr "Ctrl"
 
-#: ../src/common/accelcmn.cpp:345
-msgctxt "keyboard key"
-msgid "Ctrl+"
-msgstr "Ctrl+"
-
-#: ../src/common/accelcmn.cpp:347
-msgctxt "keyboard key"
-msgid "Shift+"
-msgstr "Shift+"
-
-#: ../src/common/accelcmn.cpp:350
-msgctxt "keyboard key"
-msgid "RawCtrl+"
-msgstr "RawCtrl+"
-
-#: ../src/common/appbase.cpp:759
+#: ../src/common/appbase.cpp:786
 msgid "show this help message"
 msgstr "parādīt šo palīdzības paziņojumu"
 
-#: ../src/common/appbase.cpp:769
+#: ../src/common/appbase.cpp:796
 msgid "generate verbose log messages"
 msgstr "veidot izsmeļošus žurnāla ierakstus"
 
@@ -892,7 +879,7 @@ msgid "Can't &Undo "
 msgstr "Nevar &atcelt"
 
 #: ../src/common/cmdproc.cpp:259 ../src/common/stockitem.cpp:208
-#: ../src/msw/textctrl.cpp:2862 ../src/osx/textctrl_osx.cpp:649
+#: ../src/msw/textctrl.cpp:2880 ../src/osx/textctrl_osx.cpp:649
 #: ../src/richtext/richtextctrl.cpp:327
 msgid "&Undo"
 msgstr "Atsa&ukt"
@@ -902,7 +889,7 @@ msgid "&Redo "
 msgstr "Atat&saukt "
 
 #: ../src/common/cmdproc.cpp:281 ../src/common/cmdproc.cpp:288
-#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2863
+#: ../src/common/stockitem.cpp:190 ../src/msw/textctrl.cpp:2881
 #: ../src/osx/textctrl_osx.cpp:650 ../src/richtext/richtextctrl.cpp:328
 msgid "&Redo"
 msgstr "Atat&saukt"
@@ -929,17 +916,17 @@ msgid "'%s' has extra '..', ignored."
 msgstr "'%s' ir lieks '..', nav ņemts vērā."
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2163 ../src/generic/datavgen.cpp:1424
+#: ../src/common/datavcmn.cpp:2166 ../src/generic/datavgen.cpp:1430
 msgid "checked"
 msgstr ""
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2167 ../src/generic/datavgen.cpp:1426
+#: ../src/common/datavcmn.cpp:2170 ../src/generic/datavgen.cpp:1432
 msgid "unchecked"
 msgstr ""
 
 #. TRANSLATORS: Checkbox state name
-#: ../src/common/datavcmn.cpp:2171
+#: ../src/common/datavcmn.cpp:2174
 #, fuzzy
 msgid "undetermined"
 msgstr "pasvītrots"
@@ -1107,81 +1094,81 @@ msgstr "Neizdevās izpildīt curl, lūdzu uzstādiet to sistēmas ceļā (PATH).
 msgid "Failed to upload the debug report (error code %d)."
 msgstr "Neizdevās augšupielādēt atkļūdošanas atskaiti (kļūda kods %d)."
 
-#: ../src/common/docview.cpp:367
+#: ../src/common/docview.cpp:366
 msgid "Save As"
 msgstr "Saglabāt kā"
 
-#: ../src/common/docview.cpp:458
+#: ../src/common/docview.cpp:457
 msgid "Discard changes and reload the last saved version?"
 msgstr "Atmest izmaiņas un atvērt pēdējo saglabāto versiju?"
 
-#: ../src/common/docview.cpp:489
+#: ../src/common/docview.cpp:488
 msgid "unnamed"
 msgstr "nenosaukts"
 
-#: ../src/common/docview.cpp:514
+#: ../src/common/docview.cpp:513
 #, c-format
 msgid "Do you want to save changes to %s?"
 msgstr "Vai vēlaties saglabāt izmaiņas %s?"
 
-#: ../src/common/docview.cpp:522 ../src/common/docview.cpp:561
+#: ../src/common/docview.cpp:521 ../src/common/docview.cpp:560
 #: ../src/common/stockitem.cpp:195
 msgid "&Save"
 msgstr "&Saglabāt"
 
-#: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
+#: ../src/common/docview.cpp:522 ../src/common/docview.cpp:560
 msgid "&Discard changes"
 msgstr ""
 
-#: ../src/common/docview.cpp:524
+#: ../src/common/docview.cpp:523
 #, fuzzy
 msgid "Do&n't close"
 msgstr "Nesaglabāt"
 
-#: ../src/common/docview.cpp:554
+#: ../src/common/docview.cpp:553
 #, fuzzy, c-format
 msgid "Do you want to save changes to %s before closing it?"
 msgstr "Vai vēlaties saglabāt izmaiņas %s?"
 
-#: ../src/common/docview.cpp:560
+#: ../src/common/docview.cpp:559
 #, fuzzy
 msgid "The document must be closed."
 msgstr "Tekstu nav iespējams saglabāt."
 
-#: ../src/common/docview.cpp:572
+#: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
 msgstr ""
 
-#: ../src/common/docview.cpp:578
+#: ../src/common/docview.cpp:577
 msgid "Retry"
 msgstr ""
 
-#: ../src/common/docview.cpp:578
+#: ../src/common/docview.cpp:577
 msgid "Discard changes"
 msgstr ""
 
-#: ../src/common/docview.cpp:680
+#: ../src/common/docview.cpp:679
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "Fails \"%s\" nav atverams rakstīšanai."
 
-#: ../src/common/docview.cpp:686
+#: ../src/common/docview.cpp:685
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "Neizdevās saglabāt dokumentu failā \"%s\"."
 
-#: ../src/common/docview.cpp:703
+#: ../src/common/docview.cpp:702
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "Fails \"%s\" nav atverams lasīšanai."
 
-#: ../src/common/docview.cpp:715
+#: ../src/common/docview.cpp:714
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "Neizdevās ielasīt dokumentu no faila \"%s\"."
 
-#: ../src/common/docview.cpp:1240
+#: ../src/common/docview.cpp:1236
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -1190,57 +1177,57 @@ msgstr ""
 "Fails '%s' nepastāv un nav atverams.\n"
 "Tas ir aizvākts no pēdējo izmantoto failu saraksta."
 
-#: ../src/common/docview.cpp:1300
+#: ../src/common/docview.cpp:1296
 msgid "Print preview creation failed."
 msgstr "Neizdevās izveidot izdrukas priekšskatījumu."
 
-#: ../src/common/docview.cpp:1306
+#: ../src/common/docview.cpp:1302
 msgid "Print Preview"
 msgstr "Drukas priekšskatījums"
 
-#: ../src/common/docview.cpp:1521
+#: ../src/common/docview.cpp:1517
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Nav iespējams noteikt faila '%s' formātu."
 
-#: ../src/common/docview.cpp:1648
+#: ../src/common/docview.cpp:1643
 #, c-format
 msgid "unnamed%d"
 msgstr "nenosaukts%d"
 
-#: ../src/common/docview.cpp:1665
+#: ../src/common/docview.cpp:1660
 msgid " - "
 msgstr " - "
 
-#: ../src/common/docview.cpp:1796 ../src/common/docview.cpp:1849
+#: ../src/common/docview.cpp:1791 ../src/common/docview.cpp:1844
 msgid "Open File"
 msgstr "Atvērt failu"
 
-#: ../src/common/docview.cpp:1812
+#: ../src/common/docview.cpp:1807
 msgid "File error"
 msgstr "Faila kļūda"
 
-#: ../src/common/docview.cpp:1814
+#: ../src/common/docview.cpp:1809
 msgid "Sorry, could not open this file."
 msgstr "Diemžēl, šis fails nav atverams."
 
-#: ../src/common/docview.cpp:1848
+#: ../src/common/docview.cpp:1843
 msgid "Sorry, the format for this file is unknown."
 msgstr "Atvainojiet, šis faila formāts nav zinams."
 
-#: ../src/common/docview.cpp:1929
+#: ../src/common/docview.cpp:1924
 msgid "Select a document template"
 msgstr "Izvēlieties dokumenta sagatavi"
 
-#: ../src/common/docview.cpp:1930
+#: ../src/common/docview.cpp:1925
 msgid "Templates"
 msgstr "Sagataves"
 
-#: ../src/common/docview.cpp:2003
+#: ../src/common/docview.cpp:1998
 msgid "Select a document view"
 msgstr "Izvēlieties dokumenta skatu"
 
-#: ../src/common/docview.cpp:2004
+#: ../src/common/docview.cpp:1999
 msgid "Views"
 msgstr "Skati"
 
@@ -2236,130 +2223,130 @@ msgstr "BMP: nav iespējams pierakstīt RGB krāsu karti."
 msgid "BMP: Couldn't write data."
 msgstr "BMP: nevar ierakstīt datus."
 
-#: ../src/common/imagbmp.cpp:556 ../src/common/imagbmp.cpp:572
+#: ../src/common/imagbmp.cpp:561 ../src/common/imagbmp.cpp:642
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: nevar piešķirt atmiņu."
 
-#: ../src/common/imagbmp.cpp:1046
+#: ../src/common/imagbmp.cpp:1041
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "DIB galvene: attēla platums > 32767 pikseļiem."
 
-#: ../src/common/imagbmp.cpp:1054
+#: ../src/common/imagbmp.cpp:1049
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "DIB galvene: attēla augstums > 32767 pikseļiem."
 
-#: ../src/common/imagbmp.cpp:1086
+#: ../src/common/imagbmp.cpp:1081
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB galvene: nezināms bitu dziļums."
 
-#: ../src/common/imagbmp.cpp:1160
+#: ../src/common/imagbmp.cpp:1156
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB galvene: nezināms faila kodējums."
 
-#: ../src/common/imagbmp.cpp:1169
+#: ../src/common/imagbmp.cpp:1165
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB galvene: kodējums neatbilst bitu dziļumam."
 
-#: ../src/common/imagbmp.cpp:1185
+#: ../src/common/imagbmp.cpp:1180
 #, c-format
-msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
+msgid "BMP Header: Invalid number of colors (%d)."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1279
+#: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
 msgstr "Kļūda nolasot attēla DIB"
 
-#: ../src/common/imagbmp.cpp:1300
+#: ../src/common/imagbmp.cpp:1294
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: kļūda lasot DIB masku."
 
-#: ../src/common/imagbmp.cpp:1359
+#: ../src/common/imagbmp.cpp:1353
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: attēls ikonai ir pārāk augsts."
 
-#: ../src/common/imagbmp.cpp:1367
+#: ../src/common/imagbmp.cpp:1361
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: attēls ikonai ir pārāk plats."
 
-#: ../src/common/imagbmp.cpp:1394 ../src/common/imagbmp.cpp:1494
-#: ../src/common/imagbmp.cpp:1509 ../src/common/imagbmp.cpp:1520
-#: ../src/common/imagbmp.cpp:1534 ../src/common/imagbmp.cpp:1582
-#: ../src/common/imagbmp.cpp:1597 ../src/common/imagbmp.cpp:1611
-#: ../src/common/imagbmp.cpp:1622
+#: ../src/common/imagbmp.cpp:1388 ../src/common/imagbmp.cpp:1488
+#: ../src/common/imagbmp.cpp:1503 ../src/common/imagbmp.cpp:1514
+#: ../src/common/imagbmp.cpp:1528 ../src/common/imagbmp.cpp:1576
+#: ../src/common/imagbmp.cpp:1591 ../src/common/imagbmp.cpp:1605
+#: ../src/common/imagbmp.cpp:1616
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: kļūda rakstot attēla failu!"
 
-#: ../src/common/imagbmp.cpp:1707
+#: ../src/common/imagbmp.cpp:1701
 msgid "ICO: Invalid icon index."
 msgstr "ICO: nederīgs ikonas indekss."
 
-#: ../src/common/image.cpp:2358
+#: ../src/common/image.cpp:2410
 msgid "Image and mask have different sizes."
 msgstr "Attēla un maskas izmēri nesakrīt."
 
-#: ../src/common/image.cpp:2366 ../src/common/image.cpp:2407
+#: ../src/common/image.cpp:2418 ../src/common/image.cpp:2459
 msgid "No unused colour in image being masked."
 msgstr ""
 
-#: ../src/common/image.cpp:2589
+#: ../src/common/image.cpp:2641
 #, fuzzy, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
 msgstr "Neizdevās ielādēt attēlu %d no straumējuma."
 
-#: ../src/common/image.cpp:2598
+#: ../src/common/image.cpp:2650
 #, fuzzy, c-format
 msgid "Failed to load icon \"%s\" from resources."
 msgstr "Neizdevās ielādēt attēlu %d no straumējuma."
 
-#: ../src/common/image.cpp:2676 ../src/common/image.cpp:2695
+#: ../src/common/image.cpp:2728 ../src/common/image.cpp:2747
 #, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "Neizdevās ielādēt attēlu no faila \"%s\"."
 
-#: ../src/common/image.cpp:2709
+#: ../src/common/image.cpp:2761
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Nav iespējams saglabāt attēlu failā '%s: nezināms paplašinājums."
 
-#: ../src/common/image.cpp:2817
+#: ../src/common/image.cpp:2869
 msgid "No handler found for image type."
 msgstr ""
 
-#: ../src/common/image.cpp:2825 ../src/common/image.cpp:2948
-#: ../src/common/image.cpp:3014
+#: ../src/common/image.cpp:2877 ../src/common/image.cpp:3000
+#: ../src/common/image.cpp:3066
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr ""
 
-#: ../src/common/image.cpp:2835
+#: ../src/common/image.cpp:2887
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "Attēla faila tips nav %d."
 
-#: ../src/common/image.cpp:2918
+#: ../src/common/image.cpp:2970
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
 
-#: ../src/common/image.cpp:2936
+#: ../src/common/image.cpp:2988
 msgid "Unknown image data format."
 msgstr "Nezinām attēla datu formāts."
 
-#: ../src/common/image.cpp:2957
+#: ../src/common/image.cpp:3009
 #, c-format
 msgid "This is not a %s."
 msgstr "Šis nav %s."
 
-#: ../src/common/image.cpp:2980 ../src/common/image.cpp:3028
+#: ../src/common/image.cpp:3032 ../src/common/image.cpp:3080
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr ""
 
-#: ../src/common/image.cpp:2989
+#: ../src/common/image.cpp:3041
 #, c-format
 msgid "Image is not of type %s."
 msgstr "Attēla tips nav %s."
 
-#: ../src/common/image.cpp:3457
+#: ../src/common/image.cpp:3509
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "Neizdevās pārbaudīt attēla \"%s\" faila formātu."
@@ -2499,7 +2486,41 @@ msgstr "TIFF: kļūda pierakstot attēlu."
 msgid "TIFF: Error flushing data."
 msgstr "TIFF: kļūda saglabājot attēlu."
 
-#: ../src/common/init.cpp:173
+#: ../src/common/imagwebp.cpp:56
+msgid "WebP: Invalid data (failed to get features)."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:65
+msgid "WebP: Allocating image memory failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:82
+msgid "WebP: Decoding RGBA image data failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:98
+msgid "WebP: Decoding RGB image data failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
+msgid "WebP: Allocating stream buffer failed."
+msgstr ""
+
+#: ../src/common/imagwebp.cpp:131
+#, fuzzy
+msgid "WebP: Failed to parse container data."
+msgstr "Neizdevās iestatīt starpliktuves datus."
+
+#: ../src/common/imagwebp.cpp:222
+#, fuzzy
+msgid "WebP: Error decoding animation."
+msgstr "Kļūda lasot konfigurācijas iestatījumus."
+
+#: ../src/common/imagwebp.cpp:240
+msgid "WebP: Error getting next animation frame."
+msgstr ""
+
+#: ../src/common/init.cpp:172
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
@@ -2508,7 +2529,7 @@ msgstr ""
 "Komandrindas parametru %d nav iespējams pārvērst uz Unikodu, tāpēc tas "
 "netiks ņemts vērā."
 
-#: ../src/common/init.cpp:343
+#: ../src/common/init.cpp:344
 msgid "Initialization failed in post init, aborting."
 msgstr ""
 
@@ -3128,9 +3149,9 @@ msgstr "Gatavs"
 msgid "Printing Error"
 msgstr "Drukāšanas Kļūda"
 
-#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1591
+#: ../src/common/prntbase.cpp:413 ../src/common/prntbase.cpp:1597
 #: ../src/generic/prntdlgg.cpp:135 ../src/generic/prntdlgg.cpp:149
-#: ../src/gtk/print.cpp:625 ../src/gtk/print.cpp:643
+#: ../src/gtk/print.cpp:628 ../src/gtk/print.cpp:646
 msgid "Print"
 msgstr "Drukāt"
 
@@ -3171,55 +3192,55 @@ msgstr "Drukājas lapa %d..."
 msgid " (copy %d of %d)"
 msgstr "Lapa %d no %d"
 
-#: ../src/common/prntbase.cpp:1598
+#: ../src/common/prntbase.cpp:1604
 msgid "First page"
 msgstr "Pirmā lapa"
 
-#: ../src/common/prntbase.cpp:1603 ../src/html/helpwnd.cpp:659
+#: ../src/common/prntbase.cpp:1609 ../src/html/helpwnd.cpp:659
 msgid "Previous page"
 msgstr "Iepriekšējā lapa"
 
-#: ../src/common/prntbase.cpp:1617 ../src/html/helpwnd.cpp:660
+#: ../src/common/prntbase.cpp:1623 ../src/html/helpwnd.cpp:660
 msgid "Next page"
 msgstr "Nākamā lapa"
 
-#: ../src/common/prntbase.cpp:1622
+#: ../src/common/prntbase.cpp:1628
 msgid "Last page"
 msgstr "Pēdējā lapa"
 
-#: ../src/common/prntbase.cpp:1630 ../src/common/stockitem.cpp:215
+#: ../src/common/prntbase.cpp:1636 ../src/common/stockitem.cpp:215
 msgid "Zoom Out"
 msgstr "Attālināt"
 
-#: ../src/common/prntbase.cpp:1644 ../src/common/stockitem.cpp:214
+#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:214
 msgid "Zoom In"
 msgstr "Tuvināt"
 
-#: ../src/common/prntbase.cpp:1650 ../src/common/stockitem.cpp:153
+#: ../src/common/prntbase.cpp:1656 ../src/common/stockitem.cpp:153
 #: ../src/generic/logg.cpp:553 ../src/univ/themes/win32.cpp:3752
 msgid "&Close"
 msgstr "Ai&zvērt"
 
-#: ../src/common/prntbase.cpp:2079
+#: ../src/common/prntbase.cpp:2085
 msgid "Could not start document preview."
 msgstr "Neizdevās parādīt dokumenta priekšskatījumu."
 
-#: ../src/common/prntbase.cpp:2079 ../src/common/prntbase.cpp:2123
-#: ../src/common/prntbase.cpp:2131
+#: ../src/common/prntbase.cpp:2085 ../src/common/prntbase.cpp:2129
+#: ../src/common/prntbase.cpp:2137
 msgid "Print Preview Failure"
 msgstr "Drukas priekšskatījuma kļūda"
 
-#: ../src/common/prntbase.cpp:2123 ../src/common/prntbase.cpp:2131
+#: ../src/common/prntbase.cpp:2129 ../src/common/prntbase.cpp:2137
 msgid "Sorry, not enough memory to create a preview."
 msgstr ""
 "Diemžēl, nav pietiekami daudz brīvas atmiņas priekšskatījuma izveidošanai."
 
-#: ../src/common/prntbase.cpp:2138
+#: ../src/common/prntbase.cpp:2144
 #, c-format
 msgid "Page %d of %d"
 msgstr "Lapa %d no %d"
 
-#: ../src/common/prntbase.cpp:2140
+#: ../src/common/prntbase.cpp:2146
 #, c-format
 msgid "Page %d"
 msgstr "Lapa %d"
@@ -3331,7 +3352,6 @@ msgstr "Apakša"
 
 #: ../src/common/stockitem.cpp:150 ../src/generic/fontdlgg.cpp:462
 #: ../src/generic/fontdlgg.cpp:481 ../src/generic/wizard.cpp:415
-#: ../src/osx/cocoa/button.mm:156
 msgid "&Cancel"
 msgstr "At&celt"
 
@@ -3369,7 +3389,7 @@ msgstr "&Pārveidot"
 msgid "Convert"
 msgstr "Pārveidot"
 
-#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2866
+#: ../src/common/stockitem.cpp:155 ../src/msw/textctrl.cpp:2884
 #: ../src/osx/textctrl_osx.cpp:653 ../src/richtext/richtextctrl.cpp:331
 msgid "&Copy"
 msgstr "&Kopēt"
@@ -3378,7 +3398,7 @@ msgstr "&Kopēt"
 msgid "Copy"
 msgstr "Kopēt"
 
-#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2865
+#: ../src/common/stockitem.cpp:156 ../src/msw/textctrl.cpp:2883
 #: ../src/osx/textctrl_osx.cpp:652 ../src/richtext/richtextctrl.cpp:330
 msgid "Cu&t"
 msgstr "Izgriez&t"
@@ -3387,7 +3407,7 @@ msgstr "Izgriez&t"
 msgid "Cut"
 msgstr "Izgriezt"
 
-#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2868
+#: ../src/common/stockitem.cpp:157 ../src/msw/textctrl.cpp:2886
 #: ../src/osx/textctrl_osx.cpp:655 ../src/richtext/richtextctrl.cpp:333
 #: ../src/richtext/richtexttabspage.cpp:137
 msgid "&Delete"
@@ -3588,7 +3608,7 @@ msgstr "&Atvērt..."
 msgid "Open..."
 msgstr "Atvērt..."
 
-#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2867
+#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2885
 #: ../src/osx/textctrl_osx.cpp:654 ../src/richtext/richtextctrl.cpp:332
 msgid "&Paste"
 msgstr "Ie&līmēt"
@@ -3668,7 +3688,7 @@ msgstr "Saglabāt &kā..."
 msgid "Save As..."
 msgstr "Saglabāt &kā..."
 
-#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2870
+#: ../src/common/stockitem.cpp:197 ../src/msw/textctrl.cpp:2888
 #: ../src/osx/textctrl_osx.cpp:657 ../src/richtext/richtextctrl.cpp:335
 msgid "Select &All"
 msgstr "Izvēlēties &visu"
@@ -3870,42 +3890,42 @@ msgstr "Saglabāt pašreizējo dokumentu ar citu nosaukumu"
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Pārvēršana uz kodējumu '%s' nedarbojas."
 
-#: ../src/common/tarstrm.cpp:359 ../src/common/tarstrm.cpp:382
-#: ../src/common/tarstrm.cpp:413 ../src/generic/progdlgg.cpp:373
+#: ../src/common/tarstrm.cpp:352 ../src/common/tarstrm.cpp:375
+#: ../src/common/tarstrm.cpp:406 ../src/generic/progdlgg.cpp:373
 msgid "unknown"
 msgstr "nezināms"
 
-#: ../src/common/tarstrm.cpp:781
+#: ../src/common/tarstrm.cpp:774
 msgid "incomplete header block in tar"
 msgstr ""
 
-#: ../src/common/tarstrm.cpp:805
+#: ../src/common/tarstrm.cpp:798
 msgid "checksum failure reading tar header block"
 msgstr ""
 
-#: ../src/common/tarstrm.cpp:978
+#: ../src/common/tarstrm.cpp:971
 msgid "invalid data in extended tar header"
 msgstr "Nederīgi dati..."
 
-#: ../src/common/tarstrm.cpp:988 ../src/common/tarstrm.cpp:1010
-#: ../src/common/tarstrm.cpp:1484 ../src/common/tarstrm.cpp:1506
+#: ../src/common/tarstrm.cpp:981 ../src/common/tarstrm.cpp:1003
+#: ../src/common/tarstrm.cpp:1477 ../src/common/tarstrm.cpp:1499
 msgid "tar entry not open"
 msgstr ""
 
-#: ../src/common/tarstrm.cpp:1030
+#: ../src/common/tarstrm.cpp:1023
 msgid "unexpected end of file"
 msgstr "negaidītas faila beigas"
 
-#: ../src/common/tarstrm.cpp:1304
+#: ../src/common/tarstrm.cpp:1297
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr ""
 
-#: ../src/common/tarstrm.cpp:1366
+#: ../src/common/tarstrm.cpp:1359
 msgid "incorrect size given for tar entry"
 msgstr ""
 
-#: ../src/common/textbuf.cpp:233
+#: ../src/common/textbuf.cpp:232
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s', iespējams, ir binārais buferis."
@@ -3960,11 +3980,11 @@ msgstr ""
 msgid "Couldn't enumerate translations"
 msgstr "Neizdevās uzskaitīt tulkojumus"
 
-#: ../src/common/utilscmn.cpp:1087
+#: ../src/common/utilscmn.cpp:1145
 msgid "No default application configured for HTML files."
 msgstr "Noklusētā aplikācija HTML failu attēlošanai nav iestatīta."
 
-#: ../src/common/utilscmn.cpp:1132
+#: ../src/common/utilscmn.cpp:1190
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "Noklusētajā pārlūkā neizdevās atvērt URL \"%s\"."
@@ -4008,7 +4028,7 @@ msgstr ""
 msgid "Failed to create temporary file in %s"
 msgstr "Neizdevās izveidot pagaidu faila nosaukumu"
 
-#: ../src/common/webrequest_curl.cpp:1075
+#: ../src/common/webrequest_curl.cpp:1106
 #, fuzzy
 msgid "libcurl could not be initialized"
 msgstr "Nav iespējams inicializēt slejas aprakstu."
@@ -4018,7 +4038,7 @@ msgstr "Nav iespējams inicializēt slejas aprakstu."
 msgid "RunScriptAsync not supported"
 msgstr "Virkņu pārvēršana nav atbalstīta"
 
-#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1075
+#: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1073
 #, c-format
 msgid "Error running JavaScript: %s"
 msgstr ""
@@ -4030,7 +4050,7 @@ msgstr "Neizdevās izveidot mapi \"%s\""
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
-"Chromium can't be used because libcef.so was't loaded early enough; please "
+"Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
 
@@ -4039,16 +4059,16 @@ msgstr ""
 msgid "Could not initialize Chromium"
 msgstr "Neizdevās iestatīt izlīdiznājumu."
 
-#: ../src/common/webview_chromium.cpp:1617
+#: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
 msgstr ""
 
-#: ../src/common/webview_chromium.cpp:1618
+#: ../src/common/webview_chromium.cpp:1617
 #, fuzzy
 msgid "Close DevTools"
 msgstr "Aizvērt Visus"
 
-#: ../src/common/webview_chromium.cpp:1624
+#: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
 msgstr ""
 
@@ -4056,7 +4076,7 @@ msgstr ""
 msgid "This platform does not support background transparency."
 msgstr "Šī platforma neuztur fona caurspīdīgumu."
 
-#: ../src/common/wincmn.cpp:2082
+#: ../src/common/wincmn.cpp:2097
 msgid "Could not transfer data to window"
 msgstr "Neizdevās pārvietot datus uz logu"
 
@@ -4394,44 +4414,44 @@ msgid "Password:"
 msgstr ""
 
 #. TRANSLATORS: Name of Boolean true value
-#: ../src/generic/datavgen.cpp:1172
+#: ../src/generic/datavgen.cpp:1178
 msgid "true"
 msgstr ""
 
 #. TRANSLATORS: Name of Boolean false value
-#: ../src/generic/datavgen.cpp:1174
+#: ../src/generic/datavgen.cpp:1180
 #, fuzzy
 msgid "false"
 msgstr "Aplams"
 
-#: ../src/generic/datavgen.cpp:6891
+#: ../src/generic/datavgen.cpp:6897
 #, c-format
 msgid "Row %i"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6981
+#: ../src/generic/datavgen.cpp:6987
 msgid "Collapse"
 msgstr ""
 
 #. TRANSLATORS: Action for manipulating a tree control
-#: ../src/generic/datavgen.cpp:6984
+#: ../src/generic/datavgen.cpp:6990
 msgid "Expand"
 msgstr ""
 
 #. TRANSLATORS: Name of data view control and number of rows
-#: ../src/generic/datavgen.cpp:7005
+#: ../src/generic/datavgen.cpp:7011
 #, fuzzy, c-format
 msgid "%s (%d items)"
 msgstr "%s (vai %s)"
 
-#: ../src/generic/datavgen.cpp:7056
+#: ../src/generic/datavgen.cpp:7062
 #, c-format
 msgid "Column %u"
 msgstr ""
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7125 ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/generic/datavgen.cpp:7131 ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:192
 #: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextliststylepage.cpp:252
@@ -4442,7 +4462,7 @@ msgid "Left"
 msgstr "Pa kreisi"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7128 ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/generic/datavgen.cpp:7134 ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Right"
@@ -4561,7 +4581,7 @@ msgstr "Nederīgs mapes nosaukums."
 #: ../src/generic/filectrlg.cpp:638 ../src/generic/filectrlg.cpp:752
 #: ../src/generic/filectrlg.cpp:766 ../src/generic/filectrlg.cpp:782
 #: ../src/generic/filectrlg.cpp:1356 ../src/generic/filectrlg.cpp:1387
-#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:76
 msgid "Error"
 msgstr "Kļūda"
 
@@ -4746,16 +4766,16 @@ msgstr "Aplūkot failus detalizētajā skatā"
 msgid "Go to parent directory"
 msgstr "Iet uz vecāka direktoriju"
 
-#: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:58
+#: ../src/generic/filedlgg.cpp:351 ../src/gtk/filedlg.cpp:59
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Fails '%s' jau eksistē, vai patiešām vēlaties to pārrakstīt?"
 
-#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:61
+#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:62
 msgid "Confirm"
 msgstr "Apstiprināt"
 
-#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:74
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:75
 msgid "Please choose an existing file."
 msgstr "Lūdzu, izvēlieties esošu failu."
 
@@ -5026,7 +5046,7 @@ msgstr ""
 msgid "Notice"
 msgstr "Paziņojums"
 
-#: ../src/generic/preferencesg.cpp:116
+#: ../src/generic/preferencesg.cpp:118
 #, fuzzy, c-format
 msgid "%s Preferences"
 msgstr "Iestatījumi"
@@ -5035,8 +5055,8 @@ msgstr "Iestatījumi"
 msgid "Printing..."
 msgstr "Drukājas..."
 
-#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1074
-#: ../src/msw/printwin.cpp:217
+#: ../src/generic/printps.cpp:160 ../src/gtk/print.cpp:1076
+#: ../src/msw/printwin.cpp:235
 msgid "Could not start printing."
 msgstr "Neizdevās sākt drukāšanu."
 
@@ -5175,7 +5195,7 @@ msgstr "Nezināms"
 msgid "Done."
 msgstr "Izdarīts."
 
-#: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:205
+#: ../src/generic/srchctlg.cpp:55 ../src/gtk/srchctrl.cpp:206
 #: ../src/html/helpwnd.cpp:530 ../src/html/helpwnd.cpp:545
 msgid "Search"
 msgstr "Meklēt"
@@ -5232,7 +5252,7 @@ msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr ""
 "Nav iespējams inicializēt GTK+, vai DISPLAY parametrs ir iestatīts pareizi?"
 
-#: ../src/gtk/filedlg.cpp:88 ../src/gtk/filepicker.cpp:255
+#: ../src/gtk/filedlg.cpp:89 ../src/gtk/filepicker.cpp:255
 #, fuzzy, c-format
 msgid "Changing current directory to \"%s\" failed"
 msgstr "Neizdevās izveidot mapi \"%s\""
@@ -5283,16 +5303,43 @@ msgstr ""
 msgid "MDI child"
 msgstr ""
 
-#: ../src/gtk/print.cpp:215
+#: ../src/gtk/power.cpp:188
+#, fuzzy, c-format
+msgid "Failed to open D-Bus connection to the login manager: %s"
+msgstr "Neizdevās izveidot savienojumu ar serveri '%s'par tematu '%s'"
+
+#: ../src/gtk/power.cpp:214
+#, fuzzy
+msgid "wxWidgets application"
+msgstr "Programma"
+
+#: ../src/gtk/power.cpp:226
+msgid "Application needs to keep running"
+msgstr ""
+
+#: ../src/gtk/power.cpp:233
+msgid "Clean up before suspend"
+msgstr ""
+
+#: ../src/gtk/power.cpp:259
+#, fuzzy, c-format
+msgid "Failed to inhibit sleep: %s"
+msgstr "Neizdevās izveidot iezvanpieejas savienojumu: %s"
+
+#: ../src/gtk/power.cpp:265
+msgid "Unexpected response to D-Bus \"Inhibit\" request."
+msgstr ""
+
+#: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Pielāgots izmērs"
 
-#: ../src/gtk/print.cpp:749
+#: ../src/gtk/print.cpp:752
 #, fuzzy, c-format
 msgid "Error while printing: %s"
 msgstr "Kļūda drukājot:"
 
-#: ../src/gtk/print.cpp:813
+#: ../src/gtk/print.cpp:816
 msgid "Page Setup"
 msgstr "Lapas iestatījumi"
 
@@ -5300,28 +5347,28 @@ msgstr "Lapas iestatījumi"
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
 
-#: ../src/gtk/webview_webkit2.cpp:1099
+#: ../src/gtk/webview_webkit2.cpp:1098
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
 
-#: ../src/gtk/webview_webkit2.cpp:1105
+#: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
 
-#: ../src/gtk/window.cpp:6249
+#: ../src/gtk/window.cpp:6289
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
 msgstr ""
 
-#: ../src/gtk/window.cpp:6267
+#: ../src/gtk/window.cpp:6307
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
 
-#: ../src/gtk/window.cpp:6278
+#: ../src/gtk/window.cpp:6318
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -5640,34 +5687,34 @@ msgstr "%lu no %lu"
 msgid "Cannot open HTML document: %s"
 msgstr "Nav iespējams atvērt HTML dokumentu: %s"
 
-#: ../src/html/htmlwin.cpp:577
+#: ../src/html/htmlwin.cpp:599
 msgid "Connecting..."
 msgstr "Savienošanās..."
 
-#: ../src/html/htmlwin.cpp:594
+#: ../src/html/htmlwin.cpp:616
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Nav iespējams atvērt pieprasīto HTML dokumentu: %s"
 
-#: ../src/html/htmlwin.cpp:608
+#: ../src/html/htmlwin.cpp:630
 msgid "Loading : "
 msgstr "Lasa..."
 
-#: ../src/html/htmlwin.cpp:651
+#: ../src/html/htmlwin.cpp:673
 msgid "Done"
 msgstr "Izdarīts"
 
-#: ../src/html/htmlwin.cpp:701
+#: ../src/html/htmlwin.cpp:723
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTML enkurs %s nepastāv."
 
-#: ../src/html/htmlwin.cpp:1035
+#: ../src/html/htmlwin.cpp:1057
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Nokopēts starpliktuvē:\"%s\""
 
-#: ../src/html/htmprint.cpp:267
+#: ../src/html/htmprint.cpp:269
 msgid ""
 "This document doesn't fit on the page horizontally and will be truncated "
 "when it is printed."
@@ -5675,7 +5722,7 @@ msgstr ""
 "Šis dokuments neietilpst lapā horizontālā virzienā un tādēļ drukājot tiks "
 "aprauts."
 
-#: ../src/html/htmprint.cpp:283
+#: ../src/html/htmprint.cpp:285
 #, c-format
 msgid ""
 "The document \"%s\" doesn't fit on the page horizontally and will be "
@@ -5688,24 +5735,24 @@ msgstr ""
 "\n"
 "Turpināt drukāt neskatoties uz to?"
 
-#: ../src/html/htmprint.cpp:294
+#: ../src/html/htmprint.cpp:296
 msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
 msgstr ""
 "Ja iespējams, mēģiniet mainīt izkārtojumu, lai padarītu izdruku šaurāku."
 
-#: ../src/html/htmprint.cpp:443
+#: ../src/html/htmprint.cpp:445
 msgid ": file does not exist!"
 msgstr ": fails neeksistē!"
 
 #. TRANSLATORS: %s may be a document title.
-#: ../src/html/htmprint.cpp:712
+#: ../src/html/htmprint.cpp:717
 #, fuzzy, c-format
 msgid "%s Preview"
 msgstr " Priekšskatījums"
 
-#: ../src/html/htmprint.cpp:750 ../src/richtext/richtextprint.cpp:615
+#: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr "Kļūme lapas iestatījumos: iespējams, jānorāda noklusētais printeris."
@@ -5739,7 +5786,7 @@ msgstr "Neizdevās saņemt atbalstītos starpliktuves formātus."
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Krāsu izvēles dialogs pārtrauca darbību ar kļūdu  %0lx."
 
-#: ../src/msw/cursor.cpp:204
+#: ../src/msw/cursor.cpp:141
 msgid "Failed to create cursor."
 msgstr "Neizdevās izveidot kursoru."
 
@@ -5967,7 +6014,7 @@ msgstr "Neizdevās piešķirt %luKb atmiņas bitkartes datiem."
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "Nav iespējams uzskaitīt failus mapē '%s'"
 
-#: ../src/msw/dirdlg.cpp:359
+#: ../src/msw/dirdlg.cpp:368
 #, fuzzy
 msgid "Couldn't obtain folder name"
 msgstr "Neizdevās izveidot hronometru"
@@ -5992,15 +6039,15 @@ msgstr "Neizdevās ielādēt matafailu no faila \"%s\"."
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr "Neizdevās atvērt standarta Meklēt/aizvietot dialogu (kļūdas kods %d)"
 
-#: ../src/msw/filedlg.cpp:1233
+#: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
 msgstr ""
 
-#: ../src/msw/filedlg.cpp:1234
+#: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
 msgstr ""
 
-#: ../src/msw/filedlg.cpp:1525
+#: ../src/msw/filedlg.cpp:1533
 #, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr "Faila dialogs pārtrauca dabību ar kļūdu %0lx."
@@ -6036,17 +6083,17 @@ msgstr "Sekošana izmaiņām atsevišķos failos pagaidām netiek uzturēta."
 msgid "Unable to set up watch for '%s'"
 msgstr ""
 
-#: ../src/msw/fswatcher.cpp:477
+#: ../src/msw/fswatcher.cpp:466
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr "Nav iespējams sekot izmaiņām neesoša mapē \"%s\"."
 
-#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:505
+#: ../src/msw/glcanvas.cpp:577 ../src/unix/glx11.cpp:507
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
 msgstr ""
 
 #: ../src/msw/glcanvas.cpp:601 ../src/osx/glcanvas_osx.cpp:395
-#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:551
+#: ../src/unix/glegl.cpp:304 ../src/unix/glx11.cpp:553
 #, fuzzy
 msgid "Couldn't create OpenGL context"
 msgstr "Neizdevās izveidot hronometru"
@@ -6081,7 +6128,7 @@ msgstr "Nav iespējams izdzēst INI failu '%s'"
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Nav iespējams iegūt informāciju par saraksta vadīklas vienumu %d."
 
-#: ../src/msw/mdi.cpp:170
+#: ../src/msw/mdi.cpp:170 ../src/qt/mdi.cpp:253
 msgid "&Cascade"
 msgstr "&Kaskādēt"
 
@@ -6350,47 +6397,47 @@ msgstr "Nav iespējams eksportēt neatbalstīta tipa %d vērtību."
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "Ignorēta vērtība \"%s\" atslēgai \"%s\"."
 
-#: ../src/msw/textctrl.cpp:585
+#: ../src/msw/textctrl.cpp:596
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
 msgstr ""
 
-#: ../src/msw/thread.cpp:525 ../src/unix/threadpsx.cpp:848
+#: ../src/msw/thread.cpp:522 ../src/unix/threadpsx.cpp:850
 msgid "Cannot start thread: error writing TLS."
 msgstr "Nav iespējams palaist pavedienu: kļūda rakstot TLS."
 
-#: ../src/msw/thread.cpp:616
+#: ../src/msw/thread.cpp:613
 msgid "Can't set thread priority"
 msgstr "Nav iespējams uzstādīt pavediena prioritāti"
 
-#: ../src/msw/thread.cpp:652
+#: ../src/msw/thread.cpp:649
 msgid "Can't create thread"
 msgstr "Nav iespējams izveidot pavedienu"
 
-#: ../src/msw/thread.cpp:671
+#: ../src/msw/thread.cpp:668
 msgid "Couldn't terminate thread"
 msgstr "Nav iespējams pārtraukt pavedienu"
 
-#: ../src/msw/thread.cpp:802
+#: ../src/msw/thread.cpp:799
 msgid "Cannot wait for thread termination"
 msgstr "Nevar gaidīt uz pavediena apstāšanos"
 
-#: ../src/msw/thread.cpp:876
+#: ../src/msw/thread.cpp:873
 #, fuzzy, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "Nav iespējams apturēt pavedienu %x"
 
-#: ../src/msw/thread.cpp:906
+#: ../src/msw/thread.cpp:903
 #, fuzzy, c-format
 msgid "Cannot resume thread %lx"
 msgstr "Nav iespējams atsākt pavedienu %x"
 
-#: ../src/msw/thread.cpp:935
+#: ../src/msw/thread.cpp:932
 msgid "Couldn't get the current thread pointer"
 msgstr "Nevar iegūt pašreizējā pavediena rādītāju"
 
-#: ../src/msw/thread.cpp:1336
+#: ../src/msw/thread.cpp:1333
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -6398,7 +6445,7 @@ msgstr ""
 "Kļūda inicializējot pavediena moduli: nav iespējams piešķirt indeksu "
 "pavediena lokālajā glabātuvē"
 
-#: ../src/msw/thread.cpp:1348
+#: ../src/msw/thread.cpp:1345
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -6456,12 +6503,12 @@ msgstr "Komandas '%s' izpilde neizdevās"
 msgid "Failed to load mpr.dll."
 msgstr "Nevar ielādēt mpr.dll."
 
-#: ../src/msw/volume.cpp:507
+#: ../src/msw/volume.cpp:506
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Nav iespējams nolasīt tipa nosaukumu no  '%s'!"
 
-#: ../src/msw/volume.cpp:616
+#: ../src/msw/volume.cpp:615
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr " Nav iespējams ielādēt ikonu no '%s'."
@@ -6470,28 +6517,28 @@ msgstr " Nav iespējams ielādēt ikonu no '%s'."
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1012
+#: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1021
+#: ../src/msw/webview_ie.cpp:1019
 msgid "Failed to set web view to modern emulation level"
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1029
+#: ../src/msw/webview_ie.cpp:1027
 msgid "Failed to reset web view to standard emulation level"
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1051
+#: ../src/msw/webview_ie.cpp:1049
 msgid "Can't run JavaScript script without a valid HTML document"
 msgstr ""
 
-#: ../src/msw/webview_ie.cpp:1058
+#: ../src/msw/webview_ie.cpp:1056
 #, fuzzy
 msgid "Can't get the JavaScript object"
 msgstr "Nav iespējams uzstādīt pavediena prioritāti"
 
-#: ../src/msw/webview_ie.cpp:1072
+#: ../src/msw/webview_ie.cpp:1070
 #, fuzzy
 msgid "failed to evaluate"
 msgstr "Neizdevās izpildīt '%s'\n"
@@ -6603,12 +6650,12 @@ msgctxt "macOS menu item"
 msgid "Quit Application"
 msgstr "Programma"
 
-#: ../src/osx/webview_webkit.mm:448
+#: ../src/osx/webview_webkit.mm:444
 #, fuzzy
 msgid "Printing is not supported by the system web control"
 msgstr "Šī zlib versija neuztur gzip"
 
-#: ../src/osx/webview_webkit.mm:457
+#: ../src/osx/webview_webkit.mm:453
 #, fuzzy
 msgid "Print operation could not be initialized"
 msgstr "Nav iespējams inicializēt slejas aprakstu."
@@ -7088,6 +7135,10 @@ msgstr "Izvēlieties mapi:"
 #: ../src/propgrid/props.cpp:2055
 msgid "Choose a file"
 msgstr "Izvēlieties failu"
+
+#: ../src/qt/mdi.cpp:254
+msgid "&Tile"
+msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -7596,7 +7647,7 @@ msgid "Insert Text"
 msgstr "Ievietot tekstu"
 
 #: ../src/richtext/richtextbuffer.cpp:8023
-#: ../src/richtext/richtextbuffer.cpp:8981
+#: ../src/richtext/richtextbuffer.cpp:8979
 msgid "Insert Image"
 msgstr "Ievietot attēlu"
 
@@ -7617,70 +7668,70 @@ msgstr "Par daudz EndStyle izsaukumu!"
 msgid "files"
 msgstr "failus"
 
-#: ../src/richtext/richtextbuffer.cpp:9382
+#: ../src/richtext/richtextbuffer.cpp:9380
 msgid "standard/circle"
 msgstr "standarta/rinķis"
 
-#: ../src/richtext/richtextbuffer.cpp:9383
+#: ../src/richtext/richtextbuffer.cpp:9381
 msgid "standard/circle-outline"
 msgstr "standarta/riņķa aprises"
 
-#: ../src/richtext/richtextbuffer.cpp:9384
+#: ../src/richtext/richtextbuffer.cpp:9382
 msgid "standard/square"
 msgstr "standarta/kvadrāts"
 
-#: ../src/richtext/richtextbuffer.cpp:9385
+#: ../src/richtext/richtextbuffer.cpp:9383
 msgid "standard/diamond"
 msgstr "standarta/rombs"
 
-#: ../src/richtext/richtextbuffer.cpp:9386
+#: ../src/richtext/richtextbuffer.cpp:9384
 msgid "standard/triangle"
 msgstr "standarta/trīsstūris"
 
-#: ../src/richtext/richtextbuffer.cpp:9425
+#: ../src/richtext/richtextbuffer.cpp:9423
 msgid "Box Properties"
 msgstr "Rāmja īpašības"
 
-#: ../src/richtext/richtextbuffer.cpp:10008
+#: ../src/richtext/richtextbuffer.cpp:10006
 msgid "Multiple Cell Properties"
 msgstr "Vairāku šūnu īpašības"
 
-#: ../src/richtext/richtextbuffer.cpp:10010
+#: ../src/richtext/richtextbuffer.cpp:10008
 msgid "Cell Properties"
 msgstr "Tabulas šūnas parametri"
 
-#: ../src/richtext/richtextbuffer.cpp:11258
+#: ../src/richtext/richtextbuffer.cpp:11256
 msgid "Set Cell Style"
 msgstr "Iestatīt šūnas stilu"
 
-#: ../src/richtext/richtextbuffer.cpp:11332
+#: ../src/richtext/richtextbuffer.cpp:11330
 #, fuzzy
 msgid "Delete Row"
 msgstr "Dzēst"
 
-#: ../src/richtext/richtextbuffer.cpp:11382
+#: ../src/richtext/richtextbuffer.cpp:11380
 #, fuzzy
 msgid "Delete Column"
 msgstr "Dzēst iezīmēto"
 
-#: ../src/richtext/richtextbuffer.cpp:11433
+#: ../src/richtext/richtextbuffer.cpp:11431
 msgid "Add Row"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:11496
+#: ../src/richtext/richtextbuffer.cpp:11494
 msgid "Add Column"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:11539
+#: ../src/richtext/richtextbuffer.cpp:11537
 msgid "Table Properties"
 msgstr "Tabulas īpašības"
 
-#: ../src/richtext/richtextbuffer.cpp:12901
+#: ../src/richtext/richtextbuffer.cpp:12899
 msgid "Picture Properties"
 msgstr "Attēla īpašības"
 
-#: ../src/richtext/richtextbuffer.cpp:13171
-#: ../src/richtext/richtextbuffer.cpp:13281
+#: ../src/richtext/richtextbuffer.cpp:13169
+#: ../src/richtext/richtextbuffer.cpp:13279
 msgid "image"
 msgstr "attēls"
 
@@ -8440,7 +8491,7 @@ msgstr "Apakšējā papildinājuma lielums."
 msgid "Units for the bottom padding."
 msgstr "Vienības apakšējās malas papildinājumam."
 
-#: ../src/richtext/richtextprint.cpp:589
+#: ../src/richtext/richtextprint.cpp:592
 msgid " Preview"
 msgstr " Priekšskatījums"
 
@@ -9231,20 +9282,20 @@ msgstr "Skaņas dati ir neatbalstītā formātā."
 msgid "Couldn't open audio: %s"
 msgstr "Neizdevās atvērt audio: %s"
 
-#: ../src/unix/threadpsx.cpp:1021
+#: ../src/unix/threadpsx.cpp:1033
 msgid "Cannot retrieve thread scheduling policy."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1046
+#: ../src/unix/threadpsx.cpp:1058
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1054
+#: ../src/unix/threadpsx.cpp:1066
 msgid "Thread priority setting is ignored."
 msgstr "Pavediena prioritātes iestatījums nav ņemts vērā."
 
-#: ../src/unix/threadpsx.cpp:1209
+#: ../src/unix/threadpsx.cpp:1221
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -9252,61 +9303,61 @@ msgstr ""
 "Kļūda pievienojoties pavedienam, atrasta iespējama atmiņas noplūde - lūdzu "
 "pārstartējiet programmu"
 
-#: ../src/unix/threadpsx.cpp:1340
+#: ../src/unix/threadpsx.cpp:1352
 #, fuzzy, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "Neizdevās uzstādīt pavediena prioritāti %d."
 
-#: ../src/unix/threadpsx.cpp:1469
+#: ../src/unix/threadpsx.cpp:1481
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Neizdevās uzstādīt pavediena prioritāti %d."
 
-#: ../src/unix/threadpsx.cpp:1654
+#: ../src/unix/threadpsx.cpp:1666
 msgid "Failed to terminate a thread."
 msgstr "Neizdevās pārtraukt pavedienu."
 
-#: ../src/unix/threadpsx.cpp:1882
+#: ../src/unix/threadpsx.cpp:1893
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 "Kļūda inicializējot pavediena moduli: nav iespējams izveidot pavediena "
 "atslēgu"
 
-#: ../src/unix/utilsunx.cpp:338
+#: ../src/unix/utilsunx.cpp:340
 msgid "Impossible to get child process input"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:388
+#: ../src/unix/utilsunx.cpp:390
 msgid "Can't write to child process's stdin"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:642
+#: ../src/unix/utilsunx.cpp:644
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Neizdevās izpildīt '%s'\n"
 
-#: ../src/unix/utilsunx.cpp:676
+#: ../src/unix/utilsunx.cpp:678
 msgid "Fork failed"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:699
+#: ../src/unix/utilsunx.cpp:701
 #, fuzzy
 msgid "Failed to set process priority"
 msgstr "Neizdevās uzstādīt pavediena prioritāti %d."
 
-#: ../src/unix/utilsunx.cpp:710
+#: ../src/unix/utilsunx.cpp:712
 msgid "Failed to redirect child process input/output"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:814
+#: ../src/unix/utilsunx.cpp:816
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:1021
+#: ../src/unix/utilsunx.cpp:1023
 msgid "Cannot get the hostname"
 msgstr "Nevar atrast resursdatora vārdu"
 
-#: ../src/unix/utilsunx.cpp:1057
+#: ../src/unix/utilsunx.cpp:1059
 msgid "Cannot get the official hostname"
 msgstr "Nevar atrast oficiālo resursdatora vārdu"
 
@@ -9366,16 +9417,29 @@ msgstr "Nav iespējams atvērt resursu failu  '%s'."
 msgid "Cannot load resources from file '%s'."
 msgstr "Nav iespējams ielādēt resursus no faila '%s'."
 
-#: ../src/xrc/xmlres.cpp:2766
+#: ../src/xrc/xmlres.cpp:2767
 #, fuzzy, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Neizdevās izveidot hronometru"
 
+#~ msgctxt "keyboard key"
+#~ msgid "Alt+"
+#~ msgstr "Alt+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "Ctrl+"
+#~ msgstr "Ctrl+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "Shift+"
+#~ msgstr "Shift+"
+
+#~ msgctxt "keyboard key"
+#~ msgid "RawCtrl+"
+#~ msgstr "RawCtrl+"
+
 #~ msgid "Unsupported clipboard format."
 #~ msgstr "Neatbalstīts starpliktuves formāts."
-
-#~ msgid "Failed to set clipboard data."
-#~ msgstr "Neizdevās iestatīt starpliktuves datus."
 
 #~ msgid "Background colour"
 #~ msgstr "Fona krāsa"
