@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2023-02-07 21:59+0100\n"
+"PO-Revision-Date: 2025-05-16 21:09+0200\n"
 "Last-Translator: PB <pbfordev@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: cs_CZ\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 1524,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
@@ -715,7 +715,6 @@ msgid "SPECIAL"
 msgstr "SPECIÁLNÍ"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
@@ -1311,26 +1310,24 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" a navíc byl stávající konfigurační soubor přejmenován na \"%s\" a nebylo "
+"možné jej přejmenovat zpět, prosím přejmenujte jej na původní cestu \"%s\""
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "A zahrnuje následující soubory:\n"
+msgstr " kvůli následující chybě:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Nelze načíst textový soubor \"%s\"."
+msgstr "nelze přejmenovat existující soubor"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Nelze zjistit aktuální pracovní adresář"
+msgstr "nelze vytvořit adresář pro nový soubor"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "Nelze nastavit komponentu web view na moderní úroveň emulace"
+msgstr "soubor nelze přesunout do nového umístění"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1386,9 +1383,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "Položka konfigurace nesmí začínat na '%c'."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Nelze vytvořit objekt pro konfiguraci fontů."
+msgstr "Nelze vytvořit adresář pro konfigurační soubor."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -2201,7 +2197,7 @@ msgstr "DIB hlavička: Kódování neodpovídá bitové hloubce."
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "BMP hlavička: Neplatný počet barev (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2434,43 +2430,40 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: Chyba při zapisování obrázku."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: Chyba při ukládání obrázku."
+msgstr "TIFF: Chyba při vyprazdňování dat."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: Neplatná data (nelze získat vlastnosti)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: Nelze přidělit paměť pro obrazová data."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: Nelze dekódovat obrazová RGBA data."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: Nelze dekódovat obrazová RGB data."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: Nelze přidělit vyrovnávací paměť proudu."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "Nelze uložit data do schránky."
+msgstr "WebP: Nelze zpracovat data kontejneru."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "Chyba při čtení voleb nastavení."
+msgstr "WebP: Chyba při dekódování animace."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: Chyba při čtení dalšího snímku animace."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -3948,15 +3941,17 @@ msgid "Error: %s (%d)"
 msgstr "Chyba: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "Na disku není dostatek volného místa pro dokončení stahování."
+msgstr ""
+"Na disku není dostatek volného místa pro stažení: vyžadováno %llu ale "
+"dostupno jen %llu."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Nelze vytvořit jméno dočasného souboru"
+msgstr "Nelze vytvořit dočasný soubor v %s"
 
 #: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
@@ -3972,33 +3967,34 @@ msgid "Error running JavaScript: %s"
 msgstr "Chyba při spuštění JavaScriptu: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Nelze vytvořit adresář \"%s\""
+msgstr "Nelze nastavit proxy \"%s\": %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromium nemůže být použito, protože knihovna libcef.so nebyla načtena "
+"dostatečně brzy; prosím sestavte aplikaci znovu nebo použijte LD_PRELOAD pro "
+"dřívější načtení."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "Nelze zavést libnotify."
+msgstr "Nelze zavést Chromium"
 
 #: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
-msgstr ""
+msgstr "Zobrazit Nástroje pro vývojáře"
 
 #: ../src/common/webview_chromium.cpp:1617
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Zavřít vše"
+msgstr "Zavřít Nástroje pro vývojáře"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "Prozkoumat"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4399,12 +4395,11 @@ msgstr "Doprava"
 #, c-format
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
-msgstr ""
+msgstr "\"%s\" nemá očekávaný format data, prosím zadejte jako např. \"%s\"."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "Neplatná položka zobrazení dat"
+msgstr "Chybné datum"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4822,36 +4817,37 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Chyba při kopírování tabulky hodnot do schránky. Buď vybrané buňky netvořily "
+"souvislou oblast nebo nebyla vybraná žádná buňka."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Roh"
+msgstr "Roh tabulky hodnot"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Sloupec %u"
+msgstr "Záhlaví sloupce %s"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "Záhlaví řádku %s"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Sloupec %u"
+msgstr "Sloupec %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "Řádka %i"
+msgstr "Řádka %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Řádek %s, Sloupec %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -5241,40 +5237,39 @@ msgid "MDI child"
 msgstr "MDI syn"
 
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr "Nepodařilo se %s připojení k Internetu: %s"
+msgstr "Nelze otevřít spojení D-Bus se správcem přihlášení: %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "Skrýt aplikaci"
+msgstr "Aplikace používající wxWidgets"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "Aplikace potřebuje pokračovat ve svém běhu"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "Provedení údržby před pozastavením"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Nelze zahájit vytáčené spojení: %s"
+msgstr "Nelze předejít režimu spánku: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "Neočekávaná odpověď na D-Bus požadavek \"Inhibit\"."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Vlastní velikost"
 
 #: ../src/gtk/print.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Chyba při tisku: "
+msgstr "Chyba při tisku: %s"
 
 #: ../src/gtk/print.cpp:816
 msgid "Page Setup"
@@ -5288,10 +5283,11 @@ msgstr "WebKit v1 neumožňuje získání výsledku spuštění skriptu JavaScri
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"Nastavení proxy není WebKitem podporováno, je vyžadována verze nejméně 2.16."
 
 #: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
-msgstr ""
+msgstr "Aplikace byla sestavena bez podpory nastavení proxy ve WebKitu."
 
 #: ../src/gtk/window.cpp:6289
 msgid ""
@@ -5689,9 +5685,9 @@ msgstr ": soubor neexistuje!"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " Náhled"
+msgstr "%s Náhled"
 
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
@@ -5996,10 +5992,11 @@ msgstr "Nelze vytvořit standardní dialogové okno najít/nahradit (kód chyby 
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
 msgstr ""
+"V režimu zabezpečené pracovní plochy není povolen přístup k systému souborů."
 
 #: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "Bezpečnostní upozornění"
 
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
@@ -6469,7 +6466,7 @@ msgstr "Nelze načíst ikonu z '%s'."
 
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
-msgstr ""
+msgstr "Aplikace byla sestavena bez podpory nastavení proxy v Edge."
 
 #: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
@@ -7059,7 +7056,7 @@ msgstr "Zvolte soubor"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&Dlaždice"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -9279,9 +9276,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "Chyba při načítání XML: '%s' na řádce %d"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "Strana %d"
+msgstr "Strana %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
