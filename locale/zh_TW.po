@@ -9,7 +9,7 @@
 # Yi-Jyun Pan <pan93412@gmail.com>, 2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.2\n"
+"Project-Id-Version: wxWidgets 3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
 "PO-Revision-Date: 2022-07-09 10:45+0800\n"

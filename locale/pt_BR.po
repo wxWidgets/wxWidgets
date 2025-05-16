@@ -4,7 +4,7 @@
 # translation of pt_BR.po to
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.2.2.1\n"
+"Project-Id-Version: wxWidgets 3.3.2.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
 "PO-Revision-Date: 2023-03-27 12:18-0300\n"
