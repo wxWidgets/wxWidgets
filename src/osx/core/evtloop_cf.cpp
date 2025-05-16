@@ -355,12 +355,9 @@ int wxCFEventLoop::DoRun()
     return m_exitcode;
 }
 
-// sets the "should exit" flag and wakes up the loop so that it terminates
-// soon
-void wxCFEventLoop::ScheduleExit(int rc)
+void wxCFEventLoop::DoStop(int rc)
 {
     m_exitcode = rc;
-    m_shouldExit = true;
     OSXDoStop();
 }
 

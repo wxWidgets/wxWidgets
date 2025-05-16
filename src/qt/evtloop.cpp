@@ -110,18 +110,14 @@ wxQtEventLoopBase::~wxQtEventLoopBase()
     delete m_qtEventLoop;
 }
 
-void wxQtEventLoopBase::ScheduleExit(int rc)
+void wxQtEventLoopBase::DoStop(int rc)
 {
-    wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not started") );
-    m_shouldExit = true;
     m_qtEventLoop->exit(rc);
 }
 
 int wxQtEventLoopBase::DoRun()
 {
-    const int ret = m_qtEventLoop->exec();
-    OnExit();
-    return ret;
+    return m_qtEventLoop->exec();
 }
 
 bool wxQtEventLoopBase::Pending() const
