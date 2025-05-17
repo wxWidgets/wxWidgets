@@ -984,6 +984,12 @@ void wxScrollHelperBase::HandleOnMouseLeave(wxMouseEvent& event)
         if ( !m_targetWindow->HasScrollbar(orient) )
             return;
 
+        if ( orient == wxHORIZONTAL &&
+             m_targetWindow->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            pos = m_xScrollLines - pos; // Invert pos in RTL layout
+        }
+
 #if wxUSE_TIMER
         delete m_timerAutoScroll;
         m_timerAutoScroll = new wxAutoScrollTimer
