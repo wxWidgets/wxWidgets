@@ -492,6 +492,6 @@ void MyPage::OnDraw(wxDC& dc)
             break;
     }
 
-   wxLogStatus("%s", pageDescriptions[m_index]);
+   wxLogStatus(pageDescriptions[m_index]);
 }
 
