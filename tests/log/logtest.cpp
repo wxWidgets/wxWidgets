@@ -125,6 +125,10 @@ TEST_CASE_METHOD(LogTestCase, "wxLog::Functions", "[log]")
     wxLogError("Error %d", 17);
     CHECK( m_log->GetLog(wxLOG_Error) == "Error 17" );
 
+    // Logging a string containing percent signs should work.
+    wxLogMessage("100%sure");
+    CHECK( m_log->GetLog(wxLOG_Message) == "100%sure" );
+
     wxLogDebug("Debug");
 #if wxDEBUG_LEVEL
     CHECK( m_log->GetLog(wxLOG_Debug) == "Debug" );
