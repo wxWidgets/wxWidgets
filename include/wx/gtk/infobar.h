@@ -16,8 +16,8 @@
 // wxInfoBar for GTK+
 // ----------------------------------------------------------------------------
 
-// notice that the native GTK+ implementation is only available since
-// (relatively recent) 2.18 so we inherit from the generic one to be able to
+// notice that the native GTK+ implementation is only available since 2.18,
+// so we inherit from the generic one to be able to
 // fall back to it if GTK+ version is determined to be too old during run-time
 class WXDLLIMPEXP_CORE wxInfoBar : public wxInfoBarGeneric
 {

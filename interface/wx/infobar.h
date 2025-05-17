@@ -272,6 +272,19 @@ public:
     /// Return the effect animation duration currently used.
     int GetEffectDuration() const;
 
+    /// Return whether the checkbox was checked at the
+    /// time of the window being closed.
+    /// @note Bind a @c wxEVT_BUTTON handler for the @c wxID_CLOSE button ID
+    /// to process this in your own code. Call Dismiss() to hide the message,
+    /// and this call this to see if the checkbox was checked.
+    /// If so, then your program will need to remember
+    /// this result and show (or not show) this message based on that.
+    /// See the dialogs sample for an example.
+    bool IsCheckBoxChecked() const;
+
+    /// Sets whether the checkbox should be shown.
+    void ShowCheckBox(const wxString& checkBoxText, bool checked);
+
     /**
         Overridden base class methods changes the font of the text message.
 

@@ -13,6 +13,7 @@
 class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 
 // ----------------------------------------------------------------------------
 // wxInfoBar
@@ -75,6 +76,14 @@ public:
     // get the currently used effect animation duration
     int GetEffectDuration() const { return m_effectDuration; }
 
+    // Whether the checkbox was checked at the time of the window
+    // being closed.
+    // This should be called in a client's handler for the
+    // wxID_CLOSE button being clicked.
+    bool IsCheckBoxChecked() const { return m_checked; }
+
+    // Sets whether the checkbox should be shown.
+    void ShowCheckBox(const wxString& checkBoxText, bool checked);
 
     // overridden base class methods
     // -----------------------------
@@ -120,9 +129,10 @@ private:
 
 
     // different controls making up the bar
-    wxStaticBitmap *m_icon;
-    wxStaticText *m_text;
-    wxBitmapButton *m_button;
+    wxStaticBitmap *m_icon = nullptr;
+    wxStaticText *m_text = nullptr;
+    wxBitmapButton *m_button = nullptr;
+    wxCheckBox *m_checkbox = nullptr;
 
     // the effects to use when showing/hiding and duration for them: by default
     // the effect is determined by the info bar automatically depending on its
@@ -130,6 +140,8 @@ private:
     wxShowEffect m_showEffect,
                  m_hideEffect;
     int m_effectDuration;
+
+    bool m_checked = false;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxInfoBarGeneric);
