@@ -91,6 +91,8 @@ wxDisplay::wxDisplay(const wxWindow* window)
                               : Factory().GetPrimaryDisplay();
 }
 
+wxDisplay::~wxDisplay() = default;
+
 // ----------------------------------------------------------------------------
 // static functions forwarded to wxDisplayFactory
 // ----------------------------------------------------------------------------
@@ -125,52 +127,70 @@ wxDisplay::wxDisplay(const wxWindow* window)
 // ----------------------------------------------------------------------------
 // functions forwarded to wxDisplayImpl
 // ----------------------------------------------------------------------------
+bool wxDisplay::IsConnected() const
+{
+    wxCHECK_MSG( IsOk(), false, wxT("invalid wxDisplay object") );
+
+    return m_impl->IsConnected();
+}
 
 wxRect wxDisplay::GetGeometry() const
 {
     wxCHECK_MSG( IsOk(), wxRect(), wxT("invalid wxDisplay object") );
 
-    return m_impl->GetGeometry();
+    if ( m_impl->IsConnected() )
+        return m_impl->GetGeometry();
+    return wxRect();
 }
 
 wxRect wxDisplay::GetClientArea() const
 {
     wxCHECK_MSG( IsOk(), wxRect(), wxT("invalid wxDisplay object") );
 
-    return m_impl->GetClientArea();
+    if ( m_impl->IsConnected() )
+        return m_impl->GetClientArea();
+    return wxRect();
 }
 
 wxSize wxDisplay::GetPPI() const
 {
     wxCHECK_MSG( IsOk(), wxSize(), wxT("invalid wxDisplay object") );
 
-    return m_impl->GetPPI();
+    if ( m_impl->IsConnected() )
+        return m_impl->GetPPI();
+    return wxSize();
 }
 
 double wxDisplay::GetScaleFactor() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
 
-    return m_impl->GetScaleFactor();
+    if ( m_impl->IsConnected() )
+        return m_impl->GetScaleFactor();
+    return 0.0;
 }
 
 int wxDisplay::GetDepth() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
 
-    return m_impl->GetDepth();
+    if ( m_impl->IsConnected() )
+        return m_impl->GetDepth();
+    return 0;
 }
 
 wxString wxDisplay::GetName() const
 {
     wxCHECK_MSG( IsOk(), wxString(), wxT("invalid wxDisplay object") );
 
-    return m_impl->GetName();
+    if ( m_impl->IsConnected() )
+        return m_impl->GetName();
+    return wxString();
 }
 
 bool wxDisplay::IsPrimary() const
 {
-    return m_impl && m_impl->IsPrimary();
+    return m_impl && m_impl->IsConnected() && m_impl->IsPrimary();
 }
 
 #if wxUSE_DISPLAY
@@ -179,21 +199,27 @@ wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
 {
     wxCHECK_MSG( IsOk(), wxArrayVideoModes(), wxT("invalid wxDisplay object") );
 
-    return m_impl->GetModes(mode);
+    if ( m_impl->IsConnected() )
+        return m_impl->GetModes(mode);
+    return wxArrayVideoModes();
 }
 
 wxVideoMode wxDisplay::GetCurrentMode() const
 {
     wxCHECK_MSG( IsOk(), wxVideoMode(), wxT("invalid wxDisplay object") );
 
-    return m_impl->GetCurrentMode();
+    if ( m_impl->IsConnected() )
+        return m_impl->GetCurrentMode();
+    return wxVideoMode();
 }
 
 bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid wxDisplay object") );
 
-    return m_impl->ChangeMode(mode);
+    if ( m_impl->IsConnected() )
+        return m_impl->ChangeMode(mode);
+    return false;
 }
 
 #endif // wxUSE_DISPLAY
@@ -216,18 +242,40 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 // wxDisplayFactory implementation
 // ============================================================================
 
+bool wxDisplayFactory::UpdateDisplayChange(wxDisplayImpl *impl) const
+{
+    // If the factory is not able to detect connection state of the
+    // input display we assume that it is disconnected now.
+    impl->Disconnect();
+    return false;
+}
+
 void wxDisplayFactory::ClearImpls()
 {
-    for ( size_t n = 0; n < m_impls.size(); ++n )
-    {
-        // It can be null, that's ok.
-        delete m_impls[n];
-    }
-
     m_impls.clear();
 }
 
-wxDisplayImpl* wxDisplayFactory::GetPrimaryDisplay()
+void wxDisplayFactory::UpdateDisplayChanges()
+{
+    const unsigned newCount = GetCount();
+    wxVector<wxObjectDataPtr<wxDisplayImpl> > impls((size_t)newCount);
+
+    for ( size_t n = 0; n < m_impls.size(); ++n )
+    {
+        wxObjectDataPtr<wxDisplayImpl> &impl = m_impls[n];
+
+        // There are wxDisplay objects referring to impl still in scope.
+        if ( impl && impl->GetRefCount() > 1 )
+        {
+            // Try to update display state or mark it as disconnected.
+            if ( UpdateDisplayChange(impl.get()) && impl->GetIndex() < newCount )
+                impls[impl->GetIndex()] = impl;
+        }
+    }
+    m_impls = impls;
+}
+
+wxObjectDataPtr<wxDisplayImpl> wxDisplayFactory::GetPrimaryDisplay()
 {
     // Just use dumb linear search -- there seems to be the most reliable way
     // to do this in general. In particular, primary monitor is not guaranteed
@@ -235,14 +283,14 @@ wxDisplayImpl* wxDisplayFactory::GetPrimaryDisplay()
     const unsigned count = GetCount();
     for ( unsigned n = 0; n < count; ++n )
     {
-        wxDisplayImpl* const d = GetDisplay(n);
+        wxObjectDataPtr<wxDisplayImpl> const d = GetDisplay(n);
         if ( d && d->IsPrimary() )
             return d;
     }
 
     // This is not supposed to happen, but what else can we do if it
     // somehow does?
-    return nullptr;
+    return wxObjectDataPtr<wxDisplayImpl>();
 }
 
 int wxDisplayFactory::GetFromRect(const wxRect& r)
