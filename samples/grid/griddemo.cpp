@@ -1704,7 +1704,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
         logBuf << " (shift down)";
     if ( ev.ControlDown() )
         logBuf << " (control down)";
-    wxLogMessage( "%s", logBuf );
+    wxLogMessage(logBuf);
 
     // you must call event skip if you want default grid processing
     //
@@ -1810,7 +1810,7 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
     if ( grid->GetColPos( ev.GetCol() ) != ev.GetCol() )
         logBuf << " *** Column moved, current position: " << grid->GetColPos( ev.GetCol() );
 
-    wxLogMessage( "%s", logBuf );
+    wxLogMessage(logBuf);
 
     // you must call Skip() if you want the default processing
     // to occur in wxGrid
@@ -1837,7 +1837,7 @@ LogRangeSelectEvent(wxGridRangeSelectEvent& ev, const char* suffix)
            << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
            << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
            << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
-    wxLogMessage( "%s", logBuf );
+    wxLogMessage(logBuf);
 
     ev.Skip();
 }

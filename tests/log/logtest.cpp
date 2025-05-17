@@ -91,35 +91,13 @@ private:
 // test class
 // ----------------------------------------------------------------------------
 
-class LogTestCase : public CppUnit::TestCase
+class LogTestCase
 {
 public:
-    LogTestCase() { }
+    LogTestCase();
+    ~LogTestCase();
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
-private:
-    CPPUNIT_TEST_SUITE( LogTestCase );
-        CPPUNIT_TEST( Functions );
-        CPPUNIT_TEST( Null );
-        CPPUNIT_TEST( Component );
-#if wxDEBUG_LEVEL
-        CPPUNIT_TEST( Trace );
-#endif // wxDEBUG_LEVEL
-        CPPUNIT_TEST( SysError );
-        CPPUNIT_TEST( NoWarnings );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Functions();
-    void Null();
-    void Component();
-#if wxDEBUG_LEVEL
-    void Trace();
-#endif // wxDEBUG_LEVEL
-    void SysError();
-    void NoWarnings();
-
+protected:
     TestLog *m_log;
     wxLog *m_logOld;
     bool m_logWasEnabled;
@@ -127,54 +105,52 @@ private:
     wxDECLARE_NO_COPY_CLASS(LogTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( LogTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( LogTestCase, "LogTestCase" );
-
-void LogTestCase::setUp()
+LogTestCase::LogTestCase()
 {
     m_logOld = wxLog::SetActiveTarget(m_log = new TestLog);
     m_logWasEnabled = wxLog::EnableLogging();
 }
 
-void LogTestCase::tearDown()
+LogTestCase::~LogTestCase()
 {
     delete wxLog::SetActiveTarget(m_logOld);
     wxLog::EnableLogging(m_logWasEnabled);
 }
 
-void LogTestCase::Functions()
+TEST_CASE_METHOD(LogTestCase, "wxLog::Functions", "[log]")
 {
     wxLogMessage("Message");
-    CPPUNIT_ASSERT_EQUAL( "Message", m_log->GetLog(wxLOG_Message) );
+    CHECK( m_log->GetLog(wxLOG_Message) == "Message" );
 
     wxLogError("Error %d", 17);
-    CPPUNIT_ASSERT_EQUAL( "Error 17", m_log->GetLog(wxLOG_Error) );
+    CHECK( m_log->GetLog(wxLOG_Error) == "Error 17" );
+
+    // Logging a string containing percent signs should work.
+    wxLogMessage("100%sure");
+    CHECK( m_log->GetLog(wxLOG_Message) == "100%sure" );
 
     wxLogDebug("Debug");
 #if wxDEBUG_LEVEL
-    CPPUNIT_ASSERT_EQUAL( "Debug", m_log->GetLog(wxLOG_Debug) );
+    CHECK( m_log->GetLog(wxLOG_Debug) == "Debug" );
 #else
-    CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Debug) );
+    CHECK( m_log->GetLog(wxLOG_Debug) == "" );
 #endif
 }
 
-void LogTestCase::Null()
+TEST_CASE_METHOD(LogTestCase, "wxLogNull()", "[log]")
 {
     {
         wxLogNull noLog;
         wxLogWarning("%s warning", "Not important");
 
-        CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Warning) );
+        CHECK( m_log->GetLog(wxLOG_Warning) == "" );
     }
 
     wxLogWarning("%s warning", "Important");
-    CPPUNIT_ASSERT_EQUAL( "Important warning", m_log->GetLog(wxLOG_Warning) );
+    CHECK( m_log->GetLog(wxLOG_Warning) == "Important warning" );
 }
 
-void LogTestCase::Component()
+TEST_CASE_METHOD(LogTestCase, "wxLog::Component", "[log]")
 {
     wxLogMessage("Message");
     CPPUNIT_ASSERT_EQUAL( std::string(wxLOG_COMPONENT),
@@ -191,19 +167,19 @@ void LogTestCase::Component()
 
     // this shouldn't be output as this component is ignored
     wxLogError("Error");
-    CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Error) );
+    CHECK( m_log->GetLog(wxLOG_Error) == "" );
 
     // and so are its subcomponents
     #undef wxLOG_COMPONENT
     #define wxLOG_COMPONENT "test/ignore/sub/subsub"
     wxLogError("Error");
-    CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Error) );
+    CHECK( m_log->GetLog(wxLOG_Error) == "" );
 
     // but one subcomponent is not
     #undef wxLOG_COMPONENT
     #define wxLOG_COMPONENT "test/ignore/not"
     wxLogError("Error");
-    CPPUNIT_ASSERT_EQUAL( "Error", m_log->GetLog(wxLOG_Error) );
+    CHECK( m_log->GetLog(wxLOG_Error) == "Error" );
 
     // restore the original value
     #undef wxLOG_COMPONENT
@@ -229,13 +205,13 @@ void TraceTest(const char *format, ...)
 
 } // anonymous namespace
 
-void LogTestCase::Trace()
+TEST_CASE_METHOD(LogTestCase, "wxLog::Trace", "[log]")
 {
     // we use wxLogTrace() or wxVLogTrace() from inside TraceTest()
     // interchangeably here, it shouldn't make any difference
 
     wxLogTrace(TEST_MASK, "Not shown");
-    CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Trace) );
+    CHECK( m_log->GetLog(wxLOG_Trace) == "" );
 
     wxLog::AddTraceMask(TEST_MASK);
     TraceTest("Shown");
@@ -246,17 +222,17 @@ void LogTestCase::Trace()
     m_log->Clear();
 
     TraceTest("Not shown again");
-    CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Trace) );
+    CHECK( m_log->GetLog(wxLOG_Trace) == "" );
 }
 
 #endif // wxDEBUG_LEVEL
 
-void LogTestCase::SysError()
+TEST_CASE_METHOD(LogTestCase, "wxLogSysError", "[log]")
 {
     wxString s;
 
     wxLogSysError(17, "Error");
-    CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Error (", &s) );
+    CHECK( m_log->GetLog(wxLOG_Error).StartsWith("Error (", &s) );
     WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 17") );
 
     // Try to ensure that the system error is 0.
@@ -267,16 +243,16 @@ void LogTestCase::SysError()
 #endif
 
     wxLogSysError("Success");
-    CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Success (", &s) );
+    CHECK( m_log->GetLog(wxLOG_Error).StartsWith("Success (", &s) );
     WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 0") );
 
     wxOpen("no-such-file", 0, 0);
     wxLogSysError("Not found");
-    CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Not found (", &s) );
+    CHECK( m_log->GetLog(wxLOG_Error).StartsWith("Not found (", &s) );
     WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 2") );
 }
 
-void LogTestCase::NoWarnings()
+TEST_CASE_METHOD(LogTestCase, "wxLog::NoWarnings", "[log]")
 {
     // Check that "else" branch is [not] taken as expected and that this code
     // compiles without warnings (which used to not be the case).
@@ -287,14 +263,14 @@ void LogTestCase::NoWarnings()
     else
         b = !b;
 
-    CPPUNIT_ASSERT( b );
+    CHECK( b );
 
     if ( b )
         wxLogError("If");
     else
-        CPPUNIT_FAIL("Should not be taken");
+        FAIL_CHECK("Should not be taken");
 
-    CPPUNIT_ASSERT_EQUAL( "If", m_log->GetLog(wxLOG_Error) );
+    CHECK( m_log->GetLog(wxLOG_Error) == "If" );
 }
 
 // The following two functions (v, macroCompilabilityTest) are not run by
@@ -362,7 +338,7 @@ void macroCompilabilityTest()
 
 // This allows to check wxLogTrace() interactively by running this test with
 // WXTRACE=logtest.
-TEST_CASE("wxLog::Trace", "[log][.]")
+TEST_CASE("wxLog::WXTRACE", "[log][.]")
 {
     // Running this test without setting WXTRACE is useless.
     REQUIRE( wxGetEnv("WXTRACE", nullptr) );

@@ -666,7 +666,7 @@ void MyFrame::OnCalRClick(wxMouseEvent& event)
             break;
     }
 
-    wxLogMessage("%s", msg);
+    wxLogMessage(msg);
 }
 
 #if wxUSE_DATEPICKCTRL

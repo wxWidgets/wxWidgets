@@ -77,13 +77,13 @@ extern "C"
 static void
 TIFFwxWarningHandler(const char* module, const char *fmt, va_list ap)
 {
-    wxLogWarning("%s", FormatTiffMessage(module, fmt, ap));
+    wxLogWarning(FormatTiffMessage(module, fmt, ap));
 }
 
 static void
 TIFFwxErrorHandler(const char* module, const char *fmt, va_list ap)
 {
-    wxLogError("%s", FormatTiffMessage(module, fmt, ap));
+    wxLogError(FormatTiffMessage(module, fmt, ap));
 }
 
 } // extern "C"

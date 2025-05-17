@@ -999,6 +999,15 @@ public:
         DoCallOnLog(wxString::Format(format, args...));
     }
 
+    // overload used when there are no format specifiers: we want to avoid
+    // using wxString::Format() in this case both because this would be
+    // needlessly inefficient and because it would misinterpret any "%"
+    // characters in the string as introducing format specifiers
+    void Log(const wxString& s)
+    {
+        DoCallOnLog(s);
+    }
+
     // same as Log() but with an extra numeric or pointer parameters: this is
     // used to pass an optional value by storing it in m_info under the name
     // passed to MaybeStore() and is required to support "overloaded" versions
@@ -1009,6 +1018,13 @@ public:
         Store(m_optKey, num);
 
         DoCallOnLog(wxString::Format(format, args...));
+    }
+
+    void Log(long num, const wxString& s)
+    {
+        Store(m_optKey, num);
+
+        DoCallOnLog(s);
     }
 
     // unfortunately we can't use "void *" here as we get overload ambiguities
@@ -1024,6 +1040,13 @@ public:
         DoCallOnLog(wxString::Format(format, args...));
     }
 
+    void Log(wxObject* ptr, const wxString& s)
+    {
+        Store(m_optKey, wxPtrToUInt(ptr));
+
+        DoCallOnLog(s);
+    }
+
     // log the message at the level specified as its first argument
     //
     // as the macros don't have access to the level argument in this case, this
@@ -1035,6 +1058,14 @@ public:
             return;
 
         DoCallOnLog(level, wxString::Format(format, args...));
+    }
+
+    void LogAtLevel(wxLogLevel level, const wxString& s)
+    {
+        if ( !wxLog::IsLevelEnabled(level, wxASCII_STR(m_info.component)) )
+            return;
+
+        DoCallOnLog(level, s);
     }
 
     // special versions for wxLogTrace() which is passed either string or
@@ -1049,6 +1080,16 @@ public:
         Store(wxLOG_KEY_TRACE_MASK, mask);
 
         DoCallOnLog(wxString::Format(format, args...));
+    }
+
+    void LogTrace(const wxString& mask, const wxString& s)
+    {
+        if ( !wxLog::IsAllowedTraceMask(mask) )
+            return;
+
+        Store(wxLOG_KEY_TRACE_MASK, mask);
+
+        DoCallOnLog(s);
     }
 
 private:

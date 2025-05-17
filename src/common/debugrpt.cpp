@@ -585,7 +585,7 @@ bool wxDebugReport::DoProcess()
 
     msg += _("\nPlease send this report to the program maintainer, thank you!\n");
 
-    wxLogMessage(wxT("%s"), msg);
+    wxLogMessage(msg);
 
     // we have to do this or the report would be deleted, and we don't even
     // have any way to ask the user if he wants to keep it from here
@@ -735,7 +735,7 @@ bool wxDebugReportUpload::DoProcess()
         {
             for ( size_t n = 0; n < count; n++ )
             {
-                wxLogWarning(wxT("%s"), errors[n]);
+                wxLogWarning(errors[n]);
             }
         }
 
