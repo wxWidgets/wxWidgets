@@ -35,11 +35,26 @@ installation instructions.
 Changes since 3.2
 -----------------
 
-- TODO
+With more than 5300 commits since the last release, there are too many changes
+to list them all here, but here is just a summary of the most important ones:
+
+- Support for dark mode in wxMSW under Windows 10 and later.
+- New Chrome-based wxWebView backend and many other wxWebView improvements.
+- Many improvements to wxAUI, including support for pinned and multiline tabs.
+- Support for WebP format in wxImage.
+- Support for high DPI cursors and animations.
+- Latest versions of 3rd party libraries.
+- Support for latest compilers (gcc 15, clang 19/Xcode 16) and C++ standards.
+
+Please see the change log for the more complete list of various improvements:
+
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.0/docs/changes.txt
 
 Note that in spite of all these changes, wxWidgets 3.3 is almost fully
 compatible with wxWidgets 3.2 and updating the existing applications to
-use it shouldn't require much effort.
+use it shouldn't require much effort. However please make sure to read the
+"INCOMPATIBLE CHANGES" section of the change log above when upgrading to be
+aware of the breaking changes in it.
 
 
 Supported Platforms
@@ -132,4 +147,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, July 2022
+The wxWidgets Team, May 2025
