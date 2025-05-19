@@ -2115,21 +2115,31 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 }
 
 #ifdef __WXGTK3__
-void wxTextCtrl::GTKSetPangoMarkup(const wxString& str)
+bool wxTextCtrl::GTKSetPangoMarkup(const wxString& str)
 {
-    wxCHECK_RET(IsMultiLine(), "pango markup requires multiline control");
+    wxCHECK_MSG(IsMultiLine(), false,
+                "Pango markup only supported in multiline controls");
 
-    // multiple events may get fired while editing text, so block those
+#if GTK_CHECK_VERSION(3,16,0)
+    if (gtk_check_version(3,16,0) == nullptr)
     {
-        EventsSuppressor noevents(this);
-        // clear current content
-        GtkTextIter start, end;
-        gtk_text_buffer_get_bounds(m_buffer, &start, &end);
-        gtk_text_buffer_delete(m_buffer, &start, &end);
+        // multiple events may get fired while editing text, so block those
+        {
+            EventsSuppressor noevents(this);
+            // clear current content
+            GtkTextIter start, end;
+            gtk_text_buffer_get_bounds(m_buffer, &start, &end);
+            gtk_text_buffer_delete(m_buffer, &start, &end);
 
-        gtk_text_buffer_insert_markup(m_buffer, &start, str.utf8_str(), -1);
+            gtk_text_buffer_insert_markup(m_buffer, &start, str.utf8_str(), -1);
+        }
+        SendTextUpdatedEvent(GetEditableWindow());
+
+        return true;
     }
-    SendTextUpdatedEvent(GetEditableWindow());
+#endif // GTK 3.16
+
+    return false;
 }
 wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
 {

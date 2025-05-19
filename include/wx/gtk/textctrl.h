@@ -118,7 +118,7 @@ public:
     GtkEditable *GTKGetEditable() const { return GetEditable(); }
 
 #ifdef __WXGTK3__
-    void GTKSetPangoMarkup(const wxString& str);
+    bool GTKSetPangoMarkup(const wxString& str);
 #endif // __WXGTK3__
 
     // Implementation from now on
