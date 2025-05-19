@@ -721,7 +721,7 @@ MyFrame::MyFrame(const wxString& title)
 
 #if wxUSE_INFOBAR
     // an info bar can be created very simply and used without any extra effort
-    m_infoBarSimple = new wxInfoBar(this);
+    m_infoBarSimple = new wxInfoBar(this, wxID_ANY, wxINFOBAR_CHECKBOX);
 
     // or it can also be customized by
     m_infoBarAdvanced = new wxInfoBar(this);

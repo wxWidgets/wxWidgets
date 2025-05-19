@@ -24,13 +24,13 @@ class WXDLLIMPEXP_CORE wxInfoBar : public wxInfoBarGeneric
 public:
     wxInfoBar() { Init(); }
 
-    wxInfoBar(wxWindow *parent, wxWindowID winid = wxID_ANY)
+    wxInfoBar(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0)
     {
         Init();
-        Create(parent, winid);
+        Create(parent, winid, style);
     }
 
-    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY);
+    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0);
 
     virtual ~wxInfoBar();
 
@@ -61,6 +61,8 @@ protected:
 
 private:
     void Init() { m_impl = nullptr; }
+
+    virtual bool UseNative() const override;
 
     // add a button with the given id/label and return its widget
     GtkWidget *GTKAddButton(wxWindowID btnid,

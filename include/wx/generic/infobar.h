@@ -19,6 +19,11 @@ class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 // wxInfoBar
 // ----------------------------------------------------------------------------
 
+enum
+{
+    wxINFOBAR_CHECKBOX = 0x0010
+};
+
 class WXDLLIMPEXP_CORE wxInfoBarGeneric : public wxInfoBarBase
 {
 public:
@@ -26,13 +31,13 @@ public:
     // hidden
     wxInfoBarGeneric() { Init(); }
 
-    wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY)
+    wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0)
     {
         Init();
-        Create(parent, winid);
+        Create(parent, winid, style);
     }
 
-    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY);
+    bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY, long style = 0);
 
 
     // implement base class methods
@@ -105,9 +110,13 @@ protected:
     // should be called when we're shown or hidden)
     void UpdateParent();
 
+    long m_style = 0;
+
 private:
     // common part of all ctors
     void Init();
+
+    virtual bool UseNative() const { return false; }
 
     // handler for the close button
     void OnButton(wxCommandEvent& event);
