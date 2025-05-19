@@ -242,11 +242,11 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 // wxDisplayFactory implementation
 // ============================================================================
 
-bool wxDisplayFactory::UpdateDisplayChange(wxDisplayImpl *impl) const
+bool wxDisplayFactory::UpdateDisplayChange(wxDisplayImpl &impl) const
 {
     // If the factory is not able to detect connection state of the
     // input display we assume that it is disconnected now.
-    impl->Disconnect();
+    impl.Disconnect();
     return false;
 }
 
@@ -268,7 +268,7 @@ void wxDisplayFactory::UpdateDisplayChanges()
         if ( impl && impl->GetRefCount() > 1 )
         {
             // Try to update display state or mark it as disconnected.
-            if ( UpdateDisplayChange(impl.get()) && impl->GetIndex() < newCount )
+            if ( UpdateDisplayChange(*impl) && impl->GetIndex() < newCount )
                 impls[impl->GetIndex()] = impl;
         }
     }

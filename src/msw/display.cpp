@@ -192,7 +192,7 @@ public:
         wxDisplayFactory::InvalidateCache();
     }
 
-    virtual bool UpdateDisplayChange(wxDisplayImpl *impl) const override;
+    virtual bool UpdateDisplayChange(wxDisplayImpl &impl) const override;
 
     // Declare the second argument as int to avoid problems with older SDKs not
     // declaring MONITOR_DPI_TYPE enum.
@@ -668,18 +668,17 @@ int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
 #endif
 }
 
-bool wxDisplayFactoryMSW::UpdateDisplayChange(wxDisplayImpl *impl) const
+bool wxDisplayFactoryMSW::UpdateDisplayChange(wxDisplayImpl &impl) const
 {
-    wxDisplayMSW *implMsw = dynamic_cast<wxDisplayMSW *>(impl);
-    if (implMsw)
+    wxDisplayMSW &implMsw = static_cast<wxDisplayMSW &>(impl);
+
+    for ( size_t n = 0; n < m_displays.size(); ++n )
     {
-        for ( size_t n = 0; n < m_displays.size(); ++n )
-        {
-            if (implMsw->UpdateStateIfHandleMatches((unsigned) n, m_displays[n]))
-                return true;
-        }
+        if (implMsw.UpdateStateIfHandleMatches((unsigned) n, m_displays[n]))
+            return true;
     }
-    impl->Disconnect();
+
+    impl.Disconnect();
     return false;
 }
 

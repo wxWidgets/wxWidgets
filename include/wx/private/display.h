@@ -90,7 +90,7 @@ protected:
     // if this is the case
     //
     // mark display as disconnected and return false otherwise
-    virtual bool UpdateDisplayChange(wxDisplayImpl *impl) const;
+    virtual bool UpdateDisplayChange(wxDisplayImpl &impl) const;
 
 private:
     // Delete all the elements of m_impls vector and clear it.
