@@ -683,7 +683,7 @@ void MyFrame::OnShowFieldsRect(wxCommandEvent& WXUNUSED(event))
         }
     }
 
-    wxLogMessage("%s", msg);
+    wxLogMessage(msg);
 }
 
 void MyFrame::OnUpdateStatusBarToggle(wxUpdateUIEvent& event)

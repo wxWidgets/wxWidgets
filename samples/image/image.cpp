@@ -1418,7 +1418,7 @@ void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
             }
         }
 
-        wxLogMessage("%s", info);
+        wxLogMessage(info);
     }
 }
 

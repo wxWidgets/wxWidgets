@@ -79,7 +79,7 @@ protected:
             s << '\t' << reply[n] << '\n';
         }
 
-        wxLogMessage("%s", s);
+        wxLogMessage(s);
 
         return true;
     }

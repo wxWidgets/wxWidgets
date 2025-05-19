@@ -861,7 +861,7 @@ void MyFrame::OnGetColOrder(wxCommandEvent& WXUNUSED(event))
                                 n, m_listCtrl->GetColumnIndexFromOrder(n));
     }
 
-    wxLogMessage("%s", msg);
+    wxLogMessage(msg);
 }
 
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
