@@ -138,54 +138,54 @@ wxRect wxDisplay::GetGeometry() const
 {
     wxCHECK_MSG( IsOk(), wxRect(), wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->GetGeometry();
-    return wxRect();
+    if ( !m_impl->IsConnected() )
+        return wxRect();
+    return m_impl->GetGeometry();
 }
 
 wxRect wxDisplay::GetClientArea() const
 {
     wxCHECK_MSG( IsOk(), wxRect(), wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->GetClientArea();
-    return wxRect();
+    if ( !m_impl->IsConnected() )
+        return wxRect();
+    return m_impl->GetClientArea();
 }
 
 wxSize wxDisplay::GetPPI() const
 {
     wxCHECK_MSG( IsOk(), wxSize(), wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->GetPPI();
-    return wxSize();
+    if ( !m_impl->IsConnected() )
+        return wxSize();
+    return m_impl->GetPPI();
 }
 
 double wxDisplay::GetScaleFactor() const
 {
-    wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
+    wxCHECK_MSG( IsOk(), 0.0, wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->GetScaleFactor();
-    return 0.0;
+    if ( !m_impl->IsConnected() )
+        return 0.0;
+    return m_impl->GetScaleFactor();
 }
 
 int wxDisplay::GetDepth() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->GetDepth();
-    return 0;
+    if ( !m_impl->IsConnected() )
+        return 0;
+    return m_impl->GetDepth();
 }
 
 wxString wxDisplay::GetName() const
 {
     wxCHECK_MSG( IsOk(), wxString(), wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->GetName();
-    return wxString();
+    if ( !m_impl->IsConnected() )
+        return wxString();
+    return m_impl->GetName();
 }
 
 bool wxDisplay::IsPrimary() const
@@ -199,27 +199,27 @@ wxArrayVideoModes wxDisplay::GetModes(const wxVideoMode& mode) const
 {
     wxCHECK_MSG( IsOk(), wxArrayVideoModes(), wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->GetModes(mode);
-    return wxArrayVideoModes();
+    if ( !m_impl->IsConnected() )
+        return wxArrayVideoModes();
+    return m_impl->GetModes(mode);
 }
 
 wxVideoMode wxDisplay::GetCurrentMode() const
 {
     wxCHECK_MSG( IsOk(), wxVideoMode(), wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->GetCurrentMode();
-    return wxVideoMode();
+    if ( !m_impl->IsConnected() )
+        return wxVideoMode();
+    return m_impl->GetCurrentMode();
 }
 
 bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid wxDisplay object") );
 
-    if ( m_impl->IsConnected() )
-        return m_impl->ChangeMode(mode);
-    return false;
+    if ( !m_impl->IsConnected() )
+        return false;
+    return m_impl->ChangeMode(mode);
 }
 
 #endif // wxUSE_DISPLAY
