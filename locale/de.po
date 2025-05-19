@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.3.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2023-02-06 17:46+0100\n"
+"PO-Revision-Date: 2025-05-19 17:22+0200\n"
 "Last-Translator: Ulrich Telle <ulrich@telle-online.eu>\n"
 "Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
 "Language: de\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
@@ -723,7 +723,6 @@ msgid "SPECIAL"
 msgstr "SPEZIAL"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Strg"
 
@@ -1328,26 +1327,25 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" und zusätzlich, die existierende Konfigurationsdatei wurde nach \"%s\" "
+"umbenannt und konnte nicht zurück umbenannt werden, bitte zum ursprünglichen "
+"Pfad umbenennen \"%s\""
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "Und enthält die folgenden Dateien:\n"
+msgstr " aufgrund des folgenden Fehlers:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Konnte Textdatei „%s“ nicht lesen."
+msgstr "Konnte die existierende Datei nicht umbenennen"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Konnte Arbeitsverzeichnis nicht ermitteln"
+msgstr "Konnte Dateiverzeichnis nicht erstellen"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "Das Setzen der Web Ansicht auf moderne Nachbildung ist fehlgeschlagen"
+msgstr "Das Verschieben der Datei zum neuen Ort ist fehlgeschlagen"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1407,9 +1405,8 @@ msgstr ""
 "Die Bezeichnung des Konfigurations-Eintrags kann nicht mit „%c“ beginnen."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Erzeugung des Schriftart-Konfigurationsobjektes fehlgeschlagen."
+msgstr "Erzeugung des Konfigurationsdateiverzeichnisses fehlgeschlagen."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -2232,7 +2229,7 @@ msgstr "DIB-Header: Kodierung entspricht nicht der Bittiefe."
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "BMP Kopfzeile: Ungültige Anzahl der Farben (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2468,43 +2465,40 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: Schreibfehler beim Speichern."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: Schreibfehler beim Speichern."
+msgstr "TIFF: Fehler beim Löschen der Daten."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: Ungültige Daten (Eigenschaften konnten nicht abgerufen werden)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: Zuweisung des Bildspeichers fehlgeschlagen."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: Entschlüsselung der RGBA Bilddaten fehlgeschlagen."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: Entschlüsselung der RGB Bilddaten fehlgeschlagen."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: Zuweisung des Strömungspuffers fehlgeschlagen."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "Konnte Dateien nicht in die Zwischenablage kopieren."
+msgstr "WebP: Konnte die Containerdaten nicht analysieren."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "Fehler beim Parsen der Optionen."
+msgstr "WebP: Fehler beim Entschlüsseln der Animation."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: Fehler bei der Anforderung des nächsten Animationsfensters."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -3990,16 +3984,17 @@ msgid "Error: %s (%d)"
 msgstr "Fehler: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
 msgstr ""
-"Nicht genügend freier Festplattenplatz für das Herunterladen vorhanden."
+"Nicht genügend freier Festplattenplatz für das Herunterladen vorhanden: %llu "
+"benötigt aber nur %llu verfügbar."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Konnte keinen temporären Dateinamen erstellen"
+msgstr "Erzeugen der temporären Datei in %s fehlgeschlagen"
 
 #: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
@@ -4015,33 +4010,34 @@ msgid "Error running JavaScript: %s"
 msgstr "Fehler beim Ausführen von JavaScript: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Konnte das Verzeichnis „%s“ nicht erstellen."
+msgstr "Konnte den Proxy „%s“: %s nicht setzen"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromium kann nicht benutzt werden weil libcef.so nicht früh genug geladen "
+"wurde; bitte die Anwendung neu binden oder LD_PRELOAD benutzen, um sie "
+"früher zu laden."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "Konnte libnotify nicht initialisieren."
+msgstr "Konnte Chromium nicht initialisieren"
 
 #: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
-msgstr ""
+msgstr "Zeige die Entwicklungswerkzeuge"
 
 #: ../src/common/webview_chromium.cpp:1617
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Alles Schließen"
+msgstr "Entwicklungswerkzeuge Schließen"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "Überprüfen"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4448,11 +4444,12 @@ msgstr "Rechts"
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
 msgstr ""
+"\"%s\" liegt nicht im erwarteten Datenformat vor, bitte als z.B. \"%s\" "
+"eingeben."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "Ungültiges Datenansichtselement"
+msgstr "Ungültiges Datum"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4874,36 +4871,37 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Fehler beim Kopieren des Rasters in die Zwischenablage. Entweder die Zellen "
+"waren nicht aufeinanderfolgend oder keine Zelle war ausgewählt."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Ecke"
+msgstr "Rasterecke"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Spalte %u"
+msgstr "Spalte %s Kopfzeile"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "Zeile %s Kopfzeile"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Spalte %u"
+msgstr "Spalte %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "\t%s: %s\n"
+msgstr "Zeile %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Zeile %s, Spalte %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -5297,40 +5295,39 @@ msgid "MDI child"
 msgstr "MDI child"
 
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr "Aufbau der Verbindung zum Server „%s“ „on topic“ „%s“ fehlgeschlagen"
+msgstr "Öffnen der D-Bus Verbindung zum Anmeldedienst ist fehlgeschlagen: %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "Anwendung ausblenden"
+msgstr "wxWidgets Anwendung"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "Die Anwendung muss weiterhin laufen"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "Aufräumen vor dem Suspendieren"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Versuch fehlgeschlagen, die Einwählverbindung einzuleiten: %s"
+msgstr "Das Einschlafen konnte nicht verhindert werden: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "Unerwartete Antwort auf die D-Bus \"Unterdrücken\"-Anforderung."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Angepasste Größe"
 
 #: ../src/gtk/print.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Fehler während des Druckens: "
+msgstr "Fehler während des Druckens: %s"
 
 #: ../src/gtk/print.cpp:816
 msgid "Page Setup"
@@ -5346,10 +5343,14 @@ msgstr ""
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"Das Setzen des Proxy wird vom WebKit nicht unterstützt, mindestens die "
+"Version 2.16 ist nötig."
 
 #: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
+"Dieses Programm wurde ohne Unterstützung zum Setzen des WebKit Proxy "
+"übersetzt."
 
 #: ../src/gtk/window.cpp:6289
 msgid ""
@@ -5751,9 +5752,9 @@ msgstr ": Datei existiert nicht!"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " Vorschau"
+msgstr "%s Vorschau"
 
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
@@ -6079,10 +6080,12 @@ msgstr "Konnte keinen Standard-Finden/Ersetzen-Dialog erstellen (Fehler %d)"
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
 msgstr ""
+"Zugriff auf das Dateisystem ist vom Sicherheitsschreibtisch aus nicht "
+"erlaubt."
 
 #: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "Sicherheitswarnung"
 
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
@@ -6565,6 +6568,7 @@ msgstr "Kann das Icon nicht von „%s“ laden."
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
 msgstr ""
+"Dieses Programm wurde ohne Unterstützung zum Setzen des Edge Proxy übersetzt."
 
 #: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
@@ -7186,7 +7190,7 @@ msgstr "Datei wählen"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&Kachel"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -9413,9 +9417,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "Fehler beim Lesen des XML: „%s“ in Zeile %d"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "Seite %d"
+msgstr "Seite %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
