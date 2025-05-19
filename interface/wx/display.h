@@ -208,6 +208,21 @@ public:
     static wxSize GetStdPPI();
 
     /**
+        Returns @true if the display has not been unplugged.
+
+        This function is only implemented on MSW. After the display is unplugged,
+        or if the corresponding laptop lid is closed, the display object becomes
+        invalid on the next event queue execution if the object is still in scope.
+        All display property access functions will then return fallback values.
+
+        To receive notifications about display unplugging or other display changes,
+        connect a top-level window to the wxDisplayChangedEvent.
+
+        @since 3.3.0
+    */
+    bool IsConnected() const;
+
+    /**
         Returns @true if the display is the primary display. The primary
         display is the one whose index is 0.
     */
