@@ -1568,7 +1568,7 @@ bool wxWebViewChromium::CanSetZoomType(wxWebViewZoomType type) const
 
 void wxWebViewChromium::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
-    CefRegisterSchemeHandlerFactory( handler->GetName().ToStdWstring(), 
+    CefRegisterSchemeHandlerFactory( handler->GetName().ToStdWstring(),
                                      handler->GetVirtualHost().ToStdWstring(),
                                      new SchemeHandlerFactory(handler) );
 }
@@ -2087,7 +2087,7 @@ bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,
 {
     base::AutoLock lock_scope(m_lock);
     wxWebViewChromiumHandlerRequest req(request);
-    
+
     m_handlerResponse.reset(new wxWebViewChromiumHandlerResponse(callback));
     m_handler->StartRequest(req, m_handlerResponse);
     return GetHandlerResponse()->GetResult();
