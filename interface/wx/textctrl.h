@@ -2185,13 +2185,18 @@ public:
         This offers more granular control of content formatting, as well as a
         significant performance benefit with larger content.
 
-        This is the GTK analogy to SetRTFValue().
+        This is the GTK equivalent of SetRTFValue().
+
+        This functionality is only available in GTK versions greater than 3.16,
+        the function does nothing and returns @false when using older GTK
+        version, the application should handle this case and fall back to some
+        other way of setting the control contents.
 
         @onlyfor{wxgtk}
 
         @since 3.3
     */
-    void GTKSetPangoMarkup(const wxString& str);
+    bool GTKSetPangoMarkup(const wxString& str);
 
     ///@}
 
