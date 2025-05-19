@@ -162,14 +162,14 @@ public:
 
 protected:
     // create the object providing access to the display with the given index
-    wxDisplayImpl(unsigned n) : m_index(n), m_isConnected(true) { }
+    wxDisplayImpl(unsigned n) : m_index(n) { }
 
 
     // the index of this display (0 is always the primary one)
     unsigned m_index;
 
     // true, if this display is still connected physically to system
-    bool m_isConnected;
+    bool m_isConnected = true;
 
     friend class wxDisplayFactory;
 
