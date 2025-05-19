@@ -13,6 +13,15 @@
     A control is generally a small window which processes user input and/or
     displays one or more item of data.
 
+    wxControl is mainly intended to function as a base class for the implementation
+    of native widget classes. It provides some common support for control labels and
+    dealing with mnemonics in labels as well as some platform support.
+
+    Developers of classes for generic or custom controls (which often have no need for
+    label support and/or platform specifics) might be better of deriving directly from
+    wxWindow. There are however no known technical restrictions for using wxControl as
+    a base class for generic widget classes.
+
     @beginEventEmissionTable{wxClipboardTextEvent}
     @event{EVT_TEXT_COPY(id, func)}
            Some or all of the controls content was copied to the clipboard.

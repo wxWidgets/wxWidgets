@@ -33,6 +33,12 @@ enum wxScrollbarVisibility
       so doesn't handle children specially. This is suitable e.g. for
       implementing scrollable controls such as tree or list controls.
 
+    In addition the wxScrolled<wxControl> specialization is also used internally
+    in wxWidgets. Like with wxControl itself though (and for the same reasons),
+    it is not advised to use this template specialization as a base class for
+    custom scrolling controls (also note the absence of a wxScrolledControl
+    typedef). Use wxScrolledCanvas instead.
+
     @note
     See wxScrolled::Create() if you want to use wxScrolled with a custom class.
 
