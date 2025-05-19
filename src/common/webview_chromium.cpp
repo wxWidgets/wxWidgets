@@ -526,10 +526,10 @@ public:
         SetData(m_request->GetPostData());
     }
     virtual ~wxWebViewChromiumHandlerRequest() = default;
-    virtual wxString GetRawURI() const;
-    virtual wxInputStream* GetData() const;
-    virtual wxString GetMethod() const;
-    virtual wxString GetHeader(const wxString& name) const;
+    virtual wxString GetRawURI() const override;
+    virtual wxInputStream* GetData() const override;
+    virtual wxString GetMethod() const override;
+    virtual wxString GetHeader(const wxString& name) const override;
 private:
     void SetData(CefRefPtr<CefPostData> postData);
     CefRefPtr<CefRequest> m_request;
@@ -545,11 +545,11 @@ public:
         m_futureResult = m_promiseResult.get_future();
     }
     virtual ~wxWebViewChromiumHandlerResponse() = default;
-    virtual void SetStatus(int status);
-    virtual void SetContentType(const wxString& contentType);
-    virtual void SetHeader(const wxString& name, const wxString& value);
-    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data);
-    virtual void FinishWithError();
+    virtual void SetStatus(int status) override;
+    virtual void SetContentType(const wxString& contentType) override;
+    virtual void SetHeader(const wxString& name, const wxString& value) override;
+    virtual void Finish(wxSharedPtr<wxWebViewHandlerResponseData> data) override;
+    virtual void FinishWithError() override;
 
     bool GetResult();
 
