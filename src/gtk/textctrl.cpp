@@ -2119,6 +2119,11 @@ void wxTextCtrl::GTKSetPangoMarkup(const wxString& str)
 {
     wxCHECK_RET(IsMultiLine(), "pango markup requires multiline control");
 
+#if GTK_CHECK_VERSION(3,16,0)
+    if (gtk_check_version(3,16,0) != nullptr) {
+        wxLogError(wxT("pango markup requires GTK+ 3.16.0+"));
+        return;
+    }
     // multiple events may get fired while editing text, so block those
     {
         EventsSuppressor noevents(this);
@@ -2130,6 +2135,9 @@ void wxTextCtrl::GTKSetPangoMarkup(const wxString& str)
         gtk_text_buffer_insert_markup(m_buffer, &start, str.utf8_str(), -1);
     }
     SendTextUpdatedEvent(GetEditableWindow());
+#else
+    wxLogError(wxT("pango markup requires GTK+ 3.16.0+"));
+#endif // GTK_CHECK_VERSION(3,16,0)
 }
 wxTextSearchResult wxTextCtrl::SearchText(const wxTextSearch& search) const
 {
