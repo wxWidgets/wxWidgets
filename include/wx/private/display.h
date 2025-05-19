@@ -26,38 +26,7 @@ public:
 
     // Create the display if necessary using CreateDisplay(), otherwise just
     // get it from cache.
-    wxObjectDataPtr<wxDisplayImpl> GetDisplay(unsigned n)
-    {
-        // Normally, m_impls should be cleared if the number of displays in the
-        // system changes because InvalidateCache() must be called. However in
-        // some ports (e.g. Mac right now, see #18318), cache invalidation never
-        // happens, so we can end up with m_impls size being out of sync with
-        // the actual number of monitors. Compensate for this here by checking
-        // if the index is invalid and invalidating the cache at least in this
-        // case.
-        //
-        // Note that this is still incorrect because we continue using outdated
-        // information if the first monitor is disconnected, for example. The
-        // only real solution is to ensure that InvalidateCache() is called,
-        // but for now this at least avoids crashes when a new display is
-        // connected.
-        if ( n >= m_impls.size() )
-        {
-            // This strange two-step resize is done to clear all the existing
-            // elements: they may not be valid any longer if the number of
-            // displays has changed.
-            m_impls.resize(0);
-            m_impls.resize(GetCount());
-        }
-        else if ( m_impls[n] )
-        {
-            // Just return the existing display if we have it.
-            return m_impls[n];
-        }
-
-        m_impls[n] = CreateDisplay(n);
-        return m_impls[n];
-    }
+    wxObjectDataPtr<wxDisplayImpl> GetDisplay(unsigned n);
 
     // Return the primary display object, creating it if necessary.
     wxObjectDataPtr<wxDisplayImpl> GetPrimaryDisplay();
@@ -102,6 +71,9 @@ private:
 
     // On-demand populated vector of wxDisplayImpl objects.
     wxVector<wxObjectDataPtr<wxDisplayImpl> > m_impls;
+
+    // The count of connected displays retrieved on last display access.
+    unsigned m_countOnLastAccess = 0u;
 
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactory);
 };

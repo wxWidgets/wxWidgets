@@ -257,22 +257,53 @@ void wxDisplayFactory::ClearImpls()
 
 void wxDisplayFactory::UpdateDisplayChanges()
 {
-    const unsigned newCount = GetCount();
-    wxVector<wxObjectDataPtr<wxDisplayImpl> > impls((size_t)newCount);
+    m_countOnLastAccess = GetCount();
+    wxVector<wxObjectDataPtr<wxDisplayImpl> > impls;
+    impls.reserve(m_countOnLastAccess);
 
     for ( size_t n = 0; n < m_impls.size(); ++n )
     {
         wxObjectDataPtr<wxDisplayImpl> &impl = m_impls[n];
 
-        // There are wxDisplay objects referring to impl still in scope.
-        if ( impl && impl->GetRefCount() > 1 )
-        {
-            // Try to update display state or mark it as disconnected.
-            if ( UpdateDisplayChange(*impl) && impl->GetIndex() < newCount )
-                impls[impl->GetIndex()] = impl;
-        }
+        // Try to update display state or mark it as disconnected.
+        if ( UpdateDisplayChange(*impl) )
+            impls.push_back(impl);
     }
     m_impls = impls;
+}
+
+wxObjectDataPtr<wxDisplayImpl> wxDisplayFactory::GetDisplay(unsigned n)
+{
+    // Normally, m_impls should be cleared if the number of displays in the
+    // system changes because InvalidateCache() must be called. However in
+    // some ports (e.g. Mac right now, see #18318), cache invalidation never
+    // happens, so we can end up with m_impls size being out of sync with
+    // the actual number of monitors. Compensate for this here by checking
+    // if the index is invalid and invalidating the cache at least in this
+    // case.
+    //
+    // Note that this is still incorrect because we continue using outdated
+    // information if the first monitor is disconnected, for example. The
+    // only real solution is to ensure that InvalidateCache() is called,
+    // but for now this at least avoids crashes when a new display is
+    // connected.
+    if ( n >= m_countOnLastAccess )
+    {
+        // Clear all the existing elements: they may not be valid any longer
+        // if the number of displays has changed.
+        UpdateDisplayChanges();
+    }
+
+    // Just return the existing display if we have it.
+    for ( size_t i = 0; i < m_impls.size(); ++i )
+    {
+        if ( m_impls[i]->GetIndex() == n )
+            return m_impls[i];
+    }
+    wxObjectDataPtr<wxDisplayImpl> impl(CreateDisplay(n));
+    if ( impl )
+        m_impls.push_back(impl);
+    return impl;
 }
 
 wxObjectDataPtr<wxDisplayImpl> wxDisplayFactory::GetPrimaryDisplay()
