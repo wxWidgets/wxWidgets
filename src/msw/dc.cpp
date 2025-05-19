@@ -1950,11 +1950,31 @@ wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
         }
     }
 
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // This is a workaround to fix a bug when using this function
+        // to map DP to LP in RTL layout.
+        int w, h;
+        DoGetSize(&w, &h);
+
+        x = w - x - 1; // x is mirrored in RTL layout.
+    }
+
     return pt;
 }
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // This is a workaround to fix a bug when using this function
+        // to map LP to DP in RTL.
+        int w, h;
+        DoGetSize(&w, &h);
+
+        x = w - x - 1; // x is mirrored in RTL layout layout.
+    }
+
     POINT p;
     p.x = x;
     p.y = y;
