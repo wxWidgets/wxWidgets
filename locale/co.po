@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets in Corsican\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2025-03-02 15:21+0100\n"
+"PO-Revision-Date: 2025-05-19 16:47+0200\n"
 "Last-Translator: Patriccollu di Santa Maria è Sichè <https://github.com/"
 "Patriccollu/Lingua_Corsa-Infurmatica/#readme>\n"
 "Language-Team: Patriccollu di Santa Maria è Sichè\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.5.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
@@ -722,7 +722,6 @@ msgid "SPECIAL"
 msgstr "SPEZIALE"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
@@ -2239,7 +2238,7 @@ msgstr ""
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "Intestatura BMP : Numeru inaccettevule di culori (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2482,37 +2481,35 @@ msgstr "TIFF : Sbagliu à a squassatura di i dati."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP : Dati inaccettevule (fiascu per ottene i funzioni)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP : Fiascu per attribuisce memoria à a fiura."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP : Fiascu per discudificà i dati di fiura RGBA."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP : Fiascu per discudificà i dati di fiura RGB."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP : Fiascu per attribuisce u stampone à u flussu."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "Fiascu per definisce i dati di u preme’papei."
+msgstr "WebP : Fiascu per analizà i dati di u cuntenidore."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "Sbagliu durante a lettura di l’ozzioni di cunfigurazione."
+msgstr "WebP : Sbagliu per discudificà l’animazione."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP : Sbagliu per ottene a sequenza seguente d’animazione."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -4028,7 +4025,6 @@ msgid "Failed to set proxy \"%s\": %s"
 msgstr "Fiascu per definisce u proxy « %s » : %s"
 
 #: ../src/common/webview_chromium.cpp:989
-#, fuzzy
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
@@ -5313,33 +5309,31 @@ msgid "MDI child"
 msgstr "Zitellu MDI"
 
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
 msgstr ""
-"Fiascu à a creazione di a cunnessione à u servitore « %s » nant’à u "
-"sughjettu « %s »"
+"Fiascu per apre a cunnessione D-Bus per u ghjestiunariu di cunnessione : %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "Piattà l’appiecazione"
+msgstr "Appiecazione wxWidgets"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "L’appiecazione hà bisognu di cuntinuà à funziunà"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "Nettata prima d’interrompe"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Ùn si pò micca inizià a cunnessione tefonica : %s"
+msgstr "Fiascu per impedisce a veghja : %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "Risposta inespettata à a richiesta D-Bus d’inibizione."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
@@ -7193,7 +7187,7 @@ msgstr "Sceglie un schedariu"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&Musaica"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
