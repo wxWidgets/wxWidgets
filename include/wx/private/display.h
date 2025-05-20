@@ -47,7 +47,7 @@ public:
     virtual int GetFromWindow(const wxWindow *window);
 
     // Trigger recreation of wxDisplayImpl when they're needed the next time.
-    virtual void InvalidateCache() { UpdateDisplayChanges(); }
+    virtual void UpdateOnDisplayChange();
 
 protected:
     // create a new display object
@@ -59,15 +59,11 @@ protected:
     // if this is the case
     //
     // mark display as disconnected and return false otherwise
-    virtual bool UpdateDisplayChange(wxDisplayImpl &impl) const;
+    virtual bool UpdateOnDisplayChange(wxDisplayImpl &impl) const;
 
 private:
     // Delete all the elements of m_impls vector and clear it.
     void ClearImpls();
-
-    // Trigger recreation of wxDisplayImpl or update its properties if
-    // a reference to it is still in scope.
-    void UpdateDisplayChanges();
 
     // On-demand populated vector of wxDisplayImpl objects.
     wxVector<wxObjectDataPtr<wxDisplayImpl> > m_impls;

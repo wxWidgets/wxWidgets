@@ -141,7 +141,7 @@ public:
     virtual bool ChangeMode(const wxVideoMode& mode) override;
 
     // update index and display information from info if handle matches
-    bool UpdateStateIfHandleMatches(unsigned n, const wxDisplayInfo &info);
+    bool UpdateOnDisplayChange(const wxVector<wxDisplayInfo> &displays);
 
 protected:
     // convert a DEVMODE to our wxVideoMode
@@ -186,13 +186,13 @@ public:
     virtual int GetFromRect(const wxRect& rect) override;
     virtual int GetFromWindow(const wxWindow *window) override;
 
-    void InvalidateCache() override
+    void UpdateOnDisplayChange() override
     {
         DoRefreshMonitors();
-        wxDisplayFactory::InvalidateCache();
+        wxDisplayFactory::UpdateOnDisplayChange();
     }
 
-    virtual bool UpdateDisplayChange(wxDisplayImpl &impl) const override;
+    virtual bool UpdateOnDisplayChange(wxDisplayImpl &impl) const override;
 
     // Declare the second argument as int to avoid problems with older SDKs not
     // declaring MONITOR_DPI_TYPE enum.
@@ -492,14 +492,18 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
     return false;
 }
 
-bool wxDisplayMSW::UpdateStateIfHandleMatches(unsigned n, const wxDisplayInfo &info)
+bool wxDisplayMSW::UpdateOnDisplayChange(const wxVector<wxDisplayInfo> &displays)
 {
-    if ( info.hmon == m_info.hmon )
+    for ( size_t n = 0; n < displays.size(); ++n )
     {
-        m_info = info;
-        m_index = n;
-        return true;
+        if ( displays[n].hmon == displays[n].hmon )
+        {
+            m_info = displays[n];
+            m_index = n;
+            return true;
+        }
     }
+    Disconnect();
     return false;
 }
 
@@ -668,18 +672,10 @@ int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
 #endif
 }
 
-bool wxDisplayFactoryMSW::UpdateDisplayChange(wxDisplayImpl &impl) const
+bool wxDisplayFactoryMSW::UpdateOnDisplayChange(wxDisplayImpl &impl) const
 {
     wxDisplayMSW &implMsw = static_cast<wxDisplayMSW &>(impl);
-
-    for ( size_t n = 0; n < m_displays.size(); ++n )
-    {
-        if (implMsw.UpdateStateIfHandleMatches((unsigned) n, m_displays[n]))
-            return true;
-    }
-
-    impl.Disconnect();
-    return false;
+    return implMsw.UpdateOnDisplayChange(m_displays);
 }
 
 #else // !wxUSE_DISPLAY

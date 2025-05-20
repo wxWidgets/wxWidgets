@@ -121,7 +121,7 @@ wxDisplay::~wxDisplay() = default;
 
 /* static */ void wxDisplay::InvalidateCache()
 {
-    Factory().InvalidateCache();
+    Factory().UpdateOnDisplayChange();
 }
 
 // ----------------------------------------------------------------------------
@@ -242,7 +242,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 // wxDisplayFactory implementation
 // ============================================================================
 
-bool wxDisplayFactory::UpdateDisplayChange(wxDisplayImpl &impl) const
+bool wxDisplayFactory::UpdateOnDisplayChange(wxDisplayImpl &impl) const
 {
     // If the factory is not able to detect connection state of the
     // input display we assume that it is disconnected now.
@@ -253,23 +253,6 @@ bool wxDisplayFactory::UpdateDisplayChange(wxDisplayImpl &impl) const
 void wxDisplayFactory::ClearImpls()
 {
     m_impls.clear();
-}
-
-void wxDisplayFactory::UpdateDisplayChanges()
-{
-    m_countOnLastAccess = GetCount();
-    wxVector<wxObjectDataPtr<wxDisplayImpl> > impls;
-    impls.reserve(m_countOnLastAccess);
-
-    for ( size_t n = 0; n < m_impls.size(); ++n )
-    {
-        wxObjectDataPtr<wxDisplayImpl> &impl = m_impls[n];
-
-        // Try to update display state or mark it as disconnected.
-        if ( UpdateDisplayChange(*impl) )
-            impls.push_back(impl);
-    }
-    m_impls = std::move(impls);
 }
 
 wxObjectDataPtr<wxDisplayImpl> wxDisplayFactory::GetDisplay(unsigned n)
@@ -291,7 +274,7 @@ wxObjectDataPtr<wxDisplayImpl> wxDisplayFactory::GetDisplay(unsigned n)
     {
         // Clear all the existing elements: they may not be valid any longer
         // if the number of displays has changed.
-        UpdateDisplayChanges();
+        UpdateOnDisplayChange();
     }
 
     // Just return the existing display if we have it.
@@ -364,6 +347,23 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
         return wxNOT_FOUND;
 
     return GetFromRect(window->GetScreenRect());
+}
+
+void wxDisplayFactory::UpdateOnDisplayChange()
+{
+    m_countOnLastAccess = GetCount();
+    wxVector<wxObjectDataPtr<wxDisplayImpl> > impls;
+    impls.reserve(m_countOnLastAccess);
+
+    for ( size_t n = 0; n < m_impls.size(); ++n )
+    {
+        wxObjectDataPtr<wxDisplayImpl> &impl = m_impls[n];
+
+        // Try to update display state or mark it as disconnected.
+        if ( UpdateOnDisplayChange(*impl) )
+            impls.push_back(impl);
+    }
+    m_impls = std::move(impls);
 }
 
 // ============================================================================
