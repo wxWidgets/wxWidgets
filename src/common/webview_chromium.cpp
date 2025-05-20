@@ -590,7 +590,7 @@ public:
 private:
     wxWebViewChromiumHandlerResponse *GetHandlerResponse();
     wxSharedPtr<wxWebViewHandler> m_handler;
-    wxSharedPtr<wxWebViewHandlerResponse> m_handlerResponse;
+    wxSharedPtr<wxWebViewChromiumHandlerResponse> m_handlerResponse;
     std::string m_data;
     std::string m_mime_type;
     size_t m_offset;
@@ -2061,7 +2061,7 @@ wxInputStream* wxWebViewChromiumHandlerResponse::GetData() const
 int64_t wxWebViewChromiumHandlerResponse::GetLength() const
 {
     int64_t length = -1;
-    wxInputStream *stream = GetData();
+    wxInputStream* stream = GetData();
     wxFileOffset size = 0;
     if(stream)
     {
@@ -2078,7 +2078,7 @@ void wxWebViewChromiumHandlerResponse::CopyHeaders(CefRefPtr<CefResponse> respon
 {
     for (const auto& header : m_headers)
     {
-        response->SetHeaderByName(header.first.ToStdString(), header.second.ToStdString(), true);
+        response->SetHeaderByName(header.first.utf8_string(), header.second.utf8_string(), true);
     }
 }
 
@@ -2121,7 +2121,7 @@ bool SchemeHandler::ReadResponse(void* data_out,
     wxWebViewChromiumHandlerResponse* handlerResponse = GetHandlerResponse();
     wxInputStream* stream = handlerResponse->GetData();
 
-    if(stream->CanRead())
+    if ( stream->CanRead() )
     {
         stream->Read(data_out, bytes_to_read);
         bytes_read = stream->LastRead();
