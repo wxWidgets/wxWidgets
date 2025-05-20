@@ -260,6 +260,7 @@ public:
     wxString& operator<<(wxString&, const wxLongLong&);
 
 #if wxUSE_STREAMS
+    #include "wx/txtstrm.h"
     friend WXDLLIMPEXP_BASE
     class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxLongLong&);
     friend WXDLLIMPEXP_BASE
@@ -486,6 +487,7 @@ public:
     wxString& operator<<(wxString&, const wxULongLong&);
 
 #if wxUSE_STREAMS
+    #include "wx/txtstrm.h"
     friend WXDLLIMPEXP_BASE
     class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxULongLong&);
     friend WXDLLIMPEXP_BASE
