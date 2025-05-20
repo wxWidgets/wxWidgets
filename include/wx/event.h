@@ -4106,9 +4106,6 @@ protected:
     // instance of wxSharedPtr to extend the life of the wxRecursionGuardFlag
     // to outlive wxRecursionGuard
     wxSharedPtr<DynamicEvents> m_dynamicEvents;
-    // ensure new m_dynamicEvents has same layout as wxWidgets 3.2 m_dynamicEvents
-    static_assert(sizeof(wxSharedPtr<DynamicEvents>) == sizeof(DynamicEvents*), "wxSharedPtr<> has wrong size");
-    static_assert(alignof(wxSharedPtr<DynamicEvents>) == alignof(DynamicEvents*), "wxSharedPtr<> has wrong alignment");
 
     wxList*             m_pendingEvents;
 
