@@ -269,7 +269,7 @@ void wxDisplayFactory::UpdateDisplayChanges()
         if ( UpdateDisplayChange(*impl) )
             impls.push_back(impl);
     }
-    m_impls = impls;
+    m_impls = std::move(impls);
 }
 
 wxObjectDataPtr<wxDisplayImpl> wxDisplayFactory::GetDisplay(unsigned n)
