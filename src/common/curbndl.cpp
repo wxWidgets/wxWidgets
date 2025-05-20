@@ -61,7 +61,7 @@ public:
     {
     }
 
-    virtual wxCursor GetCursorFor(const wxWindow* WXUNUSED(window)) const
+    virtual wxCursor GetCursorFor(const wxWindow* WXUNUSED(window)) const override
     {
         return m_cursor;
     }
