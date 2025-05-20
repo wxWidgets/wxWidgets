@@ -127,10 +127,10 @@ public:
 #endif // wxUSE_DISPLAY
 
     // return true, if this display is still connected physically to system
-    virtual bool IsConnected() const { return m_isConnected; }
+    bool IsConnected() const { return m_isConnected; }
 
     // indicate that this display is not connected to system anymore
-    virtual void Disconnect() { m_isConnected = false; }
+    void Disconnect() { m_isConnected = false; }
 
 protected:
     // create the object providing access to the display with the given index
