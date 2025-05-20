@@ -252,6 +252,10 @@ Changes in behaviour which may result in build errors
 3.2.9: (released 2025-??-??)
 ----------------------------
 
+All (Unix):
+
+- Fix configure build with --with-flavour option broken in 3.2.8 (#25436).
+
 wxGTK:
 
 - Fix handling total window size with GNOME with X11 (#25348).

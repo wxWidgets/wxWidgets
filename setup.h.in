@@ -23,6 +23,9 @@
 /* Are multiple versions of the same symbol supported? */
 #undef wxHAVE_ELF_SYMVER_MULTIPLE
 
+/* Prefix for the ELF version used for the library symbols. */
+#undef wxELF_VERSION_PREFIX
+
 /* Define if ssize_t type is available.  */
 #undef HAVE_SSIZE_T
 
