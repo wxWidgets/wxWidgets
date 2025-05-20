@@ -212,7 +212,7 @@ public:
 
         This function is only full implemented in MSW and just always returns
         @true under the other platforms currently.
-        
+
         Under MSW, it returns @false if the physical display that this C++
         object corresponds to has become unavailable, e.g. because it was
         unplugged or otherwise removed from the system. Such disconnected
