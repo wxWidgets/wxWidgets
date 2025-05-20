@@ -17,6 +17,11 @@
 
 #include <limits.h>     // for LONG_MAX
 
+#if wxUSE_STREAMS
+class WXDLLIMPEXP_FWD_BASE wxTextOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxTextInputStream;
+#endif
+
 class WXDLLIMPEXP_FWD_BASE wxULongLong;
 
 class WXDLLIMPEXP_BASE wxWARN_UNUSED wxLongLong
