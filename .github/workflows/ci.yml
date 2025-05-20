@@ -105,21 +105,25 @@ jobs:
             container: ubuntu:20.04
             compiler: clang++-10
             configure_flags: --disable-sys-libs
+            extra_warnings: -Winconsistent-missing-override
             use_xvfb: true
           - name: Ubuntu 22.04 wxGTK with wx containers
             runner: ubuntu-22.04
             configure_flags: --enable-compat30 --disable-std_containers
+            extra_warnings: -Wsuggest-override
             use_xvfb: true
             check_headers: true
           - name: Ubuntu 24.04 wxGTK with ASAN
             runner: ubuntu-24.04
             configure_flags: --disable-compat32 --disable-sys-libs
+            extra_warnings: -Wsuggest-override
             skip_samples: true
             use_asan: true
             use_xvfb: true
           - name: Ubuntu 24.04 wxGTK with UBSAN
             runner: ubuntu-24.04
             configure_flags: --with-cxx=20
+            extra_warnings: -Wsuggest-override
             use_ubsan: true
             use_xvfb: true
             build_out_of_tree_samples: true
@@ -270,7 +274,7 @@ jobs:
 
           if [ -z ${{ matrix.allow_warnings }} ]; then
             if [ -z ${{ matrix.allow_extra_warnings }} ]; then
-              error_opts="-Wextra"
+              error_opts="-Wextra ${{ matrix.extra_warnings }}"
             fi
             error_opts="$error_opts -Werror $allow_warn_opt"
             echo "wxMAKEFILE_ERROR_CXXFLAGS=$error_opts" >> $GITHUB_ENV
