@@ -34,12 +34,8 @@
         #define wxELF_SYMVER_NON_DEFAULT(sym, ver)
     #endif
 
-    // Our version tag depends on whether we're using Unicode or not.
-    #if wxUSE_UNICODE
-        #define wxMAKE_ELF_VERSION_TAG(ver) "WXU_" ver
-    #else
-        #define wxMAKE_ELF_VERSION_TAG(ver) "WX_" ver
-    #endif
+    // wxELF_VERSION_PREFIX is defined by configure if wxHAVE_ELF_SYMVER is.
+    #define wxMAKE_ELF_VERSION_TAG(ver) wxELF_VERSION_PREFIX ver
 
     // This macro is used to repair ABI compatibility problems with the symbols
     // versions: unfortunately, some symbols were initially added with the
