@@ -12,12 +12,7 @@
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
 
 #include "wx/webview.h"
-#include "wx/mstream.h"
 #include "wx/timer.h"
-
-#include <future>
-#include <map>
-#include <vector>
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 
@@ -217,6 +212,9 @@ public:
     // If non-zero, specifies the port to use for remote debugging (the usual
     // value for it is 9223).
     int m_remoteDebuggingPort = 0;
+
+    // Set to true to block CEF from accessing local files.
+    bool m_disableFileAccess = false;
 
     // Function to create the custom CefClient to use if non-null.
     //

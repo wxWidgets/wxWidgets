@@ -13,6 +13,7 @@
 #include "wx/eventfilter.h"
 #include "wx/filename.h"
 #include "wx/filesys.h"
+#include "wx/mstream.h"
 #include "wx/rtti.h"
 #include "wx/stdpaths.h"
 #include "wx/app.h"
@@ -29,6 +30,10 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #endif
+
+#include <future>
+#include <map>
+#include <vector>
 
 // With MSVC we are always using debug CEF build in debug wx builds (i.e. when
 // _DEBUG is defined), as otherwise we'd be using incompatible variants of CRT.
@@ -590,7 +595,7 @@ public:
 private:
     wxWebViewChromiumHandlerResponse *GetHandlerResponse();
     wxSharedPtr<wxWebViewHandler> m_handler;
-    wxSharedPtr<wxWebViewChromiumHandlerResponse> m_handlerResponse;
+    wxSharedPtr<wxWebViewHandlerResponse> m_handlerResponse;
     std::string m_data;
     std::string m_mime_type;
     size_t m_offset;
@@ -710,8 +715,8 @@ private:
 class wxCefBrowserApp : public CefApp
 {
 public:
-    wxCefBrowserApp()
-        : m_browserProcessHandler(new wxBrowserProcessHandler{})
+    wxCefBrowserApp(bool disableFileAccess)
+        : m_browserProcessHandler(new wxBrowserProcessHandler{}), m_disableFileAccess(disableFileAccess)
     {
     }
 
@@ -720,7 +725,7 @@ public:
                                        CefRefPtr<CefCommandLine> command_line)
                                        override
     {
-        if ( process_type.empty() )
+        if ( process_type.empty() && !m_disableFileAccess)
         {
             command_line->AppendSwitch("allow-file-access-from-files");
             command_line->AppendSwitch("allow-universal-access-from-files");
@@ -734,7 +739,7 @@ public:
 
 private:
     CefRefPtr<CefBrowserProcessHandler> m_browserProcessHandler;
-
+    bool m_disableFileAccess;
     IMPLEMENT_REFCOUNTING(wxCefBrowserApp);
 };
 
@@ -1168,7 +1173,8 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
     CefMainArgs args(app->argc, app->argv);
 #endif
 
-    CefRefPtr<CefApp> cefApp{new wxCefBrowserApp{}};
+    CefRefPtr<CefApp> cefApp{new wxCefBrowserApp(
+        configChrome->m_disableFileAccess)};
     if ( !CefInitialize(args, settings, cefApp, nullptr) )
     {
         wxLogError(_("Could not initialize Chromium"));
@@ -1980,7 +1986,6 @@ wxString wxWebViewChromiumHandlerRequest::GetHeader(const wxString& name) const
 
 void wxWebViewChromiumHandlerRequest::SetData(CefRefPtr<CefPostData> data)
 {
-    wxInputStream *stream = nullptr;
     if(data)
     {
         CefPostData::ElementVector elements;
@@ -2000,9 +2005,12 @@ void wxWebViewChromiumHandlerRequest::SetData(CefRefPtr<CefPostData> data)
                 element->GetBytes(read_size, m_buffer.data() + offset);
             }
         }
-        stream = new wxMemoryInputStream(m_buffer.data(), m_buffer.size());
+        m_data.reset(new wxMemoryInputStream(m_buffer.data(), m_buffer.size()));
     }
-    m_data.reset(stream);
+    else
+    {
+        m_data.reset();
+    }
 }
 
 void wxWebViewChromiumHandlerResponse::SetStatus(int status)
@@ -2124,7 +2132,7 @@ bool SchemeHandler::ReadResponse(void* data_out,
     if ( stream->CanRead() )
     {
         stream->Read(data_out, bytes_to_read);
-        bytes_read = stream->LastRead();
+        bytes_read += stream->LastRead();
     }
 
     return bytes_read > 0;
@@ -2132,7 +2140,7 @@ bool SchemeHandler::ReadResponse(void* data_out,
 
 wxWebViewChromiumHandlerResponse *SchemeHandler::GetHandlerResponse()
 {
-    return dynamic_cast<wxWebViewChromiumHandlerResponse*>(m_handlerResponse.get());
+    return static_cast<wxWebViewChromiumHandlerResponse*>(m_handlerResponse.get());
 }
 
 namespace
