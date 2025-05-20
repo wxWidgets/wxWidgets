@@ -785,7 +785,7 @@ public:
         }
         @endcode
 
-        @note This is only used by macOS, Chromium and the Edge backend.
+        @note This is only used by macOS, Chromium, and the Edge backend.
 
         @see GetFile()
         @since 3.3.0
