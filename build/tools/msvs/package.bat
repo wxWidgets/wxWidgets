@@ -84,7 +84,7 @@ cd %base_dir%\docs
 7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z licence.txt
 7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleaseDLL.7z licence.txt
 
-cd %packagePath%\%VCver%
+cd ..\%packagePath%\%VCver%
 del sha1.txt
 rem fciv requires a complete path to files
 fciv %cd%\. -type *.7z -sha1 -wp >> sha1.txt

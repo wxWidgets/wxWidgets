@@ -47,7 +47,7 @@ rmdir ..\..\lib\%compvers%_x64_dll /s /q
 del %compvers%x64_Debug.txt
 del %compvers%x64_Release.txt
 
-if "%compvers%" == "vc14x" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64
+if "%compvers%" == "vc14x" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64 10.0.17763.0
 
 @echo 64 bit release build
 
