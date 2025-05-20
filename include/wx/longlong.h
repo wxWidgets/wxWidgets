@@ -14,6 +14,7 @@
 #include "wx/defs.h"
 #include "wx/iosfwrap.h"
 #include "wx/string.h"
+#include "wx/txtstrm.h"
 
 #include <limits.h>     // for LONG_MAX
 
@@ -260,7 +261,6 @@ public:
     wxString& operator<<(wxString&, const wxLongLong&);
 
 #if wxUSE_STREAMS
-    #include "wx/txtstrm.h"
     friend WXDLLIMPEXP_BASE
     class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxLongLong&);
     friend WXDLLIMPEXP_BASE
@@ -487,7 +487,6 @@ public:
     wxString& operator<<(wxString&, const wxULongLong&);
 
 #if wxUSE_STREAMS
-    #include "wx/txtstrm.h"
     friend WXDLLIMPEXP_BASE
     class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxULongLong&);
     friend WXDLLIMPEXP_BASE
