@@ -708,7 +708,7 @@ void WidgetsFrame::InitBook()
         m_book->AddPage(nullptr,WidgetsCategories[cat],false,0);
 #else
         m_book->AddPage(books[cat],WidgetsCategories[cat],false,0);
-        books[cat]->SetImageList(imageList);
+        books[cat]->SetImages(imageList);
 #endif
 
         // now do add them
