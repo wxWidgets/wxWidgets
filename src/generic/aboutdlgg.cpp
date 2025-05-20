@@ -250,6 +250,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
         wxWindow* const separator = new wxWindow(this, wxID_ANY);
         separator->SetInitialSize(wxSize(1, 1));
         separator->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+        separator->Disable(); // Make it inactive for screen readers.
         sizerTop->Add(separator, wxSizerFlags().Expand());
 
         sizerTop->Add(sizerBtns, wxSizerFlags().Expand().DoubleBorder());
