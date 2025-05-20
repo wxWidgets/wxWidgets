@@ -210,10 +210,15 @@ public:
     /**
         Returns @true if the display has not been unplugged.
 
-        This function is only implemented on MSW. After the display is unplugged,
-        or if the corresponding laptop lid is closed, the display object becomes
-        invalid on the next event queue execution if the object is still in scope.
-        All display property access functions will then return fallback values.
+        This function is only full implemented in MSW and just always returns
+        @true under the other platforms currently.
+        
+        Under MSW, it returns @false if the physical display that this C++
+        object corresponds to has become unavailable, e.g. because it was
+        unplugged or otherwise removed from the system. Such disconnected
+        display object can still be used by the program, but all its accessor
+        functions return special fallback values (e.g. 0 for the width and
+        height).
 
         To receive notifications about display unplugging or other display changes,
         connect a top-level window to the wxDisplayChangedEvent.
