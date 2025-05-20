@@ -50,21 +50,9 @@ if "%wxMINOR_VERSION%" == "9" set wxDLLVers=%wxMAJOR_VERSION%%wxMINOR_VERSION%%w
 
 rem Get rid of any files from the last run.
 
-del %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z
-del %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_ReleaseDLL.7z
-del %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_ReleasePDB.7z
 del %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z
 del %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleaseDLL.7z
 del %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleasePDB.7z
-
-rem Package the 32 bit files
-
-REM Copy wxrc.exe to the dll folder.
-copy utils\wxrc\%VCver%_mswudll\wxrc.exe lib\%VCver%_dll
-
-7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z lib\%VCver%_dll\mswud  lib\%VCver%_dll\mswu lib\%VCver%_dll\wxMSW%wxDllVers%ud_*.pdb lib\%VCver%_dll\wxbase%wxDllVers%ud_*.pdb lib\%VCver%_dll\wxMSW%wxDllVers%ud_*.dll lib\%VCver%_dll\wxbase%wxDllVers%u*.dll  lib\%VCver%_dll\*.lib lib\%VCver%_dll\wxrc.exe
-7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_ReleaseDLL.7z lib\%VCver%_dll\wxMSW%wxDllVers%u_*.dll lib\%VCver%_dll\wxbase%wxDllVers%u_*.dll
-7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_ReleasePDB.7z lib\%VCver%_dll\wxMSW%wxDllVers%u_*.pdb lib\%VCver%_dll\wxbase%wxDllVers%u_*.pdb
 
 rem Package the 64 bit files
 
@@ -77,7 +65,6 @@ copy utils\wxrc\%VCver%_x64_mswudll\wxrc.exe lib\%VCver%_x64_dll
 
 rem Include the props files: we need wxwidgets.props itself and wx_setup.props
 rem included from it.
-7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z build\msw\wx_setup.props
 7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z build\msw\wx_setup.props
 
 copy wxwidgets.props %packagePath%\%VCver%\wxwidgets.props
@@ -86,7 +73,6 @@ rem Change to the directory containing wxwidgets.props in order to include it
 rem into the archive without any path.
 cd %packagePath%\%VCver%
 
-7z a -t7z wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z wxwidgets.props
 7z a -t7z wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z wxwidgets.props
 
 del wxwidgets.props
@@ -95,12 +81,10 @@ rem Change to the directory containing licence file in order to include it
 rem into the archives without any path.
 cd %base_dir%\docs
 
-7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z licence.txt
-7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_ReleaseDLL.7z licence.txt
 7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z licence.txt
 7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleaseDLL.7z licence.txt
 
-cd %packagePath%\%VCver%
+cd ..\%packagePath%\%VCver%
 del sha1.txt
 rem fciv requires a complete path to files
 fciv %cd%\. -type *.7z -sha1 -wp >> sha1.txt
