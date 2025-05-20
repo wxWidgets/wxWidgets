@@ -567,7 +567,9 @@ public:
 
 private:
     CefRefPtr<CefCallback> m_callback;
+    // Used to store result of StartRequest if finished asynchronously
     std::promise<bool> m_promiseResult;
+    // Used to retrieve result of StartRequest if finished asynchronously
     std::future<bool> m_futureResult;
     int m_status;
     wxString m_contentType;
