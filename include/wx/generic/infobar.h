@@ -110,8 +110,6 @@ protected:
     // should be called when we're shown or hidden)
     void UpdateParent();
 
-    long m_style = 0;
-
 private:
     // common part of all ctors
     void Init();

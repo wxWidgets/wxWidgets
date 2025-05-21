@@ -72,7 +72,7 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     // calling Hide() before Create() ensures that we're created initially
     // hidden
     Hide();
-    m_style = style;
+    SetWindowStyle(style);
     if ( !wxWindow::Create(parent, winid) )
         return false;
 
@@ -494,7 +494,7 @@ void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
 
 void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
 {
-    wxASSERT_MSG( (m_style & wxINFOBAR_CHECKBOX) != 0,
+    wxASSERT_MSG( (GetWindowStyle() & wxINFOBAR_CHECKBOX) != 0,
                   "wxINFOBAR_CHECKBOX style should be set if calling ShowCheckBox()!");
     m_checked = checked;
     if (m_checkbox != nullptr)
