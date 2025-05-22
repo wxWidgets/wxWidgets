@@ -38,6 +38,13 @@ endif()
 
 # setup header and wx-config
 if(WIN32_MSVC_NAMING)
+    # create both Debug and Release directories, so CMake doesn't complain about
+    # non-existent path when only Release or Debug build has been installed
+    set(lib_unicode "u")
+    install(DIRECTORY
+        DESTINATION "lib/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode}")
+    install(DIRECTORY
+        DESTINATION "lib/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode}d")
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
         DESTINATION "lib/${wxPLATFORM_LIB_DIR}")
