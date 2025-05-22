@@ -141,6 +141,39 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxBkModeChanger);
 };
 
+// This helper class is to prevent text mirroring in RTL layout when there is
+// an affine transformation applied to the DC.
+class wxDCMirrorForRTL
+{
+public:
+    explicit wxDCMirrorForRTL(wxMSWDCImpl* dc)
+        : m_dc(dc), m_origTrans(dc->GetTransformMatrix())
+    {
+        if ( m_dc->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            wxAffineMatrix2D mirrorTrans;
+            mirrorTrans.Mirror();
+            auto trans = m_origTrans;
+            trans.Concat(mirrorTrans);
+            m_dc->SetTransformMatrix(trans);
+        }
+    }
+
+    ~wxDCMirrorForRTL()
+    {
+        if ( m_dc->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            m_dc->SetTransformMatrix(m_origTrans); // Restore transformation matrix;
+        }
+    }
+
+private:
+    wxMSWDCImpl* const m_dc;
+    const wxAffineMatrix2D m_origTrans;
+
+    wxDECLARE_NO_COPY_CLASS(wxDCMirrorForRTL);
+};
+
 } // namespace wxMSWImpl
 
 #endif // _MSW_PRIVATE_DC_H_

@@ -1333,6 +1333,8 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
     wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
 
+    wxDCMirrorForRTL mirrorDC(this);
+
     DrawAnyText(text, x, y);
 
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
@@ -1341,7 +1343,11 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
 void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
-    if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, nullptr,
+    const bool isRTL = GetLayoutDirection() == wxLayout_RightToLeft;
+    const int xdev = isRTL ? -XLOG2DEV(x) : XLOG2DEV(x);
+    const UINT options = isRTL ? 0 : ETO_RTLREADING;
+
+    if ( ::ExtTextOut(GetHdc(), xdev, YLOG2DEV(y), options, nullptr,
                    text.c_str(), text.length(), nullptr) == 0 )
     {
         wxLogLastError(wxT("TextOut"));
@@ -1387,6 +1393,8 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
 
     // GDI wants the angle in tenth of degree
     long angle10 = (long)(angle * 10);
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        angle10 = -angle10;
     lf.lfEscapement = angle10;
     lf.lfOrientation = angle10;
 
@@ -1406,6 +1414,7 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     // Prepare for drawing the text
     wxTextColoursChanger textCol(GetHdc(), *this);
     wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
+    wxDCMirrorForRTL mirrorDC(this);
 
     // Compute the shift for the origin of the next line.
     const double rad = wxDegToRad(angle);
