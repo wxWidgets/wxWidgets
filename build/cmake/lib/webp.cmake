@@ -45,11 +45,19 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
     foreach(target_name IN LISTS webpTargets)
         set_target_properties(${target_name} PROPERTIES
             FOLDER "Third Party Libraries/WebP"
-            OUTPUT_NAME "${target_name}"
+            PREFIX  ""
+            OUTPUT_NAME "wx${target_name}"
+            PUBLIC_HEADER ""
         )
     endforeach()
 
-    set(WebP_LIBRARIES webp webpdemux)
+    set(WebP_LIBRARIES webp webpdemux sharpyuv)
+    if(NOT wxBUILD_SHARED)
+        wx_install(TARGETS ${WebP_LIBRARIES}
+            EXPORT wxWidgetsTargets
+            ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+        )
+    endif()
 
 elseif(wxUSE_LIBWEBP)
     find_package(WebP REQUIRED)
