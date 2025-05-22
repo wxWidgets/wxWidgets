@@ -278,8 +278,12 @@ public:
 #endif // wxUSE_PALETTE
 
 protected:
+    // Helper class for RTL layout
+    class DCTransformAdjusterForRTL;
+
     // common part of DoDrawText() and DoDrawRotatedText()
-    void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
+    void DrawAnyText(const wxString& text, wxCoord x, wxCoord y,
+                     class DCTransformAdjusterForRTL* dcTransAdjuster);
 
     // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
     void SetClippingHrgn(WXHRGN hrgn);

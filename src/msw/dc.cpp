@@ -1277,6 +1277,46 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
     CalcBoundingBox(wxPoint(x, y), bmp.GetSize());
 }
 
+// In RTL layout, text is not rendered correctly when an affine transformation
+// is applied to the DC. If this is the case, this class temporarily adjusts the
+// DC for correct rendering.
+class wxMSWDCImpl::DCTransformAdjusterForRTL
+{
+public:
+    DCTransformAdjusterForRTL(wxMSWDCImpl* dc)
+        : m_dc(dc), m_oldTrans(dc->GetTransformMatrix())
+    {
+        if ( IsActive() )
+        {
+            wxAffineMatrix2D mirrorTrans;
+            mirrorTrans.Mirror();
+            auto trans = m_oldTrans;
+            trans.Concat(mirrorTrans);
+            m_dc->SetTransformMatrix(trans);
+        }
+    }
+
+    ~DCTransformAdjusterForRTL()
+    {
+        if ( IsActive() )
+        {
+            m_dc->SetTransformMatrix(m_oldTrans);
+        }
+    }
+
+    bool IsActive() const
+    {
+        return m_dc->GetLayoutDirection() == wxLayout_RightToLeft &&
+               !m_oldTrans.IsIdentity();
+    }
+
+private:
+    wxMSWDCImpl* const m_dc;
+    const wxAffineMatrix2D m_oldTrans;
+
+    wxDECLARE_NO_COPY_CLASS(DCTransformAdjusterForRTL);
+};
+
 void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     // For compatibility with other ports (notably wxGTK) and because it's
@@ -1296,15 +1336,22 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
     wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
 
-    DrawAnyText(text, x, y);
+    DCTransformAdjusterForRTL dcTransAdjuster(this);
+
+    DrawAnyText(text, x, y, &dcTransAdjuster);
 
     // update the bounding box
     CalcBoundingBox(wxPoint(x, y), GetOwner()->GetTextExtent(text));
 }
 
-void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
+void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y,
+                              DCTransformAdjusterForRTL* dcTransAdjuster)
 {
-    if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, nullptr,
+    const int xdev = dcTransAdjuster->IsActive() ? -XLOG2DEV(x) : XLOG2DEV(x);
+
+    const UINT options = GetLayoutDirection() == wxLayout_RightToLeft ? 0 : ETO_RTLREADING;
+
+    if ( ::ExtTextOut(GetHdc(), xdev, YLOG2DEV(y), options, nullptr,
                    text.c_str(), text.length(), nullptr) == 0 )
     {
         wxLogLastError(wxT("TextOut"));
@@ -1348,8 +1395,12 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
         wxLogLastError(wxT("GetObject(hfont)"));
     }
 
+    DCTransformAdjusterForRTL dcTransAdjuster(this);
+
     // GDI wants the angle in tenth of degree
     long angle10 = (long)(angle * 10);
+    if ( dcTransAdjuster.IsActive() )
+        angle10 = -angle10;
     lf.lfEscapement = angle10;
     lf.lfOrientation = angle10;
 
@@ -1383,7 +1434,8 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
         // rounding errors.
         DrawAnyText(lines[lineNum],
                     x + wxRound(lineNum*dx),
-                    y + wxRound(lineNum*dy));
+                    y + wxRound(lineNum*dy),
+                    &dcTransAdjuster);
     }
 
 
