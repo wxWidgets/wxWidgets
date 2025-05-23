@@ -270,23 +270,21 @@ wxObjectDataPtr<wxDisplayImpl> wxDisplayFactory::GetDisplay(unsigned n)
     // only real solution is to ensure that InvalidateCache() is called,
     // but for now this at least avoids crashes when a new display is
     // connected.
-    if ( n >= m_countOnLastAccess )
+    if ( n >= m_impls.size() )
     {
-        // Clear all the existing elements: they may not be valid any longer
-        // if the number of displays has changed.
-        UpdateOnDisplayChange();
+        // This strange two-step resize is done to clear all the existing
+        // elements: they may not be valid any longer if the number of
+        // displays has changed.
+        m_impls.resize(0);
+        m_impls.resize(GetCount());
     }
-
-    // Just return the existing display if we have it.
-    for ( size_t i = 0; i < m_impls.size(); ++i )
+    else if ( m_impls[n] )
     {
-        if ( m_impls[i]->GetIndex() == n )
-            return m_impls[i];
+        // Just return the existing display if we have it.
+        return m_impls[n];
     }
-    wxObjectDataPtr<wxDisplayImpl> impl(CreateDisplay(n));
-    if ( impl )
-        m_impls.push_back(impl);
-    return impl;
+    m_impls[n] = CreateDisplay(n);
+    return m_impls[n];
 }
 
 wxObjectDataPtr<wxDisplayImpl> wxDisplayFactory::GetPrimaryDisplay()
@@ -351,17 +349,21 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 
 void wxDisplayFactory::UpdateOnDisplayChange()
 {
-    m_countOnLastAccess = GetCount();
-    wxVector<wxObjectDataPtr<wxDisplayImpl> > impls;
-    impls.reserve(m_countOnLastAccess);
+    // Enforce the lookup range to be the new number of displays.
+    wxVector<wxObjectDataPtr<wxDisplayImpl> > impls(GetCount());
 
     for ( size_t n = 0; n < m_impls.size(); ++n )
     {
         wxObjectDataPtr<wxDisplayImpl> &impl = m_impls[n];
 
+        // Object may be empty if not accessed yet.
         // Try to update display state or mark it as disconnected.
-        if ( UpdateOnDisplayChange(*impl) )
-            impls.push_back(impl);
+        if ( impl && UpdateOnDisplayChange(*impl) )
+        {
+            // If display is still connected put it on the new index position.
+            if ( impl->GetIndex() < (unsigned) impls.size() )
+                impls[impl->GetIndex()] = impl;
+        }
     }
     m_impls = std::move(impls);
 }

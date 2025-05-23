@@ -68,9 +68,6 @@ private:
     // On-demand populated vector of wxDisplayImpl objects.
     wxVector<wxObjectDataPtr<wxDisplayImpl> > m_impls;
 
-    // The count of connected displays retrieved on last display access.
-    unsigned m_countOnLastAccess = 0u;
-
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactory);
 };
 
