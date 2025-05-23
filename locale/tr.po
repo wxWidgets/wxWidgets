@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2025-03-24 02:03+0300\n"
+"PO-Revision-Date: 2025-05-24 02:24+0300\n"
 "Last-Translator: Kerim Demirkaynak <kerim@post.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/klyok/wxwidgets/"
 "language/tr_TR/)\n"
@@ -723,7 +723,6 @@ msgid "SPECIAL"
 msgstr "SPECIAL"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
@@ -2216,7 +2215,7 @@ msgstr "DIB başlık bilgisi: Kodlama, bit derinliğine uymuyor."
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "BMP Başlığı: Geçersiz renk sayısı (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2453,37 +2452,35 @@ msgstr "TIFF: Veri boşaltma hatası."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: Geçersiz veri (özellikler alınamadı)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: Görüntü belleği ayrılamadı."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: RGBA görüntü verisi çözülemedi."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: RGB görüntü verisi çözülemedi."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: Akış arabelleği ayrılamadı."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "Pano verisi ayarlanamadı."
+msgstr "WebP: Konteyner verisi çözümlenemedi."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "Ayarlar okunurken sorun çıktı."
+msgstr "WebP: Animasyonun çözülmesinde hata oluştu."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: Sonraki animasyon karesi alınırken hata oluştu."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -3990,14 +3987,12 @@ msgid "Failed to set proxy \"%s\": %s"
 msgstr "\"%s\" proxy'si ayarlanamadı: %s"
 
 #: ../src/common/webview_chromium.cpp:989
-#, fuzzy
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
-"Chromium, libcef.so dosyası yeterince erken yüklenmediği için kullanılamaz; "
-"lütfen uygulamayı yeniden bağlayın veya LD_PRELOAD kullanarak daha erken "
-"yüklenmesini sağlayın."
+"Chromium kullanılamıyor çünkü libcef.so yeterince erken yüklenemedi; lütfen "
+"uygulamayı yeniden bağlayın ya da LD_PRELOAD kullanarak daha erken yükleyin."
 
 #: ../src/common/webview_chromium.cpp:1108
 msgid "Could not initialize Chromium"
@@ -5256,31 +5251,30 @@ msgid "MDI child"
 msgstr "MDI alt"
 
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr "'%s' sunucusuna '%s' konusundan bağlantı kurulamadı"
+msgstr "Giriş yöneticisine D-Bus bağlantısı açılamadı: %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "Uygulamayı gizle"
+msgstr "wxWidgets uygulaması"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "Uygulamanın çalışmaya devam etmesi gerekiyor."
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "Kapanmadan önce temizle"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Çevirmeli bağlantı başlatılamadı: %s"
+msgstr "Uyku engellenemedi: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "D-Bus ‘Inhibit’ isteğine beklenmeyen yanıt alındı."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
@@ -7070,7 +7064,7 @@ msgstr "Bir dosya seçin"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&Döşeme"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
