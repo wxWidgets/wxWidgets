@@ -516,6 +516,10 @@ public:
 
     // adds a quadratic Bezier curve from the current point, using a control point and an end point
     virtual void AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, wxDouble y );
+    void AddQuadCurveToPoint(const wxPoint2DDouble& cp, const wxPoint2DDouble& e)
+    {
+        AddQuadCurveToPoint(cp.m_x, cp.m_y, e.m_x, e.m_y);
+    }
 
     // appends a rectangle as a new closed subpath
     virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
@@ -794,7 +798,7 @@ public:
     // translate
     virtual void Translate( wxDouble dx , wxDouble dy ) = 0;
 
-    void Translate(wxPoint2DDouble pt)
+    void Translate(const wxPoint2DDouble& pt)
     {
         Translate(pt.m_x, pt.m_y);
     }
@@ -857,7 +861,7 @@ public:
     void DrawText( const wxString &str, wxDouble x, wxDouble y )
         { DoDrawText(str, x, y); }
 
-    void DrawText( const wxString &str, wxPoint2DDouble pt)
+    void DrawText( const wxString &str, const wxPoint2DDouble& pt)
         { DoDrawText(str, pt.m_x, pt.m_y); }
 
     void DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle )
@@ -904,7 +908,7 @@ public:
     // strokes a single line
     virtual void StrokeLine( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
 
-    void StrokeLine(wxPoint2DDouble pt1, wxPoint2DDouble pt2)
+    void StrokeLine(const wxPoint2DDouble& pt1, const wxPoint2DDouble& pt2)
     {
         StrokeLine(pt1.m_x, pt1.m_y, pt2.m_x, pt2.m_y);
     }

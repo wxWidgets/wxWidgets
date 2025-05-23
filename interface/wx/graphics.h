@@ -171,6 +171,13 @@ public:
                                      wxDouble x, wxDouble y);
 
     /**
+        @overload
+
+        @since 3.3
+    */
+    void AddQuadCurveToPoint(const wxPoint2DDouble& cp, const wxPoint2DDouble& e);
+
+    /**
         Appends a rectangle as a new closed subpath. After this call
         the current point will be at (@a x, @a y).
     */
@@ -935,7 +942,7 @@ public:
 
         @since 3.3
     */
-    void DrawText(const wxString& str, wxPoint2DDouble pt);
+    void DrawText(const wxString& str, const wxPoint2DDouble& pt);
 
     /**
         Draws text at the defined position.
@@ -1017,7 +1024,7 @@ public:
 
         @since 3.3
     */
-    void StrokeLine(wxPoint2DDouble pt1, wxPoint2DDouble pt2);
+    void StrokeLine(const wxPoint2DDouble& pt1, const wxPoint2DDouble& pt2);
 
     /**
         Stroke disconnected lines from begin to end points, using the
@@ -2242,7 +2249,7 @@ public:
 
         @since 3.3
     */
-    void Translate(wxPoint2DDouble pt);
+    void Translate(const wxPoint2DDouble& pt);
 };
 
 /// An empty wxGraphicsPen object.
