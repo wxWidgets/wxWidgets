@@ -523,6 +523,10 @@ public:
 
     // appends a rectangle as a new closed subpath
     virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    virtual void AddRectangle(const wxRect2DDouble& rect)
+    {
+        AddRectangle(rect.m_x, rect.m_y, rect.m_width, rect.m_height);
+    }
 
     // appends an ellipsis as a new closed subpath fitting the passed rectangle
     virtual void AddCircle( wxDouble x, wxDouble y, wxDouble r );
@@ -532,9 +536,17 @@ public:
 
     // appends an ellipse
     virtual void AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    void AddEllipse(const wxRect2DDouble& rect)
+    {
+        AddEllipse(rect.m_x, rect.m_y, rect.m_width, rect.m_height);
+    }
 
     // appends a rounded rectangle
     virtual void AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
+    void AddRoundedRectangle(const wxRect2DDouble& rect, wxDouble radius)
+    {
+        AddRoundedRectangle(rect.m_x, rect.m_y, rect.m_width, rect.m_height, radius);
+    }
 
     // returns the native path
     virtual void * GetNativePath() const;

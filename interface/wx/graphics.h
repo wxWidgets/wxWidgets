@@ -127,6 +127,13 @@ public:
     virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     /**
+        @overload
+
+        @since 3.3
+    */
+    void AddEllipse(const wxRect2DDouble& rect);
+
+    /**
         Adds a straight line from the current point to (@a x,@a y).
         If current point is not yet set before the call to AddLineToPoint(),
         then this function will behave as MoveToPoint().
@@ -184,6 +191,13 @@ public:
     virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     /**
+        @overload
+
+        @since 3.3
+    */
+    void AddRectangle(const wxRect2DDouble& rect);
+
+    /**
         Appends a rounded rectangle as a new closed subpath.
         If @a radius equals 0, then this function will behave as AddRectangle();
         otherwise, after this call, the current point will be at
@@ -191,6 +205,13 @@ public:
     */
     virtual void AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
                                      wxDouble h, wxDouble radius);
+
+    /**
+        @overload
+
+        @since 3.3
+    */
+    void AddRoundedRectangle(const wxRect2DDouble& rect, wxDouble radius);
 
     /**
         Closes the current sub-path. After this call, the current point will be
