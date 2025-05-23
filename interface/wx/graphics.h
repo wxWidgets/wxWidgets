@@ -882,7 +882,9 @@ public:
                           wxDouble w, wxDouble h) = 0;
 
     /**
-        Draws the icon.
+        @overload
+
+        @since 3.3
     */
     void DrawIcon(const wxIcon& icon, const wxRect2DDouble& rect);
 
