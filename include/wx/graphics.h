@@ -699,11 +699,23 @@ public:
     // clips drawings to the rect intersected with the current clipping region
     virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
 
+    void Clip(const wxRect2DDouble& rect)
+    {
+        Clip(rect.m_x, rect.m_y, rect.m_width, rect.m_height);
+    }
+
     // resets the clipping to original extent
     virtual void ResetClip() = 0;
 
     // returns bounding box of the clipping region
     virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) = 0;
+
+    wxNODISCARD wxRect2DDouble GetClipBox()
+    {
+        wxDouble x, y, w, h;
+        GetClipBox(&x, &y, &w, &h);
+        return wxRect2DDouble{ x, y, w, h };
+    }
 
     // returns the native context
     virtual void * GetNativeContext() = 0;
@@ -782,6 +794,11 @@ public:
     // translate
     virtual void Translate( wxDouble dx , wxDouble dy ) = 0;
 
+    void Translate(wxPoint2DDouble pt)
+    {
+        Translate(pt.m_x, pt.m_y);
+    }
+
     // scale
     virtual void Scale( wxDouble xScale , wxDouble yScale ) = 0;
 
@@ -828,12 +845,20 @@ public:
     // paints a transparent rectangle (only useful for bitmaps or windows)
     virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
+    void ClearRectangle(const wxRect2DDouble& rect)
+    {
+        ClearRectangle(rect.m_x, rect.m_y, rect.m_width, rect.m_height);
+    }
+
     //
     // text
     //
 
     void DrawText( const wxString &str, wxDouble x, wxDouble y )
         { DoDrawText(str, x, y); }
+
+    void DrawText( const wxString &str, wxPoint2DDouble pt)
+        { DoDrawText(str, pt.m_x, pt.m_y); }
 
     void DrawText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle )
         { DoDrawRotatedText(str, x, y, angle); }
@@ -858,9 +883,19 @@ public:
 
     virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
 
+    void DrawBitmap(const wxGraphicsBitmap& bmp, const wxRect2DDouble& rect)
+    {
+        DrawBitmap(bmp, rect.m_x, rect.m_y, rect.m_width, rect.m_height);
+    }
+
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
+
+    void DrawIcon(const wxIcon& icon, const wxRect2DDouble& rect)
+    {
+        DrawIcon(icon, rect.m_x, rect.m_y, rect.m_width, rect.m_height);
+    }
 
     //
     // convenience methods
@@ -868,6 +903,11 @@ public:
 
     // strokes a single line
     virtual void StrokeLine( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
+
+    void StrokeLine(wxPoint2DDouble pt1, wxPoint2DDouble pt2)
+    {
+        StrokeLine(pt1.m_x, pt1.m_y, pt2.m_x, pt2.m_y);
+    }
 
     // stroke lines connecting each of the points
     virtual void StrokeLines( size_t n, const wxPoint2DDouble *points);
@@ -881,13 +921,26 @@ public:
     // draws a rectangle
     virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
+    void DrawRectangle(const wxRect2DDouble& rect)
+    {
+        DrawRectangle(rect.m_x, rect.m_y, rect.m_width, rect.m_height);
+    }
+
     // draws an ellipse
     virtual void DrawEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+
+    void DrawEllipse(const wxRect2DDouble& rect)
+    {
+        DrawEllipse(rect.m_x, rect.m_y, rect.m_width, rect.m_height);
+    }
 
     // draws a rounded rectangle
     virtual void DrawRoundedRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h, wxDouble radius);
 
-     // wrappers using wxPoint2DDouble TODO
+    void DrawRoundedRectangle(const wxRect2DDouble& rect, wxDouble radius)
+    {
+        DrawRoundedRectangle(rect.m_x, rect.m_y, rect.m_width, rect.m_height, radius);
+    }
 
     // helper to determine if a 0.5 offset should be applied for the drawing operation
     virtual bool ShouldOffset() const { return false; }

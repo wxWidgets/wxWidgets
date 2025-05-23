@@ -624,6 +624,13 @@ public:
     virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) = 0;
 
     /**
+        @overload
+
+        @since 3.3
+    */
+    void Clip(const wxRect2DDouble& rect);
+
+    /**
         Returns a bounding box of the current clipping region.
 
         This is useful for rolling back to a previous clipping region.
@@ -645,6 +652,13 @@ public:
         @since 3.1.1
     */
     virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) = 0;
+
+    /**
+        @overload
+
+        @since 3.3
+    */
+    wxRect2DDouble GetClipBox();
 
     /** @}
     */
@@ -843,15 +857,34 @@ public:
                             wxDouble w, wxDouble h) = 0;
 
     /**
+        @overload
+
+        @since 3.3
+    */
+    void DrawBitmap(const wxGraphicsBitmap& bmp, const wxRect2DDouble& rect);
+
+    /**
         Draws an ellipse.
     */
     virtual void DrawEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+
+    /**
+        @overload
+
+        @since 3.3
+    */
+    void DrawEllipse(const wxRect2DDouble& rect);
 
     /**
         Draws the icon.
     */
     virtual void DrawIcon(const wxIcon& icon, wxDouble x, wxDouble y,
                           wxDouble w, wxDouble h) = 0;
+
+    /**
+        Draws the icon.
+    */
+    void DrawIcon(const wxIcon& icon, const wxRect2DDouble& rect);
 
     /**
         Draws a polygon.
@@ -871,15 +904,36 @@ public:
     virtual void DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     /**
+        @overload
+
+        @since 3.3
+    */
+    void DrawRectangle(const wxRect2DDouble& rect);
+
+    /**
         Draws a rounded rectangle.
     */
     virtual void DrawRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
                                       wxDouble h, wxDouble radius);
 
     /**
+        @overload
+
+        @since 3.3
+    */
+    void DrawRoundedRectangle(const wxRect2DDouble& rect, wxDouble radius);
+
+    /**
         Draws text at the defined position.
     */
     void DrawText(const wxString& str, wxDouble x, wxDouble y);
+
+    /**
+        @overload
+
+        @since 3.3
+    */
+    void DrawText(const wxString& str, wxPoint2DDouble pt);
 
     /**
         Draws text at the defined position.
@@ -929,6 +983,18 @@ public:
                   wxDouble angle, const wxGraphicsBrush& backgroundBrush);
 
     /**
+        Paints a transparent rectangle (only useful for bitmaps or windows).
+    */
+    virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+
+    /**
+        @overload
+
+        @since 3.3
+    */
+    void ClearRectangle(const wxRect2DDouble& rect);
+
+    /**
         Creates a native graphics path which is initially empty.
     */
     wxGraphicsPath CreatePath() const;
@@ -943,6 +1009,13 @@ public:
         Strokes a single line.
     */
     virtual void StrokeLine(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2);
+
+    /**
+        @overload
+
+        @since 3.3
+    */
+    void StrokeLine(wxPoint2DDouble pt1, wxPoint2DDouble pt2);
 
     /**
         Stroke disconnected lines from begin to end points, using the
@@ -2161,6 +2234,13 @@ public:
         Translates this matrix.
     */
     virtual void Translate(wxDouble dx, wxDouble dy);
+
+    /**
+        @overload
+
+        @since 3.3
+    */
+    void Translate(wxPoint2DDouble pt);
 };
 
 /// An empty wxGraphicsPen object.
