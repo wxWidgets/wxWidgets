@@ -1660,8 +1660,14 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
             else if ( parent )
             {
                 event.SetCurrentFocus(this);
-                parent->HandleWindowEvent(event);
-            }
+                if ( !parent->HandleWindowEvent(event) )
+                {
+                    // if the parent didn't handle this event, the notebook
+                    // must be its only child accepting focus, so take it
+                    event.Skip(false);
+                    SetFocus();
+                }
+             }
         }
     }
 }
