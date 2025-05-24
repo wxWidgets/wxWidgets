@@ -5116,6 +5116,10 @@ bool wxWindowMSW::HandleDisplayChange()
     wxDisplayChangedEvent event;
     event.SetEventObject(this);
 
+    // trigger display cache update to ensure the user receives the most
+    // recent display properties on event handling after change.
+    wxDisplay::InvalidateCache();
+
     return HandleWindowEvent(event);
 }
 

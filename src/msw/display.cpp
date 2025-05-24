@@ -140,6 +140,9 @@ public:
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
     virtual bool ChangeMode(const wxVideoMode& mode) override;
 
+    // update index and display information from info if handle matches
+    bool UpdateOnDisplayChange(const wxVector<wxDisplayInfo> &displays);
+
 protected:
     // convert a DEVMODE to our wxVideoMode
     static wxVideoMode ConvertToVideoMode(const DEVMODE& dm)
@@ -183,11 +186,13 @@ public:
     virtual int GetFromRect(const wxRect& rect) override;
     virtual int GetFromWindow(const wxWindow *window) override;
 
-    void InvalidateCache() override
+    void UpdateOnDisplayChange() override
     {
-        wxDisplayFactory::InvalidateCache();
         DoRefreshMonitors();
+        wxDisplayFactory::UpdateOnDisplayChange();
     }
+
+    virtual bool UpdateOnDisplayChange(wxDisplayImpl &impl) const override;
 
     // Declare the second argument as int to avoid problems with older SDKs not
     // declaring MONITOR_DPI_TYPE enum.
@@ -487,6 +492,20 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
     return false;
 }
 
+bool wxDisplayMSW::UpdateOnDisplayChange(const wxVector<wxDisplayInfo> &displays)
+{
+    for ( size_t n = 0; n < displays.size(); ++n )
+    {
+        if ( displays[n].hmon == displays[n].hmon )
+        {
+            m_info = displays[n];
+            m_index = n;
+            return true;
+        }
+    }
+    Disconnect();
+    return false;
+}
 
 // ----------------------------------------------------------------------------
 // wxDisplayFactoryMSW implementation
@@ -651,6 +670,12 @@ int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
 #else
     return GetFromRect(window->GetScreenRect());
 #endif
+}
+
+bool wxDisplayFactoryMSW::UpdateOnDisplayChange(wxDisplayImpl &impl) const
+{
+    wxDisplayMSW &implMsw = static_cast<wxDisplayMSW &>(impl);
+    return implMsw.UpdateOnDisplayChange(m_displays);
 }
 
 #else // !wxUSE_DISPLAY

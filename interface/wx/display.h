@@ -208,6 +208,26 @@ public:
     static wxSize GetStdPPI();
 
     /**
+        Returns @true if the display has not been unplugged.
+
+        This function is only full implemented in MSW and just always returns
+        @true under the other platforms currently.
+
+        Under MSW, it returns @false if the physical display that this C++
+        object corresponds to has become unavailable, e.g. because it was
+        unplugged or otherwise removed from the system. Such disconnected
+        display object can still be used by the program, but all its accessor
+        functions return special fallback values (e.g. 0 for the width and
+        height).
+
+        To receive notifications about display unplugging or other display changes,
+        connect a top-level window to the wxDisplayChangedEvent.
+
+        @since 3.3.0
+    */
+    bool IsConnected() const;
+
+    /**
         Returns @true if the display is the primary display. The primary
         display is the one whose index is 0.
     */
