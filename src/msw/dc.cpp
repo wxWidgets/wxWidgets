@@ -404,59 +404,33 @@ bool wxMSWDCImpl::DoGetClippingRect(wxRect& rect) const
 }
 
 // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
-void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
+void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn)
 {
     wxCHECK_RET( hrgn, wxT("invalid clipping region") );
 
-    HRGN hRgnRTL = nullptr;
-    // DC with enabled RTL layout needs a mirrored region
-    // so we have to create such a region temporarily.
-    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    if ( m_clipping )
     {
-        DWORD bufLen = ::GetRegionData(hrgn, 0, nullptr);  // Get the storage size
-        wxScopedArray<char> pDataBuf(bufLen);
-        RGNDATA* const rgndata = reinterpret_cast<RGNDATA*>(pDataBuf.get());
-        if ( ::GetRegionData(hrgn, bufLen, rgndata) != bufLen )
+        // note that we combine the new clipping region with the existing one: this
+        // is compatible with what the other ports do and is the documented
+        // behaviour now (starting with 2.3.3)
+        if ( ::ExtSelectClipRgn(GetHdc(), (HRGN)hrgn, RGN_AND) == ERROR )
         {
-            wxLogLastError("GetRegionData");
-            return;
-        }
-        int dcw, dch;
-        DoGetSize(&dcw, &dch);
-        XFORM tr;
-        tr.eM11 = -1;
-        tr.eM12 = 0;
-        tr.eM21 = 0;
-        tr.eM22 = 1;
-        // For region created directly with device coordinates
-        // (regions passed to DoSetDeviceClippingRegion) we have to
-        // apply additional 1-pixel offset because original right edge
-        // passed to e.g. CreateRectRgn() (in wxRegion) is actually
-        // not included in the clipping area but this edge will become
-        // a left edge after mirroring and therefore its x-coordinates
-        // shoulde be adjusted.
-        tr.eDx = doRtlOffset ? dcw : dcw-1; // max X
-        tr.eDy = 0;
-        hRgnRTL = ::ExtCreateRegion(&tr, bufLen, rgndata);
-        if ( !hRgnRTL )
-        {
-            wxLogLastError("ExtCreateRegion");
+            wxLogLastError(wxT("ExtSelectClipRgn"));
+
             return;
         }
     }
-    AutoHRGN rgnRTL(hRgnRTL);
-
-    // note that we combine the new clipping region with the existing one: this
-    // is compatible with what the other ports do and is the documented
-    // behaviour now (starting with 2.3.3)
-    if ( ::ExtSelectClipRgn(GetHdc(), (HRGN)rgnRTL ? (HRGN)rgnRTL : (HRGN)hrgn, RGN_AND) == ERROR )
+    else
     {
-        wxLogLastError(wxT("ExtSelectClipRgn"));
+        if ( ::SelectClipRgn(GetHdc(), (HRGN)hrgn) == ERROR )
+        {
+            wxLogLastError(wxT("SelectClipRgn"));
 
-        return;
+            return;
+        }
+
+        m_clipping = true;
     }
-
-    m_clipping = true;
 
     UpdateClipBox();
 }
@@ -506,7 +480,7 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
     }
     else
     {
-        SetClippingHrgn((WXHRGN)hrgn, false);
+        SetClippingHrgn((WXHRGN)hrgn);
 
         ::DeleteObject(hrgn);
     }
@@ -514,7 +488,7 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
 
 void wxMSWDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
-    SetClippingHrgn(region.GetHRGN(), true);
+    SetClippingHrgn(region.GetHRGN());
 }
 
 void wxMSWDCImpl::DestroyClippingRegion()
@@ -1303,6 +1277,46 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
     CalcBoundingBox(wxPoint(x, y), bmp.GetSize());
 }
 
+// In RTL layout, text is not rendered correctly when an affine transformation
+// is applied to the DC. If this is the case, this class temporarily adjusts the
+// DC for correct rendering.
+class wxMSWDCImpl::DCTransformAdjusterForRTL
+{
+public:
+    DCTransformAdjusterForRTL(wxMSWDCImpl* dc)
+        : m_dc(dc), m_oldTrans(dc->GetTransformMatrix())
+    {
+        if ( IsActive() )
+        {
+            wxAffineMatrix2D mirrorTrans;
+            mirrorTrans.Mirror();
+            auto trans = m_oldTrans;
+            trans.Concat(mirrorTrans);
+            m_dc->SetTransformMatrix(trans);
+        }
+    }
+
+    ~DCTransformAdjusterForRTL()
+    {
+        if ( IsActive() )
+        {
+            m_dc->SetTransformMatrix(m_oldTrans);
+        }
+    }
+
+    bool IsActive() const
+    {
+        return m_dc->GetLayoutDirection() == wxLayout_RightToLeft &&
+               !m_oldTrans.IsIdentity();
+    }
+
+private:
+    wxMSWDCImpl* const m_dc;
+    const wxAffineMatrix2D m_oldTrans;
+
+    wxDECLARE_NO_COPY_CLASS(DCTransformAdjusterForRTL);
+};
+
 void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     // For compatibility with other ports (notably wxGTK) and because it's
@@ -1322,15 +1336,22 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
     wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
 
-    DrawAnyText(text, x, y);
+    DCTransformAdjusterForRTL dcTransAdjuster(this);
+
+    DrawAnyText(text, x, y, &dcTransAdjuster);
 
     // update the bounding box
     CalcBoundingBox(wxPoint(x, y), GetOwner()->GetTextExtent(text));
 }
 
-void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
+void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y,
+                              DCTransformAdjusterForRTL* dcTransAdjuster)
 {
-    if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, nullptr,
+    const int xdev = dcTransAdjuster->IsActive() ? -XLOG2DEV(x) : XLOG2DEV(x);
+
+    const UINT options = GetLayoutDirection() == wxLayout_RightToLeft ? 0 : ETO_RTLREADING;
+
+    if ( ::ExtTextOut(GetHdc(), xdev, YLOG2DEV(y), options, nullptr,
                    text.c_str(), text.length(), nullptr) == 0 )
     {
         wxLogLastError(wxT("TextOut"));
@@ -1374,8 +1395,12 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
         wxLogLastError(wxT("GetObject(hfont)"));
     }
 
+    DCTransformAdjusterForRTL dcTransAdjuster(this);
+
     // GDI wants the angle in tenth of degree
     long angle10 = (long)(angle * 10);
+    if ( dcTransAdjuster.IsActive() )
+        angle10 = -angle10;
     lf.lfEscapement = angle10;
     lf.lfOrientation = angle10;
 
@@ -1409,7 +1434,8 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
         // rounding errors.
         DrawAnyText(lines[lineNum],
                     x + wxRound(lineNum*dx),
-                    y + wxRound(lineNum*dy));
+                    y + wxRound(lineNum*dy),
+                    &dcTransAdjuster);
     }
 
 
@@ -1976,11 +2002,31 @@ wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
         }
     }
 
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // This is a workaround to fix a bug when using this function
+        // to map DP to LP in RTL layout.
+        int w, h;
+        DoGetSize(&w, &h);
+
+        x = w - x - 1; // x is mirrored in RTL layout.
+    }
+
     return pt;
 }
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // This is a workaround to fix a bug when using this function
+        // to map LP to DP in RTL.
+        int w, h;
+        DoGetSize(&w, &h);
+
+        x = w - x - 1; // x is mirrored in RTL layout layout.
+    }
+
     POINT p;
     p.x = x;
     p.y = y;
