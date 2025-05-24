@@ -236,36 +236,232 @@ Changes in behaviour which may result in build errors
   cursor-related ones.
 
 
-3.3.0: (released 2022-??-??)
+3.3.0: (released 2025-05-22)
 ----------------------------
 
-NOTE: In addition to the note below, also incorporate (either by
-      copy or by reference) all the changes in the 3.2 branch (i.e.
-      everything in this file after 3.2.0 in that branch).
+This release contains the following major changes compared to 3.2.8:
 
-NOTE: This file is updated only before the release, please use
+- Add experimental dark mode support to wxMSW (#23028)
+- Add Chromium-based wxWebView backend (#706).
+- Add support for WebP images (Hermann Höhne, Maarten Bent, #25205).
+- Add support for pinned/locked (#25187) and multi-row (#25076) wxAUI tabs.
+- Add synchronous (blocking) version of wxWebRequest (#24760).
+- Add API for raw touch events (Martin Koegler, #17077).
+- Implement accessibility support for wxGrid (Dietmar Schwertberger, #24368).
+- Implement power events and blockers support under Unix (#22396, #23717)
+- Use native file dialogs if possible in wxGTK (#24486, #25104).
+- Provide access to native wxTextCtrl contents (Blake-Madden, #24626, #24912).
 
-    $ git log --notes=changelog --format='%N' v3.2.0..|grep .
+Other changes are listed in alphabetical order in platform-specific sections:
 
-      to see all the change log entries since the last release.
+All:
 
-      To update the notes, fetch them first:
+- Accept std::initializer_list in wxArray ctor (Lotendan, #23309).
+- Add US Catholic Feasts support to wxDateTime (Blake Madden, #24094)
+- Add WXLOG_TIME_FORMAT environment variable (#23576).
+- Add __WXFUNCTION_SIG__ (Blake-Madden, #24554).
+- Add catch-unhandled-exceptions system option (Lauri Nurmi, #25257).
+- Add date-related localization functions (Ulrich Telle, #23556).
+- Add support for setting base URL in wxWebRequest (#24769).
+- Add support for setting the proxy to use in wxWebRequest (#24762).
+- Add wxGrid::Enable{Row,Col}Resize().
+- Add wxNODISCARD and use it for some functions (PB, #22943).
+- Add wxNO_REQUIRE_LITERAL_MSGIDS (Lauri Nurmi, #24957).
+- Add wxString::wc_string() (#23463).
+- Add wxURI::SetUserAndPassword() (#25240).
+- Add wxWARN_UNUSED and use it for wxString (Lauri Nurmi, #24833).
+- Add wxWebSession::EnablePersistentStorage() (Tobias Taschner, #23743).
+- Add wxXmlParseError to wxXmlDocument::Load() (Randalphwa, #24215).
+- Allow customizing exit code in case of error (#24770).
+- Allow using lambdas with Bind() without RTTI (MapleLeaf-X, #14850).
+- Allow using wxMessageQueue with move-only types (#25026).
+- Avoid DNS lookup when constructing wxIPV4address from IP (SMMB-DEV, #23109).
+- Fix multiple bugs in wxURI parsing (Ryan Norton, #23360).
+- Fix wxSocket::Peek() with UDP sockets (Brian Nixon, #23594).
+- Fix wxWebResponse::GetMimeType(), add GetContentType() (Blake-Madden, #23461).
+- Improve locale matching algorithm (Ulrich Telle, #24855)
+- Make wxLogXXX(string) safe to use (#25414).
+- Make wxString {To,From}CDouble() faster and more robust (#23287).
+- Make wxrc-generated code faster to build (DoctorNoobingstoneIPresume, #24579).
+- Multiple headers with same name in wxWebRequest (Stefan Dinkelacker, #24878).
+- Operators on wx types are not defined in global scope any more (#24190).
+- Optimize wxString by supporting move operations (Pavel Tyunin, #23215)
+- Optimize wxString::operator<<() for numeric types (#25388).
+- Preserve errno in wxString methods (Lauri Nurmi, #23113).
+- Support constructing wxString from std::string_view (Ian McInerney, #23711).
+- Update 3rd party libraries to latest versions (Maarten Bent, #25112, #25325).
+- Update Turkish translations (Kerim Demirkaynak, #25267).
+- Update language database (Ulrich Telle, #23437).
+- Use UTF-8 for environment variables (#25101).
+- Use variadic templates for vararg functions (#22981).
+- Use XDG-compliant location by default in wxFileConfig under Unix (#24195).
 
-    $ git fetch origin refs/notes/changelog:refs/notes/changelog
+All (GUI):
 
-      then use the following command to update them locally
+- Add "feature" attribute to XRC (#23184).
+- Add RTF support to wxTextCtrl (Blake-Madden, #24626).
+- Add WXK_NUMPAD_CENTER (Ivan Sorokin, #23478).
+- Add XRC handler for wxVListBox (Bill Su, #24361).
+- Add checks for incorrect use of wxGridTable messages.
+- Add high DPI support to generic wxListCtrl (Gerhard Stein, #22916).
+- Add support for "id" attribute in wxHTML (Oleg Tolmatcev, #24968).
+- Add support for high DPI animations (#23817).
+- Add support for high DPI cursors via wxCursorBundle (#25374).
+- Add support for loading wxPropertyGrid from XRC (#24274).
+- Add support for printing multiple page ranges (Stefan Ziegler, #25030).
+- Add wxApp::SetAppearance() to explicitly set dark or light mode (#24461).
+- Add wxAuiManager::{Save,Load}Layout() (#24235).
+- Add wxGrid::CopySelection() (Blake Madden, #24124).
+- Add wxRadioButton group support to wxGenericValidator (Bill Su, #24264).
+- Add wxRibbonBar::GetPageById() (Blake Madden, #24211).
+- Add wxStatusBar::AddFieldControl() (AliKet, #24092).
+- Add wxTexTCtrl::SearchText() (Blake-Madden, #24756).
+- Allow resizing row and column labels in wxGrid (Dietmar Schwertberger, #24362).
+- Allow setting fonts in wxAuiTabArt to work (#24829).
+- Allow specifying size of wxTextEntryDialog (Blake-Madden, #24467).
+- Allow using wxVListBox wxXRC_NO_SUBCLASSING (Bill Su, #25144).
+- Derive wxSearchCtrl from wxTextEntry in all ports (Martin Corino, #23686).
+- Fix default background of RLE bitmaps (Brian Nixon, #23599).
+- Fix handling of sizers inside <windowlabel> XRC tag.
+- Fix loading some bitmaps using BI_BITFIELDS (Brian Nixon, #23601).
+- Fix print preview in high DPI (taler21, #24666).
+- Fix wxAUI dock art appearance after DPI change (Maarten Bent, #23420).
+- Fix wxFontList::FindOrCreateFont() for non-integral sizes (PB).
+- Fix wxGrid::GetDropTarget() (Dan Allen, #24448)
+- Fix wxNUM_VAL_ZERO_AS_BLANK behaviour on focus loss (#24859).
+- Fix wxPGVIterator used in wxPropertyGridManager (#23273).
+- Fix wxTextCtrl proof checking functions return values (mcorino, #23832).
+- Implement client data support in wxAuiToolBar (Miguel Gimenez, #23271).
+- Improve generic and MSW "About" dialog appearance (#23196).
+- Improve item sorting in generic wx{File,Dir}Ctrl (PB, #23962).
+- Improve wxImage resizing quality (Alex Shvartzkop, #25252).
+- Make date/time picker controls locale-aware (Ulrich Telle, #23965).
+- Make wxEL_ALLOW_NEW without wxEL_ALLOW_EDIT work (Martin Corino, #24099).
+- Make wxGenericValidator more flexible (Bill Su, #24134).
+- Make wxGrid::ProcessTableMessage() more convenient to use (Joachim Wiesemann).
+- Provide reason for wxNotificationMessage dismissal (Lauri Nurmi, #24340).
+- Restore non-live-resize in wxAUI and wxSplitterWindow (AliKet, #24193).
+- Save/restore wxAuiNotebook layout (#24950).
+- Several fixes to scrolling in wxVListBox (Bill Su, #24278).
+- Support high DPI bitmaps in wxBusyInfo (#23813).
+- Support specifying dark mode colours in XRC (#23571).
+- Support wxCHK_UNDETERMINED in wxUpdateUIEvent (Bill Su, #24764).
+- Update Scintilla to 5.0 and Lexilla to 5.3 (Maarten Bent, #23117, #24369).
+- Update nanosvg to fix possible crashes (#24213).
+- Use CSS colour names (#23518).
+- Use new default flat tab art provider in wxAUI (#25316).
+- Use thousands separators in page numbers when printing (Blake-Madden, #25320).
 
-    $ git notes --ref=changelog add -m 'wxPort: description.'
+All (CMake):
 
-      and finally push it to the server.
+- Add option to use all built-in libraries (Maarten Bent).
+- Build mfc sample too (Maarten Bent, #25402).
+- Fix generated wx-config when using custom flavour (#25398).
+- Fix using static runtime with msvc (Maarten Bent, #25098).
 
-    $ git push origin refs/notes/changelog:refs/notes/changelog
+All (WebView):
 
-      If this fails due to a conflict because you had forgotten to
-      run git-fetch first, you can always reset your local notes
-      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
+- Add support for clearing browsing data (Tobias Taschner, #24431).
+- Add advanced requests (Tobias Taschner, #22797).
+- Add child window handling (Tobias Taschner, #23334).
+- Add new wxEVT_WEBVIEW_CREATED (#706).
+- Add wxWebView::EnableBrowserAcceleratorKeys() (Tobias Taschner, #23070)
+- Add wxWebView::EnablePersistentStorage() (Tobias Taschner, #24405).
+- Add wxWebView::GetNativeConfiguration() (Tobias Taschner, #22781).
+- Add wxWebView::SetProxy() (#23854).
+- Add wxWebView::ShowDevTools() (#24799).
+- Add wxWebViewConfiguration (Tobias Taschner, #23374).
+- Add wxWebViewEvent::IsTargetMainFrame() (Tobias Taschner, #23238).
+- Allow setting wxWebViewEdge UA after creation (Tobias Taschner, #23225).
+- Queue Edge wxWebView events (Tobias Taschner, #22744, #19075).
 
-    $ git fetch origin refs/notes/changelog
-    $ git update-ref refs/notes/changelog FETCH_HEAD
+wxGTK:
 
-      and then redo "git-notes add" and git-push.
+- Add support for building with libwebkit2gtk-4.1 (Scott Talbert, #23633).
+- Add support for wxRB_SINGLE (Stefan Hansson, #23652).
+- Add wxTextCtrl::GTKSetPangoMarkup() (Blake-Madden, #24912)
+- Add wxWindow::GTKGetWin32Handle() (Ryan Ogurek, #24675).
+- Don't require libsecret-1.so presence at run-time (#25355).
+- Fix handling of binary secrets in wxSecretStore (Martin Corino, #24352).
+- Fix handling total window size with GNOME with X11 (#25348).
+- Fix missing enter/leave window events (#24339).
+- Fix using wrong colour in wxPrinterDC (#24729).
+- Fix wxKeyEvent::GetKeyCode() in non-US layouts (Ivan Sorokin, #23379).
+- Implement generation of wxDPIChangedEvent (#19290, #24040).
+- Implement max length limit for multiline wxTextCtrl (Igor Korot, #24751).
+- Implement wxTextCtrl::SearchText() (Blake-Madden, #24897).
+- Improve wxInfoBar appearance when text doesn't fit (#24695).
+- Limit radius in wxDC::DrawRoundedRectangle() (Alex Shvartzkop, #24327).
+- Multiple fixes to mouse event generation (#24931, #24932, #24933).
+
+wxMSW:
+
+- Add support for extended-length paths (#25033).
+- Add support for markup to wxStaticText (#25000).
+- Allow changing wxHyperLink colour (#23549).
+- Allow using static CRT in MSBuild projects (David Connet).
+- Change default wxTreeCtrl to use more modern look (PB, #23844).
+- Don't append unwanted extension in wxFileDialg (Martin Corino, #24949).
+- Enable double buffering for all windows (#22851).
+- Fix AUI tab close button size on DPI change (Kumazuma, #23400).
+- Fix background of wxCollapsiblePane inside wxNotebook (#23274).
+- Fix background of wxStaticText in wxAuiToolbar (#24765).
+- Fix build issues with llvm clang (Sergey Khalyutn, Maarten Bent, #23468).
+- Fix loading message catalogs with "@" in their names (Mike Wang).
+- Fix missing closing line in wxGDIPlusContext::DrawLines() (#24645).
+- Fix multiple problems in UTF-8 build (#23313).
+- Fix not showing help text for submenus (David Langhals, #24724).
+- Fix resizing of TLWs with single child on DPI change (#22983)
+- Fix saving geometry of Aero-snapped windows (Randalphwa).
+- Fix security issue when running on secure desktop (Sean Budd).
+- Fix using strings with Unicode characters outside of BMP (#25128).
+- Fix wxPropertyGrid expander buttons appearance in high DPI (#24304).
+- Implement support for wxBG_STYLE_TRANSPARENT (Maarten Bent, #23412).
+- Improve wxGetUserName() implementation (Blake-Madden, #24242).
+- Increase wxButton default size in high DPI (#25297).
+- Link with gdiplus.lib and msimg32.lib directly (Maarten Bent, #24614).
+- Reimplement wxOverlay using layered windows (AliKet, #23261).
+- Return bool from wxBitmap::UseAlpha() (PB, #23919).
+- Support printing current or selected pages (Stefan Ziegler, #23372).
+- Turn wxCAPTION on automatically if required by other styles (#23575).
+- wxNotebook::HitTest() for tabs on the right/left (Gerhard Gruber, #23023)
+- wxMessageOutputBest uses associated console, if any (#25068).
+
+wxOSX:
+
+- Add loading wxCursor from resources (oneeyeman1, Maarten Bent, #24374)
+- Add missing const wxFontDialog::GetFontData() (Martin Corino, #23691).
+- Do not activate "Close" button on Cmd-C (nobugshere, #25346).
+- Ensure that wxEventLoop::OnExit() is called (#25409).
+- Fix setting cursor for TLWs (unawarez, #25131).
+- Make wxUIActionSimulator actually work (Martin Corino, #23692).
+
+wxQt:
+
+- Fix clipping in wxDC to work as expected (AliKet, #23600).
+- Fix wxButton::GetLabel() (AliKet, #22929).
+- Fix wxEVT_TEXT_ENTER processing (AliKet, #22942).
+- Fix wxFrame::ClientToScreen() (AliKet, #22969).
+- Fix wxPopupWindow implementation under wxQt (AliKet, #23904).
+- Fix wxRadioButton selection (AliKet, #22991).
+- Fixes for Qt 6.8.2 (AliKet, #25207).
+- Fixes for wxSlider ticks and events (AliKet, #22989).
+- Implement clipboard and undo support in wxTextCtrl (AliKet, #22973).
+- Implement more wxTextCtrl methods (AliKet, #23984).
+- Implement wxRadio{Box,Button}::{Set,Get}Label() (Alex Shvartzkop, #24309).
+- Implement wxTextCtrl::SearchText() (AliKet, #24899).
+- Make wxGLCanvas work (Alex Shvartzkop, #24200).
+- Make wxPen and wxBrush behaviour more consistent with the other ports (AliKet, #23863).
+- Make wxTopLevelWindow::SetSizeHints() works (AliKet, #23917).
+- Many improvements in wxListCtrl (AliKet, #23029).
+- Many improvements to wxDC (Alex Shvartzkop, #24328).
+- Many improvements to wxListBox (AliKet, #23063).
+- Provide native wxOverlay implementation (AliKet, #24080).
+- Provide native wx{Date,Time}Ctrl (AliKet, #23925).
+- Provide wxRendererNative implementation (AliKet, #24223).
+- Refresh children too in wxWindow::Refresh() (AliKet, #22918).
+- Several fixes and improvements (AliKet, #22932).
+- Support accelerators and radio items in wxMenu (AliKet, #22985).
+- Support extended message and custom labels in wxMessageDialog (#24299).
+- Support images and tab orientation in wxNotebook (AliKet, #22997).
+- Use premultiplied ARGB32 format for wxBitmap (AliKet, #23872).
