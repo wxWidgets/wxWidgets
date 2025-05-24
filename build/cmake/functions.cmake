@@ -542,6 +542,21 @@ macro(wx_lib_link_libraries name)
     endif()
 endmacro()
 
+# wx_lib_link_directories(name [])
+# Forwards everything to target_link_directories() except for monolithic
+# build where it collects all directories for linking with the mono lib
+macro(wx_lib_link_directories name)
+    if(wxBUILD_MONOLITHIC)
+        cmake_parse_arguments(_DIR_LINK "" "" "PUBLIC;PRIVATE" ${ARGN})
+        list(APPEND wxMONO_DIRS_PUBLIC ${_DIR_LINK_PUBLIC})
+        list(APPEND wxMONO_DIRS_PRIVATE ${_DIR_LINK_PRIVATE})
+        set(wxMONO_DIRS_PUBLIC ${wxMONO_DIRS_PUBLIC} PARENT_SCOPE)
+        set(wxMONO_DIRS_PRIVATE ${wxMONO_DIRS_PRIVATE} PARENT_SCOPE)
+    else()
+        target_link_directories(${name};${ARGN})
+    endif()
+endmacro()
+
 # wx_exe_link_libraries(target libs...)
 # Link wx libraries to executable
 macro(wx_exe_link_libraries name)
