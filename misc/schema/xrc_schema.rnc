@@ -703,9 +703,11 @@ wxBitmapButton =
         [xrc:p="o"] element default  {_, t_bool }* &
         [xrc:p="o"] element close    {_, t_bool }* &
         [xrc:p="important"] element bitmap {_, t_bitmap }* &
+        [xrc:p="o"] element pressed  {_, t_bitmap }* &
         [xrc:p="o"] element selected {_, t_bitmap }* &
         [xrc:p="o"] element focus    {_, t_bitmap }* &
         [xrc:p="o"] element disabled {_, t_bitmap }* &
+        [xrc:p="o"] element current  {_, t_bitmap }* &
         [xrc:p="o"] element hover    {_, t_bitmap }*
     }
 
