@@ -1849,6 +1849,9 @@
     <ClInclude Include="..\..\include\wx\msw\metafile.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\mfc.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\minifram.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
