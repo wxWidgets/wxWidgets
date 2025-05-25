@@ -879,22 +879,13 @@ bool wxGLCanvasEGL::SwapBuffers()
     // entire application completely unusable just because one of its windows
     // using wxGLCanvas got occluded or unmapped (e.g. due to a move to another
     // workspace).
-    if ( !m_swapIntervalSet )
+    if ( m_swapIntervalToSet != wxGLCanvas::DefaultSwapInterval )
     {
-        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
-        // callback to know when we should draw ourselves already.
-        if ( eglSwapInterval(m_display, 0) )
-        {
-            wxLogTrace(TRACE_EGL, "Set EGL swap interval to 0 for %p", this);
+        DoSetSwapInterval(m_swapIntervalToSet);
 
-            // It shouldn't be necessary to set it again.
-            m_swapIntervalSet = true;
-        }
-        else
-        {
-            wxLogTrace(TRACE_EGL, "eglSwapInterval(0) failed for %p: %#x",
-                       this, eglGetError());
-        }
+        // Don't set it again in any case, even if it failed, as it would just
+        // fail again the next time anyhow.
+        m_swapIntervalToSet = wxGLCanvas::DefaultSwapInterval;
     }
 
     GdkWindow* const window = m_canvas->GTKGetDrawingWindow();
@@ -927,6 +918,28 @@ bool wxGLCanvasEGL::SwapBuffers()
     wxLogTrace(TRACE_EGL, "Swapping buffers for window %p", this);
 
     return eglSwapBuffers(m_display, m_surface);
+}
+
+bool wxGLCanvasEGL::DoSetSwapInterval(int interval)
+{
+    if ( !eglSwapInterval(m_display, interval) )
+    {
+        wxLogTrace(TRACE_EGL, "eglSwapInterval(%d) failed for %p: %#x",
+                   interval, this, eglGetError());
+        return false;
+    }
+
+    wxLogTrace(TRACE_EGL, "Set EGL swap interval to 0 for %p", this);
+
+    return true;
+}
+
+int wxGLCanvasEGL::GetSwapInterval() const
+{
+    // There doesn't seem to be a way to query the current swap interval in
+    // EGL, there are  EGL_MIN_SWAP_INTERVAL and EGL_MAX_SWAP_INTERVAL in
+    // EGLConfig, but not the current value.
+    return wxGLCanvas::DefaultSwapInterval;
 }
 
 bool wxGLCanvasEGL::HasWindow() const

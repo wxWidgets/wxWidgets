@@ -46,6 +46,29 @@ public:
 
     virtual bool SwapBuffers() = 0;
 
+    bool SetSwapInterval(int interval)
+    {
+        if ( !HasWindow() )
+        {
+            // We don't have a window yet, so we can't set the swap interval
+            // right now. Remember the value to set it later in SwapBuffers().
+            m_swapIntervalToSet = interval;
+            return true;
+        }
+
+        // We will try to set it now and we shouldn't try setting it again in
+        // SwapBuffers(), even if it failed, as it will almost certainly just
+        // fail again if we retry.
+        m_swapIntervalToSet = wxGLCanvas::DefaultSwapInterval;
+
+        if ( interval == wxGLCanvas::DefaultSwapInterval )
+            return true;
+
+        return DoSetSwapInterval(interval);
+    }
+
+    virtual int GetSwapInterval() const = 0;
+
     virtual void OnRealized() = 0;
 
     virtual bool HasWindow() const = 0;
@@ -58,7 +81,15 @@ protected:
     {
     }
 
+    // This function is only called if the window already exists and if
+    // interval is valid, i.e. not DefaultSwapInterval.
+    virtual bool DoSetSwapInterval(int interval) = 0;
+
+
     wxGLCanvasUnix* const m_canvas;
+
+    // The value of swap interval to set or DefaultSwapInterval.
+    int m_swapIntervalToSet = 0;
 
     wxDECLARE_NO_COPY_CLASS(wxGLCanvasUnixImpl);
 };

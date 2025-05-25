@@ -47,6 +47,9 @@ public:
 
     virtual bool SwapBuffers() override;
 
+    virtual bool DoSetSwapInterval(int interval) override;
+    virtual int GetSwapInterval() const override;
+
     virtual void OnRealized() override { /* nothing to do here for GLX */ }
 
     virtual bool HasWindow() const override;
@@ -62,8 +65,6 @@ public:
 private:
     GLXFBConfig *m_fbc;
     XVisualInfo* m_vi;
-
-    bool m_swapIntervalSet = false;
 };
 
 // ----------------------------------------------------------------------------

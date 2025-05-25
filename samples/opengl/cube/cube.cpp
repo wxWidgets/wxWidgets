@@ -450,6 +450,11 @@ wxString glGetwxString(GLenum name)
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
     EVT_MENU(NEW_STEREO_WINDOW, MyFrame::OnNewStereoWindow)
+
+    EVT_MENU(SET_SWAP_INTERVAL_0, MyFrame::OnSetSwapInterval0)
+    EVT_MENU(SET_SWAP_INTERVAL_1, MyFrame::OnSetSwapInterval1)
+    EVT_MENU(GET_SWAP_INTERVAL, MyFrame::OnGetSwapInterval)
+
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_CLOSE, MyFrame::OnClose)
 wxEND_EVENT_TABLE()
@@ -457,7 +462,7 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame( bool stereoWindow )
        : wxFrame(nullptr, wxID_ANY, "wxWidgets OpenGL Cube Sample")
 {
-    new TestGLCanvas(this, stereoWindow);
+    m_canvas = new TestGLCanvas(this, stereoWindow);
 
     SetIcon(wxICON(sample));
 
@@ -465,6 +470,10 @@ MyFrame::MyFrame( bool stereoWindow )
     wxMenu *menu = new wxMenu;
     menu->Append(wxID_NEW);
     menu->Append(NEW_STEREO_WINDOW, "New Stereo Window");
+    menu->AppendSeparator();
+    menu->Append(SET_SWAP_INTERVAL_0, "&Disable VSync");
+    menu->Append(SET_SWAP_INTERVAL_1, "Set Swap Interval to &1");
+    menu->Append(GET_SWAP_INTERVAL, "Display Swap &Interval\tCtrl+I");
     menu->AppendSeparator();
     menu->Append(wxID_ABOUT, "&About...\tF1");
     menu->AppendSeparator();
@@ -560,4 +569,29 @@ void MyFrame::OnNewStereoWindow( wxCommandEvent& WXUNUSED(event) )
     {
         wxLogError("Stereo not supported by OpenGL on this system, sorry.");
     }
+}
+
+void MyFrame::OnSetSwapInterval0( wxCommandEvent& WXUNUSED(event) )
+{
+    if ( m_canvas->SetSwapInterval(0) )
+        wxLogStatus("VSync disabled.");
+    else
+        wxLogStatus("Couldn't disable VSync.");
+}
+
+void MyFrame::OnSetSwapInterval1( wxCommandEvent& WXUNUSED(event) )
+{
+    if ( m_canvas->SetSwapInterval(1) )
+        wxLogStatus("Swap interval set to 1.");
+    else
+        wxLogStatus("Couldn't set swap interval to 1.");
+}
+
+void MyFrame::OnGetSwapInterval( wxCommandEvent& WXUNUSED(event) )
+{
+    const int swapInterval = m_canvas->GetSwapInterval();
+    if ( swapInterval != wxGLCanvas::DefaultSwapInterval )
+        wxLogMessage("Current swap interval is %d.", swapInterval);
+    else
+        wxLogMessage("Couldn't get current swap interval.");
 }

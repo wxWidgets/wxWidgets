@@ -53,6 +53,8 @@ public:
     virtual ~wxGLCanvasUnix();
 
     virtual bool SwapBuffers() override;
+    virtual bool SetSwapInterval(int interval) override;
+    virtual int GetSwapInterval() const override;
 
     virtual bool IsShownOnScreen() const override;
 

@@ -59,6 +59,12 @@ private:
     void OnNewWindow(wxCommandEvent& event);
     void OnNewStereoWindow(wxCommandEvent& event);
 
+    void OnSetSwapInterval0(wxCommandEvent& event);
+    void OnSetSwapInterval1(wxCommandEvent& event);
+    void OnGetSwapInterval(wxCommandEvent& event);
+
+    wxGLCanvas* m_canvas = nullptr;
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -86,7 +92,10 @@ private:
 
 enum
 {
-    NEW_STEREO_WINDOW = wxID_HIGHEST
+    NEW_STEREO_WINDOW = wxID_HIGHEST,
+    SET_SWAP_INTERVAL_0,
+    SET_SWAP_INTERVAL_1,
+    GET_SWAP_INTERVAL
 };
 
 #endif // _WX_CUBE_H_

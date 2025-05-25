@@ -59,6 +59,9 @@ public:
 
     virtual bool SwapBuffers() override;
 
+    virtual bool DoSetSwapInterval(int interval) override;
+    virtual int GetSwapInterval() const override;
+
     virtual void OnRealized() override;
 
     virtual bool HasWindow() const override;
@@ -117,7 +120,6 @@ private:
     wl_subsurface *m_wlSubsurface = nullptr;
 
     bool m_readyToDraw = false;
-    bool m_swapIntervalSet = false;
 
     // Called from GTK callbacks and needs access to private members.
     friend void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win);

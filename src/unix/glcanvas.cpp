@@ -287,6 +287,16 @@ bool wxGLCanvasUnix::SwapBuffers()
     return m_impl->SwapBuffers();
 }
 
+bool wxGLCanvasUnix::SetSwapInterval(int interval)
+{
+    return m_impl->SetSwapInterval(interval);
+}
+
+int wxGLCanvasUnix::GetSwapInterval() const
+{
+    return m_impl->GetSwapInterval();
+}
+
 bool wxGLCanvasUnix::IsShownOnScreen() const
 {
     return m_impl->HasWindow() && wxGLCanvasBase::IsShownOnScreen();

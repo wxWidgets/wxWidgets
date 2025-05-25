@@ -799,6 +799,17 @@ class wxGLCanvas : public wxWindow
 {
 public:
     /**
+        Constant used with SetSwapInterval() and GetSwapInterval().
+
+        When used with SetSwapInterval(), it disables changing the default swap
+        interval. When returned by GetSwapInterval(), it indicates that the
+        swap interval value couldn't be retrieved.
+
+        @since 3.3.2
+     */
+    static constexpr int DefaultSwapInterval = -1;
+
+    /**
         Default constructor not creating the window.
 
         Create() must be used to actually create it later.
@@ -935,6 +946,21 @@ public:
     static int GetGLXVersion();
 
     /**
+        Return the current swap interval.
+
+        Note that the swap interval is not necessarily the same as the one set
+        by SetSwapInterval() as the implementation may clamp it to the maximum
+        supported value.
+
+        @return
+            The current swap interval or DefaultSwapInterval if the function is
+            not implemented for the current platform or an error occurred.
+
+        @since 3.3.2
+     */
+    int GetSwapInterval() const;
+
+    /**
         Determines if a canvas having the specified attributes is available.
         This only applies for visual attributes, not rendering context attributes.
 
@@ -1012,6 +1038,27 @@ public:
         @return @false if an error occurred.
     */
     bool SetCurrent(const wxGLContext& context) const;
+
+    /**
+        Set swap interval to the specified value.
+
+        @a interval specifies the minimum number of video frame periods per
+        buffer swap, i.e. for each call to SwapBuffers(). Using the value of 0
+        means to disable synchronizing buffer swaps to video frames.
+
+        @param interval
+            The swap interval to set or the special value DefaultSwapInterval
+            which means to turn off automatically setting it to 0 by default,
+            as needs to be done under some platforms currently.
+
+        @return @true if the swap interval was set successfully, @false if not,
+            e.g. if the function is not implemented for the current platform.
+
+        @see GetSwapInterval()
+
+        @since 3.3.2
+     */
+    bool SetSwapInterval(int interval);
 
     /**
         Swaps the double-buffer of this window, making the back-buffer the

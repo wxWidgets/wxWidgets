@@ -111,6 +111,10 @@ typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
 #define GLX_ARB_robustness_share_group_isolation
 #endif
 
+#ifndef GLX_EXT_swap_control
+#define GLX_SWAP_INTERVAL_EXT 0x20F1
+#endif
+
 #ifndef GLX_ARB_context_flush_control
 #define GLX_ARB_context_flush_control
 #define GLX_CONTEXT_RELEASE_BEHAVIOR_ARB            0x2097
@@ -776,7 +780,7 @@ namespace
 // For now just try using EXT_swap_control extension, in principle there is
 // also a MESA one, but it's not clear if it's worth falling back on it (or
 // preferring to use it?).
-void wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
+bool wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
 {
     typedef void (*PFNGLXSWAPINTERVALEXTPROC)(Display *dpy,
                                               GLXDrawable drawable,
@@ -797,7 +801,11 @@ void wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
         wxLogTrace(TRACE_GLX, "Setting GLX swap interval to %d", interval);
 
         s_glXSwapIntervalEXT(dpy, drawable, interval);
+
+        return true;
     }
+
+    return false;
 }
 
 } // anonymous namespace
@@ -811,17 +819,42 @@ bool wxGLCanvasX11::SwapBuffers()
 
     // Disable blocking in glXSwapBuffers, as this is needed under XWayland for
     // the reasons explained in wxGLCanvasEGL::SwapBuffers().
-    if ( !m_swapIntervalSet )
+    if ( m_swapIntervalToSet != wxGLCanvas::DefaultSwapInterval )
     {
-        wxGLSetSwapInterval(dpy, xid, 0);
+        wxGLSetSwapInterval(dpy, xid, m_swapIntervalToSet);
 
         // Don't try again in any case, if we failed this time, we'll fail the
         // next one anyhow.
-        m_swapIntervalSet = true;
+        m_swapIntervalToSet = wxGLCanvas::DefaultSwapInterval;
     }
 
     glXSwapBuffers(dpy, xid);
     return true;
+}
+
+bool wxGLCanvasX11::DoSetSwapInterval(int interval)
+{
+    const Window xid = m_canvas->GetXWindow();
+    const auto dpy = wxGetX11Display();
+
+    return wxGLSetSwapInterval(dpy, xid, interval);
+}
+
+int wxGLCanvasX11::GetSwapInterval() const
+{
+    int swapInterval = wxGLCanvas::DefaultSwapInterval;
+
+    const Window xid = m_canvas->GetXWindow();
+    if ( xid )
+    {
+        const auto dpy = wxGetX11Display();
+        unsigned int value = 0;
+        glXQueryDrawable(dpy, xid, GLX_SWAP_INTERVAL_EXT, &value);
+
+        swapInterval = value;
+    }
+
+    return swapInterval;
 }
 
 bool wxGLCanvasX11::HasWindow() const
