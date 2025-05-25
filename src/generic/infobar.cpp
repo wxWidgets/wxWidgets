@@ -494,7 +494,7 @@ void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
 
 void wxInfoBarGeneric::ShowCheckBox(const wxString& checkBoxText, bool checked)
 {
-    wxASSERT_MSG( (GetWindowStyle() & wxINFOBAR_CHECKBOX) != 0,
+    wxASSERT_MSG( HasFlag(wxINFOBAR_CHECKBOX),
                   "wxINFOBAR_CHECKBOX style should be set if calling ShowCheckBox()!");
     m_checked = checked;
     if (m_checkbox != nullptr)
