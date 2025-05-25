@@ -51,8 +51,8 @@ End users may download one of `wxMSW-3.3.0_vc14x_x64_ReleaseDLL.7z` or `wxMSW-3.
 
 ### For Debugging
 
-* Microsoft Visual C++ users: Files `wxMSW-3.3.0_vc14x_x64_ReleasePDB.7z` contain the debug symbols for the release build of the DLLs. Download them if you want to debug your own applications in release build or if you want to get meaningful information from mini-dumps retrieved from your users machines.
-* gcc users: Currently the debug symbols are not available for the release build of the DLLs (only the debug versions of the DLLs contains the debug symbols).
+* Microsoft Visual C++ users: File `wxMSW-3.3.0_vc14x_x64_ReleasePDB.7z` contains the debug symbols for the release build of the DLLs. Download it if you want to debug your own applications in release build or if you want to get meaningful information from mini-dumps retrieved from your users machines.
+* gcc users: Currently the debug symbols are not available for the release build of the DLLs (only the debug versions of the DLLs contain the debug symbols).
 
 ### Binary File Download Verification
 
