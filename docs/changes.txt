@@ -290,7 +290,9 @@ All:
 - Preserve errno in wxString methods (Lauri Nurmi, #23113).
 - Support constructing wxString from std::string_view (Ian McInerney, #23711).
 - Update 3rd party libraries to latest versions (Maarten Bent, #25112, #25325).
-- Update Turkish translations (Kerim Demirkaynak, #25267).
+- Update translations for Corsican (Patriccollu, #25420), Czech (PB, #25412),
+  French (#25400), German (tstkr), Romanian (Cătălin Răceanu, #25403), Turkish
+  (Kerim Demirkaynak, #25267) and Ukrainian (Yuri Chornoivan, #25410).
 - Update language database (Ulrich Telle, #23437).
 - Use UTF-8 for environment variables (#25101).
 - Use variadic templates for vararg functions (#22981).
