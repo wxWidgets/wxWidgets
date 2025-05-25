@@ -4028,8 +4028,9 @@ if test "$wxUSE_SHARED" = "yes"; then
                     AC_LINK_IFELSE([
                         AC_LANG_SOURCE([
                             #include "wx/private/elfversion.h"
-                            wxELF_SYMVER("foo","foo@lib_old")
-                            wxELF_SYMVER("foo","foo@@lib_new")
+                            extern "C" {
+                            wxELF_SYMVER("_foo","_foo@lib_old")
+                            wxELF_SYMVER("_foo","_foo@@lib_new")
                             void foo() {}
                             int main() { return 0; }
                         ])],
@@ -4050,7 +4051,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                         AC_LINK_IFELSE([
                             AC_LANG_SOURCE([
                                 #include "wx/private/elfversion.h"
-                                wxELF_SYMVER("foo","foo@@lib_new")
+                                wxELF_SYMVER("_foo","_foo@@lib_new")
                                 void foo() {}
                                 int main() { return 0; }
                             ])],
@@ -4204,7 +4205,11 @@ if test "$wxUSE_DEBUG_INFO" = "yes"; then
     DEBUG_INFO=1
 fi
 
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[[a-z]]' '[[A-Z]]'`
+wxELF_VERSION_PREFIX=`echo WX${lib_unicode_suffix}${WX_LIB_FLAVOUR}_ | tr '[[a-z]]' '[[A-Z]]'`
+if test "$wxUSE_ELF_SYMVER" != "no"; then
+    AC_DEFINE_UNQUOTED(wxELF_VERSION_PREFIX, "$wxELF_VERSION_PREFIX")
+fi
+WX_VERSION_TAG="${wxELF_VERSION_PREFIX}${WX_RELEASE}"
 
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 
