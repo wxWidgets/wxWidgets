@@ -922,10 +922,33 @@ void wxTreeCtrl::SetIndent(unsigned int indent)
 
 void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
 {
+    int indent = GetIndent();
+
+    HIMAGELIST oldImgList = TreeView_GetImageList(GetHwnd(), which);
+    if ( oldImgList != NULL )
+    {
+        int oldWidth = 0, oldHeight = 0;
+        if ( ImageList_GetIconSize(oldImgList, &oldWidth, &oldHeight) )
+        {
+            int diff = oldWidth - FromDIP(16);
+            if ( diff < 0 )
+                indent -= diff;
+        }
+    }
+
     // no error return
     (void) TreeView_SetImageList(GetHwnd(),
                                  imageList ? imageList->GetHIMAGELIST() : 0,
                                  which);
+
+    wxImageList* newImgList = GetImageList();
+    if ( newImgList != NULL )
+    {
+        int diff = newImgList->GetSize().GetWidth() - FromDIP(16);
+        if ( diff < 0 )
+            indent += diff;
+    }
+    SetIndent(indent);
 }
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)

@@ -262,6 +262,10 @@ wxGTK:
 - Fix height of read-only wxBitmapComboBox (#25468).
 - Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
 
+wxMSW
+
+- Fix regression in wxTreeCtrl indent size in high DPI (Maarten Bent, #25282).
+
 wxOSX:
 
 - Do not activate "Close" button on Cmd-C (nobugshere, #25346).
