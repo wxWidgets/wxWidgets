@@ -39,11 +39,7 @@ jobs:
             sha1sum * | tee -a ../../../docs/release.md
 
       - name: Create Draft Release
-        # Note: use a fork of softprops/action-gh-release which includes
-        # https://github.com/softprops/action-gh-release/pull/254 fixing
-        # updating the body of the draft releases. We should replace the SHA-1
-        # with a tag when an upstream release including this fix is made.
-        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
+        uses: softprops/action-gh-release@v2.2.2
         id: create_release
         with:
           name: wxWidgets ${{ inputs.version }}
@@ -110,7 +106,7 @@ jobs:
             type ..\..\..\checksums
 
       - name: Add Files to the Release
-        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
+        uses: softprops/action-gh-release@v2.2.2
         with:
           name: wxWidgets ${{ inputs.version }}
           body_path: checksums
