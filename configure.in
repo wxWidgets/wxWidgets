@@ -4025,17 +4025,21 @@ if test "$wxUSE_SHARED" = "yes"; then
                 wx_cv_elf_symver_multiple,
                 [
                     echo "lib_new {}; lib_old { *; };" >conftest.sym
+                    AC_LANG_PUSH(C++)
                     AC_LINK_IFELSE([
                         AC_LANG_SOURCE([
                             #include "wx/private/elfversion.h"
-                            wxELF_SYMVER("foo","foo@lib_old")
-                            wxELF_SYMVER("foo","foo@@lib_new")
+                            extern "C" {
+                            wxELF_SYMVER("_foo","_foo@lib_old")
+                            wxELF_SYMVER("_foo","_foo@@lib_new")
                             void foo() {}
+                            }
                             int main() { return 0; }
                         ])],
                         wx_cv_elf_symver_multiple=yes,
                         wx_cv_elf_symver_multiple=no
                     )
+                    AC_LANG_POP()
                     rm -f conftest.sym
                 ]
             )
@@ -4047,16 +4051,20 @@ if test "$wxUSE_SHARED" = "yes"; then
                     wx_cv_elf_symver,
                     [
                         echo "lib_new {}; lib_old { *; };" >conftest.sym
+                        AC_LANG_PUSH(C++)
                         AC_LINK_IFELSE([
                             AC_LANG_SOURCE([
                                 #include "wx/private/elfversion.h"
-                                wxELF_SYMVER("foo","foo@@lib_new")
+                                extern "C" {
+                                wxELF_SYMVER("_foo","_foo@@lib_new")
                                 void foo() {}
+                                }
                                 int main() { return 0; }
                             ])],
                             wx_cv_elf_symver=yes,
                             wx_cv_elf_symver=no
                         )
+                        AC_LANG_POP()
                         rm -f conftest.sym
                     ]
                 )
