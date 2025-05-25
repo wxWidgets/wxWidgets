@@ -102,7 +102,7 @@ bool wxInfoBar::UseNative() const
     // Native GtkInfoBar widget is only available in GTK+ 2.18 and later.
     // Also, if the checkbox is included, then we need to use
     // the generic version.
-    return wx_is_at_least_gtk2(18) && ((GetWindowStyle() & wxINFOBAR_CHECKBOX) == 0);
+    return wx_is_at_least_gtk2(18) && !HasFlag(wxINFOBAR_CHECKBOX);
 }
 
 bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid, long style)
