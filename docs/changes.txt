@@ -255,6 +255,7 @@ Changes in behaviour which may result in build errors
 All (Unix):
 
 - Fix configure build with --with-flavour option broken in 3.2.8 (#25436).
+- Fix configure build with clang and LTO broken in 3.2.8 (#25438).
 
 wxGTK:
 
