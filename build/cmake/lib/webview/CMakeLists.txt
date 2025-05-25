@@ -82,7 +82,7 @@ elseif(WXMSW)
         endif()
 
         if (wxUSE_WEBVIEW_EDGE_STATIC)
-            target_link_directories(wxwebview PUBLIC
+            wx_lib_link_directories(wxwebview PUBLIC
                 $<BUILD_INTERFACE:${WEBVIEW2_PACKAGE_DIR}/build/native/$(LibrariesArchitecture)/>
             )
         else()

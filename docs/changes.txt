@@ -252,6 +252,10 @@ Changes in behaviour which may result in build errors
 3.2.9: (released 2025-??-??)
 ----------------------------
 
+All:
+
+- Backport several CMake enhancements from 3.3 (Maarten Bent, #25448).
+
 All (GUI):
 
 - Respect menu path style in wxFileHistory::AddFilesToMenu() (Bill Su, #25451).

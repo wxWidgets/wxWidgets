@@ -2113,6 +2113,7 @@ MSW_HDR =
     wx/msw/menu.h
     wx/msw/menuitem.h
     wx/msw/metafile.h
+    wx/msw/mfc.h
     wx/msw/minifram.h
     wx/msw/missing.h
     wx/msw/msgdlg.h
