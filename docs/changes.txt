@@ -344,6 +344,7 @@ All (GUI):
 - Make wxGenericValidator more flexible (Bill Su, #24134).
 - Make wxGrid::ProcessTableMessage() more convenient to use (Joachim Wiesemann).
 - Provide reason for wxNotificationMessage dismissal (Lauri Nurmi, #24340).
+- Respect menu path style in wxFileHistory::AddFilesToMenu() (Bill Su, #25451).
 - Restore non-live-resize in wxAUI and wxSplitterWindow (AliKet, #24193).
 - Save/restore wxAuiNotebook layout (#24950).
 - Several fixes to scrolling in wxVListBox (Bill Su, #24278).

@@ -41,10 +41,36 @@ namespace
 // return the string used for the MRU list items in the menu
 //
 // NB: the index n is 0-based, as usual, but the strings start from 1
-wxString GetMRUEntryLabel(int n, const wxString& path)
+wxString
+GetMRUEntryLabel(int n,
+                 const wxString& path,
+                 wxFileHistoryMenuPathStyle style,
+                 const wxString& firstPath)
 {
+    const wxFileName currFn(path);
+
+    wxString pathInMenu;
+    switch ( style )
+    {
+        case wxFH_PATH_SHOW_IF_DIFFERENT:
+            if ( currFn.HasName() && currFn.GetPath() == firstPath )
+                pathInMenu = currFn.GetFullName();
+            else
+                pathInMenu = currFn.GetFullPath();
+            break;
+
+        case wxFH_PATH_SHOW_NEVER:
+            // Only show the filename + extension and not the path.
+            pathInMenu = currFn.GetFullName();
+            break;
+
+        case wxFH_PATH_SHOW_ALWAYS:
+            // Always show full path.
+            pathInMenu = currFn.GetFullPath();
+            break;
+    }
+
     // we need to quote '&' characters which are used for mnemonics
-    wxString pathInMenu(path);
     pathInMenu.Replace("&", "&&");
 
 #ifdef __WXMSW__
@@ -153,36 +179,15 @@ void wxFileHistoryBase::DoRefreshLabels()
     // Update the labels in all menus
     for ( size_t i = 0; i < numFiles; i++ )
     {
-        const wxFileName currFn(m_fileHistory[i]);
-
-        wxString pathInMenu;
-        switch ( m_menuPathStyle )
-        {
-            case wxFH_PATH_SHOW_IF_DIFFERENT:
-                if ( currFn.HasName() && currFn.GetPath() == firstPath )
-                    pathInMenu = currFn.GetFullName();
-                else
-                    pathInMenu = currFn.GetFullPath();
-                break;
-
-            case wxFH_PATH_SHOW_NEVER:
-                // Only show the filename + extension and not the path.
-                pathInMenu = currFn.GetFullName();
-                break;
-
-            case wxFH_PATH_SHOW_ALWAYS:
-                // Always show full path.
-                pathInMenu = currFn.GetFullPath();
-                break;
-        }
-
         for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
               node;
               node = node->GetNext() )
         {
             wxMenu * const menu = (wxMenu *)node->GetData();
 
-            menu->SetLabel(m_idBase + i, GetMRUEntryLabel(i, pathInMenu));
+            menu->SetLabel(m_idBase + i, GetMRUEntryLabel(i, m_fileHistory[i],
+                                                          m_menuPathStyle,
+                                                          firstPath));
         }
     }
 }
@@ -206,6 +211,11 @@ void wxFileHistoryBase::RemoveFileFromHistory(size_t i)
     m_fileHistory.RemoveAt(i);
     numFiles--;
 
+    // Remember the path in case we need to compare with it below.
+    const wxString firstPath = !m_fileHistory.empty()
+                                ? wxFileName(m_fileHistory[0]).GetPath()
+                                : wxString();
+
     for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
           node;
           node = node->GetNext() )
@@ -215,7 +225,9 @@ void wxFileHistoryBase::RemoveFileFromHistory(size_t i)
         // shift filenames up
         for ( size_t j = i; j < numFiles; j++ )
         {
-            menu->SetLabel(m_idBase + j, GetMRUEntryLabel(j, m_fileHistory[j]));
+            menu->SetLabel(m_idBase + j, GetMRUEntryLabel(j, m_fileHistory[j],
+                                                          m_menuPathStyle,
+                                                          firstPath));
         }
 
         // delete the last menu item which is unused now
@@ -310,9 +322,14 @@ void wxFileHistoryBase::AddFilesToMenu(wxMenu* menu)
     if ( menu->GetMenuItemCount() )
         menu->AppendSeparator();
 
+    // Remember the path in case we need to compare with it below.
+    const wxString firstPath(wxFileName(m_fileHistory[0]).GetPath());
+
     for ( size_t i = 0; i < m_fileHistory.GetCount(); i++ )
     {
-        menu->Append(m_idBase + i, GetMRUEntryLabel(i, m_fileHistory[i]));
+        menu->Append(m_idBase + i, GetMRUEntryLabel(i, m_fileHistory[i],
+                                                    m_menuPathStyle,
+                                                    firstPath));
     }
 }
 
