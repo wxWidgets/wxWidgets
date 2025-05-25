@@ -36,6 +36,9 @@ wxInfoBarXmlHandler::wxInfoBarXmlHandler()
     XRC_ADD_SHOW_EFFECT(wxSHOW_EFFECT_SLIDE_TO_BOTTOM);
     XRC_ADD_SHOW_EFFECT(wxSHOW_EFFECT_BLEND);
     XRC_ADD_SHOW_EFFECT(wxSHOW_EFFECT_EXPAND);
+
+    XRC_ADD_STYLE(wxINFOBAR_CHECKBOX);
+    AddWindowStyles();
 }
 
 wxObject *wxInfoBarXmlHandler::DoCreateResource()
@@ -44,7 +47,11 @@ wxObject *wxInfoBarXmlHandler::DoCreateResource()
     {
         XRC_MAKE_INSTANCE(control, wxInfoBar)
 
-        control->Create(m_parentAsWindow, GetID());
+        wxString checkboxValue = GetText("checkboxvalue");
+
+        control->Create(m_parentAsWindow, GetID(),
+            checkboxValue.empty() ? GetStyle() :
+            GetStyle("style", wxINFOBAR_CHECKBOX));
 
         SetupWindow(control);
 
@@ -56,6 +63,9 @@ wxObject *wxInfoBarXmlHandler::DoCreateResource()
 
         if ( HasParam("effectduration") )
             control->SetEffectDuration(GetLong("effectduration"));
+
+        if ( !checkboxValue.empty() )
+            control->ShowCheckBox(checkboxValue, GetBool("checked", false) );
 
         m_insideBar = true;
         CreateChildrenPrivately(control);
