@@ -252,11 +252,6 @@ Changes in behaviour which may result in build errors
 3.2.9: (released 2025-??-??)
 ----------------------------
 
-All (Unix):
-
-- Fix configure build with --with-flavour option broken in 3.2.8 (#25436).
-- Fix configure build with clang and LTO broken in 3.2.8 (#25438).
-
 wxGTK:
 
 - Fix handling total window size with GNOME with X11 (#25348).
@@ -264,6 +259,14 @@ wxGTK:
 wxOSX:
 
 - Do not activate "Close" button on Cmd-C (nobugshere, #25346).
+
+
+3.2.8.1: (released 2025-05-25)
+------------------------------
+
+This hotfix release corrects regressions in 3.2.8 for configure builds on
+platforms using ELF if --with-flavour is specified (#25436) or LTO is used
+with clang (#25438).
 
 
 3.2.8: (released 2025-04-24)
