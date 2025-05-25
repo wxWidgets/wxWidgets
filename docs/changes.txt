@@ -252,6 +252,10 @@ Changes in behaviour which may result in build errors
 3.2.9: (released 2025-??-??)
 ----------------------------
 
+All (GUI):
+
+- Respect menu path style in wxFileHistory::AddFilesToMenu() (Bill Su, #25451).
+
 wxGTK:
 
 - Fix handling total window size with GNOME with X11 (#25348).
