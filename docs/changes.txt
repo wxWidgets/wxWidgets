@@ -249,6 +249,14 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
+3.2.8.1: (released 2025-05-25)
+------------------------------
+
+This hotfix release corrects regressions in 3.2.8 for configure builds on
+platforms using ELF if --with-flavour is specified (#25436) or LTO is used
+with clang (#25438).
+
+
 3.2.8: (released 2025-04-24)
 ----------------------------
 

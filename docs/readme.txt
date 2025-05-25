@@ -1,5 +1,5 @@
-wxWidgets 3.2.8 Release Notes
-=============================
+wxWidgets 3.2.8.1 Release Notes
+===============================
 
 Welcome to the new stable release of wxWidgets, a free and open source
 cross-platform C++ framework for writing advanced GUI applications using
@@ -25,50 +25,21 @@ download from:
 
 or, for a more more permanent but less convenient to use link, from
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.8/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.2.8.1/
 
 Please see https://docs.wxwidgets.org/3.2.8/overview_install.html for full
 installation instructions.
 
 
 
-Changes since 3.2.7
+Changes since 3.2.8
 -------------------
 
-This is mostly a bug fix release correcting several problems found in the
-previous 3.2.7 release:
+This is a hotfix release correcting regressions in 3.2.8 for configure builds
+on platforms using ELF if --with-flavour is specified (#25436) or LTO is used
+with clang (#25438).
 
-- Fix crash in wxPropertyGrid with wxGTK3 after recent change (#25286).
-- Fix padding of wxMenu in high DPI under Windows 11 (#25117).
-- Fix key codes in WXK_NUMPADx events in wxGTK (#25263).
-- Fix ABI breakage for versioned symbols in 3.2.7 (#25327).
-- Fix third party libraries build with Xcode 16.3.
-- Fix using OpenGL and WebView when using CMake install (#25266).
-
-But it still contains a couple of enhancements, including:
-
-- Add wxVector(std::initializer_list<U> list) ctor (#25290).
-- Add mouse scrolling support to generic wxSpinCtrl (#24935).
-- Add @USER@ macro to HTML and RichText printers (#25318).
-
-Other changes include:
-
-- Call OnExceptionInMainLoop() in wxGTK if idle event handler throws (#25312).
-- Compute wxStaticText best size ourselves if GTK does it wrongly (#24781).
-- Fix page count display in wxHtmlPrintout when there is only one page (#25320).
-- Miscellaneous CMake build improvements (#25324).
-- Fix new warnings with gcc 15 (#25338).
-- Update Brazilian Portuguese translations.
-
-Please see the full change log for more details:
-
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.8/docs/changes.txt
-
-This release is API and ABI-compatible with the previous 3.2.x releases, so
-the existing applications don't even need to be rebuilt to profit from all the
-fixes above if they use shared/dynamic libraries. And if they do need to be
-recompiled, this can be done without any changes to the code.
-
+Please see 3.2.8 release announcement for the full list of changes since 3.2.7.
 
 
 Supported Platforms
@@ -162,4 +133,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, April 2025
+The wxWidgets Team, May 2025
