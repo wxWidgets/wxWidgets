@@ -162,7 +162,11 @@ void wxOverlayImpl::Init(wxDC* dc, int , int , int , int )
 
     // The rectangle must be in screen coordinates
     m_rect = m_window->GetClientSize();
-    m_window->ClientToScreen(&m_rect.x, &m_rect.y);
+
+    RECT rc;
+    wxCopyRectToRECT(m_rect, rc);
+    wxMapWindowPoints(GetHwndOf(m_window), HWND_DESKTOP, &rc);
+    wxCopyRECTToRect(rc, m_rect);
 
     // Because wxClientDC adjusts the origin of the device context to the
     // origin of the client area of the window, we need to compensate for it
@@ -195,6 +199,7 @@ void wxOverlayImpl::BeginDrawing(wxDC* dc)
     wxCHECK_RET( IsOk(), wxS("overlay not initialized") );
 
     m_memDC.SelectObject(m_bitmap);
+    m_memDC.SetLayoutDirection(m_window->GetLayoutDirection());
 
     auto impl = dc->GetImpl();
     auto msw_impl = static_cast<wxMSWDCImpl*>(impl);

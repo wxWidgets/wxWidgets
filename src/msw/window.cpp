@@ -6185,9 +6185,7 @@ void wxWindowMSW::GenerateMouseLeave()
 
     // we need to have client coordinates here for symmetry with
     // wxEVT_ENTER_WINDOW
-    RECT rect = wxGetWindowRect(GetHwnd());
-    pt.x -= rect.left;
-    pt.y -= rect.top;
+    wxMapWindowPoints(HWND_DESKTOP, GetHwnd(), &pt);
 
     wxMouseEvent event(wxEVT_LEAVE_WINDOW);
     InitMouseEvent(event, pt.x, pt.y, state);
