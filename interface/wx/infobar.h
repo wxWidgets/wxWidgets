@@ -296,7 +296,8 @@ public:
     /// @since 3.3.0
     bool IsCheckBoxChecked() const;
 
-    /// Sets whether the checkbox should be shown.
+    /// Sets whether the checkbox should be shown, its label, and
+    /// whether it is checked by default.
     /// @note The wxINFOBAR_CHECKBOX style should be used for this control
     /// if calling this function.
     /// @since 3.3.0
