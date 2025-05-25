@@ -237,6 +237,7 @@ builtinWindowClasses =
     | wxToolbook
     | wxTreeCtrl
     | wxTreebook
+    | wxVListBox
     | wxWizard
     )
 
