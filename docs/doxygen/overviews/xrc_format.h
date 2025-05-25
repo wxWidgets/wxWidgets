@@ -1394,20 +1394,20 @@ page.
      this property is of class "button" has name (can be one of standard
      button ID) and has optional label property. If no buttons are added
      to the info bar, the default "Close" button will be shown.}
-@row3col{checkboxvalue, @ref overview_xrcformat_type_text,
-     Shows a checkbox at the bottom of the infobar with this provided label.
-     Note that setting the style @c wxINFOBAR_CHECKBOX is required to enable this.
-     (optional).}
+@row3col{checkboxlabel, @ref overview_xrcformat_type_text,
+     Shows a checkbox at the bottom of the infobar with the specified label.
+     Note that specifying this attribute automatically turns on @c
+     wxINFOBAR_CHECKBOX style (optional). @since 3.3.0.}
 @row3col{checked, @ref overview_xrcformat_type_bool,
-     If showing the checkbox, whether it should be checked by default.
-     (optional).}
+     If showing the checkbox, indicates whether it should be checked by
+     default (optional). @since 3.3.0.}
 @endTable
 
 Example:
 @code
 <object class="wxInfoBar">
     <style>wxINFOBAR_CHECKBOX</style>
-    <checkboxvalue>Do not show this again</checkboxvalue>
+    <checkboxlabel>Do not show this again</checkboxlabel>
     <checked>1</checked>
     <effectduration>1000</effectduration>
     <showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
