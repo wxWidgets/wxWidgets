@@ -354,6 +354,7 @@ All (GUI):
 
 All (CMake):
 
+- Add CMake presets (Tobias Taschner, #23335).
 - Add option to use all built-in libraries (Maarten Bent).
 - Build mfc sample too (Maarten Bent, #25402).
 - Fix generated wx-config when using custom flavour (#25398).
@@ -373,6 +374,7 @@ All (WebView):
 - Add wxWebViewConfiguration (Tobias Taschner, #23374).
 - Add wxWebViewEvent::IsTargetMainFrame() (Tobias Taschner, #23238).
 - Allow setting wxWebViewEdge UA after creation (Tobias Taschner, #23225).
+- Implement StartRequest() in wxWebViewChromium (John R. Patek, #25395).
 - Queue Edge wxWebView events (Tobias Taschner, #22744, #19075).
 
 wxGTK:
@@ -415,8 +417,10 @@ wxMSW:
 - Fix saving geometry of Aero-snapped windows (Randalphwa).
 - Fix security issue when running on secure desktop (Sean Budd).
 - Fix using strings with Unicode characters outside of BMP (#25128).
+- Fix wxOverlay and wxScrolled auto-scrolling in RTL layout (AliKet, #25413).
 - Fix wxPropertyGrid expander buttons appearance in high DPI (#24304).
 - Implement support for wxBG_STYLE_TRANSPARENT (Maarten Bent, #23412).
+- Implement RTL support in wxGraphicsContext with GDI+ (AliKet, #25431).
 - Improve wxGetUserName() implementation (Blake-Madden, #24242).
 - Increase wxButton default size in high DPI (#25297).
 - Link with gdiplus.lib and msimg32.lib directly (Maarten Bent, #24614).
