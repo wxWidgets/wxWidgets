@@ -35,15 +35,11 @@ jobs:
       - name: Create Archives Checksums
         working-directory: distrib/release/${{ inputs.version }}
         run: |
-            printf '\n# THESE CHECKSUMS MUST BE MOVED ABOVE!\n\n````' >> ../../../docs/release.md
+            printf '\n# THESE CHECKSUMS MUST BE MOVED ABOVE!\n\n````\n' >> ../../../docs/release.md
             sha1sum * | tee -a ../../../docs/release.md
 
       - name: Create Draft Release
-        # Note: use a fork of softprops/action-gh-release which includes
-        # https://github.com/softprops/action-gh-release/pull/254 fixing
-        # updating the body of the draft releases. We should replace the SHA-1
-        # with a tag when an upstream release including this fix is made.
-        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
+        uses: softprops/action-gh-release@v2.2.2
         id: create_release
         with:
           name: wxWidgets ${{ inputs.version }}
@@ -62,7 +58,7 @@ jobs:
       # because it can't be downloaded from a draft release without
       # impersonating the same user and I don't know how to do it.
       - name: Upload Release Archive
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wxWidgets-${{ inputs.version }}-source-archive
           path: distrib/release/${{ inputs.version }}/wxWidgets-${{ inputs.version }}.zip
@@ -78,13 +74,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Release Archive
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: wxWidgets-${{ inputs.version }}-source-archive
 
       - name: Install Prerequisites
         run: |
             choco install -y --no-progress graphviz html-help-workshop
+            choco install -y doxygen.install --version=1.9.1
 
       - name: Create MSW Installer and Help File
         shell: cmd
@@ -92,7 +89,7 @@ jobs:
             md distrib\release
             md distrib\release\${{ inputs.version }}
             move wxWidgets-${{ inputs.version }}.zip distrib\release\${{ inputs.version }}
-            set "PATH=C:\Program Files (x86)\HTML Help Workshop;%PATH%"
+            set "PATH=C:\Program Files\doxygen\bin;C:\Program Files (x86)\HTML Help Workshop;%PATH%"
             build\tools\release.bat ${{ inputs.version }}
 
       # This doesn't really decrease the file size but .chm files can't be
@@ -109,7 +106,7 @@ jobs:
             type ..\..\..\checksums
 
       - name: Add Files to the Release
-        uses: vadz/action-gh-release@1460c8b8cca97de38c3557ca4a277b55f4971abc
+        uses: softprops/action-gh-release@v2.2.2
         with:
           name: wxWidgets ${{ inputs.version }}
           body_path: checksums
