@@ -1080,6 +1080,8 @@ wxInfoBar =
         [xrc:p="o"] element effectduration {_, t_integer }* &
         [xrc:p="o"] element showeffect     {_, t_showeffect }* &
         [xrc:p="o"] element hideeffect     {_, t_showeffect }* &
+        [xrc:p="o"] element checkboxlabel  {_, t_text }* &
+        [xrc:p="o"] element checked        {_, t_bool }* &
         element object {
             attribute class { "button" } &
             attribute name  { t_identifier }? &
