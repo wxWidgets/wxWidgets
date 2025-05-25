@@ -2854,6 +2854,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\mfc.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\minifram.h"
 				>
 			</File>

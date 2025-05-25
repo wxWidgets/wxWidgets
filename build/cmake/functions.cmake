@@ -14,7 +14,7 @@ include(CMakePrintHelpers)
 
 # Use the MSVC/makefile naming convention, or the configure naming convention,
 # this is the same check as used in FindwxWidgets.
-if(WIN32 AND NOT CYGWIN AND NOT MSYS)
+if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_CROSSCOMPILING)
     set(WIN32_MSVC_NAMING 1)
 else()
     set(WIN32_MSVC_NAMING 0)
@@ -185,10 +185,14 @@ function(wx_set_common_target_properties target_name)
             )
         endif()
 
-        target_compile_options(${target_name} PRIVATE
-            ${common_gcc_clang_compile_options}
-            $<$<COMPILE_LANGUAGE:CXX>:${common_gcc_clang_cpp_compile_options}>
-        )
+        # Using $<COMPILE_LANGUAGE:CXX> breaks cotire:
+        # Evaluation file to be written multiple times with different content.
+        if(NOT USE_COTIRE)
+            target_compile_options(${target_name} PRIVATE
+                ${common_gcc_clang_compile_options}
+                $<$<COMPILE_LANGUAGE:CXX>:${common_gcc_clang_cpp_compile_options}>
+            )
+        endif()
     endif()
 
     if(wxUSE_NO_RTTI)
@@ -540,6 +544,21 @@ macro(wx_lib_link_libraries name)
     endif()
 endmacro()
 
+# wx_lib_link_directories(name [])
+# Forwards everything to target_link_directories() except for monolithic
+# build where it collects all directories for linking with the mono lib
+macro(wx_lib_link_directories name)
+    if(wxBUILD_MONOLITHIC)
+        cmake_parse_arguments(_DIR_LINK "" "" "PUBLIC;PRIVATE" ${ARGN})
+        list(APPEND wxMONO_DIRS_PUBLIC ${_DIR_LINK_PUBLIC})
+        list(APPEND wxMONO_DIRS_PRIVATE ${_DIR_LINK_PRIVATE})
+        set(wxMONO_DIRS_PUBLIC ${wxMONO_DIRS_PUBLIC} PARENT_SCOPE)
+        set(wxMONO_DIRS_PRIVATE ${wxMONO_DIRS_PRIVATE} PARENT_SCOPE)
+    else()
+        target_link_directories(${name};${ARGN})
+    endif()
+endmacro()
+
 # wx_exe_link_libraries(target libs...)
 # Link wx libraries to executable
 macro(wx_exe_link_libraries name)
@@ -675,7 +694,9 @@ set(wxTHIRD_PARTY_LIBRARIES)
 function(wx_add_thirdparty_library var_name lib_name help_str)
     cmake_parse_arguments(THIRDPARTY "" "DEFAULT;DEFAULT_APPLE;DEFAULT_WIN32" "" ${ARGN})
 
-    if(THIRDPARTY_DEFAULT)
+    if(NOT wxUSE_SYS_LIBS)
+        set(thirdparty_lib_default builtin)
+    elseif(THIRDPARTY_DEFAULT)
         set(thirdparty_lib_default ${THIRDPARTY_DEFAULT})
     elseif(THIRDPARTY_DEFAULT_APPLE AND APPLE)
         set(thirdparty_lib_default ${THIRDPARTY_DEFAULT_APPLE})
