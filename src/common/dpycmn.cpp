@@ -352,17 +352,14 @@ void wxDisplayFactory::UpdateOnDisplayChange()
     // Enforce the lookup range to be the new number of displays.
     wxVector<wxObjectDataPtr<wxDisplayImpl> > impls(GetCount());
 
-    for ( size_t n = 0; n < m_impls.size(); ++n )
+    for ( auto& impl : m_impls )
     {
-        wxObjectDataPtr<wxDisplayImpl> &impl = m_impls[n];
-
         // Object may be empty if not accessed yet.
         // Try to update display state or mark it as disconnected.
         if ( impl && UpdateOnDisplayChange(*impl) )
         {
             // If display is still connected put it on the new index position.
-            if ( impl->GetIndex() < (unsigned) impls.size() )
-                impls[impl->GetIndex()] = impl;
+            impls[impl->GetIndex()] = impl;
         }
     }
     m_impls = std::move(impls);
