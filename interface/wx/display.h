@@ -210,15 +210,16 @@ public:
     /**
         Returns @true if the display has not been unplugged.
 
-        This function is only full implemented in MSW and just always returns
-        @true under the other platforms currently.
-
-        Under MSW, it returns @false if the physical display that this C++
-        object corresponds to has become unavailable, e.g. because it was
+        On MSW, this function returns @false if the physical display that this
+        C++ object corresponds to has become unavailable, e.g. because it was
         unplugged or otherwise removed from the system. Such disconnected
         display object can still be used by the program, but all its accessor
         functions return special fallback values (e.g. 0 for the width and
         height).
+
+        This function is fully implemented only on MSW. On Apple devices, it always
+        returns @false when a display configuration change is detected. On other
+        platforms, it currently always returns @true.
 
         To receive notifications about display unplugging or other display changes,
         connect a top-level window to the wxDisplayChangedEvent.
