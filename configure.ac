@@ -329,6 +329,7 @@ DEFAULT_wxUSE_HOTKEY=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_METAFILE=auto
 DEFAULT_wxUSE_OPENGL=auto
+DEFAULT_wxUSE_SECRETSTORE=auto
 DEFAULT_wxUSE_WEBVIEW_EDGE=no
 
 dnl Mac/Cocoa users need to enable building universal binaries explicitly
@@ -5139,7 +5140,7 @@ dnl ---------------------------------------------------------------------------
 dnl Secret storage
 dnl ---------------------------------------------------------------------------
 
-if test "$wxUSE_SECRETSTORE" = "yes"; then
+if test "$wxUSE_SECRETSTORE" != "no"; then
     dnl The required APIs are always available under MSW and OS X but we must
     dnl have GNOME libsecret under Unix to be able to compile this class.
     if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
@@ -5152,13 +5153,19 @@ if test "$wxUSE_SECRETSTORE" = "yes"; then
                 LIBS="`echo $LIBSECRET_LIBS | sed s/-lsecret-1//g` $LIBS"
             ],
             [
+                if test "$wxUSE_SECRETSTORE" = "yes"; then
+                    AC_MSG_ERROR([wxSecretStore support requested but libsecret was not found])
+                fi
+
+                dnl By default, i.e. if --enable-secretstore wasn't explicitly
+                dnl specified, continue without it.
                 AC_MSG_WARN([libsecret not found, wxSecretStore won't be available])
                 wxUSE_SECRETSTORE=no
             ]
         )
     fi
 
-    if test "$wxUSE_SECRETSTORE" = "yes"; then
+    if test "$wxUSE_SECRETSTORE" != "no"; then
         if test "$USE_DARWIN" = 1; then
             LIBS="-framework Security $LIBS"
         fi
