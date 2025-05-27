@@ -840,14 +840,13 @@ public:
     handler provided URLs.
 
     This backend is not enabled by default, to build it follow these steps:
-    - With CMake just enable @c wxUSE_WEBVIEW_EDGE
-    - When not using CMake:
-        - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
-        nuget package (Version 1.0.864.35 or newer)
-        - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
-        (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
-        file after unpacking it)
-        - Enable @c wxUSE_WEBVIEW_EDGE in @c setup.h
+    - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
+      nuget package (Version 1.0.864.35 or newer)
+    - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
+      (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
+       file after unpacking it)
+    - With CMake, enable @c wxUSE_WEBVIEW_EDGE
+    - When not using CMake, enable @c wxUSE_WEBVIEW_EDGE in @c setup.h
     - Build wxWidgets webview library
     - Copy @c WebView2Loader.dll from the subdirectory corresponding to the
       architecture used (x86 or x64) of @c wxWidgets/3rdparty/webview2/build/
