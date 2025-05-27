@@ -4078,6 +4078,7 @@ DEFAULT_wxUSE_HOTKEY=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
 DEFAULT_wxUSE_METAFILE=auto
 DEFAULT_wxUSE_OPENGL=auto
+DEFAULT_wxUSE_SECRETSTORE=auto
 DEFAULT_wxUSE_WEBVIEW_EDGE=no
 
 DEFAULT_wxUSE_UNIVERSAL_BINARY=no
@@ -36048,7 +36049,7 @@ fi
 fi
 
 
-if test "$wxUSE_SECRETSTORE" = "yes"; then
+if test "$wxUSE_SECRETSTORE" != "no"; then
             if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
 
 pkg_failed=no
@@ -36110,7 +36111,11 @@ fi
     echo "$LIBSECRET_PKG_ERRORS" >&5
 
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret not found, wxSecretStore won't be available" >&5
+                if test "$wxUSE_SECRETSTORE" = "yes"; then
+                    as_fn_error $? "wxSecretStore support requested but libsecret was not found" "$LINENO" 5
+                fi
+
+                                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret not found, wxSecretStore won't be available" >&5
 $as_echo "$as_me: WARNING: libsecret not found, wxSecretStore won't be available" >&2;}
                 wxUSE_SECRETSTORE=no
 
@@ -36119,7 +36124,11 @@ elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret not found, wxSecretStore won't be available" >&5
+                if test "$wxUSE_SECRETSTORE" = "yes"; then
+                    as_fn_error $? "wxSecretStore support requested but libsecret was not found" "$LINENO" 5
+                fi
+
+                                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret not found, wxSecretStore won't be available" >&5
 $as_echo "$as_me: WARNING: libsecret not found, wxSecretStore won't be available" >&2;}
                 wxUSE_SECRETSTORE=no
 
@@ -36136,7 +36145,7 @@ $as_echo "yes" >&6; }
 fi
     fi
 
-    if test "$wxUSE_SECRETSTORE" = "yes"; then
+    if test "$wxUSE_SECRETSTORE" != "no"; then
         if test "$USE_DARWIN" = 1; then
             LIBS="-framework Security $LIBS"
         fi
