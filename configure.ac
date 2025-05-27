@@ -8318,7 +8318,7 @@ will use built-in instead])
     to fix this.])
         fi
         AC_MSG_RESULT([yes])
-        CATCH2_CFLAGS="-I$wx_top_builddir/3rdparty/catch/single_include"
+        CATCH2_CFLAGS="-I\$(top_srcdir)/3rdparty/catch/single_include"
     fi
 
     AC_SUBST(CATCH2_CFLAGS)

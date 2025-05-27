@@ -43975,7 +43975,7 @@ $as_echo "no" >&6; }
         fi
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-        CATCH2_CFLAGS="-I$wx_top_builddir/3rdparty/catch/single_include"
+        CATCH2_CFLAGS="-I\$(top_srcdir)/3rdparty/catch/single_include"
     fi
 
 
