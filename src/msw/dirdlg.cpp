@@ -152,9 +152,12 @@ int wxDirDialog::ShowModal()
     // Use IFileDialog under new enough Windows, it's more user-friendly.
     int rc;
 #if wxUSE_IFILEOPENDIALOG
-    rc = wxMSWImpl::wxIFileDialog::CanBeUsedWithAnOwner()
-                        ? ShowIFileOpenDialog(hWndParent)
-                        : wxID_NONE;
+    // It is crucial for this variable to be static, CanBeUsedWithAnOwner()
+    // only detects COM apartment type change once, so we shouldn't call it
+    // again if it returned false the first time.
+    static bool
+        s_canUseIFileDialog = wxMSWImpl::wxIFileDialog::CanBeUsedWithAnOwner();
+    rc = s_canUseIFileDialog ? ShowIFileOpenDialog(hWndParent) : wxID_NONE;
 
     if ( rc == wxID_NONE )
 #endif // wxUSE_IFILEOPENDIALOG
