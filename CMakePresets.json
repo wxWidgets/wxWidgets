@@ -24,7 +24,7 @@
             "hidden": true,
             "inherits": "common",
             "cacheVariables": {
-                "wxUSE_WEBVIEW_EDGE": "ON"
+                "wxUSE_WEBVIEW_EDGE": "OFF"
             },
             "condition": {
                 "type": "equals",
