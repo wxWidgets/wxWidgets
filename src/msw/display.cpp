@@ -505,16 +505,24 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
 bool
 wxDisplayMSW::DoRefreshOnDisplayChange(const wxVector<wxDisplayInfo>& displays)
 {
+    // Try to find this display in the list of the currently available ones.
     for ( size_t n = 0; n < displays.size(); ++n )
     {
-        if ( displays[n].hmon == displays[n].hmon )
+        if ( m_info.hmon == displays[n].hmon )
         {
+            // We did find it, update it just in case its characteristics have
+            // changed.
             m_info = displays[n];
+
+            // And, importantly, also update its index which could have changed
+            // due to a previous monitor disconnection.
             m_index = n;
+
             return true;
         }
     }
 
+    // This display is not connected any more, so mark it as such.
     Disconnect();
     return false;
 }
