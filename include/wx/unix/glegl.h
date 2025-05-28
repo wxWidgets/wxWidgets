@@ -145,6 +145,7 @@ private:
     static EGLConfig *ms_glEGLConfig;
 
     friend void wxEGLUpdatePosition(wxGLCanvasEGL* win);
+    friend void wxEGLSetScale(wxGLCanvasEGL* win, int scale);
 };
 
 // ----------------------------------------------------------------------------
