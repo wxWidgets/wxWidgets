@@ -23,9 +23,6 @@
             "description": "Base configuration for MSW",
             "hidden": true,
             "inherits": "common",
-            "cacheVariables": {
-                "wxUSE_WEBVIEW_EDGE": "ON"
-            },
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
