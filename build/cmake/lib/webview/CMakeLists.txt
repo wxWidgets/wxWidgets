@@ -63,7 +63,14 @@ elseif(WXMSW)
             file(DOWNLOAD
                 ${WEBVIEW2_URL}
                 ${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget
-                EXPECTED_HASH SHA256=${WEBVIEW2_SHA256})
+                EXPECTED_HASH SHA256=${WEBVIEW2_SHA256}
+                STATUS DOWNLOAD_RESULT)
+            # Check that the download was successful.
+            list(GET DOWNLOAD_RESULT 0 DOWNLOAD_RESULT_NUM)
+            if(NOT ${DOWNLOAD_RESULT_NUM} EQUAL 0)
+                list(GET DOWNLOAD_RESULT 1 DOWNLOAD_RESULT_STR)
+                message(FATAL_ERROR "Error ${DOWNLOAD_RESULT_NUM} downloading WebView2 SDK: ${DOWNLOAD_RESULT_STR}.")
+            endif()
             file(MAKE_DIRECTORY ${WEBVIEW2_PACKAGE_DIR})
             execute_process(COMMAND
                 "${CMAKE_COMMAND}" -E tar x "${CMAKE_CURRENT_BINARY_DIR}/webview2.nuget"
