@@ -255,6 +255,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Backport several CMake enhancements from 3.3 (Maarten Bent, #25448).
+- Make wxPlatformInfo::Get() thread-safe (#25459).
 
 All (GUI):
 
