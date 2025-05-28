@@ -171,7 +171,7 @@ target_link_libraries(myapp wx::net wx::core wx::base)
 
 This can be useful if you have multiple projects using wxWidgets.
 This way, you can place wxWidgets side-by-side with your other projects and
-have their Cmake scripts all point to the same wxWidgets folder.
+have their CMake scripts all point to the same wxWidgets folder.
 
 Using XRC
 ---------
