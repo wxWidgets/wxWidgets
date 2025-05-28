@@ -139,6 +139,12 @@ foreach(libname @wxLIB_TARGETS@)
     endif()
 endforeach()
 
+if(TARGET wx::wxnet AND @wxUSE_WEBREQUEST_CURL@)
+    # make sure CURL targets are available:
+    # The link interface of target "wx::wxnet" contains: CURL::libcurl_shared
+    find_package(CURL QUIET)
+endif()
+
 if(TARGET wx::wxgl)
     # make sure OpenGL targets are available:
     # The link interface of target "wx::wxgl" contains: OpenGL::GLU
