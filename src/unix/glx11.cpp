@@ -798,6 +798,26 @@ void wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
 
 } // anonymous namespace
 
+void wxGLCanvasX11::GLXSetSwapInterval(int interval)
+{
+    const Window xid = GetXWindow();
+    if ( !xid )
+    {
+        // Remember to do it later in SwapBuffers().
+        m_swapIntervalToSet = interval;
+        return;
+    }
+
+    wxGLSetSwapInterval(wxGetX11Display(), xid, interval);
+
+    GLXDontSetSwapInterval();
+}
+
+void wxGLCanvasX11::GLXDontSetSwapInterval()
+{
+    m_swapIntervalToSet = -1;
+}
+
 bool wxGLCanvasX11::SwapBuffers()
 {
     const Window xid = GetXWindow();
@@ -807,13 +827,9 @@ bool wxGLCanvasX11::SwapBuffers()
 
     // Disable blocking in glXSwapBuffers, as this is needed under XWayland for
     // the reasons explained in wxGLCanvasEGL::SwapBuffers().
-    if ( !m_swapIntervalSet )
+    if ( m_swapIntervalToSet != -1 )
     {
-        wxGLSetSwapInterval(dpy, xid, 0);
-
-        // Don't try again in any case, if we failed this time, we'll fail the
-        // next one anyhow.
-        m_swapIntervalSet = true;
+        GLXSetSwapInterval(m_swapIntervalToSet);
     }
 
     glXSwapBuffers(dpy, xid);
