@@ -66,9 +66,10 @@ elseif(WXMSW)
                 EXPECTED_HASH SHA256=${WEBVIEW2_SHA256}
                 STATUS DOWNLOAD_RESULT)
             # Check that the download was successful.
-            string(REGEX MATCH "^[0-9]+" STATUS_CODE ${DOWNLOAD_RESULT})
-            if(NOT ${STATUS_CODE} EQUAL 0)
-                message(FATAL_ERROR "Error downloading WebView2 SDK. Please ensure that you are connected to the internet.")
+            list(GET DOWNLOAD_RESULT 0 DOWNLOAD_RESULT_NUM)
+            if(NOT ${DOWNLOAD_RESULT_NUM} EQUAL 0)
+              list(GET DOWNLOAD_RESULT 1 DOWNLOAD_RESULT_STR)
+              message(FATAL_ERROR "Error ${DOWNLOAD_RESULT_NUM} downloading WebView2 SDK: ${DOWNLOAD_RESULT_STR}.")
             endif()
             file(MAKE_DIRECTORY ${WEBVIEW2_PACKAGE_DIR})
             execute_process(COMMAND
