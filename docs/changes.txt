@@ -281,6 +281,7 @@ All:
 - Fix wxWebResponse::GetMimeType(), add GetContentType() (Blake-Madden, #23461).
 - Improve locale matching algorithm (Ulrich Telle, #24855)
 - Make wxLogXXX(string) safe to use (#25414).
+- Make wxPlatformInfo::Get() thread-safe (#25459).
 - Make wxString {To,From}CDouble() faster and more robust (#23287).
 - Make wxrc-generated code faster to build (DoctorNoobingstoneIPresume, #24579).
 - Multiple headers with same name in wxWebRequest (Stefan Dinkelacker, #24878).
