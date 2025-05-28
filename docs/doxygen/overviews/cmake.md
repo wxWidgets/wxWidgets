@@ -158,7 +158,7 @@ Using an out-of-tree directory         {#cmake_outerdir}
 Likewise, wxWidgets can also be outside of your project, but still be part
 of your application's build process. To do this, you will need to provide a
 build directory argument to `add_subdirectory()`.
-This will tell Cmake where to place wxWidget's build files.
+This will tell CMake where to place wxWidget's build files.
 
 For example, if wxWidgets is one folder up from your project:
 ~~~
