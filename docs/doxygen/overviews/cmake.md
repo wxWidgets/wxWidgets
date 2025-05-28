@@ -134,8 +134,8 @@ target_link_libraries(myapp ${wxWidgets_LIBRARIES})
 Using a sub directory                  {#cmake_subdir}
 ---------------------
 You can use wxWidgets as a subdirectory in your application's build tree
-e.g. as a git submodule. This way the wxWidgets libraries will be part
-of your applications build process.
+(e.g., as a git submodule). This way the wxWidgets libraries will be part
+of your application's build process.
 
 Your *CMakeLists.txt* would look like this:
 ~~~
@@ -153,6 +153,21 @@ set(wxBUILD_SHARED OFF)
 ~~~~
 to your *CMakeLists.txt* if you want to always use static wxWidgets libraries.
 
+Using an out-of-tree directory         {#cmake_outerdir}
+---------------------
+Likewise, wxWidgets can also be outside of your project, but still be part
+of your application's build process. To do this, you will need to provide a
+build directory argument to `add_subdirectory()`.
+This will tell Cmake where to place wxWidget's build files.
+
+For example, if wxWidgets is one folder up from your project:
+~~~
+...
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../wxWidgets"
+                 "${CMAKE_CURRENT_SOURCE_DIR}/wxWidgets_lib")
+add_executable(myapp myapp.cpp)
+target_link_libraries(myapp wx::net wx::core wx::base)
+~~~
 
 Using XRC
 ---------
