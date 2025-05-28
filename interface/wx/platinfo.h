@@ -270,6 +270,9 @@ public:
     /**
         Returns the global wxPlatformInfo object, initialized with the values
         for the currently running platform.
+
+        Note that this function is thread-safe, i.e. it can be called
+        concurrently from multiple threads without locking.
     */
     static const wxPlatformInfo& Get();
 
