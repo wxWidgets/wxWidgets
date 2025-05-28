@@ -393,6 +393,7 @@ wxGTK:
 - Fix handling of binary secrets in wxSecretStore (Martin Corino, #24352).
 - Fix handling total window size with GNOME with X11 (#25348).
 - Fix missing enter/leave window events (#24339).
+- Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
 - Fix using wrong colour in wxPrinterDC (#24729).
 - Fix wxKeyEvent::GetKeyCode() in non-US layouts (Ivan Sorokin, #23379).
 - Implement generation of wxDPIChangedEvent (#19290, #24040).

@@ -430,6 +430,12 @@ void wxEGLUpdatePosition(wxGLCanvasEGL* win)
     wl_subsurface_set_position(win->m_wlSubsurface, x, y);
 }
 
+// Helper declared as friend in the header and so can access m_wlSurface.
+void wxEGLSetScale(wxGLCanvasEGL* win, int scale)
+{
+    wl_surface_set_buffer_scale(win->m_wlSurface, scale);
+}
+
 extern "C"
 {
 
@@ -490,6 +496,7 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
                          win->m_height * scale, 0, 0);
 
     wxEGLUpdatePosition(win);
+    wxEGLSetScale(win, scale);
 }
 
 } // extern "C"
