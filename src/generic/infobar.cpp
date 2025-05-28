@@ -72,7 +72,6 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     // calling Hide() before Create() ensures that we're created initially
     // hidden
     Hide();
-    SetWindowStyle(style);
     if ( !wxWindow::Create(parent, winid, wxDefaultPosition, wxDefaultSize, style) )
         return false;
 
