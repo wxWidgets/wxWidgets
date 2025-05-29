@@ -37,9 +37,14 @@ if(wxUSE_XRC)
             set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
         endif()
 
+        if(WIN32)
+            set(COPY_CMD copy)
+        else()
+            set(COPY_CMD create_symlink)
+        endif()
         # Don't use wx_install() here to preserve escaping.
         install(CODE "execute_process( \
-            COMMAND ${CMAKE_COMMAND} -E create_symlink \
+            COMMAND ${CMAKE_COMMAND} -E ${COPY_CMD} \
             \"${CMAKE_INSTALL_PREFIX}/bin/${wxrc_output_name}${EXE_SUFFIX}\" \
             \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX}\" \
             )"

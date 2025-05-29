@@ -61,9 +61,14 @@ else()
                     WORLD_EXECUTE WORLD_READ
         )
 
+    if(WIN32)
+        set(COPY_CMD copy)
+    else()
+        set(COPY_CMD create_symlink)
+    endif()
     install(DIRECTORY DESTINATION "bin")
     install(CODE "execute_process( \
-        COMMAND ${CMAKE_COMMAND} -E create_symlink \
+        COMMAND ${CMAKE_COMMAND} -E ${COPY_CMD} \
         \"${CMAKE_INSTALL_PREFIX}/lib/wx/config/${wxBUILD_FILE_ID}\" \
         \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wx-config\" \
         )"
