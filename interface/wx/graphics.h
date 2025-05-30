@@ -753,6 +753,13 @@ public:
     */
     virtual void Translate(wxDouble dx, wxDouble dy) = 0;
 
+    /**
+        @overload
+
+        @since 3.3.0
+    */
+    void Translate(const wxPoint2DDouble& pt);
+
     /** @}
     */
 

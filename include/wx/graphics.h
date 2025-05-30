@@ -238,6 +238,11 @@ public:
     // add the translation to this matrix
     virtual void Translate( wxDouble dx , wxDouble dy );
 
+    void Translate(const wxPoint2DDouble& pt)
+    {
+        Translate(pt.m_x, pt.m_y);
+    }
+
     // add the scale to this matrix
     virtual void Scale( wxDouble xScale , wxDouble yScale );
 
