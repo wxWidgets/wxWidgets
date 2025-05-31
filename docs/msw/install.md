@@ -494,15 +494,24 @@ MSVC, you also need to:
   depends on which libraries you use and whether you built wxWidgets in
   monolithic or default multi-lib mode and basically should include all the
   relevant libraries from the directory above, e.g. `wxmsw34ud_core.lib
-  wxbase34ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
-  wxexpatd.lib` for a debug build of an application using the core library of
-  wxWidgets 3.4 only (all wxWidgets applications use the base library).
-* When using static wxWidgets libraries, i.e. `WXUSINGDLL` is _not_ defined,
-  also add the list of Windows libraries to link with, which currently includes
-  the following libraries (some of which might be unnecessary depending on your
-  build configuration): `advapi32 comctl32 comdlg32 gdi32 gdiplus kernel32
-  msimg32 ole32 oleacc oleaut32 rpcrt4 shell32 shlwapi user32 uuid uxtheme
-  version wininet winmm winspool ws2_32`.
+  wxbase34ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxwebpd.lib wxzlibd.lib
+  wxregexud.lib wxexpatd.lib` for a debug build of an application using the
+  core library of wxWidgets 3.4 only (all wxWidgets applications use the base
+  library).
+* When using classes from non-core libraries, e.g. `wxPropertyGrid`, also link
+  with the corresponding library, as indicated in the class documentation, i.e.
+  `wxmsw34ud_propgrid.lib` in this case.
+* When using `wxStyledTextCtrl`, if static (not DLL) wxWidgets libraries are
+  used, then, in addition to linking with `wxmsw34ud_stc.lib`, you also need
+  to add `wxlexilla[d].lib` and `wxscintilla[d].lib` the list of libraries
+  to link with.
+* Finally, when using static wxWidgets libraries you must also add all Windows
+  libraries that are used by wxWidgets to the linker input. Currently this
+  means linking with the following libraries (some of which might be
+  unnecessary depending on your build configuration): `advapi32 comctl32
+  comdlg32 gdi32 gdiplus imm32 kernel32 msimg32 ole32 oleacc oleaut32 opengl32
+  rpcrt4 shell32 shlwapi user32 uuid uxtheme version wininet winmm winspool
+  ws2_32`.
 
 For example, to compile your program with gcc using debug wxWidgets DLLs
 you would need to use the following options for the compiler (and `windres`
