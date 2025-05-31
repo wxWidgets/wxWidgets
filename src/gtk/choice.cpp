@@ -432,7 +432,17 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
         if (gtk_tree_model_get_iter_first(model, &iter))
             model = nullptr;
         else
-            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(m_widget), "Gg");
+        {
+            gtk_list_store_insert_with_values
+            (
+                GTK_LIST_STORE(model),
+                nullptr,                // No output iterator.
+                -1,                     // Position: append.
+                m_stringCellIndex,      // Text column index.
+                "Gg",                   // This column value.
+                -1                      // Terminate the list of values.
+            );
+        }
     }
 #endif
 

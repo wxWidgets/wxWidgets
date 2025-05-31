@@ -392,6 +392,7 @@ wxGTK:
 - Don't require libsecret-1.so presence at run-time (#25355).
 - Fix handling of binary secrets in wxSecretStore (Martin Corino, #24352).
 - Fix handling total window size with GNOME with X11 (#25348).
+- Fix height of read-only wxBitmapComboBox (#25468).
 - Fix missing enter/leave window events (#24339).
 - Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
 - Fix using wrong colour in wxPrinterDC (#24729).
