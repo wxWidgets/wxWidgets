@@ -7536,12 +7536,14 @@ dnl ---------------------------------------------------------------------------
 dnl wxStyledTextCtrl
 dnl ---------------------------------------------------------------------------
 
-for lib in scintilla lexilla; do
-    WXCONFIG_STC_LIBS="$WXCONFIG_STC_LIBS -lwx${lib}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
-done
+if test "$wxUSE_STC" = "yes" ; then
+    for lib in scintilla lexilla; do
+        WXCONFIG_STC_LIBS="$WXCONFIG_STC_LIBS -lwx${lib}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+    done
 
-if test "$wxUSE_MSW" = 1 ; then
-    EXTRALIBS_STC="-limm32"
+    if test "$wxUSE_MSW" = 1 ; then
+        EXTRALIBS_STC="-limm32"
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
