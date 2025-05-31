@@ -259,6 +259,7 @@ All (GUI):
 wxGTK:
 
 - Fix handling total window size with GNOME with X11 (#25348).
+- Fix height of read-only wxBitmapComboBox (#25468).
 
 wxOSX:
 
