@@ -497,7 +497,12 @@ MSVC, you also need to:
   wxbase34ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
   wxexpatd.lib` for a debug build of an application using the core library of
   wxWidgets 3.4 only (all wxWidgets applications use the base library).
-
+* When using static wxWidgets libraries, i.e. `WXUSINGDLL` is _not_ defined,
+  also add the list of Windows libraries to link with, which currently includes
+  the following libraries (some of which might be unnecessary depending on your
+  build configuration): `advapi32 comctl32 comdlg32 gdi32 gdiplus kernel32
+  msimg32 ole32 oleacc oleaut32 rpcrt4 shell32 shlwapi user32 uuid uxtheme
+  version wininet winmm winspool ws2_32`.
 
 For example, to compile your program with gcc using debug wxWidgets DLLs
 you would need to use the following options for the compiler (and `windres`
