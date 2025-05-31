@@ -12,14 +12,6 @@ include(CMakeParseArguments)           # For compatibility with CMake < 3.4
 include(ExternalProject)
 include(CMakePrintHelpers)
 
-# Use the MSVC/makefile naming convention, or the configure naming convention,
-# this is the same check as used in FindwxWidgets.
-if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_CROSSCOMPILING)
-    set(WIN32_MSVC_NAMING 1)
-else()
-    set(WIN32_MSVC_NAMING 0)
-endif()
-
 
 # List of libraries added via wx_add_library() to use for wx-config
 # and headers added via wx_append_sources() to use for install.
@@ -500,11 +492,11 @@ macro(wx_add_library name)
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
         # Setup install
-        if(MSYS OR CYGWIN)
+        if(wxUSE_MSVC_NAMING)
+            set(runtime_default_dir "lib")
+        else()
             # configure puts the .dll in the bin directory
             set(runtime_default_dir "bin")
-        else()
-            set(runtime_default_dir "lib")
         endif()
 
         wx_get_install_dir(library "lib")
