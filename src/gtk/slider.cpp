@@ -312,32 +312,24 @@ bool wxSlider::Create(wxWindow *parent,
         return false;
     }
 
-    const bool isVertical = (style & wxSL_VERTICAL) != 0;
+    const bool isVertical = (style & (wxSL_LEFT | wxSL_RIGHT | wxSL_VERTICAL)) != 0;
     m_scale = gtk_scale_new(GtkOrientation(isVertical), nullptr);
 
     if (style & wxSL_MIN_MAX_LABELS)
     {
         gtk_widget_show( m_scale );
 
-        m_widget = gtk_box_new(GtkOrientation(!isVertical), 0);
-        gtk_box_pack_start(GTK_BOX(m_widget), m_scale, true, true, 0);
-
-        GtkWidget* box = gtk_box_new(GtkOrientation(isVertical), 0);
-        gtk_widget_show(box);
-        gtk_box_pack_start(GTK_BOX(m_widget), box, true, true, 0);
+        m_widget = gtk_box_new(GtkOrientation(isVertical), 0);
 
         m_minLabel = gtk_label_new(nullptr);
         gtk_widget_show( m_minLabel );
-        gtk_box_pack_start(GTK_BOX(box), m_minLabel, false, false, 0);
-
-        // expanding empty space between the min/max labels
-        GtkWidget *space = gtk_label_new(nullptr);
-        gtk_widget_show( space );
-        gtk_box_pack_start(GTK_BOX(box), space, true, false, 0);
 
         m_maxLabel = gtk_label_new(nullptr);
         gtk_widget_show( m_maxLabel );
-        gtk_box_pack_end(GTK_BOX(box), m_maxLabel, false, false, 0);
+
+        gtk_box_pack_start(GTK_BOX(m_widget), m_minLabel, false, false, 0);
+        gtk_box_pack_start(GTK_BOX(m_widget), m_scale, true, true, 0);
+        gtk_box_pack_start(GTK_BOX(m_widget), m_maxLabel, false, false, 0);
     }
     else
     {
@@ -351,26 +343,51 @@ bool wxSlider::Create(wxWindow *parent,
     gtk_scale_set_draw_value(GTK_SCALE (m_scale), showValueLabel );
     if ( showValueLabel )
     {
+        float xAlign = 0.5f;
+        float yAlign = 0.5f;
+
         // Position the label appropriately: notice that wxSL_DIRECTION flags
         // specify the position of the ticks, not label, and so the
         // label is on the opposite side.
         GtkPositionType posLabel;
-        if ( style & wxSL_VERTICAL )
+        if (isVertical)
         {
             if ( style & wxSL_LEFT )
+            {
                 posLabel = GTK_POS_RIGHT;
+                xAlign = 0.25f;
+            }
             else // if ( style & wxSL_RIGHT ) -- this is also the default
+            {
                 posLabel = GTK_POS_LEFT;
+                xAlign = 0.75f;
+            }
         }
         else // horizontal slider
         {
             if ( style & wxSL_TOP )
+            {
                 posLabel = GTK_POS_BOTTOM;
+                yAlign = 0.25f;
+            }
             else // if ( style & wxSL_BOTTOM) -- this is again the default
+            {
                 posLabel = GTK_POS_TOP;
+                yAlign = 0.75f;
+            }
         }
 
         gtk_scale_set_value_pos( GTK_SCALE(m_scale), posLabel );
+
+        if (m_minLabel)
+        {
+            // The value label causes the slider to be somewhat off-center,
+            // try to keep the labels approximately aligned with it.
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+            gtk_misc_set_alignment(GTK_MISC(m_minLabel), xAlign, yAlign);
+            gtk_misc_set_alignment(GTK_MISC(m_maxLabel), xAlign, yAlign);
+            wxGCC_WARNING_RESTORE()
+        }
     }
 
     // Keep full precision in position value
