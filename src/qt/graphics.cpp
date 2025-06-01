@@ -84,7 +84,7 @@ private:
         for ( size_t i = 0; i < stops.GetCount(); ++i )
         {
             const wxGraphicsGradientStop stop = stops.Item(i);
-            qstops.append(QGradientStop(stop.GetPosition(),
+            qstops.append(QGradientStop(double(stop.GetPosition()),
                                         stop.GetColour().GetQColor()));
         }
 
