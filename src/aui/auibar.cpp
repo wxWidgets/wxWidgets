@@ -2426,6 +2426,7 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
                 if (pane.IsDocked())
                 {
                     pane.floating_size = wxDefaultSize;
+                    pane.floating_client_size = wxDefaultSize;
                 }
                 else
                 {

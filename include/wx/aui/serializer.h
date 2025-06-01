@@ -72,6 +72,7 @@ struct wxAuiPaneLayoutInfo : wxAuiDockLayoutInfo
     // Floating pane geometry, may be invalid.
     wxPoint floating_pos = wxDefaultPosition;
     wxSize floating_size = wxDefaultSize;
+    wxSize floating_client_size = wxDefaultSize;
 
 
     // The remaining fields correspond to individual bits of the pane state

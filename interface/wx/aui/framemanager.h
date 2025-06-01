@@ -765,9 +765,23 @@ public:
     //@{
     /**
         FloatingSize() sets the size of the floating pane.
+        FloatingClientSize() has precedence over this.
     */
     wxAuiPaneInfo& FloatingSize(const wxSize& size);
     wxAuiPaneInfo& FloatingSize(int x, int y);
+    //@}
+
+    //@{
+    /**
+        FloatingClientSize() sets the client size of the floating pane.
+        This has precedence over FloatingSize().
+
+        @see wxWindow::SetClientSize
+
+        @since 3.3.0
+    */
+    wxAuiPaneInfo& FloatingClientSize(const wxSize& size);
+    wxAuiPaneInfo& FloatingClientSize(int x, int y);
     //@}
 
     /**
