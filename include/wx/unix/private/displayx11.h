@@ -163,7 +163,7 @@ void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height)
         if (status == Success && actual_type == XA_CARDINAL &&
             actual_format == 32 && nitems == 4)
         {
-            const long* p = (long*)data.get();
+            const long* p = (const long*)data.get();
             x = p[0];
             y = p[1];
             width = p[2];

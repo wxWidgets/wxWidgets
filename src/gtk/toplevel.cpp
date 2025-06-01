@@ -581,7 +581,7 @@ wxGetFrameExtents(GdkWindow* window, wxTopLevelWindow::DecorSize* decorSize)
     if (wx_is_at_least_gtk3(10))
         scale = gdk_window_get_scale_factor(window);
 #endif
-    long* p = (long*)data.get();
+    const long* p = (const long*)data.get();
     decorSize->left   = int(p[0]) / scale;
     decorSize->right  = int(p[1]) / scale;
     decorSize->top    = int(p[2]) / scale;

@@ -405,7 +405,7 @@ static bool wxKwinRunning(Display *display, Window rootWnd)
     }
 
     return (type == KWIN_RUNNING &&
-                   nitems == 1 && data && ((long*)data.get())[0] == 1);
+                   nitems == 1 && data && ((const long*)data.get())[0] == 1);
 }
 
 // KDE's kwin is Qt-centric so much than no normal method of fullscreen
