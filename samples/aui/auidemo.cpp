@@ -1051,7 +1051,8 @@ MyFrame::MyFrame(wxWindow* parent,
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name("test7").Caption("Client Size Reporter").
+                  Name("test7").Caption("Float Client Size 111x222").
+                  FloatingClientSize(wxSize(111, 222)).
                   Left().Layer(1).
                   CloseButton(true).MaximizeButton(true));
 
@@ -1729,6 +1730,8 @@ public:
 
         AddChild(node, "floating-rect",
                  wxRect(pane.floating_pos, pane.floating_size));
+        AddChild(node, "floating-client-rect",
+                 wxRect(pane.floating_pos, pane.floating_client_size));
 
         // Don't bother creating many "maximized" nodes with value 0 when we
         // can have at most one of them with value 1.
@@ -1936,6 +1939,13 @@ public:
 
                         pane.floating_pos = rect.GetPosition();
                         pane.floating_size = rect.GetSize();
+                    }
+                    else if ( name == "floating-client-rect" )
+                    {
+                        auto rect = GetRect(content);
+
+                        pane.floating_pos = rect.GetPosition();
+                        pane.floating_client_size = rect.GetSize();
                     }
                     else if ( name == "maximized" )
                     {
