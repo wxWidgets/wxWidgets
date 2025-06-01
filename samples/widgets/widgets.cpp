@@ -744,7 +744,7 @@ void WidgetsFrame::InitBook()
 
     wxTreeItemIdValue cookie;
     tree->EnsureVisible(tree->GetFirstChild(tree->GetRootItem(), cookie));
-    tree->SetMinSize(wxSize(tree->GetBestSize().GetWidth() * 1.1, wxDefaultCoord));
+    tree->SetMinSize(wxSize(tree->GetBestSize().GetWidth() * 9 / 8, wxDefaultCoord));
 #else
     if ( !pageSet || !m_book->GetCurrentPage() )
     {

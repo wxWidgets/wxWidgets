@@ -1562,12 +1562,14 @@ wxQtGraphicsRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
     const int srcHeight = sourcePixmap.height();
     const int dstWidth = wxRound(w);
     const int dstHeight = wxRound(h);
+    const int dstX = wxRound(x);
+    const int dstY = wxRound(y);
 
-    wxCHECK_MSG(x >= 0.0 && y >= 0.0 && dstWidth > 0 && dstHeight > 0 &&
-            x + dstWidth <= srcWidth && y + dstHeight <= srcHeight,
+    wxCHECK_MSG(dstX >= 0 && dstY >= 0 && dstWidth > 0 && dstHeight > 0 &&
+            dstX + dstWidth <= srcWidth && dstY + dstHeight <= srcHeight,
             wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
 
-    QPixmap subPixmap = sourcePixmap.copy(x, y, w, h);
+    QPixmap subPixmap = sourcePixmap.copy(dstX, dstY, dstWidth, dstHeight);
 
     wxGraphicsBitmap bmpRes;
     bmpRes.SetRefData(new wxQtBitmapData(this, subPixmap));

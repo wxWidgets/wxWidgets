@@ -1021,7 +1021,7 @@ void wxWebViewWebKit::SetWebkitZoom(float level)
 
 float wxWebViewWebKit::GetWebkitZoom() const
 {
-    return webkit_web_view_get_zoom_level(m_web_view);
+    return float(webkit_web_view_get_zoom_level(m_web_view));
 }
 
 void wxWebViewWebKit::EnableAccessToDevTools(bool enable)

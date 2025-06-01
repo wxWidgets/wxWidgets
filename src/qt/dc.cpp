@@ -212,7 +212,7 @@ wxSize wxQtDCImpl::GetPPI() const
     if (!srn)
         return wxSize(m_qtPainter->device()->logicalDpiX(), m_qtPainter->device()->logicalDpiY());
     qreal dotsPerInch = srn->logicalDotsPerInch();
-    return wxSize(round(dotsPerInch), round(dotsPerInch));
+    return wxSize(std::lround(dotsPerInch), std::lround(dotsPerInch));
 }
 
 void wxQtDCImpl::SetFont(const wxFont& font)
