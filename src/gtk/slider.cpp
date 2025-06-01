@@ -312,6 +312,7 @@ bool wxSlider::Create(wxWindow *parent,
         return false;
     }
 
+    // Note that wxSL_LEFT or wxSL_RIGHT imply vertical layout too, as in wxMSW.
     const bool isVertical = (style & (wxSL_LEFT | wxSL_RIGHT | wxSL_VERTICAL)) != 0;
     m_scale = gtk_scale_new(GtkOrientation(isVertical), nullptr);
 
