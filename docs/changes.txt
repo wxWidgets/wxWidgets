@@ -275,6 +275,7 @@ wxGTK
 
 - Fix using SetBitmap() on wxMenuItem created without a bitmap (ykne, #26771).
 - Fix memory leak with using custom handlers in wxWebView (Blake-Madden, #26784).
+- Use string passed to wxApp::SetClassName() as Wayland app-id (#24668).
 
 wxMSW:
 
