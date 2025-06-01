@@ -904,6 +904,8 @@ bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& paneInfo,
                 existing_pane.FloatingPosition(paneInfo.floating_pos);
             if (paneInfo.floating_size != wxDefaultSize)
                 existing_pane.FloatingSize(paneInfo.floating_size);
+            if (paneInfo.floating_client_size != wxDefaultSize)
+                existing_pane.FloatingClientSize(paneInfo.floating_client_size);
         }
         else
         {
@@ -1154,7 +1156,9 @@ wxString wxAuiManager::SavePaneInfo(const wxAuiPaneInfo& pane)
     result += wxString::Format(wxT("floatx=%d;"), pane.floating_pos.x);
     result += wxString::Format(wxT("floaty=%d;"), pane.floating_pos.y);
     result += wxString::Format(wxT("floatw=%d;"), pane.floating_size.x);
-    result += wxString::Format(wxT("floath=%d"), pane.floating_size.y);
+    result += wxString::Format(wxT("floath=%d;"), pane.floating_size.y);
+    result += wxString::Format(wxT("floatw_cli=%d;"), pane.floating_client_size.x);
+    result += wxString::Format(wxT("floath_cli=%d"), pane.floating_client_size.y);
 
     return result;
 }
@@ -1162,6 +1166,16 @@ wxString wxAuiManager::SavePaneInfo(const wxAuiPaneInfo& pane)
 // Load a "pane" with the pane information settings in pane_part
 void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
 {
+    // For backward compatibility, this function needs to handle
+    // both layout2 and layout3.  However, layout3 is a superset
+    // of layout2, so we don't need to actually check both
+    LoadPaneInfoVersioned("layout3", pane_part, pane);
+}
+
+bool wxAuiManager::LoadPaneInfoVersioned(wxString layoutVersion, wxString pane_part, wxAuiPaneInfo& destination)
+{
+    // don't overwrite destination unless pane_part is valid
+    wxAuiPaneInfo pane(destination);
     // replace escaped characters so we can
     // split up the string easily
     pane_part.Replace(wxT("\\|"), wxT("\a"));
@@ -1218,8 +1232,12 @@ void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
             pane.floating_size.x = wxAtoi(value.c_str());
         else if (val_name == wxT("floath"))
             pane.floating_size.y = wxAtoi(value.c_str());
+        else if (val_name == wxT("floatw_cli") && layoutVersion == "layout3")
+            pane.floating_client_size.x = wxAtoi(value.c_str());
+        else if (val_name == wxT("floath_cli") && layoutVersion == "layout3")
+            pane.floating_client_size.y = wxAtoi(value.c_str());
         else {
-            wxFAIL_MSG(wxT("Bad Perspective String"));
+            return false;
         }
     }
 
@@ -1232,7 +1250,8 @@ void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
     pane_part.Replace(wxT("\a"), wxT("|"));
     pane_part.Replace(wxT("\b"), wxT(";"));
 
-    return;
+    destination = pane;
+    return true;
 }
 
 
@@ -1245,7 +1264,7 @@ wxString wxAuiManager::SavePerspective()
 {
     wxString result;
     result.Alloc(500);
-    result = wxT("layout2|");
+    result = wxT("layout3|");
 
     for ( const auto& pane : m_panes )
     {
@@ -1268,16 +1287,18 @@ wxString wxAuiManager::SavePerspective()
 bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
 {
     wxString input = layout;
-    wxString part;
+    wxString layoutVersion;
 
     // check layout string version
     //    'layout1' = wxAUI 0.9.0 - wxAUI 0.9.2
     //    'layout2' = wxAUI 0.9.2 (wxWidgets 2.8)
-    part = input.BeforeFirst(wxT('|'));
+    //    'layout3' = wxWidgets 3.3.1
+    layoutVersion = input.BeforeFirst(wxT('|'));
     input = input.AfterFirst(wxT('|'));
-    part.Trim(true);
-    part.Trim(false);
-    if (part != wxT("layout2"))
+    layoutVersion.Trim(true);
+    layoutVersion.Trim(false);
+    if (layoutVersion != wxT("layout2") &&
+        layoutVersion != wxT("layout3"))
         return false;
 
     // Mark all panes currently managed as hidden. Also, dock all panes that are dockable.
@@ -1337,7 +1358,10 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         pane_part.Replace(wxT("\a"), wxT("|"));
         pane_part.Replace(wxT("\b"), wxT(";"));
 
-        LoadPaneInfo(pane_part, pane);
+        if (!LoadPaneInfoVersioned(layoutVersion, pane_part, pane))
+        {
+            return false;
+        }
 
         if ( pane.IsMaximized() )
             m_hasMaximized = true;
@@ -1445,6 +1469,7 @@ wxAuiManager::CopyLayoutFrom(wxAuiPaneLayoutInfo& layoutInfo,
 
     layoutInfo.floating_pos = pane.floating_pos;
     layoutInfo.floating_size = pane.floating_size;
+    layoutInfo.floating_client_size = pane.floating_client_size;
 
     layoutInfo.is_maximized = pane.HasFlag(wxAuiPaneInfo::optionMaximized);
     layoutInfo.is_hidden = pane.HasFlag(wxAuiPaneInfo::optionHidden);
@@ -1458,6 +1483,7 @@ wxAuiManager::CopyLayoutTo(const wxAuiPaneLayoutInfo& layoutInfo,
 
     pane.floating_pos = layoutInfo.floating_pos;
     pane.floating_size = layoutInfo.floating_size;
+    pane.floating_client_size = layoutInfo.floating_client_size;
 
     pane.SetFlag(wxAuiPaneInfo::optionMaximized, layoutInfo.is_maximized);
     pane.SetFlag(wxAuiPaneInfo::optionHidden, layoutInfo.is_hidden);
@@ -1482,6 +1508,7 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
 
             MakeDIP(m_frame, layoutInfo.floating_pos);
             MakeDIP(m_frame, layoutInfo.floating_size);
+            MakeDIP(m_frame, layoutInfo.floating_client_size);
 
             serializer.SavePane(layoutInfo);
 
@@ -1538,6 +1565,7 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
     {
         MakeLogical(m_frame, layoutInfo.floating_pos);
         MakeLogical(m_frame, layoutInfo.floating_size);
+        MakeLogical(m_frame, layoutInfo.floating_client_size);
 
         // Find the pane with the same name in the existing layout.
         wxWindow* window = nullptr;
@@ -2532,11 +2560,22 @@ void wxAuiManager::Update()
             {
                 // frame already exists, make sure its position
                 // and size reflect the information in wxAuiPaneInfo
-                if ((p.frame->GetPosition() != p.floating_pos) || (p.frame->GetSize() != p.floating_size))
+                // give floating_client_size precedence over floating_size
+                if ((p.frame->GetPosition() != p.floating_pos) ||
+                    ((p.floating_size != wxDefaultSize) && (p.frame->GetSize() != p.floating_size)) ||
+                    ((p.floating_client_size != wxDefaultSize) && (p.frame->GetClientSize() != p.floating_client_size)))
                 {
-                    p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
-                                     p.floating_size.x, p.floating_size.y,
-                                     wxSIZE_USE_EXISTING);
+                    if (p.floating_client_size != wxDefaultSize)
+                    {
+                        p.frame->SetPosition(p.floating_pos);
+                        p.frame->SetClientSize(p.floating_client_size);
+                    }
+                    else
+                    {
+                        p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
+                                         p.floating_size.x, p.floating_size.y,
+                                         wxSIZE_USE_EXISTING);
+                    }
                 /*
                     p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
                                      wxDefaultCoord, wxDefaultCoord,
@@ -2790,6 +2829,7 @@ bool wxAuiManager::ProcessDockResult(wxAuiPaneInfo& target,
             {
                 target.best_size = hintSize;
                 target.floating_size = wxDefaultSize;
+                target.floating_client_size = wxDefaultSize;
             }
         }
     }
@@ -3684,8 +3724,15 @@ void wxAuiManager::OnFloatingPaneResized(wxWindow* wnd, const wxRect& rect)
     // try to find the pane
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
+    // if frame isn't fully set up, don't stomp on pos/size info
+    if (!pane.frame)
+    {
+        return;
+    }
 
-    pane.FloatingSize(rect.GetWidth(), rect.GetHeight());
+    // Setting floating client size is enough, there is no need to set floating
+    // size, as it won't be used if the client size is set.
+    pane.FloatingClientSize(pane.frame->WindowToClientSize(rect.GetSize()));
 
     // the top-left position may change as well as the size
     pane.FloatingPosition(rect.x, rect.y);
