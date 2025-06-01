@@ -51,6 +51,8 @@
     #pragma warning(disable:4702)
 #endif
 
+wxGCC_WARNING_SUPPRESS(cast-qual)
+
 #if !wxUSE_NANOSVG_EXTERNAL || defined(wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL)
     #define NANOSVG_IMPLEMENTATION
     #define NANOSVGRAST_IMPLEMENTATION
@@ -64,6 +66,8 @@
     #include "../../3rdparty/nanosvg/src/nanosvg.h"
     #include "../../3rdparty/nanosvg/src/nanosvgrast.h"
 #endif
+
+wxGCC_WARNING_RESTORE(cast-qual)
 
 #ifdef __VISUALC__
     #pragma warning(pop)
