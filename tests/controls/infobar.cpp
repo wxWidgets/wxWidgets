@@ -24,17 +24,19 @@
 namespace
 {
 
-TEST_CASE("wxInfoBar", "[wxInfoBar]")
-{
-    SECTION("Buttons")
+    TEST_CASE("wxInfoBar", "[wxInfoBar]")
     {
-        const std::unique_ptr<wxInfoBar>
-            info(new wxInfoBar(wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX));
+        SECTION("Buttons")
+        {
+            const std::unique_ptr<wxInfoBar>
+                info(new wxInfoBar(wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX));
 
-        CHECK(1 == info->GetButtonCount());
-        CHECK(wxID_HIGHEST + 1000 == info->GetButtonId(0));
-        CHECK(info->HasButtonId(wxID_HIGHEST + 1000));
-        info->RemoveButton(wxID_HIGHEST + 1000);
-        CHECK(0 == info->GetButtonCount());
+            CHECK(1 == info->GetButtonCount());
+            CHECK(wxID_HIGHEST + 1000 == info->GetButtonId(0));
+            CHECK(info->HasButtonId(wxID_HIGHEST + 1000));
+            info->RemoveButton(wxID_HIGHEST + 1000);
+            CHECK(0 == info->GetButtonCount());
+        }
     }
+
 }
