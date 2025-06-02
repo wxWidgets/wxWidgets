@@ -148,6 +148,7 @@
 #ifdef wxENABLE_EXTRA_WARNINGS
 #   ifdef __GNUC__
 #       pragma GCC diagnostic warning "-Wcast-qual"
+#       pragma GCC diagnostic warning "-Wdouble-promotion"
 #       pragma GCC diagnostic warning "-Wextra"
 #   endif
 #endif

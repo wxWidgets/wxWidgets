@@ -52,6 +52,7 @@
 #endif
 
 wxGCC_WARNING_SUPPRESS(cast-qual)
+wxGCC_WARNING_SUPPRESS(double-promotion)
 
 #if !wxUSE_NANOSVG_EXTERNAL || defined(wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL)
     #define NANOSVG_IMPLEMENTATION
@@ -67,6 +68,7 @@ wxGCC_WARNING_SUPPRESS(cast-qual)
     #include "../../3rdparty/nanosvg/src/nanosvgrast.h"
 #endif
 
+wxGCC_WARNING_RESTORE(double-promotion)
 wxGCC_WARNING_RESTORE(cast-qual)
 
 #ifdef __VISUALC__
