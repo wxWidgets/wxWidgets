@@ -89,7 +89,7 @@ public:
     wxString GetName() const { return m_volName; }
     wxString GetDisplayName() const { return m_dispName; }
 
-    // TODO: operatios (Mount(), Unmount(), Eject(), ...)?
+    // TODO: Add operations (Mount(), Unmount(), Eject(), ...)?
 
 protected:
     // the internal volume name
