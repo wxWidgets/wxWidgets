@@ -30,6 +30,8 @@ namespace
         {
             const std::unique_ptr<wxInfoBar>
                 info(new wxInfoBar(wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX));
+
+            CHECK(0 == info->GetButtonCount());
             info->AddButton(wxID_HIGHEST + 1000, "test");
 
             CHECK(1 == info->GetButtonCount());
