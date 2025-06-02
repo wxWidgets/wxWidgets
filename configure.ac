@@ -728,7 +728,9 @@ WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conv
 WX_ARG_FEATURE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
 WX_ARG_FEATURE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
 WX_ARG_FEATURE(fs_zip,        [  --enable-fs_zip         now replaced by fs_archive], wxUSE_FS_ZIP)
+if test "$USE_WIN32" = 1 -o "$USE_DARWIN"; then
 WX_ARG_FEATURE(fsvolume,      [  --enable-fsvolume       use wxFSVolume class], wxUSE_FSVOLUME)
+fi
 WX_ARG_FEATURE(fswatcher,     [  --enable-fswatcher      use wxFileSystemWatcher class], wxUSE_FSWATCHER)
 WX_ARG_FEATURE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wxUSE_LOG)
@@ -5454,7 +5456,11 @@ if test "$wxUSE_FS_ZIP" = "yes"; then
 fi
 
 if test "$wxUSE_FSVOLUME" = "yes"; then
-  AC_DEFINE(wxUSE_FSVOLUME)
+  dnl wxFSVolume is not available under iOS, but it's probably not worth
+  dnl warning about this.
+  if test "$wxUSE_OSX_IPHONE" != 1; then
+    AC_DEFINE(wxUSE_FSVOLUME)
+  fi
 fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then

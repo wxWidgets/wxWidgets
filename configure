@@ -7436,6 +7436,7 @@ fi
 
           eval "$wx_cv_use_fs_zip"
 
+if test "$USE_WIN32" = 1 -o "$USE_DARWIN"; then
 
           enablestring=
           defaultval=$wxUSE_ALL_FEATURES
@@ -7465,6 +7466,7 @@ fi
 
           eval "$wx_cv_use_fsvolume"
 
+fi
 
           enablestring=
           defaultval=$wxUSE_ALL_FEATURES
@@ -37518,8 +37520,10 @@ $as_echo "$as_me: WARNING: wxZipFSHandler requires wxArchiveFSHandler... disable
 fi
 
 if test "$wxUSE_FSVOLUME" = "yes"; then
-  $as_echo "#define wxUSE_FSVOLUME 1" >>confdefs.h
+      if test "$wxUSE_OSX_IPHONE" != 1; then
+    $as_echo "#define wxUSE_FSVOLUME 1" >>confdefs.h
 
+  fi
 fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then

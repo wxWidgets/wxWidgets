@@ -53,10 +53,10 @@ enum wxFSIconType
     @class wxFSVolume
 
     wxFSVolume represents a volume (also known as 'drive') in a file system
-    under wxMSW.
+    under Windows or macOS.
 
-    Unix ports of wxWidgets do not have the concept of volumes and thus do
-    not implement wxFSVolume.
+    wxWidgets ports other than wxMSW and wxOSX don't provide this class and
+    wxUSE_FSVOLUME is always 0 for them.
 
     @onlyfor{wxmsw,wxosx}
 
