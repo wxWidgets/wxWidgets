@@ -731,6 +731,9 @@ wxAuiPaneInfo objects have the following properties:
     Sets the ideal size for the pane.}
 @row3col{floating_size, @ref overview_xrcformat_type_size,
     Sets the size of the floating pane.}
+@row3col{floating_client_size, @ref overview_xrcformat_type_size,
+    Sets the client size of the floating pane. This has precedence over
+    floating_size.}
 @row3col{min_size, @ref overview_xrcformat_type_size,
     Sets the minimum size of the pane.}
 @row3col{max_size, @ref overview_xrcformat_type_size,

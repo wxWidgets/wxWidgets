@@ -625,6 +625,7 @@ wxAuiPaneInfo =
         [xrc:p="o"] element movable         {_, t_bool }* &
         [xrc:p="o"] element floatable       {_, t_bool }* &
         [xrc:p="o"] element floating_size   {_, t_size }* &
+        [xrc:p="o"] element floating_client_size   {_, t_size }* &
         [xrc:p="o"] element min_size        {_, t_size }* &
         [xrc:p="o"] element max_size        {_, t_size }* &
         [xrc:p="o"] element best_size       {_, t_size }* &

@@ -3715,8 +3715,8 @@ void wxAuiManager::OnFloatingPaneResized(wxWindow* wnd, const wxRect& rect)
         return;
     }
 
-    /* client size has precedence over wnd size,
-        so I don't think we need to set wnd size */
+    // Setting floating client size is enough, there is no need to set floating
+    // size, as it won't be used if the client size is set.
     pane.FloatingClientSize(pane.frame->WindowToClientSize(rect.GetSize()));
 
     // the top-left position may change as well as the size
