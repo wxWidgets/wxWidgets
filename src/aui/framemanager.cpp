@@ -1253,7 +1253,7 @@ wxString wxAuiManager::SavePerspective()
 {
     wxString result;
     result.Alloc(500);
-    result = wxT("layout2|");
+    result = wxT("layout3|");
 
     for ( const auto& pane : m_panes )
     {
@@ -1281,11 +1281,12 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
     // check layout string version
     //    'layout1' = wxAUI 0.9.0 - wxAUI 0.9.2
     //    'layout2' = wxAUI 0.9.2 (wxWidgets 2.8)
+    //    'layout3' = wxWidgets 3.3
     part = input.BeforeFirst(wxT('|'));
     input = input.AfterFirst(wxT('|'));
     part.Trim(true);
     part.Trim(false);
-    if (part != wxT("layout2"))
+    if (part != wxT("layout3"))
         return false;
 
     // Mark all panes currently managed as hidden. Also, dock all panes that are dockable.
