@@ -31,10 +31,10 @@ TEST_CASE("wxInfoBar", "[wxInfoBar]")
         const std::unique_ptr<wxInfoBar>
             info(new wxInfoBar(wxTheApp->GetTopWindow(), wxID_ANY, wxINFOBAR_CHECKBOX));
 
-        ASSERT_EQUAL(1, info->GetButtonCount());
-        ASSERT_EQUAL(wxID_HIGHEST + 1000, info->GetButtonId(0));
-        ASSERT(info->HasButtonId(wxID_HIGHEST + 1000));
+        CHECK(1 == info->GetButtonCount());
+        CHECK(wxID_HIGHEST + 1000 == info->GetButtonId(0));
+        CHECK(info->HasButtonId(wxID_HIGHEST + 1000));
         info->RemoveButton(wxID_HIGHEST + 1000);
-        ASSERT_EQUAL(0, info->GetButtonCount());
+        CHECK(0 == info->GetButtonCount());
     }
 }
