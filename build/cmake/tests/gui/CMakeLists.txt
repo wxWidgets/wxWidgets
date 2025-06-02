@@ -48,6 +48,7 @@ set(TEST_GUI_SRC
     controls/htmllboxtest.cpp
     controls/hyperlinkctrltest.cpp
     controls/itemcontainertest.cpp
+    controls/infobar.cpp
     controls/label.cpp
     controls/listbasetest.cpp
     controls/listbooktest.cpp
