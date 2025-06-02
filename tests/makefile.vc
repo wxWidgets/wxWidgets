@@ -1314,6 +1314,9 @@ $(OBJS)\test_gui_hyperlinkctrltest.obj: .\controls\hyperlinkctrltest.cpp
 $(OBJS)\test_gui_itemcontainertest.obj: .\controls\itemcontainertest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\itemcontainertest.cpp
 
+$(OBJS)\test_gui_infobar.obj: .\controls\infobar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\infobar.cpp
+
 $(OBJS)\test_gui_label.obj: .\controls\label.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\label.cpp
 

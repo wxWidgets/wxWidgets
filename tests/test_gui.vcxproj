@@ -932,6 +932,7 @@
     <ClCompile Include="controls\htmllboxtest.cpp" />
     <ClCompile Include="controls\hyperlinkctrltest.cpp" />
     <ClCompile Include="controls\itemcontainertest.cpp" />
+    <ClCompile Include="controls\infobar.cpp" />
     <ClCompile Include="controls\label.cpp" />
     <ClCompile Include="controls\listbasetest.cpp" />
     <ClCompile Include="controls\listbooktest.cpp" />
