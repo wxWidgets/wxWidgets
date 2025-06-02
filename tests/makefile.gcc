@@ -1013,6 +1013,9 @@ $(OBJS)\test_gui_hyperlinkctrltest.o: ./controls/hyperlinkctrltest.cpp
 $(OBJS)\test_gui_itemcontainertest.o: ./controls/itemcontainertest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_gui_infobar.o: ./controls/infobar.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_gui_label.o: ./controls/label.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 

@@ -131,6 +131,9 @@
     <ClCompile Include="image\image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="controls\infobar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\itemcontainertest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

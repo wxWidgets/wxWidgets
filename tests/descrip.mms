@@ -578,6 +578,9 @@ test_gui_itemcontainertest.obj : [.controls]itemcontainertest.cpp
 test_gui_label.obj : [.controls]label.cpp 
 	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]label.cpp
 
+test_gui_infobar.obj : [.controls]infobar.cpp 
+	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]infobar.cpp
+
 test_gui_listbasetest.obj : [.controls]listbasetest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]listbasetest.cpp
 
