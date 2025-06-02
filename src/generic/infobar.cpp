@@ -138,7 +138,6 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     firstRowSizer->Add(m_icon, wxSizerFlags{}.Centre().Border());
     firstRowSizer->Add(m_text, wxSizerFlags{}.Proportion(1).Centre());
     firstRowSizer->AddSpacer(0); // This spacer only exists for compatibility.
-    firstRowSizer->Add(m_button, wxSizerFlags{}.Centre().Border());
 
     wxBoxSizer* const secondRowSizer = new wxBoxSizer(wxHORIZONTAL);
     secondRowSizer->Add(m_checkbox, wxSizerFlags{}.CentreVertical().Border());
@@ -148,6 +147,7 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid, long style)
     defaultControlSizer->Show(m_checkbox, !m_checkbox->GetLabel().empty(), true);
 
     sizer->Add(defaultControlSizer, wxSizerFlags{ 1 }.Expand());
+    sizer->Add(m_button, wxSizerFlags{}.Centre().Border());
 
     SetSizer(sizer);
 
@@ -355,9 +355,10 @@ size_t wxInfoBarGeneric::GetButtonCount() const
     {
         const wxSizerItem * const item = node->GetData();
 
-        // if we reached the spacer separating the buttons from the text
-        // break the for-loop.
-        if ( item->IsSpacer() )
+        // If we reached the spacer separating the buttons from the text
+        // break the for-loop. Same for if we get to the sizer holding
+        // the icon and text.
+        if ( item->IsSpacer() || item->IsSizer() )
             break;
 
         // if the standard button is shown, there must be no other ones
@@ -389,12 +390,12 @@ wxWindowID wxInfoBarGeneric::GetButtonId(size_t idx) const
     {
         const wxSizerItem * const item = node->GetData();
 
-        if ( item->IsSpacer() )
+        if ( item->IsSpacer() || item->IsSizer() )
             foundSpacer = true;
 
         if ( foundSpacer )
         {
-            if ( !item->IsSpacer() )
+            if ( !item->IsSpacer() && !item->IsSizer() )
             {
                 if ( count == idx )
                 {
@@ -433,7 +434,7 @@ bool wxInfoBarGeneric::HasButtonId(wxWindowID btnid) const
 
         // if we reached the spacer separating the buttons from the text
         // then the wanted ID is not inside.
-        if ( item->IsSpacer() )
+        if ( item->IsSpacer() || item->IsSizer() )
             return false;
 
         // check if we found our button
@@ -462,7 +463,7 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
         // if we reached the spacer separating the buttons from the text
         // preceding them without finding our button, it must mean it's not
         // there at all
-        if ( item->IsSpacer() )
+        if ( item->IsSpacer() || item->IsSizer() )
         {
             wxFAIL_MSG( wxString::Format("button with id %d not found", btnid) );
             return;
