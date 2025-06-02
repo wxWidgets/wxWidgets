@@ -121,14 +121,11 @@ enum wxFSIconType
 class WXDLLIMPEXP_CORE wxFSVolume : public wxFSVolumeBase
 {
 public:
-    wxFSVolume() : wxFSVolumeBase() { InitIcons(); }
-    explicit wxFSVolume(const wxString& name) : wxFSVolumeBase(name) { InitIcons(); }
+    using wxFSVolumeBase::wxFSVolumeBase;
 
     wxIcon GetIcon(wxFSIconType type) const;
 
 private:
-    void InitIcons();
-
     // the different icons for this volume (created on demand)
     std::vector<wxIcon> m_icons;
 };
