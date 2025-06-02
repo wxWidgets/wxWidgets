@@ -66,7 +66,7 @@ public:
     // create the volume object with this name (should be one of those returned
     // by GetVolumes()).
     wxFSVolumeBase();
-    wxFSVolumeBase(const wxString& name);
+    explicit wxFSVolumeBase(const wxString& name);
     bool Create(const wxString& name);
 
     // accessors
@@ -122,7 +122,7 @@ class WXDLLIMPEXP_CORE wxFSVolume : public wxFSVolumeBase
 {
 public:
     wxFSVolume() : wxFSVolumeBase() { InitIcons(); }
-    wxFSVolume(const wxString& name) : wxFSVolumeBase(name) { InitIcons(); }
+    explicit wxFSVolume(const wxString& name) : wxFSVolumeBase(name) { InitIcons(); }
 
     wxIcon GetIcon(wxFSIconType type) const;
 

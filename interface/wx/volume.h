@@ -75,7 +75,7 @@ public:
         Create the volume object with the given @a name (which should be one of
         those returned by GetVolumes()).
     */
-    wxFSVolume(const wxString& name);
+    explicit wxFSVolume(const wxString& name);
 
     /**
         Create the volume object with the given @a name (which should be one of
