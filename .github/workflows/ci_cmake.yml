@@ -118,7 +118,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Install Qt6
-        if: runner.os == 'Windows'
+        if: ${{ matrix.cmake_build_toolkit }} == 'qt'
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.8.*'
