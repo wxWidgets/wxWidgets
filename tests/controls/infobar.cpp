@@ -12,6 +12,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_INFOBAR
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif // WX_PRECOMP
@@ -37,3 +39,5 @@ TEST_CASE("wxInfoBar::Buttons", "[wxInfoBar]")
     info->RemoveButton(buttonId);
     CHECK(info->GetButtonCount() == 0);
 }
+
+#endif // wxUSE_INFOBAR
