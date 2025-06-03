@@ -69,6 +69,7 @@ jobs:
             platform: 'arm64'
           - configuration: 'Debug'
             platform: 'Win32'
+            use_cxx20: true
           - configuration: 'DLL Release'
             platform: 'x64'
 
@@ -87,6 +88,11 @@ jobs:
               Write-Output $txt |
               %{$_ -replace "define wxUSE_UNICODE_UTF8 0", "define wxUSE_UNICODE_UTF8 $use_utf8"} |
               Set-Content setup.h
+            }
+            $use_cxx20 = "${{ matrix.use_cxx20 }}" ? 1 : 0
+            if ( $use_cxx20 ) {
+              cd ..\..\..\build\msw
+              cp cxx20.props wx_local.props
             }
 
       - name: Add MSBuild to PATH
