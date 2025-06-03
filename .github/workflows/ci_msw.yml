@@ -185,3 +185,44 @@ jobs:
         run: |
           wxPROC_COUNT=`../build/tools/proc_count.sh`
           cmake --build . -- -j$wxPROC_COUNT
+
+  qt-msvs:
+    runs-on: windows-2022
+
+    steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.*'
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Configuring
+        run: |
+          cmake -G "Visual Studio 17 2022" `
+              -DCMAKE_BUILD_TYPE=Debug `
+              -DwxBUILD_TESTS=ALL `
+              -DwxBUILD_SAMPLES=SOME `
+              -DwxBUILD_SHARED=ON `
+              -DwxBUILD_TOOLKIT=qt `
+              -S . -B build_cmake
+
+      - name: Building
+        working-directory: build_cmake
+        run: |
+          cmake --build . --config Release
+
+      - name: Testing
+        working-directory: build_cmake\lib\vc_x64_dll
+        run: |
+          $env:WX_TEST_WEBREQUEST_URL="0"
+          .\test_base.exe
+
+      - name: Testing GUI
+        working-directory: build_cmake\lib\vc_x64_dll
+        run: |
+          $env:QT_USE_NATIVE_WINDOWS=1
+          .\test_gui.exe
