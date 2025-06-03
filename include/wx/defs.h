@@ -144,6 +144,15 @@
 #   define wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(name)
 #endif
 
+/* Enable some warnings not enabled by default if requested. */
+#ifdef wxENABLE_EXTRA_WARNINGS
+#   ifdef __GNUC__
+#       pragma GCC diagnostic warning "-Wcast-qual"
+#       pragma GCC diagnostic warning "-Wdouble-promotion"
+#       pragma GCC diagnostic warning "-Wextra"
+#   endif
+#endif
+
 /*
    Clang Support
  */

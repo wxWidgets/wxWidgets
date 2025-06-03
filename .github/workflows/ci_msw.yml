@@ -176,7 +176,7 @@ jobs:
           cmake -G "MinGW Makefiles" \
                 -DCMAKE_C_COMPILER=clang.exe \
                 -DCMAKE_CXX_COMPILER=clang++.exe \
-                -DCMAKE_CXX_FLAGS="-Werror -Wsuggest-override" \
+                -DCMAKE_CXX_FLAGS="-DwxENABLE_EXTRA_WARNINGS -Werror -Wsuggest-override" \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DwxBUILD_SAMPLES=ALL \
                 -DwxBUILD_TESTS=ALL \
