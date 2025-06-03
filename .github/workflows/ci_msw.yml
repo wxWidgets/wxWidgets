@@ -100,7 +100,7 @@ jobs:
 
       - name: Build
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc16.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc17.sln
             if ( '${{ matrix.configuration }}'.IndexOf('DLL') -ne -1 ) {
                 $dlldir = Join-Path (Get-Location) 'lib\vc_${{ matrix.platform }}_dll'
                 Write-Output "Adding $dlldir to the PATH"
@@ -110,11 +110,11 @@ jobs:
       - name: Build samples
         if: matrix.platform != 'arm64'
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\samples_vc16.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\samples_vc17.sln
 
       - name: Build tests
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc16.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc17.sln
 
       - name: Run tests
         if: ${{ !contains(matrix.platform, 'arm64') }}
@@ -139,7 +139,7 @@ jobs:
 
       - name: Build GUI tests
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc16.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc17.sln
 
       - name: Run GUI tests
         if: ${{ !contains(matrix.platform, 'arm64') }}
