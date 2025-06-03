@@ -151,6 +151,7 @@ jobs:
 
   msw-msys2-clang:
     runs-on: windows-latest
+    name: wxMSW Clang
 
     defaults:
       run:
@@ -194,6 +195,7 @@ jobs:
 
   qt-msvs:
     runs-on: windows-2022
+    name: wxQt vs2022 DLL Debug x64
 
     steps:
       - name: Install Qt
