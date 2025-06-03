@@ -85,7 +85,7 @@ jobs:
             cmake_samples: OFF
             cmake_tests: OFF
             cmake_build_toolkit: osx_iphone
-          - name: Windows MSVC
+          - name: Windows wxMSW
             runner: windows-latest
             no_sudo: 1
             cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
