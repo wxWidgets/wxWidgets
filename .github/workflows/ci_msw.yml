@@ -198,6 +198,11 @@ jobs:
     name: wxQt vs2022 DLL Debug x64
 
     steps:
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.*'
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
