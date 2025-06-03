@@ -1324,7 +1324,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     // them at least some name if we don't have anything better.
     const auto makeLabel = [](const wxString& title)
     {
-        return title.empty() ? "(untitled)" : title;
+        return title.empty() ? wxString("(untitled)") : title;
     };
 
     wxMenuItem* item;
