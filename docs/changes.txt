@@ -236,7 +236,7 @@ Changes in behaviour which may result in build errors
   cursor-related ones.
 
 
-3.3.0: (released 2025-05-22)
+3.3.0: (released 2025-06-06)
 ----------------------------
 
 This release contains the following major changes compared to 3.2.8:

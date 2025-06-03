@@ -1,4 +1,4 @@
-May 22, 2025 -- The wxWidgets team is pleased to announce the first new
+June 6, 2025 -- The wxWidgets team is pleased to announce the first new
 development release of our open source framework for the development of native
 cross-platform applications in C++.
 

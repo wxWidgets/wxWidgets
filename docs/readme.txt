@@ -147,4 +147,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, May 2025
+The wxWidgets Team, June 2025
