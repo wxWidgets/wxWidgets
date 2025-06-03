@@ -56,21 +56,19 @@ permissions:
 
 jobs:
   msw-msvs:
-    runs-on: windows-${{ matrix.vsversion }}
-    name: wxMSW vs${{ matrix.vsversion }} ${{ matrix.configuration }} ${{ matrix.platform }}
+    runs-on: windows-2022
+    name: wxMSW vs2022 ${{ matrix.configuration }} ${{ matrix.platform }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - configuration: 'DLL Debug'
             platform: 'x64'
-            vsversion: 2022
+            use_utf8: true
           - configuration: 'Debug'
             platform: 'Win32'
-            vsversion: 2019
           - configuration: 'DLL Release'
             platform: 'x64'
-            vsversion: 2019
             use_stl: true
 
     steps:
