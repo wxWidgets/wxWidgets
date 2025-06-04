@@ -135,22 +135,7 @@ wxDataObject::~wxDataObject()
 bool wxDataObject::IsSupportedFormat(const wxDataFormat& format,
                                      Direction dir) const
 {
-    const size_t formatCount = GetFormatCount(dir);
-    if ( formatCount == 1 )
-    {
-        return format == GetPreferredFormat();
-    }
-
-    wxScopedArray<wxDataFormat> formats(formatCount);
-    GetAllFormats(formats.get(), dir);
-
-    for ( size_t n = 0; n < formatCount; ++n )
-    {
-        if ( formats[n] == format )
-            return true;
-    }
-
-    return false;
+    return wxDataObjectBase::IsSupported(format,dir);
 }
 
 void wxDataObject::QtAddDataTo(QMimeData &mimeData) const
