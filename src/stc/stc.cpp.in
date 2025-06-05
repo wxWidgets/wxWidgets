@@ -724,7 +724,9 @@ void wxStyledTextCtrl::StartStyling(int start, int unused)
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
-    wxPaintDC dc(this);
+    // This _must_ be a wxMemoryDC because the code in SurfaceImpl (see
+    // PlatWX.cpp) unconditionally casts it to wxMemoryDC currently.
+    wxBufferedPaintDC dc(this);
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 
