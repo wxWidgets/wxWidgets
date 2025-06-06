@@ -574,64 +574,64 @@ public:
     // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
         // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
 
-    inline wxNODISCARD wxDouble GetLeft() const { return m_x; }
+    inline wxDouble GetLeft() const { return m_x; }
     inline void SetLeft( wxDouble n ) { m_width += m_x - n; m_x = n; }
     inline void MoveLeftTo( wxDouble n ) { m_x = n; }
-    inline wxNODISCARD wxDouble GetTop() const { return m_y; }
+    inline wxDouble GetTop() const { return m_y; }
     inline void SetTop( wxDouble n ) { m_height += m_y - n; m_y = n; }
     inline void MoveTopTo( wxDouble n ) { m_y = n; }
-    inline wxNODISCARD wxDouble GetBottom() const { return m_y + m_height; }
+    inline wxDouble GetBottom() const { return m_y + m_height; }
     inline void SetBottom( wxDouble n ) { m_height += n - (m_y+m_height);}
     inline void MoveBottomTo( wxDouble n ) { m_y = n - m_height; }
-    inline wxNODISCARD wxDouble GetRight() const { return m_x + m_width; }
+    inline wxDouble GetRight() const { return m_x + m_width; }
     inline void SetRight( wxDouble n ) { m_width += n - (m_x+m_width) ; }
     inline void MoveRightTo( wxDouble n ) { m_x = n - m_width; }
 
-    inline wxNODISCARD wxPoint2DDouble GetLeftTop() const
+    inline wxPoint2DDouble GetLeftTop() const
         { return wxPoint2DDouble( m_x , m_y ); }
     inline void SetLeftTop( const wxPoint2DDouble &pt )
         { m_width += m_x - pt.m_x; m_height += m_y - pt.m_y; m_x = pt.m_x; m_y = pt.m_y; }
     inline void MoveLeftTopTo( const wxPoint2DDouble &pt )
         { m_x = pt.m_x; m_y = pt.m_y; }
-    inline wxNODISCARD wxPoint2DDouble GetLeftBottom() const
+    inline wxPoint2DDouble GetLeftBottom() const
         { return wxPoint2DDouble( m_x , m_y + m_height ); }
     inline void SetLeftBottom( const wxPoint2DDouble &pt )
         { m_width += m_x - pt.m_x; m_height += pt.m_y - (m_y+m_height) ; m_x = pt.m_x; }
     inline void MoveLeftBottomTo( const wxPoint2DDouble &pt )
         { m_x = pt.m_x; m_y = pt.m_y - m_height; }
-    inline wxNODISCARD wxPoint2DDouble GetRightTop() const
+    inline wxPoint2DDouble GetRightTop() const
         { return wxPoint2DDouble( m_x+m_width , m_y ); }
     inline void SetRightTop( const wxPoint2DDouble &pt )
         { m_width += pt.m_x - ( m_x + m_width ); m_height += m_y - pt.m_y; m_y = pt.m_y; }
     inline void MoveRightTopTo( const wxPoint2DDouble &pt )
         { m_x = pt.m_x - m_width; m_y = pt.m_y; }
-    inline wxNODISCARD wxPoint2DDouble GetRightBottom() const
+    inline wxPoint2DDouble GetRightBottom() const
         { return wxPoint2DDouble( m_x+m_width , m_y + m_height ); }
     inline void SetRightBottom( const wxPoint2DDouble &pt )
         { m_width += pt.m_x - ( m_x + m_width ); m_height += pt.m_y - (m_y+m_height);}
     inline void MoveRightBottomTo( const wxPoint2DDouble &pt )
         { m_x = pt.m_x - m_width; m_y = pt.m_y - m_height; }
-    inline wxNODISCARD wxPoint2DDouble GetCentre() const
+    inline wxPoint2DDouble GetCentre() const
         { return wxPoint2DDouble( m_x+m_width/2 , m_y+m_height/2 ); }
     inline void SetCentre( const wxPoint2DDouble &pt )
         { MoveCentreTo( pt ); }    // since this is impossible without moving...
     inline void MoveCentreTo( const wxPoint2DDouble &pt )
         { m_x += pt.m_x - (m_x+m_width/2); m_y += pt.m_y -(m_y+m_height/2); }
-    inline wxNODISCARD wxOutCode GetOutCode( const wxPoint2DDouble &pt ) const
+    inline wxOutCode GetOutCode( const wxPoint2DDouble &pt ) const
         { return (wxOutCode) (( ( pt.m_x < m_x ) ? wxOutLeft : 0 ) +
                      ( ( pt.m_x > m_x + m_width ) ? wxOutRight : 0 ) +
                      ( ( pt.m_y < m_y ) ? wxOutTop : 0 )  +
                      ( ( pt.m_y > m_y + m_height ) ? wxOutBottom : 0 )); }
-    inline wxNODISCARD wxOutCode GetOutcode(const wxPoint2DDouble &pt) const
+    inline wxOutCode GetOutcode(const wxPoint2DDouble &pt) const
         { return GetOutCode(pt) ; }
-    inline wxNODISCARD bool Contains( const wxPoint2DDouble &pt ) const
+    inline bool Contains( const wxPoint2DDouble &pt ) const
         { return  GetOutCode( pt ) == wxInside; }
-    inline wxNODISCARD bool Contains( const wxRect2DDouble &rect ) const
+    inline bool Contains( const wxRect2DDouble &rect ) const
         { return ( ( ( m_x <= rect.m_x ) && ( rect.m_x + rect.m_width <= m_x + m_width ) ) &&
                 ( ( m_y <= rect.m_y ) && ( rect.m_y + rect.m_height <= m_y + m_height ) ) ); }
-    inline wxNODISCARD bool IsEmpty() const
+    inline bool IsEmpty() const
         { return m_width <= 0 || m_height <= 0; }
-    inline wxNODISCARD bool HaveEqualSize( const wxRect2DDouble &rect ) const
+    inline bool HaveEqualSize( const wxRect2DDouble &rect ) const
         { return wxIsSameDouble(rect.m_width, m_width) && wxIsSameDouble(rect.m_height, m_height); }
 
     inline void Inset( wxDouble x , wxDouble y )
@@ -673,7 +673,7 @@ public:
     static void Intersect( const wxRect2DDouble &src1 , const wxRect2DDouble &src2 , wxRect2DDouble *dest );
     inline void Intersect( const wxRect2DDouble &otherRect )
         { Intersect( *this , otherRect , this ); }
-    inline wxNODISCARD wxRect2DDouble CreateIntersection( const wxRect2DDouble &otherRect ) const
+    inline wxRect2DDouble CreateIntersection( const wxRect2DDouble &otherRect ) const
         { wxRect2DDouble result; Intersect( *this , otherRect , &result); return result; }
     wxNODISCARD bool Intersects( const wxRect2DDouble &rect ) const;
 
