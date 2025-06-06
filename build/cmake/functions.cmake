@@ -149,6 +149,8 @@ function(wx_set_common_target_properties target_name)
             set_target_properties(${target_name} PROPERTIES MSVC_RUNTIME_LIBRARY ${msvc_runtime})
         endif()
 
+        target_compile_options(${target_name} PRIVATE "/source-charset:utf-8")
+        set_target_properties(${target_name} PROPERTIES QT_NO_UTF8_SOURCE TRUE)
     elseif(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
         set(common_gcc_clang_compile_options
             -Wall
