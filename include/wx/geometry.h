@@ -577,7 +577,7 @@ public:
     inline wxNODISCARD wxDouble GetLeft() const { return m_x; }
     inline void SetLeft( wxDouble n ) { m_width += m_x - n; m_x = n; }
     inline void MoveLeftTo( wxDouble n ) { m_x = n; }
-    inline wxDouble GetTop() const { return m_y; }
+    inline wxNODISCARD wxDouble GetTop() const { return m_y; }
     inline void SetTop( wxDouble n ) { m_height += m_y - n; m_y = n; }
     inline void MoveTopTo( wxDouble n ) { m_y = n; }
     inline wxNODISCARD wxDouble GetBottom() const { return m_y + m_height; }
@@ -645,7 +645,7 @@ public:
 
     wxRect2DDouble& Inflate(wxDouble dx, wxDouble dy);
     wxRect2DDouble& Inflate(const wxSize& d)
-        { return Inflate(static_cast<double>(d.x), static_cast<double>(d.y)); }
+        { return Inflate(static_cast<wxDouble>(d.x), static_cast<wxDouble>(d.y)); }
     wxRect2DDouble& Inflate(wxDouble d) { return Inflate(d, d); }
     wxRect2DDouble Inflate(wxDouble dx, wxDouble dy) const
     {
@@ -656,7 +656,7 @@ public:
 
     wxRect2DDouble& Deflate(wxDouble dx, wxDouble dy) { return Inflate(-dx, -dy); }
     wxRect2DDouble& Deflate(const wxSize& d)
-        { return Inflate(-static_cast<double>(d.x), -static_cast<double>(d.y)); }
+        { return Inflate(-static_cast<wxDouble>(d.x), -static_cast<wxDouble>(d.y)); }
     wxRect2DDouble& Deflate(wxDouble d) { return Inflate(-d); }
     wxRect2DDouble Deflate(wxDouble dx, wxDouble dy) const
     {
