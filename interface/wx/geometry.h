@@ -129,13 +129,13 @@ wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxInt32 n);
 
 /**
     wxRect2DDouble is an axis-aligned rectangle;
-    each side of the rect is parallel to the x - or m_y - axis.
+    each side of the rect is parallel to the X or Y axis.
 
     The rectangle is either defined by the top left and bottom right corner,
     or by the top left corner and size.
 
-    A point is contained within the rectangle if left <= x < right
-    and top <= m_y < bottom; thus, it is a half open interval.
+    A point is contained within the rectangle if left <= @c @c m_x < right
+    and top <= @c m_y < bottom; thus, it is a half open interval.
 
     @note wxRect2DDouble has subtle differences from wxRect in how its edge
      and corner functions work. With wxRect2DDouble, there are two counterparts:
@@ -382,6 +382,11 @@ public:
     */
     bool HaveEqualSize( const wxRect2DDouble &rect ) const;
 
+    /**
+        Offsets the rectangle by @c x and @c y, but maintains the bottom right corner.
+
+        @note This will affect the width and height of the rectangle.
+    */
     void Inset( wxDouble x , wxDouble y );
     void Inset( wxDouble left , wxDouble top ,wxDouble right , wxDouble bottom  );
     /**
@@ -505,9 +510,23 @@ public:
     */
     wxRect ToRect() const;
 
+    /**
+        @name Miscellaneous operators
+    */
+    ///@{
+    /**
+        Assignment operator.
+    */
     wxRect2DDouble& operator = (const wxRect2DDouble& rect);
+    /**
+        Equality operator.
+    */
     bool operator == (const wxRect2DDouble& rect) const;
+    /**
+        Inequality operator.
+    */
     bool operator != (const wxRect2DDouble& rect) const;
+    ///@}
 
     wxDouble  m_x;
     wxDouble  m_y;
