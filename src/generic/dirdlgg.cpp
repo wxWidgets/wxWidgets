@@ -117,7 +117,8 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
     // 1) dir ctrl
     m_dirCtrl = nullptr; // this is necessary, event handler called from
                       // wxGenericDirCtrl would crash otherwise!
-    long dirStyle = wxDIRCTRL_DIR_ONLY | wxDEFAULT_CONTROL_BORDER;
+    long dirStyle = wxDIRCTRL_DIR_ONLY |
+                    static_cast<long>(wxDEFAULT_CONTROL_BORDER);
 
 #ifdef __WXMSW__
     if (!HasFlag(wxDD_DIR_MUST_EXIST))
