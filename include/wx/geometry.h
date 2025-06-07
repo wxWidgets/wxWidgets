@@ -540,8 +540,8 @@ public:
 
     wxNODISCARD wxRect ToRect() const
     {
-        return wxRect(static_cast<int>(m_x), static_cast<int>(m_y),
-                      static_cast<int>(m_width), static_cast<int>(m_height));
+        return wxRect(wxRound(m_x), wxRound(m_y),
+                      wxRound(m_width), wxRound(m_height));
     }
 /*
     wxRect2DDouble(const wxPoint2DDouble& topLeft, const wxPoint2DDouble& bottomRight);
