@@ -134,6 +134,39 @@ void wxRect2DDouble::ConstrainTo( const wxRect2DDouble &rect )
         SetTop( rect.GetTop() );
 }
 
+wxRect2DDouble& wxRect2DDouble::Inflate(wxDouble dx, wxDouble dy)
+{
+    if (-2 * dx > m_width)
+    {
+        // Don't allow deflate to eat more width than we have,
+        // a well-defined rectangle cannot have negative width.
+        m_x += m_width / 2;
+        m_width = 0;
+    }
+    else
+    {
+        // The inflate is valid.
+        m_x -= dx;
+        m_width += 2 * dx;
+    }
+
+    if (-2 * dy > m_height)
+    {
+        // Don't allow deflate to eat more height than we have,
+        // a well-defined rectangle cannot have negative height.
+        m_y += m_height / 2;
+        m_height = 0;
+    }
+    else
+    {
+        // The inflate is valid.
+        m_y -= dy;
+        m_height += 2 * dy;
+    }
+
+    return *this;
+}
+
 // integer version
 
 // for the following calculations always remember
