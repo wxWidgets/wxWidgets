@@ -7124,15 +7124,14 @@ Please install it following the instructions in the manual or remove the
         fi
     fi
 
-fi
-
-if test "$wxUSE_WEBVIEW" = "yes"; then
-    USE_WEBVIEW=1
-    AC_DEFINE(wxUSE_WEBVIEW)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
-else
-    USE_WEBVIEW=0
-    AC_MSG_WARN([No wxWebView backends found, disabling wxWebView])
+    if test "$wxUSE_WEBVIEW" = "yes"; then
+        USE_WEBVIEW=1
+        AC_DEFINE(wxUSE_WEBVIEW)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
+    else
+        USE_WEBVIEW=0
+        AC_MSG_WARN([No wxWebView backends found, disabling wxWebView])
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------

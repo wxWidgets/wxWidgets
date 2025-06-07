@@ -40159,17 +40159,16 @@ Please install it following the instructions in the manual or remove the
         fi
     fi
 
-fi
+    if test "$wxUSE_WEBVIEW" = "yes"; then
+        USE_WEBVIEW=1
+        $as_echo "#define wxUSE_WEBVIEW 1" >>confdefs.h
 
-if test "$wxUSE_WEBVIEW" = "yes"; then
-    USE_WEBVIEW=1
-    $as_echo "#define wxUSE_WEBVIEW 1" >>confdefs.h
-
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
-else
-    USE_WEBVIEW=0
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No wxWebView backends found, disabling wxWebView" >&5
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
+    else
+        USE_WEBVIEW=0
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No wxWebView backends found, disabling wxWebView" >&5
 $as_echo "$as_me: WARNING: No wxWebView backends found, disabling wxWebView" >&2;}
+    fi
 fi
 
 
