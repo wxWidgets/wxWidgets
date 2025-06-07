@@ -55,7 +55,7 @@ public:
         mainSizer->Add(new wxStaticText(this, wxID_ANY, "Request URL:"),
             wxSizerFlags().Border());
         m_urlTextCtrl = new wxTextCtrl(this, wxID_ANY,
-            url.empty() ? "https://www.wxwidgets.org/downloads/logos/blocks.png"
+            url.empty() ? wxString("https://www.wxwidgets.org/downloads/logos/blocks.png")
                         : url,
             wxDefaultPosition, wxDefaultSize,
             wxTE_PROCESS_ENTER);
