@@ -782,7 +782,7 @@ public:
 
         @see wxWindow::SetClientSize
 
-        @since 3.3.0
+        @since 3.3.1
     */
     wxAuiPaneInfo& FloatingClientSize(const wxSize& size);
     wxAuiPaneInfo& FloatingClientSize(int x, int y);
