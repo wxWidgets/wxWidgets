@@ -161,7 +161,7 @@ public:
 
         @since 3.3.0
     */
-    wxRect2DDouble(const wxRect& rect);
+    explicit wxRect2DDouble(const wxRect& rect);
 
     /**
         Returns the position.
