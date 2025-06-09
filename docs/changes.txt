@@ -235,6 +235,40 @@ Changes in behaviour which may result in build errors
   explicitly if you need to use any functions defined there other than
   cursor-related ones.
 
+3.3.1: (released 2025-??-??)
+----------------------------
+
+NOTE: In addition to the note below, also incorporate (either by
+      copy or by reference) all the changes in the 3.2 branch (i.e.
+      everything in this file after 3.2.0 in that branch).
+
+NOTE: This file is updated only before the release, please use
+
+    $ git log --notes=changelog --format='%N' v3.3.0..|grep .
+
+      to see all the change log entries since the last release.
+
+      To update the notes, fetch them first:
+
+    $ git fetch origin refs/notes/changelog:refs/notes/changelog
+
+      then use the following command to update them locally
+
+    $ git notes --ref=changelog add -m 'wxPort: description.'
+
+      and finally push it to the server.
+
+    $ git push origin refs/notes/changelog:refs/notes/changelog
+
+      If this fails due to a conflict because you had forgotten to
+      run git-fetch first, you can always reset your local notes
+      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
+
+    $ git fetch origin refs/notes/changelog
+    $ git update-ref refs/notes/changelog FETCH_HEAD
+
+      and then redo "git-notes add" and git-push.
+
 
 3.3.0: (released 2025-06-06)
 ----------------------------
