@@ -19,14 +19,14 @@ Finally, Microsoft Windows users may download [Setup.exe file](https://github.co
 
 To verify your download please use the following SHA-1 checksums:
 
-    0000000000000000000000000000000000000000  wxMSW-3.3.0-Setup.exe
-    0000000000000000000000000000000000000000  wxWidgets-3.3.0-docs-chm.zip
-    0000000000000000000000000000000000000000  wxWidgets-3.3.0-docs-html.tar.bz2
-    0000000000000000000000000000000000000000  wxWidgets-3.3.0-docs-html.zip
-    0000000000000000000000000000000000000000  wxWidgets-3.3.0-headers.7z
-    0000000000000000000000000000000000000000  wxWidgets-3.3.0.7z
-    0000000000000000000000000000000000000000  wxWidgets-3.3.0.tar.bz2
-    0000000000000000000000000000000000000000  wxWidgets-3.3.0.zip
+    a8b982cf5680611df0dda2e1613134fd4883c069  wxMSW-3.3.0-Setup.exe
+    7af1bbb7b0623ad3658bbc25fc5980bd29d7ecfd  wxWidgets-3.3.0-docs-chm.zip
+    10b72066e2233469fd386d94d0e2c8682b8ac6f5  wxWidgets-3.3.0-docs-html.tar.bz2
+    20310e1c7a737576c00171d894eb63fc5124d615  wxWidgets-3.3.0-docs-html.zip
+    467f964fe0068231986e30bb94a9bc424c41f367  wxWidgets-3.3.0-headers.7z
+    3c5f8c222a37f6f45826c3120d101dd147fc80cb  wxWidgets-3.3.0.7z
+    cb07238b60616a27f7c8ff7ddbaea50ccfa3bae4  wxWidgets-3.3.0.tar.bz2
+    0819420accb7830e234b793defd2215117ad17b3  wxWidgets-3.3.0.zip
 
 ## Binaries
 
@@ -58,12 +58,11 @@ End users may download one of `wxMSW-3.3.0_vc14x_x64_ReleaseDLL.7z` or `wxMSW-3.
 
 To verify your download please use the following SHA-1 checksums:
 
-    0000000000000000000000000000000000000000 wxMSW-3.3.0_gcc1510_x64_Dev.7z
-    0000000000000000000000000000000000000000 wxMSW-3.3.0_gcc1510_x64_ReleaseDLL.7z
-    0000000000000000000000000000000000000000 wxMSW-3.3.0_vc14x_x64_Dev.7z
-    0000000000000000000000000000000000000000 wxMSW-3.3.0_vc14x_x64_ReleaseDLL.7z
-    0000000000000000000000000000000000000000 wxMSW-3.3.0_vc14x_x64_ReleasePDB.7z
-
+    f69f304fbf2233ac1e81802c25d317fdd47ef0ae wxMSW-3.3.0_gcc1510_x64_Dev.7z
+    d6645a79e23ca6864a11dea1396156176bd42e89 wxMSW-3.3.0_gcc1510_x64_ReleaseDLL.7z
+    927147f5c4d2343783b21e0105a9b772fc04bfd6 wxMSW-3.3.0_vc14x_x64_Dev.7z
+    e2bc06117331fefdc1b176318c1b92c6c737768a wxMSW-3.3.0_vc14x_x64_ReleaseDLL.7z
+    e30f89a94d2cc0f36a3a59172f296c95ea7a37d5 wxMSW-3.3.0_vc14x_x64_ReleasePDB.7z
 
 ## Reporting Problems
 
