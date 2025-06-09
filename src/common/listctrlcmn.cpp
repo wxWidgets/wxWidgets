@@ -230,9 +230,9 @@ void wxListCtrlBase::EnableAlternateRowColours(bool enable)
         // background colour.
         const wxColour bgColour = GetBackgroundColour();
 
-        // Depending on the background, alternate row color
-        // will be 3% more dark or 50% brighter.
-        int alpha = bgColour.GetRGB() > 0x808080 ? 97 : 150;
+        // Depending on the background, alternate row colour should be a bit
+        // darker or brighter.
+        int alpha = bgColour.GetRGB() > 0x808080 ? 97 : 110;
         SetAlternateRowColour(bgColour.ChangeLightness(alpha));
     }
     else // Disable striping by setting invalid alternative colour.
