@@ -537,3 +537,25 @@ bool wxIsExecutable(const wxString &path);
 */
 
 #endif // wxUSE_FILE
+
+#if wxUSE_FSVOLUME
+
+#include "wx/volume.h"
+
+TEST_CASE("FSVolume", "[fs][volume]")
+{
+    wxFSVolumeBase vol;
+    CHECK( !vol.IsOk() );
+
+    const auto& volumes = wxFSVolumeBase::GetVolumes();
+    if ( volumes.empty() )
+    {
+        WARN("No volumes found, skipping wxFSVolume tests.");
+        return;
+    }
+
+    vol.Create(volumes[0]);
+    REQUIRE( vol.IsOk() );
+}
+
+#endif // wxUSE_FSVOLUME

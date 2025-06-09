@@ -66,7 +66,7 @@ public:
     // create the volume object with this name (should be one of those returned
     // by GetVolumes()).
     wxFSVolumeBase();
-    wxFSVolumeBase(const wxString& name);
+    explicit wxFSVolumeBase(const wxString& name);
     bool Create(const wxString& name);
 
     // accessors
@@ -89,7 +89,7 @@ public:
     wxString GetName() const { return m_volName; }
     wxString GetDisplayName() const { return m_dispName; }
 
-    // TODO: operatios (Mount(), Unmount(), Eject(), ...)?
+    // TODO: Add operations (Mount(), Unmount(), Eject(), ...)?
 
 protected:
     // the internal volume name
@@ -121,14 +121,11 @@ enum wxFSIconType
 class WXDLLIMPEXP_CORE wxFSVolume : public wxFSVolumeBase
 {
 public:
-    wxFSVolume() : wxFSVolumeBase() { InitIcons(); }
-    wxFSVolume(const wxString& name) : wxFSVolumeBase(name) { InitIcons(); }
+    using wxFSVolumeBase::wxFSVolumeBase;
 
     wxIcon GetIcon(wxFSIconType type) const;
 
 private:
-    void InitIcons();
-
     // the different icons for this volume (created on demand)
     std::vector<wxIcon> m_icons;
 };

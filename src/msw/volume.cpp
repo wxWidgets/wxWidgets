@@ -565,11 +565,6 @@ int wxFSVolumeBase::GetFlags() const
 
 #if wxUSE_GUI
 
-void wxFSVolume::InitIcons()
-{
-    m_icons.resize(wxFS_VOL_ICO_MAX);
-}
-
 //=============================================================================
 // Function: GetIcon
 // Purpose: return the requested icon.
@@ -577,6 +572,14 @@ void wxFSVolume::InitIcons()
 
 wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
 {
+    auto* const self = const_cast<wxFSVolume*>(this);
+
+    if ( m_icons.empty() )
+    {
+        // Allocate on first access.
+        self->m_icons.resize(wxFS_VOL_ICO_MAX);
+    }
+
     wxCHECK_MSG( type >= 0 && (size_t)type < m_icons.size(), wxNullIcon,
                  wxT("wxFSIconType::GetIcon(): invalid icon index") );
 
@@ -616,7 +619,7 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
         }
         else
         {
-            const_cast<wxIcon&>(m_icons[type]).CreateFromHICON((WXHICON)fi.hIcon);
+            self->m_icons[type].CreateFromHICON((WXHICON)fi.hIcon);
         }
     }
 
