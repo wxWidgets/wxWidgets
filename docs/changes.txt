@@ -252,9 +252,23 @@ Changes in behaviour which may result in build errors
 3.2.9: (released 2025-??-??)
 ----------------------------
 
+All:
+
+- Backport several CMake enhancements from 3.3 (Maarten Bent, #25448).
+
+All (GUI):
+
+- Respect menu path style in wxFileHistory::AddFilesToMenu() (Bill Su, #25451).
+
 wxGTK:
 
 - Fix handling total window size with GNOME with X11 (#25348).
+- Fix height of read-only wxBitmapComboBox (#25468).
+- Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
+
+wxMSW
+
+- Fix regression in wxTreeCtrl indent size in high DPI (Maarten Bent, #25282).
 
 wxOSX:
 

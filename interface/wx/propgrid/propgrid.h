@@ -430,8 +430,9 @@ enum wxPG_KEYBOARD_ACTIONS
 
     Call wxPropertyGrid::SetSortFunction() to set it.
 
-    Sort function should return a value greater than 0 if position of p1 is
-    after p2. So, for instance, when comparing property names, you can use
+    Sort function should return a value greater than 0 if position of @a p1 is
+    after @a p2, negative if position of @a p1 is before @a p2 and 0 if they are
+    equivalent. So, for instance, when comparing property names, you can use the
     following implementation:
 
         @code

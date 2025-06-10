@@ -129,6 +129,7 @@ if(wxUSE_UNICODE AND (NOT DEFINED wxUSE_UNICODE_UTF8 OR NOT wxUSE_UNICODE_UTF8))
     endif()
 endif()
 
+wx_option(wxUSE_SYS_LIBS "disable to force using all built-in libraries")
 wx_add_thirdparty_library(wxUSE_REGEX PCRE2 "enable support for wxRegEx class")
 wx_add_thirdparty_library(wxUSE_ZLIB ZLIB "use zlib for LZW compression" DEFAULT_APPLE sys)
 wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing" DEFAULT_APPLE sys)
