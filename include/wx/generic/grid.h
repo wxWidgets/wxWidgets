@@ -3289,8 +3289,13 @@ public:
 
     int GetRow() const { return m_row; }
     int GetCol() const { return m_col; }
+
+    // Note that GetNewRow() intentionally returns m_col, which is used for the
+    // new row for wxEVT_GRID_ROW_MOVE events because m_row is used for the row
+    // being moved. And similarly for GetNewCol().
     int GetNewRow() const { return m_col; }
     int GetNewCol() const { return m_row; }
+
     wxPoint GetPosition() const { return wxPoint( m_x, m_y ); }
     bool Selecting() const { return m_selecting; }
 
