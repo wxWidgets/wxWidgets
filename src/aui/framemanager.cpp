@@ -2550,18 +2550,17 @@ void wxAuiManager::Update()
                     ((p.floating_size != wxDefaultSize) && (p.frame->GetSize() != p.floating_size)) ||
                     ((p.floating_client_size != wxDefaultSize) && (p.frame->GetClientSize() != p.floating_client_size)))
                 {
-                    wxSize size;
                     if (p.floating_client_size != wxDefaultSize)
                     {
-                        size = p.frame->ClientToWindowSize(p.floating_client_size);
+                        p.frame->SetPosition(p.floating_pos);
+                        p.frame->SetClientSize(p.floating_client_size);
                     }
                     else
                     {
-                        size = p.floating_size;
+                        p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
+                                         p.floating_size.x, p.floating_size.y,
+                                         wxSIZE_USE_EXISTING);
                     }
-                    p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
-                                     size.x, size.y,
-                                     wxSIZE_USE_EXISTING);
                 /*
                     p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
                                      wxDefaultCoord, wxDefaultCoord,
