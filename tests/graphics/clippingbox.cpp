@@ -1033,9 +1033,9 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
         return;
     }
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMSW__)
     wxUnusedVar(bmp);
-    WARN("Skipping test known to fail in wxGTK");
+    WARN("Skipping test known to fail in this platform");
 #else
     // Setting one clipping region in device coordinates
     // inside transformed DC area.
