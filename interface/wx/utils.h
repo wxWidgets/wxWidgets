@@ -1541,18 +1541,6 @@ wxString wxNow();
 */
 void wxSleep(int secs);
 
-/**
-    @deprecated This function is deprecated because its name is misleading:
-                notice that the argument is in milliseconds, not microseconds.
-                Please use either wxMilliSleep() or wxMicroSleep() depending on
-                the resolution you need.
-
-    Sleeps for the specified number of milliseconds.
-
-    @header{wx/utils.h}
-*/
-void wxUsleep(unsigned long milliseconds);
-
 ///@}
 
 
