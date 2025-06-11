@@ -10,6 +10,8 @@
 
     Values of this enum are used with wxPropertyGrid::CommitChangesFromEditor(),
     for example.
+
+    @since 3.3.0
  */
 enum class wxPGSelectPropertyFlags : int
 {
