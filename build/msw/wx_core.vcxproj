@@ -2194,6 +2194,7 @@
     <ClInclude Include="..\..\include\wx\webpdecoder.h" />
     <ClInclude Include="..\..\include\wx\imagwebp.h" />
     <ClInclude Include="..\..\include\wx\msw\mfc.h" />
+    <ClInclude Include="..\..\include\wx\persist\checkbox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
