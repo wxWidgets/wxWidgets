@@ -161,8 +161,6 @@ void wxStaticBitmap::Free()
 {
     m_bitmap.UnRef();
 
-    MSWReplaceImageHandle(0);
-
     if ( m_ownsCurrentHandle )
     {
         ::DeleteObject(m_currentHandle);
