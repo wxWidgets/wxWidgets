@@ -429,6 +429,15 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
     }
 #endif // 3.10
 
+#if defined(GDK_WINDOWING_WAYLAND) && GTK_CHECK_VERSION(3,24,22)
+    if (wxGTKImpl::IsWayland(window) && gtk_check_version(3,24,22) == nullptr)
+    {
+        const wxString className(wxApp::GetInstance()->GetClassName());
+        if (!className.empty())
+            gdk_wayland_window_set_application_id(window, className.utf8_str());
+    }
+#endif
+
     gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
     gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
 
