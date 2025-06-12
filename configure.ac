@@ -4911,10 +4911,6 @@ else
     fi
 fi
 
-if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
-    AC_DEFINE(wxUSE_REPRODUCIBLE_BUILD)
-fi
-
 dnl ---------------------------------------------------------------------------
 dnl compatibility level
 dnl ---------------------------------------------------------------------------
@@ -8016,6 +8012,16 @@ if test "$wxUSE_WINE" = "yes"; then
 fi
 
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
+
+dnl Override some options set by AC_BAKEFILE() above.
+if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
+    AC_DEFINE(wxUSE_REPRODUCIBLE_BUILD)
+    dnl We consider that when --enable-repro-build is used, ar and ranlib
+    dnl support deterministic mode (if they don't, we wouldn't be able to
+    dnl honour this option anyhow).
+    AROPTIONS="rcD"
+    RANLIB="$RANLIB -D"
+fi
 
 dnl make install path absolute (if not already);
 dnl will fail with (some) MSDOS paths
