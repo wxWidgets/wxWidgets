@@ -51,14 +51,6 @@
 
 namespace
 {
-    bool HasNativeHyperlinkCtrl()
-    {
-        // Notice that we really must test comctl32.dll version and not the OS
-        // version here as even under Vista/7 we could be not using the v6 e.g.
-        // if the program doesn't have the correct manifest for some reason.
-        return wxApp::GetComCtl32Version() >= 600;
-    }
-
     wxString GetLabelForSysLink(const wxString& text, const wxString& url)
     {
         // Any "&"s in the text should appear on the screen and not be (mis)
@@ -84,12 +76,6 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
                              long style,
                              const wxString& name)
 {
-    if ( !HasNativeHyperlinkCtrl() )
-    {
-        return wxGenericHyperlinkCtrl::Create( parent, id, label, url, pos,
-                                               size, style, name );
-    }
-
     if ( !CreateControl(parent, id, pos, size, style,
                         wxDefaultValidator, name) )
     {
@@ -147,12 +133,6 @@ WXDWORD wxHyperlinkCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 void wxHyperlinkCtrl::SetURL(const wxString &url)
 {
-    if ( !HasNativeHyperlinkCtrl() )
-    {
-        wxGenericHyperlinkCtrl::SetURL( url );
-        return;
-    }
-
     if ( GetURL() != url )
         SetVisited( false );
     wxGenericHyperlinkCtrl::SetURL( url );
@@ -161,12 +141,6 @@ void wxHyperlinkCtrl::SetURL(const wxString &url)
 
 void wxHyperlinkCtrl::SetLabel(const wxString &label)
 {
-    if ( !HasNativeHyperlinkCtrl() )
-    {
-        wxGenericHyperlinkCtrl::SetLabel( label );
-        return;
-    }
-
     m_labelOrig = label;
     wxWindow::SetLabel( GetLabelForSysLink(label, GetURL()) );
     InvalidateBestSize();
@@ -203,16 +177,13 @@ void wxHyperlinkCtrl::MSWEnableCustomColours()
 
 wxColour wxHyperlinkCtrl::GetHoverColour() const
 {
-    if ( !HasNativeHyperlinkCtrl() )
-        return wxGenericHyperlinkCtrl::GetHoverColour();
-
     // Native control doesn't use special colour on hover.
     return GetNormalColour();
 }
 
 wxColour wxHyperlinkCtrl::GetNormalColour() const
 {
-    if ( !HasNativeHyperlinkCtrl() || MSWAreCustomColoursEnabled() )
+    if ( MSWAreCustomColoursEnabled() )
         return wxGenericHyperlinkCtrl::GetNormalColour();
 
     return GetClassDefaultAttributes().colFg;
@@ -220,15 +191,14 @@ wxColour wxHyperlinkCtrl::GetNormalColour() const
 
 void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 {
-    if ( HasNativeHyperlinkCtrl() )
-        MSWEnableCustomColours();
+    MSWEnableCustomColours();
 
     wxGenericHyperlinkCtrl::SetNormalColour(colour);
 }
 
 wxColour wxHyperlinkCtrl::GetVisitedColour() const
 {
-    if ( !HasNativeHyperlinkCtrl() || MSWAreCustomColoursEnabled() )
+    if ( MSWAreCustomColoursEnabled() )
         return wxGenericHyperlinkCtrl::GetVisitedColour();
 
     // Native control doesn't show visited links differently.
@@ -237,8 +207,7 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
 
 void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
 {
-    if ( HasNativeHyperlinkCtrl() )
-        MSWEnableCustomColours();
+    MSWEnableCustomColours();
 
     wxGenericHyperlinkCtrl::SetVisitedColour(colour);
 }
@@ -254,7 +223,7 @@ wxHyperlinkCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 {
     auto attrs = wxGenericHyperlinkCtrl::GetClassDefaultAttributes(variant);
 
-    if ( HasNativeHyperlinkCtrl() && !wxSystemSettings::GetAppearance().IsDark() )
+    if ( !wxSystemSettings::GetAppearance().IsDark() )
         attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
 
     return attrs;
@@ -262,9 +231,6 @@ wxHyperlinkCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 
 wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
 {
-    if ( !HasNativeHyperlinkCtrl() )
-        return wxGenericHyperlinkCtrl::DoGetBestClientSize();
-
     // Windows allows to pass 0 as maximum width here, but Wine interprets 0 as
     // meaning "minimum possible width", so use something that works for both.
     const WPARAM UNLIMITED_WIDTH = 10000;
@@ -277,21 +243,18 @@ wxSize wxHyperlinkCtrl::DoGetBestClientSize() const
 
 bool wxHyperlinkCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
-    if ( HasNativeHyperlinkCtrl() )
+    switch ( ((LPNMHDR) lParam)->code )
     {
-        switch ( ((LPNMHDR) lParam)->code )
-        {
-            case NM_CLICK:
-            case NM_RETURN:
-                SetVisited();
-                SendEvent();
+        case NM_CLICK:
+        case NM_RETURN:
+            SetVisited();
+            SendEvent();
 
-                // SendEvent() launches the browser by default, so we consider
-                // that the event was processed in any case, either by user
-                // code or by wx itself, hence we always return true to
-                // indicate that the default processing shouldn't take place.
-                return true;
-        }
+            // SendEvent() launches the browser by default, so we consider
+            // that the event was processed in any case, either by user
+            // code or by wx itself, hence we always return true to
+            // indicate that the default processing shouldn't take place.
+            return true;
     }
 
    return wxGenericHyperlinkCtrl::MSWOnNotify(idCtrl, lParam, result);
