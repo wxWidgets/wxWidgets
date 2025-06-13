@@ -6,15 +6,22 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+/**
+    Represents where a point is in relation to a rectangle.
+ */
 enum wxOutCode
 {
+    /// The point is inside the rectangle.
     wxInside = 0x00 ,
+    /// The point is outside of the rectangle, to its left.
     wxOutLeft = 0x01 ,
+    /// The point is outside of the rectangle, to its right.
     wxOutRight = 0x02 ,
+    /// The point is outside of the rectangle, above it.
     wxOutTop = 0x08 ,
+    /// The point is outside of the rectangle, below it.
     wxOutBottom = 0x04
 };
-
 
 class wxPoint2DInt
 {
@@ -69,36 +76,119 @@ wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n);
 
 
 /**
-    wxPoint2Ds represent a point or a vector in a 2D coordinate system.
+    wxPoint2DDouble represents a point in a 2D (Cartesian) coordinate system,
+    with additional vector operations available.
  */
 class wxPoint2DDouble
 {
 public :
+    /**
+       Initializes to zero the x and y members.
+    */
     wxPoint2DDouble();
+    /**
+       Initializes the point with the given coordinates.
+    */
     wxPoint2DDouble( wxDouble x , wxDouble y );
+    /**
+       Initializes the point from another point.
+    */
     wxPoint2DDouble( const wxPoint2DDouble &pt );
+    /**
+       Initializes the point from another point.
+    */
     wxPoint2DDouble( const wxPoint2DInt &pt );
+    /**
+       Initializes the point from another point.
+    */
     wxPoint2DDouble( const wxPoint &pt );
 
-    // two different conversions to integers, floor and rounding
-    void GetFloor( wxInt32 *x , wxInt32 *y ) const;
-    void GetRounded( wxInt32 *x , wxInt32 *y ) const;
+    /**
+       Returns the floored value of the point's coordinates.
+
+       @param[out] x The value to write the floored X coordinate to.
+       @param[out] y The value to write the floored Y coordinate to.
+    */
+    void GetFloor(wxInt32* x, wxInt32* y) const;
+    /**
+       @overload
+    */
     wxPoint GetFloor() const;
+    /**
+       Returns the rounded value of the point's coordinates.
+
+       @param[out] x The value to write the rounded X coordinate to.
+       @param[out] y The value to write the rounded Y coordinate to.
+    */
+    void GetRounded(wxInt32* x, wxInt32* y) const;
+    /**
+        @overload
+    */
     wxPoint GetRounded() const;
 
+    /**
+        Returns the hypotenuse, where the X and Y coordinates of the point
+        represent the lengths of the base and height sides of a right triangle.
+     */
     wxDouble GetVectorLength() const;
-     wxDouble GetVectorAngle() const ;
-    void SetVectorLength( wxDouble length );
+    /**
+       Sets the vector length to @c length, preserving the right angle and altering
+       the X and Y values (which represent the base and height sides
+       of a right triangle).
+    */
+    void SetVectorLength(wxDouble length);
+
+    /**
+       Returns the principal value of the arc tangent of the Y and X values,
+       expressed in degrees.
+    */
+    wxDouble GetVectorAngle() const ;
+
+    /**
+       Repositions the X and Y coordinates based on the provided angle's degrees.
+    */
     void SetVectorAngle( wxDouble degrees );
-    // set the vector length to 1.0, preserving the angle
+
+    /**
+        Sets the vector length to 1.0, preserving the right angle and altering
+        the X and Y values (which represent the base and height sides
+        of a right triangle).
+    */
     void Normalize();
 
+    /**
+        Returns the distance between this point and @c pt.
+    */
     wxDouble GetDistance( const wxPoint2DDouble &pt ) const;
+    /**
+        Returns the squared distance between this point and @c pt.
+    */
     wxDouble GetDistanceSquare( const wxPoint2DDouble &pt ) const;
+
+    /**
+        Returns the dot (i.e., scalar) product, where the products of the
+        X and Y values of this point and @c are added.
+    */
     wxDouble GetDotProduct( const wxPoint2DDouble &vec ) const;
+    /**
+        Returns the cross product, where the products of the Y
+        values of this point and @c are subtracted from the X products.
+        This represents another vector that is at right angles to both points.
+    */
     wxDouble GetCrossProduct( const wxPoint2DDouble &vec ) const;
 
-    // the reflection of this point
+    /**
+        @name Miscellaneous operators
+
+        Note that binary operators are defined as friend functions inside this
+        class, making them accessible via argument-dependent lookup, but hidden
+        otherwise.
+    */
+    ///@{
+    /**
+        Returns the reflection (i.e., negation) of this point.
+        For example, (2, 4) on a Cartesian coordinate system will become (-2, -4).
+    */
     wxPoint2DDouble operator-() const;
 
     wxPoint2DDouble& operator=(const wxPoint2DDouble& pt);
@@ -112,20 +202,25 @@ public :
     bool operator==(const wxPoint2DDouble& pt) const;
     bool operator!=(const wxPoint2DDouble& pt) const;
 
+    friend wxPoint2DDouble operator+(const wxPoint2DDouble& pt1, const wxPoint2DDouble& pt2);
+    friend wxPoint2DDouble operator-(const wxPoint2DDouble& pt1, const wxPoint2DDouble& pt2);
+    friend wxPoint2DDouble operator*(wxDouble n, const wxPoint2DDouble& pt);
+    friend wxPoint2DDouble operator*(wxInt32 n, const wxPoint2DDouble& pt);
+    friend wxPoint2DDouble operator*(const wxPoint2DDouble& pt, wxDouble n);
+    friend wxPoint2DDouble operator*(const wxPoint2DDouble& pt, wxInt32 n);
+    friend wxPoint2DDouble operator/(const wxPoint2DDouble& pt, wxDouble n);
+    friend wxPoint2DDouble operator/(const wxPoint2DDouble& pt, wxInt32 n);
+    ///@}
+
+    /**
+        X coordinate of this point.
+    */
     wxDouble m_x;
+    /**
+        Y coordinate of this point.
+    */
     wxDouble m_y;
 };
-
-wxPoint2DDouble operator+(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
-wxPoint2DDouble operator-(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2);
-wxPoint2DDouble operator*(wxDouble n , const wxPoint2DDouble& pt);
-wxPoint2DDouble operator*(wxInt32 n , const wxPoint2DDouble& pt);
-wxPoint2DDouble operator*(const wxPoint2DDouble& pt , wxDouble n);
-wxPoint2DDouble operator*(const wxPoint2DDouble& pt , wxInt32 n);
-wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxDouble n);
-wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxInt32 n);
-
-
 
 /**
     wxRect2DDouble is an axis-aligned rectangle;
