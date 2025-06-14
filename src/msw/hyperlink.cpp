@@ -96,6 +96,10 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
         return false;
     }
 
+    // Make sure our GetLabel() returns the label that was specified and not
+    // the HTML fragment used as the label by the native control.
+    m_labelOrig = label;
+
     if ( wxSystemSettings::GetAppearance().IsDark() )
     {
         // Override the colour used by default by the native control with the
@@ -136,7 +140,7 @@ void wxHyperlinkCtrl::SetURL(const wxString &url)
     if ( GetURL() != url )
         SetVisited( false );
     wxGenericHyperlinkCtrl::SetURL( url );
-    wxWindow::SetLabel( GetLabelForSysLink(m_labelOrig, url) );
+    SetLabel(m_labelOrig);
 }
 
 void wxHyperlinkCtrl::SetLabel(const wxString &label)
