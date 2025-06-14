@@ -856,6 +856,17 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
     wxString copyRight = png_get_copyright(nullptr);
     copyRight.Trim(true).Trim(false);
+    // The copyright string may include the version info in the first line.
+    // If it does, then remove it.
+    if (copyRight.starts_with("libpng"))
+    {
+        size_t firstNewLine = copyRight.find(L'\n');
+        if (firstNewLine != wxString::npos)
+        {
+            copyRight.erase(0, firstNewLine);
+            copyRight.Trim(false);
+        }
+    }
 
     return wxVersionInfo("libpng",
                          PNG_LIBPNG_VER_MAJOR,
