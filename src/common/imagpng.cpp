@@ -872,7 +872,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                          PNG_LIBPNG_VER_MAJOR,
                          PNG_LIBPNG_VER_MINOR,
                          PNG_LIBPNG_VER_RELEASE,
-                         0,
+                         PNG_LIBPNG_VER_BUILD,
                          str,
                          copyRight);
 }
