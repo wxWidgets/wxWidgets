@@ -150,6 +150,27 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
     InvalidateBestSize();
 }
 
+bool wxHyperlinkCtrl::Enable(bool enable)
+{
+    if ( !wxGenericHyperlinkCtrl::Enable(enable) )
+        return false;
+
+    wxColour colour;
+    if ( enable )
+    {
+        colour = m_savedEnabledColour;
+    }
+    else
+    {
+        m_savedEnabledColour = GetNormalColour();
+        colour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+    }
+
+    SetForegroundColour(colour);
+
+    return true;
+}
+
 bool wxHyperlinkCtrl::MSWAreCustomColoursEnabled() const
 {
     LITEM litem = { };
