@@ -35,6 +35,9 @@
 #endif
 
 #include "jpeglib.h"
+#if wxHAS_CXX17_INCLUDE("jversion.h")
+#include "jversion.h"
+#endif
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
@@ -503,10 +506,19 @@ bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
 
 /*static*/ wxVersionInfo wxJPEGHandler::GetLibraryVersionInfo()
 {
-#if defined(JPEG_LIB_VERSION_MAJOR) && defined(JPEG_LIB_VERSION_MINOR)
-    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION_MAJOR, JPEG_LIB_VERSION_MINOR);
+    const wxString copyRight =
+#ifdef JCOPYRIGHT
+    JCOPYRIGHT;
 #else
-    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION / 10, JPEG_LIB_VERSION % 10);
+    "";
+#endif
+
+#if defined(JPEG_LIB_VERSION_MAJOR) && defined(JPEG_LIB_VERSION_MINOR)
+    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION_MAJOR, JPEG_LIB_VERSION_MINOR,
+                         0, 0, wxString{}, copyRight);
+#else
+    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION / 10, JPEG_LIB_VERSION % 10,
+                         0, 0, wxString{}, copyRight);
 #endif
 }
 
