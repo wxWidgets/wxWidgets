@@ -851,14 +851,19 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 {
     // The version string seems to always have a leading space and a trailing
     // new line, get rid of them both.
-    wxString str = png_get_header_version(nullptr) + 1;
-    str.Replace("\n", "");
+    wxString str = png_get_header_version(nullptr);
+    str.Trim(true).Trim(false);
+
+    wxString copyRight = png_get_copyright(nullptr);
+    copyRight.Trim(true).Trim(false);
 
     return wxVersionInfo("libpng",
                          PNG_LIBPNG_VER_MAJOR,
                          PNG_LIBPNG_VER_MINOR,
                          PNG_LIBPNG_VER_RELEASE,
-                         str);
+                         0,
+                         str,
+                         copyRight);
 }
 
 #endif  // wxUSE_LIBPNG
