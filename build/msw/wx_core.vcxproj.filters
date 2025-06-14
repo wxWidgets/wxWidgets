@@ -2083,6 +2083,9 @@
     <ClInclude Include="..\..\include\wx\persist\dataview.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\persist\radiobut.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\persist\splitter.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
