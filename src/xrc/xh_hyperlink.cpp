@@ -57,18 +57,42 @@ wxHyperlinkCtrlXmlHandler::wxHyperlinkCtrlXmlHandler()
 
 wxObject *wxHyperlinkCtrlXmlHandler::DoCreateResource()
 {
-    XRC_MAKE_INSTANCE(control, wxHyperlinkCtrl)
+    wxHyperlinkCtrlBase* control = nullptr;
+    if ( m_instance )
+        control = wxStaticCast(m_instance, wxHyperlinkCtrlBase);
 
-    control->Create
-             (
-                m_parentAsWindow,
-                GetID(),
-                GetText(wxT("label")),
-                GetParamValue(wxT("url")),
-                GetPosition(), GetSize(),
-                GetStyle(wxT("style"), wxHL_DEFAULT_STYLE),
-                GetName()
-             );
+    if ( !control )
+    {
+        if ( m_class == "wxHyperlinkCtrl" )
+        {
+            control = new wxHyperlinkCtrl
+                          (
+                           m_parentAsWindow,
+                           GetID(),
+                           GetText(wxT("label")),
+                           GetParamValue(wxT("url")),
+                           GetPosition(), GetSize(),
+                           GetStyle(wxT("style"), wxHL_DEFAULT_STYLE),
+                           GetName()
+                          );
+        }
+        else // m_class must be "wxGenericHyperlinkCtrl"
+        {
+            control = new wxGenericHyperlinkCtrl
+                          (
+                           m_parentAsWindow,
+                           GetID(),
+                           GetText(wxT("label")),
+                           GetParamValue(wxT("url")),
+                           GetPosition(), GetSize(),
+                           GetStyle(wxT("style"), wxHL_DEFAULT_STYLE),
+                           GetName()
+                          );
+        }
+    }
+
+    if ( GetBool("hidden", 0) == 1 )
+        control->Hide();
 
     SetupWindow(control);
 
@@ -77,7 +101,8 @@ wxObject *wxHyperlinkCtrlXmlHandler::DoCreateResource()
 
 bool wxHyperlinkCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, wxT("wxHyperlinkCtrl"));
+    return IsOfClass(node, wxT("wxHyperlinkCtrl")) ||
+           IsOfClass(node, wxT("wxGenericHyperlinkCtrl"));
 }
 
 #endif // wxUSE_XRC && wxUSE_HYPERLINKCTRL

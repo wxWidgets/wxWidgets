@@ -191,6 +191,7 @@ builtinWindowClasses =
     | wxGauge
     | wxGenericAnimationCtrl
     | wxGenericDirCtrl
+    | wxGenericHyperlinkCtrl
     | wxGrid
     | wxHtmlWindow
     | wxHyperlinkCtrl
@@ -297,6 +298,7 @@ builtinClassesNames =
     | "wxGauge"
     | "wxGenericAnimationCtrl"
     | "wxGenericDirCtrl"
+    | "wxGenericHyperlinkCtrl"
     | "wxGrid"
     | "wxHtmlWindow"
     | "wxHyperlinkCtrl"
@@ -1043,6 +1045,14 @@ wxGenericDirCtrl =
         [xrc:p="o"] element defaultfilter {_, t_integer }*
     }
 
+wxGenericHyperlinkCtrl =
+    element object {
+        attribute class { "wxGenericHyperlinkCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="important"] element label {_, t_text }* &
+        [xrc:p="important"] element url   {_, t_url }*
+    }
 
 wxGrid =
     element object {
