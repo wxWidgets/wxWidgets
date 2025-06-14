@@ -35,7 +35,9 @@
 #endif
 
 #include "jpeglib.h"
+#if wxHAS_CXX17_INCLUDE("jversion.h")
 #include "jversion.h"
+#endif
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
