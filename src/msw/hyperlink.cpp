@@ -185,6 +185,16 @@ wxColour wxHyperlinkCtrl::GetHoverColour() const
     return GetNormalColour();
 }
 
+bool wxHyperlinkCtrl::SetForegroundColour(const wxColour& colour)
+{
+    if ( !wxGenericHyperlinkCtrl::SetForegroundColour(colour) )
+        return false;
+
+    SetNormalColour(colour);
+
+    return true;
+}
+
 wxColour wxHyperlinkCtrl::GetNormalColour() const
 {
     if ( MSWAreCustomColoursEnabled() )

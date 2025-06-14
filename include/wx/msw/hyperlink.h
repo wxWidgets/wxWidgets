@@ -63,6 +63,8 @@ public:
     virtual void SetVisitedColour(const wxColour &colour) override;
 
     // overridden/inherited wxWindow methods
+    virtual bool SetForegroundColour(const wxColour& colour) override;
+
     virtual wxVisualAttributes GetDefaultAttributes() const override;
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
