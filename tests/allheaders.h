@@ -267,6 +267,7 @@
 #include <wx/persist/bookctrl.h>
 #include <wx/persist/combobox.h>
 #include <wx/persist/dataview.h>
+#include <wx/persist/radiobut.h>
 #include <wx/persist/splitter.h>
 #include <wx/persist/toplevel.h>
 #include <wx/persist/treebook.h>

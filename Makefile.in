@@ -3955,6 +3955,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/persist.h \
 	wx/persist/bookctrl.h \
 	wx/persist/dataview.h \
+	wx/persist/radiobut.h \
 	wx/persist/splitter.h \
 	wx/persist/toplevel.h \
 	wx/persist/treebook.h \
