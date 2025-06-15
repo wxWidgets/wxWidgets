@@ -346,9 +346,9 @@ size_t wxStoredOutputStream::OnSysWrite(const void *buffer, size_t size)
 /////////////////////////////////////////////////////////////////////////////
 // wxRawInputStream
 //
-// Used to handle the unusal case of raw copying an entry of unknown
+// Used to handle the unusual case of raw copying an entry of unknown
 // length. This can only happen when the zip being copied from is being
-// read from a non-seekable stream, and also was original written to a
+// read from a non-seekable stream, and also was originally written to a
 // non-seekable stream.
 //
 // In this case there's no option but to decompress the stream to find
@@ -364,7 +364,7 @@ size_t wxStoredOutputStream::OnSysWrite(const void *buffer, size_t size)
 // allows the data read to be read a second time via an extra method 'GetData'.
 //
 // The wxRawInputStream then draws data through the tee using a decompressor
-// then instead of returning the decompressed data, retuns the raw data
+// then instead of returning the decompressed data, returns the raw data
 // from wxTeeInputStream::GetData().
 
 class wxTeeInputStream : public wxFilterInputStream
