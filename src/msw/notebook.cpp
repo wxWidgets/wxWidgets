@@ -1808,6 +1808,14 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
 // Windows only: attempts to get colour for UX theme page background
 wxColour wxNotebook::GetThemeBackgroundColour() const
 {
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We know the colour used in dark mode as we draw the notebook
+        // ourselves, so just return it (especially because the code below
+        // would return totally inappropriate light mode colour).
+        return GetBackgroundColour();
+    }
+
 #if wxUSE_UXTHEME
     if (wxUxThemeIsActive())
     {
