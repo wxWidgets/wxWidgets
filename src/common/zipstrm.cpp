@@ -348,7 +348,7 @@ size_t wxStoredOutputStream::OnSysWrite(const void *buffer, size_t size)
 //
 // Used to handle the unusual case of raw copying an entry of unknown
 // length. This can only happen when the zip being copied from is being
-// read from a non-seekable stream, and also was original written to a
+// read from a non-seekable stream, and also was originally written to a
 // non-seekable stream.
 //
 // In this case there's no option but to decompress the stream to find
