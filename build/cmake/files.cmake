@@ -1229,6 +1229,7 @@ set(GUI_CMN_HDR
     wx/power.h
     wx/webpdecoder.h
     wx/imagwebp.h
+    wx/persist/checkbox.h
 )
 
 set(UNIX_SRC

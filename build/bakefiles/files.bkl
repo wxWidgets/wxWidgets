@@ -1333,6 +1333,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/power.h
     wx/imagwebp.h
     wx/webpdecoder.h
+    wx/persist/checkbox.h
 </set>
 
 <!-- ====================================================================== -->
