@@ -469,9 +469,12 @@ public:
     /**
         Returns the size of a collapse button.
 
+        @a dc parameter was of type wxDC until wxWidgets 3.3.0, which changed
+        it to wxReadOnlyDC as this function doesn't modify the DC contents.
+
         @since 3.1.0
     */
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) = 0;
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& dc) = 0;
 
     /**
         Draw the border for sash window: this border must be such that the sash
