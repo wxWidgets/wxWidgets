@@ -1378,6 +1378,14 @@ page.
 @endTable
 
 
+@subsubsection xrc_wxgenerichyperlinkctrl wxGenericHyperlinkCtrl
+
+This handler is identical to the one for @ref xrc_wxhyperlinkctrl
+"wxHyperlinkCtrl", please see it for more information. The only difference is
+that, for the platforms with a native wxHyperlinkCtrl implementation, using
+this handler creates a generic control rather than a native one.
+
+
 @subsubsection xrc_wxinfobar wxInfoBar
 
 @beginTable
