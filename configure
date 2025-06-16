@@ -35643,11 +35643,6 @@ else
     fi
 fi
 
-if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
-    $as_echo "#define wxUSE_REPRODUCIBLE_BUILD 1" >>confdefs.h
-
-fi
-
 
 if test "x$WXWIN_COMPATIBILITY_3_0" = "xyes"; then
     $as_echo "#define WXWIN_COMPATIBILITY_3_0 1" >>confdefs.h
@@ -43649,6 +43644,13 @@ EOF
         as_fn_error $? "Versions of Bakefile used to generate makefiles ($BAKEFILE_AUTOCONF_INC_M4_VERSION) and configure ($BAKEFILE_BAKEFILE_M4_VERSION) do not match." "$LINENO" 5
     fi
 
+
+if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
+    $as_echo "#define wxUSE_REPRODUCIBLE_BUILD 1" >>confdefs.h
+
+                AROPTIONS="rcD"
+    RANLIB="$RANLIB -D"
+fi
 
 case ${INSTALL} in
   /* ) # Absolute
