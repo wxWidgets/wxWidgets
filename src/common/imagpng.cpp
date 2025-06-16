@@ -863,8 +863,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         size_t firstNewLine = copyRight.find(L'\n');
         if (firstNewLine != wxString::npos)
         {
-            copyRight.erase(0, firstNewLine);
-            copyRight.Trim(false);
+            copyRight.erase(0, firstNewLine + 1);
         }
     }
 
