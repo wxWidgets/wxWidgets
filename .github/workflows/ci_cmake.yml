@@ -93,6 +93,17 @@ jobs:
             cmake_samples: SOME
             cmake_tests: CONSOLE_ONLY
             cmake_build_toolkit: msw
+          - name: MSW/MSVC wxQt 5.15
+            runner: windows-latest
+            no_sudo: 1
+            cmake_generator: 'Visual Studio 17 2022'
+            cmake_defines: -DCMAKE_BUILD_TYPE=Debug -DwxBUILD_SHARED=ON
+            cmake_samples: SOME
+            cmake_tests: ALL
+            cmake_build_toolkit: qt
+            cmake_qt_version: '5.15.*'
+            skip_installation: true
+            test_gui: 1
           - name: MSW/MSVC wxQt 6.8
             runner: windows-latest
             no_sudo: 1
@@ -101,6 +112,7 @@ jobs:
             cmake_samples: SOME
             cmake_tests: ALL
             cmake_build_toolkit: qt
+            cmake_qt_version: '6.8.*'
             skip_installation: true
           - name: MSW/Clang wxMSW
             shell: msys2 {0}
@@ -137,15 +149,11 @@ jobs:
           update: true
           install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
 
-      - name: Install Qt6
-        if: ${{ matrix.cmake_build_toolkit }} == 'qt'
+      - name: Install Qt
+        if: matrix.cmake_build_toolkit == 'qt'
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.8.*'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_msvc2022_64'
-          archives: 'qtbase qtsvg qtimageformats'
+          version: ${{ matrix.cmake_qt_version }}
           cache: 'true'
           aqtversion: '==3.1.*'
           setup-python: 'false'
@@ -237,6 +245,12 @@ jobs:
               httpbin_show_log
               exit $rc
           fi
+
+      - name: Testing GUI
+        if: matrix.test_gui == '1'
+        working-directory: build_cmake\lib\vc_x64_dll
+        run: |
+          ./test_gui.exe
 
       - name: Testing installation
         if: matrix.skip_installation != true
