@@ -523,6 +523,7 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
     // it might only have it in narrow char version until now as we use main()
     // (and not _wmain()) as our entry point.
     static wxChar* s_dummyEnvVar = _tgetenv(wxT("TEMP"));
+    wxUnusedVar(s_dummyEnvVar);
 
     wxChar **env = _tenviron;
 #elif defined(__VMS)
