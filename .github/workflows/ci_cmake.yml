@@ -133,13 +133,20 @@ jobs:
       - name: Set environment variables
         run: |
           wxPROC_COUNT=`./build/tools/proc_count.sh`
-          if [ "${{ matrix.cmake_generator }}" == "Xcode" ]; then
+          case "${{ matrix.cmake_generator }}" in
+            Xcode)
               # Xcode generates a lot of output, suppress it so only warnings and errors are visible
               wxBUILD_ARGS="-jobs $wxPROC_COUNT -quiet"
-          else
+              ;;
+
+            *Makefiles)
               wxBUILD_ARGS=-j$wxPROC_COUNT
+              ;;
+          esac
+
+          if [ -n "$wxBUILD_ARGS" ]; then
+            echo wxBUILD_ARGS=$wxBUILD_ARGS >> $GITHUB_ENV
           fi
-          echo wxBUILD_ARGS=$wxBUILD_ARGS >> $GITHUB_ENV
 
           cmake_tests=${{ matrix.cmake_tests }}
           if [ -z $cmake_tests ]; then cmake_tests=CONSOLE_ONLY; fi
