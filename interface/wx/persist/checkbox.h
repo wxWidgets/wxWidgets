@@ -22,7 +22,7 @@
     If the checkbox is checked, it will be checked again after the application
     restart.
 
-    @since 3.3.0
+    @since 3.3.1
  */
 class wxPersistentCheckBox : public wxPersistentWindow<wxCheckBox>
 {
