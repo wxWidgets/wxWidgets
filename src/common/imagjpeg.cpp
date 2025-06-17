@@ -506,7 +506,6 @@ bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
 {
     struct jpeg_error_mgr err{};
     jpeg_std_error(&err);
-    err.last_jpeg_message = JMSG_COPYRIGHT;
 
 #if defined(JPEG_LIB_VERSION_MAJOR) && defined(JPEG_LIB_VERSION_MINOR)
     return wxVersionInfo("libjpeg", JPEG_LIB_VERSION_MAJOR, JPEG_LIB_VERSION_MINOR,
