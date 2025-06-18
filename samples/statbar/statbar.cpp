@@ -53,6 +53,10 @@
 //#define USE_MDI_PARENT_FRAME 1
 #ifdef USE_MDI_PARENT_FRAME
     #include "wx/mdi.h"
+
+    using BaseFrame = wxMDIParentFrame;
+#else
+    using BaseFrame = wxFrame;
 #endif // USE_MDI_PARENT_FRAME
 
 static const char *SAMPLE_DIALOGS_TITLE = "wxWidgets statbar sample";
@@ -125,15 +129,11 @@ private:
 };
 
 // Define a new frame type: this is going to be our main frame
-#ifdef USE_MDI_PARENT_FRAME
-class MyFrame : public wxMDIParentFrame
-#else
-class MyFrame : public wxFrame
-#endif
+class MyFrame : public BaseFrame
 {
 public:
     // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    explicit MyFrame(const wxString& title);
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -230,11 +230,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-#ifdef USE_MDI_PARENT_FRAME
-wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
-#else
-wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-#endif
+wxBEGIN_EVENT_TABLE(MyFrame, BaseFrame)
     EVT_MENU(StatusBar_Quit,  MyFrame::OnQuit)
     EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
     EVT_MENU(StatusBar_SetField, MyFrame::OnSetStatusField)
@@ -300,8 +296,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    MyFrame *frame = new MyFrame("wxStatusBar sample",
-                                 wxPoint(50, 50), wxSize(450, 340));
+    MyFrame *frame = new MyFrame("wxStatusBar sample");
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -318,12 +313,8 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 // frame constructor
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-#ifdef USE_MDI_PARENT_FRAME
-    : wxMDIParentFrame(nullptr, wxID_ANY, title, pos, size)
-#else
-    : wxFrame(nullptr, wxID_ANY, title, pos, size)
-#endif
+MyFrame::MyFrame(const wxString& title)
+    : BaseFrame(nullptr, wxID_ANY, title)
 {
     SetIcon(wxICON(sample));
 
