@@ -344,7 +344,7 @@ MyFrame::MyFrame(const wxString& title)
                                       "wxSTB_ELLIPSIZE_END",
                                       "Toggle wxSTB_ELLIPSIZE_END style");
     statbarMenu->Append(StatusBar_SetPaneStyle, "Status bar style",
-                        statbarStyleMenu);
+                        statbarStyleMenu, "Status bar choices");
     statbarMenu->AppendSeparator();
 
     statbarMenu->Append(StatusBar_SetField, "Set active field &number\tCtrl-N",
@@ -388,7 +388,7 @@ MyFrame::MyFrame(const wxString& title)
             "Sets the style of the first field to sunken look"
         );
     statbarMenu->Append(StatusBar_SetPaneStyle, "Field style",
-                        statbarPaneStyleMenu);
+                        statbarPaneStyleMenu, "Field style choices");
 
     statbarMenu->Append(StatusBar_ResetFieldsWidth, "Reset field widths",
                         "Sets all fields to the same width");

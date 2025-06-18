@@ -2481,13 +2481,27 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     wxMenuItem* menuItem = nullptr;
     if ( menu )
     {
+        int pos = 0;
         for ( auto& mi : menu->GetMenuItems() )
         {
+            // If there is a normal menu item with the same ID as the position
+            // of a submenu we give precedence to the normal item, as this
+            // seems more useful.
             if ( mi->GetId() == item )
             {
                 menuItem = mi;
                 break;
             }
+
+            // We don't get the ID for submenus, but their position in the
+            // parent window, so this is how we identify them.
+            if ( mi->IsSubMenu() && item == pos )
+            {
+                menuItem = mi;
+                break;
+            }
+
+            ++pos;
         }
     }
 
