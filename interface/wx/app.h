@@ -1371,7 +1371,9 @@ public:
 
         This function uses @e undocumented, and unsupported by Microsoft,
         functions to enable dark mode support for the desktop applications
-        under Windows 10 20H1 or later (including all Windows 11 versions).
+        under Windows 10 1809 (which Windows 10 LTSC 2019 is based on)
+        or later (including all Windows 11 versions).
+        But it is not fully tested for versions before Windows 10 20H1. Use caution!
 
         Note that dark mode can also be enabled by setting the "msw.dark-mode"
         @ref wxSystemOptions "system option" via an environment variable from

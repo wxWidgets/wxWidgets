@@ -107,11 +107,9 @@ DWORD (WINAPI *SetPreferredAppMode)(DWORD) = nullptr;
 
 bool InitDarkMode()
 {
-    // Note: for simplicity, we support dark mode only in Windows 10 v2004
-    // ("20H1", build number 19041) and later, even if, in principle, it could
-    // be supported as far back as v1809 (build 17763) -- but very few people
-    // must still use it by now and so it just doesn't seem to be worth it.
-    if ( !wxCheckOsVersion(10, 0, 19041) )
+    // In principle, dark mode is supported as far back as v1809 (build 17763).
+    // But it is not fully tested for versions before Windows 10 v2004 ("20H1", build number 19041). Use caution!
+    if ( !wxCheckOsVersion(10, 0, 17763) )
     {
         wxLogTrace(TRACE_DARKMODE, "Unsupported due to OS version");
         return false;
@@ -415,6 +413,9 @@ void EnableForTLW(HWND hwnd)
         return;
 
     BOOL useDarkMode = TRUE;
+    // DWMWA_USE_IMMERSIVE_DARK_MODE is 19 for v1809, but is 20 for later versions.
+    // To set title bar black for both v1809 and later versions,
+    // we try to call GetDwmSetWindowAttribute() with 20 first, and if it fails try again with 19.
     HRESULT hr = wxDarkModeModule::GetDwmSetWindowAttribute()
                  (
                     hwnd,
@@ -422,6 +423,16 @@ void EnableForTLW(HWND hwnd)
                     &useDarkMode,
                     sizeof(useDarkMode)
                  );
+    if ( FAILED(hr) )
+    {
+        hr = wxDarkModeModule::GetDwmSetWindowAttribute()
+             (
+                hwnd,
+                19,
+                &useDarkMode,
+                sizeof(useDarkMode)
+             );
+    }
     if ( FAILED(hr) )
         wxLogApiError("DwmSetWindowAttribute(USE_IMMERSIVE_DARK_MODE)", hr);
 
