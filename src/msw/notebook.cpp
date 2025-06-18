@@ -1094,7 +1094,7 @@ void
 DrawNotebookTab(wxWindow* win,
                 wxDC& dc,
                 const wxRect& rectOrig,
-                const wxString& text,
+                const wxString& label,
                 const wxBitmap& image,
                 wxDirection tabOrient,
                 int flags = wxCONTROL_NONE)
@@ -1174,6 +1174,9 @@ DrawNotebookTab(wxWindow* win,
 
     rectLabel.Deflate(labelOffset);
 
+    wxString text;
+    int mnemonicIndex = wxControl::FindAccelIndex(label, &text);
+
     // Draw the label and the image, if any.
     switch ( tabOrient )
     {
@@ -1181,7 +1184,8 @@ DrawNotebookTab(wxWindow* win,
         case wxBOTTOM:
             // We can use an existing helper that will do everything for us.
             dc.DrawLabel(text, image, rectLabel,
-                         wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+                         wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL,
+                         mnemonicIndex);
             break;
 
         case wxLEFT:
@@ -1239,6 +1243,8 @@ DrawNotebookTab(wxWindow* win,
 
                     dc.DrawRotatedText(text, rect.GetRight() - textOfs, y, -90.0);
                 }
+
+                // TODO: We don't underline mnemonic when drawing vertically.
             }
             break;
 
