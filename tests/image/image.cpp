@@ -2506,10 +2506,10 @@ static wxSize ParseEnvVarAsSize(const wxString& varname)
     REQUIRE( wxGetEnv(varname, &sizeStr) );
 
     wxString heightStr;
-    unsigned width;
+    unsigned width = 0;
     REQUIRE( sizeStr.BeforeFirst(',', &heightStr).ToUInt(&width) );
 
-    unsigned height;
+    unsigned height = 0;
     if ( !heightStr.empty() )
     {
         REQUIRE( heightStr.ToUInt(&height) );
