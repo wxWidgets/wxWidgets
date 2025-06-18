@@ -2455,7 +2455,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 #if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
 
 // Find the menu item with the given ID in the given menu.
-static wxMenuItem* MSWFindMenuItemFromHMENU(WXHMENU hMenu, int nItem);
+static wxMenuItem* MSWFindMenuItemFromHMENU(wxMenu& menu, int nItem);
 
 bool
 wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
@@ -2478,7 +2478,11 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
         item = wxID_NONE;
 
     wxMenu* menu = MSWFindMenuFromHMENU(hMenu);
-    wxMenuItem* menuItem = MSWFindMenuItemFromHMENU(hMenu, item);
+
+    // Don't try to look for the menu item if it's not our menu at all, e.g. if
+    // it's the per-window system menu in MDI applications.
+    wxMenuItem* const menuItem = menu ? MSWFindMenuItemFromHMENU(*menu, item)
+                                      : nullptr;
 
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item, menu, menuItem);
     if ( wxMenu::ProcessMenuEvent(menu, event, this) )
@@ -2529,31 +2533,13 @@ wxMenu* wxWindowMSW::MSWFindMenuFromHMENU(WXHMENU hMenu)
     return nullptr;
 }
 
-static wxMenuItem* MSWFindMenuItemFromHMENU(WXHMENU hMenu, int item)
+static wxMenuItem* MSWFindMenuItemFromHMENU(wxMenu& menu, int itemId)
 {
-    WinStruct<MENUITEMINFO> mii;
-    mii.fMask = MIIM_ID | MIIM_DATA; // Include MIIM_DATA to access dwItemData
-
-    const int count = ::GetMenuItemCount(hMenu);
-    for ( int i = 0; i < count; i++ )
+    for ( auto& item : menu.GetMenuItems() )
     {
-        if ( ::GetMenuItemInfo(hMenu, i, TRUE, &mii) )
+        if ( item->GetId() == itemId )
         {
-            wxMenuItem* menuItem = (wxMenuItem*)mii.dwItemData;
-            if ( mii.wID == (unsigned int)item && menuItem )
-            {
-                return menuItem;
-            }
-
-            // Check for submenus
-            if ( mii.hSubMenu )
-            {
-                wxMenuItem* foundInSubmenu = MSWFindMenuItemFromHMENU(mii.hSubMenu, item);
-                if ( foundInSubmenu )
-                {
-                    return foundInSubmenu;
-                }
-            }
+            return item;
         }
     }
 
