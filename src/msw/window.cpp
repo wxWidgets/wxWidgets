@@ -2486,7 +2486,8 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
         {
             // If there is a normal menu item with the same ID as the position
             // of a submenu we give precedence to the normal item, as this
-            // seems more useful.
+            // seems more useful because the application is more likely to
+            // handle wxEVT_MENU_HIGHLIGHT for a normal item than for a submenu.
             if ( mi->GetId() == item )
             {
                 menuItem = mi;
@@ -2498,7 +2499,9 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
             if ( mi->IsSubMenu() && item == pos )
             {
                 menuItem = mi;
-                break;
+
+                // Don't break here, if we find an item with the given ID
+                // later, take it instead of this submenu, as explained above.
             }
 
             ++pos;
