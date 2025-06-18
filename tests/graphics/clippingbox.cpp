@@ -852,10 +852,6 @@ static void OneRegionRTL(wxDC& dc, const wxBitmap& bmp)
         return;
     }
 
-#ifdef __WXGTK__
-    wxUnusedVar(bmp);
-    WARN("Skipping test known to fail in wxGTK");
-#else
     // Setting one clipping region inside DC area.
     const int x = 10;
     const int y = 20;
@@ -869,7 +865,6 @@ static void OneRegionRTL(wxDC& dc, const wxBitmap& bmp)
     CheckClipBox(dc, bmp,
         x, y, w, h,
         (s_dcSize.x-1)-x2, y, w, h);
-#endif
 }
 
 static void TwoRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
@@ -1033,13 +1028,9 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
         return;
     }
 
-#ifdef __WXGTK__
-    wxUnusedVar(bmp);
-    WARN("Skipping test known to fail in wxGTK");
-#else
     // Setting one clipping region in device coordinates
     // inside transformed DC area.
-    const int x = 10;
+    const int x = 11;
     const int y = 21;
     const int w = 79;
     const int h = 75;
@@ -1064,12 +1055,21 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
     dc.SetDeviceClippingRegion(reg);
     dc.SetBackground(wxBrush(s_fgColour, wxBRUSHSTYLE_SOLID));
     dc.Clear();
-    wxPoint pos = dc.DeviceToLogical(x+w-1, y); // right physical edge becomes left logical edge
+    // right physical edge becomes left logical edge in a mirrored DC.
+    const int x2 = s_dcSize.x - (x + w);
+    // In a mirrored DC, the device origin (0, 0) is always at the top left
+    // of the DC under wxMSW, but under wxGTK3 is at the top right.
+#if defined(__WXGTK3__)
+    wxPoint pos = dc.DeviceToLogical(x, y);
+    wxSize dim = dc.DeviceToLogicalRel(w, h);
+#else
+    wxPoint pos = dc.DeviceToLogical((s_dcSize.x-1)-x, y);
     wxSize dim = dc.DeviceToLogicalRel(-w, h);
+#endif
+
     CheckClipBox(dc, bmp,
                  pos.x, pos.y, dim.x, dim.y,
-                 x, y, w, h);
-#endif
+                 x2, y, w, h);
 }
 
 static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
