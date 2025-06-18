@@ -2454,9 +2454,6 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 
 #if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
 
-// Find the menu item with the given ID in the given menu.
-static wxMenuItem* MSWFindMenuItemFromHMENU(wxMenu& menu, int nItem);
-
 bool
 wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 {
@@ -2481,8 +2478,18 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 
     // Don't try to look for the menu item if it's not our menu at all, e.g. if
     // it's the per-window system menu in MDI applications.
-    wxMenuItem* const menuItem = menu ? MSWFindMenuItemFromHMENU(*menu, item)
-                                      : nullptr;
+    wxMenuItem* menuItem = nullptr;
+    if ( menu )
+    {
+        for ( auto& mi : menu->GetMenuItems() )
+        {
+            if ( mi->GetId() == item )
+            {
+                menuItem = mi;
+                break;
+            }
+        }
+    }
 
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item, menu, menuItem);
     if ( wxMenu::ProcessMenuEvent(menu, event, this) )
@@ -2531,19 +2538,6 @@ wxMenu* wxWindowMSW::MSWFindMenuFromHMENU(WXHMENU hMenu)
         return wxCurrentPopupMenu;
 
     return nullptr;
-}
-
-static wxMenuItem* MSWFindMenuItemFromHMENU(wxMenu& menu, int itemId)
-{
-    for ( auto& item : menu.GetMenuItems() )
-    {
-        if ( item->GetId() == itemId )
-        {
-            return item;
-        }
-    }
-
-    return nullptr; // Not found
 }
 
 #endif // wxUSE_MENUS && !defined(__WXUNIVERSAL__)
