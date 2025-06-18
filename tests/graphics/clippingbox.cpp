@@ -852,10 +852,6 @@ static void OneRegionRTL(wxDC& dc, const wxBitmap& bmp)
         return;
     }
 
-#ifdef __WXGTK__
-    wxUnusedVar(bmp);
-    WARN("Skipping test known to fail in wxGTK");
-#else
     // Setting one clipping region inside DC area.
     const int x = 10;
     const int y = 20;
@@ -869,7 +865,6 @@ static void OneRegionRTL(wxDC& dc, const wxBitmap& bmp)
     CheckClipBox(dc, bmp,
         x, y, w, h,
         (s_dcSize.x-1)-x2, y, w, h);
-#endif
 }
 
 static void TwoRegionsOverlapping(wxDC& dc, const wxBitmap& bmp, const wxPoint& parentDcOrigin)
@@ -1033,10 +1028,6 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
         return;
     }
 
-#if defined(__WXGTK__)
-    wxUnusedVar(bmp);
-    WARN("Skipping test known to fail in this platform");
-#else
     // Setting one clipping region in device coordinates
     // inside transformed DC area.
     const int x = 10;
@@ -1073,7 +1064,6 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
     CheckClipBox(dc, bmp,
                  pos.x, pos.y, dim.x, dim.y,
                  x2, y, w, h);
-#endif
 }
 
 static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
