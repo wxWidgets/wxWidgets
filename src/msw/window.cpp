@@ -2454,6 +2454,9 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 
 #if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
 
+// Find the menu item with the given ID in the given menu.
+static wxMenuItem* MSWFindMenuItemFromHMENU(WXHMENU hMenu, int nItem);
+
 bool
 wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 {
@@ -2526,7 +2529,7 @@ wxMenu* wxWindowMSW::MSWFindMenuFromHMENU(WXHMENU hMenu)
     return nullptr;
 }
 
-wxMenuItem* wxWindowMSW::MSWFindMenuItemFromHMENU(WXHMENU hMenu, int item)
+static wxMenuItem* MSWFindMenuItemFromHMENU(WXHMENU hMenu, int item)
 {
     WinStruct<MENUITEMINFO> mii;
     mii.fMask = MIIM_ID | MIIM_DATA; // Include MIIM_DATA to access dwItemData
