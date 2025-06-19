@@ -244,7 +244,7 @@ void DataStreamTestCase::StringRW()
     s.append(wxT("Test2"));
     CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
 
-    s = wxString::FromUTF8("\xc3\xbc"); // U+00FC LATIN SMALL LETTER U WITH DIAERESIS
+    s = wxString::FromUTF8("ü");
     CPPUNIT_ASSERT_EQUAL( TestRW(s), s );
 }
 
