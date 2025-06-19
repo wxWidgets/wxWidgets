@@ -36,7 +36,6 @@ public:
 
 wxAcceleratorTable::wxAcceleratorTable()
 {
-    m_refData = nullptr;
 }
 
 // Create from an array
