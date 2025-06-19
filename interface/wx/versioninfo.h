@@ -33,6 +33,52 @@ enum class wxVersionContext
     provide version information about your own libraries, or other libraries
     that you use.
 
+    The following example shows how to get most of wxWidgets's library information
+    and format it all into a string.
+    (Note that this assumes all libraries are being linked and @c wxInitAllImageHandlers()
+     has already been called.)
+
+    @code
+    // Consistently format library info with the name and version number.
+    const auto formatLibInfo = [](const auto& libInfo)
+    {
+        return wxString::Format(_("%s - version %s"), libInfo.GetName(),
+                                libInfo.GetNumericVersionString());
+    };
+
+    // Get wxWidgets's version--as well as its submodules--and sort them.
+    std::vector<wxString> allLibInfo;
+    allLibInfo.push_back(formatLibInfo(wxGetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxTIFFHandler::GetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxJPEGHandler::GetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxPNGHandler::GetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxWEBPHandler::GetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxRegEx::GetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxXmlDocument::GetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxStyledTextCtrl::GetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxWebSession::GetDefault().GetLibraryVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxGetZlibVersionInfo()));
+    allLibInfo.push_back(formatLibInfo(wxWebView::GetBackendVersionInfo()));
+    std::sort(allLibInfo.begin(), allLibInfo.end(),
+              [](const auto& lhv, const auto& rhv)
+                { return wxStricmp(lhv, rhv) < 0; });
+
+    // Format all the library strings into one.
+    const wxString allLibString =
+    [&allLibInfo]()
+    {
+        wxString allStr;
+        // most library strings will be ~30 characters long
+        allStr.reserve(allLibInfo.size() * 30);
+        for (const auto& lib : allLibInfo)
+        {
+            allStr.append(lib).append(L'\n');
+        }
+        allStr.Trim();
+        return allStr;
+    }();
+    @endcode
+
     @library{wxbase}
 
     @category{data}
