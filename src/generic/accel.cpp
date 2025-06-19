@@ -110,8 +110,10 @@ void wxAcceleratorTable::Remove(const wxAcceleratorEntry& entry)
 {
     AllocExclusive();
 
+    auto& accels = M_ACCELDATA->m_accels;
+
     int n = 0;
-    for ( const auto& entryCur : M_ACCELDATA->m_accels )
+    for ( const auto& entryCur : accels )
     {
         // given entry contains only the information of the accelerator key
         // because it was set that way during creation so do not use the
@@ -119,7 +121,7 @@ void wxAcceleratorTable::Remove(const wxAcceleratorEntry& entry)
         if ((entryCur.GetKeyCode() == entry.GetKeyCode()) &&
             (entryCur.GetFlags() == entry.GetFlags()))
         {
-            M_ACCELDATA->m_accels.erase(M_ACCELDATA->m_accels.begin() + n);
+            accels.erase(accels.begin() + n);
 
             return;
         }
