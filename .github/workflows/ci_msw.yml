@@ -56,25 +56,22 @@ permissions:
 
 jobs:
   msw-msvs:
-    runs-on: windows-${{ matrix.vsversion }}
-    name: wxMSW vs${{ matrix.vsversion }} ${{ matrix.configuration }} ${{ matrix.platform }}
+    runs-on: windows-2022
+    name: wxMSW vs2022 ${{ matrix.configuration }} ${{ matrix.platform }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - configuration: 'DLL Debug'
             platform: 'x64'
-            vsversion: 2022
             use_utf8: true
           - configuration: 'Release'
             platform: 'arm64'
-            vsversion: 2022
           - configuration: 'Debug'
             platform: 'Win32'
-            vsversion: 2019
+            use_cxx20: true
           - configuration: 'DLL Release'
             platform: 'x64'
-            vsversion: 2019
 
     steps:
       - name: Checkout
@@ -92,6 +89,11 @@ jobs:
               %{$_ -replace "define wxUSE_UNICODE_UTF8 0", "define wxUSE_UNICODE_UTF8 $use_utf8"} |
               Set-Content setup.h
             }
+            $use_cxx20 = "${{ matrix.use_cxx20 }}" ? 1 : 0
+            if ( $use_cxx20 ) {
+              cd ..\..\..\build\msw
+              cp cxx20.props wx_local.props
+            }
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -100,7 +102,7 @@ jobs:
 
       - name: Build
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc16.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc17.sln
             if ( '${{ matrix.configuration }}'.IndexOf('DLL') -ne -1 ) {
                 $dlldir = Join-Path (Get-Location) 'lib\vc_${{ matrix.platform }}_dll'
                 Write-Output "Adding $dlldir to the PATH"
@@ -110,11 +112,11 @@ jobs:
       - name: Build samples
         if: matrix.platform != 'arm64'
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\samples_vc16.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\samples_vc17.sln
 
       - name: Build tests
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc16.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc17.sln
 
       - name: Run tests
         if: ${{ !contains(matrix.platform, 'arm64') }}
@@ -139,53 +141,10 @@ jobs:
 
       - name: Build GUI tests
         run: |
-            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc16.sln
+            msbuild /noLogo /m /warnaserror '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc17.sln
 
       - name: Run GUI tests
         if: ${{ !contains(matrix.platform, 'arm64') }}
         working-directory: tests
         run: |
             .\vc*msw*\test_gui.exe
-
-  msw-msys2-clang:
-    runs-on: windows-latest
-
-    defaults:
-      run:
-        shell: msys2 {0}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
-
-      - name: Setup MSYS2
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: mingw64
-          update: true
-          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
-
-      - name: Configuring
-        run: |
-          clang --version
-          cmake --version
-          mkdir build_cmake
-          pushd build_cmake
-          cmake -G "MinGW Makefiles" \
-                -DCMAKE_C_COMPILER=clang.exe \
-                -DCMAKE_CXX_COMPILER=clang++.exe \
-                -DCMAKE_CXX_FLAGS="-DwxENABLE_EXTRA_WARNINGS -Werror -Wsuggest-override" \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DwxBUILD_SAMPLES=ALL \
-                -DwxBUILD_TESTS=ALL \
-                -DwxBUILD_DEMOS=ON \
-                -DwxUSE_WEBVIEW_EDGE=ON \
-                ..
-
-      - name: Building
-        working-directory: build_cmake
-        run: |
-          wxPROC_COUNT=`../build/tools/proc_count.sh`
-          cmake --build . -- -j$wxPROC_COUNT

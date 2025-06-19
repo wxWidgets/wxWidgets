@@ -34,7 +34,7 @@
     the user selects white pieces, this selection will be restored during the
     subsequent run.
 
-    @since 3.3.0
+    @since 3.3.1
  */
 class wxPersistentRadioButton : public wxPersistentWindow<wxRadioButton>
 {

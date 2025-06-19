@@ -85,6 +85,10 @@ Changes in behaviour not resulting in compilation errors
   mode under MSW, use the new AreAppsDark() or IsSystemDark() to check if the
   other applications or the system are using dark mode.
 
+- Date/time picker controls are now locale-aware by default in wxMSW, which
+  means that they do _not_ use OS default date/time format any longer unless
+  wxUILocale::UseDefault() is called.
+
 - wxUILocale::IsSupported() now returns false for unavailable locales under
   Unix systems without trying to fall back on another locale using the same
   language in a different region, e.g. it doesn't use fr_FR if fr_BE is not

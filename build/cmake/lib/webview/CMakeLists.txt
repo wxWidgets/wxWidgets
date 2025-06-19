@@ -12,12 +12,6 @@ function(wx_webview_copy_webview2_loader target)
         return()
     endif()
 
-    if(wxPLATFORM_ARCH)
-        set(WEBVIEW2_ARCH ${wxPLATFORM_ARCH})
-    else()
-        set(WEBVIEW2_ARCH x86)
-    endif()
-
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
         "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
@@ -87,9 +81,14 @@ elseif(WXMSW)
             endif()
         endif()
 
+        if(wxPLATFORM_ARCH)
+            set(WEBVIEW2_ARCH ${wxPLATFORM_ARCH})
+        else()
+            set(WEBVIEW2_ARCH x86)
+        endif()
         if (wxUSE_WEBVIEW_EDGE_STATIC)
             wx_lib_link_directories(wxwebview PUBLIC
-                $<BUILD_INTERFACE:${WEBVIEW2_PACKAGE_DIR}/build/native/$(LibrariesArchitecture)/>
+                $<BUILD_INTERFACE:${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/>
             )
         else()
             wx_webview_copy_webview2_loader(wxwebview)
