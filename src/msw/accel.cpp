@@ -42,13 +42,13 @@ class WXDLLEXPORT wxAcceleratorRefData: public wxObjectRefData
 {
     friend class WXDLLIMPEXP_FWD_CORE wxAcceleratorTable;
 public:
-    wxAcceleratorRefData();
+    explicit wxAcceleratorRefData(HACCEL hAccel);
     virtual ~wxAcceleratorRefData();
 
-    inline HACCEL GetHACCEL() const { return m_hAccel; }
+    HACCEL GetHACCEL() const { return m_hAccel; }
+
 protected:
-    HACCEL      m_hAccel;
-    bool        m_ok;
+    const HACCEL m_hAccel;
 
     wxDECLARE_NO_COPY_CLASS(wxAcceleratorRefData);
 };
@@ -63,10 +63,9 @@ protected:
 
 #define M_ACCELDATA ((wxAcceleratorRefData *)m_refData)
 
-wxAcceleratorRefData::wxAcceleratorRefData()
+wxAcceleratorRefData::wxAcceleratorRefData(HACCEL hAccel)
+    : m_hAccel(hAccel)
 {
-    m_ok = false;
-    m_hAccel = 0;
 }
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
@@ -84,17 +83,21 @@ wxAcceleratorRefData::~wxAcceleratorRefData()
 // Load from .rc resource
 wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
 {
-    m_refData = new wxAcceleratorRefData;
-
     HACCEL hAccel = ::LoadAccelerators(wxGetInstance(), resource.t_str());
-    M_ACCELDATA->m_hAccel = hAccel;
-    M_ACCELDATA->m_ok = hAccel != 0;
+    if ( hAccel )
+        m_refData = new wxAcceleratorRefData(hAccel);
 }
 
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
-    m_refData = new wxAcceleratorRefData;
+    if ( n == 0 )
+    {
+        // This is valid but useless.
+        return;
+    }
+
+    wxCHECK_RET( n > 0, "Invalid number of accelerator entries" );
 
     std::vector<ACCEL> arr(n);
     for ( int i = 0; i < n; i++ )
@@ -116,22 +119,25 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
         arr[i].cmd = (WORD)entries[i].GetCommand();
     }
 
-    M_ACCELDATA->m_hAccel = ::CreateAcceleratorTable(&arr[0], n);
-
-    M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
+    const HACCEL hAccel = ::CreateAcceleratorTable(&arr[0], n);
+    if ( hAccel )
+        m_refData = new wxAcceleratorRefData(hAccel);
 }
 
 bool wxAcceleratorTable::IsOk() const
 {
-    return (M_ACCELDATA && (M_ACCELDATA->m_ok));
+    return m_refData != nullptr;
 }
 
 void wxAcceleratorTable::SetHACCEL(WXHACCEL hAccel)
 {
-    if (!M_ACCELDATA)
-        m_refData = new wxAcceleratorRefData;
+    // This should really do AllocExclusive() to reuse the existing object if
+    // it is not shared, but for now keep things simple and just always create
+    // a new wxAcceleratorRefData object.
+    UnRef();
 
-    M_ACCELDATA->m_hAccel = (HACCEL) hAccel;
+    if ( hAccel )
+        m_refData = new wxAcceleratorRefData(hAccel);
 }
 
 WXHACCEL wxAcceleratorTable::GetHACCEL() const

@@ -105,3 +105,17 @@ TEST_CASE( "wxAcceleratorEntry::StringTests", "[accelentry]" )
         CHECK( !a.FromString("bloordyblop") );
     }
 }
+
+TEST_CASE( "wxAcceleratorTable::Create", "[accelentry]" )
+{
+    CHECK( !wxAcceleratorTable(0, nullptr).IsOk() );
+
+    const wxAcceleratorEntry entries[] =
+    {
+        wxAcceleratorEntry(wxACCEL_CTRL, 'A'),
+        wxAcceleratorEntry(wxACCEL_ALT, 'B'),
+        wxAcceleratorEntry(wxACCEL_SHIFT, 'C')
+    };
+
+    CHECK( wxAcceleratorTable(WXSIZEOF(entries), entries).IsOk() );
+}

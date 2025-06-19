@@ -36,12 +36,19 @@ public:
 
 wxAcceleratorTable::wxAcceleratorTable()
 {
-    m_refData = nullptr;
 }
 
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
+    if ( n == 0 )
+    {
+        // This is valid but useless.
+        return;
+    }
+
+    wxCHECK_RET( n > 0, "Invalid number of accelerator entries" );
+
     m_refData = new wxAcceleratorRefData;
 
     for (int i = 0; i < n; i++)
