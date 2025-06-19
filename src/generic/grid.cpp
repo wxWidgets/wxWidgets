@@ -7699,7 +7699,7 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
                 x = rect.x + (rect.width - textWidth - GRID_TEXT_MARGIN);
             break;
 
-        case wxALIGN_CENTRE:
+        case wxALIGN_CENTER_VERTICAL:
             if ( textOrientation == wxHORIZONTAL )
                 y = rect.y + ((rect.height - textHeight) / 2);
             else
@@ -7740,7 +7740,7 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
                     y = rect.y + lineWidth + GRID_TEXT_MARGIN;
                 break;
 
-            case wxALIGN_CENTRE:
+            case wxALIGN_CENTRE_HORIZONTAL:
                 if ( textOrientation == wxHORIZONTAL )
                     x = rect.x + ((rect.width - lineWidth) / 2);
                 else
