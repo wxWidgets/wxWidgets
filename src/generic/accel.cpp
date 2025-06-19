@@ -131,6 +131,13 @@ void wxAcceleratorTable::Remove(const wxAcceleratorEntry& entry)
         {
             accels.erase(accels.begin() + n);
 
+            if ( accels.empty() )
+            {
+                // wxAcceleratorEntry without any entries shouldn't be "ok", so
+                // free the associated data to make it so
+                UnRef();
+            }
+
             return;
         }
 
