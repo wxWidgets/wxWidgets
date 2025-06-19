@@ -868,6 +868,14 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
         return false;
     }
 
+    // HTML 5 charset
+    if (tag.GetParamAsString(wxT("charset"), m_retval))
+    {
+        m_Parser->StopParsing();
+        return false;
+    }
+
+    // HTML 4 charset
     wxString httpEquiv,
              content;
     if (tag.GetParamAsString(wxT("HTTP-EQUIV"), &httpEquiv) &&
