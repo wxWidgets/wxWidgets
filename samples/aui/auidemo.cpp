@@ -1052,6 +1052,7 @@ MyFrame::MyFrame(wxWindow* parent,
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name("test7").Caption("Float Client Size 111x222").
+                  MinSize(FromDIP(wxSize(11,22))).
                   FloatingClientSize(wxSize(111, 222)).
                   Left().Layer(1).
                   CloseButton(true).MaximizeButton(true));
