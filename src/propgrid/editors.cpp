@@ -2266,7 +2266,6 @@ typedef wxBitmapButton wxPGEditorBitmapButton;
 
 void wxPGMultiButton::Add( const wxBitmapBundle& bitmap, int itemid )
 {
-    itemid = GenId(itemid);
     wxSize sz = GetSize();
 
     // Internal margins around the bitmap inside the button
@@ -2311,7 +2310,6 @@ void wxPGMultiButton::Add( const wxBitmapBundle& bitmap, int itemid )
 
 void wxPGMultiButton::Add( const wxString& label, int itemid )
 {
-    itemid = GenId(itemid);
     wxSize sz = GetSize();
     wxButton* button = new wxButton(this, itemid, label,
                     wxPoint(sz.x, 0), wxSize(wxDefaultCoord, sz.y), wxBU_EXACTFIT);
