@@ -1028,6 +1028,18 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
         return;
     }
 
+#ifdef __WXMSW__
+    // FIXME: Due to rounding errors, DeviceToLogical[Rel]() return
+    //        off-by-one values if an affine transformation is applied
+    //        on the DC if:
+    //
+    // - The region starts at even positions, e.g.: x = 10
+    // - The region's width is not an even value, e.g.: w = 79
+    const int posTolerance = 1;
+#else // !__WXMSW__
+    const int posTolerance = 0;
+#endif // __WXMSW__
+
     // Setting one clipping region in device coordinates
     // inside transformed DC area.
     const int x = 10;
@@ -1063,7 +1075,7 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
     wxSize dim = dc.DeviceToLogicalRel(-w, h);
     CheckClipBox(dc, bmp,
                  pos.x, pos.y, dim.x, dim.y,
-                 x2, y, w, h);
+                 x2, y, w, h, posTolerance);
 }
 
 static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
