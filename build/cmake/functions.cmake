@@ -149,6 +149,7 @@ function(wx_set_common_target_properties target_name)
             set_target_properties(${target_name} PROPERTIES MSVC_RUNTIME_LIBRARY ${msvc_runtime})
         endif()
 
+        target_compile_options(${target_name} PRIVATE "/utf-8")
     elseif(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
         set(common_gcc_clang_compile_options
             -Wall

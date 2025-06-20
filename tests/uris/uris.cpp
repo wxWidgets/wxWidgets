@@ -313,7 +313,7 @@ TEST_CASE("URI::Paths", "[uri]")
     URI_ASSERT_BADPATH("http:////BADPATH");
 
     // 8-bit characters in the path should be percent-encoded.
-    URI_ASSERT_PATH_EQUAL( wxString::FromUTF8("http://host/\xc3\xa9"), "/%c3%a9" );
+    URI_ASSERT_PATH_EQUAL( wxString::FromUTF8("http://host/é"), "/%c3%a9" );
 }
 
 TEST_CASE("URI::UserInfo", "[uri]")
@@ -361,7 +361,7 @@ TEST_CASE("URI::UserInfo", "[uri]")
     uri.SetUserAndPassword("you:", "?me");
     URI_ASSERT_EQUAL( uri, "https://you%3a:%3fme@host/" );
 
-    uri.SetUserAndPassword(wxString::FromUTF8("\xc3\xa7"));
+    uri.SetUserAndPassword(wxString::FromUTF8("ç"));
     URI_ASSERT_USER_EQUAL( uri, "%c3%a7");
 }
 
@@ -495,23 +495,29 @@ TEST_CASE("URI::Unescape", "[uri]")
     unescaped = wxURI::Unescape(escaped);
 
     CHECK( unescaped == wxString::FromUTF8(
-                            "http://ru.wikipedia.org/wiki/"
-                            "\xD0\xA6\xD0\xB5\xD0\xBB\xD0\xBE\xD0\xB5_"
-                            "\xD1\x87\xD0\xB8\xD1\x81\xD0\xBB\xD0\xBE"
+                            "http://ru.wikipedia.org/wiki/Целое_число"
                           ) );
 
+#ifdef wxMUST_USE_U_ESCAPE
     escaped = L"file://\u043C\u043E\u0439%5C%d1%84%d0%b0%d0%b9%d0%bb";
+#else
+    escaped = L"file://мой%5C%d1%84%d0%b0%d0%b9%d0%bb";
+#endif
     unescaped = wxURI::Unescape(escaped);
 
+#ifdef wxMUST_USE_U_ESCAPE
     CHECK
     (
         unescaped == L"file://\u043C\u043E\u0439\\\u0444\u0430\u0439\u043B"
     );
+#else
+    CHECK( unescaped == L"file://мой\\файл" );
+#endif
 
 
     escaped = "%2FH%C3%A4ll%C3%B6%5C";
     unescaped = wxURI(escaped).BuildUnescapedURI();
-    CHECK( unescaped == wxString::FromUTF8("\x2FH\xC3\xA4ll\xC3\xB6\x5C") );
+    CHECK( unescaped == wxString::FromUTF8("/Hällö\\") );
 }
 
 TEST_CASE("URI::FileScheme", "[uri]")

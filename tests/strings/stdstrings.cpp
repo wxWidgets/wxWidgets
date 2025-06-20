@@ -547,10 +547,9 @@ TEST_CASE("StdString::Resize", "[stdstring]")
     CHECK( s3 == wxT("abcABCdefDEF  ") );
     CHECK( s4 == wxT("abcABCdefDEFWW") );
 
-    wxString s =
-        wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
+    wxString s = wxString::FromUTF8("Привет");
     s.resize(3);
-    CHECK( s == wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8") );
+    CHECK( s == wxString::FromUTF8("При") );
 }
 
 TEST_CASE("StdString::Riter", "[stdstring]")

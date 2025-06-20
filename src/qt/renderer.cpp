@@ -481,8 +481,7 @@ wxRendererQt::DrawCheckMark(wxWindow *win, wxDC& dc, const wxRect& rect, int WXU
     wxDCClipper clip(dc, rect);
     wxDCFontChanger fontChanger(dc, win->GetFont());
 
-    // Draw the unicode character “✓” (U+2713)
-    const auto checkMark = wxString::FromUTF8("\xE2\x9C\x93");
+    const auto checkMark = wxString::FromUTF8("✓"); // U+2713 CHECK MARK
     dc.DrawText(checkMark, rect.GetPosition());
 }
 

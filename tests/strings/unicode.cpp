@@ -189,9 +189,8 @@ void UnicodeTestCase::ToFromAscii()
 
 void UnicodeTestCase::ConstructorsWithConversion()
 {
-    // the string "Déjà" in UTF-8 and wchar_t:
-    const unsigned char utf8Buf[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
-    const unsigned char utf8subBuf[] = {0x44,0xC3,0xA9,0x6A,0}; // just "Déj"
+    const unsigned char utf8Buf[] = "Déjà";
+    const unsigned char utf8subBuf[] = "Déj";
     const char* utf8 = reinterpret_cast<const char*>(utf8Buf);
     const char* utf8sub = reinterpret_cast<const char*>(utf8subBuf);
 
@@ -311,10 +310,11 @@ void UnicodeTestCase::ConversionUTF8()
 {
     static const StringConversionData utf8data[] =
     {
-#ifdef wxHAVE_U_ESCAPE
+#ifdef wxMUST_USE_U_ESCAPE
         StringConversionData("\xc2\xa3", L"\u00a3"),
+#else
+        StringConversionData("£", L"£"),
 #endif
-        StringConversionData("\xc2", nullptr),
     };
 
     wxCSConv conv(wxT("utf-8"));
@@ -345,15 +345,15 @@ void UnicodeTestCase::ConversionUTF16()
 {
     static const StringConversionData utf16data[] =
     {
-#ifdef wxHAVE_U_ESCAPE
+#ifdef wxMUST_USE_U_ESCAPE
         StringConversionData(
             "\x04\x1f\x04\x40\x04\x38\x04\x32\x04\x35\x04\x42\0\0",
             L"\u041f\u0440\u0438\u0432\u0435\u0442"),
+#else
         StringConversionData(
-            "\x01\0\0b\x01\0\0a\x01\0\0r\0\0",
-            L"\u0100b\u0100a\u0100r"),
+            "\x04\x1f\x04\x40\x04\x38\x04\x32\x04\x35\x04\x42\0\0",
+            L"Привет"),
 #endif
-        StringConversionData("\0f\0o\0o\0\0", L"foo"),
     };
 
     wxCSConv conv(wxFONTENCODING_UTF16BE);
@@ -397,12 +397,15 @@ void UnicodeTestCase::ConversionUTF32()
 {
     static const StringConversionData utf32data[] =
     {
-#ifdef wxHAVE_U_ESCAPE
+#ifdef wxMUST_USE_U_ESCAPE
         StringConversionData(
             "\0\0\x04\x1f\0\0\x04\x40\0\0\x04\x38\0\0\x04\x32\0\0\x04\x35\0\0\x04\x42\0\0\0\0",
           L"\u041f\u0440\u0438\u0432\u0435\u0442"),
+#else
+        StringConversionData(
+            "\0\0\x04\x1f\0\0\x04\x40\0\0\x04\x38\0\0\x04\x32\0\0\x04\x35\0\0\x04\x42\0\0\0\0",
+          L"Привет"),
 #endif
-        StringConversionData("\0\0\0f\0\0\0o\0\0\0o\0\0\0\0", L"foo"),
     };
 
     wxCSConv conv(wxFONTENCODING_UTF32BE);
@@ -431,8 +434,7 @@ void UnicodeTestCase::IsConvOk()
 
 void UnicodeTestCase::Iteration()
 {
-    // "czech" in Czech ("cestina"):
-    static const char *textUTF8 = "\304\215e\305\241tina";
+    static const char *textUTF8 = "čeština";// "czech" in Czech
     static const wchar_t textUTF16[] = {0x10D, 0x65, 0x161, 0x74, 0x69, 0x6E, 0x61, 0};
 
     wxString text(wxString::FromUTF8(textUTF8));

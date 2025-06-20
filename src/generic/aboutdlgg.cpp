@@ -98,7 +98,7 @@ wxString wxAboutDialogInfo::GetCopyrightToDisplay() const
 {
     wxString ret = m_copyright;
 
-    const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
+    const wxString copyrightSign = wxString::FromUTF8("©");
     ret.Replace("(c)", copyrightSign);
     ret.Replace("(C)", copyrightSign);
 
