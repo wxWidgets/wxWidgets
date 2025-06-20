@@ -429,7 +429,7 @@ public:
         @see SavePaneInfo()
         @see SavePerspective
     */
-    void LoadPaneInfo(wxString pane_part, wxAuiPaneInfo& pane);
+    void LoadPaneInfo(wxString layoutVersion, wxString pane_part, wxAuiPaneInfo& pane);
 
     /**
         Loads a saved perspective.

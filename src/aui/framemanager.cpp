@@ -1164,7 +1164,7 @@ wxString wxAuiManager::SavePaneInfo(const wxAuiPaneInfo& pane)
 }
 
 // Load a "pane" with the pane information settings in pane_part
-void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
+bool wxAuiManager::LoadPaneInfo(wxString layoutVersion, wxString pane_part, wxAuiPaneInfo &pane)
 {
     // replace escaped characters so we can
     // split up the string easily
@@ -1222,12 +1222,12 @@ void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
             pane.floating_size.x = wxAtoi(value.c_str());
         else if (val_name == wxT("floath"))
             pane.floating_size.y = wxAtoi(value.c_str());
-        else if (val_name == wxT("cli_floatw"))
+        else if (val_name == wxT("cli_floatw") && layoutVersion == "layout3")
             pane.floating_client_size.x = wxAtoi(value.c_str());
-        else if (val_name == wxT("cli_floath"))
+        else if (val_name == wxT("cli_floath") && layoutVersion == "layout3")
             pane.floating_client_size.y = wxAtoi(value.c_str());
         else {
-            wxFAIL_MSG(wxT("Bad Perspective String"));
+            return false;
         }
     }
 
@@ -1240,7 +1240,7 @@ void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
     pane_part.Replace(wxT("\a"), wxT("|"));
     pane_part.Replace(wxT("\b"), wxT(";"));
 
-    return;
+    return true;
 }
 
 
@@ -1276,17 +1276,18 @@ wxString wxAuiManager::SavePerspective()
 bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
 {
     wxString input = layout;
-    wxString part;
+    wxString layoutVersion;
 
     // check layout string version
     //    'layout1' = wxAUI 0.9.0 - wxAUI 0.9.2
     //    'layout2' = wxAUI 0.9.2 (wxWidgets 2.8)
-    //    'layout3' = wxWidgets 3.3
-    part = input.BeforeFirst(wxT('|'));
+    //    'layout3' = wxWidgets 3.3.1
+    layoutVersion = input.BeforeFirst(wxT('|'));
     input = input.AfterFirst(wxT('|'));
-    part.Trim(true);
-    part.Trim(false);
-    if (part != wxT("layout3"))
+    layoutVersion.Trim(true);
+    layoutVersion.Trim(false);
+    if (layoutVersion != wxT("layout3") &&
+        layoutVersion != wxT("layout3"))
         return false;
 
     // Mark all panes currently managed as hidden. Also, dock all panes that are dockable.
@@ -1346,7 +1347,10 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         pane_part.Replace(wxT("\a"), wxT("|"));
         pane_part.Replace(wxT("\b"), wxT(";"));
 
-        LoadPaneInfo(pane_part, pane);
+        if (!LoadPaneInfo(layoutVersion, pane_part, pane))
+        {
+            return false;
+        }
 
         if ( pane.IsMaximized() )
             m_hasMaximized = true;

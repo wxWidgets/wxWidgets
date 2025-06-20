@@ -470,7 +470,7 @@ public:
     // Older functions using bespoke text format, prefer using the ones using
     // wxAuiSerializer and wxAuiDeserializer above instead in the new code.
     wxString SavePaneInfo(const wxAuiPaneInfo& pane);
-    void LoadPaneInfo(wxString panePart, wxAuiPaneInfo &pane);
+    bool LoadPaneInfo(wxString layoutVersion, wxString panePart, wxAuiPaneInfo &pane);
     wxString SavePerspective();
     bool LoadPerspective(const wxString& perspective, bool update = true);
 
