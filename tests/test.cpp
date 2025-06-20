@@ -454,11 +454,11 @@ static bool DoCheckConnection()
     wxSocketInitializer socketInit;
 
     wxIPV4address addr;
-    if (!addr.Hostname(0xadfe5c16) || !addr.Service(wxASCII_STR("www")))
+    if (!addr.Hostname(0x01010101) || !addr.Service(wxASCII_STR("www")))
         return false;
 
     const char* const
-        HTTP_GET = "GET / HTTP /1.1\r\nHost: www.wxwidgets.org\r\n\r\n";
+        HTTP_GET = "GET / HTTP /1.1\r\nHost: 1.1.1.1\r\n\r\n";
 
     wxSocketClient sock;
     sock.SetTimeout(10);    // 10 secs
