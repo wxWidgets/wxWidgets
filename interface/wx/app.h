@@ -755,8 +755,45 @@ public:
     void SetAppName(const wxString& name);
 
     /**
-        Sets the class name of the application. This may be used in a platform specific
-        manner to refer to the application.
+        Sets the class name of the application.
+
+        The class name is used in a platform specific manner. Currently it is
+        used as "Application User Model ID" under Windows (see [Microsoft
+        documentation][microsoft-docs]), "app ID" when using wxGTK 3.24.22 or
+        later with Wayland (see [Wayland documentation][wayland-docs]) and is
+        unused under the other platforms.
+
+        [microsoft-docs]: https://learn.microsoft.com/en-us/windows/win32/shell/appids
+        [wayland-docs]: https://wayland.app/protocols/xdg-shell#xdg_toplevel:request:set_app_id
+
+        When it is used, the class name purpose is to allow the system to
+        handle all windows with the same ID as belonging to the same
+        application, e.g. to group them together in the taskbar (so the value
+        set here is used by wxTaskBarJumpList constructor). By default the
+        application executable name is used as its ID, so it is not necessary
+        to set the class name, but it may be useful to do it to specify a more
+        unique string (typically by using a reverse domain name notation with
+        the domain unique to the application vendor) or by specifying the same
+        ID in different applications that should be handled as a single one at
+        UI level.
+
+        Please note that SetClassName() must be called as early as possible and
+        definitely before creating any top-level windows to have an effect.
+        Typically it should be called in the constructor of the class derived
+        from wxApp, e.g.
+
+        @code
+        class MyApp : public wxApp
+        {
+        public:
+            MyApp() {
+                // Constructor shouldn't perform any non-trivial iniailization
+                // as the GUI is not available yet, but this function is fine
+                // to call.
+                SetClassName("com.example.myapp");
+            }
+        };
+        @endcode
 
         @see GetClassName()
     */
