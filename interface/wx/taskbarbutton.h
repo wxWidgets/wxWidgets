@@ -619,8 +619,8 @@ public:
             Specifies a unique identifier for the application jump list, can be
             empty by default.
 
-            See <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd378459(v=vs.85).aspx">
-            Application User Model IDs</a> on MSDN for further details.
+            See <a href="https://learn.microsoft.com/en-us/windows/win32/shell/appids">
+            Application User Model IDs</a> for further details.
     */
     explicit wxTaskBarJumpList(const wxString& appID = wxEmptyString);
     virtual ~wxTaskBarJumpList();
