@@ -36,6 +36,8 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"
 
+#include "wx/msw/private/darkmode.h"
+
 #include <memory>
 
 #define NATIVE_TEXT_INDENT_XP       4
@@ -114,6 +116,9 @@ bool wxComboCtrl::Create(wxWindow *parent,
 
     // Create textctrl, if necessary
     CreateTextCtrl( wxNO_BORDER );
+
+    // Use the same theme as is used by wxChoice/wxComboBox.
+    wxMSWDarkMode::AllowForWindow(m_hWnd, L"CFD");
 
     // SetInitialSize should be called last
     SetInitialSize(size);
