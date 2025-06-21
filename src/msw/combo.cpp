@@ -36,6 +36,8 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"
 
+#include <memory>
+
 #define NATIVE_TEXT_INDENT_XP       4
 #define NATIVE_TEXT_INDENT_CLASSIC  2
 
@@ -308,7 +310,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     // TODO: Convert drawing in this function to Windows API Code
 
     wxSize sz = GetClientSize();
-    wxDC* dcPtr = wxAutoBufferedPaintDCFactory(this);
+    std::unique_ptr<wxDC> dcPtr(wxAutoBufferedPaintDCFactory(this));
     wxDC& dc = *dcPtr;
 
     const wxRect& rectButton = m_btnArea;
@@ -500,8 +502,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         else
             wxComboPopup::DefaultPaintComboControl(this,dc,rectTextField);
     }
-
-    delete dcPtr;
 }
 
 void wxComboCtrl::OnMouseEvent( wxMouseEvent& event )
