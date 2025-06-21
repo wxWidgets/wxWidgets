@@ -193,6 +193,7 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
             if ( HasParam(wxS("floatable")) )       paneInfo.Floatable( GetBool(wxS("floatable")) );
 // Sizes
             if ( HasParam(wxS("floating_size")) )   paneInfo.FloatingSize( GetSize(wxS("floating_size")) );
+            if ( HasParam(wxS("floating_client_size")) )   paneInfo.FloatingClientSize( GetSize(wxS("floating_client_size")) );
             if ( HasParam(wxS("min_size")) )        paneInfo.MinSize( GetSize(wxS("min_size")) );
             if ( HasParam(wxS("max_size")) )        paneInfo.MaxSize( GetSize(wxS("max_size")) );
             if ( HasParam(wxS("best_size")) )       paneInfo.BestSize( GetSize(wxS("best_size")) );
