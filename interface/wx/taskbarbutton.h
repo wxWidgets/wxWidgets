@@ -616,11 +616,12 @@ public:
         Constructs the jump list.
 
         @param appID
-            Specifies a unique identifier for the application jump list, can be
-            empty by default.
+            Specifies a unique identifier for the application jump list. If it
+            is empty (default value), the global application user model ID,
+            which can be changed by using wxApp::SetClassName(), is used.
 
             See <a href="https://learn.microsoft.com/en-us/windows/win32/shell/appids">
-            Application User Model IDs</a> for further details.
+            Application User Model IDs</a> for further details about app IDs.
     */
     explicit wxTaskBarJumpList(const wxString& appID = wxEmptyString);
     virtual ~wxTaskBarJumpList();
