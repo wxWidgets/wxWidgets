@@ -200,7 +200,8 @@ public:
         Initializes the accelerator table from an array of wxAcceleratorEntry.
 
         @param n
-            Number of accelerator entries.
+            Number of accelerator entries. If this parameter is 0, invalid
+            accelerator table is created, i.e. IsOk() will return @false.
         @param entries
             The array of entries.
 
