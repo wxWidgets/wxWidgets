@@ -4732,7 +4732,7 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
     if (x)
     {
         if (GetLayoutDirection() == wxLayout_RightToLeft)
-            *x = (GetClientSize().x - *x) - org_x;
+            *x = (GetClientSize().x - *x) + org_x;
         else
             *x -= org_x;
     }
