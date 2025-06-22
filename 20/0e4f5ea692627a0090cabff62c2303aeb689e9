@@ -1,0 +1,1 @@
+wxMSW: Fix regression in creation of wxAcceleratorTable with 0 entries (#25517).
