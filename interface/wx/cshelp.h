@@ -61,9 +61,11 @@ public:
     static wxHelpProvider* Get();
 
     /**
-        This version associates the given text with all windows with this id.
-        May be used to set the same help string for all Cancel buttons in
-        the application, for example.
+        Get the help string for the given window.
+
+        The interpretation of the returned string is help provider dependent,
+        but empty string always means that no help is associated with this
+        window.
     */
     virtual wxString GetHelp(const wxWindow* window) = 0;
 
