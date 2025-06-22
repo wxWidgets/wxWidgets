@@ -468,6 +468,17 @@ gtk_frame_map_callback( GtkWidget*,
 {
     wxLogTrace(TRACE_TLWSIZE, "Mapped for %s", wxDumpWindow(win));
 
+    // We couldn't set the app ID before, as it only works for mapped windows.
+#if defined(GDK_WINDOWING_WAYLAND) && GTK_CHECK_VERSION(3,24,22)
+    GdkWindow* const window = gtk_widget_get_window(win->m_widget);
+    if (wxGTKImpl::IsWayland(window) && gtk_check_version(3,24,22) == nullptr)
+    {
+        const wxString className(wxTheApp->GetClassName());
+        if (!className.empty())
+            gdk_wayland_window_set_application_id(window, className.utf8_str());
+    }
+#endif
+
     const bool wasIconized = win->IsIconized();
     if (wasIconized)
     {
