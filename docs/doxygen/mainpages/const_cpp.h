@@ -298,6 +298,7 @@ corresponding library. The following symbols are honoured:
     - wxNO_JPEG_LIB
     - wxNO_PNG_LIB
     - wxNO_TIFF_LIB
+    - wxNO_WEBP_LIB
     - wxNO_ZLIB_LIB
 
 Notice that the base library is always included and the core is always included
