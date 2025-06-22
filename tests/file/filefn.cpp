@@ -496,7 +496,7 @@ TEST_CASE_METHOD(FileFunctionsTestCase,
                  "FileFunctions::Mkdir",
                  "[filefn]")
 {
-    wxString dirname = wxString::FromUTF8("__wxMkdir_test_dir_with_\xc3\xb6");
+    wxString dirname = wxString::FromUTF8("__wxMkdir_test_dir_with_ö");
     INFO("Dir: " << dirname);
 
     CHECK( wxMkdir(dirname) );
@@ -508,7 +508,7 @@ TEST_CASE_METHOD(FileFunctionsTestCase,
                  "FileFunctions::Rmdir",
                  "[filefn]")
 {
-    wxString dirname = wxString::FromUTF8("__wxRmdir_test_dir_with_\xc3\xb6");
+    wxString dirname = wxString::FromUTF8("__wxRmdir_test_dir_with_ö");
     INFO("Dir: " << dirname);
 
     CHECK( wxMkdir(dirname) );
