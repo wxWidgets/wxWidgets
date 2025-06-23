@@ -159,6 +159,19 @@ public:
 
     void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const;
+
+    /**
+     Mark the tool to be not visible.
+
+     By default all tools and controls in the toolbar are visible.
+     If you want, you can mark the tool/control not visible by default
+     When you do that user will be able to go to the customization
+     dialog and add the tool/control at a later time.
+     When you want that you pass "false" to this function.
+     
+     @since 3.3.0
+     */
+    void MarkAvailable(bool available);
 };
 
 
@@ -271,6 +284,15 @@ public:
         Process a @c wxEVT_TOOL_DROPDOWN event. If unhandled,
         displays the default dropdown menu set using
         wxToolBar::SetDropdownMenu().
+    @event{EVT_TB_CUSTOMIZE(id)}
+        Process a @c wxEVT_TB_CUSTOMIZE event. Under MSW and OSX
+        it will display native customization dialogs. On GTK it will
+        be generic.
+        In order for this event to happen you need to double click the
+        toolbar on MSW and right click + context menu selection on OSX/GTK
+        By default all added tools are displayed.
+
+        This event is implemented @since 3.3.0
     @endEventTable
 
     The toolbar class emits menu commands in the same way that a frame menubar
@@ -878,6 +900,25 @@ public:
         @see GetMargins(), wxSize
     */
     void SetMargins(const wxSize& size);
+
+    /**
+        Return whether the tool is displayed by default or not
+        By default all tools are displayed.
+
+        @since 3.3
+    */
+    bool IsAvailable() const;
+
+    /**
+        Calling this function with the parameter set to false will not add the tool to the toolbar
+        by default.
+
+        @param available
+            Whether add the tool by default to the toolbar or not.
+
+        @since 3.3
+    */
+    void MarkAvailable(bool available);
     ///@}
 
     /**

@@ -71,7 +71,8 @@ public:
                       const wxString& longHelpString = wxEmptyString)
         : m_label(label),
           m_shortHelpString(shortHelpString),
-          m_longHelpString(longHelpString)
+          m_longHelpString(longHelpString),
+          m_available(true)
     {
         Init
         (
@@ -93,7 +94,8 @@ public:
     wxToolBarToolBase(wxToolBarBase *tbar,
                       wxControl *control,
                       const wxString& label)
-        : m_label(label)
+        : m_label(label),
+          m_available(true)
     {
         Init(tbar, wxTOOL_STYLE_CONTROL, control->GetId(), wxITEM_MAX);
 
@@ -143,6 +145,8 @@ public:
     bool IsToggled() const { return m_toggled; }
     bool CanBeToggled() const
         { return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO; }
+    bool IsAvailable() const { return m_available; }
+    virtual void MarkAvailable(bool available) { m_available = available; }
 
     // attributes
     wxBitmapBundle GetNormalBitmapBundle() const { return m_bmpNormal; }
@@ -265,6 +269,7 @@ protected:
     // short and long help strings
     wxString m_shortHelpString;
     wxString m_longHelpString;
+    bool m_available;
 
 #if wxUSE_MENUS
     wxMenu *m_dropdownMenu;
@@ -313,7 +318,7 @@ public:
                                const wxString& shortHelp = wxEmptyString,
                                wxItemKind kind = wxITEM_NORMAL)
     {
-        return AddTool(toolid, label, bitmap, wxBitmapBundle(), kind, shortHelp);
+        return AddTool(toolid, label, bitmap, wxBitmapBundle(), kind, shortHelp, wxEmptyString, nullptr);
     }
 
     // add a check tool, i.e. a tool which can be toggled
