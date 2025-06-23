@@ -787,7 +787,7 @@ public:
         {
         public:
             MyApp() {
-                // Constructor shouldn't perform any non-trivial iniailization
+                // Constructor shouldn't perform any non-trivial initialization
                 // as the GUI is not available yet, but this function is fine
                 // to call.
                 SetClassName("com.example.myapp");
