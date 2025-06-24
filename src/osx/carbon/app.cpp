@@ -306,7 +306,12 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         return false;
 
 #if wxUSE_INTL
-    wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
+    // Check if we recognize the system encoding. Note that we must not call
+    // SetDefaultEncoding() if we don't, as indicated by wxFONTENCODING_DEFAULT
+    // being returned, as SetDefaultEncoding() would assert in this case.
+    const wxFontEncoding defaultEncoding = wxLocale::GetSystemEncoding();
+    if ( defaultEncoding != wxFONTENCODING_DEFAULT )
+        wxFont::SetDefaultEncoding(defaultEncoding);
 #endif
 
     // these might be the startup dirs, set them to the 'usual' dir containing the app bundle

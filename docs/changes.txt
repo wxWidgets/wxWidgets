@@ -272,6 +272,7 @@ wxMSW
 
 wxOSX:
 
+- Fix crash on startup when using Farsi as system language (#25561).
 - Do not activate "Close" button on Cmd-C (nobugshere, #25346).
 
 
