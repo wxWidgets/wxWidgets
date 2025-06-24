@@ -1164,8 +1164,22 @@ wxString wxAuiManager::SavePaneInfo(const wxAuiPaneInfo& pane)
 }
 
 // Load a "pane" with the pane information settings in pane_part
-bool wxAuiManager::LoadPaneInfo(wxString layoutVersion, wxString pane_part, wxAuiPaneInfo &pane)
+void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
 {
+    if (LoadPaneInfoVersioned("layout3", pane_part, pane))
+    {
+        return;
+    }
+    // This is redundant since layout3
+    // recognizes all the layout2 keys,
+    // so should this be removed?
+    LoadPaneInfoVersioned("layout2", pane_part, pane);
+}
+
+bool wxAuiManager::LoadPaneInfoVersioned(wxString layoutVersion, wxString pane_part, wxAuiPaneInfo& destination)
+{
+    // don't overwrite destination unless pane_part is valid
+    wxAuiPaneInfo pane(destination);
     // replace escaped characters so we can
     // split up the string easily
     pane_part.Replace(wxT("\\|"), wxT("\a"));
@@ -1240,6 +1254,7 @@ bool wxAuiManager::LoadPaneInfo(wxString layoutVersion, wxString pane_part, wxAu
     pane_part.Replace(wxT("\a"), wxT("|"));
     pane_part.Replace(wxT("\b"), wxT(";"));
 
+    destination = pane;
     return true;
 }
 
@@ -1347,7 +1362,7 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         pane_part.Replace(wxT("\a"), wxT("|"));
         pane_part.Replace(wxT("\b"), wxT(";"));
 
-        if (!LoadPaneInfo(layoutVersion, pane_part, pane))
+        if (!LoadPaneInfoVersioned(layoutVersion, pane_part, pane))
         {
             return false;
         }
