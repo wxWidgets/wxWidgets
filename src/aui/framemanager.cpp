@@ -1157,8 +1157,8 @@ wxString wxAuiManager::SavePaneInfo(const wxAuiPaneInfo& pane)
     result += wxString::Format(wxT("floaty=%d;"), pane.floating_pos.y);
     result += wxString::Format(wxT("floatw=%d;"), pane.floating_size.x);
     result += wxString::Format(wxT("floath=%d;"), pane.floating_size.y);
-    result += wxString::Format(wxT("cli_floatw=%d;"), pane.floating_client_size.x);
-    result += wxString::Format(wxT("cli_floath=%d"), pane.floating_client_size.y);
+    result += wxString::Format(wxT("floatw_cli=%d;"), pane.floating_client_size.x);
+    result += wxString::Format(wxT("floath_cli=%d"), pane.floating_client_size.y);
 
     return result;
 }
@@ -1222,9 +1222,9 @@ bool wxAuiManager::LoadPaneInfo(wxString layoutVersion, wxString pane_part, wxAu
             pane.floating_size.x = wxAtoi(value.c_str());
         else if (val_name == wxT("floath"))
             pane.floating_size.y = wxAtoi(value.c_str());
-        else if (val_name == wxT("cli_floatw") && layoutVersion == "layout3")
+        else if (val_name == wxT("floatw_cli") && layoutVersion == "layout3")
             pane.floating_client_size.x = wxAtoi(value.c_str());
-        else if (val_name == wxT("cli_floath") && layoutVersion == "layout3")
+        else if (val_name == wxT("floath_cli") && layoutVersion == "layout3")
             pane.floating_client_size.y = wxAtoi(value.c_str());
         else {
             return false;
