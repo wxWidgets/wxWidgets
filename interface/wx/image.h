@@ -148,6 +148,7 @@ enum wxImagePNGType
 #define wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL        wxString("PngZM")
 #define wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY         wxString("PngZS")
 #define wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE      wxString("PngZB")
+#define wxIMAGE_OPTION_PNG_DESCRIPTION                  wxString("PngDescription")
 
 #define wxIMAGE_OPTION_TIFF_BITSPERSAMPLE               wxString("BitsPerSample")
 #define wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL             wxString("SamplesPerPixel")
@@ -1321,6 +1322,10 @@ public:
             or written to the GIF file. In an animated GIF each frame can have
             its own comment. If there is only a comment in the first frame of
             a GIF it will not be repeated in other frames.
+
+        Options specific to wxPNGHandler:
+        @li @c wxIMAGE_OPTION_PNG_DESCRIPTION: The Description text chunk that
+            is read from or written to the PNG file.
 
         @param name
             The name of the option, case-insensitive.

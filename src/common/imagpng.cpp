@@ -342,6 +342,23 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
         return;
 
     png_read_image( png_ptr, lines );
+
+    // load "Description" text chunk
+    png_textp text_ptr;
+    int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
+    for (int i = 0; i < num_comments; ++i)
+    {
+        if (text_ptr[i].compression != PNG_TEXT_COMPRESSION_NONE) continue; // ignoring compressed ones cause I don't know how to handle them
+
+        // key and text can either be Latin-1 or UTF-8, and are guaranteed to be zero-terminated C strings, so I think From8BitData is appropriate here?
+        wxString key = wxString::From8BitData(text_ptr[i].key);
+        if (key == _("Description")) { // "Description" is listed as a predefined chunk by the png standard. is hardcoding it like this fine?
+            wxString text = wxString::From8BitData(text_ptr[i].text);
+            image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, text);
+            break;
+        }
+    }
+
     png_read_end( png_ptr, info_ptr );
 
 #if wxUSE_PALETTE
@@ -737,6 +754,19 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         png_set_pHYs( png_ptr, info_ptr, resX, resY, PNG_RESOLUTION_METER );
 
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
+
+    // save "Description" text chunk
+    if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION)) {
+        wxString value = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
+
+        wxSharedPtr<png_text> text_ptr(new png_text[1]); // is wxSharedPtr appropriate here?
+        text_ptr.get()[0].compression = PNG_TEXT_COMPRESSION_NONE;
+        text_ptr.get()[0].key =  const_cast<char*>((const char*)_("Description").mb_str(wxConvUTF8)); // again a hard coded string, is this fine?
+        text_ptr.get()[0].text = const_cast<char*>((const char*)value           .mb_str(wxConvUTF8));
+        text_ptr.get()[0].text_length = value.length();
+        png_set_text(png_ptr, info_ptr, text_ptr.get(), 1);
+    }
+
     png_write_info( png_ptr, info_ptr );
     png_set_shift( png_ptr, &sig_bit );
     png_set_packing( png_ptr );

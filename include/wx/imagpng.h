@@ -20,6 +20,8 @@
 #include "wx/image.h"
 #include "wx/versioninfo.h"
 
+#define wxIMAGE_OPTION_PNG_DESCRIPTION wxT("PngDescription")
+
 #define wxIMAGE_OPTION_PNG_FORMAT    wxT("PngFormat")
 #define wxIMAGE_OPTION_PNG_BITDEPTH  wxT("PngBitDepth")
 #define wxIMAGE_OPTION_PNG_FILTER    wxT("PngF")
