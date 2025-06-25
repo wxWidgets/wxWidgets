@@ -152,6 +152,30 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     return wxToNSRect( sv, bounds );
 }
 
+
+void wxWidgetCocoaImpl::ApplyScrollViewBorderType()
+{
+    wxWindowMac* const peer = GetWXPeer();
+    if ( !peer )
+        return;
+
+    wxCHECK_RET( [m_osxView isKindOfClass:[NSScrollView class]],
+                 "Must be a scroll view to apply scroll view border!" );
+
+    wxBorder border = peer->GetBorder();
+
+    // Enable the scroll view border for native-like look, otherwise turn it
+    // off and draw the borders ourselves using wxWindowMac::MacPaintBorders.
+    NSBorderType borderType;
+    if ( border == wxBORDER_DEFAULT || border == wxBORDER_THEME )
+        borderType = NSBezelBorder;
+    else
+        borderType = NSNoBorder;
+
+    [static_cast<NSScrollView*>(m_osxView) setBorderType:borderType];
+}
+
+
 @interface wxNSView : NSView
 {
 }

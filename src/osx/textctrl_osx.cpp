@@ -89,9 +89,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     DontCreatePeer();
     m_editable = true ;
 
-    if ( ! (style & wxNO_BORDER) )
-        style = (style & ~wxBORDER_MASK) | wxSUNKEN_BORDER ;
-
     if ( !wxTextCtrlBase::Create( parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), validator, name ) )
         return false;
 

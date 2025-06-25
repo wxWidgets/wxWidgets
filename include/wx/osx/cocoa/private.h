@@ -230,6 +230,8 @@ public :
     virtual void                UseClippingView() override;
     virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
 
+    virtual void                ApplyScrollViewBorderType() override;
+
 protected:
     WXWidget m_osxView;
     WXWidget m_osxClipView;

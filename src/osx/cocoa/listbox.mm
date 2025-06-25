@@ -671,6 +671,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     [tableview release];
 
     wxListWidgetCocoaImpl* c = new wxListWidgetCocoaImpl( wxpeer, scrollview, tableview, ds );
+    c->ApplyScrollViewBorderType();
 
     // temporary hook for dnd
  //   [tableview registerForDraggedTypes:[NSArray arrayWithObjects:
