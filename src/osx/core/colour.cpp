@@ -32,6 +32,8 @@ public:
 
     wxCGColorRefData(const wxCGColorRefData& other);
 
+    void Init(CGFloat components[4]);
+
     virtual bool IsOk() const  wxOVERRIDE{ return m_cgColour != NULL; }
 
     virtual CGFloat Red() const wxOVERRIDE { return m_red; }
@@ -44,16 +46,12 @@ public:
     virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxCGColorRefData(*this); }
 
 private:
-    void Init(CGFloat components[4]);
-
     wxCFRef<CGColorRef> m_cgColour;
 
     CGFloat m_red;
     CGFloat m_blue;
     CGFloat m_green;
     CGFloat m_alpha;
-
-    wxDECLARE_NO_ASSIGN_CLASS(wxCGColorRefData);
 };
 
 wxCGColorRefData::wxCGColorRefData(CGFloat r, CGFloat g, CGFloat b, CGFloat a)
@@ -142,7 +140,7 @@ wxCGColorRefData::wxCGColorRefData(CGColorRef col)
     }
 }
 
-#define M_COLDATA static_cast<wxColourRefData*>(m_refData)
+#define M_COLDATA static_cast<wxCGColorRefData*>(m_refData)
 
 #if wxOSX_USE_COCOA_OR_CARBON
 wxColour::wxColour(const RGBColor& col)
@@ -231,8 +229,10 @@ WX_NSImage wxColour::OSXGetNSPatternImage() const
 
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
+    AllocExclusive();
+
     CGFloat components[4] = { (CGFloat)(r / 255.0), (CGFloat)(g / 255.0), (CGFloat)(b / 255.0), (CGFloat)(a / 255.0) };
-    m_refData = new wxCGColorRefData(components);
+    M_COLDATA->Init(components);
 }
 
 bool wxColour::operator==(const wxColour& other) const
