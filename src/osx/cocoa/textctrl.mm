@@ -747,11 +747,17 @@ bool wxNSTextBase::ShouldHandleKeyNavigation(const wxKeyEvent &event) const
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxNSTextBase(wxPeer, w)
 {
+    wxBorder border = (wxBorder)(style & wxBORDER_MASK);
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
 
     const bool hasHScroll = (style & wxHSCROLL) != 0;
     m_useCharWrapping = (style & wxTE_CHARWRAP) != 0;
+
+    if ( (border == wxBORDER_DEFAULT) || (border == wxBORDER_THEME) )
+        [m_scrollView setBorderType:NSBezelBorder];
+    else
+        [m_scrollView setBorderType:NSNoBorder];
 
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:hasHScroll];
