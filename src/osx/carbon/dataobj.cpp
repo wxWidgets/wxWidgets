@@ -122,6 +122,10 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
         case wxDF_FILENAME:
             f = kUTTypeFileURL;
             break;
+
+        case wxDF_PNG:
+            f = kUTTypePNG;
+            break;
             
         default:
             wxFAIL_MSG( wxS("unsupported data format") );
