@@ -22,6 +22,7 @@
 
 #include "wx/imagpng.h"
 #include "wx/versioninfo.h"
+#include "wx/scopedptr.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -348,15 +349,27 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
     int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, nullptr);
     for (int i = 0; i < num_comments; ++i)
     {
-        if (text_ptr[i].compression != PNG_TEXT_COMPRESSION_NONE) continue; // ignoring compressed ones cause I don't know how to handle them
-
-        // key and text can either be Latin-1 or UTF-8, and are guaranteed to be zero-terminated C strings, so I think From8BitData is appropriate here?
-        wxString key = wxString::From8BitData(text_ptr[i].key);
-        if (key == _("Description")) { // "Description" is listed as a predefined chunk by the png standard. is hardcoding it like this fine?
-            wxString text = wxString::From8BitData(text_ptr[i].text);
-            image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, text);
-            break;
+        if (text_ptr[i].compression == PNG_TEXT_COMPRESSION_NONE) // Latin-1 encoding
+        {
+            wxString key = wxString::From8BitData(text_ptr[i].key);
+            if (key == wxIMAGE_OPTION_PNG_DESCRIPTION_KEY)
+            {
+                wxString text = wxString::From8BitData(text_ptr[i].text);
+                image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, text);
+                break;
+            }
         }
+        else if (text_ptr[i].compression == PNG_ITXT_COMPRESSION_NONE) // UTF-8 encoding
+        {
+            wxString key = wxString::FromUTF8(text_ptr[i].key);
+            if (key == wxIMAGE_OPTION_PNG_DESCRIPTION_KEY)
+            {
+                wxString text = wxString::FromUTF8(text_ptr[i].text);
+                image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, text);
+                break;
+            }
+        }
+        //else {} // ignoring PNG_TEXT_COMPRESSION_zTXt and PNG_ITXT_COMPRESSION_zTXt because I don't know how to decompress them
     }
 
     png_read_end( png_ptr, info_ptr );
@@ -756,12 +769,13 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
 
     // save "Description" text chunk
-    if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION)) {
+    if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION))
+    {
         wxString value = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
 
-        wxSharedPtr<png_text> text_ptr(new png_text[1]); // is wxSharedPtr appropriate here?
-        text_ptr.get()[0].compression = PNG_TEXT_COMPRESSION_NONE;
-        text_ptr.get()[0].key =  const_cast<char*>((const char*)_("Description").mb_str(wxConvUTF8)); // again a hard coded string, is this fine?
+        wxScopedPtr<png_text> text_ptr(new png_text[1]);
+        text_ptr.get()[0].compression = PNG_ITXT_COMPRESSION_NONE;
+        text_ptr.get()[0].key =  const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.utf8_str().data());
         text_ptr.get()[0].text = const_cast<char*>(value.utf8_str().data());
         text_ptr.get()[0].text_length = value.length();
         png_set_text(png_ptr, info_ptr, text_ptr.get(), 1);
