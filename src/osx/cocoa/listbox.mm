@@ -440,7 +440,7 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
 
         [[col1 dataCell] setControlSize:size];
         // although there is no text, it may help to get the correct vertical layout
-        [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];        
+        [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];
     }
 
     [checkbox release];
@@ -638,6 +638,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     NSScrollView* scrollview = [[NSScrollView alloc] initWithFrame:r];
+    wxBorder border = (wxBorder)(style & wxBORDER_MASK);
 
     // use same scroll flags logic as msw
 
@@ -647,6 +648,11 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
         [scrollview setHasHorizontalScroller:YES];
 
     [scrollview setAutohidesScrollers: ((style & wxLB_ALWAYS_SB) ? NO : YES)];
+
+    if ( (border == wxBORDER_DEFAULT) || (border == wxBORDER_THEME) )
+        [scrollview setBorderType:NSBezelBorder];
+    else
+        [scrollview setBorderType:NSNoBorder];
 
     // setting up the true table
 

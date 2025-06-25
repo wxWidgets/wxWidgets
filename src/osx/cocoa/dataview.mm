@@ -1985,8 +1985,13 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
 {
     // initialize scrollview (the outline view is part of a scrollview):
     NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
+    wxBorder border = (wxBorder)(style & wxBORDER_MASK);
 
-    [scrollview setBorderType:NSNoBorder];
+    if ( (border == wxBORDER_DEFAULT) || (border == wxBORDER_THEME) )
+        [scrollview setBorderType:NSBezelBorder];
+    else
+        [scrollview setBorderType:NSNoBorder];
+
     [scrollview setHasVerticalScroller:YES];
     [scrollview setHasHorizontalScroller:YES];
     [scrollview setAutohidesScrollers:YES];
