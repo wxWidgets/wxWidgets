@@ -269,6 +269,7 @@ wxGTK:
 wxMSW
 
 - Fix regression in wxTreeCtrl indent size in high DPI (Maarten Bent, #25282).
+- Fix using wxNO_IMPLICIT_WXSTRING_ENCODING with PCH (#25568).
 
 wxOSX:
 
