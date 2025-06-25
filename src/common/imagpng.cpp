@@ -762,7 +762,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         wxSharedPtr<png_text> text_ptr(new png_text[1]); // is wxSharedPtr appropriate here?
         text_ptr.get()[0].compression = PNG_TEXT_COMPRESSION_NONE;
         text_ptr.get()[0].key =  const_cast<char*>((const char*)_("Description").mb_str(wxConvUTF8)); // again a hard coded string, is this fine?
-        text_ptr.get()[0].text = const_cast<char*>((const char*)value           .mb_str(wxConvUTF8));
+        text_ptr.get()[0].text = const_cast<char*>(value.utf8_str().data());
         text_ptr.get()[0].text_length = value.length();
         png_set_text(png_ptr, info_ptr, text_ptr.get(), 1);
     }
