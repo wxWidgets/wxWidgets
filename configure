@@ -43863,7 +43863,6 @@ ac_config_commands="$ac_config_commands wx-config"
 
 
 
-if test "$wxWITH_SUBDIRS" != "no"; then
 if test "$wxUSE_GUI" = "yes"; then
     SUBDIRS="samples demos utils"
 else
@@ -43995,6 +43994,7 @@ $as_echo "yes" >&6; }
 
 fi
 
+if test "$wxWITH_SUBDIRS" != "no"; then
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then
         if test "$wxUSE_GUI" = "yes"; then

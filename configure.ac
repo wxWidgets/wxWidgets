@@ -8286,8 +8286,6 @@ dnl though in this form because AC_CONFIG_LINKS will fail for directories
 dnl on platforms that do not have symlinks.
 dnl AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR:include ])
 
-if test "$wxWITH_SUBDIRS" != "no"; then
-dnl Configure samples, demos etc. directories, but only if they are present:
 if test "$wxUSE_GUI" = "yes"; then
     SUBDIRS="samples demos utils"
 else
@@ -8340,6 +8338,8 @@ will use built-in instead])
     AC_SUBST(CATCH2_CFLAGS)
 fi
 
+dnl Configure samples, demos etc. directories, but only if they are present:
+if test "$wxWITH_SUBDIRS" != "no"; then
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then
         if test "$wxUSE_GUI" = "yes"; then
