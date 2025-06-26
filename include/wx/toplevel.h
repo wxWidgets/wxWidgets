@@ -282,6 +282,7 @@ public:
     // override to do TLW-specific layout: we resize our unique child to fill
     // the entire client area
     virtual bool Layout() override;
+    virtual void Fit() override;
 
     // event handlers
     void OnCloseWindow(wxCloseEvent& event);
