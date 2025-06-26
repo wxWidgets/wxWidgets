@@ -412,11 +412,11 @@ void wxPropertyGrid::Init1()
     m_doubleBuffer = nullptr;
 
 #ifndef wxPG_ICON_WIDTH
-    m_iconWidth = 11;
-    m_iconHeight = 11;
+    m_iconWidth = FromDIP(11);
+    m_iconHeight = FromDIP(11);
 #else
-    m_iconWidth = wxPG_ICON_WIDTH;
-    m_iconHeight = wxPG_ICON_WIDTH;
+    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
+    m_iconHeight = FromDIP(wxPG_ICON_WIDTH);
 #endif
 
     m_gutterWidth = wxPG_GUTTER_MIN;
@@ -1314,19 +1314,14 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_subgroup_extramargin = x + (x/2);
     m_fontHeight = y;
 
-#if wxPG_USE_RENDERER_NATIVE
-    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
-#elif wxPG_ICON_WIDTH
-    // scale icon
-    m_iconWidth = (m_fontHeight * wxPG_ICON_WIDTH) / 13;
-    if ( m_iconWidth < 5 ) m_iconWidth = 5;
-    else if ( !(m_iconWidth & 0x01) ) m_iconWidth++; // must be odd
-
-#endif
-
 #ifdef wxPG_ICON_WIDTH
-    // Icons are always square in this case.
-    m_iconHeight = m_iconWidth;
+#if wxPG_USE_RENDERER_NATIVE
+    wxSize iconSize = wxRendererNative::Get().GetExpanderSize(this);
+#else
+    wxSize iconSize = wxRendererNative::GetGeneric().GetExpanderSize(this);
+#endif
+    m_iconWidth = iconSize.GetWidth();
+    m_iconHeight = iconSize.GetHeight();
 #endif
 
     m_gutterWidth = m_iconWidth / wxPG_GUTTER_DIV;
@@ -1963,23 +1958,21 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
     // wxRenderer functions are non-mutating in nature, so it
     // should be safe to cast "const wxPropertyGrid*" to "wxWindow*".
     // Hopefully this does not cause problems.
-#if wxPG_USE_RENDERER_NATIVE
-    wxRendererNative::Get().DrawTreeItemButton(
-            const_cast<wxPropertyGrid*>(this),
-            dc,
-            r,
-            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
-        );
-#elif wxPG_ICON_WIDTH
-    wxRendererNative::GetGeneric().DrawTreeItemButton(
-            const_cast<wxPropertyGrid*>(this),
-            dc,
-            r,
-            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
-        );
-#else
+#ifndef wxPG_ICON_WIDTH
     wxBitmap bmp = property->IsExpanded() ? s_collbmp : s_expandbmp;
-    dc.DrawBitmap( bmp, r.x, r.y, true );
+    dc.DrawBitmap(bmp, r.x, r.y, true);
+#else
+#if wxPG_USE_RENDERER_NATIVE
+    wxRendererNative::Get().
+#else
+    wxRendererNative::GetGeneric().
+#endif
+        DrawTreeItemButton(
+            const_cast<wxPropertyGrid*>(this),
+            dc,
+            r,
+            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
+        );
 #endif
 }
 
