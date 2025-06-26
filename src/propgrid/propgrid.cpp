@@ -420,7 +420,7 @@ void wxPropertyGrid::Init1()
 #endif
 
     m_gutterWidth = wxPG_GUTTER_MIN;
-    m_subgroup_extramargin = 10;
+    m_subgroup_extramargin = m_iconWidth + m_gutterWidth;
 
     m_lineHeight = 0;
 
@@ -1311,7 +1311,6 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_captionFont = wxControl::GetFont();
 
     GetTextExtent(wxS("jG"), &x, &y, nullptr, nullptr, &m_captionFont);
-    m_subgroup_extramargin = x + (x/2);
     m_fontHeight = y;
 
 #ifdef wxPG_ICON_WIDTH
@@ -1327,6 +1326,8 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_gutterWidth = m_iconWidth / wxPG_GUTTER_DIV;
     if ( m_gutterWidth < wxPG_GUTTER_MIN )
         m_gutterWidth = wxPG_GUTTER_MIN;
+
+    m_subgroup_extramargin = m_iconWidth + m_gutterWidth;
 
     int vdiv = 6;
     if ( vspacing <= 1 ) vdiv = 12;
