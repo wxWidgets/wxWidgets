@@ -332,17 +332,18 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 
     m_isDragMove = false;
     m_miniTitle = 0;
+
+    if (style & wxRESIZE_BORDER)
+        m_miniEdge = 4;
+    else
+        m_miniEdge = 3;
+
     if (style & wxCAPTION)
     {
         wxInfoDC dc(this);
         dc.SetFont(*wxSMALL_FONT);
         m_miniTitle = wxMax(dc.GetTextExtent("X").y, 16);
     }
-
-    if (style & wxRESIZE_BORDER)
-        m_miniEdge = 4;
-    else
-        m_miniEdge = 3;
 
     // don't allow sizing smaller than decorations
     int minWidth = 2 * m_miniEdge;
