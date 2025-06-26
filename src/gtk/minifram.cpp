@@ -330,9 +330,6 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 {
     wxFrame::Create( parent, id, title, pos, size, style, name );
 
-    m_isDragMove = false;
-    m_miniTitle = 0;
-
     if (style & wxRESIZE_BORDER)
         m_miniEdge = 4;
     else
