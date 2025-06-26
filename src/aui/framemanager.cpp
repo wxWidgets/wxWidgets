@@ -1166,14 +1166,10 @@ wxString wxAuiManager::SavePaneInfo(const wxAuiPaneInfo& pane)
 // Load a "pane" with the pane information settings in pane_part
 void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
 {
-    if (LoadPaneInfoVersioned("layout3", pane_part, pane))
-    {
-        return;
-    }
-    // This is redundant since layout3
-    // recognizes all the layout2 keys,
-    // so should this be removed?
-    LoadPaneInfoVersioned("layout2", pane_part, pane);
+    // For backward compatibility, this function needs to handle
+    // both layout2 and layout3.  However, layout3 is a superset
+    // of layout2, so we don't need to actually check both
+    LoadPaneInfoVersioned("layout3", pane_part, pane);
 }
 
 bool wxAuiManager::LoadPaneInfoVersioned(wxString layoutVersion, wxString pane_part, wxAuiPaneInfo& destination)
