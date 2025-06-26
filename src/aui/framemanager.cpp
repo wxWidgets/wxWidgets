@@ -1301,7 +1301,7 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
     input = input.AfterFirst(wxT('|'));
     layoutVersion.Trim(true);
     layoutVersion.Trim(false);
-    if (layoutVersion != wxT("layout3") &&
+    if (layoutVersion != wxT("layout2") &&
         layoutVersion != wxT("layout3"))
         return false;
 
