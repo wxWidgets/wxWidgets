@@ -1,0 +1,1 @@
+wxAll (GUI): Fix overwriting IDs of buttons added to wxPGMultiButton (alilie, #25514).
