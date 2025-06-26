@@ -7,11 +7,20 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+macro(wx_set_webview2_arch)
+    if(wxPLATFORM_ARCH)
+        set(WEBVIEW2_ARCH ${wxPLATFORM_ARCH})
+    else()
+        set(WEBVIEW2_ARCH x86)
+    endif()
+endmacro()
+
 function(wx_webview_copy_webview2_loader target)
     if(NOT WXMSW OR NOT wxUSE_WEBVIEW_EDGE OR NOT TARGET ${target})
         return()
     endif()
 
+    wx_set_webview2_arch()
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
         "${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/WebView2Loader.dll"
@@ -81,12 +90,8 @@ elseif(WXMSW)
             endif()
         endif()
 
-        if(wxPLATFORM_ARCH)
-            set(WEBVIEW2_ARCH ${wxPLATFORM_ARCH})
-        else()
-            set(WEBVIEW2_ARCH x86)
-        endif()
         if (wxUSE_WEBVIEW_EDGE_STATIC)
+            wx_set_webview2_arch()
             wx_lib_link_directories(wxwebview PUBLIC
                 $<BUILD_INTERFACE:${WEBVIEW2_PACKAGE_DIR}/build/native/${WEBVIEW2_ARCH}/>
             )
