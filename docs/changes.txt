@@ -265,6 +265,7 @@ wxGTK:
 - Fix handling total window size with GNOME with X11 (#25348).
 - Fix height of read-only wxBitmapComboBox (#25468).
 - Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
+- Show system default window buttons under Wayland (#25562).
 
 wxMSW
 
