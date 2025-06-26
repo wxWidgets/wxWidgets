@@ -306,7 +306,7 @@ wxEND_EVENT_TABLE()
 // -----------------------------------------------------------------------
 
 wxPropertyGrid::wxPropertyGrid()
-    : wxScrolled<wxControl>()
+    : wxSystemThemedControl<wxScrolled<wxControl>>()
 {
     Init1();
 }
@@ -319,7 +319,7 @@ wxPropertyGrid::wxPropertyGrid( wxWindow *parent,
                                 const wxSize& size,
                                 long style,
                                 const wxString& name )
-    : wxScrolled<wxControl>()
+    : wxSystemThemedControl<wxScrolled<wxControl>>()
 {
     Init1();
     Create(parent,id,pos,size,style,name);
@@ -350,6 +350,8 @@ bool wxPropertyGrid::Create( wxWindow *parent,
                       (style & wxWINDOW_STYLE_MASK) | wxScrolledWindowStyle,
                       wxDefaultValidator,
                       name);
+
+    EnableSystemThemeByDefault();
 
     m_windowStyle |= (style & wxPG_WINDOW_STYLE_MASK);
 
@@ -1286,7 +1288,7 @@ void wxPropertyGrid::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
 {
     int oldX;
     CalcUnscrolledPosition(0, 0, &oldX, nullptr);
-    wxScrolled<wxControl>::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY,
+    wxSystemThemedControl<wxScrolled<wxControl>>::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY,
                                   noUnitsX, noUnitsY, xPos, yPos, noRefresh);
     int newX;
     CalcUnscrolledPosition(0, 0, &newX, nullptr);
