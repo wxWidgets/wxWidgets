@@ -1339,7 +1339,7 @@ public:
         @li @c wxIMAGE_OPTION_PNG_DESCRIPTION: The contents of this option will
             be converted to an uncompressed iTXt chunk with the key "Description",
             and written to the PNG file upon saving.
-            Contents of uncompressed tXTt and iTXt chunks with the key: "Description"
+            Contents of uncompressed tXTt and iTXt chunks with the key "Description"
             are also automatically retrieved upon loading a PNG file, and stored in
             this option. If multiple chunks with this key are present, only the first
             is retrieved.
