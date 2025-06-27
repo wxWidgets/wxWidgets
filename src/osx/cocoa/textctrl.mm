@@ -747,7 +747,6 @@ bool wxNSTextBase::ShouldHandleKeyNavigation(const wxKeyEvent &event) const
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxNSTextBase(wxPeer, w)
 {
-    wxBorder border = (wxBorder)(style & wxBORDER_MASK);
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
 
