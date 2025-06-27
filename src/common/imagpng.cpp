@@ -346,7 +346,7 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 
     // load "Description" text chunk
     png_textp text_ptr;
-    int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, nullptr);
+    int num_comments = png_get_text( png_ptr, info_ptr, &text_ptr, nullptr );
     for (int i = 0; i < num_comments; ++i)
     {
         if (text_ptr[i].compression == PNG_TEXT_COMPRESSION_NONE) // Latin-1 encoding
@@ -771,14 +771,14 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     // save "Description" text chunk
     if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION))
     {
-        wxString value = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
+        wxString text = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
 
         wxScopedPtr<png_text> text_ptr(new png_text[1]);
         text_ptr.get()[0].compression = PNG_ITXT_COMPRESSION_NONE;
         text_ptr.get()[0].key =  const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.utf8_str().data());
-        text_ptr.get()[0].text = const_cast<char*>(value.utf8_str().data());
-        text_ptr.get()[0].text_length = value.length();
-        png_set_text(png_ptr, info_ptr, text_ptr.get(), 1);
+        text_ptr.get()[0].text = const_cast<char*>(text.utf8_str().data());
+        text_ptr.get()[0].text_length = text.length();
+        png_set_text( png_ptr, info_ptr, text_ptr.get(), 1 );
     }
 
     png_write_info( png_ptr, info_ptr );
