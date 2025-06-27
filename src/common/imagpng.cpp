@@ -773,7 +773,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     {
         const wxString& text = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
 
-        wxScopedPtr<png_text> text_ptr(new png_text[1]);
+        png_text text;
         text_ptr.get()[0].compression = PNG_ITXT_COMPRESSION_NONE;
         text_ptr.get()[0].key =  const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.utf8_str().data());
         text_ptr.get()[0].text = const_cast<char*>(text.utf8_str().data());
