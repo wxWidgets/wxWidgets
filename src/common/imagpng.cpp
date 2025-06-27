@@ -786,7 +786,8 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         text.compression = PNG_ITXT_COMPRESSION_NONE;
         text.key =  const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.utf8_str().data());
         text.text = const_cast<char*>(description.utf8_str().data());
-        text.text_length = description.length();
+        text.text_length = 0;
+        text.itxt_length = description.length();
         png_set_text( png_ptr, info_ptr, &text, 1 );
     }
 
