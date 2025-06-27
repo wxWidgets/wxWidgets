@@ -22,7 +22,6 @@
 
 #include "wx/imagpng.h"
 #include "wx/versioninfo.h"
-#include "wx/scopedptr.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -37,6 +36,8 @@
 #include <string.h>
 
 #include <unordered_map>
+
+#define wxIMAGE_OPTION_PNG_DESCRIPTION_KEY wxString("Description")
 
 // ----------------------------------------------------------------------------
 // local functions
@@ -349,27 +350,35 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
     const int num_comments = png_get_text( png_ptr, info_ptr, &text_ptr, nullptr );
     for (int i = 0; i < num_comments; ++i)
     {
-        if (text_ptr[i].compression == PNG_TEXT_COMPRESSION_NONE) // Latin-1 encoding
+        const wxString& key = wxString::From8BitData(text_ptr[i].key);
+        if (key == wxIMAGE_OPTION_PNG_DESCRIPTION_KEY)
         {
-            wxString key = wxString::From8BitData(text_ptr[i].key);
-            if (key == wxIMAGE_OPTION_PNG_DESCRIPTION_KEY)
+            wxString description;
+            switch (text_ptr[i].compression)
             {
-                wxString text = wxString::From8BitData(text_ptr[i].text);
-                image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, text);
+            case PNG_TEXT_COMPRESSION_NONE:
+                // tEXt chunk: uses Latin-1 encoding.
+                description = wxString::From8BitData(text_ptr[i].text);
+                break;
+
+            case PNG_ITXT_COMPRESSION_NONE:
+                // iTXt chunk: uses UTF-8 encoding.
+                description = wxString::FromUTF8(text_ptr[i].text);
+                break;
+
+            case PNG_TEXT_COMPRESSION_zTXt:
+            case PNG_ITXT_COMPRESSION_zTXt:
+                // Not supported currently, but should be.
+                break;
+
+            default:
+                // Invalid type, should we report it? Probably not worth it.
                 break;
             }
+
+            if (!description.empty())
+                image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, description);
         }
-        else if (text_ptr[i].compression == PNG_ITXT_COMPRESSION_NONE) // UTF-8 encoding
-        {
-            wxString key = wxString::FromUTF8(text_ptr[i].key);
-            if (key == wxIMAGE_OPTION_PNG_DESCRIPTION_KEY)
-            {
-                wxString text = wxString::FromUTF8(text_ptr[i].text);
-                image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, text);
-                break;
-            }
-        }
-        //else {} // ignoring PNG_TEXT_COMPRESSION_zTXt and PNG_ITXT_COMPRESSION_zTXt because I don't know how to decompress them
     }
 
     png_read_end( png_ptr, info_ptr );
@@ -771,14 +780,14 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     // save "Description" text chunk
     if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION))
     {
-        const wxString& text = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
+        const wxString& description = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
 
         png_text text;
-        text_ptr.get()[0].compression = PNG_ITXT_COMPRESSION_NONE;
-        text_ptr.get()[0].key =  const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.utf8_str().data());
-        text_ptr.get()[0].text = const_cast<char*>(text.utf8_str().data());
-        text_ptr.get()[0].text_length = text.length();
-        png_set_text( png_ptr, info_ptr, text_ptr.get(), 1 );
+        text.compression = PNG_ITXT_COMPRESSION_NONE;
+        text.key =  const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.utf8_str().data());
+        text.text = const_cast<char*>(description.utf8_str().data());
+        text.text_length = description.length();
+        png_set_text( png_ptr, info_ptr, &text, 1 );
     }
 
     png_write_info( png_ptr, info_ptr );
