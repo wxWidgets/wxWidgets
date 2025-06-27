@@ -35,6 +35,7 @@
 #endif
 
 #include "jpeglib.h"
+#include "jerror.h"
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
@@ -503,10 +504,15 @@ bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
 
 /*static*/ wxVersionInfo wxJPEGHandler::GetLibraryVersionInfo()
 {
+    struct jpeg_error_mgr err{};
+    jpeg_std_error(&err);
+
 #if defined(JPEG_LIB_VERSION_MAJOR) && defined(JPEG_LIB_VERSION_MINOR)
-    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION_MAJOR, JPEG_LIB_VERSION_MINOR);
+    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION_MAJOR, JPEG_LIB_VERSION_MINOR,
+                         0, 0, wxString{}, err.jpeg_message_table[JMSG_COPYRIGHT]);
 #else
-    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION / 10, JPEG_LIB_VERSION % 10);
+    return wxVersionInfo("libjpeg", JPEG_LIB_VERSION / 10, JPEG_LIB_VERSION % 10,
+                         0, 0, wxString{}, err.jpeg_message_table[JMSG_COPYRIGHT]);
 #endif
 }
 
