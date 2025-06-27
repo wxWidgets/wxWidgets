@@ -78,8 +78,8 @@ bool wxFontPickerCtrl::Create( wxWindow *parent, wxWindowID id,
 wxString wxFontPickerCtrl::Font2String(const wxFont &f)
 {
     wxString ret = f.GetNativeFontInfoUserDesc();
-#ifdef __WXMSW__
-    // on wxMSW the encoding of the font is appended at the end of the string;
+#if defined(__WXMSW__) || defined(__WXOSX__)
+    // on wxMSW and wxOSX the encoding of the font is appended at the end of the string;
     // since encoding is not very user-friendly we remove it.
     wxFontEncoding enc = f.GetEncoding();
     if ( enc != wxFONTENCODING_DEFAULT && enc != wxFONTENCODING_SYSTEM )
