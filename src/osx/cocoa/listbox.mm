@@ -638,7 +638,6 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     NSScrollView* scrollview = [[NSScrollView alloc] initWithFrame:r];
-    wxBorder border = (wxBorder)(style & wxBORDER_MASK);
 
     // use same scroll flags logic as msw
 
@@ -648,11 +647,6 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
         [scrollview setHasHorizontalScroller:YES];
 
     [scrollview setAutohidesScrollers: ((style & wxLB_ALWAYS_SB) ? NO : YES)];
-
-    if ( (border == wxBORDER_DEFAULT) || (border == wxBORDER_THEME) )
-        [scrollview setBorderType:NSBezelBorder];
-    else
-        [scrollview setBorderType:NSNoBorder];
 
     // setting up the true table
 
@@ -677,6 +671,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     [tableview release];
 
     wxListWidgetCocoaImpl* c = new wxListWidgetCocoaImpl( wxpeer, scrollview, tableview, ds );
+    c->ApplyScrollViewBorderType();
 
     // temporary hook for dnd
  //   [tableview registerForDraggedTypes:[NSArray arrayWithObjects:

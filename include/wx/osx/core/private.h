@@ -375,6 +375,8 @@ public :
     // returns native view which acts as a parent for native children
     virtual WXWidget    GetContainer() const;
 
+    virtual void        ApplyScrollViewBorderType() { }
+
     // Mechanism used to keep track of whether a change should send an event
     // Do SendEvents(false) when starting actions that would trigger programmatic events
     // and SendEvents(true) at the end of the block.

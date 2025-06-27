@@ -230,6 +230,9 @@ public :
     virtual void                UseClippingView() override;
     virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
 
+    // enables scrollview borders on native controls with scrollview superviews
+    virtual void                ApplyScrollViewBorderType() override;
+
 protected:
     WXWidget m_osxView;
     WXWidget m_osxClipView;

@@ -754,11 +754,6 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     const bool hasHScroll = (style & wxHSCROLL) != 0;
     m_useCharWrapping = (style & wxTE_CHARWRAP) != 0;
 
-    if ( (border == wxBORDER_DEFAULT) || (border == wxBORDER_THEME) )
-        [m_scrollView setBorderType:NSBezelBorder];
-    else
-        [m_scrollView setBorderType:NSNoBorder];
-
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:hasHScroll];
     [m_scrollView setHasVerticalScroller:(style & wxTE_NO_VSCROLL)? NO: YES];
@@ -1878,6 +1873,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         c = t;
 
         t->SetStringValue(str);
+        t->ApplyScrollViewBorderType();
     }
     else
     {
