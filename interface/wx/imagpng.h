@@ -12,18 +12,6 @@
 #define wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL    wxT("PngZM")
 #define wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY     wxT("PngZS")
 #define wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE  wxT("PngZB")
-
-/**
-Key used for setting an image option that, upon saving to a PNG file, will be
-converted to an iTXt chunk with the key: "Description", and stored in the file.
-
-Uncompressed tEXt and iTXt chunks with the key: "Description" are automatically
-retrieved upon loading of a PNG file, and stored in this image option. If
-multiple chunks with this key are present, only the first is retrieved.
-
-@since 3.3.1
-@see wxImage::GetOption()
-*/
 #define wxIMAGE_OPTION_PNG_DESCRIPTION              wxT("PngDescription")
 
 /* These are already in interface/wx/image.h
