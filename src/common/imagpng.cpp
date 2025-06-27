@@ -346,7 +346,7 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 
     // load "Description" text chunk
     png_textp text_ptr;
-    int num_comments = png_get_text( png_ptr, info_ptr, &text_ptr, nullptr );
+    const int num_comments = png_get_text( png_ptr, info_ptr, &text_ptr, nullptr );
     for (int i = 0; i < num_comments; ++i)
     {
         if (text_ptr[i].compression == PNG_TEXT_COMPRESSION_NONE) // Latin-1 encoding
