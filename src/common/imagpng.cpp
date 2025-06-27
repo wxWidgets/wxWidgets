@@ -783,11 +783,22 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         const wxString& description = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
 
         png_text text;
+        text.key = const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.ToAscii().data());
+        text.lang = NULL;
+        text.lang_key = NULL;
+
+#ifdef PNG_iTXt_SUPPORTED
         text.compression = PNG_ITXT_COMPRESSION_NONE;
-        text.key =  const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.utf8_str().data());
         text.text = const_cast<char*>(description.utf8_str().data());
         text.text_length = 0;
-        text.itxt_length = description.length();
+        text.itxt_length = strlen(text.text);
+#else
+        text.compression = PNG_TEXT_COMPRESSION_NONE;
+        text.text = const_cast<char*>(description.ToAscii().data());
+        text.text_length = strlen(text.text);
+        text.itxt_length = 0;
+#endif // PNG_iTXt_SUPPORTED
+
         png_set_text( png_ptr, info_ptr, &text, 1 );
     }
 
