@@ -771,7 +771,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     // save "Description" text chunk
     if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION))
     {
-        wxString text = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
+        const wxString& text = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
 
         wxScopedPtr<png_text> text_ptr(new png_text[1]);
         text_ptr.get()[0].compression = PNG_ITXT_COMPRESSION_NONE;
