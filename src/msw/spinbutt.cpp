@@ -358,7 +358,7 @@ bool wxSpinButton::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *
     NM_UPDOWN *lpnmud = (NM_UPDOWN *)lParam;
 
     if ( lpnmud->hdr.hwndFrom != GetHwnd() || // make sure it is the right control
-         lpnmud->hdr.code != UDN_DELTAPOS )   // and the right notification 
+         lpnmud->hdr.code != UDN_DELTAPOS )   // and the right notification
         return false;
 
     int newVal = lpnmud->iPos + lpnmud->iDelta;

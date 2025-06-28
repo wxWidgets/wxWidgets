@@ -23,7 +23,7 @@ wxSpinButton::wxSpinButton()
 bool wxSpinButton::Create( wxWindow *parent,
     wxWindowID id, const wxPoint& pos, const wxSize& size,
     long style, const wxString& name )
-{    
+{
     DontCreatePeer();
     if ( !wxSpinButtonBase::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
@@ -136,7 +136,7 @@ void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
 
     SetValue( newValue );
 
-    // send a thumbtrack event if EVT_SPIN_UP/DOWN wasn't vetoed 
+    // send a thumbtrack event if EVT_SPIN_UP/DOWN wasn't vetoed
     if ( newValue != oldValue )
         SendThumbTrackEvent() ;
 }

@@ -106,7 +106,7 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
 }
 
 // This test is used to verify that a call tip receives mouse clicks. However
-// the clicks do sent with the UI simulator do not seem to be received on 
+// the clicks do sent with the UI simulator do not seem to be received on
 // cocoa for some reason, so skip the test there for now.
 #if !defined(__WXOSX_COCOA__)
 TEST_CASE_METHOD(StcPopupWindowsTestCase,

@@ -40,7 +40,7 @@ void wxDialog::OSXBeginModalDialog()
         s_modalStack.back()->OSXSetWorksWhenModal(false);
     s_modalWorksStack.push_back(OSXGetWorksWhenModal());
 #endif
-    
+
     s_modalStack.push_back(this);
 }
 
@@ -50,7 +50,7 @@ void wxDialog::OSXEndModalDialog()
     s_modalStack.pop_back();
 #if wxOSX_USE_COCOA
     s_modalWorksStack.pop_back();
-    
+
     // restore worksWhenModal
     if ( s_modalStack.size() > 0 )
         s_modalStack.back()->OSXSetWorksWhenModal(s_modalWorksStack.back());

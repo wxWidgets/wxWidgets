@@ -440,7 +440,7 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
 
         [[col1 dataCell] setControlSize:size];
         // although there is no text, it may help to get the correct vertical layout
-        [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];        
+        [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];
     }
 
     [checkbox release];

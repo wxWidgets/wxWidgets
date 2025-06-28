@@ -88,7 +88,7 @@ bool wxSystemAppearance::IsDark() const
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
     wxOSXEffectiveAppearanceSetter helper;
-    
+
     NSColor* sysColor = nil;
     switch( index )
     {

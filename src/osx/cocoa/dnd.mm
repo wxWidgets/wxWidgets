@@ -188,7 +188,7 @@ void wxOSXPasteboard::DeleteSinkItems()
 void wxOSXPasteboard::Clear()
 {
     [m_pasteboard clearContents];
-    DeleteSinkItems();    
+    DeleteSinkItems();
 }
 
 void wxOSXPasteboard::Flush()
@@ -227,7 +227,7 @@ const wxOSXDataSourceItem* wxOSXPasteboard::GetItem(size_t pos) const
 {
     return new wxOSXPasteboardSourceItem([[m_pasteboard pasteboardItems] objectAtIndex: pos], m_pasteboard);
 }
- 
+
 // data source methods
 
 wxOSXPasteboard* wxOSXPasteboard::GetGeneralClipboard()

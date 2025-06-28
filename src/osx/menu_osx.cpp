@@ -380,7 +380,7 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item )
 
     if(!processed)
     {
-        processed = item->GetPeer()->DoDefault();  
+        processed = item->GetPeer()->DoDefault();
     }
 
     return processed;
@@ -527,7 +527,7 @@ static wxMenu *CreateAppleMenu()
     appleMenu->Append( wxID_OSX_SHOWALL,
                        wxGETTEXT_IN_CONTEXT("macOS menu item", "Show All") );
     appleMenu->AppendSeparator();
-    
+
     // Do always add "Quit" item unconditionally however, it can't be disabled.
     wxString quitLabel;
     if ( wxTheApp )
@@ -547,7 +547,7 @@ void wxMenuBar::Init()
         gs_emptyMenuBar.reset( new wxMenu() );
         gs_emptyMenuBar->AppendSubMenu(CreateAppleMenu(), "\x14") ;
     }
-    
+
     m_eventHandler = this;
     m_menuBarFrame = nullptr;
     m_rootMenu = new wxMenu();
@@ -615,9 +615,9 @@ void wxMenuBar::MacInstallMenuBar()
         return ;
 
     m_rootMenu->GetPeer()->MakeRoot();
-    
+
     // hide items in the apple menu that don't exist in the wx menubar
-    
+
     wxMenuItem* appleItem = nullptr;
     wxMenuItem* wxItem = nullptr;
 
@@ -628,10 +628,10 @@ void wxMenuBar::MacInstallMenuBar()
     {
         if ( wxItem == nullptr )
             appleItem->GetPeer()->Hide();
-        else 
+        else
             appleItem->SetItemLabel(wxItem->GetItemLabel());
     }
-    
+
     menuid = wxApp::s_macPreferencesMenuItemId;
     appleItem = m_appleMenu->FindItem(menuid);
     wxItem = FindItem(menuid);
@@ -639,7 +639,7 @@ void wxMenuBar::MacInstallMenuBar()
     {
         if ( wxItem == nullptr )
             appleItem->GetPeer()->Hide();
-        else 
+        else
             appleItem->SetItemLabel(wxItem->GetItemLabel());
     }
 
@@ -764,7 +764,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 void wxMenuBar::DoGetPosition(int *x, int *y) const
 {
     int _x,_y,_width,_height;
-    
+
     m_rootMenu->GetPeer()->GetMenuBarDimensions(_x, _y, _width, _height);
 
     if (x)
@@ -776,7 +776,7 @@ void wxMenuBar::DoGetPosition(int *x, int *y) const
 void wxMenuBar::DoGetSize(int *width, int *height) const
 {
     int _x,_y,_width,_height;
-    
+
     m_rootMenu->GetPeer()->GetMenuBarDimensions(_x, _y, _width, _height);
 
     if (width)

@@ -118,7 +118,7 @@ wxRichTextSizePage::~wxRichTextSizePage()
     sm_enablePositionAndSizeUnits = true;
     sm_enablePositionAndSizeCheckboxes = true;
     sm_showMoveObjectControls = true;
-    
+
 ////@begin wxRichTextSizePage destruction
 ////@end wxRichTextSizePage destruction
 }
@@ -721,7 +721,7 @@ void wxRichTextSizePage::CreateControls()
 
     if (!sm_showPositionControls)
         m_parentSizer->Show(m_positionControls, false);
-        
+
     if (!sm_showMinMaxSizeControls)
     {
         m_sizeSizer->Show(m_minWidthCheckbox, false);

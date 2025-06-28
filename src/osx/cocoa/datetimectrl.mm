@@ -78,7 +78,7 @@ public:
     virtual void SetDateTime(const wxDateTime& dt) override
     {
         wxDateTime dtFrom, dtTo;
-        
+
         if ( GetDateRange(&dtFrom,&dtTo) == false ||
             ( (!dtFrom.IsValid() || dtFrom <= dt) &&
              (!dtTo.IsValid() || dt <= dtTo ) ) )

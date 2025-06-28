@@ -33,9 +33,9 @@ bool wxStaticText::Create( wxWindow *parent,
     const wxSize& size,
     long style,
     const wxString& name )
-{    
+{
     DontCreatePeer();
-    
+
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 

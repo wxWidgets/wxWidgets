@@ -28,5 +28,5 @@ public:
     virtual wxColour GetTransparentColour(unsigned int frame) const;
 
 protected:
-    virtual bool DoCanRead(wxInputStream& stream) const;    
+    virtual bool DoCanRead(wxInputStream& stream) const;
 };

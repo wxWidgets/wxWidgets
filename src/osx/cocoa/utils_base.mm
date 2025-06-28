@@ -274,16 +274,16 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     }
 
     NSWorkspace *ws = [NSWorkspace sharedWorkspace];
-    
-    
+
+
     NSRunningApplication *app = nil;
-    
+
     if ( [params count] > 0 )
         app = [ws openURLs:params withApplicationAtURL:url
                    options:NSWorkspaceLaunchAsync
              configuration:[NSDictionary dictionary]
                      error:&error];
-    
+
     if ( app == nil )
     {
         app = [ws launchApplicationAtURL:url
@@ -303,7 +303,7 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
             }
         }
     }
-    
+
     [params release];
 
     if( app != nil )

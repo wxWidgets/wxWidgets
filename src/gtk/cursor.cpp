@@ -394,7 +394,7 @@ static int       gs_busyCount = 0;
 static void UpdateCursors(wxWindow* win, GdkCursor* globalCursor)
 {
     win->GTKUpdateCursor(globalCursor);
-    const wxWindowList& children = win->GetChildren(); 
+    const wxWindowList& children = win->GetChildren();
     wxWindowList::const_iterator i = children.begin();
     for (size_t n = children.size(); n--; ++i)
         UpdateCursors(*i, globalCursor);

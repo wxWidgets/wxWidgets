@@ -23,9 +23,9 @@ bool wxRadioButton::Create( wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name )
-{    
+{
     DontCreatePeer();
-    
+
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 

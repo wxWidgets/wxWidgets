@@ -86,7 +86,7 @@
     @code
         wxDataViewCtrl *musicCtrl = new wxDataViewCtrl(this, wxID_ANY);
         wxObjectDataPtr<wxDataViewModel> musicModel(new MyMusicModel);
-        
+
         musicCtrl->AssociateModel(musicModel.get());
 
         // add columns now

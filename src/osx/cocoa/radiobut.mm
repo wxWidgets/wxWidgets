@@ -111,7 +111,7 @@ wxWidgetImplType* wxWidgetImpl::CreateRadioButton( wxWindowMac* wxpeer,
     [v setAlignment:NSLeftTextAlignment];
 
     static int alternateAction = 1;
- 
+
     [v setAction: NSSelectorFromString([NSString stringWithFormat: alternateActionsSelector, alternateAction])];
     if ( ++alternateAction > maxAlternateActions )
         alternateAction = 1;

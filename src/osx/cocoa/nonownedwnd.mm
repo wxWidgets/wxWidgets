@@ -23,7 +23,7 @@ NSScreen* wxOSXGetMenuScreen()
 {
     if ( [NSScreen screens] == nil )
         return [NSScreen mainScreen];
-    else 
+    else
     {
         return [[NSScreen screens] objectAtIndex:0];
     }
@@ -165,7 +165,7 @@ static bool IsUsingFullScreenApi(WXWindow macWindow)
 @end
 
 //
-// wx native implementation 
+// wx native implementation
 //
 
 static NSResponder* s_nextFirstResponder = nullptr;
@@ -225,7 +225,7 @@ static NSResponder* s_formerFirstResponder = nullptr;
     }
 }
 
-// We need this for borderless windows, i.e. shaped windows or windows without  
+// We need this for borderless windows, i.e. shaped windows or windows without
 // a title bar. For more info, see:
 // http://lists.apple.com/archives/cocoa-dev/2008/May/msg02091.html
 - (BOOL)canBecomeKeyWindow
@@ -294,12 +294,12 @@ static NSResponder* s_formerFirstResponder = nullptr;
     {
         WXEVENTREF formerEvent = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEvent();
         WXEVENTHANDLERCALLREF formerHandler = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEventHandlerCallRef();
-        
+
         if (wxTheApp)
             wxTheApp->MacSetCurrentEvent(event, nullptr);
-        
+
         [super sendEvent: event];
-        
+
         if (wxTheApp)
             wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
     }
@@ -402,8 +402,8 @@ extern int wxOSXGetIdFromSelector(SEL action );
     return NO;
 }
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem 
-{    
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
     SEL action = [menuItem action];
 
     wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar();
@@ -420,19 +420,19 @@ extern int wxOSXGetIdFromSelector(SEL action );
     return YES;
 }
 
-- (void)undo:(id)sender 
+- (void)undo:(id)sender
 {
     wxUnusedVar(sender);
     [self triggerMenu:_cmd sender:sender];
 }
 
-- (void)redo:(id)sender 
+- (void)redo:(id)sender
 {
     wxUnusedVar(sender);
     [self triggerMenu:_cmd sender:sender];
 }
 
-- (void)cut:(id)sender 
+- (void)cut:(id)sender
 {
     wxUnusedVar(sender);
     [self triggerMenu:_cmd sender:sender];
@@ -450,13 +450,13 @@ extern int wxOSXGetIdFromSelector(SEL action );
     [self triggerMenu:_cmd sender:sender];
 }
 
-- (void)delete:(id)sender 
+- (void)delete:(id)sender
 {
     wxUnusedVar(sender);
     [self triggerMenu:_cmd sender:sender];
 }
 
-- (void)selectAll:(id)sender 
+- (void)selectAll:(id)sender
 {
     wxUnusedVar(sender);
     [self triggerMenu:_cmd sender:sender];
@@ -665,7 +665,7 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
     NSRect viewframe = [view frame];
     NSUInteger stylemask = [window styleMask] | NSFullScreenWindowMask;
     NSRect expectedframerect = [NSWindow contentRectForFrameRect: windowframe styleMask: stylemask];
-    
+
     if ( !NSEqualSizes(expectedframerect.size, viewframe.size) )
     {
         [view setFrameSize: expectedframerect.size];
@@ -761,8 +761,8 @@ wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
     {
         [(wxNonOwnedWindowController*)[m_macWindow delegate] removeObservers:m_macWindow];
         [m_macWindow setDelegate:nil];
-     
-        // make sure we remove this first, otherwise the ref count will not lead to the 
+
+        // make sure we remove this first, otherwise the ref count will not lead to the
         // native window's destruction
         if ([m_macWindow parentWindow] != nullptr)
             [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
@@ -812,21 +812,21 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         wclass = kDrawerWindowClass;
         */
     }
- 
+
     if ( ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
         ( style & wxCLOSE_BOX ) || ( style & wxSYSTEM_MENU ) || ( style & wxCAPTION ) )
     {
         windowstyle |= NSTitledWindowMask ;
         if ( ( style & wxMINIMIZE_BOX ) )
             windowstyle |= NSMiniaturizableWindowMask ;
-        
+
         if ( ( style & wxMAXIMIZE_BOX ) )
             windowstyle |= NSResizableWindowMask ;
-        
+
         if ( ( style & wxCLOSE_BOX) )
             windowstyle |= NSClosableWindowMask ;
     }
-    
+
     if ( ( style & wxRESIZE_BORDER ) )
         windowstyle |= NSResizableWindowMask ;
 
@@ -858,24 +858,24 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     }
 
     // if we just have a title bar with no buttons needed, hide them
-    if ( (windowstyle & NSTitledWindowMask) && 
+    if ( (windowstyle & NSTitledWindowMask) &&
         !(style & wxCLOSE_BOX) && !(style & wxMAXIMIZE_BOX) && !(style & wxMINIMIZE_BOX) )
     {
         [[m_macWindow standardWindowButton:NSWindowZoomButton] setHidden:YES];
         [[m_macWindow standardWindowButton:NSWindowCloseButton] setHidden:YES];
         [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
     }
-    
+
     m_macWindowLevel = level;
     SetUpForModalParent();
     [m_macWindow setLevel:m_macWindowLevel];
 
     [m_macWindow setDelegate:controller];
     [controller addObservers:m_macWindow];
-    
+
     if ( !(style & wxFRAME_TOOL_WINDOW) )
         [m_macWindow setHidesOnDeactivate:NO];
-    
+
     if ( GetWXPeer()->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
     {
         [m_macWindow setOpaque:NO];
@@ -948,7 +948,7 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
 {
     if ( show )
     {
-        wxNonOwnedWindow* wxpeer = GetWXPeer(); 
+        wxNonOwnedWindow* wxpeer = GetWXPeer();
         if ( wxpeer )
         {
             // add to parent window before showing
@@ -975,18 +975,18 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
                     }
                 }
             }
-            
+
             SetUpForModalParent();
             if (!(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW))
                 [m_macWindow makeKeyAndOrderFront:nil];
-            else 
-                [m_macWindow orderFront:nil]; 
+            else
+                [m_macWindow orderFront:nil];
         }
         [[m_macWindow contentView] setNeedsDisplay: YES];
     }
     else
     {
-        // avoid propagation of orderOut to parent 
+        // avoid propagation of orderOut to parent
         if ([m_macWindow parentWindow] != nullptr)
             [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
         [m_macWindow orderOut:nil];
@@ -1042,7 +1042,7 @@ void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
     if (!m_wxPeer->IsNativeWindowWrapper() && m_macWindow)
     {
         NSInteger level = NSNormalWindowLevel;
-        
+
         if (style & wxSTAY_ON_TOP)
             level = NSModalPanelWindowLevel;
         else if (( style & wxFRAME_FLOAT_ON_PARENT ) || ( style & wxFRAME_TOOL_WINDOW ))
@@ -1273,7 +1273,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long style)
         NSRect contentRect;
 
         [m_macWindow setStyleMask:data->m_formerStyleMask & ~ NSResizableWindowMask];
-        
+
         contentRect = [NSWindow contentRectForFrameRect: frame
                                 styleMask: [m_macWindow styleMask]];
         screenframe.origin.y += (frame.origin.y - contentRect.origin.y);
@@ -1285,19 +1285,19 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long style)
                         /*
                                 | kUIOptionDisableProcessSwitch
                                 | kUIOptionDisableForceQuit
-                         */); 
+                         */);
     }
     else if ( m_macFullScreenData != nullptr )
     {
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
-        
+
         [m_macWindow setFrame:data->m_formerFrame display:YES];
         [m_macWindow setStyleMask:data->m_formerStyleMask];
 
         delete data ;
         m_macFullScreenData = nullptr ;
 
-        SetSystemUIMode(kUIModeNormal, 0); 
+        SetSystemUIMode(kUIModeNormal, 0);
     }
 
     return true;

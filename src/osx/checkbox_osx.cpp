@@ -25,9 +25,9 @@ bool wxCheckBox::Create(wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name)
-{    
+{
     DontCreatePeer();
-    
+
     if ( !wxCheckBoxBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
@@ -108,7 +108,7 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
             default:
                 break;
         }
-        
+
         if (newState == origState)
             sendEvent = false;
         else
@@ -123,7 +123,7 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
             Set3StateValue( newState );
         }
     }
-    
+
     if (sendEvent)
     {
         wxCommandEvent event( wxEVT_CHECKBOX, m_windowId );

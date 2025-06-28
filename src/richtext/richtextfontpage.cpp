@@ -340,7 +340,7 @@ void wxRichTextFontPage::CreateControls()
     if ((GetAllowedTextEffects() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION) == 0)
         m_rtlParentSizer->Show(m_suppressHyphenationCtrl, false);
 
-    if ((GetAllowedTextEffects() & (wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION|wxTEXT_ATTR_EFFECT_RTL)) == 0)        
+    if ((GetAllowedTextEffects() & (wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION|wxTEXT_ATTR_EFFECT_RTL)) == 0)
         m_innerSizer->Show(m_rtlParentSizer, false);
 
     m_faceListBox->UpdateFonts();
@@ -725,7 +725,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
                     m_rtlCtrl->Set3StateValue(wxCHK_UNCHECKED);
             }
             else
-                m_rtlCtrl->Set3StateValue(wxCHK_UNDETERMINED);        
+                m_rtlCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         }
 
         if (GetAllowedTextEffects() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION)
@@ -738,7 +738,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
                     m_suppressHyphenationCtrl->Set3StateValue(wxCHK_UNCHECKED);
             }
             else
-                m_suppressHyphenationCtrl->Set3StateValue(wxCHK_UNDETERMINED);        
+                m_suppressHyphenationCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         }
     }
     else

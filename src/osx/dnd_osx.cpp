@@ -41,15 +41,15 @@ wxDataFormat wxDropTarget::GetMatchingPair()
         if ( wxDropSource* currentSource = wxDropSource::GetCurrentDropSource() )
         {
             wxDataObject* data = currentSource->GetDataObject();
-        
+
             if ( data )
                 supported = m_dataObject->GetSupportedFormatInSource(data);
         }
-    
+
         if ( supported == wxDF_INVALID )
             supported = m_dataObject->GetSupportedFormatInSource( m_currentDragPasteboard );
     }
-    
+
     return supported;
 }
 

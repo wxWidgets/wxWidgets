@@ -1082,7 +1082,7 @@ public:
         }
         return *this;
     }
-    
+
     wxNSObjRef& operator=( T ptr )
     {
         if (get() != ptr)

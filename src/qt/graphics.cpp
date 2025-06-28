@@ -1453,7 +1453,7 @@ wxGraphicsBrush wxQtGraphicsRenderer::CreateBrush(const wxBrush& brush)
 wxGraphicsBrush wxQtGraphicsRenderer::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& stops, 
+    const wxGraphicsGradientStops& stops,
     const wxGraphicsMatrix& WXUNUSED(matrix))
 {
     wxGraphicsBrush p;
@@ -1466,7 +1466,7 @@ wxGraphicsBrush wxQtGraphicsRenderer::CreateLinearGradientBrush(
 wxGraphicsBrush wxQtGraphicsRenderer::CreateRadialGradientBrush(
     wxDouble startX, wxDouble startY,
     wxDouble endX, wxDouble endY, wxDouble r,
-    const wxGraphicsGradientStops& stops, 
+    const wxGraphicsGradientStops& stops,
     const wxGraphicsMatrix& WXUNUSED(matrix))
 {
     wxGraphicsBrush p;

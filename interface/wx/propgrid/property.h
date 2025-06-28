@@ -2154,7 +2154,7 @@ protected:
         Clear cells associated with property.
 
         @param ignoreWithFlags
-            Cells will not be cleared for properties having these flags set. 
+            Cells will not be cleared for properties having these flags set.
 
         @param recursively
             If @true, apply this operation recursively in child properties.

@@ -118,7 +118,7 @@ wxCFEventLoop::DefaultModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(observe
     if ( activity & kCFRunLoopBeforeTimers )
     {
     }
-    
+
     if ( activity & kCFRunLoopBeforeWaiting )
     {
     }
@@ -134,7 +134,7 @@ wxCFEventLoop::wxCFEventLoop()
 #if wxUSE_UIACTIONSIMULATOR
     m_shouldWaitForEvent = false;
 #endif
-    
+
     m_runLoop = CFGetCurrentRunLoop();
 
     CFRunLoopObserverContext ctxt;

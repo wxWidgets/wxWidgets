@@ -89,7 +89,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
     SetToggleButtonStyle(v, style);
-    
+
     if (label.IsOk())
         [v setImage: wxOSXGetImageFromBundle(label) ];
 
