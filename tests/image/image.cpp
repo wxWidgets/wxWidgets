@@ -1088,10 +1088,8 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::PNGDescription", "[image]")
     // Test writing a description and reading it back.
     TestPNGDescription("Providing the PNG a pneumatic puma as a present");
 
-#ifdef PNG_iTXt_SUPPORTED
     // Test writing and reading a description again but with non-ASCII characters.
     TestPNGDescription("Тестирование 테스트 一 二 三");
-#endif
 
     // Test writing and reading a description again but with a long description.
     TestPNGDescription(wxString(wxT('a'), 256)

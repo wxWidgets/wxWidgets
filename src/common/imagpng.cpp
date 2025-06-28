@@ -37,7 +37,7 @@
 
 #include <unordered_map>
 
-#define wxIMAGE_OPTION_PNG_DESCRIPTION_KEY wxString("Description")
+#define wxIMAGE_OPTION_PNG_DESCRIPTION_KEY "Description"
 
 // ----------------------------------------------------------------------------
 // local functions
@@ -191,7 +191,7 @@ PNGLINKAGEMODE wx_PNG_warning(png_structp png_ptr, png_const_charp message)
     wxPNGInfoStruct *info = png_ptr ? WX_PNG_INFO(png_ptr) : nullptr;
     if ( !info || info->verbose )
     {
-        wxLogWarning( wxString::FromAscii(message) );
+        wxLogWarning( wxString::FromUTF8(message) );
     }
 }
 
@@ -346,6 +346,7 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
     png_read_image( png_ptr, lines );
 
     // load "Description" text chunk
+#if defined(PNG_READ_iTXt_SUPPORTED) || defined(PNG_READ_tEXt_SUPPORTED)
     png_textp text_ptr;
     const int num_comments = png_get_text( png_ptr, info_ptr, &text_ptr, nullptr );
     for (int i = 0; i < num_comments; ++i)
@@ -356,19 +357,16 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
             wxString description;
             switch (text_ptr[i].compression)
             {
+            case PNG_TEXT_COMPRESSION_zTXt:
             case PNG_TEXT_COMPRESSION_NONE:
                 // tEXt chunk: uses Latin-1 encoding.
                 description = wxString::From8BitData(text_ptr[i].text);
                 break;
 
+            case PNG_ITXT_COMPRESSION_zTXt:
             case PNG_ITXT_COMPRESSION_NONE:
                 // iTXt chunk: uses UTF-8 encoding.
                 description = wxString::FromUTF8(text_ptr[i].text);
-                break;
-
-            case PNG_TEXT_COMPRESSION_zTXt:
-            case PNG_ITXT_COMPRESSION_zTXt:
-                // Not supported currently, but should be.
                 break;
 
             default:
@@ -380,6 +378,7 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
                 image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, description);
         }
     }
+#endif // defined(PNG_READ_iTXt_SUPPORTED) || defined(PNG_READ_tEXt_SUPPORTED)
 
     png_read_end( png_ptr, info_ptr );
 
@@ -778,29 +777,31 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
 
     // save "Description" text chunk
+#if defined(PNG_WRITE_iTXt_SUPPORTED) || defined(PNG_WRITE_tEXt_SUPPORTED)
     if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION))
     {
         const wxString& description = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
 
         png_text text;
-        text.key = const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY.ToAscii().data());
-        text.lang = NULL;
-        text.lang_key = NULL;
+        text.key = const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY);
+        text.lang = nullptr;
+        text.lang_key = nullptr;
 
-#ifdef PNG_iTXt_SUPPORTED
+#ifdef PNG_WRITE_iTXt_SUPPORTED
         text.compression = PNG_ITXT_COMPRESSION_NONE;
         text.text = const_cast<char*>(description.utf8_str().data());
         text.text_length = 0;
         text.itxt_length = strlen(text.text);
 #else
         text.compression = PNG_TEXT_COMPRESSION_NONE;
-        text.text = const_cast<char*>(description.ToAscii().data());
+        text.text = const_cast<char*>(description.mb_str(wxConvISO8859_1).data());
         text.text_length = strlen(text.text);
         text.itxt_length = 0;
-#endif // PNG_iTXt_SUPPORTED
+#endif
 
         png_set_text( png_ptr, info_ptr, &text, 1 );
     }
+#endif // defined(PNG_WRITE_iTXt_SUPPORTED) || defined(PNG_WRITE_tEXt_SUPPORTED)
 
     png_write_info( png_ptr, info_ptr );
     png_set_shift( png_ptr, &sig_bit );
