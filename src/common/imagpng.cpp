@@ -346,7 +346,6 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
     png_read_image( png_ptr, lines );
 
     // load "Description" text chunk
-#if defined(PNG_READ_iTXt_SUPPORTED) || defined(PNG_READ_tEXt_SUPPORTED)
     png_textp text_ptr;
     const int num_comments = png_get_text( png_ptr, info_ptr, &text_ptr, nullptr );
     for (int i = 0; i < num_comments; ++i)
@@ -378,7 +377,6 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
                 image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, description);
         }
     }
-#endif // defined(PNG_READ_iTXt_SUPPORTED) || defined(PNG_READ_tEXt_SUPPORTED)
 
     png_read_end( png_ptr, info_ptr );
 
@@ -777,7 +775,6 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
 
     // save "Description" text chunk
-#if defined(PNG_WRITE_iTXt_SUPPORTED) || defined(PNG_WRITE_tEXt_SUPPORTED)
     if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION))
     {
         const wxString& description = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
@@ -786,22 +783,13 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         text.key = const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY);
         text.lang = nullptr;
         text.lang_key = nullptr;
-
-#ifdef PNG_WRITE_iTXt_SUPPORTED
         text.compression = PNG_ITXT_COMPRESSION_NONE;
-        text.text = const_cast<char*>(description.utf8_str().data());
+        const auto& buf = description.utf8_str();
+        text.text = const_cast<char*>(buf.data());
+        text.itxt_length = buf.length();
         text.text_length = 0;
-        text.itxt_length = strlen(text.text);
-#else
-        text.compression = PNG_TEXT_COMPRESSION_NONE;
-        text.text = const_cast<char*>(description.mb_str(wxConvISO8859_1).data());
-        text.text_length = strlen(text.text);
-        text.itxt_length = 0;
-#endif
-
         png_set_text( png_ptr, info_ptr, &text, 1 );
     }
-#endif // defined(PNG_WRITE_iTXt_SUPPORTED) || defined(PNG_WRITE_tEXt_SUPPORTED)
 
     png_write_info( png_ptr, info_ptr );
     png_set_shift( png_ptr, &sig_bit );
