@@ -177,7 +177,7 @@ msgstr "Entrée numérique:"
 
 #: internat.cpp:417
 msgid "Number"
-msgstr "Numéro"
+msgstr "Nombre"
 
 #: internat.cpp:421
 msgid "Date"
@@ -186,7 +186,7 @@ msgstr "Date"
 #: internat.cpp:437
 #, c-format
 msgid "Number in UI locale: %s; in C locale: %.2f"
-msgstr "Numéro utilisant les paramètres régionaux: %s; sans: %.2f"
+msgstr "Nombre utilisant les paramètres régionaux: %s; sans: %.2f"
 
 #: internat.cpp:457
 msgid ""
@@ -242,7 +242,7 @@ msgid ""
 "Localized name: %s"
 msgstr ""
 "Les paramètres régionaux \"%s\" sont disponibles.\n"
-"Idéntifiant: %s; Direction d'écriture: %s\n"
+"Identifiant: %s; Direction d'écriture: %s\n"
 "Nom en anglais: %s\n"
 "Nom traduit: %s"
 
