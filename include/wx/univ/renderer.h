@@ -22,7 +22,7 @@
    methods).
 
    Finally note that wxRenderer supersedes wxRendererNative in wxUniv build and
-   includes the latters functionality (which it may delegate to the generic
+   includes the latter's functionality (which it may delegate to the generic
    implementation of the latter or reimplement itself).
  */
 
