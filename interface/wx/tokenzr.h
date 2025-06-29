@@ -121,7 +121,7 @@ public:
 
     /**
         Returns the delimiter which ended scan for the last token returned by
-        GetNextToken() or @c NUL if there had been no calls to this function
+        GetNextToken() or @NULL if there had been no calls to this function
         yet or if it returned the trailing empty token in
         ::wxTOKEN_RET_EMPTY_ALL mode.
 
