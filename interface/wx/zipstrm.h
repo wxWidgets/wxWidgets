@@ -105,7 +105,7 @@ enum wxZipArchiveFormat
     objects, using wxZipEntry::SetNotifier().
 
     Setting a notifier is not usually necessary. It is used to handle
-    certain cases when modifying an zip in a pipeline (i.e. between
+    certain cases when modifying a zip in a pipeline (i.e. between
     non-seekable streams).
     See @ref overview_archive_noseek.
 

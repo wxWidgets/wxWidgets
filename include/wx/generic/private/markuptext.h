@@ -54,7 +54,7 @@ protected:
     }
 
     // Return m_markup suitable for measuring by Measure, i.e. stripped of
-    // any mnenomics.
+    // any mnemonics.
     virtual wxString GetMarkupForMeasuring() const = 0;
 
     wxString m_markup;
