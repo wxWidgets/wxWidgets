@@ -162,7 +162,7 @@ protected:
     wxVariant TranslateVal( wxColourPropertyValue& v ) const;
     wxVariant TranslateVal( int type, const wxColour& colour ) const;
 
-    // Translates colour to a int value, return wxNOT_FOUND if no match.
+    // Translates colour to an int value, return wxNOT_FOUND if no match.
     int ColToInd( const wxColour& colour ) const;
 };
 

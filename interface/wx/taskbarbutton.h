@@ -649,7 +649,7 @@ public:
     /**
         Accesses the built in tasks category.
 
-        With the returned tasks category, you can append an new task, remove
+        With the returned tasks category, you can append a new task, remove
         an existing task, modify the task item etc.
     */
     wxTaskBarJumpListCategory& GetTasks() const;

@@ -439,8 +439,8 @@ public:
     // This method converts an image where the original alpha
     // information is only available as a shades of a colour
     // (actually shades of grey) typically when you draw anti-
-    // aliased text into a bitmap. The DC drawinf routines
-    // draw grey values on the black background although they
+    // aliased text into a bitmap. The DC drawing routines
+    // draw grey values on the black background, although they
     // actually mean to draw white with different alpha values.
     // This method reverses it, assuming a black (!) background
     // and white text (actually only the red channel is read).
