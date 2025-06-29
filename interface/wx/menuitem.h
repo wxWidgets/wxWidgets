@@ -43,7 +43,7 @@
     This class provides several functions for customizing the menu items
     appearance that are available only in wxMSW port. These functions should
     not be used in portable programs and, moreover, have some known limitations
-    even in wxMSW: using them switches the menu item in a "owner drawn" mode,
+    even in wxMSW: using them switches the menu item in an "owner drawn" mode,
     where it is painted by wxWidgets itself and not the system, which may
     result in a slightly different appearance for it. Owner drawn items are
     also incompatible with dark mode support and using them makes the entire
