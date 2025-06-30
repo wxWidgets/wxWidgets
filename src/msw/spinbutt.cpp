@@ -176,7 +176,7 @@ void wxSpinButton::OnPaint(wxPaintEvent& event)
         const RECT rc = wxGetClientRect(GetHwnd());
         const wxSize size{rc.right - rc.left, rc.bottom - rc.top};
 
-        if ( !size.IsAtLeast(wxSize(1, 1)) )
+        if ( size.IsEmpty() )
             return;
 
         wxBitmap bmp(size);

@@ -430,6 +430,9 @@ public:
 
     bool IsFullySpecified() const { return x != wxDefaultCoord && y != wxDefaultCoord; }
 
+    // Return true if size doesn't define a valid, non-empty area.
+    bool IsEmpty() const { return x <= 0 || y <= 0; }
+
     // Check that this size object is at least as big as the other one in both
     // directions.
     bool IsAtLeast(const wxSize& sz) const { return x >= sz.x && y >= sz.y; }

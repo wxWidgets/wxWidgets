@@ -2468,7 +2468,7 @@ void wxAuiToolBar::UpdateBackgroundBitmap(const wxSize& size)
 {
     // We can't create 0-sized bitmaps, but we can be called with 0 size: just
     // ignore it, as we'll be called again when the window is resized.
-    if ( !size.IsAtLeast(wxSize(1, 1)) )
+    if ( size.IsEmpty() )
         return;
 
     m_backgroundBitmap.Create(size);
