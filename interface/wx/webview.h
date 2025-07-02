@@ -839,19 +839,21 @@ public:
     wxWebViewHandler::SetVirtualHost() for more details on how to access
     handler provided URLs.
 
-    This backend is not enabled by default, to build it follow these steps:
-    - With CMake just enable @c wxUSE_WEBVIEW_EDGE
+    This backend is enabled by default only when using CMake. To build it follow these steps:
     - When not using CMake:
         - Download the <a href="https://aka.ms/webviewnuget">WebView2 SDK</a>
-        nuget package (Version 1.0.864.35 or newer)
-        - Extract the package (it's a zip archive) to @c wxWidgets/3rdparty/webview2
+        NuGet package (Version 1.0.864.35 or newer)
+        - Extract the package (it's a zip archive) to @c WX_SRCDIR/3rdparty/webview2
         (you should have @c 3rdparty/webview2/build/native/include/WebView2.h
         file after unpacking it)
         - Enable @c wxUSE_WEBVIEW_EDGE in @c setup.h
+    - When using CMake, the backend is enabled by default. It can be disabled by setting
+      @c wxUSE_WEBVIEW_EDGE to @c OFF. If a WebView2 SDK is found in @c WX_SRCDIR/3rdparty/webview2
+      (see the bullet above), that SDK is used. Otherwise, the SDK is downloaded and extracted
+      by CMake during the configure phase (into directory @c WX_BUILDDIR/libs/webview/packages)
     - Build wxWidgets webview library
-    - Copy @c WebView2Loader.dll from the subdirectory corresponding to the
-      architecture used (x86 or x64) of @c wxWidgets/3rdparty/webview2/build/
-      to your applications executable
+    - From the WebView2 SDK @c build subdirectory copy @c WebView2Loader.dll corresponding
+      to the architecture used (x86 or x64) to the directory with your application executable
     - At runtime you can use wxWebView::IsBackendAvailable() to check if the
       backend can be used (it will be available if @c WebView2Loader.dll can be
       loaded and Edge (Chromium) is installed)
