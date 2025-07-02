@@ -458,10 +458,10 @@ public:
 class WXDLLIMPEXP_CORE wxWARN_UNUSED wxRealPoint
 {
 public:
-    double x;
-    double y;
+    double x = 0.0;
+    double y = 0.0;
 
-    wxRealPoint() : x(0.0), y(0.0) { }
+    wxRealPoint() = default;
     wxRealPoint(double xx, double yy) : x(xx), y(yy) { }
     wxRealPoint(const wxPoint& pt);
 
@@ -608,9 +608,9 @@ public:
 class WXDLLIMPEXP_CORE wxWARN_UNUSED wxPoint
 {
 public:
-    int x, y;
+    int x = 0, y = 0;
 
-    wxPoint() : x(0), y(0) { }
+    wxPoint() = default;
     wxPoint(int xx, int yy) : x(xx), y(yy) { }
     wxPoint(const wxRealPoint& pt) : x(wxRound(pt.x)), y(wxRound(pt.y)) { }
 
@@ -774,9 +774,7 @@ WX_DECLARE_LIST_WITH_DECL(wxPoint, wxPointList, class WXDLLIMPEXP_CORE);
 class WXDLLIMPEXP_CORE wxWARN_UNUSED wxRect
 {
 public:
-    wxRect()
-        : x(0), y(0), width(0), height(0)
-        { }
+    wxRect() = default;
     wxRect(int xx, int yy, int ww, int hh)
         : x(xx), y(yy), width(ww), height(hh)
         { }
@@ -785,7 +783,7 @@ public:
         : x(pt.x), y(pt.y), width(size.x), height(size.y)
         { }
     wxRect(const wxSize& size)
-        : x(0), y(0), width(size.x), height(size.y)
+        : width(size.x), height(size.y)
         { }
 
     // default copy ctor and assignment operators ok
@@ -934,7 +932,10 @@ public:
     }
 
 public:
-    int x, y, width, height;
+    int x = 0,
+        y = 0,
+        width = 0,
+        height = 0;
 };
 
 
