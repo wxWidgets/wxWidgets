@@ -276,7 +276,6 @@ enum wxEllipsizeMode
 class WXDLLIMPEXP_CORE wxWARN_UNUSED wxSize
 {
 public:
-    // members are public for compatibility, don't use them directly.
     int x = 0, y = 0;
 
     // constructors
