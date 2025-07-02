@@ -63,4 +63,20 @@ TEST_CASE("wxSize::Functions", "[size]")
     CHECK_FALSE( wxSize(10, 10).IsAtLeast(wxSize(10, 11)) );
     CHECK_FALSE( wxSize(10, 10).IsAtLeast(wxSize(11, 11)) );
     CHECK_FALSE( wxDefaultSize.IsAtLeast(wxSize()) );
+
+    CHECK(wxSize{ 0, 0 }.IsFullySpecified());
+    // should be 0, 0, which is fully specified (but empty)
+    CHECK(wxSize{}.IsFullySpecified());
+    CHECK_FALSE(wxSize{ wxDefaultCoord , wxDefaultCoord }.IsFullySpecified());
+    CHECK_FALSE(wxSize{ 0, wxDefaultCoord }.IsFullySpecified());
+    CHECK_FALSE(wxSize{ wxDefaultCoord, 0 }.IsFullySpecified());
+
+    CHECK_FALSE(wxSize{ 1, 1 }.IsEmpty());
+    CHECK(wxSize{ 0, 10 }.IsEmpty());
+    CHECK(wxSize{ 10, 0 }.IsEmpty());
+    CHECK(wxSize{}.IsEmpty());
+    CHECK(wxSize{ 0, 0 }.IsEmpty());
+    CHECK(wxSize{ -1, 0 }.IsEmpty());
+    CHECK(wxSize{ 0, -1 }.IsEmpty());
+    CHECK(wxSize{ wxDefaultCoord, wxDefaultCoord }.IsEmpty());
 }

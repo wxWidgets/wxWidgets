@@ -277,10 +277,10 @@ class WXDLLIMPEXP_CORE wxWARN_UNUSED wxSize
 {
 public:
     // members are public for compatibility, don't use them directly.
-    int x, y;
+    int x = 0, y = 0;
 
     // constructors
-    wxSize() : x(0), y(0) { }
+    wxSize() = default;
     wxSize(int xx, int yy) : x(xx), y(yy) { }
 
     // no copy ctor or assignment operator - the defaults are ok
@@ -429,6 +429,8 @@ public:
     int GetHeight() const { return y; }
 
     bool IsFullySpecified() const { return x != wxDefaultCoord && y != wxDefaultCoord; }
+
+    bool IsEmpty() const { return (x <= 0) || (y <= 0); }
 
     // Check that this size object is at least as big as the other one in both
     // directions.

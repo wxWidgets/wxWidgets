@@ -774,6 +774,14 @@ public:
     bool IsFullySpecified() const;
 
     /**
+        Returns @true if this size has a width or height less than or
+        equal to 0 and @false otherwise.
+
+        @since 3.3.1
+    */
+    bool IsEmpty() const;
+
+    /**
         Combine this object with another one replacing the uninitialized
         values.
 
