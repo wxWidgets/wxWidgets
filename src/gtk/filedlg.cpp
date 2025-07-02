@@ -495,20 +495,17 @@ void wxFileDialog::OnSize(wxSizeEvent&)
 wxString wxFileDialog::GetPath() const
 {
     wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetPaths() instead" );
-    const wxGtkFileChooser& fc = m_fcNative ? *m_fcNative : m_fc;
-    return fc.GetPath();
+    return GetFileChooser().GetPath();
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const
 {
-    const wxGtkFileChooser& fc = m_fcNative ? *m_fcNative : m_fc;
-    fc.GetFilenames(files);
+    GetFileChooser().GetFilenames(files);
 }
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const
 {
-    const wxGtkFileChooser& fc = m_fcNative ? *m_fcNative : m_fc;
-    fc.GetPaths(paths);
+    GetFileChooser().GetPaths(paths);
 }
 
 void wxFileDialog::SetMessage(const wxString& message)
@@ -573,8 +570,7 @@ wxString wxFileDialog::GetFilename() const
 {
     wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
 
-    const wxGtkFileChooser& fc = m_fcNative ? *m_fcNative : m_fc;
-    wxString currentFilename(fc.GetFilename());
+    wxString currentFilename(GetFileChooser().GetFilename());
     if (currentFilename.empty())
     {
         // m_fc.GetFilename() will return empty until the dialog has been shown
@@ -601,8 +597,7 @@ void wxFileDialog::SetFilterIndex(int filterIndex)
 
 int wxFileDialog::GetFilterIndex() const
 {
-    const wxGtkFileChooser& fc = m_fcNative ? *m_fcNative : m_fc;
-    return fc.GetFilterIndex();
+    return GetFileChooser().GetFilterIndex();
 }
 
 void wxFileDialog::GTKSelectionChanged(const wxString& filename)
