@@ -23,7 +23,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
-    #include "wx/combobox.h"
 #endif
 
 #include "wx/valnum.h"
@@ -49,38 +48,6 @@ int wxNumValidatorBase::GetFormatFlags() const
         flags |= wxNumberFormatter::Style_NoTrailingZeroes;
 
     return flags;
-}
-
-void wxNumValidatorBase::SetWindow(wxWindow *win)
-{
-    wxValidator::SetWindow(win);
-
-#if wxUSE_TEXTCTRL
-    if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
-        return;
-#endif // wxUSE_TEXTCTRL
-
-#if wxUSE_COMBOBOX
-    if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
-        return;
-#endif // wxUSE_COMBOBOX
-
-    wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
-}
-
-wxTextEntry *wxNumValidatorBase::GetTextEntry() const
-{
-#if wxUSE_TEXTCTRL
-    if ( wxTextCtrl *text = wxDynamicCast(m_validatorWindow, wxTextCtrl) )
-        return text;
-#endif // wxUSE_TEXTCTRL
-
-#if wxUSE_COMBOBOX
-    if ( wxComboBox *combo = wxDynamicCast(m_validatorWindow, wxComboBox) )
-        return combo;
-#endif // wxUSE_COMBOBOX
-
-    return nullptr;
 }
 
 void
@@ -227,6 +194,48 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
     // first place.
     if ( wasModified )
         text->MarkDirty();
+}
+
+bool wxNumValidatorBase::CanPaste(const wxString& text)
+{
+    wxString valid;
+    valid.reserve(text.length());
+
+    bool hasInvalid = false;
+    int pos = 0;
+
+    // Examine all characters one by one.
+    for ( wxString::const_iterator i = text.begin(), end = text.end();
+          i != end; ++i )
+    {
+        const wxUniChar ch = *i;
+
+        if ( IsCharOk(valid, pos, ch) )
+        {
+            valid += ch;
+            ++pos;
+        }
+        else // Invalid character.
+        {
+            // Only beep once per paste, not for every invalid character.
+            if ( !hasInvalid && !wxValidator::IsSilent() )
+                wxBell();
+
+            hasInvalid = true;
+        }
+    }
+
+    // If we can't let the control paste everything, do it ourselves.
+    if ( hasInvalid )
+    {
+        wxTextEntry * const entry = GetTextEntry();
+        if ( entry )
+        {
+            entry->WriteText(valid);
+        }
+    }
+
+    return !hasInvalid;
 }
 
 // ============================================================================

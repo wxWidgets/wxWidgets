@@ -314,3 +314,79 @@ protected:
     bool IsValidChar(const wxUniChar& c) const;
 };
 
+
+/**
+    @class wxRegexValidator
+
+    wxRegexValidator validates text controls, providing a variety of filtering
+    behaviours. It differs from wxTextValidator in that validation is also done
+    using a regular expression.
+
+    For more information, please see @ref overview_validator.
+
+    @library{wxcore}
+    @category{validator}
+
+    @see @ref overview_validator, wxValidator, wxGenericValidator, wxTextValidator
+        wxIntegerValidator, wxFloatingPointValidator, wxRegEx
+*/
+class wxRegexValidator : public wxTextValidator
+{
+public:
+    /**
+        Constructor taking a style and optional pointer to a wxString variable.
+
+        @param style
+            One or more of the ::wxTextValidatorStyle styles. See SetStyle().
+        @param valPtr
+            A pointer to a wxString variable that contains the value. This
+            variable should have a lifetime equal to or longer than the
+            validator lifetime (which is usually determined by the lifetime of
+            the window).
+
+        @note Use SetRegEx() to initialize the validator.
+    */
+    wxRegexValidator(long style = wxFILTER_NONE, wxString* valPtr = nullptr);
+
+    /**
+        Constructor taking a pattern, purpose, style and optional pointer to a
+        wxString variable.
+
+        @param pattern
+            A string to compile into a regular expression.
+        @param purpose
+            The purpose of the regular expression. Used to compose the error
+            message when validation fails.
+        @param style
+            One or more of the ::wxTextValidatorStyle styles. See SetStyle().
+        @param valPtr
+            A pointer to a wxString variable that contains the value. This
+            variable should have a lifetime equal to or longer than the
+            validator lifetime (which is usually determined by the lifetime of
+            the window).
+    */
+    wxRegexValidator(const wxString& pattern, const wxString& purpose,
+                     long style = wxFILTER_NONE, wxString* valPtr = nullptr);
+
+    /**
+        Use this function to initialize the validator if the first constructor
+        was used to create it.
+    */
+    void SetRegEx(const wxString& pattern, const wxString& purpose);
+
+    /**
+        Use this function to initialize the validator if the first constructor
+        was used to create it.
+    */
+    void SetRegEx(wxSharedPtr<wxRegEx> regex, const wxString& purpose);
+
+    /**
+        Returns the error message if the contents of @a val are invalid or the
+        empty string if @a val is valid. First, it calls the base class version
+        wxTextValidator::IsValid() if style is not wxFILTER_NONE. If it passes,
+        it validates against the regular expression.
+
+        @note Use wxFILTER_NONE to validate against the regular expression only.
+    */
+    virtual wxString IsValid(const wxString& val) const override;
+};
