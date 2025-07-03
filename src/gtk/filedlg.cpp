@@ -451,7 +451,11 @@ int wxFileDialog::ShowModal()
             {
                 wxGtkString filename(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_fileChooserNative)));
                 wxGtkString dir(g_path_get_dirname(filename));
-                chdir(dir);
+                if ( chdir(dir) != 0 )
+                {
+                    wxLogSysError(_("Changing current directory to \"%s\" failed"),
+                                  wxString::FromUTF8(dir));
+                }
             }
             m_returnCode = wxID_OK;
         }
