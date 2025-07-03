@@ -509,6 +509,18 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
         m_graphicContext->ConcatTransform( m_matrixCurrent );
         m_matrixCurrentInv = m_matrixCurrent;
         m_matrixCurrentInv.Invert();
+
+#if defined(__WXMSW__) || defined(__WXGTK3__)
+        // The device context is mirrored in RTL layout under wxMSW and wxGTK3.
+        if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            int width;
+            GetSize(&width, nullptr);
+            m_matrixCurrentInv.Translate(width, 0);
+            m_matrixCurrentInv.Scale(-1, 1);
+        }
+#endif // __WXMSW__ || __WXGTK3__
+
         m_isClipBoxValid = false;
     }
 }
