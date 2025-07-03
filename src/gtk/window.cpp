@@ -6440,6 +6440,10 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
         rect = wxDisplay(data.menu->GetInvokingWindow()).GetClientArea();
 
     wxPoint pos = data.pos;
+
+    if ( wxWindowGTK::GTKGetLayout(GTK_WIDGET(menu)) == wxLayout_RightToLeft )
+        pos.x -= req.width;
+
     if ( pos.x < rect.x )
         pos.x = rect.x;
     if ( pos.y < rect.y )
@@ -6457,6 +6461,8 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != nullptr, false, wxT("invalid window") );
+
+    GTKSetLayout(menu->m_menu, GetLayoutDirection());
 
     menu->SetupBitmaps(this);
 
@@ -6515,6 +6521,10 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
             {
                 gdk_window_get_device_position(window, device, &x, &y, nullptr);
             }
+        }
+        else if (GetLayoutDirection() == wxLayout_RightToLeft)
+        {
+            x = gdk_window_get_width(window) - x;
         }
 
         const GdkRectangle rect = { x, y, 1, 1 };
