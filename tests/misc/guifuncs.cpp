@@ -27,6 +27,7 @@
 #include "wx/panel.h"
 
 #include "asserthelper.h"
+#include "waitfor.h"
 
 #include <memory>
 
@@ -171,6 +172,20 @@ TEST_CASE("GUI::ClientToScreen", "[guifuncs]")
     wxWindow* const tlw = wxTheApp->GetTopWindow();
     REQUIRE( tlw );
 
+    SECTION("Right to left layout [RTL]") { }
+    {
+        tlw->SetLayoutDirection(wxLayout_RightToLeft);
+    }
+
+    SECTION("Left to right layout [LTR]")
+    {
+        tlw->SetLayoutDirection(wxLayout_LeftToRight);
+    }
+
+    tlw->Refresh();
+    tlw->Update();
+    wxYield();
+
     std::unique_ptr<wxPanel> const
         p1(new wxPanel(tlw, wxID_ANY, wxPoint(0, 0), wxSize(100, 50)));
     std::unique_ptr<wxPanel> const
@@ -179,13 +194,25 @@ TEST_CASE("GUI::ClientToScreen", "[guifuncs]")
         b = new wxWindow(p2.get(), wxID_ANY, wxPoint(10, 10), wxSize(30, 10));
 
     // We need this to realize the windows created above under wxGTK.
-    wxYield();
+    YieldForAWhile();
 
     const wxPoint tlwOrig = tlw->ClientToScreen(wxPoint(0, 0));
+    const int xx = tlw->GetLayoutDirection() == wxLayout_RightToLeft ? -10 : 10;
 
-    CHECK( p2->ClientToScreen(wxPoint(0, 0)) == tlwOrig + wxPoint(0, 50) );
+    wxPoint c2sCoords = p2->ClientToScreen(wxPoint(0, 0));
+    wxPoint c2sCoordsExpected = tlwOrig + wxPoint(0, 50);
 
-    CHECK( b->ClientToScreen(wxPoint(0, 0)) == tlwOrig + wxPoint(10, 60) );
+    CHECK( c2sCoords == c2sCoordsExpected );
+
+    c2sCoords = b->ClientToScreen(wxPoint(0, 0));
+    c2sCoordsExpected = tlwOrig + wxPoint(xx, 60);
+
+    CHECK( c2sCoords == c2sCoordsExpected );
+
+    // Ensure that "ScreenToClient(ClientToScreen(coords)) == coords" is also true.
+    c2sCoords = b->ScreenToClient(c2sCoords);
+    c2sCoordsExpected = wxPoint(0, 0);
+    CHECK( c2sCoords == c2sCoordsExpected );
 }
 
 namespace
