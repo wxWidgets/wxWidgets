@@ -607,7 +607,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() override { Update(); }
+    virtual void UpdateMacScrollWindow() override { this->Update(); }
 #endif // __WXMAC__
 
 private:
