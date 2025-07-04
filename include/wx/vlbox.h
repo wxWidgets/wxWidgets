@@ -92,7 +92,7 @@ public:
     // is this item the current one?
     bool IsCurrent(size_t item) const { return item == (size_t)m_current; }
     #ifdef __WXUNIVERSAL__
-    bool IsCurrent() const { return wxVScrolledWindow::IsCurrent(); }
+    bool IsCurrent() const { return wxVScrolledCanvas::IsCurrent(); }
     #endif
 
     // get current item
@@ -139,7 +139,7 @@ public:
 
     // set the number of items to be shown in the control
     //
-    // this is just a synonym for wxVScrolledWindow::SetRowCount()
+    // this is just a synonym for wxVScrolledCanvas::SetRowCount()
     virtual void SetItemCount(size_t count);
 
     // delete all items from the control
