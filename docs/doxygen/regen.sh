@@ -243,7 +243,11 @@ if [[ -s doxygen.log ]]; then
     topsrcdir=`cd ../.. && pwd`
     sed -i'' -e "s|$topsrcdir/||g" doxygen.log
 
-    echo '*** There were warnings during docs generation ***'
+    # Filter out warnings from interface/wx/stc/stc.h for now, there are tons
+    # of them and it's not clear what to do about them, see #25603
+    if grep -q -v "interface/wx/stc/stc.h" doxygen.log; then
+        echo '*** There were warnings during docs generation ***'
+    fi
 else
     # Don't leave empty file lying around.
     rm doxygen.log

@@ -1485,7 +1485,7 @@ public:
         Add a script message handler with the given name.
 
         To use the script message handler from javascript use
-        @c `window.<name>.postMessage(<messageBody>)` where `<name>` corresponds the value
+        `window.<name>.postMessage(<messageBody>)` where `<name>` corresponds the value
         of the name parameter. The `<messageBody>` will be available to the application
         via a @c wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED event.
 

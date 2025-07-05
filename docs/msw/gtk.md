@@ -20,8 +20,8 @@ in bakefiles manually. Apply following patch manually or using Cygwin:
 
 Regenerate required make/project files:
 
-    cd build\bakefiles
-    bakefile_gen
+        cd build\bakefiles
+        bakefile_gen
 
 3. Download GTK+ for Windows and uncompress files in the directory
 without spaces in the name. We suppose later that GTK+/Win32 is
