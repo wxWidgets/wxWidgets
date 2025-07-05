@@ -87,11 +87,7 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
     // unnecessary anyhow as we're going to set the label when creating it.
     wxGenericHyperlinkCtrl::SetURL( url );
 
-    WXDWORD exstyle;
-    WXDWORD msStyle = MSWGetStyle(style, &exstyle);
-
-    if ( !MSWCreateControl(WC_LINK, msStyle, pos, size,
-                           GetLabelForSysLink( label, url ), exstyle) )
+    if ( !MSWCreateControl(WC_LINK, GetLabelForSysLink(label, url), pos, size) )
     {
         return false;
     }
