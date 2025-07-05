@@ -50,6 +50,7 @@
 #include <windowsx.h>
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/winundef.h"
 
 #include <string.h>
@@ -473,9 +474,10 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( !MSWCreateText(value, pos, size) )
         return false;
 
-#if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
+#if wxUSE_RICHEDIT
     if ( IsRich() )
     {
+#if wxUSE_DRAG_AND_DROP
         // rich text controls have a default associated drop target which
         // allows them to receive (rich) text dropped on them, which is nice,
         // but prevents us from associating a user-defined drop target with
@@ -484,8 +486,16 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // to make it work, we set m_dropTarget to this special value initially
         // and check for it in our SetDropTarget()
         m_dropTarget = wxRICHTEXT_DEFAULT_DROPTARGET;
+#endif // wxUSE_DRAG_AND_DROP
+
+        if ( wxMSWDarkMode::IsActive() )
+        {
+            // We need to set the colours explicitly for rich text controls.
+            SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+            SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+        }
     }
-#endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
+#endif // wxUSE_RICHEDIT
 
     return true;
 }
