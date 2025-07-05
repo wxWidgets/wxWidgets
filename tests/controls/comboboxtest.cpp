@@ -72,6 +72,7 @@ private:
         CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( ReadOnly );
         CPPUNIT_TEST( IsEmpty );
+        CPPUNIT_TEST( SetStringSelection );
     CPPUNIT_TEST_SUITE_END();
 
     void Size();
@@ -79,6 +80,7 @@ private:
     void Sort();
     void ReadOnly();
     void IsEmpty();
+    void SetStringSelection();
 
     wxComboBox *m_combo;
 
@@ -227,6 +229,20 @@ void ComboBoxTestCase::IsEmpty()
     // Compiling this should fail, see failtest target definition in test.bkl.
     m_combo->IsEmpty();
 #endif
+}
+
+void ComboBoxTestCase::SetStringSelection()
+{
+    m_combo->Append("foo");
+    m_combo->Append("bar");
+    m_combo->Append("baz");
+
+    EventCounter events(m_combo, wxEVT_COMBOBOX);
+    m_combo->SetStringSelection("bar");
+    CPPUNIT_ASSERT_EQUAL( 0, events.GetCount() );
+
+    m_combo->SetStringSelection("foo");
+    CPPUNIT_ASSERT_EQUAL( 0, events.GetCount() );
 }
 
 TEST_CASE("wxComboBox::ProcessEnter", "[wxComboBox][enter]")
