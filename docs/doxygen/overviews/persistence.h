@@ -48,10 +48,14 @@ The persistence framework includes the following components:
 wxWidgets has built-in support for a (constantly growing) number of controls.
 Currently the following classes are supported:
 
-- wxTopLevelWindow (and hence wxFrame and wxDialog)
-- wxBookCtrlBase (i.e. wxNotebook, wxListbook, wxToolbook and wxChoicebook)
-- wxDataViewCtrl (and derivatives such as wxDataViewListCtrl)
-- wxTreebook
+- wxTopLevelWindow (and hence wxFrame and wxDialog), see wxPersistentTLW.
+- wxBookCtrlBase (i.e. wxNotebook, wxListbook, wxToolbook and wxChoicebook),
+  see wxPersistentBookCtrl and wxPersistentTreeBookCtrl.
+- wxDataViewCtrl (and derivatives such as wxDataViewListCtrl), see
+  wxPersistentDataViewCtrl.
+- wxCheckBox, see wxPersistentCheckBox.
+- wxComboBox, see wxPersistentComboBox.
+- wxRadioButton, see wxPersistentRadioButton.
 
 To automatically save and restore the properties of the windows of classes
 listed above you need to:
