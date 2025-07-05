@@ -492,6 +492,11 @@ public:
 
         @note In wxMSW, @a icon must be either 16x16 or 32x32 icon.
 
+        @note In wxGTK this function currently doesn't do anything when using
+            Wayland, which doesn't allow setting the icon for a window. Please
+            create a `.desktop` file for your application to set the icon for
+            its windows.
+
         @see wxIcon, SetIcons()
     */
     void SetIcon(const wxIcon& icon);
@@ -507,6 +512,11 @@ public:
 
         @note In wxMSW, @a icons must contain a 16x16 or 32x32 icon,
               preferably both.
+
+        @note In wxGTK this function currently doesn't do anything when using
+            Wayland, which doesn't allow setting the icon for a window. Please
+            create a `.desktop` file for your application to set the icon for
+            its windows.
 
         @see wxIconBundle
     */
