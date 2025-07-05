@@ -151,6 +151,15 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
     gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
 }
 
+#if GTK_CHECK_VERSION(3,20,0)
+static void wx_filedialog_show(GtkWidget*, wxFileDialog* win)
+{
+    // If m_widget is shown, then GtkFileChooserNative is not being used.
+    // This happens when using wxFilePickerCtrl, for example.
+    win->GTKDropNative();
+}
+#endif
+
 } // extern "C"
 
 void wxFileDialog::AddChildGTK(wxWindowGTK* child)
@@ -260,6 +269,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
             m_message.utf8_str(), gtk_parent, gtk_action, nullptr, nullptr));
         m_fcNative = new wxGtkFileChooser;
         m_fcNative->SetWidget(m_fileChooserNative);
+        g_signal_connect(m_widget, "show", G_CALLBACK(wx_filedialog_show), this);
     }
 #endif
 
@@ -408,6 +418,17 @@ void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
     EndDialog(wxID_OK);
 }
 
+void wxFileDialog::GTKDropNative()
+{
+    if (m_fileChooserNative)
+    {
+        delete m_fcNative;
+        m_fcNative = nullptr;
+        g_object_unref(m_fileChooserNative);
+        m_fileChooserNative = nullptr;
+    }
+}
+
 int wxFileDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
@@ -415,13 +436,10 @@ int wxFileDialog::ShowModal()
     CreateExtraControl();
 
 #if GTK_CHECK_VERSION(3,20,0)
-    if (m_fileChooserNative && m_extraControl)
+    if (m_extraControl)
     {
         // GtkFileChooserNative does not support extra controls
-        delete m_fcNative;
-        m_fcNative = nullptr;
-        g_object_unref(m_fileChooserNative);
-        m_fileChooserNative = nullptr;
+        GTKDropNative();
     }
     if (m_fileChooserNative)
     {

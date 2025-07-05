@@ -64,6 +64,7 @@ public:
 
     // Implementation only.
     void GTKSelectionChanged(const wxString& filename);
+    void GTKDropNative();
 
 
 protected:
