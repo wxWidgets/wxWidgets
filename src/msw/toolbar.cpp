@@ -1713,10 +1713,8 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 nmtbcd->clrText =
                 nmtbcd->clrTextHighlight = wxColourToRGB(GetForegroundColour());
 
-                const wxColour colBg = m_hasBgCol
-                    ? GetBackgroundColour()
-                    : wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-                nmtbcd->clrHighlightHotTrack = wxColourToRGB(colBg.ChangeLightness(115));
+                nmtbcd->clrHighlightHotTrack =
+                    wxColourToRGB(GetBackgroundColour().ChangeLightness(115));
 
                 *result = CDRF_DODEFAULT |
                           CDRF_NOTIFYPOSTPAINT |
@@ -1755,10 +1753,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                     ::SendMessage(GetHwnd(), TB_GETITEMDROPDOWNRECT,
                                   (WPARAM)itemIndex, (LPARAM)&ddrc);
 
-                    wxColour colBg = m_hasBgCol
-                        ? GetBackgroundColour()
-                        : wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-
+                    wxColour colBg = GetBackgroundColour();
                     if ( nmtbcd->nmcd.uItemState & CDIS_HOT )
                     {
                         // Make this slightly different from the colour used
@@ -2277,11 +2272,8 @@ WXHBRUSH wxToolBar::MSWGetToolbarBgBrush()
     // different colours), it seems to be a solid one and using REBAR
     // background brush as we used to do before doesn't look good at all under
     // Windows 7 (and probably Vista too), so for now we just keep it simple
-    wxColour const
-        colBg = m_hasBgCol ? GetBackgroundColour()
-                           : wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
     wxBrush * const
-        brush = wxTheBrushList->FindOrCreateBrush(colBg);
+        brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
 
     return brush ? static_cast<WXHBRUSH>(brush->GetResourceHandle()) : 0;
 }
