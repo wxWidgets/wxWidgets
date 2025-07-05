@@ -37,7 +37,7 @@
 // event tables
 // ----------------------------------------------------------------------------
 
-wxBEGIN_EVENT_TABLE(wxVListBox, wxVScrolledWindow)
+wxBEGIN_EVENT_TABLE(wxVListBox, wxVScrolledCanvas)
     EVT_PAINT(wxVListBox::OnPaint)
 
     EVT_KEY_DOWN(wxVListBox::OnKeyDown)
@@ -54,7 +54,7 @@ wxEND_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxVListBox, wxVScrolledWindow);
+wxIMPLEMENT_ABSTRACT_CLASS(wxVListBox, wxVScrolledCanvas);
 const char wxVListBoxNameStr[] = "wxVListBox";
 
 // ----------------------------------------------------------------------------
@@ -76,7 +76,7 @@ bool wxVListBox::Create(wxWindow *parent,
                         const wxString& name)
 {
     style |= wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE;
-    if ( !wxVScrolledWindow::Create(parent, id, pos, size, style, name) )
+    if ( !wxVScrolledCanvas::Create(parent, id, pos, size, style, name) )
         return false;
 
     if ( style & wxLB_MULTIPLE )

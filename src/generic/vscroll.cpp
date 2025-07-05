@@ -992,6 +992,10 @@ bool wxVarHVScrollHelper::IsVisible(size_t row, size_t column) const
 // wx[V/H/HV]ScrolledWindow implementations
 // ============================================================================
 
+// NB: skipping wxVScrolled<T> in wxRTTI information because being a template,
+//     it doesn't and can't implement wxRTTI support
 wxIMPLEMENT_ABSTRACT_CLASS(wxVScrolledWindow, wxPanel);
+wxIMPLEMENT_ABSTRACT_CLASS(wxVScrolledCanvas, wxWindow);
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxHScrolledWindow, wxPanel);
 wxIMPLEMENT_ABSTRACT_CLASS(wxHVScrolledWindow, wxPanel);
