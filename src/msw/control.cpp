@@ -350,17 +350,13 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 
         if ( !hbr )
         {
-            if ( wxMSWDarkMode::IsActive() )
-            {
-                colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
-            }
-            // if the control doesn't have any bg colour, foreground colour will be
-            // ignored as the return value would be 0 -- so forcefully give it a
-            // non default background brush in this case
-            else if ( m_hasFgCol )
-            {
+            // We always need to use custom background in dark mode. And in
+            // light mode, we have to use it if the control uses a non-default
+            // foreground too because if we didn't, this function would return
+            // 0 and everything done by it would be ignored -- so ensure we use
+            // a valid value in both of these cases.
+            if ( wxMSWDarkMode::IsActive() || m_hasFgCol )
                 colBg = GetBackgroundColour();
-            }
         }
     }
 
