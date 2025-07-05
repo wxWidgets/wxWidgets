@@ -760,6 +760,35 @@ void wxTreeCtrl::Init()
     gs_expandEvents[IDX_EXPAND][IDX_DOING] = wxEVT_TREE_ITEM_EXPANDING;
 }
 
+WXDWORD wxTreeCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    DWORD wstyle = wxTreeCtrlBase::MSWGetStyle(style, exstyle);
+    wstyle |= WS_TABSTOP | TVS_SHOWSELALWAYS;
+
+    if ( !(style & wxTR_NO_LINES) )
+        wstyle |= TVS_HASLINES;
+    if ( style & wxTR_HAS_BUTTONS )
+        wstyle |= TVS_HASBUTTONS;
+
+    if ( style & wxTR_EDIT_LABELS )
+        wstyle |= TVS_EDITLABELS;
+
+    if ( style & wxTR_LINES_AT_ROOT )
+        wstyle |= TVS_LINESATROOT;
+
+    if ( style & wxTR_FULL_ROW_HIGHLIGHT )
+    {
+        wstyle |= TVS_FULLROWSELECT;
+    }
+
+#if defined(TVS_INFOTIP)
+    // Need so that TVN_GETINFOTIP messages will be sent
+    wstyle |= TVS_INFOTIP;
+#endif
+
+    return wstyle;
+}
+
 bool wxTreeCtrl::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxPoint& pos,
@@ -774,33 +803,8 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
 
-    WXDWORD exStyle = 0;
-    DWORD wstyle = MSWGetStyle(m_windowStyle, & exStyle);
-    wstyle |= WS_TABSTOP | TVS_SHOWSELALWAYS;
-
-    if ( !(m_windowStyle & wxTR_NO_LINES) )
-        wstyle |= TVS_HASLINES;
-    if ( m_windowStyle & wxTR_HAS_BUTTONS )
-        wstyle |= TVS_HASBUTTONS;
-
-    if ( m_windowStyle & wxTR_EDIT_LABELS )
-        wstyle |= TVS_EDITLABELS;
-
-    if ( m_windowStyle & wxTR_LINES_AT_ROOT )
-        wstyle |= TVS_LINESATROOT;
-
-    if ( m_windowStyle & wxTR_FULL_ROW_HIGHLIGHT )
-    {
-        wstyle |= TVS_FULLROWSELECT;
-    }
-
-#if defined(TVS_INFOTIP)
-    // Need so that TVN_GETINFOTIP messages will be sent
-    wstyle |= TVS_INFOTIP;
-#endif
-
     // Create the tree control.
-    if ( !MSWCreateControl(WC_TREEVIEW, wstyle, pos, size) )
+    if ( !MSWCreateControl(WC_TREEVIEW, wxString{}, pos, size) )
         return false;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));

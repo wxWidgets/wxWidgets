@@ -86,30 +86,22 @@ protected:
     // size parameter (style parameter is not needed because m_windowStyle is
     // supposed to had been already set and so is used instead when this
     // function is called)
+    //
+    // Note that this calls MSWGetStyle() to determine the Windows styles to
+    // use, so it must be implemented correctly in the derived class.
     bool MSWCreateControl(const wxChar *classname,
                           const wxString& label,
                           const wxPoint& pos,
                           const wxSize& size);
 
-    // NB: the method below is deprecated now, with MSWGetStyle() the method
-    //     above should be used instead! Once all the controls are updated to
-    //     implement MSWGetStyle() this version will disappear.
-    //
-    // create the control of the given class with the given style (combination
-    // of WS_XXX flags, i.e. Windows style, not wxWidgets one), returns
-    // false if creation failed
-    //
-    // All parameters except classname and style are optional, if the
-    // size/position are not given, they should be set later with SetSize()
-    // and, label (the title of the window), of course, is left empty. The
-    // extended style is determined from the style and the app 3D settings
-    // automatically if it's not specified explicitly.
+    // Prefer the overload above, this one should only be used if the styles
+    // can't be completely determined from the window style.
     bool MSWCreateControl(const wxChar *classname,
                           WXDWORD style,
-                          const wxPoint& pos = wxDefaultPosition,
-                          const wxSize& size = wxDefaultSize,
-                          const wxString& label = wxEmptyString,
-                          WXDWORD exstyle = (WXDWORD)-1);
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          const wxString& label,
+                          WXDWORD exstyle);
 
     // call this from the derived class MSWControlColor() if you want to show
     // the control greyed out (and opaque)

@@ -204,6 +204,8 @@ public:
     virtual bool IsDoubleBuffered() const override;
     virtual void SetDoubleBuffered(bool on) override;
 
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
+
 protected:
     // Implement "update locking" in a custom way for this control.
     virtual void DoFreeze() override;
