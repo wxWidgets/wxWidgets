@@ -353,8 +353,6 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
             if ( wxMSWDarkMode::IsActive() )
             {
                 colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
-                if ( !m_hasFgCol )
-                    colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
             }
             // if the control doesn't have any bg colour, foreground colour will be
             // ignored as the return value would be 0 -- so forcefully give it a
