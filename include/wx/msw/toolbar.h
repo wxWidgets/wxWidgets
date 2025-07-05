@@ -59,6 +59,15 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    // override some virtual functions inherited from wxWindow too
+    virtual wxVisualAttributes GetDefaultAttributes() const override
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     virtual void SetWindowStyleFlag(long style) override;
 
     virtual bool MSWCommand(WXUINT param, WXWORD id) override;
