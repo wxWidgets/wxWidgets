@@ -749,6 +749,24 @@ int wxToolBar::MSWGetToolTipMessage() const
     return TB_GETTOOLTIPS;
 }
 
+/* static */
+wxVisualAttributes
+wxToolBar::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attrs =
+        wxToolBarBase::GetClassDefaultAttributes(variant);
+
+    // Override the default background because the default value doesn't
+    // provide any contrast with the main window in dark mode.
+    //
+    // Note that in light mode the default background colour is already
+    // wxSYS_COLOUR_BTNFACE anyhow, see wxWindow version of this function.
+    if ( wxMSWDarkMode::IsActive() )
+        attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+
+    return attrs;
+}
+
 // ----------------------------------------------------------------------------
 // adding/removing tools
 // ----------------------------------------------------------------------------
