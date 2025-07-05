@@ -654,6 +654,20 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 #if wxUSE_RICHEDIT
     if (IsRich())
     {
+        // RICHEDIT50W automatically adds WS_EX_CLIENTEDGE to its style for
+        // some reason and while this isn't very noticeable in light mode, it
+        // looks really bad in dark mode, so forcibly remove it unless it was
+        // explicitly requested.
+        if ( GetBorder() != wxBORDER_SUNKEN && wxMSWDarkMode::IsActive() )
+        {
+            const auto origExStyle = ::GetWindowLongPtr(GetHwnd(), GWL_EXSTYLE);
+            if ( origExStyle & WS_EX_CLIENTEDGE )
+            {
+                ::SetWindowLongPtr(GetHwnd(), GWL_EXSTYLE,
+                                   origExStyle & ~WS_EX_CLIENTEDGE);
+            }
+        }
+
 #if wxUSE_INKEDIT
         if (IsInkEdit())
         {
