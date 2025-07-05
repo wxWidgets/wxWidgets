@@ -92,13 +92,6 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                                  const wxString& label,
                                  WXDWORD exstyle)
 {
-    // if no extended style given, determine it ourselves
-    if ( exstyle == (WXDWORD)-1 )
-    {
-        exstyle = 0;
-        (void) MSWGetStyle(GetWindowStyle(), &exstyle);
-    }
-
     // all controls should have this style
     style |= WS_CHILD;
 
