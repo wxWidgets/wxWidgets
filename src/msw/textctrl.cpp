@@ -511,9 +511,6 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
                                const wxPoint& pos,
                                const wxSize& size)
 {
-    // translate wxWin style flags to MSW ones
-    WXDWORD msStyle = MSWGetCreateWindowFlags();
-
     // do create the control - either an EDIT or RICHEDIT
     wxString windowClass = wxT("EDIT");
 
@@ -634,7 +631,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
     // implementation detail
     m_updatesCount = -2;
 
-    if ( !MSWCreateControl(windowClass.t_str(), msStyle, pos, size, valueWin) )
+    if ( !MSWCreateControl(windowClass.t_str(), valueWin, pos, size) )
     {
         // There is one case in which window creation may realistically fail
         // and this is when we create a plain EDIT control with too long text,
