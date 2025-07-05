@@ -249,6 +249,12 @@ void DirPickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void DirPickerWidgetsPage::OnDirChange(wxFileDirPickerEvent& event)
 {
+    wxLogMessage("The directory changed to '%s' (the control has '%s')."
+                 "The current working directory is '%s'",
+                 event.GetPath(),
+                 m_dirPicker->GetDirName().GetFullPath(),
+                 wxGetCwd());
+
     wxLogMessage("The directory changed to '%s' ! The current working directory is '%s'",
                  event.GetPath(), wxGetCwd());
 }

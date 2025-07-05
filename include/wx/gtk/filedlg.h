@@ -80,6 +80,11 @@ private:
     void OnSize(wxSizeEvent&);
     virtual void AddChildGTK(wxWindowGTK* child) override;
 
+    const wxGtkFileChooser& GetFileChooser() const
+    {
+        return m_fcNative ? *m_fcNative : m_fc;
+    }
+
     wxGtkFileChooser    m_fc;
     wxGtkFileChooser* m_fcNative = nullptr;
     GtkFileChooser* m_fileChooserNative = nullptr;
