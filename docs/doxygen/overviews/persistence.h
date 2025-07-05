@@ -127,18 +127,18 @@ remembers the last open page without using the helper function:
 User-defined classes can be easily integrated with wxPersistenceManager. To add
 support for your custom class @c MyWidget you just need to:
 
--# Define a new @c MyPersistentWidget class inheriting from
-   wxPersistentWindow<MyWidget>.
+-# Define a new `MyPersistentWidget` class inheriting from
+   `wxPersistentWindow<MyWidget>`.
 -# Implement its pure virtual GetKind() method returning a unique string
-   identifying all @c MyWidget objects, typically something like @c "widget"
+   identifying all `MyWidget` objects, typically something like `"widget"`
 -# Implement its pure virtual Save() and Restore() methods to actually save
    and restore the widget settings using wxPersistentObject::SaveValue() and
    wxPersistentObject::RestoreValue() methods.
--# Define wxCreatePersistentObject() overload taking @c MyWidget * and
-   returning a new @c MyPersistentWidget object.
+-# Define wxCreatePersistentObject() overload taking `MyWidget*` and
+   returning a new `MyPersistentWidget` object.
 
 If you want to add persistence support for a class not deriving from wxWindow,
-you need to derive @c MyPersistentWidget directly from wxPersistentObject and
+you need to derive `MyPersistentWidget` directly from wxPersistentObject and
 so implement its pure virtual wxPersistentObject::GetName() method too.
 Additionally, you must ensure that wxPersistenceManager::SaveAndUnregister() is
 called when your object is destroyed as this can be only done automatically for
