@@ -117,8 +117,11 @@ bool wxComboCtrl::Create(wxWindow *parent,
     // Create textctrl, if necessary
     CreateTextCtrl( wxNO_BORDER );
 
-    // Use the same theme as is used by wxChoice/wxComboBox.
-    wxMSWDarkMode::AllowForWindow(m_hWnd, L"CFD");
+    // Use the same theme as is used by wxChoice/wxComboBox, but specify the
+    // class name because it's not used automatically for a non-native
+    // combobox and without this combobox-specific parts, such as CB_BORDER
+    // used in the code below, wouldn't work.
+    wxMSWDarkMode::AllowForWindow(m_hWnd, L"CFD", L"COMBOBOX");
 
     // SetInitialSize should be called last
     SetInitialSize(size);
