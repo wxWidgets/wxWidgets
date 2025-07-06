@@ -411,6 +411,11 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
             // It should be safe enough to update this flag here.
             m_iFlags |= wxCC_FULL_BUTTON;
         }
+        else if ( bgState == CBXS_DISABLED )
+        {
+            // Disable controls shouldn't have a border.
+            comboBoxPart = CP_READONLY;
+        }
         else
         {
             comboBoxPart = CP_BORDER;
