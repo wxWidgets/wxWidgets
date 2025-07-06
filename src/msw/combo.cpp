@@ -364,8 +364,8 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         RECT rBorder;
         wxCopyRectToRECT(borderRect, rBorder);
 
-        bool isNonStdButton = (m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE) ||
-                              (m_iFlags & wxCC_IFLAG_HAS_NONSTANDARD_BUTTON);
+        const bool usesStdButton = !(m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE) &&
+                                   !(m_iFlags & wxCC_IFLAG_HAS_NONSTANDARD_BUTTON);
 
         //
         // Get some states for themed drawing
@@ -397,7 +397,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         const bool isFocused = (FindFocus() == GetMainWindowOfCompositeControl()) ? true : false;
 
         // Draw the entire control as a single button?
-        if ( !isNonStdButton )
+        if ( usesStdButton )
         {
             if ( HasFlag(wxCB_READONLY) )
                 drawFullButton = true;
@@ -456,7 +456,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
         //
         // Draw the drop-button
-        if ( !isNonStdButton )
+        if ( usesStdButton )
         {
             drawButFlags = Button_BitmapOnly;
 
