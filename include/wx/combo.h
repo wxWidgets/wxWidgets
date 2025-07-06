@@ -435,9 +435,6 @@ public:
     // Return true if Create has finished
     bool IsCreated() const { return m_iFlags & wxCC_IFLAG_CREATED ? true : false; }
 
-    // Need to override to return text area background colour
-    wxColour GetBackgroundColour() const;
-
     // common code to be called on popup hide/dismiss
     void OnPopupDismiss(bool generateEvent);
 

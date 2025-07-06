@@ -1386,18 +1386,15 @@ bool wxComboCtrlBase::SetForegroundColour(const wxColour& colour)
 
 bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
 {
+    if ( !wxControl::SetBackgroundColour(colour) )
+        return false;
+
     if ( m_mainWindow )
         m_mainWindow->SetBackgroundColour(colour);
+
     m_tcBgCol = colour;
     m_hasTcBgCol = true;
     return true;
-}
-
-wxColour wxComboCtrlBase::GetBackgroundColour() const
-{
-    if ( m_mainWindow )
-        return m_mainWindow->GetBackgroundColour();
-    return m_tcBgCol;
 }
 
 // ----------------------------------------------------------------------------
