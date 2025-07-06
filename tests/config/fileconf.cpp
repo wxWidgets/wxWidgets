@@ -657,7 +657,7 @@ TEST_CASE_METHOD(LogTestCase, "wxFileConfig::Error", "[fileconfig][error]")
     checkWarning("foo=\\", "trailing backslash");
 
     // Check that it's the second quote which is unexpected, not the first one.
-    checkWarning(R"(foo="x"y)", R"(unexpected " at position 2)");
+    checkWarning(R"(foo="x"y)", R"(unexpected " at position 3)");
 }
 
 #endif // wxUSE_FILECONFIG
