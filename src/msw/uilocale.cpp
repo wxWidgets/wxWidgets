@@ -104,11 +104,16 @@ void GetUserPreferredLanguagesFromRegistry(wxVector<wxString>& userLanguages)
         // Retrieve the "Languages" value from the key
         DWORD type = REG_SZ;
         DWORD valueSize = 256;
-        wxScopedArray<WCHAR> languages(valueSize);
+        wxScopedArray<WCHAR> languages(valueSize + 1); // +1 for NUL at the end
         if (::RegQueryValueEx(hKey, L"Languages", nullptr, &type, reinterpret_cast<LPBYTE>(languages.get()), &valueSize) == ERROR_SUCCESS)
         {
             // Extract languages from multi-string value
             WCHAR* buf = languages.get();
+
+            // Ensure the buffer is NUL-terminated because this is not
+            // guaranteed by RegQueryValueEx() for REG_MULTI_SZ values.
+            buf[valueSize/sizeof(buf[0])] = L'\0';
+
             while (*buf != 0)
             {
                 const wxString language(buf);
