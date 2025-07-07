@@ -96,34 +96,35 @@ namespace
 void GetUserPreferredLanguagesFromRegistry(wxVector<wxString>& userLanguages)
 {
     // Open the registry key for user preferred languages
-    HKEY hKey;
-    if (::RegOpenKeyEx(HKEY_CURRENT_USER,
-                       L"Control Panel\\International\\User Profile",
-                       0, KEY_READ, &hKey) == ERROR_SUCCESS)
+    wxRegKey key(wxRegKey::HKCU, L"Control Panel\\International\\User Profile");
+    if ( !key.Open(wxRegKey::Read) )
+        return;
+
+    // Retrieve the "Languages" value from the key
+    DWORD type = REG_SZ;
+    constexpr DWORD numChars = 256;
+    DWORD valueSize = numChars*sizeof(WCHAR);
+    wxScopedArray<WCHAR> languages(numChars + 1); // +1 for NUL at the end
+    if ( ::RegQueryValueEx(reinterpret_cast<HKEY>(key.GetHkey()),
+                           L"Languages",
+                           wxRESERVED_PARAM,
+                           &type,
+                           reinterpret_cast<LPBYTE>(languages.get()),
+                           &valueSize) == ERROR_SUCCESS )
     {
-        // Retrieve the "Languages" value from the key
-        DWORD type = REG_SZ;
-        constexpr DWORD numChars = 256;
-        DWORD valueSize = numChars*sizeof(WCHAR);
-        wxScopedArray<WCHAR> languages(numChars + 1); // +1 for NUL at the end
-        if (::RegQueryValueEx(hKey, L"Languages", nullptr, &type, reinterpret_cast<LPBYTE>(languages.get()), &valueSize) == ERROR_SUCCESS)
+        // Extract languages from multi-string value
+        WCHAR* buf = languages.get();
+
+        // Ensure the buffer is NUL-terminated because this is not
+        // guaranteed by RegQueryValueEx() for REG_MULTI_SZ values.
+        buf[valueSize/sizeof(buf[0])] = L'\0';
+
+        while (*buf != 0)
         {
-            // Extract languages from multi-string value
-            WCHAR* buf = languages.get();
-
-            // Ensure the buffer is NUL-terminated because this is not
-            // guaranteed by RegQueryValueEx() for REG_MULTI_SZ values.
-            buf[valueSize/sizeof(buf[0])] = L'\0';
-
-            while (*buf != 0)
-            {
-                const wxString language(buf);
-                userLanguages.push_back(language);
-                buf += language.length() + 1;
-            }
+            const wxString language(buf);
+            userLanguages.push_back(language);
+            buf += language.length() + 1;
         }
-        // Close the registry key
-        ::RegCloseKey(hKey);
     }
 }
 
