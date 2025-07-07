@@ -1758,6 +1758,13 @@ gtk_wx_cell_renderer_activate(
             wxMouseEvent mouse_event(wxEVT_LEFT_DOWN);
             InitMouseEvent(ctrl, mouse_event, button_event);
 
+            if (ctrl->GetLayoutDirection() == wxLayout_RightToLeft)
+            {
+                int w;
+                ctrl->GetClientSize(&w, nullptr);
+                renderrect.x = w - (renderrect.x + renderrect.width);
+            }
+
             mouse_event.m_x -= renderrect.x;
             mouse_event.m_y -= renderrect.y;
 
@@ -4772,6 +4779,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
+    GTKSetLayout(m_treeview, GetLayoutDirection());
 
     g_signal_connect_after(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)),
         "changed", G_CALLBACK(wxdataview_selection_changed_callback), this);
