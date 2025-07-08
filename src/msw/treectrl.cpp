@@ -1766,7 +1766,6 @@ void wxTreeCtrl::DeleteAllItems()
     TreeItemUnlocker unlock_all;
 
     // invalidate all the items we store as they're going to become invalid
-    m_htEnsureVisibleOnThaw =
     m_htSelStart =
     m_htClickedItem = wxTreeItemId();
 
@@ -2049,7 +2048,7 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
         // while we're frozen, as we disable scrolling in this case. So just
         // remember that item we were supposed to make visible and actually do
         // it when the control is thawed.
-        m_htEnsureVisibleOnThaw = item;
+        m_htEnsureVisibleOnThaw.push_back(item);
         return;
     }
 
@@ -4046,11 +4045,22 @@ void wxTreeCtrl::DoThaw()
 
     wxTreeCtrlBase::DoThaw();
 
-    if ( !IsFrozen() && m_htEnsureVisibleOnThaw.IsOk() )
+    if ( !IsFrozen() && !m_htEnsureVisibleOnThaw.empty() )
     {
         // Really do the job of EnsureVisible() now that we can.
-        EnsureVisible(m_htEnsureVisibleOnThaw);
-        m_htEnsureVisibleOnThaw.Unset();
+        for ( auto item : m_htEnsureVisibleOnThaw )
+        {
+            if ( !item.IsOk() )
+            {
+                // If the item has become invalid between calls to
+                // EnsureVisible() and Thaw(), it's probably not a problem.
+                continue;
+            }
+
+            EnsureVisible(item);
+        }
+
+        m_htEnsureVisibleOnThaw.clear();
     }
 }
 

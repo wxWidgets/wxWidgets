@@ -327,8 +327,8 @@ private:
     // Virtual root item, if wxTR_HIDE_ROOT is set.
     void* m_pVirtualRoot;
 
-    // Item to call EnsureVisible() on when the tree is thawed, if necessary.
-    wxTreeItemId m_htEnsureVisibleOnThaw;
+    // Items to call EnsureVisible() on when the tree is thawed, if necessary.
+    std::vector<wxTreeItemId> m_htEnsureVisibleOnThaw;
 
     // the starting item for selection with Shift
     wxTreeItemId m_htSelStart, m_htClickedItem;
