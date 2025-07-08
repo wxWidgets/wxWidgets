@@ -68,10 +68,6 @@ public:
     // function returns true.
     static bool GetThousandsSeparatorIfUsed(wxChar *sep);
 
-private:
-    // Post-process the string representing an integer.
-    static wxString PostProcessIntString(wxString s, int style);
-
     // Add the thousands separators to a string representing a number without
     // the separators. This is used by ToString(Style_WithThousandsSep).
     static void AddThousandsSeparators(wxString& s);
@@ -83,6 +79,10 @@ private:
 
     // Remove all thousands separators from a string representing a number.
     static void RemoveThousandsSeparators(wxString& s);
+
+private:
+    // Post-process the string representing an integer.
+    static wxString PostProcessIntString(wxString s, int style);
 };
 
 #endif // _WX_NUMFORMATTER_H_
