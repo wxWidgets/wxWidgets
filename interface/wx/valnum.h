@@ -58,7 +58,25 @@ enum wxNumValidatorStyle
         of e.g. 1.567 will still be shown with all the three significant
         digits, of course).
      */
-    wxNUM_VAL_NO_TRAILING_ZEROES
+    wxNUM_VAL_NO_TRAILING_ZEROES = 4,
+
+    /**
+        Show non-negative values with a + prefix.
+
+        This style cannot be used with wxNUM_VAL_SIGN_SPACE.
+
+        @since 3.3.1
+     */
+    wxNUM_VAL_SIGN_PLUS = 0x8,
+
+    /**
+        Show non-negative values with a space prefix.
+
+        This style cannot be used with wxNUM_VAL_SIGN_PLUS.
+
+        @since 3.3.1
+     */
+    wxNUM_VAL_SIGN_SPACE = 0x10,
 
 };
 

@@ -47,6 +47,10 @@ int wxNumValidatorBase::GetFormatFlags() const
         flags |= wxNumberFormatter::Style_WithThousandsSep;
     if ( m_style & wxNUM_VAL_NO_TRAILING_ZEROES )
         flags |= wxNumberFormatter::Style_NoTrailingZeroes;
+    if ( m_style & wxNUM_VAL_SIGN_PLUS)
+        flags |= wxNumberFormatter::Style_SignPlus;
+    if ( m_style & wxNUM_VAL_SIGN_SPACE)
+        flags |= wxNumberFormatter::Style_SignSpace;
 
     return flags;
 }

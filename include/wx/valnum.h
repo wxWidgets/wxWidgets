@@ -32,7 +32,9 @@ enum wxNumValidatorStyle
     wxNUM_VAL_DEFAULT               = 0x0,
     wxNUM_VAL_THOUSANDS_SEPARATOR   = 0x1,
     wxNUM_VAL_ZERO_AS_BLANK         = 0x2,
-    wxNUM_VAL_NO_TRAILING_ZEROES    = 0x4
+    wxNUM_VAL_NO_TRAILING_ZEROES    = 0x4,
+    wxNUM_VAL_SIGN_PLUS             = 0x8,
+    wxNUM_VAL_SIGN_SPACE           = 0x10,
 };
 
 // ----------------------------------------------------------------------------
@@ -75,7 +77,8 @@ protected:
     // still test the return value for safety.
     wxTextEntry *GetTextEntry() const;
 
-    // Convert wxNUM_VAL_THOUSANDS_SEPARATOR and wxNUM_VAL_NO_TRAILING_ZEROES
+    // Convert wxNUM_VAL_THOUSANDS_SEPARATOR, wxNUM_VAL_NO_TRAILING_ZEROES,
+    // wxNUM_VAL_SIGN_PLUS, and wxNUM_VAL_SIGN_SPACE
     // bits of our style to the corresponding wxNumberFormatter::Style values.
     int GetFormatFlags() const;
 
@@ -320,6 +323,9 @@ protected:
     {
         wxASSERT_MSG( !(style & wxNUM_VAL_NO_TRAILING_ZEROES),
                       "This style doesn't make sense for integers." );
+        wxASSERT_MSG(!(style & wxNUM_VAL_SIGN_PLUS) ||
+                        !(style & wxNUM_VAL_SIGN_SPACE),
+                        "Sign prefix conflict.");
     }
 
     // Default copy ctor is ok.
