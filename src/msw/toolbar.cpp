@@ -1719,6 +1719,11 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                     ::FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
                     *result |= TBCDRF_NOBACKGROUND;
                 }
+                else if (nmtbcd->nmcd.uItemState == CDIS_SELECTED) {
+                    AutoHBRUSH br(wxColourToRGB(colBg.ChangeLightness(110)));
+                    ::FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
+                    *result |= TBCDRF_NOBACKGROUND;
+                }
 
                 return true;
             }
