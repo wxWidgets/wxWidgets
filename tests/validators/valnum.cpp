@@ -277,6 +277,40 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::NoTrailingZeroes", "[valnum]")
     CHECK( m_text->GetValue() == "1.234" );
 }
 
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::SignPlus", "[valnum]")
+{
+    double value = 1.2;
+    m_text->SetValidator(
+        wxMakeFloatingPointValidator(3, &value, wxNUM_VAL_NO_TRAILING_ZEROES |
+                                                wxNUM_VAL_SIGN_PLUS));
+
+    wxValidator * const val = m_text->GetValidator();
+
+    CHECK( val->TransferToWindow() );
+    CHECK( m_text->GetValue() == "+1.2" );
+
+    value = 1.234;
+    CHECK( val->TransferToWindow() );
+    CHECK( m_text->GetValue() == "+1.234" );
+}
+
+TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::SignSpace", "[valnum]")
+{
+    double value = 1.2;
+    m_text->SetValidator(
+        wxMakeFloatingPointValidator(3, &value, wxNUM_VAL_NO_TRAILING_ZEROES |
+                                                wxNUM_VAL_SIGN_SPACE));
+
+    wxValidator * const val = m_text->GetValidator();
+
+    CHECK( val->TransferToWindow() );
+    CHECK( m_text->GetValue() == " 1.2" );
+
+    value = 1.234;
+    CHECK( val->TransferToWindow() );
+    CHECK( m_text->GetValue() == " 1.234" );
+}
+
 #if wxUSE_UIACTIONSIMULATOR
 
 TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")

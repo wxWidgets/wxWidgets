@@ -326,7 +326,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                     3,
                                     &g_data.m_doubleValue,
                                     wxNUM_VAL_THOUSANDS_SEPARATOR |
-                                    wxNUM_VAL_NO_TRAILING_ZEROES
+                                    wxNUM_VAL_NO_TRAILING_ZEROES |
+                                    wxNUM_VAL_SIGN_PLUS
                                 )
                               );
     numSizer->Add(new wxStaticText(this, wxID_ANY, "Up to 3 decimals:"),
