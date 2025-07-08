@@ -1705,17 +1705,27 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                           TBCDRF_USECDCOLORS |
                           TBCDRF_HILITEHOTTRACK;
 
-                // Draw custom checked button background when it is not hot:
-                // by default it is drawn in a light colour not appropriate for
-                // the dark mode under Windows 11.
+                // Draw custom button background when it would be drawn with a
+                // light background by default: this is the case for checked
+                // buttons under Windows 11 (unless they are "hot") and for
+                // selected buttons (which is a state the button is in when
+                // the mouse is pressed over it).
+                wxColour customBg;
                 if ( (nmtbcd->nmcd.uItemState &
                         (CDIS_CHECKED | CDIS_HOT)) == CDIS_CHECKED )
                 {
-                    const wxColor color =
-                        wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT)
-                            .ChangeLightness(110);
+                    customBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+                }
+                else if ( nmtbcd->nmcd.uItemState == CDIS_SELECTED )
+                {
+                    customBg = colBg;
+                }
 
-                    AutoHBRUSH br(wxColourToRGB(color));
+                if ( customBg.IsOk() )
+                {
+                    customBg = customBg.ChangeLightness(110);
+
+                    AutoHBRUSH br(wxColourToRGB(customBg));
                     ::FillRect(nmtbcd->nmcd.hdc, &nmtbcd->nmcd.rc, br);
                     *result |= TBCDRF_NOBACKGROUND;
                 }
