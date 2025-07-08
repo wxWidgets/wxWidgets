@@ -296,6 +296,12 @@ enum wxCalendarHitTestResult
     @note Changing the selected date will trigger an EVT_CALENDAR_DAY, MONTH or
           YEAR event as well as an EVT_CALENDAR_SEL_CHANGED event.
 
+    @note In wxMSW this control always uses the default user locale, i.e. the
+        month and weekday names are always displayed in the Windows display
+        language and are not affected by wxUILocale. This is a limitation of
+        the native control and wxGenericCalendarCtrl must be used if this is
+        undesirable.
+
     @library{wxcore}
     @category{ctrl}
     @appearance{calendarctrl}
