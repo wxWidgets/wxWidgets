@@ -1713,8 +1713,9 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                 nmtbcd->clrText =
                 nmtbcd->clrTextHighlight = wxColourToRGB(GetForegroundColour());
 
+                const wxColour colBg = GetBackgroundColour();
                 nmtbcd->clrHighlightHotTrack =
-                    wxColourToRGB(GetBackgroundColour().ChangeLightness(115));
+                    wxColourToRGB(colBg.ChangeLightness(115));
 
                 *result = CDRF_DODEFAULT |
                           CDRF_NOTIFYPOSTPAINT |
