@@ -149,4 +149,34 @@ public:
      */
     static bool GetThousandsSeparatorIfUsed(wxChar *sep);
 
+    /**
+        Add thousands separators to a string representing a number
+        that currently doesn't have any.
+
+        @param[in,out] str The string to add thousands separators to.
+
+        @since 3.3.1
+     */
+    static void AddThousandsSeparators(wxString& str);
+
+    /**
+        Remove all thousands separators from a string representing a number.
+
+        @param[in,out] str The string to remove thousands separators from.
+
+        @since 3.3.1
+     */
+    static void RemoveThousandsSeparators(wxString& str);
+
+    /**
+        Remove trailing zeroes and, if there is nothing left after it, the
+        decimal separator itself from a string representing a floating point
+        number.
+
+        @param[in,out] str The string to remove zeroes from.
+
+        @since 3.3.1
+     */
+    static void RemoveTrailingZeroes(wxString& str);
+
 };
