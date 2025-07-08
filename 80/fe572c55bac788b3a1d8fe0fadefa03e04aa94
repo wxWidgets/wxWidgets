@@ -1,0 +1,1 @@
+wxMSW: Fix regression in wxTreeCtrl::EnsureVisible() while frozen (#18435).
