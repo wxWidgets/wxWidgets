@@ -1,0 +1,1 @@
+wxMSW: Fix wxTE_RICH wxTextCtrl appearance in dark mode (#25602).
