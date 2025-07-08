@@ -399,18 +399,21 @@ MyFrame::MyFrame()
 
     // create some controls affected by the locale
 
+    const int border = wxSizerFlags::GetDefaultBorder();
+    auto* const sizerInput = new wxFlexGridSizer(2, wxSize(border, border));
+    sizerInput->AddGrowableCol(1);
+
     // this demonstrates RTL layout mirroring for Arabic locales and using
     // locale-specific decimal separator in wxSpinCtrlDouble.
-    wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(new wxStaticText(panel, wxID_ANY, _("Numeric input:")),
-               wxSizerFlags().Center().Border());
+    sizerInput->Add(new wxStaticText(panel, wxID_ANY, _("Numeric input:")),
+                    wxSizerFlags().CenterVertical().Right());
 
     wxSpinCtrlDouble* const spin = new wxSpinCtrlDouble(panel, wxID_ANY);
     spin->SetDigits(2);
     spin->SetValue(12.34);
-    sizer->Add(spin, wxSizerFlags().Center().Border());
+    sizerInput->Add(spin, wxSizerFlags().CenterVertical().Expand());
 
-    topSizer->Add(sizer, wxSizerFlags().Center());
+    topSizer->Add(sizerInput, wxSizerFlags().Center());
 
     // show that week days and months names are translated too
     topSizer->Add(new wxCalendarCtrl(panel, wxID_ANY),
