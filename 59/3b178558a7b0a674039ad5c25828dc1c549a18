@@ -1,0 +1,1 @@
+wxMSW: Fix selected toolbar buttons in dark mode (Stefan Ziegler, #25616).
