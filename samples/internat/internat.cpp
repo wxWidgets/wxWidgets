@@ -28,6 +28,7 @@
 #endif
 
 #include "wx/calctrl.h"
+#include "wx/datectrl.h"
 #include "wx/intl.h"
 #include "wx/file.h"
 #include "wx/grid.h"
@@ -36,6 +37,7 @@
 #include "wx/numformatter.h"
 #include "wx/platinfo.h"
 #include "wx/spinctrl.h"
+#include "wx/timectrl.h"
 #include "wx/translation.h"
 #include "wx/uilocale.h"
 
@@ -412,6 +414,18 @@ MyFrame::MyFrame()
     spin->SetDigits(2);
     spin->SetValue(12.34);
     sizerInput->Add(spin, wxSizerFlags().CenterVertical().Expand());
+
+    // this one demonstrates the locale-specific date format
+    sizerInput->Add(new wxStaticText(panel, wxID_ANY, _("Date input:")),
+                    wxSizerFlags().CenterVertical().Right());
+    sizerInput->Add(new wxDatePickerCtrl(panel, wxID_ANY),
+                    wxSizerFlags().CenterVertical().Expand());
+
+    // and this one does the same for time format
+    sizerInput->Add(new wxStaticText(panel, wxID_ANY, _("Time input:")),
+                    wxSizerFlags().CenterVertical().Right());
+    sizerInput->Add(new wxTimePickerCtrl(panel, wxID_ANY),
+                    wxSizerFlags().CenterVertical().Expand());
 
     topSizer->Add(sizerInput, wxSizerFlags().Center());
 
