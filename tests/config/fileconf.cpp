@@ -22,6 +22,8 @@
 #include "wx/sstream.h"
 #include "wx/log.h"
 
+#include "testlog.h"
+
 static const char *testconfig =
 "[root]\n"
 "entry=value\n"
@@ -637,6 +639,25 @@ TEST_CASE("wxFileConfig::LongLong", "[fileconfig][config][longlong]")
     wxLongLong_t ll;
     REQUIRE( fc.Read("ll", &ll) );
     CHECK( ll == val );
+}
+
+TEST_CASE_METHOD(LogTestCase, "wxFileConfig::Error", "[fileconfig][error]")
+{
+    const auto checkWarning = [this](const char* contents, const char* expected)
+    {
+        wxStringInputStream sis(contents);
+        wxFileConfig fc(sis);
+
+        CHECK_THAT( m_log->GetLog(wxLOG_Warning).utf8_string(),
+                    Catch::Contains(expected) );
+        m_log->Clear();
+    };
+
+    // Check that the expected warning is logged.
+    checkWarning("foo=\\", "trailing backslash");
+
+    // Check that it's the second quote which is unexpected, not the first one.
+    checkWarning(R"(foo="x"y)", R"(unexpected " at position 3)");
 }
 
 #endif // wxUSE_FILECONFIG
