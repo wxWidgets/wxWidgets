@@ -149,4 +149,15 @@ public:
      */
     static bool GetThousandsSeparatorIfUsed(wxChar *sep);
 
+    /**
+        Remove trailing zeroes and, if there is nothing left after it, the
+        decimal separator itself from a string representing a floating point
+        number.
+
+        @param[in,out] str The string to remove zeroes from.
+
+        @since 3.3.1
+     */
+    static void RemoveTrailingZeroes(wxString& str);
+
 };

@@ -68,6 +68,11 @@ public:
     // function returns true.
     static bool GetThousandsSeparatorIfUsed(wxChar *sep);
 
+    // Remove trailing zeroes and, if there is nothing left after it, the
+    // decimal separator itself from a string representing a floating point
+    // number. Also used by ToString().
+    static void RemoveTrailingZeroes(wxString& s);
+
 private:
     // Post-process the string representing an integer.
     static wxString PostProcessIntString(wxString s, int style);
@@ -75,11 +80,6 @@ private:
     // Add the thousands separators to a string representing a number without
     // the separators. This is used by ToString(Style_WithThousandsSep).
     static void AddThousandsSeparators(wxString& s);
-
-    // Remove trailing zeroes and, if there is nothing left after it, the
-    // decimal separator itself from a string representing a floating point
-    // number. Also used by ToString().
-    static void RemoveTrailingZeroes(wxString& s);
 
     // Remove all thousands separators from a string representing a number.
     static void RemoveThousandsSeparators(wxString& s);
