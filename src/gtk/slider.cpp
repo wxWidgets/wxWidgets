@@ -425,8 +425,10 @@ bool wxSlider::Create(wxWindow *parent,
             else
                 (style & wxSL_TOP ? margin.top : margin.bottom) = extraSide;
         }
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_widget_set_margin_left(m_scale, margin.left);
         gtk_widget_set_margin_right(m_scale, margin.right);
+        wxGCC_WARNING_RESTORE()
         gtk_widget_set_margin_top(m_scale, margin.top);
         gtk_widget_set_margin_bottom(m_scale, margin.bottom);
     }
