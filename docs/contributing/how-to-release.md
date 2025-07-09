@@ -130,6 +130,8 @@ Update https://www.wxwidgets.org:
   trigger the site rebuild which will fail if the release statistics are not
   available yet, so make sure to publish the release on GitHub first (or wait
   an hour for the next scheduled site rebuild to happen).
+* If this is a new minor release, update `docs/index.md` to add a link to the
+  documentation for the new branch and update the existing links descriptions.
 
 Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
 to wx-users.
