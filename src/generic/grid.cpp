@@ -3135,7 +3135,12 @@ wxGrid::SetTable(wxGridTableBase *table,
 
     InvalidateBestSize();
 
-    UpdateCurrentCellOnRedim();
+    // If we already have a valid current cell, ensure that it is in valid
+    // range for the new table with a possibly different number of rows/columns
+    // but don't do anything if the current cell is invalid, setting the table
+    // shouldn't automatically select the cell at (0, 0).
+    if ( m_currentCellCoords != wxGridNoCellCoords )
+        UpdateCurrentCellOnRedim();
 
     return m_created;
 }

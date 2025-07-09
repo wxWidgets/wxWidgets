@@ -28,6 +28,8 @@
 
 #include "waitfor.h"
 
+#include <memory>
+
 // To disable tests which work locally, but not when run on GitHub CI.
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
     #define wxSKIP_AUTOMATIC_TEST_IF_GTK2() \
@@ -2617,6 +2619,19 @@ TEST_CASE("GridBlockCoords::SymDifference", "[grid]")
         CHECK(result.m_parts[2] == wxGridNoBlockCoords);
         CHECK(result.m_parts[3] == wxGridNoBlockCoords);
     }
+}
+
+TEST_CASE("wxGrid::Events", "[grid][event]")
+{
+    const std::unique_ptr<wxGrid> grid(new wxGrid());
+
+    EventCounter selectEvents(grid.get(), wxEVT_GRID_SELECT_CELL);
+
+    REQUIRE( grid->Create(wxTheApp->GetTopWindow(), wxID_ANY) );
+    grid->CreateGrid(1, 1);
+
+    // Creating grid shouldn't result in any selection change events.
+    CHECK( selectEvents.GetCount() == 0 );
 }
 
 //
