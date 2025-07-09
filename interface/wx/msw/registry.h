@@ -237,6 +237,15 @@ public:
     bool GetFirstValue(wxString& strValueName, long& lIndex);
 
     /**
+        Return the associated HKEY handle.
+
+        It may be null if the key is not opened.
+
+        @since 3.3.1
+     */
+    WXHKEY GetHkey() const;
+
+    /**
         Gets information about the key. Returns @true if successful.
 
         @param pnSubKeys

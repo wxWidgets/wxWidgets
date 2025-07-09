@@ -96,28 +96,40 @@ namespace
 void GetUserPreferredLanguagesFromRegistry(wxVector<wxString>& userLanguages)
 {
     // Open the registry key for user preferred languages
-    HKEY hKey;
-    if (::RegOpenKeyEx(HKEY_CURRENT_USER,
-                       L"Control Panel\\International\\User Profile",
-                       0, KEY_READ, &hKey) == ERROR_SUCCESS)
+    wxRegKey key(wxRegKey::HKCU, L"Control Panel\\International\\User Profile");
+    if ( !key.Open(wxRegKey::Read) )
+        return;
+
+    // Retrieve the "Languages" value from the key
+    DWORD type = REG_SZ;
+    constexpr DWORD numChars = 256;
+    DWORD valueSize = numChars*sizeof(WCHAR);
+    wxScopedArray<WCHAR> languagesBuf(numChars + 1); // +1 for NUL at the end
+    WCHAR* const languages = languagesBuf.get();
+    if ( ::RegQueryValueEx(reinterpret_cast<HKEY>(key.GetHkey()),
+                           L"Languages",
+                           wxRESERVED_PARAM,
+                           &type,
+                           reinterpret_cast<LPBYTE>(languages),
+                           &valueSize) == ERROR_SUCCESS )
     {
-        // Retrieve the "Languages" value from the key
-        DWORD type = REG_SZ;
-        DWORD valueSize = 256;
-        wxScopedArray<WCHAR> languages(valueSize);
-        if (::RegQueryValueEx(hKey, L"Languages", nullptr, &type, reinterpret_cast<LPBYTE>(languages.get()), &valueSize) == ERROR_SUCCESS)
+        // Ensure the buffer is NUL-terminated because this is not
+        // guaranteed by RegQueryValueEx() for REG_MULTI_SZ values.
+        const size_t actualLen = valueSize/sizeof(WCHAR);
+        languages[actualLen] = L'\0';
+
+        // Extract languages from multi-string value
+        const WCHAR* p = languages;
+
+        while ( *p != 0 )
         {
-            // Extract languages from multi-string value
-            WCHAR* buf = languages.get();
-            while (*buf != 0)
-            {
-                const wxString language(buf);
-                userLanguages.push_back(language);
-                buf += language.length() + 1;
-            }
+            const wxString language(p);
+            userLanguages.push_back(language);
+            p += language.length() + 1;
+
+            if ( static_cast<size_t>(p - languages) >= actualLen )
+                break;
         }
-        // Close the registry key
-        ::RegCloseKey(hKey);
     }
 }
 

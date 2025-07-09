@@ -139,6 +139,8 @@ public:
   bool  IsOpened() const { return m_hKey != nullptr; }
     // for "if ( !key ) wxLogError(...)" kind of expressions
   operator bool()  const { return m_dwLastError == 0; }
+    // return the associated HKEY, possibly null if the key is not opened
+  WXHKEY GetHkey() const { return m_hKey; }
 
   // operations on the key itself
     // explicitly open the key (will be automatically done by all functions
