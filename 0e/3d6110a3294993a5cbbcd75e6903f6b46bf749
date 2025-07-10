@@ -1,0 +1,1 @@
+wxOSX: Fix crash on startup when using Farsi as system language (#25561).

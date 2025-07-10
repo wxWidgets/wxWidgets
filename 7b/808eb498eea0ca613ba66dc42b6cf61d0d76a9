@@ -1,0 +1,1 @@
+wxMSW: Fix regression in wxDataViewCtrl border in light mode (#25532).

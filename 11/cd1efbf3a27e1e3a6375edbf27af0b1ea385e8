@@ -1,0 +1,1 @@
+wxMSW: Fix crash with wxStaticBitmap inside wxNotebook in dark mode (#25499).

@@ -1,0 +1,1 @@
+wxMSW: Fix crash when using per-window menu in MDI applications (#25522).
