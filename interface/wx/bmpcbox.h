@@ -138,20 +138,20 @@ public:
         Adds the item to the end of the combo box.
     */
     int Append(const wxString& item,
-               const wxBitmap& bitmap = wxNullBitmap);
+               const wxBitmapBundle& bitmap = wxBitmapBundle());
 
     /**
         Adds the item to the end of the combo box, associating the given
         untyped, client data pointer @a clientData with the item.
     */
-    int Append(const wxString& item, const wxBitmap& bitmap,
+    int Append(const wxString& item, const wxBitmapBundle& bitmap,
                void* clientData);
 
     /**
         Adds the item to the end of the combo box, associating the given typed
         client data pointer @a clientData with the item.
     */
-    int Append(const wxString& item, const wxBitmap& bitmap,
+    int Append(const wxString& item, const wxBitmapBundle& bitmap,
                wxClientData* clientData);
 
     /**
@@ -193,7 +193,7 @@ public:
         Inserts the item into the list before @a pos.
         Not valid for @c wxCB_SORT style, use Append() instead.
     */
-    int Insert(const wxString& item, const wxBitmap& bitmap,
+    int Insert(const wxString& item, const wxBitmapBundle& bitmap,
                unsigned int pos);
 
     /**
@@ -201,7 +201,7 @@ public:
         untyped, client data pointer with the item.
         Not valid for @c wxCB_SORT style, use Append() instead.
     */
-    int Insert(const wxString& item, const wxBitmap& bitmap,
+    int Insert(const wxString& item, const wxBitmapBundle& bitmap,
                unsigned int pos,
                void* clientData);
 
@@ -210,7 +210,7 @@ public:
         client data pointer with the item.
         Not valid for @c wxCB_SORT style, use Append() instead.
     */
-    int Insert(const wxString& item, const wxBitmap& bitmap,
+    int Insert(const wxString& item, const wxBitmapBundle& bitmap,
                unsigned int pos,
                wxClientData* clientData);
 
