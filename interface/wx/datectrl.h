@@ -68,6 +68,13 @@ enum
     wxDP_SHOWCENTURY (this is also the style used by default if none is
     specified).
 
+    @note In wxMSW this control uses default user date format even if
+        wxUILocale::UseDefault() hasn't been called, while under the other
+        platforms it only does it if the default UI locale has been set.
+        For applications targeting international users, it is strongly
+        recommended to call wxUILocale::UseDefault() to ensure that the
+        behaviour is consistent across all platforms.
+
     @beginEventEmissionTable{wxDateEvent}
     @event{EVT_DATE_CHANGED(id, func)}
            Process a wxEVT_DATE_CHANGED event, which fires when the user

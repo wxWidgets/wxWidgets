@@ -133,7 +133,12 @@ public:
     // in the new code.
     static bool UseLocaleName(const wxString& localeName);
 
-    // Get the object corresponding to the currently used locale.
+    // Return true if the locale was set by calling either UseDefault() or
+    // UseLocaleName().
+    static bool IsSet();
+
+    // Get the object corresponding to the currently used locale, which is
+    // always valid: if IsSet() is false, "C" locale is returned.
     static const wxUILocale& GetCurrent();
 
     // A helper just to avoid writing wxUILocale(wxLocaleIdent::FromTag(...)).

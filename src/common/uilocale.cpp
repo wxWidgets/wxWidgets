@@ -77,6 +77,8 @@ inline bool IsDefaultCLocale(const wxString& locale)
 /* static */
 wxUILocale wxUILocale::ms_current;
 
+static bool wxUILocaleIsSet = false;
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -817,6 +819,7 @@ bool wxUILocale::UseDefault()
 
     impl->Use();
     ms_current = wxUILocale(impl);
+    wxUILocaleIsSet = true;
 
     return true;
 }
@@ -851,8 +854,15 @@ bool wxUILocale::UseLocaleName(const wxString& localeName)
 
     impl->Use();
     ms_current = wxUILocale(impl);
+    wxUILocaleIsSet = true;
 
     return true;
+}
+
+/* static */
+bool wxUILocale::IsSet()
+{
+    return wxUILocaleIsSet;
 }
 
 /* static */
@@ -862,6 +872,9 @@ const wxUILocale& wxUILocale::GetCurrent()
     if ( !ms_current.m_impl )
     {
         ms_current = wxUILocale(wxUILocaleImpl::CreateStdC());
+
+        // Do _not_ set wxUILocaleIsSet to true here, as this is just the
+        // default locale and not something really chosen by the user.
     }
 
     return ms_current;
