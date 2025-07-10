@@ -173,6 +173,17 @@ This can be useful if you have multiple projects using wxWidgets.
 This way, you can place wxWidgets side-by-side with your other projects and
 have their CMake scripts all point to the same wxWidgets folder.
 
+Cached CMake variables
+----------------------
+
+If building wxWidgets statically into your program, these values will
+be available:
+
+Name               | Description
+------------------ | -----------  |
+wxVERSION          | wxWidgets's version number
+wxCOPYRIGHT        | The copyright string
+
 Using XRC
 ---------
 
