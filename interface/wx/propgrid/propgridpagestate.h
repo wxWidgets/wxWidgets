@@ -435,7 +435,8 @@ public:
     */
     virtual void DoSetSplitter( int pos,
                                 int splitterColumn = 0,
-                                wxPGSplitterPositionFlags flags = 0 );
+                                wxPGSplitterPositionFlags flags =
+                                wxPGSplitterPositionFlags::Null );
 
     bool EnableCategories( bool enable );
 
