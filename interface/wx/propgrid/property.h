@@ -1274,15 +1274,6 @@ public:
     int AddChoice( const wxString& label, int value = wxPG_INVALID_VALUE );
 
     /**
-        Adds a private child property.
-
-        @deprecated Use AddPrivateChild() instead.
-
-        @see AddPrivateChild()
-    */
-    void AddChild( wxPGProperty* prop );
-
-    /**
         Adds a private child property. If you use this instead of
         wxPropertyGridInterface::Insert() or
         wxPropertyGridInterface::AppendIn(), then property's parental
