@@ -1,0 +1,1 @@
+wxGTK: Fix crash when sorting wxDataViewCtrl with unexpanded branches (#25625).
