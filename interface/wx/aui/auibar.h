@@ -537,13 +537,27 @@ public:
                          const wxRect& rect,
                          int state) = 0;
 
+    /**
+        Return the size of the label for the given item.
+
+        Note that the type of @a dc was wxDC until wxWidgets 3.3.0, where it
+        was changed to wxReadOnlyDC as this function doesn't modify the DC
+        contents.
+     */
     virtual wxSize GetLabelSize(
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 
+    /**
+        Return the size of the given item.
+
+        Note that the type of @a dc was wxDC until wxWidgets 3.3.0, where it
+        was changed to wxReadOnlyDC as this function doesn't modify the DC
+        contents.
+     */
     virtual wxSize GetToolSize(
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          wxWindow* wnd,
                          const wxAuiToolBarItem& item) = 0;
 

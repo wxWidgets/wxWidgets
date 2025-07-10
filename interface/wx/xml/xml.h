@@ -565,10 +565,10 @@ enum wxXmlDocumentLoadFlag
  */
 struct wxXmlParseError
 {
-    wxString message;   ///< Error description
-    int line;           ///< Line number where error occurred
-    int column;         ///< Column number where error occurred
-    int byte_offset;    ///< Byte offset where error occurred
+    wxString message;       ///< Error description
+    int line = 0;           ///< Line number where error occurred
+    int column = 0;         ///< Column number where error occurred
+    wxFileOffset offset = 0;///< Byte offset where error occurred
 };
 
 
