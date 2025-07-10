@@ -740,7 +740,7 @@ public:
             than or equal to zero, which is the minimum pixel width for the tab.
     */
     virtual void GetBarTabWidth(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         const wxString& label,
                         const wxBitmap& bitmap,
@@ -763,7 +763,7 @@ public:
             The tabs which will acquire the returned height.
     */
     virtual int GetTabCtrlHeight(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         const wxRibbonPageTabInfoArray& pages) = 0;
 
@@ -781,7 +781,7 @@ public:
             regardless of its state).
     */
     virtual wxSize GetScrollButtonMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         long style) = 0;
 
@@ -803,7 +803,7 @@ public:
         @see GetPanelClientSize()
     */
     virtual wxSize GetPanelSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize client_size,
                         wxPoint* client_offset) = 0;
@@ -826,7 +826,7 @@ public:
         @see GetPanelSize()
     */
     virtual wxSize GetPanelClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset) = 0;
@@ -844,7 +844,7 @@ public:
         @since 2.9.4
     */
     virtual wxRect GetPanelExtButtonArea(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxRect rect) = 0;
 
@@ -863,7 +863,7 @@ public:
         @see GetGalleryClientSize()
     */
     virtual wxSize GetGallerySize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
                         wxSize client_size) = 0;
 
@@ -893,7 +893,7 @@ public:
             occupies.
     */
     virtual wxSize GetGalleryClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
                         wxSize size,
                         wxPoint* client_offset,
@@ -919,7 +919,7 @@ public:
             The size of the page after the resize.
     */
     virtual wxRect GetPageBackgroundRedrawArea(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPage* wnd,
                         wxSize page_old_size,
                         wxSize page_new_size) = 0;
@@ -959,7 +959,7 @@ public:
         @return @true if a size exists for the button, @false otherwise.
     */
     virtual bool GetButtonBarButtonSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
@@ -995,7 +995,7 @@ public:
         @since 3.1.2
     */
     virtual wxCoord GetButtonBarButtonTextWidth(
-                        wxDC& dc, const wxString& label,
+                        wxReadOnlyDC& dc, const wxString& label,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size) = 0;
 
@@ -1015,7 +1015,7 @@ public:
             minimised panel (@c wxEAST or @c wxSOUTH depending on the style).
     */
     virtual wxSize GetMinimisedPanelMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize* desired_bitmap_size,
                         wxDirection* expanded_panel_direction) = 0;
@@ -1040,7 +1040,7 @@ public:
             size which counts as the dropdown part.
     */
     virtual wxSize GetToolSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         wxSize bitmap_size,
                         wxRibbonButtonKind kind,
