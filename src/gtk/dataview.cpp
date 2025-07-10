@@ -446,6 +446,7 @@ public:
         { return m_children; }
 
     unsigned int GetChildCount() const { return m_children.size(); }
+    unsigned int GetNodesCount() const { return m_nodes.size(); }
 
     wxDataViewItem &GetItem() { return m_item; }
     wxDataViewCtrlInternal *GetInternal() { return m_internal; }
@@ -3543,10 +3544,15 @@ void wxGtkTreeModelNode::Resort()
     if (child_count == 0)
         return;
 
+    size_t node_count = GetNodesCount();
+
     if (child_count == 1)
     {
-        wxGtkTreeModelNode *node = m_nodes.front( );
-        node->Resort();
+        if (node_count == 1)
+        {
+            wxGtkTreeModelNode *node = m_nodes.front( );
+            node->Resort();
+        }
         return;
     }
 
