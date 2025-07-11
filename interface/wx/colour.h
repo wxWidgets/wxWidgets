@@ -256,6 +256,29 @@ public:
         @since 3.1.2
     */
     virtual bool IsSolid() const;
+
+    /**
+        Returns @true if the color is completely transparent (i.e., no opacity).
+
+        @since 3.3.1
+    */
+    bool IsTransparent() const;
+
+    /**
+        Returns @true if the color is completely opaque (i.e., full opacity).
+
+        @since 3.3.1
+    */
+    bool IsOpaque() const;
+
+    /**
+        Returns @true if the color has some translucency
+        (not fully opaque, but not transparent either).
+
+        @since 3.3.1
+    */
+    bool IsTranslucent() const;
+
     ///@{
     /**
         Sets the RGB intensity values using the given values (first overload),
