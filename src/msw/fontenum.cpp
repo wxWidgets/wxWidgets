@@ -41,7 +41,7 @@
 
 // the helper class which calls ::EnumFontFamilies() and whose OnFont() is
 // called from the callback passed to this function and, in its turn, calls the
-// appropariate wxFontEnumerator method
+// appropriate wxFontEnumerator method
 class wxFontEnumeratorHelper
 {
 public:

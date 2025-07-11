@@ -1320,7 +1320,7 @@ wxFindMenuItemId(wxFrame *frame,
 }
 
 // Try to find the deepest child that contains 'pt'.
-// We go backwards, to try to allow for controls that are spacially
+// We go backwards, to try to allow for controls that are spatially
 // within other controls, but are still siblings (e.g. buttons within
 // static boxes). Static boxes are likely to be created _before_ controls
 // that sit inside them.

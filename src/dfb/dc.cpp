@@ -479,7 +479,7 @@ wxCoord wxDFBDCImpl::GetCharWidth() const
 
     int w = -1;
     GetCurrentFont()->GetStringWidth("H", 1, &w);
-    // VS: YDEV is corrent, it should *not* be XDEV, because font's are only
+    // VS: YDEV is correct, it should *not* be XDEV, because fonts are only
     //     scaled according to m_scaleY
     return YDEV2LOGREL(w);
 }
@@ -505,7 +505,7 @@ void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
 
     if ( f->GetStringExtents(string.utf8_str(), -1, &rect, nullptr) )
     {
-        // VS: YDEV is corrent, it should *not* be XDEV, because font's are
+        // VS: YDEV is correct, it should *not* be XDEV, because fonts are
         //     only scaled according to m_scaleY
         xx = YDEV2LOGREL(rect.w);
         yy = YDEV2LOGREL(rect.h);

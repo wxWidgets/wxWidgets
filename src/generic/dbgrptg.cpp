@@ -126,7 +126,7 @@ class wxDumpOpenExternalDlg : public wxDialog
 public:
     wxDumpOpenExternalDlg(wxWindow *parent, const wxFileName& filename);
 
-    // return the command chosed by user to open this file
+    // return the command chosen by user to open this file
     const wxString& GetCommand() const { return m_command; }
 
     wxString m_command;

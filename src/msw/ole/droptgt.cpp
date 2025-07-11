@@ -588,7 +588,7 @@ wxDataFormat wxDropTarget::GetMatchingPair()
 
 wxDataFormat wxDropTarget::MSWGetSupportedFormat(IDataObject *pIDataSource) const
 {
-    // this strucutre describes a data of any type (first field will be
+    // this structure describes a data of any type (first field will be
     // changing) being passed through global memory block.
     static FORMATETC s_fmtMemory = {
         0,
