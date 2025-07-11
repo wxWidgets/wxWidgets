@@ -347,14 +347,13 @@ public:
     /**
        Set the bottom edge of the rectangle.
 
-       @note This will alter the height of the rectangle.
+       @note This will preserve the top position and
+        alter the height of the rectangle.
         Use MoveBottomTo() to only move the bottom.
      */
     void SetBottom( wxDouble n );
     /**
-       Set the bottom edge of the rectangle.
-
-       @note This will affect the height of the rectangle.
+       Set the bottom edge of the rectangle, preserving the height.
      */
     void MoveBottomTo( wxDouble n );
     /**
@@ -364,14 +363,13 @@ public:
     /**
        Set the right side of the rectangle.
 
-       @note This will alter the width of the rectangle.
+       @note This will preserve the left position and
+        alter the width of the rectangle.
         Use MoveRightTo() to only move the bottom.
      */
     void SetRight( wxDouble n );
     /**
-       Set the right side of the rectangle.
-
-       @note This will affect the width of the rectangle.
+       Set the right side of the rectangle, preserving the width.
      */
     void MoveRightTo( wxDouble n );
 
