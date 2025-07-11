@@ -160,6 +160,20 @@ TEST_CASE("wxColour::GetLuminance", "[colour][luminance]")
     CHECK( wxRED->GetLuminance() < 1 );
 }
 
+TEST_CASE("wxColour::IsXXX", "[colour][opacity]")
+{
+    CHECK(wxColour{ 0, 0, 0, 0 }.IsTransparent());
+    CHECK_FALSE(wxColour{ 0, 0, 0, 1 }.IsTransparent());
+
+    CHECK(wxColour{ 0, 0, 0, 255 }.IsOpaque());
+    CHECK_FALSE(wxColour{ 0, 0, 0, 1 }.IsOpaque());
+
+    CHECK(wxColour{ 0, 0, 0, 254 }.IsTranslucent());
+    CHECK(wxColour{ 0, 0, 0, 10 }.IsTranslucent());
+    CHECK_FALSE(wxColour{ 0, 0, 0, 0 }.IsTranslucent());
+    CHECK_FALSE(wxColour{ 0, 0, 0, 255 }.IsTranslucent());
+}
+
 TEST_CASE("wxColour::Database", "[colour][database]")
 {
     wxColourDatabase db;
