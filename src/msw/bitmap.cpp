@@ -473,7 +473,7 @@ static bool CheckAlpha(HBITMAP hbmp, HBITMAP* hdib = nullptr)
 // explicitly.
 static HBITMAP CreatePremultipliedDIBIfNeeded(HBITMAP hbmp)
 {
-    // Check if 32-bit bitmap realy has premultiplied RGB data
+    // Check if 32-bit bitmap really has premultiplied RGB data
     // and premuliply it if necessary.
 
     BITMAP bm;
@@ -557,7 +557,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
                 wxLogLastError(wxT("wxBitmap::CopyFromIconOrCursor - BitBlt"));
             }
             // Prepare the AND mask to be compatible with wxBitmap mask
-            // by seting its bits to 0 wherever XOR mask (image) bits are set to 1.
+            // by setting its bits to 0 wherever XOR mask (image) bits are set to 1.
             // This is done in-place by applying the following ROP:
             // dest = dest AND (NOT src) where dest=AND mask, src=XOR mask
             //

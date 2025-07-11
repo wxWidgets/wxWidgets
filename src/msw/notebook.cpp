@@ -51,7 +51,7 @@
 #define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
 // you can set USE_NOTEBOOK_ANTIFLICKER to 0 for desktop Windows versions too
-// to disable code whih results in flicker-less notebook redrawing at the
+// to disable code which results in flicker-less notebook redrawing at the
 // expense of some extra GDI resource consumption
 #define USE_NOTEBOOK_ANTIFLICKER    1
 
@@ -612,7 +612,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 
     if ( m_pages.empty() )
     {
-        // no selection any more, the notebook becamse empty
+        // no selection any more, the notebook becomes empty
         m_selection = wxNOT_FOUND;
     }
     else // notebook still not empty
@@ -621,7 +621,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
         if ( selNew != wxNOT_FOUND )
         {
             // No selection change, just refresh the current selection.
-            // Because it could be that the slection index changed
+            // Because it could be that the selection index changed
             // we need to update it.
             // Note: this does not mean the selection it self changed.
             m_selection = selNew;
@@ -1637,7 +1637,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         {
             // no, it doesn't come from child, case (b) or (c): forward to a
             // page but only if entering notebook page (i.e. direction is
-            // backwards (Shift-TAB) comething from out-of-notebook, or
+            // backwards (Shift-TAB) something from out-of-notebook, or
             // direction is forward (TAB) from ourselves),
             if ( m_selection != wxNOT_FOUND &&
                     (!event.GetDirection() || isFromSelf) )

@@ -196,7 +196,7 @@ void wxListBox::MSWOnItemsChanged()
 {
     // we need to do two things when items change: update their max horizontal
     // extent so that horizontal scrollbar could be shown or hidden as
-    // appropriate and also invlaidate the best size
+    // appropriate and also invalidate the best size
     //
     // updating the max extent is slow (it's an O(N) operation) and so we defer
     // it until the idle time but the best size should be invalidated

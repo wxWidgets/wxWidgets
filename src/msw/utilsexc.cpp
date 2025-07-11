@@ -553,7 +553,7 @@ wxExecuteDDE(const wxString& ddeServer,
         // XTYP_EXECUTE for their DDE API, some important ones -- like Word
         // and other MS stuff - use XTYP_REQUEST!
         //
-        // moreover, anotheri mportant program (IE) understands both but
+        // moreover, another important program (IE) understands both but
         // returns an error from Execute() so we must try Request() first
         // to avoid doing it twice
         {

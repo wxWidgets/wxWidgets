@@ -220,7 +220,7 @@ public:
 
         // Because new label can have different length than the old one
         // so updating button's label with TB_SETBUTTONINFO would require
-        // also manual re-positionining items in the control tools located
+        // also manual re-positioning items in the control tools located
         // to the right in the toolbar and recalculation of stretchable
         // spacers so it is easier just to recreate the toolbar with
         // Realize(). Performance penalty should be negligible.

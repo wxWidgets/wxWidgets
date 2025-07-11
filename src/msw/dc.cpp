@@ -1218,7 +1218,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         bool ok = false;
 
 #if wxUSE_SYSTEM_OPTIONS
-        // On some systems, MaskBlt succeeds yet is much much slower
+        // On some systems, MaskBlt succeeds yet is much, much slower
         // than the wxWidgets fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
         //

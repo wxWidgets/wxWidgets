@@ -118,7 +118,7 @@ inline StringFormat* GetDrawTextStringFormat(wxLayoutDirection dir = wxLayout_De
 // device context implementation
 //
 // more and more of the dc functionality should be implemented by calling
-// the appropricate wxGDIPlusContext, but we will have to do that step by step
+// the appropriate wxGDIPlusContext, but we will have to do that step by step
 // also coordinate conversions should be moved to native matrix ops
 //-----------------------------------------------------------------------------
 
@@ -830,7 +830,7 @@ wxGDIPlusPenBrushBaseData::CreateRadialGradientBrush(
     int count = 1;
     brush->SetSurroundColors(&col, &count);
 
-    // TODO: There doesn't seem to be an equivallent for SetWrapMode, so
+    // TODO: There doesn't seem to be an equivalent for SetWrapMode, so
     // the area outside of the gradient's radius is not getting painted.
 
     // Apply the matrix if there is one

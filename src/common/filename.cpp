@@ -169,7 +169,7 @@ public:
                                       : FILE_WRITE_ATTRIBUTES,
                      FILE_SHARE_READ |              // sharing mode
                      FILE_SHARE_WRITE,              // (allow everything)
-                     nullptr,                       // no secutity attr
+                     nullptr,                       // no security attr
                      OPEN_EXISTING,                 // creation disposition
                      flags,                         // flags
                      nullptr                        // no template file
@@ -923,7 +923,7 @@ static wxString wxCreateTempImpl(
     }
     else
     {
-        // easier if it alwasys points to something
+        // easier if it always points to something
         deleteOnClose = &wantDeleteOnClose;
     }
 

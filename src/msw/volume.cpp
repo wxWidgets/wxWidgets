@@ -323,7 +323,7 @@ static int CompareFcn(const wxString& first, const wxString& second)
 //=============================================================================
 // Function: BuildRemoteList
 // Purpose: Append Network Neighborhood items to the list.
-// Notes: - Mounted gets transalated into Connected.  FilteredAdd is told
+// Notes: - Mounted gets translated into Connected.  FilteredAdd is told
 //          to ignore the Mounted flag since we need to handle it in a weird
 //          way manually.
 //        - The resulting list is sorted alphabetically.
