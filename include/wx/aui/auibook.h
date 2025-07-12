@@ -339,6 +339,11 @@ private:
 
 
 
+// This class is internal and can only be used outside of the library as a
+// pointer to an opaque object, i.e. "wxAuiTabCtrl*" returned by wxAuiNotebook
+// functions can be compared with each other and passed to wxAuiNotebook
+// functions taking them, but not otherwise.
+
 class WXDLLIMPEXP_AUI wxAuiTabCtrl : public wxControl,
                                      public wxAuiTabContainer
 {
