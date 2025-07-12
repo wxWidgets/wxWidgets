@@ -372,7 +372,6 @@ protected:
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     void OnPaint(wxPaintEvent& evt);
-    void OnEraseBackground(wxEraseEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnLeftDown(wxMouseEvent& evt);
     void OnLeftDClick(wxMouseEvent& evt);
