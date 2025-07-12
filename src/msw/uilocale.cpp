@@ -157,6 +157,16 @@ LCTYPE wxGetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
 
 WXDLLIMPEXP_BASE wxString wxGetMSWDateTimeFormat(wxLocaleInfo index)
 {
+    if ( !wxUILocale::IsSet() )
+    {
+        // We don't want to use the date/time formats of "C" locale here
+        // because this is incompatible with the behaviour in the previous
+        // wxWidgets versions and inconsistent with the behaviour of
+        // wxCalendarCtrl (which uses default user locale format), so let the
+        // date/time controls keep using their default format.
+        return wxString{};
+    }
+
     wxString format;
     wxString localeName = wxUILocale::GetCurrent().GetName();
     if (localeName.IsSameAs("C"))

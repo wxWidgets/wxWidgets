@@ -36,6 +36,13 @@ enum
 
     This control currently doesn't have any specific flags.
 
+    @note In wxMSW this control uses default user date format even if
+        wxUILocale::UseDefault() hasn't been called, while under the other
+        platforms it only does it if the default UI locale has been set.
+        For applications targeting international users, it is strongly
+        recommended to call wxUILocale::UseDefault() to ensure that the
+        behaviour is consistent across all platforms.
+
     @beginEventEmissionTable{wxDateEvent}
     @event{EVT_TIME_CHANGED(id, func)}
            Process a wxEVT_TIME_CHANGED event, which fires when the user
