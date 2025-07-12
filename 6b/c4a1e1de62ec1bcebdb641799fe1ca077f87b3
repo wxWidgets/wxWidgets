@@ -1,0 +1,1 @@
+wxGTK: Fix losing wxListCtrl contents after AppendColumn() (#25519).
