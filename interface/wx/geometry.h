@@ -386,7 +386,8 @@ public:
      */
     void SetLeftTop( const wxPoint2DDouble &pt );
     /**
-       Set the top-left point of the rectangle, preserving the width.
+       Set the top-left point of the rectangle, while preserving the
+       width and height of the rectangle.
      */
     void MoveLeftTopTo( const wxPoint2DDouble &pt );
     /**
