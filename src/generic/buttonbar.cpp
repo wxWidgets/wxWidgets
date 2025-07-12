@@ -413,7 +413,7 @@ void wxButtonToolBar::DoLayout()
                         dc.GetTextExtent(tool->GetShortHelp(), & tw, & th);
 
                         // If the label is bigger than the icon, the label width
-                        // becomes the new tool width, and we need to centre the
+                        // becomes the new tool width, and we need to centre
                         // the bitmap in this box.
                         if (tw > sz.x)
                         {

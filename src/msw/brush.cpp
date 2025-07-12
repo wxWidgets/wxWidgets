@@ -111,7 +111,7 @@ wxBrushRefData::~wxBrushRefData()
 }
 
 // ----------------------------------------------------------------------------
-// wxBrushRefData accesors
+// wxBrushRefData accessors
 // ----------------------------------------------------------------------------
 
 bool wxBrushRefData::operator==(const wxBrushRefData& data) const

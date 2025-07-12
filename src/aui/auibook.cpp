@@ -1870,7 +1870,7 @@ public:
     ~wxAuiTabFrame()
     {
         // use pending delete because sometimes during
-        // window closing, refreshs are pending
+        // window closing, refreshes are pending
         if (!wxPendingDelete.Member(m_tabs))
             wxPendingDelete.Append(m_tabs);
     }
@@ -4074,7 +4074,7 @@ public:
     unsigned char m_dir;
 
     /*
-        As the caulculation is done from the inner to the outermost pane, the
+        As the calculation is done from the inner to the outermost pane, the
         panes are sorted in the following order: layer, direction, row,
         position.
      */

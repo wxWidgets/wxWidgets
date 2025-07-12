@@ -640,7 +640,7 @@ int wxTreebook::HitTest(wxPoint const & pt, long * flags) const
     if ( flags )
         *flags = wxBK_HITTEST_NOWHERE;
 
-    // convert from wxTreebook coorindates to wxTreeCtrl ones
+    // convert from wxTreebook coordinates to wxTreeCtrl ones
     const wxTreeCtrl * const tree = GetTreeCtrl();
     const wxPoint treePt = tree->ScreenToClient(ClientToScreen(pt));
 

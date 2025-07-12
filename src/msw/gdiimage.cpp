@@ -502,7 +502,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     // Unfortunately this doesn't work, because ExtractIconEx
     // will scale the icon to the 'desired' size, even if that
     // size of icon isn't explicitly stored. So we would have
-    // to parse the icon file outselves.
+    // to parse the icon file ourselves.
     if ( desiredWidth == -1 &&
          desiredHeight == -1)
     {

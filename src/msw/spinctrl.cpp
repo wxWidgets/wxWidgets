@@ -345,7 +345,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
-    // set up fonts and colours  (This is nomally done in MSWCreateControl)
+    // set up fonts and colours  (This is normally done in MSWCreateControl)
     InheritAttributes();
     if (!m_hasFont)
         SetFont(GetDefaultAttributes().font);
@@ -534,7 +534,7 @@ void wxSpinCtrl::SetLayoutDirection(wxLayoutDirection dir)
 
 WXHWND wxSpinCtrl::MSWGetFocusHWND() const
 {
-    // Return the buddy hwnd because it shuld be focused instead of the
+    // Return the buddy hwnd because it should be focused instead of the
     // wxSpinCtrl itself.
     return m_hwndBuddy;
 }

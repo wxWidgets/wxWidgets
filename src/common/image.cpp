@@ -1065,7 +1065,7 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
                     const double
                         pixel_weight = vPrecalc.weight[k + 1] * hPrecalc.weight[i + 1];
 
-                    // Create a sum of all velues for each color channel
+                    // Create a sum of all values for each color channel
                     // adjusted for the pixel's calculated weight
                     if ( src_alpha )
                     {

@@ -327,7 +327,7 @@ void wxRichTextPrintout::CalculateScaling(wxDC* dc, wxRect& textRect, wxRect& he
     int ppiPrinterX, ppiPrinterY;
     GetPPIPrinter(&ppiPrinterX, &ppiPrinterY);
 
-    // This scales the DC so that the printout roughly represents the
+    // This scales the DC so that the printout roughly represents
     // the screen scaling.
     const double scale = double(ppiPrinterX) / ppiScreenX;
 

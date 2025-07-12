@@ -248,8 +248,8 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
         if ( !::GetModuleFileName(hmod, libname, MAX_PATH) )
         {
             // GetModuleFileName could also return extended-length paths (paths
-            // prepended with "//?/", maximum length is 32767 charachters) so,
-            // in principle, MAX_PATH could be unsufficient and we should try
+            // prepended with "//?/", maximum length is 32767 characters) so,
+            // in principle, MAX_PATH could be insufficient and we should try
             // increasing the buffer size here.
             wxLogLastError(wxT("GetModuleFromAddress"));
             return nullptr;

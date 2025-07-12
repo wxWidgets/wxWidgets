@@ -194,7 +194,7 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
 
         for ( size_t i = m_panes.size(); i > 0; i-- )
         {
-            // divide the unassigned width evently between the
+            // divide the unassigned width evenly between the
             // not yet processed fields:
             int w = widthToUse / i;
             widths.Add(w);

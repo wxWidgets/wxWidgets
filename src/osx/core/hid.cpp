@@ -67,7 +67,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
     //then later some registry properties from an iterator (see below)
     //
     //The call to IOServiceMatching filters down the
-    //the services we want to hid services (and also eats the
+    //services we want to hid services (and also eats the
     //dictionary up for us (consumes one reference))
     CFMutableDictionaryRef pDictionary = IOServiceMatching(kIOHIDDeviceKey);
     if(pDictionary == nullptr)

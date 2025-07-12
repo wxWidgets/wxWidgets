@@ -26,7 +26,7 @@ void wxAffineMatrix2D::Set(const wxMatrix2D &mat2D, const wxPoint2DDouble &tr)
     m_ty = tr.m_y;
 }
 
-// gets the component valuess of the matrix
+// gets the component values of the matrix
 void wxAffineMatrix2D::Get(wxMatrix2D *mat2D, wxPoint2DDouble *tr) const
 {
     mat2D->m_11 = m_11;

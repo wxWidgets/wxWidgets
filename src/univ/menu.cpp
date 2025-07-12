@@ -1297,7 +1297,7 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
     // unfortunately, we can't use m_menuBar->GetEventHandler() here because,
     // if the menubar is currently showing a menu, its event handler is a
-    // temporary one installed by wxPopupWindow and so will disappear soon any
+    // temporary one installed by wxPopupWindow and so will disappear soon and
     // any attempts to use it from the newly attached menu would result in a
     // crash
     //

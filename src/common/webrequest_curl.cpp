@@ -787,7 +787,7 @@ LRESULT CALLBACK WinSock1SocketPoller::MsgProc(WXHWND hwnd, WXUINT uMsg,
 
     if ( uMsg == SOCKET_MESSAGE )
     {
-        // Extract the result any any errors from lParam.
+        // Extract the result and any errors from lParam.
         int winResult = LOWORD(lParam);
         int error = HIWORD(lParam);
 

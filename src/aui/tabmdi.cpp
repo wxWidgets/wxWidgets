@@ -458,12 +458,12 @@ wxAuiMDIChildFrame::wxAuiMDIChildFrame(wxAuiMDIParentFrame *parent,
 {
     Init();
 
-    // There are two ways to create an tabbed mdi child fram without
+    // There are two ways to create a tabbed mdi child frame without
     // making it the active document.  Either Show(false) can be called
     // before Create() (as is customary on some ports with wxFrame-type
     // windows), or wxMINIMIZE can be passed in the style flags.  Note that
     // wxAuiMDIChildFrame is not really derived from wxFrame, as wxMDIChildFrame
-    // is, but those are the expected symantics.  No style flag is passed
+    // is, but those are the expected semantics.  No style flag is passed
     // onto the panel underneath.
     if (style & wxMINIMIZE)
         m_activateOnCreate = false;
