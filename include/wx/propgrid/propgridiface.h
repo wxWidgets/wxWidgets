@@ -72,24 +72,19 @@ constexpr bool operator!(wxPGVFBFlags a)
 }
 
 #if WXWIN_COMPATIBILITY_3_2
-wxDEPRECATED_MSG("use wxPGVFBFlags::Null instead")
-constexpr wxPGVFBFlags wxPG_VFB_NULL{ wxPGVFBFlags::Null };
-wxDEPRECATED_MSG("use wxPGVFBFlags::StayInProperty instead")
-constexpr wxPGVFBFlags wxPG_VFB_STAY_IN_PROPERTY{ wxPGVFBFlags::StayInProperty };
-wxDEPRECATED_MSG("use wxPGVFBFlags::Beep instead")
-constexpr wxPGVFBFlags wxPG_VFB_BEEP{ wxPGVFBFlags::Beep };
-wxDEPRECATED_MSG("use wxPGVFBFlags::MarkCell instead")
-constexpr wxPGVFBFlags wxPG_VFB_MARK_CELL{ wxPGVFBFlags::MarkCell };
-wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessage instead")
-constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGE{ wxPGVFBFlags::ShowMessage };
-wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessageBox instead")
-constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGEBOX{ wxPGVFBFlags::ShowMessageBox };
-wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessageOnStatusBar instead")
-constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR{ wxPGVFBFlags::ShowMessageOnStatusBar };
-wxDEPRECATED_MSG("use wxPGVFBFlags::Default instead")
-constexpr wxPGVFBFlags wxPG_VFB_DEFAULT{ wxPGVFBFlags::Default };
-wxDEPRECATED_MSG("use wxPGVFBFlags::Undefined instead")
-constexpr wxPGVFBFlags wxPG_VFB_UNDEFINED{ wxPGVFBFlags::Undefined };
+// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// because one will be given whenever they are used with any function now
+// taking wxPGVFBFlags anyhow and giving multiple deprecation warnings for the
+// same line of code is more annoying than helpful.
+constexpr int wxPG_VFB_NULL = static_cast<int>(wxPGVFBFlags::Null);
+constexpr int wxPG_VFB_STAY_IN_PROPERTY = static_cast<int>(wxPGVFBFlags::StayInProperty);
+constexpr int wxPG_VFB_BEEP = static_cast<int>(wxPGVFBFlags::Beep);
+constexpr int wxPG_VFB_MARK_CELL = static_cast<int>(wxPGVFBFlags::MarkCell);
+constexpr int wxPG_VFB_SHOW_MESSAGE = static_cast<int>(wxPGVFBFlags::ShowMessage);
+constexpr int wxPG_VFB_SHOW_MESSAGEBOX = static_cast<int>(wxPGVFBFlags::ShowMessageBox);
+constexpr int wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR = static_cast<int>(wxPGVFBFlags::ShowMessageOnStatusBar);
+constexpr int wxPG_VFB_DEFAULT = static_cast<int>(wxPGVFBFlags::Default);
+constexpr int wxPG_VFB_UNDEFINED = static_cast<int>(wxPGVFBFlags::Undefined);
 
 wxDEPRECATED_MSG("use wxPGVFBFlags instead")
 constexpr bool operator==(wxPGVFBFlags a, int b)

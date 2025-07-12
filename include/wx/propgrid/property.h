@@ -475,56 +475,36 @@ constexpr int operator&(int a, wxPGPropertyFlags b)
 // =====
 
 #if WXWIN_COMPATIBILITY_3_2
-wxDEPRECATED_MSG("use wxPGPropertyFlags::Modified instead")
-constexpr wxPGPropertyFlags wxPG_PROP_MODIFIED = wxPGPropertyFlags::Modified;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::Disabled instead")
-constexpr wxPGPropertyFlags wxPG_PROP_DISABLED = wxPGPropertyFlags::Disabled;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::Hidden instead")
-constexpr wxPGPropertyFlags wxPG_PROP_HIDDEN = wxPGPropertyFlags::Hidden;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::CustomImage instead")
-constexpr wxPGPropertyFlags wxPG_PROP_CUSTOMIMAGE = wxPGPropertyFlags::CustomImage;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::NoEditor instead")
-constexpr wxPGPropertyFlags wxPG_PROP_NOEDITOR = wxPGPropertyFlags::NoEditor;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::Collapsed instead")
-constexpr wxPGPropertyFlags wxPG_PROP_COLLAPSED = wxPGPropertyFlags::Collapsed;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::InvalidValue instead")
-constexpr wxPGPropertyFlags wxPG_PROP_INVALID_VALUE = wxPGPropertyFlags::InvalidValue;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::WasModified instead")
-constexpr wxPGPropertyFlags wxPG_PROP_WAS_MODIFIED = wxPGPropertyFlags::WasModified;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::Aggregate instead")
-constexpr wxPGPropertyFlags wxPG_PROP_AGGREGATE = wxPGPropertyFlags::Aggregate;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::ChildrenAreCopies instead")
-constexpr wxPGPropertyFlags wxPG_PROP_CHILDREN_ARE_COPIES = wxPGPropertyFlags::ChildrenAreCopies;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::Property instead")
-constexpr wxPGPropertyFlags wxPG_PROP_PROPERTY = wxPGPropertyFlags::Property;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::Category instead")
-constexpr wxPGPropertyFlags wxPG_PROP_CATEGORY = wxPGPropertyFlags::Category;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::MiscParent instead")
-constexpr wxPGPropertyFlags wxPG_PROP_MISC_PARENT = wxPGPropertyFlags::MiscParent;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::ReadOnly instead")
-constexpr wxPGPropertyFlags wxPG_PROP_READONLY = wxPGPropertyFlags::ReadOnly;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::ComposedValue instead")
-constexpr wxPGPropertyFlags wxPG_PROP_COMPOSED_VALUE = wxPGPropertyFlags::ComposedValue;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::UsesCommonValue instead")
-constexpr wxPGPropertyFlags wxPG_PROP_USES_COMMON_VALUE = wxPGPropertyFlags::UsesCommonValue;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::AutoUnspecified instead")
-constexpr wxPGPropertyFlags wxPG_PROP_AUTO_UNSPECIFIED = wxPGPropertyFlags::AutoUnspecified;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::BeingDeleted instead")
-constexpr wxPGPropertyFlags wxPG_PROP_BEING_DELETED = wxPGPropertyFlags::BeingDeleted;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::ParentalFlags instead")
-constexpr wxPGPropertyFlags wxPG_PROP_PARENTAL_FLAGS = wxPGPropertyFlags::ParentalFlags;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::StringStoredFlags instead")
-constexpr wxPGPropertyFlags wxPG_STRING_STORED_FLAGS = wxPGPropertyFlags::StringStoredFlags;
-wxDEPRECATED_MSG("use wxPGPropertyFlags::Max instead")
-constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPGPropertyFlags::Max;
+// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// because one will be given whenever they are used with any function now
+// taking wxPGPropertyFlags anyhow and giving multiple deprecation warnings for
+// the same line of code is more annoying than helpful.
+constexpr int wxPG_PROP_MODIFIED = static_cast<int>(wxPGPropertyFlags::Modified);
+constexpr int wxPG_PROP_DISABLED = static_cast<int>(wxPGPropertyFlags::Disabled);
+constexpr int wxPG_PROP_HIDDEN = static_cast<int>(wxPGPropertyFlags::Hidden);
+constexpr int wxPG_PROP_CUSTOMIMAGE = static_cast<int>(wxPGPropertyFlags::CustomImage);
+constexpr int wxPG_PROP_NOEDITOR = static_cast<int>(wxPGPropertyFlags::NoEditor);
+constexpr int wxPG_PROP_COLLAPSED = static_cast<int>(wxPGPropertyFlags::Collapsed);
+constexpr int wxPG_PROP_INVALID_VALUE = static_cast<int>(wxPGPropertyFlags::InvalidValue);
+constexpr int wxPG_PROP_WAS_MODIFIED = static_cast<int>(wxPGPropertyFlags::WasModified);
+constexpr int wxPG_PROP_AGGREGATE = static_cast<int>(wxPGPropertyFlags::Aggregate);
+constexpr int wxPG_PROP_CHILDREN_ARE_COPIES = static_cast<int>(wxPGPropertyFlags::ChildrenAreCopies);
+constexpr int wxPG_PROP_PROPERTY = static_cast<int>(wxPGPropertyFlags::Property);
+constexpr int wxPG_PROP_CATEGORY = static_cast<int>(wxPGPropertyFlags::Category);
+constexpr int wxPG_PROP_MISC_PARENT = static_cast<int>(wxPGPropertyFlags::MiscParent);
+constexpr int wxPG_PROP_READONLY = static_cast<int>(wxPGPropertyFlags::ReadOnly);
+constexpr int wxPG_PROP_COMPOSED_VALUE = static_cast<int>(wxPGPropertyFlags::ComposedValue);
+constexpr int wxPG_PROP_USES_COMMON_VALUE = static_cast<int>(wxPGPropertyFlags::UsesCommonValue);
+constexpr int wxPG_PROP_AUTO_UNSPECIFIED = static_cast<int>(wxPGPropertyFlags::AutoUnspecified);
+constexpr int wxPG_PROP_BEING_DELETED = static_cast<int>(wxPGPropertyFlags::BeingDeleted);
+constexpr int wxPG_PROP_PARENTAL_FLAGS = static_cast<int>(wxPGPropertyFlags::ParentalFlags);
+constexpr int wxPG_STRING_STORED_FLAGS = static_cast<int>(wxPGPropertyFlags::StringStoredFlags);
+constexpr int wxPG_PROP_MAX = static_cast<int>(wxPGPropertyFlags::Max);
 
 // Indicates bits usable by derived properties.
-wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_CLASS_SPECIFIC_1 in intended for internal use only.")
-constexpr wxPGPropertyFlags wxPG_PROP_CLASS_SPECIFIC_1 = wxPGPropertyFlags::Reserved_1;
-wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_CLASS_SPECIFIC_2 in intended for internal use only.")
-constexpr wxPGPropertyFlags wxPG_PROP_CLASS_SPECIFIC_2 = wxPGPropertyFlags::Reserved_2;
-wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_CLASS_SPECIFIC_3 in intended for internal use only.")
-constexpr wxPGPropertyFlags wxPG_PROP_CLASS_SPECIFIC_3 = wxPGPropertyFlags::Reserved_3;
+constexpr int wxPG_PROP_CLASS_SPECIFIC_1 = static_cast<int>(wxPGPropertyFlags::Reserved_1);
+constexpr int wxPG_PROP_CLASS_SPECIFIC_2 = static_cast<int>(wxPGPropertyFlags::Reserved_2);
+constexpr int wxPG_PROP_CLASS_SPECIFIC_3 = static_cast<int>(wxPGPropertyFlags::Reserved_3);
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------

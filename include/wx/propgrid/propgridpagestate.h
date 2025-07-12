@@ -47,26 +47,20 @@ enum class wxPGSelectPropertyFlags : int
 };
 
 #if WXWIN_COMPATIBILITY_3_2
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Null instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_NONE{ wxPGSelectPropertyFlags::Null };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Focus instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_FOCUS{wxPGSelectPropertyFlags::Focus };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Force instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_FORCE{ wxPGSelectPropertyFlags::Force };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Nonvisible instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_NONVISIBLE{ wxPGSelectPropertyFlags::Nonvisible };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::NoValidate instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_NOVALIDATE{ wxPGSelectPropertyFlags::NoValidate };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Deleting instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_DELETING{wxPGSelectPropertyFlags::Deleting };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::SetUnspec instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_SETUNSPEC{ wxPGSelectPropertyFlags::SetUnspec };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::DialogVal instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_DIALOGVAL{ wxPGSelectPropertyFlags::DialogVal };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::DontSendEvent instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_DONT_SEND_EVENT{ wxPGSelectPropertyFlags::DontSendEvent };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::NoRefresh instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_NO_REFRESH{ wxPGSelectPropertyFlags::NoRefresh };
+// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// because one will be given whenever they are used with any function now
+// taking wxPGSelectPropertyFlags anyhow and giving multiple deprecation
+// warnings for the same line of code is more annoying than helpful.
+constexpr int wxPG_SEL_NONE = static_cast<int>(wxPGSelectPropertyFlags::Null);
+constexpr int wxPG_SEL_FOCUS = static_cast<int>(wxPGSelectPropertyFlags::Focus);
+constexpr int wxPG_SEL_FORCE = static_cast<int>(wxPGSelectPropertyFlags::Force);
+constexpr int wxPG_SEL_NONVISIBLE = static_cast<int>(wxPGSelectPropertyFlags::Nonvisible);
+constexpr int wxPG_SEL_NOVALIDATE = static_cast<int>(wxPGSelectPropertyFlags::NoValidate);
+constexpr int wxPG_SEL_DELETING = static_cast<int>(wxPGSelectPropertyFlags::Deleting);
+constexpr int wxPG_SEL_SETUNSPEC = static_cast<int>(wxPGSelectPropertyFlags::SetUnspec);
+constexpr int wxPG_SEL_DIALOGVAL = static_cast<int>(wxPGSelectPropertyFlags::DialogVal);
+constexpr int wxPG_SEL_DONT_SEND_EVENT = static_cast<int>(wxPGSelectPropertyFlags::DontSendEvent);
+constexpr int wxPG_SEL_NO_REFRESH = static_cast<int>(wxPGSelectPropertyFlags::NoRefresh);
 
 wxDEPRECATED_MSG("use wxPGSelectPropertyFlags instead")
 constexpr bool operator==(wxPGSelectPropertyFlags a, int b)
@@ -130,14 +124,11 @@ constexpr bool operator!(wxPGSplitterPositionFlags a)
 }
 
 #if WXWIN_COMPATIBILITY_3_2
-wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::Refresh instead")
-constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_REFRESH { wxPGSplitterPositionFlags::Refresh };
-wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::AllPages instead")
-constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_ALL_PAGES { wxPGSplitterPositionFlags::AllPages };
-wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::FromEvent instead")
-constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_FROM_EVENT { wxPGSplitterPositionFlags::FromEvent };
-wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::FromAutoCenter instead")
-constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_FROM_AUTO_CENTER { wxPGSplitterPositionFlags::FromAutoCenter };
+// See comment before wxPG_SEL_NONE above.
+constexpr int wxPG_SPLITTER_REFRESH  = static_cast<int>(wxPGSplitterPositionFlags::Refresh);
+constexpr int wxPG_SPLITTER_ALL_PAGES  = static_cast<int>(wxPGSplitterPositionFlags::AllPages);
+constexpr int wxPG_SPLITTER_FROM_EVENT  = static_cast<int>(wxPGSplitterPositionFlags::FromEvent);
+constexpr int wxPG_SPLITTER_FROM_AUTO_CENTER  = static_cast<int>(wxPGSplitterPositionFlags::FromAutoCenter);
 
 wxDEPRECATED_MSG("use wxPGSplitterPositionFlags instead")
 constexpr bool operator==(wxPGSplitterPositionFlags a, int b)
