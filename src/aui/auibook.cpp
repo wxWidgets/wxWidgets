@@ -1378,8 +1378,7 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
         // wxAuiNotebooks always want to receive this event
         // even if the tab is already active, because they may
         // have multiple tab controls
-        if ((new_selection != GetActivePage() ||
-            wxDynamicCast(GetParent(), wxAuiNotebook)) && !m_hoverButton)
+        if ((new_selection != GetActivePage()) && !m_hoverButton)
         {
             wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
             e.SetSelection(new_selection);
