@@ -777,6 +777,14 @@ public:
         ID in different applications that should be handled as a single one at
         UI level.
 
+        @note Under Windows setting the application user model ID changes some
+        functionality available by default, notably Shift middle clicking the
+        application icon in the taskbar doesn't open a new instance of the
+        application any more and most recently used files list maintained by
+        the shell doesn't work any longer. Application that need to keep this
+        working need to use `SHGetPropertyStoreForWindow()` and
+        `SHAddToRecentDocs()` functions to provide the necessary support for it.
+
         Please note that SetClassName() must be called as early as possible and
         definitely before creating any top-level windows to have an effect.
         Typically it should be called in the constructor of the class derived
