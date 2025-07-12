@@ -105,4 +105,19 @@ TEST_CASE_METHOD(ListViewTestCase, "ListView::Focus", "[listctrl][listview]")
     CHECK( m_list->GetFocusedItem() == 0 );
 }
 
+TEST_CASE_METHOD(ListViewTestCase, "ListView::AppendColumn", "[listctrl][listview]")
+{
+    m_list->AppendColumn("Column 0");
+    m_list->AppendColumn("Column 1");
+
+    m_list->InsertItem(0, "First item");
+    m_list->SetItem(0, 1, "First subitem");
+
+    // Appending a column shouldn't change the existing items.
+    m_list->AppendColumn("Column 2");
+
+    CHECK( m_list->GetItemText(0) == "First item" );
+    CHECK( m_list->GetItemText(0, 1) == "First subitem" );
+}
+
 #endif
