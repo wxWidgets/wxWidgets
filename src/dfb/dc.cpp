@@ -479,7 +479,7 @@ wxCoord wxDFBDCImpl::GetCharWidth() const
 
     int w = -1;
     GetCurrentFont()->GetStringWidth("H", 1, &w);
-    // VS: YDEV is correct, it should *not* be XDEV, because font's are only
+    // VS: YDEV is correct, it should *not* be XDEV, because fonts are only
     //     scaled according to m_scaleY
     return YDEV2LOGREL(w);
 }
