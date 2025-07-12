@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/controls/listbasetest.cpp
-// Purpose:     Base class for wxListCtrl and wxListView tests
+// Purpose:     Common wxListCtrl and wxListView tests
 // Author:      Steven Lamerton
 // Created:     2010-07-20
-// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>,
+// Copyright:   (c) 2008,2025 Vadim Zeitlin <vadim@wxwidgets.org>,
 //              (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,24 +18,6 @@ public:
 
 protected:
     virtual wxListCtrl *GetList() const = 0;
-
-    #define wxLIST_BASE_TESTS() \
-        CPPUNIT_TEST( ColumnsOrder ); \
-        CPPUNIT_TEST( ItemRect ); \
-        CPPUNIT_TEST( ItemText ); \
-        CPPUNIT_TEST( ChangeMode ); \
-        WXUISIM_TEST( ItemClick ); \
-        WXUISIM_TEST( KeyDown ); \
-        WXUISIM_TEST( MultiSelect ); \
-        CPPUNIT_TEST( DeleteItems ); \
-        CPPUNIT_TEST( InsertItem ); \
-        CPPUNIT_TEST( Find ); \
-        CPPUNIT_TEST( Visible ); \
-        CPPUNIT_TEST( ItemFormatting ); \
-        WXUISIM_TEST( EditLabel ); \
-        CPPUNIT_TEST( ImageList ); \
-        CPPUNIT_TEST( HitTest ); \
-        CPPUNIT_TEST( Sort )
 
     void ColumnsOrder();
     void ItemRect();
@@ -56,5 +38,37 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(ListBaseTestCase);
 };
+
+// In the macros below, ClassName is the name of the class (without "wx"
+// prefix), i.e. an identifier, and ClassTag is the string containing the
+// tag to be used in the test registration macro.
+
+// Define a test case delegating to ListBaseTestCase.
+#define wxLIST_TEST_CASE(ClassName, ClassTag, TestName) \
+    TEST_CASE_METHOD(ClassName ## TestCase, \
+                     #ClassName "::" #TestName, \
+                     ClassTag) \
+    { \
+        TestName(); \
+    }
+
+// Define all common test cases.
+#define wxLIST_BASE_TESTS(ClassName, TagName) \
+    wxLIST_TEST_CASE(ClassName, TagName, ColumnsOrder) \
+    wxLIST_TEST_CASE(ClassName, TagName, ItemRect) \
+    wxLIST_TEST_CASE(ClassName, TagName, ItemText) \
+    wxLIST_TEST_CASE(ClassName, TagName, ChangeMode) \
+    wxLIST_TEST_CASE(ClassName, TagName, ItemClick) \
+    wxLIST_TEST_CASE(ClassName, TagName, KeyDown) \
+    wxLIST_TEST_CASE(ClassName, TagName, MultiSelect) \
+    wxLIST_TEST_CASE(ClassName, TagName, DeleteItems) \
+    wxLIST_TEST_CASE(ClassName, TagName, InsertItem) \
+    wxLIST_TEST_CASE(ClassName, TagName, Find) \
+    wxLIST_TEST_CASE(ClassName, TagName, Visible) \
+    wxLIST_TEST_CASE(ClassName, TagName, ItemFormatting) \
+    wxLIST_TEST_CASE(ClassName, TagName, EditLabel) \
+    wxLIST_TEST_CASE(ClassName, TagName, ImageList) \
+    wxLIST_TEST_CASE(ClassName, TagName, HitTest) \
+    wxLIST_TEST_CASE(ClassName, TagName, Sort)
 
 #endif

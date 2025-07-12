@@ -96,9 +96,11 @@ static const int MARGIN_AROUND_CHECKBOX = 5;
 // ----------------------------------------------------------------------------
 
 wxListItemData::wxListItemData(wxListItemData&& other)
+              : m_image(other.m_image),
+                m_data(other.m_data),
+                m_owner(other.m_owner),
+                m_text(std::move(other.m_text))
 {
-    m_owner = other.m_owner;
-
     // Take ownership of the pointers from the other object and reset them.
     std::swap(m_attr, other.m_attr);
     std::swap(m_rect, other.m_rect);
@@ -109,6 +111,7 @@ wxListItemData& wxListItemData::operator=(wxListItemData&& other)
     m_image = other.m_image;
     m_data = other.m_data;
     m_owner = other.m_owner;
+    m_text = std::move(other.m_text);
 
     // Swap them to let our pointers be deleted by the other object if necessary.
     std::swap(m_attr, other.m_attr);
