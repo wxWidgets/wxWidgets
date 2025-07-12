@@ -1246,7 +1246,6 @@ int wxAuiTabContainer::GetFirstTabNotOfKind(wxAuiTabKind kind) const
 
 wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_PAINT(wxAuiTabCtrl::OnPaint)
-    EVT_ERASE_BACKGROUND(wxAuiTabCtrl::OnEraseBackground)
     EVT_SIZE(wxAuiTabCtrl::OnSize)
     EVT_LEFT_DOWN(wxAuiTabCtrl::OnLeftDown)
     EVT_LEFT_DCLICK(wxAuiTabCtrl::OnLeftDClick)
@@ -1275,6 +1274,7 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxAuiNotebook* parent, wxWindowID id)
                         wxDefaultValidator,
                         wxT("wxAuiTabCtrl"))
 {
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 wxAuiTabCtrl::~wxAuiTabCtrl() = default;
@@ -1353,10 +1353,6 @@ void wxAuiTabCtrl::OnSysColourChanged(wxSysColourChangedEvent &event)
     {
         m_art->UpdateColoursFromSystem();
     }
-}
-
-void wxAuiTabCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
-{
 }
 
 void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)
