@@ -987,7 +987,6 @@ void wxAuiTabContainer::DoShowHide()
 
 wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_PAINT(wxAuiTabCtrl::OnPaint)
-    EVT_ERASE_BACKGROUND(wxAuiTabCtrl::OnEraseBackground)
     EVT_SIZE(wxAuiTabCtrl::OnSize)
     EVT_LEFT_DOWN(wxAuiTabCtrl::OnLeftDown)
     EVT_LEFT_DCLICK(wxAuiTabCtrl::OnLeftDClick)
@@ -1013,6 +1012,7 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
                            const wxSize& size,
                            long style) : wxControl(parent, id, pos, size, style)
 {
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetName(wxT("wxAuiTabCtrl"));
     m_clickPt = wxDefaultPosition;
     m_isDragging = false;
@@ -1046,6 +1046,7 @@ void wxAuiTabCtrl::OnSysColourChanged(wxSysColourChangedEvent &event)
 
 void wxAuiTabCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 {
+    // This is not used any more but preseved for ABI compatibility in 3.2.
 }
 
 void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)
