@@ -19,51 +19,35 @@
 #include "listbasetest.h"
 #include "testableframe.h"
 
-class ListViewTestCase : public ListBaseTestCase, public CppUnit::TestCase
+class ListViewTestCase : public ListBaseTestCase
 {
 public:
-    ListViewTestCase() { }
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    ListViewTestCase();
+    virtual ~ListViewTestCase() override;
 
     virtual wxListCtrl *GetList() const override { return m_list; }
 
-private:
-    CPPUNIT_TEST_SUITE( ListViewTestCase );
-        wxLIST_BASE_TESTS();
-        CPPUNIT_TEST( Selection );
-        CPPUNIT_TEST( Focus );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Selection();
-    void Focus();
-
+protected:
     wxListView *m_list;
 
     wxDECLARE_NO_COPY_CLASS(ListViewTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ListViewTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ListViewTestCase, "ListViewTestCase" );
-
-void ListViewTestCase::setUp()
+ListViewTestCase::ListViewTestCase()
 {
     m_list = new wxListView(wxTheApp->GetTopWindow());
     m_list->SetWindowStyle(wxLC_REPORT);
     m_list->SetSize(400, 200);
 }
 
-void ListViewTestCase::tearDown()
+ListViewTestCase::~ListViewTestCase()
 {
     DeleteTestWindow(m_list);
-    m_list = nullptr;
 }
 
-void ListViewTestCase::Selection()
+wxLIST_BASE_TESTS(ListView, "[listctrl][listview]")
+
+TEST_CASE_METHOD(ListViewTestCase, "ListView::Selection", "[listctrl][listview]")
 {
     m_list->InsertColumn(0, "Column 0");
 
@@ -101,7 +85,7 @@ void ListViewTestCase::Selection()
     CPPUNIT_ASSERT_EQUAL(2, m_list->GetFirstSelected());
 }
 
-void ListViewTestCase::Focus()
+TEST_CASE_METHOD(ListViewTestCase, "ListView::Focus", "[listctrl][listview]")
 {
     EventCounter focused(m_list, wxEVT_LIST_ITEM_FOCUSED);
 

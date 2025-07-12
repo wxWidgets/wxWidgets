@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/controls/listbasetest.cpp
-// Purpose:     Base class for wxListCtrl and wxListView tests
+// Purpose:     Common wxListCtrl and wxListView tests
 // Author:      Steven Lamerton
 // Created:     2010-07-20
-// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>,
+// Copyright:   (c) 2008,2025 Vadim Zeitlin <vadim@wxwidgets.org>,
 //              (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -178,6 +178,8 @@ void ListBaseTestCase::ChangeMode()
 void ListBaseTestCase::MultiSelect()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
 
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
     // FIXME: This test fails on GitHub CI under wxGTK2 although works fine on
@@ -310,6 +312,8 @@ void ListBaseTestCase::MultiSelect()
 void ListBaseTestCase::ItemClick()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
 
 #ifdef __WXMSW__
     // FIXME: This test fails on MSW buildbot slaves although works fine on
@@ -377,6 +381,9 @@ void ListBaseTestCase::ItemClick()
 void ListBaseTestCase::KeyDown()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     wxListCtrl* const list = GetList();
 
     EventCounter keydown(list, wxEVT_LIST_KEY_DOWN);
@@ -526,6 +533,9 @@ void ListBaseTestCase::ItemFormatting()
 void ListBaseTestCase::EditLabel()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     wxListCtrl* const list = GetList();
 
     list->SetWindowStyleFlag(wxLC_REPORT | wxLC_EDIT_LABELS);
