@@ -474,22 +474,18 @@ enum class wxPGKeyboardAction
 wxDEPRECATED_MSG("use wxPGKeyboardAction type instead")
 typedef wxPGKeyboardAction wxPGKeyboardActions;
 
-wxDEPRECATED_MSG("use wxPGKeyboardAction::Invalid instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_INVALID { wxPGKeyboardAction::Invalid };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::NextProperty instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_NEXT_PROPERTY { wxPGKeyboardAction::NextProperty };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::PrevProperty instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_PREV_PROPERTY { wxPGKeyboardAction::PrevProperty };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::ExpandProperty instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_EXPAND_PROPERTY { wxPGKeyboardAction::ExpandProperty };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::CollapseProperty instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_COLLAPSE_PROPERTY { wxPGKeyboardAction::CollapseProperty };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::CancelEdit instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_CANCEL_EDIT { wxPGKeyboardAction::CancelEdit };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::Edit instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_EDIT { wxPGKeyboardAction::Edit };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::PressButton instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_PRESS_BUTTON { wxPGKeyboardAction::PressButton };
+// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// because one will be given whenever they are used with any function now
+// taking wxPGKeyboardAction anyhow and giving multiple deprecation warnings
+// for the same line of code is more annoying than helpful.
+constexpr int wxPG_ACTION_INVALID  = static_cast<int>(wxPGKeyboardAction::Invalid);
+constexpr int wxPG_ACTION_NEXT_PROPERTY  = static_cast<int>(wxPGKeyboardAction::NextProperty);
+constexpr int wxPG_ACTION_PREV_PROPERTY  = static_cast<int>(wxPGKeyboardAction::PrevProperty);
+constexpr int wxPG_ACTION_EXPAND_PROPERTY  = static_cast<int>(wxPGKeyboardAction::ExpandProperty);
+constexpr int wxPG_ACTION_COLLAPSE_PROPERTY  = static_cast<int>(wxPGKeyboardAction::CollapseProperty);
+constexpr int wxPG_ACTION_CANCEL_EDIT  = static_cast<int>(wxPGKeyboardAction::CancelEdit);
+constexpr int wxPG_ACTION_EDIT  = static_cast<int>(wxPGKeyboardAction::Edit);
+constexpr int wxPG_ACTION_PRESS_BUTTON  = static_cast<int>(wxPGKeyboardAction::PressButton);
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
