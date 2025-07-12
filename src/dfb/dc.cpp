@@ -505,7 +505,7 @@ void wxDFBDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
 
     if ( f->GetStringExtents(string.utf8_str(), -1, &rect, nullptr) )
     {
-        // VS: YDEV is correct, it should *not* be XDEV, because font's are
+        // VS: YDEV is correct, it should *not* be XDEV, because fonts are
         //     only scaled according to m_scaleY
         xx = YDEV2LOGREL(rect.w);
         yy = YDEV2LOGREL(rect.h);
