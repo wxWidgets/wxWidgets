@@ -1,0 +1,1 @@
+wxAll (GUI): Avoid wxEVT_GRID_SELECT_CELL when creating wxGrid (#25498).
