@@ -623,7 +623,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
             // No selection change, just refresh the current selection.
             // Because it could be that the selection index changed
             // we need to update it.
-            // Note: this does not mean the selection it self changed.
+            // Note: this does not mean the selection itself changed.
             m_selection = selNew;
             m_pages[m_selection]->Refresh();
         }
