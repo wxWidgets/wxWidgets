@@ -186,9 +186,9 @@ TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::ColumnDrag", "[listctrl]")
     sim.MouseUp();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, begindrag.GetCount());
-    CPPUNIT_ASSERT(dragging.GetCount() > 0);
-    CPPUNIT_ASSERT_EQUAL(1, enddrag.GetCount());
+    CHECK( begindrag.GetCount() == 1 );
+    CHECK( dragging.GetCount() > 0 );
+    CHECK( enddrag.GetCount() == 1 );
 
     m_list->ClearAll();
 }
@@ -213,8 +213,8 @@ TEST_CASE_METHOD(ListCtrlTestCase, "ListCtrl::ColumnClick", "[listctrl]")
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, colclick.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, colrclick.GetCount());
+    CHECK( colclick.GetCount() == 1 );
+    CHECK( colrclick.GetCount() == 1 );
 
     m_list->ClearAll();
 }

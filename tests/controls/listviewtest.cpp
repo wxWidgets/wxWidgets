@@ -60,29 +60,29 @@ TEST_CASE_METHOD(ListViewTestCase, "ListView::Selection", "[listctrl][listview]"
     m_list->Select(2);
     m_list->Select(3);
 
-    CPPUNIT_ASSERT(m_list->IsSelected(0));
-    CPPUNIT_ASSERT(!m_list->IsSelected(1));
+    CHECK(m_list->IsSelected(0));
+    CHECK(!m_list->IsSelected(1));
 
     long sel = m_list->GetFirstSelected();
 
-    CPPUNIT_ASSERT_EQUAL(0, sel);
+    CHECK( sel == 0 );
 
     sel = m_list->GetNextSelected(sel);
 
-    CPPUNIT_ASSERT_EQUAL(2, sel);
+    CHECK( sel == 2 );
 
     sel = m_list->GetNextSelected(sel);
 
-    CPPUNIT_ASSERT_EQUAL(3, sel);
+    CHECK( sel == 3 );
 
     sel = m_list->GetNextSelected(sel);
 
-    CPPUNIT_ASSERT_EQUAL(-1, sel);
+    CHECK( sel == -1 );
 
     m_list->Select(0, false);
 
-    CPPUNIT_ASSERT(!m_list->IsSelected(0));
-    CPPUNIT_ASSERT_EQUAL(2, m_list->GetFirstSelected());
+    CHECK(!m_list->IsSelected(0));
+    CHECK( m_list->GetFirstSelected() == 2 );
 }
 
 TEST_CASE_METHOD(ListViewTestCase, "ListView::Focus", "[listctrl][listview]")
@@ -96,13 +96,13 @@ TEST_CASE_METHOD(ListViewTestCase, "ListView::Focus", "[listctrl][listview]")
     m_list->InsertItem(2, "Item 2");
     m_list->InsertItem(3, "Item 3");
 
-    CPPUNIT_ASSERT_EQUAL(0, focused.GetCount());
-    CPPUNIT_ASSERT_EQUAL(-1, m_list->GetFocusedItem());
+    CHECK( focused.GetCount() == 0 );
+    CHECK( m_list->GetFocusedItem() == -1 );
 
     m_list->Focus(0);
 
-    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
-    CPPUNIT_ASSERT_EQUAL(0, m_list->GetFocusedItem());
+    CHECK( focused.GetCount() == 1 );
+    CHECK( m_list->GetFocusedItem() == 0 );
 }
 
 #endif
