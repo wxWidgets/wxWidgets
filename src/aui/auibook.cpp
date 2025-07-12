@@ -1277,9 +1277,7 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxAuiNotebook* parent, wxWindowID id)
 {
 }
 
-wxAuiTabCtrl::~wxAuiTabCtrl()
-{
-}
+wxAuiTabCtrl::~wxAuiTabCtrl() = default;
 
 void wxAuiTabCtrl::DoShowTab(int idx)
 {
