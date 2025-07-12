@@ -343,12 +343,9 @@ class WXDLLIMPEXP_AUI wxAuiTabCtrl : public wxControl,
                                      public wxAuiTabContainer
 {
 public:
-
-    wxAuiTabCtrl(wxWindow* parent,
-                 wxWindowID id = wxID_ANY,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = 0);
+    // This constructor is only used internally by the library, applications
+    // never create objects of this type.
+    wxAuiTabCtrl(wxAuiNotebook* parent, wxWindowID id);
 
     ~wxAuiTabCtrl();
 

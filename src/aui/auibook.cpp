@@ -1267,13 +1267,14 @@ wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
 wxEND_EVENT_TABLE()
 
 
-wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
-                           wxWindowID id,
-                           const wxPoint& pos,
-                           const wxSize& size,
-                           long style) : wxControl(parent, id, pos, size, style)
+wxAuiTabCtrl::wxAuiTabCtrl(wxAuiNotebook* parent, wxWindowID id)
+            : wxControl(parent, id,
+                        wxDefaultPosition,
+                        wxDefaultSize,
+                        wxNO_BORDER | wxWANTS_CHARS,
+                        wxDefaultValidator,
+                        wxT("wxAuiTabCtrl"))
 {
-    SetName(wxT("wxAuiTabCtrl"));
 }
 
 wxAuiTabCtrl::~wxAuiTabCtrl()
@@ -2131,11 +2132,7 @@ void wxAuiNotebook::InitNotebook(long style)
 
 wxAuiTabFrame* wxAuiNotebook::CreateTabFrame(wxSize size)
 {
-    auto* const tabs = new wxAuiTabCtrl(this,
-                                        m_tabIdCounter++,
-                                        wxDefaultPosition,
-                                        wxDefaultSize,
-                                        wxNO_BORDER|wxWANTS_CHARS);
+    auto* const tabs = new wxAuiTabCtrl(this, m_tabIdCounter++);
     tabs->SetFlags(m_flags);
     tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
 
