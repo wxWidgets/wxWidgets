@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/controls/listbasetest.cpp
-// Purpose:     Base class for wxListCtrl and wxListView tests
+// Purpose:     Common wxListCtrl and wxListView tests
 // Author:      Steven Lamerton
 // Created:     2010-07-20
-// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>,
+// Copyright:   (c) 2008,2025 Vadim Zeitlin <vadim@wxwidgets.org>,
 //              (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +52,7 @@ void ListBaseTestCase::ColumnsOrder()
     // check that the order is natural in the beginning
     const wxArrayInt orderOrig = list->GetColumnsOrder();
     for ( n = 0; n < NUM_COLS; n++ )
-        CPPUNIT_ASSERT_EQUAL( n, orderOrig[n] );
+        CHECK( orderOrig[n]  == n );
 
     // then rearrange them: using { 2, 0, 1 } order means that column 2 is
     // shown first, then column 0 and finally column 1
@@ -65,31 +65,31 @@ void ListBaseTestCase::ColumnsOrder()
     // check that we get back the same order as we set
     const wxArrayInt orderNew = list->GetColumnsOrder();
     for ( n = 0; n < NUM_COLS; n++ )
-        CPPUNIT_ASSERT_EQUAL( order[n], orderNew[n] );
+        CHECK( orderNew[n]  == order[n] );
 
     // and the order -> index mappings for individual columns
     for ( n = 0; n < NUM_COLS; n++ )
-        CPPUNIT_ASSERT_EQUAL( order[n], list->GetColumnIndexFromOrder(n) );
+        CHECK( list->GetColumnIndexFromOrder(n)  == order[n] );
 
     // and also the reverse mapping
-    CPPUNIT_ASSERT_EQUAL( 1, list->GetColumnOrder(0) );
-    CPPUNIT_ASSERT_EQUAL( 2, list->GetColumnOrder(1) );
-    CPPUNIT_ASSERT_EQUAL( 0, list->GetColumnOrder(2) );
+    CHECK( list->GetColumnOrder(0)  == 1 );
+    CHECK( list->GetColumnOrder(1)  == 2 );
+    CHECK( list->GetColumnOrder(2)  == 0 );
 
 
     // finally check that accessors still use indices, not order
-    CPPUNIT_ASSERT( list->GetColumn(0, li) );
-    CPPUNIT_ASSERT_EQUAL( "Column 0", li.GetText() );
+    CHECK( list->GetColumn(0, li) );
+    CHECK( li.GetText()  == "Column 0" );
 
     li.SetId(0);
     li.SetColumn(1);
-    CPPUNIT_ASSERT( list->GetItem(li) );
-    CPPUNIT_ASSERT_EQUAL( "first in first", li.GetText() );
+    CHECK( list->GetItem(li) );
+    CHECK( li.GetText()  == "first in first" );
 
     li.SetId(1);
     li.SetColumn(2);
-    CPPUNIT_ASSERT( list->GetItem(li) );
-    CPPUNIT_ASSERT_EQUAL( "second in second", li.GetText() );
+    CHECK( list->GetItem(li) );
+    CHECK( li.GetText()  == "second in second" );
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
 }
 
@@ -111,17 +111,17 @@ void ListBaseTestCase::ItemRect()
     // do test
     wxRect r;
     WX_ASSERT_FAILS_WITH_ASSERT( list->GetItemRect(1, r) );
-    CPPUNIT_ASSERT( list->GetItemRect(0, r) );
-    CPPUNIT_ASSERT_EQUAL( 150, r.GetWidth() );
+    CHECK( list->GetItemRect(0, r) );
+    CHECK( r.GetWidth()  == 150 );
 
-    CPPUNIT_ASSERT( list->GetSubItemRect(0, 0, r) );
-    CPPUNIT_ASSERT_EQUAL( 60, r.GetWidth() );
+    CHECK( list->GetSubItemRect(0, 0, r) );
+    CHECK( r.GetWidth()  == 60 );
 
-    CPPUNIT_ASSERT( list->GetSubItemRect(0, 1, r) );
-    CPPUNIT_ASSERT_EQUAL( 50, r.GetWidth() );
+    CHECK( list->GetSubItemRect(0, 1, r) );
+    CHECK( r.GetWidth()  == 50 );
 
-    CPPUNIT_ASSERT( list->GetSubItemRect(0, 2, r) );
-    CPPUNIT_ASSERT_EQUAL( 40, r.GetWidth() );
+    CHECK( list->GetSubItemRect(0, 2, r) );
+    CHECK( r.GetWidth()  == 40 );
 
     WX_ASSERT_FAILS_WITH_ASSERT( list->GetSubItemRect(0, 3, r) );
 
@@ -131,13 +131,13 @@ void ListBaseTestCase::ItemRect()
     //
     // Notice that we consider that the header can't be less than 10 pixels
     // because we don't know its exact height.
-    CPPUNIT_ASSERT( list->GetItemRect(0, r) );
-    CPPUNIT_ASSERT( r.y >= 10 );
+    CHECK( list->GetItemRect(0, r) );
+    CHECK( r.y >= 10 );
 
     // However if we remove the header now, the item should be at (0, 0).
     list->SetWindowStyle(wxLC_REPORT | wxLC_NO_HEADER);
-    CPPUNIT_ASSERT( list->GetItemRect(0, r) );
-    CPPUNIT_ASSERT_EQUAL( 0, r.y );
+    CHECK( list->GetItemRect(0, r) );
+    CHECK( r.y  == 0 );
 }
 
 void ListBaseTestCase::ItemText()
@@ -148,11 +148,11 @@ void ListBaseTestCase::ItemText()
     list->InsertColumn(1, "Second");
 
     list->InsertItem(0, "0,0");
-    CPPUNIT_ASSERT_EQUAL( "0,0", list->GetItemText(0) );
-    CPPUNIT_ASSERT_EQUAL( "", list->GetItemText(0, 1) );
+    CHECK( list->GetItemText(0) == "0,0" );
+    CHECK( list->GetItemText(0, 1)  == "" );
 
     list->SetItem(0, 1, "0,1");
-    CPPUNIT_ASSERT_EQUAL( "0,1", list->GetItemText(0, 1) );
+    CHECK( list->GetItemText(0, 1) == "0,1" );
 }
 
 void ListBaseTestCase::ChangeMode()
@@ -162,22 +162,24 @@ void ListBaseTestCase::ChangeMode()
     list->InsertColumn(0, "Header");
     list->InsertItem(0, "First");
     list->InsertItem(1, "Second");
-    CPPUNIT_ASSERT_EQUAL( 2, list->GetItemCount() );
+    CHECK( list->GetItemCount()  == 2 );
 
     // check that switching the mode preserves the items
     list->SetWindowStyle(wxLC_ICON);
-    CPPUNIT_ASSERT_EQUAL( 2, list->GetItemCount() );
-    CPPUNIT_ASSERT_EQUAL( "First", list->GetItemText(0) );
+    CHECK( list->GetItemCount()  == 2 );
+    CHECK( list->GetItemText(0)  == "First" );
 
     // and so does switching back
     list->SetWindowStyle(wxLC_REPORT);
-    CPPUNIT_ASSERT_EQUAL( 2, list->GetItemCount() );
-    CPPUNIT_ASSERT_EQUAL( "First", list->GetItemText(0) );
+    CHECK( list->GetItemCount()  == 2 );
+    CHECK( list->GetItemText(0)  == "First" );
 }
 
 void ListBaseTestCase::MultiSelect()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
 
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
     // FIXME: This test fails on GitHub CI under wxGTK2 although works fine on
@@ -224,10 +226,10 @@ void ListBaseTestCase::MultiSelect()
 
     // when the first item was selected the focus changes to it, but not
     // on subsequent clicks
-    CPPUNIT_ASSERT_EQUAL(4, list->GetSelectedItemCount()); // item 2 to 5 (inclusive) are selected
-    CPPUNIT_ASSERT_EQUAL(2, focused.GetCount()); // count the focus which was on the anchor
-    CPPUNIT_ASSERT_EQUAL(4, selected.GetCount());
-    CPPUNIT_ASSERT_EQUAL(0, deselected.GetCount());
+    CHECK( list->GetSelectedItemCount() == 4 ); // item 2 to 5 (inclusive) are selected
+    CHECK( focused.GetCount() == 2 ); // count the focus which was on the anchor
+    CHECK( selected.GetCount() == 4 );
+    CHECK( deselected.GetCount() == 0 );
 
     focused.Clear();
     selected.Clear();
@@ -236,10 +238,10 @@ void ListBaseTestCase::MultiSelect()
     sim.Char(WXK_END, wxMOD_SHIFT); // extend the selection to the last item
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(8, list->GetSelectedItemCount()); // item 2 to 9 (inclusive) are selected
-    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // focus is on the last item
-    CPPUNIT_ASSERT_EQUAL(4, selected.GetCount()); // only newly selected items got the event
-    CPPUNIT_ASSERT_EQUAL(0, deselected.GetCount());
+    CHECK( list->GetSelectedItemCount() == 8 ); // item 2 to 9 (inclusive) are selected
+    CHECK( focused.GetCount() == 1 ); // focus is on the last item
+    CHECK( selected.GetCount() == 4); // only newly selected items got the event
+    CHECK( deselected.GetCount() == 0 );
 
     focused.Clear();
     selected.Clear();
@@ -248,10 +250,10 @@ void ListBaseTestCase::MultiSelect()
     sim.Char(WXK_HOME, wxMOD_SHIFT); // select from anchor to the first item
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(3, list->GetSelectedItemCount()); // item 0 to 2 (inclusive) are selected
-    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // focus is on item 0
-    CPPUNIT_ASSERT_EQUAL(2, selected.GetCount()); // events are only generated for item 0 and 1
-    CPPUNIT_ASSERT_EQUAL(7, deselected.GetCount()); // item 2 (exclusive) to 9 are deselected
+    CHECK( list->GetSelectedItemCount() == 3 ); // item 0 to 2 (inclusive) are selected
+    CHECK( focused.GetCount() == 1 ); // focus is on item 0
+    CHECK( selected.GetCount() == 2 ); // events are only generated for item 0 and 1
+    CHECK( deselected.GetCount() == 7 ); // item 2 (exclusive) to 9 are deselected
 
     focused.Clear();
     selected.Clear();
@@ -269,10 +271,10 @@ void ListBaseTestCase::MultiSelect()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, list->GetSelectedItemCount()); // anchor is the only selected item
-    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // because the focus changed from item 0 to anchor
-    CPPUNIT_ASSERT_EQUAL(0, selected.GetCount()); // anchor is already in selection state
-    CPPUNIT_ASSERT_EQUAL(2, deselected.GetCount()); // items 0 and 1 are deselected
+    CHECK( list->GetSelectedItemCount() == 1 ); // anchor is the only selected item
+    CHECK( focused.GetCount() == 1 ); // because the focus changed from item 0 to anchor
+    CHECK( selected.GetCount() == 0 ); // anchor is already in selection state
+    CHECK( deselected.GetCount() == 2 ); // items 0 and 1 are deselected
 
     focused.Clear();
     selected.Clear();
@@ -300,16 +302,18 @@ void ListBaseTestCase::MultiSelect()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, list->GetSelectedItemCount()); // item 3 is the only selected item
-    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount()); // because the focus changed from anchor to item 3
-    CPPUNIT_ASSERT_EQUAL(2, selected.GetCount()); // item 3 was selected twice
-    CPPUNIT_ASSERT_EQUAL(2, deselected.GetCount()); // anchor and item 3 were each deselected once
+    CHECK( list->GetSelectedItemCount() == 1 ); // item 3 is the only selected item
+    CHECK( focused.GetCount() == 1 ); // because the focus changed from anchor to item 3
+    CHECK( selected.GetCount() == 2 ); // item 3 was selected twice
+    CHECK( deselected.GetCount() == 2 ); // anchor and item 3 were each deselected once
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
 void ListBaseTestCase::ItemClick()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
 
 #ifdef __WXMSW__
     // FIXME: This test fails on MSW buildbot slaves although works fine on
@@ -366,17 +370,20 @@ void ListBaseTestCase::ItemClick()
 
     // when the first item was selected the focus changes to it, but not
     // on subsequent clicks
-    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, selected.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, deselected.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
+    CHECK( focused.GetCount() == 1 );
+    CHECK( selected.GetCount() == 1 );
+    CHECK( deselected.GetCount() == 1 );
+    CHECK( activated.GetCount() == 1 );
+    CHECK( rclick.GetCount() == 1 );
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
 void ListBaseTestCase::KeyDown()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     wxListCtrl* const list = GetList();
 
     EventCounter keydown(list, wxEVT_LIST_KEY_DOWN);
@@ -388,7 +395,7 @@ void ListBaseTestCase::KeyDown()
     sim.Text("aAbB"); // 4 letters + 2 shift mods.
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(6, keydown.GetCount());
+    CHECK( keydown.GetCount() == 6 );
 #endif
 }
 
@@ -426,8 +433,8 @@ void ListBaseTestCase::DeleteItems()
     list->ClearAll();
     list->DeleteAllItems();
 
-    CPPUNIT_ASSERT_EQUAL(2, deleteitem.GetCount());
-    CPPUNIT_ASSERT_EQUAL(2, deleteall.GetCount());
+    CHECK( deleteitem.GetCount() == 2 );
+    CHECK( deleteall.GetCount() == 2 );
 #endif
 }
 
@@ -446,7 +453,7 @@ void ListBaseTestCase::InsertItem()
     list->InsertItem(item);
     list->InsertItem(1, "more text");
 
-    CPPUNIT_ASSERT_EQUAL(2, insert.GetCount());
+    CHECK( insert.GetCount() == 2 );
 }
 
 void ListBaseTestCase::Find()
@@ -469,10 +476,10 @@ void ListBaseTestCase::Find()
     list->InsertItem(3, "ITEM 01");
     list->SetItem(3, 1, "first column");
 
-    CPPUNIT_ASSERT_EQUAL(1, list->FindItem(-1, "Item 1"));
-    CPPUNIT_ASSERT_EQUAL(2, list->FindItem(-1, "Item 4", true));
-    CPPUNIT_ASSERT_EQUAL(2, list->FindItem(1, "Item 40"));
-    CPPUNIT_ASSERT_EQUAL(3, list->FindItem(2, "Item 0", true));
+    CHECK( list->FindItem(-1, "Item 1") == 1 );
+    CHECK( list->FindItem(-1, "Item 4", true) == 2 );
+    CHECK( list->FindItem(1, "Item 40") == 2 );
+    CHECK( list->FindItem(2, "Item 0", true) == 3 );
 }
 
 void ListBaseTestCase::Visible()
@@ -489,16 +496,16 @@ void ListBaseTestCase::Visible()
         list->InsertItem(i, wxString::Format("string %d", i));
     }
 
-    CPPUNIT_ASSERT_EQUAL(count + 10, list->GetItemCount());
-    CPPUNIT_ASSERT_EQUAL(0, list->GetTopItem());
-    CPPUNIT_ASSERT(list->IsVisible(0));
-    CPPUNIT_ASSERT(!list->IsVisible(count + 1));
+    CHECK( list->GetItemCount() == count + 10 );
+    CHECK( list->GetTopItem() == 0 );
+    CHECK(list->IsVisible(0));
+    CHECK(!list->IsVisible(count + 1));
 
-    CPPUNIT_ASSERT(list->EnsureVisible(count + 9));
-    CPPUNIT_ASSERT(list->IsVisible(count + 9));
-    CPPUNIT_ASSERT(!list->IsVisible(9));
+    CHECK(list->EnsureVisible(count + 9));
+    CHECK(list->IsVisible(count + 9));
+    CHECK(!list->IsVisible(9));
 
-    CPPUNIT_ASSERT(list->GetTopItem() != 0);
+    CHECK(list->GetTopItem() != 0);
 }
 
 void ListBaseTestCase::ItemFormatting()
@@ -516,16 +523,19 @@ void ListBaseTestCase::ItemFormatting()
     list->SetItemTextColour(0, *wxRED);
     list->SetItemBackgroundColour(1, *wxBLUE);
 
-    CPPUNIT_ASSERT_EQUAL(*wxGREEN, list->GetBackgroundColour());
-    CPPUNIT_ASSERT_EQUAL(*wxBLUE,list->GetItemBackgroundColour(1));
+    CHECK( list->GetBackgroundColour() == *wxGREEN );
+    CHECK( list->GetItemBackgroundColour(1) == *wxBLUE );
 
-    CPPUNIT_ASSERT_EQUAL(*wxYELLOW, list->GetTextColour());
-    CPPUNIT_ASSERT_EQUAL(*wxRED, list->GetItemTextColour(0));
+    CHECK( list->GetTextColour() == *wxYELLOW );
+    CHECK( list->GetItemTextColour(0) == *wxRED );
 }
 
 void ListBaseTestCase::EditLabel()
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     wxListCtrl* const list = GetList();
 
     list->SetWindowStyleFlag(wxLC_REPORT | wxLC_EDIT_LABELS);
@@ -550,8 +560,8 @@ void ListBaseTestCase::EditLabel()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, beginedit.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, endedit.GetCount());
+    CHECK( beginedit.GetCount() == 1 );
+    CHECK( endedit.GetCount() == 1 );
 #endif
 }
 
@@ -568,7 +578,7 @@ void ListBaseTestCase::ImageList()
 
     list->AssignImageList(imglist, wxIMAGE_LIST_NORMAL);
 
-    CPPUNIT_ASSERT_EQUAL(imglist, list->GetImageList(wxIMAGE_LIST_NORMAL));
+    CHECK( list->GetImageList(wxIMAGE_LIST_NORMAL) == imglist );
 }
 
 void ListBaseTestCase::HitTest()
@@ -608,22 +618,19 @@ void ListBaseTestCase::HitTest()
     int xCheckBox = rectSubItem0.GetLeft() + (rectIcon.GetLeft() -
                     rectSubItem0.GetLeft()) / 2;
     list->HitTest(wxPoint(xCheckBox, y), flags);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected wxLIST_HITTEST_ONITEMSTATEICON",
-        wxLIST_HITTEST_ONITEMSTATEICON, flags);
+    CHECK( flags == wxLIST_HITTEST_ONITEMSTATEICON );
 
     // icon
     int xIcon = rectIcon.GetLeft() + (rectIcon.GetRight() - rectIcon.GetLeft()) / 2;
     list->HitTest(wxPoint(xIcon, y), flags);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected wxLIST_HITTEST_ONITEMICON",
-        wxLIST_HITTEST_ONITEMICON, flags);
+    CHECK( flags == wxLIST_HITTEST_ONITEMICON );
 
     // label, beyond column 0
     wxRect rectItem;
     list->GetItemRect(0, rectItem); // entire item
     int xHit = rectSubItem0.GetRight() + (rectItem.GetRight() - rectSubItem0.GetRight()) / 2;
     list->HitTest(wxPoint(xHit, y), flags);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected wxLIST_HITTEST_ONITEMLABEL",
-        wxLIST_HITTEST_ONITEMLABEL, flags);
+    CHECK( flags == wxLIST_HITTEST_ONITEMLABEL );
 #endif // __WXMSW__
 }
 
@@ -657,8 +664,8 @@ void ListBaseTestCase::Sort()
 
     list->SortItems(MyCompareFunction, 0);
 
-    CPPUNIT_ASSERT_EQUAL("Item 1", list->GetItemText(0));
-    CPPUNIT_ASSERT_EQUAL("Item 0", list->GetItemText(1));
+    CHECK( list->GetItemText(0) == "Item 1" );
+    CHECK( list->GetItemText(1) == "Item 0" );
 }
 
 #endif //wxUSE_LISTCTRL
