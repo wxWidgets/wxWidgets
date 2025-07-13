@@ -4121,6 +4121,12 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
         if ( m_selection.OnItemsDeleted(row + 1, countDeletedRows) )
         {
             SendSelectionChangedEvent(GetItemByRow(row));
+
+            // The event handler for wxEVT_DATAVIEW_SELECTION_CHANGED could
+            // have called Collapse() itself, in which case the node would be
+            // already closed and we shouldn't try to close it again.
+            if ( !node->IsOpen() )
+                return;
         }
 
         node->ToggleOpen(this);
