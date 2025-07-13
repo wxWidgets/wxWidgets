@@ -19,6 +19,8 @@
     #include "wx/scrolbar.h"
 #endif
 
+#include "wx/stc/stc.h"
+
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
     #include "wx/osx/private/available.h"
@@ -1021,9 +1023,34 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    wxUnusedVar(aRange);
-    wxUnusedVar(actualRange);
-    return NSMakeRect(0, 0, 0, 0);
+#pragma unused(actualRange)
+    NSRect rect = NSZeroRect;
+
+#if wxUSE_STC
+    const auto impl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget(self);
+    if (!impl) return rect;
+
+    auto textCtrl = dynamic_cast<wxStyledTextCtrl*>(impl->GetWXPeer());
+    if (!textCtrl) return rect;
+
+    const auto pos = textCtrl->GetCurrentPos();
+    const auto point = textCtrl->PointFromPosition(pos);
+    const auto line = textCtrl->LineFromPosition(pos);
+    const auto textHeight = textCtrl->TextHeight(line);
+
+    rect = NSMakeRect(
+        point.x,
+        point.y,
+        2,
+        textHeight
+    );
+
+    id view = impl->GetWXWidget();
+    rect = [view convertRect: rect toView: nil];
+	rect = [[view window] convertRectToScreen: rect];
+#endif
+
+    return rect;
 }
 - (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
 {
