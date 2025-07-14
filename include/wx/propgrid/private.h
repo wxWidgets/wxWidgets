@@ -188,29 +188,29 @@ wxDECLARE_EVENT(wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
 // Flags used only internally
 
 // wxBoolProperty, wxFlagsProperty specific flags
-constexpr wxPGPropertyFlags wxPGPropertyFlags_UseCheckBox = wxPGPropertyFlags::Reserved_1;
+constexpr wxPGFlags wxPGPropertyFlags_UseCheckBox = wxPGFlags::Reserved_1;
 // DCC = Double Click Cycles
-constexpr wxPGPropertyFlags wxPGPropertyFlags_UseDCC = wxPGPropertyFlags::Reserved_2;
+constexpr wxPGFlags wxPGPropertyFlags_UseDCC = wxPGFlags::Reserved_2;
 
 // wxStringProperty flag
-constexpr wxPGPropertyFlags wxPGPropertyFlags_Password = wxPGPropertyFlags::Reserved_2;
+constexpr wxPGFlags wxPGPropertyFlags_Password = wxPGFlags::Reserved_2;
 
 // wxColourProperty flag - if set, then match from list is searched for a custom colour.
-constexpr wxPGPropertyFlags wxPGPropertyFlags_TranslateCustom = wxPGPropertyFlags::Reserved_1;
+constexpr wxPGFlags wxPGPropertyFlags_TranslateCustom = wxPGFlags::Reserved_1;
 
 // wxCursorProperty, wxSystemColourProperty - If set, then selection of choices is static
 // and should not be changed (i.e. returns nullptr in GetPropertyChoices).
-constexpr wxPGPropertyFlags wxPGPropertyFlags_StaticChoices = wxPGPropertyFlags::Reserved_1;
+constexpr wxPGFlags wxPGPropertyFlags_StaticChoices = wxPGFlags::Reserved_1;
 
-// wxSystemColourProperty - wxEnumProperty based classes cannot use wxPGPropertyFlags::Reserved_1
-constexpr wxPGPropertyFlags wxPGPropertyFlags_HideCustomColour = wxPGPropertyFlags::Reserved_2;
-constexpr wxPGPropertyFlags wxPGPropertyFlags_ColourHasAlpha = wxPGPropertyFlags::Reserved_3;
+// wxSystemColourProperty - wxEnumProperty based classes cannot use wxPGFlags::Reserved_1
+constexpr wxPGFlags wxPGPropertyFlags_HideCustomColour = wxPGFlags::Reserved_2;
+constexpr wxPGFlags wxPGPropertyFlags_ColourHasAlpha = wxPGFlags::Reserved_3;
 
 // wxFileProperty - if set, full path is shown in wxFileProperty.
-constexpr wxPGPropertyFlags wxPGPropertyFlags_ShowFullFileName = wxPGPropertyFlags::Reserved_1;
+constexpr wxPGFlags wxPGPropertyFlags_ShowFullFileName = wxPGFlags::Reserved_1;
 
 // wxLongStringProperty - flag used to mark that edit button
 // should be enabled even in the read-only mode.
-constexpr wxPGPropertyFlags wxPGPropertyFlags_ActiveButton = wxPGPropertyFlags::Reserved_3;
+constexpr wxPGFlags wxPGPropertyFlags_ActiveButton = wxPGFlags::Reserved_3;
 
 #endif // _WX_PROPGRID_PRIVATE_H_

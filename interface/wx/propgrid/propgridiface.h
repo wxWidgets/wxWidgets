@@ -368,7 +368,7 @@ public:
             See @ref propgrid_iterator_flags.
     */
     void GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
-                                wxPGPropertyFlags flags,
+                                wxPGFlags flags,
                                 bool inverse = false,
                                 int iterFlags = (wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES) ) const;
 

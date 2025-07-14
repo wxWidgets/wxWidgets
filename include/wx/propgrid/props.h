@@ -458,7 +458,7 @@ public:
 #if WXWIN_COMPATIBILITY_3_2
 // If set, then selection of choices is static and should not be
 // changed (i.e. returns nullptr in GetPropertyChoices).
-constexpr int wxPG_PROP_STATIC_CHOICES = static_cast<int>(wxPGPropertyFlags::Reserved_1);
+constexpr int wxPG_PROP_STATIC_CHOICES = wxPG_PROP_CLASS_SPECIFIC_1;
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // Represents a single selection from a list of choices
@@ -763,7 +763,7 @@ protected:
 // -----------------------------------------------------------------------
 
 #if WXWIN_COMPATIBILITY_3_2
-constexpr int wxPG_PROP_SHOW_FULL_FILENAME = static_cast<int>(wxPGPropertyFlags::Reserved_1);
+constexpr int wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_CLASS_SPECIFIC_1;
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // Like wxLongStringProperty, but the button triggers file selector instead.
@@ -820,7 +820,7 @@ protected:
 #if WXWIN_COMPATIBILITY_3_2
 // Flag used in wxLongStringProperty to mark that edit button
 // should be enabled even in the read-only mode.
-constexpr int wxPG_PROP_ACTIVE_BTN = static_cast<int>(wxPGPropertyFlags::Reserved_3);
+constexpr int wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_3;
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // Like wxStringProperty, but has a button that triggers a small text

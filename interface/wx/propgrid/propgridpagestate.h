@@ -146,26 +146,26 @@ enum wxPG_ITERATOR_FLAGS
     aggregate or hidden items by default).
     @hideinitializer
 */
-wxPG_ITERATE_PROPERTIES = wxPGPropertyFlags::Property |
-                          wxPGPropertyFlags::MiscParent |
-                          wxPGPropertyFlags::Aggregate |
-                          wxPGPropertyFlags::Collapsed |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::MiscParent) |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::Category),
+wxPG_ITERATE_PROPERTIES = wxPGFlags::Property |
+                          wxPGFlags::MiscParent |
+                          wxPGFlags::Aggregate |
+                          wxPGFlags::Collapsed |
+                          wxPG_IT_CHILDREN(wxPGFlags::MiscParent) |
+                          wxPG_IT_CHILDREN(wxPGFlags::Category),
 
 /**
     Iterate children of collapsed parents, and individual items that are hidden.
     @hideinitializer
 */
-wxPG_ITERATE_HIDDEN = wxPGPropertyFlags::Hidden |
-                      wxPG_IT_CHILDREN(wxPGPropertyFlags::Collapsed),
+wxPG_ITERATE_HIDDEN = wxPGFlags::Hidden |
+                      wxPG_IT_CHILDREN(wxPGFlags::Collapsed),
 
 /**
     Iterate children of parent that is an aggregate property (ie has fixed
     children).
     @hideinitializer
 */
-wxPG_ITERATE_FIXED_CHILDREN = wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate) |
+wxPG_ITERATE_FIXED_CHILDREN = wxPG_IT_CHILDREN(wxPGFlags::Aggregate) |
                               wxPG_ITERATE_PROPERTIES,
 
 /** Iterate categories.
@@ -173,16 +173,16 @@ wxPG_ITERATE_FIXED_CHILDREN = wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate) |
     through.
     @hideinitializer
 */
-wxPG_ITERATE_CATEGORIES = wxPGPropertyFlags::Category |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::Category) |
-                          wxPGPropertyFlags::Collapsed,
+wxPG_ITERATE_CATEGORIES = wxPGFlags::Category |
+                          wxPG_IT_CHILDREN(wxPGFlags::Category) |
+                          wxPGFlags::Collapsed,
 
 /**
     @hideinitializer
 */
-wxPG_ITERATE_ALL_PARENTS = wxPGPropertyFlags::MiscParent |
-                           wxPGPropertyFlags::Aggregate |
-                           wxPGPropertyFlags::Category,
+wxPG_ITERATE_ALL_PARENTS = wxPGFlags::MiscParent |
+                           wxPGFlags::Aggregate |
+                           wxPGFlags::Category,
 
 /**
     @hideinitializer
@@ -194,12 +194,12 @@ wxPG_ITERATE_ALL_PARENTS_RECURSIVELY = wxPG_ITERATE_ALL_PARENTS |
 /**
     @hideinitializer
 */
-wxPG_ITERATOR_FLAGS_ALL = wxPGPropertyFlags::Property |
-                          wxPGPropertyFlags::MiscParent |
-                          wxPGPropertyFlags::Aggregate |
-                          wxPGPropertyFlags::Hidden |
-                          wxPGPropertyFlags::Category |
-                          wxPGPropertyFlags::Collapsed,
+wxPG_ITERATOR_FLAGS_ALL = wxPGFlags::Property |
+                          wxPGFlags::MiscParent |
+                          wxPGFlags::Aggregate |
+                          wxPGFlags::Hidden |
+                          wxPGFlags::Category |
+                          wxPGFlags::Collapsed,
 
 /**
     @hideinitializer
@@ -217,8 +217,8 @@ wxPG_ITERATOR_MASK_OP_PARENT = wxPG_ITERATOR_FLAGS_ALL,
     @hideinitializer
 */
 wxPG_ITERATE_VISIBLE = wxPG_ITERATE_PROPERTIES |
-                       wxPGPropertyFlags::Category |
-                       wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate),
+                       wxPGFlags::Category |
+                       wxPG_IT_CHILDREN(wxPGFlags::Aggregate),
 
 /**
     Iterate all items.

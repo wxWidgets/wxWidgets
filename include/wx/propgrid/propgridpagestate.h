@@ -204,54 +204,54 @@ enum wxPG_ITERATOR_FLAGS
 
 // Iterate through 'normal' property items (does not include children of
 // aggregate or hidden items by default).
-wxPG_ITERATE_PROPERTIES = wxPGPropertyFlags::Property |
-                          wxPGPropertyFlags::MiscParent |
-                          wxPGPropertyFlags::Aggregate |
-                          wxPGPropertyFlags::Collapsed |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::MiscParent) |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::Category),
+wxPG_ITERATE_PROPERTIES = wxPGFlags::Property |
+                          wxPGFlags::MiscParent |
+                          wxPGFlags::Aggregate |
+                          wxPGFlags::Collapsed |
+                          wxPG_IT_CHILDREN(wxPGFlags::MiscParent) |
+                          wxPG_IT_CHILDREN(wxPGFlags::Category),
 
 // Iterate children of collapsed parents, and individual items that are hidden.
-wxPG_ITERATE_HIDDEN = wxPGPropertyFlags::Hidden |
-                      wxPG_IT_CHILDREN(wxPGPropertyFlags::Collapsed),
+wxPG_ITERATE_HIDDEN = wxPGFlags::Hidden |
+                      wxPG_IT_CHILDREN(wxPGFlags::Collapsed),
 
 // Iterate children of parent that is an aggregate property (ie has fixed
 // children).
-wxPG_ITERATE_FIXED_CHILDREN = wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate) |
+wxPG_ITERATE_FIXED_CHILDREN = wxPG_IT_CHILDREN(wxPGFlags::Aggregate) |
                               wxPG_ITERATE_PROPERTIES,
 
 // Iterate categories.
 // Note that even without this flag, children of categories are still iterated
 // through.
-wxPG_ITERATE_CATEGORIES = wxPGPropertyFlags::Category |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::Category) |
-                          wxPGPropertyFlags::Collapsed,
+wxPG_ITERATE_CATEGORIES = wxPGFlags::Category |
+                          wxPG_IT_CHILDREN(wxPGFlags::Category) |
+                          wxPGFlags::Collapsed,
 
-wxPG_ITERATE_ALL_PARENTS = static_cast<int>(wxPGPropertyFlags::MiscParent |
-                           wxPGPropertyFlags::Aggregate |
-                           wxPGPropertyFlags::Category),
+wxPG_ITERATE_ALL_PARENTS = static_cast<int>(wxPGFlags::MiscParent |
+                           wxPGFlags::Aggregate |
+                           wxPGFlags::Category),
 
 wxPG_ITERATE_ALL_PARENTS_RECURSIVELY = wxPG_ITERATE_ALL_PARENTS |
                                        wxPG_IT_CHILDREN(
                                                 wxPG_ITERATE_ALL_PARENTS),
 
-wxPG_ITERATOR_FLAGS_ALL = static_cast<int>(wxPGPropertyFlags::Property |
-                          wxPGPropertyFlags::MiscParent |
-                          wxPGPropertyFlags::Aggregate |
-                          wxPGPropertyFlags::Hidden |
-                          wxPGPropertyFlags::Category |
-                          wxPGPropertyFlags::Collapsed),
+wxPG_ITERATOR_FLAGS_ALL = static_cast<int>(wxPGFlags::Property |
+                          wxPGFlags::MiscParent |
+                          wxPGFlags::Aggregate |
+                          wxPGFlags::Hidden |
+                          wxPGFlags::Category |
+                          wxPGFlags::Collapsed),
 
 wxPG_ITERATOR_MASK_OP_ITEM = wxPG_ITERATOR_FLAGS_ALL,
 
-// (wxPGPropertyFlags::MiscParent|wxPGPropertyFlags::Aggregate|wxPGPropertyFlags::Category)
+// (wxPGFlags::MiscParent|wxPGFlags::Aggregate|wxPGFlags::Category)
 wxPG_ITERATOR_MASK_OP_PARENT = wxPG_ITERATOR_FLAGS_ALL,
 
 // Combines all flags needed to iterate through visible properties
 // (ie. hidden properties and children of collapsed parents are skipped).
 wxPG_ITERATE_VISIBLE = wxPG_ITERATE_PROPERTIES |
-                       wxPGPropertyFlags::Category |
-                       wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate),
+                       wxPGFlags::Category |
+                       wxPG_IT_CHILDREN(wxPGFlags::Aggregate),
 
 // Iterate all items.
 wxPG_ITERATE_ALL = wxPG_ITERATE_VISIBLE |
@@ -267,11 +267,11 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
 
 };
 
-inline void wxPGCreateIteratorMasks(int flags, wxPGPropertyFlags& itemExMask, wxPGPropertyFlags& parentExMask)
+inline void wxPGCreateIteratorMasks(int flags, wxPGFlags& itemExMask, wxPGFlags& parentExMask)
 {
-    itemExMask = static_cast<wxPGPropertyFlags>((flags ^ wxPG_ITERATOR_MASK_OP_ITEM) &
+    itemExMask = static_cast<wxPGFlags>((flags ^ wxPG_ITERATOR_MASK_OP_ITEM) &
         wxPG_ITERATOR_MASK_OP_ITEM & 0xFFFF);
-    parentExMask = static_cast<wxPGPropertyFlags>(((flags >> 16) ^ wxPG_ITERATOR_MASK_OP_PARENT) &
+    parentExMask = static_cast<wxPGFlags>(((flags >> 16) ^ wxPG_ITERATOR_MASK_OP_PARENT) &
         wxPG_ITERATOR_MASK_OP_PARENT & 0xFFFF);
 }
 
@@ -328,8 +328,8 @@ private:
     wxPGProperty*               m_baseParent;
 
     // Masks are used to quickly exclude items
-    wxPGPropertyFlags           m_itemExMask;
-    wxPGPropertyFlags           m_parentExMask;
+    wxPGFlags           m_itemExMask;
+    wxPGFlags           m_parentExMask;
 };
 
 template <typename PROPERTY, typename STATE>
@@ -632,7 +632,7 @@ protected:
 
     void DoLimitPropertyEditing(wxPGProperty* p, bool limit = true)
     {
-        p->SetFlagRecursively(wxPGPropertyFlags::NoEditor, limit);
+        p->SetFlagRecursively(wxPGFlags::NoEditor, limit);
     }
 
     bool DoSelectProperty(wxPGProperty* p, wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::Null);

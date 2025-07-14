@@ -250,8 +250,8 @@ wxPG_EX_HELP_AS_TOOLTIPS            = 0x00010000,
 wxPG_EX_NATIVE_DOUBLE_BUFFERING         = 0x00080000,
 
 // Set this style to let user have ability to set values of properties to
-// unspecified state. Same as setting wxPGPropertyFlags::AutoUnspecified for
-// all properties.
+// unspecified state. Same as setting wxPGFlags::AutoUnspecified for all
+// properties.
 wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
 
 // If this style is used, built-in attributes (such as wxPG_FLOAT_PRECISION
@@ -1306,10 +1306,10 @@ public:
     // Called to indicate property and editor has valid value now.
     void OnValidationFailureReset( wxPGProperty* property )
     {
-        if ( property && property->HasFlag(wxPGPropertyFlags::InvalidValue) )
+        if ( property && property->HasFlag(wxPGFlags::InvalidValue) )
         {
             DoOnValidationFailureReset(property);
-            property->ClearFlag(wxPGPropertyFlags::InvalidValue);
+            property->ClearFlag(wxPGFlags::InvalidValue);
         }
         m_validationInfo.ClearFailureMessage();
     }
@@ -1343,7 +1343,7 @@ public:
                                         wxVariant& invalidValue );
 
     // Override to customize resetting of property validation failure status.
-    // Property is guaranteed to have flag wxPGPropertyFlags::InvalidValue set.
+    // Property is guaranteed to have flag wxPGFlags::InvalidValue set.
     virtual void DoOnValidationFailureReset( wxPGProperty* property );
 
     int GetSpacingY() const { return m_spacingy; }

@@ -166,8 +166,8 @@ wxPG_EX_NATIVE_DOUBLE_BUFFERING         = 0x00080000,
 
 /**
     Set this style to let user have ability to set values of properties to
-    unspecified state. Same as setting wxPGPropertyFlags::AutoUnspecified
-    for all properties.
+    unspecified state. Same as setting wxPGFlags::AutoUnspecified for all
+    properties.
     @hideinitializer
 */
 wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
@@ -899,7 +899,7 @@ public:
         Note that @a column must not be equal to 1, as the second column is
         always editable and can be made read-only only on cell-by-cell basis
         using
-        @code wxPGProperty::ChangeFlag(wxPGPropertyFlags::ReadOnly, true) @endcode
+        @code wxPGProperty::ChangeFlag(wxPGFlags::ReadOnly, true) @endcode
 
         @see BeginLabelEdit(), EndLabelEdit()
     */
@@ -1206,7 +1206,7 @@ public:
 
     /** Override to customize resetting of property validation failure status.
         @remarks
-        Property is guaranteed to have flag wxPGPropertyFlags::InvalidValue set.
+        Property is guaranteed to have flag wxPGFlags::InvalidValue set.
     */
     virtual void DoOnValidationFailureReset( wxPGProperty* property );
 

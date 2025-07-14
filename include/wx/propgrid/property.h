@@ -304,7 +304,7 @@ protected:
     std::unordered_map<wxString, wxVariantData*> m_map;
 };
 
-enum class wxPGPropertyFlags : int
+enum class wxPGFlags : int
 {
     // No flags.
     Null = 0,
@@ -415,37 +415,37 @@ enum class wxPGPropertyFlags : int
     StringStoredFlags = Disabled | Hidden | NoEditor | Collapsed
 };
 
-constexpr wxPGPropertyFlags operator|(wxPGPropertyFlags a, wxPGPropertyFlags b)
+constexpr wxPGFlags operator|(wxPGFlags a, wxPGFlags b)
 {
-    return static_cast<wxPGPropertyFlags>(static_cast<int>(a) | static_cast<int>(b));
+    return static_cast<wxPGFlags>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-inline wxPGPropertyFlags operator|=(wxPGPropertyFlags & a, wxPGPropertyFlags b)
+inline wxPGFlags operator|=(wxPGFlags & a, wxPGFlags b)
 {
     return a = a | b;
 }
 
-constexpr wxPGPropertyFlags operator&(wxPGPropertyFlags a, wxPGPropertyFlags b)
+constexpr wxPGFlags operator&(wxPGFlags a, wxPGFlags b)
 {
-    return static_cast<wxPGPropertyFlags>(static_cast<int>(a) & static_cast<int>(b));
+    return static_cast<wxPGFlags>(static_cast<int>(a) & static_cast<int>(b));
 }
 
-inline wxPGPropertyFlags operator&=(wxPGPropertyFlags & a, wxPGPropertyFlags b)
+inline wxPGFlags operator&=(wxPGFlags & a, wxPGFlags b)
 {
     return a = a & b;
 }
 
-constexpr wxPGPropertyFlags operator^(wxPGPropertyFlags a, wxPGPropertyFlags b)
+constexpr wxPGFlags operator^(wxPGFlags a, wxPGFlags b)
 {
-    return static_cast<wxPGPropertyFlags>(static_cast<int>(a) ^ static_cast<int>(b));
+    return static_cast<wxPGFlags>(static_cast<int>(a) ^ static_cast<int>(b));
 }
 
-constexpr wxPGPropertyFlags operator~(wxPGPropertyFlags a)
+constexpr wxPGFlags operator~(wxPGFlags a)
 {
-    return static_cast<wxPGPropertyFlags>(~static_cast<int>(a));
+    return static_cast<wxPGFlags>(~static_cast<int>(a));
 }
 
-constexpr bool operator!(wxPGPropertyFlags a)
+constexpr bool operator!(wxPGFlags a)
 {
     return static_cast<int>(a) == 0;
 }
@@ -453,22 +453,22 @@ constexpr bool operator!(wxPGPropertyFlags a)
 // We need these operators with int arguments for interoperability
 // with wxPG_ITERATOR_FLAGS as plain enumeration).
 // =====
-constexpr int operator<<(wxPGPropertyFlags a, int n)
+constexpr int operator<<(wxPGFlags a, int n)
 {
     return static_cast<int>(a) << n;
 }
 
-constexpr int operator|(wxPGPropertyFlags a, int b)
+constexpr int operator|(wxPGFlags a, int b)
 {
     return static_cast<int>(a) | b;
 }
 
-constexpr int operator|(int a, wxPGPropertyFlags b)
+constexpr int operator|(int a, wxPGFlags b)
 {
     return a | static_cast<int>(b);
 }
 
-constexpr int operator&(int a, wxPGPropertyFlags b)
+constexpr int operator&(int a, wxPGFlags b)
 {
     return a & static_cast<int>(b);
 }
@@ -477,34 +477,35 @@ constexpr int operator&(int a, wxPGPropertyFlags b)
 #if WXWIN_COMPATIBILITY_3_2
 // These constants themselves intentionally don't use wxDEPRECATED_MSG()
 // because one will be given whenever they are used with any function now
-// taking wxPGPropertyFlags anyhow and giving multiple deprecation warnings for
+// taking wxPGFlags anyhow and giving multiple deprecation warnings for
 // the same line of code is more annoying than helpful.
-constexpr int wxPG_PROP_MODIFIED = static_cast<int>(wxPGPropertyFlags::Modified);
-constexpr int wxPG_PROP_DISABLED = static_cast<int>(wxPGPropertyFlags::Disabled);
-constexpr int wxPG_PROP_HIDDEN = static_cast<int>(wxPGPropertyFlags::Hidden);
-constexpr int wxPG_PROP_CUSTOMIMAGE = static_cast<int>(wxPGPropertyFlags::CustomImage);
-constexpr int wxPG_PROP_NOEDITOR = static_cast<int>(wxPGPropertyFlags::NoEditor);
-constexpr int wxPG_PROP_COLLAPSED = static_cast<int>(wxPGPropertyFlags::Collapsed);
-constexpr int wxPG_PROP_INVALID_VALUE = static_cast<int>(wxPGPropertyFlags::InvalidValue);
-constexpr int wxPG_PROP_WAS_MODIFIED = static_cast<int>(wxPGPropertyFlags::WasModified);
-constexpr int wxPG_PROP_AGGREGATE = static_cast<int>(wxPGPropertyFlags::Aggregate);
-constexpr int wxPG_PROP_CHILDREN_ARE_COPIES = static_cast<int>(wxPGPropertyFlags::ChildrenAreCopies);
-constexpr int wxPG_PROP_PROPERTY = static_cast<int>(wxPGPropertyFlags::Property);
-constexpr int wxPG_PROP_CATEGORY = static_cast<int>(wxPGPropertyFlags::Category);
-constexpr int wxPG_PROP_MISC_PARENT = static_cast<int>(wxPGPropertyFlags::MiscParent);
-constexpr int wxPG_PROP_READONLY = static_cast<int>(wxPGPropertyFlags::ReadOnly);
-constexpr int wxPG_PROP_COMPOSED_VALUE = static_cast<int>(wxPGPropertyFlags::ComposedValue);
-constexpr int wxPG_PROP_USES_COMMON_VALUE = static_cast<int>(wxPGPropertyFlags::UsesCommonValue);
-constexpr int wxPG_PROP_AUTO_UNSPECIFIED = static_cast<int>(wxPGPropertyFlags::AutoUnspecified);
-constexpr int wxPG_PROP_BEING_DELETED = static_cast<int>(wxPGPropertyFlags::BeingDeleted);
-constexpr int wxPG_PROP_PARENTAL_FLAGS = static_cast<int>(wxPGPropertyFlags::ParentalFlags);
-constexpr int wxPG_STRING_STORED_FLAGS = static_cast<int>(wxPGPropertyFlags::StringStoredFlags);
-constexpr int wxPG_PROP_MAX = static_cast<int>(wxPGPropertyFlags::Max);
-
-// Indicates bits usable by derived properties.
-constexpr int wxPG_PROP_CLASS_SPECIFIC_1 = static_cast<int>(wxPGPropertyFlags::Reserved_1);
-constexpr int wxPG_PROP_CLASS_SPECIFIC_2 = static_cast<int>(wxPGPropertyFlags::Reserved_2);
-constexpr int wxPG_PROP_CLASS_SPECIFIC_3 = static_cast<int>(wxPGPropertyFlags::Reserved_3);
+enum wxPGPropertyFlags
+{
+    wxPG_PROP_MODIFIED = static_cast<int>(wxPGFlags::Modified),
+    wxPG_PROP_DISABLED = static_cast<int>(wxPGFlags::Disabled),
+    wxPG_PROP_HIDDEN = static_cast<int>(wxPGFlags::Hidden),
+    wxPG_PROP_CUSTOMIMAGE = static_cast<int>(wxPGFlags::CustomImage),
+    wxPG_PROP_NOEDITOR = static_cast<int>(wxPGFlags::NoEditor),
+    wxPG_PROP_COLLAPSED = static_cast<int>(wxPGFlags::Collapsed),
+    wxPG_PROP_INVALID_VALUE = static_cast<int>(wxPGFlags::InvalidValue),
+    wxPG_PROP_WAS_MODIFIED = static_cast<int>(wxPGFlags::WasModified),
+    wxPG_PROP_AGGREGATE = static_cast<int>(wxPGFlags::Aggregate),
+    wxPG_PROP_CHILDREN_ARE_COPIES = static_cast<int>(wxPGFlags::ChildrenAreCopies),
+    wxPG_PROP_PROPERTY = static_cast<int>(wxPGFlags::Property),
+    wxPG_PROP_CATEGORY = static_cast<int>(wxPGFlags::Category),
+    wxPG_PROP_MISC_PARENT = static_cast<int>(wxPGFlags::MiscParent),
+    wxPG_PROP_READONLY = static_cast<int>(wxPGFlags::ReadOnly),
+    wxPG_PROP_COMPOSED_VALUE = static_cast<int>(wxPGFlags::ComposedValue),
+    wxPG_PROP_USES_COMMON_VALUE = static_cast<int>(wxPGFlags::UsesCommonValue),
+    wxPG_PROP_AUTO_UNSPECIFIED = static_cast<int>(wxPGFlags::AutoUnspecified),
+    wxPG_PROP_BEING_DELETED = static_cast<int>(wxPGFlags::BeingDeleted),
+    wxPG_PROP_PARENTAL_FLAGS = static_cast<int>(wxPGFlags::ParentalFlags),
+    wxPG_STRING_STORED_FLAGS = static_cast<int>(wxPGFlags::StringStoredFlags),
+    wxPG_PROP_MAX = static_cast<int>(wxPGFlags::Max),
+    wxPG_PROP_CLASS_SPECIFIC_1 = static_cast<int>(wxPGFlags::Reserved_1),
+    wxPG_PROP_CLASS_SPECIFIC_2 = static_cast<int>(wxPGFlags::Reserved_2),
+    wxPG_PROP_CLASS_SPECIFIC_3 = static_cast<int>(wxPGFlags::Reserved_3),
+};
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
@@ -1033,7 +1034,7 @@ public:
 #if WXWIN_COMPATIBILITY_3_0
     typedef wxUint32 FlagType;
 #elif WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use wxPGPropertyFlags type instead")
+    wxDEPRECATED_MSG("use wxPGFlags type instead")
     typedef wxUint32 FlagType;
 #endif // WXWIN_COMPATIBILITY_3_0, WXWIN_COMPATIBILITY_3_2
 
@@ -1325,7 +1326,7 @@ public:
     // values of a font).
     bool AreChildrenComponents() const
     {
-        return !!(m_flags & (wxPGPropertyFlags::ComposedValue|wxPGPropertyFlags::Aggregate));
+        return !!(m_flags & (wxPGFlags::ComposedValue|wxPGFlags::Aggregate));
     }
 
     // Deletes children of the property.
@@ -1347,7 +1348,7 @@ public:
     // Common values are disabled by the default for all properties.
     void EnableCommonValue( bool enable = true )
     {
-        ChangeFlag(wxPGPropertyFlags::UsesCommonValue, enable);
+        ChangeFlag(wxPGFlags::UsesCommonValue, enable);
     }
 
     // Composes text from values of child properties.
@@ -1491,35 +1492,35 @@ public:
 
 #if WXWIN_COMPATIBILITY_3_0
     // Returns non-zero if property has given flag set.
-    wxDEPRECATED_MSG("use HasFlag() with 'flag' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use HasFlag() with 'flag' argument as wxPGFlags")
     FlagType HasFlag( FlagType flag ) const
     {
         return ( static_cast<FlagType>(m_flags) & flag );
     }
 #endif
     // Returns true if property has given flag set.
-    bool HasFlag(wxPGPropertyFlags flag) const
+    bool HasFlag(wxPGFlags flag) const
     {
         return !!(m_flags & flag);
     }
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use HasFlag() with 'flag' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use HasFlag() with 'flag' argument as wxPGFlags")
     // Returns true if property has given flag set.
     bool HasFlag(int flag) const
     {
-        return HasFlag(static_cast<wxPGPropertyFlags>(flag));
+        return HasFlag(static_cast<wxPGFlags>(flag));
     }
 #endif // WXWIN_COMPATIBILITY_3_2
 
     // Returns true if property has all given flags set.
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use HasFlagExact() with 'flags' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use HasFlagExact() with 'flags' argument as wxPGFlags")
     bool HasFlagsExact(int flags) const
     {
-        return HasFlagsExact(static_cast<wxPGPropertyFlags>(flags));
+        return HasFlagsExact(static_cast<wxPGFlags>(flags));
     }
 #endif // WXWIN_COMPATIBILITY_3_2
-    bool HasFlagsExact(wxPGPropertyFlags flags) const
+    bool HasFlagsExact(wxPGFlags flags) const
     {
         return (m_flags & flags) == flags;
     }
@@ -1578,7 +1579,7 @@ public:
     int InsertChoice( const wxString& label, int index, int value = wxPG_INVALID_VALUE );
 
     // Returns true if this property is actually a wxPropertyCategory.
-    bool IsCategory() const { return !!(m_flags & wxPGPropertyFlags::Category); }
+    bool IsCategory() const { return !!(m_flags & wxPGFlags::Category); }
 
     // Returns true if this property is actually a wxRootProperty.
     bool IsRoot() const { return (m_parent == nullptr); }
@@ -1620,7 +1621,7 @@ public:
     // Returns true if containing grid uses wxPG_EX_AUTO_UNSPECIFIED_VALUES.
     bool UsesAutoUnspecified() const
     {
-        return !!(m_flags & wxPGPropertyFlags::AutoUnspecified);
+        return !!(m_flags & wxPGFlags::AutoUnspecified);
     }
 
     // Returns bitmap that appears next to value text. Only returns non-null
@@ -1645,16 +1646,16 @@ public:
     unsigned int GetDepth() const { return (unsigned int)m_depth; }
 
     // Gets flags as a'|' delimited string. Note that flag names are not
-    // prepended with 'wxPGPropertyFlags'.
+    // prepended with 'wxPGFlags'.
     // flagmask - String will only be made to include flags combined by this parameter.
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use GetFlagsAsString() with 'flags' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use GetFlagsAsString() with 'flags' argument as wxPGFlags")
     wxString GetFlagsAsString( int flagsMask ) const
     {
-        return GetFlagsAsString(static_cast<wxPGPropertyFlags>(flagsMask));
+        return GetFlagsAsString(static_cast<wxPGFlags>(flagsMask));
     }
 #endif // WXWIN_COMPATIBILITY_3_2
-    wxString GetFlagsAsString(wxPGPropertyFlags flagsMask) const;
+    wxString GetFlagsAsString(wxPGFlags flagsMask) const;
 
     // Returns position in parent's array.
     unsigned int GetIndexInParent() const
@@ -1677,13 +1678,13 @@ public:
 
     // Returns true if property has visible children.
     bool IsExpanded() const
-        { return (!(m_flags & wxPGPropertyFlags::Collapsed) && HasAnyChild()); }
+        { return (!(m_flags & wxPGFlags::Collapsed) && HasAnyChild()); }
 
     // Returns true if all parents expanded.
     bool IsVisible() const;
 
     // Returns true if property is enabled.
-    bool IsEnabled() const { return !(m_flags & wxPGPropertyFlags::Disabled); }
+    bool IsEnabled() const { return !(m_flags & wxPGFlags::Disabled); }
 
     // If property's editor is created this forces its recreation.
     // Useful in SetAttribute etc. Returns true if actually did anything.
@@ -1709,7 +1710,7 @@ public:
     // by default).
     void SetAutoUnspecified( bool enable = true )
     {
-        ChangeFlag(wxPGPropertyFlags::AutoUnspecified, enable);
+        ChangeFlag(wxPGFlags::AutoUnspecified, enable);
     }
 
     // Sets property's background colour.
@@ -1784,13 +1785,13 @@ public:
     }
 
     // Sets flags from a '|' delimited string. Note that flag names are not
-    // prepended with 'wxPGPropertyFlags'.
+    // prepended with 'wxPGFlags'.
     void SetFlagsFromString( const wxString& str );
 
     // Sets property's "is it modified?" flag. Affects children recursively.
     void SetModifiedStatus( bool modified )
     {
-        SetFlagRecursively(wxPGPropertyFlags::Modified, modified);
+        SetFlagRecursively(wxPGFlags::Modified, modified);
     }
 
     // Call in OnEvent(), OnButtonClick() etc. to change the property value
@@ -1831,15 +1832,15 @@ public:
 
     void SetExpanded( bool expanded )
     {
-        ChangeFlag(wxPGPropertyFlags::Collapsed, !expanded);
+        ChangeFlag(wxPGFlags::Collapsed, !expanded);
     }
 
     // Sets or clears given property flag. Mainly for internal use.
     // Setting a property flag never has any side-effect, and is
     // intended almost exclusively for internal use. So, for
     // example, if you want to disable a property, call
-    // Enable(false) instead of setting wxPGPropertyFlags::Disabled flag.
-    void ChangeFlag( wxPGPropertyFlags flag, bool set )
+    // Enable(false) instead of setting wxPGFlags::Disabled flag.
+    void ChangeFlag( wxPGFlags flag, bool set )
     {
         if ( set )
             m_flags |= flag;
@@ -1849,7 +1850,7 @@ public:
 
     // Sets or clears given property flag, recursively. This function is
     // primarily intended for internal use.
-    void SetFlagRecursively( wxPGPropertyFlags flag, bool set );
+    void SetFlagRecursively( wxPGFlags flag, bool set );
 
     // Sets property's help string, which is shown, for example, in
     // wxPropertyGridManager's description text box.
@@ -1867,21 +1868,21 @@ public:
     void SetName( const wxString& newName );
 
     // Changes what sort of parent this property is for its children.
-    // flag - Use one of the following values: wxPGPropertyFlags::MiscParent (for
-    //   generic parents), wxPGPropertyFlags::Category (for categories), or
-    //   wxPGPropertyFlags::Aggregate (for derived property classes with private
+    // flag - Use one of the following values: wxPGFlags::MiscParent (for
+    //   generic parents), wxPGFlags::Category (for categories), or
+    //   wxPGFlags::Aggregate (for derived property classes with private
     //   children).
     // You generally do not need to call this function.
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use SetParentalType() with 'flag' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use SetParentalType() with 'flag' argument as wxPGFlags")
     void SetParentalType(int flag)
     {
-        SetParentalType(static_cast<wxPGPropertyFlags>(flag));
+        SetParentalType(static_cast<wxPGFlags>(flag));
     }
 #endif // WXWIN_COMPATIBILITY_3_2
-    void SetParentalType(wxPGPropertyFlags flag)
+    void SetParentalType(wxPGFlags flag)
     {
-        m_flags &= ~(wxPGPropertyFlags::Property | wxPGPropertyFlags::ParentalFlags);
+        m_flags &= ~(wxPGFlags::Property | wxPGFlags::ParentalFlags);
         m_flags |= flag;
     }
 
@@ -1948,7 +1949,7 @@ public:
     // (i.e. cancel 'true' returned by StringToValue() or IntToValue()).
     void SetWasModified( bool set = true )
     {
-        ChangeFlag(wxPGPropertyFlags::WasModified, set);
+        ChangeFlag(wxPGFlags::WasModified, set);
     }
 
     // Returns property's help or description text.
@@ -1968,7 +1969,7 @@ public:
     // Adds a private child property. If you use this instead of
     // wxPropertyGridInterface::Insert() or
     // wxPropertyGridInterface::AppendIn(), then property's parental
-    // type will automatically be set up to wxPGPropertyFlags::Aggregate. In other
+    // type will automatically be set up to wxPGFlags::Aggregate. In other
     // words, all properties of this property will become private.
     void AddPrivateChild( wxPGProperty* prop );
 
@@ -2078,7 +2079,7 @@ protected:
     // ignoreWithFlags - Properties with any one of these flags are skipped.
     // recursively - If true, apply this operation recursively in child properties.
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use AdaptiveSetCell() with 'ignoreWithFlags' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use AdaptiveSetCell() with 'ignoreWithFlags' argument as wxPGFlags")
     void AdaptiveSetCell( unsigned int firstCol,
                           unsigned int lastCol,
                           const wxPGCell& preparedCell,
@@ -2088,7 +2089,7 @@ protected:
                           bool recursively )
     {
         AdaptiveSetCell(firstCol, lastCol, preparedCell, srcData, unmodCellData,
-                        static_cast<wxPGPropertyFlags>(ignoreWithFlags), recursively);
+                        static_cast<wxPGFlags>(ignoreWithFlags), recursively);
     }
 #endif // WXWIN_COMPATIBILITY_3_2
     void AdaptiveSetCell(unsigned int firstCol,
@@ -2096,19 +2097,19 @@ protected:
                          const wxPGCell& preparedCell,
                          const wxPGCell& srcData,
                          wxPGCellData* unmodCellData,
-                         wxPGPropertyFlags ignoreWithFlags,
+                         wxPGFlags ignoreWithFlags,
                          bool recursively);
 
     // Clear cells associated with property.
     // recursively - If true, apply this operation recursively in child properties.
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use ClearCells() with 'ignoreWithFlags' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use ClearCells() with 'ignoreWithFlags' argument as wxPGFlags")
     void ClearCells(int ignoreWithFlags, bool recursively)
     {
-        ClearCells(static_cast<wxPGPropertyFlags>(ignoreWithFlags), recursively);
+        ClearCells(static_cast<wxPGFlags>(ignoreWithFlags), recursively);
     }
 #endif // WXWIN_COMPATIBILITY_3_2
-    void ClearCells(wxPGPropertyFlags ignoreWithFlags, bool recursively);
+    void ClearCells(wxPGFlags ignoreWithFlags, bool recursively);
 
     // Makes sure m_cells has size of column+1 (or more).
     void EnsureCells( unsigned int column );
@@ -2178,23 +2179,23 @@ protected:
     void SetParentState( wxPropertyGridPageState* pstate )
         { m_parentState = pstate; }
 
-    void SetFlag( wxPGPropertyFlags flag )
+    void SetFlag( wxPGFlags flag )
     {
         //
-        // NB: While using wxPGPropertyFlags here makes it difficult to
+        // NB: While using wxPGFlags here makes it difficult to
         //     combine different flags, it usefully prevents user from
         //     using incorrect flags (say, wxWindow styles).
         m_flags |= flag;
     }
 
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use ClearFlag() with 'flag' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use ClearFlag() with 'flag' argument as wxPGFlags")
     void ClearFlag( int flag )
     {
-        ClearFlag(static_cast<wxPGPropertyFlags>(flag));
+        ClearFlag(static_cast<wxPGFlags>(flag));
     }
 #endif // WXWIN_COMPATIBILITY_3_2
-    void ClearFlag(wxPGPropertyFlags flag)
+    void ClearFlag(wxPGFlags flag)
     {
         m_flags &= ~(flag);
     }
@@ -2249,7 +2250,7 @@ protected:
     // If not -1, then overrides m_value
     int                         m_commonValue;
 
-    wxPGPropertyFlags           m_flags;
+    wxPGFlags                   m_flags;
 
     // Maximum length (for string properties). Could be in some sort of
     // wxBaseStringProperty, but currently, for maximum flexibility and
