@@ -16,6 +16,9 @@
 #
 # incantation to directly create an entry in the format used here.
 
+# Trim trailing whitespace from all sources, 2025-06-28
+af61bbe43c4bb8a559e05568909d2726400c462b
+
 # Add missing spaces after compound statement keywords, 2024-12-23
 216232fd7c92d067c21ef28f12d7fc3020441ea8
 

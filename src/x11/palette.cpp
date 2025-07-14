@@ -177,7 +177,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
         xcol.blue = (unsigned short)blue[i] << 8;
         pix_array[i] = (XAllocColor(display, cmap, &xcol) == 0) ? 0 : xcol.pixel;
 
-        // store the RGB value(0-255) to palette directly, 
+        // store the RGB value(0-255) to palette directly,
         // no need to calculate the color again in GetRGB()
         col_red[i] = red[i];
         col_green[i] = green[i];

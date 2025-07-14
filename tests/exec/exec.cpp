@@ -519,7 +519,7 @@ TEST_CASE("wxExecute::RedirectUTF8", "[.]")
         // It seems unlikely that this part of the output will change for GNU
         // ls, so check for its presence as a sign that the program output was
         // decoded correctly.
-        if ( output[n].find(wxString::FromUTF8("vous \xc3\xaates libre")) != wxString::npos )
+        if ( output[n].find(wxString::FromUTF8("vous êtes libre")) != wxString::npos )
             return;
     }
 

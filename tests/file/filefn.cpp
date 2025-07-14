@@ -496,7 +496,7 @@ TEST_CASE_METHOD(FileFunctionsTestCase,
                  "FileFunctions::Mkdir",
                  "[filefn]")
 {
-    wxString dirname = wxString::FromUTF8("__wxMkdir_test_dir_with_\xc3\xb6");
+    wxString dirname = wxString::FromUTF8("__wxMkdir_test_dir_with_ö");
     INFO("Dir: " << dirname);
 
     CHECK( wxMkdir(dirname) );
@@ -508,7 +508,7 @@ TEST_CASE_METHOD(FileFunctionsTestCase,
                  "FileFunctions::Rmdir",
                  "[filefn]")
 {
-    wxString dirname = wxString::FromUTF8("__wxRmdir_test_dir_with_\xc3\xb6");
+    wxString dirname = wxString::FromUTF8("__wxRmdir_test_dir_with_ö");
     INFO("Dir: " << dirname);
 
     CHECK( wxMkdir(dirname) );
@@ -537,3 +537,25 @@ bool wxIsExecutable(const wxString &path);
 */
 
 #endif // wxUSE_FILE
+
+#if wxUSE_FSVOLUME
+
+#include "wx/volume.h"
+
+TEST_CASE("FSVolume", "[fs][volume]")
+{
+    wxFSVolumeBase vol;
+    CHECK( !vol.IsOk() );
+
+    const auto& volumes = wxFSVolumeBase::GetVolumes();
+    if ( volumes.empty() )
+    {
+        WARN("No volumes found, skipping wxFSVolume tests.");
+        return;
+    }
+
+    vol.Create(volumes[0]);
+    REQUIRE( vol.IsOk() );
+}
+
+#endif // wxUSE_FSVOLUME

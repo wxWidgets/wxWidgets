@@ -1130,6 +1130,7 @@ set(GUI_CMN_HDR
     wx/persist.h
     wx/persist/bookctrl.h
     wx/persist/dataview.h
+    wx/persist/radiobut.h
     wx/persist/splitter.h
     wx/persist/toplevel.h
     wx/persist/treebook.h
@@ -1229,6 +1230,7 @@ set(GUI_CMN_HDR
     wx/power.h
     wx/webpdecoder.h
     wx/imagwebp.h
+    wx/persist/checkbox.h
 )
 
 set(UNIX_SRC

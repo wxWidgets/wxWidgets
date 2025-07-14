@@ -42,13 +42,13 @@ public:
     {
         m_control = v;
     }
-    
+
     wxInt32  GetValue() const
     {
         return [m_control isOn] ? 1 : 0;
     }
-    
-    void SetValue( wxInt32 v ) 
+
+    void SetValue( wxInt32 v )
     {
         [m_control setOn:v != 0 animated:NO];
     }

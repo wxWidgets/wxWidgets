@@ -132,7 +132,7 @@ public:
     virtual void         MacPrintFiles(const wxArrayString &fileNames) ;
     // called by MacPrintFiles for each file
     virtual void         MacPrintFile(const wxString &fileName) ;
-    // in response of a open-application apple event
+    // in response of an open-application apple event
     virtual void         MacNewFile() ;
     // in response of a reopen-application apple event
     virtual void         MacReopenApp() ;

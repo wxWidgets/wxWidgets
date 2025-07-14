@@ -1872,6 +1872,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         c = t;
 
         t->SetStringValue(str);
+        t->ApplyScrollViewBorderType();
     }
     else
     {

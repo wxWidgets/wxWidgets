@@ -340,8 +340,8 @@ public:
     static unsigned char AlphaBlend(unsigned char fg, unsigned char bg, double alpha);
 
     /**
-        Utility function that simply darkens or lightens a color, based on the specified 
-        percentage @a ialpha. @a ialpha of 0 would be make the color completely black, 
+        Utility function that simply darkens or lightens a color, based on the specified
+        percentage @a ialpha. @a ialpha of 0 would be make the color completely black,
         200 completely white and 100 would not change the color.
         @since 2.9.0
     */

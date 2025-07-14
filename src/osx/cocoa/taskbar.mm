@@ -44,7 +44,7 @@ public:
 
     void OnMenuEvent(wxCommandEvent& event);
     void OnUpdateUIEvent(wxUpdateUIEvent& event);
-    
+
 private:
     wxTaskBarIconImpl *m_impl;
     wxDECLARE_EVENT_TABLE();
@@ -58,14 +58,14 @@ class wxTaskBarIconImpl
 {
 public:
     wxTaskBarIconImpl(wxTaskBarIcon *taskBarIcon);
-    
+
     virtual bool IsStatusItem() const { return false; }
 
     virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) = 0;
     virtual bool RemoveIcon() = 0;
-    
+
     bool IsIconInstalled() const { return m_icon.IsOk(); }
-        
+
     virtual bool PopupMenu(wxMenu *menu) = 0;
     virtual ~wxTaskBarIconImpl();
     inline wxTaskBarIcon* GetTaskBarIcon() { return m_taskBarIcon; }
@@ -125,7 +125,7 @@ class wxTaskBarIconCustomStatusItemImpl: public wxTaskBarIconImpl
 public:
     wxTaskBarIconCustomStatusItemImpl(wxTaskBarIcon *taskBarIcon);
     virtual ~wxTaskBarIconCustomStatusItemImpl();
-    
+
     virtual bool IsStatusItem() const override { return true; }
 
     virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) override;
@@ -198,7 +198,7 @@ bool wxTaskBarIcon::IsIconInstalled() const
 {
     if ( m_impl )
         return m_impl->IsIconInstalled();
-    
+
     return false;
 }
 
@@ -263,7 +263,7 @@ WX_NSMenu wxTaskBarIconDockImpl::OSXGetDockHMenu()
 {
     if(sm_dockIcon)
         return sm_dockIcon->OSXDoGetDockHMenu();
-    
+
     return nil;
 }
 
@@ -284,9 +284,9 @@ WX_NSMenu wxTaskBarIconDockImpl::OSXDoGetDockHMenu()
     }
 
     m_pMenu->SetInvokingWindow(m_eventWindow);
-    
+
     m_pMenu->UpdateUI();
-    
+
     return (WX_NSMenu)m_pMenu->GetHMenu();
 }
 
@@ -320,7 +320,7 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
 - (NSMenu*)applicationDockMenu:(NSApplication *)sender
 {
     wxUnusedVar(sender);
-    
+
     return wxTaskBarIconDockImpl::OSXGetDockHMenu();
 }
 @end
@@ -345,7 +345,7 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
     {
         impl->PopupMenu(menu);
         delete menu;
-    }    
+    }
 }
 
 - (void)setImplementation: (wxTaskBarIconCustomStatusItemImpl *) theImplementation
@@ -399,7 +399,7 @@ bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxBitmapBundle& icon, cons
         return YES;
     }];
     [[m_statusItem button] setImage:statusBarScaledImage];
-    
+
     wxCFStringRef cfTooltip(tooltip);
     [[m_statusItem button] setToolTip:cfTooltip.AsNSString()];
     return true;
@@ -411,9 +411,9 @@ bool wxTaskBarIconCustomStatusItemImpl::RemoveIcon()
     m_statusItem = nil;
     [m_target release];
     m_target = nil;
-    
+
     m_icon = wxBitmap();
-    
+
     return true;
 }
 
@@ -438,7 +438,7 @@ wxBEGIN_EVENT_TABLE(wxTaskBarIconWindow, wxWindow)
     EVT_UPDATE_UI(-1, wxTaskBarIconWindow::OnUpdateUIEvent)
 wxEND_EVENT_TABLE()
 
-wxTaskBarIconWindow::wxTaskBarIconWindow(wxTaskBarIconImpl *impl) 
+wxTaskBarIconWindow::wxTaskBarIconWindow(wxTaskBarIconImpl *impl)
 : m_impl(impl)
 {
 }

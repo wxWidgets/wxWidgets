@@ -202,12 +202,12 @@ int wxAuiDockArt::GetMetricForWindow(int id, wxWindow* window)
     bool scale = false;
     switch (id)
     {
-        case wxAUI_DOCKART_SASH_SIZE:
         case wxAUI_DOCKART_PANE_BORDER_SIZE:
-            // These sizes are typically small values and we don't scale them
+            // The border sizes are typically small and we don't scale them
             // by default to allow setting them to 1 pixel even in high DPI.
             break;
 
+        case wxAUI_DOCKART_SASH_SIZE:
         case wxAUI_DOCKART_CAPTION_SIZE:
         case wxAUI_DOCKART_GRIPPER_SIZE:
         case wxAUI_DOCKART_PANE_BUTTON_SIZE:

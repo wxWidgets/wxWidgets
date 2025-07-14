@@ -6243,15 +6243,38 @@ public:
 
     virtual void DrawCornerLabel(wxDC& dc);
 
+    /**
+        Draw the given text inside the specified rectangle.
+
+        The overload taking a single string splits it into an array of lines
+        (possibly consisting of just a single element if the string doesn't
+        contain any new line characters).
+
+        The alignment parameters may be ::wxALIGN_LEFT, ::wxALIGN_RIGHT and
+        either ::wxALIGN_CENTRE or ::wxALIGN_CENTER_HORIZONTAL for horizontal
+        alignment and ::wxALIGN_TOP, ::wxALIGN_BOTTOM and either
+        ::wxALIGN_CENTRE or ::wxALIGN_CENTER_VERTICAL for vertical one.
+
+        For the overload taking default alignment parameters, they are used
+        only if the provided wxGridCellAttr doesn't specify any alignment in
+        the corresponding direction.
+     */
     void DrawTextRectangle( wxDC& dc, const wxString& text, const wxRect& rect,
                             int horizontalAlignment = wxALIGN_LEFT,
                             int verticalAlignment = wxALIGN_TOP,
                             int textOrientation = wxHORIZONTAL ) const;
 
+    /// @overload
     void DrawTextRectangle( wxDC& dc, const wxArrayString& lines, const wxRect& rect,
                             int horizontalAlignment = wxALIGN_LEFT,
                             int verticalAlignment = wxALIGN_TOP,
                             int textOrientation = wxHORIZONTAL ) const;
+
+    /// @overload
+    void DrawTextRectangle(wxDC& dc, const wxString& text, const wxRect& rect,
+                           const wxGridCellAttr& attr,
+                           int defaultHAlign = wxALIGN_INVALID,
+                           int defaultVAlign = wxALIGN_INVALID) const;
 
     wxColour GetCellHighlightColour() const;
     int      GetCellHighlightPenWidth() const;

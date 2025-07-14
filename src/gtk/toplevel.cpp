@@ -414,12 +414,22 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
 #if GTK_CHECK_VERSION(3,12,0)
             if (m_gdkDecor && wx_is_at_least_gtk3(12))
             {
-                char layout[sizeof("icon,menu:minimize,maximize,close")];
-                snprintf(layout, sizeof(layout), "icon%s:%s%s%s",
-                     m_gdkDecor & GDK_DECOR_MENU ? ",menu" : "",
-                     m_gdkDecor & GDK_DECOR_MINIMIZE ? "minimize," : "",
-                     m_gdkDecor & GDK_DECOR_MAXIMIZE ? "maximize," : "",
-                     m_gdkFunc & GDK_FUNC_CLOSE ? "close" : "");
+                char* s;
+                g_object_get(gtk_widget_get_settings(m_widget),
+                    "gtk-decoration-layout", &s, nullptr);
+                wxString layout(s);
+                g_free(s);
+
+                const wxString empty;
+                if ((m_gdkDecor & GDK_DECOR_MENU) == 0)
+                    layout.Replace("menu", empty, false);
+                if ((m_gdkDecor & GDK_DECOR_MINIMIZE) == 0)
+                    layout.Replace("minimize", empty, false);
+                if ((m_gdkDecor & GDK_DECOR_MAXIMIZE) == 0)
+                    layout.Replace("maximize", empty, false);
+                if ((m_gdkFunc & GDK_FUNC_CLOSE) == 0)
+                    layout.Replace("close", empty, false);
+
                 gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(titlebar), layout);
             }
 #endif // 3.12
@@ -467,6 +477,17 @@ gtk_frame_map_callback( GtkWidget*,
                         wxTopLevelWindow *win )
 {
     wxLogTrace(TRACE_TLWSIZE, "Mapped for %s", wxDumpWindow(win));
+
+    // We couldn't set the app ID before, as it only works for mapped windows.
+#if defined(GDK_WINDOWING_WAYLAND) && GTK_CHECK_VERSION(3,24,22)
+    GdkWindow* const window = gtk_widget_get_window(win->m_widget);
+    if (wxGTKImpl::IsWayland(window) && gtk_check_version(3,24,22) == nullptr)
+    {
+        const wxString className(wxTheApp->GetClassName());
+        if (!className.empty())
+            gdk_wayland_window_set_application_id(window, className.utf8_str());
+    }
+#endif
 
     const bool wasIconized = win->IsIconized();
     if (wasIconized)

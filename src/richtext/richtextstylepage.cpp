@@ -54,7 +54,7 @@ wxRichTextStylePage::wxRichTextStylePage( wxWindow* parent, wxWindowID id, const
 void wxRichTextStylePage::Init()
 {
     m_nameIsEditable = false;
-    
+
 ////@begin wxRichTextStylePage member initialisation
     m_styleName = nullptr;
     m_basedOn = nullptr;

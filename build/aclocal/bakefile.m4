@@ -519,7 +519,7 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     if test "x$SUNCXX" = "xyes"; then
         dnl Sun C++ compiler requires special way of creating static libs;
         dnl see here for more details:
-        dnl https://github.com/wxWidgets/wxWidgets/issues/2639
+        dnl https://github.com/wxWidgets/wxWidgets/issues/22004
         AR=$CXX
         AROPTIONS="-xar -o"
         AC_SUBST(AR)

@@ -440,7 +440,7 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
 
         [[col1 dataCell] setControlSize:size];
         // although there is no text, it may help to get the correct vertical layout
-        [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];        
+        [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];
     }
 
     [checkbox release];
@@ -671,6 +671,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     [tableview release];
 
     wxListWidgetCocoaImpl* c = new wxListWidgetCocoaImpl( wxpeer, scrollview, tableview, ds );
+    c->ApplyScrollViewBorderType();
 
     // temporary hook for dnd
  //   [tableview registerForDraggedTypes:[NSArray arrayWithObjects:

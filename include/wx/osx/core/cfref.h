@@ -24,7 +24,7 @@
 #define WX_OSX_BRIDGE __bridge
 #else
 #define WX_OSX_BRIDGE_RETAINED
-#define WX_OSX_BRIDGE 
+#define WX_OSX_BRIDGE
 #endif
 
 // #include <CoreFoundation/CFBase.h>
@@ -354,7 +354,7 @@ public:
         m_ptr = nullptr;
         return p;
     }
-    
+
     // Autorelease the pointer, i.e. during the next cleanup it will be released
     refType autorelease()
     {

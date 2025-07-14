@@ -191,6 +191,7 @@ builtinWindowClasses =
     | wxGauge
     | wxGenericAnimationCtrl
     | wxGenericDirCtrl
+    | wxGenericHyperlinkCtrl
     | wxGrid
     | wxHtmlWindow
     | wxHyperlinkCtrl
@@ -297,6 +298,7 @@ builtinClassesNames =
     | "wxGauge"
     | "wxGenericAnimationCtrl"
     | "wxGenericDirCtrl"
+    | "wxGenericHyperlinkCtrl"
     | "wxGrid"
     | "wxHtmlWindow"
     | "wxHyperlinkCtrl"
@@ -626,6 +628,7 @@ wxAuiPaneInfo =
         [xrc:p="o"] element movable         {_, t_bool }* &
         [xrc:p="o"] element floatable       {_, t_bool }* &
         [xrc:p="o"] element floating_size   {_, t_size }* &
+        [xrc:p="o"] element floating_client_size   {_, t_size }* &
         [xrc:p="o"] element min_size        {_, t_size }* &
         [xrc:p="o"] element max_size        {_, t_size }* &
         [xrc:p="o"] element best_size       {_, t_size }* &
@@ -1043,6 +1046,14 @@ wxGenericDirCtrl =
         [xrc:p="o"] element defaultfilter {_, t_integer }*
     }
 
+wxGenericHyperlinkCtrl =
+    element object {
+        attribute class { "wxGenericHyperlinkCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="important"] element label {_, t_text }* &
+        [xrc:p="important"] element url   {_, t_url }*
+    }
 
 wxGrid =
     element object {

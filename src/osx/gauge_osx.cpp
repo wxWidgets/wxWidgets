@@ -24,9 +24,9 @@ bool wxGauge::Create( wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name )
-{    
+{
     DontCreatePeer();
-    
+
     if ( !wxGaugeBase::Create( parent, id, range, pos, s, style & 0xE0FFFFFF, validator, name ) )
         return false;
 

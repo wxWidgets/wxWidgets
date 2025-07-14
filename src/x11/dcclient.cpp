@@ -1609,7 +1609,7 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,
     cairo_destroy(cr);
 #else
     #warning "Drawing rotated text is not implemented without Cairo"
-#endif    
+#endif
 }
 
 void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,

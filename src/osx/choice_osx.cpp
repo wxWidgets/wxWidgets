@@ -62,9 +62,9 @@ bool wxChoice::Create(wxWindow *parent,
     long style,
     const wxValidator& validator,
     const wxString& name )
-{    
+{
     DontCreatePeer();
-    
+
     if ( !wxChoiceBase::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 

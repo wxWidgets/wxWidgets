@@ -26,7 +26,7 @@
 wxIMPLEMENT_CLASS(wxMessageDialog, wxDialog);
 
 
-namespace 
+namespace
 {
     NSAlertStyle GetAlertStyleFromWXStyle( long style )
     {
@@ -60,7 +60,7 @@ int wxMessageDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
 
     wxCFEventLoopPauseIdleEvents pause;
-    
+
     const long style = GetMessageDialogStyle();
 
     wxASSERT_MSG( (style & 0x3F) != wxYES, wxT("this style is not supported on Mac") );
@@ -99,7 +99,7 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()) );
 
         NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
-                
+
         int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
 
         if (style & wxYES_NO)
@@ -156,7 +156,7 @@ int wxMessageDialog::ShowModal()
 
         int button = -1;
         button = [alert runModal];
-        
+
         OSXEndModalDialog();
 
         ModalFinishedCallback(alert, button);
@@ -180,7 +180,7 @@ void wxMessageDialog::ShowWindowModal()
     if (parentWindow)
     {
         NSAlert* alert = (NSAlert*)ConstructNSAlert();
-        
+
         NSWindow* nativeParent = parentWindow->GetWXWindow();
         [alert beginSheetModalForWindow:nativeParent  completionHandler:
          ^(NSModalResponse returnCode)
@@ -203,7 +203,7 @@ void wxMessageDialog::ModalFinishedCallback(void* WXUNUSED(panel), int resultCod
             resultbutton = wxID_CANCEL;
     }
     SetReturnCode(resultbutton);
-    
+
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
@@ -283,7 +283,7 @@ void* wxMessageDialog::ConstructNSAlert()
             [alert addButtonWithTitle:cfOKString.AsNSString()];
             m_buttonId[ m_buttonCount++ ] = wxID_OK;
         }
-        else 
+        else
         {
             [alert addButtonWithTitle:cfOKString.AsNSString()];
             m_buttonId[ m_buttonCount++ ] = wxID_OK;

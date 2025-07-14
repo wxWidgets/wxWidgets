@@ -65,6 +65,7 @@
 #if wxUSE_OLE
     #include <ole2.h>
 #endif
+#include <shobjidl.h>
 
 #include <string.h>
 #include <ctype.h>
@@ -494,6 +495,14 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     }
 
     callBaseCleanup.Dismiss();
+
+    // We need to set the app user model ID before doing anything UI-related if
+    // it is specified.
+    const wxString className(wxTheApp->GetClassName());
+    if ( !className.empty() )
+    {
+        SetCurrentProcessExplicitAppUserModelID(className.wc_str());
+    }
 
     if ( !wxSystemOptions::GetOptionInt("msw.no-manifest-check") )
     {

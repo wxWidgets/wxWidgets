@@ -519,7 +519,7 @@ inline bool wxPoint2DDouble::operator!=(const wxPoint2DDouble& pt) const
     return !(*this == pt);
 }
 
-// wxRect2Ds are an axis-aligned rectangles, each side of the rect is parallel to the x- or m_y- axis. The rectangle is either defined by the
+// wxRect2Ds are axis-aligned rectangles, each side of the rect is parallel to the x- or m_y- axis. The rectangle is either defined by the
 // top left and bottom right corner, or by the top left corner and size. A point is contained within the rectangle if
 // left <= x < right  and top <= m_y < bottom , thus it is a half open interval.
 
@@ -529,6 +529,20 @@ public:
     wxRect2DDouble() = default;
     wxRect2DDouble(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
         { m_x = x; m_y = y; m_width = w;  m_height = h; }
+
+    explicit wxRect2DDouble(const wxRect& rect)
+    {
+        m_x = static_cast<wxDouble>(rect.x);
+        m_y = static_cast<wxDouble>(rect.y);
+        m_width = static_cast<wxDouble>(rect.width);
+        m_height = static_cast<wxDouble>(rect.height);
+    }
+
+    wxNODISCARD wxRect ToRect() const
+    {
+        return wxRect(wxRound(m_x), wxRound(m_y),
+                      wxRound(m_width), wxRound(m_height));
+    }
 /*
     wxRect2DDouble(const wxPoint2DDouble& topLeft, const wxPoint2DDouble& bottomRight);
     wxRect2DDouble(const wxPoint2DDouble& pos, const wxSize& size);
@@ -536,10 +550,26 @@ public:
 */
         // single attribute accessors
 
-    wxPoint2DDouble GetPosition() const
+    wxNODISCARD wxPoint2DDouble GetPosition() const
         { return wxPoint2DDouble(m_x, m_y); }
-    wxSize GetSize() const
+    wxNODISCARD wxSize GetSize() const
         { return wxSize((int) m_width, (int) m_height); }
+
+    wxNODISCARD wxDouble GetX() const
+        { return m_x; }
+
+    wxNODISCARD wxDouble GetY() const
+        { return m_y; }
+
+    wxNODISCARD wxDouble GetWidth() const
+        { return m_width; }
+
+    void SetWidth(wxDouble w) { m_width = w; }
+
+    wxNODISCARD wxDouble GetHeight() const
+        { return m_height; }
+
+    void SetHeight(wxDouble h) { m_height = h; }
 
     // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
         // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
@@ -610,10 +640,34 @@ public:
         { m_x += left; m_y += top; m_width -= left + right; m_height -= top + bottom;}
     inline void Offset( const wxPoint2DDouble &pt )
         { m_x += pt.m_x; m_y += pt.m_y; }
+    inline void Offset(wxDouble dx, wxDouble dy)
+        { Offset({ dx, dy }); }
+
+    wxRect2DDouble& Inflate(wxDouble dx, wxDouble dy);
+    wxRect2DDouble& Inflate(const wxSize& d)
+        { return Inflate(static_cast<wxDouble>(d.x), static_cast<wxDouble>(d.y)); }
+    wxRect2DDouble& Inflate(wxDouble d) { return Inflate(d, d); }
+    wxRect2DDouble Inflate(wxDouble dx, wxDouble dy) const
+    {
+        wxRect2DDouble r = *this;
+        r.Inflate(dx, dy);
+        return r;
+    }
+
+    wxRect2DDouble& Deflate(wxDouble dx, wxDouble dy) { return Inflate(-dx, -dy); }
+    wxRect2DDouble& Deflate(const wxSize& d)
+        { return Inflate(-static_cast<wxDouble>(d.x), -static_cast<wxDouble>(d.y)); }
+    wxRect2DDouble& Deflate(wxDouble d) { return Inflate(-d); }
+    wxRect2DDouble Deflate(wxDouble dx, wxDouble dy) const
+    {
+        wxRect2DDouble r = *this;
+        r.Deflate(dx, dy);
+        return r;
+    }
 
     void ConstrainTo( const wxRect2DDouble &rect );
 
-    wxPoint2DDouble Interpolate( wxInt32 widthfactor, wxInt32 heightfactor ) const
+    wxNODISCARD wxPoint2DDouble Interpolate( wxInt32 widthfactor, wxInt32 heightfactor ) const
         { return wxPoint2DDouble( m_x + m_width * widthfactor , m_y + m_height * heightfactor ); }
 
     static void Intersect( const wxRect2DDouble &src1 , const wxRect2DDouble &src2 , wxRect2DDouble *dest );
@@ -621,7 +675,7 @@ public:
         { Intersect( *this , otherRect , this ); }
     inline wxRect2DDouble CreateIntersection( const wxRect2DDouble &otherRect ) const
         { wxRect2DDouble result; Intersect( *this , otherRect , &result); return result; }
-    bool Intersects( const wxRect2DDouble &rect ) const;
+    wxNODISCARD bool Intersects( const wxRect2DDouble &rect ) const;
 
     static void Union( const wxRect2DDouble &src1 , const wxRect2DDouble &src2 , wxRect2DDouble *dest );
     void Union( const wxRect2DDouble &otherRect )

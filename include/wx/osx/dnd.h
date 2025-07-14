@@ -60,7 +60,7 @@ class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
     virtual wxDataFormat GetMatchingPair();
 
     bool CurrentDragHasSupportedFormat() ;
-    
+
     void SetCurrentDragSource( wxOSXDataSource* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }
   protected :
     wxOSXDataSource* m_currentDragPasteboard ;

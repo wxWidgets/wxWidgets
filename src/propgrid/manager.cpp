@@ -97,7 +97,7 @@ static const char gs_svg_noncatmode[] =
 "<line x1=\"16\" y1=\"25\" x2=\"20\" y2=\"25\" stroke-width=\"2\" stroke=\"#868686\" stroke-linecap=\"square\"/>"
 "<line x1=\"24\" y1=\"25\" x2=\"28\" y2=\"25\" stroke-width=\"2\" stroke=\"#868686\" stroke-linecap=\"square\"/>"
 "<line x1=\"16\" y1=\"29\" x2=\"20\" y2=\"29\" stroke-width=\"2\" stroke=\"#868686\" stroke-linecap=\"square\"/>"
-"<line x1=\"24\" y1=\"29\" x2=\"28\" y2=\"29\" stroke-width=\"2\" stroke=\"#868686\" stroke-linecap=\"square\"/>" 
+"<line x1=\"24\" y1=\"29\" x2=\"28\" y2=\"29\" stroke-width=\"2\" stroke=\"#868686\" stroke-linecap=\"square\"/>"
 "</svg>";
 
 // Default Page Icon.

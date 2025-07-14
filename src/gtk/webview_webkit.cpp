@@ -46,7 +46,7 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
         //We have to check if we are actually storing history
         //If the item isn't added we add it ourselves, it isn't added otherwise
         //with a custom scheme.
-        if(!item || (WEBKIT_IS_WEB_HISTORY_ITEM(item) && 
+        if(!item || (WEBKIT_IS_WEB_HISTORY_ITEM(item) &&
                      webkit_web_history_item_get_uri(item) != url))
         {
             WebKitWebHistoryItem*
@@ -483,7 +483,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     g_signal_connect_after(m_web_view, "resource-request-starting",
                            G_CALLBACK(wxgtk_webview_webkit_resource_req), this);
 
-#if WEBKIT_CHECK_VERSION(1, 10, 0)    
+#if WEBKIT_CHECK_VERSION(1, 10, 0)
      g_signal_connect_after(m_web_view, "context-menu",
                            G_CALLBACK(wxgtk_webview_webkit_context_menu), this);
 #endif
@@ -947,7 +947,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 void wxWebViewWebKit::EnableContextMenu(bool enable)
 {
 #if !WEBKIT_CHECK_VERSION(1, 10, 0) //If we are using an older version
-    g_object_set(webkit_web_view_get_settings(m_web_view), 
+    g_object_set(webkit_web_view_get_settings(m_web_view),
                  "enable-default-context-menu", enable, nullptr);
 #endif
     wxWebView::EnableContextMenu(enable);
@@ -956,7 +956,7 @@ void wxWebViewWebKit::EnableContextMenu(bool enable)
 long wxWebViewWebKit::Find(const wxString& text, int flags)
 {
     bool newSearch = false;
-    if(text != m_findText || 
+    if(text != m_findText ||
        (flags & wxWEBVIEW_FIND_MATCH_CASE) != (m_findFlags & wxWEBVIEW_FIND_MATCH_CASE))
     {
         newSearch = true;
@@ -1007,7 +1007,7 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
 
     //Highlight them if needed
     bool highlight = flags & wxWEBVIEW_FIND_HIGHLIGHT_RESULT ? true : false;
-    webkit_web_view_set_highlight_text_matches(m_web_view, highlight);     
+    webkit_web_view_set_highlight_text_matches(m_web_view, highlight);
 
     if(!webkit_web_view_search_text(m_web_view, text.utf8_str(), matchCase, forward, wrap))
     {

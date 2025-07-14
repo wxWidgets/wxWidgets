@@ -480,7 +480,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
     if ( !wxGLCanvas::DoCreate(parent,id,pos,size,style,name) )
         return false;
-    
+
     return true;
 }
 

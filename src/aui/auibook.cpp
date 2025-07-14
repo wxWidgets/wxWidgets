@@ -2451,7 +2451,7 @@ wxWindow* wxAuiNotebook::DoRemovePage(size_t page_idx)
     wxCHECK_MSG(page_idx < GetPageCount(), nullptr, "invalid page index");
 
     // Lock the window for changes to avoid flicker when
-    // removing the active page (there is a noticeable 
+    // removing the active page (there is a noticeable
     // flicker from the active tab is closed and until a
     // new one is selected) - this is noticeable on MSW
     wxWindowUpdateLocker locker { this };

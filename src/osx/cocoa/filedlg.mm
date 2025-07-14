@@ -252,7 +252,7 @@ void wxFileDialog::ShowWindowModal()
     wxCFStringRef file( m_fileName );
 
     wxNonOwnedWindow* parentWindow = nullptr;
-    
+
     m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
 
     if (GetParent())
@@ -339,10 +339,10 @@ void wxFileDialog::ShowWindowModal()
             this->ModalFinishedCallback(sPanel, returnCode);
         }];
     }
-    else 
+    else
     {
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
-        
+
         SetupExtraControls(oPanel);
 
         [oPanel setTreatsFilePackagesAsDirectories:NO];
@@ -403,7 +403,7 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
                             : static_cast<wxWindow*>(new wxPanel(this));
 
     wxBoxSizer *verticalSizer = new wxBoxSizer(wxVERTICAL);
-    
+
     // the file type control
     {
         wxBoxSizer *horizontalSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -422,7 +422,7 @@ wxWindow* wxFileDialog::CreateFilterPanel(wxWindow *extracontrol)
         }
         m_filterChoice->Bind(wxEVT_CHOICE, &wxFileDialog::OnFilterSelected, this);
     }
-        
+
     if(extracontrol)
     {
         // Either use an extra control's existing sizer or the extra control
@@ -484,7 +484,7 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     // workaround for crashes we don't support those yet
     if ( [panel contentView] == nil || getenv("APP_SANDBOX_CONTAINER_ID") != nullptr )
         return;
-    
+
     wxNonOwnedWindow::Create( GetParent(), nativeWindow );
 
     // This won't do anything if there are no extra controls to create and
@@ -562,7 +562,7 @@ int wxFileDialog::ShowModal()
     wxCFEventLoopPauseIdleEvents pause;
 
     wxMacAutoreleasePool autoreleasepool;
-    
+
     wxCFStringRef cf( m_message );
 
     wxCFStringRef dir( m_dir );
@@ -587,7 +587,7 @@ int wxFileDialog::ShowModal()
     if( HasFlag(wxFD_OPEN) )
     {
         if ( !(wxSystemOptions::HasOption( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES ) && (wxSystemOptions::GetOptionInt( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES ) == 1)) )
-            m_useFileTypeFilter = false;            
+            m_useFileTypeFilter = false;
     }
 
     m_firstFileTypeFilter = -1;
@@ -659,7 +659,7 @@ int wxFileDialog::ShowModal()
     else
     {
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
-        
+
         SetupExtraControls(oPanel);
 
         wxOpenSavePanelDelegate* del = [[wxOpenSavePanelDelegate alloc]init];
@@ -692,13 +692,13 @@ int wxFileDialog::ShowModal()
                 [oPanel setAllowedFileTypes: types];
         }
         if ( !m_dir.IsEmpty() )
-            [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
+            [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString()
                                                isDirectory:YES]];
         returnCode = [oPanel runModal];
-            
+
         ModalFinishedCallback(oPanel, returnCode);
     }
-    
+
     OSXEndModalDialog();
 
 
@@ -760,7 +760,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     }
 
     SetReturnCode(wasAccepted ? wxID_OK : wxID_CANCEL);
-    
+
     // workaround for sandboxed app, see above, must be executed before window modal handler
     // because there this instance will be deleted
     if ( m_isNativeWindowWrapper )
@@ -768,7 +768,7 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
 
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
-    
+
     [sPanel setAccessoryView:nil];
 }
 

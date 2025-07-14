@@ -61,7 +61,7 @@
     wxTheApp->OSXOnDidFinishLaunching();
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application { 
+- (void)applicationWillTerminate:(UIApplication *)application {
     wxUnusedVar(application);
     wxTheApp->OSXOnWillTerminate();
 }
@@ -132,7 +132,7 @@ wxMouseState wxGetMouseState()
 {
     wxMouseState ms;
     return ms;
-}    
+}
 
 // Get size of display
 

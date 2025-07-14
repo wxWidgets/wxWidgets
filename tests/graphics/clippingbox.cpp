@@ -4692,7 +4692,7 @@ static void RegionsAndPushPopState(std::unique_ptr<wxGraphicsContext>& gc, const
         return;
     }
 #endif
-    
+
     // Get rectangle of the entire drawing area.
     double x, y, w, h;
     gc->GetClipBox(&x, &y, &w, &h);

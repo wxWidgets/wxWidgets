@@ -313,8 +313,11 @@ void FilePickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void FilePickerWidgetsPage::OnFileChange(wxFileDirPickerEvent& event)
 {
-    wxLogMessage("The file changed to '%s' ! The current working directory is '%s'",
-                 event.GetPath(), wxGetCwd());
+    wxLogMessage("The file changed to '%s' (the control has '%s')."
+                 "The current working directory is '%s'",
+                 event.GetPath(),
+                 m_filePicker->GetFileName().GetFullPath(),
+                 wxGetCwd());
 }
 
 void FilePickerWidgetsPage::OnCheckBox(wxCommandEvent &event)

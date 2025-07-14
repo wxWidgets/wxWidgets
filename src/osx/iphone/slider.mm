@@ -45,12 +45,12 @@ public :
     ~wxSliderIPhoneImpl()
     {
     }
-    
+
     void controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent)
     {
         if ( controlEvent == UIControlEventValueChanged )
             GetWXPeer()->TriggerScrollEvent(wxEVT_SCROLL_THUMBTRACK);
-        else 
+        else
             wxWidgetIPhoneImpl::controlAction(sender,controlEvent,rawEvent);
     }
 
@@ -58,12 +58,12 @@ public :
     {
         [m_control setMaximumValue:m];
     }
-    
+
     void SetMinimum(wxInt32 m)
     {
         [m_control setMinimumValue:m];
     }
-    
+
     void SetValue(wxInt32 n)
     {
         [m_control setValue:n];
@@ -73,7 +73,7 @@ public :
     {
         return [m_control value];
     }
-    
+
 private:
     UISlider* m_control;
 };

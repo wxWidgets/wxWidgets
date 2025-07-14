@@ -195,11 +195,19 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     // API: TMT_TEXTCOLOR doesn't work either for EDIT nor COMBOBOX
     attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
 
-    // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
-    wxUxThemeHandle hTheme(wnd, L"EDIT");
-    attrs.colBg = hTheme.GetColour(EP_EDITTEXT, TMT_FILLCOLOR, ETS_NORMAL);
-    if ( !attrs.colBg.IsOk() )
-        attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // Theme colour would be light, so don't use it.
+        attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+    }
+    else
+    {
+        // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
+        wxUxThemeHandle hTheme(wnd, L"EDIT");
+        attrs.colBg = hTheme.GetColour(EP_EDITTEXT, TMT_FILLCOLOR, ETS_NORMAL);
+        if ( !attrs.colBg.IsOk() )
+            attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    }
 
     return attrs;
 }

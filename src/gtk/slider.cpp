@@ -314,14 +314,22 @@ bool wxSlider::Create(wxWindow *parent,
 
     // Note that wxSL_LEFT or wxSL_RIGHT imply vertical layout too, as in wxMSW.
     const bool isVertical = (style & (wxSL_LEFT | wxSL_RIGHT | wxSL_VERTICAL)) != 0;
+    m_widget =
     m_scale = gtk_scale_new(GtkOrientation(isVertical), nullptr);
 
-    if (style & wxSL_MIN_MAX_LABELS)
+    const bool showMinMaxLabels = (style & wxSL_MIN_MAX_LABELS) != 0;
+#ifndef __WXGTK3__
+    if (showMinMaxLabels)
+#endif
     {
         gtk_widget_show( m_scale );
 
         m_widget = gtk_box_new(GtkOrientation(isVertical), 0);
-
+    }
+    m_minLabel = nullptr;
+    m_maxLabel = nullptr;
+    if (showMinMaxLabels)
+    {
         m_minLabel = gtk_label_new(nullptr);
         gtk_widget_show( m_minLabel );
 
@@ -332,12 +340,12 @@ bool wxSlider::Create(wxWindow *parent,
         gtk_box_pack_start(GTK_BOX(m_widget), m_scale, true, true, 0);
         gtk_box_pack_start(GTK_BOX(m_widget), m_maxLabel, false, false, 0);
     }
+#ifdef __WXGTK3__
     else
     {
-        m_widget = m_scale;
-        m_maxLabel = nullptr;
-        m_minLabel = nullptr;
+        gtk_box_pack_start(GTK_BOX(m_widget), m_scale, true, true, 0);
     }
+#endif
     g_object_ref(m_widget);
 
     const bool showValueLabel = (style & wxSL_VALUE_LABEL) != 0;
@@ -390,6 +398,41 @@ bool wxSlider::Create(wxWindow *parent,
             wxGCC_WARNING_RESTORE()
         }
     }
+#ifdef __WXGTK3__
+    if (showValueLabel || !showMinMaxLabels)
+    {
+        // Some themes draw the slider partially outside the GtkScale's allocation.
+        // This is known to occur with Mint-Y, and even slightly with Adwaita.
+        // To avoid clipping, add some extra space.
+
+        GtkBorder margin = { };
+
+        if (!showMinMaxLabels)
+        {
+            const int extraEnd = 1;
+
+            if (isVertical)
+                margin.top = margin.bottom = extraEnd;
+            else
+                margin.left = margin.right = extraEnd;
+        }
+        if (showValueLabel)
+        {
+            const int extraSide = 5;
+
+            if (isVertical)
+                (style & wxSL_LEFT ? margin.left : margin.right) = extraSide;
+            else
+                (style & wxSL_TOP ? margin.top : margin.bottom) = extraSide;
+        }
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        gtk_widget_set_margin_left(m_scale, margin.left);
+        gtk_widget_set_margin_right(m_scale, margin.right);
+        wxGCC_WARNING_RESTORE()
+        gtk_widget_set_margin_top(m_scale, margin.top);
+        gtk_widget_set_margin_bottom(m_scale, margin.bottom);
+    }
+#endif
 
     // Keep full precision in position value
     gtk_scale_set_digits(GTK_SCALE (m_scale), -1);

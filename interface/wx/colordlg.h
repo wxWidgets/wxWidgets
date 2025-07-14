@@ -117,7 +117,7 @@ public:
     wxColourDialogEvent(wxEventType evtType,
                         wxColourDialog* dialog,
                         const wxColour& colour);
-    
+
     /**
         Retrieve the colour the user has just selected.
     */

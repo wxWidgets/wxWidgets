@@ -998,7 +998,7 @@ void wxGTKRenderer::DrawRadioButtonBitmap(wxDC& dc,
     DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT), rect);
 
     dc.SetPen(m_penDarkGrey);
-    dc.SetBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT)); 
+    dc.SetBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT));
     // draw the normal border
     dc.DrawCircle(xRight/2,yBottom/2,yMid);
 

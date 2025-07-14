@@ -481,6 +481,10 @@ public:
     /**
         Returns @true if this rectangle has a width or height less than or
         equal to 0 and @false otherwise.
+
+        This is equivalent to using `GetSize().IsEmpty()`.
+
+        @see wxSize::IsEmpty()
     */
     bool IsEmpty() const;
 
@@ -1113,6 +1117,17 @@ public:
         @since 3.3.0
      */
     bool IsAtLeast(const wxSize& size) const;
+
+    /**
+        Returns @true if either of the size object components is 0 or -1/
+
+        Empty wxSize objects don't define a valid size in the geometric sense.
+
+        @see wxRect::IsEmpty()
+
+        @since 3.3.1
+    */
+    bool IsEmpty() const;
 
     /**
         Returns @true if neither of the size object components is equal to -1,

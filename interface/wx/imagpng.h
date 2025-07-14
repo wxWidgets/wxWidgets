@@ -12,6 +12,7 @@
 #define wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL    wxT("PngZM")
 #define wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY     wxT("PngZS")
 #define wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE  wxT("PngZB")
+#define wxIMAGE_OPTION_PNG_DESCRIPTION              wxT("PngDescription")
 
 /* These are already in interface/wx/image.h
     They were likely put there as a stopgap, but they've been there long enough

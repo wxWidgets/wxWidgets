@@ -86,7 +86,7 @@ void wxGUIEventLoop::OSXDoRun()
         const char* appname = "app";
         UIApplicationMain( 1, (char**) &appname, @"UIApplication", @"wxAppDelegate" );
     }
-    else 
+    else
     {
         wxCFEventLoop::OSXDoRun();
     }

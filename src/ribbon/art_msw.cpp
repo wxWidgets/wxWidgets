@@ -963,25 +963,25 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id) const
         case wxRIBBON_ART_TOOL_BACKGROUND_TOP_COLOUR:
             return m_tool_background_top_colour;
         case wxRIBBON_ART_TOOL_BACKGROUND_TOP_GRADIENT_COLOUR:
-            return m_tool_background_top_gradient_colour;        
+            return m_tool_background_top_gradient_colour;
         case wxRIBBON_ART_TOOL_BACKGROUND_COLOUR:
-            return m_tool_background_colour;        
+            return m_tool_background_colour;
         case wxRIBBON_ART_TOOL_BACKGROUND_GRADIENT_COLOUR:
-            return m_tool_background_gradient_colour;        
+            return m_tool_background_gradient_colour;
         case wxRIBBON_ART_TOOL_HOVER_BACKGROUND_TOP_COLOUR:
-            return m_tool_hover_background_top_colour;        
+            return m_tool_hover_background_top_colour;
         case wxRIBBON_ART_TOOL_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR:
-            return m_tool_hover_background_top_gradient_colour;        
+            return m_tool_hover_background_top_gradient_colour;
         case wxRIBBON_ART_TOOL_HOVER_BACKGROUND_COLOUR:
-            return m_tool_hover_background_colour;        
+            return m_tool_hover_background_colour;
         case wxRIBBON_ART_TOOL_HOVER_BACKGROUND_GRADIENT_COLOUR:
-            return m_tool_hover_background_gradient_colour;        
+            return m_tool_hover_background_gradient_colour;
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_COLOUR:
-            return m_tool_active_background_top_colour;        
+            return m_tool_active_background_top_colour;
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR:
-            return m_tool_active_background_top_gradient_colour;        
+            return m_tool_active_background_top_gradient_colour;
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_COLOUR:
-            return m_tool_active_background_colour;        
+            return m_tool_active_background_colour;
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
             return m_tool_active_background_gradient_colour;
         default:
@@ -1300,37 +1300,37 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_TOOL_BACKGROUND_TOP_GRADIENT_COLOUR:
             m_tool_background_top_gradient_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_BACKGROUND_COLOUR:
             m_tool_background_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_BACKGROUND_GRADIENT_COLOUR:
             m_tool_background_gradient_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_HOVER_BACKGROUND_TOP_COLOUR:
             m_tool_hover_background_top_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR:
             m_tool_hover_background_top_gradient_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_HOVER_BACKGROUND_COLOUR:
             m_tool_hover_background_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_HOVER_BACKGROUND_GRADIENT_COLOUR:
             m_tool_hover_background_gradient_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_COLOUR:
             m_tool_active_background_top_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR:
             m_tool_active_background_top_gradient_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_COLOUR:
             m_tool_active_background_colour = colour;
-            break;        
+            break;
         case wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
             m_tool_active_background_gradient_colour = colour;
-            break;        
+            break;
         default:
             wxFAIL_MSG("Invalid Metric Ordinal");
             break;

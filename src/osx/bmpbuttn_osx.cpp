@@ -32,7 +32,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
                              const wxString& name )
 {
     DontCreatePeer();
-    
+
     if ( !wxBitmapButtonBase::Create(parent, id, pos, size, style,
                                      validator, name) )
         return false;

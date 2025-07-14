@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="UserMacros">
-    <wxVersionString>330</wxVersionString>
+    <wxVersionString>331</wxVersionString>
     <wxShortVersionString>33</wxShortVersionString>
     <wxToolkitPrefix>msw</wxToolkitPrefix>
     <wxCompilerPrefix>vc</wxCompilerPrefix>
@@ -87,6 +87,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalOptions Condition="('$(Configuration)'=='Release' or '$(Configuration)'=='DLL Release') and '$(VisualStudioVersion)' >= '14.0'">/Zc:throwingNew %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;gdiplus.lib;msimg32.lib;comdlg32.lib;winspool.lib;shell32.lib;shlwapi.lib;ole32.lib;oleaut32.lib;uuid.lib;advapi32.lib;version.lib;comctl32.lib;rpcrt4.lib;ws2_32.lib;wininet.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>

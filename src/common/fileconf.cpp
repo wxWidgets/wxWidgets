@@ -2150,8 +2150,8 @@ static wxString FilterInValue(const wxString& str)
             }
             else if ( i != end - 1 )
             {
-                wxLogWarning(_("unexpected \" at position %d in '%s'."),
-                             i - str.begin(), str);
+                wxLogWarning(_("unexpected \" at position %zu in '%s'."),
+                             i - str.begin() + 1, str);
             }
             //else: it's the last quote of a quoted string, ok
         }

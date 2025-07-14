@@ -260,9 +260,9 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
 #endif
-    
+
     [NSApp runModalForWindow:fontPanel];
-    
+
     // if we don't reenable it, FPShowHideFontPanel does not work
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:YES] ;
     // we must pick the selection before closing, otherwise a native textcontrol interferes

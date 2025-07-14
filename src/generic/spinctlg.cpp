@@ -567,7 +567,7 @@ double wxSpinCtrlGenericBase::AdjustAndSnap(double val) const
         val = m_min;
     if ( val > m_max )
         val = m_max;
-    
+
     if ( m_snap_to_ticks && (m_increment != 0) )
     {
         double snap_value = val / m_increment;

@@ -64,6 +64,7 @@ public:
 
     // Implementation only.
     void GTKSelectionChanged(const wxString& filename);
+    void GTKDropNative();
 
 
 protected:
@@ -78,6 +79,11 @@ private:
     void OnFakeOk( wxCommandEvent &event );
     void OnSize(wxSizeEvent&);
     virtual void AddChildGTK(wxWindowGTK* child) override;
+
+    const wxGtkFileChooser& GetFileChooser() const
+    {
+        return m_fcNative ? *m_fcNative : m_fc;
+    }
 
     wxGtkFileChooser    m_fc;
     wxGtkFileChooser* m_fcNative = nullptr;

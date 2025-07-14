@@ -96,7 +96,7 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
         case wxDF_TEXT:
             f = kUTTypeTraditionalMacText;
             break;
-            
+
         case wxDF_UNICODETEXT:
 #ifdef wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
             f = kUTTypeUTF8PlainText;
@@ -106,23 +106,23 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
 #error "one of wxNEEDS_UTF{8,16}_FOR_TEXT_DATAOBJ must be defined"
 #endif
             break;
-            
+
         case wxDF_HTML:
             f = kUTTypeHTML;
             break;
-            
+
         case wxDF_BITMAP:
             f = kUTTypeTIFF;
             break;
-            
+
         case wxDF_METAFILE:
             f = kUTTypePDF;
             break;
-            
+
         case wxDF_FILENAME:
             f = kUTTypeFileURL;
             break;
-            
+
         default:
             wxFAIL_MSG( wxS("unsupported data format") );
             break;
@@ -350,7 +350,7 @@ void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
                 if ( thisFormat.GetType() == wxDF_FILENAME )
                 {
                     wxString filenames;
-                    
+
                     filenames = wxString( (const char*)buf, *wxConvFileName );
                     wxArrayString files = wxStringTokenize( filenames, wxT("\n"), wxTOKEN_STRTOK );
 
@@ -374,7 +374,7 @@ void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
 bool wxDataObject::ReadFromSource(wxDataObject * source)
 {
     bool transferred = false;
-    
+
     size_t formatcount = source->GetFormatCount();
     wxScopedArray<wxDataFormat> array(formatcount);
     source->GetAllFormats( array.get() );
@@ -385,7 +385,7 @@ bool wxDataObject::ReadFromSource(wxDataObject * source)
         {
             int size = source->GetDataSize( format );
             transferred = true;
-            
+
             if (size == 0)
             {
                 SetData( format, 0, nullptr );
@@ -421,11 +421,11 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
             wxCFMutableArrayRef<CFStringRef> typesarray;
             dataFormat.AddSupportedTypesForSetting(typesarray);
             size_t itemCount = source->GetItemCount();
-            
+
             for ( size_t itemIndex = 0; itemIndex < itemCount && !transferred; ++itemIndex)
             {
                 std::unique_ptr<const wxOSXDataSourceItem> sitem(source->GetItem(itemIndex));
-                
+
                 wxDataFormat::NativeFormat nativeFormat = sitem->AvailableType(typesarray);
                 CFDataRef flavorData = sitem->DoGetData(nativeFormat);
                 if (flavorData)
@@ -460,21 +460,21 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
                                 databuf.UngetWriteBuf(flavorDataSize);
                             }
                         }
-                        
+
                         if (dataFormat.GetType() == wxDF_FILENAME)
                         {
                             // revert the translation and decomposition to arrive at a proper utf8 string again
-                            
+
                             wxCFRef<CFURLRef> url = CFURLCreateWithBytes(kCFAllocatorDefault, (UInt8*) buf, flavorDataSize, kCFStringEncodingUTF8, nullptr);
                             wxCFStringRef cfString = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
-                                
+
                             CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(nullptr, 0, cfString);
                             CFStringNormalize(cfMutableString, kCFStringNormalizationFormC);
                             // cfMutableString is released by the wxCFStringRef
                             wxString path = wxCFStringRef(cfMutableString).AsString();
                             if (!path.empty())
                                 filenamesPassed += path + wxS("\n");
-                            
+
                             // if it's the last item, we set the wx data
                             if ( itemIndex + 1 == itemCount )
                             {
@@ -486,7 +486,7 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
                         else
                         {
                             // because some data implementation expect trailing a trailing NUL, we add some headroom
-                            
+
                             if (dataFormat.GetType() == wxDF_TEXT)
                             {
                                 for (char* p = static_cast<char*>(buf); *p; p++)
@@ -516,7 +516,7 @@ wxDataFormat wxDataObject::GetSupportedFormatInSource(wxDataObject *source) cons
     wxDataFormat format;
     size_t formatcount = source->GetFormatCount();
     wxScopedArray<wxDataFormat> array(formatcount);
-    
+
     source->GetAllFormats( array.get() );
     for (size_t i = 0; i < formatcount; i++)
     {
@@ -534,23 +534,23 @@ wxDataFormat wxDataObject::GetSupportedFormatInSource(wxDataObject *source) cons
 wxDataFormat wxDataObject::GetSupportedFormatInSource(wxOSXDataSource *source) const
 {
     wxDataFormat format;
-    
+
     size_t formatcount = GetFormatCount(wxDataObject::Set);
     wxScopedArray<wxDataFormat> array(formatcount);
     GetAllFormats(array.get(), wxDataObject::Set);
-    
+
     for (size_t i = 0; i < formatcount; i++)
     {
         // go through the data in our order of preference
         wxDataFormat dataFormat = array[i];
-        
+
         if (source->IsSupported(dataFormat))
         {
             format = dataFormat;
             break;
         }
     }
-    
+
     return format;
 }
 

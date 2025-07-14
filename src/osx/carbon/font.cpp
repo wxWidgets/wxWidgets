@@ -329,7 +329,7 @@ void wxFontRefData::AllocIfNeeded() const
 void wxFontRefData::Alloc()
 {
     wxCHECK_RET(m_info.GetPointSize() > 0, wxT("Point size should not be zero."));
-    
+
     // use font caching, we cache a font with a certain size and a font with just any size for faster creation
     wxString lookupnameNoSize = wxString::Format("%s_%d_%d", m_info.GetPostScriptName(), (int)m_info.GetStyle(), m_info.GetNumericWeight());
 
@@ -976,7 +976,7 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
     wxASSERT(descriptor != nullptr);
 
     m_descriptor = descriptor;
-    
+
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
 
 #if wxDEBUG_LEVEL >= 2
@@ -986,15 +986,15 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(familyname);
     wxLogTrace(TRACE_CTFONT,"****** CreateCTFontDescriptor ******");
     wxLogTrace(TRACE_CTFONT,"Descriptor FontFamilyName: %s",familyname);
-    
+
     wxString name;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(name);
     wxLogTrace(TRACE_CTFONT,"Descriptor FontName: %s",name);
-    
+
     wxString display;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontDisplayNameAttribute)).GetValue(display);
     wxLogTrace(TRACE_CTFONT,"Descriptor DisplayName: %s",display);
-    
+
     wxString style;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontStyleNameAttribute)).GetValue(style);
     wxLogTrace(TRACE_CTFONT,"Descriptor StyleName: %s",style);
@@ -1002,11 +1002,11 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
     wxString psname;
     wxCFTypeRef(CTFontCopyPostScriptName(font)).GetValue(psname);
     wxLogTrace(TRACE_CTFONT,"Created Font PostScriptName: %s",psname);
-    
+
     wxString fullname;
     wxCFTypeRef(CTFontCopyFullName(font)).GetValue(fullname);
     wxLogTrace(TRACE_CTFONT,"Created Font FullName: %s",fullname);
-    
+
     wxLogTrace(TRACE_CTFONT,"************************************");
 #endif
 }
@@ -1366,7 +1366,7 @@ bool wxNativeFontInfo::SetPostScriptName(const wxString& postScriptName)
         Free();
         m_postScriptName = postScriptName;
     }
-    
+
     return true;
 }
 

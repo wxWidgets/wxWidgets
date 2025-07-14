@@ -37,6 +37,8 @@
 
 #include <unordered_map>
 
+#define wxIMAGE_OPTION_PNG_DESCRIPTION_KEY "Description"
+
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
@@ -189,7 +191,7 @@ PNGLINKAGEMODE wx_PNG_warning(png_structp png_ptr, png_const_charp message)
     wxPNGInfoStruct *info = png_ptr ? WX_PNG_INFO(png_ptr) : nullptr;
     if ( !info || info->verbose )
     {
-        wxLogWarning( wxString::FromAscii(message) );
+        wxLogWarning( wxString::FromUTF8(message) );
     }
 }
 
@@ -342,6 +344,40 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
         return;
 
     png_read_image( png_ptr, lines );
+
+    // load "Description" text chunk
+    png_textp text_ptr;
+    const int num_comments = png_get_text( png_ptr, info_ptr, &text_ptr, nullptr );
+    for (int i = 0; i < num_comments; ++i)
+    {
+        const wxString& key = wxString::From8BitData(text_ptr[i].key);
+        if (key == wxIMAGE_OPTION_PNG_DESCRIPTION_KEY)
+        {
+            wxString description;
+            switch (text_ptr[i].compression)
+            {
+            case PNG_TEXT_COMPRESSION_zTXt:
+            case PNG_TEXT_COMPRESSION_NONE:
+                // tEXt chunk: uses Latin-1 encoding.
+                description = wxString::From8BitData(text_ptr[i].text);
+                break;
+
+            case PNG_ITXT_COMPRESSION_zTXt:
+            case PNG_ITXT_COMPRESSION_NONE:
+                // iTXt chunk: uses UTF-8 encoding.
+                description = wxString::FromUTF8(text_ptr[i].text);
+                break;
+
+            default:
+                // Invalid type, should we report it? Probably not worth it.
+                break;
+            }
+
+            if (!description.empty())
+                image->SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, description);
+        }
+    }
+
     png_read_end( png_ptr, info_ptr );
 
 #if wxUSE_PALETTE
@@ -737,6 +773,24 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         png_set_pHYs( png_ptr, info_ptr, resX, resY, PNG_RESOLUTION_METER );
 
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
+
+    // save "Description" text chunk
+    if (image->HasOption(wxIMAGE_OPTION_PNG_DESCRIPTION))
+    {
+        const wxString& description = image->GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION);
+
+        png_text text;
+        text.key = const_cast<char*>(wxIMAGE_OPTION_PNG_DESCRIPTION_KEY);
+        text.lang = nullptr;
+        text.lang_key = nullptr;
+        text.compression = PNG_ITXT_COMPRESSION_NONE;
+        const auto& buf = description.utf8_str();
+        text.text = const_cast<char*>(buf.data());
+        text.itxt_length = buf.length();
+        text.text_length = 0;
+        png_set_text( png_ptr, info_ptr, &text, 1 );
+    }
+
     png_write_info( png_ptr, info_ptr );
     png_set_shift( png_ptr, &sig_bit );
     png_set_packing( png_ptr );
@@ -851,14 +905,29 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 {
     // The version string seems to always have a leading space and a trailing
     // new line, get rid of them both.
-    wxString str = png_get_header_version(nullptr) + 1;
-    str.Replace("\n", "");
+    wxString str = png_get_header_version(nullptr);
+    str.Trim(true).Trim(false);
+
+    wxString copyRight = png_get_copyright(nullptr);
+    copyRight.Trim(true).Trim(false);
+    // The copyright string may include the version info in the first line.
+    // If it does, then remove it.
+    if (copyRight.starts_with("libpng"))
+    {
+        size_t firstNewLine = copyRight.find(L'\n');
+        if (firstNewLine != wxString::npos)
+        {
+            copyRight.erase(0, firstNewLine + 1);
+        }
+    }
 
     return wxVersionInfo("libpng",
                          PNG_LIBPNG_VER_MAJOR,
                          PNG_LIBPNG_VER_MINOR,
                          PNG_LIBPNG_VER_RELEASE,
-                         str);
+                         PNG_LIBPNG_VER_BUILD,
+                         str,
+                         copyRight);
 }
 
 #endif  // wxUSE_LIBPNG

@@ -308,7 +308,7 @@ wxFontStyle wxFont::GetStyle() const
 int wxFont::GetNumericWeight() const
 {
     wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, "invalid font" );
-    
+
     return M_FONTDATA->m_nativeFontInfo.GetNumericWeight();
 }
 
@@ -376,7 +376,7 @@ void wxFont::SetStyle(wxFontStyle style)
 void wxFont::SetNumericWeight(int weight)
 {
     AllocExclusive();
-    
+
     M_FONTDATA->SetNumericWeight(weight);
 }
 

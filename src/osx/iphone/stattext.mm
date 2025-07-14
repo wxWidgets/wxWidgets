@@ -55,7 +55,7 @@ public:
     {
         wxUILabel* v = (wxUILabel*)GetWXWidget();
         wxCFStringRef text( title );
-        
+
         [v setText:text.AsNSString()];
     }
 private :
@@ -95,7 +95,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
         [v setTextAlignment: NSTextAlignmentCenter];
     else if (style & wxALIGN_RIGHT)
         [v setTextAlignment: NSTextAlignmentRight];
-    
+
     wxWidgetIPhoneImpl* c = new wxStaticTextIPhoneImpl( wxpeer, v );
     return c;
 }

@@ -490,7 +490,7 @@ IconRef wxBitmapRefData::GetIconRef() const
             sz = 512;
         else if ( sz <= 1024)
             sz = 1024;
-        
+
         switch (sz)
         {
             case 1024:
@@ -500,11 +500,11 @@ IconRef wxBitmapRefData::GetIconRef() const
             case 512:
                 dataType = kIconServices512PixelDataARGB;
                 break;
-                
+
             case 256:
                 dataType = kIconServices256PixelDataARGB;
                 break;
- 
+
             case 128:
                 dataType = kIconServices128PixelDataARGB ;
                 break;
@@ -1945,7 +1945,7 @@ bool wxICNSResourceHandler::LoadFile(wxBitmap *bitmap,
     if ( theId != 0 )
     {
         IconRef iconRef = nullptr ;
-        
+
         wxOSX_VERIFY_NOERR(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
         img = wxOSXGetNSImageFromIconRef(iconRef);
     }
@@ -1956,10 +1956,10 @@ bool wxICNSResourceHandler::LoadFile(wxBitmap *bitmap,
         wxCFStringRef restype(GetExtension().Lower());
 
         iconURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, nullptr));
-        
+
         img = wxOSXGetNSImageFromCFURL(iconURL);
     }
-    
+
     if ( img )
     {
         bitmap->Create(img);
@@ -1980,9 +1980,9 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
     wxString ext = GetExtension().Lower();
     wxCFStringRef restype(ext);
     double scale = 1.0;
-    
+
     wxCFRef<CFURLRef> imageURL;
-    
+
     const int contentScaleFactor = wxRound(wxOSXGetMainScreenContentScaleFactor());
     if ( contentScaleFactor > 1 )
     {
@@ -1990,20 +1990,20 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
         imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, nullptr));
         scale = contentScaleFactor;
     }
-    
+
     if ( imageURL.get() == nullptr )
     {
         wxCFStringRef resname(name);
         imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, nullptr));
         scale = 1.0;
     }
-    
+
     if ( imageURL.get() != nullptr )
     {
         // Create the data provider object
         wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL (imageURL) );
         CGImageRef image = nullptr;
-        
+
         if ( ext == "jpeg" )
             image = CGImageCreateWithJPEGDataProvider (provider, nullptr, true,
                                                    kCGRenderingIntentDefault);
@@ -2017,7 +2017,7 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
             return true;
         }
     }
-        
+
     return false ;
 }
 

@@ -163,15 +163,15 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
                           const wxString& name)
 {
     DontCreatePeer();
-    
+
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
-    
+
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
     [v setWantsBestResolutionOpenGLSurface:YES];
-    
+
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, wxWidgetImpl::Widget_UserKeyEvents | wxWidgetImpl::Widget_UserMouseEvents );
     SetPeer(c);
     MacPostControlCreate(pos, size) ;

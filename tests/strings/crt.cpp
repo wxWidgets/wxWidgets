@@ -42,7 +42,7 @@ TEST_CASE("CRT::SetGetEnv", "[crt][getenv][setenv]")
     CHECK( val == "value" );
     CHECK( wxString(wxGetenv(TESTVAR_NAME)) == "value" );
 
-    const wxString nonASCII = wxString::FromUTF8("\xe2\x98\xba");
+    const wxString nonASCII = wxString::FromUTF8("☺");
     wxSetEnv(TESTVAR_NAME, nonASCII);
     CHECK( wxGetEnv(TESTVAR_NAME, &val) );
     CHECK( val == nonASCII );
@@ -68,12 +68,12 @@ TEST_CASE("CRT::Strchr", "[crt][strchr]")
 {
     // test that searching for a wide character in a narrow string simply
     // doesn't find it but doesn't fail with an assert (#11487)
-    const wxUniChar smiley = *wxString::FromUTF8("\xe2\x98\xba").begin();
+    const wxUniChar smiley = *wxString::FromUTF8("☺").begin();
 
     CHECK( !wxStrchr("hello", smiley) );
 
     // but searching for an explicitly wide character does find it
-    CHECK( wxStrchr(wxString::FromUTF8(":-) == \xe2\x98\xba"),
+    CHECK( wxStrchr(wxString::FromUTF8(":-) == ☺"),
                     static_cast<wchar_t>(smiley)) );
 }
 

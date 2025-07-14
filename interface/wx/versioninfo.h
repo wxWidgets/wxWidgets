@@ -33,6 +33,16 @@ enum class wxVersionContext
     provide version information about your own libraries, or other libraries
     that you use.
 
+    For example, if you are including Lua in your program, you can gather its
+    library info as such:
+
+    @code
+    wxVersionInfo luaLibInfo{ "Lua", LUA_VERSION_MAJOR_N, LUA_VERSION_MINOR_N,
+                               LUA_VERSION_RELEASE_N, 0, wxString{}, LUA_COPYRIGHT };
+    // GetName(), GetCopyright(), GetNumericVersionString(), etc. can be called
+    // from the luaLibInfo object.
+    @endcode
+
     @library{wxbase}
 
     @category{data}

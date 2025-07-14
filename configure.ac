@@ -13,7 +13,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.3.0], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.3.1], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -39,7 +39,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=3
-wx_release_number=0
+wx_release_number=1
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -261,6 +261,9 @@ case "${host}" in
     dnl      USE_UNIX  must be set and not USE_WIN32
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MSW=1
+    dnl This is not the final value, we may reset it to 0 if we use Cygwin in
+    dnl Unix emulation mode.
+    USE_WIN32=1
   ;;
 
   *-*-darwin* )
@@ -558,9 +561,9 @@ WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compressi
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
 WX_ARG_WITH(libcurl,       [  --with-libcurl          use libcurl-based wxWebRequest], wxUSE_LIBCURL)
-dnl USE_WIN32 is not defined yet, so we always define this option even if it's
-dnl MSW-specific, which is not ideal, but better than never defining it.
+if test "$USE_WIN32" = 1; then
 WX_ARG_WITH(winhttp,       [  --with-winhttp          use WinHTTP-based wxWebRequest], wxUSE_WINHTTP)
+fi
 if test "$USE_DARWIN" = 1; then
 WX_ARG_WITH(urlsession,    [  --with-urlsession       use NSURLSession-based wxWebRequest], wxUSE_URLSESSION)
 fi
@@ -725,7 +728,9 @@ WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conv
 WX_ARG_FEATURE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
 WX_ARG_FEATURE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
 WX_ARG_FEATURE(fs_zip,        [  --enable-fs_zip         now replaced by fs_archive], wxUSE_FS_ZIP)
+if test "$USE_WIN32" = 1 -o "$USE_DARWIN"; then
 WX_ARG_FEATURE(fsvolume,      [  --enable-fsvolume       use wxFSVolume class], wxUSE_FSVOLUME)
+fi
 WX_ARG_FEATURE(fswatcher,     [  --enable-fswatcher      use wxFileSystemWatcher class], wxUSE_FSWATCHER)
 WX_ARG_FEATURE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wxUSE_LOG)
@@ -1471,7 +1476,6 @@ esac
 dnl Determine whether we want to use Cygwin as Windows or POSIX platform: the
 dnl latter makes more sense for wxGTK/X11 ports
 wants_win32=0
-doesnt_want_win32=0
 case "${host}" in
   *-*-cygwin*)
       if test "$wxUSE_MSW" = 1 ; then
@@ -1497,7 +1501,8 @@ case "${host}" in
         if test "$wx_cv_nocygwin" = "yes"; then
             wants_win32=1
         else
-            doesnt_want_win32=1
+            dnl Undo USE_WIN32=1 done above.
+            USE_WIN32=0
         fi
       fi
       if test "$wants_win32" = 1 ; then
@@ -1514,8 +1519,6 @@ if test "$wxUSE_WINE" = "yes"; then
     LDFLAGS_GUI="-mwindows"
 fi
 
-dnl NB: The two tests below are *NOT* mutually exclusive! They should only
-dnl     take effect on Cygwin/Mingw and not other platforms.
 if test "$wants_win32" = 1 ; then
     USE_UNIX=0
     USE_WIN32=1
@@ -1524,11 +1527,6 @@ if test "$wants_win32" = 1 ; then
     AC_DEFINE(__GNUWIN32__)
     AC_DEFINE(STRICT)
 fi
-if test "$doesnt_want_win32" = 1 ; then
-    USE_UNIX=1
-    USE_WIN32=0
-fi
-dnl (end of Windows-only piece)
 
 if test "$USE_UNIX" = 1 ; then
     wxUSE_UNIX=yes
@@ -4913,10 +4911,6 @@ else
     fi
 fi
 
-if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
-    AC_DEFINE(wxUSE_REPRODUCIBLE_BUILD)
-fi
-
 dnl ---------------------------------------------------------------------------
 dnl compatibility level
 dnl ---------------------------------------------------------------------------
@@ -5458,7 +5452,11 @@ if test "$wxUSE_FS_ZIP" = "yes"; then
 fi
 
 if test "$wxUSE_FSVOLUME" = "yes"; then
-  AC_DEFINE(wxUSE_FSVOLUME)
+  dnl wxFSVolume is not available under iOS, but it's probably not worth
+  dnl warning about this.
+  if test "$wxUSE_OSX_IPHONE" != 1; then
+    AC_DEFINE(wxUSE_FSVOLUME)
+  fi
 fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
@@ -7124,15 +7122,14 @@ Please install it following the instructions in the manual or remove the
         fi
     fi
 
-fi
-
-if test "$wxUSE_WEBVIEW" = "yes"; then
-    USE_WEBVIEW=1
-    AC_DEFINE(wxUSE_WEBVIEW)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
-else
-    USE_WEBVIEW=0
-    AC_MSG_WARN([No wxWebView backends found, disabling wxWebView])
+    if test "$wxUSE_WEBVIEW" = "yes"; then
+        USE_WEBVIEW=1
+        AC_DEFINE(wxUSE_WEBVIEW)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
+    else
+        USE_WEBVIEW=0
+        AC_MSG_WARN([No wxWebView backends found, disabling wxWebView])
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -8016,6 +8013,16 @@ fi
 
 AC_BAKEFILE([m4_include(autoconf_inc.m4)])
 
+dnl Override some options set by AC_BAKEFILE() above.
+if test "x$wxUSE_REPRODUCIBLE_BUILD" = "xyes"; then
+    AC_DEFINE(wxUSE_REPRODUCIBLE_BUILD)
+    dnl We consider that when --enable-repro-build is used, ar and ranlib
+    dnl support deterministic mode (if they don't, we wouldn't be able to
+    dnl honour this option anyhow).
+    AROPTIONS="rcD"
+    RANLIB="$RANLIB -D"
+fi
+
 dnl make install path absolute (if not already);
 dnl will fail with (some) MSDOS paths
 case ${INSTALL} in
@@ -8279,8 +8286,6 @@ dnl though in this form because AC_CONFIG_LINKS will fail for directories
 dnl on platforms that do not have symlinks.
 dnl AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR:include ])
 
-if test "$wxWITH_SUBDIRS" != "no"; then
-dnl Configure samples, demos etc. directories, but only if they are present:
 if test "$wxUSE_GUI" = "yes"; then
     SUBDIRS="samples demos utils"
 else
@@ -8333,6 +8338,8 @@ will use built-in instead])
     AC_SUBST(CATCH2_CFLAGS)
 fi
 
+dnl Configure samples, demos etc. directories, but only if they are present:
+if test "$wxWITH_SUBDIRS" != "no"; then
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then
         if test "$wxUSE_GUI" = "yes"; then

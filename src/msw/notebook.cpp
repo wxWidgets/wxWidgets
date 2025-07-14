@@ -311,6 +311,11 @@ int wxNotebook::MSWGetToolTipMessage() const
 
 wxNotebook::~wxNotebook()
 {
+    // Make sure we don't try to repaint the notebook any more: not only is
+    // this useless, it can also crash when calling member functions of a
+    // half-destroyed object.
+    Unbind(wxEVT_PAINT, &wxNotebook::OnPaint, this);
+
 #if wxUSE_UXTHEME
     if ( m_hbrBackground )
         ::DeleteObject((HBRUSH)m_hbrBackground);
@@ -1089,7 +1094,7 @@ void
 DrawNotebookTab(wxWindow* win,
                 wxDC& dc,
                 const wxRect& rectOrig,
-                const wxString& text,
+                const wxString& label,
                 const wxBitmap& image,
                 wxDirection tabOrient,
                 int flags = wxCONTROL_NONE)
@@ -1169,6 +1174,9 @@ DrawNotebookTab(wxWindow* win,
 
     rectLabel.Deflate(labelOffset);
 
+    wxString text;
+    int mnemonicIndex = wxControl::FindAccelIndex(label, &text);
+
     // Draw the label and the image, if any.
     switch ( tabOrient )
     {
@@ -1176,7 +1184,8 @@ DrawNotebookTab(wxWindow* win,
         case wxBOTTOM:
             // We can use an existing helper that will do everything for us.
             dc.DrawLabel(text, image, rectLabel,
-                         wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+                         wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL,
+                         mnemonicIndex);
             break;
 
         case wxLEFT:
@@ -1234,6 +1243,8 @@ DrawNotebookTab(wxWindow* win,
 
                     dc.DrawRotatedText(text, rect.GetRight() - textOfs, y, -90.0);
                 }
+
+                // TODO: We don't underline mnemonic when drawing vertically.
             }
             break;
 
@@ -1808,56 +1819,33 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
 // Windows only: attempts to get colour for UX theme page background
 wxColour wxNotebook::GetThemeBackgroundColour() const
 {
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We know the colour used in dark mode as we draw the notebook
+        // ourselves, so just return it (especially because the code below
+        // would return totally inappropriate light mode colour).
+        return GetBackgroundColour();
+    }
+
 #if wxUSE_UXTHEME
     if (wxUxThemeIsActive())
     {
         wxUxThemeHandle hTheme(this, L"TAB");
         if (hTheme)
         {
-            // This is total guesswork.
-            // See PlatformSDK\Include\Tmschema.h for values.
-            // JACS: can also use 9 (TABP_PANE)
-            wxColour colour = hTheme.GetColour(TABP_BODY, TMT_FILLCOLORHINT, TIS_NORMAL);
-            if ( !colour.IsOk() )
-                return GetBackgroundColour();
+            // Probe the colour of the background: note that we need to use a
+            // bitmap bigger than 1*1 because it may have borders of different
+            // colour. But this size should hopefully be enough for the central
+            // pixel not to belong to any border.
+            const wxSize size(10, 10);
 
-            /*
-            [DS] Workaround for WindowBlinds:
-            Some themes return a near black theme color using FILLCOLORHINT,
-            this makes notebook pages have an ugly black background and makes
-            text (usually black) unreadable. Retry again with FILLCOLOR.
+            wxBitmap bmp(size);
+            wxMemoryDC memdc(bmp);
+            hTheme.DrawBackground(GetHdcOf(memdc), size, TABP_PANE);
 
-            This workaround potentially breaks appearance of some themes,
-            but in practice it already fixes some themes.
-            */
-            if ( colour.GetRGB() == 1 )
-                colour = hTheme.GetColour(TABP_BODY, TMT_FILLCOLOR, TIS_NORMAL);
-
-            // Under Vista, the tab background colour is reported incorrectly.
-            // So for the default theme at least, hard-code the colour to something
-            // that will blend in.
-
-            static int s_AeroStatus = -1;
-            if (s_AeroStatus == -1)
-            {
-                WCHAR szwThemeFile[1024];
-                WCHAR szwThemeColor[256];
-                if (S_OK == ::GetCurrentThemeName(szwThemeFile, 1024, szwThemeColor, 256, nullptr, 0))
-                {
-                    wxString themeFile(szwThemeFile);
-                    if (themeFile.Find(wxT("Aero")) != -1 && wxString(szwThemeColor) == wxT("NormalColor"))
-                        s_AeroStatus = 1;
-                    else
-                        s_AeroStatus = 0;
-                }
-                else
-                    s_AeroStatus = 0;
-            }
-
-            if (s_AeroStatus == 1)
-                colour = wxColour(255, 255, 255);
-
-            return colour;
+            wxColour colour;
+            if ( memdc.GetPixel(size.x/2, size.y/2, &colour) )
+                return colour;
         }
     }
 #endif // wxUSE_UXTHEME

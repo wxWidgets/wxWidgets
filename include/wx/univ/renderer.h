@@ -22,7 +22,7 @@
    methods).
 
    Finally note that wxRenderer supersedes wxRendererNative in wxUniv build and
-   includes the latters functionality (which it may delegate to the generic
+   includes the latter's functionality (which it may delegate to the generic
    implementation of the latter or reimplement itself).
  */
 
@@ -458,7 +458,7 @@ public:
     // get the border between the status bar fields
     virtual wxCoord GetStatusBarBorderBetweenFields() const = 0;
 
-    // get the mergin between a field and its border
+    // get the margin between a field and its border
     virtual wxSize GetStatusBarFieldMargins() const = 0;
 #endif // wxUSE_STATUSBAR
 
