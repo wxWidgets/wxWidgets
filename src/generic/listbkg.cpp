@@ -132,7 +132,7 @@ long wxListbook::GetListCtrlFlags(bool hasImages) const
         {
             flags |= wxLC_LIST;
         }
-        
+
 #ifdef __WXQT__
         flags |= wxLC_NO_HEADER;
 #endif

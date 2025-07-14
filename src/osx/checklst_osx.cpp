@@ -54,8 +54,8 @@ bool wxCheckListBox::Create(
    long style,
    const wxValidator& validator,
    const wxString& name )
-{    
-    
+{
+
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   wxT("only one of listbox selection modes can be specified") );
 

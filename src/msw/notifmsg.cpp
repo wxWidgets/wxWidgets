@@ -276,7 +276,7 @@ void wxBalloonNotifMsgImpl::SetUpIcon(wxWindow *win)
     }
 }
 
-bool 
+bool
 wxBalloonNotifMsgImpl::Show(int timeout)
 {
     // timout active event

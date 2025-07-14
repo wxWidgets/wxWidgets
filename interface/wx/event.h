@@ -4085,7 +4085,7 @@ public:
     bool IsPrimary() const;
 
     /**
-        Returns the ID of the touch. This allows to track the move of an specific touch point.
+        Returns the ID of the touch. This allows to track the move of a specific touch point.
     */
     const wxTouchSequenceId& GetSequenceId() const;
 };

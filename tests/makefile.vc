@@ -205,6 +205,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_htmllboxtest.obj \
 	$(OBJS)\test_gui_hyperlinkctrltest.obj \
 	$(OBJS)\test_gui_itemcontainertest.obj \
+	$(OBJS)\test_gui_infobar.obj \
 	$(OBJS)\test_gui_label.obj \
 	$(OBJS)\test_gui_listbasetest.obj \
 	$(OBJS)\test_gui_listbooktest.obj \

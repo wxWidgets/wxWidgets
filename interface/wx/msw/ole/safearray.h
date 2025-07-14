@@ -27,7 +27,7 @@
     @library{wxcore}
     @category{data}
 
-    @see wxAutomationObject, wxVariantDataSafeArray, wxVariant    
+    @see wxAutomationObject, wxVariantDataSafeArray, wxVariant
 */
 template <VARTYPE varType>
 class wxSafeArray<varType>

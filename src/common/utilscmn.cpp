@@ -1069,15 +1069,13 @@ wxVersionInfo wxGetLibraryVersionInfo()
 
     msg += wxPlatformInfo::Get().GetPlatformDescription();
 
-    const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
-
     return wxVersionInfo(wxS("wxWidgets"),
                          wxMAJOR_VERSION,
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxString::Format(wxS("Copyright %s 1992-2025 wxWidgets team"),
-                                          copyrightSign));
+                         wxString::FromUTF8("Copyright © 1992-2025 wxWidgets team")
+                         );
 }
 
 

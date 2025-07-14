@@ -260,7 +260,7 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
 {
     if ( !wxWindow::SetBackgroundColour(c) && m_hasBgCol )
         return false ;
-    
+
     // only set the native background color if the toplevel window's
     // background is not supposed to be transparent, otherwise the
     // transparency is lost
@@ -473,7 +473,7 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
 #else
     m_nowpeer->GetContentArea(left, top, w, h);
 #endif
-    
+
     if (width)
        *width = w ;
     if (height)

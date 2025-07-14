@@ -131,7 +131,7 @@ void wxRichTextBackgroundPage::Init()
  */
 
 void wxRichTextBackgroundPage::CreateControls()
-{    
+{
 ////@begin wxRichTextBackgroundPage content construction
     wxRichTextBackgroundPage* itemRichTextDialogPage1 = this;
 
@@ -368,7 +368,7 @@ bool wxRichTextBackgroundPage::TransferDataToWindow()
     }
 
     m_useShadow->SetValue(attr->GetTextBoxAttr().GetShadow().IsValid());
-    
+
     wxArrayInt units;
     units.Add(wxTEXT_ATTR_UNITS_PIXELS);
     units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
@@ -418,7 +418,7 @@ bool wxRichTextBackgroundPage::TransferDataFromWindow()
     {
         attr->SetFlags(attr->GetFlags() & ~wxTEXT_ATTR_BACKGROUND_COLOUR);
     }
-    
+
     if (!m_useShadow->GetValue())
         attr->GetTextBoxAttr().GetShadow().Reset();
     else

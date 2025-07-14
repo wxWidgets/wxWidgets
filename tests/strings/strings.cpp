@@ -115,10 +115,7 @@ TEST_CASE("StringFormatUnicode", "[wxString]")
     wxLocaleSetter loc("C.UTF-8");
 #endif // !__WINDOWS__
 
-    const char *UNICODE_STR = "Iestat\xC4\xAB %i%i";
-    //const char *UNICODE_STR = "Iestat\xCC\x84 %i%i";
-
-    wxString fmt = wxString::FromUTF8(UNICODE_STR);
+    wxString fmt = wxString::FromUTF8("Iestatī");
     wxString s = wxString::Format(fmt, 1, 1);
     wxString expected(fmt);
     expected.Replace("%i", "1");
@@ -207,8 +204,7 @@ TEST_CASE("StringExtraction", "[wxString]")
     CHECK( wxStrcmp( s.substr(3, 5).c_str() , wxT("lo, w") ) == 0 );
     CHECK( wxStrcmp( s.substr(3).c_str() , wxT("lo, world!") ) == 0 );
 
-    static const char *germanUTF8 = "Oberfl\303\244che";
-    wxString strUnicode(wxString::FromUTF8(germanUTF8));
+    wxString strUnicode(wxString::FromUTF8("Oberfläche"));
 
     CHECK( strUnicode.Mid(0, 10) == strUnicode );
     CHECK( strUnicode.Mid(7, 2) == "ch" );

@@ -27,14 +27,14 @@
     #define WXUISIM_TEST(test)
 #endif
 
-// define wxHAVE_U_ESCAPE if the compiler supports \uxxxx character constants
-#if defined(__VISUALC__) || defined(__GNUC__)
-    #define wxHAVE_U_ESCAPE
-
-    // and disable warning that using them results in with MSVC 8+
-    #if defined(__VISUALC__)
-        // universal-character-name encountered in source
-        #pragma warning(disable:4428)
+#if defined(__VISUALC__)
+    #if _MSC_VER < 1910
+        // MSVS 2015 doesn't handle literal Unicode characters in wide strings
+        // correctly, so use \uxxxx escapes for it instead.
+        //
+        // When support for MSVS 2015 is dropped, this symbol and all code
+        // guarded by it should be removed.
+        #define wxMUST_USE_U_ESCAPE
     #endif
 #endif
 

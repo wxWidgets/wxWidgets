@@ -111,7 +111,7 @@ public:
     static double GetCTSlant( CTFontDescriptorRef font );
 
     CTFontDescriptorRef GetCTFontDescriptor() const;
-    
+
     void RealizeResource() const;
 private:
     // attributes for regenerating a CTFontDescriptor, stay close to native values

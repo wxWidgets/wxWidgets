@@ -81,7 +81,7 @@ protected:
         }
     }
 };
-    
+
 } // anonymous namespace
 
 wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer,

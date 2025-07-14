@@ -159,7 +159,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
     if ( style & wxSP_WRAP )
         wrap = YES;
     [v setValueWraps:wrap];
-    
+
     wxWidgetCocoaImpl* c = new wxSpinButtonCocoaImpl( wxpeer, v );
     return c;
 }

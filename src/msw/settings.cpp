@@ -290,7 +290,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* win)
         {
             return -1;
         }
-        
+
         if ( blinkTime == INFINITE ) // caret does not blink
         {
             return 0;

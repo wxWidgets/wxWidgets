@@ -2475,7 +2475,38 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
         item = wxID_NONE;
 
     wxMenu* menu = MSWFindMenuFromHMENU(hMenu);
-    wxMenuItem* menuItem = MSWFindMenuItemFromHMENU(hMenu, item);
+
+    // Don't try to look for the menu item if it's not our menu at all, e.g. if
+    // it's the per-window system menu in MDI applications.
+    wxMenuItem* menuItem = nullptr;
+    if ( menu )
+    {
+        int pos = 0;
+        for ( auto& mi : menu->GetMenuItems() )
+        {
+            // If there is a normal menu item with the same ID as the position
+            // of a submenu we give precedence to the normal item, as this
+            // seems more useful because the application is more likely to
+            // handle wxEVT_MENU_HIGHLIGHT for a normal item than for a submenu.
+            if ( mi->GetId() == item )
+            {
+                menuItem = mi;
+                break;
+            }
+
+            // We don't get the ID for submenus, but their position in the
+            // parent window, so this is how we identify them.
+            if ( mi->IsSubMenu() && item == pos )
+            {
+                menuItem = mi;
+
+                // Don't break here, if we find an item with the given ID
+                // later, take it instead of this submenu, as explained above.
+            }
+
+            ++pos;
+        }
+    }
 
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item, menu, menuItem);
     if ( wxMenu::ProcessMenuEvent(menu, event, this) )
@@ -2524,37 +2555,6 @@ wxMenu* wxWindowMSW::MSWFindMenuFromHMENU(WXHMENU hMenu)
         return wxCurrentPopupMenu;
 
     return nullptr;
-}
-
-wxMenuItem* wxWindowMSW::MSWFindMenuItemFromHMENU(WXHMENU hMenu, int item)
-{
-    WinStruct<MENUITEMINFO> mii;
-    mii.fMask = MIIM_ID | MIIM_DATA; // Include MIIM_DATA to access dwItemData
-
-    const int count = ::GetMenuItemCount(hMenu);
-    for ( int i = 0; i < count; i++ )
-    {
-        if ( ::GetMenuItemInfo(hMenu, i, TRUE, &mii) )
-        {
-            wxMenuItem* menuItem = (wxMenuItem*)mii.dwItemData;
-            if ( mii.wID == (unsigned int)item && menuItem )
-            {
-                return menuItem;
-            }
-
-            // Check for submenus
-            if ( mii.hSubMenu )
-            {
-                wxMenuItem* foundInSubmenu = MSWFindMenuItemFromHMENU(mii.hSubMenu, item);
-                if ( foundInSubmenu )
-                {
-                    return foundInSubmenu;
-                }
-            }
-        }
-    }
-
-    return nullptr; // Not found
 }
 
 #endif // wxUSE_MENUS && !defined(__WXUNIVERSAL__)

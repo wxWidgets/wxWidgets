@@ -490,7 +490,7 @@ void wxRegionIterator::CreateRects( const wxRegion& region )
     if (cairoRegion == nullptr)
         return;
     m_numRects = cairo_region_num_rectangles(cairoRegion);
-     
+
     if (m_numRects)
     {
         m_rects = new wxRect[m_numRects];

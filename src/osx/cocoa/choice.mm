@@ -71,7 +71,7 @@ public:
     {
         delete m_popUpMenu;
     }
-    
+
     void InsertItem( size_t pos, int itemid, const wxString& text) override
     {
         m_popUpMenu->Insert( pos, itemid, text );

@@ -731,6 +731,9 @@ wxAuiPaneInfo objects have the following properties:
     Sets the ideal size for the pane.}
 @row3col{floating_size, @ref overview_xrcformat_type_size,
     Sets the size of the floating pane.}
+@row3col{floating_client_size, @ref overview_xrcformat_type_size,
+    Sets the client size of the floating pane. This has precedence over
+    floating_size. This attribute is available since wxWidgets 3.3.1.}
 @row3col{min_size, @ref overview_xrcformat_type_size,
     Sets the minimum size of the pane.}
 @row3col{max_size, @ref overview_xrcformat_type_size,
@@ -1376,6 +1379,14 @@ page.
 @row3col{url, @ref overview_xrcformat_type_url,
      URL to open when the link is clicked (default: empty).}
 @endTable
+
+
+@subsubsection xrc_wxgenerichyperlinkctrl wxGenericHyperlinkCtrl
+
+This handler is identical to the one for @ref xrc_wxhyperlinkctrl
+"wxHyperlinkCtrl", please see it for more information. The only difference is
+that, for the platforms with a native wxHyperlinkCtrl implementation, using
+this handler creates a generic control rather than a native one.
 
 
 @subsubsection xrc_wxinfobar wxInfoBar

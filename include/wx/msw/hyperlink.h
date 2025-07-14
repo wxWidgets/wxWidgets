@@ -63,6 +63,9 @@ public:
     virtual void SetVisitedColour(const wxColour &colour) override;
 
     // overridden/inherited wxWindow methods
+    virtual bool Enable(bool enable = true) override;
+    virtual bool SetForegroundColour(const wxColour& colour) override;
+
     virtual wxVisualAttributes GetDefaultAttributes() const override;
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -76,6 +79,10 @@ private:
 
     bool MSWAreCustomColoursEnabled() const;
     void MSWEnableCustomColours();
+
+    // This is set to the previously used colour when the control is disabled,
+    // to be able to restore it later when the control is enabled again.
+    wxColour m_savedEnabledColour;
 
     wxDECLARE_DYNAMIC_CLASS( wxHyperlinkCtrl );
 };

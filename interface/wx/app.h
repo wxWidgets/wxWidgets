@@ -755,8 +755,45 @@ public:
     void SetAppName(const wxString& name);
 
     /**
-        Sets the class name of the application. This may be used in a platform specific
-        manner to refer to the application.
+        Sets the class name of the application.
+
+        The class name is used in a platform specific manner. Currently it is
+        used as "Application User Model ID" under Windows (see [Microsoft
+        documentation][microsoft-docs]), "app ID" when using wxGTK 3.24.22 or
+        later with Wayland (see [Wayland documentation][wayland-docs]) and is
+        unused under the other platforms.
+
+        [microsoft-docs]: https://learn.microsoft.com/en-us/windows/win32/shell/appids
+        [wayland-docs]: https://wayland.app/protocols/xdg-shell#xdg_toplevel:request:set_app_id
+
+        When it is used, the class name purpose is to allow the system to
+        handle all windows with the same ID as belonging to the same
+        application, e.g. to group them together in the taskbar (so the value
+        set here is used by wxTaskBarJumpList constructor). By default the
+        application executable name is used as its ID, so it is not necessary
+        to set the class name, but it may be useful to do it to specify a more
+        unique string (typically by using a reverse domain name notation with
+        the domain unique to the application vendor) or by specifying the same
+        ID in different applications that should be handled as a single one at
+        UI level.
+
+        Please note that SetClassName() must be called as early as possible and
+        definitely before creating any top-level windows to have an effect.
+        Typically it should be called in the constructor of the class derived
+        from wxApp, e.g.
+
+        @code
+        class MyApp : public wxApp
+        {
+        public:
+            MyApp() {
+                // Constructor shouldn't perform any non-trivial initialization
+                // as the GUI is not available yet, but this function is fine
+                // to call.
+                SetClassName("com.example.myapp");
+            }
+        };
+        @endcode
 
         @see GetClassName()
     */
@@ -1371,7 +1408,11 @@ public:
 
         This function uses @e undocumented, and unsupported by Microsoft,
         functions to enable dark mode support for the desktop applications
-        under Windows 10 20H1 or later (including all Windows 11 versions).
+        under Windows 10 versions later than v1809 (which includes Windows 10
+        LTSC 2019) and all Windows 11 versions. Please note that dark mode
+        testing under versions of Windows earlier than 20H1 (i.e. v2004) has
+        been limited, make sure to test your application especially carefully
+        if you target these versions and want to enable dark mode support.
 
         Note that dark mode can also be enabled by setting the "msw.dark-mode"
         @ref wxSystemOptions "system option" via an environment variable from
@@ -1388,12 +1429,13 @@ public:
         - The following dialogs wrapping common windows dialogs don't support
           dark mode: wxColourDialog, wxFindReplaceDialog, wxFontDialog,
           wxPageSetupDialog, wxPrintDialog.
-        - wxDatePickerCtrl and wxTimePickerCtrl don't support dark mode and
-          use the same (light) background as by default in it.
+        - wxTimePickerCtrl, wxDatePickerCtrl and wxCalendarCtrl don't support dark mode
+          and use the same (light) background as by default in it.
         - Toolbar items for which wxToolBar::SetDropdownMenu() was called
           don't draw the menu drop-down correctly, making it almost
           invisible.
-        - Calling wxMenu::Break() will result in the menu being light.
+        - Calling wxMenu::Break() or wxMenuItem::SetDisabledBitmap() will result
+          in the menu being light.
 
         @param flags Can include @c wxApp::DarkMode_Always to force enabling
             dark mode for the application, even if the system doesn't use the

@@ -15,11 +15,37 @@
 */
 enum
 {
-    wxTL_SINGLE         = 0x0000,       /// This is the default anyhow.
-    wxTL_MULTIPLE       = 0x0001,       /// Allow multiple selection.
-    wxTL_CHECKBOX       = 0x0002,       /// Show checkboxes in the first column.
-    wxTL_3STATE         = 0x0004,       /// Allow 3rd state in checkboxes.
-    wxTL_USER_3STATE    = 0x0008,       /// Allow user to set 3rd state.
+    /// Only allow single selection (this is the default).
+    wxTL_SINGLE         = 0x0000,
+
+    /// Allow multiple selections.
+    wxTL_MULTIPLE       = 0x0001,
+
+    /**
+        Show checkboxes in the first column.
+
+        Without any additional styles, checkboxes may be only in checked or
+        unchecked state.
+     */
+    wxTL_CHECKBOX       = 0x0002,
+
+    /**
+        Allow 3rd state in checkboxes.
+
+        Specifying this style turns on ::wxTL_CHECKBOX too.
+
+        Unless ::wxTL_USER_3STATE is also specified, the 3rd state
+        ("undetermined") can only be set by the program but not by the user.
+     */
+    wxTL_3STATE         = 0x0004,
+
+    /**
+        Allow user to set 3rd state in the checkboxes.
+
+        Specifying this style turns on ::wxTL_3STATE and ::wxTL_CHECKBOX too.
+     */
+    wxTL_USER_3STATE    = 0x0008,
+
     /**
         Don't show the column headers.
 
@@ -30,12 +56,8 @@ enum
      */
     wxTL_NO_HEADER      = 0x0010,
 
-    wxTL_DEFAULT_STYLE  = wxTL_SINGLE,
-    wxTL_STYLE_MASK     = wxTL_SINGLE |
-                          wxTL_MULTIPLE |
-                          wxTL_CHECKBOX |
-                          wxTL_3STATE |
-                          wxTL_USER_3STATE
+    /// Style used by the control by default.
+    wxTL_DEFAULT_STYLE  = wxTL_SINGLE
 };
 
 

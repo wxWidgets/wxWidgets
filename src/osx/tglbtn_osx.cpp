@@ -46,7 +46,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString& name)
 {
     DontCreatePeer();
-    
+
     m_marginX =
     m_marginY = 0;
 
@@ -113,7 +113,7 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString& name)
 {
     DontCreatePeer();
-    
+
     if ( !wxToggleButton::Create(parent, id, wxEmptyString, pos, size, style | wxBU_NOTEXT | wxBU_EXACTFIT, validator, name) )
         return false;
 

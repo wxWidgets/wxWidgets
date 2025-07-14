@@ -616,13 +616,14 @@ public:
         Constructs the jump list.
 
         @param appID
-            Specifies a unique identifier for the application jump list, can be
-            empty by default.
+            Specifies a unique identifier for the application jump list. If it
+            is empty (default value), the global application user model ID,
+            which can be changed by using wxApp::SetClassName(), is used.
 
-            See <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd378459(v=vs.85).aspx">
-            Application User Model IDs</a> on MSDN for further details.
+            See <a href="https://learn.microsoft.com/en-us/windows/win32/shell/appids">
+            Application User Model IDs</a> for further details about app IDs.
     */
-    wxTaskBarJumpList(const wxString& appID = wxEmptyString);
+    explicit wxTaskBarJumpList(const wxString& appID = wxEmptyString);
     virtual ~wxTaskBarJumpList();
 
     /**
@@ -648,7 +649,7 @@ public:
     /**
         Accesses the built in tasks category.
 
-        With the returned tasks category, you can append an new task, remove
+        With the returned tasks category, you can append a new task, remove
         an existing task, modify the task item etc.
     */
     wxTaskBarJumpListCategory& GetTasks() const;

@@ -936,7 +936,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 {
     wxTextCoord colStart, colEnd,
                 lineStart, lineEnd;
-    // as convention, ( src/gtk/textctrl.cpp:1411, src/msw/textctrl.cpp:759, 
+    // as convention, ( src/gtk/textctrl.cpp:1411, src/msw/textctrl.cpp:759,
     // test/controls/textentrytest.cpp:171 )
     // if `to` equal -1, it means go to the last position
     if ( to == -1 )
@@ -970,7 +970,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 
     // set selection range for GetSelection and GetInsertionPoint call
     // if give a range but the text length that give doesn't equal the range
-    // it mean clear the text in the range and set the text after `from` 
+    // it mean clear the text in the range and set the text after `from`
     if ( (to - from) != (wxTextPos)text.Len() )
     {
         m_selStart = from;
@@ -1362,7 +1362,7 @@ wxTextPos wxTextCtrl::GetInsertionPoint() const
     long from;
     if ( HasSelection() )
         GetSelection(&from, nullptr);
-    else 
+    else
         from = m_curPos;
     return from;
 }

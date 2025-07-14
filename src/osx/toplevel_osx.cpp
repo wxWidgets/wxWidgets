@@ -99,7 +99,7 @@ bool wxTopLevelWindowMac::Destroy()
     // loop iteration
     if ( !wxPendingDelete.Member(this) )
         wxPendingDelete.Append(this);
-    
+
     Hide();
     return true;
 }

@@ -425,7 +425,7 @@ void wxWidgetIPhoneImpl::SetForegroundColour( const wxColour &col )
     // TODO: use textColor if available?
 }
 
-bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style) 
+bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style)
 {
     if ( style == wxBG_STYLE_PAINT )
         [m_osxView setOpaque: YES ];
@@ -515,7 +515,7 @@ bool wxWidgetIPhoneImpl::IsEnabled() const
 
     if ( [targetView respondsToSelector:@selector(isEnabled) ] )
         return [targetView isEnabled];
-    
+
     return true;
 }
 
@@ -558,11 +558,11 @@ void wxWidgetIPhoneImpl::SetControlSize( wxWindowVariant variant )
 {
 }
 
-double wxWidgetIPhoneImpl::GetContentScaleFactor() const 
+double wxWidgetIPhoneImpl::GetContentScaleFactor() const
 {
     if ( [m_osxView respondsToSelector:@selector(contentScaleFactor) ])
         return [m_osxView contentScaleFactor];
-    else 
+    else
         return 1.0;
 }
 
@@ -574,7 +574,7 @@ void wxWidgetIPhoneImpl::InstallEventHandler( WXWidget control )
 {
     WXWidget c =  control ? control : (WXWidget) m_osxView;
     wxWidgetImpl::Associate( c, this ) ;
-    
+
     if ([c isKindOfClass:[UIControl class] ])
     {
         UIControl* cc = (UIControl*) c;
@@ -705,7 +705,7 @@ void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cm
         wxpeer->MacPaintChildrenBorders();
         CGContextRestoreGState( context );
     }
-    
+
     wxpeer->MacSetCGContextRef( nullptr );
 }
 
@@ -714,7 +714,7 @@ void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf
     bool inRecursion = false;
     if ( inRecursion )
         return;
-    
+
     UITouch *touch = [touches anyObject];
     CGPoint clickLocation;
     if ( [touch view] != slf && IsRootControl() )
@@ -723,18 +723,18 @@ void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf
         inRecursion = true;
         inRecursion = false;
     }
-    else 
+    else
     {
         clickLocation = [touch locationInView:slf];
         wxPoint pt = wxFromNSPoint( m_osxView, clickLocation );
-        
+
         wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
         SetupMouseEvent( wxevent , touches, event ) ;
         wxevent.m_x = pt.x;
         wxevent.m_y = pt.y;
         wxevent.SetEventObject( GetWXPeer() ) ;
         //?wxevent.SetId( GetWXPeer()->GetId() ) ;
-        
+
         GetWXPeer()->HandleWindowEvent(wxevent);
     }
 }
@@ -748,7 +748,7 @@ void wxWidgetIPhoneImpl::controlAction(void* sender, wxUint32 controlEvent, WX_U
 void wxWidgetIPhoneImpl::controlTextDidChange()
 {
     wxTextCtrl* wxpeer = wxDynamicCast((wxWindow*)GetWXPeer(),wxTextCtrl);
-    if ( wxpeer ) 
+    if ( wxpeer )
     {
         wxCommandEvent event(wxEVT_TEXT, wxpeer->GetId());
         event.SetEventObject( wxpeer );

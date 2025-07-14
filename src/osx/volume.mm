@@ -140,11 +140,6 @@ int wxFSVolumeBase::GetFlags() const
 }
 
 #if wxUSE_GUI
-void wxFSVolume::InitIcons()
-{
-    // no support for icons on apple
-}
-
 wxIcon wxFSVolume::GetIcon(wxFSIconType WXUNUSED(type)) const
 {
     // no support for icons on apple

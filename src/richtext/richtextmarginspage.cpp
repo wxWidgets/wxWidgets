@@ -154,7 +154,7 @@ void wxRichTextMarginsPage::Init()
  */
 
 void wxRichTextMarginsPage::CreateControls()
-{    
+{
 ////@begin wxRichTextMarginsPage content construction
     wxRichTextMarginsPage* itemRichTextDialogPage1 = this;
 

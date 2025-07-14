@@ -625,7 +625,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
             image.Rescale(m_Width, m_Height, wxIMAGE_QUALITY_HIGH);
             (*m_bitmap) = wxBitmap(image);
         }
-#endif 
+#endif
 
         if (m_Width != m_bitmap->GetLogicalWidth())
             imageScaleX = (double) m_Width / (double) m_bitmap->GetLogicalWidth();
@@ -710,7 +710,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                             scaleHDPI = 2.0;
                         }
                     }
-                }                    
+                }
 #endif
                 if (!str)
                     str = m_WParser->OpenURL(wxHTML_URL_IMAGE, tmp);

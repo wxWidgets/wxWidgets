@@ -85,7 +85,7 @@ jobs:
             cmake_samples: OFF
             cmake_tests: OFF
             cmake_build_toolkit: osx_iphone
-          - name: Windows MSVC
+          - name: MSW/MSVC wxMSW
             runner: windows-latest
             no_sudo: 1
             cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
@@ -93,7 +93,18 @@ jobs:
             cmake_samples: SOME
             cmake_tests: CONSOLE_ONLY
             cmake_build_toolkit: msw
-          - name: Windows wxQt 6.8
+          - name: MSW/MSVC wxQt 5.15
+            runner: windows-latest
+            no_sudo: 1
+            cmake_generator: 'Visual Studio 17 2022'
+            cmake_defines: -DCMAKE_BUILD_TYPE=Debug -DwxBUILD_SHARED=ON
+            cmake_samples: SOME
+            cmake_tests: ALL
+            cmake_build_toolkit: qt
+            cmake_qt_version: '5.15.*'
+            skip_installation: true
+            test_gui: 1
+          - name: MSW/MSVC wxQt 6.8
             runner: windows-latest
             no_sudo: 1
             cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
@@ -101,15 +112,28 @@ jobs:
             cmake_samples: SOME
             cmake_tests: ALL
             cmake_build_toolkit: qt
+            cmake_qt_version: '6.8.*'
+            skip_installation: true
+          - name: MSW/Clang wxMSW
+            shell: msys2 {0}
+            runner: windows-latest
+            no_sudo: 1
+            cmake_defines: -DCMAKE_C_COMPILER=clang.exe -DCMAKE_CXX_COMPILER=clang++.exe -DCMAKE_CXX_FLAGS="-DwxENABLE_EXTRA_WARNINGS -Werror -Wsuggest-override" -DCMAKE_BUILD_TYPE=Release -DwxBUILD_DEMOS=ON -DwxUSE_WEBVIEW_EDGE=ON
+            cmake_generator: MinGW Makefiles
+            cmake_samples: ALL
+            cmake_tests: OFF
+            cmake_build_toolkit: msw
             skip_installation: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
 
     # Use bash as the shell, even under MSW where the default is PowerShell.
+    # Except for the MSYS2 shell, which must be used to find MSYS2 clang
+    # instead of native clang.
     defaults:
       run:
-        shell: bash
+        shell: ${{ matrix.shell || 'bash' }}
 
     steps:
       - name: Checkout
@@ -117,15 +141,19 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Install Qt6
-        if: runner.os == 'Windows'
+      - name: Setup MSYS2
+        if: matrix.cmake_generator == 'MinGW Makefiles'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
+
+      - name: Install Qt
+        if: matrix.cmake_build_toolkit == 'qt'
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.8.*'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_msvc2022_64'
-          archives: 'qtbase qtsvg qtimageformats'
+          version: ${{ matrix.cmake_qt_version }}
           cache: 'true'
           aqtversion: '==3.1.*'
           setup-python: 'false'
@@ -133,13 +161,20 @@ jobs:
       - name: Set environment variables
         run: |
           wxPROC_COUNT=`./build/tools/proc_count.sh`
-          if [ "${{ matrix.cmake_generator }}" == "Xcode" ]; then
+          case "${{ matrix.cmake_generator }}" in
+            Xcode)
               # Xcode generates a lot of output, suppress it so only warnings and errors are visible
               wxBUILD_ARGS="-jobs $wxPROC_COUNT -quiet"
-          else
+              ;;
+
+            *Makefiles)
               wxBUILD_ARGS=-j$wxPROC_COUNT
+              ;;
+          esac
+
+          if [ -n "$wxBUILD_ARGS" ]; then
+            echo wxBUILD_ARGS=$wxBUILD_ARGS >> $GITHUB_ENV
           fi
-          echo wxBUILD_ARGS=$wxBUILD_ARGS >> $GITHUB_ENV
 
           cmake_tests=${{ matrix.cmake_tests }}
           if [ -z $cmake_tests ]; then cmake_tests=CONSOLE_ONLY; fi
@@ -163,9 +198,10 @@ jobs:
         run: |
           ./build/tools/before_install.sh
 
-      # required for CMake to find Ninja
-      - name: "[Windows] Set up MSVC Developer Command Prompt"
-        if: runner.os == 'Windows'
+      # required for CMake to find Ninja but shouldn't be used when using
+      # MSYS2, or we'd end up using MSVC clang instead of its own.
+      - name: Setup MSVC Environment
+        if: ${{ runner.os == 'Windows' && matrix.cmake_generator != 'MinGW Makefiles' }}
         uses: wxWidgets/gha-setup-vsdevenv@wx
 
       - name: Configuring
@@ -209,6 +245,12 @@ jobs:
               httpbin_show_log
               exit $rc
           fi
+
+      - name: Testing GUI
+        if: matrix.test_gui == '1'
+        working-directory: build_cmake\lib\vc_x64_dll
+        run: |
+          ./test_gui.exe
 
       - name: Testing installation
         if: matrix.skip_installation != true

@@ -2231,7 +2231,7 @@ wxString wxRichTextXMLHelper::AddAttributes(wxRichTextObject* obj, bool isPara)
     if (!obj->IsShown())
         style << wxT(" show=\"0\"");
     return style;
-}    
+}
 
 // Write the properties
 bool wxRichTextXMLHelper::WriteProperties(wxOutputStream& stream, const wxRichTextProperties& properties, int level)

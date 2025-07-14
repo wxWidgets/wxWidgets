@@ -600,7 +600,7 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
     {
         if (checkBox)
             checkBox->SetValue(true);
-        
+
         if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
         {
             unitsIdx = 0;  // By default, the 1st in the list.
@@ -628,7 +628,7 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
             unitsIdx = 3; // By default, the 4th in the list (we don't have points and hundredths of points in the same list)
             valueCtrl->SetValue(wxString::Format(wxT("%d"), (int) dim.GetValue()));
         }
-        
+
         if (units)
         {
             unitsIdx = units->Index(dim.GetUnits());

@@ -563,26 +563,27 @@ public:                                                                       \
 // wxScrolledWindow features however, notably it can't scroll only a rectangle
 // of the window and not its entire client area.
 
-class WXDLLIMPEXP_CORE wxVScrolledWindow : public wxPanel,
-                                      public wxVarVScrollHelper
+template<class T>
+class wxVScrolled : public T,
+                    public wxVarVScrollHelper
 {
 public:
     // constructors and such
     // ---------------------
 
     // default ctor, you must call Create() later
-    wxVScrolledWindow() : wxVarVScrollHelper(this) { }
+    wxVScrolled() : wxVarVScrollHelper(this) { }
 
     // normal ctor, no need to call Create() after this one
     //
     // note that wxVSCROLL is always automatically added to our style, there is
     // no need to specify it explicitly
-    wxVScrolledWindow(wxWindow *parent,
-                      wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long style = 0,
-                      const wxString& name = wxASCII_STR(wxPanelNameStr))
+    wxVScrolled(wxWindow *parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxASCII_STR(wxPanelNameStr))
     : wxVarVScrollHelper(this)
     {
         (void)Create(parent, id, pos, size, style, name);
@@ -599,19 +600,54 @@ public:
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
-        return wxPanel::Create(parent, id, pos, size, style | wxVSCROLL, name);
+        return static_cast<T*>(this)->Create(parent, id, pos, size, style | wxVSCROLL, name);
     }
 
     WX_FORWARD_TO_VAR_SCROLL_HELPER()
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() override { Update(); }
+    virtual void UpdateMacScrollWindow() override { this->Update(); }
 #endif // __WXMAC__
 
 private:
-    wxDECLARE_NO_COPY_CLASS(wxVScrolledWindow);
+    wxDECLARE_NO_COPY_CLASS(wxVScrolled);
+};
+
+// for compatibility with existing code, we provide wxVScrolledWindow
+// "typedef" for wxVScrolled<wxPanel>. It's not a real typedef because we
+// want wxVScrolledWindow to show in wxRTTI information:
+class WXDLLIMPEXP_CORE wxVScrolledWindow : public wxVScrolled<wxPanel>
+{
+public:
+    wxVScrolledWindow() : wxVScrolled<wxPanel>() {}
+    wxVScrolledWindow(wxWindow *parent,
+                      wxWindowID winid = wxID_ANY,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = wxScrolledWindowStyle,
+                      const wxString& name = wxASCII_STR(wxPanelNameStr))
+        : wxVScrolled<wxPanel>(parent, winid, pos, size, style, name) {}
+
     wxDECLARE_ABSTRACT_CLASS(wxVScrolledWindow);
+};
+
+// Parallel to wxVScrolledWindow, we provide wxVScrolledCanvas
+// "typedef" for wxVScrolled<wxWindow>. It's not a real typedef because we
+// want wxVScrolledCanvas to show in wxRTTI information:
+class WXDLLIMPEXP_CORE wxVScrolledCanvas : public wxVScrolled<wxWindow>
+{
+public:
+    wxVScrolledCanvas() : wxVScrolled<wxWindow>() {}
+    wxVScrolledCanvas(wxWindow *parent,
+                      wxWindowID winid = wxID_ANY,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = wxScrolledWindowStyle,
+                      const wxString& name = wxASCII_STR(wxPanelNameStr))
+        : wxVScrolled<wxWindow>(parent, winid, pos, size, style, name) {}
+
+    wxDECLARE_ABSTRACT_CLASS(wxVScrolledCanvas);
 };
 
 

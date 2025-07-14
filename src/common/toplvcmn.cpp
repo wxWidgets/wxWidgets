@@ -505,6 +505,20 @@ bool wxTopLevelWindowBase::Layout()
     return false;
 }
 
+void wxTopLevelWindowBase::Fit()
+{
+    if ( !UsesAutoLayout() )
+    {
+        if ( wxWindow* const child = GetUniqueChild() )
+        {
+            SetClientSize(child->GetBestSize());
+            return;
+        }
+    }
+
+    return wxNonOwnedWindow::Fit();
+}
+
 wxSize wxTopLevelWindowBase::DoGetBestClientSize() const
 {
     // The logic here parallels that of Layout() above.

@@ -47,7 +47,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 #elif wxOSX_USE_IPHONE
         cfFontFamilies = CopyAvailableFontFamilyNames();
 #endif
-        
+
         CFIndex count = CFArrayGetCount(cfFontFamilies);
         for(CFIndex i = 0; i < count; i++)
         {
@@ -62,20 +62,20 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                     if ( fontFamiliyEncoding != macEncoding )
                         continue;
                 }
-                
+
                 if ( fixedWidthOnly )
                 {
                     CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(font);
                     if ( (traits & kCTFontMonoSpaceTrait) == 0 )
                         continue;
                 }
-                
+
             }
-            
+
             wxCFStringRef cfName(wxCFRetain(fontName)) ;
             fontFamilies.Add(cfName.AsString());
         }
-        
+
         CFRelease(cfFontFamilies);
     }
     for ( size_t i = 0 ; i < fontFamilies.Count() ; ++i )

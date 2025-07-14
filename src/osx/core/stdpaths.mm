@@ -122,7 +122,7 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
             dirType = NSDocumentDirectory;
             break;
     }
-    
+
     return GetFMDirectory(dirType, NSUserDomainMask) + subdir;
 }
 

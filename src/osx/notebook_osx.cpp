@@ -40,9 +40,9 @@ bool wxNotebook::Create( wxWindow *parent,
     const wxSize& size,
     long style,
     const wxString& name )
-{    
+{
     DontCreatePeer();
-    
+
     if (! (style & wxBK_ALIGN_MASK))
         style |= wxBK_TOP;
 

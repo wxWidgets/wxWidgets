@@ -33,12 +33,12 @@
         [iv setImage:[NSApplication sharedApplication].applicationIconImage];
         [m_dockTile setContentView:iv];
         [iv release];
-        
+
         m_progIndicator = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(0, 16, m_dockTile.size.width, 24)];
         m_progIndicator.style = NSProgressIndicatorBarStyle;
         [m_progIndicator setIndeterminate:NO];
         [iv addSubview:m_progIndicator];
-        
+
         [m_progIndicator setBezeled:YES];
         [m_progIndicator setMinValue:0];
         [m_progIndicator setMaxValue:1];
@@ -58,7 +58,7 @@
     [m_progIndicator setHidden:NO];
     [m_progIndicator setIndeterminate:NO];
     [m_progIndicator setDoubleValue:value];
-    
+
     [m_dockTile display];
 }
 
@@ -83,7 +83,7 @@ wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* WXUNUSED(parent), int m
     m_maxValue(maxValue)
 {
     wxAppProgressDockIcon* dockIcon = [[wxAppProgressDockIcon alloc] init];
-    
+
     m_dockIcon = dockIcon;
 }
 

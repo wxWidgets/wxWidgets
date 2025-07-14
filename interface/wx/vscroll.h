@@ -605,7 +605,7 @@ public:
 
 
 /**
-    @class wxVScrolledWindow
+    @class wxVScrolled
 
     In the name of this class, "V" may stand for "variable" because it can be
     used for scrolling rows of variable heights; "virtual", because it is not
@@ -621,25 +621,30 @@ public:
     To use this class, you need to derive from it and implement the
     OnGetRowHeight() pure virtual method. You also must call SetRowCount() to
     let the base class know how many rows it should display, but from that
-    moment on the scrolling is handled entirely by wxVScrolledWindow. You only
+    moment on the scrolling is handled entirely by wxVScrolled. You only
     need to draw the visible part of contents in your @c OnPaint() method as
     usual. You should use GetVisibleRowsBegin() and GetVisibleRowsEnd() to
     select the lines to display. Note that the device context origin is not
     shifted so the first visible row always appears at the point (0, 0) in
     physical as well as logical coordinates.
 
+    Note that this template class is available since wxWidgets 3.3.1, only
+    wxVScrolledWindow was available in the earlier versions.
+
     @library{wxcore}
     @category{miscwnd}
 
+    @see wxVScrolledWindow, wxVScrolledCanvas
     @see wxHScrolledWindow, wxHVScrolledWindow
 */
-class wxVScrolledWindow : public wxPanel, public wxVarVScrollHelper
+template<class T>
+class wxVScrolled : public T, public wxVarVScrollHelper
 {
 public:
     /**
         Default constructor, you must call Create() later.
     */
-    wxVScrolledWindow();
+    wxVScrolled();
     /**
         This is the normal constructor, no need to call Create() after using
         this constructor.
@@ -661,7 +666,7 @@ public:
         @param name
             The name for this window; usually not used.
     */
-    wxVScrolledWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
+    wxVScrolled(wxWindow* parent, wxWindowID id = wxID_ANY,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize, long style = 0,
                       const wxString& name = wxPanelNameStr);
@@ -678,6 +683,47 @@ public:
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxString& name = wxPanelNameStr);
 };
+
+
+
+/**
+    VScrolled window derived from wxPanel.
+
+    See wxVScrolled for a detailed description.
+
+    @note Note that because this class derives from wxPanel, it shares its
+          behaviour with regard to TAB traversal and focus handling (in
+          particular, it forwards focus to its children). If you don't want
+          this behaviour, use ::wxScrolledCanvas instead.
+
+    @note ::wxVScrolledWindow is an alias for wxVScrolled<wxPanel> since version
+          3.3.1. In older versions, it was a standalone class.
+
+    @library{wxcore}
+    @category{miscwnd}
+
+    @see wxVScrolled, ::wxVScrolledCanvas
+*/
+typedef wxVScrolled<wxPanel> wxVScrolledWindow;
+
+
+
+/**
+    @class wxVScrolledCanvas
+
+    Alias for wxVScrolled<wxWindow>. VScrolled window that doesn't have children
+    and so doesn't need or want special handling of TAB traversal.
+
+    See wxVScrolled for a detailed description.
+
+    @since 3.3.1
+
+    @library{wxcore}
+    @category{miscwnd}
+
+    @see wxVScrolled
+*/
+typedef wxVScrolled<wxWindow> wxVScrolledCanvas;
 
 
 

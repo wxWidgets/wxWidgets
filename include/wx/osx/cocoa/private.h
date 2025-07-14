@@ -61,10 +61,10 @@ class wxWidgetCocoaNativeKeyDownSuspender
 public:
     // stops sending keydown events for text inserted into this widget
     explicit wxWidgetCocoaNativeKeyDownSuspender(wxWidgetCocoaImpl *target);
-    
+
     // resumes sending keydown events
     ~wxWidgetCocoaNativeKeyDownSuspender();
-    
+
 private:
     wxWidgetCocoaImpl *m_target;
     NSEvent* m_nsevent;
@@ -230,6 +230,8 @@ public :
     virtual void                UseClippingView() override;
     virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
 
+    virtual void                ApplyScrollViewBorderType() override;
+
 protected:
     WXWidget m_osxView;
     WXWidget m_osxClipView;
@@ -263,7 +265,7 @@ protected:
     bool m_hasEditor;
 
     friend class wxWidgetCocoaNativeKeyDownSuspender;
-    
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
 

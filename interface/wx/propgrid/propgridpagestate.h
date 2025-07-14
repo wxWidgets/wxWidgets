@@ -10,6 +10,8 @@
 
     Values of this enum are used with wxPropertyGrid::CommitChangesFromEditor(),
     for example.
+
+    @since 3.3.0
  */
 enum class wxPGSelectPropertyFlags : int
 {
@@ -63,6 +65,30 @@ enum class wxPGSelectPropertyFlags : int
       @hideinitializer
     */
     NoRefresh     = 0x0100
+};
+
+/**
+    Flags for wxPropertyGridPageState::DoSetSplitter().
+
+    @since 3.3.0
+*/
+enum class wxPGSplitterPositionFlags : int
+{
+    /// No special flags.
+    Null           = 0,
+    /// Refresh the grid after setting splitter position.
+    Refresh        = 0x0001,
+    /// Set splitter position for all pages.
+    AllPages       = 0x0002,
+
+    /*
+        These are intentionally not documented as it seems that they are only
+        used internally.
+
+    FromEvent      = 0x0004,
+    FromAutoCenter = 0x0008
+
+     */
 };
 
 /**

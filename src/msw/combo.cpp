@@ -36,6 +36,10 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"
 
+#include "wx/msw/private/darkmode.h"
+
+#include <memory>
+
 #define NATIVE_TEXT_INDENT_XP       4
 #define NATIVE_TEXT_INDENT_CLASSIC  2
 
@@ -112,6 +116,12 @@ bool wxComboCtrl::Create(wxWindow *parent,
 
     // Create textctrl, if necessary
     CreateTextCtrl( wxNO_BORDER );
+
+    // Use the same theme as is used by wxChoice/wxComboBox, but specify the
+    // class name because it's not used automatically for a non-native
+    // combobox and without this combobox-specific parts, such as CB_BORDER
+    // used in the code below, wouldn't work.
+    wxMSWDarkMode::AllowForWindow(m_hWnd, L"CFD", L"COMBOBOX");
 
     // SetInitialSize should be called last
     SetInitialSize(size);
@@ -308,23 +318,23 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     // TODO: Convert drawing in this function to Windows API Code
 
     wxSize sz = GetClientSize();
-    wxDC* dcPtr = wxAutoBufferedPaintDCFactory(this);
+    std::unique_ptr<wxDC> dcPtr(wxAutoBufferedPaintDCFactory(this));
     wxDC& dc = *dcPtr;
 
     const wxRect& rectButton = m_btnArea;
     wxRect rectTextField = m_tcArea;
 
-    // FIXME: Either SetBackgroundColour or GetBackgroundColour
-    //        doesn't work under Vista, so here's a temporary
-    //        workaround.
-    //        In the theme-less rendering code below, this fixes incorrect
-    //        background on read-only comboboxes (they are gray, but should be
-    //        white).
-    wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    const bool isEnabled = IsThisEnabled();
+    const bool usesStdButton = !(m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE) &&
+                               !(m_iFlags & wxCC_IFLAG_HAS_NONSTANDARD_BUTTON);
+
+    const bool isStdAndEditable = isEnabled && usesStdButton && m_text;
+
+    const wxColour bgCol =
+        isStdAndEditable ? GetBackgroundColour()
+                         : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
 #if wxUSE_UXTHEME
-    const bool isEnabled = IsThisEnabled();
-
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HDC hDc = GetHdcOf(*impl);
     HWND hWnd = GetHwndOf(this);
@@ -353,9 +363,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
         RECT rBorder;
         wxCopyRectToRECT(borderRect, rBorder);
-
-        bool isNonStdButton = (m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE) ||
-                              (m_iFlags & wxCC_IFLAG_HAS_NONSTANDARD_BUTTON);
 
         //
         // Get some states for themed drawing
@@ -387,7 +394,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         const bool isFocused = (FindFocus() == GetMainWindowOfCompositeControl()) ? true : false;
 
         // Draw the entire control as a single button?
-        if ( !isNonStdButton )
+        if ( usesStdButton )
         {
             if ( HasFlag(wxCB_READONLY) )
                 drawFullButton = true;
@@ -400,6 +407,11 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
             // It should be safe enough to update this flag here.
             m_iFlags |= wxCC_FULL_BUTTON;
+        }
+        else if ( bgState == CBXS_DISABLED )
+        {
+            // Disable controls shouldn't have a border.
+            comboBoxPart = CP_READONLY;
         }
         else
         {
@@ -426,14 +438,40 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
         //
         // Draw the control background (including the border)
+        bool drawBgOurselves = false;
         if ( m_widthCustomBorder > 0 )
         {
             hTheme.DrawBackground(hDc, *rUseForBg, comboBoxPart, bgState);
+
+            if ( isStdAndEditable && wxMSWDarkMode::IsActive() )
+            {
+                // We still want to draw background in dark mode as the theme
+                // uses background colour different from that of the text
+                // control and we want it to blend in (alternative would be to
+                // change the text control colour, but this wouldn't work if
+                // it's explicitly changed by the application, so just do it
+                // always like this for simplicity and consistency).
+                drawBgOurselves = true;
+
+                // Don't overwrite the button background for consistency with
+                // how wxComboBox does it.
+                borderRect.width -= rectButton.width;
+                if ( m_btnSide == wxLEFT )
+                    borderRect.x += rectButton.width;
+
+                // Leave out the border drawn by the theme.
+                borderRect.Deflate(1);
+            }
         }
         else
         {
             // No border. We can't use theme, since it cannot be relied on
             // to deliver borderless drawing, even with DrawThemeBackgroundEx.
+            drawBgOurselves = true;
+        }
+
+        if ( drawBgOurselves )
+        {
             dc.SetBrush(bgCol);
             dc.SetPen(bgCol);
             dc.DrawRectangle(borderRect);
@@ -441,7 +479,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
         //
         // Draw the drop-button
-        if ( !isNonStdButton )
+        if ( usesStdButton )
         {
             drawButFlags = Button_BitmapOnly;
 
@@ -500,8 +538,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         else
             wxComboPopup::DefaultPaintComboControl(this,dc,rectTextField);
     }
-
-    delete dcPtr;
 }
 
 void wxComboCtrl::OnMouseEvent( wxMouseEvent& event )

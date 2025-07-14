@@ -23,14 +23,14 @@
 extern wxList wxModalDialogs;
 
 void wxDialog::DoShowWindowModal()
-{   
+{
     wxTopLevelWindow* parent = static_cast<wxTopLevelWindow*>(wxGetTopLevelParent(GetParent()));
-    
+
     wxASSERT_MSG(parent, "ShowWindowModal requires the dialog to have a parent.");
-    
+
     NSWindow* parentWindow = parent->GetWXWindow();
     NSWindow* theWindow = GetWXWindow();
-    
+
     [parentWindow beginSheet:theWindow completionHandler:
      ^(NSModalResponse returnCode)
     {

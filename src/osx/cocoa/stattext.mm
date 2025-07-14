@@ -53,32 +53,32 @@
     [super dealloc];
 }
 
-- (void) setEnabled:(BOOL) flag 
+- (void) setEnabled:(BOOL) flag
 {
     bool wasEnabled = [self isEnabled];
 
-    [super setEnabled: flag]; 
-    
+    [super setEnabled: flag];
+
     if (![self drawsBackground]) {
         // Static text is drawn incorrectly when disabled.
         // For an explanation, see
         // http://www.cocoabuilder.com/archive/message/cocoa/2006/7/21/168028
         if (flag)
-        { 
+        {
             if (m_textColor)
                 [self setTextColor: m_textColor];
         }
-        else 
+        else
         {
             if (wasEnabled)
             {
                 [m_textColor release];
                 m_textColor = [[self textColor] retain];
             }
-            [self setTextColor: [NSColor disabledControlTextColor]]; 
-        } 
-    } 
-} 
+            [self setTextColor: [NSColor disabledControlTextColor]];
+        }
+    }
+}
 
 @end
 

@@ -1555,8 +1555,8 @@ wxDateTime::ParseFormat(const wxString& date,
                         minusFound = false;
                     else if
                     (
-                        *input == wxS('-')
-                        || *input == wxString::FromUTF8("\xe2\x88\x92")
+                        *input == wxS('-') ||
+                        *input == wxString::FromUTF8("−") // U+2212 MINUS SIGN
                     )
                         minusFound = true;
                     else

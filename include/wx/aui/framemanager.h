@@ -152,6 +152,7 @@ public:
         , max_size(wxDefaultSize)
         , floating_pos(wxDefaultPosition)
         , floating_size(wxDefaultSize)
+        , floating_client_size(wxDefaultSize)
     {
         window = nullptr;
         frame = nullptr;
@@ -246,6 +247,8 @@ public:
     wxAuiPaneInfo& FloatingPosition(int x, int y) { floating_pos.x = x; floating_pos.y = y; return *this; }
     wxAuiPaneInfo& FloatingSize(const wxSize& size) { floating_size = size; return *this; }
     wxAuiPaneInfo& FloatingSize(int x, int y) { floating_size.Set(x,y); return *this; }
+    wxAuiPaneInfo& FloatingClientSize(const wxSize& size) { floating_client_size = size; return *this; }
+    wxAuiPaneInfo& FloatingClientSize(int x, int y) { floating_client_size.Set(x,y); return *this; }
     wxAuiPaneInfo& Fixed() { return SetFlag(optionResizable, false); }
     wxAuiPaneInfo& Resizable(bool resizable = true) { return SetFlag(optionResizable, resizable); }
     wxAuiPaneInfo& Dock() { return SetFlag(optionFloating, false); }
@@ -391,6 +394,8 @@ public:
 
     wxPoint floating_pos; // position while floating
     wxSize floating_size; // size while floating
+    // this has precedence over floating_size
+    wxSize floating_client_size; // client size while floating
     int dock_proportion;  // proportion while docked
 
     wxRect rect;              // current rectangle (populated by wxAUI)
@@ -466,6 +471,9 @@ public:
     // wxAuiSerializer and wxAuiDeserializer above instead in the new code.
     wxString SavePaneInfo(const wxAuiPaneInfo& pane);
     void LoadPaneInfo(wxString panePart, wxAuiPaneInfo &pane);
+private:
+    bool LoadPaneInfoVersioned(wxString layoutVersion, wxString panePart, wxAuiPaneInfo& pane);
+public:
     wxString SavePerspective();
     bool LoadPerspective(const wxString& perspective, bool update = true);
 

@@ -565,11 +565,12 @@ enum class wxPGPropertyFlags : int
 
     Like wxStringProperty, but has a button that triggers a small text editor
     dialog. Note that in long string values, some control characters are
-    escaped: tab is represented by "\t", line break by "\n", carriage return
-    by "\r" and backslash character by "\\". If another character is preceded
-    by backslash, the backslash is skipped.
+    escaped: tab is represented by `"\t"`, line break by `"\n"`, carriage return
+    by `"\r"` and backslash characters are doubled. If another character is
+    preceded by backslash, the backslash is skipped.
+
     Note also that depending on the system (port), some sequences of special
-    characters, like e.g. "\r\n", can be interpreted and presented in
+    characters, like e.g. `"\r\n"`, can be interpreted and presented in
     a different way in the editor and therefore such sequences may not be
     the same before and after the edition.
 
@@ -2154,7 +2155,7 @@ protected:
         Clear cells associated with property.
 
         @param ignoreWithFlags
-            Cells will not be cleared for properties having these flags set. 
+            Cells will not be cleared for properties having these flags set.
 
         @param recursively
             If @true, apply this operation recursively in child properties.

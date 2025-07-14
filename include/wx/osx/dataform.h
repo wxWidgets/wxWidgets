@@ -46,7 +46,7 @@ public:
     operator NativeFormat() const { return m_format; }
 
     void SetId(NativeFormat format);
-    
+
     // string ids are used for custom types - this SetId() must be used for
     // application-specific formats
     wxString GetId() const;

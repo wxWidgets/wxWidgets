@@ -57,10 +57,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
     DontCreatePeer();
-    
+
     m_text = nullptr;
     m_choice = nullptr;
-    
+
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 

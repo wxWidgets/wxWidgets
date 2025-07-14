@@ -40,6 +40,7 @@
 #include "wx/imaglist.h"
 #include "wx/stockitem.h"
 #include "wx/msw/private/button.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/dc.h"
 #include "wx/msw/private/winstyle.h"
 #include "wx/msw/uxtheme.h"
@@ -86,6 +87,25 @@ using namespace wxMSWImpl;
 #if wxUSE_UXTHEME
 extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
 #endif // wxUSE_UXTHEME
+
+// Create a disabled bitmap from the normal one taking the application mode
+// (light or dark) into account.
+static wxBitmap CreateDisabledBitmap(const wxBitmap& bmp)
+{
+#if wxUSE_IMAGE
+    // If dark mode is active, the result of wxImage::ConvertToDisabled() don't
+    // look right, so use a different approach.
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        const wxImage imgDisabled = bmp.ConvertToImage().ChangeLightness(66);
+        return wxBitmap(imgDisabled, -1, bmp.GetScaleFactor());
+    }
+
+    return bmp.ConvertToDisabled();
+#else // !wxUSE_IMAGE
+    return bmp;
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+}
 
 // ----------------------------------------------------------------------------
 // button image data
@@ -246,11 +266,9 @@ private:
             wxBitmap stateBitmap = m_bitmapBundles[n].GetBitmap(m_bitmapSize);
             if ( !stateBitmap.IsOk() )
             {
-#if wxUSE_IMAGE
                 if ( n == wxAnyButton::State_Disabled )
-                    stateBitmap = bitmap.ConvertToDisabled();
+                    stateBitmap = CreateDisabledBitmap(bitmap);
                 else
-#endif // wxUSE_IMAGE
                     stateBitmap = bitmap;
             }
 
@@ -407,11 +425,9 @@ private:
             wxBitmap stateBitmap = m_bitmapBundles[n].GetBitmap(m_bitmapSize);
             if ( !stateBitmap.IsOk() )
             {
-#if wxUSE_IMAGE
                 if ( n == wxAnyButton::State_Disabled )
-                    stateBitmap = bitmap.ConvertToDisabled();
+                    stateBitmap = CreateDisabledBitmap(bitmap);
                 else
-#endif // wxUSE_IMAGE
                     stateBitmap = bitmap;
             }
 
@@ -788,7 +804,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmapBundle, State which)
             // Replace the removed bitmap with the normal one.
             wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
             m_imageData->SetBitmap(which == State_Disabled
-                                        ? bmpNormal.ConvertToDisabled()
+                                        ? CreateDisabledBitmap(bmpNormal)
                                         : bmpNormal,
                                     which);
         }

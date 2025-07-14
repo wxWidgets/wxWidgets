@@ -33,16 +33,11 @@ environment:
   GOPATH: c:\gopath
   matrix:
   - TOOLSET: msbuild
-    CONFIGURATION: DLL Release
-    ARCH: x64
-    VSVER: 17
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
-  - TOOLSET: msbuild
     CONFIGURATION: Debug
     ARCH: x64
-    VSVER: 17
-    wxUSE_UNICODE_UTF8: 1
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2022
+    SHARED: ON
+    VSVER: 16
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
   - TOOLSET: nmake
     VS: '14.0'
     BUILD: debug
@@ -54,12 +49,6 @@ environment:
     SHARED: ON
     CONFIGURATION: Release
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-  - TOOLSET: cmake_qt
-    GENERATOR: 'Visual Studio 16 2019'
-    ARCH: x64
-    SHARED: ON
-    CONFIGURATION: Release
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 
 clone_depth: 1
 

@@ -1069,6 +1069,34 @@ TEST_CASE_METHOD(ImageHandlersInit, "wxImage::SavePNG", "[image]")
 
 }
 
+static void TestPNGDescription(const wxString& description)
+{
+    wxImage image("horse.png");
+
+    image.SetOption(wxIMAGE_OPTION_PNG_DESCRIPTION, description);
+    wxMemoryOutputStream memOut;
+    REQUIRE(image.SaveFile(memOut, wxBITMAP_TYPE_PNG));
+
+    wxMemoryInputStream memIn(memOut);
+    REQUIRE(image.LoadFile(memIn));
+
+    CHECK(image.GetOption(wxIMAGE_OPTION_PNG_DESCRIPTION) == description);
+}
+
+TEST_CASE_METHOD(ImageHandlersInit, "wxImage::PNGDescription", "[image]")
+{
+    // Test writing a description and reading it back.
+    TestPNGDescription("Providing the PNG a pneumatic puma as a present");
+
+    // Test writing and reading a description again but with non-ASCII characters.
+    TestPNGDescription("Тестирование 테스트 一 二 三");
+
+    // Test writing and reading a description again but with a long description.
+    TestPNGDescription(wxString(wxT('a'), 256)
+        + wxString(wxT('b'), 256)
+        + wxString(wxT('c'), 256));
+}
+
 #if wxUSE_LIBTIFF
 static void TestTIFFImage(const wxString& option, int value,
     const wxImage *compareImage = nullptr)
@@ -2506,10 +2534,10 @@ static wxSize ParseEnvVarAsSize(const wxString& varname)
     REQUIRE( wxGetEnv(varname, &sizeStr) );
 
     wxString heightStr;
-    unsigned width;
+    unsigned width = 0;
     REQUIRE( sizeStr.BeforeFirst(',', &heightStr).ToUInt(&width) );
 
-    unsigned height;
+    unsigned height = 0;
     if ( !heightStr.empty() )
     {
         REQUIRE( heightStr.ToUInt(&height) );

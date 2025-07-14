@@ -21,9 +21,9 @@ bool wxStaticBox::Create( wxWindow *parent,
     const wxSize& size,
     long style,
     const wxString& name )
-{    
+{
     DontCreatePeer();
-    
+
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 
@@ -38,7 +38,7 @@ bool wxStaticBox::Create( wxWindow *parent,
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
-    static int extraTop = 11; 
+    static int extraTop = 11;
     static int other = 11;
 
     *borderTop = extraTop;

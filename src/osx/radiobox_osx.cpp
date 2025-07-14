@@ -99,9 +99,9 @@ bool wxRadioBox::Create( wxWindow *parent,
     int n, const wxString choices[],
     int majorDim, long style,
     const wxValidator& val, const wxString& name )
-{    
+{
     DontCreatePeer();
-    
+
     if ( !wxControl::Create( parent, id, pos, size, style, val, name ) )
         return false;
 

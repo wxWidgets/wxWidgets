@@ -192,7 +192,7 @@ WXImage wxOSXGetSystemImage(const wxString& name)
             return symbol;
     }
 #endif
-    
+
     NSImage* nsimage = [NSImage imageNamed:cfname.AsNSString()];
     return nsimage;
 }

@@ -48,7 +48,7 @@
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXIPhoneClassAddWXMethods( self );
@@ -65,7 +65,7 @@
 WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
 {
     WXGLContext context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
-    
+
     if ( !context )
         wxFAIL_MSG("NSOpenGLContext creation failed");
     return context ;
@@ -106,7 +106,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
 bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
     if ( !m_glContext )
-        return false;  
+        return false;
 
     wxUICustomOpenGLView* v = (wxUICustomOpenGLView*) win.GetPeer()->GetWXWidget();
     if ( v.context != m_glContext ) {
@@ -114,7 +114,7 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
         [v bindDrawable];
     }
     WXGLSetCurrentContext(m_glContext);
-    
+
     return true;
 }
 

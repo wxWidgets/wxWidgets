@@ -267,13 +267,13 @@ public:
     int TabHitTest(const wxPoint & pt, long* flags) override
     {
         int retval = wxNOT_FOUND;
-        
+
         NSPoint nspt = wxToNSPoint( m_osxView, pt );
-        
+
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
-        
+
         NSTabViewItem* hitItem = [slf tabViewItemAtPoint:nspt];
-        
+
         if (!hitItem) {
             if ( flags )
                 *flags = wxBK_HITTEST_NOWHERE;
@@ -282,8 +282,8 @@ public:
             if ( flags )
                 *flags = wxBK_HITTEST_ONLABEL;
         }
-        
-        return retval; 
+
+        return retval;
     }
 
 private:

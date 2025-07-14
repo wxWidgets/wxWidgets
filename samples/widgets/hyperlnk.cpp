@@ -77,6 +77,13 @@ public:
     virtual ~HyperlinkWidgetsPage() {}
 
     virtual wxWindow *GetWidget() const override { return m_hyperlink; }
+    virtual Widgets GetWidgets() const override
+    {
+        Widgets widgets(WidgetsPage::GetWidgets());
+        widgets.push_back(m_hyperlinkLong);
+        return widgets;
+    }
+
     virtual void RecreateWidget() override { CreateHyperlink(); }
 
     // lazy creation of the content
