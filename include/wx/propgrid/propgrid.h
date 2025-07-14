@@ -592,7 +592,7 @@ public:
     //   trigger the action.
 #if WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("use AddActionTrigger with 'action' argument as wxPGKeyboardAction")
-    void AddActionTrigger(int action, int keycode, int modifiers)
+    void AddActionTrigger(int action, int keycode, int modifiers = 0)
     {
         AddActionTrigger(static_cast<wxPGKeyboardAction>(action), keycode, modifiers);
     }
