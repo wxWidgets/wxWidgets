@@ -160,11 +160,11 @@ wxNumericPropertyValidator::
             style |= wxFILTER_DIGITS;
     }
 
-    if ( numericType == NumericType::Signed )
+    if ( numericType == Signed )
     {
         allowedChars += wxS("-+");
     }
-    else if ( numericType == NumericType::Float )
+    else if ( numericType == Float )
     {
         allowedChars += wxS("-+eE");
 
@@ -504,7 +504,7 @@ wxValidator* wxIntProperty::GetClassValidator()
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxValidator* validator = new wxNumericPropertyValidator(
-                                    wxNumericPropertyValidator::NumericType::Signed);
+                                    wxNumericPropertyValidator::Signed);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else
@@ -749,7 +749,7 @@ wxValidator* wxUIntProperty::DoGetValidator() const
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxValidator* validator = new wxNumericPropertyValidator(
-                                    wxNumericPropertyValidator::NumericType::Unsigned,
+                                    wxNumericPropertyValidator::Unsigned,
                                     m_realBase);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
@@ -977,7 +977,7 @@ wxFloatProperty::GetClassValidator()
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxValidator* validator = new wxNumericPropertyValidator(
-                                    wxNumericPropertyValidator::NumericType::Float);
+                                    wxNumericPropertyValidator::Float);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else

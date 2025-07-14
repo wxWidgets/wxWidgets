@@ -86,9 +86,9 @@ enum class wxPGNumericValidationMode
 class wxNumericPropertyValidator : public wxTextValidator
 {
 public:
-    enum class NumericType
+    enum NumericType
     {
-        Signed,
+        Signed = 0,
         Unsigned,
         Float
     };

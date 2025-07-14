@@ -163,19 +163,12 @@ constexpr int wxPG_PROPERTY_VALIDATION_WRAP  = static_cast<int>(wxPGNumericValid
 class WXDLLIMPEXP_PROPGRID wxNumericPropertyValidator : public wxTextValidator
 {
 public:
-    enum class NumericType
+    enum NumericType
     {
-        Signed,
+        Signed = 0,
         Unsigned,
         Float
     };
-
-#if WXWIN_COMPATIBILITY_3_2
-    // See comments above.
-    static const int Signed = static_cast<int>(NumericType::Signed);
-    static const int Unsigned = static_cast<int>(NumericType::Unsigned);
-    static const int Float = static_cast<int>(NumericType::Float);
-#endif // WXWIN_COMPATIBILITY_3_2
 
     wxNumericPropertyValidator( NumericType numericType, int base = 10 );
     virtual ~wxNumericPropertyValidator() = default;
