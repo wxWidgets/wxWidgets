@@ -1847,6 +1847,13 @@ public:
         else
             m_flags &= ~flag;
     }
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use ChangeFlag with flags argument as wxPGFlags")
+    void ChangeFlag(wxPGPropertyFlags flags, bool set)
+    {
+        ChangeFlag(static_cast<wxPGFlags>(flags), set);
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     // Sets or clears given property flag, recursively. This function is
     // primarily intended for internal use.
