@@ -182,17 +182,20 @@ constexpr bool operator!(wxPGPropertyValuesFlags a)
 }
 
 #if WXWIN_COMPATIBILITY_3_2
-// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// These constants are deprecated but intentionally don't use wxDEPRECATED_MSG()
 // because one will be given whenever they are used with any function now
 // taking wxPGPropertyValuesFlags anyhow and giving multiple deprecation
 // warnings for the same line of code is more annoying than helpful.
-constexpr int wxPG_DONT_RECURSE  = static_cast<int>(wxPGPropertyValuesFlags::DontRecurse);
-constexpr int wxPG_KEEP_STRUCTURE  = static_cast<int>(wxPGPropertyValuesFlags::KeepStructure);
-constexpr int wxPG_RECURSE  = static_cast<int>(wxPGPropertyValuesFlags::Recurse);
-constexpr int wxPG_INC_ATTRIBUTES  = static_cast<int>(wxPGPropertyValuesFlags::IncAttributes);
-constexpr int wxPG_RECURSE_STARTS  = static_cast<int>(wxPGPropertyValuesFlags::RecurseStarts);
-constexpr int wxPG_FORCE  = static_cast<int>(wxPGPropertyValuesFlags::Force);
-constexpr int wxPG_SORT_TOP_LEVEL_ONLY  = static_cast<int>(wxPGPropertyValuesFlags::SortTopLevelOnly);
+enum wxPG_PROPERTYVALUES_FLAGS
+{
+    wxPG_DONT_RECURSE = static_cast<int>(wxPGPropertyValuesFlags::DontRecurse),
+    wxPG_KEEP_STRUCTURE = static_cast<int>(wxPGPropertyValuesFlags::KeepStructure),
+    wxPG_RECURSE = static_cast<int>(wxPGPropertyValuesFlags::Recurse),
+    wxPG_INC_ATTRIBUTES = static_cast<int>(wxPGPropertyValuesFlags::IncAttributes),
+    wxPG_RECURSE_STARTS = static_cast<int>(wxPGPropertyValuesFlags::RecurseStarts),
+    wxPG_FORCE = static_cast<int>(wxPGPropertyValuesFlags::Force),
+    wxPG_SORT_TOP_LEVEL_ONLY = static_cast<int>(wxPGPropertyValuesFlags::SortTopLevelOnly),
+};
 
 wxDEPRECATED_MSG("use wxPGPropertyValuesFlags instead")
 constexpr bool operator==(wxPGPropertyValuesFlags a, int b)
@@ -279,14 +282,17 @@ inline int operator|=(int& a, wxPGPropValFormatFlags b)
 }
 
 // See comment before wxPG_RECURSE above.
-constexpr int wxPG_FULL_VALUE  = static_cast<int>(wxPGPropValFormatFlags::FullValue);
-constexpr int wxPG_REPORT_ERROR  = static_cast<int>(wxPGPropValFormatFlags::ReportError);
-constexpr int wxPG_PROPERTY_SPECIFIC  = static_cast<int>(wxPGPropValFormatFlags::PropertySpecific);
-constexpr int wxPG_EDITABLE_VALUE  = static_cast<int>(wxPGPropValFormatFlags::EditableValue);
-constexpr int wxPG_COMPOSITE_FRAGMENT  = static_cast<int>(wxPGPropValFormatFlags::CompositeFragment);
-constexpr int wxPG_UNEDITABLE_COMPOSITE_FRAGMENT  = static_cast<int>(wxPGPropValFormatFlags::UneditableCompositeFragment);
-constexpr int wxPG_VALUE_IS_CURRENT  = static_cast<int>(wxPGPropValFormatFlags::ValueIsCurrent);
-constexpr int wxPG_PROGRAMMATIC_VALUE  = static_cast<int>(wxPGPropValFormatFlags::ProgrammaticValue);
+enum wxPG_MISC_ARG_FLAGS
+{
+    wxPG_FULL_VALUE = static_cast<int>(wxPGPropValFormatFlags::FullValue),
+    wxPG_REPORT_ERROR = static_cast<int>(wxPGPropValFormatFlags::ReportError),
+    wxPG_PROPERTY_SPECIFIC = static_cast<int>(wxPGPropValFormatFlags::PropertySpecific),
+    wxPG_EDITABLE_VALUE = static_cast<int>(wxPGPropValFormatFlags::EditableValue),
+    wxPG_COMPOSITE_FRAGMENT = static_cast<int>(wxPGPropValFormatFlags::CompositeFragment),
+    wxPG_UNEDITABLE_COMPOSITE_FRAGMENT = static_cast<int>(wxPGPropValFormatFlags::UneditableCompositeFragment),
+    wxPG_VALUE_IS_CURRENT = static_cast<int>(wxPGPropValFormatFlags::ValueIsCurrent),
+    wxPG_PROGRAMMATIC_VALUE = static_cast<int>(wxPGPropValFormatFlags::ProgrammaticValue),
+};
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
@@ -321,10 +327,13 @@ constexpr bool operator!(wxPGSetValueFlags a)
 }
 
 #if WXWIN_COMPATIBILITY_3_2
-constexpr int wxPG_SETVAL_REFRESH_EDITOR  = static_cast<int>(wxPGSetValueFlags::RefreshEditor);
-constexpr int wxPG_SETVAL_AGGREGATED  = static_cast<int>(wxPGSetValueFlags::Aggregated);
-constexpr int wxPG_SETVAL_FROM_PARENT  = static_cast<int>(wxPGSetValueFlags::FromParent);
-constexpr int wxPG_SETVAL_BY_USER  = static_cast<int>(wxPGSetValueFlags::ByUser);
+enum wxPG_SETVALUE_FLAGS
+{
+    wxPG_SETVAL_REFRESH_EDITOR = static_cast<int>(wxPGSetValueFlags::RefreshEditor),
+    wxPG_SETVAL_AGGREGATED = static_cast<int>(wxPGSetValueFlags::Aggregated),
+    wxPG_SETVAL_FROM_PARENT = static_cast<int>(wxPGSetValueFlags::FromParent),
+    wxPG_SETVAL_BY_USER = static_cast<int>(wxPGSetValueFlags::ByUser),
+};
 
 wxDEPRECATED_MSG("use wxPGSetValueFlags instead")
 constexpr bool operator==(wxPGSetValueFlags a, int b)
