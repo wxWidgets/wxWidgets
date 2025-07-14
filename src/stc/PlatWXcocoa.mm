@@ -13,6 +13,121 @@
 
 #include "wx/osx/private.h"
 #include "PlatWXcocoa.h"
+#include "wx/stc/stc.h"
+
+@interface wxNSView : NSView
+{
+}
+
+@end // wxNSView
+
+@interface wxNSView(TextInput) <NSTextInputClient>
+
+- (void)insertText:(id)aString replacementRange:(NSRange)replacementRange;
+- (void)doCommandBySelector:(SEL)aSelector;
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange;
+- (void)unmarkText;
+- (NSRange)selectedRange;
+- (NSRange)markedRange;
+- (BOOL)hasMarkedText;
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange;
+- (NSArray*)validAttributesForMarkedText;
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange;
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint;
+
+@end
+
+@implementation wxNSView(TextInput)
+
+void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
+
+- (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
+{
+    wxUnusedVar(replacementRange);
+    wxOSX_insertText(self, @selector(insertText:), aString);
+}
+
+- (void)doCommandBySelector:(SEL)aSelector
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+        impl->doCommandBySelector(aSelector, self, _cmd);
+}
+
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
+{
+    wxUnusedVar(aString);
+    wxUnusedVar(selectedRange);
+    wxUnusedVar(replacementRange);
+}
+
+- (void)unmarkText
+{
+}
+
+- (NSRange)selectedRange
+{
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (NSRange)markedRange
+{
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (BOOL)hasMarkedText
+{
+    return NO;
+}
+
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+{
+    wxUnusedVar(aRange);
+    wxUnusedVar(actualRange);
+    return nil;
+}
+
+- (NSArray*)validAttributesForMarkedText
+{
+    return nil;
+}
+
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+{
+#pragma unused(actualRange)
+    NSRect rect = NSZeroRect;
+
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl*) wxWidgetImpl::FindFromWXWidget(self);
+    if (!impl) return rect;
+
+    wxStyledTextCtrl* textCtrl = dynamic_cast<wxStyledTextCtrl*>(impl->GetWXPeer());
+    if (!textCtrl) return rect;
+
+    int pos = textCtrl->GetCurrentPos();
+    wxPoint point = textCtrl->PointFromPosition(pos);
+    int line = textCtrl->LineFromPosition(pos);
+    int textHeight = textCtrl->TextHeight(line);
+
+    rect = NSMakeRect(
+        point.x,
+        point.y,
+        2,
+        textHeight
+    );
+
+    id view = impl->GetWXWidget();
+    rect = [view convertRect: rect toView: nil];
+	rect = [[view window] convertRectToScreen: rect];
+
+    return rect;
+}
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
+{
+    wxUnusedVar(aPoint);
+    return NSNotFound;
+}
+
+@end // wxNSView(TextInput)
 
 // A simple view used for popup windows.
 
