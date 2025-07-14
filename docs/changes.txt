@@ -235,6 +235,11 @@ Changes in behaviour which may result in build errors
   explicitly if you need to use any functions defined there other than
   cursor-related ones.
 
+- wxStyledTextCtrl::AddSelection() erroneously returned int, while the
+  corresponding Scintilla doesn't have any return value, so it was changed
+  to return void, please update your code to not use its return value.
+
+
 3.3.1: (released 2025-??-??)
 ----------------------------
 
