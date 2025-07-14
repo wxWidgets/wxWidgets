@@ -117,7 +117,7 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
     id view = impl->GetWXWidget();
     rect = [view convertRect: rect toView: nil];
-	rect = [[view window] convertRectToScreen: rect];
+    rect = [[view window] convertRectToScreen: rect];
 
     return rect;
 }
