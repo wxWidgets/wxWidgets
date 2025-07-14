@@ -76,15 +76,18 @@ constexpr bool operator!(wxPGVFBFlags a)
 // because one will be given whenever they are used with any function now
 // taking wxPGVFBFlags anyhow and giving multiple deprecation warnings for the
 // same line of code is more annoying than helpful.
-constexpr int wxPG_VFB_NULL = static_cast<int>(wxPGVFBFlags::Null);
-constexpr int wxPG_VFB_STAY_IN_PROPERTY = static_cast<int>(wxPGVFBFlags::StayInProperty);
-constexpr int wxPG_VFB_BEEP = static_cast<int>(wxPGVFBFlags::Beep);
-constexpr int wxPG_VFB_MARK_CELL = static_cast<int>(wxPGVFBFlags::MarkCell);
-constexpr int wxPG_VFB_SHOW_MESSAGE = static_cast<int>(wxPGVFBFlags::ShowMessage);
-constexpr int wxPG_VFB_SHOW_MESSAGEBOX = static_cast<int>(wxPGVFBFlags::ShowMessageBox);
-constexpr int wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR = static_cast<int>(wxPGVFBFlags::ShowMessageOnStatusBar);
-constexpr int wxPG_VFB_DEFAULT = static_cast<int>(wxPGVFBFlags::Default);
-constexpr int wxPG_VFB_UNDEFINED = static_cast<int>(wxPGVFBFlags::Undefined);
+enum wxPG_VALIDATION_FAILURE_BEHAVIOR_FLAGS
+{
+    wxPG_VFB_NULL = static_cast<int>(wxPGVFBFlags::Null),
+    wxPG_VFB_STAY_IN_PROPERTY = static_cast<int>(wxPGVFBFlags::StayInProperty),
+    wxPG_VFB_BEEP = static_cast<int>(wxPGVFBFlags::Beep),
+    wxPG_VFB_MARK_CELL = static_cast<int>(wxPGVFBFlags::MarkCell),
+    wxPG_VFB_SHOW_MESSAGE = static_cast<int>(wxPGVFBFlags::ShowMessage),
+    wxPG_VFB_SHOW_MESSAGEBOX = static_cast<int>(wxPGVFBFlags::ShowMessageBox),
+    wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR = static_cast<int>(wxPGVFBFlags::ShowMessageOnStatusBar),
+    wxPG_VFB_DEFAULT = static_cast<int>(wxPGVFBFlags::Default),
+    wxPG_VFB_UNDEFINED = static_cast<int>(wxPGVFBFlags::Undefined),
+};
 
 wxDEPRECATED_MSG("use wxPGVFBFlags instead")
 constexpr bool operator==(wxPGVFBFlags a, int b)

@@ -150,9 +150,12 @@ enum class wxPGNumericValidationMode
 // because one will be given whenever they are used with any function now
 // taking wxPGNumericValidationMode anyhow and giving multiple deprecation
 // warnings for the same line of code is more annoying than helpful.
-constexpr int wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE  = static_cast<int>(wxPGNumericValidationMode::ErrorMessage);
-constexpr int wxPG_PROPERTY_VALIDATION_SATURATE  = static_cast<int>(wxPGNumericValidationMode::Saturate);
-constexpr int wxPG_PROPERTY_VALIDATION_WRAP  = static_cast<int>(wxPGNumericValidationMode::Wrap);
+enum wxPGNumericValidationConstants
+{
+    wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE = static_cast<int>(wxPGNumericValidationMode::ErrorMessage),
+    wxPG_PROPERTY_VALIDATION_SATURATE = static_cast<int>(wxPGNumericValidationMode::Saturate),
+    wxPG_PROPERTY_VALIDATION_WRAP = static_cast<int>(wxPGNumericValidationMode::Wrap),
+};
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------

@@ -478,14 +478,18 @@ typedef wxPGKeyboardAction wxPGKeyboardActions;
 // because one will be given whenever they are used with any function now
 // taking wxPGKeyboardAction anyhow and giving multiple deprecation warnings
 // for the same line of code is more annoying than helpful.
-constexpr int wxPG_ACTION_INVALID  = static_cast<int>(wxPGKeyboardAction::Invalid);
-constexpr int wxPG_ACTION_NEXT_PROPERTY  = static_cast<int>(wxPGKeyboardAction::NextProperty);
-constexpr int wxPG_ACTION_PREV_PROPERTY  = static_cast<int>(wxPGKeyboardAction::PrevProperty);
-constexpr int wxPG_ACTION_EXPAND_PROPERTY  = static_cast<int>(wxPGKeyboardAction::ExpandProperty);
-constexpr int wxPG_ACTION_COLLAPSE_PROPERTY  = static_cast<int>(wxPGKeyboardAction::CollapseProperty);
-constexpr int wxPG_ACTION_CANCEL_EDIT  = static_cast<int>(wxPGKeyboardAction::CancelEdit);
-constexpr int wxPG_ACTION_EDIT  = static_cast<int>(wxPGKeyboardAction::Edit);
-constexpr int wxPG_ACTION_PRESS_BUTTON  = static_cast<int>(wxPGKeyboardAction::PressButton);
+enum wxPG_KEYBOARD_ACTIONS
+{
+    wxPG_ACTION_INVALID = static_cast<int>(wxPGKeyboardAction::Invalid),
+    wxPG_ACTION_NEXT_PROPERTY = static_cast<int>(wxPGKeyboardAction::NextProperty),
+    wxPG_ACTION_PREV_PROPERTY = static_cast<int>(wxPGKeyboardAction::PrevProperty),
+    wxPG_ACTION_EXPAND_PROPERTY = static_cast<int>(wxPGKeyboardAction::ExpandProperty),
+    wxPG_ACTION_COLLAPSE_PROPERTY = static_cast<int>(wxPGKeyboardAction::CollapseProperty),
+    wxPG_ACTION_CANCEL_EDIT = static_cast<int>(wxPGKeyboardAction::CancelEdit),
+    wxPG_ACTION_EDIT = static_cast<int>(wxPGKeyboardAction::Edit),
+    wxPG_ACTION_PRESS_BUTTON = static_cast<int>(wxPGKeyboardAction::PressButton),
+    wxPG_ACTION_MAX
+};
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
