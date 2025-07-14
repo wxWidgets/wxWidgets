@@ -422,7 +422,7 @@ public:     // static functions
         @param flags
             One or more of the ::wxEllipsizeFlags enumeration values combined.
     */
-    static wxString Ellipsize(const wxString& label, const wxDC& dc,
+    static wxString Ellipsize(const wxString& label, const wxReadOnlyDC& dc,
                               wxEllipsizeMode mode, int maxWidth,
                               int flags = wxELLIPSIZE_FLAGS_DEFAULT);
 };
