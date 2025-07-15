@@ -14,7 +14,9 @@ include(CMakePrintHelpers)
 
 # Use the MSVC/makefile naming convention, or the configure naming convention,
 # this is the same check as used in FindwxWidgets.
-if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_CROSSCOMPILING)
+if(MSVC)
+    set(WIN32_MSVC_NAMING 1)
+elseif(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_CROSSCOMPILING)
     set(WIN32_MSVC_NAMING 1)
 else()
     set(WIN32_MSVC_NAMING 0)
