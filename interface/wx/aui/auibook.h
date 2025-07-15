@@ -927,9 +927,6 @@ class wxAuiTabContainerButtonArray : public std::vector<wxAuiTabContainerButton>
     the wxAuiNotebook, where it is disadvantageous to have separate
     windows for each tab control in the case of "docked tabs".
 
-    A derived class, wxAuiTabCtrl, is an actual wxWindow - derived window
-    which can be used as a tab control in the normal sense.
-
     @library{wxaui}
     @category{aui}
 */
@@ -1026,6 +1023,21 @@ protected:
     unsigned int m_flags;
 };
 
+/**
+    @class wxAuiTabCtrl
+
+    Only used internally by wxAUI framework.
+
+    Objects of this class are used by wxAuiNotebook to manage tabs. They can't
+    be created by the application and shouldn't be used directly by it: all
+    pointers to wxAuiTabCtrl should be handled as pointers to an opaque object,
+    i.e. they can be compared with other pointers of the same type or passed to
+    wxAuiNotebook::GetPagesInDisplayOrder() but not otherwise.
+ */
+class WXDLLIMPEXP_AUI wxAuiTabCtrl : public wxControl,
+                                     public wxAuiTabContainer
+{
+};
 
 
 /**
