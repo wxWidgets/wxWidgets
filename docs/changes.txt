@@ -259,6 +259,7 @@ All:
 All (GUI):
 
 - Respect menu path style in wxFileHistory::AddFilesToMenu() (Bill Su, #25451).
+- Don't assert in wxGridSizer::Calc{Cols,Rows}() if sizer is empty (#25641).
 
 wxGTK:
 
