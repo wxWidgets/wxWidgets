@@ -482,11 +482,11 @@ macro(wx_add_library name)
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
         # Setup install
-        if(MSYS OR CYGWIN)
+        if(wxUSE_MSVC_NAMING)
+            set(runtime_default_dir "lib")
+        else()
             # configure puts the .dll in the bin directory
             set(runtime_default_dir "bin")
-        else()
-            set(runtime_default_dir "lib")
         endif()
 
         wx_get_install_dir(library "lib")
