@@ -206,6 +206,14 @@ if(WIN32_MSVC_NAMING)
     endif()
 
     set(wxPLATFORM_LIB_DIR "${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}${lib_suffix}")
+
+    # Generator expression to not create different Debug and Release directories
+    set(GEN_EXPR_DIR "$<1:/>")
+    set(wxINSTALL_INCLUDE_DIR "include")
+else()
+    set(GEN_EXPR_DIR "/")
+    wx_get_flavour(lib_flavour "-")
+    set(wxINSTALL_INCLUDE_DIR "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
 endif()
 
 if(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
