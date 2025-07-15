@@ -118,6 +118,10 @@ struct wxFontMetrics
     Objects of this class can't be created directly, please see wxDC for the
     description of how to create objects of the derived classes.
 
+    Please note that all wxWidgets functions taking parameters of this type
+    added before wxWidgets 3.3.0 used to take wxDC instead and that they can
+    still be called with wxDC objects, as wxDC inherits from wxReadOnlyDC.
+
     @since 3.3.0
  */
 class wxReadOnlyDC : public wxObject
@@ -129,7 +133,7 @@ public:
     bool IsOk() const;
 
     /**
-        @name query capabilities
+        @name Query capabilities
     */
     ///@{
 
