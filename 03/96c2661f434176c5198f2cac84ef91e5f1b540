@@ -1,0 +1,1 @@
+wxAll (GUI): Fix calling wxDVC::Collapse() from event handler (#25631).
