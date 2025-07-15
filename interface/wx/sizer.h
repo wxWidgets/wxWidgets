@@ -1928,6 +1928,9 @@ public:
         This will depend on the number of children the sizer has if
         the sizer is automatically adjusting the number of columns/rows.
 
+        Note that if the sizer is not empty, the number of rows must have been
+        set, otherwise this function triggers an assert failure and returns 0.
+
         @since 2.9.1
     */
     int GetEffectiveColsCount() const;
@@ -1937,6 +1940,9 @@ public:
 
         This will depend on the number of children the sizer has if
         the sizer is automatically adjusting the number of columns/rows.
+
+        Note that if the sizer is not empty, the number of columns must have been
+        set, otherwise this function triggers an assert failure and returns 0.
 
         @since 2.9.1
     */

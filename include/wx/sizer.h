@@ -839,24 +839,34 @@ protected:
     // of children (and the fixed number of rows/columns)
     int CalcCols() const
     {
+        // Check the count first because we shouldn't assert if the sizer is
+        // completely empty.
+        const int count = wxSsize(m_children);
+        if ( !count )
+            return 0;
+
         wxCHECK_MSG
         (
             m_rows, 0,
             "Can't calculate number of cols if number of rows is not specified"
         );
 
-        return int(m_children.GetCount() + m_rows - 1) / m_rows;
+        return (count + m_rows - 1) / m_rows;
     }
 
     int CalcRows() const
     {
+        const int count = wxSsize(m_children);
+        if ( !count )
+            return 0;
+
         wxCHECK_MSG
         (
             m_cols, 0,
             "Can't calculate number of cols if number of rows is not specified"
         );
 
-        return int(m_children.GetCount() + m_cols - 1) / m_cols;
+        return (count + m_cols - 1) / m_cols;
     }
 
 private:
