@@ -1858,6 +1858,13 @@ public:
     // Sets or clears given property flag, recursively. This function is
     // primarily intended for internal use.
     void SetFlagRecursively( wxPGFlags flag, bool set );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetFlagRecursively with flags argument as wxPGFlags")
+    void SetFlagRecursively(wxPGPropertyFlags flags, bool set)
+    {
+        ChangeFlag(static_cast<wxPGFlags>(flags), set);
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     // Sets property's help string, which is shown, for example, in
     // wxPropertyGridManager's description text box.
@@ -2194,10 +2201,17 @@ protected:
         //     using incorrect flags (say, wxWindow styles).
         m_flags |= flag;
     }
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetFlag() with 'flag' argument as wxPGFlags")
+    void SetFlag( wxPGPropertyFlags flag )
+    {
+        SetFlag(static_cast<wxPGFlags>(flag));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
 
 #if WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("use ClearFlag() with 'flag' argument as wxPGFlags")
-    void ClearFlag( int flag )
+    void ClearFlag(wxPGPropertyFlags flag)
     {
         ClearFlag(static_cast<wxPGFlags>(flag));
     }
