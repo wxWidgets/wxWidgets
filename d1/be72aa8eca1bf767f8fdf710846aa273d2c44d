@@ -1,0 +1,1 @@
+wxAll (GUI): Don't assert in wxGridSizer if sizer is empty (#25641).
