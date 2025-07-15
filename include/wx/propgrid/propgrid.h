@@ -250,8 +250,8 @@ wxPG_EX_HELP_AS_TOOLTIPS            = 0x00010000,
 wxPG_EX_NATIVE_DOUBLE_BUFFERING         = 0x00080000,
 
 // Set this style to let user have ability to set values of properties to
-// unspecified state. Same as setting wxPGPropertyFlags::AutoUnspecified for
-// all properties.
+// unspecified state. Same as setting wxPGFlags::AutoUnspecified for all
+// properties.
 wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
 
 // If this style is used, built-in attributes (such as wxPG_FLOAT_PRECISION
@@ -474,22 +474,22 @@ enum class wxPGKeyboardAction
 wxDEPRECATED_MSG("use wxPGKeyboardAction type instead")
 typedef wxPGKeyboardAction wxPGKeyboardActions;
 
-wxDEPRECATED_MSG("use wxPGKeyboardAction::Invalid instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_INVALID { wxPGKeyboardAction::Invalid };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::NextProperty instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_NEXT_PROPERTY { wxPGKeyboardAction::NextProperty };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::PrevProperty instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_PREV_PROPERTY { wxPGKeyboardAction::PrevProperty };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::ExpandProperty instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_EXPAND_PROPERTY { wxPGKeyboardAction::ExpandProperty };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::CollapseProperty instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_COLLAPSE_PROPERTY { wxPGKeyboardAction::CollapseProperty };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::CancelEdit instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_CANCEL_EDIT { wxPGKeyboardAction::CancelEdit };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::Edit instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_EDIT { wxPGKeyboardAction::Edit };
-wxDEPRECATED_MSG("use wxPGKeyboardAction::PressButton instead")
-constexpr wxPGKeyboardAction wxPG_ACTION_PRESS_BUTTON { wxPGKeyboardAction::PressButton };
+// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// because one will be given whenever they are used with any function now
+// taking wxPGKeyboardAction anyhow and giving multiple deprecation warnings
+// for the same line of code is more annoying than helpful.
+enum wxPG_KEYBOARD_ACTIONS
+{
+    wxPG_ACTION_INVALID = static_cast<int>(wxPGKeyboardAction::Invalid),
+    wxPG_ACTION_NEXT_PROPERTY = static_cast<int>(wxPGKeyboardAction::NextProperty),
+    wxPG_ACTION_PREV_PROPERTY = static_cast<int>(wxPGKeyboardAction::PrevProperty),
+    wxPG_ACTION_EXPAND_PROPERTY = static_cast<int>(wxPGKeyboardAction::ExpandProperty),
+    wxPG_ACTION_COLLAPSE_PROPERTY = static_cast<int>(wxPGKeyboardAction::CollapseProperty),
+    wxPG_ACTION_CANCEL_EDIT = static_cast<int>(wxPGKeyboardAction::CancelEdit),
+    wxPG_ACTION_EDIT = static_cast<int>(wxPGKeyboardAction::Edit),
+    wxPG_ACTION_PRESS_BUTTON = static_cast<int>(wxPGKeyboardAction::PressButton),
+    wxPG_ACTION_MAX
+};
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
@@ -596,7 +596,7 @@ public:
     //   trigger the action.
 #if WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("use AddActionTrigger with 'action' argument as wxPGKeyboardAction")
-    void AddActionTrigger(int action, int keycode, int modifiers)
+    void AddActionTrigger(int action, int keycode, int modifiers = 0)
     {
         AddActionTrigger(static_cast<wxPGKeyboardAction>(action), keycode, modifiers);
     }
@@ -1310,10 +1310,10 @@ public:
     // Called to indicate property and editor has valid value now.
     void OnValidationFailureReset( wxPGProperty* property )
     {
-        if ( property && property->HasFlag(wxPGPropertyFlags::InvalidValue) )
+        if ( property && property->HasFlag(wxPGFlags::InvalidValue) )
         {
             DoOnValidationFailureReset(property);
-            property->ClearFlag(wxPGPropertyFlags::InvalidValue);
+            property->ClearFlag(wxPGFlags::InvalidValue);
         }
         m_validationInfo.ClearFailureMessage();
     }
@@ -1347,7 +1347,7 @@ public:
                                         wxVariant& invalidValue );
 
     // Override to customize resetting of property validation failure status.
-    // Property is guaranteed to have flag wxPGPropertyFlags::InvalidValue set.
+    // Property is guaranteed to have flag wxPGFlags::InvalidValue set.
     virtual void DoOnValidationFailureReset( wxPGProperty* property );
 
     int GetSpacingY() const { return m_spacingy; }

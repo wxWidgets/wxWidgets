@@ -235,7 +235,16 @@ struct wxPGPaintData
     @{
 */
 
-enum class wxPGPropertyFlags : int
+/**
+    Strongly typed enums containing properties flags.
+
+    Note that this replaces wxPGPropertyFlags enum used in previous wxWidgets
+    versions which defined the same flags using `wxPG_PROP_XXX` naming
+    convention.
+
+    @since 3.3.1
+ */
+enum class wxPGFlags : int
 {
     /** No flags.
         @hideinitializer
@@ -1286,7 +1295,7 @@ public:
         Adds a private child property. If you use this instead of
         wxPropertyGridInterface::Insert() or
         wxPropertyGridInterface::AppendIn(), then property's parental
-        type will automatically be set up to wxPGPropertyFlags::Aggregate.
+        type will automatically be set up to wxPGFlags::Aggregate.
         In other words, all properties of this property will become private.
     */
     void AddPrivateChild( wxPGProperty* prop );
@@ -1332,11 +1341,11 @@ public:
                  intended almost exclusively for internal use. So, for
                  example, if you want to disable a property, call
                  @code Enable(false) @endcode instead of setting
-                 wxPGPropertyFlags::Disabled flag.
+                 wxPGFlags::Disabled flag.
 
         @see HasFlag(), GetFlags()
     */
-    void ChangeFlag( wxPGPropertyFlags flag, bool set );
+    void ChangeFlag( wxPGFlags flag, bool set );
 
     /**
         Deletes children of the property.
@@ -1550,12 +1559,12 @@ public:
     const wxString& GetHelpString() const;
 
     /** Gets flags as a'|' delimited string. Note that flag names are not
-        prepended with 'wxPGPropertyFlags'.
+        prepended with 'wxPGFlags'.
 
         @param flagsMask
         String will only be made to include flags combined by this parameter.
     */
-    wxString GetFlagsAsString(wxPGPropertyFlags flagsMask) const;
+    wxString GetFlagsAsString(wxPGFlags flagsMask) const;
 
     /**
         Returns position in parent's array.
@@ -1658,12 +1667,12 @@ public:
 
         @see propgrid_propflags
     */
-    bool HasFlag(wxPGPropertyFlags flag) const;
+    bool HasFlag(wxPGFlags flag) const;
 
     /**
         Returns @true if property has all given flags set.
     */
-    bool HasFlagsExact(wxPGPropertyFlags flags) const;
+    bool HasFlagsExact(wxPGFlags flags) const;
 
     /**
         Returns @true if property has even one visible child.
@@ -1903,7 +1912,7 @@ public:
     void SetExpanded( bool expanded );
 
     /** Sets flags from a '|' delimited string. Note that flag names are not
-        prepended with 'wxPGPropertyFlags'.
+        prepended with 'wxPGFlags'.
     */
     void SetFlagsFromString( const wxString& str );
 
@@ -1913,7 +1922,7 @@ public:
 
         @see ChangeFlag()
     */
-    void SetFlagRecursively( wxPGPropertyFlags flag, bool set );
+    void SetFlagRecursively( wxPGFlags flag, bool set );
 
     /**
         Sets property's help string, which is shown, for example, in
@@ -1962,14 +1971,14 @@ public:
         Changes what sort of parent this property is for its children.
 
         @param flag
-            Use one of the following values: wxPGPropertyFlags::MiscParent (for
-            generic parents), wxPGPropertyFlags::Category (for categories), or
-            wxPGPropertyFlags::Aggregate (for derived property classes with
+            Use one of the following values: wxPGFlags::MiscParent (for
+            generic parents), wxPGFlags::Category (for categories), or
+            wxPGFlags::Aggregate (for derived property classes with
             private children).
 
         @remarks You generally do not need to call this function.
     */
-    void SetParentalType(wxPGPropertyFlags flag);
+    void SetParentalType(wxPGFlags flag);
 
     /**
         Sets property's text colour.
@@ -2148,7 +2157,7 @@ protected:
                           const wxPGCell& preparedCell,
                           const wxPGCell& srcData,
                           wxPGCellData* unmodCellData,
-                          wxPGPropertyFlags ignoreWithFlags,
+                          wxPGFlags ignoreWithFlags,
                           bool recursively );
 
     /**
@@ -2162,7 +2171,7 @@ protected:
 
         @since 3.1.0
     */
-    void ClearCells(wxPGPropertyFlags ignoreWithFlags, bool recursively);
+    void ClearCells(wxPGFlags ignoreWithFlags, bool recursively);
 
     /**
         Makes sure m_cells has size of column+1 (or more).

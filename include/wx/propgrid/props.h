@@ -146,12 +146,16 @@ enum class wxPGNumericValidationMode
 };
 
 #if WXWIN_COMPATIBILITY_3_2
-wxDEPRECATED_MSG("use wxPGNumericValidationMode::ErrorMessage instead")
-constexpr wxPGNumericValidationMode wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE { wxPGNumericValidationMode::ErrorMessage };
-wxDEPRECATED_MSG("use wxPGNumericValidationMode::Saturate instead")
-constexpr wxPGNumericValidationMode wxPG_PROPERTY_VALIDATION_SATURATE { wxPGNumericValidationMode::Saturate };
-wxDEPRECATED_MSG("use wxPGNumericValidationMode::Wrap instead")
-constexpr wxPGNumericValidationMode wxPG_PROPERTY_VALIDATION_WRAP { wxPGNumericValidationMode::Wrap };
+// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// because one will be given whenever they are used with any function now
+// taking wxPGNumericValidationMode anyhow and giving multiple deprecation
+// warnings for the same line of code is more annoying than helpful.
+enum wxPGNumericValidationConstants
+{
+    wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE = static_cast<int>(wxPGNumericValidationMode::ErrorMessage),
+    wxPG_PROPERTY_VALIDATION_SATURATE = static_cast<int>(wxPGNumericValidationMode::Saturate),
+    wxPG_PROPERTY_VALIDATION_WRAP = static_cast<int>(wxPGNumericValidationMode::Wrap),
+};
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
@@ -162,21 +166,12 @@ constexpr wxPGNumericValidationMode wxPG_PROPERTY_VALIDATION_WRAP { wxPGNumericV
 class WXDLLIMPEXP_PROPGRID wxNumericPropertyValidator : public wxTextValidator
 {
 public:
-    enum class NumericType
+    enum NumericType
     {
-        Signed,
+        Signed = 0,
         Unsigned,
         Float
     };
-
-#if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use NumericType::Signed instead")
-    static const NumericType Signed = NumericType::Signed;
-    wxDEPRECATED_MSG("use NumericType::Unsigned instead")
-    static const NumericType Unsigned = NumericType::Unsigned;
-    wxDEPRECATED_MSG("use NumericType::Float instead")
-    static const NumericType Float = NumericType::Float;
-#endif // WXWIN_COMPATIBILITY_3_2
 
     wxNumericPropertyValidator( NumericType numericType, int base = 10 );
     virtual ~wxNumericPropertyValidator() = default;
@@ -459,8 +454,7 @@ public:
 #if WXWIN_COMPATIBILITY_3_2
 // If set, then selection of choices is static and should not be
 // changed (i.e. returns nullptr in GetPropertyChoices).
-wxDEPRECATED_MSG("wxPG_PROP_STATIC_CHOICES is intended for internal use.")
-constexpr wxPGPropertyFlags wxPG_PROP_STATIC_CHOICES = wxPGPropertyFlags::Reserved_1;
+constexpr int wxPG_PROP_STATIC_CHOICES = wxPG_PROP_CLASS_SPECIFIC_1;
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // Represents a single selection from a list of choices
@@ -765,9 +759,7 @@ protected:
 // -----------------------------------------------------------------------
 
 #if WXWIN_COMPATIBILITY_3_2
-// Indicates first bit usable by derived properties.
-wxDEPRECATED_MSG("wxPG_PROP_SHOW_FULL_FILENAME is intended for internal use.")
-constexpr wxPGPropertyFlags wxPG_PROP_SHOW_FULL_FILENAME = wxPGPropertyFlags::Reserved_1;
+constexpr int wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_CLASS_SPECIFIC_1;
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // Like wxLongStringProperty, but the button triggers file selector instead.
@@ -824,8 +816,7 @@ protected:
 #if WXWIN_COMPATIBILITY_3_2
 // Flag used in wxLongStringProperty to mark that edit button
 // should be enabled even in the read-only mode.
-wxDEPRECATED_MSG("wxPG_PROP_ACTIVE_BTN is intended for internal use.")
-constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPGPropertyFlags::Reserved_3;
+constexpr int wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_3;
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // Like wxStringProperty, but has a button that triggers a small text

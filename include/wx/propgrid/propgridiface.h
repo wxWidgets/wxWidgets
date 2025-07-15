@@ -72,24 +72,22 @@ constexpr bool operator!(wxPGVFBFlags a)
 }
 
 #if WXWIN_COMPATIBILITY_3_2
-wxDEPRECATED_MSG("use wxPGVFBFlags::Null instead")
-constexpr wxPGVFBFlags wxPG_VFB_NULL{ wxPGVFBFlags::Null };
-wxDEPRECATED_MSG("use wxPGVFBFlags::StayInProperty instead")
-constexpr wxPGVFBFlags wxPG_VFB_STAY_IN_PROPERTY{ wxPGVFBFlags::StayInProperty };
-wxDEPRECATED_MSG("use wxPGVFBFlags::Beep instead")
-constexpr wxPGVFBFlags wxPG_VFB_BEEP{ wxPGVFBFlags::Beep };
-wxDEPRECATED_MSG("use wxPGVFBFlags::MarkCell instead")
-constexpr wxPGVFBFlags wxPG_VFB_MARK_CELL{ wxPGVFBFlags::MarkCell };
-wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessage instead")
-constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGE{ wxPGVFBFlags::ShowMessage };
-wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessageBox instead")
-constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGEBOX{ wxPGVFBFlags::ShowMessageBox };
-wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessageOnStatusBar instead")
-constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR{ wxPGVFBFlags::ShowMessageOnStatusBar };
-wxDEPRECATED_MSG("use wxPGVFBFlags::Default instead")
-constexpr wxPGVFBFlags wxPG_VFB_DEFAULT{ wxPGVFBFlags::Default };
-wxDEPRECATED_MSG("use wxPGVFBFlags::Undefined instead")
-constexpr wxPGVFBFlags wxPG_VFB_UNDEFINED{ wxPGVFBFlags::Undefined };
+// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// because one will be given whenever they are used with any function now
+// taking wxPGVFBFlags anyhow and giving multiple deprecation warnings for the
+// same line of code is more annoying than helpful.
+enum wxPG_VALIDATION_FAILURE_BEHAVIOR_FLAGS
+{
+    wxPG_VFB_NULL = static_cast<int>(wxPGVFBFlags::Null),
+    wxPG_VFB_STAY_IN_PROPERTY = static_cast<int>(wxPGVFBFlags::StayInProperty),
+    wxPG_VFB_BEEP = static_cast<int>(wxPGVFBFlags::Beep),
+    wxPG_VFB_MARK_CELL = static_cast<int>(wxPGVFBFlags::MarkCell),
+    wxPG_VFB_SHOW_MESSAGE = static_cast<int>(wxPGVFBFlags::ShowMessage),
+    wxPG_VFB_SHOW_MESSAGEBOX = static_cast<int>(wxPGVFBFlags::ShowMessageBox),
+    wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR = static_cast<int>(wxPGVFBFlags::ShowMessageOnStatusBar),
+    wxPG_VFB_DEFAULT = static_cast<int>(wxPGVFBFlags::Default),
+    wxPG_VFB_UNDEFINED = static_cast<int>(wxPGVFBFlags::Undefined),
+};
 
 wxDEPRECATED_MSG("use wxPGVFBFlags instead")
 constexpr bool operator==(wxPGVFBFlags a, int b)
@@ -331,7 +329,7 @@ public:
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
 
-        if ( !p->HasAnyChild() || p->HasFlag(wxPGPropertyFlags::Aggregate) )
+        if ( !p->HasAnyChild() || p->HasFlag(wxPGFlags::Aggregate) )
             return wxNullProperty;
 
         return p->Item(0);
@@ -411,7 +409,7 @@ public:
     // flags - Property flags to use.
     // iterFlags - Iterator flags to use. Default is everything expect private children.
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use GetPropertiesWithFlag() with 'flags' argument as wxPGPropertyFlags")
+    wxDEPRECATED_MSG("use GetPropertiesWithFlag() with 'flags' argument as wxPGFlags")
     void GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
                                 int flags,
                                 bool inverse = false,
@@ -419,11 +417,11 @@ public:
                                                 wxPG_ITERATE_HIDDEN |
                                                 wxPG_ITERATE_CATEGORIES) const
     {
-        GetPropertiesWithFlag(targetArr, static_cast<wxPGPropertyFlags>(flags), inverse, iterFlags);
+        GetPropertiesWithFlag(targetArr, static_cast<wxPGFlags>(flags), inverse, iterFlags);
     }
 #endif // WXWIN_COMPATIBILITY_3_2
     void GetPropertiesWithFlag(wxArrayPGProperty* targetArr,
-                               wxPGPropertyFlags flags,
+                               wxPGFlags flags,
                                bool inverse = false,
                                int iterFlags = wxPG_ITERATE_PROPERTIES |
                                                wxPG_ITERATE_HIDDEN |
@@ -662,7 +660,7 @@ public:
     bool IsPropertyEnabled( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return !p->HasFlag(wxPGPropertyFlags::Disabled);
+        return !p->HasFlag(wxPGFlags::Disabled);
     }
 
     // Returns true if given property is expanded.
@@ -674,7 +672,7 @@ public:
     bool IsPropertyModified( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return p->HasFlag(wxPGPropertyFlags::Modified);
+        return p->HasFlag(wxPGFlags::Modified);
     }
 
     // Returns true if property is selected.
@@ -689,7 +687,7 @@ public:
     bool IsPropertyShown( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return !p->HasFlag(wxPGPropertyFlags::Hidden);
+        return !p->HasFlag(wxPGFlags::Hidden);
     }
 
     // Returns true if property value is set to unspecified.

@@ -47,26 +47,23 @@ enum class wxPGSelectPropertyFlags : int
 };
 
 #if WXWIN_COMPATIBILITY_3_2
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Null instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_NONE{ wxPGSelectPropertyFlags::Null };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Focus instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_FOCUS{wxPGSelectPropertyFlags::Focus };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Force instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_FORCE{ wxPGSelectPropertyFlags::Force };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Nonvisible instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_NONVISIBLE{ wxPGSelectPropertyFlags::Nonvisible };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::NoValidate instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_NOVALIDATE{ wxPGSelectPropertyFlags::NoValidate };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::Deleting instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_DELETING{wxPGSelectPropertyFlags::Deleting };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::SetUnspec instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_SETUNSPEC{ wxPGSelectPropertyFlags::SetUnspec };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::DialogVal instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_DIALOGVAL{ wxPGSelectPropertyFlags::DialogVal };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::DontSendEvent instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_DONT_SEND_EVENT{ wxPGSelectPropertyFlags::DontSendEvent };
-wxDEPRECATED_MSG("use wxPGSelectPropertyFlags::NoRefresh instead")
-constexpr wxPGSelectPropertyFlags wxPG_SEL_NO_REFRESH{ wxPGSelectPropertyFlags::NoRefresh };
+// These constants themselves intentionally don't use wxDEPRECATED_MSG()
+// because one will be given whenever they are used with any function now
+// taking wxPGSelectPropertyFlags anyhow and giving multiple deprecation
+// warnings for the same line of code is more annoying than helpful.
+enum wxPG_SELECT_PROPERTY_FLAGS
+{
+    wxPG_SEL_NONE = static_cast<int>(wxPGSelectPropertyFlags::Null),
+    wxPG_SEL_FOCUS = static_cast<int>(wxPGSelectPropertyFlags::Focus),
+    wxPG_SEL_FORCE = static_cast<int>(wxPGSelectPropertyFlags::Force),
+    wxPG_SEL_NONVISIBLE = static_cast<int>(wxPGSelectPropertyFlags::Nonvisible),
+    wxPG_SEL_NOVALIDATE = static_cast<int>(wxPGSelectPropertyFlags::NoValidate),
+    wxPG_SEL_DELETING = static_cast<int>(wxPGSelectPropertyFlags::Deleting),
+    wxPG_SEL_SETUNSPEC = static_cast<int>(wxPGSelectPropertyFlags::SetUnspec),
+    wxPG_SEL_DIALOGVAL = static_cast<int>(wxPGSelectPropertyFlags::DialogVal),
+    wxPG_SEL_DONT_SEND_EVENT = static_cast<int>(wxPGSelectPropertyFlags::DontSendEvent),
+    wxPG_SEL_NO_REFRESH = static_cast<int>(wxPGSelectPropertyFlags::NoRefresh),
+};
 
 wxDEPRECATED_MSG("use wxPGSelectPropertyFlags instead")
 constexpr bool operator==(wxPGSelectPropertyFlags a, int b)
@@ -130,14 +127,14 @@ constexpr bool operator!(wxPGSplitterPositionFlags a)
 }
 
 #if WXWIN_COMPATIBILITY_3_2
-wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::Refresh instead")
-constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_REFRESH { wxPGSplitterPositionFlags::Refresh };
-wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::AllPages instead")
-constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_ALL_PAGES { wxPGSplitterPositionFlags::AllPages };
-wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::FromEvent instead")
-constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_FROM_EVENT { wxPGSplitterPositionFlags::FromEvent };
-wxDEPRECATED_MSG("use wxPGSplitterPositionFlags::FromAutoCenter instead")
-constexpr wxPGSplitterPositionFlags wxPG_SPLITTER_FROM_AUTO_CENTER { wxPGSplitterPositionFlags::FromAutoCenter };
+// See comment before wxPG_SEL_NONE above.
+enum wxPG_SET_SPLITTER_POSITION_SPLITTER_FLAGS
+{
+    wxPG_SPLITTER_REFRESH = static_cast<int>(wxPGSplitterPositionFlags::Refresh),
+    wxPG_SPLITTER_ALL_PAGES = static_cast<int>(wxPGSplitterPositionFlags::AllPages),
+    wxPG_SPLITTER_FROM_EVENT = static_cast<int>(wxPGSplitterPositionFlags::FromEvent),
+    wxPG_SPLITTER_FROM_AUTO_CENTER = static_cast<int>(wxPGSplitterPositionFlags::FromAutoCenter),
+};
 
 wxDEPRECATED_MSG("use wxPGSplitterPositionFlags instead")
 constexpr bool operator==(wxPGSplitterPositionFlags a, int b)
@@ -213,54 +210,54 @@ enum wxPG_ITERATOR_FLAGS
 
 // Iterate through 'normal' property items (does not include children of
 // aggregate or hidden items by default).
-wxPG_ITERATE_PROPERTIES = wxPGPropertyFlags::Property |
-                          wxPGPropertyFlags::MiscParent |
-                          wxPGPropertyFlags::Aggregate |
-                          wxPGPropertyFlags::Collapsed |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::MiscParent) |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::Category),
+wxPG_ITERATE_PROPERTIES = wxPGFlags::Property |
+                          wxPGFlags::MiscParent |
+                          wxPGFlags::Aggregate |
+                          wxPGFlags::Collapsed |
+                          wxPG_IT_CHILDREN(wxPGFlags::MiscParent) |
+                          wxPG_IT_CHILDREN(wxPGFlags::Category),
 
 // Iterate children of collapsed parents, and individual items that are hidden.
-wxPG_ITERATE_HIDDEN = wxPGPropertyFlags::Hidden |
-                      wxPG_IT_CHILDREN(wxPGPropertyFlags::Collapsed),
+wxPG_ITERATE_HIDDEN = wxPGFlags::Hidden |
+                      wxPG_IT_CHILDREN(wxPGFlags::Collapsed),
 
 // Iterate children of parent that is an aggregate property (ie has fixed
 // children).
-wxPG_ITERATE_FIXED_CHILDREN = wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate) |
+wxPG_ITERATE_FIXED_CHILDREN = wxPG_IT_CHILDREN(wxPGFlags::Aggregate) |
                               wxPG_ITERATE_PROPERTIES,
 
 // Iterate categories.
 // Note that even without this flag, children of categories are still iterated
 // through.
-wxPG_ITERATE_CATEGORIES = wxPGPropertyFlags::Category |
-                          wxPG_IT_CHILDREN(wxPGPropertyFlags::Category) |
-                          wxPGPropertyFlags::Collapsed,
+wxPG_ITERATE_CATEGORIES = wxPGFlags::Category |
+                          wxPG_IT_CHILDREN(wxPGFlags::Category) |
+                          wxPGFlags::Collapsed,
 
-wxPG_ITERATE_ALL_PARENTS = static_cast<int>(wxPGPropertyFlags::MiscParent |
-                           wxPGPropertyFlags::Aggregate |
-                           wxPGPropertyFlags::Category),
+wxPG_ITERATE_ALL_PARENTS = static_cast<int>(wxPGFlags::MiscParent |
+                           wxPGFlags::Aggregate |
+                           wxPGFlags::Category),
 
 wxPG_ITERATE_ALL_PARENTS_RECURSIVELY = wxPG_ITERATE_ALL_PARENTS |
                                        wxPG_IT_CHILDREN(
                                                 wxPG_ITERATE_ALL_PARENTS),
 
-wxPG_ITERATOR_FLAGS_ALL = static_cast<int>(wxPGPropertyFlags::Property |
-                          wxPGPropertyFlags::MiscParent |
-                          wxPGPropertyFlags::Aggregate |
-                          wxPGPropertyFlags::Hidden |
-                          wxPGPropertyFlags::Category |
-                          wxPGPropertyFlags::Collapsed),
+wxPG_ITERATOR_FLAGS_ALL = static_cast<int>(wxPGFlags::Property |
+                          wxPGFlags::MiscParent |
+                          wxPGFlags::Aggregate |
+                          wxPGFlags::Hidden |
+                          wxPGFlags::Category |
+                          wxPGFlags::Collapsed),
 
 wxPG_ITERATOR_MASK_OP_ITEM = wxPG_ITERATOR_FLAGS_ALL,
 
-// (wxPGPropertyFlags::MiscParent|wxPGPropertyFlags::Aggregate|wxPGPropertyFlags::Category)
+// (wxPGFlags::MiscParent|wxPGFlags::Aggregate|wxPGFlags::Category)
 wxPG_ITERATOR_MASK_OP_PARENT = wxPG_ITERATOR_FLAGS_ALL,
 
 // Combines all flags needed to iterate through visible properties
 // (ie. hidden properties and children of collapsed parents are skipped).
 wxPG_ITERATE_VISIBLE = wxPG_ITERATE_PROPERTIES |
-                       wxPGPropertyFlags::Category |
-                       wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate),
+                       wxPGFlags::Category |
+                       wxPG_IT_CHILDREN(wxPGFlags::Aggregate),
 
 // Iterate all items.
 wxPG_ITERATE_ALL = wxPG_ITERATE_VISIBLE |
@@ -276,11 +273,11 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
 
 };
 
-inline void wxPGCreateIteratorMasks(int flags, wxPGPropertyFlags& itemExMask, wxPGPropertyFlags& parentExMask)
+inline void wxPGCreateIteratorMasks(int flags, wxPGFlags& itemExMask, wxPGFlags& parentExMask)
 {
-    itemExMask = static_cast<wxPGPropertyFlags>((flags ^ wxPG_ITERATOR_MASK_OP_ITEM) &
+    itemExMask = static_cast<wxPGFlags>((flags ^ wxPG_ITERATOR_MASK_OP_ITEM) &
         wxPG_ITERATOR_MASK_OP_ITEM & 0xFFFF);
-    parentExMask = static_cast<wxPGPropertyFlags>(((flags >> 16) ^ wxPG_ITERATOR_MASK_OP_PARENT) &
+    parentExMask = static_cast<wxPGFlags>(((flags >> 16) ^ wxPG_ITERATOR_MASK_OP_PARENT) &
         wxPG_ITERATOR_MASK_OP_PARENT & 0xFFFF);
 }
 
@@ -337,8 +334,8 @@ private:
     wxPGProperty*               m_baseParent;
 
     // Masks are used to quickly exclude items
-    wxPGPropertyFlags           m_itemExMask;
-    wxPGPropertyFlags           m_parentExMask;
+    wxPGFlags           m_itemExMask;
+    wxPGFlags           m_parentExMask;
 };
 
 template <typename PROPERTY, typename STATE>
@@ -641,7 +638,7 @@ protected:
 
     void DoLimitPropertyEditing(wxPGProperty* p, bool limit = true)
     {
-        p->SetFlagRecursively(wxPGPropertyFlags::NoEditor, limit);
+        p->SetFlagRecursively(wxPGFlags::NoEditor, limit);
     }
 
     bool DoSelectProperty(wxPGProperty* p, wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::Null);

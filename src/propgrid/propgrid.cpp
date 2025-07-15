@@ -957,11 +957,11 @@ void wxPropertyGrid::MakeColumnEditable( unsigned int column,
                                          bool editable )
 {
     // The second column is always editable. To make it read-only is a property
-    // by property decision by setting its wxPGPropertyFlags::ReadOnly flag.
+    // by property decision by setting its wxPGFlags::ReadOnly flag.
     wxASSERT_MSG
     (
          column != 1,
-         wxS("Set wxPGPropertyFlags::ReadOnly property flag instead")
+         wxS("Set wxPGFlags::ReadOnly property flag instead")
     );
 
     if ( editable )
@@ -2140,7 +2140,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     {
         const wxPGProperty* p = *it;
 
-        if ( !p->HasFlag(wxPGPropertyFlags::Hidden) )
+        if ( !p->HasFlag(wxPGFlags::Hidden) )
         {
             visPropArray.push_back(const_cast<wxPGProperty*>(p));
 
@@ -2347,7 +2347,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             if ( butRect.x > 0 )
                 butRect.x += IN_CELL_EXPANDER_BUTTON_X_ADJUST;
 
-            if ( p->HasFlag(wxPGPropertyFlags::Modified) &&
+            if ( p->HasFlag(wxPGFlags::Modified) &&
                  (windowStyle & wxPG_BOLD_MODIFIED) )
             {
                 dc.SetFont(m_captionFont);
@@ -2986,7 +2986,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     wxVariant* pPendingValue = &pendingValue;
     wxVariant* pList = nullptr;
 
-    // If parent has wxPGPropertyFlags::Aggregate flag, or uses composite
+    // If parent has wxPGFlags::Aggregate flag, or uses composite
     // string value, then we need treat as it was changed instead
     // (or, in addition, as is the case with composite string parent).
     // This includes creating list variant for child values.
@@ -3000,7 +3000,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     listValue.SetName(p->GetBaseName());
 
     while ( pwc &&
-            (pwc->HasFlag(wxPGPropertyFlags::Aggregate) || pwc->HasFlag(wxPGPropertyFlags::ComposedValue)) )
+            (pwc->HasFlag(wxPGFlags::Aggregate) || pwc->HasFlag(wxPGFlags::ComposedValue)) )
     {
         wxVariantList tempList;
         wxVariant lv(tempList, pwc->GetBaseName());
@@ -3008,7 +3008,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
         listValue = lv;
         pPendingValue = &listValue;
 
-        if ( pwc->HasFlag(wxPGPropertyFlags::Aggregate) )
+        if ( pwc->HasFlag(wxPGFlags::Aggregate) )
         {
             baseChangedProperty = pwc;
             bcpPendingList = lv;
@@ -3038,9 +3038,9 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     {
         // FIXME: After proper ValueToString()s added, remove
         // this. It is just a temporary fix, as evt_changing
-        // will simply not work for wxPGPropertyFlags::ComposedValue
+        // will simply not work for wxPGFlags::ComposedValue
         // (unless it is selected, and textctrl editor is open).
-        if ( changedProperty->HasFlag(wxPGPropertyFlags::ComposedValue) )
+        if ( changedProperty->HasFlag(wxPGFlags::ComposedValue) )
         {
             evtChangingProperty = baseChangedProperty;
             if ( evtChangingProperty != p )
@@ -3053,7 +3053,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
             }
         }
 
-        if ( evtChangingProperty->HasFlag(wxPGPropertyFlags::ComposedValue) )
+        if ( evtChangingProperty->HasFlag(wxPGFlags::ComposedValue) )
         {
             if ( changedProperty == GetSelection() )
             {
@@ -3180,7 +3180,7 @@ bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
     {
         // When property selection is being changed, do not display any
         // messages, if some were already shown for this property.
-        if ( property->HasFlag(wxPGPropertyFlags::InvalidValue) )
+        if ( property->HasFlag(wxPGFlags::InvalidValue) )
         {
             m_validationInfo.SetFailureBehavior(
                 vfb & (~(wxPGVFBFlags::ShowMessage |
@@ -3202,7 +3202,7 @@ bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
         property->GetEditorClass()->UpdateControl(property, editor);
     }
 
-    property->SetFlag(wxPGPropertyFlags::InvalidValue);
+    property->SetFlag(wxPGFlags::InvalidValue);
 
     return res;
 }
@@ -3215,7 +3215,7 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
         ::wxBell();
 
     if ( !!(vfb & wxPGVFBFlags::MarkCell) &&
-         !property->HasFlag(wxPGPropertyFlags::InvalidValue) )
+         !property->HasFlag(wxPGFlags::InvalidValue) )
     {
         unsigned int colCount = m_pState->GetColumnCount();
 
@@ -3367,9 +3367,9 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, wxPGSelectPropertyFlags
     wxWindow* editor = GetEditorControl();
 
     // Set as Modified (not if dragging just began)
-    if ( !p->HasFlag(wxPGPropertyFlags::Modified) )
+    if ( !p->HasFlag(wxPGFlags::Modified) )
     {
-        p->SetFlag(wxPGPropertyFlags::Modified);
+        p->SetFlag(wxPGFlags::Modified);
         if ( p == selected && (m_windowStyle & wxPG_BOLD_MODIFIED) )
         {
             if ( editor )
@@ -3384,7 +3384,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, wxPGSelectPropertyFlags
 
     while ( prevPwc != topPaintedProperty )
     {
-        pwc->SetFlag(wxPGPropertyFlags::Modified);
+        pwc->SetFlag(wxPGFlags::Modified);
 
         if ( pwc == selected && (m_windowStyle & wxPG_BOLD_MODIFIED) )
         {
@@ -3415,11 +3415,11 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, wxPGSelectPropertyFlags
     }
 
     // Sanity check
-    wxASSERT( !changedProperty->GetParent()->HasFlag(wxPGPropertyFlags::Aggregate) );
+    wxASSERT( !changedProperty->GetParent()->HasFlag(wxPGFlags::Aggregate) );
 
     // If top parent has composite string value, then send to child parents,
     // starting from baseChangedProperty.
-    if ( changedProperty->HasFlag(wxPGPropertyFlags::ComposedValue) )
+    if ( changedProperty->HasFlag(wxPGFlags::ComposedValue) )
     {
         pwc = m_chgInfo_baseChangedProperty;
 
@@ -3547,7 +3547,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     // Somehow, event is handled after property has been deselected.
     // Possibly, but very rare.
     if ( !selected ||
-          selected->HasFlag(wxPGPropertyFlags::BeingDeleted) ||
+          selected->HasFlag(wxPGFlags::BeingDeleted) ||
           m_inOnValidationFailure ||
           // Also don't handle editor event if wxEVT_PG_CHANGED or
           // similar is currently doing something (showing a
@@ -4027,7 +4027,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, wxPGSelectPropertyFlags 
 
     prevFirstSel = prevSelection.empty()? nullptr: prevSelection[0];
 
-    if ( prevFirstSel && prevFirstSel->HasFlag(wxPGPropertyFlags::BeingDeleted) )
+    if ( prevFirstSel && prevFirstSel->HasFlag(wxPGFlags::BeingDeleted) )
         prevFirstSel = nullptr;
 
     // Always send event, as this is indirect call
@@ -4141,7 +4141,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, wxPGSelectPropertyFlags 
 
             //
             // Only create editor for non-disabled non-caption
-            if ( !p->IsCategory() && !p->HasFlag(wxPGPropertyFlags::Disabled) )
+            if ( !p->IsCategory() && !p->HasFlag(wxPGFlags::Disabled) )
             {
             // do this for non-caption items
 
@@ -4149,7 +4149,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, wxPGSelectPropertyFlags 
 
                 // Do we need to paint the custom image, if any?
                 m_iFlags &= ~(wxPG_FL_CUR_USES_CUSTOM_IMAGE);
-                if ( p->HasFlag(wxPGPropertyFlags::CustomImage) &&
+                if ( p->HasFlag(wxPGFlags::CustomImage) &&
                      !p->GetEditorClass()->CanContainCustomImage()
                    )
                     m_iFlags |= wxPG_FL_CUR_USES_CUSTOM_IMAGE;
@@ -4215,7 +4215,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, wxPGSelectPropertyFlags 
 
                     // If it has modified status, use bold font
                     // (must be done before capturing m_ctrlXAdjust)
-                    if ( p->HasFlag(wxPGPropertyFlags::Modified) &&
+                    if ( p->HasFlag(wxPGFlags::Modified) &&
                          (m_windowStyle & wxPG_BOLD_MODIFIED) )
                         SetCurControlBoldFont();
                     // Store x relative to splitter (we'll need it).
@@ -4406,7 +4406,7 @@ void wxPropertyGrid::RefreshEditor()
     // calling UpdateControl().
     if ( HasFlag(wxPG_BOLD_MODIFIED) )
     {
-        if ( p->HasFlag(wxPGPropertyFlags::Modified) )
+        if ( p->HasFlag(wxPGFlags::Modified) )
             wnd->SetFont(GetCaptionFont());
         else
             wnd->SetFont(GetFont());
@@ -5109,7 +5109,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                         space -= (wxPG_XBEFORETEXT + 1);
                         int tw, th;
                         const wxFont* font = nullptr;
-                        if ( (m_windowStyle & wxPG_BOLD_MODIFIED) && m_propHover->HasFlag(wxPGPropertyFlags::Modified) )
+                        if ( (m_windowStyle & wxPG_BOLD_MODIFIED) && m_propHover->HasFlag(wxPGFlags::Modified) )
                             font = &m_captionFont;
                         if ( cell.GetFont().IsOk() )
                             font = &cell.GetFont();
@@ -5181,7 +5181,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
             // Since categories cannot be selected along with 'other'
             // properties, exclude them from iterator flags.
-            int iterFlags = wxPG_ITERATE_VISIBLE & (~wxPGPropertyFlags::Category);
+            int iterFlags = wxPG_ITERATE_VISIBLE & (~wxPGFlags::Category);
 
             for ( int i=(selection.size()-1); i>=0; i-- )
             {
@@ -5728,7 +5728,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         if ( action == wxPGKeyboardAction::Edit && !editorFocused )
         {
             // Mark as handled only for editable property
-            if ( !p->IsCategory() && p->IsEnabled() && !p->HasFlag(wxPGPropertyFlags::ReadOnly) )
+            if ( !p->IsCategory() && p->IsEnabled() && !p->HasFlag(wxPGFlags::ReadOnly) )
             {
                 DoSelectProperty( p, wxPGSelectPropertyFlags::Focus );
                 wasHandled = true;
@@ -6371,7 +6371,7 @@ wxPGProperty* wxPropertyGridPopulator::Add( const wxString& propClass,
     wxClassInfo* classInfo = wxClassInfo::FindClass(propClass);
     wxPGProperty* parent = GetCurParent();
 
-    if ( parent->HasFlag(wxPGPropertyFlags::Aggregate) )
+    if ( parent->HasFlag(wxPGFlags::Aggregate) )
     {
         ProcessError(wxString::Format(wxS("new children cannot be added to '%s'"),parent->GetName()));
         return nullptr;

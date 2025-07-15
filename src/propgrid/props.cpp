@@ -60,9 +60,9 @@ wxStringProperty::wxStringProperty( const wxString& label,
 void wxStringProperty::OnSetValue()
 {
     if ( !m_value.IsNull() && m_value.GetString() == wxS("<composed>") )
-        SetFlag(wxPGPropertyFlags::ComposedValue);
+        SetFlag(wxPGFlags::ComposedValue);
 
-    if ( HasFlag(wxPGPropertyFlags::ComposedValue) )
+    if ( HasFlag(wxPGFlags::ComposedValue) )
     {
         wxString s;
         DoGenerateComposedValue(s);
@@ -75,7 +75,7 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
 {
     wxString s = value.GetString();
 
-    if ( HasAnyChild() && HasFlag(wxPGPropertyFlags::ComposedValue) )
+    if ( HasAnyChild() && HasFlag(wxPGFlags::ComposedValue) )
     {
         // Value stored in m_value is non-editable, non-full value
         if ( !!(flags & wxPGPropValFormatFlags::FullValue) ||
@@ -103,7 +103,7 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
 
 bool wxStringProperty::StringToValue( wxVariant& variant, const wxString& text, wxPGPropValFormatFlags flags ) const
 {
-    if ( HasAnyChild() && HasFlag(wxPGPropertyFlags::ComposedValue) )
+    if ( HasAnyChild() && HasFlag(wxPGFlags::ComposedValue) )
         return wxPGProperty::StringToValue(variant, text, flags);
 
     if ( variant != text )
@@ -160,11 +160,11 @@ wxNumericPropertyValidator::
             style |= wxFILTER_DIGITS;
     }
 
-    if ( numericType == NumericType::Signed )
+    if ( numericType == Signed )
     {
         allowedChars += wxS("-+");
     }
-    else if ( numericType == NumericType::Float )
+    else if ( numericType == Float )
     {
         allowedChars += wxS("-+eE");
 
@@ -504,7 +504,7 @@ wxValidator* wxIntProperty::GetClassValidator()
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxValidator* validator = new wxNumericPropertyValidator(
-                                    wxNumericPropertyValidator::NumericType::Signed);
+                                    wxNumericPropertyValidator::Signed);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else
@@ -749,7 +749,7 @@ wxValidator* wxUIntProperty::DoGetValidator() const
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxValidator* validator = new wxNumericPropertyValidator(
-                                    wxNumericPropertyValidator::NumericType::Unsigned,
+                                    wxNumericPropertyValidator::Unsigned,
                                     m_realBase);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
@@ -977,7 +977,7 @@ wxFloatProperty::GetClassValidator()
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxValidator* validator = new wxNumericPropertyValidator(
-                                    wxNumericPropertyValidator::NumericType::Float);
+                                    wxNumericPropertyValidator::Float);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else
@@ -1566,7 +1566,7 @@ void wxFlagsProperty::OnSetValue()
             long flag = m_choices.GetValue(i);
 
             if ( (newFlags & flag) != (m_oldValue & flag) )
-                Item(i)->ChangeFlag(wxPGPropertyFlags::Modified, true );
+                Item(i)->ChangeFlag(wxPGFlags::Modified, true );
         }
 
         m_oldValue = newFlags;
@@ -1667,7 +1667,7 @@ void wxFlagsProperty::RefreshChildren()
         wxPGProperty* p = Item(i);
 
         if ( subVal != (m_oldValue & flag) )
-            p->ChangeFlag(wxPGPropertyFlags::Modified, true );
+            p->ChangeFlag(wxPGFlags::Modified, true );
 
         p->SetValue( subVal == flag?true:false );
     }
@@ -1960,7 +1960,7 @@ wxString wxFileProperty::ValueToString( wxVariant& value,
     {
         return filename.GetFullPath();
     }
-    else if ( !!(m_flags & wxPGPropertyFlags::ShowFullFileName) )
+    else if ( !!(m_flags & wxPGFlags::ShowFullFileName) )
     {
         if ( !m_basePath.empty() )
         {
@@ -1978,7 +1978,7 @@ bool wxFileProperty::StringToValue( wxVariant& variant, const wxString& text, wx
 {
     wxFileName filename = variant.GetString();
 
-    if ( !!(m_flags & wxPGPropertyFlags::ShowFullFileName) || !!(flags & wxPGPropValFormatFlags::FullValue) )
+    if ( !!(m_flags & wxPGFlags::ShowFullFileName) || !!(flags & wxPGPropValFormatFlags::FullValue) )
     {
         if ( filename != text )
         {
@@ -2108,7 +2108,7 @@ bool wxLongStringProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& va
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
     long edStyle = wxTE_MULTILINE;
-    if ( HasFlag(wxPGPropertyFlags::ReadOnly) )
+    if ( HasFlag(wxPGFlags::ReadOnly) )
         edStyle |= wxTE_READONLY;
     wxString strVal;
     wxPropertyGrid::ExpandEscapeSequences(strVal, value.GetString());
@@ -2121,7 +2121,7 @@ bool wxLongStringProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& va
     topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
 
     long btnSizerFlags = wxCANCEL;
-    if ( !HasFlag(wxPGPropertyFlags::ReadOnly) )
+    if ( !HasFlag(wxPGFlags::ReadOnly) )
         btnSizerFlags |= wxOK;
     wxStdDialogButtonSizer* buttonSizer = dlg->CreateStdDialogButtonSizer(btnSizerFlags);
     topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxBOTTOM|wxRIGHT, spacing));

@@ -125,7 +125,7 @@ wxPGProperty* wxPropertyGridInterface::RemoveProperty( wxPGPropArg id )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
 
-    wxCHECK( !p->HasAnyChild() || p->HasFlag(wxPGPropertyFlags::Aggregate),
+    wxCHECK( !p->HasAnyChild() || p->HasFlag(wxPGFlags::Aggregate),
              wxNullProperty);
 
     wxPropertyGridPageState* state = p->GetParentState();
@@ -228,7 +228,7 @@ bool wxPropertyGridInterface::EnableProperty( wxPGPropArg id, bool enable )
 
     if ( enable )
     {
-        if ( !p->HasFlag(wxPGPropertyFlags::Disabled) )
+        if ( !p->HasFlag(wxPGFlags::Disabled) )
             return false;
 
         // If active, Set active Editor.
@@ -237,7 +237,7 @@ bool wxPropertyGridInterface::EnableProperty( wxPGPropArg id, bool enable )
     }
     else
     {
-        if ( p->HasFlag(wxPGPropertyFlags::Disabled) )
+        if ( p->HasFlag(wxPGFlags::Disabled) )
             return false;
 
         // If active, Disable as active Editor.
@@ -258,17 +258,17 @@ void wxPropertyGridInterface::SetPropertyReadOnly( wxPGPropArg id, bool set, wxP
 
     if ( !!(flags & wxPGPropertyValuesFlags::Recurse) )
     {
-        p->SetFlagRecursively(wxPGPropertyFlags::ReadOnly, set);
+        p->SetFlagRecursively(wxPGFlags::ReadOnly, set);
     }
     else
     {
         // Do nothing if flag is already set as required.
-        if ( set && p->HasFlag(wxPGPropertyFlags::ReadOnly) )
+        if ( set && p->HasFlag(wxPGFlags::ReadOnly) )
             return;
-        if ( !set && !p->HasFlag(wxPGPropertyFlags::ReadOnly) )
+        if ( !set && !p->HasFlag(wxPGFlags::ReadOnly) )
             return;
 
-        p->ChangeFlag(wxPGPropertyFlags::ReadOnly, set);
+        p->ChangeFlag(wxPGFlags::ReadOnly, set);
     }
 
     wxPropertyGridPageState* state = p->GetParentState();
@@ -337,7 +337,7 @@ void wxPropertyGridInterface::ClearModifiedStatus()
     wxPropertyGridPageState* page;
     while ( (page = GetPageState(pageIndex)) != nullptr )
     {
-        page->DoGetRoot()->SetFlagRecursively(wxPGPropertyFlags::Modified, false);
+        page->DoGetRoot()->SetFlagRecursively(wxPGFlags::Modified, false);
         page->m_anyModified = false;
 
         pageIndex++;
@@ -456,7 +456,7 @@ void wxPropertyGridInterface::SetPropertyAttributeAll( const wxString& attrName,
 // -----------------------------------------------------------------------
 
 void wxPropertyGridInterface::GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
-                                                     wxPGPropertyFlags flags,
+                                                     wxPGFlags flags,
                                                      bool inverse,
                                                      int iterFlags ) const
 {
@@ -538,9 +538,9 @@ bool wxPropertyGridInterface::HideProperty(wxPGPropArg id, bool hide, wxPGProper
     // Do nothing if single property is already hidden/visible as requested.
     if ( !(flags & wxPGPropertyValuesFlags::Recurse) )
     {
-        if ( hide && p->HasFlag(wxPGPropertyFlags::Hidden) )
+        if ( hide && p->HasFlag(wxPGFlags::Hidden) )
             return false;
-        if ( !hide && !p->HasFlag(wxPGPropertyFlags::Hidden) )
+        if ( !hide && !p->HasFlag(wxPGFlags::Hidden) )
             return false;
     }
 
@@ -847,9 +847,9 @@ bool wxPropertyGridInterface::ChangePropertyValue( wxPGPropArg id, wxVariant new
 void wxPropertyGridInterface::BeginAddChildren( wxPGPropArg id )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-    wxCHECK_RET( p->HasFlag(wxPGPropertyFlags::Aggregate), wxS("only call on properties with fixed children") );
-    p->ClearFlag(wxPGPropertyFlags::Aggregate);
-    p->SetFlag(wxPGPropertyFlags::MiscParent);
+    wxCHECK_RET( p->HasFlag(wxPGFlags::Aggregate), wxS("only call on properties with fixed children") );
+    p->ClearFlag(wxPGFlags::Aggregate);
+    p->SetFlag(wxPGFlags::MiscParent);
 }
 
 // -----------------------------------------------------------------------
@@ -864,9 +864,9 @@ bool wxPropertyGridInterface::EditorValidate()
 void wxPropertyGridInterface::EndAddChildren( wxPGPropArg id )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-    wxCHECK_RET( p->HasFlag(wxPGPropertyFlags::MiscParent), wxS("only call on properties for which BeginAddChildren was called prior") );
-    p->ClearFlag(wxPGPropertyFlags::MiscParent);
-    p->SetFlag(wxPGPropertyFlags::Aggregate);
+    wxCHECK_RET( p->HasFlag(wxPGFlags::MiscParent), wxS("only call on properties for which BeginAddChildren was called prior") );
+    p->ClearFlag(wxPGFlags::MiscParent);
+    p->SetFlag(wxPGFlags::Aggregate);
 }
 
 // -----------------------------------------------------------------------
@@ -955,7 +955,7 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
             {
                 const wxPGProperty* p = it.GetProperty();
 
-                if ( !p->HasFlag(wxPGPropertyFlags::Collapsed) )
+                if ( !p->HasFlag(wxPGFlags::Collapsed) )
                     result += EscapeDelimiters(p->GetName());
                 result += wxS(",");
 

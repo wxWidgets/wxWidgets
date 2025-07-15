@@ -159,8 +159,7 @@ protected:
 
 #if WXWIN_COMPATIBILITY_3_2
 // If set, then match from list is searched for a custom colour.
-wxDEPRECATED_MSG("wxPG_PROP_TRANSLATE_CUSTOM is intended for internal use.")
-constexpr wxPGPropertyFlags wxPG_PROP_TRANSLATE_CUSTOM = wxPGPropertyFlags::Reserved_1;
+constexpr int wxPG_PROP_TRANSLATE_CUSTOM = wxPG_PROP_CLASS_SPECIFIC_1;
 #endif // WXWIN_COMPATIBILITY_3_2
 
 // Has dropdown list of wxWidgets system colours. Value used is
