@@ -93,6 +93,21 @@ mark_as_advanced(wxBUILD_INSTALL_PLATFORM_SUBDIR)
 wx_option(wxBUILD_INSTALL_PDB "install pdb files in the runtime direcotry (MSVC)" OFF)
 mark_as_advanced(wxBUILD_INSTALL_PDB)
 
+# Use the MSVC/makefile naming convention, or the configure naming convention,
+# this is the same check as used in FindwxWidgets.
+wx_option(wxBUILD_WIN32_MSVC_NAMING "Force the MSVC / makefile.[gcc/vc] naming convention" AUTO STRINGS ON OFF AUTO)
+mark_as_advanced(wxBUILD_WIN32_MSVC_NAMING)
+if(wxBUILD_WIN32_MSVC_NAMING STREQUAL "AUTO")
+    if(MSVC)
+        set(WIN32_MSVC_NAMING 1)
+    elseif(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_CROSSCOMPILING)
+        set(WIN32_MSVC_NAMING 1)
+    else()
+        set(WIN32_MSVC_NAMING 0)
+    endif()
+else()
+    set(WIN32_MSVC_NAMING ${wxBUILD_WIN32_MSVC_NAMING})
+endif()
 
 # STL options
 wx_option(wxUSE_STD_IOSTREAM "use standard C++ streams" ON)

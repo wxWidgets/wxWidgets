@@ -12,17 +12,6 @@ include(CMakeParseArguments)           # For compatibility with CMake < 3.4
 include(ExternalProject)
 include(CMakePrintHelpers)
 
-# Use the MSVC/makefile naming convention, or the configure naming convention,
-# this is the same check as used in FindwxWidgets.
-if(MSVC)
-    set(WIN32_MSVC_NAMING 1)
-elseif(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_CROSSCOMPILING)
-    set(WIN32_MSVC_NAMING 1)
-else()
-    set(WIN32_MSVC_NAMING 0)
-endif()
-
-
 # List of libraries added via wx_add_library() to use for wx-config
 # and headers added via wx_append_sources() to use for install.
 set(wxLIB_TARGETS)
@@ -102,16 +91,6 @@ macro(wx_get_flavour flavour prefix)
         set(${flavour})
     endif()
 endmacro()
-
-if(WIN32_MSVC_NAMING)
-    # Generator expression to not create different Debug and Release directories
-    set(GEN_EXPR_DIR "$<1:/>")
-    set(wxINSTALL_INCLUDE_DIR "include")
-else()
-    set(GEN_EXPR_DIR "/")
-    wx_get_flavour(lib_flavour "-")
-    set(wxINSTALL_INCLUDE_DIR "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
-endif()
 
 # Set properties common to builtin third party libraries and wx libs
 function(wx_set_common_target_properties target_name)
