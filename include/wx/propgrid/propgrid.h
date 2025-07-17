@@ -17,6 +17,7 @@
 #include "wx/scrolwin.h"
 #include "wx/recguard.h"
 #include "wx/time.h" // needed for wxMilliClock_t
+#include "wx/systhemectrl.h"
 
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridiface.h"
@@ -555,7 +556,7 @@ enum wxPG_KEYBOARD_ACTIONS
 // Use Freeze() and Thaw() respectively to disable and enable drawing. This
 // will also delay sorting etc. miscellaneous calculations to the last
 // possible moment.
-class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxScrolled<wxControl>,
+class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxSystemThemedControl<wxScrolled<wxControl>>,
                                             public wxPropertyGridInterface
 {
     friend class wxPropertyGridEvent;
