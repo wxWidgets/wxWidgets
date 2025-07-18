@@ -424,7 +424,7 @@ TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
     if (CheckSupported(locDE, "German"))
     {
         CHECK(locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == "€");
+        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"€");
     }
 
     // This one shows that "Swiss High German" locale (de_CH) correctly uses
