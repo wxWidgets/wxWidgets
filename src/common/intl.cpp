@@ -1263,6 +1263,10 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
             cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleDecimalSeparator);
             break;
 
+        case wxLOCALE_CURRENCY_SYMBOL:
+            cfstr = (CFStringRef)CFLocaleGetValue(cfloc, kCFLocaleCurrencySymbol);
+            break;
+
         case wxLOCALE_SHORT_DATE_FMT:
         case wxLOCALE_LONG_DATE_FMT:
         case wxLOCALE_DATE_TIME_FMT:
