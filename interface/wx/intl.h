@@ -198,6 +198,13 @@ enum wxLocaleInfo
     wxLOCALE_DECIMAL_POINT,
 
     /**
+        The character used as currency symbol for monetary values.
+
+        @since 3.3.1
+     */
+    wxLOCALE_CURRENCY_SYMBOL,
+
+    /**
         Short date format.
 
         Notice that short and long date formats may be the same under POSIX

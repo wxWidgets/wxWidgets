@@ -501,6 +501,10 @@ public:
                     << GetInfo(wxLOCALE_TIME_FMT, cat);
                 break;
 
+            case wxLOCALE_CURRENCY_SYMBOL:
+                str = DoGetInfo(LOCALE_SCURRENCY);
+                break;
+
             default:
                 wxFAIL_MSG( "unknown wxLocaleInfo" );
         }

@@ -89,6 +89,9 @@ enum wxLocaleInfo
     // the character used as decimal point (for wxLOCALE_CAT_NUMBER or MONEY)
     wxLOCALE_DECIMAL_POINT,
 
+    // currency symbol for wxLOCALE_CAT_MONEY
+    wxLOCALE_CURRENCY_SYMBOL,
+
     // the stftime()-formats used for short/long date and time representations
     // (under some platforms short and long date formats are the same)
     //

@@ -594,6 +594,20 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 
             return GetLangInfo(RADIXCHAR);
 
+        case wxLOCALE_CURRENCY_SYMBOL:
+        {
+            wxString currencyStr = GetLangInfo(CRNCYSTR);
+            // strip positional info, if present
+            if (!currencyStr.empty() &&
+                (currencyStr[0] == wxT('+') ||
+                 currencyStr[0] == wxT('-') ||
+                 currencyStr[0] == wxT('.')))
+            {
+                currencyStr.erase(0, 1);
+            }
+            return currencyStr;
+        }
+
         case wxLOCALE_SHORT_DATE_FMT:
             return GetLangInfo(D_FMT);
 
