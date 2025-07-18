@@ -596,7 +596,7 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 
         case wxLOCALE_CURRENCY_SYMBOL:
         {
-            wxString currencyStr = GetLangInfo(CRNCYSTR);
+            wxString currencyStr = GetLangInfo(CURRENCY_SYMBOL);
             // strip positional info, if present
             if (!currencyStr.empty() &&
                 (currencyStr[0] == wxT('+') ||
