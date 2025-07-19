@@ -1170,7 +1170,7 @@ msgstr "Nie udało się zapisać dokumentu do pliku \"%s\"."
 #: ../src/common/docview.cpp:702
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
-msgstr "Nie udało się otworzyć pliku '%s' do odczytu"
+msgstr "Nie udało się otworzyć pliku '%s' do odczytu."
 
 #: ../src/common/docview.cpp:714
 #, c-format
@@ -2100,7 +2100,7 @@ msgstr ""
 #: ../src/common/fontmap.cpp:241
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
-msgstr "Nie udało się zapamiętać kodowania dla zestawu znaków '%s'"
+msgstr "Nie udało się zapamiętać kodowania dla zestawu znaków '%s'."
 
 #: ../src/common/fontmap.cpp:321
 msgid "can't load any font, aborting"
@@ -4351,7 +4351,7 @@ msgstr "Wystąpił błąd DirectFB: %d"
 
 #: ../src/generic/aboutdlgg.cpp:69
 msgid "Developed by "
-msgstr "Opracowane przez"
+msgstr "Opracowane przez "
 
 #: ../src/generic/aboutdlgg.cpp:72
 msgid "Documentation by "
@@ -4359,11 +4359,11 @@ msgstr "Dokumentacja autorstwa"
 
 #: ../src/generic/aboutdlgg.cpp:75
 msgid "Graphics art by "
-msgstr "Grafika autorstwa"
+msgstr "Grafika autorstwa "
 
 #: ../src/generic/aboutdlgg.cpp:78
 msgid "Translations by "
-msgstr "Tłumaczenia autorstwa"
+msgstr "Tłumaczenia autorstwa "
 
 # prawa?
 #: ../src/generic/aboutdlgg.cpp:133 ../src/osx/cocoa/aboutdlg.mm:83
@@ -4916,7 +4916,7 @@ msgstr "Anulowanie wyboru czcionki"
 #: ../src/generic/fontdlgg.cpp:469 ../src/generic/fontdlgg.cpp:471
 #: ../src/generic/fontdlgg.cpp:476 ../src/generic/fontdlgg.cpp:478
 msgid "Click to confirm the font selection."
-msgstr "Potwierdzenie wyboru czcionki"
+msgstr "Potwierdzenie wyboru czcionki."
 
 #: ../src/generic/fontpickerg.cpp:50 ../src/gtk/fontdlg.cpp:77
 msgid "Choose font"
@@ -9428,7 +9428,7 @@ msgstr "Nie można pobrać oficjalnej nazwy serwera"
 
 #: ../src/unix/wakeuppipe.cpp:49
 msgid "Failed to create wake up pipe used by event loop."
-msgstr "Nie udało się utworzyć potoku budzącego używanego przez pętlę zdarzeń"
+msgstr "Nie udało się utworzyć potoku budzącego używanego przez pętlę zdarzeń."
 
 #: ../src/unix/wakeuppipe.cpp:56
 msgid "Failed to switch wake up pipe to non-blocking mode"
@@ -9436,7 +9436,7 @@ msgstr "Nie udało się przełączyć potoku budzącego na modus nie-blokujący"
 
 #: ../src/unix/wakeuppipe.cpp:117
 msgid "Failed to read from wake-up pipe"
-msgstr "Nie udało się czytać z potoku budzącego "
+msgstr "Nie udało się czytać z potoku budzącego"
 
 # Pytanie X11
 #: ../src/x11/app.cpp:124

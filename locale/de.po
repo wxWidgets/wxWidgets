@@ -5154,7 +5154,7 @@ msgstr "Rechter Rand (mm):"
 
 #: ../src/generic/prntdlgg.cpp:873
 msgid "Bottom margin (mm):"
-msgstr "Unterer Rand (mm)"
+msgstr "Unterer Rand (mm):"
 
 #: ../src/generic/prntdlgg.cpp:896
 msgid "Printer..."

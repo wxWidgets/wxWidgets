@@ -1697,7 +1697,7 @@ msgstr "विण्डो सायरिलिक (सीपी १२५१)"
 
 #: ../src/common/fmapbase.cpp:162
 msgid "Windows Thai (CP 874)"
-msgstr "विण्डो थाई (सीपी १२५७)"
+msgstr "विण्डो थाई (सीपी ८७४)"
 
 #: ../src/common/fmapbase.cpp:163
 #, fuzzy

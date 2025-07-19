@@ -7553,7 +7553,7 @@ msgstr "Unidatz ta l'amplaria d'o canto cucho."
 #: ../src/richtext/richtextborderspage.cpp:536
 #: ../src/richtext/richtextborderspage.cpp:538
 msgid "The border line style."
-msgstr "O estilo d'a linia d'o canto"
+msgstr "O estilo d'a linia d'o canto."
 
 #: ../src/richtext/richtextborderspage.cpp:276
 #: ../src/richtext/richtextborderspage.cpp:444
@@ -7643,7 +7643,7 @@ msgstr "Cantonada"
 
 #: ../src/richtext/richtextborderspage.cpp:574
 msgid "Corner &radius:"
-msgstr "&Radio d'a cantonada"
+msgstr "&Radio d'a cantonada:"
 
 #: ../src/richtext/richtextborderspage.cpp:576
 #: ../src/richtext/richtextborderspage.cpp:578
@@ -7653,12 +7653,12 @@ msgstr "Un radio de cantonada opcional ta adhibir cantonadas redondiadas."
 #: ../src/richtext/richtextborderspage.cpp:584
 #: ../src/richtext/richtextborderspage.cpp:586
 msgid "The value of the corner radius."
-msgstr "A valor d'o radio de cantonada"
+msgstr "A valor d'o radio de cantonada."
 
 #: ../src/richtext/richtextborderspage.cpp:595
 #: ../src/richtext/richtextborderspage.cpp:597
 msgid "Units for the corner radius."
-msgstr "Unidatz ta lo radio de cantonada"
+msgstr "Unidatz ta lo radio de cantonada."
 
 #: ../src/richtext/richtextborderspage.cpp:609
 #: ../src/richtext/richtextsizepage.cpp:247
