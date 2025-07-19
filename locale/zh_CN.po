@@ -2843,7 +2843,7 @@ msgstr "特大 A5 纸张，174 x 235 毫米"
 
 #: ../src/common/paper.cpp:133
 msgid "B5 (ISO) Extra 201 x 276 mm"
-msgstr "特大 B4 纸张 (JIS)，201 x 276 毫米"
+msgstr "特大 B5 纸张 (JIS)，201 x 276 毫米"
 
 #: ../src/common/paper.cpp:134
 msgid "A2 420 x 594 mm"
@@ -2915,7 +2915,7 @@ msgstr "横向日式双明信片，148 x 200 毫米"
 
 #: ../src/common/paper.cpp:152
 msgid "A6 Rotated 148 x 105 mm"
-msgstr "横向 A5 纸张，148 x 105 毫米"
+msgstr "横向 A6 纸张，148 x 105 毫米"
 
 #: ../src/common/paper.cpp:153
 msgid "Japanese Envelope Kaku #2 Rotated"

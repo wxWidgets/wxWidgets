@@ -3053,7 +3053,7 @@ msgstr "Envelope PRC #2 Rotacionado 176 x 102 mm"
 
 #: ../src/common/paper.cpp:180
 msgid "PRC Envelope #3 Rotated 176 x 125 mm"
-msgstr "Envelope B6 #3 Rotacionado 176 x 125 mm"
+msgstr "Envelope PRC #3 Rotacionado 176 x 125 mm"
 
 #: ../src/common/paper.cpp:181
 msgid "PRC Envelope #4 Rotated 208 x 110 mm"
