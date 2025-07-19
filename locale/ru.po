@@ -4460,7 +4460,7 @@ msgstr "Введите команду для открытия файла \"%s\":
 
 #: ../src/generic/dbgrptg.cpp:230
 msgid "Executable files (*.exe)|*.exe|"
-msgstr "Исполняемые файлы (*.exe)|*.exe"
+msgstr "Исполняемые файлы (*.exe)|*.exe|"
 
 #: ../src/generic/dbgrptg.cpp:300
 #, c-format

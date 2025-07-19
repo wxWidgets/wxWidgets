@@ -8848,7 +8848,7 @@ msgstr "(ნორმალური ტექსტი)"
 
 #: ../src/richtext/richtexttabspage.cpp:109
 msgid "&Position (tenths of a mm):"
-msgstr "&მდებარეობა (მმ-ის მეათედებში)"
+msgstr "&მდებარეობა (მმ-ის მეათედებში):"
 
 #: ../src/richtext/richtexttabspage.cpp:113
 #: ../src/richtext/richtexttabspage.cpp:115

@@ -13,7 +13,7 @@ msgstr ""
 
 #: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
-msgstr "Tots els fitxers (*.*) *.*  "
+msgstr "Tots els fitxers (*.*)|*.*"
 
 #: ../include/wx/defs.h:2585
 msgid "All files (*)|*"
@@ -783,7 +783,7 @@ msgstr "especifiqueu el mode de pantalla a utilitzar (p. ex. 640x480-16)"
 #: ../src/common/appcmn.cpp:292
 #, c-format
 msgid "Unsupported theme '%s'."
-msgstr "Tema '%s' no suportat"
+msgstr "Tema '%s' no suportat."
 
 #: ../src/common/appcmn.cpp:309
 #, c-format

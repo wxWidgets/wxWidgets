@@ -8917,7 +8917,7 @@ msgstr "(Tekst normal)"
 
 #: ../src/richtext/richtexttabspage.cpp:109
 msgid "&Position (tenths of a mm):"
-msgstr "&Pozicion (të dhjeta të mm-it)"
+msgstr "&Pozicion (të dhjeta të mm-it):"
 
 #: ../src/richtext/richtexttabspage.cpp:113
 #: ../src/richtext/richtexttabspage.cpp:115

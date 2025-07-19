@@ -1745,7 +1745,7 @@ msgstr "Unicode 32 bit (UTF-32)"
 
 #: ../src/common/fmapbase.cpp:184
 msgid "Unicode 32 bit Little Endian (UTF-32LE)"
-msgstr "Unicode 32 bit petit-boutiste (UTF-8)"
+msgstr "Unicode 32 bit petit-boutiste (UTF-32LE)"
 
 #: ../src/common/fmapbase.cpp:186
 msgid "Unicode 16 bit Big Endian (UTF-16BE)"
@@ -2856,7 +2856,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/common/paper.cpp:127
 msgid "Letter Plus 8 1/2 x 12.69 in"
-msgstr "Lettre Plus 8,5 x 11.69 pouces"
+msgstr "Lettre Plus 8,5 x 12.69 pouces"
 
 #: ../src/common/paper.cpp:128
 msgid "A4 Plus 210 x 330 mm"
@@ -9371,7 +9371,7 @@ msgstr "Erreur d'analyse XML : « %s » à la ligne %d"
 #: ../src/xrc/xh_propgrid.cpp:239
 #, c-format
 msgid "Page %i"
-msgstr "Page %d"
+msgstr "Page %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format

@@ -5567,7 +5567,7 @@ msgstr "フォントの大きさ"
 
 #: ../src/html/helpwnd.cpp:1256
 msgid "Normal face<br>and <u>underlined</u>. "
-msgstr "通常<br> と <u>下線付き</u>"
+msgstr "通常<br> と <u>下線付き</u>。 "
 
 #: ../src/html/helpwnd.cpp:1257
 msgid "<i>Italic face.</i> "
@@ -5583,7 +5583,7 @@ msgstr "<b><i>太字でイタリック体。</i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1262
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
-msgstr "固定幅。<br> <b>太字</b><i>イタリック</i>"
+msgstr "固定幅。<br> <b>太字</b><i>イタリック</i> "
 
 #: ../src/html/helpwnd.cpp:1263
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
@@ -5836,7 +5836,7 @@ msgstr "非同期 poke トランザクションの要求が時間切れになり
 
 #: ../src/msw/dde.cpp:1171
 msgid "an internal call to the PostMessage function has failed. "
-msgstr "PostMessage関数の内部呼び出しが失敗しました。"
+msgstr "PostMessage関数の内部呼び出しが失敗しました。 "
 
 #: ../src/msw/dde.cpp:1174
 msgid "reentrancy problem."

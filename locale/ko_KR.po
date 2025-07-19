@@ -782,7 +782,7 @@ msgstr "'%s' 테마는 지원하지 않습니다."
 #: ../src/common/appcmn.cpp:309
 #, c-format
 msgid "Invalid display mode specification '%s'."
-msgstr "설정된 디스플레이 모드('%s')가 없습니다. "
+msgstr "설정된 디스플레이 모드('%s')가 없습니다."
 
 #: ../src/common/cmdline.cpp:875
 #, fuzzy, c-format
@@ -1623,7 +1623,7 @@ msgstr "남유럽어 (ISO-8859-3)"
 
 #: ../src/common/fmapbase.cpp:147
 msgid "Baltic (old) (ISO-8859-4)"
-msgstr "발트어 (old)(ISO-8859-13)"
+msgstr "발트어 (old)(ISO-8859-4)"
 
 #: ../src/common/fmapbase.cpp:148
 msgid "Cyrillic (ISO-8859-5)"
@@ -2847,7 +2847,7 @@ msgstr "일본 옆서 100 x 148 mm"
 
 #: ../src/common/paper.cpp:114
 msgid "9 x 11 in"
-msgstr "확대(_I)"
+msgstr "9 x 11 in"
 
 #: ../src/common/paper.cpp:115
 msgid "10 x 11 in"

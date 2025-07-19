@@ -1510,7 +1510,7 @@ msgid ""
 "exists."
 msgstr ""
 "Non se puido cambiar o nome do ficheiro de '%s' a '%s' porque o ficheiro de "
-"destino xa existe. "
+"destino xa existe."
 
 #: ../src/common/filefn.cpp:623
 #, c-format
@@ -4342,7 +4342,7 @@ msgstr "Documentación de "
 
 #: ../src/generic/aboutdlgg.cpp:75
 msgid "Graphics art by "
-msgstr "Gráficos de"
+msgstr "Gráficos de "
 
 #: ../src/generic/aboutdlgg.cpp:78
 msgid "Translations by "
@@ -4350,7 +4350,7 @@ msgstr "Traducións de "
 
 #: ../src/generic/aboutdlgg.cpp:133 ../src/osx/cocoa/aboutdlg.mm:83
 msgid "Version "
-msgstr "Versión"
+msgstr "Versión "
 
 #. TRANSLATORS: %s is application name
 #: ../src/generic/aboutdlgg.cpp:146 ../src/msw/aboutdlg.cpp:60
@@ -5842,7 +5842,7 @@ msgstr "Non se puido terminar o bucle de aviso co servidor DDE"
 
 #: ../src/msw/dde.cpp:768
 msgid "Failed to send DDE advise notification"
-msgstr "Erro ao enviar notificación de recomendación de DDE "
+msgstr "Erro ao enviar notificación de recomendación de DDE"
 
 #: ../src/msw/dde.cpp:1085
 msgid "Failed to create DDE string"
@@ -5917,7 +5917,7 @@ msgstr "expirou unha solicitude de transacción síncrona de asignación."
 
 #: ../src/msw/dde.cpp:1171
 msgid "an internal call to the PostMessage function has failed. "
-msgstr "erro nunha chamada interna á función PostMessage."
+msgstr "erro nunha chamada interna á función PostMessage. "
 
 #: ../src/msw/dde.cpp:1174
 msgid "reentrancy problem."
