@@ -133,7 +133,7 @@ case $(uname -s) in
         ;;
 
     FreeBSD)
-        pkg install -q -y ${WX_EXTRA_PACKAGES} gawk gspell gstreamer1 gtk3 jpeg-turbo libnotify libsecret mesa-libs pkgconf png tiff webkit2-gtk_41
+        pkg install -q -y ${WX_EXTRA_PACKAGES} gawk gspell gstreamer1 gtk3 jpeg-turbo libnotify libsecret mesa-libs pkgconf png tiff webkit2-gtk_40
         ;;
 
     Darwin)
