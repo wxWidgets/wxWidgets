@@ -240,39 +240,51 @@ Changes in behaviour which may result in build errors
   to return void, please update your code to not use its return value.
 
 
-3.3.1: (released 2025-??-??)
+3.3.1: (released 2025-07-21)
 ----------------------------
 
-NOTE: In addition to the note below, also incorporate (either by
-      copy or by reference) all the changes in the 3.2 branch (i.e.
-      everything in this file after 3.2.0 in that branch).
+All:
 
-NOTE: This file is updated only before the release, please use
+- Add persistence support for groups of wxRadioButtons (#25530).
+- Add persistence support for wxCheckBox (#25515).
+- Add support for PNG "Description" text chunk (GenevensiS, #25556).
+- Add wxAuiPaneInfo::FloatingClientSize() (Bill Su, #25483).
+- Allow setting app id under supported platforms (#25548).
+- Avoid wxEVT_GRID_SELECT_CELL when creating wxGrid (#25498).
+- CMake fixes and improvements (Maarten Bent, #25466, #25503, #25592).
+- Don't assert in wxGridSizer if sizer is empty (#25641).
+- Fix calling wxDVC::Collapse() from event handler (#25631).
+- Fix overwriting IDs of buttons added to wxPGMultiButton (alilie, #25514).
+- Improve wxRect2DDouble (Blake-Madden, #25497).
+- Restore compatibility in wxPropertyGrid (#25627).
+- wxNumberFormatter improvements (#25614, #25635).
+- Make static reproducible builds under Unix really reproducible (#25502).
 
-    $ git log --notes=changelog --format='%N' v3.3.0..|grep .
+wxGTK:
 
-      to see all the change log entries since the last release.
+- Fix crash when sorting wxDataViewCtrl with single leaf node (#25625).
+- Fix losing wxListCtrl contents after AppendColumn() (#25519).
 
-      To update the notes, fetch them first:
+wxMSW:
 
-    $ git fetch origin refs/notes/changelog:refs/notes/changelog
+- Fix buffer overrun when getting preferred languages list (#25612).
+- Fix crash when using per-window menu in MDI applications (#25522).
+- Fix crash with wxStaticBitmap inside wxNotebook in dark mode (#25499).
+- Fix disabled wxButton bitmaps appearance in dark mode (#25575).
+- Fix disabled wxStaticText appearance in dark mode (#25574).
+- Fix notebook background in dark high contrast themes (#25542).
+- Fix regression in creation of wxAcceleratorTable with 0 entries (#25517).
+- Fix regression in wxDataViewCtrl border in light mode (#25532).
+- Fix regression in wxTreeCtrl::EnsureVisible() while frozen (#18435).
+- Fix selected toolbar buttons in dark mode (Stefan Ziegler, #25616).
+- Fix wxComboCtrl appearance in dark mode (#23766).
+- Fix wxTE_RICH wxTextCtrl appearance in dark mode (#25602).
+- Restore date/time pickers behaviour under non-English OS (#25511).
 
-      then use the following command to update them locally
+wxOSX:
 
-    $ git notes --ref=changelog add -m 'wxPort: description.'
-
-      and finally push it to the server.
-
-    $ git push origin refs/notes/changelog:refs/notes/changelog
-
-      If this fails due to a conflict because you had forgotten to
-      run git-fetch first, you can always reset your local notes
-      (LOSING YOUR CHANGES TO THEM, so make sure to make a copy)
-
-    $ git fetch origin refs/notes/changelog
-    $ git update-ref refs/notes/changelog FETCH_HEAD
-
-      and then redo "git-notes add" and git-push.
+- Fix border look for wxDVC, wxListBox, wxTextCtrl (Will Cosgrove, #25570).
+- Fix crash on startup when using Farsi as system language (#25561).
 
 
 3.3.0: (released 2025-06-06)

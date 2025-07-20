@@ -17,18 +17,18 @@ Getting the files
 -----------------
 
 First, you need to get the correct files. You will always need the
-`wxWidgets-3.3.0-headers.7z` one but the "Dev" and the "ReleaseDLL"
+`wxWidgets-3.3.1-headers.7z` one but the "Dev" and the "ReleaseDLL"
 files depend on your compiler: for example, for MSVS you will need
-`wxMSW-3.3.0_vc14x_x64_Dev.7z` and `wxMSW-3.3.0_vc14x_x64_ReleaseDLL.7z`, but
-if you are using gcc, you will need `wxMSW-3.3.0_gcc1510_x64_Dev.7z` and
-`wxMSW-3.3.0_gcc1510_x64_ReleaseDLL.7z`.
+`wxMSW-3.3.1_vc14x_x64_Dev.7z` and `wxMSW-3.3.1_vc14x_x64_ReleaseDLL.7z`, but
+if you are using gcc, you will need `wxMSW-3.3.1_gcc1510_x64_Dev.7z` and
+`wxMSW-3.3.1_gcc1510_x64_ReleaseDLL.7z`.
 
 All binaries are available at:
 
-https://www.wxwidgets.org/downloads#v3.3.0_msw
+https://www.wxwidgets.org/downloads#v3.3.1_msw
 
 Once you have the files you need, unzip all of them into the same directory, for
-example `c:\wx\3.3.0`. You should have `include` and `lib` subdirectories under
+example `c:\wx\3.3.1`. You should have `include` and `lib` subdirectories under
 this directory, as well as files such as `wxwidgets.props`.
 
 Note: To avoid hard-coding this path into your projects, define `wxwin`
