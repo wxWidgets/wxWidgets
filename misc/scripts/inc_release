@@ -38,6 +38,12 @@ run_sed docs/readme.txt \
     "/\//s/$ver_for_sed/$ver_string_new/" \
     "/naming: while/s/$ver_for_sed/$ver_string_new/" 
 
+run_sed docs/release.md \
+    "s/$ver_for_sed/$ver_string_new/"
+
+run_sed docs/msw/binaries.md \
+    "s/$ver_for_sed/$ver_string_new/"
+
 run_sed docs/doxygen/Doxyfile \
     "/^PROJECT_NUMBER/s/$ver_for_sed/$ver_string_new/"
 
