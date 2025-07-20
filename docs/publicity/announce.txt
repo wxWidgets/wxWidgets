@@ -3,8 +3,8 @@ development release of our open source framework for the development of native
 cross-platform applications in C++.
 
 wxWidgets 3.3.1 is the second release in the 3.3.x development series coming
-soon after 3.3.0 and as it is mostly a bug fix release, correcting some
-regressions found in 3.3.0. The new version is available now from
+soon after 3.3.0 and is mostly a bug fix release, correcting some regressions
+found in 3.3.0. The new version is available now from
 
     https://www.wxwidgets.org/downloads/
 
