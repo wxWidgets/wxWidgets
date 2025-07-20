@@ -1,35 +1,56 @@
-June 6, 2025 -- The wxWidgets team is pleased to announce the first new
+July 21, 2025 -- The wxWidgets team is pleased to announce the first new
 development release of our open source framework for the development of native
 cross-platform applications in C++.
 
-wxWidgets 3.3.0 is the first release in the new 3.3.x development series and is
-available now from
+wxWidgets 3.3.1 is the second release in the 3.3.x development series coming
+soon after 3.3.0 and as it is mostly a bug fix release, correcting some
+regressions found in 3.3.0. The new version is available now from
 
     https://www.wxwidgets.org/downloads/
 
-Compared to the stable 3.0.x series, this version brings too many
-improvements and even more bug fixes to list all of them here, please
-see the change log
+and
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.0/docs/changes.txt
+    https://github.com/wxWidgets/wxWidgets/releases/v3.3.1
 
-for the list of the most important ones and here is the maximally condensed
-summary of the major changes compared to 3.2:
+The most important fixes since 3.3.0 include:
 
-- Support for dark mode in wxMSW under Windows 10 and later.
-- New Chrome-based wxWebView backend and many other wxWebView improvements.
-- Many improvements to wxAUI, including support for pinned and multiline tabs.
-- Support for WebP format in wxImage.
-- Support for high DPI cursors and animations.
-- Latest versions of 3rd party libraries.
-- Support for latest compilers (gcc 15, clang 19/Xcode 16) and C++ standards.
+- Restore Windows date/time pickers behaviour under non-English OS (#25511).
+- Fix crash on startup under macOS when using Farsi as system language (#25561).
+- Fix losing wxGenericListCtrl contents after AppendColumn() (#25519).
+- Fix crash when sorting wxDataViewCtrl in wxGTK in some circumstances (#25625).
+- Fix crash when using per-window menu in Windows MDI applications (#25522).
+- Restore inadvertently broken API compatibility in wxPropertyGrid (#25627).
+
+There were also a number of fixes to the new Windows dark mode support:
+
+- Fix crash with wxStaticBitmap inside wxNotebook in dark mode (#25499).
+- Fix disabled wxButton bitmaps appearance in dark mode (#25575).
+- Fix disabled wxStaticText appearance in dark mode (#25574).
+- Fix notebook background in dark high contrast themes (#25542).
+- Fix regression in wxDataViewCtrl border in light mode (#25532).
+- Fix selected toolbar buttons in dark mode (Stefan Ziegler, #25616).
+- Fix wxComboCtrl appearance in dark mode (#23766).
+- Fix wxTE_RICH wxTextCtrl appearance in dark mode (#25602).
+
+And, finally, this release also contains a small number of new features:
+
+- Allow setting "app id" under supported platforms (Windows/Wayland) (#25548).
+- Add persistence support for wxRadioButtons (#25530) and wxCheckBox (#25515).
+- Add support for PNG "Description" text chunk to wxImage (#25556).
+- wxNumberFormatter improvements (#25614, #25635).
+
+Please see the change log
+
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.1/docs/changes.txt
+
+for the list of the other important changes.
 
 
-This release is the start of a new "development" release series, but these
-development releases are suitable for production use: the only difference
-between them and "stable" releases is that neither ABI nor API stability is
-guaranteed in 3.3.x. However we strive to minimize API-incompatible changes
-even so and, in spite of a huge number of changes in it, this release remains
+This release is part of the "development" release series, but these development
+releases are suitable for production use: the only difference between them and
+"stable" releases is that neither ABI nor API stability is guaranteed in 3.3.x.
+However we strive to minimize API-incompatible changes even so and, in spite of
+a huge number of changes since the last stable version, this release remains
 almost fully API-compatible with wxWidgets 3.2 and updating the existing
 applications to use it should be straightforward. However please make sure to
 read the "INCOMPATIBLE CHANGES" section in the change log to be aware of the

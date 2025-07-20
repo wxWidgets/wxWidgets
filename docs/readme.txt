@@ -32,25 +32,42 @@ installation instructions.
 
 
 
-Changes since 3.2
------------------
+Changes since 3.3.0
+-------------------
 
-With more than 5300 commits since the last release, there are too many changes
-to list them all here, but here is just a summary of the most important ones:
+This release comes only a few weeks after 3.3.0, but still has more than 200
+changes including several important fixes for bugs found in 3.3.0, notably:
 
-- Support for dark mode in wxMSW under Windows 10 and later.
-- New Chrome-based wxWebView backend and many other wxWebView improvements.
-- Many improvements to wxAUI, including support for pinned and multiline tabs.
-- Support for WebP format in wxImage.
-- Support for high DPI cursors and animations.
-- Latest versions of 3rd party libraries.
-- Support for latest compilers (gcc 15, clang 19/Xcode 16) and C++ standards.
+- Restore Windows date/time pickers behaviour under non-English OS (#25511).
+- Fix crash on startup under macOS when using Farsi as system language (#25561).
+- Fix losing wxGenericListCtrl contents after AppendColumn() (#25519).
+- Fix crash when sorting wxDataViewCtrl in wxGTK in some circumstances (#25625).
+- Fix crash when using per-window menu in Windows MDI applications (#25522).
+- Restore inadvertently broken API compatibility in wxPropertyGrid (#25627).
 
-Please see the change log for the more complete list of various improvements:
+There were also a number of fixes to the new Windows dark mode support:
+
+- Fix crash with wxStaticBitmap inside wxNotebook in dark mode (#25499).
+- Fix disabled wxButton bitmaps appearance in dark mode (#25575).
+- Fix disabled wxStaticText appearance in dark mode (#25574).
+- Fix notebook background in dark high contrast themes (#25542).
+- Fix regression in wxDataViewCtrl border in light mode (#25532).
+- Fix selected toolbar buttons in dark mode (Stefan Ziegler, #25616).
+- Fix wxComboCtrl appearance in dark mode (#23766).
+- Fix wxTE_RICH wxTextCtrl appearance in dark mode (#25602).
+
+And, finally, this release also contains a small number of new features:
+
+- Allow setting "app id" under supported platforms (Windows/Wayland) (#25548).
+- Add persistence support for wxRadioButtons (#25530) and wxCheckBox (#25515).
+- Add support for PNG "Description" text chunk to wxImage (#25556).
+- wxNumberFormatter improvements (#25614, #25635).
+
+Please see the change log for the more complete list:
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.3.1/docs/changes.txt
 
-Note that in spite of all these changes, wxWidgets 3.3 is almost fully
+Note that in spite of all these changes, wxWidgets 3.3.1 is almost fully
 compatible with wxWidgets 3.2 and updating the existing applications to
 use it shouldn't require much effort. However please make sure to read the
 "INCOMPATIBLE CHANGES" section of the change log above when upgrading to be
@@ -147,4 +164,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, June 2025
+The wxWidgets Team, July 2025
