@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2022-04-14 12:56+0530\n"
+"PO-Revision-Date: 2025-07-23 09:41+0530\n"
 "Last-Translator: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language-Team: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language: ta\n"
@@ -40,8 +40,9 @@ msgid "Printout"
 msgstr "அச்செடுப்பு"
 
 #. TRANSLATORS: HTML easy print default title.
-#: ../include/wx/html/htmprint.h:234 ../include/wx/richtext/richtextprint.h:163
-#: ../src/common/prntbase.cpp:522 ../src/html/htmprint.cpp:291
+#: ../include/wx/html/htmprint.h:234
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:522
+#: ../src/html/htmprint.cpp:291
 msgid "Printing"
 msgstr "அச்சிடப்படுகிறது"
 
@@ -714,7 +715,6 @@ msgid "SPECIAL"
 msgstr "சிறப்புடையது"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "கட்டுப்பாடு"
 
@@ -1081,35 +1081,33 @@ msgstr "சேமித்திடுக (&S)"
 
 #: ../src/common/docview.cpp:522 ../src/common/docview.cpp:560
 msgid "&Discard changes"
-msgstr ""
+msgstr "& மாற்றங்களை நிராகரித்திடுக"
 
 #: ../src/common/docview.cpp:523
-#, fuzzy
 msgid "Do&n't close"
-msgstr "சேமிக்க வேண்டாம்"
+msgstr "மூடாதிருந்திடுக"
 
 #: ../src/common/docview.cpp:553
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "%s-இல் ஏற்பட்டுள்ள மாற்றங்களை தாங்கள் சேமிக்க வேண்டுமா?"
+msgstr "மூடுவதற்கு முன் %s-இல் ஏற்பட்டுள்ள மாற்றங்களை தாங்கள் சேமிக்க விரும்புகிறீர்களா?"
 
 #: ../src/common/docview.cpp:559
-#, fuzzy
 msgid "The document must be closed."
-msgstr "உரையை சேமிக்க இயலவில்லை."
+msgstr "ஆவணம் மூடப்பட வேண்டும்."
 
 #: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "%s சேமிப்பதில் தோல்வி. மீண்டும் முயல விரும்புகிறீர்களா?"
 
 #: ../src/common/docview.cpp:577
 msgid "Retry"
-msgstr ""
+msgstr "மீண்டும் முயல்க"
 
 #: ../src/common/docview.cpp:577
 msgid "Discard changes"
-msgstr ""
+msgstr "& மாற்றங்களை நிராகரித்திடுக"
 
 #: ../src/common/docview.cpp:679
 #, c-format
@@ -1314,26 +1312,24 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+"கூடுதலாக, தற்போதைய அமைவடிவக் கோப்பு \"%s\" என்று மறுபெயரிடப்பட்டுள்ளது. அதன் முந்தைய "
+"பெயருக்கு மாற்ற இயலவில்லை. \"%s\" என்கிற அதன் அசல் தடத்திற்கு அருள்கூர்ந்து மறுபெயரிடவும்"
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "பின்வரும் கோப்புகளும் சேர்க்கப்பட்டுள்ளன: \n"
+msgstr "பின்வரும் பிழை காரணமாக:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "\"%s\" உரைக் கோப்பினைப் படிப்பதில் தோல்வி."
+msgstr "தற்போதுள்ள கோப்பை மறுபெயரிடுவதில் தோல்வி"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "செயலிலிருக்கும் அடைவினைப் பெறுவதில் தோல்வி"
+msgstr "புதிய கோப்பு அடைவை உருவாக்குவதில் தோல்வி"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "வலைத் தோற்றத்தை நவீன நிகர்நிலை மட்டத்திற்கு அமைக்க இயலவில்லை"
+msgstr "புதிய இடத்திற்கு கோப்பை நகர்த்துவதில் தோல்வி"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1359,9 +1355,9 @@ msgid "Failed to read config options."
 msgstr "அமைவடிவ விருப்பத் தேர்வுகளைப் படிப்பதில் தோல்வி."
 
 #: ../src/common/fileconf.cpp:700
-#, fuzzy, c-format
+#, c-format
 msgid "file '%s': unexpected character %c at line %zu."
-msgstr "கோப்பு '%s': %zu வரியில் எதிர்பாராத வரியுரு %c."
+msgstr "கோப்பு '%s': எதிர்பாராத வரியுரு %c. அமைவிடம்: வரி %zu."
 
 #: ../src/common/fileconf.cpp:736
 #, c-format
@@ -1390,9 +1386,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "அமைவடிவ உள்ளிடின் பெயர் '%c' என்று துவங்க இயலாது."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "எழுத்துரு அமைவடிவப் பொருளை உருவாக்குவதில் தோல்வி."
+msgstr "அமைவடிவ கோப்பு அடைவை உருவாக்குவதில் தோல்வி."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -1431,9 +1426,9 @@ msgid "trailing backslash ignored in '%s'"
 msgstr "'%s'-ல் பின்சாய்வுச் சுவடு புறந்தள்ளப்படுகிறது"
 
 #: ../src/common/fileconf.cpp:2153
-#, fuzzy, c-format
+#, c-format
 msgid "unexpected \" at position %d in '%s'."
-msgstr "'%s'ல் எதிர்பாராத \" நிலை %d."
+msgstr "%d நிலையில் எதிர்பாராத \".  அமைவிடம்: '%s"
 
 #: ../src/common/filefn.cpp:474
 #, c-format
@@ -2071,8 +2066,8 @@ msgid ""
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
 "'%s' குறியீட்டில் உரைகளைக் காட்டுவதற்கான எழுத்துரு ஏதுமில்லை,\n"
-"இந்தக் குறியீட்டில் பயன்படுத்துவதற்கு ஒரு எழுத்துருவைத் தெரிவு செய்ய "
-"வேண்டுமா(இல்லையென்றால், இந்தக் குறியீட்டைக் கொண்ட உரை சரிவர காட்டப்பட மாட்டாது)?"
+"இந்தக் குறியீட்டில் பயன்படுத்துவதற்கு ஒரு எழுத்துருவைத் தெரிவு செய்ய வேண்டுமா"
+"(இல்லையென்றால், இந்தக் குறியீட்டைக் கொண்ட உரை சரிவர காட்டப்பட மாட்டாது)?"
 
 #: ../src/common/fs_mem.cpp:169
 #, c-format
@@ -2210,7 +2205,7 @@ msgstr "DIB மேலுரை: குறியாக்கம் bitdepth-உ�
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "BMP தலைப்புரை: ஏற்க இயலாத எண்ணிக்கையிலான நிறங்கள் (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2444,43 +2439,40 @@ msgid "TIFF: Error writing image."
 msgstr "TIF: படிமத்தை எழுதுவதில் பிழை."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIF: படிமத்தை சேமிப்பதில் பிழை."
+msgstr "TIF: தரவை நிலைப்படுத்துவதில் பிழை"
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: ஏற்க இயலாத தரவு (கூறுகளைப் பெறுவதில் தோல்வி)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: பட நினைவகத்தை ஒதுக்குவதில் தோல்வி."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: RGBA படத் தரவின் குறியாக்கத்தை நீக்குவதில் தோல்வி."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: RGB படத் தரவின் குறியாக்கத்தை நீக்குவதில் தோல்வி."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: ஓடை இடையகம் ஒதுக்குவதில் தோல்வி."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "பிடிப்புப் பலகை தரவினை அமைப்பதில் தோல்வி."
+msgstr "WebP: கலன் தரவை பகுப்பாய்வதில் தோல்வி."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "அமைவடிவ விருப்பத் தேர்வுகளைப் படிப்பதில் பிழை."
+msgstr "WebP: அசைவூட்டக் குறியாக்கத்தை நீக்குவதில் பிழை."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: அடுத்த அசைவுட்ட சட்டகத்தைப் பெறுவதில் தோல்வி."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -3956,15 +3948,17 @@ msgid "Error: %s (%d)"
 msgstr "பிழை: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "தரவிறக்குவதற்கு வட்டில் போதிய இடமில்லை."
+msgstr ""
+"தரவிறக்குவதற்கு வட்டில் போதிய இடமில்லை.: %llu தேவைப்படுகிறது. ஆனால், %llu மட்டுமே "
+"கிடைப்பிலுள்ளது."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "தற்காலிக கோப்புப் பெயரை உருவாக்குவதில் தோல்வி"
+msgstr "%sல் தற்காலிகக் கோப்பை உருவாக்குவதில் தோல்வி"
 
 #: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
@@ -3972,7 +3966,7 @@ msgstr "Libcurl-ஐ துவக்கநிலையாக்க இயலவ�
 
 #: ../src/common/webview.cpp:392
 msgid "RunScriptAsync not supported"
-msgstr ""
+msgstr "RunScriptAsync ஆதரிக்கப்படவில்லை"
 
 #: ../src/common/webview.cpp:403 ../src/msw/webview_ie.cpp:1073
 #, c-format
@@ -3980,33 +3974,34 @@ msgid "Error running JavaScript: %s"
 msgstr "ஜாவா குறுநிரலை இயக்குவதில் பிழை: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "\"%s\" அடைவினை உருவாக்குவதில் தோல்வி."
+msgstr "\"%s\" பகரணியை அமைப்பதில் தோல்வி: %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"libcef.so போதுமான அளவு விரைந்து ஏற்றப்படவில்லை என்பதால் குரோமியத்தைப் பயன்படுத்த "
+"இயலாது. பயன்பாட்டை மீளிணைக்கவும், அல்லது அதை விரைந்து ஏற்ற LD_PRELOAD-ஐப் "
+"பயன்படுத்தவும். "
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "ஒழுங்கமைக்க இயலவில்லை."
+msgstr "குரோமியத்தைத் தொடக்கநிலையாக்க இயலவில்லை."
 
 #: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
-msgstr ""
+msgstr "மேம்படுத்துநர் கருவிகளைக் காட்டிடுக"
 
 #: ../src/common/webview_chromium.cpp:1617
-#, fuzzy
 msgid "Close DevTools"
-msgstr "அனைத்தையும் மூடுக"
+msgstr "மேம்படுத்துநர் கருவிகளை மூடுக"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "ஆய்ந்திடுக"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4389,7 +4384,8 @@ msgid "Column %u"
 msgstr "நெடுவரிசை %u"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7131 ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/generic/datavgen.cpp:7131
+#: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:192
 #: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextliststylepage.cpp:252
@@ -4400,7 +4396,8 @@ msgid "Left"
 msgstr "இடது"
 
 #. TRANSLATORS: Keystroke for manipulating a tree control
-#: ../src/generic/datavgen.cpp:7134 ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/generic/datavgen.cpp:7134
+#: ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Right"
@@ -4410,12 +4407,11 @@ msgstr "வலது"
 #, c-format
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
-msgstr ""
+msgstr "\"%s\" எதிர்பார்க்கப்படும் தேதி வடிவத்தில் இல்லை. எ.கா. \"%s\" என்று உள்ளிடவும்."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "ஏற்கமுடியாத தரவுத் தோற்ற உருப்படி"
+msgstr "செல்லாத தேதி"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4833,36 +4829,37 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"வலையத்தைப் பிடிப்புப்பலகைக்கு படியெடுப்பதில் பிழை. களம் ஏதும் தெரிவுசெய்யப்படவில்லை, "
+"அல்லது தெரிவுசெய்யப்பட்டுள்ள களங்கள் தொடர்ச்சியாக இல்லை."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "எல்லைக் கோணம்"
+msgstr "வலையக் கோணம்"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "நெடுவரிசை %u"
+msgstr "நெடுவரிசை %s தலைப்புரை"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "கிடைவரிசை %s தலைப்புரை"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "நெடுவரிசை %u"
+msgstr "நெடுவரிசை %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "கிடைவரிசை %i"
+msgstr "கிடைவரிசை %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "கிடைவரிசை %s, நெடுவரிசை %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -5250,40 +5247,39 @@ msgid "MDI child"
 msgstr "MDI சேய்"
 
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr "'%s' வழங்கியுடன் '%s' தலைப்பில் இணைவதில் தோல்வி."
+msgstr "புகுபதிவு மேலாளருக்கு D-Bus இணைப்பைத் திறப்பதில் தோல்வி: %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "பயன்பாடு"
+msgstr "wxWidgets பயன்பாடு"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "பயன்பாடு தொடர்ந்து இயங்க வேண்டும்"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "இடைநீக்குவதற்கு முன் தூய்மைப்படுத்தவும்"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "சுழல் இணைப்பினைத் துவக்குவதில் தோல்வி: %s"
+msgstr "உறக்கநிலையை தடுப்பதில் தோல்வி: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "D-Bus \"Inhibit\" கோரிக்கைக்கு எதிர்பாராத துலங்கல்."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "தனிப் பயனாக்கப்பட்ட அளவு"
 
 #: ../src/gtk/print.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "அச்சிடுகையில் பிழை:"
+msgstr "அச்சிடுகையில் பிழை: %s"
 
 #: ../src/gtk/print.cpp:816
 msgid "Page Setup"
@@ -5297,10 +5293,12 @@ msgstr "JavaScript குறுநிரல் வெளியீட்டின
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"பினாமியை அமைப்பது வெப்கிட்டினால் ஆதரிக்கப்படவில்லை. குறைந்தபட்ச பதிப்பு 2.16 "
+"தேவைப்படுகிறது. "
 
 #: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
-msgstr ""
+msgstr "வெப்கிட் பினாமி அமைப்பதற்கான ஆதரவில்லாமல் இந்நிரல் தொகுக்கப்பட்டுள்ளது."
 
 #: ../src/gtk/window.cpp:6289
 msgid ""
@@ -5624,9 +5622,9 @@ msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "குறுக்கப்பட்ட HTML உதவிக் கோப்பு (*.chm)|*.chm|"
 
 #: ../src/html/helpwnd.cpp:1671
-#, fuzzy, c-format
+#, c-format
 msgid "%i of %u"
-msgstr "%uல் %i"
+msgstr "%i, மொத்தம் %u"
 
 #: ../src/html/helpwnd.cpp:1709
 #, c-format
@@ -5696,9 +5694,9 @@ msgstr "கோப்பு கிடைப்பில் இல்லை!"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr "முன்தோற்றம்"
+msgstr "%s முன்தோற்றம்"
 
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
@@ -6001,11 +5999,11 @@ msgstr "நிலையான கண்டுபிடி/மாற்றமர�
 
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
-msgstr ""
+msgstr "பாதுகாப்பான மேசைத்தளத்திலிருந்து கோப்பு முறைமையை அணுகுவதற்கு அனுமதியில்லை."
 
 #: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "பாதுகாப்பு எச்சரிக்கை"
 
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
@@ -6477,7 +6475,7 @@ msgstr "'%s'-இருந்து படவுருக்களை ஏற்�
 
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
-msgstr ""
+msgstr "எட்ஜ் பினாமியை அமைப்பதற்கான ஆதரவில்லாமல் இந்நிரல் தொகுக்கப்பட்டுள்ளது."
 
 #: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
@@ -6508,34 +6506,29 @@ msgid "File type:"
 msgstr "கோப்பு வகை:"
 
 #: ../src/osx/cocoa/menu.mm:242
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "சாளரம்"
 
 #: ../src/osx/cocoa/menu.mm:259
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "உதவி"
 
 #: ../src/osx/cocoa/menu.mm:298
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "சிறிதாக்கிடுக"
 
 #: ../src/osx/cocoa/menu.mm:303
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
 msgstr "பெரிதாக்கிடுக"
 
 #: ../src/osx/cocoa/menu.mm:309
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
-msgstr "அனைத்தையும் முன்னால் கொண்டுவருக"
+msgstr "அனைத்தையும் முன்கொண்டுவருக"
 
 #: ../src/osx/core/sound.cpp:143
 #, c-format
@@ -6550,8 +6543,8 @@ msgstr "\"%s\" எழுத்துருக் கோப்பு கிடை
 #: ../src/osx/fontutil.cpp:88
 #, c-format
 msgid ""
-"Font file \"%s\" cannot be used as it is not inside the font directory "
-"\"%s\"."
+"Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
+"\"."
 msgstr ""
 "\"%s\" எழுத்துரு அடைவில் இல்லாததால், \"%s\" எழுத்துரு கோப்பினைப் பயன்படுத்த இயலாது."
 
@@ -6583,10 +6576,9 @@ msgid "Hide %s"
 msgstr "%s-யினை மறை"
 
 #: ../src/osx/menu_osx.cpp:522
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "பயன்பாடு"
+msgstr "பயன்பாட்டை மறைத்திடுக"
 
 #: ../src/osx/menu_osx.cpp:526
 msgctxt "macOS menu item"
@@ -6605,10 +6597,9 @@ msgid "Quit %s"
 msgstr "%s-ஐ விட்டு வெளியேறுக"
 
 #: ../src/osx/menu_osx.cpp:537
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Quit Application"
-msgstr "பயன்பாடு"
+msgstr "பயன்பாட்டை விட்டு வெளியேறுக"
 
 #: ../src/osx/webview_webkit.mm:444
 msgid "Printing is not supported by the system web control"
@@ -6842,169 +6833,141 @@ msgid "White"
 msgstr "வெள்ளை"
 
 #: ../src/propgrid/advprops.cpp:1718
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Default"
 msgstr "இயல்பிருப்பு"
 
 #: ../src/propgrid/advprops.cpp:1719
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Arrow"
 msgstr "அம்பு"
 
 #: ../src/propgrid/advprops.cpp:1720
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Arrow"
 msgstr "வலதம்பு"
 
 #: ../src/propgrid/advprops.cpp:1721
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Blank"
 msgstr "வெற்று"
 
 #: ../src/propgrid/advprops.cpp:1722
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Bullseye"
 msgstr "Bullseye"
 
 #: ../src/propgrid/advprops.cpp:1723
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Character"
 msgstr "வரியுரு"
 
 #: ../src/propgrid/advprops.cpp:1724
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Cross"
 msgstr "சிலுவை "
 
 #: ../src/propgrid/advprops.cpp:1725
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Hand"
 msgstr "கை"
 
 #: ../src/propgrid/advprops.cpp:1726
-#, fuzzy
 msgctxt "system cursor name"
 msgid "I-Beam"
 msgstr "ஐபீம்"
 
 #: ../src/propgrid/advprops.cpp:1727
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Left Button"
 msgstr "இடது பொத்தான்"
 
 #: ../src/propgrid/advprops.cpp:1728
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Magnifier"
 msgstr "உருப்பெருக்கி"
 
 #: ../src/propgrid/advprops.cpp:1729
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Middle Button"
 msgstr "நடு பொத்தான்"
 
 #: ../src/propgrid/advprops.cpp:1730
-#, fuzzy
 msgctxt "system cursor name"
 msgid "No Entry"
 msgstr "உள்ளீடு ஏதுமில்லை"
 
 #: ../src/propgrid/advprops.cpp:1731
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Paint Brush"
 msgstr "வண்ணத் தூரிகை"
 
 #: ../src/propgrid/advprops.cpp:1732
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Pencil"
 msgstr "பெண்சில்"
 
 #: ../src/propgrid/advprops.cpp:1733
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Left"
 msgstr "இடமுனை"
 
 #: ../src/propgrid/advprops.cpp:1734
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Point Right"
 msgstr "வலமுனை"
 
 #: ../src/propgrid/advprops.cpp:1735
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Question Arrow"
 msgstr "கேள்வியம்பு"
 
 #: ../src/propgrid/advprops.cpp:1736
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Right Button"
 msgstr "வலது பொத்தான்"
 
 #: ../src/propgrid/advprops.cpp:1737
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NE-SW"
-msgstr "சைசிங் NE-SW"
+msgstr "அளவாக்கம் NE-SW"
 
 #: ../src/propgrid/advprops.cpp:1738
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing N-S"
-msgstr "சைசிங் N-S"
+msgstr "அளவாக்கம் N-S"
 
 #: ../src/propgrid/advprops.cpp:1739
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing NW-SE"
-msgstr "சைசிங் NW-SE"
+msgstr "அளவாக்கம் NW-SE"
 
 #: ../src/propgrid/advprops.cpp:1740
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing W-E"
-msgstr "சைசிங் W-E"
+msgstr "அளவாக்கம் W-E"
 
 #: ../src/propgrid/advprops.cpp:1741
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Sizing"
-msgstr "சைசிங்"
+msgstr "அளவாக்கம்"
 
 #: ../src/propgrid/advprops.cpp:1742
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Spraycan"
 msgstr "தெளிக்குவளை"
 
 #: ../src/propgrid/advprops.cpp:1743
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait"
 msgstr "காத்திரு"
 
 #: ../src/propgrid/advprops.cpp:1744
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Watch"
 msgstr "கவனி"
 
 #: ../src/propgrid/advprops.cpp:1745
-#, fuzzy
 msgctxt "system cursor name"
 msgid "Wait Arrow"
 msgstr "காத்திரு அம்பு"
@@ -7104,7 +7067,7 @@ msgstr "ஒரு கோப்பினைத் தேர்ந்தெடு�
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "அடுக்குக (&T)"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -9325,9 +9288,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "XML parsing பிழை: '%s', %d வரியில்"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "பக்கம் %d"
+msgstr "பக்கம் %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
@@ -9441,11 +9404,9 @@ msgstr "%s உருவாக்கப்படுகிறது. \"%s\" தோ
 #~ msgid "Please choose a valid font."
 #~ msgstr "ஏற்கக்கூடிய எழுத்துருவைத் தேர்ந்தெடுக்கவும்."
 
-#, c-format
 #~ msgid "Failed to display HTML document in %s encoding"
 #~ msgstr "%s குறியாக்கத்தில் HtML ஆவணத்தை காட்டுவதில் தோல்வி"
 
-#, c-format
 #~ msgid "wxWidgets could not open display for '%s': exiting."
 #~ msgstr "wxWidgets, '%s'-ற்கான காட்சியளிப்பைத் திறக்க இயலவில்லை: வெளியேறுகிறது."
 
@@ -9619,8 +9580,8 @@ msgstr "%s உருவாக்கப்படுகிறது. \"%s\" தோ
 #~ msgstr "தேதி வழங்கி மதிப்பை வழங்க இயலாது; மதிப்பு வகை:"
 
 #~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension "
-#~ "\"%s\" ?\n"
+#~ "Do you want to overwrite the command used to %s files with extension \"%s"
+#~ "\" ?\n"
 #~ "Current value is \n"
 #~ "%s, \n"
 #~ "New value is \n"
