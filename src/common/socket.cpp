@@ -1716,13 +1716,6 @@ void wxSocketBase::SetTimeout(long seconds)
 
 void wxSocketBase::SetFlags(wxSocketFlags flags)
 {
-    // Do some sanity checking on the flags used: not all values can be used
-    // together.
-    wxASSERT_MSG( !(flags & wxSOCKET_NOWAIT) ||
-                  !(flags & (wxSOCKET_WAITALL | wxSOCKET_BLOCK)),
-                  "Using wxSOCKET_WAITALL or wxSOCKET_BLOCK with "
-                  "wxSOCKET_NOWAIT doesn't make sense" );
-
     // Blocking sockets are very different from non-blocking ones and we need
     // to [un]register the socket with the event loop if wxSOCKET_BLOCK is
     // being [un]set.
