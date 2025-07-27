@@ -1979,7 +1979,7 @@ void MyCanvas::DrawCursors(wxDC& dc)
                 x, y);
 
     const int w = FromDIP(200);
-    const int h = FromPhys(wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this));
+    const int h = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this);
     const int margin = dc.GetCharWidth();
 
     y += h;
