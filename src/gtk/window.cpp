@@ -47,6 +47,7 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/event.h"
+#include "wx/gtk/private/wayland.h"
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/gtk/private/backend.h"
 #include "wx/private/textmeasure.h"
@@ -5547,9 +5548,54 @@ void wxWindowGTK::WXUpdateCursor()
     GTKUpdateCursor();
 }
 
+#ifdef wxHAVE_WAYLAND_PROTOCOLS
+
+namespace wxWayland
+{
+
+void WarpPointer(GdkWindow* window, int x, int y)
+{
+    if ( !WLGlobals.pointer_warp )
+    {
+        // This is not an error, many compositors don't support this protocol.
+        return;
+    }
+
+    // We don't have any way to find the seat for which we want to warp the
+    // pointer, so just use the first one which has a pointer to warp.
+    for ( const auto& seat : WLGlobals.seats )
+    {
+        if ( seat.pointer && seat.lastEnterSerial )
+        {
+            wp_pointer_warp_v1_warp_pointer(WLGlobals.pointer_warp.get(),
+                gdk_wayland_window_get_wl_surface(window),
+                seat.pointer.get(),
+                wl_fixed_from_int(x),
+                wl_fixed_from_int(y),
+                seat.lastEnterSerial
+            );
+        }
+    }
+}
+
+} // namespace wxWayland
+
+#endif // wxHAVE_WAYLAND_PROTOCOLS
+
 void wxWindowGTK::WarpPointer( int x, int y )
 {
     wxCHECK_RET( (m_widget != nullptr), wxT("invalid window") );
+
+#ifdef wxHAVE_WAYLAND_PROTOCOLS
+    // Implement this ourselves as gdk_device_warp() doesn't do anything when
+    // using Wayland backend in GTK3 and this function has been removed in GTK4.
+    GdkWindow* const window = GTKGetMainWindow();
+    if ( wxGTKImpl::IsWayland(window) )
+    {
+        wxWayland::WarpPointer(window, x, y);
+        return;
+    }
+#endif // wxHAVE_WAYLAND_PROTOCOLS
 
     ClientToScreen(&x, &y);
     GdkDisplay* display = gtk_widget_get_display(m_widget);

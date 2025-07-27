@@ -1,0 +1,262 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        src/gtk/wayland.cpp
+// Purpose:     Wayland support for wxGTK.
+// Author:      Vadim Zeitlin
+// Created:     2025-08-22
+// Copyright:   (c) 2025 Vadim Zeitlin <vadim@wxwidgets.org>
+// Licence:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
+
+#include "wx/wxprec.h"
+
+#include "wx/gtk/private/wayland.h"
+
+#ifdef wxHAVE_WAYLAND_PROTOCOLS
+
+#include "wx/log.h"
+
+constexpr const char* TRACE_WAYLAND = "wayland";
+
+// Include the relevant part of wayland-scanner-generated code here as we don't
+// want to add a separate source file for this and deal with its ideas about
+// visibility.
+#include "wayland-util.h"
+extern "C" {
+extern const struct wl_interface wl_pointer_interface;
+extern const struct wl_interface wl_surface_interface;
+
+static const struct wl_interface *pointer_warp_v1_types[] = {
+        &wl_surface_interface,
+        &wl_pointer_interface,
+        NULL,
+        NULL,
+        NULL,
+};
+
+static const struct wl_message wp_pointer_warp_v1_requests[] = {
+        { "destroy", "", pointer_warp_v1_types + 0 },
+        { "warp_pointer", "ooffu", pointer_warp_v1_types + 0 },
+};
+
+const struct wl_interface wp_pointer_warp_v1_interface = {
+        "wp_pointer_warp_v1", 1,
+        2, wp_pointer_warp_v1_requests,
+        0, NULL,
+};
+}
+
+namespace wxWayland
+{
+
+// ----------------------------------------------------------------------------
+// Seat implementation
+// ----------------------------------------------------------------------------
+
+void
+pointer_handle_enter(void* data,
+                     wl_pointer* WXUNUSED(pointer),
+                     uint32_t serial,
+                     wl_surface* WXUNUSED(surface),
+                     wl_fixed_t WXUNUSED(x),
+                     wl_fixed_t WXUNUSED(y))
+{
+    auto* const seat = static_cast<Seat*>(data);
+
+    seat->lastEnterSerial = serial;
+}
+
+void
+pointer_handle_leave(void* data,
+                     wl_pointer* WXUNUSED(pointer),
+                     uint32_t WXUNUSED(serial),
+                     wl_surface* WXUNUSED(surface))
+{
+    auto* const seat = static_cast<Seat*>(data);
+
+    seat->lastEnterSerial = 0;
+}
+
+void
+pointer_handle_motion(void* WXUNUSED(data),
+                      wl_pointer* WXUNUSED(pointer),
+                      uint32_t WXUNUSED(time),
+                      wl_fixed_t WXUNUSED(x),
+                      wl_fixed_t WXUNUSED(y))
+{
+}
+
+void
+pointer_handle_button(void* WXUNUSED(data),
+                      wl_pointer* WXUNUSED(pointer),
+                      uint32_t WXUNUSED(serial),
+                      uint32_t WXUNUSED(time),
+                      uint32_t WXUNUSED(button),
+                      uint32_t WXUNUSED(state))
+{
+}
+
+void
+pointer_handle_axis(void* WXUNUSED(data),
+                    wl_pointer* WXUNUSED(pointer),
+                    uint32_t WXUNUSED(time),
+                    uint32_t WXUNUSED(axis),
+                    wl_fixed_t WXUNUSED(value))
+{
+}
+
+const wl_pointer_listener pointer_listener = {
+    pointer_handle_enter,
+    pointer_handle_leave,
+    pointer_handle_motion,
+    pointer_handle_button,
+    pointer_handle_axis,
+};
+
+void
+seat_handle_capabilities(void* data,
+                         wl_seat* WXUNUSED(wl_seat),
+                         uint32_t capabilities)
+{
+    auto* const seat = static_cast<Seat*>(data);
+
+    wxLogTrace(TRACE_WAYLAND,
+               "Seat(%u) capabilities=%04x", seat->id, capabilities);
+
+    seat->UpdateCapabilities(capabilities);
+}
+
+void
+seat_handle_name(void* data,
+                 wl_seat* WXUNUSED(wl_seat),
+                 const char* name)
+{
+    auto* const seat = static_cast<Seat*>(data);
+
+    wxLogTrace(TRACE_WAYLAND, "Seat(%u) name=\"%s\"", seat->id, name);
+
+    if ( name )
+        seat->name = name;
+    else
+        seat->name.clear();
+}
+
+const wl_seat_listener seat_listener = {
+    seat_handle_capabilities,
+    seat_handle_name
+};
+
+Seat::Seat(wl_seat* seat_, uint32_t id_)
+    : seat(seat_), id(id_)
+{
+    wl_seat_add_listener(seat.get(), &seat_listener, this);
+}
+
+void Seat::UpdateCapabilities(int capabilities)
+{
+    pointer.reset(capabilities & WL_SEAT_CAPABILITY_POINTER
+            ? wl_seat_get_pointer(seat.get())
+            : nullptr);
+
+    if ( pointer )
+        wl_pointer_add_listener(pointer.get(), &pointer_listener, this);
+    else
+        lastEnterSerial = 0;
+}
+
+// ----------------------------------------------------------------------------
+// Globals implementation
+// ----------------------------------------------------------------------------
+
+void
+registry_handle_global(void* WXUNUSED(data),
+                       wl_registry* registry,
+                       uint32_t name,
+                       const char* interface,
+                       uint32_t version)
+{
+    if ( strcmp(interface, wl_seat_interface.name) == 0 )
+    {
+        // Use v2 of the wl_seat interface, as this is enough for our needs and
+        // frees us from providing empty implementations of the new pointer
+        // events introduced in v5.
+        constexpr uint32_t SEAT_VERSION = 2;
+
+        if ( version < SEAT_VERSION )
+        {
+            wxLogTrace(TRACE_WAYLAND,
+                       "Wayland seat interface v%u for seat %u is too old",
+                       version, name);
+            return;
+        }
+
+        auto const seat = static_cast<wl_seat*>(
+            wl_registry_bind(registry, name, &wl_seat_interface, SEAT_VERSION)
+        );
+
+        WLGlobals.seats.emplace_back(seat, name);
+    }
+
+    if ( strcmp(interface, wp_pointer_warp_v1_interface.name) == 0 )
+    {
+        WLGlobals.pointer_warp.reset(static_cast<wp_pointer_warp_v1*>(
+            wl_registry_bind(registry, name, &wp_pointer_warp_v1_interface, 1)
+        ));
+    }
+}
+
+void
+registry_handle_global_remove(void* WXUNUSED(data),
+                              wl_registry* WXUNUSED(registry),
+                              uint32_t name)
+{
+    // Check if the global being removed is one of the seats.
+    for ( auto it = WLGlobals.seats.begin();
+          it != WLGlobals.seats.end();
+          ++it )
+    {
+        if ( it->id == name )
+        {
+            WLGlobals.seats.erase(it);
+            return;
+        }
+    }
+}
+
+const wl_registry_listener registry_listener = {
+    registry_handle_global,
+    registry_handle_global_remove
+};
+
+void Globals::Init()
+{
+    // Get the default Wayland display from GTK. If we ever want to support
+    // more than one of them, we need to replace WLGlobals with per-display
+    // objects.
+    auto const manager = gdk_display_manager_get();
+    auto const displayGDK = gdk_display_manager_get_default_display(manager);
+    auto const displayWL = gdk_wayland_display_get_wl_display(displayGDK);
+
+    // Get the registry and keep it alive in a member variable so that we keep
+    // receiving the events about the globals being added and removed later.
+    registry.reset(wl_display_get_registry(displayWL));
+
+    // And get all of the current globals, including the seats and pointer warp
+    // protocol, if supported.
+    wl_registry_add_listener(registry.get(), &registry_listener, nullptr);
+    wl_display_roundtrip(displayWL);
+}
+
+void Globals::Free()
+{
+    registry.reset();
+
+    seats.clear();
+
+    pointer_warp.reset();
+}
+
+Globals WLGlobals;
+
+} // namespace wxWayland
+
+#endif // wxHAVE_WAYLAND_PROTOCOLS
