@@ -71,6 +71,7 @@ jobs:
             platform: 'Win32'
             use_cxx20: true
           - configuration: 'DLL Release'
+            use_std_string: true
             platform: 'x64'
 
     steps:
@@ -82,10 +83,12 @@ jobs:
       - name: Configure build options
         working-directory: include/wx/msw
         run: |
+            $use_std_string = "${{ matrix.use_std_string }}" ? 1 : 0
             $use_utf8 = "${{ matrix.use_utf8 }}" ? 1 : 0
-            if ( $use_utf8 ) {
+            if ( $use_std_string -or $use_utf8 ) {
               $txt = Get-Content setup.h
               Write-Output $txt |
+              %{$_ -replace "define wxUSE_STD_STRING_CONV_IN_WXSTRING 0", "define wxUSE_STD_STRING_CONV_IN_WXSTRING $use_std_string"} |
               %{$_ -replace "define wxUSE_UNICODE_UTF8 0", "define wxUSE_UNICODE_UTF8 $use_utf8"} |
               Set-Content setup.h
             }
