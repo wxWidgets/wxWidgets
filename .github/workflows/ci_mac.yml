@@ -82,9 +82,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - name: wxMac ARM with ASAN
+        - name: wxMac ARM ASAN not compatible
           runner: self-hosted
           arch: arm64
+          configure_flags: --enable-std_string_conv_in_wxstring --disable-compat32 --disable-sys-libs
           use_asan: true
         - name: wxMac Intel C++17
           runner: macos-14

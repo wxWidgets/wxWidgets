@@ -74,9 +74,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: wxMSW 64 bits
+          - name: wxMSW 64 bits not compatible
             debian_release: testing
-            configure_flags: --disable-compat32
+            configure_flags: --enable-std_string_conv_in_wxstring --disable-compat32
           - name: wxMSW 32 bits
             # Testing doesn't have 32 bit support any more.
             debian_release: stable

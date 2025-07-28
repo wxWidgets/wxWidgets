@@ -113,14 +113,14 @@ jobs:
             extra_warnings: -Wsuggest-override
             use_xvfb: true
             check_headers: true
-          - name: Ubuntu 24.04 wxGTK with ASAN
+          - name: Ubuntu 24.04 wxGTK ASAN not compatible
             runner: ubuntu-24.04
-            configure_flags: --disable-compat32 --disable-sys-libs
+            configure_flags: --enable-std_string_conv_in_wxstring --disable-compat32 --disable-sys-libs
             extra_warnings: -Wsuggest-override
             skip_samples: true
             use_asan: true
             use_xvfb: true
-          - name: Ubuntu 24.04 wxGTK with UBSAN
+          - name: Ubuntu 24.04 wxGTK UBSAN
             runner: ubuntu-24.04
             configure_flags: --with-cxx=20
             extra_warnings: -Wsuggest-override
