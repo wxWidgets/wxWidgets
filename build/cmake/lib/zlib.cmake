@@ -33,6 +33,8 @@ if(wxUSE_ZLIB STREQUAL "builtin")
         # more convenient than having to modify it to avoid them.
         target_compile_definitions(wxzlib PRIVATE _CRT_NONSTDC_NO_WARNINGS)
     endif()
+    # Tell our modified zconf.h to include wx/setup.h.
+    target_compile_definitions(wxzlib PRIVATE wxHAVE_SETUP_H=1)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         target_compile_options(wxzlib PRIVATE -Wno-deprecated-non-prototype)
     endif()
