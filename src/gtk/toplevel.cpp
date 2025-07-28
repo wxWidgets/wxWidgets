@@ -430,7 +430,8 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
                 if ((m_gdkFunc & GDK_FUNC_CLOSE) == 0)
                     layout.Replace("close", empty, false);
 
-                gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(titlebar), layout);
+                gtk_header_bar_set_decoration_layout(GTK_HEADER_BAR(titlebar),
+                                                     layout.utf8_str());
             }
 #endif // 3.12
             // Don't set WM decorations when GTK is using Client Side Decorations
