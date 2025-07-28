@@ -36,7 +36,7 @@ Files
     * Includes all other cmake files
 * options.cmake
     * All user selectable build options should be defined in this file via
-      calls to `wx_option()`
+      calls to `wx_option()` or `wx_option_auto()`
 * policies.cmake
     * [CMake policies][2] for wxWidgets should be defined in this file
 * setup.cmake

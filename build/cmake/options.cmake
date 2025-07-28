@@ -16,7 +16,7 @@ wx_option(wxBUILD_TESTS "Build console tests (CONSOLE_ONLY) or ALL" OFF
     STRINGS CONSOLE_ONLY ALL OFF)
 wx_option(wxBUILD_DEMOS "Build demos" OFF)
 wx_option(wxBUILD_BENCHMARKS "Build benchmarks" OFF)
-wx_option(wxBUILD_LOCALES "Build locales" AUTO STRINGS ON OFF AUTO)
+wx_option_auto(wxBUILD_LOCALES "Build locales")
 mark_as_advanced(wxBUILD_LOCALES)
 wx_option(wxBUILD_PRECOMP "Use precompiled headers" ON STRINGS ON OFF COTIRE)
 mark_as_advanced(wxBUILD_PRECOMP)
@@ -95,7 +95,7 @@ mark_as_advanced(wxBUILD_INSTALL_PDB)
 
 # Use the MSVC/makefile naming convention, or the configure naming convention,
 # this is the same check as used in FindwxWidgets.
-wx_option(wxBUILD_WIN32_MSVC_NAMING "Force the MSVC / makefile.[gcc/vc] naming convention" AUTO STRINGS ON OFF AUTO)
+wx_option_auto(wxBUILD_WIN32_MSVC_NAMING "Force the MSVC / makefile.[gcc/vc] naming convention")
 mark_as_advanced(wxBUILD_WIN32_MSVC_NAMING)
 if(wxBUILD_WIN32_MSVC_NAMING STREQUAL "AUTO")
     if(MSVC)

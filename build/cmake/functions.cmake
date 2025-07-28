@@ -1025,6 +1025,15 @@ function(wx_option name desc)
     endif()
 endfunction()
 
+# A convenient wrapper for wx_option() for an option set to AUTO by default but
+# also allowing ON and OFF values, with AUTO meaning that the option is set to
+# ON if possible (e.g. required support for it is detected) and turned OFF with
+# just a warning otherwise, while ON means that an error is given if it can't
+# be enabled.
+function(wx_option_auto name desc)
+    wx_option(${name} ${desc} AUTO STRINGS ON OFF AUTO)
+endfunction()
+
 # Force a new value for an option created with wx_option
 function(wx_option_force_value name value)
     get_property(helpstring CACHE ${name} PROPERTY HELPSTRING)
