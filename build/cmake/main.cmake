@@ -73,6 +73,20 @@ endif()
 # Print configuration summary
 wx_print_thirdparty_library_summary()
 
+# Avoid printing out the message if we're being reconfigured and nothing has
+# changed since the previous run, so check if the current summary differs from
+# the cached value.
+set(wxSUMMARY_NOW
+    "${CMAKE_SYSTEM_NAME}-${wxVERSION}-${wxREQUIRED_OS_DESC}-"
+    "${wxBUILD_TOOLKIT}-${wxTOOLKIT_VERSION}-${wxTOOLKIT_EXTRA}-"
+    "${wxBUILD_MONOLITHIC}-${wxBUILD_SHARED}-${wxBUILD_COMPATIBILITY}-"
+)
+if("${wxSUMMARY_NOW}" STREQUAL "${wxSUMMARY}")
+  return()
+endif()
+
+set(wxSUMMARY ${wxSUMMARY_NOW} CACHE INTERNAL "internal summary of wxWidgets build options")
+
 if(wxTOOLKIT_EXTRA)
     string(REPLACE ";" ", " wxTOOLKIT_DESC "${wxTOOLKIT_EXTRA}")
     set(wxTOOLKIT_DESC "with support for: ${wxTOOLKIT_DESC}")

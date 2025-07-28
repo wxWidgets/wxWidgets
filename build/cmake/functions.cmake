@@ -712,6 +712,7 @@ function(wx_print_thirdparty_library_summary)
     foreach(entry IN LISTS wxTHIRD_PARTY_LIBRARIES)
         if(NOT var_name)
             set(var_name ${entry})
+            string(APPEND wxTHIRD_PARTY_SUMMARY_NOW "${var_name}=${${var_name}}-")
         else()
             string(LENGTH ${var_name} len)
             if(len GREATER nameLength)
@@ -724,6 +725,15 @@ function(wx_print_thirdparty_library_summary)
             set(var_name)
         endif()
     endforeach()
+
+    # Avoid printing out the message if we're being reconfigured and nothing
+    # has changed since the previous run, so check if the current summary
+    # differs from the cached value.
+    if("${wxTHIRD_PARTY_SUMMARY_NOW}" STREQUAL "${wxTHIRD_PARTY_SUMMARY}")
+        return()
+    endif()
+    set(wxTHIRD_PARTY_SUMMARY ${wxTHIRD_PARTY_SUMMARY_NOW} CACHE INTERNAL "internal summary of 3rd party libraries used by wxWidgets")
+
     math(EXPR nameLength "${nameLength}+1") # account for :
 
     set(message "Which libraries should wxWidgets use?\n")
