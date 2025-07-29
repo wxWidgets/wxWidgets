@@ -559,6 +559,17 @@ macro(wx_lib_include_directories name)
         list(APPEND wxMONO_INCLUDE_DIRS ${ARGN})
         set(wxMONO_INCLUDE_DIRS ${wxMONO_INCLUDE_DIRS} PARENT_SCOPE)
     else()
+        target_include_directories(${name} PRIVATE ${ARGN})
+    endif()
+endmacro()
+
+# Same as wx_lib_include_directories() but prepends the given directories to
+# the include path instead of appending them.
+macro(wx_lib_include_directories_before name)
+    if(wxBUILD_MONOLITHIC)
+        list(PREPEND wxMONO_INCLUDE_DIRS ${ARGN})
+        set(wxMONO_INCLUDE_DIRS ${wxMONO_INCLUDE_DIRS} PARENT_SCOPE)
+    else()
         target_include_directories(${name} BEFORE PRIVATE ${ARGN})
     endif()
 endmacro()

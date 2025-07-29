@@ -28,12 +28,15 @@ endif()
 
 wx_add_library(wxbase IS_BASE ${BASE_FILES})
 
+# Note that when using built-in versions of the libraries, their include
+# directories must come before the system ones which could be used by some
+# other dependency.
 if(wxUSE_ZLIB)
-    wx_lib_include_directories(wxbase ${ZLIB_INCLUDE_DIRS})
+    wx_lib_include_directories_before(wxbase ${ZLIB_INCLUDE_DIRS})
     wx_lib_link_libraries(wxbase PRIVATE ${ZLIB_LIBRARIES})
 endif()
 if(wxUSE_REGEX)
-    wx_lib_include_directories(wxbase ${REGEX_INCLUDE_DIRS})
+    wx_lib_include_directories_before(wxbase ${REGEX_INCLUDE_DIRS})
     wx_lib_link_libraries(wxbase PRIVATE ${REGEX_LIBRARIES})
 endif()
 if(wxUSE_LIBLZMA)
