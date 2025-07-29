@@ -13,7 +13,7 @@
 #ifndef _WX_MSW_GSOCKMSW_H_
 #define _WX_MSW_GSOCKMSW_H_
 
-#include "wx/msw/wrapwin.h"
+#include "wx/private/sockettype.h"
 
 #if defined(__CYGWIN__)
     //CYGWIN gives annoying warning about runtime stuff if we don't do this
@@ -33,8 +33,6 @@
 #ifndef wxIoctlSocketArg_t
     #define wxIoctlSocketArg_t u_long
 #endif
-
-#define wxCloseSocket closesocket
 
 // ----------------------------------------------------------------------------
 // MSW-specific socket implementation
