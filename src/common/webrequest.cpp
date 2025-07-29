@@ -470,6 +470,26 @@ void wxWebRequestBase::SetStorage(Storage storage)
     m_impl->SetStorage(storage);
 }
 
+void wxWebRequestBase::SetConnectionTimeouts(long resolveTimeoutMs,
+                                             long connectTimeoutMs)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetConnectionTimeouts(resolveTimeoutMs, connectTimeoutMs);
+}
+
+void wxWebRequestBase::SetTimeouts(long resolveTimeoutMs,
+                                   long connectTimeoutMs,
+                                   long sendTimeoutMs,
+                                   long receiveTimeoutMs)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetTimeouts(
+        resolveTimeoutMs, connectTimeoutMs, sendTimeoutMs, receiveTimeoutMs);
+}
+
+
 wxWebRequestBase::Storage wxWebRequestBase::GetStorage() const
 {
     wxCHECK_IMPL( Storage_None );

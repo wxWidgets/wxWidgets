@@ -524,6 +524,25 @@ void wxWebRequestCURL::Start()
     StartRequest();
 }
 
+void wxWebRequestCURL::SetConnectionTimeouts(long resolveTimeoutMs,
+                                             long connectTimeoutMs)
+{
+    wxCURLSetOpt(m_handle,
+                 CURLOPT_CONNECTTIMEOUT_MS,
+                 resolveTimeoutMs + connectTimeoutMs);
+}
+
+void wxWebRequestCURL::SetTimeouts(long resolveTimeoutMs,
+                                   long connectTimeoutMs,
+                                   long sendTimeoutMs,
+                                   long receiveTimeoutMs)
+{
+    long timeout =
+            resolveTimeoutMs + connectTimeoutMs + sendTimeoutMs + receiveTimeoutMs;
+    wxCURLSetOpt(m_handle, CURLOPT_TIMEOUT_MS, timeout);
+}
+
+
 bool wxWebRequestCURL::StartRequest()
 {
     m_bytesSent = 0;

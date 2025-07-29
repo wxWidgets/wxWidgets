@@ -88,6 +88,10 @@ public:
     // cancelled.
     void Cancel();
 
+    virtual void SetConnectionTimeouts(long resolveTimeoutMs, long connectTimeoutMs) = 0;
+
+    virtual void SetTimeouts(long resolveTimeoutMs, long connectTimeoutMs, long sendTimeoutMs, long receiveTimeoutMs) = 0;
+
     virtual wxWebResponseImplPtr GetResponse() const = 0;
 
     virtual wxWebAuthChallengeImplPtr GetAuthChallenge() const = 0;

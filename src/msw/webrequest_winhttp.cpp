@@ -60,6 +60,7 @@ public:
         wxLOAD_FUNC(WinHttpQueryAuthSchemes)
         wxLOAD_FUNC(WinHttpSetCredentials)
         wxLOAD_FUNC(WinHttpOpen)
+        wxLOAD_FUNC(WinHttpSetTimeouts)
 
         if ( !result )
             m_winhttp.Unload();
@@ -99,6 +100,8 @@ public:
     static WinHttpSetCredentials_t WinHttpSetCredentials;
     typedef HINTERNET(WINAPI* WinHttpOpen_t)(LPCWSTR, DWORD, LPCWSTR, LPCWSTR, DWORD);
     static WinHttpOpen_t WinHttpOpen;
+    typedef HINTERNET(WINAPI* WinHttpSetTimeouts_t)(HINTERNET, int, int, int, int);
+    static WinHttpSetTimeouts_t WinHttpSetTimeouts;
 
 private:
     static wxDynamicLibrary m_winhttp;
@@ -121,6 +124,7 @@ wxWinHTTP::WinHttpReadData_t wxWinHTTP::WinHttpReadData;
 wxWinHTTP::WinHttpQueryAuthSchemes_t wxWinHTTP::WinHttpQueryAuthSchemes;
 wxWinHTTP::WinHttpSetCredentials_t wxWinHTTP::WinHttpSetCredentials;
 wxWinHTTP::WinHttpOpen_t wxWinHTTP::WinHttpOpen;
+wxWinHTTP::WinHttpSetTimeouts_t wxWinHTTP::WinHttpSetTimeouts;
 
 
 // Define constants potentially missing in old SDKs
@@ -747,6 +751,31 @@ void wxWebRequestWinHTTP::Start()
 
     CheckResult(SendRequest());
 }
+
+void wxWebRequestWinHTTP::SetConnectionTimeouts(long resolveTimeoutMs,
+                                                long connectTimeoutMs)
+{
+    const int defaultSendTimeoutMs = 30000;
+    const int defaultReceiveTimeoutMs = 30000;
+    wxWinHTTP::WinHttpSetTimeouts(m_request,
+                                  resolveTimeoutMs,
+                                  connectTimeoutMs,
+                                  defaultSendTimeoutMs,
+                                  defaultReceiveTimeoutMs);
+}
+
+void wxWebRequestWinHTTP::SetTimeouts(long resolveTimeoutMs,
+                                      long connectTimeoutMs,
+                                      long sendTimeoutMs,
+                                      long receiveTimeoutMs)
+{
+    wxWinHTTP::WinHttpSetTimeouts(m_request,
+                                  resolveTimeoutMs,
+                                  connectTimeoutMs,
+                                  sendTimeoutMs,
+                                  receiveTimeoutMs);
+}
+
 
 wxWebRequest::Result wxWebRequestWinHTTP::SendRequest()
 {

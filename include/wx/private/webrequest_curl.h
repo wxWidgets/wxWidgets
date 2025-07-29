@@ -64,6 +64,10 @@ public:
 
     void Start() override;
 
+    void SetConnectionTimeouts(long resolveTimeoutMs, long connectTimeoutMs) override;
+
+    void SetTimeouts(long resolveTimeoutMs, long connectTimeoutMs, long sendTimeoutMs, long receiveTimeoutMs) override;
+
     wxWebResponseImplPtr GetResponse() const override
         { return m_response; }
 

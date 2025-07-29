@@ -426,14 +426,11 @@ public:
         Sets the resolve and connection timeout in milliseconds for the webrequest.
 
         @param resolveTimeoutMs
-            The resolve timeout in milliseconds.
+             Maximum time in milliseconds allowed for name resolution.
         @param connectTimeoutMs
-            The connect timeout in milliseconds.
+            Maximum time in milliseconds allowed to connect to the server.
 
-        @note The @c resolveTimeoutMs parameter is only used under Windows.\n
-            Under Linux the @c connectTimeoutMs timeout limit the whole connection phase, including
-            resolve, all protocols handshakes and negociations until there is an
-            established connection with the remote side.
+        @note On Linux those parameters can't be distinguish. They are added to form one value.
 
         @remarks The default timeouts may vary depending on Implementation.
             For more details take a look at the natives function (@ref descriptions).
@@ -442,7 +439,30 @@ public:
             - For macOS backend, this is not implemented yet.
 
     */
-    void SetConnectionTimeout(long resolveTimeoutMs, long connectTimeoutMs);
+    void SetConnectionTimeouts(long resolveTimeoutMs, long connectTimeoutMs);
+
+    /**
+        Sets the timeouts in milliseconds for the webrequest.
+
+        @param resolveTimeoutMs
+            Maximum time in milliseconds allowed for name resolution.
+        @param connectTimeoutMs
+            Maximum time in milliseconds allowed to connect to the server.
+        @param sendTimeoutMs
+            Maximum time in milliseconds allowed to send the request.
+        @param receiveTimeoutMs
+            Maximum time in milliseconds allowed to receive a response.
+
+        @note On Linux those parameters can't be distinguish. They are added to form one value.
+
+        @remarks The default timeouts may vary depending on Implementation.
+            For more details take a look at the natives function (@ref descriptions).
+            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
+            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_TIMEOUT_MS option.
+            - For macOS backend, this is not implemented yet.
+
+    */
+    void SetTimeouts(long resolveTimeoutMs, long connectTimeoutMs, long sendTimeoutMs, long receiveTimeoutMs);
 
     /**
         Flags for disabling security features.
@@ -896,6 +916,48 @@ public:
          */
         Ignore_All = Ignore_Certificate | Ignore_Host
     };
+
+    /**
+        Sets the resolve and connection timeout in milliseconds for the webrequest.
+
+        @param resolveTimeoutMs
+             Maximum time in milliseconds allowed for name resolution.
+        @param connectTimeoutMs
+            Maximum time in milliseconds allowed to connect to the server.
+
+        @note On Linux those parameters can't be distinguish. They are added to form one value.
+
+        @remarks The default timeouts may vary depending on Implementation.
+            For more details take a look at the natives function (@ref descriptions).
+            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
+            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_CONNECTIONTIMEOUT_MS option.
+            - For macOS backend, this is not implemented yet.
+
+    */
+    void SetConnectionTimeouts(long resolveTimeoutMs, long connectTimeoutMs);
+
+    /**
+        Sets the timeouts in milliseconds for the webrequest.
+
+        @param resolveTimeoutMs
+            Maximum time in milliseconds allowed for name resolution.
+        @param connectTimeoutMs
+            Maximum time in milliseconds allowed to connect to the server.
+        @param sendTimeoutMs
+            Maximum time in milliseconds allowed to send the request.
+        @param receiveTimeoutMs
+            Maximum time in milliseconds allowed to receive a response.
+
+        @note On Linux those parameters can't be distinguish. They are added to form one value.
+
+        @remarks The default timeouts may vary depending on Implementation.
+            For more details take a look at the natives function (@ref descriptions).
+            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
+            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_TIMEOUT_MS option.
+            - For macOS backend, this is not implemented yet.
+
+    */
+    void SetTimeouts(long resolveTimeoutMs, long connectTimeoutMs, long sendTimeoutMs, long receiveTimeoutMs);
 
     /**
         Make connection insecure by disabling security checks.
