@@ -423,6 +423,28 @@ public:
     void SetStorage(Storage storage);
 
     /**
+        Sets the resolve and connection timeout in milliseconds for the webrequest.
+
+        @param resolveTimeoutMs
+            The resolve timeout in milliseconds.
+        @param connectTimeoutMs
+            The connect timeout in milliseconds.
+
+        @note The @c resolveTimeoutMs parameter is only used under Windows.\n
+            Under Linux the @c connectTimeoutMs timeout limit the whole connection phase, including
+            resolve, all protocols handshakes and negociations until there is an
+            established connection with the remote side.
+
+        @remarks The default timeouts may vary depending on Implementation.
+            For more details take a look at the natives function (@ref descriptions).
+            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
+            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_CONNECTIONTIMEOUT_MS option.
+            - For macOS backend, this is not implemented yet.
+
+    */
+    void SetConnectionTimeout(long resolveTimeoutMs, long connectTimeoutMs);
+
+    /**
         Flags for disabling security features.
 
         @since 3.3.0
