@@ -84,10 +84,12 @@ public:
 
     virtual void SetDefaultTimeout(wxUint32 Value);
 
+#if wxUSE_SOCKETS
     // override wxSocketBase::SetTimeout function to avoid that the internal
     // m_uiDefaultTimeout goes out-of-sync:
     virtual void SetTimeout(long seconds) override
         { SetDefaultTimeout(static_cast<wxUint32>(seconds)); }
+#endif // wxUSE_SOCKETS
 
 
     // logging support: each wxProtocol object may have the associated logger

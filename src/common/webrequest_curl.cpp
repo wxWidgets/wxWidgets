@@ -23,7 +23,7 @@
 #endif
 
 #include "wx/uri.h"
-#include "wx/private/socket.h"
+#include "wx/private/sockettype.h"
 #include "wx/evtloop.h"
 
 #ifdef __WINDOWS__

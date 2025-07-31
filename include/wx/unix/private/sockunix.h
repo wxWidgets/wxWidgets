@@ -11,7 +11,8 @@
 #ifndef _WX_UNIX_GSOCKUNX_H_
 #define _WX_UNIX_GSOCKUNX_H_
 
-#include <unistd.h>
+#include "wx/private/sockettype.h"
+
 #include <sys/ioctl.h>
 
 // Under older (Open)Solaris versions FIONBIO is declared in this header only.
@@ -22,8 +23,6 @@
 #endif
 
 #include "wx/private/fdiomanager.h"
-
-#define wxCloseSocket close
 
 class wxSocketImplUnix : public wxSocketImpl,
                          public wxFDIOHandler
