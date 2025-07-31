@@ -228,6 +228,26 @@ public:
     };
 
     /**
+        Special timeout values.
+
+        Can be used as argument when calling wxWebRequest::SetTimeouts().
+
+        @since 3.3.2
+    */
+    enum Timeout
+    {
+        /**
+            Use the default value for the current timeout and implementation.
+        */
+        Timeout_Default,
+
+        /**
+            Set the timeout to infinite (No timeout).
+        */
+        Timeout_Infinite
+    };
+
+    /**
         Default constructor creates an invalid object.
 
         Initialize it by assigning wxWebSession::CreateRequest() to it before
@@ -421,6 +441,41 @@ public:
         server.
     */
     void SetStorage(Storage storage);
+
+    /**
+        Set the timeouts for the connection and data exchange time.
+
+        @param connectionTimeoutMs
+            Maximum time in milliseconds allowed for connection to the server.
+            For WinHTTP backend, this timeout is used for both the server name
+            resolution and the connection establishment. For libcurl backend,
+            this timeout is used for the complete connection establishment,
+            including name resolution.
+        @param dataTimeoutMs
+            The exact meaning of this parameter depends on the implementation:
+            for WinHTTP backend, it is the maximum time allowed for each read
+            or write operation. For libcurl backend it is the total time for
+            the entire operation, not counting the connection establishment
+            time.
+
+        @note Use wxWebRequest::Timeout_Default to set the timeout to the
+            default value (default depends on implementation). Use
+            wxWebRequest::Timeout_Infinite to set an infinite timeout.
+
+        @remarks The default timeout values vary depending on implementation:
+            - For WinHTTP backend, default connection timeout is infinite while
+              data timeout is 30 seconds.
+            - For CURL backend, default connection timeout is 5 minutes and
+              there is no data timeout.
+
+        @see Timeout
+
+        @note This function is currently not implemented for macOS backend and
+            does nothing when it is called when using it.
+
+        @since 3.3.2
+    */
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
         Flags for disabling security features.
@@ -874,6 +929,41 @@ public:
          */
         Ignore_All = Ignore_Certificate | Ignore_Host
     };
+
+    /**
+        Set the timeouts for the connection and data exchange time.
+
+        @param connectionTimeoutMs
+            Maximum time in milliseconds allowed for connection to the server.
+            For WinHTTP backend, this timeout is used for both the server name
+            resolution and the connection establishment. For libcurl backend,
+            this timeout is used for the complete connection establishment,
+            including name resolution.
+        @param dataTimeoutMs
+            The exact meaning of this parameter depends on the implementation:
+            for WinHTTP backend, it is the maximum time allowed for each read
+            or write operation. For libcurl backend it is the total time for
+            the entire operation, not counting the connection establishment
+            time.
+
+        @note Use wxWebRequest::Timeout_Default to set the timeout to the
+            default value (default depends on implementation). Use
+            wxWebRequest::Timeout_Infinite to set an infinite timeout.
+
+        @remarks The default timeout values vary depending on implementation:
+            - For WinHTTP backend, default connection timeout is infinite while
+              data timeout is 30 seconds.
+            - For CURL backend, default connection timeout is 5 minutes and
+              there is no data timeout.
+
+        @see Timeout
+
+        @note This function is currently not implemented for macOS backend and
+            does nothing when it is called when using it.
+
+        @since 3.3.2
+    */
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
         Make connection insecure by disabling security checks.
