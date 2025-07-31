@@ -211,6 +211,8 @@ public:
 
     void SetStorage(Storage storage);
 
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
+
     Storage GetStorage() const;
 
     wxWebResponse GetResponse() const;

@@ -423,6 +423,26 @@ public:
     void SetStorage(Storage storage);
 
     /**
+        Sets the timeouts in milliseconds for the webrequest.
+
+        @param connectionTimeoutMs
+            Maximum time in milliseconds allowed for name resolution and connection to the server.
+        @param dataTimeoutMs
+            Maximum time in milliseconds allowed to send and to receive data.
+
+        @note On Linux those parameters can't be distinguish. They are added to form one value used to set
+        the maximum time in seconds that you allow the entire transfer operation to take. The whole thing, from start to end.
+
+        @remarks The default timeouts may vary depending on Implementation.
+            For more details take a look at the natives function (@ref descriptions).
+            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
+            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_TIMEOUT_MS option.
+            - For macOS backend, this is not implemented yet.
+
+    */
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
+
+    /**
         Flags for disabling security features.
 
         @since 3.3.0
@@ -874,6 +894,25 @@ public:
          */
         Ignore_All = Ignore_Certificate | Ignore_Host
     };
+
+    /**
+        Sets the timeouts in milliseconds for the webrequest.
+
+        @param connectionTimeoutMs
+            Maximum time in milliseconds allowed for name resolution and connection to the server.
+        @param dataTimeoutMs
+            Maximum time in milliseconds allowed to send and to receive data.
+
+        @note On Linux those parameters can't be distinguish. They are added to form one value.
+
+        @remarks The default timeouts may vary depending on Implementation.
+            For more details take a look at the natives function (@ref descriptions).
+            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
+            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_TIMEOUT_MS option.
+            - For macOS backend, this is not implemented yet.
+
+    */
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
         Make connection insecure by disabling security checks.
