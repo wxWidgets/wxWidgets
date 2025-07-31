@@ -559,6 +559,17 @@ macro(wx_lib_include_directories name)
         list(APPEND wxMONO_INCLUDE_DIRS ${ARGN})
         set(wxMONO_INCLUDE_DIRS ${wxMONO_INCLUDE_DIRS} PARENT_SCOPE)
     else()
+        target_include_directories(${name} PRIVATE ${ARGN})
+    endif()
+endmacro()
+
+# Same as wx_lib_include_directories() but prepends the given directories to
+# the include path instead of appending them.
+macro(wx_lib_include_directories_before name)
+    if(wxBUILD_MONOLITHIC)
+        list(PREPEND wxMONO_INCLUDE_DIRS ${ARGN})
+        set(wxMONO_INCLUDE_DIRS ${wxMONO_INCLUDE_DIRS} PARENT_SCOPE)
+    else()
         target_include_directories(${name} BEFORE PRIVATE ${ARGN})
     endif()
 endmacro()
@@ -712,6 +723,7 @@ function(wx_print_thirdparty_library_summary)
     foreach(entry IN LISTS wxTHIRD_PARTY_LIBRARIES)
         if(NOT var_name)
             set(var_name ${entry})
+            string(APPEND wxTHIRD_PARTY_SUMMARY_NOW "${var_name}=${${var_name}}-")
         else()
             string(LENGTH ${var_name} len)
             if(len GREATER nameLength)
@@ -724,6 +736,15 @@ function(wx_print_thirdparty_library_summary)
             set(var_name)
         endif()
     endforeach()
+
+    # Avoid printing out the message if we're being reconfigured and nothing
+    # has changed since the previous run, so check if the current summary
+    # differs from the cached value.
+    if("${wxTHIRD_PARTY_SUMMARY_NOW}" STREQUAL "${wxTHIRD_PARTY_SUMMARY}")
+        return()
+    endif()
+    set(wxTHIRD_PARTY_SUMMARY ${wxTHIRD_PARTY_SUMMARY_NOW} CACHE INTERNAL "internal summary of 3rd party libraries used by wxWidgets")
+
     math(EXPR nameLength "${nameLength}+1") # account for :
 
     set(message "Which libraries should wxWidgets use?\n")
@@ -1023,6 +1044,15 @@ function(wx_option name desc)
             message(FATAL_ERROR "Invalid value \"${${name}}\" for option ${name}. Valid values are: ${avail_values}")
         endif()
     endif()
+endfunction()
+
+# A convenient wrapper for wx_option() for an option set to AUTO by default but
+# also allowing ON and OFF values, with AUTO meaning that the option is set to
+# ON if possible (e.g. required support for it is detected) and turned OFF with
+# just a warning otherwise, while ON means that an error is given if it can't
+# be enabled.
+function(wx_option_auto name desc)
+    wx_option(${name} ${desc} AUTO STRINGS ON OFF AUTO)
 endfunction()
 
 # Force a new value for an option created with wx_option

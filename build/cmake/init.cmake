@@ -400,6 +400,11 @@ if(UNIX)
         # have GNOME libsecret under Unix to be able to compile this class.
         find_package(LIBSECRET)
         if(NOT LIBSECRET_FOUND)
+            if(wxUSE_SECRETSTORE STREQUAL ON)
+                message(FATAL_ERROR "wxSecretStore support requested, but libsecret was not found: either install it or don't set wxUSE_SECRETSTORE to ON")
+            endif()
+
+            # wxUSE_SECRETSTORE must be AUTO, continue with a warning.
             message(WARNING "libsecret not found, wxSecretStore won't be available")
             wx_option_force_value(wxUSE_SECRETSTORE OFF)
         endif()

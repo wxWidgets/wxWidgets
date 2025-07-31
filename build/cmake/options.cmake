@@ -16,7 +16,7 @@ wx_option(wxBUILD_TESTS "Build console tests (CONSOLE_ONLY) or ALL" OFF
     STRINGS CONSOLE_ONLY ALL OFF)
 wx_option(wxBUILD_DEMOS "Build demos" OFF)
 wx_option(wxBUILD_BENCHMARKS "Build benchmarks" OFF)
-wx_option(wxBUILD_LOCALES "Build locales" AUTO STRINGS ON OFF AUTO)
+wx_option_auto(wxBUILD_LOCALES "Build locales")
 mark_as_advanced(wxBUILD_LOCALES)
 wx_option(wxBUILD_PRECOMP "Use precompiled headers" ON STRINGS ON OFF COTIRE)
 mark_as_advanced(wxBUILD_PRECOMP)
@@ -95,7 +95,7 @@ mark_as_advanced(wxBUILD_INSTALL_PDB)
 
 # Use the MSVC/makefile naming convention, or the configure naming convention,
 # this is the same check as used in FindwxWidgets.
-wx_option(wxBUILD_WIN32_MSVC_NAMING "Force the MSVC / makefile.[gcc/vc] naming convention" AUTO STRINGS ON OFF AUTO)
+wx_option_auto(wxBUILD_WIN32_MSVC_NAMING "Force the MSVC / makefile.[gcc/vc] naming convention")
 mark_as_advanced(wxBUILD_WIN32_MSVC_NAMING)
 if(wxBUILD_WIN32_MSVC_NAMING STREQUAL "AUTO")
     if(MSVC)
@@ -121,7 +121,7 @@ if(NOT WIN32)
 endif()
 wx_option(wxUSE_STD_STRING_CONV_IN_WXSTRING "provide implicit conversions to std::wstring and std::string in wxString" OFF)
 wx_option(wxUSE_UNSAFE_WXSTRING_CONV "provide unsafe implicit conversions in wxString to const char* or std::string")
-wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducable build" OFF)
+wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducible build" OFF)
 
 # ---------------------------------------------------------------------------
 # external libraries
@@ -221,7 +221,7 @@ wx_option(wxUSE_GEOMETRY "use geometry class")
 wx_option(wxUSE_LOG "use logging system")
 wx_option(wxUSE_MIMETYPE "use wxMimeTypesManager")
 wx_option(wxUSE_PRINTF_POS_PARAMS "use wxVsnprintf() which supports positional parameters")
-wx_option(wxUSE_SECRETSTORE "use wxSecretStore class")
+wx_option_auto(wxUSE_SECRETSTORE "use wxSecretStore class")
 wx_option(wxUSE_SNGLINST_CHECKER "use wxSingleInstanceChecker class")
 wx_option(wxUSE_SOUND "use wxSound class")
 wx_option(wxUSE_SPELLCHECK "enable spell checking in wxTextCtrl")
