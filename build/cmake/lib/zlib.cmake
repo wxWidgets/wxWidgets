@@ -27,7 +27,7 @@ if(wxUSE_ZLIB STREQUAL "builtin")
         src/zlib/uncompr.c
         src/zlib/zutil.c
     )
-    if(WIN32)
+    if(MSVC)
         # Define this to get rid of many warnings about using open(),
         # read() and other POSIX functions in zlib code. This is much
         # more convenient than having to modify it to avoid them.
