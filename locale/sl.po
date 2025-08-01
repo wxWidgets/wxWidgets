@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2023-09-14 22:55+0200\n"
+"PO-Revision-Date: 2025-08-01 19:17+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
-"n%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
 "X-Generator: Poedit 2.2.1\n"
 
@@ -841,7 +841,6 @@ msgstr "POSEBNO"
 
 # common/utilscmn.cpp:464
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Krmilka"
 
@@ -1212,8 +1211,8 @@ msgstr "Tvorba poročila o razhroščevanju ni uspela."
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
-"Obdelava poročila o razhroščevanju ni uspela, datoteke so ostale v mapi "
-"\"%s\"."
+"Obdelava poročila o razhroščevanju ni uspela, datoteke so ostale v mapi \"%s"
+"\"."
 
 #: ../src/common/debugrpt.cpp:573
 msgid "A debug report has been generated. It can be found in"
@@ -1572,28 +1571,26 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" Poleg tega je bila obstoječa prilagoditvena datoteka preimenovana v »%s« in "
+"je ni bilo mogoče preimenovati nazaj; preimenujte jo v prvotno pot »%s«"
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "in vsebuje naslednje datoteke:\n"
+msgstr " zaradi naslednje napake:\n"
 
 # common/ffile.cpp:182
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "Branje besedilne datoteke »%s« ni uspelo."
+msgstr "preimenovanje obstoječe datoteke ni uspelo"
 
 # generic/dirdlgg.cpp:550
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "Delovne mape ni mogoče pridobiti."
+msgstr "Ustvarjanje nove mape datoteke ni uspelo"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "Nastavitev spletnega pogleda na sodobno raven emulacije ni uspela"
+msgstr "premik datoteke na novo mesto ni uspel"
 
 # common/fileconf.cpp:319
 #: ../src/common/fileconf.cpp:462
@@ -1661,9 +1658,8 @@ msgstr "Vstopno konfiguracijsko ime se ne more začeti s »%c«."
 
 # common/fileconf.cpp:800
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "Predmeta prilagoditve pisave ni mogoče ustvariti."
+msgstr "Ustvarjanje mape prilagoditvene datoteke ni uspelo."
 
 # common/fileconf.cpp:800
 #: ../src/common/fileconf.cpp:1158
@@ -2572,7 +2568,7 @@ msgstr "Glava DIB: kodiranje se ne ujema z bitno globino."
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "Glava BMP: Neveljavno število barv (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2847,45 +2843,42 @@ msgstr "TIFF: napaka pri zapisovanju slike."
 
 # common/imagtiff.cpp:291
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: napaka pri shranjevanju slike."
+msgstr "TIFF: Napaka pri izpraznjenju podatkov."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: Neveljavni podatki (funkcij ni bilo mogoče pridobiti)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: Dodeljevanje slikovnega pomnilnika ni uspelo."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: Dekodiranje slikovnih podatkov RGBA ni uspelo."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: Dekodiranje slikovnih podatkov RGB ni uspelo."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: Dodeljevanje medpomnilnika toka ni uspelo."
 
 # msw/clipbrd.cpp:300
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "Neuspešno določanje podatkov za odložišče."
+msgstr "WebP: Razčlenjevanje podatkov vsebnika ni uspelo."
 
 # generic/dirdlgg.cpp:552
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "Napaka pri branju konfiguracijskih možnosti."
+msgstr "WebP: Napaka pri dekodiranju animacije."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: Napaka pri pridobivanju naslednje sličice animacije."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -4562,16 +4555,18 @@ msgid "Error: %s (%d)"
 msgstr "Napaka: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "Za prenos ni dovolj prostora na disku."
+msgstr ""
+"Za prenos ni dovolj prostora na disku: zahtevanih je %llu, na voljo je le "
+"%llu."
 
 # generic/dirdlgg.cpp:550
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "Začasnega imena datoteke ni mogoče ustvariti."
+msgstr "Začasne datoteke v %s ni mogoče ustvariti"
 
 # common/textcmn.cpp:94
 #: ../src/common/webrequest_curl.cpp:1106
@@ -4593,37 +4588,37 @@ msgstr "Napaka pri izvajanju JavaScripta: %s"
 #
 # msw/registry.cpp:399
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "Mape »%s« ni mogoče ustvariti."
+msgstr "Ni bilo mogoče nastaviti posrednika »%s«: %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromiuma ni mogoče uporabiti, ker libcef.so ni bil naložen dovolj zgodaj; "
+"ponovno povežite aplikacijo ali uporabite LD_PRELOAD, da jo naložite prej."
 
 # msw/app.cpp:252
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "Inicializacija OLE ni možna"
+msgstr "Inicializacija Chrome je spodletela"
 
 #: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
-msgstr ""
+msgstr "Pokaži DevTools"
 
 # common/prntbase.cpp:359
 # generic/progdlgg.cpp:307
 # generic/proplist.cpp:518
 #: ../src/common/webview_chromium.cpp:1617
-#, fuzzy
 msgid "Close DevTools"
-msgstr "Zapri vse"
+msgstr "Zapri DevTools"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "Preuči"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -5051,13 +5046,12 @@ msgstr "Desno"
 #, c-format
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
-msgstr ""
+msgstr "»%s« ni v pričakovani datumski obliki, vnesite ga kot npr. »%s«."
 
 # common/imagpcx.cpp:470
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "PCX: neveljavna slika"
+msgstr "Neveljaven datum"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -5556,36 +5550,37 @@ msgid ""
 "Error copying grid to the clipboard. Either selected cells were not "
 "contiguous or no cell was selected."
 msgstr ""
+"Napaka pri kopiranju mreže v odložišče. Izbrane celice niso bile sosednje "
+"ali pa ni bila izbrana nobena celica."
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "Oglišče"
+msgstr "Oglišče mreže"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "Stolpec %u"
+msgstr "Glava stolpca %s"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "Glava vrstice %s"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "Stolpec %u"
+msgstr "Stolpec %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "Vrstica %i"
+msgstr "Vrstica %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "Vrstica %s, stolpec %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -6072,33 +6067,32 @@ msgstr "Otrok MDI"
 
 # msw/dde.cpp:401
 #: ../src/gtk/power.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr "Povezava s strežnikom »%s« na temo »%s« ni uspela."
+msgstr "Ni bilo mogoče odpreti povezave D-Bus z upraviteljem prijav: %s"
 
 # generic/dirdlgg.cpp:191
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "Skrij program"
+msgstr "Program wxWidgets"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "Program mora še naprej delovati"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "Počisti pred ustavitvijo"
 
 # msw/dialup.cpp:933
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "Inicializacija klicne povezave ni uspela: %s"
+msgstr "Nedejavnega načina ni uspelo preprečiti: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "Nepričakovan odziv na zahtevo »Inhibit« D-Busa."
 
 # html/helpfrm.cpp:899
 #: ../src/gtk/print.cpp:218
@@ -6106,9 +6100,9 @@ msgid "Custom size"
 msgstr "Velikost po meri"
 
 #: ../src/gtk/print.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "Napaka pri tiskanju: "
+msgstr "Napaka pri tiskanju: %s"
 
 # generic/prntdlgg.cpp:604
 #: ../src/gtk/print.cpp:816
@@ -6123,10 +6117,12 @@ msgstr "Pridobivanje izhoda skripta JavaScript ni podprto z WebKit v1"
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"WebKit ne podpira nastavitve posrednika, potrebna je vsaj različica 2.16."
 
 #: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
 msgstr ""
+"Ta program je bil preveden brez podpore za nastavitev posrednika WebKit."
 
 #: ../src/gtk/window.cpp:6289
 msgid ""
@@ -6148,8 +6144,8 @@ msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
 msgstr ""
-"Program je bil preveden z zastarelo različico GTK+, ponovno ga zgradite z "
-"GTK+ 2.12 ali novejšim."
+"Program je bil preveden z zastarelo različico GTK+, ponovno ga zgradite z GTK"
+"+ 2.12 ali novejšim."
 
 # generic/dirdlgg.cpp:550
 #: ../src/html/chm.cpp:138
@@ -6611,9 +6607,9 @@ msgstr ": datoteka ne obstaja!"
 # html/htmprint.cpp:490
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " Predogled"
+msgstr " Predogled %s"
 
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
@@ -6985,11 +6981,11 @@ msgstr ""
 
 #: ../src/msw/filedlg.cpp:1241
 msgid "Access to the file system is not allowed from secure desktop."
-msgstr ""
+msgstr "Dostop do datotečnega sistema ni dovoljen z varnega namizja."
 
 #: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "Varnostno opozorilo"
 
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
@@ -7583,7 +7579,7 @@ msgstr "Nalaganje ikone z »%s« ni možno."
 
 #: ../src/msw/webview_edge.cpp:285
 msgid "This program was compiled without support for setting Edge proxy."
-msgstr ""
+msgstr "Ta program je bil preveden brez podpore za nastavitev posrednika Edge."
 
 #: ../src/msw/webview_ie.cpp:1010
 msgid "Failed to find web view emulation level in the registry"
@@ -7663,8 +7659,8 @@ msgstr "Datoteka pisave »%s« ne obstaja."
 #: ../src/osx/fontutil.cpp:88
 #, c-format
 msgid ""
-"Font file \"%s\" cannot be used as it is not inside the font directory "
-"\"%s\"."
+"Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
+"\"."
 msgstr ""
 "Datoteke pisave »%s« ni mogoče uporabiti, saj je ni v mapi pisave »%s«."
 
@@ -8220,7 +8216,7 @@ msgstr "Izberite datoteko"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&Tlakuj"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -10582,9 +10578,9 @@ msgstr "Napaka razčlenjevanja XML: '%s' v vrstici %d"
 
 # common/prntbase.cpp:731
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "Stran %d"
+msgstr "Stran %i"
 
 # common/ffile.cpp:101
 #: ../src/xrc/xmlres.cpp:448
@@ -10608,103 +10604,3 @@ msgstr "Ni mogoče naložiti virov iz datoteke »%s«."
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Ustvarjanje %s »%s« ni uspelo."
-
-#, c-format
-#~ msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-#~ msgstr "BMP: glava ima biClrUsed=%d, ko je biBitCount=%d."
-
-#~ msgctxt "keyboard key"
-#~ msgid "Alt+"
-#~ msgstr "Izmenjalka-"
-
-# common/utilscmn.cpp:464
-#~ msgctxt "keyboard key"
-#~ msgid "Ctrl+"
-#~ msgstr "Krmilka-"
-
-# common/utilscmn.cpp:468
-#~ msgctxt "keyboard key"
-#~ msgid "Shift+"
-#~ msgstr "Dvigalka-"
-
-# common/utilscmn.cpp:464
-#~ msgctxt "keyboard key"
-#~ msgid "RawCtrl+"
-#~ msgstr "SurovaKrmilka-"
-
-#~ msgid "Copying more than one selected block to clipboard is not supported."
-#~ msgstr "Kopiranje več kot enega izbranega bloka na odložišče ni podprto."
-
-# msw/clipbrd.cpp:268
-# msw/clipbrd.cpp:369
-#~ msgid "Unsupported clipboard format."
-#~ msgstr "Nepodprta oblika zapisa za odložišče."
-
-#~ msgid "Background colour"
-#~ msgstr "Barva ozadja"
-
-# html/helpfrm.cpp:899
-#~ msgid "Font:"
-#~ msgstr "Pisava:"
-
-# generic/filedlgg.cpp:534
-#~ msgid "Size:"
-#~ msgstr "Velikost:"
-
-# html/helpfrm.cpp:899
-#~ msgid "The font size in points."
-#~ msgstr "Velikost pisave v točkah."
-
-#~ msgid "Style:"
-#~ msgstr "Slog:"
-
-#~ msgid "Check to make the font bold."
-#~ msgstr "Označite za krepko pisavo."
-
-#~ msgid "Check to make the font italic."
-#~ msgstr "Označite za ležečo pisavo."
-
-#~ msgid "Check to make the font underlined."
-#~ msgstr "Označite za podčrtano pisavo."
-
-#~ msgid "Colour:"
-#~ msgstr "Barva:"
-
-#~ msgid "Click to change the font colour."
-#~ msgstr "Kliknite za spremembo barve pisave."
-
-#~ msgid "Shows a preview of the font."
-#~ msgstr "Pokaže predogled pisave."
-
-#~ msgid "Click to cancel changes to the font."
-#~ msgstr "Kliknite za preklic sprememb pisave."
-
-#~ msgid "Click to confirm changes to the font."
-#~ msgstr "Kliknite za potrditev sprememb pisave."
-
-#~ msgid "<Any>"
-#~ msgstr "<poljubna>"
-
-# generic/fontdlgg.cpp:206
-#~ msgid "<Any Roman>"
-#~ msgstr "<poljubna serifna>"
-
-# generic/fontdlgg.cpp:207
-#~ msgid "<Any Decorative>"
-#~ msgstr "<poljubna okrasna>"
-
-# generic/fontdlgg.cpp:208
-#~ msgid "<Any Modern>"
-#~ msgstr "<poljubna sodobna>"
-
-# generic/fontdlgg.cpp:209
-#~ msgid "<Any Script>"
-#~ msgstr "<poljubna pisana>"
-
-# generic/fontdlgg.cpp:210
-#~ msgid "<Any Swiss>"
-#~ msgstr "<poljubna neserifna>"
-
-# generic/fontdlgg.cpp:211
-#~ msgid "<Any Teletype>"
-#~ msgstr "<poljubna strojna>"
