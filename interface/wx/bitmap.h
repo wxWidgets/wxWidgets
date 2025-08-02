@@ -949,29 +949,6 @@ public:
                           const wxPalette* palette = nullptr) const;
 
     /**
-         @deprecated This function is deprecated since version 3.1.2, dimensions
-            and depth can only be set at construction time.
-
-        Sets the depth member (does not affect the bitmap data).
-
-        @param depth
-            Bitmap depth.
-
-    */
-    virtual void SetDepth(int depth);
-
-    /**
-        @deprecated This function is deprecated since version 3.1.2, dimensions
-            and depth can only be set at construction time.
-
-        Sets the height member (does not affect the bitmap data).
-
-        @param height
-            Bitmap height in pixels.
-    */
-    virtual void SetHeight(int height);
-
-    /**
         Sets the bitmap scale factor.
 
         This doesn't change the bitmap actual size or its contents, but changes
@@ -1010,17 +987,6 @@ public:
         @see wxPalette
     */
     virtual void SetPalette(const wxPalette& palette);
-
-    /**
-        @deprecated This function is deprecated since version 3.1.2, dimensions
-            and depth can only be set at construction time.
-
-        Sets the width member (does not affect the bitmap data).
-
-        @param width
-            Bitmap width in pixels.
-    */
-    virtual void SetWidth(int width);
 
     /**
         Enable or disable use of alpha channel in this bitmap.
