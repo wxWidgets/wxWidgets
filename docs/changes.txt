@@ -285,6 +285,7 @@ wxOSX:
 - Fix crash on startup when using Farsi as system language (#25561).
 - Do not activate "Close" button on Cmd-C (nobugshere, #25346).
 - Fix memory leak in wxColour::Set() (#25569).
+- Fix regression with configure build under macOS < 12 (#25675).
 
 
 3.2.8.1: (released 2025-05-25)
