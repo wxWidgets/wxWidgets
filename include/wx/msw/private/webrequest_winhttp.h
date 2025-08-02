@@ -85,6 +85,8 @@ public:
 
     void Start() override;
 
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs) override;
+
     wxWebResponseImplPtr GetResponse() const override
         { return m_response; }
 
@@ -120,6 +122,7 @@ private:
     // returned later and this argument must be null.
     wxNODISCARD Result DoWriteData(DWORD* bytesWritten = nullptr);
 
+    void DoSetTimeouts();
 
     wxWebSessionWinHTTP& m_sessionImpl;
     wxString m_url;
@@ -139,6 +142,12 @@ private:
     // Proxy credentials (if any) are stored in the session, but we need store
     // the same flag for them as for the server credentials here.
     bool m_tryProxyCredentials = false;
+
+    // Store timeouts, in order to set these before sending request.
+    bool m_isTimeoutsSet = false;
+    long m_connectionTimeoutMs = 60000;
+    long m_dataTimeoutMs = 30000;
+
 
 
     wxNODISCARD Result SendRequest();
