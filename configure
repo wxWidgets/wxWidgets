@@ -31839,18 +31839,26 @@ if ${wx_cv_elf_symver_multiple+:} false; then :
 else
 
                     echo "lib_new {}; lib_old { *; };" >conftest.sym
+                    ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
                     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
                             #include "wx/private/elfversion.h"
-                            wxELF_SYMVER("foo","foo@lib_old")
-                            wxELF_SYMVER("foo","foo@@lib_new")
+                            extern "C" {
+                            wxELF_SYMVER("_foo","_foo@lib_old")
+                            wxELF_SYMVER("_foo","_foo@@lib_new")
                             void foo() {}
+                            }
                             int main() { return 0; }
 
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   wx_cv_elf_symver_multiple=yes
 else
   wx_cv_elf_symver_multiple=no
@@ -31858,6 +31866,12 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+                    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
                     rm -f conftest.sym
 
 
@@ -31875,17 +31889,25 @@ if ${wx_cv_elf_symver+:} false; then :
 else
 
                         echo "lib_new {}; lib_old { *; };" >conftest.sym
+                        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
                         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
                                 #include "wx/private/elfversion.h"
-                                wxELF_SYMVER("foo","foo@@lib_new")
+                                extern "C" {
+                                wxELF_SYMVER("_foo","_foo@@lib_new")
                                 void foo() {}
+                                }
                                 int main() { return 0; }
 
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   wx_cv_elf_symver=yes
 else
   wx_cv_elf_symver=no
@@ -31893,6 +31915,12 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
+                        ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
                         rm -f conftest.sym
 
 
