@@ -3627,17 +3627,15 @@ if test "$wxUSE_SHARED" = "yes"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
             cat <<EOF >change-install-names
 #!/bin/sh
-libnames=\`cd lib ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
+libnames=\$(cd lib ; ls -1 libwx*${WX_RELEASE}.dylib)
 changes=''
 for dep in \${libnames} ; do
-    changes="\${changes} -change \${4}/\${dep} \${3}/\${dep}"
+    target=\$(readlink -f \${4}/\${dep})
+    changes="\${changes} -change \${target} \${3}/\${dep}"
 done
 for i in \${libnames} ; do
-    if test -L \${1}/\${i}; then
-        # skip symbolic links
-        continue
-    fi
-    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${1}/\${i}
+    lib=\$(readlink -f \${1}/\${i})
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${lib}
 done
 
 if test -f "\${2}/wxrc-${WX_RELEASE}" ; then
