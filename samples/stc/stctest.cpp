@@ -38,6 +38,11 @@
 #include "edit.h"        // Edit module
 #include "prefs.h"       // Prefs
 
+// Used by wxStyledTextCtrlMap
+#include "wx/dcgraph.h"
+#include "wx/overlay.h"
+#include "wx/splitter.h"
+
 //----------------------------------------------------------------------------
 // resources
 //----------------------------------------------------------------------------
@@ -96,8 +101,11 @@ private:
     AppFrame* m_frame;
 
     wxFrame* MinimalEditor();
+    void ShowDocumentMap(wxWindow* parent);
+
 protected:
     void OnMinimalEditor(wxCommandEvent&);
+    void OnDocumentMap(wxCommandEvent&);
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -186,6 +194,7 @@ wxIMPLEMENT_APP(App);
 
 wxBEGIN_EVENT_TABLE(App, wxApp)
 EVT_MENU(myID_WINDOW_MINIMAL, App::OnMinimalEditor)
+EVT_MENU(myID_WINDOW_DOCMAP, App::OnDocumentMap)
 wxEND_EVENT_TABLE()
 
 //----------------------------------------------------------------------------
@@ -609,6 +618,7 @@ void AppFrame::CreateMenu ()
     // Window menu
     wxMenu *menuWindow = new wxMenu;
     menuWindow->Append(myID_WINDOW_MINIMAL, _("&Minimal editor"));
+    menuWindow->Append(myID_WINDOW_DOCMAP, _("Document &map\tF2"));
 
     // Help menu
     wxMenu *menuHelp = new wxMenu;
@@ -878,3 +888,413 @@ void App::OnMinimalEditor(wxCommandEvent& WXUNUSED(event))
     MinimalEditor();
 }
 
+// Editor with a document map.
+
+constexpr const char* wxTRACE_STC_MAP = "stcmap";
+
+class wxStyledTextCtrlMap : public wxStyledTextCtrl
+{
+public:
+    wxStyledTextCtrlMap(wxWindow* parent, wxStyledTextCtrl* edit)
+        : wxStyledTextCtrl(parent),
+          m_edit(edit)
+    {
+        // Use the same document as the main editor.
+        auto* const doc = edit->GetDocPointer();
+        edit->AddRefDocument(doc);
+        SetDocPointer(doc);
+
+        // The map is used as as the scrollbar, so the editor doesn't need it.
+        edit->SetUseVerticalScrollBar(false);
+
+        // Making the map read-only apparently makes the document read-only, so
+        // undo this for the original control (doing nothing if it already was
+        // read-only anyhow).
+        auto const wasReadOnly = edit->GetReadOnly();
+        SetReadOnly(true);
+        edit->SetReadOnly(wasReadOnly);
+
+        // Copy the main editor attributes.
+        SetLexer(edit->GetLexer());
+        for ( int style = 0; style < wxSTC_STYLE_MAX; ++style )
+        {
+            // There is probably no need to set the font for the map: at such
+            // size, all fonts are indistinguishable.
+            StyleSetForeground(style, edit->StyleGetForeground(style));
+            StyleSetBackground(style, edit->StyleGetBackground(style));
+            StyleSetBold(style, edit->StyleGetBold(style));
+            StyleSetItalic(style, edit->StyleGetItalic(style));
+            StyleSetUnderline(style, edit->StyleGetUnderline(style));
+            StyleSetCase(style, edit->StyleGetCase(style));
+        }
+
+        SetWrapMode(edit->GetWrapMode());
+        SetWrapVisualFlags(edit->GetWrapVisualFlags());
+        SetWrapVisualFlagsLocation(edit->GetWrapVisualFlagsLocation());
+        SetWrapIndentMode(edit->GetWrapIndentMode());
+        SetWrapStartIndent(edit->GetWrapStartIndent());
+
+        // Configure the map appearance.
+        SetZoom(-10 /* maximum zoom out level */);
+        SetExtraDescent(-1); // Compress the lines even more.
+        SetCaretStyle(wxSTC_CARETSTYLE_INVISIBLE);
+        SetMarginCount(0);
+        SetIndentationGuides(wxSTC_IV_NONE);
+        UsePopUp(wxSTC_POPUP_NEVER);
+        SetUseHorizontalScrollBar(false);
+        SetCursor(wxCURSOR_ARROW);
+
+        // Scroll the editor when the map is scrolled.
+        Bind(wxEVT_STC_UPDATEUI, &wxStyledTextCtrlMap::OnMapUpdate, this);
+
+        // But also update the map when the editor changes.
+        edit->Bind(wxEVT_STC_UPDATEUI, &wxStyledTextCtrlMap::OnEditUpdate, this);
+
+        // And also when the height changes.
+        edit->Bind(wxEVT_SIZE, [this](wxSizeEvent& event) {
+            SyncMapPosition();
+            event.Skip();
+        });
+
+        // Handle mouse events for dragging the visible zone indicator.
+        Bind(wxEVT_LEFT_DOWN, &wxStyledTextCtrlMap::OnLeftDown, this);
+
+        Bind(wxEVT_MOTION, [this](wxMouseEvent& event) {
+            if ( event.LeftIsDown() && IsDragging() )
+                DoDrag(event.GetPosition());
+        });
+
+        Bind(wxEVT_LEFT_UP, [this](wxMouseEvent& WXUNUSED(event)) {
+            if ( IsDragging() )
+                DoStopDragging();
+        });
+
+        Bind(wxEVT_MOUSE_CAPTURE_LOST, [this](wxMouseCaptureLostEvent& WXUNUSED(event)) {
+            DoStopDragging();
+        });
+
+        // Draw our overlay over the map.
+        Bind(wxEVT_PAINT, [this](wxPaintEvent& event) {
+            // Normally we shouldn't call the base class event handler directly
+            // like this, but here we really want to draw the text before
+            // calling our DrawVisibleZone().
+            wxStyledTextCtrl::OnPaint(event);
+
+            // While dragging the visible zone is shown in an overlay.
+            if ( !IsDragging() )
+            {
+                wxPaintDC dc(this);
+
+                // We need to use wxGraphicsContext to draw the translucent
+                // rectangle.
+                wxGCDC gcdc(dc);
+                DrawVisibleZone(gcdc);
+            }
+        });
+
+        SyncMapPosition();
+        SyncSelection();
+
+        wxLogTrace(wxTRACE_STC_MAP, "Edit line height: %d, map: %d",
+                   m_edit->TextHeight(0), TextHeight(0));
+    }
+
+    virtual ~wxStyledTextCtrlMap()
+    {
+        if ( IsDragging() )
+            DoStopDragging();
+    }
+
+private:
+    int GetMapLineHeight() const
+    {
+        // Note that the line index doesn't matter, as the height is the same
+        // for all of them.
+        return TextHeight(0);
+    }
+
+    // Get map line at the given mouse position.
+    int GetMapLineAtPoint(const wxPoint& pos) const
+    {
+        return LineFromPosition(PositionFromPoint(pos));
+    }
+
+    // Update our internal variable and set the first visible line in the map.
+    void DoUpdateMapFirstVisibleLine(int firstLine)
+    {
+        m_mapFirstLine = firstLine;
+
+        SetFirstVisibleLine(firstLine);
+    }
+
+    // Get the valid editor first line corresponding to the desired one but
+    // adjusted for bounds.
+    int GetEditValidFirstLine(int firstLine) const
+    {
+        if ( firstLine < 0 )
+            return 0;
+
+        auto const lastValid = GetLineCount() - m_edit->LinesOnScreen();
+        if ( firstLine > lastValid )
+            return lastValid;
+
+        return firstLine;
+    }
+
+    // Scroll the editor to correspond to the current position in the map.
+    void SyncEditPosition()
+    {
+        auto const change = GetFirstVisibleLine() - m_mapFirstLine;
+        if ( !change )
+            return;
+
+        m_mapFirstLine += change;
+
+        m_edit->SetFirstVisibleLine(m_edit->GetFirstVisibleLine() + change);
+    }
+
+    // Scroll the map to correspond to the current position in the editor.
+    void SyncMapPosition()
+    {
+        // We want the physical position of the visible zone in the map window
+        // to show the position of the currently visible part of the document,
+        // as the scrollbar thumb does, which means, as mapFirst is 0 when
+        // editorFirst is 0, that they must be proportional:
+        //
+        //                  mapFirst = α * editorFirst
+        //
+        // And the coefficient of proportionality α is given by considering
+        // that the last possible values of the editor first line must be
+        // mapped to the last valid position of the thumb, which is half thumb
+        // size less than the map height, giving
+        //
+        //             totalLines - mapHeight / mapLineHeight
+        //         α = --------------------------------------
+        //                totalLines - editorVisibleLines
+
+        // First check for the special case when all lines are visible.
+        auto const editorVisibleLines = m_edit->LinesOnScreen();
+        auto const totalLines = GetLineCount();
+        if ( editorVisibleLines >= totalLines )
+        {
+            DoUpdateMapFirstVisibleLine(0);
+            return;
+        }
+
+        float const mapLineHeight = GetMapLineHeight();
+        auto const mapHeight = GetClientSize().y;
+        auto const editorFirst = m_edit->GetFirstVisibleLine();
+
+        DoUpdateMapFirstVisibleLine
+        (
+            editorFirst * (totalLines - mapHeight / mapLineHeight) /
+                          (totalLines - editorVisibleLines)
+        );
+
+        Refresh();
+    }
+
+    void DrawVisibleZone(wxDC& dc)
+    {
+        auto const mapLineHeight = GetMapLineHeight();
+
+        // TODO: Don't hardcode the colour.
+        dc.SetBrush(wxColour(0x80, 0x80, 0x80, 0x40));
+        dc.SetPen(*wxTRANSPARENT_PEN);
+
+        // Height of the highlight is proportional to the height of the visible
+        // part of the editor.
+        dc.DrawRectangle
+           (
+                0,
+                (m_edit->GetFirstVisibleLine() - m_mapFirstLine)*mapLineHeight,
+                GetClientSize().GetWidth(),
+                m_edit->LinesOnScreen()*mapLineHeight
+           );
+    }
+
+    // Show the same selection in the map as in the editor.
+    void SyncSelection()
+    {
+        SetSelectionStart(m_edit->GetSelectionStart());
+        SetSelectionEnd(m_edit->GetSelectionEnd());
+    }
+
+    void OnEditUpdate(wxStyledTextEvent& event)
+    {
+        if ( event.GetUpdated() & wxSTC_UPDATE_V_SCROLL )
+        {
+            auto const editorFirst = m_edit->GetFirstVisibleLine();
+            wxLogTrace(wxTRACE_STC_MAP, "Visible edit lines: %d..%d",
+                       editorFirst,
+                       editorFirst + m_edit->LinesOnScreen() - 1);
+
+            SyncMapPosition();
+        }
+
+        if ( event.GetUpdated() & wxSTC_UPDATE_SELECTION )
+            SyncSelection();
+
+        if ( event.GetUpdated() & wxSTC_UPDATE_CONTENT )
+            Refresh();
+    }
+
+    void OnMapUpdate(wxStyledTextEvent& event)
+    {
+        // We're only interested in scrolling notifications here.
+        if ( !(event.GetUpdated() & wxSTC_UPDATE_V_SCROLL) )
+            return;
+
+        wxLogTrace(wxTRACE_STC_MAP, "Visible map lines: %d..%d",
+                   GetFirstVisibleLine(),
+                   GetFirstVisibleLine() + LinesOnScreen() - 1);
+
+        SyncEditPosition();
+    }
+
+    // Return true if the visible zone indicator is currently being dragged.
+    bool IsDragging() const
+    {
+        return m_dragStartLine != -1;
+    }
+
+    void OnLeftDown(wxMouseEvent& event)
+    {
+        auto const line = GetMapLineAtPoint(event.GetPosition());
+
+        auto const editorFirst = m_edit->GetFirstVisibleLine();
+        auto const visibleLines = m_edit->LinesOnScreen();
+
+        // If the line is in the visible zone indicator, start dragging it.
+        if ( line >= editorFirst && line < editorFirst + visibleLines )
+        {
+            StartDragging(line);
+        }
+
+        // The clicked line becomes the center of the visible zone indicator.
+        // unless it's too close to the top or bottom of the map.
+        auto const
+            editorNew = GetEditValidFirstLine(line - (visibleLines + 1) / 2);
+
+        if ( editorNew != editorFirst )
+        {
+            wxLogTrace(wxTRACE_STC_MAP, "Editor first %d -> %d",
+                       editorFirst, editorNew);
+            m_edit->SetFirstVisibleLine(editorNew);
+            SyncMapPosition();
+
+            Refresh();
+        }
+    }
+
+    // Called when the user starts dragging at the given position but only
+    // starts dragging if this position is inside the visible zone indicator.
+    void StartDragging(int line)
+    {
+        m_dragStartLine = line;
+        m_dragLineOffset = line - m_edit->GetFirstVisibleLine();
+        wxLogTrace(wxTRACE_STC_MAP, "Start dragging line %d (offset=%d)",
+                   m_dragStartLine, m_dragLineOffset);
+
+        SetCursor(wxCURSOR_HAND);
+        CaptureMouse();
+
+        // This is required by wxMSW to ensure that the map shows from behind
+        // the overlay and does nothing elsewhere.
+        m_overlay.SetOpacity(0x80);
+
+        wxOverlayDC dc(m_overlay, this);
+        dc.Clear();
+        DrawVisibleZone(dc);
+
+        Refresh();
+    }
+
+    // Called while dragging the visible zone indicator.
+    void DoDrag(const wxPoint& pos)
+    {
+        auto const currentLine = GetMapLineAtPoint(pos);
+        auto const
+            firstLine = GetEditValidFirstLine(currentLine - m_dragLineOffset);
+
+        wxLogTrace(wxTRACE_STC_MAP, "Editor first line %d -> %d",
+                   m_edit->GetFirstVisibleLine(), firstLine);
+        m_edit->SetFirstVisibleLine(firstLine);
+        SyncMapPosition();
+
+        wxOverlayDC dc(m_overlay, this);
+        dc.Clear();
+        DrawVisibleZone(dc);
+    }
+
+    // Called when we stop dragging, either because the mouse button was
+    // released or because the mouse capture was lost.
+    void DoStopDragging()
+    {
+        m_dragStartLine = -1;
+
+        SetCursor(wxCURSOR_ARROW);
+        ReleaseMouse();
+
+        m_overlay.Reset();
+
+        Refresh();
+    }
+
+
+    // The associated main document control.
+    wxStyledTextCtrl* const m_edit;
+
+    // First line shown in the map before the last scroll events.
+    //
+    // Call DoUpdateMapFirstVisibleLine() to set it to ensure that it's always
+    // in sync with the actual first visible line.
+    int m_mapFirstLine = 0;
+
+    // Overlay showing the visible zone indicator being dragged.
+    wxOverlay m_overlay;
+
+    // The line where the user started the dragging operation, or -1 if there
+    // is no dragging in progress.
+    int m_dragStartLine = -1;
+
+    // Offset of the line being dragged from the first visible editor line.
+    int m_dragLineOffset = 0;
+
+
+    wxDECLARE_NO_COPY_CLASS(wxStyledTextCtrlMap);
+};
+
+void App::ShowDocumentMap(wxWindow* parent)
+{
+    wxDialog dialog(parent, wxID_ANY, "Editor with Document Map",
+                    wxDefaultPosition,
+                    wxWindow::FromDIP(wxSize(800, 600), m_frame),
+                    wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+
+    auto* const splitter = new wxSplitterWindow(&dialog, wxID_ANY);
+
+    auto* const edit = new Edit(splitter);
+    edit->LoadFile("stctest.cpp");
+
+    // Show line numbers and hide the other margins not used here.
+    edit->SetMarginWidth(0, dialog.GetTextExtent("9999").x);
+    edit->SetMarginWidth(1, 0);
+    edit->SetMarginWidth(2, 0);
+
+    auto* const map = new wxStyledTextCtrlMap(splitter, edit);
+
+    splitter->SplitVertically(edit, map);
+
+    dialog.Bind(wxEVT_SIZE, [&](wxSizeEvent& event) {
+        splitter->SetSashPosition(-dialog.FromDIP(200));
+        event.Skip();
+    });
+
+    dialog.ShowModal();
+}
+
+void App::OnDocumentMap(wxCommandEvent& WXUNUSED(event))
+{
+    ShowDocumentMap(m_frame);
+}
