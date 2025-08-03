@@ -4444,7 +4444,7 @@ public:
     bool GetEndAtLastLine() const;
 
     // Retrieve the height of a particular line of text in pixels.
-    int TextHeight(int line);
+    int TextHeight(int line) const;
 
     // Show or hide the vertical scroll bar.
     void SetUseVerticalScrollBar(bool visible);

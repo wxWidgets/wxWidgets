@@ -3925,7 +3925,7 @@ public:
     /**
         Retrieve the height of a particular line of text in pixels.
     */
-    int TextHeight(int line);
+    int TextHeight(int line) const;
 
     /**
         Move the caret inside current view if it's not there already.

@@ -2551,7 +2551,7 @@ bool wxStyledTextCtrl::GetEndAtLastLine() const
 }
 
 // Retrieve the height of a particular line of text in pixels.
-int wxStyledTextCtrl::TextHeight(int line)
+int wxStyledTextCtrl::TextHeight(int line) const
 {
     return SendMsg(SCI_TEXTHEIGHT, line, 0);
 }
