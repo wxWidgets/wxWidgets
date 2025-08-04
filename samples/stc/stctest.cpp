@@ -1098,8 +1098,11 @@ private:
     {
         auto const mapLineHeight = GetMapLineHeight();
 
+        // We need to use a different opacity here when not using wxMSW (which
+        // sets the opacity for the overlay globally).
+        //
         // TODO: Don't hardcode the colour.
-        dc.SetBrush(wxColour(0x80, 0x80, 0x80, 0x40));
+        dc.SetBrush(wxColour(0x80, 0x80, 0x80, IsDragging() ? 0x80 : 0x40));
         dc.SetPen(*wxTRANSPARENT_PEN);
 
         // Height of the highlight is proportional to the height of the visible
