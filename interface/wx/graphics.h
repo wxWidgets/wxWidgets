@@ -731,6 +731,8 @@ public:
         This can be useful for applying a tilt to your drawing
         commands or for drawing radial patterns.
 
+        @note A positive angle will rotate clockwise, negative counterclockwise.
+
         @param angle
             Rotation angle in radians, clockwise.
 
