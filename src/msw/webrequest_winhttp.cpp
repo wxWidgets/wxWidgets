@@ -154,6 +154,11 @@ wxWinHTTP::WinHttpSetTimeouts_t wxWinHTTP::WinHttpSetTimeouts;
 #define WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2 0x00000800
 #endif
 
+// Define default timeouts constant
+#define WINHTTP_DEFAULT_RESOLVE_TIMEOUT 0
+#define WINHTTP_DEFAULT_CONNECT_TIMEOUT 60000
+#define WINHTTP_DEFAULT_DATA_TIMEOUT 30000
+
 namespace
 {
 
@@ -540,8 +545,7 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
     if ( !result )
         return result;
 
-    if (m_isTimeoutsSet)
-        DoSetTimeouts();
+    DoSetTimeouts();
 
     // This loop executes until we exhaust all authentication possibilities: we
     // may need to authenticate with the proxy first and then with the server
@@ -734,8 +738,7 @@ void wxWebRequestWinHTTP::Start()
     if ( !CheckResult(DoPrepareRequest()) )
         return;
 
-    if (m_isTimeoutsSet)
-        DoSetTimeouts();
+    DoSetTimeouts();
 
     // Register callback
     if ( wxWinHTTP::WinHttpSetStatusCallback
@@ -761,19 +764,25 @@ void wxWebRequestWinHTTP::Start()
 void wxWebRequestWinHTTP::SetTimeouts(long connectionTimeoutMs,
                                       long dataTimeoutMs)
 {
-    m_isTimeoutsSet = true;
     m_connectionTimeoutMs = connectionTimeoutMs;
     m_dataTimeoutMs = dataTimeoutMs;
 }
 
 void wxWebRequestWinHTTP::DoSetTimeouts()
 {
-    if (!wxWinHTTP::WinHttpSetTimeouts(
+    int resolveTimeoutMs = m_connectionTimeoutMs == wxWebRequest::Timeout_Default ?
+        WINHTTP_DEFAULT_RESOLVE_TIMEOUT : m_connectionTimeoutMs;
+    int connectionTimeoutMs = m_connectionTimeoutMs == wxWebRequest::Timeout_Default ?
+        WINHTTP_DEFAULT_CONNECT_TIMEOUT : m_connectionTimeoutMs;
+    int dataTimeoutMs = m_dataTimeoutMs == wxWebRequest::Timeout_Default ?
+        WINHTTP_DEFAULT_DATA_TIMEOUT : m_dataTimeoutMs;
+
+    if ( !wxWinHTTP::WinHttpSetTimeouts(
         m_request,
-        m_connectionTimeoutMs,
-        m_connectionTimeoutMs,
-        m_dataTimeoutMs,
-        m_dataTimeoutMs))
+        resolveTimeoutMs,
+        connectionTimeoutMs,
+        dataTimeoutMs,
+        dataTimeoutMs) )
     {
         wxLogTrace(wxTRACE_WEBREQUEST,
                    "Error while setting timeout. Error code: %d", ::GetLastError());

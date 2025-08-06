@@ -330,7 +330,6 @@ void wxWebRequestURLSession::Start()
 void wxWebRequestURLSession::SetTimeouts(long WXUNUSED(connectionTimeoutMs),
                                          long WXUNUSED(dataTimeoutMs))
 {
-    wxFAIL_MSG(wxT("Unimplemented"));
 }
 
 void wxWebRequestURLSession::DoCancel()
