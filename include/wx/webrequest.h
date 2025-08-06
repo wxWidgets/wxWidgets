@@ -194,6 +194,12 @@ public:
         wxString error;
     };
 
+    enum Timeout
+    {
+        Timeout_Default = -1,
+        Timeout_Infinite = 0
+    };
+
     bool IsOk() const { return m_impl.get() != nullptr; }
 
     void SetHeader(const wxString& name, const wxString& value);

@@ -50,6 +50,9 @@
     #define CURLOPT_ACCEPT_ENCODING CURLOPT_ENCODING
 #endif
 
+// Define libcurl timeout constants
+# define LIBCURL_DEFAULT_CONNECT_TIMEOUT 300000
+
 //
 // wxWebResponseCURL
 //
@@ -527,7 +530,34 @@ void wxWebRequestCURL::Start()
 void wxWebRequestCURL::SetTimeouts(long connectionTimeoutMs,
                                    long dataTimeoutMs)
 {
-    long timeout = connectionTimeoutMs + dataTimeoutMs;
+    long timeout;
+    connectionTimeoutMs = connectionTimeoutMs == wxWebRequest::Timeout_Default ?
+        LIBCURL_DEFAULT_CONNECT_TIMEOUT : connectionTimeoutMs;
+
+    if ( connectionTimeoutMs == wxWebRequest::Timeout_Infinite )
+        connectionTimeoutMs = LONG_MAX;
+
+    if ( dataTimeoutMs == wxWebRequest::Timeout_Infinite ||
+         dataTimeoutMs == wxWebRequest::Timeout_Default )
+    {
+        timeout = wxWebRequest::Timeout_Infinite;
+    }
+    else
+    {
+        // Checking if connectionTimeoutMs + dataTimeoutMs will overflow.
+        long overflowDiff = LONG_MAX - connectionTimeoutMs;
+        if ( dataTimeoutMs > overflowDiff )
+        {
+            wxLogTrace(wxTRACE_WEBREQUEST,
+                "Timeout overflow, using default value LONG_MAX.");
+            timeout = LONG_MAX;
+        }
+        else
+            timeout = connectionTimeoutMs + dataTimeoutMs;
+    }
+
+    wxCURLSetOpt(m_handle, CURLOPT_CONNECTTIMEOUT_MS, connectionTimeoutMs);
+
     wxCURLSetOpt(m_handle, CURLOPT_TIMEOUT_MS, timeout);
 }
 

@@ -144,9 +144,8 @@ private:
     bool m_tryProxyCredentials = false;
 
     // Store timeouts, in order to set these before sending request.
-    bool m_isTimeoutsSet = false;
-    long m_connectionTimeoutMs = 60000;
-    long m_dataTimeoutMs = 30000;
+    long m_connectionTimeoutMs = wxWebRequest::Timeout_Default;
+    long m_dataTimeoutMs = wxWebRequest::Timeout_Default;
 
 
 
