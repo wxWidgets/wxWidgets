@@ -2228,6 +2228,7 @@ OSX_IPHONE_SRC =
     $(OSX_COMMON_SRC)
     src/generic/regiong.cpp
     src/osx/core/sound.cpp
+    src/osx/core/bmpbndl.mm
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
     src/osx/iphone/checkbox.mm

@@ -105,7 +105,6 @@
 #undef wxUSE_ABOUTDLG
 #undef wxUSE_STATLINE
 #undef wxUSE_COLLPANE
-#undef wxUSE_STATBMP
 #undef wxUSE_STATBOX
 #undef wxUSE_RADIOBTN
 #undef wxUSE_RADIOBOX
@@ -117,7 +116,6 @@
 #define wxUSE_ABOUTDLG 0
 #define wxUSE_STATLINE 0
 #define wxUSE_COLLPANE 0
-#define wxUSE_STATBMP 0
 #define wxUSE_STATBOX 0
 #define wxUSE_RADIOBTN 0
 #define wxUSE_RADIOBOX 0
