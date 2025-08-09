@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/log.h"
 
 @interface wxUIPickerView : UIPickerView<UIPickerViewDelegate,UIPickerViewDataSource>
 {
@@ -83,6 +84,12 @@
     [self selectRow:v inComponent:0 animated:NO];
 }
 
+- (void) pickerView: (UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent: (NSInteger)component
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( pickerView );
+    wxChoice *choice = (wxChoice*) impl->GetWXPeer();
+    choice->SendSelectionChangedEvent(wxEVT_CHOICE);
+}
 
 
 @end
@@ -117,6 +124,11 @@ public:
     {
         wxCFStringRef cftext(text);
         [((wxUIPickerView*)m_osxView).rows replaceObjectAtIndex:pos withObject:cftext.AsNSString()];
+    }
+
+    wxInt32 GetValue() const override
+    {
+        return [((wxUIPickerView*)m_osxView) selectedRowInComponent:0 ];
     }
 
 private:
