@@ -130,7 +130,6 @@
 #undef wxUSE_COMBOCTRL
 #undef wxUSE_ODCOMBOBOX
 #undef wxUSE_BITMAPCOMBOBOX
-#undef wxUSE_BMPBUTTON
 #undef wxUSE_CHECKLISTBOX
 #undef wxUSE_GRID
 #undef wxUSE_LISTBOX
@@ -161,7 +160,6 @@
 #define wxUSE_COMBOCTRL 0
 #define wxUSE_ODCOMBOBOX 0
 #define wxUSE_BITMAPCOMBOBOX 0
-#define wxUSE_BMPBUTTON 0
 #define wxUSE_CHECKLISTBOX 0
 #define wxUSE_GRID 0
 #define wxUSE_LISTBOX 0
