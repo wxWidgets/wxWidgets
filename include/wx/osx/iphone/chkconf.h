@@ -85,11 +85,6 @@
 #define wxUSE_CARET 0
 #endif
 
-#if wxUSE_CHOICE
-#undef wxUSE_CHOICE
-#define wxUSE_CHOICE 0
-#endif
-
 #if wxUSE_COMBOBOX
 #undef wxUSE_COMBOBOX
 #define wxUSE_COMBOBOX 0
@@ -193,10 +188,8 @@
 #undef wxUSE_LOGWINDOW
 #undef wxUSE_LOG_DIALOG
 #undef wxUSE_LISTBOOK
-#undef wxUSE_CHOICEBOOK
 #undef wxUSE_TREEBOOK
 #undef wxUSE_TOOLBOOK
-#undef wxUSE_CHOICEDLG
 #undef wxUSE_HELP
 #undef wxUSE_PROGRESSDLG
 #undef  wxUSE_FONTDLG
@@ -216,10 +209,8 @@
 #define wxUSE_LOGWINDOW 0
 #define wxUSE_LOG_DIALOG 0
 #define wxUSE_LISTBOOK 0
-#define wxUSE_CHOICEBOOK 0
 #define wxUSE_TREEBOOK 0
 #define wxUSE_TOOLBOOK 0
-#define wxUSE_CHOICEDLG 0
 #define wxUSE_HELP 0
 #define wxUSE_PROGRESSDLG 0
 #define  wxUSE_FONTDLG 0

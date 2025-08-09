@@ -11,6 +11,7 @@
 #define _WX_SIMPLEBOOK_H_
 
 #include "wx/compositebookctrl.h"
+#include "wx/choicebk.h"
 
 #if wxUSE_BOOKCTRL
 
