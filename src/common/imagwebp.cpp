@@ -230,8 +230,8 @@ bool wxWEBPHandler::LoadAnimation(std::vector<wxWebPAnimationFrame>& frames, wxI
 
     while (WebPAnimDecoderHasMoreFrames(decoder.get()))
     {
-        uint8_t* buf;
-        int timestamp;
+        uint8_t* buf = nullptr;
+        int timestamp = 0;
         WebPAnimDecoderGetNext(decoder.get(), &buf, &timestamp);
         if (buf == nullptr)
         {
