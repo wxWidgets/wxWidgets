@@ -24,6 +24,8 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
+#include "wx/artprov.h"
+#include "wx/stattext.h"
 
 namespace
 {
@@ -59,6 +61,19 @@ bool wxFrame::Create(wxWindow *parent,
 {
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
+
+#ifdef __WXOSX_IPHONE__
+    if (parent != NULL) {
+        // We are on the next screen, provide a back button and title
+        wxToolBar *tb = CreateToolBar();
+        tb->AddTool( wxID_CLOSE, _("Back"), wxArtProvider::GetBitmap( wxART_GO_BACK ) );
+        tb->AddStretchableSpace();
+        tb->AddStretchableSpace();
+        tb->AddControl( new wxStaticText( tb, -1, title ) );
+        tb->AddStretchableSpace();
+        tb->AddStretchableSpace();
+    }
+#endif
 
     return true;
 }
