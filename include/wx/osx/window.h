@@ -94,6 +94,7 @@ public:
     virtual int GetCharWidth() const override;
 
 public:
+    virtual void DoSetVirtualSize( int x, int y ) override;
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true ) override;
     virtual void SetScrollPos( int orient, int pos, bool refresh = true ) override;

@@ -104,6 +104,8 @@ public :
     wxInt32             GetMaximum() const;
     int                 GetIncrement() const { return 1; }
     void                PulseGauge();
+    void                SetVirtualSize( int x, int y );
+    int                 GetScrollPos(int orient) const;
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
     void                SetFont(const wxFont & font);
@@ -225,12 +227,11 @@ protected :
 
     @end
 
-    @interface wxUIView : UIView
+    @interface wxUIView : UIScrollView
     {
     }
 
     @end // wxUIView
-
 
     void WXDLLIMPEXP_CORE wxOSXIPhoneClassAddWXMethods(Class c);
 
