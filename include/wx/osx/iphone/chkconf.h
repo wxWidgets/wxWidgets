@@ -116,10 +116,6 @@
 #define wxUSE_RADIOBOX 0
 #define wxUSE_TOGGLEBTN 0
 
-#undef wxUSE_HTML
-
-#define wxUSE_HTML 0
-
 #undef wxUSE_RICHTEXT
 #define wxUSE_RICHTEXT 0
 
