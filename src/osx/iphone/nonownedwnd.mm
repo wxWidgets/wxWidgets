@@ -13,6 +13,7 @@
 
 #include "wx/nonownedwnd.h"
 #include "wx/frame.h"
+#include "wx/settings.h"
 #include <algorithm>
 
 CGRect wxToNSRect(UIView* parent, const wxRect& r )

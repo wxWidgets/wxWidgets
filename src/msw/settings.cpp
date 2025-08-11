@@ -265,7 +265,11 @@ static const int gs_metricsMap[] =
     -1,   // wxSYS_DCLICK_MSEC - not available as system metric
     -1,   // wxSYS_CARET_ON_MSEC - not available as system metric
     -1,   // wxSYS_CARET_OFF_MSEC - not available as system metric
-    -1    // wxSYS_CARET_TIMEOUT_MSEC - not available as system metric
+    -1,   // wxSYS_CARET_TIMEOUT_MSEC - not available as system metric
+    -1,   // wxSYS_DEVICE_AREA_TOP
+    -1,   // wxSYS_DEVICE_AREA_BOTTOM
+    -1,   // wxSYS_DEVICE_AREA_LEFT
+    -1    // wxSYS_DEVICE_AREA_RIGHT
 };
 
 // Get a system metric, e.g. scrollbar size
@@ -273,6 +277,15 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* win)
 {
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
                  wxT("invalid metric") );
+
+    if  ((index == wxSYS_DEVICE_AREA_TOP) ||
+         (index == wxSYS_DEVICE_AREA_BOTTOM) ||
+         (index == wxSYS_DEVICE_AREA_LEFT) ||
+         (index == wxSYS_DEVICE_AREA_RIGHT)) {
+        // change this if MSW will run on a smartphone and mainwindow can be
+        // partially hidden by statusbar, camera hole or onscreen keyboard...
+        return 0;
+    }
 
     if ( index == wxSYS_DCLICK_MSEC )
     {

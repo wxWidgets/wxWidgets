@@ -230,6 +230,20 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUN
             // but rather rely on the 'click-count' by the system delivered in a mouse event
             return 500;
 
+        case wxSYS_DEVICE_AREA_TOP:
+            // UIKit UIApplication statusBarFrame is now deprecated 
+            // Todo, find a way to find the safe area not covered
+            return 44;
+
+        case wxSYS_DEVICE_AREA_BOTTOM:
+            // change this to dynamically look for screen keyboards
+            return 20;
+
+        case wxSYS_DEVICE_AREA_LEFT:
+        case wxSYS_DEVICE_AREA_RIGHT:
+            // change this to dynamically look for screen keyboards
+            return 0;
+
         default:
             return -1;  // unsupported metric
     }

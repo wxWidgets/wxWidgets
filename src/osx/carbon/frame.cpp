@@ -387,8 +387,9 @@ void wxFrame::PositionToolBar()
         else
         {
 #if !wxOSX_USE_NATIVE_TOOLBAR
+            int spaceAtTheTop = wxSystemSettings::GetMetric( wxSYS_DEVICE_AREA_TOP, NULL );
             // Use the 'real' position
-            GetToolBar()->SetSize(tx , ty , cw , th, wxSIZE_NO_ADJUSTMENTS );
+            GetToolBar()->SetSize(tx , ty+spaceAtTheTop, cw , th, wxSIZE_NO_ADJUSTMENTS );
 #endif
         }
     }

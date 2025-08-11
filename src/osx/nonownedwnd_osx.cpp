@@ -251,8 +251,16 @@ bool wxNonOwnedWindow::OSXShowWithEffect(bool show,
 
 wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const
 {
-    int left, top, width, height;
-    m_nowpeer->GetContentArea(left, top, width, height);
+    int left, top, w, h;
+    // under iphone with a translucent status bar the m_nowpeer returns the
+    // inner area, while the content area extends under the translucent
+    // status bar, therefore we use the content view's area
+#ifdef __WXOSX_IPHONE__
+    // GetPeer()->GetContentArea(left, top, w, h);
+    m_nowpeer->GetContentArea(left, top, w, h);
+#else
+    m_nowpeer->GetContentArea(left, top, w, h);
+#endif
     return wxPoint(left, top);
 }
 
@@ -469,7 +477,8 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
     // inner area, while the content area extends under the translucent
     // status bar, therefore we use the content view's area
 #ifdef __WXOSX_IPHONE__
-    GetPeer()->GetContentArea(left, top, w, h);
+    // GetPeer()->GetContentArea(left, top, w, h);
+    m_nowpeer->GetContentArea(left, top, w, h);
 #else
     m_nowpeer->GetContentArea(left, top, w, h);
 #endif

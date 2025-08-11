@@ -340,6 +340,13 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* WXUN
              // On MacOS X, carets don't stop blinking after user interactions.
              return -1;
 
+        case wxSYS_DEVICE_AREA_TOP:
+        case wxSYS_DEVICE_AREA_BOTTOM:
+        case wxSYS_DEVICE_AREA_LEFT:
+        case wxSYS_DEVICE_AREA_RIGHT:
+            // change this if OSX will run on a smartphone
+            return 0;
+
         default:
             break;
     }
