@@ -237,8 +237,15 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
 
 @end // wxUIView
 
+typedef void (*wxOSX_touchEventHandlerPtr)(UIView* self, SEL _cmd, NSSet* touches, UIEvent *event );
+
 void wxOSX_touchEvent(UIView* self, SEL _cmd, NSSet* touches, UIEvent *event )
 {
+    // Call the superclass handler first as that is e.g. handling mouse events for UISegementedControls
+    wxOSX_touchEventHandlerPtr superimpl = 
+        (wxOSX_touchEventHandlerPtr) [[self superclass] instanceMethodForSelector:_cmd];
+    superimpl(self, _cmd, touches, event );
+
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == nullptr)
         return;
@@ -813,8 +820,14 @@ void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf
 
 void wxWidgetIPhoneImpl::controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent)
 {
-    if ( controlEvent == UIControlEventTouchUpInside )
+    if ( controlEvent == UIControlEventTouchUpInside ) 
+    {
         GetWXPeer()->OSXHandleClicked(0);
+    } else 
+    if ( controlEvent == UIControlEventValueChanged )
+    {
+        GetWXPeer()->OSXHandleClicked(0);
+    }
 }
 
 void wxWidgetIPhoneImpl::controlTextDidChange()
