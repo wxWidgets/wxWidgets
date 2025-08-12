@@ -122,6 +122,8 @@ typedef wxString wxArtID;
 #define wxART_REFRESH              wxART_MAKE_ART_ID(wxART_REFRESH)
 #define wxART_STOP                 wxART_MAKE_ART_ID(wxART_STOP)
 
+#define wxART_PREV_SCREEN          wxART_MAKE_ART_ID(wxART_PREV_SCREEN)
+
 // ----------------------------------------------------------------------------
 // wxArtProvider class
 // ----------------------------------------------------------------------------

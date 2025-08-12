@@ -93,6 +93,8 @@ const char* wxART_EDIT;
 
 const char* wxART_WX_LOGO;
 
+const char* wxART_PREV_SCREEN;
+
 
 /**
     @class wxArtProvider
@@ -212,6 +214,7 @@ const char* wxART_WX_LOGO;
      @li @c wxART_CDROM
      @li @c wxART_REMOVABLE
      @li @c wxART_WX_LOGO (since 3.1.6)
+     @li @c wxART_PREV_SCREEN (since 3.1.6)
     </td></tr>
     </table>
 

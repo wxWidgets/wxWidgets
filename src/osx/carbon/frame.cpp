@@ -51,6 +51,10 @@ wxEND_EVENT_TABLE()
 // creation/destruction
 // ----------------------------------------------------------------------------
 
+#ifdef __WXOSX_IPHONE__
+   #include "../../../art/prev_screen.xpm"
+#endif
+
 bool wxFrame::Create(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
@@ -66,8 +70,9 @@ bool wxFrame::Create(wxWindow *parent,
     if (parent != NULL) {
         // We are on the next screen, provide a back button and title
         wxToolBar *tb = CreateToolBar();
-        tb->AddTool( wxID_CLOSE, _("Back"), wxArtProvider::GetBitmap( wxART_GO_BACK ) );
-        tb->AddStretchableSpace();
+        // tb->AddTool( wxID_CLOSE, wxEmptyString, wxArtProvider::GetBitmap(wxART_PREV_SCREEN) ); doesn't work for some reason
+        tb->AddTool( wxID_CLOSE, wxEmptyString, wxBitmap( prev_screen_xpm ) );
+        tb->AddStretchableSpace();  // doesn't yet stretch on iOS, so at least at two
         tb->AddStretchableSpace();
         tb->AddControl( new wxStaticText( tb, -1, title ) );
         tb->AddStretchableSpace();

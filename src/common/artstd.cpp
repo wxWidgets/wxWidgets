@@ -123,6 +123,8 @@ protected:
 #include "../../art/fullscreen.xpm"
 #include "../../art/edit.xpm"
 
+#include "../../art/prev_screen.xpm"
+
 #ifdef wxHAS_SVG
     #include "../../art/wxlogo_svg.cpp"
 #endif // wxHAS_SVG
@@ -192,6 +194,7 @@ wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
     ART(wxART_FULL_SCREEN,                         fullscreen)
     ART(wxART_NEW,                                 new)
     ART(wxART_EDIT,                                edit)
+    ART(wxART_PREV_SCREEN,                         prev_screen)
 
 
     return wxNullBitmap;
