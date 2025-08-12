@@ -804,8 +804,12 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
         return E_INVALIDARG;
     }
 
-    // the only one allowed by current COM implementation
-    if ( pformatetc->lindex != -1 ) {
+    // the only ones allowed by current COM implementation
+    static UINT cfFileContents = ::RegisterClipboardFormat(CFSTR_FILECONTENTS);
+    if (
+        (pformatetc->cfFormat != cfFileContents && pformatetc->lindex != -1) ||
+        (pformatetc->cfFormat == cfFileContents && pformatetc->lindex != 0)
+    ) {
         wxLogTrace(wxTRACE_OleCalls,
                    wxT("wxIDataObject::QueryGetData: bad lindex %ld"),
                    pformatetc->lindex);
