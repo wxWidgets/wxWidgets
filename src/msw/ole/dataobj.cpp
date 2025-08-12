@@ -609,6 +609,18 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
         return hr;
     }
 
+    if ((pformatetcIn->tymed & (TYMED_HGLOBAL | TYMED_ISTREAM)) == TYMED_ISTREAM) {
+        IStream* stream = NULL;
+        hr = CreateStreamOnHGlobal(pmedium->hGlobal, TRUE, &stream);
+        if (FAILED(hr)) {
+            GlobalFree(pmedium->hGlobal);
+            return hr;
+        }
+        ZeroMemory(pmedium, sizeof(STGMEDIUM));
+        pmedium->tymed = TYMED_ISTREAM;
+        pmedium->pstm = stream;
+    }
+
     return S_OK;
 }
 
@@ -805,11 +817,7 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
     }
 
     // the only ones allowed by current COM implementation
-    static UINT cfFileContents = ::RegisterClipboardFormat(CFSTR_FILECONTENTS);
-    if (
-        (pformatetc->cfFormat != cfFileContents && pformatetc->lindex != -1) ||
-        (pformatetc->cfFormat == cfFileContents && pformatetc->lindex != 0)
-    ) {
+    if (pformatetc->lindex != -1 && pformatetc->lindex != 0) {
         wxLogTrace(wxTRACE_OleCalls,
                    wxT("wxIDataObject::QueryGetData: bad lindex %ld"),
                    pformatetc->lindex);
