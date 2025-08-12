@@ -610,7 +610,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
     }
 
     if ((pformatetcIn->tymed & (TYMED_HGLOBAL | TYMED_ISTREAM)) == TYMED_ISTREAM) {
-        IStream* stream = NULL;
+        IStream* stream = nullptr;
         hr = CreateStreamOnHGlobal(pmedium->hGlobal, TRUE, &stream);
         if (FAILED(hr)) {
             GlobalFree(pmedium->hGlobal);
