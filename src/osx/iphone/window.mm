@@ -322,8 +322,8 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWidgetIPhoneImpl , wxWidgetImpl);
 
-wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags ) :
-    wxWidgetImpl( peer, flags ), m_osxView(w)
+wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags, void *c ) :
+    wxWidgetImpl( peer, flags ), m_osxView(w), m_controller(c)
 {
 }
 

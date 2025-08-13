@@ -32,6 +32,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/log.h"
 
 // ============================================================================
 // wxEventLoop implementation
@@ -133,10 +134,39 @@ wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 
 void wxModalEventLoop::OSXDoRun()
 {
-    // presentModalViewController:animated:
+    wxNonOwnedWindow *parent = dynamic_cast<wxNonOwnedWindow*>( m_modalWindow->GetParent() );
+    wxASSERT_MSG( parent != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    wxWidgetIPhoneImpl *parentImpl = (wxWidgetIPhoneImpl*) parent->GetPeer();
+    UIViewController *parentController = (UIViewController *) parentImpl->GetController();
+    wxASSERT_MSG( parentController != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    wxWidgetIPhoneImpl *impl = (wxWidgetIPhoneImpl*) m_modalWindow->GetPeer();
+    UIViewController *controller = (UIViewController *) impl->GetController();
+    wxASSERT_MSG( controller != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    // [controller setModalPresentationStyle: UIModalPresentationPageSheet];
+    // [controller setModalInPresentation: YES];
+    [parentController presentViewController: controller animated: YES completion: nil ];
 }
 
 void wxModalEventLoop::OSXDoStop()
-{
-    // (void)dismissModalViewControllerAnimated:(BOOL)animated
+{    
+    // This never gets called because iOS discourages modal dialogs. Instead the same 
+    // code in dialog_osx.cpp gets called. I leave this here in case someone manages
+    // to create a local CFRunLoop in wxDialog::ShowModal(), also in dialog_osx.cpp
+    /*
+    wxNonOwnedWindow *parent = dynamic_cast<wxNonOwnedWindow*>( m_modalWindow->GetParent() );
+    wxASSERT_MSG( parent != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    wxWidgetIPhoneImpl *parentImpl = (wxWidgetIPhoneImpl*) parent->GetPeer();
+    UIViewController *parentController = (UIViewController *) parentImpl->GetController();
+    wxASSERT_MSG( parentController != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    wxWidgetIPhoneImpl *impl = (wxWidgetIPhoneImpl*) m_modalWindow->GetPeer();
+    UIViewController *controller = (UIViewController *) impl->GetController();
+    wxASSERT_MSG( controller != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    [parentController dismissViewControllerAnimated: YES completion: nil ];
+    */
 }

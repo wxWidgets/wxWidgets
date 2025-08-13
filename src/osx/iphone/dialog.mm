@@ -19,6 +19,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
+#include "wx/log.h"
 
 extern wxList wxModalDialogs;
 
@@ -31,4 +32,16 @@ void wxDialog::DoShowWindowModal()
 
 void wxDialog::EndWindowModal()
 {
+    wxNonOwnedWindow *parent = dynamic_cast<wxNonOwnedWindow*>( GetParent() );
+    wxASSERT_MSG( parent != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    wxWidgetIPhoneImpl *parentImpl = (wxWidgetIPhoneImpl*) parent->GetPeer();
+    UIViewController *parentController = (UIViewController *) parentImpl->GetController();
+    wxASSERT_MSG( parentController != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    wxWidgetIPhoneImpl *impl = (wxWidgetIPhoneImpl*) GetPeer();
+    UIViewController *controller = (UIViewController *) impl->GetController();
+    wxASSERT_MSG( controller != nullptr, "dialog must have in a toplevel window parent for modal event loop" );
+
+    [parentController dismissViewControllerAnimated: YES completion: nil ];
 }

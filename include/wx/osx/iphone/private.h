@@ -38,7 +38,7 @@ wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0 ) ;
+    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0, void *c = NULL  ) ;
     wxWidgetIPhoneImpl() ;
     ~wxWidgetIPhoneImpl();
 
@@ -126,8 +126,11 @@ public :
 
     virtual void        controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent);
     virtual void         controlTextDidChange();
+
+    void*               GetController() { return m_controller; }
 protected:
-    WXWidget m_osxView;
+    WXWidget          m_osxView;
+    void             *m_controller;
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl);
 };
 
