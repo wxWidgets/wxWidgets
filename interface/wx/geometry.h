@@ -229,7 +229,7 @@ public :
     The rectangle is either defined by the top left and bottom right corner,
     or by the top left corner and size.
 
-    A point is contained within the rectangle if left <= @c @c m_x < right
+    A point is contained within the rectangle if left <= @c m_x < right
     and top <= @c m_y < bottom; thus, it is a half open interval.
 
     @note wxRect2DDouble has subtle differences from wxRect in how its edge
