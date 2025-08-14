@@ -191,7 +191,7 @@ private:
             m_nsPopDownArrowCell = [[NSButtonCell alloc] initImageCell:[NSImage imageNamed: @"NSTokenPopDownArrow"]];
             m_nsPopDownArrowCell.buttonType = NSButtonTypeMomentaryPushIn;
             m_nsPopDownArrowCell.highlightsBy = NSPushInCellMask;
-            m_nsPopDownArrowCell.bezelStyle = NSBezelStylePushDisclosure;
+            m_nsPopDownArrowCell.bezelStyle = NSBezelStyleRoundedDisclosure;
         }
 
         return m_nsPopDownArrowCell;
