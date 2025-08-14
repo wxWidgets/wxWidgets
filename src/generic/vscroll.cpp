@@ -405,7 +405,13 @@ void wxVarScrollHelperBase::UpdateScrollbar()
     }
 
     // set the scrollbar parameters to reflect this
+#ifdef __WXOSX_IPHONE__
+    // can only reasonably scroll vertically on smartphones
+    m_win->SetVirtualSize( -1, unitsPageSize * m_unitMax );
+    m_win->SetScrollPos( wxVERTICAL, m_unitFirst * unitsPageSize );
+#else
     m_win->SetScrollbar(GetOrientation(), m_unitFirst, unitsPageSize, m_unitMax);
+#endif
 }
 
 void wxVarScrollHelperBase::RemoveScrollbar()
