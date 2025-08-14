@@ -100,7 +100,7 @@ public:
 
             UIViewController *subController =[[UIViewController alloc] init];
 
-            wxCFStringRef text( page->GetLabel() );
+            wxCFStringRef text( wxControl::RemoveMnemonics(notebook.GetPageText(i)) );
             UIImage *nbImage = nil;
             const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
             if ( bitmap.IsOk() ) {
