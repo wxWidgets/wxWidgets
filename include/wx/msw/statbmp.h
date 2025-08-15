@@ -132,10 +132,6 @@ private:
     // Flag indicating whether we own m_currentHandle, i.e. should delete it.
     bool m_ownsCurrentHandle;
 
-    // Replace the image at the native control level with the given HBITMAP or
-    // HICON (which can be 0) and destroy the previous image if necessary.
-    void MSWReplaceImageHandle(WXHANDLE handle);
-
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);
     wxDECLARE_EVENT_TABLE();
