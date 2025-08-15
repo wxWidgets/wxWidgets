@@ -19,6 +19,13 @@
             }
         },
         {
+            "name": "with_tests",
+            "hidden": true,
+            "cacheVariables": {
+                "wxBUILD_TESTS": "ALL"
+            }
+        },
+        {
             "name": "msw_base",
             "description": "Base configuration for MSW",
             "hidden": true,
@@ -36,6 +43,15 @@
                 "msw_base"
             ],
             "displayName": "MSW Visual Studio 2022 (with Samples)",
+            "generator": "Visual Studio 17 2022"
+        },
+        {
+            "name": "msw_vc17_tests",
+            "inherits": [
+                "with_tests",
+                "msw_base"
+            ],
+            "displayName": "MSW Visual Studio 2022 (with Tests)",
             "generator": "Visual Studio 17 2022"
         },
         {
@@ -64,6 +80,15 @@
             "generator": "Xcode"
         },
         {
+            "name": "osx_xcode_tests",
+            "inherits": [
+                "with_tests",
+                "osx_base"
+            ],
+            "displayName": "macOS Xcode (with Tests)",
+            "generator": "Xcode"
+        },
+        {
             "name": "osx_xcode",
             "inherits": "osx_base",
             "displayName": "macOS Xcode",
@@ -76,6 +101,15 @@
                 "osx_base"
             ],
             "displayName": "macOS Make (with Samples)",
+            "generator": "Unix Makefiles"
+        },
+        {
+            "name": "osx_make_tests",
+            "inherits": [
+                "with_tests",
+                "osx_base"
+            ],
+            "displayName": "macOS Make (with Tests)",
             "generator": "Unix Makefiles"
         },
         {
