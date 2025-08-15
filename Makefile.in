@@ -5603,11 +5603,14 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_anybutton.o \
 	monodll_iphone_button.o \
 	monodll_iphone_checkbox.o \
+	monodll_iphone_choice.o \
 	monodll_iphone_dialog.o \
 	monodll_iphone_evtloop.o \
 	monodll_iphone_gauge.o \
+	monodll_iphone_listbox.o \
 	monodll_iphone_msgdlg.o \
 	monodll_iphone_nonownedwnd.o \
+	monodll_iphone_notebook.o \
 	monodll_iphone_scrolbar.o \
 	monodll_iphone_slider.o \
 	monodll_iphone_stattext.o \
@@ -7375,11 +7378,14 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_anybutton.o \
 	monolib_iphone_button.o \
 	monolib_iphone_checkbox.o \
+	monolib_iphone_choice.o \
 	monolib_iphone_dialog.o \
 	monolib_iphone_evtloop.o \
 	monolib_iphone_gauge.o \
+	monolib_iphone_listbox.o \
 	monolib_iphone_msgdlg.o \
 	monolib_iphone_nonownedwnd.o \
+	monolib_iphone_notebook.o \
 	monolib_iphone_scrolbar.o \
 	monolib_iphone_slider.o \
 	monolib_iphone_stattext.o \
@@ -9293,11 +9299,14 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_anybutton.o \
 	coredll_iphone_button.o \
 	coredll_iphone_checkbox.o \
+	coredll_iphone_choice.o \
 	coredll_iphone_dialog.o \
 	coredll_iphone_evtloop.o \
 	coredll_iphone_gauge.o \
+	coredll_iphone_listbox.o \
 	coredll_iphone_msgdlg.o \
 	coredll_iphone_nonownedwnd.o \
+	coredll_iphone_notebook.o \
 	coredll_iphone_scrolbar.o \
 	coredll_iphone_slider.o \
 	coredll_iphone_stattext.o \
@@ -10793,11 +10802,14 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_anybutton.o \
 	corelib_iphone_button.o \
 	corelib_iphone_checkbox.o \
+	corelib_iphone_choice.o \
 	corelib_iphone_dialog.o \
 	corelib_iphone_evtloop.o \
 	corelib_iphone_gauge.o \
+	corelib_iphone_listbox.o \
 	corelib_iphone_msgdlg.o \
 	corelib_iphone_nonownedwnd.o \
+	corelib_iphone_notebook.o \
 	corelib_iphone_scrolbar.o \
 	corelib_iphone_slider.o \
 	corelib_iphone_stattext.o \
@@ -16094,6 +16106,9 @@ monodll_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(MONODLL_ODEP)
 monodll_iphone_checkbox.o: $(srcdir)/src/osx/iphone/checkbox.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/checkbox.mm
 
+monodll_iphone_choice.o: $(srcdir)/src/osx/iphone/choice.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/choice.mm
+
 monodll_iphone_dialog.o: $(srcdir)/src/osx/iphone/dialog.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/dialog.mm
 
@@ -16103,11 +16118,17 @@ monodll_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(MONODLL_ODEP)
 monodll_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+monodll_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 monodll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
 
 monodll_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
+
+monodll_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
 
 monodll_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
@@ -20855,6 +20876,9 @@ monolib_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(MONOLIB_ODEP)
 monolib_iphone_checkbox.o: $(srcdir)/src/osx/iphone/checkbox.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/checkbox.mm
 
+monolib_iphone_choice.o: $(srcdir)/src/osx/iphone/choice.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/choice.mm
+
 monolib_iphone_dialog.o: $(srcdir)/src/osx/iphone/dialog.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/dialog.mm
 
@@ -20864,11 +20888,17 @@ monolib_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(MONOLIB_ODEP)
 monolib_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+monolib_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 monolib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
 
 monolib_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
+
+monolib_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
 
 monolib_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
@@ -26285,6 +26315,9 @@ coredll_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(COREDLL_ODEP)
 coredll_iphone_checkbox.o: $(srcdir)/src/osx/iphone/checkbox.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/checkbox.mm
 
+coredll_iphone_choice.o: $(srcdir)/src/osx/iphone/choice.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/choice.mm
+
 coredll_iphone_dialog.o: $(srcdir)/src/osx/iphone/dialog.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/dialog.mm
 
@@ -26294,11 +26327,17 @@ coredll_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(COREDLL_ODEP)
 coredll_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+coredll_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 coredll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
 
 coredll_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
+
+coredll_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
 
 coredll_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
@@ -30017,6 +30056,9 @@ corelib_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(CORELIB_ODEP)
 corelib_iphone_checkbox.o: $(srcdir)/src/osx/iphone/checkbox.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/checkbox.mm
 
+corelib_iphone_choice.o: $(srcdir)/src/osx/iphone/choice.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/choice.mm
+
 corelib_iphone_dialog.o: $(srcdir)/src/osx/iphone/dialog.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/dialog.mm
 
@@ -30026,11 +30068,17 @@ corelib_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(CORELIB_ODEP)
 corelib_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+corelib_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 corelib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
 
 corelib_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
+
+corelib_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
 
 corelib_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm

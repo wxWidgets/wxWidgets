@@ -27,6 +27,12 @@
 extern WXDLLIMPEXP_DATA_CORE(const char) wxChoiceNameStr[];
 
 // ----------------------------------------------------------------------------
+// wxChoice style flags
+// ----------------------------------------------------------------------------
+
+#define wxCH_BUTTONS      0x0100   // 2-4 buttons next to each other in iOS
+
+// ----------------------------------------------------------------------------
 // wxChoice allows to select one of a non-modifiable list of strings
 // ----------------------------------------------------------------------------
 

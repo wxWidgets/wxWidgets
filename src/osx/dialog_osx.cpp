@@ -164,6 +164,7 @@ int wxDialog::ShowModal()
     m_eventLoop = &modalLoop;
 
     OSXBeginModalDialog();
+    // TODO: Figure out how to block here on iOS. Currently ShowModal immediately returns
     modalLoop.Run();
     OSXEndModalDialog();
 
@@ -194,10 +195,21 @@ void wxDialog::EndModal(int retCode)
         m_eventLoop->Exit(retCode);
 
     SetReturnCode(retCode);
+
+#ifdef __WXOSX_IPHONE__
+    if (IsModal())
+       EndWindowModal();
+    else
+#endif
     Show(false);
 
+#ifdef __WXOSX_IPHONE__
+    // On iOS, MyDialog.ShowModal() == wxID_OK etc is not supported. Destroy dialog here.
+    Destroy();
+#else
     // Prevent app frame from taking z-order precedence
     if( GetParent() )
         GetParent()->Raise();
+#endif
 }
 

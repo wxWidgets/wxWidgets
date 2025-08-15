@@ -13,6 +13,8 @@
 
 #include "wx/nonownedwnd.h"
 #include "wx/frame.h"
+#include "wx/settings.h"
+#include "wx/log.h"
 #include <algorithm>
 
 CGRect wxToNSRect(UIView* parent, const wxRect& r )
@@ -369,15 +371,26 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     [contentview setController:controller];
     [contentview setHidden:YES];
 
-    wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, Widget_IsRoot );
+    /* UIViewController *topLevelController = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+    [topLevelController setView: toplevelwindow];
+    [topLevelController addChildViewController: controller]; */
+
+    wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, Widget_IsRoot, controller );
     impl->InstallEventHandler();
+
+    wxString name = now->GetClassInfo()->GetClassName(); 
+    wxLogMessage( "CreateContentView from %s", name );
 
     if ([toplevelwindow respondsToSelector:@selector(setRootViewController:)])
     {
+        wxLogMessage( "CreateContentView set rootViewController from %s", name );
+
         toplevelwindow.rootViewController = controller;
     }
     else
     {
+        wxLogMessage( "CreateContentView addSubView from %s", name );
+
         [toplevelwindow addSubview:contentview];
     }
     return impl;

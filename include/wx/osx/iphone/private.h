@@ -38,7 +38,7 @@ wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0 ) ;
+    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0, void *c = NULL  ) ;
     wxWidgetIPhoneImpl() ;
     ~wxWidgetIPhoneImpl();
 
@@ -104,6 +104,8 @@ public :
     wxInt32             GetMaximum() const;
     int                 GetIncrement() const { return 1; }
     void                PulseGauge();
+    void                SetVirtualSize( int x, int y );
+    int                 GetScrollPos(int orient) const;
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
     void                SetFont(const wxFont & font);
@@ -124,8 +126,11 @@ public :
 
     virtual void        controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent);
     virtual void         controlTextDidChange();
+
+    void*               GetController() { return m_controller; }
 protected:
-    WXWidget m_osxView;
+    WXWidget          m_osxView;
+    void             *m_controller;
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl);
 };
 
@@ -225,12 +230,11 @@ protected :
 
     @end
 
-    @interface wxUIView : UIView
+    @interface wxUIView : UIScrollView
     {
     }
 
     @end // wxUIView
-
 
     void WXDLLIMPEXP_CORE wxOSXIPhoneClassAddWXMethods(Class c);
 

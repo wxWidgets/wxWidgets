@@ -2094,7 +2094,11 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
       parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name
     );
 #else
+#ifdef __WXOSX_IPHONE__
+    Create( parent, id, pos, size, wxVSCROLL|wxHSCROLL|wxBORDER_NONE, name );
+#else
     Create( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name );
+#endif
 #endif
 
     SetOwner( parent );

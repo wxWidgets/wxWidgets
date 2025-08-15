@@ -354,7 +354,8 @@ public :
     virtual int         GetIncrement() const = 0;
     virtual void        PulseGauge() = 0;
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
-
+    virtual void        SetVirtualSize( int WXUNUSED(x), int WXUNUSED(y) ) {}
+    virtual int         GetScrollPos(int WXUNUSED(orient)) const { return 0; }
     virtual void        SetFont(const wxFont & font) = 0;
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }

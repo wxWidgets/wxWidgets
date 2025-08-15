@@ -28,6 +28,7 @@
 
 #include "wx/display.h"
 #include "wx/modalhook.h"
+#include "wx/settings.h"
 
 #include "wx/private/tlwgeom.h"
 
@@ -496,7 +497,9 @@ bool wxTopLevelWindowBase::Layout()
             int clientW, clientH;
             DoGetClientSize(&clientW, &clientH);
 
-            child->SetSize(0, 0, clientW, clientH);
+            int spaceAtTheTop = wxSystemSettings::GetMetric( wxSYS_DEVICE_AREA_TOP, NULL );
+
+            child->SetSize(0, spaceAtTheTop, clientW, clientH-spaceAtTheTop );
 
             return true;
         }

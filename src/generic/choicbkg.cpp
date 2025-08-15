@@ -80,7 +80,10 @@ wxChoicebook::Create(wxWindow *parent,
                     this,
                     wxID_ANY,
                     wxDefaultPosition,
-                    wxDefaultSize
+                    wxDefaultSize,
+                    0,
+                    NULL,
+                    wxCH_BUTTONS  // standard appearance with segmented buttons on iOS
                  );
 
     wxSizer* mainSizer = new wxBoxSizer(IsVertical() ? wxVERTICAL : wxHORIZONTAL);

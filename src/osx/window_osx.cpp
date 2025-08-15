@@ -1414,6 +1414,11 @@ bool wxWindowMac::EnableTouchEvents(int eventsMask)
 
 int wxWindowMac::GetScrollPos(int orient) const
 {
+#ifdef __WXOSX_IPHONE__
+    wxWidgetImpl *impl = GetPeer();
+    if (impl)
+        return impl->GetScrollPos( orient );
+#endif
 #if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
@@ -1619,6 +1624,15 @@ void wxWindowMac::RemoveChild( wxWindowBase *child )
 
     wxWindowBase::RemoveChild( child ) ;
 }
+
+void wxWindowMac::DoSetVirtualSize( int x, int y )
+{
+    wxWindowBase::DoSetVirtualSize( x, y );
+#ifdef __WXOSX_IPHONE__
+    GetPeer()->SetVirtualSize( x, y );
+#endif
+}
+
 
 void wxWindowMac::DoUpdateScrollbarVisibility()
 {

@@ -41,6 +41,10 @@
              frame to respond to system close events, for example so that related
              data and subwindows can be cleaned up.
 
+    @remarks On iOS, if the frame has a parent (frame), a toolbar with a back button
+             and the title of the frame will be added automatically. Hitting that back
+             button will send a wxCloseEvent that you should respond to.
+
 
     @section frame_defaultevent Default event processing
 

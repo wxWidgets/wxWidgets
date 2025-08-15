@@ -76,6 +76,9 @@ bool wxVListBox::Create(wxWindow *parent,
                         const wxString& name)
 {
     style |= wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE;
+#ifdef __WXOSX_IPHONE__
+    style |= wxVSCROLL | wxHSCROLL;
+#endif
     if ( !wxVScrolledCanvas::Create(parent, id, pos, size, style, name) )
         return false;
 

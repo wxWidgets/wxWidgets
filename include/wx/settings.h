@@ -140,7 +140,11 @@ enum wxSystemMetric
     wxSYS_DCLICK_MSEC,
     wxSYS_CARET_ON_MSEC,
     wxSYS_CARET_OFF_MSEC,
-    wxSYS_CARET_TIMEOUT_MSEC
+    wxSYS_CARET_TIMEOUT_MSEC,
+    wxSYS_DEVICE_AREA_TOP,
+    wxSYS_DEVICE_AREA_BOTTOM,
+    wxSYS_DEVICE_AREA_LEFT,
+    wxSYS_DEVICE_AREA_RIGHT
 };
 
 // possible values for wxSystemSettings::HasFeature() parameter
