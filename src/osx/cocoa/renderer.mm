@@ -184,6 +184,19 @@ private:
         return m_nsPushButtonCell;
     }
 
+    NSButtonCell* GetPopDownArrowCell()
+    {
+        if ( !m_nsPopDownArrowCell )
+        {
+            m_nsPopDownArrowCell = [[NSButtonCell alloc] initImageCell:[NSImage imageNamed: @"NSTokenPopDownArrow"]];
+            m_nsPopDownArrowCell.buttonType = NSButtonTypeMomentaryPushIn;
+            m_nsPopDownArrowCell.highlightsBy = NSPushInCellMask;
+            m_nsPopDownArrowCell.bezelStyle = NSBezelStyleRoundedDisclosure;
+        }
+
+        return m_nsPopDownArrowCell;
+    }
+
     NSButtonCell* GetCheckBoxCell()
     {
         if ( !m_nsCheckBoxCell )
@@ -260,6 +273,7 @@ private:
     NSButtonCell* m_nsCheckBoxCell = nil;
     NSButtonCell* m_nsRadioButtonCell = nil;
     NSButtonCell* m_nsDisclosureButtonCell = nil;
+    NSButtonCell* m_nsPopDownArrowCell = nil;
     NSPopUpButtonCell* m_nsPopupbuttonCell = nil;
     NSComboBoxCell* m_nsComboBoxCell = nil;
     NSTableHeaderCell* m_nsTableHeaderCell = nil;
@@ -285,6 +299,7 @@ wxRendererMac::~wxRendererMac()
     [m_nsCheckBoxCell release];
     [m_nsRadioButtonCell release];
     [m_nsDisclosureButtonCell release];
+    [m_nsPopDownArrowCell release];
     [m_nsPopupbuttonCell release];
     [m_nsComboBoxCell release];
     [m_nsTableHeaderCell release];
@@ -830,6 +845,10 @@ wxRendererMac::DrawComboBoxDropButton(wxWindow *win,
                               const wxRect& rect,
                               int flags)
 {
+#if wxOSX_USE_NSCELL_RENDERER
+    NSControlStateValue stateValue = (flags & wxCONTROL_PRESSED) ? NSControlStateValueOn : NSControlStateValueOff;
+    DrawMacCell(win, dc, GetPopDownArrowCell(), rect, flags, stateValue);
+#else
     int kind;
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
         kind = kThemeArrowButtonSmall;
@@ -840,6 +859,7 @@ wxRendererMac::DrawComboBoxDropButton(wxWindow *win,
 
     DrawMacThemeButton(win, dc, rect, flags,
                        kind, kThemeAdornmentArrowDownArrow);
+#endif
 }
 
 void
