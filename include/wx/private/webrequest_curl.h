@@ -64,6 +64,8 @@ public:
 
     void Start() override;
 
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs) override;
+
     wxWebResponseImplPtr GetResponse() const override
         { return m_response; }
 

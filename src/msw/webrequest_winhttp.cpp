@@ -60,6 +60,7 @@ public:
         wxLOAD_FUNC(WinHttpQueryAuthSchemes)
         wxLOAD_FUNC(WinHttpSetCredentials)
         wxLOAD_FUNC(WinHttpOpen)
+        wxLOAD_FUNC(WinHttpSetTimeouts)
 
         if ( !result )
             m_winhttp.Unload();
@@ -99,6 +100,8 @@ public:
     static WinHttpSetCredentials_t WinHttpSetCredentials;
     typedef HINTERNET(WINAPI* WinHttpOpen_t)(LPCWSTR, DWORD, LPCWSTR, LPCWSTR, DWORD);
     static WinHttpOpen_t WinHttpOpen;
+    typedef BOOL(WINAPI* WinHttpSetTimeouts_t)(HINTERNET, int, int, int, int);
+    static WinHttpSetTimeouts_t WinHttpSetTimeouts;
 
 private:
     static wxDynamicLibrary m_winhttp;
@@ -121,6 +124,7 @@ wxWinHTTP::WinHttpReadData_t wxWinHTTP::WinHttpReadData;
 wxWinHTTP::WinHttpQueryAuthSchemes_t wxWinHTTP::WinHttpQueryAuthSchemes;
 wxWinHTTP::WinHttpSetCredentials_t wxWinHTTP::WinHttpSetCredentials;
 wxWinHTTP::WinHttpOpen_t wxWinHTTP::WinHttpOpen;
+wxWinHTTP::WinHttpSetTimeouts_t wxWinHTTP::WinHttpSetTimeouts;
 
 
 // Define constants potentially missing in old SDKs
@@ -149,6 +153,11 @@ wxWinHTTP::WinHttpOpen_t wxWinHTTP::WinHttpOpen;
 #ifndef WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2
 #define WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2 0x00000800
 #endif
+
+// Define default timeouts constant
+#define WINHTTP_DEFAULT_RESOLVE_TIMEOUT 0
+#define WINHTTP_DEFAULT_CONNECT_TIMEOUT 60000
+#define WINHTTP_DEFAULT_DATA_TIMEOUT 30000
 
 namespace
 {
@@ -536,6 +545,8 @@ wxWebRequest::Result wxWebRequestWinHTTP::Execute()
     if ( !result )
         return result;
 
+    DoSetTimeouts();
+
     // This loop executes until we exhaust all authentication possibilities: we
     // may need to authenticate with the proxy first and then with the server
     // and we even may need to authenticate with the proxy again after failing
@@ -727,6 +738,8 @@ void wxWebRequestWinHTTP::Start()
     if ( !CheckResult(DoPrepareRequest()) )
         return;
 
+    DoSetTimeouts();
+
     // Register callback
     if ( wxWinHTTP::WinHttpSetStatusCallback
            (
@@ -746,6 +759,34 @@ void wxWebRequestWinHTTP::Start()
     SetState(wxWebRequest::State_Active);
 
     CheckResult(SendRequest());
+}
+
+void wxWebRequestWinHTTP::SetTimeouts(long connectionTimeoutMs,
+                                      long dataTimeoutMs)
+{
+    m_connectionTimeoutMs = connectionTimeoutMs;
+    m_dataTimeoutMs = dataTimeoutMs;
+}
+
+void wxWebRequestWinHTTP::DoSetTimeouts()
+{
+    int resolveTimeoutMs = m_connectionTimeoutMs == wxWebRequest::Timeout_Default ?
+        WINHTTP_DEFAULT_RESOLVE_TIMEOUT : m_connectionTimeoutMs;
+    int connectionTimeoutMs = m_connectionTimeoutMs == wxWebRequest::Timeout_Default ?
+        WINHTTP_DEFAULT_CONNECT_TIMEOUT : m_connectionTimeoutMs;
+    int dataTimeoutMs = m_dataTimeoutMs == wxWebRequest::Timeout_Default ?
+        WINHTTP_DEFAULT_DATA_TIMEOUT : m_dataTimeoutMs;
+
+    if ( !wxWinHTTP::WinHttpSetTimeouts(
+        m_request,
+        resolveTimeoutMs,
+        connectionTimeoutMs,
+        dataTimeoutMs,
+        dataTimeoutMs) )
+    {
+        wxLogTrace(wxTRACE_WEBREQUEST,
+                   "Error while setting timeout. Error code: %d", ::GetLastError());
+    }
 }
 
 wxWebRequest::Result wxWebRequestWinHTTP::SendRequest()

@@ -228,6 +228,21 @@ public:
     };
 
     /**
+        Constant timeout values. Can be use as argument when calling wxWebRequest::SetTimeouts.
+    */
+    enum Timeout
+    {
+        /**
+            Use the default value for the current timeout and implementation.
+        */
+        Timeout_Default,
+        /**
+            Set the timeout to infinite (No timeout).
+        */
+        Timeout_Infinite
+    };
+
+    /**
         Default constructor creates an invalid object.
 
         Initialize it by assigning wxWebSession::CreateRequest() to it before
@@ -421,6 +436,30 @@ public:
         server.
     */
     void SetStorage(Storage storage);
+
+    /**
+        Set the timeouts for the connection and total request time.
+
+        @param connectionTimeoutMs
+            Maximum time in milliseconds allowed for connection to the server, including its name resolution.
+        @param dataTimeoutMs
+            Maximum time in milliseconds allowed for the remaining operations (post connection).
+
+        @note Use wxWebRequest::Timeout_Default to set the timeout to the default value (default depends on implementation).
+        Use wxWebRequest::Timeout_Infinite to set an infinite timeout.\n
+
+        @note On Linux @c connectionTimeoutMs can't be set to infinite instead the timeout will be set to the maximal value that can be stored in a long.
+        @c connectionTimeoutMs and @c dataTimeoutMs are added to form one value used to set the maximum time in milliseconds that you allow the entire transfer operation to take. The whole thing, from start to end.
+
+        @remarks The default timeouts vary depending on implementation.
+            For more details take a look at the natives function (@ref descriptions).
+            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
+            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_TIMEOUT_MS and CURLOPT_CONNECTTIMEOUT_MS options.
+            - For macOS backend, this is not implemented yet.
+
+        @see Timeout
+    */
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
         Flags for disabling security features.
@@ -874,6 +913,30 @@ public:
          */
         Ignore_All = Ignore_Certificate | Ignore_Host
     };
+
+    /**
+        Set the timeouts for the connection and total request time.
+
+        @param connectionTimeoutMs
+            Maximum time in milliseconds allowed for connection to the server, including its name resolution.
+        @param dataTimeoutMs
+            Maximum time in milliseconds allowed for the remaining operations (post connection).
+
+        @note Use wxWebRequest::Timeout_Default to set the timeout to the default value (default depends on implementation).
+        Use wxWebRequest::Timeout_Infinite to set an infinite timeout.\n
+
+        @note On Linux @c connectionTimeoutMs can't be set to infinite instead the timeout will be set to the maximal value that can be stored in a long.
+        @c connectionTimeoutMs and @c dataTimeoutMs are added to form one value used to set the maximum time in milliseconds that you allow the entire transfer operation to take. The whole thing, from start to end.
+
+        @remarks The default timeouts vary depending on implementation.
+            For more details take a look at the natives function (@ref descriptions).
+            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
+            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_TIMEOUT_MS and CURLOPT_CONNECTTIMEOUT_MS options.
+            - For macOS backend, this is not implemented yet.
+
+        @see Timeout
+    */
+    void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
         Make connection insecure by disabling security checks.
