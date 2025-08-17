@@ -1255,8 +1255,17 @@ DrawNotebookTab(wxWindow* win,
 
 } // anonymous namespace
 
-void wxNotebook::MSWNotebookPaint(wxDC& dc)
+void wxNotebook::MSWNotebookPaint()
 {
+    // This is tricky: GetTabRect() may result in a nested WM_PAINT when the
+    // native control decides to generate it from its Tab_CalcPaintMetrics()
+    // for some reason (this happens at least when using multiple tab rows), so
+    // we need to call it before creating wxPaintDC as otherwise the current
+    // paint DC would be invalidated by EndPaint() while we use it, see #25700.
+    wxRect rectTabArea = GetTabRect(0);
+
+    // Now create and use the DC.
+    wxPaintDC dc(this);
     dc.Clear();
 
     const wxDirection tabOrient = GetTabOrientation();
@@ -1282,7 +1291,6 @@ void wxNotebook::MSWNotebookPaint(wxDC& dc)
         return;
 
     // Start by erasing the tabs area background.
-    wxRect rectTabArea = GetTabRect(0);
     rectTabArea = ExpandSelectedTab(rectTabArea, tabOrient);
     if ( tabOrient == wxTOP || tabOrient == wxBOTTOM )
         rectTabArea.SetRight(sizeWindow.x);
@@ -1370,15 +1378,15 @@ void wxNotebook::OnPaint(wxPaintEvent& event)
         return;
     }
 
-    wxPaintDC dc(this);
-
     if ( wxMSWDarkMode::IsActive() )
     {
         // We can't use default painting in dark mode, it just doesn't work
         // there, whichever theme we use, so draw everything ourselves.
-        MSWNotebookPaint(dc);
+        MSWNotebookPaint();
         return;
     }
+
+    wxPaintDC dc(this);
 
     RECT rc;
     ::GetClientRect(GetHwnd(), &rc);
