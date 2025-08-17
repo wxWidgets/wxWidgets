@@ -280,6 +280,7 @@ wxMSW
 - Fix crash when copying wxBitmaps if GDI resources are exhausted (#24703).
 - Fix MSVS debug visualizer for wxString (#25684).
 - Fix TAB behaviour in a panel with notebook as only active child (#25443).
+- Reduce GDI resource usage in wxStaticBitmap (Alex Shvartzkop, #25698).
 
 wxOSX:
 
