@@ -2094,11 +2094,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
       parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name
     );
 #else
-#ifdef __WXOSX_IPHONE__
-    Create( parent, id, pos, size, wxVSCROLL|wxHSCROLL|wxBORDER_NONE, name );
-#else
     Create( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name );
-#endif
 #endif
 
     SetOwner( parent );
@@ -2543,7 +2539,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     // prepare the DC
-    GetOwner()->PrepareDC( dc );
+    m_owner->PrepareDC( dc );
 
     wxRect update = GetUpdateRegion().GetBox();
     m_owner->CalcUnscrolledPosition( update.x, update.y, &update.x, &update.y );
@@ -5655,8 +5651,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 
     Init();
 
-    if (!wxControl::Create( parent, id, pos, size,
-                            style | wxScrolledWindowStyle, validator, name))
+    if (!wxControl::Create( parent, id, pos, size, style | wxScrolledWindowStyle, validator, name))
         return false;
 
     SetInitialSize(size);

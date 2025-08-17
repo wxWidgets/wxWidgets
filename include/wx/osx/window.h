@@ -94,7 +94,6 @@ public:
     virtual int GetCharWidth() const override;
 
 public:
-    virtual void DoSetVirtualSize( int x, int y ) override;
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true ) override;
     virtual void SetScrollPos( int orient, int pos, bool refresh = true ) override;
@@ -275,6 +274,15 @@ public:
     // or windows indiscriminately, e.g. for setting NSViewAnimationTargetKey
     virtual void *OSXGetViewOrWindow() const;
 #endif // Cocoa
+
+#ifdef __WXOSX_IPHONE__
+    void                OSXSetScrollTargetWindow( wxWindow *target );
+    wxWindow *          OSXGetScrollTargetWindow() { return m_scrollTargetWindow; }
+    wxWindow *          m_scrollTargetWindow;
+    void                OSXSetScrollOwnerWindow( wxWindow *owner );
+    wxWindow *          OSXGetScrollOwnerWindow() { return m_scrollOwnerWindow; }
+    wxWindow *          m_scrollOwnerWindow;
+#endif
 
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }

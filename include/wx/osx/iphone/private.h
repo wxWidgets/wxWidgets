@@ -104,7 +104,7 @@ public :
     wxInt32             GetMaximum() const;
     int                 GetIncrement() const { return 1; }
     void                PulseGauge();
-    void                SetVirtualSize( int x, int y );
+    void                SetScrollbar( int orient, int pos, int thumb, int range, bool refresh );
     int                 GetScrollPos(int orient) const;
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
@@ -128,9 +128,13 @@ public :
     virtual void         controlTextDidChange();
 
     void*               GetController() { return m_controller; }
+    bool                GetBlockScrollEvents() const { return m_blockScrollEvents; }
+
 protected:
     WXWidget          m_osxView;
     void             *m_controller;
+    bool              m_blockScrollEvents;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl);
 };
 

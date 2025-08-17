@@ -78,21 +78,25 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     wxWidgetIPhoneImpl* viewimpl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( scrollView );
     if ( viewimpl )
     {
-        viewimpl->SetNeedsDisplay();
         wxWindowMac* wxpeer = (wxWindowMac*) viewimpl->GetWXPeer();
         if (wxpeer) {
             CGPoint position = [scrollView contentOffset];
 
-            wxScrollEvent event( wxEVT_SCROLL_THUMBTRACK, wxpeer->GetId() );
-            event.SetOrientation( wxVERTICAL );
-            event.SetPosition( position.y * -1);
-            int p = position.y * -1;
-            event.SetEventObject( wxpeer );
+            viewimpl->SetDeviceLocalOrigin( wxPoint( -1*position.x, -1*position.y ) );
 
-            // wxWindow* window = wxpeer->GetParent();
-            // window->MacOnScroll( event );
-            wxpeer->HandleWindowEvent( event );
+            if (viewimpl->GetBlockScrollEvents())
+                return; 
+
+            // wxString name = wxpeer->GetClassInfo()->GetClassName();
+            // wxLogMessage( "scrollViewDidScroll from %s  y %i", name, (int)(-1*position.y) );
+
+            wxScrollWinEvent event( wxEVT_SCROLLWIN_THUMBTRACK, wxpeer->GetId() );
+            event.SetOrientation( wxVERTICAL );
+            event.SetPosition( position.y );
+            event.SetEventObject( wxpeer );
+            wxpeer->OSXGetScrollOwnerWindow()->HandleWindowEvent( event );
         }
+        viewimpl->SetNeedsDisplay();
     }
 }
 
@@ -323,7 +327,7 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
 wxIMPLEMENT_DYNAMIC_CLASS(wxWidgetIPhoneImpl , wxWidgetImpl);
 
 wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags, void *c ) :
-    wxWidgetImpl( peer, flags ), m_osxView(w), m_controller(c)
+    wxWidgetImpl( peer, flags ), m_osxView(w), m_controller(c), m_blockScrollEvents(true)
 {
 }
 
@@ -374,28 +378,11 @@ void wxWidgetIPhoneImpl::Lower()
     [[m_osxView superview] sendSubviewToBack:m_osxView];
 }
 
-void wxWidgetIPhoneImpl::SetVirtualSize( int x, int y )
-{
-    int style = GetWXPeer()->GetWindowStyle();
-    if ((style & (wxHSCROLL | wxVSCROLL)) != 0) {
-        wxUIView *view = (wxUIView*) m_osxView;
-        CGSize sz = CGSizeMake( x, y );
-        [view setContentSize: sz];
-    }
-}
-
-void wxWidgetIPhoneImpl::ScrollRect( const wxRect *rect, int dx, int dy )
-{
-    SetNeedsDisplay() ;
-}
-
 void wxWidgetIPhoneImpl::Move(int x, int y, int width, int height)
 {
     CGRect r = CGRectMake( x, y, width, height) ;
     [m_osxView setFrame:r];
 }
-
-
 
 void wxWidgetIPhoneImpl::GetPosition( int &x, int &y ) const
 {
@@ -421,12 +408,18 @@ void wxWidgetIPhoneImpl::GetContentArea( int&left, int &top, int &width, int &he
 
 void wxWidgetIPhoneImpl::SetNeedsDisplay( const wxRect* where )
 {
+    /*
     if ( where )
-    {
-        CGRect r = CGRectMake( where->x, where->y, where->width, where->height) ;
+    {   
+        wxLogMessage( "wxWidgetIPhoneImpl::SetNeedsDisplay" );
+        // TODO: adapt to DeviceLocalOrigin
+        CGRect r = CGRectMake( where->x-m_deviceLocalOrigin.x, 
+                               where->y-m_deviceLocalOrigin.y, 
+           where->width, where->height) ;
         [m_osxView setNeedsDisplayInRect:r];
     }
     else
+    */
         [m_osxView setNeedsDisplay];
 }
 
@@ -469,6 +462,7 @@ void wxWidgetIPhoneImpl::Embed( wxWidgetImpl *parent )
 
 void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to )
 {
+    // TODO: adapt to DeviceLocalOrigin
     CGPoint p = CGPointMake( pt->x , pt->y );
     p = [from->GetWXWidget() convertPoint:p toView:to->GetWXWidget() ];
     pt->x = (int)p.x;
@@ -610,16 +604,31 @@ void wxWidgetIPhoneImpl::PulseGauge()
 {
 }
 
+void wxWidgetIPhoneImpl::ScrollRect( const wxRect *rect, int dx, int dy )
+{
+    SetNeedsDisplay();
+}
+
 int wxWidgetIPhoneImpl::GetScrollPos(int orient) const
 { 
+    wxString name = GetWXPeer()->GetClassInfo()->GetClassName();
+    /*
+    wxLogMessage( "GetScrollPos 1 from %s", name );
+
     int style = GetWXPeer()->GetWindowStyle();
     if ((style & (wxHSCROLL | wxVSCROLL)) == 0) {
         return 0;
     }
+    */
 
-    wxUIView* targetView = (wxUIView*)m_osxView;  // wxUIView derives from UIScrollView
+    wxUIView* view = (wxUIView*)m_osxView;  // wxUIView derives from UIScrollView
 
-    CGPoint position = [targetView contentOffset];
+    CGPoint position = [view contentOffset];
+
+    // these should always be the same
+    // wxLogMessage( "GetScrollPos 2 from %s, x: %i y: %i", name, (int) position.x, (int) position.y );
+    // wxLogMessage( "GetScrollPos 2 from %s, x: %i y: %i", name, m_deviceLocalOrigin.x, m_deviceLocalOrigin.y );
+
     if (orient == wxVERTICAL)
         return position.y * -1;
     if (orient == wxHORIZONTAL)
@@ -627,6 +636,36 @@ int wxWidgetIPhoneImpl::GetScrollPos(int orient) const
 
     return 0; 
     
+}
+
+void wxWidgetIPhoneImpl::SetScrollbar(int orient, int pos, int thumb,
+                                     int range, bool refresh)
+{
+    wxUIView* view = (wxUIView*)m_osxView;  // wxUIView derives from UIScrollView
+
+    CGPoint position = [view contentOffset];
+    CGSize size = [view contentSize];
+    if (orient == wxVERTICAL)
+    {
+        size = CGSizeMake( size.width, range*thumb );
+        position = CGPointMake( position.x, pos*thumb );
+
+        int p = pos*thumb;
+        int s = range*thumb;
+
+    } else
+    if (orient == wxHORIZONTAL)
+    {
+        size = CGSizeMake( range*thumb, size.height );
+        position = CGPointMake( pos*thumb, position.y );
+    }
+
+    m_blockScrollEvents = true;
+    [view setContentSize: size];
+    // [view setContentOffset: position];
+    m_blockScrollEvents = false;
+
+    SetNeedsDisplay();
 }
 
 void wxWidgetIPhoneImpl::SetScrollThumb( wxInt32 value, wxInt32 thumbSize )
@@ -736,6 +775,7 @@ bool wxWidgetIPhoneImpl::resignFirstResponder(WXWidget slf, void *_cmd)
 void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cmd))
 {
     wxRegion updateRgn( wxFromNSRect( slf, *rect ) );
+    updateRgn.Offset( GetDeviceLocalOrigin() );
 
     wxWindow* wxpeer = GetWXPeer();
     wxpeer->GetUpdateRegion() = updateRgn;
@@ -809,8 +849,8 @@ void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf
 
         wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
         SetupMouseEvent( wxevent , touches, event ) ;
-        wxevent.m_x = pt.x;
-        wxevent.m_y = pt.y;
+        wxevent.m_x = pt.x + m_deviceLocalOrigin.x;
+        wxevent.m_y = pt.y + m_deviceLocalOrigin.y;
         wxevent.SetEventObject( GetWXPeer() ) ;
         //?wxevent.SetId( GetWXPeer()->GetId() ) ;
 
@@ -854,10 +894,11 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
 
     CGRect r = CGRectMake( pos.x, pos.y, size.x, size.y) ;
     wxUIView* v = [[wxUIView alloc] initWithFrame:r];
-    if ((style & (wxHSCROLL | wxVSCROLL)) != 0) {
+//    if ((style & (wxHSCROLL | wxVSCROLL)) != 0) {
         wxUIScrollViewDelegate *delegate = [[wxUIScrollViewDelegate alloc] init];
         [v setDelegate: delegate];
-    }
+//        [v setNeedsDisplay];
+//    }
     sv.clipsToBounds = YES;
     sv.contentMode =  UIViewContentModeRedraw;
     sv.clearsContextBeforeDrawing = NO;
