@@ -1,0 +1,1 @@
+wxMSW: Fix MSVS debug visualizer for wxString (#25684).
