@@ -287,12 +287,13 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
     // Update the handle used by the native control.
     const WPARAM imageType = m_icon.IsOk() ? IMAGE_ICON : IMAGE_BITMAP;
 
+    const HGDIOBJ currentHandle = (HGDIOBJ)m_currentHandle;
     const HGDIOBJ oldHandle = (HGDIOBJ)
-        ::SendMessage(GetHwnd(), STM_SETIMAGE, imageType, (LPARAM)m_currentHandle);
+        ::SendMessage(GetHwnd(), STM_SETIMAGE, imageType, (LPARAM)currentHandle);
 
     // detect if this is still the handle we passed before or
     // if the static-control made a copy of the bitmap!
-    if (oldHandle != 0 && oldHandle != (HGDIOBJ) m_currentHandle)
+    if ( oldHandle != 0 && oldHandle != currentHandle )
     {
         // the static control made a copy and we are responsible for deleting it
         ::DeleteObject(oldHandle);
@@ -302,7 +303,7 @@ void wxStaticBitmap::DoUpdateImage(const wxSize& sizeOld, bool wasIcon)
     // if the native control doesn't actually use it.
     const HGDIOBJ newHandle = (HGDIOBJ)
         ::SendMessage(GetHwnd(), STM_GETIMAGE, imageType, 0);
-    if ( newHandle != (HGDIOBJ)m_currentHandle )
+    if ( newHandle != currentHandle )
     {
         // The control made a copy of the image and we don't need to keep it.
         Free();
