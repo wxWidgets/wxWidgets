@@ -281,6 +281,13 @@ private:
 
     // handler injected into target window to forward some useful events to us
     wxVarScrollHelperEvtHandler *m_handler;
+
+#ifdef __WXOSX_IPHONE__
+    wxCoord m_deviceOffset;
+
+public:
+    wxCoord GetDeviceOffset() const { return m_deviceOffset; }
+#endif    
 };
 
 
