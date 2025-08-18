@@ -83,6 +83,11 @@ public:
         DoSetBitmap(bmp, bChecked);
     }
 
+    wxBitmapBundle GetBitmapBundle(bool bChecked) const
+    {
+        return bChecked ? m_bitmap : m_bmpUnchecked;
+    }
+
     wxBitmap GetBitmap(bool bChecked) const;
 
 #if wxUSE_OWNER_DRAWN
@@ -91,6 +96,8 @@ public:
         m_bmpDisabled = bmpDisabled;
         SetOwnerDrawn(true);
     }
+
+    wxBitmapBundle GetDisabledBitmapBundle() const { return m_bmpDisabled; }
 
     wxBitmap GetDisabledBitmap() const;
 
