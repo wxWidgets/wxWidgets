@@ -663,7 +663,7 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
 
 wxBitmap wxMenuItem::GetBitmap(bool bChecked) const
 {
-    wxBitmap bmp = GetBitmapFromBundle(bChecked ? m_bitmap : m_bmpUnchecked);
+    wxBitmap bmp = GetBitmapFromBundle(GetBitmapBundle(bChecked));
 #if wxUSE_IMAGE
     if ( bmp.IsOk() )
     {
