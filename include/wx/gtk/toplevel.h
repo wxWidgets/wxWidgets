@@ -94,6 +94,7 @@ public:
 
     // GTK callbacks
     virtual void GTKHandleRealized() override;
+    void GTKHandleMapped();
 
     void GTKConfigureEvent(int x, int y);
 
