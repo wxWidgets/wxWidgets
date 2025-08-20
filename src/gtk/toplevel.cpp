@@ -1610,11 +1610,17 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
             if (size.x >= m_minWidth - (decorSize.left + decorSize.right) &&
                 size.y >= m_minHeight - (decorSize.top + decorSize.bottom))
             {
+                wxLogTrace(TRACE_TLWSIZE, "Setting adjusted size for %s to %d*%d",
+                           wxDumpWindow(this), size.x, size.y);
+
                 gtk_window_resize(GTK_WINDOW(m_widget), size.x, size.y);
                 if (!isResizeable)
                     gtk_widget_set_size_request(GTK_WIDGET(m_widget), size.x, size.y);
                 resized = true;
             }
+
+            // Don't do this again.
+            m_deferShowAllowed = false;
         }
         if (!resized)
         {
