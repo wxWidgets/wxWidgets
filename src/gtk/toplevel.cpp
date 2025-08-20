@@ -518,6 +518,9 @@ void wxTopLevelWindowGTK::GTKHandleMapped()
 
     // restore focus-on-map setting in case ShowWithoutActivating() was called
     gtk_window_set_focus_on_map(GTK_WINDOW(m_widget), true);
+
+    // Deferred show is no longer possible
+    m_deferShowAllowed = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -1370,7 +1373,7 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
         wxLogTrace(TRACE_TLWSIZE, "Size set for %s (%d, %d) -> (%d, %d)",
                    wxDumpWindow(this), oldSize.x, oldSize.y, m_width, m_height);
 
-        m_deferShowAllowed = true;
+        m_deferShowAllowed = !gtk_widget_get_mapped(m_widget);
         m_useCachedClientSize = false;
 
 #ifdef __WXGTK3__
