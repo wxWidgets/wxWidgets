@@ -1412,13 +1412,13 @@ void wxSVGFileDCImpl::DoDrawBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y,
 
     CalcBoundingBox(x, y, x + bmp.GetWidth(), y + bmp.GetHeight());
 
-    // If we don't have any bitmap handler yet, use the default one.
-    if ( !m_bmp_handler )
-        m_bmp_handler.reset(new wxSVGBitmapFileHandler(m_filename));
-
     m_OK = m_outfile && m_outfile->IsOk();
     if (!m_OK)
         return;
+
+    // If we don't have any bitmap handler yet, use the default one.
+    if ( !m_bmp_handler )
+        m_bmp_handler.reset(new wxSVGBitmapFileHandler(m_filename));
 
     m_bmp_handler->ProcessBitmap(bmp, x, y, *m_outfile);
     m_OK = m_outfile->IsOk();
