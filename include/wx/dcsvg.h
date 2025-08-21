@@ -20,7 +20,9 @@
 
 #include <memory>
 
+#if WXWIN_COMPATIBILITY_3_2
 #define wxSVGVersion wxT("v0101")
+#endif
 
 enum wxSVGShapeRenderingMode
 {
