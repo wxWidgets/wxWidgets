@@ -1023,6 +1023,12 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
 
     write(s);
+
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+    {
+        double r = wxMax(r1, r2);
+        CalcBoundingBox(xc - r, yc - r, xc + r, yc + r);
+    }
 }
 
 void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h, double sa, double ea)
@@ -1117,6 +1123,9 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     wxString arcLine = wxString::Format(wxS("%s\" %s %s/>\n"),
         arcPath, GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
     write(arcLine);
+
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x, y, x + w, y + h);
 }
 
 void wxSVGFileDCImpl::DoGradientFillLinear(const wxRect& rect,
@@ -1428,6 +1437,9 @@ void wxSVGFileDCImpl::DoDrawBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y,
                                    bool WXUNUSED(useMask))
 {
     NewGraphicsIfNeeded();
+
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x, y, x + bmp.GetWidth(), y + bmp.GetHeight());
 
     // If we don't have any bitmap handler yet, use the default one.
     if ( !m_bmp_handler )
