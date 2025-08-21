@@ -13,7 +13,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
-    #include "wx/dcscreen.h"
     #include "wx/icon.h"
     #include "wx/image.h"
     #include "wx/math.h"
@@ -360,31 +359,28 @@ wxString CreateBrushFill(const wxBrush& brush, wxSVGShapeRenderingMode mode)
     return s;
 }
 
-void SetScaledScreenDCFont(wxScreenDC& sDC, const wxFont& font)
+wxMemoryDC GetTextMetricDC(const wxFont& font)
 {
-    const double screenDPI = sDC.GetPPI().y;
-    const double scale = screenDPI / SVG_DPI.y;
+    wxMemoryDC dc;
+    const double dcDPI = dc.GetPPI().y;
+    const double scale = dcDPI / SVG_DPI.y;
     if ( scale != 1 )
     {
-        // wxScreenDC uses the DPI of the main screen to determine the text
-        // extent and character width/height. Because the SVG should be
-        // DPI-independent we want the text extent of the default (96) DPI.
-        //
-        // Even when using DPI Independent pixels (like macOS), we still need to
-        // scale because macOS DPI (72) is different than SVG DPI (96).
-        // (wxScreenDC returns the standard DPI also on Retina screens.)
+        // The SVG is DPI-independent so we want text metrics for the default (96) DPI.
         //
         // We can't just divide the returned sizes by the scale factor, because
         // text does not scale linear (at least on Windows). Therefore, we scale
         // the font size instead.
         wxFont scaledFont = font;
         scaledFont.SetFractionalPointSize(scaledFont.GetFractionalPointSize() / scale);
-        sDC.SetFont(scaledFont);
+        dc.SetFont(scaledFont);
     }
     else
     {
-        sDC.SetFont(font);
+        dc.SetFont(font);
     }
+
+    return dc;
 }
 
 } // anonymous namespace
@@ -1292,27 +1288,18 @@ void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string,
                                       wxCoord* externalLeading,
                                       const wxFont* theFont) const
 {
-    wxScreenDC sDC;
-    SetScaledScreenDCFont(sDC, theFont ? *theFont : m_font);
-
-    sDC.GetTextExtent(string, x, y, descent, externalLeading);
+    GetTextMetricDC(theFont ? *theFont : m_font).
+        GetTextExtent(string, x, y, descent, externalLeading);
 }
 
 wxCoord wxSVGFileDCImpl::GetCharHeight() const
 {
-    wxScreenDC sDC;
-    SetScaledScreenDCFont(sDC, m_font);
-
-    return sDC.GetCharHeight();
-
+    return GetTextMetricDC(m_font).GetCharHeight();
 }
 
 wxCoord wxSVGFileDCImpl::GetCharWidth() const
 {
-    wxScreenDC sDC;
-    SetScaledScreenDCFont(sDC, m_font);
-
-    return sDC.GetCharWidth();
+    return GetTextMetricDC(m_font).GetCharWidth();
 }
 
 void wxSVGFileDCImpl::ComputeScaleAndOrigin()
