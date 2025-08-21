@@ -522,7 +522,7 @@ void wxSVGFileDCImpl::Init(const wxString& filename, int width, int height,
 
     m_dpi = dpi;
 
-    m_OK = true;
+    m_writeError = false;
 
     m_clipUniqueId = 0;
     m_clipNestingLevel = 0;
@@ -1435,27 +1435,28 @@ void wxSVGFileDCImpl::DoDrawBitmap(const wxBitmap& bmp, wxCoord x, wxCoord y,
     if ( AreAutomaticBoundingBoxUpdatesEnabled() )
         CalcBoundingBox(x, y, x + bmp.GetWidth(), y + bmp.GetHeight());
 
+    if ( !m_outfile )
+        return;
+
     // If we don't have any bitmap handler yet, use the default one.
     if ( !m_bmp_handler )
         m_bmp_handler.reset(new wxSVGBitmapFileHandler(m_filename));
 
-    m_OK = m_outfile && m_outfile->IsOk();
-    if (!m_OK)
-        return;
-
-    m_bmp_handler->ProcessBitmap(bmp, x, y, *m_outfile);
-    m_OK = m_outfile->IsOk();
+    m_writeError = m_bmp_handler->ProcessBitmap(bmp, x, y, *m_outfile);
 }
 
 void wxSVGFileDCImpl::write(const wxString& s)
 {
-    m_OK = m_outfile && m_outfile->IsOk();
-    if (!m_OK)
+    if ( !m_outfile )
         return;
 
-    const wxCharBuffer buf = s.utf8_str();
-    m_outfile->Write(buf, strlen((const char*)buf));
-    m_OK = m_outfile->IsOk();
+    if ( m_outfile->IsOk() )
+    {
+        const wxCharBuffer buf = s.utf8_str();
+        m_outfile->Write(buf, strlen((const char*)buf));
+    }
+
+    m_writeError = !m_outfile->IsOk();
 }
 
 #endif // wxUSE_SVG

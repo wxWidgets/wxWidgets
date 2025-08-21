@@ -95,7 +95,7 @@ public:
 
     virtual ~wxSVGFileDCImpl();
 
-    bool IsOk() const override { return m_OK; }
+    bool IsOk() const override { return !m_writeError; }
 
     virtual bool CanDrawBitmap() const override { return true; }
     virtual bool CanGetTextExtent() const override { return true; }
@@ -271,7 +271,7 @@ private:
     void DoStartNewGraphics();
 
     wxString            m_filename;
-    bool                m_OK;
+    bool                m_writeError;
     bool                m_graphics_changed;  // set by Set{Brush,Pen}()
     int                 m_width, m_height;
     double              m_dpi;
