@@ -51,7 +51,7 @@
 #endif
 
 // Define libcurl timeout constants
-# define LIBCURL_DEFAULT_CONNECT_TIMEOUT 300000
+static constexpr int LIBCURL_DEFAULT_CONNECT_TIMEOUT = 300000; // 5m in ms.
 
 //
 // wxWebResponseCURL
@@ -530,35 +530,27 @@ void wxWebRequestCURL::Start()
 void wxWebRequestCURL::SetTimeouts(long connectionTimeoutMs,
                                    long dataTimeoutMs)
 {
-    long timeout;
-    connectionTimeoutMs = connectionTimeoutMs == wxWebRequest::Timeout_Default ?
-        LIBCURL_DEFAULT_CONNECT_TIMEOUT : connectionTimeoutMs;
+    if ( connectionTimeoutMs == wxWebRequest::Timeout_Default )
+        connectionTimeoutMs = LIBCURL_DEFAULT_CONNECT_TIMEOUT;
 
     if ( connectionTimeoutMs == wxWebRequest::Timeout_Infinite )
         connectionTimeoutMs = LONG_MAX;
 
+    wxCURLSetOpt(m_handle, CURLOPT_CONNECTTIMEOUT_MS, connectionTimeoutMs);
+
+    // Don't set full request timeout if not specified.
     if ( dataTimeoutMs == wxWebRequest::Timeout_Infinite ||
          dataTimeoutMs == wxWebRequest::Timeout_Default )
     {
-        timeout = wxWebRequest::Timeout_Infinite;
-    }
-    else
-    {
-        // Checking if connectionTimeoutMs + dataTimeoutMs will overflow.
-        long overflowDiff = LONG_MAX - connectionTimeoutMs;
-        if ( dataTimeoutMs > overflowDiff )
-        {
-            wxLogTrace(wxTRACE_WEBREQUEST,
-                "Timeout overflow, using default value LONG_MAX.");
-            timeout = LONG_MAX;
-        }
-        else
-            timeout = connectionTimeoutMs + dataTimeoutMs;
+        return;
     }
 
-    wxCURLSetOpt(m_handle, CURLOPT_CONNECTTIMEOUT_MS, connectionTimeoutMs);
+    // Check that connectionTimeoutMs + dataTimeoutMs doesn't overflow.
+    const long overflowDiff = LONG_MAX - connectionTimeoutMs;
+    wxCHECK_RET( dataTimeoutMs <= overflowDiff, "Timeout values overflow" );
 
-    wxCURLSetOpt(m_handle, CURLOPT_TIMEOUT_MS, timeout);
+    const long fullTimeoutMs = connectionTimeoutMs + dataTimeoutMs;
+    wxCURLSetOpt(m_handle, CURLOPT_TIMEOUT_MS, fullTimeoutMs);
 }
 
 bool wxWebRequestCURL::StartRequest()

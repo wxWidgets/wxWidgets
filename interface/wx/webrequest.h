@@ -228,7 +228,11 @@ public:
     };
 
     /**
-        Constant timeout values. Can be use as argument when calling wxWebRequest::SetTimeouts.
+        Special timeout values.
+
+        Can be used as argument when calling wxWebRequest::SetTimeouts().
+
+        @since 3.3.2
     */
     enum Timeout
     {
@@ -236,6 +240,7 @@ public:
             Use the default value for the current timeout and implementation.
         */
         Timeout_Default,
+
         /**
             Set the timeout to infinite (No timeout).
         */
@@ -438,26 +443,37 @@ public:
     void SetStorage(Storage storage);
 
     /**
-        Set the timeouts for the connection and total request time.
+        Set the timeouts for the connection and data exchange time.
 
         @param connectionTimeoutMs
-            Maximum time in milliseconds allowed for connection to the server, including its name resolution.
+            Maximum time in milliseconds allowed for connection to the server.
+            For WinHTTP backend, this timeout is used for both the server name
+            resolution and the connection establishment. For libcurl backend,
+            this timeout is used for the complete connection establishment,
+            including name resolution.
         @param dataTimeoutMs
-            Maximum time in milliseconds allowed for the remaining operations (post connection).
+            The exact meaning of this parameter depends on the implementation:
+            for WinHTTP backend, it is the maximum time allowed for each read
+            or write operation. For libcurl backend it is the total time for
+            the entire operation, not counting the connection establishment
+            time.
 
-        @note Use wxWebRequest::Timeout_Default to set the timeout to the default value (default depends on implementation).
-        Use wxWebRequest::Timeout_Infinite to set an infinite timeout.\n
+        @note Use wxWebRequest::Timeout_Default to set the timeout to the
+            default value (default depends on implementation). Use
+            wxWebRequest::Timeout_Infinite to set an infinite timeout.
 
-        @note On Linux @c connectionTimeoutMs can't be set to infinite instead the timeout will be set to the maximal value that can be stored in a long.
-        @c connectionTimeoutMs and @c dataTimeoutMs are added to form one value used to set the maximum time in milliseconds that you allow the entire transfer operation to take. The whole thing, from start to end.
-
-        @remarks The default timeouts vary depending on implementation.
-            For more details take a look at the natives function (@ref descriptions).
-            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
-            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_TIMEOUT_MS and CURLOPT_CONNECTTIMEOUT_MS options.
-            - For macOS backend, this is not implemented yet.
+        @remarks The default timeout values vary depending on implementation:
+            - For WinHTTP backend, default connection timeout is infinite while
+              data timeout is 30 seconds.
+            - For CURL backend, default connection timeout is 5 minutes and
+              there is no data timeout.
 
         @see Timeout
+
+        @note This function is currently not implemented for macOS backend and
+            does nothing when it is called when using it.
+
+        @since 3.3.2
     */
     void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
@@ -915,26 +931,37 @@ public:
     };
 
     /**
-        Set the timeouts for the connection and total request time.
+        Set the timeouts for the connection and data exchange time.
 
         @param connectionTimeoutMs
-            Maximum time in milliseconds allowed for connection to the server, including its name resolution.
+            Maximum time in milliseconds allowed for connection to the server.
+            For WinHTTP backend, this timeout is used for both the server name
+            resolution and the connection establishment. For libcurl backend,
+            this timeout is used for the complete connection establishment,
+            including name resolution.
         @param dataTimeoutMs
-            Maximum time in milliseconds allowed for the remaining operations (post connection).
+            The exact meaning of this parameter depends on the implementation:
+            for WinHTTP backend, it is the maximum time allowed for each read
+            or write operation. For libcurl backend it is the total time for
+            the entire operation, not counting the connection establishment
+            time.
 
-        @note Use wxWebRequest::Timeout_Default to set the timeout to the default value (default depends on implementation).
-        Use wxWebRequest::Timeout_Infinite to set an infinite timeout.\n
+        @note Use wxWebRequest::Timeout_Default to set the timeout to the
+            default value (default depends on implementation). Use
+            wxWebRequest::Timeout_Infinite to set an infinite timeout.
 
-        @note On Linux @c connectionTimeoutMs can't be set to infinite instead the timeout will be set to the maximal value that can be stored in a long.
-        @c connectionTimeoutMs and @c dataTimeoutMs are added to form one value used to set the maximum time in milliseconds that you allow the entire transfer operation to take. The whole thing, from start to end.
-
-        @remarks The default timeouts vary depending on implementation.
-            For more details take a look at the natives function (@ref descriptions).
-            - For WinHTTP backend, <a target=_new href="https://learn.microsoft.com/en-us/windows/win32/api/winhttp/nf-winhttp-winhttpsettimeouts">WinHttpSetTimeouts</a> function.
-            - For CURL backend, <a target=_new href="https://curl.se/libcurl/c/CURLOPT_CONNECTTIMEOUT_MS.html">curl_easy_setopt</a> function with CURLOPT_TIMEOUT_MS and CURLOPT_CONNECTTIMEOUT_MS options.
-            - For macOS backend, this is not implemented yet.
+        @remarks The default timeout values vary depending on implementation:
+            - For WinHTTP backend, default connection timeout is infinite while
+              data timeout is 30 seconds.
+            - For CURL backend, default connection timeout is 5 minutes and
+              there is no data timeout.
 
         @see Timeout
+
+        @note This function is currently not implemented for macOS backend and
+            does nothing when it is called when using it.
+
+        @since 3.3.2
     */
     void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 

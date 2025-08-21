@@ -154,13 +154,13 @@ wxWinHTTP::WinHttpSetTimeouts_t wxWinHTTP::WinHttpSetTimeouts;
 #define WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2 0x00000800
 #endif
 
-// Define default timeouts constant
-#define WINHTTP_DEFAULT_RESOLVE_TIMEOUT 0
-#define WINHTTP_DEFAULT_CONNECT_TIMEOUT 60000
-#define WINHTTP_DEFAULT_DATA_TIMEOUT 30000
-
 namespace
 {
+
+// Define default timeouts constant
+constexpr DWORD WINHTTP_DEFAULT_RESOLVE_TIMEOUT = 0;
+constexpr DWORD WINHTTP_DEFAULT_CONNECT_TIMEOUT = 60000;
+constexpr DWORD WINHTTP_DEFAULT_DATA_TIMEOUT    = 30000;
 
 // Wrapper initializing URL_COMPONENTS struct.
 struct wxURLComponents : URL_COMPONENTS
@@ -770,12 +770,27 @@ void wxWebRequestWinHTTP::SetTimeouts(long connectionTimeoutMs,
 
 void wxWebRequestWinHTTP::DoSetTimeouts()
 {
-    int resolveTimeoutMs = m_connectionTimeoutMs == wxWebRequest::Timeout_Default ?
-        WINHTTP_DEFAULT_RESOLVE_TIMEOUT : m_connectionTimeoutMs;
-    int connectionTimeoutMs = m_connectionTimeoutMs == wxWebRequest::Timeout_Default ?
-        WINHTTP_DEFAULT_CONNECT_TIMEOUT : m_connectionTimeoutMs;
-    int dataTimeoutMs = m_dataTimeoutMs == wxWebRequest::Timeout_Default ?
-        WINHTTP_DEFAULT_DATA_TIMEOUT : m_dataTimeoutMs;
+    if ( m_connectionTimeoutMs == wxWebRequest::Timeout_Default &&
+            m_dataTimeoutMs == wxWebRequest::Timeout_Default )
+    {
+        // Nothing to do, don't bother calling WinHttpSetTimeouts().
+        return;
+    }
+
+    // Note that we don't have to test for Timeout_Infinite here as it is
+    // handled by WinHttpSetTimeouts() itself as long as its value is 0.
+    static_assert( wxWebRequest::Timeout_Infinite == 0,
+                   "wxWebRequest::Timeout_Infinite must be 0" );
+
+    int resolveTimeoutMs = WINHTTP_DEFAULT_RESOLVE_TIMEOUT;
+    int connectionTimeoutMs = WINHTTP_DEFAULT_CONNECT_TIMEOUT;
+    int dataTimeoutMs = WINHTTP_DEFAULT_DATA_TIMEOUT;
+
+    if ( m_connectionTimeoutMs != wxWebRequest::Timeout_Default )
+        resolveTimeoutMs = m_connectionTimeoutMs;
+
+    if ( m_dataTimeoutMs != wxWebRequest::Timeout_Default )
+        dataTimeoutMs = m_dataTimeoutMs;
 
     if ( !wxWinHTTP::WinHttpSetTimeouts(
         m_request,
