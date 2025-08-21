@@ -28,7 +28,18 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
     set(WEBP_BUILD_WEBP_JS    OFF)
     set(WEBP_BUILD_FUZZTEST   OFF)
 
+    # webp sets CMAKE_BUILD_TYPE if it is not defined.
+    # Multi-config generators do not need this, and might even
+    # cause confusion in cmake-gui, so unset it later.
+    if(NOT DEFINED CMAKE_BUILD_TYPE)
+        set(RESET_CMAKE_BUILD_TYPE ON)
+    endif()
+
     add_subdirectory("${WEBP_ROOT}" "${WEBP_BUILD_ROOT}" EXCLUDE_FROM_ALL)
+
+    if(RESET_CMAKE_BUILD_TYPE)
+        unset(CMAKE_BUILD_TYPE CACHE)
+    endif()
 
     mark_as_advanced(WEBP_CHECK_SIMD)
     mark_as_advanced(WEBP_BITTRACE)
