@@ -1806,7 +1806,7 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
     }
 
     int lineHeight = textSize.GetHeight();
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxRect r(textSize.GetWidth() + x, x, dc.FromDIP(100), lineHeight);
 
     dc.DrawText("System colours", x, r.y);
@@ -1895,7 +1895,7 @@ void MyCanvas::DrawDatabaseColours(wxDC& dc)
     }
 
     int lineHeight = textSize.GetHeight();
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxRect r(textSize.GetWidth() + x, x, dc.FromDIP(100), lineHeight);
 
     wxString title = "wxColourDatabase colours";
@@ -1971,7 +1971,7 @@ void MyCanvas::DrawCursors(wxDC& dc)
     constexpr int stockNamesCount = WXSIZEOF(stockNames);
     m_cursorRects.resize(stockNamesCount);
 
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxCoord y = x;
 
     dc.SetBackgroundMode(wxTRANSPARENT);
@@ -1980,7 +1980,7 @@ void MyCanvas::DrawCursors(wxDC& dc)
                                  wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this)),
                 x, y);
 
-    const int w = FromDIP(200);
+    const int w = dc.FromDIP(200);
     const int h = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this);
     const int margin = dc.GetCharWidth();
 
