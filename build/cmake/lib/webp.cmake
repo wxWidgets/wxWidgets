@@ -43,10 +43,9 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
 
     get_property(webpTargets DIRECTORY "${WEBP_ROOT}" PROPERTY BUILDSYSTEM_TARGETS)
     foreach(target_name IN LISTS webpTargets)
+        wx_set_builtin_target_ouput_name(${target_name} "wx${target_name}")
         set_target_properties(${target_name} PROPERTIES
             FOLDER "Third Party Libraries/WebP"
-            PREFIX  ""
-            OUTPUT_NAME "wx${target_name}"
             PUBLIC_HEADER ""
         )
     endforeach()
