@@ -598,8 +598,8 @@ macro(wx_add_dependencies name)
     endif()
 endmacro()
 
-# Set common properties for a builtin third party library
-function(wx_set_builtin_target_properties target_name)
+# Set output name for a builtin third party library
+macro(wx_set_builtin_target_ouput_name target target_name)
     set(lib_unicode)
     if(target_name STREQUAL "wxregex")
         set(lib_unicode "u")
@@ -618,10 +618,23 @@ function(wx_set_builtin_target_properties target_name)
         set(lib_version "-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
     endif()
 
-    set_target_properties(${target_name} PROPERTIES
+    set(lib_prefix "lib")
+    if(MSVC OR (WIN32 AND wxBUILD_SHARED))
+        set(lib_prefix)
+    elseif (CYGWIN AND wxBUILD_SHARED)
+        set(lib_prefix "cyg")
+    endif()
+
+    set_target_properties(${target} PROPERTIES
         OUTPUT_NAME       "${target_name}${lib_unicode}${lib_rls}${lib_flavour}${lib_version}"
         OUTPUT_NAME_DEBUG "${target_name}${lib_unicode}${lib_dbg}${lib_flavour}${lib_version}"
+        PREFIX            "${lib_prefix}"
     )
+endmacro()
+
+# Set common properties for a builtin third party library
+function(wx_set_builtin_target_properties target_name)
+    wx_set_builtin_target_ouput_name(${target_name} "${target_name}")
 
     if(MSVC)
         # we're not interested in deprecation warnings about the use of
