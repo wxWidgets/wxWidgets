@@ -806,10 +806,10 @@ key specialKeys[] =
 
 TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
 {
-    wxMenu* menu = new wxMenu;
+    wxMenu menu;
 
-    menu->Append( wxID_ANY, "Test" );
-    wxMenuItem* item = menu->FindItemByPosition( 0 );
+    menu.Append( wxID_ANY, "Test" );
+    wxMenuItem* item = menu.FindItemByPosition( 0 );
 
     SECTION( "Modifier keys" )
     {
