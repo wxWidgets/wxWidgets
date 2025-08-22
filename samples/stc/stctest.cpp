@@ -969,6 +969,11 @@ public:
                 DoStopDragging();
         });
 
+        Bind(wxEVT_LEFT_DCLICK, [this](wxMouseEvent& WXUNUSED(event)) {
+            // Don't let Scintilla get the double click, even if we don't do
+            // anything with it ourselves.
+        });
+
         Bind(wxEVT_MOUSE_CAPTURE_LOST, [this](wxMouseCaptureLostEvent& WXUNUSED(event)) {
             DoStopDragging();
         });
