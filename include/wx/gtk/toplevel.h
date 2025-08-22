@@ -71,9 +71,6 @@ public:
     virtual void SetTitle( const wxString &title ) override;
     virtual wxString GetTitle() const override { return m_title; }
 
-    virtual void SetLabel(const wxString& label) override { SetTitle( label ); }
-    virtual wxString GetLabel() const override            { return GetTitle(); }
-
     virtual wxVisualAttributes GetDefaultAttributes() const override;
 
     virtual bool SetTransparent(wxByte alpha) override;

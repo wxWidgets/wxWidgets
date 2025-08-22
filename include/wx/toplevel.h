@@ -191,6 +191,10 @@ public:
     virtual void SetTitle(const wxString& title) = 0;
     virtual wxString GetTitle() const = 0;
 
+    // label is the same as title for top-level windows
+    virtual void SetLabel(const wxString& label) override { SetTitle( label ); }
+    virtual wxString GetLabel() const override            { return GetTitle(); }
+
     // enable/disable close button [x]
     virtual bool EnableCloseButton(bool WXUNUSED(enable) = true) { return false; }
     virtual bool EnableMaximizeButton(bool WXUNUSED(enable) = true) { return false; }
