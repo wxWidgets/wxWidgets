@@ -15,6 +15,8 @@
 
 #include "wx/log.h"
 
+#include "wx/gtk/private/backend.h"
+
 constexpr const char* TRACE_WAYLAND = "wayland";
 
 // Include the relevant part of wayland-scanner-generated code here as we don't
@@ -234,6 +236,10 @@ void Globals::Init()
     // objects.
     auto const manager = gdk_display_manager_get();
     auto const displayGDK = gdk_display_manager_get_default_display(manager);
+
+    if ( !wxGTKImpl::IsWayland(displayGDK) )
+        return;
+
     auto const displayWL = gdk_wayland_display_get_wl_display(displayGDK);
 
     // Get the registry and keep it alive in a member variable so that we keep
