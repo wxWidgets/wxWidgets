@@ -147,8 +147,15 @@ void Seat::UpdateCapabilities(int capabilities)
 // Globals implementation
 // ----------------------------------------------------------------------------
 
+// Use v2 of the wl_seat interface, as this is enough for our needs and frees
+// us from providing empty implementations of the new pointer events introduced
+// in v5.
+constexpr uint32_t SEAT_VERSION = 2;
+
+using SeatIds = std::vector<uint32_t>;
+
 void
-registry_handle_global(void* WXUNUSED(data),
+registry_handle_global(void* data,
                        wl_registry* registry,
                        uint32_t name,
                        const char* interface,
@@ -156,11 +163,6 @@ registry_handle_global(void* WXUNUSED(data),
 {
     if ( strcmp(interface, wl_seat_interface.name) == 0 )
     {
-        // Use v2 of the wl_seat interface, as this is enough for our needs and
-        // frees us from providing empty implementations of the new pointer
-        // events introduced in v5.
-        constexpr uint32_t SEAT_VERSION = 2;
-
         if ( version < SEAT_VERSION )
         {
             wxLogTrace(TRACE_WAYLAND,
@@ -169,11 +171,7 @@ registry_handle_global(void* WXUNUSED(data),
             return;
         }
 
-        auto const seat = static_cast<wl_seat*>(
-            wl_registry_bind(registry, name, &wl_seat_interface, SEAT_VERSION)
-        );
-
-        WLGlobals.seats.emplace_back(seat, name);
+        static_cast<SeatIds*>(data)->push_back(name);
     }
 
     if ( strcmp(interface, wp_pointer_warp_v1_interface.name) == 0 )
@@ -224,10 +222,30 @@ void Globals::Init()
     // receiving the events about the globals being added and removed later.
     registry.reset(wl_display_get_registry(displayWL));
 
-    // And get all of the current globals, including the seats and pointer warp
-    // protocol, if supported.
-    wl_registry_add_listener(registry.get(), &registry_listener, nullptr);
+    // And get all of the current globals, storing the seat IDs in the provided
+    // vector and pointer warp protocol directly in this global object itself.
+    SeatIds seatIds;
+    wl_registry_add_listener(registry.get(), &registry_listener, &seatIds);
     wl_display_roundtrip(displayWL);
+
+    // We currently only use Wayland API for pointer warping, so if the
+    // corresponding protocol is not supported, just don't do anything at all.
+    if ( !pointer_warp )
+    {
+        registry.reset();
+        return;
+    }
+
+    // Otherwise initialize all seats, as we need to listen to "enter" event on
+    // the pointer(s) associated with the seat(s).
+    for ( auto name : seatIds )
+    {
+        auto const seat = static_cast<wl_seat*>(
+            wl_registry_bind(registry.get(), name, &wl_seat_interface, SEAT_VERSION)
+        );
+
+        WLGlobals.seats.emplace_back(seat, name);
+    }
 }
 
 void Globals::Free()
