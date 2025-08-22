@@ -849,4 +849,20 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
     }
 }
 
+TEST_CASE("wxMenuItemAccessors", "[menu]")
+{
+    wxMenu menu;
+
+    wxMenuItem* const item = menu.AppendCheckItem(wxID_ANY, "Check");
+
+    // Just check that we can call various functions.
+    CHECK( !item->GetBitmapBundle().IsOk() );
+    CHECK( !item->GetBitmap().IsOk() );
+
+#ifdef __WXMSW__
+    CHECK( !item->GetBitmapBundle(true).IsOk() );
+    CHECK( !item->GetBitmap(true).IsOk() );
+#endif // __WXMSW__
+}
+
 #endif
