@@ -513,7 +513,7 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
         [panel setAccessoryView:accView];
 
         wxCLANG_WARNING_SUPPRESS(undeclared-selector)
-        if ([panel respondsToSelector:@selector(setAccessoryViewDisclosed)])
+        if ([panel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
         {
             [(id)panel setAccessoryViewDisclosed:YES];
         }
