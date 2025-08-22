@@ -1385,6 +1385,9 @@ void App::ShowDocumentMap(wxWindow* parent)
     edit->SetMarginWidth(1, 0);
     edit->SetMarginWidth(2, 0);
 
+    edit->SetWrapMode(wxSTC_WRAP_WORD);
+    edit->SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
+
     auto* const map = new wxStyledTextCtrlMap(splitter, edit);
 
     splitter->SplitVertically(edit, map);
