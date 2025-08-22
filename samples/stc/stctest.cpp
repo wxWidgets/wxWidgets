@@ -1177,6 +1177,7 @@ private:
         if ( line >= editorFirst && line < editorFirst + visibleLines )
         {
             StartDragging(line);
+            return;
         }
 
         // The clicked line becomes the center of the visible zone indicator.
