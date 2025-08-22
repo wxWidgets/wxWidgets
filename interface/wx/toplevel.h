@@ -228,6 +228,17 @@ public:
     const wxIconBundle& GetIcons() const;
 
     /**
+        Get the window title.
+
+        This base class function is overridden in this class to behave as
+        GetTitle() and is useful when having only a `wxWindow*` pointer.
+
+        Please call GetTitle() directly instead of this function for clarity if
+        possible.
+     */
+    virtual wxString GetLabel() const;
+
+    /**
         Gets a string containing the window title.
 
         @see SetTitle()
@@ -581,6 +592,20 @@ public:
     void SetSizeHints(const wxSize& minSize,
                       const wxSize& maxSize = wxDefaultSize,
                       const wxSize& incSize = wxDefaultSize);
+
+    /**
+        Sets the window title.
+
+        This base class function is overridden in this class to behave as
+        SetTitle() and is useful when having only a `wxWindow*` pointer.
+
+        Please call SetTitle() directly instead of this function for clarity if
+        possible.
+
+        @param title
+            The window title.
+     */
+    virtual void SetLabel(const wxString& title);
 
     /**
         Sets the window title.

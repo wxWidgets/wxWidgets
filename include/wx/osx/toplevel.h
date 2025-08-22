@@ -82,9 +82,6 @@ public:
     virtual bool EnableMaximizeButton(bool enable = true) override;
     virtual bool EnableMinimizeButton(bool enable = true) override;
 
-    virtual void SetLabel(const wxString& label) override { SetTitle( label ); }
-    virtual wxString GetLabel() const            override { return GetTitle(); }
-
     virtual void OSXSetModified(bool modified) override;
     virtual bool OSXIsModified() const override;
 
