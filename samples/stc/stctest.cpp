@@ -1099,10 +1099,13 @@ private:
         Refresh();
     }
 
+    int GetThumbTopPos() const
+    {
+        return (m_edit->GetFirstVisibleLine() - m_mapFirstLine)*GetMapLineHeight();
+    }
+
     void DrawVisibleZone(wxDC& dc)
     {
-        auto const mapLineHeight = GetMapLineHeight();
-
         // We need to use a different opacity here when not using wxMSW (which
         // sets the opacity for the overlay globally).
         //
@@ -1115,9 +1118,9 @@ private:
         dc.DrawRectangle
            (
                 0,
-                (m_edit->GetFirstVisibleLine() - m_mapFirstLine)*mapLineHeight,
+                GetThumbTopPos(),
                 GetClientSize().GetWidth(),
-                m_edit->LinesOnScreen()*mapLineHeight
+                m_edit->LinesOnScreen()*GetMapLineHeight()
            );
     }
 
