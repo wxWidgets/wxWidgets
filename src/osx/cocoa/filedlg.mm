@@ -512,8 +512,12 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
         [accView removeFromSuperview];
         [panel setAccessoryView:accView];
 
+        // We need to explicitly show the accessory view for "Open" file
+        // dialogs, but doing it for "Save" dialogs is not only unnecessary but
+        // results in an immediate application abort (see #25717).
         wxCLANG_WARNING_SUPPRESS(undeclared-selector)
-        if ([panel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
+        if (!HasFlag(wxFD_SAVE) &&
+                [panel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
         {
             [(id)panel setAccessoryViewDisclosed:YES];
         }
