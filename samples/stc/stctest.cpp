@@ -952,6 +952,11 @@ public:
 
         // And also when the height changes.
         edit->Bind(wxEVT_SIZE, [this](wxSizeEvent& event) {
+            UpdateCachedValues();
+
+            wxLogTrace(wxTRACE_STC_MAP, "Edit visible lines: %d, map: %d",
+                       m_mapVisibleLines, m_editVisibleLines);
+
             SyncMapPosition();
             event.Skip();
         });
@@ -997,6 +1002,7 @@ public:
             }
         });
 
+        UpdateCachedValues();
         SyncMapPosition();
         SyncSelection();
 
@@ -1011,25 +1017,22 @@ public:
     }
 
 private:
-    int GetMapLineHeight() const
+    // We cache some values for performance, this function must be called to
+    // update them.
+    void UpdateCachedValues()
     {
         // Note that the line index doesn't matter, as the height is the same
         // for all of them.
-        return TextHeight(0);
+        m_mapLineHeight = TextHeight(0);
+
+        m_mapVisibleLines = LinesOnScreen();
+        m_editVisibleLines = m_edit->LinesOnScreen();
     }
 
     // Get map line at the given mouse position.
     int GetMapLineAtPoint(const wxPoint& pos) const
     {
         return LineFromPosition(PositionFromPoint(pos));
-    }
-
-    // Update our internal variable and set the first visible line in the map.
-    void DoUpdateMapFirstVisibleLine(int firstLine)
-    {
-        m_mapFirstLine = firstLine;
-
-        SetFirstVisibleLine(firstLine);
     }
 
     // Get the valid editor first line corresponding to the desired one but
@@ -1039,69 +1042,102 @@ private:
         if ( firstLine < 0 )
             return 0;
 
-        auto const lastValid = GetLineCount() - m_edit->LinesOnScreen();
+        auto const lastValid = GetLineCount() - m_editVisibleLines;
         if ( firstLine > lastValid )
             return lastValid;
 
         return firstLine;
     }
 
+    // Set the editor first visible line without triggering the matching map
+    // update.
+    void SetEditFirstVisibleLine(int firstLine)
+    {
+        m_updateBlocked = true;
+
+        m_edit->SetFirstVisibleLine(firstLine);
+
+        m_updateBlocked = false;
+    }
+
+    // Set the first visible line in the map without triggering the matching
+    // editor update.
+    void SetMapFirstVisibleLine(int firstLine)
+    {
+        m_updateBlocked = true;
+
+        SetFirstVisibleLine(firstLine);
+
+        m_updateBlocked = false;
+    }
+
+    // We want the physical position of the visible zone in the map window
+    // to show the position of the currently visible part of the document,
+    // as the scrollbar thumb does, which means, as mapFirst is 0 when
+    // editorFirst is 0, that they must be proportional:
+    //
+    //                  mapFirst = α * editorFirst
+    //
+    // And the coefficient of proportionality α is given by considering
+    // that the last possible values of the editor first line must be
+    // mapped to the last valid position of the thumb, which is thumb size
+    // less than the map height, giving
+    //
+    //              totalLines - mapVisibleLines
+    //         α = -------------------------------
+    //             totalLines - editorVisibleLines
+
     // Scroll the editor to correspond to the current position in the map.
     void SyncEditPosition()
     {
-        auto const change = GetFirstVisibleLine() - m_mapFirstLine;
-        if ( !change )
+        auto const totalLines = GetLineCount();
+
+        if ( m_editVisibleLines >= totalLines )
+        {
+            SetEditFirstVisibleLine(0);
             return;
+        }
 
-        m_mapFirstLine += change;
-
-        m_edit->SetFirstVisibleLine(m_edit->GetFirstVisibleLine() + change);
+        SetEditFirstVisibleLine
+        (
+            wxMulDivInt32
+            (
+                GetFirstVisibleLine(), totalLines - m_editVisibleLines,
+                totalLines - m_mapVisibleLines
+            )
+        );
     }
 
     // Scroll the map to correspond to the current position in the editor.
     void SyncMapPosition()
     {
-        // We want the physical position of the visible zone in the map window
-        // to show the position of the currently visible part of the document,
-        // as the scrollbar thumb does, which means, as mapFirst is 0 when
-        // editorFirst is 0, that they must be proportional:
-        //
-        //                  mapFirst = α * editorFirst
-        //
-        // And the coefficient of proportionality α is given by considering
-        // that the last possible values of the editor first line must be
-        // mapped to the last valid position of the thumb, which is half thumb
-        // size less than the map height, giving
-        //
-        //             totalLines - mapHeight / mapLineHeight
-        //         α = --------------------------------------
-        //                totalLines - editorVisibleLines
-
         // First check for the special case when all lines are visible.
-        auto const editorVisibleLines = m_edit->LinesOnScreen();
         auto const totalLines = GetLineCount();
-        if ( editorVisibleLines >= totalLines )
+        if ( m_editVisibleLines >= totalLines )
         {
-            DoUpdateMapFirstVisibleLine(0);
+            SetMapFirstVisibleLine(0);
             return;
         }
 
-        float const mapLineHeight = GetMapLineHeight();
-        auto const mapHeight = GetClientSize().y;
-        auto const editorFirst = m_edit->GetFirstVisibleLine();
-
-        DoUpdateMapFirstVisibleLine
+        SetMapFirstVisibleLine
         (
-            editorFirst * (totalLines - mapHeight / mapLineHeight) /
-                          (totalLines - editorVisibleLines)
+            wxMulDivInt32
+            (
+                m_edit->GetFirstVisibleLine(), totalLines - m_mapVisibleLines,
+                totalLines - m_editVisibleLines
+            )
         );
 
         Refresh();
     }
 
+    // Thumb starts at the first line shown in the editor and is offset from
+    // the top of the map window by the number of lines between it and the
+    // first line shown in the map, multiplied by the height of one line.
     int GetThumbTopPos() const
     {
-        return (m_edit->GetFirstVisibleLine() - m_mapFirstLine)*GetMapLineHeight();
+        return (m_edit->GetFirstVisibleLine() - GetFirstVisibleLine())
+                * m_mapLineHeight;
     }
 
     void DrawVisibleZone(wxDC& dc)
@@ -1120,7 +1156,7 @@ private:
                 0,
                 GetThumbTopPos(),
                 GetClientSize().GetWidth(),
-                m_edit->LinesOnScreen()*GetMapLineHeight()
+                m_editVisibleLines * m_mapLineHeight
            );
     }
 
@@ -1133,12 +1169,13 @@ private:
 
     void OnEditUpdate(wxStyledTextEvent& event)
     {
+        if ( m_updateBlocked )
+            return;
+
         if ( event.GetUpdated() & wxSTC_UPDATE_V_SCROLL )
         {
-            auto const editorFirst = m_edit->GetFirstVisibleLine();
-            wxLogTrace(wxTRACE_STC_MAP, "Visible edit lines: %d..%d",
-                       editorFirst,
-                       editorFirst + m_edit->LinesOnScreen() - 1);
+            wxLogTrace(wxTRACE_STC_MAP, "First edit line: %d",
+                       m_edit->GetFirstVisibleLine());
 
             SyncMapPosition();
         }
@@ -1152,61 +1189,61 @@ private:
 
     void OnMapUpdate(wxStyledTextEvent& event)
     {
-        // We're only interested in scrolling notifications here.
-        if ( !(event.GetUpdated() & wxSTC_UPDATE_V_SCROLL) )
+        if ( m_updateBlocked )
             return;
 
-        wxLogTrace(wxTRACE_STC_MAP, "Visible map lines: %d..%d",
-                   GetFirstVisibleLine(),
-                   GetFirstVisibleLine() + LinesOnScreen() - 1);
+        // We're only interested in scrolling notifications here.
+        if ( event.GetUpdated() & wxSTC_UPDATE_V_SCROLL )
+        {
+            wxLogTrace(wxTRACE_STC_MAP, "First map line: %d",
+                       GetFirstVisibleLine());
 
-        SyncEditPosition();
+            SyncEditPosition();
+        }
     }
 
     // Return true if the visible zone indicator is currently being dragged.
     bool IsDragging() const
     {
-        return m_dragStartLine != -1;
+        return m_dragOffset != -1;
     }
 
     void OnLeftDown(wxMouseEvent& event)
     {
-        auto const line = GetMapLineAtPoint(event.GetPosition());
+        auto const posMouse = event.GetPosition();
+        auto const line = GetMapLineAtPoint(posMouse);
 
         auto const editorFirst = m_edit->GetFirstVisibleLine();
-        auto const visibleLines = m_edit->LinesOnScreen();
 
         // If the line is in the visible zone indicator, start dragging it.
-        if ( line >= editorFirst && line < editorFirst + visibleLines )
+        if ( line >= editorFirst && line < editorFirst + m_editVisibleLines )
         {
-            StartDragging(line);
+            StartDragging(posMouse);
             return;
         }
 
         // The clicked line becomes the center of the visible zone indicator.
         // unless it's too close to the top or bottom of the map.
         auto const
-            editorNew = GetEditValidFirstLine(line - (visibleLines + 1) / 2);
+            editorNew = GetEditValidFirstLine(line - (m_editVisibleLines + 1) / 2);
 
         if ( editorNew != editorFirst )
         {
             wxLogTrace(wxTRACE_STC_MAP, "Editor first %d -> %d",
                        editorFirst, editorNew);
-            m_edit->SetFirstVisibleLine(editorNew);
+            SetEditFirstVisibleLine(editorNew);
             SyncMapPosition();
 
             Refresh();
         }
     }
 
-    // Called when the user starts dragging at the given position but only
-    // starts dragging if this position is inside the visible zone indicator.
-    void StartDragging(int line)
+    // Called when the user starts dragging at the given point.
+    void StartDragging(const wxPoint& pos)
     {
-        m_dragStartLine = line;
-        m_dragLineOffset = line - m_edit->GetFirstVisibleLine();
-        wxLogTrace(wxTRACE_STC_MAP, "Start dragging line %d (offset=%d)",
-                   m_dragStartLine, m_dragLineOffset);
+        m_dragOffset = pos.y - GetThumbTopPos();
+        wxLogTrace(wxTRACE_STC_MAP, "Start dragging at thumb offset %d",
+                   m_dragOffset);
 
         SetCursor(wxCURSOR_HAND);
         CaptureMouse();
@@ -1225,14 +1262,42 @@ private:
     // Called while dragging the visible zone indicator.
     void DoDrag(const wxPoint& pos)
     {
-        auto const currentLine = GetMapLineAtPoint(pos);
-        auto const
-            firstLine = GetEditValidFirstLine(currentLine - m_dragLineOffset);
+        // We want the thumb to follow the mouse when dragging, i.e. its top
+        // must remain at the same distance from the mouse pointer as it was
+        // when the dragging started, but it must also remain valid.
+        auto thumbTopPos = pos.y - m_dragOffset;
+        if ( thumbTopPos < 0 )
+            thumbTopPos = 0;
 
-        wxLogTrace(wxTRACE_STC_MAP, "Editor first line %d -> %d",
-                   m_edit->GetFirstVisibleLine(), firstLine);
-        m_edit->SetFirstVisibleLine(firstLine);
-        SyncMapPosition();
+        auto const lastValidThumbTopPos =
+            GetClientSize().y - m_editVisibleLines * m_mapLineHeight;
+        if ( thumbTopPos > lastValidThumbTopPos )
+            thumbTopPos = lastValidThumbTopPos;
+
+
+        // As the thumb top is (editorFirst - mapFirst)*mapLineHeight and
+        // mapFirst = α * editorFirst, we can compute the new editor first
+        // line as thumbTopPos / ((1 - α) * mapLineHeight) or the map first
+        // line as thumbTopPos / ((1/α - 1) * mapLineHeight).
+        auto const totalLines = GetLineCount();
+
+        SetEditFirstVisibleLine
+        (
+            wxMulDivInt32
+            (
+                thumbTopPos, totalLines - m_editVisibleLines,
+                (m_mapVisibleLines - m_editVisibleLines) * m_mapLineHeight
+            )
+        );
+
+        SetMapFirstVisibleLine
+        (
+            wxMulDivInt32
+            (
+                thumbTopPos, totalLines - m_mapVisibleLines,
+                (m_mapVisibleLines - m_editVisibleLines) * m_mapLineHeight
+            )
+        );
 
         wxOverlayDC dc(m_overlay, this);
         dc.Clear();
@@ -1243,7 +1308,7 @@ private:
     // released or because the mouse capture was lost.
     void DoStopDragging()
     {
-        m_dragStartLine = -1;
+        m_dragOffset = -1;
 
         SetCursor(wxCURSOR_ARROW);
         ReleaseMouse();
@@ -1257,21 +1322,24 @@ private:
     // The associated main document control.
     wxStyledTextCtrl* const m_edit;
 
-    // First line shown in the map before the last scroll events.
-    //
-    // Call DoUpdateMapFirstVisibleLine() to set it to ensure that it's always
-    // in sync with the actual first visible line.
-    int m_mapFirstLine = 0;
-
     // Overlay showing the visible zone indicator being dragged.
     wxOverlay m_overlay;
 
-    // The line where the user started the dragging operation, or -1 if there
-    // is no dragging in progress.
-    int m_dragStartLine = -1;
+    // The constant vertical offset between the mouse pointer and the thumb top
+    // while dragging (always positive) or -1 if not dragging.
+    int m_dragOffset = -1;
 
-    // Offset of the line being dragged from the first visible editor line.
-    int m_dragLineOffset = 0;
+    // These values change only when the window size changes and correspond to
+    // the returned value of the corresponding wxStyledTextCtrl functions, we
+    // store them only for performance reasons, see UpdateCachedValues().
+
+    int m_mapLineHeight = 0; // Height of a single line in the map.
+    int m_mapVisibleLines = 0; // Number of lines visible in the map.
+    int m_editVisibleLines = 0; // Number of lines visible in the editor.
+
+    // Flag set to true to indicate that the editor or map is scrolled by us
+    // and so shouldn't result in matching changes of the other window.
+    bool m_updateBlocked = false;
 
 
     wxDECLARE_NO_COPY_CLASS(wxStyledTextCtrlMap);
