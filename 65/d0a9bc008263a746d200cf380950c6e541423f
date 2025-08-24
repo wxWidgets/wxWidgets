@@ -1,0 +1,1 @@
+wxAll: Support configurable timeouts in wxWebRequest (Brian Delalex, #25673).
