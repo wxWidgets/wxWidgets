@@ -2310,18 +2310,21 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         m_currentpoint = wxPoint( xx , yy ) ;
         wxRect newrect ( m_anchorpoint , m_currentpoint ) ;
 
+        // This is required with wxMSW to allow per-pixel transparency.
+        m_overlay.SetOpacity(-1);
+
         wxOverlayDC dc(m_overlay, this);
         PrepareDC(dc);
 
+        // Note: this must be called on the overlay DC, not wxGCDC.
         dc.Clear();
-#ifdef __WXMAC__
-        dc.SetPen( *wxGREY_PEN );
-        dc.SetBrush( wxColour( 192,192,192,64 ) );
-#else
-        dc.SetPen( wxPen( *wxLIGHT_GREY, 2 ) );
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-#endif
-        dc.DrawRectangle( newrect );
+
+        // Use wxGCDC to ensure that brush transparency is taken into account
+        // even under wxMSW where plain wxDC doesn't support it.
+        wxGCDC gdc(dc);
+        gdc.SetPen( *wxGREY_PEN );
+        gdc.SetBrush( wxColour( 192,192,192,64 ) );
+        gdc.DrawRectangle( newrect );
     }
 #else
     wxUnusedVar(event);
