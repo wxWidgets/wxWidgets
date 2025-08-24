@@ -442,7 +442,7 @@ public:
     virtual wxString GetUserLocalDataDir() const;
 
     /**
-        Return OS specific directory where project shared liraries are.
+        Return OS specific directory where project shared libraries are.
 
         The function does the same thing as GetPluginsDir() under non-Mac platforms
         but differs from it under Mac, where plugins (shared libraries loaded by the
