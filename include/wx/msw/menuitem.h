@@ -83,6 +83,7 @@ public:
         DoSetBitmap(bmp, bChecked);
     }
 
+    using wxMenuItemBase::GetBitmapBundle;
     wxBitmapBundle GetBitmapBundle(bool bChecked) const
     {
         return bChecked ? m_bitmap : m_bmpUnchecked;
