@@ -43,6 +43,7 @@ build/upmake    -diff
 .cirrus.yml                     export-ignore
 .github/                        export-ignore
 .gitattributes                  export-ignore
+.git-blame-ignore-revs          export-ignore
 .gitignore                      export-ignore
 .gitmodules                     export-ignore
 .mailmap                        export-ignore
