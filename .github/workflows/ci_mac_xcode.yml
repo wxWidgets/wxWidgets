@@ -90,14 +90,14 @@ jobs:
           configuration: 'Release'
           project: samples/minimal/minimal_cocoa.xcodeproj
         - name: iOS static Debug
-          runner: macos-latest
+          runner: macos-14
           scheme: 'static'
           destination: 'generic/platform=iOS'
           arch: x86_64
           configuration: 'Debug'
           project: build/osx/wxiphone.xcodeproj
         - name: iOS Simulator static
-          runner: macos-latest
+          runner: macos-15
           scheme: 'app-static'
           destination: 'generic/platform=iOS Simulator'
           arch: arm64
