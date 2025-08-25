@@ -164,6 +164,8 @@ public:
 // wxDCImpl
 //-----------------------------------------------------------------------------
 
+// This class is only used by wxDC and wxWidgets itself, do not use it in the
+// application code.
 class WXDLLIMPEXP_CORE wxDCImpl: public wxObject
 {
 public:
