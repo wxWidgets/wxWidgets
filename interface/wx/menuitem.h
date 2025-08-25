@@ -224,7 +224,7 @@ public:
 
         @since 3.3.2
     */
-    wxBitmap GetDisabledBitmapBundle() const;
+    wxBitmapBundle GetDisabledBitmapBundle() const;
 
     /**
         Returns the font associated with the menu item.
