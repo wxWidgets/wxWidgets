@@ -962,7 +962,9 @@ public:
         });
 
         // Handle mouse events for dragging the visible zone indicator.
-        Bind(wxEVT_LEFT_DOWN, &wxStyledTextCtrlMap::OnLeftDown, this);
+        Bind(wxEVT_LEFT_DOWN, [this](wxMouseEvent& event) {
+            HandleMouseClick(event);
+        });
 
         Bind(wxEVT_MOTION, [this](wxMouseEvent& event) {
             if ( event.LeftIsDown() && IsDragging() )
@@ -974,9 +976,10 @@ public:
                 DoStopDragging();
         });
 
-        Bind(wxEVT_LEFT_DCLICK, [this](wxMouseEvent& WXUNUSED(event)) {
-            // Don't let Scintilla get the double click, even if we don't do
-            // anything with it ourselves.
+        Bind(wxEVT_LEFT_DCLICK, [this](wxMouseEvent& event) {
+            // Don't let Scintilla get the double click, handle it as a simple
+            // click instead.
+            HandleMouseClick(event);
         });
 
         Bind(wxEVT_MOUSE_CAPTURE_LOST, [this](wxMouseCaptureLostEvent& WXUNUSED(event)) {
@@ -1208,7 +1211,7 @@ private:
         return m_dragOffset != -1;
     }
 
-    void OnLeftDown(wxMouseEvent& event)
+    void HandleMouseClick(wxMouseEvent& event)
     {
         auto const posMouse = event.GetPosition();
         auto const line = GetMapLineAtPoint(posMouse);
