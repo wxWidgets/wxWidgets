@@ -173,6 +173,7 @@ public:
     virtual ~wxDCImpl();
 
     wxDC *GetOwner() const { return m_owner; }
+    void SetOwner(wxDC* owner) { m_owner = owner; }
 
     wxWindow* GetWindow() const { return m_window; }
 
@@ -921,7 +922,7 @@ protected:
     {
     }
 
-    wxDCImpl * const m_pimpl;
+    wxDCImpl *m_pimpl;
 };
 
 // Full device context class, providing functions for drawing on the device in
@@ -929,6 +930,37 @@ protected:
 class WXDLLIMPEXP_CORE wxDC : public wxReadOnlyDC
 {
 public:
+    // Device context objects are not copyable but are moveable.
+    wxDC(const wxDC&) = delete;
+    wxDC& operator=(const wxDC&) = delete;
+
+    wxDC(wxDC&& other) noexcept
+        : wxReadOnlyDC(other.m_pimpl)
+    {
+        if ( m_pimpl )
+        {
+            m_pimpl->SetOwner(this);
+            other.m_pimpl = nullptr;
+        }
+    }
+
+    wxDC& operator=(wxDC&& other) noexcept
+    {
+        if ( this != &other )
+        {
+            delete m_pimpl;
+            m_pimpl = other.m_pimpl;
+            if ( m_pimpl )
+            {
+                m_pimpl->SetOwner(this);
+                other.m_pimpl = nullptr;
+            }
+        }
+
+        return *this;
+    }
+
+
     // copy attributes (font, colours and writing direction) from another DC
     void CopyAttributes(const wxDC& dc);
 
@@ -1339,7 +1371,6 @@ protected:
 
 private:
     wxDECLARE_ABSTRACT_CLASS(wxDC);
-    wxDECLARE_NO_COPY_CLASS(wxDC);
 };
 
 // ----------------------------------------------------------------------------

@@ -797,6 +797,9 @@ public:
     and such functions can now also be called with wxInfoDC objects as
     arguments.
 
+    Although copying wxDC objects is not allowed because it wouldn't make
+    sense, objects of wxDC-derived classes can be moved, in C++ sense, allowing
+    to return them from functions since wxWidgets 3.3.2.
 
     @section dc_units Device and logical units
 
