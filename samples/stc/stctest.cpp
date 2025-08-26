@@ -1377,6 +1377,7 @@ void App::ShowDocumentMap(wxWindow* parent)
     auto* const map = new wxStyledTextCtrlMap(splitter, edit);
 
     splitter->SplitVertically(edit, map);
+    splitter->SetMinimumPaneSize(dialog.FromDIP(10));
 
     dialog.Bind(wxEVT_SIZE, [&](wxSizeEvent& event) {
         splitter->SetSashPosition(-dialog.FromDIP(200));
