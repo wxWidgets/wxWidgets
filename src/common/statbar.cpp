@@ -226,7 +226,7 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
                 widths.Add(pane.GetWidth());
             else
             {
-                int nVarWidth = widthExtra > 0 ? (widthExtra * (-pane.GetWidth())) / nVarCount : 0;
+                int nVarWidth = (widthExtra > 0 && nVarCount != 0) ? (widthExtra * (-pane.GetWidth())) / nVarCount : 0;
                 nVarCount += pane.GetWidth();
                 widthExtra -= nVarWidth;
                 widths.Add(nVarWidth);
