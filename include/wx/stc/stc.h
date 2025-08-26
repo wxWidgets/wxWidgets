@@ -6107,6 +6107,9 @@ protected:
 
     bool                m_lastKeyDownConsumed;
 
+private:
+    wxBitmap m_buffer;
+
     friend class ScintillaWX;
 #endif // !SWIG
 };
