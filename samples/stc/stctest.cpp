@@ -982,6 +982,15 @@ public:
             HandleMouseClick(event);
         });
 
+        Bind(wxEVT_MOUSEWHEEL, [this](wxMouseEvent& event) {
+            // Don't allow zooming into the map.
+            if ( event.ControlDown() )
+                return;
+
+            // But do allow to scroll in it using the wheel.
+            event.Skip();
+        });
+
         Bind(wxEVT_MOUSE_CAPTURE_LOST, [this](wxMouseCaptureLostEvent& WXUNUSED(event)) {
             DoStopDragging();
         });
