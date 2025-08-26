@@ -1689,7 +1689,7 @@ protected:
     bool DoIsHoliday(const wxDateTime& dt) const override
     {
         if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
-            (dt.GetMonth() == 12 && dt.GetDay() == 25))
+            (dt.GetMonth() == wxDateTime::Month::Dec && dt.GetDay() == 25))
         {
             return true;
         }
