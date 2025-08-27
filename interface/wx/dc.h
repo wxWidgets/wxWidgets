@@ -789,12 +789,6 @@ public:
     of the two wxCoord ones or wxPoint and wxSize instead of the four
     wxCoord parameters.
 
-    Beginning with wxWidgets 2.9.0 the entire wxDC code has been
-    reorganized. All platform dependent code (actually all drawing code)
-    has been moved into backend classes which derive from a common
-    wxDCImpl class. The user-visible classes such as wxClientDC and
-    wxPaintDC merely forward all calls to the backend implementation.
-
     In wxWidgets 3.3.0 the new wxReadOnlyDC class was extracted from wxDC: it
     contains all the functions that don't actually draw on the device context,
     but just return information about it. This class should be rarely used
@@ -803,6 +797,9 @@ public:
     and such functions can now also be called with wxInfoDC objects as
     arguments.
 
+    Although copying wxDC objects is not allowed because it wouldn't make
+    sense, objects of wxDC-derived classes can be moved, in C++ sense, allowing
+    to return them from functions since wxWidgets 3.3.2.
 
     @section dc_units Device and logical units
 
