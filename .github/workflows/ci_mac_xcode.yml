@@ -90,14 +90,15 @@ jobs:
           configuration: 'Release'
           project: samples/minimal/minimal_cocoa.xcodeproj
         - name: iOS static Debug
-          runner: macos-latest
+          runner: macos-15
+          xcode: Xcode_16.4
           scheme: 'static'
           destination: 'generic/platform=iOS'
           arch: x86_64
           configuration: 'Debug'
           project: build/osx/wxiphone.xcodeproj
         - name: iOS Simulator static
-          runner: macos-latest
+          runner: macos-15
           scheme: 'app-static'
           destination: 'generic/platform=iOS Simulator'
           arch: arm64
@@ -113,6 +114,10 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
+
+    - name: Configure Xcode
+      if: ${{ matrix.xcode }}
+      run: sudo xcode-select -s /Applications/${{ matrix.xcode }}.app
 
     - name: Build
       run: |
