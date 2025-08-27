@@ -1,0 +1,1 @@
+wxAll (GUI): Make wxDC-derived objects moveable (#25726).
