@@ -226,6 +226,7 @@ bool App::OnInit () {
     (*g_pageSetupData) = *g_printData;
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
+    m_frame = nullptr; ShowDocumentMap(nullptr); SetErrorExitCode(0); return false; // FIXME-VZ
     // create application frame
     m_frame = new AppFrame (*g_appname);
 
@@ -1357,6 +1358,64 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxStyledTextCtrlMap);
 };
 
+// Temporary experiment:
+//
+// Wrap lines in the same way in the map and in the editor, this is required in
+// order to have the same line indices in both of them.
+class wxStyledTextCtrlMapContainer : public wxWindow
+{
+public:
+    wxStyledTextCtrlMapContainer(wxWindow* parent, wxStyledTextCtrl* edit)
+        : wxWindow(parent, wxID_ANY),
+          m_edit(edit),
+          m_map(new wxStyledTextCtrlMap(this, edit))
+    {
+        SetBackgroundColour(*wxYELLOW); // FIXME-VZ
+        Bind(wxEVT_SIZE, &wxStyledTextCtrlMapContainer::OnSize, this);
+    }
+
+private:
+    void OnSize(wxSizeEvent& WXUNUSED(event))
+    {
+        // Resize the map to wrap lines at the same position as the editor.
+        wxLogTrace(wxTRACE_STC_MAP, "Char width in editor: %d, map: %d",
+                   m_edit->TextWidth(wxSTC_STYLE_DEFAULT, "x"),
+                   m_map->TextWidth(wxSTC_STYLE_DEFAULT, "x"));
+
+        m_map->SetClientSize
+        (
+            wxMulDivInt32
+            (
+                m_map->TextWidth(wxSTC_STYLE_DEFAULT, "x"),
+                m_edit->GetClientSize().x,
+                m_edit->TextWidth(wxSTC_STYLE_DEFAULT, "x")
+            ),
+            GetClientSize().y
+        );
+
+        wxLogTrace(wxTRACE_STC_MAP, "Window width of editor: %d, map: %d",
+                   m_edit->GetClientSize().x,
+                   m_map->GetClientSize().x);
+
+        auto const N = m_edit->GetLineCount();
+        int mapDisplayLines = 0;
+        int editDisplayLines = 0;
+        for ( int line = 0; line < N; ++line )
+        {
+            mapDisplayLines += m_map->WrapCount(line);
+            editDisplayLines += m_edit->WrapCount(line);
+        }
+        wxLogTrace(wxTRACE_STC_MAP, "Total display lines: editor %d, map: %d",
+                   editDisplayLines, mapDisplayLines);
+
+    }
+
+    wxStyledTextCtrl* const m_edit;
+    wxStyledTextCtrlMap* const m_map;
+
+    wxDECLARE_NO_COPY_CLASS(wxStyledTextCtrlMapContainer);
+};
+
 void App::ShowDocumentMap(wxWindow* parent)
 {
     wxDialog dialog(parent, wxID_ANY, "Editor with Document Map",
@@ -1374,7 +1433,10 @@ void App::ShowDocumentMap(wxWindow* parent)
     edit->SetMarginWidth(1, 0);
     edit->SetMarginWidth(2, 0);
 
-    auto* const map = new wxStyledTextCtrlMap(splitter, edit);
+    edit->SetWrapMode(wxSTC_WRAP_WORD);
+    edit->SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
+
+    auto* const map = new wxStyledTextCtrlMapContainer(splitter, edit);
 
     splitter->SplitVertically(edit, map);
     splitter->SetMinimumPaneSize(dialog.FromDIP(10));
