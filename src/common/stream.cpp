@@ -350,7 +350,7 @@ char wxStreamBuffer::Peek()
         return 0;
     }
 
-    char c;
+    char c = 0;
     GetFromBuffer(&c, sizeof(c));
     m_buffer_pos--;
 
@@ -363,7 +363,7 @@ char wxStreamBuffer::GetChar()
 
     wxCHECK_MSG( inStream, 0, wxT("should have a stream in wxStreamBuffer") );
 
-    char c;
+    char c = 0;
     if ( !HasBuffer() )
     {
         inStream->OnSysRead(&c, sizeof(c));
