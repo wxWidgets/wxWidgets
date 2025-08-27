@@ -570,6 +570,8 @@
 
 #cmakedefine01 wxUSE_NANOSVG_EXTERNAL
 
+#cmakedefine01 wxUSE_LUNASVG
+
 #cmakedefine01 wxUSE_TGA
 
 #cmakedefine01 wxUSE_GIF

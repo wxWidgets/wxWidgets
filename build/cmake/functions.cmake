@@ -754,6 +754,8 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
 
     if(NOT wxUSE_SYS_LIBS)
         set(thirdparty_lib_default builtin)
+    elseif(THIRDPARTY_DEFAULT STREQUAL "OFF")
+        set(thirdparty_lib_default OFF)
     elseif(THIRDPARTY_DEFAULT)
         set(thirdparty_lib_default ${THIRDPARTY_DEFAULT})
     elseif(THIRDPARTY_DEFAULT_APPLE AND APPLE)
