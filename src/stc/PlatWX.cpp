@@ -196,7 +196,7 @@ class SurfaceImpl : public Surface {
 private:
     wxDC*       hdc;
     bool        hdcOwned;
-    wxBitmap*   bitmap;
+    wxBitmap    bitmap;
     int         x;
     int         y;
     bool        unicodeMode;
@@ -257,7 +257,7 @@ public:
 
 
 SurfaceImpl::SurfaceImpl() :
-    hdc(nullptr), hdcOwned(0), bitmap(nullptr),
+    hdc(nullptr), hdcOwned(0),
     x(0), y(0), unicodeMode(0)
 {}
 
@@ -292,17 +292,15 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID w
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
-    bitmap = new wxBitmap();
-    bitmap->CreateWithLogicalSize(width, height, GETWIN(winid)->GetDPIScaleFactor());
-    mdc->SelectObject(*bitmap);
+    bitmap.CreateWithLogicalSize(width, height, GETWIN(winid)->GetDPIScaleFactor());
+    mdc->SelectObject(bitmap);
 }
 
 
 void SurfaceImpl::Release() {
-    if (bitmap) {
+    if (bitmap.IsOk()) {
         ((wxMemoryDC*)hdc)->SelectObject(wxNullBitmap);
-        delete bitmap;
-        bitmap = nullptr;
+        bitmap.UnRef();
     }
     if (hdcOwned) {
         delete hdc;
@@ -377,8 +375,8 @@ void SurfaceImpl::FillRectangle(PRectangle rc, ColourDesired back) {
 
 void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
     wxBrush br;
-    if (((SurfaceImpl&)surfacePattern).bitmap)
-        br = wxBrush(*((SurfaceImpl&)surfacePattern).bitmap);
+    if (((SurfaceImpl&)surfacePattern).bitmap.IsOk())
+        br = wxBrush(((SurfaceImpl&)surfacePattern).bitmap);
     else    // Something is wrong so display in red
         br = wxBrush(*wxRED);
     hdc->SetPen(*wxTRANSPARENT_PEN);
