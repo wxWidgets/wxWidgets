@@ -5592,7 +5592,11 @@ void wxWindowGTK::WarpPointer( int x, int y )
     GdkWindow* const window = GTKGetMainWindow();
     if ( wxGTKImpl::IsWayland(window) )
     {
-        wxWayland::WarpPointer(window, x, y);
+        int org_x = 0;
+        int org_y = 0;
+        gdk_window_get_origin(window, &org_x, &org_y);
+
+        wxWayland::WarpPointer(window, org_x + x, org_y + y);
         return;
     }
 #endif // wxHAVE_WAYLAND_PROTOCOLS
