@@ -1804,7 +1804,7 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
     }
 
     int lineHeight = textSize.GetHeight();
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxRect r(textSize.GetWidth() + x, x, dc.FromDIP(100), lineHeight);
 
     dc.DrawText("System colours", x, r.y);
@@ -1893,7 +1893,7 @@ void MyCanvas::DrawDatabaseColours(wxDC& dc)
     }
 
     int lineHeight = textSize.GetHeight();
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxRect r(textSize.GetWidth() + x, x, dc.FromDIP(100), lineHeight);
 
     wxString title = "wxColourDatabase colours";
@@ -1969,7 +1969,7 @@ void MyCanvas::DrawCursors(wxDC& dc)
     constexpr int stockNamesCount = WXSIZEOF(stockNames);
     m_cursorRects.resize(stockNamesCount);
 
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxCoord y = x;
 
     dc.SetBackgroundMode(wxTRANSPARENT);
@@ -1978,7 +1978,7 @@ void MyCanvas::DrawCursors(wxDC& dc)
                                  wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this)),
                 x, y);
 
-    const int w = FromDIP(200);
+    const int w = dc.FromDIP(200);
     const int h = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this);
     const int margin = dc.GetCharWidth();
 
@@ -2784,13 +2784,16 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
             m_canvas->UseGraphicRenderer(nullptr);
 #endif
-            wxSVGFileDC svgdc(dlg.GetPath(),
-                              canvasSize.GetWidth(),
-                              canvasSize.GetHeight(),
-                              72,
-                              "Drawing sample");
-            svgdc.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
-            m_canvas->Draw(svgdc);
+            wxSize svgSize;
+            wxSVGFileDC tempSvgDC("", svgSize.x, svgSize.y, 72, "Drawing sample");
+            m_canvas->Draw(tempSvgDC);
+
+            svgSize = wxSize(tempSvgDC.MaxX(), tempSvgDC.MaxY());
+            svgSize.IncBy(15); // account for wxPen width exceeding bounds
+
+            wxSVGFileDC svgDC(dlg.GetPath(), svgSize.x, svgSize.y, 72, "Drawing sample");
+            svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
+            m_canvas->Draw(svgDC);
 #if wxUSE_GRAPHICS_CONTEXT
             m_canvas->UseGraphicRenderer(tempRenderer);
 #endif
