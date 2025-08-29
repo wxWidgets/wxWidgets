@@ -2539,9 +2539,12 @@ TEST_CASE("Easter", "[datetime][holiday][easter]")
 
 TEST_CASE("US Catholic Holidays", "[datetime][holiday]")
 {
+    // Clear the wxDateTimeWorkDays that exists by default, and restore it at the end,
+    // after cleaning up the authority tested here.
     wxDateTimeHolidayAuthority::ClearAllAuthorities();
     wxON_BLOCK_EXIT0(wxDateTimeHolidayAuthority::ClearAllAuthorities);
     wxON_BLOCK_EXIT1(wxDateTimeHolidayAuthority::AddAuthority, new wxDateTimeWorkDays);
+
     SECTION("Ascension")
     {
         wxDateTime ascension = wxDateTimeUSCatholicFeasts::GetThursdayAscension(2023);
@@ -2569,6 +2572,8 @@ TEST_CASE("US Catholic Holidays", "[datetime][holiday]")
 
 TEST_CASE("Christian Holidays", "[datetime][holiday][christian]")
 {
+    // Clear the wxDateTimeWorkDays that exists by default, and restore it at the end,
+    // after cleaning up the authority tested here.
     wxDateTimeHolidayAuthority::ClearAllAuthorities();
     wxON_BLOCK_EXIT0(wxDateTimeHolidayAuthority::ClearAllAuthorities);
     wxON_BLOCK_EXIT1(wxDateTimeHolidayAuthority::AddAuthority, new wxDateTimeWorkDays);
