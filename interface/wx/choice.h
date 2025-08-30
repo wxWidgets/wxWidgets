@@ -15,6 +15,8 @@
     @beginStyleTable
     @style{wxCB_SORT}
            Sorts the entries alphabetically.
+    @style{wxCH_BUTTONS}
+           iOS only. Implements wxChoice as segmented buttons laid out horizontally
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}

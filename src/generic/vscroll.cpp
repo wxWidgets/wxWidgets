@@ -27,6 +27,7 @@
 #include "wx/vscroll.h"
 
 #include "wx/utils.h"   // For wxMin/wxMax().
+#include "wx/log.h"
 
 // ============================================================================
 // wxVarScrollHelperEvtHandler declaration
@@ -193,6 +194,10 @@ wxVarScrollHelperBase::wxVarScrollHelperBase(wxWindow *win)
 
     m_physicalScrolling = true;
     m_handler = nullptr;
+
+#ifdef __WXOSX_IPHONE__
+    m_deviceOffset = 0;
+#endif    
 
     // by default, the associated window is also the target window
     DoSetTargetWindow(win);
@@ -395,6 +400,10 @@ void wxVarScrollHelperBase::UpdateScrollbar()
 
     m_nUnitsVisible = unit - m_unitFirst;
 
+#ifdef __WXOSX_IPHONE__
+    int size = EstimateTotalSize();
+    m_win->SetScrollbar(GetOrientation(), m_deviceOffset, 20, (size/20)+1 );
+#else
     int unitsPageSize = m_nUnitsVisible;
     if ( s > sWindow )
     {
@@ -406,6 +415,7 @@ void wxVarScrollHelperBase::UpdateScrollbar()
 
     // set the scrollbar parameters to reflect this
     m_win->SetScrollbar(GetOrientation(), m_unitFirst, unitsPageSize, m_unitMax);
+#endif
 }
 
 void wxVarScrollHelperBase::RemoveScrollbar()
@@ -487,6 +497,11 @@ void wxVarScrollHelperBase::SetUnitCount(size_t count)
 
 void wxVarScrollHelperBase::RefreshUnit(size_t unit)
 {
+#ifdef __WXOSX_IPHONE__
+    m_targetWindow->Refresh();
+    return;
+#endif    
+
     // is this unit visible?
     if ( !IsVisible(unit) )
     {
@@ -511,6 +526,11 @@ void wxVarScrollHelperBase::RefreshUnit(size_t unit)
 void wxVarScrollHelperBase::RefreshUnits(size_t from, size_t to)
 {
     wxASSERT_MSG( from <= to, wxT("RefreshUnits(): empty range") );
+
+#ifdef __WXOSX_IPHONE__
+    m_targetWindow->Refresh();
+    return;
+#endif    
 
     // clump the range to just the visible units -- it is useless to refresh
     // the other ones
@@ -576,6 +596,15 @@ bool wxVarScrollHelperBase::ScrollLayout()
 
 int wxVarScrollHelperBase::VirtualHitTest(wxCoord coord) const
 {
+#ifdef __WXOSX_IPHONE__
+    int y = 0;
+    for ( size_t unit = 0; unit < m_unitMax; unit++ )
+    {
+        y += OnGetUnitSize(unit);
+        if (coord < y)
+            return unit;
+    }
+#else
     const size_t unitMax = GetVisibleEnd();
     for ( size_t unit = GetVisibleBegin(); unit < unitMax; ++unit )
     {
@@ -583,6 +612,7 @@ int wxVarScrollHelperBase::VirtualHitTest(wxCoord coord) const
         if ( coord < 0 )
             return unit;
     }
+#endif
 
     return wxNOT_FOUND;
 }
@@ -754,7 +784,37 @@ void wxVarScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
         return;
     }
 
+#ifdef __WXOSX_IPHONE__
+    m_deviceOffset = event.GetPosition();
+    // calculate new start and end units
+    wxCoord clientSize = GetOrientationTargetSize();
+    wxCoord start = 0;
+    for (int i = 0; i < m_unitMax; i++)
+    {
+        int height = OnGetUnitSize( i );
+        if (start + height < m_deviceOffset) {
+            start += height;
+            continue;
+        }
+        m_unitFirst = i;
+        m_nUnitsVisible = 1;
+        for (int j = i; j < m_unitMax; j++)
+        {
+            if (start + height < m_deviceOffset+clientSize) {
+                start += height;
+                m_nUnitsVisible++;
+                continue;
+            }
+            return;
+        }
+        return;
+    }
+    // nothing found..
+    m_unitFirst = 0;
+    m_nUnitsVisible = 10;
+#else
     DoScrollToUnit(GetNewScrollPosition(event));
+#endif
 
 #ifdef __WXMAC__
     UpdateMacScrollWindow();
@@ -763,6 +823,9 @@ void wxVarScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 
 void wxVarScrollHelperBase::DoPrepareDC(wxDC& dc)
 {
+#ifdef __WXOSX_IPHONE__
+    dc.SetDeviceOrigin(0, -m_deviceOffset);
+#else
     if ( m_physicalScrolling )
     {
         wxPoint pt = dc.GetDeviceOrigin();
@@ -771,6 +834,7 @@ void wxVarScrollHelperBase::DoPrepareDC(wxDC& dc)
 
         dc.SetDeviceOrigin(pt.x, pt.y);
     }
+#endif
 }
 
 int wxVarScrollHelperBase::DoCalcScrolledPosition(int coord) const
@@ -837,6 +901,12 @@ bool wxVarHVScrollHelper::ScrollToRowColumn(size_t row, size_t column)
 
 void wxVarHVScrollHelper::RefreshRowColumn(size_t row, size_t column)
 {
+#ifdef __WXOSX_IPHONE__
+    wxVarVScrollHelper::GetTargetWindow()->Refresh();
+    wxVarHScrollHelper::GetTargetWindow()->Refresh();
+    return;
+#endif
+
     // is this unit visible?
     if ( !IsRowVisible(row) || !IsColumnVisible(column) )
     {
@@ -885,6 +955,12 @@ void wxVarHVScrollHelper::RefreshRowsColumns(size_t fromRow, size_t toRow,
 {
     wxASSERT_MSG( fromRow <= toRow || fromColumn <= toColumn,
         wxT("RefreshRowsColumns(): empty range") );
+
+#ifdef __WXOSX_IPHONE__
+    wxVarVScrollHelper::GetTargetWindow()->Refresh();
+    wxVarHScrollHelper::GetTargetWindow()->Refresh();
+    return;
+#endif
 
     // clump the range to just the visible units -- it is useless to refresh
     // the other ones

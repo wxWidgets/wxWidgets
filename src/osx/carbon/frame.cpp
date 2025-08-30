@@ -24,6 +24,8 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
+#include "wx/artprov.h"
+#include "wx/stattext.h"
 
 namespace
 {
@@ -49,6 +51,10 @@ wxEND_EVENT_TABLE()
 // creation/destruction
 // ----------------------------------------------------------------------------
 
+#ifdef __WXOSX_IPHONE__
+   #include "../../../art/prev_screen.xpm"
+#endif
+
 bool wxFrame::Create(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
@@ -59,6 +65,20 @@ bool wxFrame::Create(wxWindow *parent,
 {
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
+
+#ifdef __WXOSX_IPHONE__
+    if (parent != NULL) {
+        // We are on the next screen, provide a back button and title
+        wxToolBar *tb = CreateToolBar();
+        // tb->AddTool( wxID_CLOSE, wxEmptyString, wxArtProvider::GetBitmap(wxART_PREV_SCREEN) ); doesn't work for some reason
+        tb->AddTool( wxID_CLOSE, wxEmptyString, wxBitmap( prev_screen_xpm ) );
+        tb->AddStretchableSpace();  // doesn't yet stretch on iOS, so at least at two
+        tb->AddStretchableSpace();
+        tb->AddControl( new wxStaticText( tb, -1, title ) );
+        tb->AddStretchableSpace();
+        tb->AddStretchableSpace();
+    }
+#endif
 
     return true;
 }
@@ -387,8 +407,9 @@ void wxFrame::PositionToolBar()
         else
         {
 #if !wxOSX_USE_NATIVE_TOOLBAR
+            int spaceAtTheTop = wxSystemSettings::GetMetric( wxSYS_DEVICE_AREA_TOP, NULL );
             // Use the 'real' position
-            GetToolBar()->SetSize(tx , ty , cw , th, wxSIZE_NO_ADJUSTMENTS );
+            GetToolBar()->SetSize(tx , ty+spaceAtTheTop, cw , th, wxSIZE_NO_ADJUSTMENTS );
 #endif
         }
     }

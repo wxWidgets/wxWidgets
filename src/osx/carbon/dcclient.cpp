@@ -47,8 +47,10 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     m_ok = true ;
 
     m_window->GetSize( &m_width , &m_height);
+#ifndef __WXOSX_IPHONE__ 
     if ( !m_window->IsShownOnScreen() )
         m_width = m_height = 0;
+#endif
 
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
 
@@ -74,6 +76,10 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
         if ( window->MacGetLeftBorderSize() != 0 || window->MacGetTopBorderSize() != 0 )
             CGContextTranslateCTM( cg , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() );
 
+        wxWidgetImpl *impl = (wxWidgetImpl *) window->GetPeer();
+        wxPoint origin( impl->GetDeviceLocalOrigin() );
+        CGContextTranslateCTM( cg, -origin.x, -origin.y );
+
         wxGraphicsContext* context = wxGraphicsContext::CreateFromNative( cg );
         context->SetContentScaleFactor(m_contentScaleFactor);
         SetGraphicsContext( context );
@@ -83,6 +89,10 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     SetBackground(window->GetBackgroundColour());
 
     SetFont( window->GetFont() ) ;
+    
+    wxWidgetImpl *impl = (wxWidgetImpl*)window->GetPeer();
+    wxPoint origin( impl->GetDeviceLocalOrigin() );
+    SetDeviceLocalOrigin( origin.x, origin.y );
 }
 
 wxWindowDCImpl::~wxWindowDCImpl()
@@ -169,6 +179,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
 {
     m_origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
+
     SetDeviceOrigin( m_origin.x, m_origin.y );
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }

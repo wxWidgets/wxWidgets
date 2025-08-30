@@ -32,6 +32,7 @@
 #include "wx/dcbuffer.h"
 #include "wx/selstore.h"
 #include "wx/renderer.h"
+#include "wx/log.h"
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -452,11 +453,23 @@ void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // the bounding rectangle of the current line
     wxRect rectRow;
+
+#ifdef __WXOSX_IPHONE__
+    DoPrepareDC( dc );
+    rectUpdate.y += GetDeviceOffset();
+#endif
     rectRow.width = clientSize.x;
 
+#ifdef __WXOSX_IPHONE__
+    // iterate over lines from start
+    const size_t lineMax = GetVisibleEnd();
+    size_t line = 0;
+#else
     // iterate over all visible lines
     const size_t lineMax = GetVisibleEnd();
-    for ( size_t line = GetVisibleBegin(); line < lineMax; line++ )
+    size_t line = GetVisibleBegin();
+#endif
+    for ( ; line < lineMax; line++ )
     {
         const wxCoord hRow = OnGetRowHeight(line);
 
@@ -695,8 +708,11 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
 {
     SetFocus();
 
-    int item = VirtualHitTest(event.GetPosition().y);
-
+    int y = event.GetPosition().y;
+#ifdef __WXOSX_IPHONE__
+    y += GetDeviceOffset();
+#endif
+    int item = VirtualHitTest( y );
     if ( item != wxNOT_FOUND )
     {
         int flags = 0;
@@ -712,7 +728,11 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
 
 void wxVListBox::OnLeftDClick(wxMouseEvent& eventMouse)
 {
-    int item = VirtualHitTest(eventMouse.GetPosition().y);
+    int y = eventMouse.GetPosition().y;
+#ifdef __WXOSX_IPHONE__
+    y += GetDeviceOffset();
+#endif
+    int item = VirtualHitTest( y );
     if ( item != wxNOT_FOUND )
     {
 

@@ -2539,7 +2539,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     // prepare the DC
-    GetOwner()->PrepareDC( dc );
+    m_owner->PrepareDC( dc );
 
     wxRect update = GetUpdateRegion().GetBox();
     m_owner->CalcUnscrolledPosition( update.x, update.y, &update.x, &update.y );
@@ -5651,8 +5651,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
 
     Init();
 
-    if (!wxControl::Create( parent, id, pos, size,
-                            style | wxScrolledWindowStyle, validator, name))
+    if (!wxControl::Create( parent, id, pos, size, style | wxScrolledWindowStyle, validator, name))
         return false;
 
     SetInitialSize(size);

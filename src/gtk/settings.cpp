@@ -1382,6 +1382,13 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win
             // No MS Windows for Pen computing extension available in X11 based gtk+.
             return 0;
 
+        case wxSYS_DEVICE_AREA_TOP:
+        case wxSYS_DEVICE_AREA_BOTTOM:
+        case wxSYS_DEVICE_AREA_LEFT:
+        case wxSYS_DEVICE_AREA_RIGHT:
+            // change this if GTK+ will run on a smartphone
+            return 0;
+
         default:
             return -1;   // metric is unknown
     }

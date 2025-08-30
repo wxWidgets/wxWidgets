@@ -19,6 +19,10 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/log.h"
+
+// --------------------- UIPickerView implementation ----------------------
+
 
 @interface wxUIPickerView : UIPickerView<UIPickerViewDelegate,UIPickerViewDataSource>
 {
@@ -83,6 +87,12 @@
     [self selectRow:v inComponent:0 animated:NO];
 }
 
+- (void) pickerView: (UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent: (NSInteger)component
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( pickerView );
+    wxChoice *choice = (wxChoice*) impl->GetWXPeer();
+    choice->SendSelectionChangedEvent(wxEVT_CHOICE);
+}
 
 
 @end
@@ -119,6 +129,82 @@ public:
         [((wxUIPickerView*)m_osxView).rows replaceObjectAtIndex:pos withObject:cftext.AsNSString()];
     }
 
+    wxInt32 GetValue() const override
+    {
+        return [((wxUIPickerView*)m_osxView) selectedRowInComponent:0 ];
+    }
+
+private:
+};
+
+// --------------------- UISegmentedControl implementation ----------------------
+
+
+@interface wxUISegmentedControl : UISegmentedControl
+{
+}
+
+@end
+
+@implementation wxUISegmentedControl
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXIPhoneClassAddWXMethods( self );
+    }
+}
+
+@end
+
+
+class wxSegmentedChoiceIPhoneImpl : public wxWidgetIPhoneImpl, public wxChoiceWidgetImpl
+{
+public:
+    wxSegmentedChoiceIPhoneImpl(wxWindowMac *wxpeer, wxUISegmentedControl *v)
+    : wxWidgetIPhoneImpl(wxpeer, v)
+    {
+    }
+
+    void InsertItem( size_t pos, int itemid, const wxString& text) override
+    {
+        wxCFStringRef cftext(text);
+        [((wxUISegmentedControl*)m_osxView) insertSegmentWithTitle:cftext.AsNSString() atIndex:pos animated:NO];
+        [((wxUISegmentedControl*)m_osxView) setEnabled: YES forSegmentAtIndex: pos ];
+    }
+
+    size_t GetNumberOfItems() const override
+    {
+        int value = [((wxUISegmentedControl*)m_osxView) numberOfSegments];
+        wxLogMessage( "GetNumberOfItems()", value );
+        return [((wxUISegmentedControl*)m_osxView) numberOfSegments];
+    }
+
+    void RemoveItem( size_t pos ) override
+    {
+        [((wxUISegmentedControl*)m_osxView) removeSegmentAtIndex:pos animated:NO];
+    }
+
+    void SetItem(int pos, const wxString& text) override
+    {
+        wxCFStringRef cftext(text);
+        [((wxUISegmentedControl*)m_osxView) setTitle: cftext.AsNSString() forSegmentAtIndex: pos ];
+    }
+
+    wxInt32 GetValue() const override
+    {
+        return [((wxUISegmentedControl*)m_osxView) selectedSegmentIndex ];
+    }
+
+    void SetValue( wxInt32 value ) override
+    {
+        return [((wxUISegmentedControl*)m_osxView) setSelectedSegmentIndex: value ];
+    }
+
+
 private:
 };
 
@@ -128,13 +214,21 @@ wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     wxMenu* menu,
                                     const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style),
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxUIPickerView* v = [[wxUIPickerView alloc] initWithFrame:r];
 
-    wxChoiceIPhoneImpl* c = new wxChoiceIPhoneImpl( wxpeer, v );
+    wxWidgetImplType *c = NULL;
+
+    if ((style & wxCH_BUTTONS) != 0) {
+        wxUISegmentedControl* v = [[wxUISegmentedControl alloc] initWithFrame:r];
+        // [v setMomentary: NO];
+        c = new wxSegmentedChoiceIPhoneImpl( wxpeer, v );
+    } else { 
+        wxUIPickerView* v = [[wxUIPickerView alloc] initWithFrame:r];
+        c = new wxChoiceIPhoneImpl( wxpeer, v );
+    }
     return c;
 }
 

@@ -48,7 +48,8 @@ enum wxScrollbarVisibility
 
     One way is to set the scrollbars directly using a call to SetScrollbars().
     This is the way it used to be in any previous version of wxWidgets and it
-    will be kept for backwards compatibility.
+    will be kept for backwards compatibility. On iOS, this is currently not
+    supported. Use wxWindow::SetVirtualSize() instead.
 
     An additional method of manual control, which requires a little less
     computation of your own, is to set the total size of the scrolling area by
@@ -85,7 +86,8 @@ enum wxScrollbarVisibility
     scroll the (usually white) cell area, whereas the (usually grey) label area
     will scroll very differently. For this special purpose, you can call
     SetTargetWindow() which means that pressing the scrollbars will scroll a
-    different window.
+    different window. This is not supported on iOS where there are no scrollbars
+    and you need to scroll with your fingers on the target window.
 
     Note that the underlying system knows nothing about scrolling coordinates,
     so that all system functions (mouse events, expose events, refresh calls
@@ -568,6 +570,9 @@ public:
 
         Notice that if this method is used, GetSizeAvailableForScrollTarget()
         method must be overridden.
+
+        This is not supported on iOS where there are no scrollbars and you need
+        to scroll with your fingers on the target window.
     */
     void SetTargetWindow(wxWindow *window);
     wxWindow *GetTargetWindow() const;
