@@ -41,6 +41,7 @@
 #include "wx/graphics.h"
 #endif
 
+#include <array>
 #include <memory>
 #include <unordered_map>
 
@@ -201,6 +202,14 @@ private:
     int         y;
     bool        unicodeMode;
 
+    // MRU brush cache.
+    struct BrushCacheEntry {
+        int usage = 0;
+        ColourDesired colour;
+        wxBrush brush;
+    };
+    static std::array<BrushCacheEntry, 8> brushCache;
+
 public:
     SurfaceImpl();
     ~SurfaceImpl();
@@ -254,6 +263,7 @@ public:
     void SetFont(Font &font_);
 };
 
+std::array<SurfaceImpl::BrushCacheEntry, 8> SurfaceImpl::brushCache;
 
 
 SurfaceImpl::SurfaceImpl() :
@@ -320,7 +330,29 @@ void SurfaceImpl::PenColour(ColourDesired fore) {
 }
 
 void SurfaceImpl::BrushColour(ColourDesired back) {
-    hdc->SetBrush(wxBrush(wxColourFromCD(back)));
+    wxBrush brush;
+    int minUsage = INT_MAX;
+    size_t minUsageIndex = 0;
+    for (size_t i = 0; i < brushCache.size(); i++) {
+        auto& entry = brushCache[i];
+        if (entry.usage && entry.colour == back) {
+            entry.usage++;
+            brush = entry.brush;
+        } else if (entry.usage < minUsage) {
+            minUsage = entry.usage;
+            minUsageIndex = i;
+        }
+    }
+
+    if (!brush.IsOk()) {
+        auto& entry = brushCache[minUsageIndex];
+        entry.colour = back;
+        entry.brush = wxBrush(wxColourFromCD(back));
+        entry.usage = 1;
+        brush = entry.brush;
+    }
+
+    hdc->SetBrush(brush);
 }
 
 void SurfaceImpl::SetFont(Font &font_) {
