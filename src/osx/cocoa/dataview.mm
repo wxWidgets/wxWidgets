@@ -3287,7 +3287,7 @@ bool wxDataViewIconTextRenderer::MacRender()
     cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
     iconText << GetValue();
     const wxDataViewCtrl* const dvc = GetOwner()->GetOwner();
-    [cell setImage:iconText.GetBitmapBundle().GetBitmapFor(dvc).GetNSImage()];
+    [cell setImage:wxOSXGetImageFromBundle(iconText.GetBitmapBundle())];
     [cell setStringValue:wxCFStringRef(iconText.GetText()).AsNSString()];
     return true;
 }
@@ -3401,7 +3401,7 @@ bool wxDataViewCheckIconTextRenderer::MacRender()
     {
         wxNSTextAttachmentCellWithBaseline* const attachmentCell =
             [[wxNSTextAttachmentCellWithBaseline alloc]
-             initImageCell: icon.GetBitmapFor(GetOwner()->GetOwner()).GetNSImage()];
+             initImageCell: wxOSXGetImageFromBundle(icon)];
         NSTextAttachment* const attachment = [NSTextAttachment new];
         [attachment setAttachmentCell: attachmentCell];
 
@@ -3649,12 +3649,7 @@ void wxDataViewColumn::SetBitmap(const wxBitmapBundle& bitmap)
     // the title is removed:
     m_title.clear();
     wxDataViewColumnBase::SetBitmap(bitmap);
-    wxBitmap bmp = m_owner ? bitmap.GetBitmapFor(m_owner) : bitmap.GetBitmap(
-        bitmap.GetPreferredBitmapSizeAtScale(
-            wxOSXGetMainScreenContentScaleFactor()
-        )
-    );
-    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:bmp.GetNSImage()];
+    [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:wxOSXGetImageFromBundle(bitmap)];
 }
 
 void wxDataViewColumn::SetMaxWidth(int maxWidth)
