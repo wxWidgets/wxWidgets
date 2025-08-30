@@ -210,6 +210,16 @@ private:
     };
     static std::array<BrushCacheEntry, 8> brushCache;
 
+    // String reused for conversions from UTF-8 to wxString: this allows to
+    // avoid reallocating memory all the time, e.g. for each line drawn.
+    static wxString stcString;
+
+    const wxString& STCString(const char* s, int len) {
+        stcString.AssignFromUTF8Unchecked(s, len);
+
+        return stcString;
+    }
+
 public:
     SurfaceImpl();
     ~SurfaceImpl();
@@ -264,6 +274,7 @@ public:
 };
 
 std::array<SurfaceImpl::BrushCacheEntry, 8> SurfaceImpl::brushCache;
+wxString SurfaceImpl::stcString;
 
 
 SurfaceImpl::SurfaceImpl() :
@@ -657,7 +668,7 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, XYPOSITION ybase,
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
+    hdc->DrawText(STCString(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
 }
 
 void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, XYPOSITION ybase,
@@ -670,7 +681,7 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, XYPOSITION ybase,
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
     // see comments above
-    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
+    hdc->DrawText(STCString(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
     hdc->DestroyClippingRegion();
 }
 
@@ -685,7 +696,7 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, XYPOSITION ybas
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
+    hdc->DrawText(STCString(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
 
     hdc->SetBackgroundMode(wxBRUSHSTYLE_SOLID);
 }
@@ -693,7 +704,7 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, XYPOSITION ybas
 
 void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, XYPOSITION *positions) {
 
-    wxString   str = stc2wx(s, len);
+    const wxString& str = STCString(s, len);
     wxArrayInt tpos;
 
     SetFont(font);
@@ -734,7 +745,7 @@ XYPOSITION SurfaceImpl::WidthText(Font &font, const char *s, int len) {
     int w;
     int h;
 
-    hdc->GetTextExtent(stc2wx(s, len), &w, &h);
+    hdc->GetTextExtent(STCString(s, len), &w, &h);
     return w;
 }
 
