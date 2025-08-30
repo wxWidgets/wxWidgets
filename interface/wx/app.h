@@ -9,8 +9,7 @@
 /**
     @class wxAppConsole
 
-    This class is essential for writing console-only or hybrid apps without
-    having to define @c wxUSE_GUI=0.
+    This class us used instead of wxApp for console applications.
 
     It is used to:
     @li set and get application-wide properties (see wxAppConsole::CreateTraits
@@ -30,6 +29,8 @@
     Use wxDECLARE_APP(appClass) in a header file if you want the ::wxGetApp() function
     (which returns a reference to your application object) to be visible to other
     files.
+
+    Note that setting @c wxUSE_GUI=0 makes wxApp identical to this class.
 
     @library{wxbase}
     @category{appmanagement}
