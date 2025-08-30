@@ -623,7 +623,8 @@ void wxDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     DoDrawLine(x1, y3, x3, y2);
     DoDrawLine(x3, y2, x2, y1);
 
-    CalcBoundingBox(x1, y1, x2, y2);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x1, y1, x2, y2);
 }
 
 bool
@@ -1281,7 +1282,8 @@ void wxDC::DrawLabel(const wxString& text,
         *rectBounding = wxRect(x, y - heightText, widthText, heightText);
     }
 
-    m_pimpl->CalcBoundingBox(wxPoint(x0, y0), wxSize(width0, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        m_pimpl->CalcBoundingBox(wxPoint(x0, y0), wxSize(width0, height));
 }
 
 /*

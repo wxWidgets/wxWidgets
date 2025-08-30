@@ -1567,8 +1567,43 @@ public:
 
     /**
         @name Bounding box functions
+
+        By default, wxDC maintains the coordinates of the bounding box
+        containing all the drawing operations performed on it. This can be
+        useful to determine the area of the DC that was modified, for example
+        to optimize the redrawing of a window.
+
+        If the application code doesn't need this information, it can save some
+        time by calling DisableAutomaticBoundingBoxUpdates() to disable the
+        default behaviour. Note that even in this case, the bounding box can
+        still be updated by calling CalcBoundingBox() manually, but it won't be
+        done automatically by the drawing functions.
     */
     ///@{
+
+    /**
+        Disable automatic bounding box updates.
+
+        Such updates are enabled by default but can be disabled to make the
+        drawing functions slightly faster.
+
+        @see AreAutomaticBoundingBoxUpdatesEnabled()
+
+        @since 3.3.2
+     */
+    void DisableAutomaticBoundingBoxUpdates();
+
+    /**
+        Check if automatic bounding box updates are performed.
+
+        Returns @true if the automatic bounding box updates are enabled (this
+        is the default) or @false if they are disabled.
+
+        @see DisableAutomaticBoundingBoxUpdates()
+
+        @since 3.3.2
+    */
+    bool AreAutomaticBoundingBoxUpdatesEnabled() const;
 
     /**
         Adds the specified point to the bounding box which can be retrieved

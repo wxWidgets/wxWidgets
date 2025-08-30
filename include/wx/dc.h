@@ -240,6 +240,17 @@ public:
 
     // bounding box
 
+    void DisableAutomaticBoundingBoxUpdates()
+    {
+        m_isBBoxValid = false;
+        m_updateBBox = false;
+    }
+
+    bool AreAutomaticBoundingBoxUpdatesEnabled() const
+    {
+        return m_updateBBox;
+    }
+
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)
     {
       // Bounding box is internally stored in device units.
@@ -722,6 +733,11 @@ private:
 
     bool m_useDevClipCoords = false;
 
+    // If true (the default), the bounding box is updated automatically by
+    // all drawing operations, otherwise it is not to save some time if it's
+    // not needed anyhow.
+    bool m_updateBBox = true;
+
     wxDECLARE_ABSTRACT_CLASS(wxDCImpl);
 };
 
@@ -1011,6 +1027,11 @@ public:
         { m_pimpl->EndPage(); }
 
     // bounding box
+
+    void DisableAutomaticBoundingBoxUpdates()
+        { m_pimpl->DisableAutomaticBoundingBoxUpdates(); }
+    bool AreAutomaticBoundingBoxUpdatesEnabled() const
+        { return m_pimpl->AreAutomaticBoundingBoxUpdatesEnabled(); }
 
     void CalcBoundingBox(wxCoord x, wxCoord y)
         { m_pimpl->CalcBoundingBox(x,y); }
