@@ -2383,7 +2383,6 @@ size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStar
         if (DoIsHoliday(dt) )
         {
             holidays.Add(dt);
-            continue;
         }
     }
 
@@ -2405,7 +2404,6 @@ size_t wxDateTimeChristianHolidays::DoGetHolidaysInRange(const wxDateTime& dtSta
         if (DoIsHoliday(dt) )
         {
             holidays.Add(dt);
-            continue;
         }
     }
 

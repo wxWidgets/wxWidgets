@@ -789,12 +789,6 @@ public:
     of the two wxCoord ones or wxPoint and wxSize instead of the four
     wxCoord parameters.
 
-    Beginning with wxWidgets 2.9.0 the entire wxDC code has been
-    reorganized. All platform dependent code (actually all drawing code)
-    has been moved into backend classes which derive from a common
-    wxDCImpl class. The user-visible classes such as wxClientDC and
-    wxPaintDC merely forward all calls to the backend implementation.
-
     In wxWidgets 3.3.0 the new wxReadOnlyDC class was extracted from wxDC: it
     contains all the functions that don't actually draw on the device context,
     but just return information about it. This class should be rarely used
@@ -803,6 +797,9 @@ public:
     and such functions can now also be called with wxInfoDC objects as
     arguments.
 
+    Although copying wxDC objects is not allowed because it wouldn't make
+    sense, objects of wxDC-derived classes can be moved, in C++ sense, allowing
+    to return them from functions since wxWidgets 3.3.2.
 
     @section dc_units Device and logical units
 
@@ -1570,8 +1567,43 @@ public:
 
     /**
         @name Bounding box functions
+
+        By default, wxDC maintains the coordinates of the bounding box
+        containing all the drawing operations performed on it. This can be
+        useful to determine the area of the DC that was modified, for example
+        to optimize the redrawing of a window.
+
+        If the application code doesn't need this information, it can save some
+        time by calling DisableAutomaticBoundingBoxUpdates() to disable the
+        default behaviour. Note that even in this case, the bounding box can
+        still be updated by calling CalcBoundingBox() manually, but it won't be
+        done automatically by the drawing functions.
     */
     ///@{
+
+    /**
+        Disable automatic bounding box updates.
+
+        Such updates are enabled by default but can be disabled to make the
+        drawing functions slightly faster.
+
+        @see AreAutomaticBoundingBoxUpdatesEnabled()
+
+        @since 3.3.2
+     */
+    void DisableAutomaticBoundingBoxUpdates();
+
+    /**
+        Check if automatic bounding box updates are performed.
+
+        Returns @true if the automatic bounding box updates are enabled (this
+        is the default) or @false if they are disabled.
+
+        @see DisableAutomaticBoundingBoxUpdates()
+
+        @since 3.3.2
+    */
+    bool AreAutomaticBoundingBoxUpdatesEnabled() const;
 
     /**
         Adds the specified point to the bounding box which can be retrieved

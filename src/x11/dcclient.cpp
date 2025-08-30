@@ -405,7 +405,8 @@ void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 
             //    (GC) m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
         }
 
-        CalcBoundingBox(x1, y1, x2, y2);
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox(x1, y1, x2, y2);
     }
 }
 
@@ -536,7 +537,8 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         }
     }
 
-    CalcBoundingBox(x1, y1, x2, y2);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double sa, double ea )
@@ -615,7 +617,8 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
         }
     }
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
@@ -626,7 +629,8 @@ void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
         XDrawPoint( (Display*) m_display, (Window) m_x11window,
                 (GC) m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
 
-    CalcBoundingBox (x, y);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox (x, y);
 }
 
 void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset )
@@ -642,7 +646,8 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
         xpoints[i].x = XLOG2DEV (points[i].x + xoffset);
         xpoints[i].y = YLOG2DEV (points[i].y + yoffset);
 
-        CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset );
     }
     XDrawLines( (Display*) m_display, (Window) m_x11window, (GC) m_penGC, xpoints.get(), n, 0 );
 }
@@ -662,7 +667,8 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
         xpoints[i].x = XLOG2DEV (points[i].x + xoffset);
         xpoints[i].y = YLOG2DEV (points[i].y + yoffset);
 
-        CalcBoundingBox (points[i].x + xoffset, points[i].y + yoffset);
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox (points[i].x + xoffset, points[i].y + yoffset);
     }
 
     if (m_x11window)
@@ -806,7 +812,8 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
         }
     }
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
@@ -928,7 +935,8 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
     }
 
     // this ignores the radius
-    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -1004,7 +1012,8 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
         }
     }
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
@@ -1030,7 +1039,8 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (!m_x11window) return;
 
@@ -1148,7 +1158,8 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (!m_x11window) return;
 
@@ -1366,7 +1377,8 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
         }
     }
 
-    CalcBoundingBox(wxPoint(xdest, ydest), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(xdest, ydest), wxSize(width, height));
 
     // scale/translate size and position
     wxCoord xx = XLOG2DEV(xdest);
@@ -1581,7 +1593,8 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     g_object_unref( G_OBJECT( layout ) );
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,

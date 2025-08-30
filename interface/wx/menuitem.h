@@ -179,6 +179,9 @@ public:
     /**
         Returns the checked or unchecked bitmap.
 
+        Prefer using GetBitmapBundle() overload taking @a checked parameter in
+        the new code.
+
         This overload only exists in wxMSW, avoid using it in portable code.
     */
     wxBitmap GetBitmap(bool checked) const;
@@ -196,11 +199,32 @@ public:
     wxBitmapBundle GetBitmapBundle() const;
 
     /**
+        Returns the bitmap bundle containing the checked or unchecked bitmap
+        for this item.
+
+        @onlyfor{wxmsw}
+
+        @since 3.3.2
+     */
+    wxBitmapBundle GetBitmapBundle(bool checked) const;
+
+    /**
         Returns the bitmap used for disabled items.
+
+        @see GetDisabledBitmapBundle()
 
         @onlyfor{wxmsw}
     */
     virtual wxBitmap GetDisabledBitmap() const;
+
+    /**
+        Returns the bitmap bundle used for disabled items.
+
+        @onlyfor{wxmsw}
+
+        @since 3.3.2
+    */
+    wxBitmapBundle GetDisabledBitmapBundle() const;
 
     /**
         Returns the font associated with the menu item.

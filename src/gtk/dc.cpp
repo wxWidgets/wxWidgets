@@ -104,7 +104,8 @@ void wxGTKCairoDCImpl::DoDrawText(const wxString& text, int x, int y)
     int w, h;
     DoGetTextExtent(text, &w, &h);
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     const bool yInverted = m_signY < 0;
     if (xInverted || yInverted)
@@ -161,21 +162,24 @@ void wxGTKCairoDCImpl::DoDrawRotatedText(const wxString& text, int x, int y, dou
     m_maxX = maxX;
     m_maxY = maxY;
 
-    CalcBoundingBox(x, y);
-    int w, h;
-    DoGetTextExtent(text, &w, &h);
-    cairo_matrix_t m;
-    cairo_matrix_init_translate(&m, x, y);
-    cairo_matrix_rotate(&m, rad);
-    double xx = w, yy = 0;
-    cairo_matrix_transform_point(&m, &xx, &yy);
-    CalcBoundingBox(int(xx), int(yy));
-    xx = w; yy = h;
-    cairo_matrix_transform_point(&m, &xx, &yy);
-    CalcBoundingBox(int(xx), int(yy));
-    xx = 0; yy = h;
-    cairo_matrix_transform_point(&m, &xx, &yy);
-    CalcBoundingBox(int(xx), int(yy));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+    {
+        CalcBoundingBox(x, y);
+        int w, h;
+        DoGetTextExtent(text, &w, &h);
+        cairo_matrix_t m;
+        cairo_matrix_init_translate(&m, x, y);
+        cairo_matrix_rotate(&m, rad);
+        double xx = w, yy = 0;
+        cairo_matrix_transform_point(&m, &xx, &yy);
+        CalcBoundingBox(int(xx), int(yy));
+        xx = w; yy = h;
+        cairo_matrix_transform_point(&m, &xx, &yy);
+        CalcBoundingBox(int(xx), int(yy));
+        xx = 0; yy = h;
+        cairo_matrix_transform_point(&m, &xx, &yy);
+        CalcBoundingBox(int(xx), int(yy));
+    }
 }
 
 void wxGTKCairoDCImpl::DoDrawCheckMark(int x, int y, int width, int height)

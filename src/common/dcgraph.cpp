@@ -281,7 +281,8 @@ void wxGCDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y,
         m_graphicContext->DrawBitmap( bmpCopy, x, y, w, h );
     }
 
-    CalcBoundingBox(wxPoint(x, y), bmp.GetLogicalSize());
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), bmp.GetLogicalSize());
 }
 
 void wxGCDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
@@ -294,7 +295,8 @@ void wxGCDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 
     m_graphicContext->DrawIcon( icon , x, y, w, h );
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 }
 
 bool wxGCDCImpl::StartDoc( const wxString& message )
@@ -671,7 +673,8 @@ void wxGCDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 
     m_graphicContext->StrokeLine(x1,y1,x2,y2);
 
-    CalcBoundingBox(x1, y1, x2, y2);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxGCDCImpl::DoCrossHair( wxCoord x, wxCoord y )
@@ -688,7 +691,8 @@ void wxGCDCImpl::DoCrossHair( wxCoord x, wxCoord y )
     m_graphicContext->StrokeLine(0,y,w,y);
     m_graphicContext->StrokeLine(x,0,x,h);
 
-    CalcBoundingBox(0, 0, w, h);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(0, 0, w, h);
 }
 
 void wxGCDCImpl::DoDrawArc( wxCoord x1, wxCoord y1,
@@ -736,7 +740,8 @@ void wxGCDCImpl::DoDrawArc( wxCoord x1, wxCoord y1,
         path.AddLineToPoint( xc, yc );
     m_graphicContext->DrawPath(path);
 
-    CalcBoundingBoxForBox(path.GetBox());
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBoxForBox(path.GetBox());
 }
 
 void wxGCDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
@@ -786,7 +791,8 @@ void wxGCDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     box.m_x += dx;
     box.m_y += dy;
 
-    CalcBoundingBoxForBox(box);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBoxForBox(box);
 
     m_graphicContext->PopState();
 }
@@ -804,7 +810,8 @@ void wxGCDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     // Raster-based DCs draw a single pixel regardless of scale
     m_graphicContext->DrawRectangle(x, y, 1 / m_scaleX, 1 / m_scaleY);
 
-    CalcBoundingBox(x, y);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x, y);
 }
 
 void wxGCDCImpl::DoDrawLines(int n, const wxPoint points[],
@@ -836,8 +843,11 @@ void wxGCDCImpl::DoDrawLines(int n, const wxPoint points[],
 
     m_graphicContext->StrokeLines( n , pointsD.get());
 
-    CalcBoundingBox(minX + xoffset, minY + yoffset,
-                    maxX + xoffset, maxY + yoffset);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+    {
+        CalcBoundingBox(minX + xoffset, minY + yoffset,
+                        maxX + xoffset, maxY + yoffset);
+    }
 }
 
 #if wxUSE_SPLINES
@@ -876,7 +886,8 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 
     m_graphicContext->StrokePath( path );
 
-    CalcBoundingBoxForBox(path.GetBox());
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBoxForBox(path.GetBox());
 }
 #endif // wxUSE_SPLINES
 
@@ -919,8 +930,11 @@ void wxGCDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 
     m_graphicContext->DrawLines( n+(closeIt?1:0) , pointsD.get(), fillStyle);
 
-    CalcBoundingBox(minX + xoffset, minY + yoffset,
-                    maxX + xoffset, maxY + yoffset);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+    {
+        CalcBoundingBox(minX + xoffset, minY + yoffset,
+                        maxX + xoffset, maxY + yoffset);
+    }
 }
 
 void wxGCDCImpl::DoDrawPolyPolygon(int n,
@@ -951,7 +965,8 @@ void wxGCDCImpl::DoDrawPolyPolygon(int n,
     }
     m_graphicContext->DrawPath( path , fillStyle);
 
-    CalcBoundingBoxForBox(path.GetBox());
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBoxForBox(path.GetBox());
 }
 
 void wxGCDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
@@ -965,7 +980,8 @@ void wxGCDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     if (w == 0 || h == 0)
         return;
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (m_pen.IsNonTransparent())
     {
@@ -993,7 +1009,8 @@ void wxGCDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     if (w == 0 || h == 0)
         return;
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     if (m_pen.IsNonTransparent())
     {
@@ -1012,7 +1029,8 @@ void wxGCDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     if ( !m_logicalFunctionSupported )
         return;
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     m_graphicContext->DrawEllipse(x,y,w,h);
 }
@@ -1118,7 +1136,8 @@ bool wxGCDCImpl::DoStretchBlit(
     // reset composition
     m_graphicContext->SetCompositionMode(formerMode);
 
-    CalcBoundingBox(wxPoint(xdest, ydest), wxSize(dstWidth, dstHeight));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(xdest, ydest), wxSize(dstWidth, dstHeight));
 
     return retval;
 }
@@ -1171,12 +1190,15 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     // determining which of them is really topmost/leftmost/...)
 
     // "upper left" and "upper right"
-    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+    {
+        CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 
-    // "bottom left" and "bottom right"
-    x += (wxCoord)(h*sin(rad));
-    y += (wxCoord)(h*cos(rad));
-    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+        // "bottom left" and "bottom right"
+        x += (wxCoord)(h*sin(rad));
+        y += (wxCoord)(h*cos(rad));
+        CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    }
 }
 
 void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
@@ -1212,7 +1234,8 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
 
     m_graphicContext->SetCompositionMode(curMode);
 
-    CalcBoundingBox(wxPoint(x, y), GetOwner()->GetTextExtent(str));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), GetOwner()->GetTextExtent(str));
 }
 
 bool wxGCDCImpl::CanGetTextExtent() const
@@ -1374,7 +1397,8 @@ void wxGCDCImpl::DoGradientFillLinear(const wxRect& rect,
     m_graphicContext->SetPen(m_pen);
     m_graphicContext->SetBrush(m_brush);
 
-    CalcBoundingBox(rect);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(rect);
 }
 
 void wxGCDCImpl::DoGradientFillConcentric(const wxRect& rect,
@@ -1405,7 +1429,8 @@ void wxGCDCImpl::DoGradientFillConcentric(const wxRect& rect,
     m_graphicContext->SetPen(m_pen);
     m_graphicContext->SetBrush(m_brush);
 
-    CalcBoundingBox(rect);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(rect);
 }
 
 void wxGCDCImpl::DoDrawCheckMark(wxCoord x, wxCoord y,

@@ -581,7 +581,8 @@ public:
         Constructor.
 
         @a ptr is a pointer to the reference counted object to which this class points.
-        If @a ptr is not null @b T::IncRef() will be called on the object.
+        This object takes ownership of @a ptr, i.e.\ it will call T::DecRef()
+        on it if it is non-null when this object is destroyed or reset.
     */
     wxObjectDataPtr(T* ptr = nullptr);
 

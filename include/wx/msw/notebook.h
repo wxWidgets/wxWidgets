@@ -183,8 +183,9 @@ protected:
   void OnEraseBackground(wxEraseEvent& event);
   void OnPaint(wxPaintEvent& event);
 
-  // Paint the notebook ourselves on the provided DC.
-  void MSWNotebookPaint(wxDC& dc);
+  // Paint the notebook ourselves using wxPaintDC (so this can be only called
+  // from wxEVT_PAINT handler).
+  void MSWNotebookPaint();
 
 
   // true if we have already subclassed our updown control

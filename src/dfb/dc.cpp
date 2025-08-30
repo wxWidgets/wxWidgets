@@ -133,8 +133,11 @@ void wxDFBDCImpl::Clear()
     wxColour clr = m_backgroundBrush.GetColour();
     m_surface->Clear(clr.Red(), clr.Green(), clr.Blue(), clr.Alpha());
 
-    wxSize size(GetSize());
-    CalcBoundingBox(XDEV2LOG(0), YDEV2LOG(0), XDEV2LOG(size.x), YDEV2LOG(size.y));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+    {
+        wxSize size(GetSize());
+        CalcBoundingBox(XDEV2LOG(0), YDEV2LOG(0), XDEV2LOG(size.x), YDEV2LOG(size.y));
+    }
 }
 
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
@@ -202,7 +205,8 @@ void wxDFBDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
     m_surface->DrawLine(xx1, yy1, xx2, yy2);
 
-    CalcBoundingBox(x1, y1, x2, y2);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x1, y1, x2, y2);
 }
 
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
@@ -282,7 +286,8 @@ void wxDFBDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
         m_surface->DrawRectangle(xx, yy, ww, hh);
     }
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxDFBDCImpl::DoDrawRoundedRectangle(wxCoord WXUNUSED(x),
@@ -328,7 +333,8 @@ void wxDFBDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     // update the bounding box
     wxCoord w, h;
     DoGetTextExtent(text, &w, &h);
-    CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
     // if background mode is solid, DrawText must paint text's background:
     if ( m_backgroundMode == wxBRUSHSTYLE_SOLID )
@@ -689,7 +695,8 @@ bool wxDFBDCImpl::DoBlitFromSurface(const wxIDirectFBSurfacePtr& src,
         return false;
     }
 
-    CalcBoundingBox(wxPoint(dstx, dsty), wxSize(w, h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(dstx, dsty), wxSize(w, h));
 
     DFBRectangle srcRect = { srcx, srcy, w, h };
     DFBRectangle dstRect = { XLOG2DEV(dstx), YLOG2DEV(dsty),

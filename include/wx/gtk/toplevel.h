@@ -71,9 +71,6 @@ public:
     virtual void SetTitle( const wxString &title ) override;
     virtual wxString GetTitle() const override { return m_title; }
 
-    virtual void SetLabel(const wxString& label) override { SetTitle( label ); }
-    virtual wxString GetLabel() const override            { return GetTitle(); }
-
     virtual wxVisualAttributes GetDefaultAttributes() const override;
 
     virtual bool SetTransparent(wxByte alpha) override;
@@ -94,6 +91,7 @@ public:
 
     // GTK callbacks
     virtual void GTKHandleRealized() override;
+    void GTKHandleMapped();
 
     void GTKConfigureEvent(int x, int y);
 

@@ -2461,6 +2461,7 @@ void wxAuiToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
     event.Skip();
 
     m_art->UpdateColoursFromSystem();
+    UpdateBackgroundBitmap(GetClientSize());
     Refresh();
 }
 

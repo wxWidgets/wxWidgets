@@ -1494,7 +1494,7 @@ ToNumeric(T* pVal,
     PreserveErrno preserveErrno;
     errno = 0;
 
-    wxStringCharType *end;
+    wxStringCharType *end = nullptr;
 
     const R res = convert(start, &end, base);
     if ( rangeCheck && !rangeCheck(res) )

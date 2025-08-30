@@ -35,7 +35,13 @@
 
 bool wxUxThemeIsActive()
 {
-    return ::IsAppThemed() && ::IsThemeActive();
+    static int s_isActive = -1;
+    if ( s_isActive == -1 )
+    {
+        s_isActive = ::IsAppThemed() && ::IsThemeActive() ? 1 : 0;
+    }
+
+    return s_isActive != 0;
 }
 
 /* static */

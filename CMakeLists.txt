@@ -13,7 +13,10 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
     get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
     # Set default configuration types for multi-config generators
     if(HAVE_MULTI_CONFIG_GENERATOR)
-        set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
+        string(CONCAT config_hint "Semicolon separated list of supported "
+            "configuration types, only supports Debug, Release, MinSizeRel, "
+            "and RelWithDebInfo, anything else will be ignored.")
+        set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING ${config_hint})
     endif()
 endif()
 
@@ -21,7 +24,9 @@ endif()
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(default_build_type "Debug")
     message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
-    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
+    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING
+        "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel"
+    )
     # Set the possible values of build type for cmake-gui
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 endif()

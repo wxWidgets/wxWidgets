@@ -164,13 +164,18 @@ public:
 // wxDCImpl
 //-----------------------------------------------------------------------------
 
+// This class is only used by wxDC and wxWidgets itself, do not use it in the
+// application code.
 class WXDLLIMPEXP_CORE wxDCImpl: public wxObject
 {
 public:
-    wxDCImpl( wxDC *owner );
-    virtual ~wxDCImpl();
+    wxDCImpl( wxDC *owner ) : m_owner(owner)
+    {
+    }
+    virtual ~wxDCImpl() = default;
 
     wxDC *GetOwner() const { return m_owner; }
+    void SetOwner(wxDC* owner) { m_owner = owner; }
 
     wxWindow* GetWindow() const { return m_window; }
 
@@ -234,6 +239,17 @@ public:
     virtual wxSize LogicalToDeviceRel(int x, int y) const;
 
     // bounding box
+
+    void DisableAutomaticBoundingBoxUpdates()
+    {
+        m_isBBoxValid = false;
+        m_updateBBox = false;
+    }
+
+    bool AreAutomaticBoundingBoxUpdatesEnabled() const
+    {
+        return m_updateBBox;
+    }
 
     virtual void CalcBoundingBox(wxCoord x, wxCoord y)
     {
@@ -631,67 +647,96 @@ protected:
 
 
     // window on which the DC draws or nullptr
-    wxWindow   *m_window;
+    wxWindow   *m_window = nullptr;
 
     // flags
-    bool m_colour:1;
-    bool m_ok:1;
-    bool m_clipping:1;
-    bool m_isInteractive:1;
-    bool m_isBBoxValid:1;
+    bool m_colour = true;
+    bool m_ok = true;
+    bool m_clipping = false;
+    bool m_isInteractive = false;
+    bool m_isBBoxValid = false;
 
     // coordinate system variables
 
-    wxCoord m_logicalOriginX, m_logicalOriginY;
-    wxCoord m_deviceOriginX, m_deviceOriginY;           // Usually 0,0, can be change by user
+    wxCoord m_logicalOriginX = 0,
+            m_logicalOriginY = 0;
+    wxCoord m_deviceOriginX = 0,
+            m_deviceOriginY = 0;
 
-    wxCoord m_deviceLocalOriginX, m_deviceLocalOriginY; // non-zero if native top-left corner
-                                                        // is not at 0,0. This was the case under
-                                                        // Mac's GrafPorts (coordinate system
-                                                        // used toplevel window's origin) and
-                                                        // e.g. for Postscript, where the native
-                                                        // origin in the bottom left corner.
-    double m_logicalScaleX, m_logicalScaleY;
-    double m_userScaleX, m_userScaleY;
-    double m_scaleX, m_scaleY;  // calculated from logical scale and user scale
+    // Non-zero for Postscript where the native origin in the bottom left
+    // corner.
+    wxCoord m_deviceLocalOriginX = 0,
+            m_deviceLocalOriginY = 0;
 
-    int m_signX, m_signY;  // Used by SetAxisOrientation() to invert the axes
+    double m_logicalScaleX = 1.0,
+           m_logicalScaleY = 1.0;
+    double m_userScaleX = 1.0,
+           m_userScaleY = 1.0;
 
-    double m_contentScaleFactor; // used by high resolution displays (retina)
+    // Calculated from logical scale and user scale.
+    double m_scaleX = 1.0,
+           m_scaleY = 1.0;
+
+    // Used by SetAxisOrientation() to invert the axes.
+    int m_signX = 1,
+        m_signY = 1;
+
+    // > 1 on high resolution displays.
+    double m_contentScaleFactor = 1.0;
 
     // Pixel per mm in horizontal and vertical directions.
     //
     // These variables are computed on demand by GetMMToPX[xy]() functions,
     // don't access them directly other than for assigning to them.
-    mutable double m_mm_to_pix_x,
-                   m_mm_to_pix_y;
+    mutable double m_mm_to_pix_x = 0.0,
+                   m_mm_to_pix_y = 0.0;
 
     // bounding and clipping boxes
-    wxCoord m_minX, m_minY, m_maxX, m_maxY; // Bounding box is stored in device units.
-    wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;  // Some derived classes operate directly on clipping box given in logical units.
 
-    wxRasterOperationMode m_logicalFunction;
-    int m_backgroundMode;
-    wxMappingMode m_mappingMode;
+    // Bounding box is stored in device units.
+    wxCoord m_minX = 0,
+            m_minY = 0,
+            m_maxX = 0,
+            m_maxY = 0;
+
+    // Some derived classes use clipping box given in logical units directly.
+    wxCoord m_clipX1 = 0,
+            m_clipY1 = 0,
+            m_clipX2 = 0,
+            m_clipY2 = 0;
+
+    wxRasterOperationMode m_logicalFunction = wxCOPY;
+    int m_backgroundMode = wxBRUSHSTYLE_TRANSPARENT;
+    wxMappingMode m_mappingMode = wxMM_TEXT;
 
     wxPen             m_pen;
     wxBrush           m_brush;
     wxBrush           m_backgroundBrush;
-    wxColour          m_textForegroundColour;
-    wxColour          m_textBackgroundColour;
+    wxColour          m_textForegroundColour = *wxBLACK;
+    wxColour          m_textBackgroundColour = *wxWHITE;
     wxFont            m_font;
 
 #if wxUSE_PALETTE
     wxPalette         m_palette;
-    bool              m_hasCustomPalette;
+    bool              m_hasCustomPalette = false;
 #endif // wxUSE_PALETTE
 
 private:
     // Return the full DC area in logical coordinates.
     wxRect GetLogicalArea() const;
 
-    wxCoord m_devClipX1, m_devClipY1, m_devClipX2, m_devClipY2;  // For proper calculations of clipping box we need to store it in device units.
-    bool m_useDevClipCoords;
+    // For proper calculations of clipping box we need to store it in device units.
+    wxCoord m_devClipX1 = 0,
+            m_devClipY1 = 0,
+            m_devClipX2 = 0,
+            m_devClipY2 = 0;
+
+    bool m_useDevClipCoords = false;
+
+    // If true (the default), the bounding box is updated automatically by
+    // all drawing operations, otherwise it is not to save some time if it's
+    // not needed anyhow.
+    bool m_updateBBox = true;
 
     wxDECLARE_ABSTRACT_CLASS(wxDCImpl);
 };
@@ -919,7 +964,7 @@ protected:
     {
     }
 
-    wxDCImpl * const m_pimpl;
+    wxDCImpl *m_pimpl;
 };
 
 // Full device context class, providing functions for drawing on the device in
@@ -927,6 +972,37 @@ protected:
 class WXDLLIMPEXP_CORE wxDC : public wxReadOnlyDC
 {
 public:
+    // Device context objects are not copyable but are moveable.
+    wxDC(const wxDC&) = delete;
+    wxDC& operator=(const wxDC&) = delete;
+
+    wxDC(wxDC&& other) noexcept
+        : wxReadOnlyDC(other.m_pimpl)
+    {
+        if ( m_pimpl )
+        {
+            m_pimpl->SetOwner(this);
+            other.m_pimpl = nullptr;
+        }
+    }
+
+    wxDC& operator=(wxDC&& other) noexcept
+    {
+        if ( this != &other )
+        {
+            delete m_pimpl;
+            m_pimpl = other.m_pimpl;
+            if ( m_pimpl )
+            {
+                m_pimpl->SetOwner(this);
+                other.m_pimpl = nullptr;
+            }
+        }
+
+        return *this;
+    }
+
+
     // copy attributes (font, colours and writing direction) from another DC
     void CopyAttributes(const wxDC& dc);
 
@@ -951,6 +1027,11 @@ public:
         { m_pimpl->EndPage(); }
 
     // bounding box
+
+    void DisableAutomaticBoundingBoxUpdates()
+        { m_pimpl->DisableAutomaticBoundingBoxUpdates(); }
+    bool AreAutomaticBoundingBoxUpdatesEnabled() const
+        { return m_pimpl->AreAutomaticBoundingBoxUpdatesEnabled(); }
 
     void CalcBoundingBox(wxCoord x, wxCoord y)
         { m_pimpl->CalcBoundingBox(x,y); }
@@ -1337,7 +1418,6 @@ protected:
 
 private:
     wxDECLARE_ABSTRACT_CLASS(wxDC);
-    wxDECLARE_NO_COPY_CLASS(wxDC);
 };
 
 // ----------------------------------------------------------------------------

@@ -609,6 +609,21 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
         return hr;
     }
 
+    if ( (pformatetcIn->tymed & (TYMED_HGLOBAL | TYMED_ISTREAM)) == TYMED_ISTREAM ) {
+        IStream* stream = nullptr;
+        hr = ::CreateStreamOnHGlobal(pmedium->hGlobal,
+                                     TRUE, // delete on release
+                                     &stream);
+        if ( FAILED(hr) ) {
+            GlobalFree(pmedium->hGlobal);
+            return hr;
+        }
+
+        wxZeroMemory(*pmedium);
+        pmedium->tymed = TYMED_ISTREAM;
+        pmedium->pstm = stream;
+    }
+
     return S_OK;
 }
 
@@ -804,8 +819,10 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
         return E_INVALIDARG;
     }
 
-    // the only one allowed by current COM implementation
-    if ( pformatetc->lindex != -1 ) {
+    // the only ones allowed by current COM implementation (0 is used for e.g.
+    // CFSTR_FILECONTENTS which is not handled by wx itself, but could be by
+    // the application)
+    if ( pformatetc->lindex != -1 && pformatetc->lindex != 0 ) {
         wxLogTrace(wxTRACE_OleCalls,
                    wxT("wxIDataObject::QueryGetData: bad lindex %ld"),
                    pformatetc->lindex);
