@@ -527,6 +527,34 @@ public:
     */
     wxString operator =(wxUniChar c);
 
+    /**
+        Assignment from UTF-8 string.
+
+        Calling `s.AssignFromUTF8(utf8, len) is equivalent to doing
+        `s = wxString::FromUTF8(utf8, len)` but may be more efficient as it can
+        reuse the existing string buffer instead of always having to allocate a
+        new one.
+
+        This function can be useful in performance-sensitive loops or with
+        static variables (retaining their buffer between calls) in often called
+        functions.
+
+        @since 3.3.2
+     */
+    void AssignFromUTF8(const char *utf8, size_t len = npos);
+
+    /**
+        Assignment from UTF-8 string.
+
+        This function is the same as AssignFromUTF8() but doesn't check that
+        @a utf8 is a valid pointer to a valid UTF-8 string. It must not be
+        called if @a utf8 is @NULL or its contents is not already known to be
+        correct UTF-8.
+
+        @since 3.3.2
+     */
+    void AssignFromUTF8Unchecked(const char *utf8, size_t len = npos);
+
     ///@}
 
 
@@ -2018,6 +2046,8 @@ public:
         The overload taking @c std::string_view is only available starting with
         wxWidgets 3.3.0 and requires the consumer application to use C++17.
 
+        @see AssignFromUTF8()
+
         @since 2.8.4
     */
     static wxString FromUTF8(const char* s);
@@ -2045,6 +2075,8 @@ public:
 
         The overload taking @c std::string_view is only available starting with
         wxWidgets 3.3.0 and requires the consumer application to use C++17.
+
+        @see AssignFromUTF8Unchecked()
 
         @since 2.8.9
     */
