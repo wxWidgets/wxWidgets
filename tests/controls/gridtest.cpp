@@ -26,6 +26,10 @@
     #include "wx/stopwatch.h"
 #endif // __WXGTK__
 
+#ifdef __WXQT__
+    #include <QtGlobal> // QT_VERSION and QT_VERSION_CHECK
+#endif
+
 #include "waitfor.h"
 
 #include <memory>
