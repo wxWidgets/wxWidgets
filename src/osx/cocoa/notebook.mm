@@ -23,6 +23,7 @@
 #include "wx/string.h"
 #include "wx/private/bmpbndl.h"
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 //
 // controller
@@ -86,7 +87,18 @@
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+
+        // On macOS 26 Tahoe, the mere presence of drawRect: in derived class,
+        // even if it just calls super's implementation, triggers legacy
+        // rendering of NSTabView.
+        if (WX_IS_MACOS_AVAILABLE(26, 0))
+        {
+            wxOSXCocoaClassAddWXMethods(self, wxOSXSKIP_DRAW);
+        }
+        else
+        {
+            wxOSXCocoaClassAddWXMethods(self);
+        }
     }
 }
 
