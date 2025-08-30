@@ -29,6 +29,7 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/log.h"
 #include "wx/gtk/private/threads.h"
+#include "wx/gtk/private/wayland.h"
 
 #ifdef __WXGTK3__
     #include "wx/gtk/private/appearance.h"
@@ -595,11 +596,19 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
     WakeUpIdle();
 
+#ifdef wxHAVE_WAYLAND_PROTOCOLS
+    wxWayland::WLGlobals.Init();
+#endif // wxHAVE_WAYLAND_PROTOCOLS
+
     return true;
 }
 
 void wxApp::CleanUp()
 {
+#ifdef wxHAVE_WAYLAND_PROTOCOLS
+    wxWayland::WLGlobals.Free();
+#endif // wxHAVE_WAYLAND_PROTOCOLS
+
     wxAppBase::CleanUp();
 
     if (m_idleSourceId != 0)

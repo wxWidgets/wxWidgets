@@ -275,6 +275,7 @@ public:
     void OnCopy(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnShow(wxCommandEvent &event);
+    void OnMoveMouse(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
     void OnBoundingBox(wxCommandEvent& evt);
     void OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt);
@@ -392,6 +393,7 @@ enum
     LogicalOrigin_MoveRight,
     LogicalOrigin_Set,
     LogicalOrigin_Restore,
+    LogicalOrigin_MoveMouse,
 
 #if wxUSE_DC_TRANSFORM_MATRIX
     TransformMatrix_Set,
@@ -2514,6 +2516,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU_RANGE(MenuShow_First,   MenuShow_Last,   MyFrame::OnShow)
 
+    EVT_MENU(LogicalOrigin_MoveMouse, MyFrame::OnMoveMouse)
     EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
 wxEND_EVENT_TABLE()
 
@@ -2633,6 +2636,9 @@ MyFrame::MyFrame(const wxString& title)
     menuLogical->AppendSeparator();
     menuLogical->Append( LogicalOrigin_Set, "Set to (&100, 100)\tShift-Ctrl-1" );
     menuLogical->Append( LogicalOrigin_Restore, "&Restore to normal\tShift-Ctrl-0" );
+    menuLogical->AppendSeparator();
+    menuLogical->Append( LogicalOrigin_MoveMouse,
+                         "Move &mouse to logical (100, 100)\tShift-Ctrl-M");
 
 #if wxUSE_DC_TRANSFORM_MATRIX
     wxMenu *menuTransformMatrix = new wxMenu;
@@ -2881,6 +2887,11 @@ void MyFrame::OnShow(wxCommandEvent& event)
     }
 #endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
     m_canvas->ToShow(show);
+}
+
+void MyFrame::OnMoveMouse(wxCommandEvent& WXUNUSED(event))
+{
+    m_canvas->WarpPointer(100, 100);
 }
 
 void MyFrame::OnOption(wxCommandEvent& event)
