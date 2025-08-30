@@ -725,6 +725,11 @@ void wxStyledTextCtrl::StartStyling(int start, int unused)
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
     wxBufferedPaintDC dc(this, m_buffer);
+
+    // We don't use bounding box for anything, so disable updating it to speed
+    // things up a bit.
+    dc.DisableAutomaticBoundingBoxUpdates();
+
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 

@@ -311,6 +311,7 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID w
     wxMemoryDC* mdc = surfaceImpl && surfaceImpl->hdc
         ? new wxMemoryDC(surfaceImpl->hdc)
         : new wxMemoryDC();
+    mdc->DisableAutomaticBoundingBoxUpdates();
     hdc = mdc;
     hdcOwned = true;
     if (width < 1) width = 1;
