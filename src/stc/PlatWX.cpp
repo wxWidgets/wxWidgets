@@ -306,8 +306,10 @@ void SurfaceImpl::Init(SurfaceID hdc_, WindowID) {
 
 void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID winid) {
     Release();
-    wxMemoryDC* mdc = surface
-        ? new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc)
+
+    auto* const surfaceImpl = static_cast<SurfaceImpl*>(surface);
+    wxMemoryDC* mdc = surfaceImpl && surfaceImpl->hdc
+        ? new wxMemoryDC(surfaceImpl->hdc)
         : new wxMemoryDC();
     hdc = mdc;
     hdcOwned = true;
@@ -444,7 +446,7 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
                                  ColourDesired outline, int alphaOutline,
                                  int /*flags*/) {
 #if wxUSE_GRAPHICS_CONTEXT
-    wxGCDC dc(*(wxMemoryDC*)hdc);
+    wxGCDC dc(wxGraphicsContext::CreateFromUnknownDC(*hdc));
     wxColour penColour(wxColourFromCDandAlpha(outline, alphaOutline));
     wxColour brushColour(wxColourFromCDandAlpha(fill, alphaFill));
     dc.SetPen(wxPen(penColour));
@@ -557,7 +559,7 @@ void SurfaceImpl::GradientRectangle(PRectangle rc,
             break;
     }
 
-    wxGCDC dc(*(wxMemoryDC*)hdc);
+    wxGCDC dc(wxGraphicsContext::CreateFromUnknownDC(*hdc));
     wxGraphicsContext* gc = dc.GetGraphicsContext();
     gc->SetBrush(gc->CreateLinearGradientBrush(rc.left, rc.top, ep.x, ep.y, gradientStops));
     gc->DrawRectangle(rc.left, rc.top, rc.Width(), rc.Height());
