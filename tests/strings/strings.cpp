@@ -192,6 +192,22 @@ TEST_CASE("StringStaticConstructors", "[wxString]")
     //CHECK( wxString::FromUTF8("", 1).length() == 1 );
 }
 
+TEST_CASE("StringAssignUTF8", "[wxString]")
+{
+    wxString s;
+    s.AssignFromUTF8("Oberfläche");
+    CHECK( s == wxString::FromUTF8("Oberfläche") );
+
+    s.AssignFromUTF8("fläche");
+    CHECK( s == wxString::FromUTF8("fläche") );
+
+    s.AssignFromUTF8("Even longer than Oberfläche");
+    CHECK( s == wxString::FromUTF8("Even longer than Oberfläche") );
+
+    s.AssignFromUTF8(nullptr);
+    CHECK( s == wxString() );
+}
+
 TEST_CASE("StringExtraction", "[wxString]")
 {
     wxString s(wxT("Hello, world!"));
