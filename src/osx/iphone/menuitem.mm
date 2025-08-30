@@ -191,7 +191,7 @@ public :
 
     ~wxMenuItemCocoaImpl();
 
-    void SetBitmap( const wxBitmap& bitmap ) override
+    void SetBitmap( const wxBitmapBundle& bitmap ) override
     {
     }
 

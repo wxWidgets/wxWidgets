@@ -18,6 +18,7 @@
     #include "wx/menu.h"
 #endif // WX_PRECOMP
 
+#include "wx/private/bmpbndl.h"
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
@@ -248,9 +249,9 @@ public :
 
     ~wxMenuItemCocoaImpl();
 
-    void SetBitmap( const wxBitmap& bitmap ) override
+    void SetBitmap( const wxBitmapBundle& bitmap ) override
     {
-        [m_osxMenuItem setImage:bitmap.GetNSImage()];
+        [m_osxMenuItem setImage:wxOSXGetImageFromBundle(bitmap)];
     }
 
     void Enable( bool enable ) override

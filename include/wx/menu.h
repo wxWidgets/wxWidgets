@@ -260,7 +260,7 @@ public:
     //
     // NB: avoid calling SetInvokingWindow() directly if possible, use
     //     wxMenuInvokingWindowSetter class below instead
-    virtual void SetInvokingWindow(wxWindow *win);
+    void SetInvokingWindow(wxWindow *win);
     wxWindow *GetInvokingWindow() const { return m_invokingWindow; }
 
     // the window associated with this menu: this is the invoking window for

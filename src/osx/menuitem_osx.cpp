@@ -150,6 +150,11 @@ void wxMenuItem::SetItemLabel(const wxString& text)
     UpdateItemText() ;
 }
 
+void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
+{
+    wxMenuItemBase::SetBitmap(bitmap);
+    UpdateItemBitmap();
+}
 
 void wxMenuItem::UpdateItemBitmap()
 {
@@ -158,7 +163,7 @@ void wxMenuItem::UpdateItemBitmap()
 
     if ( m_bitmap.IsOk() )
     {
-        GetPeer()->SetBitmap(GetBitmap());
+        GetPeer()->SetBitmap(m_bitmap);
     }
 }
 
