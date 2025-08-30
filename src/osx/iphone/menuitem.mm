@@ -192,7 +192,7 @@ public :
 
     ~wxMenuItemCocoaImpl();
 
-    void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE
+    void SetBitmap( const wxBitmapBundle& bitmap ) wxOVERRIDE
     {
     }
 

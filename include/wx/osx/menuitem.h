@@ -38,6 +38,7 @@ public:
 
     // override base class virtuals
     virtual void SetItemLabel(const wxString& strName) wxOVERRIDE;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
 
     virtual void Enable(bool bDoEnable = true) wxOVERRIDE;
     virtual void Check(bool bDoCheck = true) wxOVERRIDE;
