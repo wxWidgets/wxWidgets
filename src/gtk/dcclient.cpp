@@ -527,7 +527,8 @@ void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 
         if (m_gdkwindow)
             gdk_draw_line( m_gdkwindow, m_penGC, XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2) );
 
-        CalcBoundingBox(x1, y1, x2, y2);
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox(x1, y1, x2, y2);
     }
 }
 
@@ -657,7 +658,8 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
         }
     }
 
-    CalcBoundingBox(x1, y1, x2, y2);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double sa, double ea )
@@ -704,7 +706,8 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
             gdk_draw_arc( m_gdkwindow, m_penGC, FALSE, xx, yy, ww, hh, start, end );
     }
 
-    CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
 }
 
 void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
@@ -714,7 +717,8 @@ void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     if ( m_pen.IsNonTransparent() && m_gdkwindow )
         gdk_draw_point( m_gdkwindow, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
 
-    CalcBoundingBox (x, y);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox (x, y);
 }
 
 void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset )
@@ -747,7 +751,8 @@ void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset
             gpts_alloc[i].x = XLOG2DEV(points[i].x + xoffset);
             gpts_alloc[i].y = YLOG2DEV(points[i].y + yoffset);
         }
-        CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
     }
 
     if (m_gdkwindow)
@@ -784,7 +789,8 @@ void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[],
             gdkpoints_alloc[i].x = XLOG2DEV(points[i].x + xoffset);
             gdkpoints_alloc[i].y = YLOG2DEV(points[i].y + yoffset);
         }
-        CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
     }
 
     if (m_gdkwindow)
@@ -855,7 +861,8 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
         }
     }
 
-    CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
 }
 
 void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
@@ -936,7 +943,8 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
     }
 
     // this ignores the radius
-    CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
 }
 
 void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -978,7 +986,8 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
             gdk_draw_arc( m_gdkwindow, m_penGC, false, xx, yy, ww, hh, 0, 360*64 );
     }
 
-    CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox( wxPoint(x, y), wxSize(width, height) );
 }
 
 void wxWindowDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
@@ -1087,7 +1096,8 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     // notice that as the bitmap is not drawn upside down (or right to left)
     // even if the corresponding axis direction is inversed, we need to take it
     // into account when calculating its bounding box
-    CalcBoundingBox(wxPoint(x, y), wxSize(m_signX*w, m_signY*h));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(m_signX*w, m_signY*h));
 
     // device coords
     int xx = LogicalToDeviceX(x);
@@ -1236,7 +1246,8 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
             return false;
     }
 
-    CalcBoundingBox(wxPoint(xdest, ydest), wxSize(width, height) );
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(xdest, ydest), wxSize(width, height) );
 
     // source device coords
     int src_x = source->LogicalToDeviceX(xsrc);
@@ -1422,7 +1433,8 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text, int xLogical, int y
 
     if (wxIsNullDouble(angle))
     {
-        CalcBoundingBox(wxPoint(xLogical, yLogical), wxSize(w, h));
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox(wxPoint(xLogical, yLogical), wxSize(w, h));
     }
     else
     {
@@ -1445,8 +1457,14 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text, int xLogical, int y
                 minY = (wxCoord)(dmin(dmin(0, y2), dmin(y3, y4)) - 0.5);
         x += minX;
         y += minY;
-        CalcBoundingBox(DeviceToLogicalX(x), DeviceToLogicalY(y),
-                        DeviceToLogicalX(x + maxX - minX), DeviceToLogicalY(y + maxY - minY));
+
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        {
+            CalcBoundingBox(DeviceToLogicalX(x),
+                            DeviceToLogicalY(y),
+                            DeviceToLogicalX(x + maxX - minX),
+                            DeviceToLogicalY(y + maxY - minY));
+        }
     }
 
     gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x, y, m_layout, nullptr, bg_col);

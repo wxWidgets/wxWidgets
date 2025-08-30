@@ -319,47 +319,6 @@ int wxPrinterDC::GetResolution() const
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject);
 
-wxDCImpl::wxDCImpl( wxDC *owner )
-        : m_window(nullptr)
-        , m_colour(true)
-        , m_ok(true)
-        , m_clipping(false)
-        , m_isInteractive(0)
-        , m_isBBoxValid(false)
-        , m_logicalOriginX(0), m_logicalOriginY(0)
-        , m_deviceOriginX(0), m_deviceOriginY(0)
-        , m_deviceLocalOriginX(0), m_deviceLocalOriginY(0)
-        , m_logicalScaleX(1.0), m_logicalScaleY(1.0)
-        , m_userScaleX(1.0), m_userScaleY(1.0)
-        , m_scaleX(1.0), m_scaleY(1.0)
-        , m_signX(1), m_signY(1)
-        , m_contentScaleFactor(1)
-        , m_mm_to_pix_x(0.0), m_mm_to_pix_y(0.0)
-        , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
-        , m_clipX1(0), m_clipY1(0), m_clipX2(0), m_clipY2(0)
-        , m_logicalFunction(wxCOPY)
-        , m_backgroundMode(wxBRUSHSTYLE_TRANSPARENT)
-        , m_mappingMode(wxMM_TEXT)
-        , m_pen()
-        , m_brush()
-        , m_backgroundBrush()
-        , m_textForegroundColour(*wxBLACK)
-        , m_textBackgroundColour(*wxWHITE)
-        , m_font()
-#if wxUSE_PALETTE
-        , m_palette()
-        , m_hasCustomPalette(false)
-#endif // wxUSE_PALETTE
-        , m_devClipX1(0), m_devClipY1(0), m_devClipX2(0), m_devClipY2(0)
-        , m_useDevClipCoords(false)
-{
-    m_owner = owner;
-}
-
-wxDCImpl::~wxDCImpl()
-{
-}
-
 // ----------------------------------------------------------------------------
 // clipping
 // ----------------------------------------------------------------------------
@@ -664,7 +623,8 @@ void wxDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     DoDrawLine(x1, y3, x3, y2);
     DoDrawLine(x3, y2, x2, y1);
 
-    CalcBoundingBox(x1, y1, x2, y2);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x1, y1, x2, y2);
 }
 
 bool
@@ -1322,7 +1282,8 @@ void wxDC::DrawLabel(const wxString& text,
         *rectBounding = wxRect(x, y - heightText, widthText, heightText);
     }
 
-    m_pimpl->CalcBoundingBox(wxPoint(x0, y0), wxSize(width0, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        m_pimpl->CalcBoundingBox(wxPoint(x0, y0), wxSize(width0, height));
 }
 
 /*

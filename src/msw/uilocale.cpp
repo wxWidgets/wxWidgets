@@ -629,11 +629,17 @@ public:
 
     wxLayoutDirection GetLayoutDirection() const override
     {
-        wxString str = DoGetInfo(LOCALE_IREADINGLAYOUT);
-        // str contains a number between 0 and 3:
-        // 0 = LTR, 1 = RTL, 2 = TTB+RTL, 3 = TTB + LTR
-        // If str equals 1 return RTL, otherwise LTR
-        return (str.IsSameAs("1") ? wxLayout_RightToLeft : wxLayout_LeftToRight);
+        if ( m_layoutDir == wxLayout_Default )
+        {
+            wxString str = DoGetInfo(LOCALE_IREADINGLAYOUT);
+            // str contains a number between 0 and 3:
+            // 0 = LTR, 1 = RTL, 2 = TTB+RTL, 3 = TTB + LTR
+            // If str equals 1 return RTL, otherwise LTR
+            m_layoutDir = str.IsSameAs("1") ? wxLayout_RightToLeft
+                                            : wxLayout_LeftToRight;
+        }
+
+        return m_layoutDir;
     }
 
     int CompareStrings(const wxString& lhs, const wxString& rhs,
@@ -691,6 +697,8 @@ private:
     }
 
     const wchar_t* const m_name;
+
+    mutable wxLayoutDirection m_layoutDir = wxLayout_Default;
 
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplName);
 };

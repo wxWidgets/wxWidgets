@@ -633,7 +633,8 @@ void wxSVGFileDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
     write(s);
 
-    CalcBoundingBox(x1, y1, x2, y2);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(x1, y1, x2, y2);
 }
 
 void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
@@ -646,12 +647,14 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
         s = wxString::Format(wxS("  <path d=\"M%d %d"),
             (points[0].x + xoffset), (points[0].y + yoffset));
 
-        CalcBoundingBox(points[0].x + xoffset, points[0].y + yoffset);
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox(points[0].x + xoffset, points[0].y + yoffset);
 
         for (int i = 1; i < n; ++i)
         {
             s += wxString::Format(wxS(" L%d %d"), (points[i].x + xoffset), (points[i].y + yoffset));
-            CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
+            if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+                CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
         }
 
         s += wxString::Format(wxS("\" style=\"fill:none\" %s %s/>\n"),
@@ -681,8 +684,11 @@ void wxSVGFileDCImpl::DoDrawSpline(const wxPointList* points)
 
     s += wxString::Format("M %s %s L %s %s",
                           NumStr(p1.m_x), NumStr(p1.m_y), NumStr(p3.m_x), NumStr(p3.m_y));
-    CalcBoundingBox(wxRound(p1.m_x), wxRound(p1.m_y));
-    CalcBoundingBox(wxRound(p3.m_x), wxRound(p3.m_y));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+    {
+        CalcBoundingBox(wxRound(p1.m_x), wxRound(p1.m_y));
+        CalcBoundingBox(wxRound(p3.m_x), wxRound(p3.m_y));
+    }
 
     while ( itPt != points->end() )
     {
@@ -700,11 +706,15 @@ void wxSVGFileDCImpl::DoDrawSpline(const wxPointList* points)
         s += wxString::Format(" C %s %s, %s %s, %s %s",
              NumStr(c1.m_x), NumStr(c1.m_y), NumStr(c2.m_x), NumStr(c2.m_y), NumStr(p3.m_x), NumStr(p3.m_y));
 
-        CalcBoundingBox(wxRound(p0.m_x), wxRound(p0.m_y));
-        CalcBoundingBox(wxRound(p3.m_x), wxRound(p3.m_y));
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        {
+            CalcBoundingBox(wxRound(p0.m_x), wxRound(p0.m_y));
+            CalcBoundingBox(wxRound(p3.m_x), wxRound(p3.m_y));
+        }
     }
     s += wxString::Format(" L %s %s", NumStr(p2.m_x), NumStr(p2.m_y));
-    CalcBoundingBox(wxRound(p2.m_x), wxRound(p2.m_y));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxRound(p2.m_x), wxRound(p2.m_y));
 
     s += wxString::Format("\" style=\"fill:none\" %s %s/>\n",
                           GetRenderMode(m_renderingMode), GetPenPattern(m_pen));
@@ -748,10 +758,13 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     const double dy = heightLine * cos(rad);
 
     // Update bounding box: upper left, upper right, bottom left, bottom right
-    CalcBoundingBox(x, y);
-    CalcBoundingBox((wxCoord)(x + w * cos(rad)), (wxCoord)(y - h * sin(rad)));
-    CalcBoundingBox((wxCoord)(x + h * sin(rad)), (wxCoord)(y + h * cos(rad)));
-    CalcBoundingBox((wxCoord)(x + h * sin(rad) + w * cos(rad)), (wxCoord)(y + h * cos(rad) - w * sin(rad)));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+    {
+        CalcBoundingBox(x, y);
+        CalcBoundingBox((wxCoord)(x + w * cos(rad)), (wxCoord)(y - h * sin(rad)));
+        CalcBoundingBox((wxCoord)(x + h * sin(rad)), (wxCoord)(y + h * cos(rad)));
+        CalcBoundingBox((wxCoord)(x + h * sin(rad) + w * cos(rad)), (wxCoord)(y + h * cos(rad) - w * sin(rad)));
+    }
 
     // Create text style string
     wxString fontstyle;
@@ -863,7 +876,8 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
 
     write(s);
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
@@ -879,7 +893,8 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     for (int i = 0; i < n; i++)
     {
         s += wxString::Format(wxS("%d %d "), points[i].x + xoffset, points[i].y + yoffset);
-        CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+            CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
     }
 
     s += wxString::Format(wxS("\" %s %s %s style=\"fill-rule:%s;\"/>\n"),
@@ -946,7 +961,8 @@ void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord
 
     write(s);
 
-    CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(wxPoint(x, y), wxSize(width, height));
 }
 
 void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, wxCoord xc, wxCoord yc)
@@ -1144,7 +1160,8 @@ void wxSVGFileDCImpl::DoGradientFillLinear(const wxRect& rect,
 
     write(s);
 
-    CalcBoundingBox(rect);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(rect);
 }
 
 void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
@@ -1183,7 +1200,8 @@ void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
 
     write(s);
 
-    CalcBoundingBox(rect);
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() )
+        CalcBoundingBox(rect);
 }
 
 void wxSVGFileDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
