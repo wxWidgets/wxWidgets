@@ -257,6 +257,7 @@ All:
 - Backport several CMake enhancements from 3.3 (Maarten Bent, #25448).
 - Fix using wxSOCKET_NOWAIT_READ and wxSOCKET_WAITALL_WRITE together (#17114).
 - Make wxPlatformInfo::Get() thread-safe (#25459).
+- Fix CMake build under Alpine Linux and other systems using musl (#25749).
 
 All (GUI):
 
