@@ -587,13 +587,20 @@ if(wxUSE_FSWATCHER)
 endif()
 
 if(wxUSE_XLOCALE)
+    list(APPEND xlocale_headers locale.h stdlib.h)
     check_include_file(xlocale.h HAVE_XLOCALE_H)
-    set(CMAKE_EXTRA_INCLUDE_FILES locale.h)
     if(HAVE_XLOCALE_H)
-        list(APPEND CMAKE_EXTRA_INCLUDE_FILES xlocale.h)
+        list(APPEND xlocale_headers xlocale.h)
     endif()
-    check_type_size(locale_t LOCALE_T)
-    set(CMAKE_EXTRA_INCLUDE_FILES)
+    wx_check_c_source_compiles("
+        locale_t t;
+        strtod_l(NULL, NULL, t);
+        strtol_l(NULL, NULL, 0, t);
+        strtoul_l(NULL, NULL, 0, t);
+"
+        HAVE_LOCALE_T
+        ${xlocale_headers}
+        )
 endif()
 
 # Check sizes of various types
