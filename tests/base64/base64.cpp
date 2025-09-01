@@ -69,238 +69,197 @@ static void generateGibberish(void* buff, size_t len)
 // test class
 // --------------------------------------------------------------------------
 
-class Base64TestCase : public CppUnit::TestCase
-{
-public:
-    Base64TestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( Base64TestCase );
-        CPPUNIT_TEST( EncodeDecodeEmpty );
-        CPPUNIT_TEST( EncodeDecodeA );
-        CPPUNIT_TEST( EncodeDecodeAB );
-        CPPUNIT_TEST( EncodeDecodeABC );
-        CPPUNIT_TEST( EncodeDecodeABCD );
-        CPPUNIT_TEST( EncodeDecode0to255 );
-        CPPUNIT_TEST( EncodeDecodePatternA );
-        CPPUNIT_TEST( EncodeDecodePatternB );
-        CPPUNIT_TEST( EncodeDecodePatternC );
-        CPPUNIT_TEST( EncodeDecodeRandom );
-        CPPUNIT_TEST( DecodeInvalid );
-    CPPUNIT_TEST_SUITE_END();
-
-    void EncodeDecodeEmpty();
-    void EncodeDecodeA();
-    void EncodeDecodeAB();
-    void EncodeDecodeABC();
-    void EncodeDecodeABCD();
-    void EncodeDecode0to255();
-    void EncodeDecodePatternA();
-    void EncodeDecodePatternB();
-    void EncodeDecodePatternC();
-    void EncodeDecodeRandom();
-    void DecodeInvalid();
-
-    wxDECLARE_NO_COPY_CLASS(Base64TestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( Base64TestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Base64TestCase, "Base64TestCase" );
-
-void Base64TestCase::EncodeDecodeEmpty()
+TEST_CASE("Encode Decode Empty", "[base64]")
 {
     char shouldBeEmpty[10];
     shouldBeEmpty[0] = '\0';
     size_t len = 10;
 
-    CPPUNIT_ASSERT(wxBase64Encode(shouldBeEmpty, len, "", 0) != wxCONV_FAILED);
-    CPPUNIT_ASSERT_EQUAL('\0', shouldBeEmpty[0]);
+    CHECK( wxBase64Encode(shouldBeEmpty, len, "", 0) != wxCONV_FAILED );
+    CHECK( shouldBeEmpty[0] == '\0' );
 
-    CPPUNIT_ASSERT(wxBase64Decode(shouldBeEmpty, len, "") != wxCONV_FAILED);
-    CPPUNIT_ASSERT_EQUAL('\0', shouldBeEmpty[0]);
+    CHECK( wxBase64Decode(shouldBeEmpty, len, "") != wxCONV_FAILED );
+    CHECK( shouldBeEmpty[0] == '\0' );
 
     wxMemoryBuffer bufmt;
     wxString resultEmpty = wxBase64Encode(bufmt);
-    CPPUNIT_ASSERT(resultEmpty.empty());
+    CHECK( resultEmpty.empty() );
 
     bufmt = wxBase64Decode(resultEmpty);
-    CPPUNIT_ASSERT_EQUAL(0, bufmt.GetDataLen());
+    CHECK( bufmt.GetDataLen() == 0 );
 }
 
-void Base64TestCase::EncodeDecodeA()
+TEST_CASE("Encode Decode A", "[base64]")
 {
     const wxString str = wxBase64Encode("A", 1);
-    CPPUNIT_ASSERT_EQUAL(wxString("QQ=="), str);
+    CHECK( str == wxString("QQ==") );
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    CPPUNIT_ASSERT_EQUAL(1, buf.GetDataLen());
-    CPPUNIT_ASSERT_EQUAL('A', *(char *)buf.GetData());
+    CHECK(buf.GetDataLen() == 1);
+    CHECK( *(char*)buf.GetData() == 'A' );
 
     char cbuf[10];
     memset(cbuf, (char)-1, sizeof(cbuf));
-    CPPUNIT_ASSERT_EQUAL( 1, wxBase64Decode(cbuf, 1, str) );
-    CPPUNIT_ASSERT_EQUAL( 'A', cbuf[0] );
-    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[1] );
-    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[2] );
+    CHECK(wxBase64Decode(cbuf, 1, str) == 1);
+    CHECK( cbuf[0] == 'A' );
+    CHECK( cbuf[1] == (char)-1 );
+    CHECK( cbuf[2] == (char)-1 );
 }
 
-void Base64TestCase::EncodeDecodeAB()
+TEST_CASE("Encode Decode AB", "[base64]")
 {
     const wxString str = wxBase64Encode("AB", 2);
-    CPPUNIT_ASSERT_EQUAL(wxString("QUI="), str);
+    CHECK( str == wxString("QUI=") );
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    CPPUNIT_ASSERT_EQUAL(2, buf.GetDataLen());
-    CPPUNIT_ASSERT_EQUAL('A', buf[0]);
-    CPPUNIT_ASSERT_EQUAL('B', buf[1]);
+    CHECK( buf.GetDataLen() == 2 );
+    CHECK( buf[0] == 'A' );
+    CHECK( buf[1] == 'B' );
 
     char cbuf[10];
     memset(cbuf, (char)-1, sizeof(cbuf));
-    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, wxBase64Decode(cbuf, 1, str) );
-    CPPUNIT_ASSERT_EQUAL( 2, wxBase64Decode(cbuf, 2, str) );
-    CPPUNIT_ASSERT_EQUAL( 'A', cbuf[0] );
-    CPPUNIT_ASSERT_EQUAL( 'B', cbuf[1] );
-    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[2] );
-    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[3] );
+    CHECK( wxBase64Decode(cbuf, 1, str) == wxCONV_FAILED);
+    CHECK( wxBase64Decode(cbuf, 2, str) == 2 );
+    CHECK( cbuf[0] == 'A' );
+    CHECK( cbuf[1] == 'B' );
+    CHECK( cbuf[2] == (char)-1 );
+    CHECK( cbuf[3] == (char)-1 );
 }
 
-void Base64TestCase::EncodeDecodeABC()
+TEST_CASE("Encode Decode ABC", "[base64]")
 {
     const wxString str = wxBase64Encode("ABC", 3);
-    CPPUNIT_ASSERT_EQUAL(wxString("QUJD"), str);
+    CHECK( str == wxString("QUJD") );
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    CPPUNIT_ASSERT_EQUAL(3, buf.GetDataLen());
-    CPPUNIT_ASSERT_EQUAL('A', buf[0]);
-    CPPUNIT_ASSERT_EQUAL('B', buf[1]);
-    CPPUNIT_ASSERT_EQUAL('C', buf[2]);
+    CHECK( buf.GetDataLen() == 3 );
+    CHECK( buf[0] == 'A' );
+    CHECK( buf[1] == 'B' );
+    CHECK( buf[2] == 'C' );
 
     char cbuf[10];
     memset(cbuf, (char)-1, sizeof(cbuf));
-    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, wxBase64Decode(cbuf, 2, str) );
-    CPPUNIT_ASSERT_EQUAL( 3, wxBase64Decode(cbuf, 3, str) );
-    CPPUNIT_ASSERT_EQUAL( 'A', cbuf[0] );
-    CPPUNIT_ASSERT_EQUAL( 'B', cbuf[1] );
-    CPPUNIT_ASSERT_EQUAL( 'C', cbuf[2] );
-    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[3] );
-    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[4] );
+    CHECK( wxBase64Decode(cbuf, 2, str) == wxCONV_FAILED );
+    CHECK( wxBase64Decode(cbuf, 3, str) == 3 );
+    CHECK( cbuf[0] == 'A' );
+    CHECK( cbuf[1] == 'B' );
+    CHECK( cbuf[2] == 'C' );
+    CHECK( cbuf[3] == (char)-1 );
+    CHECK( cbuf[4] == (char)-1 );
 }
 
-void Base64TestCase::EncodeDecodeABCD()
+TEST_CASE("Encode Decode ABCD", "[base64]")
 {
     const wxString str = wxBase64Encode("ABCD", 4);
-    CPPUNIT_ASSERT_EQUAL(wxString("QUJDRA=="), str);
+    CHECK( str == wxString("QUJDRA==") );
 
     wxMemoryBuffer buf = wxBase64Decode(str);
-    CPPUNIT_ASSERT_EQUAL(4, buf.GetDataLen());
-    CPPUNIT_ASSERT_EQUAL('A', buf[0]);
-    CPPUNIT_ASSERT_EQUAL('B', buf[1]);
-    CPPUNIT_ASSERT_EQUAL('C', buf[2]);
-    CPPUNIT_ASSERT_EQUAL('D', buf[3]);
+    CHECK( buf.GetDataLen() == 4 );
+    CHECK( buf[0] == 'A' );
+    CHECK( buf[1] == 'B' );
+    CHECK( buf[2] == 'C' );
+    CHECK( buf[3] == 'D' );
 
     char cbuf[10];
     memset(cbuf, (char)-1, sizeof(cbuf));
-    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, wxBase64Decode(cbuf, 3, str) );
-    CPPUNIT_ASSERT_EQUAL( 4, wxBase64Decode(cbuf, 4, str) );
-    CPPUNIT_ASSERT_EQUAL( 'A', cbuf[0] );
-    CPPUNIT_ASSERT_EQUAL( 'B', cbuf[1] );
-    CPPUNIT_ASSERT_EQUAL( 'C', cbuf[2] );
-    CPPUNIT_ASSERT_EQUAL( 'D', cbuf[3] );
-    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[4] );
-    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[5] );
+    CHECK( wxBase64Decode(cbuf, 3, str) == wxCONV_FAILED );
+    CHECK( wxBase64Decode(cbuf, 4, str) == 4 );
+    CHECK( cbuf[0] == 'A' );
+    CHECK( cbuf[1] == 'B' );
+    CHECK( cbuf[2] == 'C' );
+    CHECK( cbuf[3] == 'D' );
+    CHECK( cbuf[4] == (char)-1 );
+    CHECK( cbuf[5] == (char)-1 );
 }
 
-void Base64TestCase::EncodeDecode0to255()
+TEST_CASE("Encode Decode 0 to 255", "[base64]")
 {
     unsigned char buff[256];
     generatePatternedData(buff, 256, 0, 1);
     wxString str = wxBase64Encode(buff, 256);
     wxMemoryBuffer mbuff = wxBase64Decode(str);
-    CPPUNIT_ASSERT(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
+    CHECK(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
 
     mbuff = wxBase64Decode(encoded0to255);
-    CPPUNIT_ASSERT(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
+    CHECK(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
 }
 
-void Base64TestCase::EncodeDecodePatternA()
+TEST_CASE("Encode Decode Pattern A", "[base64]")
 {
     unsigned char buff[350];
     generatePatternedData(buff, 350, 24, 5, 3);
     wxString str = wxBase64Encode(buff, 350);
     wxMemoryBuffer mbuff = wxBase64Decode(str);
-    CPPUNIT_ASSERT(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
+    CHECK(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
 }
 
-void Base64TestCase::EncodeDecodePatternB()
+TEST_CASE("Encode Decode Pattern B", "[base64]")
 {
     unsigned char buff[350];
     generatePatternedData(buff, 350, 0, 1, 1, 0xAA);
     wxString str = wxBase64Encode(buff, 350);
     wxMemoryBuffer mbuff = wxBase64Decode(str);
-    CPPUNIT_ASSERT(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
+    CHECK(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
 }
 
-void Base64TestCase::EncodeDecodePatternC()
+TEST_CASE("Encode Decode PatternC", "[base64]")
 {
     unsigned char buff[11];
     generatePatternedData(buff, 11, 1, 0, 2);
     wxString str = wxBase64Encode(buff, 11);
     wxMemoryBuffer mbuff = wxBase64Decode(str);
-    CPPUNIT_ASSERT(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
+    CHECK(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
 }
 
-void Base64TestCase::EncodeDecodeRandom()
+TEST_CASE("Encode Decode Random", "[base64]")
 {
     size_t size = (size_t)(rand() / (float)RAND_MAX * 3000. + 11);
     unsigned char *buff = new unsigned char[size];
     generateRandomData(buff, size);
     wxString str = wxBase64Encode(buff, size);
     wxMemoryBuffer mbuff = wxBase64Decode(str);
-    CPPUNIT_ASSERT(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
+    CHECK(memcmp(mbuff.GetData(), buff, mbuff.GetDataLen()) == 0);
 
     generateGibberish(buff, size);
     char *buff2 = new char[size];
     size_t realsize = size;
-    CPPUNIT_ASSERT(wxBase64Decode(buff2, realsize, (char *)buff, size));
-    CPPUNIT_ASSERT(wxBase64Encode(buff2, size, buff2, realsize));
+    CHECK(wxBase64Decode(buff2, realsize, (char *)buff, size));
+    CHECK(wxBase64Encode(buff2, size, buff2, realsize));
     delete[] buff2;
     delete[] buff;
 }
 
-void Base64TestCase::DecodeInvalid()
+TEST_CASE("Decode Invalid", "[base64]")
 {
     size_t rc, posErr;
     rc = wxBase64Decode(nullptr, 0, "one two!", wxNO_LEN,
                         wxBase64DecodeMode_Strict, &posErr);
-    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
-    CPPUNIT_ASSERT_EQUAL( 3, posErr );
+    CHECK( rc == wxCONV_FAILED );
+    CHECK( posErr == 3 );
 
     rc = wxBase64Decode(nullptr, 0, "one two!", wxNO_LEN,
                         wxBase64DecodeMode_SkipWS, &posErr);
-    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
-    CPPUNIT_ASSERT_EQUAL( 7, posErr );
+    CHECK( rc == wxCONV_FAILED );
+    CHECK( posErr == 7 );
 
     rc = wxBase64Decode(nullptr, 0, "? QQ==", wxNO_LEN,
                         wxBase64DecodeMode_SkipWS, &posErr);
-    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
-    CPPUNIT_ASSERT_EQUAL( 0, posErr );
+    CHECK( rc == wxCONV_FAILED );
+    CHECK( posErr == 0 );
 
     const size_t POS_INVALID = (size_t)-1;
     posErr = POS_INVALID;
     rc = wxBase64Decode(nullptr, 0, " QQ==", wxNO_LEN,
                         wxBase64DecodeMode_SkipWS, &posErr);
-    CPPUNIT_ASSERT_EQUAL( 1, rc );
-    CPPUNIT_ASSERT_EQUAL( POS_INVALID, posErr );
+    CHECK( rc == 1 );
+    CHECK( posErr == POS_INVALID );
 
     rc = wxBase64Decode(nullptr, 0, "? QQ==", wxNO_LEN,
                         wxBase64DecodeMode_Relaxed, &posErr);
-    CPPUNIT_ASSERT_EQUAL( 1, rc );
-    CPPUNIT_ASSERT_EQUAL( POS_INVALID, posErr );
+    CHECK( rc == 1);
+    CHECK( posErr == POS_INVALID );
 
-    CPPUNIT_ASSERT( !wxBase64Decode("wxGetApp()").GetDataLen() );
+    CHECK( !wxBase64Decode("wxGetApp()").GetDataLen() );
 }
 
 #endif // wxUSE_BASE64
