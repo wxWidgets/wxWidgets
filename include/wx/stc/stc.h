@@ -4263,10 +4263,10 @@ public:
     void CallTipSetPosition(bool above);
 
     // Find the display line of a document line taking hidden lines into account.
-    int VisibleFromDocLine(int docLine);
+    int VisibleFromDocLine(int docLine) const;
 
     // Find the document line of a display line taking hidden lines into account.
-    int DocLineFromVisible(int displayLine);
+    int DocLineFromVisible(int displayLine) const;
 
     // The number of display lines needed to wrap a document line
     int WrapCount(int docLine);

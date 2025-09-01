@@ -2191,13 +2191,13 @@ void wxStyledTextCtrl::CallTipSetPosition(bool above)
 }
 
 // Find the display line of a document line taking hidden lines into account.
-int wxStyledTextCtrl::VisibleFromDocLine(int docLine)
+int wxStyledTextCtrl::VisibleFromDocLine(int docLine) const
 {
     return SendMsg(SCI_VISIBLEFROMDOCLINE, docLine, 0);
 }
 
 // Find the document line of a display line taking hidden lines into account.
-int wxStyledTextCtrl::DocLineFromVisible(int displayLine)
+int wxStyledTextCtrl::DocLineFromVisible(int displayLine) const
 {
     return SendMsg(SCI_DOCLINEFROMVISIBLE, displayLine, 0);
 }

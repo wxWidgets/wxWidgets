@@ -1203,6 +1203,8 @@ constNonGetterMethods = (
     'CanRedo',
     'CanUndo',
     'TextHeight',
+    'VisibleFromDocLine',
+    'DocLineFromVisible',
 )
 
 # several methods require override
