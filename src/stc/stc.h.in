@@ -200,6 +200,13 @@ public:
     // Returns the line number of the line with the caret.
     int GetCurrentLine();
 
+    // Returns the total number of display lines, which may be different from
+    // GetLineCount() because of folding and wrapping.
+    int GetDisplayLineCount() const
+    {
+        return VisibleFromDocLine(GetLineCount());
+    }
+
     // Extract style settings from a spec-string which is composed of one or
     // more of the following comma separated elements:
     //

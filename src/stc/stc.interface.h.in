@@ -144,6 +144,19 @@ public:
     int GetCurrentLine();
 
     /**
+        Returns the total number of display lines.
+
+        This may be different from the value returned by GetLineCount() because
+        of folding and wrapping.
+
+        Note that this is not the same as GetVisibleLineCount() which returns
+        the number of lines currently visible on screen.
+
+        @since 3.3.2
+    */
+    int GetDisplayLineCount() const;
+
+    /**
        Extract style settings from a spec-string which is composed of one or
        more of the following comma separated elements:
 
