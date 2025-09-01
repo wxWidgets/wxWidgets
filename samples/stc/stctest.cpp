@@ -1045,6 +1045,13 @@ private:
         m_editVisibleLines = m_edit->LinesOnScreen();
     }
 
+    // Get the total number of displayed lines, i.e. not taking hidden lines
+    // (due to folding) into account and counting wrapped lines.
+    int GetDisplayedLineCount() const
+    {
+        return VisibleFromDocLine(GetLineCount());
+    }
+
     // Get map line at the given mouse position.
     int GetMapLineAtPoint(const wxPoint& pos) const
     {
@@ -1058,7 +1065,7 @@ private:
         if ( firstLine < 0 )
             return 0;
 
-        auto const lastValid = GetLineCount() - m_editVisibleLines;
+        auto const lastValid = GetDisplayedLineCount() - m_editVisibleLines;
         if ( firstLine > lastValid )
             return lastValid;
 
@@ -1106,7 +1113,7 @@ private:
     // Scroll the editor to correspond to the current position in the map.
     void SyncEditPosition()
     {
-        auto const totalLines = GetLineCount();
+        auto const totalLines = GetDisplayedLineCount();
 
         if ( m_editVisibleLines >= totalLines )
         {
@@ -1128,7 +1135,7 @@ private:
     void SyncMapPosition()
     {
         // First check for the special case when all lines are visible.
-        auto const totalLines = GetLineCount();
+        auto const totalLines = GetDisplayedLineCount();
         if ( m_editVisibleLines >= totalLines )
         {
             SetMapFirstVisibleLine(0);
@@ -1295,7 +1302,7 @@ private:
         // mapFirst = α * editorFirst, we can compute the new editor first
         // line as thumbTopPos / ((1 - α) * mapLineHeight) or the map first
         // line as thumbTopPos / ((1/α - 1) * mapLineHeight).
-        auto const totalLines = GetLineCount();
+        auto const totalLines = GetDisplayedLineCount();
 
         SetEditFirstVisibleLine
         (
