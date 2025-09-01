@@ -511,7 +511,7 @@ void Edit::OnTechnology(wxCommandEvent& event)
 
 //! misc
 void Edit::OnMarginClick (wxStyledTextEvent &event) {
-    if (event.GetMargin() == 2) {
+    if (event.GetMargin() == m_FoldingID) {
         int lineClick = LineFromPosition (event.GetPosition());
         int levelClick = GetFoldLevel (lineClick);
         if ((levelClick & wxSTC_FOLDLEVELHEADERFLAG) > 0) {
