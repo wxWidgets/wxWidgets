@@ -915,7 +915,11 @@ public:
         edit->SetReadOnly(wasReadOnly);
 
         // Copy the main editor attributes.
-        SetLexer(edit->GetLexer());
+
+        // Do NOT set the lexer: this somehow breaks syntax highlighting and
+        // folding in the main editor itself and the map gets syntax
+        // highlighting even without it anyhow.
+
         for ( int style = 0; style < wxSTC_STYLE_MAX; ++style )
         {
             // There is probably no need to set the font for the map: at such
