@@ -36,6 +36,8 @@ if(MSVC)
     )
 endif()
 
+wx_get_install_dir(library "lib")
+
 # setup header and wx-config
 if(WIN32_MSVC_NAMING)
     # create both Debug and Release directories, so CMake doesn't complain about
@@ -55,7 +57,7 @@ else()
 
     install(
         FILES "${wxOUTPUT_DIR}/wx/config/${wxBUILD_FILE_ID}"
-        DESTINATION "lib/wx/config"
+        DESTINATION "${library_dir}/wx/config"
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
                     GROUP_EXECUTE GROUP_READ
                     WORLD_EXECUTE WORLD_READ
@@ -64,7 +66,7 @@ else()
     install(DIRECTORY DESTINATION "bin")
     install(CODE "execute_process( \
         COMMAND ${CMAKE_COMMAND} -E create_symlink \
-        \"${CMAKE_INSTALL_PREFIX}/lib/wx/config/${wxBUILD_FILE_ID}\" \
+        \"${CMAKE_INSTALL_PREFIX}/${library_dir}/wx/config/${wxBUILD_FILE_ID}\" \
         \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wx-config\" \
         )"
     )
