@@ -43,7 +43,7 @@ TEST_CASE("wxWrapSizer::CalcMin", "[wxWrapSizer]")
     sizer->Add(child1);
     win->Layout();
 
-    CHECK( sizeMinExpected == sizer->CalcMin() );
+    CHECK( sizeMinExpected == sizer->CalcMinUsingLayoutDirection() );
 
     // If both children can fit in the same row, the minimal size of the sizer
     // is determined by the sum of their minimal horizontal dimensions and
@@ -58,7 +58,7 @@ TEST_CASE("wxWrapSizer::CalcMin", "[wxWrapSizer]")
     sizer->Add(child2);
     win->Layout();
 
-    CHECK( sizeMinExpected == sizer->CalcMin() );
+    CHECK( sizeMinExpected == sizer->CalcMinUsingLayoutDirection() );
 
     // Three children will take at least two rows so the minimal size in
     // vertical direction must increase.
@@ -71,7 +71,7 @@ TEST_CASE("wxWrapSizer::CalcMin", "[wxWrapSizer]")
     sizer->Add(child3);
     win->Layout();
 
-    CHECK( sizeMinExpected == sizer->CalcMin() );
+    CHECK( sizeMinExpected == sizer->CalcMinUsingLayoutDirection() );
 }
 
 TEST_CASE("wxWrapSizer::CalcMinFromMinor", "[wxWrapSizer]")

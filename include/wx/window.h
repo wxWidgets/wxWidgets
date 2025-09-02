@@ -480,6 +480,9 @@ public:
     int GetMaxWidth() const { return GetMaxSize().x; }
     int GetMaxHeight() const { return GetMaxSize().y; }
 
+        // Can be overridden to compute minimal size if it depends on the
+        // layout direction set by InformFirstDirection().
+    virtual wxSize GetMinSizeUsingLayoutDirection() const { return GetMinSize(); }
 
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for

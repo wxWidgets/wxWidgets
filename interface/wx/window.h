@@ -1402,6 +1402,24 @@ public:
     virtual wxSize GetEffectiveMinSize() const;
 
     /**
+        May be overridden if the control minimal size depends on the layout
+        direction.
+
+        This method is called after InformFirstDirection() and so its
+        implementation can rely on the values passed to that method.
+
+        For example, a multi-line wxStaticText returns the minimum size at
+        which it can be wrapped when the major layout direction is vertical.
+
+        The default implementation of this method just calls GetMinSize().
+
+        @since 3.3.2
+
+        @see InformFirstDirection(), wxSizer::CalcMinUsingLayoutDirection()
+    */
+    virtual wxSize GetMinSizeUsingLayoutDirection() const;
+
+    /**
         Returns the maximum size of window's client area.
 
         This is an indication to the sizer layout mechanism that this is the maximum
@@ -1596,6 +1614,8 @@ public:
        stretch over several lines). Parameter availableOtherDir
        tells the item how much more space there is available in the opposite
        direction (-1 if unknown).
+
+       @see GetMinSizeUsingLayoutDirection(), wxSizer::CalcMinUsingLayoutDirection()
     */
     virtual bool
     InformFirstDirection(int direction,
