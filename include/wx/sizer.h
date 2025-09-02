@@ -669,6 +669,9 @@ public:
     // this size to really update all the sizer items.
     virtual wxSize CalcMin() = 0;
 
+    // Can be overidden for two step process, e.g. by wxWrapSizer
+    virtual wxSize CalcMinFirstPass() { return CalcMin(); }
+
     // This method should be overridden but isn't pure virtual for backwards
     // compatibility.
     virtual void RepositionChildren(const wxSize& WXUNUSED(minSize))

@@ -859,6 +859,11 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
     // merge the best size with the min size, giving priority to the min size
     wxSize min = GetMinSize();
 
+    const wxStaticText *text = dynamic_cast<const wxStaticText*>(this);
+    if (text != nullptr) {
+        // printf( "1 GetEffectiveMinSize from wxStaticText. minSize %i %i\n", min.x, min.y );
+    }
+
     if (min.x == wxDefaultCoord || min.y == wxDefaultCoord)
     {
         wxSize best = GetBestSize();
@@ -866,13 +871,26 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
         if (min.y == wxDefaultCoord) min.y =  best.y;
     }
 
+    if (text != nullptr) {
+        // printf( "4 GetEffectiveMinSize from wxStaticText. minSize %i %i\n", min.x, min.y );
+    }
+
     return min;
 }
 
 wxSize wxWindowBase::GetBestSize() const
 {
+    const wxStaticText *text = dynamic_cast<const wxStaticText*>(this);
+    if (text != nullptr) {
+        // printf( "2 GetBestSize from wxStaticText. m_bestSizeCache %i %i\n", m_bestSizeCache.x, m_bestSizeCache.y );
+    }
+
     if ( !m_windowSizer && m_bestSizeCache.IsFullySpecified() )
         return m_bestSizeCache;
+
+    if (text != nullptr) {
+        // printf( "3 GetBestSize from wxStaticText. m_bestSizeCache %i %i\n", m_bestSizeCache.x, m_bestSizeCache.y );
+    }
 
     // call DoGetBestClientSize() first, if a derived class overrides it wants
     // it to be used
