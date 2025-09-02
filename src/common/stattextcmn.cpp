@@ -217,7 +217,7 @@ void wxStaticTextBase::Wrap(int width)
     m_currentWrap = width;
 
     // Allow for repeated calls to Wrap with different values
-    if (m_unwrappedLabel.IsNull()) 
+    if (m_unwrappedLabel.empty()) 
     {
         m_unwrappedLabel = GetLabel();
     } 
