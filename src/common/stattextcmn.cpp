@@ -248,7 +248,8 @@ bool wxStaticTextBase::InformFirstDirection(int direction, int size, int WXUNUSE
         return false;
 
     int style = GetWindowStyleFlag();
-    SetWindowStyleFlag( style | wxST_NO_AUTORESIZE );
+    if ( !(style & wxST_NO_AUTORESIZE) )
+        SetWindowStyleFlag( style | wxST_NO_AUTORESIZE );
     Wrap( size );
     InvalidateBestSize();
     SetWindowStyleFlag( style );
