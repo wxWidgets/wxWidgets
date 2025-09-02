@@ -213,8 +213,56 @@ private:
 
 void wxStaticTextBase::Wrap(int width)
 {
+    if (width == m_currentWrap)
+        return;
+
+    m_currentWrap = width;
+
+    // Allow for repeated calls to Wrap with different values
+    if (m_unwrappedLabel.empty())
+    {
+        m_unwrappedLabel = GetLabel();
+    }
+    else
+    {
+        SetLabel( m_unwrappedLabel );
+    }
     wxLabelWrapper wrapper;
     wrapper.WrapLabel(this, width);
+    InvalidateBestSize();
+}
+
+wxSize wxStaticTextBase::GetMinSizeUsingLayoutDirection() const
+{
+    if (!HasFlag(wxST_WRAP))
+        return GetMinSize();
+
+    // While wxWrapSizer can only wrap entire controls, a text paragraph
+    // could theoretically wrap at a few letters, so we start with
+    // requesting very little space in the first pass
+    return wxSize( GetCharWidth(), GetCharHeight() );
+}
+
+bool wxStaticTextBase::InformFirstDirection(int direction, int size, int WXUNUSED(availableOtherDir))
+{
+    if (!HasFlag(wxST_WRAP))
+        return false;
+
+    // In the second pass, this control has been given "size" amount of
+    // space in the horizontal direction. Wrap there and report a new
+    // GetEffectiveMinSize() from then on.
+
+    if (direction != wxHORIZONTAL)
+        return false;
+
+    int style = GetWindowStyleFlag();
+    if ( !(style & wxST_NO_AUTORESIZE) )
+        SetWindowStyleFlag( style | wxST_NO_AUTORESIZE );
+    Wrap( size );
+    InvalidateBestSize();
+    SetWindowStyleFlag( style );
+
+    return true;
 }
 
 void wxStaticTextBase::AutoResizeIfNecessary()

@@ -20,7 +20,7 @@
  * wxStaticText flags
  */
 #define wxST_NO_AUTORESIZE         0x0001
-// free 0x0002 bit
+#define wxST_WRAP                  0x0002
 #define wxST_ELLIPSIZE_START       0x0004
 #define wxST_ELLIPSIZE_MIDDLE      0x0008
 #define wxST_ELLIPSIZE_END         0x0010
@@ -39,6 +39,11 @@ public:
     // width (if possible: this function won't break words)
     // This function will modify the value returned by GetLabel()!
     void Wrap(int width);
+
+    virtual wxSize GetMinSizeUsingLayoutDirection() const override;
+
+    virtual bool
+    InformFirstDirection(int direction, int size, int availableOtherDir) override;
 
     // overridden base virtuals
     virtual bool AcceptsFocus() const override { return false; }
@@ -71,6 +76,16 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // for the new size. Calls WXSetVisibleLabel() to actually update the
     // display.
     void UpdateLabel();
+
+    // If m_currentWrap is non-zero, contains the label value before wrapping it.
+    // This is used to allow re-wrapping it at different widths. Note that
+    // wxControlBase::m_labelOrig is changed when Wrap() is called and so can't
+    // be used.
+    wxString m_unwrappedLabel;
+
+    // The width at which the label is currently wrapped or 0 if not wrapped.
+    int m_currentWrap = 0;
+
 
     // These functions are platform-specific and must be implemented in the
     // platform-specific code. They must not use or update m_labelOrig.
