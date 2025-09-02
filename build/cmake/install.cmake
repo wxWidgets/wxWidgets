@@ -70,7 +70,10 @@ else()
     )
 endif()
 
-install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets/${wxPLATFORM_LIB_DIR}")
+wx_get_install_dir(library "lib")
+set(wx_cmake_dir "${library_dir}/cmake/wxWidgets-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
+
+install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "${wx_cmake_dir}/${wxPLATFORM_LIB_DIR}")
 
 # find_package config file
 include(CMakePackageConfigHelpers)
@@ -93,11 +96,11 @@ write_basic_package_version_file(
 configure_package_config_file(
     "${wxSOURCE_DIR}/build/cmake/wxWidgetsConfig.cmake.in"
     "${projectConfig}"
-    INSTALL_DESTINATION "lib/cmake/wxWidgets"
+    INSTALL_DESTINATION "${wx_cmake_dir}"
 )
 install(
     FILES "${projectConfig}" "${versionConfig}"
-    DESTINATION "lib/cmake/wxWidgets"
+    DESTINATION "${wx_cmake_dir}"
 )
 
 # uninstall target
