@@ -333,7 +333,15 @@ gtk_frame_configure_callback( GtkWidget*,
 }
 }
 
-void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
+extern "C" {
+static void
+notify_gtk_scale_factor(GObject*, GParamSpec*, wxTopLevelWindowGTK* win)  // "notify::scale-factor"
+{
+    win->GTKScaleFactorChanged();
+}
+}
+
+void wxTopLevelWindowGTK::GTKScaleFactorChanged()
 {
 #ifdef __WXGTK3__
     // First of all check if our DPI has changed.
@@ -349,6 +357,10 @@ void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
         WXNotifyDPIChange(oldScaleFactor, newScaleFactor);
     }
 #endif // __WXGTK3__
+}
+
+void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
+{
 
     wxPoint point;
 #ifdef GDK_WINDOWING_X11
@@ -847,6 +859,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     // for wxMoveEvent
     g_signal_connect (m_widget, "configure_event",
                       G_CALLBACK (gtk_frame_configure_callback), this);
+
+    g_signal_connect_after(m_widget, "notify::scale-factor",
+        G_CALLBACK(notify_gtk_scale_factor), this);
 
     // activation
     g_signal_connect_after (m_widget, "focus_in_event",
