@@ -235,7 +235,7 @@ wxSize wxStaticTextBase::GetEffectiveMinSizeFirstPass() const
     // While wxWrapSizer can only wrap entire controls, a text paragraph
     // could theoretically wrap at a few letters, so we start with
     // requesting very little space in the first pass
-    return wxSize( 10, 10 );
+    return wxSize( GetCharWidth(), GetCharHeight() );
 }
 
 bool wxStaticTextBase::InformFirstDirection(int direction, int size, int WXUNUSED(availableOtherDir))

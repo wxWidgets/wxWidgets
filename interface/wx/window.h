@@ -1402,6 +1402,21 @@ public:
     virtual wxSize GetEffectiveMinSize() const;
 
     /**
+        This methods has to be overridden by controls that can stretch
+        in both main direction and in which an owning sizer determines
+        a main or first direction (see below). The typical and almost
+        only example is a multi-line wxStaticText which can stretch in
+        either direction. The methods returns the smallest possible
+        size that this control can be shrunk to, e.g. a single word 
+        for a text control. 
+
+        @since 3.3.2
+
+        @see InformFirstDirection(), wxSizer::CalcMinFirstPass()
+    */
+    virtual wxSize GetEffectiveMinSizeFirstPass() const;
+
+    /**
         Returns the maximum size of window's client area.
 
         This is an indication to the sizer layout mechanism that this is the maximum
@@ -1596,6 +1611,8 @@ public:
        stretch over several lines). Parameter availableOtherDir
        tells the item how much more space there is available in the opposite
        direction (-1 if unknown).
+
+       @see GetEffectiveMinSizeFirstPass(), wxSizer::CalcMinFirstPass()
     */
     virtual bool
     InformFirstDirection(int direction,

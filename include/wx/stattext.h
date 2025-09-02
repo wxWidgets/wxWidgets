@@ -80,6 +80,8 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // save unwrapped label to allow to call Wrap() several times and 
     // always starting from the original, unwrapped label
     wxString m_unwrappedLabel;
+
+    // Value of 0 or less indicates no wrapping done
     int m_currentWrap = 0;
 
 

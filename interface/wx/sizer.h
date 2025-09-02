@@ -337,6 +337,21 @@ public:
     virtual wxSize CalcMin() = 0;
 
     /**
+        This methods has to be overridden by sizers that can stretch
+        in both main direction and in which an owning sizer determines
+        a main or first direction (see below). The typical and almost
+        only example is a @ref wxWrapSizer which can stretch in
+        either direction. The methods returns the smallest possible
+        size that this sizer can be shrunk to, e.g. the width of a single
+        control. 
+
+        @since 3.3.2
+
+        @see InformFirstDirection()
+    */
+    virtual wxSize CalcMinFirstPass() const;
+
+    /**
         Detaches all children from the sizer.
 
         If @a delete_windows is @true then child windows will also be deleted.
@@ -436,6 +451,8 @@ public:
        Inform sizer about the first direction that has been decided (by
        parent item).  Returns true if it made use of the information (and
        recalculated min size).
+
+       @see wxWindow::GetEffectiveMinSizeFirstPass(), CalcMinFirstPass()
     */
     virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
 
