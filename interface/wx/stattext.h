@@ -19,6 +19,11 @@
     the label doesn't fit into the provided space and also formatting markup
     with wxControl::SetLabelMarkup().
 
+    Since version 3.3.2 this control can be used within a vertical @ref wxBoxSizer
+    and it will dynamically change its wrapping according to the allocated
+    horizontal space. This behaviour is conceptually identical to a @ref wxWrapSizer
+    that wraps controls.
+
     @beginStyleTable
     @style{wxALIGN_LEFT}
            Align the text to the left.
