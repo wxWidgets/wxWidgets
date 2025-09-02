@@ -411,6 +411,7 @@ public:
         // minimum size, giving priority to the min size components, and
         // returns the results.
     virtual wxSize GetEffectiveMinSize() const;
+    virtual wxSize GetEffectiveMinSizeFirstPass() const { return  GetEffectiveMinSize(); }
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.

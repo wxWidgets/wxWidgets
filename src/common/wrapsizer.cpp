@@ -72,7 +72,6 @@ wxWrapSizer::wxWrapSizer(int orient, int flags)
              m_dirInform(0),
              m_availSize(-1),
              m_availableOtherDir(0),
-             m_lastUsed(true),
              m_minSizeMinor(0),
              m_maxSizeMajor(0),
              m_minItemMajor(INT_MAX),
@@ -141,7 +140,6 @@ bool wxWrapSizer::InformFirstDirection(int direction,
                             (direction == wxHORIZONTAL ? m_calculatedMinSize.y
                                                        : m_calculatedMinSize.x);
     m_dirInform = direction;
-    m_lastUsed = false;
     return true;
 }
 
@@ -161,22 +159,13 @@ void wxWrapSizer::AdjustLastRowItemProp(size_t n, wxSizerItem *itemLast)
     item->SetUserData(new wxPropChanger(*this, *itemLast));
 }
 
-wxSize wxWrapSizer::CalcMin()
+wxSize wxWrapSizer::CalcMinFirstPass()
 {
     if ( m_children.empty() )
         return wxSize();
 
-    // We come here to calculate min size in two different situations:
     // 1 - Immediately after InformFirstDirection, then we find a min size that
     //     uses one dimension maximally and the other direction minimally.
-    // 2 - Ordinary case, get a sensible min size value using the current line
-    //     layout, trying to maintain the possibility to re-arrange lines by
-    //     sizing
-
-    if ( !m_lastUsed )
-    {
-        // Case 1 above: InformFirstDirection() has just been called
-        m_lastUsed = true;
 
         // There are two different algorithms for finding a useful min size for
         // a wrap sizer, depending on whether the first reported size component
@@ -186,9 +175,19 @@ wxSize wxWrapSizer::CalcMin()
             CalcMinFromMajor(m_availSize);
         else
             CalcMinFromMinor(m_availSize);
-    }
-    else // Case 2 above: not immediately after InformFirstDirection()
-    {
+
+    return m_calculatedMinSize;
+}
+
+wxSize wxWrapSizer::CalcMin()
+{
+    if ( m_children.empty() )
+        return wxSize();
+
+    // 2 - Ordinary case, get a sensible min size value using the current line
+    //     layout, trying to maintain the possibility to re-arrange lines by
+    //     sizing
+
         if ( m_availSize > 0 )
         {
             wxSize szAvail;    // Keep track of boundary so we don't overflow
@@ -203,7 +202,6 @@ wxSize wxWrapSizer::CalcMin()
         {
             CalcMaxSingleItemSize();
         }
-    }
 
     return m_calculatedMinSize;
 }

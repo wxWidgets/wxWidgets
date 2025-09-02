@@ -40,6 +40,11 @@ public:
     // This function will modify the value returned by GetLabel()!
     void Wrap(int width);
 
+    virtual wxSize GetEffectiveMinSizeFirstPass() const override;
+
+    virtual bool
+    InformFirstDirection(int direction, int size, int availableOtherDir);
+
     // overridden base virtuals
     virtual bool AcceptsFocus() const override { return false; }
     virtual bool HasTransparentBackground() override { return true; }
@@ -71,6 +76,12 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // for the new size. Calls WXSetVisibleLabel() to actually update the
     // display.
     void UpdateLabel();
+
+    // save unwrapped label to allow to call Wrap() several times and 
+    // always starting from the original, unwrapped label
+    wxString m_unwrappedLabel;
+    int m_currentWrap = 0;
+
 
     // These functions are platform-specific and must be implemented in the
     // platform-specific code. They must not use or update m_labelOrig.

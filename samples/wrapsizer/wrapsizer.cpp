@@ -118,10 +118,13 @@ WrapSizerFrame::WrapSizerFrame()
 
         sizerMidWrap->Add(chk, wxSizerFlags().Centre().Border());
     }
-
     sizerMid->Add(sizerMidWrap, wxSizerFlags(100).Expand());
     sizerRoot->Add(sizerMid, wxSizerFlags(100).Expand().Border());
 
+    // A long wxStaticText that wraps like a wxWrapSizer
+    sizerRoot->Add( new wxStaticText( m_panel, -1,
+        "This is very long text that will wrap. This is very long text that will wrap. This is very long text that will wrap."
+    ));
 
     // A shaped item inside a box sizer
     wxStaticBoxSizer *sizerBottom = new wxStaticBoxSizer(wxVERTICAL, m_panel,
