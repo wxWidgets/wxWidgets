@@ -713,12 +713,12 @@ void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && m_staticMonth )
     {
         wxSize sizeChoice = m_choiceMonth->GetEffectiveMinSize();
-        wxSize sizeStatic = m_staticMonth->GetSize();
-        wxSize sizeSpin = m_spinYear->GetSize();
+        wxSize sizeStatic = m_staticMonth->GetEffectiveMinSize();
+        wxSize sizeSpin = m_spinYear->GetEffectiveMinSize();
 
         int maxHeight = wxMax(sizeSpin.y, sizeChoice.y);
         int dy = (maxHeight - sizeStatic.y) / 2;
-        m_choiceMonth->Move(x, y + (maxHeight - sizeChoice.y)/2);
+        m_choiceMonth->SetSize(x, y + (maxHeight - sizeChoice.y)/2, sizeChoice.x, -1);
         m_staticMonth->SetSize(x, y + dy, sizeChoice.x, -1);
 
         int xDiff = sizeChoice.x + HORZ_MARGIN;
