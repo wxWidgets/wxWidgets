@@ -891,7 +891,9 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 n = wd;
             wxCoord dayw, dayh;
             dc.GetTextExtent(m_weekdays[n], &dayw, &dayh);
-            dc.DrawText(m_weekdays[n], x0 + (wd*m_widthCol) + ((m_widthCol- dayw) / 2), y); // center the day-name
+            int dayx = x0 + (wd * m_widthCol) + ((m_widthCol - dayw) / 2);
+            int dayy = y + m_heightRow / 2 - dayh / 2;
+            dc.DrawText(m_weekdays[n], dayx, dayy); // center the day-name
         }
     }
 
@@ -912,7 +914,11 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         {
             const int weekNr = date.GetWeekOfYear();
             wxString text = wxString::Format( wxT( "%d" ), weekNr );
-            dc.DrawText( text, m_calendarWeekWidth - dc.GetTextExtent( text ).GetWidth() - 2, y + m_heightRow * i );
+            wxCoord weekw, weekh;
+            dc.GetTextExtent(text, &weekw, &weekh);
+            int weekx = m_calendarWeekWidth - weekw - 2;
+            int weeky = (i * m_heightRow) + (y + m_heightRow / 2 - weekh / 2);
+            dc.DrawText(text, weekx, weeky);
             date += wxDateSpan::Week();
         }
     }
@@ -950,8 +956,8 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 // don't use wxDate::Format() which prepends 0s
                 unsigned int day = date.GetDay();
                 wxString dayStr = wxString::Format(wxT("%u"), day);
-                wxCoord width;
-                dc.GetTextExtent(dayStr, &width, nullptr);
+                wxCoord width, height;
+                dc.GetTextExtent(dayStr, &width, &height);
 
                 bool changedColours = false,
                      changedFont = false;
@@ -1013,7 +1019,7 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 }
 
                 wxCoord x = wd*m_widthCol + (m_widthCol - width) / 2 + x0;
-                dc.DrawText(dayStr, x, y + 1);
+                dc.DrawText(dayStr, x, y + m_heightRow / 2 - height / 2);
 
                 if ( !isSel && attr && attr->HasBorder() )
                 {
@@ -1031,16 +1037,17 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                     dc.SetPen(pen);
                     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
+                    int shapeSize = wxMin(m_widthCol, m_heightRow) - 1;
+                    wxRect shapeRect(x + width / 2 - shapeSize / 2, y, shapeSize, shapeSize);
+
                     switch ( attr->GetBorder() )
                     {
                         case wxCAL_BORDER_SQUARE:
-                            dc.DrawRectangle(x - 2, y,
-                                             width + 4, m_heightRow);
+                            dc.DrawRectangle(shapeRect);
                             break;
 
                         case wxCAL_BORDER_ROUND:
-                            dc.DrawEllipse(x - 2, y,
-                                           width + 4, m_heightRow);
+                            dc.DrawEllipse(shapeRect);
                             break;
 
                         default:
@@ -1110,15 +1117,6 @@ void wxGenericCalendarCtrl::RefreshDate(const wxDateTime& date)
 
     rect.width = 7*m_widthCol;
     rect.height = m_heightRow;
-
-#ifdef __WXMSW__
-    // VZ: for some reason, the selected date seems to occupy more space under
-    //     MSW - this is probably some bug in the font size calculations, but I
-    //     don't know where exactly. This fix is ugly and leads to more
-    //     refreshes than really needed, but without it the selected days
-    //     leaves even more ugly underscores on screen.
-    rect.Inflate(0, 1);
-#endif // MSW
 
 #if DEBUG_PAINT
     wxLogDebug("*** refreshing week %d at (%d, %d)-(%d, %d)\n",
