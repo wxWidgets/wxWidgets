@@ -81,8 +81,6 @@
 #endif
 
 
-#define wxPG_GUTTER_DIV                 3 // gutter is max(iconwidth/gutter_div,gutter_min)
-#define wxPG_GUTTER_MIN                 3 // gutter before and after image of [+] or [-]
 #define wxPG_YSPACING_MIN               1
 #define wxPG_DEFAULT_VSPACING           2 // This matches .NET propertygrid's value,
                                           // but causes normal combobox to spill out under MSW
@@ -419,7 +417,7 @@ void wxPropertyGrid::Init1()
     m_iconHeight = FromDIP(wxPG_ICON_WIDTH);
 #endif
 
-    m_gutterWidth = wxPG_GUTTER_MIN;
+    m_gutterWidth = wxMax(0, (FromDIP(16) - m_iconWidth) / 2);
     m_subgroup_extramargin = m_iconWidth + m_gutterWidth;
 
     m_lineHeight = 0;
@@ -1323,9 +1321,7 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_iconHeight = iconSize.GetHeight();
 #endif
 
-    m_gutterWidth = m_iconWidth / wxPG_GUTTER_DIV;
-    if ( m_gutterWidth < wxPG_GUTTER_MIN )
-        m_gutterWidth = wxPG_GUTTER_MIN;
+    m_gutterWidth = wxMax(0, (FromDIP(16) - m_iconWidth) / 2);
 
     m_subgroup_extramargin = m_iconWidth + m_gutterWidth;
 
