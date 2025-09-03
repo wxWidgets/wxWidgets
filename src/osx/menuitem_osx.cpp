@@ -158,9 +158,6 @@ void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
 
 void wxMenuItem::UpdateItemBitmap()
 {
-    if ( !m_parentMenu )
-        return;
-
     if ( m_bitmap.IsOk() )
     {
         GetPeer()->SetBitmap(m_bitmap);
@@ -169,9 +166,6 @@ void wxMenuItem::UpdateItemBitmap()
 
 void wxMenuItem::UpdateItemStatus()
 {
-    if ( !m_parentMenu )
-        return ;
-
     if ( IsSeparator() )
         return ;
 
@@ -185,9 +179,6 @@ void wxMenuItem::UpdateItemStatus()
 
 void wxMenuItem::UpdateItemText()
 {
-    if ( !m_parentMenu )
-        return ;
-
     wxString text = wxStripMenuCodes(m_text, m_parentMenu != nullptr && m_parentMenu->GetNoEventsMode() ? wxStrip_Accel : wxStrip_Menu);
     if (text.IsEmpty() && !IsSeparator())
     {
