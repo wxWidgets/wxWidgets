@@ -70,7 +70,7 @@ else()
     )
 endif()
 
-wx_get_install_dir(library "lib")
+wx_get_build_install_dir(library "lib")
 set(wx_cmake_dir "${library_dir}/cmake/wxWidgets-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
 
 install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "${wx_cmake_dir}/${wxPLATFORM_LIB_DIR}")
