@@ -1,0 +1,1 @@
+wxAll (GUI): Make generic wxCalendarCtrl DPI-aware (Maarten Bent, #25713).
