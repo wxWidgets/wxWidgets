@@ -495,7 +495,7 @@ public:
                 str = DoGetInfo(LOCALE_SCURRENCY);
                 break;
             case wxLOCALE_CURRENCY_CODE:
-                str = wxString(DoGetInfo(LOCALE_SINTLSYMBOL).Left(3);
+                str = wxString(DoGetInfo(LOCALE_SINTLSYMBOL)).Left(3);
                 break;
             case wxLOCALE_CURRENCY_DIGITS:
                 str = DoGetInfo(LOCALE_ICURRDIGITS);
