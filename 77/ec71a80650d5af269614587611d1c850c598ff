@@ -1,0 +1,1 @@
+wxGTK: Make WarpPointer() work with supported Wayland compositors (#23778).
