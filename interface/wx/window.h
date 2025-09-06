@@ -3836,8 +3836,12 @@ public:
               applications (and probably avoid using it under the other
               platforms without good reason as well).
 
-        @note This function does nothing when using wxGTK with Wayland because
-              Wayland intentionally doesn't provide the required functionality.
+        @note This function only works when using wxGTK with Wayland if the
+              compositor implements the "pointer warp" protocol. In addition,
+              its implementation is subject to the limitations imposed by the
+              compositor, e.g. mutter (the Wayland compositor used by GNOME)
+              requires a mouse button to be pressed when this function is
+              called and doesn't move the pointer otherwise.
 
         @param x
             The new x position for the cursor.

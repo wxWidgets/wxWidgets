@@ -1340,6 +1340,7 @@ GTK_LOWLEVEL_SRC =
     src/gtk/tooltip.cpp
     src/gtk/toplevel.cpp
     src/gtk/utilsgtk.cpp
+    src/gtk/wayland.cpp
     src/gtk/win_gtk.cpp
     src/gtk/window.cpp
 GTK2_LOWLEVEL_SRC =

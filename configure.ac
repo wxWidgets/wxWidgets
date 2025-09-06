@@ -3045,6 +3045,18 @@ installed, where VER is 2, 3 or 4.
                            )
             CFLAGS=$save_CFLAGS
         ])
+
+        dnl Also check for wayland-client presence if we use Wayland.
+        if test "$wx_cv_gdk_wayland" = "yes"; then
+            PKG_CHECK_MODULES(WAYLAND_CLIENT, [wayland-client],
+                [
+                    AC_DEFINE(wxHAVE_WAYLAND_CLIENT)
+                    CFLAGS="$WAYLAND_CLIENT_CFLAGS $CFLAGS"
+                    CXXFLAGS="$WAYLAND_CLIENT_CFLAGS $CXXFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $WAYLAND_CLIENT_LIBS"
+                ]
+            )
+        fi
     fi
 
     if test "$wxUSE_DFB" = 1; then
