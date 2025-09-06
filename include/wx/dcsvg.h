@@ -20,7 +20,9 @@
 
 #include <memory>
 
+#if WXWIN_COMPATIBILITY_3_2
 #define wxSVGVersion wxT("v0101")
+#endif
 
 enum wxSVGShapeRenderingMode
 {
@@ -93,7 +95,7 @@ public:
 
     virtual ~wxSVGFileDCImpl();
 
-    bool IsOk() const override { return m_OK; }
+    bool IsOk() const override { return m_OK || m_filename.empty(); }
 
     virtual bool CanDrawBitmap() const override { return true; }
     virtual bool CanGetTextExtent() const override { return true; }
