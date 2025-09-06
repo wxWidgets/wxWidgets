@@ -232,7 +232,7 @@ wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
             NSString* str = [m_nsloc currencyCode];
             return wxCFStringRef::AsString(str);
         }
-        default: 
+        default:
             return wxGetInfoFromCFLocale((CFLocaleRef)m_nsloc, index, cat);
     }
 }
