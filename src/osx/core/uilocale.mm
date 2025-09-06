@@ -210,7 +210,7 @@ wxUILocaleImplCF::GetLocaleId() const
 wxString
 wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 {
-    switch (form)
+    switch (index)
     {
         case wxLOCALE_MEASURE_METRIC:
             if ([m_nsloc respondsToSelector:@selector(usesMetricSystem)])
