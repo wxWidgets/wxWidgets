@@ -6043,36 +6043,6 @@ WXLRESULT wxStyledTextCtrl::MSWWindowProc(WXUINT nMsg,
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
-wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
-    : wxCommandEvent(commandType, id)
-{
-    m_position = 0;
-    m_key = 0;
-    m_modifiers = 0;
-    m_modificationType = 0;
-    m_length = 0;
-    m_linesAdded = 0;
-    m_line = 0;
-    m_foldLevelNow = 0;
-    m_foldLevelPrev = 0;
-    m_margin = 0;
-    m_message = 0;
-    m_wParam = 0;
-    m_lParam = 0;
-    m_listType = 0;
-    m_x = 0;
-    m_y = 0;
-    m_token = 0;
-    m_annotationLinesAdded = 0;
-    m_updated = 0;
-    m_listCompletionMethod = 0;
-
-#if wxUSE_DRAG_AND_DROP
-    m_dragFlags = wxDrag_CopyOnly;
-    m_dragResult = wxDragNone;
-#endif
-}
-
 bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCI_SHIFT) != 0; }
 bool wxStyledTextEvent::GetControl() const { return (m_modifiers & SCI_CTRL) != 0; }
 bool wxStyledTextEvent::GetAlt() const { return (m_modifiers & SCI_ALT) != 0; }
