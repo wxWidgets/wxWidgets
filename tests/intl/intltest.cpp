@@ -43,6 +43,7 @@ private:
         CPPUNIT_TEST( Domain );
         CPPUNIT_TEST( Headers );
         CPPUNIT_TEST( DateTimeFmtFrench );
+        CPPUNIT_TEST( CurrencyAndMeasurementFrench );
         CPPUNIT_TEST( IsAvailable );
     CPPUNIT_TEST_SUITE_END();
 
@@ -50,6 +51,7 @@ private:
     void Domain();
     void Headers();
     void DateTimeFmtFrench();
+    void CurrencyAndMeasurementFrench();
     void IsAvailable();
 
     static wxString GetDecimalPoint()
@@ -228,6 +230,17 @@ void IntlTestCase::DateTimeFmtFrench()
 #endif
     WX_ASSERT_EQUAL_FORMAT( "French time", "%H:%M:%S",
                             wxLocale::GetInfo(wxLOCALE_TIME_FMT) );
+}
+
+void IntlTestCase::CurrencyAndMeasurementFrench()
+{
+    if ( !m_locale )
+        return;
+
+    CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"€");
+    CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
+    CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
+    CHECK(wxLocale::GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
 }
 
 void IntlTestCase::IsAvailable()

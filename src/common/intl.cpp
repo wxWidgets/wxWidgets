@@ -1433,8 +1433,42 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             }
             break;
 
+        case wxLOCALE_MEASURE_METRIC:
+            {
+#ifdef HAVE_LANGINFO_H
+                wxString measureStr;
+                const char* measurement = nl_langinfo(_NL_MEASUREMENT_MEASUREMENT);
+                if (measurement && *measurement == 1)
+                    measureStr = wxString("Yes");
+                else if (measurement && *measurement == 2)
+                    measureStr = wxString("No");
+                else
+                    measureStr = wxString("Unknown");
+                return measureStr;
+#else
+                return wxString("Unknown");
+#endif
+            }
+
         case wxLOCALE_CURRENCY_SYMBOL:
-            return lc->currency_symbol;
+            {
+                wchar_t currencySymbol[16];
+                mbstowcs(currencySymbol, lc->currency_symbol, 16);
+                return wxString(currencySymbol);
+            }
+
+        case wxLOCALE_CURRENCY_CODE:
+            {
+                wchar_t currencyCode[16];
+                mbstowcs(currencyCode, lc->int_curr_symbol, 16);
+                return wxString(currencyCode).Left(3);
+            }
+
+        case wxLOCALE_CURRENCY_DIGITS:
+            {
+                wxString currencyDigitsStr(wxUniChar('0' + lc->int_frac_digits));
+                return currencyDigitsStr;
+            }
 
 #ifdef HAVE_LANGINFO_H
         case wxLOCALE_SHORT_DATE_FMT:

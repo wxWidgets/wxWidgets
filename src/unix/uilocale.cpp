@@ -594,9 +594,23 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 
             return GetLangInfo(RADIXCHAR);
 
+        case wxLOCALE_MEASURE_METRIC:
+        {
+            wxString measureStr = GetLangInfo(_NL_MEASUREMENT_MEASUREMENT);
+            if (measureStr.IsEmpty())
+                measureStr = wxString("\0");
+            if (measureStr[0].GetValue() == 1)
+                measureStr = wxString("Yes");
+            else if (measureStr[0].GetValue() == 2)
+                measureStr = wxString("No");
+            else
+                measureStr = wxString("Unknown");
+            return measureStr;
+        }
+
         case wxLOCALE_CURRENCY_SYMBOL:
         {
-            wxString currencyStr = GetLangInfo(CURRENCY_SYMBOL);
+            wxString currencyStr = wxString(GetLangInfo(CURRENCY_SYMBOL), wxCSConv(GetCodeSet()));
             // strip positional info, if present
             if (!currencyStr.empty() &&
                 (currencyStr[0] == wxT('+') ||
@@ -606,6 +620,20 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
                 currencyStr.erase(0, 1);
             }
             return currencyStr;
+        }
+
+        case wxLOCALE_CURRENCY_CODE:
+        {
+            wxString currencyCode = wxString(GetLangInfo(INT_CURR_SYMBOL), wxCSConv(GetCodeSet()));
+            return currencyCode.Left(3);
+        }
+
+        case wxLOCALE_CURRENCY_DIGITS:
+        {
+            wxString currencyDigitsStr;
+            const char* currencyDigits = GetLangInfo(INT_FRAC_DIGITS);
+            currencyDigitsStr.Append(wxUniChar('0' + currencyDigits[0]));
+            return currencyDigitsStr;
         }
 
         case wxLOCALE_SHORT_DATE_FMT:
