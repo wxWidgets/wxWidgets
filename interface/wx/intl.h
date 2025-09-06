@@ -212,7 +212,7 @@ enum wxLocaleInfo
         The string representing the currency symbol for monetary values.
 
         Examples: "$" for the U.S. Dollar, "€" for the Euro.
-        
+
         @since 3.3.2
      */
     wxLOCALE_CURRENCY_SYMBOL,
@@ -221,7 +221,7 @@ enum wxLocaleInfo
         The string representing the international monetary symbol specified in ISO 4217.
 
         Examples: "USD" for the U.S. Dollar, "EUR" for the Euro.
-        
+
         @since 3.3.2
      */
     wxLOCALE_CURRENCY_CODE,
