@@ -418,10 +418,20 @@ TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
     CHECK( wxUILocale::FromTag("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    CHECK( wxUILocale::FromTag("en").GetInfo(wxLOCALE_CURRENCY_SYMBOL) == "$");
+    CHECK(wxUILocale::FromTag("en").GetInfo(wxLOCALE_CURRENCY_CODE) == "USD");
+    CHECK(wxUILocale::FromTag("en").GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
+    CHECK(wxUILocale::FromTag("en").GetInfo(wxLOCALE_MEASURE_METRIC) == "No");
 
     const wxUILocale locDE(wxUILocale::FromTag("de"));
-    if ( CheckSupported(locDE, "German") )
-        CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
+    if (CheckSupported(locDE, "German"))
+    {
+        CHECK(locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
+        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"€");
+        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
+        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
+        CHECK(locDE.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
+    }
 
     // This one shows that "Swiss High German" locale (de_CH) correctly uses
     // dot, and not comma, as decimal separator, even under macOS, where POSIX

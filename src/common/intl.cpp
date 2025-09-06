@@ -1210,6 +1210,18 @@ wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
         case wxLOCALE_DECIMAL_POINT:
             return ".";
 
+        case wxLOCALE_MEASURE_METRIC:
+            return "No";
+
+        case wxLOCALE_CURRENCY_SYMBOL:
+            return "$";
+
+        case wxLOCALE_CURRENCY_CODE:
+            return "USD";
+
+        case wxLOCALE_CURRENCY_DIGITS:
+            return "2";
+
         case wxLOCALE_SHORT_DATE_FMT:
             return "%m/%d/%y";
 
@@ -1258,6 +1270,10 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
 
         case wxLOCALE_DECIMAL_POINT:
             cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleDecimalSeparator);
+            break;
+
+        case wxLOCALE_CURRENCY_SYMBOL:
+            cfstr = (CFStringRef)CFLocaleGetValue(cfloc, kCFLocaleCurrencySymbol);
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
@@ -1416,6 +1432,9 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
                     wxFAIL_MSG( "invalid wxLocaleCategory" );
             }
             break;
+
+        case wxLOCALE_CURRENCY_SYMBOL:
+            return lc->currency_symbol;
 
 #ifdef HAVE_LANGINFO_H
         case wxLOCALE_SHORT_DATE_FMT:

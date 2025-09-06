@@ -89,6 +89,19 @@ enum wxLocaleInfo
     // the character used as decimal point (for wxLOCALE_CAT_NUMBER or MONEY)
     wxLOCALE_DECIMAL_POINT,
 
+    // check whether locale uses the metric system for measurements
+    // returns "Yes", "No", or "Unknown"
+    wxLOCALE_MEASURE_METRIC,
+
+    // the currency symbol (for example "$")
+    wxLOCALE_CURRENCY_SYMBOL,
+
+    // the currency ISO code (for example "USD")
+    wxLOCALE_CURRENCY_CODE,
+
+    // the number of currency digits
+    wxLOCALE_CURRENCY_DIGITS,
+
     // the stftime()-formats used for short/long date and time representations
     // (under some platforms short and long date formats are the same)
     //

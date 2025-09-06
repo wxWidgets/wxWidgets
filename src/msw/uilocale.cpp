@@ -481,6 +481,26 @@ public:
                                     : LOCALE_SDECIMAL);
                 break;
 
+            case wxLOCALE_MEASURE_METRIC:
+                str = DoGetInfo(LOCALE_IMEASURE);
+                if (str.IsEmpty())
+                    str = wxString("Unknown");
+                else if (str.IsSameAs("0"))
+                    str = wxString("Yes");
+                else
+                    str = wxString("No");
+                break;
+
+            case wxLOCALE_CURRENCY_SYMBOL:
+                str = DoGetInfo(LOCALE_SCURRENCY);
+                break;
+            case wxLOCALE_CURRENCY_CODE:
+                str = DoGetInfo(LOCALE_SINTLSYMBOL);
+                break;
+            case wxLOCALE_CURRENCY_DIGITS:
+                str = DoGetInfo(LOCALE_ICURRDIGITS);
+                break;
+
             case wxLOCALE_SHORT_DATE_FMT:
             case wxLOCALE_LONG_DATE_FMT:
             case wxLOCALE_TIME_FMT:

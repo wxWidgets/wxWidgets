@@ -210,7 +210,31 @@ wxUILocaleImplCF::GetLocaleId() const
 wxString
 wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 {
-    return wxGetInfoFromCFLocale((CFLocaleRef)m_nsloc, index, cat);
+    switch (form)
+    {
+        case wxLOCALE_MEASURE_METRIC:
+            if ([m_nsloc respondsToSelector:@selector(usesMetricSystem)])
+            {
+                BOOL isMetric = [m_nsloc usesMetricSystem];
+                return (isMetric) ? wxString("Yes") : wxString("No");
+            }
+            else
+            {
+                return wxString("Unknown");
+            }
+        case wxLOCALE_CURRENCY_SYMBOL:
+        {
+            NSString* str = [m_nsloc currencySymbol];
+            return wxCFStringRef::AsString(str);
+        }
+        case wxLOCALE_CURRENCY_CODE:
+        {
+            NSString* str = [m_nsloc currencyCode];
+            return wxCFStringRef::AsString(str);
+        }
+        default: 
+            return wxGetInfoFromCFLocale((CFLocaleRef)m_nsloc, index, cat);
+    }
 }
 
 wxString
