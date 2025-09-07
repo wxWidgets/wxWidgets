@@ -475,6 +475,8 @@ if(wxUSE_GUI)
                                 ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
                                 ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
                             COMMAND
+                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_output_dir}
+                            COMMAND
                                 ${WAYLAND_SCANNER} client-header
                                     ${wx_protocols_input_dir}/pointer-warp-v1.xml
                                     ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
