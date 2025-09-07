@@ -430,30 +430,31 @@ TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
-    CHECK( wxUILocale::FromTag("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
-    CHECK( wxUILocale::FromTag("en").GetInfo(wxLOCALE_CURRENCY_SYMBOL) == "$");
-    CHECK(wxUILocale::FromTag("en").GetInfo(wxLOCALE_CURRENCY_CODE) == "USD");
-    CHECK(wxUILocale::FromTag("en").GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
-    CHECK(wxUILocale::FromTag("en").GetInfo(wxLOCALE_MEASURE_METRIC) == "No");
+    const wxUILocale locEN(wxUILocale::FromTag("en-US"));
+    CHECK( locEN.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    CHECK( locEN.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == "$");
+    CHECK( locEN.GetInfo(wxLOCALE_CURRENCY_CODE) == "USD");
+    CHECK( locEN.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
+    CHECK( locEN.GetInfo(wxLOCALE_MEASURE_METRIC) == "No");
 
-    const wxUILocale locDE(wxUILocale::FromTag("de"));
+    const wxUILocale locDE(wxUILocale::FromTag("de-DE"));
     if (CheckSupported(locDE, "German"))
     {
-        CHECK(locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
-        CHECK(locDE.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
+        CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
+        CHECK( locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
+        CHECK( locDE.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
+        CHECK( locDE.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
+        CHECK( locDE.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
     }
 
-    const wxUILocale locFR(wxUILocale::FromTag("fr"));
+    const wxUILocale locFR(wxUILocale::FromTag("fr-FR"));
     if (CheckSupported(locFR, "French"))
     {
-        CHECK(locFR.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
-        CHECK(locFR.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
-        CHECK(locFR.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
-        CHECK(locFR.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
-        CHECK(locFR.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
+        CHECK( locFR.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
+        CHECK( locFR.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
+        CHECK( locFR.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
+        CHECK( locFR.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
+        CHECK( locFR.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
     }
 
     // This one shows that "Swiss High German" locale (de_CH) correctly uses

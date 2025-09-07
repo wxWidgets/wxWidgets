@@ -646,9 +646,9 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 
         case wxLOCALE_CURRENCY_DIGITS:
         {
-            wxString currencyDigitsStr;
 #ifdef __GLIBC__
             const char* currencyDigits = GetLangInfo(INT_FRAC_DIGITS);
+            wxString currencyDigitsStr;
             currencyDigitsStr.Append(wxUniChar('0' + currencyDigits[0]));
             return currencyDigitsStr;
 #else
