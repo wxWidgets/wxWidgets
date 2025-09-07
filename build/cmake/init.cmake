@@ -470,31 +470,24 @@ if(wxUSE_GUI)
                         set(wx_protocols_input_dir ${wxSOURCE_DIR}/src/unix/protocols)
                         set(wx_protocols_output_dir ${wxSETUP_HEADER_PATH}/wx/protocols)
 
-                        add_custom_command(
-                            OUTPUT
-                                ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
-                                ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
+                        # Note that we need multiple execute_process()
+                        # invocations as single one would run commands
+                        # concurrently and not sequentially.
+                        execute_process(
                             COMMAND
                                 ${CMAKE_COMMAND} -E make_directory ${wx_protocols_output_dir}
+                        )
+                        execute_process(
                             COMMAND
                                 ${WAYLAND_SCANNER} client-header
                                     ${wx_protocols_input_dir}/pointer-warp-v1.xml
                                     ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
+                        )
+                        execute_process(
                             COMMAND
                                 ${WAYLAND_SCANNER} private-code
                                     ${wx_protocols_input_dir}/pointer-warp-v1.xml
                                     ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
-                            MAIN_DEPENDENCY
-                                ${wx_protocols_input_dir}/pointer-warp-v1.xml
-                            COMMENT
-                                "Generating Wayland protocols files"
-                            VERBATIM
-                        )
-
-                        add_custom_target(wayland_protocols ALL
-                            DEPENDS
-                                ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
-                                ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
                         )
 
                         set(wxHAVE_WAYLAND_CLIENT ON)
