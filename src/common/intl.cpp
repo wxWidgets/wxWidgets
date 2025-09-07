@@ -60,6 +60,7 @@
     #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFLocale.h>
     #include <CoreFoundation/CFDateFormatter.h>
+    #include <CoreFoundation/CFNumberFormatter.h>
     #include <CoreFoundation/CFString.h>
 #elif defined(__UNIX__)
     #include "wx/unix/private/uilocale.h"
@@ -1274,7 +1275,7 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
 
         case wxLOCALE_MEASURE_METRIC:
         {
-            CFStringRef measurementSystem = CFLocaleGetValue(locale, kCFLocaleMeasurementSystem);
+            CFStringRef measurementSystem = CFLocaleGetValue(cfloc, kCFLocaleMeasurementSystem);
             if (CFStringCompare(measurementSystem, CFSTR("Metric"), 0) == kCFCompareEqualTo)
                 return wxString("Yes");
             else
@@ -1285,11 +1286,11 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
             cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleCurrencySymbol);
             break;
         case wxLOCALE_CURRENCY_CODE:
-            cfstr = (CFStringRef) CFLocaleGetValue(locale, kCFLocaleCurrencyCode);
+            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleCurrencyCode);
             break;
         case wxLOCALE_CURRENCY_DIGITS:
             {
-                CFNumberFormatterRef formatter = CFNumberFormatterCreate(nullptr, locale, kCFNumberFormatterCurrencyStyle);
+                CFNumberFormatterRef formatter = CFNumberFormatterCreate(nullptr, cfloc, kCFNumberFormatterCurrencyStyle);
                 CFNumberRef minFrac = CFNumberFormatterCopyProperty(formatter, kCFNumberFormatterMinFractionDigits);
                 cfstr = (CFStringRef) CFNumberFormatterCreateStringWithNumber(nullptr, formatter, minFrac);
             }
