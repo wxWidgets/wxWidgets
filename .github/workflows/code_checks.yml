@@ -59,7 +59,6 @@ jobs:
                 ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!misc/languages/data/unicode/*.xml' \
                 ':!samples/widgets/widgets.bkl' \
-                ':!src/gtk/wayland/*.c' \
                 ':!tests/test.bkl' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
