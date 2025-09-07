@@ -1292,7 +1292,14 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
             {
                 CFNumberFormatterRef formatter = CFNumberFormatterCreate(nullptr, cfloc, kCFNumberFormatterCurrencyStyle);
                 CFNumberRef minFrac = (CFNumberRef) CFNumberFormatterCopyProperty(formatter, kCFNumberFormatterMinFractionDigits);
-                cfstr = (CFStringRef) CFNumberFormatterCreateStringWithNumber(nullptr, formatter, minFrac);
+                SInt32 minFraction = 0;
+                if (minFrac)
+                {
+                    CFNumberGetValue(minFrac, kCFNumberSInt32Type, &minFraction);
+                    CFRelease(minFrac);
+                }
+                wxString currencyDigitsStr(wxUniChar('0' + minFraction));
+                return currencyDigitsStr;
             }
             break;
 
