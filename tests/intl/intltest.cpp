@@ -449,11 +449,11 @@ TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
     const wxUILocale locFR(wxUILocale::FromTag("fr"));
     if (CheckSupported(locFR, "French"))
     {
-        CHECK(locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
-        CHECK(locDE.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
+        CHECK(locFR.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
+        CHECK(locFR.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
+        CHECK(locFR.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
+        CHECK(locFR.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
+        CHECK(locFR.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
     }
 
     // This one shows that "Swiss High German" locale (de_CH) correctly uses
