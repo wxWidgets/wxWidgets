@@ -1463,11 +1463,13 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         case wxLOCALE_MEASURE_METRIC:
             {
 #ifdef HAVE_LANGINFO_H
+#ifdef __GLIBC__
                 const char* measurement = nl_langinfo(_NL_MEASUREMENT_MEASUREMENT);
                 if (measurement && *measurement == 1)
                     return wxString("Yes");
                 else if (measurement && *measurement == 2)
                     return wxString("No");
+#endif
 #endif
                 wxString region = wxUILocale::GetCurrent().GetLocaleId().GetRegion();
                 // In 2025 only in the United States, Liberia, and Myanmar

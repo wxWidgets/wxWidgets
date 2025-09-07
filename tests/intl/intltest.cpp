@@ -446,6 +446,16 @@ TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
         CHECK(locDE.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
     }
 
+    const wxUILocale locFR(wxUILocale::FromTag("fr"));
+    if (CheckSupported(locFR, "French"))
+    {
+        CHECK(locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
+        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
+        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
+        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
+        CHECK(locDE.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
+    }
+
     // This one shows that "Swiss High German" locale (de_CH) correctly uses
     // dot, and not comma, as decimal separator, even under macOS, where POSIX
     // APIs use incorrect (identical to "German") definitions for this locale.
