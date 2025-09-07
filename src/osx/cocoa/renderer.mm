@@ -918,7 +918,7 @@ wxSize wxRendererMac::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxReadOnlyD
     }
 
     // strict metrics size cutoff the button, increase the size
-    size.IncBy(1);
+    size.IncBy(3);
 
     return size;
 }
