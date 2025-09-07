@@ -1275,7 +1275,7 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
 
         case wxLOCALE_MEASURE_METRIC:
         {
-            CFStringRef measurementSystem = CFLocaleGetValue(cfloc, kCFLocaleMeasurementSystem);
+            CFStringRef measurementSystem = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleMeasurementSystem);
             if (CFStringCompare(measurementSystem, CFSTR("Metric"), 0) == kCFCompareEqualTo)
                 return wxString("Yes");
             else
@@ -1291,7 +1291,7 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
         case wxLOCALE_CURRENCY_DIGITS:
             {
                 CFNumberFormatterRef formatter = CFNumberFormatterCreate(nullptr, cfloc, kCFNumberFormatterCurrencyStyle);
-                CFNumberRef minFrac = CFNumberFormatterCopyProperty(formatter, kCFNumberFormatterMinFractionDigits);
+                CFNumberRef minFrac = (CFNumberRef) CFNumberFormatterCopyProperty(formatter, kCFNumberFormatterMinFractionDigits);
                 cfstr = (CFStringRef) CFNumberFormatterCreateStringWithNumber(nullptr, formatter, minFrac);
             }
             break;
