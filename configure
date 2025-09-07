@@ -1110,6 +1110,7 @@ with_libxpm
 with_libiconv
 with_libmspack
 with_gtkprint
+with_wayland
 with_gnomevfs
 with_libnotify
 with_opengl
@@ -2394,6 +2395,7 @@ Optional Packages:
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
   --without-gtkprint      don't use GTK printing support
+  --without-wayland       don't use Wayland-specific code
   --with-gnomevfs         use GNOME VFS for associating MIME types
   --with-libnotify        use libnotify for notifications
   --with-opengl           use OpenGL (or Mesa)
@@ -5004,6 +5006,35 @@ fi
 
 
           eval "$wx_cv_use_gtkprint"
+
+
+          withstring=without
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-wayland was given.
+if test "${with_wayland+set}" = set; then :
+  withval=$with_wayland;
+                        if test "$withval" = yes; then
+                          wx_cv_use_wayland='wxUSE_WAYLAND=yes'
+                        else
+                          wx_cv_use_wayland='wxUSE_WAYLAND=no'
+                        fi
+
+else
+
+                        wx_cv_use_wayland='wxUSE_WAYLAND=${'DEFAULT_wxUSE_WAYLAND":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_wayland"
 
 
           withstring=
@@ -28254,7 +28285,7 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gdk_wayland" >&5
 $as_echo "$wx_cv_gdk_wayland" >&6; }
 
-                if test "$wx_cv_gdk_wayland" = "yes"; then
+                        if test "$wx_cv_gdk_wayland" = "yes" -a "$wxUSE_WAYLAND" != "no"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for wayland-client" >&5

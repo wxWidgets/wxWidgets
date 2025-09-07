@@ -534,6 +534,7 @@ WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file forma
 WX_ARG_WITH(libiconv,      [  --with-libiconv         use libiconv (character conversion)], wxUSE_LIBICONV)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
+WX_ARG_WITHOUT(wayland,    [  --without-wayland       don't use Wayland-specific code], wxUSE_WAYLAND)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
@@ -3046,8 +3047,9 @@ installed, where VER is 2, 3 or 4.
             CFLAGS=$save_CFLAGS
         ])
 
-        dnl Also check for wayland-client presence if we use Wayland.
-        if test "$wx_cv_gdk_wayland" = "yes"; then
+        dnl Also check for wayland-client presence if we use Wayland and its
+        dnl use was not explicitly disabled.
+        if test "$wx_cv_gdk_wayland" = "yes" -a "$wxUSE_WAYLAND" != "no"; then
             PKG_CHECK_MODULES(WAYLAND_CLIENT, [wayland-client],
                 [
                     AC_DEFINE(wxHAVE_WAYLAND_CLIENT)

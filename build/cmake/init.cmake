@@ -461,7 +461,7 @@ if(wxUSE_GUI)
         endif()
 
         if(UNIX)
-            if(wxHAVE_GDK_WAYLAND)
+            if(wxHAVE_GDK_WAYLAND AND wxUSE_WAYLAND)
                 find_package(PkgConfig)
                 pkg_check_modules(WAYLAND_CLIENT QUIET)
                 if(WAYLAND_CLIENT_FOUND)
