@@ -498,7 +498,7 @@ if(wxUSE_GUI)
                         )
 
                         set(wxHAVE_WAYLAND_CLIENT ON)
-                        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${WAYLAND_CLIENT_CFLAGS})
+                        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${WAYLAND_CLIENT_INCLUDE_DIRS})
                         list(APPEND wxTOOLKIT_LIBRARIES ${WAYLAND_CLIENT_LIBRARIES})
                     endif()
                 endif()
