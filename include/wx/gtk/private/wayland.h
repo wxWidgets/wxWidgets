@@ -18,13 +18,7 @@
 // GTK version to compile the code using it.
 #if defined(GDK_WINDOWING_WAYLAND) && GTK_CHECK_VERSION(3,20,0)
     #ifdef wxHAVE_WAYLAND_CLIENT
-        #include <wayland-client-protocol.h>
-
-        // Old headers don't define this flag used in
-        // pointer-warp-v1-client-protocol.h, so we can't compile it with them.
-        #ifdef WL_MARSHAL_FLAG_DESTROY
-            #define wxHAVE_WAYLAND_PROTOCOLS
-        #endif
+        #define wxHAVE_WAYLAND_PROTOCOLS
     #endif
 #endif
 
@@ -32,6 +26,8 @@
 
 #include <memory>
 #include <vector>
+
+#include <wayland-client-protocol.h> // Core protocols.
 
 #include "wx/protocols/pointer-warp-v1-client-protocol.h"
 
