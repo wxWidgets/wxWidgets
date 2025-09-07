@@ -1062,13 +1062,6 @@ wxSize wxWindowMac::DoGetBestSize() const
             }
             else
 #endif
-#if wxUSE_SPINBTN
-            if ( IsKindOf( CLASSINFO( wxSpinButton ) ) )
-            {
-                r.height = 24 ;
-            }
-            else
-#endif
             {
                 // return wxWindowBase::DoGetBestSize() ;
             }
