@@ -25,9 +25,6 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
-// Margin between the field text and the field rect
-#define wxFIELD_TEXT_MARGIN 2
-
 
 wxBEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)
     EVT_PAINT(wxStatusBarMac::OnPaint)
@@ -69,6 +66,7 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 
     InitColours();
+    InitCornerInset();
 
     return true;
 }
@@ -186,6 +184,38 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     for ( size_t i = 0; i < m_panes.GetCount(); i ++ )
         DrawField(dc, i, textHeight);
+}
+
+void wxStatusBarMac::InitCornerInset()
+{
+    if ( WX_IS_MACOS_AVAILABLE(26, 0) )
+        m_cornerInset = 8;
+    else if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+        m_cornerInset = 4;
+    else
+        m_cornerInset = 0;
+}
+
+void wxStatusBarMac::MacSetCornerInset(int inset)
+{
+    m_cornerInset = inset;
+    // force recalculation of the fields:
+    m_lastClientSize = wxDefaultSize;
+    Refresh();
+}
+
+int wxStatusBarMac::GetAvailableWidthForFields(int width) const
+{
+    return wxStatusBarGeneric::GetAvailableWidthForFields(width) - 2 * m_cornerInset;
+}
+
+bool wxStatusBarMac::GetFieldRect(int i, wxRect& rect) const
+{
+    if ( !wxStatusBarGeneric::GetFieldRect(i, rect) )
+        return false;
+
+    rect.x += MacGetCornerInset();
+    return true;
 }
 
 void wxStatusBarMac::MacHiliteChanged()
