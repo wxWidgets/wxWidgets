@@ -1272,8 +1272,27 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
             cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleDecimalSeparator);
             break;
 
+        case wxLOCALE_MEASURE_METRIC:
+        {
+            CFStringRef measurementSystem = CFLocaleGetValue(locale, kCFLocaleMeasurementSystem);
+            if (CFStringCompare(measurementSystem, CFSTR("Metric"), 0) == kCFCompareEqualTo)
+                return wxString("Yes");
+            else
+                return wxString("No");
+        }
+
         case wxLOCALE_CURRENCY_SYMBOL:
-            cfstr = (CFStringRef)CFLocaleGetValue(cfloc, kCFLocaleCurrencySymbol);
+            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleCurrencySymbol);
+            break;
+        case wxLOCALE_CURRENCY_CODE:
+            cfstr = (CFStringRef) CFLocaleGetValue(locale, kCFLocaleCurrencyCode);
+            break;
+        case wxLOCALE_CURRENCY_DIGITS:
+            {
+                CFNumberFormatterRef formatter = CFNumberFormatterCreate(NULL, locale, kCFNumberFormatterCurrencyStyle);
+                CFNumberRef minFrac = CFNumberFormatterCopyProperty(formatter, kCFNumberFormatterMinFractionDigits);
+                cfstr = (CFStringRef) CFNumberFormatterCreateStringWithNumber(NULL, formatter, minFrac);
+            }
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
@@ -1436,18 +1455,24 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         case wxLOCALE_MEASURE_METRIC:
             {
 #ifdef HAVE_LANGINFO_H
-                wxString measureStr;
                 const char* measurement = nl_langinfo(_NL_MEASUREMENT_MEASUREMENT);
                 if (measurement && *measurement == 1)
-                    measureStr = wxString("Yes");
+                    return wxString("Yes");
                 else if (measurement && *measurement == 2)
-                    measureStr = wxString("No");
-                else
-                    measureStr = wxString("Unknown");
-                return measureStr;
-#else
-                return wxString("Unknown");
+                    return wxString("No");
 #endif
+                wxString region = wxUILocale::GetCurrent().GetLocaleId().GetRegion();
+                // In 2025 only in the United States, Liberia, and Myanmar
+                // the use of the metric system is not mandatory.
+                if (!region.empty())
+                {
+                    if (region == "US" || region == "LR" || region == "MM")
+                        return wxString("No");
+                    else
+                        return wxString("Yes");
+                }
+                else
+                    return wxString("Unknown");
             }
 
         case wxLOCALE_CURRENCY_SYMBOL:

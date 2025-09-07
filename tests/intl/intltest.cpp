@@ -237,7 +237,7 @@ void IntlTestCase::CurrencyAndMeasurementFrench()
     if ( !m_locale )
         return;
 
-    CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"€");
+    CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
     CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
     CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
     CHECK(wxLocale::GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
@@ -440,7 +440,7 @@ TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
     if (CheckSupported(locDE, "German"))
     {
         CHECK(locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
-        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"€");
+        CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
         CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
         CHECK(locDE.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
         CHECK(locDE.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");

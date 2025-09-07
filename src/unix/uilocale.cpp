@@ -596,22 +596,31 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 
         case wxLOCALE_MEASURE_METRIC:
         {
+#ifdef __GLIBC__
             wxString measureStr = GetLangInfo(_NL_MEASUREMENT_MEASUREMENT);
-            if (measureStr.IsEmpty())
-                measureStr = wxString("\0");
-            if (measureStr[0].GetValue() == 1)
-                measureStr = wxString("Yes");
-            else if (measureStr[0].GetValue() == 2)
-                measureStr = wxString("No");
+            if (!measureStr.empty() && measureStr[0].GetValue() == 1)
+                return wxString("Yes");
+            else if (!measureStr.empty() && measureStr[0].GetValue() == 2)
+                return wxString("No");
+#endif
+            wxString region = GetLocaleId().GetRegion();
+            // In 2025 only in the United States, Liberia, and Myanmar
+            // the metric system is not the default measurement system.
+            if (!region.empty())
+            {
+                if (region == "US" || region == "LR" || region == "MM")
+                    return wxString("No");
+                else
+                    return wxString("Yes");
+            }
             else
-                measureStr = wxString("Unknown");
-            return measureStr;
+                return wxString("Unknown");
         }
 
         case wxLOCALE_CURRENCY_SYMBOL:
         {
+#ifdef __GLIBC__
             wxString currencyStr = wxString(GetLangInfo(CURRENCY_SYMBOL), wxCSConv(GetCodeSet()));
-            // strip positional info, if present
             if (!currencyStr.empty() &&
                 (currencyStr[0] == wxT('+') ||
                  currencyStr[0] == wxT('-') ||
@@ -620,20 +629,31 @@ wxUILocaleImplUnix::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
                 currencyStr.erase(0, 1);
             }
             return currencyStr;
+#else
+            return wxLocale::GetInfo(index, cat);
+#endif
         }
 
         case wxLOCALE_CURRENCY_CODE:
         {
+#ifdef __GLIBC__
             wxString currencyCode = wxString(GetLangInfo(INT_CURR_SYMBOL), wxCSConv(GetCodeSet()));
             return currencyCode.Left(3);
+#else
+            return wxLocale::GetInfo(index, cat);
+#endif
         }
 
         case wxLOCALE_CURRENCY_DIGITS:
         {
             wxString currencyDigitsStr;
+#ifdef __GLIBC__
             const char* currencyDigits = GetLangInfo(INT_FRAC_DIGITS);
             currencyDigitsStr.Append(wxUniChar('0' + currencyDigits[0]));
             return currencyDigitsStr;
+#else
+            return wxLocale::GetInfo(index, cat);
+#endif
         }
 
         case wxLOCALE_SHORT_DATE_FMT:
