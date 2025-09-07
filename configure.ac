@@ -3052,12 +3052,38 @@ installed, where VER is 2, 3 or 4.
         if test "$wx_cv_gdk_wayland" = "yes" -a "$wxUSE_WAYLAND" != "no"; then
             PKG_CHECK_MODULES(WAYLAND_CLIENT, [wayland-client],
                 [
-                    AC_DEFINE(wxHAVE_WAYLAND_CLIENT)
+                    wx_cv_wayland_client=yes
                     CFLAGS="$WAYLAND_CLIENT_CFLAGS $CFLAGS"
                     CXXFLAGS="$WAYLAND_CLIENT_CFLAGS $CXXFLAGS"
                     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $WAYLAND_CLIENT_LIBS"
+                ],
+                [
+                    wx_cv_wayland_client=no
                 ]
             )
+
+            if test "$wx_cv_wayland_client" = "yes"; then
+                AC_CACHE_CHECK([for wayland-scanner],
+                    wx_cv_wayland_scanner,
+                    [
+                        wx_cv_wayland_scanner=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner 2>/dev/null`
+                    ]
+                )
+                WAYLAND_SCANNER=$wx_cv_wayland_scanner
+                if test -n "$WAYLAND_SCANNER" ; then
+                    AC_DEFINE(wxHAVE_WAYLAND_CLIENT)
+                    AC_CONFIG_COMMANDS([wayland-protocols],
+                        [
+                            mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
+                            $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
+                            $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
+                        ],
+                        [
+                            WAYLAND_SCANNER=$WAYLAND_SCANNER
+                        ]
+                    )
+                fi
+            fi
         fi
     fi
 

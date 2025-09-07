@@ -465,9 +465,40 @@ if(wxUSE_GUI)
                 find_package(PkgConfig)
                 pkg_check_modules(WAYLAND_CLIENT QUIET)
                 if(WAYLAND_CLIENT_FOUND)
-                    set(wxHAVE_WAYLAND_CLIENT ON)
-                    list(APPEND wxTOOLKIT_INCLUDE_DIRS ${WAYLAND_CLIENT_CFLAGS})
-                    list(APPEND wxTOOLKIT_LIBRARIES ${WAYLAND_CLIENT_LIBRARIES})
+                    pkg_get_variable(WAYLAND_SCANNER wayland-scanner wayland_scanner)
+                    if(WAYLAND_SCANNER)
+                        set(wx_protocols_input_dir ${wxSOURCE_DIR}/src/unix/protocols)
+                        set(wx_protocols_output_dir ${wxSETUP_HEADER_PATH}/wx/protocols)
+
+                        add_custom_command(
+                            OUTPUT
+                                ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
+                                ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
+                            COMMAND
+                                ${WAYLAND_SCANNER} client-header
+                                    ${wx_protocols_input_dir}/pointer-warp-v1.xml
+                                    ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
+                            COMMAND
+                                ${WAYLAND_SCANNER} private-code
+                                    ${wx_protocols_input_dir}/pointer-warp-v1.xml
+                                    ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
+                            MAIN_DEPENDENCY
+                                ${wx_protocols_input_dir}/pointer-warp-v1.xml
+                            COMMENT
+                                "Generating Wayland protocols files"
+                            VERBATIM
+                        )
+
+                        add_custom_target(wayland_protocols ALL
+                            DEPENDS
+                                ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
+                                ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
+                        )
+
+                        set(wxHAVE_WAYLAND_CLIENT ON)
+                        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${WAYLAND_CLIENT_CFLAGS})
+                        list(APPEND wxTOOLKIT_LIBRARIES ${WAYLAND_CLIENT_LIBRARIES})
+                    endif()
                 endif()
             endif()
         else()

@@ -33,7 +33,7 @@
 #include <memory>
 #include <vector>
 
-#include "wx/gtk/private/wayland/pointer-warp-v1-client-protocol.h"
+#include "wx/protocols/pointer-warp-v1-client-protocol.h"
 
 namespace wxWayland
 {
