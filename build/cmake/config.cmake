@@ -106,11 +106,12 @@ function(wx_write_config_inplace)
 endfunction()
 
 function(wx_write_config)
+    wx_get_install_dir(library "lib")
 
     set(prefix ${CMAKE_INSTALL_PREFIX})
     set(exec_prefix "\${prefix}")
     set(includedir "\${prefix}/include")
-    set(libdir "\${exec_prefix}/lib")
+    set(libdir "\${exec_prefix}/${library_dir}")
     set(bindir "\${exec_prefix}/bin")
 
     if(wxBUILD_MONOLITHIC)

@@ -36,26 +36,28 @@ if(MSVC)
     )
 endif()
 
+wx_get_install_dir(library "lib")
+
 # setup header and wx-config
 if(WIN32_MSVC_NAMING)
     # create both Debug and Release directories, so CMake doesn't complain about
     # non-existent path when only Release or Debug build has been installed
     set(lib_unicode "u")
     install(DIRECTORY
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode}")
+        DESTINATION "${library_dir}/${wxBUILD_TOOLKIT}${lib_unicode}")
     install(DIRECTORY
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode}d")
+        DESTINATION "${library_dir}/${wxBUILD_TOOLKIT}${lib_unicode}d")
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}")
+        DESTINATION "${library_dir}")
 else()
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "lib/wx/include")
+        DESTINATION "${library_dir}/wx/include")
 
     install(
         FILES "${wxOUTPUT_DIR}/wx/config/${wxBUILD_FILE_ID}"
-        DESTINATION "lib/wx/config"
+        DESTINATION "${library_dir}/wx/config"
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
                     GROUP_EXECUTE GROUP_READ
                     WORLD_EXECUTE WORLD_READ
@@ -64,7 +66,7 @@ else()
     install(DIRECTORY DESTINATION "bin")
     install(CODE "execute_process( \
         COMMAND ${CMAKE_COMMAND} -E create_symlink \
-        \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/wx/config/${wxBUILD_FILE_ID}\" \
+        \"${CMAKE_INSTALL_PREFIX}/${library_dir}/wx/config/${wxBUILD_FILE_ID}\" \
         \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wx-config\" \
         )"
     )
