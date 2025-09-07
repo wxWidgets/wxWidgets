@@ -1289,9 +1289,9 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
             break;
         case wxLOCALE_CURRENCY_DIGITS:
             {
-                CFNumberFormatterRef formatter = CFNumberFormatterCreate(NULL, locale, kCFNumberFormatterCurrencyStyle);
+                CFNumberFormatterRef formatter = CFNumberFormatterCreate(nullptr, locale, kCFNumberFormatterCurrencyStyle);
                 CFNumberRef minFrac = CFNumberFormatterCopyProperty(formatter, kCFNumberFormatterMinFractionDigits);
-                cfstr = (CFStringRef) CFNumberFormatterCreateStringWithNumber(NULL, formatter, minFrac);
+                cfstr = (CFStringRef) CFNumberFormatterCreateStringWithNumber(nullptr, formatter, minFrac);
             }
             break;
 
