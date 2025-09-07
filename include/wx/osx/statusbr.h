@@ -35,7 +35,7 @@ protected:
     virtual void InitColours() override;
 
 private:
-    wxColour m_textActive, m_textInactive;
+    wxColour m_textActive, m_textInactive, m_bgActive, m_bgInactive, m_separator;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBarMac);
     wxDECLARE_EVENT_TABLE();

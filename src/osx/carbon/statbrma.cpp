@@ -75,7 +75,45 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
 
 void wxStatusBarMac::InitColours()
 {
-    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    if ( WX_IS_MACOS_AVAILABLE(26, 0) )
+    {
+        if ( wxSystemSettings::GetAppearance().IsDark() )
+        {
+            m_textActive = wxColour(0x9B, 0x9F, 0x9F);
+            m_textInactive = wxColour(0x59, 0x5F, 0x60);
+            // native separator uses hairline black plus some shading,
+            // this approximates it well visually:
+            m_separator = wxColour(0x18, 0x18, 0x18);
+        }
+        else
+        {
+            m_textActive = wxColour(0x80, 0x80, 0x80);
+            m_textInactive = wxColour(0xB8, 0xB8, 0xB8);
+            m_separator = wxColour(0xD9, 0xD9, 0xD9);
+        }
+    }
+    else if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        if ( wxSystemSettings::GetAppearance().IsDark() )
+        {
+            m_textActive = wxColour(0xB1, 0xB2, 0xB2);
+            m_textInactive = wxColour(0x68, 0x69, 0x6A);
+            m_bgActive = wxColour(0x35, 0x36, 0x36);
+            m_bgInactive = wxColour(0x27, 0x28, 0x29);
+            // native separator uses hairline black plus some shading,
+            // this approximates it well visually:
+            m_separator = wxColour(0x18, 0x18, 0x18);
+        }
+        else
+        {
+            m_textActive = wxColour(0x73, 0x74, 0x74);
+            m_textInactive = wxColour(0xA5, 0xA6, 0xA6);
+            m_bgActive = wxColour(0xF3, 0xF3, 0xF3);
+            m_bgInactive = wxColour(0xE6, 0xE6, 0xE6);
+            m_separator = wxColour(0xCC, 0xCC, 0xCC);
+        }
+    }
+    else if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
         if ( wxSystemSettings::GetAppearance().IsDark() )
         {
@@ -90,7 +128,6 @@ void wxStatusBarMac::InitColours()
     }
     else // 10.10 Yosemite to 10.13:
     {
-
         m_textActive = wxColour(0x40, 0x40, 0x40);
         m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
     }
@@ -118,7 +155,27 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
             break;
     }
 
-    // Don't paint any background, that's handled by the OS. Only draw text:
+    if ( WX_IS_MACOS_AVAILABLE(26, 0) )
+    {
+        // don't paint the background, handled by the OS
+    }
+    else if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        // we _do_ need to paint the background on Big Sur up to Tahoe
+        // to match Finder's appearance:
+        dc.SetBackground(tlw == keyWindow ? m_bgActive : m_bgInactive);
+        dc.Clear();
+    }
+    // else: background is rendered by OS, it is part of NSWindow border
+
+    // Draw horizontal separator above the status bar:
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        dc.SetPen(m_separator);
+        dc.DrawLine(0, 0, GetSize().x, 0);
+    }
+
+    // Draw the text:
 
     dc.SetTextForeground(tlw == keyWindow ? m_textActive : m_textInactive);
 
