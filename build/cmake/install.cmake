@@ -44,9 +44,9 @@ if(WIN32_MSVC_NAMING)
     # non-existent path when only Release or Debug build has been installed
     set(lib_unicode "u")
     install(DIRECTORY
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode}")
+        DESTINATION "${library_dir}/${wxBUILD_TOOLKIT}${lib_unicode}")
     install(DIRECTORY
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode}d")
+        DESTINATION "${library_dir}/${wxBUILD_TOOLKIT}${lib_unicode}d")
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
         DESTINATION "lib/${wxPLATFORM_LIB_DIR}")
