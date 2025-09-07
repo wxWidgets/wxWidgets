@@ -49,11 +49,11 @@ if(WIN32_MSVC_NAMING)
         DESTINATION "${library_dir}/${wxBUILD_TOOLKIT}${lib_unicode}d")
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}")
+        DESTINATION "${library_dir}")
 else()
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "lib/wx/include")
+        DESTINATION "${library_dir}/wx/include")
 
     install(
         FILES "${wxOUTPUT_DIR}/wx/config/${wxBUILD_FILE_ID}"
