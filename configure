@@ -28383,12 +28383,16 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_wayland_scanner" >&5
 $as_echo "$wx_cv_wayland_scanner" >&6; }
                 WAYLAND_SCANNER=$wx_cv_wayland_scanner
-                if test -n "$WAYLAND_SCANNER" ; then
-                    $as_echo "#define wxHAVE_WAYLAND_CLIENT 1" >>confdefs.h
+            fi
 
-                    ac_config_commands="$ac_config_commands wayland-protocols"
+            if test -n "$WAYLAND_SCANNER" ; then
+                $as_echo "#define wxHAVE_WAYLAND_CLIENT 1" >>confdefs.h
 
-                fi
+                ac_config_commands="$ac_config_commands wayland-protocols"
+
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Wayland-specific code will be disabled" >&5
+$as_echo "$as_me: WARNING: Wayland-specific code will be disabled" >&2;}
             fi
         fi
     fi
@@ -45193,7 +45197,7 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 # INIT-COMMANDS
 #
 
-                            WAYLAND_SCANNER=$WAYLAND_SCANNER
+                        WAYLAND_SCANNER=$WAYLAND_SCANNER
 
 
 
@@ -45782,10 +45786,10 @@ $as_echo "$as_me: executing $ac_file commands" >&6;}
 
   case $ac_file$ac_mode in
     "wayland-protocols":C)
-                            mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
-                            $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
-                            $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
-                         ;;
+                        mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
+                        $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
+                        $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
+                     ;;
     "rcdefs.h":C)
             mkdir -p $outdir &&
             $CPP $infile | sed 's/^# *[1-9].*//;s/^ *//;/./,/^$/!d' > $outdir/rcdefs.h

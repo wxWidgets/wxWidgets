@@ -3070,19 +3070,22 @@ installed, where VER is 2, 3 or 4.
                     ]
                 )
                 WAYLAND_SCANNER=$wx_cv_wayland_scanner
-                if test -n "$WAYLAND_SCANNER" ; then
-                    AC_DEFINE(wxHAVE_WAYLAND_CLIENT)
-                    AC_CONFIG_COMMANDS([wayland-protocols],
-                        [
-                            mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
-                            $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
-                            $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
-                        ],
-                        [
-                            WAYLAND_SCANNER=$WAYLAND_SCANNER
-                        ]
-                    )
-                fi
+            fi
+
+            if test -n "$WAYLAND_SCANNER" ; then
+                AC_DEFINE(wxHAVE_WAYLAND_CLIENT)
+                AC_CONFIG_COMMANDS([wayland-protocols],
+                    [
+                        mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
+                        $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
+                        $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
+                    ],
+                    [
+                        WAYLAND_SCANNER=$WAYLAND_SCANNER
+                    ]
+                )
+            else
+                AC_MSG_WARN([Wayland-specific code will be disabled])
             fi
         fi
     fi
