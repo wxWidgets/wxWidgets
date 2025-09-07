@@ -43,7 +43,7 @@ public:
     virtual wxSize GetEffectiveMinSizeFirstPass() const override;
 
     virtual bool
-    InformFirstDirection(int direction, int size, int availableOtherDir);
+    InformFirstDirection(int direction, int size, int availableOtherDir) override;
 
     // overridden base virtuals
     virtual bool AcceptsFocus() const override { return false; }
