@@ -64,6 +64,8 @@ void check(const wxString& input, const wxString& expectedScanf,
     INFO("expectedWcharWindows: " + expectedWcharWindows);
 
     wxString result, msg;
+    wxUnusedVar(result);
+    wxUnusedVar(msg);
 
 #ifndef __WINDOWS__
     // on windows, wxScanf() string needs no modifications
