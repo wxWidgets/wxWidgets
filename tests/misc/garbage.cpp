@@ -140,7 +140,8 @@ TEST_CASE("Load", "[garbage]")
     for (size_t size = 1; size < GARBAGE_DATA_SIZE; size *= size + 1)
     {
         // first, generate some garbage data
-        unsigned char* data = new unsigned char[size];
+        std::vector<unsigned char> buffer(size);
+        unsigned char* data = &buffer[0];
         for (size_t i = 0; i < size; i++)
             data[i] = rand();
 
@@ -160,8 +161,6 @@ TEST_CASE("Load", "[garbage]")
         // try to load it from a wxInputStream
         wxMemoryInputStream stream(data, size);
         DoLoadGarbageStream(stream);
-
-        wxDELETEA(data);
     }
 }
 
