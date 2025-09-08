@@ -878,7 +878,7 @@ public:
 #if defined(__WINDOWS__)
     #ifdef __VISUALC__
         #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                \
-            int wmain(int argc, wchar_t **argv)                               \
+            extern "C" int wmain(int argc, wchar_t **argv)                    \
             {                                                                 \
                 wxDISABLE_DEBUG_SUPPORT();                                    \
                                                                               \
@@ -886,7 +886,7 @@ public:
             }
     #else // No wmain(), use main() but don't trust its arguments.
         #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                \
-            int main(int, char **)                                            \
+            extern "C" int main(int, char **)                                 \
             {                                                                 \
                 wxDISABLE_DEBUG_SUPPORT();                                    \
                                                                               \
@@ -895,7 +895,7 @@ public:
     #endif
 #else // Use standard main()
     #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
-        int main(int argc, char **argv)                                       \
+        extern "C" int main(int argc, char **argv)                            \
         {                                                                     \
             wxDISABLE_DEBUG_SUPPORT();                                        \
                                                                               \
