@@ -124,12 +124,16 @@ void doTest(const char* input, const char* expectedScanf,
 
     // try the test for a variety of combinations of flag, width and precision
     for (const wxChar** prec = precs; *prec; prec++)
+    {
         for (const wxChar** width = flag_width; *width; width++)
+        {
             check(fmt + *width + *prec + input,
                 fmt + *width + *prec + expectedScanf,
                 fmt + *width + *prec + expectedUtf8,
                 fmt + *width + *prec + expectedWcharUnix,
                 fmt + *width + *prec + expectedWcharWindows);
+        }
+    }
 }
 
 
