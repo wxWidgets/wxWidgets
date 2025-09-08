@@ -367,6 +367,8 @@ public :
 
     virtual bool        EnableTouchEvents(int eventsMask) = 0;
 
+    virtual void        ClipsToBounds(bool clip);
+
     // scrolling views need a clip subview that acts as parent for native children
     // (except for the scollbars) which are children of the view itself
     virtual void        AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical);

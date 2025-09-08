@@ -73,6 +73,7 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
 
 void wxStatusBarMac::InitColours()
 {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_26_0
     if ( WX_IS_MACOS_AVAILABLE(26, 0) )
     {
         if ( wxSystemSettings::GetAppearance().IsDark() )
@@ -90,7 +91,10 @@ void wxStatusBarMac::InitColours()
             m_separator = wxColour(0xD9, 0xD9, 0xD9);
         }
     }
-    else if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    else
+#endif // MAC_OS_VERSION_26_0
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_11_0
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
     {
         if ( wxSystemSettings::GetAppearance().IsDark() )
         {
@@ -111,7 +115,10 @@ void wxStatusBarMac::InitColours()
             m_separator = wxColour(0xCC, 0xCC, 0xCC);
         }
     }
-    else if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    else
+#endif // MAC_OS_VERSION_11_0
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
     {
         if ( wxSystemSettings::GetAppearance().IsDark() )
         {
@@ -124,7 +131,9 @@ void wxStatusBarMac::InitColours()
             m_textInactive = wxColour(0xB1, 0xB1, 0xB1);
         }
     }
-    else // 10.10 Yosemite to 10.13:
+    else
+#endif // MAC_OS_X_VERSION_10_14
+    // 10.10 Yosemite to 10.13:
     {
         m_textActive = wxColour(0x40, 0x40, 0x40);
         m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
@@ -153,11 +162,15 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
             break;
     }
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_26_0
     if ( WX_IS_MACOS_AVAILABLE(26, 0) )
     {
         // don't paint the background, handled by the OS
     }
-    else if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    else
+#endif
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_11_0
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
     {
         // we _do_ need to paint the background on Big Sur up to Tahoe
         // to match Finder's appearance:
@@ -165,13 +178,16 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.Clear();
     }
     // else: background is rendered by OS, it is part of NSWindow border
+#endif
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_11_0
     // Draw horizontal separator above the status bar:
     if ( WX_IS_MACOS_AVAILABLE(11, 0) )
     {
         dc.SetPen(m_separator);
         dc.DrawLine(0, 0, GetSize().x, 0);
     }
+#endif
 
     // Draw the text:
 
@@ -188,11 +204,16 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxStatusBarMac::InitCornerInset()
 {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_26_0
     if ( WX_IS_MACOS_AVAILABLE(26, 0) )
         m_cornerInset = 8;
-    else if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    else
+#endif
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_11_0
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
         m_cornerInset = 4;
     else
+#endif
         m_cornerInset = 0;
 }
 

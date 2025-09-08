@@ -221,6 +221,9 @@ public:
     // returns the visible region of this control in window ie non-client coordinates
     const wxRegion&     MacGetVisibleRegion( bool includeOuterStructures = false ) ;
 
+    // sets NSView.clipsToBounds property
+    void                MacClipsToBounds( bool clip );
+
     // returns true if children have to clipped to the content area
     // (e.g., scrolled windows)
     bool                MacClipChildren() const { return m_clipChildren ; }
