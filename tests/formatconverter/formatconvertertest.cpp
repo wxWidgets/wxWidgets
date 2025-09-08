@@ -232,7 +232,7 @@ TEST_CASE("Format::lC", "[formatconverter]")
 // the converter in a bad state that will affect subsequent formats, so
 // check with a selection of longer patterns.
 //
-TEST_CASE("Test Longer", "[formatconverter]")
+TEST_CASE("Format::Longer", "[formatconverter]")
 {
     struct {
         const char *input;
