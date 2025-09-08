@@ -81,11 +81,13 @@ bool wxSpinButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_26_0
     if ( WX_IS_MACOS_AVAILABLE(26, 0) )
     {
         return wxSize(21, 28);
     }
     else
+#endif
     {
         return wxSize(13, 22);
     }

@@ -232,8 +232,10 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
                 break ;
         }
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_26_0
         if ( WX_IS_MACOS_AVAILABLE(26, 0) )
             hText += 3;
+#endif
 
         // the numbers above include the border size, so subtract it before
         // possibly adding it back below
