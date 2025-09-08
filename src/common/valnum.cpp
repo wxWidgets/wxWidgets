@@ -261,7 +261,7 @@ wxIntegerValidatorBase::FromString(const wxString& s,
     else
     {
         // Parse as unsigned to ensure we don't accept minus sign here.
-        ULongestValueType uvalue;
+        ULongestValueType uvalue = 0;
         if ( !wxNumberFormatter::FromString(s, &uvalue) )
             return false;
 
