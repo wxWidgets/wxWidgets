@@ -40,13 +40,13 @@
 
     Note that the scaling factor of the bitmap determines the scaling factor
     used by this device context, so when using a memory device context as a
-    back buffer for a window, you should typically create the bitmap using the
-    same scale factor as used by the window, e.g.
+    back buffer for a window, you should create the bitmap using the same scale
+    factor as the one used by the window itself, e.g.
     @code
     void MyWindow::OnPaint(wxPaintEvent&)
     {
         wxBitmap bmp;
-        bmp.CreateWithDIPSize(GetClientSize(), GetDPIScaleFactor());
+        bmp.CreateWithLogicalSize(GetClientSize(), GetDPIScaleFactor());
         {
             wxMemoryDC memdc(bmp);
             ... use memdc to draw on the bitmap ...
