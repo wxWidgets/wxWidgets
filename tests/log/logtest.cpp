@@ -69,8 +69,7 @@ TEST_CASE_METHOD(LogTestCase, "wxLogNull()", "[log]")
 TEST_CASE_METHOD(LogTestCase, "wxLog::Component", "[log]")
 {
     wxLogMessage("Message");
-    CPPUNIT_ASSERT_EQUAL( std::string(wxLOG_COMPONENT),
-                          m_log->GetInfo(wxLOG_Message).component );
+    CHECK( m_log->GetInfo(wxLOG_Message).component == std::string(wxLOG_COMPONENT) );
 
     // completely disable logging for this component
     wxLog::SetComponentLevel("test/ignore", wxLOG_FatalError);
