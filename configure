@@ -986,6 +986,8 @@ X_CFLAGS
 XMKMF
 DIRECTFB_LIBS
 DIRECTFB_CFLAGS
+WAYLAND_CLIENT_LIBS
+WAYLAND_CLIENT_CFLAGS
 GTHREAD_LIBS
 GTHREAD_CFLAGS
 GTK_LIBS
@@ -1108,6 +1110,7 @@ with_libxpm
 with_libiconv
 with_libmspack
 with_gtkprint
+with_wayland
 with_gnomevfs
 with_libnotify
 with_opengl
@@ -1414,6 +1417,8 @@ GTK_CFLAGS
 GTK_LIBS
 GTHREAD_CFLAGS
 GTHREAD_LIBS
+WAYLAND_CLIENT_CFLAGS
+WAYLAND_CLIENT_LIBS
 DIRECTFB_CFLAGS
 DIRECTFB_LIBS
 XMKMF
@@ -2390,6 +2395,7 @@ Optional Packages:
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
   --without-gtkprint      don't use GTK printing support
+  --without-wayland       don't use Wayland-specific code
   --with-gnomevfs         use GNOME VFS for associating MIME types
   --with-libnotify        use libnotify for notifications
   --with-opengl           use OpenGL (or Mesa)
@@ -2449,6 +2455,10 @@ Some influential environment variables:
               C compiler flags for GTHREAD, overriding pkg-config
   GTHREAD_LIBS
               linker flags for GTHREAD, overriding pkg-config
+  WAYLAND_CLIENT_CFLAGS
+              C compiler flags for WAYLAND_CLIENT, overriding pkg-config
+  WAYLAND_CLIENT_LIBS
+              linker flags for WAYLAND_CLIENT, overriding pkg-config
   DIRECTFB_CFLAGS
               C compiler flags for DIRECTFB, overriding pkg-config
   DIRECTFB_LIBS
@@ -4996,6 +5006,35 @@ fi
 
 
           eval "$wx_cv_use_gtkprint"
+
+
+          withstring=without
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-wayland was given.
+if test "${with_wayland+set}" = set; then :
+  withval=$with_wayland;
+                        if test "$withval" = yes; then
+                          wx_cv_use_wayland='wxUSE_WAYLAND=yes'
+                        else
+                          wx_cv_use_wayland='wxUSE_WAYLAND=no'
+                        fi
+
+else
+
+                        wx_cv_use_wayland='wxUSE_WAYLAND=${'DEFAULT_wxUSE_WAYLAND":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_wayland"
 
 
           withstring=
@@ -28245,6 +28284,117 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gdk_wayland" >&5
 $as_echo "$wx_cv_gdk_wayland" >&6; }
+
+                        if test "$wx_cv_gdk_wayland" = "yes" -a "$wxUSE_WAYLAND" != "no"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for wayland-client" >&5
+$as_echo_n "checking for wayland-client... " >&6; }
+
+if test -n "$WAYLAND_CLIENT_CFLAGS"; then
+    pkg_cv_WAYLAND_CLIENT_CFLAGS="$WAYLAND_CLIENT_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"wayland-client\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "wayland-client") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WAYLAND_CLIENT_CFLAGS=`$PKG_CONFIG --cflags "wayland-client" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$WAYLAND_CLIENT_LIBS"; then
+    pkg_cv_WAYLAND_CLIENT_LIBS="$WAYLAND_CLIENT_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"wayland-client\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "wayland-client") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_WAYLAND_CLIENT_LIBS=`$PKG_CONFIG --libs "wayland-client" 2>/dev/null`
+              test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+            WAYLAND_CLIENT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "wayland-client" 2>&1`
+        else
+            WAYLAND_CLIENT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "wayland-client" 2>&1`
+        fi
+    # Put the nasty error message in config.log where it belongs
+    echo "$WAYLAND_CLIENT_PKG_ERRORS" >&5
+
+
+                    wx_cv_wayland_client=no
+
+
+elif test $pkg_failed = untried; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                    wx_cv_wayland_client=no
+
+
+else
+    WAYLAND_CLIENT_CFLAGS=$pkg_cv_WAYLAND_CLIENT_CFLAGS
+    WAYLAND_CLIENT_LIBS=$pkg_cv_WAYLAND_CLIENT_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                    wx_cv_wayland_client=yes
+                    CFLAGS="$WAYLAND_CLIENT_CFLAGS $CFLAGS"
+                    CXXFLAGS="$WAYLAND_CLIENT_CFLAGS $CXXFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $WAYLAND_CLIENT_LIBS"
+
+fi
+
+            if test "$wx_cv_wayland_client" = "yes"; then
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for wayland-scanner" >&5
+$as_echo_n "checking for wayland-scanner... " >&6; }
+if ${wx_cv_wayland_scanner+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                        wx_cv_wayland_scanner=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner 2>/dev/null`
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_wayland_scanner" >&5
+$as_echo "$wx_cv_wayland_scanner" >&6; }
+                WAYLAND_SCANNER=$wx_cv_wayland_scanner
+            fi
+
+            if test -n "$WAYLAND_SCANNER" ; then
+                $as_echo "#define wxHAVE_WAYLAND_CLIENT 1" >>confdefs.h
+
+                ac_config_commands="$ac_config_commands wayland-protocols"
+
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Wayland-specific code will be disabled" >&5
+$as_echo "$as_me: WARNING: Wayland-specific code will be disabled" >&2;}
+            fi
+        fi
     fi
 
     if test "$wxUSE_DFB" = 1; then
@@ -45047,6 +45197,10 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 # INIT-COMMANDS
 #
 
+                        WAYLAND_SCANNER=$WAYLAND_SCANNER
+
+
+
             CPP="$CPP"
             infile="$srcdir/include/wx/msw/genrcdefs.h"
             outdir="lib/wx/include/$TOOLCHAIN_FULLNAME/wx/msw"
@@ -45066,6 +45220,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
+    "wayland-protocols") CONFIG_COMMANDS="$CONFIG_COMMANDS wayland-protocols" ;;
     "lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h") CONFIG_HEADERS="$CONFIG_HEADERS lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in" ;;
     "rcdefs.h") CONFIG_COMMANDS="$CONFIG_COMMANDS rcdefs.h" ;;
     "lib/wx/config/${TOOLCHAIN_FULLNAME}") CONFIG_FILES="$CONFIG_FILES lib/wx/config/${TOOLCHAIN_FULLNAME}:wx-config.in" ;;
@@ -45630,6 +45785,11 @@ $as_echo "$as_me: executing $ac_file commands" >&6;}
 
 
   case $ac_file$ac_mode in
+    "wayland-protocols":C)
+                        mkdir -p lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols
+                        $WAYLAND_SCANNER client-header $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.h
+                        $WAYLAND_SCANNER private-code $srcdir/src/unix/protocols/pointer-warp-v1.xml lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/protocols/pointer-warp-v1-client-protocol.c
+                     ;;
     "rcdefs.h":C)
             mkdir -p $outdir &&
             $CPP $infile | sed 's/^# *[1-9].*//;s/^ *//;/./,/^$/!d' > $outdir/rcdefs.h

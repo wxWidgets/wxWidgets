@@ -150,23 +150,22 @@ void wxMenuItem::SetItemLabel(const wxString& text)
     UpdateItemText() ;
 }
 
+void wxMenuItem::SetBitmap(const wxBitmapBundle& bitmap)
+{
+    wxMenuItemBase::SetBitmap(bitmap);
+    UpdateItemBitmap();
+}
 
 void wxMenuItem::UpdateItemBitmap()
 {
-    if ( !m_parentMenu )
-        return;
-
     if ( m_bitmap.IsOk() )
     {
-        GetPeer()->SetBitmap(GetBitmap());
+        GetPeer()->SetBitmap(m_bitmap);
     }
 }
 
 void wxMenuItem::UpdateItemStatus()
 {
-    if ( !m_parentMenu )
-        return ;
-
     if ( IsSeparator() )
         return ;
 
@@ -180,9 +179,6 @@ void wxMenuItem::UpdateItemStatus()
 
 void wxMenuItem::UpdateItemText()
 {
-    if ( !m_parentMenu )
-        return ;
-
     wxString text = wxStripMenuCodes(m_text, m_parentMenu != nullptr && m_parentMenu->GetNoEventsMode() ? wxStrip_Accel : wxStrip_Menu);
     if (text.IsEmpty() && !IsSeparator())
     {

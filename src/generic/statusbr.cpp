@@ -177,13 +177,19 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
     DoUpdateFieldWidths();
 }
 
+int wxStatusBarGeneric::GetAvailableWidthForFields(int width) const
+{
+    if ( ShowsSizeGrip() )
+        width -= GetSizeGripRect().width;
+
+    return width;
+}
+
 void wxStatusBarGeneric::DoUpdateFieldWidths()
 {
     m_lastClientSize = GetClientSize();
 
-    int width = m_lastClientSize.x;
-    if ( ShowsSizeGrip() )
-        width -= GetSizeGripRect().width;
+    const int width = GetAvailableWidthForFields(m_lastClientSize.x);
 
     // recompute the cache of the field widths if the status bar width has changed
     m_widthsAbs = CalculateAbsWidths(width);

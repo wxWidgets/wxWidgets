@@ -389,9 +389,8 @@ bool MyApp::OnInit()
     wxUILocale::UseDefault();
 
     // Create the main application window
-    MyFrame *frame = new MyFrame("Calendar wxWidgets sample"
-                                 ,wxPoint(50, 50), wxSize(460, 340)
-                                 );
+    MyFrame* frame = new MyFrame("Calendar wxWidgets sample");
+    frame->SetSize(frame->FromDIP(wxSize(460, 340)));
 
     frame->Show(true);
 

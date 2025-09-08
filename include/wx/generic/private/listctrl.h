@@ -914,7 +914,7 @@ private:
     // Check if the given point is inside the checkbox of this item.
     //
     // Always returns false if there are no checkboxes.
-    bool IsInsideCheckBox(long item, int x, int y);
+    bool IsInsideCheckBox(long item, int x, int y) const;
 
     // the height of one line using the current font
     wxCoord m_lineHeight;

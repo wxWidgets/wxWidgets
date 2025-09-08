@@ -622,6 +622,15 @@
 
 #define wxUSE_GSTREAMER_PLAYER 0
 
+/**
+    Use wayland-client library.
+
+    This is needed by any Wayland-specific code in wxGTK implementation.
+
+    Recommended setting: 1, only set to 0 if wayland-client is not available.
+ */
+#undef wxHAVE_WAYLAND_CLIENT
+
 /*
    Use XTest extension to implement wxUIActionSimulator?
 

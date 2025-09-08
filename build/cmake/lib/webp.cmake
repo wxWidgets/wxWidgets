@@ -69,6 +69,4 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
         )
     endif()
 
-elseif(wxUSE_LIBWEBP)
-    find_package(WebP REQUIRED)
 endif()

@@ -128,7 +128,17 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
 void wxFrame::SetStatusBar(wxStatusBar *statbar)
 {
     wxFrameBase::SetStatusBar(statbar);
-    m_nowpeer->SetBottomBorderThickness(statbar ? GetMacStatusbarHeight() : 0);
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_11_0
+    if ( WX_IS_MACOS_AVAILABLE(11, 0) )
+    {
+        // textured borders are unwanted, statusbar renders w/o them
+    }
+    else
+#endif
+    {
+        m_nowpeer->SetBottomBorderThickness(statbar ? GetMacStatusbarHeight() : 0);
+    }
 }
 
 void wxFrame::PositionStatusBar()

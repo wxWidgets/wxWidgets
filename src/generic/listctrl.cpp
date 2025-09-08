@@ -751,8 +751,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 
     ApplyAttributes(dc, rectHL, highlighted, current);
 
-    wxCoord x = rect.x + HEADER_OFFSET_X + ICON_OFFSET_X,
-            yMid = rect.y + rect.height/2;
+    wxCoord x = rect.x;
+    wxCoord yMid = rect.y + rect.height/2;
 
     if ( m_owner->HasCheckBoxes() )
     {
@@ -768,6 +768,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 
         x += cbSize.GetWidth() + (2 * MARGIN_AROUND_CHECKBOX);
     }
+
+    x += ICON_OFFSET_X;
 
     size_t col = 0;
     for ( const auto& item : m_items )
@@ -1754,10 +1756,19 @@ wxRect wxListMainWindow::GetLineIconRect(size_t line) const
     wxListLineData *ld = GetLine(line);
     wxASSERT_MSG( ld->HasImage(), wxT("should have an image") );
 
-    wxRect rect;
-    rect.x = HEADER_OFFSET_X;
-    rect.y = GetLineY(line);
-    GetImageSize(ld->GetImage(), rect.width, rect.height);
+    wxRect rect = GetLineRect(line);
+    rect.x += ICON_OFFSET_X;
+
+    if ( HasCheckBoxes() )
+    {
+        wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(const_cast<wxListMainWindow*>(this));
+        rect.x += cbSize.GetWidth() + (2 * MARGIN_AROUND_CHECKBOX);
+    }
+
+    // use full height of the line, same as win32 listctrl
+    int ix, iy;
+    GetImageSize(ld->GetImage(), ix, iy);
+    rect.width = ix;
 
     return rect;
 }
@@ -1771,6 +1782,9 @@ wxRect wxListMainWindow::GetLineHighlightRect(size_t line) const
 long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
 {
     wxASSERT_MSG( line < GetItemCount(), wxT("invalid line in HitTestLine") );
+
+    if ( IsInsideCheckBox(line, x, y) )
+        return wxLIST_HITTEST_ONITEMSTATEICON;
 
     wxListLineData *ld = GetLine(line);
 
@@ -3860,16 +3874,17 @@ wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect,
                         int ix, iy;
                         GetImageSize(line->GetImage(), ix, iy);
 
-                        const int iconWidth = ix + IMAGE_MARGIN_IN_REPORT_MODE;
-
                         if ( code == wxLIST_RECT_ICON )
                         {
-                            rect.width = iconWidth;
+                            rect.y += (rect.height - iy) / 2;
+                            rect.width = ix;
+                            rect.height = iy;
                         }
                         else // wxLIST_RECT_LABEL
                         {
-                            rect.x += iconWidth;
-                            rect.width -= iconWidth;
+                            // this includes the margin between icon and label (IMAGE_MARGIN_IN_REPORT_MODE)
+                            rect.x += ix;
+                            rect.width -= ix;
                         }
                     }
                     else // No icon
@@ -3956,14 +3971,14 @@ bool wxListMainWindow::IsItemChecked(long item) const
     }
 }
 
-bool wxListMainWindow::IsInsideCheckBox(long item, int x, int y)
+bool wxListMainWindow::IsInsideCheckBox(long item, int x, int y) const
 {
     if ( HasCheckBoxes() )
     {
         wxRect lineRect = GetLineRect(item);
-        wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(this);
+        wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(const_cast<wxListMainWindow*>(this));
         int yOffset = (lineRect.height - cbSize.GetHeight()) / 2;
-        wxRect rr(wxPoint(MARGIN_AROUND_CHECKBOX, lineRect.y + yOffset), cbSize);
+        wxRect rr(wxPoint(lineRect.x + MARGIN_AROUND_CHECKBOX, lineRect.y + yOffset), cbSize);
 
         return rr.Contains(wxPoint(x, y));
     }

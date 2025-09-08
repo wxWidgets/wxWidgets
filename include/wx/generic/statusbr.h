@@ -87,6 +87,9 @@ protected:
     // returns the position and the size of the size grip
     wxRect GetSizeGripRect() const;
 
+    // returns the width available for fields drawing given total width
+    virtual int GetAvailableWidthForFields(int width) const;
+
     // common part of all ctors
     void Init();
 
