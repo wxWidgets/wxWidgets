@@ -40,7 +40,7 @@ unsigned GetRectsCount(const wxRegion& rgn)
 
 } // anonymous namespace
 
-// this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxRegions
+// this operator is needed to use CHECK with wxRegions
 std::ostream& operator<<(std::ostream& os, const wxRegion& rgn)
 {
     wxRect r = rgn.GetBox();
@@ -55,63 +55,39 @@ std::ostream& operator<<(std::ostream& os, const wxRegion& rgn)
 // test class
 // ----------------------------------------------------------------------------
 
-class RegionTestCase : public CppUnit::TestCase
-{
-public:
-    RegionTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( RegionTestCase );
-        CPPUNIT_TEST( Validity );
-        CPPUNIT_TEST( Intersect );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Validity();
-    void Intersect();
-
-    wxDECLARE_NO_COPY_CLASS(RegionTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( RegionTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RegionTestCase, "RegionTestCase" );
-
-void RegionTestCase::Validity()
+TEST_CASE("wxRegion::Validity", "[region]")
 {
     wxRegion r;
 
-    CPPUNIT_ASSERT_MESSAGE
+    // Default constructed region must be invalid
+    CHECK_FALSE
     (
-        "Default constructed region must be invalid",
-        !r.IsOk()
+        r.IsOk()
     );
 
-    CPPUNIT_ASSERT_MESSAGE
+    // Invalid region should be empty
+    CHECK
     (
-        "Invalid region should be empty",
         r.IsEmpty()
     );
 
     // Offsetting an invalid region doesn't make sense.
     WX_ASSERT_FAILS_WITH_ASSERT( r.Offset(1, 1) );
 
-    CPPUNIT_ASSERT_MESSAGE
+    // Combining with a valid region should create a valid region
+    CHECK
     (
-        "Combining with a valid region should create a valid region",
         r.Union(0, 0, 10, 10)
     );
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    // Union() with invalid region should give the same region
+    CHECK
     (
-        "Union() with invalid region should give the same region",
-        wxRegion(0, 0, 10, 10),
-        r
+        wxRegion(0, 0, 10, 10) ==  r
     );
 }
 
-void RegionTestCase::Intersect()
+TEST_CASE("wxRegion::Intersect", "[region]")
 {
     const wxPoint points1[] = {
         wxPoint(310, 392),
@@ -131,6 +107,6 @@ void RegionTestCase::Intersect()
 
     wxRegion region2(4,points2);
 
-    CPPUNIT_ASSERT( region1.Intersect(region2) );
-    CPPUNIT_ASSERT( region1.IsEmpty() );
+    CHECK( region1.Intersect(region2) );
+    CHECK( region1.IsEmpty() );
 }
