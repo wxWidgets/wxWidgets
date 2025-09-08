@@ -236,6 +236,10 @@ public :
     virtual void                UseClippingView(bool clip) wxOVERRIDE;
     virtual WXWidget            GetContainer() const wxOVERRIDE { return m_osxClipView ? m_osxClipView : m_osxView; }
 
+    virtual void                ClipsToBounds(bool clip) wxOVERRIDE;
+
+    virtual void                ApplyScrollViewBorderType() wxOVERRIDE;
+
 protected:
     WXWidget m_osxView;
     WXWidget m_osxClipView;
