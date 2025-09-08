@@ -1494,6 +1494,24 @@ public:
 #define wxDECLARE_APP( className )
 
 /**
+    This macro and tells wxWidgets which application class should be used.
+
+    Unlike the more usual wxIMPLEMENT_APP() macro, this macro does not define
+    the entry point of the application, i.e. doesn't define @c main() or
+    @c WinMain() function, so you need to implement it separately when using
+    it.
+
+    The @a className passed to this macro must be a name of a default
+    constructible class deriving from wxApp that will be instantiated by
+    wxWidgets during its initialization.
+
+    Note that this macro requires a final semicolon.
+
+    @header{wx/app.h}
+ */
+#define wxIMPLEMENT_APP_NO_MAIN( className )
+
+/**
     This macro defines the application entry point and tells wxWidgets which
     application class should be used.
 
@@ -1502,8 +1520,9 @@ public:
     typical GUI application it's simpler and more convenient to use this macro
     to do both together.
 
-    The @a className passed to this macro must be a name of the class deriving
-    from wxApp.
+    The @a className passed to this macro must be a name of a default
+    constructible class deriving from wxApp that will be instantiated by
+    wxWidgets during its initialization.
 
     Note that this macro requires a final semicolon.
 
