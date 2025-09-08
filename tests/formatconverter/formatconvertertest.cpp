@@ -58,10 +58,10 @@ void check(const wxString& input, const wxString& expectedScanf,
     const wxString& expectedWcharUnix,
     const wxString& expectedWcharWindows)
 {
-    INFO("expectedScanf: " + expectedScanf);
-    INFO("expectedUtf8: " + expectedUtf8);
-    INFO("expectedWcharUnix: " + expectedWcharUnix);
-    INFO("expectedWcharWindows: " + expectedWcharWindows);
+    INFO("expectedScanf: " << expectedScanf);
+    INFO("expectedUtf8: " << expectedUtf8);
+    INFO("expectedWcharUnix: " << expectedWcharUnix);
+    INFO("expectedWcharWindows: " << expectedWcharWindows);
 
     wxString result, msg;
     wxUnusedVar(result);
