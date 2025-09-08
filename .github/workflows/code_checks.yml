@@ -57,10 +57,8 @@ jobs:
                 ':!build/upmake' \
                 ':!build/vcxproj-clone' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
-                ':!include/wx/gtk/private/wayland/*.h' \
                 ':!misc/languages/data/unicode/*.xml' \
                 ':!samples/widgets/widgets.bkl' \
-                ':!src/gtk/wayland/*.c' \
                 ':!tests/test.bkl' \
                 ':!**/*akefile*' \
                 ':!**/*.pbxproj' \
@@ -99,7 +97,6 @@ jobs:
             git fetch --depth=1 origin master
             if git diff origin/master \
                ':**.h' ':**.cpp' \
-               ':!include/wx/gtk/private/wayland/*.h' \
                | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|wxMEMBER_DELETE|__WXFUNCTION__|[^"_@A-Za-z0-9]NULL([- ,;()+*/%&=!?]|$))'; then
               echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
               exit 1
