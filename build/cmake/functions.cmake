@@ -8,7 +8,6 @@
 #############################################################################
 
 include(CMakeDependentOption)
-include(CMakeParseArguments)           # For compatibility with CMake < 3.4
 include(ExternalProject)
 include(CMakePrintHelpers)
 

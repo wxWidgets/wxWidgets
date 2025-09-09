@@ -111,7 +111,6 @@ if (POLICY CMP0055)
 	cmake_policy(SET CMP0055 NEW)
 endif()
 
-include(CMakeParseArguments)
 include(ProcessorCount)
 
 function (cotire_get_configuration_types _configsVar)
