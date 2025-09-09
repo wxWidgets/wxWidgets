@@ -107,10 +107,13 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
                     Expand().
                     TripleBorder(wxLEFT | wxRIGHT));
 
-    // 3) buttons if any
+    // 3) buttons, if any, and a spacer to force them down to the bottom
+    // when single-line dialog is resized
     wxSizer *buttonSizer = CreateSeparatedButtonSizer(style & (wxOK | wxCANCEL));
     if ( buttonSizer )
     {
+        if ((style & wxTE_MULTILINE) == 0)
+            topsizer->AddStretchSpacer();
         topsizer->Add(buttonSizer, wxSizerFlags().Expand().DoubleBorder());
     }
 
