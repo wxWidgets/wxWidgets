@@ -1695,10 +1695,6 @@ protected:
         }
         return false;
     }
-
-    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
-                                const wxDateTime& dtEnd,
-                                wxDateTimeArray& holidays) const override;
 };
 
 // ============================================================================

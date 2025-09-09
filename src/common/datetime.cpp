@@ -2393,23 +2393,6 @@ size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStar
 // wxDateTimeChristianHolidays
 // ----------------------------------------------------------------------------
 
-size_t wxDateTimeChristianHolidays::DoGetHolidaysInRange(const wxDateTime& dtStart,
-                                                         const wxDateTime& dtEnd,
-                                                         wxDateTimeArray& holidays) const
-{
-    holidays.Clear();
-
-    for (wxDateTime dt = dtStart; dt <= dtEnd; dt += wxDateSpan::Day())
-    {
-        if (DoIsHoliday(dt) )
-        {
-            holidays.Add(dt);
-        }
-    }
-
-    return holidays.size();
-}
-
 // ============================================================================
 // other helper functions
 // ============================================================================
