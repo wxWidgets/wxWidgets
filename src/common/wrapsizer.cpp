@@ -167,14 +167,14 @@ wxSize wxWrapSizer::CalcMinFirstPass()
     // 1 - Immediately after InformFirstDirection, then we find a min size that
     //     uses one dimension maximally and the other direction minimally.
 
-        // There are two different algorithms for finding a useful min size for
-        // a wrap sizer, depending on whether the first reported size component
-        // is the opposite as our own orientation (the simpler case) or the same
-        // one (more complicated).
-        if ( m_dirInform == m_orient )
-            CalcMinFromMajor(m_availSize);
-        else
-            CalcMinFromMinor(m_availSize);
+    // There are two different algorithms for finding a useful min size for
+    // a wrap sizer, depending on whether the first reported size component
+    // is the opposite as our own orientation (the simpler case) or the same
+    // one (more complicated).
+    if ( m_dirInform == m_orient )
+        CalcMinFromMajor(m_availSize);
+    else
+        CalcMinFromMinor(m_availSize);
 
     return m_calculatedMinSize;
 }
@@ -188,20 +188,20 @@ wxSize wxWrapSizer::CalcMin()
     //     layout, trying to maintain the possibility to re-arrange lines by
     //     sizing
 
-        if ( m_availSize > 0 )
-        {
-            wxSize szAvail;    // Keep track of boundary so we don't overflow
-            if ( m_dirInform == m_orient )
-                szAvail = SizeFromMajorMinor(m_availSize, m_availableOtherDir);
-            else
-                szAvail = SizeFromMajorMinor(m_availableOtherDir, m_availSize);
+    if ( m_availSize > 0 )
+    {
+        wxSize szAvail;    // Keep track of boundary so we don't overflow
+        if ( m_dirInform == m_orient )
+            szAvail = SizeFromMajorMinor(m_availSize, m_availableOtherDir);
+        else
+            szAvail = SizeFromMajorMinor(m_availableOtherDir, m_availSize);
 
-            CalcMinFittingSize(szAvail);
-        }
-        else // Initial calculation, before we have size available to us
-        {
-            CalcMaxSingleItemSize();
-        }
+        CalcMinFittingSize(szAvail);
+    }
+    else // Initial calculation, before we have size available to us
+    {
+        CalcMaxSingleItemSize();
+    }
 
     return m_calculatedMinSize;
 }
