@@ -2206,6 +2206,13 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
                                                const wxDateTime& dtEnd,
                                                wxDateTimeArray& holidays)
 {
+    if ( dtStart > dtEnd )
+    {
+        wxFAIL_MSG( wxT("invalid date range in GetHolidaysInRange") );
+
+        return 0u;
+    }
+
     wxDateTimeArray hol;
 
     holidays.Clear();
@@ -2255,13 +2262,6 @@ size_t wxDateTimeWorkDays::DoGetHolidaysInRange(const wxDateTime& dtStart,
                                                 const wxDateTime& dtEnd,
                                                 wxDateTimeArray& holidays) const
 {
-    if ( dtStart > dtEnd )
-    {
-        wxFAIL_MSG( wxT("invalid date range in GetHolidaysInRange") );
-
-        return 0u;
-    }
-
     holidays.Empty();
 
     // instead of checking all days, start with the first Sat after dtStart and
