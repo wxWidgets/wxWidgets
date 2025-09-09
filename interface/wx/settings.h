@@ -118,7 +118,7 @@ enum wxSystemColour
     /**
         On macOS, this maps to [NSColor gridLines], on other platforms
         it's mapped to wxSYS_COLOUR_BTNFACE
-        @since 3.3
+        @since 3.3.2
      */
     wxSYS_COLOUR_GRIDLINES,
     

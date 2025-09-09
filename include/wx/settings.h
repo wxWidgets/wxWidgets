@@ -92,7 +92,6 @@ enum wxSystemColour
     wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
     wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
     wxSYS_COLOUR_FRAMEBK = wxSYS_COLOUR_BTNFACE
-    
 };
 
 // possible values for wxSystemSettings::GetMetric() index parameter
