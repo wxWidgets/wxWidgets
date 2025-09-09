@@ -1228,7 +1228,7 @@ private:
     // Return true if the visible zone indicator is currently being dragged.
     bool IsDragging() const
     {
-        return m_dragOffset != -1;
+        return m_isDragging;
     }
 
     void HandleMouseClick(wxMouseEvent& event)
@@ -1264,6 +1264,8 @@ private:
     // Called when the user starts dragging at the given point.
     void StartDragging(const wxPoint& pos)
     {
+        m_isDragging = true;
+
         m_dragOffset = pos.y - GetThumbTopPos();
         wxLogTrace(wxTRACE_STC_MAP, "Start dragging at thumb offset %d",
                    m_dragOffset);
@@ -1331,7 +1333,8 @@ private:
     // released or because the mouse capture was lost.
     void DoStopDragging()
     {
-        m_dragOffset = -1;
+        m_isDragging = false;
+        m_dragOffset = 0;
 
         SetCursor(wxCURSOR_ARROW);
         ReleaseMouse();
@@ -1349,8 +1352,8 @@ private:
     wxOverlay m_overlay;
 
     // The constant vertical offset between the mouse pointer and the thumb top
-    // while dragging (always positive) or -1 if not dragging.
-    int m_dragOffset = -1;
+    // while dragging. Only valid if m_isDragging is true.
+    int m_dragOffset = 0;
 
     // These values change only when the window size changes and correspond to
     // the returned value of the corresponding wxStyledTextCtrl functions, we
@@ -1363,6 +1366,9 @@ private:
     // Flag set to true to indicate that the editor or map is scrolled by us
     // and so shouldn't result in matching changes of the other window.
     bool m_updateBlocked = false;
+
+    // Flag set while dragging the thumb.
+    bool m_isDragging = false;
 
 
     wxDECLARE_NO_COPY_CLASS(wxStyledTextCtrlMap);
