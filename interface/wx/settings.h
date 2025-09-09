@@ -121,7 +121,7 @@ enum wxSystemColour
         @since 3.3.2
      */
     wxSYS_COLOUR_GRIDLINES,
-    
+
     // synonyms:
 
     wxSYS_COLOUR_BACKGROUND = wxSYS_COLOUR_DESKTOP,
