@@ -115,6 +115,15 @@ enum wxSystemColour
      */
     wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT,
 
+    /**
+        Colour of separator lines in grid-like controls.
+
+        On macOS, this maps to `[NSColor gridLines]`, on other platforms
+        it is currently the same as ::wxSYS_COLOUR_BTNFACE.
+
+        @since 3.3.2
+     */
+    wxSYS_COLOUR_GRIDLINES,
 
     // synonyms:
 
