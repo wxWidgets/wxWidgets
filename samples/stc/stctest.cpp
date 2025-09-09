@@ -1054,8 +1054,8 @@ private:
         return true;
     }
 
-    // Get map line at the given mouse position.
-    int GetMapLineAtPoint(const wxPoint& pos) const
+    // Get document line at the given mouse position in the map.
+    int GetDocLineAtMapPoint(const wxPoint& pos) const
     {
         return LineFromPosition(PositionFromPoint(pos));
     }
@@ -1236,7 +1236,7 @@ private:
     void HandleMouseClick(wxMouseEvent& event)
     {
         auto const posMouse = event.GetPosition();
-        auto const line = GetMapLineAtPoint(posMouse);
+        auto const line = GetDocLineAtMapPoint(posMouse);
 
         auto const editorFirst = m_edit->GetFirstVisibleLine();
 
