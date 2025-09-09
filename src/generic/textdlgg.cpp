@@ -81,6 +81,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
         return false;
     }
 
+    if (sz.IsFullySpecified())
     SetMinSize( sz );
 
     m_dialogStyle = style;
@@ -115,7 +116,10 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
 
     SetSizer( topsizer );
 
+    if (sz.IsFullySpecified())
     topsizer->Fit( this );
+    else
+        topsizer->SetSizeHints( this );
 
     if ( style & wxCENTRE )
         Centre( wxBOTH );
