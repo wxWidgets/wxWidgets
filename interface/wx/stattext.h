@@ -6,6 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #define wxST_NO_AUTORESIZE         0x0001
+#define wxST_WRAP                  0x0002
 #define wxST_ELLIPSIZE_START       0x0004
 #define wxST_ELLIPSIZE_MIDDLE      0x0008
 #define wxST_ELLIPSIZE_END         0x0010
@@ -22,7 +23,7 @@
     Since version 3.3.2 this control can be used within a vertical @ref wxBoxSizer
     and it will dynamically change its wrapping according to the allocated
     horizontal space. This behaviour is conceptually identical to a @ref wxWrapSizer
-    that wraps controls.
+    that wraps controls and can be activated by using the @c wxST_WRAP flag.
 
     @beginStyleTable
     @style{wxALIGN_LEFT}

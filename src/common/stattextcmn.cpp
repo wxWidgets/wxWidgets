@@ -232,6 +232,9 @@ void wxStaticTextBase::Wrap(int width)
 
 wxSize wxStaticTextBase::GetEffectiveMinSizeFirstPass() const
 {
+    if (!HasFlag(wxST_WRAP))
+        return GetEffectiveMinSize();
+
     // While wxWrapSizer can only wrap entire controls, a text paragraph
     // could theoretically wrap at a few letters, so we start with
     // requesting very little space in the first pass
@@ -240,6 +243,9 @@ wxSize wxStaticTextBase::GetEffectiveMinSizeFirstPass() const
 
 bool wxStaticTextBase::InformFirstDirection(int direction, int size, int WXUNUSED(availableOtherDir))
 {
+    if (!HasFlag(wxST_WRAP))
+        return false;
+
     // In the second pass, this control has been given "size" amount of
     // space in the horizontal direction. Wrap there and report a new
     // GetEffectiveMinSize() from then on.
