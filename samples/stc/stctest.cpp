@@ -956,10 +956,10 @@ public:
 
         // And also when the height changes.
         edit->Bind(wxEVT_SIZE, [this](wxSizeEvent& event) {
-            UpdateCachedValues();
+            UpdateLineInfo();
 
-            wxLogTrace(wxTRACE_STC_MAP, "Edit visible lines: %d, map: %d",
-                       m_mapVisibleLines, m_editVisibleLines);
+            wxLogTrace(wxTRACE_STC_MAP, "After resize: %s",
+                       m_lines.Dump());
 
             SyncMapPosition();
             event.Skip();
@@ -1022,7 +1022,7 @@ public:
         // for all of them.
         m_mapLineHeight = TextHeight(0);
 
-        UpdateCachedValues();
+        UpdateLineInfo();
         SyncMapPosition();
         SyncSelection();
 
@@ -1037,19 +1037,21 @@ public:
     }
 
 private:
-    // We cache some values for performance, this function must be called to
-    // update them.
-    void UpdateCachedValues()
+    // Check if the cached information about visible and total number of lines
+    // has changed and update it and return true if it did.
+    bool UpdateLineInfo()
     {
-        m_mapVisibleLines = LinesOnScreen();
-        m_editVisibleLines = m_edit->LinesOnScreen();
-    }
+        LinesInfo lineInfo;
+        lineInfo.mapVisible = LinesOnScreen();
+        lineInfo.editVisible = m_edit->LinesOnScreen();
+        lineInfo.mapDisplay = GetDisplayLineCount();
+        lineInfo.editDisplay = m_edit->GetDisplayLineCount();
 
-    // Get the total number of displayed lines, i.e. not taking hidden lines
-    // (due to folding) into account and counting wrapped lines.
-    int GetDisplayedLineCount() const
-    {
-        return VisibleFromDocLine(GetLineCount());
+        if ( lineInfo == m_lines )
+            return false;
+
+        m_lines = lineInfo;
+        return true;
     }
 
     // Get map line at the given mouse position.
@@ -1065,7 +1067,8 @@ private:
         if ( firstLine < 0 )
             return 0;
 
-        auto const lastValid = GetDisplayedLineCount() - m_editVisibleLines;
+        auto const
+            lastValid = m_lines.editDisplay - m_lines.editVisible;
         if ( firstLine > lastValid )
             return lastValid;
 
@@ -1113,9 +1116,7 @@ private:
     // Scroll the editor to correspond to the current position in the map.
     void SyncEditPosition()
     {
-        auto const totalLines = GetDisplayedLineCount();
-
-        if ( m_editVisibleLines >= totalLines )
+        if ( m_lines.editVisible >= m_lines.editDisplay )
         {
             SetEditFirstVisibleLine(0);
             return;
@@ -1125,8 +1126,9 @@ private:
         (
             wxMulDivInt32
             (
-                GetFirstVisibleLine(), totalLines - m_editVisibleLines,
-                totalLines - m_mapVisibleLines
+                GetFirstVisibleLine(),
+                m_lines.editDisplay - m_lines.editVisible,
+                m_lines.mapDisplay - m_lines.mapVisible
             )
         );
     }
@@ -1135,8 +1137,7 @@ private:
     void SyncMapPosition()
     {
         // First check for the special case when all lines are visible.
-        auto const totalLines = GetDisplayedLineCount();
-        if ( m_editVisibleLines >= totalLines )
+        if ( m_lines.editVisible >= m_lines.editDisplay )
         {
             SetMapFirstVisibleLine(0);
             return;
@@ -1146,8 +1147,9 @@ private:
         (
             wxMulDivInt32
             (
-                m_edit->GetFirstVisibleLine(), totalLines - m_mapVisibleLines,
-                totalLines - m_editVisibleLines
+                m_edit->GetFirstVisibleLine(),
+                m_lines.mapDisplay - m_lines.mapVisible,
+                m_lines.editDisplay - m_lines.editVisible
             )
         );
 
@@ -1179,7 +1181,7 @@ private:
                 0,
                 GetThumbTopPos(),
                 GetClientSize().GetWidth(),
-                m_editVisibleLines * m_mapLineHeight
+                m_lines.editVisible * m_mapLineHeight
            );
     }
 
@@ -1239,7 +1241,7 @@ private:
         auto const editorFirst = m_edit->GetFirstVisibleLine();
 
         // If the line is in the visible zone indicator, start dragging it.
-        if ( line >= editorFirst && line < editorFirst + m_editVisibleLines )
+        if ( line >= editorFirst && line < editorFirst + m_lines.editVisible )
         {
             StartDragging(posMouse);
             return;
@@ -1248,7 +1250,7 @@ private:
         // The clicked line becomes the center of the visible zone indicator.
         // unless it's too close to the top or bottom of the map.
         auto const
-            editorNew = GetEditValidFirstLine(line - (m_editVisibleLines + 1) / 2);
+            editorNew = GetEditValidFirstLine(line - (m_lines.editVisible + 1) / 2);
 
         if ( editorNew != editorFirst )
         {
@@ -1295,7 +1297,7 @@ private:
             thumbTopPos = 0;
 
         auto const lastValidThumbTopPos =
-            GetClientSize().y - m_editVisibleLines * m_mapLineHeight;
+            GetClientSize().y - m_lines.editVisible * m_mapLineHeight;
         if ( thumbTopPos > lastValidThumbTopPos )
             thumbTopPos = lastValidThumbTopPos;
 
@@ -1304,14 +1306,13 @@ private:
         // mapFirst = α * editorFirst, we can compute the new editor first
         // line as thumbTopPos / ((1 - α) * mapLineHeight) or the map first
         // line as thumbTopPos / ((1/α - 1) * mapLineHeight).
-        auto const totalLines = GetDisplayedLineCount();
-
         SetEditFirstVisibleLine
         (
             wxMulDivInt32
             (
-                thumbTopPos, totalLines - m_editVisibleLines,
-                (m_mapVisibleLines - m_editVisibleLines) * m_mapLineHeight
+                thumbTopPos,
+                m_lines.editDisplay - m_lines.editVisible,
+                (m_lines.mapVisible - m_lines.editVisible) * m_mapLineHeight
             )
         );
 
@@ -1319,8 +1320,9 @@ private:
         (
             wxMulDivInt32
             (
-                thumbTopPos, totalLines - m_mapVisibleLines,
-                (m_mapVisibleLines - m_editVisibleLines) * m_mapLineHeight
+                thumbTopPos,
+                m_lines.mapDisplay - m_lines.mapVisible,
+                (m_lines.mapVisible - m_lines.editVisible) * m_mapLineHeight
             )
         );
 
@@ -1359,12 +1361,49 @@ private:
     // the control.
     int m_mapLineHeight = 0;
 
-    // These values change only when the window size changes and correspond to
-    // the returned value of the corresponding wxStyledTextCtrl functions, we
-    // store them only for performance reasons, see UpdateCachedValues().
+    // The values in this struct change when the window size changes and, for
+    // the display line count, may also change later when wrapping is enabled
+    // as Scintilla re-wraps lines during idle time.
+    struct LinesInfo
+    {
+        // Number of lines visible in the map.
+        int mapVisible = 0;
 
-    int m_mapVisibleLines = 0; // Number of lines visible in the map.
-    int m_editVisibleLines = 0; // Number of lines visible in the editor.
+        // Number of lines visible in the editor.
+        int editVisible = 0;
+
+        // Total number of physical lines in the map.
+        int mapDisplay = 0;
+
+        // Total number of physical lines in the editor.
+        int editDisplay = 0;
+
+        LinesInfo() = default;
+        LinesInfo(const LinesInfo& other) = default;
+        LinesInfo& operator=(const LinesInfo& other) = default;
+
+        bool operator==(const LinesInfo& rhs) const
+        {
+            return mapVisible == rhs.mapVisible &&
+                   editVisible == rhs.editVisible &&
+                   mapDisplay == rhs.mapDisplay &&
+                   editDisplay == rhs.editDisplay;
+        }
+
+        bool operator!=(const LinesInfo& rhs) const
+        {
+            return !(*this == rhs);
+        }
+
+        wxString Dump() const
+        {
+            return wxString::Format
+                   (
+                    "map/edit visible: %d/%d, map/edit physical: %d/%d",
+                    mapVisible, editVisible, mapDisplay, editDisplay
+                   );
+        }
+    } m_lines;
 
     // Flag set to true to indicate that the editor or map is scrolled by us
     // and so shouldn't result in matching changes of the other window.
