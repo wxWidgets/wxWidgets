@@ -2193,6 +2193,12 @@ bool wxDateTimeHolidayAuthority::IsHoliday(const wxDateTime& dt)
     {
         if ( ms_authorities[n]->DoIsHoliday(dt) )
         {
+            // DoIsHoliday() and DoGetHolidaysInRange() may have implementations
+            // completely independent of each other, but it would be nice if both
+            // consider the same days to be holidays.
+            wxDateTimeArray hol;
+            wxASSERT( ms_authorities[n]->DoGetHolidaysInRange(dt, dt, hol) == 1
+                      && hol.Last() == dt );
             return true;
         }
     }
@@ -2221,6 +2227,14 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
     for ( size_t nAuth = 0; nAuth < countAuth; nAuth++ )
     {
         ms_authorities[nAuth]->DoGetHolidaysInRange(dtStart, dtEnd, hol);
+
+        // DoIsHoliday() and DoGetHolidaysInRange() may have implementations
+        // completely independent of each other, but it would be nice if both
+        // consider the same days to be holidays.
+        for ( size_t n = 0; n < hol.size(); ++n )
+        {
+            wxASSERT( ms_authorities[nAuth]->DoIsHoliday(hol[n]) );
+        }
 
         WX_APPEND_ARRAY(holidays, hol);
     }
