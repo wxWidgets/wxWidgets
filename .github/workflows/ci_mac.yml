@@ -104,6 +104,14 @@ jobs:
           skip_samples: true
           skip_testing: true
           allow_warnings: true
+        - name: wxiOS Simulator on Silicon Mac
+          runner: macos-15
+          arch: arm64
+          configure_flags: --with-iphonesimulator --enable-monolithic --disable-shared --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path) --host=aarch64-apple-darwin24.6.0 --build=aarch64-apple-darwin --without-libtiff
+          xcode_sdk: iphonesimulator
+          skip_samples: true
+          skip_testing: true
+          allow_warnings: true
 
     env:
       wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
