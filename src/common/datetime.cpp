@@ -2299,6 +2299,7 @@ std::vector<wxDateTime> wxDateTimeUSCatholicFeasts::m_holyDaysOfObligation =
     { wxDateTime(25, wxDateTime::Month::Dec, 0) }  // Christmas
 };
 
+/* static */
 wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
 {
     // Adjust for miscalculation in Gauss formula
@@ -2372,6 +2373,44 @@ wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
     }
 }
 
+/* static */
+wxDateTime wxDateTimeUSCatholicFeasts::GetThursdayAscension(int year)
+{
+    const wxDateTime ascension = GetEaster(year) + wxDateSpan::Days(39);
+    wxASSERT_MSG(
+        ascension.GetWeekDay() == wxDateTime::WeekDay::Thu,
+        "Error in Ascension calculation!");
+    return ascension;
+}
+
+/* static */
+wxDateTime wxDateTimeUSCatholicFeasts::GetSundayAscension(int year)
+{
+    const wxDateTime ascension = GetEaster(year) + wxDateSpan::Weeks(6);
+    wxASSERT_MSG(
+        ascension.GetWeekDay() == wxDateTime::WeekDay::Sun,
+        "Error in Ascension calculation!");
+    return ascension;
+}
+
+bool wxDateTimeUSCatholicFeasts::DoIsHoliday(const wxDateTime& dt) const
+{
+    if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+        dt.IsSameDate(GetThursdayAscension(dt.GetYear())) )
+    {
+        return true;
+    }
+    for (const auto& feast : m_holyDaysOfObligation)
+    {
+        if (feast.GetMonth() == dt.GetMonth() &&
+            feast.GetDay() == dt.GetDay())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStart,
                                                         const wxDateTime& dtEnd,
                                                         wxDateTimeArray& holidays) const
@@ -2392,6 +2431,16 @@ size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStar
 // ----------------------------------------------------------------------------
 // wxDateTimeChristianHolidays
 // ----------------------------------------------------------------------------
+
+bool wxDateTimeChristianHolidays::DoIsHoliday(const wxDateTime& dt) const
+{
+    if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+        (dt.GetMonth() == wxDateTime::Month::Dec && dt.GetDay() == 25))
+    {
+        return true;
+    }
+    return false;
+}
 
 // ============================================================================
 // other helper functions
