@@ -21,6 +21,13 @@ enum wxSVGShapeRenderingMode
     wxSVG_SHAPE_RENDERING_OPTIMISE_SPEED = wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED
 };
 
+/**
+    Value indicating the default dpi resolution of wxSVGFileDC.
+
+    @since 3.3.2
+ */
+constexpr double wxSVG_DEFAULT_DPI = 72.0;
+
 
 /**
     @class wxSVGFileDC
@@ -59,10 +66,24 @@ public:
     /**
         Initializes a wxSVGFileDC with the given @a filename, @a width and
         @a height at @a dpi resolution, and an optional @a title.
+
         The title provides a readable name for the SVG document.
+        The filename is allowed to be empty, in which case no SVG file will be written.
     */
     wxSVGFileDC(const wxString& filename, int width = 320, int height = 240,
-                double dpi = 72, const wxString& title = wxString());
+                double dpi = wxSVG_DEFAULT_DPI, const wxString& title = wxString());
+
+    /**
+        Initializes a wxSVGFileDC with the given @a size, an optional @a filename,
+        an optional @a title, and an optional @a dpi resolution.
+
+        The title provides a readable name for the SVG document.
+        The filename is allowed to be empty, in which case no SVG file will be written.
+
+        @since 3.3.2
+    */
+    wxSVGFileDC(const wxSize size, const wxString& filename = wxString(),
+                const wxString& title = wxString(), double dpi = wxSVG_DEFAULT_DPI);
 
     /**
         Draws a rectangle the size of the SVG using the wxDC::SetBackground() brush.

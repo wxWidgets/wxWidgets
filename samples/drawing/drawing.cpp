@@ -2791,13 +2791,13 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             m_canvas->UseGraphicRenderer(nullptr);
 #endif
             wxSize svgSize;
-            wxSVGFileDC tempSvgDC("", svgSize.x, svgSize.y, 72, "Drawing sample");
+            wxSVGFileDC tempSvgDC(svgSize);
             m_canvas->Draw(tempSvgDC);
 
             svgSize = wxSize(tempSvgDC.MaxX(), tempSvgDC.MaxY());
             svgSize.IncBy(15); // account for wxPen width exceeding bounds
 
-            wxSVGFileDC svgDC(dlg.GetPath(), svgSize.x, svgSize.y, 72, "Drawing sample");
+            wxSVGFileDC svgDC(svgSize, dlg.GetPath(), "Drawing sample");
             svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
             m_canvas->Draw(svgDC);
 #if wxUSE_GRAPHICS_CONTEXT

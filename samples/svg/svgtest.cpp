@@ -236,13 +236,13 @@ MyPage::MyPage(wxNotebook *parent, int index)
 bool MyPage::OnSave(const wxString& filename)
 {
     wxSize svgSize;
-    wxSVGFileDC tempSvgDC("", svgSize.x, svgSize.y, 72, pageNames[m_index]);
+    wxSVGFileDC tempSvgDC(svgSize);
     OnDraw(tempSvgDC);
 
     svgSize = wxSize(tempSvgDC.MaxX(), tempSvgDC.MaxY());
     svgSize.IncBy(15); // account for wxPen width exceeding bounds
 
-    wxSVGFileDC svgDC(filename, svgSize.x, svgSize.y, 72, pageNames[m_index]);
+    wxSVGFileDC svgDC(svgSize, filename, pageNames[m_index]);
     svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
     OnDraw(svgDC);
 
