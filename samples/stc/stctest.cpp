@@ -956,12 +956,36 @@ public:
 
         // And also when the height changes.
         edit->Bind(wxEVT_SIZE, [this](wxSizeEvent& event) {
-            UpdateLineInfo();
-
-            wxLogTrace(wxTRACE_STC_MAP, "After resize: %s",
+            wxLogTrace(wxTRACE_STC_MAP,
+                       "Edit resized to %dx%d, line info: %s",
+                       event.GetSize().x, event.GetSize().y,
                        m_lines.Dump());
 
-            SyncMapPosition();
+            // We try to update the map immediately as we may not need to do
+            // anything else, but we need to also handle the number of
+            // displayed lines changing later due to wrapping performed in the
+            // background by Scintilla, so we also do it from wxEVT_PAINT
+            // handler below.
+            if ( UpdateLineInfo() )
+            {
+                wxLogTrace(wxTRACE_STC_MAP, "Sync map from size: %s",
+                           m_lines.Dump());
+                SyncMapPosition();
+            }
+
+            event.Skip();
+        });
+
+        edit->Bind(wxEVT_PAINT, [this](wxPaintEvent& event) {
+            // The number of displayed lines may have changed due to
+            // rewrapping, in which case we need to update the map.
+            if ( UpdateLineInfo() )
+            {
+                wxLogTrace(wxTRACE_STC_MAP, "Sync map from paint: %s",
+                            m_lines.Dump());
+                SyncMapPosition();
+            }
+
             event.Skip();
         });
 
@@ -1109,9 +1133,9 @@ private:
     // mapped to the last valid position of the thumb, which is thumb size
     // less than the map height, giving
     //
-    //              totalLines - mapVisibleLines
-    //         α = -------------------------------
-    //             totalLines - editorVisibleLines
+    //              mapTotalLines - mapVisibleLines
+    //         α = ---------------------------------
+    //             editTotalLines - editVisibleLines
 
     // Scroll the editor to correspond to the current position in the map.
     void SyncEditPosition()
@@ -1156,13 +1180,42 @@ private:
         Refresh();
     }
 
-    // Thumb starts at the first line shown in the editor and is offset from
-    // the top of the map window by the number of lines between it and the
-    // first line shown in the map, multiplied by the height of one line.
-    int GetThumbTopPos() const
+    struct ThumbInfo
     {
-        return (m_edit->GetFirstVisibleLine() - GetFirstVisibleLine())
-                * m_mapLineHeight;
+        int pos = 0;    // Position of the top of the thumb in pixels.
+        int height = 0; // Height of the thumb in pixels.
+    };
+
+    // Get the current thumb position and height.
+    ThumbInfo GetThumbInfo() const
+    {
+        ThumbInfo thumb;
+
+        // Thumb starts at the first line shown in the editor and is offset
+        // from the top of the map window by the number of lines between it and
+        // the first line shown in the map, multiplied by the height of one
+        // line. In the trivial case when display and physical lines are the
+        // same, this would be just the difference between the visible lines in
+        // the editor and the map respectively, but in the general case we need
+        // to convert the editor visible line to the document line first and
+        // then convert it to the map visible line.
+        auto const editorFirst = m_edit->GetFirstVisibleLine();
+        auto const docFirst = m_edit->DocLineFromVisible(editorFirst);
+        auto const mapThumbFirst = VisibleFromDocLine(docFirst);
+
+        thumb.pos = (mapThumbFirst - GetFirstVisibleLine()) * m_mapLineHeight;
+
+        // Thumb size is the number of display lines in the map corresponding
+        // to the lines shown in the editor (in the trivial case when display
+        // and physical lines are the same, this is just the number of the
+        // lines shown in the editor) multiplied by the height of one line.
+        auto const editorLast = editorFirst + m_lines.editVisible;
+        auto const docLast = m_edit->DocLineFromVisible(editorLast);
+        auto const mapThumbLast = VisibleFromDocLine(docLast);
+
+        thumb.height = (mapThumbLast - mapThumbFirst) * m_mapLineHeight;
+
+        return thumb;
     }
 
     void DrawVisibleZone(wxDC& dc)
@@ -1174,15 +1227,8 @@ private:
         dc.SetBrush(wxColour(0x80, 0x80, 0x80, IsDragging() ? 0x80 : 0x40));
         dc.SetPen(*wxTRANSPARENT_PEN);
 
-        // Height of the highlight is proportional to the height of the visible
-        // part of the editor.
-        dc.DrawRectangle
-           (
-                0,
-                GetThumbTopPos(),
-                GetClientSize().GetWidth(),
-                m_lines.editVisible * m_mapLineHeight
-           );
+        auto const thumb = GetThumbInfo();
+        dc.DrawRectangle(0, thumb.pos, GetClientSize().x, thumb.height);
     }
 
     // Show the same selection in the map as in the editor.
@@ -1236,12 +1282,20 @@ private:
     void HandleMouseClick(wxMouseEvent& event)
     {
         auto const posMouse = event.GetPosition();
-        auto const line = GetDocLineAtMapPoint(posMouse);
+        auto const docLine = GetDocLineAtMapPoint(posMouse);
+        auto const editorLine = m_edit->VisibleFromDocLine(docLine);
+
+        wxLogTrace(wxTRACE_STC_MAP, "Clicked doc/editor line %d/%d",
+                   docLine, editorLine);
 
         auto const editorFirst = m_edit->GetFirstVisibleLine();
+        auto const docFirst = m_edit->DocLineFromVisible(editorFirst);
+
+        auto const editorLast = editorFirst + m_lines.editVisible;
+        auto const docLast = m_edit->DocLineFromVisible(editorLast);
 
         // If the line is in the visible zone indicator, start dragging it.
-        if ( line >= editorFirst && line < editorFirst + m_lines.editVisible )
+        if ( docLine >= docFirst && docLine < docLast )
         {
             StartDragging(posMouse);
             return;
@@ -1250,7 +1304,7 @@ private:
         // The clicked line becomes the center of the visible zone indicator.
         // unless it's too close to the top or bottom of the map.
         auto const
-            editorNew = GetEditValidFirstLine(line - (m_lines.editVisible + 1) / 2);
+            editorNew = GetEditValidFirstLine(editorLine - m_lines.editVisible / 2);
 
         if ( editorNew != editorFirst )
         {
@@ -1268,7 +1322,8 @@ private:
     {
         m_isDragging = true;
 
-        m_dragOffset = pos.y - GetThumbTopPos();
+        auto const thumb = GetThumbInfo();
+        m_dragOffset = pos.y - (thumb.pos + thumb.height / 2);
         wxLogTrace(wxTRACE_STC_MAP, "Start dragging at thumb offset %d",
                    m_dragOffset);
 
@@ -1287,44 +1342,82 @@ private:
     }
 
     // Called while dragging the visible zone indicator.
-    void DoDrag(const wxPoint& pos)
+    void DoDrag(wxPoint pos)
     {
-        // We want the thumb to follow the mouse when dragging, i.e. its top
+        // We want the thumb to follow the mouse when dragging, i.e. its middle
         // must remain at the same distance from the mouse pointer as it was
-        // when the dragging started, but it must also remain valid.
-        auto thumbTopPos = pos.y - m_dragOffset;
-        if ( thumbTopPos < 0 )
-            thumbTopPos = 0;
+        // when the dragging started.
+        pos.y -= m_dragOffset;
 
-        auto const lastValidThumbTopPos =
-            GetClientSize().y - m_lines.editVisible * m_mapLineHeight;
-        if ( thumbTopPos > lastValidThumbTopPos )
-            thumbTopPos = lastValidThumbTopPos;
+        // We need to find the editor first line such that the thumb will be
+        // positioned with its middle at pos.y but the trouble is that we can't
+        // invert the GetThumbInfo() calculation easily as conversion between
+        // document and display lines is not reversible. So we just estimate it.
+        const int lineMiddle = (pos.y + m_mapLineHeight - 1) / m_mapLineHeight;
 
+        int editorNew = lineMiddle - m_lines.editVisible / 2;
+        if ( editorNew < 0 )
+        {
+            editorNew = 0;
+        }
+        else
+        {
+            // This divides it by 1-α
+            auto const editMax = m_lines.editDisplay - m_lines.editVisible;
+            auto const mapMax = m_lines.mapDisplay - m_lines.mapVisible;
 
-        // As the thumb top is (editorFirst - mapFirst)*mapLineHeight and
-        // mapFirst = α * editorFirst, we can compute the new editor first
-        // line as thumbTopPos / ((1 - α) * mapLineHeight) or the map first
-        // line as thumbTopPos / ((1/α - 1) * mapLineHeight).
-        SetEditFirstVisibleLine
-        (
-            wxMulDivInt32
-            (
-                thumbTopPos,
-                m_lines.editDisplay - m_lines.editVisible,
-                (m_lines.mapVisible - m_lines.editVisible) * m_mapLineHeight
-            )
-        );
+            editorNew = wxMulDivInt32(editorNew, editMax, editMax - mapMax);
 
-        SetMapFirstVisibleLine
-        (
-            wxMulDivInt32
-            (
-                thumbTopPos,
-                m_lines.mapDisplay - m_lines.mapVisible,
-                (m_lines.mapVisible - m_lines.editVisible) * m_mapLineHeight
-            )
-        );
+            wxLogTrace(wxTRACE_STC_MAP, "Dragging: initial estimate=%d",
+                       editorNew);
+
+            // Adjust until the actual position of the middle of the thumb if
+            // this were the first visible line in the editor becomes close to
+            // the desired position.
+            for ( ;; )
+            {
+                // This would be the first visible line in the map.
+                auto const mapNew = wxMulDivInt32(editorNew, mapMax, editMax);
+
+                // This is similar to the code in GetThumbInfo() but uses the
+                // given line instead of the first currently visible one.
+                auto const docFirst = m_edit->DocLineFromVisible(editorNew);
+                auto const thumbFirst = VisibleFromDocLine(docFirst);
+                auto const docLast = m_edit->DocLineFromVisible(editorNew + m_lines.editVisible);
+                auto const thumbLast = VisibleFromDocLine(docLast);
+
+                // Compare where the thumb would be with where we want it to
+                // be and adjust the first line accordingly, if possible.
+                auto const thumbMiddle = (thumbFirst + thumbLast) / 2 - mapNew;
+                if ( thumbMiddle < lineMiddle )
+                {
+                    if ( editorNew >= editMax )
+                        break;
+
+                    ++editorNew;
+                }
+                else if ( thumbMiddle > lineMiddle )
+                {
+                    if ( editorNew <= 0 )
+                        break;
+
+                    --editorNew;
+                }
+                else // thumbMiddle == lineMiddle
+                {
+                    break;
+                }
+            }
+
+            wxLogTrace(wxTRACE_STC_MAP, "Dragging: final line=%d",
+                       editorNew);
+        }
+
+        if ( editorNew == m_edit->GetFirstVisibleLine() )
+            return;
+
+        SetEditFirstVisibleLine(editorNew);
+        SyncMapPosition();
 
         wxOverlayDC dc(m_overlay, this);
         dc.Clear();
@@ -1353,8 +1446,8 @@ private:
     // Overlay showing the visible zone indicator being dragged.
     wxOverlay m_overlay;
 
-    // The constant vertical offset between the mouse pointer and the thumb top
-    // while dragging. Only valid if m_isDragging is true.
+    // The constant vertical offset between the mouse pointer and the middle of
+    // the thumb while dragging. Only valid if m_isDragging is true.
     int m_dragOffset = 0;
 
     // Height of a single line in the map: this value is cached when creating
