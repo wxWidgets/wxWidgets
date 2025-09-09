@@ -82,7 +82,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     }
 
     if (sz.IsFullySpecified())
-    SetMinSize( sz );
+        SetMinSize( sz );
 
     m_dialogStyle = style;
     m_value = value;
@@ -120,7 +120,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     SetSizer( topsizer );
 
     if (sz.IsFullySpecified())
-    topsizer->Fit( this );
+        topsizer->Fit( this );
     else
         topsizer->SetSizeHints( this );
 
