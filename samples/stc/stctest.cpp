@@ -1018,6 +1018,10 @@ public:
             }
         });
 
+        // Note that the line index doesn't matter, as the height is the same
+        // for all of them.
+        m_mapLineHeight = TextHeight(0);
+
         UpdateCachedValues();
         SyncMapPosition();
         SyncSelection();
@@ -1037,10 +1041,6 @@ private:
     // update them.
     void UpdateCachedValues()
     {
-        // Note that the line index doesn't matter, as the height is the same
-        // for all of them.
-        m_mapLineHeight = TextHeight(0);
-
         m_mapVisibleLines = LinesOnScreen();
         m_editVisibleLines = m_edit->LinesOnScreen();
     }
@@ -1355,11 +1355,14 @@ private:
     // while dragging. Only valid if m_isDragging is true.
     int m_dragOffset = 0;
 
+    // Height of a single line in the map: this value is cached when creating
+    // the control.
+    int m_mapLineHeight = 0;
+
     // These values change only when the window size changes and correspond to
     // the returned value of the corresponding wxStyledTextCtrl functions, we
     // store them only for performance reasons, see UpdateCachedValues().
 
-    int m_mapLineHeight = 0; // Height of a single line in the map.
     int m_mapVisibleLines = 0; // Number of lines visible in the map.
     int m_editVisibleLines = 0; // Number of lines visible in the editor.
 
