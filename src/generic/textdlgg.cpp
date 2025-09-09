@@ -99,7 +99,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
         style |= wxTE_RICH2;
 
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
-                                wxDefaultPosition, wxSize(300, wxDefaultCoord),
+                                wxDefaultPosition, wxSize(FromDIP(300), wxDefaultCoord),
                                 style & ~wxTextEntryDialogStyle);
 
     topsizer->Add(m_textctrl,
