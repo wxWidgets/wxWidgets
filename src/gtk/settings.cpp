@@ -764,6 +764,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         }
         wxFALLTHROUGH;
 #endif
+    case wxSYS_COLOUR_GRIDLINES:
     case wxSYS_COLOUR_3DLIGHT:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:

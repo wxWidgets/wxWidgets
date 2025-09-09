@@ -80,6 +80,7 @@ enum wxSystemColour
     wxSYS_COLOUR_MENUBAR,
     wxSYS_COLOUR_LISTBOXTEXT,
     wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT,
+    wxSYS_COLOUR_GRIDLINES,
 
     wxSYS_COLOUR_MAX,
 
@@ -91,6 +92,7 @@ enum wxSystemColour
     wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
     wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
     wxSYS_COLOUR_FRAMEBK = wxSYS_COLOUR_BTNFACE
+    
 };
 
 // possible values for wxSystemSettings::GetMetric() index parameter

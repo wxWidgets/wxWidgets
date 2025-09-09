@@ -115,7 +115,13 @@ enum wxSystemColour
      */
     wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT,
 
-
+    /**
+        On macOS, this maps to [NSColor gridLines], on other platforms
+        it's mapped to wxSYS_COLOUR_BTNFACE
+        @since 3.3
+     */
+    wxSYS_COLOUR_GRIDLINES,
+    
     // synonyms:
 
     wxSYS_COLOUR_BACKGROUND = wxSYS_COLOUR_DESKTOP,
