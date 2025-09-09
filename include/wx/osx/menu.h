@@ -72,7 +72,7 @@ public:
     virtual void Attach(wxMenuBarBase *menubar) wxOVERRIDE;
 #endif
 
-    void SetupBitmaps();
+    void SetupBitmaps(); //unused
 
 protected:
     // hide special menu items like exit, preferences etc
@@ -172,7 +172,7 @@ public:
     static wxMenuBar* MacGetCommonMenuBar() { return s_macCommonMenuBar; }
 
     virtual void Attach(wxFrame *frame) wxOVERRIDE;
-    void SetupBitmaps();
+    void SetupBitmaps(); // unused
 
 
     static WXHMENU MacGetWindowMenuHMenu() { return s_macWindowMenuHandle ; }
