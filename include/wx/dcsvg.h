@@ -23,6 +23,7 @@
 #if WXWIN_COMPATIBILITY_3_2
 #define wxSVGVersion wxT("v0101")
 #endif
+constexpr double wxSVG_DEFAULT_DPI = 72.0;
 
 enum wxSVGShapeRenderingMode
 {
@@ -90,7 +91,7 @@ class WXDLLIMPEXP_CORE wxSVGFileDCImpl : public wxDCImpl
 {
 public:
     wxSVGFileDCImpl(wxSVGFileDC* owner, const wxString& filename,
-                    int width = 320, int height = 240, double dpi = 72.0,
+                    int width = 320, int height = 240, double dpi = wxSVG_DEFAULT_DPI,
                     const wxString& title = wxString());
 
     virtual ~wxSVGFileDCImpl();
@@ -301,9 +302,17 @@ public:
     wxSVGFileDC(const wxString& filename,
                 int width = 320,
                 int height = 240,
-                double dpi = 72.0,
+                double dpi = wxSVG_DEFAULT_DPI,
                 const wxString& title = wxString())
         : wxDC(new wxSVGFileDCImpl(this, filename, width, height, dpi, title))
+    {
+    }
+
+    wxSVGFileDC(const wxSize size,
+                const wxString& filename = wxString(),
+                const wxString& title = wxString(),
+                double dpi = wxSVG_DEFAULT_DPI)
+        : wxDC(new wxSVGFileDCImpl(this, filename, size.x, size.y, dpi, title))
     {
     }
 
