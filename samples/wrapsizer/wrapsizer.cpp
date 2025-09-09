@@ -126,11 +126,11 @@ WrapSizerFrame::WrapSizerFrame()
         "This is very long text that will wrap. This is very long text that will wrap. This is very long text that will wrap.",
         wxDefaultPosition, wxDefaultSize, wxST_WRAP
     ));
-    // A long wxStaticText that does not wraps 
+    // A long wxStaticText that does not wrap
     sizerRoot->Add( new wxStaticText( m_panel, -1,
-        "This is very text that will not wrap. This is long text that will not wrap."
+        "This is long text that will not wrap. This is long text that will not wrap."
     ));
-    // A long wxStaticText that does not wraps at 150px
+    // A long wxStaticText that wraps at 150px
     wxStaticText *stattext = new wxStaticText( m_panel, -1, "This is very long text that will wrap at 150x. This is very long text that will wrap at 150px." );
     stattext->Wrap( 150 );
     sizerRoot->Add(  stattext );

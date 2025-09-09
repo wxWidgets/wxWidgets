@@ -217,11 +217,11 @@ void wxStaticTextBase::Wrap(int width)
     m_currentWrap = width;
 
     // Allow for repeated calls to Wrap with different values
-    if (m_unwrappedLabel.empty()) 
+    if (m_unwrappedLabel.empty())
     {
         m_unwrappedLabel = GetLabel();
-    } 
-    else 
+    }
+    else
     {
         SetLabel( m_unwrappedLabel );
     }

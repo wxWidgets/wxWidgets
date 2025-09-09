@@ -343,7 +343,7 @@ public:
         only example is a @ref wxWrapSizer which can stretch in
         either direction. The methods returns the smallest possible
         size that this sizer can be shrunk to, e.g. the width of a single
-        control. 
+        control.
 
         @since 3.3.2
 

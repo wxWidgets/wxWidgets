@@ -77,7 +77,7 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // display.
     void UpdateLabel();
 
-    // save unwrapped label to allow to call Wrap() several times and 
+    // save unwrapped label to allow to call Wrap() several times and
     // always starting from the original, unwrapped label
     wxString m_unwrappedLabel;
 

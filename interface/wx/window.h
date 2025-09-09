@@ -1407,8 +1407,8 @@ public:
         a main or first direction (see below). The typical and almost
         only example is a multi-line wxStaticText which can stretch in
         either direction. The methods returns the smallest possible
-        size that this control can be shrunk to, e.g. a single word 
-        for a text control. 
+        size that this control can be shrunk to, e.g. a single word
+        for a text control.
 
         @since 3.3.2
 
