@@ -81,7 +81,8 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
         return false;
     }
 
-    SetMinSize( sz );
+    if (sz.IsFullySpecified())
+        SetMinSize( sz );
 
     m_dialogStyle = style;
     m_value = value;
@@ -98,7 +99,7 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
         style |= wxTE_RICH2;
 
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
-                                wxDefaultPosition, wxSize(300, wxDefaultCoord),
+                                wxDefaultPosition, wxSize(FromDIP(300), wxDefaultCoord),
                                 style & ~wxTextEntryDialogStyle);
 
     topsizer->Add(m_textctrl,
@@ -106,16 +107,22 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
                     Expand().
                     TripleBorder(wxLEFT | wxRIGHT));
 
-    // 3) buttons if any
+    // 3) buttons, if any, and a spacer to force them down to the bottom
+    // when single-line dialog is resized
     wxSizer *buttonSizer = CreateSeparatedButtonSizer(style & (wxOK | wxCANCEL));
     if ( buttonSizer )
     {
+        if ((style & wxTE_MULTILINE) == 0)
+            topsizer->AddStretchSpacer();
         topsizer->Add(buttonSizer, wxSizerFlags().Expand().DoubleBorder());
     }
 
     SetSizer( topsizer );
 
-    topsizer->Fit( this );
+    if (sz.IsFullySpecified())
+        topsizer->Fit( this );
+    else
+        topsizer->SetSizeHints( this );
 
     if ( style & wxCENTRE )
         Centre( wxBOTH );
