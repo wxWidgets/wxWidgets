@@ -410,7 +410,7 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
                 hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:after];
             }
             symbolPosition = (hasSpace)
-                           ? wxCurrencySymbolPosition::PrefixWithSep;
+                           ? wxCurrencySymbolPosition::PrefixWithSep
                            : wxCurrencySymbolPosition::PrefixNoSep;
         }
         else
@@ -422,7 +422,7 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
                 hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:before];
             }
             symbolPosition = (hasSpace)
-                           ? wxCurrencySymbolPosition::SuffixWithSep;
+                           ? wxCurrencySymbolPosition::SuffixWithSep
                            : wxCurrencySymbolPosition::SuffixNoSep;
         }
     }
@@ -431,7 +431,7 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
 }
 
 wxLocaleNumberFormatting
-DoGetNumberFormatting(wxLocaleCategory cat) const
+wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
 {
     NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
     formatter.locale = m_nsloc;
