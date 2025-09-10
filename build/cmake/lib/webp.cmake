@@ -9,6 +9,7 @@
 
 if(wxUSE_LIBWEBP STREQUAL "sys")
     find_package(WebP)
+    mark_as_advanced(WebP_DIR)
     if(NOT WebP_FOUND)
         # If the sys library can not be found use builtin
         wx_option_force_value(wxUSE_LIBWEBP builtin)

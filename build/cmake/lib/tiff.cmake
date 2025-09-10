@@ -9,6 +9,7 @@
 
 if(wxUSE_LIBTIFF STREQUAL "sys")
     find_package(TIFF)
+    mark_as_advanced(Tiff_DIR)
     if(NOT TIFF_FOUND)
         # If the sys library can not be found use builtin
         wx_option_force_value(wxUSE_LIBTIFF builtin)
