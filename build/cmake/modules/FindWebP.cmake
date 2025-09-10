@@ -6,3 +6,6 @@ if(NOT WebP_FOUND)
         pkg_check_modules(WebP libwebp)
     endif()
 endif()
+
+set(WebP_LIBRARIES ${WebP_LIBRARIES} PARENT_SCOPE)
+set(WebP_INCLUDE_DIRS ${WebP_INCLUDE_DIRS} PARENT_SCOPE)
