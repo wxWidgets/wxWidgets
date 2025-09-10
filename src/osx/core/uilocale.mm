@@ -363,27 +363,27 @@ wxUILocaleImplCF::GetLayoutDirection() const
 }
 
 wxLocaleNumberFormatting
-wxUILocaleImplCF::GetNumberFormatting() const override
+wxUILocaleImplCF::GetNumberFormatting() const
 {
     return DoGetNumberFormatting(wxLOCALE_CAT_NUMBER);
 }
 
 wxString
-wxUILocaleImplCF::GetCurrencySymbol() const override
+wxUILocaleImplCF::GetCurrencySymbol() const
 {
     NSString* str = [m_nsloc currencySymbol];
     return wxCFStringRef::AsString(str);
 }
 
 wxString
-wxUILocaleImplCF::GetCurrencyCode() const override
+wxUILocaleImplCF::GetCurrencyCode() const
 {
     NSString* str = [m_nsloc currencyCode];
     return wxCFStringRef::AsString(str);
 }
 
 wxCurrencySymbolPosition
-wxUILocaleImplCF::GetCurrencySymbolPosition() const override
+wxUILocaleImplCF::GetCurrencySymbolPosition() const
 {
     wxCurrencySymbolPosition symbolPosition = wxCurrencySymbolPosition::PrefixWithSep;
 
@@ -459,7 +459,7 @@ DoGetNumberFormatting(wxLocaleCategory cat) const
 }
 
 wxLocaleCurrencyInfo
-wxUILocaleImplCF::GetCurrencyInfo() const override
+wxUILocaleImplCF::GetCurrencyInfo() const
 {
     wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
     return wxLocaleCurrencyInfo(
@@ -470,7 +470,7 @@ wxUILocaleImplCF::GetCurrencyInfo() const override
 }
 
 wxMeasurementSystem
-wxUILocaleImplCF::UsesMetricSystem() const override
+wxUILocaleImplCF::UsesMetricSystem() const
 {
     if ([m_nsloc respondsToSelector:@selector(usesMetricSystem)])
     {
