@@ -41,6 +41,8 @@
 #include "wx/tokenzr.h"
 #include "wx/utils.h"
 
+#include <array>
+
 #define TRACE_I18N wxS("i18n")
 
 namespace
@@ -1034,7 +1036,7 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
 #else
     groupingStr = DoGetInfoFromLocaleConv(LOCALE_CONV_GROUPING, cat);
 #endif
-    groupingStr = GenerateGroupingString(grouping);
+    groupingStr = GenerateGroupingString(groupingStr);
 
     wxString decimalSeparator;
 #if defined(HAVE_LANGINFO_H) && defined(__GLIBC__)
@@ -1048,7 +1050,7 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
     #endif
     decimalSeparator = wxString(decimalSep, wxCSConv(GetCodeSet()));
 #else
-    decimalSeparator = GetInfoFromLocaleConv(LOCALE_CONV_DECIMAL_POINT, cat);
+    decimalSeparator = DoGetInfoFromLocaleConv(LOCALE_CONV_DECIMAL_POINT, cat);
 #endif
 
     int fractionalDigits = 0;
@@ -1056,7 +1058,7 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
     const char* fracDigits = GetLangInfo(FRAC_DIGITS);
     fractionalDigits = fracDigits[0];
 #else
-    wxString fracDigits = GetInfoFromLocaleConv(LOCALE_CONV_DIGITS, cat);
+    wxString fracDigits = DoGetInfoFromLocaleConv(LOCALE_CONV_DIGITS, cat);
     fractionalDigits = fracDigits.GetChar(0).GetValue();
 #endif
 
