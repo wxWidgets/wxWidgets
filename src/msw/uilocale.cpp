@@ -306,27 +306,27 @@ public:
         return wxLayout_Default;
     }
 
-    wxLocaleNumberFormatting GetNumberFormatting() const
+    wxLocaleNumberFormatting GetNumberFormatting() const override
     {
         return wxLocaleNumberFormatting("", "", ".", 2);
     }
 
-    wxString GetCurrencySymbol() const
+    wxString GetCurrencySymbol() const override
     {
         return wxString("$");
     }
 
-    wxString GetCurrencyCode() const
+    wxString GetCurrencyCode() const override
     {
         return wxString("USD");
     }
 
-    wxCurrencySymbolPosition GetCurrencySymbolPosition() const
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override
     {
         return wxCurrencySymbolPosition::PrefixWithSep;
     }
 
-    wxLocaleCurrencyInfo GetCurrencyInfo() const
+    wxLocaleCurrencyInfo GetCurrencyInfo() const override
     {
         return wxLocaleCurrencyInfo(
             GetCurrencySymbol(),
@@ -335,7 +335,7 @@ public:
             GetNumberFormatting());
     }
 
-    wxMeasurementSystem UsesMetricSystem() const
+    wxMeasurementSystem UsesMetricSystem() const override
     {
         return wxMeasurementSystem::Metric;
     }

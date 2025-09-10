@@ -234,12 +234,12 @@ public:
 #endif // wxUSE_DATETIME
     wxLayoutDirection GetLayoutDirection() const override;
 
-    wxLocaleNumberFormatting GetNumberFormatting() const;
-    wxString GetCurrencySymbol() const;
-    wxString GetCurrencyCode() const;
-    wxCurrencySymbolPosition GetCurrencySymbolPosition() const;
-    wxLocaleCurrencyInfo GetCurrencyInfo() const;
-    wxMeasurementSystem UsesMetricSystem() const;
+    wxLocaleNumberFormatting GetNumberFormatting() const override;
+    wxString GetCurrencySymbol() const override;
+    wxString GetCurrencyCode() const override;
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override;
+    wxLocaleCurrencyInfo GetCurrencyInfo() const override;
+    wxMeasurementSystem UsesMetricSystem() const override;
 
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const override;
