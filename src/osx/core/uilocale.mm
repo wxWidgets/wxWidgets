@@ -31,6 +31,8 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSLocale.h>
 #import <Foundation/NSDateFormatter.h>
+#import <Foundation/NSNumber.h>
+#import <Foundation/NSNumberFormatter.h>
 
 #include "wx/osx/private/uilocale.h"
 
@@ -165,10 +167,20 @@ public:
 #endif // wxUSE_DATETIME
 
     wxLayoutDirection GetLayoutDirection() const override;
+
+    wxLocaleNumberFormatting GetNumberFormatting() const override;
+    wxString GetCurrencySymbol() const override;
+    wxString GetCurrencyCode() const override;
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override;
+    wxLocaleCurrencyInfo GetCurrencyInfo() const override;
+    wxMeasurementSystem UsesMetricSystem() const override;
+
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const override;
 
 private:
+    wxLocaleNumberFormatting DoGetNumberFormatting(wxLocaleCategory cat) const;
+
     NSLocale* const m_nsloc;
 
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplCF);
@@ -210,31 +222,7 @@ wxUILocaleImplCF::GetLocaleId() const
 wxString
 wxUILocaleImplCF::GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const
 {
-    switch (index)
-    {
-        case wxLOCALE_MEASURE_METRIC:
-            if ([m_nsloc respondsToSelector:@selector(usesMetricSystem)])
-            {
-                BOOL isMetric = [m_nsloc usesMetricSystem];
-                return (isMetric) ? wxString("Yes") : wxString("No");
-            }
-            else
-            {
-                return wxString("Unknown");
-            }
-        case wxLOCALE_CURRENCY_SYMBOL:
-        {
-            NSString* str = [m_nsloc currencySymbol];
-            return wxCFStringRef::AsString(str);
-        }
-        case wxLOCALE_CURRENCY_CODE:
-        {
-            NSString* str = [m_nsloc currencyCode];
-            return wxCFStringRef::AsString(str);
-        }
-        default:
-            return wxGetInfoFromCFLocale((CFLocaleRef)m_nsloc, index, cat);
-    }
+    return wxGetInfoFromCFLocale((CFLocaleRef)m_nsloc, index, cat);
 }
 
 wxString
@@ -371,6 +359,131 @@ wxUILocaleImplCF::GetLayoutDirection() const
     else if (layoutDirection == NSLocaleLanguageDirectionRightToLeft)
         return wxLayout_RightToLeft;
     return wxLayout_Default;
+}
+
+wxLocaleNumberFormatting
+wxUILocaleImplCF::GetNumberFormatting() const override
+{
+    return DoGetNumberFormatting(wxLOCALE_CAT_NUMBER);
+}
+
+wxString
+wxUILocaleImplCF::GetCurrencySymbol() const override
+{
+    NSString* str = [m_nsloc currencySymbol];
+    return wxCFStringRef::AsString(str);
+}
+
+wxString
+wxUILocaleImplCF::GetCurrencyCode() const override
+{
+    NSString* str = [m_nsloc currencyCode];
+    return wxCFStringRef::AsString(str);
+}
+
+wxCurrencySymbolPosition
+wxUILocaleImplCF::GetCurrencySymbolPosition() const override
+{
+    wxCurrencySymbolPosition symbolPosition = wxCurrencySymbolPosition::PrefixWithSep;
+
+    NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
+    formatter.locale = m_nsloc;
+    formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+
+    NSString* formatted = [formatter stringFromNumber:@123];
+    NSString* symbol = formatter.currencySymbol;
+
+    NSRange symbolRange = [formatted rangeOfString:symbol];
+    BOOL symbolBefore = (symbolRange.location == 0);
+
+    BOOL hasSpace = NO;
+    if (symbolRange.location != NSNotFound)
+    {
+        if (symbolBefore)
+        {
+            // Check character succeeding the currency symbol
+            NSUInteger idx = NSMaxRange(symbolRange);
+            if (idx < formatted.length)
+            {
+                unichar after = [formatted characterAtIndex:idx];
+                hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:after];
+            }
+            symbolPosition = (hasSpace)
+                           ? wxCurrencySymbolPosition::PrefixWithSep;
+                           : wxCurrencySymbolPosition::PrefixNoSep;
+        }
+        else
+        {
+            // Check character preceding the currency symbol
+            if (symbolRange.location > 0)
+            {
+                unichar before = [formatted characterAtIndex:symbolRange.location - 1];
+                hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:before];
+            }
+            symbolPosition = (hasSpace)
+                           ? wxCurrencySymbolPosition::SuffixWithSep;
+                           : wxCurrencySymbolPosition::SuffixNoSep;
+        }
+    }
+
+    return symbolPosition;
+}
+
+wxLocaleNumberFormatting
+DoGetNumberFormatting(wxLocaleCategory cat) const
+{
+    NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
+    formatter.locale = m_nsloc;
+    formatter.numberStyle = (cat == wxLOCALE_CAT_MONEY)
+                          ? NSNumberFormatterCurrencyStyle
+                          : NSNumberFormatterDecimalStyle;
+
+    wxString groupSeparator = wxCFStringRef::AsString(formatter.groupingSeparator);
+
+    wxString grouping;
+    int groupingSize = (int) formatter.groupingSize;
+    int secondaryGroupingSize  = (int) formatter.secondaryGroupingSize;
+    if (groupingSize > 0)
+    {
+        if (secondaryGroupingSize > 0 && secondaryGroupingSize != groupingSize)
+            grouping = wxString::Format("%d;%d;0", groupingSize, secondaryGroupingSize);
+        else
+            grouping = wxString::Format("%d;0", groupingSize);
+    }
+
+    wxString decimalSeparator = wxCFStringRef::AsString(formatter.decimalSeparator);
+    int fractionalDigits = (int) formatter.minimumFractionDigits;
+
+    return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
+}
+
+wxLocaleCurrencyInfo
+wxUILocaleImplCF::GetCurrencyInfo() const override
+{
+    wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
+    return wxLocaleCurrencyInfo(
+        GetCurrencySymbol(),
+        GetCurrencyCode(),
+        GetCurrencySymbolPosition(),
+        currencyFormatting);
+}
+
+wxMeasurementSystem
+wxUILocaleImplCF::UsesMetricSystem() const override
+{
+    if ([m_nsloc respondsToSelector:@selector(usesMetricSystem)])
+    {
+        BOOL isMetric = [m_nsloc usesMetricSystem];
+        return (isMetric) ? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
+    }
+    else
+    {
+        wxString region = GetLocaleId().GetRegion();
+        // In 2025 only in the United States, Liberia, and Myanmar
+        // the metric system is not the default measurement system.
+        bool usesMetric = !(region == "US" || region == "LR" || region == "MM");
+        return (usesMetric) ? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
+    }
 }
 
 /* static */

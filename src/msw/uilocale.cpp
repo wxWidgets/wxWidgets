@@ -30,6 +30,8 @@
 #include "wx/dynlib.h"
 #include "wx/wxcrt.h"
 
+#include <array>
+
 #ifndef LOCALE_NAME_USER_DEFAULT
     #define LOCALE_NAME_USER_DEFAULT nullptr
 #endif
@@ -304,6 +306,40 @@ public:
         return wxLayout_Default;
     }
 
+    wxLocaleNumberFormatting GetNumberFormatting() const
+    {
+        return wxLocaleNumberFormatting("", "", ".", 2);
+    }
+
+    wxString GetCurrencySymbol() const
+    {
+        return wxString("$");
+    }
+
+    wxString GetCurrencyCode() const
+    {
+        return wxString("USD");
+    }
+
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const
+    {
+        return wxCurrencySymbolPosition::PrefixWithSep;
+    }
+
+    wxLocaleCurrencyInfo GetCurrencyInfo() const
+    {
+        return wxLocaleCurrencyInfo(
+            GetCurrencySymbol(),
+            GetCurrencyCode(),
+            GetCurrencySymbolPosition(),
+            GetNumberFormatting());
+    }
+
+    wxMeasurementSystem UsesMetricSystem() const
+    {
+        return wxMeasurementSystem::Metric;
+    }
+
     int CompareStrings(const wxString& lhs, const wxString& rhs,
         int flags) const override
     {
@@ -472,33 +508,15 @@ public:
         switch ( index )
         {
             case wxLOCALE_THOUSANDS_SEP:
-                str = DoGetInfo(LOCALE_STHOUSAND);
+                str = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+                    ? LOCALE_SMONTHOUSANDSEP
+                    : LOCALE_STHOUSAND);
                 break;
 
             case wxLOCALE_DECIMAL_POINT:
                 str = DoGetInfo(cat == wxLOCALE_CAT_MONEY
-                                    ? LOCALE_SMONDECIMALSEP
-                                    : LOCALE_SDECIMAL);
-                break;
-
-            case wxLOCALE_MEASURE_METRIC:
-                str = DoGetInfo(LOCALE_IMEASURE);
-                if (str.IsEmpty())
-                    str = wxString("Unknown");
-                else if (str.IsSameAs("0"))
-                    str = wxString("Yes");
-                else
-                    str = wxString("No");
-                break;
-
-            case wxLOCALE_CURRENCY_SYMBOL:
-                str = DoGetInfo(LOCALE_SCURRENCY);
-                break;
-            case wxLOCALE_CURRENCY_CODE:
-                str = wxString(DoGetInfo(LOCALE_SINTLSYMBOL)).Left(3);
-                break;
-            case wxLOCALE_CURRENCY_DIGITS:
-                str = DoGetInfo(LOCALE_ICURRDIGITS);
+                    ? LOCALE_SMONDECIMALSEP
+                    : LOCALE_SDECIMAL);
                 break;
 
             case wxLOCALE_SHORT_DATE_FMT:
@@ -662,6 +680,58 @@ public:
         return m_layoutDir;
     }
 
+    wxLocaleNumberFormatting GetNumberFormatting() const override
+    {
+        return DoGetNumberFormatting(wxLOCALE_CAT_NUMBER);
+    }
+
+    wxString GetCurrencySymbol() const override
+    {
+        return DoGetInfo(LOCALE_SCURRENCY);
+    }
+
+    wxString GetCurrencyCode() const override
+    {
+        return wxString(DoGetInfo(LOCALE_SINTLSYMBOL)).Left(3);
+    }
+
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override
+    {
+        static std::array<wxCurrencySymbolPosition, 4> symPos = {
+            wxCurrencySymbolPosition::PrefixNoSep, wxCurrencySymbolPosition::PrefixWithSep,
+            wxCurrencySymbolPosition::SuffixNoSep, wxCurrencySymbolPosition::SuffixWithSep };
+        wxString posStr = wxString(DoGetInfo(LOCALE_ICURRENCY));
+        wxUint32 posIdx = posStr.GetChar(0).GetValue() - wxUniChar('0').GetValue();
+        return (posIdx < symPos.size()) ? symPos[posIdx] : wxCurrencySymbolPosition::PrefixWithSep;
+    }
+
+    wxLocaleCurrencyInfo GetCurrencyInfo() const override
+    {
+        wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
+        return wxLocaleCurrencyInfo(
+            GetCurrencySymbol(),
+            GetCurrencyCode(),
+            GetCurrencySymbolPosition(),
+            currencyFormatting);
+    }
+
+    wxMeasurementSystem UsesMetricSystem() const override
+    {
+        wxString str = DoGetInfo(LOCALE_IMEASURE);
+        if (str.empty())
+        {
+            wxString region = GetLocaleId().GetRegion();
+            // In 2025 only in the United States, Liberia, and Myanmar
+            // the metric system is not the default measurement system.
+            bool usesMetric = !(region == "US" || region == "LR" || region == "MM");
+            return (usesMetric) ? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
+        }
+        else
+        {
+            return (str.IsSameAs("0"))? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
+        }
+    }
+
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const override
     {
@@ -714,6 +784,25 @@ private:
         }
 
         return buf;
+    }
+
+    wxLocaleNumberFormatting DoGetNumberFormatting(wxLocaleCategory cat) const
+    {
+        wxString groupSeparator = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+                                ? LOCALE_SMONTHOUSANDSEP
+                                : LOCALE_STHOUSAND);
+        wxString grouping = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+                          ? LOCALE_SMONGROUPING
+                          : LOCALE_SGROUPING);
+        wxString decimalSeparator = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+                                  ? LOCALE_SMONDECIMALSEP
+                                  : LOCALE_SDECIMAL);
+        wxString digits = DoGetInfo(cat == wxLOCALE_CAT_MONEY
+                        ? LOCALE_ICURRDIGITS
+                        : LOCALE_IDIGITS);
+        int fractionalDigits = digits.GetChar(0).GetValue() - wxUniChar('0').GetValue();
+
+        return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
     }
 
     const wchar_t* const m_name;

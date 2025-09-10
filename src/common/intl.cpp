@@ -1211,18 +1211,6 @@ wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
         case wxLOCALE_DECIMAL_POINT:
             return ".";
 
-        case wxLOCALE_MEASURE_METRIC:
-            return "No";
-
-        case wxLOCALE_CURRENCY_SYMBOL:
-            return "$";
-
-        case wxLOCALE_CURRENCY_CODE:
-            return "USD";
-
-        case wxLOCALE_CURRENCY_DIGITS:
-            return "2";
-
         case wxLOCALE_SHORT_DATE_FMT:
             return "%m/%d/%y";
 
@@ -1271,36 +1259,6 @@ wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WX
 
         case wxLOCALE_DECIMAL_POINT:
             cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleDecimalSeparator);
-            break;
-
-        case wxLOCALE_MEASURE_METRIC:
-        {
-            CFStringRef measurementSystem = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleMeasurementSystem);
-            if (CFStringCompare(measurementSystem, CFSTR("Metric"), 0) == kCFCompareEqualTo)
-                return wxString("Yes");
-            else
-                return wxString("No");
-        }
-
-        case wxLOCALE_CURRENCY_SYMBOL:
-            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleCurrencySymbol);
-            break;
-        case wxLOCALE_CURRENCY_CODE:
-            cfstr = (CFStringRef) CFLocaleGetValue(cfloc, kCFLocaleCurrencyCode);
-            break;
-        case wxLOCALE_CURRENCY_DIGITS:
-            {
-                CFNumberFormatterRef formatter = CFNumberFormatterCreate(nullptr, cfloc, kCFNumberFormatterCurrencyStyle);
-                CFNumberRef minFrac = (CFNumberRef) CFNumberFormatterCopyProperty(formatter, kCFNumberFormatterMinFractionDigits);
-                SInt32 minFraction = 0;
-                if (minFrac)
-                {
-                    CFNumberGetValue(minFrac, kCFNumberSInt32Type, &minFraction);
-                    CFRelease(minFrac);
-                }
-                wxString currencyDigitsStr(wxUniChar('0' + minFraction));
-                return currencyDigitsStr;
-            }
             break;
 
         case wxLOCALE_SHORT_DATE_FMT:
@@ -1459,51 +1417,6 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
                     wxFAIL_MSG( "invalid wxLocaleCategory" );
             }
             break;
-
-        case wxLOCALE_MEASURE_METRIC:
-            {
-#ifdef HAVE_LANGINFO_H
-#ifdef __GLIBC__
-                const char* measurement = nl_langinfo(_NL_MEASUREMENT_MEASUREMENT);
-                if (measurement && *measurement == 1)
-                    return wxString("Yes");
-                else if (measurement && *measurement == 2)
-                    return wxString("No");
-#endif
-#endif
-                wxString region = wxUILocale::GetCurrent().GetLocaleId().GetRegion();
-                // In 2025 only in the United States, Liberia, and Myanmar
-                // the use of the metric system is not mandatory.
-                if (!region.empty())
-                {
-                    if (region == "US" || region == "LR" || region == "MM")
-                        return wxString("No");
-                    else
-                        return wxString("Yes");
-                }
-                else
-                    return wxString("Unknown");
-            }
-
-        case wxLOCALE_CURRENCY_SYMBOL:
-            {
-                wchar_t currencySymbol[16];
-                mbstowcs(currencySymbol, lc->currency_symbol, 16);
-                return wxString(currencySymbol);
-            }
-
-        case wxLOCALE_CURRENCY_CODE:
-            {
-                wchar_t currencyCode[16];
-                mbstowcs(currencyCode, lc->int_curr_symbol, 16);
-                return wxString(currencyCode).Left(3);
-            }
-
-        case wxLOCALE_CURRENCY_DIGITS:
-            {
-                wxString currencyDigitsStr(wxUniChar('0' + lc->int_frac_digits));
-                return currencyDigitsStr;
-            }
 
 #ifdef HAVE_LANGINFO_H
         case wxLOCALE_SHORT_DATE_FMT:

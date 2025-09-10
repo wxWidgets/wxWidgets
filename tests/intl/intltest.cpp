@@ -43,7 +43,6 @@ private:
         CPPUNIT_TEST( Domain );
         CPPUNIT_TEST( Headers );
         CPPUNIT_TEST( DateTimeFmtFrench );
-        CPPUNIT_TEST( CurrencyAndMeasurementFrench );
         CPPUNIT_TEST( IsAvailable );
     CPPUNIT_TEST_SUITE_END();
 
@@ -51,7 +50,6 @@ private:
     void Domain();
     void Headers();
     void DateTimeFmtFrench();
-    void CurrencyAndMeasurementFrench();
     void IsAvailable();
 
     static wxString GetDecimalPoint()
@@ -230,17 +228,6 @@ void IntlTestCase::DateTimeFmtFrench()
 #endif
     WX_ASSERT_EQUAL_FORMAT( "French time", "%H:%M:%S",
                             wxLocale::GetInfo(wxLOCALE_TIME_FMT) );
-}
-
-void IntlTestCase::CurrencyAndMeasurementFrench()
-{
-    if ( !m_locale )
-        return;
-
-    CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
-    CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
-    CHECK(wxLocale::GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
-    CHECK(wxLocale::GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
 }
 
 void IntlTestCase::IsAvailable()
@@ -432,29 +419,32 @@ TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
     const wxUILocale locEN(wxUILocale::FromTag("en-US"));
     CHECK( locEN.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
-    CHECK( locEN.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == "$");
-    CHECK( locEN.GetInfo(wxLOCALE_CURRENCY_CODE) == "USD");
-    CHECK( locEN.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
-    CHECK( locEN.GetInfo(wxLOCALE_MEASURE_METRIC) == "No");
+    CHECK( locEN.GetCurrencySymbol() == "$");
+    CHECK( locEN.GetCurrencyCode() == "USD");
+    CHECK( locEN.GetCurrencyInfo().CurrencyFormat.FractionalDigits == 2);
+    CHECK( locEN.GetCurrencySymbolPosition() == wxCurrencySymbolPosition::PrefixNoSep);
+    CHECK( locEN.UsesMetricSystem() == wxMeasurementSystem::NonMetric);
 
     const wxUILocale locDE(wxUILocale::FromTag("de-DE"));
     if (CheckSupported(locDE, "German"))
     {
         CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
-        CHECK( locDE.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
-        CHECK( locDE.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
-        CHECK( locDE.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
-        CHECK( locDE.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
+        CHECK( locDE.GetCurrencySymbol() == L"\u20AC");
+        CHECK( locDE.GetCurrencyCode() == "EUR");
+        CHECK( locDE.GetCurrencyInfo().CurrencyFormat.FractionalDigits == 2);
+        CHECK( locDE.GetCurrencySymbolPosition() == wxCurrencySymbolPosition::SuffixWithSep);
+        CHECK( locDE.UsesMetricSystem() == wxMeasurementSystem::Metric);
     }
 
     const wxUILocale locFR(wxUILocale::FromTag("fr-FR"));
     if (CheckSupported(locFR, "French"))
     {
         CHECK( locFR.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
-        CHECK( locFR.GetInfo(wxLOCALE_CURRENCY_SYMBOL) == L"\u20AC");
-        CHECK( locFR.GetInfo(wxLOCALE_CURRENCY_CODE) == "EUR");
-        CHECK( locFR.GetInfo(wxLOCALE_CURRENCY_DIGITS) == "2");
-        CHECK( locFR.GetInfo(wxLOCALE_MEASURE_METRIC) == "Yes");
+        CHECK( locFR.GetCurrencySymbol() == L"\u20AC");
+        CHECK( locFR.GetCurrencyCode() == "EUR");
+        CHECK( locFR.GetCurrencyInfo().CurrencyFormat.FractionalDigits == 2);
+        CHECK( locFR.GetCurrencySymbolPosition() == wxCurrencySymbolPosition::SuffixWithSep);
+        CHECK( locFR.UsesMetricSystem() == wxMeasurementSystem::Metric);
     }
 
     // This one shows that "Swiss High German" locale (de_CH) correctly uses

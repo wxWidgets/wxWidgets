@@ -89,19 +89,6 @@ enum wxLocaleInfo
     // the character used as decimal point (for wxLOCALE_CAT_NUMBER or MONEY)
     wxLOCALE_DECIMAL_POINT,
 
-    // check whether locale uses the metric system for measurements
-    // returns "Yes", "No", or "Unknown"
-    wxLOCALE_MEASURE_METRIC,
-
-    // the currency symbol (for example "$")
-    wxLOCALE_CURRENCY_SYMBOL,
-
-    // the currency ISO code (for example "USD")
-    wxLOCALE_CURRENCY_CODE,
-
-    // the number of currency digits
-    wxLOCALE_CURRENCY_DIGITS,
-
     // the stftime()-formats used for short/long date and time representations
     // (under some platforms short and long date formats are the same)
     //
@@ -133,6 +120,53 @@ enum wxLocaleForm
 {
     wxLOCALE_FORM_NATIVE,
     wxLOCALE_FORM_ENGLISH
+};
+
+enum class wxMeasurementSystem
+{
+    UnknownSystem,
+    Metric,
+    NonMetric
+};
+
+enum class wxCurrencySymbolPosition
+{
+    PrefixNoSep,
+    PrefixWithSep,
+    SuffixNoSep,
+    SuffixWithSep
+};
+
+struct WXDLLIMPEXP_BASE wxLocaleNumberFormatting
+{
+    wxLocaleNumberFormatting() = default;
+    wxLocaleNumberFormatting(const wxString& groupSeparator, const wxString& grouping,
+                             const wxString& decimalSeparator, int fractionalDigits)
+        : GroupSeparator(groupSeparator), Grouping(grouping),
+          DecimalSeparator(decimalSeparator), FractionalDigits(fractionalDigits)
+    {
+    }
+    wxString GroupSeparator;
+    wxString Grouping;
+    wxString DecimalSeparator;
+    int      FractionalDigits = 0;
+};
+
+struct WXDLLIMPEXP_BASE wxLocaleCurrencyInfo
+{
+    wxLocaleCurrencyInfo() = default;
+    wxLocaleCurrencyInfo(const wxString& symbol, const wxString& code,
+                         const wxCurrencySymbolPosition currencySymbolPos,
+                         const wxLocaleNumberFormatting currencyFormat)
+        : CurrencySymbol(symbol), CurrencyCode(code),
+          CurrencySymbolPos(currencySymbolPos),
+          CurrencyFormat(currencyFormat)
+    {
+    }
+    wxString CurrencySymbol;     // the currency symbol (for example "$")
+    wxString CurrencyCode;       // the currency ISO code (for example "USD")
+    wxCurrencySymbolPosition CurrencySymbolPos = wxCurrencySymbolPosition::PrefixNoSep;
+    wxLocaleNumberFormatting CurrencyFormat;
 };
 
 // ----------------------------------------------------------------------------
