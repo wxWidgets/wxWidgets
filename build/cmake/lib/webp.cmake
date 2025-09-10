@@ -7,6 +7,14 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(wxUSE_LIBWEBP STREQUAL "sys")
+    find_package(WebP)
+    if(NOT WebP_FOUND)
+        # If the sys library can not be found use builtin
+        wx_option_force_value(wxUSE_LIBWEBP builtin)
+    endif()
+endif()
+
 if(wxUSE_LIBWEBP STREQUAL "builtin")
     set(WEBP_ROOT "${wxSOURCE_DIR}/3rdparty/libwebp")
     set(WEBP_BUILD_ROOT "${CMAKE_CURRENT_BINARY_DIR}/webp-build")

@@ -718,14 +718,6 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
     wx_option(${var_name} ${help_str} ${thirdparty_lib_default}
         STRINGS builtin sys OFF)
 
-    if(${var_name} STREQUAL "sys")
-        # If the sys library can not be found use builtin
-        find_package(${lib_name})
-        if(NOT ${lib_name}_FOUND)
-            wx_option_force_value(${var_name} builtin)
-        endif()
-    endif()
-
     set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} ${var_name} "${help_str}" PARENT_SCOPE)
 endfunction()
 
