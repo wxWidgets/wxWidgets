@@ -37,6 +37,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             color = pal.color(QPalette::Light);
             break;
 
+        case wxSYS_COLOUR_GRIDLINES:
         case wxSYS_COLOUR_BTNFACE:
             color = pal.color(QPalette::Button);
             break;

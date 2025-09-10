@@ -1434,18 +1434,28 @@ void wxPropertyGrid::RegainColours()
 {
     if ( !(m_coloursCustomized & CustomColour_CaptionBg) )
     {
-        wxColour col = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
-
-        // Make sure colour is dark enough
-    #ifdef __WXGTK__
-        int colDec = wxPGGetColAvg(col) - 230;
-    #else
-        int colDec = wxPGGetColAvg(col) - 200;
-    #endif
-        if ( colDec > 0 )
-            m_colCapBack = wxPGAdjustColour(col,-colDec);
+        wxColour col = wxSystemSettings::GetColour( wxSYS_COLOUR_GRIDLINES );
+    #ifdef __WXOSX__
+        if (wxSystemSettings::GetAppearance().IsDark())
+        {
+            // Make sure colour is light enough
+            int colDec = wxPGGetColAvg(col);
+            if (colDec < 30)
+                col = wxPGAdjustColour(col, 20);
+        }
         else
-            m_colCapBack = col;
+    #endif
+        {
+            // Make sure colour is dark enough
+        #ifdef __WXGTK__
+            int colDec = wxPGGetColAvg(col) - 230;
+        #else
+            int colDec = wxPGGetColAvg(col) - 200;
+        #endif
+            if ( colDec > 0 )
+                col = wxPGAdjustColour(col,-colDec);
+        }
+        m_colCapBack = col;
         m_categoryDefaultCell.GetData()->SetBgCol(m_colCapBack);
     }
 
