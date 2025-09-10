@@ -27,12 +27,13 @@
 #include "wx/osx/core/cfref.h"
 #include "wx/osx/core/cfstring.h"
 
+#import <Foundation/Foundation.h>
+#if 0
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSLocale.h>
 #import <Foundation/NSDateFormatter.h>
-#import <Foundation/NSNumber.h>
-#import <Foundation/NSNumberFormatter.h>
+#endif
 
 #include "wx/osx/private/uilocale.h"
 

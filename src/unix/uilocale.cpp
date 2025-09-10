@@ -266,7 +266,9 @@ private:
 
     wxLocaleNumberFormatting DoGetNumberFormatting(wxLocaleCategory cat) const;
 
+#if !(defined(HAVE_LANGINFO_H) && defined(__GLIBC__))
     wxString DoGetInfoFromLocaleConv(wxLocaleConvAttr index, wxLocaleCategory cat) const;
+#endif
 
     wxLocaleIdent m_locId;
 
@@ -1061,6 +1063,8 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
     return wxLocaleNumberFormatting(groupSeparator, groupingStr, decimalSeparator, fractionalDigits);
 }
 
+#if !(defined(HAVE_LANGINFO_H) && defined(__GLIBC__))
+
 wxString
 wxUILocaleImplUnix::DoGetInfoFromLocaleConv(wxLocaleConvAttr index, wxLocaleCategory cat) const
 {
@@ -1148,6 +1152,8 @@ wxUILocaleImplUnix::DoGetInfoFromLocaleConv(wxLocaleConvAttr index, wxLocaleCate
 
     return wxString();
 }
+
+#endif
 
 /* static */
 wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
