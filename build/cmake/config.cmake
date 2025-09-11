@@ -12,6 +12,9 @@ file(MAKE_DIRECTORY ${wxCONFIG_DIR})
 set(TOOLCHAIN_FULLNAME ${wxBUILD_FILE_ID})
 
 macro(wx_configure_script input output)
+    # variable used in wx-config.in
+    wx_get_install_dir(library "lib")
+    set(libdir "\${exec_prefix}/${library_dir}")
     # variables used in wx-config-inplace.in
     set(abs_top_srcdir ${wxSOURCE_DIR})
     set(abs_top_builddir ${wxBINARY_DIR})
