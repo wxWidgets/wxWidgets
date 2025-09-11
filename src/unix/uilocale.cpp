@@ -577,7 +577,7 @@ wxUILocaleImplUnix::GetLangInfo(nl_item item) const
     if ( m_locale )
         return nl_langinfo_l(item, m_locale);
 #else
-    TempLocaleSetter setThisLocale(LC_CTYPE, m_locId.GetName());
+    TempLocaleSetter setThisLocale(LC_ALL, m_locId.GetName());
 #endif // HAVE_LOCALE_T
 
     return nl_langinfo(item);
@@ -591,7 +591,7 @@ wxUILocaleImplUnix::GetLangInfoWide(nl_item item) const
     if ( m_locale )
         return (wchar_t*) nl_langinfo_l(item, m_locale);
 #else
-    TempLocaleSetter setThisLocale(LC_CTYPE, m_locId.GetName());
+    TempLocaleSetter setThisLocale(LC_ALL, m_locId.GetName());
 #endif // HAVE_LOCALE_T
 
     return (wchar_t*) nl_langinfo(item);
@@ -1072,7 +1072,7 @@ wxUILocaleImplUnix::DoGetInfoFromLocaleConv(wxLocaleConvAttr index, wxLocaleCate
 {
     // localeconv accesses only the global locale
     // temporarily set this locale
-    TempLocaleSetter setThisLocale(LC_CTYPE, m_locId.GetName());
+    TempLocaleSetter setThisLocale(LC_ALL, m_locId.GetName());
 
     lconv* const lc = localeconv();
     if (!lc)
