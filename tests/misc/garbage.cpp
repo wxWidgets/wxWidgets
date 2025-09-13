@@ -12,6 +12,8 @@
 
 #include "testprec.h"
 
+#include "testfile.h"
+
 
 #include "wx/filename.h"
 #include "wx/image.h"
@@ -146,17 +148,10 @@ TEST_CASE("Load", "[garbage]")
             data[i] = rand();
 
         // write it to a file
-        wxString garbagename = wxFileName::CreateTempFileName("garbage");
-        CHECK(!garbagename.empty());
-
-        wxFile garbage(garbagename, wxFile::write);
-        CHECK(garbage.IsOpened());
-
-        CHECK(garbage.Write(data, size) == size);
-        garbage.Close();
+        TestFile tf(data, size);
 
         // try to load it by name
-        DoLoadGarbageFile(garbagename);
+        DoLoadGarbageFile(tf.GetName());
 
         // try to load it from a wxInputStream
         wxMemoryInputStream stream(data, size);
