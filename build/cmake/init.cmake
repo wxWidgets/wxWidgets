@@ -198,6 +198,7 @@ if(WIN32)
     endif()
 endif()
 
+wx_get_install_dir(include)
 if(WIN32_MSVC_NAMING)
     if(wxBUILD_SHARED)
         set(lib_suffix "_dll")
@@ -209,11 +210,11 @@ if(WIN32_MSVC_NAMING)
 
     # Generator expression to not create different Debug and Release directories
     set(GEN_EXPR_DIR "$<1:/>")
-    set(wxINSTALL_INCLUDE_DIR "include")
+    set(wxINSTALL_INCLUDE_DIR "${include_dir}")
 else()
     set(GEN_EXPR_DIR "/")
     wx_get_flavour(lib_flavour "-")
-    set(wxINSTALL_INCLUDE_DIR "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
+    set(wxINSTALL_INCLUDE_DIR "${include_dir}/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
 endif()
 
 if(wxBUILD_CUSTOM_SETUP_HEADER_PATH)

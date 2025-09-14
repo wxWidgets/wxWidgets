@@ -10,6 +10,7 @@
 include(CMakeDependentOption)
 include(ExternalProject)
 include(CMakePrintHelpers)
+include(GNUInstallDirs)
 
 # List of libraries added via wx_add_library() to use for wx-config
 # and headers added via wx_append_sources() to use for install.
@@ -88,6 +89,35 @@ macro(wx_get_flavour flavour prefix)
         set(${flavour} "${prefix}${flav}")
     else()
         set(${flavour})
+    endif()
+endmacro()
+
+# Get the library/runtime/archive directory
+macro(wx_get_install_dir artifact)
+    string(TOUPPER ${artifact} artifact_upper)
+
+    if("${artifact_upper}" STREQUAL "RUNTIME")
+        set(${artifact}_dir "${CMAKE_INSTALL_BINDIR}")
+    elseif("${artifact_upper}" STREQUAL "LIBRARY")
+        set(${artifact}_dir "${CMAKE_INSTALL_LIBDIR}")
+    elseif("${artifact_upper}" STREQUAL "ARCHIVE")
+        set(${artifact}_dir "${CMAKE_INSTALL_LIBDIR}")
+    elseif("${artifact_upper}" STREQUAL "INCLUDE")
+        set(${artifact}_dir "${CMAKE_INSTALL_INCLUDEDIR}")
+    else()
+        message(FATAL_ERROR "Unknown install artifact: ${artifact}")
+    endif()
+
+    if(wxBUILD_INSTALL_${artifact_upper}_DIR)
+        set(${artifact}_dir "${wxBUILD_INSTALL_${artifact_upper}_DIR}")
+    endif()
+endmacro()
+
+# Get the library/runtime/archive directory including platform specific sub-directory
+macro(wx_get_install_platform_dir artifact)
+    wx_get_install_dir(${artifact})
+    if(wxBUILD_INSTALL_PLATFORM_SUBDIR AND wxPLATFORM_LIB_DIR)
+        wx_string_append(${artifact}_dir "/${wxPLATFORM_LIB_DIR}")
     endif()
 endmacro()
 
@@ -340,13 +370,14 @@ function(wx_set_target_properties target_name)
     endif()
     target_compile_definitions(${target_name} PUBLIC _UNICODE)
 
+    wx_get_install_dir(library)
     file(RELATIVE_PATH wxSETUP_HEADER_REL ${wxOUTPUT_DIR} ${wxSETUP_HEADER_PATH})
     target_include_directories(${target_name}
         BEFORE
         PUBLIC
             $<BUILD_INTERFACE:${wxSETUP_HEADER_PATH}>
             $<BUILD_INTERFACE:${wxSOURCE_DIR}/include>
-            $<INSTALL_INTERFACE:lib/${wxSETUP_HEADER_REL}>
+            $<INSTALL_INTERFACE:${library_dir}/${wxSETUP_HEADER_REL}>
             $<INSTALL_INTERFACE:${wxINSTALL_INCLUDE_DIR}>
         )
 
@@ -425,22 +456,6 @@ function(wx_set_target_properties target_name)
     wx_set_common_target_properties(${target_name})
 endfunction()
 
-macro(wx_get_install_dir artifact default)
-    wx_get_build_install_dir(${artifact} ${default})
-    if(wxBUILD_INSTALL_PLATFORM_SUBDIR AND wxPLATFORM_LIB_DIR)
-        wx_string_append(${artifact}_dir "/${wxPLATFORM_LIB_DIR}")
-    endif()
-endmacro()
-
-macro(wx_get_build_install_dir artifact default)
-    string(TOUPPER ${artifact} artifact_upper)
-    if(wxBUILD_INSTALL_${artifact_upper}_DIR)
-        set(${artifact}_dir "${wxBUILD_INSTALL_${artifact_upper}_DIR}")
-    else()
-        set(${artifact}_dir ${default})
-    endif()
-endmacro()
-
 
 # Add a wxWidgets library
 # wx_add_library(<target_name> [IS_BASE;IS_PLUGIN;IS_MONO] <src_files>...)
@@ -481,17 +496,17 @@ macro(wx_add_library name)
         wx_set_target_properties(${name} ${ARGN})
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
-        # Setup install
-        if(WIN32_MSVC_NAMING)
-            set(runtime_default_dir "lib")
-        else()
-            # configure puts the .dll in the bin directory
-            set(runtime_default_dir "bin")
-        endif()
+        wx_get_install_platform_dir(library)
+        wx_get_install_platform_dir(archive)
+        wx_get_install_platform_dir(runtime)
 
-        wx_get_install_dir(library "lib")
-        wx_get_install_dir(archive "lib")
-        wx_get_install_dir(runtime "${runtime_default_dir}")
+        if(WIN32_MSVC_NAMING AND NOT wxBUILD_INSTALL_RUNTIME_DIR)
+            # override the default 'bin' to match MSVC solution
+            set(runtime_dir "lib")
+            if(wxBUILD_INSTALL_PLATFORM_SUBDIR AND wxPLATFORM_LIB_DIR)
+                wx_string_append(runtime_dir "/${wxPLATFORM_LIB_DIR}")
+            endif()
+        endif()
 
         wx_install(TARGETS ${name}
             EXPORT wxWidgetsTargets
@@ -663,7 +678,8 @@ function(wx_set_builtin_target_properties target_name)
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
-        wx_install(TARGETS ${name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}")
+        wx_get_install_platform_dir(archive)
+        wx_install(TARGETS ${name} EXPORT wxWidgetsTargets ARCHIVE DESTINATION "${archive_dir}")
     endif()
 endfunction()
 

@@ -36,7 +36,7 @@ if(MSVC)
     )
 endif()
 
-wx_get_install_dir(library "lib")
+wx_get_install_platform_dir(library)
 
 # setup header and wx-config
 if(WIN32_MSVC_NAMING)
@@ -63,16 +63,17 @@ else()
                     WORLD_EXECUTE WORLD_READ
         )
 
-    install(DIRECTORY DESTINATION "bin")
+    wx_get_install_platform_dir(runtime)
+    install(DIRECTORY DESTINATION "${runtime_dir}")
     install(CODE "execute_process( \
         COMMAND ${CMAKE_COMMAND} -E create_symlink \
         \"${CMAKE_INSTALL_PREFIX}/${library_dir}/wx/config/${wxBUILD_FILE_ID}\" \
-        \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wx-config\" \
+        \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wx-config\" \
         )"
     )
 endif()
 
-wx_get_build_install_dir(library "lib")
+wx_get_install_dir(library)
 set(wx_cmake_dir "${library_dir}/cmake/wxWidgets-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
 
 install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "${wx_cmake_dir}/${wxPLATFORM_LIB_DIR}")
@@ -123,8 +124,8 @@ if(NOT TARGET ${UNINST_NAME})
         endif()
 
         set(WX_EXTRA_UNINSTALL_FILES
-            "${CMAKE_INSTALL_PREFIX}/bin/wx-config"
-            "${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX}"
+            "${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wx-config"
+            "${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wxrc${EXE_SUFFIX}"
         )
     endif()
 

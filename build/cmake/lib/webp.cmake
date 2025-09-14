@@ -72,10 +72,10 @@ if(wxUSE_LIBWEBP STREQUAL "builtin")
 
     set(WebP_LIBRARIES webp webpdemux sharpyuv)
     if(NOT wxBUILD_SHARED)
+        wx_get_install_platform_dir(archive)
         wx_install(TARGETS ${WebP_LIBRARIES}
             EXPORT wxWidgetsTargets
-            ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+            ARCHIVE DESTINATION "${archive_dir}"
         )
     endif()
-
 endif()
