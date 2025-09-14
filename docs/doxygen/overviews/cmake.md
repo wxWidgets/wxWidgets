@@ -83,6 +83,10 @@ For example, the following will build a "universal binary 2" (i.e., ARM64 and In
     cmake --build . --target install
 ~~~
 
+The option `wxBUILD_INSTALL_LIBRARY_DIR` is used to specify the name of the library
+directory relative to `CMAKE_INSTALL_PREFIX` which otherwise defaults to "lib".
+For example on Linux it might be used as `-DwxBUILD_INSTALL_LIBRARY_DIR=lib64`.
+
 A complete list of options and advanced options can be found when using the
 CMake GUI.
 
