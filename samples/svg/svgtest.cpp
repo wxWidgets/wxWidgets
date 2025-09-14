@@ -249,8 +249,12 @@ bool MyPage::OnSave(const wxString& filename)
     return svgDC.IsOk();
 }
 
-// Define the repainting behaviour
-void MyPage::OnDraw(wxDC& dc)
+namespace
+{
+
+// Define this function in an anonymous namespace, to prevent accidentally
+// using (wxWindow::)FromDIP instead of dc.FromDIP().
+void DrawOnDC(wxDC& dc, const int index)
 {
     // vars to use ...
     wxPen wP;
@@ -261,7 +265,7 @@ void MyPage::OnDraw(wxDC& dc)
     dc.SetFont(wxFontInfo(9).FaceName("Arial").Family(wxFONTFAMILY_SWISS));
     dc.SetPen(*wxGREEN_PEN);
 
-    switch (m_index)
+    switch (index)
     {
         case Page_Lines:
             // draw lines to make a cross
@@ -496,6 +500,14 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawRotatedText(txtStr, txtX, txtY, 45);
             break;
     }
+}
+
+} // namespace
+
+// Define the repainting behaviour
+void MyPage::OnDraw(wxDC& dc)
+{
+    DrawOnDC(dc, m_index);
 
     wxLogStatus(pageDescriptions[m_index]);
 }
