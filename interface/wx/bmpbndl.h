@@ -285,7 +285,7 @@ public:
             from the "Path" menu in Inkscape can perform this. This is only
             recommended for simple images, however, as more complex images
             may not rasterize well.\n\n
-            To work around clip paths, you can manually cut and remove portions
+            To work around lack of support for clip paths, you can manually cut and remove portions
             of objects (rather than using a clip path to hide them).
             In Inkscape, this can be done via either "Path" → "Difference"
             or "Path" → "Division" (i.e., cookie-cutter subtraction).
