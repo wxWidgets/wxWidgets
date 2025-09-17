@@ -45,6 +45,8 @@ if(wxUSE_XRC)
             \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wxrc${EXE_SUFFIX}\" \
             )"
         )
+        list(APPEND WX_EXTRA_UNINSTALL_FILES "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wxrc${EXE_SUFFIX}")
+        set(WX_EXTRA_UNINSTALL_FILES ${WX_EXTRA_UNINSTALL_FILES} PARENT_SCOPE)
     endif()
 endif()
 

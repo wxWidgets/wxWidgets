@@ -71,6 +71,7 @@ else()
         \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wx-config\" \
         )"
     )
+    list(APPEND WX_EXTRA_UNINSTALL_FILES "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wx-config")
 endif()
 
 wx_get_install_dir(library)
@@ -114,21 +115,6 @@ else()
 endif()
 
 if(NOT TARGET ${UNINST_NAME})
-    # these symlinks are not included in the install manifest
-    set(WX_EXTRA_UNINSTALL_FILES)
-    if(NOT WIN32_MSVC_NAMING)
-        if(IPHONE)
-            set(EXE_SUFFIX ".app")
-        else()
-            set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
-        endif()
-
-        set(WX_EXTRA_UNINSTALL_FILES
-            "${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wx-config"
-            "${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wxrc${EXE_SUFFIX}"
-        )
-    endif()
-
     configure_file(
         "${wxSOURCE_DIR}/build/cmake/uninstall.cmake.in"
         "${wxBINARY_DIR}/uninstall.cmake"

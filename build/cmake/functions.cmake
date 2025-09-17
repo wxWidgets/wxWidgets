@@ -13,9 +13,11 @@ include(CMakePrintHelpers)
 include(GNUInstallDirs)
 
 # List of libraries added via wx_add_library() to use for wx-config
-# and headers added via wx_append_sources() to use for install.
 set(wxLIB_TARGETS)
+# List of headers added via wx_append_sources() to use for install
 set(wxINSTALL_HEADERS)
+# List of files not included in the install manifest
+set(WX_EXTRA_UNINSTALL_FILES)
 
 
 # This function adds a list of headers to a variable while prepending
