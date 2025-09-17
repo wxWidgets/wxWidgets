@@ -472,19 +472,6 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
     msflags &= ~WS_BORDER;
 #endif // wxUniversal
 
-    // Enable double buffering by default for all our own, i.e. not the ones
-    // using native controls, classes.
-    //
-    // Note that this function is not used for top-level windows, so we don't
-    // set this style for them, and also that setting it for children of
-    // windows that already have WS_EX_COMPOSITED set doesn't seem to have any
-    // bad effect as the style is just ignored in this case, so we don't bother
-    // checking it it's already set for the parent, even though we could.
-    if ( !classname )
-    {
-        exstyle |= WS_EX_COMPOSITED;
-    }
-
     if ( IsShown() )
     {
         msflags |= WS_VISIBLE;
