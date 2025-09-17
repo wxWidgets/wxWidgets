@@ -19,6 +19,13 @@ set(wxINSTALL_HEADERS)
 # List of files not included in the install manifest
 set(WX_EXTRA_UNINSTALL_FILES)
 
+# create one target with all libraries, same as FindwxWidgets
+set(CREATE_WX_TARGET OFF)
+if(NOT TARGET wxWidgets AND NOT TARGET wxWidgets::wxWidgets)
+    set(CREATE_WX_TARGET ON)
+    add_library(wxWidgets INTERFACE)
+    add_library(wxWidgets::wxWidgets ALIAS wxWidgets)
+endif()
 
 # This function adds a list of headers to a variable while prepending
 # include/ to the path
@@ -502,6 +509,11 @@ macro(wx_add_library name)
 
         add_library(${name} ${wxBUILD_LIB_TYPE} ${src_files})
         add_library(wx::${name_short} ALIAS ${name})
+        add_library(wxWidgets::${name_short} ALIAS ${name})
+        if(CREATE_WX_TARGET)
+            target_link_libraries(wxWidgets INTERFACE ${name})
+        endif()
+
         wx_set_target_properties(${name} ${ARGN})
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
@@ -710,6 +722,11 @@ function(wx_add_builtin_library name)
 
     add_library(${name} STATIC ${src_list})
     add_library(wx::${name_short} ALIAS ${name})
+    add_library(wxWidgets::${name_short} ALIAS ${name})
+    if(CREATE_WX_TARGET)
+        target_link_libraries(wxWidgets INTERFACE ${name})
+    endif()
+
     wx_set_builtin_target_properties(${name})
     set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 endfunction()
