@@ -114,10 +114,10 @@ void wxPowerResource::Release(wxPowerResourceKind kind)
 #import <Cocoa/Cocoa.h>
 #import "wx/power.h" // Assuming you have wxPowerEvent defined or a custom event
 
-@interface CocoaPowerEventsObserver : NSObject
+@interface wxCocoaPowerEventsObserver : NSObject
 @end
 
-@implementation CocoaPowerEventsObserver
+@implementation wxCocoaPowerEventsObserver
 
 - (id)init {
     self = [super init];
@@ -169,7 +169,7 @@ wxDECLARE_DYNAMIC_CLASS(wxCocoaPowerModule);
 public:
     bool OnInit() override
     {
-         m_powerObserver = [[CocoaPowerEventsObserver alloc] init];
+         m_powerObserver = [[wxCocoaPowerEventsObserver alloc] init];
          return true;
     }
 
@@ -183,7 +183,7 @@ public:
     }
 
 private:
-    CocoaPowerEventsObserver* m_powerObserver;
+    wxCocoaPowerEventsObserver* m_powerObserver;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxCocoaPowerModule, wxModule)
