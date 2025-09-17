@@ -153,7 +153,7 @@ if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
         ${WEBKIT2_LIBRARIES}
         )
 
-    wx_get_install_dir(library "lib")
+    wx_get_install_platform_dir(library)
 
     wx_install(TARGETS wxwebkit2_ext LIBRARY DESTINATION "${library_dir}/wx/${WX_WEB_EXT_VERSION}/web-extensions")
 

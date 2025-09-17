@@ -313,9 +313,10 @@ else()
     )
 endif()
 
+wx_get_install_platform_dir(archive)
 wx_install(TARGETS libcef_dll_wrapper
     EXPORT wxWidgetsTargets
-    ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+    ARCHIVE DESTINATION "${archive_dir}"
 )
 
 wx_lib_include_directories(wxwebview PRIVATE ${CEF_ROOT})

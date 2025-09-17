@@ -7,6 +7,14 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(wxUSE_ZLIB STREQUAL "sys")
+    find_package(ZLIB)
+    if(NOT ZLIB_FOUND)
+        # If the sys library can not be found use builtin
+        wx_option_force_value(wxUSE_ZLIB builtin)
+    endif()
+endif()
+
 if(wxUSE_ZLIB STREQUAL "builtin")
     # TODO: implement building zlib via its CMake file, using
     # add_subdirectory or ExternalProject_Add
@@ -40,6 +48,4 @@ if(wxUSE_ZLIB STREQUAL "builtin")
     endif()
     set(ZLIB_LIBRARIES wxzlib)
     set(ZLIB_INCLUDE_DIRS ${wxSOURCE_DIR}/src/zlib)
-elseif(wxUSE_ZLIB)
-    find_package(ZLIB REQUIRED)
 endif()
