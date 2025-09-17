@@ -125,6 +125,13 @@ endmacro()
 function(wx_set_common_target_properties target_name)
     cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
 
+    if(WIN32_MSVC_NAMING)
+        # Generator expression to not create different Debug and Release directories
+        set(GEN_EXPR_DIR "$<1:/>")
+    else()
+        set(GEN_EXPR_DIR "/")
+    endif()
+
     set_target_properties(${target_name} PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
         ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
