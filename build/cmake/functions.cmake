@@ -287,7 +287,7 @@ function(wx_set_target_properties target_name)
     endif()
     # For compatibility with MSVS project files and makefile.vc, use arch
     # suffix for non-x86 (including x86_64) DLLs.
-    if(MSVC AND wxARCH_SUFFIX)
+    if(WIN32_MSVC_NAMING AND wxARCH_SUFFIX)
         # This one already includes the leading underscore, so don't add another one.
         wx_string_append(dll_suffix "${wxARCH_SUFFIX}")
     endif()
@@ -301,7 +301,7 @@ function(wx_set_target_properties target_name)
     endif()
 
     set(lib_prefix "lib")
-    if(MSVC OR (WIN32 AND wxBUILD_SHARED))
+    if(WIN32_MSVC_NAMING OR (WIN32 AND wxBUILD_SHARED))
         set(lib_prefix)
     elseif (CYGWIN AND wxBUILD_SHARED)
         set(lib_prefix "cyg")
@@ -364,7 +364,7 @@ function(wx_set_target_properties target_name)
         target_compile_definitions(${target_name} PRIVATE wxUSE_GUI=1 wxUSE_BASE=0)
     endif()
 
-    if(WIN32 AND MSVC)
+    if(MSVC)
         # Suppress deprecation warnings for standard library calls
         target_compile_definitions(${target_name} PRIVATE
             _CRT_SECURE_NO_DEPRECATE=1
@@ -643,7 +643,7 @@ macro(wx_set_builtin_target_ouput_name target target_name)
     endif()
 
     set(lib_prefix "lib")
-    if(MSVC OR (WIN32 AND wxBUILD_SHARED))
+    if(WIN32_MSVC_NAMING OR (WIN32 AND wxBUILD_SHARED))
         set(lib_prefix)
     elseif (CYGWIN AND wxBUILD_SHARED)
         set(lib_prefix "cyg")

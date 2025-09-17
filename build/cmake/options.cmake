@@ -88,9 +88,9 @@ set(wxBUILD_INSTALL_LIBRARY_DIR "" CACHE STRING "override default sub-directory 
 mark_as_advanced(wxBUILD_INSTALL_LIBRARY_DIR)
 set(wxBUILD_INSTALL_ARCHIVE_DIR "" CACHE STRING "override default sub-directory to install archive files")
 mark_as_advanced(wxBUILD_INSTALL_ARCHIVE_DIR)
-wx_option(wxBUILD_INSTALL_PLATFORM_SUBDIR "platform specific sub-directory (MSVC-naming)" ON)
+wx_option(wxBUILD_INSTALL_PLATFORM_SUBDIR "use platform specific sub-directory (MSVC-naming)" ON)
 mark_as_advanced(wxBUILD_INSTALL_PLATFORM_SUBDIR)
-wx_option(wxBUILD_INSTALL_PDB "install pdb files in the runtime direcotry (MSVC)" OFF)
+wx_option(wxBUILD_INSTALL_PDB "install pdb files in the runtime directory (MSVC-naming)" OFF)
 mark_as_advanced(wxBUILD_INSTALL_PDB)
 
 # Use the MSVC/makefile naming convention, or the configure naming convention,

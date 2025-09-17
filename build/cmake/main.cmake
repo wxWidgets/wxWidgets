@@ -47,9 +47,7 @@ endif()
 
 if(WIN32_MSVC_NAMING)
     include(build/cmake/build_cfg.cmake)
-endif()
-
-if(NOT MSVC)
+else()
     # Write wx-config
     include(build/cmake/config.cmake)
 endif()
