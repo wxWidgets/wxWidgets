@@ -1666,10 +1666,7 @@ void wxWindowMSW::MSWDisableComposited()
         if ( win->IsTopLevel() )
             break;
 
-        wxMSWWinExStyleUpdater updater(GetHwndOf(win));
-        updater.TurnOff(WS_EX_COMPOSITED);
-        if ( updater.Apply() )
-            win->CallForEachChild([](wxWindow* w) { w->MSWOnDisabledComposited(); });
+        wxMSWWinExStyleUpdater(GetHwndOf(win)).TurnOff(WS_EX_COMPOSITED);
     }
 }
 
