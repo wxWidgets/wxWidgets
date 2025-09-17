@@ -1555,9 +1555,20 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     // finally draw the label
     if ( ShowsLabel() )
     {
-        COLORREF colFg = state & ODS_DISABLED
-                            ? ::GetSysColor(COLOR_GRAYTEXT)
-                            : wxColourToRGB(GetForegroundColour());
+        COLORREF colFg;
+        if (state & ODS_DISABLED)
+            colFg = ::GetSysColor(COLOR_GRAYTEXT);
+        else {
+            colFg = wxColourToRGB(GetForegroundColour());
+
+#if wxUSE_UXTHEME
+            if ( wxUxThemeIsActive() &&
+                 (GetButtonState(this, state) == wxAnyButton::State_Current) )
+                // The button is higlighted. We must make sure it remains
+                // readable.
+                colFg = ::GetSysColor(COLOR_BTNTEXT);
+#endif
+        }
 
         wxTextColoursChanger changeFg(hdc, colFg, CLR_INVALID);
         wxBkModeChanger changeBkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
