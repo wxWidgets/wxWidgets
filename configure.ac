@@ -415,9 +415,11 @@ dnl shouldn't default to wxUSE_ALL_FEATURES
 AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3 (default), 2, or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_cocoa,     [  --with-osx_cocoa        use macOS (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx_iphone,    [  --with-osx_iphone       use iOS], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
+WX_ARG_ONLY_WITH(iphonesimulator, [  --with-osx_iphonesimulator  use iPhone simulator], [wxUSE_OSX_IPHONE="$withval" wxUSE_IPHONESIMULATOR="yes" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(osx,           [  --with-osx              use macOS (default port, Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(cocoa,         [  --with-cocoa            same as --with-osx_cocoa], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(iphone,        [  --with-iphone           same as --with-osx_iphone], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
+WX_ARG_ONLY_WITH(iphonesimulator, [  --with-iphonesimulator     same as --with-osx_iphonesimulator], [wxUSE_OSX_IPHONE="$withval" wxUSE_IPHONESIMULATOR="yes" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(mac,           [  --with-mac              same as --with-osx], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 WX_ARG_ONLY_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 WX_ARG_ONLY_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
@@ -1339,7 +1341,11 @@ fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     if test "$wxUSE_OSX_IPHONE" = 1; then
-        MACOSX_VERSION_MIN_OPTS="-miphoneos-version-min=$wxUSE_MACOSX_VERSION_MIN"
+        if test "$wxUSE_IPHONESIMULATOR" = "yes"; then
+            MACOSX_VERSION_MIN_OPTS="-miphonesimulator-version-min=$wxUSE_MACOSX_VERSION_MIN"
+        else
+            MACOSX_VERSION_MIN_OPTS="-miphoneos-version-min=$wxUSE_MACOSX_VERSION_MIN"
+        fi
     else
         MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
     fi
