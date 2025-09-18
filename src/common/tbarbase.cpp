@@ -810,6 +810,21 @@ void wxToolBarBase::UpdateWindowUI(long flags)
     }
 }
 
+//sph091825
+void wxToolBarBase::SetHelpEventPos(wxHelpEvent& event)
+{
+    wxPoint pos1 = event.GetPosition();
+    wxPoint pos2 = ScreenToClient(pos1);
+    wxToolBarToolBase* base = FindToolForPosition(pos2.x, pos2.y);
+    if (base)
+    {
+        int nId = base->GetId();
+        event.SetId(nId);
+        event.SetPosition(pos2);
+    }
+}
+
+
 #if wxUSE_MENUS
 bool wxToolBarBase::SetDropdownMenu(int toolid, wxMenu* menu)
 {

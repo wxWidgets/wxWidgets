@@ -199,20 +199,8 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
 {
     wxCHECK_MSG( win, false, wxT("win parameter can't be null") );
 
-    int nId = win->GetId();
-    wxPoint pt1 = pt;
-    bool bTB = win->IsKindOf(wxCLASSINFO(wxToolBar));
-
-    if (bTB)
-    {
-        pt1 = win->ScreenToClient(pt);
-        wxToolBar* tb = static_cast<wxToolBar*>(win);
-        wxToolBarToolBase* base = tb->FindToolForPosition(pt1.x, pt1.y);
-        nId = base->GetId();
-    }
-
-    wxHelpEvent helpEvent(wxEVT_HELP, nId, pt1,
-                 wxHelpEvent::Origin_HelpButton);
+    wxHelpEvent helpEvent(wxEVT_HELP, win->GetId(), pt,
+        wxHelpEvent::Origin_HelpButton);
     helpEvent.SetEventObject(win);
     return win->GetEventHandler()->ProcessEvent(helpEvent);
 }

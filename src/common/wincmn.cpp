@@ -2212,6 +2212,9 @@ void wxWindowBase::OnHelp(wxHelpEvent& event)
             }
         }
 
+        //SPH091825 add virtual function to handle toolbar
+        SetHelpEventPos(event);
+
         if ( helpProvider->ShowHelpAtPoint(this, pos, origin) )
         {
             // skip the event.Skip() below
