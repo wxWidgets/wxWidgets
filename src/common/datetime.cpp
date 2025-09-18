@@ -2193,6 +2193,12 @@ bool wxDateTimeHolidayAuthority::IsHoliday(const wxDateTime& dt)
     {
         if ( ms_authorities[n]->DoIsHoliday(dt) )
         {
+            // DoIsHoliday() and DoGetHolidaysInRange() may have implementations
+            // completely independent of each other, but it would be nice if both
+            // consider the same days to be holidays.
+            wxDateTimeArray hol;
+            wxASSERT( ms_authorities[n]->DoGetHolidaysInRange(dt, dt, hol) == 1
+                      && hol.Last() == dt );
             return true;
         }
     }
@@ -2206,6 +2212,13 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
                                                const wxDateTime& dtEnd,
                                                wxDateTimeArray& holidays)
 {
+    if ( dtStart > dtEnd )
+    {
+        wxFAIL_MSG( wxT("invalid date range in GetHolidaysInRange") );
+
+        return 0u;
+    }
+
     wxDateTimeArray hol;
 
     holidays.Clear();
@@ -2214,6 +2227,14 @@ wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
     for ( size_t nAuth = 0; nAuth < countAuth; nAuth++ )
     {
         ms_authorities[nAuth]->DoGetHolidaysInRange(dtStart, dtEnd, hol);
+
+        // DoIsHoliday() and DoGetHolidaysInRange() may have implementations
+        // completely independent of each other, but it would be nice if both
+        // consider the same days to be holidays.
+        for ( size_t n = 0; n < hol.size(); ++n )
+        {
+            wxASSERT( ms_authorities[nAuth]->DoIsHoliday(hol[n]) );
+        }
 
         WX_APPEND_ARRAY(holidays, hol);
     }
@@ -2255,13 +2276,6 @@ size_t wxDateTimeWorkDays::DoGetHolidaysInRange(const wxDateTime& dtStart,
                                                 const wxDateTime& dtEnd,
                                                 wxDateTimeArray& holidays) const
 {
-    if ( dtStart > dtEnd )
-    {
-        wxFAIL_MSG( wxT("invalid date range in GetHolidaysInRange") );
-
-        return 0u;
-    }
-
     holidays.Empty();
 
     // instead of checking all days, start with the first Sat after dtStart and
@@ -2299,6 +2313,7 @@ std::vector<wxDateTime> wxDateTimeUSCatholicFeasts::m_holyDaysOfObligation =
     { wxDateTime(25, wxDateTime::Month::Dec, 0) }  // Christmas
 };
 
+/* static */
 wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
 {
     // Adjust for miscalculation in Gauss formula
@@ -2372,6 +2387,44 @@ wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
     }
 }
 
+/* static */
+wxDateTime wxDateTimeUSCatholicFeasts::GetThursdayAscension(int year)
+{
+    const wxDateTime ascension = GetEaster(year) + wxDateSpan::Days(39);
+    wxASSERT_MSG(
+        ascension.GetWeekDay() == wxDateTime::WeekDay::Thu,
+        "Error in Ascension calculation!");
+    return ascension;
+}
+
+/* static */
+wxDateTime wxDateTimeUSCatholicFeasts::GetSundayAscension(int year)
+{
+    const wxDateTime ascension = GetEaster(year) + wxDateSpan::Weeks(6);
+    wxASSERT_MSG(
+        ascension.GetWeekDay() == wxDateTime::WeekDay::Sun,
+        "Error in Ascension calculation!");
+    return ascension;
+}
+
+bool wxDateTimeUSCatholicFeasts::DoIsHoliday(const wxDateTime& dt) const
+{
+    if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+        dt.IsSameDate(GetThursdayAscension(dt.GetYear())) )
+    {
+        return true;
+    }
+    for (const auto& feast : m_holyDaysOfObligation)
+    {
+        if (feast.GetMonth() == dt.GetMonth() &&
+            feast.GetDay() == dt.GetDay())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStart,
                                                         const wxDateTime& dtEnd,
                                                         wxDateTimeArray& holidays) const
@@ -2393,21 +2446,14 @@ size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStar
 // wxDateTimeChristianHolidays
 // ----------------------------------------------------------------------------
 
-size_t wxDateTimeChristianHolidays::DoGetHolidaysInRange(const wxDateTime& dtStart,
-                                                         const wxDateTime& dtEnd,
-                                                         wxDateTimeArray& holidays) const
+bool wxDateTimeChristianHolidays::DoIsHoliday(const wxDateTime& dt) const
 {
-    holidays.Clear();
-
-    for (wxDateTime dt = dtStart; dt <= dtEnd; dt += wxDateSpan::Day())
+    if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+        (dt.GetMonth() == wxDateTime::Month::Dec && dt.GetDay() == 25))
     {
-        if (DoIsHoliday(dt) )
-        {
-            holidays.Add(dt);
-        }
+        return true;
     }
-
-    return holidays.size();
+    return false;
 }
 
 // ============================================================================

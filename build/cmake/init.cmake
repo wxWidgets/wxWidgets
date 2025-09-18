@@ -198,22 +198,18 @@ if(WIN32)
     endif()
 endif()
 
+wx_get_install_dir(include)
 if(WIN32_MSVC_NAMING)
     if(wxBUILD_SHARED)
         set(lib_suffix "_dll")
     else()
         set(lib_suffix "_lib")
     endif()
-
     set(wxPLATFORM_LIB_DIR "${wxCOMPILER_PREFIX}${wxARCH_SUFFIX}${lib_suffix}")
-
-    # Generator expression to not create different Debug and Release directories
-    set(GEN_EXPR_DIR "$<1:/>")
-    set(wxINSTALL_INCLUDE_DIR "include")
+    set(wxINSTALL_INCLUDE_DIR "${include_dir}")
 else()
-    set(GEN_EXPR_DIR "/")
     wx_get_flavour(lib_flavour "-")
-    set(wxINSTALL_INCLUDE_DIR "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
+    set(wxINSTALL_INCLUDE_DIR "${include_dir}/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}${lib_flavour}")
 endif()
 
 if(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
@@ -460,7 +456,43 @@ if(wxUSE_GUI)
             wx_option_force_value(wxUSE_OWNER_DRAWN OFF)
         endif()
 
-        if(NOT UNIX)
+        if(UNIX)
+            if(wxHAVE_GDK_WAYLAND AND wxUSE_WAYLAND)
+                find_package(PkgConfig)
+                pkg_check_modules(WAYLAND_CLIENT wayland-client)
+                if(WAYLAND_CLIENT_FOUND)
+                    pkg_get_variable(WAYLAND_SCANNER wayland-scanner wayland_scanner)
+                    if(WAYLAND_SCANNER)
+                        set(wx_protocols_input_dir ${wxSOURCE_DIR}/src/unix/protocols)
+                        set(wx_protocols_output_dir ${wxSETUP_HEADER_PATH}/wx/protocols)
+
+                        # Note that we need multiple execute_process()
+                        # invocations as single one would run commands
+                        # concurrently and not sequentially.
+                        execute_process(
+                            COMMAND
+                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_output_dir}
+                        )
+                        execute_process(
+                            COMMAND
+                                ${WAYLAND_SCANNER} client-header
+                                    ${wx_protocols_input_dir}/pointer-warp-v1.xml
+                                    ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
+                        )
+                        execute_process(
+                            COMMAND
+                                ${WAYLAND_SCANNER} private-code
+                                    ${wx_protocols_input_dir}/pointer-warp-v1.xml
+                                    ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
+                        )
+
+                        set(wxHAVE_WAYLAND_CLIENT ON)
+                        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${WAYLAND_CLIENT_INCLUDE_DIRS})
+                        list(APPEND wxTOOLKIT_LIBRARIES ${WAYLAND_CLIENT_LIBRARIES})
+                    endif()
+                endif()
+            endif()
+        else()
             wx_option_force_value(wxUSE_WEBVIEW OFF)
             wx_option_force_value(wxUSE_MEDIACTRL OFF)
             wx_option_force_value(wxUSE_UIACTIONSIMULATOR OFF)
@@ -638,6 +670,7 @@ if(wxUSE_GUI)
         find_package(SDL2)
         if(NOT SDL2_FOUND)
             find_package(SDL)
+            mark_as_advanced(SDL_INCLUDE_DIR SDLMAIN_LIBRARY)
         endif()
         if(NOT SDL2_FOUND AND NOT SDL_FOUND)
             message(WARNING "SDL not found, SDL Audio back-end won't be available")

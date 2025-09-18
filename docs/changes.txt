@@ -206,6 +206,13 @@ Changes in behaviour which may result in build errors
   the official ones and those using MSVS projects, but also when using
   makefile.vc or CMake, for consistency.
 
+- CMake files are now installed in a versioned subdirectory, e.g.
+  lib/cmake/wxWidgets-3.3, to allow installing multiple versions of wxWidgets
+  simultaneously, and not just "wxWidgets" as before. Please update your
+  CMake files if you rely on the exact name of this directory. Note that
+  nothing needs to be done if you simply use find_package(wxWidgets) as it
+  still works in the same way as before.
+
 - Support for memory debugging that was previously disabled but could be
   activated by using wxUSE_MEMORY_TRACING, wxUSE_GLOBAL_MEMORY_OPERATORS etc
   options was completely removed. Please use address sanitizer or similar

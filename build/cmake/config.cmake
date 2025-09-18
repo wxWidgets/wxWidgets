@@ -100,18 +100,21 @@ function(wx_write_config_inplace)
     execute_process(
         COMMAND
         "${CMAKE_COMMAND}" -E ${COPY_CMD}
-        "${wxBINARY_DIR}/lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
+        "${wxCONFIG_DIR}/inplace-${TOOLCHAIN_FULLNAME}"
         "${wxBINARY_DIR}/wx-config"
         )
 endfunction()
 
 function(wx_write_config)
+    wx_get_install_dir(include)
+    wx_get_install_platform_dir(library)
+    wx_get_install_platform_dir(runtime)
 
     set(prefix ${CMAKE_INSTALL_PREFIX})
     set(exec_prefix "\${prefix}")
-    set(includedir "\${prefix}/include")
-    set(libdir "\${exec_prefix}/lib")
-    set(bindir "\${exec_prefix}/bin")
+    set(includedir "\${prefix}/${include_dir}")
+    set(libdir "\${exec_prefix}/${library_dir}")
+    set(bindir "\${exec_prefix}/${runtime_dir}")
 
     if(wxBUILD_MONOLITHIC)
         set(MONOLITHIC 1)

@@ -28,14 +28,23 @@ public:
     // Implementation
     virtual void MacHiliteChanged() override;
     void OnPaint(wxPaintEvent& event);
+    virtual bool GetFieldRect(int i, wxRect& rect) const override;
+
+    void MacSetCornerInset(int inset);
+    int MacGetCornerInset() const { return m_cornerInset; }
 
 protected:
     virtual int GetEffectiveFieldStyle(int WXUNUSED(i)) const override { return wxSB_NORMAL; }
 
     virtual void InitColours() override;
 
+    void InitCornerInset();
+
+    virtual int GetAvailableWidthForFields(int width) const override;
+
 private:
-    wxColour m_textActive, m_textInactive;
+    int m_cornerInset;
+    wxColour m_textActive, m_textInactive, m_bgActive, m_bgInactive, m_separator;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBarMac);
     wxDECLARE_EVENT_TABLE();

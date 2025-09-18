@@ -27,11 +27,12 @@ inline std::ostream& operator<<(std::ostream& o, const wxFileName& fn)
 class TestFile
 {
 public:
-    TestFile()
+    // Ctor creates the file and initializes with the provided temporary data.
+    explicit TestFile(const void* data = "Before", size_t size = 6)
     {
         wxFile file;
         m_name = wxFileName::CreateTempFileName(wxT("wxtest"), &file);
-        file.Write("Before", 6);
+        file.Write(data, size);
     }
 
     ~TestFile() { if (wxFileExists(m_name)) wxRemoveFile(m_name); }

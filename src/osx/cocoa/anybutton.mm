@@ -44,5 +44,5 @@ wxSize wxAnyButton::DoGetBestSize() const
 
 wxSize wxAnyButton::GetDefaultSize()
 {
-    return wxSize(84, 20);
+    return wxSize(74, 20);
 }
