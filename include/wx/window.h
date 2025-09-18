@@ -1448,7 +1448,9 @@ public:
         return GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Unknown);
     }
 
-	//sph091825
+    /*
+    * Modified: S. P. Hirshman (091825)
+    */
 	virtual void SetHelpIdAtPoint(wxHelpEvent& WXUNUSED(event)) { return; }
 
 #else // !wxUSE_HELP
