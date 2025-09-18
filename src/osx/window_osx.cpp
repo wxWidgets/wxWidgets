@@ -844,29 +844,14 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
     }
 }
 
-bool wxWindowMac::SetCursor(const wxCursor& cursor)
+void wxWindowMac::WXUpdateCursor()
 {
-    if (m_cursor.IsSameAs(cursor))
-        return false;
-
-    if (!cursor.IsOk())
-    {
-        if ( ! wxWindowBase::SetCursor( *wxSTANDARD_CURSOR ) )
-            return false ;
-    }
-    else
-    {
-        if ( ! wxWindowBase::SetCursor( cursor ) )
-            return false ;
-    }
-
-    wxASSERT_MSG( m_cursor.IsOk(),
-        wxT("cursor must be valid after call to the base version"));
+    wxWindowBase::WXUpdateCursor();
 
     if ( GetPeer() != nullptr )
-        GetPeer()->SetCursor( m_cursor );
-
-    return true ;
+    {
+        GetPeer()->SetCursor( m_cursor.IsOk() ? m_cursor : *wxSTANDARD_CURSOR ) ;
+    }
 }
 
 #if wxUSE_MENUS
