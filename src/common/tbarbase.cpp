@@ -811,7 +811,7 @@ void wxToolBarBase::UpdateWindowUI(long flags)
 }
 
 //sph091825
-void wxToolBarBase::SetHelpEventPos(wxHelpEvent& event)
+void wxToolBarBase::SetHelpIdAtPoint(wxHelpEvent& event)
 {
     wxPoint pos1 = event.GetPosition();
     wxPoint pos2 = ScreenToClient(pos1);
@@ -820,7 +820,6 @@ void wxToolBarBase::SetHelpEventPos(wxHelpEvent& event)
     {
         int nId = base->GetId();
         event.SetId(nId);
-        event.SetPosition(pos2);
     }
 }
 

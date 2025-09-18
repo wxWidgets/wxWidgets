@@ -1449,7 +1449,7 @@ public:
     }
 
 	//sph091825
-	virtual void SetHelpEventPos(wxHelpEvent& WXUNUSED(event)) { return; }
+	virtual void SetHelpIdAtPoint(wxHelpEvent& WXUNUSED(event)) { return; }
 
 #else // !wxUSE_HELP
     // silently ignore SetHelpText() calls
