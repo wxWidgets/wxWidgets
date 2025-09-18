@@ -3140,6 +3140,21 @@ public:
     ///@{
 
     /**
+        Get the ID to be used for help events generated at the given point.
+
+        By default help events use the ID of the window for which they are
+        generated, but in some cases it may be preferable to use an ID for a
+        sub-element of the window instead, e.g. this is used by wxToolBar to
+        generate help events with the ID of the tool under the mouse, if any.
+
+        Similarly, this function may be overridden in other composite controls
+        in the application code.
+
+        @since 3.3.2
+     */
+    virtual int GetHelpIdAtPoint(const wxPoint& pt);
+
+    /**
         Gets the help text to be used as context-sensitive help for this window.
         Note that the text is actually stored by the current wxHelpProvider
         implementation, and not in the window object itself.

@@ -3831,6 +3831,11 @@ public:
     clicked-on window, and then either show some suitable help or call wxEvent::Skip()
     if the identifier is unrecognised.
 
+    Note that for some windows, such as wxToolBar, the event uses the ID of the
+    tool that was under the mouse, if any, and not the ID of the window itself.
+    If necessary, wxEvent::GetEventObject() may be used to get the pointer to
+    the toolbar itself.
+
     Calling Skip is important because it allows wxWidgets to generate further
     events for ancestors of the clicked-on window. Otherwise it would be impossible to
     show help for container windows, since processing would stop after the first window
