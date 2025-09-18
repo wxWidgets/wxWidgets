@@ -1448,10 +1448,7 @@ public:
         return GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Unknown);
     }
 
-    /*
-    * Modified: S. P. Hirshman (091825)
-    */
-	virtual void SetHelpIdAtPoint(wxHelpEvent& WXUNUSED(event)) { return; }
+    virtual void SetHelpIdAtPoint(wxHelpEvent& WXUNUSED(event)) { }
 
 #else // !wxUSE_HELP
     // silently ignore SetHelpText() calls

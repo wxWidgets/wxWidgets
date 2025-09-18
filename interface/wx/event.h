@@ -3831,7 +3831,7 @@ public:
     clicked-on window, and then either show some suitable help or call wxEvent::Skip()
     if the identifier is unrecognised.
 
-    Modified 091825: Added a virtual function SetHelpIdAtPoint (in windows.h) to convert
+    Added a virtual function SetHelpIdAtPoint (in windows.h) to convert
     ToolBar Id in context help mode to actual pressed button Id for derived wxToolBar class
 
     Calling Skip is important because it allows wxWidgets to generate further
