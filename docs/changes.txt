@@ -11,19 +11,6 @@ INCOMPATIBLE CHANGES SINCE 3.2.x:
 Changes in behaviour not resulting in compilation errors
 --------------------------------------------------------
 
-- wxMSW now uses double buffering by default, meaning that updating the
-  windows using wxClientDC doesn't work any longer, which is consistent with
-  the behaviour of wxGTK with Wayland backend and of wxOSX, but not with the
-  traditional historic behaviour of wxMSW (or wxGTK/X11). You may call
-  MSWDisableComposited() to restore the previous behaviour, however it is
-  strongly recommended to change your redrawing logic to avoid using wxClientDC
-  instead, as the code using it still won't work with wxGTK/wxOSX.
-
-  You may also choose to globally set the new msw.window.no-composited system
-  option to disable the use of double buffering, but please consider doing it
-  only as a last resort and/or temporary solution, as this _will_ result in
-  flicker and won't be supported at all in the future wxWidgets versions.
-
 - wxMSW doesn't support versions of Microsoft Windows before Windows 7. If you
   need Windows XP or Vista support, please use wxWidgets 3.2.
 

@@ -554,13 +554,9 @@ public:
     virtual bool IsDoubleBuffered() const override;
 
     // Ensure that neither this window itself nor any of its parents use
-    // WS_EX_COMPOSITED: this is used by the native wxListCtrl which is
-    // incompatible with this style.
+    // WS_EX_COMPOSITED: this may only be necessary after calling
+    // SetDoubleBuffered() which sets this style.
     void MSWDisableComposited();
-
-    // This function is called for all child windows when compositing is
-    // disabled for their parent.
-    virtual void MSWOnDisabledComposited() { }
 
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();

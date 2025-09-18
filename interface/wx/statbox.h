@@ -20,13 +20,8 @@
     wxWidgets 2.9.1 it is strongly recommended to create them as children of
     wxStaticBox itself, as doing this avoids problems with repainting that
     could happen when creating the other windows as siblings of the box.
-    Notably, in wxMSW, siblings of the static box are not drawn at all inside
-    it when compositing is used, which is the case by default, and
-    wxWindow::MSWDisableComposited() must be explicitly called to fix this.
-    Creating windows located inside the static box as its children avoids this
-    problem and works well whether compositing is used or not.
 
-    To summarize, the correct way to create static box and the controls inside
+    To be clear, the correct way to create static box and the controls inside
     it is:
     @code
         void MyFrame::CreateControls()

@@ -735,8 +735,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if ( !CreateWindow(parent, id, pos, size, style, name) )
         return false;
 
-    MSWDisableComposited();
-
     // Choose a matching pixel format.
     // Need a PIXELFORMATDESCRIPTOR for SetPixelFormat()
     PIXELFORMATDESCRIPTOR pfd;

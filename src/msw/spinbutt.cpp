@@ -22,7 +22,6 @@
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
-    #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
 #endif
 
@@ -253,13 +252,7 @@ void wxSpinButton::OnPaint(wxPaintEvent& event)
     }
     else
     {
-        // We need to always paint this control explicitly instead of letting
-        // DefWndProc() do it, as this avoids whichever optimization the latter
-        // function does when WS_EX_COMPOSITED is on that result in not drawing
-        // parts of the control at all (see #23656).
-        wxPaintDC dc(this);
-
-        wxSpinButtonBase::OnPaint(event);
+        event.Skip();
     }
 }
 

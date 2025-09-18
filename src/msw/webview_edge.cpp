@@ -1078,8 +1078,6 @@ bool wxWebViewEdge::Create(wxWindow* parent,
         return false;
     }
 
-    MSWDisableComposited();
-
     if (!m_impl->Create())
         return false;
     Bind(wxEVT_SIZE, &wxWebViewEdge::OnSize, this);
