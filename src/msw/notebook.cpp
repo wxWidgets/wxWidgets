@@ -1296,7 +1296,10 @@ void wxNotebook::MSWNotebookPaint()
         rectTabArea.SetRight(sizeWindow.x);
     else
         rectTabArea.SetBottom(sizeWindow.y);
-    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+    if (m_backgroundColour.IsOk())
+        dc.SetBrush(m_backgroundColour);
+    else
+        dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(rectTabArea);
 
