@@ -44,9 +44,12 @@ if(APPLE)
 elseif(WXMSW)
     if(wxUSE_WEBVIEW_EDGE)
         # Update the following variables if updating WebView2 SDK
-        set(WEBVIEW2_VERSION "1.0.1722.45")
+        set(WEBVIEW2_VERSION "1.0.3485.44")
         set(WEBVIEW2_URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/${WEBVIEW2_VERSION}")
-        set(WEBVIEW2_SHA256 "10d78e9e11c7851f0a8bf0dd4c22bbf6383de45bd337e1be42240b103812947d")
+        # When updating the above version of WebView2, download the nupkg from the above URL.
+        # Then, from a PowerShell session, call Get-FileHash on the downloaded nupkg file to get its SHA256
+        # to update here.
+        set(WEBVIEW2_SHA256 "BC09150B179246AC90189649B13BE8E6B11B3AC200E817E18DF106E1F3CF489E")
 
         set(WEBVIEW2_DEFAULT_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/packages/Microsoft.Web.WebView2.${WEBVIEW2_VERSION}")
 
