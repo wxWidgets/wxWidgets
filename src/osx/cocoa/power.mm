@@ -80,28 +80,8 @@ static wxAtomicInt g_powerResourceSystemRefCount = 0;
 @end
 
 namespace {
-// wrapper around obj-c interface, usable as std::unique_ptr
-class wxCocoaPowerEventsObserverWrapper
-{
-public:
-    wxCocoaPowerEventsObserverWrapper()
-        : m_powerEventsObserver( [[wxCocoaPowerEventsObserver alloc] init] )
-    {
-    }
-
-    ~wxCocoaPowerEventsObserverWrapper()
-    {
-        [m_powerEventsObserver release];
-    }
-
-private:
-    wxCocoaPowerEventsObserver* m_powerEventsObserver;
-
-    wxDECLARE_NO_COPY_CLASS(wxCocoaPowerEventsObserverWrapper);
-};
-
 // the global power events observer
-static std::unique_ptr<wxCocoaPowerEventsObserverWrapper> g_powerEventsObserver;
+static wxCFRef<wxCocoaPowerEventsObserver*> g_powerEventsObserver;
 
 // add power observers on init and remove on exit
 class wxCocoaPowerModule : public wxModule
@@ -113,10 +93,7 @@ public:
         // There should be no other threads by now, so no locking is needed.
         if ( g_powerResourceSystemRefCount )
         {
-            if ( g_powerEventsObserver )
-            {
-                delete g_powerEventsObserver.release();
-            }
+            g_powerEventsObserver.reset();
 
             g_powerResourceSystemRefCount = 0;
         }
@@ -164,9 +141,9 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
             [[NSProcessInfo processInfo]
              endActivity:(id)g_processInfoActivity];
             g_processInfoActivity = nil;
-
-            return true;
         }
+
+        g_powerEventsObserver.reset();
     }
 
     return true;
@@ -183,9 +160,9 @@ wxPowerResource::Acquire(wxPowerResourceKind kind,
         {
             wxAtomicInc(g_powerResourceSystemRefCount);
 
-            if ( !g_powerEventsObserver )
+            if ( g_powerEventsObserver.get() == nullptr )
             {
-                g_powerEventsObserver.reset( new wxCocoaPowerEventsObserverWrapper() );
+                g_powerEventsObserver = [[wxCocoaPowerEventsObserver alloc] init];
             }
         }
 
