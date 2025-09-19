@@ -1,0 +1,1 @@
+wxOSX: Add support for suspend/resume event generation (Tijs Van Buggenhout, #25778).
