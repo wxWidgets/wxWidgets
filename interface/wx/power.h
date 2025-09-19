@@ -67,9 +67,9 @@ enum wxPowerBlockKind
     system is suspended, hibernated, plugged into or unplugged from the wall socket
     and so on. wxPowerEvents are emitted by wxWindows.
 
-    Notice that currently these events are generated only under MSW and Linux
-    and that under Linux you @e must use wxPowerResource::Acquire() to receive
-    them, e.g. typically an application interested in these events should
+    Notice that currently these events are generated only under MSW, Linux and
+    MacOS (cocoa). Under Linux and MacOS you @e must use wxPowerResource::Acquire()
+    to receive them, e.g. typically an application interested in these events should
     initialize wxPowerResourceBlocker for ::wxPOWER_RESOURCE_SYSTEM resource
     using ::wxPOWER_DELAY block kind when initializing either the application
     itself or its main window. E.g. for an application that wants to handle

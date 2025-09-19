@@ -40,7 +40,7 @@ enum wxBatteryState
 // compiling in the code for handling them which is never going to be invoked
 // under the other platforms, we define wxHAS_POWER_EVENTS symbol if this event
 // is available, it should be used to guard all code using wxPowerEvent
-#if defined(__WINDOWS__) || defined(__WXGTK__)
+#if defined(__WINDOWS__) || defined(__WXGTK__) || defined(__WXOSX_COCOA__)
 
 #define wxHAS_POWER_EVENTS
 
