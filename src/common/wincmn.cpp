@@ -2212,7 +2212,6 @@ void wxWindowBase::OnHelp(wxHelpEvent& event)
             }
         }
 
-        //SPH091825 add virtual function to handle toolbar
         SetHelpIdAtPoint(event);
 
         if ( helpProvider->ShowHelpAtPoint(this, pos, origin) )
@@ -4145,7 +4144,4 @@ wxWindowBase::AdjustForLayoutDirection(wxCoord x,
         x = widthTotal - x - width;
     }
 
-    return x;
-}
-
-
+    return x;}
