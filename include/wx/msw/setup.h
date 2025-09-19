@@ -645,7 +645,7 @@
 // Default is 1.
 //
 // Recommended setting: 1
-#define wxUSE_MEDIACTRL     1
+#define wxUSE_MEDIACTRL 0
 
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
@@ -1319,7 +1319,7 @@
 //
 // Recommended setting: 1 if you intend to use OpenGL, can be safely set to 0
 // otherwise.
-#define wxUSE_GLCANVAS       1
+#define wxUSE_GLCANVAS 0
 
 // Setting wxUSE_GLCANVAS_EGL to 1 enables OpenGL EGL backend. This will be
 // automatically enabled if EGL support is detected.  EGL support is only
