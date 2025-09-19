@@ -4146,5 +4146,3 @@ wxWindowBase::AdjustForLayoutDirection(wxCoord x,
 
     return x;
 }
-
-

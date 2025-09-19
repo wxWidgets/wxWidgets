@@ -810,7 +810,6 @@ void wxToolBarBase::UpdateWindowUI(long flags)
     }
 }
 
-
 void wxToolBarBase::SetHelpIdAtPoint(wxHelpEvent& event)
 {
     wxPoint pos1 = event.GetPosition();
