@@ -833,6 +833,9 @@ void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
     // check if this is a scroll area (scroll only inner viewport)
     QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
 
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        dx = -dx;
+
     // scroll the widget or the specified rect (not children)
     if ( rect != nullptr )
         widget->scroll( dx, dy, wxQtConvertRect( *rect ));
