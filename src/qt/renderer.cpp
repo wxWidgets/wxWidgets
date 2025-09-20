@@ -170,12 +170,14 @@ wxRendererQt::DrawHeaderButton(wxWindow *win,  wxDC& dc, const wxRect& rect, int
 
     wxDCClipper clip(dc, rect);
 
+    const bool isRTL = dc.GetLayoutDirection() == wxLayout_RightToLeft;
+
     auto qtWidget = win->GetHandle();
     auto qtStyle = qtWidget->style();
 
+    int iconSize = qtStyle->pixelMetric(QStyle::PM_SmallIconSize, nullptr, qtWidget);
     int margin = qtStyle->pixelMetric(QStyle::PM_HeaderMargin, nullptr, qtWidget);
-    int bestWidth = qtStyle->pixelMetric(QStyle::PM_HeaderDefaultSectionSizeHorizontal, nullptr, qtWidget)
-                  + 2 * margin;
+    int bestWidth = qtStyle->pixelMetric(QStyle::PM_HeaderDefaultSectionSizeHorizontal, nullptr, qtWidget);
 
     QStyleOptionHeader option;
     option.initFrom(qtWidget);
@@ -195,9 +197,17 @@ wxRendererQt::DrawHeaderButton(wxWindow *win,  wxDC& dc, const wxRect& rect, int
             option.state |= QStyle::State_Sunken;
     }
 
+    QString labelText;
+    QRect   labelRect;
+    QFont   labelFont;
+    int     labelOffset = 0;
+
     if ( params )
     {
         option.text = wxQtConvertString(params->m_labelText);
+
+        bestWidth = wxMax(bestWidth, option.fontMetrics.boundingRect(option.text).width());
+        bestWidth += 2 * margin;
 
         if ( params->m_labelColour.IsOk() )
         {
@@ -207,14 +217,15 @@ wxRendererQt::DrawHeaderButton(wxWindow *win,  wxDC& dc, const wxRect& rect, int
 
         if ( params->m_labelFont.IsOk() )
         {
-            option.fontMetrics = QFontMetrics(params->m_labelFont.GetHandle());
+            labelFont = params->m_labelFont.GetHandle();
+            option.fontMetrics = QFontMetrics(labelFont);
         }
 
         switch ( params->m_labelAlignment )
         {
             default:
             case wxALIGN_LEFT:
-                option.textAlignment = Qt::AlignLeft;
+                option.textAlignment = isRTL ? Qt::AlignRight : Qt::AlignLeft;
                 break;
 
             case wxALIGN_CENTER:
@@ -222,22 +233,52 @@ wxRendererQt::DrawHeaderButton(wxWindow *win,  wxDC& dc, const wxRect& rect, int
                 break;
 
             case wxALIGN_RIGHT:
-                option.textAlignment = Qt::AlignRight;
+                option.textAlignment = isRTL ? Qt::AlignLeft : Qt::AlignRight;
                 break;
         }
 
         if ( params->m_labelBitmap.IsOk() )
         {
+            bestWidth += iconSize;
+
             option.icon = *params->m_labelBitmap.GetHandle();
             option.iconAlignment = Qt::AlignVCenter;
 
             if ( win->HasFlag(wxHD_BITMAP_ON_RIGHT) )
-                option.iconAlignment |= Qt::AlignRight;
-
-            bestWidth += qtStyle->pixelMetric(QStyle::PM_SmallIconSize, nullptr, qtWidget);
+                option.iconAlignment |= isRTL ? Qt::AlignLeft : Qt::AlignRight;
+            else
+                option.iconAlignment |= isRTL ? Qt::AlignRight : Qt::AlignLeft;
+        }
+        else
+        {
+            iconSize = 0;
         }
 
-        bestWidth = wxMax(bestWidth, option.fontMetrics.boundingRect(option.text).width());
+        if ( isRTL )
+        {
+            labelText = std::move(option.text);
+
+            if ( iconSize > 0 && option.textAlignment != option.iconAlignment )
+            {
+                if ( !win->HasFlag(wxHD_BITMAP_ON_RIGHT) )
+                {
+                    if ( option.textAlignment == Qt::AlignRight )
+                        labelOffset = iconSize;
+                    else if ( option.textAlignment == Qt::AlignLeft )
+                        labelOffset = -iconSize;
+                }
+                else if ( option.textAlignment == Qt::AlignLeft )
+                {
+                        labelOffset = -2*iconSize;
+                }
+
+            }
+
+            labelRect = option.rect;
+            labelRect.setX(-labelRect.x()-bestWidth-labelOffset);
+            labelRect.setWidth(bestWidth);
+            labelRect.adjust(4*margin, 0, -margin, 0);
+        }
     }
 
 #if 0
@@ -254,6 +295,17 @@ wxRendererQt::DrawHeaderButton(wxWindow *win,  wxDC& dc, const wxRect& rect, int
 #endif
 
     qtStyle->drawControl(QStyle::CE_Header, &option, painter, qtWidget);
+
+    if ( isRTL )
+    {
+        // text is not mirrored
+        painter->save();
+        painter->scale(-1, 1);
+        painter->setFont(labelFont);
+        qtStyle->drawItemText(painter, labelRect, option.textAlignment, option.palette,
+                              flags & wxCONTROL_DISABLED, labelText);
+        painter->restore();
+    }
 
     if ( sortArrow != wxHDR_SORT_ICON_NONE )
     {
@@ -465,7 +517,21 @@ wxRendererQt::DrawCheckBox(wxWindow* win,  wxDC& dc, const wxRect& rect, int fla
     else
         option.state |= QStyle::State_Off;
 
+    const bool isRTL = dc.GetLayoutDirection() == wxLayout_RightToLeft;
+    if (isRTL)
+    {
+        // checkbox is not mirrored
+        painter->save();
+        painter->scale(-1, 1);
+
+        option.direction = Qt::LeftToRight;
+        option.rect.setX(-rect.x-rect.width);
+    }
+
     qtStyle->drawControl(QStyle::CE_CheckBox, &option, painter, qtWidget);
+
+    if (isRTL)
+        painter->restore();
 }
 
 wxSize
@@ -633,6 +699,9 @@ wxDrawGauge(QStyleOptionProgressBar& option, QPainter* painter, QWidget* qtWidge
     else
     {
         option.state |= QStyle::State_Horizontal;
+
+        if ( qtWidget->layoutDirection() == Qt::RightToLeft )
+            option.invertedAppearance = true;
     }
 
     const bool drawGrooveAndContents =
