@@ -48,6 +48,14 @@ private:
     virtual void paintEvent(QPaintEvent* WXUNUSED(event)) override
     {
         QPainter painter(this);
+
+        auto parent = parentWidget();
+        if ( parent && parent->layoutDirection() == Qt::RightToLeft )
+        {
+            painter.translate(parent->width(), 0);
+            painter.scale(-1, 1);
+        }
+
         m_pict.play(&painter);
     }
 };
@@ -100,9 +108,13 @@ void wxOverlayImpl::Init(wxDC* dc, int , int , int , int )
     m_overlay = new wxOverlayWindow(m_target ? m_target->GetHandle() : nullptr);
 }
 
-void wxOverlayImpl::BeginDrawing(wxDC* WXUNUSED(dc))
+void wxOverlayImpl::BeginDrawing(wxDC* dc)
 {
     wxCHECK_RET( IsOk(), "wxOverlay not initialized" );
+
+    // For correct result in RTL layout, the drawing is done in a non-mirrored
+    // DC and the mirroring is done in paintEvent() above.
+    dc->SetLayoutDirection(wxLayout_LeftToRight);
 
     QRect qtRect = m_target ? m_target->GetHandle()->rect()
                             : qGuiApp->primaryScreen()->geometry();
