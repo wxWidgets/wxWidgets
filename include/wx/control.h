@@ -56,6 +56,8 @@ public:
         wxWindow::SetLabel(label);
     }
 
+    void SetHelpIdAtPoint(wxHelpEvent& WXUNUSED(event)) override {};
+
     // return the original string, as it was passed to SetLabel()
     // (i.e. with wx-style mnemonics)
     virtual wxString GetLabel() const override { return m_labelOrig; }
