@@ -22,6 +22,7 @@
 #include <QShortcut>
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/dcclient.h"
     #include "wx/frame.h"
     #include "wx/log.h"
@@ -424,6 +425,8 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
 
     if ( parent )
         parent->AddChild( this );
+
+    SetLayoutDirection(wxLayout_Default);
 
     wxPoint p;
     if ( pos != wxDefaultPosition )
@@ -831,6 +834,56 @@ void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
         widget->scroll( dx, dy );
 }
 
+void wxWindowQt::SetLayoutDirection(wxLayoutDirection dir)
+{
+    if ( dir == wxLayout_Default )
+    {
+        const wxWindow* const parent = GetParent();
+        if ( parent )
+        {
+            // inherit layout from parent.
+            dir = parent->GetLayoutDirection();
+        }
+        else // no parent, use global default layout
+        {
+            dir = wxTheApp->GetLayoutDirection();
+        }
+    }
+
+    Qt::LayoutDirection qtDir = Qt::LeftToRight;
+
+    switch ( dir )
+    {
+    case wxLayout_Default:
+        break;
+
+    case wxLayout_LeftToRight:
+        qtDir = Qt::LeftToRight;
+        break;
+
+    case wxLayout_RightToLeft:
+        qtDir = Qt::RightToLeft;
+        break;
+    }
+
+    GetHandle()->setLayoutDirection(qtDir);
+}
+
+wxLayoutDirection wxWindowQt::GetLayoutDirection() const
+{
+    return GetHandle()->layoutDirection() == Qt::RightToLeft
+            ? wxLayout_RightToLeft
+            : wxLayout_LeftToRight;
+}
+
+wxCoord wxWindowQt::AdjustForLayoutDirection(wxCoord x,
+                                             wxCoord WXUNUSED(width),
+                                             wxCoord WXUNUSED(widthTotal)) const
+{
+    // wxQt mirrors the coordinates of RTL windows automatically, so don't
+    // redo it ourselves
+    return x;
+}
 
 #if wxUSE_DRAG_AND_DROP
 void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
@@ -1071,6 +1124,14 @@ void wxWindowQt::DoGetPosition(int *x, int *y) const
     QWidget *qtWidget = GetHandle();
     *x = qtWidget->x();
     *y = qtWidget->y();
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft && GetParent() )
+    {
+        int w;
+        GetParent()->GetClientSize(&w, nullptr);
+
+        *x = w - (*x + qtWidget->width());
+    }
 }
 
 namespace
@@ -1182,18 +1243,43 @@ void wxWindowQt::DoSetClientSize(int width, int height)
     }
 
     QRect geometry = qtWidget->geometry();
+    const int dx = width - geometry.width();
     geometry.setWidth( width );
     geometry.setHeight( height );
     qtWidget->setGeometry( geometry );
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        for ( const auto child : GetChildren() )
+        {
+            if ( child->IsTopLevel() )
+                continue;
+
+            wxPoint pos = child->GetPosition();
+            pos.x -= dx;
+            child->SetPosition(pos);
+        }
+    }
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 {
     QWidget *qtWidget = GetHandle();
 
-    qtWidget->move( x, y );
-
     const auto clientSize = wxQtSetClientSize(qtWidget, width, height);
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft && !IsTopLevel() )
+    {
+        const auto parent = GetParent();
+        if ( parent )
+        {
+            int w;
+            parent->GetClientSize(&w, nullptr);
+            x = w - (x + width);
+        }
+    }
+
+    qtWidget->move( x, y );
 
     if (!qtWidget->isVisible() && clientSize.x > 0 && clientSize.y > 0)
     {
@@ -1400,9 +1486,6 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         return false;
     }
 
-    // use the Qt event region:
-    m_updateRegion.QtSetRegion( event->region() );
-
     // Prepare the Qt painter:
     QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
 
@@ -1420,6 +1503,24 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     if ( ok )
     {
         bool handled;
+
+        auto qtRegion = event->region();
+
+        if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            int w;
+            GetClientSize(&w, nullptr);
+            QTransform matrix;
+            matrix.translate(w, 0);
+            matrix.scale(-1, 1);
+
+            m_qtPainter->setWorldTransform(matrix);
+
+            qtRegion = matrix.map(qtRegion);
+        }
+
+        // use the Qt event region:
+        m_updateRegion.QtSetRegion( qtRegion );
 
         if ( !m_qtPicture )
         {
