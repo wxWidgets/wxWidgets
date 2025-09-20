@@ -1074,6 +1074,16 @@ void wxWindowQt::SetExtraStyle( long exStyle )
 
 void wxWindowQt::DoClientToScreen( int *x, int *y ) const
 {
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // For non-TLWs we use GetSize() instead of GetClientSize()
+        // to account for the vertical scrollbar if any.
+        int width;
+        IsTopLevel() ? DoGetClientSize(&width, nullptr)
+                     : DoGetSize(&width, nullptr);
+        *x = width - *x;
+    }
+
     QPoint screenPosition = GetHandle()->mapToGlobal( QPoint( *x, *y ));
     *x = screenPosition.x();
     *y = screenPosition.y();
@@ -1083,6 +1093,17 @@ void wxWindowQt::DoClientToScreen( int *x, int *y ) const
 void wxWindowQt::DoScreenToClient( int *x, int *y ) const
 {
     QPoint clientPosition = GetHandle()->mapFromGlobal( QPoint( *x, *y ));
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // For non-TLWs we use GetSize() instead of GetClientSize()
+        // to account for the vertical scrollbar if any.
+        int width;
+        IsTopLevel() ? DoGetClientSize(&width, nullptr)
+                     : DoGetSize(&width, nullptr);
+        clientPosition.setX(width - clientPosition.x());
+    }
+
     *x = clientPosition.x();
     *y = clientPosition.y();
 }
