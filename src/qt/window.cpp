@@ -1077,6 +1077,13 @@ void wxWindowQt::SetExtraStyle( long exStyle )
 
 void wxWindowQt::DoClientToScreen( int *x, int *y ) const
 {
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        int width;
+        DoGetSize(&width, nullptr);
+        *x = width - *x - 1;
+    }
+
     QPoint screenPosition = GetHandle()->mapToGlobal( QPoint( *x, *y ));
     *x = screenPosition.x();
     *y = screenPosition.y();
@@ -1086,6 +1093,14 @@ void wxWindowQt::DoClientToScreen( int *x, int *y ) const
 void wxWindowQt::DoScreenToClient( int *x, int *y ) const
 {
     QPoint clientPosition = GetHandle()->mapFromGlobal( QPoint( *x, *y ));
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        int width;
+        DoGetSize(&width, nullptr);
+        clientPosition.setX(width - clientPosition.x() - 1);
+    }
+
     *x = clientPosition.x();
     *y = clientPosition.y();
 }
