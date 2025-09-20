@@ -509,6 +509,12 @@ public:
     // Argument is wxID_ANY if mouse is exiting the toolbar.
     virtual void OnMouseEnter(int toolid);
 
+#if wxUSE_HELP
+    // override to return the ID of the tool at the given point
+    virtual int GetHelpIdAtPoint(const wxPoint& pt) override;
+#endif // wxUSE_HELP
+
+
     // more deprecated functions
     // -------------------------
 

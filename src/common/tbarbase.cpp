@@ -810,6 +810,17 @@ void wxToolBarBase::UpdateWindowUI(long flags)
     }
 }
 
+#if wxUSE_HELP
+int wxToolBarBase::GetHelpIdAtPoint(const wxPoint& pt)
+{
+    if ( wxToolBarToolBase* const tool = FindToolForPosition(pt.x, pt.y) )
+        return tool->GetId();
+
+    return wxControl::GetHelpIdAtPoint(pt);
+}
+#endif // wxUSE_HELP
+
+
 #if wxUSE_MENUS
 bool wxToolBarBase::SetDropdownMenu(int toolid, wxMenu* menu)
 {

@@ -199,7 +199,9 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
 {
     wxCHECK_MSG( win, false, wxT("win parameter can't be null") );
 
-    wxHelpEvent helpEvent(wxEVT_HELP, win->GetId(), pt,
+    wxHelpEvent helpEvent(wxEVT_HELP,
+                          win->GetHelpIdAtPoint(win->ScreenToClient(pt)),
+                          pt,
                           wxHelpEvent::Origin_HelpButton);
     helpEvent.SetEventObject(win);
 
