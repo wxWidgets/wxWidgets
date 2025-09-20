@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif // WX_PRECOMP
 
 #include "wx/dc.h"
@@ -289,6 +290,35 @@ void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 }
 #endif // wxUSE_PALETTE
 
+wxPoint wxQtDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    QPointF devicePoint(x, y);
+    const auto invTrans  = m_qtPainter->combinedTransform().inverted();
+    QPointF logicalPoint = invTrans.map(devicePoint);
+    return wxPoint(wxRound(logicalPoint.x()), wxRound(logicalPoint.y()));
+}
+
+wxPoint wxQtDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    QPointF logicalPoint(x, y);
+    QPointF devicePoint = m_qtPainter->combinedTransform().map(logicalPoint);
+    return wxPoint(wxRound(devicePoint.x()), wxRound(devicePoint.y()));
+}
+
+wxSize wxQtDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    wxPoint pt0 = DeviceToLogical(0, 0);
+    wxPoint pt  = DeviceToLogical(x, y);
+    return wxSize(pt.x-pt0.x, pt.y-pt0.y);
+}
+
+wxSize wxQtDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    wxPoint pt0 = LogicalToDevice(0, 0);
+    wxPoint pt  = LogicalToDevice(x, y);
+    return wxSize(pt.x-pt0.x, pt.y-pt0.y);
+}
+
 void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
     m_logicalFunction = function;
@@ -462,10 +492,9 @@ void wxQtDCImpl::Clear()
     int width, height;
     DoGetSize(&width, &height);
 
-    m_qtPainter->eraseRect( DeviceToLogicalX(0),
-                            DeviceToLogicalY(0),
-                            DeviceToLogicalXRel(width),
-                            DeviceToLogicalYRel(height) );
+    const wxPoint pos = DeviceToLogical(0, 0);
+    const wxSize size = DeviceToLogicalRel(width, height);
+    m_qtPainter->eraseRect( pos.x, pos.y, size.x, size.y);
 }
 
 void wxQtDCImpl::UpdateClipBox()
@@ -478,10 +507,10 @@ void wxQtDCImpl::UpdateClipBox()
         int dcwidth, dcheight;
         DoGetSize(&dcwidth, &dcheight);
 
-        m_qtPainter->setClipRect(DeviceToLogicalX(0),
-                                 DeviceToLogicalY(0),
-                                 DeviceToLogicalXRel(dcwidth),
-                                 DeviceToLogicalYRel(dcheight),
+        const wxPoint pos = DeviceToLogical(0, 0);
+        const wxSize size = DeviceToLogicalRel(dcwidth, dcheight);
+
+        m_qtPainter->setClipRect(pos.x, pos.y, size.x, size.y,
                                  m_clipping ? Qt::IntersectClip : Qt::ReplaceClip);
     }
 
@@ -548,14 +577,29 @@ void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
     if ( m_qtPainter->isActive() )
     {
+        auto qtRegion = region.GetHandle();
+
+        if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            int w;
+            if ( m_window )
+                m_window->GetClientSize(&w, nullptr);
+            else
+                GetSize(&w, nullptr);
+            QTransform matrix;
+            matrix.translate(w, 0);
+            matrix.scale(-1, 1);
+            qtRegion = matrix.map(qtRegion);
+        }
+
         // Disable the matrix transformations to match device coordinates
         m_qtPainter->setWorldMatrixEnabled(false);
         // Enable clipping explicitly as QPainter::setClipRegion() doesn't
         // do that for us
-        m_qtPainter->setClipping( true );
+        m_qtPainter->setClipping(true);
         // Set QPainter clipping (intersection if not the first one)
-        m_qtPainter->setClipRegion( region.GetHandle(),
-                                    m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+        m_qtPainter->setClipRegion(qtRegion,
+                                   m_clipping ? Qt::IntersectClip : Qt::ReplaceClip);
 
         m_qtPainter->setWorldMatrixEnabled(true);
 
@@ -780,6 +824,15 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
     QPixmap pix = *bmp.GetHandle();
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // bitmap is not mirrored
+        m_qtPainter->save();
+        m_qtPainter->scale(-1, 1);
+        x = -x - bmp.GetWidth();
+    }
+
     if (pix.depth() == 1) {
         //Monochrome bitmap, draw using text fore/background
 
@@ -804,6 +857,9 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                 pix.setMask(*bmp.GetMask()->GetHandle());
             m_qtPainter->drawPixmap(x, y, pix);
     }
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        m_qtPainter->restore();
 }
 
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
@@ -1021,6 +1077,19 @@ void wxQtDCImpl::DoDrawPolyPolygon(int n,
 void wxQtDCImpl::ComputeScaleAndOrigin()
 {
     QTransform t;
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        int w;
+
+        if ( m_window )
+            m_window->GetClientSize(&w, nullptr);
+        else
+            GetSize(&w, nullptr);
+
+        t.translate(w, 0);
+        t.scale(-1, 1);
+    }
 
     // First apply device origin
     t.translate( m_deviceOriginX + m_deviceLocalOriginX,

@@ -38,6 +38,11 @@ public:
     virtual void SetPalette(const wxPalette& palette) override;
 #endif // wxUSE_PALETTE
 
+    virtual wxPoint DeviceToLogical(wxCoord x, wxCoord y) const override;
+    virtual wxPoint LogicalToDevice(wxCoord x, wxCoord y) const override;
+    virtual wxSize DeviceToLogicalRel(int x, int y) const override;
+    virtual wxSize LogicalToDeviceRel(int x, int y) const override;
+
     virtual void SetLogicalFunction(wxRasterOperationMode function) override;
 
     virtual wxCoord GetCharHeight() const override;
