@@ -588,6 +588,22 @@ void wxWindowQt::Update()
     widget->repaint();
 }
 
+// Helper function to refresh the intersection area of the widget _widget_
+// (and child widgets) with the rectangle _rect_.
+static void wxQtRefreshChildWidgets(QWidget* widget, const QRect& rect)
+{
+    widget->update(rect);
+
+    for ( auto child : widget->children() )
+    {
+        if ( auto childWidget = qobject_cast<QWidget*>(child) )
+        {
+            const auto childRect = rect.translated(-childWidget->pos());
+            wxQtRefreshChildWidgets(childWidget, childRect & childWidget->rect());
+        }
+    }
+}
+
 void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
 {
     QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
@@ -599,25 +615,15 @@ void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
             wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Refresh %s rect %d %d %d %d"),
                        GetName(),
                        rect->x, rect->y, rect->width, rect->height);
-            widget->update( wxQtConvertRect( *rect ));
 
-            wxWindowList& children = GetChildren();
-            if ( !children.empty() )
+            wxRect parentRect = *rect;
+
+            if ( GetLayoutDirection() == wxLayout_RightToLeft )
             {
-                wxRect parentRect = *rect;
-                ClientToScreen(&parentRect.x, &parentRect.y);
-
-                for ( auto childWin : children )
-                {
-                    wxRect childRect = childWin->GetScreenRect();
-                    childRect.Intersect(parentRect);
-                    if ( !childRect.IsEmpty() )
-                    {
-                        childWin->ScreenToClient(&childRect.x, &childRect.y);
-                        childWin->RefreshRect(childRect);
-                    }
-                }
+                parentRect.x = widget->rect().width() - (parentRect.x + parentRect.width);
             }
+
+            wxQtRefreshChildWidgets(widget, wxQtConvertRect(parentRect));
         }
         else
         {
