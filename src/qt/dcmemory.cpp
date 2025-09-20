@@ -79,6 +79,22 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     }
 }
 
+void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
+{
+    if ( m_selected.IsOk() )
+    {
+        if ( width )
+            *width = m_selected.GetWidth();
+        if ( height )
+            *height = m_selected.GetHeight();
+    }
+    else
+    {
+        if ( width ) *width = 0;
+        if ( height ) *height = 0;
+    }
+}
+
 wxBitmap wxMemoryDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
     if ( !subrect )
