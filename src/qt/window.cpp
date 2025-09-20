@@ -1343,7 +1343,18 @@ bool wxWindowQt::DoPopupMenu(wxMenu *menu, int x, int y)
     if (x == wxDefaultCoord && y == wxDefaultCoord)
         pt = QCursor::pos();
     else
+    {
+        if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            menu->GetHandle()->setLayoutDirection(Qt::RightToLeft);
+            int width;
+            DoGetClientSize(&width, nullptr);
+
+            x = width - (x + menu->GetHandle()->sizeHint().width());
+        }
+
         pt = GetHandle()->mapToGlobal(QPoint(x, y));
+    }
 
     menu->GetHandle()->exec(pt);
 
