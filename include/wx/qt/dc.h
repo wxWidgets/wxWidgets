@@ -117,6 +117,14 @@ public:
 
     virtual void* GetHandle() const override { return (void*) m_qtPainter; }
 
+    // LTR/RTL related functions
+    // -------------------------
+    //
+    // get or change the layout direction (LTR or RTL) for this dc,
+    // wxLayout_Default is returned if layout direction is not supported
+    virtual wxLayoutDirection GetLayoutDirection() const override;
+    virtual void SetLayoutDirection(wxLayoutDirection dir) override;
+
 protected:
     virtual QPixmap *GetQPixmap() { return m_qtPixmap; }
 
@@ -126,6 +134,8 @@ protected:
     wxRegion m_clippingRegion;
 
     bool m_isClipBoxValid = false;
+
+    wxLayoutDirection m_layoutDir = wxLayout_Default;
 
 private:
     enum wxQtRasterColourOp
