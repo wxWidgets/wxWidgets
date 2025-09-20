@@ -18,6 +18,8 @@ public:
     wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc );
     ~wxMemoryDCImpl();
 
+    // overridden from wxDCImpl
+    virtual void DoGetSize( int *width, int *height ) const override;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override;
     virtual void DoSelect(const wxBitmap& bitmap) override;
 
