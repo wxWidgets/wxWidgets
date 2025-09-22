@@ -24,6 +24,8 @@ public:
     virtual const wxBitmap& GetSelectedBitmap() const override;
     virtual wxBitmap& GetSelectedBitmap() override;
 
+    virtual void SetLayoutDirection(wxLayoutDirection dir) override;
+
 private:
     wxBitmap m_selected;
 
