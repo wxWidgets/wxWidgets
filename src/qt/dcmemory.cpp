@@ -95,3 +95,20 @@ wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
 {
     return m_selected;
 }
+
+void wxMemoryDCImpl::SetLayoutDirection(wxLayoutDirection dir)
+{
+    if ( m_layoutDir != dir )
+    {
+        if ( m_layoutDir == wxLayout_RightToLeft || dir == wxLayout_RightToLeft )
+        {
+            int w;
+            GetSize(&w, nullptr);
+
+            m_qtPainter->translate(w, 0);
+            m_qtPainter->scale(-1, 1);
+        }
+
+        m_layoutDir = dir;
+    }
+}
