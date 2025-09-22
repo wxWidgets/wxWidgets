@@ -456,4 +456,4 @@
 /3rdparty/webview2
 
 /build/cmake/output/
-CMakePresetsUser.json
+CMakeUserPresets.json
