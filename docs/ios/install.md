@@ -30,7 +30,7 @@ On a recent Silicon Mac in the 3.3 branch you need this configure
 to compile for the iPhone simulator (exchange 24.6.0 with your 
 actual host system):
 
-    ../configure --with-osx_iphonesimulator --enable-monolithic  \
+    ../wxWidgets/configure --with-iphonesimulator --enable-monolithic  \
         --disable-shared --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path)  \
-        --host=aarch64-apple-darwin24.6.0 --build=aarch64-apple-darwin --without-libtiff
+        --host=$(../wxWidgets/config.guess) --build=aarch64-apple-darwin --without-libtiff
     make
