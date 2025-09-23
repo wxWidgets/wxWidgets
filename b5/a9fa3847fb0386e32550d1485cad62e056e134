@@ -1,0 +1,1 @@
+wxMSW: Revert use of WS_EX_COMPOSITED in 3.3 (#25808).
