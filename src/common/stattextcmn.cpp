@@ -104,7 +104,6 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
     const wxInfoDC dc(win);
 
     const wxString zeroWidthSpace = wxString::FromUTF8("\xE2\x80\x8B");
-    const wxString zeroWidthSpace_and_space = wxString::FromUTF8("\xE2\x80\x8B ");
 
     bool hadFirst = false;
     for ( auto line : wxSplit(text, '\n', '\0') )
@@ -154,8 +153,12 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             }
 
             // Find the last word to chop off.
-            // size_t posSpace = line.rfind(' ', posEnd);
-            size_t posSpace = line.find_last_of( zeroWidthSpace_and_space, posEnd );
+            const size_t posSpace1 = line.rfind(' ', posEnd);
+            const size_t posSpace2 = line.rfind(zeroWidthSpace, posEnd);
+            size_t posSpace = wxMax(posSpace1, posSpace2);
+            if ( posSpace == wxString::npos )
+                posSpace = wxMin(posSpace1, posSpace2);
+
 
             if ( posSpace == wxString::npos )
             {
@@ -163,8 +166,12 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
                 // which is defined here as just a sequence of non-space chars.
                 //
                 // TODO: Implement real Unicode word break algorithm.
-                // posSpace = line.find(' ', posEnd);
-                posSpace = line.find_first_of( zeroWidthSpace_and_space, posEnd);
+                const size_t posSpace1 = line.find(' ', posEnd);
+                const size_t posSpace2 = line.find(zeroWidthSpace, posEnd);
+                posSpace = wxMax(posSpace1, posSpace2);
+                if ( posSpace == wxString::npos )
+                    posSpace = wxMin(posSpace1, posSpace2);
+                
                 if ( posSpace == wxString::npos )
                 {
                     // No more spaces at all, output the rest of the line.
