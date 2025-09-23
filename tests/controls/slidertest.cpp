@@ -16,6 +16,10 @@
     #include "wx/slider.h"
 #endif // WX_PRECOMP
 
+#ifdef __WXQT__
+    #include <QtGlobal> // QT_VERSION and QT_VERSION_CHECK
+#endif
+
 #include "wx/uiaction.h"
 #include "testableframe.h"
 
@@ -225,7 +229,8 @@ void SliderTestCase::Thumb()
 
     CPPUNIT_ASSERT(track.GetCount() != 0);
     CPPUNIT_ASSERT_EQUAL(1, release.GetCount());
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || \
+    (defined(__WXQT__) && QT_VERSION < QT_VERSION_CHECK(6, 8, 0))
     CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 #endif
