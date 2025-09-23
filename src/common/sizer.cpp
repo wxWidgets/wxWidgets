@@ -540,7 +540,7 @@ bool wxSizerItem::InformFirstDirection(int direction, int size, int availableOth
     {
         didUse = GetSizer()->InformFirstDirection(direction,size,availableOtherDir);
         if (didUse)
-            m_minSize = GetSizer()->CalcMin();
+            m_minSize = GetSizer()->CalcMinFirstPass();
     }
     else if (IsWindow())
     {
@@ -594,7 +594,7 @@ wxSize wxSizerItem::CalcMin()
     {
         // Since the size of the window may change during runtime, we
         // should use the current minimal/best size.
-        m_minSize = m_window->GetEffectiveMinSize();
+        m_minSize = m_window->GetEffectiveMinSizeFirstPass();
     }
 
     return GetMinSizeWithBorder();
@@ -2624,6 +2624,7 @@ wxSize wxBoxSizer::CalcMin()
     // part, to respect the children proportion. To satisfy the latter
     // condition we must find the greatest min-size-to-proportion ratio for all
     // elements with non-zero proportion.
+
     float maxMinSizeToProp = 0;
     for ( wxSizerItemList::const_iterator i = m_children.begin();
           i != m_children.end();
@@ -2635,6 +2636,7 @@ wxSize wxBoxSizer::CalcMin()
             continue;
 
         const wxSize sizeMinThis = item->CalcMin();
+
         if ( const int propThis = item->GetProportion() )
         {
             float minSizeToProp = GetSizeInMajorDir(sizeMinThis);

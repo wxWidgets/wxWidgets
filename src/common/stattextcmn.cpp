@@ -103,6 +103,8 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
     const wxInfoDC dc(win);
 
+    const wxString zeroWidthSpace = wxString::FromUTF8("\xE2\x80\x8B");
+
     bool hadFirst = false;
     for ( auto line : wxSplit(text, '\n', '\0') )
     {
@@ -151,14 +153,25 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             }
 
             // Find the last word to chop off.
-            size_t posSpace = line.rfind(' ', posEnd);
+            const size_t posSpace1 = line.rfind(' ', posEnd);
+            const size_t posSpace2 = line.rfind(zeroWidthSpace, posEnd);
+            size_t posSpace = wxMax(posSpace1, posSpace2);
+            if ( posSpace == wxString::npos )
+                posSpace = wxMin(posSpace1, posSpace2);
+
+
             if ( posSpace == wxString::npos )
             {
                 // No spaces, so can't wrap, output until the end of the word
                 // which is defined here as just a sequence of non-space chars.
                 //
                 // TODO: Implement real Unicode word break algorithm.
-                posSpace = line.find(' ', posEnd);
+                const size_t posSpace1 = line.find(' ', posEnd);
+                const size_t posSpace2 = line.find(zeroWidthSpace, posEnd);
+                posSpace = wxMax(posSpace1, posSpace2);
+                if ( posSpace == wxString::npos )
+                    posSpace = wxMin(posSpace1, posSpace2);
+                
                 if ( posSpace == wxString::npos )
                 {
                     // No more spaces at all, output the rest of the line.
@@ -171,7 +184,8 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             DoOutputLine(line.substr(0, posSpace));
 
             // And redo the layout with the rest.
-            line = line.substr(posSpace + 1);
+            // line = line.substr(posSpace + 1);
+            line = line.substr(posSpace + (line[posSpace] == ' ' ? 1 : zeroWidthSpace.size()));
         }
     }
 }
@@ -213,8 +227,54 @@ private:
 
 void wxStaticTextBase::Wrap(int width)
 {
+    if (width == m_currentWrap) return;
+    m_currentWrap = width;
+
+    // Allow for repeated calls to Wrap with different values
+    if (m_unwrappedLabel.empty())
+    {
+        m_unwrappedLabel = GetLabel();
+    }
+    else
+    {
+        SetLabel( m_unwrappedLabel );
+    }
     wxLabelWrapper wrapper;
     wrapper.WrapLabel(this, width);
+    InvalidateBestSize();
+}
+
+wxSize wxStaticTextBase::GetEffectiveMinSizeFirstPass() const
+{
+    if (!HasFlag(wxST_WRAP))
+        return GetEffectiveMinSize();
+
+    // While wxWrapSizer can only wrap entire controls, a text paragraph
+    // could theoretically wrap at a few letters, so we start with
+    // requesting very little space in the first pass
+    return wxSize( GetCharWidth(), GetCharHeight() );
+}
+
+bool wxStaticTextBase::InformFirstDirection(int direction, int size, int WXUNUSED(availableOtherDir))
+{
+    if (!HasFlag(wxST_WRAP))
+        return false;
+
+    // In the second pass, this control has been given "size" amount of
+    // space in the horizontal direction. Wrap there and report a new
+    // GetEffectiveMinSize() from then on.
+
+    if (direction != wxHORIZONTAL)
+        return false;
+
+    int style = GetWindowStyleFlag();
+    if ( !(style & wxST_NO_AUTORESIZE) )
+        SetWindowStyleFlag( style | wxST_NO_AUTORESIZE );
+    Wrap( size );
+    InvalidateBestSize();
+    SetWindowStyleFlag( style );
+
+    return true;
 }
 
 void wxStaticTextBase::AutoResizeIfNecessary()
