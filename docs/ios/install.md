@@ -27,8 +27,7 @@ The library can also be build via configure/make:
     make
 
 On a recent Silicon Mac in the 3.3 branch you need this configure
-to compile for the iPhone simulator (exchange 24.6.0 with your 
-actual host system):
+to compile for the iPhone simulator:
 
     ../wxWidgets/configure --with-iphonesimulator --enable-monolithic  \
         --disable-shared --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path)  \
