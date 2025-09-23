@@ -229,8 +229,14 @@ void SliderTestCase::Thumb()
 
     CPPUNIT_ASSERT(track.GetCount() != 0);
     CPPUNIT_ASSERT_EQUAL(1, release.GetCount());
-#if defined(__WXMSW__) || defined(__WXGTK__) || \
-    (defined(__WXQT__) && QT_VERSION < QT_VERSION_CHECK(6, 8, 0))
+
+#ifdef __WXQT__
+    #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+        WARN("wxEVT_SCROLL_CHANGED is generated twice with Qt 6.8, skipping test");
+        return;
+    #endif
+#endif
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
     CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 #endif
