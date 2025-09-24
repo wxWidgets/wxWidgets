@@ -448,6 +448,10 @@ STDMETHODIMP wxIEnumFORMATETC::Next(ULONG      celt,
         format.lindex   = -1;
         format.tymed    = TYMED_HGLOBAL;
 
+        if (RegisterClipboardFormat(CFSTR_FILECONTENTS) == format.cfFormat) {
+            format.tymed = TYMED_ISTREAM;
+        }
+
         *rgelt++ = format;
         numFetched++;
     }
@@ -837,6 +841,13 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
                    pformatetc->dwAspect);
 
         return DV_E_DVASPECT;
+    }
+
+    // CFSTR_FILECONTENTS should use TYMED_ISTREAM
+    if (RegisterClipboardFormat(CFSTR_FILECONTENTS) == pformatetc->cfFormat) {
+        if (!(pformatetc->tymed & TYMED_ISTREAM)) {
+            return DV_E_TYMED;
+        }
     }
 
     // and now check the type of data requested
