@@ -3979,6 +3979,9 @@ void wxAuiManager::OnFindManager(wxAuiManagerEvent& evt)
 
 void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
 {
+    // Don't set any cursor by default.
+    event.Skip();
+
     // determine cursor
     wxAuiDockUIPart* part = HitTest(event.GetX(), event.GetY());
     wxCursor cursor;
@@ -4010,7 +4013,13 @@ void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
         }
     }
 
-    event.SetCursor(cursor);
+    if ( cursor.IsOk() )
+    {
+        event.SetCursor(cursor);
+
+        // Undo Skip() done above.
+        event.Skip(false);
+    }
 }
 
 
