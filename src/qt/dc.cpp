@@ -880,6 +880,13 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
         m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
     }
 
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // text is not mirrored
+        m_qtPainter->scale(-1, 1);
+        x = -x;
+    }
+
     QFontMetrics metrics = m_qtPainter->fontMetrics();
 
     wxStringTokenizer tokenizer(text, "\n");
@@ -900,6 +907,14 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
 
     if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        m_qtPainter->scale(-1, 1);
+
+        x = -x;
+        angle = -angle;
+    }
 
     //Move and rotate (reverse angle direction in Qt and wx)
     m_qtPainter->translate(x, y);
