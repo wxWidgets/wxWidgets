@@ -1746,21 +1746,25 @@ public:
     wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
                      int pos = 0, int orient = 0);
     wxScrollWinEvent(const wxScrollWinEvent& event) : wxEvent(event)
-        {
-            m_commandInt = event.m_commandInt;
-            m_extraLong = event.m_extraLong;
-        }
+    {
+        m_commandInt = event.m_commandInt;
+        m_extraLong = event.m_extraLong;
+        m_pixelOffset = event.m_pixelOffset;
+    }
 
     int GetOrientation() const { return (int) m_extraLong; }
     int GetPosition() const { return m_commandInt; }
+    int GetPixelOffset() const { return m_pixelOffset; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
+    void SetPixelOffset(int pixelOffset) { m_pixelOffset = pixelOffset; }
 
     wxNODISCARD virtual wxEvent *Clone() const override { return new wxScrollWinEvent(*this); }
 
 protected:
     int               m_commandInt;
     long              m_extraLong;
+    int               m_pixelOffset;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxScrollWinEvent);

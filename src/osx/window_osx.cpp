@@ -217,6 +217,10 @@ void wxWindowMac::Init()
     m_clipChildren = false ;
     m_cachedClippedRectValid = false ;
     m_isNativeWindowWrapper = false;
+#ifdef __WXOSX_IPHONE__
+    m_scrollTargetWindow = this;
+    m_scrollOwnerWindow = this;
+#endif
 }
 
 wxWindowMac::~wxWindowMac()
@@ -1397,8 +1401,25 @@ bool wxWindowMac::EnableTouchEvents(int eventsMask)
     return GetPeer() ? GetPeer()->EnableTouchEvents(eventsMask) : false;
 }
 
+#ifdef __WXOSX_IPHONE__
+void wxWindowMac::OSXSetScrollOwnerWindow( wxWindow *owner )
+{
+    m_scrollOwnerWindow = owner;
+}
+
+void wxWindowMac::OSXSetScrollTargetWindow( wxWindow *target )
+{
+    m_scrollTargetWindow = target;
+    target->OSXSetScrollOwnerWindow( this );
+}
+#endif
+
 int wxWindowMac::GetScrollPos(int orient) const
 {
+#ifdef __WXOSX_IPHONE__
+    const wxWidgetImpl *impl = (const wxWidgetImpl*) OSXGetScrollTargetWindow()->GetPeer();
+    return impl->GetScrollPos( orient );
+#endif
 #if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
@@ -1452,6 +1473,10 @@ int wxWindowMac::GetScrollThumb(int orient) const
 
 void wxWindowMac::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
+#ifdef __WXOSX_IPHONE__
+    wxWidgetImpl *impl = (wxWidgetImpl*) OSXGetScrollTargetWindow()->GetPeer();
+    impl->SetScrollPos( orient, pos );
+#endif
 #if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
@@ -1658,6 +1683,10 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumb,
 
     DoUpdateScrollbarVisibility();
 #endif
+#ifdef __WXOSX_IPHONE__
+    wxWidgetImpl *impl = (wxWidgetImpl*) OSXGetScrollTargetWindow()->GetPeer();
+    impl->SetScrollbar( orient, pos, thumb, range, refresh );
+#endif
 }
 
 // Does a physical scroll
@@ -1665,6 +1694,11 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
     if ( dx == 0 && dy == 0 )
         return ;
+
+#ifdef __WXOSX_IPHONE__
+    GetPeer()->ScrollWindow( dx, dy, rect );
+    return;
+#endif
 
     int width , height ;
     GetClientSize( &width , &height ) ;
@@ -1895,8 +1929,11 @@ void wxWindowMac::MacUpdateClippedRects() const
 bool wxWindowMac::MacDoRedraw( long time )
 {
     bool handled = false ;
+#ifndef __WXOSX_IPHONE__
+    // iOS draws before the window is visible, I assume into off-screen buffer
     if ( !IsShownOnScreen() )
         return handled;
+#endif
 
     wxRegion formerUpdateRgn = m_updateRegion;
     wxRegion clientUpdateRgn = formerUpdateRgn;
@@ -1929,6 +1966,9 @@ bool wxWindowMac::MacDoRedraw( long time )
                     eevent.SetEventObject( this );
                     if ( ProcessWindowEvent( eevent ) )
                         break;
+
+                    if (!UseBgCol())
+                        dc.Clear();
                 }
 
                 if ( UseBgCol() )
@@ -2670,6 +2710,7 @@ void wxWidgetImpl::Init()
     m_wantsUserMouse = false;
     m_wxPeer = nullptr;
     m_needsFrame = true;
+    m_deviceLocalOrigin = wxPoint(0, 0);
 }
 
 void wxWidgetImpl::SetNeedsFrame( bool needs )

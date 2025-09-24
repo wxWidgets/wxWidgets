@@ -1909,6 +1909,22 @@ public:
     */
     int GetPosition() const;
 
+    /**
+        Offset of the scroll position from the nearest position expressed in
+        scroll units.
+
+        In cases where scrolling is possible with single pixel precision,
+        such as when panning on a touch screen with fingers, this returns
+        the offset in pixels of the real position compared to the position
+        obtained by multiplying the current scroll position in scroll units by
+        the size of scroll unit in pixels. For example, if the scroll unit size
+        (pixels per line) is 20px, this function returns a value which can be
+        between 0 and 19.
+
+        @since 3.2.2
+    */
+    int GetPixelOffset() const;
+
     void SetOrientation(int orient);
     void SetPosition(int pos);
 };
