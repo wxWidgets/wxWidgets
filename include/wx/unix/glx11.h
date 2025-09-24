@@ -77,6 +77,13 @@ public:
     // GLX-specific methods
     // --------------------
 
+    // Set swap interval to the specified value.
+    void GLXSetSwapInterval(int interval);
+
+    // Disable automatic setting of the swap interval done by default.
+    void GLXDontSetSwapInterval();
+
+
     // override some wxWindow methods
     // ------------------------------
 
@@ -100,7 +107,8 @@ private:
     GLXFBConfig *m_fbc;
     void* m_vi;
 
-    bool m_swapIntervalSet = false;
+    // The value of swap interval to set, -1 means not to set it.
+    int m_swapIntervalToSet = 0;
 };
 
 // ----------------------------------------------------------------------------
