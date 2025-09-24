@@ -10,6 +10,15 @@
 #ifndef _WX_MSW_OWNERDRAWNBUTTON_H_
 #define _WX_MSW_OWNERDRAWNBUTTON_H_
 
+// With MSVC 2017 and earlier, explicitly defining the destructor below
+// _causes_ exactly the kind of compiler warnings (C4265) the definition
+// was meant to avoid (on GCC). With later versions of MSVC, there is no
+// warning either way. We'll disable C4265 temporarily here.
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4265) // non-virtual destructor with virtual functions
+#endif
+
 // ----------------------------------------------------------------------------
 // wxMSWOwnerDrawnButton: base class for any kind of Windows buttons
 // ----------------------------------------------------------------------------
@@ -128,5 +137,9 @@ public:
 protected:
     bool IsOwnerDrawn() const { return MSWIsOwnerDrawn(); }
 };
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // _WX_MSW_OWNERDRAWNBUTTON_H_
