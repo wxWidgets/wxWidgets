@@ -362,6 +362,16 @@ void wxScrollHelperBase::SetScrollbars(int pixelsPerUnitX,
                                        int yPos,
                                        bool noRefresh)
 {
+#ifdef __WXOSX_IPHONE__   
+    // the scroll physics on iPhone enforces single scroll units
+    xPos = xPos * pixelsPerUnitX;
+    yPos = yPos * pixelsPerUnitY;
+    noUnitsX = noUnitsX * pixelsPerUnitX;
+    noUnitsY = noUnitsY * pixelsPerUnitY;
+    pixelsPerUnitX = 1;
+    pixelsPerUnitY = 1;
+#endif
+
     // Convert positions expressed in scroll units to positions in pixels.
     int xPosInPixels = (xPos + m_xScrollPosition)*m_xScrollPixelsPerLine,
         yPosInPixels = (yPos + m_yScrollPosition)*m_yScrollPixelsPerLine;
@@ -443,6 +453,9 @@ void wxScrollHelperBase::DoSetTargetWindow(wxWindow *target)
     m_targetWindow = target;
 #ifdef __WXMAC__
     target->MacSetClipChildren() ;
+#endif
+#ifdef __WXOSX_IPHONE__
+    m_win->OSXSetScrollTargetWindow( target );
 #endif
 
     // install the event handler which will intercept the events we're
@@ -601,6 +614,9 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
                 nScrollInc = pos - m_yScrollPosition;
     }
 
+// the scroll physics on iPhone allow to temporarily scroll beyond 
+// the limits and then bounce back
+#ifndef __WXOSX_IPHONE__   
     if (orient == wxHORIZONTAL)
     {
         if ( m_xScrollPosition + nScrollInc < 0 )
@@ -635,6 +651,7 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
             }
         }
     }
+#endif
 
     return nScrollInc;
 }
@@ -658,6 +675,10 @@ void wxScrollHelperBase::DoPrepareReadOnlyDC(wxReadOnlyDC& dc)
 
 void wxScrollHelperBase::SetScrollRate( int xstep, int ystep )
 {
+#ifdef __WXOSX_IPHONE__
+    xstep = 1;
+    ystep = 1;
+#endif
     int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
     int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
 

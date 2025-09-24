@@ -1185,10 +1185,17 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxDefaultHtmlRenderingStyle rstyle(this);
     rinfo.SetSelection(m_selection);
     rinfo.SetStyle(&rstyle);
+#ifdef __WXOSX_IPHONE__
+    m_Cell->Draw(*dc, 0, 0,
+                 y * 1 + rect.GetTop(),
+                 y * 1 + rect.GetBottom(),
+                 rinfo);
+#else
     m_Cell->Draw(*dc, 0, 0,
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
                  rinfo);
+#endif
 
 #ifdef DEBUG_HTML_SELECTION
     {

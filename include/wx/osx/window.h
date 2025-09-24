@@ -279,6 +279,15 @@ public:
     virtual void *OSXGetViewOrWindow() const;
 #endif // Cocoa
 
+#ifdef __WXOSX_IPHONE__
+    void                OSXSetScrollTargetWindow( wxWindow *target );
+    wxWindow *          OSXGetScrollTargetWindow() { return m_scrollTargetWindow; }
+    wxWindow *          m_scrollTargetWindow;
+    void                OSXSetScrollOwnerWindow( wxWindow *owner );
+    wxWindow *          OSXGetScrollOwnerWindow() { return m_scrollOwnerWindow; }
+    wxWindow *          m_scrollOwnerWindow;
+#endif
+
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
 

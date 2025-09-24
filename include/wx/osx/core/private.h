@@ -282,6 +282,11 @@ public :
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) = 0;
     virtual void        SetForegroundColour( const wxColour& col ) = 0;
 
+    virtual void        SetDeviceLocalOrigin( wxPoint origin ) 
+        { m_deviceLocalOrigin = origin; }
+    virtual wxPoint     GetDeviceLocalOrigin() const
+        { return m_deviceLocalOrigin; }
+
     // all coordinates in native parent widget relative coordinates
     virtual void        GetContentArea( int &left , int &top , int &width , int &height ) const = 0;
     virtual void        Move(int x, int y, int width, int height) = 0;
@@ -354,7 +359,9 @@ public :
     virtual int         GetIncrement() const = 0;
     virtual void        PulseGauge() = 0;
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
-
+    virtual void        SetScrollbar( int WXUNUSED(orient), int WXUNUSED(pos), int WXUNUSED(thumb), 
+                                      int WXUNUSED(range), bool WXUNUSED(refresh) ) {}
+    virtual int         GetScrollPos(int WXUNUSED(orient)) const { return 0; }
     virtual void        SetFont(const wxFont & font) = 0;
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
@@ -619,6 +626,7 @@ protected :
     wxWindowMac*        m_wxPeer;
     bool                m_needsFrame;
     bool                m_shouldSendEvents;
+    wxPoint             m_deviceLocalOrigin;
 
     wxDECLARE_ABSTRACT_CLASS(wxWidgetImpl);
 };
