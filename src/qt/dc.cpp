@@ -26,6 +26,8 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/compat.h"
 
+#include "wx/tokenzr.h"
+
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
 
@@ -878,7 +880,15 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
         m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
     }
 
-    m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+    QFontMetrics metrics = m_qtPainter->fontMetrics();
+
+    wxStringTokenizer tokenizer(text, "\n");
+    while ( tokenizer.HasMoreTokens() )
+    {
+        const wxString line = tokenizer.GetNextToken();
+        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(line));
+        y += metrics.lineSpacing();
+    }
 
     m_qtPainter->restore();
 }
