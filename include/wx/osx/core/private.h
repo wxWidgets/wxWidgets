@@ -362,6 +362,9 @@ public :
     virtual void        SetScrollbar( int WXUNUSED(orient), int WXUNUSED(pos), int WXUNUSED(thumb), 
                                       int WXUNUSED(range), bool WXUNUSED(refresh) ) {}
     virtual int         GetScrollPos(int WXUNUSED(orient)) const { return 0; }
+    virtual void        SetScrollPos(int WXUNUSED(orient), int WXUNUSED(pos)) {}
+    virtual void 	    ScrollWindow (int WXUNUSED(dx), int WXUNUSED(dy), const wxRect *WXUNUSED(rect)=NULL) {}
+
     virtual void        SetFont(const wxFont & font) = 0;
 
     virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }

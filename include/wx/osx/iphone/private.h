@@ -106,7 +106,9 @@ public :
     void                PulseGauge();
     void                SetScrollbar( int orient, int pos, int thumb, int range, bool refresh );
     int                 GetScrollPos(int orient) const;
+    void                SetScrollPos(int orient, int pos);
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
+    void     	        ScrollWindow (int dx, int dy, const wxRect *rect=NULL);
 
     void                SetFont(const wxFont & font);
 
@@ -134,6 +136,7 @@ protected:
     WXWidget          m_osxView;
     void             *m_controller;
     bool              m_blockScrollEvents;
+
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl);
 };
