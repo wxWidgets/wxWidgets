@@ -7307,7 +7307,7 @@ wxGrid::DoDrawGridLines(wxDC& dc,
         int i = GetColAt( colPos );
 
         int colRight = GetColRight(i);
-#if defined(__WXGTK__) || defined(__WXQT__)
+#if defined(__WXGTK__)
         if (GetLayoutDirection() != wxLayout_RightToLeft)
 #endif
             colRight--;
