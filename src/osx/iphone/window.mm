@@ -90,9 +90,7 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
             // wxString name = wxpeer->GetClassInfo()->GetClassName();
             // wxLogMessage( "scrollViewDidScroll from %s  y %i", name, (int)(-1*position.y) );
 
-            wxScrollWinEvent event( wxEVT_SCROLLWIN_THUMBTRACK, wxpeer->GetId() );
-            event.SetOrientation( wxVERTICAL );
-            event.SetPosition( position.y );
+            wxScrollWinPanEvent event( wxEVT_SCROLLWIN_PAN, position.x, position.y );
             event.SetEventObject( wxpeer );
             wxpeer->OSXGetScrollOwnerWindow()->HandleWindowEvent( event );
         }

@@ -252,6 +252,7 @@ public:
 
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
+    void HandleOnPanScroll(wxScrollWinPanEvent& event);
     void HandleOnSize(wxSizeEvent& event);
     void HandleOnMouseEnter(wxMouseEvent& event);
     void HandleOnMouseLeave(wxMouseEvent& event);
@@ -349,6 +350,13 @@ protected:
     int                   m_yScrollPixelsPerLine;
     int                   m_xScrollPosition;
     int                   m_yScrollPosition;
+    // ScrollPosition is using steps or lines, but if we need single pixel
+    // precisio, then ScrollPositionPixelOffset gets added to 
+    // ScrollPosition * ScrollPixelsPerLine
+    // GetPos() { return ScrollPosition * ScrollPixelsPerLine; }
+    // GetPosPrecise() { return (ScrollPosition * ScrollPixelsPerLine) + ScrollPositionPixelOffset; }
+    int                   m_xScrollPositionPixelOffset;
+    int                   m_yScrollPositionPixelOffset;
     int                   m_xScrollLines;
     int                   m_yScrollLines;
     int                   m_xScrollLinesPerPage;

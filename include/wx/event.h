@@ -663,6 +663,7 @@ class WXDLLIMPEXP_FWD_CORE wxSetCursorEvent;
 class WXDLLIMPEXP_FWD_CORE wxScrollEvent;
 class WXDLLIMPEXP_FWD_CORE wxSpinEvent;
 class WXDLLIMPEXP_FWD_CORE wxScrollWinEvent;
+class WXDLLIMPEXP_FWD_CORE wxScrollWinPanEvent;
 class WXDLLIMPEXP_FWD_CORE wxSizeEvent;
 class WXDLLIMPEXP_FWD_CORE wxMoveEvent;
 class WXDLLIMPEXP_FWD_CORE wxCloseEvent;
@@ -804,6 +805,9 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEv
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent);
+
+    // Gesture based scroll events from wxWindow
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAN, wxScrollWinPanEvent);
 
     // MultiTouch event types
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_BEGIN, wxMultiTouchEvent);
@@ -1762,6 +1766,35 @@ protected:
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxScrollWinEvent);
+};
+
+// ScrollWinPan event class, derived fom wxEvent and sent
+// following a pan gesture (scrolling with figers on a 
+// touch screen)
+/*
+ wxEVT_SCROLLWIN_PAN
+*/
+
+class WXDLLIMPEXP_CORE wxScrollWinPanEvent : public wxEvent
+{
+public:
+    wxScrollWinPanEvent(wxEventType commandType = wxEVT_NULL,
+                     int xpos = 0, int ypos = 0);
+    wxScrollWinPanEvent(const wxScrollWinPanEvent& event) : wxEvent(event)
+        {    m_x = event.m_x; m_y = event.m_y;    }
+
+    int GetX() const { return m_x; }
+    int GetY() const { return m_y; }
+    void SetX( int pos ) { m_x = pos; }
+    void SetY( int pos ) { m_y = pos; }
+
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxScrollWinPanEvent(*this); }
+
+protected:
+    int               m_x,m_y;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxScrollWinPanEvent);
 };
 
 
@@ -4278,6 +4311,7 @@ protected:
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);
 typedef void (wxEvtHandler::*wxScrollEventFunction)(wxScrollEvent&);
 typedef void (wxEvtHandler::*wxScrollWinEventFunction)(wxScrollWinEvent&);
+typedef void (wxEvtHandler::*wxScrollWinPanEventFunction)(wxScrollWinPanEvent&);
 typedef void (wxEvtHandler::*wxSizeEventFunction)(wxSizeEvent&);
 typedef void (wxEvtHandler::*wxMoveEventFunction)(wxMoveEvent&);
 typedef void (wxEvtHandler::*wxPaintEventFunction)(wxPaintEvent&);
@@ -4328,6 +4362,8 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     wxEVENT_HANDLER_CAST(wxScrollEventFunction, func)
 #define wxScrollWinEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxScrollWinEventFunction, func)
+#define wxScrollWinPanEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxScrollWinPanEventFunction, func)
 #define wxSizeEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxSizeEventFunction, func)
 #define wxMoveEventHandler(func) \
@@ -4703,6 +4739,9 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     EVT_SCROLLWIN_PAGEDOWN(func) \
     EVT_SCROLLWIN_THUMBTRACK(func) \
     EVT_SCROLLWIN_THUMBRELEASE(func)
+
+// Gesture based scrolling from wxWindow (sent to wxScrolledWindow) 
+#define EVT_SCROLLWIN_PAN(func) wx__DECLARE_EVT0(wxEVT_SCROLLWIN_PAN, wxScrollWinPanEventHandler(func))
 
 // Scrolling from wxSlider and wxScrollBar
 #define EVT_SCROLL_TOP(func) wx__DECLARE_EVT0(wxEVT_SCROLL_TOP, wxScrollEventHandler(func))

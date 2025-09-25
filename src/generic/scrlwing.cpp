@@ -227,6 +227,20 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     if ( wasSkipped )
         event.Skip(false);
 
+    if ( evType == wxEVT_SCROLLWIN_PAN)
+    {
+        m_scrollHelper->HandleOnPanScroll((wxScrollWinPanEvent &)event);
+        if ( !event.GetSkipped() )
+        {
+            // it makes sense to indicate that we processed the message as we
+            // did scroll the window (and also notice that wxAutoScrollTimer
+            // relies on our return value to stop scrolling when we are at top
+            // or bottom already)
+            processed = true;
+            wasSkipped = false;
+        }
+    }
+
     if ( evType == wxEVT_SCROLLWIN_TOP ||
          evType == wxEVT_SCROLLWIN_BOTTOM ||
          evType == wxEVT_SCROLLWIN_LINEUP ||
@@ -326,6 +340,9 @@ wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
     m_xScrollLinesPerPage =
     m_yScrollLinesPerPage = 0;
 
+    m_xScrollPositionPixelOffset = 
+    m_yScrollPositionPixelOffset = 0;
+
     m_xScrollingEnabled =
     m_yScrollingEnabled = true;
 
@@ -362,15 +379,8 @@ void wxScrollHelperBase::SetScrollbars(int pixelsPerUnitX,
                                        int yPos,
                                        bool noRefresh)
 {
-#ifdef __WXOSX_IPHONE__   
-    // the scroll physics on iPhone enforces single scroll units
-    xPos = xPos * pixelsPerUnitX;
-    yPos = yPos * pixelsPerUnitY;
-    noUnitsX = noUnitsX * pixelsPerUnitX;
-    noUnitsY = noUnitsY * pixelsPerUnitY;
-    pixelsPerUnitX = 1;
-    pixelsPerUnitY = 1;
-#endif
+    m_xScrollPositionPixelOffset = 
+    m_yScrollPositionPixelOffset = 0;
 
     // Convert positions expressed in scroll units to positions in pixels.
     int xPosInPixels = (xPos + m_xScrollPosition)*m_xScrollPixelsPerLine,
@@ -485,8 +495,69 @@ void wxScrollHelperBase::SetTargetWindow(wxWindow *target)
 // scrolling implementation itself
 // ----------------------------------------------------------------------------
 
+void wxScrollHelperBase::HandleOnPanScroll(wxScrollWinPanEvent& event)
+{
+    int xOldPrecisePosition = m_xScrollPixelsPerLine * m_xScrollPosition + m_xScrollPositionPixelOffset;
+    int yOldPrecisePosition = m_yScrollPixelsPerLine * m_yScrollPosition + m_yScrollPositionPixelOffset;
+    int xNewPrecisePosition = event.GetX();
+    int yNewPrecisePosition = event.GetY();
+
+    // perform range check here for non iOS devices?
+
+    if ((xNewPrecisePosition == xOldPrecisePosition) && (yNewPrecisePosition == yOldPrecisePosition))
+    {
+        event.Skip();
+        return;
+    }
+
+        // flush all pending repaints before we change m_{x,y}ScrollPosition, as
+        // otherwise invalidated area could be updated incorrectly later when
+        // ScrollWindow() makes sure they're repainted before scrolling them
+#ifdef __WXMAC__
+        // wxWindowMac is taking care of making sure the update area is correctly
+        // set up, while not forcing an immediate redraw
+#else
+        m_targetWindow->Update();
+#endif
+
+    m_xScrollPosition = xNewPrecisePosition / m_xScrollPixelsPerLine;
+    m_xScrollPositionPixelOffset = xNewPrecisePosition % m_xScrollPixelsPerLine;
+    m_win->SetScrollPos(wxHORIZONTAL, m_xScrollPosition);
+
+    m_yScrollPosition = yNewPrecisePosition / m_yScrollPixelsPerLine;
+    m_yScrollPositionPixelOffset = yNewPrecisePosition % m_yScrollPixelsPerLine;
+    m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition);
+
+#ifndef __WXOSX_IPHONE__
+    // iOS takes care of all refreshing
+
+    // need to check this per platform
+    bool needsRefresh = true;
+    if ( needsRefresh )
+    {
+        m_targetWindow->Refresh(true );
+    }
+    else
+    {
+        int dx = xNewPrecisePosition - xOldPrecisePosition;
+        int dy = yNewPrecisePosition - yOldPrecisePosition;
+        m_targetWindow->ScrollWindow(dx, dy);
+    }
+#ifdef __WXUNIVERSAL__
+    if (m_win != m_targetWindow)
+    {
+        m_win->Refresh(true, GetScrollRect());
+    }
+#endif // __WXUNIVERSAL__
+#endif // __WXOSX_IPHONE__
+}
+
+
 void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 {
+    m_xScrollPositionPixelOffset = 0;
+    m_yScrollPositionPixelOffset = 0;
+
     int nScrollInc = CalcScrollInc(event);
     if ( nScrollInc == 0 )
     {
@@ -614,9 +685,6 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
                 nScrollInc = pos - m_yScrollPosition;
     }
 
-// the scroll physics on iPhone allow to temporarily scroll beyond 
-// the limits and then bounce back
-#ifndef __WXOSX_IPHONE__   
     if (orient == wxHORIZONTAL)
     {
         if ( m_xScrollPosition + nScrollInc < 0 )
@@ -651,7 +719,6 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
             }
         }
     }
-#endif
 
     return nScrollInc;
 }
@@ -664,21 +731,17 @@ void wxScrollHelperBase::DoPrepareReadOnlyDC(wxReadOnlyDC& dc)
     // the m_sign from the DC here, but I leave the
     // #ifdef GTK for now.
     if (m_win->GetLayoutDirection() == wxLayout_RightToLeft)
-        dc.SetDeviceOrigin( pt.x + m_xScrollPosition * m_xScrollPixelsPerLine,
-                            pt.y - m_yScrollPosition * m_yScrollPixelsPerLine );
+        dc.SetDeviceOrigin( pt.x + (m_xScrollPosition * m_xScrollPixelsPerLine) + m_xScrollPositionPixelOffset,
+                            pt.y - (m_yScrollPosition * m_yScrollPixelsPerLine) - m_yScrollPositionPixelOffset );
     else
 #endif
-        dc.SetDeviceOrigin( pt.x - m_xScrollPosition * m_xScrollPixelsPerLine,
-                            pt.y - m_yScrollPosition * m_yScrollPixelsPerLine );
+        dc.SetDeviceOrigin( pt.x - (m_xScrollPosition * m_xScrollPixelsPerLine) - m_xScrollPositionPixelOffset,
+                            pt.y - (m_yScrollPosition * m_yScrollPixelsPerLine) - m_yScrollPositionPixelOffset );
     dc.SetUserScale( m_scaleX, m_scaleY );
 }
 
 void wxScrollHelperBase::SetScrollRate( int xstep, int ystep )
 {
-#ifdef __WXOSX_IPHONE__
-    xstep = 1;
-    ystep = 1;
-#endif
     int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
     int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
 
@@ -747,18 +810,18 @@ void wxScrollHelperBase::DoCalcScrolledPosition(int x, int y,
                                                 int *xx, int *yy) const
 {
     if ( xx )
-        *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
+        *xx = x - (m_xScrollPosition * m_xScrollPixelsPerLine) - m_xScrollPositionPixelOffset;
     if ( yy )
-        *yy = y - m_yScrollPosition * m_yScrollPixelsPerLine;
+        *yy = y - (m_yScrollPosition * m_yScrollPixelsPerLine) - m_yScrollPositionPixelOffset;
 }
 
 void wxScrollHelperBase::DoCalcUnscrolledPosition(int x, int y,
                                                   int *xx, int *yy) const
 {
     if ( xx )
-        *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;
+        *xx = x + (m_xScrollPosition * m_xScrollPixelsPerLine) + m_xScrollPositionPixelOffset;
     if ( yy )
-        *yy = y + m_yScrollPosition * m_yScrollPixelsPerLine;
+        *yy = y + (m_yScrollPosition * m_yScrollPixelsPerLine) + m_yScrollPositionPixelOffset;
 }
 
 // ----------------------------------------------------------------------------
