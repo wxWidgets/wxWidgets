@@ -1402,13 +1402,16 @@ public:
     virtual wxSize GetEffectiveMinSize() const;
 
     /**
-        This methods has to be overridden by controls that can stretch
-        in both main direction and in which an owning sizer determines
-        a main or first direction (see below). The typical and almost
-        only example is a multi-line wxStaticText which can stretch in
-        either direction. The methods returns the smallest possible
-        size that this control can be shrunk to, e.g. a single word
-        for a text control.
+        May be overridden if the control minimal size depends on the layout
+        direction.
+
+        This method is called after InformFirstDirection() and so its
+        implementation can rely on the values passed to that method.
+
+        For example, a multi-line wxStaticText returns the minimum size at
+        which it can be wrapped when the major layout direction is vertical.
+
+        The default implementation of this method just calls GetMinSize().
 
         @since 3.3.2
 
