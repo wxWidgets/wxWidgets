@@ -1,14 +1,14 @@
 # WxWidgets Georgian tanslation
-# Copyright (C) 2022 THE WxWidgets'S COPYRIGHT HOLDER
+# Copyright (C) 2022 THE WxWidgets'S authors
 # This file is distributed under the same license as the WxWidgets package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2022-07-30 11:10+0200\n"
+"PO-Revision-Date: 2025-09-26 10:07+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: \n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.7\n"
 
 #: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
@@ -718,7 +718,6 @@ msgid "SPECIAL"
 msgstr "SPECIAL"
 
 #: ../src/common/accelcmn.cpp:373
-#, fuzzy
 msgid "Ctrl"
 msgstr "Ctrl"
 
@@ -1085,35 +1084,33 @@ msgstr "&შენახვა"
 
 #: ../src/common/docview.cpp:522 ../src/common/docview.cpp:560
 msgid "&Discard changes"
-msgstr ""
+msgstr "&ცვლილებების მოცილება"
 
 #: ../src/common/docview.cpp:523
-#, fuzzy
 msgid "Do&n't close"
-msgstr "არ შეინახო"
+msgstr "არ და&ხურო"
 
 #: ../src/common/docview.cpp:553
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "გნებავთ'%s' -ის ცვლილებების შენახვა?"
+msgstr "გნებავთ '%s' -ის ცვლილებების შენახვა მის დახურვამდე?"
 
 #: ../src/common/docview.cpp:559
-#, fuzzy
 msgid "The document must be closed."
-msgstr "ტექსტის შენახვა შეუძლებელია."
+msgstr "დოკუმენტი უნდა დაიხუროს."
 
 #: ../src/common/docview.cpp:571
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "%s-ის შენახვა ჩავარდა. ვცადო თავიდან?"
 
 #: ../src/common/docview.cpp:577
 msgid "Retry"
-msgstr ""
+msgstr "თავიდან ცდა"
 
 #: ../src/common/docview.cpp:577
 msgid "Discard changes"
-msgstr ""
+msgstr "ცვლილებების გაუქმება"
 
 #: ../src/common/docview.cpp:679
 #, c-format
@@ -1320,26 +1317,25 @@ msgid ""
 " and additionally, the existing configuration file was renamed to \"%s\" and "
 "couldn't be renamed back, please rename it to its original path \"%s\""
 msgstr ""
+" და დამატებით არსებული კონფიგურაციის ფაილის სახელი შეიცვალა \"%s\"-ზე და ამ "
+"გადარქმევის გაუქმება ვერ მოხერხდა. გადაარქვით მას სახელი ორიგინალზე და "
+"დააბრუნეთ ბილიკზე \"%s\""
 
 #: ../src/common/fileconf.cpp:389
-#, fuzzy
 msgid " due to the following error:\n"
-msgstr "და შეიცავს შემდეგ ფაილებს:\n"
+msgstr " შემდეგი შეცდომის გამო:\n"
 
 #: ../src/common/fileconf.cpp:412
-#, fuzzy
 msgid "failed to rename the existing file"
-msgstr "ტექსტური ფაილის კითხვის შეცდომა: %s."
+msgstr "არსებული ფაილის სახელის გადარქმევა ჩავარდა"
 
 #: ../src/common/fileconf.cpp:421
-#, fuzzy
 msgid "failed to create the new file directory"
-msgstr "სამუშაო საქაღალდის მიღების შეცდომა"
+msgstr "ახალი ფაილების საქაღალდის შექმნა ჩავარდა"
 
 #: ../src/common/fileconf.cpp:428
-#, fuzzy
 msgid "failed to move the file to the new location"
-msgstr "სატელეფონო კავშირის გაუქმების შეცდომა: %s"
+msgstr "ფაილის ახალ მდებარეობაზე გადატანა ჩავარდა"
 
 #: ../src/common/fileconf.cpp:462
 #, c-format
@@ -1398,9 +1394,8 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "კონფიგურაციის ჩანაწერის სახელი '%c'-ით ვერ დაიწყება."
 
 #: ../src/common/fileconf.cpp:1146
-#, fuzzy
 msgid "Failed to create configuration file directory."
-msgstr "ფონტის კონფიგურაციის ობიექტის შექმნის შეცდომა."
+msgstr "კონფიგურაციის ფაილის საქაღალდის შექმნა ჩავარდა."
 
 #: ../src/common/fileconf.cpp:1158
 msgid "can't open user configuration file."
@@ -2217,7 +2212,7 @@ msgstr "DIB თავსართი: კოდირება ბიტურ �
 #: ../src/common/imagbmp.cpp:1180
 #, c-format
 msgid "BMP Header: Invalid number of colors (%d)."
-msgstr ""
+msgstr "BMP თავსართი: ფერების არასწორი რაოდენობა (%d)."
 
 #: ../src/common/imagbmp.cpp:1273
 msgid "Error in reading image DIB."
@@ -2453,43 +2448,40 @@ msgid "TIFF: Error writing image."
 msgstr "TIFF: გამოსახულების ჩასწერის შეცდომა."
 
 #: ../src/common/imagtiff.cpp:881
-#, fuzzy
 msgid "TIFF: Error flushing data."
-msgstr "TIFF: გამოსახულების შენახვის შეცდომა."
+msgstr "TIFF: მონაცემების ჩაწერის შეცდომა."
 
 #: ../src/common/imagwebp.cpp:56
 msgid "WebP: Invalid data (failed to get features)."
-msgstr ""
+msgstr "WebP: არასწორი მონაცემები (თვისებების მიღება ჩავარდა)."
 
 #: ../src/common/imagwebp.cpp:65
 msgid "WebP: Allocating image memory failed."
-msgstr ""
+msgstr "WebP: გამოსახულების მეხსიერების გამოყოფა ჩავარდა."
 
 #: ../src/common/imagwebp.cpp:82
 msgid "WebP: Decoding RGBA image data failed."
-msgstr ""
+msgstr "WebP: RGBA გამოსახულების მონაცემების გაშიფვრა ჩავარდა."
 
 #: ../src/common/imagwebp.cpp:98
 msgid "WebP: Decoding RGB image data failed."
-msgstr ""
+msgstr "WebP: RGB გამოსახულების მონაცემების გაშიფვრა ჩავარდა."
 
 #: ../src/common/imagwebp.cpp:113 ../src/common/imagwebp.cpp:201
 msgid "WebP: Allocating stream buffer failed."
-msgstr ""
+msgstr "WebP: ნაკადის ბუფერის გამოყოფა ჩავარდა."
 
 #: ../src/common/imagwebp.cpp:131
-#, fuzzy
 msgid "WebP: Failed to parse container data."
-msgstr "მიმოცვლის ბაფერის დაყენების შეცდომა."
+msgstr "WebP: ვერ მოხერხდა კონტეინერის მონაცემების ანალიზი."
 
 #: ../src/common/imagwebp.cpp:222
-#, fuzzy
 msgid "WebP: Error decoding animation."
-msgstr "კონფიგურაციის პარამეტრების წაკითხვის შეცდომა."
+msgstr "WebP: ანიმაციის გაშიფვრის შეცდომა."
 
 #: ../src/common/imagwebp.cpp:240
 msgid "WebP: Error getting next animation frame."
-msgstr ""
+msgstr "WebP: შემდეგი ანიმაციის კადრის მიღების შეცდომა."
 
 #: ../src/common/init.cpp:172
 #, c-format
@@ -3967,15 +3959,17 @@ msgid "Error: %s (%d)"
 msgstr "შეცდომა: %s (%d)"
 
 #: ../src/common/webrequest.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Not enough free disk space for download: %llu needed but only %llu available."
-msgstr "გადმოსაწერად დისკზე საკმარისი თავისუფალი ადგილი არაა."
+msgstr ""
+"გადმოსაწერად დისკზე საკმარისი თავისუფალი ადგილი არაა: საჭიროა %llu, "
+"ხელმისაწვდომია, მხოლოდ, %llu."
 
 #: ../src/common/webrequest.cpp:669
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file in %s"
-msgstr "დროებითი ფაილის სახელის შექმნის შეცდომა"
+msgstr "დროებითი ფაილის სახელის შექმნის შეცდომა საქაღალდეში %s"
 
 #: ../src/common/webrequest_curl.cpp:1106
 msgid "libcurl could not be initialized"
@@ -3991,33 +3985,34 @@ msgid "Error running JavaScript: %s"
 msgstr "JavaScript-ის შესრულების შეცდომა: %s"
 
 #: ../src/common/webview_chromium.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set proxy \"%s\": %s"
-msgstr "საქაღალდის შექმნის შეცდომა: %s"
+msgstr "პროქსის \"%s\" დაყენება ჩავარდა: %s"
 
 #: ../src/common/webview_chromium.cpp:989
 msgid ""
 "Chromium can't be used because libcef.so wasn't loaded early enough; please "
 "relink the application or use LD_PRELOAD to load it earlier."
 msgstr ""
+"Chromium-ის გამოყენება შეუძლებელია, რადგან libcef საკმარისად ადრე არ იყო "
+"ჩატვირთული. გთხოვთ, თავიდან ააგეთ აპლიკაცია, ან მისი უფრო ადრე "
+"გამოსაყენებლად LD_PRELOAD გამოიყენეთ."
 
 #: ../src/common/webview_chromium.cpp:1108
-#, fuzzy
 msgid "Could not initialize Chromium"
-msgstr "OLE-ის ინიციალიზაციის შეცდომა"
+msgstr "Chromium-ის ინიციალიზაციის შეცდომა"
 
 #: ../src/common/webview_chromium.cpp:1616
 msgid "Show DevTools"
-msgstr ""
+msgstr "DevTools-ის ჩვენება"
 
 #: ../src/common/webview_chromium.cpp:1617
-#, fuzzy
 msgid "Close DevTools"
-msgstr "ყველას დახურვა"
+msgstr "DevToolsი-ის დახურვა"
 
 #: ../src/common/webview_chromium.cpp:1623
 msgid "Inspect"
-msgstr ""
+msgstr "ინსპექცია"
 
 #: ../src/common/wincmn.cpp:1628
 msgid "This platform does not support background transparency."
@@ -4421,11 +4416,12 @@ msgstr "მარჯვნივ"
 msgid ""
 "\"%s\" is not in the expected date format, please enter it as e.g. \"%s\"."
 msgstr ""
+"\"%s\" მოსალოდნელი თარიღის ფორმატი არაა. შეიყვანეთ ის, მაგალითად, როგორც "
+"\"%s\"."
 
 #: ../src/generic/datectlg.cpp:94
-#, fuzzy
 msgid "Invalid date"
-msgstr "PCX: არასწორი გამოსახულება"
+msgstr "არასწორი თარიღი"
 
 #: ../src/generic/dbgrptg.cpp:159
 #, c-format
@@ -4838,34 +4834,33 @@ msgid ""
 msgstr ""
 
 #: ../src/generic/grid.cpp:12739
-#, fuzzy
 msgid "Grid Corner"
-msgstr "კუთხე"
+msgstr "ბადის კუთხე"
 
 #: ../src/generic/grid.cpp:12741
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s Header"
-msgstr "სვეტი %u"
+msgstr "სვეტი %s თავსართი"
 
 #: ../src/generic/grid.cpp:12743
 #, c-format
 msgid "Row %s Header"
-msgstr ""
+msgstr "მწკრივი %s თავსართი"
 
 #: ../src/generic/grid.cpp:12745
-#, fuzzy, c-format
+#, c-format
 msgid "Column %s: %s"
-msgstr "სვეტი %u"
+msgstr "სვეტი %s: %s"
 
 #: ../src/generic/grid.cpp:12749
-#, fuzzy, c-format
+#, c-format
 msgid "Row %s: %s"
-msgstr "მწკრივი %i"
+msgstr "მწკრივი %s: %s"
 
 #: ../src/generic/grid.cpp:12753
 #, c-format
 msgid "Row %s, Column %s: %s"
-msgstr ""
+msgstr "მწკრივი %s, სვეტი %s: %s"
 
 #: ../src/generic/helpext.cpp:257
 #, c-format
@@ -4881,6 +4876,7 @@ msgstr "დახმარების ფაილი %s არ არსებ
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr ""
+"ხაზზე %lu რუკის ფაილში \"%s\" აღმოჩენილია არასწორი სინტაქსი. გამოტოვებულია."
 
 #: ../src/generic/helpext.cpp:292
 #, c-format
@@ -5244,38 +5240,37 @@ msgstr "MDI შვილი"
 #: ../src/gtk/power.cpp:188
 #, c-format
 msgid "Failed to open D-Bus connection to the login manager: %s"
-msgstr ""
+msgstr "D-Bus-ის კავშირის გახსნა შესვლის მენეჯერთან ჩავარდა: %s"
 
 #: ../src/gtk/power.cpp:214
-#, fuzzy
 msgid "wxWidgets application"
-msgstr "აპლიკაციის დამალვა"
+msgstr "wxWidgets-ის აპლიკაცია"
 
 #: ../src/gtk/power.cpp:226
 msgid "Application needs to keep running"
-msgstr ""
+msgstr "აპლიკაციის შესრულება უნდა გაგრძელდეს"
 
 #: ../src/gtk/power.cpp:233
 msgid "Clean up before suspend"
-msgstr ""
+msgstr "გასუფთავება შეჩერებამდე"
 
 #: ../src/gtk/power.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inhibit sleep: %s"
-msgstr "სატელეფონო კავშირის ინიციალიზაციის შეცდომა: %s"
+msgstr "ძილის დათრგუნვა ვერ მოხერხდა: %s"
 
 #: ../src/gtk/power.cpp:265
 msgid "Unexpected response to D-Bus \"Inhibit\" request."
-msgstr ""
+msgstr "მოულოდნელი პასუხი D-Bus-ის მოთხოვნაზე \"inhibit\"."
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "მორგებული ზომა"
 
 #: ../src/gtk/print.cpp:752
-#, fuzzy, c-format
+#, c-format
 msgid "Error while printing: %s"
-msgstr "ბეჭდვის შეცდომა: "
+msgstr "შეცდომა ბეჭდვისას: %s"
 
 #: ../src/gtk/print.cpp:816
 msgid "Page Setup"
@@ -5284,15 +5279,18 @@ msgstr "გვერდის მორგება"
 #: ../src/gtk/webview_webkit.cpp:932
 msgid "Retrieving JavaScript script output is not supported with WebKit v1"
 msgstr ""
+"WebKit v1-ში JavaScript-ის გამოტანილი ინფორმაციის მიღება მხარდაჭერილი არაა"
 
 #: ../src/gtk/webview_webkit2.cpp:1098
 msgid ""
 "Setting proxy is not supported by WebKit, at least version 2.16 is required."
 msgstr ""
+"WebKit-ს პროქსის დაყენების მხარდაჭერა არ გააჩნია. აუცილებელი მინიმალური "
+"ვერსიაა 2.16."
 
 #: ../src/gtk/webview_webkit2.cpp:1104
 msgid "This program was compiled without support for setting WebKit proxy."
-msgstr ""
+msgstr "ეს პროგრამა აგებულია WebKit-ის პროქსის დაყენების მხარდაჭერის გარეშე."
 
 #: ../src/gtk/window.cpp:6289
 msgid ""
@@ -5676,9 +5674,9 @@ msgstr ": ფაილი არ არსებობს!"
 
 #. TRANSLATORS: %s may be a document title.
 #: ../src/html/htmprint.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preview"
-msgstr " გადახედვა"
+msgstr "%s-ის მინიატურა"
 
 #: ../src/html/htmprint.cpp:755 ../src/richtext/richtextprint.cpp:618
 msgid ""
@@ -5743,11 +5741,11 @@ msgstr ""
 
 #: ../src/msw/dde.cpp:693
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr ""
+msgstr "რჩვევების მარყუჟის შეჩერება DDE სერვერთან ჩავარდა"
 
 #: ../src/msw/dde.cpp:768
 msgid "Failed to send DDE advise notification"
-msgstr ""
+msgstr "DDE რჩევის გაფრთხილების გაგზავნა ჩავარდა"
 
 #: ../src/msw/dde.cpp:1085
 msgid "Failed to create DDE string"
@@ -5936,7 +5934,7 @@ msgstr ""
 #: ../src/msw/dir.cpp:241
 #, c-format
 msgid "Cannot enumerate files in directory '%s'"
-msgstr ""
+msgstr "შეუძლებელია ფაილების ჩამოთვლა საქაღალდეში \"%s\""
 
 #: ../src/msw/dirdlg.cpp:368
 msgid "Couldn't obtain folder name"
@@ -5968,7 +5966,7 @@ msgstr ""
 
 #: ../src/msw/filedlg.cpp:1242
 msgid "Security warning"
-msgstr ""
+msgstr "უსაფრთხოების გაფრთხილება"
 
 #: ../src/msw/filedlg.cpp:1533
 #, c-format
@@ -6220,17 +6218,17 @@ msgstr "რეესტრის გასაღები უკვე არს
 #: ../src/msw/registry.cpp:625
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
-msgstr ""
+msgstr "ვერ გადავარქვი სახელი რეესტრის გასაღებს '%s'-დან '%s'-ზე."
 
 #: ../src/msw/registry.cpp:670
 #, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
-msgstr ""
+msgstr "ვერ დავაკოპირე რეესტრის ქვეგასაღები '%s'-დან '%s'-მდე."
 
 #: ../src/msw/registry.cpp:683
 #, c-format
 msgid "Failed to copy registry value '%s'"
-msgstr ""
+msgstr "ვერ დავაკოპირე რეესტრის მნიშვნელობა '%s'"
 
 #: ../src/msw/registry.cpp:692
 #, c-format
@@ -6311,7 +6309,7 @@ msgstr ""
 #: ../src/msw/registry.cpp:1427
 #, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
-msgstr ""
+msgstr "გამოტოვებული იქნება მნიშვნელობა \"%s\" გასაღებისთვის \"%s\"."
 
 #: ../src/msw/textctrl.cpp:596
 msgid ""
@@ -6405,7 +6403,7 @@ msgstr "ანონიმური ფაიფის შექმნის შ
 
 #: ../src/msw/utilsexc.cpp:697
 msgid "Failed to redirect the child process IO"
-msgstr ""
+msgstr "შვილი პროცესის IO-ის გადამისამართება ჩავარდა"
 
 #: ../src/msw/utilsexc.cpp:870
 #, c-format
@@ -6419,7 +6417,7 @@ msgstr "\"mpr.dll\"-ის ჩატვირთვის შეცდომა.
 #: ../src/msw/volume.cpp:506
 #, c-format
 msgid "Cannot read typename from '%s'!"
-msgstr ""
+msgstr "'%s'-დან typename ვერ წავიკითხე!"
 
 #: ../src/msw/volume.cpp:615
 #, c-format
@@ -6459,31 +6457,26 @@ msgid "File type:"
 msgstr "ფაილის ტიპი:"
 
 #: ../src/osx/cocoa/menu.mm:242
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "ფანჯარა"
 
 #: ../src/osx/cocoa/menu.mm:259
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "დახმარება"
 
 #: ../src/osx/cocoa/menu.mm:298
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "ჩაკეცვა"
 
 #: ../src/osx/cocoa/menu.mm:303
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
-msgstr "გადიდება"
+msgstr "მასშტაბი"
 
 #: ../src/osx/cocoa/menu.mm:309
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "ყველას წინ გამოტანა"
@@ -7020,7 +7013,7 @@ msgstr "ფაილის არჩევა"
 
 #: ../src/qt/mdi.cpp:254
 msgid "&Tile"
-msgstr ""
+msgstr "&ფილა"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:147
 #: ../src/richtext/richtextformatdlg.cpp:376
@@ -7436,7 +7429,7 @@ msgstr "კუთხის &რადიუსი:"
 #: ../src/richtext/richtextborderspage.cpp:576
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "არასავალდებულო კუთხის რადიუსი მომრგვალებული კუთხეების დასამატებლად."
 
 #: ../src/richtext/richtextborderspage.cpp:584
 #: ../src/richtext/richtextborderspage.cpp:586
@@ -7949,7 +7942,7 @@ msgstr "&მარჯვნიდან მარცხნივ"
 #: ../src/richtext/richtextfontpage.cpp:314
 #: ../src/richtext/richtextfontpage.cpp:316
 msgid "Check to indicate right-to-left text layout."
-msgstr ""
+msgstr "ჩართეთ მარჯვნიდან-მარცხნივ ტექსტის განლაგების მითითებისთვის."
 
 #: ../src/richtext/richtextfontpage.cpp:319
 msgid "Suppress hyphe&nation"
@@ -8222,12 +8215,12 @@ msgstr "&გვერდის გახლეჩა"
 #: ../src/richtext/richtextindentspage.cpp:294
 #: ../src/richtext/richtextindentspage.cpp:296
 msgid "Inserts a page break before the paragraph."
-msgstr ""
+msgstr "ჩასვამს გვერდის გადატანას აბზაცამდე."
 
 #: ../src/richtext/richtextindentspage.cpp:302
 #: ../src/richtext/richtextindentspage.cpp:304
 msgid "Shows a preview of the paragraph settings."
-msgstr ""
+msgstr "აჩვენებს აბზაცის პარამეტრების მინიატურას."
 
 #: ../src/richtext/richtextliststylepage.cpp:182
 msgid "&List level:"
@@ -8245,7 +8238,7 @@ msgstr "&ფონტი დონისთვის...."
 #: ../src/richtext/richtextliststylepage.cpp:194
 #: ../src/richtext/richtextliststylepage.cpp:196
 msgid "Click to choose the font for this level."
-msgstr ""
+msgstr "დააწკაპუნეთ ამ დონისთვის ფონტის ასარჩევად."
 
 #: ../src/richtext/richtextliststylepage.cpp:312
 msgid "Bullet style"
@@ -8366,7 +8359,7 @@ msgstr "&მცურავი რეჟიმი:"
 #: ../src/richtext/richtextsizepage.cpp:252
 #: ../src/richtext/richtextsizepage.cpp:254
 msgid "How the object will float relative to the text."
-msgstr ""
+msgstr "როგორ ილივლივებს ობიექტი ტექსტთან შედარებით."
 
 #: ../src/richtext/richtextsizepage.cpp:265
 msgid "Alignment"
@@ -8968,20 +8961,20 @@ msgstr ""
 
 #: ../src/unix/fswatcher_inotify.cpp:71
 msgid "Unable to create inotify instance"
-msgstr ""
+msgstr "inotify-ის გაშვებული ასლის შექმნა შეუძლებელია"
 
 #: ../src/unix/fswatcher_inotify.cpp:94
 msgid "Unable to close inotify instance"
-msgstr ""
+msgstr "inotify-ის გაშვებული ასლის დახურვა შეუძლებელია"
 
 #: ../src/unix/fswatcher_inotify.cpp:106
 msgid "Unable to add inotify watch"
-msgstr ""
+msgstr "inotify-ის ყურების დამატება შეუძლებელია"
 
 #: ../src/unix/fswatcher_inotify.cpp:138
 #, c-format
 msgid "Unable to remove inotify watch %i"
-msgstr ""
+msgstr "inotify-ის ყურების %i წაშლა შეუძლებელია"
 
 #: ../src/unix/fswatcher_inotify.cpp:271
 #, c-format
@@ -8991,15 +8984,15 @@ msgstr ""
 #: ../src/unix/fswatcher_inotify.cpp:320
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "არასწორი inotify-ის მოვლენა \"%s\"-სთვის"
 
 #: ../src/unix/fswatcher_inotify.cpp:553
 msgid "Unable to read from inotify descriptor"
-msgstr ""
+msgstr "inotify-ის დესკრიპტორიდან წაკითხვა სეუძლებელია"
 
 #: ../src/unix/fswatcher_inotify.cpp:558
 msgid "EOF while reading from inotify descriptor"
-msgstr ""
+msgstr "EOF inotify-ის დესკრიპტორის კითხვისას"
 
 #: ../src/unix/fswatcher_kqueue.cpp:114
 msgid "Unable to create kqueue instance"
@@ -9105,7 +9098,7 @@ msgstr "ხმის გარეშე"
 
 #: ../src/unix/sound.cpp:364
 msgid "Unable to play sound asynchronously."
-msgstr ""
+msgstr "ხმის ასინქრონულად დაკვრა შეუძლებელია."
 
 #: ../src/unix/sound.cpp:458
 #, c-format
@@ -9165,11 +9158,11 @@ msgstr ""
 
 #: ../src/unix/utilsunx.cpp:340
 msgid "Impossible to get child process input"
-msgstr ""
+msgstr "შვილი პროცესის შეყვანის მიღება შეუძლებელია"
 
 #: ../src/unix/utilsunx.cpp:390
 msgid "Can't write to child process's stdin"
-msgstr ""
+msgstr "შვილი პროცესის stdin-ში ჩაწერა შეუძლებელია"
 
 #: ../src/unix/utilsunx.cpp:644
 #, c-format
@@ -9210,7 +9203,7 @@ msgstr ""
 
 #: ../src/unix/wakeuppipe.cpp:117
 msgid "Failed to read from wake-up pipe"
-msgstr ""
+msgstr "გაღვიძების არხიდან წაკითხვა შეუძლებელია"
 
 #: ../src/x11/app.cpp:124
 #, c-format
@@ -9237,9 +9230,9 @@ msgid "XML parsing error: '%s' at line %d"
 msgstr "XML-ის დამუშვების შეცდომა: '%s' ხაზთან %d"
 
 #: ../src/xrc/xh_propgrid.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "Page %i"
-msgstr "%d გვერდი"
+msgstr "გვერდი %i"
 
 #: ../src/xrc/xmlres.cpp:448
 #, c-format
@@ -9260,114 +9253,3 @@ msgstr "'%s'-დან რესურსების ჩატვირთვ�
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "შექმნა %s \"%s\" შეცდომა."
-
-#, c-format
-#~ msgid "BMP: header has biClrUsed=%d when biBitCount=%d."
-#~ msgstr "BMP: თავსართოცას აქვს biClrUsed=%d when biBitCount=%d."
-
-#~ msgctxt "keyboard key"
-#~ msgid "Alt+"
-#~ msgstr "Alt+"
-
-#~ msgctxt "keyboard key"
-#~ msgid "Ctrl+"
-#~ msgstr "Ctrl+"
-
-#~ msgctxt "keyboard key"
-#~ msgid "Shift+"
-#~ msgstr "Shift+"
-
-#~ msgctxt "keyboard key"
-#~ msgid "RawCtrl+"
-#~ msgstr "RawCtrl+"
-
-#~ msgid "Copying more than one selected block to clipboard is not supported."
-#~ msgstr "მიმოცვლის ბაფერში ერთზე მეტი ბლოკის დამატება მხარდაუჭერელია."
-
-#~ msgid "Unsupported clipboard format."
-#~ msgstr "მიმოცვლის ბაფერის არასწორი ფორმატი."
-
-#~ msgid "Background colour"
-#~ msgstr "ფონის ფერი"
-
-#~ msgid "Font:"
-#~ msgstr "ფონტი:"
-
-#~ msgid "Size:"
-#~ msgstr "ზომა:"
-
-#~ msgid "The font size in points."
-#~ msgstr "ფონტის ზომი წერტილებში."
-
-#~ msgid "Style:"
-#~ msgstr "სტილი:"
-
-#~ msgid "Check to make the font bold."
-#~ msgstr "ფონტის გასასქელებლად ჩართეთ."
-
-#~ msgid "Check to make the font italic."
-#~ msgstr "ფონტის დასაკურსივებლად ჩართეთ."
-
-#~ msgid "Check to make the font underlined."
-#~ msgstr "ფონტის ხაზგასასმელად ჩართეთ."
-
-#~ msgid "Colour:"
-#~ msgstr "ფერი:"
-
-#~ msgid "Click to change the font colour."
-#~ msgstr "წკაპი ფონტის ფერის შესაცვლელად."
-
-#~ msgid "Shows a preview of the font."
-#~ msgstr "ფონტის გადახედვის ჩვენება."
-
-#~ msgid "Click to cancel changes to the font."
-#~ msgstr "წკაპი ფონტის ცვლილებების გაუქმებისთვის."
-
-#~ msgid "Click to confirm changes to the font."
-#~ msgstr "წპაი ფონტის ცვლილებების დასადასატურებლად."
-
-#~ msgid "<Any>"
-#~ msgstr "<ნებისმიერი>"
-
-#~ msgid "<Any Roman>"
-#~ msgstr "<ნებისმიერი რომანული>"
-
-#~ msgid "<Any Decorative>"
-#~ msgstr "<ნებისმიერი დეკორატიული>"
-
-#~ msgid "<Any Modern>"
-#~ msgstr "<ნებისმიერი თანამედროვე>"
-
-#~ msgid "<Any Script>"
-#~ msgstr "<ნებისმიერი სკრიპტი>"
-
-#~ msgid "<Any Swiss>"
-#~ msgstr "<ნებისმიერი შვეიცარიული>"
-
-#~ msgid "<Any Teletype>"
-#~ msgstr "<ნებისმიერი ტელეტაიპი>"
-
-#~ msgid "Printing "
-#~ msgstr "დაბეჭდვა "
-
-#~ msgid "Failed to insert text in the control."
-#~ msgstr "კონტროლში ტექსტის ჩასმის პრობლემა."
-
-#~ msgid "Please choose a valid font."
-#~ msgstr "აირჩიეთ სწორი ფონტი."
-
-#, c-format
-#~ msgid "wxWidgets could not open display for '%s': exiting."
-#~ msgstr "wxWidgets -მა ვერ გახსნა ეკრანი '%s'-სთვის: გასვლა."
-
-#~ msgid "Filter"
-#~ msgstr "ფილტრი"
-
-#~ msgid "Directories"
-#~ msgstr "საქაღალდეები"
-
-#~ msgid "Files"
-#~ msgstr "ფაილები"
-
-#~ msgid "Selection"
-#~ msgstr "მონიშნული"
