@@ -42,6 +42,7 @@
 #include "wx/utils.h"
 
 #include <array>
+#include <vector>
 
 #define TRACE_I18N wxS("i18n")
 
@@ -60,36 +61,6 @@ enum wxLocaleConvAttr
     LOCALE_CONV_CURRENCY_CODE,
     LOCALE_CONV_CURRENCY_SYM_POS
 };
-
-// Generate a grouping description in the format as used under Windows
-// Convert a raw grouping format string returned by localeconv() to
-// The list of char sized integers is converted to ASCII digits.
-// For example '\3' becomes '3'. A ';' is added as a separator between
-// the individual list elements.
-// A '\0' or a CHAR_MAX element marks the end of the raw grouping
-// description. If it ends with a '\0' then a '0' will be appended.
-// A possibly trailing separator will be removed.
-wxString GenerateGroupingString(const wxString& groupingRaw)
-{
-    wxString grouping;
-    bool lastCharIsZero = true;
-    for (auto ch : groupingRaw)
-    {
-        auto val = ch.GetValue();
-        if (val == 0 || val == CHAR_MAX)
-        {
-            lastCharIsZero = (val == CHAR_MAX);
-            break;
-        }
-        grouping.Append(wxUniChar('0' + val));
-        grouping.Append(';');
-    }
-    if (lastCharIsZero)
-        grouping.Append('0');
-    else
-        grouping.RemoveLast();
-    return grouping;
-}
 
 // Small helper function: get the value of the given environment variable and
 // return true only if the variable was found and has non-empty value.
@@ -239,7 +210,7 @@ public:
     wxLocaleNumberFormatting GetNumberFormatting() const override;
     wxString GetCurrencySymbol() const override;
     wxString GetCurrencyCode() const override;
-    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override;
+    void GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const override;
     wxLocaleCurrencyInfo GetCurrencyInfo() const override;
     wxMeasurementSystem UsesMetricSystem() const override;
 
@@ -900,9 +871,9 @@ wxUILocaleImplUnix::GetCurrencySymbol() const
 #if defined(HAVE_LANGINFO_H) && defined(__GLIBC__)
     wxString currencyStr = wxString(GetLangInfo(CURRENCY_SYMBOL), wxCSConv(GetCodeSet()));
     if (!currencyStr.empty() &&
-        (currencyStr[0] == wxT('+') ||
-         currencyStr[0] == wxT('-') ||
-         currencyStr[0] == wxT('.')))
+        (currencyStr[0] == '+' ||
+         currencyStr[0] == '-' ||
+         currencyStr[0] == '.'))
     {
         currencyStr.erase(0, 1);
     }
@@ -923,35 +894,38 @@ wxUILocaleImplUnix::GetCurrencyCode() const
 #endif
 }
 
-wxCurrencySymbolPosition
-wxUILocaleImplUnix::GetCurrencySymbolPosition() const
+void
+wxUILocaleImplUnix::GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const
 {
-    static std::array<wxCurrencySymbolPosition, 4> symPos = {
-        wxCurrencySymbolPosition::PrefixNoSep, wxCurrencySymbolPosition::PrefixWithSep,
-        wxCurrencySymbolPosition::SuffixNoSep, wxCurrencySymbolPosition::SuffixWithSep };
-
     wxUint32 posIdx = 0;
 #if defined(HAVE_LANGINFO_H) && defined(__GLIBC__)
     const char* csPrecedes = GetLangInfo(P_CS_PRECEDES);
     const char* sepBySpace = GetLangInfo(P_SEP_BY_SPACE);
-    posIdx += (csPrecedes[0] == 0) ? 2 : 0;
-    posIdx += (sepBySpace[0] == 0) ? 0 : 1;
+    posIdx += (csPrecedes[0] == 0) ? 1 : 0;
+    posIdx += (sepBySpace[0] == 0) ? 0 : 2;
 #else
     wxString symbolPosition = DoGetInfoFromLocaleConv(LOCALE_CONV_CURRENCY_SYM_POS, wxLOCALE_CAT_DEFAULT);
-    posIdx = symbolPosition.GetChar(0).GetValue();
+    posIdx = (!symbolPosition.empty()) ? symbolPosition.GetChar(0).GetValue() : 2;
 #endif
-    return (posIdx < symPos.size()) ? symPos[posIdx] : wxCurrencySymbolPosition::PrefixWithSep;
+    position = (posIdx % 2 == 0)
+             ? wxCurrencySymbolPosition::Prefix
+             : wxCurrencySymbolPosition::Suffix;
+    hasSeparator = (((posIdx / 2) % 2) == 1);
 }
 
 wxLocaleCurrencyInfo
 wxUILocaleImplUnix::GetCurrencyInfo() const
 {
+    wxCurrencySymbolPosition position;
+    bool hasSeparator;
+    GetCurrencySymbolPosition(position, hasSeparator);
     wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
-    return wxLocaleCurrencyInfo(
+    return wxLocaleCurrencyInfo{
         GetCurrencySymbol(),
         GetCurrencyCode(),
-        GetCurrencySymbolPosition(),
-        currencyFormatting);
+        position,
+        hasSeparator,
+        currencyFormatting };
 }
 
 wxMeasurementSystem
@@ -964,18 +938,7 @@ wxUILocaleImplUnix::UsesMetricSystem() const
     else if (!measureStr.empty() && measureStr[0].GetValue() == 2)
         return wxMeasurementSystem::NonMetric;
 #endif
-    wxString region = GetLocaleId().GetRegion();
-    // In 2025 only in the United States, Liberia, and Myanmar
-    // the metric system is not the default measurement system.
-    if (!region.empty())
-    {
-        if (region == "US" || region == "LR" || region == "MM")
-            return wxMeasurementSystem::NonMetric;
-        else
-            return wxMeasurementSystem::Metric;
-    }
-    else
-        return wxMeasurementSystem::UnknownSystem;
+    return wxMeasurementSystem::Unknown;
 }
 
 int
@@ -1018,9 +981,9 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
     groupSeparator = DoGetInfoFromLocaleConv(LOCALE_CONV_THOUSANDS_SEP, cat);
 #endif
 
-    wxString groupingStr;
+    std::vector<size_t> grouping;
 #if defined(HAVE_LANGINFO_H) && defined(__GLIBC__)
-    const char* grouping =
+    const char* groupingInfo =
   #ifdef MON_GROUPING
         (cat == wxLOCALE_CAT_MONEY)
             ? GetLangInfo(MON_GROUPING)
@@ -1029,14 +992,26 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
         GetLangInfo(GROUPING);
   #endif
 
-    size_t groupLen = strlen(grouping);
+    // Include the terminating '\0' in total length
+    size_t groupLen = strlen(groupingInfo) + 1;
     for (size_t j = 0; j < groupLen; ++j)
-        groupingStr.Append(wxUniChar(grouping[j]));
-    groupingStr.Append(wxUniChar(0));
+    {
+        auto val = groupingInfo[j];
+        if (val == CHAR_MAX)
+            break;
+        grouping.push_back(static_cast<size_t>(val));
+    }
 #else
-    groupingStr = DoGetInfoFromLocaleConv(LOCALE_CONV_GROUPING, cat);
+    bool lastCharIsZero = false;
+    wxString groupingStr = DoGetInfoFromLocaleConv(LOCALE_CONV_GROUPING, cat);
+    for (auto ch : groupingStr)
+    {
+        auto val = ch.GetValue();
+        if (val == CHAR_MAX)
+            break;
+        grouping.push_back(static_cast<size_t>(val));
+    }
 #endif
-    groupingStr = GenerateGroupingString(groupingStr);
 
     wxString decimalSeparator;
 #if defined(HAVE_LANGINFO_H) && defined(__GLIBC__)
@@ -1056,13 +1031,13 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
     int fractionalDigits = 0;
 #if defined(HAVE_LANGINFO_H) && defined(__GLIBC__)
     const char* fracDigits = GetLangInfo(FRAC_DIGITS);
-    fractionalDigits = fracDigits[0];
+    fractionalDigits = (fracDigits) ? fracDigits[0] : 0;
 #else
     wxString fracDigits = DoGetInfoFromLocaleConv(LOCALE_CONV_DIGITS, cat);
-    fractionalDigits = fracDigits.GetChar(0).GetValue();
+    fractionalDigits = (!fracDigits.empty()) ? fracDigits.GetChar(0).GetValue() : 0;
 #endif
 
-    return wxLocaleNumberFormatting(groupSeparator, groupingStr, decimalSeparator, fractionalDigits);
+    return wxLocaleNumberFormatting{ decimalSeparator, groupSeparator, grouping, fractionalDigits };
 }
 
 #if !(defined(HAVE_LANGINFO_H) && defined(__GLIBC__))
@@ -1082,22 +1057,18 @@ wxUILocaleImplUnix::DoGetInfoFromLocaleConv(wxLocaleConvAttr index, wxLocaleCate
     {
         case LOCALE_CONV_THOUSANDS_SEP:
         {
-            wchar_t thousandsSep[16];
             if (cat == wxLOCALE_CAT_MONEY)
-                mbstowcs(thousandsSep, lc->mon_thousands_sep, 16);
+                return wxString(lc->mon_thousands_sep, wxCSConv(GetCodeSet()));
             else
-                mbstowcs(thousandsSep, lc->thousands_sep, 16);
-            return wxString(thousandsSep);
+                return wxString(lc->thousands_sep, wxCSConv(GetCodeSet()));
         }
 
         case LOCALE_CONV_DECIMAL_POINT:
         {
-            wchar_t decimalPoint[16];
             if (cat == wxLOCALE_CAT_MONEY)
-                mbstowcs(decimalPoint, lc->mon_decimal_point, 16);
+                return wxString(lc->mon_decimal_point, wxCSConv(GetCodeSet()));
             else
-                mbstowcs(decimalPoint, lc->decimal_point, 16);
-            return wxString(decimalPoint);
+                return wxString(lc->decimal_point, wxCSConv(GetCodeSet()));
         }
 
         case LOCALE_CONV_GROUPING:
@@ -1118,16 +1089,12 @@ wxUILocaleImplUnix::DoGetInfoFromLocaleConv(wxLocaleConvAttr index, wxLocaleCate
 
         case LOCALE_CONV_CURRENCY_SYMBOL:
         {
-            wchar_t currencySymbol[16];
-            mbstowcs(currencySymbol, lc->currency_symbol, 16);
-            return wxString(currencySymbol);
+            return wxString(lc->currency_symbol, wxCSConv(GetCodeSet()));
         }
 
         case LOCALE_CONV_CURRENCY_CODE:
         {
-            wchar_t currencyCode[16];
-            mbstowcs(currencyCode, lc->int_curr_symbol, 16);
-            return wxString(currencyCode).Left(3);
+            return wxString(lc->int_curr_symbol, wxCSConv(GetCodeSet()));
         }
 
         case LOCALE_CONV_DIGITS:
@@ -1141,8 +1108,8 @@ wxUILocaleImplUnix::DoGetInfoFromLocaleConv(wxLocaleConvAttr index, wxLocaleCate
             char csPrecedes = lc->p_cs_precedes;
             char sepBySpace = lc->p_sep_by_space;
             wxUint32 posIdx = 0;
-            posIdx += (csPrecedes == 0) ? 2 : 0;
-            posIdx += (sepBySpace == 0) ? 0 : 1;
+            posIdx += (csPrecedes == 0) ? 1 : 0;
+            posIdx += (sepBySpace == 0) ? 0 : 2;
             wxString symbolPosition;
             symbolPosition.Append(wxUniChar(posIdx));
             return symbolPosition;

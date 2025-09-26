@@ -100,7 +100,7 @@ public:
     virtual wxLocaleNumberFormatting GetNumberFormatting() const = 0;
     virtual wxString GetCurrencySymbol() const = 0;
     virtual wxString GetCurrencyCode() const = 0;
-    virtual wxCurrencySymbolPosition GetCurrencySymbolPosition() const = 0;
+    virtual void GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const = 0;
     virtual wxLocaleCurrencyInfo GetCurrencyInfo() const = 0;
     virtual wxMeasurementSystem UsesMetricSystem() const = 0;
 

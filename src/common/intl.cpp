@@ -60,7 +60,6 @@
     #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFLocale.h>
     #include <CoreFoundation/CFDateFormatter.h>
-    #include <CoreFoundation/CFNumberFormatter.h>
     #include <CoreFoundation/CFString.h>
 #elif defined(__UNIX__)
     #include "wx/unix/private/uilocale.h"

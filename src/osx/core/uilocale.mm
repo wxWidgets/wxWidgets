@@ -28,12 +28,6 @@
 #include "wx/osx/core/cfstring.h"
 
 #import <Foundation/Foundation.h>
-#if 0
-#import <Foundation/NSArray.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSLocale.h>
-#import <Foundation/NSDateFormatter.h>
-#endif
 
 #include "wx/osx/private/uilocale.h"
 
@@ -172,7 +166,7 @@ public:
     wxLocaleNumberFormatting GetNumberFormatting() const override;
     wxString GetCurrencySymbol() const override;
     wxString GetCurrencyCode() const override;
-    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override;
+    void GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const override;
     wxLocaleCurrencyInfo GetCurrencyInfo() const override;
     wxMeasurementSystem UsesMetricSystem() const override;
 
@@ -382,10 +376,11 @@ wxUILocaleImplCF::GetCurrencyCode() const
     return wxCFStringRef::AsString(str);
 }
 
-wxCurrencySymbolPosition
-wxUILocaleImplCF::GetCurrencySymbolPosition() const
+void
+wxUILocaleImplCF::GetCurrencySymbolPosition(wxCurrencySymbolPosition& symbolPosition, bool& hasSeparator) const
 {
-    wxCurrencySymbolPosition symbolPosition = wxCurrencySymbolPosition::PrefixWithSep;
+    symbolPosition = wxCurrencySymbolPosition::Prefix;
+    hasSeparator = true;
 
     NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
     formatter.locale = m_nsloc;
@@ -409,9 +404,8 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
                 unichar after = [formatted characterAtIndex:idx];
                 hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:after];
             }
-            symbolPosition = (hasSpace)
-                           ? wxCurrencySymbolPosition::PrefixWithSep
-                           : wxCurrencySymbolPosition::PrefixNoSep;
+            symbolPosition = wxCurrencySymbolPosition::Prefix;
+            hasSeparator = hasSpace;
         }
         else
         {
@@ -421,13 +415,12 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
                 unichar before = [formatted characterAtIndex:symbolRange.location - 1];
                 hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:before];
             }
-            symbolPosition = (hasSpace)
-                           ? wxCurrencySymbolPosition::SuffixWithSep
-                           : wxCurrencySymbolPosition::SuffixNoSep;
+            symbolPosition = wxCurrencySymbolPosition::Suffix;
+            hasSeparator = hasSpace;
         }
     }
 
-    return symbolPosition;
+    [formatter release];
 }
 
 wxLocaleNumberFormatting
@@ -455,18 +448,23 @@ wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
     wxString decimalSeparator = wxCFStringRef::AsString(formatter.decimalSeparator);
     int fractionalDigits = (int) formatter.minimumFractionDigits;
 
-    return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
+    [formatter release];
+    return wxLocaleNumberFormatting{ decimalSeparator, groupSeparator, grouping, fractionalDigits };
 }
 
 wxLocaleCurrencyInfo
 wxUILocaleImplCF::GetCurrencyInfo() const
 {
+    wxCurrencySymbolPosition position;
+    bool hasSeparator;
+    GetCurrencySymbolPosition(position, hasSeparator);
     wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
-    return wxLocaleCurrencyInfo(
+    return wxLocaleCurrencyInfo{
         GetCurrencySymbol(),
         GetCurrencyCode(),
-        GetCurrencySymbolPosition(),
-        currencyFormatting);
+        position,
+        hasSeparator,
+        currencyFormatting };
 }
 
 wxMeasurementSystem
@@ -477,14 +475,7 @@ wxUILocaleImplCF::UsesMetricSystem() const
         BOOL isMetric = [m_nsloc usesMetricSystem];
         return (isMetric) ? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
     }
-    else
-    {
-        wxString region = GetLocaleId().GetRegion();
-        // In 2025 only in the United States, Liberia, and Myanmar
-        // the metric system is not the default measurement system.
-        bool usesMetric = !(region == "US" || region == "LR" || region == "MM");
-        return (usesMetric) ? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
-    }
+    return wxMeasurementSystem::Unknown;
 }
 
 /* static */

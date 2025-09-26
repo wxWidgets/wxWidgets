@@ -83,12 +83,14 @@ void ReplaceSeparatorIfNecessary(wxString& s, wxChar sepOld, wxChar sepNew)
 wxString wxNumberFormatter::PostProcessIntString(wxString s, int style)
 {
     if ( style & Style_WithThousandsSep )
-        AddThousandsSeparators(s);
+        AddThousandsSeparators(s, style);
 
     wxASSERT_MSG( !(style & Style_NoTrailingZeroes),
                   "Style_NoTrailingZeroes can't be used with integer values" );
 
     AddSignPrefix(s, style);
+
+    AddCurrency(s, style);
 
     return s;
 }
@@ -121,12 +123,14 @@ wxString wxNumberFormatter::ToString(double val, int precision, int style)
     ReplaceSeparatorIfNecessary(s, '.', GetDecimalSeparator());
 
     if ( style & Style_WithThousandsSep )
-        AddThousandsSeparators(s);
+        AddThousandsSeparators(s, style);
 
     if ( style & Style_NoTrailingZeroes )
         RemoveTrailingZeroes(s);
 
     AddSignPrefix(s, style);
+
+    AddCurrency(s, style);
 
     return s;
 }
@@ -148,17 +152,33 @@ wxString wxNumberFormatter::Format(const wxString& format, double val)
     return s;
 }
 
-void wxNumberFormatter::AddThousandsSeparators(wxString& s)
+void wxNumberFormatter::AddThousandsSeparators(wxString& s, int style)
 {
     // Thousands separators for numbers in scientific format are not relevant.
     if ( s.find_first_of("eE") != wxString::npos )
         return;
 
-    wxChar thousandsSep;
-    if ( !GetThousandsSeparatorIfUsed(&thousandsSep) )
+    wxString groupingSeparator;
+    std::vector<size_t> grouping;
+    wxString decimalSeparator = GetDecimalSeparator();
+#if wxUSE_INTL
+    wxLocaleNumberFormatting numForm;
+    if (style & Style_Currency)
+        numForm = wxUILocale::GetCurrent().GetCurrencyInfo().currencyFormat;
+    else
+        numForm = wxUILocale::GetCurrent().GetNumberFormatting();
+    if (!numForm.groupSeparator.empty())
+    {
+        groupingSeparator = numForm.groupSeparator;
+        grouping = numForm.grouping;
+        decimalSeparator = numForm.decimalSeparator;
+    }
+#endif // wxUSE_INTL
+
+    if (groupingSeparator.empty() )
         return;
 
-    size_t pos = s.find(GetDecimalSeparator());
+    size_t pos = s.find(decimalSeparator);
     if ( pos == wxString::npos )
     {
         // Start grouping at the end of an integer number.
@@ -169,17 +189,31 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
     // before their start.
     const size_t start = s.find_first_of("0123456789");
 
-    // We currently group digits by 3 independently of the locale. This is not
-    // the right thing to do and we should use lconv::grouping (under POSIX)
-    // and GetLocaleInfo(LOCALE_SGROUPING) (under MSW) to get information about
-    // the correct grouping to use. This is something that needs to be done at
-    // wxLocale level first and then used here in the future (TODO).
-    const size_t GROUP_LEN = 3;
+    if (grouping.empty())
+        return;
 
-    while ( pos > start + GROUP_LEN )
+    size_t groupIndex = 0;
+    size_t groupLen = grouping[0];
+    size_t nextGroupLen = groupLen;
+
+    while (groupLen > 0 && pos > start)
     {
-        pos -= GROUP_LEN;
-        s.insert(pos, thousandsSep);
+        pos = (pos >= groupLen) ? pos - groupLen : 0;
+        if (pos > start)
+            s.insert(pos, groupingSeparator);
+
+        // Select next group length
+        if (++groupIndex < grouping.size())
+        {
+            nextGroupLen = grouping[groupIndex];
+            if (nextGroupLen != 0)
+                groupLen = nextGroupLen;
+        }
+        else if (nextGroupLen != 0)
+        {
+            // No further group
+            groupLen = 0;
+        }
     }
 }
 
@@ -232,6 +266,71 @@ void wxNumberFormatter::AddSignPrefix(wxString& s, int style)
     }
 }
 
+void wxNumberFormatter::AddCurrency(wxString& s, int style)
+{
+    if (style & Style_Currency)
+    {
+        wxString currencyStr;
+        bool isCurrencyPrefix = true;
+        bool hasCurrencySeparator = true;
+#if wxUSE_INTL
+        auto currencyInfo = wxUILocale::GetCurrent().GetCurrencyInfo();
+        if (style & Style_CurrencySymbol)
+        {
+            currencyStr = currencyInfo.currencySymbol;
+            isCurrencyPrefix = currencyInfo.currencySymbolPos == wxCurrencySymbolPosition::Prefix;
+            hasCurrencySeparator = true;
+        }
+        else if (style & Style_CurrencyCode)
+        {
+            currencyStr = currencyInfo.currencyCode;
+            isCurrencyPrefix = true;
+            hasCurrencySeparator = true;
+        }
+#endif // wxUSE_INTL
+
+        if (!currencyStr.empty() &&
+            (style & Style_CurrencySymbol || style & Style_CurrencyCode))
+        {
+            if (isCurrencyPrefix)
+            {
+                if (hasCurrencySeparator)
+                    currencyStr += " ";
+                s = currencyStr + s;
+            }
+            else
+            {
+                if (hasCurrencySeparator)
+                    s += " ";
+                s += currencyStr;
+            }
+        }
+    }
+}
+
+void wxNumberFormatter::RemoveCurrency(wxString& s)
+{
+    // The currency symbol or code can be a prefix or a suffix of the
+    // given string. Therefore we remove all characters from the head
+    // and the tail of the string that do not belong to a valid number.
+
+    // Every valid number starts with one of the characters in startChars
+    const wxString startChars = "+-0123456789";
+
+    // Every valid number ends with one of the characters in finalChars
+    const wxString finalChars = "0123456789.";
+
+    // Find start and final position of the number
+    size_t start = s.find_first_of(startChars);
+    size_t final = s.find_last_of(finalChars);
+
+    // Extract the number, if the start and final positions are valid
+    if (start != wxString::npos && final != wxString::npos && start <= final)
+        s = s.SubString(start, final);
+    else
+        s = wxString(); // No number found
+}
+
 // ----------------------------------------------------------------------------
 // Conversion from strings
 // ----------------------------------------------------------------------------
@@ -248,6 +347,7 @@ void wxNumberFormatter::RemoveThousandsSeparators(wxString& s)
 bool wxNumberFormatter::FromString(wxString s, long *val)
 {
     RemoveThousandsSeparators(s);
+    RemoveCurrency(s);
     return s.ToLong(val);
 }
 
@@ -256,6 +356,7 @@ bool wxNumberFormatter::FromString(wxString s, long *val)
 bool wxNumberFormatter::FromString(wxString s, wxLongLong_t *val)
 {
     RemoveThousandsSeparators(s);
+    RemoveCurrency(s);
     return s.ToLongLong(val);
 }
 
@@ -264,6 +365,7 @@ bool wxNumberFormatter::FromString(wxString s, wxLongLong_t *val)
 bool wxNumberFormatter::FromString(wxString s, wxULongLong_t *val)
 {
     RemoveThousandsSeparators(s);
+    RemoveCurrency(s);
 
     // wxString::ToULongLong() does accept minus sign for unsigned integers,
     // consistently with the standard functions behaviour, e.g. strtoul() does
@@ -286,5 +388,6 @@ bool wxNumberFormatter::FromString(wxString s, double *val)
 {
     RemoveThousandsSeparators(s);
     ReplaceSeparatorIfNecessary(s, GetDecimalSeparator(), '.');
+    RemoveCurrency(s);
     return s.ToCDouble(val);
 }
