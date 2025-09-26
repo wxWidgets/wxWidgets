@@ -31,6 +31,8 @@
 
 #include "wx/osx/private/uilocale.h"
 
+#include <vector>
+
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory cat);
 
@@ -434,15 +436,22 @@ wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
 
     wxString groupSeparator = wxCFStringRef::AsString(formatter.groupingSeparator);
 
-    wxString grouping;
+    std::vector<size_t> grouping;
     int groupingSize = (int) formatter.groupingSize;
     int secondaryGroupingSize  = (int) formatter.secondaryGroupingSize;
     if (groupingSize > 0)
     {
         if (secondaryGroupingSize > 0 && secondaryGroupingSize != groupingSize)
-            grouping = wxString::Format("%d;%d;0", groupingSize, secondaryGroupingSize);
+        {
+            grouping.push_back(static_cast<size_t>(groupingSize));
+            grouping.push_back(static_cast<size_t>(secondaryGroupingSize));
+            grouping.push_back(static_cast<size_t>(0));
+        }
         else
-            grouping = wxString::Format("%d;0", groupingSize);
+        {
+            grouping.push_back(static_cast<size_t>(groupingSize));
+            grouping.push_back(static_cast<size_t>(0));
+        }
     }
 
     wxString decimalSeparator = wxCFStringRef::AsString(formatter.decimalSeparator);

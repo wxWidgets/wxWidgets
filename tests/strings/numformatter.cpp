@@ -393,7 +393,7 @@ TEST_CASE_METHOD(CurrencyFormatterTestCase, "CurrencyFormatterTestCase::NumericV
     CHECK( wxString::FromUTF8("12\u00A0345\u00A0678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_WithThousandsSep));
     CHECK( "12.345.678,12" == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_WithThousandsSep));
-    CHECK( wxString::FromUTF8("12.345.678,12 \u20AC") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
+    CHECK( wxString::FromUTF8("\u20AC 12.345.678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_CurrencySymbol | wxNumberFormatter::Style_WithThousandsSep));
     CHECK( "EUR 12.345.678,12" == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_CurrencyCode | wxNumberFormatter::Style_WithThousandsSep));
