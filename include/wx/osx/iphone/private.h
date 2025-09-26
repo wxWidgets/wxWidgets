@@ -131,11 +131,14 @@ public :
 
     void*               GetController() { return m_controller; }
     bool                GetBlockScrollEvents() const { return m_blockScrollEvents; }
+    void                SetBlockScrollWindow( bool block ) { m_blockScrollWindow = block; } 
+    bool                GetBlockScrollWindow() const { return m_blockScrollWindow; }
 
 protected:
     WXWidget          m_osxView;
     void             *m_controller;
     bool              m_blockScrollEvents;
+    bool              m_blockScrollWindow;
 
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl);

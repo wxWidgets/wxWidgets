@@ -528,28 +528,23 @@ void wxScrollHelperBase::HandleOnPanScroll(wxScrollWinPanEvent& event)
     m_yScrollPositionPixelOffset = yNewPrecisePosition % m_yScrollPixelsPerLine;
     m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition);
 
-#ifndef __WXOSX_IPHONE__
-    // iOS takes care of all refreshing
-
-    // need to check this per platform
-    bool needsRefresh = true;
-    if ( needsRefresh )
-    {
-        m_targetWindow->Refresh(true );
-    }
-    else
+    if (m_xScrollingEnabled || m_yScrollingEnabled)
     {
         int dx = xNewPrecisePosition - xOldPrecisePosition;
         int dy = yNewPrecisePosition - yOldPrecisePosition;
         m_targetWindow->ScrollWindow(dx, dy);
+    } 
+    else
+    {
+        m_targetWindow->Refresh(true );
     }
+
 #ifdef __WXUNIVERSAL__
     if (m_win != m_targetWindow)
     {
         m_win->Refresh(true, GetScrollRect());
     }
 #endif // __WXUNIVERSAL__
-#endif // __WXOSX_IPHONE__
 }
 
 

@@ -90,9 +90,14 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
             // wxString name = wxpeer->GetClassInfo()->GetClassName();
             // wxLogMessage( "scrollViewDidScroll from %s  y %i", name, (int)(-1*position.y) );
 
+            // iOS already scrolled the window, 
+            viewimpl->SetBlockScrollWindow( true );
+
             wxScrollWinPanEvent event( wxEVT_SCROLLWIN_PAN, position.x, position.y );
             event.SetEventObject( wxpeer );
             wxpeer->OSXGetScrollOwnerWindow()->HandleWindowEvent( event );
+
+            viewimpl->SetBlockScrollWindow( false );
         }
         viewimpl->SetNeedsDisplay();
     }
@@ -325,7 +330,8 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
 wxIMPLEMENT_DYNAMIC_CLASS(wxWidgetIPhoneImpl , wxWidgetImpl);
 
 wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags, void* controller ) :
-    wxWidgetImpl( peer, flags ), m_osxView(w), m_controller(controller), m_blockScrollEvents(true)
+    wxWidgetImpl( peer, flags ), m_osxView(w), m_controller(controller), 
+    m_blockScrollEvents(false), m_blockScrollWindow(false)
 {
 }
 
@@ -633,8 +639,9 @@ void wxWidgetIPhoneImpl::ScrollRect( const wxRect *rect, int dx, int dy )
 
 void wxWidgetIPhoneImpl::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
+    if (m_blockScrollWindow) return;
+
     wxUIView* view = (wxUIView*)m_osxView;  // wxUIView derives from UIScrollView
-    if (view == nullptr) return;
 
     CGPoint position = [view contentOffset];
 
@@ -644,6 +651,8 @@ void wxWidgetIPhoneImpl::ScrollWindow( int dx, int dy, const wxRect *rect )
     m_blockScrollEvents = true;
     [view setContentOffset: position];    
     m_blockScrollEvents = false;
+
+    SetNeedsDisplay();
 }
 
 
