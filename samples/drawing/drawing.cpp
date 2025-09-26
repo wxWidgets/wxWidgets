@@ -275,6 +275,7 @@ public:
     void OnCopy(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnShow(wxCommandEvent &event);
+    void OnMoveMouse(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
     void OnBoundingBox(wxCommandEvent& evt);
     void OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt);
@@ -392,6 +393,7 @@ enum
     LogicalOrigin_MoveRight,
     LogicalOrigin_Set,
     LogicalOrigin_Restore,
+    LogicalOrigin_MoveMouse,
 
 #if wxUSE_DC_TRANSFORM_MATRIX
     TransformMatrix_Set,
@@ -1804,7 +1806,7 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
     }
 
     int lineHeight = textSize.GetHeight();
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxRect r(textSize.GetWidth() + x, x, dc.FromDIP(100), lineHeight);
 
     dc.DrawText("System colours", x, r.y);
@@ -1893,7 +1895,7 @@ void MyCanvas::DrawDatabaseColours(wxDC& dc)
     }
 
     int lineHeight = textSize.GetHeight();
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxRect r(textSize.GetWidth() + x, x, dc.FromDIP(100), lineHeight);
 
     wxString title = "wxColourDatabase colours";
@@ -1969,7 +1971,7 @@ void MyCanvas::DrawCursors(wxDC& dc)
     constexpr int stockNamesCount = WXSIZEOF(stockNames);
     m_cursorRects.resize(stockNamesCount);
 
-    wxCoord x(FromDIP(10));
+    wxCoord x(dc.FromDIP(10));
     wxCoord y = x;
 
     dc.SetBackgroundMode(wxTRANSPARENT);
@@ -1978,7 +1980,7 @@ void MyCanvas::DrawCursors(wxDC& dc)
                                  wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this)),
                 x, y);
 
-    const int w = FromDIP(200);
+    const int w = dc.FromDIP(200);
     const int h = wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this);
     const int margin = dc.GetCharWidth();
 
@@ -2514,6 +2516,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU_RANGE(MenuShow_First,   MenuShow_Last,   MyFrame::OnShow)
 
+    EVT_MENU(LogicalOrigin_MoveMouse, MyFrame::OnMoveMouse)
     EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
 wxEND_EVENT_TABLE()
 
@@ -2633,6 +2636,9 @@ MyFrame::MyFrame(const wxString& title)
     menuLogical->AppendSeparator();
     menuLogical->Append( LogicalOrigin_Set, "Set to (&100, 100)\tShift-Ctrl-1" );
     menuLogical->Append( LogicalOrigin_Restore, "&Restore to normal\tShift-Ctrl-0" );
+    menuLogical->AppendSeparator();
+    menuLogical->Append( LogicalOrigin_MoveMouse,
+                         "Move &mouse to logical (100, 100)\tShift-Ctrl-M");
 
 #if wxUSE_DC_TRANSFORM_MATRIX
     wxMenu *menuTransformMatrix = new wxMenu;
@@ -2784,13 +2790,16 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
             m_canvas->UseGraphicRenderer(nullptr);
 #endif
-            wxSVGFileDC svgdc(dlg.GetPath(),
-                              canvasSize.GetWidth(),
-                              canvasSize.GetHeight(),
-                              72,
-                              "Drawing sample");
-            svgdc.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
-            m_canvas->Draw(svgdc);
+            wxSize svgSize;
+            wxSVGFileDC tempSvgDC(svgSize);
+            m_canvas->Draw(tempSvgDC);
+
+            svgSize = wxSize(tempSvgDC.MaxX(), tempSvgDC.MaxY());
+            svgSize.IncBy(15); // account for wxPen width exceeding bounds
+
+            wxSVGFileDC svgDC(svgSize, dlg.GetPath(), "Drawing sample");
+            svgDC.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
+            m_canvas->Draw(svgDC);
 #if wxUSE_GRAPHICS_CONTEXT
             m_canvas->UseGraphicRenderer(tempRenderer);
 #endif
@@ -2881,6 +2890,11 @@ void MyFrame::OnShow(wxCommandEvent& event)
     }
 #endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
     m_canvas->ToShow(show);
+}
+
+void MyFrame::OnMoveMouse(wxCommandEvent& WXUNUSED(event))
+{
+    m_canvas->WarpPointer(100, 100);
 }
 
 void MyFrame::OnOption(wxCommandEvent& event)

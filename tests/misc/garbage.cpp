@@ -12,6 +12,8 @@
 
 #include "testprec.h"
 
+#include "testfile.h"
+
 
 #include "wx/filename.h"
 #include "wx/image.h"
@@ -28,64 +30,6 @@
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
-
-class GarbageTestCase : public CppUnit::TestCase
-{
-public:
-    GarbageTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( GarbageTestCase );
-        CPPUNIT_TEST( LoadGarbage );
-    CPPUNIT_TEST_SUITE_END();
-
-    void LoadGarbage();
-    void DoLoadFile(const wxString& fullname);
-    void DoLoadStream(wxInputStream& stream);
-
-    wxDECLARE_NO_COPY_CLASS(GarbageTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( GarbageTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( GarbageTestCase, "GarbageTestCase" );
-
-
-void GarbageTestCase::LoadGarbage()
-{
-    srand(1234);
-
-    wxInitAllImageHandlers();
-
-    for (size_t size = 1; size < GARBAGE_DATA_SIZE; size *= size+1)
-    {
-        // first, generate some garbage data
-        unsigned char *data = new unsigned char[size];
-        for (size_t i = 0; i < size; i++)
-            data[i] = rand();
-
-        // write it to a file
-        wxString garbagename = wxFileName::CreateTempFileName("garbage");
-        CPPUNIT_ASSERT( !garbagename.empty() );
-
-        wxFile garbage(garbagename, wxFile::write);
-        CPPUNIT_ASSERT( garbage.IsOpened() );
-
-        CPPUNIT_ASSERT( garbage.Write(data, size) == size );
-        garbage.Close();
-
-        // try to load it by name
-        DoLoadFile(garbagename);
-
-        // try to load it from a wxInputStream
-        wxMemoryInputStream stream(data, size);
-        DoLoadStream(stream);
-
-        wxDELETEA(data);
-    }
-}
 
 // Execute the given macro with the given first and second parameters and
 // bitmap type as its third parameter for all bitmap types.
@@ -119,7 +63,7 @@ void GarbageTestCase::LoadGarbage()
       !func(arg) \
     )
 
-void GarbageTestCase::DoLoadFile(const wxString& fullname)
+void DoLoadGarbageFile(const wxString& fullname)
 {
     // test wxImage
     wxImage img;
@@ -145,27 +89,27 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
 
     // test wxDynamicLibrary
     wxDynamicLibrary lib;
-    CPPUNIT_ASSERT( lib.Load(fullname) == false );
+    CHECK_FALSE( lib.Load(fullname) );
 
 /*
 #if wxUSE_MEDIACTRL
     // test wxMediaCtrl
     wxMediaCtrl *media = new wxMediaCtrl(wxTheApp->GetTopWindow());
-    CPPUNIT_ASSERT( media->Load(fullname) == false );
+    CHECK_FALSE( media->Load(fullname) );
 #endif
 
     // test wxHtmlWindow
     wxHtmlWindow *htmlwin = new wxHtmlWindow(wxTheApp->GetTopWindow());
-    CPPUNIT_ASSERT( htmlwin->LoadFile(fullname) == false );
+    CHECK_FALSE( htmlwin->LoadFile(fullname) );
     delete htmlwin;
 */
     // test wxXmlResource
 #if wxUSE_XRC
-    CPPUNIT_ASSERT( wxXmlResource::Get()->Load(fullname) == false );
+    CHECK_FALSE( wxXmlResource::Get()->Load(fullname) );
 #endif
 }
 
-void GarbageTestCase::DoLoadStream(wxInputStream& stream)
+void DoLoadGarbageStream(wxInputStream& stream)
 {
     // NOTE: not all classes tested by DoLoadFile() supports loading
     //       from an input stream!
@@ -184,9 +128,35 @@ void GarbageTestCase::DoLoadStream(wxInputStream& stream)
 /*
     // test wxHtmlWindow
     wxHtmlWindow *htmlwin = new wxHtmlWindow(wxTheApp->GetTopWindow());
-    CPPUNIT_ASSERT( htmlwin->LoadFile(fullname) == false );
+    CHECK_FALSE( htmlwin->LoadFile(fullname) );
     delete htmlwin;
 */
+}
+
+TEST_CASE("Load", "[garbage]")
+{
+    srand(1234);
+
+    wxInitAllImageHandlers();
+
+    for (size_t size = 1; size < GARBAGE_DATA_SIZE; size *= size + 1)
+    {
+        // first, generate some garbage data
+        std::vector<unsigned char> buffer(size);
+        unsigned char* data = &buffer[0];
+        for (size_t i = 0; i < size; i++)
+            data[i] = rand();
+
+        // write it to a file
+        TestFile tf(data, size);
+
+        // try to load it by name
+        DoLoadGarbageFile(tf.GetName());
+
+        // try to load it from a wxInputStream
+        wxMemoryInputStream stream(data, size);
+        DoLoadGarbageStream(stream);
+    }
 }
 
 #undef ASSERT_FUNC_FAILS

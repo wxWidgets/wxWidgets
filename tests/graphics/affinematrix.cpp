@@ -27,30 +27,7 @@
 // Affine transform test class
 // ----------------------------------------------------------------------------
 
-class AffineTransformTestCase : public CppUnit::TestCase
-{
-public:
-    AffineTransformTestCase() {}
-
-private:
-    CPPUNIT_TEST_SUITE( AffineTransformTestCase );
-        CPPUNIT_TEST( InvertMatrix );
-        CPPUNIT_TEST( Concat );
-    CPPUNIT_TEST_SUITE_END();
-
-    void InvertMatrix();
-    void Concat();
-
-    wxDECLARE_NO_COPY_CLASS(AffineTransformTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( AffineTransformTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( AffineTransformTestCase, "AffineTransformTestCase" );
-
-void AffineTransformTestCase::InvertMatrix()
+TEST_CASE("AffineTransform::InvertMatrix", "[affine-transform]")
 {
     wxAffineMatrix2D matrix1;
     matrix1.Set(wxMatrix2D(2, 1, 1, 1), wxPoint2DDouble(1, 1));
@@ -62,18 +39,18 @@ void AffineTransformTestCase::InvertMatrix()
     wxMatrix2D m;
     wxPoint2DDouble p;
     matrix2.Get(&m, &p);
-    CPPUNIT_ASSERT_EQUAL( 1, (int)m.m_11 );
-    CPPUNIT_ASSERT_EQUAL( -1, (int)m.m_12 );
-    CPPUNIT_ASSERT_EQUAL( -1, (int)m.m_21 );
-    CPPUNIT_ASSERT_EQUAL( 2, (int)m.m_22 );
-    CPPUNIT_ASSERT_EQUAL( 0, (int)p.m_x );
-    CPPUNIT_ASSERT_EQUAL( -1, (int)p.m_y );
+    CHECK( (int)m.m_11 == 1 );
+    CHECK( (int)m.m_12 == -1 );
+    CHECK( (int)m.m_21 == -1 );
+    CHECK( (int)m.m_22 == 2 );
+    CHECK( (int)p.m_x == 0 );
+    CHECK( (int)p.m_y == -1 );
 
     matrix2.Concat(matrix1);
-    CPPUNIT_ASSERT( matrix2.IsIdentity() );
+    CHECK( matrix2.IsIdentity() );
 }
 
-void AffineTransformTestCase::Concat()
+TEST_CASE("AffineTransform::Concat", "[affine-transform]")
 {
     wxAffineMatrix2D m1;
     m1.Set(wxMatrix2D(0.9, 0.4, -0.4, 0.9), wxPoint2DDouble(0.0, 0.0));
@@ -86,12 +63,12 @@ void AffineTransformTestCase::Concat()
     m1.Get(&m, &p);
 
     const double delta = 0.01;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.9, m.m_11, delta );
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.4, m.m_12, delta );
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( -0.4, m.m_21, delta );
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.9, m.m_22, delta );
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.7, p.m_x, delta );
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( 5.7, p.m_y, delta );
+    CHECK_THAT( m.m_11 , Catch::Matchers::WithinAbs(0.9, delta) );
+    CHECK_THAT( m.m_12, Catch::Matchers::WithinAbs(0.4, delta) );
+    CHECK_THAT( m.m_21, Catch::Matchers::WithinAbs(-0.4, delta) );
+    CHECK_THAT( m.m_22, Catch::Matchers::WithinAbs(0.9, delta) );
+    CHECK_THAT( p.m_x, Catch::Matchers::WithinAbs(0.7, delta) );
+    CHECK_THAT( p.m_y, Catch::Matchers::WithinAbs(5.7,delta) );
 }
 
 #if wxUSE_DC_TRANSFORM_MATRIX

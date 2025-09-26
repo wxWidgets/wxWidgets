@@ -257,11 +257,6 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
-    // LISTVIEW generates and endless stream of LVN_ODCACHEHINT event for a
-    // virtual wxListCtrl, so disable WS_EX_COMPOSITED.
-    if ( IsVirtual() )
-        MSWDisableComposited();
-
     const wxVisualAttributes& defAttrs = GetDefaultAttributes();
 
     if ( wxMSWDarkMode::IsActive() )

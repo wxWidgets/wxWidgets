@@ -261,6 +261,13 @@ wxWindowMac::~wxWindowMac()
     delete GetPeer() ;
 }
 
+void wxWindowMac::MacClipsToBounds( bool clip )
+{
+    if ( m_peer )
+        m_peer->ClipsToBounds(clip);
+}
+
+
 void wxWindowMac::MacSetClipChildren()
 {
     m_clipChildren = true ;
@@ -837,29 +844,14 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
     }
 }
 
-bool wxWindowMac::SetCursor(const wxCursor& cursor)
+void wxWindowMac::WXUpdateCursor()
 {
-    if (m_cursor.IsSameAs(cursor))
-        return false;
-
-    if (!cursor.IsOk())
-    {
-        if ( ! wxWindowBase::SetCursor( *wxSTANDARD_CURSOR ) )
-            return false ;
-    }
-    else
-    {
-        if ( ! wxWindowBase::SetCursor( cursor ) )
-            return false ;
-    }
-
-    wxASSERT_MSG( m_cursor.IsOk(),
-        wxT("cursor must be valid after call to the base version"));
+    wxWindowBase::WXUpdateCursor();
 
     if ( GetPeer() != nullptr )
-        GetPeer()->SetCursor( m_cursor );
-
-    return true ;
+    {
+        GetPeer()->SetCursor( m_cursor.IsOk() ? m_cursor : *wxSTANDARD_CURSOR ) ;
+    }
 }
 
 #if wxUSE_MENUS
@@ -1052,13 +1044,6 @@ wxSize wxWindowMac::DoGetBestSize() const
             if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
             {
                 r.height = 16 ;
-            }
-            else
-#endif
-#if wxUSE_SPINBTN
-            if ( IsKindOf( CLASSINFO( wxSpinButton ) ) )
-            {
-                r.height = 24 ;
             }
             else
 #endif
@@ -2698,6 +2683,10 @@ bool wxWidgetImpl::NeedsFrame() const
 }
 
 void wxWidgetImpl::SetDrawingEnabled(bool WXUNUSED(enabled))
+{
+}
+
+void wxWidgetImpl::ClipsToBounds(bool WXUNUSED(clip))
 {
 }
 

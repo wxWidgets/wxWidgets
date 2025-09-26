@@ -161,7 +161,7 @@ public :
     }
 
     virtual ~wxMenuItemImpl() ;
-    virtual void SetBitmap( const wxBitmap& bitmap ) = 0;
+    virtual void SetBitmap( const wxBitmapBundle& bitmap ) = 0;
     virtual void Enable( bool enable ) = 0;
     virtual void Check( bool check ) = 0;
     virtual void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) = 0;
@@ -366,6 +366,8 @@ public :
     virtual void        InstallEventHandler( WXWidget control = nullptr ) = 0;
 
     virtual bool        EnableTouchEvents(int eventsMask) = 0;
+
+    virtual void        ClipsToBounds(bool clip);
 
     // scrolling views need a clip subview that acts as parent for native children
     // (except for the scollbars) which are children of the view itself

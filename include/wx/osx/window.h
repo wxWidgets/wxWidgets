@@ -82,7 +82,6 @@ public:
     virtual void Update() override;
     virtual void ClearBackground() override;
 
-    virtual bool SetCursor( const wxCursor &cursor ) override;
     virtual bool SetFont( const wxFont &font ) override;
     virtual bool SetBackgroundColour( const wxColour &colour ) override;
     virtual bool SetForegroundColour( const wxColour &colour ) override;
@@ -129,6 +128,8 @@ public:
 
     // implementation from now on
     // --------------------------
+
+    virtual void WXUpdateCursor() override;
 
     void MacClientToRootWindow( int *x , int *y ) const;
 
@@ -220,6 +221,9 @@ public:
 
     // returns the visible region of this control in window ie non-client coordinates
     const wxRegion&     MacGetVisibleRegion( bool includeOuterStructures = false ) ;
+
+    // sets NSView.clipsToBounds property
+    void                MacClipsToBounds( bool clip );
 
     // returns true if children have to clipped to the content area
     // (e.g., scrolled windows)

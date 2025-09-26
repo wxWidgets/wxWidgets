@@ -62,6 +62,10 @@ You can also use wxDECLARE_APP(appClass) in a header file to declare the wxGetAp
 function which returns a reference to the application object. Otherwise you can
 only use the global @c wxTheApp pointer which is of type @c wxApp*.
 
+Please note that wxIMPLEMENT_APP() and wxDECLARE_APP() must always be used in
+the global scope and not within a namespace, even if the application class is
+within a namespace.
+
 
 
 @section overview_app_shutdown Application Shutdown

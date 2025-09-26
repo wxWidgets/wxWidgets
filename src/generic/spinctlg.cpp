@@ -49,11 +49,15 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSpinDoubleEvent, wxNotifyEvent);
 // ----------------------------------------------------------------------------
 
 // The margin between the text control and the spin: the value here is the same
-// as the margin between the spin button and its "buddy" text control in wxMSW
-// so the generic control looks similarly to the native one there, we might
-// need to use different value for the other platforms (and maybe even
-// determine it dynamically?).
+// as the margin between the spin button and its "buddy" text control in wxMSW,
+// and the commonly used spacing on macOS, so the generic control looks
+// similarly to the native one there, we might need to use different value for
+// other platforms (and maybe even determine it dynamically?).
+#ifdef __WXOSX__
+static const wxCoord MARGIN = 4;
+#else
 static const wxCoord MARGIN = 1;
+#endif
 
 #define SPINCTRLBUT_MAX 32000 // large to avoid wrap around trouble
 
@@ -240,6 +244,10 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
         if ( DoTextToValue(value, &d) )
             m_value = AdjustAndSnap(d);
     }
+
+#ifdef __WXOSX__
+    MacClipsToBounds(false);
+#endif
 
     m_textCtrl   = new wxSpinCtrlTextGeneric(this, DoValueToText(m_value), style);
     m_spinButton = new wxSpinCtrlButtonGeneric(this, style);

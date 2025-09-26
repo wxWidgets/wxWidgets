@@ -1452,6 +1452,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/window.cpp
     src/gtk/mimetype.cpp
     src/gtk/power.cpp
+    src/gtk/wayland.cpp
 </set>
 <set var="GTK2_LOWLEVEL_SRC" hints="files">
     $(GTK_LOWLEVEL_SRC)

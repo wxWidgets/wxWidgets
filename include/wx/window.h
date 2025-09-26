@@ -1449,6 +1449,12 @@ public:
         return GetHelpTextAtPoint(wxDefaultPosition, wxHelpEvent::Origin_Unknown);
     }
 
+        // may be overridden to return a more appropriate ID for the help event
+        // generated at the given point (in client window coordinates)
+    virtual int GetHelpIdAtPoint(const wxPoint& WXUNUSED(pt))
+    {
+        return GetId();
+    }
 #else // !wxUSE_HELP
     // silently ignore SetHelpText() calls
     void SetHelpText(const wxString& WXUNUSED(text)) { }

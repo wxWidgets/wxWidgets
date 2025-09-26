@@ -810,10 +810,6 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     if ( !InitCEF(m_implData->m_config) )
         return false;
 
-#ifdef __WXMSW__
-    MSWDisableComposited();
-#endif // __WXMSW__
-
     m_clientHandler = new ClientHandler{*this};
     m_clientHandler->AddRef();
 

@@ -12,12 +12,11 @@ if(wxBUILD_LOCALES)
     endif()
 endif()
 
+mark_as_advanced(GETTEXT_MSGMERGE_EXECUTABLE GETTEXT_MSGFMT_EXECUTABLE)
+
 if(NOT wxBUILD_LOCALES)
     return()
 endif()
-
-mark_as_advanced(GETTEXT_MSGMERGE_EXECUTABLE)
-mark_as_advanced(GETTEXT_MSGFMT_EXECUTABLE)
 
 # list and process the po files
 file(GLOB _po_files "${wxSOURCE_DIR}/locale/*.po")

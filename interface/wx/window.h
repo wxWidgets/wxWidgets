@@ -3157,6 +3157,21 @@ public:
     ///@{
 
     /**
+        Get the ID to be used for help events generated at the given point.
+
+        By default help events use the ID of the window for which they are
+        generated, but in some cases it may be preferable to use an ID for a
+        sub-element of the window instead, e.g. this is used by wxToolBar to
+        generate help events with the ID of the tool under the mouse, if any.
+
+        Similarly, this function may be overridden in other composite controls
+        in the application code.
+
+        @since 3.3.2
+     */
+    virtual int GetHelpIdAtPoint(const wxPoint& pt);
+
+    /**
         Gets the help text to be used as context-sensitive help for this window.
         Note that the text is actually stored by the current wxHelpProvider
         implementation, and not in the window object itself.
@@ -3853,8 +3868,12 @@ public:
               applications (and probably avoid using it under the other
               platforms without good reason as well).
 
-        @note This function does nothing when using wxGTK with Wayland because
-              Wayland intentionally doesn't provide the required functionality.
+        @note This function only works when using wxGTK with Wayland if the
+              compositor implements the "pointer warp" protocol. In addition,
+              its implementation is subject to the limitations imposed by the
+              compositor, e.g. mutter (the Wayland compositor used by GNOME)
+              requires a mouse button to be pressed when this function is
+              called and doesn't move the pointer otherwise.
 
         @param x
             The new x position for the cursor.
@@ -4328,39 +4347,6 @@ public:
     ///@}
 
 
-    /**
-        Disable the use native double buffering in wxMSW.
-
-        This MSW-specific function can be used to disable the use of
-        `WS_EX_COMPOSITED` for this window and all of its parents and so allow
-        using wxClientDC with it.
-
-        `WS_EX_COMPOSITED` style is turned on by default when creating the
-        windows and it is strongly recommended @e not to use this functions to
-        remove it, but to instead change the drawing code to avoid using
-        wxClientDC.
-
-        If you do need to use it, please note that this function doesn't exist
-        in the other ports and has to be explicitly bracketed by the checks for
-        wxMSW, e.g.
-        @code
-        MyFrame::MyFrame(...)
-        {
-            auto p = new wxPanel(this);
-        #ifdef __WXMSW__
-            p->MSWDisableComposited();
-        #endif
-
-            // Using wxClientDC will work now with this panel in wxMSW --
-            // although it still won't with wxOSX nor wxGTK under Wayland.
-        }
-        @endcode
-
-        @see wxClientDC
-
-        @since 3.3.0
-     */
-    void MSWDisableComposited();
 
 protected:
 

@@ -72,54 +72,30 @@ public:
 // test class
 // ----------------------------------------------------------------------------
 
-class TLSTestCase : public CppUnit::TestCase
+TEST_CASE("TLS::Int", "[tls]")
 {
-public:
-    TLSTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( TLSTestCase );
-        CPPUNIT_TEST( TestInt );
-        CPPUNIT_TEST( TestStruct );
-    CPPUNIT_TEST_SUITE_END();
-
-    void TestInt();
-    void TestStruct();
-
-    wxDECLARE_NO_COPY_CLASS(TLSTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( TLSTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TLSTestCase, "TLSTestCase" );
-
-void TLSTestCase::TestInt()
-{
-    CPPUNIT_ASSERT_EQUAL( 0, gs_threadInt );
+    CHECK( gs_threadInt == 0 );
 
     gs_threadInt++;
-    CPPUNIT_ASSERT_EQUAL( 1, gs_threadInt );
+    CHECK( gs_threadInt == 1 );
 
     TLSTestThread().Wait();
 
-    CPPUNIT_ASSERT_EQUAL( 1, gs_threadInt );
+    CHECK( gs_threadInt == 1 );
 }
 
-void TLSTestCase::TestStruct()
+TEST_CASE("TLS::Struct", "[tls]")
 {
-    CPPUNIT_ASSERT_EQUAL( nullptr, gs_threadData.name );
-    CPPUNIT_ASSERT_EQUAL( 0, gs_threadData.number );
+    CHECK( gs_threadData.name == nullptr);
+    CHECK( gs_threadData.number == 0 );
 
     gs_threadData.name = "main";
     gs_threadData.number = 1;
 
-    CPPUNIT_ASSERT_EQUAL( 1, gs_threadData.number );
+    CHECK( gs_threadData.number == 1 );
 
     TLSTestThread().Wait();
 
-    CPPUNIT_ASSERT_EQUAL( std::string("main"), gs_threadData.name );
-    CPPUNIT_ASSERT_EQUAL( 1, gs_threadData.number );
+    CHECK( gs_threadData.name == std::string("main") );
+    CHECK( gs_threadData.number == 1 );
 }
-

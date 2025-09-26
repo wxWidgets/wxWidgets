@@ -54,6 +54,7 @@ jobs:
                 ':!build/bakefiles/make_dist.mk' \
                 ':!build/bakefiles/scintilla.bkl' \
                 ':!build/clone-minimal-vcxproj' \
+                ':!build/cmake/modules/cotire.cmake' \
                 ':!build/upmake' \
                 ':!build/vcxproj-clone' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
