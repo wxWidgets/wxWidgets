@@ -164,13 +164,12 @@ wxSize wxWrapSizer::CalcMinUsingLayoutDirection()
     if ( m_children.empty() )
         return wxSize();
 
-    // 1 - Immediately after InformFirstDirection, then we find a min size that
-    //     uses one dimension maximally and the other direction minimally.
-
-    // There are two different algorithms for finding a useful min size for
-    // a wrap sizer, depending on whether the first reported size component
-    // is the opposite as our own orientation (the simpler case) or the same
-    // one (more complicated).
+    // We're called after InformFirstDirection() to find a min size that
+    // uses one dimension maximally and the other direction minimally.
+    //
+    // There are two different algorithms for doing it, depending on whether
+    // the first reported size component is the opposite as our own orientation
+    // (the simpler case) or the same one (more complicated).
     if ( m_dirInform == m_orient )
         CalcMinFromMajor(m_availSize);
     else
@@ -184,9 +183,8 @@ wxSize wxWrapSizer::CalcMin()
     if ( m_children.empty() )
         return wxSize();
 
-    // 2 - Ordinary case, get a sensible min size value using the current line
-    //     layout, trying to maintain the possibility to re-arrange lines by
-    //     sizing
+    // We're called to get a sensible min size value using the current line
+    // layout, trying to maintain the possibility to re-arrange lines by sizing
 
     if ( m_availSize > 0 )
     {
