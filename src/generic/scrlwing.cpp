@@ -227,6 +227,16 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     if ( wasSkipped )
         event.Skip(false);
 
+    if ( evType == wxEVT_GESTURE_PAN)
+    {
+        m_scrollHelper->HandleOnPanGesture((wxPanGestureEvent &)event);
+        if ( !event.GetSkipped() )
+        {
+            processed = true;
+            wasSkipped = false;
+        }
+    }
+
     if ( evType == wxEVT_SCROLLWIN_PAN)
     {
         m_scrollHelper->HandleOnPanScroll((wxScrollWinPanEvent &)event);
@@ -495,6 +505,19 @@ void wxScrollHelperBase::SetTargetWindow(wxWindow *target)
 // scrolling implementation itself
 // ----------------------------------------------------------------------------
 
+void wxScrollHelperBase::HandleOnPanGesture(wxPanGestureEvent& event)
+{
+    int xOldPrecisePosition = m_xScrollPixelsPerLine * m_xScrollPosition + m_xScrollPositionPixelOffset;
+    int yOldPrecisePosition = m_yScrollPixelsPerLine * m_yScrollPosition + m_yScrollPositionPixelOffset;
+    int xNewPrecisePosition = xOldPrecisePosition + event.GetDelta().x;
+    int yNewPrecisePosition = yOldPrecisePosition + event.GetDelta().y;
+
+    wxScrollWinPanEvent winPanEvent( wxEVT_SCROLLWIN_PAN, xNewPrecisePosition, yNewPrecisePosition );
+    event.SetEventObject( m_win );
+    // m_win->GetEventHandler()->ProcessEvent( winPanEvent );  cannot do this because it is protected
+    HandleOnPanScroll( winPanEvent );
+}
+
 void wxScrollHelperBase::HandleOnPanScroll(wxScrollWinPanEvent& event)
 {
     int xOldPrecisePosition = m_xScrollPixelsPerLine * m_xScrollPosition + m_xScrollPositionPixelOffset;
@@ -530,8 +553,8 @@ void wxScrollHelperBase::HandleOnPanScroll(wxScrollWinPanEvent& event)
 
     if (m_xScrollingEnabled || m_yScrollingEnabled)
     {
-        int dx = xNewPrecisePosition - xOldPrecisePosition;
-        int dy = yNewPrecisePosition - yOldPrecisePosition;
+        int dx = xOldPrecisePosition - xNewPrecisePosition;
+        int dy = yOldPrecisePosition - yNewPrecisePosition;
         m_targetWindow->ScrollWindow(dx, dy);
     } 
     else

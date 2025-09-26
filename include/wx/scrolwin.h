@@ -253,6 +253,7 @@ public:
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
     void HandleOnPanScroll(wxScrollWinPanEvent& event);
+    void HandleOnPanGesture(wxPanGestureEvent& event);
     void HandleOnSize(wxSizeEvent& event);
     void HandleOnMouseEnter(wxMouseEvent& event);
     void HandleOnMouseLeave(wxMouseEvent& event);
