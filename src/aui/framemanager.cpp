@@ -4015,52 +4015,14 @@ void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
 
 
 
-void wxAuiManager::UpdateButtonOnScreen(wxAuiDockUIPart* button_ui_part,
-                                        const wxMouseEvent& event)
+void wxAuiManager::UpdateButtonOnScreen(wxAuiDockUIPart* button_ui_part, int state)
 {
-    wxAuiDockUIPart* hit_test = HitTest(event.GetX(), event.GetY());
-    if (!hit_test || !button_ui_part)
-        return;
+    wxASSERT(button_ui_part != nullptr); // should never happen!
 
-    int state = wxAUI_BUTTON_STATE_NORMAL;
+    button_ui_part->state = state;
 
-    if (hit_test == button_ui_part)
-    {
-        if (event.LeftDown())
-            state = wxAUI_BUTTON_STATE_PRESSED;
-        else
-            state = wxAUI_BUTTON_STATE_HOVER;
-    }
-    else
-    {
-        if (event.LeftDown())
-            state = wxAUI_BUTTON_STATE_HOVER;
-    }
-
-    // now repaint the button with hover state -- or everything if we can't
-    // repaint just it
-    if ( !wxClientDC::CanBeUsedForDrawing(m_frame) )
-    {
-        m_frame->Refresh();
-        m_frame->Update();
-    }
-
-    wxClientDC cdc(m_frame);
-
-    // if the frame has a toolbar, the client area
-    // origin will not be (0,0).
-    wxPoint pt = m_frame->GetClientAreaOrigin();
-    if (pt.x != 0 || pt.y != 0)
-        cdc.SetDeviceOrigin(pt.x, pt.y);
-
-    if (hit_test->pane)
-    {
-        m_art->DrawPaneButton(cdc, m_frame,
-                  button_ui_part->button,
-                  state,
-                  button_ui_part->rect,
-                  *hit_test->pane);
-    }
+    m_frame->RefreshRect(button_ui_part->rect);
+    m_frame->Update();
 }
 
 void wxAuiManager::OnLeftDown(wxMouseEvent& event)
@@ -4103,7 +4065,7 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
             m_actionStart = wxPoint(event.m_x, event.m_y);
             m_frame->CaptureMouse();
 
-            UpdateButtonOnScreen(part, event);
+            UpdateButtonOnScreen(part, wxAUI_BUTTON_STATE_PRESSED);
         }
         else if (part->type == wxAuiDockUIPart::typeCaption ||
                   part->type == wxAuiDockUIPart::typeGripper)
@@ -4441,10 +4403,14 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
 
         if (m_actionPart)
         {
-            UpdateButtonOnScreen(m_actionPart, event);
+            auto actionPart = HitTest(event.GetX(), event.GetY());
+            int state = m_actionPart == actionPart
+                      ? wxAUI_BUTTON_STATE_HOVER : wxAUI_BUTTON_STATE_NORMAL;
+
+            UpdateButtonOnScreen(m_actionPart, state);
 
             // make sure we're still over the item that was originally clicked
-            if (m_actionPart == HitTest(event.GetX(), event.GetY()))
+            if (m_actionPart == actionPart)
             {
                 // fire button-click event
                 wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
@@ -4657,13 +4623,12 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                 // make the old button normal
                 if (m_hoverButton)
                 {
-                    UpdateButtonOnScreen(m_hoverButton, event);
-                    Repaint();
+                    UpdateButtonOnScreen(m_hoverButton, wxAUI_BUTTON_STATE_NORMAL);
                 }
 
                 // mouse is over a button, so repaint the
                 // button in hover mode
-                UpdateButtonOnScreen(part, event);
+                UpdateButtonOnScreen(part, wxAUI_BUTTON_STATE_HOVER);
                 m_hoverButton = part;
 
             }
@@ -4672,8 +4637,8 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
         {
             if (m_hoverButton)
             {
+                UpdateButtonOnScreen(m_hoverButton, wxAUI_BUTTON_STATE_NORMAL);
                 m_hoverButton = nullptr;
-                Repaint();
             }
             else
             {
@@ -4687,8 +4652,8 @@ void wxAuiManager::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
 {
     if (m_hoverButton)
     {
+        UpdateButtonOnScreen(m_hoverButton, wxAUI_BUTTON_STATE_NORMAL);
         m_hoverButton = nullptr;
-        Repaint();
     }
 }
 

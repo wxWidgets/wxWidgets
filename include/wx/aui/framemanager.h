@@ -572,7 +572,7 @@ protected:
     void Repaint(wxDC* dc = nullptr);
     void ProcessMgrEvent(wxAuiManagerEvent& event);
     void UpdateButtonOnScreen(wxAuiDockUIPart* buttonUiPart,
-                              const wxMouseEvent& event);
+                              int state = wxAUI_BUTTON_STATE_NORMAL);
     void GetPanePositionsAndSizes(wxAuiDockInfo& dock,
                               wxArrayInt& positions,
                               wxArrayInt& sizes);
@@ -769,6 +769,7 @@ public:
     };
 
     int type;                // ui part type (see enum above)
+    int state;               // state of the button if type == typePaneButton
     int orientation;         // orientation (either wxHORIZONTAL or wxVERTICAL)
     wxAuiDockInfo* dock;        // which dock the item is associated with
     wxAuiPaneInfo* pane;        // which pane the item is associated with
