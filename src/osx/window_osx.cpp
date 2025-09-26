@@ -1958,6 +1958,9 @@ bool wxWindowMac::MacDoRedraw( long time )
                     eevent.SetEventObject( this );
                     if ( ProcessWindowEvent( eevent ) )
                         break;
+                        
+                    if (!UseBgCol())
+                        dc.Clear();
                 }
 
                 if ( UseBgCol() )
