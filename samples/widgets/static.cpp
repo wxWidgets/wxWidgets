@@ -407,18 +407,18 @@ void StaticWidgetsPage::CreateStatic()
 
     int flagsBox = 0,
         flagsText = GetAttrs().m_defaultFlags,
-        flagsDummyText = GetAttrs().m_defaultFlags;
+        flagsMarkupText = GetAttrs().m_defaultFlags;
 
     if ( !m_chkAutoResize->GetValue() )
     {
         flagsText |= wxST_NO_AUTORESIZE;
-        flagsDummyText |= wxST_NO_AUTORESIZE;
+        flagsMarkupText |= wxST_NO_AUTORESIZE;
     }
 
     if ( m_chkWrap->GetValue() )
     {
         flagsText |= wxST_WRAP;
-        flagsDummyText |= wxST_WRAP;
+        flagsMarkupText |= wxST_WRAP;
     }
 
     int align = 0;
@@ -469,21 +469,21 @@ void StaticWidgetsPage::CreateStatic()
                 wxFALLTHROUGH;
 
             case StaticEllipsize_Start:
-                flagsDummyText |= wxST_ELLIPSIZE_START;
+                flagsText |= wxST_ELLIPSIZE_START;
                 break;
 
             case StaticEllipsize_Middle:
-                flagsDummyText |= wxST_ELLIPSIZE_MIDDLE;
+                flagsText |= wxST_ELLIPSIZE_MIDDLE;
                 break;
 
             case StaticEllipsize_End:
-                flagsDummyText |= wxST_ELLIPSIZE_END;
+                flagsText |= wxST_ELLIPSIZE_END;
                 break;
         }
     }
 
-    flagsDummyText |= align;
     flagsText |= align;
+    flagsMarkupText |= align;
     flagsBox |= align;
 
     wxStaticBox *staticBox;
@@ -516,12 +516,12 @@ void StaticWidgetsPage::CreateStatic()
         m_statText = new wxGenericStaticText(staticBox, wxID_ANY,
                                              m_textLabel->GetValue(),
                                              wxDefaultPosition, wxDefaultSize,
-                                             flagsDummyText);
+                                             flagsText);
 #if wxUSE_MARKUP
         m_statMarkup = new wxGenericStaticText(staticBox, wxID_ANY,
                                              wxString(),
                                              wxDefaultPosition, wxDefaultSize,
-                                             flagsText);
+                                             flagsMarkupText);
 #endif // wxUSE_MARKUP
     }
     else // use native versions
@@ -529,12 +529,12 @@ void StaticWidgetsPage::CreateStatic()
         m_statText = new wxStaticText(staticBox, wxID_ANY,
                                       m_textLabel->GetValue(),
                                       wxDefaultPosition, wxDefaultSize,
-                                      flagsDummyText);
+                                      flagsText);
 #if wxUSE_MARKUP
         m_statMarkup = new wxStaticText(staticBox, wxID_ANY,
                                         wxString(),
                                         wxDefaultPosition, wxDefaultSize,
-                                        flagsText);
+                                        flagsMarkupText);
 #endif // wxUSE_MARKUP
     }
 
