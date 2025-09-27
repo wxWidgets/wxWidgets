@@ -940,6 +940,18 @@ wxUILocaleImplUnix::UsesMetricSystem() const
         return wxMeasurementSystem::Metric;
     else if (!measureStr.empty() && measureStr[0].GetValue() == 2)
         return wxMeasurementSystem::NonMetric;
+#else
+    // Fallback for Unix systems without GLIBC
+    wxString region = GetLocaleId().GetRegion();
+    // In 2025 only in the United States, Liberia, and Myanmar
+    // the metric system is not the default measurement system.
+    if (!region.empty())
+    {
+        if (region == "US" || region == "LR" || region == "MM")
+            return wxMeasurementSystem::NonMetric;
+        else
+            return wxMeasurementSystem::Metric;
+    }
 #endif
     return wxMeasurementSystem::Unknown;
 }
@@ -1101,7 +1113,7 @@ wxUILocaleImplUnix::DoGetInfoFromLocaleConv(wxLocaleConvAttr index, wxLocaleCate
 
         case LOCALE_CONV_CURRENCY_CODE:
         {
-            return wxString(lc->int_curr_symbol, wxCSConv(GetCodeSet()));
+            return wxString(lc->int_curr_symbol, wxCSConv(GetCodeSet())).Left(3);
         }
 
         case LOCALE_CONV_DIGITS:

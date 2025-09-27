@@ -338,12 +338,15 @@ public:
         wxCurrencySymbolPosition position;
         bool hasSeparator;
         GetCurrencySymbolPosition(position, hasSeparator);
-        return wxLocaleCurrencyInfo{
-            GetCurrencySymbol(),
-            GetCurrencyCode(),
-            position,
-            hasSeparator,
-            GetNumberFormatting() };
+
+        wxLocaleCurrencyInfo currencyInfo;
+        currencyInfo.currencySymbol       = GetCurrencySymbol();
+        currencyInfo.currencyCode         = GetCurrencyCode();
+        currencyInfo.currencySymbolPos    = position;
+        currencyInfo.hasCurrencySeparator = hasSeparator;
+        currencyInfo.currencyFormat       = GetNumberFormatting();
+
+        return currencyInfo;
     }
 
     wxMeasurementSystem UsesMetricSystem() const override
