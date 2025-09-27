@@ -30,6 +30,7 @@ public:
     virtual void DoGetSize( int *width, int *height ) const override;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override;
     virtual void DestroyClippingRegion() override;
+    virtual void InheritAttributes(wxWindow *win) override;
 
 protected:
 #if WXWIN_COMPATIBILITY_3_2
