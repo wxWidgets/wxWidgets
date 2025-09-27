@@ -227,7 +227,9 @@ private:
 
 void wxStaticTextBase::Wrap(int width)
 {
-    if (width == m_currentWrap) return;
+    if (width == m_currentWrap)
+        return;
+
     m_currentWrap = width;
 
     // Allow for repeated calls to Wrap with different values
