@@ -458,7 +458,7 @@ wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
     int fractionalDigits = (int) formatter.minimumFractionDigits;
 
     [formatter release];
-    
+
     wxLocaleNumberFormatting numForm;
     numForm.decimalSeparator = decimalSeparator;
     numForm.groupSeparator   = groupSeparator;
