@@ -77,11 +77,13 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // display.
     void UpdateLabel();
 
-    // save unwrapped label to allow to call Wrap() several times and
-    // always starting from the original, unwrapped label
+    // If m_currentWrap is non-zero, contains the label value before wrapping it.
+    // This is used to allow re-wrapping it at different widths. Note that
+    // wxControlBase::m_labelOrig is changed when Wrap() is called and so can't
+    // be used.
     wxString m_unwrappedLabel;
 
-    // Value of 0 or less indicates no wrapping done
+    // The width at which the label is currently wrapped or 0 if not wrapped.
     int m_currentWrap = 0;
 
 
