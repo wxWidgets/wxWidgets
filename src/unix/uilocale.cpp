@@ -920,12 +920,15 @@ wxUILocaleImplUnix::GetCurrencyInfo() const
     bool hasSeparator;
     GetCurrencySymbolPosition(position, hasSeparator);
     wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
-    return wxLocaleCurrencyInfo{
-        GetCurrencySymbol(),
-        GetCurrencyCode(),
-        position,
-        hasSeparator,
-        currencyFormatting };
+
+    wxLocaleCurrencyInfo currencyInfo;
+    currencyInfo.currencySymbol       = GetCurrencySymbol();
+    currencyInfo.currencyCode         = GetCurrencyCode();
+    currencyInfo.currencySymbolPos    = position;
+    currencyInfo.hasCurrencySeparator = hasSeparator;
+    currencyInfo.currencyFormat       = currencyFormatting;
+
+    return currencyInfo;
 }
 
 wxMeasurementSystem
@@ -1002,7 +1005,6 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
         grouping.push_back(static_cast<size_t>(val));
     }
 #else
-    bool lastCharIsZero = false;
     wxString groupingStr = DoGetInfoFromLocaleConv(LOCALE_CONV_GROUPING, cat);
     for (auto ch : groupingStr)
     {
@@ -1037,7 +1039,12 @@ wxUILocaleImplUnix::DoGetNumberFormatting(wxLocaleCategory cat) const
     fractionalDigits = (!fracDigits.empty()) ? fracDigits.GetChar(0).GetValue() : 0;
 #endif
 
-    return wxLocaleNumberFormatting{ decimalSeparator, groupSeparator, grouping, fractionalDigits };
+    wxLocaleNumberFormatting numForm;
+    numForm.decimalSeparator = decimalSeparator;
+    numForm.groupSeparator   = groupSeparator;
+    numForm.grouping         = grouping;
+    numForm.fractionalDigits = fractionalDigits;
+    return numForm;
 }
 
 #if !(defined(HAVE_LANGINFO_H) && defined(__GLIBC__))

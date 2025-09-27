@@ -309,7 +309,12 @@ public:
 
     wxLocaleNumberFormatting GetNumberFormatting() const override
     {
-        return wxLocaleNumberFormatting{ ".", "", {}, 2 };
+        wxLocaleNumberFormatting numForm;
+        numForm.decimalSeparator = ".";
+        numForm.groupSeparator   = "";
+        numForm.grouping         = {};
+        numForm.fractionalDigits = 2;
+        return numForm;
     }
 
     wxString GetCurrencySymbol() const override
@@ -717,12 +722,15 @@ public:
         bool hasSeparator;
         GetCurrencySymbolPosition(position, hasSeparator);
         wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
-        return wxLocaleCurrencyInfo{
-            GetCurrencySymbol(),
-            GetCurrencyCode(),
-            position,
-            hasSeparator,
-            currencyFormatting };
+        
+        wxLocaleCurrencyInfo currencyInfo;
+        currencyInfo.currencySymbol       = GetCurrencySymbol();
+        currencyInfo.currencyCode         = GetCurrencyCode();
+        currencyInfo.currencySymbolPos    = position;
+        currencyInfo.hasCurrencySeparator = hasSeparator;
+        currencyInfo.currencyFormat       = currencyFormatting;
+
+        return currencyInfo;
     }
 
     wxMeasurementSystem UsesMetricSystem() const override
@@ -814,8 +822,12 @@ private:
                 grouping.push_back(static_cast<size_t>(value));
         }
 
-
-        return wxLocaleNumberFormatting{ decimalSeparator, groupSeparator, grouping, fractionalDigits };
+        wxLocaleNumberFormatting numForm;
+        numForm.decimalSeparator = decimalSeparator;
+        numForm.groupSeparator   = groupSeparator;
+        numForm.grouping         = grouping;
+        numForm.fractionalDigits = fractionalDigits;
+        return numForm;
     }
 
     const wchar_t* const m_name;

@@ -458,7 +458,13 @@ wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
     int fractionalDigits = (int) formatter.minimumFractionDigits;
 
     [formatter release];
-    return wxLocaleNumberFormatting{ decimalSeparator, groupSeparator, grouping, fractionalDigits };
+    
+    wxLocaleNumberFormatting numForm;
+    numForm.decimalSeparator = decimalSeparator;
+    numForm.groupSeparator   = groupSeparator;
+    numForm.grouping         = grouping;
+    numForm.fractionalDigits = fractionalDigits;
+    return numForm;
 }
 
 wxLocaleCurrencyInfo
@@ -468,12 +474,15 @@ wxUILocaleImplCF::GetCurrencyInfo() const
     bool hasSeparator;
     GetCurrencySymbolPosition(position, hasSeparator);
     wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
-    return wxLocaleCurrencyInfo{
-        GetCurrencySymbol(),
-        GetCurrencyCode(),
-        position,
-        hasSeparator,
-        currencyFormatting };
+
+    wxLocaleCurrencyInfo currencyInfo;
+    currencyInfo.currencySymbol       = GetCurrencySymbol();
+    currencyInfo.currencyCode         = GetCurrencyCode();
+    currencyInfo.currencySymbolPos    = position;
+    currencyInfo.hasCurrencySeparator = hasSeparator;
+    currencyInfo.currencyFormat       = currencyFormatting;
+
+    return currencyInfo;
 }
 
 wxMeasurementSystem
