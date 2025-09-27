@@ -373,7 +373,8 @@ void StaticWidgetsPage::Reset()
 #endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX
     m_chkVert->SetValue(false);
     m_chkAutoResize->SetValue(true);
-    m_chkEllipsize->SetValue(true);
+    m_chkEllipsize->SetValue(false);
+    m_radioEllipsize->Disable();
 
     m_radioHAlign->SetSelection(StaticHAlign_Left);
     m_radioVAlign->SetSelection(StaticVAlign_Top);
