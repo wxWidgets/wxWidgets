@@ -20,11 +20,6 @@
     the label doesn't fit into the provided space and also formatting markup
     with wxControl::SetLabelMarkup().
 
-    Since version 3.3.2 this control can be used within a vertical @ref wxBoxSizer
-    and it will dynamically change its wrapping according to the allocated
-    horizontal space. This behaviour is conceptually identical to a @ref wxWrapSizer
-    that wraps controls and can be activated by using the @c wxST_WRAP flag.
-
     @beginStyleTable
     @style{wxALIGN_LEFT}
            Align the text to the left.
@@ -48,6 +43,10 @@
     @style{wxST_ELLIPSIZE_END}
            If the label text width exceeds the control width, replace the end
            of the label with an ellipsis; uses wxControl::Ellipsize.
+    @style{wxST_WRAP}
+           Wrap label text on multiple lines if necessary, using the available
+           horizontal space. This style only works when the control is used
+           inside a sizer. It is available since wxWidgets 3.3.2.
     @endStyleTable
 
     @library{wxcore}
