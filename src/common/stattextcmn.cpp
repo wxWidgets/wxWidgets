@@ -248,26 +248,40 @@ void wxStaticTextBase::Wrap(int width)
 
 wxSize wxStaticTextBase::GetMinSizeUsingLayoutDirection() const
 {
-    if (!HasFlag(wxST_WRAP))
+    if ( !m_currentWrap )
         return GetMinSize();
 
-    // While wxWrapSizer can only wrap entire controls, a text paragraph
-    // could theoretically wrap at a few letters, so we start with
-    // requesting very little space in the first pass
-    return wxSize( GetCharWidth(), GetCharHeight() );
+    int numLines = 0;
+    int maxLineWidth = 0;
+    for ( auto line : wxSplit(GetLabel(), '\n', '\0') )
+    {
+        const int w = GetTextExtent(line).x;
+        if ( w > maxLineWidth )
+            maxLineWidth = w;
+
+        ++numLines;
+    }
+
+    return wxSize( maxLineWidth, numLines*GetCharHeight() );
 }
 
 bool wxStaticTextBase::InformFirstDirection(int direction, int size, int WXUNUSED(availableOtherDir))
 {
-    if (!HasFlag(wxST_WRAP))
+    if ( !HasFlag(wxST_WRAP) || direction != wxHORIZONTAL )
+    {
+        // If we had wrapped the control before, don't do it any longer.
+        if ( m_currentWrap )
+        {
+            SetLabel(m_unwrappedLabel);
+            m_currentWrap = 0;
+        }
+
         return false;
+    }
 
     // In the second pass, this control has been given "size" amount of
     // space in the horizontal direction. Wrap there and report a new
     // GetEffectiveMinSize() from then on.
-
-    if (direction != wxHORIZONTAL)
-        return false;
 
     int style = GetWindowStyleFlag();
     if ( !(style & wxST_NO_AUTORESIZE) )
