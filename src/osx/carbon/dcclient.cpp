@@ -86,10 +86,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     }
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 
-    SetBackground(window->GetBackgroundColour());
-
-    SetFont( window->GetFont() ) ;
-    
+    InheritAttributes(window);
+        
     wxWidgetImpl *impl = (wxWidgetImpl*)window->GetPeer();
     wxPoint origin( impl->GetDeviceLocalOrigin() );
     SetDeviceLocalOrigin( origin.x, origin.y );
@@ -104,6 +102,20 @@ wxWindowDCImpl::~wxWindowDCImpl()
         CGContextRef cg = (CGContextRef) m_window->MacGetCGContextRef();
         CGContextRestoreGState(cg);
     }
+}
+
+void wxWindowDCImpl::InheritAttributes(wxWindow *win)
+{
+    wxCHECK_RET( win, "window can't be null" );
+
+    SetFont(win->GetFont());
+
+    SetTextForeground(win->GetForegroundColour());
+    if ( win->UseBackgroundColour() ) {
+        SetTextBackground(win->GetBackgroundColour());
+        SetBackground(win->GetBackgroundColour());
+    }
+    SetLayoutDirection(win->GetLayoutDirection());
 }
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
