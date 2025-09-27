@@ -12,6 +12,8 @@
 
 #include "wx/defs.h"
 
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // wxLayoutDirection: used by wxWindow, wxDC etc
 // ----------------------------------------------------------------------------
@@ -120,6 +122,36 @@ enum wxLocaleForm
 {
     wxLOCALE_FORM_NATIVE,
     wxLOCALE_FORM_ENGLISH
+};
+
+enum class wxMeasurementSystem
+{
+    Unknown,
+    Metric,
+    NonMetric
+};
+
+enum class wxCurrencySymbolPosition
+{
+    Prefix,
+    Suffix
+};
+
+struct wxLocaleNumberFormatting
+{
+    wxString decimalSeparator;
+    wxString groupSeparator;
+    std::vector<size_t> grouping;
+    int      fractionalDigits = 0;
+};
+
+struct wxLocaleCurrencyInfo
+{
+    wxString currencySymbol;     // the currency symbol (for example "$")
+    wxString currencyCode;       // the currency ISO code (for example "USD")
+    wxCurrencySymbolPosition currencySymbolPos = wxCurrencySymbolPosition::Prefix;
+    bool hasCurrencySeparator = false;
+    wxLocaleNumberFormatting currencyFormat;
 };
 
 // ----------------------------------------------------------------------------

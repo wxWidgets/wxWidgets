@@ -994,6 +994,78 @@ wxLayoutDirection wxUILocale::GetLayoutDirection() const
     return dir;
 }
 
+wxLocaleNumberFormatting wxUILocale::GetNumberFormatting() const
+{
+    if (!m_impl)
+        return wxLocaleNumberFormatting();
+
+    return m_impl->GetNumberFormatting();
+}
+
+wxString wxUILocale::GetCurrencySymbol() const
+{
+    if (!m_impl)
+        return wxString();
+
+    return m_impl->GetCurrencySymbol();
+}
+
+wxString wxUILocale::GetCurrencyCode() const
+{
+    if (!m_impl)
+        return wxString();
+
+    return m_impl->GetCurrencyCode();
+}
+
+void wxUILocale::GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const
+{
+    if (m_impl)
+    {
+        m_impl->GetCurrencySymbolPosition(position, hasSeparator);
+    }
+    else
+    {
+        position = wxCurrencySymbolPosition::Prefix;
+        hasSeparator = true;
+    }
+}
+
+wxLocaleCurrencyInfo wxUILocale::GetCurrencyInfo() const
+{
+    if (!m_impl)
+        return wxLocaleCurrencyInfo();
+
+    return m_impl->GetCurrencyInfo();
+}
+
+wxMeasurementSystem wxUILocale::UsesMetricSystem() const
+{
+    if (!m_impl)
+        return wxMeasurementSystem::Unknown;
+
+    return m_impl->UsesMetricSystem();
+}
+
+wxMeasurementSystem wxUILocale::GuessMetricSystemFromRegion() const
+{
+    if (!m_impl)
+        return wxMeasurementSystem::Unknown;
+
+    wxString region = m_impl->GetLocaleId().GetRegion();
+    // In 2025 only in the United States, Liberia, and Myanmar
+    // the metric system is not the default measurement system.
+    if (!region.empty())
+    {
+        if (region == "US" || region == "LR" || region == "MM")
+            return wxMeasurementSystem::NonMetric;
+        else
+            return wxMeasurementSystem::Metric;
+    }
+    else
+        return wxMeasurementSystem::Unknown;
+}
+
 int
 wxUILocale::CompareStrings(const wxString& lhs,
                            const wxString& rhs,

@@ -417,11 +417,40 @@ TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
-    CHECK( wxUILocale::FromTag("en").GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    wxCurrencySymbolPosition currencyPosition;
+    bool currencyHasSeparator;
+    const wxUILocale locEN(wxUILocale::FromTag("en-US"));
+    locEN.GetCurrencySymbolPosition(currencyPosition, currencyHasSeparator);
+    CHECK( locEN.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
+    CHECK( locEN.GetCurrencySymbol() == "$");
+    CHECK( locEN.GetCurrencyCode() == "USD");
+    CHECK( locEN.GetCurrencyInfo().currencyFormat.fractionalDigits == 2);
+    CHECK( (currencyPosition == wxCurrencySymbolPosition::Prefix && !currencyHasSeparator) );
+    CHECK( locEN.UsesMetricSystem() == wxMeasurementSystem::NonMetric);
 
-    const wxUILocale locDE(wxUILocale::FromTag("de"));
-    if ( CheckSupported(locDE, "German") )
-        CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == "," );
+    const wxUILocale locDE(wxUILocale::FromTag("de-DE"));
+    if (CheckSupported(locDE, "German"))
+    {
+        locDE.GetCurrencySymbolPosition(currencyPosition, currencyHasSeparator);
+        CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
+        CHECK( locDE.GetCurrencySymbol() == L"\u20AC");
+        CHECK( locDE.GetCurrencyCode() == "EUR");
+        CHECK( locDE.GetCurrencyInfo().currencyFormat.fractionalDigits == 2);
+        CHECK( (currencyPosition == wxCurrencySymbolPosition::Suffix && currencyHasSeparator) );
+        CHECK( locDE.UsesMetricSystem() == wxMeasurementSystem::Metric);
+    }
+
+    const wxUILocale locFR(wxUILocale::FromTag("fr-FR"));
+    if (CheckSupported(locFR, "French"))
+    {
+        locFR.GetCurrencySymbolPosition(currencyPosition, currencyHasSeparator);
+        CHECK( locFR.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
+        CHECK( locFR.GetCurrencySymbol() == L"\u20AC");
+        CHECK( locFR.GetCurrencyCode() == "EUR");
+        CHECK( locFR.GetCurrencyInfo().currencyFormat.fractionalDigits == 2);
+        CHECK( (currencyPosition == wxCurrencySymbolPosition::Suffix && currencyHasSeparator) );
+        CHECK( locFR.UsesMetricSystem() == wxMeasurementSystem::Metric);
+    }
 
     // This one shows that "Swiss High German" locale (de_CH) correctly uses
     // dot, and not comma, as decimal separator, even under macOS, where POSIX
