@@ -103,8 +103,6 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
     const wxInfoDC dc(win);
 
-    const wxString zeroWidthSpace = wxString::FromUTF8("\xE2\x80\x8B");
-
     bool hadFirst = false;
     for ( auto line : wxSplit(text, '\n', '\0') )
     {
@@ -153,25 +151,14 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             }
 
             // Find the last word to chop off.
-            const size_t posSpace1 = line.rfind(' ', posEnd);
-            const size_t posSpace2 = line.rfind(zeroWidthSpace, posEnd);
-            size_t posSpace = wxMax(posSpace1, posSpace2);
-            if ( posSpace == wxString::npos )
-                posSpace = wxMin(posSpace1, posSpace2);
-
-
+            size_t posSpace = line.rfind(' ', posEnd);
             if ( posSpace == wxString::npos )
             {
                 // No spaces, so can't wrap, output until the end of the word
                 // which is defined here as just a sequence of non-space chars.
                 //
                 // TODO: Implement real Unicode word break algorithm.
-                const size_t posSpace1 = line.find(' ', posEnd);
-                const size_t posSpace2 = line.find(zeroWidthSpace, posEnd);
-                posSpace = wxMax(posSpace1, posSpace2);
-                if ( posSpace == wxString::npos )
-                    posSpace = wxMin(posSpace1, posSpace2);
-                
+                posSpace = line.find(' ', posEnd);
                 if ( posSpace == wxString::npos )
                 {
                     // No more spaces at all, output the rest of the line.
@@ -184,8 +171,7 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             DoOutputLine(line.substr(0, posSpace));
 
             // And redo the layout with the rest.
-            // line = line.substr(posSpace + 1);
-            line = line.substr(posSpace + (line[posSpace] == ' ' ? 1 : zeroWidthSpace.size()));
+            line = line.substr(posSpace + 1);
         }
     }
 }
