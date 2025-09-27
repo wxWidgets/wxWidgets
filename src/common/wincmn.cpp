@@ -859,12 +859,8 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
     // merge the best size with the min size, giving priority to the min size
     wxSize min = GetMinSize();
 
-    if (min.x == wxDefaultCoord || min.y == wxDefaultCoord)
-    {
-        wxSize best = GetBestSize();
-        if (min.x == wxDefaultCoord) min.x =  best.x;
-        if (min.y == wxDefaultCoord) min.y =  best.y;
-    }
+    if ( !min.IsFullySpecified() )
+        min.SetDefaults(GetBestSize());
 
     return min;
 }
