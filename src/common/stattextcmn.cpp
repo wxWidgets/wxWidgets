@@ -99,6 +99,36 @@ wxCONSTRUCTOR_6( wxStaticText, wxWindow*, Parent, wxWindowID, Id, \
 // wxTextWrapper
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
+bool IsBreakableWhiteSpace(wxUniChar ch)
+{
+    // We don't take "\r" into account here as it's not supposed to be present
+    // in the labels and "\n" is not present because Wrap() splits text on it.
+    switch ( ch.GetValue() )
+    {
+        case ' ':
+        case '\t':
+        case 0x2000: // en quad
+        case 0x2001: // em quad
+        case 0x2002: // en space
+        case 0x2003: // em space
+        case 0x2004: // three-per-em space
+        case 0x2005: // four-per-em space
+        case 0x2006: // six-per-em space
+        case 0x2008: // punctuation space
+        case 0x2009: // thin space
+        case 0x200A: // hair space
+        case 0x200B: // zero width space
+            return true;
+    }
+
+    return false;
+}
+
+} // anonymous namespace
+
 void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
     const wxInfoDC dc(win);
@@ -143,7 +173,7 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             }
 
             // If the overflowing character is a space, we can break right here.
-            if ( line[posEnd] == ' ' )
+            if ( IsBreakableWhiteSpace(line[posEnd]) )
             {
                 DoOutputLine(line.substr(0, posEnd));
                 line = line.substr(posEnd + 1);
@@ -151,20 +181,35 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             }
 
             // Find the last word to chop off.
-            size_t posSpace = line.rfind(' ', posEnd);
-            if ( posSpace == wxString::npos )
+            //
+            // "Word" is defined here as just a sequence of non-space chars.
+            //
+            // TODO: Implement real Unicode word break algorithm.
+            size_t posSpace = posEnd;
+            for ( ;; posSpace-- )
             {
-                // No spaces, so can't wrap, output until the end of the word
-                // which is defined here as just a sequence of non-space chars.
-                //
-                // TODO: Implement real Unicode word break algorithm.
-                posSpace = line.find(' ', posEnd);
-                if ( posSpace == wxString::npos )
+                if ( posSpace == 0 )
                 {
-                    // No more spaces at all, output the rest of the line.
-                    DoOutputLine(line);
+                    // No spaces, so can't wrap, output until the end of the word.
+                    posSpace = posEnd;
+                    for ( ;; )
+                    {
+                        if ( ++posSpace == line.length() )
+                        {
+                            // No more spaces at all, output the rest of the line.
+                            DoOutputLine(line);
+                            return;
+                        }
+
+                        if ( IsBreakableWhiteSpace(line[posSpace]) )
+                            break;
+                    }
+
                     break;
                 }
+
+                if ( IsBreakableWhiteSpace(line[posSpace]) )
+                    break;
             }
 
             // Output the part that fits.
