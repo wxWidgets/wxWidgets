@@ -340,10 +340,10 @@ void StaticWidgetsPage::CreateContent()
     m_textLabel->SetValue("And this is a\n\tlabel inside the box with a &mnemonic.\n"
                           "Only this text is affected by the ellipsize settings.");
 #if wxUSE_MARKUP
-    m_textLabelWithMarkup->SetValue("Another label, this time <b>decorated</b> "
-                                    "with <u>markup</u>; here you need entities "
-                                    "for the symbols: &lt; &gt; &amp;&amp; &apos; &quot; "
-                                    " but you can still use &mnemonics too");
+    m_textLabelWithMarkup->SetValue("Another label, this time <b>decorated</b>\n"
+                                    "with <u>markup</u>; here you need entities\n"
+                                    "for the symbols: &lt; &gt; &amp;&amp; &apos; &quot;\n"
+                                    "but you can still use &mnemonics too");
 #endif // wxUSE_MARKUP
 
     // right pane
@@ -557,7 +557,7 @@ void StaticWidgetsPage::CreateStatic()
     NotifyWidgetRecreation(m_statLine);
 #endif
 
-    m_sizerStatic->Add(m_sizerStatBox, 0, wxGROW);
+    m_sizerStatic->Add(m_sizerStatBox, 1, wxGROW);
 
     m_sizerStatic->Layout();
 
