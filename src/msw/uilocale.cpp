@@ -722,7 +722,7 @@ public:
         bool hasSeparator;
         GetCurrencySymbolPosition(position, hasSeparator);
         wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
-        
+
         wxLocaleCurrencyInfo currencyInfo;
         currencyInfo.currencySymbol       = GetCurrencySymbol();
         currencyInfo.currencyCode         = GetCurrencyCode();
