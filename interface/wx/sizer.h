@@ -355,7 +355,7 @@ public:
 
         @since 3.3.2
     */
-    virtual wxSize CalcMinFirstPass() const;
+    virtual wxSize CalcMinUsingLayoutDirection() const;
 
     /**
         Detaches all children from the sizer.
@@ -458,7 +458,7 @@ public:
        parent item).  Returns true if it made use of the information (and
        recalculated min size).
 
-       @see wxWindow::GetEffectiveMinSizeFirstPass(), CalcMinFirstPass()
+       @see wxWindow::GetMinSizeUsingLayoutDirection(), CalcMinUsingLayoutDirection()
     */
     virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
 

@@ -36,7 +36,7 @@ public:
 
     // override base class virtual methods
     virtual wxSize CalcMin() override;
-    virtual wxSize CalcMinFirstPass() override;
+    virtual wxSize CalcMinUsingLayoutDirection() override;
     virtual void RepositionChildren(const wxSize& minSize) override;
 
     virtual bool InformFirstDirection(int direction,

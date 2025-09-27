@@ -411,7 +411,6 @@ public:
         // minimum size, giving priority to the min size components, and
         // returns the results.
     virtual wxSize GetEffectiveMinSize() const;
-    virtual wxSize GetEffectiveMinSizeFirstPass() const { return  GetEffectiveMinSize(); }
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
@@ -481,6 +480,9 @@ public:
     int GetMaxWidth() const { return GetMaxSize().x; }
     int GetMaxHeight() const { return GetMaxSize().y; }
 
+        // Can be overridden to compute minimal size if it depends on the
+        // layout direction set by InformFirstDirection().
+    virtual wxSize GetMinSizeUsingLayoutDirection() const { return GetMinSize(); }
 
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for

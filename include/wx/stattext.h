@@ -40,7 +40,7 @@ public:
     // This function will modify the value returned by GetLabel()!
     void Wrap(int width);
 
-    virtual wxSize GetEffectiveMinSizeFirstPass() const override;
+    virtual wxSize GetMinSizeUsingLayoutDirection() const override;
 
     virtual bool
     InformFirstDirection(int direction, int size, int availableOtherDir) override;

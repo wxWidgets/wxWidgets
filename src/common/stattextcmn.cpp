@@ -244,10 +244,10 @@ void wxStaticTextBase::Wrap(int width)
     InvalidateBestSize();
 }
 
-wxSize wxStaticTextBase::GetEffectiveMinSizeFirstPass() const
+wxSize wxStaticTextBase::GetMinSizeUsingLayoutDirection() const
 {
     if (!HasFlag(wxST_WRAP))
-        return GetEffectiveMinSize();
+        return GetMinSize();
 
     // While wxWrapSizer can only wrap entire controls, a text paragraph
     // could theoretically wrap at a few letters, so we start with

@@ -1415,9 +1415,9 @@ public:
 
         @since 3.3.2
 
-        @see InformFirstDirection(), wxSizer::CalcMinFirstPass()
+        @see InformFirstDirection(), wxSizer::CalcMinUsingLayoutDirection()
     */
-    virtual wxSize GetEffectiveMinSizeFirstPass() const;
+    virtual wxSize GetMinSizeUsingLayoutDirection() const;
 
     /**
         Returns the maximum size of window's client area.
@@ -1615,7 +1615,7 @@ public:
        tells the item how much more space there is available in the opposite
        direction (-1 if unknown).
 
-       @see GetEffectiveMinSizeFirstPass(), wxSizer::CalcMinFirstPass()
+       @see GetMinSizeUsingLayoutDirection(), wxSizer::CalcMinUsingLayoutDirection()
     */
     virtual bool
     InformFirstDirection(int direction,

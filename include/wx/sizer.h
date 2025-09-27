@@ -669,8 +669,9 @@ public:
     // this size to really update all the sizer items.
     virtual wxSize CalcMin() = 0;
 
-    // Can be overridden for two step process, e.g. by wxWrapSizer
-    virtual wxSize CalcMinFirstPass() { return CalcMin(); }
+    // Can be overridden to compute minimal size if it depends on the layout
+    // direction set by InformFirstDirection().
+    virtual wxSize CalcMinUsingLayoutDirection() { return CalcMin(); }
 
     // This method should be overridden but isn't pure virtual for backwards
     // compatibility.

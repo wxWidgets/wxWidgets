@@ -159,7 +159,7 @@ void wxWrapSizer::AdjustLastRowItemProp(size_t n, wxSizerItem *itemLast)
     item->SetUserData(new wxPropChanger(*this, *itemLast));
 }
 
-wxSize wxWrapSizer::CalcMinFirstPass()
+wxSize wxWrapSizer::CalcMinUsingLayoutDirection()
 {
     if ( m_children.empty() )
         return wxSize();
