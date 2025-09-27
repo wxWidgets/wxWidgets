@@ -118,6 +118,7 @@ WrapSizerFrame::WrapSizerFrame()
 
         sizerMidWrap->Add(chk, wxSizerFlags().Centre().Border());
     }
+
     sizerMid->Add(sizerMidWrap, wxSizerFlags(100).Expand());
     sizerRoot->Add(sizerMid, wxSizerFlags(100).Expand().Border());
 
