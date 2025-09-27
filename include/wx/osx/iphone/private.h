@@ -139,6 +139,8 @@ protected:
     void             *m_controller;
     bool              m_blockScrollEvents;
     bool              m_blockScrollWindow;
+    int               m_xScrollPixelsPerLine;
+    int               m_yScrollPixelsPerLine;
 
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl);

@@ -282,6 +282,7 @@ public:
 #ifdef __WXOSX_IPHONE__
     void                OSXSetScrollTargetWindow( wxWindow *target );
     wxWindow *          OSXGetScrollTargetWindow() { return m_scrollTargetWindow; }
+    const wxWindow *    OSXGetScrollTargetWindow() const { return m_scrollTargetWindow; }
     wxWindow *          m_scrollTargetWindow;
     void                OSXSetScrollOwnerWindow( wxWindow *owner );
     wxWindow *          OSXGetScrollOwnerWindow() { return m_scrollOwnerWindow; }

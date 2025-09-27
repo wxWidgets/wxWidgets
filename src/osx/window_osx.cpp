@@ -1416,6 +1416,10 @@ void wxWindowMac::OSXSetScrollTargetWindow( wxWindow *target )
 
 int wxWindowMac::GetScrollPos(int orient) const
 {
+#ifdef __WXOSX_IPHONE__
+    const wxWidgetImpl *impl = (const wxWidgetImpl*) OSXGetScrollTargetWindow()->GetPeer();
+    return impl->GetScrollPos( orient );
+#endif
 #if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
@@ -1469,6 +1473,10 @@ int wxWindowMac::GetScrollThumb(int orient) const
 
 void wxWindowMac::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
+#ifdef __WXOSX_IPHONE__
+    wxWidgetImpl *impl = (wxWidgetImpl*) OSXGetScrollTargetWindow()->GetPeer();
+    impl->SetScrollPos( orient, pos );
+#endif
 #if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
@@ -1684,13 +1692,13 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumb,
 // Does a physical scroll
 void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
+    if ( dx == 0 && dy == 0 )
+        return ;
+
 #ifdef __WXOSX_IPHONE__
     GetPeer()->ScrollWindow( dx, dy, rect );
     return;
 #endif
-
-    if ( dx == 0 && dy == 0 )
-        return ;
 
     int width , height ;
     GetClientSize( &width , &height ) ;
