@@ -136,6 +136,7 @@ protected:
                *m_chkBoxWithCheck,
 #endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX
                *m_chkAutoResize,
+               *m_chkWrap,
                *m_chkEllipsize;
 
 #if wxUSE_MARKUP
@@ -187,6 +188,7 @@ StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_chkVert =
     m_chkAutoResize =
+    m_chkWrap =
     m_chkGeneric =
 #ifdef wxHAS_WINDOW_LABEL_IN_STATIC_BOX
     m_chkBoxWithCheck =
@@ -241,6 +243,9 @@ void StaticWidgetsPage::CreateContent()
 
     m_chkAutoResize = CreateCheckBoxAndAddToSizer(sizerLeft, "&Fit to text", wxID_ANY, sizerLeftBox);
     m_chkAutoResize->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
+
+    m_chkWrap = CreateCheckBoxAndAddToSizer(sizerLeft, "&Wrap", wxID_ANY, sizerLeftBox);
+    m_chkWrap->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
@@ -373,6 +378,7 @@ void StaticWidgetsPage::Reset()
 #endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX
     m_chkVert->SetValue(false);
     m_chkAutoResize->SetValue(true);
+    m_chkWrap->SetValue(false);
     m_chkEllipsize->SetValue(false);
     m_radioEllipsize->Disable();
 
@@ -407,6 +413,12 @@ void StaticWidgetsPage::CreateStatic()
     {
         flagsText |= wxST_NO_AUTORESIZE;
         flagsDummyText |= wxST_NO_AUTORESIZE;
+    }
+
+    if ( m_chkWrap->GetValue() )
+    {
+        flagsText |= wxST_WRAP;
+        flagsDummyText |= wxST_WRAP;
     }
 
     int align = 0;
