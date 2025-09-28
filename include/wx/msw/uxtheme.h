@@ -189,13 +189,8 @@ public:
         return NewAtStdDPI(0, classes);
     }
 
-    static wxUxThemeHandle ThemeLightOrDark(const wxWindow* win, const wchar_t *classes, const wchar_t *classes_dark);
-
     // wxWindow pointer here must be valid and its DPI is always used.
-    wxUxThemeHandle(const wxWindow *win, const wchar_t *classes) :
-        wxUxThemeHandle(GetHwndOf(win), classes, win->GetDPI().y)
-    {
-    }
+    wxUxThemeHandle(const wxWindow *win, const wchar_t *classes, const wchar_t* classesDark = nullptr);
 
     wxUxThemeHandle(wxUxThemeHandle&& other)
         : m_hTheme{other.m_hTheme}

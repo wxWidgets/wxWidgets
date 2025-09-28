@@ -619,7 +619,7 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
                                       const wxRect& rect,
                                       int flags)
 {
-    wxUxThemeHandle hTheme=wxUxThemeHandle::ThemeLightOrDark(win, L"COMBOBOX", L"DarkMode_CFD::COMBOBOX");
+    wxUxThemeHandle hTheme(win, L"COMBOBOX", L"DarkMode_CFD::COMBOBOX");
     if ( !hTheme )
     {
         m_rendererNative.DrawComboBoxDropButton(win, dc, rect, flags);
@@ -725,7 +725,7 @@ wxRendererXP::DoDrawCheckMark(int kind,
                               const wxRect& rect,
                               int flags)
 {
-    wxUxThemeHandle hTheme=wxUxThemeHandle::ThemeLightOrDark(win, L"MENU", L"DarkMode::MENU");
+    wxUxThemeHandle hTheme(win, L"MENU", L"DarkMode::MENU");
     if ( !hTheme )
         return false;
 
@@ -1160,7 +1160,7 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
                                 const wxRect& rect,
                                 int flags)
 {
-    wxUxThemeHandle hTheme=wxUxThemeHandle::ThemeLightOrDark(win, L"EDIT", L"DarkMode_CFD::Combobox");
+    wxUxThemeHandle hTheme(win, L"EDIT", L"DarkMode_CFD::Combobox");
     if ( !hTheme )
     {
         m_rendererNative.DrawTextCtrl(win,dc,rect,flags);
@@ -1174,7 +1174,7 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
     int state;
 
     if (flags & wxCONTROL_DISABLED)
-        state =CBB_DISABLED;
+        state = CBB_DISABLED;
     else if (flags & wxCONTROL_FOCUSED)
         state = CBB_FOCUSED;
     else if (flags & wxCONTROL_CURRENT)

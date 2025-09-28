@@ -45,17 +45,16 @@ bool wxUxThemeIsActive()
     return s_isActive != 0;
 }
 
-wxUxThemeHandle wxUxThemeHandle::ThemeLightOrDark(const wxWindow* win, const wchar_t* classes, const wchar_t* classes_dark)
+wxUxThemeHandle::wxUxThemeHandle(const wxWindow *win, const wchar_t *classes, const wchar_t *classesDark) :
+    // When using dark mode and using the DarkMode classes we have
+    // to use the handle of a control which is *not* in dark mode,
+    // and as we don't have any, just use 0.
+    wxUxThemeHandle(
+        classesDark && wxMSWDarkMode::IsActive() ? 0 : GetHwndOf(win),
+        classesDark && wxMSWDarkMode::IsActive() ? classesDark : classes,
+        win->GetDPI().y
+    )
 {
-    if (wxMSWDarkMode::IsActive())
-    {
-        // for themes starting with DarkMode we have to use the handle of a control which is *not* in dark mode
-        return wxUxThemeHandle(0, classes_dark, win->GetDPI().y);
-    }
-    else
-    {
-        return wxUxThemeHandle(win->GetHWND(), classes, win->GetDPI().y);
-    }
 }
 
 /* static */
