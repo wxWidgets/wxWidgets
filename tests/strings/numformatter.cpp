@@ -349,6 +349,15 @@ TEST_CASE_METHOD(NumFormatterTestCase, "NumFormatter::DoubleFromString", "[numfo
 // test class for currency formatting
 // ----------------------------------------------------------------------------
 
+// Euro Sign in UTF-8
+#define EUROSIGN "\xe2\x82\xac"
+
+// No-Break Space in UTF-8
+#define NBSP  "\xc2\xa0"
+
+// Narrow No-Break Space in UTF-8
+#define NNBSP "\xe2\x80\xaf"
+
 class CurrencyFormatterTestCase
 {
 public:
@@ -360,7 +369,20 @@ public:
     }
 
 protected:
-    bool CanRunTest() const { return m_locale.IsOk(); }
+    bool CanRunTest() const
+    {
+        bool ok = m_locale.IsOk();
+        if (ok)
+        {
+            wxLocaleNumberFormatting numForm = wxUILocale::GetCurrent().GetNumberFormatting();
+#ifdef __GLIBC__
+            ok = numForm.groupSeparator == ".";
+#else
+            ok = numForm.groupSeparator == wxString::FromUTF8(NBSP);
+#endif
+        }
+        return ok;
+    }
 
 private:
     wxLocale m_locale;
@@ -379,21 +401,21 @@ TEST_CASE_METHOD(CurrencyFormatterTestCase, "CurrencyFormatterTestCase::NumericV
 
 #ifdef __GLIBC__
     CHECK( wxString::FromUTF8("12.345.678") == wxNumberFormatter::ToString(12345678L, wxNumberFormatter::Style_WithThousandsSep));
-    CHECK( wxString::FromUTF8("12\u202F345\u202F678") == wxNumberFormatter::ToString(12345678L, wxNumberFormatter::Style_Currency|wxNumberFormatter::Style_WithThousandsSep));
+    CHECK( wxString::FromUTF8("12" NNBSP "345" NNBSP "678") == wxNumberFormatter::ToString(12345678L, wxNumberFormatter::Style_Currency|wxNumberFormatter::Style_WithThousandsSep));
     CHECK( wxString::FromUTF8("12.345.678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_WithThousandsSep));
-    CHECK( wxString::FromUTF8("12\u202F345\u202F678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
+    CHECK( wxString::FromUTF8("12" NNBSP "345" NNBSP "678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_WithThousandsSep));
-    CHECK( wxString::FromUTF8("\u20AC 12\u202F345\u202F678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
+    CHECK( wxString::FromUTF8(EUROSIGN " 12" NNBSP "345" NNBSP "678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_CurrencySymbol | wxNumberFormatter::Style_WithThousandsSep));
-    CHECK( "EUR 12\u202F345\u202F678,12" == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
+    CHECK( "EUR 12" NNBSP "345" NNBSP "678,12" == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_CurrencyCode | wxNumberFormatter::Style_WithThousandsSep));
 #else
-    CHECK( wxString::FromUTF8("12\u00A0345\u00A0678") == wxNumberFormatter::ToString(12345678L, wxNumberFormatter::Style_WithThousandsSep));
+    CHECK( wxString::FromUTF8("12" NBSP "345" NBSP "678") == wxNumberFormatter::ToString(12345678L, wxNumberFormatter::Style_WithThousandsSep));
     CHECK( "12.345.678" == wxNumberFormatter::ToString(12345678L, wxNumberFormatter::Style_Currency|wxNumberFormatter::Style_WithThousandsSep));
-    CHECK( wxString::FromUTF8("12\u00A0345\u00A0678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_WithThousandsSep));
+    CHECK( wxString::FromUTF8("12" NBSP "345" NBSP "678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_WithThousandsSep));
     CHECK( "12.345.678,12" == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_WithThousandsSep));
-    CHECK( wxString::FromUTF8("\u20AC 12.345.678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
+    CHECK( wxString::FromUTF8(EUROSIGN " 12.345.678,12") == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_CurrencySymbol | wxNumberFormatter::Style_WithThousandsSep));
     CHECK( "EUR 12.345.678,12" == wxNumberFormatter::ToString(12345678.12, 2, wxNumberFormatter::Style_Currency
         | wxNumberFormatter::Style_CurrencyCode | wxNumberFormatter::Style_WithThousandsSep));
@@ -414,7 +436,16 @@ public:
     }
 
 protected:
-    bool CanRunTest() const { return m_locale.IsOk(); }
+    bool CanRunTest() const
+    {
+        bool ok = m_locale.IsOk();
+        if (ok)
+        {
+            wxLocaleNumberFormatting numForm = wxUILocale::GetCurrent().GetNumberFormatting();
+            ok = (!numForm.grouping.empty() && numForm.grouping.back() == 0);
+        }
+        return ok;
+    }
 
 private:
     wxLocale m_locale;

@@ -210,7 +210,7 @@ public:
     wxLocaleNumberFormatting GetNumberFormatting() const override;
     wxString GetCurrencySymbol() const override;
     wxString GetCurrencyCode() const override;
-    void GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const override;
+    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const override;
     wxLocaleCurrencyInfo GetCurrencyInfo() const override;
     wxMeasurementSystem UsesMetricSystem() const override;
 
@@ -894,9 +894,10 @@ wxUILocaleImplUnix::GetCurrencyCode() const
 #endif
 }
 
-void
-wxUILocaleImplUnix::GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const
+wxLocaleCurrencyPositionInfo
+wxUILocaleImplUnix::GetCurrencySymbolPosition() const
 {
+    wxLocaleCurrencyPositionInfo positionInfo;
     wxUint32 posIdx = 0;
 #if defined(HAVE_LANGINFO_H) && defined(__GLIBC__)
     const char* csPrecedes = GetLangInfo(P_CS_PRECEDES);
@@ -907,25 +908,24 @@ wxUILocaleImplUnix::GetCurrencySymbolPosition(wxCurrencySymbolPosition& position
     wxString symbolPosition = DoGetInfoFromLocaleConv(LOCALE_CONV_CURRENCY_SYM_POS, wxLOCALE_CAT_DEFAULT);
     posIdx = (!symbolPosition.empty()) ? symbolPosition.GetChar(0).GetValue() : 2;
 #endif
-    position = (posIdx % 2 == 0)
-             ? wxCurrencySymbolPosition::Prefix
-             : wxCurrencySymbolPosition::Suffix;
-    hasSeparator = (((posIdx / 2) % 2) == 1);
+    positionInfo.currencySymbolPos = (posIdx == 0 || posIdx == 2)
+                                   ? wxCurrencySymbolPosition::Prefix
+                                   : wxCurrencySymbolPosition::Suffix;
+    positionInfo.useCurrencySeparator = (posIdx == 2 || posIdx == 3);
+    return positionInfo;
 }
 
 wxLocaleCurrencyInfo
 wxUILocaleImplUnix::GetCurrencyInfo() const
 {
-    wxCurrencySymbolPosition position;
-    bool hasSeparator;
-    GetCurrencySymbolPosition(position, hasSeparator);
+    wxLocaleCurrencyPositionInfo positionInfo = GetCurrencySymbolPosition();
     wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
 
     wxLocaleCurrencyInfo currencyInfo;
     currencyInfo.currencySymbol       = GetCurrencySymbol();
     currencyInfo.currencyCode         = GetCurrencyCode();
-    currencyInfo.currencySymbolPos    = position;
-    currencyInfo.hasCurrencySeparator = hasSeparator;
+    currencyInfo.currencySymbolPos    = positionInfo.currencySymbolPos;
+    currencyInfo.useCurrencySeparator = positionInfo.useCurrencySeparator;
     currencyInfo.currencyFormat       = currencyFormatting;
 
     return currencyInfo;
@@ -940,20 +940,11 @@ wxUILocaleImplUnix::UsesMetricSystem() const
         return wxMeasurementSystem::Metric;
     else if (!measureStr.empty() && measureStr[0].GetValue() == 2)
         return wxMeasurementSystem::NonMetric;
+    else
+        return wxMeasurementSystem::Unknown;
 #else
-    // Fallback for Unix systems without GLIBC
-    wxString region = GetLocaleId().GetRegion();
-    // In 2025 only in the United States, Liberia, and Myanmar
-    // the metric system is not the default measurement system.
-    if (!region.empty())
-    {
-        if (region == "US" || region == "LR" || region == "MM")
-            return wxMeasurementSystem::NonMetric;
-        else
-            return wxMeasurementSystem::Metric;
-    }
+    return wxUILocale::GuessMetricSystemFromRegion(GetLocaleId());
 #endif
-    return wxMeasurementSystem::Unknown;
 }
 
 int

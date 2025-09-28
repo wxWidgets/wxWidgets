@@ -196,7 +196,7 @@ public:
     wxString GetCurrencyCode() const;
 
     // Query the currency symbol position of the current locale
-    void GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const;
+    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const;
 
     // Query the currency infos of the current locale
     wxLocaleCurrencyInfo GetCurrencyInfo() const;
@@ -205,7 +205,7 @@ public:
     wxMeasurementSystem UsesMetricSystem() const;
 
     // Guess from the region whether the current locale uses the metric system
-    wxMeasurementSystem GuessMetricSystemFromRegion() const;
+    static wxMeasurementSystem GuessMetricSystemFromRegion(const wxLocaleIdent& idLocale);
 
     // Compares two strings in the order defined by this locale.
     int CompareStrings(const wxString& lhs, const wxString& rhs,

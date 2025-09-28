@@ -327,23 +327,23 @@ public:
         return "USD";
     }
 
-    void GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const override
+    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const override
     {
-        position = wxCurrencySymbolPosition::Prefix;
-        hasSeparator = true;
+        wxLocaleCurrencyPositionInfo positionInfo;
+        positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Prefix;
+        positionInfo.useCurrencySeparator = true;
+        return positionInfo;
     }
 
     wxLocaleCurrencyInfo GetCurrencyInfo() const override
     {
-        wxCurrencySymbolPosition position;
-        bool hasSeparator;
-        GetCurrencySymbolPosition(position, hasSeparator);
+        wxLocaleCurrencyPositionInfo positionInfo = GetCurrencySymbolPosition();
 
         wxLocaleCurrencyInfo currencyInfo;
         currencyInfo.currencySymbol       = GetCurrencySymbol();
         currencyInfo.currencyCode         = GetCurrencyCode();
-        currencyInfo.currencySymbolPos    = position;
-        currencyInfo.hasCurrencySeparator = hasSeparator;
+        currencyInfo.currencySymbolPos    = positionInfo.currencySymbolPos;
+        currencyInfo.useCurrencySeparator = positionInfo.useCurrencySeparator;
         currencyInfo.currencyFormat       = GetNumberFormatting();
 
         return currencyInfo;
@@ -709,28 +709,30 @@ public:
         return wxString(DoGetInfo(LOCALE_SINTLSYMBOL)).Left(3);
     }
 
-    void GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const override
+    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const override
     {
+        wxLocaleCurrencyPositionInfo positionInfo;
         wxString posStr = wxString(DoGetInfo(LOCALE_ICURRENCY));
-        wxUint32 posIdx = (!posStr.empty()) ? posStr.GetChar(0).GetValue() - wxUniChar('0').GetValue() : 1;
-        position = (posIdx % 2 == 0)
-                 ? wxCurrencySymbolPosition::Prefix
-                 : wxCurrencySymbolPosition::Suffix;
-        hasSeparator = (((posIdx / 2) % 2) == 1);
+        unsigned int posIdx;
+        if (posStr.empty() || !posStr.ToUInt(&posIdx))
+            posIdx = 2;
+        positionInfo.currencySymbolPos = (posIdx == 0 || posIdx == 2)
+                                       ? wxCurrencySymbolPosition::Prefix
+                                       : wxCurrencySymbolPosition::Suffix;
+        positionInfo.useCurrencySeparator = (posIdx == 1 || posIdx == 3);
+        return positionInfo;
     }
 
     wxLocaleCurrencyInfo GetCurrencyInfo() const override
     {
-        wxCurrencySymbolPosition position;
-        bool hasSeparator;
-        GetCurrencySymbolPosition(position, hasSeparator);
+        wxLocaleCurrencyPositionInfo positionInfo = GetCurrencySymbolPosition();
         wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
 
         wxLocaleCurrencyInfo currencyInfo;
         currencyInfo.currencySymbol       = GetCurrencySymbol();
         currencyInfo.currencyCode         = GetCurrencyCode();
-        currencyInfo.currencySymbolPos    = position;
-        currencyInfo.hasCurrencySeparator = hasSeparator;
+        currencyInfo.currencySymbolPos    = positionInfo.currencySymbolPos;
+        currencyInfo.useCurrencySeparator = positionInfo.useCurrencySeparator;
         currencyInfo.currencyFormat       = currencyFormatting;
 
         return currencyInfo;
@@ -814,7 +816,9 @@ private:
         wxString digits = DoGetInfo(cat == wxLOCALE_CAT_MONEY
                         ? LOCALE_ICURRDIGITS
                         : LOCALE_IDIGITS);
-        int fractionalDigits = (!digits.empty()) ? digits.GetChar(0).GetValue() - wxUniChar('0').GetValue() : 0;
+        int fractionalDigits;
+        if (digits.empty() || !digits.ToInt(&fractionalDigits))
+            fractionalDigits = 0;
 
         // Extract grouping lengths from groupingInfo
         std::vector<size_t> grouping;

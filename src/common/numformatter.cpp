@@ -192,26 +192,42 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s, int style)
     if (grouping.empty())
         return;
 
+    // The vector grouping conatins a list of group length.
+    // Beginning from the right, each group length is applied once
+    // to determine the next position of a group separator,
+    // unless the last entry entry is a zero, in which case
+    // the last group length is applied repeatedly.
     size_t groupIndex = 0;
     size_t groupLen = grouping[0];
     size_t nextGroupLen = groupLen;
 
+    // Repeat while the group length is valid (i.e. > 0)
+    // and the potential group separator position lies
+    // within the number.
     while (groupLen > 0 && pos > start)
     {
+        // Determine next group separator position
         pos = (pos >= groupLen) ? pos - groupLen : 0;
+
+        // Apply group separator if it is within the number
         if (pos > start)
             s.insert(pos, groupingSeparator);
 
         // Select next group length
         if (++groupIndex < grouping.size())
         {
+            // Set the group length to the next group length entry
+            // unless the next group length is zero,
+            // in which case the last group length remains in effect.
             nextGroupLen = grouping[groupIndex];
             if (nextGroupLen != 0)
                 groupLen = nextGroupLen;
         }
         else if (nextGroupLen != 0)
         {
-            // No further group
+            // If the next group length is not zero,
+            // the last group length was already applied once, and
+            // no further group is to be applied.
             groupLen = 0;
         }
     }
@@ -272,20 +288,20 @@ void wxNumberFormatter::AddCurrency(wxString& s, int style)
     {
         wxString currencyStr;
         bool isCurrencyPrefix = true;
-        bool hasCurrencySeparator = true;
+        bool useCurrencySeparator = true;
 #if wxUSE_INTL
         auto currencyInfo = wxUILocale::GetCurrent().GetCurrencyInfo();
         if (style & Style_CurrencySymbol)
         {
             currencyStr = currencyInfo.currencySymbol;
             isCurrencyPrefix = currencyInfo.currencySymbolPos == wxCurrencySymbolPosition::Prefix;
-            hasCurrencySeparator = true;
+            useCurrencySeparator = true;
         }
         else if (style & Style_CurrencyCode)
         {
             currencyStr = currencyInfo.currencyCode;
             isCurrencyPrefix = true;
-            hasCurrencySeparator = true;
+            useCurrencySeparator = true;
         }
 #endif // wxUSE_INTL
 
@@ -294,13 +310,13 @@ void wxNumberFormatter::AddCurrency(wxString& s, int style)
         {
             if (isCurrencyPrefix)
             {
-                if (hasCurrencySeparator)
+                if (useCurrencySeparator)
                     currencyStr += " ";
                 s = currencyStr + s;
             }
             else
             {
-                if (hasCurrencySeparator)
+                if (useCurrencySeparator)
                     s += " ";
                 s += currencyStr;
             }
@@ -321,12 +337,12 @@ void wxNumberFormatter::RemoveCurrency(wxString& s)
     const wxString finalChars = "0123456789.";
 
     // Find start and final position of the number
-    size_t start = s.find_first_of(startChars);
-    size_t final = s.find_last_of(finalChars);
+    size_t startPos = s.find_first_of(startChars);
+    size_t finalPos = s.find_last_of(finalChars);
 
     // Extract the number, if the start and final positions are valid
-    if (start != wxString::npos && final != wxString::npos && start <= final)
-        s = s.SubString(start, final);
+    if (startPos != wxString::npos && finalPos != wxString::npos && startPos <= finalPos)
+        s = s.SubString(startPos, finalPos);
     else
         s = wxString(); // No number found
 }

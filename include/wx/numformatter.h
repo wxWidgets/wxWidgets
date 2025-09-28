@@ -93,7 +93,8 @@ private:
     // Add currency symbol or code depending on style
     static void AddCurrency(wxString& s, int style);
 
-    // Add currency symbol or code depending on style
+    // Remove currency symbol or code
+    // Actually, any non-numeric prefix and suffix will be removed.
     static void RemoveCurrency(wxString& s);
 
     // Remove all thousands separators from a string representing a number.

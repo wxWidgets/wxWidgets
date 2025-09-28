@@ -417,38 +417,39 @@ TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
 {
-    wxCurrencySymbolPosition currencyPosition;
-    bool currencyHasSeparator;
     const wxUILocale locEN(wxUILocale::FromTag("en-US"));
-    locEN.GetCurrencySymbolPosition(currencyPosition, currencyHasSeparator);
+    wxLocaleCurrencyPositionInfo posInfo = locEN.GetCurrencySymbolPosition();
     CHECK( locEN.GetInfo(wxLOCALE_DECIMAL_POINT) == "." );
     CHECK( locEN.GetCurrencySymbol() == "$");
     CHECK( locEN.GetCurrencyCode() == "USD");
     CHECK( locEN.GetCurrencyInfo().currencyFormat.fractionalDigits == 2);
-    CHECK( (currencyPosition == wxCurrencySymbolPosition::Prefix && !currencyHasSeparator) );
+    CHECK( posInfo.currencySymbolPos == wxCurrencySymbolPosition::Prefix );
+    CHECK( !posInfo.useCurrencySeparator );
     CHECK( locEN.UsesMetricSystem() == wxMeasurementSystem::NonMetric);
 
     const wxUILocale locDE(wxUILocale::FromTag("de-DE"));
     if (CheckSupported(locDE, "German"))
     {
-        locDE.GetCurrencySymbolPosition(currencyPosition, currencyHasSeparator);
+        posInfo = locDE.GetCurrencySymbolPosition();
         CHECK( locDE.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
         CHECK( locDE.GetCurrencySymbol() == L"\u20AC");
         CHECK( locDE.GetCurrencyCode() == "EUR");
         CHECK( locDE.GetCurrencyInfo().currencyFormat.fractionalDigits == 2);
-        CHECK( (currencyPosition == wxCurrencySymbolPosition::Suffix && currencyHasSeparator) );
+        CHECK( posInfo.currencySymbolPos == wxCurrencySymbolPosition::Suffix );
+        CHECK( posInfo.useCurrencySeparator );
         CHECK( locDE.UsesMetricSystem() == wxMeasurementSystem::Metric);
     }
 
     const wxUILocale locFR(wxUILocale::FromTag("fr-FR"));
     if (CheckSupported(locFR, "French"))
     {
-        locFR.GetCurrencySymbolPosition(currencyPosition, currencyHasSeparator);
+        posInfo = locFR.GetCurrencySymbolPosition();
         CHECK( locFR.GetInfo(wxLOCALE_DECIMAL_POINT) == ",");
         CHECK( locFR.GetCurrencySymbol() == L"\u20AC");
         CHECK( locFR.GetCurrencyCode() == "EUR");
         CHECK( locFR.GetCurrencyInfo().currencyFormat.fractionalDigits == 2);
-        CHECK( (currencyPosition == wxCurrencySymbolPosition::Suffix && currencyHasSeparator) );
+        CHECK( posInfo.currencySymbolPos == wxCurrencySymbolPosition::Suffix );
+        CHECK( posInfo.useCurrencySeparator);
         CHECK( locFR.UsesMetricSystem() == wxMeasurementSystem::Metric);
     }
 

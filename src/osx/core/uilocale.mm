@@ -168,7 +168,7 @@ public:
     wxLocaleNumberFormatting GetNumberFormatting() const override;
     wxString GetCurrencySymbol() const override;
     wxString GetCurrencyCode() const override;
-    void GetCurrencySymbolPosition(wxCurrencySymbolPosition& position, bool& hasSeparator) const override;
+    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const override;
     wxLocaleCurrencyInfo GetCurrencyInfo() const override;
     wxMeasurementSystem UsesMetricSystem() const override;
 
@@ -378,11 +378,12 @@ wxUILocaleImplCF::GetCurrencyCode() const
     return wxCFStringRef::AsString(str);
 }
 
-void
-wxUILocaleImplCF::GetCurrencySymbolPosition(wxCurrencySymbolPosition& symbolPosition, bool& hasSeparator) const
+wxLocaleCurrencyPositionInfo
+wxUILocaleImplCF::GetCurrencySymbolPosition() const
 {
-    symbolPosition = wxCurrencySymbolPosition::Prefix;
-    hasSeparator = true;
+    wxLocaleCurrencyPositionInfo positionInfo;
+    positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Prefix;
+    positionInfo.useCurrencySeparator = true;
 
     NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
     formatter.locale = m_nsloc;
@@ -406,8 +407,8 @@ wxUILocaleImplCF::GetCurrencySymbolPosition(wxCurrencySymbolPosition& symbolPosi
                 unichar after = [formatted characterAtIndex:idx];
                 hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:after];
             }
-            symbolPosition = wxCurrencySymbolPosition::Prefix;
-            hasSeparator = hasSpace;
+            positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Prefix;
+            positionInfo.useCurrencySeparator = hasSpace;
         }
         else
         {
@@ -417,12 +418,14 @@ wxUILocaleImplCF::GetCurrencySymbolPosition(wxCurrencySymbolPosition& symbolPosi
                 unichar before = [formatted characterAtIndex:symbolRange.location - 1];
                 hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:before];
             }
-            symbolPosition = wxCurrencySymbolPosition::Suffix;
-            hasSeparator = hasSpace;
+            positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Suffix;
+            positionInfo.useCurrencySeparator = hasSpace;
         }
     }
 
     [formatter release];
+
+    return positionInfo;
 }
 
 wxLocaleNumberFormatting
@@ -470,16 +473,14 @@ wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
 wxLocaleCurrencyInfo
 wxUILocaleImplCF::GetCurrencyInfo() const
 {
-    wxCurrencySymbolPosition position;
-    bool hasSeparator;
-    GetCurrencySymbolPosition(position, hasSeparator);
+    wxLocaleCurrencyPositionInfo positionInfo = GetCurrencySymbolPosition();
     wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
 
     wxLocaleCurrencyInfo currencyInfo;
     currencyInfo.currencySymbol       = GetCurrencySymbol();
     currencyInfo.currencyCode         = GetCurrencyCode();
-    currencyInfo.currencySymbolPos    = position;
-    currencyInfo.hasCurrencySeparator = hasSeparator;
+    currencyInfo.currencySymbolPos    = positionInfo.currencySymbolPos;
+    currencyInfo.hasCurrencySeparator = positionInfo.useCurrencySeparator;
     currencyInfo.currencyFormat       = currencyFormatting;
 
     return currencyInfo;

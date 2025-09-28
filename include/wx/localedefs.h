@@ -150,8 +150,14 @@ struct wxLocaleCurrencyInfo
     wxString currencySymbol;     // the currency symbol (for example "$")
     wxString currencyCode;       // the currency ISO code (for example "USD")
     wxCurrencySymbolPosition currencySymbolPos = wxCurrencySymbolPosition::Prefix;
-    bool hasCurrencySeparator = false;
+    bool useCurrencySeparator = false;
     wxLocaleNumberFormatting currencyFormat;
+};
+
+struct wxLocaleCurrencyPositionInfo
+{
+    wxCurrencySymbolPosition currencySymbolPos = wxCurrencySymbolPosition::Prefix;
+    bool useCurrencySeparator = false;
 };
 
 // ----------------------------------------------------------------------------
