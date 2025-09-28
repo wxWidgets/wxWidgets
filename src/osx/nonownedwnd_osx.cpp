@@ -253,6 +253,20 @@ wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const
 {
     int left, top, width, height;
     m_nowpeer->GetContentArea(left, top, width, height);
+
+#ifdef __WXOSX_IPHONE__
+    // TODO, find a way to find the safe area not covered at the top
+    // UIKit UIApplication statusBarFrame is now deprecated 
+    // https://stackoverflow.com/questions/46829840/get-safe-area-inset-top-and-bottom-heights
+    // suggest something like this
+    // if (@available(iOS 11.0, *)) {
+    //    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+    //    CGFloat topPadding = window.safeAreaInsets.top;
+    //    CGFloat bottomPadding = window.safeAreaInsets.bottom;
+    // }
+    top += 44;
+#endif
+
     return wxPoint(left, top);
 }
 
@@ -470,6 +484,17 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
     // status bar, therefore we use the content view's area
 #ifdef __WXOSX_IPHONE__
     GetPeer()->GetContentArea(left, top, w, h);
+
+    // TODO, find a way to find the safe area not covered at the top
+    // UIKit UIApplication statusBarFrame is now deprecated 
+    // https://stackoverflow.com/questions/46829840/get-safe-area-inset-top-and-bottom-heights
+    // suggest something like this
+    // if (@available(iOS 11.0, *)) {
+    //    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+    //    CGFloat topPadding = window.safeAreaInsets.top;
+    //    CGFloat bottomPadding = window.safeAreaInsets.bottom;
+    // }
+    h -= 44;
 #else
     m_nowpeer->GetContentArea(left, top, w, h);
 #endif
