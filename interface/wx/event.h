@@ -1846,6 +1846,67 @@ public:
     bool IsZMove() const;
 };
 
+/**
+    @class wxScrollWinPanEvent
+
+    A wxScrollWinPanEvent is sent following a pan gesture (usually scrolling
+    with fingers on a touch screen - sometimes simulated by mouse draggging).
+
+    Different from all other scrolling events, this event can hold information
+    for vertical and horizontal changes as the finger or mouse moves around
+    the screen. 
+    
+    This event contains positional information in single pixels, not scroll
+    units (lines) that usually have between 10 and 20 pixels each. This 
+    is needed to allow smooth scrolling as the finger or mouse moves 
+    around on screen.
+
+    wxScrolled<> intercepts wxPanGestureEvents by default and translates
+    these into wxScrollWinPanEvents to enable touch screen scrolling.
+
+    @beginEventTable{wxScrollWinEvent}
+    @event{EVT_SCROLLWIN_PAN(func)}
+        Process @c wxEVT_SCROLLWIN_PAN pan events
+        (frequent events sent as the user pans the screen with fingers or mouse).
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @see wxScrollWinEvent, @see wxPanGestureEvent, @ref overview_events
+*/
+
+class WXDLLIMPEXP_CORE wxScrollWinPanEvent : public wxEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxScrollWinPanEvent(wxEventType commandType = wxEVT_NULL,
+                     int xpos = 0, int ypos = 0);
+
+    /**
+        Returns the horizontal scroll position in pixels
+        - not in scroll units (lines).
+    */
+    int GetX() const;
+
+    /**
+        Returns the vertical scroll position in pixels
+        - not in scroll units (lines).
+    */
+    int GetY() const;
+
+    /**
+        Sets the horizontal scroll position in pixels.
+    */
+    void SetX( int pos );
+
+    /**
+        Sets the vertical scroll position in pixels.
+    */
+    void SetY( int pos );
+};
 
 
 /**
