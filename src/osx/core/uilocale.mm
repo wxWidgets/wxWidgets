@@ -480,7 +480,7 @@ wxUILocaleImplCF::GetCurrencyInfo() const
     currencyInfo.currencySymbol       = GetCurrencySymbol();
     currencyInfo.currencyCode         = GetCurrencyCode();
     currencyInfo.currencySymbolPos    = positionInfo.currencySymbolPos;
-    currencyInfo.hasCurrencySeparator = positionInfo.useCurrencySeparator;
+    currencyInfo.useCurrencySeparator = positionInfo.useCurrencySeparator;
     currencyInfo.currencyFormat       = currencyFormatting;
 
     return currencyInfo;
