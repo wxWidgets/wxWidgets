@@ -136,6 +136,7 @@ protected:
                *m_chkBoxWithCheck,
 #endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX
                *m_chkAutoResize,
+               *m_chkWrap,
                *m_chkEllipsize;
 
 #if wxUSE_MARKUP
@@ -187,6 +188,7 @@ StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_chkVert =
     m_chkAutoResize =
+    m_chkWrap =
     m_chkGeneric =
 #ifdef wxHAS_WINDOW_LABEL_IN_STATIC_BOX
     m_chkBoxWithCheck =
@@ -241,6 +243,9 @@ void StaticWidgetsPage::CreateContent()
 
     m_chkAutoResize = CreateCheckBoxAndAddToSizer(sizerLeft, "&Fit to text", wxID_ANY, sizerLeftBox);
     m_chkAutoResize->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
+
+    m_chkWrap = CreateCheckBoxAndAddToSizer(sizerLeft, "&Wrap", wxID_ANY, sizerLeftBox);
+    m_chkWrap->Bind(wxEVT_CHECKBOX, &StaticWidgetsPage::OnRecreate, this);
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
@@ -340,10 +345,10 @@ void StaticWidgetsPage::CreateContent()
     m_textLabel->SetValue("And this is a\n\tlabel inside the box with a &mnemonic.\n"
                           "Only this text is affected by the ellipsize settings.");
 #if wxUSE_MARKUP
-    m_textLabelWithMarkup->SetValue("Another label, this time <b>decorated</b> "
-                                    "with <u>markup</u>; here you need entities "
-                                    "for the symbols: &lt; &gt; &amp;&amp; &apos; &quot; "
-                                    " but you can still use &mnemonics too");
+    m_textLabelWithMarkup->SetValue("Another label, this time <b>decorated</b>\n"
+                                    "with <u>markup</u>; here you need entities\n"
+                                    "for the symbols: &lt; &gt; &amp;&amp; &apos; &quot;\n"
+                                    "but you can still use &mnemonics too");
 #endif // wxUSE_MARKUP
 
     // right pane
@@ -373,7 +378,9 @@ void StaticWidgetsPage::Reset()
 #endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX
     m_chkVert->SetValue(false);
     m_chkAutoResize->SetValue(true);
-    m_chkEllipsize->SetValue(true);
+    m_chkWrap->SetValue(false);
+    m_chkEllipsize->SetValue(false);
+    m_radioEllipsize->Disable();
 
     m_radioHAlign->SetSelection(StaticHAlign_Left);
     m_radioVAlign->SetSelection(StaticVAlign_Top);
@@ -400,12 +407,18 @@ void StaticWidgetsPage::CreateStatic()
 
     int flagsBox = 0,
         flagsText = GetAttrs().m_defaultFlags,
-        flagsDummyText = GetAttrs().m_defaultFlags;
+        flagsMarkupText = GetAttrs().m_defaultFlags;
 
     if ( !m_chkAutoResize->GetValue() )
     {
         flagsText |= wxST_NO_AUTORESIZE;
-        flagsDummyText |= wxST_NO_AUTORESIZE;
+        flagsMarkupText |= wxST_NO_AUTORESIZE;
+    }
+
+    if ( m_chkWrap->GetValue() )
+    {
+        flagsText |= wxST_WRAP;
+        flagsMarkupText |= wxST_WRAP;
     }
 
     int align = 0;
@@ -456,21 +469,21 @@ void StaticWidgetsPage::CreateStatic()
                 wxFALLTHROUGH;
 
             case StaticEllipsize_Start:
-                flagsDummyText |= wxST_ELLIPSIZE_START;
+                flagsText |= wxST_ELLIPSIZE_START;
                 break;
 
             case StaticEllipsize_Middle:
-                flagsDummyText |= wxST_ELLIPSIZE_MIDDLE;
+                flagsText |= wxST_ELLIPSIZE_MIDDLE;
                 break;
 
             case StaticEllipsize_End:
-                flagsDummyText |= wxST_ELLIPSIZE_END;
+                flagsText |= wxST_ELLIPSIZE_END;
                 break;
         }
     }
 
-    flagsDummyText |= align;
     flagsText |= align;
+    flagsMarkupText |= align;
     flagsBox |= align;
 
     wxStaticBox *staticBox;
@@ -503,12 +516,12 @@ void StaticWidgetsPage::CreateStatic()
         m_statText = new wxGenericStaticText(staticBox, wxID_ANY,
                                              m_textLabel->GetValue(),
                                              wxDefaultPosition, wxDefaultSize,
-                                             flagsDummyText);
+                                             flagsText);
 #if wxUSE_MARKUP
         m_statMarkup = new wxGenericStaticText(staticBox, wxID_ANY,
                                              wxString(),
                                              wxDefaultPosition, wxDefaultSize,
-                                             flagsText);
+                                             flagsMarkupText);
 #endif // wxUSE_MARKUP
     }
     else // use native versions
@@ -516,12 +529,12 @@ void StaticWidgetsPage::CreateStatic()
         m_statText = new wxStaticText(staticBox, wxID_ANY,
                                       m_textLabel->GetValue(),
                                       wxDefaultPosition, wxDefaultSize,
-                                      flagsDummyText);
+                                      flagsText);
 #if wxUSE_MARKUP
         m_statMarkup = new wxStaticText(staticBox, wxID_ANY,
                                         wxString(),
                                         wxDefaultPosition, wxDefaultSize,
-                                        flagsText);
+                                        flagsMarkupText);
 #endif // wxUSE_MARKUP
     }
 
@@ -557,7 +570,7 @@ void StaticWidgetsPage::CreateStatic()
     NotifyWidgetRecreation(m_statLine);
 #endif
 
-    m_sizerStatic->Add(m_sizerStatBox, 0, wxGROW);
+    m_sizerStatic->Add(m_sizerStatBox, 1, wxGROW);
 
     m_sizerStatic->Layout();
 

@@ -337,6 +337,27 @@ public:
     virtual wxSize CalcMin() = 0;
 
     /**
+        This method may be overridden by sizers whose minimal size depends on
+        the layout direction.
+
+        It is called after InformFirstDirection(), so the implementation may
+        use the direction provided to this function to decide which size to
+        return.
+
+        The typical and almost only example of a sizer needing to override this
+        function is wxWrapSizer which can stretch in either direction.
+
+        The method must return the smallest possible size that this sizer can be
+        shrunk to, e.g. the width of a single control when the major layout
+        direction is vertical.
+
+        By default, this method simply returns the result of CalcMin().
+
+        @since 3.3.2
+    */
+    virtual wxSize CalcMinUsingLayoutDirection() const;
+
+    /**
         Detaches all children from the sizer.
 
         If @a delete_windows is @true then child windows will also be deleted.
@@ -436,6 +457,8 @@ public:
        Inform sizer about the first direction that has been decided (by
        parent item).  Returns true if it made use of the information (and
        recalculated min size).
+
+       @see wxWindow::GetMinSizeUsingLayoutDirection(), CalcMinUsingLayoutDirection()
     */
     virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
 

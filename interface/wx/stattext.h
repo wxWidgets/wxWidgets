@@ -6,6 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #define wxST_NO_AUTORESIZE         0x0001
+#define wxST_WRAP                  0x0002
 #define wxST_ELLIPSIZE_START       0x0004
 #define wxST_ELLIPSIZE_MIDDLE      0x0008
 #define wxST_ELLIPSIZE_END         0x0010
@@ -42,6 +43,10 @@
     @style{wxST_ELLIPSIZE_END}
            If the label text width exceeds the control width, replace the end
            of the label with an ellipsis; uses wxControl::Ellipsize.
+    @style{wxST_WRAP}
+           Wrap label text on multiple lines if necessary, using the available
+           horizontal space. This style only works when the control is used
+           inside a sizer. It is available since wxWidgets 3.3.2.
     @endStyleTable
 
     @library{wxcore}

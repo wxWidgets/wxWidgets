@@ -540,13 +540,13 @@ bool wxSizerItem::InformFirstDirection(int direction, int size, int availableOth
     {
         didUse = GetSizer()->InformFirstDirection(direction,size,availableOtherDir);
         if (didUse)
-            m_minSize = GetSizer()->CalcMin();
+            m_minSize = GetSizer()->CalcMinUsingLayoutDirection();
     }
     else if (IsWindow())
     {
         didUse =  GetWindow()->InformFirstDirection(direction,size,availableOtherDir);
         if (didUse)
-            m_minSize = m_window->GetEffectiveMinSize();
+            m_minSize = m_window->GetMinSizeUsingLayoutDirection();
 
         // This information is useful for items with wxSHAPED flag, since
         // we can request an optimal min size for such an item. Even if
@@ -594,7 +594,10 @@ wxSize wxSizerItem::CalcMin()
     {
         // Since the size of the window may change during runtime, we
         // should use the current minimal/best size.
-        m_minSize = m_window->GetEffectiveMinSize();
+        m_minSize = m_window->GetMinSizeUsingLayoutDirection();
+
+        if ( !m_minSize.IsFullySpecified() )
+            m_minSize.SetDefaults(m_window->GetBestSize());
     }
 
     return GetMinSizeWithBorder();
