@@ -67,7 +67,7 @@ bool wxFrame::Create(wxWindow *parent,
         return false;
 
 #ifdef __WXOSX_IPHONE__
-    if (parent != NULL) {
+    if (parent != nullptr) {
         // We are on the next screen, provide a back button and title
         wxToolBar *tb = CreateToolBar();
         // tb->AddTool( wxID_CLOSE, wxEmptyString, wxArtProvider::GetBitmap(wxART_PREV_SCREEN) ); doesn't work for some reason
