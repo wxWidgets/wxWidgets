@@ -381,7 +381,8 @@ wxUILocaleImplCF::GetCurrencyCode() const
 wxCurrencySymbolPosition
 wxUILocaleImplCF::GetCurrencySymbolPosition() const
 {
-    wxCFRef<NSNumberFormatter*> formatter = [[NSNumberFormatter alloc] init];
+    wxCFRef<NSNumberFormatter*> cfRefFormatter = [[NSNumberFormatter alloc] init];
+    NSNumberFormatter* formatter = cfRefFormatter.get();
     formatter.locale = m_nsloc;
     formatter.numberStyle = NSNumberFormatterCurrencyStyle;
 
@@ -428,7 +429,8 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
 wxLocaleNumberFormatting
 wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
 {
-    wxCFRef<NSNumberFormatter*> formatter = [[NSNumberFormatter alloc] init];
+    wxCFRef<NSNumberFormatter*> cfRefFormatter = [[NSNumberFormatter alloc] init];
+    NSNumberFormatter* formatter = cfRefFormatter.get();
     formatter.locale = m_nsloc;
     formatter.numberStyle = (cat == wxLOCALE_CAT_MONEY)
                           ? NSNumberFormatterCurrencyStyle
