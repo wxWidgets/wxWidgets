@@ -1232,14 +1232,10 @@ void wxWindowQt::DoSetClientSize(int width, int height)
 
     if ( qtWidget != GetHandle() )
     {
-        const QSize frameSize = GetHandle()->frameSize();
-        const QSize innerSize = GetHandle()->geometry().size();
-        const QSize frameSizeDiff = frameSize - innerSize;
-
-        const int clientWidth = width + frameSizeDiff.width();
-        const int clientHeight = height + frameSizeDiff.height();
-
-        GetHandle()->resize(clientWidth, clientHeight);
+        int x, y;
+        DoGetPosition(&x, &y);
+        // Ensure that this window is correctly positioned in RTL layout.
+        DoMoveWindow(x, y, width, height);
     }
 
     QRect geometry = qtWidget->geometry();
@@ -1268,6 +1264,11 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 
     const auto clientSize = wxQtSetClientSize(qtWidget, width, height);
 
+    if (!qtWidget->isVisible() && clientSize.x > 0 && clientSize.y > 0)
+    {
+        m_pendingClientSize = clientSize;
+    }
+
     if ( GetLayoutDirection() == wxLayout_RightToLeft && !IsTopLevel() )
     {
         const auto parent = GetParent();
@@ -1280,11 +1281,6 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
     }
 
     qtWidget->move( x, y );
-
-    if (!qtWidget->isVisible() && clientSize.x > 0 && clientSize.y > 0)
-    {
-        m_pendingClientSize = clientSize;
-    }
 }
 
 #if wxUSE_TOOLTIPS
