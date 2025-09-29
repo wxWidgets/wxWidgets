@@ -1777,6 +1777,8 @@ enum wxStandardID
 
     /*  id for a separator line in the menu (invalid for normal item) */
     wxID_SEPARATOR = -2,
+    /*  id for a stretchable separator line in toolbar */
+    wxID_STRETCHABLE_SEPARATOR = -4,
 
     /* any id: means that we don't care about the id, whether when installing
      * an event handler or when creating a new window */

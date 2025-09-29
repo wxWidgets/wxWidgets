@@ -13,6 +13,7 @@
 
 #include "wx/nonownedwnd.h"
 #include "wx/frame.h"
+#include "wx/log.h"
 #include <algorithm>
 
 CGRect wxToNSRect(UIView* parent, const wxRect& r )
@@ -259,6 +260,17 @@ void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width
     height = r.size.height;
     left = r.origin.x;
     top = r.origin.y;
+
+    // https://stackoverflow.com/questions/46829840/get-safe-area-inset-top-and-bottom-heights
+    // suggest something like this 
+    if (@available(iOS 11.0, *)) {
+        UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+        CGFloat topPadding = window.safeAreaInsets.top;
+        CGFloat bottomPadding = window.safeAreaInsets.bottom;
+        top  += (int) topPadding;
+        // height -= (int) (bottomPadding + topPadding);  // we want to use the bottom area
+        height -= (int) (topPadding);
+    }
 }
 
 bool wxNonOwnedWindowIPhoneImpl::SetShape(const wxRegion& region)

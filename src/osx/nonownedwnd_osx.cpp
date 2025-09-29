@@ -254,19 +254,6 @@ wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const
     int left, top, width, height;
     m_nowpeer->GetContentArea(left, top, width, height);
 
-#ifdef __WXOSX_IPHONE__
-    // TODO, find a way to find the safe area not covered at the top
-    // UIKit UIApplication statusBarFrame is now deprecated 
-    // https://stackoverflow.com/questions/46829840/get-safe-area-inset-top-and-bottom-heights
-    // suggest something like this
-    // if (@available(iOS 11.0, *)) {
-    //    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
-    //    CGFloat topPadding = window.safeAreaInsets.top;
-    //    CGFloat bottomPadding = window.safeAreaInsets.bottom;
-    // }
-    top += 44;
-#endif
-
     return wxPoint(left, top);
 }
 
@@ -482,22 +469,18 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
     // under iphone with a translucent status bar the m_nowpeer returns the
     // inner area, while the content area extends under the translucent
     // status bar, therefore we use the content view's area
-#ifdef __WXOSX_IPHONE__
-    GetPeer()->GetContentArea(left, top, w, h);
-
-    // TODO, find a way to find the safe area not covered at the top
-    // UIKit UIApplication statusBarFrame is now deprecated 
-    // https://stackoverflow.com/questions/46829840/get-safe-area-inset-top-and-bottom-heights
-    // suggest something like this
-    // if (@available(iOS 11.0, *)) {
-    //    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
-    //    CGFloat topPadding = window.safeAreaInsets.top;
-    //    CGFloat bottomPadding = window.safeAreaInsets.bottom;
-    // }
-    h -= 44;
-#else
+    //
+    // RR: I am not sure about ContentArea vs. ClientArea in this case.
+    // I think GetClientSize() refers to the area below menubar and toolbar
+    // and in the case of iOS below the iOS statusbar and the toolbar.
+    // The area behind the iOS status bar text/symbols (Wifi and battery
+    // status etc.) is part of the background and we should be able to 
+    // draw into this in the background code. 
+//#ifdef __WXOSX_IPHONE__
+//    GetPeer()->GetContentArea(left, top, w, h);
+//#else
     m_nowpeer->GetContentArea(left, top, w, h);
-#endif
+//#endif
 
     if (width)
        *width = w ;

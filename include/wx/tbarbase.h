@@ -538,9 +538,9 @@ public:
 
     // this one is not virtual but just a simple helper/wrapper around
     // CreateTool() for separators
-    wxToolBarToolBase *CreateSeparator()
+    wxToolBarToolBase *CreateSeparator( int id )
     {
-        return CreateTool(wxID_SEPARATOR,
+        return CreateTool(id,
                           wxEmptyString,
                           wxBitmapBundle(), wxBitmapBundle(),
                           wxITEM_SEPARATOR, nullptr,

@@ -496,13 +496,7 @@ bool wxTopLevelWindowBase::Layout()
             int clientW, clientH;
             DoGetClientSize(&clientW, &clientH);
 
-#ifndef __WXOSX_IPHONE__
-            int y = 0;
-#else
-            int y = GetClientAreaOrigin().y;  // this might actually be correct on all platforms
-#endif
-
-            child->SetSize(0, y, clientW, clientH);
+            child->SetSize(0, 0, clientW, clientH);
 
             return true;
         }

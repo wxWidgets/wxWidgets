@@ -151,7 +151,10 @@ void wxTopLevelWindowMac::Restore()
 
 wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
 {
-    return wxPoint(0, 0) ;
+    int left, top, width, height;
+    m_nowpeer->GetContentArea(left, top, width, height);
+
+    return wxPoint(left, top);
 }
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)

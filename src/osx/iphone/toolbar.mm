@@ -85,7 +85,8 @@ public:
         tbar->OnLeftClick( GetId(), IsToggled() );
     }
 
-    UIBarButtonItem* GetUIBarButtonItem() const {return m_toolbarItem;}
+    UIBarButtonItem* GetUIBarButtonItem() const       { return m_toolbarItem; }
+    void SetUIBarButtonItem( UIBarButtonItem *item )  { m_toolbarItem = item; }
 private:
 
     void Init()
@@ -117,6 +118,15 @@ wxToolBarToolBase(
                   tbar, id, label, bmpNormal, bmpDisabled, kind,
                   clientData, shortHelp, longHelp )
 {
+    bool stretchable = (id == wxID_STRETCHABLE_SEPARATOR);
+    if (stretchable) 
+    {
+        m_id = wxID_SEPARATOR;
+        id = wxID_SEPARATOR;
+        m_toolStyle = wxTOOL_STYLE_SEPARATOR;
+        m_kind = wxITEM_SEPARATOR;
+    }
+
     Init();
     UIBarButtonItem* bui = [UIBarButtonItem alloc];
     UIBarButtonItemStyle style = UIBarButtonItemStylePlain;
@@ -124,8 +134,18 @@ wxToolBarToolBase(
 
     if ( id == wxID_SEPARATOR )
     {
-        bui = [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        bui.width = 25.0f;
+        if (stretchable)
+        {
+            // The Stretchable() flag is set after creation in
+            // wxToolBarToolBase *wxToolBarBase::InsertStretchableSpace(size_t pos)
+            // and that is after this call
+            bui = [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        }
+        else
+        {
+            bui = [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+            bui.width = 25.0f;
+        }
     }
     else if ( bmpNormal.IsOk() )
     {
@@ -262,7 +282,6 @@ bool wxToolBar::Realize()
 {
     if ( !wxToolBarBase::Realize() )
         return false;
-
 
     return true;
 }
@@ -402,7 +421,7 @@ void wxToolBar::SetWindowStyleFlag( long style )
     if (!(self = [super init]))
         return nil;
 
-    mutableBarItems = [NSMutableArray arrayWithCapacity:5];
+    mutableBarItems = [NSMutableArray arrayWithCapacity:10];
     return self;
 }
 
