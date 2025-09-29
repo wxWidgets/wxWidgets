@@ -1637,43 +1637,13 @@ public:
     // Ascension for a given year.
     // Celebrated on the 40th day of Easter/
     // the sixth Thursday after Easter Sunday.
-    static wxDateTime GetThursdayAscension(int year)
-    {
-        const wxDateTime ascension = GetEaster(year) + wxDateSpan::Days(39);
-        wxASSERT_MSG(
-            ascension.GetWeekDay() == wxDateTime::WeekDay::Thu,
-            "Error in Ascension calculation!");
-        return ascension;
-    }
+    static wxDateTime GetThursdayAscension(int year);
 
     // Ascension for a given year.
     // Same as traditional Ascension, but moved to the following Sunday.
-    static wxDateTime GetSundayAscension(int year)
-    {
-        const wxDateTime ascension = GetEaster(year) + wxDateSpan::Weeks(6);
-        wxASSERT_MSG(
-            ascension.GetWeekDay() == wxDateTime::WeekDay::Sun,
-            "Error in Ascension calculation!");
-        return ascension;
-    }
+    static wxDateTime GetSundayAscension(int year);
 protected:
-    bool DoIsHoliday(const wxDateTime& dt) const override
-    {
-        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
-            dt.IsSameDate(GetThursdayAscension(dt.GetYear())) )
-        {
-            return true;
-        }
-        for (const auto& feast : m_holyDaysOfObligation)
-        {
-            if (feast.GetMonth() == dt.GetMonth() &&
-                feast.GetDay() == dt.GetDay())
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    bool DoIsHoliday(const wxDateTime& dt) const override;
 
     size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
                                 const wxDateTime& dtEnd,
@@ -1686,19 +1656,7 @@ private:
 class WXDLLIMPEXP_BASE wxDateTimeChristianHolidays : public wxDateTimeUSCatholicFeasts
 {
 protected:
-    bool DoIsHoliday(const wxDateTime& dt) const override
-    {
-        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
-            (dt.GetMonth() == wxDateTime::Month::Dec && dt.GetDay() == 25))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
-                                const wxDateTime& dtEnd,
-                                wxDateTimeArray& holidays) const override;
+    bool DoIsHoliday(const wxDateTime& dt) const override;
 };
 
 // ============================================================================

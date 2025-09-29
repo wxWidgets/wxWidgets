@@ -330,6 +330,7 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_MENU:
             return wxColour(0x2b2b2b);
 
+        case wxSYS_COLOUR_GRIDLINES:
         case wxSYS_COLOUR_BTNFACE:
             return wxColour(0x333333);
 

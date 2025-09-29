@@ -13,6 +13,11 @@
 
 #include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+  #include "wx/module.h"
+  #include "wx/window.h"
+#endif
+
 #include "wx/power.h"
 #include "wx/atomic.h"
 #include "wx/osx/private.h"
@@ -20,11 +25,89 @@
 
 #include <IOKit/pwr_mgt/IOPMLib.h>
 
+#import <Cocoa/Cocoa.h>
+
+static wxAtomicInt g_powerResourceSystemRefCount = 0;
+
+// ----------------------------------------------------------------------------
+// wxCocoaPowerModule
+// ----------------------------------------------------------------------------
+
+@interface wxCocoaPowerEventsObserver : NSObject
+@end
+
+@implementation wxCocoaPowerEventsObserver
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        NSNotificationCenter *center = [[NSWorkspace sharedWorkspace] notificationCenter];
+
+        // Register for "will sleep" notification
+        [center addObserver:self
+                   selector:@selector(handleWillSleep:)
+                       name:NSWorkspaceWillSleepNotification
+                     object:nil];
+
+        // Register for "did wake" notification
+        [center addObserver:self
+                   selector:@selector(handleDidWake:)
+                       name:NSWorkspaceDidWakeNotification
+                     object:nil];
+    }
+    return self;
+}
+
+- (void)dealloc {
+    [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
+    [super dealloc];
+}
+
+- (void)handleWillSleep:(NSNotification *)notification {
+    wxPowerEvent event(wxEVT_POWER_SUSPENDED);
+
+    for ( auto tlw : wxTopLevelWindows )
+        tlw->HandleWindowEvent(event);
+}
+
+- (void)handleDidWake:(NSNotification *)notification {
+    wxPowerEvent event(wxEVT_POWER_RESUME);
+
+    for ( auto tlw : wxTopLevelWindows )
+        tlw->HandleWindowEvent(event);
+}
+
+@end
+
+namespace {
+// the global power events observer
+static wxCFRef<wxCocoaPowerEventsObserver*> g_powerEventsObserver;
+
+// add power observers on init and remove on exit
+class wxCocoaPowerModule : public wxModule
+{
+public:
+    bool OnInit() override { return true; }
+    void OnExit() override
+    {
+        // There should be no other threads by now, so no locking is needed.
+        if ( g_powerResourceSystemRefCount )
+        {
+            g_powerEventsObserver.reset();
+
+            g_powerResourceSystemRefCount = 0;
+        }
+    }
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxCocoaPowerModule);
+};
+}; // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxPowerResource
 // ----------------------------------------------------------------------------
 
-static wxAtomicInt g_powerResourceSystemRefCount = 0;
 static NSObject* g_processInfoActivity = nil;
 
 bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
@@ -58,9 +141,9 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
             [[NSProcessInfo processInfo]
              endActivity:(id)g_processInfoActivity];
             g_processInfoActivity = nil;
-
-            return true;
         }
+
+        g_powerEventsObserver.reset();
     }
 
     return true;
@@ -73,7 +156,16 @@ wxPowerResource::Acquire(wxPowerResourceKind kind,
 {
     if ( blockKind == wxPOWER_DELAY )
     {
-        // We don't support this mode under macOS because it's not needed there.
+        if ( kind == wxPOWER_RESOURCE_SYSTEM )
+        {
+            wxAtomicInc(g_powerResourceSystemRefCount);
+
+            if ( g_powerEventsObserver.get() == nullptr )
+            {
+                g_powerEventsObserver = [[wxCocoaPowerEventsObserver alloc] init];
+            }
+        }
+
         return true;
     }
 

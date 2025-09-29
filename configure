@@ -1093,6 +1093,7 @@ with_osx_iphone
 with_osx
 with_cocoa
 with_iphone
+with_iphonesimulator
 with_mac
 with_wine
 with_msw
@@ -2379,6 +2380,7 @@ Optional Packages:
   --with-osx              use macOS (default port, Cocoa)
   --with-cocoa            same as --with-osx_cocoa
   --with-iphone           same as --with-osx_iphone
+  --with-iphonesimulator     same as --with-osx_iphonesimulator
   --with-mac              same as --with-osx
   --with-wine             use Wine
   --with-msw              use MS-Windows
@@ -4472,6 +4474,19 @@ if test "${with_iphone+set}" = set; then :
                 as_fn_error $? "Option --with-iphone doesn't accept any arguments" "$LINENO" 5
             fi
             wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1
+
+fi
+
+
+
+
+# Check whether --with-iphonesimulator was given.
+if test "${with_iphonesimulator+set}" = set; then :
+  withval=$with_iphonesimulator;
+            if test "$withval" != yes; then
+                as_fn_error $? "Option --with-iphonesimulator doesn't accept any arguments" "$LINENO" 5
+            fi
+            wxUSE_OSX_IPHONE="$withval" wxUSE_IPHONESIMULATOR="yes" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1
 
 fi
 
@@ -23176,7 +23191,11 @@ fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     if test "$wxUSE_OSX_IPHONE" = 1; then
-        MACOSX_VERSION_MIN_OPTS="-miphoneos-version-min=$wxUSE_MACOSX_VERSION_MIN"
+        if test "$wxUSE_IPHONESIMULATOR" = "yes"; then
+            MACOSX_VERSION_MIN_OPTS="-miphonesimulator-version-min=$wxUSE_MACOSX_VERSION_MIN"
+        else
+            MACOSX_VERSION_MIN_OPTS="-miphoneos-version-min=$wxUSE_MACOSX_VERSION_MIN"
+        fi
     else
         MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
     fi
@@ -30865,7 +30884,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
 
     if test "$wxUSE_OSX_COCOA" = 1; then
-        OPENGL_LIBS="-framework OpenGL -framework AGL"
+        OPENGL_LIBS="-framework OpenGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32"
     elif test "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1; then

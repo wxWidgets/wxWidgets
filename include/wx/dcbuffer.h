@@ -15,9 +15,12 @@
 #include "wx/dcclient.h"
 #include "wx/window.h"
 
-// All current ports use double buffering.
-#define wxALWAYS_NATIVE_DOUBLE_BUFFER       1
-
+// Only wxMSW doesn't use double buffering.
+#ifdef __WXMSW__
+    #define wxALWAYS_NATIVE_DOUBLE_BUFFER       0
+#else
+    #define wxALWAYS_NATIVE_DOUBLE_BUFFER       1
+#endif
 
 // ----------------------------------------------------------------------------
 // Double buffering helper.

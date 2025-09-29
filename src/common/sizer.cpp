@@ -2757,17 +2757,6 @@ bool wxStaticBoxSizer::CheckIfNonBoxChild(wxWindow* win) const
                wxDumpWindow(win),
                wxDumpWindow(win->GetParent()));
 
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    // Additionally, under MSW the windows inside a static box are not
-    // drawn at all when compositing is used, so we have to disable it.
-    //
-    // An alternative could be to Reparent() the window to the static
-    // box, but it might break the existing code and as we only allow
-    // this for compatibility in the first place, it seems better not
-    // to risk it.
-    win->MSWDisableComposited();
-#endif // __WXMSW__ && !__WXUNIVERSAL__
-
     return true;
 }
 

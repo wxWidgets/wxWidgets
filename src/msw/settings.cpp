@@ -106,7 +106,12 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             return colDark;
     }
 
-    if ( index == wxSYS_COLOUR_LISTBOXTEXT)
+    if ( index == wxSYS_COLOUR_GRIDLINES)
+    {
+        // there is no standard colour with this index, map to another one
+        index = wxSYS_COLOUR_BTNFACE;
+    }
+    else if ( index == wxSYS_COLOUR_LISTBOXTEXT)
     {
         // there is no standard colour with this index, map to another one
         index = wxSYS_COLOUR_WINDOWTEXT;

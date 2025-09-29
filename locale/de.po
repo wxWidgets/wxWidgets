@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.3.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-14 20:23+0200\n"
-"PO-Revision-Date: 2025-05-19 17:22+0200\n"
+"PO-Revision-Date: 2025-09-28 14:53+0200\n"
 "Last-Translator: Ulrich Telle <ulrich@telle-online.eu>\n"
 "Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
 "Language: de\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: ../include/wx/defs.h:2582
 msgid "All files (*.*)|*.*"
@@ -1092,11 +1092,11 @@ msgstr "&Speichern"
 
 #: ../src/common/docview.cpp:522 ../src/common/docview.cpp:560
 msgid "&Discard changes"
-msgstr "Änderungen &Verwerfen"
+msgstr "Änderungen &verwerfen"
 
 #: ../src/common/docview.cpp:523
 msgid "Do&n't close"
-msgstr "Nicht schließen"
+msgstr "Nicht schließe&n"
 
 #: ../src/common/docview.cpp:553
 #, c-format

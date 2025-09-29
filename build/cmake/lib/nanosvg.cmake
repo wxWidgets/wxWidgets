@@ -7,6 +7,14 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(wxUSE_NANOSVG STREQUAL "sys")
+    find_package(NanoSVG)
+    if(NOT NanoSVG_FOUND)
+        # If the sys library can not be found use builtin
+        wx_option_force_value(wxUSE_NANOSVG builtin)
+    endif()
+endif()
+
 if(wxUSE_NANOSVG STREQUAL "builtin")
     set(wxUSE_NANOSVG_EXTERNAL 0 PARENT_SCOPE)
 elseif(wxUSE_NANOSVG)
@@ -15,8 +23,6 @@ elseif(wxUSE_NANOSVG)
     set(NANOSVG_LIBRARIES )
     set(NANOSVG_INCLUDE_DIRS )
     set(wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL TRUE)
-
-    find_package(NanoSVG REQUIRED)
 
     foreach(TARGETNAME NanoSVG::nanosvg NanoSVG::nanosvgrast unofficial::nanosvg)
         if(NOT TARGET ${TARGETNAME})

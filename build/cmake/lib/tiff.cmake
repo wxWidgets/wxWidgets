@@ -7,6 +7,15 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(wxUSE_LIBTIFF STREQUAL "sys")
+    find_package(TIFF)
+    mark_as_advanced(Tiff_DIR)
+    if(NOT TIFF_FOUND)
+        # If the sys library can not be found use builtin
+        wx_option_force_value(wxUSE_LIBTIFF builtin)
+    endif()
+endif()
+
 if(wxUSE_LIBTIFF STREQUAL "builtin")
     # TODO: implement building libtiff via its CMake file, using
     # add_subdirectory or ExternalProject_Add
@@ -76,6 +85,4 @@ if(wxUSE_LIBTIFF STREQUAL "builtin")
     target_link_libraries(wxtiff PRIVATE ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES})
     set(TIFF_LIBRARIES wxtiff)
     set(TIFF_INCLUDE_DIRS ${wxSOURCE_DIR}/src/tiff/libtiff)
-elseif(wxUSE_LIBTIFF)
-    find_package(TIFF REQUIRED)
 endif()

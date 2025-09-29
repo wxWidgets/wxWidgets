@@ -19,12 +19,12 @@
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
     #include "wx/geometry.h"
+    #include "wx/itemid.h"
     #include "wx/cursor.h"
     #include "wx/mousestate.h"
 #endif
 
 #include "wx/dynarray.h"
-#include "wx/itemid.h"
 #include "wx/thread.h"
 #include "wx/tracker.h"
 #include "wx/typeinfo.h"
