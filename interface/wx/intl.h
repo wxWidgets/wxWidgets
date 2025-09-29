@@ -198,44 +198,6 @@ enum wxLocaleInfo
     wxLOCALE_DECIMAL_POINT,
 
     /**
-        Information whether the metric measurement system is used in the locale.
-
-        Returns "Yes", if the metric system (Systéme International d'Units, or S.I.) is used,
-        or "No", if the Imperial/United States system is used,
-        or "Unknown", if the measurement system couldn't be determined.
-
-        @since 3.3.2
-     */
-    wxLOCALE_MEASURE_METRIC,
-
-    /**
-        The string representing the currency symbol for monetary values.
-
-        Examples: "$" for the U.S. Dollar, "€" for the Euro.
-
-        @since 3.3.2
-     */
-    wxLOCALE_CURRENCY_SYMBOL,
-
-    /**
-        The string representing the international monetary symbol specified in ISO 4217.
-
-        Examples: "USD" for the U.S. Dollar, "EUR" for the Euro.
-
-        @since 3.3.2
-     */
-    wxLOCALE_CURRENCY_CODE,
-
-    /**
-        The number of fractional digits for the local monetary format.
-
-        Notice that the number is returned as a string value.
-
-        @since 3.3.2
-     */
-    wxLOCALE_CURRENCY_DIGITS,
-
-    /**
         Short date format.
 
         Notice that short and long date formats may be the same under POSIX

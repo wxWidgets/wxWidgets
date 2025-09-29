@@ -297,6 +297,101 @@ public:
     wxLayoutDirection GetLayoutDirection() const;
 
     /**
+        Query infos about number formatting of the current locale.
+        The information includes:
+        - the grouping separator
+        - the grouping specification
+        - the decimal separator
+        - the number of fractional digits
+
+        @return
+            The wxLocaleNumberFormatting structure with the number formatting details.
+        @since 3.3.2
+     */
+    wxLocaleNumberFormatting GetNumberFormatting() const;
+
+    /**
+        Query the curreny symbol of the current locale.
+
+        @return
+            The currency symbol that is typically used locally for currency values.
+            If no currency symbol could be determined, an empty string will be returned.
+        @since 3.3.2
+     */
+    wxString GetCurrencySymbol() const;
+
+    /**
+        Query the ISO 4217 currency code of the current locale.
+
+        @return
+            The 3-letter ISO 4217 currency code.
+            If no currency code could be determined, an empty string will be returned.
+        @since 3.3.2
+     */
+    wxString GetCurrencyCode() const;
+
+    /**
+        Query the currency symbol position of the current locale.
+
+        The currency symbol can be positioned in one of 4 ways:
+        as a prefix or suffix to the currency value, either separated from the value
+        by a space character or not. Accordingly, one of the following values is returned:
+        - wxCurrencySymbolPosition::PrefixWithSep
+        - wxCurrencySymbolPosition::PrefixNoSep
+        - wxCurrencySymbolPosition::SuffixWithSep
+        - wxCurrencySymbolPosition::SuffixNoSep
+
+        @note The position of the currency symbol does not affect the representation
+              with the currency code. The currency code is always placed before the
+              currency value and separated by a space.
+
+        @return
+            The currency symbol position.
+        @since 3.3.2
+     */
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const;
+
+    /**
+        Query the currency information of the current locale.
+
+        The currency information includes the following items:
+        - the currency symbol
+        - the currency code
+        - the currency symbol position
+        - the currency value formatting information
+
+        @return
+            The wxLocaleCurrencyInfo structure.
+        @since 3.3.2
+     */
+    wxLocaleCurrencyInfo GetCurrencyInfo() const;
+
+    /**
+        Query whether the current locale uses the metric system
+
+        @return
+            The measurement system, one of the values
+            wxMeasurementSystem::Metric, wxMeasurementSystem::NonMetric,
+            or wxMeasurementSystem::Unknown.
+        @since 3.3.2
+     */
+    wxMeasurementSystem UsesMetricSystem() const;
+
+    /**
+        Guess whether the current locale uses the metric system
+        base on from the region part of the locale identification.
+
+        @param idLocale
+            The id of the locale for which the measurement system should be guessed.
+        @return
+            The guessed measurement system, one of the values
+            wxMeasurementSystem::Metric, wxMeasurementSystem::NonMetric,
+            or wxMeasurementSystem::Unknown.
+        @since 3.3.2
+     */
+    static wxMeasurementSystem GuessMetricSystemFromRegion(const wxLocaleIdent& idLocale);
+
+    /**
         Return true if locale is supported on the current system.
 
         If this function returns @a false, the other functions of this class,
