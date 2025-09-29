@@ -133,31 +133,42 @@ enum class wxMeasurementSystem
 
 enum class wxCurrencySymbolPosition
 {
-    Prefix,
-    Suffix
+    PrefixNoSep,
+    PrefixWithSep,
+    SuffixNoSep,
+    SuffixWithSep
 };
 
 struct wxLocaleNumberFormatting
 {
-    wxString decimalSeparator;
+    wxLocaleNumberFormatting() = default;
+    wxLocaleNumberFormatting(const wxString& groupSeparator_, const std::vector<int>& grouping_,
+                             const wxString& decimalSeparator_, int fractionalDigits_)
+        : groupSeparator(groupSeparator_), grouping(grouping_),
+          decimalSeparator(decimalSeparator_), fractionalDigits(fractionalDigits_)
+    {
+    }
     wxString groupSeparator;
-    std::vector<size_t> grouping;
+    std::vector<int> grouping;
+    wxString decimalSeparator;
     int      fractionalDigits = 0;
 };
 
 struct wxLocaleCurrencyInfo
 {
+    wxLocaleCurrencyInfo() = default;
+    wxLocaleCurrencyInfo(const wxString& symbol_, const wxString& code_,
+                         const wxCurrencySymbolPosition currencySymbolPos_,
+                         const wxLocaleNumberFormatting currencyFormat_)
+        : currencySymbol(symbol_), currencyCode(code_),
+          currencySymbolPos(currencySymbolPos_),
+          currencyFormat(currencyFormat_)
+    {
+    }
     wxString currencySymbol;     // the currency symbol (for example "$")
     wxString currencyCode;       // the currency ISO code (for example "USD")
-    wxCurrencySymbolPosition currencySymbolPos = wxCurrencySymbolPosition::Prefix;
-    bool useCurrencySeparator = false;
+    wxCurrencySymbolPosition currencySymbolPos = wxCurrencySymbolPosition::PrefixWithSep;
     wxLocaleNumberFormatting currencyFormat;
-};
-
-struct wxLocaleCurrencyPositionInfo
-{
-    wxCurrencySymbolPosition currencySymbolPos = wxCurrencySymbolPosition::Prefix;
-    bool useCurrencySeparator = false;
 };
 
 // ----------------------------------------------------------------------------

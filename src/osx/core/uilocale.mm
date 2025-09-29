@@ -168,7 +168,7 @@ public:
     wxLocaleNumberFormatting GetNumberFormatting() const override;
     wxString GetCurrencySymbol() const override;
     wxString GetCurrencyCode() const override;
-    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const override;
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override;
     wxLocaleCurrencyInfo GetCurrencyInfo() const override;
     wxMeasurementSystem UsesMetricSystem() const override;
 
@@ -378,14 +378,10 @@ wxUILocaleImplCF::GetCurrencyCode() const
     return wxCFStringRef::AsString(str);
 }
 
-wxLocaleCurrencyPositionInfo
+wxCurrencySymbolPosition
 wxUILocaleImplCF::GetCurrencySymbolPosition() const
 {
-    wxLocaleCurrencyPositionInfo positionInfo;
-    positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Prefix;
-    positionInfo.useCurrencySeparator = true;
-
-    NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
+    wxCFRef<NSNumberFormatter*> formatter = [[NSNumberFormatter alloc] init];
     formatter.locale = m_nsloc;
     formatter.numberStyle = NSNumberFormatterCurrencyStyle;
 
@@ -395,6 +391,7 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
     NSRange symbolRange = [formatted rangeOfString:symbol];
     BOOL symbolBefore = (symbolRange.location == 0);
 
+    wxCurrencySymbolPosition symbolPos = wxCurrencySymbolPosition::PrefixWithSep;
     BOOL hasSpace = NO;
     if (symbolRange.location != NSNotFound)
     {
@@ -407,8 +404,9 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
                 unichar after = [formatted characterAtIndex:idx];
                 hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:after];
             }
-            positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Prefix;
-            positionInfo.useCurrencySeparator = hasSpace;
+            symbolPos = (hasSpace)
+                      ? wxCurrencySymbolPosition::PrefixWithSep
+                      : wxCurrencySymbolPosition::PrefixNoSep;
         }
         else
         {
@@ -418,20 +416,19 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
                 unichar before = [formatted characterAtIndex:symbolRange.location - 1];
                 hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:before];
             }
-            positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Suffix;
-            positionInfo.useCurrencySeparator = hasSpace;
+            symbolPos = (hasSpace)
+                      ? wxCurrencySymbolPosition::SuffixWithSep
+                      : wxCurrencySymbolPosition::SuffixNoSep;
         }
     }
 
-    [formatter release];
-
-    return positionInfo;
+    return symbolPos;
 }
 
 wxLocaleNumberFormatting
 wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
 {
-    NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
+    wxCFRef<NSNumberFormatter*> formatter = [[NSNumberFormatter alloc] init];
     formatter.locale = m_nsloc;
     formatter.numberStyle = (cat == wxLOCALE_CAT_MONEY)
                           ? NSNumberFormatterCurrencyStyle
@@ -439,51 +436,39 @@ wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
 
     wxString groupSeparator = wxCFStringRef::AsString(formatter.groupingSeparator);
 
-    std::vector<size_t> grouping;
+    std::vector<int> grouping;
     int groupingSize = (int) formatter.groupingSize;
     int secondaryGroupingSize  = (int) formatter.secondaryGroupingSize;
     if (groupingSize > 0)
     {
         if (secondaryGroupingSize > 0 && secondaryGroupingSize != groupingSize)
         {
-            grouping.push_back(static_cast<size_t>(groupingSize));
-            grouping.push_back(static_cast<size_t>(secondaryGroupingSize));
-            grouping.push_back(static_cast<size_t>(0));
+            grouping.push_back(groupingSize);
+            grouping.push_back(secondaryGroupingSize);
+            grouping.push_back(0);
         }
         else
         {
-            grouping.push_back(static_cast<size_t>(groupingSize));
-            grouping.push_back(static_cast<size_t>(0));
+            grouping.push_back(groupingSize);
+            grouping.push_back(0);
         }
     }
 
     wxString decimalSeparator = wxCFStringRef::AsString(formatter.decimalSeparator);
     int fractionalDigits = (int) formatter.minimumFractionDigits;
 
-    [formatter release];
-
-    wxLocaleNumberFormatting numForm;
-    numForm.decimalSeparator = decimalSeparator;
-    numForm.groupSeparator   = groupSeparator;
-    numForm.grouping         = grouping;
-    numForm.fractionalDigits = fractionalDigits;
-    return numForm;
+    return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
 }
 
 wxLocaleCurrencyInfo
 wxUILocaleImplCF::GetCurrencyInfo() const
 {
-    wxLocaleCurrencyPositionInfo positionInfo = GetCurrencySymbolPosition();
     wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
-
-    wxLocaleCurrencyInfo currencyInfo;
-    currencyInfo.currencySymbol       = GetCurrencySymbol();
-    currencyInfo.currencyCode         = GetCurrencyCode();
-    currencyInfo.currencySymbolPos    = positionInfo.currencySymbolPos;
-    currencyInfo.useCurrencySeparator = positionInfo.useCurrencySeparator;
-    currencyInfo.currencyFormat       = currencyFormatting;
-
-    return currencyInfo;
+    return wxLocaleCurrencyInfo(
+        GetCurrencySymbol(),
+        GetCurrencyCode(),
+        GetCurrencySymbolPosition(),
+        currencyFormatting);
 }
 
 wxMeasurementSystem

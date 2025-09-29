@@ -31,6 +31,7 @@
 #include "wx/tokenzr.h"
 #include "wx/wxcrt.h"
 
+#include <array>
 #include <vector>
 
 #ifndef LOCALE_NAME_USER_DEFAULT
@@ -327,26 +328,18 @@ public:
         return "USD";
     }
 
-    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const override
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override
     {
-        wxLocaleCurrencyPositionInfo positionInfo;
-        positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Prefix;
-        positionInfo.useCurrencySeparator = true;
-        return positionInfo;
+        return wxCurrencySymbolPosition::PrefixWithSep;
     }
 
     wxLocaleCurrencyInfo GetCurrencyInfo() const override
     {
-        wxLocaleCurrencyPositionInfo positionInfo = GetCurrencySymbolPosition();
-
-        wxLocaleCurrencyInfo currencyInfo;
-        currencyInfo.currencySymbol       = GetCurrencySymbol();
-        currencyInfo.currencyCode         = GetCurrencyCode();
-        currencyInfo.currencySymbolPos    = positionInfo.currencySymbolPos;
-        currencyInfo.useCurrencySeparator = positionInfo.useCurrencySeparator;
-        currencyInfo.currencyFormat       = GetNumberFormatting();
-
-        return currencyInfo;
+        return wxLocaleCurrencyInfo(
+            GetCurrencySymbol(),
+            GetCurrencyCode(),
+            GetCurrencySymbolPosition(),
+            GetNumberFormatting());
     }
 
     wxMeasurementSystem UsesMetricSystem() const override
@@ -709,33 +702,26 @@ public:
         return wxString(DoGetInfo(LOCALE_SINTLSYMBOL)).Left(3);
     }
 
-    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const override
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override
     {
-        wxLocaleCurrencyPositionInfo positionInfo;
+        static std::array<wxCurrencySymbolPosition, 4> symPos = {
+             wxCurrencySymbolPosition::PrefixNoSep, wxCurrencySymbolPosition::SuffixNoSep,
+             wxCurrencySymbolPosition::PrefixWithSep, wxCurrencySymbolPosition::SuffixWithSep };
         wxString posStr = wxString(DoGetInfo(LOCALE_ICURRENCY));
         unsigned int posIdx;
         if (posStr.empty() || !posStr.ToUInt(&posIdx))
             posIdx = 2;
-        positionInfo.currencySymbolPos = (posIdx == 0 || posIdx == 2)
-                                       ? wxCurrencySymbolPosition::Prefix
-                                       : wxCurrencySymbolPosition::Suffix;
-        positionInfo.useCurrencySeparator = (posIdx == 1 || posIdx == 3);
-        return positionInfo;
+        return (posIdx < symPos.size()) ? symPos[posIdx] : wxCurrencySymbolPosition::PrefixWithSep;
     }
 
     wxLocaleCurrencyInfo GetCurrencyInfo() const override
     {
-        wxLocaleCurrencyPositionInfo positionInfo = GetCurrencySymbolPosition();
         wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
-
-        wxLocaleCurrencyInfo currencyInfo;
-        currencyInfo.currencySymbol       = GetCurrencySymbol();
-        currencyInfo.currencyCode         = GetCurrencyCode();
-        currencyInfo.currencySymbolPos    = positionInfo.currencySymbolPos;
-        currencyInfo.useCurrencySeparator = positionInfo.useCurrencySeparator;
-        currencyInfo.currencyFormat       = currencyFormatting;
-
-        return currencyInfo;
+        return wxLocaleCurrencyInfo(
+            GetCurrencySymbol(),
+            GetCurrencyCode(),
+            GetCurrencySymbolPosition(),
+            currencyFormatting);
     }
 
     wxMeasurementSystem UsesMetricSystem() const override
@@ -821,7 +807,7 @@ private:
             fractionalDigits = 0;
 
         // Extract grouping lengths from groupingInfo
-        std::vector<size_t> grouping;
+        std::vector<int> grouping;
         for (wxStringTokenizer tokenizer(groupingInfo, ";"); tokenizer.HasMoreTokens();)
         {
             unsigned long value = 0;
@@ -829,12 +815,7 @@ private:
                 grouping.push_back(static_cast<size_t>(value));
         }
 
-        wxLocaleNumberFormatting numForm;
-        numForm.decimalSeparator = decimalSeparator;
-        numForm.groupSeparator   = groupSeparator;
-        numForm.grouping         = grouping;
-        numForm.fractionalDigits = fractionalDigits;
-        return numForm;
+        return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
     }
 
     const wchar_t* const m_name;

@@ -196,7 +196,7 @@ public:
     wxString GetCurrencyCode() const;
 
     // Query the currency symbol position of the current locale
-    wxLocaleCurrencyPositionInfo GetCurrencySymbolPosition() const;
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const;
 
     // Query the currency infos of the current locale
     wxLocaleCurrencyInfo GetCurrencyInfo() const;

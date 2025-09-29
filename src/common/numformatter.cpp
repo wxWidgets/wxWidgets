@@ -159,7 +159,7 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s, int style)
         return;
 
     wxString groupingSeparator;
-    std::vector<size_t> grouping;
+    std::vector<int> grouping;
     wxString decimalSeparator = GetDecimalSeparator();
 #if wxUSE_INTL
     wxLocaleNumberFormatting numForm;
@@ -284,44 +284,45 @@ void wxNumberFormatter::AddSignPrefix(wxString& s, int style)
 
 void wxNumberFormatter::AddCurrency(wxString& s, int style)
 {
+#if wxUSE_INTL
     if (style & Style_Currency)
     {
-        wxString currencyStr;
-        bool isCurrencyPrefix = true;
-        bool useCurrencySeparator = true;
-#if wxUSE_INTL
         auto currencyInfo = wxUILocale::GetCurrent().GetCurrencyInfo();
+        wxString currencyStr;
+        wxCurrencySymbolPosition currencyPos{ wxCurrencySymbolPosition::PrefixWithSep };
         if (style & Style_CurrencySymbol)
         {
             currencyStr = currencyInfo.currencySymbol;
-            isCurrencyPrefix = currencyInfo.currencySymbolPos == wxCurrencySymbolPosition::Prefix;
-            useCurrencySeparator = true;
+            currencyPos = currencyInfo.currencySymbolPos;
         }
         else if (style & Style_CurrencyCode)
         {
             currencyStr = currencyInfo.currencyCode;
-            isCurrencyPrefix = true;
-            useCurrencySeparator = true;
         }
-#endif // wxUSE_INTL
 
-        if (!currencyStr.empty() &&
-            (style & Style_CurrencySymbol || style & Style_CurrencyCode))
+        if (!currencyStr.empty())
         {
-            if (isCurrencyPrefix)
+            switch (currencyPos)
             {
-                if (useCurrencySeparator)
-                    currencyStr += " ";
-                s = currencyStr + s;
-            }
-            else
-            {
-                if (useCurrencySeparator)
-                    s += " ";
-                s += currencyStr;
+                case wxCurrencySymbolPosition::PrefixWithSep:
+                    s = currencyStr + wxString(" ") + s;
+                    break;
+                case wxCurrencySymbolPosition::PrefixNoSep:
+                    s = currencyStr + s;
+                    break;
+                case wxCurrencySymbolPosition::SuffixWithSep:
+                    s = s + wxString(" ") + currencyStr;
+                    break;
+                case wxCurrencySymbolPosition::SuffixNoSep:
+                    s = s + currencyStr;
+                    break;
             }
         }
     }
+#else
+    wxUnused(s);
+    wxUnused(style);
+#endif // wxUSE_INTL
 }
 
 void wxNumberFormatter::RemoveCurrency(wxString& s)

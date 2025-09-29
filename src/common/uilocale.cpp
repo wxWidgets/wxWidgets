@@ -1018,7 +1018,7 @@ wxString wxUILocale::GetCurrencyCode() const
     return m_impl->GetCurrencyCode();
 }
 
-wxLocaleCurrencyPositionInfo wxUILocale::GetCurrencySymbolPosition() const
+wxCurrencySymbolPosition wxUILocale::GetCurrencySymbolPosition() const
 {
     if (m_impl)
     {
@@ -1026,10 +1026,7 @@ wxLocaleCurrencyPositionInfo wxUILocale::GetCurrencySymbolPosition() const
     }
     else
     {
-        wxLocaleCurrencyPositionInfo positionInfo;
-        positionInfo.currencySymbolPos = wxCurrencySymbolPosition::Prefix;
-        positionInfo.useCurrencySeparator = true;
-        return positionInfo;
+        return wxCurrencySymbolPosition::PrefixWithSep;
     }
 }
 
