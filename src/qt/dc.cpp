@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif // WX_PRECOMP
 
 #include "wx/dc.h"
@@ -24,6 +25,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/compat.h"
+
+#include "wx/tokenzr.h"
 
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
@@ -289,6 +292,35 @@ void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 }
 #endif // wxUSE_PALETTE
 
+wxPoint wxQtDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    QPointF devicePoint(x, y);
+    const auto invTrans  = m_qtPainter->combinedTransform().inverted();
+    QPointF logicalPoint = invTrans.map(devicePoint);
+    return wxPoint(wxRound(logicalPoint.x()), wxRound(logicalPoint.y()));
+}
+
+wxPoint wxQtDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    QPointF logicalPoint(x, y);
+    QPointF devicePoint = m_qtPainter->combinedTransform().map(logicalPoint);
+    return wxPoint(wxRound(devicePoint.x()), wxRound(devicePoint.y()));
+}
+
+wxSize wxQtDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    wxPoint pt0 = DeviceToLogical(0, 0);
+    wxPoint pt  = DeviceToLogical(x, y);
+    return wxSize(pt.x-pt0.x, pt.y-pt0.y);
+}
+
+wxSize wxQtDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    wxPoint pt0 = LogicalToDevice(0, 0);
+    wxPoint pt  = LogicalToDevice(x, y);
+    return wxSize(pt.x-pt0.x, pt.y-pt0.y);
+}
+
 void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
     m_logicalFunction = function;
@@ -462,10 +494,9 @@ void wxQtDCImpl::Clear()
     int width, height;
     DoGetSize(&width, &height);
 
-    m_qtPainter->eraseRect( DeviceToLogicalX(0),
-                            DeviceToLogicalY(0),
-                            DeviceToLogicalXRel(width),
-                            DeviceToLogicalYRel(height) );
+    const wxPoint pos = DeviceToLogical(0, 0);
+    const wxSize size = DeviceToLogicalRel(width, height);
+    m_qtPainter->eraseRect( pos.x, pos.y, size.x, size.y);
 }
 
 void wxQtDCImpl::UpdateClipBox()
@@ -478,10 +509,10 @@ void wxQtDCImpl::UpdateClipBox()
         int dcwidth, dcheight;
         DoGetSize(&dcwidth, &dcheight);
 
-        m_qtPainter->setClipRect(DeviceToLogicalX(0),
-                                 DeviceToLogicalY(0),
-                                 DeviceToLogicalXRel(dcwidth),
-                                 DeviceToLogicalYRel(dcheight),
+        const wxPoint pos = DeviceToLogical(0, 0);
+        const wxSize size = DeviceToLogicalRel(dcwidth, dcheight);
+
+        m_qtPainter->setClipRect(pos.x, pos.y, size.x, size.y,
                                  m_clipping ? Qt::IntersectClip : Qt::ReplaceClip);
     }
 
@@ -548,14 +579,29 @@ void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
     if ( m_qtPainter->isActive() )
     {
+        auto qtRegion = region.GetHandle();
+
+        if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            int w;
+            if ( m_window )
+                m_window->GetClientSize(&w, nullptr);
+            else
+                GetSize(&w, nullptr);
+            QTransform matrix;
+            matrix.translate(w, 0);
+            matrix.scale(-1, 1);
+            qtRegion = matrix.map(qtRegion);
+        }
+
         // Disable the matrix transformations to match device coordinates
         m_qtPainter->setWorldMatrixEnabled(false);
         // Enable clipping explicitly as QPainter::setClipRegion() doesn't
         // do that for us
-        m_qtPainter->setClipping( true );
+        m_qtPainter->setClipping(true);
         // Set QPainter clipping (intersection if not the first one)
-        m_qtPainter->setClipRegion( region.GetHandle(),
-                                    m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+        m_qtPainter->setClipRegion(qtRegion,
+                                   m_clipping ? Qt::IntersectClip : Qt::ReplaceClip);
 
         m_qtPainter->setWorldMatrixEnabled(true);
 
@@ -574,6 +620,29 @@ void wxQtDCImpl::DestroyClippingRegion()
         m_qtPainter->setClipping( false );
 
     m_isClipBoxValid = false;
+}
+
+wxLayoutDirection wxQtDCImpl::GetLayoutDirection() const
+{
+    if ( m_layoutDir == wxLayout_Default && m_window )
+    {
+        return m_window->GetLayoutDirection();
+    }
+
+    return m_layoutDir;
+}
+
+void wxQtDCImpl::SetLayoutDirection(wxLayoutDirection dir)
+{
+    m_layoutDir = dir;
+
+    // QPainter::setLayoutDirection() affects text drawing only.
+    // i.e.: painter's origin and axes orientations are not affected.
+    m_qtPainter->setLayoutDirection(dir == wxLayout_RightToLeft ? Qt::RightToLeft
+                                                                : Qt::LeftToRight);
+
+    // No need to mirror the painter here (in RTL layout) as it will be adjusted
+    // in ComputeScaleAndOrigin() anyway.
 }
 
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -757,6 +826,15 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
     QPixmap pix = *bmp.GetHandle();
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // bitmap is not mirrored
+        m_qtPainter->save();
+        m_qtPainter->scale(-1, 1);
+        x = -x - bmp.GetWidth();
+    }
+
     if (pix.depth() == 1) {
         //Monochrome bitmap, draw using text fore/background
 
@@ -781,85 +859,82 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                 pix.setMask(*bmp.GetMask()->GetHandle());
             m_qtPainter->drawPixmap(x, y, pix);
     }
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+        m_qtPainter->restore();
 }
 
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
-    QPen savedPen = m_qtPainter->pen();
+    m_qtPainter->save();
+
     m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
     // Disable logical function
-    QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
     m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
 
     if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
     {
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
 
-        //Save pen/brush
-        QBrush savedBrush = m_qtPainter->background();
-
-        //Use text colors
         m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
-
-        //Draw
-        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
-
-        //Restore saved settings
-        m_qtPainter->setBackground(savedBrush);
-
-
-        m_qtPainter->setBackgroundMode(Qt::TransparentMode);
     }
-    else
-        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 
-    m_qtPainter->setPen(savedPen);
-    m_qtPainter->setCompositionMode( savedOp );
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // text is not mirrored
+        m_qtPainter->scale(-1, 1);
+        x = -x;
+    }
+
+    QFontMetrics metrics = m_qtPainter->fontMetrics();
+
+    wxStringTokenizer tokenizer(text, "\n");
+    while ( tokenizer.HasMoreTokens() )
+    {
+        const wxString line = tokenizer.GetNextToken();
+        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(line));
+        y += metrics.lineSpacing();
+    }
+
+    m_qtPainter->restore();
 }
 
 void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
                                wxCoord x, wxCoord y, double angle)
 {
+    m_qtPainter->save();
+
     if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        m_qtPainter->scale(-1, 1);
+
+        x = -x;
+        angle = -angle;
+    }
 
     //Move and rotate (reverse angle direction in Qt and wx)
     m_qtPainter->translate(x, y);
     m_qtPainter->rotate(-angle);
 
-    QPen savedPen = m_qtPainter->pen();
     m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
     // Disable logical function
-    QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
     m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
 
     if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
     {
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
 
-        //Save pen/brush
-        QBrush savedBrush = m_qtPainter->background();
-
-        //Use text colors
         m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
-
-        //Draw
-        m_qtPainter->drawText(0, 0, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
-
-        //Restore saved settings
-        m_qtPainter->setBackground(savedBrush);
-
-        m_qtPainter->setBackgroundMode(Qt::TransparentMode);
     }
-    else
-        m_qtPainter->drawText(0, 0, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 
-    //Reset to default
-    ComputeScaleAndOrigin();
-    m_qtPainter->setPen(savedPen);
-    m_qtPainter->setCompositionMode( savedOp );
+    m_qtPainter->drawText(0, 0, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+
+    m_qtPainter->restore();
 }
 
 bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
@@ -998,6 +1073,19 @@ void wxQtDCImpl::DoDrawPolyPolygon(int n,
 void wxQtDCImpl::ComputeScaleAndOrigin()
 {
     QTransform t;
+
+    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        int w;
+
+        if ( m_window )
+            m_window->GetClientSize(&w, nullptr);
+        else
+            GetSize(&w, nullptr);
+
+        t.translate(w, 0);
+        t.scale(-1, 1);
+    }
 
     // First apply device origin
     t.translate( m_deviceOriginX + m_deviceLocalOriginX,
