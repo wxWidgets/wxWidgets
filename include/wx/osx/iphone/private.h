@@ -112,6 +112,7 @@ public :
     bool                EnableTouchEvents(int WXUNUSED(eventsMask)) { return false; }
 
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
+    virtual void        SetupKeyEvent(wxKeyEvent &wxevent, WXEvent event, UIPress* press, NSString* charString = nullptr);
 
     // thunk connected calls
 
@@ -119,6 +120,7 @@ public :
     virtual void        touchEvent(WX_NSSet touches, WX_UIEvent event, WXWidget slf, void* _cmd);
     virtual bool        becomeFirstResponder(WXWidget slf, void* _cmd);
     virtual bool        resignFirstResponder(WXWidget slf, void* _cmd);
+    virtual void        keyEvent(WX_NSSet presses, WXEvent event, WXWidget slf, void* _cmd);
 
     // action
 
