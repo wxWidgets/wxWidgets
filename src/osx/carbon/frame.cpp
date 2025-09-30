@@ -24,6 +24,8 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
+#include "wx/artprov.h"
+#include "wx/stattext.h"
 
 namespace
 {
@@ -49,6 +51,10 @@ wxEND_EVENT_TABLE()
 // creation/destruction
 // ----------------------------------------------------------------------------
 
+#ifdef __WXOSX_IPHONE__
+   #include "../../../art/prev_screen.xpm"
+#endif
+
 bool wxFrame::Create(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
@@ -60,14 +66,29 @@ bool wxFrame::Create(wxWindow *parent,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
 
+#ifdef __WXOSX_IPHONE__
+    if (parent != nullptr) {
+        // We are on the next screen, provide a back button and title
+        wxToolBar *tb = CreateToolBar();
+        // tb->AddTool( wxID_CLOSE, wxEmptyString, wxArtProvider::GetBitmap(wxART_PREV_SCREEN) ); doesn't work for some reason
+        tb->AddTool( wxID_CLOSE, wxEmptyString, wxBitmap( prev_screen_xpm ) );
+        tb->AddStretchableSpace();
+        tb->AddControl( new wxStaticText( tb, wxID_ANY, title ) );
+        tb->AddStretchableSpace();
+        tb->Realize();
+    }
+#endif
+
     return true;
 }
 
 // get the origin of the client area in the client coordinates
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
+    // this gets the size of iOS status bar
     wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
 
+    // this adds the size of the toolbar to it
 #if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__)
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
@@ -359,18 +380,23 @@ void wxFrame::PositionToolBar()
     }
 #endif
 
-#ifdef __WXOSX_IPHONE__
-    // TODO integrate this in a better way, on iphone the status bar is not a child of the content view
-    // but the toolbar is
-    ch -= 20;
-#endif
-
     if (GetToolBar())
     {
         const int direction = GetToolBar()->GetDirection();
         int tx, ty, tw, th;
 
         tx = ty = 0 ;
+        // The docs say about wxFrame::GetClientAreaOrigin() that it returns
+        // the origin of the frame client area and that it "may be different
+        // from (0, 0) if the frame has a toolbar." so we cannot use it to 
+        // place the tool bar. We use GetContentArea() instead.
+        if ( m_nowpeer )
+        {
+            int left, top, w, h;
+            m_nowpeer->GetContentArea(left, top, w, h);
+            tx = left;
+            ty = top;
+        }
         GetToolBar()->GetSize(&tw, &th);
 
         if (direction == wxTB_LEFT)
@@ -398,7 +424,7 @@ void wxFrame::PositionToolBar()
         {
 #if !wxOSX_USE_NATIVE_TOOLBAR
             // Use the 'real' position
-            GetToolBar()->SetSize(tx , ty , cw , th, wxSIZE_NO_ADJUSTMENTS );
+            GetToolBar()->SetSize(tx , ty, cw , th, wxSIZE_NO_ADJUSTMENTS );
 #endif
         }
     }

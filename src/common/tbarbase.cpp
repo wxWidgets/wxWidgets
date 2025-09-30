@@ -259,7 +259,7 @@ wxToolBarToolBase *wxToolBarBase::AddSeparator()
 
 wxToolBarToolBase *wxToolBarBase::InsertSeparator(size_t pos)
 {
-    return DoInsertNewTool(pos, CreateSeparator());
+    return DoInsertNewTool(pos, CreateSeparator(wxID_SEPARATOR));
 }
 
 wxToolBarToolBase *wxToolBarBase::AddStretchableSpace()
@@ -269,7 +269,15 @@ wxToolBarToolBase *wxToolBarBase::AddStretchableSpace()
 
 wxToolBarToolBase *wxToolBarBase::InsertStretchableSpace(size_t pos)
 {
-    wxToolBarToolBase * const tool = CreateSeparator();
+#ifdef __WXOSX_IPHONE__
+   // The hack below does not work on iPhone as the tools are
+   // created in the constructor not Realize. The hack the hack
+   // by add a distinct ID
+   const int id = wxID_STRETCHABLE_SEPARATOR;
+#else
+   const int id = wxID_SEPARATOR;
+#endif
+    wxToolBarToolBase * const tool = CreateSeparator( id );
     if ( tool )
     {
         // this is a hack but we know that all the current implementations

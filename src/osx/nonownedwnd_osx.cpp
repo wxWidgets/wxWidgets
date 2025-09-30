@@ -253,6 +253,7 @@ wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const
 {
     int left, top, width, height;
     m_nowpeer->GetContentArea(left, top, width, height);
+
     return wxPoint(left, top);
 }
 
@@ -468,11 +469,18 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
     // under iphone with a translucent status bar the m_nowpeer returns the
     // inner area, while the content area extends under the translucent
     // status bar, therefore we use the content view's area
-#ifdef __WXOSX_IPHONE__
-    GetPeer()->GetContentArea(left, top, w, h);
-#else
+    //
+    // RR: I am not sure about ContentArea vs. ClientArea in this case.
+    // I think GetClientSize() refers to the area below menubar and toolbar
+    // and in the case of iOS below the iOS statusbar and the toolbar.
+    // The area behind the iOS status bar text/symbols (Wifi and battery
+    // status etc.) is part of the background and we should be able to 
+    // draw into this in the background code. 
+//#ifdef __WXOSX_IPHONE__
+//    GetPeer()->GetContentArea(left, top, w, h);
+//#else
     m_nowpeer->GetContentArea(left, top, w, h);
-#endif
+//#endif
 
     if (width)
        *width = w ;
