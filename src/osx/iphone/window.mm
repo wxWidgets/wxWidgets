@@ -30,7 +30,7 @@
 // ----------------------------------------------------------------------------
 
 // These functions are called from the code but are also useful in the debugger
-// (especially wxDumpNSView(), as selectors can be printed out directly anyhow),
+// (especially wxDumpUIView(), as selectors can be printed out directly anyhow),
 // so make them just static instead of putting them in an anonymous namespace
 // to make it easier to call them.
 
@@ -904,11 +904,16 @@ long wxOSXTranslateKey( UIPress* press, int eventType )
             retval = '0';
             break;
         default:
-            if ( keyCode >= UIKeyboardHIDUsageKeyboardA && keyCode <= UIKeyboardHIDUsageKeyboardZ ) {
+            if ( keyCode >= UIKeyboardHIDUsageKeyboardA && keyCode <= UIKeyboardHIDUsageKeyboardZ )
+            {
                 retval = 'a' + (keyCode - UIKeyboardHIDUsageKeyboardA );
-            } else if ( keyCode >= UIKeyboardHIDUsageKeyboard1 && keyCode <= UIKeyboardHIDUsageKeyboard9 ) {
+            }
+            else if ( keyCode >= UIKeyboardHIDUsageKeyboard1 && keyCode <= UIKeyboardHIDUsageKeyboard9 )
+            {
                 retval = '1' + (keyCode - UIKeyboardHIDUsageKeyboard1 );
-            } else if ( keyCode >= UIKeyboardHIDUsageKeyboardF1 && keyCode <= UIKeyboardHIDUsageKeyboardF12 ) {
+            }
+            else if ( keyCode >= UIKeyboardHIDUsageKeyboardF1 && keyCode <= UIKeyboardHIDUsageKeyboardF12 )
+            {
                 retval = WXK_F1 + (keyCode - UIKeyboardHIDUsageKeyboardF1 );
             }
             break;
@@ -1050,7 +1055,8 @@ void wxWidgetIPhoneImpl::keyEvent( NSSet *presses, UIEvent* event, WXWidget slf,
         m_wxPeer->OSXHandleKeyEvent(wxevent);
     }
 
-    if ( !handled ) {
+    if ( !handled )
+    {
         wxOSX_PressesHandlerPtr superimpl = (wxOSX_PressesHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, presses, event);
     }
