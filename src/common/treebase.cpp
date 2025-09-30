@@ -24,6 +24,8 @@
 
 #include "wx/treectrl.h"
 #include "wx/imaglist.h"
+#include "wx/dcclient.h"
+#include "wx/string.h"
 
 extern WXDLLEXPORT_DATA(const char) wxTreeCtrlNameStr[] = "treeCtrl";
 
@@ -200,6 +202,19 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
     DoSetItemState(item, state);
 }
 
+// Helper to get depth of a tree node
+static int wxGetTreeItemDepth(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id)
+{
+    int depth = 0;
+    wxTreeItemId parent = treeCtrl->GetItemParent(id);
+    while (parent.IsOk())
+    {
+        depth++;
+        parent = treeCtrl->GetItemParent(parent);
+    }
+    return depth;
+}
+
 static void
 wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
 {
@@ -214,6 +229,23 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
 #endif
 
         size.IncTo(wxSize(rect.GetRight(), rect.GetBottom()));
+    }
+    else if (id != treeCtrl->GetRootItem())
+    {
+        // Estimate width for collapsed (invisible) node
+        wxString label = treeCtrl->GetItemText(id);
+        wxClientDC dc(const_cast<wxTreeCtrlBase*>(treeCtrl));
+        dc.SetFont(treeCtrl->GetFont());
+        wxSize textSize = dc.GetTextExtent(label);
+        int indent = treeCtrl->GetIndent();
+        int iconWidth = 0, h = 0;
+        int imageIndex = treeCtrl->GetItemImage(id);
+        if (treeCtrl->GetImageList() && imageIndex != -1)
+            treeCtrl->GetImageList()->GetSize(imageIndex, iconWidth, h);
+        int depth = wxGetTreeItemDepth(treeCtrl, id);
+        int extraPadding = 20; // experience-based value, can be adjusted
+        int totalWidth = indent * depth + iconWidth + textSize.GetWidth() + extraPadding;
+        size.IncTo(wxSize(totalWidth, size.GetHeight()));
     }
 
     wxTreeItemIdValue cookie;
