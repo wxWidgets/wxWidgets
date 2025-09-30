@@ -22,6 +22,39 @@
 
 #include <objc/runtime.h>
 
+#define TRACE_FOCUS "focus"
+#define TRACE_KEYS  "keyevent"
+
+// ----------------------------------------------------------------------------
+// debugging helpers
+// ----------------------------------------------------------------------------
+
+// These functions are called from the code but are also useful in the debugger
+// (especially wxDumpNSView(), as selectors can be printed out directly anyhow),
+// so make them just static instead of putting them in an anonymous namespace
+// to make it easier to call them.
+
+static wxString wxDumpSelector(SEL cmd)
+{
+    return wxStringWithNSString(NSStringFromSelector(cmd));
+}
+
+static wxString wxDumpUIView(UIView* view)
+{
+    wxWidgetImpl* const impl = wxWidgetImpl::FindFromWXWidget(view);
+    if ( !impl )
+        return wxStringWithNSString([view description]);
+
+    return wxString::Format("%s belonging to %s",
+                            wxStringWithNSString([view className]),
+                            wxDumpWindow(impl->GetWXPeer())
+                            );
+}
+
+// ----------------------------------------------------------------------------
+// Focus
+// ----------------------------------------------------------------------------
+
 WXWidget wxWidgetImpl::FindFocus()
 {
     UIView* focusedView = nil;
@@ -66,6 +99,11 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void)handleTouchEvent:(NSSet *)touches withEvent:(UIEvent *)event;
+
+- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
+- (void)pressesChanged:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
+- (void)pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event;
 
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
@@ -221,6 +259,19 @@ BOOL wxOSX_resignFirstResponder(UIView* self, SEL _cmd)
     return impl->resignFirstResponder(self, _cmd);
 }
 
+void wxOSX_keyEvent(UIView* self, SEL _cmd, NSSet* presses, UIEvent *event)
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == nullptr)
+    {
+        wxLogTrace(TRACE_KEYS, "Dropping %s for %s",
+                   wxDumpSelector(_cmd), wxDumpUIView(self));
+        return;
+    }
+
+    impl->keyEvent(presses, event, self, _cmd);
+}
+
 void wxOSX_drawRect(UIView* self, SEL _cmd, CGRect rect)
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -238,6 +289,12 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
     class_addMethod(c, @selector(touchesEnded:withEvent:), (IMP) wxOSX_touchEvent, "v@:@@");
     class_addMethod(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" );
     class_addMethod(c, @selector(resignFirstResponder), (IMP) wxOSX_resignFirstResponder, "c@:" );
+
+    class_addMethod(c, @selector(pressesBegan:withEvent:), (IMP) wxOSX_keyEvent, "v@:@@" );
+    class_addMethod(c, @selector(pressesChanged:withEvent:), (IMP) wxOSX_keyEvent, "v@:@@" );
+    class_addMethod(c, @selector(pressesEnded:withEvent:), (IMP) wxOSX_keyEvent, "v@:@@" );
+    class_addMethod(c, @selector(pressesCancelled:withEvent:withEvent:), (IMP) wxOSX_keyEvent, "v@:@@" );
+
     class_addMethod(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_CGRect={_CGPoint=ff}{_CGSize=ff}}" );
 }
 
@@ -623,6 +680,7 @@ void wxWidgetIPhoneImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* ot
 
 typedef void (*wxOSX_DrawRectHandlerPtr)(UIView* self, SEL _cmd, CGRect rect);
 typedef BOOL (*wxOSX_FocusHandlerPtr)(UIView* self, SEL _cmd);
+typedef void (*wxOSX_PressesHandlerPtr)(UIView* self, SEL _cmd, NSSet* presses, UIEvent* event);
 
 bool wxWidgetIPhoneImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 {
@@ -757,6 +815,246 @@ void wxWidgetIPhoneImpl::controlTextDidChange()
     }
 }
 
+long wxOSXTranslateKey( UIPress* press, int eventType )
+{
+    long retval = 0;
+    UIKey* key = press.key;
+
+    if ( key == nil )
+        return 0;
+
+    UIKeyboardHIDUsage keyCode = [key keyCode];
+    switch( keyCode )
+    {
+        // command key
+        case UIKeyboardHIDUsageKeyboardLeftGUI:
+        case UIKeyboardHIDUsageKeyboardRightGUI:
+            retval = WXK_CONTROL;
+            break;
+        // caps locks key
+        case UIKeyboardHIDUsageKeyboardCapsLock: // Capslock
+            retval = WXK_CAPITAL;
+            break;
+        // shift key
+        case UIKeyboardHIDUsageKeyboardLeftShift: // Left Shift
+        case UIKeyboardHIDUsageKeyboardRightShift: // Right Shift
+            retval = WXK_SHIFT;
+            break;
+        // alt key
+        case UIKeyboardHIDUsageKeyboardLeftAlt: // Left Alt
+        case UIKeyboardHIDUsageKeyboardRightAlt: // Right Alt
+            retval = WXK_ALT;
+            break;
+        // ctrl key
+        case UIKeyboardHIDUsageKeyboardLeftControl: // Left Ctrl
+        case UIKeyboardHIDUsageKeyboardRightControl: // Right Ctrl
+            retval = WXK_RAW_CONTROL;
+            break;
+        // clear key
+        case UIKeyboardHIDUsageKeyboardClear:
+            retval = WXK_CLEAR;
+            break;
+        // tab key
+        case UIKeyboardHIDUsageKeyboardTab:
+            retval = WXK_TAB;
+            break;
+
+        // numpad enter key End-of-text character ETX U+0003
+        case UIKeyboardHIDUsageKeypadEnter:
+            retval = WXK_NUMPAD_ENTER;
+            break;
+        // backspace key
+        case UIKeyboardHIDUsageKeyboardDeleteOrBackspace :
+            retval = WXK_BACK;
+            break;
+        case UIKeyboardHIDUsageKeyboardUpArrow :
+            retval = WXK_UP;
+            break;
+        case UIKeyboardHIDUsageKeyboardDownArrow :
+            retval = WXK_DOWN;
+            break;
+        case UIKeyboardHIDUsageKeyboardLeftArrow :
+            retval = WXK_LEFT;
+            break;
+        case UIKeyboardHIDUsageKeyboardRightArrow :
+            retval = WXK_RIGHT;
+            break;
+        case UIKeyboardHIDUsageKeyboardInsert  :
+            retval = WXK_INSERT;
+            break;
+        case UIKeyboardHIDUsageKeyboardDeleteForward  :
+            retval = WXK_DELETE;
+            break;
+        case UIKeyboardHIDUsageKeyboardHome  :
+            retval = WXK_HOME;
+            break;
+        case UIKeyboardHIDUsageKeyboardEnd  :
+            retval = WXK_END;
+            break;
+        case UIKeyboardHIDUsageKeyboardPageUp  :
+            retval = WXK_PAGEUP;
+            break;
+       case UIKeyboardHIDUsageKeyboardPageDown  :
+            retval = WXK_PAGEDOWN;
+            break;
+       case UIKeyboardHIDUsageKeyboardHelp  :
+            retval = WXK_HELP;
+            break;
+        case UIKeyboardHIDUsageKeyboard0:
+            retval = '0';
+            break;
+        default:
+            if ( keyCode >= UIKeyboardHIDUsageKeyboardA && keyCode <= UIKeyboardHIDUsageKeyboardZ ) {
+                retval = 'a' + (keyCode - UIKeyboardHIDUsageKeyboardA );
+            } else if ( keyCode >= UIKeyboardHIDUsageKeyboard1 && keyCode <= UIKeyboardHIDUsageKeyboard9 ) {
+                retval = '1' + (keyCode - UIKeyboardHIDUsageKeyboard1 );
+            } else if ( keyCode >= UIKeyboardHIDUsageKeyboardF1 && keyCode <= UIKeyboardHIDUsageKeyboardF12 ) {
+                retval = WXK_F1 + (keyCode - UIKeyboardHIDUsageKeyboardF1 );
+            }
+            break;
+    }
+
+    // Check for NUMPAD keys.  For KEY_UP/DOWN events we need to use the
+    // WXK_NUMPAD constants, but for the CHAR event we want to use the
+    // standard ascii values
+    if ( eventType != wxEVT_CHAR )
+    {
+        switch( [key keyCode] )
+        {
+            case UIKeyboardHIDUsageKeypadSlash: // /
+                retval = WXK_NUMPAD_DIVIDE;
+                break;
+            case UIKeyboardHIDUsageKeypadAsterisk: // *
+                retval = WXK_NUMPAD_MULTIPLY;
+                break;
+            case UIKeyboardHIDUsageKeypadHyphen: // -
+                retval = WXK_NUMPAD_SUBTRACT;
+                break;
+            case UIKeyboardHIDUsageKeypadPlus: // +
+                retval = WXK_NUMPAD_ADD;
+                break;
+            case UIKeyboardHIDUsageKeypadPeriod: // .
+                retval = WXK_NUMPAD_DECIMAL;
+                break;
+            case UIKeyboardHIDUsageKeypad0: // 0
+                retval = WXK_NUMPAD0;
+                break;
+            case UIKeyboardHIDUsageKeypad1: // 1
+                retval = WXK_NUMPAD1;
+                break;
+            case UIKeyboardHIDUsageKeypad2: // 2
+                retval = WXK_NUMPAD2;
+                break;
+            case UIKeyboardHIDUsageKeypad3: // 3
+                retval = WXK_NUMPAD3;
+                break;
+            case UIKeyboardHIDUsageKeypad4: // 4
+                retval = WXK_NUMPAD4;
+                break;
+            case UIKeyboardHIDUsageKeypad5: // 5
+                retval = WXK_NUMPAD5;
+                break;
+            case UIKeyboardHIDUsageKeypad6: // 6
+                retval = WXK_NUMPAD6;
+                break;
+            case UIKeyboardHIDUsageKeypad7: // 7
+                retval = WXK_NUMPAD7;
+                break;
+            case UIKeyboardHIDUsageKeypad8: // 8
+                retval = WXK_NUMPAD8;
+                break;
+            case UIKeyboardHIDUsageKeypad9: // 9
+                retval = WXK_NUMPAD9;
+                break;
+            default:
+                //retval = [event keyCode];
+                break;
+        }
+    }
+    return retval;
+}
+void wxWidgetIPhoneImpl::SetupKeyEvent(wxKeyEvent &wxevent , UIEvent* nsEvent, UIPress* press, NSString* charString)
+{
+    UIPressPhase pressPhase = press.phase;
+
+    wxevent.SetTimestamp( static_cast<long>([press timestamp] * 1000) ) ;
+
+    long keyval = 0;
+
+    if ( press.key )
+    {
+        UIKeyModifierFlags modifiers = [press.key modifierFlags];
+
+        wxevent.m_shiftDown = modifiers & UIKeyModifierShift; // UIKeyModifierAlphaShift for capslock
+        wxevent.m_rawControlDown = modifiers & UIKeyModifierControl;
+        wxevent.m_altDown = modifiers & UIKeyModifierAlternate;
+        wxevent.m_controlDown = modifiers & UIKeyModifierCommand;
+        wxevent.m_rawCode = (wxUint32) ([press.key keyCode]);
+        wxevent.m_rawFlags =(wxUint32) modifiers;
+
+    }
+
+    if (wxevent.GetEventType() != wxEVT_CHAR)
+    {
+        keyval = wxOSXTranslateKey(press, wxevent.GetEventType()) ;
+        switch (pressPhase)
+        {
+            case UIPressPhaseBegan :
+                wxevent.SetEventType( wxEVT_KEY_DOWN )  ;
+                break;
+            case UIPressPhaseStationary:
+                wxevent.SetEventType( wxEVT_KEY_DOWN )  ;
+                wxevent.m_isRepeat = true;
+                break;
+            case UIPressPhaseEnded :
+                wxevent.SetEventType( wxEVT_KEY_UP )  ;
+                break;
+            default :
+                break ;
+        }
+    }
+    else
+    {
+        long keycode = wxOSXTranslateKey( press, wxEVT_CHAR );
+        if ( (keycode > 0 && keycode < WXK_SPACE) || keycode == WXK_DELETE || keycode >= WXK_START )
+        {
+            keyval = keycode;
+        }
+    }
+
+    wxevent.m_keyCode = keyval;
+
+    wxWindowMac* peer = GetWXPeer();
+    if ( peer )
+    {
+        wxevent.SetEventObject(peer);
+        wxevent.SetId(peer->GetId()) ;
+    }
+}
+
+void wxWidgetIPhoneImpl::keyEvent( NSSet *presses, UIEvent* event, WXWidget slf, void *_cmd)
+{
+    wxLogTrace(TRACE_KEYS, "Got %s for %s",
+               wxDumpSelector((SEL)_cmd), wxDumpUIView(slf));
+
+    if ( !m_wxPeer->IsEnabled() )
+        return;
+
+    wxKeyEvent wxevent;
+
+    bool handled = false;
+
+    for (UIPress *press in (NSSet<UIPress *> *) presses)
+    {
+        SetupKeyEvent(wxevent, event, press , nil);
+        m_wxPeer->OSXHandleKeyEvent(wxevent);
+    }
+
+    if ( !handled ) {
+        wxOSX_PressesHandlerPtr superimpl = (wxOSX_PressesHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        superimpl(slf, (SEL)_cmd, presses, event);
+    }
+}
 //
 // Factory methods
 //
