@@ -58,11 +58,6 @@
 #define wxUSE_TOOLTIPS 0
 #endif
 
-#if wxUSE_DATAVIEWCTRL
-#undef wxUSE_DATAVIEWCTRL
-#define wxUSE_DATAVIEWCTRL 0
-#endif
-
 #if wxUSE_TREELISTCTRL
 #undef wxUSE_TREELISTCTRL
 #define wxUSE_TREELISTCTRL 0
@@ -85,11 +80,6 @@
 #define wxUSE_CARET 0
 #endif
 
-#if wxUSE_CHOICE
-#undef wxUSE_CHOICE
-#define wxUSE_CHOICE 0
-#endif
-
 #if wxUSE_COMBOBOX
 #undef wxUSE_COMBOBOX
 #define wxUSE_COMBOBOX 0
@@ -105,7 +95,6 @@
 #undef wxUSE_ABOUTDLG
 #undef wxUSE_STATLINE
 #undef wxUSE_COLLPANE
-#undef wxUSE_STATBMP
 #undef wxUSE_STATBOX
 #undef wxUSE_RADIOBTN
 #undef wxUSE_RADIOBOX
@@ -117,15 +106,10 @@
 #define wxUSE_ABOUTDLG 0
 #define wxUSE_STATLINE 0
 #define wxUSE_COLLPANE 0
-#define wxUSE_STATBMP 0
 #define wxUSE_STATBOX 0
 #define wxUSE_RADIOBTN 0
 #define wxUSE_RADIOBOX 0
 #define wxUSE_TOGGLEBTN 0
-
-#undef wxUSE_HTML
-
-#define wxUSE_HTML 0
 
 #undef wxUSE_RICHTEXT
 #define wxUSE_RICHTEXT 0
@@ -137,7 +121,6 @@
 #undef wxUSE_COMBOCTRL
 #undef wxUSE_ODCOMBOBOX
 #undef wxUSE_BITMAPCOMBOBOX
-#undef wxUSE_BMPBUTTON
 #undef wxUSE_CHECKLISTBOX
 #undef wxUSE_GRID
 #undef wxUSE_LISTBOX
@@ -147,7 +130,6 @@
 #undef wxUSE_SPINCTRL
 #undef wxUSE_TREECTRL
 #undef wxUSE_DATEPICKCTRL
-#undef wxUSE_DATAVIEWCTRL
 #undef wxUSE_EDITABLELISTBOX
 #undef wxUSE_FILEPICKERCTRL
 #undef wxUSE_DIRPICKERCTRL
@@ -168,7 +150,6 @@
 #define wxUSE_COMBOCTRL 0
 #define wxUSE_ODCOMBOBOX 0
 #define wxUSE_BITMAPCOMBOBOX 0
-#define wxUSE_BMPBUTTON 0
 #define wxUSE_CHECKLISTBOX 0
 #define wxUSE_GRID 0
 #define wxUSE_LISTBOX 0
@@ -178,7 +159,6 @@
 #define wxUSE_SPINCTRL 0
 #define wxUSE_TREECTRL 0
 #define wxUSE_DATEPICKCTRL 0
-#define wxUSE_DATAVIEWCTRL 0
 #define wxUSE_EDITABLELISTBOX 0
 #define wxUSE_FILEPICKERCTRL 0
 #define wxUSE_DIRPICKERCTRL 0
@@ -195,10 +175,8 @@
 #undef wxUSE_LOGWINDOW
 #undef wxUSE_LOG_DIALOG
 #undef wxUSE_LISTBOOK
-#undef wxUSE_CHOICEBOOK
 #undef wxUSE_TREEBOOK
 #undef wxUSE_TOOLBOOK
-#undef wxUSE_CHOICEDLG
 #undef wxUSE_HELP
 #undef wxUSE_PROGRESSDLG
 #undef  wxUSE_FONTDLG
@@ -218,10 +196,8 @@
 #define wxUSE_LOGWINDOW 0
 #define wxUSE_LOG_DIALOG 0
 #define wxUSE_LISTBOOK 0
-#define wxUSE_CHOICEBOOK 0
 #define wxUSE_TREEBOOK 0
 #define wxUSE_TOOLBOOK 0
-#define wxUSE_CHOICEDLG 0
 #define wxUSE_HELP 0
 #define wxUSE_PROGRESSDLG 0
 #define  wxUSE_FONTDLG 0
