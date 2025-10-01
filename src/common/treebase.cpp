@@ -203,21 +203,8 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
     DoSetItemState(item, state);
 }
 
-// Helper to get depth of a tree node
-static int wxGetTreeItemDepth(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id)
-{
-    int depth = 0;
-    wxTreeItemId parent = treeCtrl->GetItemParent(id);
-    while (parent.IsOk())
-    {
-        depth++;
-        parent = treeCtrl->GetItemParent(parent);
-    }
-    return depth;
-}
-
 static void
-wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
+wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size, int depth)
 {
     wxRect rect;
 
@@ -244,7 +231,6 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
         int imageIndex = treeCtrl->GetItemImage(id);
         if (treeCtrl->GetImageList() && imageIndex != -1)
             treeCtrl->GetImageList()->GetSize(imageIndex, iconWidth, h);
-        int depth = wxGetTreeItemDepth(treeCtrl, id);
         int height = std::max(h, textSize.GetHeight());
         int extraPadding = 20; // experience-based value, can be adjusted
         int totalWidth = indent * depth + iconWidth + textSize.GetWidth() + extraPadding;
@@ -256,7 +242,7 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
           item.IsOk();
           item = treeCtrl->GetNextChild(id, cookie) )
     {
-        wxGetBestTreeSize(treeCtrl, item, size);
+        wxGetBestTreeSize(treeCtrl, item, size, depth + 1);
     }
 }
 
@@ -293,7 +279,7 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
         // iterate over all items recursively
         wxTreeItemId idRoot = GetRootItem();
         if ( idRoot.IsOk() )
-            wxGetBestTreeSize(this, idRoot, size);
+            wxGetBestTreeSize(this, idRoot, size, 0);
     }
 
     // need some minimal size even for empty tree
