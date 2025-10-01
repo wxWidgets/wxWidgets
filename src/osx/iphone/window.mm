@@ -910,8 +910,8 @@ void wxWidgetIPhoneImpl::controlAction(void* sender, wxUint32 controlEvent, WX_U
     if ( controlEvent == UIControlEventTouchUpInside )
     {
         GetWXPeer()->OSXHandleClicked(0);
-    } else 
-    if ( controlEvent == UIControlEventValueChanged )
+    }
+    else if ( controlEvent == UIControlEventValueChanged )
     {
         GetWXPeer()->OSXHandleClicked(0);
     }
