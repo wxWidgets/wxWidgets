@@ -662,7 +662,8 @@ void wxWidgetIPhoneImpl::ScrollRect( const wxRect *rect, int dx, int dy )
 
 void wxWidgetIPhoneImpl::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
-    if (m_blockScrollWindow) return;
+    if (m_blockScrollWindow)
+        return;
 
     wxUIView* view = (wxUIView*)m_osxView;  // wxUIView derives from UIScrollView
 
