@@ -136,7 +136,7 @@ public :
 
 protected:
     WXWidget          m_osxView;
-    void             *m_controller;
+    void*             m_controller;
     bool              m_blockScrollEvents;
     bool              m_blockScrollWindow;
     int               m_xScrollPixelsPerLine;
