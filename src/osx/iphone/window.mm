@@ -624,7 +624,8 @@ void wxWidgetIPhoneImpl::SetScrollPos(int orient, int pos)
     }
     else if (orient == wxHORIZONTAL)
     {
-        if (m_xScrollPixelsPerLine == 0) return;
+        if (m_xScrollPixelsPerLine == 0)
+            return;
         position = CGPointMake( pos*m_xScrollPixelsPerLine, position.y );
     }
 
