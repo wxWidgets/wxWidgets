@@ -38,7 +38,7 @@ wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0, void *controller = NULL  ) ;
+    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0, void *controller = nullptr ) ;
     wxWidgetIPhoneImpl() ;
     ~wxWidgetIPhoneImpl();
 
