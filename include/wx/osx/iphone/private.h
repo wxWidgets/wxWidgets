@@ -108,7 +108,7 @@ public :
     int                 GetScrollPos(int orient) const;
     void                SetScrollPos(int orient, int pos);
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
-    void     	        ScrollWindow (int dx, int dy, const wxRect *rect=NULL);
+    void     	        ScrollWindow (int dx, int dy, const wxRect* rect = nullptr);
 
     void                SetFont(const wxFont & font);
 
