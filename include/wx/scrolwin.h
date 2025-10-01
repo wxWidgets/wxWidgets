@@ -352,7 +352,7 @@ protected:
     int                   m_xScrollPosition;
     int                   m_yScrollPosition;
     // ScrollPosition is using steps or lines, but if we need single pixel
-    // precisio, then ScrollPositionPixelOffset gets added to 
+    // precision, then ScrollPositionPixelOffset gets added to 
     // ScrollPosition * ScrollPixelsPerLine
     // GetPos() { return ScrollPosition * ScrollPixelsPerLine; }
     // GetPosPrecise() { return (ScrollPosition * ScrollPixelsPerLine) + ScrollPositionPixelOffset; }
