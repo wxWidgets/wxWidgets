@@ -248,7 +248,7 @@ typedef void (*wxOSX_touchEventHandlerPtr)(UIView* self, SEL _cmd, NSSet* touche
 
 void wxOSX_touchEvent(UIView* self, SEL _cmd, NSSet* touches, UIEvent *event )
 {
-    // Call the superclass handler first as that is e.g. handling mouse events for UISegementedControls
+    // Call the superclass handler first as that is e.g. handling mouse events for UISegmentedControls
     wxOSX_touchEventHandlerPtr superimpl = 
         (wxOSX_touchEventHandlerPtr) [[self superclass] instanceMethodForSelector:_cmd];
     superimpl(self, _cmd, touches, event );
