@@ -220,7 +220,8 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
 {
     wxRect rect;
 
-    if ( treeCtrl->GetBoundingRect(id, rect, true /* just the item */) )
+    if ( treeCtrl->GetBoundingRect(id, rect, true /* just the item */)
+         && rect.width > 0 && rect.height > 0 ) // check for valid rect
     {
         // Translate to logical position so we get the full extent
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
