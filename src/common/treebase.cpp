@@ -227,13 +227,13 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size,
         dc.SetFont(treeCtrl->GetFont());
         wxSize textSize = dc.GetTextExtent(label);
         int indent = treeCtrl->GetIndent();
-        int iconWidth = 0, h = 0;
+        wxSize iconSize;
         int imageIndex = treeCtrl->GetItemImage(id);
         if (treeCtrl->GetImageList() && imageIndex != -1)
-            treeCtrl->GetImageList()->GetSize(imageIndex, iconWidth, h);
-        int height = std::max(h, textSize.GetHeight());
+            iconSize = treeCtrl->GetImageLogicalSize(treeCtrl, imageIndex);
+        int height = std::max(iconSize.GetHeight(), textSize.GetHeight());
         int extraPadding = 20; // experience-based value, can be adjusted
-        int totalWidth = indent * depth + iconWidth + textSize.GetWidth() + extraPadding;
+        int totalWidth = indent * depth + iconSize.GetWidth() + textSize.GetWidth() + extraPadding;
         size.IncTo(wxSize(totalWidth, height));
     }
 
