@@ -231,8 +231,7 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size,
         if ( treeCtrl->HasImages() && imageIndex != wxTreeCtrl::NO_IMAGE )
             iconSize = treeCtrl->GetImageLogicalSize(treeCtrl, imageIndex);
         int height = std::max(iconSize.GetHeight(), textSize.GetHeight());
-        int extraPadding = 20; // experience-based value, can be adjusted
-        int totalWidth = indent * depth + iconSize.GetWidth() + textSize.GetWidth() + extraPadding;
+        int totalWidth = indent * depth + iconSize.GetWidth() + textSize.GetWidth() + indent;
         size.IncTo(wxSize(totalWidth, height));
     }
 
