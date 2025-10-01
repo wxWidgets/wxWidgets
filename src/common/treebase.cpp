@@ -223,13 +223,12 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size,
     {
         // Estimate width for collapsed (invisible) node
         wxString label = treeCtrl->GetItemText(id);
-        wxClientDC dc(const_cast<wxTreeCtrlBase*>(treeCtrl));
-        dc.SetFont(treeCtrl->GetFont());
+        wxInfoDC dc(const_cast<wxTreeCtrlBase*>(treeCtrl));
         wxSize textSize = dc.GetTextExtent(label);
         int indent = treeCtrl->GetIndent();
         wxSize iconSize;
         int imageIndex = treeCtrl->GetItemImage(id);
-        if (treeCtrl->GetImageList() && imageIndex != -1)
+        if ( treeCtrl->HasImages() && imageIndex != wxTreeCtrl::NO_IMAGE )
             iconSize = treeCtrl->GetImageLogicalSize(treeCtrl, imageIndex);
         int height = std::max(iconSize.GetHeight(), textSize.GetHeight());
         int extraPadding = 20; // experience-based value, can be adjusted
