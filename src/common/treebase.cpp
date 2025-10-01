@@ -26,6 +26,7 @@
 #include "wx/imaglist.h"
 #include "wx/dcclient.h"
 #include "wx/string.h"
+#include <algorithm>
 
 extern WXDLLEXPORT_DATA(const char) wxTreeCtrlNameStr[] = "treeCtrl";
 
@@ -244,9 +245,10 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
         if (treeCtrl->GetImageList() && imageIndex != -1)
             treeCtrl->GetImageList()->GetSize(imageIndex, iconWidth, h);
         int depth = wxGetTreeItemDepth(treeCtrl, id);
+        int height = std::max(h, textSize.GetHeight());
         int extraPadding = 20; // experience-based value, can be adjusted
         int totalWidth = indent * depth + iconWidth + textSize.GetWidth() + extraPadding;
-        size.IncTo(wxSize(totalWidth, size.GetHeight()));
+        size.IncTo(wxSize(totalWidth, height));
     }
 
     wxTreeItemIdValue cookie;
