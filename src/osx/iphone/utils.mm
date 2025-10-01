@@ -144,18 +144,9 @@ public:
         CGRect bounds = [[UIScreen mainScreen] bounds];
 
         int width, height;
-        if ( UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) )
-        {
-            // portrait
-            width = (int)bounds.size.width ;
-            height = (int)bounds.size.height;
-        }
-        else
-        {
-            // landscape
-            width = (int)bounds.size.height ;
-            height = (int)bounds.size.width;
-        }
+
+        width = (int)bounds.size.width ;
+        height = (int)bounds.size.height;
 
         return wxRect(0, 0, width, height);
     }
