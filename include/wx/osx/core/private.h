@@ -363,7 +363,7 @@ public :
                                       int WXUNUSED(range), bool WXUNUSED(refresh) ) {}
     virtual int         GetScrollPos(int WXUNUSED(orient)) const { return 0; }
     virtual void        SetScrollPos(int WXUNUSED(orient), int WXUNUSED(pos)) {}
-    virtual void 	    ScrollWindow (int WXUNUSED(dx), int WXUNUSED(dy), const wxRect *WXUNUSED(rect)=NULL) {}
+    virtual void 	    ScrollWindow (int WXUNUSED(dx), int WXUNUSED(dy), const wxRect *WXUNUSED(rect) = nullptr) {}
 
     virtual void        SetFont(const wxFont & font) = 0;
 
