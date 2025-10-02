@@ -93,9 +93,19 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
             // iOS already scrolled the window, 
             viewimpl->SetBlockScrollWindow( true );
 
-            wxScrollWinPanEvent event( wxEVT_SCROLLWIN_PAN, position.x, position.y );
-            event.SetEventObject( wxpeer );
-            wxpeer->OSXGetScrollOwnerWindow()->HandleWindowEvent( event );
+            int unitY = position.y / viewimpl->GetYScrollPixelsPerLine();
+            int offsetY = (int)(position.y) % viewimpl->GetYScrollPixelsPerLine();
+            wxScrollWinEvent vevent( wxEVT_SCROLLWIN_THUMBTRACK, unitY, wxVERTICAL );
+            vevent.SetPixelOffset( offsetY );
+            vevent.SetEventObject( wxpeer );
+            wxpeer->OSXGetScrollOwnerWindow()->HandleWindowEvent( vevent );
+
+            int unitX = position.x / viewimpl->GetXScrollPixelsPerLine();
+            int offsetX = (int)(position.x) % viewimpl->GetXScrollPixelsPerLine();
+            wxScrollWinEvent hevent( wxEVT_SCROLLWIN_THUMBTRACK, unitX, wxHORIZONTAL );
+            hevent.SetPixelOffset( offsetX );
+            hevent.SetEventObject( wxpeer );
+            wxpeer->OSXGetScrollOwnerWindow()->HandleWindowEvent( hevent );
 
             viewimpl->SetBlockScrollWindow( false );
         }

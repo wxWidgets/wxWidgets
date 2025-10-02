@@ -69,7 +69,6 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxScrollWinEvent, wxEvent);
-    wxIMPLEMENT_DYNAMIC_CLASS(wxScrollWinPanEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxKeyEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxSizeEvent, wxEvent);
@@ -246,8 +245,6 @@ wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent );
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent );
-
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAN, wxScrollWinPanEvent );
 
 // MultiTouch Events
 wxDEFINE_EVENT( wxEVT_TOUCH_BEGIN, wxMultiTouchEvent );
@@ -569,19 +566,7 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
     m_eventType = commandType;
     m_extraLong = orient;
     m_commandInt = pos;
-}
-
-// ----------------------------------------------------------------------------
-// wxScrollWinPanEvent
-// ----------------------------------------------------------------------------
-
-wxScrollWinPanEvent::wxScrollWinPanEvent(wxEventType commandType,
-                                   int xpos,
-                                   int ypos)
-{
-    m_eventType = commandType;
-    m_x = xpos;
-    m_y = ypos;
+    m_pixelOffset = 0;
 }
 
 // ----------------------------------------------------------------------------

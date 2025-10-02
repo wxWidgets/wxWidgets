@@ -1751,52 +1751,27 @@ public:
                      int pos = 0, int orient = 0);
     wxScrollWinEvent(const wxScrollWinEvent& event) : wxEvent(event)
         {    m_commandInt = event.m_commandInt;
-            m_extraLong = event.m_extraLong;    }
+             m_extraLong = event.m_extraLong; 
+             m_pixelOffset = event.m_pixelOffset; }
 
     int GetOrientation() const { return (int) m_extraLong; }
     int GetPosition() const { return m_commandInt; }
+    int GetPixelOffset() const { return m_pixelOffset; }
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
+    void SetPixelOffset(int pixelOffset) { m_pixelOffset = pixelOffset; }
+
 
     wxNODISCARD virtual wxEvent *Clone() const override { return new wxScrollWinEvent(*this); }
 
 protected:
     int               m_commandInt;
     long              m_extraLong;
+    int               m_pixelOffset;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxScrollWinEvent);
 };
-
-// ScrollWinPan event class, derived fom wxEvent and sent
-// following a pan gesture (scrolling with figers on a 
-// touch screen)
-/*
- wxEVT_SCROLLWIN_PAN
-*/
-
-class WXDLLIMPEXP_CORE wxScrollWinPanEvent : public wxEvent
-{
-public:
-    wxScrollWinPanEvent(wxEventType commandType = wxEVT_NULL,
-                     int xpos = 0, int ypos = 0);
-    wxScrollWinPanEvent(const wxScrollWinPanEvent& event) : wxEvent(event)
-        {    m_x = event.m_x; m_y = event.m_y;    }
-
-    int GetX() const { return m_x; }
-    int GetY() const { return m_y; }
-    void SetX( int pos ) { m_x = pos; }
-    void SetY( int pos ) { m_y = pos; }
-
-    wxNODISCARD virtual wxEvent *Clone() const override { return new wxScrollWinPanEvent(*this); }
-
-protected:
-    int               m_x,m_y;
-
-private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxScrollWinPanEvent);
-};
-
 
 
 // Mouse event class

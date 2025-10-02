@@ -134,6 +134,9 @@ public :
     void                SetBlockScrollWindow( bool block ) { m_blockScrollWindow = block; } 
     bool                GetBlockScrollWindow() const { return m_blockScrollWindow; }
 
+    int                 GetXScrollPixelsPerLine() const { return m_xScrollPixelsPerLine; }
+    int                 GetYScrollPixelsPerLine() const { return m_yScrollPixelsPerLine; }
+
 protected:
     WXWidget          m_osxView;
     void*             m_controller;

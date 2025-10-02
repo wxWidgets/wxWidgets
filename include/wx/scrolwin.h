@@ -182,13 +182,23 @@ public:
     // which it is implemented to not use wxWindow::ScrollWindow().
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
 
-    // Get the view start
+    // Get the view start in units
     void GetViewStart(int *x, int *y) const { DoGetViewStart(x, y); }
 
     wxPoint GetViewStart() const
     {
         wxPoint pt;
         DoGetViewStart(&pt.x, &pt.y);
+        return pt;
+    }
+
+    // Get the view start in pixels
+    void GetViewStartPixels(int *x, int *y) const { DoGetViewStartPixels(x, y); }
+
+    wxPoint GetViewStartPixels() const
+    {
+        wxPoint pt;
+        DoGetViewStartPixels(&pt.x, &pt.y);
         return pt;
     }
 
@@ -252,8 +262,6 @@ public:
 
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
-    void HandleOnPanScroll(wxScrollWinPanEvent& event);
-    void HandleOnPanGesture(wxPanGestureEvent& event);
     void HandleOnSize(wxSizeEvent& event);
     void HandleOnMouseEnter(wxMouseEvent& event);
     void HandleOnMouseLeave(wxMouseEvent& event);
@@ -287,6 +295,9 @@ protected:
 
     // implementation of public methods with the same name
     virtual void DoGetViewStart(int *x, int *y) const;
+    // return view start in pixel, not units
+    virtual void DoGetViewStartPixels(int *x, int *y) const;
+
     virtual void DoScroll(int x, int y) = 0;
     virtual void DoShowScrollbars(wxScrollbarVisibility horz,
                                   wxScrollbarVisibility vert) = 0;

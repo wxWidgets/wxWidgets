@@ -227,30 +227,6 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     if ( wasSkipped )
         event.Skip(false);
 
-    if ( evType == wxEVT_GESTURE_PAN)
-    {
-        m_scrollHelper->HandleOnPanGesture((wxPanGestureEvent &)event);
-        if ( !event.GetSkipped() )
-        {
-            processed = true;
-            wasSkipped = false;
-        }
-    }
-
-    if ( evType == wxEVT_SCROLLWIN_PAN)
-    {
-        m_scrollHelper->HandleOnPanScroll((wxScrollWinPanEvent &)event);
-        if ( !event.GetSkipped() )
-        {
-            // it makes sense to indicate that we processed the message as we
-            // did scroll the window (and also notice that wxAutoScrollTimer
-            // relies on our return value to stop scrolling when we are at top
-            // or bottom already)
-            processed = true;
-            wasSkipped = false;
-        }
-    }
-
     if ( evType == wxEVT_SCROLLWIN_TOP ||
          evType == wxEVT_SCROLLWIN_BOTTOM ||
          evType == wxEVT_SCROLLWIN_LINEUP ||
@@ -505,76 +481,14 @@ void wxScrollHelperBase::SetTargetWindow(wxWindow *target)
 // scrolling implementation itself
 // ----------------------------------------------------------------------------
 
-void wxScrollHelperBase::HandleOnPanGesture(wxPanGestureEvent& event)
-{
-    int xOldPrecisePosition = m_xScrollPixelsPerLine * m_xScrollPosition + m_xScrollPositionPixelOffset;
-    int yOldPrecisePosition = m_yScrollPixelsPerLine * m_yScrollPosition + m_yScrollPositionPixelOffset;
-    int xNewPrecisePosition = xOldPrecisePosition + event.GetDelta().x;
-    int yNewPrecisePosition = yOldPrecisePosition + event.GetDelta().y;
-
-    wxScrollWinPanEvent winPanEvent( wxEVT_SCROLLWIN_PAN, xNewPrecisePosition, yNewPrecisePosition );
-    event.SetEventObject( m_win );
-    // m_win->GetEventHandler()->ProcessEvent( winPanEvent );  cannot do this because it is protected
-    HandleOnPanScroll( winPanEvent );
-}
-
-void wxScrollHelperBase::HandleOnPanScroll(wxScrollWinPanEvent& event)
-{
-    int xOldPrecisePosition = m_xScrollPixelsPerLine * m_xScrollPosition + m_xScrollPositionPixelOffset;
-    int yOldPrecisePosition = m_yScrollPixelsPerLine * m_yScrollPosition + m_yScrollPositionPixelOffset;
-    int xNewPrecisePosition = event.GetX();
-    int yNewPrecisePosition = event.GetY();
-
-    // perform range check here for non iOS devices?
-
-    if ((xNewPrecisePosition == xOldPrecisePosition) && (yNewPrecisePosition == yOldPrecisePosition))
-    {
-        event.Skip();
-        return;
-    }
-
-        // flush all pending repaints before we change m_{x,y}ScrollPosition, as
-        // otherwise invalidated area could be updated incorrectly later when
-        // ScrollWindow() makes sure they're repainted before scrolling them
-#ifdef __WXMAC__
-        // wxWindowMac is taking care of making sure the update area is correctly
-        // set up, while not forcing an immediate redraw
-#else
-        m_targetWindow->Update();
-#endif
-
-    m_xScrollPosition = xNewPrecisePosition / m_xScrollPixelsPerLine;
-    m_xScrollPositionPixelOffset = xNewPrecisePosition % m_xScrollPixelsPerLine;
-    m_win->SetScrollPos(wxHORIZONTAL, m_xScrollPosition);
-
-    m_yScrollPosition = yNewPrecisePosition / m_yScrollPixelsPerLine;
-    m_yScrollPositionPixelOffset = yNewPrecisePosition % m_yScrollPixelsPerLine;
-    m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition);
-
-    if (m_xScrollingEnabled || m_yScrollingEnabled)
-    {
-        int dx = xOldPrecisePosition - xNewPrecisePosition;
-        int dy = yOldPrecisePosition - yNewPrecisePosition;
-        m_targetWindow->ScrollWindow(dx, dy);
-    } 
-    else
-    {
-        m_targetWindow->Refresh(true );
-    }
-
-#ifdef __WXUNIVERSAL__
-    if (m_win != m_targetWindow)
-    {
-        m_win->Refresh(true, GetScrollRect());
-    }
-#endif // __WXUNIVERSAL__
-}
-
-
 void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 {
-    m_xScrollPositionPixelOffset = 0;
-    m_yScrollPositionPixelOffset = 0;
+    int orient = event.GetOrientation();
+    
+    if (orient == wxHORIZONTAL)
+        m_xScrollPositionPixelOffset = 0;
+    else
+        m_yScrollPositionPixelOffset = 0;
 
     int nScrollInc = CalcScrollInc(event);
     if ( nScrollInc == 0 )
@@ -588,7 +502,6 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
     bool needsRefresh = false;
     int dx = 0,
         dy = 0;
-    int orient = event.GetOrientation();
     if (orient == wxHORIZONTAL)
     {
        if ( m_xScrollingEnabled )
@@ -698,11 +611,19 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
         (event.GetEventType() == wxEVT_SCROLLWIN_THUMBRELEASE))
     {
             if (orient == wxHORIZONTAL)
+            {
                 nScrollInc = pos - m_xScrollPosition;
+                m_xScrollPositionPixelOffset = event.GetPixelOffset();
+            }
             else
+            {
                 nScrollInc = pos - m_yScrollPosition;
+                m_yScrollPositionPixelOffset = event.GetPixelOffset();
+            }
     }
 
+// on iOS, overscrolling is allowed
+#ifndef __WXOSX_IPHONE__
     if (orient == wxHORIZONTAL)
     {
         if ( m_xScrollPosition + nScrollInc < 0 )
@@ -737,6 +658,7 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
             }
         }
     }
+#endif
 
     return nScrollInc;
 }
@@ -815,13 +737,22 @@ void wxScrollHelperBase::EnableScrolling (bool x_scroll, bool y_scroll)
     m_yScrollingEnabled = y_scroll;
 }
 
-// Where the current view starts from
+// Where the current view starts from in units
 void wxScrollHelperBase::DoGetViewStart (int *x, int *y) const
 {
     if ( x )
         *x = m_xScrollPosition;
     if ( y )
         *y = m_yScrollPosition;
+}
+
+// Where the current view starts from in pixels
+void wxScrollHelperBase::DoGetViewStartPixels (int *x, int *y) const
+{
+    if ( x )
+        *x = m_xScrollPosition * m_xScrollLinesPerPage + m_xScrollPositionPixelOffset;
+    if ( y )
+        *y = m_yScrollPosition * m_yScrollLinesPerPage + m_yScrollPositionPixelOffset;
 }
 
 void wxScrollHelperBase::DoCalcScrolledPosition(int x, int y,
