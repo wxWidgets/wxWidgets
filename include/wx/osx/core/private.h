@@ -359,7 +359,7 @@ public :
     virtual int         GetIncrement() const = 0;
     virtual void        PulseGauge() = 0;
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
-    virtual void        SetScrollbar( int WXUNUSED(orient), int WXUNUSED(pos), int WXUNUSED(thumb), 
+    virtual void        SetScrollbar( int WXUNUSED(orient), int WXUNUSED(pos), int WXUNUSED(thumb),
                                       int WXUNUSED(range), bool WXUNUSED(refresh) ) {}
     virtual int         GetScrollPos(int WXUNUSED(orient)) const { return 0; }
     virtual void        SetScrollPos(int WXUNUSED(orient), int WXUNUSED(pos)) {}

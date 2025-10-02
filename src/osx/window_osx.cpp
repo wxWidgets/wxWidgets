@@ -1403,12 +1403,12 @@ bool wxWindowMac::EnableTouchEvents(int eventsMask)
 
 #ifdef __WXOSX_IPHONE__
 void wxWindowMac::OSXSetScrollOwnerWindow( wxWindow *owner )
-{ 
+{
     m_scrollOwnerWindow = owner;
 }
 
 void wxWindowMac::OSXSetScrollTargetWindow( wxWindow *target )
-{ 
+{
     m_scrollTargetWindow = target;
     target->OSXSetScrollOwnerWindow( this );
 }
@@ -1966,7 +1966,7 @@ bool wxWindowMac::MacDoRedraw( long time )
                     eevent.SetEventObject( this );
                     if ( ProcessWindowEvent( eevent ) )
                         break;
-                        
+
                     if (!UseBgCol())
                         dc.Clear();
                 }

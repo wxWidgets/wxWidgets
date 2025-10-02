@@ -131,7 +131,7 @@ public :
 
     void*               GetController() { return m_controller; }
     bool                GetBlockScrollEvents() const { return m_blockScrollEvents; }
-    void                SetBlockScrollWindow( bool block ) { m_blockScrollWindow = block; } 
+    void                SetBlockScrollWindow( bool block ) { m_blockScrollWindow = block; }
     bool                GetBlockScrollWindow() const { return m_blockScrollWindow; }
 
     int                 GetXScrollPixelsPerLine() const { return m_xScrollPixelsPerLine; }
