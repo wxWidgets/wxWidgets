@@ -326,7 +326,7 @@ wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
     m_xScrollLinesPerPage =
     m_yScrollLinesPerPage = 0;
 
-    m_xScrollPositionPixelOffset = 
+    m_xScrollPositionPixelOffset =
     m_yScrollPositionPixelOffset = 0;
 
     m_xScrollingEnabled =

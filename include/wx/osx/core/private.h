@@ -282,7 +282,7 @@ public :
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) = 0;
     virtual void        SetForegroundColour( const wxColour& col ) = 0;
 
-    virtual void        SetDeviceLocalOrigin( wxPoint origin ) 
+    virtual void        SetDeviceLocalOrigin( wxPoint origin )
         { m_deviceLocalOrigin = origin; }
     virtual wxPoint     GetDeviceLocalOrigin() const
         { return m_deviceLocalOrigin; }
