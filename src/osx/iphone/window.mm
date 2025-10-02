@@ -79,16 +79,14 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     if ( viewimpl )
     {
         wxWindowMac* wxpeer = (wxWindowMac*) viewimpl->GetWXPeer();
-        if (wxpeer) {
+        if (wxpeer)
+        {
             CGPoint position = [scrollView contentOffset];
 
-            viewimpl->SetDeviceLocalOrigin( wxPoint( -1*position.x, -1*position.y ) );
+            viewimpl->SetDeviceLocalOrigin( wxPoint( -position.x, -position.y ) );
 
             if (viewimpl->GetBlockScrollEvents())
                 return; 
-
-            // wxString name = wxpeer->GetClassInfo()->GetClassName();
-            // wxLogMessage( "scrollViewDidScroll from %s  y %i", name, (int)(-1*position.y) );
 
             // iOS already scrolled the window, 
             viewimpl->SetBlockScrollWindow( true );
@@ -622,14 +620,16 @@ void wxWidgetIPhoneImpl::PulseGauge()
 
 void wxWidgetIPhoneImpl::SetScrollPos(int orient, int pos)
 {
-    if (m_blockScrollWindow) return;
+    if (m_blockScrollWindow)
+        return;
     wxUIView* view = (wxUIView*)m_osxView;  // wxUIView derives from UIScrollView
 
     CGPoint position = [view contentOffset];
 
     if (orient == wxVERTICAL)
     {
-        if (m_yScrollPixelsPerLine == 0) return;
+        if (m_yScrollPixelsPerLine == 0)
+            return;
         position = CGPointMake( position.x, pos*m_yScrollPixelsPerLine );
     }
     else if (orient == wxHORIZONTAL)

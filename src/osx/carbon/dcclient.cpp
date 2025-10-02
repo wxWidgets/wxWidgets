@@ -111,7 +111,8 @@ void wxWindowDCImpl::InheritAttributes(wxWindow *win)
     SetFont(win->GetFont());
 
     SetTextForeground(win->GetForegroundColour());
-    if ( win->UseBackgroundColour() ) {
+    if ( win->UseBackgroundColour() )
+    {
         SetTextBackground(win->GetBackgroundColour());
         SetBackground(win->GetBackgroundColour());
     }
