@@ -484,16 +484,32 @@ void wxScrollHelperBase::SetTargetWindow(wxWindow *target)
 void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 {
     int orient = event.GetOrientation();
+    int oldPos = 0;
     
     if (orient == wxHORIZONTAL)
+    {
+        oldPos = GetViewStartPixels().x;
+        // reset to 0 assuming scrolling by scrollbar or mouse wheel
         m_xScrollPositionPixelOffset = 0;
+    }
     else
+    {
+        oldPos = GetViewStartPixels().y;
+        // reset to 0 assuming scrolling by scrollbar or mouse wheel
         m_yScrollPositionPixelOffset = 0;
+    }
 
     int nScrollInc = CalcScrollInc(event);
-    if ( nScrollInc == 0 )
+
+    int newPos = 0;
+    if (orient == wxHORIZONTAL)
+        newPos = (m_xScrollPosition + nScrollInc) * m_xScrollPixelsPerLine + m_xScrollPositionPixelOffset;
+    else
+        newPos = (m_yScrollPosition + nScrollInc) * m_yScrollPixelsPerLine + m_yScrollPositionPixelOffset;
+
+    if ( newPos == oldPos )
     {
-        // can't scroll further
+        // no scrolling done
         event.Skip();
 
         return;
@@ -506,7 +522,7 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
     {
        if ( m_xScrollingEnabled )
        {
-           dx = -m_xScrollPixelsPerLine * nScrollInc;
+            dx = oldPos - newPos;
        }
        else
        {
@@ -517,7 +533,7 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
     {
         if ( m_yScrollingEnabled )
         {
-            dy = -m_yScrollPixelsPerLine * nScrollInc;
+            dy = oldPos - newPos;
         }
         else
         {
@@ -750,9 +766,9 @@ void wxScrollHelperBase::DoGetViewStart (int *x, int *y) const
 void wxScrollHelperBase::DoGetViewStartPixels (int *x, int *y) const
 {
     if ( x )
-        *x = m_xScrollPosition * m_xScrollLinesPerPage + m_xScrollPositionPixelOffset;
+        *x = m_xScrollPosition * m_xScrollPixelsPerLine + m_xScrollPositionPixelOffset;
     if ( y )
-        *y = m_yScrollPosition * m_yScrollLinesPerPage + m_yScrollPositionPixelOffset;
+        *y = m_yScrollPosition * m_yScrollPixelsPerLine + m_yScrollPositionPixelOffset;
 }
 
 void wxScrollHelperBase::DoCalcScrolledPosition(int x, int y,
