@@ -1124,9 +1124,9 @@ private:
     // We want the physical position of the visible zone in the map window
     // to show the position of the currently visible part of the document,
     // as the scrollbar thumb does, which means, as mapFirst is 0 when
-    // editorFirst is 0, that they must be proportional:
+    // editFirst is 0, that they must be proportional:
     //
-    //                  mapFirst = α * editorFirst
+    //                  mapFirst = α * editFirst
     //
     // And the coefficient of proportionality α is given by considering
     // that the last possible values of the editor first line must be
@@ -1199,8 +1199,8 @@ private:
         // the editor and the map respectively, but in the general case we need
         // to convert the editor visible line to the document line first and
         // then convert it to the map visible line.
-        auto const editorFirst = m_edit->GetFirstVisibleLine();
-        auto const docFirst = m_edit->DocLineFromVisible(editorFirst);
+        auto const editFirst = m_edit->GetFirstVisibleLine();
+        auto const docFirst = m_edit->DocLineFromVisible(editFirst);
         auto const mapThumbFirst = VisibleFromDocLine(docFirst);
 
         thumb.pos = (mapThumbFirst - GetFirstVisibleLine()) * m_mapLineHeight;
@@ -1209,8 +1209,8 @@ private:
         // to the lines shown in the editor (in the trivial case when display
         // and physical lines are the same, this is just the number of the
         // lines shown in the editor) multiplied by the height of one line.
-        auto const editorLast = editorFirst + m_lines.editVisible;
-        auto const docLast = m_edit->DocLineFromVisible(editorLast);
+        auto const editLast = editFirst + m_lines.editVisible;
+        auto const docLast = m_edit->DocLineFromVisible(editLast);
         auto const mapThumbLast = VisibleFromDocLine(docLast);
 
         thumb.height = (mapThumbLast - mapThumbFirst) * m_mapLineHeight;
@@ -1283,16 +1283,16 @@ private:
     {
         auto const posMouse = event.GetPosition();
         auto const docLine = GetDocLineAtMapPoint(posMouse);
-        auto const editorLine = m_edit->VisibleFromDocLine(docLine);
+        auto const editLine = m_edit->VisibleFromDocLine(docLine);
 
         wxLogTrace(wxTRACE_STC_MAP, "Clicked doc/editor line %d/%d",
-                   docLine, editorLine);
+                   docLine, editLine);
 
-        auto const editorFirst = m_edit->GetFirstVisibleLine();
-        auto const docFirst = m_edit->DocLineFromVisible(editorFirst);
+        auto const editFirst = m_edit->GetFirstVisibleLine();
+        auto const docFirst = m_edit->DocLineFromVisible(editFirst);
 
-        auto const editorLast = editorFirst + m_lines.editVisible;
-        auto const docLast = m_edit->DocLineFromVisible(editorLast);
+        auto const editLast = editFirst + m_lines.editVisible;
+        auto const docLast = m_edit->DocLineFromVisible(editLast);
 
         // If the line is in the visible zone indicator, start dragging it.
         if ( docLine >= docFirst && docLine < docLast )
@@ -1304,13 +1304,13 @@ private:
         // The clicked line becomes the center of the visible zone indicator.
         // unless it's too close to the top or bottom of the map.
         auto const
-            editorNew = GetEditValidFirstLine(editorLine - m_lines.editVisible / 2);
+            editNew = GetEditValidFirstLine(editLine - m_lines.editVisible / 2);
 
-        if ( editorNew != editorFirst )
+        if ( editNew != editFirst )
         {
             wxLogTrace(wxTRACE_STC_MAP, "Editor first %d -> %d",
-                       editorFirst, editorNew);
-            SetEditFirstVisibleLine(editorNew);
+                       editFirst, editNew);
+            SetEditFirstVisibleLine(editNew);
             SyncMapPosition();
 
             Refresh();
@@ -1355,10 +1355,10 @@ private:
         // document and display lines is not reversible. So we just estimate it.
         const int lineMiddle = (pos.y + m_mapLineHeight - 1) / m_mapLineHeight;
 
-        int editorNew = lineMiddle - m_lines.editVisible / 2;
-        if ( editorNew < 0 )
+        int editNew = lineMiddle - m_lines.editVisible / 2;
+        if ( editNew < 0 )
         {
-            editorNew = 0;
+            editNew = 0;
         }
         else
         {
@@ -1366,10 +1366,10 @@ private:
             auto const editMax = m_lines.editDisplay - m_lines.editVisible;
             auto const mapMax = m_lines.mapDisplay - m_lines.mapVisible;
 
-            editorNew = wxMulDivInt32(editorNew, editMax, editMax - mapMax);
+            editNew = wxMulDivInt32(editNew, editMax, editMax - mapMax);
 
             wxLogTrace(wxTRACE_STC_MAP, "Dragging: initial estimate=%d",
-                       editorNew);
+                       editNew);
 
             // Adjust until the actual position of the middle of the thumb if
             // this were the first visible line in the editor becomes close to
@@ -1377,13 +1377,13 @@ private:
             for ( ;; )
             {
                 // This would be the first visible line in the map.
-                auto const mapNew = wxMulDivInt32(editorNew, mapMax, editMax);
+                auto const mapNew = wxMulDivInt32(editNew, mapMax, editMax);
 
                 // This is similar to the code in GetThumbInfo() but uses the
                 // given line instead of the first currently visible one.
-                auto const docFirst = m_edit->DocLineFromVisible(editorNew);
+                auto const docFirst = m_edit->DocLineFromVisible(editNew);
                 auto const thumbFirst = VisibleFromDocLine(docFirst);
-                auto const docLast = m_edit->DocLineFromVisible(editorNew + m_lines.editVisible);
+                auto const docLast = m_edit->DocLineFromVisible(editNew + m_lines.editVisible);
                 auto const thumbLast = VisibleFromDocLine(docLast);
 
                 // Compare where the thumb would be with where we want it to
@@ -1391,17 +1391,17 @@ private:
                 auto const thumbMiddle = (thumbFirst + thumbLast) / 2 - mapNew;
                 if ( thumbMiddle < lineMiddle )
                 {
-                    if ( editorNew >= editMax )
+                    if ( editNew >= editMax )
                         break;
 
-                    ++editorNew;
+                    ++editNew;
                 }
                 else if ( thumbMiddle > lineMiddle )
                 {
-                    if ( editorNew <= 0 )
+                    if ( editNew <= 0 )
                         break;
 
-                    --editorNew;
+                    --editNew;
                 }
                 else // thumbMiddle == lineMiddle
                 {
@@ -1410,13 +1410,13 @@ private:
             }
 
             wxLogTrace(wxTRACE_STC_MAP, "Dragging: final line=%d",
-                       editorNew);
+                       editNew);
         }
 
-        if ( editorNew == m_edit->GetFirstVisibleLine() )
+        if ( editNew == m_edit->GetFirstVisibleLine() )
             return;
 
-        SetEditFirstVisibleLine(editorNew);
+        SetEditFirstVisibleLine(editNew);
         SyncMapPosition();
 
         wxOverlayDC dc(m_overlay, this);
