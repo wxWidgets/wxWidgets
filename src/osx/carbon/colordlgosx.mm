@@ -107,7 +107,7 @@ bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
 
     [[NSColorPanel sharedColorPanel] setShowsAlpha:m_colourData.GetChooseAlpha() ? YES : NO];
     if(m_colourData.GetColour().IsOk())
-        [[NSColorPanel sharedColorPanel] setColor:m_colourData.GetColour().OSXGetNSColor()];
+        [[NSColorPanel sharedColorPanel] setColor:m_colourData.GetColour().OSXGetWXColor()];
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
 
