@@ -46,7 +46,7 @@ private:
 
 wxNSColorRefData::wxNSColorRefData(CGFloat r, CGFloat g, CGFloat b, CGFloat a = 1.0)
 {
-    m_nsColour = [[NSColor colorWithCalibratedRed:r green:g blue:b alpha:a] retain];
+    m_nsColour = [[NSColor colorWithRed:r green:g blue:b alpha:a] retain];
 }
 
 wxNSColorRefData::wxNSColorRefData(WXColor color)
