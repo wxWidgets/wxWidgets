@@ -254,7 +254,7 @@ void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width
     r.origin.y += safe.top;
     r.size.width -= (safe.left + safe.right);
     r.size.height -= (safe.top + safe.bottom);
-    
+
     width = r.size.width;
     height = r.size.height;
     left = r.origin.x;
