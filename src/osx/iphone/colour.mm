@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/iphone/colour.mm
 // Purpose:     Conversions between UIColor and wxColour
-// Author:      Vadim Zeitlin
-// Created:     2015-11-26 (completely replacing the old version of the file)
-// Copyright:   (c) 2015 Vadim Zeitlin
+// Author:      Stefan Csomor
+// Created:     2025-10-02
+// Copyright:   (c) 2025 Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
