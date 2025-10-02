@@ -52,7 +52,7 @@ wxString wxSystemAppearance::GetName() const
     if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
         return wxS("Dark");
     else if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight)
-        return wxT("Light");
+        return wxS("Light");
     else
         return wxT("Unspecified");
 }
