@@ -27,12 +27,11 @@
 #include "wx/osx/core/cfref.h"
 #include "wx/osx/core/cfstring.h"
 
-#import <Foundation/NSArray.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSLocale.h>
-#import <Foundation/NSDateFormatter.h>
+#import <Foundation/Foundation.h>
 
 #include "wx/osx/private/uilocale.h"
+
+#include <vector>
 
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory cat);
@@ -165,10 +164,20 @@ public:
 #endif // wxUSE_DATETIME
 
     wxLayoutDirection GetLayoutDirection() const override;
+
+    wxLocaleNumberFormatting GetNumberFormatting() const override;
+    wxString GetCurrencySymbol() const override;
+    wxString GetCurrencyCode() const override;
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const override;
+    wxLocaleCurrencyInfo GetCurrencyInfo() const override;
+    wxMeasurementSystem UsesMetricSystem() const override;
+
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const override;
 
 private:
+    wxLocaleNumberFormatting DoGetNumberFormatting(wxLocaleCategory cat) const;
+
     NSLocale* const m_nsloc;
 
     wxDECLARE_NO_COPY_CLASS(wxUILocaleImplCF);
@@ -347,6 +356,132 @@ wxUILocaleImplCF::GetLayoutDirection() const
     else if (layoutDirection == NSLocaleLanguageDirectionRightToLeft)
         return wxLayout_RightToLeft;
     return wxLayout_Default;
+}
+
+wxLocaleNumberFormatting
+wxUILocaleImplCF::GetNumberFormatting() const
+{
+    return DoGetNumberFormatting(wxLOCALE_CAT_NUMBER);
+}
+
+wxString
+wxUILocaleImplCF::GetCurrencySymbol() const
+{
+    NSString* str = [m_nsloc currencySymbol];
+    return wxCFStringRef::AsString(str);
+}
+
+wxString
+wxUILocaleImplCF::GetCurrencyCode() const
+{
+    NSString* str = [m_nsloc currencyCode];
+    return wxCFStringRef::AsString(str);
+}
+
+wxCurrencySymbolPosition
+wxUILocaleImplCF::GetCurrencySymbolPosition() const
+{
+    wxCFRef<NSNumberFormatter*> cfRefFormatter = [[NSNumberFormatter alloc] init];
+    NSNumberFormatter* formatter = cfRefFormatter.get();
+    formatter.locale = m_nsloc;
+    formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+
+    NSString* formatted = [formatter stringFromNumber:@123];
+    NSString* symbol = formatter.currencySymbol;
+
+    NSRange symbolRange = [formatted rangeOfString:symbol];
+    BOOL symbolBefore = (symbolRange.location == 0);
+
+    wxCurrencySymbolPosition symbolPos = wxCurrencySymbolPosition::PrefixWithSep;
+    BOOL hasSpace = NO;
+    if (symbolRange.location != NSNotFound)
+    {
+        if (symbolBefore)
+        {
+            // Check character succeeding the currency symbol
+            NSUInteger idx = NSMaxRange(symbolRange);
+            if (idx < formatted.length)
+            {
+                unichar after = [formatted characterAtIndex:idx];
+                hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:after];
+            }
+            symbolPos = (hasSpace)
+                      ? wxCurrencySymbolPosition::PrefixWithSep
+                      : wxCurrencySymbolPosition::PrefixNoSep;
+        }
+        else
+        {
+            // Check character preceding the currency symbol
+            if (symbolRange.location > 0)
+            {
+                unichar before = [formatted characterAtIndex:symbolRange.location - 1];
+                hasSpace = [[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:before];
+            }
+            symbolPos = (hasSpace)
+                      ? wxCurrencySymbolPosition::SuffixWithSep
+                      : wxCurrencySymbolPosition::SuffixNoSep;
+        }
+    }
+
+    return symbolPos;
+}
+
+wxLocaleNumberFormatting
+wxUILocaleImplCF::DoGetNumberFormatting(wxLocaleCategory cat) const
+{
+    wxCFRef<NSNumberFormatter*> cfRefFormatter = [[NSNumberFormatter alloc] init];
+    NSNumberFormatter* formatter = cfRefFormatter.get();
+    formatter.locale = m_nsloc;
+    formatter.numberStyle = (cat == wxLOCALE_CAT_MONEY)
+                          ? NSNumberFormatterCurrencyStyle
+                          : NSNumberFormatterDecimalStyle;
+
+    wxString groupSeparator = wxCFStringRef::AsString(formatter.groupingSeparator);
+
+    std::vector<int> grouping;
+    int groupingSize = (int) formatter.groupingSize;
+    int secondaryGroupingSize  = (int) formatter.secondaryGroupingSize;
+    if (groupingSize > 0)
+    {
+        if (secondaryGroupingSize > 0 && secondaryGroupingSize != groupingSize)
+        {
+            grouping.push_back(groupingSize);
+            grouping.push_back(secondaryGroupingSize);
+            grouping.push_back(0);
+        }
+        else
+        {
+            grouping.push_back(groupingSize);
+            grouping.push_back(0);
+        }
+    }
+
+    wxString decimalSeparator = wxCFStringRef::AsString(formatter.decimalSeparator);
+    int fractionalDigits = (int) formatter.minimumFractionDigits;
+
+    return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
+}
+
+wxLocaleCurrencyInfo
+wxUILocaleImplCF::GetCurrencyInfo() const
+{
+    wxLocaleNumberFormatting currencyFormatting = DoGetNumberFormatting(wxLOCALE_CAT_MONEY);
+    return wxLocaleCurrencyInfo(
+        GetCurrencySymbol(),
+        GetCurrencyCode(),
+        GetCurrencySymbolPosition(),
+        currencyFormatting);
+}
+
+wxMeasurementSystem
+wxUILocaleImplCF::UsesMetricSystem() const
+{
+    if ([m_nsloc respondsToSelector:@selector(usesMetricSystem)])
+    {
+        BOOL isMetric = [m_nsloc usesMetricSystem];
+        return (isMetric) ? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
+    }
+    return wxMeasurementSystem::Unknown;
 }
 
 /* static */

@@ -186,6 +186,27 @@ public:
     // Query the layout direction of the current locale.
     wxLayoutDirection GetLayoutDirection() const;
 
+    // Query infos about number formatting of the current locale
+    wxLocaleNumberFormatting GetNumberFormatting() const;
+
+    // Query the curreny symbol of the current locale
+    wxString GetCurrencySymbol() const;
+
+    // Query the currency code of the current locale
+    wxString GetCurrencyCode() const;
+
+    // Query the currency symbol position of the current locale
+    wxCurrencySymbolPosition GetCurrencySymbolPosition() const;
+
+    // Query the currency infos of the current locale
+    wxLocaleCurrencyInfo GetCurrencyInfo() const;
+
+    // Query whether the current locale uses the metric system
+    wxMeasurementSystem UsesMetricSystem() const;
+
+    // Guess from the region whether the current locale uses the metric system
+    static wxMeasurementSystem GuessMetricSystemFromRegion(const wxLocaleIdent& idLocale);
+
     // Compares two strings in the order defined by this locale.
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags = wxCompare_CaseSensitive) const;

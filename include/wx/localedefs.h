@@ -12,6 +12,8 @@
 
 #include "wx/defs.h"
 
+#include <vector>
+
 // ----------------------------------------------------------------------------
 // wxLayoutDirection: used by wxWindow, wxDC etc
 // ----------------------------------------------------------------------------
@@ -120,6 +122,53 @@ enum wxLocaleForm
 {
     wxLOCALE_FORM_NATIVE,
     wxLOCALE_FORM_ENGLISH
+};
+
+enum class wxMeasurementSystem
+{
+    Unknown,
+    Metric,
+    NonMetric
+};
+
+enum class wxCurrencySymbolPosition
+{
+    PrefixNoSep,
+    PrefixWithSep,
+    SuffixNoSep,
+    SuffixWithSep
+};
+
+struct wxLocaleNumberFormatting
+{
+    wxLocaleNumberFormatting() = default;
+    wxLocaleNumberFormatting(const wxString& groupSeparator_, const std::vector<int>& grouping_,
+                             const wxString& decimalSeparator_, int fractionalDigits_)
+        : groupSeparator(groupSeparator_), grouping(grouping_),
+          decimalSeparator(decimalSeparator_), fractionalDigits(fractionalDigits_)
+    {
+    }
+    wxString groupSeparator;
+    std::vector<int> grouping;
+    wxString decimalSeparator;
+    int      fractionalDigits = 0;
+};
+
+struct wxLocaleCurrencyInfo
+{
+    wxLocaleCurrencyInfo() = default;
+    wxLocaleCurrencyInfo(const wxString& symbol_, const wxString& code_,
+                         const wxCurrencySymbolPosition currencySymbolPos_,
+                         const wxLocaleNumberFormatting currencyFormat_)
+        : currencySymbol(symbol_), currencyCode(code_),
+          currencySymbolPos(currencySymbolPos_),
+          currencyFormat(currencyFormat_)
+    {
+    }
+    wxString currencySymbol;     // the currency symbol (for example "$")
+    wxString currencyCode;       // the currency ISO code (for example "USD")
+    wxCurrencySymbolPosition currencySymbolPos = wxCurrencySymbolPosition::PrefixWithSep;
+    wxLocaleNumberFormatting currencyFormat;
 };
 
 // ----------------------------------------------------------------------------
