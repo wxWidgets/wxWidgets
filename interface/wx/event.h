@@ -1907,6 +1907,16 @@ public:
     */
     int GetPosition() const;
 
+    /**
+        In cases where scrolling is possible with single pixel precision,
+        such as when panning on a touch screen with fingers, this returns
+        the offset in single pixels. If the units size (pixels per line)
+        are e.g. 20px, this can be between 0 and 19.
+
+        @since 3.2.2
+    */
+    int GetPixelOffset() const;
+
     void SetOrientation(int orient);
     void SetPosition(int pos);
 };

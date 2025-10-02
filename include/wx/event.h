@@ -806,9 +806,6 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWin
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent);
 
-    // Gesture based scroll events from wxWindow
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_PAN, wxScrollWinPanEvent);
-
     // MultiTouch event types
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_BEGIN, wxMultiTouchEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TOUCH_MOVE, wxMultiTouchEvent);
@@ -4286,7 +4283,6 @@ protected:
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);
 typedef void (wxEvtHandler::*wxScrollEventFunction)(wxScrollEvent&);
 typedef void (wxEvtHandler::*wxScrollWinEventFunction)(wxScrollWinEvent&);
-typedef void (wxEvtHandler::*wxScrollWinPanEventFunction)(wxScrollWinPanEvent&);
 typedef void (wxEvtHandler::*wxSizeEventFunction)(wxSizeEvent&);
 typedef void (wxEvtHandler::*wxMoveEventFunction)(wxMoveEvent&);
 typedef void (wxEvtHandler::*wxPaintEventFunction)(wxPaintEvent&);
@@ -4337,8 +4333,6 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     wxEVENT_HANDLER_CAST(wxScrollEventFunction, func)
 #define wxScrollWinEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxScrollWinEventFunction, func)
-#define wxScrollWinPanEventHandler(func) \
-    wxEVENT_HANDLER_CAST(wxScrollWinPanEventFunction, func)
 #define wxSizeEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxSizeEventFunction, func)
 #define wxMoveEventHandler(func) \
@@ -4714,9 +4708,6 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     EVT_SCROLLWIN_PAGEDOWN(func) \
     EVT_SCROLLWIN_THUMBTRACK(func) \
     EVT_SCROLLWIN_THUMBRELEASE(func)
-
-// Gesture based scrolling from wxWindow (sent to wxScrolledWindow) 
-#define EVT_SCROLLWIN_PAN(func) wx__DECLARE_EVT0(wxEVT_SCROLLWIN_PAN, wxScrollWinPanEventHandler(func))
 
 // Scrolling from wxSlider and wxScrollBar
 #define EVT_SCROLL_TOP(func) wx__DECLARE_EVT0(wxEVT_SCROLL_TOP, wxScrollEventHandler(func))

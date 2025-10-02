@@ -402,7 +402,7 @@ public:
         2-element list (x, y).
         @endWxPerlOnly
 
-        @see SetScrollbars(), Scroll()
+        @see SetScrollbars(), Scroll(), GetViewStartPixels()
     */
     void GetViewStart(int* x, int* y) const;
 
@@ -411,6 +411,26 @@ public:
         for more info.
     */
     wxPoint GetViewStart() const;
+
+    /**
+        Get the position at which the visible portion of the window starts
+        in pixels, not in units like GetViewStart(int*,int*)
+
+        @param x
+            Receives the first visible x position in scroll pixels.
+        @param y
+            Receives the first visible y position in scroll pixels.
+
+
+        @see SetScrollbars(), Scroll(), GetViewStart()
+    */
+    void GetViewStartPixels(int* x, int* y) const;
+
+    /**
+        This is a simple overload of GetViewStartPixels(int*,int*); see that function
+        for more info.
+    */
+    wxPoint GetViewStartPixels() const;
 
     /**
         Gets the size in device units of the scrollable window area (as
