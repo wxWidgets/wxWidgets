@@ -50,7 +50,7 @@ wxString wxSystemAppearance::GetName() const
 {
     UITraitCollection* traitCollection = [UIScreen mainScreen].traitCollection;
     if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
-        return wxT("Dark");
+        return wxS("Dark");
     else if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight)
         return wxT("Light");
     else
