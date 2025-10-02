@@ -668,7 +668,6 @@ int wxWidgetIPhoneImpl::GetScrollPos(int orient) const
 
 void wxWidgetIPhoneImpl::ScrollRect( const wxRect *rect, int dx, int dy )
 {
-    wxLogMessage( "wxWidgetIPhoneImpl::ScrollRect" );
 }
 
 void wxWidgetIPhoneImpl::ScrollWindow( int dx, int dy, const wxRect *rect )
