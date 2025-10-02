@@ -1746,8 +1746,10 @@ public:
     wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
                      int pos = 0, int orient = 0);
     wxScrollWinEvent(const wxScrollWinEvent& event) : wxEvent(event)
-        {    m_commandInt = event.m_commandInt;
-            m_extraLong = event.m_extraLong;    }
+        {
+            m_commandInt = event.m_commandInt;
+            m_extraLong = event.m_extraLong;
+        }
 
     int GetOrientation() const { return (int) m_extraLong; }
     int GetPosition() const { return m_commandInt; }
