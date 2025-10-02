@@ -20,6 +20,8 @@
 
 CGColorSpaceRef wxMacGetGenericRGBColorSpace();
 
+#if !wxOSX_USE_COCOA_OR_IPHONE
+
 class wxCGColorRefData : public wxColourRefData
 {
 public:
@@ -44,6 +46,8 @@ public:
 
     virtual wxColourRefData* Clone() const override { return new wxCGColorRefData(*this); }
 
+    CGColorRef GetWXColor() const override { return (CGColorRef) m_cgColour; }
+    CGPatternRef GetWXPatternImage() const override { return CGColorGetPattern(m_cgColor); }
 private:
     wxCFRef<CGColorRef> m_cgColour;
 
@@ -139,23 +143,26 @@ wxCGColorRefData::wxCGColorRefData(CGColorRef col)
     }
 }
 
-#define M_COLDATA static_cast<wxCGColorRefData*>(m_refData)
+#endif
+
+#define M_COLDATA static_cast<wxColourRefData*>(m_refData)
 
 #if wxOSX_USE_COCOA_OR_CARBON
 wxColour::wxColour(const RGBColor& col)
 {
-    CGFloat components[4] = { (CGFloat)(col.red / 65535.0), (CGFloat)(col.green / 65535.0),
-        (CGFloat)(col.blue / 65535.0), (CGFloat)1.0 };
-    m_refData = new wxCGColorRefData(components);
+    InitRGBA((float)(col.red / 65535.0), (float)(col.green / 65535.0),
+        (float)(col.blue / 65535.0), (float)1.0 );
 }
 #endif
 
+#if !wxOSX_USE_COCOA_OR_IPHONE
 wxColour::wxColour(CGColorRef col)
 {
     wxASSERT_MSG(col != nullptr, "Invalid CoreGraphics Color");
 
     m_refData = new wxCGColorRefData(col);
 }
+#endif
 
 wxColour::ChannelType wxColour::Red() const
 {
@@ -210,28 +217,18 @@ CGColorRef wxColour::GetCGColor() const
     return M_COLDATA->GetCGColor();
 }
 
-#if wxOSX_USE_COCOA
-WX_NSColor wxColour::OSXGetNSColor() const
+WXColor wxColour::OSXGetWXColor() const
 {
     wxCHECK_MSG( IsOk(), nullptr, "invalid colour" );
 
-    return M_COLDATA->GetNSColor();
+    return M_COLDATA->GetWXColor();
 }
 
-WX_NSImage wxColour::OSXGetNSPatternImage() const
+WXImage wxColour::OSXGetWXPatternImage() const
 {
     wxCHECK_MSG( IsOk(), nullptr, "invalid colour" );
 
-    return M_COLDATA->GetNSPatternImage();
-}
-#endif
-
-void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
-{
-    AllocExclusive();
-
-    CGFloat components[4] = { (CGFloat)(r / 255.0), (CGFloat)(g / 255.0), (CGFloat)(b / 255.0), (CGFloat)(a / 255.0) };
-    M_COLDATA->Init(components);
+    return M_COLDATA->GetWXPatternImage();
 }
 
 bool wxColour::operator==(const wxColour& other) const
@@ -245,13 +242,12 @@ bool wxColour::operator==(const wxColour& other) const
     return CGColorEqualToColor(GetCGColor(), other.GetCGColor());
 }
 
-wxGDIRefData* wxColour::CreateGDIRefData() const
-{
-    // black
-    return new wxCGColorRefData(0.0, 0.0, 0.0);
-}
-
 wxGDIRefData* wxColour::CloneGDIRefData(const wxGDIRefData* data) const
 {
     return static_cast<const wxColourRefData*>(data)->Clone();
+}
+
+void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
+{
+    InitRGBA((float)(r / 255.0), (float)(g / 255.0), (float)(b / 255.0), (float)(a / 255.0));
 }

@@ -17,7 +17,8 @@
 class wxNSColorRefData : public wxColourRefData
 {
 public:
-    wxNSColorRefData(WX_NSColor color);
+    wxNSColorRefData(CGFloat r, CGFloat g, CGFloat b, CGFloat a);
+    wxNSColorRefData(WXColor color);
 
     wxNSColorRefData(const wxNSColorRefData& other);
 
@@ -34,8 +35,8 @@ public:
 
     virtual wxColourRefData* Clone() const override { return new wxNSColorRefData(*this); }
 
-    virtual WX_NSColor GetNSColor() const override;
-    virtual WX_NSImage GetNSPatternImage() const override;
+    virtual WXColor GetWXColor() const override;
+    virtual WXImage GetWXPatternImage() const override;
 private:
     static CGFloat GetCGColorComponent(CGColorRef col, int rgbaIndex);
     WX_NSColor m_nsColour;
@@ -43,7 +44,12 @@ private:
     wxDECLARE_NO_ASSIGN_CLASS(wxNSColorRefData);
 };
 
-wxNSColorRefData::wxNSColorRefData(WX_NSColor color)
+wxNSColorRefData::wxNSColorRefData(CGFloat r, CGFloat g, CGFloat b, CGFloat a = 1.0)
+{
+    m_nsColour = [[NSColor colorWithCalibratedRed:r green:g blue:b alpha:a] retain];
+}
+
+wxNSColorRefData::wxNSColorRefData(WXColor color)
 {
     m_nsColour = [color retain];
 }
@@ -58,7 +64,7 @@ wxNSColorRefData::~wxNSColorRefData()
     [m_nsColour release];
 }
 
-WX_NSColor wxNSColorRefData::GetNSColor() const
+WX_NSColor wxNSColorRefData::GetWXColor() const
 {
     return m_nsColour;
 }
@@ -161,7 +167,7 @@ CGColorRef wxNSColorRefData::GetCGColor() const
     return [m_nsColour CGColor];
 }
 
-WX_NSImage wxNSColorRefData::GetNSPatternImage() const
+WX_NSImage wxNSColorRefData::GetWXPatternImage() const
 {
     NSColor* colPat = [m_nsColour colorUsingColorSpaceName:NSPatternColorSpace];
     if ( colPat )
@@ -176,18 +182,25 @@ WX_NSImage wxNSColorRefData::GetNSPatternImage() const
     return nullptr;
 }
 
-WX_NSColor wxColourRefData::GetNSColor() const
+void wxColour::InitRGBA(float r, float g, float b, float a)
 {
-    wxOSXEffectiveAppearanceSetter helper;
-    return [NSColor colorWithCalibratedRed:Red() green:Green() blue:Blue() alpha:Alpha() ];
+    UnRef();
+    m_refData = new wxNSColorRefData(r,g,b,a);
 }
 
-WX_NSImage wxColourRefData::GetNSPatternImage() const
+wxGDIRefData* wxColour::CreateGDIRefData() const
 {
-    return nullptr;
+    return new wxNSColorRefData(0.0, 0.0, 0.0);
 }
 
 wxColour::wxColour(WX_NSColor col)
 {
     m_refData = new wxNSColorRefData(col);
+}
+
+wxColour::wxColour(CGColorRef col)
+{
+    m_refData = new wxNSColorRefData([[NSColor colorWithCGColor:col] retain]);
+    // as per contract CGColorRef is not retained
+    CGColorRelease(col);
 }
