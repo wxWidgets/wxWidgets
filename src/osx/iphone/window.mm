@@ -661,7 +661,7 @@ int wxWidgetIPhoneImpl::GetScrollPos(int orient) const
         return position.x / m_xScrollPixelsPerLine;
     }
 
-    return 0;   
+    return 0;
 }
 
 

@@ -47,7 +47,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     m_ok = true ;
 
     m_window->GetSize( &m_width , &m_height);
-#ifndef __WXOSX_IPHONE__ 
+#ifndef __WXOSX_IPHONE__
     if ( !m_window->IsShownOnScreen() )
         m_width = m_height = 0;
 #endif
@@ -87,7 +87,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 
     InheritAttributes(window);
-        
+
     wxWidgetImpl *impl = (wxWidgetImpl*)window->GetPeer();
     wxPoint origin( impl->GetDeviceLocalOrigin() );
     SetDeviceLocalOrigin( origin.x, origin.y );

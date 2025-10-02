@@ -365,7 +365,7 @@ void wxScrollHelperBase::SetScrollbars(int pixelsPerUnitX,
                                        int yPos,
                                        bool noRefresh)
 {
-    m_xScrollPositionPixelOffset = 
+    m_xScrollPositionPixelOffset =
     m_yScrollPositionPixelOffset = 0;
 
     // Convert positions expressed in scroll units to positions in pixels.
@@ -485,7 +485,7 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 {
     int orient = event.GetOrientation();
     int oldPos = 0;
-    
+
     if (orient == wxHORIZONTAL)
     {
         oldPos = GetViewStartPixels().x;
