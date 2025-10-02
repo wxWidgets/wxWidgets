@@ -140,8 +140,6 @@ long style, long extraStyle, const wxString& name )
     if ( ( style & wxSTAY_ON_TOP ) )
         level = UIWindowLevelAlert;
     CGRect r = CGRectMake( 0, 0, size.x, size.y) ;
-    if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
-        std::swap(r.size.width,r.size.height);
 
     [m_macWindow initWithFrame:r ];
     [m_macWindow setHidden:YES];
@@ -228,8 +226,6 @@ bool wxNonOwnedWindowIPhoneImpl::CanSetTransparent()
 void wxNonOwnedWindowIPhoneImpl::MoveWindow(int x, int y, int width, int height)
 {
     CGRect r = CGRectMake( x,y,width,height) ;
-    if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
-        std::swap(r.size.width,r.size.height);
 
     [m_macWindow setFrame:r];
 }
@@ -244,8 +240,7 @@ void wxNonOwnedWindowIPhoneImpl::GetPosition( int &x, int &y ) const
 void wxNonOwnedWindowIPhoneImpl::GetSize( int &width, int &height ) const
 {
     CGRect r = [m_macWindow frame];
-    if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
-        std::swap(r.size.width,r.size.height);
+
     width = r.size.width;
     height = r.size.height;
 }
@@ -253,8 +248,13 @@ void wxNonOwnedWindowIPhoneImpl::GetSize( int &width, int &height ) const
 void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width, int &height ) const
 {
     CGRect r = [m_macWindow bounds];
-    if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
-        std::swap(r.size.width,r.size.height);
+    UIEdgeInsets safe = [m_macWindow safeAreaInsets];
+
+    r.origin.x += safe.left;
+    r.origin.y += safe.top;
+    r.size.width -= (safe.left + safe.right);
+    r.size.height -= (safe.top + safe.bottom);
+
     width = r.size.width;
     height = r.size.height;
     left = r.origin.x;
@@ -360,9 +360,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     wxUIContentViewController* controller = [[wxUIContentViewController alloc] initWithNibName:nil bundle:nil];
 
-#ifdef __IPHONE_3_0
     controller.wantsFullScreenLayout = fullscreen;
-#endif
 
     controller.view = contentview;
     [contentview release];
