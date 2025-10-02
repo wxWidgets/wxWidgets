@@ -1324,8 +1324,10 @@ private:
 
         auto const thumb = GetThumbInfo();
         m_dragOffset = pos.y - (thumb.pos + thumb.height / 2);
-        wxLogTrace(wxTRACE_STC_MAP, "Start dragging at thumb offset %d",
-                   m_dragOffset);
+        m_dragLastY = pos.y;
+
+        wxLogTrace(wxTRACE_STC_MAP, "Dragging: start at %d (offset=%d)",
+                   m_dragLastY, m_dragOffset);
 
         SetCursor(wxCURSOR_HAND);
         CaptureMouse();
@@ -1349,24 +1351,27 @@ private:
         // when the dragging started.
         pos.y -= m_dragOffset;
 
+        // Define the maximum possible value for the first visible line in the
+        // editor and the map respectively.
+        auto const editMax = m_lines.editDisplay - m_lines.editVisible;
+        auto const mapMax = m_lines.mapDisplay - m_lines.mapVisible;
+
         // We need to find the editor first line such that the thumb will be
         // positioned with its middle at pos.y but the trouble is that we can't
         // invert the GetThumbInfo() calculation easily as conversion between
-        // document and display lines is not reversible. So we just estimate it.
-        const int lineMiddle = (pos.y + m_mapLineHeight - 1) / m_mapLineHeight;
+        // document and display lines is not reversible. So start by estimating
+        // the editor first line assuming that display and physical lines
+        // are the same and then adjust it until the thumb middle is close
+        // to the desired position.
+        const int thumbWanted = (pos.y + m_mapLineHeight - 1) / m_mapLineHeight;
 
-        int editNew = lineMiddle - m_lines.editVisible / 2;
+        const int editOld = m_edit->GetFirstVisibleLine();
+
+        int editNew = editOld + (pos.y - m_dragLastY) / m_mapLineHeight;
         if ( editNew < 0 )
-        {
             editNew = 0;
-        }
-        else
-        {
-            // This divides it by 1-α
-            auto const editMax = m_lines.editDisplay - m_lines.editVisible;
-            auto const mapMax = m_lines.mapDisplay - m_lines.mapVisible;
-
-            editNew = wxMulDivInt32(editNew, editMax, editMax - mapMax);
+        else if ( editNew > editMax )
+            editNew = editMax;
 
             wxLogTrace(wxTRACE_STC_MAP, "Dragging: initial estimate=%d",
                        editNew);
@@ -1374,7 +1379,11 @@ private:
             // Adjust until the actual position of the middle of the thumb if
             // this were the first visible line in the editor becomes close to
             // the desired position.
-            for ( ;; )
+        //
+        // We use direction, which can be -1, 0 or 1 to avoid looping forever
+        // if we can't get any closer, so remember which way we're going and
+        // stop if overshoot.
+        for ( int direction = 0;; )
             {
                 // This would be the first visible line in the map.
                 auto const mapNew = wxMulDivInt32(editNew, mapMax, editMax);
@@ -1389,21 +1398,39 @@ private:
                 // Compare where the thumb would be with where we want it to
                 // be and adjust the first line accordingly, if possible.
                 auto const thumbMiddle = (thumbFirst + thumbLast) / 2 - mapNew;
-                if ( thumbMiddle < lineMiddle )
+            if ( thumbMiddle < thumbWanted )
                 {
+                // We can't go any further.
                     if ( editNew >= editMax )
                         break;
 
+                // We overshot the correct value, we won't get any closer to it
+                // than we were before, so stop now to avoid entering an
+                // infinite loop alternating between the two values closest to
+                // the desired one from above and below.
+                if ( direction < 0 )
+                    break;
+
+                // Remember that we're going down in case it is the first
+                // iteration of the loop.
+                direction = 1;
+
                     ++editNew;
                 }
-                else if ( thumbMiddle > lineMiddle )
+            else if ( thumbMiddle > thumbWanted )
                 {
+                // See comment in the branch above.
                     if ( editNew <= 0 )
                         break;
 
+                if ( direction > 0 )
+                    break;
+
+                direction = -1;
+
                     --editNew;
                 }
-                else // thumbMiddle == lineMiddle
+            else // thumbMiddle == thumbWanted
                 {
                     break;
                 }
@@ -1411,9 +1438,8 @@ private:
 
             wxLogTrace(wxTRACE_STC_MAP, "Dragging: final line=%d",
                        editNew);
-        }
 
-        if ( editNew == m_edit->GetFirstVisibleLine() )
+        if ( editNew == editOld )
             return;
 
         SetEditFirstVisibleLine(editNew);
@@ -1430,6 +1456,7 @@ private:
     {
         m_isDragging = false;
         m_dragOffset = 0;
+        m_dragLastY = 0;
 
         SetCursor(wxCURSOR_ARROW);
         ReleaseMouse();
@@ -1449,6 +1476,11 @@ private:
     // The constant vertical offset between the mouse pointer and the middle of
     // the thumb while dragging. Only valid if m_isDragging is true.
     int m_dragOffset = 0;
+
+    // Vertical mouse position of the last drag event or the click event which
+    // started the dragging if there were no other drag events yet. Only valid
+    // if m_isDragging is true.
+    int m_dragLastY = 0;
 
     // Height of a single line in the map: this value is cached when creating
     // the control.
