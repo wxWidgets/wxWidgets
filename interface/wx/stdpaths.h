@@ -368,6 +368,7 @@ public:
         - Unix: @c prefix/share/appinfo
         - Windows: the directory where the executable file is located
         - Mac: @c appinfo.app/Contents/Resources bundle subdirectory
+        - iOS: @c appinfo.app bundle subdirectory
 
         @since 2.7.0
 
