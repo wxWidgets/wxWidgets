@@ -20,7 +20,7 @@
 
 CGColorSpaceRef wxMacGetGenericRGBColorSpace();
 
-#if !wxOSX_USE_COCOA_OR_IPHONE
+// wxCGColorRefData is used for preserving precise channel values
 
 class wxCGColorRefData : public wxColourRefData
 {
@@ -46,8 +46,8 @@ public:
 
     virtual wxColourRefData* Clone() const override { return new wxCGColorRefData(*this); }
 
-    CGColorRef GetWXColor() const override { return (CGColorRef) m_cgColour; }
-    CGPatternRef GetWXPatternImage() const override { return CGColorGetPattern(m_cgColor); }
+    WXColor GetWXColor() const override;
+    WXImage GetWXPatternImage() const override;
 private:
     wxCFRef<CGColorRef> m_cgColour;
 
@@ -143,7 +143,15 @@ wxCGColorRefData::wxCGColorRefData(CGColorRef col)
     }
 }
 
-#endif
+WXColor wxCGColorRefData::GetWXColor() const
+{
+    return wxOSXGetWXColorFromCGColor(m_cgColour);
+}
+
+WXImage wxCGColorRefData::GetWXPatternImage() const
+{
+    return wxOSXGetWXImageFromCGColor(m_cgColour);
+}
 
 #define M_COLDATA static_cast<wxColourRefData*>(m_refData)
 
@@ -250,4 +258,10 @@ wxGDIRefData* wxColour::CloneGDIRefData(const wxGDIRefData* data) const
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
     InitRGBA((float)(r / 255.0), (float)(g / 255.0), (float)(b / 255.0), (float)(a / 255.0));
+}
+
+void wxColour::InitRGBA(float r, float g, float b, float a)
+{
+    UnRef();
+    m_refData = new wxCGColorRefData(r,g,b,a);
 }

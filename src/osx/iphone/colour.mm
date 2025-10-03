@@ -177,12 +177,6 @@ WXImage wxUIColorRefData::GetWXPatternImage() const
     return nullptr;
 }
 
-void wxColour::InitRGBA(float r, float g, float b, float a)
-{
-    UnRef();
-    m_refData = new wxUIColorRefData(r,g,b,a);
-}
-
 wxGDIRefData* wxColour::CreateGDIRefData() const
 {
     return new wxUIColorRefData(0.0, 0.0, 0.0, 1.0);

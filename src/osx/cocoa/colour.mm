@@ -46,7 +46,7 @@ private:
 
 wxNSColorRefData::wxNSColorRefData(CGFloat r, CGFloat g, CGFloat b, CGFloat a = 1.0)
 {
-    m_nsColour = [[NSColor colorWithDeviceRed:r green:g blue:b alpha:a] retain];
+    m_nsColour = [[NSColor colorWithRed:r green:g blue:b alpha:a] retain];
 }
 
 wxNSColorRefData::wxNSColorRefData(WXColor color)
@@ -180,12 +180,6 @@ WX_NSImage wxNSColorRefData::GetWXPatternImage() const
     }
 
     return nullptr;
-}
-
-void wxColour::InitRGBA(float r, float g, float b, float a)
-{
-    UnRef();
-    m_refData = new wxNSColorRefData(r,g,b,a);
 }
 
 wxGDIRefData* wxColour::CreateGDIRefData() const
