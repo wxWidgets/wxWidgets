@@ -5611,6 +5611,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_gauge.o \
 	monodll_iphone_msgdlg.o \
 	monodll_iphone_nonownedwnd.o \
+	monodll_iphone_notebook.o \
 	monodll_iphone_scrolbar.o \
 	monodll_iphone_slider.o \
 	monodll_iphone_stattext.o \
@@ -7389,6 +7390,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_gauge.o \
 	monolib_iphone_msgdlg.o \
 	monolib_iphone_nonownedwnd.o \
+	monolib_iphone_notebook.o \
 	monolib_iphone_scrolbar.o \
 	monolib_iphone_slider.o \
 	monolib_iphone_stattext.o \
@@ -9313,6 +9315,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_gauge.o \
 	coredll_iphone_msgdlg.o \
 	coredll_iphone_nonownedwnd.o \
+	coredll_iphone_notebook.o \
 	coredll_iphone_scrolbar.o \
 	coredll_iphone_slider.o \
 	coredll_iphone_stattext.o \
@@ -10819,6 +10822,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_gauge.o \
 	corelib_iphone_msgdlg.o \
 	corelib_iphone_nonownedwnd.o \
+	corelib_iphone_notebook.o \
 	corelib_iphone_scrolbar.o \
 	corelib_iphone_slider.o \
 	corelib_iphone_stattext.o \
@@ -16133,6 +16137,9 @@ monodll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONODLL_ODEP)
 monodll_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
 
+monodll_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
+
 monodll_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
 
@@ -20902,6 +20909,9 @@ monolib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONOLIB_ODEP)
 
 monolib_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
+
+monolib_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
 
 monolib_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
@@ -26342,6 +26352,9 @@ coredll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(COREDLL_ODEP)
 coredll_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
 
+coredll_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
+
 coredll_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm
 
@@ -30082,6 +30095,9 @@ corelib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(CORELIB_ODEP)
 
 corelib_iphone_nonownedwnd.o: $(srcdir)/src/osx/iphone/nonownedwnd.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/nonownedwnd.mm
+
+corelib_iphone_notebook.o: $(srcdir)/src/osx/iphone/notebook.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/notebook.mm
 
 corelib_iphone_scrolbar.o: $(srcdir)/src/osx/iphone/scrolbar.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/scrolbar.mm

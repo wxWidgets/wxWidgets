@@ -142,7 +142,6 @@
 #undef wxUSE_GRID
 #undef wxUSE_LISTBOX
 #undef wxUSE_LISTCTRL
-#undef wxUSE_NOTEBOOK
 #undef wxUSE_SPINBTN
 #undef wxUSE_SPINCTRL
 #undef wxUSE_TREECTRL
@@ -173,7 +172,6 @@
 #define wxUSE_GRID 0
 #define wxUSE_LISTBOX 0
 #define wxUSE_LISTCTRL 0
-#define wxUSE_NOTEBOOK 0
 #define wxUSE_SPINBTN 0
 #define wxUSE_SPINCTRL 0
 #define wxUSE_TREECTRL 0
