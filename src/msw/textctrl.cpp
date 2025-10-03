@@ -3131,7 +3131,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
         // the default font for it.
         wxTextAttr attr;
         attr.SetFont(font);
-        SetStyle(-1, -1, attr);
+        SetStyle(-1, -1, wxTextAttr::Combine(attr, GetDefaultStyle(), this));
     }
 
     return true;
