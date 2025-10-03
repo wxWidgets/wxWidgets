@@ -47,7 +47,7 @@
 
 -(BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    // wxLogMessage( "shouldSelectUIViewController" );
+    // TODO: Can we veto here?
     return YES;
 }
 
@@ -71,60 +71,155 @@
 class wxNotebookIPhoneImpl : public wxWidgetIPhoneImpl
 {
 public:
-    wxNotebookIPhoneImpl(wxWindowMac *wxpeer, UIView *v, UITabBarController *c)
+    wxNotebookIPhoneImpl(wxWindowMac *wxpeer, UIView *v, UITabBarController *controller, UISegmentedControl* segmented )
     : wxWidgetIPhoneImpl(wxpeer, v)
     {
-        m_controller = c;
+        m_controller = controller;
+        m_segmented = segmented;
     }
     
     wxInt32  GetValue() const wxOVERRIDE
     {
-        return [m_controller selectedIndex ] + 1; // notebook_osx starts with 1
+        if (GetWXPeer()->HasFlag( wxBK_BOTTOM ))
+        {
+            return [m_controller selectedIndex ] + 1; // notebook_osx starts with 1
+        }
+        else
+        {
+            return [m_segmented selectedSegmentIndex ] + 1;
+        }
     }
     
-    void SetValue( wxInt32 v ) wxOVERRIDE
+    void SetValue( wxInt32 value ) wxOVERRIDE
     {
-        [m_controller setSelectedIndex: v-1 ];    // notebook_osx starts with 1
+        if (GetWXPeer()->HasFlag( wxBK_BOTTOM ))
+        {
+            [m_controller setSelectedIndex: value-1 ];    // notebook_osx starts with 1
+        }
+        else
+        {
+            [m_segmented setSelectedSegmentIndex: value-1 ];
+        }
     }
 
     void SetupTabs( const wxNotebook& notebook) wxOVERRIDE
     {
         UIView* slf = (UIView*) m_osxView;
-        // if (controller.view != slf) return; 
 
-        NSMutableArray *viewControllers = [[NSMutableArray alloc] init ];
 
-        for (int i = 0; i < notebook.GetPageCount(); i++)
+        if (GetWXPeer()->HasFlag( wxBK_BOTTOM ))
         {
-            wxNotebookPage* page = notebook.GetPage(i);
+            NSMutableArray *viewControllers = [[NSMutableArray alloc] init ];
 
-            UIViewController *subController =[[UIViewController alloc] init];
+            for (int i = 0; i < notebook.GetPageCount(); i++)
+            {
+                wxNotebookPage* page = notebook.GetPage(i);
 
-            wxCFStringRef text( wxControl::RemoveMnemonics(notebook.GetPageText(i)) );
-            UIImage *nbImage = nil;
-            const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
-            if ( bitmap.IsOk() ) {
-                nbImage = wxOSXGetImageFromBundle(bitmap);
+                UIViewController *subController =[[UIViewController alloc] init];
+
+                wxCFStringRef text( wxControl::RemoveMnemonics(notebook.GetPageText(i)) );
+                UIImage *nbImage = nil;
+                const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
+                if ( bitmap.IsOk() ) {
+                    nbImage = wxOSXGetImageFromBundle(bitmap);
+                }
+                UITabBarItem *item = [[UITabBarItem alloc] initWithTitle: text.AsNSString() image:nbImage tag: i ];
+                [subController setTabBarItem: item];
+
+                UIView *subView = [[UIView alloc] init ];
+                [slf addSubview: subView];
+                [subController setView: subView];
+                [subView addSubview: page->GetHandle()];
+
+                [viewControllers addObject: subController];
+            }        
+
+            [m_controller setViewControllers: viewControllers];
+        }
+        else
+        {
+            [m_segmented removeAllSegments];
+            for (int i = 0; i < notebook.GetPageCount(); i++)
+            {
+                wxNotebookPage* page = notebook.GetPage(i);
+
+                wxCFStringRef text( wxControl::RemoveMnemonics(notebook.GetPageText(i)) );
+                [m_segmented insertSegmentWithTitle:text.AsNSString() atIndex:i animated:NO];
+
+                if (notebook.GetPageCount() > 0)
+                  [m_segmented setSelectedSegmentIndex: 0 ];
             }
-            UITabBarItem *item = [[UITabBarItem alloc] initWithTitle: text.AsNSString() image:nbImage tag: i ];
-            [subController setTabBarItem: item];
 
-            UIView *subView = [[UIView alloc] init ];
-            [slf addSubview: subView];
-            [subController setView: subView];
-            [subView addSubview: page->GetHandle()];
-
-            [viewControllers addObject: subController];
         }        
+    }
 
-        [m_controller setViewControllers: viewControllers];
+    // TODO: find out what the proper border is
+    const int borderAround = 4;
 
+    void Move(int x, int y, int width, int height) wxOVERRIDE
+    {
+        wxWidgetIPhoneImpl::Move(x, y, width, height);
+
+        if (!GetWXPeer()->HasFlag( wxBK_BOTTOM ))
+        {
+            CGRect r = CGRectMake( borderAround, borderAround, width-(2*borderAround), 35) ;
+            [m_segmented setFrame:r];
+        }
+    }
+
+    void SegmentedSelected( int selected )
+    {
+        wxNotebook *notebook = (wxNotebook*) GetWXPeer();
+        wxNotebookPage *page = notebook->GetPage( selected );
+        page->Show( true );
+        for (int i = 0; i < notebook->GetPageCount(); i++)
+        {
+            if (i != selected) 
+            {
+                wxNotebookPage* page = notebook->GetPage(i);
+                page->Hide();
+            }
+        }
+        wxNotebookEvent event(  wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, notebook->GetId(), selected );
+        notebook->HandleWindowEvent( event );
     }
 
 protected:
     UITabBarController  *m_controller;
+    UISegmentedControl  *m_segmented;
 
 };
+
+@interface wxUISegmentedControl : UISegmentedControl
+{
+}
+
+@property  wxNotebookIPhoneImpl *owner;
+
+@end
+
+@implementation wxUISegmentedControl
+
+@end
+
+
+
+@interface UIControl (wxUIControlActionSupport)
+
+- (void) segmentedValueChangedAction:(id)sender event:(UIEvent*)event;
+
+@end
+
+@implementation UIControl (wxUIControlActionSupport)
+
+- (void) segmentedValueChangedAction:(id)sender event:(UIEvent*)event
+{
+    wxUISegmentedControl *segmented = (wxUISegmentedControl*) self;
+    wxNotebookIPhoneImpl* impl = [segmented owner];
+    impl->SegmentedSelected( [segmented selectedSegmentIndex] );
+}
+
+@end
 
 
 wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
@@ -135,12 +230,31 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
                                     long style,
                                     long WXUNUSED(extraStyle))
 {
-    UITabBarController *controller = [[UITabBarController alloc] init];
-   
-    wxTabBarControllerDelegate *delegate = [[wxTabBarControllerDelegate alloc] init];
-    [controller setDelegate: delegate];
+    UITabBarController *controller = nullptr;
+    wxUISegmentedControl *segmented = nullptr;
+    UIView *v = nullptr;
 
-    UIView *v = controller.view;
+    if (style & wxBK_BOTTOM)
+    {
+        controller = [[UITabBarController alloc] init];
+    
+        wxTabBarControllerDelegate *delegate = [[wxTabBarControllerDelegate alloc] init];
+        [controller setDelegate: delegate];
+
+        v = controller.view;
+    }
+    else
+    {
+        CGRect r = CGRectMake( pos.x, pos.y, size.x, size.y) ;
+        v = [[UIView alloc] initWithFrame:r];
+
+        CGRect rs = CGRectMake( 0, 0, size.x, 50) ;
+        segmented = [[wxUISegmentedControl alloc] initWithFrame:r];
+
+        [segmented addTarget:segmented action:@selector(segmentedValueChangedAction:event:) forControlEvents:UIControlEventValueChanged];
+
+        [v addSubview:segmented];
+    }
 
     /*
     if (style & wxALIGN_CENTER)
@@ -149,8 +263,12 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
         [v setTextAlignment: NSTextAlignmentRight];
     */
 
-    wxWidgetIPhoneImpl* c = new wxNotebookIPhoneImpl( wxpeer, v, controller );
-    return c;
+    wxNotebookIPhoneImpl* impl = new wxNotebookIPhoneImpl( wxpeer, v, controller, segmented );
+
+    if (segmented != nullptr)
+        [segmented setOwner: impl];
+
+    return impl;
 }
 
 #endif //if wxUSE_NOTEBOOK
