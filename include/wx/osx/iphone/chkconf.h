@@ -175,6 +175,7 @@
 #undef wxUSE_LOGWINDOW
 #undef wxUSE_LOG_DIALOG
 #undef wxUSE_LISTBOOK
+#undef wxUSE_CHOICEBOOK
 #undef wxUSE_TREEBOOK
 #undef wxUSE_TOOLBOOK
 #undef wxUSE_HELP
@@ -196,6 +197,7 @@
 #define wxUSE_LOGWINDOW 0
 #define wxUSE_LOG_DIALOG 0
 #define wxUSE_LISTBOOK 0
+#define wxUSE_CHOICEBOOK 0
 #define wxUSE_TREEBOOK 0
 #define wxUSE_TOOLBOOK 0
 #define wxUSE_HELP 0

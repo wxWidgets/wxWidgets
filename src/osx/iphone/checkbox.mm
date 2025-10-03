@@ -55,15 +55,32 @@ public:
         [m_control setOn:v != 0 animated:NO];
     }
 
+    // a blog on spacing in iOS
+    // https://uxdesign.cc/designing-widgets-for-ios-macos-and-ipados-the-ultimate-guide-737fb284a9df
+    const int widthOfSpace = 9;
+
     void Move(int x, int y, int width, int height) override
     {
         wxWidgetIPhoneImpl::Move( x, y, width, height );
-        m_label->SetPosition( wxPoint(x + 65, y+5) );  // TODO: align properly
+
+        int checkboxWidth = 0;
+        int checkboxHeight = 0;
+        // get size of checkbox
+        wxWidgetIPhoneImpl::GetSize( checkboxWidth, checkboxHeight );
+
+        // get size of label
+        wxSize sz = m_label->GetSize();
+
+        int offset = (checkboxHeight-sz.y) / 2;
+
+        m_label->SetPosition( wxPoint(x + checkboxWidth+widthOfSpace, y+offset) ); 
     }
 
     void GetSize( int &width, int &height ) const override
     {
         wxWidgetIPhoneImpl::GetSize( width, height );
+        wxSize sz = m_label->GetSize();
+        width += widthOfSpace + sz.x;
     }
 
 private:
@@ -89,6 +106,9 @@ wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
 //        [v setAllowsMixedState:YES];
 
     wxCheckBoxIPhoneImpl* c = new wxCheckBoxIPhoneImpl( wxpeer, v, text );
+
+    c->Move( pos.x, pos.y, size.y, size.y );
+
     return c;
 }
 
