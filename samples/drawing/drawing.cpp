@@ -282,7 +282,7 @@ public:
     void OnOption(wxCommandEvent &event);
     void OnBoundingBox(wxCommandEvent& evt);
     void OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt);
-#if wxOSX_USE_IPHONE
+#if defined(__WXOSX__) && wxOSX_USE_IPHONE
     // for iOS versions with no app menubar
     void OnKeyDown(wxKeyEvent &event);
 #endif
@@ -2532,7 +2532,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LogicalOrigin_MoveMouse, MyFrame::OnMoveMouse)
     EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
 
-#if wxOSX_USE_IPHONE
+#if defined(__WXOSX__) && wxOSX_USE_IPHONE
     EVT_KEY_DOWN(MyFrame::OnKeyDown)
 #endif
 wxEND_EVENT_TABLE()
@@ -2919,7 +2919,7 @@ void MyFrame::OnMoveMouse(wxCommandEvent& WXUNUSED(event))
     m_canvas->WarpPointer(100, 100);
 }
 
-#if wxOSX_USE_IPHONE
+#if defined(__WXOSX__) && wxOSX_USE_IPHONE
 void MyFrame::OnKeyDown(wxKeyEvent& event)
 {
     int currentPage = m_canvas->GetPage();
