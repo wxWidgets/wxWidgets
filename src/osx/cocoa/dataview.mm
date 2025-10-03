@@ -2850,7 +2850,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
                     data->SaveOriginalTextColour([(id)cell textColor]);
                 }
 
-                colText = attr.GetColour().OSXGetNSColor();
+                colText = attr.GetColour().OSXGetWXColor();
             }
         }
 
@@ -2863,7 +2863,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
                 if ( !data->GetOriginalBackgroundColour() )
                     data->SaveOriginalBackgroundColour([(id)cell backgroundColor]);
 
-                colBack = attr.GetBackgroundColour().OSXGetNSColor();
+                colBack = attr.GetBackgroundColour().OSXGetWXColor();
             }
         }
     }

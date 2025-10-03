@@ -124,6 +124,9 @@ WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 
 // UI
 
+WXColor WXDLLIMPEXP_CORE wxOSXGetWXColorFromCGColor(CGColorRef col);
+WXImage WXDLLIMPEXP_CORE wxOSXGetWXImageFromCGColor(CGColorRef col);
+
 CGSize WXDLLIMPEXP_CORE wxOSXGetImageSize(WXImage image);
 CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromImage( WXImage nsimage, double *scale = nullptr );
 CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r, CGContextRef cg);

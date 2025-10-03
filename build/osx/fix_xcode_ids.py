@@ -39,7 +39,7 @@ def insertBuildFileEntry(filePath, fileRefId):
     global strIn
     print("\tInsert PBXBuildFile for '%s'..." % filePath)
 
-    matchBuildFileSection = re.search("/\* Begin PBXBuildFile section \*/\n", strIn)
+    matchBuildFileSection = re.search(r"/\* Begin PBXBuildFile section \*/\n", strIn)
     dirName, fileName = os.path.split(filePath)
 
     fileInSources = fileName + " in Sources"
@@ -58,7 +58,7 @@ def insertFileRefEntry(filePath, id=0):
     global strIn
     print("\tInsert PBXFileReference for '%s'..." % filePath)
 
-    matchFileRefSection = re.search("/\* Begin PBXFileReference section \*/\n", strIn)
+    matchFileRefSection = re.search(r"/\* Begin PBXFileReference section \*/\n", strIn)
     dirName, fileName = os.path.split(filePath)
     if id == 0:
         id = toUuid(fileName)
@@ -76,7 +76,7 @@ def insertSourcesBuildPhaseEntry(id, fileName, insertBeforeFileName, startSearch
     global strIn
     print("\tInsert PBXSourcesBuildPhase for '%s'..." % fileName)
 
-    matchBuildPhase = re.compile(".+ /\* " + insertBeforeFileName + " in Sources \*/,") \
+    matchBuildPhase = re.compile(r".+ /\* " + insertBeforeFileName + r" in Sources \*/,") \
         .search(strIn, startSearchPos)
     insert = "\t\t\t\t%s /* %s in Sources */,\n" % (id, fileName)
     strIn = strIn[:matchBuildPhase.start()] \
@@ -174,7 +174,7 @@ def processContent():
     global strIn
     global idDict
 
-    rc = re.compile(".+ (?P<path1>[\w/.]+(\.cpp|\.cxx|\.c))(?P<path2>\w+/[\w/.]+).+")
+    rc = re.compile(r".+ (?P<path1>[\w/.]+(\.cpp|\.cxx|\.c))(?P<path2>\w+/[\w/.]+).+")
     matchLine = rc.search(strIn)
     while matchLine:
         line = matchLine.group(0)
@@ -221,10 +221,10 @@ def processContent():
                 startSearchIndex = insertSourcesBuildPhaseEntry(buildPhaseId[i], fileName1, fileName2, startSearchIndex)
 
             # insert both paths in the group they belong to
-            matchGroupStart = re.search("/\* %s \*/ = {" % dir2, strIn)
+            matchGroupStart = re.search(r"/\* %s \*/ = {" % dir2, strIn)
             endGroupIndex = strIn.find("};", matchGroupStart.start())
 
-            for matchGroupLine in re.compile(".+" + idMask + " /\* (.+) \*/,").finditer(strIn, matchGroupStart.start(),
+            for matchGroupLine in re.compile(".+" + idMask + r" /\* (.+) \*/,").finditer(strIn, matchGroupStart.start(),
                                                                                         endGroupIndex):
                 if matchGroupLine.group(1) > fileName1:
                     print("\tInsert paths in PBXGroup '%s', just before '%s'..." % (dir2, matchGroupLine.group(1)))
@@ -266,7 +266,7 @@ def processContent():
     # 890123456789ABCDEF012345 /* Name */ = {
 
     # Capture the first comment between /* and */ (file/section name) as a group
-    rc = re.compile("\s+(" + idMask + ") /\* (.+) \*/ = {.*$", re.MULTILINE)
+    rc = re.compile(r"\s+(" + idMask + r") /\* (.+) \*/ = {.*$", re.MULTILINE)
     dict = rc.findall(strIn)
 
     for s in dict:

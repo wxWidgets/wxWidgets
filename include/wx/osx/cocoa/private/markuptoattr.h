@@ -115,14 +115,14 @@ public:
         if ( attr.foreground.IsOk() )
         {
             [m_attrString addAttribute:NSForegroundColorAttributeName
-                          value:attr.foreground.OSXGetNSColor()
+                          value:attr.foreground.OSXGetWXColor()
                           range:range];
         }
 
         if ( attr.background.IsOk() )
         {
             [m_attrString addAttribute:NSBackgroundColorAttributeName
-                          value:attr.background.OSXGetNSColor()
+                          value:attr.background.OSXGetWXColor()
                           range:range];
         }
     }

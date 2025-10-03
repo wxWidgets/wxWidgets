@@ -138,7 +138,7 @@ public:
         {
             wxWindow* const wxpeer = GetWXPeer();
             if ( wxpeer )
-                [nsdatePicker setTextColor: wxpeer->GetForegroundColour().OSXGetNSColor()];
+                [nsdatePicker setTextColor: wxpeer->GetForegroundColour().OSXGetWXColor()];
             else
                 [nsdatePicker setTextColor: [NSColor controlTextColor]];
         }

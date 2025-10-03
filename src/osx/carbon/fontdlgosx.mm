@@ -256,7 +256,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     [[NSFontManager sharedFontManager] setSelectedAttributes:attributes isMultiple:false];
 
     if(fontdata.m_fontColour.IsOk())
-        [[NSColorPanel sharedColorPanel] setColor: fontdata.m_fontColour.OSXGetNSColor()];
+        [[NSColorPanel sharedColorPanel] setColor: fontdata.m_fontColour.OSXGetWXColor()];
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
 #endif
