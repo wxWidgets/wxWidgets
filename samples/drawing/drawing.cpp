@@ -36,6 +36,7 @@
 #include "wx/filename.h"
 #include "wx/metafile.h"
 #include "wx/settings.h"
+#include "wx/stdpaths.h"
 #if wxUSE_SVG
 #include "wx/dcsvg.h"
 #endif
@@ -273,12 +274,18 @@ public:
 
     void OnBuffer(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
+#if wxUSE_FILEDLG
     void OnSave(wxCommandEvent& event);
+#endif
     void OnShow(wxCommandEvent &event);
     void OnMoveMouse(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
     void OnBoundingBox(wxCommandEvent& evt);
     void OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt);
+#if wxOSX_USE_IPHONE
+    // for iOS versions with no app menubar
+    void OnKeyDown(wxKeyEvent &event);
+#endif
 
 #if wxUSE_COLOURDLG
     wxColour SelectColour();
@@ -461,6 +468,7 @@ bool MyApp::LoadImages()
     pathList.Add("..");
     pathList.Add("../drawing");
     pathList.Add("../../../samples/drawing");
+    pathList.Add(wxStandardPaths::Get().GetResourcesDir());
 
     wxString path = pathList.FindValidPath("pat4.bmp");
     if ( !path )
@@ -1874,7 +1882,8 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
         { wxSYS_COLOUR_SCROLLBAR, "wxSYS_COLOUR_SCROLLBAR" },
         { wxSYS_COLOUR_WINDOWFRAME, "wxSYS_COLOUR_WINDOWFRAME" },
         { wxSYS_COLOUR_WINDOWTEXT, "wxSYS_COLOUR_WINDOWTEXT" },
-        { wxSYS_COLOUR_WINDOW, "wxSYS_COLOUR_WINDOW" }
+        { wxSYS_COLOUR_WINDOW, "wxSYS_COLOUR_WINDOW" },
+        { wxSYS_COLOUR_GRIDLINES, "wxSYS_COLOUR_GRIDLINES" }
     };
 
     for (int i = 0; i < wxSYS_COLOUR_MAX; i++)
@@ -2376,6 +2385,7 @@ void MyCanvas::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 void MyCanvas::UseGraphicRenderer(wxGraphicsRenderer* renderer)
 {
     m_renderer = renderer;
+    #if wxUSE_STATUSBAR
     if (renderer)
     {
         int major, minor, micro;
@@ -2388,6 +2398,7 @@ void MyCanvas::UseGraphicRenderer(wxGraphicsRenderer* renderer)
     {
         m_owner->SetStatusText(wxEmptyString, 1);
     }
+#endif
 
     Refresh();
 }
@@ -2510,7 +2521,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
     EVT_MENU      (File_Copy,     MyFrame::OnCopy)
+#if wxUSE_FILEDLG
     EVT_MENU      (File_Save,     MyFrame::OnSave)
+#endif
     EVT_MENU      (File_BBox,     MyFrame::OnBoundingBox)
     EVT_UPDATE_UI (File_BBox,     MyFrame::OnBoundingBoxUpdateUI)
 
@@ -2518,6 +2531,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(LogicalOrigin_MoveMouse, MyFrame::OnMoveMouse)
     EVT_MENU_RANGE(MenuOption_First, MenuOption_Last, MyFrame::OnOption)
+
+#if wxOSX_USE_IPHONE
+    EVT_KEY_DOWN(MyFrame::OnKeyDown)
+#endif
 wxEND_EVENT_TABLE()
 
 // frame constructor
@@ -2527,6 +2544,7 @@ MyFrame::MyFrame(const wxString& title)
     // set the frame icon
     SetIcon(wxICON(sample));
 
+#if wxUSE_MENUBAR
     wxMenu *menuScreen = new wxMenu;
     menuScreen->Append(File_ShowDefault, "&Default screen\tF1");
     menuScreen->Append(File_ShowText, "&Text screen\tF2");
@@ -2680,6 +2698,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
+#endif
 
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
@@ -2707,8 +2726,9 @@ MyFrame::MyFrame(const wxString& title)
 
     m_canvas = new MyCanvas( this );
     m_canvas->SetScrollbars( 10, 10, 100, 450 );
-
+#ifndef wxOSX_USE_IPHONE
     SetSize(FromDIP(wxSize(800, 700)));
+#endif
     Center(wxBOTH);
 }
 
@@ -2757,6 +2777,7 @@ void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 #endif
 }
 
+#if wxUSE_FILEDLG
 void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
     wxString wildCard = "Bitmap image (*.bmp)|*.bmp;*.BMP";
@@ -2861,6 +2882,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         }
     }
 }
+#endif // wxUSE_FILEDLG
 
 void MyFrame::OnShow(wxCommandEvent& event)
 {
@@ -2896,6 +2918,38 @@ void MyFrame::OnMoveMouse(wxCommandEvent& WXUNUSED(event))
 {
     m_canvas->WarpPointer(100, 100);
 }
+
+#if wxOSX_USE_IPHONE
+void MyFrame::OnKeyDown(wxKeyEvent& event)
+{
+    int currentPage = m_canvas->GetPage();
+
+    switch ( event.GetKeyCode() )
+    {
+        case WXK_LEFT:
+            currentPage--;
+            if ( currentPage < MenuShow_First )
+                currentPage = MenuShow_Last;
+            break;
+        case WXK_RIGHT:
+            currentPage++;
+            if ( currentPage > MenuShow_Last )
+                currentPage = MenuShow_First;
+            break;
+        default:
+            event.Skip();
+            return;
+    }
+    if ( currentPage == File_ShowAlpha || currentPage == File_ShowGraphics )
+    {
+        if ( !m_canvas->HasRenderer() )
+            m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetDefaultRenderer());
+        // Disable selecting wxDC, if necessary.
+    }
+
+    m_canvas->ToShow(currentPage);
+}
+#endif
 
 void MyFrame::OnOption(wxCommandEvent& event)
 {
