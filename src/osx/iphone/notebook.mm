@@ -77,7 +77,7 @@ public:
         m_controller = controller;
         m_segmented = segmented;
     }
-    
+
     wxInt32  GetValue() const wxOVERRIDE
     {
         if (GetWXPeer()->HasFlag( wxBK_BOTTOM ))
@@ -89,7 +89,7 @@ public:
             return [m_segmented selectedSegmentIndex ] + 1;
         }
     }
-    
+
     void SetValue( wxInt32 value ) wxOVERRIDE
     {
         if (GetWXPeer()->HasFlag( wxBK_BOTTOM ))
@@ -132,7 +132,7 @@ public:
                 [subView addSubview: page->GetHandle()];
 
                 [viewControllers addObject: subController];
-            }        
+            }
 
             [m_controller setViewControllers: viewControllers];
         }
@@ -149,8 +149,7 @@ public:
                 if (notebook.GetPageCount() > 0)
                   [m_segmented setSelectedSegmentIndex: 0 ];
             }
-
-        }        
+        }    
     }
 
     // TODO: find out what the proper border is
@@ -174,7 +173,7 @@ public:
         page->Show( true );
         for (int i = 0; i < notebook->GetPageCount(); i++)
         {
-            if (i != selected) 
+            if (i != selected)
             {
                 wxNotebookPage* page = notebook->GetPage(i);
                 page->Hide();
@@ -237,7 +236,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
     if (style & wxBK_BOTTOM)
     {
         controller = [[UITabBarController alloc] init];
-    
+
         wxTabBarControllerDelegate *delegate = [[wxTabBarControllerDelegate alloc] init];
         [controller setDelegate: delegate];
 
