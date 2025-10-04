@@ -2235,6 +2235,7 @@ set(OSX_IPHONE_SRC
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
     src/osx/iphone/gauge.mm
+    src/osx/iphone/listbox.mm
     src/osx/iphone/msgdlg.mm
     src/osx/iphone/nonownedwnd.mm
     src/osx/iphone/scrolbar.mm
