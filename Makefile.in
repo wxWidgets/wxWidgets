@@ -5609,6 +5609,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_dialog.o \
 	monodll_iphone_evtloop.o \
 	monodll_iphone_gauge.o \
+	monodll_iphone_listbox.o \
 	monodll_iphone_msgdlg.o \
 	monodll_iphone_nonownedwnd.o \
 	monodll_iphone_scrolbar.o \
@@ -7387,6 +7388,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_dialog.o \
 	monolib_iphone_evtloop.o \
 	monolib_iphone_gauge.o \
+	monolib_iphone_listbox.o \
 	monolib_iphone_msgdlg.o \
 	monolib_iphone_nonownedwnd.o \
 	monolib_iphone_scrolbar.o \
@@ -9311,6 +9313,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_dialog.o \
 	coredll_iphone_evtloop.o \
 	coredll_iphone_gauge.o \
+	coredll_iphone_listbox.o \
 	coredll_iphone_msgdlg.o \
 	coredll_iphone_nonownedwnd.o \
 	coredll_iphone_scrolbar.o \
@@ -10817,6 +10820,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_dialog.o \
 	corelib_iphone_evtloop.o \
 	corelib_iphone_gauge.o \
+	corelib_iphone_listbox.o \
 	corelib_iphone_msgdlg.o \
 	corelib_iphone_nonownedwnd.o \
 	corelib_iphone_scrolbar.o \
@@ -16127,6 +16131,9 @@ monodll_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(MONODLL_ODEP)
 monodll_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+monodll_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 monodll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
 
@@ -20896,6 +20903,9 @@ monolib_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(MONOLIB_ODEP)
 
 monolib_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
+
+monolib_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
 
 monolib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
@@ -26336,6 +26346,9 @@ coredll_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(COREDLL_ODEP)
 coredll_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
 
+coredll_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
+
 coredll_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm
 
@@ -30076,6 +30089,9 @@ corelib_iphone_evtloop.o: $(srcdir)/src/osx/iphone/evtloop.mm $(CORELIB_ODEP)
 
 corelib_iphone_gauge.o: $(srcdir)/src/osx/iphone/gauge.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/gauge.mm
+
+corelib_iphone_listbox.o: $(srcdir)/src/osx/iphone/listbox.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/listbox.mm
 
 corelib_iphone_msgdlg.o: $(srcdir)/src/osx/iphone/msgdlg.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/msgdlg.mm

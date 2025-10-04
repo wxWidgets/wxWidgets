@@ -140,7 +140,6 @@
 #undef wxUSE_BMPBUTTON
 #undef wxUSE_CHECKLISTBOX
 #undef wxUSE_GRID
-#undef wxUSE_LISTBOX
 #undef wxUSE_LISTCTRL
 #undef wxUSE_NOTEBOOK
 #undef wxUSE_SPINBTN
@@ -171,7 +170,6 @@
 #define wxUSE_BMPBUTTON 0
 #define wxUSE_CHECKLISTBOX 0
 #define wxUSE_GRID 0
-#define wxUSE_LISTBOX 0
 #define wxUSE_LISTCTRL 0
 #define wxUSE_NOTEBOOK 0
 #define wxUSE_SPINBTN 0
