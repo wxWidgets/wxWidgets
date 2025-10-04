@@ -1056,11 +1056,19 @@ void wxGenericTreeCtrl::InitVisualAttributes()
 
     m_dottedPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT), 1, wxPENSTYLE_DOT);
 
+    if ( !m_hasExplicitFont )
+    {
 #if defined(__WXOSX__)
-    m_normalFont = wxFont(wxOSX_SYSTEM_FONT_VIEWS);
+        m_normalFont = wxFont(wxOSX_SYSTEM_FONT_VIEWS);
 #else
-    m_normalFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+        m_normalFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 #endif
+    }
+    else
+    {
+        m_normalFont = m_font;
+    }
+
     m_boldFont = m_normalFont.Bold();
 
     m_indent = 10;
