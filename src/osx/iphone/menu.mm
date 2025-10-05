@@ -227,4 +227,3 @@ void wxMenuBar::OSXOnBuildMenu(WX_NSObject b)
 #endif
 
 #endif
-
