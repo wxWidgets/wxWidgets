@@ -18,8 +18,54 @@
 #endif
 
 #include "wx/osx/core/private.h"
+#include "wx/osx/private/available.h"
 
 #include "UIKit/UIKit.h"
+
+#import <Foundation/Foundation.h>
+
+
+static int wxOSXGetUserDefault(NSString* key, int defaultValue)
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    if (!defaults)
+    {
+        return defaultValue;
+    }
+
+    id setting = [defaults objectForKey: key];
+    if (!setting)
+    {
+        return defaultValue;
+    }
+
+    return [setting intValue];
+}
+
+// ----------------------------------------------------------------------------
+// wxSystemAppearance
+// ----------------------------------------------------------------------------
+
+wxString wxSystemAppearance::GetName() const
+{
+    UITraitCollection* traitCollection = [UIScreen mainScreen].traitCollection;
+    if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
+        return wxS("Dark");
+    else if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight)
+        return wxS("Light");
+    else
+        return wxS("Unspecified");
+}
+
+bool wxSystemAppearance::IsDark() const
+{
+    UITraitCollection* traitCollection = [UIScreen mainScreen].traitCollection;
+    if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
+        return true;
+
+    return false;
+}
+
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
@@ -31,15 +77,12 @@
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    wxColour resultColor;
-#if wxOSX_USE_COCOA_OR_CARBON
-    ThemeBrush colorBrushID;
-#endif
+    UIColor* sysColor = nil;
 
     switch ( index )
     {
         case wxSYS_COLOUR_WINDOW:
-            resultColor = *wxWHITE;
+            sysColor = [UIColor systemBackgroundColor];
             break ;
         case wxSYS_COLOUR_SCROLLBAR :
         case wxSYS_COLOUR_BACKGROUND:
@@ -51,15 +94,15 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_BTNFACE:
         case wxSYS_COLOUR_MENUBAR:
-            resultColor = wxColour( 0xBE, 0xBE, 0xBE ) ;
+            sysColor = [UIColor systemFillColor];
             break ;
 
         case wxSYS_COLOUR_LISTBOX :
-            resultColor = *wxWHITE ;
+            sysColor = [UIColor whiteColor];
             break ;
 
         case wxSYS_COLOUR_BTNSHADOW:
-            resultColor = wxColour( 0xBE, 0xBE, 0xBE );
+            sysColor = [UIColor systemFillColor];
             break ;
 
         case wxSYS_COLOUR_BTNTEXT:
@@ -69,40 +112,40 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_INFOTEXT:
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_LISTBOXTEXT:
-            resultColor = *wxBLACK;
+            sysColor = [UIColor labelColor];
             break ;
 
         case wxSYS_COLOUR_HIGHLIGHT:
             {
-                resultColor = wxColor( 0xCC, 0xCC, 0xFF );
+            sysColor = [UIColor lightTextColor];
             }
             break ;
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:
         case wxSYS_COLOUR_GRAYTEXT:
-            resultColor = wxColor( 0xCC, 0xCC, 0xCC );
+            sysColor = [UIColor lightTextColor];
             break ;
 
         case wxSYS_COLOUR_3DDKSHADOW:
-            resultColor = wxColor( 0x44, 0x44, 0x44 );
+            sysColor = [UIColor darkTextColor];
             break ;
 
         case wxSYS_COLOUR_3DLIGHT:
-            resultColor = wxColor( 0xCC, 0xCC, 0xCC );
+            sysColor = [UIColor lightTextColor];
             break ;
 
         case wxSYS_COLOUR_HIGHLIGHTTEXT :
         case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT :
-            resultColor = *wxWHITE ;
+            sysColor = [UIColor whiteColor];
             break ;
 
         case wxSYS_COLOUR_INFOBK :
             // we don't have a way to detect tooltip color, so use the
             // standard value used at least on 10.4:
-            resultColor = wxColour( 0xFF, 0xFF, 0xD3 ) ;
+            sysColor = [UIColor systemFillColor];
             break ;
         case wxSYS_COLOUR_APPWORKSPACE:
-            resultColor =  wxColor( 0x80, 0x80, 0x80 ); ;
+            sysColor = [UIColor systemBackgroundColor];
             break ;
 
         case wxSYS_COLOUR_HOTLIGHT:
@@ -110,15 +153,21 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         case wxSYS_COLOUR_MENUHILIGHT:
             // TODO:
-            resultColor = *wxBLACK;
+            sysColor = [UIColor whiteColor];
             break ;
 
         default:
-            resultColor = *wxWHITE;
+            if(index>=wxSYS_COLOUR_MAX)
+            {
+                wxFAIL_MSG(wxT("Invalid system colour index"));
+                return wxColour();
+            }
+
+            sysColor = [UIColor whiteColor];
             break ;
     }
 
-    return resultColor;
+    return wxColour(sysColor);
 }
 
 // ----------------------------------------------------------------------------
@@ -247,9 +296,4 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
         default:
             return false;
     }
-}
-
-bool wxSystemAppearance::IsDark() const
-{
-    return false;
 }

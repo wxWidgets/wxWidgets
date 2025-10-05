@@ -2803,6 +2803,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(WKWebView);
 typedef WX_NSWindow WXWindow;
 typedef WX_NSEvent WXEvent;
 typedef WX_NSView WXWidget;
+typedef WX_NSColor WXColor;
 typedef WX_NSImage WXImage;
 typedef WX_NSMenu WXHMENU;
 typedef WX_NSOpenGLPixelFormat WXGLPixelFormat;
@@ -2812,6 +2813,7 @@ typedef WX_WKWebView OSXWebViewPtr;
 
 #elif wxOSX_USE_IPHONE
 
+DECLARE_WXCOCOA_OBJC_CLASS(UIColor);
 DECLARE_WXCOCOA_OBJC_CLASS(UIMenu);
 DECLARE_WXCOCOA_OBJC_CLASS(UIMenuItem);
 DECLARE_WXCOCOA_OBJC_CLASS(UIWindow);
@@ -2829,6 +2831,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIPasteboard);
 typedef WX_UIWindow WXWindow;
 typedef WX_UIEvent WXEvent;
 typedef WX_UIView WXWidget;
+typedef WX_UIColor WXColor;
 typedef WX_UIImage WXImage;
 typedef WX_UIMenu WXHMENU;
 typedef WX_EAGLContext WXGLContext;

@@ -163,6 +163,25 @@ WXWindow wxOSXGetKeyWindow()
 // NSImage Utils
 // ----------------------------------------------------------------------------
 
+WXColor wxOSXGetWXColorFromCGColor(CGColorRef col)
+{
+#if wxOSX_USE_COCOA
+    return [NSColor colorWithCGColor:col];
+#elif wxOSX_USE_IPHONE
+    return [UIColor colorWithCGColor:col];
+#else
+    return 0;
+#endif
+}
+
+WXImage wxOSXGetWXImageFromCGColor(CGColorRef /*col*/)
+{
+// CGPatternRef pattern = CGColorGetPattern(col);
+// is the internal pattern, but right now there are no conversion APIs
+
+    return nullptr;
+}
+
 #if wxOSX_USE_IPHONE
 
 wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name, const wxString &client, const wxSize& size)
