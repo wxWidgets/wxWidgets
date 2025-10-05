@@ -474,8 +474,8 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
     // I think GetClientSize() refers to the area below menubar and toolbar
     // and in the case of iOS below the iOS statusbar and the toolbar.
     // The area behind the iOS status bar text/symbols (Wifi and battery
-    // status etc.) is part of the background and we should be able to 
-    // draw into this in the background code. 
+    // status etc.) is part of the background and we should be able to
+    // draw into this in the background code.
 //#ifdef __WXOSX_IPHONE__
 //    GetPeer()->GetContentArea(left, top, w, h);
 //#else

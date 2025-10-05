@@ -388,7 +388,7 @@ void wxFrame::PositionToolBar()
         tx = ty = 0 ;
         // The docs say about wxFrame::GetClientAreaOrigin() that it returns
         // the origin of the frame client area and that it "may be different
-        // from (0, 0) if the frame has a toolbar." so we cannot use it to 
+        // from (0, 0) if the frame has a toolbar." so we cannot use it to
         // place the tool bar. We use GetContentArea() instead.
         if ( m_nowpeer )
         {

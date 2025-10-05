@@ -270,9 +270,9 @@ wxToolBarToolBase *wxToolBarBase::AddStretchableSpace()
 wxToolBarToolBase *wxToolBarBase::InsertStretchableSpace(size_t pos)
 {
 #ifdef __WXOSX_IPHONE__
-   // The hack below does not work on iPhone as the tools are
-   // created in the constructor not Realize. The hack the hack
-   // by add a distinct ID
+   // The hack below does not work on iPhone/iOS as the tools are
+   // created in the constructor, not Realize(). I hack the hack
+   // by adding a distinct ID and check for it in iOS code
    const int id = wxID_STRETCHABLE_SEPARATOR;
 #else
    const int id = wxID_SEPARATOR;

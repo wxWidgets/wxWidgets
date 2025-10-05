@@ -262,7 +262,7 @@ void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width
     top = r.origin.y;
 
     // https://stackoverflow.com/questions/46829840/get-safe-area-inset-top-and-bottom-heights
-    // suggest something like this 
+    // suggest something like this
     if (@available(iOS 11.0, *)) {
         UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
         CGFloat topPadding = window.safeAreaInsets.top;

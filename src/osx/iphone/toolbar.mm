@@ -119,7 +119,7 @@ wxToolBarToolBase(
                   clientData, shortHelp, longHelp )
 {
     bool stretchable = (id == wxID_STRETCHABLE_SEPARATOR);
-    if (stretchable) 
+    if (stretchable)
     {
         m_id = wxID_SEPARATOR;
         id = wxID_SEPARATOR;
