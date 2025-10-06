@@ -73,6 +73,7 @@
     [super dealloc];
 }
 
+#if wxUSE_MENUBAR
 - (void) buildMenuWithBuilder:(id<UIMenuBuilder>) builder
 {
     if ( builder.system == UIMenuSystem.mainSystem )
@@ -80,6 +81,7 @@
         wxTheApp->OSXOnBuildMenu((WX_NSObject) builder);
     }
 }
+#endif
 
 @end
 
