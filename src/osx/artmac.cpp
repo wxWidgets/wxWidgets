@@ -124,10 +124,10 @@ wxIconBundle wxMacArtProvider::CreateIconBundle(const wxArtID& id, const wxArtCl
 #define ART_BITMAP(artId, symbolname) \
     if ( id == artId ) \
     { \
-        return wxOSXCreateSystemBitmapBundle(symbolname); \
+        return wxOSXCreateSystemBitmapBundle(symbolname, size); \
     }
 
-static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id)
+static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id, const wxSize& size)
 {
     ART_BITMAP(wxART_ERROR,         "xmark.circle" )
     ART_BITMAP(wxART_INFORMATION,   "info.circle" )
@@ -158,14 +158,14 @@ static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id)
     return wxBitmapBundle();
 }
 
-wxBitmapBundle wxMacArtProvider::CreateBitmapBundle(const wxArtID& id, const wxArtClient& client, const wxSize& /* size */)
+wxBitmapBundle wxMacArtProvider::CreateBitmapBundle(const wxArtID& id, const wxArtClient& client, const wxSize& size )
 {
     // On the Mac folders in lists are always drawn closed, so if an open
     // folder icon is asked for we will ask for a closed one in its place
     if ( client == wxART_LIST && id == wxART_FOLDER_OPEN )
-        return wxMacArtProvider_CreateBitmapBundle(wxART_FOLDER);
+        return wxMacArtProvider_CreateBitmapBundle(wxART_FOLDER, size);
 
-    return wxMacArtProvider_CreateBitmapBundle(id);
+    return wxMacArtProvider_CreateBitmapBundle(id, size);
 }
 
 // ----------------------------------------------------------------------------

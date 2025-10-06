@@ -224,11 +224,16 @@ WXImage wxOSXGetSystemImage(const wxString& name)
 
 #endif // wxOSX_USE_COCOA
 
-wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name)
+wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name, const wxSize& size)
 {
     WXImage nsimage = wxOSXGetSystemImage(name);
     if ( nsimage )
     {
+#if wxOSX_USE_COCOA
+        [nsimage setSize:NSMakeSize(size.x,size.y)];
+#else
+        // determine whether we should scale the image
+#endif
         return wxOSXMakeBundleFromImage( nsimage );
     }
     return wxNullBitmap;
