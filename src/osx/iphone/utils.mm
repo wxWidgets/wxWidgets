@@ -42,7 +42,7 @@
 // Common Event Support
 // ----------------------------------------------------------------------------
 
-@interface wxAppDelegate : NSObject <UIApplicationDelegate> {
+@interface wxAppDelegate : UIResponder <UIApplicationDelegate> {
 }
 
 @end
@@ -57,19 +57,31 @@
     return YES;
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
+- (void)applicationDidFinishLaunching:(UIApplication *)application
+{
     wxTheApp->OSXOnDidFinishLaunching();
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application
+{
     wxUnusedVar(application);
     wxTheApp->OSXOnWillTerminate();
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [super dealloc];
 }
 
+#if wxUSE_MENUBAR
+- (void) buildMenuWithBuilder:(id<UIMenuBuilder>) builder
+{
+    if ( builder.system == UIMenuSystem.mainSystem )
+    {
+        wxTheApp->OSXOnBuildMenu((WX_NSObject) builder);
+    }
+}
+#endif
 
 @end
 
