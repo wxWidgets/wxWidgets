@@ -149,7 +149,7 @@ public:
                 if (notebook.GetPageCount() > 0)
                   [m_segmented setSelectedSegmentIndex: 0 ];
             }
-        }    
+        }
     }
 
     // TODO: find out what the proper border is
