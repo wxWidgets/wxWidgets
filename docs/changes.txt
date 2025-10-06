@@ -293,6 +293,7 @@ wxOSX:
 - Fix memory leak in wxColour::Set() (#25569).
 - Fix regression with configure build under macOS < 12 (#25675).
 - Fix build under macOS 26 Tahoe (#25798).
+- Fix nested markup attributes handling (Václav Slavík, #25864).
 
 
 3.2.8.1: (released 2025-05-25)
