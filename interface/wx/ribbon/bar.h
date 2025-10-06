@@ -462,6 +462,57 @@ public:
     */
     wxRibbonDisplayMode GetDisplayMode() const;
 
+    /**
+        Returns whether the bar contains multiple pages.
+
+        The default implementation always returns @c true.
+
+        @since 3.1.0
+    */
+    virtual bool HasMultiplePages() const;
+
+    /**
+        Returns @c true if the toggle button is currently moused over.
+
+        @since 3.1.0
+    */
+    bool IsToggleButtonHovered() const;
+
+    /**
+        Returns @c true if the help button is currently moused over.
+
+        @since 3.1.0
+    */
+    bool IsHelpButtonHovered() const;
+
+    /**
+        Hide the panels if its display mode is @c wxRIBBON_BAR_EXPANDED.
+
+        @since 3.1.0
+    */
+    void HideIfExpanded();
+
+    /**
+        Sets the wxRibbonBarOption flags for the ribbon bar.
+
+        @since 3.1.0
+    */
+    void SetWindowStyleFlag(long style);
+
+    /**
+        Returns the ribbon bar's wxRibbonBarOption flags.
+
+        @since 3.1.0
+    */
+    long GetWindowStyleFlag() const;
+
+    /**
+        Return the image list containing images of the given size, creating it
+        if necessary.
+
+        @since 3.1.0
+    */
+    wxImageList* GetButtonImageList(wxSize size);
 
     /**
         Perform initial layout and size calculations of the bar and its
