@@ -462,6 +462,27 @@ public:
     */
     wxRibbonDisplayMode GetDisplayMode() const;
 
+    /**
+        Returns whether the bar contains multiple pages.
+
+        The default implementation always returns @c true.
+    */
+    virtual bool HasMultiplePages() const;
+
+    /**
+        Hide the panels if its display mode is @c wxRIBBON_BAR_EXPANDED.
+
+        @since 2.9.5
+    */
+    void HideIfExpanded();
+
+    /**
+        Return the image list containing images of the given size, creating it
+        if necessary.
+
+        @since 3.1.4
+    */
+    wxImageList* GetButtonImageList(wxSize size);
 
     /**
         Perform initial layout and size calculations of the bar and its
