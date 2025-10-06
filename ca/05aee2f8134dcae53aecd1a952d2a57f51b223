@@ -1,0 +1,1 @@
+wxOSX: Fix nested markup attributes handling (Václav Slavík, #25864).
