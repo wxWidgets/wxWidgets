@@ -480,9 +480,12 @@ public:
         Return the image list containing images of the given size, creating it
         if necessary.
 
+        @param initialCount The initial number of images to reserve for the
+            image list.
+
         @since 3.1.4
     */
-    wxImageList* GetButtonImageList(wxSize size);
+    wxImageList* GetButtonImageList(wxSize size, int initialCount);
 
     /**
         Perform initial layout and size calculations of the bar and its
