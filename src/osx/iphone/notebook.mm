@@ -161,8 +161,11 @@ public:
 
         if (!GetWXPeer()->HasFlag( wxBK_BOTTOM ))
         {
-            CGRect r = CGRectMake( borderAround, borderAround, width-(2*borderAround), 35) ;
-            [m_segmented setFrame:r];
+            CGRect frame = [m_segmented frame];
+            frame.origin = CGPointMake( borderAround, borderAround );
+            frame.size.width = width - (2*borderAround);
+
+            [m_segmented setFrame:frame];
         }
     }
 
@@ -247,8 +250,8 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
         CGRect r = CGRectMake( pos.x, pos.y, size.x, size.y) ;
         v = [[UIView alloc] initWithFrame:r];
 
-        CGRect rs = CGRectMake( 0, 0, size.x, 50) ;
         segmented = [[wxUISegmentedControl alloc] initWithFrame:r];
+        [segmented sizeToFit];
 
         [segmented addTarget:segmented action:@selector(segmentedValueChangedAction:event:) forControlEvents:UIControlEventValueChanged];
 
