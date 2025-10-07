@@ -133,7 +133,11 @@ CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r
 CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate = nullptr);
 WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
 double WXDLLIMPEXP_CORE wxOSXGetImageScaleFactor(WXImage image);
-
+wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& name, const wxSize& size);
+WXImage WXDLLIMPEXP_CORE wxOSXGetSystemImage(const wxString& name);
+wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id, const wxString &client, const wxSize& size);
+void WXDLLIMPEXP_CORE wxOSXDrawImage(CGContextRef inContext, const CGRect* inBounds, WXImage inImage, wxCompositionMode composition) ;
+bool WXDLLIMPEXP_CORE wxOSXGetCGBlendMode(wxCompositionMode op, wxInt32& mode);
 
 class wxWindowMac;
 // to

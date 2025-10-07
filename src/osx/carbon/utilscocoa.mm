@@ -184,18 +184,24 @@ WXImage wxOSXGetWXImageFromCGColor(CGColorRef /*col*/)
 
 #if wxOSX_USE_IPHONE
 
-wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name, const wxString &client, const wxSize& size)
+WXImage wxOSXGetSystemImage(const wxString& name)
 {
-#if 1
-    // unfortunately this only accesses images in the app bundle, not the system wide globals
     wxCFStringRef cfname(name);
-    return wxOSXMakeBundleFromImage( [UIImage imageNamed:cfname.AsNSString()] );
-#else
-    return wxNullBitmap;
-#endif
-}
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_13_0
+    if ( WX_IS_IOS_AVAILABLE(13, 0) )
+    {
+        UIImage* image = [UIImage systemImageNamed:cfname.AsNSString()];
+        if ( image )
+            return image;
+    }
 #endif
+
+    UIImage* image = [UIImage imageNamed:cfname.AsNSString()];
+    return image;
+
+}
+#endif // wxOSX_USE_IPHONE
 
 #if wxOSX_USE_COCOA
 
@@ -216,17 +222,25 @@ WXImage wxOSXGetSystemImage(const wxString& name)
     return nsimage;
 }
 
-wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(sizeHint))
+#endif // wxOSX_USE_COCOA
+
+wxBitmapBundle wxOSXCreateSystemBitmapBundle(const wxString& name, const wxSize& size)
 {
-    NSImage* nsimage = wxOSXGetSystemImage(name);
+    WXImage nsimage = wxOSXGetSystemImage(name);
     if ( nsimage )
     {
+        if ( size != wxDefaultSize )
+        {
+#if wxOSX_USE_COCOA
+            [nsimage setSize:NSMakeSize(size.x,size.y)];
+#else
+            // determine whether we should scale the image
+#endif
+        }
         return wxOSXMakeBundleFromImage( nsimage );
     }
     return wxNullBitmap;
 }
-
-#endif
 
 WXImage  wxOSXGetImageFromCGImage( CGImageRef image, double scaleFactor, bool isTemplate )
 {
@@ -258,6 +272,11 @@ WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCFURL( CFURLRef urlref )
     NSImage  *newImage = [[NSImage alloc] initWithContentsOfURL:(NSURL*)urlref];
     [newImage autorelease];
     return( newImage );
+}
+
+WXImage wxOSXGetIconForType(OSType type )
+{
+    return [[NSWorkspace sharedWorkspace] iconForFileType: NSFileTypeForHFSTypeCode(type)];
 }
 #endif
 
@@ -362,21 +381,18 @@ namespace
 #endif
 } // anonymous namespace
 
-void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
-                                          CGContextRef    inContext,
-                                          const CGRect *  inBounds,
-                                          WXImage      inImage,
-                                          wxCompositionMode composition)
+void WXDLLIMPEXP_CORE wxOSXDrawImage(CGContextRef inContext, const CGRect* inBounds, WXImage inImage, wxCompositionMode composition)
 {
     if (inImage != nil)
     {
         CGContextSaveGState(inContext);
+
+#if wxOSX_USE_COCOA
         CGContextTranslateCTM(inContext, inBounds->origin.x, inBounds->origin.y + inBounds->size.height);
         CGRect r = *inBounds;
         r.origin.x = r.origin.y = 0;
         CGContextScaleCTM(inContext, 1, -1);
 
-#if wxOSX_USE_COCOA
         NSGraphicsContext *previousContext = [NSGraphicsContext currentContext];
         NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithCGContext:inContext flipped:NO];
         [NSGraphicsContext setCurrentContext:nsGraphicsContext];
@@ -384,7 +400,11 @@ void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
         [inImage drawInRect:NSRectFromCGRect(r) fromRect:NSZeroRect operation:wxOSXNSCompositionFromWXComposition(composition) fraction:1.0];
         [NSGraphicsContext setCurrentContext:previousContext];
 #else
-        CGContextDrawImage(inContext, r, [inImage CGImage]);
+        UIGraphicsPushContext(inContext);
+        wxInt32 blendMode;
+        if ( wxOSXGetCGBlendMode(composition, blendMode ) )
+            [inImage drawInRect:*inBounds blendMode: (CGBlendMode) blendMode alpha:1.0];
+        UIGraphicsPopContext();
 #endif
         CGContextRestoreGState(inContext);
 
@@ -397,24 +417,6 @@ double wxOSXGetMainScreenContentScaleFactor()
     return [[NSScreen mainScreen] backingScaleFactor];
 #else
     return [[UIScreen mainScreen] scale];
-#endif
-}
-
-WXImage wxOSXGetIconForType(OSType type )
-{
-#if wxOSX_USE_COCOA
-    return [[NSWorkspace sharedWorkspace] iconForFileType: NSFileTypeForHFSTypeCode(type)];
-#else
-    return nullptr;
-#endif
-}
-
-void wxOSXSetImageSize(WXImage image, CGFloat width, CGFloat height)
-{
-#if wxOSX_USE_COCOA
-    [image setSize:NSMakeSize(width, height)];
-#else
-    // TODO
 #endif
 }
 
