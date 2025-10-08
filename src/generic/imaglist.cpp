@@ -64,7 +64,8 @@ bool wxGenericImageList::Create( int width, int height, bool mask, int initialCo
     m_size = wxSize(wxMax(width, 0), wxMax(height, 0));
     m_useMask = mask;
 
-    m_images.reserve(initialCount);
+    if ( initialCount > 1 )
+        m_images.reserve(initialCount);
 
     // Images must have proper size
     return m_size != wxSize(0, 0);
