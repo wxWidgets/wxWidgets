@@ -482,7 +482,7 @@ public:
 
         @param size The size of the images going into this image list.
         @param initialCount The initial number of images to reserve for the
-            image list.
+            image list (this parameter is available since wxWidgets 3.3.2).
         @return The existing (or newly created) image list.
 
         @since 3.1.4
