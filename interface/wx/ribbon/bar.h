@@ -487,7 +487,7 @@ public:
 
         @since 3.1.4
     */
-    wxImageList* GetButtonImageList(wxSize size, int initialCount);
+    wxImageList* GetButtonImageList(wxSize size, int initialCount = 1);
 
     /**
         Perform initial layout and size calculations of the bar and its
