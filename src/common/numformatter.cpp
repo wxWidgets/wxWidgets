@@ -83,12 +83,14 @@ void ReplaceSeparatorIfNecessary(wxString& s, wxChar sepOld, wxChar sepNew)
 wxString wxNumberFormatter::PostProcessIntString(wxString s, int style)
 {
     if ( style & Style_WithThousandsSep )
-        AddThousandsSeparators(s);
+        AddThousandsSeparators(s, style);
 
     wxASSERT_MSG( !(style & Style_NoTrailingZeroes),
                   "Style_NoTrailingZeroes can't be used with integer values" );
 
     AddSignPrefix(s, style);
+
+    AddCurrency(s, style);
 
     return s;
 }
@@ -121,12 +123,14 @@ wxString wxNumberFormatter::ToString(double val, int precision, int style)
     ReplaceSeparatorIfNecessary(s, '.', GetDecimalSeparator());
 
     if ( style & Style_WithThousandsSep )
-        AddThousandsSeparators(s);
+        AddThousandsSeparators(s, style);
 
     if ( style & Style_NoTrailingZeroes )
         RemoveTrailingZeroes(s);
 
     AddSignPrefix(s, style);
+
+    AddCurrency(s, style);
 
     return s;
 }
@@ -148,17 +152,33 @@ wxString wxNumberFormatter::Format(const wxString& format, double val)
     return s;
 }
 
-void wxNumberFormatter::AddThousandsSeparators(wxString& s)
+void wxNumberFormatter::AddThousandsSeparators(wxString& s, int style)
 {
     // Thousands separators for numbers in scientific format are not relevant.
     if ( s.find_first_of("eE") != wxString::npos )
         return;
 
-    wxChar thousandsSep;
-    if ( !GetThousandsSeparatorIfUsed(&thousandsSep) )
+    wxString groupingSeparator;
+    std::vector<int> grouping;
+    wxString decimalSeparator = GetDecimalSeparator();
+#if wxUSE_INTL
+    wxLocaleNumberFormatting numForm;
+    if (style & Style_Currency)
+        numForm = wxUILocale::GetCurrent().GetCurrencyInfo().currencyFormat;
+    else
+        numForm = wxUILocale::GetCurrent().GetNumberFormatting();
+    if (!numForm.groupSeparator.empty())
+    {
+        groupingSeparator = numForm.groupSeparator;
+        grouping = numForm.grouping;
+        decimalSeparator = numForm.decimalSeparator;
+    }
+#endif // wxUSE_INTL
+
+    if (groupingSeparator.empty() )
         return;
 
-    size_t pos = s.find(GetDecimalSeparator());
+    size_t pos = s.find(decimalSeparator);
     if ( pos == wxString::npos )
     {
         // Start grouping at the end of an integer number.
@@ -169,17 +189,47 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
     // before their start.
     const size_t start = s.find_first_of("0123456789");
 
-    // We currently group digits by 3 independently of the locale. This is not
-    // the right thing to do and we should use lconv::grouping (under POSIX)
-    // and GetLocaleInfo(LOCALE_SGROUPING) (under MSW) to get information about
-    // the correct grouping to use. This is something that needs to be done at
-    // wxLocale level first and then used here in the future (TODO).
-    const size_t GROUP_LEN = 3;
+    if (grouping.empty())
+        return;
 
-    while ( pos > start + GROUP_LEN )
+    // The vector grouping conatins a list of group length.
+    // Beginning from the right, each group length is applied once
+    // to determine the next position of a group separator,
+    // unless the last entry entry is a zero, in which case
+    // the last group length is applied repeatedly.
+    size_t groupIndex = 0;
+    size_t groupLen = grouping[0];
+    size_t nextGroupLen = groupLen;
+
+    // Repeat while the group length is valid (i.e. > 0)
+    // and the potential group separator position lies
+    // within the number.
+    while (groupLen > 0 && pos > start)
     {
-        pos -= GROUP_LEN;
-        s.insert(pos, thousandsSep);
+        // Determine next group separator position
+        pos = (pos >= groupLen) ? pos - groupLen : 0;
+
+        // Apply group separator if it is within the number
+        if (pos > start)
+            s.insert(pos, groupingSeparator);
+
+        // Select next group length
+        if (++groupIndex < grouping.size())
+        {
+            // Set the group length to the next group length entry
+            // unless the next group length is zero,
+            // in which case the last group length remains in effect.
+            nextGroupLen = grouping[groupIndex];
+            if (nextGroupLen != 0)
+                groupLen = nextGroupLen;
+        }
+        else if (nextGroupLen != 0)
+        {
+            // If the next group length is not zero,
+            // the last group length was already applied once, and
+            // no further group is to be applied.
+            groupLen = 0;
+        }
     }
 }
 
@@ -230,6 +280,101 @@ void wxNumberFormatter::AddSignPrefix(wxString& s, int style)
             s = ' ' + s;
         }
     }
+}
+
+void wxNumberFormatter::AddCurrency(wxString& s, int style)
+{
+#if wxUSE_INTL
+    if (style & Style_Currency)
+    {
+        auto currencyInfo = wxUILocale::GetCurrent().GetCurrencyInfo();
+        wxString currencyStr;
+        wxCurrencySymbolPosition currencyPos{ wxCurrencySymbolPosition::PrefixWithSep };
+        if (style & Style_CurrencySymbol)
+        {
+            currencyStr = currencyInfo.currencySymbol;
+            currencyPos = currencyInfo.currencySymbolPos;
+        }
+        else if (style & Style_CurrencyCode)
+        {
+            currencyStr = currencyInfo.currencyCode;
+        }
+
+        if (!currencyStr.empty())
+        {
+            switch (currencyPos)
+            {
+                case wxCurrencySymbolPosition::PrefixWithSep:
+                    s = currencyStr + wxString(" ") + s;
+                    break;
+                case wxCurrencySymbolPosition::PrefixNoSep:
+                    s = currencyStr + s;
+                    break;
+                case wxCurrencySymbolPosition::SuffixWithSep:
+                    s = s + wxString(" ") + currencyStr;
+                    break;
+                case wxCurrencySymbolPosition::SuffixNoSep:
+                    s = s + currencyStr;
+                    break;
+            }
+        }
+    }
+#else
+    wxUnused(s);
+    wxUnused(style);
+#endif // wxUSE_INTL
+}
+
+wxString wxNumberFormatter::RemoveCurrencySymbolOrCode(wxString s, int style)
+{
+#if wxUSE_INTL
+    if (style & Style_Currency)
+    {
+        auto currencyInfo = wxUILocale::GetCurrent().GetCurrencyInfo();
+        wxString thousandsSep = currencyInfo.currencyFormat.groupSeparator;
+        wxString currencyStr;
+        wxCurrencySymbolPosition currencyPos{ wxCurrencySymbolPosition::PrefixWithSep };
+        if (style & Style_CurrencySymbol)
+        {
+            currencyStr = currencyInfo.currencySymbol;
+            currencyPos = currencyInfo.currencySymbolPos;
+        }
+        else if (style & Style_CurrencyCode)
+        {
+            currencyStr = currencyInfo.currencyCode;
+        }
+
+        if (!currencyStr.empty())
+        {
+            wxString valueStr;
+            switch (currencyPos)
+            {
+            case wxCurrencySymbolPosition::PrefixWithSep:
+                currencyStr += wxString(" ");
+                // Fall through to case without separator
+            case wxCurrencySymbolPosition::PrefixNoSep:
+                if (s.StartsWith(currencyStr, &valueStr))
+                    s = valueStr;
+                break;
+            case wxCurrencySymbolPosition::SuffixWithSep:
+                currencyStr = wxString(" ") + currencyStr;
+                // Fall through to case without separator
+            case wxCurrencySymbolPosition::SuffixNoSep:
+                if (s.EndsWith(currencyStr, &valueStr))
+                    s = valueStr;
+                break;
+            }
+        }
+        if (style & Style_WithThousandsSep && !thousandsSep.empty())
+        {
+            s.Replace(thousandsSep, wxString());
+        }
+    }
+    return s;
+#else
+    wxUnused(style);
+    return s;
+#endif // wxUSE_INTL
 }
 
 // ----------------------------------------------------------------------------
