@@ -10,7 +10,8 @@ jobs:
           name: Install Git
           command: dnf install -y git
 
-      - checkout
+      - checkout:
+          method: blobless
 
       - run:
           name: Install dependencies
