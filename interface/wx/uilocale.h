@@ -297,7 +297,7 @@ public:
     wxLayoutDirection GetLayoutDirection() const;
 
     /**
-        Query infos about number formatting of the current locale.
+        Return all settings related to number formatting for the current locale.
         The information includes:
         - the grouping separator
         - the grouping specification
@@ -311,7 +311,7 @@ public:
     wxLocaleNumberFormatting GetNumberFormatting() const;
 
     /**
-        Query the curreny symbol of the current locale.
+        Query the currency symbol of the current locale.
 
         @return
             The currency symbol that is typically used locally for currency values.
@@ -352,7 +352,7 @@ public:
     wxCurrencySymbolPosition GetCurrencySymbolPosition() const;
 
     /**
-        Query the currency information of the current locale.
+        Return all settings related to currency formatting for the current locale.
 
         The currency information includes the following items:
         - the currency symbol
@@ -369,11 +369,16 @@ public:
     /**
         Query whether the current locale uses the metric system
 
+        @note If wxMeasurementSystem::Unknown is returned,
+        GuessMetricSystemFromRegion() can be used as a fallback
+
         @return
             The measurement system, one of the values
             wxMeasurementSystem::Metric, wxMeasurementSystem::NonMetric,
             or wxMeasurementSystem::Unknown.
         @since 3.3.2
+
+        @see GuessMetricSystemFromRegion()
      */
     wxMeasurementSystem UsesMetricSystem() const;
 

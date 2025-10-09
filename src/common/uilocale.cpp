@@ -1020,14 +1020,10 @@ wxString wxUILocale::GetCurrencyCode() const
 
 wxCurrencySymbolPosition wxUILocale::GetCurrencySymbolPosition() const
 {
-    if (m_impl)
-    {
-        return m_impl->GetCurrencySymbolPosition();
-    }
-    else
-    {
+    if (!m_impl)
         return wxCurrencySymbolPosition::PrefixWithSep;
-    }
+
+    return m_impl->GetCurrencySymbolPosition();
 }
 
 wxLocaleCurrencyInfo wxUILocale::GetCurrencyInfo() const

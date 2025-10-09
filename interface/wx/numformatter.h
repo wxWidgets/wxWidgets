@@ -106,7 +106,7 @@ public:
             The style will only take effect, if it is combined with Style_Currency.
             The style should not be combined with Style_CurrencySymbol.
 
-            @since 3.3.1
+            @since 3.3.2
          */
         Style_CurrencyCode      = 0x40,     // Currency with ISO 4217 code
 

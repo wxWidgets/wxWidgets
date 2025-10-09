@@ -709,9 +709,9 @@ public:
              wxCurrencySymbolPosition::PrefixWithSep, wxCurrencySymbolPosition::SuffixWithSep };
         wxString posStr = wxString(DoGetInfo(LOCALE_ICURRENCY));
         unsigned int posIdx;
-        if (posStr.empty() || !posStr.ToUInt(&posIdx))
-            posIdx = 2;
-        return (posIdx < symPos.size()) ? symPos[posIdx] : wxCurrencySymbolPosition::PrefixWithSep;
+        return posStr.ToUInt(&posIdx) && posIdx < symPos.size()
+            ? symPos[posIdx]
+            : wxCurrencySymbolPosition::PrefixWithSep;
     }
 
     wxLocaleCurrencyInfo GetCurrencyInfo() const override
@@ -810,9 +810,9 @@ private:
         std::vector<int> grouping;
         for (wxStringTokenizer tokenizer(groupingInfo, ";"); tokenizer.HasMoreTokens();)
         {
-            unsigned long value = 0;
-            if (tokenizer.GetNextToken().ToULong(&value))
-                grouping.push_back(static_cast<size_t>(value));
+            int value = 0;
+            if (tokenizer.GetNextToken().ToInt(&value))
+                grouping.push_back(value);
         }
 
         return wxLocaleNumberFormatting(groupSeparator, grouping, decimalSeparator, fractionalDigits);
