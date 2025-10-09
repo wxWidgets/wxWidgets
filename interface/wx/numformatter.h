@@ -216,4 +216,22 @@ public:
      */
     static void RemoveTrailingZeroes(wxString& str);
 
+    /**
+        Remove currency symbol or code, and grouping separators,
+        according to the given style flags.
+
+        @note This function allows to remove the currency symbol or code
+            from a string with a formatted currency value, so that
+            FromString() can be used afterwards to retrieve the numerical value.
+            Additionally, grouping separators are removed, if necessary.
+
+        @param[in] str
+            The string to remove the currency symbol or code or grouping separators from.
+        @param flags
+            Combination of values from the Style enumeration.
+
+        @since 3.3.2
+     */
+    static wxString RemoveCurrencySymbolOrCode(wxString str, int flags);
+
 };

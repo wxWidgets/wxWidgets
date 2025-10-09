@@ -325,27 +325,56 @@ void wxNumberFormatter::AddCurrency(wxString& s, int style)
 #endif // wxUSE_INTL
 }
 
-void wxNumberFormatter::RemoveCurrency(wxString& s)
+wxString wxNumberFormatter::RemoveCurrencySymbolOrCode(wxString s, int style)
 {
-    // The currency symbol or code can be a prefix or a suffix of the
-    // given string. Therefore we remove all characters from the head
-    // and the tail of the string that do not belong to a valid number.
+#if wxUSE_INTL
+    if (style & Style_Currency)
+    {
+        auto currencyInfo = wxUILocale::GetCurrent().GetCurrencyInfo();
+        wxString thousandsSep = currencyInfo.currencyFormat.groupSeparator;
+        wxString currencyStr;
+        wxCurrencySymbolPosition currencyPos{ wxCurrencySymbolPosition::PrefixWithSep };
+        if (style & Style_CurrencySymbol)
+        {
+            currencyStr = currencyInfo.currencySymbol;
+            currencyPos = currencyInfo.currencySymbolPos;
+        }
+        else if (style & Style_CurrencyCode)
+        {
+            currencyStr = currencyInfo.currencyCode;
+        }
 
-    // Every valid number starts with one of the characters in startChars
-    const wxString startChars = "+-0123456789";
-
-    // Every valid number ends with one of the characters in finalChars
-    const wxString finalChars = "0123456789.";
-
-    // Find start and final position of the number
-    size_t startPos = s.find_first_of(startChars);
-    size_t finalPos = s.find_last_of(finalChars);
-
-    // Extract the number, if the start and final positions are valid
-    if (startPos != wxString::npos && finalPos != wxString::npos && startPos <= finalPos)
-        s = s.SubString(startPos, finalPos);
-    else
-        s = wxString(); // No number found
+        if (!currencyStr.empty())
+        {
+            wxString valueStr;
+            switch (currencyPos)
+            {
+            case wxCurrencySymbolPosition::PrefixWithSep:
+                currencyStr += wxString(" ");
+                // Fall through to case without separator
+            case wxCurrencySymbolPosition::PrefixNoSep:
+                if (s.StartsWith(currencyStr, &valueStr))
+                    s = valueStr;
+                break;
+            case wxCurrencySymbolPosition::SuffixWithSep:
+                currencyStr = wxString(" ") + currencyStr;
+                // Fall through to case without separator
+            case wxCurrencySymbolPosition::SuffixNoSep:
+                if (s.EndsWith(currencyStr, &valueStr))
+                    s = valueStr;
+                break;
+            }
+        }
+        if (style & Style_WithThousandsSep && !thousandsSep.empty())
+        {
+            s.Replace(thousandsSep, wxString());
+        }
+    }
+    return s;
+#else
+    wxUnused(style);
+    return s;
+#endif // wxUSE_INTL
 }
 
 // ----------------------------------------------------------------------------
@@ -364,7 +393,6 @@ void wxNumberFormatter::RemoveThousandsSeparators(wxString& s)
 bool wxNumberFormatter::FromString(wxString s, long *val)
 {
     RemoveThousandsSeparators(s);
-    RemoveCurrency(s);
     return s.ToLong(val);
 }
 
@@ -373,7 +401,6 @@ bool wxNumberFormatter::FromString(wxString s, long *val)
 bool wxNumberFormatter::FromString(wxString s, wxLongLong_t *val)
 {
     RemoveThousandsSeparators(s);
-    RemoveCurrency(s);
     return s.ToLongLong(val);
 }
 
@@ -382,7 +409,6 @@ bool wxNumberFormatter::FromString(wxString s, wxLongLong_t *val)
 bool wxNumberFormatter::FromString(wxString s, wxULongLong_t *val)
 {
     RemoveThousandsSeparators(s);
-    RemoveCurrency(s);
 
     // wxString::ToULongLong() does accept minus sign for unsigned integers,
     // consistently with the standard functions behaviour, e.g. strtoul() does
@@ -405,6 +431,5 @@ bool wxNumberFormatter::FromString(wxString s, double *val)
 {
     RemoveThousandsSeparators(s);
     ReplaceSeparatorIfNecessary(s, GetDecimalSeparator(), '.');
-    RemoveCurrency(s);
     return s.ToCDouble(val);
 }

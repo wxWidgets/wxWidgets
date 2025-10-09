@@ -78,6 +78,9 @@ public:
     // number. Also used by ToString().
     static void RemoveTrailingZeroes(wxString& s);
 
+    // Remove currency symbol or code
+    static wxString RemoveCurrencySymbolOrCode(wxString s, int style);
+
 private:
     // Post-process the string representing an integer.
     static wxString PostProcessIntString(wxString s, int style);
@@ -92,10 +95,6 @@ private:
 
     // Add currency symbol or code depending on style
     static void AddCurrency(wxString& s, int style);
-
-    // Remove currency symbol or code
-    // Actually, any non-numeric prefix and suffix will be removed.
-    static void RemoveCurrency(wxString& s);
 
     // Remove all thousands separators from a string representing a number.
     static void RemoveThousandsSeparators(wxString& s);
