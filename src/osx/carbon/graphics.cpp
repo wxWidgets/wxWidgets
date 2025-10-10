@@ -46,29 +46,55 @@ extern void wxOSXUnlockFocus( WXWidget view) ;
 #endif
 #endif
 
-// copying values from NSCompositingModes (see also webkit and cairo sources)
-
-typedef enum CGCompositeOperation {
-   kCGCompositeOperationClear           = 0,
-   kCGCompositeOperationCopy            = 1,
-   kCGCompositeOperationSourceOver      = 2,
-   kCGCompositeOperationSourceIn        = 3,
-   kCGCompositeOperationSourceOut       = 4,
-   kCGCompositeOperationSourceAtop      = 5,
-   kCGCompositeOperationDestinationOver = 6,
-   kCGCompositeOperationDestinationIn   = 7,
-   kCGCompositeOperationDestinationOut  = 8,
-   kCGCompositeOperationDestinationAtop = 9,
-   kCGCompositeOperationXOR             = 10,
-   kCGCompositeOperationPlusDarker      = 11,
-// NS only, unsupported by CG : Highlight
-   kCGCompositeOperationPlusLighter     = 12
-} CGCompositeOperation ;
-
-extern "C"
+bool wxOSXGetCGBlendMode(wxCompositionMode op, wxInt32& mode)
 {
-   CG_EXTERN void CGContextSetCompositeOperation (CGContextRef context, int operation);
-} ;
+    switch( op )
+    {
+        case wxCOMPOSITION_CLEAR:
+            mode = kCGBlendModeClear;
+            break;
+        case wxCOMPOSITION_SOURCE:
+            mode = kCGBlendModeCopy;
+            break;
+        case wxCOMPOSITION_OVER:
+            mode = kCGBlendModeNormal;
+            break;
+        case wxCOMPOSITION_IN:
+            mode = kCGBlendModeSourceIn;
+            break;
+        case wxCOMPOSITION_OUT:
+            mode = kCGBlendModeSourceOut;
+            break;
+        case wxCOMPOSITION_ATOP:
+            mode = kCGBlendModeSourceAtop;
+            break;
+        case wxCOMPOSITION_DEST_OVER:
+            mode = kCGBlendModeDestinationOver;
+            break;
+        case wxCOMPOSITION_DEST_IN:
+            mode = kCGBlendModeDestinationIn;
+            break;
+        case wxCOMPOSITION_DEST_OUT:
+            mode = kCGBlendModeDestinationOut;
+            break;
+        case wxCOMPOSITION_DEST_ATOP:
+            mode = kCGBlendModeDestinationAtop;
+            break;
+        case wxCOMPOSITION_XOR:
+            mode = kCGBlendModeExclusion; // Not kCGBlendModeXOR!
+            break;
+        case wxCOMPOSITION_ADD:
+            mode = kCGBlendModePlusLighter ;
+            break;
+        case wxCOMPOSITION_DIFF:
+            mode = kCGBlendModeDifference ;
+            break;
+        default:
+            return false;
+            break;
+    }
+    return true;
+}
 
 //-----------------------------------------------------------------------------
 // constants
@@ -1962,107 +1988,13 @@ bool wxMacCoreGraphicsContext::DoSetCompositionMode(wxCompositionMode op)
     if (op == wxCOMPOSITION_DEST)
         return true;
 
-    // TODO REMOVE if we don't need it because of bugs in 10.5
-#if 0
+    wxInt32 blendMode;
+    if ( wxOSXGetCGBlendMode(op, blendMode ) )
     {
-        CGCompositeOperation cop = kCGCompositeOperationSourceOver;
-        CGBlendMode mode = kCGBlendModeNormal;
-        switch( op )
-        {
-            case wxCOMPOSITION_CLEAR:
-                cop = kCGCompositeOperationClear;
-                break;
-            case wxCOMPOSITION_SOURCE:
-                cop = kCGCompositeOperationCopy;
-                break;
-            case wxCOMPOSITION_OVER:
-                mode = kCGBlendModeNormal;
-                break;
-            case wxCOMPOSITION_IN:
-                cop = kCGCompositeOperationSourceIn;
-                break;
-            case wxCOMPOSITION_OUT:
-                cop = kCGCompositeOperationSourceOut;
-                break;
-            case wxCOMPOSITION_ATOP:
-                cop = kCGCompositeOperationSourceAtop;
-                break;
-            case wxCOMPOSITION_DEST_OVER:
-                cop = kCGCompositeOperationDestinationOver;
-                break;
-            case wxCOMPOSITION_DEST_IN:
-                cop = kCGCompositeOperationDestinationIn;
-                break;
-            case wxCOMPOSITION_DEST_OUT:
-                cop = kCGCompositeOperationDestinationOut;
-                break;
-            case wxCOMPOSITION_DEST_ATOP:
-                cop = kCGCompositeOperationDestinationAtop;
-                break;
-            case wxCOMPOSITION_XOR:
-                cop = kCGCompositeOperationXOR;
-                break;
-            case wxCOMPOSITION_ADD:
-                mode = kCGBlendModePlusLighter ;
-                break;
-            default:
-                return false;
-        }
-        if ( cop != kCGCompositeOperationSourceOver )
-            CGContextSetCompositeOperation(m_cgContext, cop);
-        else
-            CGContextSetBlendMode(m_cgContext, mode);
+        CGContextSetBlendMode(m_cgContext, (CGBlendMode) blendMode);
+        return true;
     }
-#endif
-    {
-        CGBlendMode mode = kCGBlendModeNormal;
-        switch( op )
-        {
-            case wxCOMPOSITION_CLEAR:
-                mode = kCGBlendModeClear;
-                break;
-            case wxCOMPOSITION_SOURCE:
-                mode = kCGBlendModeCopy;
-                break;
-            case wxCOMPOSITION_OVER:
-                mode = kCGBlendModeNormal;
-                break;
-            case wxCOMPOSITION_IN:
-                mode = kCGBlendModeSourceIn;
-                break;
-            case wxCOMPOSITION_OUT:
-                mode = kCGBlendModeSourceOut;
-                break;
-            case wxCOMPOSITION_ATOP:
-                mode = kCGBlendModeSourceAtop;
-                break;
-            case wxCOMPOSITION_DEST_OVER:
-                mode = kCGBlendModeDestinationOver;
-                break;
-            case wxCOMPOSITION_DEST_IN:
-                mode = kCGBlendModeDestinationIn;
-                break;
-            case wxCOMPOSITION_DEST_OUT:
-                mode = kCGBlendModeDestinationOut;
-                break;
-            case wxCOMPOSITION_DEST_ATOP:
-                mode = kCGBlendModeDestinationAtop;
-                break;
-            case wxCOMPOSITION_XOR:
-                mode = kCGBlendModeExclusion; // Not kCGBlendModeXOR!
-                break;
-            case wxCOMPOSITION_ADD:
-                mode = kCGBlendModePlusLighter ;
-                break;
-            case wxCOMPOSITION_DIFF:
-                mode = kCGBlendModeDifference ;
-                break;
-            default:
-                return false;
-        }
-        CGContextSetBlendMode(m_cgContext, mode);
-    }
-    return true;
+    return false;
 }
 
 void wxMacCoreGraphicsContext::BeginLayer(wxDouble opacity)
@@ -2112,8 +2044,18 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
         m_clipRgn.reset(mutableShape);
     }
 #else
-    // allow usage as measuring context
-    // wxASSERT_MSG( m_cgContext != nullptr, "Needs a valid context for clipping" );
+    std::vector<CGRect> rects;
+    wxRegionIterator ri(region);
+    while (ri)
+    {
+        rects.push_back(CGRectMake( (CGFloat) ri.GetX() , (CGFloat) ri.GetY() , (CGFloat) ri.GetW() , (CGFloat) ri.GetH() ));
+        ++ri;
+    }
+
+    if ( m_cgContext )
+    {
+        CGContextClipToRects( m_cgContext, rects.data(), rects.size() );
+    }
 #endif
     CheckInvariants();
 }
@@ -2444,16 +2386,11 @@ void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-#if wxOSX_USE_COCOA
     if (EnsureIsValid())
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
-        wxOSXDrawNSImage( m_cgContext, &r, bmp.GetNSImage(), m_composition);
+        wxOSXDrawImage( m_cgContext, &r, bmp.OSXGetImage(), m_composition);
     }
-#else
-    wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
-    DrawBitmap(bitmap, x, y, w, h);
-#endif
 }
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -2508,12 +2445,10 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-#if wxOSX_USE_COCOA
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
-        wxOSXDrawNSImage( m_cgContext, &r, icon.GetNSImage(), m_composition);
+        wxOSXDrawImage( m_cgContext, &r, icon.OSXGetImage(), m_composition);
     }
-#endif
 
     CheckInvariants();
 }

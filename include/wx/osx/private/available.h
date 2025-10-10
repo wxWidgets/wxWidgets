@@ -18,6 +18,9 @@
     #define WX_IS_MACOS_AVAILABLE(major, minor) \
         __builtin_available(macOS major ## . ## minor, *)
 
+    #define WX_IS_IOS_AVAILABLE(major, minor) \
+        __builtin_available(iOS major ## . ## minor, *)
+
     #define WX_IS_MACOS_OR_IOS_AVAILABLE(macmajor, macminor, imajor, iminor) \
         __builtin_available(macOS macmajor ## . ## macminor, iOS imajor ##. ## iminor, *)
 

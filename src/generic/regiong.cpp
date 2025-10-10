@@ -375,7 +375,9 @@ bool wxRegionGeneric::DoOffset(wxCoord x, wxCoord y)
 
 bool wxRegionGeneric::IsEmpty() const
 {
-    wxASSERT(m_refData);
+    if ( m_refData == nullptr )
+        return false;
+
     return REGION::XEmptyRegion(M_REGIONDATA);
 }
 

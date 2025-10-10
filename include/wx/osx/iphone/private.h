@@ -38,7 +38,7 @@ wxBitmapBundle WXDLLIMPEXP_CORE wxOSXCreateSystemBitmapBundle(const wxString& id
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0 ) ;
+    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags = 0, void* controller = nullptr ) ;
     wxWidgetIPhoneImpl() ;
     ~wxWidgetIPhoneImpl();
 
@@ -104,7 +104,11 @@ public :
     wxInt32             GetMaximum() const;
     int                 GetIncrement() const { return 1; }
     void                PulseGauge();
+    void                SetScrollbar( int orient, int pos, int thumb, int range, bool refresh );
+    int                 GetScrollPos(int orient) const;
+    void                SetScrollPos(int orient, int pos);
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
+    void                ScrollWindow (int dx, int dy, const wxRect* rect = nullptr);
 
     void                SetFont(const wxFont & font);
 
@@ -112,6 +116,7 @@ public :
     bool                EnableTouchEvents(int WXUNUSED(eventsMask)) { return false; }
 
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
+    virtual void        SetupKeyEvent(wxKeyEvent &wxevent, WXEvent event, UIPress* press, NSString* charString = nullptr);
 
     // thunk connected calls
 
@@ -119,13 +124,30 @@ public :
     virtual void        touchEvent(WX_NSSet touches, WX_UIEvent event, WXWidget slf, void* _cmd);
     virtual bool        becomeFirstResponder(WXWidget slf, void* _cmd);
     virtual bool        resignFirstResponder(WXWidget slf, void* _cmd);
+    virtual void        keyEvent(WX_NSSet presses, WXEvent event, WXWidget slf, void* _cmd);
 
     // action
 
     virtual void        controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent);
     virtual void         controlTextDidChange();
+
+    void*               GetController() { return m_controller; }
+    bool                GetBlockScrollEvents() const { return m_blockScrollEvents; }
+    void                SetBlockScrollWindow( bool block ) { m_blockScrollWindow = block; }
+    bool                GetBlockScrollWindow() const { return m_blockScrollWindow; }
+
+    int                 GetXScrollPixelsPerLine() const { return m_xScrollPixelsPerLine; }
+    int                 GetYScrollPixelsPerLine() const { return m_yScrollPixelsPerLine; }
+
 protected:
-    WXWidget m_osxView;
+    WXWidget          m_osxView;
+    void*             m_controller;
+    bool              m_blockScrollEvents;
+    bool              m_blockScrollWindow;
+    int               m_xScrollPixelsPerLine;
+    int               m_yScrollPixelsPerLine;
+
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl);
 };
 
@@ -225,7 +247,7 @@ protected :
 
     @end
 
-    @interface wxUIView : UIView
+    @interface wxUIView : UIScrollView
     {
     }
 

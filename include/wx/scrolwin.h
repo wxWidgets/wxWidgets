@@ -182,13 +182,23 @@ public:
     // which it is implemented to not use wxWindow::ScrollWindow().
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
 
-    // Get the view start
+    // Get the view start in scroll units
     void GetViewStart(int *x, int *y) const { DoGetViewStart(x, y); }
 
     wxPoint GetViewStart() const
     {
         wxPoint pt;
         DoGetViewStart(&pt.x, &pt.y);
+        return pt;
+    }
+
+    // Get the view start in pixels
+    void GetViewStartPixels(int *x, int *y) const { DoGetViewStartPixels(x, y); }
+
+    wxPoint GetViewStartPixels() const
+    {
+        wxPoint pt;
+        DoGetViewStartPixels(&pt.x, &pt.y);
         return pt;
     }
 
@@ -285,6 +295,7 @@ protected:
 
     // implementation of public methods with the same name
     virtual void DoGetViewStart(int *x, int *y) const;
+    virtual void DoGetViewStartPixels(int *x, int *y) const;
     virtual void DoScroll(int x, int y) = 0;
     virtual void DoShowScrollbars(wxScrollbarVisibility horz,
                                   wxScrollbarVisibility vert) = 0;
@@ -353,6 +364,11 @@ protected:
     int                   m_yScrollLines;
     int                   m_xScrollLinesPerPage;
     int                   m_yScrollLinesPerPage;
+
+    // Extra offset compared to the multiple of m_[xy]ScrollPosition which is
+    // used to obtain the position in pixels for DoGetViewStartPixels().
+    int                   m_xScrollPositionPixelOffset;
+    int                   m_yScrollPositionPixelOffset;
 
     bool                  m_xScrollingEnabled;
     bool                  m_yScrollingEnabled;

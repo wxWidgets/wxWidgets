@@ -42,7 +42,7 @@
 // Common Event Support
 // ----------------------------------------------------------------------------
 
-@interface wxAppDelegate : NSObject <UIApplicationDelegate> {
+@interface wxAppDelegate : UIResponder <UIApplicationDelegate> {
 }
 
 @end
@@ -57,19 +57,31 @@
     return YES;
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
+- (void)applicationDidFinishLaunching:(UIApplication *)application
+{
     wxTheApp->OSXOnDidFinishLaunching();
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application
+{
     wxUnusedVar(application);
     wxTheApp->OSXOnWillTerminate();
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [super dealloc];
 }
 
+#if wxUSE_MENUBAR
+- (void) buildMenuWithBuilder:(id<UIMenuBuilder>) builder
+{
+    if ( builder.system == UIMenuSystem.mainSystem )
+    {
+        wxTheApp->OSXOnBuildMenu((WX_NSObject) builder);
+    }
+}
+#endif
 
 @end
 
@@ -144,18 +156,9 @@ public:
         CGRect bounds = [[UIScreen mainScreen] bounds];
 
         int width, height;
-        if ( UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) )
-        {
-            // portrait
-            width = (int)bounds.size.width ;
-            height = (int)bounds.size.height;
-        }
-        else
-        {
-            // landscape
-            width = (int)bounds.size.height ;
-            height = (int)bounds.size.width;
-        }
+
+        width = (int)bounds.size.width ;
+        height = (int)bounds.size.height;
 
         return wxRect(0, 0, width, height);
     }

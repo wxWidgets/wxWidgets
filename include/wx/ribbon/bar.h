@@ -163,7 +163,7 @@ public:
 
     // Return the image list containing images of the given size, creating it
     // if necessary.
-    wxImageList* GetButtonImageList(wxSize size);
+    wxImageList* GetButtonImageList(wxSize size, int initialCount = 1);
 
 protected:
     friend class wxRibbonPage;

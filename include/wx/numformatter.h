@@ -25,6 +25,9 @@ public:
         Style_NoTrailingZeroes  = 0x02,     // Only for floating point numbers
         Style_SignPlus          = 0x04,
         Style_SignSpace         = 0x08,
+        Style_Currency          = 0x10,     // Currency, without currency symbol
+        Style_CurrencySymbol    = 0x20,     // Currency with currency symbol
+        Style_CurrencyCode      = 0x40,     // Currency with ISO 4217 code
     };
 
     // Format a number as a string. By default, the thousands separator is
@@ -75,17 +78,23 @@ public:
     // number. Also used by ToString().
     static void RemoveTrailingZeroes(wxString& s);
 
+    // Remove currency symbol or code
+    static wxString RemoveCurrencySymbolOrCode(wxString s, int style);
+
 private:
     // Post-process the string representing an integer.
     static wxString PostProcessIntString(wxString s, int style);
 
     // Add the thousands separators to a string representing a number without
     // the separators. This is used by ToString(Style_WithThousandsSep).
-    static void AddThousandsSeparators(wxString& s);
+    static void AddThousandsSeparators(wxString& s, int style);
 
     // Add the sign prefix to a string representing a number without
     // the prefix. This is used by ToString().
     static void AddSignPrefix(wxString& s, int style);
+
+    // Add currency symbol or code depending on style
+    static void AddCurrency(wxString& s, int style);
 
     // Remove all thousands separators from a string representing a number.
     static void RemoveThousandsSeparators(wxString& s);
