@@ -67,14 +67,21 @@ bool wxFrame::Create(wxWindow *parent,
         return false;
 
 #ifdef __WXOSX_IPHONE__
-    if (parent != nullptr) {
+    if ((parent != nullptr) && (HasFlag(wxCAPTION) || HasFlag(wxCLOSE_BOX)))
+    {
         // We are on the next screen, provide a back button and title
         wxToolBar *tb = CreateToolBar();
-        // tb->AddTool( wxID_CLOSE, wxEmptyString, wxArtProvider::GetBitmap(wxART_PREV_SCREEN) ); doesn't work for some reason
-        tb->AddTool( wxID_CLOSE, wxEmptyString, wxBitmap( prev_screen_xpm ) );
-        tb->AddStretchableSpace();
-        tb->AddControl( new wxStaticText( tb, wxID_ANY, title ) );
-        tb->AddStretchableSpace();
+        if (HasFlag(wxCLOSE_BOX))
+        {
+            // tb->AddTool( wxID_CLOSE, wxEmptyString, wxArtProvider::GetBitmap(wxART_PREV_SCREEN) ); doesn't work for some reason
+            tb->AddTool( wxID_CLOSE, wxEmptyString, wxBitmap( prev_screen_xpm ) );
+            tb->AddStretchableSpace();
+        }
+        if (HasFlag(wxCAPTION))
+        {
+            tb->AddControl( new wxStaticText( tb, wxID_ANY, title ) );
+            tb->AddStretchableSpace();
+        }
         tb->Realize();
     }
 #endif
