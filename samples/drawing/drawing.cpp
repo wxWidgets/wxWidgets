@@ -2100,13 +2100,11 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     if ( m_useBuffer )
     {
         wxBufferedPaintDC bpdc(this);
-        PrepareDC(bpdc); // Adjust scrolled contents.
         Draw(bpdc);
     }
     else
     {
         wxPaintDC pdc(this);
-        PrepareDC(pdc); // Adjust scrolled contents.
         Draw(pdc);
     }
 }
@@ -2150,6 +2148,7 @@ void MyCanvas::Draw(wxDC& pdc)
     wxDC &dc = pdc ;
 #endif
 
+    PrepareDC(dc); // Adjust scrolled contents.
     m_owner->PrepareDC(dc);
 
     dc.SetBackgroundMode( m_owner->m_backgroundMode );
