@@ -375,10 +375,13 @@ protected:
         if (ok)
         {
             wxLocaleNumberFormatting numForm = wxUILocale::GetCurrent().GetNumberFormatting();
+            wxLocaleNumberFormatting curForm = wxUILocale::GetCurrent().GetCurrencyInfo().currencyFormat;
 #ifdef __GLIBC__
-            ok = numForm.groupSeparator == ".";
+            ok = numForm.groupSeparator == "."
+                && curForm.groupSeparator == wxString::FromUTF8(NNBSP);
 #else
-            ok = numForm.groupSeparator == wxString::FromUTF8(NBSP);
+            ok = numForm.groupSeparator == wxString::FromUTF8(NBSP)
+                && curForm.groupSeparator == ".";
 #endif
         }
         return ok;
@@ -770,7 +773,16 @@ public:
     }
 
 protected:
-    bool CanRunTest() const { return m_locale.IsOk(); }
+    bool CanRunTest() const
+    {
+        bool ok = m_locale.IsOk();
+        if (ok)
+        {
+            wxLocaleNumberFormatting numForm = wxUILocale::GetCurrent().GetNumberFormatting();
+            ok = (!numForm.grouping.empty() && numForm.grouping.back() == 0);
+        }
+        return ok;
+    }
 
 private:
     wxLocale m_locale;
