@@ -1079,6 +1079,13 @@ private:
             ? editDisplay - lineInfo.editVisible
             : 0;
 
+        // The last thumb position corresponds to the difference between the
+        // map line corresponding to the first visible line in the editor and
+        // the first visible line in the map itself.
+        lineInfo.thumbMax =
+            VisibleFromDocLine(m_edit->DocLineFromVisible(lineInfo.editMax)) -
+                lineInfo.mapMax;
+
         if ( lineInfo == m_lines )
             return false;
 
@@ -1123,21 +1130,46 @@ private:
         SetFirstVisibleLine(firstLine);
     }
 
-    // We want the physical position of the visible zone in the map window
-    // to show the position of the currently visible part of the document,
-    // as the scrollbar thumb does, which means, as mapFirst is 0 when
-    // editFirst is 0, that they must be proportional:
+    // We want the physical position of the thumb in the map to show the
+    // position of the currently visible part of the document, just as a
+    // normal scrollbar thumb does. So the thumb position is proportional to
+    // the first visible line in the editor:
     //
-    //                  mapFirst = α * editFirst
+    //          thumbPos = thumbMax / editMax * editFirst
     //
-    // And the coefficient of proportionality α is given by considering
+    // Where the coefficient of proportionality is given by considering
     // that the last possible values of the editor first line must be
-    // mapped to the last valid position of the thumb, which is thumb size
-    // less than the map height, giving
+    // mapped to the last valid position of the thumb.
     //
-    //              mapTotalLines - mapVisibleLines
-    //         α = ---------------------------------
-    //             editTotalLines - editVisibleLines
+    // But thumb position (in map line units) is also given by the difference
+    // between the map line corresponding to the first visible line in the
+    // editor and the first visible line in the map itself:
+    //
+    //          thumbPos = VisibleFromDocLine(editDocFirst) - mapFirst
+    //
+    // where
+    //
+    //          editDocFirst = m_edit->DocLineFromVisible(editFirst)
+    //
+    // This gives us the expression for the map first visible line as a
+    // function of the editor first visible line:
+    //
+    //          mapFirst = VisibleFromDocLine(editDocFirst) -
+    //                          thumbMax / editMax * editFirst
+    //
+    // which can be used to set the map position when the editor position
+    // changes and is returned by the function below.
+
+    // Get the map first visible line corresponding to the given editor
+    // first visible line.
+    int GetMapFirstFromEditFirst(int editFirst) const
+    {
+        auto const editDocFirst = m_edit->DocLineFromVisible(editFirst);
+        auto const thumbPos =
+            wxMulDivInt32(editFirst, m_lines.thumbMax, m_lines.editMax);
+
+        return VisibleFromDocLine(editDocFirst) - thumbPos;
+    }
 
     // Scroll the editor to correspond to the current position in the map.
     void SyncEditPosition()
@@ -1154,11 +1186,12 @@ private:
     void SyncMapPosition()
     {
         auto const editFirst = m_edit->GetFirstVisibleLine();
+        auto const mapFirst = GetMapFirstFromEditFirst(editFirst);
 
-        SetMapFirstVisibleLine
-        (
-            wxMulDivInt32(editFirst, m_lines.mapMax, m_lines.editMax)
-        );
+        if ( mapFirst == GetFirstVisibleLine() )
+            return;
+
+        SetMapFirstVisibleLine(mapFirst);
 
         Refresh();
     }
@@ -1490,6 +1523,9 @@ private:
         // Last valid value for the first editor line.
         int editMax = 0;
 
+        // Last valid value for the thumb position (in map line units).
+        int thumbMax = 0;
+
         LinesInfo() = default;
         LinesInfo(const LinesInfo& other) = default;
         LinesInfo& operator=(const LinesInfo& other) = default;
@@ -1499,7 +1535,8 @@ private:
             return mapVisible == rhs.mapVisible &&
                    editVisible == rhs.editVisible &&
                    mapMax == rhs.mapMax &&
-                   editMax == rhs.editMax;
+                   editMax == rhs.editMax &&
+                   thumbMax == rhs.thumbMax;
         }
 
         bool operator!=(const LinesInfo& rhs) const
