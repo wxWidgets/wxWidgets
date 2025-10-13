@@ -1068,8 +1068,16 @@ private:
         LinesInfo lineInfo;
         lineInfo.mapVisible = LinesOnScreen();
         lineInfo.editVisible = m_edit->LinesOnScreen();
-        lineInfo.mapDisplay = GetDisplayLineCount();
-        lineInfo.editDisplay = m_edit->GetDisplayLineCount();
+
+        auto const mapDisplay = GetDisplayLineCount();
+        lineInfo.mapMax = mapDisplay > lineInfo.mapVisible
+            ? mapDisplay - lineInfo.mapVisible
+            : 0;
+
+        auto const editDisplay = m_edit->GetDisplayLineCount();
+        lineInfo.editMax = editDisplay > lineInfo.editVisible
+            ? editDisplay - lineInfo.editVisible
+            : 0;
 
         if ( lineInfo == m_lines )
             return false;
@@ -1091,10 +1099,8 @@ private:
         if ( firstLine < 0 )
             return 0;
 
-        auto const
-            lastValid = m_lines.editDisplay - m_lines.editVisible;
-        if ( firstLine > lastValid )
-            return lastValid;
+        if ( firstLine > m_lines.editMax )
+            return m_lines.editMax;
 
         return firstLine;
     }
@@ -1140,41 +1146,22 @@ private:
     // Scroll the editor to correspond to the current position in the map.
     void SyncEditPosition()
     {
-        if ( m_lines.editVisible >= m_lines.editDisplay )
-        {
-            SetEditFirstVisibleLine(0);
-            return;
-        }
+        auto const mapFirst = GetFirstVisibleLine();
 
         SetEditFirstVisibleLine
         (
-            wxMulDivInt32
-            (
-                GetFirstVisibleLine(),
-                m_lines.editDisplay - m_lines.editVisible,
-                m_lines.mapDisplay - m_lines.mapVisible
-            )
+            wxMulDivInt32(mapFirst, m_lines.editMax, m_lines.mapMax)
         );
     }
 
     // Scroll the map to correspond to the current position in the editor.
     void SyncMapPosition()
     {
-        // First check for the special case when all lines are visible.
-        if ( m_lines.editVisible >= m_lines.editDisplay )
-        {
-            SetMapFirstVisibleLine(0);
-            return;
-        }
+        auto const editFirst = m_edit->GetFirstVisibleLine();
 
         SetMapFirstVisibleLine
         (
-            wxMulDivInt32
-            (
-                m_edit->GetFirstVisibleLine(),
-                m_lines.mapDisplay - m_lines.mapVisible,
-                m_lines.editDisplay - m_lines.editVisible
-            )
+            wxMulDivInt32(editFirst, m_lines.mapMax, m_lines.editMax)
         );
 
         Refresh();
@@ -1351,11 +1338,6 @@ private:
         // when the dragging started.
         pos.y -= m_dragOffset;
 
-        // Define the maximum possible value for the first visible line in the
-        // editor and the map respectively.
-        auto const editMax = m_lines.editDisplay - m_lines.editVisible;
-        auto const mapMax = m_lines.mapDisplay - m_lines.mapVisible;
-
         // We need to find the editor first line such that the thumb will be
         // positioned with its middle at pos.y but the trouble is that we can't
         // invert the GetThumbInfo() calculation easily as conversion between
@@ -1370,8 +1352,8 @@ private:
         int editNew = editOld + (pos.y - m_dragLastY) / m_mapLineHeight;
         if ( editNew < 0 )
             editNew = 0;
-        else if ( editNew > editMax )
-            editNew = editMax;
+        else if ( editNew > m_lines.editMax )
+            editNew = m_lines.editMax;
 
             wxLogTrace(wxTRACE_STC_MAP, "Dragging: initial estimate=%d",
                        editNew);
@@ -1386,7 +1368,8 @@ private:
         for ( int direction = 0;; )
             {
                 // This would be the first visible line in the map.
-                auto const mapNew = wxMulDivInt32(editNew, mapMax, editMax);
+            auto const mapNew =
+                wxMulDivInt32(editNew, m_lines.mapMax, m_lines.editMax);
 
                 // This is similar to the code in GetThumbInfo() but uses the
                 // given line instead of the first currently visible one.
@@ -1401,7 +1384,7 @@ private:
             if ( thumbMiddle < thumbWanted )
                 {
                 // We can't go any further.
-                    if ( editNew >= editMax )
+                if ( editNew >= m_lines.editMax )
                         break;
 
                 // We overshot the correct value, we won't get any closer to it
@@ -1497,11 +1480,11 @@ private:
         // Number of lines visible in the editor.
         int editVisible = 0;
 
-        // Total number of physical lines in the map.
-        int mapDisplay = 0;
+        // Last valid value for the first map line.
+        int mapMax = 0;
 
-        // Total number of physical lines in the editor.
-        int editDisplay = 0;
+        // Last valid value for the first editor line.
+        int editMax = 0;
 
         LinesInfo() = default;
         LinesInfo(const LinesInfo& other) = default;
@@ -1511,8 +1494,8 @@ private:
         {
             return mapVisible == rhs.mapVisible &&
                    editVisible == rhs.editVisible &&
-                   mapDisplay == rhs.mapDisplay &&
-                   editDisplay == rhs.editDisplay;
+                   mapMax == rhs.mapMax &&
+                   editMax == rhs.editMax;
         }
 
         bool operator!=(const LinesInfo& rhs) const
@@ -1524,8 +1507,8 @@ private:
         {
             return wxString::Format
                    (
-                    "map/edit visible: %d/%d, map/edit physical: %d/%d",
-                    mapVisible, editVisible, mapDisplay, editDisplay
+                    "map/edit visible: %d/%d, map/edit first line max: %d/%d",
+                    mapVisible, editVisible, mapMax, editMax
                    );
         }
     } m_lines;
