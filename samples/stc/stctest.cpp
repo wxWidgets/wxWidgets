@@ -1614,7 +1614,7 @@ void App::ShowDocumentMap(wxWindow* parent)
     edit->LoadFile("stctest.cpp");
 
     // Show line numbers and hide the other margins not used here.
-    edit->SetMarginWidth(0, dialog.GetTextExtent("9999").x);
+    edit->SetMarginWidth(0, edit->GetTextExtent("99999").x);
     edit->SetMarginWidth(1, 0);
     edit->SetMarginWidth(2, 0);
 
