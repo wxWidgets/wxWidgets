@@ -1176,10 +1176,59 @@ private:
     {
         auto const mapFirst = GetFirstVisibleLine();
 
-        SetEditFirstVisibleLine
-        (
+        // There is no way to invert the formula above giving mapFirst from
+        // editFirst, so we start with the likely candidate for editFirst
+        // (which is actually the correct value if no lines are wrapped or
+        // folded) and iterate it until we find the value of editFirst giving
+        // the desired mapFirst.
+        int editNew = GetEditValidFirstLine(
             wxMulDivInt32(mapFirst, m_lines.editMax, m_lines.mapMax)
         );
+
+        wxLogTrace(wxTRACE_STC_MAP, "Syncing: initial estimate=%d", editNew);
+
+        for ( int direction = 0;; )
+        {
+            auto const mapWouldBeFirst = GetMapFirstFromEditFirst(editNew);
+
+            if ( mapWouldBeFirst < mapFirst )
+            {
+                if ( editNew >= m_lines.editMax )
+                    break;
+
+                if ( direction < 0 )
+                    break;
+
+                direction = 1;
+
+                ++editNew;
+            }
+            else if ( mapWouldBeFirst > mapFirst )
+            {
+                if ( editNew <= 0 )
+                    break;
+
+                if ( direction > 0 )
+                    break;
+
+                direction = -1;
+
+                --editNew;
+            }
+            else // mapWouldBeFirst == mapFirst
+            {
+                break;
+            }
+
+            editNew = GetEditValidFirstLine(editNew);
+        }
+
+        wxLogTrace(wxTRACE_STC_MAP, "Syncing: final line=%d", editNew);
+
+        if ( editNew == m_edit->GetFirstVisibleLine() )
+            return;
+
+        SetEditFirstVisibleLine(editNew);
     }
 
     // Scroll the map to correspond to the current position in the editor.
