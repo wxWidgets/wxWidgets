@@ -314,11 +314,14 @@ bool wxStaticTextBase::InformFirstDirection(int direction, int size, int WXUNUSE
     // space in the horizontal direction. Wrap there and report a new
     // GetEffectiveMinSize() from then on.
 
-    int style = GetWindowStyleFlag();
+    const int style = GetWindowStyleFlag();
     if ( !(style & wxST_NO_AUTORESIZE) )
         SetWindowStyleFlag( style | wxST_NO_AUTORESIZE );
+
     Wrap( size );
-    SetWindowStyleFlag( style );
+
+    if ( !(style & wxST_NO_AUTORESIZE) )
+        SetWindowStyleFlag( style );
 
     return true;
 }
