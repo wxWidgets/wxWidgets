@@ -892,6 +892,8 @@ void App::OnMinimalEditor(wxCommandEvent& WXUNUSED(event))
 
 constexpr const char* wxTRACE_STC_MAP = "stcmap";
 
+#include <functional>
+
 class wxStyledTextCtrlMap : public wxStyledTextCtrl
 {
 public:
@@ -1181,49 +1183,15 @@ private:
         // (which is actually the correct value if no lines are wrapped or
         // folded) and iterate it until we find the value of editFirst giving
         // the desired mapFirst.
-        int editNew = GetEditValidFirstLine(
-            wxMulDivInt32(mapFirst, m_lines.editMax, m_lines.mapMax)
-        );
-
-        wxLogTrace(wxTRACE_STC_MAP, "Syncing: initial estimate=%d", editNew);
-
-        for ( int direction = 0;; )
-        {
-            auto const mapWouldBeFirst = GetMapFirstFromEditFirst(editNew);
-
-            if ( mapWouldBeFirst < mapFirst )
-            {
-                if ( editNew >= m_lines.editMax )
-                    break;
-
-                if ( direction < 0 )
-                    break;
-
-                direction = 1;
-
-                ++editNew;
-            }
-            else if ( mapWouldBeFirst > mapFirst )
-            {
-                if ( editNew <= 0 )
-                    break;
-
-                if ( direction > 0 )
-                    break;
-
-                direction = -1;
-
-                --editNew;
-            }
-            else // mapWouldBeFirst == mapFirst
-            {
-                break;
-            }
-
-            editNew = GetEditValidFirstLine(editNew);
-        }
-
-        wxLogTrace(wxTRACE_STC_MAP, "Syncing: final line=%d", editNew);
+        const int editNew = FindClosestEditFirstLine
+            (
+                wxMulDivInt32(mapFirst, m_lines.editMax, m_lines.mapMax),
+                [this](int editNew)
+                {
+                    return GetMapFirstFromEditFirst(editNew);
+                },
+                mapFirst
+            );
 
         if ( editNew == m_edit->GetFirstVisibleLine() )
             return;
@@ -1251,6 +1219,74 @@ private:
     {
         auto const docLine = m_edit->DocLineFromVisible(editVisible);
         return VisibleFromDocLine(docLine);
+    }
+
+    // This function encapsulates the algorithm iterating over the first
+    // visible editor line until we getValueForEditFirst() returns the closest
+    // value to the desired one.
+    //
+    // The initial value is forced to be in the correct range.
+    int
+    FindClosestEditFirstLine(int editNewInitial,
+                             std::function<int (int)> getValueForEditFirst,
+                             int valueWanted) const
+    {
+        int editNew = GetEditValidFirstLine(editNewInitial);
+
+        wxLogTrace(wxTRACE_STC_MAP, "Iterating: initial estimate=%d", editNew);
+
+        // We use direction, which can be -1, 0 or 1 to avoid looping forever
+        // if we can't get any closer, so remember which way we're going and
+        // stop if overshoot.
+        for ( int direction = 0;; )
+        {
+            auto const valueCurrent = getValueForEditFirst(editNew);
+
+            if ( valueCurrent < valueWanted )
+            {
+                if ( editNew >= m_lines.editMax )
+                {
+                    // We can't go any further.
+                    break;
+                }
+
+                if ( direction < 0 )
+                {
+                    // We overshot the correct value, we won't get any closer
+                    // to it than we were before, so stop now to avoid entering
+                    // an infinite loop alternating between the two values
+                    // closest to the desired one from above and below.
+                    break;
+                }
+
+                // Remember that we're going down in case it is the first
+                // iteration of the loop.
+                direction = 1;
+
+                ++editNew;
+            }
+            else if ( valueCurrent > valueWanted )
+            {
+                // See comment in the branch above.
+                if ( editNew <= 0 )
+                    break;
+
+                if ( direction > 0 )
+                    break;
+
+                direction = -1;
+
+                --editNew;
+            }
+            else // valueCurrent == valueWanted
+            {
+                break;
+            }
+        }
+
+        wxLogTrace(wxTRACE_STC_MAP, "Iterating: final line=%d", editNew);
+
+        return editNew;
     }
 
     struct ThumbInfo
@@ -1440,78 +1476,28 @@ private:
         // Start with the position corresponding to the current thumb height.
         int thumbPos = thumbWanted - GetThumbInfo().height / (2 * m_mapLineHeight);
 
-        const int editOld = m_edit->GetFirstVisibleLine();
-
-        int editNew = GetEditValidFirstLine(
-            wxMulDivInt32(thumbPos, m_lines.editMax, m_lines.thumbMax)
-        );
-
-        wxLogTrace(wxTRACE_STC_MAP, "Dragging: initial estimate=%d", editNew);
-
         // Adjust until the actual position of the middle of the thumb if
         // this were the first visible line in the editor becomes close to
         // the desired position.
-        //
-        // We use direction, which can be -1, 0 or 1 to avoid looping forever
-        // if we can't get any closer, so remember which way we're going and
-        // stop if overshoot.
-        for ( int direction = 0;; )
-        {
-            // Thumb top corresponds to the visible line in the map
-            // corresponding to the document line corresponding to the line
-            // editNew in the editor and, similarly, thumb bottom corresponds
-            // to editNew + m_lines.editVisible.
-            auto const thumbMiddle =
-                (MapVisibleFromEditVisible(editNew) +
-                 MapVisibleFromEditVisible(editNew + m_lines.editVisible))
-                / 2
-                - GetMapFirstFromEditFirst(editNew);
-
-            if ( thumbMiddle < thumbWanted )
-            {
-                if ( editNew >= m_lines.editMax )
+        const int editNew = FindClosestEditFirstLine
+            (
+                wxMulDivInt32(thumbPos, m_lines.editMax, m_lines.thumbMax),
+                [this](int editNew)
                 {
-                    // We can't go any further.
-                    break;
-                }
+                    // Thumb top corresponds to the visible line in the map
+                    // corresponding to the document line corresponding to the
+                    // line editNew in the editor and, similarly, thumb bottom
+                    // corresponds to editNew + m_lines.editVisible.
+                    return
+                        (MapVisibleFromEditVisible(editNew) +
+                         MapVisibleFromEditVisible(editNew + m_lines.editVisible))
+                        / 2
+                        - GetMapFirstFromEditFirst(editNew);
+                },
+                thumbWanted
+            );
 
-                if ( direction < 0 )
-                {
-                    // We overshot the correct value, we won't get any closer
-                    // to it than we were before, so stop now to avoid entering
-                    // an infinite loop alternating between the two values
-                    // closest to the desired one from above and below.
-                    break;
-                }
-
-                // Remember that we're going down in case it is the first
-                // iteration of the loop.
-                direction = 1;
-
-                ++editNew;
-            }
-            else if ( thumbMiddle > thumbWanted )
-            {
-                // See comment in the branch above.
-                if ( editNew <= 0 )
-                    break;
-
-                if ( direction > 0 )
-                    break;
-
-                direction = -1;
-
-                --editNew;
-            }
-            else // thumbMiddle == thumbWanted
-            {
-                break;
-            }
-        }
-
-        wxLogTrace(wxTRACE_STC_MAP, "Dragging: final line=%d", editNew);
-
-        if ( editNew == editOld )
+        if ( editNew == m_edit->GetFirstVisibleLine() )
             return;
 
         SetEditFirstVisibleLine(editNew);
