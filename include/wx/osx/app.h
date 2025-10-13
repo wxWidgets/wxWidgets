@@ -152,7 +152,9 @@ public:
     virtual bool         OSXOnShouldTerminate();
     // before application terminates
     virtual void         OSXOnWillTerminate();
-
+#if wxOSX_USE_IPHONE && wxUSE_MENUBAR
+    virtual void         OSXOnBuildMenu(WX_NSObject menuBuilder);
+#endif
 private:
     bool                m_onInitResult;
     bool                m_inited;

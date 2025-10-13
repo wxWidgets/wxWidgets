@@ -810,7 +810,7 @@ void wxRibbonBar::CommonInit(long style)
     m_ribbon_state = wxRIBBON_BAR_PINNED;
 }
 
-wxImageList* wxRibbonBar::GetButtonImageList(wxSize size)
+wxImageList* wxRibbonBar::GetButtonImageList(wxSize size, int initialCount)
 {
     for ( size_t n = 0; n < m_image_lists.size(); ++n )
     {
@@ -819,7 +819,7 @@ wxImageList* wxRibbonBar::GetButtonImageList(wxSize size)
     }
 
     wxImageList* const
-        il = new wxImageList(size.GetWidth(), size.GetHeight(), /*mask*/false);
+        il = new wxImageList(size.GetWidth(), size.GetHeight(), /*mask*/false, initialCount);
     m_image_lists.push_back(il);
 
     return il;

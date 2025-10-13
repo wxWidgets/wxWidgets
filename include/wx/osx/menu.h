@@ -151,6 +151,10 @@ public:
 
     wxMenu *OSXGetAppleMenu() const { return m_appleMenu; }
 
+#if wxOSX_USE_IPHONE
+    void OSXOnBuildMenu( WX_NSObject builder ) ;
+#endif
+
     static void SetAutoWindowMenu( bool enable ) { s_macAutoWindowMenu = enable ; }
     static bool GetAutoWindowMenu() { return s_macAutoWindowMenu ; }
 

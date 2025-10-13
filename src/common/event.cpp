@@ -566,6 +566,7 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
     m_eventType = commandType;
     m_extraLong = orient;
     m_commandInt = pos;
+    m_pixelOffset = 0;
 }
 
 // ----------------------------------------------------------------------------

@@ -58,6 +58,7 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
                             const wxString& name)
 {
     SetBackgroundStyle( wxBG_STYLE_TRANSPARENT );
+    InitCornerInset();
 
     if ( !wxStatusBarGeneric::Create( parent, id, style, name ) )
         return false;
@@ -66,7 +67,6 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 
     InitColours();
-    InitCornerInset();
 
     return true;
 }

@@ -26,6 +26,9 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/object.h"
 
+// All animation-related APIs have been deprecated gdk-pixbuf 2.44, suppress
+// the warnings about using them as long as we still do.
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 // ============================================================================
 // implementation

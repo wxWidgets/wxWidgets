@@ -220,6 +220,16 @@ bool wxApp::OSXOnShouldTerminate()
     ProcessEvent(event);
     return !event.GetVeto();
 }
+
+#endif
+
+#if wxOSX_USE_IPHONE && wxUSE_MENUBAR
+
+void wxApp::OSXOnBuildMenu(WX_NSObject builder)
+{
+    wxMenuBar::MacGetInstalledMenuBar()->OSXOnBuildMenu(builder);
+}
+
 #endif
 
 #if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON

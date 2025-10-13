@@ -3828,7 +3828,7 @@ void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
                 break;
             case wxAuiDockUIPart::typePaneButton:
                 m_art->DrawPaneButton(*dc, m_frame, part.button,
-                        wxAUI_BUTTON_STATE_NORMAL, part.rect, *part.pane);
+                        part.state, part.rect, *part.pane);
                 break;
         }
     }
@@ -3979,6 +3979,9 @@ void wxAuiManager::OnFindManager(wxAuiManagerEvent& evt)
 
 void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
 {
+    // Don't set any cursor by default.
+    event.Skip();
+
     // determine cursor
     wxAuiDockUIPart* part = HitTest(event.GetX(), event.GetY());
     wxCursor cursor;
@@ -4010,57 +4013,33 @@ void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
         }
     }
 
-    event.SetCursor(cursor);
+    if ( cursor.IsOk() )
+    {
+        event.SetCursor(cursor);
+
+        // Undo Skip() done above.
+        event.Skip(false);
+    }
 }
 
 
 
-void wxAuiManager::UpdateButtonOnScreen(wxAuiDockUIPart* button_ui_part,
-                                        const wxMouseEvent& event)
+void wxAuiManager::UpdateButtonOnScreen(wxAuiDockUIPart* button_ui_part, int state)
 {
-    wxAuiDockUIPart* hit_test = HitTest(event.GetX(), event.GetY());
-    if (!hit_test || !button_ui_part)
+    wxCHECK_RET( button_ui_part,
+                 "UpdateButtonOnScreen() called with null part" );
+
+    wxASSERT_MSG( button_ui_part->type == wxAuiDockUIPart::typePaneButton,
+                  "UpdateButtonOnScreen() called for non-button part" );
+
+    // Don't bother doing anything if nothing changed.
+    if ( button_ui_part->state == state )
         return;
 
-    int state = wxAUI_BUTTON_STATE_NORMAL;
+    button_ui_part->state = state;
 
-    if (hit_test == button_ui_part)
-    {
-        if (event.LeftDown())
-            state = wxAUI_BUTTON_STATE_PRESSED;
-        else
-            state = wxAUI_BUTTON_STATE_HOVER;
-    }
-    else
-    {
-        if (event.LeftDown())
-            state = wxAUI_BUTTON_STATE_HOVER;
-    }
-
-    // now repaint the button with hover state -- or everything if we can't
-    // repaint just it
-    if ( !wxClientDC::CanBeUsedForDrawing(m_frame) )
-    {
-        m_frame->Refresh();
-        m_frame->Update();
-    }
-
-    wxClientDC cdc(m_frame);
-
-    // if the frame has a toolbar, the client area
-    // origin will not be (0,0).
-    wxPoint pt = m_frame->GetClientAreaOrigin();
-    if (pt.x != 0 || pt.y != 0)
-        cdc.SetDeviceOrigin(pt.x, pt.y);
-
-    if (hit_test->pane)
-    {
-        m_art->DrawPaneButton(cdc, m_frame,
-                  button_ui_part->button,
-                  state,
-                  button_ui_part->rect,
-                  *hit_test->pane);
-    }
+    m_frame->RefreshRect(button_ui_part->rect);
+    m_frame->Update();
 }
 
 void wxAuiManager::OnLeftDown(wxMouseEvent& event)
@@ -4103,7 +4082,7 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
             m_actionStart = wxPoint(event.m_x, event.m_y);
             m_frame->CaptureMouse();
 
-            UpdateButtonOnScreen(part, event);
+            UpdateButtonOnScreen(part, wxAUI_BUTTON_STATE_PRESSED);
         }
         else if (part->type == wxAuiDockUIPart::typeCaption ||
                   part->type == wxAuiDockUIPart::typeGripper)
@@ -4441,8 +4420,6 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
 
         if (m_actionPart)
         {
-            UpdateButtonOnScreen(m_actionPart, event);
-
             // make sure we're still over the item that was originally clicked
             if (m_actionPart == HitTest(event.GetX(), event.GetY()))
             {
@@ -4452,6 +4429,13 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
                 e.SetPane(m_actionPart->pane);
                 e.SetButton(m_actionPart->button);
                 ProcessMgrEvent(e);
+            }
+            else
+            {
+                // normally we should have reset the button state when mouse
+                // moved out of the active part, but do it here just in case we
+                // somehow didn't get it
+                UpdateButtonOnScreen(m_actionPart, wxAUI_BUTTON_STATE_NORMAL);
             }
         }
     }
@@ -4657,13 +4641,12 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                 // make the old button normal
                 if (m_hoverButton)
                 {
-                    UpdateButtonOnScreen(m_hoverButton, event);
-                    Repaint();
+                    UpdateButtonOnScreen(m_hoverButton, wxAUI_BUTTON_STATE_NORMAL);
                 }
 
                 // mouse is over a button, so repaint the
                 // button in hover mode
-                UpdateButtonOnScreen(part, event);
+                UpdateButtonOnScreen(part, wxAUI_BUTTON_STATE_HOVER);
                 m_hoverButton = part;
 
             }
@@ -4672,8 +4655,8 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
         {
             if (m_hoverButton)
             {
+                UpdateButtonOnScreen(m_hoverButton, wxAUI_BUTTON_STATE_NORMAL);
                 m_hoverButton = nullptr;
-                Repaint();
             }
             else
             {
@@ -4687,8 +4670,8 @@ void wxAuiManager::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
 {
     if (m_hoverButton)
     {
+        UpdateButtonOnScreen(m_hoverButton, wxAUI_BUTTON_STATE_NORMAL);
         m_hoverButton = nullptr;
-        Repaint();
     }
 }
 

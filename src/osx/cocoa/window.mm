@@ -3530,7 +3530,7 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 
             if ( toplevel == nullptr || toplevel->GetShape().IsEmpty() )
                 [targetView setBackgroundColor:
-                        col.IsOk() ? col.OSXGetNSColor() : nil];
+                        col.IsOk() ? col.OSXGetWXColor() : nil];
         }
     }
 }
@@ -3594,7 +3594,7 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title )
             if ( col.IsOk() )
             {
                 [attrString addAttribute:NSForegroundColorAttributeName
-                                   value:col.OSXGetNSColor()
+                                   value:col.OSXGetWXColor()
                                    range:NSMakeRange(0, [attrString length])];
             }
 
@@ -3888,7 +3888,7 @@ void wxWidgetCocoaImpl::SetForegroundColour(const wxColour& col)
 
     if ([targetView respondsToSelector:@selector(setTextColor:)])
     {
-        [targetView setTextColor: col.IsOk() ? col.OSXGetNSColor() : nil];
+        [targetView setTextColor: col.IsOk() ? col.OSXGetWXColor() : nil];
     }
 }
 

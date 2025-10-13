@@ -290,8 +290,8 @@ void wxGCDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawIcon - invalid DC") );
     wxCHECK_RET( icon.IsOk(), wxT("wxGCDC(cg)::DoDrawIcon - invalid icon") );
 
-    wxCoord w = icon.GetWidth();
-    wxCoord h = icon.GetHeight();
+    wxCoord w = icon.GetLogicalWidth();
+    wxCoord h = icon.GetLogicalHeight();
 
     m_graphicContext->DrawIcon( icon , x, y, w, h );
 

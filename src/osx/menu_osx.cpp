@@ -665,11 +665,13 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
+    // must be set early because base class method call might call back and create a native menu which would be missing a title
+    menu->SetTitle(title);
+
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return false;
 
     m_rootMenu->Insert( pos+firstMenuPos, wxMenuItem::New( m_rootMenu, wxID_ANY, title, "", wxITEM_NORMAL, menu ) );
-    menu->SetTitle(title);
 
     return true;
 }
@@ -688,6 +690,9 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
 bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 {
+    // must be set early because base class method call might call back and create a native menu which would be missing a title
+    menu->SetTitle(title);
+
     WXHMENU submenu = menu ? menu->GetHMenu() : nullptr;
         wxCHECK_MSG( submenu, false, wxT("can't append invalid menu to menubar") );
 
@@ -695,7 +700,6 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         return false;
 
     m_rootMenu->AppendSubMenu(menu, title);
-    menu->SetTitle(title);
 
     return true;
 }

@@ -764,6 +764,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         }
         wxFALLTHROUGH;
 #endif
+    case wxSYS_COLOUR_GRIDLINES:
     case wxSYS_COLOUR_3DLIGHT:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:
@@ -921,6 +922,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_BTNFACE:
+        case wxSYS_COLOUR_GRIDLINES:
         //case wxSYS_COLOUR_3DFACE:
         case wxSYS_COLOUR_3DLIGHT:
             color = wxColor(ButtonStyle()->bg[GTK_STATE_NORMAL]);

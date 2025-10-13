@@ -24,7 +24,6 @@
     #include "wx/window.h"
     #include "wx/control.h"     // for wxControl::Ellipsize()
     #include "wx/dc.h"
-    #include "wx/dcmemory.h"
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
@@ -37,8 +36,6 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/wrapcctl.h"
 #include "wx/dynlib.h"
-
-#include "wx/msw/private/darkmode.h"
 
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
@@ -622,7 +619,7 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
                                       const wxRect& rect,
                                       int flags)
 {
-    wxUxThemeHandle hTheme(win, L"COMBOBOX");
+    wxUxThemeHandle hTheme(win, L"COMBOBOX", L"DarkMode_CFD::COMBOBOX");
     if ( !hTheme )
     {
         m_rendererNative.DrawComboBoxDropButton(win, dc, rect, flags);
@@ -654,7 +651,7 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
                                wxHeaderSortIconType sortArrow,
                                wxHeaderButtonParams* params)
 {
-    wxUxThemeHandle hTheme(win, L"HEADER");
+    wxUxThemeHandle hTheme(win, L"Explorer::HEADER");
     if ( !hTheme )
     {
         return m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
@@ -728,7 +725,7 @@ wxRendererXP::DoDrawCheckMark(int kind,
                               const wxRect& rect,
                               int flags)
 {
-    wxUxThemeHandle hTheme(win, L"MENU");
+    wxUxThemeHandle hTheme(win, L"MENU", L"DarkMode::MENU");
     if ( !hTheme )
         return false;
 
@@ -915,39 +912,8 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
                                  int flags)
 {
     RECT r = ConvertToRECT(dc, rect);
-
-    // Default theme draws the button on light background which looks very out
-    // of place when using dark mode, so invert it if necessary and fall back
-    // on the generic version if this fails.
-    //
-    // Ideal would be to find the theme drawing the version appropriate for the
-    // dark mode, but it's unknown if there is one providing this.
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        wxBitmap bmp(rect.GetSize());
-
-        bool ok;
-        {
-            wxMemoryDC mdc(bmp);
-            ok = DoDrawCollapseButton(win, GetHdcOf(mdc), r, flags);
-        }
-
-        if ( ok )
-        {
-            wxBitmap bmpInv = wxMSWDarkMode::InvertBitmap(bmp);
-            if ( bmpInv.IsOk() )
-            {
-                dc.DrawBitmap(bmpInv, rect.GetPosition());
-                return;
-            }
-        }
-    }
-    else
-    {
-        if ( DoDrawCollapseButton(win, GetHdcOf(dc.GetTempHDC()), r, flags) )
-            return;
-    }
-
+    if ( DoDrawCollapseButton(win, GetHdcOf(dc.GetTempHDC()), r, flags) )
+        return;
     m_rendererNative.DrawCollapseButton(win, dc, rect, flags);
 }
 
@@ -1194,22 +1160,31 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
                                 const wxRect& rect,
                                 int flags)
 {
-    wxUxThemeHandle hTheme(win, L"EDIT");
+    wxUxThemeHandle hTheme(win, L"EDIT", L"DarkMode_CFD::Combobox");
     if ( !hTheme )
     {
         m_rendererNative.DrawTextCtrl(win,dc,rect,flags);
         return;
     }
 
-    wxColour fill = hTheme.GetColour(EP_EDITTEXT, TMT_FILLCOLOR, ETS_NORMAL);
-    wxColour bdr = hTheme.GetColour(EP_EDITTEXT, TMT_BORDERCOLOR,
-                                    flags & wxCONTROL_DISABLED
-                                        ? ETS_DISABLED
-                                        : ETS_NORMAL);
+    wxCHECK_RET(dc.GetImpl(), wxT("Invalid wxDC"));
 
-    wxDCPenChanger setPen(dc, bdr);
-    wxDCBrushChanger setBrush(dc, fill);
-    dc.DrawRectangle(rect);
+    RECT r = ConvertToRECT(dc, rect);
+
+    int state;
+
+    if (flags & wxCONTROL_DISABLED)
+        state = CBB_DISABLED;
+    else if (flags & wxCONTROL_FOCUSED)
+        state = CBB_FOCUSED;
+    else if (flags & wxCONTROL_CURRENT)
+        state = CBB_HOT;
+    else
+        state = CBB_NORMAL;
+
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, CP_BACKGROUND);
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, CP_BORDER, state);
+
 }
 
 void wxRendererXP::DrawGauge(wxWindow* win,

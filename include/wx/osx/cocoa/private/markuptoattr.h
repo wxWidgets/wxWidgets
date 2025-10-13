@@ -37,12 +37,6 @@ protected:
 
         [m_attrString beginEditing];
 
-        // First thing we do is change the default string font: as mentioned in
-        // Apple documentation, attributed strings use "Helvetica 12" font by
-        // default which is different from the system "Lucida Grande" font. So
-        // we need to explicitly change the font for the entire string.
-        ApplyFont(font, NSMakeRange(0, [m_attrString length]));
-
         // Now translate the markup tags to corresponding attributes.
         wxMarkupParser parser(*this);
         parser.Parse(markup);
@@ -54,27 +48,6 @@ protected:
     {
         if ( m_attrString )
             [m_attrString release];
-    }
-
-    void ApplyFont(const wxFont& font, const NSRange& range)
-    {
-        [m_attrString addAttribute:NSFontAttributeName
-                      value:font.OSXGetNSFont()
-                      range:range];
-
-        if ( font.GetStrikethrough() )
-        {
-            [m_attrString addAttribute:NSStrikethroughStyleAttributeName
-                                 value:@(NSUnderlineStyleSingle)
-                                 range:range];
-        }
-
-        if ( font.GetUnderlined() )
-        {
-            [m_attrString addAttribute:NSUnderlineStyleAttributeName
-                                 value:@(NSUnderlineStyleSingle)
-                                 range:range];
-        }
     }
 
     // prepare text chunk for display, e.g. strip mnemonics from it
@@ -89,43 +62,35 @@ public:
         return m_attrString;
     }
 
-
     // Implement base class pure virtual methods to process markup tags.
     virtual void OnText(const wxString& text) override
     {
-        m_pos += PrepareText(text).length();
+        const Attr& attr = GetAttr();
+
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+
+        dict[NSFontAttributeName] = attr.effectiveFont.OSXGetNSFont();
+        if ( attr.effectiveFont.GetStrikethrough() )
+            dict[NSStrikethroughStyleAttributeName] = @(NSUnderlineStyleSingle);
+        if ( attr.effectiveFont.GetUnderlined() )
+            dict[NSUnderlineStyleAttributeName] = @(NSUnderlineStyleSingle);
+
+        if ( attr.effectiveForeground.IsOk() )
+            dict[NSForegroundColorAttributeName] = attr.effectiveForeground.OSXGetWXColor();
+
+        if ( attr.effectiveBackground.IsOk() )
+            dict[NSBackgroundColorAttributeName] = attr.effectiveBackground.OSXGetWXColor();
+
+        const unsigned len = PrepareText(text).length();
+
+        [m_attrString addAttributes:dict range:NSMakeRange(m_pos, len)];
+
+        m_pos += len;
     }
 
-    virtual void OnAttrStart(const Attr& WXUNUSED(attr)) override
-    {
-        // Just remember the starting position of the range, we can't really
-        // set the attribute until we find the end of it.
-        m_rangeStarts.push(m_pos);
-    }
+    virtual void OnAttrStart(const Attr& WXUNUSED(attr)) override {}
 
-    virtual void OnAttrEnd(const Attr& attr) override
-    {
-        unsigned start = m_rangeStarts.top();
-        m_rangeStarts.pop();
-
-        const NSRange range = NSMakeRange(start, m_pos - start);
-
-        ApplyFont(attr.font, range);
-
-        if ( attr.foreground.IsOk() )
-        {
-            [m_attrString addAttribute:NSForegroundColorAttributeName
-                          value:attr.foreground.OSXGetNSColor()
-                          range:range];
-        }
-
-        if ( attr.background.IsOk() )
-        {
-            [m_attrString addAttribute:NSBackgroundColorAttributeName
-                          value:attr.background.OSXGetNSColor()
-                          range:range];
-        }
-    }
+    virtual void OnAttrEnd(const Attr& WXUNUSED(attr)) override {}
 
 private:
     // The attributed string we're building.
@@ -133,9 +98,6 @@ private:
 
     // The current position in the output string.
     unsigned m_pos;
-
-    // The positions of starting ranges.
-    wxStack<unsigned> m_rangeStarts;
 };
 
 

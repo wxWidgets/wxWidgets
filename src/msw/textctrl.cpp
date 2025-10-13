@@ -3131,6 +3131,15 @@ bool wxTextCtrl::SetFont(const wxFont& font)
         // the default font for it.
         wxTextAttr attr;
         attr.SetFont(font);
+
+        // In dark mode we also need to set the colours explicitly, just as we
+        // do for the colours of the control itself in Create().
+        if ( wxMSWDarkMode::IsActive() )
+        {
+            attr.SetTextColour(GetForegroundColour());
+            attr.SetBackgroundColour(GetBackgroundColour());
+        }
+
         SetStyle(-1, -1, attr);
     }
 

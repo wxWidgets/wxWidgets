@@ -147,20 +147,22 @@ foreach(libname @wxLIB_TARGETS@)
     endif()
 endforeach()
 
+include(CMakeFindDependencyMacro)
+
 if(TARGET wx::wxnet AND @wxUSE_WEBREQUEST_CURL@)
     # make sure CURL targets are available:
     # The link interface of target "wx::wxnet" contains: CURL::libcurl_shared
-    find_package(CURL QUIET)
+    find_dependency(CURL)
 endif()
 
-if(TARGET wx::wxgl)
+if(TARGET wx::wxgl AND NOT (APPLE AND IOS))
     # make sure OpenGL targets are available:
     # The link interface of target "wx::wxgl" contains: OpenGL::GLU
-    find_package(OpenGL QUIET)
+    find_dependency(OpenGL)
 endif()
 
 # make sure Threads targets are available
-find_package(Threads QUIET)
+find_dependency(Threads)
 
 # if no components are specified in find_package, check all of them
 if(NOT @PROJECT_NAME@_FIND_COMPONENTS)

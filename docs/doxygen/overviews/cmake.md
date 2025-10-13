@@ -72,6 +72,7 @@ wxUSE_GUI                 | BOOL   | ON      | Build the UI libraries
 wxBUILD_COMPATIBILITY     | STRING | 3.2     | Enable API compatibility with 3.0, 3.2 or neither ("NONE")
 wxBUILD_PRECOMP           | BOOL   | ON      | Use precompiled headers
 wxBUILD_MONOLITHIC        | BOOL   | OFF     | Build a single library
+wxBUILD_DEBUG_LEVEL       | STRING | 1       | 0, 1, or 2 (corresponds to wxDEBUG_LEVEL)
 
 Note that on macOS, the option `CMAKE_OSX_ARCHITECTURES` is used to specify which architecture(s) to build.
 For example, the following will build a "universal binary 2" (i.e., ARM64 and Intel x86_64) library.
