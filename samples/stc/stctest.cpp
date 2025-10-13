@@ -1196,6 +1196,14 @@ private:
         Refresh();
     }
 
+    // Helper function returning the visible line of the map corresponding to
+    // the given visible line in the main editor.
+    int MapVisibleFromEditVisible(int editVisible) const
+    {
+        auto const docLine = m_edit->DocLineFromVisible(editVisible);
+        return VisibleFromDocLine(docLine);
+    }
+
     struct ThumbInfo
     {
         int pos = 0;    // Position of the top of the thumb in pixels.
@@ -1216,8 +1224,7 @@ private:
         // to convert the editor visible line to the document line first and
         // then convert it to the map visible line.
         auto const editFirst = m_edit->GetFirstVisibleLine();
-        auto const docFirst = m_edit->DocLineFromVisible(editFirst);
-        auto const mapThumbFirst = VisibleFromDocLine(docFirst);
+        auto const mapThumbFirst = MapVisibleFromEditVisible(editFirst);
 
         thumb.pos = (mapThumbFirst - GetFirstVisibleLine()) * m_mapLineHeight;
 
@@ -1226,8 +1233,7 @@ private:
         // and physical lines are the same, this is just the number of the
         // lines shown in the editor) multiplied by the height of one line.
         auto const editLast = editFirst + m_lines.editVisible;
-        auto const docLast = m_edit->DocLineFromVisible(editLast);
-        auto const mapThumbLast = VisibleFromDocLine(docLast);
+        auto const mapThumbLast = MapVisibleFromEditVisible(editLast);
 
         thumb.height = (mapThumbLast - mapThumbFirst) * m_mapLineHeight;
 
