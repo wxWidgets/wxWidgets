@@ -1109,22 +1109,18 @@ private:
     // update.
     void SetEditFirstVisibleLine(int firstLine)
     {
-        m_updateBlocked = true;
+        m_lastSetEditFirst = firstLine;
 
         m_edit->SetFirstVisibleLine(firstLine);
-
-        m_updateBlocked = false;
     }
 
     // Set the first visible line in the map without triggering the matching
     // editor update.
     void SetMapFirstVisibleLine(int firstLine)
     {
-        m_updateBlocked = true;
+        m_lastSetMapFirst = firstLine;
 
         SetFirstVisibleLine(firstLine);
-
-        m_updateBlocked = false;
     }
 
     // We want the physical position of the visible zone in the map window
@@ -1227,13 +1223,17 @@ private:
 
     void OnEditUpdate(wxStyledTextEvent& event)
     {
-        if ( m_updateBlocked )
-            return;
-
         if ( event.GetUpdated() & wxSTC_UPDATE_V_SCROLL )
         {
-            wxLogTrace(wxTRACE_STC_MAP, "First edit line: %d",
-                       m_edit->GetFirstVisibleLine());
+            auto const editFirst = m_edit->GetFirstVisibleLine();
+            if ( editFirst == m_lastSetEditFirst )
+            {
+                m_lastSetEditFirst = -1;
+                return;
+            }
+
+            wxLogTrace(wxTRACE_STC_MAP, "Sync map from scroll: %d",
+                       editFirst);
 
             SyncMapPosition();
         }
@@ -1247,14 +1247,18 @@ private:
 
     void OnMapUpdate(wxStyledTextEvent& event)
     {
-        if ( m_updateBlocked )
-            return;
-
         // We're only interested in scrolling notifications here.
         if ( event.GetUpdated() & wxSTC_UPDATE_V_SCROLL )
         {
-            wxLogTrace(wxTRACE_STC_MAP, "First map line: %d",
-                       GetFirstVisibleLine());
+            auto const mapFirst = GetFirstVisibleLine();
+            if ( mapFirst == m_lastSetMapFirst )
+            {
+                m_lastSetMapFirst = -1;
+                return;
+            }
+
+            wxLogTrace(wxTRACE_STC_MAP, "Sync edit from scroll: %d",
+                       mapFirst);
 
             SyncEditPosition();
         }
@@ -1513,9 +1517,13 @@ private:
         }
     } m_lines;
 
-    // Flag set to true to indicate that the editor or map is scrolled by us
-    // and so shouldn't result in matching changes of the other window.
-    bool m_updateBlocked = false;
+    // Last values set by this code: we can safely ignore notifications about
+    // changes that still use these values.
+    //
+    // -1 here means "invalid" and is used because it's guaranteed to be
+    // different from any valid first line value.
+    int m_lastSetEditFirst = -1;
+    int m_lastSetMapFirst = -1;
 
     // Flag set while dragging the thumb.
     bool m_isDragging = false;
