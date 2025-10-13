@@ -1354,10 +1354,9 @@ private:
 
         auto const thumb = GetThumbInfo();
         m_dragOffset = pos.y - (thumb.pos + thumb.height / 2);
-        m_dragLastY = pos.y;
 
-        wxLogTrace(wxTRACE_STC_MAP, "Dragging: start at %d (offset=%d)",
-                   m_dragLastY, m_dragOffset);
+        wxLogTrace(wxTRACE_STC_MAP, "Dragging: start at offset=%d",
+                   m_dragOffset);
 
         SetCursor(wxCURSOR_HAND);
         CaptureMouse();
@@ -1381,89 +1380,87 @@ private:
         // when the dragging started.
         pos.y -= m_dragOffset;
 
-        // We need to find the editor first line such that the thumb will be
-        // positioned with its middle at pos.y but the trouble is that we can't
-        // invert the GetThumbInfo() calculation easily as conversion between
-        // document and display lines is not reversible. So start by estimating
-        // the editor first line assuming that display and physical lines
-        // are the same and then adjust it until the thumb middle is close
-        // to the desired position.
+        // This is the position at which we want thumb middle to be.
         const int thumbWanted = (pos.y + m_mapLineHeight - 1) / m_mapLineHeight;
+
+        // First visible line in the editor is proportional to the thumb
+        // position, but we only have the position of the middle of the thumb
+        // and the thumb height depends on the position too, so we need to
+        // iterate until we find the right position.
+        //
+        // Start with the position corresponding to the current thumb height.
+        int thumbPos = thumbWanted - GetThumbInfo().height / (2 * m_mapLineHeight);
 
         const int editOld = m_edit->GetFirstVisibleLine();
 
-        int editNew = editOld + (pos.y - m_dragLastY) / m_mapLineHeight;
-        if ( editNew < 0 )
-            editNew = 0;
-        else if ( editNew > m_lines.editMax )
-            editNew = m_lines.editMax;
+        int editNew = GetEditValidFirstLine(
+            wxMulDivInt32(thumbPos, m_lines.editMax, m_lines.thumbMax)
+        );
 
-            wxLogTrace(wxTRACE_STC_MAP, "Dragging: initial estimate=%d",
-                       editNew);
+        wxLogTrace(wxTRACE_STC_MAP, "Dragging: initial estimate=%d", editNew);
 
-            // Adjust until the actual position of the middle of the thumb if
-            // this were the first visible line in the editor becomes close to
-            // the desired position.
+        // Adjust until the actual position of the middle of the thumb if
+        // this were the first visible line in the editor becomes close to
+        // the desired position.
         //
         // We use direction, which can be -1, 0 or 1 to avoid looping forever
         // if we can't get any closer, so remember which way we're going and
         // stop if overshoot.
         for ( int direction = 0;; )
-            {
-                // This would be the first visible line in the map.
-            auto const mapNew =
-                wxMulDivInt32(editNew, m_lines.mapMax, m_lines.editMax);
+        {
+            // Thumb top corresponds to the visible line in the map
+            // corresponding to the document line corresponding to the line
+            // editNew in the editor and, similarly, thumb bottom corresponds
+            // to editNew + m_lines.editVisible.
+            auto const thumbMiddle =
+                (MapVisibleFromEditVisible(editNew) +
+                 MapVisibleFromEditVisible(editNew + m_lines.editVisible))
+                / 2
+                - GetMapFirstFromEditFirst(editNew);
 
-                // This is similar to the code in GetThumbInfo() but uses the
-                // given line instead of the first currently visible one.
-                auto const docFirst = m_edit->DocLineFromVisible(editNew);
-                auto const thumbFirst = VisibleFromDocLine(docFirst);
-                auto const docLast = m_edit->DocLineFromVisible(editNew + m_lines.editVisible);
-                auto const thumbLast = VisibleFromDocLine(docLast);
-
-                // Compare where the thumb would be with where we want it to
-                // be and adjust the first line accordingly, if possible.
-                auto const thumbMiddle = (thumbFirst + thumbLast) / 2 - mapNew;
             if ( thumbMiddle < thumbWanted )
-                {
-                // We can't go any further.
+            {
                 if ( editNew >= m_lines.editMax )
-                        break;
-
-                // We overshot the correct value, we won't get any closer to it
-                // than we were before, so stop now to avoid entering an
-                // infinite loop alternating between the two values closest to
-                // the desired one from above and below.
-                if ( direction < 0 )
+                {
+                    // We can't go any further.
                     break;
+                }
+
+                if ( direction < 0 )
+                {
+                    // We overshot the correct value, we won't get any closer
+                    // to it than we were before, so stop now to avoid entering
+                    // an infinite loop alternating between the two values
+                    // closest to the desired one from above and below.
+                    break;
+                }
 
                 // Remember that we're going down in case it is the first
                 // iteration of the loop.
                 direction = 1;
 
-                    ++editNew;
-                }
+                ++editNew;
+            }
             else if ( thumbMiddle > thumbWanted )
-                {
+            {
                 // See comment in the branch above.
-                    if ( editNew <= 0 )
-                        break;
+                if ( editNew <= 0 )
+                    break;
 
                 if ( direction > 0 )
                     break;
 
                 direction = -1;
 
-                    --editNew;
-                }
-            else // thumbMiddle == thumbWanted
-                {
-                    break;
-                }
+                --editNew;
             }
+            else // thumbMiddle == thumbWanted
+            {
+                break;
+            }
+        }
 
-            wxLogTrace(wxTRACE_STC_MAP, "Dragging: final line=%d",
-                       editNew);
+        wxLogTrace(wxTRACE_STC_MAP, "Dragging: final line=%d", editNew);
 
         if ( editNew == editOld )
             return;
@@ -1482,7 +1479,6 @@ private:
     {
         m_isDragging = false;
         m_dragOffset = 0;
-        m_dragLastY = 0;
 
         SetCursor(wxCURSOR_ARROW);
         ReleaseMouse();
@@ -1502,11 +1498,6 @@ private:
     // The constant vertical offset between the mouse pointer and the middle of
     // the thumb while dragging. Only valid if m_isDragging is true.
     int m_dragOffset = 0;
-
-    // Vertical mouse position of the last drag event or the click event which
-    // started the dragging if there were no other drag events yet. Only valid
-    // if m_isDragging is true.
-    int m_dragLastY = 0;
 
     // Height of a single line in the map: this value is cached when creating
     // the control.
