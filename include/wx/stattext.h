@@ -40,12 +40,12 @@ public:
     // This function will modify the value returned by GetLabel()!
     void Wrap(int width);
 
-    virtual wxSize GetMinSizeUsingLayoutDirection() const override;
-
-    virtual bool
-    InformFirstDirection(int direction, int size, int availableOtherDir) override;
-
     // overridden base virtuals
+    virtual wxSize
+    GetMinSizeFromKnownDirection(int direction,
+                                 int size,
+                                 int availableOtherDir) override;
+
     virtual bool AcceptsFocus() const override { return false; }
     virtual bool HasTransparentBackground() override { return true; }
 

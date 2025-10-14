@@ -277,11 +277,34 @@ void wxStaticTextBase::Wrap(int width)
     InvalidateBestSize();
 }
 
-wxSize wxStaticTextBase::GetMinSizeUsingLayoutDirection() const
+wxSize
+wxStaticTextBase::GetMinSizeFromKnownDirection(int direction,
+                                               int size,
+                                               int WXUNUSED(availableOtherDir))
 {
-    if ( !m_currentWrap )
-        return GetMinSize();
+    if ( !HasFlag(wxST_WRAP) || direction != wxHORIZONTAL )
+    {
+        // If we had wrapped the control before, don't do it any longer.
+        if ( m_currentWrap )
+        {
+            SetLabel(m_unwrappedLabel);
+            m_currentWrap = 0;
+        }
 
+        return wxDefaultSize;
+    }
+
+    // Wrap at the given width to compute the required size.
+    const int style = GetWindowStyleFlag();
+    if ( !(style & wxST_NO_AUTORESIZE) )
+        SetWindowStyleFlag( style | wxST_NO_AUTORESIZE );
+
+    Wrap( size );
+
+    if ( !(style & wxST_NO_AUTORESIZE) )
+        SetWindowStyleFlag( style );
+
+    // Now compute the best size for the wrapped label.
     int numLines = 0;
     int maxLineWidth = 0;
     for ( auto line : wxSplit(GetLabel(), '\n', '\0') )
@@ -294,36 +317,6 @@ wxSize wxStaticTextBase::GetMinSizeUsingLayoutDirection() const
     }
 
     return wxSize( maxLineWidth, numLines*GetCharHeight() );
-}
-
-bool wxStaticTextBase::InformFirstDirection(int direction, int size, int WXUNUSED(availableOtherDir))
-{
-    if ( !HasFlag(wxST_WRAP) || direction != wxHORIZONTAL )
-    {
-        // If we had wrapped the control before, don't do it any longer.
-        if ( m_currentWrap )
-        {
-            SetLabel(m_unwrappedLabel);
-            m_currentWrap = 0;
-        }
-
-        return false;
-    }
-
-    // In the second pass, this control has been given "size" amount of
-    // space in the horizontal direction. Wrap there and report a new
-    // GetEffectiveMinSize() from then on.
-
-    const int style = GetWindowStyleFlag();
-    if ( !(style & wxST_NO_AUTORESIZE) )
-        SetWindowStyleFlag( style | wxST_NO_AUTORESIZE );
-
-    Wrap( size );
-
-    if ( !(style & wxST_NO_AUTORESIZE) )
-        SetWindowStyleFlag( style );
-
-    return true;
 }
 
 void wxStaticTextBase::AutoResizeIfNecessary()

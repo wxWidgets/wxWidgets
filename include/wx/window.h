@@ -480,9 +480,22 @@ public:
     int GetMaxWidth() const { return GetMaxSize().x; }
     int GetMaxHeight() const { return GetMaxSize().y; }
 
-        // Can be overridden to compute minimal size if it depends on the
-        // layout direction set by InformFirstDirection().
-    virtual wxSize GetMinSizeUsingLayoutDirection() const { return GetMinSize(); }
+        // This function may be overridden to return the minimal size if it
+        // depends on the size known to be available in some direction, e.g.
+        // for text wrapping controls to compute the number of lines needed to
+        // fit all their text in the given width.
+        //
+        // It must return wxDefaultSize if the size of this window doesn't
+        // depend on the size in the given direction to avoid unnecessary
+        // relayouts.
+        //
+        // Default implementation calls InformFirstDirection() for
+        // compatibility and then returns either GetEffectiveMinSize() or
+        // wxDefaultSize depending on InformFirstDirection() return value.
+    virtual wxSize
+    GetMinSizeFromKnownDirection(int direction,
+                                 int size,
+                                 int availableOtherDir);
 
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for

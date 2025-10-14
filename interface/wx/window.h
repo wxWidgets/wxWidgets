@@ -1405,19 +1405,43 @@ public:
         May be overridden if the control minimal size depends on the layout
         direction.
 
-        This method is called after InformFirstDirection() and so its
-        implementation can rely on the values passed to that method.
+        This function is called when using sizers for the layout to request
+        minimum controls size once its size in the specified @a direction is
+        fixed by the layout algorithm and known to be equal to @a size.
 
-        For example, a multi-line wxStaticText returns the minimum size at
-        which it can be wrapped when the major layout direction is vertical.
+        It may be useful to override it if the control minimal size varies
+        depending on its size in some direction. For example, controls showing
+        multi-line text may return the size needed to show their text after
+        wrapping the contents to fit the given width when @a direction is
+        wxHORIZONTAL and @a size is the available width.
 
-        The default implementation of this method just calls GetMinSize().
+        The default implementation of this method returns wxDefaultSize
+        (to be precise, it may return GetEffectiveMinSize() if the deprecated
+        InformFirstDirection() is overridden and returns @true, but this
+        shouldn't be done in the new code).
+
+        @param direction
+            The direction in which the size is fixed, either ::wxHORIZONTAL or
+            ::wxVERTICAL.
+        @param size
+            The size in the direction given by the @a direction parameter,
+            always valid, i.e. positive.
+        @param availableOtherDir
+            The size available in the other direction, may be -1 if the
+            available size is not known.
+        @return
+            The minimal size of the window when its size in the given
+            @a direction is fixed to @a size or ::wxDefaultSize if the minimum
+            size doesn't depend on the layout direction and is always the same.
 
         @since 3.3.2
 
-        @see InformFirstDirection(), wxSizer::CalcMinUsingLayoutDirection()
+        @see wxSizer::CalcMinSizeFromKnownDirection()
     */
-    virtual wxSize GetMinSizeUsingLayoutDirection() const;
+    virtual wxSize
+    GetMinSizeFromKnownDirection(int direction,
+                                 int size,
+                                 int availableOtherDir) const;
 
     /**
         Returns the maximum size of window's client area.
@@ -1608,14 +1632,10 @@ public:
     virtual wxSize GetWindowBorderSize() const;
 
     /**
-       wxSizer and friends use this to give a chance to a component to recalc
-       its min size once one of the final size components is known. Override
-       this function when that is useful (such as for wxStaticText which can
-       stretch over several lines). Parameter availableOtherDir
-       tells the item how much more space there is available in the opposite
-       direction (-1 if unknown).
+       Compatibility function called by GetMinSizeFromKnownDirection().
 
-       @see GetMinSizeUsingLayoutDirection(), wxSizer::CalcMinUsingLayoutDirection()
+       This function shouldn't be used in the new code, please override
+       GetMinSizeFromKnownDirection() instead.
     */
     virtual bool
     InformFirstDirection(int direction,
