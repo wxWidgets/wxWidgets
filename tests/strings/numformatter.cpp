@@ -375,13 +375,16 @@ protected:
         if (ok)
         {
             wxLocaleNumberFormatting numForm = wxUILocale::GetCurrent().GetNumberFormatting();
-            wxLocaleNumberFormatting curForm = wxUILocale::GetCurrent().GetCurrencyInfo().currencyFormat;
+            wxLocaleCurrencyInfo currencyInfo = wxUILocale::GetCurrent().GetCurrencyInfo();
+            wxLocaleNumberFormatting curForm = currencyInfo.currencyFormat;
 #ifdef __GLIBC__
             ok = numForm.groupSeparator == "."
-                && curForm.groupSeparator == wxString::FromUTF8(NNBSP);
+                && curForm.groupSeparator == wxString::FromUTF8(NNBSP)
+                && currencyInfo.currencySymbolPos == wxCurrencySymbolPosition::PrefixWithSep;
 #else
             ok = numForm.groupSeparator == wxString::FromUTF8(NBSP)
-                && curForm.groupSeparator == ".";
+                && curForm.groupSeparator == "."
+                && currencyInfo.currencySymbolPos == wxCurrencySymbolPosition::PrefixWithSep;
 #endif
         }
         return ok;
