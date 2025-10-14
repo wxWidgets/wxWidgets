@@ -127,23 +127,6 @@ wxSizer *wxWrapSizer::GetRowSizer(size_t n)
     return sizer;
 }
 
-bool wxWrapSizer::InformFirstDirection(int direction,
-                                       int size,
-                                       int availableOtherDir)
-{
-    if ( !direction )
-        return false;
-
-    // Store the values for later use
-    m_availSize = size;
-    m_availableOtherDir = availableOtherDir +
-                            (direction == wxHORIZONTAL ? m_calculatedMinSize.y
-                                                       : m_calculatedMinSize.x);
-    m_dirInform = direction;
-    return true;
-}
-
-
 void wxWrapSizer::AdjustLastRowItemProp(size_t n, wxSizerItem *itemLast)
 {
     if ( !itemLast || !(m_flags & wxEXTEND_LAST_ON_EACH_LINE) )
@@ -159,13 +142,31 @@ void wxWrapSizer::AdjustLastRowItemProp(size_t n, wxSizerItem *itemLast)
     item->SetUserData(new wxPropChanger(*this, *itemLast));
 }
 
-wxSize wxWrapSizer::CalcMinUsingLayoutDirection()
+wxSize
+wxWrapSizer::CalcMinSizeFromKnownDirection(int direction,
+                                           int size,
+                                           int availableOtherDir)
 {
     if ( m_children.empty() )
-        return wxSize();
+        return wxDefaultSize;
 
-    // We're called after InformFirstDirection() to find a min size that
-    // uses one dimension maximally and the other direction minimally.
+    // Store the parameters for use in CalcMin() later.
+    m_availSize = size;
+    if ( availableOtherDir == -1 )
+    {
+        m_availableOtherDir = -1;
+    }
+    else
+    {
+        m_availableOtherDir = availableOtherDir +
+                                (direction == wxHORIZONTAL ? m_calculatedMinSize.y
+                                                           : m_calculatedMinSize.x);
+    }
+
+    m_dirInform = direction;
+
+    // We're called to find a min size that uses one dimension maximally and
+    // the other direction minimally.
     //
     // There are two different algorithms for doing it, depending on whether
     // the first reported size component is the opposite as our own orientation

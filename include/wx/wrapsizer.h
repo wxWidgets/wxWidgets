@@ -36,12 +36,11 @@ public:
 
     // override base class virtual methods
     virtual wxSize CalcMin() override;
-    virtual wxSize CalcMinUsingLayoutDirection() override;
+    virtual wxSize
+    CalcMinSizeFromKnownDirection(int direction,
+                                  int size,
+                                  int availableOtherDir) override;
     virtual void RepositionChildren(const wxSize& minSize) override;
-
-    virtual bool InformFirstDirection(int direction,
-                                      int size,
-                                      int availableOtherDir) override;
 
 protected:
     // This method is called to decide if an item represents empty space or
