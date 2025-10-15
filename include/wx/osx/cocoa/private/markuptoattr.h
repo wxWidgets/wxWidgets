@@ -27,7 +27,7 @@ protected:
           m_attrString(NULL)
     {}
 
-    void Parse(const wxFont& font, const wxString& markup)
+    void Parse(const wxFont& WXUNUSED(font), const wxString& markup)
     {
         const wxCFStringRef label(PrepareText(wxMarkupParser::Strip(markup)));
         m_attrString = [[NSMutableAttributedString alloc]
