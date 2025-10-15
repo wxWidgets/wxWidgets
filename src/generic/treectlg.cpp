@@ -2804,7 +2804,8 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
         if ( item->IsSelected() )
         {
 #ifdef __WXMAC__
-            colText = *wxWHITE;
+            if (m_hasFocus)
+               colText = *wxWHITE;
 #else
             if (m_hasFocus)
                 colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
@@ -3902,7 +3903,11 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             {
                 // only toggle the item for a single click, double click on
                 // the button doesn't do anything (it toggles the item twice)
-                if ( event.LeftDown() )
+                // Reply: wxWidgets only sends one LeftDown() event and if you
+                // keep clicking, a series of DClick events are sent - so the tree
+                // branch doesn't toggle if you click mulitple times. Therefore,
+                // I re-added || event.LeftDClick()
+                if ( event.LeftDown() || event.LeftDClick() )
                 {
                     Toggle( item );
                 }
