@@ -1488,7 +1488,7 @@ void wxRibbonMSWArtProvider::DrawTab(
             dc.GetTextExtent(label, &text_width, &text_height);
             int width = tab.rect.width - 5;
             int x = tab.rect.x + 3;
-            if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
+            if ( (m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS) && tab.page->GetIcon().IsOk() )
             {
                 x += 3 + tab.page->GetIcon().GetLogicalWidth();
                 width -= 3 + tab.page->GetIcon().GetLogicalWidth();
