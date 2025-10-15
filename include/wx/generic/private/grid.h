@@ -980,7 +980,7 @@ public:
         { grid->DeselectCol(line); }
 
     virtual bool IsLineInSelection(wxGrid *grid, int line) const override
-        { return grid->m_selection->IsInSelection(line, 0); }
+        { return grid->m_selection->IsInSelection(0, line); }
 
     virtual wxGrid::EventResult SendEvent(wxGrid *grid, wxEventType eventType,
         int line, const wxMouseEvent& event) const override
