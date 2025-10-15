@@ -2804,7 +2804,8 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
         if ( item->IsSelected() )
         {
 #ifdef __WXMAC__
-            colText = *wxWHITE;
+            if (m_hasFocus)
+               colText = *wxWHITE;
 #else
             if (m_hasFocus)
                 colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
