@@ -78,7 +78,7 @@
     @library{wxstc}
     @category{stc}
 
-    @see wxStyledTextEvent
+    @see wxStyledTextEvent, wxStyledTextCtrlMiniMap
 */
 
 class wxStyledTextCtrl : public wxControl, public wxTextEntry
@@ -422,7 +422,7 @@ public:
         opened/closed in this control, a fold at the same line will be
         opened/closed in the mirror control as well. This will only be useful
         if both controls have the same text contents, i.e. if they share the
-        same GetDocPointer().
+        same GetDocPointer() which is e.g. the case of wxStyledTextCtrlMiniMap.
 
         @param mirrorFoldingCtrl
             The control to synchronize folding with or @NULL to disable folding
