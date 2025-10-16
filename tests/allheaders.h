@@ -333,6 +333,7 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/statusbr.h>
+#include <wx/stc/minimap.h>
 #include <wx/stc/stc.h>
 #include <wx/stdpaths.h>
 #include <wx/stdstream.h>
