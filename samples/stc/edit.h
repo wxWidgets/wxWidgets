@@ -131,6 +131,9 @@ public:
     wxString GetFilename () {return m_filename;}
     void SetFilename (const wxString &filename) {m_filename = filename;}
 
+    // Toggle showing line numbers in the margin.
+    void ToggleLineNumbers();
+
 private:
     // file
     wxString m_filename;

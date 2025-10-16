@@ -320,6 +320,10 @@ void Edit::OnIndentGuide (wxCommandEvent &WXUNUSED(event)) {
 }
 
 void Edit::OnLineNumber (wxCommandEvent &WXUNUSED(event)) {
+    ToggleLineNumbers();
+}
+
+void Edit::ToggleLineNumbers() {
     SetMarginWidth (m_LineNrID,
                     GetMarginWidth (m_LineNrID) == 0? m_LineNrMargin: 0);
 }

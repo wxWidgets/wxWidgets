@@ -1616,8 +1616,8 @@ void App::ShowDocumentMap(wxWindow* parent)
     auto* const edit = new Edit(splitter);
     edit->LoadFile("stctest.cpp");
 
-    // Show line numbers and hide the other margins not used here.
-    edit->SetMarginWidth(0, edit->GetTextExtent("99999").x);
+    // Show line numbers in the margin, which are hidden by default.
+    edit->ToggleLineNumbers();
 
     edit->SetWrapMode(wxSTC_WRAP_WORD);
     edit->SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
