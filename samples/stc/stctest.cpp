@@ -950,6 +950,9 @@ public:
         SetUseHorizontalScrollBar(false);
         SetCursor(wxCURSOR_ARROW);
 
+        // Ensure that folds in the map are synchronized with the main editor.
+        edit->SetMirrorFoldingCtrl(this);
+
         // Scroll the editor when the map is scrolled.
         Bind(wxEVT_STC_UPDATEUI, &wxStyledTextCtrlMap::OnMapUpdate, this);
 
@@ -1615,8 +1618,6 @@ void App::ShowDocumentMap(wxWindow* parent)
 
     // Show line numbers and hide the other margins not used here.
     edit->SetMarginWidth(0, edit->GetTextExtent("99999").x);
-    edit->SetMarginWidth(1, 0);
-    edit->SetMarginWidth(2, 0);
 
     edit->SetWrapMode(wxSTC_WRAP_WORD);
     edit->SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
