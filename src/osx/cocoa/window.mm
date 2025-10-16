@@ -4114,6 +4114,22 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     bool processed = false;
     for ( auto& wxevent : TranslateMouseEvent(event) )
     {
+        if (wxevent.GetEventType() == wxEVT_LEFT_DCLICK)
+        {
+            // synthesize LEFT_DOWN event before DCLICK event
+            wxevent.SetEventType( wxEVT_LEFT_DOWN );
+            GetWXPeer()->HandleWindowEvent(wxevent);
+            wxevent.SetEventType( wxEVT_LEFT_DCLICK );
+        }
+
+        if (wxevent.GetEventType() == wxEVT_RIGHT_DCLICK)
+        {
+            // synthesize RIGHT_DOWN event before DCLICK event
+            wxevent.SetEventType( wxEVT_RIGHT_DOWN );
+            GetWXPeer()->HandleWindowEvent(wxevent);
+            wxevent.SetEventType( wxEVT_RIGHT_DCLICK );
+        }
+
         // Even if this event was processed, still continue with the other
         // events, if any.
         if ( GetWXPeer()->HandleWindowEvent(wxevent) )
