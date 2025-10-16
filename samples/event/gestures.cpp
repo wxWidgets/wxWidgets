@@ -8,27 +8,26 @@
 
 
 MyMouseFrame::MyMouseFrame()
-    : wxFrame(nullptr, wxID_ANY, "Mouse evebts", wxDefaultPosition, wxSize(800, 600))
+    : wxFrame(nullptr, wxID_ANY, "Mouse events")
 {
     // Create controls
-    MyMousePanel *myPanel = new MyMousePanel(this);
+    MyMousePanel* myPanel = new MyMousePanel(this);
+    myPanel->SetMinSize(FromDIP(wxSize(100, 200)));
     myPanel->SetBackgroundColour( *wxLIGHT_GREY );
-    m_logText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                    wxSize(wxDefaultCoord, 350), wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH);
+    m_logText = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+                               wxDefaultPosition, wxDefaultSize,
+                               wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH);
 
     // Add controls to sizer
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(myPanel, wxSizerFlags(1).Expand());
-    sizer->Add(m_logText, wxSizerFlags().Expand());
+    sizer->Add(myPanel, wxSizerFlags().Expand());
+    sizer->Add(m_logText, wxSizerFlags(1).Expand());
     SetSizer(sizer);
-
-    // Set a minimum size for the frame
-    wxSize dsplySz = wxGetDisplaySize();
-    SetSizeHints(wxMin(800,dsplySz.GetWidth()), wxMin(600,dsplySz.GetHeight()));
 
     // Log to the text control
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
 
+    SetClientSize(FromDIP(wxSize(600, 800)));
 
     Bind(wxEVT_CLOSE_WINDOW, &MyMouseFrame::OnQuit, this);
 }
@@ -51,95 +50,66 @@ MyMousePanel::MyMousePanel(MyMouseFrame *parent)
     Bind(wxEVT_RIGHT_DCLICK, &MyMousePanel::OnRightDClick, this);
     Bind(wxEVT_ENTER_WINDOW, &MyMousePanel::OnEnter, this);
     Bind(wxEVT_LEAVE_WINDOW, &MyMousePanel::OnLeave, this);
+}
 
+void
+MyMousePanel::DoLogMouseEvent(const wxMouseEvent& event,
+                              const wxString& eventName)
+{
+    wxString msg = eventName;
+
+    wxString down;
+    if (event.LeftIsDown())
+        down += " left";
+    if (event.MiddleIsDown())
+        down += " middle";
+    if (event.RightIsDown())
+        down += " right";
+
+    if (down.empty())
+        down = " none";
+
+    wxLogMessage("%s (buttons down:%s)", msg, down);
 }
 
 void MyMousePanel::OnLeftDown(wxMouseEvent& event)
 {
-    wxLogMessage("wxEVT_LEFT_DOWN event");
-    if (event.LeftIsDown())
-      wxLogMessage("event.LeftIsDown() is true");
-    else
-      wxLogMessage("event.LeftIsDown() is false");
-    wxLogMessage("");
+    DoLogMouseEvent(event, "wxEVT_LEFT_DOWN");
 }
 
 void MyMousePanel::OnLeftUp(wxMouseEvent& event)
 {
-    wxLogMessage("wxEVT_LEFT_UP event");
-    if (event.LeftIsDown())
-      wxLogMessage("event.LeftIsDown() is true");
-    else
-      wxLogMessage("event.LeftIsDown() is false");
-    wxLogMessage("");
+    DoLogMouseEvent(event, "wxEVT_LEFT_UP");
 }
 
 void MyMousePanel::OnRightDown(wxMouseEvent& event)
 {
-    wxLogMessage("wxEVT_RIGHT_DOWN event");
-    if (event.RightIsDown())
-      wxLogMessage("event.RightIsDown() is true");
-    else
-      wxLogMessage("event.RightIsDown() is false");
-    wxLogMessage("");
+    DoLogMouseEvent(event, "wxEVT_RIGHT_DOWN");
 }
 
 void MyMousePanel::OnRightUp(wxMouseEvent& event)
 {
-    wxLogMessage("wxEVT_RIGHT_UP event");
-    if (event.RightIsDown())
-      wxLogMessage("event.RightIsDown() is true");
-    else
-      wxLogMessage("event.RightIsDown() is false");
-    wxLogMessage("");
+    DoLogMouseEvent(event, "wxEVT_RIGHT_UP");
 }
 
 void MyMousePanel::OnLeftDClick(wxMouseEvent& event)
 {
-    wxLogMessage("wxEVT_LEFT_DCLICK event");
-    if (event.LeftIsDown())
-      wxLogMessage("event.LeftIsDown() is true");
-    else
-      wxLogMessage("event.LeftIsDown() is false");
-    wxLogMessage("");
+    DoLogMouseEvent(event, "wxEVT_LEFT_DCLICK");
 }
 
 void MyMousePanel::OnRightDClick(wxMouseEvent& event)
 {
-    wxLogMessage("wxEVT_RIGHT_DCLICK event");
-    if (event.RightIsDown())
-      wxLogMessage("event.RightIsDown() is true");
-    else
-      wxLogMessage("event.RightIsDown() is false");
-    wxLogMessage("");
+    DoLogMouseEvent(event, "wxEVT_RIGHT_DCLICK");
 }
 
 void MyMousePanel::OnEnter(wxMouseEvent& event)
 {
-    wxLogMessage("wxEVT_ENTER_WINDDOW event");
-    if (event.LeftIsDown())
-      wxLogMessage("event.LeftIsDown() is true");
-    else
-      wxLogMessage("event.LeftIsDown() is false");
-    if (event.RightIsDown())
-      wxLogMessage("event.RightIsDown() is true");
-    else
-      wxLogMessage("event.RightIsDown() is false");
-    wxLogMessage("");
+    DoLogMouseEvent(event, "wxEVT_ENTER_WINDDOW");
 }
 
 void MyMousePanel::OnLeave(wxMouseEvent& event)
 {
-    wxLogMessage("wxEVT_LEAVE_WINDDOW event");
-    if (event.LeftIsDown())
-      wxLogMessage("event.LeftIsDown() is true");
-    else
-      wxLogMessage("event.LeftIsDown() is false");
-    if (event.RightIsDown())
-      wxLogMessage("event.RightIsDown() is true");
-    else
-      wxLogMessage("event.RightIsDown() is false");
-    wxLogMessage("");
+    DoLogMouseEvent(event, "wxEVT_LEAVE_WINDDOW");
 }
 
 // --------------------------------------------------------------------

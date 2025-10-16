@@ -55,6 +55,9 @@ class MyMousePanel : public wxPanel
 public:
     MyMousePanel(MyMouseFrame* parent);
 
+private:
+    void DoLogMouseEvent(const wxMouseEvent& event, const wxString& eventName);
+
     void OnLeftDown(wxMouseEvent& event);
     void OnLeftUp(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
