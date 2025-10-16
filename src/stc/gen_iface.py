@@ -1187,6 +1187,87 @@ methodOverrideMap = {
          SendMsg(%s, 0, (sptr_t)ilexer);'''
     ),
 
+    # Forward all functions changing folding state to the mirror control, if any.
+    'SetFoldLevel' :
+    (0, 0,
+    '''void %s(int line, int level)
+{
+    SendMsg(%s, line, level);
+
+    if ( m_mirrorFoldingCtrl )
+        m_mirrorFoldingCtrl->SetFoldLevel(line, level);'''
+    ),
+
+    'SetFoldExpanded' :
+    (0, 0,
+    '''void %s(int line, bool expanded)
+{
+    SendMsg(%s, line, expanded);
+
+    if ( m_mirrorFoldingCtrl )
+        m_mirrorFoldingCtrl->SetFoldExpanded(line, expanded);'''
+    ),
+
+    'ToggleFold' :
+    (0, 0,
+    '''void %s(int line)
+{
+    SendMsg(%s, line, 0);
+
+    if ( m_mirrorFoldingCtrl )
+        m_mirrorFoldingCtrl->ToggleFold(line);'''
+    ),
+
+    'ToggleFoldShowText' :
+    (0, 0,
+    '''void %s(int line, const wxString& text)
+{
+    SendMsg(%s, line, (sptr_t)(const char*)wx2stc(text));
+
+    if ( m_mirrorFoldingCtrl )
+        m_mirrorFoldingCtrl->ToggleFoldShowText(line, text);'''
+    ),
+
+    'FoldLine' :
+    (0, 0,
+    '''void %s(int line, int action)
+{
+    SendMsg(%s, line, action);
+
+    if ( m_mirrorFoldingCtrl )
+        m_mirrorFoldingCtrl->FoldLine(line, action);'''
+    ),
+
+    'FoldChildren' :
+    (0, 0,
+    '''void %s(int line, int action)
+{
+    SendMsg(%s, line, action);
+
+    if ( m_mirrorFoldingCtrl )
+        m_mirrorFoldingCtrl->FoldChildren(line, action);'''
+    ),
+
+    'FoldAll' :
+    (0, 0,
+    '''void %s(int action)
+{
+    SendMsg(%s, action, 0);
+
+    if ( m_mirrorFoldingCtrl )
+        m_mirrorFoldingCtrl->FoldAll(action);'''
+    ),
+
+    'SetFoldFlags' :
+    (0, 0,
+    '''void %s(int flags)
+{
+    SendMsg(%s, flags, 0);
+
+    if ( m_mirrorFoldingCtrl )
+        m_mirrorFoldingCtrl->SetFoldFlags(flags);'''
+    ),
+
     '' : ('', 0, 0),
 
     }

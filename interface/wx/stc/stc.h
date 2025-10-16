@@ -8155,6 +8155,25 @@ public:
     ///@}
 
 
+    /**
+        Specify a control in which folds will be synchronized with folding in
+        this control.
+
+        If @a mirrorFoldingCtrl is non-null, then whenever a fold is
+        opened/closed in this control, a fold at the same line will be
+        opened/closed in the mirror control as well. This will only be useful
+        if both controls have the same text contents, i.e. if they share the
+        same GetDocPointer().
+
+        @param mirrorFoldingCtrl
+            The control to synchronize folding with or @NULL to disable folding
+            synchronization if it had been previously enabled.
+
+        @since 3.3.2
+     */
+    void SetMirrorFoldingCtrl(wxStyledTextCtrl* mirrorFoldingCtrl);
+
+
     // wxTextEntryBase pure virtual methods
     // ----------------------------------------------
     ///@member_group_name{text_entry, Text entry methods}

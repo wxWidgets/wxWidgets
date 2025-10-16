@@ -5853,6 +5853,11 @@ public:
     %pythoncode "_stc_utf8_methods.py"
 #endif
 
+    // Specify that folding in the given control should be synchronized with
+    // folding in this control, i.e. whenever a fold is opened/closed in this
+    // one, it will be opened/closed in the mirror control as well.
+    void SetMirrorFoldingCtrl(wxStyledTextCtrl* mirrorFoldingCtrl);
+
 
     // implement wxTextEntryBase pure virtual methods
     // ----------------------------------------------
@@ -6116,6 +6121,8 @@ protected:
 
 private:
     wxBitmap m_buffer;
+
+    wxStyledTextCtrl*   m_mirrorFoldingCtrl = nullptr;
 
     friend class ScintillaWX;
 #endif // !SWIG
