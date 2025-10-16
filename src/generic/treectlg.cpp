@@ -3903,11 +3903,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             {
                 // only toggle the item for a single click, double click on
                 // the button doesn't do anything (it toggles the item twice)
-                // Reply: wxWidgets only sends one LeftDown() event and if you
-                // keep clicking, a series of DClick events are sent - so the tree
-                // branch doesn't toggle if you click mulitple times. Therefore,
-                // I re-added || event.LeftDClick()
-                if ( event.LeftDown() || event.LeftDClick() )
+                if ( event.LeftDown() )
                 {
                     Toggle( item );
                 }
