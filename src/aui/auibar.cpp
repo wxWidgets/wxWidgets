@@ -915,6 +915,7 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     return true;
 }
@@ -2488,11 +2489,13 @@ void wxAuiToolBar::UpdateBackgroundBitmap(const wxSize& size)
 
 void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
-    wxPaintDC dc(this);
+    wxAutoBufferedPaintDC dc(this);
     wxRect cli_rect(wxPoint(0,0), GetClientSize());
 
 
     bool horizontal = m_orientation == wxHORIZONTAL;
+
+    dc.DrawBitmap(m_backgroundBitmap, 0, 0);
 
     int gripperSize = m_art->GetElementSizeForWindow(wxAUI_TBART_GRIPPER_SIZE, this);
     int overflowSize = m_art->GetElementSizeForWindow(wxAUI_TBART_OVERFLOW_SIZE, this);
