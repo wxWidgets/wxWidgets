@@ -4124,8 +4124,8 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
         {
             if (m_lastLeftDownWasDClick)
             {
-               // synthesize LEFT_DOWN event from second, fourth etc. DCLICK event
-               wxevent.SetEventType( wxEVT_LEFT_DOWN );
+                // synthesize LEFT_DOWN event from second, fourth etc. DCLICK event
+                wxevent.SetEventType( wxEVT_LEFT_DOWN );
                 m_lastLeftDownWasDClick = false;
             }
             else
@@ -4141,8 +4141,8 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
         {
             if (m_lastRightDownWasDClick)
             {
-               // synthesize RIGHT_DOWN event from second, fourth etc. DCLICK event
-               wxevent.SetEventType( wxEVT_RIGHT_DOWN );
+                // synthesize RIGHT_DOWN event from second, fourth etc. DCLICK event
+                wxevent.SetEventType( wxEVT_RIGHT_DOWN );
                 m_lastRightDownWasDClick = false;
             }
             else
