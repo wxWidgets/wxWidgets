@@ -67,4 +67,20 @@ public:
         @return @true on success, @false in case of catastrophic failure.
     */
     bool Create(wxWindow* parent, wxStyledTextCtrl* edit);
+
+    /**
+        Set the colours used to draw the visible zone indicator.
+
+        Note that alpha components of the colours are also used here and should
+        typically be non-zero to make the thumb semi-transparent.
+
+        If any of the parameters is an invalid colour, the corresponding colour
+        is left unchanged.
+
+        @param colNormal
+            Colour used to draw the thumb in normal state.
+        @param colDragging
+            Colour used to draw the thumb while it is being dragged.
+     */
+    void SetThumbColours(const wxColour& colNormal, const wxColour& colDragging);
 };

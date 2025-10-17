@@ -39,6 +39,12 @@ public:
 
     virtual ~wxStyledTextCtrlMiniMap();
 
+    // Set the colours used to draw the visible zone indicator in normal state
+    // and when dragging.
+    //
+    // Note that alpha components of the colours are also used here.
+    void SetThumbColours(const wxColour& colNormal, const wxColour& colDragging);
+
 private:
     // Check if the cached information about visible and total number of lines
     // has changed and update it and return true if it did.
@@ -130,6 +136,10 @@ private:
 
     // The associated main document control.
     wxStyledTextCtrl* /* const */ m_edit;
+
+    // Colours used for the thumb in normal state and when dragging.
+    wxColour m_thumbColNormal,
+             m_thumbColDragging;
 
     // Overlay showing the visible zone indicator being dragged.
     wxOverlay m_overlay;

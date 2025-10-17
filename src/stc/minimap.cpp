@@ -155,6 +155,11 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
 
     m_edit = edit;
 
+    // Use semi-transparent grey by default, this works well in both light and
+    // dark modes.
+    m_thumbColNormal = wxColour(0x80, 0x80, 0x80, 0x40);
+    m_thumbColDragging = wxColour(0x80, 0x80, 0x80, 0x80);
+
     // Use the same document as the main editor.
     auto* const doc = edit->GetDocPointer();
     edit->AddRefDocument(doc);
@@ -305,6 +310,16 @@ wxStyledTextCtrlMiniMap::~wxStyledTextCtrlMiniMap()
         DoStopDragging();
 }
 
+void
+wxStyledTextCtrlMiniMap::SetThumbColours(const wxColour& colNormal,
+                                         const wxColour& colDragging)
+{
+    if ( colNormal.IsOk() )
+        m_thumbColNormal = colNormal;
+    if ( colDragging.IsOk() )
+        m_thumbColDragging = colDragging;
+}
+
 bool wxStyledTextCtrlMiniMap::UpdateLineInfo()
 {
     LinesInfo lineInfo;
@@ -451,11 +466,9 @@ wxStyledTextCtrlMiniMap::GetThumbInfo() const
 
 void wxStyledTextCtrlMiniMap::DrawVisibleZone(wxDC& dc)
 {
-    // We need to use a different opacity here when not using wxMSW (which
-    // sets the opacity for the overlay globally).
-    //
-    // TODO: Don't hardcode the colour.
-    dc.SetBrush(wxColour(0x80, 0x80, 0x80, IsDragging() ? 0x80 : 0x40));
+    // Note that opacity used here is not taken into account under wxMSW where
+    // the overlay opacity is set globally.
+    dc.SetBrush(IsDragging() ? m_thumbColDragging : m_thumbColNormal);
     dc.SetPen(*wxTRANSPARENT_PEN);
 
     auto const thumb = GetThumbInfo();
@@ -578,7 +591,7 @@ void wxStyledTextCtrlMiniMap::StartDragging(const wxPoint& pos)
 
     // This is required by wxMSW to ensure that the map shows from behind
     // the overlay and does nothing elsewhere.
-    m_overlay.SetOpacity(0x80);
+    m_overlay.SetOpacity(m_thumbColDragging.Alpha());
 
     wxOverlayDC dc(m_overlay, this);
     dc.Clear();
