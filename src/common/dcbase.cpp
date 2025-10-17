@@ -1131,8 +1131,8 @@ void wxDC::DrawLabel(const wxString& text,
     wxCoord width, height;
     if ( bitmap.IsOk() )
     {
-        width = widthText + bitmap.GetWidth();
-        height = bitmap.GetHeight();
+        width = widthText + static_cast<wxCoord>(std::floor(bitmap.GetScaledWidth()));
+        height = static_cast<wxCoord>(std::floor(bitmap.GetScaledHeight()));
     }
     else // no bitmap
     {
@@ -1175,7 +1175,7 @@ void wxDC::DrawLabel(const wxString& text,
     {
         DrawBitmap(bitmap, x, y, true /* use mask */);
 
-        wxCoord offset = bitmap.GetWidth() + 4;
+        wxCoord offset = static_cast<wxCoord>(std::floor(bitmap.GetScaledWidth())) + 4;
         x += offset;
         width -= offset;
 
