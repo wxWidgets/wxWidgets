@@ -263,6 +263,7 @@ All (GUI):
 
 - Respect menu path style in wxFileHistory::AddFilesToMenu() (Bill Su, #25451).
 - Don't assert in wxGridSizer::Calc{Cols,Rows}() if sizer is empty (#25641).
+- Fix bitmap position in wxDC::DrawLabel() in high DPI (Blake Madden, #25888).
 - Fix calling wxDataViewCtrl::Collapse() from event handler (#25631).
 - Fix selecting columns in wxGrid with mouse (Dietmar Schwertberger, #25884).
 - Improve wxActivityIndicator dots colour contrast with background (#25405).
