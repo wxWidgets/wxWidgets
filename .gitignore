@@ -457,3 +457,5 @@
 
 /build/cmake/output/
 CMakeUserPresets.json
+/.vs
+/.gitignore
