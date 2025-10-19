@@ -175,6 +175,12 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
     SetReadOnly(true);
     edit->SetReadOnly(wasReadOnly);
 
+    // Because we draw the thumb over the text ourselves, indicate to the
+    // control that it shouldn't scroll itself when redrawing but always
+    // invalidate the whole window.
+    SetCustomDrawn(true);
+
+
     // Copy the main editor attributes.
 
     // Do NOT set the lexer: this somehow breaks syntax highlighting and

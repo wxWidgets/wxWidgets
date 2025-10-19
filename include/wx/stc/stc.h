@@ -5858,6 +5858,11 @@ public:
     // one, it will be opened/closed in the mirror control as well.
     void SetMirrorFoldingCtrl(wxStyledTextCtrl* mirrorFoldingCtrl);
 
+    // Indicate that custom drawing is done on top of this control. This is
+    // necessary to avoid corrupting it by scrolling the window content instead
+    // of refreshing it when it needs to be scrolled.
+    void SetCustomDrawn(bool customDrawn) { m_isCustomDrawn = customDrawn; }
+
 
     // implement wxTextEntryBase pure virtual methods
     // ----------------------------------------------
@@ -6123,6 +6128,8 @@ private:
     wxBitmap m_buffer;
 
     wxStyledTextCtrl*   m_mirrorFoldingCtrl = nullptr;
+
+    bool                m_isCustomDrawn = false;
 
     friend class ScintillaWX;
 #endif // !SWIG

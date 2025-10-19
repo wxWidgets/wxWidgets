@@ -432,6 +432,20 @@ public:
      */
     void SetMirrorFoldingCtrl(wxStyledTextCtrl* mirrorFoldingCtrl);
 
+    /**
+        Indicate that custom drawing is done on top of this control.
+
+        This is necessary to avoid corrupting it by scrolling the window
+        content instead of refreshing it when it needs to be scrolled.
+
+        @param customDrawn
+            If @true, indicates that custom drawing is done on top of this
+            control.
+
+        @since 3.3.2
+     */
+    void SetCustomDrawn(bool customDrawn);
+
 
     // wxTextEntryBase pure virtual methods
     // ----------------------------------------------
