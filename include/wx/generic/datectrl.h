@@ -15,6 +15,7 @@
 #include "wx/combo.h"
 #include "wx/uilocale.h"
 #include "wx/calctrl.h"
+#include "wx/dateevt.h"
 
 class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 
