@@ -14,6 +14,7 @@
 #include "wx/containr.h"
 #include "wx/combo.h"
 #include "wx/uilocale.h"
+#include "wx/calctrl.h"
 
 class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 
