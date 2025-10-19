@@ -259,6 +259,8 @@ protected:
 
     NSEvent* m_lastKeyDownEvent;
     bool m_lastKeyDownWXSent;
+    bool m_lastLeftDownWasDClick;
+    bool m_lastRightDownWasDClick;
 #if !wxOSX_USE_NATIVE_FLIPPED
     bool m_isFlipped;
 #endif
