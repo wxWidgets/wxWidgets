@@ -1,0 +1,1 @@
+wxOSX: Make click events consistent with wxMSW (Robert Roebling, #25886).
