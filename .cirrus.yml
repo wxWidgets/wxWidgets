@@ -82,7 +82,7 @@ task:
 
   test_script: |
     cd tests
-    WX_TEST_WEBREQUEST_URL="0" ./test
+    WX_TEST_WEBREQUEST_URL="0" ./test -d 1
 
   build_samples_script: |
     make -k -C samples $wxBUILD_ARGS
