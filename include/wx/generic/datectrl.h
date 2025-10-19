@@ -13,7 +13,6 @@
 #include "wx/compositewin.h"
 #include "wx/containr.h"
 #include "wx/uilocale.h"
-#include "wx/combo.h"
 
 class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 
