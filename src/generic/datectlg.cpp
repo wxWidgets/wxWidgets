@@ -163,7 +163,7 @@ wxWindowList wxDatePickerCtrlGeneric::GetCompositeWindowParts() const
 // wxDatePickerCtrlGeneric API
 // ----------------------------------------------------------------------------
 
-void 
+void
 wxDatePickerCtrlGeneric::SetFormat(const wxString& format)
 {
     m_popup->SetFormat(format);
