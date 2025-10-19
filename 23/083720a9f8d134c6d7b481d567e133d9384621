@@ -1,0 +1,1 @@
+wxAll: Fix bitmap position in wxDC::DrawLabel() in high DPI (Blake Madden, #25888).
