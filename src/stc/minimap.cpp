@@ -430,10 +430,8 @@ void wxStyledTextCtrlMiniMap::SyncMapPosition()
     auto const editFirst = m_edit->GetFirstVisibleLine();
     auto const mapFirst = GetMapFirstFromEditFirst(editFirst);
 
-    if ( mapFirst == GetFirstVisibleLine() )
-        return;
-
-    SetMapFirstVisibleLine(mapFirst);
+    if ( mapFirst != GetFirstVisibleLine() )
+        SetMapFirstVisibleLine(mapFirst);
 
     Refresh();
 }
