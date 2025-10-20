@@ -73,7 +73,7 @@ public:
 
         int offset = (checkboxHeight-sz.y) / 2;
 
-        m_label->SetPosition( wxPoint(x + checkboxWidth+widthOfSpace, y+offset) ); 
+        m_label->SetPosition( wxPoint(x + checkboxWidth+widthOfSpace, y+offset) );
     }
 
     void GetSize( int &width, int &height ) const override
