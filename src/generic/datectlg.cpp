@@ -46,6 +46,252 @@
 // global variables
 // ----------------------------------------------------------------------------
 
+bool DateValidator::Validate(wxWindow* parent)
+{
+    // We can only be used with wxComboCtrl, so just a static_cast<> would
+    // be safe, but use checked cast to notice any problems in debug build.
+    const wxString
+        s = wxStaticCast(m_validatorWindow, wxComboCtrl)->GetValue();
+    if (s.empty())
+    {
+        // There is no need to tell the user that an empty string is
+        // invalid, this shouldn't be a surprise for them.
+        return true;
+    }
+
+    wxDateTime dt;
+    if (!dt.ParseFormat(s, m_format))
+    {
+        wxMessageBox
+        (
+            wxString::Format
+            (
+                _("\"%s\" is not in the expected date format, "
+                    "please enter it as e.g. \"%s\"."),
+                s, wxDateTime::Today().Format(m_format)
+            ),
+            _("Invalid date"),
+            wxOK | wxICON_WARNING,
+            parent
+        );
+
+        return false;
+    }
+
+    return true;
+}
+bool wxCalendarComboPopup::Create(wxWindow* parent)
+{
+    if (!wxCalendarCtrl::Create(parent, wxID_ANY, wxDefaultDateTime,
+        wxPoint(0, 0), wxDefaultSize,
+        wxCAL_SEQUENTIAL_MONTH_SELECTION
+        | wxCAL_SHOW_HOLIDAYS | wxBORDER_SUNKEN))
+        return false;
+
+    SetFormat(GetLocaleDateFormat());
+
+    m_useSize = wxCalendarCtrl::GetBestSize();
+
+    wxWindow* tx = m_combo->GetTextCtrl();
+    if (!tx)
+        tx = m_combo;
+
+    tx->Bind(wxEVT_KILL_FOCUS, &wxCalendarComboPopup::OnKillTextFocus, this);
+
+    return true;
+}
+void wxCalendarComboPopup::SetDateValue(const wxDateTime& date)
+{
+    if (date.IsValid())
+    {
+        m_combo->SetText(date.Format(m_format));
+        SetDate(date);
+    }
+    else // invalid date
+    {
+        wxASSERT_MSG(HasDPFlag(wxDP_ALLOWNONE),
+            wxT("this control must have a valid date"));
+
+        m_combo->SetText(wxEmptyString);
+    }
+}
+void wxCalendarComboPopup::ChangeDateAndNotifyIfValid()
+{
+    wxDateTime dt;
+    if (!ParseDateTime(m_combo->GetValue(), &dt))
+    {
+        // The user must be in the process of updating the date, don't do
+        // anything -- we'll take care of ensuring it's valid on focus loss
+        // later.
+        return;
+    }
+
+    if (dt == GetDate())
+    {
+        // No need to send event if the date hasn't changed.
+        return;
+    }
+
+    // We change the date immediately, as it's more consistent with the
+    // native MSW version and avoids another event on focus loss.
+    SetDate(dt);
+
+    SendDateEvent(dt);
+}
+bool wxCalendarComboPopup::SetFormat(const wxString& fmt)
+{
+    m_format = fmt;
+
+    if (m_combo)
+    {
+#if wxUSE_VALIDATORS
+        m_combo->SetValidator(DateValidator(m_format));
+#endif // wxUSE_VALIDATORS
+
+        if (GetDate().IsValid())
+            m_combo->SetText(GetDate().Format(m_format));
+    }
+
+    return true;
+}
+bool wxCalendarComboPopup::ParseDateTime(const wxString& s, wxDateTime* pDt) const
+{
+    pDt->ParseFormat(s, m_format);
+    if (!pDt->IsValid())
+        return false;
+
+    return true;
+}
+void wxCalendarComboPopup::SendDateEvent(const wxDateTime& dt)
+{
+    // Sends both wxCalendarEvent and wxDateEvent
+    wxWindow* datePicker = m_combo->GetParent();
+
+    wxCalendarEvent cev(datePicker, dt, wxEVT_CALENDAR_SEL_CHANGED);
+    datePicker->GetEventHandler()->ProcessEvent(cev);
+
+    wxDateEvent event(datePicker, dt, wxEVT_DATE_CHANGED);
+    datePicker->GetEventHandler()->ProcessEvent(event);
+}
+
+void wxCalendarComboPopup::OnCalKey(wxKeyEvent& ev)
+{
+    if (ev.GetKeyCode() == WXK_ESCAPE && !ev.HasModifiers())
+        Dismiss();
+    else
+        ev.Skip();
+}
+
+void wxCalendarComboPopup::OnSelChange(wxCalendarEvent& ev)
+{
+    m_combo->SetText(GetDate().Format(m_format));
+
+    if (ev.GetEventType() == wxEVT_CALENDAR_DOUBLECLICKED)
+    {
+        Dismiss();
+    }
+
+    SendDateEvent(GetDate());
+}
+
+void wxCalendarComboPopup::OnKillTextFocus(wxFocusEvent& ev)
+{
+    ev.Skip();
+
+    const wxDateTime& dtOld = GetDate();
+
+    wxDateTime dt;
+    wxString value = m_combo->GetValue();
+    if (!ParseDateTime(value, &dt))
+    {
+        if (!HasDPFlag(wxDP_ALLOWNONE))
+            dt = dtOld;
+    }
+
+    if (dt.IsValid())
+    {
+        // Set it at wxCalendarCtrl level.
+        SetDate(dt);
+
+        // And show it in the text field.
+        m_combo->SetText(GetStringValue());
+
+        // And if the date has really changed, send an event about it.
+        if (dt != dtOld)
+            SendDateEvent(dt);
+    }
+    else // Invalid date currently entered.
+    {
+        if (HasDPFlag(wxDP_ALLOWNONE))
+        {
+            // Clear the text part to indicate that the date is invalid.
+            // Would it be better to indicate this in some more clear way,
+            // e.g. maybe by using "[none]" or something like this?
+            m_combo->SetText(wxString());
+        }
+        else
+        {
+            // Restore the original value, as we can't have invalid value
+            // in this control.
+            m_combo->SetText(GetStringValue());
+        }
+    }
+}
+wxString wxCalendarComboPopup::GetLocaleDateFormat() const
+{
+#if wxUSE_INTL
+    wxString fmt = wxUILocale::GetCurrent().GetInfo(wxLOCALE_SHORT_DATE_FMT);
+    if (HasDPFlag(wxDP_SHOWCENTURY))
+        fmt.Replace("%y", "%Y");
+#else // !wxUSE_INTL
+    wxString fmt = wxS("%x");
+#endif // wxUSE_INTL/!wxUSE_INTL
+
+    // Also check if we can actually parse dates in this format because we
+    // had several problems with unsupported format specifiers being used
+    // in some locales date format strings in the past, and in this case
+    // we'd just annoy the user with senseless messages about invalid dates
+    // being entered when it's actually just our own bug.
+    wxDateTime dt;
+    if (!dt.ParseFormat(wxDateTime::Now().Format(fmt), fmt))
+    {
+        // If we can't parse the date in the format we're going to use, we
+        // can't use it and have to fallback to something else -- this is
+        // not ideal, but better than not allowing the user to enter any
+        // dates at all.
+        wxLogTrace("datectrl",
+            "Can't parse dates in format \"%s\", "
+            "using ISO 8601 as fallback",
+            fmt);
+
+        fmt = HasDPFlag(wxDP_SHOWCENTURY) ? wxS("%Y-%m-%d")
+            : wxS("%y-%m-%d");
+    }
+
+    return fmt;
+}
+
+void wxCalendarComboPopup::SetStringValue(const wxString& s)
+{
+    wxDateTime dt;
+    if (ParseDateTime(s, &dt))
+        SetDate(dt);
+    //else: keep the old value
+}
+
+wxString wxCalendarComboPopup::GetStringValue() const
+{
+    return GetStringValueFor(GetDate());
+}
+
+wxString wxCalendarComboPopup::GetStringValueFor(const wxDateTime& dt) const
+{
+    wxString val;
+    if (dt.IsValid())
+        val = dt.Format(m_format);
+
+    return val;
+}
 
 wxBEGIN_EVENT_TABLE(wxCalendarComboPopup, wxCalendarCtrl)
     EVT_KEY_DOWN(wxCalendarComboPopup::OnCalKey)
