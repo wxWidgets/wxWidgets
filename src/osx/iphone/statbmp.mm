@@ -28,6 +28,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/private/bmpbndl.h"
 
 class wxStaticBitmapIPhoneImpl : public wxWidgetIPhoneImpl
 {
@@ -46,6 +47,13 @@ public :
         // although NSControl has this method, NSImageView throws an exception if it is called
     }
 
+    void SetBitmap( const wxBitmapBundle& bitmap ) wxOVERRIDE
+    {
+        UIImageView* v = (UIImageView*) m_osxView;
+        [v setImage: wxOSXGetImageFromBundle(bitmap)];
+        [v setNeedsDisplay];
+    }
+    
     void SetScaleMode(wxStaticBitmap::ScaleMode scaleMode)
     {
         UIImageView* v = (UIImageView*) m_osxView;
