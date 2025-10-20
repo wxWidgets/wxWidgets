@@ -53,7 +53,7 @@ public :
         [v setImage: wxOSXGetImageFromBundle(bitmap)];
         [v setNeedsDisplay];
     }
-    
+
     void SetScaleMode(wxStaticBitmap::ScaleMode scaleMode)
     {
         UIImageView* v = (UIImageView*) m_osxView;
