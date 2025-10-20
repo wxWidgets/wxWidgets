@@ -458,7 +458,7 @@ bool wxRibbonGallery::ScrollPixels(int pixels)
 
 void wxRibbonGallery::EnsureVisible(const wxRibbonGalleryItem* item)
 {
-    if(item == nullptr || !item->IsVisible() || IsEmpty())
+    if(item == nullptr || !item->IsVisible() || IsEmpty() || m_art == nullptr )
         return;
 
     if(m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
@@ -518,8 +518,9 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
         else
             offset_pos.SetLeft(offset_pos.GetLeft() - m_scroll_amount);
         m_art->DrawGalleryItemBackground(dc, this, offset_pos, item);
-        dc.DrawBitmap(item->GetBitmap(), offset_pos.GetLeft() + padding_left,
-            offset_pos.GetTop() + padding_top);
+        if (item->GetBitmap().IsOk() )
+            dc.DrawBitmap(item->GetBitmap(), offset_pos.GetLeft() + padding_left,
+                offset_pos.GetTop() + padding_top);
     }
 }
 
@@ -543,7 +544,7 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id)
 
     wxRibbonGalleryItem *item = new wxRibbonGalleryItem;
     item->SetId(id);
-    item->SetBitmap(bitmap);
+    item->SetBitmap(bitmap.IsOk() ? bitmap : wxBitmap{});
     m_items.Add(item);
     return item;
 }
@@ -574,6 +575,10 @@ void wxRibbonGallery::Clear()
         delete item;
     }
     m_items.Clear();
+
+    m_selected_item = nullptr;
+    m_hovered_item = nullptr;
+    m_active_item = nullptr;
 }
 
 bool wxRibbonGallery::IsSizingContinuous() const
