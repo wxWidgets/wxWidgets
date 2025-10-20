@@ -524,7 +524,13 @@ void wxStyledTextCtrlMiniMap::OnEditUpdate(wxStyledTextEvent& event)
 
 void wxStyledTextCtrlMiniMap::OnMapUpdate(wxStyledTextEvent& event)
 {
-    // We're only interested in scrolling notifications here.
+    // The order is important here: the only changes in content that we get
+    // must come from the changes done in the editor, and in this case we don't
+    // want to sync the editor back with the map position, even if this content
+    // change also resulted in a vertical scrolling position change.
+    if ( event.GetUpdated() & wxSTC_UPDATE_CONTENT )
+        return;
+
     if ( event.GetUpdated() & wxSTC_UPDATE_V_SCROLL )
     {
         auto const mapFirst = GetFirstVisibleLine();
