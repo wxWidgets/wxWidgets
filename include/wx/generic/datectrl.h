@@ -75,10 +75,7 @@ public:
 
     void SetDateValue(const wxDateTime& date);
 
-    bool IsTextEmpty() const
-    {
-        return m_combo->GetTextCtrl()->IsEmpty();
-    }
+    bool IsTextEmpty() const;
 
     // This is public because it is used by wxDatePickerCtrlGeneric itself to
     // change the date when the text control field changes. The reason it's
@@ -99,10 +96,7 @@ private:
 
     void OnKillTextFocus(wxFocusEvent& ev);
 
-    bool HasDPFlag(int flag) const
-    {
-        return m_combo->GetParent()->HasFlag(flag);
-    }
+    bool HasDPFlag(int flag) const;
 
     // Return the format to be used for the dates shown by the control. This
     // functions honours wxDP_SHOWCENTURY flag.

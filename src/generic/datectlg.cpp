@@ -115,6 +115,11 @@ void wxCalendarComboPopup::SetDateValue(const wxDateTime& date)
         m_combo->SetText(wxEmptyString);
     }
 }
+bool wxCalendarComboPopup::IsTextEmpty() const
+{
+    return m_combo->GetTextCtrl()->IsEmpty();
+}
+
 void wxCalendarComboPopup::ChangeDateAndNotifyIfValid()
 {
     wxDateTime dt;
@@ -237,6 +242,12 @@ void wxCalendarComboPopup::OnKillTextFocus(wxFocusEvent& ev)
         }
     }
 }
+
+bool wxCalendarComboPopup::HasDPFlag(int flag) const
+{
+    return m_combo->GetParent()->HasFlag(flag);
+}
+
 wxString wxCalendarComboPopup::GetLocaleDateFormat() const
 {
 #if wxUSE_INTL
