@@ -2231,6 +2231,7 @@ set(OSX_IPHONE_SRC
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
     src/osx/iphone/checkbox.mm
+    src/osx/iphone/choice.mm
     src/osx/iphone/colour.mm
     src/osx/iphone/dialog.mm
     src/osx/iphone/evtloop.mm
