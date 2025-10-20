@@ -158,7 +158,7 @@ public:
                 const wxString& name = wxDatePickerCtrlNameStr);
 
     // wxDatePickerCtrl methods
-    void SetFormat(const wxString& format);
+    void SetGenericFormat(const wxString& format);
     void SetValue(const wxDateTime& date) override;
     wxDateTime GetValue() const override;
 
