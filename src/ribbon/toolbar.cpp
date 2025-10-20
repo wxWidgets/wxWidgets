@@ -1184,7 +1184,7 @@ void wxRibbonToolBar::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
             notification.SetBar(this);
             ProcessEvent(notification);
 
-            wxStaticCast(m_parent, wxRibbonPanel)->HideIfExpanded();
+            wxDynamicCast(GetParent(), wxRibbonPanel)->HideIfExpanded();
         }
 
         // Notice that m_active_tool could have been reset by the event handler
