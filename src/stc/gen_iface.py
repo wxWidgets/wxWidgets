@@ -1187,90 +1187,21 @@ methodOverrideMap = {
          SendMsg(%s, 0, (sptr_t)ilexer);'''
     ),
 
-    # Forward all functions changing folding state to the mirror control, if any.
-    'SetFoldLevel' :
-    (0, 0,
-    '''void %s(int line, int level)
-{
-    SendMsg(%s, line, level);
-
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->SetFoldLevel(line, level);'''
-    ),
-
-    'SetFoldExpanded' :
-    (0, 0,
-    '''void %s(int line, bool expanded)
-{
-    SendMsg(%s, line, expanded);
-
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->SetFoldExpanded(line, expanded);'''
-    ),
-
-    'ToggleFold' :
-    (0, 0,
-    '''void %s(int line)
-{
-    SendMsg(%s, line, 0);
-
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->ToggleFold(line);'''
-    ),
-
-    'ToggleFoldShowText' :
-    (0, 0,
-    '''void %s(int line, const wxString& text)
-{
-    SendMsg(%s, line, (sptr_t)(const char*)wx2stc(text));
-
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->ToggleFoldShowText(line, text);'''
-    ),
-
-    'FoldLine' :
-    (0, 0,
-    '''void %s(int line, int action)
-{
-    SendMsg(%s, line, action);
-
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->FoldLine(line, action);'''
-    ),
-
-    'FoldChildren' :
-    (0, 0,
-    '''void %s(int line, int action)
-{
-    SendMsg(%s, line, action);
-
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->FoldChildren(line, action);'''
-    ),
-
-    'FoldAll' :
-    (0, 0,
-    '''void %s(int action)
-{
-    SendMsg(%s, action, 0);
-
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->FoldAll(action);'''
-    ),
-
-    'SetFoldFlags' :
-    (0, 0,
-    '''void %s(int flags)
-{
-    SendMsg(%s, flags, 0);
-
-    if ( m_mirrorCtrl )
-        m_mirrorCtrl->SetFoldFlags(flags);'''
-    ),
-
     '' : ('', 0, 0),
 
     }
+
+# List of methods that should be mirrored to m_mirrorCtrl if it is non-null.
+mirroringNeeded = (
+    'SetFoldLevel',
+    'SetFoldExpanded',
+    'ToggleFold',
+    'ToggleFoldShowText',
+    'FoldLine',
+    'FoldChildren',
+    'FoldAll',
+    'SetFoldFlags',
+)
 
 # all Scintilla getters are transformed into const member of wxSTC class but
 # some non-getter methods are also logically const and this set contains their
@@ -1532,6 +1463,20 @@ def processMethods(methods):
             theImp = theImp + 'SendMsg(%s, %s, %s)' % (number,
                                                        makeArgString(param1),
                                                        makeArgString(param2))
+            if name in mirroringNeeded:
+                if retType != 'void':
+                    # Mirroring doesn't make sense for those.
+                    raise RuntimeError("Can't mirror non-void methods")
+
+                if param2:
+                    args = '%s, %s' % (param1[1], param2[1])
+                else:
+                    args = param1[1]
+                theImp = theImp + ''';
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->%s(%s)''' % (name, args)
+
             if retType == 'bool':
                 theImp = theImp + ' != 0'
             if retType == 'wxColour':
