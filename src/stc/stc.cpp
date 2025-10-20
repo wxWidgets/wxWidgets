@@ -2215,8 +2215,8 @@ void wxStyledTextCtrl::SetFoldLevel(int line, int level)
 {
     SendMsg(SCI_SETFOLDLEVEL, line, level);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->SetFoldLevel(line, level);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldLevel(line, level);
 }
 
 // Retrieve the fold level of a line.
@@ -2266,8 +2266,8 @@ void wxStyledTextCtrl::SetFoldExpanded(int line, bool expanded)
 {
     SendMsg(SCI_SETFOLDEXPANDED, line, expanded);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->SetFoldExpanded(line, expanded);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldExpanded(line, expanded);
 }
 
 // Is a header line expanded?
@@ -2281,8 +2281,8 @@ void wxStyledTextCtrl::ToggleFold(int line)
 {
     SendMsg(SCI_TOGGLEFOLD, line, 0);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->ToggleFold(line);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->ToggleFold(line);
 }
 
 // Switch a header line between expanded and contracted and show some text after the line.
@@ -2290,8 +2290,8 @@ void wxStyledTextCtrl::ToggleFoldShowText(int line, const wxString& text)
 {
     SendMsg(SCI_TOGGLEFOLDSHOWTEXT, line, (sptr_t)(const char*)wx2stc(text));
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->ToggleFoldShowText(line, text);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->ToggleFoldShowText(line, text);
 }
 
 // Set the style of fold display text.
@@ -2328,8 +2328,8 @@ void wxStyledTextCtrl::FoldLine(int line, int action)
 {
     SendMsg(SCI_FOLDLINE, line, action);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->FoldLine(line, action);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldLine(line, action);
 }
 
 // Expand or contract a fold header and its children.
@@ -2337,8 +2337,8 @@ void wxStyledTextCtrl::FoldChildren(int line, int action)
 {
     SendMsg(SCI_FOLDCHILDREN, line, action);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->FoldChildren(line, action);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldChildren(line, action);
 }
 
 // Expand a fold header and all children. Use the level argument instead of the line's current level.
@@ -2352,8 +2352,8 @@ void wxStyledTextCtrl::FoldAll(int action)
 {
     SendMsg(SCI_FOLDALL, action, 0);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->FoldAll(action);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldAll(action);
 }
 
 // Ensure a particular line is visible by expanding any header line hiding it.
@@ -2379,8 +2379,8 @@ void wxStyledTextCtrl::SetFoldFlags(int flags)
 {
     SendMsg(SCI_SETFOLDFLAGS, flags, 0);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->SetFoldFlags(flags);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldFlags(flags);
 }
 
 // Ensure a particular line is visible by expanding any header line hiding it.
@@ -5479,14 +5479,14 @@ int wxStyledTextCtrl::ReplaceTargetRERaw(const char* text, int length)
     return SendMsg(SCI_REPLACETARGETRE, length, reinterpret_cast<sptr_t>(text));
 }
 
-void wxStyledTextCtrl::SetMirrorFoldingCtrl(wxStyledTextCtrl* mirrorFoldingCtrl)
+void wxStyledTextCtrl::SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl)
 {
-    m_mirrorFoldingCtrl = mirrorFoldingCtrl;
+    m_mirrorCtrl = mirrorCtrl;
 
     // Set the fold flags to the same value as in this control in case they had
     // been changed before calling this function.
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->SetFoldFlags(m_swx->foldFlags);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldFlags(m_swx->foldFlags);
 }
 
 #if WXWIN_COMPATIBILITY_3_0

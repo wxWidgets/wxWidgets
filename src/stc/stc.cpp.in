@@ -704,14 +704,14 @@ int wxStyledTextCtrl::ReplaceTargetRERaw(const char* text, int length)
     return SendMsg(SCI_REPLACETARGETRE, length, reinterpret_cast<sptr_t>(text));
 }
 
-void wxStyledTextCtrl::SetMirrorFoldingCtrl(wxStyledTextCtrl* mirrorFoldingCtrl)
+void wxStyledTextCtrl::SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl)
 {
-    m_mirrorFoldingCtrl = mirrorFoldingCtrl;
+    m_mirrorCtrl = mirrorCtrl;
 
     // Set the fold flags to the same value as in this control in case they had
     // been changed before calling this function.
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->SetFoldFlags(m_swx->foldFlags);
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldFlags(m_swx->foldFlags);
 }
 
 #if WXWIN_COMPATIBILITY_3_0

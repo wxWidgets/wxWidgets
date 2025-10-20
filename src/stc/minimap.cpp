@@ -215,8 +215,9 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
     SetUseHorizontalScrollBar(false);
     SetCursor(wxCURSOR_ARROW);
 
-    // Ensure that folds in the map are synchronized with the main editor.
-    edit->SetMirrorFoldingCtrl(this);
+    // Ensure that folds and markers in the map are synchronized with the main
+    // editor.
+    edit->SetMirrorCtrl(this);
 
     // Scroll the editor when the map is scrolled.
     Bind(wxEVT_STC_UPDATEUI, &wxStyledTextCtrlMiniMap::OnMapUpdate, this);

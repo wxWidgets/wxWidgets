@@ -1194,8 +1194,8 @@ methodOverrideMap = {
 {
     SendMsg(%s, line, level);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->SetFoldLevel(line, level);'''
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldLevel(line, level);'''
     ),
 
     'SetFoldExpanded' :
@@ -1204,8 +1204,8 @@ methodOverrideMap = {
 {
     SendMsg(%s, line, expanded);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->SetFoldExpanded(line, expanded);'''
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldExpanded(line, expanded);'''
     ),
 
     'ToggleFold' :
@@ -1214,8 +1214,8 @@ methodOverrideMap = {
 {
     SendMsg(%s, line, 0);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->ToggleFold(line);'''
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->ToggleFold(line);'''
     ),
 
     'ToggleFoldShowText' :
@@ -1224,8 +1224,8 @@ methodOverrideMap = {
 {
     SendMsg(%s, line, (sptr_t)(const char*)wx2stc(text));
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->ToggleFoldShowText(line, text);'''
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->ToggleFoldShowText(line, text);'''
     ),
 
     'FoldLine' :
@@ -1234,8 +1234,8 @@ methodOverrideMap = {
 {
     SendMsg(%s, line, action);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->FoldLine(line, action);'''
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldLine(line, action);'''
     ),
 
     'FoldChildren' :
@@ -1244,8 +1244,8 @@ methodOverrideMap = {
 {
     SendMsg(%s, line, action);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->FoldChildren(line, action);'''
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldChildren(line, action);'''
     ),
 
     'FoldAll' :
@@ -1254,8 +1254,8 @@ methodOverrideMap = {
 {
     SendMsg(%s, action, 0);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->FoldAll(action);'''
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldAll(action);'''
     ),
 
     'SetFoldFlags' :
@@ -1264,8 +1264,8 @@ methodOverrideMap = {
 {
     SendMsg(%s, flags, 0);
 
-    if ( m_mirrorFoldingCtrl )
-        m_mirrorFoldingCtrl->SetFoldFlags(flags);'''
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldFlags(flags);'''
     ),
 
     '' : ('', 0, 0),
