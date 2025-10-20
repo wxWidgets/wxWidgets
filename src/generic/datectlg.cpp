@@ -21,13 +21,13 @@
 #if wxUSE_DATEPICKCTRL
 
 #ifndef WX_PRECOMP
-    #include "wx/dialog.h"
-    #include "wx/dcmemory.h"
-    #include "wx/intl.h"
-    #include "wx/log.h"
-    #include "wx/msgdlg.h"
-    #include "wx/panel.h"
-    #include "wx/textctrl.h"
+#include "wx/dialog.h"
+#include "wx/dcmemory.h"
+#include "wx/intl.h"
+#include "wx/log.h"
+#include "wx/msgdlg.h"
+#include "wx/panel.h"
+#include "wx/textctrl.h"
 #endif
 
 #include "wx/calctrl.h"
@@ -294,10 +294,10 @@ wxString wxCalendarComboPopup::GetStringValueFor(const wxDateTime& dt) const
 }
 
 wxBEGIN_EVENT_TABLE(wxCalendarComboPopup, wxCalendarCtrl)
-    EVT_KEY_DOWN(wxCalendarComboPopup::OnCalKey)
-    EVT_CALENDAR_SEL_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
-    EVT_CALENDAR_PAGE_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
-    EVT_CALENDAR(wxID_ANY, wxCalendarComboPopup::OnSelChange)
+EVT_KEY_DOWN(wxCalendarComboPopup::OnCalKey)
+EVT_CALENDAR_SEL_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
+EVT_CALENDAR_PAGE_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
+EVT_CALENDAR(wxID_ANY, wxCalendarComboPopup::OnSelChange)
 wxEND_EVENT_TABLE()
 
 
@@ -306,33 +306,33 @@ wxEND_EVENT_TABLE()
 // ============================================================================
 
 wxBEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
-    EVT_TEXT(wxID_ANY, wxDatePickerCtrlGeneric::OnText)
-    EVT_SIZE(wxDatePickerCtrlGeneric::OnSize)
+EVT_TEXT(wxID_ANY, wxDatePickerCtrlGeneric::OnText)
+EVT_SIZE(wxDatePickerCtrlGeneric::OnSize)
 wxEND_EVENT_TABLE()
 
 #ifndef wxHAS_NATIVE_DATEPICKCTRL
-    wxIMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl);
+wxIMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl);
 #endif
 
 // ----------------------------------------------------------------------------
 // creation
 // ----------------------------------------------------------------------------
 
-bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
-                                     wxWindowID id,
-                                     const wxDateTime& date,
-                                     const wxPoint& pos,
-                                     const wxSize& size,
-                                     long style,
-                                     const wxValidator& validator,
-                                     const wxString& name)
+bool wxDatePickerCtrlGeneric::Create(wxWindow* parent,
+    wxWindowID id,
+    const wxDateTime& date,
+    const wxPoint& pos,
+    const wxSize& size,
+    long style,
+    const wxValidator& validator,
+    const wxString& name)
 {
-    wxASSERT_MSG( !(style & wxDP_SPIN),
-                  wxT("wxDP_SPIN style not supported, use wxDP_DEFAULT") );
+    wxASSERT_MSG(!(style & wxDP_SPIN),
+        wxT("wxDP_SPIN style not supported, use wxDP_DEFAULT"));
 
-    if ( !wxControl::Create(parent, id, pos, size,
-                            style | wxCLIP_CHILDREN | wxWANTS_CHARS | wxBORDER_NONE,
-                            validator, name) )
+    if (!wxControl::Create(parent, id, pos, size,
+        style | wxCLIP_CHILDREN | wxWANTS_CHARS | wxBORDER_NONE,
+        validator, name))
     {
         return false;
     }
@@ -340,7 +340,7 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
     InheritAttributes();
 
     m_combo = new wxComboCtrl(this, -1, wxEmptyString,
-                              wxDefaultPosition, wxDefaultSize);
+        wxDefaultPosition, wxDefaultSize);
 
     m_combo->SetCtrlMainWnd(this);
 
@@ -372,7 +372,7 @@ wxDatePickerCtrlGeneric::~wxDatePickerCtrlGeneric()
 
 bool wxDatePickerCtrlGeneric::Destroy()
 {
-    if ( m_combo )
+    if (m_combo)
         m_combo->Destroy();
 
     m_combo = nullptr;
@@ -416,19 +416,19 @@ wxDatePickerCtrlGeneric::SetGenericFormat(const wxString& format)
 
 bool
 wxDatePickerCtrlGeneric::SetDateRange(const wxDateTime& lowerdate,
-                                      const wxDateTime& upperdate)
+    const wxDateTime& upperdate)
 {
-    if ( !m_popup->SetDateRange(lowerdate, upperdate) )
+    if (!m_popup->SetDateRange(lowerdate, upperdate))
         return false;
 
     // If the limits were, check that our current value lies between them and
     // adjust it if it doesn't.
     const wxDateTime old = GetValue();
-    if ( old.IsValid() )
+    if (old.IsValid())
     {
-        if ( lowerdate.IsValid() && old < lowerdate )
+        if (lowerdate.IsValid() && old < lowerdate)
             SetValue(lowerdate);
-        else if ( upperdate.IsValid() && old > upperdate )
+        else if (upperdate.IsValid() && old > upperdate)
             SetValue(upperdate);
     }
 
@@ -438,7 +438,7 @@ wxDatePickerCtrlGeneric::SetDateRange(const wxDateTime& lowerdate,
 
 wxDateTime wxDatePickerCtrlGeneric::GetValue() const
 {
-    if ( HasFlag(wxDP_ALLOWNONE) && m_popup->IsTextEmpty() )
+    if (HasFlag(wxDP_ALLOWNONE) && m_popup->IsTextEmpty())
         return wxInvalidDateTime;
     return m_popup->GetDate();
 }
@@ -450,19 +450,19 @@ void wxDatePickerCtrlGeneric::SetValue(const wxDateTime& date)
 }
 
 
-bool wxDatePickerCtrlGeneric::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
+bool wxDatePickerCtrlGeneric::GetRange(wxDateTime* dt1, wxDateTime* dt2) const
 {
     return m_popup->GetDateRange(dt1, dt2);
 }
 
 
 void
-wxDatePickerCtrlGeneric::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
+wxDatePickerCtrlGeneric::SetRange(const wxDateTime& dt1, const wxDateTime& dt2)
 {
     SetDateRange(dt1, dt2);
 }
 
-wxCalendarCtrl *wxDatePickerCtrlGeneric::GetCalendar() const
+wxCalendarCtrl* wxDatePickerCtrlGeneric::GetCalendar() const
 {
     return m_popup;
 }
@@ -474,20 +474,20 @@ wxCalendarCtrl *wxDatePickerCtrlGeneric::GetCalendar() const
 
 void wxDatePickerCtrlGeneric::OnSize(wxSizeEvent& event)
 {
-    if ( m_combo )
+    if (m_combo)
         m_combo->SetSize(GetClientSize());
 
     event.Skip();
 }
 
 
-void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
+void wxDatePickerCtrlGeneric::OnText(wxCommandEvent& ev)
 {
     ev.SetEventObject(this);
     ev.SetId(GetId());
     GetParent()->GetEventHandler()->ProcessEvent(ev);
 
-    if ( m_popup )
+    if (m_popup)
         m_popup->ChangeDateAndNotifyIfValid();
 }
 
