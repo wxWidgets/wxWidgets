@@ -283,16 +283,7 @@ wxStaticTextBase::GetMinSizeFromKnownDirection(int direction,
                                                int WXUNUSED(availableOtherDir))
 {
     if ( !HasFlag(wxST_WRAP) || direction != wxHORIZONTAL )
-    {
-        // If we had wrapped the control before, don't do it any longer.
-        if ( m_currentWrap )
-        {
-            SetLabel(m_unwrappedLabel);
-            m_currentWrap = 0;
-        }
-
         return wxDefaultSize;
-    }
 
     // Wrap at the given width to compute the required size.
     const int style = GetWindowStyleFlag();
@@ -317,6 +308,23 @@ wxStaticTextBase::GetMinSizeFromKnownDirection(int direction,
     }
 
     return wxSize( maxLineWidth, numLines*GetCharHeight() );
+}
+
+void wxStaticTextBase::SetWindowStyleFlag(long style)
+{
+    // Check if wxST_WRAP is being cleared.
+    if ( HasFlag(wxST_WRAP) && !(style & wxST_WRAP) )
+    {
+        // And unwrap the label in this case.
+        if ( m_currentWrap )
+        {
+            SetLabel(m_unwrappedLabel);
+            m_unwrappedLabel.clear();
+            m_currentWrap = 0;
+        }
+    }
+
+    wxControl::SetWindowStyleFlag(style);
 }
 
 void wxStaticTextBase::AutoResizeIfNecessary()

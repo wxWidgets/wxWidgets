@@ -49,6 +49,8 @@ public:
     virtual bool AcceptsFocus() const override { return false; }
     virtual bool HasTransparentBackground() override { return true; }
 
+    virtual void SetWindowStyleFlag(long style) override;
+
     bool IsEllipsized() const
     {
         return (GetWindowStyle() & wxST_ELLIPSIZE_MASK) != 0;
