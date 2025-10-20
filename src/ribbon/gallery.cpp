@@ -544,7 +544,7 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id)
 
     wxRibbonGalleryItem *item = new wxRibbonGalleryItem;
     item->SetId(id);
-    item->SetBitmap(bitmap.IsOk() ? bitmap : wxBitmap{});
+    item->SetBitmap(bitmap);
     m_items.Add(item);
     return item;
 }
