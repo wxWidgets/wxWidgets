@@ -44,6 +44,15 @@ static void gtk_dirdialog_response_callback(GtkWidget * WXUNUSED(w),
     else // GTK_RESPONSE_CANCEL or GTK_RESPONSE_NONE
         dialog->GTKOnCancel();
 }
+
+#if GTK_CHECK_VERSION(3,20,0)
+static void wx_dirdialog_show(GtkWidget*, wxDirDialog* win)
+{
+    // If m_widget is shown, then GtkFileChooserNative is not being used.
+    // This happens when using wxDirPickerCtrl, for example.
+    win->GTKDropNative();
+}
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -118,6 +127,7 @@ bool wxDirDialog::Create(wxWindow* parent,
             gtk_parent,
             GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
             nullptr, nullptr));
+        g_signal_connect(m_widget, "show", G_CALLBACK(wx_dirdialog_show), this);
     }
     else
 #endif
@@ -201,6 +211,16 @@ void wxDirDialog::GTKOnCancel()
     EndDialog(wxID_CANCEL);
 }
 
+void wxDirDialog::GTKDropNative()
+{
+    if (m_fileChooser != (GtkFileChooser*)m_widget)
+    {
+        g_object_unref(m_fileChooser);
+        m_fileChooser = (GtkFileChooser*)m_widget;
+        g_object_ref(m_fileChooser);
+    }
+}
+
 int wxDirDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
@@ -252,6 +272,8 @@ void wxDirDialog::SetPath(const wxString& dir)
     if (wxDirExists(dir))
     {
         gtk_file_chooser_set_current_folder(m_fileChooser, wxGTK_CONV_FN(dir));
+        if (m_fileChooser != (GtkFileChooser*)m_widget)
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV_FN(dir));
     }
 }
 
