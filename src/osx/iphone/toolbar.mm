@@ -199,7 +199,7 @@ void wxToolBarTool::MakeStretchable()
 
         UIBarButtonItem* bui = [UIBarButtonItem alloc];
         bui = [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        
+
         m_toolbarItem = bui;
         wxToolBarToolList[bui] = this;
     }
