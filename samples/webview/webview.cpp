@@ -466,7 +466,6 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     wxString backend;
     if ( !wxGetEnv("WX_WEBVIEW_BACKEND", &backend) )
         backend = wxWebViewBackendDefault;
-#if wxUSE_WEBVIEW_CHROMIUM
     // Allow specifying shorter "CEF" instead of having to type the full class
     // name.
     //
@@ -477,7 +476,6 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     // wouldn't be available during run-time at all.
     else if ( backend.CmpNoCase("cef") == 0 )
         backend = wxWebViewBackendChromium;
-#endif // wxUSE_WEBVIEW_CHROMIUM
 
     if ( backend != wxWebViewBackendDefault &&
             !wxWebView::IsBackendAvailable(backend) )
@@ -588,7 +586,6 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
                 wxLogError("Could not add script message handler");
         };
 
-#if wxUSE_WEBVIEW_CHROMIUM
         if ( backend == wxWebViewBackendChromium )
         {
             m_browser->Bind(wxEVT_WEBVIEW_CREATED, [initShow](wxWebViewEvent& event) {
@@ -598,7 +595,6 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
             });
         }
         else
-#endif // wxUSE_WEBVIEW_CHROMIUM
         {
             initShow();
         }
