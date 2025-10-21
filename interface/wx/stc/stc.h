@@ -8161,9 +8161,13 @@ public:
         If @a mirrorCtrl is non-null, then various aspects of the text in this
         control will be reflected in it too. For example, whenever a fold is
         opened/closed in this control, a fold at the same line will be
-        opened/closed in the mirror control as well. This will only be useful
-        if both controls have the same text contents, i.e. if they share the
-        same GetDocPointer() which is e.g. the case of wxStyledTextCtrlMiniMap.
+        opened/closed in the mirror control as well. Similarly, any markers
+        defined for the lines in this control will be also defined for the same
+        line in the mirror control (but notice that markers defined before
+        calling this function won't be synchronized when it is called). This
+        will only be useful if both controls have the same text contents, i.e.
+        if they share the same GetDocPointer() which is e.g. the case of
+        wxStyledTextCtrlMiniMap.
 
         @param mirrorCtrl
             The control to synchronize with or @NULL to disable synchronization

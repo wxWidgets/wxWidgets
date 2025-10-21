@@ -5853,9 +5853,9 @@ public:
     %pythoncode "_stc_utf8_methods.py"
 #endif
 
-    // Specify that changes to various text aspects in this control should
-    // synchronized with the given control (or stop synchronizing them if the
-    // parameter is null).
+    // Specify that changes to various text aspects in this control, such as
+    // folding or markers, should be synchronized with the given control (or
+    // stop synchronizing them if the parameter is null).
     void SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl);
 
     // Indicate that custom drawing is done on top of this control. This is

@@ -907,6 +907,13 @@ void App::ShowDocumentMap(wxWindow* parent)
 
     auto* const map = new wxStyledTextCtrlMiniMap(splitter, edit);
 
+    // Create a marker just to show that it is shown in the map as well.
+    //
+    // Note that this should be done after creating the map, markers defined
+    // before creating it wouldn't be shown in it.
+    edit->MarkerDefine(3, wxSTC_MARK_ROUNDRECT, *wxRED, *wxRED);
+    edit->MarkerAdd(111, 3);
+
     splitter->SplitVertically(edit, map);
     splitter->SetMinimumPaneSize(dialog.FromDIP(10));
 

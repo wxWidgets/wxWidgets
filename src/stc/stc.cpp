@@ -621,35 +621,53 @@ void wxStyledTextCtrl::MarkerDefine(int markerNumber, int markerSymbol,
                     MarkerSetForeground(markerNumber, foreground);
                 if (background.IsOk())
                     MarkerSetBackground(markerNumber, background);
+
+                if ( m_mirrorCtrl )
+                    m_mirrorCtrl->MarkerDefine(markerNumber, markerSymbol, foreground, background);
 }
 
 // Set the foreground colour used for a particular marker number.
 void wxStyledTextCtrl::MarkerSetForeground(int markerNumber, const wxColour& fore)
 {
     SendMsg(SCI_MARKERSETFORE, markerNumber, wxColourAsLong(fore));
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerSetForeground(markerNumber, fore);
 }
 
 // Set the background colour used for a particular marker number.
 void wxStyledTextCtrl::MarkerSetBackground(int markerNumber, const wxColour& back)
 {
     SendMsg(SCI_MARKERSETBACK, markerNumber, wxColourAsLong(back));
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerSetBackground(markerNumber, back);
 }
 
 // Set the background colour used for a particular marker number when its folding block is selected.
 void wxStyledTextCtrl::MarkerSetBackgroundSelected(int markerNumber, const wxColour& back)
 {
     SendMsg(SCI_MARKERSETBACKSELECTED, markerNumber, wxColourAsLong(back));
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerSetBackgroundSelected(markerNumber, back);
 }
 
 // Enable/disable highlight for current folding block (smallest one that contains the caret)
 void wxStyledTextCtrl::MarkerEnableHighlight(bool enabled)
 {
     SendMsg(SCI_MARKERENABLEHIGHLIGHT, enabled, 0);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerEnableHighlight(enabled);
 }
 
 // Add a marker to a line, returning an ID which can be used to find or delete the marker.
 int wxStyledTextCtrl::MarkerAdd(int line, int markerNumber)
 {
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerAdd(line, markerNumber);
+
     return SendMsg(SCI_MARKERADD, line, markerNumber);
 }
 
@@ -657,12 +675,18 @@ int wxStyledTextCtrl::MarkerAdd(int line, int markerNumber)
 void wxStyledTextCtrl::MarkerDelete(int line, int markerNumber)
 {
     SendMsg(SCI_MARKERDELETE, line, markerNumber);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerDelete(line, markerNumber);
 }
 
 // Delete all markers with a particular number from all lines.
 void wxStyledTextCtrl::MarkerDeleteAll(int markerNumber)
 {
     SendMsg(SCI_MARKERDELETEALL, markerNumber, 0);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerDeleteAll(markerNumber);
 }
 
 // Get a bit mask of all the markers set on a line.
@@ -686,6 +710,9 @@ int wxStyledTextCtrl::MarkerPrevious(int lineStart, int markerMask)
 
 // Define a marker from a bitmap
 void wxStyledTextCtrl::MarkerDefinePixmap(int markerNumber, const char* const* xpmData) {
+        if ( m_mirrorCtrl )
+            m_mirrorCtrl->MarkerDefinePixmap(markerNumber, xpmData);
+
         SendMsg(SCI_MARKERDEFINEPIXMAP, markerNumber, (sptr_t)xpmData);
 }
 
@@ -693,12 +720,18 @@ void wxStyledTextCtrl::MarkerDefinePixmap(int markerNumber, const char* const* x
 void wxStyledTextCtrl::MarkerAddSet(int line, int markerSet)
 {
     SendMsg(SCI_MARKERADDSET, line, markerSet);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerAddSet(line, markerSet);
 }
 
 // Set the alpha used for a marker that is drawn in the text area, not the margin.
 void wxStyledTextCtrl::MarkerSetAlpha(int markerNumber, int alpha)
 {
     SendMsg(SCI_MARKERSETALPHA, markerNumber, alpha);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerSetAlpha(markerNumber, alpha);
 }
 
 // Set a margin to be either numeric or symbolic.
