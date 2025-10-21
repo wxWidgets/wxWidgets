@@ -140,6 +140,9 @@ public:
     // override this to return false from a non-bundled console app in order to stay in background ...
     virtual bool         OSXIsGUIApplication() { return true; }
 
+    // returns false on macOS and on windowed iPad apps
+    bool                 OSXIsFullScreenApp();
+
     // Allow the user to disable the tab bar support in the application
     void                 OSXEnableAutomaticTabbing(bool enable);
 
