@@ -89,6 +89,13 @@ class wxToolInfo : public TOOLINFO
 {
 public:
     wxToolInfo(HWND hwndOwner, unsigned int id, const wxRect& rc)
+#if defined(__has_feature)
+    #if __has_feature(memory_sanitizer)
+        // https://forums.wxwidgets.org/viewtopic.php?p=229882#p229882
+        // Fix UBSan sanitizer causing crash in debug mode
+        __attribute__((no_sanitize("undefined")))
+    #endif
+#endif
     {
         // initialize all members
         wxZeroMemory(*this);
