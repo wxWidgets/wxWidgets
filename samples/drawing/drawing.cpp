@@ -594,7 +594,7 @@ bool MyApp::DoSetAppearance(int menuId)
     switch ( SetAppearance(Appearance(menuId - Colour_AppearanceSystem)) )
     {
         case wxApp::AppearanceResult::Failure:
-            wxLogStatus("Appearance couldn't be changed.");
+            wxLogWarning("Appearance couldn't be changed.");
             break;
 
         case wxApp::AppearanceResult::Ok:
@@ -602,7 +602,7 @@ bool MyApp::DoSetAppearance(int menuId)
             return true;
 
         case wxApp::AppearanceResult::CannotChange:
-            wxLogStatus("Appearance cannot be changed dynamically.");
+            wxLogWarning("Appearance cannot be changed dynamically.");
             break;
     }
 
