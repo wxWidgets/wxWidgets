@@ -232,17 +232,11 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
                    event.GetSize().x, event.GetSize().y,
                    m_lines.Dump());
 
-        // We try to update the map immediately as we may not need to do
-        // anything else, but we need to also handle the number of
-        // displayed lines changing later due to wrapping performed in the
-        // background by Scintilla, so we also do it from wxEVT_PAINT
-        // handler below.
-        if ( UpdateLineInfo() )
-        {
-            wxLogTrace(wxTRACE_STC_MAP, "Sync map from size: %s",
-                       m_lines.Dump());
-            SyncMapPosition();
-        }
+        // Resizing the map may change its first visible line, however we
+        // shouldn't synchronize the editor with this change, as it would be
+        // wrong to change the position in it on resize, so ignore any upcoming
+        // notifications about the new map position.
+        m_lastSetMapFirst = GetFirstVisibleLine();
 
         event.Skip();
     });
