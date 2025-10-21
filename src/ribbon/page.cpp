@@ -1066,7 +1066,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                 }
             }
         }
-        if(largest_panel != nullptr)
+        if(largest_panel != nullptr && largest_panel_size != nullptr)
         {
             if(largest_panel->IsSizingContinuous())
             {
