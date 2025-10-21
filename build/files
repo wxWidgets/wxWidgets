@@ -1184,7 +1184,6 @@ GUI_CMN_HDR =
     wx/richmsgdlg.h
     wx/richtooltip.h
     wx/sashwin.h
-    wx/scopeguard.h
     wx/scrolbar.h
     wx/scrolbar.h
     wx/scrolwin.h
@@ -1822,7 +1821,6 @@ MSW_HDR =
     wx/msw/hyperlink.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
-    wx/msw/init.h
     wx/msw/listbox.h
     wx/msw/listctrl.h
     wx/msw/mdi.h

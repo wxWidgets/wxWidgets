@@ -1144,7 +1144,6 @@ set(GUI_CMN_HDR
     wx/quantize.h
     wx/rawbmp.h
     wx/region.h
-    wx/scopeguard.h
     wx/simplebook.h
     wx/spinbutt.h
     wx/spinctrl.h
@@ -1806,7 +1805,6 @@ set(MSW_HDR
     wx/msw/headerctrl.h
     wx/msw/imaglist.h
     wx/msw/iniconf.h
-    wx/msw/init.h
     wx/msw/listbox.h
     wx/msw/listctrl.h
     wx/msw/mdi.h
