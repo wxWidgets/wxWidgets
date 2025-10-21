@@ -153,54 +153,18 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
     if ( !wxStyledTextCtrl::Create(parent, wxID_ANY) )
         return false;
 
-    m_edit = edit;
-
     // Use semi-transparent grey by default, this works well in both light and
     // dark modes.
     m_thumbColNormal = wxColour(0x80, 0x80, 0x80, 0x40);
     m_thumbColDragging = wxColour(0x80, 0x80, 0x80, 0x80);
 
-    // Use the same document as the main editor.
-    auto* const doc = edit->GetDocPointer();
-    edit->AddRefDocument(doc);
-    SetDocPointer(doc);
-
-    // Making the map read-only apparently makes the document read-only, so
-    // undo this for the original control (doing nothing if it already was
-    // read-only anyhow).
-    auto const wasReadOnly = edit->GetReadOnly();
+    // Map itself can't be modified.
     SetReadOnly(true);
-    edit->SetReadOnly(wasReadOnly);
 
     // Because we draw the thumb over the text ourselves, indicate to the
     // control that it shouldn't scroll itself when redrawing but always
     // invalidate the whole window.
     SetCustomDrawn(true);
-
-
-    // Copy the main editor attributes.
-
-    // Do NOT set the lexer: this somehow breaks syntax highlighting and
-    // folding in the main editor itself and the map gets syntax
-    // highlighting even without it anyhow.
-
-    for ( int style = 0; style < wxSTC_STYLE_MAX; ++style )
-    {
-        // There is probably no need to set the font for the map: at such
-        // size, all fonts are indistinguishable.
-        StyleSetForeground(style, edit->StyleGetForeground(style));
-        StyleSetBackground(style, edit->StyleGetBackground(style));
-        StyleSetBold(style, edit->StyleGetBold(style));
-        StyleSetItalic(style, edit->StyleGetItalic(style));
-        StyleSetUnderline(style, edit->StyleGetUnderline(style));
-        StyleSetCase(style, edit->StyleGetCase(style));
-    }
-
-    SetWrapMode(edit->GetWrapMode());
-    SetWrapVisualFlags(edit->GetWrapVisualFlags());
-    SetWrapVisualFlagsLocation(edit->GetWrapVisualFlagsLocation());
-    SetWrapIndentMode(edit->GetWrapIndentMode());
-    SetWrapStartIndent(edit->GetWrapStartIndent());
 
     // Configure the map appearance.
     SetZoom(-10 /* maximum zoom out level */);
@@ -213,44 +177,10 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
     SetUseVerticalScrollBar(false);
     SetCursor(wxCURSOR_ARROW);
 
-    // Ensure that folds and markers in the map are synchronized with the main
-    // editor.
-    edit->SetMirrorCtrl(this);
+    SetEdit(edit);
 
     // Scroll the editor when the map is scrolled.
     Bind(wxEVT_STC_UPDATEUI, &wxStyledTextCtrlMiniMap::OnMapUpdate, this);
-
-    // But also update the map when the editor changes.
-    edit->Bind(wxEVT_STC_UPDATEUI, &wxStyledTextCtrlMiniMap::OnEditUpdate, this);
-
-    // And also when the height changes.
-    edit->Bind(wxEVT_SIZE, [this](wxSizeEvent& event) {
-        wxLogTrace(wxTRACE_STC_MAP,
-                   "Edit resized to %dx%d, line info: %s",
-                   event.GetSize().x, event.GetSize().y,
-                   m_lines.Dump());
-
-        // Resizing the map may change its first visible line, however we
-        // shouldn't synchronize the editor with this change, as it would be
-        // wrong to change the position in it on resize, so ignore any upcoming
-        // notifications about the new map position.
-        m_lastSetMapFirst = GetFirstVisibleLine();
-
-        event.Skip();
-    });
-
-    edit->Bind(wxEVT_PAINT, [this](wxPaintEvent& event) {
-        // The number of displayed lines may have changed due to
-        // rewrapping, in which case we need to update the map.
-        if ( UpdateLineInfo() )
-        {
-            wxLogTrace(wxTRACE_STC_MAP, "Sync map from paint: %s",
-                        m_lines.Dump());
-            SyncMapPosition();
-        }
-
-        event.Skip();
-    });
 
     // Handle mouse events for dragging the visible zone indicator.
     Bind(wxEVT_LEFT_DOWN, [this](wxMouseEvent& event) {
@@ -287,7 +217,94 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
     });
 
     // Draw our overlay over the map.
-    Bind(wxEVT_PAINT, &wxStyledTextCtrlMiniMap::OnPaint, this);
+    Bind(wxEVT_PAINT, &wxStyledTextCtrlMiniMap::OnMapPaint, this);
+
+    return true;
+}
+
+wxStyledTextCtrlMiniMap::~wxStyledTextCtrlMiniMap()
+{
+    if ( IsDragging() )
+        DoStopDragging();
+
+    // Dissociate from the editor, if any.
+    SetEdit(nullptr);
+}
+
+void wxStyledTextCtrlMiniMap::SetEdit(wxStyledTextCtrl* edit)
+{
+    if ( edit == m_edit )
+        return;
+
+    if ( m_edit )
+    {
+        // Dissociate from the old editor.
+        m_edit->SetMirrorCtrl(nullptr);
+
+        m_edit->Unbind(wxEVT_STC_UPDATEUI,
+                       &wxStyledTextCtrlMiniMap::OnEditUpdate, this);
+        m_edit->Unbind(wxEVT_PAINT,
+                       &wxStyledTextCtrlMiniMap::OnEditPaint, this);
+        m_edit->Unbind(wxEVT_SIZE,
+                       &wxStyledTextCtrlMiniMap::OnEditSize, this);
+        m_edit->Unbind(wxEVT_DESTROY,
+                       &wxStyledTextCtrlMiniMap::OnEditDestroy, this);
+    }
+
+    m_edit = edit;
+
+    if ( !m_edit )
+    {
+        // We must not continue using the old document.
+        SetDocPointer(nullptr);
+
+        return;
+    }
+
+    // Use the same document as the main editor.
+    auto* const doc = edit->GetDocPointer();
+    edit->AddRefDocument(doc);
+    SetDocPointer(doc);
+
+
+    // Copy the main editor attributes.
+
+    // Do NOT set the lexer: this somehow breaks syntax highlighting and
+    // folding in the main editor itself and the map gets syntax
+    // highlighting even without it anyhow.
+
+    for ( int style = 0; style < wxSTC_STYLE_MAX; ++style )
+    {
+        // There is probably no need to set the font for the map: at such
+        // size, all fonts are indistinguishable.
+        StyleSetForeground(style, edit->StyleGetForeground(style));
+        StyleSetBackground(style, edit->StyleGetBackground(style));
+        StyleSetBold(style, edit->StyleGetBold(style));
+        StyleSetItalic(style, edit->StyleGetItalic(style));
+        StyleSetUnderline(style, edit->StyleGetUnderline(style));
+        StyleSetCase(style, edit->StyleGetCase(style));
+    }
+
+    SetWrapMode(edit->GetWrapMode());
+    SetWrapVisualFlags(edit->GetWrapVisualFlags());
+    SetWrapVisualFlagsLocation(edit->GetWrapVisualFlagsLocation());
+    SetWrapIndentMode(edit->GetWrapIndentMode());
+    SetWrapStartIndent(edit->GetWrapStartIndent());
+
+    // Ensure that folds and markers in the map are synchronized with the main
+    // editor.
+    edit->SetMirrorCtrl(this);
+
+    // Update the map when the editor changes.
+    edit->Bind(wxEVT_STC_UPDATEUI, &wxStyledTextCtrlMiniMap::OnEditUpdate, this);
+
+    // And also when the height changes, except we can't do it directly in
+    // wxEVT_SIZE handler, so also check for the change in wxEVT_PAINT one.
+    edit->Bind(wxEVT_SIZE, &wxStyledTextCtrlMiniMap::OnEditSize, this);
+    edit->Bind(wxEVT_PAINT, &wxStyledTextCtrlMiniMap::OnEditPaint, this);
+
+    // Stop using the editor when it is destroyed.
+    edit->Bind(wxEVT_DESTROY, &wxStyledTextCtrlMiniMap::OnEditDestroy, this);
 
     // Note that the line index doesn't matter, as the height is the same
     // for all of them.
@@ -300,13 +317,6 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
     wxLogTrace(wxTRACE_STC_MAP, "Edit line height: %d, map: %d",
                m_edit->TextHeight(0), TextHeight(0));
 
-    return true;
-}
-
-wxStyledTextCtrlMiniMap::~wxStyledTextCtrlMiniMap()
-{
-    if ( IsDragging() )
-        DoStopDragging();
 }
 
 void
@@ -472,8 +482,14 @@ void wxStyledTextCtrlMiniMap::DrawVisibleZone(wxDC& dc)
     dc.DrawRectangle(0, thumb.pos, GetClientSize().x, thumb.height);
 }
 
-void wxStyledTextCtrlMiniMap::OnPaint(wxPaintEvent& event)
+void wxStyledTextCtrlMiniMap::OnMapPaint(wxPaintEvent& event)
 {
+    if ( !m_edit )
+    {
+        event.Skip();
+        return;
+    }
+
     // Normally we shouldn't call the base class event handler directly
     // like this, but here we really want to draw the text before
     // calling our DrawVisibleZone().
@@ -489,6 +505,43 @@ void wxStyledTextCtrlMiniMap::OnPaint(wxPaintEvent& event)
         wxGCDC gcdc(dc);
         DrawVisibleZone(gcdc);
     }
+}
+
+void wxStyledTextCtrlMiniMap::OnEditDestroy(wxWindowDestroyEvent& event)
+{
+    SetEdit(nullptr);
+
+    event.Skip();
+}
+
+void wxStyledTextCtrlMiniMap::OnEditSize(wxSizeEvent& event)
+{
+    wxLogTrace(wxTRACE_STC_MAP,
+               "Edit resized to %dx%d, line info: %s",
+               event.GetSize().x, event.GetSize().y,
+               m_lines.Dump());
+
+    // Resizing the map may change its first visible line, however we
+    // shouldn't synchronize the editor with this change, as it would be
+    // wrong to change the position in it on resize, so ignore any upcoming
+    // notifications about the new map position.
+    m_lastSetMapFirst = GetFirstVisibleLine();
+
+    event.Skip();
+}
+
+void wxStyledTextCtrlMiniMap::OnEditPaint(wxPaintEvent& event)
+{
+    // The number of displayed lines may have changed due to
+    // rewrapping, in which case we need to update the map.
+    if ( UpdateLineInfo() )
+    {
+        wxLogTrace(wxTRACE_STC_MAP, "Sync map from paint: %s",
+                    m_lines.Dump());
+        SyncMapPosition();
+    }
+
+    event.Skip();
 }
 
 void wxStyledTextCtrlMiniMap::OnEditUpdate(wxStyledTextEvent& event)
@@ -518,6 +571,9 @@ void wxStyledTextCtrlMiniMap::OnEditUpdate(wxStyledTextEvent& event)
 
 void wxStyledTextCtrlMiniMap::OnMapUpdate(wxStyledTextEvent& event)
 {
+    if ( !m_edit )
+        return;
+
     // The order is important here: the only changes in content that we get
     // must come from the changes done in the editor, and in this case we don't
     // want to sync the editor back with the map position, even if this content
@@ -543,6 +599,9 @@ void wxStyledTextCtrlMiniMap::OnMapUpdate(wxStyledTextEvent& event)
 
 void wxStyledTextCtrlMiniMap::HandleMouseClick(wxMouseEvent& event)
 {
+    if ( !m_edit )
+        return;
+
     auto const posMouse = event.GetPosition();
     auto const docLine = GetDocLineAtMapPoint(posMouse);
     auto const editLine = m_edit->VisibleFromDocLine(docLine);
@@ -607,6 +666,9 @@ void wxStyledTextCtrlMiniMap::StartDragging(const wxPoint& pos)
 // Called while dragging the visible zone indicator.
 void wxStyledTextCtrlMiniMap::DoDrag(wxPoint pos)
 {
+    if ( !m_edit )
+        return;
+
     // We want the thumb to follow the mouse when dragging, i.e. its middle
     // must remain at the same distance from the mouse pointer as it was
     // when the dragging started.

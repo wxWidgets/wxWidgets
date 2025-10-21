@@ -19,7 +19,9 @@
 
     Objects of this class must be associated with a wxStyledTextCtrl instance
     (the "editor") which they will show a mini map for. This association is
-    done in the constructor or Create() method.
+    done in the constructor or Create() method and may be modified later using
+    SetEdit(). If the map doesn't have any associated editor, it doesn't show
+    anything and is effectively useless.
 
     This class doesn't generate any events and, more generally, the only thing
     the application needs to do is to create it and position it properly. While
@@ -70,11 +72,22 @@ public:
         @param parent
             The parent window.
         @param edit
-            The associated main document control which must be valid.
+            The associated main document control which should typically be
+            valid but may be @NULL if the map shouldn't show anything
+            initially.
 
         @return @true on success, @false in case of catastrophic failure.
     */
     bool Create(wxWindow* parent, wxStyledTextCtrl* edit);
+
+    /**
+        Set the associated main document control.
+
+        @param edit
+            The associated main document control which may be @NULL to reset
+            the editor.
+     */
+    void SetEdit(wxStyledTextCtrl* edit);
 
     /**
         Set the colours used to draw the visible zone indicator.

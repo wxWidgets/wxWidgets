@@ -39,6 +39,8 @@ public:
 
     virtual ~wxStyledTextCtrlMiniMap();
 
+    void SetEdit(wxStyledTextCtrl* edit);
+
     // Set the colours used to draw the visible zone indicator in normal state
     // and when dragging.
     //
@@ -103,7 +105,13 @@ private:
 
     void DrawVisibleZone(wxDC& dc);
 
-    void OnPaint(wxPaintEvent& event);
+    // Event handlers, both for the map itself and for the associated editor.
+    void OnEditDestroy(wxWindowDestroyEvent& event);
+
+    void OnEditSize(wxSizeEvent& event);
+
+    void OnEditPaint(wxPaintEvent& event);
+    void OnMapPaint(wxPaintEvent& event);
 
     // Show the same selection in the map as in the editor.
     void SyncSelection()
@@ -135,7 +143,7 @@ private:
 
 
     // The associated main document control.
-    wxStyledTextCtrl* /* const */ m_edit;
+    wxStyledTextCtrl* m_edit = nullptr;
 
     // Colours used for the thumb in normal state and when dragging.
     wxColour m_thumbColNormal,
