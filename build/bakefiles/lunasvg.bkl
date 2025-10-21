@@ -18,7 +18,7 @@
 
     <template id="wxlunasvg_cppflags">
         <include>$(TOP_SRCDIR)3rdparty/lunasvg/include</include>
-        <include>$(TOP_SRCDIR)3rdparty/lunasvg/3rdparty/plutovg</include>
+        <include>$(TOP_SRCDIR)3rdparty/lunasvg/plutovg/include</include>
     </template>
 
     <lib id="wxlunasvg" template="3rdparty_lib,wxlunasvg_cppflags,msvc_setup_h"
