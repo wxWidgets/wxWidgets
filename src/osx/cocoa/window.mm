@@ -2754,6 +2754,8 @@ void wxWidgetCocoaImpl::Init()
     m_lastKeyDownEvent = nil;
     m_lastKeyDownWXSent = false;
     m_hasEditor = false;
+    m_lastLeftDownWasDClick = false;
+    m_lastRightDownWasDClick = false;
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -4114,6 +4116,41 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     bool processed = false;
     for ( auto& wxevent : TranslateMouseEvent(event) )
     {
+        if (wxevent.GetEventType() == wxEVT_LEFT_DOWN)
+        {
+                m_lastLeftDownWasDClick = false;
+        }
+        else if (wxevent.GetEventType() == wxEVT_LEFT_DCLICK)
+        {
+            if (m_lastLeftDownWasDClick)
+            {
+                // synthesize LEFT_DOWN event from second, fourth etc. DCLICK event
+                wxevent.SetEventType( wxEVT_LEFT_DOWN );
+                m_lastLeftDownWasDClick = false;
+            }
+            else
+            {
+                m_lastLeftDownWasDClick = true;
+            }
+        }
+        else if (wxevent.GetEventType() == wxEVT_RIGHT_DOWN)
+        {
+                m_lastRightDownWasDClick = false;
+        }
+        else if (wxevent.GetEventType() == wxEVT_RIGHT_DCLICK)
+        {
+            if (m_lastRightDownWasDClick)
+            {
+                // synthesize RIGHT_DOWN event from second, fourth etc. DCLICK event
+                wxevent.SetEventType( wxEVT_RIGHT_DOWN );
+                m_lastRightDownWasDClick = false;
+            }
+            else
+            {
+                m_lastRightDownWasDClick = true;
+            }
+        }
+
         // Even if this event was processed, still continue with the other
         // events, if any.
         if ( GetWXPeer()->HandleWindowEvent(wxevent) )

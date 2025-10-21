@@ -2804,7 +2804,8 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
         if ( item->IsSelected() )
         {
 #ifdef __WXMAC__
-            colText = *wxWHITE;
+            if (m_hasFocus)
+               colText = *wxWHITE;
 #else
             if (m_hasFocus)
                 colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
@@ -3900,9 +3901,8 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
             if ( flags & wxTREE_HITTEST_ONITEMBUTTON )
             {
-                // only toggle the item for a single click, double click on
-                // the button doesn't do anything (it toggles the item twice)
-                if ( event.LeftDown() )
+                // toggle the item for both single clicks and double clicks
+                if ( event.LeftDown() || event.LeftDClick() )
                 {
                     Toggle( item );
                 }

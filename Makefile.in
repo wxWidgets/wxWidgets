@@ -5609,6 +5609,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_anybutton.o \
 	monodll_iphone_button.o \
 	monodll_iphone_checkbox.o \
+	monodll_iphone_choice.o \
 	monodll_iphone_colour.o \
 	monodll_iphone_dialog.o \
 	monodll_iphone_evtloop.o \
@@ -7391,6 +7392,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_anybutton.o \
 	monolib_iphone_button.o \
 	monolib_iphone_checkbox.o \
+	monolib_iphone_choice.o \
 	monolib_iphone_colour.o \
 	monolib_iphone_dialog.o \
 	monolib_iphone_evtloop.o \
@@ -9319,6 +9321,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_anybutton.o \
 	coredll_iphone_button.o \
 	coredll_iphone_checkbox.o \
+	coredll_iphone_choice.o \
 	coredll_iphone_colour.o \
 	coredll_iphone_dialog.o \
 	coredll_iphone_evtloop.o \
@@ -10828,6 +10831,7 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_anybutton.o \
 	corelib_iphone_button.o \
 	corelib_iphone_checkbox.o \
+	corelib_iphone_choice.o \
 	corelib_iphone_colour.o \
 	corelib_iphone_dialog.o \
 	corelib_iphone_evtloop.o \
@@ -16135,6 +16139,9 @@ monodll_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(MONODLL_ODEP)
 monodll_iphone_checkbox.o: $(srcdir)/src/osx/iphone/checkbox.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/checkbox.mm
 
+monodll_iphone_choice.o: $(srcdir)/src/osx/iphone/choice.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/choice.mm
+
 monodll_iphone_colour.o: $(srcdir)/src/osx/iphone/colour.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/colour.mm
 
@@ -20916,6 +20923,9 @@ monolib_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(MONOLIB_ODEP)
 
 monolib_iphone_checkbox.o: $(srcdir)/src/osx/iphone/checkbox.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/checkbox.mm
+
+monolib_iphone_choice.o: $(srcdir)/src/osx/iphone/choice.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/choice.mm
 
 monolib_iphone_colour.o: $(srcdir)/src/osx/iphone/colour.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/colour.mm
@@ -26368,6 +26378,9 @@ coredll_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(COREDLL_ODEP)
 coredll_iphone_checkbox.o: $(srcdir)/src/osx/iphone/checkbox.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/checkbox.mm
 
+coredll_iphone_choice.o: $(srcdir)/src/osx/iphone/choice.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/choice.mm
+
 coredll_iphone_colour.o: $(srcdir)/src/osx/iphone/colour.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/colour.mm
 
@@ -30117,6 +30130,9 @@ corelib_iphone_button.o: $(srcdir)/src/osx/iphone/button.mm $(CORELIB_ODEP)
 
 corelib_iphone_checkbox.o: $(srcdir)/src/osx/iphone/checkbox.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/checkbox.mm
+
+corelib_iphone_choice.o: $(srcdir)/src/osx/iphone/choice.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/choice.mm
 
 corelib_iphone_colour.o: $(srcdir)/src/osx/iphone/colour.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/colour.mm

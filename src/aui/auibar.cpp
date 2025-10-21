@@ -915,6 +915,7 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     return true;
 }
@@ -1392,7 +1393,7 @@ void wxAuiToolBar::SetToolSticky(int tool_id, bool sticky)
 
     item->m_sticky = sticky;
 
-    Refresh();
+    Refresh(false);
     Update();
 }
 
@@ -1483,7 +1484,7 @@ void wxAuiToolBar::SetGripperVisible(bool visible)
     else
         m_windowStyle &= ~wxAUI_TB_GRIPPER;
     Realize();
-    Refresh();
+    Refresh(false);
 }
 
 
@@ -1499,7 +1500,7 @@ void wxAuiToolBar::SetOverflowVisible(bool visible)
         m_windowStyle |= wxAUI_TB_OVERFLOW;
     else
         m_windowStyle &= ~wxAUI_TB_OVERFLOW;
-    Refresh();
+    Refresh(false);
 }
 
 bool wxAuiToolBar::SetFont(const wxFont& font)
@@ -1548,7 +1549,7 @@ void wxAuiToolBar::SetHoverItem(wxAuiToolBarItem* pitem)
 
     if (former_hover != pitem)
     {
-        Refresh();
+        Refresh(false);
         Update();
     }
 }
@@ -1574,7 +1575,7 @@ void wxAuiToolBar::SetPressedItem(wxAuiToolBarItem* pitem)
 
     if (former_item != pitem)
     {
-        Refresh();
+        Refresh(false);
         Update();
     }
 }
@@ -1608,7 +1609,7 @@ void wxAuiToolBar::RefreshOverflowState()
     if (overflow_state != m_overflowState)
     {
         m_overflowState = overflow_state;
-        Refresh();
+        Refresh(false);
         Update();
     }
 
@@ -1966,7 +1967,7 @@ bool wxAuiToolBar::Realize()
         m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
     }
 
-    Refresh();
+    Refresh(false);
     return true;
 }
 
@@ -2309,7 +2310,7 @@ void wxAuiToolBar::DoIdleUpdate()
 
     if (need_refresh)
     {
-        Refresh();
+        Refresh(false);
     }
 }
 
@@ -2354,7 +2355,7 @@ void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
     // We need to update the bitmap if the size has changed.
     UpdateBackgroundBitmap(wxSize(x, y));
 
-    Refresh();
+    Refresh(false);
 
     // idle events aren't sent while user is resizing frame (why?),
     // but resizing toolbar here causes havoc,
@@ -2488,11 +2489,13 @@ void wxAuiToolBar::UpdateBackgroundBitmap(const wxSize& size)
 
 void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
-    wxPaintDC dc(this);
+    wxAutoBufferedPaintDC dc(this);
     wxRect cli_rect(wxPoint(0,0), GetClientSize());
 
 
     bool horizontal = m_orientation == wxHORIZONTAL;
+
+    dc.DrawBitmap(m_backgroundBitmap, 0, 0);
 
     int gripperSize = m_art->GetElementSizeForWindow(wxAUI_TBART_GRIPPER_SIZE, this);
     int overflowSize = m_art->GetElementSizeForWindow(wxAUI_TBART_OVERFLOW_SIZE, this);
@@ -2642,7 +2645,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 
                 int res = m_art->ShowDropDown(this, overflow_items);
                 m_overflowState = 0;
-                Refresh();
+                Refresh(false);
                 if (res != -1)
                 {
                     wxCommandEvent event(wxEVT_MENU, res);
@@ -2745,7 +2748,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
                 ToggleTool(m_actionItem->m_toolId, toggle);
 
                 // repaint immediately
-                Refresh();
+                Refresh(false);
                 Update();
 
                 e.SetInt(toggle);

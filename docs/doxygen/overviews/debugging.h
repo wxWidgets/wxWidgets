@@ -27,15 +27,19 @@ yourself.
 
 @section overview_debugging_config Configuring Debug Support
 
-Starting with wxWidgets 2.9.1 debugging features are always available by
+Starting with wxWidgets 2.9.1, debugging features are always available by
 default (and not only in a special "debug" build of the library) and you need
-to predefine wxDEBUG_LEVEL symbol as 0 when building both the library and your
-application to remove them completely from the generated object code. However
-the debugging features are disabled by default when the application itself is
+to predefine @c wxDEBUG_LEVEL symbol as 0 when building both the library and your
+application to remove them completely from the generated object code.
+(If using CMake and statically linking wxWidgets, set @c wxBUILD_DEBUG_LEVEL to
+the desired level before calling @c add_subdirectory, and set @c wxDEBUG_LEVEL
+when setting compile definitions for your code.)
+
+However the debugging features are disabled by default when the application itself is
 built with @c NDEBUG defined (i.e. in "release" or "production" mode) so there
 is no need to do this, unless the resources of the system your application will
-be running on are unusually constrained (notice that when asserts are disabled
-their condition is not even evaluated so the only run-time cost is a single
+be running on are unusually constrained (notice that when asserts are disabled,
+their condition is not even evaluated, so the only run-time cost is a single
 condition check and the extra space taken by the asserts in the code).
 
 This automatic deactivation of debugging code is done by wxIMPLEMENT_APP()
@@ -43,10 +47,20 @@ macro so if you don't use you may need to explicitly call
 wxDISABLE_DEBUG_SUPPORT() yourself.
 
 Also notice that it is possible to build your own application with a different
-value of wxDEBUG_LEVEL than the one which was used for wxWidgets itself. E.g.
-you may be using an official binary version of the library which will have been
-compiled with default @code wxDEBUG_LEVEL == 1 @endcode but still predefine
-wxDEBUG_LEVEL as 0 for your own code.
+value of @c wxDEBUG_LEVEL than the one which was used for wxWidgets itself.
+For example, you may be using an official binary version of the library which
+will have been compiled with default @code wxDEBUG_LEVEL == 1 @endcode, but still predefine
+@c wxDEBUG_LEVEL as 0 for your own code.
+
+It is technically allowed to build your application with a higher @c wxDEBUG_LEVEL than the
+`wxDEBUG_LEVEL/wxBUILD_DEBUG_LEVEL` used when compiling wxWidgets itself.
+However, doing so means that debug macros like wxASSERT() or wxLogDebug() will **compile**,
+but effectively become **no-ops at runtime**, since the library does not include the corresponding debug support.
+This won't cause runtime errors or crashes, but it can lead to **confusing behavior**:
+your code may appear to include assertions or debugging checks that simply don't execute.
+For this reason, it's generally **recommended** to keep @c wxDEBUG_LEVEL **less than or
+equal to** the library's `wxDEBUG_LEVEL/wxBUILD_DEBUG_LEVEL`,
+to ensure that debug features behave as expected.
 
 On the other hand, if you do want to keep the asserts even in production
 builds, you will probably want to override the handling of assertion failures

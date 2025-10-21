@@ -2051,6 +2051,17 @@ void wxToolBar::SetToolPacking(int packing)
 // Responds to colour changes, and passes event on to children.
 void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
+    // let the event propagate further in any case
+    event.Skip();
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We currently don't use system colours in dark mode, although we
+        // should, of course. For now at least don't switch to using light mode
+        // colours.
+        return;
+    }
+
     if ( !UseBgCol() )
         wxRGBToColour(m_backgroundColour, ::GetSysColor(COLOR_BTNFACE));
 
@@ -2063,9 +2074,6 @@ void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
     SetRows(nrows);
 
     Refresh();
-
-    // let the event propagate further
-    event.Skip();
 }
 
 void wxToolBar::OnMouseEvent(wxMouseEvent& event)

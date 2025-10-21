@@ -1490,8 +1490,13 @@ void wxRibbonMSWArtProvider::DrawTab(
             int x = tab.rect.x + 3;
             if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
             {
-                x += 3 + tab.page->GetIcon().GetLogicalWidth();
-                width -= 3 + tab.page->GetIcon().GetLogicalWidth();
+                const wxBitmap& icon = tab.page->GetIcon();
+                if (icon.IsOk())
+                {
+                    const int iconWidth = icon.GetLogicalWidth();
+                    x += 3 + iconWidth;
+                    width -= 3 + iconWidth;
+                }
             }
             int y = tab.rect.y + (tab.rect.height - text_height) / 2;
 

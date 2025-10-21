@@ -141,6 +141,9 @@ public:
     void OnClickDynamicHandlerButton(wxCommandEvent& event);
     void OnClickStaticHandlerFrame(wxCommandEvent& event);
 
+    // Mouse
+    void OnMouseEvents(wxCommandEvent& event);
+
     // Gesture
     void OnGesture(wxCommandEvent& event);
 
@@ -182,6 +185,7 @@ private:
     MyEvtTestButton *m_testBtn;
 
     wxWindowRef m_gestureFrame;
+    wxWindowRef m_mouseFrame;
 
 
     // any class wishing to process wxWidgets events must use this macro
@@ -227,6 +231,7 @@ enum
     Event_Custom,
     Event_Test,
     Event_Gesture,
+    Event_Mouse,
     Event_NewEventClass
 };
 
@@ -260,6 +265,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Push, MyFrame::OnPushEventHandler)
     EVT_MENU(Event_Pop, MyFrame::OnPopEventHandler)
     EVT_MENU(Event_Gesture, MyFrame::OnGesture)
+    EVT_MENU(Event_Mouse, MyFrame::OnMouseEvents)
     EVT_MENU(Event_NewEventClass, MyFrame::OnNewEventClass)
 
     EVT_UPDATE_UI(Event_Pop, MyFrame::OnUpdateUIPop)
@@ -392,6 +398,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                       "Generate a custom event");
     menuEvent->Append(Event_Gesture, "&Gesture events\tCtrl-G",
                     "Gesture event");
+    menuEvent->Append(Event_Mouse, "&Mouse events\tCtrl-M",
+                    "Mouse event");
     menuEvent->Append(Event_NewEventClass, "&New wxEvent class demo\tCtrl-N",
                     "Demonstrates a new wxEvent-derived class");
 
@@ -459,6 +467,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_gestureFrame )
         m_gestureFrame->Close(true);
+
+    if ( m_mouseFrame )
+        m_mouseFrame->Close(true);
+
     Close(true);
 }
 
@@ -592,6 +604,19 @@ void MyFrame::OnGesture(wxCommandEvent& WXUNUSED(event))
     {
         m_gestureFrame = new MyGestureFrame();
         m_gestureFrame->Show(true);
+    }
+}
+
+void MyFrame::OnMouseEvents(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_mouseFrame )
+    {
+        m_mouseFrame->Raise();
+    }
+    else
+    {
+        m_mouseFrame = new MyMouseFrame();
+        m_mouseFrame->Show(true);
     }
 }
 
