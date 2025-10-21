@@ -27,6 +27,14 @@
     the right side of the editor, see @ref page_samples_stc for an example of
     doing this.
 
+    Note that you may want to disable the scrollbar of the editor when using a
+    mini map with it, as the mini map itself provides a scrollbar-like
+    functionality. This can be done simply by calling
+    `SetUseVerticalScrollBar(false)` on the editor. If you don't do this, you
+    may also want to enable the maps own scrollbar, which is not shown by
+    default to avoid cluttering the display with multiple scrollbars, by
+    calling `SetUseVerticalScrollBar(true)` on the mini map itself.
+
     @library{wxstc}
     @category{stc}
 

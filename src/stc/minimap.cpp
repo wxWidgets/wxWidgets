@@ -165,9 +165,6 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
     edit->AddRefDocument(doc);
     SetDocPointer(doc);
 
-    // The map is used as as the scrollbar, so the editor doesn't need it.
-    edit->SetUseVerticalScrollBar(false);
-
     // Making the map read-only apparently makes the document read-only, so
     // undo this for the original control (doing nothing if it already was
     // read-only anyhow).
@@ -213,6 +210,7 @@ wxStyledTextCtrlMiniMap::Create(wxWindow* parent, wxStyledTextCtrl* edit)
     SetIndentationGuides(wxSTC_IV_NONE);
     UsePopUp(wxSTC_POPUP_NEVER);
     SetUseHorizontalScrollBar(false);
+    SetUseVerticalScrollBar(false);
     SetCursor(wxCURSOR_ARROW);
 
     // Ensure that folds and markers in the map are synchronized with the main
