@@ -85,6 +85,8 @@ public:
         tbar->OnLeftClick( GetId(), IsToggled() );
     }
 
+    void MakeStretchable() override;
+
     UIBarButtonItem* GetUIBarButtonItem() const {return m_toolbarItem;}
 private:
 
@@ -93,6 +95,8 @@ private:
         m_toolbarItem = nullptr;
         m_index = -1;
     }
+
+    void RemoveAssociation();
 
     UIBarButtonItem* m_toolbarItem;
     // position in its toolbar, -1 means not inserted
@@ -161,6 +165,11 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString
 
 wxToolBarTool::~wxToolBarTool()
 {
+    RemoveAssociation();
+}
+
+void wxToolBarTool::RemoveAssociation()
+{
     bool found = true ;
     while ( found )
     {
@@ -175,6 +184,24 @@ wxToolBarTool::~wxToolBarTool()
                 break;
             }
         }
+    }
+}
+
+
+void wxToolBarTool::MakeStretchable()
+{
+    wxToolBarToolBase::MakeStretchable();
+
+    if ( IsSeparator() )
+    {
+        RemoveAssociation();
+        [m_toolbarItem release];
+
+        UIBarButtonItem* bui = [UIBarButtonItem alloc];
+        bui = [bui initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        
+        m_toolbarItem = bui;
+        wxToolBarToolList[bui] = this;
     }
 }
 
