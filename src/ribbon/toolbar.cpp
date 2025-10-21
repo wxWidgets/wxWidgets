@@ -1184,7 +1184,8 @@ void wxRibbonToolBar::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
             notification.SetBar(this);
             ProcessEvent(notification);
 
-            wxDynamicCast(GetParent(), wxRibbonPanel)->HideIfExpanded();
+            wxCHECK_RET(wxDynamicCast(GetParent(), wxRibbonPanel), "pointer of wrong type?");
+            static_cast<wxRibbonPanel*>(GetParent())->HideIfExpanded();
         }
 
         // Notice that m_active_tool could have been reset by the event handler

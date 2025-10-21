@@ -204,7 +204,8 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
 
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
-    wxDynamicCast(GetParent(), wxRibbonBar)->AddPage(this);
+    wxCHECK_RET(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
+    static_cast<wxRibbonBar*>(GetParent())->AddPage(this);
 }
 
 void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
@@ -887,7 +888,8 @@ bool wxRibbonPage::ShowScrollButtons()
 
     if(reposition)
     {
-        wxDynamicCast(GetParent(), wxRibbonBar)->RepositionPage(this);
+        wxCHECK_RET(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
+        static_cast<wxRibbonBar*>(GetParent())->RepositionPage(this);
     }
 
     return reposition;
@@ -1275,7 +1277,8 @@ wxSize wxRibbonPage::DoGetBestSize() const
 
 void wxRibbonPage::HideIfExpanded()
 {
-    wxDynamicCast(GetParent(), wxRibbonBar)->HideIfExpanded();
+    wxCHECK_RET(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
+    static_cast<wxRibbonBar*>(GetParent())->HideIfExpanded();
 }
 
 #endif // wxUSE_RIBBON
