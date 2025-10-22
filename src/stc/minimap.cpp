@@ -262,9 +262,7 @@ void wxStyledTextCtrlMiniMap::SetEdit(wxStyledTextCtrl* edit)
     }
 
     // Use the same document as the main editor.
-    auto* const doc = edit->GetDocPointer();
-    edit->AddRefDocument(doc);
-    SetDocPointer(doc);
+    SetDocPointer(edit->GetDocPointer());
 
 
     // Copy the main editor attributes.
