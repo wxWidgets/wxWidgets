@@ -25,9 +25,15 @@ struct wxOSXTimerInfo
     CFRunLoopTimerRef   m_timerRef;
 };
 
-void wxProcessTimer(CFRunLoopTimerRef WXUNUSED(theTimer), void *data)
+void wxProcessTimer(CFRunLoopTimerRef theTimer, void *data)
 {
     if ( data == NULL )
+        return;
+
+    // CFRunLoop can fire timer callbacks after CFRunLoopTimerInvalidate()
+    // has been called (e.g., if the callback was already queued when Stop() was called).
+    // Verify the timer is still valid before proceeding to avoid crashes.
+    if ( !CFRunLoopTimerIsValid(theTimer) )
         return;
 
     wxOSXTimerImpl* timer = (wxOSXTimerImpl*)data;
