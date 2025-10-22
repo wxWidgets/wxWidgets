@@ -31,28 +31,20 @@ set(BASE_UNIX_AND_DARWIN_HDR
     wx/unix/fswatcher_kqueue.h
 )
 
-set(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC
+set(BASE_UNIX_SRC
+    src/unix/fswatcher_inotify.cpp
+    src/unix/secretstore.cpp
+    src/unix/stdpaths.cpp
     ${BASE_UNIX_AND_DARWIN_SRC}
     src/unix/mimetype.cpp
     src/unix/uilocale.cpp
 )
 
-set(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR
-    ${BASE_UNIX_AND_DARWIN_HDR}
-    wx/unix/mimetype.h
-)
-
-set(BASE_UNIX_SRC
-    ${BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC}
-    src/unix/fswatcher_inotify.cpp
-    src/unix/secretstore.cpp
-    src/unix/stdpaths.cpp
-)
-
 set(BASE_UNIX_HDR
-    ${BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR}
     wx/unix/fswatcher_inotify.h
     wx/unix/stdpaths.h
+    ${BASE_UNIX_AND_DARWIN_HDR}
+    wx/unix/mimetype.h
 )
 
 set(BASE_WIN32_SRC
@@ -115,6 +107,7 @@ set(BASE_COREFOUNDATION_SRC
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
     src/osx/core/stdpaths.mm
+    src/osx/volume.mm
 )
 
 set(BASE_COREFOUNDATION_HDR
@@ -136,15 +129,15 @@ set(BASE_COREFOUNDATION_HDR
     wx/osx/core/stdpaths.h
 )
 
-set(BASE_OSX_SHARED_SRC
-    src/osx/core/mimetype.cpp
+set(BASE_OSX_SRC
     src/osx/fswatcher_fsevents.cpp
     ${BASE_COREFOUNDATION_SRC}
     ${BASE_UNIX_AND_DARWIN_SRC}
     src/osx/core/uilocale.mm
+    src/osx/core/mimetype.cpp
 )
 
-set(BASE_OSX_SHARED_HDR
+set(BASE_OSX_HDR
     wx/osx/fswatcher_fsevents.h
     ${BASE_COREFOUNDATION_HDR}
     ${BASE_UNIX_AND_DARWIN_HDR}
@@ -152,17 +145,6 @@ set(BASE_OSX_SHARED_HDR
 
 set(BASE_AND_GUI_OSX_COCOA_SRC
     src/osx/cocoa/utils.mm
-    src/osx/volume.mm
-)
-
-set(BASE_OSX_NOTWXMAC_SRC
-    ${BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC}
-    ${BASE_COREFOUNDATION_SRC}
-)
-
-set(BASE_OSX_NOTWXMAC_HDR
-    ${BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR}
-    ${BASE_COREFOUNDATION_HDR}
 )
 
 set(QT_UNIX_SRC

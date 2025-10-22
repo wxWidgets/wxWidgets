@@ -18,7 +18,7 @@
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/object.h"
 
-#if defined(__UNIX__)
+#if defined(__UNIX__) && !defined(__DARWIN__)
 wxString wxGTKMimeTypesManagerImpl::GetIconFromMimeType(const wxString& mime)
 {
     wxString icon;

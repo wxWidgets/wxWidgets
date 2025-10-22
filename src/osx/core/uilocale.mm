@@ -43,7 +43,7 @@ NSLocale* wxGetCurrentNSLocale()
 {
     if (!gs_currentNSLocale)
     {
-        static wxCFRef<NSLocale*> stdCLocale([[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain]);
+        static wxCFRef<NSLocale*> stdCLocale([[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]);
         gs_currentNSLocale = stdCLocale;
     }
     return gs_currentNSLocale;
@@ -103,8 +103,11 @@ public:
         // completely invalid strings, so we need to check if the name is
         // actually in the list of the supported locales ourselves.
         bool isAvailable = false;
-        for ( id nsLocId in [NSLocale availableLocaleIdentifiers] )
+        NSArray* availableLocaleIds = [NSLocale availableLocaleIdentifiers];
+
+        for (NSUInteger i = 0; i < [availableLocaleIds count]; i++)
         {
+            NSString* nsLocId = [availableLocaleIds objectAtIndex:i];
             // We can't simply compare the names here because the list returned
             // by NSLocale is incomplete and doesn't contain all synonyms, e.g.
             // it only contains "zh_Hant_TW" but not "zh_TW" itself, so we need
@@ -146,9 +149,11 @@ public:
             return nullptr;
 
         wxCFStringRef cfName(locId.GetName());
-        auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
+        NSLocale* nsloc = [[NSLocale alloc] initWithLocaleIdentifier:cfName.AsNSString()];
         if ( !nsloc )
             return nullptr;
+
+        [nsloc autorelease];
 
         return new wxUILocaleImplCF(nsloc);
     }
@@ -239,17 +244,17 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
             return wxString();
     }
 
-    NSString* str = nullptr;
+    NSString* str = nil;
     switch (name)
     {
         case wxLOCALE_NAME_LOCALE:
-            str = [convLocale localizedStringForLocaleIdentifier:[m_nsloc localeIdentifier]];
+            str = [convLocale displayNameForKey:NSLocaleIdentifier value:[m_nsloc objectForKey:NSLocaleIdentifier]];
             break;
         case wxLOCALE_NAME_LANGUAGE:
-            str = [convLocale localizedStringForLanguageCode:[m_nsloc languageCode]];
+            str = [convLocale displayNameForKey:NSLocaleLanguageCode value:[m_nsloc objectForKey:NSLocaleLanguageCode]];
             break;
         case wxLOCALE_NAME_COUNTRY:
-            str = [convLocale localizedStringForCountryCode:[m_nsloc countryCode]];
+            str = [convLocale displayNameForKey:NSLocaleCountryCode value:[m_nsloc objectForKey:NSLocaleCountryCode]];
             break;
     }
     return wxCFStringRef::AsString(str);
@@ -350,7 +355,7 @@ wxUILocaleImplCF::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFo
 wxLayoutDirection
 wxUILocaleImplCF::GetLayoutDirection() const
 {
-    NSLocaleLanguageDirection layoutDirection = [NSLocale characterDirectionForLanguage:[m_nsloc languageCode]];
+    NSLocaleLanguageDirection layoutDirection = [NSLocale characterDirectionForLanguage:[m_nsloc objectForKey:NSLocaleLanguageCode]];
     if (layoutDirection == NSLocaleLanguageDirectionLeftToRight)
         return wxLayout_LeftToRight;
     else if (layoutDirection == NSLocaleLanguageDirectionRightToLeft)
@@ -367,14 +372,14 @@ wxUILocaleImplCF::GetNumberFormatting() const
 wxString
 wxUILocaleImplCF::GetCurrencySymbol() const
 {
-    NSString* str = [m_nsloc currencySymbol];
+    NSString* str = [m_nsloc objectForKey:NSLocaleCurrencySymbol];
     return wxCFStringRef::AsString(str);
 }
 
 wxString
 wxUILocaleImplCF::GetCurrencyCode() const
 {
-    NSString* str = [m_nsloc currencyCode];
+    NSString* str = [m_nsloc objectForKey:NSLocaleCurrencyCode];
     return wxCFStringRef::AsString(str);
 }
 
@@ -386,7 +391,7 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
     formatter.locale = m_nsloc;
     formatter.numberStyle = NSNumberFormatterCurrencyStyle;
 
-    NSString* formatted = [formatter stringFromNumber:@123];
+    NSString* formatted = [formatter stringFromNumber:[NSNumber numberWithInt:123]];
     NSString* symbol = formatter.currencySymbol;
 
     NSRange symbolRange = [formatted rangeOfString:symbol];
@@ -478,7 +483,7 @@ wxUILocaleImplCF::UsesMetricSystem() const
 {
     if ([m_nsloc respondsToSelector:@selector(usesMetricSystem)])
     {
-        BOOL isMetric = [m_nsloc usesMetricSystem];
+        BOOL isMetric = [(NSNumber*) [m_nsloc objectForKey:NSLocaleUsesMetricSystem] boolValue];
         return (isMetric) ? wxMeasurementSystem::Metric : wxMeasurementSystem::NonMetric;
     }
     return wxMeasurementSystem::Unknown;
@@ -492,7 +497,7 @@ wxUILocaleImpl* wxUILocaleImpl::CreateStdC()
     // wouldn't be much better as we'd still need a hack for it in GetName()
     // because the locale names are always converted to lower case, while we
     // really want to return "C" rather than "c" as the name of this one.
-    return new wxUILocaleImplCF([NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]);
+    return new wxUILocaleImplCF([[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease]);
 }
 
 /* static */
@@ -512,10 +517,11 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
 {
     wxVector<wxString> preferred;
     NSArray* preferredLangs = [NSLocale preferredLanguages];
-    NSUInteger count = preferredLangs.count;
-
-    for (NSUInteger j = 0; j < count; ++j)
-        preferred.push_back(wxCFStringRef::AsString(preferredLangs[j]));
+    for (NSUInteger i = 0; i < [preferredLangs count]; i++) \
+    {
+        NSString* preferredLang = [preferredLangs objectAtIndex:i];
+        preferred.push_back(wxCFStringRef::AsString(preferredLang));
+    }
 
     return preferred;
 }

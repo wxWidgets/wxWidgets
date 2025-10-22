@@ -50,31 +50,22 @@ BASE_UNIX_AND_DARWIN_HDR =
     wx/unix/stackwalk.h
     wx/unix/fswatcher_kqueue.h
 
-# Files used on all Unix systems, including Darwin with any port but wxMac
-# (this is really an aberration, we should also use these files for wxMac,
-#  it's not done because of some OS 9 support leftovers only now)
-BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC =
-    $(BASE_UNIX_AND_DARWIN_SRC)
-    src/unix/mimetype.cpp
-    src/unix/uilocale.cpp
-
-BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR =
-    $(BASE_UNIX_AND_DARWIN_HDR)
-    wx/unix/mimetype.h
-
 # Files used on all non-Darwin Unix systems (because Darwin provides other,
 # better, native equivalents of the functionality they implement (e.g.
 # CFSocket instead of BSD sockets) or doesn't provide it at all (epoll,
 # backtrace())
 BASE_UNIX_SRC =
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
+    $(BASE_UNIX_AND_DARWIN_SRC)
     src/unix/fswatcher_inotify.cpp
+    src/unix/mimetype.cpp
     src/unix/secretstore.cpp
     src/unix/stdpaths.cpp
+    src/unix/uilocale.cpp
 
 BASE_UNIX_HDR =
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
+    $(BASE_UNIX_AND_DARWIN_HDR)
     wx/unix/fswatcher_inotify.h
+    wx/unix/mimetype.h
     wx/unix/stdpaths.h
 
 
@@ -141,6 +132,7 @@ BASE_COREFOUNDATION_SRC =
     src/osx/core/stdpaths.mm
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
+    src/osx/volume.mm
 
 BASE_COREFOUNDATION_HDR =
     wx/osx/carbon/region.h
@@ -161,32 +153,21 @@ BASE_COREFOUNDATION_HDR =
     wx/osx/core/stdpaths.h
 
 # Base files used by OS X ports (not Carbon)
-BASE_OSX_SHARED_SRC =
+BASE_OSX_SRC =
+    $(BASE_UNIX_AND_DARWIN_SRC)
+    $(BASE_COREFOUNDATION_SRC)
     src/osx/core/mimetype.cpp
     src/osx/core/uilocale.mm
     src/osx/fswatcher_fsevents.cpp
-    $(BASE_COREFOUNDATION_SRC)
-    $(BASE_UNIX_AND_DARWIN_SRC)
 
-BASE_OSX_SHARED_HDR =
-    wx/osx/fswatcher_fsevents.h
-    $(BASE_COREFOUNDATION_HDR)
+BASE_OSX_HDR =
     $(BASE_UNIX_AND_DARWIN_HDR)
+    $(BASE_COREFOUNDATION_HDR)
+    wx/osx/fswatcher_fsevents.h
 
 # Base and GUI files used by OS X
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
-    src/osx/volume.mm
-
-# files used by non-wxMac OS X builds
-BASE_OSX_NOTWXMAC_SRC =
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
-    $(BASE_COREFOUNDATION_SRC)
-
-BASE_OSX_NOTWXMAC_HDR =
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
-    $(BASE_COREFOUNDATION_HDR)
-
 
 ## Qt
 
