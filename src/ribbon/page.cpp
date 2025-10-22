@@ -888,7 +888,7 @@ bool wxRibbonPage::ShowScrollButtons()
 
     if(reposition)
     {
-        wxCHECK_RET(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
+        wxASSERT_MSG(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
         static_cast<wxRibbonBar*>(GetParent())->RepositionPage(this);
     }
 
