@@ -66,6 +66,7 @@ bool wxFrame::Create(wxWindow *parent,
         if ((parent != nullptr) && (HasFlag(wxCAPTION) || HasFlag(wxCLOSE_BOX)))
         {
             // We are on the next screen, provide a back button and title
+            // TODO replace with UINavigationBar
             wxToolBar *tb = CreateToolBar();
             if (HasFlag(wxCLOSE_BOX))
             {

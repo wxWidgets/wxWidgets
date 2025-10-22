@@ -140,7 +140,8 @@ public:
     // override this to return false from a non-bundled console app in order to stay in background ...
     virtual bool         OSXIsGUIApplication() { return true; }
 
-    // returns false on macOS and on windowed iPad apps
+    // Returns false on macOS and on windowed iPad apps (iPadOS 26), this is not the same as a fullscreen app window
+    // in a desktop OS which still has options to escape the fullscreen mode, while on an iPhone you cannot.
     bool                 OSXIsFullScreenApp();
 
     // Allow the user to disable the tab bar support in the application
