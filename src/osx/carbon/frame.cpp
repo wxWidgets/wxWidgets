@@ -383,18 +383,16 @@ void wxFrame::PositionToolBar()
     }
 #endif
 
-#ifdef __WXOSX_IPHONE__
-    // TODO integrate this in a better way, on iphone the status bar is not a child of the content view
-    // but the toolbar is
-    ch -= 20;
-#endif
-
     if (GetToolBar())
     {
         const int direction = GetToolBar()->GetDirection();
         int tx, ty, tw, th;
 
         tx = ty = 0 ;
+        wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
+        tx = pt.x;
+        ty = pt.y;
+        
         GetToolBar()->GetSize(&tw, &th);
 
         if (direction == wxTB_LEFT)
