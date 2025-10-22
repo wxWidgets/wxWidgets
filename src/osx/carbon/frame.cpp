@@ -392,7 +392,7 @@ void wxFrame::PositionToolBar()
         wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
         tx = pt.x;
         ty = pt.y;
-        
+
         GetToolBar()->GetSize(&tw, &th);
 
         if (direction == wxTB_LEFT)
