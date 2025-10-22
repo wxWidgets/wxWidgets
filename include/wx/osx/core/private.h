@@ -39,7 +39,7 @@
 #   endif
 #endif
 
-#if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
+#if ( !wxUSE_GUI && !defined(__WXOSX_IPHONE__) ) || defined(__WXOSX_COCOA__)
 
 // Carbon functions are currently still used in wxOSX/Cocoa too (including
 // wxBase part of it).
