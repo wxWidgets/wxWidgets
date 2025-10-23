@@ -509,7 +509,7 @@ wxString wxGetCurrentDir()
 // ----------------------------------------------------------------------------
 
 #ifdef __WXOSX__
-#if wxOSX_USE_COCOA_OR_CARBON
+#if defined(wxOSX_USE_COCOA_OR_CARBON) && wxOSX_USE_COCOA_OR_CARBON
     #include <crt_externs.h>
 #endif
 #endif
@@ -530,7 +530,7 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
    // TODO : should we do something with logicals?
     char **env=nullptr;
 #elif defined(__DARWIN__)
-#if wxOSX_USE_COCOA_OR_CARBON
+#if defined(wxOSX_USE_COCOA_OR_CARBON) && wxOSX_USE_COCOA_OR_CARBON
     // Under Mac shared libraries don't have access to the global environ
     // variable so use this Mac-specific function instead as advised by
     // environ(7) under Darwin
@@ -1512,7 +1512,7 @@ wxWindowDisabler::wxWindowDisabler(bool disable)
     {
         DoDisable();
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
+#if defined(__WXOSX__) && defined(wxOSX_USE_COCOA) && wxOSX_USE_COCOA
         AfterDisable(nullptr);
 #endif
     }
@@ -1529,7 +1529,7 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2)
 
     DoDisable();
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
+#if defined(__WXOSX__) && defined(wxOSX_USE_COCOA) && wxOSX_USE_COCOA
     AfterDisable(winToSkip);
 #endif
 }
@@ -1562,7 +1562,7 @@ wxWindowDisabler::~wxWindowDisabler()
     if ( !m_disabled )
         return;
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
+#if defined(__WXOSX__) && defined(wxOSX_USE_COCOA) && wxOSX_USE_COCOA
     BeforeEnable();
 #endif
 
