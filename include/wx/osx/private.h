@@ -7,8 +7,14 @@
     #include "wx/osx/iphone/private.h"
 #elif defined(__WXOSX_COCOA__)
     #include "wx/osx/cocoa/private.h"
-#elif wxUSE_GUI
+#elif defined(__WXOSX__)
     #error "Must include wx/defs.h first"
+#else
+    #include <ApplicationServices/ApplicationServices.h>
+
+    #ifdef __OBJC__
+        #import <Cocoa/Cocoa.h>
+    #endif
 #endif
 
 #endif

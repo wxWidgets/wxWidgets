@@ -66,9 +66,9 @@ WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
 
 WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
 
-#if wxUSE_GUI
+#ifdef __WXOSX__
 
-#if !wxOSX_USE_IPHONE
+#if !defined(__WXOSX_IPHONE__)
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
@@ -1050,7 +1050,7 @@ protected :
     wxDECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl);
 };
 
-#endif // wxUSE_GUI
+#endif // __WXOSX__
 
 //---------------------------------------------------------------------------
 // cocoa bridging utilities
