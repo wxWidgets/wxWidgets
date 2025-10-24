@@ -41,14 +41,8 @@
 
 #ifdef wxHAS_SVG
 
-#if wxUSE_LUNASVG
-
-#include <memory>
-
-#include "wx/buffer.h"
-#include "wx/log.h"
-
 #include "wx/bmpbndl.h"
+
 #if wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE
@@ -59,6 +53,13 @@
 
 #include "wx/rawbmp.h"
 #include "wx/private/bmpbndl.h"
+
+#if wxUSE_LUNASVG
+
+#include <memory>
+
+#include "wx/buffer.h"
+#include "wx/log.h"
 
 // Try to help people updating their sources from Git and forgetting to
 // initialize new submodules, if possible: if you get this error, it means that
@@ -319,18 +320,6 @@ wxGCC_WARNING_RESTORE(cast-qual)
 #ifndef WX_PRECOMP
     #include "wx/utils.h"                   // Only for wxMin()
 #endif // WX_PRECOMP
-
-#include "wx/bmpbndl.h"
-#ifdef wxUSE_FFILE
-    #include "wx/ffile.h"
-#elif wxUSE_FILE
-    #include "wx/file.h"
-#else
-    #define wxNO_SVG_FILE
-#endif
-#include "wx/rawbmp.h"
-
-#include "wx/private/bmpbndl.h"
 
 // ----------------------------------------------------------------------------
 // private helpers
