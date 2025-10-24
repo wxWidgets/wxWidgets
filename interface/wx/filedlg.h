@@ -117,9 +117,9 @@ const char wxFileSelectorDefaultWildcardStr[];
     But in contrast to Windows and Unix, where the file type choice filters only
     the selected files, on Mac macOS even in this case the dialog shows all files
     matching all file types. The files which does not match the currently selected
-    file type are greyed out and are not selectable. Also, currently the Mac macOS 
-    implementation is bugged, causing all filters after the first to also have the 
-    first filter applied, so ensure your first filter is a superset of all other 
+    file type are greyed out and are not selectable. Also, currently the Mac macOS
+    implementation is bugged, causing all filters after the first to also have the
+    first filter applied, so ensure your first filter is a superset of all other
     wildcard filters to avoid any issues.
 
 
