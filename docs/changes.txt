@@ -297,6 +297,7 @@ wxOSX:
 - Fix build under macOS 26 Tahoe (#25798).
 - Fix nested markup attributes handling (Václav Slavík, #25864).
 - Fix possible use of already destroyed wxTimers (Federico Perini, #25871).
+- Fix handling of multiple filters in wxFileDialog (#25918).
 
 
 3.2.8.1: (released 2025-05-25)
