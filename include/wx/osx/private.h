@@ -7,7 +7,7 @@
     #include "wx/osx/iphone/private.h"
 #elif defined(__WXOSX_COCOA__)
     #include "wx/osx/cocoa/private.h"
-#elif defined(__WXOSX__)
+#elif wxUSE_GUI && defined(__WXOSX__)
     #error "Must include wx/defs.h first"
 #else
     #include <ApplicationServices/ApplicationServices.h>
