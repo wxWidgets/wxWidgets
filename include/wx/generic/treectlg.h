@@ -292,6 +292,10 @@ protected:
     // misc helpers
     void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);
 
+    static inline wxGenericTreeItem* GetItemPtr(const wxTreeItemId& item) {
+        return static_cast<wxGenericTreeItem*>(item.m_pItem);
+    }
+
     void DrawBorder(const wxTreeItemId& item);
     void DrawLine(const wxTreeItemId& item, bool below);
     void DrawDropEffect(wxGenericTreeItem *item);
