@@ -66,7 +66,7 @@ WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
 
 WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
 
-#ifdef __WXOSX__
+#if wxUSE_GUI && defined(__WXOSX__)
 
 #if !defined(__WXOSX_IPHONE__)
 #include <ApplicationServices/ApplicationServices.h>
