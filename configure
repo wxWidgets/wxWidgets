@@ -36004,17 +36004,33 @@ fi
 done
 
 
-                for ac_func in dl_iterate_phdr
-do :
-  ac_fn_c_check_func "$LINENO" "dl_iterate_phdr" "ac_cv_func_dl_iterate_phdr"
-if test "x$ac_cv_func_dl_iterate_phdr" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_DL_ITERATE_PHDR 1
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dl_iterate_phdr" >&5
+$as_echo_n "checking for dl_iterate_phdr... " >&6; }
+if ${wx_cv_func_dl_iterate_phdr+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+                           #include <link.h>
+                           int main() { return dl_iterate_phdr(0, 0); }
 _ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  wx_cv_func_dl_iterate_phdr=yes
+else
+  wx_cv_func_dl_iterate_phdr=no
 
 fi
-done
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
 
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_dl_iterate_phdr" >&5
+$as_echo "$wx_cv_func_dl_iterate_phdr" >&6; }
+                if test "$wx_cv_func_dl_iterate_phdr" = "yes"; then
+                    $as_echo "#define HAVE_DL_ITERATE_PHDR 1" >>confdefs.h
+
+                fi
             fi
         fi
 

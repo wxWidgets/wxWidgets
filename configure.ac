@@ -5055,7 +5055,20 @@ else
                     ]
                 )
 
-                AC_CHECK_FUNCS(dl_iterate_phdr)
+                AC_CACHE_CHECK(
+                    [for dl_iterate_phdr],
+                    wx_cv_func_dl_iterate_phdr,
+                    AC_LINK_IFELSE(
+                        [AC_LANG_SOURCE([
+                           #include <link.h>
+                           int main() { return dl_iterate_phdr(0, 0); }])],
+                        [wx_cv_func_dl_iterate_phdr=yes],
+                        [wx_cv_func_dl_iterate_phdr=no]
+                    )
+                )
+                if test "$wx_cv_func_dl_iterate_phdr" = "yes"; then
+                    AC_DEFINE(HAVE_DL_ITERATE_PHDR)
+                fi
             fi
         fi
 
