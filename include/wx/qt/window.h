@@ -117,6 +117,13 @@ public:
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = nullptr ) override;
 
+    // LTR/RTL layout direction setter/getter
+    virtual void SetLayoutDirection(wxLayoutDirection dir) override;
+    virtual wxLayoutDirection GetLayoutDirection() const override;
+    virtual wxCoord AdjustForLayoutDirection(wxCoord x,
+                                             wxCoord width,
+                                             wxCoord widthTotal) const override;
+
     // Styles
     virtual void SetWindowStyleFlag( long style ) override;
     virtual void SetExtraStyle( long exStyle ) override;
