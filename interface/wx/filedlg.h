@@ -20,6 +20,11 @@ enum
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
+// set this system option to 1 in order to always show the filetypes popup in
+// file open dialogs if possible
+
+#define wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES wxT("osx.openfiledialog.always-show-types")
+
 /**
     Default wildcard string used in wxFileDialog corresponding to all files.
 
@@ -112,7 +117,7 @@ const char wxFileSelectorDefaultWildcardStr[];
     display of the filter choice set the corresponding wxSystemOptions before calling
     the file open dialog:
     @code
-         wxSystemOptions::SetOption('osx.openfiledialog.always-show-types', 1)
+         wxSystemOptions::SetOption(wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES, 1)
     @endcode
     But in contrast to Windows and Unix, where the file type choice filters only
     the selected files, on Mac macOS even in this case the dialog shows all files
