@@ -7,6 +7,12 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(NOT wxUSE_LUNASVG STREQUAL "OFF")
+    if(NOT (CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR wxHAVE_CXX17))
+        message(FATAL_ERROR "LunaSVG requires at least C++17")
+    endif()
+endif()
+
 if(wxUSE_LUNASVG STREQUAL "ON" OR wxUSE_LUNASVG STREQUAL "builtin")
     wx_add_builtin_library(wxlunasvg
         3rdparty/lunasvg/source/lunasvg.cpp
