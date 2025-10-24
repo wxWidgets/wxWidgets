@@ -185,6 +185,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/utils_base.mm
     src/osx/core/secretstore.cpp
     src/osx/core/stdpaths.mm
+    src/osx/volume.mm
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/osx/core/cfdataref.h
@@ -207,11 +208,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <!-- Base files used by OS X ports (not Carbon) -->
 <set var="BASE_OSX_SHARED_SRC" hints="files">
-    src/osx/core/mimetype.cpp
     $(BASE_COREFOUNDATION_SRC)
     $(BASE_UNIX_AND_DARWIN_SRC)
     src/osx/fswatcher_fsevents.cpp
     src/osx/core/uilocale.mm
+    src/osx/core/mimetype.cpp
 </set>
 <set var="BASE_OSX_SHARED_HDR" hints="files">
     $(BASE_COREFOUNDATION_HDR)
@@ -222,7 +223,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_AND_GUI_OSX_COCOA_SRC" hints="files">
     src/osx/cocoa/utils.mm
-    src/osx/volume.mm
 </set>
 
 <!-- Base files used by non-wxMac OS X builds -->

@@ -141,6 +141,7 @@ BASE_COREFOUNDATION_SRC =
     src/osx/core/stdpaths.mm
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
+    src/osx/volume.mm
 
 BASE_COREFOUNDATION_HDR =
     wx/osx/carbon/region.h
@@ -176,7 +177,6 @@ BASE_OSX_SHARED_HDR =
 # Base and GUI files used by OS X
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
-    src/osx/volume.mm
 
 # files used by non-wxMac OS X builds
 BASE_OSX_NOTWXMAC_SRC =
