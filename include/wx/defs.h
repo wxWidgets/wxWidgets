@@ -2851,7 +2851,27 @@ typedef WX_UIPasteboard WXOSXPasteboard;
 
 #endif
 
-#endif /* __WXMAC__ */
+// Define a for loop macro to iterate over Objective-C collections that works also for
+// compilers like gcc that does not support the "for .. in" syntax.
+
+#if OBJC_API_VERSION >= 2
+
+    #define wxOBJC_FOR_LOOP(var, collection) \
+        for (var in collection) \
+        {
+
+#else
+
+    #define wxOBJC_FOR_LOOP(var, collection) \
+        for (NSUInteger wx_i = 0; wx_i < [collection count]; wx_i++) \
+        { var = [collection objectAtIndex:wx_i];
+
+#endif
+
+#define wxOBJC_END_FOR_LOOP \
+    }
+
+#endif /* __DARWIN__ */
 
 /* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */
 #if defined(__WIN32__)
