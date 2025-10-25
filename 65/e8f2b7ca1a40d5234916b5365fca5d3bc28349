@@ -1,0 +1,1 @@
+wxAll (GUI): Implement automatic wrapping of wxStaticText (Robert Roebling, #25753).
