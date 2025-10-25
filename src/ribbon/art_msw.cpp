@@ -543,8 +543,8 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     copy->m_tab_hover_label_colour = m_tab_hover_label_colour;
     copy->m_tab_separator_colour = m_tab_separator_colour;
     copy->m_tab_separator_gradient_colour = m_tab_separator_gradient_colour;
-    copy->m_tab_active_background_colour = m_tab_hover_background_colour;
-    copy->m_tab_active_background_gradient_colour = m_tab_hover_background_gradient_colour;
+    copy->m_tab_active_background_colour = m_tab_active_background_colour;
+    copy->m_tab_active_background_gradient_colour = m_tab_active_background_gradient_colour;
     copy->m_tab_hover_background_colour = m_tab_hover_background_colour;
     copy->m_tab_hover_background_gradient_colour = m_tab_hover_background_gradient_colour;
     copy->m_tab_hover_background_top_colour = m_tab_hover_background_top_colour;
@@ -840,7 +840,7 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id) const
         case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_TOP_COLOUR:
             return m_gallery_button_hover_background_top_brush.GetColour();
         case wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR:
-            return m_gallery_button_face_colour;
+            return m_gallery_button_hover_face_colour;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_COLOUR:
             return m_gallery_button_active_background_colour;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_GRADIENT_COLOUR:

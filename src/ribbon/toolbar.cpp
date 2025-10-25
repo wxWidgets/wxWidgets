@@ -1176,15 +1176,16 @@ void wxRibbonToolBar::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
             if(m_active_tool->kind == wxRIBBON_BUTTON_TOGGLE)
             {
                 m_active_tool->state ^=
-                    wxRIBBON_BUTTONBAR_BUTTON_TOGGLED;
+                    wxRIBBON_TOOLBAR_TOOL_TOGGLED;
                 notification.SetInt(m_active_tool->state &
-                    wxRIBBON_BUTTONBAR_BUTTON_TOGGLED);
+                    wxRIBBON_TOOLBAR_TOOL_TOGGLED);
             }
             notification.SetEventObject(this);
             notification.SetBar(this);
             ProcessEvent(notification);
 
-            wxStaticCast(m_parent, wxRibbonPanel)->HideIfExpanded();
+            wxCHECK_RET(wxDynamicCast(GetParent(), wxRibbonPanel), "pointer of wrong type?");
+            static_cast<wxRibbonPanel*>(GetParent())->HideIfExpanded();
         }
 
         // Notice that m_active_tool could have been reset by the event handler

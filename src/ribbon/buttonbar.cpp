@@ -99,6 +99,8 @@ public:
                     wxBitmap bitmap_small,
                     wxBitmap bitmap_small_disabled)
     {
+        wxCHECK_RET(ribbon, "Ribbon bar not set; can't register button images yet!");
+
         if(!bitmap_large.IsOk())
         {
             bitmap_large = MakeResizedBitmap(bitmap_small, bitmap_size_large);
