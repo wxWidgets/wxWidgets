@@ -28,7 +28,7 @@ jobs:
         - name: wxGTK on macOS
           runner: macos-latest
           arch: arm64
-          configure_flags: --disable-uiactionsim --with-cxx=11 --without-liblzma --enable-debug --disable-sys-libs --with-gtk=3 --with-opengl=no --enable-detect_sm=no
+          configure_flags: --disable-uiactionsim --with-cxx=11 --enable-debug --disable-sys-libs --with-gtk=3 --with-opengl=no --enable-detect_sm=no
           skip_samples: true
           skip_testing: true
           allow_warnings: true
