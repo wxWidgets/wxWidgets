@@ -267,6 +267,7 @@ All (GUI):
 - Fix calling wxDataViewCtrl::Collapse() from event handler (#25631).
 - Fix selecting columns in wxGrid with mouse (Dietmar Schwertberger, #25884).
 - Improve wxActivityIndicator dots colour contrast with background (#25405).
+- Update wxGenericTreeCtrl item height after changing its font (#16428).
 
 wxGTK:
 

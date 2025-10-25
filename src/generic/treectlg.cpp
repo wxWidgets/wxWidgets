@@ -1336,6 +1336,8 @@ bool wxGenericTreeCtrl::SetFont( const wxFont &font )
     m_normalFont = font;
     m_boldFont = m_normalFont.Bold();
 
+    CalculateLineHeight();
+
     if (m_anchor)
         m_anchor->RecursiveResetTextSize();
 
