@@ -24,6 +24,9 @@
 
 #include "wx/treectrl.h"
 #include "wx/imaglist.h"
+#include "wx/dcclient.h"
+#include "wx/string.h"
+#include <algorithm>
 
 extern WXDLLEXPORT_DATA(const char) wxTreeCtrlNameStr[] = "treeCtrl";
 
@@ -201,11 +204,12 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
 }
 
 static void
-wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
+wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size, int depth)
 {
     wxRect rect;
 
-    if ( treeCtrl->GetBoundingRect(id, rect, true /* just the item */) )
+    if ( treeCtrl->GetBoundingRect(id, rect, true /* just the item */)
+         && !rect.IsEmpty() ) // check for valid rect
     {
         // Translate to logical position so we get the full extent
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
@@ -215,13 +219,33 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
 
         size.IncTo(wxSize(rect.GetRight(), rect.GetBottom()));
     }
+    else if (id != treeCtrl->GetRootItem())
+    {
+        // Estimate width for collapsed (invisible) node
+        wxString label = treeCtrl->GetItemText(id);
+        wxInfoDC dc(const_cast<wxTreeCtrlBase*>(treeCtrl));
+        wxSize textSize = dc.GetTextExtent(label);
+        int indent = treeCtrl->GetIndent();
+        wxSize iconSize;
+        int imageIndex = treeCtrl->GetItemImage(id);
+        if ( treeCtrl->HasImages() && imageIndex != wxTreeCtrl::NO_IMAGE )
+            iconSize = treeCtrl->GetImageLogicalSize(treeCtrl, imageIndex);
+        int height = std::max(iconSize.GetHeight(), textSize.GetHeight());
+        int extraPadding = 0;
+#if defined(__WXMSW__)
+        // On Windows there should be some extra space to the right of the text
+        extraPadding = indent / 2;
+#endif
+        int totalWidth = indent * depth + iconSize.GetWidth() + textSize.GetWidth() + extraPadding;
+        size.IncTo(wxSize(totalWidth, height));
+    }
 
     wxTreeItemIdValue cookie;
     for ( wxTreeItemId item = treeCtrl->GetFirstChild(id, cookie);
           item.IsOk();
           item = treeCtrl->GetNextChild(id, cookie) )
     {
-        wxGetBestTreeSize(treeCtrl, item, size);
+        wxGetBestTreeSize(treeCtrl, item, size, depth + 1);
     }
 }
 
@@ -258,7 +282,7 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
         // iterate over all items recursively
         wxTreeItemId idRoot = GetRootItem();
         if ( idRoot.IsOk() )
-            wxGetBestTreeSize(this, idRoot, size);
+            wxGetBestTreeSize(this, idRoot, size, 0);
     }
 
     // need some minimal size even for empty tree
