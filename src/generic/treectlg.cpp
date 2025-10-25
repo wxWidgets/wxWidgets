@@ -248,10 +248,10 @@ public:
         { m_children.Insert(child, index); }
 
     // calculate and cache the item size using either the provided DC (which is
-    // supposed to have wxGenericTreeCtrl::m_normalFont selected into it!) or a
-    // wxClientDC on the control window
+    // supposed to already have wxGenericTreeCtrl font selected into it!) or a
+    // wxInfoDC associated with the control
     void CalculateSize(wxGenericTreeCtrl *control, wxReadOnlyDC& dc)
-        { DoCalculateSize(control, dc, true /* dc uses normal font */); }
+        { DoCalculateSize(control, dc); }
     void CalculateSize(wxGenericTreeCtrl *control);
 
     void GetSize( int &x, int &y, const wxGenericTreeCtrl* );
@@ -316,12 +316,7 @@ public:
 private:
     // calculate the size of this item, i.e. set m_width, m_height and
     // m_widthText and m_heightText properly
-    //
-    // if dcUsesNormalFont is true, the current dc font must be the normal tree
-    // control font
-    void DoCalculateSize(wxGenericTreeCtrl *control,
-                         wxReadOnlyDC& dc,
-                         bool dcUsesNormalFont);
+    void DoCalculateSize(wxGenericTreeCtrl *control, wxReadOnlyDC& dc);
 
     // since there can be very many of these, we save size by chosing
     // the smallest representation for the elements and by ordering
@@ -848,42 +843,29 @@ void wxGenericTreeItem::CalculateSize(wxGenericTreeCtrl* control)
         return;
 
     wxInfoDC dc(control);
-    DoCalculateSize(control, dc, false /* normal font not used */);
+    DoCalculateSize(control, dc);
 }
 
 void
 wxGenericTreeItem::DoCalculateSize(wxGenericTreeCtrl* control,
-                                   wxReadOnlyDC& dc,
-                                   bool dcUsesNormalFont)
+                                   wxReadOnlyDC& dc)
 {
     if ( m_width != 0 ) // Size known, nothing to do
         return;
 
     if ( m_widthText == -1 )
     {
-        bool fontChanged;
+        bool fontChanged = false;
         if ( SetFont(control, dc) )
         {
             fontChanged = true;
-        }
-        else // we have no special font
-        {
-           if ( !dcUsesNormalFont )
-           {
-               // but we do need to ensure that the normal font is used: notice
-               // that this doesn't count as changing the font as we don't need
-               // to restore it
-               dc.SetFont(control->m_normalFont);
-           }
-
-           fontChanged = false;
         }
 
         dc.GetTextExtent( GetText(), &m_widthText, &m_heightText );
 
         // restore normal font if the DC used it previously and we changed it
         if ( fontChanged )
-             dc.SetFont(control->m_normalFont);
+             dc.SetFont(control->GetFont());
     }
 
     int text_h = m_heightText + 2;
@@ -1062,12 +1044,7 @@ void wxGenericTreeCtrl::InitVisualAttributes()
 
     m_dottedPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT), 1, wxPENSTYLE_DOT);
 
-#if defined(__WXOSX__)
-    m_normalFont = wxFont(wxOSX_SYSTEM_FONT_VIEWS);
-#else
-    m_normalFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-#endif
-    m_boldFont = m_normalFont.Bold();
+    m_boldFont = m_font.Bold();
 
     m_indent = 10;
     m_spacing = 10;
@@ -1315,8 +1292,9 @@ bool wxGenericTreeCtrl::SetFont( const wxFont &font )
 
     m_hasExplicitFont = true;
 
-    m_normalFont = font;
-    m_boldFont = m_normalFont.Bold();
+    m_boldFont = m_font.Bold();
+
+    CalculateLineHeight();
 
     if (m_anchor)
         m_anchor->RecursiveResetTextSize();
@@ -2703,7 +2681,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                  (wxCoord)(item->GetY() + extraH));
 
     // restore normal font
-    dc.SetFont( m_normalFont );
+    dc.SetFont( m_font );
 
     if (item == m_dndEffectItem)
     {
@@ -3030,7 +3008,6 @@ void wxGenericTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ( !m_anchor)
         return;
 
-    dc.SetFont( m_normalFont );
     dc.SetPen( m_dottedPen );
 
     int y = 2;
@@ -4034,8 +4011,6 @@ void wxGenericTreeCtrl::CalculatePositions()
     wxInfoDC dc(this);
     PrepareDC( dc );
 
-    dc.SetFont( m_normalFont );
-
     int y = 2;
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion
 }
@@ -4181,7 +4156,11 @@ wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     wxVisualAttributes attr;
     attr.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
     attr.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
-    attr.font  = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+#if defined(__WXOSX__)
+    attr.font = wxFont(wxOSX_SYSTEM_FONT_VIEWS);
+#else
+    attr.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+#endif
     return attr;
 #endif
 }
