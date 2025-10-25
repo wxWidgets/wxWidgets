@@ -1062,12 +1062,7 @@ void wxGenericTreeCtrl::InitVisualAttributes()
 
     m_dottedPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT), 1, wxPENSTYLE_DOT);
 
-#if defined(__WXOSX__)
-    m_normalFont = wxFont(wxOSX_SYSTEM_FONT_VIEWS);
-#else
-    m_normalFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-#endif
-    m_boldFont = m_normalFont.Bold();
+    m_boldFont = m_font.Bold();
 
     m_indent = 10;
     m_spacing = 10;
@@ -4180,7 +4175,11 @@ wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     wxVisualAttributes attr;
     attr.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
     attr.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
-    attr.font  = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+#if defined(__WXOSX__)
+    attr.font = wxFont(wxOSX_SYSTEM_FONT_VIEWS);
+#else
+    attr.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+#endif
     return attr;
 #endif
 }
