@@ -1,0 +1,1 @@
+wxOSX: Use threaded animation for wxGA_SMOOTH (Will Cosgrove, #25906).
