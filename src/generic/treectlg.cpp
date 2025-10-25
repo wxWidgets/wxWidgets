@@ -248,7 +248,7 @@ public:
         { m_children.Insert(child, index); }
 
     // calculate and cache the item size using either the provided DC (which is
-    // supposed to have wxGenericTreeCtrl::m_normalFont selected into it!) or a
+    // supposed to already have wxGenericTreeCtrl font selected into it!) or a
     // wxInfoDC associated with the control
     void CalculateSize(wxGenericTreeCtrl *control, wxReadOnlyDC& dc)
         { DoCalculateSize(control, dc); }
@@ -865,7 +865,7 @@ wxGenericTreeItem::DoCalculateSize(wxGenericTreeCtrl* control,
 
         // restore normal font if the DC used it previously and we changed it
         if ( fontChanged )
-             dc.SetFont(control->m_normalFont);
+             dc.SetFont(control->GetFont());
     }
 
     int text_h = m_heightText + 2;
@@ -1292,8 +1292,7 @@ bool wxGenericTreeCtrl::SetFont( const wxFont &font )
 
     m_hasExplicitFont = true;
 
-    m_normalFont = font;
-    m_boldFont = m_normalFont.Bold();
+    m_boldFont = m_font.Bold();
 
     CalculateLineHeight();
 
@@ -2682,7 +2681,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                  (wxCoord)(item->GetY() + extraH));
 
     // restore normal font
-    dc.SetFont( m_normalFont );
+    dc.SetFont( m_font );
 
     if (item == m_dndEffectItem)
     {
