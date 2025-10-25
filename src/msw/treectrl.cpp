@@ -48,7 +48,7 @@
 // --------------------------------
 
 // get HTREEITEM from wxTreeItemId
-#define HITEM(item)     ((HTREEITEM)(((item).m_pItem)))
+#define HITEM(item)     ((HTREEITEM)(((item).GetID())))
 
 
 // older SDKs are missing these
@@ -1231,7 +1231,7 @@ wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
 
-    const auto it = m_attrs.find(item.m_pItem);
+    const auto it = m_attrs.find(item.GetID());
     return it == m_attrs.end() ? wxNullColour : it->second->GetTextColour();
 }
 
@@ -1239,7 +1239,7 @@ wxColour wxTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
 
-    const auto it = m_attrs.find(item.m_pItem);
+    const auto it = m_attrs.find(item.GetID());
     return it == m_attrs.end() ? wxNullColour : it->second->GetBackgroundColour();
 }
 
@@ -1247,18 +1247,18 @@ wxFont wxTreeCtrl::GetItemFont(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxNullFont, wxT("invalid tree item") );
 
-    const auto it = m_attrs.find(item.m_pItem);
+    const auto it = m_attrs.find(item.GetID());
     return it == m_attrs.end() ? wxNullFont : it->second->GetFont();
 }
 
 wxItemAttr* wxTreeCtrl::DoGetAttrPtr(const wxTreeItemId& item)
 {
     wxItemAttr *attr;
-    const auto it = m_attrs.find(item.m_pItem);
+    const auto it = m_attrs.find(item.GetID());
     if ( it == m_attrs.end() )
     {
         attr = new wxItemAttr;
-        m_attrs[item.m_pItem] = std::unique_ptr<wxItemAttr>(attr);
+        m_attrs[item.GetID()] = std::unique_ptr<wxItemAttr>(attr);
     }
     else
     {
@@ -1452,7 +1452,7 @@ wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
 
     wxTreeItemId item(hitem);
 
-    cookie = item.m_pItem;
+    cookie = item.GetID();
 
     return item;
 }

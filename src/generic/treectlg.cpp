@@ -370,7 +370,7 @@ private:
 // Get wxGenericTreeItem from wxTreeItemId.
 static inline wxGenericTreeItem* GetItemPtr(const wxTreeItemId& item)
 {
-    return static_cast<wxGenericTreeItem*>(item.m_pItem);
+    return static_cast<wxGenericTreeItem*>(item.GetID());
 }
 
 // translate the key or mouse event flags to the type of selection we're
