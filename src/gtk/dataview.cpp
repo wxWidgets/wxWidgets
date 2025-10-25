@@ -1655,7 +1655,14 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
 
     wxDataViewCustomRenderer::GTKRenderParams renderParams;
+    wxRect rect(wxRectFromGDKRect(cell_area));
 #ifdef __WXGTK3__
+    const bool isRTL = wxWindow::GTKGetLayout(widget);
+    if (isRTL)
+    {
+        cairo_scale(cr, -1, 1);
+        rect.x = -rect.x - rect.width;
+    }
     renderParams.cr = cr;
 #else
     renderParams.window = window;
@@ -1666,7 +1673,6 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     renderParams.flags = flags;
     cell->GTKSetRenderParams(&renderParams);
 
-    wxRect rect(wxRectFromGDKRect(cell_area));
     int xpad, ypad;
     gtk_cell_renderer_get_padding(renderer, &xpad, &ypad);
     rect = rect.Deflate(xpad, ypad);
@@ -1757,6 +1763,13 @@ gtk_wx_cell_renderer_activate(
         {
             wxMouseEvent mouse_event(wxEVT_LEFT_DOWN);
             InitMouseEvent(ctrl, mouse_event, button_event);
+
+            if (ctrl->GetLayoutDirection() == wxLayout_RightToLeft)
+            {
+                int w;
+                ctrl->GetClientSize(&w, nullptr);
+                renderrect.x = w - (renderrect.x + renderrect.width);
+            }
 
             mouse_event.m_x -= renderrect.x;
             mouse_event.m_y -= renderrect.y;
@@ -2820,6 +2833,16 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text,
     cell_area.x += xoffset;
     cell_area.width -= xoffset;
 
+#ifdef __WXGTK3__
+    const bool isRTL = wxWindow::GTKGetLayout(m_renderParams->widget);
+    if (isRTL)
+    {
+        cairo_save(m_renderParams->cr);
+        cairo_scale(m_renderParams->cr, -1, 1);
+        cell_area.x = -cell_area.x - cell_area.width;
+    }
+#endif // __WXGTK3__
+
     gtk_cell_renderer_render( GTK_CELL_RENDERER(textRenderer),
 #ifdef __WXGTK3__
         m_renderParams->cr,
@@ -2833,6 +2856,11 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text,
         m_renderParams->expose_area,
 #endif
         GtkCellRendererState(m_renderParams->flags));
+
+#ifdef __WXGTK3__
+    if (isRTL)
+        cairo_restore(m_renderParams->cr);
+#endif
 }
 
 bool wxDataViewCustomRenderer::Init(wxDataViewCellMode mode, int align)
@@ -2871,7 +2899,7 @@ wxDC *wxDataViewCustomRenderer::GetDC()
         wxASSERT(m_renderParams);
         cairo_t* cr = m_renderParams->cr;
         wxASSERT(cr && cairo_status(cr) == 0);
-        m_dc = new wxGTKCairoDC(cr, ctrl);
+        m_dc = new wxGTKCairoDC(cr, ctrl, ctrl->GetLayoutDirection());
 #else
         if (ctrl == nullptr)
             return nullptr;
@@ -4772,6 +4800,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
+    GTKSetLayout(m_treeview, GetLayoutDirection());
 
     g_signal_connect_after(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_treeview)),
         "changed", G_CALLBACK(wxdataview_selection_changed_callback), this);

@@ -404,59 +404,33 @@ bool wxMSWDCImpl::DoGetClippingRect(wxRect& rect) const
 }
 
 // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
-void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
+void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn)
 {
     wxCHECK_RET( hrgn, wxT("invalid clipping region") );
 
-    HRGN hRgnRTL = nullptr;
-    // DC with enabled RTL layout needs a mirrored region
-    // so we have to create such a region temporarily.
-    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    if ( m_clipping )
     {
-        DWORD bufLen = ::GetRegionData(hrgn, 0, nullptr);  // Get the storage size
-        wxScopedArray<char> pDataBuf(bufLen);
-        RGNDATA* const rgndata = reinterpret_cast<RGNDATA*>(pDataBuf.get());
-        if ( ::GetRegionData(hrgn, bufLen, rgndata) != bufLen )
+        // note that we combine the new clipping region with the existing one: this
+        // is compatible with what the other ports do and is the documented
+        // behaviour now (starting with 2.3.3)
+        if ( ::ExtSelectClipRgn(GetHdc(), (HRGN)hrgn, RGN_AND) == ERROR )
         {
-            wxLogLastError("GetRegionData");
-            return;
-        }
-        int dcw, dch;
-        DoGetSize(&dcw, &dch);
-        XFORM tr;
-        tr.eM11 = -1;
-        tr.eM12 = 0;
-        tr.eM21 = 0;
-        tr.eM22 = 1;
-        // For region created directly with device coordinates
-        // (regions passed to DoSetDeviceClippingRegion) we have to
-        // apply additional 1-pixel offset because original right edge
-        // passed to e.g. CreateRectRgn() (in wxRegion) is actually
-        // not included in the clipping area but this edge will become
-        // a left edge after mirroring and therefore its x-coordinates
-        // shoulde be adjusted.
-        tr.eDx = doRtlOffset ? dcw : dcw-1; // max X
-        tr.eDy = 0;
-        hRgnRTL = ::ExtCreateRegion(&tr, bufLen, rgndata);
-        if ( !hRgnRTL )
-        {
-            wxLogLastError("ExtCreateRegion");
+            wxLogLastError(wxT("ExtSelectClipRgn"));
+
             return;
         }
     }
-    AutoHRGN rgnRTL(hRgnRTL);
-
-    // note that we combine the new clipping region with the existing one: this
-    // is compatible with what the other ports do and is the documented
-    // behaviour now (starting with 2.3.3)
-    if ( ::ExtSelectClipRgn(GetHdc(), (HRGN)rgnRTL ? (HRGN)rgnRTL : (HRGN)hrgn, RGN_AND) == ERROR )
+    else
     {
-        wxLogLastError(wxT("ExtSelectClipRgn"));
+        if ( ::SelectClipRgn(GetHdc(), (HRGN)hrgn) == ERROR )
+        {
+            wxLogLastError(wxT("SelectClipRgn"));
 
-        return;
+            return;
+        }
+
+        m_clipping = true;
     }
-
-    m_clipping = true;
 
     UpdateClipBox();
 }
@@ -487,18 +461,28 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
     // 4 corners of the rectangle to create a polygonal clipping region
     // in device coordinates.
     POINT rect[4];
-    wxPoint p = LogicalToDevice(x, y);
-    rect[0].x = p.x;
-    rect[0].y = p.y;
-    p = LogicalToDevice(x + w, y);
-    rect[1].x = p.x;
-    rect[1].y = p.y;
-    p = LogicalToDevice(x + w, y + h);
-    rect[2].x = p.x;
-    rect[2].y = p.y;
-    p = LogicalToDevice(x, y + h);
-    rect[3].x = p.x;
-    rect[3].y = p.y;
+    {
+        // Forcing LTR layout to calculate _rect_, otherwise the region created
+        // by CreatePolygonRgn() will not be correct in RTL layout.
+        const auto oldLayoutDir = GetLayoutDirection();
+        SetLayoutDirection(wxLayout_LeftToRight);
+
+        wxPoint p = LogicalToDevice(x, y);
+        rect[0].x = p.x;
+        rect[0].y = p.y;
+        p = LogicalToDevice(x + w, y);
+        rect[1].x = p.x;
+        rect[1].y = p.y;
+        p = LogicalToDevice(x + w, y + h);
+        rect[2].x = p.x;
+        rect[2].y = p.y;
+        p = LogicalToDevice(x, y + h);
+        rect[3].x = p.x;
+        rect[3].y = p.y;
+
+        SetLayoutDirection(oldLayoutDir);
+    }
+
     HRGN hrgn = ::CreatePolygonRgn(rect, WXSIZEOF(rect), WINDING);
     if ( !hrgn )
     {
@@ -506,7 +490,7 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
     }
     else
     {
-        SetClippingHrgn((WXHRGN)hrgn, false);
+        SetClippingHrgn((WXHRGN)hrgn);
 
         ::DeleteObject(hrgn);
     }
@@ -514,7 +498,7 @@ void wxMSWDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h
 
 void wxMSWDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
-    SetClippingHrgn(region.GetHRGN(), true);
+    SetClippingHrgn(region.GetHRGN());
 }
 
 void wxMSWDCImpl::DestroyClippingRegion()
