@@ -3032,7 +3032,6 @@ void wxGenericTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ( !m_anchor)
         return;
 
-    dc.SetFont( m_normalFont );
     dc.SetPen( m_dottedPen );
 
     int y = 2;
@@ -4035,8 +4034,6 @@ void wxGenericTreeCtrl::CalculatePositions()
 
     wxInfoDC dc(this);
     PrepareDC( dc );
-
-    dc.SetFont( m_normalFont );
 
     int y = 2;
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion
