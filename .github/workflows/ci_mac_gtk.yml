@@ -179,12 +179,10 @@ jobs:
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS" samples
   
       - name: Installing
-        if: matrix.skip_testing != true
         run: |
           make install
   
       - name: Testing installation
-        if: matrix.skip_testing != true
         run: |
           make -C samples/minimal -f makefile.unx clean
           make -C samples/minimal -f makefile.unx WX_CONFIG=${{ github.workspace }}/localbin_${{ matrix.arch }}/bin/wx-config $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
