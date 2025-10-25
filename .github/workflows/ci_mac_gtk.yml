@@ -43,7 +43,7 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@main
       
-      - name: Install gtk+3
+      - name: Install GTK 3
         run: brew install gtk+3
 
       - name: Set environment variables
@@ -174,7 +174,7 @@ jobs:
           ./test_gui.app/Contents/MacOS/test_gui $wx_tests_selection
   
       - name: Building samples
-        if: matrix.skip_testing != true && matrix.skip_samples != true
+        if: matrix.skip_samples != true
         run: |
           make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS" samples
   
