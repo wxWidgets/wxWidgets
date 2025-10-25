@@ -232,7 +232,7 @@ bool wxDragImage::Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
     m_hImageList = (WXHIMAGELIST)
-        TreeView_CreateDragImage(GetHwndOf(&treeCtrl), (HTREEITEM) id.m_pItem);
+        TreeView_CreateDragImage(GetHwndOf(&treeCtrl), (HTREEITEM) id.GetID());
     if ( !m_hImageList )
     {
         // fall back on just the item text if there is no image
