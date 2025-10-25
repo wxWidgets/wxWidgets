@@ -20,6 +20,11 @@ enum
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
+// set this system option to 1 in order to always show the filetypes popup in
+// file open dialogs if possible
+
+#define wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES wxT("osx.openfiledialog.always-show-types")
+
 /**
     Default wildcard string used in wxFileDialog corresponding to all files.
 
@@ -117,7 +122,10 @@ const char wxFileSelectorDefaultWildcardStr[];
     But in contrast to Windows and Unix, where the file type choice filters only
     the selected files, on Mac macOS even in this case the dialog shows all files
     matching all file types. The files which does not match the currently selected
-    file type are greyed out and are not selectable.
+    file type are greyed out and are not selectable. Also, currently the Mac macOS
+    implementation is bugged, causing all filters after the first to also have the
+    first filter applied, so ensure your first filter is a superset of all other
+    wildcard filters to avoid any issues.
 
 
     @section filedialog_customize Dialog Customization
