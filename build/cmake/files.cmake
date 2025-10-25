@@ -2908,11 +2908,13 @@ set(STC_CMN_SRC
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
     src/xrc/xh_styledtextctrl.cpp
+    src/stc/minimap.cpp
 )
 
 set(STC_CMN_HDR
     wx/stc/stc.h
     wx/xrc/xh_styledtextctrl.h
+    wx/stc/minimap.h
 )
 
 set(STC_OSX_COCOA_SRC

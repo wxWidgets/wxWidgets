@@ -357,6 +357,15 @@ bool ScintillaWX::HaveMouseCapture() {
 
 
 void ScintillaWX::ScrollText(Sci::Line linesToMove) {
+    if (stc->m_isCustomDrawn) {
+        // We can't scroll the window as this would scroll custom-drawn content
+        // too corrupting the display, so we have to always do a full redraw in
+        // this case. It doesn't make any visible difference due to the use of
+        // double buffering anyhow.
+        Redraw();
+        return;
+    }
+
     int dy = vs.lineHeight * (linesToMove);
     stc->ScrollWindow(0, dy);
 }

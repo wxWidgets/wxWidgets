@@ -38,6 +38,10 @@
 #include "edit.h"        // Edit module
 #include "prefs.h"       // Prefs
 
+// Used for mini map window.
+#include "wx/stc/minimap.h"
+#include "wx/splitter.h"
+
 //----------------------------------------------------------------------------
 // resources
 //----------------------------------------------------------------------------
@@ -96,8 +100,11 @@ private:
     AppFrame* m_frame;
 
     wxFrame* MinimalEditor();
+    void ShowDocumentMap(wxWindow* parent);
+
 protected:
     void OnMinimalEditor(wxCommandEvent&);
+    void OnDocumentMap(wxCommandEvent&);
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -186,6 +193,7 @@ wxIMPLEMENT_APP(App);
 
 wxBEGIN_EVENT_TABLE(App, wxApp)
 EVT_MENU(myID_WINDOW_MINIMAL, App::OnMinimalEditor)
+EVT_MENU(myID_WINDOW_DOCMAP, App::OnDocumentMap)
 wxEND_EVENT_TABLE()
 
 //----------------------------------------------------------------------------
@@ -467,7 +475,7 @@ void AppFrame::CreateMenu ()
     menuFile->Append (wxID_SAVEAS, _("Save &as ..\tCtrl+Shift+S"));
     menuFile->Append (wxID_CLOSE, _("&Close\tCtrl+W"));
     menuFile->AppendSeparator();
-    menuFile->Append (myID_PROPERTIES, _("Proper&ties ..\tCtrl+I"));
+    menuFile->Append (myID_PROPERTIES, _("Proper&ties ..\tCtrl+Shift+T"));
     menuFile->AppendSeparator();
     menuFile->Append (wxID_PRINT_SETUP, _("Print Set&up .."));
     menuFile->Append (wxID_PREVIEW, _("Print Pre&view\tCtrl+Shift+P"));
@@ -498,8 +506,8 @@ void AppFrame::CreateMenu ()
     menuEdit->Append (myID_GOTO, _("&Goto\tCtrl+G"));
     menuEdit->Enable (myID_GOTO, false);
     menuEdit->AppendSeparator();
-    menuEdit->Append (myID_INDENTINC, _("&Indent increase\tTab"));
-    menuEdit->Append (myID_INDENTRED, _("I&ndent reduce\tShift+Tab"));
+    menuEdit->Append (myID_INDENTINC, _("&Indent increase\tCtrl+I"));
+    menuEdit->Append (myID_INDENTRED, _("I&ndent reduce\tShift+Ctrl+I"));
     menuEdit->AppendSeparator();
     menuEdit->Append (wxID_SELECTALL, _("&Select all\tCtrl+A"));
     menuEdit->Append (myID_SELECTLINE, _("Select &line\tCtrl+L"));
@@ -609,6 +617,7 @@ void AppFrame::CreateMenu ()
     // Window menu
     wxMenu *menuWindow = new wxMenu;
     menuWindow->Append(myID_WINDOW_MINIMAL, _("&Minimal editor"));
+    menuWindow->Append(myID_WINDOW_DOCMAP, _("Document &map\tF2"));
 
     // Help menu
     wxMenu *menuHelp = new wxMenu;
@@ -878,3 +887,45 @@ void App::OnMinimalEditor(wxCommandEvent& WXUNUSED(event))
     MinimalEditor();
 }
 
+void App::ShowDocumentMap(wxWindow* parent)
+{
+    wxDialog dialog(parent, wxID_ANY, "Editor with Document Map",
+                    wxDefaultPosition,
+                    wxWindow::FromDIP(wxSize(800, 600), m_frame),
+                    wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+
+    auto* const splitter = new wxSplitterWindow(&dialog, wxID_ANY);
+
+    auto* const edit = new Edit(splitter);
+    edit->LoadFile("stctest.cpp");
+
+    // Show line numbers in the margin, which are hidden by default.
+    edit->ToggleLineNumbers();
+
+    edit->SetWrapMode(wxSTC_WRAP_WORD);
+    edit->SetWrapVisualFlags(wxSTC_WRAPVISUALFLAG_END);
+
+    auto* const map = new wxStyledTextCtrlMiniMap(splitter, edit);
+
+    // Create a marker just to show that it is shown in the map as well.
+    //
+    // Note that this should be done after creating the map, markers defined
+    // before creating it wouldn't be shown in it.
+    edit->MarkerDefine(3, wxSTC_MARK_ROUNDRECT, *wxRED, *wxRED);
+    edit->MarkerAdd(111, 3);
+
+    splitter->SplitVertically(edit, map);
+    splitter->SetMinimumPaneSize(dialog.FromDIP(10));
+
+    dialog.Bind(wxEVT_SIZE, [&](wxSizeEvent& event) {
+        splitter->SetSashPosition(-dialog.FromDIP(200));
+        event.Skip();
+    });
+
+    dialog.ShowModal();
+}
+
+void App::OnDocumentMap(wxCommandEvent& WXUNUSED(event))
+{
+    ShowDocumentMap(m_frame);
+}
