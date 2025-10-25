@@ -191,7 +191,7 @@ public:
 private:
     WX_NSURLSession m_session = nullptr;
     WX_wxWebSessionDelegate m_delegate;
-#if !wxOSX_USE_IPHONE
+#if !defined(wxOSX_USE_IPHONE) || !wxOSX_USE_IPHONE
     WX_NSURLComponents m_proxyURL = nullptr;
 #endif // !wxOSX_USE_IPHONE
     bool m_persistentStorageEnabled = false;

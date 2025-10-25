@@ -35,13 +35,22 @@
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
+
+#define NSURLVolumeLocalizedNameKey @"NSURLVolumeLocalizedNameKey"
+#define NSURLVolumeIsLocalKey @"NSURLVolumeIsLocalKey"
+#define NSURLVolumeIsReadOnlyKey @"NSURLVolumeIsReadOnlyKey"
+#define NSURLVolumeIsRemovableKey @"NSURLVolumeIsRemovableKey"
+
+#endif
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // wxFSVolume
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
 {
-    auto nativeVolumes = [[NSFileManager defaultManager]
+    NSArray* nativeVolumes = [[NSFileManager defaultManager]
                           mountedVolumeURLsIncludingResourceValuesForKeys:nil
                           options:NSVolumeEnumerationSkipHiddenVolumes];
 
@@ -56,13 +65,14 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
     }
     else
     {
-        for (NSURL* url in nativeVolumes)
+        wxOBJC_FOR_LOOP(NSURL* url, nativeVolumes)
         {
             wxFSVolumeBase volume(url.fileSystemRepresentation);
             int flags = volume.GetFlags();
             if ((flags & flagsSet) == flagsSet && !(flags & flagsUnset))
                 volumePaths.push_back(volume.GetName());
         }
+        wxOBJC_END_FOR_LOOP
     }
     return volumePaths;
 }
@@ -87,7 +97,7 @@ bool wxFSVolumeBase::Create(const wxString& name)
     m_volName = name;
 
     NSURL* url = [NSURL fileURLWithPath:wxCFStringRef(name).AsNSString()];
-    auto values = [url resourceValuesForKeys:@[NSURLVolumeLocalizedNameKey] error:nil];
+    NSDictionary* values = [url resourceValuesForKeys:@[NSURLVolumeLocalizedNameKey] error:nil];
     if (values)
     {
         m_isOk = true;
@@ -105,7 +115,7 @@ bool wxFSVolumeBase::IsOk() const
 wxFSVolumeKind wxFSVolumeBase::GetKind() const
 {
     NSURL* url = [NSURL fileURLWithPath:wxCFStringRef(GetName()).AsNSString()];
-    auto values = [url resourceValuesForKeys:@[NSURLVolumeIsLocalKey, NSURLVolumeIsReadOnlyKey] error:nil];
+    NSDictionary* values = [url resourceValuesForKeys:@[NSURLVolumeIsLocalKey, NSURLVolumeIsReadOnlyKey] error:nil];
 
     // Assume disk for local volumes
     if ([(NSNumber*)[values objectForKey:NSURLVolumeIsLocalKey] boolValue])
@@ -122,7 +132,7 @@ wxFSVolumeKind wxFSVolumeBase::GetKind() const
 int wxFSVolumeBase::GetFlags() const
 {
     NSURL* url = [NSURL fileURLWithPath:wxCFStringRef(GetName()).AsNSString()];
-    auto values = [url resourceValuesForKeys:@[NSURLVolumeIsRemovableKey, NSURLVolumeIsLocalKey, NSURLVolumeIsReadOnlyKey] error:nil];
+    NSDictionary* values = [url resourceValuesForKeys:@[NSURLVolumeIsRemovableKey, NSURLVolumeIsLocalKey, NSURLVolumeIsReadOnlyKey] error:nil];
     if (values)
     {
         // mounted status cannot be determined, assume mounted

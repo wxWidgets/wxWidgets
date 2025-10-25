@@ -115,6 +115,7 @@ set(BASE_COREFOUNDATION_SRC
     src/osx/core/strconv_cf.cpp
     src/osx/cocoa/utils_base.mm
     src/osx/core/stdpaths.mm
+    src/osx/volume.mm
 )
 
 set(BASE_COREFOUNDATION_HDR
@@ -137,11 +138,11 @@ set(BASE_COREFOUNDATION_HDR
 )
 
 set(BASE_OSX_SHARED_SRC
-    src/osx/core/mimetype.cpp
     src/osx/fswatcher_fsevents.cpp
     ${BASE_COREFOUNDATION_SRC}
     ${BASE_UNIX_AND_DARWIN_SRC}
     src/osx/core/uilocale.mm
+    src/osx/core/mimetype.cpp
 )
 
 set(BASE_OSX_SHARED_HDR
@@ -152,7 +153,6 @@ set(BASE_OSX_SHARED_HDR
 
 set(BASE_AND_GUI_OSX_COCOA_SRC
     src/osx/cocoa/utils.mm
-    src/osx/volume.mm
 )
 
 set(BASE_OSX_NOTWXMAC_SRC

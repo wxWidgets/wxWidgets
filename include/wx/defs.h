@@ -2754,22 +2754,44 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSData);
 DECLARE_WXCOCOA_OBJC_CLASS(NSMutableArray);
 DECLARE_WXCOCOA_OBJC_CLASS(NSString);
 DECLARE_WXCOCOA_OBJC_CLASS(NSObject);
+DECLARE_WXCOCOA_OBJC_CLASS(NSSet);
 
-#if wxOSX_USE_COCOA
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+
+DECLARE_WXCOCOA_OBJC_CLASS(NSBitmapImageRep);
+DECLARE_WXCOCOA_OBJC_CLASS(NSColor);
+DECLARE_WXCOCOA_OBJC_CLASS(NSFont);
+DECLARE_WXCOCOA_OBJC_CLASS(NSFontDescriptor);
+DECLARE_WXCOCOA_OBJC_CLASS(NSImage);
+DECLARE_WXCOCOA_OBJC_CLASS(NSSound);
+DECLARE_WXCOCOA_OBJC_CLASS(NSThread);
+
+typedef WX_NSColor WXColor;
+typedef WX_NSImage WXImage;
+
+#elif defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
+
+DECLARE_WXCOCOA_OBJC_CLASS(UIColor);
+DECLARE_WXCOCOA_OBJC_CLASS(UIImage);
+DECLARE_WXCOCOA_OBJC_CLASS(UIFont);
+
+typedef WX_UIColor WXColor;
+typedef WX_UIImage WXImage;
+
+#else
+
+#endif
+
+#ifdef __WXOSX_COCOA__
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
-DECLARE_WXCOCOA_OBJC_CLASS(NSBitmapImageRep);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBox);
 DECLARE_WXCOCOA_OBJC_CLASS(NSButton);
-DECLARE_WXCOCOA_OBJC_CLASS(NSColor);
 DECLARE_WXCOCOA_OBJC_CLASS(NSColorPanel);
 DECLARE_WXCOCOA_OBJC_CLASS(NSControl);
 DECLARE_WXCOCOA_OBJC_CLASS(NSCursor);
 DECLARE_WXCOCOA_OBJC_CLASS(NSEvent);
-DECLARE_WXCOCOA_OBJC_CLASS(NSFont);
-DECLARE_WXCOCOA_OBJC_CLASS(NSFontDescriptor);
 DECLARE_WXCOCOA_OBJC_CLASS(NSFontPanel);
-DECLARE_WXCOCOA_OBJC_CLASS(NSImage);
 DECLARE_WXCOCOA_OBJC_CLASS(NSLayoutManager);
 DECLARE_WXCOCOA_OBJC_CLASS(NSMenu);
 DECLARE_WXCOCOA_OBJC_CLASS(NSMenuExtra);
@@ -2778,14 +2800,12 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSNotification);
 DECLARE_WXCOCOA_OBJC_CLASS(NSPanel);
 DECLARE_WXCOCOA_OBJC_CLASS(NSResponder);
 DECLARE_WXCOCOA_OBJC_CLASS(NSScrollView);
-DECLARE_WXCOCOA_OBJC_CLASS(NSSound);
 DECLARE_WXCOCOA_OBJC_CLASS(NSStatusItem);
 DECLARE_WXCOCOA_OBJC_CLASS(NSTableColumn);
 DECLARE_WXCOCOA_OBJC_CLASS(NSTableView);
 DECLARE_WXCOCOA_OBJC_CLASS(NSTextContainer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSTextField);
 DECLARE_WXCOCOA_OBJC_CLASS(NSTextStorage);
-DECLARE_WXCOCOA_OBJC_CLASS(NSThread);
 DECLARE_WXCOCOA_OBJC_CLASS(NSWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(NSView);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLContext);
@@ -2803,36 +2823,27 @@ DECLARE_WXCOCOA_OBJC_CLASS(WKWebView);
 typedef WX_NSWindow WXWindow;
 typedef WX_NSEvent WXEvent;
 typedef WX_NSView WXWidget;
-typedef WX_NSColor WXColor;
-typedef WX_NSImage WXImage;
 typedef WX_NSMenu WXHMENU;
 typedef WX_NSOpenGLPixelFormat WXGLPixelFormat;
 typedef WX_NSOpenGLContext WXGLContext;
 typedef WX_NSPasteboard OSXPasteboard;
 typedef WX_WKWebView OSXWebViewPtr;
 
-#elif wxOSX_USE_IPHONE
+#elif defined(__WXOSX_IPHONE__)
 
-DECLARE_WXCOCOA_OBJC_CLASS(UIColor);
 DECLARE_WXCOCOA_OBJC_CLASS(UIMenu);
 DECLARE_WXCOCOA_OBJC_CLASS(UIMenuItem);
 DECLARE_WXCOCOA_OBJC_CLASS(UIWindow);
-DECLARE_WXCOCOA_OBJC_CLASS(UImage);
 DECLARE_WXCOCOA_OBJC_CLASS(UIView);
-DECLARE_WXCOCOA_OBJC_CLASS(UIFont);
-DECLARE_WXCOCOA_OBJC_CLASS(UIImage);
 DECLARE_WXCOCOA_OBJC_CLASS(UIEvent);
 DECLARE_WXCOCOA_OBJC_CLASS(UIPress);
 DECLARE_WXCOCOA_OBJC_CLASS(UIKey);
-DECLARE_WXCOCOA_OBJC_CLASS(NSSet);
 DECLARE_WXCOCOA_OBJC_CLASS(EAGLContext);
 DECLARE_WXCOCOA_OBJC_CLASS(UIPasteboard);
 
 typedef WX_UIWindow WXWindow;
 typedef WX_UIEvent WXEvent;
 typedef WX_UIView WXWidget;
-typedef WX_UIColor WXColor;
-typedef WX_UIImage WXImage;
 typedef WX_UIMenu WXHMENU;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
@@ -2840,9 +2851,31 @@ typedef WX_UIPasteboard WXOSXPasteboard;
 
 #endif
 
+// Define a for loop macro to iterate over Objective-C collections that works also for
+// compilers like gcc that does not support the "for .. in" syntax.
 
+#if defined(__OBJC__)
 
-#endif /* __WXMAC__ */
+#if OBJC_API_VERSION >= 2
+
+    #define wxOBJC_FOR_LOOP(var, collection) \
+        for (var in collection) \
+        {
+
+#else
+
+    #define wxOBJC_FOR_LOOP(var, collection) \
+        for (NSUInteger wx_i = 0; wx_i < [collection count]; wx_i++) \
+        { var = [collection objectAtIndex:wx_i];
+
+#endif
+
+#define wxOBJC_END_FOR_LOOP \
+    }
+
+#endif
+
+#endif /* __DARWIN__ */
 
 /* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */
 #if defined(__WIN32__)
