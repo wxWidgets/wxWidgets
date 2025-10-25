@@ -82,9 +82,9 @@ class wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
 {
 public:
     void Add(const wxTreeItemId& id)
-        { wxArrayTreeItemIdsBase::Add(id.m_pItem); }
+        { wxArrayTreeItemIdsBase::Add(id.GetID()); }
     void Insert(const wxTreeItemId& id, size_t pos)
-        { wxArrayTreeItemIdsBase::Insert(id.m_pItem, pos); }
+        { wxArrayTreeItemIdsBase::Insert(id.GetID(), pos); }
     wxTreeItemId Item(size_t i) const
         { return wxTreeItemId(wxArrayTreeItemIdsBase::Item(i)); }
     wxTreeItemId operator[](size_t i) const { return Item(i); }
