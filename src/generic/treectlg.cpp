@@ -48,7 +48,7 @@
 // array types
 // -----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_CORE wxGenericTreeItem;
+class wxGenericTreeItem;
 
 WX_DEFINE_ARRAY_PTR(wxGenericTreeItem *, wxArrayGenericTreeItems);
 
