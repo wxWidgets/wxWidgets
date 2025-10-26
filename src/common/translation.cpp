@@ -54,6 +54,7 @@
 #endif
 
 #include <memory>
+#include <map>
 #include <unordered_set>
 
 // ----------------------------------------------------------------------------
@@ -1451,12 +1452,35 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
     return lang;
 }
 
+namespace {
+
+class UntranslatedStringHolder {
+private:
+    static wxCriticalSection criticalSection;
+    static std::map<wxThreadIdType, std::unordered_set<wxString> > setsMap;
+public:
+    std::unordered_set<wxString> &get(void) {
+        wxCriticalSectionLocker locker(UntranslatedStringHolder::criticalSection);
+        return setsMap[wxThread::GetCurrentId()];
+    }
+
+    ~UntranslatedStringHolder() {
+        wxCriticalSectionLocker locker(UntranslatedStringHolder::criticalSection);
+        setsMap.erase(wxThread::GetCurrentId());
+    }
+};
+
+wxCriticalSection UntranslatedStringHolder::criticalSection;
+
+std::map<wxThreadIdType, std::unordered_set<wxString> > UntranslatedStringHolder::setsMap;
+
+}
 
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
-    thread_local std::unordered_set<wxString> wxPerThreadStrings;
-    return *wxPerThreadStrings.insert(str).first;
+    thread_local UntranslatedStringHolder wxPerThreadStrings;
+    return *wxPerThreadStrings.get().insert(str).first;
 }
 
 
