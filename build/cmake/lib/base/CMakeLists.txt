@@ -58,8 +58,11 @@ endif()
 
 if(APPLE)
     wx_lib_link_libraries(wxbase
+        PRIVATE
+        "-framework Security"
         PUBLIC
         "-framework CoreFoundation"
+        "-framework AppKit"
     )
     if(WXOSX_COCOA)
         wx_lib_link_libraries(wxbase
