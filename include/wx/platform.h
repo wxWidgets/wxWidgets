@@ -413,7 +413,7 @@
 #   endif
 #endif
 
-#ifdef __WXOSX_MAC__
+#ifdef __DARWIN__
 #    if defined(__MACH__)
 #        include <Availability.h>
 #        ifndef MAC_OS_X_VERSION_10_4
