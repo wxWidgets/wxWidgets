@@ -108,15 +108,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     backtrace())
  -->
 <set var="BASE_UNIX_SRC" hints="files">
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
     src/unix/fswatcher_inotify.cpp
     src/unix/stdpaths.cpp
     src/unix/secretstore.cpp
+    $(BASE_UNIX_AND_DARWIN_SRC)
+    src/unix/mimetype.cpp
+    src/unix/uilocale.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
     wx/unix/fswatcher_inotify.h
     wx/unix/stdpaths.h
+    wx/unix/mimetype.h
+    $(BASE_UNIX_AND_DARWIN_HDR)
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -223,16 +226,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_AND_GUI_OSX_COCOA_SRC" hints="files">
     src/osx/cocoa/utils.mm
-</set>
-
-<!-- Base files used by non-wxMac OS X builds -->
-<set var="BASE_OSX_NOTWXMAC_SRC" hints="files">
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
-    $(BASE_COREFOUNDATION_SRC)
-</set>
-<set var="BASE_OSX_NOTWXMAC_HDR" hints="files">
-    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
-    $(BASE_COREFOUNDATION_HDR)
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -3217,16 +3210,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Nested if would be nicer, but this works -->
     <!-- These are the files for PLATFORM_MACOSX -->
     <set var="BASE_OSX_SRC" hints="files">
-        <if cond="TOOLKIT=='OSX_COCOA'">$(BASE_OSX_SHARED_SRC)</if>
-        <if cond="TOOLKIT=='OSX_IPHONE'">$(BASE_OSX_SHARED_SRC)</if>
-        <if cond="TOOLKIT=='COCOA'">$(BASE_OSX_NOTWXMAC_SRC)</if>
-        <if cond="TOOLKIT=='GTK'">$(BASE_OSX_NOTWXMAC_SRC)</if>
-        <if cond="TOOLKIT=='X11'">$(BASE_OSX_NOTWXMAC_SRC)</if>
-        <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
-
-        <!-- FIXME: a hack because there are two wxBase versions on
-                    Mac; once fixed, this would no longer be needed -->
-        <if cond="TOOLKIT==''">$(BASE_OSX_NOTWXMAC_SRC)</if>
+        $(BASE_OSX_SHARED_SRC)
     </set>
     <set var="BASE_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
@@ -3245,15 +3229,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Nested if would be nicer, but this works -->
     <!-- These are the files for PLATFORM_MACOSX -->
     <set var="BASE_OSX_HDR" hints="files">
-        <if cond="TOOLKIT=='OSX_COCOA'">$(BASE_OSX_SHARED_HDR)</if>
-        <if cond="TOOLKIT=='COCOA'">$(BASE_OSX_NOTWXMAC_HDR)</if>
-        <if cond="TOOLKIT=='GTK'">$(BASE_OSX_NOTWXMAC_HDR)</if>
-        <if cond="TOOLKIT=='X11'">$(BASE_OSX_NOTWXMAC_HDR)</if>
-        <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
-
-        <!-- FIXME: a hack because there are two wxBase versions on
-                    Mac; once fixed, this would no longer be needed -->
-        <if cond="TOOLKIT==''">$(BASE_OSX_NOTWXMAC_HDR)</if>
+        $(BASE_OSX_SHARED_HDR)
     </set>
     <set var="BASE_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>

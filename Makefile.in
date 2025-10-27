@@ -926,6 +926,9 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/localedefs.h \
 	wx/uilocale.h \
 	wx/fs_data.h \
+	wx/unix/fswatcher_inotify.h \
+	wx/unix/stdpaths.h \
+	wx/unix/mimetype.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -935,9 +938,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
 	wx/unix/fswatcher_kqueue.h \
-	wx/unix/mimetype.h \
-	wx/unix/fswatcher_inotify.h \
-	wx/unix/stdpaths.h \
 	wx/msw/apptrait.h \
 	wx/msw/apptbase.h \
 	wx/msw/chkconf.h \
@@ -960,7 +960,32 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/wrapcdlg.h \
 	wx/msw/wrapwin.h \
 	wx/msw/fswatcher.h \
-	$(BASE_OSX_HDR) \
+	wx/osx/core/cfdataref.h \
+	wx/osx/core/cfref.h \
+	wx/osx/core/cfstring.h \
+	wx/osx/core/hid.h \
+	wx/osx/core/evtloop.h \
+	wx/osx/core/objcid.h \
+	wx/osx/core/private.h \
+	wx/osx/core/colour.h \
+	wx/osx/carbon/region.h \
+	wx/osx/core/cfdictionary.h \
+	wx/osx/core/cfarray.h \
+	wx/osx/core/cftype.h \
+	wx/osx/core/joystick.h \
+	wx/osx/core/mimetype.h \
+	wx/osx/core/dataview.h \
+	wx/osx/core/stdpaths.h \
+	wx/unix/app.h \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
+	wx/unix/chkconf.h \
+	wx/unix/evtloop.h \
+	wx/unix/evtloopsrc.h \
+	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
+	wx/unix/fswatcher_kqueue.h \
+	wx/osx/fswatcher_fsevents.h \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
 	wx/protocol/ftp.h \
@@ -1062,6 +1087,9 @@ ALL_BASE_SOURCES =  \
 	src/common/lzmastream.cpp \
 	src/common/uilocale.cpp \
 	src/common/fs_data.cpp \
+	src/unix/fswatcher_inotify.cpp \
+	src/unix/stdpaths.cpp \
+	src/unix/secretstore.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -1079,9 +1107,6 @@ ALL_BASE_SOURCES =  \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/unix/uilocale.cpp \
-	src/unix/fswatcher_inotify.cpp \
-	src/unix/stdpaths.cpp \
-	src/unix/secretstore.cpp \
 	src/msw/basemsw.cpp \
 	src/msw/crashrpt.cpp \
 	src/msw/debughlp.cpp \
@@ -1102,7 +1127,31 @@ ALL_BASE_SOURCES =  \
 	src/msw/fswatcher.cpp \
 	src/msw/secretstore.cpp \
 	src/msw/uilocale.cpp \
-	$(BASE_OSX_SRC) \
+	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
+	src/osx/core/strconv_cf.cpp \
+	src/osx/cocoa/utils_base.mm \
+	src/osx/core/secretstore.cpp \
+	src/osx/core/stdpaths.mm \
+	src/osx/volume.mm \
+	src/common/fdiodispatcher.cpp \
+	src/common/selectdispatcher.cpp \
+	src/unix/appunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
+	src/unix/timerunx.cpp \
+	src/unix/threadpsx.cpp \
+	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
+	src/unix/fswatcher_kqueue.cpp \
+	src/osx/fswatcher_fsevents.cpp \
+	src/osx/core/uilocale.mm \
+	src/osx/core/mimetype.cpp \
 	src/common/event.cpp \
 	src/common/fs_mem.cpp \
 	src/common/msgout.cpp \
@@ -2583,249 +2632,7 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 @COND_TOOLKIT_X11@OPENGL_PLATFORM_HDR = wx/unix/glx11.h wx/x11/glcanvas.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_PLATFORM_HDR = wx/aui/tabartgtk.h
 @COND_TOOLKIT_MSW@AUI_PLATFORM_HDR = wx/aui/tabartmsw.h wx/aui/barartmsw.h
-COND_TOOLKIT__BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/unix/uilocale.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/stdpaths.mm \
-	src/osx/volume.mm
-@COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
-COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/unix/uilocale.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/stdpaths.mm \
-	src/osx/volume.mm
-@COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
-COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/unix/uilocale.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/stdpaths.mm \
-	src/osx/volume.mm
-@COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
-COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/stdpaths.mm \
-	src/osx/volume.mm \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/osx/fswatcher_fsevents.cpp \
-	src/osx/core/uilocale.mm \
-	src/osx/core/mimetype.cpp
-@COND_TOOLKIT_OSX_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC)
-COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/stdpaths.mm \
-	src/osx/volume.mm \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/osx/fswatcher_fsevents.cpp \
-	src/osx/core/uilocale.mm \
-	src/osx/core/mimetype.cpp
-@COND_TOOLKIT_OSX_IPHONE@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC)
-COND_TOOLKIT_X11_BASE_OSX_SRC =  \
-	src/common/fdiodispatcher.cpp \
-	src/common/selectdispatcher.cpp \
-	src/unix/appunix.cpp \
-	src/unix/dir.cpp \
-	src/unix/dlunix.cpp \
-	src/unix/epolldispatcher.cpp \
-	src/unix/evtloopunix.cpp \
-	src/unix/fdiounix.cpp \
-	src/unix/snglinst.cpp \
-	src/unix/stackwalk.cpp \
-	src/unix/timerunx.cpp \
-	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp \
-	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp \
-	src/unix/mimetype.cpp \
-	src/unix/uilocale.cpp \
-	src/osx/core/cfstring.cpp \
-	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/strconv_cf.cpp \
-	src/osx/cocoa/utils_base.mm \
-	src/osx/core/secretstore.cpp \
-	src/osx/core/stdpaths.mm \
-	src/osx/volume.mm
-@COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
-COND_TOOLKIT__BASE_OSX_HDR =  \
-	wx/unix/app.h \
-	wx/unix/apptbase.h \
-	wx/unix/apptrait.h \
-	wx/unix/chkconf.h \
-	wx/unix/evtloop.h \
-	wx/unix/evtloopsrc.h \
-	wx/unix/pipe.h \
-	wx/unix/stackwalk.h \
-	wx/unix/fswatcher_kqueue.h \
-	wx/unix/mimetype.h \
-	wx/osx/core/cfdataref.h \
-	wx/osx/core/cfref.h \
-	wx/osx/core/cfstring.h \
-	wx/osx/core/hid.h \
-	wx/osx/core/evtloop.h \
-	wx/osx/core/objcid.h \
-	wx/osx/core/private.h \
-	wx/osx/core/colour.h \
-	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h \
-	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h \
-	wx/osx/core/joystick.h \
-	wx/osx/core/mimetype.h \
-	wx/osx/core/dataview.h \
-	wx/osx/core/stdpaths.h
-@COND_TOOLKIT_@BASE_OSX_HDR = $(COND_TOOLKIT__BASE_OSX_HDR)
-COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
-	wx/unix/app.h \
-	wx/unix/apptbase.h \
-	wx/unix/apptrait.h \
-	wx/unix/chkconf.h \
-	wx/unix/evtloop.h \
-	wx/unix/evtloopsrc.h \
-	wx/unix/pipe.h \
-	wx/unix/stackwalk.h \
-	wx/unix/fswatcher_kqueue.h \
-	wx/unix/mimetype.h \
-	wx/osx/core/cfdataref.h \
-	wx/osx/core/cfref.h \
-	wx/osx/core/cfstring.h \
-	wx/osx/core/hid.h \
-	wx/osx/core/evtloop.h \
-	wx/osx/core/objcid.h \
-	wx/osx/core/private.h \
-	wx/osx/core/colour.h \
-	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h \
-	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h \
-	wx/osx/core/joystick.h \
-	wx/osx/core/mimetype.h \
-	wx/osx/core/dataview.h \
-	wx/osx/core/stdpaths.h
-@COND_TOOLKIT_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_COCOA_BASE_OSX_HDR)
-COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
-	wx/unix/app.h \
-	wx/unix/apptbase.h \
-	wx/unix/apptrait.h \
-	wx/unix/chkconf.h \
-	wx/unix/evtloop.h \
-	wx/unix/evtloopsrc.h \
-	wx/unix/pipe.h \
-	wx/unix/stackwalk.h \
-	wx/unix/fswatcher_kqueue.h \
-	wx/unix/mimetype.h \
-	wx/osx/core/cfdataref.h \
-	wx/osx/core/cfref.h \
-	wx/osx/core/cfstring.h \
-	wx/osx/core/hid.h \
-	wx/osx/core/evtloop.h \
-	wx/osx/core/objcid.h \
-	wx/osx/core/private.h \
-	wx/osx/core/colour.h \
-	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h \
-	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h \
-	wx/osx/core/joystick.h \
-	wx/osx/core/mimetype.h \
-	wx/osx/core/dataview.h \
-	wx/osx/core/stdpaths.h
-@COND_TOOLKIT_GTK@BASE_OSX_HDR = $(COND_TOOLKIT_GTK_BASE_OSX_HDR)
-COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
+COND_PLATFORM_MACOSX_1_BASE_PLATFORM_HDR =  \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2852,37 +2659,11 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/unix/stackwalk.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/osx/fswatcher_fsevents.h
-@COND_TOOLKIT_OSX_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR)
-COND_TOOLKIT_X11_BASE_OSX_HDR =  \
-	wx/unix/app.h \
-	wx/unix/apptbase.h \
-	wx/unix/apptrait.h \
-	wx/unix/chkconf.h \
-	wx/unix/evtloop.h \
-	wx/unix/evtloopsrc.h \
-	wx/unix/pipe.h \
-	wx/unix/stackwalk.h \
-	wx/unix/fswatcher_kqueue.h \
-	wx/unix/mimetype.h \
-	wx/osx/core/cfdataref.h \
-	wx/osx/core/cfref.h \
-	wx/osx/core/cfstring.h \
-	wx/osx/core/hid.h \
-	wx/osx/core/evtloop.h \
-	wx/osx/core/objcid.h \
-	wx/osx/core/private.h \
-	wx/osx/core/colour.h \
-	wx/osx/carbon/region.h \
-	wx/osx/core/cfdictionary.h \
-	wx/osx/core/cfarray.h \
-	wx/osx/core/cftype.h \
-	wx/osx/core/joystick.h \
-	wx/osx/core/mimetype.h \
-	wx/osx/core/dataview.h \
-	wx/osx/core/stdpaths.h
-@COND_TOOLKIT_X11@BASE_OSX_HDR = $(COND_TOOLKIT_X11_BASE_OSX_HDR)
-@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(BASE_OSX_HDR)
+@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_MACOSX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
+	wx/unix/fswatcher_inotify.h \
+	wx/unix/stdpaths.h \
+	wx/unix/mimetype.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2891,10 +2672,7 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
-	wx/unix/fswatcher_kqueue.h \
-	wx/unix/mimetype.h \
-	wx/unix/fswatcher_inotify.h \
-	wx/unix/stdpaths.h
+	wx/unix/fswatcher_kqueue.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/apptrait.h \
@@ -4321,6 +4099,9 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_core_mimetype.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
+	monodll_fswatcher_inotify.o \
+	monodll_unix_stdpaths.o \
+	monodll_unix_secretstore.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -4337,10 +4118,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_wakeuppipe.o \
 	monodll_fswatcher_kqueue.o \
 	monodll_unix_mimetype.o \
-	monodll_unix_uilocale.o \
-	monodll_fswatcher_inotify.o \
-	monodll_unix_stdpaths.o \
-	monodll_unix_secretstore.o
+	monodll_unix_uilocale.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -6104,6 +5882,9 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_core_mimetype.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
+	monolib_fswatcher_inotify.o \
+	monolib_unix_stdpaths.o \
+	monolib_unix_secretstore.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -6120,10 +5901,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_wakeuppipe.o \
 	monolib_fswatcher_kqueue.o \
 	monolib_unix_mimetype.o \
-	monolib_unix_uilocale.o \
-	monolib_fswatcher_inotify.o \
-	monolib_unix_stdpaths.o \
-	monolib_unix_secretstore.o
+	monolib_unix_uilocale.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -7937,6 +7715,9 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_core_mimetype.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
+	basedll_fswatcher_inotify.o \
+	basedll_unix_stdpaths.o \
+	basedll_unix_secretstore.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -7953,10 +7734,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_wakeuppipe.o \
 	basedll_fswatcher_kqueue.o \
 	basedll_unix_mimetype.o \
-	basedll_unix_uilocale.o \
-	basedll_fswatcher_inotify.o \
-	basedll_unix_stdpaths.o \
-	basedll_unix_secretstore.o
+	basedll_unix_uilocale.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -8023,6 +7801,9 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_core_mimetype.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
+	baselib_fswatcher_inotify.o \
+	baselib_unix_stdpaths.o \
+	baselib_unix_secretstore.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -8039,10 +7820,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_wakeuppipe.o \
 	baselib_fswatcher_kqueue.o \
 	baselib_unix_mimetype.o \
-	baselib_unix_uilocale.o \
-	baselib_fswatcher_inotify.o \
-	baselib_unix_stdpaths.o \
-	baselib_unix_secretstore.o
+	baselib_unix_uilocale.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -15612,12 +15390,6 @@ monodll_common_uilocale.o: $(srcdir)/src/common/uilocale.cpp $(MONODLL_ODEP)
 monodll_fs_data.o: $(srcdir)/src/common/fs_data.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fs_data.cpp
 
-monodll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
-
-monodll_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
-
 monodll_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
@@ -15626,6 +15398,12 @@ monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
 
 monodll_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
+
+monodll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
+
+monodll_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
 
 monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -20394,12 +20172,6 @@ monolib_common_uilocale.o: $(srcdir)/src/common/uilocale.cpp $(MONOLIB_ODEP)
 monolib_fs_data.o: $(srcdir)/src/common/fs_data.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fs_data.cpp
 
-monolib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
-
-monolib_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
-
 monolib_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
@@ -20408,6 +20180,12 @@ monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
 
 monolib_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
+
+monolib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
+
+monolib_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
 
 monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -25176,12 +24954,6 @@ basedll_common_uilocale.o: $(srcdir)/src/common/uilocale.cpp $(BASEDLL_ODEP)
 basedll_fs_data.o: $(srcdir)/src/common/fs_data.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fs_data.cpp
 
-basedll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
-
-basedll_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
-
 basedll_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
@@ -25190,6 +24962,12 @@ basedll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
 
 basedll_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
+
+basedll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
+
+basedll_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
 
 basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -25650,12 +25428,6 @@ baselib_common_uilocale.o: $(srcdir)/src/common/uilocale.cpp $(BASELIB_ODEP)
 baselib_fs_data.o: $(srcdir)/src/common/fs_data.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fs_data.cpp
 
-baselib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
-
-baselib_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
-
 baselib_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
@@ -25664,6 +25436,12 @@ baselib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
 
 baselib_unix_secretstore.o: $(srcdir)/src/unix/secretstore.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/secretstore.cpp
+
+baselib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
+
+baselib_unix_uilocale.o: $(srcdir)/src/unix/uilocale.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/uilocale.cpp
 
 baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
