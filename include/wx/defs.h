@@ -2856,7 +2856,7 @@ typedef WX_UIPasteboard WXOSXPasteboard;
 
 #if defined(__OBJC__)
 
-#if OBJC_API_VERSION >= 2
+#if defined( OBJC_API_VERSION ) && OBJC_API_VERSION >= 2
 
     #define wxOBJC_FOR_LOOP(var, collection) \
         for (var in collection) \
