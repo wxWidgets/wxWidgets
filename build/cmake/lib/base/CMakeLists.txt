@@ -60,12 +60,20 @@ if(APPLE)
         "-framework Security"
         PUBLIC
         "-framework CoreFoundation"
-        "-framework AppKit"
     )
+    if(WXOSX_IPHONE)
+        wx_lib_link_libraries(wxbase
+            PUBLIC
+            "-framework UIKit"
+        )
+    else()
+        wx_lib_link_libraries(wxbase
+            PUBLIC
+            "-framework AppKit"
+        )
+    endif()
     if(WXOSX_COCOA)
         wx_lib_link_libraries(wxbase
-            PRIVATE
-            "-framework Security"
             PUBLIC
             "-framework Carbon"
             "-framework Cocoa"
