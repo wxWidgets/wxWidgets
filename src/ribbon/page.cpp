@@ -204,8 +204,8 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
 
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
-    wxCHECK_RET(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
-    static_cast<wxRibbonBar*>(GetParent())->AddPage(this);
+    if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
+        bar->AddPage(this);
 }
 
 void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
@@ -1277,8 +1277,8 @@ wxSize wxRibbonPage::DoGetBestSize() const
 
 void wxRibbonPage::HideIfExpanded()
 {
-    wxCHECK_RET(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
-    static_cast<wxRibbonBar*>(GetParent())->HideIfExpanded();
+    if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
+        bar->HideIfExpanded();
 }
 
 #endif // wxUSE_RIBBON
