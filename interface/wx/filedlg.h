@@ -20,9 +20,6 @@ enum
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
-// set this system option to 1 in order to always show the filetypes popup in
-// file open dialogs if possible
-
 #define wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES wxT("osx.openfiledialog.always-show-types")
 
 /**
