@@ -606,6 +606,13 @@ public:
     void AppendColumn(const wxHeaderColumnSimple& col);
 
     /**
+        Delete all columns.
+
+        @see DeleteColumn()
+     */
+    void DeleteAllColumns();
+
+    /**
         Delete the column at the given position.
 
         @see InsertColumn(), AppendColumn()
@@ -655,7 +662,7 @@ public:
             If @true or @false show the sort indicator corresponding to
             ascending or descending sort order respectively.
      */
-    void ShowSortIndicator(unsigned int idx, bool sortOrder = true);
+    void ShowSortIndicator(unsigned int idx, bool ascending = true);
 
     /**
         Remove the sort indicator from the column being used as sort key.
