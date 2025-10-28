@@ -112,6 +112,12 @@ public:
     wxImageHandler()
         : m_name(wxEmptyString), m_extension(wxEmptyString), m_mime(), m_type(wxBITMAP_TYPE_INVALID)
         { }
+    wxImageHandler(const wxString& name,
+                   const wxString& ext,
+                   wxBitmapType type,
+                   const wxString& mime)
+        : m_name(name), m_extension(ext), m_mime(mime), m_type(type)
+        { }
 
 #if wxUSE_STREAMS
     // NOTE: LoadFile and SaveFile are not pure virtuals to allow derived classes

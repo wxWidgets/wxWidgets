@@ -47,12 +47,12 @@ struct wxWebPAnimationFrame
 class WXDLLIMPEXP_CORE wxWEBPHandler : public wxImageHandler
 {
 public:
-    wxWEBPHandler()
+    wxWEBPHandler() : wxImageHandler(
+        wxS("WebP file"),
+        wxS("webp"),
+        wxBITMAP_TYPE_WEBP,
+        wxS("image/webp"))
     {
-        m_name = wxS("WebP file");
-        m_extension = wxS("webp");
-        m_type = wxBITMAP_TYPE_WEBP;
-        m_mime = wxS("image/webp");
     }
 
     static wxVersionInfo GetLibraryVersionInfo();
