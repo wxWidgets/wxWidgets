@@ -103,7 +103,7 @@ public:
         // completely invalid strings, so we need to check if the name is
         // actually in the list of the supported locales ourselves.
         bool isAvailable = false;
-        for ( id nsLocId in [NSLocale availableLocaleIdentifiers] )
+        wxOBJC_FOR_LOOP( id nsLocId, [NSLocale availableLocaleIdentifiers] )
         {
             // We can't simply compare the names here because the list returned
             // by NSLocale is incomplete and doesn't contain all synonyms, e.g.
@@ -141,6 +141,7 @@ public:
             if ( isAvailable )
                 break;
         }
+        wxOBJC_END_FOR_LOOP
 
         if ( !isAvailable )
             return nullptr;
