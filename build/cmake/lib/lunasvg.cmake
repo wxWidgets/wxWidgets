@@ -42,4 +42,7 @@ if(wxUSE_LUNASVG STREQUAL "ON" OR wxUSE_LUNASVG STREQUAL "builtin")
         ${wxSOURCE_DIR}/3rdparty/lunasvg/include
         ${wxSOURCE_DIR}/3rdparty/lunasvg/plutovg/include
     )
+
+    set(LUNASVG_LIBRARIES wxlunasvg)
+    set(LUNASVG_INCLUDE_DIRS ${wxSOURCE_DIR}/3rdparty/lunasvg/include)
 endif()
