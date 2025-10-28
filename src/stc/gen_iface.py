@@ -1202,6 +1202,7 @@ constNonGetterMethods = (
     'CanPaste',
     'CanRedo',
     'CanUndo',
+    'TextHeight',
 )
 
 # several methods require override

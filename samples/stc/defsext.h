@@ -105,6 +105,7 @@ enum {
     myID_SELECTLINE,
     myID_EDIT_LAST = myID_SELECTLINE,
     myID_WINDOW_MINIMAL,
+    myID_WINDOW_DOCMAP,
 
     // other IDs
     myID_ABOUTTIMER,
