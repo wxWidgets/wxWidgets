@@ -23,6 +23,14 @@
     SetEdit(). If the map doesn't have any associated editor, it doesn't show
     anything and is effectively useless.
 
+    Please note that while any changes to the folds or markers in the
+    associated editor done after associating the map with it will be shown in
+    the map, as it uses wxStyledTextCtrl::SetMirrorCtrl() internally, this does
+    _not_ happen for any pre-existing document aspects. In particular, when the
+    same map is used with multiple controls, with SetEdit() used to switch
+    between them, the application needs to store the folds and markers in each
+    of the documents and reapply them to the map after calling SetEdit().
+
     This class doesn't generate any events and, more generally, the only thing
     the application needs to do is to create it and position it properly. While
     mini map window may be positioned arbitrarily, it is customarily placed on
@@ -82,6 +90,11 @@ public:
 
     /**
         Set the associated main document control.
+
+        Please note that any pre-existing folds and markers in the control will
+        not be visible in the map. The application needs to remember their
+        definitions and re-apply them to the map control after calling this
+        function if desired.
 
         @param edit
             The associated main document control which may be @NULL to reset
