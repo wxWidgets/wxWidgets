@@ -1469,11 +1469,11 @@ private:
     static std::map<wxThreadIdType, std::unordered_set<wxString> > setsMap;
     std::unordered_set<wxString> *holder;
 public:
-    UntranslatedStringHolder(): holder(NULL) {
+    UntranslatedStringHolder(): holder(nullptr) {
     }
 
     const wxString &get(const wxString &str) {
-        if (holder == NULL) {
+        if (holder == nullptr) {
             wxCriticalSectionLocker locker(UntranslatedStringHolder::criticalSection);
             holder = &setsMap[wxThread::GetCurrentId()];
         }
