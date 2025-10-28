@@ -1255,8 +1255,9 @@ void wxRibbonAUIArtProvider::DrawTool(
         dc.DrawBitmap(m_toolbar_drop_bitmap, bg_rect.x + avail_width + 2,
             bg_rect.y + (bg_rect.height / 2) - 2, true);
     }
-    dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetLogicalWidth()) / 2,
-        bg_rect.y + (bg_rect.height - bitmap.GetLogicalHeight()) / 2, true);
+    if ( bitmap.IsOk() )
+        dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetLogicalWidth()) / 2,
+            bg_rect.y + (bg_rect.height - bitmap.GetLogicalHeight()) / 2, true);
 }
 
 #endif // wxUSE_RIBBON

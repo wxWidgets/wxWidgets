@@ -204,7 +204,8 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
 
     SetBackgroundStyle(wxBG_STYLE_PAINT);
 
-    wxDynamicCast(GetParent(), wxRibbonBar)->AddPage(this);
+    if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
+        bar->AddPage(this);
 }
 
 void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
@@ -887,7 +888,8 @@ bool wxRibbonPage::ShowScrollButtons()
 
     if(reposition)
     {
-        wxDynamicCast(GetParent(), wxRibbonBar)->RepositionPage(this);
+        wxASSERT_MSG(wxDynamicCast(GetParent(), wxRibbonBar), "pointer of wrong type?");
+        static_cast<wxRibbonBar*>(GetParent())->RepositionPage(this);
     }
 
     return reposition;
@@ -1064,7 +1066,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                 }
             }
         }
-        if(largest_panel != nullptr)
+        if(largest_panel != nullptr && largest_panel_size != nullptr)
         {
             if(largest_panel->IsSizingContinuous())
             {
@@ -1275,7 +1277,8 @@ wxSize wxRibbonPage::DoGetBestSize() const
 
 void wxRibbonPage::HideIfExpanded()
 {
-    wxStaticCast(m_parent, wxRibbonBar)->HideIfExpanded();
+    if (auto* const bar = wxCheckedStaticCast<wxRibbonBar>(GetParent()))
+        bar->HideIfExpanded();
 }
 
 #endif // wxUSE_RIBBON
