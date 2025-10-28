@@ -1455,11 +1455,11 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
 namespace {
 
 /* As of October 2025, MinGW has a bug regarding thread_local
- * variables, de-allocating their memory before calling their
- * destructor.
+ * variables: their memory is de-allocated, and then their destructor
+ * is called.
  *
  * The UntranslatedStringHolder class works around this issue, having
- * its constructor access no data members.
+ * its destructor access no data members.
  */
 #if defined __MINGW32__ || defined __MINGW64__
 
