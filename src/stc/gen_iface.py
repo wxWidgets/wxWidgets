@@ -264,14 +264,32 @@ methodOverrideMap = {
                 if (foreground.IsOk())
                     MarkerSetForeground(markerNumber, foreground);
                 if (background.IsOk())
-                    MarkerSetBackground(markerNumber, background);'''
+                    MarkerSetBackground(markerNumber, background);
+
+                if ( m_mirrorCtrl )
+                    m_mirrorCtrl->MarkerDefine(markerNumber, markerSymbol, foreground, background);'''
     ),
 
+    # This one needs to be defined manually only because it's a non-void method
+    # that we want to mirror because we consider that we can just ignore the
+    # return value of the call on the mirror control.
+    'MarkerAdd' :
+    (0, 0,
+'''int %s(int line, int markerNumber)
+{
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerAdd(line, markerNumber);
+
+    return SendMsg(%s, line, markerNumber);'''
+    ),
 
    'MarkerDefinePixmap' :
     (0,
      '''void %s(int markerNumber, const char* const* xpmData);''',
      '''void %s(int markerNumber, const char* const* xpmData) {
+        if ( m_mirrorCtrl )
+            m_mirrorCtrl->MarkerDefinePixmap(markerNumber, xpmData);
+
         SendMsg(%s, markerNumber, (sptr_t)xpmData);'''
     ),
 
@@ -1191,6 +1209,31 @@ methodOverrideMap = {
 
     }
 
+# List of methods that should be mirrored to m_mirrorCtrl if it is non-null.
+mirroringNeeded = (
+    'SetFoldLevel',
+    'SetFoldExpanded',
+    'ToggleFold',
+    'ToggleFoldShowText',
+    'FoldLine',
+    'FoldChildren',
+    'FoldAll',
+    'SetFoldFlags',
+
+    # Marker-related methods: commented out are the ones overridden above.
+    # MarkerAdd
+    'MarkerAddSet',
+    # MarkerDefine
+    # MarkerDefinePixmap
+    'MarkerDelete',
+    'MarkerDeleteAll',
+    'MarkerEnableHighlight',
+    'MarkerSetAlpha',
+    'MarkerSetBackground',
+    'MarkerSetBackgroundSelected',
+    'MarkerSetForeground',
+)
+
 # all Scintilla getters are transformed into const member of wxSTC class but
 # some non-getter methods are also logically const and this set contains their
 # names (notice that it's useless to include here methods manually overridden
@@ -1203,6 +1246,8 @@ constNonGetterMethods = (
     'CanRedo',
     'CanUndo',
     'TextHeight',
+    'VisibleFromDocLine',
+    'DocLineFromVisible',
 )
 
 # several methods require override
@@ -1449,12 +1494,30 @@ def processMethods(methods):
             theImp = theImp + 'SendMsg(%s, %s, %s)' % (number,
                                                        makeArgString(param1),
                                                        makeArgString(param2))
+            if name in mirroringNeeded:
+                if retType != 'void':
+                    # Mirroring doesn't make sense for those.
+                    raise RuntimeError("Can't mirror non-void method %s" % name)
+
+                if param2:
+                    args = '%s, %s' % (param1[1], param2[1])
+                else:
+                    args = param1[1]
+                theImp = theImp + ''';
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->%s(%s)''' % (name, args)
+
             if retType == 'bool':
                 theImp = theImp + ' != 0'
             if retType == 'wxColour':
                 theImp = theImp + ';\n    return wxColourFromLong(c)'
 
             theImp = theImp + ';\n}'
+        else:
+            if name in mirroringNeeded:
+                raise RuntimeError("Can't mirror overridden method %s" % name)
+
         imps.append(theImp)
 
     # For the interface file, merge all the pieces into one list

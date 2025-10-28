@@ -2337,6 +2337,7 @@ STCDLL_OBJECTS =  \
 	stcdll_PlatWX.o \
 	stcdll_ScintillaWX.o \
 	stcdll_xh_styledtextctrl.o \
+	stcdll_minimap.o \
 	$(__STC_PLATFORM_SRC_OBJECTS_2)
 STCDLL_ODEP =  $(_____pch_wxprec_stcdll_wx_wxprec_h_gch___depname)
 STCLIB_CXXFLAGS = $(__stclib_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
@@ -2371,6 +2372,7 @@ STCLIB_OBJECTS =  \
 	stclib_PlatWX.o \
 	stclib_ScintillaWX.o \
 	stclib_xh_styledtextctrl.o \
+	stclib_minimap.o \
 	$(__STC_PLATFORM_SRC_OBJECTS_3)
 STCLIB_ODEP =  $(_____pch_wxprec_stclib_wx_wxprec_h_gch___depname)
 GLDLL_CXXFLAGS = $(__gldll_PCH_INC) $(__INC_TIFF_BUILD_p) $(__INC_TIFF_p) \
@@ -4213,6 +4215,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_richtext.h \
 	wx/stc/stc.h \
 	wx/xrc/xh_styledtextctrl.h \
+	wx/stc/minimap.h \
 	$(WEBVIEW_PLATFORM_HDR) \
 	wx/webview.h \
 	wx/webviewarchivehandler.h \
@@ -6045,6 +6048,7 @@ COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS =  \
 	monodll_PlatWX.o \
 	monodll_ScintillaWX.o \
 	monodll_xh_styledtextctrl.o \
+	monodll_minimap.o \
 	$(__STC_PLATFORM_SRC_OBJECTS)
 @COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS = $(COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS)
 @COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS = monodll_PlatWXcocoa.o
@@ -7827,6 +7831,7 @@ COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS_1 =  \
 	monolib_PlatWX.o \
 	monolib_ScintillaWX.o \
 	monolib_xh_styledtextctrl.o \
+	monolib_minimap.o \
 	$(__STC_PLATFORM_SRC_OBJECTS_1)
 @COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS_1 = $(COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS_1)
 @COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS_1 \
@@ -17062,6 +17067,9 @@ monodll_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(MONODLL_ODEP)
 monodll_xh_styledtextctrl.o: $(srcdir)/src/xrc/xh_styledtextctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_styledtextctrl.cpp
 
+monodll_minimap.o: $(srcdir)/src/stc/minimap.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/stc/minimap.cpp
+
 monodll_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
 
@@ -21843,6 +21851,9 @@ monolib_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(MONOLIB_ODEP)
 
 monolib_xh_styledtextctrl.o: $(srcdir)/src/xrc/xh_styledtextctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_styledtextctrl.cpp
+
+monolib_minimap.o: $(srcdir)/src/stc/minimap.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/stc/minimap.cpp
 
 monolib_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
@@ -34543,6 +34554,9 @@ stcdll_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(STCDLL_ODEP)
 stcdll_xh_styledtextctrl.o: $(srcdir)/src/xrc/xh_styledtextctrl.cpp $(STCDLL_ODEP)
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_styledtextctrl.cpp
 
+stcdll_minimap.o: $(srcdir)/src/stc/minimap.cpp $(STCDLL_ODEP)
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/src/stc/minimap.cpp
+
 stcdll_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(STCDLL_ODEP)
 	$(CXXC) -c -o $@ $(STCDLL_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
 
@@ -34557,6 +34571,9 @@ stclib_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(STCLIB_ODEP)
 
 stclib_xh_styledtextctrl.o: $(srcdir)/src/xrc/xh_styledtextctrl.cpp $(STCLIB_ODEP)
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_styledtextctrl.cpp
+
+stclib_minimap.o: $(srcdir)/src/stc/minimap.cpp $(STCLIB_ODEP)
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/src/stc/minimap.cpp
 
 stclib_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(STCLIB_ODEP)
 	$(CXXC) -c -o $@ $(STCLIB_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm

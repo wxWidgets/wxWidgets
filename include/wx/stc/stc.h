@@ -4263,10 +4263,10 @@ public:
     void CallTipSetPosition(bool above);
 
     // Find the display line of a document line taking hidden lines into account.
-    int VisibleFromDocLine(int docLine);
+    int VisibleFromDocLine(int docLine) const;
 
     // Find the document line of a display line taking hidden lines into account.
-    int DocLineFromVisible(int displayLine);
+    int DocLineFromVisible(int displayLine) const;
 
     // The number of display lines needed to wrap a document line
     int WrapCount(int docLine);
@@ -5678,6 +5678,13 @@ public:
     // Returns the line number of the line with the caret.
     int GetCurrentLine();
 
+    // Returns the total number of display lines, which may be different from
+    // GetLineCount() because of folding and wrapping.
+    int GetDisplayLineCount() const
+    {
+        return VisibleFromDocLine(GetLineCount());
+    }
+
     // Extract style settings from a spec-string which is composed of one or
     // more of the following comma separated elements:
     //
@@ -5845,6 +5852,16 @@ public:
 #ifdef SWIG
     %pythoncode "_stc_utf8_methods.py"
 #endif
+
+    // Specify that changes to various text aspects in this control, such as
+    // folding or markers, should be synchronized with the given control (or
+    // stop synchronizing them if the parameter is null).
+    void SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl);
+
+    // Indicate that custom drawing is done on top of this control. This is
+    // necessary to avoid corrupting it by scrolling the window content instead
+    // of refreshing it when it needs to be scrolled.
+    void SetCustomDrawn(bool customDrawn) { m_isCustomDrawn = customDrawn; }
 
 
     // implement wxTextEntryBase pure virtual methods
@@ -6106,6 +6123,13 @@ protected:
     wxScrollBar*        m_hScrollBar;
 
     bool                m_lastKeyDownConsumed;
+
+private:
+    wxBitmap m_buffer;
+
+    wxStyledTextCtrl*   m_mirrorCtrl = nullptr;
+
+    bool                m_isCustomDrawn = false;
 
     friend class ScintillaWX;
 #endif // !SWIG

@@ -41,6 +41,7 @@
 #include "wx/graphics.h"
 #endif
 
+#include <array>
 #include <memory>
 #include <unordered_map>
 
@@ -196,10 +197,28 @@ class SurfaceImpl : public Surface {
 private:
     wxDC*       hdc;
     bool        hdcOwned;
-    wxBitmap*   bitmap;
+    wxBitmap    bitmap;
     int         x;
     int         y;
     bool        unicodeMode;
+
+    // MRU brush cache.
+    struct BrushCacheEntry {
+        int usage = 0;
+        ColourDesired colour;
+        wxBrush brush;
+    };
+    static std::array<BrushCacheEntry, 8> brushCache;
+
+    // String reused for conversions from UTF-8 to wxString: this allows to
+    // avoid reallocating memory all the time, e.g. for each line drawn.
+    static wxString stcString;
+
+    const wxString& STCString(const char* s, int len) {
+        stcString.AssignFromUTF8Unchecked(s, len);
+
+        return stcString;
+    }
 
 public:
     SurfaceImpl();
@@ -254,10 +273,12 @@ public:
     void SetFont(Font &font_);
 };
 
+std::array<SurfaceImpl::BrushCacheEntry, 8> SurfaceImpl::brushCache;
+wxString SurfaceImpl::stcString;
 
 
 SurfaceImpl::SurfaceImpl() :
-    hdc(nullptr), hdcOwned(0), bitmap(nullptr),
+    hdc(nullptr), hdcOwned(0),
     x(0), y(0), unicodeMode(0)
 {}
 
@@ -285,24 +306,25 @@ void SurfaceImpl::Init(SurfaceID hdc_, WindowID) {
 
 void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID winid) {
     Release();
-    wxMemoryDC* mdc = surface
-        ? new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc)
+
+    auto* const surfaceImpl = static_cast<SurfaceImpl*>(surface);
+    wxMemoryDC* mdc = surfaceImpl && surfaceImpl->hdc
+        ? new wxMemoryDC(surfaceImpl->hdc)
         : new wxMemoryDC();
+    mdc->DisableAutomaticBoundingBoxUpdates();
     hdc = mdc;
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
-    bitmap = new wxBitmap();
-    bitmap->CreateWithLogicalSize(width, height, GETWIN(winid)->GetDPIScaleFactor());
-    mdc->SelectObject(*bitmap);
+    bitmap.CreateWithLogicalSize(width, height, GETWIN(winid)->GetDPIScaleFactor());
+    mdc->SelectObject(bitmap);
 }
 
 
 void SurfaceImpl::Release() {
-    if (bitmap) {
+    if (bitmap.IsOk()) {
         ((wxMemoryDC*)hdc)->SelectObject(wxNullBitmap);
-        delete bitmap;
-        bitmap = nullptr;
+        bitmap.UnRef();
     }
     if (hdcOwned) {
         delete hdc;
@@ -322,7 +344,29 @@ void SurfaceImpl::PenColour(ColourDesired fore) {
 }
 
 void SurfaceImpl::BrushColour(ColourDesired back) {
-    hdc->SetBrush(wxBrush(wxColourFromCD(back)));
+    wxBrush brush;
+    int minUsage = INT_MAX;
+    size_t minUsageIndex = 0;
+    for (size_t i = 0; i < brushCache.size(); i++) {
+        auto& entry = brushCache[i];
+        if (entry.usage && entry.colour == back) {
+            entry.usage++;
+            brush = entry.brush;
+        } else if (entry.usage < minUsage) {
+            minUsage = entry.usage;
+            minUsageIndex = i;
+        }
+    }
+
+    if (!brush.IsOk()) {
+        auto& entry = brushCache[minUsageIndex];
+        entry.colour = back;
+        entry.brush = wxBrush(wxColourFromCD(back));
+        entry.usage = 1;
+        brush = entry.brush;
+    }
+
+    hdc->SetBrush(brush);
 }
 
 void SurfaceImpl::SetFont(Font &font_) {
@@ -377,8 +421,8 @@ void SurfaceImpl::FillRectangle(PRectangle rc, ColourDesired back) {
 
 void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
     wxBrush br;
-    if (((SurfaceImpl&)surfacePattern).bitmap)
-        br = wxBrush(*((SurfaceImpl&)surfacePattern).bitmap);
+    if (((SurfaceImpl&)surfacePattern).bitmap.IsOk())
+        br = wxBrush(((SurfaceImpl&)surfacePattern).bitmap);
     else    // Something is wrong so display in red
         br = wxBrush(*wxRED);
     hdc->SetPen(*wxTRANSPARENT_PEN);
@@ -403,7 +447,7 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
                                  ColourDesired outline, int alphaOutline,
                                  int /*flags*/) {
 #if wxUSE_GRAPHICS_CONTEXT
-    wxGCDC dc(*(wxMemoryDC*)hdc);
+    wxGCDC dc(wxGraphicsContext::CreateFromUnknownDC(*hdc));
     wxColour penColour(wxColourFromCDandAlpha(outline, alphaOutline));
     wxColour brushColour(wxColourFromCDandAlpha(fill, alphaFill));
     dc.SetPen(wxPen(penColour));
@@ -516,7 +560,7 @@ void SurfaceImpl::GradientRectangle(PRectangle rc,
             break;
     }
 
-    wxGCDC dc(*(wxMemoryDC*)hdc);
+    wxGCDC dc(wxGraphicsContext::CreateFromUnknownDC(*hdc));
     wxGraphicsContext* gc = dc.GetGraphicsContext();
     gc->SetBrush(gc->CreateLinearGradientBrush(rc.left, rc.top, ep.x, ep.y, gradientStops));
     gc->DrawRectangle(rc.left, rc.top, rc.Width(), rc.Height());
@@ -627,7 +671,7 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, XYPOSITION ybase,
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
+    hdc->DrawText(STCString(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
 }
 
 void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, XYPOSITION ybase,
@@ -640,7 +684,7 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, XYPOSITION ybase,
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
     // see comments above
-    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
+    hdc->DrawText(STCString(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
     hdc->DestroyClippingRegion();
 }
 
@@ -655,7 +699,7 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, XYPOSITION ybas
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
+    hdc->DrawText(STCString(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
 
     hdc->SetBackgroundMode(wxBRUSHSTYLE_SOLID);
 }
@@ -663,7 +707,7 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, XYPOSITION ybas
 
 void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, XYPOSITION *positions) {
 
-    wxString   str = stc2wx(s, len);
+    const wxString& str = STCString(s, len);
     wxArrayInt tpos;
 
     SetFont(font);
@@ -704,7 +748,7 @@ XYPOSITION SurfaceImpl::WidthText(Font &font, const char *s, int len) {
     int w;
     int h;
 
-    hdc->GetTextExtent(stc2wx(s, len), &w, &h);
+    hdc->GetTextExtent(STCString(s, len), &w, &h);
     return w;
 }
 

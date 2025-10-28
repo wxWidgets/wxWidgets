@@ -704,6 +704,16 @@ int wxStyledTextCtrl::ReplaceTargetRERaw(const char* text, int length)
     return SendMsg(SCI_REPLACETARGETRE, length, reinterpret_cast<sptr_t>(text));
 }
 
+void wxStyledTextCtrl::SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl)
+{
+    m_mirrorCtrl = mirrorCtrl;
+
+    // Set the fold flags to the same value as in this control in case they had
+    // been changed before calling this function.
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldFlags(m_swx->foldFlags);
+}
+
 #if WXWIN_COMPATIBILITY_3_0
 // Deprecated since Scintilla 3.7.2
 void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
@@ -724,9 +734,12 @@ void wxStyledTextCtrl::StartStyling(int start, int unused)
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
-    // This _must_ be a wxMemoryDC because the code in SurfaceImpl (see
-    // PlatWX.cpp) unconditionally casts it to wxMemoryDC currently.
-    wxBufferedPaintDC dc(this);
+    wxBufferedPaintDC dc(this, m_buffer);
+
+    // We don't use bounding box for anything, so disable updating it to speed
+    // things up a bit.
+    dc.DisableAutomaticBoundingBoxUpdates();
+
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 

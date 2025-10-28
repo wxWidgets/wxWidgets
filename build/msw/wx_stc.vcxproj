@@ -862,6 +862,7 @@
     <ClCompile Include="..\..\src\stc\ScintillaWX.cpp" />
     <ClCompile Include="..\..\src\stc\stc.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_styledtextctrl.cpp" />
+    <ClCompile Include="..\..\src\stc\minimap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -914,6 +915,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64EC'">true</ExcludedFromBuild>
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\stc\stc.h" />
+    <ClInclude Include="..\..\include\wx\stc\minimap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

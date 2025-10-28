@@ -621,35 +621,53 @@ void wxStyledTextCtrl::MarkerDefine(int markerNumber, int markerSymbol,
                     MarkerSetForeground(markerNumber, foreground);
                 if (background.IsOk())
                     MarkerSetBackground(markerNumber, background);
+
+                if ( m_mirrorCtrl )
+                    m_mirrorCtrl->MarkerDefine(markerNumber, markerSymbol, foreground, background);
 }
 
 // Set the foreground colour used for a particular marker number.
 void wxStyledTextCtrl::MarkerSetForeground(int markerNumber, const wxColour& fore)
 {
     SendMsg(SCI_MARKERSETFORE, markerNumber, wxColourAsLong(fore));
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerSetForeground(markerNumber, fore);
 }
 
 // Set the background colour used for a particular marker number.
 void wxStyledTextCtrl::MarkerSetBackground(int markerNumber, const wxColour& back)
 {
     SendMsg(SCI_MARKERSETBACK, markerNumber, wxColourAsLong(back));
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerSetBackground(markerNumber, back);
 }
 
 // Set the background colour used for a particular marker number when its folding block is selected.
 void wxStyledTextCtrl::MarkerSetBackgroundSelected(int markerNumber, const wxColour& back)
 {
     SendMsg(SCI_MARKERSETBACKSELECTED, markerNumber, wxColourAsLong(back));
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerSetBackgroundSelected(markerNumber, back);
 }
 
 // Enable/disable highlight for current folding block (smallest one that contains the caret)
 void wxStyledTextCtrl::MarkerEnableHighlight(bool enabled)
 {
     SendMsg(SCI_MARKERENABLEHIGHLIGHT, enabled, 0);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerEnableHighlight(enabled);
 }
 
 // Add a marker to a line, returning an ID which can be used to find or delete the marker.
 int wxStyledTextCtrl::MarkerAdd(int line, int markerNumber)
 {
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerAdd(line, markerNumber);
+
     return SendMsg(SCI_MARKERADD, line, markerNumber);
 }
 
@@ -657,12 +675,18 @@ int wxStyledTextCtrl::MarkerAdd(int line, int markerNumber)
 void wxStyledTextCtrl::MarkerDelete(int line, int markerNumber)
 {
     SendMsg(SCI_MARKERDELETE, line, markerNumber);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerDelete(line, markerNumber);
 }
 
 // Delete all markers with a particular number from all lines.
 void wxStyledTextCtrl::MarkerDeleteAll(int markerNumber)
 {
     SendMsg(SCI_MARKERDELETEALL, markerNumber, 0);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerDeleteAll(markerNumber);
 }
 
 // Get a bit mask of all the markers set on a line.
@@ -686,6 +710,9 @@ int wxStyledTextCtrl::MarkerPrevious(int lineStart, int markerMask)
 
 // Define a marker from a bitmap
 void wxStyledTextCtrl::MarkerDefinePixmap(int markerNumber, const char* const* xpmData) {
+        if ( m_mirrorCtrl )
+            m_mirrorCtrl->MarkerDefinePixmap(markerNumber, xpmData);
+
         SendMsg(SCI_MARKERDEFINEPIXMAP, markerNumber, (sptr_t)xpmData);
 }
 
@@ -693,12 +720,18 @@ void wxStyledTextCtrl::MarkerDefinePixmap(int markerNumber, const char* const* x
 void wxStyledTextCtrl::MarkerAddSet(int line, int markerSet)
 {
     SendMsg(SCI_MARKERADDSET, line, markerSet);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerAddSet(line, markerSet);
 }
 
 // Set the alpha used for a marker that is drawn in the text area, not the margin.
 void wxStyledTextCtrl::MarkerSetAlpha(int markerNumber, int alpha)
 {
     SendMsg(SCI_MARKERSETALPHA, markerNumber, alpha);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->MarkerSetAlpha(markerNumber, alpha);
 }
 
 // Set a margin to be either numeric or symbolic.
@@ -2191,13 +2224,13 @@ void wxStyledTextCtrl::CallTipSetPosition(bool above)
 }
 
 // Find the display line of a document line taking hidden lines into account.
-int wxStyledTextCtrl::VisibleFromDocLine(int docLine)
+int wxStyledTextCtrl::VisibleFromDocLine(int docLine) const
 {
     return SendMsg(SCI_VISIBLEFROMDOCLINE, docLine, 0);
 }
 
 // Find the document line of a display line taking hidden lines into account.
-int wxStyledTextCtrl::DocLineFromVisible(int displayLine)
+int wxStyledTextCtrl::DocLineFromVisible(int displayLine) const
 {
     return SendMsg(SCI_DOCLINEFROMVISIBLE, displayLine, 0);
 }
@@ -2214,6 +2247,9 @@ int wxStyledTextCtrl::WrapCount(int docLine)
 void wxStyledTextCtrl::SetFoldLevel(int line, int level)
 {
     SendMsg(SCI_SETFOLDLEVEL, line, level);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldLevel(line, level);
 }
 
 // Retrieve the fold level of a line.
@@ -2262,6 +2298,9 @@ bool wxStyledTextCtrl::GetAllLinesVisible() const
 void wxStyledTextCtrl::SetFoldExpanded(int line, bool expanded)
 {
     SendMsg(SCI_SETFOLDEXPANDED, line, expanded);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldExpanded(line, expanded);
 }
 
 // Is a header line expanded?
@@ -2274,12 +2313,18 @@ bool wxStyledTextCtrl::GetFoldExpanded(int line) const
 void wxStyledTextCtrl::ToggleFold(int line)
 {
     SendMsg(SCI_TOGGLEFOLD, line, 0);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->ToggleFold(line);
 }
 
 // Switch a header line between expanded and contracted and show some text after the line.
 void wxStyledTextCtrl::ToggleFoldShowText(int line, const wxString& text)
 {
     SendMsg(SCI_TOGGLEFOLDSHOWTEXT, line, (sptr_t)(const char*)wx2stc(text));
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->ToggleFoldShowText(line, text);
 }
 
 // Set the style of fold display text.
@@ -2315,12 +2360,18 @@ wxString wxStyledTextCtrl::GetDefaultFoldDisplayText() const {
 void wxStyledTextCtrl::FoldLine(int line, int action)
 {
     SendMsg(SCI_FOLDLINE, line, action);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldLine(line, action);
 }
 
 // Expand or contract a fold header and its children.
 void wxStyledTextCtrl::FoldChildren(int line, int action)
 {
     SendMsg(SCI_FOLDCHILDREN, line, action);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldChildren(line, action);
 }
 
 // Expand a fold header and all children. Use the level argument instead of the line's current level.
@@ -2333,6 +2384,9 @@ void wxStyledTextCtrl::ExpandChildren(int line, int level)
 void wxStyledTextCtrl::FoldAll(int action)
 {
     SendMsg(SCI_FOLDALL, action, 0);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->FoldAll(action);
 }
 
 // Ensure a particular line is visible by expanding any header line hiding it.
@@ -2357,6 +2411,9 @@ int wxStyledTextCtrl::GetAutomaticFold() const
 void wxStyledTextCtrl::SetFoldFlags(int flags)
 {
     SendMsg(SCI_SETFOLDFLAGS, flags, 0);
+
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldFlags(flags);
 }
 
 // Ensure a particular line is visible by expanding any header line hiding it.
@@ -5455,6 +5512,16 @@ int wxStyledTextCtrl::ReplaceTargetRERaw(const char* text, int length)
     return SendMsg(SCI_REPLACETARGETRE, length, reinterpret_cast<sptr_t>(text));
 }
 
+void wxStyledTextCtrl::SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl)
+{
+    m_mirrorCtrl = mirrorCtrl;
+
+    // Set the fold flags to the same value as in this control in case they had
+    // been changed before calling this function.
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldFlags(m_swx->foldFlags);
+}
+
 #if WXWIN_COMPATIBILITY_3_0
 // Deprecated since Scintilla 3.7.2
 void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
@@ -5475,9 +5542,12 @@ void wxStyledTextCtrl::StartStyling(int start, int unused)
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
-    // This _must_ be a wxMemoryDC because the code in SurfaceImpl (see
-    // PlatWX.cpp) unconditionally casts it to wxMemoryDC currently.
-    wxBufferedPaintDC dc(this);
+    wxBufferedPaintDC dc(this, m_buffer);
+
+    // We don't use bounding box for anything, so disable updating it to speed
+    // things up a bit.
+    dc.DisableAutomaticBoundingBoxUpdates();
+
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 

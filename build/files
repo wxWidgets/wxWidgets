@@ -2863,12 +2863,14 @@ RICHTEXT_HDR =
 # wxSTC
 
 STC_CMN_SRC =
+    src/stc/minimap.cpp
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
     src/xrc/xh_styledtextctrl.cpp
 
 STC_CMN_HDR =
+    wx/stc/minimap.h
     wx/stc/stc.h
     wx/xrc/xh_styledtextctrl.h
 
