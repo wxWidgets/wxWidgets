@@ -606,6 +606,13 @@ public:
     void AppendColumn(const wxHeaderColumnSimple& col);
 
     /**
+        Delete all columns.
+
+        @see DeleteColumn()
+     */
+    void DeleteAllColumns();
+
+    /**
         Delete the column at the given position.
 
         @see InsertColumn(), AppendColumn()
