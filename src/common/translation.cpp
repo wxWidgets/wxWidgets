@@ -1454,17 +1454,35 @@ wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, c
 
 namespace {
 
+/* As of October 2025, MinGW has a bug regarding thread_local
+ * variables, de-allocating their memory before calling their
+ * destructor.
+ *
+ * The UntranslatedStringHolder class works around this issue, having
+ * its constructor access no data members.
+ */
+#if defined __MINGW32__ || defined __MINGW64__
+
 class UntranslatedStringHolder {
 private:
     static wxCriticalSection criticalSection;
     static std::map<wxThreadIdType, std::unordered_set<wxString> > setsMap;
+    std::unordered_set<wxString> *holder;
 public:
-    std::unordered_set<wxString> &get(void) {
-        wxCriticalSectionLocker locker(UntranslatedStringHolder::criticalSection);
-        return setsMap[wxThread::GetCurrentId()];
+    UntranslatedStringHolder(): holder(NULL) {
+    }
+
+    const wxString &get(const wxString &str) {
+        if (holder == NULL) {
+            wxCriticalSectionLocker locker(UntranslatedStringHolder::criticalSection);
+            holder = &setsMap[wxThread::GetCurrentId()];
+        }
+        return *holder->insert(str).first;
     }
 
     ~UntranslatedStringHolder() {
+        /* This code is run after this object memory has been
+           deallocated. We cannot access any data members */
         wxCriticalSectionLocker locker(UntranslatedStringHolder::criticalSection);
         setsMap.erase(wxThread::GetCurrentId());
     }
@@ -1474,13 +1492,30 @@ wxCriticalSection UntranslatedStringHolder::criticalSection;
 
 std::map<wxThreadIdType, std::unordered_set<wxString> > UntranslatedStringHolder::setsMap;
 
-}
+#else
+
+/* On platforms other than MinGW, thread_local variables are supposed to work
+ * correctly. This class can be a trivial wrapper.
+ */
+class UntranslatedStringHolder {
+private:
+    std::unordered_set<wxString> holder;
+public:
+    const wxString &get(const wxString &str) {
+        return *holder.insert(str).first;
+    }
+};
+
+#endif // if on MinGW
+
+} // Anonymous namespace
+
 
 /* static */
 const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 {
     thread_local UntranslatedStringHolder wxPerThreadStrings;
-    return *wxPerThreadStrings.get().insert(str).first;
+    return wxPerThreadStrings.get(str);
 }
 
 
