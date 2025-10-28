@@ -658,7 +658,7 @@ public:
             The column to set the sort indicator for.
             If @c -1 is given, then the currently shown sort indicator
             will be removed.
-        @param sortOrder
+        @param ascending
             If @true or @false show the sort indicator corresponding to
             ascending or descending sort order respectively.
      */
