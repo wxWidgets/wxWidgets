@@ -540,6 +540,9 @@ void AppFrame::CreateMenu ()
     menuView->AppendCheckItem (myID_WHITESPACE, _("Show white&space"));
     menuView->AppendSeparator();
     menuView->Append (myID_USECHARSET, _("Use &code page of .."), menuCharset);
+    menuView->AppendSeparator();
+    menuView->Append(myID_WINDOW_MINIMAL, _("&Minimal editor"));
+    menuView->Append(myID_WINDOW_DOCMAP, _("Document &map\tF2"));
 
     // Annotations menu
     wxMenu* menuAnnotations = new wxMenu;
@@ -614,11 +617,6 @@ void AppFrame::CreateMenu ()
 #endif
     menuExtra->AppendCheckItem (myID_CUSTOM_POPUP, _("C&ustom context menu"));
 
-    // Window menu
-    wxMenu *menuWindow = new wxMenu;
-    menuWindow->Append(myID_WINDOW_MINIMAL, _("&Minimal editor"));
-    menuWindow->Append(myID_WINDOW_DOCMAP, _("Document &map\tF2"));
-
     // Help menu
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append (wxID_ABOUT, _("&About ..\tCtrl+D"));
@@ -630,7 +628,6 @@ void AppFrame::CreateMenu ()
     m_menuBar->Append (menuAnnotations, _("&Annotations"));
     m_menuBar->Append (menuIndicators, _("&Indicators"));
     m_menuBar->Append (menuExtra, _("E&xtra"));
-    m_menuBar->Append (menuWindow, _("&Window"));
     m_menuBar->Append (menuHelp, _("&Help"));
     SetMenuBar (m_menuBar);
 
