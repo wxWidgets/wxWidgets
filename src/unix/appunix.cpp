@@ -20,6 +20,10 @@
 #include "wx/private/fdiodispatcher.h"
 #include "wx/private/fdioeventloopsourcehandler.h"
 
+#ifdef __DARWIN__
+#include "wx/osx/private.h"
+#endif
+
 #include <signal.h>
 #include <unistd.h>
 
@@ -86,6 +90,14 @@ wxAppConsole::~wxAppConsole()
 // same names
 bool wxAppConsole::Initialize(int& argc_, wxChar** argv_)
 {
+#ifdef __DARWIN__
+    // On command line apps on macOS we need to initialize Cocoa framework
+    wxMacAutoreleasePool autoreleasepool;
+#if !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+    wxMacInitCocoa();
+#endif
+#endif // __DARWIN__
+
     if ( !wxAppConsoleBase::Initialize(argc_, argv_) )
         return false;
 
