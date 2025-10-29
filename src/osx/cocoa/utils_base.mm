@@ -374,9 +374,13 @@ NSString* wxNSStringWithWxString(const wxString &wxstring)
 // helper when starting as a command line tool without an NSApp running at all
 //----------------------------------------------------------------------------
 
+#if !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+
 bool wxMacInitCocoa()
 {
     bool cocoaLoaded = NSApplicationLoad();
     wxASSERT_MSG(cocoaLoaded,wxT("Couldn't load Cocoa in Carbon Environment")) ;
     return cocoaLoaded;
 }
+
+#endif // !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__

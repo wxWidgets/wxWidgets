@@ -1056,9 +1056,13 @@ protected :
 // cocoa bridging utilities
 //---------------------------------------------------------------------------
 
-bool wxMacInitCocoa();
+#if !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
 
-class WXDLLIMPEXP_CORE wxMacAutoreleasePool
+bool WXDLLIMPEXP_BASE wxMacInitCocoa();
+
+#endif // !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+
+class WXDLLIMPEXP_BASE wxMacAutoreleasePool
 {
 public :
     wxMacAutoreleasePool();
@@ -1069,9 +1073,9 @@ private :
 
 // NSObject
 
-void wxMacCocoaRelease( void* obj );
-void wxMacCocoaAutorelease( void* obj );
-void* wxMacCocoaRetain( void* obj );
+void WXDLLIMPEXP_BASE wxMacCocoaRelease( void* obj );
+void WXDLLIMPEXP_BASE wxMacCocoaAutorelease( void* obj );
+void* WXDLLIMPEXP_BASE wxMacCocoaRetain( void* obj );
 
 // shared_ptr like API for NSObject and subclasses
 template <class T>
