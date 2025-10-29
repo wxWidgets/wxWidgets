@@ -156,9 +156,12 @@ public:
         if ( !isAvailable )
             return nullptr;
 
-        auto nsloc = [NSLocale localeWithLocaleIdentifier: availableLocaleId];
+        wxCFStringRef cfName(locId.GetName());
+        auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
         if ( !nsloc )
             return nullptr;
+
+        
 
         return new wxUILocaleImplCF(nsloc);
     }
