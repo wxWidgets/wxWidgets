@@ -116,7 +116,6 @@ public:
             const auto availId = wxLocaleIdent::FromTag(strId);
             if ( availId.IsEmpty() )
             {
-                // wxLogTrace("Failed to parse locale identifier %s" , [nsLocId UTF8String]);
                 wxLogDebug("Failed to parse locale identifier \"%s\"", strId);
                 continue;
             }
@@ -147,10 +146,7 @@ public:
         wxOBJC_END_FOR_LOOP
 
         if ( !isAvailable )
-        {
-            wxLogTrace("locale", "no match found for %s" ,  locId.GetTag().c_str());
             return nullptr;
-        }
 
         wxCFStringRef cfName(locId.GetName());
         NSLocale* nsloc = [[NSLocale alloc] initWithLocaleIdentifier:cfName.AsNSString()];
