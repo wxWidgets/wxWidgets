@@ -103,9 +103,9 @@ public:
         // completely invalid strings, so we need to check if the name is
         // actually in the list of the supported locales ourselves.
         bool isAvailable = false;
-        NSString* availableLocaleId = NULL;
+        NSArray* availableLocaleIds = [NSLocale availableLocaleIdentifiers];
 
-        wxOBJC_FOR_LOOP( NSString* nsLocId, [NSLocale availableLocaleIdentifiers] )
+        wxOBJC_FOR_LOOP( NSString* nsLocId, availableLocaleIds )
         {
             // We can't simply compare the names here because the list returned
             // by NSLocale is incomplete and doesn't contain all synonyms, e.g.
@@ -116,6 +116,7 @@ public:
             const auto availId = wxLocaleIdent::FromTag(strId);
             if ( availId.IsEmpty() )
             {
+                // wxLogTrace("Failed to parse locale identifier %s" , [nsLocId UTF8String]);
                 wxLogDebug("Failed to parse locale identifier \"%s\"", strId);
                 continue;
             }
@@ -135,31 +136,27 @@ public:
                         isAvailable = availId.GetRegion() == locId.GetRegion();
                     }
                 }
-                else if (!locId.GetRegion().empty() )
+                else
                 {
                     isAvailable = availId.GetRegion() == locId.GetRegion();
                 }
-                else
-                {
-                    // No script or region specified, language match is enough.
-                    isAvailable = true;
-                }
             }
             if ( isAvailable )
-            {
-                availableLocaleId = nsLocId;
                 break;
-            }
         }
         wxOBJC_END_FOR_LOOP
 
         if ( !isAvailable )
+        {
+            wxLogTrace("locale", "no match found for %s" ,  locId.GetTag().c_str());
             return nullptr;
+        }
 
         wxCFStringRef cfName(locId.GetName());
-        NSLocale* nsloc = [[NSLocale alloc] initWithLocaleIdentifier: cfName.AsNSString()];
+        NSLocale* nsloc = [[NSLocale alloc] initWithLocaleIdentifier:cfName.AsNSString()];
         if ( !nsloc )
             return nullptr;
+
         [nsloc autorelease];
 
         return new wxUILocaleImplCF(nsloc);
