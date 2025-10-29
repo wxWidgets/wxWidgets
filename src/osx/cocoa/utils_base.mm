@@ -325,3 +325,58 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
     // expected return values of wxCmpNatural(), so we don't need to convert.
     return [wxCFStringRef(s1).AsNSString() localizedStandardCompare: wxCFStringRef(s2).AsNSString()];
 }
+
+wxMacAutoreleasePool::wxMacAutoreleasePool()
+{
+    m_pool = [[NSAutoreleasePool alloc] init];
+}
+
+wxMacAutoreleasePool::~wxMacAutoreleasePool()
+{
+    [(NSAutoreleasePool*)m_pool release];
+}
+
+// ----------------------------------------------------------------------------
+// NSObject Utils
+// ----------------------------------------------------------------------------
+
+void wxMacCocoaRelease( void* obj )
+{
+    [(NSObject*)obj release];
+}
+
+void wxMacCocoaAutorelease( void* obj )
+{
+    [(NSObject*)obj autorelease];
+}
+
+void* wxMacCocoaRetain( void* obj )
+{
+    [(NSObject*)obj retain];
+    return obj;
+}
+
+//---------------------------------------------------------
+// helper functions for NSString<->wxString conversion
+//---------------------------------------------------------
+
+wxString wxStringWithNSString(NSString *nsstring)
+{
+    return wxString([nsstring UTF8String], wxConvUTF8);
+}
+
+NSString* wxNSStringWithWxString(const wxString &wxstring)
+{
+    return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];
+}
+
+//----------------------------------------------------------------------------
+// helper when starting as a command line tool without an NSApp running at all
+//----------------------------------------------------------------------------
+
+bool wxMacInitCocoa()
+{
+    bool cocoaLoaded = NSApplicationLoad();
+    wxASSERT_MSG(cocoaLoaded,wxT("Couldn't load Cocoa in Carbon Environment")) ;
+    return cocoaLoaded;
+}
