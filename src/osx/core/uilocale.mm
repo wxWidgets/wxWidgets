@@ -399,7 +399,7 @@ wxUILocaleImplCF::GetCurrencySymbolPosition() const
     formatter.locale = m_nsloc;
     formatter.numberStyle = NSNumberFormatterCurrencyStyle;
 
-    NSString* formatted = [formatter stringFromNumber:@123];
+    NSString* formatted = [formatter stringFromNumber:[NSNumber numberWithInt:123]];
     NSString* symbol = formatter.currencySymbol;
 
     NSRange symbolRange = [formatted rangeOfString:symbol];
