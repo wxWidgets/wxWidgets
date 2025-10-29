@@ -506,7 +506,7 @@ wxWebSessionURLSession::~wxWebSessionURLSession()
 {
     [m_session release];
     [m_delegate release];
-#if !wxOSX_USE_IPHONE
+#if !defined(wxOSX_USE_IPHONE) || !wxOSX_USE_IPHONE
     [m_proxyURL release];
 #endif // !wxOSX_USE_IPHONE
 }
@@ -542,7 +542,7 @@ wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo() const
 
 bool wxWebSessionURLSession::SetProxy(const wxWebProxy& proxy)
 {
-#if wxOSX_USE_IPHONE
+#if defined(wxOSX_USE_IPHONE) && wxOSX_USE_IPHONE
     // Setting the proxy doesn't seem to be supported under iOS.
     return false;
 #else // !wxOSX_USE_IPHONE
@@ -641,7 +641,7 @@ WX_NSURLSession wxWebSessionURLSession::GetSession()
              [NSURLSessionConfiguration defaultSessionConfiguration] :
              [NSURLSessionConfiguration ephemeralSessionConfiguration];
 
-#if !wxOSX_USE_IPHONE
+#if !defined(wxOSX_USE_IPHONE) || !wxOSX_USE_IPHONE
         switch ( GetProxy().GetType() )
         {
             case wxWebProxy::Type::URL:
