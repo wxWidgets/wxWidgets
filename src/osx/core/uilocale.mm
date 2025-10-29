@@ -133,9 +133,14 @@ public:
                         isAvailable = availId.GetRegion() == locId.GetRegion();
                     }
                 }
-                else
+                else if (!locId.GetRegion().empty() )
                 {
                     isAvailable = availId.GetRegion() == locId.GetRegion();
+                }
+                else
+                {
+                    // No script or region specified, language match is enough.
+                    isAvailable = true;
                 }
             }
             if ( isAvailable )
