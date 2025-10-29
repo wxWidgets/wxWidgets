@@ -103,6 +103,8 @@ public:
         // completely invalid strings, so we need to check if the name is
         // actually in the list of the supported locales ourselves.
         bool isAvailable = false;
+        NSString* availableLocaleId = NULL;
+
         wxOBJC_FOR_LOOP( id nsLocId, [NSLocale availableLocaleIdentifiers] )
         {
             // We can't simply compare the names here because the list returned
@@ -144,15 +146,17 @@ public:
                 }
             }
             if ( isAvailable )
+            {
+                availableLocaleId = nsLocId;
                 break;
+            }
         }
         wxOBJC_END_FOR_LOOP
 
         if ( !isAvailable )
             return nullptr;
 
-        wxCFStringRef cfName(locId.GetName());
-        auto nsloc = [NSLocale localeWithLocaleIdentifier: cfName.AsNSString()];
+        auto nsloc = [NSLocale localeWithLocaleIdentifier: availableLocaleId];
         if ( !nsloc )
             return nullptr;
 
