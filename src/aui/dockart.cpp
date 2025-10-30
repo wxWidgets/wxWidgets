@@ -826,12 +826,9 @@ void wxAuiDefaultDockArt::DrawGripper(wxDC& dc,
     }
 }
 
-void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
-                                      wxWindow* window,
-                                      int button,
-                                      int button_state,
-                                      const wxRect& _rect,
-                                      wxAuiPaneInfo& pane)
+wxBitmapBundle
+wxAuiDefaultDockArt::GetPaneButtonBitmap(int button,
+                                         const wxAuiPaneInfo& pane)
 {
     wxBitmapBundle bb;
     switch (button)
@@ -867,6 +864,17 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
             break;
     }
 
+    return bb;
+}
+
+void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
+                                      wxWindow* window,
+                                      int button,
+                                      int button_state,
+                                      const wxRect& _rect,
+                                      wxAuiPaneInfo& pane)
+{
+    const auto& bb = GetPaneButtonBitmap(button, pane);
     const wxBitmap& bmp = bb.GetBitmapFor(window);
 
     wxRect rect = _rect;

@@ -161,6 +161,10 @@ protected:
 
     void InitBitmaps();
 
+    // Preferred function for bitmap access: use it rather than wxBitmapBundle
+    // member variables directly.
+    wxBitmapBundle GetPaneButtonBitmap(int button, const wxAuiPaneInfo& pane);
+
 protected:
 
     wxPen m_borderPen;
