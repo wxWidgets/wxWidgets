@@ -296,6 +296,7 @@ wxOSX:
 - Fix memory leak in wxColour::Set() (#25569).
 - Fix regression with configure build under macOS < 12 (#25675).
 - Fix build under macOS 26 Tahoe (#25798).
+- Fix build problem with memset_s() with PCH enabled (#24687).
 - Fix nested markup attributes handling (Václav Slavík, #25864).
 - Fix possible use of already destroyed wxTimers (Federico Perini, #25871).
 - Fix handling of multiple filters in wxFileDialog (#25918).
