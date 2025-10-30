@@ -269,6 +269,12 @@
 #        if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
 #            define wxSIZE_T_IS_ULONG
 #        endif
+
+        /* Define this as soon as possible and before string.h is included to
+           get memset_s() declaration from it if available. */
+#       ifndef __STDC_WANT_LIB_EXT1__
+#           define __STDC_WANT_LIB_EXT1__ 1
+#       endif
 #    endif
 
 /*
