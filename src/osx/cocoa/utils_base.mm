@@ -36,6 +36,8 @@ wxSocketManager *wxOSXSocketManagerCF = nullptr;
 #if (defined(__APPLE__) && __MAC_OS_X_VERSION_MAX_ALLOWED >= 101000) \
     || (defined(__WXOSX_IPHONE__) && defined(__IPHONE_8_0))
     #define wxHAS_NSPROCESSINFO 1
+#else
+    #define wxHAS_NSPROCESSINFO 0
 #endif
 
 // our OS version is the same in non GUI and GUI cases
