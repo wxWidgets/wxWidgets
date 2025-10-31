@@ -36,6 +36,8 @@ wxSocketManager *wxOSXSocketManagerCF = nullptr;
 #if (defined(__APPLE__) && __MAC_OS_X_VERSION_MAX_ALLOWED >= 101000) \
     || (defined(__WXOSX_IPHONE__) && defined(__IPHONE_8_0))
     #define wxHAS_NSPROCESSINFO 1
+#else
+    #define wxHAS_NSPROCESSINFO 0
 #endif
 
 // our OS version is the same in non GUI and GUI cases
@@ -278,11 +280,16 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
 
     NSRunningApplication *app = nil;
 
-    if ( [params count] > 0 )
-        app = [ws openURLs:params withApplicationAtURL:url
-                   options:NSWorkspaceLaunchAsync
-             configuration:[NSDictionary dictionary]
-                     error:&error];
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101000
+    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
+    {
+        if ( [params count] > 0 )
+            app = [ws openURLs:params withApplicationAtURL:url
+                       options:NSWorkspaceLaunchAsync
+                 configuration:[NSDictionary dictionary]
+                         error:&error];
+    }
+#endif
 
     if ( app == nil )
     {
@@ -325,3 +332,62 @@ int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
     // expected return values of wxCmpNatural(), so we don't need to convert.
     return [wxCFStringRef(s1).AsNSString() localizedStandardCompare: wxCFStringRef(s2).AsNSString()];
 }
+
+wxMacAutoreleasePool::wxMacAutoreleasePool()
+{
+    m_pool = [[NSAutoreleasePool alloc] init];
+}
+
+wxMacAutoreleasePool::~wxMacAutoreleasePool()
+{
+    [(NSAutoreleasePool*)m_pool release];
+}
+
+// ----------------------------------------------------------------------------
+// NSObject Utils
+// ----------------------------------------------------------------------------
+
+void wxMacCocoaRelease( void* obj )
+{
+    [(NSObject*)obj release];
+}
+
+void wxMacCocoaAutorelease( void* obj )
+{
+    [(NSObject*)obj autorelease];
+}
+
+void* wxMacCocoaRetain( void* obj )
+{
+    [(NSObject*)obj retain];
+    return obj;
+}
+
+//---------------------------------------------------------
+// helper functions for NSString<->wxString conversion
+//---------------------------------------------------------
+
+wxString wxStringWithNSString(NSString *nsstring)
+{
+    return wxString([nsstring UTF8String], wxConvUTF8);
+}
+
+NSString* wxNSStringWithWxString(const wxString &wxstring)
+{
+    return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];
+}
+
+//----------------------------------------------------------------------------
+// helper when starting as a command line tool without an NSApp running at all
+//----------------------------------------------------------------------------
+
+#if !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+
+bool wxMacInitCocoa()
+{
+    bool cocoaLoaded = NSApplicationLoad();
+    wxASSERT_MSG(cocoaLoaded,wxT("Couldn't load Cocoa in Carbon Environment")) ;
+    return cocoaLoaded;
+}
+
+#endif // !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__

@@ -55,7 +55,7 @@
 
 #ifdef __WIN32__
     #include "wx/msw/private/uilocale.h"
-#elif defined(__WXOSX__)
+#elif defined(__DARWIN__)
     #include "wx/osx/core/cfref.h"
     #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFLocale.h>
@@ -535,7 +535,7 @@ wxString wxLocale::GetSystemEncodingName()
     default:
         encname.Printf(wxS("windows-%u"), codepage);
     }
-#elif defined(__WXMAC__)
+#elif defined(__DARWIN__)
     encname = wxCFStringRef::AsString(
         CFStringGetNameOfEncoding(CFStringGetSystemEncoding())
     );
@@ -819,7 +819,7 @@ wxString wxLocale::GetHeaderValue(const wxString& header,
 // accessors for locale-dependent data
 // ----------------------------------------------------------------------------
 
-#if defined(__WINDOWS__) || defined(__WXOSX__)
+#if defined(__WINDOWS__) || defined(__DARWIN__)
 
 namespace
 {
@@ -1243,7 +1243,7 @@ wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
     return wxUILocale::GetCurrent().GetInfo(index, cat);
 }
 
-#elif defined(__WXOSX__)
+#elif defined(__DARWIN__)
 
 // This function is also used by wxUILocaleImpl, so don't make it private.
 extern wxString
