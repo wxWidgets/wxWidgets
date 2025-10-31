@@ -857,7 +857,7 @@ wxWindowBase::InformFirstDirection(int direction,
 wxSize
 wxWindowBase::GetMinSizeFromKnownDirection(int direction,
                                            int size,
-                                           int availableOtherDir)
+                                           int availableOtherDir) const
 {
     if ( !InformFirstDirection(direction, size, availableOtherDir) )
         return wxDefaultSize;
