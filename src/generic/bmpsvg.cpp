@@ -54,6 +54,37 @@
 #include "wx/rawbmp.h"
 #include "wx/private/bmpbndl.h"
 
+#include "wx/buffer.h"
+#include "wx/log.h"
+
+// ============================================================================
+// private helpers
+// ============================================================================
+
+// Common helper to load SVG file data
+static wxCharBuffer LoadSVGFile(const wxString& path)
+{
+#ifndef wxNO_SVG_FILE
+#if wxUSE_FFILE
+    wxFFile file(path, "rb");
+#elif wxUSE_FILE
+    wxFile file(path);
+#endif
+    if ( file.IsOpened() )
+    {
+        const wxFileOffset lenAsOfs = file.Length();
+        if ( lenAsOfs != wxInvalidOffset )
+        {
+            const size_t len = static_cast<size_t>(lenAsOfs);
+            wxCharBuffer buf(len);
+            if ( file.Read(buf.data(), len) == len )
+                return buf;
+        }
+    }
+#endif // !wxNO_SVG_FILE
+    return wxCharBuffer();
+}
+
 #if wxUSE_LUNASVG
 
 // ============================================================================
