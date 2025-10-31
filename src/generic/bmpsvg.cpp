@@ -56,10 +56,11 @@
 
 #if wxUSE_LUNASVG
 
-#include <memory>
+// ============================================================================
+// lunasvg implementation
+// ============================================================================
 
-#include "wx/buffer.h"
-#include "wx/log.h"
+#include <memory>
 
 // Try to help people updating their sources from Git and forgetting to
 // initialize new submodules, if possible: if you get this error, it means that
@@ -249,34 +250,18 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxS
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef)
 {
-#if wxUSE_FFILE
-    wxFFile file(path, "rb");
-#elif wxUSE_FILE
-    wxFile file(path);
-#else
-    #error "wxWidgets must be built with support for wxFFile or wxFile."
-#endif
-    if (file.IsOpened())
-    {
-        const wxFileOffset lenAsOfs = file.Length();
-        if (lenAsOfs != wxInvalidOffset)
-        {
-            const size_t len = static_cast<size_t>(lenAsOfs);
-            wxMemoryBuffer buf(len);
-
-            if (file.Read(static_cast<char*>(buf.GetWriteBuf(len)), len) == len)
-            {
-                buf.UngetWriteBuf(len);
-                return wxBitmapBundle::FromSVG(static_cast<wxByte*>(buf.GetData()),
-                                               len, sizeDef);
-            }
-        }
-    }
+    wxCharBuffer buf = LoadSVGFile(path);
+    if ( buf.data() )
+        return wxBitmapBundle::FromSVG(buf.data(), sizeDef);
 
     return wxBitmapBundle();
 }
 
 #else // !wxUSE_LUNASVG
+
+// ============================================================================
+// nanosvg implementation
+// ============================================================================
 
 // Note that we have to include NanoSVG headers before including any of wx
 // headers, notably wx/unichar.h which defines global operator==() overloads
@@ -321,9 +306,9 @@ wxGCC_WARNING_RESTORE(cast-qual)
     #include "wx/utils.h"                   // Only for wxMin()
 #endif // WX_PRECOMP
 
-// ----------------------------------------------------------------------------
-// private helpers
-// ----------------------------------------------------------------------------
+// ============================================================================
+// nanosvg implementation
+// ============================================================================
 
 namespace
 {
@@ -494,26 +479,9 @@ wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& s
     // There is nsvgParseFromFile(), but it doesn't work with Unicode filenames
     // under MSW and does exactly the same thing that we do here in any case,
     // so it seems better to use our code.
-#ifndef wxNO_SVG_FILE
-#if wxUSE_FFILE
-    wxFFile file(path, "rb");
-#elif wxUSE_FILE
-    wxFile file(path);
-#endif
-    if ( file.IsOpened() )
-    {
-        const wxFileOffset lenAsOfs = file.Length();
-        if ( lenAsOfs != wxInvalidOffset )
-        {
-            const size_t len = static_cast<size_t>(lenAsOfs);
-
-            wxCharBuffer buf(len);
-            char* const ptr = buf.data();
-            if ( file.Read(ptr, len) == len )
-                return wxBitmapBundle::FromSVG(ptr, sizeDef);
-        }
-    }
-#endif // !wxNO_SVG_FILE
+    wxCharBuffer buf = LoadSVGFile(path);
+    if ( buf.data() )
+        return wxBitmapBundle::FromSVG(buf.data(), sizeDef);
 
     return wxBitmapBundle();
 }
