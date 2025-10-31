@@ -566,7 +566,7 @@ void wxStyledTextCtrlMiniMap::OnEditUpdate(wxStyledTextEvent& event)
         SyncSelection();
 
     // Note that we don't need to refresh the map for wxSTC_UPDATE_CONTENT
-    // changes, as Scintilla already refreshs it on its own when the shared
+    // changes, as Scintilla already refreshes it on its own when the shared
     // document contents change.
 }
 
