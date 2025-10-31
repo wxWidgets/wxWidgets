@@ -1441,7 +1441,7 @@ public:
     virtual wxSize
     GetMinSizeFromKnownDirection(int direction,
                                  int size,
-                                 int availableOtherDir) const;
+                                 int availableOtherDir);
 
     /**
         Returns the maximum size of window's client area.
