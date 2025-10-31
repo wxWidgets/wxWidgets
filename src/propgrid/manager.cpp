@@ -1475,7 +1475,6 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
     }
     else
     {
-        m_pTxtHelpCaption->Wrap(-1);
         m_pTxtHelpCaption->Show( true );
         if ( cnt_hei <= 2 )
         {
@@ -1484,7 +1483,6 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
         else
         {
             m_pTxtHelpContent->SetSize(3,cnt_y,use_width,cnt_hei);
-            m_pTxtHelpContent->Wrap(use_width);
             m_pTxtHelpContent->Show( true );
         }
     }
@@ -1841,7 +1839,9 @@ void wxPropertyGridManager::RecreateControls()
                                                  wxString(),
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
-                                                 wxALIGN_LEFT|wxST_NO_AUTORESIZE);
+                                                 wxALIGN_LEFT|
+                                                 wxST_NO_AUTORESIZE|
+                                                 wxST_WRAP);
             m_pTxtHelpContent->SetCursor( *wxSTANDARD_CURSOR );
         }
 
