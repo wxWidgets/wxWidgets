@@ -544,6 +544,7 @@ void wxStyledTextCtrlMiniMap::OnEditPaint(wxPaintEvent& event)
 
 void wxStyledTextCtrlMiniMap::OnEditUpdate(wxStyledTextEvent& event)
 {
+    event.Skip();
     if ( event.GetUpdated() & wxSTC_UPDATE_V_SCROLL )
     {
         auto const editFirst = m_edit->GetFirstVisibleLine();
