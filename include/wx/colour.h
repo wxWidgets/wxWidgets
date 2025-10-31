@@ -34,7 +34,7 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
              ChannelType blue,                                                \
              ChannelType alpha = wxALPHA_OPAQUE)                              \
         { Init(); Set(red, green, blue, alpha); }                             \
-    explicit wxColour(unsigned long colRGB) { Init(); Set(colRGB    ); }      \
+    wxColour(unsigned long colRGB) { Init(); Set(colRGB    ); }               \
     wxColour(const wxString& colourName) { Init(); Set(colourName); }         \
     wxWXCOLOUR_CTOR_FROM_CHAR                                                 \
     wxColour(const wchar_t *colourName) { Init(); Set(colourName); }
