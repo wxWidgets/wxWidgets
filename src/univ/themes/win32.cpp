@@ -2214,7 +2214,7 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
             "w ",
             " w",
         };
-        dc.SetBrush(wxBrush(wxColour(wxString(stipple_xpm))));
+        dc.SetBrush(wxBrush(wxColour(wxBitmap(stipple_xpm))));
 
         dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, SHADOW_HIGHLIGHT));
         dc.SetTextBackground(wxSCHEME_COLOUR(m_scheme, CONTROL));
