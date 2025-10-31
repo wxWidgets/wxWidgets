@@ -495,7 +495,7 @@ public:
     virtual wxSize
     GetMinSizeFromKnownDirection(int direction,
                                  int size,
-                                 int availableOtherDir);
+                                 int availableOtherDir) const;
 
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for
