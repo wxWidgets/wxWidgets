@@ -98,7 +98,7 @@ public:
         @param colRGB
             A packed RGB value.
     */
-    wxColour(unsigned long colRGB);
+    explicit wxColour(unsigned long colRGB);
 
     /**
         Copy constructor.
