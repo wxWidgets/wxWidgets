@@ -263,18 +263,22 @@ void wxStaticTextBase::Wrap(int width)
 
     m_currentWrap = width;
 
-    // Allow for repeated calls to Wrap with different values
-    if (m_unwrappedLabel.empty())
-    {
-        m_unwrappedLabel = GetLabel();
-    }
-    else
+    // Allow for repeated calls to Wrap() with different values by storing the
+    // original label, before wrapping it. We also need to preserve the value
+    // of the unwrapped label if it's already set because the calls to
+    // SetLabel() (including from inside wxLabelWrapper) reset it.
+    auto const unwrappedLabel = m_unwrappedLabel.empty()
+                                    ? GetLabel()
+                                    : m_unwrappedLabel;
+    if ( !m_unwrappedLabel.empty() )
     {
         SetLabel( m_unwrappedLabel );
     }
     wxLabelWrapper wrapper;
     wrapper.WrapLabel(this, width);
     InvalidateBestSize();
+
+    m_unwrappedLabel = unwrappedLabel;
 }
 
 wxSize
@@ -353,6 +357,11 @@ bool wxStaticTextBase::UpdateLabelOrig(const wxString& label)
         return false;
 
     m_labelOrig = label;
+
+    // We need to clear the existing unwrapped label as it doesn't correspond
+    // to the new value of the actual label any longer.
+    m_unwrappedLabel.clear();
+
     return true;
 }
 
