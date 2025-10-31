@@ -27,17 +27,21 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 #else // wxNO_IMPLICIT_WXSTRING_ENCODING
 #define wxWXCOLOUR_CTOR_FROM_CHAR
 #endif
-#define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                      \
-    wxColour() { Init(); }                                                    \
-    wxColour(ChannelType red,                                                 \
-             ChannelType green,                                               \
-             ChannelType blue,                                                \
-             ChannelType alpha = wxALPHA_OPAQUE)                              \
-        { Init(); Set(red, green, blue, alpha); }                             \
-    wxColour(unsigned long colRGB) { Init(); Set(colRGB    ); }               \
-    wxColour(const wxString& colourName) { Init(); Set(colourName); }         \
-    wxWXCOLOUR_CTOR_FROM_CHAR                                                 \
-    wxColour(const wchar_t *colourName) { Init(); Set(colourName); }
+#define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                              \
+    wxColour() { Init(); }                                                            \
+    wxColour(ChannelType red,                                                         \
+             ChannelType green,                                                       \
+             ChannelType blue,                                                        \
+             ChannelType alpha = wxALPHA_OPAQUE)                                      \
+        { Init(); Set(red, green, blue, alpha); }                                     \
+    wxColour(unsigned long colRGB) { Init(); Set(colRGB); }                           \
+    wxColour(long colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}           \
+    wxColour(unsigned int colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}   \
+    wxColour(int colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}            \
+    wxColour(const wxString& colourName) { Init(); Set(colourName); }                 \
+    wxWXCOLOUR_CTOR_FROM_CHAR                                                         \
+    wxColour(const wchar_t *colourName) { Init(); Set(colourName); }                  \
+    wxColour(bool) = delete;
 
 
 // flags for wxColour -> wxString conversion (see wxColour::GetAsString)
