@@ -347,6 +347,15 @@ void wxStaticTextBase::AutoResizeIfNecessary()
     SetSize(GetBestSize());
 }
 
+bool wxStaticTextBase::UpdateLabelOrig(const wxString& label)
+{
+    if ( label == m_labelOrig )
+        return false;
+
+    m_labelOrig = label;
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // wxStaticTextBase - generic implementation for wxST_ELLIPSIZE_* support
 // ----------------------------------------------------------------------------

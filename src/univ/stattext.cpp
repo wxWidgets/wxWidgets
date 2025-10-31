@@ -66,11 +66,8 @@ void wxStaticText::DoDraw(wxControlRenderer *renderer)
 
 void wxStaticText::SetLabel(const wxString& str)
 {
-    if ( str == m_labelOrig )
+    if ( !UpdateLabelOrig(str) )
         return;
-
-    // save original label
-    m_labelOrig = str;
 
     // draw as real label the abbreviated version of it
     WXSetVisibleLabel(GetEllipsizedLabel());
