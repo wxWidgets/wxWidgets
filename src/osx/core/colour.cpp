@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/core/colour.cpp
-// Purpose:     wxColour class
+// Purpose:     wxColourImpl class
 // Author:      Stefan Csomor
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
@@ -156,7 +156,7 @@ WXImage wxCGColorRefData::GetWXPatternImage() const
 #define M_COLDATA static_cast<wxColourRefData*>(m_refData)
 
 #if wxOSX_USE_COCOA_OR_CARBON
-wxColour::wxColour(const RGBColor& col)
+wxColourImpl::wxColourImpl(const RGBColor& col)
 {
     InitRGBA((float)(col.red / 65535.0), (float)(col.green / 65535.0),
         (float)(col.blue / 65535.0), (float)1.0 );
@@ -164,7 +164,7 @@ wxColour::wxColour(const RGBColor& col)
 #endif
 
 #if !wxOSX_USE_COCOA_OR_IPHONE
-wxColour::wxColour(CGColorRef col)
+wxColourImpl::wxColourImpl(CGColorRef col)
 {
     wxASSERT_MSG(col != nullptr, "Invalid CoreGraphics Color");
 
@@ -172,35 +172,35 @@ wxColour::wxColour(CGColorRef col)
 }
 #endif
 
-wxColour::ChannelType wxColour::Red() const
+wxColourImpl::ChannelType wxColourImpl::Red() const
 {
     wxCHECK_MSG( IsOk(), 0, "invalid colour" );
 
     return wxRound(M_COLDATA->Red() * 255.0);
 }
 
-wxColour::ChannelType wxColour::Green() const
+wxColourImpl::ChannelType wxColourImpl::Green() const
 {
     wxCHECK_MSG( IsOk(), 0, "invalid colour" );
 
     return wxRound(M_COLDATA->Green() * 255.0);
 }
 
-wxColour::ChannelType wxColour::Blue() const
+wxColourImpl::ChannelType wxColourImpl::Blue() const
 {
     wxCHECK_MSG( IsOk(), 0, "invalid colour" );
 
     return wxRound(M_COLDATA->Blue() * 255.0);
 }
 
-wxColour::ChannelType wxColour::Alpha() const
+wxColourImpl::ChannelType wxColourImpl::Alpha() const
 {
     wxCHECK_MSG( IsOk(), 0, "invalid colour" );
 
     return wxRound(M_COLDATA->Alpha() * 255.0);
 }
 
-bool wxColour::IsSolid() const
+bool wxColourImpl::IsSolid() const
 {
     wxCHECK_MSG( IsOk(), false, "invalid colour" );
 
@@ -208,7 +208,7 @@ bool wxColour::IsSolid() const
 }
 
 #if wxOSX_USE_COCOA_OR_CARBON
-void wxColour::GetRGBColor(RGBColor* col) const
+void wxColourImpl::GetRGBColor(RGBColor* col) const
 {
     wxCHECK_RET( IsOk(), "invalid colour" );
 
@@ -218,28 +218,28 @@ void wxColour::GetRGBColor(RGBColor* col) const
 }
 #endif
 
-CGColorRef wxColour::GetCGColor() const
+CGColorRef wxColourImpl::GetCGColor() const
 {
     wxCHECK_MSG( IsOk(), nullptr, "invalid colour" );
 
     return M_COLDATA->GetCGColor();
 }
 
-WXColor wxColour::OSXGetWXColor() const
+WXColor wxColourImpl::OSXGetWXColor() const
 {
     wxCHECK_MSG( IsOk(), nullptr, "invalid colour" );
 
     return M_COLDATA->GetWXColor();
 }
 
-WXImage wxColour::OSXGetWXPatternImage() const
+WXImage wxColourImpl::OSXGetWXPatternImage() const
 {
     wxCHECK_MSG( IsOk(), nullptr, "invalid colour" );
 
     return M_COLDATA->GetWXPatternImage();
 }
 
-bool wxColour::operator==(const wxColour& other) const
+bool wxColourImpl::operator==(const wxColourImpl& other) const
 {
     if (m_refData == other.m_refData)
         return true;
@@ -250,17 +250,17 @@ bool wxColour::operator==(const wxColour& other) const
     return CGColorEqualToColor(GetCGColor(), other.GetCGColor());
 }
 
-wxGDIRefData* wxColour::CloneGDIRefData(const wxGDIRefData* data) const
+wxGDIRefData* wxColourImpl::CloneGDIRefData(const wxGDIRefData* data) const
 {
     return static_cast<const wxColourRefData*>(data)->Clone();
 }
 
-void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
+void wxColourImpl::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
     InitRGBA(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 }
 
-void wxColour::InitRGBA(float r, float g, float b, float a)
+void wxColourImpl::InitRGBA(float r, float g, float b, float a)
 {
     UnRef();
     m_refData = new wxCGColorRefData(r,g,b,a);
