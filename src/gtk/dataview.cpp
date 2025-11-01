@@ -1657,7 +1657,7 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     wxDataViewCustomRenderer::GTKRenderParams renderParams;
     wxRect rect(wxRectFromGDKRect(cell_area));
 #ifdef __WXGTK3__
-    const bool isRTL = wxWindow::GTKGetLayout(widget);
+    const bool isRTL = wxWindow::GTKGetLayout(widget) == wxLayout_RightToLeft;
     if (isRTL)
     {
         cairo_scale(cr, -1, 1);
@@ -2834,7 +2834,8 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text,
     cell_area.width -= xoffset;
 
 #ifdef __WXGTK3__
-    const bool isRTL = wxWindow::GTKGetLayout(m_renderParams->widget);
+    const bool isRTL =
+        wxWindow::GTKGetLayout(m_renderParams->widget) == wxLayout_RightToLeft;
     if (isRTL)
     {
         cairo_save(m_renderParams->cr);
