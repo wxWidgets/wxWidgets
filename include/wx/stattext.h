@@ -79,6 +79,13 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // display.
     void UpdateLabel();
 
+    // This helper function must be called to update m_labelOrig instead of
+    // doing it directly.
+    //
+    // It returns false if the label didn't change.
+    bool UpdateLabelOrig(const wxString& label);
+
+
     // If m_currentWrap is non-zero, contains the label value before wrapping it.
     // This is used to allow re-wrapping it at different widths. Note that
     // wxControlBase::m_labelOrig is changed when Wrap() is called and so can't

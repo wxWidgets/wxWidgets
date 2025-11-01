@@ -91,12 +91,8 @@ QLabel* wxStaticText::GetQLabel() const
 void wxStaticText::SetLabel(const wxString& label)
 {
     // If the label doesn't really change, avoid flicker by not doing anything.
-    if ( label == m_labelOrig )
+    if ( !UpdateLabelOrig(label) )
         return;
-
-    // save the label in m_labelOrig with both the markup (if any) and
-    // the mnemonics characters (if any)
-    m_labelOrig = label;
 
     WXSetVisibleLabel(GetEllipsizedLabel());
 
