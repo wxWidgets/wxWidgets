@@ -93,7 +93,7 @@
     support using wxDC::DrawSpline(), currently we don't do it and so FromSVG()
     is only available in the ports providing raw bitmap access.
  */
-#if defined(wxHAS_RAW_BITMAP) && wxUSE_NANOSVG
+#if defined(wxHAS_RAW_BITMAP) && (wxUSE_NANOSVG || wxUSE_LUNASVG)
     #define wxHAS_SVG
 #endif
 

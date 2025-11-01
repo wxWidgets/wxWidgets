@@ -147,6 +147,8 @@ wx_add_thirdparty_library(wxUSE_LIBPNG PNG "use libpng (PNG image format)")
 wx_add_thirdparty_library(wxUSE_LIBTIFF TIFF "use libtiff (TIFF file format)")
 wx_add_thirdparty_library(wxUSE_LIBWEBP WebP "use libwebp (WebP file format)")
 wx_add_thirdparty_library(wxUSE_NANOSVG NanoSVG "use NanoSVG for rasterizing SVG" DEFAULT builtin)
+wx_option(wxUSE_LUNASVG "use LunaSVG for rasterizing SVG (C++17 minimum)" OFF)
+set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LUNASVG "use LunaSVG for rasterizing SVG (C++17 minimum)")
 wx_option(wxUSE_LIBLZMA "use LZMA compression" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzma for LZMA compression")
 
