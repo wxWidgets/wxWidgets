@@ -53,7 +53,9 @@ if(WIN32_MSVC_NAMING)
 else()
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "${library_dir}/wx/include")
+        DESTINATION "${library_dir}/wx/include"
+        PATTERN "protocols" EXCLUDE
+    )
 
     install(
         FILES "${wxOUTPUT_DIR}/wx/config/${wxBUILD_FILE_ID}"
