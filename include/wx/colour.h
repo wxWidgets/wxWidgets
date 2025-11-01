@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 // Set() is a virtual function and thus cannot be called by wxColourBase ctors
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 #define wxWXCOLOUR_CTOR_FROM_CHAR \
-    wxColour(const char *colourName) { Init(); Set(colourName); }
+    wxColour(const char *colourName) : wxColour(wxString(colourName)) {}
 #else // wxNO_IMPLICIT_WXSTRING_ENCODING
 #define wxWXCOLOUR_CTOR_FROM_CHAR
 #endif
@@ -40,7 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
     wxColour(int colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}            \
     wxColour(const wxString& colourName) { Init(); Set(colourName); }                 \
     wxWXCOLOUR_CTOR_FROM_CHAR                                                         \
-    wxColour(const wchar_t *colourName) { Init(); Set(colourName); }                  \
+    wxColour(const wchar_t *colourName) : wxColour(wxString(colourName)) {}           \
     wxColour(bool) = delete;
 
 
