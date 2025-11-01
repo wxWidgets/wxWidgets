@@ -17,29 +17,6 @@
 
 class WXDLLIMPEXP_FWD_CORE wxColour;
 
-// A macro to define the standard wxColour constructors:
-//
-// It avoids the need to repeat these lines across all colour.h files, since
-// Set() is a virtual function and thus cannot be called by wxColourBase ctors
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-#define wxWXCOLOUR_CTOR_FROM_CHAR \
-    wxColour(const char *colourName) { Init(); Set(colourName); }
-#else // wxNO_IMPLICIT_WXSTRING_ENCODING
-#define wxWXCOLOUR_CTOR_FROM_CHAR
-#endif
-#define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                      \
-    wxColour() { Init(); }                                                    \
-    wxColour(ChannelType red,                                                 \
-             ChannelType green,                                               \
-             ChannelType blue,                                                \
-             ChannelType alpha = wxALPHA_OPAQUE)                              \
-        { Init(); Set(red, green, blue, alpha); }                             \
-    wxColour(unsigned long colRGB) { Init(); Set(colRGB    ); }               \
-    wxColour(const wxString& colourName) { Init(); Set(colourName); }         \
-    wxWXCOLOUR_CTOR_FROM_CHAR                                                 \
-    wxColour(const wchar_t *colourName) { Init(); Set(colourName); }
-
-
 // flags for wxColour -> wxString conversion (see wxColour::GetAsString)
 enum {
     wxC2S_NAME             = 1,   // return colour name, when possible
@@ -192,10 +169,6 @@ public:
     wxDECLARE_VARIANT_OBJECT_EXPORTED(wxColour, WXDLLIMPEXP_CORE);
 
 protected:
-    // Some ports need Init() and while we don't, provide a stub so that the
-    // ports which don't need it are not forced to define it
-    void Init() { }
-
     virtual void
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) = 0;
 
@@ -243,5 +216,42 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
 #endif
 
 #define wxColor wxColour
+
+// Actual wxColour class, inheriting from the port-specific implementation
+// class and defining all the overloaded constructors.
+class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour : public wxColourImpl
+{
+public:
+    wxColour() = default;
+    wxColour(ChannelType red,
+             ChannelType green,
+             ChannelType blue,
+             ChannelType alpha = wxALPHA_OPAQUE)
+        { Set(red, green, blue, alpha); }
+    wxColour(unsigned long colRGB) { Set(colRGB); }
+    wxColour(long colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}
+    wxColour(unsigned int colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}
+    wxColour(int colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}
+    wxColour(const wxString& colourName) { Set(colourName); }
+    wxColour(const wchar_t *colourName) : wxColour(wxString(colourName)) {}
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    wxColour(const char *colourName) : wxColour(wxString(colourName)) {}
+#endif
+    wxColour(bool) = delete;
+
+    // Also inherit port-specific constructors from the base class, if any.
+    using wxColourImpl::wxColourImpl;
+
+    // And define copy constructor and assignment operator in this class too.
+    wxColour(const wxColour& col) : wxColourImpl(col) {}
+    wxColour& operator=(const wxColour& col)
+    {
+        wxColourImpl::operator=(col);
+        return *this;
+    }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxColour);
+};
 
 #endif // _WX_COLOUR_H_BASE_

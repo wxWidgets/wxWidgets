@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/colour.h
-// Purpose:     wxColour class
+// Purpose:     wxColourImpl class
 // Author:      Julian Smart
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
@@ -16,12 +16,12 @@
 // Colour
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour : public wxColourBase
+class WXDLLIMPEXP_CORE wxColourImpl : public wxColourBase
 {
 public:
     // constructors
     // ------------
-    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
+    wxColourImpl() = default;
 
     // accessors
     // ---------
@@ -34,7 +34,7 @@ public:
     unsigned char Alpha() const override { return m_alpha ; }
 
     // comparison
-    bool operator==(const wxColour& colour) const
+    bool operator==(const wxColourImpl& colour) const
     {
         return m_isInit == colour.m_isInit
             && m_red == colour.m_red
@@ -43,29 +43,23 @@ public:
             && m_alpha == colour.m_alpha;
     }
 
-    bool operator!=(const wxColour& colour) const { return !(*this == colour); }
+    bool operator!=(const wxColourImpl& colour) const { return !(*this == colour); }
 
     WXCOLORREF GetPixel() const { return m_pixel; }
 
 public:
-    WXCOLORREF m_pixel;
+    WXCOLORREF m_pixel = 0;
 
 protected:
-    // Helper function
-    void Init();
-
     virtual void
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
 
 private:
-    bool          m_isInit;
-    unsigned char m_red;
-    unsigned char m_blue;
-    unsigned char m_green;
-    unsigned char m_alpha;
-
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxColour);
+    bool          m_isInit = false;
+    unsigned char m_red = 0;
+    unsigned char m_blue = 0;
+    unsigned char m_green = 0;
+    unsigned char m_alpha = wxALPHA_TRANSPARENT;
 };
 
 #endif // _WX_COLOUR_H_
