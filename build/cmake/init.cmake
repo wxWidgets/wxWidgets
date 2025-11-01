@@ -464,6 +464,7 @@ if(wxUSE_GUI)
                     pkg_get_variable(WAYLAND_SCANNER wayland-scanner wayland_scanner)
                     if(WAYLAND_SCANNER)
                         set(wx_protocols_input_dir ${wxSOURCE_DIR}/src/unix/protocols)
+                        set(wx_protocols_temp_dir ${wxOUTPUT_DIR}/wx/protocols)
                         set(wx_protocols_output_dir ${wxSETUP_HEADER_PATH}/wx/protocols)
 
                         # Note that we need multiple execute_process()
@@ -471,19 +472,30 @@ if(wxUSE_GUI)
                         # concurrently and not sequentially.
                         execute_process(
                             COMMAND
-                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_output_dir}
+                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_temp_dir}
                         )
                         execute_process(
                             COMMAND
                                 ${WAYLAND_SCANNER} client-header
                                     ${wx_protocols_input_dir}/pointer-warp-v1.xml
-                                    ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.h
+                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.h
                         )
                         execute_process(
                             COMMAND
                                 ${WAYLAND_SCANNER} private-code
                                     ${wx_protocols_input_dir}/pointer-warp-v1.xml
-                                    ${wx_protocols_output_dir}/pointer-warp-v1-client-protocol.c
+                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.c
+                        )
+
+                        execute_process(
+                            COMMAND
+                                ${CMAKE_COMMAND} -E make_directory ${wx_protocols_output_dir}
+                        )
+                        execute_process(
+                            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.h
+                                    ${wx_protocols_temp_dir}/pointer-warp-v1-client-protocol.c
+                                    ${wx_protocols_output_dir}
                         )
 
                         set(wxHAVE_WAYLAND_CLIENT ON)
