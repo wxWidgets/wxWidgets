@@ -257,7 +257,7 @@ wxGDIRefData* wxColour::CloneGDIRefData(const wxGDIRefData* data) const
 
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
-    InitRGBA((float)(r / 255.0), (float)(g / 255.0), (float)(b / 255.0), (float)(a / 255.0));
+    InitRGBA(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 }
 
 void wxColour::InitRGBA(float r, float g, float b, float a)
