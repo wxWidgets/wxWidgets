@@ -48,12 +48,6 @@ QColor wxColour::GetQColor() const
     return QColor();
 }
 
-void wxColour::Init()
-{
-    m_red = m_green = m_blue = m_alpha = 0;
-    m_valid = false;
-}
-
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
     m_red = r; m_green = g; m_blue = b; m_alpha = a;

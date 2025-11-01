@@ -23,16 +23,6 @@
 
 // Colour
 
-void wxColour::Init()
-{
-    m_isInit = false;
-    m_pixel = 0;
-    m_alpha =
-    m_red =
-    m_blue =
-    m_green = 0;
-}
-
 void wxColour::InitRGBA(unsigned char r, unsigned char g, unsigned char b,
                         unsigned char a)
 {

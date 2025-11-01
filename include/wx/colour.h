@@ -29,17 +29,17 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 #define wxWXCOLOUR_CTOR_FROM_CHAR
 #endif
 #define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                              \
-    wxColour() { Init(); }                                                            \
+    wxColour() = default;                                                             \
     wxColour(ChannelType red,                                                         \
              ChannelType green,                                                       \
              ChannelType blue,                                                        \
              ChannelType alpha = wxALPHA_OPAQUE)                                      \
-        { Init(); Set(red, green, blue, alpha); }                                     \
-    wxColour(unsigned long colRGB) { Init(); Set(colRGB); }                           \
+        { Set(red, green, blue, alpha); }                                             \
+    wxColour(unsigned long colRGB) { Set(colRGB); }                                   \
     wxColour(long colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}           \
     wxColour(unsigned int colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}   \
     wxColour(int colRGB) : wxColour(static_cast<unsigned long>(colRGB)) {}            \
-    wxColour(const wxString& colourName) { Init(); Set(colourName); }                 \
+    wxColour(const wxString& colourName) { Set(colourName); }                         \
     wxWXCOLOUR_CTOR_FROM_CHAR                                                         \
     wxColour(const wchar_t *colourName) : wxColour(wxString(colourName)) {}           \
     wxColour(bool) = delete;
@@ -197,10 +197,6 @@ public:
     wxDECLARE_VARIANT_OBJECT_EXPORTED(wxColour, WXDLLIMPEXP_CORE);
 
 protected:
-    // Some ports need Init() and while we don't, provide a stub so that the
-    // ports which don't need it are not forced to define it
-    void Init() { }
-
     virtual void
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) = 0;
 

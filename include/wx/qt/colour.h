@@ -33,12 +33,14 @@ public:
     QColor GetQColor() const;
 
 protected:
-    void Init();
     virtual void InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) override;
 
 private:
-    ChannelType m_red, m_green, m_blue, m_alpha;
-    bool m_valid;
+    ChannelType m_red = 0,
+                m_green = 0,
+                m_blue = 0,
+                m_alpha = wxALPHA_TRANSPARENT;
+    bool m_valid = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxColour);
 };

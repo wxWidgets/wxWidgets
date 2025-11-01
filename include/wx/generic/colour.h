@@ -49,19 +49,15 @@ public:
     bool operator!=(const wxColour& colour) const { return !(*this == colour); }
 
 protected:
-
-    // Helper function
-    void Init();
-
     virtual void
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 private:
-    bool m_isInit;
-    unsigned char m_red;
-    unsigned char m_blue;
-    unsigned char m_green;
-    unsigned char m_alpha;
+    bool m_isInit = false;
+    unsigned char m_red = 0;
+    unsigned char m_blue = 0;
+    unsigned char m_green = 0;
+    unsigned char m_alpha = wxALPHA_OPAQUE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxColour);
