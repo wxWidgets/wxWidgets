@@ -20,7 +20,8 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 // A macro to define the standard wxColour constructors:
 //
 // It avoids the need to repeat these lines across all colour.h files, since
-// Set() is a virtual function and thus cannot be called by wxColourBase ctors
+// InitRGBA(), called from Set(), is a virtual function and thus Set() cannot
+// be called from wxColourBase ctors.
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
 #define wxWXCOLOUR_CTOR_FROM_CHAR \
     wxColour(const char *colourName) : wxColour(wxString(colourName)) {}
