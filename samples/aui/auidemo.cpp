@@ -33,7 +33,6 @@
 #include "wx/msgdlg.h"
 #include "wx/textdlg.h"
 #include "wx/stattext.h"
-#include "wx/checkbox.h"
 
 #include "wx/aui/aui.h"
 #include "wx/aui/serializer.h"
@@ -127,9 +126,6 @@ class MyFrame : public wxFrame
         ID_NotebookNormalTab,
         ID_NotebookPinTab,
         ID_NotebookLockTab,
-        ID_3CHECK,
-        ID_UI_2CHECK_UPDATED,
-        ID_UI_3CHECK_UPDATED,
 
         ID_SampleItem,
 
@@ -203,8 +199,6 @@ private:
     void OnNotebookSetTabKind(wxCommandEvent& evt);
 
     void OnPaneClose(wxAuiManagerEvent& evt);
-
-    void OnCheckboxUpdateUI(wxUpdateUIEvent& evt);
 
 private:
 
@@ -746,8 +740,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnNotebookPageChanging)
     EVT_AUINOTEBOOK_TAB_RIGHT_DOWN(wxID_ANY, MyFrame::OnNotebookTabRightClick)
     EVT_AUINOTEBOOK_BG_DCLICK(wxID_ANY, MyFrame::OnNotebookTabBackgroundDClick)
-    EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
-    EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
 wxEND_EVENT_TABLE()
 
 
@@ -900,14 +892,9 @@ MyFrame::MyFrame(wxWindow* parent,
     appendItems.Add(item);
 
 
-    // If using wxUPDATE_UI_PROCESS_ALL (the default),
-    // some of the problems handling controls in toolbar
-    // are masked by the calls to wxCheckBox::UpdateWindowUI()
-    wxUpdateUIEvent::SetMode(wxUPDATE_UI_PROCESS_SPECIFIED);
     // create some toolbars
     wxAuiToolBar* tb1 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb1->SetExtraStyle(tb1->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
     tb1->AddTool(ID_SampleItem+1, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb1->AddSeparator();
     tb1->AddTool(ID_SampleItem+2, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
@@ -920,7 +907,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb2 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_HORIZONTAL);
-    tb2->SetExtraStyle(tb2->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
 
     wxBitmapBundle tb2_bmp1 = wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
     tb2->AddTool(ID_SampleItem+6, "Disabled", tb2_bmp1);
@@ -942,7 +928,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb3->SetExtraStyle(tb3->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
     wxBitmapBundle tb3_bmp1 = wxArtProvider::GetBitmapBundle(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
     tb3->AddTool(ID_SampleItem+16, "Check 1", tb3_bmp1, "Check 1", wxITEM_CHECK);
     tb3->AddTool(ID_SampleItem+17, "Check 2", tb3_bmp1, "Check 2", wxITEM_CHECK);
@@ -965,7 +950,6 @@ MyFrame::MyFrame(wxWindow* parent,
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
-    tb4->SetExtraStyle(tb4->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
     wxBitmapBundle tb4_bmp1 = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
@@ -985,34 +969,11 @@ MyFrame::MyFrame(wxWindow* parent,
     choice->AppendString("Good choice");
     choice->AppendString("Better choice");
     tb4->AddControl(choice);
-#if wxUSE_CHECKBOX
-    wxCheckBox* checkbox1 = new wxCheckBox(tb4, ID_3CHECK,
-                                                "Checkbox",
-                                                wxDefaultPosition, wxDefaultSize,
-                                                wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
-    checkbox1->SetMinSize(checkbox1->GetSizeFromText(checkbox1->GetLabelText()));
-    tb4->AddControl(checkbox1);
-    wxCheckBox* checkbox2 = new wxCheckBox(tb4, ID_UI_2CHECK_UPDATED,
-                                                "2Checkbox UI Updated",
-                                                wxDefaultPosition, wxDefaultSize,
-                                                wxCHK_2STATE);
-    checkbox2->SetMinSize(checkbox2->GetSizeFromText(checkbox2->GetLabelText()));
-    checkbox2->Disable();
-    tb4->AddControl(checkbox2);
-    wxCheckBox* checkbox3 = new wxCheckBox(tb4, ID_UI_3CHECK_UPDATED,
-                                                "3Checkbox UI Updated",
-                                                wxDefaultPosition, wxDefaultSize,
-                                                wxCHK_3STATE);
-    checkbox3->SetMinSize(checkbox3->GetSizeFromText(checkbox3->GetLabelText()));
-    checkbox3->Disable();
-    tb4->AddControl(checkbox3);
-#endif
     tb4->Realize();
 
 
     wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-    tb5->SetExtraStyle(tb5->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
     tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb5->AddSeparator();
     tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
@@ -1644,33 +1605,6 @@ void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
         if (res != wxYES)
             evt.Veto();
     }
-}
-
-// copy state from user-controllable checkbox to disabled checkbox
-void MyFrame::OnCheckboxUpdateUI(wxUpdateUIEvent& evt)
-{
-#if wxUSE_CHECKBOX
-    wxASSERT(evt.IsCheckable());
-    wxWindow* tb4 = m_mgr.GetPane("tb4").window;
-    wxWindow* wnd = tb4->FindWindow(ID_3CHECK);
-    wxCheckBox* src = wxCheckCast<wxCheckBox>(wnd);
-    if (!evt.Is3State())
-    {
-        if (src->Get3StateValue() != wxCHK_UNDETERMINED)
-        {
-            evt.Show(true);
-            evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
-        }
-        else
-        {
-            evt.Show(false);
-        }
-    }
-    else
-    {
-        evt.Set3StateValue(src->Get3StateValue());
-    }
-#endif
 }
 
 void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
