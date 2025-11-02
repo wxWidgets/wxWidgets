@@ -603,31 +603,27 @@ wxSize wxAuiGenericToolBarArt::GetToolSize(
     if (m_flags & wxAUI_TB_TEXT)
     {
         dc.SetFont(m_font);
-        int tx, ty;
+        const wxSize textSize = dc.GetTextExtent(item.GetLabel());
 
         if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
         {
-            dc.GetTextExtent(wxT("ABCDHgj"), &tx, &ty);
-            height += ty;
+            // Reuse the height of text if we already have it, otherwise (i.e.
+            // if the label is empty) use the character height.
+            height += textSize.y ? textSize.y : dc.GetCharHeight();
 
-            if ( !item.GetLabel().empty() )
-            {
-                dc.GetTextExtent(item.GetLabel(), &tx, &ty);
-                width = wxMax(width, tx+wnd->FromDIP(6));
-            }
+            const int widthWithMargins = textSize.x + wnd->FromDIP(6);
+            if ( widthWithMargins > width )
+                width = widthWithMargins;
         }
         else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT &&
-                  !item.GetLabel().empty() )
+                  textSize.x != 0 )
         {
             width += wnd->FromDIP(3); // space between left border and bitmap
             width += wnd->FromDIP(3); // space between bitmap and text
 
-            if ( !item.GetLabel().empty() )
-            {
-                dc.GetTextExtent(item.GetLabel(), &tx, &ty);
-                width += tx;
-                height = wxMax(height, ty);
-            }
+            width += textSize.x;
+            if ( textSize.y > height )
+                height = textSize.y;
         }
     }
 
