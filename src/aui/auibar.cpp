@@ -1025,22 +1025,15 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
                            wxObject* client_data)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
     item.m_label = label;
     item.m_bitmap = bitmap;
     item.m_disabledBitmap = disabledBitmap;
     item.m_shortHelp = shortHelpString;
     item.m_longHelp = longHelpString;
-    item.m_active = true;
     item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = tool_id;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = kind;
-    item.m_sizerItem = nullptr;
     item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
     item.m_clientData = client_data;
     item.m_sticky = false;
 
@@ -1055,20 +1048,14 @@ wxAuiToolBarItem* wxAuiToolBar::AddControl(wxControl* control,
                               const wxString& label)
 {
     wxAuiToolBarItem item;
-    item.m_window = (wxWindow*)control;
+    item.m_window = control;
     item.m_label = label;
     item.m_bitmap = wxBitmapBundle();
     item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
     item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = control->GetId();
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_CONTROL;
-    item.m_sizerItem = nullptr;
     item.m_minSize = control->GetEffectiveMinSize();
-    item.m_userData = 0;
     item.m_sticky = false;
 
     m_items.Add(item);
@@ -1084,20 +1071,11 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
         min_size.x = width;
 
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
     item.m_label = label;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
     item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = tool_id;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_LABEL;
-    item.m_sizerItem = nullptr;
     item.m_minSize = min_size;
-    item.m_userData = 0;
     item.m_sticky = false;
 
     if (item.m_toolId == wxID_ANY)
@@ -1110,19 +1088,10 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
 wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
     item.m_dropDown = false;
     item.m_toolId = -1;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_SEPARATOR;
-    item.m_sizerItem = nullptr;
     item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
     item.m_sticky = false;
 
     m_items.Add(item);
@@ -1132,20 +1101,11 @@ wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
 wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
     item.m_dropDown = false;
     item.m_spacerPixels = pixels;
     item.m_toolId = -1;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_SPACER;
-    item.m_sizerItem = nullptr;
     item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
     item.m_sticky = false;
 
     m_items.Add(item);
@@ -1155,20 +1115,11 @@ wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
 wxAuiToolBarItem* wxAuiToolBar::AddStretchSpacer(int proportion)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
     item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = -1;
-    item.m_state = 0;
     item.m_proportion = proportion;
     item.m_kind = wxITEM_SPACER;
-    item.m_sizerItem = nullptr;
     item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
     item.m_sticky = false;
 
     m_items.Add(item);
