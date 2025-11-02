@@ -47,7 +47,10 @@ enum wxAuiToolBarStyle
     wxAUI_TB_VERTICAL      = 1 << 5,
 
     /**
-      Shows the text and the icons alongside, not vertically stacked. This style must be used with wxAUI_TB_TEXT
+      Shows the text and the icons alongside, not vertically stacked.
+
+      This style must be used with wxAUI_TB_TEXT and can't be used with
+      wxAUI_TB_VERTICAL.
     */
     wxAUI_TB_HORZ_LAYOUT   = 1 << 6,
 
@@ -755,6 +758,9 @@ public:
         whereas by default it can be horizontal or vertical and
         be docked anywhere.
     @style{wxAUI_TB_HORZ_LAYOUT}
+        For horizontal toolbars, show the text and the icons alongside,
+        not vertically stacked. This style must be used with wxAUI_TB_TEXT
+        and can't be used with wxAUI_TB_VERTICAL.
     @style{wxAUI_TB_HORIZONTAL}
         Analogous to wxAUI_TB_VERTICAL, but forces the toolbar
         to be horizontal.

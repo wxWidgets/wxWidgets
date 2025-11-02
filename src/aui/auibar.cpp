@@ -909,6 +909,16 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     SetFont(*wxNORMAL_FONT);
     SetArtFlags();
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+
+    if ( style & wxAUI_TB_VERTICAL )
+    {
+        wxASSERT_MSG
+        (
+         !(style & wxAUI_TB_HORZ_LAYOUT),
+         "Horizontal layout style can't be used with vertical toolbars"
+        );
+    }
+
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
     SetBackgroundStyle(wxBG_STYLE_PAINT);
