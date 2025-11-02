@@ -208,15 +208,15 @@ private:
     wxString m_shortHelp;               // short help (for tooltip)
     wxString m_longHelp;                // long help (for status bar)
     wxSizerItem* m_sizerItem = nullptr; // sizer item
-    wxSize m_minSize;                   // item's minimum size
+    wxSize m_minSize = wxDefaultSize;   // item's minimum size
     int m_spacerPixels = 0;             // size of a spacer
     int m_toolId = 0;                   // item's id
     int m_kind = wxITEM_NORMAL;         // item's kind
     int m_state = 0;                    // state
     int m_proportion = 0;               // proportion
     bool m_active = true;               // true if the item is currently active
-    bool m_dropDown = true;             // true if the item has a dropdown button
-    bool m_sticky = true;               // button is always active if true
+    bool m_dropDown = false;            // item has a dropdown button if true
+    bool m_sticky = false;              // button is always active if true
     long m_userData = 0;                // number associated with the item
     wxObject* m_clientData = nullptr;   // wxObject associated with the item
     int m_alignment = wxALIGN_CENTER;   // sizer alignment flag
