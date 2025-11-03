@@ -43,6 +43,9 @@ while <tt>\__WINDOWS__</tt> should be used for the platform tests.}
 @itemdef{\__WXOSX_IPHONE__, iPhone (UIKit)}
 @itemdef{\__WXOSX_COCOA__, macOS using Cocoa (AppKit)}
 @itemdef{\__WXOSX_MAC__, macOS (Cocoa)}
+@itemdef{\__WXDARWIN__, wxBase built on macOS or iPhone, synonym of <tt>\__DARWIN__</tt> (see below)}
+@itemdef{\__WXDARWIN_OSX__, wxBase built on macOS (can be used for with Apple and non-Apple GUIs)}
+@itemdef{\__WXDARWIN_IPHONE__, wxBase built on iPhone}
 @itemdef{\__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{\__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
 @itemdef{\__WXX11__, wxX11 (<tt>\__WXUNIVERSAL__</tt> will be also defined)}
