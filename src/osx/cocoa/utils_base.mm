@@ -36,14 +36,12 @@ wxSocketManager *wxOSXSocketManagerCF = nullptr;
 #if (defined(__APPLE__) && __MAC_OS_X_VERSION_MAX_ALLOWED >= 101000) \
     || (defined(__WXOSX_IPHONE__) && defined(__IPHONE_8_0))
     #define wxHAS_NSPROCESSINFO 1
-#else
-    #define wxHAS_NSPROCESSINFO 0
 #endif
 
 // our OS version is the same in non GUI and GUI cases
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
-#if wxHAS_NSPROCESSINFO
+#ifdef wxHAS_NSPROCESSINFO
     NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
 
     if ( verMaj != nullptr )
@@ -75,7 +73,7 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 {
-#if wxHAS_NSPROCESSINFO
+#ifdef wxHAS_NSPROCESSINFO
     NSOperatingSystemVersion osVer;
     osVer.majorVersion = majorVsn;
     osVer.minorVersion = minorVsn;
@@ -381,13 +379,13 @@ NSString* wxNSStringWithWxString(const wxString &wxstring)
 // helper when starting as a command line tool without an NSApp running at all
 //----------------------------------------------------------------------------
 
-#if !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+#if !defined(__WXOSX_IPHONE__)
 
 bool wxMacInitCocoa()
 {
     bool cocoaLoaded = NSApplicationLoad();
-    wxASSERT_MSG(cocoaLoaded,wxT("Couldn't load Cocoa in Carbon Environment")) ;
+    wxASSERT_MSG(cocoaLoaded,wxT("Couldn't load Cocoa Environment as console app")) ;
     return cocoaLoaded;
 }
 
-#endif // !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+#endif // !defined(__WXOSX_IPHONE__)

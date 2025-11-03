@@ -93,7 +93,7 @@ bool wxAppConsole::Initialize(int& argc_, wxChar** argv_)
 #ifdef __DARWIN__
     // On command line apps on macOS we need to initialize Cocoa framework
     wxMacAutoreleasePool autoreleasepool;
-#if !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+#if !defined(__WXOSX_IPHONE__)
     wxMacInitCocoa();
 #endif
 #endif // __DARWIN__

@@ -105,8 +105,9 @@ public:
         bool isAvailable = false;
         NSArray* availableLocaleIds = [NSLocale availableLocaleIdentifiers];
 
-        wxOBJC_FOR_LOOP( NSString* nsLocId, availableLocaleIds )
+        for (NSUInteger i = 0; i < [availableLocaleIds count]; i++) \
         {
+            NSString* nsLocId = [availableLocaleIds objectAtIndex:i];
             // We can't simply compare the names here because the list returned
             // by NSLocale is incomplete and doesn't contain all synonyms, e.g.
             // it only contains "zh_Hant_TW" but not "zh_TW" itself, so we need
@@ -143,7 +144,6 @@ public:
             if ( isAvailable )
                 break;
         }
-        wxOBJC_END_FOR_LOOP
 
         if ( !isAvailable )
             return nullptr;
@@ -517,11 +517,11 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
 {
     wxVector<wxString> preferred;
     NSArray* preferredLangs = [NSLocale preferredLanguages];
-    wxOBJC_FOR_LOOP(NSString* preferredLang, preferredLangs)
+    for (NSUInteger i = 0; i < [preferredLangs count]; i++) \
     {
+        NSString* preferredLang = [preferredLangs objectAtIndex:i];
         preferred.push_back(wxCFStringRef::AsString(preferredLang));
     }
-    wxOBJC_END_FOR_LOOP
 
     return preferred;
 }

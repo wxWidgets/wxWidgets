@@ -1056,11 +1056,11 @@ protected :
 // cocoa bridging utilities
 //---------------------------------------------------------------------------
 
-#if !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+#if !defined(__WXOSX_IPHONE__)
 
 bool WXDLLIMPEXP_BASE wxMacInitCocoa();
 
-#endif // !defined(__WXOSX_IPHONE__) || !__WXOSX_IPHONE__
+#endif // !defined(__WXOSX_IPHONE__)
 
 class WXDLLIMPEXP_BASE wxMacAutoreleasePool
 {

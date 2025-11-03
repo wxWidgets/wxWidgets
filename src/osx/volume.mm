@@ -65,14 +65,14 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
     }
     else
     {
-        wxOBJC_FOR_LOOP(NSURL* url, nativeVolumes)
+        for (NSUInteger i = 0; i < [nativeVolumes count]; i++) \
         {
+            NSURL* url = [nativeVolumes objectAtIndex:i];
             wxFSVolumeBase volume([[url path] fileSystemRepresentation]);
             int flags = volume.GetFlags();
             if ((flags & flagsSet) == flagsSet && !(flags & flagsUnset))
                 volumePaths.push_back(volume.GetName());
         }
-        wxOBJC_END_FOR_LOOP
     }
     return volumePaths;
 }
