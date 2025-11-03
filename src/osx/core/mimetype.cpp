@@ -426,7 +426,17 @@ void wxMimeTypesManagerImpl::LoadDisplayDataForUti(const wxString& uti)
     wxCFStringRef ext = UTTypeCopyPreferredTagWithClass( cfuti, kUTTagClassFilenameExtension );
 
     // Look up the preferred application
-    wxCFRef<CFURLRef> appUrl = LSCopyDefaultApplicationURLForContentType( cfuti, kLSRolesAll, nullptr);
+    wxCFRef<CFURLRef> appUrl;
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_10
+    CFURLRef aurl;
+    // THIS FUNCTION, DESPITE ITS NAME, RETAINS THE URL REFERENCE ON BEHALF OF THE CALLER. 
+    OSStatus status = LSGetApplicationForInfo( kLSUnknownType, kLSUnknownCreator, ext, kLSRolesAll, NULL, &aurl );
+    if( status != noErr )
+        return;
+    appUrl.reset(aurl);
+#else
+    appUrl.reset(LSCopyDefaultApplicationURLForContentType( cfuti, kLSRolesAll, nullptr));
+#endif
 
     if( !appUrl )
         return;
