@@ -415,19 +415,13 @@
 
 #ifdef __DARWIN__
 #    if defined(__MACH__)
-#        ifndef __WXDARWIN__
-#            define __WXDARWIN__ 1
-#        endif
+#        define __WXDARWIN__ 1
 #        include <TargetConditionals.h>
 #        if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
 /*           this branch is also true for tv, catalyst, watch and vision */
-#            ifndef __WXDARWIN_IPHONE__
-#                define __WXDARWIN_IPHONE__ 1
-#            endif
+#            define __WXDARWIN_IPHONE__ 1
 #        elif defined(TARGET_OS_OSX) && TARGET_OS_OSX
-#            ifndef __WXDARWIN_IPHONE__
-#                define __WXDARWIN_OSX__ 1
-#            endif
+#            define __WXDARWIN_OSX__ 1
 #        endif
 
 #        include <Availability.h>

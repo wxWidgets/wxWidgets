@@ -96,7 +96,7 @@ wxString wxGetOsDescription()
     int majorVer, minorVer;
     wxGetOsVersion(&majorVer, &minorVer);
 
-#ifndef __WXOSX_IPHONE__
+#ifdef __WXDARWIN_OSX__
     // Notice that neither the OS name itself nor the code names seem to be
     // ever translated, OS X itself uses the English words even for the
     // languages not using Roman alphabet.
@@ -197,7 +197,7 @@ bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
 }
 #endif // wxUSE_DATETIME
 
-#ifndef __WXOSX_IPHONE__
+#ifdef __WXDARWIN_OSX__
 
 #include <AppKit/AppKit.h>
 
@@ -379,7 +379,7 @@ NSString* wxNSStringWithWxString(const wxString &wxstring)
 // helper when starting as a command line tool without an NSApp running at all
 //----------------------------------------------------------------------------
 
-#if !defined(__WXOSX_IPHONE__)
+#ifdef __WXDARWIN_OSX__
 
 bool wxMacInitCocoa()
 {
@@ -388,4 +388,4 @@ bool wxMacInitCocoa()
     return cocoaLoaded;
 }
 
-#endif // !defined(__WXOSX_IPHONE__)
+#endif // __WXDARWIN_OSX__
