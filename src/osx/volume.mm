@@ -67,7 +67,7 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
     {
         wxOBJC_FOR_LOOP(NSURL* url, nativeVolumes)
         {
-            wxFSVolumeBase volume(url.fileSystemRepresentation);
+            wxFSVolumeBase volume([[url path] fileSystemRepresentation]);
             int flags = volume.GetFlags();
             if ((flags & flagsSet) == flagsSet && !(flags & flagsUnset))
                 volumePaths.push_back(volume.GetName());
