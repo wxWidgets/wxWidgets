@@ -429,8 +429,8 @@ void wxMimeTypesManagerImpl::LoadDisplayDataForUti(const wxString& uti)
     wxCFRef<CFURLRef> appUrl;
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_10
     CFURLRef aurl;
-    // THIS FUNCTION, DESPITE ITS NAME, RETAINS THE URL REFERENCE ON BEHALF OF THE CALLER. 
-    OSStatus status = LSGetApplicationForInfo( kLSUnknownType, kLSUnknownCreator, ext, kLSRolesAll, NULL, &aurl );
+    // THIS FUNCTION, DESPITE ITS NAME, RETAINS THE URL REFERENCE ON BEHALF OF THE CALLER.
+    OSStatus status = LSGetApplicationForInfo( kLSUnknownType, kLSUnknownCreator, ext, kLSRolesAll, nullptr, &aurl );
     if( status != noErr )
         return;
     appUrl.reset(aurl);
