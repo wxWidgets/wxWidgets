@@ -12,12 +12,12 @@
 
 #include "wx/defs.h"
 
-#if defined(__WINDOWS__)
-    #include "wx/msw/mimetype.h"
-#elif ( defined(__DARWIN__) )
+#if defined(__DARWIN__)
     #include "wx/osx/mimetype.h"
 #elif defined(__UNIX__)
     #include "wx/unix/mimetype.h"
+#elif defined(__WINDOWS__)
+    #include "wx/msw/mimetype.h"
 #endif
 
 #if wxUSE_MIMETYPE
