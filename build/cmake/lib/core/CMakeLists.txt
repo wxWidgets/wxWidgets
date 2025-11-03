@@ -60,7 +60,7 @@ elseif(WXX11)
 endif()
 
 wx_add_library(wxcore ${CORE_SRC})
-foreach(lib JPEG PNG TIFF NANOSVG WebP wxlunasvg)
+foreach(lib JPEG PNG TIFF NANOSVG WebP LUNASVG)
     if(${lib}_LIBRARIES)
         wx_lib_link_libraries(wxcore PRIVATE ${${lib}_LIBRARIES})
     endif()
