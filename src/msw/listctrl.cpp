@@ -1382,11 +1382,26 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
 
     wxCopyRECTToRect(rectWin, rect);
 
-    // there is no way to retrieve the first sub item bounding rectangle using
-    // wxGetListCtrlSubItemRect() as 0 means the whole item, so we need to
-    // truncate it at first column ourselves
+    // the 0th subitem always returns the entire row bounds
+    // this causes rc.left to always be 0, regardless of the column order
+    // workaround:
+    // calculate the x position based on preceding, reordered columns
+    // also, use the column width for the width of the 0th column item
+    // since rc.right is also the end of the entire row
     if ( subItem == 0 && code == wxLIST_RECT_BOUNDS )
+    {
+        int precedingWidth = 0;
+        wxArrayInt columnOrder = GetColumnsOrder();
+        for ( int col = 0; col < columnOrder.GetCount(); col++ )
+        {
+            if ( columnOrder[col] == 0 )
+                break;
+
+            precedingWidth += GetColumnWidth(columnOrder[col]);
+        }
+        rect.x = precedingWidth;
         rect.width = GetColumnWidth(0);
+    }
 
     return true;
 }
@@ -3035,9 +3050,15 @@ RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
     return rc;
 }
 
-constexpr int GAP_BETWEEN_CHECKBOX_AND_TEXT = 2;
+// these are the values used to replicate the native listctrl rendering as close as possible
+constexpr int PADDING_LEFT_SIDE = 1;
+constexpr int PADDING_RIGHT_SIDE = 2;
+constexpr int GAP_AFTER_CHECKBOX = 2;
+constexpr int GAP_BEFORE_IMAGE = 2;
+constexpr int GAP_BEFORE_CHECKBOX = 4;
+constexpr int PADDING_LEFT_FOR_TEXT = 1;
 
-bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
+bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount, RECT rc, COLORREF bgFillRectColor)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
 
@@ -3050,40 +3071,43 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
     if ( hfont )
         selFont.Init(hdc, hfont);
 
-    // get the rectangle to paint
-    RECT rc;
-    wxGetListCtrlSubItemRect(hwndList, item, col, LVIR_BOUNDS, rc);
-    if ( !col && colCount > 1 )
-    {
-        // ListView_GetSubItemRect() returns the entire item rect for 0th
-        // subitem while we really need just the part for this column
-        RECT rc2;
-        wxGetListCtrlSubItemRect(hwndList, item, 1, LVIR_BOUNDS, rc2);
-        rc.right = rc2.left;
-    }
+    // there's some padding on both sides of the column item
+    const int maxColumnWidth = wxMax(listctrl->GetColumnWidth(col) - PADDING_LEFT_SIDE - PADDING_RIGHT_SIDE, 0);
+    rc.left += PADDING_LEFT_SIDE;
+    rc.right -= PADDING_RIGHT_SIDE;
 
-    if ( !col && listctrl->HasCheckBoxes() )
+    if ( col == 0 && listctrl->HasCheckBoxes() )
     {
         const HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_STATE);
 
         if ( himl && ImageList_GetImageCount(himl) == 2 )
         {
-            int cbX, cbY, cbWidth, cbHeight;
+            rc.left += GAP_BEFORE_CHECKBOX;
 
+            int cbWidth, cbHeight;
             ImageList_GetIconSize(himl, &cbWidth, &cbHeight);
-            cbX = listctrl->FromDIP(GAP_BETWEEN_CHECKBOX_AND_TEXT);
-            cbY = rc.top + ((rc.bottom - rc.top) / 2 - cbHeight / 2);
-            // When using style flag ILD_SELECTED or ILD_FOCUS, the checkboxes
-            // for selected items are drawn with a blue background, which we want to avoid.
-            ImageList_Draw(himl, listctrl->IsItemChecked(item) ? 1 : 0, hdc, cbX, cbY, ILD_TRANSPARENT);
-            rc.left += cbX + cbWidth;
+
+            // center checkbox vertically
+            int cbY = rc.top + ((rc.bottom - rc.top) / 2 - cbHeight / 2);
+
+            // prevent drawing checkbox farther than the column width or negative width
+            cbWidth = wxMin(cbWidth, rc.right - rc.left);
+            cbWidth = wxClip(cbWidth, 0, maxColumnWidth);
+
+            if ( rc.left < rc.right )
+            {
+                // When using style flag ILD_SELECTED or ILD_FOCUS, the checkboxes
+                // for selected items are drawn with a blue background, which we want to avoid.
+                ImageList_DrawEx(himl, listctrl->IsItemChecked(item) ? 1 : 0, hdc, rc.left, cbY, cbWidth, cbHeight,
+                                CLR_DEFAULT, CLR_DEFAULT, ILD_TRANSPARENT);
+            }
+
+            rc.left += GAP_AFTER_CHECKBOX;
+            
+            // move left edge for further drawing
+            rc.left += cbWidth;
         }
     }
-
-    // This mysterious offset is necessary for the owner drawn items to align
-    // with the non-owner-drawn ones. Note that it's intentionally *not* scaled
-    // by DPI factor because it doesn't seem to depend on the resolution.
-    rc.left += 6;
 
     // get the image and text to draw
     wxChar text[512];
@@ -3100,25 +3124,44 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
     HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_SMALL);
     if ( himl && ImageList_GetImageCount(himl) )
     {
+        // only the first column has padding for the image, in the native listctrl rendering
+        if ( col == 0 )
+        {
+            rc.left += GAP_BEFORE_IMAGE;
+        }
+
         int wImage, hImage;
         ImageList_GetIconSize(himl, &wImage, &hImage);
 
-        if ( it.iImage != -1 )
+        // center image vertically
+        const int yImage = rc.top + ((rc.bottom - rc.top) / 2 - hImage / 2);
+
+        // prevent drawing image farther than the column width
+        const int xOffset = wxClip(rc.right - rc.left, 0, wImage);
+        const int yOffset = hImage;
+
+        // only draw the image if there's enough space for it
+        if ( it.iImage != -1 && rc.left < rc.right )
         {
-            const int yImage = rc.top + ((rc.bottom - rc.top) / 2 - hImage / 2);
-            ImageList_Draw(himl, it.iImage, hdc, rc.left, yImage,
-                           nmcd.uItemState & CDIS_SELECTED ? ILD_SELECTED
-                                                           : ILD_TRANSPARENT);
+            const UINT fStyle = nmcd.uItemState & CDIS_SELECTED ? ILD_SELECTED : ILD_TRANSPARENT;
+            ImageList_DrawEx(himl, it.iImage, hdc, rc.left, yImage, xOffset, yOffset, CLR_DEFAULT, CLR_DEFAULT, fStyle);
         }
 
         // notice that even if this item doesn't have any image, the list
         // control still leaves space for the image in the first column if the
         // image list is not empty (presumably so that items with and without
         // images align?)
-        if ( it.iImage != -1 || it.iSubItem == 0 )
+        if ( it.iImage != -1 )
         {
-            rc.left += wImage + 2;
+            rc.left += xOffset;
         }
+    }
+
+    // draw attribute background after drawing any images or checkboxes
+    if ( rc.left < rc.right )
+    {
+        RECT fillRect = rc;
+        ::FillRect(hdc, &fillRect, AutoHBRUSH(bgFillRectColor));
     }
 
     ::SetBkMode(hdc, TRANSPARENT);
@@ -3150,7 +3193,11 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
     }
     //else: failed to get alignment, assume it's DT_LEFT (default)
 
-    DrawText(hdc, text, -1, &rc, fmt);
+    // text is drawn 1 unit away from the background rectangle
+    rc.left += PADDING_LEFT_FOR_TEXT;
+
+    if ( rc.left < rc.right )
+        DrawText(hdc, text, -1, &rc, fmt);
 
     return true;
 }
@@ -3179,6 +3226,7 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
 void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
+    HDC hdc = nmcd.hdc;
 
     const HWND hwndList = nmcd.hdr.hwndFrom;
     const int item = nmcd.dwItemSpec;
@@ -3215,35 +3263,50 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
         nmcd.uItemState &= ~CDIS_FOCUS;
     }
 
-    HDC hdc = nmcd.hdc;
-    RECT rc = GetCustomDrawnItemRect(nmcd);
 
+    COLORREF clrFullBG = pLVCD->clrTextBk;
     if ( nmcd.uItemState & CDIS_SELECTED )
     {
         pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
         pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+
+        clrFullBG = pLVCD->clrTextBk;
     }
     else
     {
-        // use normal colours from pLVCD
-
-        // do not draw item background colour under the checkbox/image
-        RECT rcIcon;
-        wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
-        if ( !::IsRectEmpty(&rcIcon) )
-            rc.left = rcIcon.right + listctrl->FromDIP(GAP_BETWEEN_CHECKBOX_AND_TEXT);
+        clrFullBG = wxColourToRGB(listctrl->GetBackgroundColour());
     }
-
+    
+    // clear the entire row with the listctrl's bg colour
+    // otherwise, it'd keep the hover color but only for the regions
+    // like the image/checkboxes since those aren't cleared inside
+    // HandleSubItemPrepaint, where it clears using the passed bg color
+    // but only for the text area
+    RECT rcFullClear = GetCustomDrawnItemRect(nmcd);
+    ::FillRect(hdc, &rcFullClear, AutoHBRUSH(clrFullBG));
+    
     COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
-    ::FillRect(hdc, &rc, AutoHBRUSH(pLVCD->clrTextBk));
 
     // we could use CDRF_NOTIFYSUBITEMDRAW here but it results in weird repaint
     // problems so just draw everything except the focus rect from here instead
-    const int colCount = Header_GetItemCount(ListView_GetHeader(hwndList));
-    for ( int col = 0; col < colCount; col++ )
+    
+    // draw the subitems in visual order, not logical one
+    // not necessary, but might improve any overflow issues
+    wxArrayInt columnOrder = listctrl->GetColumnsOrder();
+    int colCount = columnOrder.GetCount();
+    for ( int orderIdx = 0; orderIdx < colCount; orderIdx++ )
     {
+        const int col = columnOrder[orderIdx];
         pLVCD->iSubItem = col;
-        HandleSubItemPrepaint(listctrl, pLVCD, hfont, colCount);
+
+        // get the rectangle of this entire subitem
+        wxRect wxRCSubItem;
+        if ( !listctrl->GetSubItemRect(item, col, wxRCSubItem, wxLIST_RECT_BOUNDS) )
+            continue;
+        RECT rcSubItem;
+        wxCopyRectToRECT(wxRCSubItem, rcSubItem);
+
+        HandleSubItemPrepaint(listctrl, pLVCD, hfont, colCount, rcSubItem, pLVCD->clrTextBk);
     }
 
     ::SetTextColor(hdc, colTextOld);
