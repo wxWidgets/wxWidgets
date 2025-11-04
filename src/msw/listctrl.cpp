@@ -1382,11 +1382,23 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
 
     wxCopyRECTToRect(rectWin, rect);
 
-    // there is no way to retrieve the first sub item bounding rectangle using
-    // wxGetListCtrlSubItemRect() as 0 means the whole item, so we need to
-    // truncate it at first column ourselves
+    // We can't use wxGetListCtrlSubItemRect() for the 0th subitem as 0 means
+    // the entire row for this function, so we need to calculate it ourselves.
     if ( subItem == 0 && code == wxLIST_RECT_BOUNDS )
+    {
+        // Because the columns can be reordered, we need to sum the widths of
+        // all preceding columns to get the correct x position.
+        rect.x = 0;
+        for ( auto col : GetColumnsOrder() )
+        {
+            if ( col == 0 )
+                break;
+
+            rect.x += GetColumnWidth(col);
+        }
+
         rect.width = GetColumnWidth(0);
+    }
 
     return true;
 }
