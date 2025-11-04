@@ -1392,7 +1392,7 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
     {
         int precedingWidth = 0;
         wxArrayInt columnOrder = GetColumnsOrder();
-        for ( int col = 0; col < columnOrder.GetCount(); col++ )
+        for ( unsigned int col = 0; col < columnOrder.GetCount(); col++ )
         {
             if ( columnOrder[col] == 0 )
                 break;
@@ -3058,7 +3058,7 @@ constexpr int GAP_BEFORE_IMAGE = 2;
 constexpr int GAP_BEFORE_CHECKBOX = 4;
 constexpr int PADDING_LEFT_FOR_TEXT = 1;
 
-bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount, RECT rc, COLORREF bgFillRectColor)
+bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, RECT rc, COLORREF bgFillRectColor)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
 
@@ -3103,7 +3103,7 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
             }
 
             rc.left += GAP_AFTER_CHECKBOX;
-            
+
             // move left edge for further drawing
             rc.left += cbWidth;
         }
@@ -3276,7 +3276,7 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     {
         clrFullBG = wxColourToRGB(listctrl->GetBackgroundColour());
     }
-    
+
     // clear the entire row with the listctrl's bg colour
     // otherwise, it'd keep the hover color but only for the regions
     // like the image/checkboxes since those aren't cleared inside
@@ -3284,12 +3284,12 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     // but only for the text area
     RECT rcFullClear = GetCustomDrawnItemRect(nmcd);
     ::FillRect(hdc, &rcFullClear, AutoHBRUSH(clrFullBG));
-    
+
     COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
 
     // we could use CDRF_NOTIFYSUBITEMDRAW here but it results in weird repaint
     // problems so just draw everything except the focus rect from here instead
-    
+
     // draw the subitems in visual order, not logical one
     // not necessary, but might improve any overflow issues
     wxArrayInt columnOrder = listctrl->GetColumnsOrder();
@@ -3306,7 +3306,7 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
         RECT rcSubItem;
         wxCopyRectToRECT(wxRCSubItem, rcSubItem);
 
-        HandleSubItemPrepaint(listctrl, pLVCD, hfont, colCount, rcSubItem, pLVCD->clrTextBk);
+        HandleSubItemPrepaint(listctrl, pLVCD, hfont, rcSubItem, pLVCD->clrTextBk);
     }
 
     ::SetTextColor(hdc, colTextOld);
