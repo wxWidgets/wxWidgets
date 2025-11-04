@@ -3251,8 +3251,10 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
     // we could use CDRF_NOTIFYSUBITEMDRAW here but it results in weird repaint
     // problems so just draw everything except the focus rect from here instead
-    const int colCount = Header_GetItemCount(ListView_GetHeader(hwndList));
-    for ( int col = 0; col < colCount; col++ )
+
+    // draw the subitems in visual order, not logical one
+    // not necessary, but might improve any overflow issues
+    for ( auto col : listctrl->GetColumnsOrder() )
     {
         pLVCD->iSubItem = col;
         HandleSubItemPrepaint(listctrl, pLVCD, hfont, colCount);
