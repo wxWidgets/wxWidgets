@@ -3230,10 +3230,13 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     HDC hdc = nmcd.hdc;
     RECT rc = GetCustomDrawnItemRect(nmcd);
 
+    COLORREF clrFullBG;
     if ( nmcd.uItemState & CDIS_SELECTED )
     {
         pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
         pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+
+        clrFullBG = pLVCD->clrTextBk;
     }
     else
     {
@@ -3244,10 +3247,18 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
         wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
         if ( !::IsRectEmpty(&rcIcon) )
             rc.left = rcIcon.right + listctrl->FromDIP(GAP_BETWEEN_CHECKBOX_AND_TEXT);
+
+        clrFullBG = wxColourToRGB(listctrl->GetBackgroundColour());
     }
 
     COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
-    ::FillRect(hdc, &rc, AutoHBRUSH(pLVCD->clrTextBk));
+
+    // clear the entire row with the listctrl's bg colour
+    // otherwise, it'd keep the hover color but only for the regions
+    // like the image/checkboxes since those aren't cleared inside
+    // HandleSubItemPrepaint, where it clears using the passed bg color
+    // but only for the text area
+    ::FillRect(hdc, &rc, AutoHBRUSH(clrFullBG));
 
     // we could use CDRF_NOTIFYSUBITEMDRAW here but it results in weird repaint
     // problems so just draw everything except the focus rect from here instead
