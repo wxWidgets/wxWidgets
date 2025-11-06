@@ -6035,18 +6035,10 @@ WXLRESULT wxStyledTextCtrl::MSWWindowProc(WXUINT nMsg,
     WXWPARAM wParam,
     WXLPARAM lParam)
 {
-    switch(nMsg) {
-    // Forward IME messages to ScintillaWX
-    case WM_IME_KEYDOWN:
-    case WM_IME_REQUEST:
-    case WM_IME_STARTCOMPOSITION:
-    case WM_IME_ENDCOMPOSITION:
-    case WM_IME_COMPOSITION:
-    case WM_IME_SETCONTEXT:
+    if ( m_swx )
         return SendMsg(nMsg, wParam, lParam);
-    default:
+    else
         return wxControl::MSWWindowProc(nMsg, wParam, lParam);
-    }
 }
 #endif
 
