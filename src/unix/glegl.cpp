@@ -312,8 +312,7 @@ wxGLContext::~wxGLContext()
         return;
 
     if ( m_glContext == eglGetCurrentContext() )
-        eglMakeCurrent(wxGLCanvasEGL::GetDisplay(), EGL_NO_SURFACE,
-                       EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        ClearCurrent();
 
     eglDestroyContext(wxGLCanvasEGL::GetDisplay(), m_glContext);
 }

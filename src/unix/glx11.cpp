@@ -564,7 +564,7 @@ wxGLContext::~wxGLContext()
         return;
 
     if ( m_glContext == glXGetCurrentContext() )
-        MakeCurrent(None, nullptr);
+        ClearCurrent();
 
     glXDestroyContext( wxGetX11Display(), m_glContext );
 }
