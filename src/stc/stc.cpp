@@ -187,10 +187,22 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-    style |= wxVSCROLL | wxHSCROLL;
-    if (!wxControl::Create(parent, id, pos, size,
-                           style | wxWANTS_CHARS | wxCLIP_CHILDREN,
-                           wxDefaultValidator, name))
+    style |= wxVSCROLL | wxHSCROLL | wxWANTS_CHARS | wxCLIP_CHILDREN;
+
+    // We want to use a specific class name for this window in wxMSW to make it
+    // possible to configure screen readers to handle it specifically.
+    bool created =
+#ifdef __WXMSW__
+        CreateUsingMSWClass(
+            wxApp::GetRegisteredClassName(wxT("Scintilla")),
+            parent, id, pos, size, style, name
+        );
+#else
+        wxControl::Create(
+            parent, id, pos, size, style, wxDefaultValidator, name
+        );
+#endif
+    if ( !created )
         return false;
 
     m_swx = new ScintillaWX(this);
