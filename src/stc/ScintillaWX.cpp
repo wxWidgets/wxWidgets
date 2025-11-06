@@ -752,8 +752,15 @@ void ScintillaWX::FineTickerCancel(TickReason reason) {
 //----------------------------------------------------------------------
 
 
-sptr_t ScintillaWX::DefWndProc(unsigned int /*iMessage*/, uptr_t /*wParam*/, sptr_t /*lParam*/) {
+sptr_t ScintillaWX::DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
+#ifdef __WXMSW__
+    return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+#else
+    wxUnusedVar(iMessage);
+    wxUnusedVar(wParam);
+    wxUnusedVar(lParam);
     return 0;
+#endif
 }
 
 sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
@@ -829,13 +836,13 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
                     InvalidateStyleRedraw();
                 }
             }
-            break;
+            return 0;
 #endif
 
 #ifdef SCI_LEXER
       case SCI_LOADLEXERLIBRARY:
             LexerManager::GetInstance()->Load((const char*)lParam);
-            break;
+            return 0;
 #endif
       case SCI_GETDIRECTFUNCTION:
             return reinterpret_cast<sptr_t>(DirectFunction);
@@ -848,24 +855,25 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
       case WM_IME_STARTCOMPOSITION:
           // Always use windowed IME in ScintillaWX for now. Inline IME not implemented yet
           ImeStartComposition();
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+          break;
 
       case WM_IME_ENDCOMPOSITION:
           ImeEndComposition();
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+          break;
 
       case WM_IME_KEYDOWN:
       case WM_IME_REQUEST:
       case WM_IME_COMPOSITION:
       case WM_IME_SETCONTEXT:
           // These events are forwarded here for future inline IME implementation
-          return stc->wxControl::MSWWindowProc(iMessage, wParam, lParam);
+          break;
 #endif
 
       default:
-          return ScintillaBase::WndProc(iMessage, wParam, lParam);
+          break;
       }
-      return 0;
+
+    return ScintillaBase::WndProc(iMessage, wParam, lParam);
 }
 
 
