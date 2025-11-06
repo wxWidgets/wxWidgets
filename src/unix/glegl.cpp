@@ -327,6 +327,13 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
                           win.GetEGLSurface(), m_glContext);
 }
 
+/* static */
+void wxGLContextBase::ClearCurrent()
+{
+    eglMakeCurrent(wxGLCanvasEGL::GetDisplay(), EGL_NO_SURFACE,
+                   EGL_NO_SURFACE, EGL_NO_CONTEXT);
+}
+
 // ============================================================================
 // wxGLCanvasEGL implementation
 // ============================================================================

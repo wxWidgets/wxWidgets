@@ -580,6 +580,12 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     return MakeCurrent(xid, m_glContext);
 }
 
+/* static */
+void wxGLContextBase::ClearCurrent()
+{
+    MakeCurrent(None, nullptr);
+}
+
 // wrapper around glXMakeContextCurrent/glXMakeCurrent depending on GLX
 // version
 static bool MakeCurrent(GLXDrawable drawable, GLXContext context)

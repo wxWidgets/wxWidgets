@@ -188,6 +188,9 @@ public:
     // set this context as the current one
     virtual bool SetCurrent(const wxGLCanvas& win) const = 0;
 
+    // unset any currently set context
+    static void ClearCurrent();
+
     bool IsOK() const { return m_isOk; }
 
 protected:
