@@ -2851,8 +2851,6 @@ typedef WX_UIPasteboard WXOSXPasteboard;
 
 #endif
 
-// Define a for loop macro to iterate over Objective-C collections that works also for
-// compilers like gcc that does not support the "for .. in" syntax.
 
 #endif /* __DARWIN__ */
 

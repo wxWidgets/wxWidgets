@@ -105,7 +105,7 @@ public:
         bool isAvailable = false;
         NSArray* availableLocaleIds = [NSLocale availableLocaleIdentifiers];
 
-        for (NSUInteger i = 0; i < [availableLocaleIds count]; i++) \
+        for (NSUInteger i = 0; i < [availableLocaleIds count]; i++)
         {
             NSString* nsLocId = [availableLocaleIds objectAtIndex:i];
             // We can't simply compare the names here because the list returned
