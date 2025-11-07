@@ -1481,6 +1481,14 @@ void wxAuiTabCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 
         wxAuiTabEventSource::TabCancelDrag(this, GetIdxFromWindow(clickTab));
     }
+
+    auto* const pressedButton = FindPressedButton();
+    if ( pressedButton )
+        ClearButtonState(*pressedButton, wxAUI_BUTTON_STATE_PRESSED);
+
+    auto* const hoverButton = FindHoverButton();
+    if ( hoverButton )
+        ClearButtonState(*hoverButton, wxAUI_BUTTON_STATE_HOVER);
 }
 
 void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
