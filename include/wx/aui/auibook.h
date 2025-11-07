@@ -403,7 +403,6 @@ protected:
     wxWindow* m_clickTab = nullptr;
     bool m_isDragging = false;
 
-    wxAuiTabContainerButton* m_hoverButton = nullptr;
     wxAuiTabContainerButton* m_pressedButton = nullptr;
 
     void SetHoverTab(wxWindow* wnd);
@@ -411,6 +410,12 @@ protected:
 private:
     // Reset dragging-related fields above to their initial values.
     void DoEndDragging();
+
+    // Find button in "hover" state, may return nullptr if none.
+    wxAuiTabContainerButton* FindHoverButton() const;
+
+    // Reset "hover" state on any button and update the control if needed.
+    void ResetHoverButton();
 
     void OnButton(int tabIdx, int button);
 

@@ -1440,15 +1440,17 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     DoEndDragging();
     m_pressedButton = nullptr;
 
+    const wxPoint pos = evt.GetPosition();
+    wxAuiTabContainerButton* const buttonUnderMouse = ButtonHitTest(pos);
 
-    if ( auto const tabInfo = TabHitTest(evt.GetPosition()) )
+    if ( auto const tabInfo = TabHitTest(pos) )
     {
         int new_selection = tabInfo.pos;
 
         // wxAuiNotebooks always want to receive this event
         // even if the tab is already active, because they may
         // have multiple tab controls
-        if ((new_selection != GetActivePage()) && !m_hoverButton)
+        if ((new_selection != GetActivePage()) && !buttonUnderMouse)
         {
             wxAuiTabEventSource::TabClicked(this, new_selection);
         }
@@ -1458,9 +1460,9 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
         m_clickTab = tabInfo.window;
     }
 
-    if (m_hoverButton)
+    if (buttonUnderMouse)
     {
-        m_pressedButton = m_hoverButton;
+        m_pressedButton = buttonUnderMouse;
         m_pressedButton->curState |= wxAUI_BUTTON_STATE_PRESSED;
         Refresh();
         Update();
@@ -1579,10 +1581,10 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     wxAuiTabContainerButton* const button = ButtonHitTest(pos);
     if (button && !(button->curState & wxAUI_BUTTON_STATE_DISABLED))
     {
-        if (m_hoverButton && button != m_hoverButton)
+        auto* const hoverButton = FindHoverButton();
+        if (hoverButton && button != hoverButton)
         {
-            m_hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
-            m_hoverButton = nullptr;
+            hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
             Refresh();
             Update();
         }
@@ -1593,19 +1595,12 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
             Refresh();
             Update();
 
-            m_hoverButton = button;
             return;
         }
     }
     else
     {
-        if (m_hoverButton)
-        {
-            m_hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
-            m_hoverButton = nullptr;
-            Refresh();
-            Update();
-        }
+        ResetHoverButton();
     }
 
     bool hovering = false;
@@ -1676,15 +1671,34 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
 {
-    if (m_hoverButton)
+    ResetHoverButton();
+
+    SetHoverTab(nullptr);
+}
+
+wxAuiTabContainerButton* wxAuiTabCtrl::FindHoverButton() const
+{
+    for ( const auto& page : m_pages )
     {
-        m_hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
-        m_hoverButton = nullptr;
+        for ( const auto& button : page.buttons )
+        {
+            if ( button.curState & wxAUI_BUTTON_STATE_HOVER )
+                return const_cast<wxAuiTabContainerButton*>(&button);
+        }
+    }
+
+    return nullptr;
+}
+
+void wxAuiTabCtrl::ResetHoverButton()
+{
+    auto* const hoverButton = FindHoverButton();
+    if (hoverButton)
+    {
+        hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
         Refresh();
         Update();
     }
-
-    SetHoverTab(nullptr);
 }
 
 void wxAuiTabCtrl::OnButton(int tabIdx, int button)
