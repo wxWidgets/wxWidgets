@@ -423,6 +423,27 @@ private:
         return FindButtonIn(wxAUI_BUTTON_STATE_HOVER);
     }
 
+    // Switch on or off the given button state for the given button and refresh
+    // the window if the state has actually changed.
+    //
+    // Return true if the state was changed.
+    bool UpdateButtonStateAndRefresh(wxAuiTabContainerButton& button,
+                                     wxAuiPaneButtonState state,
+                                     bool on);
+
+    // More readable helpers for button state changes.
+    bool
+    SetButtonState(wxAuiTabContainerButton& button, wxAuiPaneButtonState state)
+    {
+        return UpdateButtonStateAndRefresh(button, state, true);
+    }
+
+    bool
+    ClearButtonState(wxAuiTabContainerButton& button, wxAuiPaneButtonState state)
+    {
+        return UpdateButtonStateAndRefresh(button, state, false);
+    }
+
     void OnButton(int tabIdx, int button);
 
 #ifndef SWIG
