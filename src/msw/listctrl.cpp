@@ -3055,7 +3055,7 @@ constexpr int PADDING_RIGHT_SIDE = 2;
 constexpr int GAP_AFTER_CHECKBOX = 2;
 constexpr int GAP_BEFORE_IMAGE = 2;
 constexpr int GAP_BEFORE_CHECKBOX = 4;
-constexpr int PADDING_LEFT_FOR_TEXT = 1;
+constexpr int PADDING_FOR_TEXT = 1;
 
 bool
 HandleSubItemPrepaint(wxListCtrl* listctrl,
@@ -3203,6 +3203,7 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
         {
             case LVCFMT_LEFT:
                 fmt |= DT_LEFT;
+                rc.left += PADDING_FOR_TEXT;
                 break;
 
             case LVCFMT_CENTER:
@@ -3211,12 +3212,11 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
 
             case LVCFMT_RIGHT:
                 fmt |= DT_RIGHT;
+                rc.right -= PADDING_FOR_TEXT;
                 break;
         }
     }
     //else: failed to get alignment, assume it's DT_LEFT (default)
-
-    rc.left += PADDING_LEFT_FOR_TEXT;
 
     if ( rc.left < rc.right )
         DrawText(hdc, text, -1, &rc, fmt);
