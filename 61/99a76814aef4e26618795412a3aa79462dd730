@@ -1,0 +1,1 @@
+wxAll (GUI): Fix crash after closing tab in wxAuiNotebook (#25959).
