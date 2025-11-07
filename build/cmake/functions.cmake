@@ -430,6 +430,10 @@ function(wx_set_target_properties target_name)
             PUBLIC ${WIN32_LIBRARIES})
     endif()
 
+    if(wxTOOLKIT_LIBRARY_DIRS AND NOT wxTARGET_IS_BASE)
+        target_link_directories(${target_name}
+            PUBLIC ${wxTOOLKIT_LIBRARY_DIRS})
+    endif()
     if(wxTOOLKIT_LIBRARIES AND NOT wxTARGET_IS_BASE)
         target_link_libraries(${target_name}
             PUBLIC ${wxTOOLKIT_LIBRARIES})
