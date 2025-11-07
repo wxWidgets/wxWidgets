@@ -1595,7 +1595,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     bool hovering = false;
     if (evt.Moving())
     {
-        if ( auto const tabInfo = TabHitTest(evt.GetPosition()) )
+        if ( auto const tabInfo = TabHitTest(pos) )
         {
             hovering = true;
 
