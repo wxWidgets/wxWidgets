@@ -1438,7 +1438,6 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
 
     // Reset any previous values first.
     DoEndDragging();
-    m_pressedButton = nullptr;
 
     const wxPoint pos = evt.GetPosition();
     wxAuiTabContainerButton* const buttonUnderMouse = ButtonHitTest(pos);
@@ -1460,10 +1459,16 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
         m_clickTab = tabInfo.window;
     }
 
-    if (buttonUnderMouse)
+    auto* const pressedButton = FindPressedButton();
+    if (buttonUnderMouse && buttonUnderMouse != pressedButton)
     {
-        m_pressedButton = buttonUnderMouse;
-        m_pressedButton->curState |= wxAUI_BUTTON_STATE_PRESSED;
+        buttonUnderMouse->curState |= wxAUI_BUTTON_STATE_PRESSED;
+        Refresh();
+        Update();
+    }
+    else if (pressedButton)
+    {
+        pressedButton->curState &= ~wxAUI_BUTTON_STATE_PRESSED;
         Refresh();
         Update();
     }
@@ -1497,9 +1502,9 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
         return;
     }
 
-    if (m_pressedButton)
+    if (auto* const pressedButton = FindPressedButton())
     {
-        m_pressedButton->curState &= ~wxAUI_BUTTON_STATE_PRESSED;
+        pressedButton->curState &= ~wxAUI_BUTTON_STATE_PRESSED;
 
         // make sure we're still clicking the button
         const wxAuiTabContainerButton* const
@@ -1507,21 +1512,16 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
         if (!button || button->curState & wxAUI_BUTTON_STATE_DISABLED)
             return;
 
-        if (button != m_pressedButton)
-        {
-            m_pressedButton = nullptr;
+        if (button != pressedButton)
             return;
-        }
 
         Refresh();
         Update();
 
-        if (!(m_pressedButton->curState & wxAUI_BUTTON_STATE_DISABLED))
+        if (!(pressedButton->curState & wxAUI_BUTTON_STATE_DISABLED))
         {
-            OnButton(GetIdxFromWindow(m_clickTab), m_pressedButton->id);
+            OnButton(GetIdxFromWindow(m_clickTab), pressedButton->id);
         }
-
-        m_pressedButton = nullptr;
     }
 
     DoEndDragging();
@@ -1676,13 +1676,14 @@ void wxAuiTabCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
     SetHoverTab(nullptr);
 }
 
-wxAuiTabContainerButton* wxAuiTabCtrl::FindHoverButton() const
+wxAuiTabContainerButton*
+wxAuiTabCtrl::FindButtonIn(wxAuiPaneButtonState state) const
 {
     for ( const auto& page : m_pages )
     {
         for ( const auto& button : page.buttons )
         {
-            if ( button.curState & wxAUI_BUTTON_STATE_HOVER )
+            if ( button.curState & state )
                 return const_cast<wxAuiTabContainerButton*>(&button);
         }
     }
