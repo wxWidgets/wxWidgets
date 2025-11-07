@@ -1571,25 +1571,31 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
 {
     wxPoint pos = evt.GetPosition();
 
-    // check if the mouse is hovering above a button and, if so, if it's the
-    // same one as before or a different one
-    auto* const hoverButton = FindHoverButton();
-    wxAuiTabContainerButton* const button = ButtonHitTest(pos);
-    if (button && !(button->curState & wxAUI_BUTTON_STATE_DISABLED))
+    // Don't highlight any buttons while dragging the tab itself.
+    if ( !m_isDragging )
     {
-        if (hoverButton && button != hoverButton)
+        // check if the mouse is hovering above a button and, if so, if it's the
+        // same one as before or a different one
+        auto* const hoverButton = FindHoverButton();
+        wxAuiTabContainerButton* const button = ButtonHitTest(pos);
+        if ( button != hoverButton )
         {
-            ClearButtonState(*hoverButton, wxAUI_BUTTON_STATE_HOVER);
+            if ( hoverButton )
+                ClearButtonState(*hoverButton, wxAUI_BUTTON_STATE_HOVER);
+
+            if ( button && !(button->curState & wxAUI_BUTTON_STATE_DISABLED) )
+                SetButtonState(*button, wxAUI_BUTTON_STATE_HOVER);
         }
 
-        if ( SetButtonState(*button, wxAUI_BUTTON_STATE_HOVER) )
-        {
+        // Don't do anything else if we're hovering over a button, even a
+        // disabled one.
+        if ( button )
             return;
-        }
-    }
-    else if (hoverButton)
-    {
-        ClearButtonState(*hoverButton, wxAUI_BUTTON_STATE_HOVER);
+
+        // Also skip the rest if we're moving the mouse while a button is
+        // pressed.
+        if ( FindPressedButton() )
+            return;
     }
 
     bool hovering = false;
