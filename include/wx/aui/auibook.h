@@ -423,9 +423,6 @@ private:
         return FindButtonIn(wxAUI_BUTTON_STATE_HOVER);
     }
 
-    // Reset "hover" state on any button and update the control if needed.
-    void ResetHoverButton();
-
     void OnButton(int tabIdx, int button);
 
 #ifndef SWIG

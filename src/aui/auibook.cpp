@@ -1577,11 +1577,12 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
 {
     wxPoint pos = evt.GetPosition();
 
-    // check if the mouse is hovering above a button
+    // check if the mouse is hovering above a button and, if so, if it's the
+    // same one as before or a different one
+    auto* const hoverButton = FindHoverButton();
     wxAuiTabContainerButton* const button = ButtonHitTest(pos);
     if (button && !(button->curState & wxAUI_BUTTON_STATE_DISABLED))
     {
-        auto* const hoverButton = FindHoverButton();
         if (hoverButton && button != hoverButton)
         {
             hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
@@ -1598,9 +1599,11 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
             return;
         }
     }
-    else
+    else if (hoverButton)
     {
-        ResetHoverButton();
+        hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
+        Refresh();
+        Update();
     }
 
     bool hovering = false;
@@ -1671,7 +1674,13 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
 
 void wxAuiTabCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
 {
-    ResetHoverButton();
+    auto* const hoverButton = FindHoverButton();
+    if (hoverButton)
+    {
+        hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
+        Refresh();
+        Update();
+    }
 
     SetHoverTab(nullptr);
 }
@@ -1689,17 +1698,6 @@ wxAuiTabCtrl::FindButtonIn(wxAuiPaneButtonState state) const
     }
 
     return nullptr;
-}
-
-void wxAuiTabCtrl::ResetHoverButton()
-{
-    auto* const hoverButton = FindHoverButton();
-    if (hoverButton)
-    {
-        hoverButton->curState &= ~wxAUI_BUTTON_STATE_HOVER;
-        Refresh();
-        Update();
-    }
 }
 
 void wxAuiTabCtrl::OnButton(int tabIdx, int button)
