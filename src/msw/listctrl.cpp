@@ -3057,7 +3057,7 @@ constexpr int GAP_BEFORE_IMAGE = 2;
 constexpr int GAP_BEFORE_CHECKBOX = 4;
 constexpr int PADDING_FOR_TEXT = 1;
 
-bool
+void
 HandleSubItemPrepaint(wxListCtrl* listctrl,
                       LPNMLVCUSTOMDRAW pLVCD,
                       HFONT hfont,
@@ -3130,7 +3130,7 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
     it.pszText = text;
     it.cchTextMax = WXSIZEOF(text);
     if ( !ListView_GetItem(hwndList, &it) )
-        return false;
+        return;
 
     HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_SMALL);
     if ( himl && ImageList_GetImageCount(himl) )
@@ -3220,8 +3220,6 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
 
     if ( rc.left < rc.right )
         DrawText(hdc, text, -1, &rc, fmt);
-
-    return true;
 }
 
 void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
