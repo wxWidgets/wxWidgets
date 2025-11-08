@@ -3078,15 +3078,25 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
     rc.left += PADDING_LEFT_SIDE;
     rc.right -= PADDING_RIGHT_SIDE;
 
-    const int availableWidth = wxMax(rc.right - rc.left, 0);
+    if ( rc.left >= rc.right )
+    {
+        // Nothing can fit.
+        return;
+    }
 
-    if ( !col && listctrl->HasCheckBoxes() && availableWidth > 0 )
+    if ( !col && listctrl->HasCheckBoxes() )
     {
         const HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_STATE);
 
         if ( himl && ImageList_GetImageCount(himl) == 2 )
         {
             rc.left += GAP_BEFORE_CHECKBOX;
+            if ( rc.left >= rc.right )
+            {
+                // Checkbox can't fit even partially and so nothing it can fit
+                // at all.
+                return;
+            }
 
             int cbWidth, cbHeight;
             ImageList_GetIconSize(himl, &cbWidth, &cbHeight);
@@ -3095,7 +3105,7 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
             int cbY = rc.top + ((rc.bottom - rc.top) / 2 - cbHeight / 2);
 
             // prevent drawing checkbox farther than the column width
-            cbWidth = wxClip(cbWidth, 0, availableWidth);
+            cbWidth = wxClip(cbWidth, 0, rc.right - rc.left);
 
             // When using style flag ILD_SELECTED or ILD_FOCUS, the checkboxes
             // for selected items are drawn with a blue background, which we want to avoid.
@@ -3117,6 +3127,11 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
 
             // move left edge for further drawing
             rc.left += cbWidth;
+            if ( rc.left >= rc.right )
+            {
+                // Nothing else can fit after the checkbox.
+                return;
+            }
         }
     }
 
@@ -3180,12 +3195,12 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
         }
     }
 
+    if ( rc.left >= rc.right )
+        return;
+
     // draw attribute background after drawing any images or checkboxes
-    if ( rc.left < rc.right )
-    {
-        RECT fillRect = rc;
-        ::FillRect(hdc, &fillRect, AutoHBRUSH(pLVCD->clrTextBk));
-    }
+    RECT fillRect = rc;
+    ::FillRect(hdc, &fillRect, AutoHBRUSH(pLVCD->clrTextBk));
 
     ::SetBkMode(hdc, TRANSPARENT);
 
@@ -3218,8 +3233,10 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
     }
     //else: failed to get alignment, assume it's DT_LEFT (default)
 
-    if ( rc.left < rc.right )
-        DrawText(hdc, text, -1, &rc, fmt);
+    if ( rc.left >= rc.right )
+        return;
+
+    DrawText(hdc, text, -1, &rc, fmt);
 }
 
 void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
