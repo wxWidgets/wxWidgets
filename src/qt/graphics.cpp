@@ -1189,6 +1189,16 @@ protected:
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
 
+        const bool isRTL = m_qtPainter->layoutDirection() == Qt::RightToLeft;
+
+        if ( isRTL )
+        {
+            m_qtPainter->save();
+            // text is not mirrored
+            m_qtPainter->scale(-1, 1);
+            x = -x;
+        }
+
         m_qtPainter->setFont(fontData->GetFont());
         m_qtPainter->setPen(QPen(fontData->GetColor()));
 
@@ -1198,9 +1208,12 @@ protected:
         while ( tokenizer.HasMoreTokens() )
         {
             const wxString line = tokenizer.GetNextToken();
-            m_qtPainter->drawText(QPointF(x, y + metrics.ascent()), wxQtConvertString(line));
+            m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(line));
             y += metrics.lineSpacing();
         }
+
+        if ( isRTL )
+            m_qtPainter->restore();
     }
 
     void

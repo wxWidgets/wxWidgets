@@ -335,8 +335,10 @@ protected:
             const wxImageList *imageList = GetHandler()->GetImageList();
             const wxBitmap bitmap = imageList->GetBitmap(imageIndex);
             const QRect rect = visualRect(index);
-            const int offset = (rect.height() / 2) - (bitmap.GetHeight() / 2);
-            painter->drawPixmap(rect.topLeft() + QPoint(0,offset), *bitmap.GetHandle());
+            const int dy = (rect.height() / 2) - (bitmap.GetHeight() / 2);
+            const int dx = layoutDirection() == Qt::RightToLeft
+                         ? rect.width() - bitmap.GetWidth() : 0;
+            painter->drawPixmap(rect.topLeft() + QPoint(dx,dy), *bitmap.GetHandle());
         }
     }
 

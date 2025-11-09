@@ -79,6 +79,22 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     }
 }
 
+void wxMemoryDCImpl::DoGetSize( int *width, int *height ) const
+{
+    if ( m_selected.IsOk() )
+    {
+        if ( width )
+            *width = m_selected.GetWidth();
+        if ( height )
+            *height = m_selected.GetHeight();
+    }
+    else
+    {
+        if ( width ) *width = 0;
+        if ( height ) *height = 0;
+    }
+}
+
 wxBitmap wxMemoryDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
     if ( !subrect )
@@ -94,4 +110,21 @@ const wxBitmap& wxMemoryDCImpl::GetSelectedBitmap() const
 wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
 {
     return m_selected;
+}
+
+void wxMemoryDCImpl::SetLayoutDirection(wxLayoutDirection dir)
+{
+    if ( m_layoutDir != dir )
+    {
+        if ( m_layoutDir == wxLayout_RightToLeft || dir == wxLayout_RightToLeft )
+        {
+            int w;
+            GetSize(&w, nullptr);
+
+            m_qtPainter->translate(w, 0);
+            m_qtPainter->scale(-1, 1);
+        }
+
+        m_layoutDir = dir;
+    }
 }

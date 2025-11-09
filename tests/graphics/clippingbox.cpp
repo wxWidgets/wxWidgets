@@ -1063,13 +1063,13 @@ static void OneDevRegionRTL(wxDC& dc, const wxBitmap& bmp, bool useTransformMatr
     wxPoint pos = dc.DeviceToLogical(x, y);
     wxSize dim = dc.DeviceToLogicalRel(w, h);
 #else
-    wxPoint pos = dc.DeviceToLogical((s_dcSize.x-1)-x, y);
+    wxPoint pos = dc.DeviceToLogical(s_dcSize.x-x, y);
     wxSize dim = dc.DeviceToLogicalRel(-w, h);
 #endif
 
     CheckClipBox(dc, bmp,
                  pos.x, pos.y, dim.x, dim.y,
-                 x2, y, w, h);
+                 x2, y, w, h, 1 /*posTolerance*/);
 }
 
 static void OneLargeDevRegion(wxDC& dc, const wxBitmap& bmp, bool checkExtCoords, bool useTransformMatrix, const wxPoint& parentDcOrigin)
