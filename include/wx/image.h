@@ -24,10 +24,6 @@
 #  include "wx/stream.h"
 #endif
 
-// on some systems (Unixware 7.x) index is defined as a macro in the headers
-// which breaks the compilation below
-#undef index
-
 #define wxIMAGE_OPTION_QUALITY               wxString(wxS("quality"))
 #define wxIMAGE_OPTION_FILENAME              wxString(wxS("FileName"))
 
