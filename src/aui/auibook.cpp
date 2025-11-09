@@ -1686,6 +1686,12 @@ void wxAuiTabCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event))
 wxAuiTabContainerButton*
 wxAuiTabCtrl::FindButtonIn(wxAuiPaneButtonState state) const
 {
+    for ( const auto& button : m_buttons )
+    {
+        if ( button.curState & state )
+            return const_cast<wxAuiTabContainerButton*>(&button);
+    }
+
     for ( const auto& page : m_pages )
     {
         for ( const auto& button : page.buttons )
