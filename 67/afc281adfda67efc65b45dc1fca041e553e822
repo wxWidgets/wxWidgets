@@ -1,0 +1,1 @@
+wxAll (GUI): Fix crash on mouse hover in wxAuiNotebook (#25959).
