@@ -439,6 +439,11 @@ more details.
          developers, but can also be used by the applications if they want to
          opt in into getting more help from compiler. Support for this symbol
          appeared in wxWidgets 3.3.0.}
+@itemdef{wxNO_WIN32_W,
+        this symbol is not defined by wxWidgets itself, but can be defined by
+        the applications using the library to not inline the WIDE win32 API
+        functions in wx/msw/winundef.h, but inline the ANSI functions instead.
+        This constant is available since wxWidgets 3.3.2.}
 @endDefList
 
 */
