@@ -1,0 +1,1 @@
+wxMSW: Fix wxStyledTextCtrl support in screen readers (Maarten Bent, #25956).
