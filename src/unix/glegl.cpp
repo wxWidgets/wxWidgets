@@ -312,8 +312,7 @@ wxGLContext::~wxGLContext()
         return;
 
     if ( m_glContext == eglGetCurrentContext() )
-        eglMakeCurrent(wxGLCanvasEGL::GetDisplay(), EGL_NO_SURFACE,
-                       EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        ClearCurrent();
 
     eglDestroyContext(wxGLCanvasEGL::GetDisplay(), m_glContext);
 }
@@ -325,6 +324,13 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 
     return eglMakeCurrent(win.GetEGLDisplay(), win.GetEGLSurface(),
                           win.GetEGLSurface(), m_glContext);
+}
+
+/* static */
+void wxGLContextBase::ClearCurrent()
+{
+    eglMakeCurrent(wxGLCanvasEGL::GetDisplay(), EGL_NO_SURFACE,
+                   EGL_NO_SURFACE, EGL_NO_CONTEXT);
 }
 
 // ============================================================================
