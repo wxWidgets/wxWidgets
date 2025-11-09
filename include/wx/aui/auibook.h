@@ -403,14 +403,46 @@ protected:
     wxWindow* m_clickTab = nullptr;
     bool m_isDragging = false;
 
-    wxAuiTabContainerButton* m_hoverButton = nullptr;
-    wxAuiTabContainerButton* m_pressedButton = nullptr;
-
     void SetHoverTab(wxWindow* wnd);
 
 private:
     // Reset dragging-related fields above to their initial values.
     void DoEndDragging();
+
+    // Find button with the given state, which is assumed to be set on one
+    // button at most, may return nullptr if none.
+    wxAuiTabContainerButton* FindButtonIn(wxAuiPaneButtonState state) const;
+
+    wxAuiTabContainerButton* FindPressedButton() const
+    {
+        return FindButtonIn(wxAUI_BUTTON_STATE_PRESSED);
+    }
+
+    wxAuiTabContainerButton* FindHoverButton() const
+    {
+        return FindButtonIn(wxAUI_BUTTON_STATE_HOVER);
+    }
+
+    // Switch on or off the given button state for the given button and refresh
+    // the window if the state has actually changed.
+    //
+    // Return true if the state was changed.
+    bool UpdateButtonStateAndRefresh(wxAuiTabContainerButton& button,
+                                     wxAuiPaneButtonState state,
+                                     bool on);
+
+    // More readable helpers for button state changes.
+    bool
+    SetButtonState(wxAuiTabContainerButton& button, wxAuiPaneButtonState state)
+    {
+        return UpdateButtonStateAndRefresh(button, state, true);
+    }
+
+    bool
+    ClearButtonState(wxAuiTabContainerButton& button, wxAuiPaneButtonState state)
+    {
+        return UpdateButtonStateAndRefresh(button, state, false);
+    }
 
     void OnButton(int tabIdx, int button);
 
