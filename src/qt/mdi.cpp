@@ -428,6 +428,13 @@ void wxMDIChildFrame::SetMenuBar(wxMenuBar* menuBar)
 
     m_menuBar = menuBar;
 
+    if ( m_mdiParent->GetActiveChild() == this )
+    {
+        // Attach the menu bar to m_mdiParent immediately if this child
+        // window is active.
+        InternalSetMenuBar();
+    }
+
     // Don't call wxFrameBase::SetMenuBar() here because m_menuBar will be
     // attached to m_mdiParent later when this child frame becomes active.
 }
