@@ -496,6 +496,15 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long WXUNUSED(sty
     return true;
 }
 
+wxMDIClientWindow::~wxMDIClientWindow()
+{
+    DestroyChildren();
+
+    // Prevent the base class dtor from destroying the underlying qt window, as
+    // it is owned by QMainWindow.
+    m_qtWindow = nullptr;
+}
+
 // Helper implementation:
 
 wxQtMdiArea::wxQtMdiArea(wxWindow *parent, wxMDIClientWindow *handler )
