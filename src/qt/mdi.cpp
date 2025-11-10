@@ -27,11 +27,11 @@ static QMdiSubWindow* gs_qtActiveSubWindow = nullptr;
 }
 
 /*static*/
-wxMDIParentFrame::Layout wxMDIParentFrame::ms_layout =
+wxMDIParentFrame::Kind wxMDIParentFrame::ms_layout =
 #if defined(__WINDOWS__)
-    Layout::MDI;
+    Kind::MDI;
 #else // !__WINDOWS__
-    Layout::Tabbed;
+    Kind::Tabbed;
 #endif // __WINDOWS__
 
 // Central widget helper (provides an area in which MDI windows are displayed):
@@ -89,7 +89,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
     return true;
 }
 
-void wxMDIParentFrame::QtSetPreferredDILayout(Layout layout)
+void wxMDIParentFrame::QtSetPreferredDILayout(Kind layout)
 {
     ms_layout = layout;
 
@@ -97,11 +97,11 @@ void wxMDIParentFrame::QtSetPreferredDILayout(Layout layout)
 
     switch ( layout )
     {
-    case Layout::MDI:
+    case Kind::MDI:
         viewMode = QMdiArea::SubWindowView;
         break;
 
-    case Layout::Tabbed:
+    case Kind::Tabbed:
         viewMode = QMdiArea::TabbedView;
         break;
 
@@ -245,7 +245,7 @@ void wxMDIParentFrame::AddWindowMenu()
         // Qt offers only "Tile" without specifying any direction, so just
         // reuse one of the predifined ids.
 
-        if ( ms_layout == Layout::MDI )
+        if ( ms_layout == Kind::MDI )
         {
             // Qt offers only "Tile" without specifying any direction, so just
             // reuse one of the predifined ids.
