@@ -295,6 +295,12 @@ public:
             of objects (rather than using a clip path to hide them).
             In Inkscape, this can be done via either "Path" → "Difference"
             or "Path" → "Division" (i.e., cookie-cutter subtraction).
+
+        @remark To enable LunaSVG library support, will need to set
+            wxBUILD_CXX_STANDARD to at least 17 when configuring a wxWidgets
+            build. You will also need to have wxUSE_LUNASVG set to 1 in your
+            setup.h file. See @ref overview_cmake "CMake Overview".
+
      */
     static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
 
