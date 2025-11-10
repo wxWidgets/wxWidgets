@@ -320,6 +320,10 @@ jobs:
             echo 'ASAN_OPTIONS=fast_unwind_on_malloc=0' >> $GITHUB_ENV
           elif [ ${{ matrix.use_ubsan }} ]; then
             wxSANITIZER_FLAGS='-fsanitize=undefined'
+            setup_h_file=$(find lib/wx/include -name setup.h)
+            if [ -n "$setup_h_file" ]; then
+              sed -i 's/#define wxUSE_LUNASVG 0/#define wxUSE_LUNASVG 1/' "$setup_h_file"
+            fi
           fi
 
           if [ -n "$wxSANITIZER_FLAGS" ]; then
