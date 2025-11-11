@@ -96,6 +96,8 @@ public:
     virtual void ResetTransformMatrix() override;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
+    virtual wxRect MSWApplyWXTransform(const wxRect& r) const override;
+
     virtual void SetLogicalFunction(wxRasterOperationMode function) override;
 
     // implementation from now on

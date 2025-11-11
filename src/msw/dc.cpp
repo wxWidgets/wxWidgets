@@ -1933,6 +1933,16 @@ void wxMSWDCImpl::SetLogicalScale(double x, double y)
     RealizeScaleAndOrigin();
 }
 
+wxRect wxMSWDCImpl::MSWApplyWXTransform(const wxRect& r) const
+{
+    // We need to handle the origin offset here as we don't use Windows support
+    // for this, see SetDeviceOrigin() below.
+    wxRect rect = r;
+    rect.x += m_deviceOriginX;
+    rect.y += m_deviceOriginY;
+    return rect;
+}
+
 void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 {
     if ( x == m_deviceOriginX && y == m_deviceOriginY )

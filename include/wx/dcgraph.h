@@ -223,7 +223,7 @@ public:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const override;
 
 #ifdef __WXMSW__
-    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const override;
+    virtual wxRect MSWApplyWXTransform(const wxRect& r) const override;
 #endif // __WXMSW__
 
     // update the internal clip box variables
