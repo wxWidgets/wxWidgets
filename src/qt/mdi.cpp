@@ -242,9 +242,6 @@ void wxMDIParentFrame::AddWindowMenu()
     {
         m_windowMenu = new wxMenu;
 
-        // Qt offers only "Tile" without specifying any direction, so just
-        // reuse one of the predifined ids.
-
         if ( ms_layout == Kind::MDI )
         {
             // Qt offers only "Tile" without specifying any direction, so just
