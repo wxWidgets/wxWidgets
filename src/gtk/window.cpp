@@ -423,7 +423,7 @@ const char* wxDumpGtkWidget(GtkWidget* w)
     static wxString s;
     s.Printf("GtkWidget %p, type \"%s\"", w, G_OBJECT_TYPE_NAME(w));
 
-    return s.c_str();
+    return s.data();
 }
 
 //-----------------------------------------------------------------------------

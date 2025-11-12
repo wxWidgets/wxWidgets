@@ -1377,7 +1377,9 @@ public:
 #if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
   operator wxStringToStdStringRetType() const { return ToStdString(); }
 #endif // wxUSE_UNSAFE_WXSTRING_CONV
-  operator wxStringToStdWstringRetType() const { return ToStdWstring(); }
+  // bricsys change: this clashes with operator const wchar_t*.
+  // Since OdChar/OdString are based on wchar_t*, we choose the former.
+  // operator wxStringToStdWstringRetType() const { return ToStdWstring(); }
 #endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
 
 #undef wxStringToStdStringRetType
@@ -1618,12 +1620,16 @@ public:
           (and not a buffer).
      */
 
+    //bricsys change merged on wxwidgets upgrade
+    //changed definition of c_str() to match OdString::c_str()
+    //original c_str() definition of wxWidgets is retained as data()
+    const wchar_t* c_str() const {  return wxCStrData(this); }
+      
     // explicit conversion to wxCStrData
-    wxCStrData c_str() const { return wxCStrData(this); }
-    wxCStrData data() const { return c_str(); }
+    wxCStrData data() const { return wxCStrData(this); }
 
     // implicit conversion to wxCStrData
-    operator wxCStrData() const { return c_str(); }
+    operator wxCStrData() const { return data(); }
 
     // the first two operators conflict with operators for conversion to
     // std::string and they must be disabled if those conversions are enabled;
@@ -1631,25 +1637,19 @@ public:
     // and not defining it in STL build also helps us to get more clear error
     // messages for the code which relies on implicit conversion to char* in
     // STL build
-#if !wxUSE_STD_STRING_CONV_IN_WXSTRING
+
+
+    //bricsys change merged on wxwidgets upgrade
+    //removed implicit conversion to const char* and const void*
+    //keep only implicit conversion to const wchar_t*
     operator const wchar_t*() const { return c_str(); }
 
-#if wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
-    operator const char*() const { return c_str(); }
-    // implicit conversion to untyped pointer for compatibility with previous
-    // wxWidgets versions: this is the same as conversion to const char * so it
-    // may fail!
-    operator const void*() const { return c_str(); }
-#endif // wxUSE_UNSAFE_WXSTRING_CONV && !defined(wxNO_UNSAFE_WXSTRING_CONV)
-
-#endif // !wxUSE_STD_STRING_CONV_IN_WXSTRING
-
     // identical to c_str(), for MFC compatibility
-    const wxCStrData GetData() const { return c_str(); }
+    const wxCStrData GetData() const { return data(); }
 
     // explicit conversion to C string in internal representation (char*,
     // wchar_t*, UTF-8-encoded char*, depending on the build):
-    const wxStringCharType *wx_str() const { return m_impl.c_str(); }
+    const wxStringCharType *wx_str() const { return m_impl.data(); }
 
     // conversion to *non-const* multibyte or widestring buffer; modifying
     // returned buffer won't affect the string, these methods are only useful
