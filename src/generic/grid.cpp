@@ -6396,11 +6396,14 @@ void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)
     DisableCellEditControl();
 }
 
-bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
+bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords, bool sendSelectEvent /*= true*/ )
 {
     switch ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) )
     {
         case Event_Vetoed:
+            if ( sendSelectEvent )
+                return false;
+            break;
         case Event_CellDeleted:
             // We shouldn't do anything if the event was vetoed and can't do
             // anything if the cell doesn't exist any longer.
