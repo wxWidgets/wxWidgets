@@ -240,7 +240,7 @@ wxUint32 wxTextInputStream::Read32(int base)
     wxString word = ReadWord();
     if(word.empty())
         return 0;
-    return wxStrtoul(word.c_str(), 0, base);
+    return wxStrtoul(word.data(), 0, base);
 }
 
 wxUint16 wxTextInputStream::Read16(int base)
@@ -276,7 +276,7 @@ wxInt32 wxTextInputStream::Read32S(int base)
     wxString word = ReadWord();
     if(word.empty())
         return 0;
-    return wxStrtol(word.c_str(), 0, base);
+    return wxStrtol(word.data(), 0, base);
 }
 
 wxInt16 wxTextInputStream::Read16S(int base)
@@ -295,7 +295,11 @@ double wxTextInputStream::ReadDouble()
     wxString word = ReadWord();
     if(word.empty())
         return 0;
-    return wxStrtod(word.c_str(), 0);
+
+    return wxStrtod(
+        static_cast<const wchar_t*>(word.c_str()),
+        static_cast<wchar_t**>(nullptr)
+    );
 }
 
 wxString wxTextInputStream::ReadLine()

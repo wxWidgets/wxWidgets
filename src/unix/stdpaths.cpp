@@ -220,7 +220,7 @@ wxString wxStandardPaths::GetDataDir() const
     static const wxString
       envOverride(
         getenv(
-            ("WX_" + wxTheApp->GetAppName().Upper() + "_DATA_DIR").c_str()
+            ("WX_" + wxTheApp->GetAppName().Upper() + "_DATA_DIR").data()
         )
       );
 

@@ -93,7 +93,7 @@ wxXLocale::wxXLocale(wxLanguage lang)
     const wxLanguageInfo * const info = wxUILocale::GetLanguageInfo(lang);
     if ( info )
     {
-        Init(info->GetLocaleName().c_str());
+        Init(info->GetLocaleName().data());
     }
 }
 #endif // wxUSE_INTL
@@ -128,7 +128,7 @@ void wxXLocale::Init(const char *loc)
 {
     if (!loc || *loc == '\0')
         return;
-
+    
     m_locale = newlocale(LC_ALL_MASK, loc, NULL);
     if (!m_locale)
     {
@@ -137,21 +137,21 @@ void wxXLocale::Init(const char *loc)
         wxString buf(loc);
         wxString buf2;
         buf2 = buf + wxS(".UTF-8");
-        m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
+        m_locale = newlocale(LC_ALL_MASK, buf2.data(), NULL);
         if ( !m_locale )
         {
             buf2 = buf + wxS(".utf-8");
-            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.data(), NULL);
         }
         if ( !m_locale )
         {
             buf2 = buf + wxS(".UTF8");
-            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.data(), NULL);
         }
         if ( !m_locale )
         {
             buf2 = buf + wxS(".utf8");
-            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.data(), NULL);
         }
     }
 

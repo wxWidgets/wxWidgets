@@ -79,7 +79,7 @@ public:
         // containing its char* representation and so it can be kept for as
         // long as wxString is not modified -- which is long enough for our
         // needs
-        const char *p = m_str->c_str().AsChar();
+        const char *p = m_str->data().AsChar();
         if ( *p )
         {
             // find the offset of the character corresponding to this iterator
@@ -108,7 +108,7 @@ public:
         // just remember that this works as long as wxString keeps an internal
         // buffer with its wide char representation, just as with AsChar()
         // above
-        return m_str->c_str().AsWChar() + (m_iter - m_str->begin());
+        return m_str->data().AsWChar() + (m_iter - m_str->begin());
     }
 
     // Because the objects of this class are only used as return type for

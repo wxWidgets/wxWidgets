@@ -123,7 +123,7 @@ bool wxColourBase::FromString(const wxString& str)
             // while with wxSscanf() it depends on the type of the string
             // passed as first argument: if it is a wide string, then %c
             // expects "wchar_t *" matching parameter under MSW for example.
-            if ( sscanf(str.c_str() + 4,
+            if ( sscanf(str.data() + 4,
                         formatStr.mb_str(),
                         &red, &green, &blue, alphaPtr) != 4 )
                 return false;
