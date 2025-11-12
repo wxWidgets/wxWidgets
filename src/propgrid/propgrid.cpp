@@ -4795,8 +4795,14 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                      )
                     )
                 {
+                    int setFocus=columnHit;
+#if 1 //Bricsys change
+                    if(m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED)
+                        setFocus=1;
+#endif //Bricsys change
+                        
                     if ( !AddToSelectionFromInputEvent( p,
-                                                        columnHit,
+                                                        setFocus,
                                                         &event ) )
                         return res;
 
@@ -4811,7 +4817,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
             else if ( splitterHit == -1 )
             {
             // Click on value.
-                unsigned int selFlag = 0;
+                unsigned int selFlag = m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED ? wxPG_SEL_FOCUS : 0; //Bricsys change
                 if ( columnHit == 1 )
                 {
                     m_iFlags |= wxPG_FL_ACTIVATION_BY_CLICK;
@@ -4942,7 +4948,12 @@ bool wxPropertyGrid::HandleMouseRightClick( int WXUNUSED(x),
     {
         // Select property here as well
         wxPGProperty* p = m_propHover;
-        AddToSelectionFromInputEvent(p, m_colHover, &event);
+        int setFocus=m_colHover;
+#if 1 //Bricsys change
+        if (m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED)
+            setFocus = 1;
+#endif //Bricsys change
+        AddToSelectionFromInputEvent(p, setFocus, &event);
 
         // Send right click event.
         SendEvent( wxEVT_PG_RIGHT_CLICK, p );
@@ -5752,6 +5763,10 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
             if ( p )
             {
                 int selFlags = 0;
+#if 1 //Bricsys change
+                if (m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED)
+                    selFlags = wxPG_SEL_FOCUS;
+#endif //Bricsys change
                 int reopenLabelEditorCol = -1;
 
                 if ( action == wxPG_ACTION_EDIT )
@@ -5787,7 +5802,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         if ( action != wxPG_ACTION_CANCEL_EDIT && secondAction != wxPG_ACTION_CANCEL_EDIT )
         {
             wxPGProperty* p = wxPropertyGridInterface::GetFirst();
-            if ( p ) DoSelectProperty(p);
+            if ( p ) DoSelectProperty(p, m_windowStyle & wxPG_ALWAYS_FOCUS_SELECTED ? wxPG_SEL_FOCUS : 0); //Bricsys change
             wasHandled = true;
         }
     }
