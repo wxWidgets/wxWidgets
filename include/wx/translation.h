@@ -36,7 +36,12 @@
 // to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
 #ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-    #define _(s)                               wxGetTranslation((s))
+    //bricsys change merged on wxwidgets upgrade
+    //appended ".c_str()" to definition of _(s)
+    //bricscad code expects _("") to return const wchar_t*
+    //    - to make conversion to OdString seemless
+    //    - to make _T("") and _("") interchangeable
+    #define _(s)                     wxGetTranslation((s)).c_str()
 #else
     #define _(s)                               wxGetTranslation(wxASCII_STR(s))
 #endif

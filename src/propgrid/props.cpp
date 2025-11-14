@@ -1901,7 +1901,7 @@ bool wxDirProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
     }
 
     wxDirDialog dlg(pg->GetPanel(),
-                    m_dlgTitle.empty() ? _("Choose a directory:") : m_dlgTitle,
+                    m_dlgTitle.empty() ? wxGetTranslation("Choose a directory:") : m_dlgTitle,
                     value.GetString(), m_dlgStyle, dlg_pos, dlg_sz);
     if ( dlg.ShowModal() == wxID_OK )
     {
@@ -2196,10 +2196,10 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
         path = m_basePath;
 
     wxFileDialog dlg(pg->GetPanel(),
-        m_dlgTitle.empty() ? _("Choose a file") : m_dlgTitle,
+        m_dlgTitle.empty() ? wxGetTranslation("Choose a file") : m_dlgTitle,
         m_initialPath.empty() ? path : m_initialPath,
         file,
-        m_wildcard.empty() ? _(wxALL_FILES) : m_wildcard,
+        m_wildcard.empty() ? wxGetTranslation(wxALL_FILES) : m_wildcard,
         m_dlgStyle,
         wxDefaultPosition);
 

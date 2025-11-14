@@ -228,7 +228,7 @@ void wxDumpOpenExternalDlg::OnBrowse(wxCommandEvent& )
                      fname.GetPathWithSep(),
                      fname.GetFullName()
 #ifdef __WXMSW__
-                     , wxString(_("Executable files (*.exe)|*.exe|")) + wxALL_FILES
+                     , wxGetTranslation("Executable files (*.exe)|*.exe|") + wxALL_FILES
 #endif // __WXMSW__
                      );
     if ( dlg.ShowModal() == wxID_OK )
