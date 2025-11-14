@@ -243,7 +243,8 @@ public:
                                wxCoord xsrc, wxCoord ysrc,
                                wxCoord srcWidth, wxCoord srcHeight,
                                wxRasterOperationMode rop = wxCOPY, bool useMask = false,
-                               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) wxOVERRIDE;
+                               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord,
+                               bool resizeQualityHigh = false) wxOVERRIDE;
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height) wxOVERRIDE;

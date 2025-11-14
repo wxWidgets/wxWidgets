@@ -1043,14 +1043,14 @@ bool wxGCDCImpl::DoBlit(
 {
     return DoStretchBlit( xdest, ydest, width, height,
         source, xsrc, ysrc, width, height, logical_func, useMask,
-        xsrcMask,ysrcMask );
+        xsrcMask,ysrcMask,false );
 }
 
 bool wxGCDCImpl::DoStretchBlit(
     wxCoord xdest, wxCoord ydest, wxCoord dstWidth, wxCoord dstHeight,
     wxDC *source, wxCoord xsrc, wxCoord ysrc, wxCoord srcWidth, wxCoord srcHeight,
     wxRasterOperationMode logical_func , bool useMask,
-    wxCoord xsrcMask, wxCoord ysrcMask )
+    wxCoord xsrcMask, wxCoord ysrcMask, bool resizeQualityHigh )
 {
     wxCHECK_MSG( IsOk(), false, wxT("wxGCDC(cg)::DoStretchBlit - invalid DC") );
     wxCHECK_MSG( source->IsOk(), false, wxT("wxGCDC(cg)::DoStretchBlit - invalid source DC") );

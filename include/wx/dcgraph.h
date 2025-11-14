@@ -188,7 +188,8 @@ public:
                                wxCoord xsrc, wxCoord ysrc,
                                wxCoord srcWidth, wxCoord srcHeight,
                                wxRasterOperationMode = wxCOPY, bool useMask = false,
-                               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) wxOVERRIDE;
+                               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord,
+                               bool resizeQualityHigh = false) wxOVERRIDE;
 
     virtual void DoGetSize(int *,int *) const wxOVERRIDE;
     virtual void DoGetSizeMM(int* width, int* height) const wxOVERRIDE;

@@ -422,10 +422,14 @@ namespace
 class StretchBltModeChanger
 {
 public:
-    StretchBltModeChanger(HDC hdc)
+    //Bricsys change
+    StretchBltModeChanger(HDC hdc, int mode)
         : m_hdc(hdc)
     {
-        m_modeOld = ::SetStretchBltMode(m_hdc, COLORONCOLOR);
+        m_modeOld = ::SetStretchBltMode(m_hdc, mode);
+        if (mode == HALFTONE)
+            ::SetBrushOrgEx(hdc, 0, 0, NULL);
+    //End change
         if ( !m_modeOld )
         {
             wxLogLastError(wxT("SetStretchBltMode"));
@@ -1457,7 +1461,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         }
     }
 
-    StretchBltModeChanger stretchModeChanger(GetHdc());
+    StretchBltModeChanger stretchModeChanger(GetHdc(), COLORONCOLOR);
 
     if ( useMask )
     {
@@ -2356,7 +2360,7 @@ bool wxMSWDCImpl::DoBlit(wxCoord dstX, wxCoord dstY,
                   wxRasterOperationMode rop, bool useMask,
                   wxCoord srcMaskX, wxCoord srcMaskY)
 {
-    return DoStretchBlit(dstX, dstY, dstWidth, dstHeight, source, srcX, srcY, dstWidth, dstHeight, rop, useMask, srcMaskX, srcMaskY);
+    return DoStretchBlit(dstX, dstY, dstWidth, dstHeight, source, srcX, srcY, dstWidth, dstHeight, rop, useMask, srcMaskX, srcMaskY, false);
 }
 
 bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
@@ -2365,8 +2369,9 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                          wxCoord xsrc, wxCoord ysrc,
                          wxCoord srcWidth, wxCoord srcHeight,
                          wxRasterOperationMode rop, bool useMask,
-                         wxCoord xsrcMask, wxCoord ysrcMask)
+                         wxCoord xsrcMask, wxCoord ysrcMask, bool resizeQualityHigh)
 {
+    int stretctBlitMode = resizeQualityHigh ? HALFTONE : COLORONCOLOR;
     wxCHECK_MSG( source, false, wxT("wxMSWDCImpl::Blit(): NULL wxDC pointer") );
 
     wxMSWDCImpl *implSrc = wxDynamicCast( source->GetImpl(), wxMSWDCImpl );
@@ -2527,7 +2532,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 wxLogLastError(wxT("BitBlt"));
             }
 
-            StretchBltModeChanger stretchModeChanger(GetHdc());
+            StretchBltModeChanger stretchModeChanger(GetHdc(), COLORONCOLOR);
 
             // copy src to buffer using selected raster op
             if ( !::StretchBlt(dc_buffer, 0, 0, dstWidth, dstHeight,
@@ -2595,7 +2600,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                              sizeof(ds),
                              &ds) == sizeof(ds) )
             {
-                StretchBltModeChanger stretchModeChanger(GetHdc());
+                StretchBltModeChanger stretchModeChanger(GetHdc(), stretctBlitMode);
 
                 // Unlike all the other functions used here (i.e. AlphaBlt(),
                 // MaskBlt(), BitBlt() and StretchBlt()), StretchDIBits() does
@@ -2639,7 +2644,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
         if ( !success && (caps & RC_STRETCHBLT) )
         {
-            StretchBltModeChanger stretchModeChanger(GetHdc());
+            StretchBltModeChanger stretchModeChanger(GetHdc(), stretctBlitMode);
 
             /*
             Workaround for #19190. See (reverted) 6614aa496d: "For some reason
