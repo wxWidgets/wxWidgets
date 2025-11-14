@@ -31,7 +31,15 @@ public:
     virtual wxBitmap DoGetAsBitmap(const wxRect* subrect) const wxOVERRIDE;
     virtual bool DoGetPixel(int x, int y, wxColour* col) const wxOVERRIDE;
     virtual void DoGetSize(int* width, int* height) const wxOVERRIDE;
-    virtual bool DoStretchBlit(int xdest, int ydest, int dstWidth, int dstHeight, wxDC* source, int xsrc, int ysrc, int srcWidth, int srcHeight, wxRasterOperationMode rop, bool useMask, int xsrcMask, int ysrcMask) wxOVERRIDE;
+    virtual bool DoStretchBlit(wxCoord xdest, wxCoord ydest,
+                                wxCoord dstWidth, wxCoord dstHeight,
+                                wxDC *source,
+                                wxCoord xsrc, wxCoord ysrc,
+                                wxCoord srcWidth, wxCoord srcHeight,
+                                wxRasterOperationMode = wxCOPY, bool useMask = false,
+                                wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord,
+                                bool resizeQualityHigh = false) wxOVERRIDE;
+    
     virtual void* GetCairoContext() const wxOVERRIDE;
 
     virtual wxSize GetPPI() const wxOVERRIDE;

@@ -674,7 +674,8 @@ wxDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                         wxRasterOperationMode rop,
                         bool useMask,
                         wxCoord xsrcMask,
-                        wxCoord ysrcMask)
+                        wxCoord ysrcMask,
+                        bool resizeQualityHigh)
 {
     wxCHECK_MSG( srcWidth && srcHeight && dstWidth && dstHeight, false,
                  wxT("invalid blit size") );

@@ -233,7 +233,14 @@ void wxGTKCairoDCImpl::DoGetSize(int* width, int* height) const
         *height = m_size.y;
 }
 
-bool wxGTKCairoDCImpl::DoStretchBlit(int xdest, int ydest, int dstWidth, int dstHeight, wxDC* source, int xsrc, int ysrc, int srcWidth, int srcHeight, wxRasterOperationMode rop, bool useMask, int xsrcMask, int ysrcMask)
+bool wxGTKCairoDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
+                                      wxCoord dstWidth, wxCoord dstHeight,
+                                      wxDC *source,
+                                      wxCoord xsrc, wxCoord ysrc,
+                                      wxCoord srcWidth, wxCoord srcHeight,
+                                      wxRasterOperationMode rop, bool useMask,
+                                      wxCoord xsrcMask, wxCoord ysrcMask,
+                                      bool WXUNUSED(resizeQualityHigh))    
 {
     wxCHECK_MSG(IsOk(), false, "invalid DC");
     wxCHECK_MSG(source && source->IsOk(), false, "invalid source DC");
