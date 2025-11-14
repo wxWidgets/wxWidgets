@@ -586,6 +586,13 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     return MakeCurrent(xid, m_glContext);
 }
 
+// Bricsys added
+GLXContext wxGLContext::GetNativeContext()
+{
+    return m_glContext;
+}
+// end Bricsys added
+
 // wrapper around glXMakeContextCurrent/glXMakeCurrent depending on GLX
 // version
 static bool MakeCurrent(GLXDrawable drawable, GLXContext context)

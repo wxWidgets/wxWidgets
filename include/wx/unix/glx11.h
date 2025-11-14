@@ -29,6 +29,10 @@ public:
 
     virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
 
+    // Bricsys added
+    virtual GLXContext GetNativeContext();
+    // end Bricsys added
+
 private:
     GLXContext m_glContext;
 
