@@ -3258,9 +3258,7 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
 // also called when using dark mode as we have to draw the selected item
 // ourselves when using it, and if we do this, we have to paint all the items
 // for consistency.
-//
-// pLVCD->clrText and clrTextBk should contain the colours to use
-void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
@@ -3301,21 +3299,9 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
     HDC hdc = nmcd.hdc;
     RECT rc = GetCustomDrawnItemRect(nmcd);
-
-    COLORREF clrFullBG;
-    if ( nmcd.uItemState & CDIS_SELECTED )
-    {
-        pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-        pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-
-        clrFullBG = pLVCD->clrTextBk;
-    }
-    else
-    {
-        clrFullBG = wxColourToRGB(listctrl->GetBackgroundColour());
-    }
-
-    COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
+    COLORREF clrFullBG = wxColourToRGB((nmcd.uItemState & CDIS_SELECTED)
+        ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)
+        : listctrl->GetBackgroundColour());
 
     // clear the entire row with the listctrl's bg colour
     // otherwise, it'd keep the hover color but only for the regions
@@ -3340,56 +3326,54 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
         RECT rcSubItem;
         wxCopyRectToRECT(rectSubItem, rcSubItem);
 
-        HandleSubItemPrepaint(listctrl, pLVCD, hfont, rcSubItem);
-    }
-
-    ::SetTextColor(hdc, colTextOld);
-
-    HandleItemPostpaint(nmcd);
-}
-
-WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
-                            LPNMLVCUSTOMDRAW pLVCD,
-                            wxItemAttr *attr)
-{
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        // We need to always paint selected items ourselves as they come
-        // out completely wrong in DarkMode_Explorer theme, see the comment
-        // before MSWGetDarkModeSupport().
+        wxItemAttr* attr = listctrl->MSWGetItemColumnAttr(item, col);
         wxFont font;
-
         if ( attr && attr->HasFont() )
         {
             font = attr->GetFont();
             font.WXAdjustToPPI(listctrl->GetDPI());
         }
+        HFONT hfont = font.IsOk() ? GetHfontOf(font) : nullptr;
 
-        pLVCD->clrText = attr && attr->HasTextColour()
-                            ? wxColourToRGB(attr->GetTextColour())
-                            : wxColourToRGB(listctrl->GetTextColour());
-        pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
-                            ? wxColourToRGB(attr->GetBackgroundColour())
-                            : wxColourToRGB(listctrl->GetBackgroundColour());
+        if ( nmcd.uItemState & CDIS_SELECTED )
+        {
+            pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+            pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+        }
+        else
+        {
+            pLVCD->clrText = attr && attr->HasTextColour()
+                ? wxColourToRGB(attr->GetTextColour())
+                : wxColourToRGB(listctrl->GetTextColour());
+            pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
+                ? wxColourToRGB(attr->GetBackgroundColour())
+                : wxColourToRGB(listctrl->GetBackgroundColour());
+        }
 
-        HandleItemPaint(listctrl, pLVCD, font.IsOk() ? GetHfontOf(font) : nullptr);
+        COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
+
+        HandleSubItemPrepaint(listctrl, pLVCD, hfont, rcSubItem);
+
+        ::SetTextColor(hdc, colTextOld);
+    }
+
+    HandleItemPostpaint(nmcd);
+}
+
+WXLPARAM HandleItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
+{
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        HandleItemPaint(listctrl, pLVCD);
         return CDRF_SKIPDEFAULT;
     }
 
+    wxItemAttr* attr = listctrl->MSWGetItemColumnAttr(pLVCD->nmcd.dwItemSpec, pLVCD->iSubItem);
     if ( !attr )
     {
         // nothing to do for this item
         return CDRF_DODEFAULT;
     }
-
-
-    // set the colours to use for text drawing
-    pLVCD->clrText = attr->HasTextColour()
-                     ? wxColourToRGB(attr->GetTextColour())
-                     : wxColourToRGB(listctrl->GetTextColour());
-    pLVCD->clrTextBk = attr->HasBackgroundColour()
-                       ? wxColourToRGB(attr->GetBackgroundColour())
-                       : wxColourToRGB(listctrl->GetBackgroundColour());
 
     // select the font if non default one is specified
     if ( attr->HasFont() )
@@ -3402,7 +3386,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
             // with recent comctl32.dll versions (5 and 6, it uses to work with
             // 4.something) so we have to draw the item entirely ourselves in
             // this case
-            HandleItemPaint(listctrl, pLVCD, GetHfontOf(font));
+            HandleItemPaint(listctrl, pLVCD);
             return CDRF_SKIPDEFAULT;
         }
 
@@ -3420,11 +3404,17 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
     // lucky as HandleItemPaint() doesn't result in the same appearance as with
     // the system theme, so we should avoid using it in this case to ensure
     // that all items appear consistently.
-    if ( listctrl->IsSystemThemeDisabled() &&
-            pLVCD->clrTextBk == ::GetSysColor(COLOR_BTNFACE) )
+    if ( listctrl->IsSystemThemeDisabled() )
     {
-        HandleItemPaint(listctrl, pLVCD, nullptr);
-        return CDRF_SKIPDEFAULT;
+        COLORREF bgCol = attr->HasBackgroundColour()
+            ? wxColourToRGB(attr->GetBackgroundColour())
+            : wxColourToRGB(listctrl->GetBackgroundColour());
+
+        if ( bgCol == ::GetSysColor(COLOR_BTNFACE) )
+        {
+            HandleItemPaint(listctrl, pLVCD);
+            return CDRF_SKIPDEFAULT;
+        }
     }
 
     return CDRF_DODEFAULT;
@@ -3464,7 +3454,7 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             if ( column < 0 || column >= GetColumnCount() )
                 break;
 
-            return HandleItemPrepaint(this, pLVCD, DoGetItemColumnAttr(item, column));
+            return HandleItemPrepaint(this, pLVCD);
     }
 
     return CDRF_DODEFAULT;
