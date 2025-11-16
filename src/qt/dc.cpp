@@ -866,7 +866,16 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
 
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
+    DoDrawRotatedText(text, x, y, 0.0);
+}
+
+void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
+                                   wxCoord x, wxCoord y, double angle)
+{
     m_qtPainter->save();
+    // Move and rotate (reverse angle direction in Qt and wx)
+    m_qtPainter->translate(x, y);
+    m_qtPainter->rotate(-angle);
 
     m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
@@ -884,57 +893,49 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     {
         // text is not mirrored
         m_qtPainter->scale(-1, 1);
-        x = -x;
     }
+
+    QRect  boundingRect; // Bounding rectangle for non rotated text.
+    QRect* boundingRectPtr = AreAutomaticBoundingBoxUpdatesEnabled()
+                           ? &boundingRect : nullptr;
 
     QFontMetrics metrics = m_qtPainter->fontMetrics();
 
+    int lineSpacing = 0;
     wxStringTokenizer tokenizer(text, "\n");
     while ( tokenizer.HasMoreTokens() )
     {
         const wxString line = tokenizer.GetNextToken();
-        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(line));
-        y += metrics.lineSpacing();
+        m_qtPainter->drawText(0, lineSpacing, 1, 1, Qt::TextDontClip,
+                              wxQtConvertString(line), boundingRectPtr);
+        lineSpacing += metrics.lineSpacing();
+
+        if ( AreAutomaticBoundingBoxUpdatesEnabled() && wxIsNullDouble(angle) )
+        {
+            CalcBoundingBox(wxQtConvertRect(boundingRect));
+        }
     }
 
     m_qtPainter->restore();
-}
 
-void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
-                               wxCoord x, wxCoord y, double angle)
-{
-    m_qtPainter->save();
-
-    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
-        m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
-
-    if ( GetLayoutDirection() == wxLayout_RightToLeft )
+    // Calculate bounding rectangle for rotated text.
+    if ( AreAutomaticBoundingBoxUpdatesEnabled() && !wxIsNullDouble(angle) )
     {
-        m_qtPainter->scale(-1, 1);
+        const double rad = wxDegToRad(angle);
 
-        x = -x;
-        angle = -angle;
+        const QFontMetrics metrics = m_qtPainter->fontMetrics();
+        const QRect rect = metrics.boundingRect(wxQtConvertString(text));
+        const int w = rect.width();
+        const int h = rect.height();
+
+        // "upper left" and "upper right"
+        CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+
+        // "bottom left" and "bottom right"
+        x += (wxCoord)(h*sin(rad));
+        y += (wxCoord)(h*cos(rad));
+        CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
     }
-
-    //Move and rotate (reverse angle direction in Qt and wx)
-    m_qtPainter->translate(x, y);
-    m_qtPainter->rotate(-angle);
-
-    m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
-
-    // Disable logical function
-    m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
-
-    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
-    {
-        m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
-
-        m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
-    }
-
-    m_qtPainter->drawText(0, 0, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
-
-    m_qtPainter->restore();
 }
 
 bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
