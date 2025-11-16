@@ -15,29 +15,47 @@
  */
 
 // ----------------------------------------------------------------------------
-// windows.h #defines the following identifiers which are also used in wxWin so
-// we replace these symbols with the corresponding inline functions and
-// undefine the macro.
+// windows.h and other win32 headers can #define the following identifiers
+// which are also used by wxWidgets so we replace these symbols with the
+// corresponding inline functions and undefine the macro.
 //
 // This looks quite ugly here but allows us to write clear (and correct!) code
 // elsewhere because the functions, unlike the macros, respect the scope.
+//
+// wxWidgets is built using the WIDE win32 API, and the inline functions in
+// this file will use the W variant by default.
+// Applications that include and use ANSI Windows.h can override this by
+// defining wxNO_WIN32_W before including any wxWidgets headers. The inline
+// function will then use the A variant.
 // ----------------------------------------------------------------------------
 
-// CreateDialog
+#if defined(WXBUILDING) || !defined(wxNO_WIN32_W)
+    #define wxFUNC_AW(fn) fn ## W
+    #define wxLPCSTR LPCWSTR
+    #define wxLPSTR LPWSTR
+    #define wxLPWNDCLASS LPWNDCLASSW
+    #define wxDOCINFO DOCINFOW
+    #define wxLPFINDREPLACE LPFINDREPLACEW
+#else
+    #define wxFUNC_AW(fn) fn ## A
+    #define wxLPCSTR LPCSTR
+    #define wxLPSTR LPSTR
+    #define wxLPWNDCLASS LPWNDCLASSA
+    #define wxDOCINFO DOCINFOA
+    #define wxLPFINDREPLACE LPFINDREPLACEA
+#endif
 
-#if defined(CreateDialog)
+#ifdef CreateDialog
     #undef CreateDialog
 
     inline HWND CreateDialog(HINSTANCE hInstance,
-                             LPCTSTR pTemplate,
+                             wxLPCSTR pTemplate,
                              HWND hwndParent,
                              DLGPROC pDlgProc)
     {
-        return CreateDialogW(hInstance, pTemplate, hwndParent, pDlgProc);
+        return wxFUNC_AW(CreateDialog)(hInstance, pTemplate, hwndParent, pDlgProc);
     }
 #endif
-
-// CreateFont
 
 #ifdef CreateFont
     #undef CreateFont
@@ -55,22 +73,20 @@
                             DWORD clipprecision,
                             DWORD quality,
                             DWORD family,
-                            LPCTSTR facename)
+                            wxLPCSTR facename)
     {
-        return CreateFontW(height, width, escapement, orientation,
-                           weight, italic, underline, strikeout, charset,
-                           outprecision, clipprecision, quality,
-                           family, facename);
+        return wxFUNC_AW(CreateFont)(height, width, escapement, orientation,
+                                     weight, italic, underline, strikeout,
+                                     charset, outprecision, clipprecision,
+                                     quality, family, facename);
     }
-#endif // CreateFont
+#endif
 
-// CreateWindow
-
-#if defined(CreateWindow)
+#ifdef CreateWindow
     #undef CreateWindow
 
-    inline HWND CreateWindow(LPCTSTR lpClassName,
-                             LPCTSTR lpWndClass,
+    inline HWND CreateWindow(wxLPCSTR lpClassName,
+                             wxLPCSTR lpWndClass,
                              DWORD dwStyle,
                              int x, int y, int w, int h,
                              HWND hWndParent,
@@ -78,261 +94,217 @@
                              HINSTANCE hInstance,
                              LPVOID lpParam)
     {
-        return CreateWindowW(lpClassName, lpWndClass, dwStyle, x, y, w, h,
-                             hWndParent, hMenu, hInstance, lpParam);
+        return wxFUNC_AW(CreateWindow)(lpClassName, lpWndClass, dwStyle, x, y, w, h,
+                                       hWndParent, hMenu, hInstance, lpParam);
     }
 #endif
-
-// LoadMenu
 
 #ifdef LoadMenu
     #undef LoadMenu
 
-    inline HMENU LoadMenu(HINSTANCE instance, LPCTSTR name)
+    inline HMENU LoadMenu(HINSTANCE instance, wxLPCSTR name)
     {
-        return LoadMenuW(instance, name);
+        return wxFUNC_AW(LoadMenu)(instance, name);
     }
 #endif
-
-// FindText
 
 #ifdef FindText
     #undef FindText
 
-    inline HWND APIENTRY FindText(LPFINDREPLACE lpfindreplace)
+    inline HWND APIENTRY FindText(wxLPFINDREPLACE lpfindreplace)
     {
-        return FindTextW(lpfindreplace);
+        return wxFUNC_AW(FindText)(lpfindreplace);
     }
 #endif
-
-// GetCharWidth
 
 #ifdef GetCharWidth
-   #undef GetCharWidth
+    #undef GetCharWidth
 
-   inline BOOL GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
-   {
-      return GetCharWidthW(dc, first, last, buffer);
-   }
+    inline BOOL GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
+    {
+        return wxFUNC_AW(GetCharWidth)(dc, first, last, buffer);
+    }
 #endif
-
-// FindWindow
 
 #ifdef FindWindow
-   #undef FindWindow
+    #undef FindWindow
 
-   inline HWND FindWindow(LPCWSTR classname, LPCWSTR windowname)
-   {
-      return FindWindowW(classname, windowname);
-   }
+    inline HWND FindWindow(wxLPCSTR classname, wxLPCSTR windowname)
+    {
+        return wxFUNC_AW(FindWindow)(classname, windowname);
+    }
 #endif
-
-// PlaySound
 
 #ifdef PlaySound
-   #undef PlaySound
+    #undef PlaySound
 
-   inline BOOL PlaySound(LPCWSTR pszSound, HMODULE hMod, DWORD fdwSound)
-   {
-      return PlaySoundW(pszSound, hMod, fdwSound);
-   }
+    inline BOOL PlaySound(wxLPCSTR pszSound, HMODULE hMod, DWORD fdwSound)
+    {
+        return wxFUNC_AW(PlaySound)(pszSound, hMod, fdwSound);
+    }
 #endif
-
-// GetClassName
 
 #ifdef GetClassName
-   #undef GetClassName
+    #undef GetClassName
 
-   inline int GetClassName(HWND h, LPWSTR classname, int maxcount)
-   {
-      return GetClassNameW(h, classname, maxcount);
-   }
+    inline int GetClassName(HWND h, wxLPSTR classname, int maxcount)
+    {
+        return wxFUNC_AW(GetClassName)(h, classname, maxcount);
+    }
 #endif
-
-// GetClassInfo
 
 #ifdef GetClassInfo
-   #undef GetClassInfo
+    #undef GetClassInfo
 
-   inline BOOL GetClassInfo(HINSTANCE h, LPCWSTR name, LPWNDCLASSW winclass)
-   {
-      return GetClassInfoW(h, name, winclass);
-   }
+    inline BOOL GetClassInfo(HINSTANCE h, wxLPCSTR name, wxLPWNDCLASS winclass)
+    {
+        return wxFUNC_AW(GetClassInfo)(h, name, winclass);
+    }
 #endif
-
-// LoadAccelerators
 
 #ifdef LoadAccelerators
-   #undef LoadAccelerators
+    #undef LoadAccelerators
 
-   inline HACCEL LoadAccelerators(HINSTANCE h, LPCWSTR name)
-   {
-      return LoadAcceleratorsW(h, name);
-   }
+    inline HACCEL LoadAccelerators(HINSTANCE h, wxLPCSTR name)
+    {
+        return wxFUNC_AW(LoadAccelerators)(h, name);
+    }
 #endif
-
-// DrawText
 
 #ifdef DrawText
-   #undef DrawText
+    #undef DrawText
 
-   inline int DrawText(HDC h, LPCWSTR str, int count, LPRECT rect, UINT format)
-   {
-      return DrawTextW(h, str, count, rect, format);
-   }
+    inline int DrawText(HDC h, wxLPCSTR str, int count, LPRECT rect, UINT format)
+    {
+        return wxFUNC_AW(DrawText)(h, str, count, rect, format);
+    }
 #endif
-
-
-// StartDoc
 
 #ifdef StartDoc
-   #undef StartDoc
+    #undef StartDoc
 
-   inline int StartDoc(HDC h, CONST DOCINFOW* info)
-   {
-      return StartDocW(h, const_cast<DOCINFOW*>(info));
-   }
+    inline int StartDoc(HDC h, CONST wxDOCINFO* info)
+    {
+        return wxFUNC_AW(StartDoc)(h, info);
+    }
 #endif
-
-// GetObject
 
 #ifdef GetObject
-   #undef GetObject
-   inline int GetObject(HGDIOBJ h, int i, LPVOID buffer)
-   {
-      return GetObjectW(h, i, buffer);
-   }
-#endif
+    #undef GetObject
 
-// GetMessage
+    inline int GetObject(HGDIOBJ h, int i, LPVOID buffer)
+    {
+        return wxFUNC_AW(GetObject)(h, i, buffer);
+    }
+#endif
 
 #ifdef GetMessage
-   #undef GetMessage
-   inline int GetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
-   {
-      return GetMessageW(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
-   }
+    #undef GetMessage
+
+    inline int GetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
+    {
+        return wxFUNC_AW(GetMessage)(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
+    }
 #endif
 
-// LoadIcon
 #ifdef LoadIcon
     #undef LoadIcon
-    inline HICON LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
-    {
-        return LoadIconW(hInstance, lpIconName);
-    }
-#endif // LoadIcon
 
-// LoadBitmap
+    inline HICON LoadIcon(HINSTANCE hInstance, wxLPCSTR lpIconName)
+    {
+        return wxFUNC_AW(LoadIcon)(hInstance, lpIconName);
+    }
+#endif
+
 #ifdef LoadBitmap
     #undef LoadBitmap
-    inline HBITMAP LoadBitmap(HINSTANCE hInstance, LPCTSTR lpBitmapName)
-    {
-        return LoadBitmapW(hInstance, lpBitmapName);
-    }
-#endif // LoadBitmap
 
-// LoadLibrary
+    inline HBITMAP LoadBitmap(HINSTANCE hInstance, wxLPCSTR lpBitmapName)
+    {
+        return wxFUNC_AW(LoadBitmap)(hInstance, lpBitmapName);
+    }
+#endif
 
 #ifdef LoadLibrary
     #undef LoadLibrary
 
-    inline HINSTANCE LoadLibrary(LPCWSTR lpLibFileName)
+    inline HINSTANCE LoadLibrary(wxLPCSTR lpLibFileName)
     {
-        return LoadLibraryW(lpLibFileName);
+        return wxFUNC_AW(LoadLibrary)(lpLibFileName);
     }
 #endif
 
-// FindResource
 #ifdef FindResource
     #undef FindResource
 
-    inline HRSRC FindResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType)
+    inline HRSRC FindResource(HMODULE hModule, wxLPCSTR lpName, wxLPCSTR lpType)
     {
-        return FindResourceW(hModule, lpName, lpType);
+        return wxFUNC_AW(FindResource)(hModule, lpName, lpType);
     }
 #endif
 
-// IsMaximized
-
 #ifdef IsMaximized
     #undef IsMaximized
+
     inline BOOL IsMaximized(HWND hwnd)
     {
         return IsZoomed(hwnd);
     }
 #endif
 
-// GetFirstChild
-
 #ifdef GetFirstChild
     #undef GetFirstChild
+
     inline HWND GetFirstChild(HWND hwnd)
     {
         return GetTopWindow(hwnd);
     }
 #endif
 
-// GetFirstSibling
-
 #ifdef GetFirstSibling
     #undef GetFirstSibling
+
     inline HWND GetFirstSibling(HWND hwnd)
     {
-        return GetWindow(hwnd,GW_HWNDFIRST);
+        return GetWindow(hwnd, GW_HWNDFIRST);
     }
 #endif
-
-// GetLastSibling
 
 #ifdef GetLastSibling
     #undef GetLastSibling
+
     inline HWND GetLastSibling(HWND hwnd)
     {
-        return GetWindow(hwnd,GW_HWNDLAST);
+        return GetWindow(hwnd, GW_HWNDLAST);
     }
 #endif
-
-// GetPrevSibling
 
 #ifdef GetPrevSibling
     #undef GetPrevSibling
+
     inline HWND GetPrevSibling(HWND hwnd)
     {
-        return GetWindow(hwnd,GW_HWNDPREV);
+        return GetWindow(hwnd, GW_HWNDPREV);
     }
 #endif
-
-// GetNextSibling
 
 #ifdef GetNextSibling
     #undef GetNextSibling
+
     inline HWND GetNextSibling(HWND hwnd)
     {
-        return GetWindow(hwnd,GW_HWNDNEXT);
+        return GetWindow(hwnd, GW_HWNDNEXT);
     }
 #endif
-
-// For WINE
-
-#if defined(GetWindowStyle)
-  #undef GetWindowStyle
-#endif
-
-// For ming and cygwin
 
 #ifdef Yield
     #undef Yield
 #endif
 
+// For WINE
 
-// GetWindowProc
-//ifdef GetWindowProc
-//   #undef GetWindowProc
-//endif
-//ifdef GetNextChild
-//    #undef GetNextChild
-//endif
+#ifdef GetWindowStyle
+    #undef GetWindowStyle
+#endif
 
 // #endif // _WX_WINUNDEF_H_
-

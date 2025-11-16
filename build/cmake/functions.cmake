@@ -382,9 +382,10 @@ function(wx_set_target_properties target_name)
     endif()
 
     if(WIN32)
-        target_compile_definitions(${target_name} PUBLIC UNICODE)
+        # not needed for wxWidgets anymore (it is always built with unicode)
+        # but keep it here so IDEs like Visual Studio know what character set is used
+        target_compile_definitions(${target_name} PRIVATE UNICODE _UNICODE)
     endif()
-    target_compile_definitions(${target_name} PUBLIC _UNICODE)
 
     wx_get_install_dir(library)
     file(RELATIVE_PATH wxSETUP_HEADER_REL ${wxOUTPUT_DIR} ${wxSETUP_HEADER_PATH})
@@ -688,9 +689,7 @@ function(wx_set_builtin_target_properties target_name)
     endif()
 
     if(WIN32)
-        # not needed for wxWidgets anymore (it is always built with unicode)
-        # but keep it here so applications linking to wxWidgets will inherit it
-        target_compile_definitions(${target_name} PUBLIC UNICODE _UNICODE)
+        target_compile_definitions(${target_name} PRIVATE UNICODE _UNICODE)
     endif()
 
     target_include_directories(${target_name} BEFORE PRIVATE ${wxSETUP_HEADER_PATH})

@@ -21,10 +21,6 @@ typedef void            WXIDISPATCH;
 typedef unsigned short* WXBSTR;
 typedef unsigned long   WXLCID;
 
-#ifdef GetObject
-#undef GetObject
-#endif
-
 // Flags used with wxAutomationObject::GetInstance()
 enum wxAutomationInstanceFlags
 {
