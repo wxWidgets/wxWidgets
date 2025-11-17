@@ -363,6 +363,13 @@ public:
     // (this option is on by default, you can turn it on/off at any time)
   bool IsExpandingEnvVars() const { return m_bExpandEnvVars; }
   void SetExpandEnvVars(bool bDoIt = true) { m_bExpandEnvVars = bDoIt; }
+
+  // Bricsys changes: options
+  // if environment variables were expanded during session a user could expect
+  // that they would be unexpanded while storing paths back to a registry
+  bool IsUnExpandingEnvVars() const { return m_bUnExpandEnvVars; }
+  void SetUnExpandEnvVars(bool bDoIt = true) { m_bUnExpandEnvVars = bDoIt; }
+
     // recording of default values
   void SetRecordDefaults(bool bDoIt = true) { m_bRecordDefaults = bDoIt; }
   bool IsRecordingDefaults() const { return m_bRecordDefaults; }
@@ -417,6 +424,7 @@ protected:
 private:
   // are we doing automatic environment variable expansion?
   bool m_bExpandEnvVars;
+  bool m_bUnExpandEnvVars;
   // do we record default values?
   bool m_bRecordDefaults;
 

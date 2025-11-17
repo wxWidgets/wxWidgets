@@ -874,6 +874,23 @@ wxRegKey::ValueType wxRegKey::GetValueType(const wxString& szValue) const
     return (ValueType)dwType;
 }
 
+//BRICSYS change: added dependencies for ::PathUnExpandEnvStrings 
+#include <Shlwapi.h>
+#pragma comment(lib, "Shlwapi.lib")
+
+bool wxRegKey::SetUnexpandedValue(const wxString& szValue, const wxString& strValue)
+{
+    //BRICSYS change: use expandable type "REG_EXPAND_SZ" + ::PathUnExpandEnvStrings routine
+    // for storing strings in registry in a portable format
+    const unsigned int maxStrLen = 16384;
+    wxChar buf[maxStrLen]; // MAX_PATH (512) is too small, long strings encountered (i.e. SRCHPATH)
+    BOOL bUnExpanded = PathUnExpandEnvStrings(strValue.c_str(), buf, (maxStrLen-1) * sizeof(wxChar));
+    wxString refinedValue(bUnExpanded ? buf : strValue);
+    int storeType = bUnExpanded ? REG_EXPAND_SZ : REG_SZ;
+    
+    return SetValue(szValue, refinedValue, storeType);
+}
+
 bool wxRegKey::SetValue(const wxString& szValue, long lValue)
 {
   if ( CONST_CAST Open() ) {
@@ -1105,21 +1122,21 @@ bool wxRegKey::QueryValue(const wxString& szValue,
     return false;
 }
 
-bool wxRegKey::SetValue(const wxString& szValue, const wxString& strValue)
+bool wxRegKey::SetValue(const wxString& szValue, const wxString& strValue, int type/*= REG_SZ*/)
 {
-  if ( CONST_CAST Open() ) {
-      m_dwLastError = RegSetValueEx((HKEY) m_hKey,
-                                    RegValueStr(szValue),
-                                    wxRESERVED_PARAM, REG_SZ,
-                                    reinterpret_cast<const BYTE*>(wxMSW_CONV_LPCTSTR(strValue)),
-                                    (strValue.Len() + 1)*sizeof(wxChar));
-      if ( m_dwLastError == ERROR_SUCCESS )
-        return true;
-  }
+    if (CONST_CAST Open()) {
+        m_dwLastError = RegSetValueEx((HKEY)m_hKey,
+            RegValueStr(szValue),
+            wxRESERVED_PARAM, type,
+            (RegString)wxMSW_CONV_LPCTSTR(strValue),
+            (strValue.Len() + 1)*sizeof(wxChar));
+        if (m_dwLastError == ERROR_SUCCESS)
+            return true;
+    }
 
-  wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
-                GetFullName(this, szValue));
-  return false;
+    wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
+        GetFullName(this, szValue));
+    return false;
 }
 
 wxString wxRegKey::QueryDefaultValue() const

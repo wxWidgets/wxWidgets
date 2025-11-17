@@ -80,6 +80,7 @@ wxConfigBase::wxConfigBase(const wxString& appName,
             : m_appName(appName), m_vendorName(vendorName), m_style(style)
 {
     m_bExpandEnvVars = true;
+    m_bUnExpandEnvVars = false;
     m_bRecordDefaults = false;
 }
 

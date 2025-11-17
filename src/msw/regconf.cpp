@@ -640,7 +640,17 @@ bool wxRegConfig::DoWriteValue(const wxString& key, const T& value)
 
 bool wxRegConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
-  return DoWriteValue(key, szValue);
+    wxConfigPathChanger path(this, key);
+    
+    if ( IsImmutable(path.Name()) ) {
+        wxLogError(wxT("Can't change immutable entry '%s'."), path.Name().c_str());
+        return false;
+    }
+    
+    if ( IsUnExpandingEnvVars() )
+        return LocalKey().SetUnexpandedValue(path.Name(), szValue);
+    else
+        return LocalKey().SetValue(path.Name(), szValue);
 }
 
 bool wxRegConfig::DoWriteLong(const wxString& key, long lValue)
