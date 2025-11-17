@@ -188,10 +188,11 @@ public:
     // named values
 
     // set the string value
-  bool  SetValue(const wxString& szValue, const wxString& strValue);
-    // retrieve the string value
+  bool  SetValue(const wxString& szValue, const wxString& strValue, int type = REG_SZ);
+  // BRICSYS change: wrapper for 'SetValue' for using environment variables in paths
+  bool SetUnexpandedValue(const wxString& szValue, const wxString& strValue);
   bool  QueryValue(const wxString& szValue, wxString& strValue) const
-    { return QueryValue(szValue, strValue, false); }
+  { return QueryValue(szValue, strValue, false); }
     // retrieve raw string value
   bool  QueryRawValue(const wxString& szValue, wxString& strValue) const
     { return QueryValue(szValue, strValue, true); }

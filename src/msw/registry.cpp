@@ -874,6 +874,68 @@ wxRegKey::ValueType wxRegKey::GetValueType(const wxString& szValue) const
     return (ValueType)dwType;
 }
 
+//BRICSYS change: added dependencies for ::PathUnExpandEnvStrings 
+#include <Shlwapi.h>
+#pragma comment(lib, "Shlwapi.lib")
+
+static bool isExpandable(const wxString& path)
+{
+    const int newLength = ::ExpandEnvironmentStrings(path.c_str(), NULL, 0);
+    if (newLength == 0)
+        return false;
+    else if (newLength == path.length() + 1)
+    {
+        wxString str;
+        int length = ::ExpandEnvironmentStrings(path.c_str(), wxStringBuffer(str, newLength), newLength);
+        return length != 0 && path != str;
+    }
+    else
+        return true;
+}
+
+struct PathUnExpander
+{
+    // combined path could contain single path or several valid paths
+    // we have to split paths so PathUnExpandEnvStrings could process all of sub-paths, 
+    // otherwise only first sub-path would be handled
+    PathUnExpander(const wxString& combinedPath)
+    : m_subPaths(wxSplit(combinedPath, _T(';'))), m_bUnExpanded(false) {}
+
+    bool unexpand(wxString &result)
+    {
+        m_bUnExpanded = false;
+        wxArrayString::iterator it = m_subPaths.begin();
+        wxArrayString::iterator itEnd = m_subPaths.end();
+        for (; it != itEnd; ++it)
+        {
+            if (PathUnExpandEnvStrings(it->c_str(), buf, eMAX_PATH * sizeof(wxChar)))
+            {
+                *it = buf;
+                m_bUnExpanded = true;
+            }
+        }
+        result = wxJoin(m_subPaths, _T(';'), _T('\0'));
+        return m_bUnExpanded;
+    }
+
+    enum {eMAX_PATH = 1024};
+    wxArrayString m_subPaths;
+    wxChar buf[eMAX_PATH];
+    bool m_bUnExpanded;
+};
+
+bool wxRegKey::SetUnexpandedValue(const wxString& szValue, const wxString& strValue)
+{
+    //BRICSYS change: use expandable type "REG_EXPAND_SZ" + ::PathUnExpandEnvStrings routine
+    // for storing strings in registry in a portable format
+    PathUnExpander unExpander(strValue);
+    wxString refinedValue;
+    BOOL bUnExpanded = unExpander.unexpand(refinedValue);
+    int storeType = bUnExpanded ? REG_EXPAND_SZ : REG_SZ;
+    
+    return SetValue(szValue, refinedValue, storeType);
+}
+
 bool wxRegKey::SetValue(const wxString& szValue, long lValue)
 {
   if ( CONST_CAST Open() ) {
@@ -1105,21 +1167,21 @@ bool wxRegKey::QueryValue(const wxString& szValue,
     return false;
 }
 
-bool wxRegKey::SetValue(const wxString& szValue, const wxString& strValue)
+bool wxRegKey::SetValue(const wxString& szValue, const wxString& strValue, int type/*= REG_SZ*/)
 {
-  if ( CONST_CAST Open() ) {
-      m_dwLastError = RegSetValueEx((HKEY) m_hKey,
-                                    RegValueStr(szValue),
-                                    wxRESERVED_PARAM, REG_SZ,
-                                    reinterpret_cast<const BYTE*>(wxMSW_CONV_LPCTSTR(strValue)),
-                                    (strValue.Len() + 1)*sizeof(wxChar));
-      if ( m_dwLastError == ERROR_SUCCESS )
-        return true;
-  }
+    if (CONST_CAST Open()) {
+        m_dwLastError = RegSetValueEx((HKEY)m_hKey,
+            RegValueStr(szValue),
+            wxRESERVED_PARAM, type,
+            (RegString)wxMSW_CONV_LPCTSTR(strValue),
+            (strValue.Len() + 1)*sizeof(wxChar));
+        if (m_dwLastError == ERROR_SUCCESS)
+            return true;
+    }
 
-  wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
-                GetFullName(this, szValue));
-  return false;
+    wxLogSysError(m_dwLastError, _("Can't set value of '%s'"),
+        GetFullName(this, szValue));
+    return false;
 }
 
 wxString wxRegKey::QueryDefaultValue() const
