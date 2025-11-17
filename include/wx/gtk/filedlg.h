@@ -48,6 +48,7 @@ public:
     virtual wxString GetFilename() const override;
     virtual void GetFilenames(wxArrayString& files) const override;
     virtual int GetFilterIndex() const override;
+    virtual wxString GetDirectory() const override;
 
     virtual void SetMessage(const wxString& message) override;
     virtual void SetPath(const wxString& path) override;
