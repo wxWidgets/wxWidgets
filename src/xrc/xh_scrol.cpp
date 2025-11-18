@@ -43,7 +43,9 @@ wxObject *wxScrollBarXmlHandler::DoCreateResource()
     control->SetScrollbar(GetLong( wxT("value"), 0),
                           GetLong( wxT("thumbsize"),1),
                           GetLong( wxT("range"), 10),
-                          GetLong( wxT("pagesize"),1));
+                          GetLong( wxT("pagesize"),1),
+                          true,
+                          GetLong( wxT("lineSize"),1));
 
     SetupWindow(control);
     CreateChildren(control);

@@ -6450,11 +6450,13 @@ bool wxWindowGTK::IsRetained() const
     return false;
 }
 
+// bricsys changed: addeed lineSize
 void wxWindowGTK::SetScrollbar(int orient,
                                int pos,
                                int thumbVisible,
                                int range,
-                               bool WXUNUSED(update))
+                               bool WXUNUSED(update),
+                               int WXUNUSED(lineSize))
 {
     const int dir = ScrollDirFromOrient(orient);
     GtkRange* const sb = m_scrollBar[dir];

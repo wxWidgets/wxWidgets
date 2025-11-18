@@ -64,9 +64,11 @@ void wxScrollBar::SetScrollbar( int position,
                                 int thumbSize,
                                 int range,
                                 int pageSize,
-                                bool WXUNUSED(refresh) )
+                                bool WXUNUSED(refresh),
+                                 int lineSize)
 {
     m_pageSize = pageSize;
+    m_lineSize = lineSize;
     m_viewSize = thumbSize;
     m_objectSize = range;
 
@@ -131,11 +133,11 @@ void wxScrollBar::TriggerScrollEvent( wxEventType scrollEvent )
 
     if ( scrollEvent == wxEVT_SCROLL_LINEUP )
     {
-        nScrollInc = -1;
+        nScrollInc = -m_lineSize;
     }
     else if ( scrollEvent == wxEVT_SCROLL_LINEDOWN )
     {
-        nScrollInc = 1;
+        nScrollInc = m_lineSize;
     }
     else if ( scrollEvent == wxEVT_SCROLL_PAGEUP )
     {

@@ -1397,7 +1397,7 @@ public:
                                int pos,
                                int thumbvisible,
                                int range,
-                               bool refresh = true ) = 0;
+                               bool refresh = true, [[maybe_unused]] int lineSize=1 ) = 0;
     virtual void SetScrollPos( int orient, int pos, bool refresh = true ) = 0;
     virtual int GetScrollPos( int orient ) const = 0;
     virtual int GetScrollThumb( int orient ) const = 0;
