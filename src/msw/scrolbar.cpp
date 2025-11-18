@@ -163,11 +163,12 @@ int wxScrollBar::GetThumbPosition() const
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
-    bool refresh)
+    bool refresh, int lineSize)
 {
     m_viewSize = pageSize;
     m_pageSize = thumbSize;
     m_objectSize = range;
+    m_lineSize = lineSize;
 
     // The range (number of scroll steps) is the
     // object length minus the page size.

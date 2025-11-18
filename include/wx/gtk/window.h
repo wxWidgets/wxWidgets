@@ -101,8 +101,9 @@ public:
     virtual double GetContentScaleFactor() const wxOVERRIDE;
     virtual double GetDPIScaleFactor() const wxOVERRIDE;
 
+    // bricsys changed
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
-                               int range, bool refresh = true ) wxOVERRIDE;
+                               int range, bool refresh = true, [[maybe_unused]] int lineSize=1 ) wxOVERRIDE;
     virtual void SetScrollPos( int orient, int pos, bool refresh = true ) wxOVERRIDE;
     virtual int GetScrollPos( int orient ) const wxOVERRIDE;
     virtual int GetScrollThumb( int orient ) const wxOVERRIDE;

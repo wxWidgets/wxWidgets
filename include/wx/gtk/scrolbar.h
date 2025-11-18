@@ -36,13 +36,16 @@ public:
     int GetThumbPosition() const wxOVERRIDE;
     int GetThumbSize() const wxOVERRIDE;
     int GetPageSize() const wxOVERRIDE;
+    // bricsys added
+    int GetLineSize() const wxOVERRIDE;
     int GetRange() const wxOVERRIDE;
     virtual void SetThumbPosition( int viewStart ) wxOVERRIDE;
     virtual void SetScrollbar( int position, int thumbSize, int range, int pageSize,
-      bool refresh = true ) wxOVERRIDE;
+      bool refresh = true, int lineSize = 1 ) wxOVERRIDE;
 
     void SetThumbSize(int thumbSize);
     void SetPageSize( int pageLength );
+    void SetLineSize( int lineSize );
     void SetRange(int range);
 
     static wxVisualAttributes
