@@ -144,8 +144,8 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
     return true;
 }
 
-
-bool wxTextFile::OnWrite(wxTextFileType typeNew, const wxMBConv& conv)
+// Bricsys: added last 2 parameters to write BOM to Unicode files
+bool wxTextFile::OnWrite(wxTextFileType typeNew, const wxMBConv& conv, const char* charBOM, size_t lengthBOM)
 {
     wxFileName fn = m_strBufferName;
 
@@ -161,6 +161,10 @@ bool wxTextFile::OnWrite(wxTextFileType typeNew, const wxMBConv& conv)
         wxLogError(_("can't write buffer '%s' to disk."), m_strBufferName);
         return false;
     }
+
+    // Bricsys: added means to write BOM to Unicode files
+    if( charBOM )
+        fileTmp.Write( charBOM, lengthBOM );
 
     // Writing to wxTempFile in reasonably-sized chunks is much faster than
     // doing it line by line.
