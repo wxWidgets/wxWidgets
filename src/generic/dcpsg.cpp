@@ -1022,7 +1022,11 @@ void wxPostScriptDCImpl::SetPSColour(const wxColor& col)
         // setgray here ?
     }
 
+// Bricsys change: let's write the color, even if it's the same, because
+// there could be 'grestore' after the previous 'setrgbcolor' (e.g. due to clipping caused by viewports)
+#if 0
     if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
+#endif
     {
         double redPS = (double)red / 255.0;
         double bluePS = (double)blue / 255.0;
@@ -1508,13 +1512,20 @@ void wxPostScriptDCImpl::SetPrintData(const wxPrintData& data)
 
     wxPaperSize id = m_printData.GetPaperId();
     wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(id);
-    if (!paper) paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
+    // Bricsys change: use paper height and width from print data, if possible
+    //if (!paper) paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
     int w = 595;
     int h = 842;
     if (paper)
     {
         w = paper->GetSizeDeviceUnits().x;
         h = paper->GetSizeDeviceUnits().y;
+    }
+    // Bricsys change: use paper height and width from print data, if possible
+    else if(m_printData.GetPaperSize().x)
+    {
+        w = floor(m_printData.GetPaperSize().x / (25.4 / 72.0) + 0.5);
+        h = floor(m_printData.GetPaperSize().y / (25.4 / 72.0) + 0.5);
     }
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
@@ -1546,7 +1557,8 @@ void wxPostScriptDCImpl::DoGetSize(int* width, int* height) const
 
     wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(id);
 
-    if (!paper) paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
+    // Bricsys change: use paper height and width from print data, if possible
+    //if (!paper) paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
 
     int w = 595;
     int h = 842;
@@ -1554,6 +1566,12 @@ void wxPostScriptDCImpl::DoGetSize(int* width, int* height) const
     {
         w = paper->GetSizeDeviceUnits().x;
         h = paper->GetSizeDeviceUnits().y;
+    }
+    // Bricsys change: use paper height and width from print data, if possible
+    else if(m_printData.GetPaperSize().x)
+    {
+        w = floor(m_printData.GetPaperSize().x / (25.4 / 72.0) + 0.5);
+        h = floor(m_printData.GetPaperSize().y / (25.4 / 72.0) + 0.5);
     }
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
@@ -1574,7 +1592,8 @@ void wxPostScriptDCImpl::DoGetSizeMM(int *width, int *height) const
 
     wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(id);
 
-    if (!paper) paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
+    // Bricsys change: use paper height and width from print data, if possible
+    //if (!paper) paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
 
     int w = 210;
     int h = 297;
@@ -1582,6 +1601,12 @@ void wxPostScriptDCImpl::DoGetSizeMM(int *width, int *height) const
     {
         w = paper->GetWidth() / 10;
         h = paper->GetHeight() / 10;
+    }
+    // Bricsys change: use paper height and width from print data, if possible
+    else if(m_printData.GetPaperSize().x)
+    {
+        w = m_printData.GetPaperSize().x;
+        h = m_printData.GetPaperSize().y;
     }
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
@@ -1634,8 +1659,11 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
     m_ok = true;
 
     wxString buffer;
-
-    PsPrint( "%!PS-Adobe-2.0\n" );
+    
+    // Bricsys changes: Write PS DSC version 3.0
+    PsPrint( "%!PS-Adobe-3.0\n" );
+    
+    PsPrint( "%%LanguageLevel: 2\n" ); 
 
     PsPrint( "%%Creator: wxWidgets PostScript renderer\n" );
 
@@ -1667,8 +1695,12 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
        default: paper = wxT("A4");
     }
 
-    buffer.Printf( "%%%%DocumentPaperSizes: %s\n", paper );
-    PsPrint( buffer );
+    // Bricsys changes: Write PS DSC version 3.0
+    int width, height;
+    DoGetSize(&width, &height);
+    PsPrint( wxString::Format( wxT("%%%%DocumentMedia: %s %d %d 0 () ()\n"), paper, width, height ) );
+
+    PsPrint( buffer );        
 
     PsPrint( "%%EndComments\n\n" );
 
