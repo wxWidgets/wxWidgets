@@ -13,6 +13,10 @@
 
 #include "wx/gdicmn.h"
 
+// Bricsys change
+inline int wxFONT_SZ(int pointSize){ return pointSize; }
+// end Bricsys change
+
 // ----------------------------------------------------------------------------
 // wxFont
 // ----------------------------------------------------------------------------

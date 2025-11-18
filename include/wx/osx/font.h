@@ -30,6 +30,9 @@ enum wxOSXSystemFont
     wxOSX_SYSTEM_FONT_FIXED
 };
 
+// Bricsys change
+    int WXDLLIMPEXP_CORE wxFONT_SZ(int pointSize);
+// end Bricsys change
 
 class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {

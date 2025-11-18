@@ -37,6 +37,45 @@
 #include <float.h>       // for FLT_MAX
 
 #define TRACE_CTFONT "ctfont"
+// Bricsys change
+#include <unordered_map>
+static const std::unordered_map<int, int> s_fontSizeNormalize =
+    {
+        {  6, 8  },
+        {  7, 9  },
+        {  8, 11 },
+        {  9, 12 },
+        { 10, 13 },
+        { 11, 15 },
+        { 12, 16 },
+        { 13, 17 },
+        { 14, 19 },
+        { 15, 21 },
+        { 16, 22 },
+        { 17, 23 },
+        { 18, 24 },
+        { 20, 26 },
+        { 22, 29 },
+        { 24, 32 },
+        { 26, 35 },
+        { 27, 36 },
+        { 28, 37 },
+        { 29, 38 },
+        { 30, 40 },
+        { 32, 42 },
+        { 34, 45 },
+        { 36, 48 },
+        };
+
+int wxFONT_SZ(int pointSize)
+{
+    auto it = s_fontSizeNormalize.find(pointSize);
+    if(it != s_fontSizeNormalize.end())
+        return it->second;
+    else
+        return std::nearbyint(pointSize * 1.3333f);
+}
+// end Bricsys change
 
 class WXDLLEXPORT wxFontRefData : public wxGDIRefData
 {

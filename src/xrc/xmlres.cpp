@@ -2718,15 +2718,17 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     }
     else // not based on system font
     {
-        font = wxFontInfo(double(pointSize))
-                .FaceName(facename)
-                .Family(ifamily)
-                .Style(istyle)
-                .Weight(iweight)
-                .Underlined(underlined)
-                .Strikethrough(strikethrough)
-                .Encoding(enc)
-                ;
+        // Bricscad change
+        font = wxFontInfo(wxFONT_SZ(pointSize))
+                   .FaceName(facename)
+                   .Family(ifamily)
+                   .Style(istyle)
+                   .Weight(iweight)
+                   .Underlined(underlined)
+                   .Strikethrough(strikethrough)
+                   .Encoding(enc)
+            ;
+        // end Bricscad change
     }
 
     m_handler->m_node = oldnode;
