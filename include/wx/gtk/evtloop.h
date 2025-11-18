@@ -26,6 +26,8 @@ public:
     virtual bool Dispatch() wxOVERRIDE;
     virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
     virtual void WakeUp() wxOVERRIDE;
+    // Bricsys added: regenAbort - we need a function which peeks for queued mouse events in the loop
+    virtual bool Pending(int type) const;
 
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
         { m_arrGdkEvents.Add(ev); }

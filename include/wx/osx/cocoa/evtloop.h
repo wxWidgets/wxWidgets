@@ -20,6 +20,9 @@ public:
 
     void EndModalSession();
 
+    // Bricsys added: regenAbort - we need a function which peeks for queued mouse events in the loop
+    virtual bool Pending(int type) const;
+
     virtual void WakeUp() wxOVERRIDE;
 
     void OSXUseLowLevelWakeup(bool useIt)

@@ -30,6 +30,9 @@ public:
     // return true if any events are available
     virtual bool Pending() const wxOVERRIDE;
 
+    // Bricsys added: regenAbort - we need a function which peeks for queued mouse events in the loop
+    virtual bool Pending(int type) const{ return false; };
+
     // dispatch a single event, return false if we should exit from the loop
     virtual bool Dispatch() wxOVERRIDE;
 

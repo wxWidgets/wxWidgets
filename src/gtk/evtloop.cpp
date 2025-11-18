@@ -219,6 +219,35 @@ bool wxGUIEventLoop::Pending() const
     return gtk_events_pending() != 0;
 }
 
+// Bricsys added: regenAbort - we need a function which peeks for queued mouse events in the loop
+bool wxGUIEventLoop::Pending(int type) const
+{
+    if( type == 1 )
+    {
+         if( gtk_events_pending() )
+         {
+             GdkEvent* ev = gdk_event_get();
+             if( ev )
+             {
+                 if (ev->type == GDK_MOTION_NOTIFY)
+                 {
+                     // NOTE: gdk_put_event() makes a copy of the event passed to it
+                     gdk_event_put( ev );
+                     gdk_event_free( ev );
+                     return true;
+                 }
+                 else
+                 {
+                     // NOTE: gdk_put_event() makes a copy of the event passed to it
+                     gdk_event_put( ev );
+                     gdk_event_free( ev );
+                     return false;
+                 }
+             }
+         }
+    }
+}
+
 bool wxGUIEventLoop::Dispatch()
 {
     wxCHECK_MSG( IsRunning(), false, wxT("can't call Dispatch() if not running") );
