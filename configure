@@ -1116,6 +1116,7 @@ with_libnotify
 with_opengl
 with_xtest
 with_nanosvg
+with_lunasvg
 with_cairo
 with_dmalloc
 with_sdl
@@ -2402,6 +2403,7 @@ Optional Packages:
   --with-opengl           use OpenGL (or Mesa)
   --with-xtest            use XTest extension
   --with-nanosvg          use NanoSVG for rasterizing SVG
+  --with-lunasvg          use LunaSVG for rasterizing SVG
   --with-cairo            use Cairo-based wxGraphicsContext implementation
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-sdl              use SDL for audio on Unix
@@ -5194,6 +5196,35 @@ fi
 
 
           eval "$wx_cv_use_nanosvg"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-lunasvg was given.
+if test "${with_lunasvg+set}" = set; then :
+  withval=$with_lunasvg;
+                        if test "$withval" = yes; then
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=yes'
+                        else
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=no'
+                        fi
+
+else
+
+                        wx_cv_use_lunasvg='wxUSE_LUNASVG=${'DEFAULT_wxUSE_LUNASVG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_lunasvg"
 
 
 if test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
@@ -27456,6 +27487,12 @@ if test "$wxUSE_NANOSVG" = "yes"; then
 
 fi
 
+
+if test "$wxUSE_LUNASVG" = "yes"; then
+    $as_echo "#define wxUSE_LUNASVG 1" >>confdefs.h
+
+fi
+
 if test "$wxUSE_XML" != "yes"; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XML library not built, cannot build wxrc" >&5
 $as_echo "$as_me: WARNING: XML library not built, cannot build wxrc" >&2;}
@@ -39892,6 +39929,22 @@ fi
      COND_PYTHON="#"
    fi
 
+fi
+
+USE_LUNASVG=0
+if test "$wxUSE_LUNASVG" = "yes"; then
+   if ! test -f "$srcdir/3rdparty/lunasvg/include/lunasvg.h" ; then
+       as_fn_error $? "
+   The required lunasvg header was not found. You probably need to run
+
+       git submodule update --init 3rdparty/lunasvg
+
+   to fix this." "$LINENO" 5
+   fi
+
+   $as_echo "#define wxUSE_LUNASVG 1" >>confdefs.h
+
+   USE_LUNASVG=1
 fi
 
 if test "$wxUSE_MENUS" = "yes"; then

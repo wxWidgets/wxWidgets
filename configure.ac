@@ -6983,7 +6983,7 @@ fi
 
 USE_LUNASVG=0
 if test "$wxUSE_LUNASVG" = "yes"; then
-   if ! test -f "$3rdparty/lunasvg/include/lunasvg.h" ; then
+   if ! test -f "$srcdir/3rdparty/lunasvg/include/lunasvg.h" ; then
        AC_MSG_ERROR([
    The required lunasvg header was not found. You probably need to run
 
