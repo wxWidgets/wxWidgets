@@ -161,8 +161,10 @@ public:
 
     // change the buffer (default argument means "don't change type")
     // possibly in another format
+    // Bricsys: added last 2 parameters to write BOM to Unicode files
     bool Write(wxTextFileType typeNew = wxTextFileType_None,
-               const wxMBConv& conv = wxConvAuto());
+               const wxMBConv& conv = wxConvAuto(),
+               const char* charBOM = NULL, size_t lengthBOM = 0);
 
     // dtor
     virtual ~wxTextBuffer();
@@ -185,7 +187,7 @@ protected:
                         wxTextBufferOpenMode openmode) = 0;
     virtual bool OnClose() = 0;
     virtual bool OnRead(const wxMBConv& conv) = 0;
-    virtual bool OnWrite(wxTextFileType typeNew, const wxMBConv& conv) = 0;
+    virtual bool OnWrite(wxTextFileType typeNew, const wxMBConv& conv, const char* charBOM,  size_t lengthBOM) = 0;
 
     static wxString ms_eof;     // dummy string returned at EOF
     wxString m_strBufferName;   // name of the buffer
