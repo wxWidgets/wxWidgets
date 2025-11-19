@@ -52,6 +52,12 @@ wxAuiXmlHandler::wxAuiXmlHandler()
     XRC_ADD_STYLE(wxAUI_NB_TOP);
     XRC_ADD_STYLE(wxAUI_NB_BOTTOM);
 
+    // Bricsys added
+    XRC_ADD_STYLE(wxAUI_NB_LEFT);
+    XRC_ADD_STYLE(wxAUI_NB_RIGHT);
+    XRC_ADD_STYLE(wxAUI_NB_NO_HINT_WINDOW);
+    // end Bricsys added
+
     AddWindowStyles();
 }
 

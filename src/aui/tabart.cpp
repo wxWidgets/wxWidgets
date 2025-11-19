@@ -245,8 +245,7 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     m_fixedTabWidth = wnd->FromDIP(100);
 
-    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wnd->FromDIP(4);
-
+    int tot_width = (int)(Vertical() ? tab_ctrl_size.y : tab_ctrl_size.x) - GetIndentSize() - 4;
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
         tot_width -= m_activeCloseBmp.GetPreferredLogicalSizeFor(wnd).x;
     if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
@@ -265,9 +264,15 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     m_fixedTabWidth = wxMin(m_fixedTabWidth, wnd->FromDIP(220));
 
-    m_tabCtrlHeight = tab_ctrl_size.y;
+    m_tabCtrlHeight = Vertical() ? tab_ctrl_size.x : tab_ctrl_size.y;
 }
 
+// Bricsys added
+bool wxAuiGenericTabArt::Vertical() const
+{
+    return (m_flags & wxAUI_NB_LEFT || m_flags & wxAUI_NB_RIGHT);
+}
+// end Bricsys added
 
 void wxAuiGenericTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
 {
@@ -980,8 +985,10 @@ void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     m_fixedTabWidth = wnd->FromDIP(100);
 
-    int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wnd->FromDIP(4);
-
+    // Bricscad changed:
+    int tot_width = (int)(Vertical() ? tab_ctrl_size.y : tab_ctrl_size.x) - GetIndentSize() - wnd->FromDIP(4);
+    // end Bricscad changed
+    
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
         tot_width -= m_activeCloseBmp.GetBitmapFor(wnd).GetLogicalWidth();
     if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
@@ -1013,6 +1020,13 @@ void wxAuiSimpleTabArt::SetActiveColour(const wxColour& colour)
     m_selectedBkBrush = wxBrush(colour);
     m_selectedBkPen = wxPen(colour);
 }
+
+// Bricsys added
+bool wxAuiSimpleTabArt::Vertical() const
+{
+    return (m_flags & wxAUI_NB_LEFT || m_flags & wxAUI_NB_RIGHT);    
+}
+// end Bricsys added
 
 void wxAuiSimpleTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
 {
