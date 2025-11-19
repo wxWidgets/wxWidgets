@@ -842,6 +842,10 @@ wxAuiManager* wxAuiManager::GetManager(wxWindow* window)
 
 void wxAuiManager::UpdateHintWindowConfig()
 {
+    // Bricsys change: don't show hint window if flag set
+    if(m_flags & wxAUI_MGR_NO_HINT_WINDOW)
+        return;
+
     // find out if the system can do transparent frames
     bool can_do_transparent = false;
 

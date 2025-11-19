@@ -743,7 +743,8 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
                                wxID_ANY,
                                wxPoint(0,0),
                                parent->FromDIP(wxSize(100, 100)),
-                               wxAUI_NB_DEFAULT_STYLE | wxNO_BORDER))
+// Bricsys change: add wxAUI_NB_NO_HINT_WINDOW flag
+                               wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_NO_HINT_WINDOW | wxNO_BORDER))
     {
         return false;
     }
