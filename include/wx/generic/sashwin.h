@@ -116,6 +116,9 @@ public:
     virtual int GetMaximumSizeX() const { return m_maximumPaneSizeX; }
     virtual int GetMaximumSizeY() const { return m_maximumPaneSizeY; }
 
+// Bricsys change (#15486, for theming)
+    virtual void DoDrawSash(wxSashEdgePosition edge, wxDC& dc);
+
 ////////////////////////////////////////////////////////////////////////////
 // Implementation
 
