@@ -1695,8 +1695,12 @@ void wxAuiNotebook::InitNotebook(long style)
     m_dummyWnd->SetSize(FromDIP(wxSize(200, 200)));
     m_dummyWnd->Show(false);
 
+    // Bricsys change: add no hint window flag to manager
+    if( m_flags & wxAUI_NB_NO_HINT_WINDOW )
+        GetAuiManager().SetFlags(wxAUI_MGR_DEFAULT | wxAUI_MGR_NO_HINT_WINDOW);
+    else
+        GetAuiManager().SetFlags(wxAUI_MGR_DEFAULT);
     GetAuiManager().SetManagedWindow(this);
-    GetAuiManager().SetFlags(wxAUI_MGR_DEFAULT);
     GetAuiManager().SetDockSizeConstraint(1.0, 1.0); // no dock size constraint
 
     GetAuiManager().AddPane(m_dummyWnd,
