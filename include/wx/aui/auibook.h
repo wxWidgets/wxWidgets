@@ -168,6 +168,9 @@ public:
     // Make the tab visible if it wasn't already
     void MakeTabVisible(int tabPage, wxWindow* win);
 
+    // Bricsys added
+    bool Vertical() const;
+
 protected:
 
     virtual void Render(wxDC* dc, wxWindow* wnd);

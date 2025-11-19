@@ -67,61 +67,86 @@ void wxTabFrame::DoSizing()
     
     if (m_tabs->IsFrozen() || m_tabs->GetParent()->IsFrozen())
         return;
-    
-    m_tab_rect = wxRect(m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
-    if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
+
+    //if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
+    // Bricsys changed: handle left/right tabs
+    unsigned int flags = m_tabs->GetFlags();
+    if (flags & wxAUI_NB_LEFT)
+    {
+        m_tab_rect = wxRect(m_rect.x, m_rect.y, m_tabCtrlHeight, m_rect.height);
+        m_tabs->SetSize(m_tab_rect);
+        m_tabs->SetRect(wxRect(0, 0, m_tabCtrlHeight, m_rect.height));
+    }
+    else if (flags & wxAUI_NB_RIGHT)
+    {
+        m_tab_rect = wxRect(m_rect.x + m_rect.height, m_rect.y, m_rect.width - m_tabCtrlHeight, m_rect.height);
+        m_tabs->SetSize(m_tab_rect);
+        m_tabs->SetRect(wxRect(0, 0, m_tabCtrlHeight, m_rect.height));
+    }
+    else if (flags & wxAUI_NB_BOTTOM)  
     {
         m_tab_rect = wxRect (m_rect.x, m_rect.y + m_rect.height - m_tabCtrlHeight, m_rect.width, m_tabCtrlHeight);
-        m_tabs->SetSize     (m_rect.x, m_rect.y + m_rect.height - m_tabCtrlHeight, m_rect.width, m_tabCtrlHeight);
+        m_tabs->SetSize(m_tab_rect);
         m_tabs->SetRect     (wxRect(0, 0, m_rect.width, m_tabCtrlHeight));
     }
-    else //TODO: if (GetFlags() & wxAUI_NB_TOP)
+    else // (flags & wxAUI_NB_TOP)
     {
         m_tab_rect = wxRect (m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
-        m_tabs->SetSize     (m_rect.x, m_rect.y, m_rect.width, m_tabCtrlHeight);
+        m_tabs->SetSize(m_tab_rect); 
         m_tabs->SetRect     (wxRect(0, 0,        m_rect.width, m_tabCtrlHeight));
     }
-    // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
-    // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
-    
+    // end Bricsys changed 
     m_tabs->Refresh();
     m_tabs->Update();
-    
+
     wxAuiNotebookPageArray& pages = m_tabs->GetPages();
     size_t i, page_count = pages.GetCount();
-    
+
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = pages.Item(i);
         int border_space = m_tabs->GetArtProvider()->GetAdditionalBorderSpace(page.window);
         
-        int height = m_rect.height - m_tabCtrlHeight - border_space;
+        // Bricsys change: left/right tabs
+        wxSize margin(2 * border_space, 2 * border_space);
+        if (m_tabs->Vertical())
+            margin.x = m_tabCtrlHeight + border_space;
+        else // horizontal tabs
+            margin.y = m_tabCtrlHeight + border_space;
+
+        int height = m_rect.height - margin.y;  
         if ( height < 0 )
         {
             // avoid passing negative height to wxWindow::SetSize(), this
             // results in assert failures/GTK+ warnings
             height = 0;
         }
-        int width = m_rect.width - 2 * border_space;
+        int width = m_rect.width - margin.x;
         if (width < 0)
             width = 0;
         
-        if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
+        if (flags & wxAUI_NB_BOTTOM || flags & wxAUI_NB_RIGHT)
         {
             page.window->SetSize(m_rect.x + border_space,
                                  m_rect.y + border_space,
                                  width,
                                  height);
         }
-        else //TODO: if (GetFlags() & wxAUI_NB_TOP)
+        else if (flags & wxAUI_NB_LEFT)
+        {
+            page.window->SetSize(m_rect.x + m_tabCtrlHeight,
+                                      m_rect.y + border_space,
+                                      width,
+                                      height); 
+        }
+        else // (flags & wxAUI_NB_TOP)
         {
             page.window->SetSize(m_rect.x + border_space,
                                  m_rect.y + m_tabCtrlHeight,
                                  width,
                                  height);
         }
-        // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
-        // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
+        // end Bricsys change 
     }
 }
 
@@ -1013,6 +1038,13 @@ void wxAuiTabContainer::DoShowHide()
             ShowWnd(page.window, false);
     }
 }
+
+// Bricsys added
+bool wxAuiTabContainer::Vertical() const
+{
+    return (m_flags & wxAUI_NB_LEFT || m_flags & wxAUI_NB_RIGHT);
+}
+// end Bricsys added
 
 
 
