@@ -416,7 +416,7 @@ public:
     static bool AlwaysUsesLiveResize();
     bool HasLiveResize() const;
 
-    void SetManagedWindow(wxWindow* managedWnd);
+    virtual void SetManagedWindow(wxWindow* managedWnd);
     wxWindow* GetManagedWindow() const;
 
     static wxAuiManager* GetManager(wxWindow* window);
@@ -494,7 +494,7 @@ public:
 
 protected:
 
-    void UpdateHintWindowConfig();
+    virtual void UpdateHintWindowConfig();
 
     void DoFrameLayout();
 
