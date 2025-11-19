@@ -463,6 +463,10 @@ protected:
     virtual int DoModifySelection(size_t n, bool events);
     virtual wxAuiManager& GetAuiManager() { if(m_mgr == NULL) m_mgr = new wxAuiManager; return *m_mgr; }
 
+// Bricsys change: enable replacement of stock wxAuiTabCtrl with derived class
+    virtual wxAuiTabCtrl* createTabControl(wxWindow* parent, wxWindowID id,
+        const wxPoint& pos, const wxSize& size, long style);
+
 protected:
 
     void DoSizing();

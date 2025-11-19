@@ -2326,7 +2326,8 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
     // If there is no tabframe at all, create one
     wxTabFrame* tabframe = new wxTabFrame;
     tabframe->SetTabCtrlHeight(m_tabCtrlHeight);
-    tabframe->m_tabs = new wxAuiTabCtrl(this,
+    // Bricsys change: enable replacement of stock wxAuiTabCtrl with derived class
+    tabframe->m_tabs = createTabControl(this, 
                                         m_tabIdCounter++,
                                         wxDefaultPosition,
                                         wxDefaultSize,
@@ -2409,7 +2410,8 @@ void wxAuiNotebook::Split(size_t page, int direction)
     wxTabFrame* new_tabs = new wxTabFrame;
     new_tabs->m_rect = wxRect(wxPoint(0,0), split_size);
     new_tabs->SetTabCtrlHeight(m_tabCtrlHeight);
-    new_tabs->m_tabs = new wxAuiTabCtrl(this,
+    // Bricsys change: enable replacement of stock wxAuiTabCtrl with derived class
+    new_tabs->m_tabs = createTabControl(this, 
                                         m_tabIdCounter++,
                                         wxDefaultPosition,
                                         wxDefaultSize,
@@ -2825,7 +2827,8 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             wxTabFrame* new_tabs = new wxTabFrame;
             new_tabs->m_rect = wxRect(wxPoint(0,0), CalculateNewSplitSize());
             new_tabs->SetTabCtrlHeight(m_tabCtrlHeight);
-            new_tabs->m_tabs = new wxAuiTabCtrl(this,
+            // Bricsys change: enable replacement of stock wxAuiTabCtrl with derived class
+            new_tabs->m_tabs = createTabControl(this, 
                                                 m_tabIdCounter++,
                                                 wxDefaultPosition,
                                                 wxDefaultSize,
@@ -3627,6 +3630,13 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
     }
 
     return m_curPage;
+}
+
+// Bricsys change: enable replacement of stock wxAuiTabCtrl with derived class
+wxAuiTabCtrl* wxAuiNotebook::createTabControl(wxWindow* parent, wxWindowID id,
+                                          const wxPoint& pos, const wxSize& size, long style)
+{
+    return new wxAuiTabCtrl(parent, id, pos, size, style);
 }
 
 void wxAuiTabCtrl::SetHoverTab(wxWindow* wnd)
