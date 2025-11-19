@@ -465,8 +465,14 @@ void wxSashWindow::DrawSashes(wxDC& dc)
             DrawSash((wxSashEdgePosition) i, dc);
 }
 
-// Draw the sash
+// Bricsys change (#15486, for theming)
 void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
+{
+    DoDrawSash(edge, dc);
+}
+
+// Draw the sash
+void wxSashWindow::DoDrawSash(wxSashEdgePosition edge, wxDC& dc)
 {
     int w, h;
     GetClientSize(&w, &h);
@@ -538,6 +544,7 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
     dc.SetPen(wxNullPen);
     dc.SetBrush(wxNullBrush);
 }
+//end Bricsys change
 
 // Draw the sash tracker (for whilst moving the sash)
 void wxSashWindow::DrawSashTracker(wxSashEdgePosition edge, int x, int y)
