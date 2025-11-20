@@ -39,6 +39,28 @@ extern bool        g_blockEventsOnScroll;
 // "expose_event" of m_mainWidget
 //-----------------------------------------------------------------------------
 
+// Bricsys added
+namespace
+{
+
+void initMiniEdge(int& miniEdge, long style)
+{
+    if (style & wxRESIZE_BORDER)
+        miniEdge = 4;
+    else if (style & wxBORDER_NONE)
+        miniEdge = 0;
+    else
+        miniEdge = 3;
+}
+
+int getDecMiniEdge(const int miniEdge)
+{
+    return std::max(0, miniEdge - 1);
+}
+
+}
+// Bricsys added
+
 extern "C" {
 #ifdef __WXGTK3__
 static gboolean draw(GtkWidget* widget, cairo_t* cr, wxMiniFrame* win)
@@ -97,9 +119,9 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
         wxBrush brush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
         dc.SetBrush( brush );
         dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle( win->m_miniEdge-1,
-                          win->m_miniEdge-1,
-                          win->m_width - (2*(win->m_miniEdge-1)),
+        dc.DrawRectangle( getDecMiniEdge(win->m_miniEdge),
+                          getDecMiniEdge(win->m_miniEdge),
+                          win->m_width - (2*(getDecMiniEdge(win->m_miniEdge))),          
                           height );
 
         const wxColour textColor = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
@@ -339,10 +361,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         m_miniTitle = wxMax(dc.GetTextExtent("X").y, 16);
     }
 
-    if (style & wxRESIZE_BORDER)
-        m_miniEdge = 4;
-    else
-        m_miniEdge = 3;
+    initMiniEdge(m_miniEdge, style);
 
     // don't allow sizing smaller than decorations
     int minWidth = 2 * m_miniEdge;
@@ -449,6 +468,89 @@ void wxMiniFrame::DoSetSizeHints(int minW, int minH, int maxW, int maxH, int inc
     if (minW < w) minW = w;
     if (minH < h) minH = h;
     wxFrame::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+}
+
+// Bricsys change: allow mini frames to be non focusing by calling gtk_window_set_accept_focus(false)
+bool wxMiniFrame::CreateNonFocusing( wxWindow *parent, wxWindowID id, const wxString &title,
+                                    const wxPoint &pos, const wxSize &size,
+                                    long style, const wxString &name )
+{
+    m_miniTitle = 0;
+    if (style & wxCAPTION)
+        m_miniTitle = 16;
+    
+    initMiniEdge(m_miniEdge, style);
+    
+    // don't allow sizing smaller than decorations
+    int minWidth = 2 * m_miniEdge;
+    int minHeight = 2 * m_miniEdge + m_miniTitle;
+    if (m_minWidth < minWidth)
+        m_minWidth = minWidth;
+    if (m_minHeight < minHeight)
+        m_minHeight = minHeight;
+    
+    wxFrame::Create( parent, id, title, pos, size, style, name );
+    
+    gtk_window_set_accept_focus( GTK_WINDOW(m_widget), false );
+    
+    // Use a GtkEventBox for the title and borders. Using m_widget for this
+    // almost works, except that setting the resize cursor has no effect.
+    GtkWidget* eventbox = gtk_event_box_new();
+    gtk_widget_add_events(eventbox,
+                          GDK_POINTER_MOTION_MASK |
+                              GDK_POINTER_MOTION_HINT_MASK);
+    gtk_widget_show(eventbox);
+    // Use a GtkAlignment to position m_mainWidget inside the decorations
+    GtkWidget* alignment = gtk_alignment_new(0, 0, 1, 1);
+    gtk_alignment_set_padding(GTK_ALIGNMENT(alignment),
+                              m_miniTitle + m_miniEdge, m_miniEdge, m_miniEdge, m_miniEdge);
+    gtk_widget_show(alignment);
+    // The GtkEventBox and GtkAlignment go between m_widget and m_mainWidget
+    gtk_widget_reparent(m_mainWidget, alignment);
+    gtk_container_add(GTK_CONTAINER(eventbox), alignment);
+    gtk_container_add(GTK_CONTAINER(m_widget), eventbox);
+    
+    m_gdkDecor = 0;
+    m_gdkFunc = 0;
+    if (style & wxRESIZE_BORDER)
+        m_gdkFunc = GDK_FUNC_RESIZE;
+    gtk_window_set_default_size(GTK_WINDOW(m_widget), m_width, m_height);
+    
+    m_decorSize.left = 0;
+    m_decorSize.right = 0;
+    m_decorSize.top = 0;
+    m_decorSize.bottom = 0;
+    
+    m_deferShow = false;
+    
+    if (m_parent && (GTK_IS_WINDOW(m_parent->m_widget)))
+    {
+        gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
+    }
+    
+    if (m_miniTitle && (style & wxCLOSE_BOX))
+    {
+        wxImage img = wxBitmap((const char*)close_bits, 16, 16).ConvertToImage();
+        img.Replace(0,0,0,123,123,123);
+        img.SetMaskColour(123,123,123);
+        m_closeButton = wxBitmap( img );
+    }
+    
+    /* these are called when the borders are drawn */
+#ifdef __WXGTK3__
+    g_signal_connect_after(eventbox, "draw", G_CALLBACK(draw), this);
+#else
+    g_signal_connect_after(eventbox, "expose_event", G_CALLBACK(expose_event), this);
+#endif
+    
+    /* these are required for dragging the mini frame around */
+    g_signal_connect (eventbox, "button_press_event",
+                     G_CALLBACK (gtk_window_button_press_callback), this);
+    g_signal_connect (eventbox, "motion_notify_event",
+                     G_CALLBACK (gtk_window_motion_notify_callback), this);
+    g_signal_connect (eventbox, "leave_notify_event",
+                     G_CALLBACK (gtk_window_leave_callback), this);
+    return true;
 }
 
 void wxMiniFrame::SetTitle( const wxString &title )

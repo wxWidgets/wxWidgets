@@ -42,6 +42,15 @@ public:
             long style = wxCAPTION | wxRESIZE_BORDER,
             const wxString& name = wxASCII_STR(wxFrameNameStr));
 
+    // Bricsys change: allow mini frames to be non focusing by calling gtk_window_set_accept_focus(false)
+    bool CreateNonFocusing(wxWindow *parent,
+                                         wxWindowID id,
+                                         const wxString& title,
+                                         const wxPoint& pos = wxDefaultPosition,
+                                         const wxSize& size = wxDefaultSize,
+                                         long style = wxCAPTION | wxRESIZE_BORDER,
+                                         const wxString& name = wxFrameNameStr); 
+
     virtual void SetTitle( const wxString &title ) wxOVERRIDE;
 
 protected:
