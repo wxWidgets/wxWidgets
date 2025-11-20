@@ -32,7 +32,7 @@
 
     @see wxSimpleHtmlListBox, wxHtmlListBox
 */
-class wxVListBox : public wxVScrolledWindow
+class wxVListBox : public wxVScrolledCanvas
 {
 public:
     /**
