@@ -1476,9 +1476,20 @@ void wxPropertyGrid::RegainColours()
     if ( !(m_coloursCustomized & 0x0100) )
         m_colDisPropFore = m_colCapFore;
 
+    // Bricscad change: set a different colour for selected but unfocused properties
+    if ( !(m_coloursCustomized & 0x0200) )
+        m_colSelUnfocusBack = m_colMargin;
+
     m_colEmptySpace = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
 }
 
+// Bricscad change: set a different colour for selected but unfocused properties
+void wxPropertyGrid::SetSelectionUnfocusedBackgroundColour( const wxColour& col )
+{
+    m_colSelUnfocusBack = col;
+    m_coloursCustomized |= 0x200;
+    Refresh();
+}
 // -----------------------------------------------------------------------
 
 void wxPropertyGrid::ResetColours()
@@ -2294,7 +2305,15 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 else if ( isPgEnabled )
                 {
                     rowFgCol = m_colPropFore;
-                    rowBgCol = m_colMargin;
+                    if ( p == firstSelected )
+                    {   // Bricscad change: set a different colour for selected but unfocused properties
+                        if ( !(m_coloursCustomized & 0x0200) )
+                            rowBgCol = m_colMargin;
+                        else
+                            rowBgCol = m_colSelUnfocusBack;
+                    }
+                    else
+                        rowBgCol = m_colSelBack;
                 }
                 else
                 {
