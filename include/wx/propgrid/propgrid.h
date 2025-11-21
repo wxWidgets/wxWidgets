@@ -1069,6 +1069,9 @@ public:
     // background.
     void SetSelectionBackgroundColour(const wxColour& col);
 
+    // Bricscad change: set a different colour for selected but unfocused properties
+    void SetSelectionUnfocusedBackgroundColour(const wxColour& col);
+
     // Sets selection foreground colour - applies to selected property name
     // text.
     void SetSelectionTextColour(const wxColour& col);
@@ -1706,6 +1709,8 @@ protected:
     // background for selected property (actually use background color when
     // control out-of-focus)
     wxColour            m_colSelBack;
+    // Bricscad change: set a different colour for selected but unfocused properties
+    wxColour            m_colSelUnfocusBack;  
     // background colour for margin
     wxColour            m_colMargin;
     // background colour for empty space below the grid
