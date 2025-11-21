@@ -85,7 +85,21 @@ private:
         // size 0 would fail, so create a 1*1 bitmap in this case
         size.IncTo(wxSize(1, 1));
 
-        buffer->CreateWithLogicalSize(size, scale);
+        // Explicitly request 24bpp bitmap under MSW to avoid slow down when
+        // drawing bitmaps with alpha channel on 32bpp bitmap: as explained in
+        // AlphaBlt() implementation in src/msw/dc.cpp, we need to manually
+        // reset alpha values in this case, which involves converting the
+        // bitmap to DIB and back and may be very slow. As we don't really care
+        // about the alpha values in the backing store bitmap (everything is
+        // already blended when drawing to it), use 24bpp bitmap to avoid this.
+        constexpr int depth =
+#if defined(__WXMSW__)
+            24;
+#else
+            wxBITMAP_SCREEN_DEPTH;
+#endif
+
+        buffer->CreateWithLogicalSize(size, scale, depth);
 
         return buffer;
     }
