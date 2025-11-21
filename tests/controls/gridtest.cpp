@@ -42,6 +42,12 @@
     #define wxSKIP_AUTOMATIC_TEST_IF_GTK2()
 #endif
 
+// Only wxMSW supports native header, so the tests would be redundant under
+// other platforms.
+#ifdef __WXMSW__
+    #define wxHAS_NATIVE_HEADER
+#endif // __WXMSW__
+
 namespace
 {
 
@@ -612,6 +618,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
     if ( !EnableUITests() )
         return;
 
+#ifdef wxHAS_NATIVE_HEADER
     wxString desc;
 
     SECTION("Default") { desc = "default header"; }
@@ -619,6 +626,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
     SECTION("Native labels") { desc = "native labels"; m_grid->SetUseNativeColLabels(); }
 
     INFO("Using " << desc);
+#endif // wxHAS_NATIVE_HEADER
 
     EventCounter lclick(m_grid, wxEVT_GRID_LABEL_LEFT_CLICK);
     EventCounter ldclick(m_grid, wxEVT_GRID_LABEL_LEFT_DCLICK);
@@ -681,6 +689,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SortClick", "[grid]")
     if ( !EnableUITests() )
         return;
 
+#ifdef wxHAS_NATIVE_HEADER
     wxString desc;
 
     SECTION("Default") { desc = "default header"; }
@@ -688,6 +697,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SortClick", "[grid]")
     SECTION("Native labels") { desc = "native labels"; m_grid->SetUseNativeColLabels(); }
 
     INFO("Using " << desc);
+#endif // wxHAS_NATIVE_HEADER
 
     m_grid->SetSortingColumn(0);
 
@@ -1166,12 +1176,14 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AddRowCol", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::DeleteAndAddRowCol", "[grid]")
 {
+#ifdef wxHAS_NATIVE_HEADER
     wxString desc;
 
     SECTION("Default") { desc = "default header"; }
     SECTION("Native header") { desc = "native header"; m_grid->UseNativeColHeader(); }
 
     INFO("Using " << desc);
+#endif // wxHAS_NATIVE_HEADER
 
     CHECK(m_grid->GetNumberRows() == 10);
     CHECK(m_grid->GetNumberCols() == 2);
@@ -1202,6 +1214,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::DeleteAndAddRowCol", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ColumnOrder", "[grid]")
 {
+#ifdef wxHAS_NATIVE_HEADER
     wxString desc;
 
     SECTION("Default") { desc = "default header"; }
@@ -1209,6 +1222,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnOrder", "[grid]")
     SECTION("Native labels") { desc = "native labels"; m_grid->SetUseNativeColLabels(); }
 
     INFO("Using " << desc);
+#endif // wxHAS_NATIVE_HEADER
 
     m_grid->AppendCols(2);
 
@@ -1621,12 +1635,14 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 
     wxSKIP_AUTOMATIC_TEST_IF_GTK2();
 
+#ifdef wxHAS_NATIVE_HEADER
     wxString desc;
 
     SECTION("Default") { desc = "default header"; }
     SECTION("Native header") { desc = "native header"; m_grid->UseNativeColHeader(); }
 
     INFO("Using " << desc);
+#endif // wxHAS_NATIVE_HEADER
 
     int const startwidth = m_grid->GetColSize(0);
     int const draglength = 100;
@@ -1676,6 +1692,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
 
     wxSKIP_AUTOMATIC_TEST_IF_GTK2();
 
+#ifdef wxHAS_NATIVE_HEADER
     wxString desc;
 
     SECTION("Default") { desc = "default header"; }
@@ -1692,6 +1709,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
     }
 
     INFO("Using " << desc);
+#endif // wxHAS_NATIVE_HEADER
 
     int const startminwidth = m_grid->GetColMinimalAcceptableWidth();
     m_grid->SetColMinimalAcceptableWidth(startminwidth*2);
@@ -1750,6 +1768,7 @@ void GridTestCase::CheckFirstColAutoSize(int expected)
 
 TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
 {
+#ifdef wxHAS_NATIVE_HEADER
     wxString desc;
 
     SECTION("Default") { desc = "default header"; }
@@ -1757,6 +1776,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
     SECTION("Native labels") { desc = "native labels"; m_grid->SetUseNativeColLabels(); }
 
     INFO("Using " << desc);
+#endif // wxHAS_NATIVE_HEADER
 
     // Hardcoded extra margin for the columns used in grid.cpp.
     const int margin = m_grid->FromDIP(10);
