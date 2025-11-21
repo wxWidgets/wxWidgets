@@ -470,40 +470,6 @@ wxString wxGetHomeDir()
     return home;
 }
 
-#if 0
-
-wxString wxGetCurrentDir()
-{
-    wxString dir;
-    size_t len = 1024;
-    bool ok;
-    do
-    {
-        ok = getcwd(dir.GetWriteBuf(len + 1), len) != nullptr;
-        dir.UngetWriteBuf();
-
-        if ( !ok )
-        {
-            if ( errno != ERANGE )
-            {
-                wxLogSysError(wxT("Failed to get current directory"));
-
-                return wxEmptyString;
-            }
-            else
-            {
-                // buffer was too small, retry with a larger one
-                len *= 2;
-            }
-        }
-        //else: ok
-    } while ( !ok );
-
-    return dir;
-}
-
-#endif // 0
-
 // ----------------------------------------------------------------------------
 // Environment
 // ----------------------------------------------------------------------------
