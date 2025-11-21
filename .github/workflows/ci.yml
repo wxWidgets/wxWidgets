@@ -122,7 +122,7 @@ jobs:
             use_xvfb: true
           - name: Ubuntu 24.04 wxGTK UBSAN
             runner: ubuntu-24.04
-            configure_flags: --with-cxx=20
+            configure_flags: --with-lunasvg --with-cxx=20
             extra_warnings: -Wsuggest-override
             use_ubsan: true
             use_xvfb: true
