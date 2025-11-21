@@ -289,6 +289,7 @@ wxMSW
 - Fix wxStyledTextCtrl support in screen readers (Maarten Bent, #25963).
 - Fix TAB behaviour in a panel with notebook as only active child (#25443).
 - Reduce GDI resource usage in wxStaticBitmap (Alex Shvartzkop, #25698).
+- Significantly improve performance of drawing bitmaps in wxAUI (#23841).
 
 wxOSX:
 
