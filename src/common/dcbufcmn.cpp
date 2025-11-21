@@ -44,19 +44,18 @@ public:
     virtual bool OnInit() override { return true; }
     virtual void OnExit() override { wxDELETE(ms_buffer); }
 
-    static wxBitmap* GetBuffer(wxDC* dc, int w, int h)
+    static wxBitmap* GetBuffer(wxDC* dc, wxSize size)
     {
         if ( ms_usingSharedBuffer )
-            return DoCreateBuffer(dc, w, h);
+            return DoCreateBuffer(dc, size);
 
         if ( !ms_buffer ||
-                w > ms_buffer->GetLogicalWidth() ||
-                h > ms_buffer->GetLogicalHeight() ||
+                !ms_buffer->GetLogicalSize().IsAtLeast(size) ||
                 (dc && dc->GetContentScaleFactor() != ms_buffer->GetScaleFactor()) )
         {
             delete ms_buffer;
 
-            ms_buffer = DoCreateBuffer(dc, w, h);
+            ms_buffer = DoCreateBuffer(dc, size);
         }
 
         ms_usingSharedBuffer = true;
@@ -77,14 +76,16 @@ public:
     }
 
 private:
-    static wxBitmap* DoCreateBuffer(wxDC* dc, int w, int h)
+    static wxBitmap* DoCreateBuffer(wxDC* dc, wxSize size)
     {
         const double scale = dc ? dc->GetContentScaleFactor() : 1.0;
         wxBitmap* const buffer = new wxBitmap;
 
         // we must always return a valid bitmap but creating a bitmap of
         // size 0 would fail, so create a 1*1 bitmap in this case
-        buffer->CreateWithLogicalSize(wxMax(w, 1), wxMax(h, 1), scale);
+        size.IncTo(wxSize(1, 1));
+
+        buffer->CreateWithLogicalSize(size, scale);
 
         return buffer;
     }
@@ -104,18 +105,18 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule);
 // wxBufferedDC
 // ============================================================================
 
-void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
+void wxBufferedDC::UseBuffer(wxSize size)
 {
-    wxCHECK_RET( w >= -1 && h >= -1, "Invalid buffer size" );
+    wxCHECK_RET( size.x >= -1 && size.y >= -1, "Invalid buffer size" );
 
     if ( !m_buffer || !m_buffer->IsOk() )
     {
-        if ( w == -1 || h == -1 )
-            m_dc->GetSize(&w, &h);
+        if ( !size.IsFullySpecified() )
+            size = m_dc->GetSize();
 
-        m_buffer = wxSharedDCBufferManager::GetBuffer(m_dc, w, h);
+        m_buffer = wxSharedDCBufferManager::GetBuffer(m_dc, size);
         m_style |= wxBUFFER_USES_SHARED_BUFFER;
-        m_area.Set(w,h);
+        m_area = size;
     }
     else
         m_area = m_buffer->GetSize();
