@@ -583,6 +583,26 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
                                     wxBitmapType WXUNUSED(flags),
                                     int desiredWidth, int desiredHeight)
 {
+    static const struct
+    {
+        const wxChar *name;
+        LPTSTR id;
+    } stdIcons[] =
+    {
+        { wxT("wxICON_QUESTION"),   IDI_QUESTION    },
+        { wxT("wxICON_WARNING"),    IDI_EXCLAMATION },
+        { wxT("wxICON_ERROR"),      IDI_HAND        },
+        { wxT("wxICON_INFORMATION"),IDI_ASTERISK    },
+    };
+
+    // Check if it's one of the standard icons.
+    size_t nStdIcon;
+    for ( nStdIcon = 0; nStdIcon < WXSIZEOF(stdIcons); nStdIcon++ )
+    {
+        if ( name == stdIcons[nStdIcon].name )
+            break;
+    }
+
     HICON hicon;
 
     // do we need the icon of the specific size or would any icon do?
@@ -602,7 +622,11 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         hicon = (HICON)::LoadImage(wxGetInstance(), name.t_str(), IMAGE_ICON,
                                     desiredWidth, desiredHeight,
                                     LR_DEFAULTCOLOR);
-        if ( !hicon )
+
+        // Don't give errors when looking for a standard icon because we
+        // provide fallback for them below, but do indicate that we failed to
+        // load other icons because this is probably not expected.
+        if ( !hicon && nStdIcon == WXSIZEOF(stdIcons) )
         {
             wxLogLastError(wxString::Format("LoadImage(%s)", name));
         }
@@ -610,38 +634,21 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
     else
     {
         hicon = ::LoadIcon(wxGetInstance(), name.t_str());
-        if ( !hicon )
+
+        // As above, only warn for non standard icons.
+        if ( !hicon && nStdIcon == WXSIZEOF(stdIcons) )
         {
             wxLogLastError(wxString::Format("LoadIcon(%s)", name));
         }
     }
 
     // next check if it's not a standard icon
-    if ( !hicon && !hasSize )
+    if ( !hicon && !hasSize && nStdIcon < WXSIZEOF(stdIcons) )
     {
-        static const struct
+        hicon = ::LoadIcon((HINSTANCE)nullptr, stdIcons[nStdIcon].id);
+        if ( !hicon )
         {
-            const wxChar *name;
-            LPTSTR id;
-        } stdIcons[] =
-        {
-            { wxT("wxICON_QUESTION"),   IDI_QUESTION    },
-            { wxT("wxICON_WARNING"),    IDI_EXCLAMATION },
-            { wxT("wxICON_ERROR"),      IDI_HAND        },
-            { wxT("wxICON_INFORMATION"),       IDI_ASTERISK    },
-        };
-
-        for ( size_t nIcon = 0; !hicon && nIcon < WXSIZEOF(stdIcons); nIcon++ )
-        {
-            if ( name == stdIcons[nIcon].name )
-            {
-                hicon = ::LoadIcon((HINSTANCE)nullptr, stdIcons[nIcon].id);
-                if ( !hicon )
-                {
-                    wxLogLastError(wxString::Format("LoadIcon(%s)", stdIcons[nIcon].name));
-                }
-                break;
-            }
+            wxLogLastError(wxString::Format("LoadIcon(%s)", stdIcons[nStdIcon].name));
         }
     }
 
