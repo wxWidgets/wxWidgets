@@ -109,7 +109,7 @@ void wxTabFrame::DoSizing()
         
         // Bricsys change: left/right tabs
         wxSize margin(2 * border_space, 2 * border_space);
-        if (m_tabs->Vertical())
+        if (m_tabs->IsVertical())
             margin.x = m_tabCtrlHeight + border_space;
         else // horizontal tabs
             margin.y = m_tabCtrlHeight + border_space;
@@ -541,10 +541,14 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
                               wxAUI_BUTTON_STATE_HIDDEN,
                             &x_extent);
 
+        // begin Bricsys changes: if Vertical() then everything is rotated 90 degrees
+        // for now, vertical tabs are drawn from top to bottom and left/right/close buttons are not correct,
+        // it works well for icon tabs but not for the existing text tabs (wxAuiSimpleTabArt, wxAuiGenericTabArt...)
+
         if (i+1 < page_count)
             total_width += x_extent;
         else
-            total_width += size.x;
+            total_width += IsVertical() ? size.y : size.x;
 
         if (i >= m_tabOffset)
         {
@@ -555,7 +559,7 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
         }
     }
 
-    if (total_width > m_rect.GetWidth() || m_tabOffset != 0)
+    if (total_width > (IsVertical() ? m_rect.GetHeight() : m_rect.GetWidth()) || m_tabOffset != 0)
     {
         // show left/right buttons
         for (i = 0; i < button_count; ++i)
@@ -599,7 +603,7 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
             for (i = 0; i < button_count; ++i)
                 button_width += m_buttons.Item(button_count - i - 1).rect.GetWidth();
 
-            if (visible_width < m_rect.GetWidth() - button_width)
+            if (visible_width < (IsVertical() ? m_rect.GetHeight() : m_rect.GetWidth() - button_width))
                 button.curState |= wxAUI_BUTTON_STATE_DISABLED;
             else
                 button.curState &= ~wxAUI_BUTTON_STATE_DISABLED;
@@ -616,7 +620,7 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
     int right_buttons_width = 0;
 
     // draw the buttons on the right side
-    int offset = m_rect.x + m_rect.width;
+    int offset = IsVertical() ? m_rect.y + m_rect.height : m_rect.x + m_rect.width;
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
@@ -627,8 +631,17 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
             continue;
 
         wxRect button_rect = m_rect;
-        button_rect.SetY(1);
-        button_rect.SetWidth(offset);
+
+        if (IsVertical())
+        {
+            button_rect.SetX(1);
+            button_rect.SetHeight(offset);
+        }
+        else
+        {
+            button_rect.SetY(1);
+            button_rect.SetWidth(offset);
+        }
 
         m_art->DrawButton(dc,
                           wnd,
@@ -638,11 +651,17 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
                           wxRIGHT,
                           &button.rect);
 
-        offset -= button.rect.GetWidth();
-        right_buttons_width += button.rect.GetWidth();
+        if (IsVertical())
+        {
+            offset -= button.rect.GetHeight();
+            right_buttons_width += button.rect.GetHeight();
+        }
+        else
+        {
+            offset -= button.rect.GetWidth();
+            right_buttons_width += button.rect.GetWidth();
+        }
     }
-
-
 
     offset = 0;
 
@@ -657,7 +676,12 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
         if (button.curState & wxAUI_BUTTON_STATE_HIDDEN)
             continue;
 
-        wxRect button_rect(offset, 1, 1000, m_rect.height);
+        wxRect button_rect;
+
+        if (IsVertical())
+            button_rect = wxRect(1, offset, m_rect.width, 1000);
+        else
+            button_rect = wxRect(offset, 1, 1000, m_rect.height);
 
         m_art->DrawButton(dc,
                           wnd,
@@ -667,8 +691,16 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
                           wxLEFT,
                           &button.rect);
 
-        offset += button.rect.GetWidth();
-        left_buttons_width += button.rect.GetWidth();
+        if (IsVertical())
+        {
+            offset += button.rect.GetHeight();
+            left_buttons_width += button.rect.GetHeight();
+        }
+        else
+        {
+            offset += button.rect.GetWidth();
+            left_buttons_width += button.rect.GetWidth();
+        }
     }
 
     offset = left_buttons_width;
@@ -708,8 +740,17 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
 
     int x_extent = 0;
     wxRect rect = m_rect;
-    rect.y = 0;
-    rect.height = m_rect.height;
+
+    if (IsVertical())
+    {
+        rect.x = 0;
+        rect.width = m_rect.width;
+    }
+    else
+    {
+        rect.y = 0;
+        rect.height = m_rect.height;
+    }
 
     for (i = m_tabOffset; i < page_count; ++i)
     {
@@ -732,11 +773,22 @@ void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
             tab_button.curState = wxAUI_BUTTON_STATE_HIDDEN;
         }
 
-        rect.x = offset;
-        rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
-
-        if (rect.width <= 0)
-            break;
+        if (IsVertical())
+        {
+            rect.y = offset;
+            rect.height = m_rect.height - right_buttons_width - offset - wnd->FromDIP(2);
+            
+            if (rect.height <= 0)
+                break;
+        }
+        else
+        {
+            rect.x = offset;
+            rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
+            
+            if (rect.width <= 0)
+                break;
+        }
 
         m_art->DrawTab(dc,
                        wnd,
@@ -825,7 +877,9 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     int right_buttons_width = 0;
 
     // calculate size of the buttons on the right side
-    int offset = m_rect.x + m_rect.width;
+    // begin Bricsys changes: vertical button support
+    int offset = IsVertical() ? m_rect.y + m_rect.height : m_rect.x + m_rect.width;
+    // end Bricsys changes
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(button_count - i - 1);
@@ -860,6 +914,49 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     if (offset == 0)
         offset += m_art->GetIndentSize();
 
+    // begin Bricsys changes
+    if (IsVertical())
+    {
+        wxRect rect = m_rect;
+        rect.x = 0;
+        rect.width = m_rect.width;
+
+        for (i = tabOffset; i < page_count; ++i)
+        {
+            wxAuiNotebookPage& page = m_pages.Item(i);
+            wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
+
+            rect.y = offset;
+            rect.height = m_rect.height - right_buttons_width - offset - wnd->FromDIP(2);
+            
+            if (rect.height <= 0)
+                return false; // haven't found the tab, and we've run out of space, so return false
+
+            int x_extent = 0;
+            m_art->GetTabSize(*dc,
+                              wnd,
+                              page.caption,
+                              page.bitmap,
+                              page.active,
+                              tab_button.curState,
+                              &x_extent);
+
+            offset += x_extent;
+
+            if (i == (size_t)tabPage)
+            {
+                if (((m_rect.height - right_buttons_width - offset - wnd->FromDIP(2)) <= 0) &&
+                    ((m_rect.height - right_buttons_width - left_buttons_width) > x_extent))
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        return true;
+    }
+    // end Bricsys changes
+
     wxRect rect = m_rect;
 
     // See if the given page is visible at the given tab offset (effectively scroll position)
@@ -875,20 +972,21 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
 
         int x_extent = 0;
         m_art->GetTabSize(*dc,
-                            wnd,
-                            page.caption,
-                            page.bitmap,
-                            page.active,
-                            tab_button.curState,
-                            &x_extent);
+                          wnd,
+                          page.caption,
+                          page.bitmap,
+                          page.active,
+                          tab_button.curState,
+                          &x_extent);
 
         offset += x_extent;
 
-        if (i == (size_t) tabPage)
+        if (i == (size_t)tabPage)
         {
             // If not all of the tab is visible, and supposing there's space to display it all,
             // we could do better so we return false.
-            if (((m_rect.width - right_buttons_width - offset - wnd->FromDIP(2)) <= 0) && ((m_rect.width - right_buttons_width - left_buttons_width) > x_extent))
+            if (((m_rect.width - right_buttons_width - offset - wnd->FromDIP(2)) <= 0) &&
+                ((m_rect.width - right_buttons_width - left_buttons_width) > x_extent))
                 return false;
             else
                 return true;
@@ -898,6 +996,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     // Shouldn't really get here, but if it does, assume the tab is visible to prevent
     // further looping in calling code.
     return true;
+
 }
 
 // Make the tab visible if it wasn't already
@@ -1040,7 +1139,7 @@ void wxAuiTabContainer::DoShowHide()
 }
 
 // Bricsys added
-bool wxAuiTabContainer::Vertical() const
+bool wxAuiTabContainer::IsVertical() const
 {
     return (m_flags & wxAUI_NB_LEFT || m_flags & wxAUI_NB_RIGHT);
 }
@@ -2560,11 +2659,14 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
             int dest_idx = dest_tabs->GetIdxFromWindow(dest_location_tab);
 
             // prevent jumpy drag
+            // Bricsys change: handle vertical tabs
+            int thisDragX = dest_tabs->IsVertical() ? pt.y : pt.x;
+
             if ((src_idx == dest_idx) || dest_idx == -1 ||
-                (src_idx > dest_idx && m_lastDragX <= pt.x) ||
-                (src_idx < dest_idx && m_lastDragX >= pt.x))
+                (src_idx > dest_idx && m_lastDragX <= thisDragX) ||
+                (src_idx < dest_idx && m_lastDragX >= thisDragX))
             {
-                m_lastDragX = pt.x;
+                m_lastDragX = thisDragX;
                 return;
             }
 
@@ -2575,7 +2677,8 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
             dest_tabs->SetActivePage((size_t)dest_idx);
             dest_tabs->DoShowHide();
             dest_tabs->Refresh();
-            m_lastDragX = pt.x;
+            m_lastDragX = thisDragX;
+            // end Bricsys change
 
         }
 

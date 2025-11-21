@@ -172,7 +172,7 @@ public:
     void MakeTabVisible(int tabPage, wxWindow* win);
 
     // Bricsys added
-    bool Vertical() const;
+    bool IsVertical() const;
 
 protected:
 
