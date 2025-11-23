@@ -20,6 +20,7 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/treeitemdelegate.h"
 
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QScrollBar>
@@ -351,6 +352,48 @@ protected:
         QTreeView::selectionChanged(selected, deselected);
     }
 
+    // Helper class which tries to close any open editor as early as possible
+    // when the application is shutting down to avoid a crash if closeEditor()
+    // pops up any message box. IOW, showing a message/dialog box (using exec())
+    // while the application is closing down is dangerous.
+    // See note in the Qt documentation of QDialog::exec()
+    class SafeEditorCloser : public QObject
+    {
+    public:
+        explicit SafeEditorCloser(wxQTreeWidget* qTreeWidget)
+            : m_qTreeWidget(qTreeWidget)
+        {
+            qApp->installEventFilter(this);
+        }
+
+        ~SafeEditorCloser()
+        {
+            qApp->removeEventFilter(this);
+        }
+
+    protected:
+        bool eventFilter(QObject* obj, QEvent* event) override
+        {
+            if ( event->type() == QEvent::Close )
+            {
+                // Don't try to close the editor if there is any active popup window
+                // (e.g. selecting Quit from the menu) because the application would
+                // hang if closeEditor() pops up any message box.
+                if ( !QApplication::activePopupWidget() )
+                {
+                    // This will close any currently opened editor.
+                    m_qTreeWidget->setCurrentItem(nullptr);
+                }
+            }
+
+            return QObject::eventFilter(obj, event);
+        }
+
+        wxQTreeWidget* const m_qTreeWidget;
+    };
+
+    std::unique_ptr<SafeEditorCloser> m_editorCloser;
+
     bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event) override
     {
         // AllEditTriggers means that editor is about to open, not waiting for double click
@@ -372,7 +415,15 @@ protected:
             if (GetHandler()->HandleWindowEvent(wx_event) && !wx_event.IsAllowed())
                 return false;
         }
-        return QTreeWidget::edit(index, trigger, event);
+
+        if ( QTreeWidget::edit(index, trigger, event) )
+        {
+            m_editorCloser.reset(new SafeEditorCloser(this));
+
+            return true;
+        }
+
+        return false;
     }
 
     void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint) override
@@ -383,6 +434,15 @@ protected:
 
         if (guard.IsInside())
             return;
+
+        m_editorCloser.reset(nullptr);
+
+        if (!GetHandler())
+        {
+            // The handler may have already been destroyed, when quitting
+            // the application using Ctrl+Q for example.
+            return;
+        }
 
         // There can be multiple calls to close editor when the item loses focus
         const QModelIndex current_index = m_item_delegate.GetCurrentModelIndex();
