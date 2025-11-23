@@ -320,6 +320,7 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
+DEFAULT_wxUSE_LUNASVG=no
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
@@ -1127,10 +1128,18 @@ case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
             AC_MSG_ERROR([Using wxWebView Chromium backend requires C++14 or later.])
         fi
 
+        if test "$wxUSE_LUNASVG" = "yes"; then
+            AC_MSG_ERROR([Using LunaSVG requires C++17 or later, use --with-cxx=17 or --with-cxx=20.])
+        fi
+
         AX_CXX_COMPILE_STDCXX(11)
         ;;
 
     14)
+        if test "$wxUSE_LUNASVG" = "yes"; then
+            AC_MSG_ERROR([Using LunaSVG requires C++17 or later, use --with-cxx=17 or --with-cxx=20.])
+        fi
+
         AX_CXX_COMPILE_STDCXX(14)
         ;;
 
