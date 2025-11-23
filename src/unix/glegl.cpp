@@ -746,9 +746,9 @@ EGLConfig wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
     {
         // Ignore the return value here, we cannot recover at this point.
         eglTerminate(dpy);
-        wxLogError(wxString::Format(
-            "EGL version is %d.%d. EGL version 1.4 or greater is required.",
-            gs_eglMajor, gs_eglMinor));
+        wxLogError(
+            _("EGL version is %d.%d but version 1.4 or greater is required."),
+            gs_eglMajor, gs_eglMinor);
         return nullptr;
     }
 
