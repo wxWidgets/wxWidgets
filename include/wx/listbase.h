@@ -51,6 +51,10 @@ int (wxCALLBACK *wxListCtrlCompare)(wxIntPtr item1, wxIntPtr item2, wxIntPtr sor
 #define wxLC_SINGLE_SEL      0x2000
 #define wxLC_SORT_ASCENDING  0x4000
 #define wxLC_SORT_DESCENDING 0x8000
+// Bricsys change
+// wxListCtrl generic
+#define wxLC_BC_COMPONENTS   0x10000
+// end Bricsys change 
 
 #define wxLC_MASK_TYPE       (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
 #define wxLC_MASK_ALIGN      (wxLC_ALIGN_TOP | wxLC_ALIGN_LEFT)

@@ -162,6 +162,10 @@ private:
 
 WX_DECLARE_LIST(wxListItemData, wxListItemDataList);
 
+// Bricsys change
+#define wxLIST_LINE_BC_COMPONENTS 0x00001
+// end Bricsys change
+
 class wxListLineData
 {
 public:
@@ -205,6 +209,10 @@ public:
 
     // back pointer to the list ctrl
     wxListMainWindow *m_owner;
+
+// Bricsys change
+    int m_flags = 0;
+// end Bricsys change
 
 public:
     wxListLineData(wxListMainWindow *owner);

@@ -66,11 +66,30 @@ static const int LINE_SPACING = 0;
 static const int EXTRA_WIDTH = 6;
 static const int EXTRA_HEIGHT = 6;
 
+// Bricsys change: adjust spacing on Mac
+#ifdef __APPLE__
+static const int NORMAL_SPACING_EXTRA = 6;
+
+// margin between the window and the items
+static const int EXTRA_BORDER_X = 0;
+static const int EXTRA_BORDER_Y = 0;
+
+// offset for the header window
+static const int HEADER_OFFSET_X = 0;
+static const int HEADER_OFFSET_Y = 0;
+
+// margin between rows of icons in [small] icon view
+static const int MARGIN_BETWEEN_ROWS = 0;
+
+// when autosizing the columns, add some slack
+static const int AUTOSIZE_COL_MARGIN = 4;
+
+#else
+static const int NORMAL_SPACING_EXTRA = 8;
+
 // margin between the window and the items
 static const int EXTRA_BORDER_X = 2;
 static const int EXTRA_BORDER_Y = 2;
-
-static const int ICON_OFFSET_X = 2;
 
 // offset for the header window
 static const int HEADER_OFFSET_X = 0;
@@ -81,6 +100,10 @@ static const int MARGIN_BETWEEN_ROWS = 6;
 
 // when autosizing the columns, add some slack
 static const int AUTOSIZE_COL_MARGIN = 10;
+#endif // __APPLE__
+// end Bricsys change: adjust spacing on Mac
+
+static const int ICON_OFFSET_X = 2;
 
 // the space between the image and the text in the report mode
 static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
@@ -430,13 +453,36 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
     wxListItemData *item = node->GetData();
 
     wxString s;
-    wxCoord lw, lh;
+    wxCoord lw = 0, lh = 0;
 
     switch ( GetMode() )
     {
         case wxLC_ICON:
         case wxLC_SMALL_ICON:
             m_gi->m_rectAll.width = spacing;
+            
+            if (item->HasImage())
+                {
+                    int w, h;
+                    m_owner->GetImageSize( item->GetImage(), w, h );
+                    // Bricsys change
+                        if(m_flags & wxLIST_LINE_BC_COMPONENTS)
+                        {
+                            m_gi->m_rectIcon.width = w + NORMAL_SPACING_EXTRA;
+                            m_gi->m_rectIcon.height = h + NORMAL_SPACING_EXTRA;
+                        }
+                    else
+                        {
+                            m_gi->m_rectIcon.width = w + 8;
+                            m_gi->m_rectIcon.height = h + 8;
+                        }
+                    // end Bricsys change
+                        
+                        if ( m_gi->m_rectIcon.width > m_gi->m_rectAll.width )
+                            m_gi->m_rectAll.width = m_gi->m_rectIcon.width;
+                    if ( m_gi->m_rectIcon.height + lh > m_gi->m_rectAll.height - 4 )
+                            m_gi->m_rectAll.height = m_gi->m_rectIcon.height + lh + 4;
+                }
 
             s = item->GetText();
 
@@ -449,6 +495,12 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             else // has label
             {
                 dc->GetTextExtent( s, &lw, &lh );
+                if(m_flags & wxLIST_LINE_BC_COMPONENTS)
+                    if(lw > m_gi->m_rectIcon.width-NORMAL_SPACING_EXTRA-2)
+                    {
+                        lw = m_gi->m_rectIcon.width-NORMAL_SPACING_EXTRA-2;
+                        lh *= 2;
+                    }  
                 lw += EXTRA_WIDTH;
                 lh += EXTRA_HEIGHT;
 
@@ -458,19 +510,6 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 
                 m_gi->m_rectLabel.width = lw;
                 m_gi->m_rectLabel.height = lh;
-            }
-
-            if (item->HasImage())
-            {
-                int w, h;
-                m_owner->GetImageSize( item->GetImage(), w, h );
-                m_gi->m_rectIcon.width = w + 8;
-                m_gi->m_rectIcon.height = h + 8;
-
-                if ( m_gi->m_rectIcon.width > m_gi->m_rectAll.width )
-                    m_gi->m_rectAll.width = m_gi->m_rectIcon.width;
-                if ( m_gi->m_rectIcon.height + lh > m_gi->m_rectAll.height - 4 )
-                    m_gi->m_rectAll.height = m_gi->m_rectIcon.height + lh + 4;
             }
 
             if ( item->HasText() )
@@ -776,7 +815,38 @@ void wxListLineData::Draw(wxDC *dc, bool current)
         const wxRect& rectLabel = m_gi->m_rectLabel;
 
         wxDCClipper clipper(*dc, rectLabel);
-        dc->DrawText(item->GetText(), rectLabel.x, rectLabel.y);
+        
+        if(m_flags & wxLIST_LINE_BC_COMPONENTS)
+            {
+                wxString label = item->GetText();
+                int maxNoChars = 10;
+                int margins = NORMAL_SPACING_EXTRA+2;
+
+                wxString outputLabel;
+                if(dc->GetTextExtent(label.Left(maxNoChars)).x > m_gi->m_rectIcon.width - margins)
+                {
+                    maxNoChars--;
+                    if(dc->GetTextExtent(label.Left(maxNoChars)).x > m_gi->m_rectIcon.width - margins)
+                            maxNoChars--;
+                }
+
+                wxString firstLine = label.Left(maxNoChars);
+                if(!firstLine.IsEmpty())
+                {
+                    wxString secondLine = label.Mid(firstLine.Len(), maxNoChars);
+                    outputLabel = firstLine;
+                    outputLabel += _T("\n");
+                    
+                        if(!secondLine.IsEmpty())
+                            outputLabel += secondLine;
+                }
+                else
+                    outputLabel = label;
+
+                dc->DrawLabel(outputLabel, rectLabel);
+            }
+        else
+            dc->DrawText(item->GetText(), rectLabel.x, rectLabel.y);  
     }
 }
 
@@ -3352,7 +3422,12 @@ void wxListMainWindow::SetImages( wxWithImages *images, const int which )
     if (which == wxIMAGE_LIST_NORMAL)
     {
         m_normal_images = images;
-        m_normal_spacing = width + 8;
+        // Bricsys change
+            if(HasFlag(wxLC_BC_COMPONENTS))
+                m_normal_spacing = width + NORMAL_SPACING_EXTRA;
+        else
+                m_normal_spacing = width + 8;
+        // end Bricsys change 
     }
 
     if (which == wxIMAGE_LIST_SMALL)
@@ -4089,7 +4164,79 @@ void wxListMainWindow::RecalculatePositions()
         // horizontally/vertically (wxLC_ALIGN_XXX styles explicitly given) or
         // to arrange them in top to bottom, left to right (don't ask me why
         // not the other way round...) order
-        if ( HasFlag(wxLC_ALIGN_LEFT | wxLC_ALIGN_TOP) )
+        // Bricsys change
+        if(HasFlag(wxLC_BC_COMPONENTS))
+        {
+            GetListCtrl()->AlwaysShowScrollbars(false, true);
+            // at first we try without any scrollbars, if the items don't fit into
+            // the window, we recalculate after subtracting the space taken by the
+            // scrollbar
+            
+            int entireHeight = 0;
+        
+            for (int tries = 0; tries < 1; tries++)
+            {
+                entireHeight = 2 * EXTRA_BORDER_Y;
+
+                if (tries == 0)
+                {
+                    // Now we have decided that the items do not fit into the
+                        // client area, so we need a scrollbar
+                        entireHeight += SCROLL_UNIT_X;
+                }
+
+                int x = EXTRA_BORDER_X;
+                int y = EXTRA_BORDER_Y;
+
+                int maxWidthInThisRow = 0;
+
+                m_linesPerPage = 0;
+                int currentlyVisibleColumns = 0;
+
+                for (size_t i = 0; i < count; i++)
+                {
+                    currentlyVisibleColumns++;
+                    wxListLineData *line = GetLine( i );
+                    line->CalculateSize( &dc, iconSpacing );
+                    line->SetPosition( x, y, iconSpacing );
+
+                    wxSize sizeLine = GetLineSize( i );
+                    
+                    if ( maxWidthInThisRow < sizeLine.x )
+                        maxWidthInThisRow = sizeLine.x;
+
+                    x += sizeLine.x;
+                    if (currentlyVisibleColumns > m_linesPerPage)
+                        m_linesPerPage = currentlyVisibleColumns;
+                    
+                    // Have we reached the end of the row either because no
+                    // more items would fit or because there are simply no more
+                    // items?
+                    if ( x + sizeLine.x >= clientWidth || i == count - 1)
+                    {
+                        currentlyVisibleColumns = 0;
+                        x = EXTRA_BORDER_X;
+                        maxWidthInThisRow += MARGIN_BETWEEN_ROWS;
+                        y += maxWidthInThisRow + line->m_gi->m_rectLabel.height;
+                        entireHeight += maxWidthInThisRow + line->m_gi->m_rectLabel.height;
+                        maxWidthInThisRow = 0;
+                    }
+                }
+            }
+        
+            GetListCtrl()->SetScrollbars
+            (
+                 SCROLL_UNIT_X,
+                 SCROLL_UNIT_X,
+                 0,
+                 (entireHeight + SCROLL_UNIT_X) / SCROLL_UNIT_X,
+                 GetListCtrl()->GetScrollPos(wxHORIZONTAL),
+                 GetListCtrl()->GetScrollPos(wxVERTICAL),
+                 true
+            );
+        }
+        // end Bricsys change
+        else if ( HasFlag(wxLC_ALIGN_LEFT | wxLC_ALIGN_TOP) )
         {
             int x = EXTRA_BORDER_X;
             int y = EXTRA_BORDER_Y;
@@ -4633,7 +4780,12 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         }
     }
 
+    int flags = 0;
+    if (HasFlag(wxLC_BC_COMPONENTS))
+        flags = wxLIST_LINE_BC_COMPONENTS;
     wxListLineData *line = new wxListLineData(this);
+    if (line)
+        line->m_flags = flags;
 
     line->SetItem( item.m_col, item );
     if ( item.m_mask & wxLIST_MASK_IMAGE )
