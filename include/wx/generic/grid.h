@@ -1471,8 +1471,12 @@ struct WXDLLIMPEXP_CORE wxGridSizesInfo
     // default copy ctor, assignment operator and dtor are ok
 
     // Get the size of the element with the given index
+// Bricsys change: we need access to the size the column had before it was hidden
+#if 0
     int GetSize(unsigned pos) const;
-
+#else
+    int GetSize(unsigned pos, bool sizeBeforeHidden=false) const;
+#endif
 
     // default size
     int m_sizeDefault;

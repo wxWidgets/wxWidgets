@@ -11303,6 +11303,8 @@ wxGridSizesInfo::wxGridSizesInfo(int defSize, const wxArrayInt& allSizes)
     }
 }
 
+// Bricsys change: we need access to the size the column had before it was hidden
+#if 0   
 int wxGridSizesInfo::GetSize(unsigned pos) const
 {
     wxUnsignedToIntHashMap::const_iterator it = m_customSizes.find(pos);
@@ -11318,6 +11320,24 @@ int wxGridSizesInfo::GetSize(unsigned pos) const
 
     return it->second;
 }
+#else
+int wxGridSizesInfo::GetSize(unsigned pos, bool sizeBeforeHidden/*=false*/) const
+{
+    wxUnsignedToIntHashMap::const_iterator it = m_customSizes.find(pos);
+
+    // if it's not found return the default
+    if ( it == m_customSizes.end() )
+        return m_sizeDefault;
+
+    // if it's hidden: 
+    // - if 'sizeBeforeHidden' is true, the size before it was hidden is needed
+    // - if 'sizeBeforeHidden' is false, return 0 for hidden columns
+    if ( it->second < 0 && !sizeBeforeHidden)
+      return 0;
+
+    return it->second;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // drop target
