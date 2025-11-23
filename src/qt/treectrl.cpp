@@ -219,14 +219,6 @@ public:
                 });
     }
 
-    virtual void paintEvent(QPaintEvent* event) override
-    {
-        //QT generates warnings if we try to paint to a QTreeWidget
-        //(perhaps because it's a compound widget) so we've disabled
-        //wx paint and erase background events
-        QTreeWidget::paintEvent(event);
-    }
-
     virtual void mouseReleaseEvent(QMouseEvent * event) override
     {
         const QPoint qPos = event->pos();
@@ -699,8 +691,6 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 
 wxTreeCtrl::~wxTreeCtrl()
 {
-    if ( GetQTreeWidget() )
-        GetQTreeWidget()->deleteLater();
 }
 
 wxQTreeWidget* wxTreeCtrl::GetQTreeWidget() const
