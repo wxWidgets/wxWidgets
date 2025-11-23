@@ -272,6 +272,7 @@ All (GUI):
 
 wxGTK:
 
+- Add support for using EGL 1.4 (and not 1.5) in wxGLCanvas (#22325).
 - Fix handling total window size with GNOME with X11 (#25348).
 - Fix height of read-only wxBitmapComboBox (#25468).
 - Fix memory leak when using wxOverlay (#24500).
