@@ -780,6 +780,11 @@ bool IsSwapControlExtensionSupported()
     return wxGLBackendX11_instance.IsExtensionSupported("GLX_EXT_swap_control");
 }
 
+bool IsMesaSwapControlExtensionSupported()
+{
+    return wxGLBackendX11_instance.IsExtensionSupported("GLX_MESA_swap_control");
+}
+
 // Call glXSwapIntervalEXT() if present.
 //
 // For now just try using EXT_swap_control extension, in principle there is
@@ -790,8 +795,10 @@ bool wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
     typedef void (*PFNGLXSWAPINTERVALEXTPROC)(Display *dpy,
                                               GLXDrawable drawable,
                                               int interval);
-
     static PFNGLXSWAPINTERVALEXTPROC s_glXSwapIntervalEXT = nullptr;
+
+    typedef void (*PFNGLXSWAPINTERVALMESAPROC)(int interval);
+    static PFNGLXSWAPINTERVALMESAPROC s_glXSwapIntervalMESA = nullptr;
 
     if ( IsSwapControlExtensionSupported() )
     {
@@ -810,6 +817,23 @@ bool wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
             }
         }
     }
+    else if ( IsMesaSwapControlExtensionSupported() )
+    {
+        static bool s_glXSwapIntervalMESAInit = false;
+        if ( !s_glXSwapIntervalMESAInit )
+        {
+            s_glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESAPROC)
+                glXGetProcAddress((const GLubyte*)"glXSwapIntervalMESA");
+
+            s_glXSwapIntervalMESAInit = true;
+
+            if ( !s_glXSwapIntervalMESA )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_MESA_swap_control supported but "
+                           "glXSwapIntervalMESA() unexpectedly not found");
+            }
+        }
+    }
 
     if ( s_glXSwapIntervalEXT )
     {
@@ -819,8 +843,46 @@ bool wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
 
         return true;
     }
+    else if ( s_glXSwapIntervalMESA )
+    {
+        wxLogTrace(TRACE_GLX, "Setting GLX swap interval to %d (using MESA)",
+                   interval);
+
+        s_glXSwapIntervalMESA(interval);
+    }
 
     return false;
+}
+
+int wxMESAGetSwapInterval()
+{
+    typedef int (*PFNGLXGETSWAPINTERVALMESAPROC)();
+    static PFNGLXGETSWAPINTERVALMESAPROC s_glXGetSwapIntervalMESA = nullptr;
+
+    if ( IsMesaSwapControlExtensionSupported() )
+    {
+        static bool s_glXGetSwapIntervalMESAInit = false;
+        if ( !s_glXGetSwapIntervalMESAInit )
+        {
+            s_glXGetSwapIntervalMESA = (PFNGLXGETSWAPINTERVALMESAPROC)
+                glXGetProcAddress((const GLubyte*)"glXGetSwapIntervalMESA");
+
+            s_glXGetSwapIntervalMESAInit = true;
+
+            if ( !s_glXGetSwapIntervalMESA )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_MESA_swap_control supported but "
+                           "glXGetSwapIntervalMESA() unexpectedly not found");
+            }
+        }
+    }
+
+    if ( s_glXGetSwapIntervalMESA )
+    {
+        return s_glXGetSwapIntervalMESA();
+    }
+
+    return wxGLCanvas::DefaultSwapInterval;
 }
 
 } // anonymous namespace
@@ -860,13 +922,20 @@ int wxGLCanvasX11::GetSwapInterval() const
     int swapInterval = wxGLCanvas::DefaultSwapInterval;
 
     const Window xid = m_canvas->GetXWindow();
-    if ( xid && IsSwapControlExtensionSupported() )
+    if ( xid )
     {
-        const auto dpy = wxGetX11Display();
-        unsigned int value = 0;
-        glXQueryDrawable(dpy, xid, GLX_SWAP_INTERVAL_EXT, &value);
+        if ( IsSwapControlExtensionSupported() )
+        {
+            const auto dpy = wxGetX11Display();
+            unsigned int value = 0;
+            glXQueryDrawable(dpy, xid, GLX_SWAP_INTERVAL_EXT, &value);
 
-        swapInterval = value;
+            swapInterval = value;
+        }
+        else if ( IsMesaSwapControlExtensionSupported() )
+        {
+            swapInterval = wxMESAGetSwapInterval();
+        }
     }
 
     return swapInterval;
