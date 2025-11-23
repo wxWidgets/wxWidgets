@@ -55,6 +55,10 @@ WX_DECLARE_HASH_SET(wxGLCanvasEGL*, wxPointerHash, wxPointerEqual, wxGLCanvasSet
 // And use it to remember which objects already called eglSwapInterval().
 wxGLCanvasSet gs_alreadySetSwapInterval;
 
+// EGL version initialized by InitConfig().
+EGLint gs_eglMajor = 0;
+EGLint gs_eglMinor = 0;
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -547,6 +551,63 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
 } // extern "C"
 #endif // GDK_WINDOWING_WAYLAND
 
+EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
+{
+    // Type of eglCreatePlatformWindowSurface[EXT]().
+    typedef EGLSurface (*CreatePlatformWindowSurface)(EGLDisplay display,
+                                                      EGLConfig config,
+                                                      void* window,
+                                                      EGLAttrib const* attrib_list);
+
+    if ( gs_eglMajor > 1 || (gs_eglMajor == 1 && gs_eglMinor >= 5) )
+    {
+        // EGL 1.5 or later: use eglCreatePlatformWindowSurface() which must be
+        // available.
+        static CreatePlatformWindowSurface s_eglCreatePlatformWindowSurface = NULL;
+        if ( !s_eglCreatePlatformWindowSurface )
+        {
+            s_eglCreatePlatformWindowSurface = reinterpret_cast<CreatePlatformWindowSurface>(
+                eglGetProcAddress("eglCreatePlatformWindowSurface"));
+        }
+
+        // This check is normally superfluous but avoid crashing just in case
+        // it isn't.
+        if ( s_eglCreatePlatformWindowSurface )
+        {
+            return s_eglCreatePlatformWindowSurface(m_display, m_config,
+                                                    window,
+                                                    NULL);
+        }
+    }
+
+    // Try loading the appropriate EGL function on first use.
+    static CreatePlatformWindowSurface s_eglCreatePlatformWindowSurfaceEXT = NULL;
+    static bool s_extFuncInitialized = false;
+    if ( !s_extFuncInitialized )
+    {
+        s_extFuncInitialized = true;
+
+        if ( IsExtensionSupported("EGL_EXT_platform_base") )
+        {
+            s_eglCreatePlatformWindowSurfaceEXT = reinterpret_cast<CreatePlatformWindowSurface>(
+                eglGetProcAddress("eglCreatePlatformWindowSurfaceEXT"));
+        }
+    }
+
+    if ( s_eglCreatePlatformWindowSurfaceEXT )
+    {
+        return s_eglCreatePlatformWindowSurfaceEXT(m_display, m_config,
+                                                   window,
+                                                   NULL);
+    }
+    else
+    {
+        return eglCreateWindowSurface(m_display, m_config,
+                                      reinterpret_cast<EGLNativeWindowType>(window),
+                                      NULL);
+    }
+}
+
 bool wxGLCanvasEGL::CreateSurface()
 {
     m_display = GetDisplay();
@@ -567,8 +628,7 @@ bool wxGLCanvasEGL::CreateSurface()
         }
 
         m_xwindow = GDK_WINDOW_XID(window);
-        m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
-                                                   &m_xwindow, NULL);
+        m_surface = CallCreatePlatformWindowSurface(&m_xwindow);
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
@@ -599,8 +659,7 @@ bool wxGLCanvasEGL::CreateSurface()
         wl_surface_set_buffer_scale(m_wlSurface, scale);
         m_wlEGLWindow = wl_egl_window_create(m_wlSurface, w * scale,
                                              h * scale);
-        m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
-                                                   m_wlEGLWindow, NULL);
+        m_surface = CallCreatePlatformWindowSurface(m_wlEGLWindow);
 
         // We need to use "map-event" instead of "map" to ensure that the
         // widget's underlying Wayland surface has been created.
@@ -720,22 +779,20 @@ EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
         return NULL;
     }
 
-    EGLint eglMajor = 0;
-    EGLint eglMinor = 0;
-    if ( !eglInitialize(dpy, &eglMajor, &eglMinor) )
+    if ( !eglInitialize(dpy, &gs_eglMajor, &gs_eglMinor) )
     {
         wxFAIL_MSG("eglInitialize failed");
         return NULL;
     }
 
     // The runtime EGL version cannot be known until EGL has been initialized.
-    if ( eglMajor < 1 || (eglMajor == 1 && eglMinor < 5) )
+    if ( gs_eglMajor < 1 || (gs_eglMajor == 1 && gs_eglMinor < 4) )
     {
         // Ignore the return value here, we cannot recover at this point.
         eglTerminate(dpy);
         wxLogError(wxString::Format(
-            "EGL version is %d.%d. EGL version 1.5 or greater is required.",
-            eglMajor, eglMinor));
+            "EGL version is %d.%d. EGL version 1.4 or greater is required.",
+            gs_eglMajor, gs_eglMinor));
         return NULL;
     }
 

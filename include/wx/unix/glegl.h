@@ -131,6 +131,15 @@ public:
     wl_egl_window *m_wlEGLWindow;
 
 private:
+    // Call eglCreatePlatformWindowSurface() when using EGL 1.5 or later,
+    // otherwise try eglCreatePlatformWindowSurfaceEXT() if it's available and
+    // fall back on eglCreateWindowSurface() otherwise.
+    //
+    // This function uses m_display and m_config which must be initialized
+    // before using it and should be passed either m_xwindow or m_wlEGLWindow
+    // depending on whether we are using X11 or Wayland.
+    EGLSurface CallCreatePlatformWindowSurface(void *window) const;
+
 
     EGLConfig *m_config;
     EGLDisplay m_display;
