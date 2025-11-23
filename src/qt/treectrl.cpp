@@ -175,9 +175,11 @@ private:
 
 class wxQTreeWidget : public wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>
 {
+    using BaseClass = wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>;
+
 public:
     wxQTreeWidget(wxWindow *parent, wxTreeCtrl *handler) :
-        wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>(parent, handler),
+        BaseClass(parent, handler),
         m_item_delegate(handler),
         m_closing_editor(0)
     {
@@ -264,7 +266,7 @@ public:
                 }
         }
 
-        return wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>::mouseReleaseEvent(event);
+        return BaseClass::mouseReleaseEvent(event);
     }
 
     wxTextCtrl *GetEditControl()
@@ -595,7 +597,7 @@ private:
     virtual void mouseMoveEvent(QMouseEvent *event) override
     {
         const bool wasDragging = state() == DraggingState;
-        wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>::mouseMoveEvent(event);
+        BaseClass::mouseMoveEvent(event);
 
         const bool nowDragging = state() == DraggingState;
         if ( !wasDragging && nowDragging )
