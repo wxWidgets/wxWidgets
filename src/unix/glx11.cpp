@@ -775,6 +775,11 @@ int wxGLBackendX11::GetGLXVersion()
 namespace
 {
 
+bool IsSwapControlExtensionSupported()
+{
+    return wxGLBackendX11_instance.IsExtensionSupported("GLX_EXT_swap_control");
+}
+
 // Call glXSwapIntervalEXT() if present.
 //
 // For now just try using EXT_swap_control extension, in principle there is
@@ -787,13 +792,23 @@ bool wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
                                               int interval);
 
     static PFNGLXSWAPINTERVALEXTPROC s_glXSwapIntervalEXT = nullptr;
-    static bool s_glXSwapIntervalEXTInit = false;
-    if ( !s_glXSwapIntervalEXTInit )
-    {
-        s_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)
-            glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
 
-        s_glXSwapIntervalEXTInit = true;
+    if ( IsSwapControlExtensionSupported() )
+    {
+        static bool s_glXSwapIntervalEXTInit = false;
+        if ( !s_glXSwapIntervalEXTInit )
+        {
+            s_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)
+                glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
+
+            s_glXSwapIntervalEXTInit = true;
+
+            if ( !s_glXSwapIntervalEXT )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_EXT_swap_control supported but "
+                           "glXSwapIntervalEXT() unexpectedly not found");
+            }
+        }
     }
 
     if ( s_glXSwapIntervalEXT )
@@ -845,7 +860,7 @@ int wxGLCanvasX11::GetSwapInterval() const
     int swapInterval = wxGLCanvas::DefaultSwapInterval;
 
     const Window xid = m_canvas->GetXWindow();
-    if ( xid )
+    if ( xid && IsSwapControlExtensionSupported() )
     {
         const auto dpy = wxGetX11Display();
         unsigned int value = 0;
