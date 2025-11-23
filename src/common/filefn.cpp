@@ -1032,7 +1032,7 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 
     if ( !overwrite && wxFileExists(file2) )
     {
-        wxLogSysError
+        wxLogError
         (
             _("Failed to rename the file '%s' to '%s' because the destination file already exists."),
             file1.c_str(), file2.c_str()
