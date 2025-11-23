@@ -785,13 +785,23 @@ void wxGLCanvasX11::GLXSetSwapInterval(int interval)
                                               int interval);
 
     static PFNGLXSWAPINTERVALEXTPROC s_glXSwapIntervalEXT = nullptr;
-    static bool s_glXSwapIntervalEXTInit = false;
-    if ( !s_glXSwapIntervalEXTInit )
-    {
-        s_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)
-            glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
 
-        s_glXSwapIntervalEXTInit = true;
+    if ( IsExtensionSupported("GLX_EXT_swap_control") )
+    {
+        static bool s_glXSwapIntervalEXTInit = false;
+        if ( !s_glXSwapIntervalEXTInit )
+        {
+            s_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)
+                glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
+
+            s_glXSwapIntervalEXTInit = true;
+
+            if ( !s_glXSwapIntervalEXT )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_EXT_swap_control supported but "
+                           "glXSwapIntervalEXT() unexpectedly not found");
+            }
+        }
     }
 
     if ( s_glXSwapIntervalEXT )
