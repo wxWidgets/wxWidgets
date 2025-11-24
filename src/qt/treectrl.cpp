@@ -406,6 +406,8 @@ protected:
                 return true;
             }
 
+            m_startEditorText = wxQtConvertString(itemFromIndex(index)->text(0));
+
             // Allow event handlers to veto opening the editor
             wxTreeEvent wx_event(
                 wxEVT_TREE_BEGIN_LABEL_EDIT,
@@ -454,7 +456,10 @@ protected:
             GetHandler(),
             wxQtConvertTreeItem(itemFromIndex(current_index))
             );
-        if (hint == QAbstractItemDelegate::RevertModelCache)
+
+        const wxString editor_text = m_item_delegate.GetEditControl()->GetLineText(0);
+
+        if (hint == QAbstractItemDelegate::RevertModelCache || editor_text == m_startEditorText)
         {
             event.SetEditCanceled(true);
             EmitEvent(event);
@@ -462,7 +467,6 @@ protected:
         else
         {
             // Allow event handlers to decide whether to accept edited text
-            const wxString editor_text = m_item_delegate.GetEditControl()->GetLineText(0);
             event.SetLabel(editor_text);
             if (!GetHandler()->HandleWindowEvent(event) || event.IsAllowed())
                 m_item_delegate.AcceptModelData(editor, model(), current_index);
@@ -696,6 +700,8 @@ private:
 
     typedef std::map<QTreeWidgetItem*,ImageState> ImageStateMap;
     ImageStateMap m_imageStates;
+
+    wxString m_startEditorText;
 
     // Place holder image to reserve enough space in a row
     // for us to draw our icon
