@@ -57,6 +57,9 @@ public:
     // Select text in the textctrl
     virtual void SetSelection(long from, long to) = 0;
 
+protected:
+    virtual bool DoSetValue(double val, int sendEvent) { val = 0; sendEvent = 0; return false; }  
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxSpinCtrlBase);
 };
