@@ -799,7 +799,7 @@ void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
     }
 }
 
-void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,
+void wxNonOwnedWindowCocoaImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
 long style, long extraStyle, const wxString& WXUNUSED(name) )
 {
     static wxNonOwnedWindowController* controller = NULL;
@@ -884,6 +884,50 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
     }
     
+    // Bricsys change: popup windows in Drawing Explorer (or modal windows, other than dialogs - see below)
+    // don't receive events because they are not a descendant of it (but a wxNonOwnedWindow)
+    // wxWS_EX_MODAL_FRAME_BCAD was introduced to mark such windows because there is no IsModal() for wxFrame
+    wxWindow* toplevelAncestor = parent->MacGetTopLevelWindow();
+    if( level == kCGPopUpMenuWindowLevel && (toplevelAncestor && toplevelAncestor->GetExtraStyle() & wxWS_EX_MODAL_FRAME_BCAD) )
+        if ([m_macWindow isKindOfClass:[NSPanel class]])
+        {
+            [(NSPanel*)m_macWindow setWorksWhenModal:YES];
+        }
+    // end Bricsys change
+    
+    // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
+    // to be in kCGUtilityWindowLevel and not kCGFloatingWindowLevel to stay
+    // above the parent.
+    wxDialog * const parentDialog = parent == NULL ? NULL : wxDynamicCast(toplevelAncestor, wxDialog);
+    if (parentDialog && parentDialog->IsModal())
+    {
+        if (level == kCGFloatingWindowLevel)
+        {
+            level = kCGUtilityWindowLevel;
+        }
+
+        // Cocoa's modal loop does not process other windows by default, but
+        // don't call this on normal window levels so nested modal dialogs will
+        // still behave modally.
+        if (level != kCGNormalWindowLevel)
+        {
+            if ([m_macWindow isKindOfClass:[NSPanel class]])
+            {
+                [(NSPanel*)m_macWindow setWorksWhenModal:YES];
+            }
+        }
+    }
+    
+    // Bricsys change: allow popup windows to work in a modal event loop
+    // I suppose we don't need to check if their parent is the modal window,
+    // since they are short lived anyway and are probably always created by the modal window
+    if( level == kCGPopUpMenuWindowLevel )
+        if ([m_macWindow isKindOfClass:[NSPanel class]])
+        {
+            [(NSPanel*)m_macWindow setWorksWhenModal:YES];
+        }
+    // end Bricsys change
+
     m_macWindowLevel = level;
     SetUpForModalParent();
     [m_macWindow setLevel:m_macWindowLevel];

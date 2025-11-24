@@ -1751,6 +1751,10 @@ wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 #define wxFRAME_EX_CONTEXTHELP          wxWS_EX_CONTEXTHELP
 #define wxDIALOG_EX_CONTEXTHELP         wxWS_EX_CONTEXTHELP
 
+// Bricsys change: extra style for modal toplevel frames that are not dialogs (used on Mac)
+#define wxWS_EX_MODAL_FRAME_BCAD        0x00000100
+// end Bricsys change
+
 /*  Create a window which is attachable to another top level window */
 #define wxFRAME_DRAWER          0x0020
 
