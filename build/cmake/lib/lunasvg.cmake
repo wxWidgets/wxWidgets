@@ -7,7 +7,11 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-if(NOT wxUSE_LUNASVG STREQUAL "OFF")
+if(wxUSE_LUNASVG STREQUAL "sys")
+    message(FATAL_ERROR "Not supported")
+endif()
+
+if(wxUSE_LUNASVG)
     if(NOT (CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR wxHAVE_CXX17))
         message(FATAL_ERROR "LunaSVG requires at least C++17")
     endif()
