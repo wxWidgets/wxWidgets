@@ -83,6 +83,7 @@ protected:
     double DoGetMax() const;
     double DoGetIncrement() const;
 
+    using wxSpinCtrlBase::DoSetValue;
     void DoSetValue(double val);
     void DoSetValue(const wxString& strValue);
     void DoSetRange(double min_val, double max_val);

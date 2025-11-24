@@ -590,7 +590,7 @@ double wxSpinCtrlGenericBase::AdjustAndSnap(double val) const
     return val;
 }
 
-bool wxSpinCtrlGenericBase::DoSetValue(double val, SendEvent sendEvent)
+bool wxSpinCtrlGenericBase::DoSetValue(double val, int sendEvent)
 {
     wxCHECK_MSG( m_textCtrl, false, wxT("invalid call to wxSpinCtrl::SetValue") );
 
