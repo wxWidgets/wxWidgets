@@ -437,9 +437,21 @@ void wxEGLUpdatePosition(wxGLCanvasEGL* win)
 }
 
 // Helper declared as friend in the header and so can access m_wlSurface.
-void wxEGLSetScale(wxGLCanvasEGL* win, int scale)
+void wxEGLUpdatePositionAndScale(wxGLCanvasEGL* win, int scale)
 {
+    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
+                         win->m_height * scale, 0, 0);
+
+    wxEGLUpdatePosition(win);
+
     wl_surface_set_buffer_scale(win->m_wlSurface, scale);
+    win->m_scale = scale;
+}
+
+void wxEGLUpdateScaleIfChanged(wxGLCanvasEGL* win, int scale)
+{
+    if ( scale != win->m_scale )
+        wxEGLUpdatePositionAndScale(win, scale);
 }
 
 extern "C"
@@ -493,16 +505,22 @@ static void gtk_glcanvas_unmap_callback(GtkWidget *, wxGLCanvasEGL *win)
     win->DestroyWaylandSubsurface();
 }
 
+static gboolean
+gtk_glcanvas_draw_callback(GtkWidget* widget,
+                           cairo_t*,
+                           wxGLCanvasEGL* win)
+{
+    int scale = gtk_widget_get_scale_factor(widget);
+    wxEGLUpdateScaleIfChanged(win, scale);
+    return FALSE;
+}
+
 static void gtk_glcanvas_size_callback(GtkWidget *widget,
                                        GtkAllocation *,
                                        wxGLCanvasEGL *win)
 {
     int scale = gtk_widget_get_scale_factor(widget);
-    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
-                         win->m_height * scale, 0, 0);
-
-    wxEGLUpdatePosition(win);
-    wxEGLSetScale(win, scale);
+    wxEGLUpdatePositionAndScale(win, scale);
 }
 
 } // extern "C"
@@ -574,6 +592,15 @@ bool wxGLCanvasEGL::CreateSurface()
         // Not unmapping the canvas as soon as possible causes problems when reparenting
         g_signal_connect(m_widget, "unmap",
                          G_CALLBACK(gtk_glcanvas_unmap_callback), this);
+
+        // We connect to "size-allocate" to update the position of the
+        // subsurface when the toplevel window is moved, which also updates the
+        // scale, but we need to connect to "draw" as well to catch the initial
+        // scale change, as we don't get any "size-allocate" when the window is
+        // shown for the first time, at least with some Wayland compositors
+        // (Sway, for example).
+        g_signal_connect(m_widget, "draw",
+                         G_CALLBACK(gtk_glcanvas_draw_callback), this);
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
     }

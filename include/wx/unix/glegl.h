@@ -141,6 +141,7 @@ private:
     wl_region *m_wlRegion = nullptr;
     wl_subsurface *m_wlSubsurface = nullptr;
 
+    int m_scale = 1;
     bool m_readyToDraw = false;
     bool m_swapIntervalSet = false;
 
@@ -148,7 +149,8 @@ private:
     static EGLConfig ms_glEGLConfig;
 
     friend void wxEGLUpdatePosition(wxGLCanvasEGL* win);
-    friend void wxEGLSetScale(wxGLCanvasEGL* win, int scale);
+    friend void wxEGLUpdatePositionAndScale(wxGLCanvasEGL* win, int scale);
+    friend void wxEGLUpdateScaleIfChanged(wxGLCanvasEGL* win, int scale);
 };
 
 // ----------------------------------------------------------------------------
