@@ -436,9 +436,17 @@ void wxEGLUpdatePosition(wxGLCanvasEGL* win)
     wl_subsurface_set_position(win->m_wlSubsurface, x, y);
 }
 
-// Helper declared as friend in the header and so can access m_wlSurface.
-void wxEGLSetScale(wxGLCanvasEGL* win, int scale)
+// Helper declared as friend in the header and so can access member variables.
+//
+// Used when size or scale factor changes
+void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win)
 {
+    int scale = gtk_widget_get_scale_factor(widget);
+    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
+                         win->m_height * scale, 0, 0);
+
+    wxEGLUpdatePosition(win);
+
     wl_surface_set_buffer_scale(win->m_wlSurface, scale);
 }
 
@@ -497,12 +505,14 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
                                        GtkAllocation *,
                                        wxGLCanvasEGL *win)
 {
-    int scale = gtk_widget_get_scale_factor(widget);
-    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
-                         win->m_height * scale, 0, 0);
+    wxEGLUpdateGeometry(widget, win);
+}
 
-    wxEGLUpdatePosition(win);
-    wxEGLSetScale(win, scale);
+static void gtk_glcanvas_scale_factor_notify(GtkWidget* widget,
+                                             GParamSpec*,
+                                             wxGLCanvasEGL *win)
+{
+    wxEGLUpdateGeometry(widget, win);
 }
 
 } // extern "C"
@@ -574,8 +584,17 @@ bool wxGLCanvasEGL::CreateSurface()
         // Not unmapping the canvas as soon as possible causes problems when reparenting
         g_signal_connect(m_widget, "unmap",
                          G_CALLBACK(gtk_glcanvas_unmap_callback), this);
+
+        // We connect to "size-allocate" to update the position of the
+        // subsurface when the toplevel window is moved, which also updates the
+        // scale as a side effect, but we need to also separately connect to
+        // "notify::scale-factor" to catch scale changes, which is especially
+        // important initially, as we don't get a "size-allocate" with the
+        // correct scale when the window is created.
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
+        g_signal_connect(m_widget, "notify::scale-factor",
+                         G_CALLBACK (gtk_glcanvas_scale_factor_notify), this);
     }
 #endif
 
