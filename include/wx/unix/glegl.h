@@ -131,6 +131,10 @@ public:
     wl_egl_window *m_wlEGLWindow = nullptr;
 
 private:
+    // Set correct m_wlSubsurface position.
+    //
+    // This is defined only when using Wayland.
+    void UpdateSubsurfacePosition();
 
     EGLConfig m_config = nullptr;
     EGLDisplay m_display = nullptr;
@@ -147,7 +151,7 @@ private:
     // the global/default versions of the above
     static EGLConfig ms_glEGLConfig;
 
-    friend void wxEGLUpdatePosition(wxGLCanvasEGL* win);
+    // Called from GTK callbacks and needs access to private members.
     friend void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win);
 };
 

@@ -420,10 +420,9 @@ void wxGLCanvasEGL::OnWLFrameCallback()
 
 #ifdef GDK_WINDOWING_WAYLAND
 
-// Helper declared as friend in the header and so can access m_wlSubsurface.
-void wxEGLUpdatePosition(wxGLCanvasEGL* win)
+void wxGLCanvasEGL::UpdateSubsurfacePosition()
 {
-    if ( !win->m_wlSubsurface )
+    if ( !m_wlSubsurface )
     {
         // In some circumstances such as when reparenting a canvas between two hidden
         // toplevel windows, GTK will call size-allocate before mapping the canvas
@@ -432,8 +431,8 @@ void wxEGLUpdatePosition(wxGLCanvasEGL* win)
     }
 
     int x, y;
-    gdk_window_get_origin(win->GTKGetDrawingWindow(), &x, &y);
-    wl_subsurface_set_position(win->m_wlSubsurface, x, y);
+    gdk_window_get_origin(GTKGetDrawingWindow(), &x, &y);
+    wl_subsurface_set_position(m_wlSubsurface, x, y);
 }
 
 // Helper declared as friend in the header and so can access member variables.
@@ -445,7 +444,7 @@ void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win)
     wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
                          win->m_height * scale, 0, 0);
 
-    wxEGLUpdatePosition(win);
+    win->UpdateSubsurfacePosition();
 
     wl_surface_set_buffer_scale(win->m_wlSurface, scale);
 }
@@ -645,7 +644,7 @@ void wxGLCanvasEGL::CreateWaylandSubsurface()
     wxCHECK_RET( m_wlSubsurface, "Unable to get EGL subsurface" );
 
     wl_subsurface_set_desync(m_wlSubsurface);
-    wxEGLUpdatePosition(this);
+    UpdateSubsurfacePosition();
     m_wlFrameCallbackHandler = wl_surface_frame(surface);
     wl_callback_add_listener(m_wlFrameCallbackHandler,
                              &wl_frame_listener, this);
