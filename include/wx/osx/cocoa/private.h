@@ -170,6 +170,7 @@ public :
 
     void                InstallEventHandler( WXWidget control = NULL ) wxOVERRIDE;
     bool                EnableTouchEvents(int eventsMask) wxOVERRIDE;
+    void                SetTouchEventsStatus(bool status);
 
     virtual bool        ShouldHandleKeyNavigation(const wxKeyEvent &event) const;
     bool                DoHandleKeyNavigation(const wxKeyEvent &event);
@@ -211,6 +212,8 @@ public :
     virtual unsigned int        draggingUpdated(void* sender, WXWidget slf, void* _cmd);
     virtual bool                performDragOperation(void* sender, WXWidget slf, void* _cmd);
 #endif
+    virtual void                touchesEvent(WX_NSEvent event, WXWidget slf, void *_cmd, int touchEventType);
+    virtual void                trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEvent, WXWidget slf, void* _cmd);
     virtual void                mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                cursorUpdate(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd);

@@ -116,46 +116,6 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
 
 @end
 
-@implementation wxNSCustomOpenGLView
-
-+ (void)initialize
-{
-    static BOOL initialized = NO;
-    if (!initialized)
-    {
-        initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
-    }
-}
-
-- (BOOL)isOpaque
-{
-    return YES;
-}
-
-- (BOOL) acceptsFirstResponder
-{
-    return YES;
-}
-
-// for special keys
-
-- (void)doCommandBySelector:(SEL)aSelector
-{
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if (impl)
-        impl->doCommandBySelector(aSelector, self, _cmd);
-}
-
-- (NSOpenGLContext *) openGLContext
-{
-    // Prevent the NSOpenGLView from making it's own context
-    // We want to force using wxGLContexts
-    return NULL;
-}
-
-@end
-
 bool wxGLCanvas::DoCreate(wxWindow *parent,
                           wxWindowID id,
                           const wxPoint& pos,
@@ -163,18 +123,17 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
-    DontCreatePeer();
-    
+    //DontCreatePeer();
+
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
-    
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
     [v setWantsBestResolutionOpenGLSurface:YES];
-    
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, wxWidgetImpl::Widget_UserKeyEvents | wxWidgetImpl::Widget_UserMouseEvents );
-    SetPeer(c);
+
+    m_peer = new wxWidgetCocoaImpl( this, v );
+
     MacPostControlCreate(pos, size) ;
     return true;
 }

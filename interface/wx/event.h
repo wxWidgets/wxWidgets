@@ -3040,6 +3040,29 @@ public:
 
 
 
+/** @class wxTrackPadEvent
+
+    This class is used for trackpad events and touch gestures.
+    For now there available implementation only for pinch, pan and 2 fingers double tap.
+ */
+
+class wxTrackPadEvent : public wxEvent,
+                        public wxTrackPadState
+{
+public:
+    /**
+        Constructor. Valid event types are:
+         @li @c wxEVT_ROTATE
+         @li @c wxEVT_PINCH
+         @li @c wxEVT_PAN
+         @li @c wxEVT_TAP
+    **/
+    wxTrackPadEvent(wxEventType trackpadEventType = wxEVT_NULL);
+
+};
+
+
+
 /**
     @class wxDropFilesEvent
 
