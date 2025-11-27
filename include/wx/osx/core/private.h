@@ -363,6 +363,7 @@ public :
     virtual bool        ButtonClickDidStateChange() = 0;
 
     virtual void        InstallEventHandler( WXWidget control = NULL ) = 0;
+    virtual void        SetTouchEventsStatus(bool status) = 0;
 
     virtual bool        EnableTouchEvents(int eventsMask) = 0;
 

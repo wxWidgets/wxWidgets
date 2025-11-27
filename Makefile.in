@@ -537,6 +537,7 @@ ALL_BASE_HEADERS =  \
 	wx/tls.h \
 	wx/tokenzr.h \
 	wx/tracker.h \
+	wx/trackpadstate.h \
 	wx/translation.h \
 	wx/txtstrm.h \
 	wx/typeinfo.h \
@@ -724,6 +725,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/tls.h \
 	wx/tokenzr.h \
 	wx/tracker.h \
+	wx/trackpadstate.h \
 	wx/translation.h \
 	wx/txtstrm.h \
 	wx/typeinfo.h \
@@ -3511,6 +3513,9 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/cocoa/chkconf.h \
 	wx/osx/cocoa/evtloop.h \
 	wx/osx/cocoa/private.h \
+	wx/osx/cocoa/trackerInput.h \
+	wx/osx/cocoa/trackersInput.h \
+	wx/osx/cocoa/trackerTouchDouble.h \
 	wx/generic/region.h \
 	wx/osx/cocoa/stdpaths.h \
 	wx/osx/sound.h \
@@ -5755,6 +5760,9 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_tglbtn.o \
 	monodll_cocoa_toolbar.o \
 	monodll_cocoa_tooltip.o \
+	monodll_osx_cocoa_trackerInput.o \
+	monodll_osx_cocoa_trackerTouchDouble.o \
+	monodll_osx_cocoa_window.o
 	monodll_cocoa_window.o \
 	monodll_cocoa_settings.o \
 	monodll_cocoa_overlay.o \
@@ -7766,6 +7774,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_tglbtn.o \
 	monolib_cocoa_toolbar.o \
 	monolib_cocoa_tooltip.o \
+	monolib_osx_cocoa_trackerInput.o \
+	monolib_osx_cocoa_trackerTouchDouble.o \
 	monolib_cocoa_window.o \
 	monolib_cocoa_settings.o \
 	monolib_cocoa_overlay.o \
@@ -9931,6 +9941,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_tglbtn.o \
 	coredll_cocoa_toolbar.o \
 	coredll_cocoa_tooltip.o \
+	coredll_osx_cocoa_trackerInput.o \
+	coredll_osx_cocoa_trackerTouchDouble.o \
 	coredll_cocoa_window.o \
 	coredll_cocoa_settings.o \
 	coredll_cocoa_overlay.o \
@@ -11669,6 +11681,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_tglbtn.o \
 	corelib_cocoa_toolbar.o \
 	corelib_cocoa_tooltip.o \
+	corelib_osx_cocoa_trackerInput.o \
+	corelib_osx_cocoa_trackerTouchDouble.o \
 	corelib_cocoa_window.o \
 	corelib_cocoa_settings.o \
 	corelib_cocoa_overlay.o \
@@ -16864,6 +16878,12 @@ monodll_cocoa_toolbar.o: $(srcdir)/src/osx/cocoa/toolbar.mm $(MONODLL_ODEP)
 
 monodll_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/tooltip.mm
+
+monodll_osx_cocoa_trackerInput.o: $(srcdir)/src/osx/cocoa/trackerInput.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/trackerInput.mm
+
+monodll_osx_cocoa_trackerTouchDouble.o: $(srcdir)/src/osx/cocoa/trackerTouchDouble.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/trackerTouchDouble.mm
 
 monodll_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
@@ -22186,6 +22206,12 @@ monolib_cocoa_toolbar.o: $(srcdir)/src/osx/cocoa/toolbar.mm $(MONOLIB_ODEP)
 
 monolib_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/tooltip.mm
+
+monolib_osx_cocoa_trackerInput.o: $(srcdir)/src/osx/cocoa/trackerInput.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/trackerInput.mm
+
+monolib_osx_cocoa_trackerTouchDouble.o: $(srcdir)/src/osx/cocoa/trackerTouchDouble.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/trackerTouchDouble.mm
 
 monolib_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
@@ -28196,6 +28222,12 @@ coredll_cocoa_toolbar.o: $(srcdir)/src/osx/cocoa/toolbar.mm $(COREDLL_ODEP)
 coredll_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/tooltip.mm
 
+coredll_osx_cocoa_trackerInput.o: $(srcdir)/src/osx/cocoa/trackerInput.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/trackerInput.mm
+
+coredll_osx_cocoa_trackerTouchDouble.o: $(srcdir)/src/osx/cocoa/trackerTouchDouble.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/trackerTouchDouble.mm
+
 coredll_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
 
@@ -32476,6 +32508,12 @@ corelib_cocoa_toolbar.o: $(srcdir)/src/osx/cocoa/toolbar.mm $(CORELIB_ODEP)
 
 corelib_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/tooltip.mm
+
+corelib_osx_cocoa_trackerInput.o: $(srcdir)/src/osx/cocoa/trackerInput.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/trackerInput.mm
+
+corelib_osx_cocoa_trackerTouchDouble.o: $(srcdir)/src/osx/cocoa/trackerTouchDouble.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/trackerTouchDouble.mm
 
 corelib_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm

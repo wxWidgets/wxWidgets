@@ -2591,6 +2591,10 @@
 				RelativePath="..\..\include\wx\zstream.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\trackpadstate.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

@@ -698,6 +698,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tls.h
     wx/tokenzr.h
     wx/tracker.h
+    wx/trackpadstate.h
     wx/translation.h
     wx/txtstrm.h
     wx/typeinfo.h
@@ -2648,6 +2649,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/textctrl.mm
     src/osx/cocoa/tglbtn.mm
     src/osx/cocoa/toolbar.mm
+    src/osx/cocoa/trackerInput.mm
+    src/osx/cocoa/trackerTouchDouble.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
     src/osx/cocoa/settings.mm
@@ -2687,6 +2690,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/datectrl.h
     wx/osx/timectrl.h
     wx/osx/datetimectrl.h
+    wx/osx/cocoa/trackerInput.h
+    wx/osx/cocoa/trackerTouchDouble.h
 </set>
 
 <!-- ====================================================================== -->

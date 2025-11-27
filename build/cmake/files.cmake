@@ -658,6 +658,7 @@ set(BASE_CMN_HDR
     wx/lzmastream.h
     wx/localedefs.h
     wx/uilocale.h
+    wx/trackpadstate.h
 )
 
 set(NET_UNIX_SRC
