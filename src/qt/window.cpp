@@ -1286,7 +1286,7 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 
     const auto clientSize = wxQtSetClientSize(qtWidget, width, height);
 
-    if (!qtWidget->isVisible() && clientSize.x > 0 && clientSize.y > 0)
+    if ( qtWidget->testAttribute(Qt::WA_PendingResizeEvent) )
     {
         m_pendingClientSize = clientSize;
     }
