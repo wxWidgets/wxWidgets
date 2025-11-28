@@ -131,6 +131,11 @@ public:
     wl_egl_window *m_wlEGLWindow = nullptr;
 
 private:
+    // Set correct m_wlSubsurface position.
+    //
+    // This is defined only when using Wayland.
+    void UpdateSubsurfacePosition();
+
     // Call eglCreatePlatformWindowSurface() when using EGL 1.5 or later,
     // otherwise try eglCreatePlatformWindowSurfaceEXT() if it's available and
     // fall back on eglCreateWindowSurface() otherwise.
@@ -156,8 +161,8 @@ private:
     // the global/default versions of the above
     static EGLConfig ms_glEGLConfig;
 
-    friend void wxEGLUpdatePosition(wxGLCanvasEGL* win);
-    friend void wxEGLSetScale(wxGLCanvasEGL* win, int scale);
+    // Called from GTK callbacks and needs access to private members.
+    friend void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win);
 };
 
 // ----------------------------------------------------------------------------

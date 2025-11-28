@@ -429,10 +429,9 @@ void wxGLCanvasEGL::OnWLFrameCallback()
 
 #ifdef GDK_WINDOWING_WAYLAND
 
-// Helper declared as friend in the header and so can access m_wlSubsurface.
-void wxEGLUpdatePosition(wxGLCanvasEGL* win)
+void wxGLCanvasEGL::UpdateSubsurfacePosition()
 {
-    if ( !win->m_wlSubsurface )
+    if ( !m_wlSubsurface )
     {
         // In some circumstances such as when reparenting a canvas between two hidden
         // toplevel windows, GTK will call size-allocate before mapping the canvas
@@ -441,13 +440,21 @@ void wxEGLUpdatePosition(wxGLCanvasEGL* win)
     }
 
     int x, y;
-    gdk_window_get_origin(win->GTKGetDrawingWindow(), &x, &y);
-    wl_subsurface_set_position(win->m_wlSubsurface, x, y);
+    gdk_window_get_origin(GTKGetDrawingWindow(), &x, &y);
+    wl_subsurface_set_position(m_wlSubsurface, x, y);
 }
 
-// Helper declared as friend in the header and so can access m_wlSurface.
-void wxEGLSetScale(wxGLCanvasEGL* win, int scale)
+// Helper declared as friend in the header and so can access member variables.
+//
+// Used when size or scale factor changes
+void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win)
 {
+    int scale = gtk_widget_get_scale_factor(widget);
+    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
+                         win->m_height * scale, 0, 0);
+
+    win->UpdateSubsurfacePosition();
+
     wl_surface_set_buffer_scale(win->m_wlSurface, scale);
 }
 
@@ -506,12 +513,14 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
                                        GtkAllocation *,
                                        wxGLCanvasEGL *win)
 {
-    int scale = gtk_widget_get_scale_factor(widget);
-    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
-                         win->m_height * scale, 0, 0);
+    wxEGLUpdateGeometry(widget, win);
+}
 
-    wxEGLUpdatePosition(win);
-    wxEGLSetScale(win, scale);
+static void gtk_glcanvas_scale_factor_notify(GtkWidget* widget,
+                                             GParamSpec*,
+                                             wxGLCanvasEGL *win)
+{
+    wxEGLUpdateGeometry(widget, win);
 }
 
 } // extern "C"
@@ -638,8 +647,17 @@ bool wxGLCanvasEGL::CreateSurface()
         // Not unmapping the canvas as soon as possible causes problems when reparenting
         g_signal_connect(m_widget, "unmap",
                          G_CALLBACK(gtk_glcanvas_unmap_callback), this);
+
+        // We connect to "size-allocate" to update the position of the
+        // subsurface when the toplevel window is moved, which also updates the
+        // scale as a side effect, but we need to also separately connect to
+        // "notify::scale-factor" to catch scale changes, which is especially
+        // important initially, as we don't get a "size-allocate" with the
+        // correct scale when the window is created.
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
+        g_signal_connect(m_widget, "notify::scale-factor",
+                         G_CALLBACK (gtk_glcanvas_scale_factor_notify), this);
     }
 #endif
 
@@ -690,7 +708,7 @@ void wxGLCanvasEGL::CreateWaylandSubsurface()
     wxCHECK_RET( m_wlSubsurface, "Unable to get EGL subsurface" );
 
     wl_subsurface_set_desync(m_wlSubsurface);
-    wxEGLUpdatePosition(this);
+    UpdateSubsurfacePosition();
     m_wlFrameCallbackHandler = wl_surface_frame(surface);
     wl_callback_add_listener(m_wlFrameCallbackHandler,
                              &wl_frame_listener, this);
