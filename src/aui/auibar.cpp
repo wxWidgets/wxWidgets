@@ -970,13 +970,37 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     SetArtFlags();
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 
-    if ( style & wxAUI_TB_VERTICAL )
+    if ( style & wxAUI_TB_HORIZONTAL )
+    {
+        wxASSERT_MSG
+        (
+         !(style & (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_VERT_LAYOUT_UP)),
+         "Vertical text styles can't be used with horizontal toolbars"
+        );
+    }
+    else if ( style & wxAUI_TB_VERTICAL )
     {
         wxASSERT_MSG
         (
          !(style & wxAUI_TB_HORZ_LAYOUT),
          "Horizontal layout style can't be used with vertical toolbars"
         );
+
+        if ( style & wxAUI_TB_TEXT )
+        {
+            if ( style & wxAUI_TB_VERT_LAYOUT_DOWN )
+                SetToolTextDirection(wxAuiTextDirection::TopToBottom);
+            else if ( style & wxAUI_TB_VERT_LAYOUT_UP )
+                SetToolTextDirection(wxAuiTextDirection::BottomToTop);
+        }
+        else
+        {
+            wxASSERT_MSG
+            (
+             !(style & (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_VERT_LAYOUT_UP)),
+             "Vertical text styles don't make sense without wxAUI_TB_TEXT"
+            );
+        }
     }
 
     if (style & wxAUI_TB_HORZ_LAYOUT)

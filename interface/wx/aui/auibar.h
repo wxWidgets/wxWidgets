@@ -68,9 +68,44 @@ enum wxAuiToolBarStyle
     wxAUI_TB_PLAIN_BACKGROUND = 1 << 8,
 
     /**
+        For vertical toolbars, put icon above vertical text.
+
+        This also rotates the icon by 90 degrees clockwise for consistency with
+        the text rotation angle when using wxAuiTextDirection::BottomToTop.
+
+        @since 3.3.2
+    */
+    wxAUI_TB_VERT_LAYOUT_DOWN = 1 << 9,
+
+    /**
+        For vertical toolbars, put icon below vertical text.
+
+        This also rotates the icon by 90 degrees counter clockwise for
+        consistency with the text rotation angle when using
+        wxAuiTextDirection::TopToBottom.
+
+        @since 3.3.2
+    */
+    wxAUI_TB_VERT_LAYOUT_UP = 1 << 10,
+
+    /**
        Shows the text alongside the icons, not vertically stacked.
     */
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
+
+    /**
+       Shows the text for vertical toolbars, with icon above text.
+
+       @since 3.3.2
+    */
+    wxAUI_TB_VERT_TEXT_DOWN = (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_TEXT),
+
+    /**
+       Shows the text for vertical toolbars, with icon below text.
+
+       @since 3.3.2
+    */
+    wxAUI_TB_VERT_TEXT_UP = (wxAUI_TB_VERT_LAYOUT_UP | wxAUI_TB_TEXT),
 
     /**
       Shows the text in the toolbar buttons; by default only icons are shown.
