@@ -272,6 +272,18 @@ public:
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+    void OnAutoscrollOuter(wxCommandEvent& WXUNUSED(event))
+    {
+        m_canvas->SetInnerScrollZone(wxDefaultCoord);
+        m_canvas->SetOuterScrollZone(wxDefaultCoord);
+    }
+
+    void OnAutoscrollInner(wxCommandEvent& WXUNUSED(event))
+    {
+        m_canvas->SetInnerScrollZone(FromDIP(16));
+        m_canvas->SetOuterScrollZone(0);
+    }
+
     void OnBuffer(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
 #if wxUSE_FILEDLG
@@ -374,6 +386,8 @@ enum
 #if wxUSE_GRAPHICS_CONTEXT
     File_AntiAliasing,
 #endif
+    File_AutoscrollOuter,
+    File_AutoscrollInner,
     File_Copy,
     File_Save,
 
@@ -2520,6 +2534,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU      (File_AntiAliasing, MyFrame::OnAntiAliasing)
     EVT_UPDATE_UI (File_AntiAliasing, MyFrame::OnAntiAliasingUpdateUI)
 #endif // wxUSE_GRAPHICS_CONTEXT
+    EVT_MENU      (File_AutoscrollOuter, MyFrame::OnAutoscrollOuter)
+    EVT_MENU      (File_AutoscrollInner, MyFrame::OnAutoscrollInner)
 
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
     EVT_MENU      (File_Copy,     MyFrame::OnCopy)
@@ -2619,6 +2635,9 @@ MyFrame::MyFrame(const wxString& title)
                               "Enable Anti-Aliasing in wxGraphicContext")
             ->Check();
 #endif
+    menuFile->AppendSeparator();
+    menuFile->AppendRadioItem(File_AutoscrollOuter, "&Outer", "Autoscroll zone outside window");
+    menuFile->AppendRadioItem(File_AutoscrollInner, "&Inner", "Autoscroll zone inside window");
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
     menuFile->Append(File_Copy, "Copy to clipboard");
