@@ -50,6 +50,7 @@ jobs:
                 ':!configure' \
                 ':!descrip.mms' \
                 ':!install-sh' \
+                ':!build/cmake/modules/cotire.cmake' \
                 ':!docs/doxygen/doxygen-awesome-css/*' \
                 ':!samples/widgets/widgets.bkl' \
                 ':!**/*akefile*' \
