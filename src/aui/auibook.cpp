@@ -409,11 +409,8 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 // Render() renders the tab catalog to the specified DC
 // It is a virtual function and can be overridden to
 // provide custom drawing capabilities
-void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
+void wxAuiTabContainer::Render(wxDC* pdc, wxWindow* wnd)
 {
-    if (!raw_dc || !raw_dc->IsOk())
-        return;
-
     if (m_rect.IsEmpty())
         return;
 
@@ -421,23 +418,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     size_t page_count = m_pages.GetCount();
     size_t button_count = m_buttons.GetCount();
 
-#if wxALWAYS_NATIVE_DOUBLE_BUFFER
-    wxDC& dc = *raw_dc;
-#else
-    wxMemoryDC dc;
-
-    // use the same layout direction as the window DC uses to ensure that the
-    // text is rendered correctly
-    dc.SetLayoutDirection(raw_dc->GetLayoutDirection());
-
-    wxBitmap bmp;
-    // create off-screen bitmap
-    bmp.Create(m_rect.GetWidth(), m_rect.GetHeight(),*raw_dc);
-    dc.SelectObject(bmp);
-
-    if (!dc.IsOk())
-        return;
-#endif
+    wxDC& dc = *pdc;
 
     // ensure we show as many tabs as possible
     while (m_tabOffset > 0 && IsTabVisible(page_count-1, m_tabOffset-1, &dc, wnd))
@@ -712,13 +693,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                        &tab_button.rect,
                        &x_extent);
     }
-
-
-#if !wxALWAYS_NATIVE_DOUBLE_BUFFER
-    raw_dc->Blit(m_rect.x, m_rect.y,
-                 m_rect.GetWidth(), m_rect.GetHeight(),
-                 &dc, 0, 0);
-#endif
 }
 
 // Is the tab visible?
@@ -987,7 +961,6 @@ void wxAuiTabContainer::DoShowHide()
 
 wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_PAINT(wxAuiTabCtrl::OnPaint)
-    EVT_ERASE_BACKGROUND(wxAuiTabCtrl::OnEraseBackground)
     EVT_SIZE(wxAuiTabCtrl::OnSize)
     EVT_LEFT_DOWN(wxAuiTabCtrl::OnLeftDown)
     EVT_LEFT_DCLICK(wxAuiTabCtrl::OnLeftDClick)
@@ -1013,6 +986,7 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
                            const wxSize& size,
                            long style) : wxControl(parent, id, pos, size, style)
 {
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetName(wxT("wxAuiTabCtrl"));
     m_clickPt = wxDefaultPosition;
     m_isDragging = false;
@@ -1026,7 +1000,7 @@ wxAuiTabCtrl::~wxAuiTabCtrl()
 
 void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 {
-    wxPaintDC dc(this);
+    wxAutoBufferedPaintDC dc(this);
 
     dc.SetFont(GetFont());
 
@@ -1046,6 +1020,7 @@ void wxAuiTabCtrl::OnSysColourChanged(wxSysColourChangedEvent &event)
 
 void wxAuiTabCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 {
+    // This is not used any more but preseved for ABI compatibility in 3.2.
 }
 
 void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)

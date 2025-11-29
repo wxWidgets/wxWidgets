@@ -83,9 +83,23 @@ private:
         const double scale = dc ? dc->GetContentScaleFactor() : 1.0;
         wxBitmap* const buffer = new wxBitmap;
 
+        // Explicitly request 24bpp bitmap under MSW to avoid slow down when
+        // drawing bitmaps with alpha channel on 32bpp bitmap: as explained in
+        // AlphaBlt() implementation in src/msw/dc.cpp, we need to manually
+        // reset alpha values in this case, which involves converting the
+        // bitmap to DIB and back and may be very slow. As we don't really care
+        // about the alpha values in the backing store bitmap (everything is
+        // already blended when drawing to it), use 24bpp bitmap to avoid this.
+        const int depth =
+#if defined(__WXMSW__)
+            24;
+#else
+            wxBITMAP_SCREEN_DEPTH;
+#endif
+
         // we must always return a valid bitmap but creating a bitmap of
         // size 0 would fail, so create a 1*1 bitmap in this case
-        buffer->CreateWithDIPSize(wxMax(w, 1), wxMax(h, 1), scale);
+        buffer->CreateWithDIPSize(wxMax(w, 1), wxMax(h, 1), scale, depth);
 
         return buffer;
     }

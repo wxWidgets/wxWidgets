@@ -272,8 +272,10 @@ All (GUI):
 
 wxGTK:
 
+- Add support for using EGL 1.4 (and not 1.5) in wxGLCanvas (#22325).
 - Fix handling total window size with GNOME with X11 (#25348).
 - Fix height of read-only wxBitmapComboBox (#25468).
+- Fix initial appearance of wxGLCanvas when using high DPI (#23733).
 - Fix memory leak when using wxOverlay (#24500).
 - Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
 - Fix missing wxEVT_CHAR for Ctrl-Letter in non-US layouts (#25384).
@@ -289,6 +291,7 @@ wxMSW
 - Fix wxStyledTextCtrl support in screen readers (Maarten Bent, #25963).
 - Fix TAB behaviour in a panel with notebook as only active child (#25443).
 - Reduce GDI resource usage in wxStaticBitmap (Alex Shvartzkop, #25698).
+- Significantly improve performance of drawing bitmaps in wxAUI (#23841).
 
 wxOSX:
 
