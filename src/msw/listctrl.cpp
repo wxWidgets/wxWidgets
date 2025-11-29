@@ -3439,10 +3439,16 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             break;
 
         case CDDS_ITEMPREPAINT:
+            // set the text foreground and background colour for listview
+            // and icon view, these don't get messages for subitems
+            pLVCD->clrText = wxColourToRGB(GetForegroundColour());
+            pLVCD->clrTextBk = wxColourToRGB(GetBackgroundColour());
+
             // get a message for each subitem
             return CDRF_NOTIFYITEMDRAW;
 
         case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
+        {
             const int item = nmcd.dwItemSpec;
             const int column = pLVCD->iSubItem;
 
@@ -3455,6 +3461,7 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
                 break;
 
             return HandleItemPrepaint(this, pLVCD);
+        }
     }
 
     return CDRF_DODEFAULT;
@@ -3471,16 +3478,17 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     const bool drawVRules = HasFlag(wxLC_VRULES);
 
     // Check if we need to do anything ourselves: either draw the rules or, in
-    // case of using dark mode under Windows 11, erase the unwanted separator
+    // case of using dark mode, draw the default background colour below and
+    // behind the list items, and erase the unwanted separator
     // lines drawn below the items by default, which are ugly because they
     // don't align with the separators drawn by the header control.
     bool needToDraw = false,
          needToErase = false;
-    if ( InReportView() && itemCount )
+    if ( InReportView() )
     {
-        if ( (drawHRules || drawVRules) )
+        if ( itemCount > 0 && (drawHRules || drawVRules) )
             needToDraw = true;
-        else if ( wxMSWDarkMode::IsActive() && wxGetWinVersion() >= wxWinVersion_11 )
+        if ( wxMSWDarkMode::IsActive() )
             needToErase = true;
     }
 
@@ -3509,10 +3517,12 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     if ( needToErase )
     {
         wxRect lastRect;
-        GetItemRect(bottom, lastRect);
+        if ( itemCount > 0 )
+            GetItemRect(bottom, lastRect);
 
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(GetBackgroundColour());
+        dc.DrawRectangle(lastRect.GetRight(), 0, clientSize.x - lastRect.GetRight(), lastRect.GetBottom());
         dc.DrawRectangle(0, lastRect.GetBottom(), clientSize.x, clientSize.y - lastRect.GetBottom());
         return;
     }
