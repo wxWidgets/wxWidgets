@@ -471,7 +471,13 @@ class wxAuiToolBarItemArray : public std::vector<wxAuiToolBarItem>
 /**
     @class wxAuiToolBarArt
 
-    wxAuiToolBarArt is part of the wxAUI class framework.
+    wxAuiToolBarArt is part of the wxAUI class framework and is the base class
+    defining the interface for rendering wxAuiToolBar.
+
+    It is an abstract base class and its concrete wxAuiGenericToolBarArt and
+    wxAuiMSWToolBarArt subclasses provide the implementations used by default
+    under all non-MSW platforms and under MSW respectively.
+
     See also @ref wxAuiToolBar and @ref overview_aui.
 
     @library{wxaui}
@@ -618,6 +624,46 @@ public:
     virtual int ShowDropDown(
                          wxWindow* wnd,
                          const wxAuiToolBarItemArray& items) = 0;
+};
+
+/**
+    Default generic implementation of wxAuiToolBarArt.
+
+    This class is used by default under all non-MSW platforms for rendering
+    wxAuiToolBar.
+
+    @library{wxaui}
+    @category{aui}
+*/
+class wxAuiGenericToolBarArt : public wxAuiToolBarArt
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxAuiGenericToolBarArt();
+};
+
+/**
+    wxMSW-specific implementation of wxAuiToolBarArt.
+
+    This class is available only in wxMSW port as it uses native functions and
+    is used for rendering wxAuiToolBar by default in it.
+
+    Note that native toolbar rendering functions don't respect dark mode, which
+    is why this class behaves in the same way as wxAuiGenericToolBarArt when
+    dark mode is used.
+
+    @library{wxaui}
+    @category{aui}
+*/
+class wxAuiMSWToolBarArt : public wxAuiGenericToolBarArt
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxAuiMSWToolBarArt();
 };
 
 
