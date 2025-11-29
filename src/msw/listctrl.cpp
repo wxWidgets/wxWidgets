@@ -1388,16 +1388,15 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
     {
         // Because the columns can be reordered, we need to sum the widths of
         // all preceding columns to get the correct x position.
-        rect.x = 0;
         for ( auto col : GetColumnsOrder() )
         {
-            if ( col == 0 )
+            if ( col == subItem )
                 break;
 
             rect.x += GetColumnWidth(col);
         }
 
-        rect.width = GetColumnWidth(0);
+        rect.width = GetColumnWidth(subItem);
     }
 
     return true;
