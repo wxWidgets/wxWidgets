@@ -36,41 +36,49 @@ if(MSVC)
     )
 endif()
 
+wx_get_install_platform_dir(library)
+
 # setup header and wx-config
 if(WIN32_MSVC_NAMING)
     # create both Debug and Release directories, so CMake doesn't complain about
     # non-existent path when only Release or Debug build has been installed
     set(lib_unicode "u")
     install(DIRECTORY
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode}")
+        DESTINATION "${library_dir}/${wxBUILD_TOOLKIT}${lib_unicode}")
     install(DIRECTORY
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}/${wxBUILD_TOOLKIT}${lib_unicode}d")
+        DESTINATION "${library_dir}/${wxBUILD_TOOLKIT}${lib_unicode}d")
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "lib/${wxPLATFORM_LIB_DIR}")
+        DESTINATION "${library_dir}")
 else()
     install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "lib/wx/include")
+        DESTINATION "${library_dir}/wx/include"
+    )
 
     install(
         FILES "${wxOUTPUT_DIR}/wx/config/${wxBUILD_FILE_ID}"
-        DESTINATION "lib/wx/config"
+        DESTINATION "${library_dir}/wx/config"
         PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
                     GROUP_EXECUTE GROUP_READ
                     WORLD_EXECUTE WORLD_READ
         )
 
-    install(DIRECTORY DESTINATION "bin")
+    wx_get_install_platform_dir(runtime)
+    install(DIRECTORY DESTINATION "${runtime_dir}")
     install(CODE "execute_process( \
         COMMAND ${CMAKE_COMMAND} -E create_symlink \
-        \"${CMAKE_INSTALL_PREFIX}/lib/wx/config/${wxBUILD_FILE_ID}\" \
-        \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wx-config\" \
+        \"${CMAKE_INSTALL_PREFIX}/${library_dir}/wx/config/${wxBUILD_FILE_ID}\" \
+        \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wx-config\" \
         )"
     )
+    list(APPEND WX_EXTRA_UNINSTALL_FILES "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${runtime_dir}/wx-config")
 endif()
 
-install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets/${wxPLATFORM_LIB_DIR}")
+wx_get_install_dir(library)
+set(wx_cmake_dir "${library_dir}/cmake/wxWidgets-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
+
+install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "${wx_cmake_dir}/${wxPLATFORM_LIB_DIR}")
 
 # find_package config file
 include(CMakePackageConfigHelpers)
@@ -93,11 +101,11 @@ write_basic_package_version_file(
 configure_package_config_file(
     "${wxSOURCE_DIR}/build/cmake/wxWidgetsConfig.cmake.in"
     "${projectConfig}"
-    INSTALL_DESTINATION "lib/cmake/wxWidgets"
+    INSTALL_DESTINATION "${wx_cmake_dir}"
 )
 install(
     FILES "${projectConfig}" "${versionConfig}"
-    DESTINATION "lib/cmake/wxWidgets"
+    DESTINATION "${wx_cmake_dir}"
 )
 
 # uninstall target
@@ -108,21 +116,6 @@ else()
 endif()
 
 if(NOT TARGET ${UNINST_NAME})
-    # these symlinks are not included in the install manifest
-    set(WX_EXTRA_UNINSTALL_FILES)
-    if(NOT WIN32_MSVC_NAMING)
-        if(IPHONE)
-            set(EXE_SUFFIX ".app")
-        else()
-            set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
-        endif()
-
-        set(WX_EXTRA_UNINSTALL_FILES
-            "${CMAKE_INSTALL_PREFIX}/bin/wx-config"
-            "${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX}"
-        )
-    endif()
-
     configure_file(
         "${wxSOURCE_DIR}/build/cmake/uninstall.cmake.in"
         "${wxBINARY_DIR}/uninstall.cmake"

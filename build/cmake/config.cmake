@@ -100,18 +100,21 @@ function(wx_write_config_inplace)
     execute_process(
         COMMAND
         "${CMAKE_COMMAND}" -E ${COPY_CMD}
-        "${wxBINARY_DIR}/lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
+        "${wxCONFIG_DIR}/inplace-${TOOLCHAIN_FULLNAME}"
         "${wxBINARY_DIR}/wx-config"
         )
 endfunction()
 
 function(wx_write_config)
+    wx_get_install_dir(include)
+    wx_get_install_platform_dir(library)
+    wx_get_install_platform_dir(runtime)
 
     set(prefix ${CMAKE_INSTALL_PREFIX})
     set(exec_prefix "\${prefix}")
-    set(includedir "\${prefix}/include")
-    set(libdir "\${exec_prefix}/lib")
-    set(bindir "\${exec_prefix}/bin")
+    set(includedir "\${prefix}/${include_dir}")
+    set(libdir "\${exec_prefix}/${library_dir}")
+    set(bindir "\${exec_prefix}/${runtime_dir}")
 
     if(wxBUILD_MONOLITHIC)
         set(MONOLITHIC 1)
@@ -143,15 +146,12 @@ function(wx_write_config)
     set(STD_BASE_LIBS_ALL xml net base)
     set(STD_GUI_LIBS_ALL xrc html qa adv core)
     foreach(lib IN ITEMS xrc webview stc richtext ribbon propgrid aui gl media html qa adv core xml net base)
-        list(FIND wxLIB_TARGETS wx${lib} hasLib)
-        if (hasLib GREATER -1)
+        if (wx${lib} IN_LIST wxLIB_TARGETS)
             wx_string_append(BUILT_WX_LIBS "${lib} ")
-            list(FIND STD_BASE_LIBS_ALL ${lib} index)
-            if (index GREATER -1)
+            if (${lib} IN_LIST STD_BASE_LIBS_ALL)
                 wx_string_append(STD_BASE_LIBS "${lib} ")
             endif()
-            list(FIND STD_GUI_LIBS_ALL ${lib} index)
-            if (index GREATER -1)
+            if (${lib} IN_LIST STD_GUI_LIBS_ALL)
                 wx_string_append(STD_GUI_LIBS "${lib} ")
             endif()
         endif()

@@ -7,6 +7,14 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(wxUSE_LIBJPEG STREQUAL "sys")
+    find_package(JPEG)
+    if(NOT JPEG_FOUND)
+        # If the sys library can not be found use builtin
+        wx_option_force_value(wxUSE_LIBJPEG builtin)
+    endif()
+endif()
+
 if(wxUSE_LIBJPEG STREQUAL "builtin")
     wx_add_builtin_library(wxjpeg
         src/jpeg/jaricom.c
@@ -62,6 +70,4 @@ if(wxUSE_LIBJPEG STREQUAL "builtin")
         )
     set(JPEG_LIBRARIES wxjpeg)
     set(JPEG_INCLUDE_DIR ${wxSOURCE_DIR}/src/jpeg)
-elseif(wxUSE_LIBJPEG)
-    find_package(JPEG REQUIRED)
 endif()

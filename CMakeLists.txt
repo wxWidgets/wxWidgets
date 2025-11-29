@@ -7,13 +7,16 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-cmake_minimum_required(VERSION 3.0...3.31)
+cmake_minimum_required(VERSION 3.5...4.1)
 
 if(NOT CMAKE_CONFIGURATION_TYPES)
     get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
     # Set default configuration types for multi-config generators
     if(HAVE_MULTI_CONFIG_GENERATOR)
-        set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
+        string(CONCAT config_hint "Semicolon separated list of supported "
+            "configuration types, only supports Debug, Release, MinSizeRel, "
+            "and RelWithDebInfo, anything else will be ignored.")
+        set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING ${config_hint})
     endif()
 endif()
 
@@ -21,7 +24,9 @@ endif()
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(default_build_type "Debug")
     message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
-    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
+    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING
+        "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel"
+    )
     # Set the possible values of build type for cmake-gui
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 endif()
@@ -85,8 +90,8 @@ string(REGEX MATCH "([0-9]+)"
 math(EXPR wxSOVERSION_MAJOR "${WX_CURRENT} - ${WX_AGE}")
 set(wxSOVERSION ${wxSOVERSION_MAJOR}.${WX_AGE}.${WX_REVISION})
 
-set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
-set(wxCOPYRIGHT "2002-2025 wxWidgets")
+set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER} CACHE INTERNAL "wxWidgets version")
+set(wxCOPYRIGHT "2002-2025 wxWidgets" CACHE INTERNAL "wxWidgets copyright")
 
 set(wxLANGUAGES C CXX)
 if(APPLE AND NOT CMAKE_VERSION VERSION_LESS "3.16")

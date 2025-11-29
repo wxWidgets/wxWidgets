@@ -1,13 +1,20 @@
-if(wxBUILD_LOCALES STREQUAL "AUTO")
-    find_package(Gettext QUIET)
-elseif(wxBUILD_LOCALES)
-    find_package(Gettext REQUIRED)
+if(wxBUILD_LOCALES)
+    if(wxBUILD_LOCALES STREQUAL "ON")
+        find_package(Gettext)
+    else() # wxBUILD_LOCALES is AUTO, don't give any messages if Gettext is not available
+        find_package(Gettext QUIET)
+    endif()
+    if(NOT GETTEXT_FOUND)
+        if(wxBUILD_LOCALES STREQUAL "ON")
+            message(FATAL_ERROR "Translations can't be built without gettext: either install it or don't set wxBUILD_LOCALES to ON")
+        endif()
+        wx_option_force_value(wxBUILD_LOCALES OFF)
+    endif()
 endif()
 
-mark_as_advanced(GETTEXT_MSGMERGE_EXECUTABLE)
-mark_as_advanced(GETTEXT_MSGFMT_EXECUTABLE)
+mark_as_advanced(GETTEXT_MSGMERGE_EXECUTABLE GETTEXT_MSGFMT_EXECUTABLE)
 
-if(NOT GETTEXT_FOUND OR wxBUILD_LOCALES STREQUAL "OFF")
+if(NOT wxBUILD_LOCALES)
     return()
 endif()
 

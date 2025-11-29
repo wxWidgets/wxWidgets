@@ -7,6 +7,14 @@
 # Licence:     wxWindows licence
 #############################################################################
 
+if(wxUSE_EXPAT STREQUAL "sys")
+    find_package(EXPAT)
+    if(NOT EXPAT_FOUND)
+        # If the sys library can not be found use builtin
+        wx_option_force_value(wxUSE_EXPAT builtin)
+    endif()
+endif()
+
 if(wxUSE_EXPAT STREQUAL "builtin")
     # TODO: implement building expat via its CMake file, using
     # add_subdirectory or ExternalProject_Add
@@ -17,6 +25,4 @@ if(wxUSE_EXPAT STREQUAL "builtin")
     )
     set(EXPAT_LIBRARIES wxexpat)
     set(EXPAT_INCLUDE_DIRS ${wxSOURCE_DIR}/src/expat/expat/lib)
-elseif(wxUSE_EXPAT)
-    find_package(EXPAT REQUIRED)
 endif()
