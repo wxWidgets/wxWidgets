@@ -3254,6 +3254,44 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
     }
 }
 
+void DrawGridLines(wxListCtrl* listctrl, int item, int gap = 0)
+{
+    const bool drawHRules = listctrl->HasFlag(wxLC_HRULES);
+    const bool drawVRules = listctrl->HasFlag(wxLC_VRULES);
+    if ( !(drawHRules || drawVRules) )
+        return;
+
+    wxWindowDC wdc(listctrl);
+    HDC hdc = GetHdcOf(wdc.GetTempHDC());
+
+    RECT rc;
+    wxGetListCtrlItemRect(GetHwndOf(listctrl), item, LVIR_BOUNDS, rc);
+
+    const wxColour penColour(wxSystemSettings::GetColour(wxMSWDarkMode::IsActive()
+                                                         ? wxSYS_COLOUR_GRAYTEXT
+                                                         : wxSYS_COLOUR_3DLIGHT));
+    COLORREF clrGrid = wxColourToRGB(penColour);
+
+    if ( drawHRules )
+    {
+        wxDrawHVLine(hdc, rc.left, rc.bottom, rc.right, rc.bottom, clrGrid, 1);
+    }
+
+    if ( drawVRules )
+    {
+        for ( auto col : listctrl->GetColumnsOrder() )
+        {
+            wxRect rectSubItem;
+            if ( !listctrl->GetSubItemRect(item, col, rectSubItem, wxLIST_RECT_BOUNDS) )
+                continue;
+
+            // add 1 to match the header lines
+            const int x = rectSubItem.GetRight() + 1;
+            wxDrawHVLine(hdc, x, rc.top - gap, x, rc.bottom, clrGrid, 1);
+        }
+    }
+}
+
 // This function is normally called only if we use custom colours, but it's
 // also called when using dark mode as we have to draw the selected item
 // ourselves when using it, and if we do this, we have to paint all the items
@@ -3356,6 +3394,8 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
 
         ::SetTextColor(hdc, colTextOld);
     }
+
+    DrawGridLines(listctrl, item);
 
     HandleItemPostpaint(nmcd);
 }
@@ -3524,30 +3564,15 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         dc.SetBrush(GetBackgroundColour());
         dc.DrawRectangle(lastRect.GetRight(), 0, clientSize.x - lastRect.GetRight(), lastRect.GetBottom());
         dc.DrawRectangle(0, lastRect.GetBottom(), clientSize.x, clientSize.y - lastRect.GetBottom());
+    }
+
+    if ( !needToDraw )
         return;
-    }
 
-    const wxColour penColour(wxSystemSettings::GetColour(wxMSWDarkMode::IsActive()
-                                                         ? wxSYS_COLOUR_GRAYTEXT
-                                                         : wxSYS_COLOUR_3DLIGHT));
-    wxPen pen(penColour);
-    dc.SetPen(pen);
-    dc.SetBrush(* wxTRANSPARENT_BRUSH);
+    static const bool useDrawFix = wxApp::GetComCtl32Version() < 600;
+    static const int gap = useDrawFix ? 2 : 0;
 
-    if (drawHRules)
-    {
-        wxRect itemRect;
-        for ( long i = top; i <= bottom; i++ )
-        {
-            if (GetItemRect(i, itemRect))
-            {
-                const int cy = itemRect.GetBottom();
-                dc.DrawLine(0, cy, clientSize.x, cy);
-            }
-        }
-    }
-
-    if (drawVRules)
+    if ( drawVRules && useDrawFix )
     {
         wxRect topItemRect, bottomItemRect;
         GetItemRect(top, topItemRect);
@@ -3575,39 +3600,17 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 EVT_LIST_COL_DRAGGING and also set useDrawFix to false and gap
                 to 2 (not 0).
             */
+            wxDCPenChanger changePen(dc, *wxTRANSPARENT_PEN);
+            wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
 
-            static const bool useDrawFix = wxApp::GetComCtl32Version() < 600;
-
-            static const int gap = useDrawFix ? 2 : 0;
-
-            if (useDrawFix)
-            {
-                wxDCPenChanger changePen(dc, *wxTRANSPARENT_PEN);
-                wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
-
-                dc.DrawRectangle(0, topItemRect.GetY() - gap,
-                                 clientSize.GetWidth(), gap);
-            }
-
-            const int numCols = GetColumnCount();
-            wxVector<int> indexArray(numCols);
-            if ( !ListView_GetColumnOrderArray(GetHwnd(),
-                                               numCols,
-                                               &indexArray[0]) )
-            {
-                wxFAIL_MSG( wxT("invalid column index array in OnPaint()") );
-                return;
-            }
-
-            int x = bottomItemRect.GetX();
-            for (int col = 0; col < numCols; col++)
-            {
-                int colWidth = GetColumnWidth(indexArray[col]);
-                x += colWidth ;
-                dc.DrawLine(x-1, topItemRect.GetY() - gap,
-                            x-1, bottomItemRect.GetBottom());
-            }
+            dc.DrawRectangle(0, topItemRect.GetY() - gap,
+                             clientSize.GetWidth(), gap);
         }
+    }
+
+    for ( long i = top; i <= bottom; i++ )
+    {
+        DrawGridLines(this, i, gap);
     }
 }
 
