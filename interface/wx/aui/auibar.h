@@ -146,6 +146,29 @@ enum wxAuiToolBarToolTextOrientation
 
 };
 
+/**
+    Direction of the text in wxAuiToolBar items.
+
+    Horizontal toolbars always use LeftToRight direction, whereas vertical
+    toolbars may use either TopToBottom or BottomToTop.
+
+    @library{wxaui}
+    @category{aui}
+
+    @since 3.3.2
+  */
+enum class wxAuiTextDirection
+{
+    /// Default direction always used for horizontal toolbars.
+    LeftToRight,
+
+    /// May be used for vertical toolbars, typically on the right side.
+    TopToBottom,
+
+    /// May be used for vertical toolbars, typically on the left side.
+    BottomToTop
+};
+
 
 /**
     @class wxAuiToolBarEvent
@@ -496,6 +519,25 @@ public:
     virtual void SetTextOrientation(int orientation) = 0;
     virtual int GetTextOrientation() = 0;
 
+    /**
+        Set the text direction for rendering text.
+
+        Does nothing in the base class, override this function to support
+        vertical text rendering.
+
+        @since 3.3.2
+     */
+    virtual void SetTextDirection(wxAuiTextDirection direction);
+
+    /**
+        Return the direction used for rendering text.
+
+        Always returns wxAuiTextDirection::LeftToRight in the base class.
+
+        @since 3.3.2
+     */
+    virtual wxAuiTextDirection GetTextDirection() const;
+
     virtual void DrawBackground(
                          wxDC& dc,
                          wxWindow* wnd,
@@ -642,6 +684,26 @@ public:
         Default constructor.
     */
     wxAuiGenericToolBarArt();
+
+    /**
+        Set the text direction for rendering text.
+
+        Currently vertical text directions are only supported for non-drop down
+        items.
+
+        @since 3.3.2
+     */
+    virtual void SetTextDirection(wxAuiTextDirection direction) override;
+
+    /**
+        Return the direction used for rendering text.
+
+        This is the direction last set using SetTextDirection() or
+        wxAuiTextDirection::LeftToRight if it was never called.
+
+        @since 3.3.2
+     */
+    virtual wxAuiTextDirection GetTextDirection() const override;
 };
 
 /**
@@ -664,6 +726,26 @@ public:
         Default constructor.
     */
     wxAuiMSWToolBarArt();
+
+    /**
+        Set the text direction for rendering text.
+
+        Currently vertical text directions are only supported for non-drop down
+        items.
+
+        @since 3.3.2
+     */
+    virtual void SetTextDirection(wxAuiTextDirection direction) override;
+
+    /**
+        Return the direction used for rendering text.
+
+        This is the direction last set using SetTextDirection() or
+        wxAuiTextDirection::LeftToRight if it was never called.
+
+        @since 3.3.2
+     */
+    virtual wxAuiTextDirection GetTextDirection() const override;
 };
 
 

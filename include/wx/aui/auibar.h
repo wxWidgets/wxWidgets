@@ -62,6 +62,18 @@ enum wxAuiToolBarToolTextOrientation
     wxAUI_TBTOOL_TEXT_BOTTOM = 3
 };
 
+enum class wxAuiTextDirection
+{
+    // This is always used for horizontal toolbars.
+    LeftToRight,
+
+    // This may be used for vertical toolbars, typically on the right side.
+    TopToBottom,
+
+    // This may be used for vertical toolbars, typically on the left side.
+    BottomToTop
+};
+
 
 // aui toolbar event class
 
@@ -244,6 +256,14 @@ public:
     virtual void SetTextOrientation(int orientation) = 0;
     virtual int GetTextOrientation() = 0;
 
+    // Not pure virtual for compatibility reasons, but should be implemented to
+    // render vertical text.
+    virtual void SetTextDirection(wxAuiTextDirection WXUNUSED(direction)) { }
+    virtual wxAuiTextDirection GetTextDirection() const
+    {
+        return wxAuiTextDirection::LeftToRight;
+    }
+
     virtual void DrawBackground(
                          wxDC& dc,
                          wxWindow* wnd,
@@ -341,6 +361,8 @@ public:
     virtual wxFont GetFont() override;
     virtual void SetTextOrientation(int orientation) override;
     virtual int GetTextOrientation() override;
+    virtual void SetTextDirection(wxAuiTextDirection direction) override;
+    virtual wxAuiTextDirection GetTextDirection() const override;
 
     virtual void DrawBackground(
                 wxDC& dc,
@@ -430,6 +452,9 @@ protected:
     int m_gripperSize;
     int m_overflowSize;
     int m_dropdownSize;
+
+private:
+    wxAuiTextDirection m_textDirection = wxAuiTextDirection::LeftToRight;
 };
 
 
@@ -565,6 +590,10 @@ public:
     void SetToolTextOrientation(int orientation);
     int  GetToolTextOrientation() const;
 
+    void SetToolTextDirection(wxAuiTextDirection direction);
+    wxAuiTextDirection GetToolTextDirection() const;
+    bool IsToolTextVertical() const;
+
     void SetToolPacking(int packing);
     int  GetToolPacking() const;
 
@@ -692,6 +721,8 @@ private:
     void UpdateBackgroundBitmap(const wxSize& size);
 
     wxBitmap m_backgroundBitmap;
+
+    wxAuiTextDirection m_textDirection = wxAuiTextDirection::LeftToRight;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiToolBar);
