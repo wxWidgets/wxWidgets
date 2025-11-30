@@ -3307,6 +3307,9 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
     const HWND hwndList = nmcd.hdr.hwndFrom;
     const int item = nmcd.dwItemSpec;
 
+    RECT rc = GetCustomDrawnItemRect(nmcd);
+    HDC hdc = nmcd.hdc;
+
     // unfortunately we can't trust CDIS_SELECTED, it is often set even when
     // the item is not at all selected for some reason (comctl32 6), but we
     // also can't always trust ListView_GetItem() as it could return the old
@@ -3340,11 +3343,10 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
     }
 
     // determine if the item is hot (mouse hovering over it)
-    LV_HITTESTINFO lvhti;
-    wxZeroMemory(lvhti);
-    wxGetCursorPosMSW(&(lvhti.pt));
-    ::ScreenToClient(GetHwndOf(listctrl), &lvhti.pt);
-    if ( listctrl->IsEnabled() && ListView_HitTest(GetHwndOf(listctrl), &lvhti) == item )
+    POINT point;
+    ::wxGetCursorPosMSW(&point);
+    ::ScreenToClient(GetHwndOf(listctrl), &point);
+    if ( listctrl->IsEnabled() && ::PtInRect(&rc, point) != 0 )
     {
         nmcd.uItemState |= CDIS_HOT;
     }
@@ -3352,9 +3354,6 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
     {
         nmcd.uItemState &= ~CDIS_HOT;
     }
-
-    HDC hdc = nmcd.hdc;
-    RECT rc = GetCustomDrawnItemRect(nmcd);
 
     wxColour clrBg = listctrl->GetBackgroundColour();
     if ( nmcd.uItemState & CDIS_SELECTED )
