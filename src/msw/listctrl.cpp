@@ -615,8 +615,9 @@ bool wxListCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     //  - "ItemsView" draws the selection and hover as expected, but uses light
     //    mode scrollbars and also misaligned vertical separators.
     //
-    // We currently use DarkMode_Explorer and override selection drawing.
-    support.themeName = L"DarkMode_Explorer";
+    // We currently use Explorer, in Report view we can override all drawing,
+    // the other views will still have the bluish hover colour.
+    support.themeName = L"Explorer";
 
     return true;
 }
@@ -3338,11 +3339,30 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
         nmcd.uItemState &= ~CDIS_FOCUS;
     }
 
+    // determine if the item is hot (mouse hovering over it)
+    LV_HITTESTINFO lvhti;
+    wxZeroMemory(lvhti);
+    wxGetCursorPosMSW(&(lvhti.pt));
+    ::ScreenToClient(GetHwndOf(listctrl), &lvhti.pt);
+    if ( listctrl->IsEnabled() && ListView_HitTest(GetHwndOf(listctrl), &lvhti) == item )
+    {
+        nmcd.uItemState |= CDIS_HOT;
+    }
+    else
+    {
+        nmcd.uItemState &= ~CDIS_HOT;
+    }
+
     HDC hdc = nmcd.hdc;
     RECT rc = GetCustomDrawnItemRect(nmcd);
-    COLORREF clrFullBG = wxColourToRGB((nmcd.uItemState & CDIS_SELECTED)
-        ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)
-        : listctrl->GetBackgroundColour());
+
+    wxColour clrBg = listctrl->GetBackgroundColour();
+    if ( nmcd.uItemState & CDIS_SELECTED )
+        clrBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    else if ( nmcd.uItemState & CDIS_HOT )
+        // closest match to colour when hovering over the header (0x434343)
+        clrBg = wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW);
+    COLORREF clrFullBG = wxColourToRGB(clrBg);
 
     // clear the entire row with the listctrl's bg colour
     // otherwise, it'd keep the hover color but only for the regions
@@ -3376,20 +3396,14 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
         }
         HFONT hfont = font.IsOk() ? GetHfontOf(font) : nullptr;
 
+        pLVCD->clrText = attr && attr->HasTextColour()
+            ? wxColourToRGB(attr->GetTextColour())
+            : wxColourToRGB(listctrl->GetTextColour());
+        pLVCD->clrTextBk = clrFullBG;
         if ( nmcd.uItemState & CDIS_SELECTED )
-        {
             pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-            pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-        }
-        else
-        {
-            pLVCD->clrText = attr && attr->HasTextColour()
-                ? wxColourToRGB(attr->GetTextColour())
-                : wxColourToRGB(listctrl->GetTextColour());
-            pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
-                ? wxColourToRGB(attr->GetBackgroundColour())
-                : wxColourToRGB(listctrl->GetBackgroundColour());
-        }
+        else if ( !nmcd.uItemState && attr && attr->HasBackgroundColour() )
+            pLVCD->clrTextBk = wxColourToRGB(attr->GetBackgroundColour());
 
         COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
 
