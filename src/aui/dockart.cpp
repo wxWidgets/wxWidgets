@@ -324,6 +324,29 @@ wxBitmapBundle wxAuiCreatePinButtonBitmap(const wxColour& color)
     return wxAuiCreateBitmap(pin_bitmap_data, 16, 16, color);
 }
 
+namespace
+{
+
+wxBitmapBundle wxAuiCreateMinimizeButtonBitmap(const wxColour& color)
+{
+#ifdef wxHAS_SVG
+    static const char* const minimize_bitmap_data = R"svg(
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+  <rect fill="currentColor" stroke="currentColor" stroke-width="1" x="4" y="10" width="8" height="1"/>
+</svg>
+)svg";
+#else // !wxHAS_SVG
+    static const unsigned char minimize_bitmap_data[]={
+        0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0xFC,0x3F,0xFC,0x3F,0xFC,0x3F,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+#endif // wxHAS_SVG/!wxHAS_SVG
+
+    return wxAuiCreateBitmap(minimize_bitmap_data, 16, 16, color);
+}
+
+} // anonymous namespace
+
 void
 wxAuiDefaultDockArt::InitBitmaps ()
 {
@@ -353,13 +376,8 @@ wxAuiDefaultDockArt::InitBitmaps ()
         0x07, 0xfc, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 #endif // wxHAS_SVG/!wxHAS_SVG
 
-#ifdef __WXMAC__
-    const wxColour inactive = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION);
-    const wxColour active = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
-#else
     const wxColor inactive = m_inactiveCaptionTextColour;
     const wxColor active = m_activeCaptionTextColour;
-#endif
 
     m_inactiveCloseBitmap = wxAuiCreateCloseButtonBitmap(inactive);
     m_activeCloseBitmap = wxAuiCreateCloseButtonBitmap(active);
@@ -372,6 +390,16 @@ wxAuiDefaultDockArt::InitBitmaps ()
 
     m_inactivePinBitmap = wxAuiCreatePinButtonBitmap(inactive);
     m_activePinBitmap = wxAuiCreatePinButtonBitmap(active);
+
+    // Don't eagerly initialize these ones, they may be unused. OTOH if they
+    // already were initialized, do update them as they will almost certainly
+    // continue to be used then.
+    if (m_inactiveMinimizeBitmap.IsOk())
+    {
+        m_inactiveMinimizeBitmap = wxAuiCreateMinimizeButtonBitmap(inactive);
+        m_activeMinimizeBitmap = wxAuiCreateMinimizeButtonBitmap(active);
+    }
+    //else: Leave them to be initialized on demand.
 }
 
 void wxAuiDefaultDockArt::UpdateColoursFromSystem()
@@ -396,10 +424,17 @@ void wxAuiDefaultDockArt::UpdateColoursFromSystem()
 
     m_activeCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     m_activeCaptionGradientColour = wxAuiLightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+
     m_inactiveCaptionColour = darker1Colour;
     m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
+
+#ifdef __WXMAC__
+    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
+    m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTION);
+#else
+    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+#endif
 
     m_sashBrush = wxBrush(baseColour);
     m_backgroundBrush = wxBrush(baseColour);
@@ -733,6 +768,8 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
         clip_rect.width -= buttonSize;
     if (pane.HasPinButton())
         clip_rect.width -= buttonSize;
+    if (pane.HasMinimizeButton())
+        clip_rect.width -= buttonSize;
     if (pane.HasMaximizeButton())
         clip_rect.width -= buttonSize;
 
@@ -846,6 +883,24 @@ wxAuiDefaultDockArt::GetPaneButtonBitmap(int button,
             else
                 bb = m_inactivePinBitmap;
             break;
+
+        case wxAUI_BUTTON_MINIMIZE:
+            // Initialize (both) bitmaps on demand, they often won't be used at
+            // all, so we don't eagerly initialize them in InitBitmaps().
+            if (!m_inactiveMinimizeBitmap.IsOk())
+            {
+                m_inactiveMinimizeBitmap =
+                    wxAuiCreateMinimizeButtonBitmap(m_inactiveCaptionTextColour);
+                m_activeMinimizeBitmap =
+                    wxAuiCreateMinimizeButtonBitmap(m_activeCaptionTextColour);
+            }
+
+            if (pane.state & wxAuiPaneInfo::optionActive)
+                bb = m_activeMinimizeBitmap;
+            else
+                bb = m_inactiveMinimizeBitmap;
+            break;
+
         case wxAUI_BUTTON_MAXIMIZE_RESTORE:
             if (pane.IsMaximized())
             {

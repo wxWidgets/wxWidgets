@@ -1776,13 +1776,15 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
 
         // add pane buttons to the caption
         int button_count = 0;
-        const int NUM_SUPPORTED_BUTTONS = 3;
+        constexpr int NUM_SUPPORTED_BUTTONS = 4;
         wxAuiButtonId buttons[NUM_SUPPORTED_BUTTONS] = {
+            wxAUI_BUTTON_MINIMIZE,
             wxAUI_BUTTON_MAXIMIZE_RESTORE,
             wxAUI_BUTTON_PIN,
             wxAUI_BUTTON_CLOSE
         };
         int flags[NUM_SUPPORTED_BUTTONS] = {
+            wxAuiPaneInfo::buttonMinimize,
             wxAuiPaneInfo::buttonMaximize,
             wxAuiPaneInfo::buttonPin,
             wxAuiPaneInfo::buttonClose
