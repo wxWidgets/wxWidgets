@@ -231,9 +231,11 @@ public:
      /**
         Create a bundle from bitmaps stored as files.
 
-        Looking in @a path for files using @a filename as prefix and potentionally a
-        suffix with scale, e.g. "_2x" or "@2x". Alternatively, it will look for
-        files with the same filename in a directory "2.0x/" (@since 3.3.2).
+        This function search in @a path for files using @a filename as prefix
+        and potentially a suffix with scale, e.g. "_2x" or "@2x".
+
+        Additionally, since wxWidgets 3.3.2, it also looks for the file in the
+        given name in the "2.0x" subdirectory (if it exists).
 
         @param path     Path of the directory containing the files
         @param filename Bitmap's filename without any scale suffix
