@@ -265,6 +265,9 @@ public:
     // Common scroll event handling code for wxWindow and wxScrollBar
     wxEventType GTKGetScrollEventType(GtkRange* range);
 
+    // Bricsys added
+    bool HasTopLevelFocus();
+
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
