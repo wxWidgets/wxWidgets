@@ -20,6 +20,7 @@
         self.threshold = 1;
         self.pinchThreshold = 0.00110;
         self.oldDeltaSizeTouches = 0;
+        self.oldMidPointCoord = CGPointZero;
     }
     
     return self;
@@ -49,6 +50,9 @@
 
         _oldTouches[0] = [ _currentTouches[0] retain];
         _oldTouches[1] = [ _currentTouches[1] retain];
+
+        _oldTouchesUsedInRotateEvent[0] = [ _currentTouches[0] retain];
+        _oldTouchesUsedInRotateEvent[1] = [ _currentTouches[1] retain];
 
         _currentTouchEvent = [event retain];
 
@@ -118,8 +122,13 @@
 - (void)touchesEndedWithEvent:(NSEvent *)event {
     if (!self.isEnabled) return;
     
-    self.modifiers = [event modifierFlags];
-    [self cancelTracking];
+    NSSet *touches = [event touchesMatchingPhase:NSTouchPhaseTouching inView:self.view];
+
+    if(touches && touches.count == 0)
+    {
+        self.modifiers = [event modifierFlags];
+        [self cancelTracking];
+    }
 }
 
 - (void)touchesCancelledWithEvent:(NSEvent *)event {
@@ -169,6 +178,7 @@
 @synthesize initialPoint = _initialPoint;
 @synthesize pinchThreshold = _pinchThreshold;
 @synthesize oldDeltaSizeTouches = _oldDeltaSizeTouches;
+@synthesize oldMidPointCoord = _oldMidPointCoord;
 
 @synthesize beginTrackingAction = _beginTrackingAction;
 @synthesize updateTrackingAction = _updateTrackingAction;
@@ -225,17 +235,19 @@
     double angle = 0.;
 
     //determine the progections of this vectors
-    CGPoint oldV = (CGPoint){_oldTouchesUsedInEvent[1].normalizedPosition.x - _oldTouchesUsedInEvent[0].normalizedPosition.x,
-                            _oldTouchesUsedInEvent[1].normalizedPosition.y - _oldTouchesUsedInEvent[0].normalizedPosition.y};
+    CGPoint oldV = (CGPoint){_oldTouchesUsedInRotateEvent[1].normalizedPosition.x - _oldTouchesUsedInRotateEvent[0].normalizedPosition.x,
+                            _oldTouchesUsedInRotateEvent[1].normalizedPosition.y - _oldTouchesUsedInRotateEvent[0].normalizedPosition.y};
 
     CGPoint currentV = (CGPoint){_currentTouches[1].normalizedPosition.x - _currentTouches[0].normalizedPosition.x,
                                  _currentTouches[1].normalizedPosition.y - _currentTouches[0].normalizedPosition.y};
 
+    [self GetRotationTouchesMovedInOpposition];
+
     //keep track of what touches we used, some of them will be skipped
-    [_oldTouchesUsedInEvent[0] release];
-    [_oldTouchesUsedInEvent[1] release];
-    _oldTouchesUsedInEvent[0] = [_currentTouches[0] retain];
-    _oldTouchesUsedInEvent[1] = [_currentTouches[1] retain];
+    [_oldTouchesUsedInRotateEvent[0] release];
+    [_oldTouchesUsedInRotateEvent[1] release];
+    _oldTouchesUsedInRotateEvent[0] = [_currentTouches[0] retain];
+    _oldTouchesUsedInRotateEvent[1] = [_currentTouches[1] retain];
 
     //calc dot product
     double dotProd = (oldV.x*currentV.x) + (oldV.y*currentV.y);
@@ -248,6 +260,26 @@
         angle = -angle;
 
     return angle;
+}
+
+- (BOOL)GetRotationTouchesMovedInOpposition
+{
+    static bool touchesMovedInOpposition = false;
+
+    if (_oldTouchesUsedInRotateEvent[0] == _currentTouches[0] &&
+        _oldTouchesUsedInRotateEvent[1] == _currentTouches[1])
+    {
+        return touchesMovedInOpposition;
+    }
+
+    double xDiff1 = _currentTouches[0].normalizedPosition.x - _oldTouchesUsedInRotateEvent[0].normalizedPosition.x;
+    double xDiff2 = _currentTouches[1].normalizedPosition.x - _oldTouchesUsedInRotateEvent[1].normalizedPosition.x;
+    double yDiff1 = _currentTouches[0].normalizedPosition.y - _oldTouchesUsedInRotateEvent[0].normalizedPosition.y;
+    double yDiff2 = _currentTouches[1].normalizedPosition.y - _oldTouchesUsedInRotateEvent[1].normalizedPosition.y;
+
+    touchesMovedInOpposition = (xDiff1 * xDiff2 < 0) && (yDiff1 * yDiff2 < 0) && (xDiff1 * yDiff1 < 0);
+
+    return touchesMovedInOpposition;
 }
 
 - (BOOL)DoLinesIntersect
@@ -314,6 +346,9 @@
     mp.x = mx; //* deviceSize.width;
     mp.y = my; //* deviceSize.height;
 
+    if(_oldMidPointCoord.x == CGPointZero.x && _oldMidPointCoord.y == CGPointZero.y)
+        _oldMidPointCoord = mp;
+
     return mp;
 }
 
@@ -337,6 +372,9 @@
     CGPoint mp; //mean point
     mp.x = mx; //* deviceSize.width;
     mp.y = my; //* deviceSize.height;
+
+    if(_oldMidPointCoord.x == CGPointZero.x && _oldMidPointCoord.y == CGPointZero.y)
+        _oldMidPointCoord = mp;
 
     return mp;
 }
@@ -418,10 +456,10 @@
     _currentTouches[0] = nil;
     _currentTouches[1] = nil;
 
-    [_oldTouchesUsedInEvent[0] release];
-    [_oldTouchesUsedInEvent[1] release];
-    _oldTouchesUsedInEvent[0] = nil;
-    _oldTouchesUsedInEvent[1] = nil;
+    [_oldTouchesUsedInRotateEvent[0] release];
+    [_oldTouchesUsedInRotateEvent[1] release];
+    _oldTouchesUsedInRotateEvent[0] = nil;
+    _oldTouchesUsedInRotateEvent[1] = nil;
 
 }
 

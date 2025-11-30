@@ -21,7 +21,11 @@ enum wxState
     wxRotationStart    = 3,
     wxRotationMove     = 4,
     wxRotationEnd      = 5,
-    wxMagnifying       = 6
+    wxMagnifying       = 6,
+    //rubber sheet
+    wxRubberSheetStart = 7,
+    wxRubberSheetMove  = 8,
+    wxRubberSheetEnd   = 9
 };
 
 class WXDLLIMPEXP_CORE wxTrackPadState : public wxKeyboardState
@@ -49,7 +53,6 @@ private:
     wxState     m_state;
     wxRealPoint m_ip;    //initial point
     double      m_pinchMagnitude;
-    double      m_touchesSpace; //distance between 2 touches( fingers )
     double      m_angle;        //rotation angle, usualy is used when sending a wxEVT_ROTATE event
 };
 
