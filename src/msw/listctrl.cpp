@@ -3410,6 +3410,14 @@ WXLPARAM HandleItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
     }
 
     wxItemAttr* attr = listctrl->MSWGetItemColumnAttr(pLVCD->nmcd.dwItemSpec, pLVCD->iSubItem);
+
+    pLVCD->clrText = attr && attr->HasTextColour()
+        ? wxColourToRGB(attr->GetTextColour())
+        : wxColourToRGB(listctrl->GetTextColour());
+    pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
+        ? wxColourToRGB(attr->GetBackgroundColour())
+        : wxColourToRGB(listctrl->GetBackgroundColour());
+
     if ( !attr )
     {
         // nothing to do for this item
