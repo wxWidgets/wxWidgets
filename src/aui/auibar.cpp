@@ -1057,7 +1057,8 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
 
 wxSize wxAuiToolBar::DoGetBestSize() const
 {
-    auto bestSize = GetMinSize();
+    auto bestSize = m_orientation == wxHORIZONTAL ? m_horzHintSize
+                                                  : m_vertHintSize;
 
     if ( !bestSize.IsFullySpecified() )
     {
@@ -2003,9 +2004,7 @@ bool wxAuiToolBar::Realize()
         size = m_vertHintSize;
     }
 
-    // Remember our minimum size.
-    m_minWidth = size.x;
-    m_minHeight = size.y;
+    InvalidateBestSize();
 
     // And set control size if we are not forbidden from doing it by the use of
     // a special flag and if it did actually change.
