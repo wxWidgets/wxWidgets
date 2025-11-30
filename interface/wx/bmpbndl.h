@@ -232,7 +232,8 @@ public:
         Create a bundle from bitmaps stored as files.
 
         Looking in @a path for files using @a filename as prefix and potentionally a
-        suffix with scale, e.g. "_2x" or "@2x"
+        suffix with scale, e.g. "_2x" or "@2x". Alternatively, it will look for
+        files with the same filename in a directory "2.0x/" (@since 3.3.2).
 
         @param path     Path of the directory containing the files
         @param filename Bitmap's filename without any scale suffix
