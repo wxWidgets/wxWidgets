@@ -14,13 +14,14 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
     CGFloat _threshold;
     double _pannThreshold;
     double _oldDeltaSizeTouches;
+    CGPoint _oldMidPointCoord;
     NSEvent * _currentTouchEvent;
     NSEvent * _currentGestureEvent;
 
     //Arrays to keep track of touches and identify if they are the same touches during touch events.
     NSTouch *_initialTouches[2];
     NSTouch *_currentTouches[2];
-    NSTouch *_oldTouchesUsedInEvent[2];
+    NSTouch *_oldTouchesUsedInRotateEvent[2];
 
     SEL _beginTrackingAction;
     SEL _updateTrackingAction;
@@ -38,6 +39,8 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 
 // Delta used to compare with pannThreshold
 @property double oldDeltaSizeTouches;
+
+@property CGPoint oldMidPointCoord;
 
 // The location of the cursor in the view's coordinate space when the second touch began.
 @property(readonly) NSPoint initialPoint;
@@ -57,6 +60,7 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 - (NSEvent *) getCurrentGestureEvent;
 + (NSNumber *)absoluteValue:(NSNumber *)input;
 - (double) GetRotationAngle;
+- (BOOL) GetRotationTouchesMovedInOpposition;
 - (BOOL)   DoLinesIntersect;
 + (double) calcPointsDelta:(CGPoint)point1 :(CGPoint)point2;
 + (CGFloat) CGPointCrossProductZComponent:(CGPoint)p1 :(CGPoint)p2;

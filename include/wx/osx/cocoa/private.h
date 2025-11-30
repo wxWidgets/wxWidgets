@@ -171,6 +171,7 @@ public :
     void                InstallEventHandler( WXWidget control = NULL ) wxOVERRIDE;
     bool                EnableTouchEvents(int eventsMask) wxOVERRIDE;
     void                SetTouchEventsStatus(bool status);
+    void                EnableRubberSheet(bool enable, int sensibility);
 
     virtual bool        ShouldHandleKeyNavigation(const wxKeyEvent &event) const;
     bool                DoHandleKeyNavigation(const wxKeyEvent &event);

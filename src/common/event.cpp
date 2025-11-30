@@ -226,6 +226,7 @@ wxDEFINE_EVENT( wxEVT_ROTATE, wxTrackPadEvent );
 wxDEFINE_EVENT( wxEVT_PINCH, wxTrackPadEvent );
 wxDEFINE_EVENT( wxEVT_PAN, wxTrackPadEvent );
 wxDEFINE_EVENT( wxEVT_TAP, wxTrackPadEvent );
+wxDEFINE_EVENT( wxEVT_RUBBER_SHEET, wxTrackPadEvent );
 #endif
 
 // Character input event type

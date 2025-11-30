@@ -21,7 +21,11 @@ enum wxState
     wxRotationStart    = 3,
     wxRotationMove     = 4,
     wxRotationEnd      = 5,
-    wxMagnifying       = 6
+    wxMagnifying       = 6,
+    //rubber sheet
+    wxRubberSheetStart = 7,
+    wxRubberSheetMove  = 8,
+    wxRubberSheetEnd   = 9
 };
 
 class WXDLLIMPEXP_CORE wxTrackPadState : public wxKeyboardState

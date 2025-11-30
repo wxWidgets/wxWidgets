@@ -145,6 +145,7 @@ public:
     virtual WXWidget GetHandle() const wxOVERRIDE;
 
     virtual void EnableTouches(bool enable);
+    virtual void EnableRubberSheet(bool enable, int sensibility = -1);
 
     virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
     virtual bool CanSetTransparent() wxOVERRIDE;

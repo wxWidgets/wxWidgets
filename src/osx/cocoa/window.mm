@@ -166,30 +166,49 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     //Te gesture source of scroll from Magic Mouse can't be determined in another way.
     //See: http://stackoverflow.com/questions/13807616/mac-cocoa-how-to-differentiate-if-a-nsscrollwheel-event-is-from-a-mouse-or-trac
     //panning states
-    wxState         _panningStatus;
-    wxState         _rotateStatus;
-    wxState         _magnifyStatus;
-    double _currentFingersSize;
-    double _previousFingersSize;
-
+    wxState _panningStatus;
+    wxState _rotateStatus;
+    wxState _magnifyStatus;
+    wxState _rubberSheetStatus;
+    double  _currentFingersSize;
+    double  _previousFingersSize;
+    bool    _isRubberSheet;
+    int     _rubberSheetSensibility;        // rubbersheet actions threshold modifier.
+    double  _rubberSheetLastSentTime;       // last time a rubbersheet event has been dispatched for processing.
+    double  _rubberSheetAngleThreshold;     // real time rubbersheet rotate threshold.
+    double  _rubberSheetPanThreshold;       // real time rubbersheet pan threshold.
+    double  _rubberSheetPinchThreshold;     // real time rubbersheet pinch threshold.
 }
 
 @property BOOL isTouch;
 
 @end // wxNSView
 
-static const long long _sendTimeLimit              = 20000; //microseconds
-static const double    _panEventExpireThreshold    = 0.000800; //if pan event is handle to late then skip it
-static const double    _rotationScaleFactor        = -0.025;
+static const double     _pinchDeltaLimit                = 0.010000; // delta dist. between fingers for which to send pinch event.
+static const double     _panEventExpireThreshold        = 0.000800; // if pan event is handle to late then skip it.
+static const double     _rotationScaleFactor            = -0.025;   //
+static const double     _rubberSheetPinchScaleFactor    = 2;        // rubbersheet pinch action scale factor.
+static const double     _rubberSheetSendThreshold       = 0.01;     // rubbersheet send event timeframe - seconds.
+static const double     _basicRSPanThreshold            = 0.004;    // rubbersheet base threshold for pan action.
+static const double     _basicRSPinchThreshold          = 0.008;    // rubbersheet base threshold for pinch action.
+static const double     _basicRSRotateThreshold         = 0.005;    // rubbersheet base threshold for rotate action.
+static const int        _defaultSensibility             = 5;        // rubbersheet actions threshold modifier.
+static const int        _maxSensibility                 = 10;       // maximum allowed rubbersheet activation sensibility.
 
 @interface wxNSView(TouchPadGestures)
 @end
 
 //constants
-static const int       _recognitionSteps          = 4;
-static const long long _sendTimeLimit             = 20000; //microseconds
-static const double    _pinchDeltaLimit           = 0.001500; //delta dist. between fingers for which to send pinch event
-static const double    _touchEventExpireThreshold = 0.000800; //if touch event is handle to late then skip it
+static const double     _pinchDeltaLimit                = 0.010000; // delta dist. between fingers for which to send pinch event.
+static const double     _panEventExpireThreshold        = 0.000800; // if pan event is handle to late then skip it.
+static const double     _rotationScaleFactor            = -0.025;   //
+static const double     _rubberSheetPinchScaleFactor    = 2;        // rubbersheet pinch action scale factor.
+static const double     _rubberSheetSendThreshold       = 0.01;     // rubbersheet send event timeframe - seconds.
+static const double     _basicRSPanThreshold            = 0.004;    // rubbersheet base threshold for pan action.
+static const double     _basicRSPinchThreshold          = 0.008;    // rubbersheet base threshold for pinch action.
+static const double     _basicRSRotateThreshold         = 0.005;    // rubbersheet base threshold for rotate action.
+static const int        _defaultSensibility             = 5;        // rubbersheet actions threshold modifier.
+static const int        _maxSensibility                 = 10;       // maximum allowed rubbersheet activation sensibility.
 
 @interface wxNSView(TextInput) <NSTextInputClient>
 
@@ -224,8 +243,8 @@ static const double    _touchEventExpireThreshold = 0.000800; //if touch event i
     [touchTracker release];
 }
 
-+ (long long) sendTimeLimit{
-    return _sendTimeLimit;
++ (double) pinchDeltaLimit{
+    return _pinchDeltaLimit;
 }
 
 + (double) panEventExpireThreshold{
@@ -236,9 +255,28 @@ static const double    _touchEventExpireThreshold = 0.000800; //if touch event i
     return _rotationScaleFactor;
 }
 
++ (double) rubberSheetSendThreshold{
+    return _rubberSheetSendThreshold;
+}
+
 - (void)acceptTouchEvents:(BOOL)status
 {
     [self setAcceptsTouchEvents:status];
+}
+
+- (void)enableRubberSheet:(bool)enable
+{
+    _isRubberSheet = enable;
+}
+
+-(void)setRubberSheetSensibility:(int)sensibility
+{
+    sensibility = _maxSensibility - sensibility;
+
+    if(sensibility < 0 || sensibility > _maxSensibility)
+        sensibility = _defaultSensibility;
+
+    _rubberSheetSensibility = sensibility;
 }
 
 - (void)endGestures
@@ -274,8 +312,145 @@ static const double    _touchEventExpireThreshold = 0.000800; //if touch event i
 
     CGPoint trackerLocation = NSPointToCGPoint(tracker.initialPoint);
     //we can manage which type of tracking we are performing by simply changing the tracking action methods.
-    tracker.updateTrackingAction = @selector(dualTouchesMoved:);
+    if(_isRubberSheet)
+    {
+        tracker.updateTrackingAction = @selector(dualTouchesMovedRubberSheet:);
+        _rubberSheetLastSentTime = [[NSProcessInfo processInfo] systemUptime];
+
+        _rubberSheetPanThreshold = _basicRSPanThreshold * _rubberSheetSensibility / _defaultSensibility;
+        _rubberSheetPinchThreshold = _basicRSPinchThreshold * _rubberSheetSensibility / _defaultSensibility;
+        _rubberSheetAngleThreshold = _basicRSRotateThreshold * _rubberSheetSensibility / _defaultSensibility;
+    }
+    else
+    {
+        tracker.updateTrackingAction = @selector(dualTouchesMoved:);
+    }
+
     tracker.endTrackingAction = @selector(dualTouchesEnded:);
+}
+
+// rubber sheet
+//
+- (void)dualTouchesMovedRubberSheet:(DualTouchTracker*)tracker
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (!impl)
+        return;
+
+    NSTimeInterval currentTime = [[NSProcessInfo processInfo] systemUptime];
+
+    if((currentTime - _rubberSheetLastSentTime) > [wxNSView rubberSheetSendThreshold])
+    {
+        wxTrackPadEvent tpevent(wxEVT_RUBBER_SHEET);
+
+        bool oppositeDirection = [tracker GetRotationTouchesMovedInOpposition];
+        bool shiftDown = tracker.modifiers & NSShiftKeyMask;
+
+        // pinch data
+        //
+        double deltaTouches = tracker.deltaSizeOfCurrentTouches;
+        double deltaMove    = deltaTouches - tracker.oldDeltaSizeTouches;
+
+        if(_magnifyStatus == wxNoState)
+        {
+            if(std::abs(deltaMove) > _rubberSheetPinchThreshold && !oppositeDirection)
+            {
+                _magnifyStatus = wxRubberSheetMove;
+
+                if (_panningStatus == wxNoState &&
+                    _rotateStatus == wxNoState)
+                {
+                    _rubberSheetPanThreshold += _rubberSheetPanThreshold / 2;
+                }
+            }
+        }
+        else
+        {
+            double deltaMv = deltaMove * _rubberSheetPinchScaleFactor + 1;
+            tpevent.SetPinchMagnitude(deltaMv);
+        }
+
+        // pan data
+        //
+        CGPoint midPointCoord = tracker.midPointCoordOfCurrentTouches;
+
+        if(_panningStatus == wxNoState && _rubberSheetStatus != wxNoState && !shiftDown)
+        {
+            double xDist = midPointCoord.x - tracker.oldMidPointCoord.x;
+            double yDist = midPointCoord.y - tracker.oldMidPointCoord.y;
+            double panDist = std::sqrt(xDist * xDist + yDist * yDist);
+
+            if(panDist > _rubberSheetPanThreshold && !oppositeDirection)
+            {
+                _panningStatus = wxRubberSheetMove;
+
+                if(_rotateStatus == wxNoState &&
+                   _magnifyStatus == wxNoState)
+                {
+                    _rubberSheetPinchThreshold += _rubberSheetPinchThreshold / 2;
+                }
+            }
+        }
+        else
+        {
+            CGPoint meanPoint = midPointCoord;
+            meanPoint.x *= self.frame.size.width;
+
+            // because the origin of trackpad starts from bottom-left point
+            // and the frame origin is top-left we have to adapt to frame origin adapt y
+            //
+            meanPoint.y *= self.frame.size.height;
+            meanPoint.y = self.frame.size.height - meanPoint.y;
+            tpevent.SetPosition(wxRealPoint(meanPoint.x, meanPoint.y));
+        }
+
+        // rotate data
+        //
+        double angle = [tracker GetRotationAngle];
+
+        if(_rotateStatus == wxNoState)
+        {
+            if((std::abs(angle) > _rubberSheetAngleThreshold / deltaTouches) && oppositeDirection)
+            {
+                _rotateStatus = wxRubberSheetMove;
+
+                if(_panningStatus == wxNoState &&
+                   _magnifyStatus == wxNoState)
+                {
+                    _rubberSheetPanThreshold += _rubberSheetPanThreshold / 2;
+                    _rubberSheetPinchThreshold += _rubberSheetPinchThreshold / 2;
+                }
+            }
+        }
+        else
+            tpevent.SetAngle(angle);
+
+        if(_rubberSheetStatus == wxNoState)
+        {
+            _rubberSheetStatus = wxRubberSheetStart;
+            tpevent.SetState(_rubberSheetStatus);
+        }
+        else
+        {
+            _rubberSheetStatus = wxRubberSheetMove;
+            tpevent.SetState(_rubberSheetStatus);
+        }
+
+        if(_rotateStatus != wxNoState ||
+           _panningStatus != wxNoState ||
+           _magnifyStatus != wxNoState ||
+           _rubberSheetStatus == wxRubberSheetStart ||
+           shiftDown)
+        {
+            NSEvent *event = tracker.getCurrentTouchEvent;
+
+            impl->trackpadEvent(tpevent, event, self, _cmd);
+        }
+
+        tracker.oldMidPointCoord = midPointCoord;
+        tracker.oldDeltaSizeTouches = deltaTouches;
+        _rubberSheetLastSentTime = [[NSProcessInfo processInfo] systemUptime];
+    }
 }
 
 - (void)dualTouchesMoved:(DualTouchTracker*)tracker
@@ -285,7 +460,7 @@ static const double    _touchEventExpireThreshold = 0.000800; //if touch event i
 
 - (void)dualTouchPan:(NSEvent*)event
 {
-    if(_rotateStatus == wxNoState && _magnifyStatus == wxNoState)
+    if(_rotateStatus == wxNoState && _magnifyStatus == wxNoState && !_isRubberSheet)
     {
         wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
 
@@ -341,6 +516,20 @@ static const double    _touchEventExpireThreshold = 0.000800; //if touch event i
 //handling gesture events for rotation and pinch
 - (void)dualGestureRotate:(DualTouchTracker*)tracker
 {
+    if(_isRubberSheet)
+    {
+        if(_rubberSheetStatus == wxRubberSheetMove &&
+           _rotateStatus == wxNoState &&
+           _magnifyStatus == wxNoState)
+        {
+            _rotateStatus = wxRubberSheetMove;
+
+            _rubberSheetPanThreshold += _rubberSheetPanThreshold / 2;
+            _rubberSheetPinchThreshold += _rubberSheetPinchThreshold / 2;
+        }
+        return;
+    }
+
     NSEvent * event = tracker.getCurrentGestureEvent;
     wxWidgetCocoaImpl* impl = nullptr;
 
@@ -443,6 +632,9 @@ static const double    _touchEventExpireThreshold = 0.000800; //if touch event i
 
 - (void)dualGestureMagnify:(DualTouchTracker*)tracker
 {
+    if(_isRubberSheet)
+        return;
+
     wxWidgetCocoaImpl* impl = nullptr;
     NSEvent * event = tracker.getCurrentGestureEvent;
     switch ([event phase])
@@ -503,17 +695,6 @@ static const double    _touchEventExpireThreshold = 0.000800; //if touch event i
 }
 //end gestures
 
-- (BOOL)canSendEvent:(NSEvent*)event :(double)threshold{
-
-    NSTimeInterval systemUptime = [[NSProcessInfo processInfo] systemUptime];
-    NSTimeInterval eventTime = [event timestamp];
-
-    if((systemUptime - eventTime) > threshold)
-        return FALSE;
-
-    return TRUE;
-}
-
 - (void)dualTouchesEnded:(DualTouchTracker*)tracker {
 
     tracker.updateTrackingAction = nil;
@@ -521,6 +702,19 @@ static const double    _touchEventExpireThreshold = 0.000800; //if touch event i
     tracker.oldDeltaSizeTouches  = 0;
     [self enableTrackers];
 
+    if(_rubberSheetStatus != wxNoState)
+    {
+        _rubberSheetStatus = wxNoState;
+        _panningStatus = wxNoState;
+        _rotateStatus = wxNoState;
+        _magnifyStatus = wxNoState;
+
+        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+        NSEvent * event = tracker.getCurrentTouchEvent;
+        wxTrackPadEvent tpevent(wxEVT_RUBBER_SHEET);
+        tpevent.SetState(wxRubberSheetEnd);
+        impl->trackpadEvent(tpevent, event, self, _cmd);
+    }
 }
 
 - (void)enableTrackers {
@@ -1261,12 +1455,19 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     [super initWithFrame:rectBox];
     [self _initTrackers];
     [self acceptTouchEvents:NO];
-    _isTouch              = FALSE;
-    _currentFingersSize   = 0;
-    _previousFingersSize  = 0;
-    _panningStatus        = wxNoState;
-    _rotateStatus         = wxNoState;
-    _magnifyStatus        = wxNoState;
+    _isTouch                    = FALSE;
+    _isRubberSheet              = false;
+    _rubberSheetSensibility     = 5;
+    _rubberSheetLastSentTime    = 0;
+    _rubberSheetAngleThreshold  = 0;
+    _rubberSheetPanThreshold    = 0;
+    _rubberSheetPinchThreshold  = 0;
+    _currentFingersSize         = 0;
+    _previousFingersSize        = 0;
+    _panningStatus              = wxNoState;
+    _rotateStatus               = wxNoState;
+    _magnifyStatus              = wxNoState;
+    _rubberSheetStatus          = wxNoState;
     return self;
 }
 
@@ -1910,6 +2111,16 @@ void wxWidgetCocoaImpl::SetTouchEventsStatus(bool status)
     else
         return;
     [casted_osxView acceptTouchEvents:status];
+}
+
+void wxWidgetCocoaImpl::EnableRubberSheet(bool enable, int sensibility)
+{
+    wxNSView * casted_osxView;
+    if ([m_osxView isKindOfClass:[wxNSView class]])
+        casted_osxView = (wxNSView *)m_osxView;
+    else
+        return;
+    [casted_osxView setRubberSheetSensibility:sensibility];
 }
 
 void wxWidgetCocoaImpl::trackpadEvent(wxTrackPadEvent wxEvent, WX_NSEvent nsEvent, WXWidget slf, void *_cmd)

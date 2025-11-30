@@ -770,6 +770,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_ROTATE, wxTrackPadEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PINCH, wxTrackPadEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_PAN, wxTrackPadEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TAP, wxTrackPadEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_RUBBER_SHEET, wxTrackPadEvent);
 #endif
 
     // Character input event type
@@ -4622,6 +4623,7 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
 #define EVT_PINCH(func) wx__DECLARE_EVT0(wxEVT_PINCH, wxTrackPadEventHandler(func))
 #define EVT_PAN(func) wx__DECLARE_EVT0(wxEVT_PAN, wxTrackPadEventHandler(func))
 #define EVT_TAP(func) wx__DECLARE_EVT0(wxEVT_TAP, wxTrackPadEventHandler(func))
+#define EVT_RUBBER_SHEET(func) wx__DECLARE_EVT0(wxEVT_RUBBER_SHEET, wxTrackPadEventHandler(func))
 #endif
 
 // All trackpad events
@@ -4629,6 +4631,7 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
         EVT_PINCH(func) \
         EVT_PAN(func) \
         EVT_ROTATE \
+        EVT_RUBBER_SHEET \
 
 // Mouse events
 #define EVT_LEFT_DOWN(func) wx__DECLARE_EVT0(wxEVT_LEFT_DOWN, wxMouseEventHandler(func))
