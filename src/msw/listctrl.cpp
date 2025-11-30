@@ -3250,6 +3250,8 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
     if ( nmcd.uItemState & CDIS_FOCUS )
     {
         RECT rc = GetCustomDrawnItemRect(nmcd);
+        // subtract 2px so the right border is visible
+        rc.right -= 2;
 
         ::DrawFocusRect(nmcd.hdc, &rc);
     }
