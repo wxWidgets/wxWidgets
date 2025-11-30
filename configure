@@ -15575,7 +15575,7 @@ case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
         fi
 
         if test "$wxUSE_LUNASVG" = "yes"; then
-            as_fn_error $? "Using LunaSVG requires C++17 or later, use --with-cxx=17 or --with-cxx=20." "$LINENO" 5
+            as_fn_error $? "Using LunaSVG requires C++17 or later" "$LINENO" 5
         fi
 
           ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
