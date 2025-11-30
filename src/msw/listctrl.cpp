@@ -707,6 +707,8 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
 
         delete m_headerCustomDraw;
         m_headerCustomDraw = nullptr;
+
+        MSWInitHeader();
     }
     else // We do have custom attributes.
     {
