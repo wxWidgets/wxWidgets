@@ -533,6 +533,10 @@ extern int wxOSXGetIdFromSelector(SEL action );
         // See windowDidResignKey: -- we emulate corresponding focus set
         // event for the first responder here as well:
         NSResponder *firstResponder = [window firstResponder];
+        if ([firstResponder respondsToSelector:@selector(endGestures)])
+        {
+            [firstResponder endGestures];
+        }
         wxWidgetCocoaImpl *focused = firstResponder
                 ? (wxWidgetCocoaImpl*)wxWidgetImpl::FindFromWXWidget(wxOSXGetViewFromResponder(firstResponder))
                 : NULL;

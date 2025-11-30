@@ -3,7 +3,6 @@
 
 @interface DualTouchTracker()
   @property BOOL isTracking;
-  @property BOOL dualTapDownWasSent;
   @property(readwrite) NSPoint initialPoint;
   @property(readwrite) NSUInteger modifiers;
   - (void)releaseTouches;
@@ -21,7 +20,6 @@
         self.threshold = 1;
         self.pannThreshold = 0.0014;
         self.oldDeltaSizeTouches = 0;
-        self.dualTapDownWasSent = FALSE;
     }
     
     return self;
@@ -52,9 +50,7 @@
         _oldTouchesUsedInEvent[0] = [ _currentTouches[0] retain];
         _oldTouchesUsedInEvent[1] = [ _currentTouches[1] retain];
 
-        _currentEvent = [event retain];
-
-        [self sendDualTapDown];
+        _currentTouchEvent = [event retain];
 
     } else if (touches.count > 2) {
         // More than 2 touches. Only track 2.
@@ -78,7 +74,7 @@
         NSArray *array = [touches allObjects];
         [_currentTouches[0] release];
         [_currentTouches[1] release];
-        [_currentEvent release];
+        [_currentTouchEvent release];
         
         NSTouch *touch;
         touch = [array objectAtIndex:0];
@@ -94,7 +90,7 @@
         } else {
             _currentTouches[1] = [touch retain];
         }
-        _currentEvent = [event retain];
+        _currentTouchEvent = [event retain];
         
         if (!self.isTracking)
         {
@@ -117,12 +113,10 @@
     if (!self.isEnabled) return;
     
     self.modifiers = [event modifierFlags];
-    [self sendDualTapUp];
     [self cancelTracking];
 }
 
 - (void)touchesCancelledWithEvent:(NSEvent *)event {
-    [self sendDualTapUp];
     [self cancelTracking];
 }
 
@@ -135,17 +129,30 @@
     }
 }
 
-- (void)sendDualTapDown {
-    if (self.dualTapDownAction) {
-        [NSApp sendAction:self.dualTapDownAction to:self.view from:self];
-        self.dualTapDownWasSent = TRUE;
+- (void)magnifyWithEvent:(NSEvent *)event
+{
+    if (self.magnifyAction)
+    {
+        _currentGestureEvent = [event retain];
+        [NSApp sendAction:self.magnifyAction to:self.view from:self];
     }
 }
 
-- (void)sendDualTapUp {
-    if (self.dualTapDownWasSent) {
-        if (self.dualTapUpAction) [NSApp sendAction:self.dualTapUpAction to:self.view from:self];
-        self.dualTapDownWasSent = FALSE;
+- (void)rotateWithEvent:(NSEvent *)event
+{
+    if (self.rotateAction)
+    {
+        _currentGestureEvent = [event retain];
+        [NSApp sendAction:self.rotateAction to:self.view from:self];
+    }
+}
+
+- (void)smartMagnifyWithEvent:(NSEvent *)event
+{
+    if (self.doubleTapAction)
+    {
+        _currentGestureEvent = [event retain];
+        [NSApp sendAction:self.doubleTapAction to:self.view from:self];
     }
 }
 
@@ -160,9 +167,16 @@
 @synthesize beginTrackingAction = _beginTrackingAction;
 @synthesize updateTrackingAction = _updateTrackingAction;
 @synthesize endTrackingAction = _endTrackingAction;
+@synthesize rotateAction = _rotateAction;
+@synthesize magnifyAction = _magnifyAction;
+@synthesize doubleTapAction = _doubleTapAction;
 
-- (NSEvent *) getCurrentEvent{
-    return _currentEvent;
+- (NSEvent *) getCurrentTouchEvent{
+    return _currentTouchEvent;
+}
+
+- (NSEvent *) getCurrentGestureEvent{
+    return _currentGestureEvent;
 }
 
 - (NSPoint)deltaOrigin {
@@ -406,8 +420,8 @@
 }
 
 - (void)releaseEvent {
-    [_currentEvent release];
-    _currentEvent = nil;
+    [_currentTouchEvent release];
+    _currentTouchEvent = nil;
 }
 
 @end // end DualTouchTracker implementation

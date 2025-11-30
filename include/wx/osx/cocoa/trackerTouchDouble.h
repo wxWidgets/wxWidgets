@@ -14,19 +14,20 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
     CGFloat _threshold;
     double _pannThreshold;
     double _oldDeltaSizeTouches;
-    NSEvent * _currentEvent;
-    
+    NSEvent * _currentTouchEvent;
+    NSEvent * _currentGestureEvent;
+
     //Arrays to keep track of touches and identify if they are the same touches during touch events.
     NSTouch *_initialTouches[2];
     NSTouch *_currentTouches[2];
     NSTouch *_oldTouchesUsedInEvent[2];
 
-    SEL _dualTapDownAction;
-    SEL _dualTapUpAction;
-
     SEL _beginTrackingAction;
     SEL _updateTrackingAction;
     SEL _endTrackingAction;
+    SEL _rotateAction;
+    SEL _magnifyAction;
+    SEL _doubleTapAction;
 }
 
 // The amount of dual touch movement before tracking begins. This value is in points (72ppi). Defaults to 1.
@@ -52,7 +53,8 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 @property(readonly) CGPoint midPointCoordOfInitialTouches;
 
 // Get the current NSEvent for attributes
-- (NSEvent *) getCurrentEvent;
+- (NSEvent *) getCurrentTouchEvent;
+- (NSEvent *) getCurrentGestureEvent;
 + (NSNumber *)absoluteValue:(NSNumber *)input;
 - (double) GetRotationAngle;
 - (BOOL)   DoLinesIntersect;
@@ -68,10 +70,13 @@ const TLine TLineZero = (TLine){(CGPoint){0.0, 0.0}, (CGPoint){0.0, 0.0}};
 @property SEL dualTapDownAction;
 @property SEL dualTapUpAction;
 
-// The following three properties hold the tracking callbacks on the view. Each method should have one paramenter (DragTracker *) and a void return.
+// The following properties hold the tracking callbacks on the view. Each method should have one paramenter (DragTracker *) and a void return.
 @property SEL doubleTapVerificationAction;
 @property SEL beginTrackingAction;
 @property SEL updateTrackingAction;
 @property SEL endTrackingAction;
+@property SEL rotateAction;
+@property SEL magnifyAction;
+@property SEL doubleTapAction;
 
 @end

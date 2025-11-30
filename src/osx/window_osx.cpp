@@ -280,7 +280,7 @@ WXWidget wxWindowMac::GetHandle() const
 void wxWindowMac::EnableTouches(bool enable)
 {
     //Enable receiving of touch events
-    GetPeer()->SetTouchEventsStatus(true);
+    GetPeer()->SetTouchEventsStatus(enable);
 }
 
 wxOSXWidgetImpl* wxWindowMac::GetPeer() const 

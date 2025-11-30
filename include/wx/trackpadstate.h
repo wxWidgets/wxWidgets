@@ -21,6 +21,7 @@ enum wxState
     wxRotationStart    = 3,
     wxRotationMove     = 4,
     wxRotationEnd      = 5,
+    wxMagnifying       = 6
 };
 
 class WXDLLIMPEXP_CORE wxTrackPadState : public wxKeyboardState
@@ -28,7 +29,7 @@ class WXDLLIMPEXP_CORE wxTrackPadState : public wxKeyboardState
 public:
     wxTrackPadState() : m_state(wxNoState),
                         m_ip(),
-                        m_touchesSpace(0),
+                        m_pinchMagnitude(0),
                         m_angle(0)
     { }
 
@@ -36,17 +37,18 @@ public:
     //Maybe using a map, or array of touches!?
     void SetAngle(double newAngle)               { m_angle = newAngle; }
     void SetPosition(wxRealPoint ip)             { m_ip = ip; }
-    void SetTouchesDist(double new_dist)         { m_touchesSpace = new_dist; }
+    void SetPinchMagnitude(double magnitude)         { m_pinchMagnitude = magnitude; }
     void SetState(wxState newState)              { m_state = newState; }
 
     wxRealPoint GetPosition() const { return m_ip; }
     wxState GetState()        const { return m_state; }
-    double GetTouchesDist()   const { return m_touchesSpace; }
+    double GetPinchMagnitude()   const { return m_pinchMagnitude; }
     double GetAngle()         const { return m_angle; }
 
 private:
     wxState     m_state;
     wxRealPoint m_ip;    //initial point
+    double      m_pinchMagnitude;
     double      m_touchesSpace; //distance between 2 touches( fingers )
     double      m_angle;        //rotation angle, usualy is used when sending a wxEVT_ROTATE event
 };
