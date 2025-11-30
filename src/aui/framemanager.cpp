@@ -404,6 +404,21 @@ public:
         m_needsRealize = true;
     }
 
+    void RemovePane(wxAuiPaneInfo& paneInfo)
+    {
+        for (auto const& kv : m_panes)
+        {
+            if ( kv.second == &paneInfo )
+            {
+                DeleteTool(kv.first);
+                m_panes.erase(kv.first);
+                break;
+            }
+        }
+
+        m_needsRealize = true;
+    }
+
     bool RealizeIfNeeded()
     {
         if ( !m_needsRealize )
@@ -3996,9 +4011,12 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
         if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
             pane.frame->SetTransparent(255);
     }
-    else if (m_hasMaximized)
+    else // it is docked
     {
-        RestoreMaximizedPane();
+        if (m_hasMaximized)
+            RestoreMaximizedPane();
+
+        AddPaneToMinDockIfNecessary(pane);
     }
 
     Update();
@@ -4843,6 +4861,20 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     // float the window
                     if (paneInfo->IsMaximized())
                         RestorePane(*paneInfo);
+
+                    // Remove the button corresponding to this pane from the
+                    // min dock if it's shown there, it doesn't make sense to
+                    // keep it for a floating pane.
+                    if (paneInfo->HasMinimizeButton())
+                    {
+                        auto const minDir = GetMinDockDirectionFor(paneInfo->dock_direction);
+                        if(minDir != wxAUI_DOCK_NONE)
+                        {
+                            if(auto const minDock = GetMinDockInDirection(minDir))
+                                minDock->RemovePane(*paneInfo);
+                        }
+                    }
+
                     paneInfo->Float();
                     Update();
 
@@ -4890,6 +4922,8 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
         pane.SetFlag(wxAuiPaneInfo::actionPane, true);
 
+        auto const dockDirectionOld = pane.dock_direction;
+
         wxPoint point = event.GetPosition();
         DoDrop(m_docks, m_panes, pane, point, m_actionOffset);
 
@@ -4900,6 +4934,31 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             wxPoint pt = m_frame->ClientToScreen(event.GetPosition());
             pane.floating_pos = wxPoint(pt.x - m_actionOffset.x,
                                         pt.y - m_actionOffset.y);
+        }
+        else // the pane is still docked
+        {
+            // Check if it's minimized direction has changed.
+            if (pane.HasMinimizeButton()
+                && pane.dock_direction != dockDirectionOld)
+            {
+                // The dock into which the pane is minimized may remain the
+                // same even if the docking direction has changed, e.g. if
+                // there is just one dock showing minimized panes, it will
+                // always remain the same.
+                auto const
+                    minDockOld = GetMinDockDirectionFor(dockDirectionOld);
+                auto const
+                    minDockNew = GetMinDockDirectionFor(pane.dock_direction);
+
+                if (minDockOld != minDockNew)
+                {
+                    if (auto const dockOld = GetMinDockInDirection(minDockOld))
+                        dockOld->RemovePane(pane);
+
+                    if (auto const dockNew = GetMinDockInDirection(minDockNew))
+                        dockNew->AddPane(pane);
+                }
+            }
         }
 
         // this will do the actual move operation;
