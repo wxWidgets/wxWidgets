@@ -250,7 +250,12 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
 #endif
 
     m_textCtrl   = new wxSpinCtrlTextGeneric(this, DoValueToText(m_value), style);
+    // see comment on style above: the border should be around the text control,
+    // not around the spin button
+    style = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
     m_spinButton = new wxSpinCtrlButtonGeneric(this, style);
+    // ensre correct start value also if non-zero
+    m_spinButton->SetValue( m_value );
 
 #if wxUSE_TOOLTIPS
     m_textCtrl->SetToolTip(GetToolTipText());
