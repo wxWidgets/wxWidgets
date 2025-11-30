@@ -1117,6 +1117,7 @@ with_libnotify
 with_opengl
 with_xtest
 with_nanosvg
+with_lunasvg
 with_cairo
 with_dmalloc
 with_sdl
@@ -2403,6 +2404,7 @@ Optional Packages:
   --with-opengl           use OpenGL (or Mesa)
   --with-xtest            use XTest extension
   --with-nanosvg          use NanoSVG for rasterizing SVG
+  --with-lunasvg          use LunaSVG for rasterizing SVG
   --with-cairo            use Cairo-based wxGraphicsContext implementation
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-sdl              use SDL for audio on Unix
@@ -4081,6 +4083,7 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
+DEFAULT_wxUSE_LUNASVG=no
 
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_UNICODE_UTF8=no
@@ -5195,6 +5198,35 @@ fi
 
 
           eval "$wx_cv_use_nanosvg"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-lunasvg was given.
+if test "${with_lunasvg+set}" = set; then :
+  withval=$with_lunasvg;
+                        if test "$withval" = yes; then
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=yes'
+                        else
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=no'
+                        fi
+
+else
+
+                        wx_cv_use_lunasvg='wxUSE_LUNASVG=${'DEFAULT_wxUSE_LUNASVG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_lunasvg"
 
 
 if test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
@@ -15540,6 +15572,10 @@ case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
             as_fn_error $? "Using wxWebView Chromium backend requires C++14 or later." "$LINENO" 5
         fi
 
+        if test "$wxUSE_LUNASVG" = "yes"; then
+            as_fn_error $? "Using LunaSVG requires C++17 or later, use --with-cxx=17 or --with-cxx=20." "$LINENO" 5
+        fi
+
           ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -16534,6 +16570,10 @@ $as_echo "#define HAVE_CXX11 1" >>confdefs.h
         ;;
 
     14)
+        if test "$wxUSE_LUNASVG" = "yes"; then
+            as_fn_error $? "Using LunaSVG requires C++17 or later, use --with-cxx=17 or --with-cxx=20." "$LINENO" 5
+        fi
+
           ax_cxx_compile_alternatives="14 1y"    ax_cxx_compile_cxx14_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -27454,6 +27494,12 @@ fi
 
 if test "$wxUSE_NANOSVG" = "yes"; then
     $as_echo "#define wxUSE_NANOSVG 1" >>confdefs.h
+
+fi
+
+
+if test "$wxUSE_LUNASVG" = "yes"; then
+    $as_echo "#define wxUSE_LUNASVG 1" >>confdefs.h
 
 fi
 
@@ -39893,6 +39939,22 @@ fi
      COND_PYTHON="#"
    fi
 
+fi
+
+USE_LUNASVG=0
+if test "$wxUSE_LUNASVG" = "yes"; then
+   if ! test -f "$srcdir/3rdparty/lunasvg/include/lunasvg.h" ; then
+       as_fn_error $? "
+   The required lunasvg header was not found. You probably need to run
+
+       git submodule update --init 3rdparty/lunasvg
+
+   to fix this." "$LINENO" 5
+   fi
+
+   $as_echo "#define wxUSE_LUNASVG 1" >>confdefs.h
+
+   USE_LUNASVG=1
 fi
 
 if test "$wxUSE_MENUS" = "yes"; then
