@@ -6570,6 +6570,12 @@ wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
     return eventType;
 }
 
+// Bricsys added
+bool wxWindowGTK::HasTopLevelFocus()
+{
+    return gtk_window_has_toplevel_focus(GTK_WINDOW(m_widget));
+}
+
 void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
