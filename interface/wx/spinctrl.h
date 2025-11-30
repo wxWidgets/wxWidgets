@@ -238,7 +238,7 @@ public:
 
         @since 3.1.6
     */
-    void SetIncrement(int value);
+    void SetIncrement(int inc);
 };
 
 /**
