@@ -2759,6 +2759,21 @@ void wxGridWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 
 void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
+    if ( UsesOverlaySelection() && IsSelection() )
+    {
+        wxRect r; // dummy renderExtent
+        wxRect oldSel = m_selection->GetSelectionShape(r).GetBoundingBox();
+        if ( !oldSel.IsEmpty() )
+        {
+            // Refresh the previous selection shape before invalidating it,
+            // because otherwise some areas might not be updated while
+            // drag-selecting the grid.
+            RefreshRect(&oldSel);
+        }
+
+        m_selection->InvalidateSelectionShape();
+    }
+
     // We must explicitly call wxWindow version to avoid infinite recursion as
     // wxGridWindow::ScrollWindow() calls this method back.
     m_gridWin->wxWindow::ScrollWindow( dx, dy, rect );
@@ -2770,8 +2785,6 @@ void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
 
     m_rowLabelWin->ScrollWindow( 0, dy, rect );
     m_colLabelWin->ScrollWindow( dx, 0, rect );
-
-    InvalidateOverlaySelection();
 }
 
 void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
