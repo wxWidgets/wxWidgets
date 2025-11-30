@@ -126,6 +126,7 @@ class wxAuiPaneInfo;
 class wxAuiDockInfo;
 class wxAuiDockArt;
 class wxAuiManagerEvent;
+class wxAuiMinDock;
 class wxAuiSerializer;
 class wxAuiDeserializer;
 
@@ -439,6 +440,11 @@ public:
     void SetArtProvider(wxAuiDockArt* artProvider);
     wxAuiDockArt* GetArtProvider() const;
 
+    // Change the sides where docks for minimized panes can be created.
+    // Must include one or more of wxLEFT, wxRIGHT, wxTOP, wxBOTTOM and must
+    // currently be called before there any minimized panes.
+    void AllowDocksForMinPanes(int directions);
+
     wxAuiPaneInfo& GetPane(wxWindow* window);
     wxAuiPaneInfo& GetPane(const wxString& name);
     const wxAuiPaneInfoArray& GetAllPanes() const { return m_panes; }
@@ -481,6 +487,7 @@ public:
     void GetDockSizeConstraint(double* widthPct, double* heightPct) const;
 
     void ClosePane(wxAuiPaneInfo& paneInfo);
+    void MinimizePane(wxAuiPaneInfo& paneInfo);
     void MaximizePane(wxAuiPaneInfo& paneInfo);
     void RestorePane(wxAuiPaneInfo& paneInfo);
     void RestoreMaximizedPane();
@@ -657,9 +664,40 @@ private:
     // m_actionPart. If m_actionPart is null, returns wxNOT_FOUND.
     int GetActionPartIndex() const;
 
+    // Get direction to use for minimizing the given pane docking direction.
+    //
+    // The returned value is one of 4 wxAUI_DOCK_{TOP,RIGHT,BOTTOM,LEFT} values
+    // but may be wxAUI_DOCK_NONE if paneDirection is wxAUI_DOCK_CENTER or
+    // invalid.
+    wxAuiManagerDock GetMinDockDirectionFor(int paneDirection) const;
+
+    // Get reference to the minimized dock for the given direction, which must
+    // be valid, i.e. not wxAUI_DOCK_NONE and not wxAUI_DOCK_CENTER.
+    wxAuiMinDock*& GetMinDockInDirection(wxAuiManagerDock direction);
+
+    // If the pane can be minimized and if the docking toolbar into which it
+    // would minimize is shown, add it to it.
+    void AddPaneToMinDockIfNecessary(wxAuiPaneInfo& paneInfo);
+
+
+    // Common part of ClosePane() and MinimizePane(): hide the pane window.
+    void DoHidePaneWindow(wxAuiPaneInfo& paneInfo);
+
+
     // This flag is set to true if Update() is called while the window is
     // minimized, in which case we postpone updating it until it is restored.
     bool m_updateOnRestore = false;
+
+    // Toolbars used to show minimized panes. Some, or all, of them can be null.
+    //
+    // This is indexed by wxAUI_DOCK_TOP, wxAUI_DOCK_BOTTOM, wxAUI_DOCK_RIGHT
+    // and wxAUI_DOCK_LEFT with offset of -1, so don't access it directly and
+    // use GetMinDockInDirection() instead to not have to remember this -1.
+    wxAuiMinDock* m_minDocks[wxAUI_DOCK_LEFT] = { nullptr };
+
+    // Mask of directions where we are allowed to create docks for minimized
+    // panes.
+    int m_minDockAllowed = wxLEFT | wxRIGHT | wxBOTTOM;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiManager);
@@ -786,6 +824,7 @@ public:
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_BUTTON, wxAuiManagerEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_CLOSE, wxAuiManagerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_MINIMIZE, wxAuiManagerEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_MAXIMIZE, wxAuiManagerEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_RESTORE, wxAuiManagerEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_ACTIVATED, wxAuiManagerEvent );
@@ -801,6 +840,8 @@ typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
    wx__DECLARE_EVT0(wxEVT_AUI_PANE_BUTTON, wxAuiManagerEventHandler(func))
 #define EVT_AUI_PANE_CLOSE(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANE_CLOSE, wxAuiManagerEventHandler(func))
+#define EVT_AUI_PANE_MINIMIZE(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_PANE_MINIMIZE, wxAuiManagerEventHandler(func))
 #define EVT_AUI_PANE_MAXIMIZE(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANE_MAXIMIZE, wxAuiManagerEventHandler(func))
 #define EVT_AUI_PANE_RESTORE(func) \
@@ -816,6 +857,7 @@ typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
 
 %constant wxEventType wxEVT_AUI_PANE_BUTTON;
 %constant wxEventType wxEVT_AUI_PANE_CLOSE;
+%constant wxEventType wxEVT_AUI_PANE_MINIMIZE;
 %constant wxEventType wxEVT_AUI_PANE_MAXIMIZE;
 %constant wxEventType wxEVT_AUI_PANE_RESTORE;
 %constant wxEventType wxEVT_AUI_PANE_ACTIVATED;
@@ -825,6 +867,7 @@ typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
 %pythoncode {
     EVT_AUI_PANE_BUTTON = wx.PyEventBinder( wxEVT_AUI_PANE_BUTTON )
     EVT_AUI_PANE_CLOSE = wx.PyEventBinder( wxEVT_AUI_PANE_CLOSE )
+    EVT_AUI_PANE_MINIMIZE = wx.PyEventBinder( wxEVT_AUI_PANE_MINIMIZE )
     EVT_AUI_PANE_MAXIMIZE = wx.PyEventBinder( wxEVT_AUI_PANE_MAXIMIZE )
     EVT_AUI_PANE_RESTORE = wx.PyEventBinder( wxEVT_AUI_PANE_RESTORE )
     EVT_AUI_PANE_ACTIVATED = wx.PyEventBinder( wxEVT_AUI_PANE_ACTIVATED )

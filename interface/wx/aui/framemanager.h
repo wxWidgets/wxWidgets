@@ -133,6 +133,21 @@ enum wxAuiManagerOption
         in a lower level yield to panes in higher levels. The best way to
         understand layers is by running the wxAUI sample.
 
+    @section auimanager_minimized Minimizing Panes
+
+    Since wxWidgets 3.3.2, wxAuiManager supports minimizing panes which have
+    the minimize button, see wxAuiPaneInfo::MinimizeButton(). Such panes appear
+    in the special toolbar(s) showing the buttons for all panes that can be
+    minimized and allowing to either hide or show them again.
+
+    By default, the toolbars showing the buttons for the minimized panes are
+    created on the left, bottom and right sides of the managed window. You can
+    change this using AllowDocksForMinPanes() but note that you must still
+    allow for the toolbars to be created on at least one side and the only way
+    not to have any such toolbar at all is to not have any panes with minimize
+    button.
+
+
     @beginStyleTable
     @style{wxAUI_MGR_ALLOW_FLOATING}
            Allow a pane to be undocked to take the form of a wxMiniFrame.
@@ -174,6 +189,9 @@ enum wxAuiManagerOption
         Triggered when any button is pressed for any docked panes.
     @event{EVT_AUI_PANE_CLOSE(func)}
         Triggered when a docked or floating pane is closed.
+    @event{EVT_AUI_PANE_MINIMIZE(func)}
+        Triggered when a pane is minimized. This event is new since wxWidgets
+        3.3.2.
     @event{EVT_AUI_PANE_MAXIMIZE(func)}
         Triggered when a pane is maximized.
     @event{EVT_AUI_PANE_RESTORE(func)}
@@ -228,6 +246,33 @@ public:
                  const wxAuiPaneInfo& pane_info,
                  const wxPoint& drop_pos);
     //@}
+
+    /**
+        Change the sides where docks for minimized panes can be created.
+
+        The argument @a direction must be a combination of one or more of
+        ::wxLEFT, ::wxRIGHT, ::wxTOP and ::wxBOTTOM flags.
+
+        This function must currently be called before there any minimized
+        panes, so it is recommended to call it before adding any panes at all.
+
+        Example of using this function to only allow docks showing the buttons
+        for the minimized panes on the left and right sides of the window:
+        @code
+        mgr.AllowDocksForMinPanes(wxLEFT | wxRIGHT);
+
+        // This pane will be shown in the toolbar on the left side of the
+        // window.
+        mgr.AddPane(someWindow, wxAuiPaneInfo().Left().MinimizeButton());
+
+        // But so will will this one, as creating a toolbar along the bottom
+        // side is not allowed.
+        mgr.AddPane(otherWindow, wxAuiPaneInfo().Bottom().MinimizeButton());
+        @endcode
+
+        @since 3.3.2
+     */
+    void AllowDocksForMinPanes(int directions);
 
     /**
         Returns true if live resize is always used on the current platform.
@@ -456,6 +501,22 @@ public:
     */
     bool LoadPerspective(const wxString& perspective,
                          bool update = true);
+
+    /**
+        Minimize the given pane.
+
+        Note that the pane **must** have the minimize button enabled for this
+        function to work, it cannot be used to minimize the panes without it.
+
+        Minimizing a pane hides it, but it can be later shown again by the user
+        by clicking the button corresponding to it in the minimized panes
+        toolbar.
+
+        @see @ref auimanager_minimized
+
+        @since 3.3.2
+    */
+    void MinimizePane(wxAuiPaneInfo& paneInfo);
 
     /**
         Maximize the given pane.
@@ -1001,6 +1062,16 @@ public:
 
     /**
         MinimizeButton() indicates that a minimize button should be drawn for the pane.
+
+        Pressing this button hides the pane and shows the minimized panes
+        toolbar, allowing to show the pane again later, if it hadn't been shown
+        before.
+
+        Note that when the toolbar containing the minimized panes is visible,
+        all panes that have MinimizeButton() enabled will show in it, even if
+        they are currently shown.
+
+        @see @ref auimanager_minimized
     */
     wxAuiPaneInfo& MinimizeButton(bool visible = true);
 
@@ -1174,6 +1245,9 @@ public:
         Triggered when any button is pressed for any docked panes.
     @event{EVT_AUI_PANE_CLOSE(func)}
         Triggered when a docked or floating pane is closed.
+    @event{EVT_AUI_PANE_MINIMIZE(func)}
+        Triggered when a pane is minimized. This event is new since wxWidgets
+        3.3.2.
     @event{EVT_AUI_PANE_MAXIMIZE(func)}
         Triggered when a pane is maximized.
     @event{EVT_AUI_PANE_RESTORE(func)}
@@ -1268,6 +1342,7 @@ public:
 
 wxEventType wxEVT_AUI_PANE_BUTTON;
 wxEventType wxEVT_AUI_PANE_CLOSE;
+wxEventType wxEVT_AUI_PANE_MINIMIZE;
 wxEventType wxEVT_AUI_PANE_MAXIMIZE;
 wxEventType wxEVT_AUI_PANE_RESTORE;
 wxEventType wxEVT_AUI_PANE_ACTIVATED;

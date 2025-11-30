@@ -754,6 +754,10 @@ MyFrame::MyFrame(wxWindow* parent,
     // tell wxAuiManager to manage this frame
     m_mgr.SetManagedWindow(this);
 
+    // allow minimizing panes to docks on the left and right sides of the
+    // window (and, so, disallow docks for them on the top and bottom sides)
+    m_mgr.AllowDocksForMinPanes(wxLEFT | wxRIGHT);
+
     // set frame icon
     SetIcon(wxIcon(sample_xpm));
 
@@ -1021,7 +1025,7 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   Name("test8").Caption("Tree Pane").
                   Left().Layer(1).Position(1).
-                  CloseButton(true).MaximizeButton(true));
+                  CloseButton(true).MaximizeButton(true).MinimizeButton());
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name("test9").Caption("Min Size 200x100").
@@ -1040,6 +1044,7 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
                   Name("test10").Caption("Text Pane with Hide Prompt").
                   Bottom().Layer(1).Position(1).
+                  MaximizeButton().MinimizeButton().
                   Icon(wxArtProvider::GetBitmapBundle(wxART_WARNING,
                                                       wxART_OTHER,
                                                       wxSize(iconSize, iconSize))));
