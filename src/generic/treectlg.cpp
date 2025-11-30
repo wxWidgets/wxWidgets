@@ -2870,7 +2870,7 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
 #ifdef __WXMAC__
                 // this flag is required under OSX as this will make it
                 // choose the NSCell.highlighted mode. The chevron will
-                // otherwise be light grey on white background and be 
+                // otherwise be light grey on white background and be
                 // barely visible
                 flag |= wxCONTROL_PRESSED;
 #endif
