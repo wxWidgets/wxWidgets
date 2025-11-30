@@ -1129,7 +1129,7 @@ case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
         fi
 
         if test "$wxUSE_LUNASVG" = "yes"; then
-            AC_MSG_ERROR([Using LunaSVG requires C++17 or later, use --with-cxx=17 or --with-cxx=20.])
+            AC_MSG_ERROR([Using LunaSVG requires C++17 or later])
         fi
 
         AX_CXX_COMPILE_STDCXX(11)
@@ -1137,7 +1137,7 @@ case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
 
     14)
         if test "$wxUSE_LUNASVG" = "yes"; then
-            AC_MSG_ERROR([Using LunaSVG requires C++17 or later, use --with-cxx=17 or --with-cxx=20.])
+            AC_MSG_ERROR([Using LunaSVG requires C++17 or later])
         fi
 
         AX_CXX_COMPILE_STDCXX(14)
