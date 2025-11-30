@@ -1831,10 +1831,6 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     else
     {
         sizer_item = vert_pane_sizer->Add(pane.window, 1, wxEXPAND);
-        // Don't do this because it breaks the pane size in floating windows
-        // BIW: Right now commenting this out is causing problems with
-        // an mdi client window as the center pane.
-        vert_pane_sizer->SetItemMinSize(pane.window, 1, 1);
     }
 
     part.type = wxAuiDockUIPart::typePane;
