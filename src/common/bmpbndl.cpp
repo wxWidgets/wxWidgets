@@ -529,6 +529,12 @@ wxBitmapBundle wxBitmapBundle::FromFiles(const wxString& path, const wxString& f
             fn.SetName(wxString::Format("%s_%dx", filename, dpiFactor));
         }
 
+        if ( !fn.FileExists() && dpiFactor != 1 )
+        {
+            // try /2.0x/image.png naming scheme
+            fn.AppendDir( wxString::Format("%d.0x", dpiFactor));
+        }
+
         if ( fn.FileExists() )
         {
             wxBitmap bmp(fn.GetFullPath(), wxBITMAP_TYPE_ANY);
