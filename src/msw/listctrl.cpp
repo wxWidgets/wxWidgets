@@ -3052,12 +3052,13 @@ RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 // These values try to replicate the native listctrl rendering as close as
 // possible. Notice that they are not scaled with DPI because the native
 // control doesn't do it either.
-constexpr int PADDING_LEFT_SIDE = 1;
+constexpr int PADDING_LEFT_SIDE = 3;
 constexpr int PADDING_RIGHT_SIDE = 2;
 constexpr int GAP_AFTER_CHECKBOX = 2;
 constexpr int GAP_BEFORE_IMAGE = 2;
 constexpr int GAP_BEFORE_CHECKBOX = 4;
-constexpr int PADDING_FOR_TEXT = 1;
+constexpr int PADDING_LEFT_FOR_TEXT = 2;
+constexpr int PADDING_RIGHT_FOR_TEXT = 4;
 
 void
 HandleSubItemPrepaint(wxListCtrl* listctrl,
@@ -3220,16 +3221,18 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
         {
             case LVCFMT_LEFT:
                 fmt |= DT_LEFT;
-                rc.left += PADDING_FOR_TEXT;
+                rc.left += PADDING_LEFT_FOR_TEXT;
                 break;
 
             case LVCFMT_CENTER:
+                rc.left += PADDING_LEFT_FOR_TEXT;
+                rc.right -= PADDING_RIGHT_FOR_TEXT;
                 fmt |= DT_CENTER;
                 break;
 
             case LVCFMT_RIGHT:
                 fmt |= DT_RIGHT;
-                rc.right -= PADDING_FOR_TEXT;
+                rc.right -= PADDING_RIGHT_FOR_TEXT;
                 break;
         }
     }
