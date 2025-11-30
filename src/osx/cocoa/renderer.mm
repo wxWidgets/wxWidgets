@@ -421,6 +421,12 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     else
     {
 #if wxOSX_USE_NSCELL_RENDERER
+        // this flag is required as this will make it choose
+        // the NSCell.highlighted mode. The chevron will
+        // otherwise be light grey on white background and be
+        // barely visible
+        flags |= wxCONTROL_PRESSED;
+
         NSControlStateValue stateValue = (flags & wxCONTROL_EXPANDED) ? NSControlStateValueOn : NSControlStateValueOff;
         DrawMacCell(win, dc, GetDisclosureButtonCell(), rect, flags, stateValue);
 #else
