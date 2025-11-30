@@ -252,6 +252,9 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     m_textCtrl   = new wxSpinCtrlTextGeneric(this, DoValueToText(m_value), style);
     m_spinButton = new wxSpinCtrlButtonGeneric(this, style);
 
+    // ensure correct start value also if non-zero
+    m_spinButton->SetValue( m_value );
+
 #if wxUSE_TOOLTIPS
     m_textCtrl->SetToolTip(GetToolTipText());
     m_spinButton->SetToolTip(GetToolTipText());
