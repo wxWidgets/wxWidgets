@@ -73,10 +73,6 @@ public:
     // Helper functions only used internally.
     wxTextCoalesceData* GTKGetCoalesceData() const { return m_coalesceData; }
 
-    // avoid event handling after deletion
-    void GTKTextEntrySetBeingDeleted() { m_isBeingDeleted = true; }
-    bool GTKTextEntryIsBeingDeleted() const { return m_isBeingDeleted; }
-
 protected:
     // This method must be called from the derived class Create() to connect
     // the handlers for the clipboard (cut/copy/paste) events.
@@ -148,7 +144,6 @@ private:
     mutable wxTextCoalesceData* m_coalesceData;
 
     bool m_isUpperCase;
-    bool m_isBeingDeleted;
 };
 
 // We don't need the generic version.

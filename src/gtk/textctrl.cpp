@@ -719,8 +719,6 @@ void wxTextCtrl::Init()
 
 wxTextCtrl::~wxTextCtrl()
 {
-    wxTextEntry::GTKTextEntrySetBeingDeleted();
-
     if (m_text)
         GTKDisconnect(m_text);
     if (m_buffer)
