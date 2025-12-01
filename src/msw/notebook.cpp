@@ -1262,7 +1262,12 @@ void wxNotebook::MSWNotebookPaint()
     // for some reason (this happens at least when using multiple tab rows), so
     // we need to call it before creating wxPaintDC as otherwise the current
     // paint DC would be invalidated by EndPaint() while we use it, see #25700.
-    wxRect rectTabArea = GetTabRect(0);
+    wxRect rectTabArea;
+
+    // This is more than just an optimization: calling GetTabRect(0) for an
+    // empty control is not allowed and would assert.
+    if ( GetPageCount() > 0 )
+        rectTabArea = GetTabRect(0);
 
     // Now create and use the DC.
     wxPaintDC dc(this);
