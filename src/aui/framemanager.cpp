@@ -405,6 +405,10 @@ public:
 
     void AddPane(wxAuiPaneInfo& paneInfo)
     {
+        wxBitmapBundle icon = paneInfo.iconMin;
+        if ( !icon.IsOk() )
+            icon = paneInfo.icon;
+
         wxString text, tooltip;
         if ( HasFlag(wxAUI_TB_TEXT) )
         {
@@ -417,7 +421,7 @@ public:
             tooltip = paneInfo.caption;
         }
 
-        auto* const item = AddTool(wxID_ANY, text, paneInfo.icon, tooltip);
+        auto* const item = AddTool(wxID_ANY, text, icon, tooltip);
         m_panes[item->GetId()] = &paneInfo;
 
         m_needsRealize = true;

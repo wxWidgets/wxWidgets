@@ -1029,7 +1029,8 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   Name("test8").Caption("Tree Pane").
                   Left().Layer(1).Position(1).
-                  CloseButton(true).MaximizeButton(true).MinimizeButton());
+                  CloseButton(true).MaximizeButton(true).MinimizeButton().
+                  IconMin(wxArtProvider::GetBitmapBundle(wxART_CUT, wxART_MENU)));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name("test9").Caption("Min Size 200x100").
@@ -1051,7 +1052,8 @@ MyFrame::MyFrame(wxWindow* parent,
                   MaximizeButton().MinimizeButton().
                   Icon(wxArtProvider::GetBitmapBundle(wxART_WARNING,
                                                       wxART_OTHER,
-                                                      wxSize(iconSize, iconSize))));
+                                                      wxSize(iconSize, iconSize))).
+                  IconMin(wxArtProvider::GetBitmapBundle(wxART_PASTE, wxART_MENU)));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name("test11").Caption("Fixed Pane").

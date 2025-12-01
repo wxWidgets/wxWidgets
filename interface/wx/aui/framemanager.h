@@ -145,7 +145,9 @@ enum wxAuiManagerOption
     change this using AllowDocksForMinPanes() but note that you must still
     allow for the toolbars to be created on at least one side and the only way
     not to have any such toolbar at all is to not have any panes with minimize
-    button. See also ShowTextForMinPanes().
+    button. See ShowTextForMinPanes() and wxAuiPaneInfo::IconMin() for other
+    customization possibilities.
+
 
     @beginStyleTable
     @style{wxAUI_MGR_ALLOW_FLOATING}
@@ -951,6 +953,23 @@ public:
     wxAuiPaneInfo& Icon(const wxBitmapBundle& b);
 
     /**
+        IconMin() sets the icon shown when the pane is minimized.
+
+        If minimized icon is not specified, the normal icon set by Icon() is
+        used instead, so this function should be only called if a different
+        icon is desired for the minimized state or if you don't want to show
+        any icon in the title bar when the pane is shown normally.
+
+        It is, of course, useless to call this function if the pane doesn't
+        have a minimize button.
+
+        @see MinimizeButton()
+
+        @since 3.3.2
+     */
+    wxAuiPaneInfo& IconMin(const wxBitmapBundle& b);
+
+    /**
         IsBottomDockable() returns @true if the pane can be docked at the bottom of the
         managed frame.
 
@@ -1091,7 +1110,7 @@ public:
         all panes that have MinimizeButton() enabled will show in it, even if
         they are currently shown.
 
-        @see @ref auimanager_minimized
+        @see @ref auimanager_minimized, IconMin()
     */
     wxAuiPaneInfo& MinimizeButton(bool visible = true);
 
