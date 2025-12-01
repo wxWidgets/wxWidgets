@@ -405,7 +405,19 @@ public:
 
     void AddPane(wxAuiPaneInfo& paneInfo)
     {
-        auto* const item = AddTool(wxID_ANY, paneInfo.caption, paneInfo.icon);
+        wxString text, tooltip;
+        if ( HasFlag(wxAUI_TB_TEXT) )
+        {
+            // Don't set tool tip in this case, it would be redundant.
+            text = paneInfo.caption;
+        }
+        else // Showing only icons.
+        {
+            // Don't set text in this case, it would be unused anyhow.
+            tooltip = paneInfo.caption;
+        }
+
+        auto* const item = AddTool(wxID_ANY, text, paneInfo.icon, tooltip);
         m_panes[item->GetId()] = &paneInfo;
 
         m_needsRealize = true;
