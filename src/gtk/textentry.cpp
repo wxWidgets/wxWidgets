@@ -124,6 +124,9 @@ wx_gtk_text_after_key_press(GtkWidget* widget,
                             GdkEventKey* WXUNUSED(gdk_event),
                             wxTextEntry* entry)
 {
+    if (entry->GTKTextEntryIsBeingDeleted()) 
+       return FALSE;
+
     wxTextCoalesceData* const data = entry->GTKGetCoalesceData();
     wxCHECK_MSG( data, FALSE, "must be non-null if this handler is called" );
 
@@ -608,6 +611,7 @@ wxTextEntry::wxTextEntry()
     m_autoCompleteData = nullptr;
     m_coalesceData = nullptr;
     m_isUpperCase = false;
+    m_isBeingDeleted = false;
 }
 
 wxTextEntry::~wxTextEntry()
