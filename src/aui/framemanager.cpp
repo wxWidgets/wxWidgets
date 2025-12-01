@@ -1178,6 +1178,21 @@ void wxAuiManager::ClosePane(wxAuiPaneInfo& paneInfo)
 {
     DoHidePaneWindow(paneInfo);
 
+    // Ensure that the pane doesn't remain referenced by any docks, otherwise
+    // closing it would have the same effect as minimizing it, which is not
+    // what the user expects.
+    //
+    // This also ensures that docks don't reference the already destroyed pane
+    // in case we're really destroying it below (i.e. if IsDestroyOnClose()).
+    if (paneInfo.HasMinimizeButton())
+    {
+        auto const minDirection = GetMinDockDirectionFor(paneInfo.dock_direction);
+        if (minDirection != wxAUI_DOCK_NONE)
+        {
+            RemovePaneFromMinDockIfNecessary(minDirection, paneInfo);
+        }
+    }
+
     // now we need to either destroy or hide the pane
     if (paneInfo.IsDestroyOnClose())
     {
