@@ -404,7 +404,8 @@ public:
         m_needsRealize = true;
     }
 
-    void RemovePane(wxAuiPaneInfo& paneInfo)
+    // Returns false if the dock has become empty after removing this pane.
+    bool RemovePane(wxAuiPaneInfo& paneInfo)
     {
         for (auto const& kv : m_panes)
         {
@@ -412,11 +413,16 @@ public:
             {
                 DeleteTool(kv.first);
                 m_panes.erase(kv.first);
-                break;
+
+                m_needsRealize = true;
+
+                return !m_panes.empty();
             }
         }
 
-        m_needsRealize = true;
+        wxFAIL_MSG("Pane unexpectedly not found in minimized dock");
+
+        return true;
     }
 
     bool RealizeIfNeeded()
@@ -1283,6 +1289,22 @@ void wxAuiManager::AddPaneToMinDockIfNecessary(wxAuiPaneInfo& pinfo)
         {
             if (auto const minDock = GetMinDockInDirection(minDirection))
                 minDock->AddPane(pinfo);
+        }
+    }
+}
+
+void
+wxAuiManager::RemovePaneFromMinDockIfNecessary(wxAuiManagerDock direction,
+                                               wxAuiPaneInfo& paneInfo)
+{
+    if(auto& minDock = GetMinDockInDirection(direction))
+    {
+        if (!minDock->RemovePane(paneInfo))
+        {
+            // The dock has become empty, so delete it.
+            DetachPane(minDock);
+            delete minDock;
+            minDock = nullptr;
         }
     }
 }
@@ -4870,8 +4892,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                         auto const minDir = GetMinDockDirectionFor(paneInfo->dock_direction);
                         if(minDir != wxAUI_DOCK_NONE)
                         {
-                            if(auto const minDock = GetMinDockInDirection(minDir))
-                                minDock->RemovePane(*paneInfo);
+                            RemovePaneFromMinDockIfNecessary(minDir, *paneInfo);
                         }
                     }
 
@@ -4952,8 +4973,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
                 if (minDockOld != minDockNew)
                 {
-                    if (auto const dockOld = GetMinDockInDirection(minDockOld))
-                        dockOld->RemovePane(pane);
+                    RemovePaneFromMinDockIfNecessary(minDockOld, pane);
 
                     if (auto const dockNew = GetMinDockInDirection(minDockNew))
                         dockNew->AddPane(pane);

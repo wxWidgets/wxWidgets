@@ -679,6 +679,12 @@ private:
     // would minimize is shown, add it to it.
     void AddPaneToMinDockIfNecessary(wxAuiPaneInfo& paneInfo);
 
+    // Remove the pane from the docking toolbar in the given direction if it is
+    // shown and remove the toolbar itself if it becomes empty.
+    void
+    RemovePaneFromMinDockIfNecessary(wxAuiManagerDock direction,
+                                     wxAuiPaneInfo& paneInfo);
+
 
     // Common part of ClosePane() and MinimizePane(): hide the pane window.
     void DoHidePaneWindow(wxAuiPaneInfo& paneInfo);
