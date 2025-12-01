@@ -255,7 +255,7 @@ public:
     wxAuiPaneInfo& Dock() { return SetFlag(optionFloating, false); }
     wxAuiPaneInfo& Float() { return SetFlag(optionFloating, true); }
     wxAuiPaneInfo& Hide() { return SetFlag(optionHidden, true); }
-    wxAuiPaneInfo& Show(bool show = true) { return SetFlag(optionHidden, !show); }
+    wxAuiPaneInfo& Show(bool show = true) { return SetFlag(optionHidden, !show).SetFlag(savedClosed, false); }
     wxAuiPaneInfo& CaptionVisible(bool visible = true) { return SetFlag(optionCaption, visible); }
     wxAuiPaneInfo& Maximize() { return SetFlag(optionMaximized, true); }
     wxAuiPaneInfo& Restore() { return SetFlag(optionMaximized, false); }
@@ -370,6 +370,7 @@ public:
         buttonCustom2         = 1 << 27,
         buttonCustom3         = 1 << 28,
 
+        savedClosed           = 1 << 29, // used internally
         savedHiddenState      = 1 << 30, // used internally
         actionPane            = 1u << 31  // used internally
     };

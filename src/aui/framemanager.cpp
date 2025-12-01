@@ -1212,6 +1212,11 @@ void wxAuiManager::ClosePane(wxAuiPaneInfo& paneInfo)
         {
             RemovePaneFromMinDockIfNecessary(minDirection, paneInfo);
         }
+
+        // Also prevent it from being added to the dock if it is shown later by
+        // marking it as "closed": this flag will be reset if the frame is
+        // shown again later.
+        paneInfo.SetFlag(wxAuiPaneInfo::savedClosed, true);
     }
 
     // now we need to either destroy or hide the pane
@@ -1398,6 +1403,7 @@ void wxAuiManager::MinimizePane(wxAuiPaneInfo& paneInfo)
         for ( auto& p : m_panes )
         {
             if ( p.HasMinimizeButton() &&
+                 !p.HasFlag(wxAuiPaneInfo::savedClosed) &&
                  GetMinDockDirectionFor(p.dock_direction) == minDirection )
             {
                 dock->AddPane(p);
