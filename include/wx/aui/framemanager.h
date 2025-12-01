@@ -445,6 +445,11 @@ public:
     // currently be called before there any minimized panes.
     void AllowDocksForMinPanes(int directions);
 
+    // Use text for the items representing minimized panes in the docking
+    // toolbars in addition to their icons, which are always shown.
+    void ShowTextForMinPanes(bool show);
+
+
     wxAuiPaneInfo& GetPane(wxWindow* window);
     wxAuiPaneInfo& GetPane(const wxString& name);
     const wxAuiPaneInfoArray& GetAllPanes() const { return m_panes; }
@@ -704,6 +709,10 @@ private:
     // Mask of directions where we are allowed to create docks for minimized
     // panes.
     int m_minDockAllowed = wxLEFT | wxRIGHT | wxBOTTOM;
+
+    // Whether to show text labels for minimized panes in addition to their
+    // icons.
+    bool m_showMinDockText = false;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiManager);

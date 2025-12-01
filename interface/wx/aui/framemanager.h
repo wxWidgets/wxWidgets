@@ -145,8 +145,7 @@ enum wxAuiManagerOption
     change this using AllowDocksForMinPanes() but note that you must still
     allow for the toolbars to be created on at least one side and the only way
     not to have any such toolbar at all is to not have any panes with minimize
-    button.
-
+    button. See also ShowTextForMinPanes().
 
     @beginStyleTable
     @style{wxAUI_MGR_ALLOW_FLOATING}
@@ -273,6 +272,27 @@ public:
         @since 3.3.2
      */
     void AllowDocksForMinPanes(int directions);
+
+    /**
+        Use text for the items representing minimized panes in the docking
+        toolbars.
+
+        If @a show is @true, the pane title will be shown in addition to its
+        icons, which is always shown. Note that the text will be rendered
+        vertically for the panes shown in the toolbars docked on the left and
+        right sides of the window and that the icons will be rotated to match
+        the text orientation.
+
+        By default, only the icons are shown.
+
+        This function must currently be called before there any minimized
+        panes, so it is recommended to call it before adding any panes at all.
+
+        @see AllowDocksForMinPanes()
+
+        @since 3.3.2
+     */
+    void ShowTextForMinPanes(bool show);
 
     /**
         Returns true if live resize is always used on the current platform.

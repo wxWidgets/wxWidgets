@@ -92,6 +92,7 @@ class MyFrame : public wxFrame
         ID_HorizontalGradient,
         ID_LiveUpdate,
         ID_AllowToolbarResizing,
+        ID_ShowTextForMinPanes,
         ID_Settings,
         ID_CustomizeToolbar,
         ID_DropDownToolbarItem,
@@ -186,6 +187,7 @@ private:
 
     void OnGradient(wxCommandEvent& evt);
     void OnToolbarResizing(wxCommandEvent& evt);
+    void OnShowTextForMinPanes(wxCommandEvent& evt);
     void OnManagerFlag(wxCommandEvent& evt);
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
@@ -685,6 +687,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_AllowToolbarResizing, MyFrame::OnToolbarResizing)
+    EVT_MENU(ID_ShowTextForMinPanes, MyFrame::OnShowTextForMinPanes)
     EVT_MENU(ID_Settings, MyFrame::OnSettings)
     EVT_MENU(ID_CustomizeToolbar, MyFrame::OnCustomizeToolbar)
     EVT_MENU(ID_GridContent, MyFrame::OnChangeContentPane)
@@ -808,6 +811,7 @@ MyFrame::MyFrame(wxWindow* parent,
     optionsMenu->AppendRadioItem(ID_HorizontalGradient, _("Horizontal Caption Gradient"));
     optionsMenu->AppendSeparator();
     optionsMenu->AppendCheckItem(ID_AllowToolbarResizing, _("Allow Toolbar Resizing"));
+    optionsMenu->AppendCheckItem(ID_ShowTextForMinPanes, _("Show min panes text"));
     optionsMenu->AppendSeparator();
     optionsMenu->Append(ID_Settings, _("Settings Pane"));
 
@@ -1189,6 +1193,12 @@ void MyFrame::OnToolbarResizing(wxCommandEvent& WXUNUSED(evt))
         }
     }
 
+    m_mgr.Update();
+}
+
+void MyFrame::OnShowTextForMinPanes(wxCommandEvent& evt)
+{
+    m_mgr.ShowTextForMinPanes(evt.IsChecked());
     m_mgr.Update();
 }
 

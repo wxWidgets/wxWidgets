@@ -362,23 +362,32 @@ void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
 class wxAuiMinDock : public wxAuiToolBar
 {
 public:
-    wxAuiMinDock(wxAuiManager& mgr, wxAuiManagerDock direction)
+    // flags should be either wxAUI_TB_TEXT or wxAUI_TB_DEFAULT_STYLE, the
+    // direction/orientation is inferred from the dock direction
+    wxAuiMinDock(wxAuiManager& mgr,
+                 wxAuiManagerDock direction,
+                 int flags)
         : m_mgr(mgr)
     {
-        int flags = 0;
         switch ( direction )
         {
             case wxAUI_DOCK_TOP:
             case wxAUI_DOCK_BOTTOM:
-                flags = wxAUI_TB_HORIZONTAL | wxAUI_TB_HORZ_TEXT;
+                flags |= wxAUI_TB_HORIZONTAL;
+                if ( flags & wxAUI_TB_TEXT )
+                    flags |= wxAUI_TB_HORZ_LAYOUT;
                 break;
 
             case wxAUI_DOCK_LEFT:
-                flags = wxAUI_TB_VERTICAL | wxAUI_TB_VERT_TEXT_UP;
+                flags |= wxAUI_TB_VERTICAL;
+                if ( flags & wxAUI_TB_TEXT )
+                    flags |= wxAUI_TB_VERT_LAYOUT_UP;
                 break;
 
             case wxAUI_DOCK_RIGHT:
-                flags = wxAUI_TB_VERTICAL | wxAUI_TB_VERT_TEXT_DOWN;
+                flags |= wxAUI_TB_VERTICAL;
+                if ( flags & wxAUI_TB_TEXT )
+                    flags |= wxAUI_TB_VERT_LAYOUT_DOWN;
                 break;
 
             default:
@@ -396,8 +405,6 @@ public:
 
     void AddPane(wxAuiPaneInfo& paneInfo)
     {
-        // Should we use the pane icon here? It makes buttons inconsistent
-        // because not all panes have icons.
         auto* const item = AddTool(wxID_ANY, paneInfo.caption, paneInfo.icon);
         m_panes[item->GetId()] = &paneInfo;
 
@@ -828,6 +835,20 @@ void wxAuiManager::AllowDocksForMinPanes(int directions)
     }
 
     m_minDockAllowed = directions;
+}
+
+void wxAuiManager::ShowTextForMinPanes(bool show)
+{
+    for ( const auto& dock : m_minDocks )
+    {
+        if ( dock )
+        {
+            wxFAIL_MSG( "Must be called before there are any minimized panes" );
+            return;
+        }
+    }
+
+    m_showMinDockText = show;
 }
 
 void wxAuiManager::ProcessMgrEvent(wxAuiManagerEvent& event)
@@ -1357,7 +1378,9 @@ void wxAuiManager::MinimizePane(wxAuiPaneInfo& paneInfo)
     auto& dock = GetMinDockInDirection(minDirection);
     if ( !dock )
     {
-        dock = new wxAuiMinDock(*this, minDirection);
+        dock = new wxAuiMinDock(*this, minDirection,
+                                m_showMinDockText ? wxAUI_TB_TEXT
+                                                  : wxAUI_TB_DEFAULT_STYLE);
 
         auto paneTB = wxAuiPaneInfo().
             Name(wxString::Format("minimized-dock-%d", minDirection)).
