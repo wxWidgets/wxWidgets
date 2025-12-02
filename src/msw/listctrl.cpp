@@ -3254,8 +3254,6 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
     if ( nmcd.uItemState & CDIS_FOCUS )
     {
         RECT rc = GetCustomDrawnItemRect(nmcd);
-        // subtract 2px so the right border is visible
-        rc.right -= 2;
 
         ::DrawFocusRect(nmcd.hdc, &rc);
     }
@@ -3589,8 +3587,8 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(GetBackgroundColour());
-        dc.DrawRectangle(lastRect.GetRight(), 0, clientSize.x - lastRect.GetRight(), lastRect.GetBottom());
-        dc.DrawRectangle(0, lastRect.GetBottom(), clientSize.x, clientSize.y - lastRect.GetBottom());
+        dc.DrawRectangle(lastRect.GetRight() + 1, 0, clientSize.x - lastRect.GetRight(), clientSize.GetHeight());
+        dc.DrawRectangle(0, lastRect.GetBottom() + 1, clientSize.x, clientSize.y - lastRect.GetBottom());
     }
 
     if ( !needToDraw )
