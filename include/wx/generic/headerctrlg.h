@@ -45,6 +45,13 @@ public:
                 long style = wxHD_DEFAULT_STYLE,
                 const wxString& name = wxASCII_STR(wxHeaderCtrlNameStr));
 
+    // start Bricsys change
+#ifdef __UNIX__
+    void SetColumnLabelBackgroundColour( const wxColour& );
+    void SetColumnLabelTextColour( const wxColour& );
+#endif
+    // end Bricsys change
+
     virtual ~wxHeaderCtrl();
 
 protected:
@@ -177,6 +184,13 @@ private:
     wxArrayInt m_colIndices;
 
     bool m_wasSeparatorDClick;
+
+    // start Bricsys change
+#ifdef __UNIX__
+    wxColour m_columnLabelBackgroundColour;
+    wxColour m_columnLabelTextColour;
+#endif
+    // end Bricsys change
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);

@@ -1880,6 +1880,12 @@ public:
     void     HideColLabels() { SetColLabelSize( 0 ); }
     void     SetLabelBackgroundColour( const wxColour& );
     void     SetLabelTextColour( const wxColour& );
+    // start Bricsys change
+#ifdef __UNIX__
+    void     SetColumnLabelBackgroundColour( const wxColour& );
+    void     SetColumnLabelTextColour( const wxColour& );
+#endif
+    // end Bricsys change
     void     SetLabelFont( const wxFont& );
     void     SetRowLabelAlignment( int horiz, int vert );
     void     SetColLabelAlignment( int horiz, int vert );

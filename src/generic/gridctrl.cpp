@@ -54,7 +54,11 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
             if ( grid.HasFocus() )
                 clr = grid.GetSelectionBackground();
             else
+#ifdef __linux__
+                clr = attr.GetBackgroundColour();
+#else
                 clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+#endif
         }
         else
         {
@@ -63,7 +67,11 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     }
     else // grey out fields if the grid is disabled
     {
+#ifdef __linux__
+        clr = attr.GetBackgroundColour();
+#else
         clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+#endif
     }
 
     dc.SetBrush(clr);
