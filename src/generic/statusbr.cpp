@@ -401,6 +401,16 @@ wxRect wxStatusBarGeneric::GetSizeGripRect() const
 // wxStatusBarGeneric - event handlers
 // ----------------------------------------------------------------------------
 
+void wxStatusBarGeneric::SetBorderX(int x)
+{
+    m_borderX = x;
+}
+
+void wxStatusBarGeneric::SetBorderY(int y)
+{
+    m_borderY = y;
+}
+
 void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
