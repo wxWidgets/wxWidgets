@@ -9000,6 +9000,20 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
     }
 }
 
+// start Bricsys change
+#ifdef __UNIX__
+void wxGrid::SetColumnLabelBackgroundColour( const wxColour& colour ) {
+    UseNativeColHeader();
+    GetGridColHeader()->SetColumnLabelBackgroundColour(colour);
+}
+
+void wxGrid::SetColumnLabelTextColour( const wxColour& colour ) {
+    UseNativeColHeader();
+    GetGridColHeader()->SetColumnLabelTextColour(colour);
+}
+#endif
+// end Bricsys change
+
 void wxGrid::SetLabelFont( const wxFont& font )
 {
     m_labelFont = font;

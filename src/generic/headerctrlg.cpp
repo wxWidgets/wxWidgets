@@ -56,6 +56,12 @@ void wxHeaderCtrl::Init()
     m_dragOffset = 0;
     m_scrollOffset = 0;
     m_wasSeparatorDClick = false;
+    // start Bricsys change
+#ifdef __UNIX__
+    m_columnLabelBackgroundColour = wxColour(255, 255, 255);
+    m_columnLabelTextColour = wxColour(0, 0, 0);
+#endif
+    // end Bricsys change
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -75,6 +81,18 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
 
     return true;
 }
+
+// start Bricsys change
+#ifdef __UNIX__
+void wxHeaderCtrl::SetColumnLabelBackgroundColour( const wxColour& colour ) {
+    m_columnLabelBackgroundColour = colour;
+}
+
+void wxHeaderCtrl::SetColumnLabelTextColour(const wxColour& colour) {
+    m_columnLabelTextColour = colour;
+}
+#endif
+// end Bricsys change
 
 wxHeaderCtrl::~wxHeaderCtrl()
 {
@@ -512,6 +530,11 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     GetClientSize(&w, &h);
 
     wxAutoBufferedPaintDC dc(this);
+    // start Bricsys change
+#ifdef __UNIX__
+    dc.SetBackground(wxBrush(m_columnLabelBackgroundColour));
+#endif
+    // end Bricsys change
     dc.Clear();
 
     int xpos = m_scrollOffset;
@@ -560,6 +583,12 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         params.m_labelText = col.GetTitle();
         params.m_labelBitmap = col.GetBitmapBundle().GetBitmapFor(this);
         params.m_labelAlignment = col.GetAlignment();
+
+        // start Bricsys change
+#ifdef __UNIX__
+        params.m_labelColour = m_columnLabelTextColour;
+#endif
+        // end Bricsys change
 
 #ifdef __WXGTK__
         if (i == m_numColumns - 1 && xpos + colWidth >= w)

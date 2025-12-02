@@ -214,6 +214,11 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxHeaderSortIconType sortArrow,
                                 wxHeaderButtonParams* params)
 {
+// start Bricsys change
+// Don't use native rendering
+// We draw the button using the dc
+#if 0
+    
     GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
     if (flags & wxCONTROL_SPECIAL)
         button = wxGTKPrivate::GetHeaderButtonWidgetFirst();
@@ -292,6 +297,9 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     );
 #endif
 
+#endif
+// end Bricsys change
+    
     return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 

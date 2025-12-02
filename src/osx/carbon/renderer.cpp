@@ -170,6 +170,11 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
+
+// start Bricsys change
+// Don't use native rendering
+// We draw the button using the dc
+#if 0
     if ( wxSystemSettings::GetAppearance().IsDark() )
         return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
 
@@ -234,7 +239,10 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     }
     flags &= ~wxCONTROL_PRESSED;
 
-    return DrawHeaderButtonContents(win, dc, newRect, flags, sortArrow, params);
+#endif
+
+    return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
+// end Bricsys change
 }
 
 
