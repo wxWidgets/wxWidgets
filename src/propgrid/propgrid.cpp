@@ -2438,6 +2438,12 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             if ( ci == 0 && !HasFlag(wxPG_HIDE_MARGIN) && p->HasVisibleChildren() )
                 DrawExpanderButton( dc, butRect, p );
 
+#if 1 // BS_CHANGES_ENABLED #18915
+            const bool drawBoth = GetDrawGridCellAndEditor();
+            for(int i = 0; i < (drawBoth ? 2 : 1); ++i)
+            {
+#endif
+
             // Background
             if ( isSelected && (ci == 1 || ci == m_selColumn) )
             {
@@ -2449,14 +2455,25 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                         cellEditor = m_labelEditor;
                 }
 
+#if 1 // BS_CHANGES_ENABLED #18915
+                if (drawBoth ? ((cellEditor != nullptr) && (i == 1)) : (cellEditor != nullptr))
+#else
                 if ( cellEditor )
+#endif
                 {
                     wxColour editorBgCol =
                         cellEditor->GetBackgroundColour();
                     dc.SetBrush(editorBgCol);
                     dc.SetPen(editorBgCol);
                     dc.SetTextForeground(m_colPropFore);
-                    dc.DrawRectangle(cellRect);
+#if 1 // BS_CHANGES_ENABLED #18915
+                    wxRect editorRect = cellEditor->GetRect();
+                    editorRect.y = cellRect.y;
+                    editorRect.height = cellRect.height;
+                    dc.DrawRectangle(editorRect);
+#else
+                     dc.DrawRectangle(cellRect);
+#endif
 
                     if ( m_dragStatus != 0 ||
                          (m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE) )
@@ -2485,11 +2502,22 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
             dc.SetClippingRegion(cellRect);
 
-            cellRect.x += textXAdd;
-            cellRect.width -= textXAdd;
+#if 1 // BS_CHANGES_ENABLED #18915
+            if (!drawBoth || (drawBoth && (i == 1)))
+            {
+                cellRect.x += textXAdd;
+                cellRect.width -= textXAdd;
+            }
 
             // Foreground
-            if ( !cellEditor )
+            if (drawBoth ? i == 0 : !cellEditor)
+#else
+             cellRect.x += textXAdd;
+             cellRect.width -= textXAdd;
+
+             // Foreground
+             if ( !cellEditor )
+#endif
             {
                 wxPGCellRenderer* renderer;
                 int cmnVal = p->GetCommonValue();
@@ -2512,7 +2540,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             {
                 prevFilled = true;
             }
-
+#if 1 // BS_CHANGES_ENABLED #18915
+            }
+#endif
             dc.DestroyClippingRegion();
         }
         while ( ci > firstCol );

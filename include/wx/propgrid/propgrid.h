@@ -1467,6 +1467,14 @@ public:
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
                                int xPos, int yPos, bool noRefresh) wxOVERRIDE;
+
+#if 1  // BS_CHANGES_ENABLED #18915
+    // Useful when the editor size is smaller than the grid cell size
+    // and we want to display both types of data at the same time.
+    void SetDrawGridCellAndEditor(bool drawBoth) { m_drawGridCellAndEditor = drawBoth; }
+    bool GetDrawGridCellAndEditor() const { return m_drawGridCellAndEditor; }
+#endif
+
 protected:
     virtual void DoThaw() wxOVERRIDE;
 
@@ -1738,6 +1746,10 @@ protected:
 
     // Used to skip excess text editor events
     wxString            m_prevTcValue;
+
+#if 1  // BS_CHANGES_ENABLED #18915
+    bool            m_drawGridCellAndEditor = false;
+#endif
 
 protected:
 
