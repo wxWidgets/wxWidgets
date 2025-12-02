@@ -124,8 +124,10 @@ enum wxAuiToolBarStyle
     wxAUI_TB_ROTATE_ICON_WITH_TEXT = 1 << 11,
 
     /**
-      Shows the text in the toolbar buttons; by default only icons are shown.
-    */
+        Mask including both orientation flags.
+
+        This value can't be used as a style.
+     */
     wxAUI_ORIENTATION_MASK = (wxAUI_TB_VERTICAL | wxAUI_TB_HORIZONTAL),
 
     /**
