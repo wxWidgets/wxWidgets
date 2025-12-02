@@ -54,6 +54,16 @@ enum wxAuiManagerOption
                         wxAUI_MGR_LIVE_RESIZE
 };
 
+enum wxAuiMinDockOption
+{
+    wxAUI_MIN_DOCK_ICONS       = 1 << 0,
+    wxAUI_MIN_DOCK_TEXT        = 1 << 1,
+    wxAUI_MIN_DOCK_BOTH        = wxAUI_MIN_DOCK_ICONS | wxAUI_MIN_DOCK_TEXT,
+
+    wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT = 1 << 2,
+
+    wxAUI_MIN_DOCK_DEFAULT = wxAUI_MIN_DOCK_BOTH
+};
 
 enum wxAuiPaneDockArtSetting
 {
@@ -448,9 +458,9 @@ public:
     // currently be called before there any minimized panes.
     void AllowDocksForMinPanes(int directions);
 
-    // Use text for the items representing minimized panes in the docking
-    // toolbars in addition to their icons, which are always shown.
-    void ShowTextForMinPanes(bool show);
+    // Set the style to use for the docks containing minimizing panes.
+    // Flags is the combination of wxAUI_MIN_DOCK_* values.
+    void SetDocksForMinPanesStyle(unsigned int style);
 
 
     wxAuiPaneInfo& GetPane(wxWindow* window);
@@ -713,9 +723,8 @@ private:
     // panes.
     int m_minDockAllowed = wxLEFT | wxRIGHT | wxBOTTOM;
 
-    // Whether to show text labels for minimized panes in addition to their
-    // icons.
-    bool m_showMinDockText = false;
+    // Style flags to use for the docks containing minimized panes.
+    unsigned int m_minDockStyle = wxAUI_MIN_DOCK_DEFAULT;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiManager);

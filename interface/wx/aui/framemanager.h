@@ -67,6 +67,29 @@ enum wxAuiManagerOption
 };
 
 /**
+    Flags for wxAuiManager::SetDocksForMinPanesStyle().
+
+    @since 3.3.2
+ */
+enum wxAuiMinDockOption
+{
+    /// Show icons of the minimized panes.
+    wxAUI_MIN_DOCK_ICONS       = 1 << 0,
+
+    /// Show titles of the minimized panes.
+    wxAUI_MIN_DOCK_TEXT        = 1 << 1,
+
+    /// Show both icons and titles of the minimized panes.
+    wxAUI_MIN_DOCK_BOTH        = wxAUI_MIN_DOCK_ICONS | wxAUI_MIN_DOCK_TEXT,
+
+    /// Rotate the icons to match the text orientation in vertical docks.
+    wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT = 1 << 2,
+
+    /// Default style showing both icons and titles.
+    wxAUI_MIN_DOCK_DEFAULT = wxAUI_MIN_DOCK_BOTH
+};
+
+/**
     @class wxAuiManager
 
     wxAuiManager is the central class of the wxAUI class framework.
@@ -145,7 +168,7 @@ enum wxAuiManagerOption
     change this using AllowDocksForMinPanes() but note that you must still
     allow for the toolbars to be created on at least one side and the only way
     not to have any such toolbar at all is to not have any panes with minimize
-    button. See ShowTextForMinPanes() and wxAuiPaneInfo::IconMin() for other
+    button. See SetDocksForMinPanesStyle() and wxAuiPaneInfo::IconMin() for more
     customization possibilities.
 
 
@@ -276,25 +299,35 @@ public:
     void AllowDocksForMinPanes(int directions);
 
     /**
-        Use text for the items representing minimized panes in the docking
+        Set style of for the items representing minimized panes in the docking
         toolbars.
 
-        If @a show is @true, the pane title will be shown in addition to its
-        icons, which is always shown. Note that the text will be rendered
+        If ::wxAUI_MIN_DOCK_ICONS is specified as part of the @a style, the
+        pane icon specified by wxAuiPaneInfo::IconMin() or, if it is not set,
+        wxAuiPaneInfo::Icon(), will be shown for the minimized panes.
+
+        If ::wxAUI_MIN_DOCK_TEXT is specified, the pane title will be shown
+        (possible in addition to its icon). Note that the text will be rendered
         vertically for the panes shown in the toolbars docked on the left and
         right sides of the window and that the icons will be rotated to match
         the text orientation.
 
-        By default, only the icons are shown.
+        By default, both the text and the icons are shown, which corresponds to
+        ::wxAUI_MIN_DOCK_BOTH. When using this style it may be desired to also
+        use ::wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT style which makes the icons
+        match the text orientation.
 
         This function must currently be called before there any minimized
         panes, so it is recommended to call it before adding any panes at all.
+
+        @param style
+            Combination of wxAuiMinDockOption elements.
 
         @see AllowDocksForMinPanes()
 
         @since 3.3.2
      */
-    void ShowTextForMinPanes(bool show);
+    void SetDocksForMinPanesStyle(unsigned int style);
 
     /**
         Returns true if live resize is always used on the current platform.

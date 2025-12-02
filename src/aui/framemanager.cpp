@@ -362,13 +362,19 @@ void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
 class wxAuiMinDock : public wxAuiToolBar
 {
 public:
-    // flags should be either wxAUI_TB_TEXT or wxAUI_TB_DEFAULT_STYLE, the
-    // direction/orientation is inferred from the dock direction
+    // Style is the combination of wxAUI_MIN_DOCK_XXX values.
     wxAuiMinDock(wxAuiManager& mgr,
                  wxAuiManagerDock direction,
-                 int flags)
-        : m_mgr(mgr)
+                 unsigned int style)
+        : m_mgr(mgr),
+          m_style(style)
     {
+        long flags = 0;
+        if ( m_style & wxAUI_MIN_DOCK_TEXT )
+            flags |= wxAUI_TB_TEXT;
+        if ( m_style & wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT )
+            flags |= wxAUI_TB_ROTATE_ICON_WITH_TEXT;
+
         switch ( direction )
         {
             case wxAUI_DOCK_TOP:
@@ -405,12 +411,16 @@ public:
 
     void AddPane(wxAuiPaneInfo& paneInfo)
     {
-        wxBitmapBundle icon = paneInfo.iconMin;
-        if ( !icon.IsOk() )
-            icon = paneInfo.icon;
+        wxBitmapBundle icon;
+        if ( m_style & wxAUI_MIN_DOCK_ICONS )
+        {
+            icon = paneInfo.iconMin;
+            if ( !icon.IsOk() )
+                icon = paneInfo.icon;
+        }
 
         wxString text, tooltip;
-        if ( HasFlag(wxAUI_TB_TEXT) )
+        if ( m_style & wxAUI_MIN_DOCK_TEXT )
         {
             // Don't set tool tip in this case, it would be redundant.
             text = paneInfo.caption;
@@ -487,6 +497,7 @@ private:
     }
 
     wxAuiManager& m_mgr;
+    const unsigned int m_style;
 
     std::unordered_map<int, wxAuiPaneInfo*> m_panes;
 
@@ -853,8 +864,28 @@ void wxAuiManager::AllowDocksForMinPanes(int directions)
     m_minDockAllowed = directions;
 }
 
-void wxAuiManager::ShowTextForMinPanes(bool show)
+void wxAuiManager::SetDocksForMinPanesStyle(unsigned int style)
 {
+    wxASSERT_MSG
+    (
+        !(style & ~(wxAUI_MIN_DOCK_BOTH |
+                    wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT)),
+        "Parameter may only contain wxAUI_MIN_DOCK_XXX flags"
+    );
+
+    wxASSERT_MSG
+    (
+        style & wxAUI_MIN_DOCK_BOTH,
+        "Either wxAUI_MIN_DOCK_ICONS or wxAUI_MIN_DOCK_TEXT must be specified"
+    );
+
+    wxASSERT_MSG
+    (
+        (style & wxAUI_MIN_DOCK_ICONS) ||
+            !(style & wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT),
+        "wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT requires wxAUI_MIN_DOCK_ICONS"
+    );
+
     for ( const auto& dock : m_minDocks )
     {
         if ( dock )
@@ -864,7 +895,7 @@ void wxAuiManager::ShowTextForMinPanes(bool show)
         }
     }
 
-    m_showMinDockText = show;
+    m_minDockStyle = style;
 }
 
 void wxAuiManager::ProcessMgrEvent(wxAuiManagerEvent& event)
@@ -1399,9 +1430,7 @@ void wxAuiManager::MinimizePane(wxAuiPaneInfo& paneInfo)
     auto& dock = GetMinDockInDirection(minDirection);
     if ( !dock )
     {
-        dock = new wxAuiMinDock(*this, minDirection,
-                                m_showMinDockText ? wxAUI_TB_TEXT
-                                                  : wxAUI_TB_DEFAULT_STYLE);
+        dock = new wxAuiMinDock(*this, minDirection, m_minDockStyle);
 
         auto paneTB = wxAuiPaneInfo().
             Name(wxString::Format("minimized-dock-%d", minDirection)).

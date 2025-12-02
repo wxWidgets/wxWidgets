@@ -93,6 +93,9 @@ class MyFrame : public wxFrame
         ID_LiveUpdate,
         ID_AllowToolbarResizing,
         ID_ShowTextForMinPanes,
+        ID_ShowIconsForMinPanes,
+        ID_ShowBothForMinPanes,
+        ID_RotateMinPanesIcons,
         ID_Settings,
         ID_CustomizeToolbar,
         ID_DropDownToolbarItem,
@@ -187,7 +190,8 @@ private:
 
     void OnGradient(wxCommandEvent& evt);
     void OnToolbarResizing(wxCommandEvent& evt);
-    void OnShowTextForMinPanes(wxCommandEvent& evt);
+    void OnMinPanesStyle(wxCommandEvent& evt);
+    void OnUpdateUIRotateMinPanes(wxUpdateUIEvent& evt);
     void OnManagerFlag(wxCommandEvent& evt);
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
@@ -687,7 +691,11 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_AllowToolbarResizing, MyFrame::OnToolbarResizing)
-    EVT_MENU(ID_ShowTextForMinPanes, MyFrame::OnShowTextForMinPanes)
+    EVT_MENU(ID_ShowTextForMinPanes, MyFrame::OnMinPanesStyle)
+    EVT_MENU(ID_ShowIconsForMinPanes, MyFrame::OnMinPanesStyle)
+    EVT_MENU(ID_ShowBothForMinPanes, MyFrame::OnMinPanesStyle)
+    EVT_MENU(ID_RotateMinPanesIcons, MyFrame::OnMinPanesStyle)
+    EVT_UPDATE_UI(ID_RotateMinPanesIcons, MyFrame::OnUpdateUIRotateMinPanes)
     EVT_MENU(ID_Settings, MyFrame::OnSettings)
     EVT_MENU(ID_CustomizeToolbar, MyFrame::OnCustomizeToolbar)
     EVT_MENU(ID_GridContent, MyFrame::OnChangeContentPane)
@@ -811,7 +819,15 @@ MyFrame::MyFrame(wxWindow* parent,
     optionsMenu->AppendRadioItem(ID_HorizontalGradient, _("Horizontal Caption Gradient"));
     optionsMenu->AppendSeparator();
     optionsMenu->AppendCheckItem(ID_AllowToolbarResizing, _("Allow Toolbar Resizing"));
-    optionsMenu->AppendCheckItem(ID_ShowTextForMinPanes, _("Show min panes text"));
+
+    wxMenu* minPanesMenu = new wxMenu;
+    minPanesMenu->AppendRadioItem(ID_ShowTextForMinPanes, _("Show &text"));
+    minPanesMenu->AppendRadioItem(ID_ShowIconsForMinPanes, _("Show &icons"));
+    minPanesMenu->AppendRadioItem(ID_ShowBothForMinPanes, _("Show &both"))->Check();
+    minPanesMenu->AppendSeparator();
+    minPanesMenu->AppendCheckItem(ID_RotateMinPanesIcons, _("&Rotate icons"));
+    optionsMenu->AppendSubMenu(minPanesMenu, _("&Minimized Panes Options"));
+
     optionsMenu->AppendSeparator();
     optionsMenu->Append(ID_Settings, _("Settings Pane"));
 
@@ -1198,10 +1214,31 @@ void MyFrame::OnToolbarResizing(wxCommandEvent& WXUNUSED(evt))
     m_mgr.Update();
 }
 
-void MyFrame::OnShowTextForMinPanes(wxCommandEvent& evt)
+void MyFrame::OnMinPanesStyle(wxCommandEvent& WXUNUSED(evt))
 {
-    m_mgr.ShowTextForMinPanes(evt.IsChecked());
-    m_mgr.Update();
+    const auto* const menuBar = GetMenuBar();
+
+    unsigned int style = 0;
+    if ( menuBar->IsChecked(ID_ShowTextForMinPanes) )
+        style |= wxAUI_MIN_DOCK_TEXT;
+    else if ( menuBar->IsChecked(ID_ShowIconsForMinPanes) )
+        style |= wxAUI_MIN_DOCK_ICONS;
+    else if ( menuBar->IsChecked(ID_ShowBothForMinPanes) )
+        style |= wxAUI_MIN_DOCK_BOTH;
+
+    if ( style & wxAUI_MIN_DOCK_ICONS )
+    {
+        if ( menuBar->IsChecked(ID_RotateMinPanesIcons) )
+            style |= wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT;
+    }
+
+    m_mgr.SetDocksForMinPanesStyle(style);
+}
+
+void MyFrame::OnUpdateUIRotateMinPanes(wxUpdateUIEvent& evt)
+{
+    // Rotating icons doesn't make sense if only text is shown.
+    evt.Enable( !GetMenuBar()->IsChecked(ID_ShowTextForMinPanes) );
 }
 
 void MyFrame::OnManagerFlag(wxCommandEvent& event)
