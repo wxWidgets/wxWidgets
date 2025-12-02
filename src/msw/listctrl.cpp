@@ -3345,7 +3345,7 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
 
     // determine if the item is hot (mouse hovering over it)
     POINT point;
-    ::wxGetCursorPosMSW(&point);
+    wxGetCursorPosMSW(&point);
     ::ScreenToClient(GetHwndOf(listctrl), &point);
     if ( listctrl->IsEnabled() && ::PtInRect(&rc, point) != 0 )
     {
@@ -3402,7 +3402,8 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
         pLVCD->clrTextBk = clrFullBG;
         if ( nmcd.uItemState & CDIS_SELECTED )
             pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-        else if ( !nmcd.uItemState && attr && attr->HasBackgroundColour() )
+        if ( !(nmcd.uItemState & CDIS_SELECTED) && !(nmcd.uItemState & CDIS_HOT)
+                                          && attr && attr->HasBackgroundColour() )
             pLVCD->clrTextBk = wxColourToRGB(attr->GetBackgroundColour());
 
         COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
