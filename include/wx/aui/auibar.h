@@ -44,6 +44,8 @@ enum wxAuiToolBarStyle
     // For vertical toolbars, put icon before or after vertical text.
     wxAUI_TB_VERT_LAYOUT_DOWN = 1 << 9,
     wxAUI_TB_VERT_LAYOUT_UP = 1 << 10,
+    // And rotate the icon to match the text orientation if this flag is set.
+    wxAUI_TB_ROTATE_ICON_WITH_TEXT = 1 << 11,
 
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
     wxAUI_TB_VERT_TEXT_DOWN = (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_TEXT),

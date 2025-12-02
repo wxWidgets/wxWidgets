@@ -108,6 +108,22 @@ enum wxAuiToolBarStyle
     wxAUI_TB_VERT_TEXT_UP = (wxAUI_TB_VERT_LAYOUT_UP | wxAUI_TB_TEXT),
 
     /**
+        Rotate the icon to match the text orientation.
+
+        When this flag is set, the icons in the toolbar items are rotated by 90
+        degrees clockwise or counter clockwise to match the text orientation,
+        i.e. the logical top of the icon is aligned with the top of the text
+        (and so is on the left or right side of the toolbar depending on
+        whether it is positioned along the left or right side of the window).
+
+        This flag only has effect for vertical toolbars when used together with
+        wxAUI_TB_VERT_LAYOUT_DOWN or wxAUI_TB_VERT_LAYOUT_UP.
+
+        @since 3.3.2
+     */
+    wxAUI_TB_ROTATE_ICON_WITH_TEXT = 1 << 11,
+
+    /**
       Shows the text in the toolbar buttons; by default only icons are shown.
     */
     wxAUI_ORIENTATION_MASK = (wxAUI_TB_VERTICAL | wxAUI_TB_HORIZONTAL),

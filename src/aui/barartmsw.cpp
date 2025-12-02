@@ -170,7 +170,7 @@ void wxAuiMSWToolBarArt::DrawButton(
                 break;
 
             case wxAuiTextDirection::TopToBottom:
-                if ( bmp.IsOk() )
+                if ( bmp.IsOk() && (m_flags & wxAUI_TB_ROTATE_ICON_WITH_TEXT) )
                     bmp = wxBitmap(bmp.ConvertToImage().Rotate90(true), -1, bmp.GetScaleFactor());
 
                 bmpX = rect.x + (rect.width - bmp.GetWidth()) / 2;
@@ -182,7 +182,7 @@ void wxAuiMSWToolBarArt::DrawButton(
                 break;
 
             case wxAuiTextDirection::BottomToTop:
-                if ( bmp.IsOk() )
+                if ( bmp.IsOk() && (m_flags & wxAUI_TB_ROTATE_ICON_WITH_TEXT) )
                     bmp = wxBitmap(bmp.ConvertToImage().Rotate90(false), -1, bmp.GetScaleFactor());
 
                 bmpX = rect.x + (rect.width - bmp.GetWidth()) / 2;
