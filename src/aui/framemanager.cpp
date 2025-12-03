@@ -483,7 +483,6 @@ private:
         else
         {
             pane->Show();
-            pane->window->Show();
         }
 
         m_mgr.Update();
