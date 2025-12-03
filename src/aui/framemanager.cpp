@@ -470,13 +470,6 @@ public:
         return true;
     }
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) override
-    {
-        wxAuiToolBar::DoSetSize(x, y, width, height, sizeFlags);
-    }
-
 private:
     void OnToolClicked(wxCommandEvent& event)
     {
