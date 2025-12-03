@@ -1430,6 +1430,10 @@ void wxAuiManager::MinimizePane(wxAuiPaneInfo& paneInfo)
 
     paneInfo.Hide();
 
+    // Remember the size of the dock to make sure it has the same size if/when
+    // it is recreated when the pane is restored later.
+    paneInfo.dock_size = GetContainingDockSize(paneInfo);
+
     auto& dock = GetMinDockInDirection(minDirection);
     if ( !dock )
     {
