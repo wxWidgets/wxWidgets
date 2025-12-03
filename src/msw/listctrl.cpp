@@ -3087,6 +3087,9 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
         return;
     }
 
+    bool checkboxShown = false;
+    bool imageShown = false;
+
     if ( !col && listctrl->HasCheckBoxes() )
     {
         const HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_STATE);
@@ -3126,6 +3129,7 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
                 ILD_TRANSPARENT
             );
 
+            checkboxShown = true;
             rc.left += GAP_AFTER_CHECKBOX;
 
             // move left edge for further drawing
@@ -3194,6 +3198,7 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
         // images align?)
         if ( it.iImage != -1 )
         {
+            imageShown = true;
             rc.left += xOffset;
         }
     }
@@ -3203,6 +3208,9 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
 
     // draw attribute background after drawing any images or checkboxes
     RECT fillRect = rc;
+    if ( !checkboxShown && !imageShown && listctrl->GetColumnOrder(col) != 0 )
+        fillRect.left -= PADDING_LEFT_SIDE;
+    fillRect.right += (PADDING_RIGHT_SIDE - 1);
     ::FillRect(hdc, &fillRect, AutoHBRUSH(pLVCD->clrTextBk));
 
     ::SetBkMode(hdc, TRANSPARENT);
