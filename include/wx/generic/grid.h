@@ -936,6 +936,7 @@ public:
     void UpdateAttrRows( size_t pos, int numRows );
     void UpdateAttrCols( size_t pos, int numCols );
 
+    void MoveAttrRows(size_t oldPos, size_t newPos, int numRows); // BRICSYS DragRowMove
 
     // get renderers for the given row/column header label and the corner
     // window: unlike cell renderers, these objects are not reference counted
@@ -1273,6 +1274,8 @@ public:
     virtual bool AppendCols( size_t numCols = 1 );
     virtual bool DeleteCols( size_t pos = 0, size_t numCols = 1 );
 
+    virtual bool MoveRows(size_t oldPos, size_t newPos, size_t numRows);  // BRICSYS DragRowMove
+
     virtual wxString GetRowLabelValue( int row );
     virtual wxString GetColLabelValue( int col );
     virtual wxString GetCornerLabelValue() const;
@@ -1415,6 +1418,7 @@ public:
     bool AppendCols( size_t numCols = 1 ) wxOVERRIDE;
     bool DeleteCols( size_t pos = 0, size_t numCols = 1 ) wxOVERRIDE;
 
+    bool MoveRows(size_t oldPos, size_t newPos, size_t numRows) wxOVERRIDE; // BRICSYS DragRowMove
     void SetRowLabelValue( int row, const wxString& ) wxOVERRIDE;
     void SetColLabelValue( int col, const wxString& ) wxOVERRIDE;
     void SetCornerLabelValue( const wxString& ) wxOVERRIDE;
@@ -3523,6 +3527,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_EDITOR_CREATED, wxGridEdi
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_CELL_BEGIN_DRAG, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_MOVE, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_MOVE, wxGridEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_MOVED, wxGridEvent );  // BRICSYS DragRowMove
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_SORT, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_TABBING, wxGridEvent );
 
@@ -3566,6 +3571,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_ROW_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(ROW_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(COL_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_AUTO_SIZE(id, fn)       wx__DECLARE_GRIDSIZEEVT(COL_AUTO_SIZE, id, fn)
+#define EVT_GRID_CMD_ROW_MOVING(id, fn)          wx__DECLARE_GRIDEVT(ROW_MOVING, id, fn) // BRICSYS DragRowMove
+#define EVT_GRID_CMD_ROW_MOVED(id, fn)           wx__DECLARE_GRIDEVT(ROW_MOVED, id, fn) // BRICSYS DragRowMove
 #define EVT_GRID_CMD_ROW_MOVE(id, fn)            wx__DECLARE_GRIDEVT(ROW_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDEVT(COL_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_SORT(id, fn)            wx__DECLARE_GRIDEVT(COL_SORT, id, fn)
@@ -3594,6 +3601,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_COL_SIZE(fn)            EVT_GRID_CMD_COL_SIZE(wxID_ANY, fn)
 #define EVT_GRID_COL_AUTO_SIZE(fn)       EVT_GRID_CMD_COL_AUTO_SIZE(wxID_ANY, fn)
 #define EVT_GRID_ROW_MOVE(fn)            EVT_GRID_CMD_ROW_MOVE(wxID_ANY, fn)
+#define EVT_GRID_ROW_MOVING(fn)          EVT_GRID_CMD_ROW_MOVING(wxID_ANY, fn) // BRICSYS DragRowMove
+#define EVT_GRID_ROW_MOVED(fn)           EVT_GRID_CMD_ROW_MOVED(wxID_ANY, fn)  // BRICSYS DragRowMove
 #define EVT_GRID_COL_MOVE(fn)            EVT_GRID_CMD_COL_MOVE(wxID_ANY, fn)
 #define EVT_GRID_COL_SORT(fn)            EVT_GRID_CMD_COL_SORT(wxID_ANY, fn)
 #define EVT_GRID_RANGE_SELECTING(fn)     EVT_GRID_CMD_RANGE_SELECTING(wxID_ANY, fn)

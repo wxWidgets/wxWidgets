@@ -2554,6 +2554,18 @@ public:
      */
     virtual bool DeleteCols(size_t pos = 0, size_t numCols = 1);
 
+    /**
+        Move rows in the table.
+
+        @param oldPos
+            The first row to move.
+        @param newPos
+            New position of the first moved row.
+        @param numRows
+            The number of rows to move.
+     */
+    virtual bool MoveRows(size_t oldPos, size_t newPos, size_t numRows);
+
     ///@}
 
     /*!
@@ -4503,6 +4515,13 @@ public:
     bool CanDragColMove() const;
 
     /**
+        Returns @true if rows can be moved by dragging with the mouse.
+
+        Rows can be moved by dragging on their labels.
+    */
+    bool CanDragRowMove() const;
+
+    /**
         Returns @true if the given column can be resized by dragging with the
         mouse.
 
@@ -4607,6 +4626,12 @@ public:
 
         @since 3.1.7
     */
+
+    /**
+        Disables row moving by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragRowMove().
+    */
     void DisableDragRowMove();
 
     /**
@@ -4666,7 +4691,11 @@ public:
 
         @since 3.1.7
     */
-    bool EnableDragRowMove(bool enable = true);
+
+    /**
+        Enables or disables row moving by dragging with the mouse.
+    */
+    void EnableDragRowMove(bool enable = true);
 
     /**
         Enables or disables column sizing by dragging with the mouse.
@@ -6322,6 +6351,22 @@ public:
         columns display order without affecting the use of the column indices
         otherwise.
         This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
+    @event{EVT_GRID_ROW_MOVING(func)}
+        The user tries to change the order of the rows in the grid by
+        dragging the row specified by GetRow(). This event can be vetoed to
+        either prevent the user from reordering the row change completely
+        (but notice that if you don't want to allow it at all, you simply
+        shouldn't call wxGrid::EnableDragRowMove() in the first place), vetoed
+        but handled in some way in the handler, e.g. by really moving the
+        row to the new position at the associated table level, or allowed to
+        proceed in which case wxGrid::SetRowPos() is used to reorder the
+        rows display order without affecting the use of the row indices
+        otherwise.
+        This event macro corresponds to @c wxEVT_GRID_ROW_MOVING event type.
+    @event{EVT_GRID_ROW_MOVED(func)}
+        The order of the rows in the grid has been modified by dragging the
+        row to a new position specified by GetRow().
+        This event macro corresponds to @c wxEVT_GRID_ROW_MOVED event type.
     @event{EVT_GRID_COL_SORT(func)}
         This event is generated when a column is clicked by the user and its
         name is explained by the fact that the custom reaction to a click on a
