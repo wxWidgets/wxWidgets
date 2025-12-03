@@ -300,14 +300,40 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
         contextAttribs = win->GetGLCTXAttrs().GetGLAttrs();
     }
 
+    // Check which rendering API is required, and filter the attribute list
+    EGLenum api = EGL_OPENGL_API;
+    wxVector<int> attribs;
+    for ( int i = 0; contextAttribs[i] != EGL_NONE; i += 2 )
+    {
+        if ( contextAttribs[i] == EGL_RENDERABLE_TYPE )
+        {
+            if ( contextAttribs[i + 1] == EGL_OPENGL_ES2_BIT )
+            {
+                api = EGL_OPENGL_ES_API;
+            }
+        }
+        else
+        {
+            attribs.push_back(contextAttribs[i]);
+            attribs.push_back(contextAttribs[i + 1]);
+        }
+    }
+    attribs.push_back(EGL_NONE);
+
     m_isOk = false;
+
+    if ( !eglBindAPI(api) )
+    {
+        wxFAIL_MSG("eglBindAPI failed");
+        return;
+    }
 
     EGLConfig fbc = win->GetEGLConfig();
     wxCHECK_RET( fbc, "Invalid EGLConfig for OpenGL" );
 
     m_glContext = eglCreateContext(wxGLCanvasEGL::GetDisplay(), fbc,
                                    other ? other->m_glContext : EGL_NO_CONTEXT,
-                                   contextAttribs);
+                                   &*attribs.begin());
 
     if ( !m_glContext )
         wxLogMessage(_("Couldn't create OpenGL context"));
