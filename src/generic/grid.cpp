@@ -141,6 +141,8 @@ wxDEFINE_EVENT( wxEVT_GRID_ROW_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_ROW_AUTO_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
+wxDEFINE_EVENT( wxEVT_GRID_ROW_MOVING, wxGridEvent ); // BRICSYS DragRowMove
+wxDEFINE_EVENT( wxEVT_GRID_ROW_MOVED, wxGridEvent );  // BRICSYS DragRowMove
 wxDEFINE_EVENT( wxEVT_GRID_ROW_MOVE, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_MOVE, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SORT, wxGridEvent );
@@ -1060,6 +1062,60 @@ void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
     UpdateCellAttrRowsOrCols(m_attrs, static_cast<int>(pos), 0, numCols);
 }
 
+void wxGridCellAttrData::MoveAttrRows(size_t oldPos, size_t newPos, int numRows) // BRICSYS DragRowMove
+{
+    int first, last, diff1, diff2;
+
+    int lastOld = oldPos + numRows - 1;
+
+    if (oldPos < newPos)
+    {
+        first = oldPos;
+        last = newPos;
+        diff1 = newPos - lastOld;
+        diff2 = -numRows;
+    }
+    else
+    {
+        first = newPos;
+        last = lastOld;
+        diff1 = (int)newPos - oldPos;
+        diff2 = numRows;
+    }
+
+    wxGridCoordsToAttrMap newAttrs;
+
+    for (auto it = m_attrs.begin(); it != m_attrs.end(); ++it)
+    {
+        wxGridCoordsToAttrMap::key_type key = it->first;
+        wxGridCellAttr* attr = it->second;
+
+        int row, col;
+        KeyToCoords(key, &row, &col);
+
+        int rowOrCol = row;
+
+        if (rowOrCol < first || rowOrCol > last)
+        {
+            newAttrs[key] = attr;
+            continue;
+        }
+
+        if (rowOrCol >= (int)oldPos && rowOrCol <= lastOld)
+            rowOrCol += diff1;
+        else
+            rowOrCol += diff2;
+
+        row = rowOrCol;
+
+        wxGridCoordsToAttrMap::key_type newKey = CoordsToKey(row, col);
+        
+        newAttrs[newKey] = attr;
+    }
+
+    m_attrs = newAttrs;
+}
+
 wxGridCoordsToAttrMap::iterator
 wxGridCellAttrData::FindIndex(int row, int col) const
 {
@@ -1158,6 +1214,41 @@ void wxGridRowOrColAttrData::UpdateAttrRowsOrCols( size_t pos, int numRowsOrCols
                 }
             }
         }
+    }
+}
+
+void wxGridRowOrColAttrData::MoveAttrRows(size_t oldPos, size_t newPos, int numRows) // BRICSYS DragRowMove
+{
+    int first, last, diff1, diff2;
+
+    int lastOld = oldPos + numRows - 1;
+
+    if (oldPos < newPos)
+    {
+        first = oldPos;
+        last = newPos;
+        diff1 = newPos - lastOld;
+        diff2 = -numRows;
+    }
+    else
+    {
+        first = newPos;
+        last = lastOld;
+        diff1 = (int)newPos - oldPos;
+        diff2 = numRows;
+    }
+
+    size_t count = m_attrs.GetCount();
+    for (size_t n = 0; n < count; n++)
+    {
+        int& rowOrCol = m_rowsOrCols[n];
+
+        if (rowOrCol < first || rowOrCol > last)
+            continue;
+        if (rowOrCol >= (int)oldPos && rowOrCol <= lastOld)
+            rowOrCol += diff1;
+        else
+            rowOrCol += diff2;
     }
 }
 
@@ -1313,6 +1404,16 @@ void wxGridCellAttrProvider::UpdateAttrCols( size_t pos, int numCols )
         m_data->m_cellAttrs.UpdateAttrCols( pos, numCols );
 
         m_data->m_colAttrs.UpdateAttrRowsOrCols( pos, numCols );
+    }
+}
+
+void wxGridCellAttrProvider::MoveAttrRows(size_t oldPos, size_t newPos, int numRows) // BRICSYS DragRowMove
+{
+    if (m_data)
+    {
+        m_data->m_cellAttrs.MoveAttrRows(oldPos, newPos, numRows);
+
+        m_data->m_rowAttrs.MoveAttrRows(oldPos, newPos, numRows);
     }
 }
 
@@ -1664,6 +1765,15 @@ bool wxGridTableBase::DeleteCols( size_t WXUNUSED(pos),
                                   size_t WXUNUSED(numCols) )
 {
     wxFAIL_MSG( wxT("Called grid table class function DeleteCols\nbut your derived table class does not override this function"));
+
+    return false;
+}
+
+bool wxGridTableBase::MoveRows( size_t WXUNUSED(oldPos),
+                                size_t WXUNUSED(newPos),
+                                size_t WXUNUSED(numRows) ) // BRICSYS DragRowMove
+{
+    wxFAIL_MSG(wxT("Called grid table class function MoveRows\nbut your derived table class does not override this function"));
 
     return false;
 }
@@ -2082,6 +2192,59 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
         GetView()->ProcessTableMessage( msg );
     }
 
+    return true;
+}
+
+bool wxGridStringTable::MoveRows(size_t oldPos, size_t newPos, size_t numRows) // BRICSYS DragRowMove
+{
+    size_t curNumRows = m_data.GetCount();
+
+    if (oldPos >= curNumRows || newPos >= curNumRows || (oldPos < newPos && oldPos + numRows > newPos))
+    {
+        wxFAIL_MSG( wxString::Format
+                    (
+                        wxT("Called wxGridStringTable::MoveRows(oldPos=%lu, newPos=%lu, N=%lu)\nPos value is invalid for present table with %lu rows"),
+                        (unsigned long)oldPos,
+                        (unsigned long)newPos,
+                        (unsigned long)numRows,
+                        (unsigned long)curNumRows
+                    ) );
+
+        return false;
+    }
+
+    if (numRows > curNumRows - oldPos)
+    {
+        numRows = curNumRows - oldPos;
+    }
+   
+    int lastLabelPos = oldPos < newPos ? newPos : oldPos + numRows - 1;
+    SetRowLabelValue(lastLabelPos, GetRowLabelValue(lastLabelPos));
+
+    for (size_t i = 0; i < numRows; i++)
+    {
+        wxArrayString* rowData = m_data.Detach(oldPos);
+        m_data.Insert(rowData, newPos);
+
+        /*
+        wxString label = m_rowLabels[oldPos];
+        m_rowLabels.RemoveAt(oldPos);
+        m_rowLabels.Insert(label, newPos);
+        */
+    }
+
+/*
+    if (GetView())
+    {
+        wxGridTableMessage msg(this,
+                               wxGRIDTABLE_NOTIFY_ROWS_MOVED,
+                               oldPos,
+                               newPos,
+                               numRows);
+
+        GetView()->ProcessTableMessage(msg);
+    }
+*/
     return true;
 }
 
@@ -4158,62 +4321,39 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
             if ( line >= 0 &&
                  oper.SendEvent( this, wxEVT_GRID_LABEL_LEFT_CLICK, line, event ) == Event_Unhandled )
             {
-                if ( oper.CanDragMove(this) )
+                if (m_canDragRowMove) // BRICSYS DragRowMove
                 {
-                    ChangeCursorMode(oper.GetCursorModeMove(), headerWin);
-
-                    // Show button as pressed
-                    m_dragMoveRowOrCol = line;
-                    wxClientDC dc( headerWin );
-                    oper.PrepareDCForLabels(this, dc);
-                    oper.DrawLineLabel(this, dc, line);
+                    //Show button as pressed
+                    wxClientDC dc(m_rowLabelWin);
+                    int rowTop = GetRowTop(line);
+                    int rowBottom = GetRowBottom(line);
+                    dc.SetPen(wxPen(m_rowLabelWin->GetBackgroundColour(), 1));
+                    dc.DrawLine(1, rowTop, m_rowLabelWidth-1, rowTop);
+                    dc.DrawLine(1, rowTop, 1, rowBottom);
+                    ChangeCursorMode(WXGRID_CURSOR_MOVE_ROW, m_rowLabelWin);
                 }
                 else
                 {
-                    // Check if row/col selection is possible and allowed, before doing
-                    // anything else, including changing the cursor mode to "select
-                    // row"/"select col".
-                    if ( m_selection && m_numRows > 0 && m_numCols > 0 &&
-                            m_selection->GetSelectionMode() != dual.GetSelectionMode() )
+                    if ( !event.ShiftDown() && !event.CmdDown() )
+                        ClearSelection();
+                    if ( m_selection )
                     {
-                        bool selectNewLine = false,
-                             makeLineCurrent = false;
-
-                        if ( event.ShiftDown() && !event.CmdDown() )
+                        if ( event.ShiftDown() )
                         {
-                            // Continue editing the current selection and don't
-                            // move the grid cursor.
-                            oper.SelectionExtendCurrentBlock(this, line, event);
-                            oper.MakeLineVisible(this, line);
-                        }
-                        else if ( event.CmdDown() && !event.ShiftDown() )
-                        {
-                            if ( oper.IsLineInSelection(this, line) )
-                            {
-                                oper.DeselectLine(this, line);
-                                makeLineCurrent = true;
-                            }
-                            else
-                            {
-                                makeLineCurrent =
-                                selectNewLine = true;
-                            }
+                            m_selection->SelectBlock
+                                         (
+                                            m_currentCellCoords.GetRow(), 0,
+                                            line, GetNumberCols() - 1,
+                                            event
+                                         );
                         }
                         else
                         {
-                            ClearSelection();
-                            makeLineCurrent =
-                            selectNewLine = true;
+                            m_selection->SelectRow(line, event);
                         }
-
-                        if ( selectNewLine )
-                            oper.SelectLine(this, line, event);
-
-                        if ( makeLineCurrent )
-                            oper.MakeLineCurrent(this, line);
-
-                        ChangeCursorMode(oper.GetCursorModeSelect(), labelWin);
                     }
+
+                    ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, m_rowLabelWin);
                 }
             }
         }

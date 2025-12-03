@@ -430,6 +430,7 @@ public:
     wxGridCellAttr *GetAttr(int row, int col) const;
     void UpdateAttrRows( size_t pos, int numRows );
     void UpdateAttrCols( size_t pos, int numCols );
+    void MoveAttrRows(size_t oldPos, size_t newPos, int numRows);  // BRICSYS DragRowMove
 
 private:
     // Tries to search for the attr for given cell.
@@ -449,6 +450,7 @@ public:
     void SetAttr(wxGridCellAttr *attr, int rowOrCol);
     wxGridCellAttr *GetAttr(int rowOrCol) const;
     void UpdateAttrRowsOrCols( size_t pos, int numRowsOrCols );
+    void MoveAttrRows(size_t oldPos, size_t newPos, int numRows);  // BRICSYS DragRowMove
 
 private:
     wxArrayInt m_rowsOrCols;
