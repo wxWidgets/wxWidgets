@@ -682,6 +682,9 @@ private:
     // m_actionPart. If m_actionPart is null, returns wxNOT_FOUND.
     int GetActionPartIndex() const;
 
+    // Return the size of the dock containing the given pane or 0 if not found.
+    int GetContainingDockSize(const wxAuiPaneInfo& paneInfo) const;
+
     // Get direction to use for minimizing the given pane docking direction.
     //
     // The returned value is one of 4 wxAUI_DOCK_{TOP,RIGHT,BOTTOM,LEFT} values

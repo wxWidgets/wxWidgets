@@ -599,6 +599,17 @@ int wxAuiManager::GetActionPartIndex() const
     return wxNOT_FOUND;
 }
 
+int wxAuiManager::GetContainingDockSize(const wxAuiPaneInfo& paneInfo) const
+{
+    for ( const auto& d : m_docks )
+    {
+        if ( FindPaneInDock(d, paneInfo.window) )
+            return d.size;
+    }
+
+    return 0;
+}
+
 void wxAuiManager::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     m_art->UpdateColoursFromSystem();
@@ -1839,15 +1850,7 @@ wxAuiManager::CopyDockLayoutFrom(wxAuiDockLayoutInfo& dockInfo,
     // The dock size is typically not set in the pane itself, but set in its
     // containing dock, so find it and copy it from there, as we do need to
     // save it when serializing.
-    dockInfo.dock_size = 0;
-    for ( const auto& d : m_docks )
-    {
-        if ( FindPaneInDock(d, paneInfo.window) )
-        {
-            dockInfo.dock_size = d.size;
-            break;
-        }
-    }
+    dockInfo.dock_size = GetContainingDockSize(paneInfo);
 }
 
 void
