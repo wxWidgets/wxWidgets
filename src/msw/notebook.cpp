@@ -337,6 +337,10 @@ void wxNotebook::UpdateSelection(int selNew)
     if ( m_selection != wxNOT_FOUND )
         m_pages[m_selection]->Show(false);
 
+     // Bricsys enhacement for Windows only
+     if ( HasFlag(wxNB_HIGHLIGHTSELECTION) )
+        TabCtrl_HighlightItem(GetHwnd(), m_selection, 0);
+
     if ( selNew != wxNOT_FOUND )
     {
         wxNotebookPage *pPage = m_pages[selNew];
@@ -356,6 +360,10 @@ void wxNotebook::UpdateSelection(int selNew)
             if ( !HasFocus() )
                 pPage->SetFocus();
         }
+
+        // Bricsys enhacement for Windows only
+        if ( HasFlag(wxNB_HIGHLIGHTSELECTION) )
+            TabCtrl_HighlightItem(GetHwnd(), selNew, 1);
     }
 
     m_selection = selNew;
@@ -501,6 +509,26 @@ void wxNotebook::SetPadding(const wxSize& padding)
 void wxNotebook::SetTabSize(const wxSize& sz)
 {
     ::SendMessage(GetHwnd(), TCM_SETITEMSIZE, 0, MAKELPARAM(sz.x, sz.y));
+}
+
+// Bricsys enhacement for Windows only
+wxSize wxNotebook::GetTabSize(size_t nPage) const
+{
+    wxSize tabSize;
+    if ( IS_VALID_PAGE(nPage) )
+    {
+        RECT rect;
+        TabCtrl_GetItemRect(GetHwnd(), nPage, &rect);
+        tabSize.x = rect.right - rect.left;
+        tabSize.y = rect.bottom - rect.top;
+    }
+    if (!IsVertical())
+    {
+        int aux = tabSize.x;
+        tabSize.x = tabSize.y;
+        tabSize.y = aux;
+    }
+    return tabSize;
 }
 
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const

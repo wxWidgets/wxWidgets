@@ -93,6 +93,8 @@ public:
     // style.
   void SetTabSize(const wxSize& sz) wxOVERRIDE;
 
+  wxSize GetTabSize(size_t nPage) const; // Bricsys enchacement for Windows
+
     // hit test
   virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
 
