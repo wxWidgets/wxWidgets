@@ -287,6 +287,7 @@ public:
     void OnFileSaveRTF(wxCommandEvent& event);
     void OnFileLoadRTF(wxCommandEvent& event);
     void OnRichTextTest(wxCommandEvent& event);
+    void OnDeleteTextTest(wxCommandEvent& event);
 
     void OnSetEditable(wxCommandEvent& event);
     void OnSetEnabled(wxCommandEvent& event);
@@ -420,6 +421,7 @@ enum
     TEXT_SAVE_RTF,
     TEXT_CLEAR,
     TEXT_RICH_TEXT_TEST,
+    DELETE_TEXT_TEST,
 
     // clipboard menu
     TEXT_CLIPBOARD_COPY = 200,
@@ -489,6 +491,8 @@ bool MyApp::OnInit()
 
     file_menu->AppendSeparator();
     file_menu->Append(TEXT_RICH_TEXT_TEST, "Show Rich Text Editor");
+    file_menu->AppendSeparator();
+    file_menu->Append(DELETE_TEXT_TEST, "Test deleting wxTextCtrl by ENTER");
     file_menu->AppendSeparator();
     file_menu->Append(TEXT_ABOUT, "&About\tAlt-A");
     file_menu->AppendSeparator();
@@ -1521,6 +1525,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_SAVE_RTF, MyFrame::OnFileSaveRTF)
     EVT_MENU(TEXT_LOAD_RTF, MyFrame::OnFileLoadRTF)
     EVT_MENU(TEXT_RICH_TEXT_TEST, MyFrame::OnRichTextTest)
+    EVT_MENU(DELETE_TEXT_TEST, MyFrame::OnDeleteTextTest)
 
     EVT_MENU(TEXT_LOG_KEY,  MyFrame::OnLogKey)
     EVT_MENU(TEXT_LOG_CHAR, MyFrame::OnLogChar)
@@ -1739,6 +1744,19 @@ void MyFrame::OnRichTextTest(wxCommandEvent& WXUNUSED(event))
 {
     RichTextFrame* frame = new RichTextFrame(this, "Rich Text Editor");
     frame->Show(true);
+}
+
+void MyFrame::OnDeleteTextTest(wxCommandEvent& WXUNUSED(event))
+{
+    auto frame = new wxFrame( this, -1, "Delete wxTextCtrl by ENTER", wxDefaultPosition, wxSize( 600, 400) );
+
+    new wxStaticText( frame, -1, "Test for deleting wxTextCtrl in ENTER handler", wxPoint(20,40) );
+    auto text = new wxTextCtrl( frame, -1, "Press ENTER", wxPoint(20,80), wxSize(180,-1), wxTE_PROCESS_ENTER );
+    text->Bind( wxEVT_TEXT_ENTER, [=](wxCommandEvent &WXUNUSED(event)) {
+        text->Destroy();
+    } );
+
+    frame->Show();
 }
 
 void MyFrame::OnIdle( wxIdleEvent& event )
