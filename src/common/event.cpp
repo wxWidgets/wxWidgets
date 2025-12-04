@@ -88,6 +88,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxDropFilesEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxActivateEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxInitDialogEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxDialogValidateEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxSetCursorEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxSysMetricChangedEvent, wxEvent);
@@ -300,6 +301,7 @@ wxDEFINE_EVENT( wxEVT_JOY_MOVE, wxJoystickEvent );
 wxDEFINE_EVENT( wxEVT_JOY_ZMOVE, wxJoystickEvent );
 wxDEFINE_EVENT( wxEVT_DROP_FILES, wxDropFilesEvent );
 wxDEFINE_EVENT( wxEVT_INIT_DIALOG, wxInitDialogEvent );
+wxDEFINE_EVENT( wxEVT_DIALOG_VALIDATE, wxDialogValidateEvent );
 wxDEFINE_EVENT( wxEVT_UPDATE_UI, wxUpdateUIEvent );
 
 // Clipboard events
