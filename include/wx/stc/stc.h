@@ -631,6 +631,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_DART 138
 #define wxSTC_LEX_ZIG 139
 #define wxSTC_LEX_NIX 140
+#define wxSTC_LEX_SINEX 141
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2826,6 +2827,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_TOML_TRIPLE_STRING_DQ 12
 #define wxSTC_TOML_ESCAPECHAR 13
 #define wxSTC_TOML_DATETIME 14
+#define wxSTC_TOML_STRINGEOL 15
 
 /// Lexical states for SCLEX_TROFF
 #define wxSTC_TROFF_DEFAULT 0
@@ -2885,6 +2887,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_DART_KW_SECONDARY 24
 #define wxSTC_DART_KW_TERTIARY 25
 #define wxSTC_DART_KW_TYPE 26
+#define wxSTC_DART_STRINGEOL 27
 
 /// Lexical states for SCLEX_ZIG
 #define wxSTC_ZIG_DEFAULT 0
@@ -2905,6 +2908,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_ZIG_KW_TERTIARY 15
 #define wxSTC_ZIG_KW_TYPE 16
 #define wxSTC_ZIG_IDENTIFIER_STRING 17
+#define wxSTC_ZIG_STRINGEOL 18
 
 /// Lexical states for SCLEX_NIX
 #define wxSTC_NIX_DEFAULT 0
@@ -2923,6 +2927,15 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_NIX_KEYWORD2 13
 #define wxSTC_NIX_KEYWORD3 14
 #define wxSTC_NIX_KEYWORD4 15
+#define wxSTC_NIX_STRINGEOL 16
+
+/// Lexical states for SCLEX_SINEX
+#define wxSTC_SINEX_DEFAULT 0
+#define wxSTC_SINEX_COMMENTLINE 1
+#define wxSTC_SINEX_BLOCK_START 2
+#define wxSTC_SINEX_BLOCK_END 3
+#define wxSTC_SINEX_DATE 4
+#define wxSTC_SINEX_NUMBER 5
 
 //}}}
 //----------------------------------------------------------------------

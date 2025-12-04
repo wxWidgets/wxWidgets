@@ -45,8 +45,10 @@ WXREGEX_CFLAGS = -I..\..\include -I$(SETUPHDIR) -I..\..\3rdparty\pcre\src\wx \
 	-DNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_auto_possess.o \
+	$(OBJS)\wxregex_pcre2_chartables.o \
 	$(OBJS)\wxregex_pcre2_chkdint.o \
 	$(OBJS)\wxregex_pcre2_compile.o \
+	$(OBJS)\wxregex_pcre2_compile_cgroup.o \
 	$(OBJS)\wxregex_pcre2_compile_class.o \
 	$(OBJS)\wxregex_pcre2_config.o \
 	$(OBJS)\wxregex_pcre2_context.o \
@@ -59,6 +61,7 @@ WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_maketables.o \
 	$(OBJS)\wxregex_pcre2_match.o \
 	$(OBJS)\wxregex_pcre2_match_data.o \
+	$(OBJS)\wxregex_pcre2_match_next.o \
 	$(OBJS)\wxregex_pcre2_newline.o \
 	$(OBJS)\wxregex_pcre2_ord2utf.o \
 	$(OBJS)\wxregex_pcre2_pattern_info.o \
@@ -71,8 +74,7 @@ WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_pcre2_tables.o \
 	$(OBJS)\wxregex_pcre2_ucd.o \
 	$(OBJS)\wxregex_pcre2_valid_utf.o \
-	$(OBJS)\wxregex_pcre2_xclass.o \
-	$(OBJS)\wxregex_pcre2_chartables.o
+	$(OBJS)\wxregex_pcre2_xclass.o
 WXZLIB_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
 	$(CPPFLAGS) $(CFLAGS)
 WXZLIB_OBJECTS =  \
@@ -172,7 +174,9 @@ WXWEBP_OBJECTS =  \
 	$(OBJS)\wxwebp_filters_neon.o \
 	$(OBJS)\wxwebp_filters_sse2.o \
 	$(OBJS)\wxwebp_lossless.o \
+	$(OBJS)\wxwebp_lossless_avx2.o \
 	$(OBJS)\wxwebp_lossless_enc.o \
+	$(OBJS)\wxwebp_lossless_enc_avx2.o \
 	$(OBJS)\wxwebp_lossless_enc_mips32.o \
 	$(OBJS)\wxwebp_lossless_enc_mips_dsp_r2.o \
 	$(OBJS)\wxwebp_lossless_enc_msa.o \
@@ -484,6 +488,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexRuby.o \
 	$(OBJS)\wxlexilla_LexRust.o \
 	$(OBJS)\wxlexilla_LexSAS.o \
+	$(OBJS)\wxlexilla_LexSINEX.o \
 	$(OBJS)\wxlexilla_LexSML.o \
 	$(OBJS)\wxlexilla_LexSQL.o \
 	$(OBJS)\wxlexilla_LexSTTXT.o \
@@ -6258,10 +6263,16 @@ build_cfg_file: $(SETUPHDIR)
 $(OBJS)\wxregex_pcre2_auto_possess.o: ../../3rdparty/pcre/src/pcre2_auto_possess.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxregex_pcre2_chartables.o: ../../3rdparty/pcre/src/pcre2_chartables.c
+	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxregex_pcre2_chkdint.o: ../../3rdparty/pcre/src/pcre2_chkdint.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxregex_pcre2_compile.o: ../../3rdparty/pcre/src/pcre2_compile.c
+	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxregex_pcre2_compile_cgroup.o: ../../3rdparty/pcre/src/pcre2_compile_cgroup.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxregex_pcre2_compile_class.o: ../../3rdparty/pcre/src/pcre2_compile_class.c
@@ -6298,6 +6309,9 @@ $(OBJS)\wxregex_pcre2_match.o: ../../3rdparty/pcre/src/pcre2_match.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxregex_pcre2_match_data.o: ../../3rdparty/pcre/src/pcre2_match_data.c
+	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxregex_pcre2_match_next.o: ../../3rdparty/pcre/src/pcre2_match_next.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxregex_pcre2_newline.o: ../../3rdparty/pcre/src/pcre2_newline.c
@@ -6337,9 +6351,6 @@ $(OBJS)\wxregex_pcre2_valid_utf.o: ../../3rdparty/pcre/src/pcre2_valid_utf.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxregex_pcre2_xclass.o: ../../3rdparty/pcre/src/pcre2_xclass.c
-	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxregex_pcre2_chartables.o: ../../3rdparty/pcre/src/pcre2_chartables.c
 	$(CC) -c -o $@ $(WXREGEX_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxzlib_adler32.o: ../../src/zlib/adler32.c
@@ -6612,7 +6623,13 @@ $(OBJS)\wxwebp_filters_sse2.o: ../../3rdparty/libwebp/src/dsp/filters_sse2.c
 $(OBJS)\wxwebp_lossless.o: ../../3rdparty/libwebp/src/dsp/lossless.c
 	$(CC) -c -o $@ $(WXWEBP_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxwebp_lossless_avx2.o: ../../3rdparty/libwebp/src/dsp/lossless_avx2.c
+	$(CC) -c -o $@ $(WXWEBP_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxwebp_lossless_enc.o: ../../3rdparty/libwebp/src/dsp/lossless_enc.c
+	$(CC) -c -o $@ $(WXWEBP_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxwebp_lossless_enc_avx2.o: ../../3rdparty/libwebp/src/dsp/lossless_enc_avx2.c
 	$(CC) -c -o $@ $(WXWEBP_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxwebp_lossless_enc_mips32.o: ../../3rdparty/libwebp/src/dsp/lossless_enc_mips32.c
@@ -7474,6 +7491,9 @@ $(OBJS)\wxlexilla_LexRust.o: ../../src/stc/lexilla/lexers/LexRust.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexSAS.o: ../../src/stc/lexilla/lexers/LexSAS.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_LexSINEX.o: ../../src/stc/lexilla/lexers/LexSINEX.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexSML.o: ../../src/stc/lexilla/lexers/LexSML.cxx
