@@ -247,6 +247,8 @@ void wxHeaderCtrl::RefreshColsAfter(unsigned int idx)
 {
     wxRect rect = GetClientRect();
     const int ofs = GetColStart(idx);
+    if ( ofs >= rect.width )
+        return;
     rect.x += ofs;
     rect.width -= ofs;
 
