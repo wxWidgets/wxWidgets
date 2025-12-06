@@ -154,7 +154,6 @@ wxGLContextAttrs& wxGLContextAttrs::ReleaseFlush(int val)
 
 wxGLContextAttrs& wxGLContextAttrs::PlatformDefaults()
 {
-    renderTypeRGBA = true;
     return *this;
 }
 

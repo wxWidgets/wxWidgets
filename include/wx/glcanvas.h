@@ -18,6 +18,18 @@
 #include "wx/palette.h"
 #include "wx/window.h"
 
+// Most ports have a single implementation of wxGLCanvas, but wxGTK has two:
+// legacy GLX-based one (also used by wxX11) and EGL-based one which is used
+// when enabled by wxUSE_GLCANVAS_EGL. Although it is not user-settable, define
+// wxUSE_GLCANVAS_GLX for consistency.
+#if defined(__WXX11__)
+    #define wxUSE_GLCANVAS_GLX 1
+#elif defined(__WXGTK__)
+    #define wxUSE_GLCANVAS_GLX (!wxUSE_GLCANVAS_EGL)
+#else
+    #define wxUSE_GLCANVAS_GLX 0
+#endif
+
 class WXDLLIMPEXP_FWD_GL wxGLCanvas;
 class WXDLLIMPEXP_FWD_GL wxGLContext;
 
@@ -134,9 +146,16 @@ public:
     wxGLContextAttrs& PlatformDefaults();
     void EndList(); // No more values can be chained
 
+#if wxUSE_GLCANVAS_GLX
     // Currently only used for X11 context creation
-    bool x11Direct; // X11 direct render
-    bool renderTypeRGBA;
+    bool x11Direct = false; // X11 direct render
+    bool renderTypeRGBA = false;
+#endif // wxUSE_GLCANVAS_GLX
+
+#if wxUSE_GLCANVAS_EGL
+    // Used to select the kind of API used with EGL (OpenGL or OpenGL ES).
+    bool useES = false;
+#endif // wxUSE_GLCANVAS_EGL
 };
 
 // ----------------------------------------------------------------------------
