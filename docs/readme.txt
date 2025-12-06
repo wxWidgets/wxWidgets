@@ -32,33 +32,32 @@ installation instructions.
 
 
 
-Changes since 3.2.7
+Changes since 3.2.8
 -------------------
 
-This is mostly a bug fix release correcting several problems found in the
-previous 3.2.7 release:
+This release doesn't add any major new features, but contains some important
+fixes for bugs found in the previous 3.2.8 release:
 
-- Fix crash in wxPropertyGrid with wxGTK3 after recent change (#25286).
-- Fix padding of wxMenu in high DPI under Windows 11 (#25117).
-- Fix key codes in WXK_NUMPADx events in wxGTK (#25263).
-- Fix ABI breakage for versioned symbols in 3.2.7 (#25327).
-- Fix third party libraries build with Xcode 16.3.
-- Fix using OpenGL and WebView when using CMake install (#25266).
+- Fix crash when using Farsi as system language under macOS (#25561).
+- Fix handling total window size with GNOME with X11 (#25348).
+- Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
+- Fix missing wxEVT_CHAR for Ctrl-Letter in non-US layouts (#25384).
+- Fix selecting columns in wxGrid with mouse (Dietmar Schwertberger, #25884).
 
-But it still contains a couple of enhancements, including:
+The new release still contains a couple of enhancements, including:
 
-- Add wxVector(std::initializer_list<U> list) ctor (#25290).
-- Add mouse scrolling support to generic wxSpinCtrl (#24935).
-- Add @USER@ macro to HTML and RichText printers (#25318).
+- Many improvements to CMake build system (#25448, #25749, #25998).
+- Support for building under macOS 26 Tahoe (#25798).
+- Fix wxStyledTextCtrl support in screen readers (Maarten Bent, #25963).
+- Respect HTML5 charset attribute in wxHTML (Kees van der Oord, #25546).
+- Add support for using EGL 1.4 (and not 1.5) in wxGLCanvas (#22325).
 
 Other changes include:
 
-- Call OnExceptionInMainLoop() in wxGTK if idle event handler throws (#25312).
-- Compute wxStaticText best size ourselves if GTK does it wrongly (#24781).
-- Fix page count display in wxHtmlPrintout when there is only one page (#25320).
-- Miscellaneous CMake build improvements (#25324).
-- Fix new warnings with gcc 15 (#25338).
-- Update Brazilian Portuguese translations.
+- Fix memory leak in wxColour::Set() under macOS (#25569).
+- Fix memory leak when using wxOverlay in wxGTK (#24500).
+- Reduce wxStaticBitmap GDI resource usage in wxMSW (Alex Shvartzkop, #25698).
+- Significantly improve performance of drawing bitmaps in wxAUI (#23841).
 
 Please see the full change log for more details:
 
@@ -162,4 +161,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, April 2025
+The wxWidgets Team, December 2015

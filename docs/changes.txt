@@ -249,12 +249,12 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.9: (released 2025-??-??)
+3.2.9: (released 2025-12-12)
 ----------------------------
 
 All:
 
-- Backport several CMake enhancements from 3.3 (Maarten Bent, #25448).
+- Backport several CMake enhancements from 3.3 (Maarten Bent, #25448, #25998).
 - Fix using wxSOCKET_NOWAIT_READ and wxSOCKET_WAITALL_WRITE together (#17114).
 - Make wxPlatformInfo::Get() thread-safe (#25459).
 - Fix CMake build under Alpine Linux and other systems using musl (#25749).
@@ -276,11 +276,10 @@ wxGTK:
 - Fix crash deleting wxTextCtrl from wxEVT_TEXT_ENTER handler (#26006).
 - Fix handling total window size with GNOME with X11 (#25348).
 - Fix height of read-only wxBitmapComboBox (#25468).
-- Fix initial appearance of wxGLCanvas when using high DPI (#23733).
 - Fix memory leak when using wxOverlay (#24500).
-- Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
 - Fix missing wxEVT_CHAR for Ctrl-Letter in non-US layouts (#25384).
 - Fix regression when unmaximizing windows under XFCE/MATE (#25708).
+- Fix wxGLCanvas scale when using EGL/Wayland in high DPI (Popax21, #23733).
 - Show system default window buttons under Wayland (#25562).
 
 wxMSW
