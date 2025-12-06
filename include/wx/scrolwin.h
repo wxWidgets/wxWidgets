@@ -152,6 +152,20 @@ public:
     // returns 0 if no scrollbars are there.
     int GetScrollLines( int orient ) const;
 
+    // wxWidgets <= 3.3.1 autoscrolled exactly when the (captured) mouse cursor
+    // was outside the entire window.  Starting with wxWidgets 3.3.2, the
+    // region where the mouse cursor triggers autoscrolling is configurable.
+    // If the inner scroll zone is default, then the autoscroll region is
+    // relative to the WINDOW rect, and has width of size outer scroll zone.
+    // If the outer scroll zone width is default, then it extends infinitely
+    // outward from the WINDOW rect, and the behavior is the same as
+    // wxWidgets 3.3.1.  If the inner scroll zone is non-default, then the
+    // autoscroll region is relative to the CLIENT rect since that avoids
+    // requiring the user to figure out how the width of scroll region
+    // interacts with the scrollbar.
+    void SetInnerScrollZone(wxCoord innerZone);
+    void SetOuterScrollZone(wxCoord outerZone);
+
     // Set the x, y scrolling increments.
     void SetScrollRate( int xstep, int ystep );
 
@@ -263,8 +277,8 @@ public:
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
     void HandleOnSize(wxSizeEvent& event);
-    void HandleOnMouseEnter(wxMouseEvent& event);
-    void HandleOnMouseLeave(wxMouseEvent& event);
+    void HandleOnMouseMove(wxMouseEvent& event);
+    void HandleOnLButtonUp(wxMouseEvent& event);
 #if wxUSE_MOUSEWHEEL
     void HandleOnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
@@ -344,6 +358,10 @@ protected:
         return true;
     }
 
+
+    bool                  m_inScrollRegion = false;
+    wxCoord               m_innerScrollZone = wxDefaultCoord;
+    wxCoord               m_outerScrollZone = wxDefaultCoord;
 
     double                m_scaleX;
     double                m_scaleY;
