@@ -373,6 +373,9 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSAS.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSINEX.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexScriptol.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>

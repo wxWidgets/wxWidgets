@@ -912,6 +912,7 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexRuby.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexRust.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSAS.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSINEX.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexScriptol.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSmalltalk.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexSML.cxx" />

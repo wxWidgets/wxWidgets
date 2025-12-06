@@ -114,6 +114,7 @@ wx_add_builtin_library(wxlexilla
     ${LEXILLA_SRC_DIR}/lexers/LexRuby.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexRust.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexSAS.cxx
+    ${LEXILLA_SRC_DIR}/lexers/LexSINEX.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexSML.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexSQL.cxx
     ${LEXILLA_SRC_DIR}/lexers/LexSTTXT.cxx
