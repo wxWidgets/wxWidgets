@@ -306,6 +306,7 @@ wxOSX:
 - Fix possible use of already destroyed wxTimers (Federico Perini, #25871).
 - Fix handling of multiple filters in wxFileDialog (#25918).
 - Fix value in wxEVT_SPIN with non-0 initial value (Robert Roebling, #26002).
+- Improve appearance of wxSpinCtrl (Robert Roebling, #26002).
 
 
 3.2.8.1: (released 2025-05-25)
