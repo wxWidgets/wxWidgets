@@ -615,8 +615,9 @@ bool wxListCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     //  - "ItemsView" draws the selection and hover as expected, but uses light
     //    mode scrollbars and also misaligned vertical separators.
     //
-    // We currently use DarkMode_Explorer and override selection drawing.
-    support.themeName = L"DarkMode_Explorer";
+    // We currently use Explorer, in Report view we can override all drawing,
+    // the other views will still have the bluish hover colour.
+    support.themeName = L"Explorer";
 
     return true;
 }
@@ -707,6 +708,8 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
 
         delete m_headerCustomDraw;
         m_headerCustomDraw = nullptr;
+
+        MSWInitHeader();
     }
     else // We do have custom attributes.
     {
@@ -1388,16 +1391,15 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
     {
         // Because the columns can be reordered, we need to sum the widths of
         // all preceding columns to get the correct x position.
-        rect.x = 0;
         for ( auto col : GetColumnsOrder() )
         {
-            if ( col == 0 )
+            if ( col == subItem )
                 break;
 
             rect.x += GetColumnWidth(col);
         }
 
-        rect.width = GetColumnWidth(0);
+        rect.width = GetColumnWidth(subItem);
     }
 
     return true;
@@ -3050,12 +3052,13 @@ RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 // These values try to replicate the native listctrl rendering as close as
 // possible. Notice that they are not scaled with DPI because the native
 // control doesn't do it either.
-constexpr int PADDING_LEFT_SIDE = 1;
+constexpr int PADDING_LEFT_SIDE = 3;
 constexpr int PADDING_RIGHT_SIDE = 2;
 constexpr int GAP_AFTER_CHECKBOX = 2;
 constexpr int GAP_BEFORE_IMAGE = 2;
 constexpr int GAP_BEFORE_CHECKBOX = 4;
-constexpr int PADDING_FOR_TEXT = 1;
+constexpr int PADDING_LEFT_FOR_TEXT = 2;
+constexpr int PADDING_RIGHT_FOR_TEXT = 4;
 
 void
 HandleSubItemPrepaint(wxListCtrl* listctrl,
@@ -3083,6 +3086,9 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
         // Nothing can fit.
         return;
     }
+
+    bool checkboxShown = false;
+    bool imageShown = false;
 
     if ( !col && listctrl->HasCheckBoxes() )
     {
@@ -3123,6 +3129,7 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
                 ILD_TRANSPARENT
             );
 
+            checkboxShown = true;
             rc.left += GAP_AFTER_CHECKBOX;
 
             // move left edge for further drawing
@@ -3191,6 +3198,7 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
         // images align?)
         if ( it.iImage != -1 )
         {
+            imageShown = true;
             rc.left += xOffset;
         }
     }
@@ -3200,6 +3208,9 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
 
     // draw attribute background after drawing any images or checkboxes
     RECT fillRect = rc;
+    if ( !checkboxShown && !imageShown && listctrl->GetColumnOrder(col) != 0 )
+        fillRect.left -= PADDING_LEFT_SIDE;
+    fillRect.right += (PADDING_RIGHT_SIDE - 1);
     ::FillRect(hdc, &fillRect, AutoHBRUSH(pLVCD->clrTextBk));
 
     ::SetBkMode(hdc, TRANSPARENT);
@@ -3218,16 +3229,18 @@ HandleSubItemPrepaint(wxListCtrl* listctrl,
         {
             case LVCFMT_LEFT:
                 fmt |= DT_LEFT;
-                rc.left += PADDING_FOR_TEXT;
+                rc.left += PADDING_LEFT_FOR_TEXT;
                 break;
 
             case LVCFMT_CENTER:
+                rc.left += PADDING_LEFT_FOR_TEXT;
+                rc.right -= PADDING_RIGHT_FOR_TEXT;
                 fmt |= DT_CENTER;
                 break;
 
             case LVCFMT_RIGHT:
                 fmt |= DT_RIGHT;
-                rc.right -= PADDING_FOR_TEXT;
+                rc.right -= PADDING_RIGHT_FOR_TEXT;
                 break;
         }
     }
@@ -3254,6 +3267,44 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
     }
 }
 
+void DrawGridLines(wxListCtrl* listctrl, int item, int gap = 0)
+{
+    const bool drawHRules = listctrl->HasFlag(wxLC_HRULES);
+    const bool drawVRules = listctrl->HasFlag(wxLC_VRULES);
+    if ( !(drawHRules || drawVRules) )
+        return;
+
+    wxWindowDC wdc(listctrl);
+    HDC hdc = GetHdcOf(wdc.GetTempHDC());
+
+    RECT rc;
+    wxGetListCtrlItemRect(GetHwndOf(listctrl), item, LVIR_BOUNDS, rc);
+
+    const wxColour penColour(wxSystemSettings::GetColour(wxMSWDarkMode::IsActive()
+                                                         ? wxSYS_COLOUR_GRAYTEXT
+                                                         : wxSYS_COLOUR_3DLIGHT));
+    COLORREF clrGrid = wxColourToRGB(penColour);
+
+    if ( drawHRules )
+    {
+        wxDrawHVLine(hdc, rc.left, rc.bottom, rc.right, rc.bottom, clrGrid, 1);
+    }
+
+    if ( drawVRules )
+    {
+        for ( auto col : listctrl->GetColumnsOrder() )
+        {
+            wxRect rectSubItem;
+            if ( !listctrl->GetSubItemRect(item, col, rectSubItem, wxLIST_RECT_BOUNDS) )
+                continue;
+
+            // add 1 to match the header lines
+            const int x = rectSubItem.GetRight() + 1;
+            wxDrawHVLine(hdc, x, rc.top - gap, x, rc.bottom, clrGrid, 1);
+        }
+    }
+}
+
 // This function is normally called only if we use custom colours, but it's
 // also called when using dark mode as we have to draw the selected item
 // ourselves when using it, and if we do this, we have to paint all the items
@@ -3264,6 +3315,9 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
 
     const HWND hwndList = nmcd.hdr.hwndFrom;
     const int item = nmcd.dwItemSpec;
+
+    RECT rc = GetCustomDrawnItemRect(nmcd);
+    HDC hdc = nmcd.hdc;
 
     // unfortunately we can't trust CDIS_SELECTED, it is often set even when
     // the item is not at all selected for some reason (comctl32 6), but we
@@ -3297,11 +3351,26 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
         nmcd.uItemState &= ~CDIS_FOCUS;
     }
 
-    HDC hdc = nmcd.hdc;
-    RECT rc = GetCustomDrawnItemRect(nmcd);
-    COLORREF clrFullBG = wxColourToRGB((nmcd.uItemState & CDIS_SELECTED)
-        ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)
-        : listctrl->GetBackgroundColour());
+    // determine if the item is hot (mouse hovering over it)
+    POINT point;
+    wxGetCursorPosMSW(&point);
+    ::ScreenToClient(GetHwndOf(listctrl), &point);
+    if ( listctrl->IsEnabled() && ::PtInRect(&rc, point) != 0 )
+    {
+        nmcd.uItemState |= CDIS_HOT;
+    }
+    else
+    {
+        nmcd.uItemState &= ~CDIS_HOT;
+    }
+
+    wxColour clrBg = listctrl->GetBackgroundColour();
+    if ( nmcd.uItemState & CDIS_SELECTED )
+        clrBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    else if ( nmcd.uItemState & CDIS_HOT )
+        // closest match to colour when hovering over the header (0x434343)
+        clrBg = wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW);
+    COLORREF clrFullBG = wxColourToRGB(clrBg);
 
     // clear the entire row with the listctrl's bg colour
     // otherwise, it'd keep the hover color but only for the regions
@@ -3335,20 +3404,15 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
         }
         HFONT hfont = font.IsOk() ? GetHfontOf(font) : nullptr;
 
+        pLVCD->clrText = attr && attr->HasTextColour()
+            ? wxColourToRGB(attr->GetTextColour())
+            : wxColourToRGB(listctrl->GetTextColour());
+        pLVCD->clrTextBk = clrFullBG;
         if ( nmcd.uItemState & CDIS_SELECTED )
-        {
             pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-            pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-        }
-        else
-        {
-            pLVCD->clrText = attr && attr->HasTextColour()
-                ? wxColourToRGB(attr->GetTextColour())
-                : wxColourToRGB(listctrl->GetTextColour());
-            pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
-                ? wxColourToRGB(attr->GetBackgroundColour())
-                : wxColourToRGB(listctrl->GetBackgroundColour());
-        }
+        if ( !(nmcd.uItemState & CDIS_SELECTED) && !(nmcd.uItemState & CDIS_HOT)
+                                          && attr && attr->HasBackgroundColour() )
+            pLVCD->clrTextBk = wxColourToRGB(attr->GetBackgroundColour());
 
         COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
 
@@ -3356,6 +3420,8 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
 
         ::SetTextColor(hdc, colTextOld);
     }
+
+    DrawGridLines(listctrl, item);
 
     HandleItemPostpaint(nmcd);
 }
@@ -3369,6 +3435,14 @@ WXLPARAM HandleItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
     }
 
     wxItemAttr* attr = listctrl->MSWGetItemColumnAttr(pLVCD->nmcd.dwItemSpec, pLVCD->iSubItem);
+
+    pLVCD->clrText = attr && attr->HasTextColour()
+        ? wxColourToRGB(attr->GetTextColour())
+        : wxColourToRGB(listctrl->GetTextColour());
+    pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
+        ? wxColourToRGB(attr->GetBackgroundColour())
+        : wxColourToRGB(listctrl->GetBackgroundColour());
+
     if ( !attr )
     {
         // nothing to do for this item
@@ -3439,10 +3513,16 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             break;
 
         case CDDS_ITEMPREPAINT:
+            // set the text foreground and background colour for listview
+            // and icon view, these don't get messages for subitems
+            pLVCD->clrText = wxColourToRGB(GetForegroundColour());
+            pLVCD->clrTextBk = wxColourToRGB(GetBackgroundColour());
+
             // get a message for each subitem
             return CDRF_NOTIFYITEMDRAW;
 
         case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
+        {
             const int item = nmcd.dwItemSpec;
             const int column = pLVCD->iSubItem;
 
@@ -3455,6 +3535,7 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
                 break;
 
             return HandleItemPrepaint(this, pLVCD);
+        }
     }
 
     return CDRF_DODEFAULT;
@@ -3471,16 +3552,17 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     const bool drawVRules = HasFlag(wxLC_VRULES);
 
     // Check if we need to do anything ourselves: either draw the rules or, in
-    // case of using dark mode under Windows 11, erase the unwanted separator
+    // case of using dark mode, draw the default background colour below and
+    // behind the list items, and erase the unwanted separator
     // lines drawn below the items by default, which are ugly because they
     // don't align with the separators drawn by the header control.
     bool needToDraw = false,
          needToErase = false;
-    if ( InReportView() && itemCount )
+    if ( InReportView() )
     {
-        if ( (drawHRules || drawVRules) )
+        if ( itemCount > 0 && (drawHRules || drawVRules) )
             needToDraw = true;
-        else if ( wxMSWDarkMode::IsActive() && wxGetWinVersion() >= wxWinVersion_11 )
+        if ( wxMSWDarkMode::IsActive() )
             needToErase = true;
     }
 
@@ -3509,35 +3591,22 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     if ( needToErase )
     {
         wxRect lastRect;
-        GetItemRect(bottom, lastRect);
+        if ( itemCount > 0 )
+            GetItemRect(bottom, lastRect);
 
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(GetBackgroundColour());
-        dc.DrawRectangle(0, lastRect.GetBottom(), clientSize.x, clientSize.y - lastRect.GetBottom());
+        dc.DrawRectangle(lastRect.GetRight() + 1, 0, clientSize.x - lastRect.GetRight(), clientSize.GetHeight());
+        dc.DrawRectangle(0, lastRect.GetBottom() + 1, clientSize.x, clientSize.y - lastRect.GetBottom());
+    }
+
+    if ( !needToDraw )
         return;
-    }
 
-    const wxColour penColour(wxSystemSettings::GetColour(wxMSWDarkMode::IsActive()
-                                                         ? wxSYS_COLOUR_GRAYTEXT
-                                                         : wxSYS_COLOUR_3DLIGHT));
-    wxPen pen(penColour);
-    dc.SetPen(pen);
-    dc.SetBrush(* wxTRANSPARENT_BRUSH);
+    static const bool useDrawFix = wxApp::GetComCtl32Version() < 600;
+    static const int gap = useDrawFix ? 2 : 0;
 
-    if (drawHRules)
-    {
-        wxRect itemRect;
-        for ( long i = top; i <= bottom; i++ )
-        {
-            if (GetItemRect(i, itemRect))
-            {
-                const int cy = itemRect.GetBottom();
-                dc.DrawLine(0, cy, clientSize.x, cy);
-            }
-        }
-    }
-
-    if (drawVRules)
+    if ( drawVRules && useDrawFix )
     {
         wxRect topItemRect, bottomItemRect;
         GetItemRect(top, topItemRect);
@@ -3565,39 +3634,17 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 EVT_LIST_COL_DRAGGING and also set useDrawFix to false and gap
                 to 2 (not 0).
             */
+            wxDCPenChanger changePen(dc, *wxTRANSPARENT_PEN);
+            wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
 
-            static const bool useDrawFix = wxApp::GetComCtl32Version() < 600;
-
-            static const int gap = useDrawFix ? 2 : 0;
-
-            if (useDrawFix)
-            {
-                wxDCPenChanger changePen(dc, *wxTRANSPARENT_PEN);
-                wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
-
-                dc.DrawRectangle(0, topItemRect.GetY() - gap,
-                                 clientSize.GetWidth(), gap);
-            }
-
-            const int numCols = GetColumnCount();
-            wxVector<int> indexArray(numCols);
-            if ( !ListView_GetColumnOrderArray(GetHwnd(),
-                                               numCols,
-                                               &indexArray[0]) )
-            {
-                wxFAIL_MSG( wxT("invalid column index array in OnPaint()") );
-                return;
-            }
-
-            int x = bottomItemRect.GetX();
-            for (int col = 0; col < numCols; col++)
-            {
-                int colWidth = GetColumnWidth(indexArray[col]);
-                x += colWidth ;
-                dc.DrawLine(x-1, topItemRect.GetY() - gap,
-                            x-1, bottomItemRect.GetBottom());
-            }
+            dc.DrawRectangle(0, topItemRect.GetY() - gap,
+                             clientSize.GetWidth(), gap);
         }
+    }
+
+    for ( long i = top; i <= bottom; i++ )
+    {
+        DrawGridLines(this, i, gap);
     }
 }
 
