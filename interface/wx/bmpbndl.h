@@ -249,16 +249,19 @@ public:
     /**
         Create a bundle from the SVG image.
 
-        Please note that the current implementation uses NanoSVG library
-        (https://github.com/memononen/nanosvg) for parsing and rasterizing SVG
-        images, which does not support the following:
+        Please note that the current implementation uses either LunaSVG library
+        (https://github.com/sammycage/lunasvg) (since wxWidgets 3.3) or NanoSVG
+        library (https://github.com/memononen/nanosvg) (since wxWidgets 3.1.7)
+        for parsing and rasterizing SVG images which imposes the following
+        limitations:
 
         - Text elements
         - SVG 1.1 filters
         - Embedded images
         - Clip paths
 
-        See note below for possible workarounds.
+        These limitations may be relaxed in future wxWidgets versions (they are
+        planned, but not yet implemented in LunaSVG).
 
         Please also note that this method is only available in the ports
         providing raw bitmap access via wxPixelData. This is the case for all
@@ -292,6 +295,12 @@ public:
             of objects (rather than using a clip path to hide them).
             In Inkscape, this can be done via either "Path" → "Difference"
             or "Path" → "Division" (i.e., cookie-cutter subtraction).
+
+        @remark To enable LunaSVG library support, will need to set
+            wxBUILD_CXX_STANDARD to at least 17 when configuring a wxWidgets
+            build. You will also need to have wxUSE_LUNASVG set to 1 in your
+            setup.h file. See @ref overview_cmake "CMake Overview".
+
      */
     static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
 

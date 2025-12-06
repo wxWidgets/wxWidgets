@@ -96,6 +96,12 @@ jobs:
             if ( $use_cxx20 ) {
               cd ..\..\..\build\msw
               cp cxx20.props wx_local.props
+              # Enable Lunasvg for C++20 builds
+              cd ..\..\include\wx\msw
+              $txt = Get-Content setup.h
+              Write-Output $txt |
+                %{$_ -replace "#define wxUSE_LUNASVG 0", "#define wxUSE_LUNASVG 1"} |
+                Set-Content setup.h
             }
 
       - name: Add MSBuild to PATH
