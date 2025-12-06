@@ -288,17 +288,9 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
                          const wxGLContextAttrs *ctxAttrs)
     : m_glContext(nullptr)
 {
-    const int* contextAttribs = nullptr;
-
-    if ( ctxAttrs )
-    {
-        contextAttribs = ctxAttrs->GetGLAttrs();
-    }
-    else if ( win->GetGLCTXAttrs().GetGLAttrs() )
-    {
-        // If OpenGL context parameters were set at wxGLCanvas ctor, get them now
-        contextAttribs = win->GetGLCTXAttrs().GetGLAttrs();
-    }
+    // Fall back to OpenGL context parameters set at wxGLCanvas ctor if any.
+    const wxGLContextAttrs& attrs = ctxAttrs ? *ctxAttrs
+                                             : win->GetGLCTXAttrs();
 
     m_isOk = false;
 
@@ -307,7 +299,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
     m_glContext = eglCreateContext(wxGLCanvasEGL::GetDisplay(), fbc,
                                    other ? other->m_glContext : EGL_NO_CONTEXT,
-                                   contextAttribs);
+                                   attrs.GetGLAttrs());
 
     if ( !m_glContext )
         wxLogMessage(_("Couldn't create OpenGL context"));
