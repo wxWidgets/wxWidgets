@@ -273,6 +273,7 @@ All (GUI):
 wxGTK:
 
 - Add support for using EGL 1.4 (and not 1.5) in wxGLCanvas (#22325).
+- Fix crash deleting wxTextCtrl from wxEVT_TEXT_ENTER handler (#26006).
 - Fix handling total window size with GNOME with X11 (#25348).
 - Fix height of read-only wxBitmapComboBox (#25468).
 - Fix initial appearance of wxGLCanvas when using high DPI (#23733).
@@ -296,7 +297,6 @@ wxMSW
 wxOSX:
 
 - Fix crash on startup when using Farsi as system language (#25561).
-- Fix crash deleting wxTextCtrl from wxEVT_TEXT_ENTER handler (#26006).
 - Fix showing extra controls in wxFileDialog (jey5nd6, #25717).
 - Do not activate "Close" button on Cmd-C (nobugshere, #25346).
 - Fix memory leak in wxColour::Set() (#25569).
