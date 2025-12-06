@@ -96,8 +96,7 @@ wxGLContextAttrs& wxGLContextAttrs::ForwardCompatible()
 
 wxGLContextAttrs& wxGLContextAttrs::ES2()
 {
-    AddAttribBits(EGL_RENDERABLE_TYPE,
-                  EGL_OPENGL_ES2_BIT);
+    useES = true;
     return *this;
 }
 
@@ -293,6 +292,14 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
                                              : win->GetGLCTXAttrs();
 
     m_isOk = false;
+
+    if ( !eglBindAPI(attrs.useES ? EGL_OPENGL_ES_API : EGL_OPENGL_API) )
+    {
+        // This is really not supposed to happen, so don't use wxLogError()
+        // here, there is nothing the user can do about it if it does happen.
+        wxFAIL_MSG("eglBindAPI() failed unexpectedly");
+        return;
+    }
 
     EGLConfig fbc = win->GetEGLConfig();
     wxCHECK_RET( fbc, "Invalid EGLConfig for OpenGL" );

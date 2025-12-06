@@ -151,6 +151,11 @@ public:
     bool x11Direct = false; // X11 direct render
     bool renderTypeRGBA = false;
 #endif // wxUSE_GLCANVAS_GLX
+
+#if wxUSE_GLCANVAS_EGL
+    // Used to select the kind of API used with EGL (OpenGL or OpenGL ES).
+    bool useES = false;
+#endif // wxUSE_GLCANVAS_EGL
 };
 
 // ----------------------------------------------------------------------------
