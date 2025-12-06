@@ -183,13 +183,12 @@ public:
         return wxGLCanvasEGL::InitDefaultConfig(attribList);
     }
 
-    // This method is not currently used by the library itself, but remains for
-    // backwards compatibility and also because wxGTK has it we could start
-    // using it for the same purpose in wxX11 too some day.
+#ifndef __WXGTK3__
     virtual void* GetXVisualInfo() override
     {
         return wxGLCanvasEGL::GetDefaultConfig();
     }
+#endif // GTK < 3
 
     // and override this wxApp method to clean up
     virtual int OnExit() override

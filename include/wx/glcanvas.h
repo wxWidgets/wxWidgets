@@ -312,8 +312,9 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
-// wxGLApp: a special wxApp subclass for OpenGL applications which must be used
-//          to select a visual compatible with the given attributes
+// wxGLApp: Deprecated wxApp subclass for OpenGL applications, don't bother
+//          using it any longer, just use wxGLCanvas::IsDisplaySupported() from
+//          a normal wxApp-derived application class if necessary.
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_GL wxGLAppBase : public wxApp
