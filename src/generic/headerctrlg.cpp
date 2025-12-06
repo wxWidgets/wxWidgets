@@ -528,9 +528,8 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     // account for the horizontal scrollbar offset in the parent window
     dc.SetDeviceOrigin(m_scrollOffset, 0);
 
-    const unsigned int count = m_numColumns;
     int xpos = 0;
-    for ( unsigned int i = 0; i < count; i++ )
+    for ( unsigned int i = 0; i < m_numColumns; i++ )
     {
         const unsigned idx = m_colIndices[i];
         const wxHeaderColumn& col = GetColumn(idx);
@@ -570,7 +569,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         params.m_labelAlignment = col.GetAlignment();
 
 #ifdef __WXGTK__
-        if (i == count-1 && xpos + colWidth >= w)
+        if (i == m_numColumns - 1 && xpos + colWidth >= w)
         {
             state |= wxCONTROL_DIRTY;
         }
