@@ -514,10 +514,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxAutoBufferedPaintDC dc(this);
     dc.Clear();
 
-    // account for the horizontal scrollbar offset in the parent window
-    dc.SetDeviceOrigin(m_scrollOffset, 0);
-
-    int xpos = 0;
+    int xpos = m_scrollOffset;
     for ( unsigned int i = 0; i < m_numColumns; i++ )
     {
         const unsigned idx = m_colIndices[i];
@@ -525,7 +522,14 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         if ( col.IsHidden() )
             continue;
 
-        int colWidth = col.GetWidth();
+        const int colWidth = col.GetWidth();
+        if ( xpos + colWidth < 0 )
+        {
+            // This column is not shown on screen because it is to the left of
+            // the shown area, don't bother drawing it.
+            xpos += colWidth;
+            continue;
+        }
 
         wxHeaderSortIconType sortArrow;
         if ( col.IsSortKey() )
@@ -575,6 +579,12 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                                 );
 
         xpos += colWidth;
+        if ( xpos > w )
+        {
+            // Next column and all the others are beyond the right border of
+            // the window, no need to continue.
+            break;
+        }
     }
     if (xpos < w)
     {
