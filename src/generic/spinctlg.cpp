@@ -219,8 +219,10 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     // don't use borders for this control itself, it wouldn't look good with
     // the text control borders (but we might want to use style border bits to
     // select the text control style)
+    const long styleWithoutBorder = (style & ~wxBORDER_MASK) | wxBORDER_NONE;
+
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize,
-                            (style & ~wxBORDER_MASK) | wxBORDER_NONE,
+                            styleWithoutBorder,
                             wxDefaultValidator, name) )
     {
         return false;
@@ -250,7 +252,10 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
 #endif
 
     m_textCtrl   = new wxSpinCtrlTextGeneric(this, DoValueToText(m_value), style);
-    m_spinButton = new wxSpinCtrlButtonGeneric(this, style);
+    m_spinButton = new wxSpinCtrlButtonGeneric(this, styleWithoutBorder);
+
+    // ensure correct start value also if non-zero
+    m_spinButton->SetValue( m_value );
 
 #if wxUSE_TOOLTIPS
     m_textCtrl->SetToolTip(GetToolTipText());
