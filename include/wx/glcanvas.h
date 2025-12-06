@@ -135,8 +135,8 @@ public:
     void EndList(); // No more values can be chained
 
     // Currently only used for X11 context creation
-    bool x11Direct; // X11 direct render
-    bool renderTypeRGBA;
+    bool x11Direct = false; // X11 direct render
+    bool renderTypeRGBA = false;
 };
 
 // ----------------------------------------------------------------------------
