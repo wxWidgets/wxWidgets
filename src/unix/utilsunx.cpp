@@ -18,10 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-// Define this as soon as possible and before string.h is included to get
-// memset_s() declaration from it if available.
-#define __STDC_WANT_LIB_EXT1__ 1
-
 #include "wx/utils.h"
 
 #if !defined(HAVE_SETENV) && defined(HAVE_PUTENV)
@@ -493,7 +489,7 @@ private:
 // wxExecute implementations
 // ----------------------------------------------------------------------------
 
-#if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
+#ifdef __WXDARWIN_OSX__
 bool wxCocoaLaunch(const char* const* argv, pid_t &pid);
 #endif
 
@@ -614,7 +610,7 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
                     wxT("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS
     pid_t pid;
-#if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
+#ifdef __WXDARWIN_OSX__
     pid = -1;
     // wxCocoaLaunch() only executes app bundles and only does it asynchronously.
     // It returns false if the target is not an app bundle, thus falling

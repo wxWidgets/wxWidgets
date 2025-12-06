@@ -148,6 +148,21 @@ TEST_CASE("wxTextWrapper::Wrap", "[text]")
     }
 }
 
+TEST_CASE("wxTextWrapper::WrapUnicodeSpaces", "[text][unicode]")
+{
+    // Check that ZWSP (U+200B) is treated as a breakable space, but NBSP
+    // (U+00A0) and NNBSP (U+202F) are not.
+    const wxString text{L"Un\u00a0break\u200bable\u202fspace"};
+
+    HardBreakWrapper w;
+
+    const auto n = w.Do(text, 1);
+    INFO("Wrapped text:\n" << w.GetResult() << "\n");
+    REQUIRE( n == 2 );
+    CHECK( w.GetLine(0) == wxString{L"Un\u00a0break"} );
+    CHECK( w.GetLine(1) == wxString{L"able\u202fspace"} );
+}
+
 // This pseudo test is disabled by default as it requires the environment
 // variables WX_TEST_TEXT_WRAP WX_TEST_TEXT_WIDTH to be defined to test how the
 // given text is wrapped.

@@ -24,10 +24,6 @@
 #  include "wx/stream.h"
 #endif
 
-// on some systems (Unixware 7.x) index is defined as a macro in the headers
-// which breaks the compilation below
-#undef index
-
 #define wxIMAGE_OPTION_QUALITY               wxString(wxS("quality"))
 #define wxIMAGE_OPTION_FILENAME              wxString(wxS("FileName"))
 
@@ -111,6 +107,12 @@ class WXDLLIMPEXP_CORE wxImageHandler: public wxObject
 public:
     wxImageHandler()
         : m_name(wxEmptyString), m_extension(wxEmptyString), m_mime(), m_type(wxBITMAP_TYPE_INVALID)
+        { }
+    wxImageHandler(const wxString& name,
+                   const wxString& ext,
+                   wxBitmapType type,
+                   const wxString& mime)
+        : m_name(name), m_extension(ext), m_mime(mime), m_type(type)
         { }
 
 #if wxUSE_STREAMS

@@ -19,15 +19,15 @@
 class WXDLLIMPEXP_CORE wxPNMHandler : public wxImageHandler
 {
 public:
-    inline wxPNMHandler()
+    wxPNMHandler() : wxImageHandler(
+        wxT("PNM file"),
+        wxT("pnm"),
+        wxBITMAP_TYPE_PNM,
+        wxT("image/pnm"))
     {
-        m_name = wxT("PNM file");
-        m_extension = wxT("pnm");
         m_altExtensions.Add(wxT("ppm"));
         m_altExtensions.Add(wxT("pgm"));
         m_altExtensions.Add(wxT("pbm"));
-        m_type = wxBITMAP_TYPE_PNM;
-        m_mime = wxT("image/pnm");
     }
 
 #if wxUSE_STREAMS

@@ -2057,7 +2057,6 @@
     <ClInclude Include="..\..\include\wx\region.h" />
     <ClInclude Include="..\..\include\wx\renderer.h" />
     <ClInclude Include="..\..\include\wx\richmsgdlg.h" />
-    <ClInclude Include="..\..\include\wx\scopeguard.h" />
     <ClInclude Include="..\..\include\wx\scrolbar.h" />
     <ClInclude Include="..\..\include\wx\scrolwin.h" />
     <ClInclude Include="..\..\include\wx\selstore.h" />

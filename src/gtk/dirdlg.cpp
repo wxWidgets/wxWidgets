@@ -44,6 +44,15 @@ static void gtk_dirdialog_response_callback(GtkWidget * WXUNUSED(w),
     else // GTK_RESPONSE_CANCEL or GTK_RESPONSE_NONE
         dialog->GTKOnCancel();
 }
+
+#if GTK_CHECK_VERSION(3,20,0)
+static void wx_dirdialog_show(GtkWidget*, wxDirDialog* win)
+{
+    // If m_widget is shown, then GtkFileChooserNative is not being used.
+    // This happens when using wxDirPickerCtrl, for example.
+    win->GTKDropNative();
+}
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -118,6 +127,7 @@ bool wxDirDialog::Create(wxWindow* parent,
             gtk_parent,
             GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
             nullptr, nullptr));
+        g_signal_connect(m_widget, "show", G_CALLBACK(wx_dirdialog_show), this);
     }
     else
 #endif
@@ -132,14 +142,18 @@ bool wxDirDialog::Create(wxWindow* parent,
     {
         gtk_file_chooser_set_create_folders(
             m_fileChooser, !HasFlag(wxDD_DIR_MUST_EXIST));
+        gtk_file_chooser_set_create_folders(
+            (GtkFileChooser*)m_widget, !HasFlag(wxDD_DIR_MUST_EXIST));
     }
 #endif
 
     // Enable multiple selection if desired
     gtk_file_chooser_set_select_multiple(m_fileChooser, HasFlag(wxDD_MULTIPLE));
+    gtk_file_chooser_set_select_multiple((GtkFileChooser*)m_widget, HasFlag(wxDD_MULTIPLE));
 
     // Enable show hidden folders if desired
     gtk_file_chooser_set_show_hidden(m_fileChooser, HasFlag(wxDD_SHOW_HIDDEN));
+    gtk_file_chooser_set_show_hidden((GtkFileChooser*)m_widget, HasFlag(wxDD_SHOW_HIDDEN));
 
     // local-only property could be set to false to allow non-local files to be loaded.
     // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
@@ -201,6 +215,16 @@ void wxDirDialog::GTKOnCancel()
     EndDialog(wxID_CANCEL);
 }
 
+void wxDirDialog::GTKDropNative()
+{
+    if (m_fileChooser != (GtkFileChooser*)m_widget)
+    {
+        g_object_unref(m_fileChooser);
+        m_fileChooser = (GtkFileChooser*)m_widget;
+        g_object_ref(m_fileChooser);
+    }
+}
+
 int wxDirDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
@@ -252,6 +276,8 @@ void wxDirDialog::SetPath(const wxString& dir)
     if (wxDirExists(dir))
     {
         gtk_file_chooser_set_current_folder(m_fileChooser, wxGTK_CONV_FN(dir));
+        if (m_fileChooser != (GtkFileChooser*)m_widget)
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV_FN(dir));
     }
 }
 

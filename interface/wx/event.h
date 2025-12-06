@@ -2767,8 +2767,8 @@ enum wxMouseWheelAxis
     under Mac platforms with a single button mouse).
 
     For the @c wxEVT_ENTER_WINDOW and @c wxEVT_LEAVE_WINDOW events
-    purposes, the mouse is considered to be inside the window if it is in the
-    window client area and not inside one of its children. In other words, the
+    purposes, the mouse is considered to be inside the window if it is over the
+    window and not inside one of its children. In other words, the
     parent window receives @c wxEVT_LEAVE_WINDOW event not only when the
     mouse leaves the window entirely but also when it enters one of its children.
 

@@ -104,7 +104,7 @@ jobs:
             cmake_qt_version: '5.15.*'
             skip_installation: true
             test_gui: 1
-          - name: MSW/MSVC wxQt 6.8
+          - name: MSW/MSVC wxQt 6.10
             runner: windows-latest
             no_sudo: 1
             cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
@@ -112,8 +112,9 @@ jobs:
             cmake_samples: SOME
             cmake_tests: ALL
             cmake_build_toolkit: qt
-            cmake_qt_version: '6.8.*'
+            cmake_qt_version: '6.10.*'
             skip_installation: true
+            test_gui: 1
           - name: MSW/Clang wxMSW
             shell: msys2 {0}
             runner: windows-latest

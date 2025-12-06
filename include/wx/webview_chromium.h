@@ -16,8 +16,6 @@
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 
-extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[];
-
 class CefClient;
 
 // Private namespace containing classes used only in the implementation.

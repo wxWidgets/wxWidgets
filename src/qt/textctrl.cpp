@@ -126,6 +126,7 @@ class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
 {
 public:
     wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler );
+    ~wxQtTextEdit();
 
     virtual wxString GetValueForProcessEnter() override
     {
@@ -776,6 +777,11 @@ wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
     connect(this, &QTextEdit::redoAvailable, [this](bool available) {
                 m_redoAvailable = available;
             });
+}
+
+wxQtTextEdit::~wxQtTextEdit()
+{
+    delete m_textLimiter;
 }
 
 void wxQtTextEdit::SetMaxLength(unsigned long len)

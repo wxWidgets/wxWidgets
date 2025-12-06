@@ -223,7 +223,7 @@ protected:
     #if defined(__WINDOWS__)
         #include "wx/msw/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
-    #elif defined(__DARWIN__) || defined(__WXOSX_IPHONE__)
+    #elif defined(__DARWIN__)
         #include "wx/osx/core/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
     #elif defined(__UNIX__)

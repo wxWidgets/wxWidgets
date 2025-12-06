@@ -1747,6 +1747,8 @@ public:
 
     void AssignFromUTF8Unchecked(const char *utf8, size_t len = npos)
     {
+        wxSTRING_INVALIDATE_CACHE();
+
         m_impl.assign(utf8, len == npos ? strlen(utf8) : len);
     }
     void AssignFromUTF8(const char *utf8, size_t len = npos)

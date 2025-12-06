@@ -483,14 +483,11 @@ public:
 
 #ifdef __WXMSW__
     // Native Windows functions using the underlying HDC don't honour GDI+
-    // transformations which may be applied to it. Using this function we can
-    // transform the coordinates manually before passing them to such functions
-    // (as in e.g. wxRendererMSW code). It doesn't do anything if this is not a
-    // wxGCDC.
-    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const
-    {
-        return r;
-    }
+    // transformations which may be applied to it and also don't know anything
+    // about wxDC origin as it handles it on its own to avoid limitations
+    // imposed by Windows. Use this function to transform the coordinates
+    // before passing them to such functions (as in e.g. wxRendererMSW code).
+    virtual wxRect MSWApplyWXTransform(const wxRect& r) const { return r; }
 #endif // __WXMSW__
 
 

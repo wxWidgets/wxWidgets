@@ -17,19 +17,20 @@ typedef struct _GdkRGBA GdkRGBA;
 // wxColour
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour : public wxColourBase
+class WXDLLIMPEXP_CORE wxColourImpl : public wxColourBase
 {
 public:
-    // constructors
+    wxColourImpl() = default;
+
+    // port-specific constructors
     // ------------
-    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
-    wxColour(const GdkColor& gdkColor);
+    wxColourImpl(const GdkColor& gdkColor);
 #ifdef __WXGTK3__
-    wxColour(const GdkRGBA& gdkRGBA);
+    wxColourImpl(const GdkRGBA& gdkRGBA);
 #endif
 
-    bool operator==(const wxColour& col) const;
-    bool operator!=(const wxColour& col) const { return !(*this == col); }
+    bool operator==(const wxColourImpl& col) const;
+    bool operator!=(const wxColourImpl& col) const { return !(*this == col); }
 
     unsigned char Red() const override;
     unsigned char Green() const override;
@@ -48,8 +49,6 @@ public:
 protected:
     virtual void
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a) override;
-
-    wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
 
 #endif // _WX_GTK_COLOUR_H_

@@ -32,13 +32,12 @@ struct GifHashTableType;
 class WXDLLIMPEXP_CORE wxGIFHandler : public wxImageHandler
 {
 public:
-    inline wxGIFHandler()
+    wxGIFHandler() : wxImageHandler(
+        wxT("GIF file"),
+        wxT("gif"),
+        wxBITMAP_TYPE_GIF,
+        wxT("image/gif"))
     {
-        m_name = wxT("GIF file");
-        m_extension = wxT("gif");
-        m_type = wxBITMAP_TYPE_GIF;
-        m_mime = wxT("image/gif");
-        m_hashTable = nullptr;
     }
 
 #if wxUSE_STREAMS
@@ -66,7 +65,7 @@ protected:
 
     unsigned long m_crntShiftDWord;   /* For bytes decomposition into codes. */
     int m_pixelCount;
-    struct GifHashTableType *m_hashTable;
+    struct GifHashTableType *m_hashTable = nullptr;
     wxInt16
       m_EOFCode,     /* The EOF LZ code. */
       m_clearCode,   /* The CLEAR LZ code. */

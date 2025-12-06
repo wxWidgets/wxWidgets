@@ -381,16 +381,7 @@ void wxRibbonBar::DeletePage(size_t n)
             m_current_page = wxNOT_FOUND;
 
             if(m_pages.GetCount() > 0)
-            {
-                if(n >= m_pages.GetCount())
-                {
-                    SetActivePage(m_pages.GetCount() - 1);
-                }
-                else
-                {
-                    SetActivePage(n - 1);
-                }
-            }
+                SetActivePage(wxMin(n, m_pages.GetCount() - 1));
         }
         else if(m_current_page > static_cast<int>(n))
         {

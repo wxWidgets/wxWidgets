@@ -564,7 +564,7 @@ wxGLContext::~wxGLContext()
         return;
 
     if ( m_glContext == glXGetCurrentContext() )
-        MakeCurrent(None, nullptr);
+        ClearCurrent();
 
     glXDestroyContext( wxGetX11Display(), m_glContext );
 }
@@ -578,6 +578,12 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     wxCHECK2_MSG( xid, return false, wxT("window must be shown") );
 
     return MakeCurrent(xid, m_glContext);
+}
+
+/* static */
+void wxGLContextBase::ClearCurrent()
+{
+    MakeCurrent(None, nullptr);
 }
 
 // wrapper around glXMakeContextCurrent/glXMakeCurrent depending on GLX

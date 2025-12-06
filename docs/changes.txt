@@ -233,6 +233,11 @@ Changes in behaviour which may result in build errors
   corresponding Scintilla doesn't have any return value, so it was changed
   to return void, please update your code to not use its return value.
 
+- Code unintentionally and mistakenly using wxColour ctor from bool that
+  previously compiled doesn't compile any longer, please fix it to use either
+  the ctor from RGB value or from string explicitly.
+
+
 3.3.2: (released 2025-??-??)
 ----------------------------
 

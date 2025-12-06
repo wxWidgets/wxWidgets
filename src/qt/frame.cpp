@@ -62,9 +62,13 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 {
     m_qtWindow = new wxQtMainWindow( parent, this );
 
-    // QMainWindow takes ownership of the central widget pointer.
     // Not using QScrollArea or wxPanel is intentional here as it makes the
     // implementation simpler and more manageable.
+    //
+    // Quoting the Qt docs [QMainWindow::setCentralWidget()]:
+    // QMainWindow takes ownership of the widget pointer and deletes it at
+    // the appropriate time.
+    //
     GetQMainWindow()->setCentralWidget( new wxQtCentralWidget( this, this ) );
 
     if ( !wxFrameBase::Create( parent, id, title, pos, size, style, name ) )

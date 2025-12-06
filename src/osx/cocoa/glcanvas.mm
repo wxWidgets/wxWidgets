@@ -207,4 +207,10 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     return true;
 }
 
+/* static */
+void wxGLContextBase::ClearCurrent()
+{
+    [NSOpenGLContext clearCurrentContext];
+}
+
 #endif // wxUSE_GLCANVAS

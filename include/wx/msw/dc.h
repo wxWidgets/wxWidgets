@@ -96,6 +96,8 @@ public:
     virtual void ResetTransformMatrix() override;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
+    virtual wxRect MSWApplyWXTransform(const wxRect& r) const override;
+
     virtual void SetLogicalFunction(wxRasterOperationMode function) override;
 
     // implementation from now on
@@ -282,7 +284,7 @@ protected:
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
 
     // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
-    void SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset = false);
+    void SetClippingHrgn(WXHRGN hrgn);
 
     // implementation of DoGetSize() for wxScreen/PrinterDC: this simply
     // returns the size of the entire device this DC is associated with

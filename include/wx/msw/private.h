@@ -847,13 +847,13 @@ public:
     bool IsRegistered() const { return m_registered == 1; }
 
     // try to register the class if not done yet, return true on success
-    bool Register(const WNDCLASS& wc)
+    bool Register(const WNDCLASSW& wc)
     {
         // we should only be called if we hadn't been initialized yet
         wxASSERT_MSG( m_registered == -1,
                         wxT("calling ClassRegistrar::Register() twice?") );
 
-        m_registered = ::RegisterClass(&wc) ? 1 : 0;
+        m_registered = ::RegisterClassW(&wc) ? 1 : 0;
         if ( !IsRegistered() )
         {
             wxLogLastError(wxT("RegisterClassEx()"));
@@ -875,7 +875,7 @@ public:
     {
         if ( IsRegistered() )
         {
-            if ( !::UnregisterClass(m_clsname.t_str(), wxGetInstance()) )
+            if ( !::UnregisterClassW(m_clsname.wc_str(), wxGetInstance()) )
             {
                 wxLogLastError(wxT("UnregisterClass"));
             }
@@ -949,7 +949,7 @@ private:
 inline wxString wxGetFullModuleName(HMODULE hmod)
 {
     wxString fullname;
-    if ( !::GetModuleFileName
+    if ( !::GetModuleFileNameW
             (
                 hmod,
                 wxStringBuffer(fullname, MAX_PATH),

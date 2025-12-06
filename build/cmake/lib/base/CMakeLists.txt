@@ -14,13 +14,9 @@ if(WIN32)
     wx_append_sources(BASE_FILES BASE_WIN32)
     wx_append_sources(BASE_FILES BASE_AND_GUI_WIN32)
 elseif(APPLE)
-    if(WXOSX_COCOA OR WXOSX_IPHONE)
-        wx_append_sources(BASE_FILES BASE_OSX_SHARED)
-        if(WXOSX_COCOA)
-            wx_append_sources(BASE_FILES BASE_AND_GUI_OSX_COCOA)
-        endif()
-    else()
-        wx_append_sources(BASE_FILES BASE_OSX_NOTWXMAC)
+    wx_append_sources(BASE_FILES BASE_OSX)
+    if(WXOSX_COCOA)
+        wx_append_sources(BASE_FILES BASE_AND_GUI_OSX_COCOA)
     endif()
 elseif(UNIX)
     wx_append_sources(BASE_FILES BASE_UNIX)
@@ -58,13 +54,24 @@ endif()
 
 if(APPLE)
     wx_lib_link_libraries(wxbase
+        PRIVATE
+        "-framework Security"
         PUBLIC
         "-framework CoreFoundation"
     )
+    if(WXOSX_IPHONE)
+        wx_lib_link_libraries(wxbase
+            PUBLIC
+            "-framework UIKit"
+        )
+    else()
+        wx_lib_link_libraries(wxbase
+            PUBLIC
+            "-framework AppKit"
+        )
+    endif()
     if(WXOSX_COCOA)
         wx_lib_link_libraries(wxbase
-            PRIVATE
-            "-framework Security"
             PUBLIC
             "-framework Carbon"
             "-framework Cocoa"

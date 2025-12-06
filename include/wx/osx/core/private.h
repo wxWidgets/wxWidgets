@@ -39,7 +39,7 @@
 #   endif
 #endif
 
-#if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
+#if ( !wxUSE_GUI && !defined(__WXOSX_IPHONE__) ) || defined(__WXOSX_COCOA__)
 
 // Carbon functions are currently still used in wxOSX/Cocoa too (including
 // wxBase part of it).
@@ -66,9 +66,9 @@ WXDLLIMPEXP_BASE NSString* wxNSStringWithWxString(const wxString &wxstring);
 
 WXDLLIMPEXP_BASE CFURLRef wxOSXCreateURLFromFileSystemPath( const wxString& path);
 
-#if wxUSE_GUI
+#if wxUSE_GUI && defined(__WXOSX__)
 
-#if !wxOSX_USE_IPHONE
+#if !defined(__WXOSX_IPHONE__)
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
@@ -1050,15 +1050,19 @@ protected :
     wxDECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl);
 };
 
-#endif // wxUSE_GUI
+#endif // __WXOSX__
 
 //---------------------------------------------------------------------------
 // cocoa bridging utilities
 //---------------------------------------------------------------------------
 
-bool wxMacInitCocoa();
+#ifdef __WXDARWIN_OSX__
 
-class WXDLLIMPEXP_CORE wxMacAutoreleasePool
+bool WXDLLIMPEXP_BASE wxMacInitCocoa();
+
+#endif // __WXDARWIN_OSX__
+
+class WXDLLIMPEXP_BASE wxMacAutoreleasePool
 {
 public :
     wxMacAutoreleasePool();
@@ -1069,9 +1073,9 @@ private :
 
 // NSObject
 
-void wxMacCocoaRelease( void* obj );
-void wxMacCocoaAutorelease( void* obj );
-void* wxMacCocoaRetain( void* obj );
+void WXDLLIMPEXP_BASE wxMacCocoaRelease( void* obj );
+void WXDLLIMPEXP_BASE wxMacCocoaAutorelease( void* obj );
+void* WXDLLIMPEXP_BASE wxMacCocoaRetain( void* obj );
 
 // shared_ptr like API for NSObject and subclasses
 template <class T>
