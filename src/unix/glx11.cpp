@@ -770,39 +770,80 @@ int wxGLCanvasX11::GetGLXVersion()
     return s_glxVersion;
 }
 
-namespace
+void wxGLCanvasX11::GLXSetSwapInterval(int interval)
 {
+    const Window xid = GetXWindow();
+    if ( !xid )
+    {
+        // Remember to do it later in SwapBuffers().
+        m_swapIntervalToSet = interval;
+        return;
+    }
 
-// Call glXSwapIntervalEXT() if present.
-//
-// For now just try using EXT_swap_control extension, in principle there is
-// also a MESA one, but it's not clear if it's worth falling back on it (or
-// preferring to use it?).
-void wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
-{
     typedef void (*PFNGLXSWAPINTERVALEXTPROC)(Display *dpy,
                                               GLXDrawable drawable,
                                               int interval);
+    typedef void (*PFNGLXSWAPINTERVALMESAPROC)(int interval);
 
     static PFNGLXSWAPINTERVALEXTPROC s_glXSwapIntervalEXT = nullptr;
-    static bool s_glXSwapIntervalEXTInit = false;
-    if ( !s_glXSwapIntervalEXTInit )
-    {
-        s_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)
-            glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
+    static PFNGLXSWAPINTERVALMESAPROC s_glXSwapIntervalMESA = nullptr;
 
-        s_glXSwapIntervalEXTInit = true;
+    if ( IsExtensionSupported("GLX_EXT_swap_control") )
+    {
+        static bool s_glXSwapIntervalEXTInit = false;
+        if ( !s_glXSwapIntervalEXTInit )
+        {
+            s_glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)
+                glXGetProcAddress((const GLubyte*)"glXSwapIntervalEXT");
+
+            s_glXSwapIntervalEXTInit = true;
+
+            if ( !s_glXSwapIntervalEXT )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_EXT_swap_control supported but "
+                           "glXSwapIntervalEXT() unexpectedly not found");
+            }
+        }
+    }
+    else if ( IsExtensionSupported("GLX_MESA_swap_control") )
+    {
+        static bool s_glXSwapIntervalMESAInit = false;
+        if ( !s_glXSwapIntervalMESAInit )
+        {
+            s_glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESAPROC)
+                glXGetProcAddress((const GLubyte*)"glXSwapIntervalMESA");
+
+            s_glXSwapIntervalMESAInit = true;
+
+            if ( !s_glXSwapIntervalMESA )
+            {
+                wxLogTrace(TRACE_GLX, "GLX_MESA_swap_control supported but "
+                           "glXSwapIntervalMESA() unexpectedly not found");
+            }
+        }
     }
 
     if ( s_glXSwapIntervalEXT )
     {
         wxLogTrace(TRACE_GLX, "Setting GLX swap interval to %d", interval);
 
-        s_glXSwapIntervalEXT(dpy, drawable, interval);
+        s_glXSwapIntervalEXT(wxGetX11Display(), xid, interval);
     }
+    else if ( s_glXSwapIntervalMESA )
+    {
+        wxLogTrace(TRACE_GLX, "Setting GLX swap interval to %d (using MESA)",
+                   interval);
+
+        s_glXSwapIntervalMESA(interval);
+    }
+
+    GLXDontSetSwapInterval();
 }
 
-} // anonymous namespace
+void wxGLCanvasX11::GLXDontSetSwapInterval()
+{
+    m_swapIntervalToSet = -1;
+}
 
 bool wxGLCanvasX11::SwapBuffers()
 {
@@ -813,13 +854,9 @@ bool wxGLCanvasX11::SwapBuffers()
 
     // Disable blocking in glXSwapBuffers, as this is needed under XWayland for
     // the reasons explained in wxGLCanvasEGL::SwapBuffers().
-    if ( !m_swapIntervalSet )
+    if ( m_swapIntervalToSet != -1 )
     {
-        wxGLSetSwapInterval(dpy, xid, 0);
-
-        // Don't try again in any case, if we failed this time, we'll fail the
-        // next one anyhow.
-        m_swapIntervalSet = true;
+        GLXSetSwapInterval(m_swapIntervalToSet);
     }
 
     glXSwapBuffers(dpy, xid);
