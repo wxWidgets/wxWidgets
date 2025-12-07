@@ -584,7 +584,7 @@ EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
         // it isn't.
         if ( s_eglCreatePlatformWindowSurface )
         {
-            return s_eglCreatePlatformWindowSurface(m_display, m_config,
+            return s_eglCreatePlatformWindowSurface(m_display, *m_config,
                                                     window,
                                                     NULL);
         }
@@ -606,13 +606,13 @@ EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
 
     if ( s_eglCreatePlatformWindowSurfaceEXT )
     {
-        return s_eglCreatePlatformWindowSurfaceEXT(m_display, m_config,
+        return s_eglCreatePlatformWindowSurfaceEXT(m_display, *m_config,
                                                    window,
                                                    NULL);
     }
     else
     {
-        return eglCreateWindowSurface(m_display, m_config,
+        return eglCreateWindowSurface(m_display, *m_config,
                                       reinterpret_cast<EGLNativeWindowType>(window),
                                       NULL);
     }
