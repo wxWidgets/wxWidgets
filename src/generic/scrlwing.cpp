@@ -175,11 +175,11 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // them as well, as we need to autoscroll
     if ( evType == wxEVT_LEFT_DOWN )
     {
-        m_scrollHelper->HandleOnLButtonUp((wxMouseEvent&)event);
+        m_scrollHelper->OnLeftDown((wxMouseEvent&)event);
     }
     else if ( evType == wxEVT_MOTION )
     {
-        m_scrollHelper->HandleOnMouseMove((wxMouseEvent&)event);
+        m_scrollHelper->OnMotion((wxMouseEvent&)event);
     }
 
     // Pass it on to the real handler: notice that we must not call
@@ -1002,7 +1002,7 @@ void wxScrollHelperBase::StopAutoScrolling()
 #endif
 }
 
-void wxScrollHelperBase::HandleOnMouseMove(wxMouseEvent& event)
+void wxScrollHelperBase::OnMotion(wxMouseEvent& event)
 {
     // don't prevent the usual processing of the event from taking place
     event.Skip();
@@ -1104,7 +1104,7 @@ void wxScrollHelperBase::HandleOnMouseMove(wxMouseEvent& event)
     }
 }
 
-void wxScrollHelperBase::HandleOnLButtonUp(wxMouseEvent& event)
+void wxScrollHelperBase::OnLeftDown(wxMouseEvent& event)
 {
     // don't prevent the usual processing of the event from taking place
     event.Skip();

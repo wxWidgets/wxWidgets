@@ -277,8 +277,8 @@ public:
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
     void HandleOnSize(wxSizeEvent& event);
-    void HandleOnMouseMove(wxMouseEvent& event);
-    void HandleOnLButtonUp(wxMouseEvent& event);
+    void OnMotion(wxMouseEvent& event);
+    void OnLeftDown(wxMouseEvent& event);
 #if wxUSE_MOUSEWHEEL
     void HandleOnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
