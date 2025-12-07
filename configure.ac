@@ -3458,7 +3458,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
                         if test "$WXGTK3" = 1; then
                             if test "$wxUSE_GLCANVAS_EGL" != "no"; then
-                                PKG_CHECK_MODULES(EGL, [egl >= 1.5],
+                                PKG_CHECK_MODULES(EGL, [egl >= 1.4],
                                     [
                                         OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
                                         AC_DEFINE(wxUSE_GLCANVAS_EGL)
@@ -3473,7 +3473,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                                         )
                                     ],
                                     [
-                                        AC_MSG_NOTICE([EGL 1.5+ not available. Will use GLX.])
+                                        AC_MSG_NOTICE([EGL 1.4+ not available. Will use GLX.])
                                     ]
                                 )
                                 if test "$have_wayland" != 1; then

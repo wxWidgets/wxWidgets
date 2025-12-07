@@ -735,7 +735,6 @@ COND_TOOLKIT_GTK
 COND_TOOLKIT_DFB_USE_GUI_1
 COND_TOOLKIT_DFB
 COND_TOOLKIT_COCOA
-COND_TOOLKIT_
 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1
 COND_SHARED_1_USE_GUI_1
 COND_SHARED_1
@@ -31302,19 +31301,19 @@ fi
                             if test "$wxUSE_GLCANVAS_EGL" != "no"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for egl >= 1.5" >&5
-$as_echo_n "checking for egl >= 1.5... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for egl >= 1.4" >&5
+$as_echo_n "checking for egl >= 1.4... " >&6; }
 
 if test -n "$EGL_CFLAGS"; then
     pkg_cv_EGL_CFLAGS="$EGL_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "egl >= 1.5") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "egl >= 1.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_EGL_CFLAGS=`$PKG_CONFIG --cflags "egl >= 1.5" 2>/dev/null`
+  pkg_cv_EGL_CFLAGS=`$PKG_CONFIG --cflags "egl >= 1.4" 2>/dev/null`
               test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -31326,12 +31325,12 @@ if test -n "$EGL_LIBS"; then
     pkg_cv_EGL_LIBS="$EGL_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "egl >= 1.5") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "egl >= 1.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_EGL_LIBS=`$PKG_CONFIG --libs "egl >= 1.5" 2>/dev/null`
+  pkg_cv_EGL_LIBS=`$PKG_CONFIG --libs "egl >= 1.4" 2>/dev/null`
               test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -31352,24 +31351,24 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-            EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "egl >= 1.5" 2>&1`
+            EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "egl >= 1.4" 2>&1`
         else
-            EGL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "egl >= 1.5" 2>&1`
+            EGL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "egl >= 1.4" 2>&1`
         fi
     # Put the nasty error message in config.log where it belongs
     echo "$EGL_PKG_ERRORS" >&5
 
 
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
-$as_echo "$as_me: EGL 1.5+ not available. Will use GLX." >&6;}
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
+$as_echo "$as_me: EGL 1.4+ not available. Will use GLX." >&6;}
 
 
 elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
-$as_echo "$as_me: EGL 1.5+ not available. Will use GLX." >&6;}
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
+$as_echo "$as_me: EGL 1.4+ not available. Will use GLX." >&6;}
 
 
 else
@@ -43498,11 +43497,6 @@ EOF
     COND_SHARED_1_USE_GUI_1_USE_OPENGL_1="#"
     if test "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_OPENGL" = "x1" ; then
         COND_SHARED_1_USE_GUI_1_USE_OPENGL_1=""
-    fi
-
-    COND_TOOLKIT_="#"
-    if test "x$TOOLKIT" = "x" ; then
-        COND_TOOLKIT_=""
     fi
 
     COND_TOOLKIT_COCOA="#"
