@@ -247,6 +247,8 @@ void wxHeaderCtrl::RefreshColsAfter(unsigned int idx)
 {
     wxRect rect = GetClientRect();
     const int ofs = GetColStart(idx);
+    if ( ofs >= rect.width )
+        return;
     rect.x += ofs;
     rect.width -= ofs;
 
@@ -523,19 +525,22 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxAutoBufferedPaintDC dc(this);
     dc.Clear();
 
-    // account for the horizontal scrollbar offset in the parent window
-    dc.SetDeviceOrigin(m_scrollOffset, 0);
-
-    const unsigned int count = m_numColumns;
-    int xpos = 0;
-    for ( unsigned int i = 0; i < count; i++ )
+    int xpos = m_scrollOffset;
+    for ( unsigned int i = 0; i < m_numColumns; i++ )
     {
         const unsigned idx = m_colIndices[i];
         const wxHeaderColumn& col = GetColumn(idx);
         if ( col.IsHidden() )
             continue;
 
-        int colWidth = col.GetWidth();
+        const int colWidth = col.GetWidth();
+        if ( xpos + colWidth < 0 )
+        {
+            // This column is not shown on screen because it is to the left of
+            // the shown area, don't bother drawing it.
+            xpos += colWidth;
+            continue;
+        }
 
         wxHeaderSortIconType sortArrow;
         if ( col.IsSortKey() )
@@ -568,7 +573,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         params.m_labelAlignment = col.GetAlignment();
 
 #ifdef __WXGTK__
-        if (i == count-1 && xpos + colWidth >= w)
+        if (i == m_numColumns - 1 && xpos + colWidth >= w)
         {
             state |= wxCONTROL_DIRTY;
         }
@@ -585,6 +590,12 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                                 );
 
         xpos += colWidth;
+        if ( xpos > w )
+        {
+            // Next column and all the others are beyond the right border of
+            // the window, no need to continue.
+            break;
+        }
     }
     if (xpos < w)
     {
