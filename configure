@@ -33182,12 +33182,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_EGL_CFLAGS="$EGL_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "egl >= 1.5") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "egl >= 1.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_EGL_CFLAGS=`$PKG_CONFIG --cflags "egl >= 1.5" 2>/dev/null`
+  pkg_cv_EGL_CFLAGS=`$PKG_CONFIG --cflags "egl >= 1.4" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -33200,12 +33200,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_EGL_LIBS="$EGL_LIBS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "egl >= 1.5") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"egl >= 1.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "egl >= 1.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_EGL_LIBS=`$PKG_CONFIG --libs "egl >= 1.5" 2>/dev/null`
+  pkg_cv_EGL_LIBS=`$PKG_CONFIG --libs "egl >= 1.4" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -33224,22 +33224,22 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "egl >= 1.5"`
+	        EGL_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "egl >= 1.4"`
         else
-	        EGL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "egl >= 1.5"`
+	        EGL_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "egl >= 1.4"`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$EGL_PKG_ERRORS" >&5
 
 
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
-$as_echo "$as_me: EGL 1.5+ not available. Will use GLX." >&6;}
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
+$as_echo "$as_me: EGL 1.4+ not available. Will use GLX." >&6;}
 
 
 elif test $pkg_failed = untried; then
 
-                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.5+ not available. Will use GLX." >&5
-$as_echo "$as_me: EGL 1.5+ not available. Will use GLX." >&6;}
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
+$as_echo "$as_me: EGL 1.4+ not available. Will use GLX." >&6;}
 
 
 else
