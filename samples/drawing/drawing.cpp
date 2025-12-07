@@ -284,6 +284,12 @@ public:
         m_canvas->SetOuterScrollZone(0);
     }
 
+    void OnAutoscrollDisable(wxCommandEvent& WXUNUSED(event))
+    {
+        m_canvas->SetInnerScrollZone(0);
+        m_canvas->SetOuterScrollZone(0);
+    }
+
     void OnBuffer(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
 #if wxUSE_FILEDLG
@@ -388,6 +394,7 @@ enum
 #endif
     File_AutoscrollOuter,
     File_AutoscrollInner,
+    File_AutoscrollDisable,
     File_Copy,
     File_Save,
 
@@ -2536,6 +2543,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_GRAPHICS_CONTEXT
     EVT_MENU      (File_AutoscrollOuter, MyFrame::OnAutoscrollOuter)
     EVT_MENU      (File_AutoscrollInner, MyFrame::OnAutoscrollInner)
+    EVT_MENU      (File_AutoscrollDisable, MyFrame::OnAutoscrollDisable)
 
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
     EVT_MENU      (File_Copy,     MyFrame::OnCopy)
@@ -2636,8 +2644,9 @@ MyFrame::MyFrame(const wxString& title)
             ->Check();
 #endif
     menuFile->AppendSeparator();
-    menuFile->AppendRadioItem(File_AutoscrollOuter, "&Outer", "Autoscroll zone outside window");
-    menuFile->AppendRadioItem(File_AutoscrollInner, "&Inner", "Autoscroll zone inside window");
+    menuFile->AppendRadioItem(File_AutoscrollOuter, "&Outer Scroll Zone", "Autoscroll zone outside window");
+    menuFile->AppendRadioItem(File_AutoscrollInner, "&Inner Scroll Zone", "Autoscroll zone inside window");
+    menuFile->AppendRadioItem(File_AutoscrollDisable, "Disab&le AutoScroll Zone", "Disable Autoscroll");
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
     menuFile->Append(File_Copy, "Copy to clipboard");
