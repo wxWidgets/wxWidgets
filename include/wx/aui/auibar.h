@@ -41,7 +41,15 @@ enum wxAuiToolBarStyle
     // to be horizontal
     wxAUI_TB_HORIZONTAL    = 1 << 7,
     wxAUI_TB_PLAIN_BACKGROUND = 1 << 8,
+    // For vertical toolbars, put icon before or after vertical text.
+    wxAUI_TB_VERT_LAYOUT_DOWN = 1 << 9,
+    wxAUI_TB_VERT_LAYOUT_UP = 1 << 10,
+    // And rotate the icon to match the text orientation if this flag is set.
+    wxAUI_TB_ROTATE_ICON_WITH_TEXT = 1 << 11,
+
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
+    wxAUI_TB_VERT_TEXT_DOWN = (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_TEXT),
+    wxAUI_TB_VERT_TEXT_UP = (wxAUI_TB_VERT_LAYOUT_UP | wxAUI_TB_TEXT),
     wxAUI_ORIENTATION_MASK = (wxAUI_TB_VERTICAL | wxAUI_TB_HORIZONTAL),
     wxAUI_TB_DEFAULT_STYLE = 0
 };
@@ -60,6 +68,18 @@ enum wxAuiToolBarToolTextOrientation
     wxAUI_TBTOOL_TEXT_RIGHT = 1,
     wxAUI_TBTOOL_TEXT_TOP = 2,      // unused/unimplemented
     wxAUI_TBTOOL_TEXT_BOTTOM = 3
+};
+
+enum class wxAuiTextDirection
+{
+    // This is always used for horizontal toolbars.
+    LeftToRight,
+
+    // This may be used for vertical toolbars, typically on the right side.
+    TopToBottom,
+
+    // This may be used for vertical toolbars, typically on the left side.
+    BottomToTop
 };
 
 
@@ -108,46 +128,13 @@ class WXDLLIMPEXP_AUI wxAuiToolBarItem
     friend class wxAuiToolBar;
 
 public:
+    wxAuiToolBarItem() = default;
 
-    wxAuiToolBarItem()
-    {
-        m_window = nullptr;
-        m_sizerItem = nullptr;
-        m_spacerPixels = 0;
-        m_toolId = 0;
-        m_kind = wxITEM_NORMAL;
-        m_state = 0;  // normal, enabled
-        m_proportion = 0;
-        m_active = true;
-        m_dropDown = true;
-        m_sticky = true;
-        m_userData = 0;
-        m_clientData = nullptr;
-        m_alignment = wxALIGN_CENTER;
-    }
+    wxAuiToolBarItem& operator=(const wxAuiToolBarItem& c) = default;
 
     void Assign(const wxAuiToolBarItem& c)
     {
-        m_window = c.m_window;
-        m_label = c.m_label;
-        m_bitmap = c.m_bitmap;
-        m_disabledBitmap = c.m_disabledBitmap;
-        m_hoverBitmap = c.m_hoverBitmap;
-        m_shortHelp = c.m_shortHelp;
-        m_longHelp = c.m_longHelp;
-        m_sizerItem = c.m_sizerItem;
-        m_minSize = c.m_minSize;
-        m_spacerPixels = c.m_spacerPixels;
-        m_toolId = c.m_toolId;
-        m_kind = c.m_kind;
-        m_state = c.m_state;
-        m_proportion = c.m_proportion;
-        m_active = c.m_active;
-        m_dropDown = c.m_dropDown;
-        m_sticky = c.m_sticky;
-        m_userData = c.m_userData;
-        m_clientData = c.m_clientData;
-        m_alignment = c.m_alignment;
+        *this = c;
     }
 
 
@@ -233,26 +220,26 @@ public:
 
 private:
 
-    wxWindow* m_window;          // item's associated window
-    wxString m_label;            // label displayed on the item
-    wxBitmapBundle m_bitmap;     // item's bitmap
-    wxBitmapBundle m_disabledBitmap;  // item's disabled bitmap
-    wxBitmapBundle m_hoverBitmap;     // item's hover bitmap
-    wxString m_shortHelp;       // short help (for tooltip)
-    wxString m_longHelp;        // long help (for status bar)
-    wxSizerItem* m_sizerItem;   // sizer item
-    wxSize m_minSize;           // item's minimum size
-    int m_spacerPixels;         // size of a spacer
-    int m_toolId;                // item's id
-    int m_kind;                  // item's kind
-    int m_state;                 // state
-    int m_proportion;            // proportion
-    bool m_active;               // true if the item is currently active
-    bool m_dropDown;             // true if the item has a dropdown button
-    bool m_sticky;               // overrides button states if true (always active)
-    long m_userData;             // number associated with the item
-    wxObject* m_clientData;      // pointer to a wxObject associated with the item
-    int m_alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
+    wxWindow* m_window = nullptr;       // item's associated window
+    wxString m_label;                   // label displayed on the item
+    wxBitmapBundle m_bitmap;            // item's bitmap
+    wxBitmapBundle m_disabledBitmap;    // item's disabled bitmap
+    wxBitmapBundle m_hoverBitmap;       // item's hover bitmap
+    wxString m_shortHelp;               // short help (for tooltip)
+    wxString m_longHelp;                // long help (for status bar)
+    wxSizerItem* m_sizerItem = nullptr; // sizer item
+    wxSize m_minSize = wxDefaultSize;   // item's minimum size
+    int m_spacerPixels = 0;             // size of a spacer
+    int m_toolId = 0;                   // item's id
+    int m_kind = wxITEM_NORMAL;         // item's kind
+    int m_state = 0;                    // state
+    int m_proportion = 0;               // proportion
+    bool m_active = true;               // true if the item is currently active
+    bool m_dropDown = false;            // item has a dropdown button if true
+    bool m_sticky = false;              // button is always active if true
+    long m_userData = 0;                // number associated with the item
+    wxObject* m_clientData = nullptr;   // wxObject associated with the item
+    int m_alignment = wxALIGN_CENTER;   // sizer alignment flag
 };
 
 using wxAuiToolBarItemArray = wxBaseObjectArray<wxAuiToolBarItem>;
@@ -276,6 +263,14 @@ public:
     virtual wxFont GetFont() = 0;
     virtual void SetTextOrientation(int orientation) = 0;
     virtual int GetTextOrientation() = 0;
+
+    // Not pure virtual for compatibility reasons, but should be implemented to
+    // render vertical text.
+    virtual void SetTextDirection(wxAuiTextDirection WXUNUSED(direction)) { }
+    virtual wxAuiTextDirection GetTextDirection() const
+    {
+        return wxAuiTextDirection::LeftToRight;
+    }
 
     virtual void DrawBackground(
                          wxDC& dc,
@@ -374,6 +369,8 @@ public:
     virtual wxFont GetFont() override;
     virtual void SetTextOrientation(int orientation) override;
     virtual int GetTextOrientation() override;
+    virtual void SetTextDirection(wxAuiTextDirection direction) override;
+    virtual wxAuiTextDirection GetTextDirection() const override;
 
     virtual void DrawBackground(
                 wxDC& dc,
@@ -463,6 +460,9 @@ protected:
     int m_gripperSize;
     int m_overflowSize;
     int m_dropdownSize;
+
+private:
+    wxAuiTextDirection m_textDirection = wxAuiTextDirection::LeftToRight;
 };
 
 
@@ -598,6 +598,10 @@ public:
     void SetToolTextOrientation(int orientation);
     int  GetToolTextOrientation() const;
 
+    void SetToolTextDirection(wxAuiTextDirection direction);
+    wxAuiTextDirection GetToolTextDirection() const;
+    bool IsToolTextVertical() const;
+
     void SetToolPacking(int packing);
     int  GetToolPacking() const;
 
@@ -725,6 +729,8 @@ private:
     void UpdateBackgroundBitmap(const wxSize& size);
 
     wxBitmap m_backgroundBitmap;
+
+    wxAuiTextDirection m_textDirection = wxAuiTextDirection::LeftToRight;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiToolBar);

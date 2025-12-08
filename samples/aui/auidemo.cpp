@@ -33,7 +33,6 @@
 #include "wx/msgdlg.h"
 #include "wx/textdlg.h"
 #include "wx/stattext.h"
-#include "wx/checkbox.h"
 
 #include "wx/aui/aui.h"
 #include "wx/aui/serializer.h"
@@ -93,6 +92,10 @@ class MyFrame : public wxFrame
         ID_HorizontalGradient,
         ID_LiveUpdate,
         ID_AllowToolbarResizing,
+        ID_ShowTextForMinPanes,
+        ID_ShowIconsForMinPanes,
+        ID_ShowBothForMinPanes,
+        ID_RotateMinPanesIcons,
         ID_Settings,
         ID_CustomizeToolbar,
         ID_DropDownToolbarItem,
@@ -127,9 +130,6 @@ class MyFrame : public wxFrame
         ID_NotebookNormalTab,
         ID_NotebookPinTab,
         ID_NotebookLockTab,
-        ID_3CHECK,
-        ID_UI_2CHECK_UPDATED,
-        ID_UI_3CHECK_UPDATED,
 
         ID_SampleItem,
 
@@ -190,6 +190,8 @@ private:
 
     void OnGradient(wxCommandEvent& evt);
     void OnToolbarResizing(wxCommandEvent& evt);
+    void OnMinPanesStyle(wxCommandEvent& evt);
+    void OnUpdateUIRotateMinPanes(wxUpdateUIEvent& evt);
     void OnManagerFlag(wxCommandEvent& evt);
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
@@ -203,8 +205,6 @@ private:
     void OnNotebookSetTabKind(wxCommandEvent& evt);
 
     void OnPaneClose(wxAuiManagerEvent& evt);
-
-    void OnCheckboxUpdateUI(wxUpdateUIEvent& evt);
 
 private:
 
@@ -691,6 +691,11 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_AllowToolbarResizing, MyFrame::OnToolbarResizing)
+    EVT_MENU(ID_ShowTextForMinPanes, MyFrame::OnMinPanesStyle)
+    EVT_MENU(ID_ShowIconsForMinPanes, MyFrame::OnMinPanesStyle)
+    EVT_MENU(ID_ShowBothForMinPanes, MyFrame::OnMinPanesStyle)
+    EVT_MENU(ID_RotateMinPanesIcons, MyFrame::OnMinPanesStyle)
+    EVT_UPDATE_UI(ID_RotateMinPanesIcons, MyFrame::OnUpdateUIRotateMinPanes)
     EVT_MENU(ID_Settings, MyFrame::OnSettings)
     EVT_MENU(ID_CustomizeToolbar, MyFrame::OnCustomizeToolbar)
     EVT_MENU(ID_GridContent, MyFrame::OnChangeContentPane)
@@ -746,8 +751,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnNotebookPageChanging)
     EVT_AUINOTEBOOK_TAB_RIGHT_DOWN(wxID_ANY, MyFrame::OnNotebookTabRightClick)
     EVT_AUINOTEBOOK_BG_DCLICK(wxID_ANY, MyFrame::OnNotebookTabBackgroundDClick)
-    EVT_UPDATE_UI(ID_UI_2CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
-    EVT_UPDATE_UI(ID_UI_3CHECK_UPDATED, MyFrame::OnCheckboxUpdateUI)
 wxEND_EVENT_TABLE()
 
 
@@ -761,6 +764,10 @@ MyFrame::MyFrame(wxWindow* parent,
 {
     // tell wxAuiManager to manage this frame
     m_mgr.SetManagedWindow(this);
+
+    // allow minimizing panes to docks on the left and right sides of the
+    // window (and, so, disallow docks for them on the top and bottom sides)
+    m_mgr.AllowDocksForMinPanes(wxLEFT | wxRIGHT);
 
     // set frame icon
     SetIcon(wxIcon(sample_xpm));
@@ -812,6 +819,15 @@ MyFrame::MyFrame(wxWindow* parent,
     optionsMenu->AppendRadioItem(ID_HorizontalGradient, _("Horizontal Caption Gradient"));
     optionsMenu->AppendSeparator();
     optionsMenu->AppendCheckItem(ID_AllowToolbarResizing, _("Allow Toolbar Resizing"));
+
+    wxMenu* minPanesMenu = new wxMenu;
+    minPanesMenu->AppendRadioItem(ID_ShowTextForMinPanes, _("Show &text"));
+    minPanesMenu->AppendRadioItem(ID_ShowIconsForMinPanes, _("Show &icons"));
+    minPanesMenu->AppendRadioItem(ID_ShowBothForMinPanes, _("Show &both"))->Check();
+    minPanesMenu->AppendSeparator();
+    minPanesMenu->AppendCheckItem(ID_RotateMinPanesIcons, _("&Rotate icons"));
+    optionsMenu->AppendSubMenu(minPanesMenu, _("&Minimized Panes Options"));
+
     optionsMenu->AppendSeparator();
     optionsMenu->Append(ID_Settings, _("Settings Pane"));
 
@@ -900,14 +916,9 @@ MyFrame::MyFrame(wxWindow* parent,
     appendItems.Add(item);
 
 
-    // If using wxUPDATE_UI_PROCESS_ALL (the default),
-    // some of the problems handling controls in toolbar
-    // are masked by the calls to wxCheckBox::UpdateWindowUI()
-    wxUpdateUIEvent::SetMode(wxUPDATE_UI_PROCESS_SPECIFIED);
     // create some toolbars
     wxAuiToolBar* tb1 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb1->SetExtraStyle(tb1->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
     tb1->AddTool(ID_SampleItem+1, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb1->AddSeparator();
     tb1->AddTool(ID_SampleItem+2, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
@@ -920,7 +931,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb2 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_HORIZONTAL);
-    tb2->SetExtraStyle(tb2->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
 
     wxBitmapBundle tb2_bmp1 = wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
     tb2->AddTool(ID_SampleItem+6, "Disabled", tb2_bmp1);
@@ -942,7 +952,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb3->SetExtraStyle(tb3->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
     wxBitmapBundle tb3_bmp1 = wxArtProvider::GetBitmapBundle(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
     tb3->AddTool(ID_SampleItem+16, "Check 1", tb3_bmp1, "Check 1", wxITEM_CHECK);
     tb3->AddTool(ID_SampleItem+17, "Check 2", tb3_bmp1, "Check 2", wxITEM_CHECK);
@@ -965,7 +974,6 @@ MyFrame::MyFrame(wxWindow* parent,
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
-    tb4->SetExtraStyle(tb4->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
     wxBitmapBundle tb4_bmp1 = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
@@ -985,34 +993,11 @@ MyFrame::MyFrame(wxWindow* parent,
     choice->AppendString("Good choice");
     choice->AppendString("Better choice");
     tb4->AddControl(choice);
-#if wxUSE_CHECKBOX
-    wxCheckBox* checkbox1 = new wxCheckBox(tb4, ID_3CHECK,
-                                                "Checkbox",
-                                                wxDefaultPosition, wxDefaultSize,
-                                                wxCHK_3STATE | wxCHK_ALLOW_3RD_STATE_FOR_USER);
-    checkbox1->SetMinSize(checkbox1->GetSizeFromText(checkbox1->GetLabelText()));
-    tb4->AddControl(checkbox1);
-    wxCheckBox* checkbox2 = new wxCheckBox(tb4, ID_UI_2CHECK_UPDATED,
-                                                "2Checkbox UI Updated",
-                                                wxDefaultPosition, wxDefaultSize,
-                                                wxCHK_2STATE);
-    checkbox2->SetMinSize(checkbox2->GetSizeFromText(checkbox2->GetLabelText()));
-    checkbox2->Disable();
-    tb4->AddControl(checkbox2);
-    wxCheckBox* checkbox3 = new wxCheckBox(tb4, ID_UI_3CHECK_UPDATED,
-                                                "3Checkbox UI Updated",
-                                                wxDefaultPosition, wxDefaultSize,
-                                                wxCHK_3STATE);
-    checkbox3->SetMinSize(checkbox3->GetSizeFromText(checkbox3->GetLabelText()));
-    checkbox3->Disable();
-    tb4->AddControl(checkbox3);
-#endif
     tb4->Realize();
 
 
     wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-    tb5->SetExtraStyle(tb5->GetExtraStyle() | wxWS_EX_PROCESS_UI_UPDATES);
     tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb5->AddSeparator();
     tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
@@ -1060,7 +1045,8 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   Name("test8").Caption("Tree Pane").
                   Left().Layer(1).Position(1).
-                  CloseButton(true).MaximizeButton(true));
+                  CloseButton(true).MaximizeButton(true).MinimizeButton().
+                  IconMin(wxArtProvider::GetBitmapBundle(wxART_CUT, wxART_MENU)));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name("test9").Caption("Min Size 200x100").
@@ -1079,9 +1065,11 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
                   Name("test10").Caption("Text Pane with Hide Prompt").
                   Bottom().Layer(1).Position(1).
+                  MaximizeButton().MinimizeButton().
                   Icon(wxArtProvider::GetBitmapBundle(wxART_WARNING,
                                                       wxART_OTHER,
-                                                      wxSize(iconSize, iconSize))));
+                                                      wxSize(iconSize, iconSize))).
+                  IconMin(wxArtProvider::GetBitmapBundle(wxART_PASTE, wxART_MENU)));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name("test11").Caption("Fixed Pane").
@@ -1224,6 +1212,33 @@ void MyFrame::OnToolbarResizing(wxCommandEvent& WXUNUSED(evt))
     }
 
     m_mgr.Update();
+}
+
+void MyFrame::OnMinPanesStyle(wxCommandEvent& WXUNUSED(evt))
+{
+    const auto* const menuBar = GetMenuBar();
+
+    unsigned int style = 0;
+    if ( menuBar->IsChecked(ID_ShowTextForMinPanes) )
+        style |= wxAUI_MIN_DOCK_TEXT;
+    else if ( menuBar->IsChecked(ID_ShowIconsForMinPanes) )
+        style |= wxAUI_MIN_DOCK_ICONS;
+    else if ( menuBar->IsChecked(ID_ShowBothForMinPanes) )
+        style |= wxAUI_MIN_DOCK_BOTH;
+
+    if ( style & wxAUI_MIN_DOCK_ICONS )
+    {
+        if ( menuBar->IsChecked(ID_RotateMinPanesIcons) )
+            style |= wxAUI_MIN_DOCK_ROTATE_ICON_WITH_TEXT;
+    }
+
+    m_mgr.SetDocksForMinPanesStyle(style);
+}
+
+void MyFrame::OnUpdateUIRotateMinPanes(wxUpdateUIEvent& evt)
+{
+    // Rotating icons doesn't make sense if only text is shown.
+    evt.Enable( !GetMenuBar()->IsChecked(ID_ShowTextForMinPanes) );
 }
 
 void MyFrame::OnManagerFlag(wxCommandEvent& event)
@@ -1644,33 +1659,6 @@ void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
         if (res != wxYES)
             evt.Veto();
     }
-}
-
-// copy state from user-controllable checkbox to disabled checkbox
-void MyFrame::OnCheckboxUpdateUI(wxUpdateUIEvent& evt)
-{
-#if wxUSE_CHECKBOX
-    wxASSERT(evt.IsCheckable());
-    wxWindow* tb4 = m_mgr.GetPane("tb4").window;
-    wxWindow* wnd = tb4->FindWindow(ID_3CHECK);
-    wxCheckBox* src = wxCheckCast<wxCheckBox>(wnd);
-    if (!evt.Is3State())
-    {
-        if (src->Get3StateValue() != wxCHK_UNDETERMINED)
-        {
-            evt.Show(true);
-            evt.Check(src->Get3StateValue() != wxCHK_UNCHECKED);
-        }
-        else
-        {
-            evt.Show(false);
-        }
-    }
-    else
-    {
-        evt.Set3StateValue(src->Get3StateValue());
-    }
-#endif
 }
 
 void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
