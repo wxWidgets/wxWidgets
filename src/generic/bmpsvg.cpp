@@ -153,7 +153,6 @@ wxBitmapBundleImplSVG::wxBitmapBundleImplSVG(const char* data, const wxSize& siz
     wxCHECK_RET(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, "invalid default size");
 
     m_svgDocument = wxlunasvg::Document::loadFromData(data);
-    wxCHECK_RET(m_svgDocument != nullptr, "invalid SVG data");
 }
 
 wxBitmapBundleImplSVG::wxBitmapBundleImplSVG(char* data, const wxSize& sizeDef)
@@ -245,17 +244,32 @@ wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size) {
 
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef) {
-    return wxBitmapBundle::FromImpl(new wxBitmapBundleImplSVG(data, sizeDef));
+    auto* impl = new wxBitmapBundleImplSVG(data, sizeDef);
+    if (!impl->IsOk()) {
+        delete impl;
+        return wxBitmapBundle();
+    }
+    return wxBitmapBundle::FromImpl(impl);
 }
 
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize& sizeDef) {
-    return wxBitmapBundle::FromImpl(new wxBitmapBundleImplSVG(data, sizeDef));
+    auto* impl = new wxBitmapBundleImplSVG(data, sizeDef);
+    if (!impl->IsOk()) {
+        delete impl;
+        return wxBitmapBundle();
+    }
+    return wxBitmapBundle::FromImpl(impl);
 }
 
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef) {
-    return wxBitmapBundle::FromImpl(new wxBitmapBundleImplSVG(data, len, sizeDef));
+    auto* impl = new wxBitmapBundleImplSVG(data, len, sizeDef);
+    if (!impl->IsOk()) {
+        delete impl;
+        return wxBitmapBundle();
+    }
+    return wxBitmapBundle::FromImpl(impl);
 }
 
 /* static */
