@@ -37,7 +37,16 @@
 
 #include <memory>
 
+namespace
+{
+
 constexpr const char* TRACE_EGL = "glegl";
+
+// EGL version initialized by InitConfig().
+EGLint gs_eglMajor = 0;
+EGLint gs_eglMinor = 0;
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxGLContextAttrs: OpenGL rendering context attributes
@@ -87,8 +96,7 @@ wxGLContextAttrs& wxGLContextAttrs::ForwardCompatible()
 
 wxGLContextAttrs& wxGLContextAttrs::ES2()
 {
-    AddAttribBits(EGL_RENDERABLE_TYPE,
-                  EGL_OPENGL_ES2_BIT);
+    useES = true;
     return *this;
 }
 
@@ -279,26 +287,26 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
                          const wxGLContextAttrs *ctxAttrs)
     : m_glContext(nullptr)
 {
-    const int* contextAttribs = nullptr;
-
-    if ( ctxAttrs )
-    {
-        contextAttribs = ctxAttrs->GetGLAttrs();
-    }
-    else if ( win->GetGLCTXAttrs().GetGLAttrs() )
-    {
-        // If OpenGL context parameters were set at wxGLCanvas ctor, get them now
-        contextAttribs = win->GetGLCTXAttrs().GetGLAttrs();
-    }
+    // Fall back to OpenGL context parameters set at wxGLCanvas ctor if any.
+    const wxGLContextAttrs& attrs = ctxAttrs ? *ctxAttrs
+                                             : win->GetGLCTXAttrs();
 
     m_isOk = false;
+
+    if ( !eglBindAPI(attrs.useES ? EGL_OPENGL_ES_API : EGL_OPENGL_API) )
+    {
+        // This is really not supposed to happen, so don't use wxLogError()
+        // here, there is nothing the user can do about it if it does happen.
+        wxFAIL_MSG("eglBindAPI() failed unexpectedly");
+        return;
+    }
 
     EGLConfig fbc = win->GetEGLConfig();
     wxCHECK_RET( fbc, "Invalid EGLConfig for OpenGL" );
 
     m_glContext = eglCreateContext(wxGLCanvasEGL::GetDisplay(), fbc,
                                    other ? other->m_glContext : EGL_NO_CONTEXT,
-                                   contextAttribs);
+                                   attrs.GetGLAttrs());
 
     if ( !m_glContext )
         wxLogMessage(_("Couldn't create OpenGL context"));
@@ -312,8 +320,7 @@ wxGLContext::~wxGLContext()
         return;
 
     if ( m_glContext == eglGetCurrentContext() )
-        eglMakeCurrent(wxGLCanvasEGL::GetDisplay(), EGL_NO_SURFACE,
-                       EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        ClearCurrent();
 
     eglDestroyContext(wxGLCanvasEGL::GetDisplay(), m_glContext);
 }
@@ -325,6 +332,13 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 
     return eglMakeCurrent(win.GetEGLDisplay(), win.GetEGLSurface(),
                           win.GetEGLSurface(), m_glContext);
+}
+
+/* static */
+void wxGLContextBase::ClearCurrent()
+{
+    eglMakeCurrent(wxGLCanvasEGL::GetDisplay(), EGL_NO_SURFACE,
+                   EGL_NO_SURFACE, EGL_NO_CONTEXT);
 }
 
 // ============================================================================
@@ -414,10 +428,9 @@ void wxGLCanvasEGL::OnWLFrameCallback()
 
 #ifdef GDK_WINDOWING_WAYLAND
 
-// Helper declared as friend in the header and so can access m_wlSubsurface.
-void wxEGLUpdatePosition(wxGLCanvasEGL* win)
+void wxGLCanvasEGL::UpdateSubsurfacePosition()
 {
-    if ( !win->m_wlSubsurface )
+    if ( !m_wlSubsurface )
     {
         // In some circumstances such as when reparenting a canvas between two hidden
         // toplevel windows, GTK will call size-allocate before mapping the canvas
@@ -426,13 +439,21 @@ void wxEGLUpdatePosition(wxGLCanvasEGL* win)
     }
 
     int x, y;
-    gdk_window_get_origin(win->GTKGetDrawingWindow(), &x, &y);
-    wl_subsurface_set_position(win->m_wlSubsurface, x, y);
+    gdk_window_get_origin(GTKGetDrawingWindow(), &x, &y);
+    wl_subsurface_set_position(m_wlSubsurface, x, y);
 }
 
-// Helper declared as friend in the header and so can access m_wlSurface.
-void wxEGLSetScale(wxGLCanvasEGL* win, int scale)
+// Helper declared as friend in the header and so can access member variables.
+//
+// Used when size or scale factor changes
+void wxEGLUpdateGeometry(GtkWidget* widget, wxGLCanvasEGL* win)
 {
+    int scale = gtk_widget_get_scale_factor(widget);
+    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
+                         win->m_height * scale, 0, 0);
+
+    win->UpdateSubsurfacePosition();
+
     wl_surface_set_buffer_scale(win->m_wlSurface, scale);
 }
 
@@ -491,16 +512,75 @@ static void gtk_glcanvas_size_callback(GtkWidget *widget,
                                        GtkAllocation *,
                                        wxGLCanvasEGL *win)
 {
-    int scale = gtk_widget_get_scale_factor(widget);
-    wl_egl_window_resize(win->m_wlEGLWindow, win->m_width * scale,
-                         win->m_height * scale, 0, 0);
+    wxEGLUpdateGeometry(widget, win);
+}
 
-    wxEGLUpdatePosition(win);
-    wxEGLSetScale(win, scale);
+static void gtk_glcanvas_scale_factor_notify(GtkWidget* widget,
+                                             GParamSpec*,
+                                             wxGLCanvasEGL *win)
+{
+    wxEGLUpdateGeometry(widget, win);
 }
 
 } // extern "C"
 #endif // GDK_WINDOWING_WAYLAND
+
+EGLSurface wxGLCanvasEGL::CallCreatePlatformWindowSurface(void *window) const
+{
+    // Type of eglCreatePlatformWindowSurface[EXT]().
+    typedef EGLSurface (*CreatePlatformWindowSurface)(EGLDisplay display,
+                                                      EGLConfig config,
+                                                      void* window,
+                                                      EGLAttrib const* attrib_list);
+
+    if ( gs_eglMajor > 1 || (gs_eglMajor == 1 && gs_eglMinor >= 5) )
+    {
+        // EGL 1.5 or later: use eglCreatePlatformWindowSurface() which must be
+        // available.
+        static CreatePlatformWindowSurface s_eglCreatePlatformWindowSurface = nullptr;
+        if ( !s_eglCreatePlatformWindowSurface )
+        {
+            s_eglCreatePlatformWindowSurface = reinterpret_cast<CreatePlatformWindowSurface>(
+                eglGetProcAddress("eglCreatePlatformWindowSurface"));
+        }
+
+        // This check is normally superfluous but avoid crashing just in case
+        // it isn't.
+        if ( s_eglCreatePlatformWindowSurface )
+        {
+            return s_eglCreatePlatformWindowSurface(m_display, m_config,
+                                                    window,
+                                                    nullptr);
+        }
+    }
+
+    // Try loading the appropriate EGL function on first use.
+    static CreatePlatformWindowSurface s_eglCreatePlatformWindowSurfaceEXT = nullptr;
+    static bool s_extFuncInitialized = false;
+    if ( !s_extFuncInitialized )
+    {
+        s_extFuncInitialized = true;
+
+        if ( IsExtensionSupported("EGL_EXT_platform_base") )
+        {
+            s_eglCreatePlatformWindowSurfaceEXT = reinterpret_cast<CreatePlatformWindowSurface>(
+                eglGetProcAddress("eglCreatePlatformWindowSurfaceEXT"));
+        }
+    }
+
+    if ( s_eglCreatePlatformWindowSurfaceEXT )
+    {
+        return s_eglCreatePlatformWindowSurfaceEXT(m_display, m_config,
+                                                   window,
+                                                   nullptr);
+    }
+    else
+    {
+        return eglCreateWindowSurface(m_display, m_config,
+                                      reinterpret_cast<EGLNativeWindowType>(window),
+                                      nullptr);
+    }
+}
 
 bool wxGLCanvasEGL::CreateSurface()
 {
@@ -522,8 +602,7 @@ bool wxGLCanvasEGL::CreateSurface()
         }
 
         m_xwindow = GDK_WINDOW_XID(window);
-        m_surface = eglCreatePlatformWindowSurface(m_display, m_config,
-                                                   &m_xwindow, nullptr);
+        m_surface = CallCreatePlatformWindowSurface(&m_xwindow);
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
@@ -554,8 +633,7 @@ bool wxGLCanvasEGL::CreateSurface()
         wl_surface_set_buffer_scale(m_wlSurface, scale);
         m_wlEGLWindow = wl_egl_window_create(m_wlSurface, w * scale,
                                              h * scale);
-        m_surface = eglCreatePlatformWindowSurface(m_display, m_config,
-                                                   m_wlEGLWindow, nullptr);
+        m_surface = CallCreatePlatformWindowSurface(m_wlEGLWindow);
 
         // We need to use "map-event" instead of "map" to ensure that the
         // widget's underlying Wayland surface has been created.
@@ -568,8 +646,17 @@ bool wxGLCanvasEGL::CreateSurface()
         // Not unmapping the canvas as soon as possible causes problems when reparenting
         g_signal_connect(m_widget, "unmap",
                          G_CALLBACK(gtk_glcanvas_unmap_callback), this);
+
+        // We connect to "size-allocate" to update the position of the
+        // subsurface when the toplevel window is moved, which also updates the
+        // scale as a side effect, but we need to also separately connect to
+        // "notify::scale-factor" to catch scale changes, which is especially
+        // important initially, as we don't get a "size-allocate" with the
+        // correct scale when the window is created.
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
+        g_signal_connect(m_widget, "notify::scale-factor",
+                         G_CALLBACK (gtk_glcanvas_scale_factor_notify), this);
     }
 #endif
 
@@ -620,7 +707,7 @@ void wxGLCanvasEGL::CreateWaylandSubsurface()
     wxCHECK_RET( m_wlSubsurface, "Unable to get EGL subsurface" );
 
     wl_subsurface_set_desync(m_wlSubsurface);
-    wxEGLUpdatePosition(this);
+    UpdateSubsurfacePosition();
     m_wlFrameCallbackHandler = wl_surface_frame(surface);
     wl_callback_add_listener(m_wlFrameCallbackHandler,
                              &wl_frame_listener, this);
@@ -665,22 +752,20 @@ EGLConfig wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
         return nullptr;
     }
 
-    EGLint eglMajor = 0;
-    EGLint eglMinor = 0;
-    if ( !eglInitialize(dpy, &eglMajor, &eglMinor) )
+    if ( !eglInitialize(dpy, &gs_eglMajor, &gs_eglMinor) )
     {
         wxFAIL_MSG("eglInitialize failed");
         return nullptr;
     }
 
     // The runtime EGL version cannot be known until EGL has been initialized.
-    if ( eglMajor < 1 || (eglMajor == 1 && eglMinor < 5) )
+    if ( gs_eglMajor < 1 || (gs_eglMajor == 1 && gs_eglMinor < 4) )
     {
         // Ignore the return value here, we cannot recover at this point.
         eglTerminate(dpy);
-        wxLogError(wxString::Format(
-            "EGL version is %d.%d. EGL version 1.5 or greater is required.",
-            eglMajor, eglMinor));
+        wxLogError(
+            _("EGL version is %d.%d but version 1.4 or greater is required."),
+            gs_eglMajor, gs_eglMinor);
         return nullptr;
     }
 

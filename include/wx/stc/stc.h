@@ -631,6 +631,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_DART 138
 #define wxSTC_LEX_ZIG 139
 #define wxSTC_LEX_NIX 140
+#define wxSTC_LEX_SINEX 141
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2826,6 +2827,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_TOML_TRIPLE_STRING_DQ 12
 #define wxSTC_TOML_ESCAPECHAR 13
 #define wxSTC_TOML_DATETIME 14
+#define wxSTC_TOML_STRINGEOL 15
 
 /// Lexical states for SCLEX_TROFF
 #define wxSTC_TROFF_DEFAULT 0
@@ -2885,6 +2887,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_DART_KW_SECONDARY 24
 #define wxSTC_DART_KW_TERTIARY 25
 #define wxSTC_DART_KW_TYPE 26
+#define wxSTC_DART_STRINGEOL 27
 
 /// Lexical states for SCLEX_ZIG
 #define wxSTC_ZIG_DEFAULT 0
@@ -2905,6 +2908,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_ZIG_KW_TERTIARY 15
 #define wxSTC_ZIG_KW_TYPE 16
 #define wxSTC_ZIG_IDENTIFIER_STRING 17
+#define wxSTC_ZIG_STRINGEOL 18
 
 /// Lexical states for SCLEX_NIX
 #define wxSTC_NIX_DEFAULT 0
@@ -2923,6 +2927,15 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_NIX_KEYWORD2 13
 #define wxSTC_NIX_KEYWORD3 14
 #define wxSTC_NIX_KEYWORD4 15
+#define wxSTC_NIX_STRINGEOL 16
+
+/// Lexical states for SCLEX_SINEX
+#define wxSTC_SINEX_DEFAULT 0
+#define wxSTC_SINEX_COMMENTLINE 1
+#define wxSTC_SINEX_BLOCK_START 2
+#define wxSTC_SINEX_BLOCK_END 3
+#define wxSTC_SINEX_DATE 4
+#define wxSTC_SINEX_NUMBER 5
 
 //}}}
 //----------------------------------------------------------------------
@@ -4263,10 +4276,10 @@ public:
     void CallTipSetPosition(bool above);
 
     // Find the display line of a document line taking hidden lines into account.
-    int VisibleFromDocLine(int docLine);
+    int VisibleFromDocLine(int docLine) const;
 
     // Find the document line of a display line taking hidden lines into account.
-    int DocLineFromVisible(int displayLine);
+    int DocLineFromVisible(int displayLine) const;
 
     // The number of display lines needed to wrap a document line
     int WrapCount(int docLine);
@@ -4444,7 +4457,7 @@ public:
     bool GetEndAtLastLine() const;
 
     // Retrieve the height of a particular line of text in pixels.
-    int TextHeight(int line);
+    int TextHeight(int line) const;
 
     // Show or hide the vertical scroll bar.
     void SetUseVerticalScrollBar(bool visible);
@@ -5678,6 +5691,13 @@ public:
     // Returns the line number of the line with the caret.
     int GetCurrentLine();
 
+    // Returns the total number of display lines, which may be different from
+    // GetLineCount() because of folding and wrapping.
+    int GetDisplayLineCount() const
+    {
+        return VisibleFromDocLine(GetLineCount());
+    }
+
     // Extract style settings from a spec-string which is composed of one or
     // more of the following comma separated elements:
     //
@@ -5845,6 +5865,16 @@ public:
 #ifdef SWIG
     %pythoncode "_stc_utf8_methods.py"
 #endif
+
+    // Specify that changes to various text aspects in this control, such as
+    // folding or markers, should be synchronized with the given control (or
+    // stop synchronizing them if the parameter is null).
+    void SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl);
+
+    // Indicate that custom drawing is done on top of this control. This is
+    // necessary to avoid corrupting it by scrolling the window content instead
+    // of refreshing it when it needs to be scrolled.
+    void SetCustomDrawn(bool customDrawn) { m_isCustomDrawn = customDrawn; }
 
 
     // implement wxTextEntryBase pure virtual methods
@@ -6107,6 +6137,13 @@ protected:
 
     bool                m_lastKeyDownConsumed;
 
+private:
+    wxBitmap m_buffer;
+
+    wxStyledTextCtrl*   m_mirrorCtrl = nullptr;
+
+    bool                m_isCustomDrawn = false;
+
     friend class ScintillaWX;
 #endif // !SWIG
 };
@@ -6115,7 +6152,11 @@ protected:
 
 class WXDLLIMPEXP_STC wxStyledTextEvent : public wxCommandEvent {
 public:
-    wxStyledTextEvent(wxEventType commandType=0, int id=0);
+    wxStyledTextEvent(wxEventType commandType = 0, int id = 0)
+        : wxCommandEvent(commandType, id)
+    {
+    }
+
 #ifndef SWIG
     wxStyledTextEvent(const wxStyledTextEvent& event);
 #endif
@@ -6202,35 +6243,35 @@ public:
 private:
     wxDECLARE_DYNAMIC_CLASS(wxStyledTextEvent);
 
-    int  m_position;
-    int  m_key;
-    int  m_modifiers;
+    int m_position = 0;
+    int m_key = 0;
+    int m_modifiers = 0;
 
-    int  m_modificationType;    // wxEVT_STC_MODIFIED
-    int  m_length;
-    int  m_linesAdded;
-    int  m_line;
-    int  m_foldLevelNow;
-    int  m_foldLevelPrev;
+    int m_modificationType = 0;     // wxEVT_STC_MODIFIED
+    int m_length = 0;
+    int m_linesAdded = 0;
+    int m_line = 0;
+    int m_foldLevelNow = 0;
+    int m_foldLevelPrev = 0;
 
-    int  m_margin;              // wxEVT_STC_MARGINCLICK
+    int m_margin = 0;               // wxEVT_STC_MARGINCLICK
 
-    int  m_message;             // wxEVT_STC_MACRORECORD
-    int  m_wParam;
-    int  m_lParam;
+    int m_message = 0;              // wxEVT_STC_MACRORECORD
+    int m_wParam = 0;
+    int m_lParam = 0;
 
-    int m_listType;
-    int m_x;
-    int m_y;
+    int m_listType = 0;
+    int m_x = 0;
+    int m_y = 0;
 
-    int m_token;                // wxEVT_STC__MODIFIED with SC_MOD_CONTAINER
-    int m_annotationLinesAdded; // wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION
-    int m_updated;              // wxEVT_STC_UPDATEUI
-    int m_listCompletionMethod;
+    int m_token = 0;                // wxEVT_STC__MODIFIED with SC_MOD_CONTAINER
+    int m_annotationLinesAdded = 0; // wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION
+    int m_updated = 0;              // wxEVT_STC_UPDATEUI
+    int m_listCompletionMethod = 0;
 
 #if wxUSE_DRAG_AND_DROP
-    int      m_dragFlags;       // wxEVT_STC_START_DRAG
-    wxDragResult m_dragResult;  // wxEVT_STC_DRAG_OVER,wxEVT_STC_DO_DROP
+    int m_dragFlags = wxDrag_CopyOnly;       // wxEVT_STC_START_DRAG
+    wxDragResult m_dragResult = wxDragNone;  // wxEVT_STC_DRAG_OVER,wxEVT_STC_DO_DROP
 #endif
 #endif
 };

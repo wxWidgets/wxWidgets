@@ -40,12 +40,12 @@ enum
 class WXDLLIMPEXP_CORE wxPNGHandler: public wxImageHandler
 {
 public:
-    inline wxPNGHandler()
+    wxPNGHandler() : wxImageHandler(
+        wxT("PNG file"),
+        wxT("png"),
+        wxBITMAP_TYPE_PNG,
+        wxT("image/png"))
     {
-        m_name = wxT("PNG file");
-        m_extension = wxT("png");
-        m_type = wxBITMAP_TYPE_PNG;
-        m_mime = wxT("image/png");
     }
 
     static wxVersionInfo GetLibraryVersionInfo();

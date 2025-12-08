@@ -421,6 +421,12 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     else
     {
 #if wxOSX_USE_NSCELL_RENDERER
+        // this flag is required as this will make it choose
+        // the NSCell.highlighted mode. The chevron will
+        // otherwise be light grey on white background and be
+        // barely visible
+        flags |= wxCONTROL_PRESSED;
+
         NSControlStateValue stateValue = (flags & wxCONTROL_EXPANDED) ? NSControlStateValueOn : NSControlStateValueOff;
         DrawMacCell(win, dc, GetDisclosureButtonCell(), rect, flags, stateValue);
 #else
@@ -651,6 +657,19 @@ void wxRendererMac::ApplyMacControlFlags(wxWindow* win, NSCell* cell, int flags)
     cell.controlTint = (flags & wxCONTROL_FOCUSED) ? NSColor.currentControlTint : NSClearControlTint;
 }
 
+namespace
+{
+
+// Cell Drawing seems to run into problems with clipping when the device origin has changed
+// so undo this and restore with GState later
+void CellDrawHelper ( wxDC& dc, CGContextRef cgContext, NSRect& controlRect )
+{
+    wxPoint offset = dc.GetDeviceOrigin();
+    CGContextTranslateCTM( cgContext, -offset.x, -offset.y );
+    controlRect = NSOffsetRect(controlRect, offset.x, offset.y);
+}
+
+} // anonymous namespace
 
 void wxRendererMac::DrawMacCell(wxWindow *win,
                             wxDC& dc,
@@ -681,6 +700,8 @@ void wxRendererMac::DrawMacCell(wxWindow *win,
         CGContextRef cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
         CGContextSaveGState(cgContext);
+
+        CellDrawHelper( dc, cgContext, controlRect );
 
         NSGraphicsContext* formerContext = NSGraphicsContext.currentContext;
         NSGraphicsContext.currentContext = [NSGraphicsContext graphicsContextWithCGContext:cgContext
@@ -755,6 +776,8 @@ void wxRendererMac::DrawMacHeaderCell(wxWindow *win,
         CGContextRef cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
         CGContextSaveGState(cgContext);
+
+        CellDrawHelper( dc, cgContext, controlRect );
 
         NSGraphicsContext* formerContext = NSGraphicsContext.currentContext;
         NSGraphicsContext.currentContext = [NSGraphicsContext graphicsContextWithCGContext:cgContext

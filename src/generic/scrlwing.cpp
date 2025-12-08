@@ -37,7 +37,7 @@
 #endif
 
 #ifdef __WXMSW__
-    #include <windows.h> // for DLGC_WANTARROWS
+    #include <windows.h>
     #include "wx/msw/winundef.h"
 #endif
 

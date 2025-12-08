@@ -3478,12 +3478,6 @@ wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
 
     m_frame->ClientToScreen(&rect.x, &rect.y);
 
-    if ( m_frame->GetLayoutDirection() == wxLayout_RightToLeft )
-    {
-        // Mirror rectangle in RTL mode
-        rect.x -= rect.GetWidth();
-    }
-
     return rect;
 }
 

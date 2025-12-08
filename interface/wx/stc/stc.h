@@ -587,6 +587,7 @@
 #define wxSTC_LEX_DART 138
 #define wxSTC_LEX_ZIG 139
 #define wxSTC_LEX_NIX 140
+#define wxSTC_LEX_SINEX 141
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2782,6 +2783,7 @@
 #define wxSTC_TOML_TRIPLE_STRING_DQ 12
 #define wxSTC_TOML_ESCAPECHAR 13
 #define wxSTC_TOML_DATETIME 14
+#define wxSTC_TOML_STRINGEOL 15
 
 /// Lexical states for SCLEX_TROFF
 #define wxSTC_TROFF_DEFAULT 0
@@ -2841,6 +2843,7 @@
 #define wxSTC_DART_KW_SECONDARY 24
 #define wxSTC_DART_KW_TERTIARY 25
 #define wxSTC_DART_KW_TYPE 26
+#define wxSTC_DART_STRINGEOL 27
 
 /// Lexical states for SCLEX_ZIG
 #define wxSTC_ZIG_DEFAULT 0
@@ -2861,6 +2864,7 @@
 #define wxSTC_ZIG_KW_TERTIARY 15
 #define wxSTC_ZIG_KW_TYPE 16
 #define wxSTC_ZIG_IDENTIFIER_STRING 17
+#define wxSTC_ZIG_STRINGEOL 18
 
 /// Lexical states for SCLEX_NIX
 #define wxSTC_NIX_DEFAULT 0
@@ -2879,6 +2883,15 @@
 #define wxSTC_NIX_KEYWORD2 13
 #define wxSTC_NIX_KEYWORD3 14
 #define wxSTC_NIX_KEYWORD4 15
+#define wxSTC_NIX_STRINGEOL 16
+
+/// Lexical states for SCLEX_SINEX
+#define wxSTC_SINEX_DEFAULT 0
+#define wxSTC_SINEX_COMMENTLINE 1
+#define wxSTC_SINEX_BLOCK_START 2
+#define wxSTC_SINEX_BLOCK_END 3
+#define wxSTC_SINEX_DATE 4
+#define wxSTC_SINEX_NUMBER 5
 
 //}}}
 
@@ -3296,7 +3309,7 @@
     @library{wxstc}
     @category{stc}
 
-    @see wxStyledTextEvent
+    @see wxStyledTextEvent, wxStyledTextCtrlMiniMap
 */
 
 class wxStyledTextCtrl : public wxControl, public wxTextEntry
@@ -3925,7 +3938,7 @@ public:
     /**
         Retrieve the height of a particular line of text in pixels.
     */
-    int TextHeight(int line);
+    int TextHeight(int line) const;
 
     /**
         Move the caret inside current view if it's not there already.
@@ -7247,12 +7260,12 @@ public:
     /**
         Find the display line of a document line taking hidden lines into account.
     */
-    int VisibleFromDocLine(int docLine);
+    int VisibleFromDocLine(int docLine) const;
 
     /**
         Find the document line of a display line taking hidden lines into account.
     */
-    int DocLineFromVisible(int displayLine);
+    int DocLineFromVisible(int displayLine) const;
 
     /**
         Set the fold level of a line.
@@ -7885,6 +7898,19 @@ public:
     int GetCurrentLine();
 
     /**
+        Returns the total number of display lines.
+
+        This may be different from the value returned by GetLineCount() because
+        of folding and wrapping.
+
+        Note that this is not the same as GetVisibleLineCount() which returns
+        the number of lines currently visible on screen.
+
+        @since 3.3.2
+    */
+    int GetDisplayLineCount() const;
+
+    /**
        Extract style settings from a spec-string which is composed of one or
        more of the following comma separated elements:
 
@@ -8140,6 +8166,43 @@ public:
     int ReplaceTargetRERaw(const char* text, int length=-1);
 
     ///@}
+
+
+    /**
+        Specify a control to synchronize with this control.
+
+        If @a mirrorCtrl is non-null, then various aspects of the text in this
+        control will be reflected in it too. For example, whenever a fold is
+        opened/closed in this control, a fold at the same line will be
+        opened/closed in the mirror control as well. Similarly, any markers
+        defined for the lines in this control will be also defined for the same
+        line in the mirror control (but notice that markers defined before
+        calling this function won't be synchronized when it is called). This
+        will only be useful if both controls have the same text contents, i.e.
+        if they share the same GetDocPointer() which is e.g. the case of
+        wxStyledTextCtrlMiniMap.
+
+        @param mirrorCtrl
+            The control to synchronize with or @NULL to disable synchronization
+            if it had been previously enabled.
+
+        @since 3.3.2
+     */
+    void SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl);
+
+    /**
+        Indicate that custom drawing is done on top of this control.
+
+        This is necessary to avoid corrupting it by scrolling the window
+        content instead of refreshing it when it needs to be scrolled.
+
+        @param customDrawn
+            If @true, indicates that custom drawing is done on top of this
+            control.
+
+        @since 3.3.2
+     */
+    void SetCustomDrawn(bool customDrawn);
 
 
     // wxTextEntryBase pure virtual methods

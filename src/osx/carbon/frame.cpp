@@ -24,6 +24,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
+#include "wx/stattext.h"
 
 namespace
 {
@@ -60,14 +61,37 @@ bool wxFrame::Create(wxWindow *parent,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
 
+    if ( wxTheApp->OSXIsFullScreenApp() )
+    {
+        if ((parent != nullptr) && (HasFlag(wxCAPTION) || HasFlag(wxCLOSE_BOX)))
+        {
+            // We are on the next screen, provide a back button and title
+            // TODO replace with UINavigationBar
+            wxToolBar *tb = CreateToolBar();
+            if (HasFlag(wxCLOSE_BOX))
+            {
+                tb->AddTool( wxID_CLOSE, wxEmptyString, wxOSXCreateSystemBitmapBundle("chevron.backward", wxDefaultSize) );
+                tb->AddStretchableSpace();
+            }
+            if (HasFlag(wxCAPTION))
+            {
+                tb->AddControl( new wxStaticText( tb, wxID_ANY, title ) );
+                tb->AddStretchableSpace();
+            }
+            tb->Realize();
+        }
+    }
+
     return true;
 }
 
 // get the origin of the client area in the client coordinates
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
+    // this gets the size of iOS status bar
     wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
 
+    // this adds the size of the toolbar to it
 #if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__)
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
@@ -359,18 +383,16 @@ void wxFrame::PositionToolBar()
     }
 #endif
 
-#ifdef __WXOSX_IPHONE__
-    // TODO integrate this in a better way, on iphone the status bar is not a child of the content view
-    // but the toolbar is
-    ch -= 20;
-#endif
-
     if (GetToolBar())
     {
         const int direction = GetToolBar()->GetDirection();
         int tx, ty, tw, th;
 
         tx = ty = 0 ;
+        wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
+        tx = pt.x;
+        ty = pt.y;
+
         GetToolBar()->GetSize(&tw, &th);
 
         if (direction == wxTB_LEFT)

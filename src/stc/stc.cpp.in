@@ -187,10 +187,22 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-    style |= wxVSCROLL | wxHSCROLL;
-    if (!wxControl::Create(parent, id, pos, size,
-                           style | wxWANTS_CHARS | wxCLIP_CHILDREN,
-                           wxDefaultValidator, name))
+    style |= wxVSCROLL | wxHSCROLL | wxWANTS_CHARS | wxCLIP_CHILDREN;
+
+    // We want to use a specific class name for this window in wxMSW to make it
+    // possible to configure screen readers to handle it specifically.
+    bool created =
+#ifdef __WXMSW__
+        CreateUsingMSWClass(
+            wxApp::GetRegisteredClassName(wxT("Scintilla")),
+            parent, id, pos, size, style, name
+        );
+#else
+        wxControl::Create(
+            parent, id, pos, size, style, wxDefaultValidator, name
+        );
+#endif
+    if ( !created )
         return false;
 
     m_swx = new ScintillaWX(this);
@@ -704,6 +716,16 @@ int wxStyledTextCtrl::ReplaceTargetRERaw(const char* text, int length)
     return SendMsg(SCI_REPLACETARGETRE, length, reinterpret_cast<sptr_t>(text));
 }
 
+void wxStyledTextCtrl::SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl)
+{
+    m_mirrorCtrl = mirrorCtrl;
+
+    // Set the fold flags to the same value as in this control in case they had
+    // been changed before calling this function.
+    if ( m_mirrorCtrl )
+        m_mirrorCtrl->SetFoldFlags(m_swx->foldFlags);
+}
+
 #if WXWIN_COMPATIBILITY_3_0
 // Deprecated since Scintilla 3.7.2
 void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
@@ -724,9 +746,12 @@ void wxStyledTextCtrl::StartStyling(int start, int unused)
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
-    // This _must_ be a wxMemoryDC because the code in SurfaceImpl (see
-    // PlatWX.cpp) unconditionally casts it to wxMemoryDC currently.
-    wxBufferedPaintDC dc(this);
+    wxBufferedPaintDC dc(this, m_buffer);
+
+    // We don't use bounding box for anything, so disable updating it to speed
+    // things up a bit.
+    dc.DisableAutomaticBoundingBoxUpdates();
+
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 
@@ -1202,18 +1227,10 @@ WXLRESULT wxStyledTextCtrl::MSWWindowProc(WXUINT nMsg,
     WXWPARAM wParam,
     WXLPARAM lParam)
 {
-    switch(nMsg) {
-    // Forward IME messages to ScintillaWX
-    case WM_IME_KEYDOWN:
-    case WM_IME_REQUEST:
-    case WM_IME_STARTCOMPOSITION:
-    case WM_IME_ENDCOMPOSITION:
-    case WM_IME_COMPOSITION:
-    case WM_IME_SETCONTEXT:
+    if ( m_swx )
         return SendMsg(nMsg, wParam, lParam);
-    default:
+    else
         return wxControl::MSWWindowProc(nMsg, wParam, lParam);
-    }
 }
 #endif
 
@@ -1221,36 +1238,6 @@ WXLRESULT wxStyledTextCtrl::MSWWindowProc(WXUINT nMsg,
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
-
-wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
-    : wxCommandEvent(commandType, id)
-{
-    m_position = 0;
-    m_key = 0;
-    m_modifiers = 0;
-    m_modificationType = 0;
-    m_length = 0;
-    m_linesAdded = 0;
-    m_line = 0;
-    m_foldLevelNow = 0;
-    m_foldLevelPrev = 0;
-    m_margin = 0;
-    m_message = 0;
-    m_wParam = 0;
-    m_lParam = 0;
-    m_listType = 0;
-    m_x = 0;
-    m_y = 0;
-    m_token = 0;
-    m_annotationLinesAdded = 0;
-    m_updated = 0;
-    m_listCompletionMethod = 0;
-
-#if wxUSE_DRAG_AND_DROP
-    m_dragFlags = wxDrag_CopyOnly;
-    m_dragResult = wxDragNone;
-#endif
-}
 
 bool wxStyledTextEvent::GetShift() const { return (m_modifiers & SCI_SHIFT) != 0; }
 bool wxStyledTextEvent::GetControl() const { return (m_modifiers & SCI_CTRL) != 0; }

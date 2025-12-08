@@ -12,10 +12,12 @@
 
 #include "wx/defs.h"
 
-#if defined(__UNIX__)
-#include "wx/unix/mimetype.h"
+#if defined(__DARWIN__)
+    #include "wx/osx/mimetype.h"
+#elif defined(__UNIX__)
+    #include "wx/unix/mimetype.h"
 #elif defined(__WINDOWS__)
-#include "wx/msw/mimetype.h"
+    #include "wx/msw/mimetype.h"
 #endif
 
 #if wxUSE_MIMETYPE
@@ -23,7 +25,7 @@
 class WXDLLIMPEXP_CORE wxGTKMimeTypesManagerImpl : public wxMimeTypesManagerImpl
 {
 protected:
-#if defined(__UNIX__)
+#if defined(__UNIX__) && !defined(__DARWIN__)
     wxString GetIconFromMimeType(const wxString& mime) override;
 #endif
 };

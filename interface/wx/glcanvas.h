@@ -535,6 +535,16 @@ public:
               equivalent, see wxGLCanvas::SetCurrent().
     */
     virtual bool SetCurrent(const wxGLCanvas& win) const;
+
+    /**
+        Clears any currently set context.
+
+        After calling this function, no OpenGL operations can be performed
+        until a new context is made current.
+
+        @since 3.3.2
+    */
+    static void ClearCurrent();
 };
 
 /**

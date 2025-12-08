@@ -810,7 +810,7 @@ int wxCMPFUNC_CONV wxCmpNaturalGeneric(const wxString& s1, const wxString& s2)
 // ----------------------------------------------------------------------------
 
 // If native natural sort function isn't available, use the generic version.
-#if !(defined(__WINDOWS__) || defined(__DARWIN__) || defined(__WXOSX_IPHONE__))
+#if !(defined(__WINDOWS__) || defined(__DARWIN__))
 
 int wxCMPFUNC_CONV wxCmpNatural(const wxString& s1, const wxString& s2)
 {

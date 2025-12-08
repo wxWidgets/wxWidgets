@@ -20,12 +20,12 @@
 class WXDLLIMPEXP_CORE wxPCXHandler : public wxImageHandler
 {
 public:
-    inline wxPCXHandler()
+    wxPCXHandler() : wxImageHandler(
+        wxT("PCX file"),
+        wxT("pcx"),
+        wxBITMAP_TYPE_PCX,
+        wxT("image/pcx"))
     {
-        m_name = wxT("PCX file");
-        m_extension = wxT("pcx");
-        m_type = wxBITMAP_TYPE_PCX;
-        m_mime = wxT("image/pcx");
     }
 
 #if wxUSE_STREAMS

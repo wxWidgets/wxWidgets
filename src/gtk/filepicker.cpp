@@ -310,14 +310,12 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
 
         m_path = path;
 
-        // GtkFileChooserButton does not support GTK_FILE_CHOOSER_CREATE_FOLDER
-        // thus we must ensure that the wxDD_DIR_MUST_EXIST style was given
         m_dialog = new wxDirDialog
                        (
                             nullptr,
                             message,
                             m_path.empty() ? m_initialDir : m_path,
-                            wxGenericDirButton::GetDialogStyle(style | wxDIRP_DIR_MUST_EXIST)
+                            wxGenericDirButton::GetDialogStyle(style)
                        );
 
         // little trick used to avoid problems when there are other GTK windows 'grabbed':

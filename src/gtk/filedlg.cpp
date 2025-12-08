@@ -512,6 +512,11 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
     GetFileChooser().GetPaths(paths);
 }
 
+wxString wxFileDialog::GetDirectory() const
+{
+    return GetFileChooser().GetDirectory();
+}
+
 void wxFileDialog::SetMessage(const wxString& message)
 {
     m_message = message;

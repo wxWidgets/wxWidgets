@@ -470,46 +470,12 @@ wxString wxGetHomeDir()
     return home;
 }
 
-#if 0
-
-wxString wxGetCurrentDir()
-{
-    wxString dir;
-    size_t len = 1024;
-    bool ok;
-    do
-    {
-        ok = getcwd(dir.GetWriteBuf(len + 1), len) != nullptr;
-        dir.UngetWriteBuf();
-
-        if ( !ok )
-        {
-            if ( errno != ERANGE )
-            {
-                wxLogSysError(wxT("Failed to get current directory"));
-
-                return wxEmptyString;
-            }
-            else
-            {
-                // buffer was too small, retry with a larger one
-                len *= 2;
-            }
-        }
-        //else: ok
-    } while ( !ok );
-
-    return dir;
-}
-
-#endif // 0
-
 // ----------------------------------------------------------------------------
 // Environment
 // ----------------------------------------------------------------------------
 
 #ifdef __WXOSX__
-#if wxOSX_USE_COCOA_OR_CARBON
+#if defined(wxOSX_USE_COCOA_OR_CARBON) && wxOSX_USE_COCOA_OR_CARBON
     #include <crt_externs.h>
 #endif
 #endif
@@ -523,6 +489,7 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
     // it might only have it in narrow char version until now as we use main()
     // (and not _wmain()) as our entry point.
     static wxChar* s_dummyEnvVar = _tgetenv(wxT("TEMP"));
+    wxUnusedVar(s_dummyEnvVar);
 
     wxChar **env = _tenviron;
 #elif defined(__VMS)
@@ -530,7 +497,7 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
    // TODO : should we do something with logicals?
     char **env=nullptr;
 #elif defined(__DARWIN__)
-#if wxOSX_USE_COCOA_OR_CARBON
+#if defined(wxOSX_USE_COCOA_OR_CARBON) && wxOSX_USE_COCOA_OR_CARBON
     // Under Mac shared libraries don't have access to the global environ
     // variable so use this Mac-specific function instead as advised by
     // environ(7) under Darwin
@@ -1512,7 +1479,7 @@ wxWindowDisabler::wxWindowDisabler(bool disable)
     {
         DoDisable();
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
+#if defined(__WXOSX__) && defined(wxOSX_USE_COCOA) && wxOSX_USE_COCOA
         AfterDisable(nullptr);
 #endif
     }
@@ -1529,7 +1496,7 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2)
 
     DoDisable();
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
+#if defined(__WXOSX__) && defined(wxOSX_USE_COCOA) && wxOSX_USE_COCOA
     AfterDisable(winToSkip);
 #endif
 }
@@ -1562,7 +1529,7 @@ wxWindowDisabler::~wxWindowDisabler()
     if ( !m_disabled )
         return;
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA
+#if defined(__WXOSX__) && defined(wxOSX_USE_COCOA) && wxOSX_USE_COCOA
     BeforeEnable();
 #endif
 

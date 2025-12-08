@@ -3478,7 +3478,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
                         if test "$WXGTK3" = 1; then
                             if test "$wxUSE_GLCANVAS_EGL" != "no"; then
-                                PKG_CHECK_MODULES(EGL, [egl >= 1.5],
+                                PKG_CHECK_MODULES(EGL, [egl >= 1.4],
                                     [
                                         OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
                                         AC_DEFINE(wxUSE_GLCANVAS_EGL)
@@ -3493,7 +3493,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                                         )
                                     ],
                                     [
-                                        AC_MSG_NOTICE([EGL 1.5+ not available. Will use GLX.])
+                                        AC_MSG_NOTICE([EGL 1.4+ not available. Will use GLX.])
                                     ]
                                 )
                                 if test "$have_wayland" != 1; then
@@ -5075,7 +5075,20 @@ else
                     ]
                 )
 
-                AC_CHECK_FUNCS(dl_iterate_phdr)
+                AC_CACHE_CHECK(
+                    [for dl_iterate_phdr],
+                    wx_cv_func_dl_iterate_phdr,
+                    AC_LINK_IFELSE(
+                        [AC_LANG_SOURCE([
+                           #include <link.h>
+                           int main() { return dl_iterate_phdr(0, 0); }])],
+                        [wx_cv_func_dl_iterate_phdr=yes],
+                        [wx_cv_func_dl_iterate_phdr=no]
+                    )
+                )
+                if test "$wx_cv_func_dl_iterate_phdr" = "yes"; then
+                    AC_DEFINE(HAVE_DL_ITERATE_PHDR)
+                fi
             fi
         fi
 
@@ -7759,7 +7772,7 @@ if test "$wxUSE_MAC" = 1 ; then
     fi
 fi
 if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1 ; then
-    EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices -framework Foundation"
+    EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework AppKit -framework IOKit -framework CoreServices -framework System -framework ApplicationServices -framework Foundation"
 fi
 
 LDFLAGS="$LDFLAGS $EXTRA_FRAMEWORKS"

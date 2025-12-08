@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/x11/colour.h
-// Purpose:     wxColour class
+// Purpose:     wxColourImpl class
 // Author:      Julian Smart, Robert Roebling
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
@@ -25,21 +25,19 @@ class WXDLLIMPEXP_FWD_CORE wxPaintDC;
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-class WXDLLIMPEXP_FWD_CORE wxColour;
-
 //-----------------------------------------------------------------------------
-// wxColour
+// wxColourImpl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWARN_UNUSED wxColour : public wxColourBase
+class WXDLLIMPEXP_CORE wxColourImpl : public wxColourBase
 {
 public:
     // constructors
     // ------------
-    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
+    wxColourImpl() = default;
 
-    bool operator==(const wxColour& col) const;
-    bool operator!=(const wxColour& col) const { return !(*this == col); }
+    bool operator==(const wxColourImpl& col) const;
+    bool operator!=(const wxColourImpl& col) const { return !(*this == col); }
 
     unsigned char Red() const;
     unsigned char Green() const;
@@ -59,9 +57,6 @@ protected:
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
     virtual bool FromString(const wxString& str);
-
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
 
 #endif // _WX_COLOUR_H_

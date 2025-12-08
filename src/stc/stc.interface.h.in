@@ -78,7 +78,7 @@
     @library{wxstc}
     @category{stc}
 
-    @see wxStyledTextEvent
+    @see wxStyledTextEvent, wxStyledTextCtrlMiniMap
 */
 
 class wxStyledTextCtrl : public wxControl, public wxTextEntry
@@ -142,6 +142,19 @@ public:
        Returns the line number of the line with the caret.
     */
     int GetCurrentLine();
+
+    /**
+        Returns the total number of display lines.
+
+        This may be different from the value returned by GetLineCount() because
+        of folding and wrapping.
+
+        Note that this is not the same as GetVisibleLineCount() which returns
+        the number of lines currently visible on screen.
+
+        @since 3.3.2
+    */
+    int GetDisplayLineCount() const;
 
     /**
        Extract style settings from a spec-string which is composed of one or
@@ -399,6 +412,43 @@ public:
     int ReplaceTargetRERaw(const char* text, int length=-1);
 
     ///@}
+
+
+    /**
+        Specify a control to synchronize with this control.
+
+        If @a mirrorCtrl is non-null, then various aspects of the text in this
+        control will be reflected in it too. For example, whenever a fold is
+        opened/closed in this control, a fold at the same line will be
+        opened/closed in the mirror control as well. Similarly, any markers
+        defined for the lines in this control will be also defined for the same
+        line in the mirror control (but notice that markers defined before
+        calling this function won't be synchronized when it is called). This
+        will only be useful if both controls have the same text contents, i.e.
+        if they share the same GetDocPointer() which is e.g. the case of
+        wxStyledTextCtrlMiniMap.
+
+        @param mirrorCtrl
+            The control to synchronize with or @NULL to disable synchronization
+            if it had been previously enabled.
+
+        @since 3.3.2
+     */
+    void SetMirrorCtrl(wxStyledTextCtrl* mirrorCtrl);
+
+    /**
+        Indicate that custom drawing is done on top of this control.
+
+        This is necessary to avoid corrupting it by scrolling the window
+        content instead of refreshing it when it needs to be scrolled.
+
+        @param customDrawn
+            If @true, indicates that custom drawing is done on top of this
+            control.
+
+        @since 3.3.2
+     */
+    void SetCustomDrawn(bool customDrawn);
 
 
     // wxTextEntryBase pure virtual methods

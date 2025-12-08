@@ -235,7 +235,6 @@ protected:
     friend class wxTreeFindTimer;
     friend class wxTreeTextCtrl;
 
-    wxFont               m_normalFont;
     wxFont               m_boldFont;
 
     wxGenericTreeItem   *m_anchor;

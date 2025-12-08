@@ -265,7 +265,13 @@
     <ClCompile Include="..\..\3rdparty\libwebp\src\dsp\lossless.c">
       <Filter>Source Files\dsp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libwebp\src\dsp\lossless_avx2.c">
+      <Filter>Source Files\dsp</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\3rdparty\libwebp\src\dsp\lossless_enc.c">
+      <Filter>Source Files\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\libwebp\src\dsp\lossless_enc_avx2.c">
       <Filter>Source Files\dsp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\3rdparty\libwebp\src\dsp\lossless_enc_mips_dsp_r2.c">

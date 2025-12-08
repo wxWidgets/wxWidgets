@@ -28,19 +28,6 @@
 #include "wx/fontutil.h"
 #include "wx/private/bmpbndl.h"
 
-#ifdef __WXMAC__
-
-wxMacAutoreleasePool::wxMacAutoreleasePool()
-{
-    m_pool = [[NSAutoreleasePool alloc] init];
-}
-
-wxMacAutoreleasePool::~wxMacAutoreleasePool()
-{
-    [(NSAutoreleasePool*)m_pool release];
-}
-
-#endif
 
 #if wxOSX_USE_COCOA
 
@@ -71,26 +58,6 @@ CGContextRef wxOSXGetContextFromCurrentContext()
 }
 
 #endif
-
-// ----------------------------------------------------------------------------
-// NSObject Utils
-// ----------------------------------------------------------------------------
-
-void wxMacCocoaRelease( void* obj )
-{
-    [(NSObject*)obj release];
-}
-
-void wxMacCocoaAutorelease( void* obj )
-{
-    [(NSObject*)obj autorelease];
-}
-
-void* wxMacCocoaRetain( void* obj )
-{
-    [(NSObject*)obj retain];
-    return obj;
-}
 
 // ----------------------------------------------------------------------------
 // NSFont Utils
@@ -698,20 +665,6 @@ wxPoint wxMacCocoaGetCursorHotSpot(WX_NSCursor cursor)
     return wxPoint([cursor hotSpot].x, [cursor hotSpot].y);
 }
 #endif
-
-//---------------------------------------------------------
-// helper functions for NSString<->wxString conversion
-//---------------------------------------------------------
-
-wxString wxStringWithNSString(NSString *nsstring)
-{
-    return wxString([nsstring UTF8String], wxConvUTF8);
-}
-
-NSString* wxNSStringWithWxString(const wxString &wxstring)
-{
-    return [NSString stringWithUTF8String: wxstring.mb_str(wxConvUTF8)];
-}
 
 // ----------------------------------------------------------------------------
 // helper class for getting the correct system colors according to the

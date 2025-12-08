@@ -622,6 +622,12 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     return true;
 }
 
+/* static */
+void wxGLContextBase::ClearCurrent()
+{
+    wglMakeCurrent(nullptr, nullptr);
+}
+
 // ============================================================================
 // wxGLCanvas
 // ============================================================================

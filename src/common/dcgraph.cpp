@@ -1440,7 +1440,7 @@ void wxGCDCImpl::DoDrawCheckMark(wxCoord x, wxCoord y,
 }
 
 #ifdef __WXMSW__
-wxRect wxGCDCImpl::MSWApplyGDIPlusTransform(const wxRect& r) const
+wxRect wxGCDCImpl::MSWApplyWXTransform(const wxRect& r) const
 {
     wxCHECK_MSG( IsOk(), r, wxS("Invalid wxGCDC") );
 

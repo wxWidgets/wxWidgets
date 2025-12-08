@@ -182,17 +182,17 @@ WX_NSImage wxNSColorRefData::GetWXPatternImage() const
     return nullptr;
 }
 
-wxGDIRefData* wxColour::CreateGDIRefData() const
+wxGDIRefData* wxColourImpl::CreateGDIRefData() const
 {
     return new wxNSColorRefData(0.0, 0.0, 0.0);
 }
 
-wxColour::wxColour(WX_NSColor col)
+wxColourImpl::wxColourImpl(WX_NSColor col)
 {
     m_refData = new wxNSColorRefData(col);
 }
 
-wxColour::wxColour(CGColorRef col)
+wxColourImpl::wxColourImpl(CGColorRef col)
 {
     m_refData = new wxNSColorRefData([[NSColor colorWithCGColor:col] retain]);
     // as per contract CGColorRef is not retained
