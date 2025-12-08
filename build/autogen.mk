@@ -32,6 +32,7 @@ BAKEFILES=\
   build/bakefiles/files.bkl \
   build/bakefiles/jpeg.bkl \
   build/bakefiles/lexilla.bkl \
+  build/bakefiles/lunasvg.bkl \
   build/bakefiles/mac_bundles.bkl \
   build/bakefiles/monolithic.bkl \
   build/bakefiles/multilib.bkl \
