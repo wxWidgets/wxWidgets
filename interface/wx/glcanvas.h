@@ -899,6 +899,17 @@ public:
 
 
     /**
+        Return the version of GLX being used or 0 if not using GLX.
+
+        The returned value combines major and minor version numbers in a
+        single integer, e.g. version 1.3 will be returned as 13.
+
+        This function is only available when `wxHAS_GLX` preprocessor symbol is
+        defined (which will be the case for wxGTK and wxX11 under Unix systems).
+     */
+    static int GetGLXVersion();
+
+    /**
         Determines if a canvas having the specified attributes is available.
         This only applies for visual attributes, not rendering context attributes.
 
