@@ -770,11 +770,6 @@ EGLConfig wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
         return nullptr;
     }
 
-    if ( !eglBindAPI(EGL_OPENGL_API) ) {
-        wxFAIL_MSG("eglBindAPI failed");
-        return nullptr;
-    }
-
     EGLint numConfigs = 0;
 
     // Check if we need to filter out the configs using alpha, as getting one
