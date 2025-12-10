@@ -368,6 +368,11 @@ void wxDialogBase::EndDialog(int rc)
 
 void wxDialogBase::AcceptAndClose()
 {
+    wxDialogValidateEvent vevent( GetId() );
+    vevent.SetEventObject( this );
+    HandleWindowEvent( vevent );
+    if (!vevent.IsAllowed()) return;
+
     if ( Validate() && TransferDataFromWindow() )
     {
         EndDialog(m_affirmativeId);
@@ -461,6 +466,13 @@ void wxDialogBase::OnButton(wxCommandEvent& event)
     }
     else if ( id == wxID_APPLY )
     {
+        // Allow validation in event handler...
+        wxDialogValidateEvent vevent( GetId() );
+        vevent.SetEventObject( this );
+        HandleWindowEvent( vevent );
+        if (!vevent.IsAllowed()) return;
+
+        // and/or in Validate() method        
         if ( Validate() )
             TransferDataFromWindow();
 

@@ -148,6 +148,8 @@ enum wxDialogLayoutAdaptationMode
         (see the @c wxCLOSE_BOX style).
     @event{EVT_INIT_DIALOG(func)}
         Process a @c wxEVT_INIT_DIALOG event. See wxInitDialogEvent.
+    @event{EVT_DIALOG_VALIDATE(func)}
+        Process a @c wxEVT_DIALOG_VALIDATE event. See wxDialogValidateEvent.
     @endEventTable
 
     @library{wxcore}
@@ -476,7 +478,10 @@ public:
 
     /**
         Sets the identifier to be used as OK button. When the button with this
-        identifier is pressed, the dialog calls wxWindow::Validate() and
+        identifier is pressed, a wxDialogValidateEvent is sent which can be
+        vetoed to prevent the dialog from getting closed (this is an
+        event based alternative to the Validate() call described below).
+        Then the dialog calls wxWindow::Validate() and
         wxWindow::TransferDataFromWindow() and, if they both return @true,
         closes the dialog with the affirmative id return code.
 

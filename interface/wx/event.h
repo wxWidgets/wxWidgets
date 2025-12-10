@@ -4505,7 +4505,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_events
+    @see @ref overview_events, wxDialogValidateEvent
 */
 class wxInitDialogEvent : public wxEvent
 {
@@ -4514,6 +4514,38 @@ public:
         Constructor.
     */
     wxInitDialogEvent(int id = 0);
+};
+
+/**
+    @class wxDialogValidateEvent
+
+    A wxDialogValidateEvent is sent as a dialog receives an affirmative
+    button press (such as OK or Apply) to indicate that the data should
+    now be validated and/or could be transfered from the dialog. This
+    event is derived from wxNotifyEvent so that it can veto the affirmative
+    action. In other words: when wxDialogValidateEvent::Veto() is called
+    in the event handler, then the dialog is not closed.
+
+    This is an alternative to overriding wxDialog::Validate() or the
+    use the validators.
+
+    @beginEventTable{wxDialogValidateEvent}
+    @event{EVT_DIALOG_VALIDATE(func)}
+        Process a @c wxEVT_DIALOG_VALIDATE event.
+    @endEventTable
+
+    @library{wxcore}
+    @category{events}
+
+    @see @ref overview_events, wxInitDialogEvent, wxWindow::Validate()
+*/
+class wxDialogValidateEvent : public wxNotifyEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxDialogValidateEvent(int id = 0);
 };
 
 
