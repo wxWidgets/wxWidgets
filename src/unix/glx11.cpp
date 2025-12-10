@@ -18,16 +18,18 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_GLCANVAS && !wxUSE_GLCANVAS_EGL
+#if wxUSE_GLCANVAS
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #include "wx/glcanvas.h"
-#include <GL/glx.h>
 
+#include "wx/unix/private/glx11.h"
 #include "wx/unix/private/x11ptr.h"
+
+#include "wx/private/make_unique.h"
 
 // IRIX headers call this differently
 #ifdef __SGI__
@@ -131,6 +133,9 @@ namespace
 
 constexpr const char* TRACE_GLX = "glx";
 
+// It's ok to have this global variable because its ctor and dtor are trivial.
+wxGLBackendX11 wxGLBackendX11_instance;
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -138,121 +143,116 @@ constexpr const char* TRACE_GLX = "glx";
 // ----------------------------------------------------------------------------
 // GLX specific values
 
-wxGLContextAttrs& wxGLContextAttrs::CoreProfile()
+wxGLContextAttrs& wxGLBackendX11::CoreProfile(wxGLContextAttrs& attrs)
 {
-    AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
+    attrs.AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
                   GLX_CONTEXT_CORE_PROFILE_BIT_ARB);
-    SetNeedsARB();
-    return *this;
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::MajorVersion(int val)
+wxGLContextAttrs& wxGLBackendX11::MajorVersion(wxGLContextAttrs& attrs, int val)
 {
     if ( val > 0 )
     {
-        AddAttribute(GLX_CONTEXT_MAJOR_VERSION_ARB);
-        AddAttribute(val);
+        attrs.AddAttribute(GLX_CONTEXT_MAJOR_VERSION_ARB);
+        attrs.AddAttribute(val);
         if ( val >= 3 )
-            SetNeedsARB();
+            attrs.SetNeedsARB();
     }
-    return *this;
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::MinorVersion(int val)
+wxGLContextAttrs& wxGLBackendX11::MinorVersion(wxGLContextAttrs& attrs, int val)
 {
     if ( val >= 0 )
     {
-        AddAttribute(GLX_CONTEXT_MINOR_VERSION_ARB);
-        AddAttribute(val);
+        attrs.AddAttribute(GLX_CONTEXT_MINOR_VERSION_ARB);
+        attrs.AddAttribute(val);
     }
-    return *this;
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::CompatibilityProfile()
+wxGLContextAttrs& wxGLBackendX11::CompatibilityProfile(wxGLContextAttrs& attrs)
 {
-    AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
+    attrs.AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
                   GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB);
-    SetNeedsARB();
-    return *this;
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::ForwardCompatible()
+wxGLContextAttrs& wxGLBackendX11::ForwardCompatible(wxGLContextAttrs& attrs)
 {
-    AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
+    attrs.AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
                   GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB);
-    SetNeedsARB();
-    return *this;
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::ES2()
+wxGLContextAttrs& wxGLBackendX11::ES2(wxGLContextAttrs& attrs)
 {
-    AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
+    attrs.AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
                   GLX_CONTEXT_ES2_PROFILE_BIT_EXT);
-    SetNeedsARB();
-    return *this;
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::DebugCtx()
+wxGLContextAttrs& wxGLBackendX11::DebugCtx(wxGLContextAttrs& attrs)
 {
-    AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
+    attrs.AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
                   GLX_CONTEXT_DEBUG_BIT_ARB);
-    SetNeedsARB();
-    return *this;
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::Robust()
+wxGLContextAttrs& wxGLBackendX11::Robust(wxGLContextAttrs& attrs)
 {
-    AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
+    attrs.AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
                   GLX_CONTEXT_ROBUST_ACCESS_BIT_ARB);
-    SetNeedsARB();
-    return *this;
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::NoResetNotify()
+wxGLContextAttrs& wxGLBackendX11::NoResetNotify(wxGLContextAttrs& attrs)
 {
-    AddAttribute(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
-    AddAttribute(GLX_NO_RESET_NOTIFICATION_ARB);
-    SetNeedsARB();
-    return *this;
+    attrs.AddAttribute(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
+    attrs.AddAttribute(GLX_NO_RESET_NOTIFICATION_ARB);
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::LoseOnReset()
+wxGLContextAttrs& wxGLBackendX11::LoseOnReset(wxGLContextAttrs& attrs)
 {
-    AddAttribute(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
-    AddAttribute(GLX_LOSE_CONTEXT_ON_RESET_ARB);
-    SetNeedsARB();
-    return *this;
+    attrs.AddAttribute(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
+    attrs.AddAttribute(GLX_LOSE_CONTEXT_ON_RESET_ARB);
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::ResetIsolation()
+wxGLContextAttrs& wxGLBackendX11::ResetIsolation(wxGLContextAttrs& attrs)
 {
-    AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
+    attrs.AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
                   GLX_CONTEXT_RESET_ISOLATION_BIT_ARB);
-    SetNeedsARB();
-    return *this;
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::ReleaseFlush(int val)
+wxGLContextAttrs& wxGLBackendX11::ReleaseFlush(wxGLContextAttrs& attrs, int val)
 {
-    AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_ARB);
+    attrs.AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_ARB);
     if ( val == 1 )
-        AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB);
+        attrs.AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB);
     else
-        AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB);
-    SetNeedsARB();
-    return *this;
+        attrs.AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB);
+    attrs.SetNeedsARB();
+    return attrs;
 }
 
-wxGLContextAttrs& wxGLContextAttrs::PlatformDefaults()
+wxGLContextAttrs& wxGLBackendX11::PlatformDefaults(wxGLContextAttrs& attrs)
 {
-    renderTypeRGBA = true;
-    x11Direct = true;
-    return *this;
-}
-
-void wxGLContextAttrs::EndList()
-{
-    AddAttribute(None);
+    attrs.renderTypeRGBA = true;
+    attrs.x11Direct = true;
+    return attrs;
 }
 
 // ----------------------------------------------------------------------------
@@ -272,173 +272,173 @@ void wxGLContextAttrs::EndList()
 //   - Boolean attributes such as GLX_DOUBLEBUFFER don't take values in the
 //     old version but must be followed by True or False in the new one.
 
-wxGLAttributes& wxGLAttributes::RGBA()
+wxGLAttributes& wxGLBackendX11::RGBA(wxGLAttributes& attrs)
 {
-    if ( wxGLCanvasX11::GetGLXVersion() >= 13 )
-        AddAttribBits(GLX_RENDER_TYPE, GLX_RGBA_BIT);
+    if ( GetGLXVersion() >= 13 )
+        attrs.AddAttribBits(GLX_RENDER_TYPE, GLX_RGBA_BIT);
     else
-        AddAttribute(GLX_RGBA);
-    return *this;
+        attrs.AddAttribute(GLX_RGBA);
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::BufferSize(int val)
+wxGLAttributes& wxGLBackendX11::BufferSize(wxGLAttributes& attrs, int val)
 {
     if ( val >= 0 )
     {
-        AddAttribute(GLX_BUFFER_SIZE);
-        AddAttribute(val);
+        attrs.AddAttribute(GLX_BUFFER_SIZE);
+        attrs.AddAttribute(val);
     }
-    return *this;
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::Level(int val)
+wxGLAttributes& wxGLBackendX11::Level(wxGLAttributes& attrs, int val)
 {
-    AddAttribute(GLX_LEVEL);
-    AddAttribute(val);
-    return *this;
+    attrs.AddAttribute(GLX_LEVEL);
+    attrs.AddAttribute(val);
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::DoubleBuffer()
+wxGLAttributes& wxGLBackendX11::DoubleBuffer(wxGLAttributes& attrs)
 {
-    AddAttribute(GLX_DOUBLEBUFFER);
-    if ( wxGLCanvasX11::GetGLXVersion() >= 13 )
-        AddAttribute(True);
-    return *this;
+    attrs.AddAttribute(GLX_DOUBLEBUFFER);
+    if ( GetGLXVersion() >= 13 )
+        attrs.AddAttribute(True);
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::Stereo()
+wxGLAttributes& wxGLBackendX11::Stereo(wxGLAttributes& attrs)
 {
-    AddAttribute(GLX_STEREO);
-    if ( wxGLCanvasX11::GetGLXVersion() >= 13 )
-        AddAttribute(True);
-    return *this;
+    attrs.AddAttribute(GLX_STEREO);
+    if ( GetGLXVersion() >= 13 )
+        attrs.AddAttribute(True);
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::AuxBuffers(int val)
+wxGLAttributes& wxGLBackendX11::AuxBuffers(wxGLAttributes& attrs, int val)
 {
     if ( val >= 0 )
     {
-        AddAttribute(GLX_AUX_BUFFERS);
-        AddAttribute(val);
+        attrs.AddAttribute(GLX_AUX_BUFFERS);
+        attrs.AddAttribute(val);
     }
-    return *this;
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::MinRGBA(int mRed, int mGreen, int mBlue, int mAlpha)
+wxGLAttributes& wxGLBackendX11::MinRGBA(wxGLAttributes& attrs, int mRed, int mGreen, int mBlue, int mAlpha)
 {
     if ( mRed >= 0)
     {
-        AddAttribute(GLX_RED_SIZE);
-        AddAttribute(mRed);
+        attrs.AddAttribute(GLX_RED_SIZE);
+        attrs.AddAttribute(mRed);
     }
     if ( mGreen >= 0)
     {
-        AddAttribute(GLX_GREEN_SIZE);
-        AddAttribute(mGreen);
+        attrs.AddAttribute(GLX_GREEN_SIZE);
+        attrs.AddAttribute(mGreen);
     }
     if ( mBlue >= 0)
     {
-        AddAttribute(GLX_BLUE_SIZE);
-        AddAttribute(mBlue);
+        attrs.AddAttribute(GLX_BLUE_SIZE);
+        attrs.AddAttribute(mBlue);
     }
     if ( mAlpha >= 0)
     {
-        AddAttribute(GLX_ALPHA_SIZE);
-        AddAttribute(mAlpha);
+        attrs.AddAttribute(GLX_ALPHA_SIZE);
+        attrs.AddAttribute(mAlpha);
     }
-    return *this;
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::Depth(int val)
+wxGLAttributes& wxGLBackendX11::Depth(wxGLAttributes& attrs, int val)
 {
     if ( val >= 0 )
     {
-        AddAttribute(GLX_DEPTH_SIZE);
-        AddAttribute(val);
+        attrs.AddAttribute(GLX_DEPTH_SIZE);
+        attrs.AddAttribute(val);
     }
-    return *this;
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::Stencil(int val)
+wxGLAttributes& wxGLBackendX11::Stencil(wxGLAttributes& attrs, int val)
 {
     if ( val >= 0 )
     {
-        AddAttribute(GLX_STENCIL_SIZE);
-        AddAttribute(val);
+        attrs.AddAttribute(GLX_STENCIL_SIZE);
+        attrs.AddAttribute(val);
     }
-    return *this;
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::MinAcumRGBA(int mRed, int mGreen, int mBlue, int mAlpha)
+wxGLAttributes& wxGLBackendX11::MinAcumRGBA(wxGLAttributes& attrs, int mRed, int mGreen, int mBlue, int mAlpha)
 {
     if ( mRed >= 0)
     {
-        AddAttribute(GLX_ACCUM_RED_SIZE);
-        AddAttribute(mRed);
+        attrs.AddAttribute(GLX_ACCUM_RED_SIZE);
+        attrs.AddAttribute(mRed);
     }
     if ( mGreen >= 0)
     {
-        AddAttribute(GLX_ACCUM_GREEN_SIZE);
-        AddAttribute(mGreen);
+        attrs.AddAttribute(GLX_ACCUM_GREEN_SIZE);
+        attrs.AddAttribute(mGreen);
     }
     if ( mBlue >= 0)
     {
-        AddAttribute(GLX_ACCUM_BLUE_SIZE);
-        AddAttribute(mBlue);
+        attrs.AddAttribute(GLX_ACCUM_BLUE_SIZE);
+        attrs.AddAttribute(mBlue);
     }
     if ( mAlpha >= 0)
     {
-        AddAttribute(GLX_ACCUM_ALPHA_SIZE);
-        AddAttribute(mAlpha);
+        attrs.AddAttribute(GLX_ACCUM_ALPHA_SIZE);
+        attrs.AddAttribute(mAlpha);
     }
-    return *this;
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::SampleBuffers(int val)
+wxGLAttributes& wxGLBackendX11::SampleBuffers(wxGLAttributes& attrs, int val)
 {
 #ifdef GLX_SAMPLE_BUFFERS_ARB
-    if ( val >= 0 && wxGLCanvasX11::IsGLXMultiSampleAvailable() )
+    if ( val >= 0 && IsGLXMultiSampleAvailable() )
     {
-        AddAttribute(GLX_SAMPLE_BUFFERS_ARB);
-        AddAttribute(val);
+        attrs.AddAttribute(GLX_SAMPLE_BUFFERS_ARB);
+        attrs.AddAttribute(val);
     }
 #endif
-    return *this;
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::Samplers(int val)
+wxGLAttributes& wxGLBackendX11::Samplers(wxGLAttributes& attrs, int val)
 {
 #ifdef GLX_SAMPLES_ARB
-    if ( val >= 0 && wxGLCanvasX11::IsGLXMultiSampleAvailable() )
+    if ( val >= 0 && IsGLXMultiSampleAvailable() )
     {
-        AddAttribute(GLX_SAMPLES_ARB);
-        AddAttribute(val);
+        attrs.AddAttribute(GLX_SAMPLES_ARB);
+        attrs.AddAttribute(val);
     }
 #endif
-    return *this;
+    return attrs;
 }
 
-wxGLAttributes& wxGLAttributes::FrameBuffersRGB()
+wxGLAttributes& wxGLBackendX11::FrameBuffersRGB(wxGLAttributes& attrs)
 {
-    AddAttribute(GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB);
-    AddAttribute(True);
-    return *this;
+    attrs.AddAttribute(GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB);
+    attrs.AddAttribute(True);
+    return attrs;
 }
 
-void wxGLAttributes::EndList()
-{
-    AddAttribute(None);
-}
-
-wxGLAttributes& wxGLAttributes::PlatformDefaults()
+wxGLAttributes& wxGLBackendX11::PlatformDefaults(wxGLAttributes& attrs)
 {
     // No GLX specific values
-    return *this;
+    return attrs;
+}
+
+void wxGLBackendX11::EndList(wxGLAttribsBase& attrs)
+{
+    attrs.AddAttribute(None);
 }
 
 
 // ============================================================================
-// wxGLContext implementation
+// wxGLContextX11 implementation
 // ============================================================================
 
 static bool MakeCurrent(GLXDrawable drawable, GLXContext context);
@@ -451,39 +451,43 @@ static int CTXErrorHandler( Display* WXUNUSED(dpy), XErrorEvent* WXUNUSED(ev) )
     return 0;
 }
 
-wxIMPLEMENT_CLASS(wxGLContext, wxObject);
-
-wxGLContext::wxGLContext(wxGLCanvas *win,
-                         const wxGLContext *other,
-                         const wxGLContextAttrs *ctxAttrs)
+wxGLContextX11::wxGLContextX11(wxGLCanvas *win,
+                               const wxGLContext *otherCtx,
+                               const wxGLContextAttrs *ctxAttrs)
     : m_glContext(nullptr)
 {
-    const int* contextAttribs = nullptr;
+    // We assume that all contexts in the program are of the same type, so the
+    // other context passed in must also be using wxGLContextX11.
+    auto const otherGLXContext =
+        otherCtx ? static_cast<const wxGLContextX11*>(otherCtx->GetImpl())->m_glContext
+                 : None;
+
+    // The window must also be of the appropriate type.
+    auto const winX11 = static_cast<wxGLCanvasX11*>(win->GetImpl());
+
+    // Fall back to OpenGL context parameters set at wxGLCanvas ctor if any.
+    const wxGLContextAttrs& attrs = ctxAttrs ? *ctxAttrs
+                                             : win->GetGLCTXAttrs();
+
+    const int* const contextAttribs = attrs.GetGLAttrs();
     Bool x11Direct = True;
     int renderType = GLX_RGBA_TYPE;
     bool needsARB = false;
 
-    if ( ctxAttrs )
+    // Note that we don't use default values from GetGLCTXAttrs() here unless
+    // we have some explicit attributes specified, as the default values differ
+    // from PlatformDefaults() ones, which are used just above.
+    if ( contextAttribs )
     {
-        contextAttribs = ctxAttrs->GetGLAttrs();
-        x11Direct = ctxAttrs->x11Direct;
-        renderType = ctxAttrs->renderTypeRGBA ? GLX_RGBA_TYPE : GLX_COLOR_INDEX_TYPE;
-        needsARB = ctxAttrs->NeedsARB();
+        renderType = attrs.renderTypeRGBA ? GLX_RGBA_TYPE : GLX_COLOR_INDEX_TYPE;
+        x11Direct = attrs.x11Direct ? True : False;
+        needsARB = attrs.NeedsARB();
     }
-    else if ( win->GetGLCTXAttrs().GetGLAttrs() )
-    {
-        // If OpenGL context parameters were set at wxGLCanvas ctor, get them now
-        contextAttribs = win->GetGLCTXAttrs().GetGLAttrs();
-        x11Direct = win->GetGLCTXAttrs().x11Direct;
-        renderType = win->GetGLCTXAttrs().renderTypeRGBA ? GLX_RGBA_TYPE : GLX_COLOR_INDEX_TYPE;
-        needsARB = win->GetGLCTXAttrs().NeedsARB();
-    }
-    // else use GPU driver defaults and x11Direct renderType ones
 
     m_isOk = false;
 
     Display* dpy = wxGetX11Display();
-    XVisualInfo* vi = static_cast<XVisualInfo*>(win->GetXVisualInfo());
+    XVisualInfo* vi = static_cast<XVisualInfo*>(winX11->GetXVisualInfo());
     wxCHECK_RET( vi, "invalid visual for OpenGL" );
 
     // We need to create a temporary context to get the
@@ -491,7 +495,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
     GLXContext tempContext = glXCreateContext(dpy, vi, nullptr, x11Direct);
     wxCHECK_RET(tempContext, "glXCreateContext failed" );
 
-    GLXFBConfig* const fbc = win->GetGLXFBConfig();
+    GLXFBConfig* const fbc = winX11->GetGLXFBConfig();
     PFNGLXCREATECONTEXTATTRIBSARBPROC wx_glXCreateContextAttribsARB = 0;
     if (fbc)
     {
@@ -516,7 +520,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
     if ( wx_glXCreateContextAttribsARB )
     {
         m_glContext = wx_glXCreateContextAttribsARB( dpy, fbc[0],
-                                other ? other->m_glContext : None,
+                                otherGLXContext,
                                 x11Direct, contextAttribs );
 
         // Some old hardware may accept the use of this ARB, but may fail.
@@ -535,13 +539,13 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
         if (fbc)
         {
             m_glContext = glXCreateNewContext( dpy, fbc[0], renderType,
-                                               other ? other->m_glContext : None,
+                                               otherGLXContext,
                                                x11Direct );
         }
         else // GLX <= 1.2
         {
             m_glContext = glXCreateContext( dpy, vi,
-                                            other ? other->m_glContext : None,
+                                            otherGLXContext,
                                             x11Direct );
         }
     }
@@ -558,18 +562,18 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
     XSetErrorHandler( oldHandler );
 }
 
-wxGLContext::~wxGLContext()
+wxGLContextX11::~wxGLContextX11()
 {
     if ( !m_glContext )
         return;
 
     if ( m_glContext == glXGetCurrentContext() )
-        ClearCurrent();
+        wxGLBackendX11_instance.ClearCurrentContext();
 
     glXDestroyContext( wxGetX11Display(), m_glContext );
 }
 
-bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
+bool wxGLContextX11::SetCurrent(const wxGLCanvas& win) const
 {
     if ( !m_glContext )
         return false;
@@ -580,17 +584,11 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     return MakeCurrent(xid, m_glContext);
 }
 
-/* static */
-void wxGLContextBase::ClearCurrent()
-{
-    MakeCurrent(None, nullptr);
-}
-
 // wrapper around glXMakeContextCurrent/glXMakeCurrent depending on GLX
 // version
 static bool MakeCurrent(GLXDrawable drawable, GLXContext context)
 {
-    if (wxGLCanvas::GetGLXVersion() >= 13)
+    if (wxGLBackendX11_instance.GetGLXVersion() >= 13)
         return glXMakeContextCurrent( wxGetX11Display(), drawable, drawable, context);
     else // GLX <= 1.2 doesn't have glXMakeContextCurrent()
         return glXMakeCurrent( wxGetX11Display(), drawable, context);
@@ -610,7 +608,8 @@ static bool InitXVisualInfo(
 // initialization methods and dtor
 // ----------------------------------------------------------------------------
 
-wxGLCanvasX11::wxGLCanvasX11()
+wxGLCanvasX11::wxGLCanvasX11(wxGLCanvasUnix* canvas)
+    : wxGLCanvasUnixImpl(canvas)
 {
     m_fbc = nullptr;
     m_vi = nullptr;
@@ -641,18 +640,19 @@ wxGLCanvasX11::~wxGLCanvasX11()
 // working with GL attributes
 // ----------------------------------------------------------------------------
 
-/* static */
-bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
+bool wxGLBackendX11::IsExtensionSupported(const char *extension)
 {
     Display * const dpy = wxGetX11Display();
 
-    return IsExtensionInList(glXQueryExtensionsString(dpy, DefaultScreen(dpy)),
-                             extension);
+    return wxGLCanvasBase::IsExtensionInList
+           (
+                glXQueryExtensionsString(dpy, DefaultScreen(dpy)),
+                extension
+           );
 }
 
 
-/* static */
-bool wxGLCanvasX11::IsGLXMultiSampleAvailable()
+bool wxGLBackendX11::IsGLXMultiSampleAvailable()
 {
     static int s_isMultiSampleAvailable = -1;
     if ( s_isMultiSampleAvailable == -1 )
@@ -675,7 +675,7 @@ static bool InitXVisualInfo(const wxGLAttributes& dispAttrs,
 
     Display* dpy = wxGetX11Display();
 
-    if (wxGLCanvasX11::GetGLXVersion() >= 13)
+    if (wxGLBackendX11_instance.GetGLXVersion() >= 13)
     {
         int returned;
         *pFBC = glXChooseFBConfig(dpy, DefaultScreen(dpy), attrsListGLX, &returned);
@@ -701,8 +701,7 @@ static bool InitXVisualInfo(const wxGLAttributes& dispAttrs,
     return *pXVisual != nullptr;
 }
 
-/* static */
-bool wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
+bool wxGLBackendX11::IsDisplaySupported(const wxGLAttributes& dispAttrs)
 {
     wxX11Ptr<GLXFBConfig> fbc;
     wxX11Ptr<XVisualInfo> vi;
@@ -710,20 +709,11 @@ bool wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
     return InitXVisualInfo(dispAttrs, fbc.Out(), vi.Out());
 }
 
-/* static */
-bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
-{
-    wxGLAttributes dispAttrs;
-    ParseAttribList(attribList, dispAttrs);
-
-    return IsDisplaySupported(dispAttrs);
-}
-
 // ----------------------------------------------------------------------------
 // default visual management
 // ----------------------------------------------------------------------------
 
-static void FreeDefaultVisualInfo()
+void wxGLBackendX11::FreeDefaultVisualInfo()
 {
     if (gs_glFBCInfo)
     {
@@ -737,22 +727,30 @@ static void FreeDefaultVisualInfo()
     }
 }
 
-/* static */
-bool wxGLCanvasX11::InitDefaultVisualInfo(const int *attribList)
+bool wxGLBackendX11::InitDefaultVisualInfo(const int* attribList)
 {
     FreeDefaultVisualInfo();
     wxGLAttributes dispAttrs;
-    ParseAttribList(attribList, dispAttrs);
+    wxGLCanvasBase::ParseAttribList(attribList, dispAttrs);
 
     return InitXVisualInfo(dispAttrs, &gs_glFBCInfo, &gs_glVisualInfo);
+}
+
+void* wxGLBackendX11::GetDefaultVisualInfo()
+{
+    return gs_glVisualInfo;
 }
 
 // ----------------------------------------------------------------------------
 // other GL methods
 // ----------------------------------------------------------------------------
 
-/* static */
-int wxGLCanvasX11::GetGLXVersion()
+bool wxGLBackendX11::GetEGLVersion(int* WXUNUSED(major), int* WXUNUSED(minor))
+{
+    return false;
+}
+
+int wxGLBackendX11::GetGLXVersion()
 {
     static int s_glxVersion = 0;
     if ( s_glxVersion == 0 )
@@ -806,7 +804,7 @@ void wxGLSetSwapInterval(Display* dpy, GLXDrawable drawable, int interval)
 
 bool wxGLCanvasX11::SwapBuffers()
 {
-    const Window xid = GetXWindow();
+    const Window xid = m_canvas->GetXWindow();
     wxCHECK2_MSG( xid, return false, wxT("window must be shown") );
 
     const auto dpy = wxGetX11Display();
@@ -826,30 +824,38 @@ bool wxGLCanvasX11::SwapBuffers()
     return true;
 }
 
-bool wxGLCanvasX11::IsShownOnScreen() const
+bool wxGLCanvasX11::HasWindow() const
 {
-    return GetXWindow() && wxGLCanvasBase::IsShownOnScreen();
+    return m_canvas->GetXWindow();
 }
 
 // ----------------------------------------------------------------------------
-// wxGLApp
+// wxGLBackendX11
 // ----------------------------------------------------------------------------
 
-bool wxGLApp::InitGLVisual(const int* attribList)
+/* static */
+wxGLBackend& wxGLBackendX11::Get()
 {
-    return wxGLCanvasX11::InitDefaultVisualInfo(attribList);
+    return wxGLBackendX11_instance;
 }
 
-void* wxGLApp::GetXVisualInfo()
+std::unique_ptr<wxGLContextImpl>
+wxGLBackendX11::CreateContextImpl(wxGLCanvas* win,
+                                  const wxGLContext* other,
+                                  const wxGLContextAttrs* ctxAttrs)
 {
-    return gs_glVisualInfo;
+    return std::make_unique<wxGLContextX11>(win, other, ctxAttrs);
 }
 
-int wxGLApp::OnExit()
+std::unique_ptr<wxGLCanvasUnixImpl>
+wxGLBackendX11::CreateCanvasImpl(wxGLCanvasUnix* canvas)
 {
-    FreeDefaultVisualInfo();
+    return std::make_unique<wxGLCanvasX11>(canvas);
+}
 
-    return wxGLAppBase::OnExit();
+void wxGLBackendX11::ClearCurrentContext()
+{
+    MakeCurrent(None, nullptr);
 }
 
 #endif // wxUSE_GLCANVAS

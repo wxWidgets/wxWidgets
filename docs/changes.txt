@@ -237,6 +237,10 @@ Changes in behaviour which may result in build errors
   previously compiled doesn't compile any longer, please fix it to use either
   the ctor from RGB value or from string explicitly.
 
+- wxGLCanvas::CreateSurface() which was previously enabled in build
+  configurations using EGL is not available any longer as exposing it doesn't
+  make sense when wxGLCanvas may use either EGL or GLX.
+
 
 3.3.2: (released 2025-??-??)
 ----------------------------

@@ -497,8 +497,6 @@
 
 #cmakedefine01 wxUSE_GLCANVAS
 
-#cmakedefine01 wxUSE_GLCANVAS_EGL
-
 #cmakedefine01 wxUSE_RICHTEXT
 
 
@@ -1129,6 +1127,9 @@
 
 /* Define if locale_t is available */
 #cmakedefine HAVE_LOCALE_T 1
+
+/* Define if you have EGL support */
+#cmakedefine wxHAS_EGL 1
 
 /* Define if you have inotify_xxx() functions. */
 #cmakedefine wxHAS_INOTIFY 1

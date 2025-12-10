@@ -3461,7 +3461,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                                 PKG_CHECK_MODULES(EGL, [egl >= 1.4],
                                     [
                                         OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
-                                        AC_DEFINE(wxUSE_GLCANVAS_EGL)
+                                        AC_DEFINE(wxHAS_EGL)
                                         PKG_CHECK_MODULES(WAYLAND_EGL, [wayland-egl],
                                             [
                                                 if test $wx_cv_gdk_wayland = "yes"; then

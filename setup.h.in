@@ -506,8 +506,6 @@
 
 #define wxUSE_GLCANVAS       0
 
-#define wxUSE_GLCANVAS_EGL   0
-
 #define wxUSE_RICHTEXT       0
 
 
@@ -1137,6 +1135,9 @@
 
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
+
+/* Define if you have EGL support */
+#undef wxHAS_EGL
 
 /* Define if you have inotify_xxx() functions. */
 #undef wxHAS_INOTIFY

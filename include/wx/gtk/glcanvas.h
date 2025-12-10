@@ -10,23 +10,14 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include "wx/setup.h"
-
-#if wxUSE_GLCANVAS_EGL
-    #include "wx/unix/glegl.h"
-    typedef wxGLCanvasEGL wxGLCanvasImpl;
-#else
-    #include "wx/unix/glx11.h"
-    typedef wxGLCanvasX11 wxGLCanvasImpl;
-#endif
+#include "wx/unix/glcanvas.h"
 
 //---------------------------------------------------------------------------
 // wxGLCanvas
 //---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasImpl
+class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasUnix
 {
-    typedef wxGLCanvasImpl BaseType;
 public:
     wxGLCanvas() = default;
 
@@ -69,7 +60,7 @@ public:
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) override;
 
-    // implement wxGLCanvasX11 methods
+    // implement wxGLCanvasUnix methods
     // --------------------------------
 
     virtual unsigned long GetXWindow() const override;

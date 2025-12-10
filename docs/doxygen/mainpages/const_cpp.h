@@ -187,6 +187,10 @@ Currently the following symbols exist:
     ever, be necessary to use this symbol directly, functions such as
     wxWindow::FromDIP() and wxBitmap::GetLogicalSize() exist to hide the
     differences between the platforms with and without DPI-independent pixels.}
+@itemdef{wxHAS_EGL, Defined if wxGLCanvas may use EGL for OpenGL context
+    creation (this symbol only exists in wxWidgets 3.3.2 and later).}
+@itemdef{wxHAS_GLX, Defined if wxGLCanvas may use GLX for OpenGL context
+    creation (this symbol only exists in wxWidgets 3.3.2 and later).}
 @itemdef{wxHAS_IMAGE_RESOURCES, Defined if wxICON() and wxBITMAP() macros use
     images from (Windows) resources. Otherwise, these macros use XPMs.}
 @itemdef{wxHAS_MEMBER_DEFAULT, Defined if the currently used compiler supports
