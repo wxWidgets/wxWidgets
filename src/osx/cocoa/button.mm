@@ -93,8 +93,7 @@ void wxButtonCocoaImpl::SetBitmap(const wxBitmapBundle& bitmap)
     // switch bezel style for plain pushbuttons
     if ( bitmap.IsOk() )
     {
-        if ([GetNSButton() bezelStyle] == NSRoundedBezelStyle)
-            [GetNSButton() setBezelStyle:NSRegularSquareBezelStyle];
+        [GetNSButton() setBezelStyle:NSRegularSquareBezelStyle];
     }
     else
     {
@@ -226,7 +225,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
             case wxBORDER_RAISED:
             case wxBORDER_THEME:
                 bezel = isSimpleText ? NSRoundedBezelStyle
-                                     : NSSmallSquareBezelStyle;
+                                     : NSRegularSquareBezelStyle;
                 break;
         }
 
@@ -244,7 +243,8 @@ void wxButton::OSXUpdateAfterLabelChange(const wxString& label)
     SetBezelStyleFromBorderFlags(impl->GetNSButton(),
                                  GetWindowStyle(),
                                  GetId(),
-                                 label);
+                                 label,
+                                 GetBitmap() );
 
 
     // Skip setting the accelerator for the default buttons as this would
