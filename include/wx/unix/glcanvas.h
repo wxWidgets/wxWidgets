@@ -1,22 +1,27 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/unix/glx11.h
-// Purpose:     class common for all X11-based wxGLCanvas implementations
+// Name:        wx/unix/glcanvas.h
+// Purpose:     class common for wxGLCanvas implementations in wxGTK and wxX11
 // Author:      Vadim Zeitlin
 // Created:     2007-04-15
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_GLX11_H_
-#define _WX_UNIX_GLX11_H_
+#ifndef _WX_UNIX_GLCANVAS_H_
+#define _WX_UNIX_GLCANVAS_H_
+
+#include <memory>
 
 #include <GL/gl.h>
 
-typedef struct __GLXcontextRec* GLXContext;
+// Forward declare struct from GL/glx.h
 typedef struct __GLXFBConfigRec* GLXFBConfig;
 
+class wxGLContextImpl;
+class wxGLCanvasUnixImpl;
+
 // ----------------------------------------------------------------------------
-// wxGLContext
+// wxGLContext: used as is in all ports
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
@@ -29,40 +34,34 @@ public:
 
     virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
+    // Implementation only.
+    wxGLContextImpl* GetImpl() const { return m_impl.get(); }
+
 private:
-    GLXContext m_glContext;
+    std::unique_ptr<wxGLContextImpl> m_impl;
 
     wxDECLARE_CLASS(wxGLContext);
 };
 
 // ----------------------------------------------------------------------------
-// wxGLCanvasX11
+// wxGLCanvasUnix: base class for port-specific wxGLCanvas
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_GL wxGLCanvasX11 : public wxGLCanvasBase
+class WXDLLIMPEXP_GL wxGLCanvasUnix : public wxGLCanvasBase
 {
 public:
-    // initialization and dtor
-    // -----------------------
-
-    // default ctor doesn't do anything, InitVisual() must be called
-    wxGLCanvasX11();
-
-    // initializes GLXFBConfig and XVisualInfo corresponding to the given attributes
-    bool InitVisual(const wxGLAttributes& dispAttrs);
-
-    // frees XVisualInfo info
-    virtual ~wxGLCanvasX11();
-
-
-    // implement wxGLCanvasBase methods
-    // --------------------------------
+    virtual ~wxGLCanvasUnix();
 
     virtual bool SwapBuffers() override;
 
+    virtual bool IsShownOnScreen() const override;
 
-    // X11-specific methods
+    // GLX-specific methods
     // --------------------
+
+    // if both GLX and EGL are available, prefer using GLX instead of EGL used
+    // by default
+    static void PreferGLX();
 
     // return GLX version: 13 means 1.3 &c
     static int GetGLXVersion();
@@ -74,33 +73,21 @@ public:
     virtual unsigned long GetXWindow() const = 0;
 
 
-    // GLX-specific methods
-    // --------------------
+    // Implementation only.
+    wxGLCanvasUnixImpl* GetImpl() const { return m_impl.get(); }
 
-    // override some wxWindow methods
-    // ------------------------------
+    void* GetXVisualInfo() const;
 
-    // return true only if the window is realized: OpenGL context can't be
-    // created until we are
-    virtual bool IsShownOnScreen() const override;
+protected:
+    wxGLCanvasUnix();
 
+    bool InitVisual(const wxGLAttributes& dispAttrs);
 
-    // implementation only from now on
-    // -------------------------------
-
-    // get the GLXFBConfig/XVisualInfo we use
-    GLXFBConfig *GetGLXFBConfig() const { return m_fbc; }
-    void* GetXVisualInfo() const { return m_vi; }
-
-    // initialize the global default GL visual, return false if matching visual
-    // not found
-    static bool InitDefaultVisualInfo(const int *attribList);
+    // This is only called by wxGTK but defined in any case.
+    void CallOnRealized();
 
 private:
-    GLXFBConfig *m_fbc;
-    void* m_vi;
-
-    bool m_swapIntervalSet = false;
+    std::unique_ptr<wxGLCanvasUnixImpl> m_impl;
 };
 
 // ----------------------------------------------------------------------------
@@ -113,11 +100,11 @@ private:
 class WXDLLIMPEXP_GL wxGLApp : public wxGLAppBase
 {
 public:
+    wxGLApp() = default;
+
     virtual bool InitGLVisual(const int *attribList) override;
 
-#ifndef __WXGTK3__
-    virtual void* GetXVisualInfo() override;
-#endif // GTK < 3
+    virtual void* GetXVisualInfo();
 
     // and override this wxApp method to clean up
     virtual int OnExit() override;
@@ -126,5 +113,4 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxGLApp);
 };
 
-#endif // _WX_UNIX_GLX11_H_
-
+#endif // _WX_UNIX_GLCANVAS_H_

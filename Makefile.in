@@ -2630,13 +2630,14 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 @COND_TOOLKIT_MSW@WEBVIEW_PLATFORM_HDR = \
 @COND_TOOLKIT_MSW@	wx/msw/webviewhistoryitem_ie.h wx/msw/webview_ie.h \
 @COND_TOOLKIT_MSW@	wx/msw/webview_edge.h
-@COND_TOOLKIT_GTK@OPENGL_PLATFORM_HDR = wx/unix/glx11.h \
-@COND_TOOLKIT_GTK@	wx/gtk/glcanvas.h wx/unix/glegl.h
+@COND_TOOLKIT_GTK@OPENGL_PLATFORM_HDR = wx/gtk/glcanvas.h \
+@COND_TOOLKIT_GTK@	wx/unix/glcanvas.h
 @COND_TOOLKIT_MSW@OPENGL_PLATFORM_HDR = wx/msw/glcanvas.h
 @COND_TOOLKIT_OSX_COCOA@OPENGL_PLATFORM_HDR = wx/osx/glcanvas.h
 @COND_TOOLKIT_OSX_IPHONE@OPENGL_PLATFORM_HDR = wx/osx/glcanvas.h
 @COND_TOOLKIT_QT@OPENGL_PLATFORM_HDR = wx/qt/glcanvas.h
-@COND_TOOLKIT_X11@OPENGL_PLATFORM_HDR = wx/unix/glx11.h wx/x11/glcanvas.h
+@COND_TOOLKIT_X11@OPENGL_PLATFORM_HDR = wx/x11/glcanvas.h \
+@COND_TOOLKIT_X11@	wx/unix/glcanvas.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_PLATFORM_HDR = wx/aui/tabartgtk.h
 @COND_TOOLKIT_MSW@AUI_PLATFORM_HDR = wx/aui/tabartmsw.h wx/aui/barartmsw.h
 COND_PLATFORM_MACOSX_1_BASE_PLATFORM_HDR =  \
@@ -12155,7 +12156,8 @@ COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 @COND_USE_SOVERSOLARIS_1@__gldll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__gldll___win32rc = gldll_version_rc.o
 @COND_TOOLKIT_GTK@__OPENGL_PLATFORM_SRC_OBJECTS = \
-@COND_TOOLKIT_GTK@	gldll_glx11.o gldll_gtk_glcanvas.o gldll_glegl.o
+@COND_TOOLKIT_GTK@	gldll_glx11.o gldll_gtk_glcanvas.o gldll_glegl.o \
+@COND_TOOLKIT_GTK@	gldll_unix_glcanvas.o
 @COND_TOOLKIT_MSW@__OPENGL_PLATFORM_SRC_OBJECTS = gldll_msw_glcanvas.o
 @COND_TOOLKIT_OSX_COCOA@__OPENGL_PLATFORM_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_COCOA@	= gldll_glcanvas_osx.o gldll_cocoa_glcanvas.o
@@ -12163,7 +12165,7 @@ COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 @COND_TOOLKIT_OSX_IPHONE@	= gldll_glcanvas_osx.o gldll_iphone_glcanvas.o
 @COND_TOOLKIT_QT@__OPENGL_PLATFORM_SRC_OBJECTS = gldll_qt_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_PLATFORM_SRC_OBJECTS = \
-@COND_TOOLKIT_X11@	gldll_x11_glcanvas.o gldll_glx11.o
+@COND_TOOLKIT_X11@	gldll_x11_glcanvas.o gldll_glx11.o gldll_unix_glcanvas.o
 COND_MONOLITHIC_0___WXLIBGLDEP_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIBGLDEP_CORE_p = $(COND_MONOLITHIC_0___WXLIBGLDEP_CORE_p)
@@ -12186,7 +12188,8 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_USE_PCH_1@_____pch_wxprec_gllib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_gllib/wx/wxprec.h.gch
 @COND_TOOLKIT_GTK@__OPENGL_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_GTK@	gllib_glx11.o gllib_gtk_glcanvas.o gllib_glegl.o
+@COND_TOOLKIT_GTK@	gllib_glx11.o gllib_gtk_glcanvas.o gllib_glegl.o \
+@COND_TOOLKIT_GTK@	gllib_unix_glcanvas.o
 @COND_TOOLKIT_MSW@__OPENGL_PLATFORM_SRC_OBJECTS_1 = gllib_msw_glcanvas.o
 @COND_TOOLKIT_OSX_COCOA@__OPENGL_PLATFORM_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_COCOA@	= gllib_glcanvas_osx.o gllib_cocoa_glcanvas.o
@@ -12194,7 +12197,7 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_TOOLKIT_OSX_IPHONE@	= gllib_glcanvas_osx.o gllib_iphone_glcanvas.o
 @COND_TOOLKIT_QT@__OPENGL_PLATFORM_SRC_OBJECTS_1 = gllib_qt_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_X11@	gllib_x11_glcanvas.o gllib_glx11.o
+@COND_TOOLKIT_X11@	gllib_x11_glcanvas.o gllib_glx11.o gllib_unix_glcanvas.o
 @COND_SHARED_1@____wxgl_namedll_DEP = $(__gldll___depname)
 @COND_SHARED_0@____wxgl_namelib_DEP = $(__gllib___depname)
 COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
@@ -34418,6 +34421,12 @@ gldll_x11_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_X11@gldll_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
 
+@COND_TOOLKIT_GTK@gldll_unix_glcanvas.o: $(srcdir)/src/unix/glcanvas.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glcanvas.cpp
+
+@COND_TOOLKIT_X11@gldll_unix_glcanvas.o: $(srcdir)/src/unix/glcanvas.cpp $(GLDLL_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/unix/glcanvas.cpp
+
 gllib_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
 
@@ -34453,6 +34462,12 @@ gllib_x11_glcanvas.o: $(srcdir)/src/x11/glcanvas.cpp $(GLLIB_ODEP)
 
 @COND_TOOLKIT_X11@gllib_glx11.o: $(srcdir)/src/unix/glx11.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glx11.cpp
+
+@COND_TOOLKIT_GTK@gllib_unix_glcanvas.o: $(srcdir)/src/unix/glcanvas.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glcanvas.cpp
+
+@COND_TOOLKIT_X11@gllib_unix_glcanvas.o: $(srcdir)/src/unix/glcanvas.cpp $(GLLIB_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/unix/glcanvas.cpp
 
 sound_sdl_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp
 	$(CXXC) -c -o $@ $(SOUND_SDL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp

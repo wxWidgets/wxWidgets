@@ -537,6 +537,7 @@ if(wxUSE_GUI)
                     # library directly like this to avoid link problems.
                     set(OPENGL_LIBRARIES ${OPENGL_egl_LIBRARY} ${OPENGL_LIBRARIES})
                 endif()
+                set(wxHAS_EGL 1)
                 set(OPENGL_INCLUDE_DIR ${OPENGL_INCLUDE_DIR} ${OPENGL_EGL_INCLUDE_DIRS})
                 find_package(WAYLANDEGL)
                 if(WAYLANDEGL_FOUND AND wxHAVE_GDK_WAYLAND)

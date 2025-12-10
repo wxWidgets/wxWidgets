@@ -899,18 +899,6 @@ public:
 
 
     /**
-       Re-creates EGLSurface. To be used after a reparent or other
-       changes that may invalidate the EGL drawing surface.
-
-       Only available when wxUSE_GLCANVAS_EGL is enabled.
-
-       @return @true if surface is successfully recreated
-
-       @since 3.2.3
-    */
-    bool CreateSurface();
-
-    /**
         Determines if a canvas having the specified attributes is available.
         This only applies for visual attributes, not rendering context attributes.
 
@@ -944,6 +932,28 @@ public:
         compilation.
     */
     static bool IsExtensionSupported(const char *extension);
+
+    /**
+        Prefer using GLX over other OpenGL implementations on Unix-like systems
+        where multiple implementations are available (such as GLX and EGL).
+
+        This function is only available when `wxHAS_GLX` preprocessor symbol is
+        defined (which will be the case for wxGTK and wxX11 under Unix systems).
+
+        It must be called before using any OpenGL functionality, which includes
+        not only creating wxGLCanvas but also checking for extension support or
+        creating attributes objects, doing it afterwards will trigger an assert
+        failure and have no other effect.
+
+        Note that when using wxGTK with Wayland, calling this function will
+        have no effect anyhow as only EGL is supported in this case.
+
+        Finally please note that the same effect can be achieved by setting the
+        environment variable `wx_opengl_egl=0` before starting the application.
+
+        @since 3.3.2
+     */
+    static void PreferGLX();
 
     /**
         Sets the current colour for this window (using @c glcolor3f()), using

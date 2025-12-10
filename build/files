@@ -2668,13 +2668,13 @@ OPENGL_MSW_HDR =
 
 OPENGL_GTK_SRC =
     src/gtk/glcanvas.cpp
+    src/unix/glcanvas.cpp
     src/unix/glegl.cpp
     src/unix/glx11.cpp
 
 OPENGL_GTK_HDR =
     wx/gtk/glcanvas.h
-    wx/unix/glegl.h
-    wx/unix/glx11.h
+    wx/unix/glcanvas.h
 
 OPENGL_OSX_COCOA_SRC =
     src/osx/cocoa/glcanvas.mm
@@ -2691,11 +2691,12 @@ OPENGL_OSX_IPHONE_HDR =
     wx/osx/glcanvas.h
 
 OPENGL_X11_SRC =
+    src/unix/glcanvas.cpp
     src/unix/glx11.cpp
     src/x11/glcanvas.cpp
 
 OPENGL_X11_HDR =
-    wx/unix/glx11.h
+    wx/unix/glcanvas.h
     wx/x11/glcanvas.h
 
 OPENGL_QT_SRC =
