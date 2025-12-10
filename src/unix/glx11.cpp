@@ -465,27 +465,24 @@ wxGLContextX11::wxGLContextX11(wxGLCanvas *win,
     // The window must also be of the appropriate type.
     auto const winX11 = static_cast<wxGLCanvasX11*>(win->GetImpl());
 
-    const int* contextAttribs = nullptr;
+    // Fall back to OpenGL context parameters set at wxGLCanvas ctor if any.
+    const wxGLContextAttrs& attrs = ctxAttrs ? *ctxAttrs
+                                             : win->GetGLCTXAttrs();
+
+    const int* const contextAttribs = attrs.GetGLAttrs();
     Bool x11Direct = True;
     int renderType = GLX_RGBA_TYPE;
     bool needsARB = false;
 
-    if ( ctxAttrs )
+    // Note that we don't use default values from GetGLCTXAttrs() here unless
+    // we have some explicit attributes specified, as the default values differ
+    // from PlatformDefaults() ones, which are used just above.
+    if ( contextAttribs )
     {
-        contextAttribs = ctxAttrs->GetGLAttrs();
-        x11Direct = ctxAttrs->x11Direct;
-        renderType = ctxAttrs->renderTypeRGBA ? GLX_RGBA_TYPE : GLX_COLOR_INDEX_TYPE;
-        needsARB = ctxAttrs->NeedsARB();
+        renderType = attrs.renderTypeRGBA ? GLX_RGBA_TYPE : GLX_COLOR_INDEX_TYPE;
+        x11Direct = attrs.x11Direct ? True : False;
+        needsARB = attrs.NeedsARB();
     }
-    else if ( win->GetGLCTXAttrs().GetGLAttrs() )
-    {
-        // If OpenGL context parameters were set at wxGLCanvas ctor, get them now
-        contextAttribs = win->GetGLCTXAttrs().GetGLAttrs();
-        x11Direct = win->GetGLCTXAttrs().x11Direct;
-        renderType = win->GetGLCTXAttrs().renderTypeRGBA ? GLX_RGBA_TYPE : GLX_COLOR_INDEX_TYPE;
-        needsARB = win->GetGLCTXAttrs().NeedsARB();
-    }
-    // else use GPU driver defaults and x11Direct renderType ones
 
     m_isOk = false;
 
