@@ -748,6 +748,11 @@ void* wxGLBackendX11::GetDefaultVisualInfo()
 // other GL methods
 // ----------------------------------------------------------------------------
 
+bool wxGLBackendX11::GetEGLVersion(int* WXUNUSED(major), int* WXUNUSED(minor))
+{
+    return false;
+}
+
 int wxGLBackendX11::GetGLXVersion()
 {
     static int s_glxVersion = 0;

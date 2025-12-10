@@ -89,6 +89,7 @@ public:
 
     bool IsExtensionSupported(const char* extension) override;
     bool IsDisplaySupported(const wxGLAttributes& dispAttrs) override;
+    bool GetEGLVersion(int* major, int* minor) override;
     int GetGLXVersion() override;
     bool IsGLXMultiSampleAvailable() override;
 

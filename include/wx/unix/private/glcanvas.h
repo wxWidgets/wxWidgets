@@ -107,6 +107,7 @@ public:
 
     virtual bool IsDisplaySupported(const wxGLAttributes& dispAttrs) = 0;
 
+    virtual bool GetEGLVersion(int* major, int* minor) = 0;
     virtual int GetGLXVersion() = 0;
 
     virtual bool IsGLXMultiSampleAvailable() = 0;

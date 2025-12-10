@@ -56,6 +56,13 @@ public:
 
     virtual bool IsShownOnScreen() const override;
 
+    // EGL-specific methods
+    // --------------------
+
+    // return true when using EGL, filling major and minor with EGL version
+    static bool GetEGLVersion(int* major, int* minor);
+
+
     // GLX-specific methods
     // --------------------
 

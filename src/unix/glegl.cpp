@@ -969,6 +969,16 @@ wxGLBackendEGL::CreateCanvasImpl(wxGLCanvasUnix* canvas)
     return std::make_unique<wxGLCanvasEGL>(canvas);
 }
 
+bool wxGLBackendEGL::GetEGLVersion(int* major, int* minor)
+{
+    if ( major )
+        *major = gs_eglMajor;
+    if ( minor )
+        *minor = gs_eglMinor;
+
+    return true;
+}
+
 int wxGLBackendEGL::GetGLXVersion()
 {
     // EGL doesn't have GLX version.

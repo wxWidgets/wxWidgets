@@ -302,6 +302,12 @@ void wxGLCanvasUnix::PreferGLX()
 }
 
 /* static */
+bool wxGLCanvasUnix::GetEGLVersion(int* major, int* minor)
+{
+    return wxGLBackend::Get().GetEGLVersion(major, minor);
+}
+
+/* static */
 int wxGLCanvasUnix::GetGLXVersion()
 {
     return wxGLBackend::Get().GetGLXVersion();

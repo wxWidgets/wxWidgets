@@ -899,6 +899,28 @@ public:
 
 
     /**
+        Return the version of EGL being used or @false if not using EGL.
+
+        This function is only available when `wxHAS_GLX` preprocessor symbol is
+        defined, i.e. in the builds where either GLX or EGL can be used. Note
+        that it is still available when `wxHAS_EGL` is _not_ defined, and
+        simply always returns @false in this case.
+
+        @param major
+            Pointer to an integer to receive the major version number. May be
+            @NULL.
+        @param minor
+            Pointer to an integer to receive the minor version number. May be
+            @NULL.
+        @return
+            @true if EGL is being used and version numbers were returned,
+            @false otherwise, e.g. if GLX is being used instead.
+
+        @since 3.3.2
+     */
+    static bool GetEGLVersion(int* major, int* minor);
+
+    /**
         Return the version of GLX being used or 0 if not using GLX.
 
         The returned value combines major and minor version numbers in a

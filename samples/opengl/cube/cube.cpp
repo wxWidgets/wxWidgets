@@ -503,7 +503,16 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     const int glxVersion = wxGLCanvasUnix::GetGLXVersion();
     if ( glxVersion == 0 )
     {
-        info += "Using EGL.\n\n";
+        int eglMajor = 0, eglMinor = 0;
+        if ( wxGLCanvasUnix::GetEGLVersion(&eglMajor, &eglMinor) )
+        {
+            info += wxString::Format("Using EGL %d.%d.\n\n",
+                                     eglMajor, eglMinor);
+        }
+        else
+        {
+            info += "Using unknown OpenGL binding API.\n\n";
+        }
     }
     else
     {
