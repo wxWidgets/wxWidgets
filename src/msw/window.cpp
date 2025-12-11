@@ -103,6 +103,7 @@
 
 #include <string.h>
 
+#include <imm.h>
 #include <shellapi.h>
 #include <mmsystem.h>
 
@@ -7237,6 +7238,51 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
     return win;
 }
 
+namespace
+{
+
+// We use dynamic loading to avoid having to link with imm32.lib
+// (another positive side effect is that imm32.dll is loaded only if the
+// program actually handles wxEVT_CHAR_HOOK events without skipping them, as
+// it's the only case when we need to use these IME functions).
+typedef HIMC (WINAPI *ImmGetContext_t)(HWND);
+typedef BOOL (WINAPI *ImmGetOpenStatus_t)(HIMC);
+typedef BOOL (WINAPI *ImmReleaseContext_t)(HWND, HIMC);
+
+ImmGetContext_t gs_pfnImmGetContext = nullptr;
+ImmGetOpenStatus_t gs_pfnImmGetOpenStatus = nullptr;
+ImmReleaseContext_t gs_pfnImmReleaseContext = nullptr;
+
+bool wxIsIMEOpen(const wxWindow* win)
+{
+    if ( !win )
+        return false;
+
+    if ( !gs_pfnImmGetContext )
+    {
+        wxLoadedDLL dllImm32("imm32.dll");
+        if ( !dllImm32.IsLoaded() )
+            return false;
+
+        wxDL_INIT_FUNC(gs_pfn, ImmGetContext, dllImm32);
+        wxDL_INIT_FUNC(gs_pfn, ImmGetOpenStatus, dllImm32);
+        wxDL_INIT_FUNC(gs_pfn, ImmReleaseContext, dllImm32);
+    }
+
+    const HWND hwnd = GetHwndOf(win);
+
+    const HIMC hIMC = gs_pfnImmGetContext(hwnd);
+    if ( !hIMC )
+        return false;
+
+    const BOOL isOpen = gs_pfnImmGetOpenStatus(hIMC);
+    gs_pfnImmReleaseContext(hwnd, hIMC);
+
+    return isOpen;
+}
+
+} // anonymous namespace
+
 // Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
 // in active frames and dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
@@ -7289,8 +7335,13 @@ wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
                 {
                     if ( !event.IsNextEventAllowed() )
                     {
-                        // Stop processing of this event.
-                        return 1;
+                        // When IME is active, we must let it have the event as
+                        // otherwise it could just hang, see #22473.
+                        if ( !wxIsIMEOpen(win) )
+                        {
+                            // Stop processing of this event.
+                            return 1;
+                        }
                     }
                 }
             }
