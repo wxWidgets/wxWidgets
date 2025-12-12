@@ -450,7 +450,7 @@ void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
             s_posLast = pos;
 
             // DO NOT use wxFindWindowAtPoint() because if there're multiple top level windows,
-            // it will 'Find the deepest window at the given mouse position in screen coordinates', 
+            // it will 'Find the deepest window at the given mouse position in screen coordinates',
             // which is not the right one for this logic.
             auto screen_rect = GetScreenRect();
             const auto mouse_within_me = (pos.x >= screen_rect.GetTopLeft().x and pos.y >= screen_rect.GetTopLeft().y and
