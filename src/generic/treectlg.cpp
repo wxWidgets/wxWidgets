@@ -741,7 +741,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
             // we have to detect the clicks at -10,-10 as also the 
             // native controls react to mouse click on the full 
             // height of the entry, not just where the triangle or
-            // chevron or drawn
+            // chevron is drawn
             const int triangleStart = theCtrl->FromDIP(10); // -10,-10
             const int triangleEnd = theCtrl->FromDIP(10);   // +10, +10
             if ((point.x > xCross - triangleStart) && (point.x < xCross + triangleEnd) &&
