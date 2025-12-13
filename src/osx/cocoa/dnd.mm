@@ -485,26 +485,26 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
     static bool g_in_dnd = false;
-	
+
     wxDragResult result = wxDragNone;
     if ((m_data == nullptr) || (m_data->GetFormatCount() == 0))
         return result;
-	
-	if (g_in_dnd)
+
+    if (g_in_dnd)
         return wxDragNone;
-    
+
     g_in_dnd = true;
     NSView* view = m_window->GetPeer()->GetWXWidget();
     if (view)
     {
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
-        
+
         // relax the constraint set for DoDragDrop().
         // if the user start DnD something from a frame rendered by CEF or similar framework, it should be perfectly valid.
         if (theEvent == nil)
         {
             NSPoint mouse_location = [NSEvent mouseLocation];
-            theEvent = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDragged 
+            theEvent = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDragged
                 location:mouse_location
                 modifierFlags:0
                 timestamp: 0
@@ -514,7 +514,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                 clickCount: 0
                 pressure: 1.0];
         }
-		
+
         gCurrentSource = this;
 
         DropSourceDelegate* delegate = [[DropSourceDelegate alloc] init];
@@ -579,8 +579,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         gCurrentSource = nullptr;
     }
-	
-	g_in_dnd = false;
+
+    g_in_dnd = false;
     return result;
 }
 
