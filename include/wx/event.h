@@ -689,6 +689,7 @@ class WXDLLIMPEXP_FWD_CORE wxPaletteChangedEvent;
 class WXDLLIMPEXP_FWD_CORE wxJoystickEvent;
 class WXDLLIMPEXP_FWD_CORE wxDropFilesEvent;
 class WXDLLIMPEXP_FWD_CORE wxInitDialogEvent;
+class WXDLLIMPEXP_FWD_CORE wxDialogValidateEvent;
 class WXDLLIMPEXP_FWD_CORE wxUpdateUIEvent;
 class WXDLLIMPEXP_FWD_CORE wxClipboardTextEvent;
 class WXDLLIMPEXP_FWD_CORE wxHelpEvent;
@@ -854,6 +855,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_JOY_MOVE, wxJoystickEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_JOY_ZMOVE, wxJoystickEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DROP_FILES, wxDropFilesEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_INIT_DIALOG, wxInitDialogEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_DIALOG_VALIDATE, wxDialogValidateEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_BASE, wxEVT_IDLE, wxIdleEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_UPDATE_UI, wxUpdateUIEvent);
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SIZING, wxSizeEvent);
@@ -2629,6 +2631,24 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxInitDialogEvent);
 };
 
+// DialogValidate event class
+/*
+ wxEVT_DIALOG_VALIDATE
+ */
+
+class WXDLLIMPEXP_CORE wxDialogValidateEvent : public wxNotifyEvent
+{
+public:
+    wxDialogValidateEvent(int Id = 0)
+        : wxNotifyEvent(wxEVT_DIALOG_VALIDATE, Id)
+        { }
+
+    wxNODISCARD virtual wxEvent *Clone() const override { return new wxDialogValidateEvent(*this); }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxDialogValidateEvent);
+};
+
 // Miscellaneous menu event class
 /*
  wxEVT_MENU_OPEN,
@@ -4298,6 +4318,7 @@ typedef void (wxEvtHandler::*wxMenuEventFunction)(wxMenuEvent&);
 typedef void (wxEvtHandler::*wxJoystickEventFunction)(wxJoystickEvent&);
 typedef void (wxEvtHandler::*wxDropFilesEventFunction)(wxDropFilesEvent&);
 typedef void (wxEvtHandler::*wxInitDialogEventFunction)(wxInitDialogEvent&);
+typedef void (wxEvtHandler::*wxDialogValidateEventFunction)(wxDialogValidateEvent&);
 typedef void (wxEvtHandler::*wxSysColourChangedEventFunction)(wxSysColourChangedEvent&);
 typedef void (wxEvtHandler::*wxSysMetricChangedEventFunction)(wxSysMetricChangedEvent&);
 typedef void (wxEvtHandler::*wxDisplayChangedEventFunction)(wxDisplayChangedEvent&);
@@ -4363,6 +4384,8 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
     wxEVENT_HANDLER_CAST(wxDropFilesEventFunction, func)
 #define wxInitDialogEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxInitDialogEventFunction, func)
+#define wxDialogValidateEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxDialogValidateEventFunction, func)
 #define wxSysColourChangedEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxSysColourChangedEventFunction, func)
 #define wxSysMetricChangedEventHandler(func) \
@@ -4628,6 +4651,7 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
 #define EVT_QUERY_END_SESSION(func)  wx__DECLARE_EVT0(wxEVT_QUERY_END_SESSION, wxCloseEventHandler(func))
 #define EVT_DROP_FILES(func)  wx__DECLARE_EVT0(wxEVT_DROP_FILES, wxDropFilesEventHandler(func))
 #define EVT_INIT_DIALOG(func)  wx__DECLARE_EVT0(wxEVT_INIT_DIALOG, wxInitDialogEventHandler(func))
+#define EVT_DIALOG_VALIDATE(func)  wx__DECLARE_EVT0(wxEVT_DIALOG_VALIDATE, wxDialogValidateEventHandler(func))
 #define EVT_SYS_COLOUR_CHANGED(func) wx__DECLARE_EVT0(wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEventHandler(func))
 #define EVT_SYS_METRIC_CHANGED(func) wx__DECLARE_EVT0(wxEVT_SYS_METRIC_CHANGED, wxSysMetricChangedEventHandler(func))
 #define EVT_DISPLAY_CHANGED(func)  wx__DECLARE_EVT0(wxEVT_DISPLAY_CHANGED, wxDisplayChangedEventHandler(func))
