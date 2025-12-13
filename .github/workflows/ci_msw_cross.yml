@@ -71,7 +71,7 @@ jobs:
       matrix:
         include:
           - name: wxMSW 64 bits
-            debian_release: testing
+            debian_release: stable
             configure_flags: --enable-stl --disable-compat30
           - name: wxMSW 32 bits
             # Testing doesn't have 32 bit support any more.
