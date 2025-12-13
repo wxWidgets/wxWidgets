@@ -498,9 +498,11 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if (view)
     {
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
+        
         // relax the constraint set for DoDragDrop().
         // if the user start DnD something from a frame rendered by CEF or similar framework, it should be perfectly valid.
-        if (theEvent == nil){
+        if (theEvent == nil)
+        {
             NSPoint mouse_location = [NSEvent mouseLocation];
             theEvent = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDragged 
                 location:mouse_location
