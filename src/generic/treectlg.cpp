@@ -735,11 +735,15 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
                 flags |= wxTREE_HITTEST_ONITEMLOWERPART;
 
             int xCross = m_x - theCtrl->FromDIP(theCtrl->GetSpacing());
-#ifdef __WXMAC__
+#if defined(__WXMAC__) || defined(__WXGTK__)
             // according to the drawing code the triangels are drawn
-            // at -4 , -4  from the position up to +10/+10 max
-            const int triangleStart = theCtrl->FromDIP(4);
-            const int triangleEnd = theCtrl->FromDIP(10);
+            // at -4/-4  from the position up to +10/+10 max, but
+            // we have to detect the clicks at -10,-10 as also the 
+            // native controls react to mouse click on the full 
+            // height of the entry, not just where the triangle or
+            // chevron or drawn
+            const int triangleStart = theCtrl->FromDIP(10); // -10,-10
+            const int triangleEnd = theCtrl->FromDIP(10);   // +10, +10
             if ((point.x > xCross - triangleStart) && (point.x < xCross + triangleEnd) &&
                 (point.y > y_mid - triangleStart) && (point.y < y_mid + triangleEnd) &&
                 HasPlus() && theCtrl->HasButtons() )
@@ -2866,6 +2870,8 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
                     flag |= wxCONTROL_EXPANDED;
                 if (item == m_underMouse)
                     flag |= wxCONTROL_CURRENT;
+                if (item->IsSelected())
+                    flag |= wxCONTROL_SELECTED;
 
                 wxRendererNative::Get().DrawTreeItemButton
                                         (
