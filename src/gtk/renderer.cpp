@@ -65,6 +65,8 @@ public:
 
     virtual int GetHeaderButtonMargin(wxWindow *win) override;
 
+    virtual void DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect, int value, int max, int flags = 0) override;
+
 
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton(wxWindow *win,
@@ -199,6 +201,24 @@ static GdkWindow* wxGetGTKDrawable(wxDC& dc)
     return gdk_window;
 }
 #endif
+
+// ----------------------------------------------------------------------------
+// progress bar in wxDataViewCtrl
+// ----------------------------------------------------------------------------
+
+void wxRendererGTK::DrawGauge(wxWindow* win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int value,
+                                  int max,
+                                  int flags)
+{
+    // on GTK+, the progress bar is thin
+    wxRect thinrect = rect;
+    thinrect.height = 8;
+    thinrect.y = rect.y + rect.height/2 - 4;
+    wxDelegateRendererNative::DrawGauge( win, dc, thinrect, value, max, flags );   
+}
 
 // ----------------------------------------------------------------------------
 // list/tree controls drawing
