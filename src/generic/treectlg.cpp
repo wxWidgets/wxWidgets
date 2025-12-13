@@ -2870,6 +2870,8 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
                     flag |= wxCONTROL_EXPANDED;
                 if (item == m_underMouse)
                     flag |= wxCONTROL_CURRENT;
+                if (item->IsSelected())
+                    flag |= wxCONTROL_SELECTED;
 
                 wxRendererNative::Get().DrawTreeItemButton
                                         (
