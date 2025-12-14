@@ -171,6 +171,17 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
     wxEventType evType = event.GetEventType();
 
+    // always process these mouse events ourselves, even if the user code handles
+    // them as well, as we need to autoscroll
+    if ( evType == wxEVT_LEFT_DOWN )
+    {
+        m_scrollHelper->OnLeftDown((wxMouseEvent&)event);
+    }
+    else if ( evType == wxEVT_MOTION )
+    {
+        m_scrollHelper->OnMotion((wxMouseEvent&)event);
+    }
+
     // Pass it on to the real handler: notice that we must not call
     // ProcessEvent() on this object itself as it wouldn't pass it to the next
     // handler (i.e. the real window) if we're called from a previous handler
@@ -248,14 +259,6 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         }
     }
 
-    if ( evType == wxEVT_ENTER_WINDOW )
-    {
-        m_scrollHelper->HandleOnMouseEnter((wxMouseEvent &)event);
-    }
-    else if ( evType == wxEVT_LEAVE_WINDOW )
-    {
-        m_scrollHelper->HandleOnMouseLeave((wxMouseEvent &)event);
-    }
 #if wxUSE_MOUSEWHEEL
     // Use GTK's own scroll wheel handling in GtkScrolledWindow
 #ifndef __WXGTK__
@@ -696,6 +699,31 @@ void wxScrollHelperBase::DoPrepareReadOnlyDC(wxReadOnlyDC& dc)
     dc.SetUserScale( m_scaleX, m_scaleY );
 }
 
+// wxWidgets <= 3.3.1 autoscrolled exactly when the (captured) mouse cursor
+// was outside the entire window.  Starting with wxWidgets 3.3.2, the
+// region where the mouse cursor triggers autoscrolling is configurable.
+// If the inner scroll zone is default, then the autoscroll region is
+// relative to the WINDOW rect, and has width of size outer scroll zone.
+// If the outer scroll zone width is default, then it extends infinitely
+// outward from the WINDOW rect, and the behavior is the same as
+// wxWidgets 3.3.1.  If the inner scroll zone is non-default, then the
+// autoscroll region is relative to the CLIENT rect since that avoids
+// requiring the user to figure out how the width of scroll region
+// interacts with the scrollbar.
+void wxScrollHelperBase::SetInnerScrollZone(wxCoord innerZone)
+{
+    wxCHECK_RET( innerZone == wxDefaultCoord || innerZone >= 0,
+            "arg should be non-negative or wxDefaultCoord");
+    m_innerScrollZone = innerZone;
+}
+
+void wxScrollHelperBase::SetOuterScrollZone(wxCoord outerZone)
+{
+    wxCHECK_RET( outerZone == wxDefaultCoord || outerZone >= 0,
+            "arg should be non-negative or wxDefaultCoord");
+    m_outerScrollZone = outerZone;
+}
+
 void wxScrollHelperBase::SetScrollRate( int xstep, int ystep )
 {
     int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
@@ -974,55 +1002,81 @@ void wxScrollHelperBase::StopAutoScrolling()
 #endif
 }
 
-void wxScrollHelperBase::HandleOnMouseEnter(wxMouseEvent& event)
-{
-    StopAutoScrolling();
-
-    event.Skip();
-}
-
-void wxScrollHelperBase::HandleOnMouseLeave(wxMouseEvent& event)
+void wxScrollHelperBase::OnMotion(wxMouseEvent& event)
 {
     // don't prevent the usual processing of the event from taking place
     event.Skip();
 
-    // when a captured mouse leave a scrolled window we start generate
-    // scrolling events to allow, for example, extending selection beyond the
-    // visible area in some controls
-    if ( wxWindow::GetCapture() == m_targetWindow )
+    // if not dragging, no autoscroll
+    if ( wxWindow::GetCapture() != m_targetWindow )
     {
+        return;
+    }
+
+    // is mouse in autoscroll region?
+    wxRect inner, outer;
+    if ( m_innerScrollZone == wxDefaultCoord )
+    {
+        inner = m_targetWindow->GetRect();
+        if ( m_outerScrollZone != wxDefaultCoord )
+        {
+            outer = m_targetWindow->GetRect().Inflate(m_outerScrollZone);
+        }
+    }
+    else
+    {
+        inner = m_targetWindow->GetClientRect().Deflate(m_innerScrollZone);
+        if ( m_outerScrollZone != wxDefaultCoord )
+        {
+            outer = m_targetWindow->GetClientRect().Inflate(m_outerScrollZone);
+        }
+    }
+    wxPoint pt = event.GetPosition();
+    bool inScrollRegion = !inner.Contains(pt) &&
+                            (outer == wxRect() || outer.Contains(pt));
+
+    if ( inScrollRegion == m_inScrollRegion )
+    {
+        return;
+    }
+    m_inScrollRegion = inScrollRegion;
+
+    if ( !m_inScrollRegion )
+    {
+        StopAutoScrolling();
+    }
+    else
+    {
+        // when a captured mouse enters the scroll region we start generate
+        // scrolling events to allow, for example, extending selection beyond the
+        // visible area in some controls
         // where is the mouse leaving?
         int pos, orient;
-        wxPoint pt = event.GetPosition();
-        if ( pt.x < 0 )
+        if ( pt.x < inner.GetLeft() )
         {
             orient = wxHORIZONTAL;
             pos = 0;
         }
-        else if ( pt.y < 0 )
+        else if ( pt.y < inner.GetTop() )
         {
             orient = wxVERTICAL;
             pos = 0;
         }
         else // we're lower or to the right of the window
         {
-            wxSize size = m_targetWindow->GetClientSize();
-            if ( pt.x >= size.x )
+            if ( pt.x >= inner.GetRight() )
             {
                 orient = wxHORIZONTAL;
                 pos = m_xScrollLines;
             }
-            else if ( pt.y >= size.y )
+            else if ( pt.y >= inner.GetBottom() )
             {
                 orient = wxVERTICAL;
                 pos = m_yScrollLines;
             }
             else // this should be impossible
             {
-                // but seems to happen sometimes under wxMSW - maybe it's a bug
-                // there but for now just ignore it
-
-                //wxFAIL_MSG( wxT("can't understand where has mouse gone") );
+                wxFAIL_MSG( wxT("can't understand where has mouse gone") );
 
                 return;
             }
@@ -1048,6 +1102,14 @@ void wxScrollHelperBase::HandleOnMouseLeave(wxMouseEvent& event)
         wxUnusedVar(pos);
 #endif
     }
+}
+
+void wxScrollHelperBase::OnLeftDown(wxMouseEvent& event)
+{
+    // don't prevent the usual processing of the event from taking place
+    event.Skip();
+
+    m_inScrollRegion = false;
 }
 
 #if wxUSE_MOUSEWHEEL
