@@ -5,7 +5,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-/** @class wxObjectRefData
+/** @typedef wxObjectRefData
 
     This class is just a typedef to wxRefCounter and is used by wxObject.
 
