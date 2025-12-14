@@ -400,11 +400,11 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     if (cursor_img != nil)
         return cursor_img;
 
-	wxCursor indicate_cursor = impl->GetCursorBundle(status).GetCursorForMainWindow();
+    wxCursor indicate_cursor = impl->GetCursorBundle(status).GetCursorForMainWindow();
 
-	if (indicate_cursor.IsOk()) {
-		NSCursor *cursor = (NSCursor*)indicate_cursor.GetHCURSOR();
-		cursor_img = [[cursor image] retain];
+    if (indicate_cursor.IsOk()) {
+        NSCursor *cursor = (NSCursor*)indicate_cursor.GetHCURSOR();
+        cursor_img = [[cursor image] retain];
         switch(status){
         case wxDragCopy:
             m_copy_cursor = cursor_img;
@@ -416,8 +416,8 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
             m_none_cursor = cursor_img;
             break;
         }
-	}
-	return cursor_img;
+    }
+    return cursor_img;
 }
 @end
 
