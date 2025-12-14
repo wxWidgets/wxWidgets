@@ -3408,7 +3408,7 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
             ? wxColourToRGB(attr->GetTextColour())
             : wxColourToRGB(listctrl->GetTextColour());
         pLVCD->clrTextBk = clrFullBG;
-        if ( nmcd.uItemState & CDIS_SELECTED )
+        if ( nmcd.uItemState & CDIS_SELECTED && !(attr && attr->HasTextColour()) )
             pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
         if ( !(nmcd.uItemState & CDIS_SELECTED) && !(nmcd.uItemState & CDIS_HOT)
                                           && attr && attr->HasBackgroundColour() )
