@@ -400,8 +400,8 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
     if (cursor_img != nil)
         return cursor_img;
 
-	wxCursor indicate_cursor = impl->GetCursor(status);
-	
+	wxCursor indicate_cursor = impl->GetCursorBundle(status).GetCursorForMainWindow();
+
 	if (indicate_cursor.IsOk()) {
 		NSCursor *cursor = (NSCursor*)indicate_cursor.GetHCURSOR();
 		cursor_img = [[cursor image] retain];
