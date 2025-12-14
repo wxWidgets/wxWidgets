@@ -1434,7 +1434,7 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
     }
     if (!entered){
         NSView* the_view = viewImpl->GetWXWidget();
-        [sender enumerateDraggingItemsWithOptions:NSDraggingItemEnumerationConcurrent forView:the_viewå
+        [sender enumerateDraggingItemsWithOptions:NSDraggingItemEnumerationConcurrent forView:the_view
             classes:[NSArray arrayWithObject:[NSPasteboardItem class]] searchOptions:nil
             usingBlock:^(NSDraggingItem *draggingItem, NSInteger idx, BOOL *stop) {
                            wxUnusedVar(idx);
