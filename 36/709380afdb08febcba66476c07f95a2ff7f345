@@ -1,0 +1,1 @@
+wxGTK: Allow using GLX and EGL in same program (#26023).
