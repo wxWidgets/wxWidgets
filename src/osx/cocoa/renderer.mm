@@ -577,6 +577,15 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
     wxColour col( wxMacCreateCGColorFromHITheme( (flags & wxCONTROL_FOCUSED) ?
                                                  kThemeBrushAlternatePrimaryHighlightColor
                                                                              : kThemeBrushSecondaryHighlightColor ) );
+
+    if (((flags & wxCONTROL_FOCUSED) == 0) && (wxSystemSettings::GetAppearance().IsDark()))
+    {
+        // OS X has two distinct background greys in dark mode. One very dark
+        // gray you can see as the background of e.g. wxListBox and wxTreeCtrl,
+        // and a lesser dark grey in some other cases. This looks good on both.
+        col = wxColour( 110, 110, 110 );
+    }
+
     wxBrush selBrush( col );
 
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
