@@ -149,6 +149,8 @@ static wxBitmapBundle wxMacArtProvider_CreateBitmapBundle(const wxArtID& id, con
 
     ART_BITMAP(wxART_GO_BACK,        "arrow.backward.circle")
     ART_BITMAP(wxART_GO_FORWARD,     "arrow.forward.circle")
+    ART_BITMAP(wxART_GO_UP,          "arrow.up.circle")
+    ART_BITMAP(wxART_GO_DOWN,        "arrow.down.circle")
     ART_BITMAP(wxART_GO_HOME,        "house")
 
     ART_BITMAP(wxART_HELP_SETTINGS,  "gear.badge.questionmark")
