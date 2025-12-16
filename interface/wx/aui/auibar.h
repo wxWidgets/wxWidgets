@@ -47,7 +47,10 @@ enum wxAuiToolBarStyle
     wxAUI_TB_VERTICAL      = 1 << 5,
 
     /**
-      Shows the text and the icons alongside, not vertically stacked. This style must be used with wxAUI_TB_TEXT
+      Shows the text and the icons alongside, not vertically stacked.
+
+      This style must be used with wxAUI_TB_TEXT and can't be used with
+      wxAUI_TB_VERTICAL.
     */
     wxAUI_TB_HORZ_LAYOUT   = 1 << 6,
 
@@ -65,13 +68,66 @@ enum wxAuiToolBarStyle
     wxAUI_TB_PLAIN_BACKGROUND = 1 << 8,
 
     /**
+        For vertical toolbars, put icon above vertical text.
+
+        This also rotates the icon by 90 degrees clockwise for consistency with
+        the text rotation angle when using wxAuiTextDirection::BottomToTop.
+
+        @since 3.3.2
+    */
+    wxAUI_TB_VERT_LAYOUT_DOWN = 1 << 9,
+
+    /**
+        For vertical toolbars, put icon below vertical text.
+
+        This also rotates the icon by 90 degrees counter clockwise for
+        consistency with the text rotation angle when using
+        wxAuiTextDirection::TopToBottom.
+
+        @since 3.3.2
+    */
+    wxAUI_TB_VERT_LAYOUT_UP = 1 << 10,
+
+    /**
        Shows the text alongside the icons, not vertically stacked.
     */
     wxAUI_TB_HORZ_TEXT     = (wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_TEXT),
 
     /**
-      Shows the text in the toolbar buttons; by default only icons are shown.
+       Shows the text for vertical toolbars, with icon above text.
+
+       @since 3.3.2
     */
+    wxAUI_TB_VERT_TEXT_DOWN = (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_TEXT),
+
+    /**
+       Shows the text for vertical toolbars, with icon below text.
+
+       @since 3.3.2
+    */
+    wxAUI_TB_VERT_TEXT_UP = (wxAUI_TB_VERT_LAYOUT_UP | wxAUI_TB_TEXT),
+
+    /**
+        Rotate the icon to match the text orientation.
+
+        When this flag is set, the icons in the toolbar items are rotated by 90
+        degrees clockwise or counter clockwise to match the text orientation,
+        i.e. the logical top of the icon is aligned with the top of the text
+        (and so is on the left or right side of the toolbar depending on
+        whether it is positioned along the left or right side of the window).
+
+        This flag only has effect for vertical toolbars when used together with
+        wxAUI_TB_VERT_LAYOUT_DOWN or wxAUI_TB_VERT_LAYOUT_UP.
+
+        @since 3.3.2
+     */
+    wxAUI_TB_ROTATE_ICON_WITH_TEXT = 1 << 11,
+
+    /**
+        Mask including both orientation flags.
+
+        This value can't be used as a style.
+     */
     wxAUI_ORIENTATION_MASK = (wxAUI_TB_VERTICAL | wxAUI_TB_HORIZONTAL),
 
     /**
@@ -141,6 +197,29 @@ enum wxAuiToolBarToolTextOrientation
     */
     wxAUI_TBTOOL_TEXT_BOTTOM = 3
 
+};
+
+/**
+    Direction of the text in wxAuiToolBar items.
+
+    Horizontal toolbars always use LeftToRight direction, whereas vertical
+    toolbars may use either TopToBottom or BottomToTop.
+
+    @library{wxaui}
+    @category{aui}
+
+    @since 3.3.2
+  */
+enum class wxAuiTextDirection
+{
+    /// Default direction always used for horizontal toolbars.
+    LeftToRight,
+
+    /// May be used for vertical toolbars, typically on the right side.
+    TopToBottom,
+
+    /// May be used for vertical toolbars, typically on the left side.
+    BottomToTop
 };
 
 
@@ -468,7 +547,13 @@ class wxAuiToolBarItemArray : public std::vector<wxAuiToolBarItem>
 /**
     @class wxAuiToolBarArt
 
-    wxAuiToolBarArt is part of the wxAUI class framework.
+    wxAuiToolBarArt is part of the wxAUI class framework and is the base class
+    defining the interface for rendering wxAuiToolBar.
+
+    It is an abstract base class and its concrete wxAuiGenericToolBarArt and
+    wxAuiMSWToolBarArt subclasses provide the implementations used by default
+    under all non-MSW platforms and under MSW respectively.
+
     See also @ref wxAuiToolBar and @ref overview_aui.
 
     @library{wxaui}
@@ -486,6 +571,25 @@ public:
     virtual wxFont GetFont() = 0;
     virtual void SetTextOrientation(int orientation) = 0;
     virtual int GetTextOrientation() = 0;
+
+    /**
+        Set the text direction for rendering text.
+
+        Does nothing in the base class, override this function to support
+        vertical text rendering.
+
+        @since 3.3.2
+     */
+    virtual void SetTextDirection(wxAuiTextDirection direction);
+
+    /**
+        Return the direction used for rendering text.
+
+        Always returns wxAuiTextDirection::LeftToRight in the base class.
+
+        @since 3.3.2
+     */
+    virtual wxAuiTextDirection GetTextDirection() const;
 
     virtual void DrawBackground(
                          wxDC& dc,
@@ -615,6 +719,86 @@ public:
     virtual int ShowDropDown(
                          wxWindow* wnd,
                          const wxAuiToolBarItemArray& items) = 0;
+};
+
+/**
+    Default generic implementation of wxAuiToolBarArt.
+
+    This class is used by default under all non-MSW platforms for rendering
+    wxAuiToolBar.
+
+    @library{wxaui}
+    @category{aui}
+*/
+class wxAuiGenericToolBarArt : public wxAuiToolBarArt
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxAuiGenericToolBarArt();
+
+    /**
+        Set the text direction for rendering text.
+
+        Currently vertical text directions are only supported for non-drop down
+        items.
+
+        @since 3.3.2
+     */
+    virtual void SetTextDirection(wxAuiTextDirection direction) override;
+
+    /**
+        Return the direction used for rendering text.
+
+        This is the direction last set using SetTextDirection() or
+        wxAuiTextDirection::LeftToRight if it was never called.
+
+        @since 3.3.2
+     */
+    virtual wxAuiTextDirection GetTextDirection() const override;
+};
+
+/**
+    wxMSW-specific implementation of wxAuiToolBarArt.
+
+    This class is available only in wxMSW port as it uses native functions and
+    is used for rendering wxAuiToolBar by default in it.
+
+    Note that native toolbar rendering functions don't respect dark mode, which
+    is why this class behaves in the same way as wxAuiGenericToolBarArt when
+    dark mode is used.
+
+    @library{wxaui}
+    @category{aui}
+*/
+class wxAuiMSWToolBarArt : public wxAuiGenericToolBarArt
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxAuiMSWToolBarArt();
+
+    /**
+        Set the text direction for rendering text.
+
+        Currently vertical text directions are only supported for non-drop down
+        items.
+
+        @since 3.3.2
+     */
+    virtual void SetTextDirection(wxAuiTextDirection direction) override;
+
+    /**
+        Return the direction used for rendering text.
+
+        This is the direction last set using SetTextDirection() or
+        wxAuiTextDirection::LeftToRight if it was never called.
+
+        @since 3.3.2
+     */
+    virtual wxAuiTextDirection GetTextDirection() const override;
 };
 
 
@@ -755,6 +939,9 @@ public:
         whereas by default it can be horizontal or vertical and
         be docked anywhere.
     @style{wxAUI_TB_HORZ_LAYOUT}
+        For horizontal toolbars, show the text and the icons alongside,
+        not vertically stacked. This style must be used with wxAUI_TB_TEXT
+        and can't be used with wxAUI_TB_VERTICAL.
     @style{wxAUI_TB_HORIZONTAL}
         Analogous to wxAUI_TB_VERTICAL, but forces the toolbar
         to be horizontal.

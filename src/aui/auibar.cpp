@@ -218,6 +218,16 @@ void wxAuiGenericToolBarArt::SetTextOrientation(int orientation)
     m_textOrientation = orientation;
 }
 
+void wxAuiGenericToolBarArt::SetTextDirection(wxAuiTextDirection direction)
+{
+    m_textDirection = direction;
+}
+
+wxAuiTextDirection wxAuiGenericToolBarArt::GetTextDirection() const
+{
+    return m_textDirection;
+}
+
 unsigned int wxAuiGenericToolBarArt::GetFlags()
 {
     return m_flags;
@@ -315,35 +325,65 @@ void wxAuiGenericToolBarArt::DrawButton(
 
     int bmpX = 0, bmpY = 0;
     int textX = 0, textY = 0;
+    double textAngle = 0.0;
 
-    const wxBitmap& bmp = item.GetCurrentBitmapFor(wnd);
+    wxBitmap bmp = item.GetCurrentBitmapFor(wnd);
     const wxSize bmpSize = bmp.IsOk() ? bmp.GetLogicalSize() : wxSize(0, 0);
 
-    if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
+    switch ( m_textDirection )
     {
-        bmpX = rect.x +
-                (rect.width/2) -
-                (bmpSize.x/2);
+        case wxAuiTextDirection::LeftToRight:
+            if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
+            {
+                bmpX = rect.x +
+                        (rect.width/2) -
+                        (bmpSize.x/2);
 
-        bmpY = rect.y +
-                ((rect.height-textHeight)/2) -
-                (bmpSize.y/2);
+                bmpY = rect.y +
+                        ((rect.height-textHeight)/2) -
+                        (bmpSize.y/2);
 
-        textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
-        textY = rect.y + rect.height - textHeight - 1;
-    }
-    else if (m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT)
-    {
-        bmpX = rect.x + wnd->FromDIP(3);
+                textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
+                textY = rect.y + rect.height - textHeight - 1;
+            }
+            else if (m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT)
+            {
+                bmpX = rect.x + wnd->FromDIP(3);
 
-        bmpY = rect.y +
-                (rect.height/2) -
-                (bmpSize.y/2);
+                bmpY = rect.y +
+                        (rect.height/2) -
+                        (bmpSize.y/2);
 
-        textX = bmpX + wnd->FromDIP(3) + bmpSize.x;
-        textY = rect.y +
-                 (rect.height/2) -
-                 (textHeight/2);
+                textX = bmpX + wnd->FromDIP(3) + bmpSize.x;
+                textY = rect.y +
+                         (rect.height/2) -
+                         (textHeight/2);
+            }
+            break;
+
+        case wxAuiTextDirection::TopToBottom:
+            if ( bmp.IsOk() && (m_flags & wxAUI_TB_ROTATE_ICON_WITH_TEXT) )
+                bmp = wxBitmap(bmp.ConvertToImage().Rotate90(true), -1, bmp.GetScaleFactor());
+
+            bmpX = rect.x + (rect.width - bmpSize.x) / 2;
+            bmpY = rect.y + wnd->FromDIP(3);
+
+            textAngle = -90.0;
+            textX = rect.x + (rect.width + textHeight) / 2;
+            textY = bmpY + bmpSize.x + wnd->FromDIP(3);
+            break;
+
+        case wxAuiTextDirection::BottomToTop:
+            if ( bmp.IsOk() && (m_flags & wxAUI_TB_ROTATE_ICON_WITH_TEXT) )
+                bmp = wxBitmap(bmp.ConvertToImage().Rotate90(false), -1, bmp.GetScaleFactor());
+
+            bmpX = rect.x + (rect.width - bmpSize.x) / 2;
+            bmpY = rect.y + rect.height - bmpSize.y - wnd->FromDIP(3);
+
+            textAngle = 90.0;
+            textX = rect.x + (rect.width - textHeight) / 2;
+            textY = bmpY - wnd->FromDIP(3);
+            break;
     }
 
 
@@ -389,7 +429,10 @@ void wxAuiGenericToolBarArt::DrawButton(
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
     {
-        dc.DrawText(item.GetLabel(), textX, textY);
+        if ( textAngle != 0.0 )
+            dc.DrawRotatedText(item.GetLabel(), textX, textY, textAngle);
+        else
+            dc.DrawText(item.GetLabel(), textX, textY);
     }
 }
 
@@ -603,31 +646,44 @@ wxSize wxAuiGenericToolBarArt::GetToolSize(
     if (m_flags & wxAUI_TB_TEXT)
     {
         dc.SetFont(m_font);
-        int tx, ty;
+        const wxSize textSize = dc.GetTextExtent(item.GetLabel());
 
-        if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
+        switch ( m_textDirection )
         {
-            dc.GetTextExtent(wxT("ABCDHgj"), &tx, &ty);
-            height += ty;
+            case wxAuiTextDirection::LeftToRight:
+                if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
+                {
+                    // Reuse the height of text if we already have it, otherwise (i.e.
+                    // if the label is empty) use the character height.
+                    height += textSize.y ? textSize.y : dc.GetCharHeight();
 
-            if ( !item.GetLabel().empty() )
-            {
-                dc.GetTextExtent(item.GetLabel(), &tx, &ty);
-                width = wxMax(width, tx+wnd->FromDIP(6));
-            }
-        }
-        else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT &&
-                  !item.GetLabel().empty() )
-        {
-            width += wnd->FromDIP(3); // space between left border and bitmap
-            width += wnd->FromDIP(3); // space between bitmap and text
+                    const int widthWithMargins = textSize.x + wnd->FromDIP(6);
+                    if ( widthWithMargins > width )
+                        width = widthWithMargins;
+                }
+                else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT &&
+                          textSize.x != 0 )
+                {
+                    width += wnd->FromDIP(3); // space between left border and bitmap
+                    width += wnd->FromDIP(3); // space between bitmap and text
 
-            if ( !item.GetLabel().empty() )
-            {
-                dc.GetTextExtent(item.GetLabel(), &tx, &ty);
-                width += tx;
-                height = wxMax(height, ty);
-            }
+                    width += textSize.x;
+                    if ( textSize.y > height )
+                        height = textSize.y;
+                }
+                break;
+
+            case wxAuiTextDirection::TopToBottom:
+            case wxAuiTextDirection::BottomToTop:
+                if ( textSize.y != 0 )
+                {
+                    height += wnd->FromDIP(6);
+
+                    height += textSize.x;
+                    if ( textSize.y > width )
+                        width = textSize.y;
+                }
+                break;
         }
     }
 
@@ -913,6 +969,40 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     SetFont(*wxNORMAL_FONT);
     SetArtFlags();
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+
+    if ( style & wxAUI_TB_HORIZONTAL )
+    {
+        wxASSERT_MSG
+        (
+         !(style & (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_VERT_LAYOUT_UP)),
+         "Vertical text styles can't be used with horizontal toolbars"
+        );
+    }
+    else if ( style & wxAUI_TB_VERTICAL )
+    {
+        wxASSERT_MSG
+        (
+         !(style & wxAUI_TB_HORZ_LAYOUT),
+         "Horizontal layout style can't be used with vertical toolbars"
+        );
+
+        if ( style & wxAUI_TB_TEXT )
+        {
+            if ( style & wxAUI_TB_VERT_LAYOUT_DOWN )
+                SetToolTextDirection(wxAuiTextDirection::TopToBottom);
+            else if ( style & wxAUI_TB_VERT_LAYOUT_UP )
+                SetToolTextDirection(wxAuiTextDirection::BottomToTop);
+        }
+        else
+        {
+            wxASSERT_MSG
+            (
+             !(style & (wxAUI_TB_VERT_LAYOUT_DOWN | wxAUI_TB_VERT_LAYOUT_UP)),
+             "Vertical text styles don't make sense without wxAUI_TB_TEXT"
+            );
+        }
+    }
+
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
     SetBackgroundStyle(wxBG_STYLE_PAINT);
@@ -967,7 +1057,8 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
 
 wxSize wxAuiToolBar::DoGetBestSize() const
 {
-    auto bestSize = GetMinSize();
+    auto bestSize = m_orientation == wxHORIZONTAL ? m_horzHintSize
+                                                  : m_vertHintSize;
 
     if ( !bestSize.IsFullySpecified() )
     {
@@ -1025,24 +1116,14 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
                            wxObject* client_data)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
     item.m_label = label;
     item.m_bitmap = bitmap;
     item.m_disabledBitmap = disabledBitmap;
     item.m_shortHelp = shortHelpString;
     item.m_longHelp = longHelpString;
-    item.m_active = true;
-    item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = tool_id;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = kind;
-    item.m_sizerItem = nullptr;
-    item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
     item.m_clientData = client_data;
-    item.m_sticky = false;
 
     if (item.m_toolId == wxID_ANY)
         item.m_toolId = wxNewId();
@@ -1055,21 +1136,13 @@ wxAuiToolBarItem* wxAuiToolBar::AddControl(wxControl* control,
                               const wxString& label)
 {
     wxAuiToolBarItem item;
-    item.m_window = (wxWindow*)control;
+    item.m_window = control;
     item.m_label = label;
     item.m_bitmap = wxBitmapBundle();
     item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = control->GetId();
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_CONTROL;
-    item.m_sizerItem = nullptr;
     item.m_minSize = control->GetEffectiveMinSize();
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1084,21 +1157,10 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
         min_size.x = width;
 
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
     item.m_label = label;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = tool_id;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_LABEL;
-    item.m_sizerItem = nullptr;
     item.m_minSize = min_size;
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     if (item.m_toolId == wxID_ANY)
         item.m_toolId = wxNewId();
@@ -1110,20 +1172,8 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
 wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
     item.m_toolId = -1;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_SEPARATOR;
-    item.m_sizerItem = nullptr;
-    item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1132,21 +1182,9 @@ wxAuiToolBarItem* wxAuiToolBar::AddSeparator()
 wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
     item.m_spacerPixels = pixels;
     item.m_toolId = -1;
-    item.m_state = 0;
-    item.m_proportion = 0;
     item.m_kind = wxITEM_SPACER;
-    item.m_sizerItem = nullptr;
-    item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1155,21 +1193,9 @@ wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
 wxAuiToolBarItem* wxAuiToolBar::AddStretchSpacer(int proportion)
 {
     wxAuiToolBarItem item;
-    item.m_window = nullptr;
-    item.m_label = wxEmptyString;
-    item.m_bitmap = wxBitmapBundle();
-    item.m_disabledBitmap = wxBitmapBundle();
-    item.m_active = true;
-    item.m_dropDown = false;
-    item.m_spacerPixels = 0;
     item.m_toolId = -1;
-    item.m_state = 0;
     item.m_proportion = proportion;
     item.m_kind = wxITEM_SPACER;
-    item.m_sizerItem = nullptr;
-    item.m_minSize = wxDefaultSize;
-    item.m_userData = 0;
-    item.m_sticky = false;
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1432,6 +1458,34 @@ void wxAuiToolBar::SetToolTextOrientation(int orientation)
 int wxAuiToolBar::GetToolTextOrientation() const
 {
     return m_toolTextOrientation;
+}
+
+void wxAuiToolBar::SetToolTextDirection(wxAuiTextDirection direction)
+{
+    m_textDirection = direction;
+    if (m_art)
+        m_art->SetTextDirection(direction);
+}
+
+wxAuiTextDirection wxAuiToolBar::GetToolTextDirection() const
+{
+    return m_textDirection;
+}
+
+bool wxAuiToolBar::IsToolTextVertical() const
+{
+    switch ( m_textDirection )
+    {
+        case wxAuiTextDirection::LeftToRight:
+            return false;
+
+        case wxAuiTextDirection::TopToBottom:
+        case wxAuiTextDirection::BottomToTop:
+            return true;
+    }
+
+    wxFAIL_MSG( "Unknown wxAuiTextDirection value" );
+    return false;
 }
 
 void wxAuiToolBar::SetToolPacking(int packing)
@@ -1950,9 +2004,7 @@ bool wxAuiToolBar::Realize()
         size = m_vertHintSize;
     }
 
-    // Remember our minimum size.
-    m_minWidth = size.x;
-    m_minHeight = size.y;
+    InvalidateBestSize();
 
     // And set control size if we are not forbidden from doing it by the use of
     // a special flag and if it did actually change.
