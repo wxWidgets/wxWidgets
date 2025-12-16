@@ -54,6 +54,7 @@ public:
     MyFrame(bool stereoWindow = false);
 
 private:
+    void OnAbout(wxCommandEvent& event);
     void OnClose(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
     void OnNewStereoWindow(wxCommandEvent& event);

@@ -553,8 +553,6 @@ typedef pid_t GPid;
 
 #define wxUSE_GLCANVAS       1
 
-#define wxUSE_GLCANVAS_EGL   0
-
 #define wxUSE_RICHTEXT       1
 
 #define wxUSE_CLIPBOARD     1

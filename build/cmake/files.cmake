@@ -2700,12 +2700,12 @@ set(OPENGL_GTK_SRC
     src/gtk/glcanvas.cpp
     src/unix/glx11.cpp
     src/unix/glegl.cpp
+    src/unix/glcanvas.cpp
 )
 
 set(OPENGL_GTK_HDR
     wx/gtk/glcanvas.h
-    wx/unix/glx11.h
-    wx/unix/glegl.h
+    wx/unix/glcanvas.h
 )
 
 set(OPENGL_OSX_COCOA_SRC
@@ -2729,11 +2729,12 @@ set(OPENGL_OSX_IPHONE_HDR
 set(OPENGL_X11_SRC
     src/x11/glcanvas.cpp
     src/unix/glx11.cpp
+    src/unix/glcanvas.cpp
 )
 
 set(OPENGL_X11_HDR
     wx/x11/glcanvas.h
-    wx/unix/glx11.h
+    wx/unix/glcanvas.h
 )
 
 set(OPENGL_QT_SRC

@@ -46,11 +46,13 @@ public:
     // GTK-specific methods
     // -------------------
 
+#ifndef __WXGTK3__
     // this can be overridden to return a specific visual to be used for GTK+
     // instead of the default one (it's used by wxGLApp)
     //
     // must return XVisualInfo pointer (it is not freed by caller)
     virtual void *GetXVisualInfo() { return nullptr; }
+#endif // GTK < 3
 
     // Check if we're using a global menu. Currently this is only true when
     // running under Ubuntu Unity and global menu is not disabled.
