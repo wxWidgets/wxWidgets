@@ -587,7 +587,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
     else
 #endif
     {
-        col = wxColour( wxMacCreateCGColorFromHITheme( (flags & wxCONTROL_FOCUSED) 
+        col = wxColour( wxMacCreateCGColorFromHITheme( (flags & wxCONTROL_FOCUSED)
                     ? kThemeBrushAlternatePrimaryHighlightColor
                     : kThemeBrushSecondaryHighlightColor ) );
 
