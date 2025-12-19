@@ -1065,6 +1065,30 @@ TEST_CASE_METHOD(SyncRequestFixture,
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::PostAfterRedirect", "[net][webrequest][sync]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    // We can't test this when using WinHTTP because we need to use either 307
+    // or 308 redirect status code to preserve the POST method across the
+    // redirect (all backends switch to GET for 301 and 302, although it would
+    // be possible to configure this to preserve POST when using libcurl) and
+    // WinHTTP doesn't handle them automatically.
+    const auto& versionInfo = wxWebSession::GetDefault().GetLibraryVersionInfo();
+    if ( versionInfo.GetName() == "WinHTTP" )
+    {
+        WARN("Skipping POST with redirect test with WinHTTP backend");
+        return;
+    }
+
+    Create("redirect-to?url=post&status_code=307");
+    request.SetData("app=WebRequestRedirect&version=1", "application/x-www-form-urlencoded");
+    REQUIRE( Execute() );
+    CHECK( response.GetStatus() == 200 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
                  "WebRequest::Sync::Put", "[net][webrequest][sync]")
 {
     if ( !InitBaseURL() )

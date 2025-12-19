@@ -89,8 +89,9 @@ public:
 
     wxString GetError() const;
 
-    // Method called from libcurl callback
+    // These functions implement libcurl callbacks.
     size_t CURLOnRead(char* buffer, size_t size);
+    int CURLOnSeek(curl_off_t offset, int origin);
 
 private:
     // Common initialization for sync and async requests performed when the
