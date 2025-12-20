@@ -660,7 +660,18 @@ bool wxMkdir(const wxString& dir, int perm)
   #endif
 #else  // MSW and VC++
     wxUnusedVar(perm);
-    if ( wxMkDir(dir) != 0 )
+
+    // Specifies the mode_t parameter of wxMkDir
+    // wxS_DIR_DEFAULT is specified if exists,
+    // otherwise defaults to 0777 (Full permission)
+    // Fixes the following issue:
+    // /src/common/filefn.cpp:663:17: error: too few arguments to function ‘int wxMkDir(const wxString&, mode_t)’
+    #ifdef wxS_DIR_DEFAULT
+    if ( wxMkDir(dir, wxS_DIR_DEFAULT) != 0 )
+    #else
+    if ( wxMkDir(dir, 0777) != 0 )
+    #endif
+
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dir);
