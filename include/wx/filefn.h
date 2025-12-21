@@ -381,7 +381,7 @@ inline int wxRmDir(const wxString& path)
 inline int wxMkDir(const wxString& path, mode_t WXUNUSED(mode) = 0)
     { return wxCRT_MkDir(path.fn_str()); }
 #else
-inline int wxMkDir(const wxString& path, mode_t mode)
+inline int wxMkDir(const wxString& path, mode_t mode = 0777)
     { return wxCRT_MkDir(path.fn_str(), mode); }
 #endif
 
