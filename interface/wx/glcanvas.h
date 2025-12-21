@@ -533,6 +533,9 @@ public:
               an object of type wxGLContext, the statements
               @e "RC.SetCurrent(win);" and @e "win.SetCurrent(RC);" are
               equivalent, see wxGLCanvas::SetCurrent().
+
+        @note This function may be called from any thread, not only the main
+              one, provided that the context is not used by any other thread.
     */
     virtual bool SetCurrent(const wxGLCanvas& win) const;
 
