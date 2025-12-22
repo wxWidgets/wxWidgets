@@ -1070,6 +1070,16 @@ public:
     wxWebCredentials(const wxString& user = wxString(),
                      const wxSecretValue& password = wxSecretValue());
 
+    /**
+        Return true if user name is set.
+
+        This can be used to distinguish this object from the
+        default-constructed one.
+
+        @since 3.3.2
+     */
+    bool IsOk() const;
+
     /// Return the user.
     const wxString& GetUser() const;
 
