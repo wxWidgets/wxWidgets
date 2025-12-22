@@ -432,8 +432,9 @@ void wxWebRequestCURL::DoStartPrepare(const wxString& url)
             break;
     }
 
-    // Enable all supported authentication methods
-    wxCURLSetOpt(m_handle, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+    // Enable all supported authentication methods for proxy if we're using it,
+    // but wait until we know whether we're using basic authentication for HTTP
+    // in DoFinishPrepare() before enabling it for HTTP as well.
     if ( usingProxy )
         wxCURLSetOpt(m_handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 }
@@ -453,6 +454,22 @@ wxWebRequestCURL::~wxWebRequestCURL()
 
 wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
 {
+    // Force using basic authentication if necessary.
+    auto httpAuthMethod = CURLAUTH_ANY;
+    auto const& basicAuthCred = GetBasicAuthCredentials();
+    if ( basicAuthCred.IsOk() )
+    {
+        httpAuthMethod = CURLAUTH_BASIC;
+
+        wxCURLSetOpt(m_handle, CURLOPT_USERNAME,
+                     basicAuthCred.GetUser());
+        wxCURLSetOpt(m_handle, CURLOPT_PASSWORD,
+                     basicAuthCred.GetPassword().GetAsString());
+    }
+
+    wxCURLSetOpt(m_handle, CURLOPT_HTTPAUTH, httpAuthMethod);
+
+
     m_response.reset(new wxWebResponseCURL(*this));
 
     const auto result = m_response->InitFileStorage();

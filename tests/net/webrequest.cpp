@@ -654,6 +654,22 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::Basic/Explicit", "[net][webrequest][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("basic-auth/wxtest/wxwidgets");
+
+    request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
+
+    Run();
+
+    CHECK_THAT( request.GetResponse().AsString().utf8_string(),
+                Catch::Contains(AUTHORIZED_SUBSTRING) );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Auth::Basic/Reserved", "[net][webrequest][auth]")
 {
     if ( !InitBaseURL() )
@@ -1137,6 +1153,32 @@ TEST_CASE_METHOD(SyncRequestFixture,
     SECTION("Good password")
     {
         CreateWithAuth("basic-auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
+        CHECK( Execute() );
+        CHECK( response.GetStatus() == 200 );
+        CHECK( state == wxWebRequest::State_Completed );
+
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+    }
+
+    SECTION("Explicit basic auth")
+    {
+        Create("basic-auth/wxtest/wxwidgets");
+        request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
+
+        CHECK( Execute() );
+        CHECK( response.GetStatus() == 200 );
+        CHECK( state == wxWebRequest::State_Completed );
+
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+    }
+
+    SECTION("Password after redirect")
+    {
+        Create("redirect-to?url=basic-auth/wxtest/wxwidgets");
+        request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
+
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );

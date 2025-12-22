@@ -221,6 +221,8 @@ public:
 
     void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
+    void UseBasicAuth(const wxWebCredentials& cred);
+
     Storage GetStorage() const;
 
     wxWebResponse GetResponse() const;

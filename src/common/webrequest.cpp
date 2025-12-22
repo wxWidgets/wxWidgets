@@ -13,6 +13,8 @@
 #if wxUSE_WEBREQUEST
 
 #include "wx/webrequest.h"
+
+#include "wx/base64.h"
 #include "wx/mstream.h"
 #include "wx/module.h"
 #include "wx/uri.h"
@@ -182,6 +184,22 @@ wxWebRequestImpl::SetData(std::unique_ptr<wxInputStream> dataStream,
     SetHeader("Content-Type", contentType);
 
     return true;
+}
+
+void wxWebRequestImpl::AddBasicAuthHeaderIfNecessary()
+{
+    if ( !m_basicAuthCred.IsOk() )
+        return;
+
+    const auto authInfo = wxString::Format("%s:%s",
+        m_basicAuthCred.GetUser(),
+        m_basicAuthCred.GetPassword().GetAsString()
+    );
+
+    const auto buf = authInfo.utf8_str();
+
+    SetHeader("Authorization",
+              "Basic " + wxBase64Encode(buf.data(), buf.length()));
 }
 
 wxFileOffset wxWebRequestImpl::GetBytesReceived() const
@@ -477,6 +495,12 @@ void wxWebRequestBase::SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs)
     m_impl->SetTimeouts(connectionTimeoutMs, dataTimeoutMs);
 }
 
+void wxWebRequestBase::UseBasicAuth(const wxWebCredentials& cred)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->UseBasicAuth(cred);
+}
 
 wxWebRequestBase::Storage wxWebRequestBase::GetStorage() const
 {
