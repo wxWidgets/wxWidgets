@@ -654,6 +654,22 @@ TEST_CASE_METHOD(RequestFixture,
 }
 
 TEST_CASE_METHOD(RequestFixture,
+                 "WebRequest::Auth::Basic/Explicit", "[net][webrequest][auth]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    Create("basic-auth/wxtest/wxwidgets");
+
+    request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
+
+    Run();
+
+    CHECK_THAT( request.GetResponse().AsString().utf8_string(),
+                Catch::Contains(AUTHORIZED_SUBSTRING) );
+}
+
+TEST_CASE_METHOD(RequestFixture,
                  "WebRequest::Auth::Basic/Reserved", "[net][webrequest][auth]")
 {
     if ( !InitBaseURL() )
@@ -1065,6 +1081,30 @@ TEST_CASE_METHOD(SyncRequestFixture,
 }
 
 TEST_CASE_METHOD(SyncRequestFixture,
+                 "WebRequest::Sync::PostAfterRedirect", "[net][webrequest][sync]")
+{
+    if ( !InitBaseURL() )
+        return;
+
+    // We can't test this when using WinHTTP because we need to use either 307
+    // or 308 redirect status code to preserve the POST method across the
+    // redirect (all backends switch to GET for 301 and 302, although it would
+    // be possible to configure this to preserve POST when using libcurl) and
+    // WinHTTP doesn't handle them automatically.
+    const auto& versionInfo = wxWebSession::GetDefault().GetLibraryVersionInfo();
+    if ( versionInfo.GetName() == "WinHTTP" )
+    {
+        WARN("Skipping POST with redirect test with WinHTTP backend");
+        return;
+    }
+
+    Create("redirect-to?url=post&status_code=307");
+    request.SetData("app=WebRequestRedirect&version=1", "application/x-www-form-urlencoded");
+    REQUIRE( Execute() );
+    CHECK( response.GetStatus() == 200 );
+}
+
+TEST_CASE_METHOD(SyncRequestFixture,
                  "WebRequest::Sync::Put", "[net][webrequest][sync]")
 {
     if ( !InitBaseURL() )
@@ -1113,6 +1153,32 @@ TEST_CASE_METHOD(SyncRequestFixture,
     SECTION("Good password")
     {
         CreateWithAuth("basic-auth/wxtest/wxwidgets", "wxtest", "wxwidgets");
+        CHECK( Execute() );
+        CHECK( response.GetStatus() == 200 );
+        CHECK( state == wxWebRequest::State_Completed );
+
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+    }
+
+    SECTION("Explicit basic auth")
+    {
+        Create("basic-auth/wxtest/wxwidgets");
+        request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
+
+        CHECK( Execute() );
+        CHECK( response.GetStatus() == 200 );
+        CHECK( state == wxWebRequest::State_Completed );
+
+        CHECK_THAT( response.AsString().utf8_string(),
+                    Catch::Contains(AUTHORIZED_SUBSTRING) );
+    }
+
+    SECTION("Password after redirect")
+    {
+        Create("redirect-to?url=basic-auth/wxtest/wxwidgets");
+        request.UseBasicAuth(wxWebCredentials("wxtest", wxSecretValue("wxwidgets")));
+
         CHECK( Execute() );
         CHECK( response.GetStatus() == 200 );
         CHECK( state == wxWebRequest::State_Completed );

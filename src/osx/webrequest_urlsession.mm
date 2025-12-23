@@ -187,6 +187,9 @@ wxWebRequestURLSession::DoPrepare(void (^completionHandler)(NSData*, NSURLRespon
                                 [NSURL URLWithString:wxCFStringRef(m_url).AsNSString()]];
     req.HTTPMethod = wxCFStringRef(method).AsNSString();
 
+    // Provide basic authorization header if credentials were set
+    AddBasicAuthHeaderIfNecessary();
+
     // Set request headers
     for (wxWebRequestHeaderMap::const_iterator it = m_headers.begin(); it != m_headers.end(); ++it)
     {

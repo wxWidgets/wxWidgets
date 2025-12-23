@@ -673,8 +673,11 @@ wxWebRequest::Result wxWebRequestWinHTTP::DoPrepareRequest()
         return FailWithLastError("Parsing URL");
     }
 
-    // If we have auth in the URL, remember them but we can't use them yet
-    // because we don't yet know which authentication scheme the server uses.
+    // If basic authentication was explicitly requested, send it in the
+    // "Authorization:" header to avoid an extra round-trip just to get 401
+    // response first.
+    AddBasicAuthHeaderIfNecessary();
+
     if ( urlComps.HasCredentials() )
     {
         m_credentialsFromURL = urlComps.GetCredentials();

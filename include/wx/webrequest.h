@@ -26,6 +26,8 @@ public:
     {
     }
 
+    bool IsOk() const { return !m_user.empty(); }
+
     const wxString& GetUser() const { return m_user; }
     const wxSecretValue& GetPassword() const { return m_password; }
 
@@ -218,6 +220,8 @@ public:
     void SetStorage(Storage storage);
 
     void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
+
+    void UseBasicAuth(const wxWebCredentials& cred);
 
     Storage GetStorage() const;
 

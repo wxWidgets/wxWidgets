@@ -50,6 +50,10 @@
     #define CURLOPT_ACCEPT_ENCODING CURLOPT_ENCODING
 #endif
 
+#if wxUSE_LOG_TRACE
+constexpr const char* TRACE_CURL = "curl";
+#endif
+
 // Define libcurl timeout constants
 static constexpr int LIBCURL_DEFAULT_CONNECT_TIMEOUT = 300000; // 5m in ms.
 
@@ -335,6 +339,13 @@ static size_t wxCURLRead(char *buffer, size_t size, size_t nitems, void *userdat
     return static_cast<wxWebRequestCURL*>(userdata)->CURLOnRead(buffer, size * nitems);
 }
 
+static int wxCURLSeek(void* userdata, curl_off_t offset, int origin)
+{
+    wxCHECK_MSG( userdata, CURL_SEEKFUNC_CANTSEEK, "invalid curl seek callback data" );
+
+    return static_cast<wxWebRequestCURL*>(userdata)->CURLOnSeek(offset, origin);
+}
+
 wxWebRequestCURL::wxWebRequestCURL(wxWebSession & session,
                                    wxWebSessionCURL& sessionImpl,
                                    wxEvtHandler* handler,
@@ -377,6 +388,8 @@ void wxWebRequestCURL::DoStartPrepare(const wxString& url)
     wxCURLSetOpt(m_handle, CURLOPT_HEADERFUNCTION, wxCURLHeader);
     wxCURLSetOpt(m_handle, CURLOPT_READFUNCTION, wxCURLRead);
     wxCURLSetOpt(m_handle, CURLOPT_READDATA, this);
+    wxCURLSetOpt(m_handle, CURLOPT_SEEKFUNCTION, wxCURLSeek);
+    wxCURLSetOpt(m_handle, CURLOPT_SEEKDATA, this);
     // Enable gzip, etc decompression
     wxCURLSetOpt(m_handle, CURLOPT_ACCEPT_ENCODING, "");
     // Enable redirection handling
@@ -419,8 +432,9 @@ void wxWebRequestCURL::DoStartPrepare(const wxString& url)
             break;
     }
 
-    // Enable all supported authentication methods
-    wxCURLSetOpt(m_handle, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+    // Enable all supported authentication methods for proxy if we're using it,
+    // but wait until we know whether we're using basic authentication for HTTP
+    // in DoFinishPrepare() before enabling it for HTTP as well.
     if ( usingProxy )
         wxCURLSetOpt(m_handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 }
@@ -440,6 +454,22 @@ wxWebRequestCURL::~wxWebRequestCURL()
 
 wxWebRequest::Result wxWebRequestCURL::DoFinishPrepare()
 {
+    // Force using basic authentication if necessary.
+    auto httpAuthMethod = CURLAUTH_ANY;
+    auto const& basicAuthCred = GetBasicAuthCredentials();
+    if ( basicAuthCred.IsOk() )
+    {
+        httpAuthMethod = CURLAUTH_BASIC;
+
+        wxCURLSetOpt(m_handle, CURLOPT_USERNAME,
+                     basicAuthCred.GetUser());
+        wxCURLSetOpt(m_handle, CURLOPT_PASSWORD,
+                     basicAuthCred.GetPassword().GetAsString());
+    }
+
+    wxCURLSetOpt(m_handle, CURLOPT_HTTPAUTH, httpAuthMethod);
+
+
     m_response.reset(new wxWebResponseCURL(*this));
 
     const auto result = m_response->InitFileStorage();
@@ -616,6 +646,34 @@ size_t wxWebRequestCURL::CURLOnRead(char* buffer, size_t size)
     }
     else
         return 0;
+}
+
+int wxWebRequestCURL::CURLOnSeek(curl_off_t offset, int origin)
+{
+    wxSeekMode mode = wxFromStart;
+    switch ( origin )
+    {
+        case SEEK_SET:
+            mode = wxFromStart;
+            break;
+
+        case SEEK_CUR:
+            mode = wxFromCurrent;
+            break;
+
+        case SEEK_END:
+            mode = wxFromEnd;
+            break;
+
+        default:
+            wxLogTrace(TRACE_CURL, "Seek function: unknown origin %d", origin);
+            return CURL_SEEKFUNC_CANTSEEK;
+    }
+
+    if ( m_dataStream->SeekI(offset, mode) == wxInvalidOffset )
+        return CURL_SEEKFUNC_CANTSEEK;
+
+    return CURL_SEEKFUNC_OK;
 }
 
 wxFileOffset wxWebRequestCURL::GetBytesSent() const
@@ -874,10 +932,6 @@ LRESULT CALLBACK WinSock1SocketPoller::MsgProc(WXHWND hwnd, WXUINT uMsg,
 using SocketPollerBase = WinSock1SocketPoller;
 
 #else
-
-#if wxUSE_LOG_TRACE
-constexpr const char* TRACE_CURL = "curl";
-#endif
 
 // SocketPollerSourceHandler - a source handler used by the SocketPoller class.
 

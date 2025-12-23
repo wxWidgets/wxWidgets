@@ -478,6 +478,26 @@ public:
     void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
+        Explicitly request using HTTP "Basic" authentication with the provided
+        credentials.
+
+        If this function is not called, wxWebRequest initially makes a request
+        without using any authentication and then requests credentials from the
+        application, using the preferred authentication method among those
+        supported by both the client and the server, using wxWebAuthChallenge.
+        This is the most flexible approach, but it always requires making an
+        extra HTTP request.
+
+        If the application knows that "Basic" authentication should be used, it
+        can avoid this extra request by calling this function before calling
+        Execute(): this will use the provided credentials for the initial
+        request.
+
+        @since 3.3.2
+     */
+    void UseBasicAuth(const wxWebCredentials& cred);
+
+    /**
         Flags for disabling security features.
 
         @since 3.3.0
@@ -609,16 +629,17 @@ public:
     }
     @endcode
 
-    To handle authentication with this class the username and password must be
-    specified in the URL itself and wxWebAuthChallenge is not used with it.
+    wxWebAuthChallenge is not used with this class, to access protected
+    resources the username and password may be specified in the URL itself or
+    UseBasicAuth() must be called prior to Execute().
 
     @note Any reserved characters (see RFC 3986) in the username or password
         must be percent encoded. wxURI::SetUserAndPassword() can be used to
         ensure that this is done correctly.
 
     @note macOS backend using NSURLSession doesn't handle encoded characters in
-        the password (but does handle them in the username). Async wxWebSession
-        must be used if you need to support them under this platform.
+        the password (but does handle them in the username). Use wxWebSession or
+        UseBasicAuth() if you need to support them under this platform.
 
     @see wxWebRequest
 
@@ -966,6 +987,25 @@ public:
     void SetTimeouts(long connectionTimeoutMs, long dataTimeoutMs);
 
     /**
+        Explicitly request using HTTP "Basic" authentication with the provided
+        credentials.
+
+        If this function is not called, wxWebRequestSync will use the
+        credentials from the URL itself to authenticate with the server if
+        necessary. This has the advantage of supporting multiple authentication
+        methods, but requires an extra HTTP request to be made to discover the
+        methods supported by the server.
+
+        If the application knows that "Basic" authentication should be used, it
+        can avoid this extra request by calling this function before calling
+        Execute(): this will use the provided credentials for the initial
+        request.
+
+        @since 3.3.2
+     */
+    void UseBasicAuth(const wxWebCredentials& cred);
+
+    /**
         Make connection insecure by disabling security checks.
 
         Don't use this function unless absolutely necessary as disabling the
@@ -1069,6 +1109,16 @@ public:
      */
     wxWebCredentials(const wxString& user = wxString(),
                      const wxSecretValue& password = wxSecretValue());
+
+    /**
+        Return true if user name is set.
+
+        This can be used to distinguish this object from the
+        default-constructed one.
+
+        @since 3.3.2
+     */
+    bool IsOk() const;
 
     /// Return the user.
     const wxString& GetUser() const;
