@@ -26531,8 +26531,8 @@ $as_echo "yes" >&6; }
         fi
         if test "$wxUSE_LIBJPEG" = "no"; then
                                                                                     tiff_jpeg_option=--disable-jpeg
-        else
-            tiff_jpeg_option=--enable-jpeg
+        elif test "$wxUSE_LIBJPEG" = "builtin"; then
+                                                tiff_jpeg_option=--with-jpeg-from-wx
         fi
 
 

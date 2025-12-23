@@ -2656,8 +2656,11 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl the top-level script to all the other ones called recursively), so
             dnl we need to hack around this
             tiff_jpeg_option=--disable-jpeg
-        else
-            tiff_jpeg_option=--enable-jpeg
+        elif test "$wxUSE_LIBJPEG" = "builtin"; then
+            dnl JPEG support is enabled by default, but make sure that we use
+            dnl our own libjpeg, even if another version of the library is
+            dnl installed system-wide
+            tiff_jpeg_option=--with-jpeg-from-wx
         fi
 
         dnl if you ever want to enable webp, check if it clashes with the wxUSE_LIBWBP setting
