@@ -1362,6 +1362,7 @@ enable_accessibility
 enable_uiactionsim
 enable_dctransform
 enable_webviewwebkit
+enable_glcanvasegl
 enable_palette
 enable_image
 enable_gif
@@ -2338,6 +2339,7 @@ Optional Features:
   --enable-uiactionsim    use wxUIActionSimulator
   --enable-dctransform    use wxDC::SetTransformMatrix and related
   --enable-webviewwebkit  use wxWebView WebKit backend
+  --disable-glcanvasegl   disable wxGLCanvas EGL backend
   --enable-palette        use wxPalette class
   --enable-image          use wxImage class
   --enable-gif            use gif images (GIF file format)
@@ -12370,6 +12372,35 @@ fi
 
 
           eval "$wx_cv_use_webviewwebkit"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-glcanvasegl was given.
+if test "${enable_glcanvasegl+set}" = set; then :
+  enableval=$enable_glcanvasegl;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_glcanvasegl='wxUSE_GLCANVAS_EGL=yes'
+                          else
+                            wx_cv_use_glcanvasegl='wxUSE_GLCANVAS_EGL=no'
+                          fi
+
+else
+
+                          wx_cv_use_glcanvasegl='wxUSE_GLCANVAS_EGL=${'DEFAULT_wxUSE_GLCANVAS_EGL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_glcanvasegl"
 
 
 
@@ -31267,6 +31298,7 @@ fi
                         OPENGL_LIBS="-lGL"
 
                         if test "$WXGTK3" = 1; then
+                            if test "$wxUSE_GLCANVAS_EGL" != "no"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for egl >= 1.4" >&5
@@ -31327,7 +31359,7 @@ fi
     echo "$EGL_PKG_ERRORS" >&5
 
 
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
 $as_echo "$as_me: EGL 1.4+ not available. Will use GLX." >&6;}
 
 
@@ -31335,7 +31367,7 @@ elif test $pkg_failed = untried; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
+                                        { $as_echo "$as_me:${as_lineno-$LINENO}: EGL 1.4+ not available. Will use GLX." >&5
 $as_echo "$as_me: EGL 1.4+ not available. Will use GLX." >&6;}
 
 
@@ -31345,8 +31377,8 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                    OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
-                                    $as_echo "#define wxHAS_EGL 1" >>confdefs.h
+                                        OPENGL_LIBS="$OPENGL_LIBS $EGL_LIBS"
+                                        $as_echo "#define wxHAS_EGL 1" >>confdefs.h
 
 
 pkg_failed=no
@@ -31420,17 +31452,18 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                                            if test $wx_cv_gdk_wayland = "yes"; then
-                                                OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
-                                                have_wayland=1
-                                            fi
+                                                if test $wx_cv_gdk_wayland = "yes"; then
+                                                    OPENGL_LIBS="$OPENGL_LIBS $WAYLAND_EGL_LIBS"
+                                                    have_wayland=1
+                                                fi
 
 fi
 
 fi
-                            if test "$have_wayland" != 1; then
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: wxGLCanvas will not have Wayland support" >&5
+                                if test "$have_wayland" != 1; then
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: wxGLCanvas will not have Wayland support" >&5
 $as_echo "$as_me: wxGLCanvas will not have Wayland support" >&6;}
+                                fi
                             fi
                         fi
                 fi
