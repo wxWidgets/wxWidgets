@@ -44,7 +44,11 @@
 // other standard headers
 #include <string.h>
 
+#include "wx/brush.h"
 #include "wx/dynlib.h"
+
+#include "wx/msw/uxtheme.h"
+#include "wx/msw/private/darkmode.h"
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -338,6 +342,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // (and don't forget to reset the flag)
     if ( m_doBreak ) {
         flags |= MF_MENUBREAK;
+        if ( wxMSWDarkMode::IsActive() )
+        {
+            // Menu breaks must be owner drawn to work properly in dark mode
+            pItem->SetOwnerDrawn(true);
+        }
         m_doBreak = false;
     }
 
@@ -938,6 +947,31 @@ WXHMENU wxMenuBar::Create()
                 wxLogLastError(wxT("AppendMenu"));
             }
         }
+
+#if wxUSE_OWNER_DRAWN
+        // Set menu background color
+        wxUxThemeHandle hTheme
+            (
+                GetFrame()->AsWindow(),
+                L"LightMode_ImmersiveStart::Menu;Menu",
+                L"DarkMode_ImmersiveStart::Menu;Menu"
+            );
+        wxColor colMenu = hTheme.GetColour(MENU_POPUPBACKGROUND, TMT_FILLCOLOR);
+        if ( colMenu.IsOk() )
+        {
+            wxBrush* const brush =
+                wxTheBrushList->FindOrCreateBrush(wxColourToRGB(colMenu));
+
+            WinStruct<MENUINFO> mi;
+            mi.fMask = MIM_BACKGROUND | MIM_APPLYTOSUBMENUS;
+            mi.hbrBack = GetHbrushOf(*brush);
+            if ( !::SetMenuInfo(m_hMenu, &mi) )
+            {
+                wxLogLastError(wxT("SetMenuInfo(MIM_BACKGROUND)"));
+            }
+        }
+
+#endif // wxUSE_OWNER_DRAWN
     }
 
     return m_hMenu;
