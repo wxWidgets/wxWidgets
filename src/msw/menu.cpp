@@ -45,6 +45,8 @@
 #include <string.h>
 
 #include "wx/dynlib.h"
+#include <wx/msw/private/darkmode.h>
+#include <wx/msw/uxtheme.h>
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -338,6 +340,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // (and don't forget to reset the flag)
     if ( m_doBreak ) {
         flags |= MF_MENUBREAK;
+        if (wxMSWDarkMode::IsActive())
+        {
+            pItem->SetOwnerDrawn(true); // Menu breaks must be owner drawn to work properly in dark mode
+        }
         m_doBreak = false;
     }
 
@@ -938,6 +944,24 @@ WXHMENU wxMenuBar::Create()
                 wxLogLastError(wxT("AppendMenu"));
             }
         }
+
+#if wxUSE_OWNER_DRAWN
+        if (wxMSWDarkMode::IsActive())
+        {
+            // Set dark mode menu background color
+            // May be this should be done in wxMenu::Init() instead?  
+            wxUxThemeHandle hTheme(GetFrame()->AsWindow(), L"MENU", L"DarkMode_ImmersiveStart::Menu");
+            COLORREF crMenu = wxColourToRGB(hTheme.GetColour(MENU_POPUPBACKGROUND, TMT_FILLCOLOR));
+            WinStruct<MENUINFO> mi;
+            mi.fMask = MIM_BACKGROUND | MIM_APPLYTOSUBMENUS;
+            // Maybe we should clean up this brush to avoid GDI leaks?  
+            mi.hbrBack = CreateSolidBrush(crMenu);
+            if (!::SetMenuInfo(m_hMenu, &mi))
+            {
+                wxLogLastError(wxT("SetMenuInfo(MIM_BACKGROUND)"));
+            }
+        }
+#endif // wxUSE_OWNER_DRAWN 
     }
 
     return m_hMenu;
