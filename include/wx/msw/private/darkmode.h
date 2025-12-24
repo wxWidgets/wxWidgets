@@ -67,4 +67,13 @@ HandleMenuMessage(WXLRESULT* result,
 
 } // namespace wxMSWDarkMode
 
+namespace wxMSWImpl
+{
+
+// This function is not dark mode specific but reuses the code in darkmode.cpp,
+// so it's implemented there as well.
+void EnableRoundCorners(HWND hwnd);
+
+} // namespace wxMSWImpl
+
 #endif // _WX_MSW_PRIVATE_DARKMODE_H_
