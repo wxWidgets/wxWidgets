@@ -3624,7 +3624,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             const DWORD DWMWA_WINDOW_CORNER_PREFERENCE = 33;
                             const DWORD DWMWA_BORDER_COLOR = 34;
                             int WindowCornerPreference = 3; //  DWMWCP_ROUNDSMALL
-                            // Apply rounded corners with round small  to any menu window 
+                            // Apply rounded corners with round small  to any menu window
                             HRESULT hr = pDwmSetWindowAttribute(hWndMenu, DWMWA_WINDOW_CORNER_PREFERENCE, &WindowCornerPreference, sizeof(WindowCornerPreference));
                             if (SUCCEEDED(hr))
                             {
@@ -3645,7 +3645,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                 // the border color applied only if Window Corner Preference is round or round small.
                                 DWORD color = static_cast<DWORD>(wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER)));
                                 hr =
-                                pDwmSetWindowAttribute(hWndMenu, DWMWA_BORDER_COLOR, &color,sizeof(color));
+                                    pDwmSetWindowAttribute(hWndMenu, DWMWA_BORDER_COLOR, &color, sizeof(color));
                             }
                         }
 
@@ -3655,7 +3655,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             rc.result = MSWDefWindowProc(message, wParam, lParam);
             processed = true;
-            break;
             break;
         case WM_GETMINMAXINFO:
             processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);

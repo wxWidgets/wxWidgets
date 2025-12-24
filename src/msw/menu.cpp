@@ -922,24 +922,24 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
-    if ( m_hMenu != 0 )
+    if (m_hMenu != 0)
         return m_hMenu;
 
     m_hMenu = (WXHMENU)::CreateMenu();
 
-    if ( !m_hMenu )
+    if (!m_hMenu)
     {
         wxLogLastError(wxT("CreateMenu"));
     }
     else
     {
-        for ( wxMenuList::iterator it = m_menus.begin();
-              it != m_menus.end();
-              ++it )
+        for (wxMenuList::iterator it = m_menus.begin();
+            it != m_menus.end();
+            ++it)
         {
-            if ( !::AppendMenu((HMENU)m_hMenu, MF_POPUP | MF_STRING,
-                               (UINT_PTR)(*it)->GetHMenu(),
-                               (*it)->GetTitle().t_str()) )
+            if (!::AppendMenu((HMENU)m_hMenu, MF_POPUP | MF_STRING,
+                (UINT_PTR)(*it)->GetHMenu(),
+                (*it)->GetTitle().t_str()))
             {
                 wxLogLastError(wxT("AppendMenu"));
             }
@@ -949,21 +949,20 @@ WXHMENU wxMenuBar::Create()
         if (wxMSWDarkMode::IsActive())
         {
             // Set dark mode menu background color
-            // May be this should be done in wxMenu::Init() instead?  
+            // May be this should be done in wxMenu::Init() instead?
             wxUxThemeHandle hTheme(GetFrame()->AsWindow(), L"MENU", L"DarkMode_ImmersiveStart::Menu");
             COLORREF crMenu = wxColourToRGB(hTheme.GetColour(MENU_POPUPBACKGROUND, TMT_FILLCOLOR));
             WinStruct<MENUINFO> mi;
             mi.fMask = MIM_BACKGROUND | MIM_APPLYTOSUBMENUS;
-            // Maybe we should clean up this brush to avoid GDI leaks?  
+            // Maybe we should clean up this brush to avoid GDI leaks?
             mi.hbrBack = CreateSolidBrush(crMenu);
             if (!::SetMenuInfo(m_hMenu, &mi))
             {
                 wxLogLastError(wxT("SetMenuInfo(MIM_BACKGROUND)"));
             }
         }
-#endif // wxUSE_OWNER_DRAWN 
+#endif // wxUSE_OWNER_DRAWN
     }
-
     return m_hMenu;
 }
 

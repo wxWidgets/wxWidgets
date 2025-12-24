@@ -1251,11 +1251,11 @@ void wxMenuItem::GetFontToUse(wxFont& font) const
 void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const
 {
 #if wxUSE_UXTHEME
-    if ( MenuDrawData::IsUxThemeActive() )
+    if (MenuDrawData::IsUxThemeActive())
     {
         wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU", L"DARKMODE::MENU");
 
-        if ( stat & wxODDisabled)
+        if (stat & wxODDisabled)
         {
             wxRGBToColour(colText, ::GetThemeSysColor(hTheme, COLOR_GRAYTEXT));
         }
@@ -1267,29 +1267,25 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
                 if (wxMSWDarkMode::IsActive())
                 {
                     colText = hTheme.GetColour(MENU_POPUPITEM, TMT_TEXTCOLOR, 1);
-                    if(!colText.IsOk())
+                    if (!colText.IsOk())
                     {
-                       colText = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
+                        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
                     }
                 }
-                  
                 else
                 {
                     wxRGBToColour(colText, ::GetThemeSysColor(hTheme, COLOR_MENUTEXT));
                 }
-              
             }
-                
         }
-
-        if ( stat & wxODSelected )
+        if (stat & wxODSelected)
         {
             wxRGBToColour(colBack, ::GetThemeSysColor(hTheme, COLOR_HIGHLIGHT));
         }
         else
         {
             colBack = GetBackgroundColour();
-            if ( !colBack.IsOk() )
+            if (!colBack.IsOk())
                 wxRGBToColour(colBack, ::GetThemeSysColor(hTheme, COLOR_MENU));
         }
     }
