@@ -134,6 +134,7 @@ private:
 #include "wx/msw/private/metrics.h"
 
 #endif // wxUSE_OWNER_DRAWN
+#include <wx/msw/private/darkmode.h>
 
 // ----------------------------------------------------------------------------
 // dynamic classes implementation
@@ -954,7 +955,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 state = MPI_NORMAL;
             }
 
-            wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
+            wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU",L"DARKMODE::MENU");
 
             if ( ::IsThemeBackgroundPartiallyTransparent(hTheme,
                     MENU_POPUPITEM, state) )
@@ -962,6 +963,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 hTheme.DrawBackground(hdc, rect, MENU_POPUPBACKGROUND);
             }
 
+            // we need also to draw menu arrow if the menu item at popup menu and has subMenu for darkmode.
             hTheme.DrawBackground(hdc, rcGutter, MENU_POPUPGUTTER);
 
             if ( IsSeparator() )
@@ -1019,7 +1021,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         int x = rcText.left;
         int y = rcText.top + (rcText.bottom - rcText.top - textSize.cy) / 2;
 
-        ::DrawState(hdc, nullptr, nullptr, wxMSW_CONV_LPARAM(text),
+        ::DrawStateW(hdc, nullptr, nullptr, wxMSW_CONV_LPARAM(text),
                     text.length(), x, y, 0, 0, flags);
 
         // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO
@@ -1175,7 +1177,7 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
 #if wxUSE_UXTHEME
     if ( MenuDrawData::IsUxThemeActive() )
     {
-        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
+        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU" , L"DARKMODE::MENU");
 
         const MenuDrawData* data = MenuDrawData::Get(GetMenu());
 
@@ -1251,7 +1253,7 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
 #if wxUSE_UXTHEME
     if ( MenuDrawData::IsUxThemeActive() )
     {
-        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
+        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU", L"DARKMODE::MENU");
 
         if ( stat & wxODDisabled)
         {
@@ -1260,8 +1262,24 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
         else
         {
             colText = GetTextColour();
-            if ( !colText.IsOk() )
-                wxRGBToColour(colText, ::GetThemeSysColor(hTheme, COLOR_MENUTEXT));
+            if (!colText.IsOk())
+            {
+                if (wxMSWDarkMode::IsActive())
+                {
+                    colText = hTheme.GetColour(MENU_POPUPITEM, TMT_TEXTCOLOR, 1);
+                    if(!colText.IsOk())
+                    {
+                       colText = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
+                    }
+                }
+                  
+                else
+                {
+                    wxRGBToColour(colText, ::GetThemeSysColor(hTheme, COLOR_MENUTEXT));
+                }
+              
+            }
+                
         }
 
         if ( stat & wxODSelected )
