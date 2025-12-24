@@ -49,6 +49,7 @@
     #include "wx/menuitem.h"
     #include "wx/module.h"
     #include "wx/vector.h"
+
 #endif
 
 #if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
@@ -3598,7 +3599,64 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_ENDSESSION:
             processed = HandleEndSession(wParam != 0, lParam);
             break;
+        case WM_ENTERIDLE:
+            // fix menu rounded corners in Windows 11 and higher see https://github.com/wxWidgets/wxWidgets/issues/22518
+            // if any menu is being shown, apply rounded corners and border color to it in Windows 11+
+            if (static_cast<WPARAM>(wParam) == MSGF_MENU)
+            {
+                // lParam is A handle to window containing the displayed menu(if wParam is MSGF_MENU).
+                // also if windows is not 11+ or Window Corner Preference is not rounded, we can subclass this window and prosses WM_NCPAINT.
+                // see https://learn.microsoft.com/windows/win32/dlgbox/wm-enteridle for more details.
+                HWND hWndMenu = reinterpret_cast<HWND>(lParam);
+                if (hWndMenu)
+                {
 
+                    // Dynamically load DwmSetWindowAttribute to avoid link dependency.
+                    typedef HRESULT(WINAPI* PFN_DwmSetWindowAttribute)(HWND, DWORD, LPCVOID, DWORD);
+                    HMODULE hDwm = ::LoadLibraryW(L"dwmapi.dll");
+                    if (hDwm)
+                    {
+                        PFN_DwmSetWindowAttribute pDwmSetWindowAttribute =
+                            reinterpret_cast<PFN_DwmSetWindowAttribute>(
+                                ::GetProcAddress(hDwm, "DwmSetWindowAttribute"));
+                        if (pDwmSetWindowAttribute)
+                        {
+                            const DWORD DWMWA_WINDOW_CORNER_PREFERENCE = 33;
+                            const DWORD DWMWA_BORDER_COLOR = 34;
+                            int WindowCornerPreference = 3; //  DWMWCP_ROUNDSMALL
+                            // Apply rounded corners with round small  to any menu window 
+                            HRESULT hr = pDwmSetWindowAttribute(hWndMenu, DWMWA_WINDOW_CORNER_PREFERENCE, &WindowCornerPreference, sizeof(WindowCornerPreference));
+                            if (SUCCEEDED(hr))
+                            {
+                                DWORD style = GetClassLongPtr(hWndMenu, GCL_STYLE);
+
+                                // Remove the drop shadow flag because it conflicts with rounded corners at bottom right if menu has Owner Draw style and its suppMenu of menu bar.
+                                if (style & CS_DROPSHADOW)
+                                {
+                                    style &= ~CS_DROPSHADOW;
+                                    SetClassLongPtr(hWndMenu, GCL_STYLE, style);
+                                    // not working properly for first show.
+                                    // RedrawWindow(hWndMenu, nullptr, nullptr, RDW_INVALIDATE | RDW_FRAME | RDW_UPDATENOW | RDW_ERASE);
+                                    //SetWindowPos(hWndMenu, nullptr, 0, 0, 0, 0,
+                                    //    SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER  | SWP_FRAMECHANGED);
+                                }
+
+                                // Apply border color to menu window
+                                // the border color applied only if Window Corner Preference is round or round small.
+                                DWORD color = static_cast<DWORD>(wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVEBORDER)));
+                                hr =
+                                pDwmSetWindowAttribute(hWndMenu, DWMWA_BORDER_COLOR, &color,sizeof(color));
+                            }
+                        }
+
+                        ::FreeLibrary(hDwm);
+                    }
+                }
+            }
+            rc.result = MSWDefWindowProc(message, wParam, lParam);
+            processed = true;
+            break;
+            break;
         case WM_GETMINMAXINFO:
             processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);
             break;
