@@ -963,8 +963,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 hTheme.DrawBackground(hdc, rect, MENU_POPUPBACKGROUND);
             }
 
-            // we need also to draw menu arrow if the menu item at popup menu and has subMenu for darkmode.
-            hTheme.DrawBackground(hdc, rcGutter, MENU_POPUPGUTTER);
+             hTheme.DrawBackground(hdc, rcGutter, MENU_POPUPGUTTER);
 
             if ( IsSeparator() )
             {
@@ -974,6 +973,21 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             }
 
             hTheme.DrawBackground(hdc, rcSelection, MENU_POPUPITEM, state);
+            // we need also to draw menu arrow if the menu item at popup menu and has subMenu for dark mode.
+            if (wxMSWDarkMode::IsActive && GetSubMenu())
+            {
+                int glyphState = (stat & wxODDisabled) ? MSM_DISABLED : MSM_NORMAL;
+                RECT arrowRect;
+                arrowRect.right = rcSelection.right - data->ArrowMargin.cxRightWidth;
+                arrowRect.left = arrowRect.right - data->ArrowSize.cx;
+                arrowRect.top = rcSelection.top + ((rcSelection.bottom - rcSelection.top) - data->ArrowSize.cy) / 2;  // Vertical center
+                arrowRect.bottom = arrowRect.top + data->ArrowSize.cy;
+                DrawThemeBackground(hTheme, hdc, MENU_POPUPSUBMENU, glyphState, &arrowRect, NULL);
+                // Prevent Windows from drawing its default arrow over ours
+                ExcludeClipRect(hdc, arrowRect.left, arrowRect.top, arrowRect.right, arrowRect.bottom);
+              
+            }
+           
         }
         else
 #endif // wxUSE_UXTHEME
