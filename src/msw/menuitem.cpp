@@ -974,7 +974,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
             hTheme.DrawBackground(hdc, rcSelection, MENU_POPUPITEM, state);
             // we need also to draw menu arrow if the menu item at popup menu and has subMenu for dark mode.
-            if (wxMSWDarkMode::IsActive && GetSubMenu())
+            if (wxMSWDarkMode::IsActive() && GetSubMenu())
             {
                 int glyphState = (stat & wxODDisabled) ? MSM_DISABLED : MSM_NORMAL;
                 RECT arrowRect;
