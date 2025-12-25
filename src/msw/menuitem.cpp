@@ -982,12 +982,10 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                 arrowRect.left = arrowRect.right - data->ArrowSize.cx;
                 arrowRect.top = rcSelection.top + ((rcSelection.bottom - rcSelection.top) - data->ArrowSize.cy) / 2;  // Vertical center
                 arrowRect.bottom = arrowRect.top + data->ArrowSize.cy;
-                DrawThemeBackground(hTheme, hdc, MENU_POPUPSUBMENU, glyphState, &arrowRect, NULL);
-                // Prevent Windows from drawing its default arrow over ours
+                hTheme.DrawBackground(hdc, arrowRect,MENU_POPUPSUBMENU, glyphState);
+                // Prevent Windows from drawing its default arrow over ours.
                 ExcludeClipRect(hdc, arrowRect.left, arrowRect.top, arrowRect.right, arrowRect.bottom);
-              
             }
-           
         }
         else
 #endif // wxUSE_UXTHEME
