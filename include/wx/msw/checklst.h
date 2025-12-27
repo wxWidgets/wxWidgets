@@ -62,6 +62,9 @@ public:
     // so we need to override these functions
     virtual wxOwnerDrawn *CreateLboxItem(size_t n) override;
     virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) override;
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif
 
 protected:
     virtual wxSize MSWGetFullItemSize(int w, int h) const override;
