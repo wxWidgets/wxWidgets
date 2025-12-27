@@ -62,6 +62,9 @@ public:
     // so we need to override these functions
     virtual wxOwnerDrawn *CreateLboxItem(size_t n) override;
     virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) override;
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+#endif
 
 protected:
     virtual wxSize MSWGetFullItemSize(int w, int h) const override;
@@ -87,5 +90,16 @@ protected:
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);
 };
+
+#if wxUSE_ACCESSIBILITY
+class WXDLLIMPEXP_CORE wxCheckListBoxAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxCheckListBoxAccessible(wxCheckListBox* winm);
+
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
+    virtual wxAccStatus GetState(int childId, long* state) override;
+};
+#endif
 
 #endif    //_CHECKLST_H
