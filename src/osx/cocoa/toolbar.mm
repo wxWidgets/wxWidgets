@@ -430,9 +430,11 @@ private:
 - (NSToolbarItem*) toolbar:(NSToolbar*) toolbar itemForItemIdentifier:(NSString*) itemIdentifier willBeInsertedIntoToolbar:(BOOL) flag
 {
     wxUnusedVar(toolbar);
-    wxToolBarTool* tool = (wxToolBarTool*) [itemIdentifier longLongValue];
-    if ( tool )
-    {
+    void *p_toolbar, *p_tool;
+    if(sscanf([itemIdentifier UTF8String], "%p:%p", &p_toolbar, &p_tool) == 2 && p_tool != NULL)
+     {
+        wxToolBarTool* tool = (wxToolBarTool*)(p_tool);
+
         wxNSToolbarItem* item = (wxNSToolbarItem*) tool->GetToolbarItemRef();
         if ( flag && tool->IsControl() )
         {
@@ -1226,7 +1228,7 @@ bool wxToolBar::Realize()
                     }
                     else
                     {
-                        cfidentifier = wxCFStringRef(wxString::Format("%ld", (long)tool));
+                        cfidentifier = wxCFStringRef(FormatToolId(tool));
                         nsItemId = cfidentifier.AsNSString();
                     }
 
@@ -1507,7 +1509,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 #if wxOSX_USE_NATIVE_TOOLBAR
                 if (m_macToolbar != nullptr)
                 {
-                    wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
+                    wxString identifier = FormatToolId(tool);
                     wxCFStringRef cfidentifier( identifier );
                     wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                     [item setImplementation:tool];
@@ -1536,7 +1538,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 WXWidget view = (WXWidget) tool->GetControl()->GetHandle() ;
                 wxCHECK_MSG( view, false, wxT("control must be non-null") );
 
-                wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
+                wxString identifier = FormatToolId(tool);
                 wxCFStringRef cfidentifier( identifier );
                 wxNSToolbarItem* item = [[wxNSToolbarItem alloc] initWithItemIdentifier:cfidentifier.AsNSString() ];
                 [item setImplementation:tool];
@@ -1693,9 +1695,14 @@ void wxToolBar::OSXSelectTool(int toolId)
     wxCHECK_RET( tool, "invalid tool ID" );
     wxCHECK_RET( m_macToolbar, "toolbar must be non-null" );
 
-    wxString identifier = wxString::Format(wxT("%ld"), (long)tool);
+    wxString identifier = FormatToolId(tool);
     wxCFStringRef cfidentifier(identifier);
     [(NSToolbar*)m_macToolbar setSelectedItemIdentifier:cfidentifier.AsNSString()];
+}
+
+wxString wxToolBar::FormatToolId(const wxToolBarToolBase *tool)
+{
+    return wxString::Format("%p:%p", (void*)(m_macToolbar), (void*)(tool));
 }
 #endif // wxOSX_USE_NATIVE_TOOLBAR
 
