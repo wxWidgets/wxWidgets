@@ -201,6 +201,11 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
     DoSetItemState(item, state);
 }
 
+bool wxTreeCtrlBase::HasAnyImages() const
+{
+    return HasImages() || m_imagesState.HasImages();
+}
+
 namespace
 {
 
