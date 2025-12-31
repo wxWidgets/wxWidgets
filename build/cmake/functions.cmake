@@ -398,11 +398,6 @@ function(wx_set_target_properties target_name)
             $<INSTALL_INTERFACE:${wxINSTALL_INCLUDE_DIR}>
         )
 
-    if(wxTOOLKIT_INCLUDE_DIRS AND NOT wxTARGET_IS_BASE)
-        target_include_directories(${target_name}
-            PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
-    endif()
-
     if (WIN32)
         set(WIN32_LIBRARIES
             kernel32
@@ -431,16 +426,20 @@ function(wx_set_target_properties target_name)
             PUBLIC ${WIN32_LIBRARIES})
     endif()
 
-    if(wxTOOLKIT_LIBRARY_DIRS AND NOT wxTARGET_IS_BASE)
-        target_link_directories(${target_name}
-            PUBLIC ${wxTOOLKIT_LIBRARY_DIRS})
+    if(NOT wxTARGET_IS_BASE)
+        if(wxTOOLKIT_INCLUDE_DIRS)
+            target_include_directories(${target_name} PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
+        endif()
+        if(wxTOOLKIT_LIBRARY_DIRS)
+            target_link_directories(${target_name} PUBLIC ${wxTOOLKIT_LIBRARY_DIRS})
+        endif()
+        if(wxTOOLKIT_LIBRARIES)
+            target_link_libraries(${target_name} PUBLIC ${wxTOOLKIT_LIBRARIES})
+        endif()
     endif()
-    if(wxTOOLKIT_LIBRARIES AND NOT wxTARGET_IS_BASE)
-        target_link_libraries(${target_name}
-            PUBLIC ${wxTOOLKIT_LIBRARIES})
+    if(NOT wxTARGET_IS_BASE OR NOT wxUSE_GUI)
+        target_compile_definitions(${target_name} PUBLIC ${wxTOOLKIT_DEFINITIONS})
     endif()
-    target_compile_definitions(${target_name}
-        PUBLIC ${wxTOOLKIT_DEFINITIONS})
 
     if(wxBUILD_SHARED)
         string(TOUPPER ${target_name_short} target_name_upper)
