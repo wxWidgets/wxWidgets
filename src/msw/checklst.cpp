@@ -160,6 +160,63 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     return true;
 }
 
+#if wxUSE_ACCESSIBILITY
+
+// ----------------------------------------------------------------------------
+// declaration and implementation of wxCheckListBoxAccessible class
+// ----------------------------------------------------------------------------
+
+class wxCheckListBoxAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxCheckListBoxAccessible(wxCheckListBox* win);
+
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
+    virtual wxAccStatus GetState(int childId, long* state) override;
+};
+
+wxCheckListBoxAccessible::wxCheckListBoxAccessible(wxCheckListBox* win)
+    : wxWindowAccessible(win)
+{}
+
+wxAccStatus wxCheckListBoxAccessible::GetRole(int childId, wxAccRole* role)
+{
+    wxCheckListBox* checkListBox = wxDynamicCast(GetWindow(), wxCheckListBox);
+    wxCHECK(checkListBox, wxACC_FAIL);
+
+    *role = (childId == wxACC_SELF) ? wxROLE_SYSTEM_LIST : wxROLE_SYSTEM_CHECKBUTTON;
+    return wxACC_OK;
+}
+
+// Returns a state constant.
+wxAccStatus wxCheckListBoxAccessible::GetState(int childId, long* state)
+{
+    wxCheckListBox* checkListBox = wxDynamicCast(GetWindow(), wxCheckListBox);
+    wxCHECK(checkListBox, wxACC_FAIL);
+
+    if (childId <= 0)
+        return wxACC_NOT_IMPLEMENTED; // Fall back to Windows default
+
+    long st = 0;
+    if (!checkListBox->IsEnabled())
+        st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+    if (!checkListBox->IsShown())
+        st |= wxACC_STATE_SYSTEM_INVISIBLE;
+
+    if (checkListBox->IsFocusable())
+        st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+
+    // this needs to be returned such that a child below is recognized as focused
+    if (checkListBox->HasFocus())
+        st |= wxACC_STATE_SYSTEM_FOCUSED;
+    if (checkListBox->IsChecked(childId-1))
+        st |= wxACC_STATE_SYSTEM_CHECKED;
+    *state = st;
+    return wxACC_OK;
+}
+
+#endif // wxUSE_ACCESSIBILITY
+
 // ----------------------------------------------------------------------------
 // implementation of wxCheckListBox class
 // ----------------------------------------------------------------------------
@@ -277,7 +334,7 @@ void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
     GetItem(uiIndex)->Check(bCheck);
     RefreshItem(uiIndex);
 #if wxUSE_ACCESSIBILITY
-    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, uiIndex+1);
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, uiIndex + 1);
 #endif // wxUSE_ACCESSIBILITY
 
 }
@@ -454,47 +511,6 @@ wxAccessible* wxCheckListBox::CreateAccessible()
 {
     return new wxCheckListBoxAccessible(this);
 }
-
-wxCheckListBoxAccessible::wxCheckListBoxAccessible(wxCheckListBox* win)
-    : wxWindowAccessible(win)
-{}
-
-wxAccStatus wxCheckListBoxAccessible::GetRole(int childId, wxAccRole* role)
-{
-    wxCheckListBox* checkListBox = wxDynamicCast(GetWindow(), wxCheckListBox);
-    wxCHECK(checkListBox, wxACC_FAIL);
-
-    *role = (childId == wxACC_SELF) ? wxROLE_SYSTEM_LIST : wxROLE_SYSTEM_CHECKBUTTON;
-    return wxACC_OK;
-}
-
-// Returns a state constant.
-wxAccStatus wxCheckListBoxAccessible::GetState(int childId, long* state)
-{
-    wxCheckListBox* checkListBox = wxDynamicCast(GetWindow(), wxCheckListBox);
-    wxCHECK(checkListBox, wxACC_FAIL);
-
-    if (childId <= 0)
-        return wxACC_NOT_IMPLEMENTED; // Fall back to Windows default
-
-    long st = 0;
-    if (!checkListBox->IsEnabled())
-        st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
-    if (!checkListBox->IsShown())
-        st |= wxACC_STATE_SYSTEM_INVISIBLE;
-
-    if (checkListBox->IsFocusable())
-        st |= wxACC_STATE_SYSTEM_FOCUSABLE;
-
-    // this needs to be returned such that a child below is recognized as focused
-    if (checkListBox->HasFocus())
-        st |= wxACC_STATE_SYSTEM_FOCUSED;
-    if (checkListBox->IsChecked(childId-1))
-        st |= wxACC_STATE_SYSTEM_CHECKED;
-    *state = st;
-    return wxACC_OK;
-}
-
 #endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_CHECKLISTBOX

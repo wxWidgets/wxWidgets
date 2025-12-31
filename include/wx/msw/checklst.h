@@ -91,15 +91,4 @@ protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);
 };
 
-#if wxUSE_ACCESSIBILITY
-class WXDLLIMPEXP_CORE wxCheckListBoxAccessible : public wxWindowAccessible
-{
-public:
-    explicit wxCheckListBoxAccessible(wxCheckListBox* winm);
-
-    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
-    virtual wxAccStatus GetState(int childId, long* state) override;
-};
-#endif
-
 #endif    //_CHECKLST_H
