@@ -3955,7 +3955,7 @@ wxAccStatus wxWindowAccessible::GetParent(wxAccessible** parent)
         if (*parent)
             return wxACC_OK;
         else
-            return wxACC_FAIL;
+            return wxACC_NOT_IMPLEMENTED;
     }
 }
 
