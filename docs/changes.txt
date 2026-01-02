@@ -252,6 +252,10 @@ Changes in behaviour which may result in build errors
 3.2.10: (released 2026-??-??)
 -----------------------------
 
+wxMSW:
+
+- Don't use first image for wxListCtrl items without images (#26062).
+
 wxOSX:
 
 - Fix wxChoice default size under macOS 26 Tahoe (#26058).
