@@ -2066,6 +2066,16 @@ long wxListCtrl::InsertItem(const wxListItem& info)
 
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
+
+    // When inserting items into a control with an image list, the first image
+    // is used by default, so we need to explicitly specify that we don't want
+    // any image if it wasn't set.
+    if ( !(item.mask & LVIF_IMAGE) )
+    {
+        item.iImage = I_IMAGENONE;
+        item.mask |= LVIF_IMAGE;
+    }
+
     item.mask &= ~LVIF_PARAM;
 
     // check whether we need to allocate our internal data
