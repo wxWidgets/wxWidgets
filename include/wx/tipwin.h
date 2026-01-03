@@ -26,7 +26,16 @@ class WXDLLIMPEXP_FWD_CORE wxTipWindowView;
 class WXDLLIMPEXP_CORE wxTipWindow : public wxPopupTransientWindow
 {
 public:
-    // the mandatory ctor parameters are: the parent window and the text to
+    wxTipWindow();
+    wxDEPRECATED_MSG("Using this has a race condition; use two-phase construction instead")
+    wxTipWindow(wxWindow *parent,
+                const wxString& text,
+                wxCoord maxLength = 100,
+                wxTipWindow** windowPtr = nullptr,
+                wxRect *rectBound = nullptr)
+    { (void)Create(parent, text, maxLength, windowPtr, rectBound); }
+
+    // the mandatory parameters are: the parent window and the text to
     // show
     //
     // optionally you may also specify the length at which the lines are going
@@ -34,7 +43,7 @@ public:
     //
     // windowPtr and rectBound are just passed to SetTipWindowPtr() and
     // SetBoundingRect() - see below
-    wxTipWindow(wxWindow *parent,
+    bool Create(wxWindow *parent,
                 const wxString& text,
                 wxCoord maxLength = 100,
                 wxTipWindow** windowPtr = nullptr,

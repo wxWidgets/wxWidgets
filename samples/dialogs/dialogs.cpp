@@ -2858,7 +2858,8 @@ void MyFrame::OnShowTip(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        m_tipWindow = new wxTipWindow
+        m_tipWindow = new wxTipWindow;
+        m_tipWindow->Create
                           (
                             this,
                             "This is just some text to be shown in the tip "

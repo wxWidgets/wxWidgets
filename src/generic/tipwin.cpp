@@ -96,13 +96,23 @@ wxEND_EVENT_TABLE()
 // wxTipWindow
 // ----------------------------------------------------------------------------
 
-wxTipWindow::wxTipWindow(wxWindow *parent,
+wxTipWindow::wxTipWindow()
+{
+    SetTipWindowPtr(nullptr);
+    m_view = nullptr;
+}
+
+bool wxTipWindow::Create(wxWindow *parent,
                          const wxString& text,
                          wxCoord maxLength,
                          wxTipWindow** windowPtr,
                          wxRect *rectBounds)
-           : wxPopupTransientWindow(parent)
 {
+    if (!wxPopupTransientWindow::Create(parent))
+    {
+        return false;
+    }
+
     SetTipWindowPtr(windowPtr);
     if ( rectBounds )
     {
@@ -158,6 +168,8 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     #ifdef __WXGTK__
         m_view->CaptureMouse();
     #endif
+
+    return true;
 }
 
 wxTipWindow::~wxTipWindow()
@@ -167,7 +179,7 @@ wxTipWindow::~wxTipWindow()
         *m_windowPtr = nullptr;
     }
     #ifdef __WXGTK__
-        if ( m_view->HasCapture() )
+        if ( m_view && m_view->HasCapture() )
             m_view->ReleaseMouse();
     #endif
 }

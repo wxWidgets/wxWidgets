@@ -25,7 +25,25 @@ class wxTipWindow : public wxWindow
 {
 public:
     /**
-        Constructor. The tip is shown immediately after the window is constructed.
+        Default constructor.
+    */
+    wxTipWindow();
+
+    /**
+        @deprecated
+
+        Use two-phase construction instead due to race condition
+        where windowPtr may be set to @NULL before it is set by
+        result of `new wxTipWindow(...)`.
+    */
+    wxTipWindow(wxWindow* parent, const wxString& text,
+                wxCoord maxLength = 100,
+                wxTipWindow** windowPtr = nullptr,
+                wxRect* rectBounds = nullptr);
+
+    /**
+        Construct the actual window object after creating the C++
+        object.  The tip is shown immediately.
 
         @param parent
             The parent window, must be non-null
@@ -41,7 +59,7 @@ public:
             If non-null, passed to SetBoundingRect() below, please see its
             documentation for the description of this parameter
     */
-    wxTipWindow(wxWindow* parent, const wxString& text,
+    bool Create(wxWindow* parent, const wxString& text,
                 wxCoord maxLength = 100,
                 wxTipWindow** windowPtr = nullptr,
                 wxRect* rectBounds = nullptr);
