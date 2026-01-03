@@ -96,13 +96,90 @@ wxEND_EVENT_TABLE()
 // wxTipWindow
 // ----------------------------------------------------------------------------
 
-wxTipWindow::wxTipWindow(wxWindow *parent,
+wxTipWindow::Ref::~Ref()
+{
+    if (m_ptr)
+    {
+        m_ptr->SetTipWindowPtr(nullptr);
+    }
+}
+
+wxTipWindow::Ref::Ref(Ref&& other)
+{
+    m_ptr = other.m_ptr;
+    if (m_ptr)
+    {
+        other.m_ptr = nullptr;
+        m_ptr->SetTipWindowPtr(&m_ptr);
+    }
+}
+
+wxTipWindow::Ref& wxTipWindow::Ref::operator=(Ref&& other)
+{
+    if (m_ptr != other.m_ptr)
+    {
+        if (m_ptr)
+        {
+            m_ptr->SetTipWindowPtr(nullptr);
+        }
+
+        m_ptr = other.m_ptr;
+        if (m_ptr)
+        {
+            other.m_ptr = nullptr;
+            m_ptr->SetTipWindowPtr(&m_ptr);
+        }
+    }
+
+    return *this;
+}
+
+wxTipWindow::Ref& wxTipWindow::Ref::operator=(std::nullptr_t)
+{
+    if (m_ptr)
+    {
+        m_ptr->SetTipWindowPtr(nullptr);
+        m_ptr = nullptr;
+    }
+
+    return *this;
+}
+
+wxTipWindow::Ref wxTipWindow::New(wxWindow *parent,
+            const wxString& text,
+            wxCoord maxLength /*= 100*/,
+            wxRect *rectBound /*= nullptr*/)
+{
+    std::unique_ptr<wxTipWindow> temp(new wxTipWindow);
+    wxTipWindow::Ref retval;
+    retval.m_ptr = temp.get();
+
+    if (!temp->Create(parent, text, maxLength, &retval.m_ptr, rectBound))
+    {
+        return Ref();
+    }
+
+    temp.release();
+    return retval;
+}
+
+wxTipWindow::wxTipWindow()
+{
+    SetTipWindowPtr(nullptr);
+    m_view = nullptr;
+}
+
+bool wxTipWindow::Create(wxWindow *parent,
                          const wxString& text,
                          wxCoord maxLength,
                          wxTipWindow** windowPtr,
                          wxRect *rectBounds)
-           : wxPopupTransientWindow(parent)
 {
+    if (!wxPopupTransientWindow::Create(parent))
+    {
+        return false;
+    }
+
     SetTipWindowPtr(windowPtr);
     if ( rectBounds )
     {
@@ -158,6 +235,8 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     #ifdef __WXGTK__
         m_view->CaptureMouse();
     #endif
+
+    return true;
 }
 
 wxTipWindow::~wxTipWindow()
@@ -167,7 +246,7 @@ wxTipWindow::~wxTipWindow()
         *m_windowPtr = nullptr;
     }
     #ifdef __WXGTK__
-        if ( m_view->HasCapture() )
+        if ( m_view && m_view->HasCapture() )
             m_view->ReleaseMouse();
     #endif
 }
