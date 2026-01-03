@@ -1,0 +1,1 @@
+wxOSX: Make Cmd/Alt-Left/Right work as expected in wxRichTextCtrl (Lee Ockert, #26064).
