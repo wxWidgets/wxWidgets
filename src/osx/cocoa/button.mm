@@ -88,18 +88,78 @@ wxButtonCocoaImpl::wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v)
     SetNeedsFrame(false);
 }
 
-void wxButtonCocoaImpl::SetBitmap(const wxBitmapBundle& bitmap)
+// Set bezel style depending on the wxBORDER_XXX flags specified by the style
+// and also accounting for the label (bezels are different for multiline
+// buttons and normal ones) and the ID (special bezel is used for help button).
+static
+void
+SetBezelStyleFromBorderFlags(NSButton *v,
+                             long style,
+                             wxWindowID winid,
+                             const wxString& label = wxString(),
+                             const wxBitmapBundle& bitmap = wxBitmapBundle())
 {
-    // switch bezel style for plain pushbuttons
-    if ( bitmap.IsOk() )
+    // We can't display a custom label inside a button with help bezel style so
+    // we only use it if we are using the default label. wxButton itself checks
+    // if the label is just "Help" in which case it discards it and passes us
+    // an empty string.
+    if ( winid == wxID_HELP && label.empty() )
     {
-        if ([GetNSButton() bezelStyle] == NSRoundedBezelStyle)
-            [GetNSButton() setBezelStyle:NSRegularSquareBezelStyle];
+        [v setBezelStyle:NSHelpButtonBezelStyle];
     }
     else
     {
-        [GetNSButton() setBezelStyle:NSRoundedBezelStyle];
+        // We can't use rounded bezel styles either for multiline buttons or
+        // for buttons containing (big) icons as they are only meant to be used
+        // at certain sizes, so the style used depends on whether the label is
+        // single or multi line.
+        const bool
+            isSimpleText = (label.find_first_of("\n\r") == wxString::npos)
+                                && (!bitmap.IsOk() || bitmap.GetDefaultSize().y < 20);
+
+        NSBezelStyle bezel;
+        switch ( style & wxBORDER_MASK )
+        {
+            case wxBORDER_NONE:
+                bezel = NSShadowlessSquareBezelStyle;
+                [v setBordered:NO];
+                break;
+
+            case wxBORDER_SIMPLE:
+                bezel = NSSmallSquareBezelStyle;
+                break;
+
+            case wxBORDER_SUNKEN:
+                bezel = isSimpleText ? NSTexturedRoundedBezelStyle
+                                     : NSSmallSquareBezelStyle;
+                break;
+
+            default:
+                wxFAIL_MSG( "Unknown border style" );
+                wxFALLTHROUGH;
+
+            case 0:
+            case wxBORDER_STATIC:
+            case wxBORDER_RAISED:
+            case wxBORDER_THEME:
+                bezel = isSimpleText ? NSRoundedBezelStyle
+                                     : NSRegularSquareBezelStyle;
+                break;
+        }
+
+        [v setBezelStyle:bezel];
     }
+}
+
+void wxButtonCocoaImpl::SetBitmap(const wxBitmapBundle& bitmap)
+{
+    // Update the bezel style as may be necessary if our new label is multi
+    // line while the old one wasn't (or vice versa).
+    SetBezelStyleFromBorderFlags(GetNSButton(),
+                                 GetWXPeer()->GetWindowStyle(),
+                                 GetWXPeer()->GetId(),
+                                 GetWXPeer()->GetLabel(),
+                                 bitmap );
 
     wxWidgetCocoaImpl::SetBitmap(bitmap);
 }
@@ -171,69 +231,6 @@ NSButton *wxButtonCocoaImpl::GetNSButton() const
     return static_cast<NSButton *>(m_osxView);
 }
 
-// Set bezel style depending on the wxBORDER_XXX flags specified by the style
-// and also accounting for the label (bezels are different for multiline
-// buttons and normal ones) and the ID (special bezel is used for help button).
-static
-void
-SetBezelStyleFromBorderFlags(NSButton *v,
-                             long style,
-                             wxWindowID winid,
-                             const wxString& label = wxString(),
-                             const wxBitmapBundle& bitmap = wxBitmapBundle())
-{
-    // We can't display a custom label inside a button with help bezel style so
-    // we only use it if we are using the default label. wxButton itself checks
-    // if the label is just "Help" in which case it discards it and passes us
-    // an empty string.
-    if ( winid == wxID_HELP && label.empty() )
-    {
-        [v setBezelStyle:NSHelpButtonBezelStyle];
-    }
-    else
-    {
-        // We can't use rounded bezel styles either for multiline buttons or
-        // for buttons containing (big) icons as they are only meant to be used
-        // at certain sizes, so the style used depends on whether the label is
-        // single or multi line.
-        const bool
-            isSimpleText = (label.find_first_of("\n\r") == wxString::npos)
-                                && (!bitmap.IsOk() || bitmap.GetDefaultSize().y < 20);
-
-        NSBezelStyle bezel;
-        switch ( style & wxBORDER_MASK )
-        {
-            case wxBORDER_NONE:
-                bezel = NSShadowlessSquareBezelStyle;
-                [v setBordered:NO];
-                break;
-
-            case wxBORDER_SIMPLE:
-                bezel = NSSmallSquareBezelStyle;
-                break;
-
-            case wxBORDER_SUNKEN:
-                bezel = isSimpleText ? NSTexturedRoundedBezelStyle
-                                     : NSSmallSquareBezelStyle;
-                break;
-
-            default:
-                wxFAIL_MSG( "Unknown border style" );
-                wxFALLTHROUGH;
-
-            case 0:
-            case wxBORDER_STATIC:
-            case wxBORDER_RAISED:
-            case wxBORDER_THEME:
-                bezel = isSimpleText ? NSRoundedBezelStyle
-                                     : NSSmallSquareBezelStyle;
-                break;
-        }
-
-        [v setBezelStyle:bezel];
-    }
-}
-
 // Set the keyboard accelerator key from the label (e.g. "Click &Me")
 void wxButton::OSXUpdateAfterLabelChange(const wxString& label)
 {
@@ -244,7 +241,8 @@ void wxButton::OSXUpdateAfterLabelChange(const wxString& label)
     SetBezelStyleFromBorderFlags(impl->GetNSButton(),
                                  GetWindowStyle(),
                                  GetId(),
-                                 label);
+                                 label,
+                                 GetBitmap() );
 
 
     // Skip setting the accelerator for the default buttons as this would
