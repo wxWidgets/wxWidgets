@@ -26,8 +26,40 @@ class WXDLLIMPEXP_FWD_CORE wxTipWindowView;
 class WXDLLIMPEXP_CORE wxTipWindow : public wxPopupTransientWindow
 {
 public:
+    // wxTipWindow may close itself, so provide a smart pointer
+    // that acts as a weak reference to wxTipWindow.
+    //
+    // Note that this is a move-only type.
+    //
+    // Note that this is not a wxWeakRef<> because this is set
+    // to nullptr when wxTipWindow is closed, which may be
+    // "long" before wxTipWindow is destroyed, bug wxWeakRef<>
+    // is set to nullptr on object destruction
+    class Ref
+    {
+    public:
+        Ref() { *p = nullptr; }
+
+        void Reset() { *p = nullptr; }
+
+        explicit operator bool() const { return *p; }
+        wxTipWindow* operator->() const { wxASSERT(*p);  return *p; }
+
+    private:
+        std::unique_ptr<wxTipWindow*> p { new wxTipWindow* };
+
+        friend wxTipWindow;
+    };
+
+    // replace the deprecated single-step constructor
+    // see Create() for parameters
+    static Ref New(wxWindow *parent,
+                const wxString& text,
+                wxCoord maxLength = 100,
+                wxRect *rectBound = nullptr);
+
     wxTipWindow();
-    wxDEPRECATED_MSG("Using this has a race condition; use two-phase construction instead")
+    wxDEPRECATED_MSG("Using this has a race condition; use New() instead")
     wxTipWindow(wxWindow *parent,
                 const wxString& text,
                 wxCoord maxLength = 100,

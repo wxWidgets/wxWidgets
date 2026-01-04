@@ -96,6 +96,24 @@ wxEND_EVENT_TABLE()
 // wxTipWindow
 // ----------------------------------------------------------------------------
 
+wxTipWindow::Ref wxTipWindow::New(wxWindow *parent,
+            const wxString& text,
+            wxCoord maxLength /*= 100*/,
+            wxRect *rectBound /*= nullptr*/)
+{
+    std::unique_ptr<wxTipWindow> temp(new wxTipWindow);
+    wxTipWindow::Ref retval;
+    *retval.p = temp.get();
+
+    if (!temp->Create(parent, text, maxLength, retval.p.get(), rectBound))
+    {
+        return Ref();
+    }
+
+    temp.release();
+    return retval;
+}
+
 wxTipWindow::wxTipWindow()
 {
     SetTipWindowPtr(nullptr);

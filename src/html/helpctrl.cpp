@@ -305,7 +305,7 @@ bool wxHtmlHelpController::DisplaySection(int sectionNo)
 bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint& WXUNUSED(pos))
 {
 #if wxUSE_TIPWINDOW
-    static wxTipWindow* s_tipWindow = nullptr;
+    static wxTipWindow::Ref s_tipWindow;
 
     if (s_tipWindow)
     {
@@ -314,11 +314,11 @@ bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint&
         s_tipWindow->SetTipWindowPtr(nullptr);
         s_tipWindow->Close();
     }
-    s_tipWindow = nullptr;
+    s_tipWindow.Reset();
 
     if ( !text.empty() )
     {
-        s_tipWindow = new wxTipWindow(wxTheApp->GetTopWindow(), text, 100, & s_tipWindow);
+        s_tipWindow = wxTipWindow::New(wxTheApp->GetTopWindow(), text, 100);
 
         return true;
     }

@@ -25,6 +25,58 @@ class wxTipWindow : public wxWindow
 {
 public:
     /**
+        The (weak) reference of class wxTipWindow
+
+        wxTipWindow may close itself, so provide a smart pointer
+        that acts as a weak reference to wxTipWindow.
+
+        This is a move-only type.
+
+        Note that this is not a wxWeakRef<> because this is set
+        to @NULL when wxTipWindow is closed, which may be
+        "long" before wxTipWindow is destroyed, and wxWeakRef<>
+        is set to @NULL on object destruction.
+    */
+    class Ref
+    {
+    public:
+        /**
+            Default constructor.
+
+            Tracked object is set to @NULL.
+        */
+        Ref();
+
+        /**
+            Stop tracking wxTipWindow.
+        */
+        void Reset();
+
+        /**
+            Explicit conversion to bool.
+            Returns whether the tracked object is not @NULL.
+        */
+        explicit operator bool() const;
+
+        /**
+            Smart pointer member access. Returns a pointer to the tracked object.
+            If the internal pointer is @NULL this method will cause an assert in debug mode.
+        */
+        wxTipWindow* operator->() const;
+    };
+
+    /*
+        Replace the deprecated single-step constructor.  See
+        Create() for parameters
+
+        @see Create()
+    */
+    static Ref New(wxWindow *parent,
+                const wxString& text,
+                wxCoord maxLength = 100,
+                wxRect *rectBound = nullptr);
+
+    /**
         Default constructor.
     */
     wxTipWindow();
