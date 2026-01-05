@@ -3315,6 +3315,18 @@ void DrawGridLines(wxListCtrl* listctrl, int item, int gap = 0)
     }
 }
 
+// Return the background colour to use for the items in the current state, i.e.
+// taking into account whether the control is enabled or not.
+wxColour GetEffectiveBackgroundColour(wxListCtrl* listctrl)
+{
+    if ( listctrl->IsEnabled() )
+        return listctrl->GetBackgroundColour();
+    else if ( wxMSWDarkMode::IsActive() )
+        return wxMSWDarkMode::GetColour(wxSYS_COLOUR_BTNFACE);
+    else
+        return wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+}
+
 // This function is normally called only if we use custom colours, but it's
 // also called when using dark mode as we have to draw the selected item
 // ourselves when using it, and if we do this, we have to paint all the items
@@ -3374,7 +3386,7 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
         nmcd.uItemState &= ~CDIS_HOT;
     }
 
-    wxColour clrBg = listctrl->GetBackgroundColour();
+    wxColour clrBg = GetEffectiveBackgroundColour(listctrl);
     if ( nmcd.uItemState & CDIS_SELECTED )
         clrBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     else if ( nmcd.uItemState & CDIS_HOT )
@@ -3451,7 +3463,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
         : wxColourToRGB(listctrl->GetTextColour());
     pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
         ? wxColourToRGB(attr->GetBackgroundColour())
-        : wxColourToRGB(listctrl->GetBackgroundColour());
+        : wxColourToRGB(GetEffectiveBackgroundColour(listctrl));
 
     if ( !attr )
     {
@@ -3492,7 +3504,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD)
     {
         COLORREF bgCol = attr->HasBackgroundColour()
             ? wxColourToRGB(attr->GetBackgroundColour())
-            : wxColourToRGB(listctrl->GetBackgroundColour());
+            : wxColourToRGB(GetEffectiveBackgroundColour(listctrl));
 
         if ( bgCol == ::GetSysColor(COLOR_BTNFACE) )
         {
@@ -3526,7 +3538,7 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             // set the text foreground and background colour for listview
             // and icon view, these don't get messages for subitems
             pLVCD->clrText = wxColourToRGB(GetForegroundColour());
-            pLVCD->clrTextBk = wxColourToRGB(GetBackgroundColour());
+            pLVCD->clrTextBk = wxColourToRGB(GetEffectiveBackgroundColour(this));
 
             // get a message for each subitem
             return CDRF_NOTIFYITEMDRAW;
@@ -3605,7 +3617,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             GetItemRect(bottom, lastRect);
 
         dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(GetBackgroundColour());
+        dc.SetBrush(GetEffectiveBackgroundColour(this));
         dc.DrawRectangle(lastRect.GetRight() + 1, 0, clientSize.x - lastRect.GetRight(), clientSize.GetHeight());
         dc.DrawRectangle(0, lastRect.GetBottom() + 1, clientSize.x, clientSize.y - lastRect.GetBottom());
     }
@@ -3645,7 +3657,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 to 2 (not 0).
             */
             wxDCPenChanger changePen(dc, *wxTRANSPARENT_PEN);
-            wxDCBrushChanger changeBrush(dc, GetBackgroundColour());
+            wxDCBrushChanger changeBrush(dc, GetEffectiveBackgroundColour(this));
 
             dc.DrawRectangle(0, topItemRect.GetY() - gap,
                              clientSize.GetWidth(), gap);
