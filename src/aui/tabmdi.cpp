@@ -448,13 +448,16 @@ wxAuiMDIChildFrame::wxAuiMDIChildFrame()
     Init();
 }
 
+// Bricsys change start : add tabPosition
 wxAuiMDIChildFrame::wxAuiMDIChildFrame(wxAuiMDIParentFrame *parent,
                                        wxWindowID id,
                                        const wxString& title,
                                        const wxPoint& WXUNUSED(pos),
                                        const wxSize& size,
                                        long style,
-                                       const wxString& name)
+                                       const wxString& name,
+                                       int tabPosition)
+// Bricsys change end : add tabPosition
 {
     Init();
 
@@ -468,7 +471,9 @@ wxAuiMDIChildFrame::wxAuiMDIChildFrame(wxAuiMDIParentFrame *parent,
     if (style & wxMINIMIZE)
         m_activateOnCreate = false;
 
-    Create(parent, id, title, wxDefaultPosition, size, 0, name);
+    // Bricsys change start : add tabPosition
+    Create(parent, id, title, wxDefaultPosition, size, 0, name, tabPosition);
+    // Bricsys change end : add tabPosition
 }
 
 wxAuiMDIChildFrame::~wxAuiMDIChildFrame()
@@ -495,13 +500,16 @@ wxAuiMDIChildFrame::~wxAuiMDIChildFrame()
 #endif // wxUSE_MENUS
 }
 
+// Bricsys change start : add tabPosition
 bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
                                 wxWindowID id,
                                 const wxString& title,
                                 const wxPoint& WXUNUSED(pos),
                                 const wxSize& size,
                                 long style,
-                                const wxString& name)
+                                const wxString& name,
+                                int tabPosition)
+// Bricsys change end : add tabPosition
 {
     wxAuiMDIClientWindow* pClientWindow = parent->GetClientWindow();
     wxASSERT_MSG((pClientWindow != NULL), wxT("Missing MDI client window."));
@@ -522,7 +530,11 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
 
     m_title = title;
 
-    pClientWindow->AddPage(this, title, m_activateOnCreate);
+    // Bricsys change start : add tabPosition
+    const size_t page_index = (tabPosition >= 0 && tabPosition <= pClientWindow->GetPageCount())
+                              ? tabPosition : pClientWindow->GetPageCount();
+    pClientWindow->InsertPage(page_index, this, title, m_activateOnCreate);
+    // Bricsys change end : add tabPosition
 
     // Check that the parent notion of the active child coincides with our one.
     // This is less obvious that it seems because we must honour

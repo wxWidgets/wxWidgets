@@ -125,22 +125,29 @@ class WXDLLIMPEXP_AUI wxAuiMDIChildFrame : public wxTDIChildFrame
 {
 public:
     wxAuiMDIChildFrame();
+    // Bricsys change start : add tabPosition
     wxAuiMDIChildFrame(wxAuiMDIParentFrame *parent,
                        wxWindowID winid,
                        const wxString& title,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxDEFAULT_FRAME_STYLE,
-                       const wxString& name = wxASCII_STR(wxFrameNameStr));
+                       const wxString& name = wxFrameNameStr,
+                       int tabPosition = -1);
+    // Bricsys change end : add tabPosition
 
     virtual ~wxAuiMDIChildFrame();
+    // Bricsys change start : add tabPosition
     bool Create(wxAuiMDIParentFrame *parent,
                 wxWindowID winid,
                 const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxASCII_STR(wxFrameNameStr));
+                const wxString& name = wxFrameNameStr,
+                int tabPosition = -1);
+    // Bricsys change end : add tabPosition
+
 
 #if wxUSE_MENUS
     virtual void SetMenuBar(wxMenuBar *menuBar) wxOVERRIDE;
