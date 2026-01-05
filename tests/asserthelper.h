@@ -42,6 +42,9 @@ inline std::ostream& operator<<(std::ostream& ostr, const wxTimeSpan& span)
     return ostr;
 }
 
+// The rest is valid only in the GUI tests.
+#if wxUSE_GUI
+
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 #include "wx/font.h"
@@ -53,5 +56,7 @@ std::ostream& operator<<(std::ostream& os, const wxSize& s);
 std::ostream& operator<<(std::ostream& os, const wxFont& f);
 std::ostream& operator<<(std::ostream& os, const wxPoint& p);
 std::ostream& operator<<(std::ostream& os, const wxRect& r);
+
+#endif // wxUSE_GUI
 
 #endif // _WX_TESTS_ASSERTHELPER_H_
