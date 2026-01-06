@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/wxprec.h"
+#include "wx/docview.h"
 
 
 #if wxUSE_AUI
@@ -26,7 +27,11 @@
     #include "wx/frame.h"
 #endif
 
+#include "wx/docview.h"
+
 #include "wx/aui/tabmdi.h"
+#include "wx/aui/tabdocmdi.h"
+
 #include "wx/wupdlock.h"
 
 #include "wx/dcbuffer.h" // just for wxALWAYS_NATIVE_DOUBLE_BUFFER
@@ -3237,6 +3242,16 @@ void wxAuiNotebook::OnTabButton(wxAuiNotebookEvent& evt)
         if (selection != -1)
         {
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);
+
+            wxAuiDocMDIChildFrame* frame = wxDynamicCast(close_wnd, wxAuiDocMDIChildFrame);
+
+             if ( frame )
+             {
+                wxDocument* close_doc = frame->GetDocument();
+
+               if( close_doc )
+                   close_doc->SetDocumentClosedByButton();
+            }
 
             // ask owner if it's ok to close the tab
             wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CLOSE, m_windowId);

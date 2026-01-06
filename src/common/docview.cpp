@@ -121,6 +121,7 @@ wxDocument::wxDocument(wxDocument *parent)
 
     m_commandProcessor = NULL;
     m_savedYet = false;
+    m_documentClosedByButton = false;
 }
 
 bool wxDocument::DeleteContents()
