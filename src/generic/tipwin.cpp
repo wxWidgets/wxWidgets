@@ -103,9 +103,9 @@ wxTipWindow::Ref wxTipWindow::New(wxWindow *parent,
 {
     std::unique_ptr<wxTipWindow> temp(new wxTipWindow);
     wxTipWindow::Ref retval;
-    *retval.p = temp.get();
+    *retval.m_ptr = temp.get();
 
-    if (!temp->Create(parent, text, maxLength, retval.p.get(), rectBound))
+    if (!temp->Create(parent, text, maxLength, retval.m_ptr.get(), rectBound))
     {
         return Ref();
     }

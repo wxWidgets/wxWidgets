@@ -2867,7 +2867,7 @@ void MyFrame::OnShowTip(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnUpdateShowTipUI(wxUpdateUIEvent& event)
 {
-    event.Check(bool(m_tipWindow));
+    event.Check(m_tipWindow != nullptr);
 }
 
 #endif // wxUSE_TIPWINDOW

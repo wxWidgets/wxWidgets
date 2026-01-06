@@ -314,7 +314,7 @@ bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint&
         s_tipWindow->SetTipWindowPtr(nullptr);
         s_tipWindow->Close();
     }
-    s_tipWindow.Reset();
+    s_tipWindow = nullptr;
 
     if ( !text.empty() )
     {

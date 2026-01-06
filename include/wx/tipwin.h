@@ -29,7 +29,9 @@ public:
     // wxTipWindow may close itself, so provide a smart pointer
     // that acts as a weak reference to wxTipWindow.
     //
-    // Note that this is a move-only type.
+    // Note that this is a move-only type (because
+    // wxTipWindow::Close() only sets a single wxTipWindow* to
+    // @NULL).
     //
     // Note that this is not a wxWeakRef<> because this is set
     // to nullptr when wxTipWindow is closed, which may be
@@ -38,15 +40,26 @@ public:
     class Ref
     {
     public:
-        Ref() { *p = nullptr; }
+        Ref() { *m_ptr = nullptr; }
 
-        void Reset() { *p = nullptr; }
+        Ref & operator=(std::nullptr_t) { *m_ptr = nullptr; return *this; }
 
-        explicit operator bool() const { return *p; }
-        wxTipWindow* operator->() const { wxASSERT(*p);  return *p; }
+        bool operator!=(std::nullptr_t) const { return *m_ptr != nullptr; }
+        explicit operator bool() const { return *m_ptr; }
+        wxTipWindow* operator->() const { return *m_ptr; }
 
     private:
-        std::unique_ptr<wxTipWindow*> p { new wxTipWindow* };
+        // wxTipWindow::Close() needs to know what wxTipWindow*
+        // to set to nullptr.  If m_ptr has type wxTipWindow*,
+        // then when Ref is moved (as will often be the case
+        // when returned from wxTipWindow::New()), we need
+        // to call wxTipWindow::SetTipWindowPtr() to tell
+        // wxTipWindow the address of the destination Ref's
+        // m_ptr.  We can avoid needing to explicitly call
+        // SetTipWindowPtr() by moving the wxTipWindow* from the
+        // source Ref to the destination Ref.  By using
+        // std::unique_ptr<>, that move happens automatically.
+        std::unique_ptr<wxTipWindow*> m_ptr { new wxTipWindow* };
 
         friend wxTipWindow;
     };
