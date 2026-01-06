@@ -595,6 +595,11 @@ extern ClassicCursor gMacCursors[];
 
 extern NSLayoutManager* gNSLayoutManager;
 
+// start Bricsys change
+extern void followLight();
+extern void followDark();
+// end Bricsys change
+
 // helper class for setting the current appearance to the
 // effective appearance and restore when exiting scope
 

@@ -29,6 +29,10 @@
 #include "wx/fontmap.h"
 #include "wx/msgout.h"
 
+// start Bricsys change
+#include "wx/dir.h"
+// end Bricsys change
+
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/log.h"
 
@@ -45,6 +49,92 @@
 //-----------------------------------------------------------------------------
 // local functions
 //-----------------------------------------------------------------------------
+
+// start Bricsys change
+static bool getAvailableThemes(wxVector<wxString>& themes) {
+    wxString themesDirPath(wxT("/usr/share/themes/"));
+    wxDir themesDir(themesDirPath);
+
+    if (!themesDir.IsOpened()) {
+        return false;
+    }
+
+    wxString currentThemeDirName;
+    bool isTopDirOpened = themesDir.GetFirst(&currentThemeDirName, wxEmptyString, wxDIR_DIRS);
+    while (isTopDirOpened) {
+        wxString tempThemesDirPath = wxT("/usr/share/themes/");
+        // e.g. Raleigh
+        wxDir currentThemeDir(tempThemesDirPath.Append(currentThemeDirName));
+        if (!currentThemeDir.IsOpened()) {
+            return false;
+        }
+    
+        wxString currentDirNameInTheme;
+        bool isGtk3DirOpened = currentThemeDir.GetFirst(&currentDirNameInTheme, wxEmptyString, wxDIR_DIRS);
+        while (isGtk3DirOpened) {
+            if(currentDirNameInTheme.Cmp(wxT("gtk-3.0")) == 0) 
+                themes.push_back(currentThemeDirName);
+        
+            isGtk3DirOpened = currentThemeDir.GetNext(&currentDirNameInTheme);
+        }
+    
+        isTopDirOpened = themesDir.GetNext(&currentThemeDirName);
+    }
+    
+    return true;
+}
+
+static bool trySetTheme(const wxVector<wxString>& themes, const wxString& theme) {
+    auto it = std::find_if(themes.begin(), themes.end(), [=](const wxString& currTheme) {
+        return currTheme.Cmp(theme) == 0;
+    });
+    
+    if (it != themes.end()) {
+        g_object_set(gtk_settings_get_default(), "gtk-theme-name", theme.mb_str().data(), NULL);
+        return true;
+    }
+    
+    return false;
+}
+
+static void followDark() {
+    wxVector<wxString> themes;
+    if(!getAvailableThemes(themes)) return;
+
+    bool isThemeSet = trySetTheme(themes, wxT("Adwaita-dark"));
+    if (!isThemeSet) 
+        isThemeSet = trySetTheme(themes, wxT("HighContrastInverse"));
+    if (!isThemeSet) 
+        isThemeSet = trySetTheme(themes, wxT("Yaru-dark"));
+    if (!isThemeSet) {
+        /* Check for other themes */
+    }
+}
+
+static void followLight() {
+    wxVector<wxString> themes;
+    if(!getAvailableThemes(themes)) return;
+
+    bool isThemeSet = trySetTheme(themes, wxT("Adwaita"));
+    if (!isThemeSet) 
+        isThemeSet = trySetTheme(themes, wxT("HighContrast"));
+    if (!isThemeSet) 
+        isThemeSet = trySetTheme(themes, wxT("Yaru"));
+    if (!isThemeSet) {
+        /* Check for other themes */
+    }
+}
+
+void wxApp::SetAppearance(const Theme theme) {
+    if (theme == Theme::DARK) {
+        followDark();
+    } else if(theme == Theme::LIGHT) {
+        followLight();
+    } else {
+        /* Do nothing */
+    }
+}
+// end Bricsys change
 
 // One-shot signal emission hook, to install idle handler.
 extern "C" {
