@@ -90,6 +90,9 @@ public:
     // Returns global instance (wxTheClipboard) of the object:
     static wxClipboard *Get();
 
+    // Bricsys change: add capability to change wxTheClipboard with a custom type
+    static void Set(wxClipboard* clipboard);
+    // end Bricsys change 
 
     // don't use this directly, it is public for compatibility with some ports
     // (wxX11, wxMotif, ...) only

@@ -25,6 +25,9 @@
 #include "wx/aui/floatpane.h"
 #include "wx/aui/dockart.h"
 
+#include "wx/app.h"
+#include "wx/apptrait.h"
+
 #ifndef WX_PRECOMP
 #endif
 
@@ -65,6 +68,20 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
     SystemParametersInfo(38 /*SPI_GETDRAGFULLWINDOWS*/, 0, &b, 0);
     m_solidDrag = b ? true : false;
 #endif
+
+// Bricsys change: detect KDE for docking
+#ifdef __LINUX__
+    if ( wxAppTraits * const traits = wxApp::GetTraitsIfExists() )
+    {
+        wxString wm = traits->GetDesktopEnvironment();
+        if ( wm.IsEmpty() )
+            wxGetEnv(wxT("XDG_CURRENT_DESKTOP"), &wm);
+
+        if ( wm == "KDE" )
+            m_solidDrag = false;
+    }
+#endif
+// End Bricsys change
 
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
@@ -217,8 +234,20 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
         // systems without solid window dragging need to be
         // handled slightly differently, due to the lack of
         // the constant stream of EVT_MOVING events
+
+        // Bricsys change: in case of KDE, don't do early return
+        // If m_solidDrag is true because of KDE, don't return here,
+        // the event at the end of the drag is the only one we get
+#ifdef __WXMSW__
+        // End Bricsys change
+
         if (!isMouseDown())
             return;
+
+        // Bricsys change: in case of KDE, don't do early return
+#endif // __WXMSW__
+        // End Bricsys change
+
         OnMoveStart();
         OnMoving(event.GetRect(), wxNORTH);
         m_moving = true;

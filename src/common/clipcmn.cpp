@@ -75,6 +75,16 @@ static wxClipboard *gs_clipboard = NULL;
     return gs_clipboard;
 }
 
+// Bricsys change: add capability to change wxTheClipboard with a custom type
+/*static*/ void wxClipboardBase::Set(wxClipboard* clipboard)
+{
+    if ( gs_clipboard )
+        delete gs_clipboard;
+
+    gs_clipboard = clipboard;
+}
+// end Bricsys change
+
 bool wxClipboardBase::IsSupportedAsync( wxEvtHandler *sink )
 {
     // We just imitate an asynchronous API on most platforms.
