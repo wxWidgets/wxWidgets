@@ -85,6 +85,9 @@ public:
     bool GetDocumentSaved() const { return m_savedYet; }
     void SetDocumentSaved(bool saved = true) { m_savedYet = saved; }
 
+    bool GetDocumentClosedByButton() const { return m_documentClosedByButton; }
+    void SetDocumentClosedByButton(bool closed = true) { m_documentClosedByButton = closed; }
+
     // activate the first view of the document if any
     void Activate();
 
@@ -195,6 +198,7 @@ protected:
     wxString              m_documentTypeName;
     wxDocTemplate*        m_documentTemplate;
     bool                  m_documentModified;
+    bool                  m_documentClosedByButton;
 
     // if the document parent is non-NULL, it's a pseudo-document corresponding
     // to a part of the parent document which can't be saved or loaded
