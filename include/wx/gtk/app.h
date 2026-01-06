@@ -23,6 +23,11 @@ public:
     wxApp();
     virtual ~wxApp();
 
+// start Bricsys change
+    enum class Theme {DARK, LIGHT};
+
+    void SetAppearance(const Theme theme);
+// end Bricsys change
     /* override for altering the way wxGTK initializes the GUI
      * (palette/visual/colorcube). under wxMSW, OnInitGui() does nothing by
      * default. when overriding this method, the code in it is likely to be

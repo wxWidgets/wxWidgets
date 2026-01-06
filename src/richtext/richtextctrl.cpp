@@ -4846,10 +4846,16 @@ void wxRichTextCtrl::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event)
 {
     //wxLogDebug(wxT("wxRichTextCtrl::OnSysColourChanged"));
 
+// start Bricsys change
+#ifdef _WIN32
+// end Bricsys change
     wxTextAttrEx basicStyle = GetBasicStyle();
     basicStyle.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     SetBasicStyle(basicStyle);
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+// start Bricsys change
+#endif
+// end Bricsys change
 
     Refresh();
 }

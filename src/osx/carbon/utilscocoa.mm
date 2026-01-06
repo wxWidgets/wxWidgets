@@ -718,6 +718,16 @@ NSString* wxNSStringWithWxString(const wxString &wxstring)
 
 #if wxOSX_USE_COCOA
 
+// start Bricsys change
+void followDark() {
+    [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
+}
+
+void followLight() {
+    [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
+}
+// end Bricsys change
+
 wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
 {
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14

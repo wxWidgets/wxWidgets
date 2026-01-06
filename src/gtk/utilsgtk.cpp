@@ -20,7 +20,6 @@
 #include "wx/apptrait.h"
 #include "wx/process.h"
 #include "wx/sysopt.h"
-#include "wx/vector.h"
 
 #include "wx/gtk/private/timer.h"
 #include "wx/evtloop.h"
