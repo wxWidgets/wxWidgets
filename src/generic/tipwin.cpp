@@ -96,6 +96,55 @@ wxEND_EVENT_TABLE()
 // wxTipWindow
 // ----------------------------------------------------------------------------
 
+wxTipWindow::Ref::~Ref()
+{
+    if (m_ptr)
+    {
+        m_ptr->SetTipWindowPtr(nullptr);
+    }
+}
+
+wxTipWindow::Ref::Ref(Ref&& other)
+{
+    m_ptr = other.m_ptr;
+    if (m_ptr)
+    {
+        other.m_ptr = nullptr;
+        m_ptr->SetTipWindowPtr(&m_ptr);
+    }
+}
+
+wxTipWindow::Ref& wxTipWindow::Ref::operator=(Ref&& other)
+{
+    if (m_ptr != other.m_ptr)
+    {
+        if (m_ptr)
+        {
+            m_ptr->SetTipWindowPtr(nullptr);
+        }
+
+        m_ptr = other.m_ptr;
+        if (m_ptr)
+        {
+            other.m_ptr = nullptr;
+            m_ptr->SetTipWindowPtr(&m_ptr);
+        }
+    }
+
+    return *this;
+}
+
+wxTipWindow::Ref& wxTipWindow::Ref::operator=(std::nullptr_t)
+{
+    if (m_ptr)
+    {
+        m_ptr->SetTipWindowPtr(nullptr);
+        m_ptr = nullptr;
+    }
+
+    return *this;
+}
+
 wxTipWindow::Ref wxTipWindow::New(wxWindow *parent,
             const wxString& text,
             wxCoord maxLength /*= 100*/,
@@ -103,9 +152,9 @@ wxTipWindow::Ref wxTipWindow::New(wxWindow *parent,
 {
     std::unique_ptr<wxTipWindow> temp(new wxTipWindow);
     wxTipWindow::Ref retval;
-    *retval.m_ptr = temp.get();
+    retval.m_ptr = temp.get();
 
-    if (!temp->Create(parent, text, maxLength, retval.m_ptr.get(), rectBound))
+    if (!temp->Create(parent, text, maxLength, &retval.m_ptr, rectBound))
     {
         return Ref();
     }

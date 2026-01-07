@@ -37,29 +37,24 @@ public:
     // to nullptr when wxTipWindow is closed, which may be
     // "long" before wxTipWindow is destroyed, bug wxWeakRef<>
     // is set to nullptr on object destruction
-    class Ref
+    class WXDLLIMPEXP_CORE Ref
     {
     public:
-        Ref() { *m_ptr = nullptr; }
+        Ref() = default;
+        ~Ref();
+        Ref(const Ref&) = delete;
+        Ref(Ref&& other);
+        Ref& operator=(const Ref&) = delete;
+        Ref& operator=(Ref&& other);
 
-        Ref & operator=(std::nullptr_t) { *m_ptr = nullptr; return *this; }
+        Ref& operator=(std::nullptr_t);
 
-        bool operator!=(std::nullptr_t) const { return *m_ptr != nullptr; }
-        explicit operator bool() const { return *m_ptr; }
-        wxTipWindow* operator->() const { return *m_ptr; }
+        bool operator!=(std::nullptr_t) const { return m_ptr != nullptr; }
+        explicit operator bool() const { return m_ptr; }
+        wxTipWindow* operator->() const { return m_ptr; }
 
     private:
-        // wxTipWindow::Close() needs to know what wxTipWindow*
-        // to set to nullptr.  If m_ptr has type wxTipWindow*,
-        // then when Ref is moved (as will often be the case
-        // when returned from wxTipWindow::New()), we need
-        // to call wxTipWindow::SetTipWindowPtr() to tell
-        // wxTipWindow the address of the destination Ref's
-        // m_ptr.  We can avoid needing to explicitly call
-        // SetTipWindowPtr() by moving the wxTipWindow* from the
-        // source Ref to the destination Ref.  By using
-        // std::unique_ptr<>, that move happens automatically.
-        std::unique_ptr<wxTipWindow*> m_ptr { new wxTipWindow* };
+        wxTipWindow* m_ptr = nullptr;
 
         friend wxTipWindow;
     };
