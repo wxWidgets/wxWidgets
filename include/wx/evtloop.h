@@ -227,7 +227,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
 
-#if defined(__WINDOWS__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && !defined(__WXOSX__))
+#if defined(__WINDOWS__) || defined(__WXDFB__) || (defined(__UNIX__) && !defined(__DARWIN__))
 
 // this class can be used to implement a standard event loop logic using
 // Pending() and Dispatch()
@@ -275,9 +275,9 @@ private:
 // integration with MFC) but currently this is not done for all ports yet (e.g.
 // wxX11) so fall back to the old wxGUIEventLoop definition below for them
 
+// Include wxCFEventLoop declaration which is needed by both the console and
+// GUI event loops under macOS.
 #if defined(__DARWIN__)
-    // CoreFoundation-based event loop is currently in wxBase so include it in
-    // any case too (although maybe it actually shouldn't be there at all)
     #include "wx/osx/core/evtloop.h"
 #endif
 
