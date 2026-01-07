@@ -362,7 +362,7 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 
     // wxPrinter copies printDialogData internally, so we have to pass this
     // instance in order to evaluate users inputs.
-    MyPrintout printout(this, &printer.GetPrintDialogData(), "My printout");
+    MyPrintout printout(this, &printer.GetPrintDialogData());
 
     SetStatusText(""); // clear previous "cancelled" message, if any
 
@@ -419,7 +419,7 @@ void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData printDialogData(* g_printData);
 
     wxPostScriptPrinter printer(&printDialogData);
-    MyPrintout printout(this, &printer.GetPrintDialogData(), "My printout");
+    MyPrintout printout(this, &printer.GetPrintDialogData());
     printer.Print(this, &printout, true/*prompt*/);
 
     (*g_printData) = printer.GetPrintDialogData().GetPrintData();
