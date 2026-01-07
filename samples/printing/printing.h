@@ -63,6 +63,7 @@ public:
 
 private:
     MyCanvas* m_canvas;
+    wxPrintDialogData m_printDialogDataForPreview;
     wxPreviewFrameModalityKind m_previewModality;
 
     wxDECLARE_EVENT_TABLE();

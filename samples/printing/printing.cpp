@@ -386,9 +386,11 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 {
     // Pass two printout objects: for preview, and possible printing.
-    wxPrintDialogData printDialogData(* g_printData);
+    m_printDialogDataForPreview = wxPrintDialogData(* g_printData);
     wxPrintPreview *preview =
-        new wxPrintPreview(new MyPrintout(this, &printDialogData), new MyPrintout(this, &printDialogData), &printDialogData);
+        new wxPrintPreview(new MyPrintout(this, &m_printDialogDataForPreview),
+                           new MyPrintout(this, &m_printDialogDataForPreview),
+                           &m_printDialogDataForPreview);
     if (!preview->IsOk())
     {
         delete preview;
@@ -428,8 +430,11 @@ void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
 {
     // Pass two printout objects: for preview, and possible printing.
-    wxPrintDialogData printDialogData(* g_printData);
-    wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this, &printDialogData), new MyPrintout(this, &printDialogData), &printDialogData);
+    m_printDialogDataForPreview = wxPrintDialogData(* g_printData);
+    wxPrintPreview *preview =
+        new wxPrintPreview(new MyPrintout(this, &m_printDialogDataForPreview),
+                           new MyPrintout(this, &m_printDialogDataForPreview),
+                           &m_printDialogDataForPreview);
     wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview");
     frame->Initialize();
     frame->Centre(wxBOTH);
