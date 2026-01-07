@@ -1263,12 +1263,7 @@
 
 #if defined(__WINDOWS__)
 #  include "wx/msw/chkconf.h"
-#  if defined(__WXGTK__)
-#      include "wx/gtk/chkconf.h"
-#  endif
-#elif defined(__WXGTK__)
-#  include "wx/gtk/chkconf.h"
-#elif defined(__WXMAC__)
+#elif defined(__DARWIN__)
 #  include "wx/osx/chkconf.h"
 #elif defined(__WXDFB__)
 #  include "wx/dfb/chkconf.h"
@@ -1276,6 +1271,12 @@
 #  include "wx/x11/chkconf.h"
 #elif defined(__WXANDROID__)
 #  include "wx/android/chkconf.h"
+#endif
+
+/* Note that __WXGTK__ may be defined under Windows and Mac if we're using
+   the wxGTK port there, so do NOT use #elif for it. */
+#if defined(__WXGTK__)
+#  include "wx/gtk/chkconf.h"
 #endif
 
 /*
