@@ -1313,6 +1313,103 @@ public:
 };
 
 /**
+    Base class for logging debug information from web requests.
+
+    An object of a class derived from this one may be associated with a
+    wxWebSession or wxWebSessionSync using wxWebSession::SetDebugLogger() in
+    order to receive detailed information about the data exchanged with the
+    HTTP server.
+
+    Once this object is associated with a session, its member functions will be
+    called to report various events happening during the request processing.
+
+    libcurl-based backend provides the most full-featured logging, with WinHTTP
+    backend providing only limited information and NSURLSession-based backend
+    currently not providing any logging at all.
+
+    @since 3.3.2
+
+    @library{wxnet}
+    @category{net}
+*/
+class wxWebRequestDebugLogger
+{
+public:
+    /// Default constructor.
+    wxWebRequestDebugLogger() = default;
+
+    /**
+        Called to notify about an informational message.
+
+        For example, the libcurl-based backend provides details about the
+        protocol used (including TLS version when applicable) and the
+        connection state using this function.
+
+        @param info A single line informational message.
+     */
+    virtual void OnInfo(const wxString& info) = 0;
+
+    /**
+        Called with the request line sent to the server.
+
+        A typical example of such a line would be `GET /index.html HTTP/1.1`.
+     */
+    virtual void OnRequestSent(const wxString& line) = 0;
+
+    /**
+        Called with the status line received from the server.
+
+        A typical example of such a line would be `HTTP/1.1 200 OK`.
+     */
+    virtual void OnResponseReceived(const wxString& line) = 0;
+
+    /**
+        Called for each header sent to the server.
+
+        This is currently only called when libcurl-based backend is used.
+
+        @param name Name of the header
+        @param value String value of the header
+     */
+    virtual void OnHeaderSent(const wxString& name, const wxString& value) = 0;
+
+    /**
+        Called for each header received from the server.
+
+        @param name Name of the header
+        @param value String value of the header
+     */
+    virtual void OnHeaderReceived(const wxString& name, const wxString& value) = 0;
+
+    /**
+        Called when other data is sent to the server.
+
+        This data may be binary and encrypted when using HTTPS, so it is
+        typically not human-readable, although it may be in some cases (e.g.
+        when using a text body with HTTP POST).
+
+        This is currently only called when libcurl-based backend is used or
+        when WinHTTP backend is used with synchronous requests.
+
+        @param data Pointer to the received data buffer.
+        @param size Size of the received data buffer in bytes.
+     */
+    virtual void OnDataSent(const void* data, size_t size) = 0;
+
+    /**
+        Called when other data is received from the server.
+
+        This data may be binary and encrypted when using HTTPS, so it is
+        typically not human-readable, although it may be in some cases (e.g.
+        when receiving a text response body).
+
+        @param data Pointer to the received data buffer.
+        @param size Size of the received data buffer in bytes.
+     */
+    virtual void OnDataReceived(const void* data, size_t size) = 0;
+};
+
+/**
     @class wxWebSession
 
     Session allows creating wxWebRequest objects used for the actual HTTP
@@ -1530,6 +1627,21 @@ public:
         @since 3.3.0
      */
     bool EnablePersistentStorage(bool enable);
+
+    /**
+        Enable debug logging for all requests created by this session.
+
+        If @a logger is non-null, it will be used to log detailed debug
+        information about the data exchanged with the HTTP server for all
+        requests created by this session after this function is called.
+
+        @note Calling this function destroys any previously set logger, make
+            sure there are no active requests using it any more before doing
+            so to avoid crashes.
+
+        @since 3.3.2
+     */
+    void SetDebugLogger(std::unique_ptr<wxWebRequestDebugLogger> logger);
 };
 
 /**
@@ -1721,6 +1833,21 @@ public:
         @note This is only implemented in the macOS backend.
      */
     bool EnablePersistentStorage(bool enable);
+
+    /**
+        Enable debug logging for all requests created by this session.
+
+        If @a logger is non-null, it will be used to log detailed debug
+        information about the data exchanged with the HTTP server for all
+        requests created by this session after this function is called.
+
+        @note Calling this function destroys any previously set logger, make
+            sure there are no active requests using it any more before doing
+            so to avoid crashes.
+
+        @since 3.3.2
+     */
+    void SetDebugLogger(std::unique_ptr<wxWebRequestDebugLogger> logger);
 };
 
 

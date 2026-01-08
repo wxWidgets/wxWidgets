@@ -170,6 +170,10 @@ private:
         return Fail(operation, ::GetLastError());
     }
 
+    // Log all the headers of the response if debug logging is enabled.
+    void LogResponseHeadersIfNecessary();
+
+
     // These functions can only be used for asynchronous requests.
     void SetFailed(const wxString& operation, DWORD errorCode)
     {

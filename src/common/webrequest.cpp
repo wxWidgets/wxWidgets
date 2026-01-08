@@ -1236,6 +1236,14 @@ bool wxWebSessionBase::EnablePersistentStorage(bool enable)
     return m_impl->EnablePersistentStorage(enable);
 }
 
+void
+wxWebSessionBase::SetDebugLogger(std::unique_ptr<wxWebRequestDebugLogger> logger)
+{
+    wxCHECK_IMPL_VOID();
+
+    m_impl->SetDebugLogger(std::move(logger));
+}
+
 // ----------------------------------------------------------------------------
 // Module ensuring all global/singleton objects are destroyed on shutdown.
 // ----------------------------------------------------------------------------

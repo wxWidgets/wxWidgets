@@ -362,10 +362,21 @@ public:
 
     virtual bool EnablePersistentStorage(bool WXUNUSED(enable)) { return false; }
 
+    void SetDebugLogger(std::unique_ptr<wxWebRequestDebugLogger> logger)
+        { m_debugLogger = std::move(logger); }
+
+    // Return raw, non owning pointer to the debug logger (may be null).
+    wxWebRequestDebugLogger* GetDebugLogger() const
+        { return m_debugLogger.get(); }
+
 protected:
     explicit wxWebSessionImpl(Mode mode);
 
     bool IsAsync() const { return m_mode == Mode::Async; }
+
+
+    // If non-null, use it to log debug information.
+    std::unique_ptr<wxWebRequestDebugLogger> m_debugLogger;
 
 private:
     // Make it a friend to allow accessing our m_headers.
