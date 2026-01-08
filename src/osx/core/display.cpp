@@ -24,6 +24,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/log.h"
+    #include "wx/math.h"
     #include "wx/string.h"
     #include "wx/gdicmn.h"
     #include "wx/nonownedwnd.h"
@@ -105,6 +106,7 @@ public:
     virtual wxRect GetClientArea() const override;
     virtual int GetDepth() const override;
     virtual double GetScaleFactor() const override;
+    virtual wxSize GetRawPPI() const override;
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
     virtual wxVideoMode GetCurrentMode() const override;
@@ -308,6 +310,21 @@ int wxDisplayImplMacOSX::GetDepth() const
 double wxDisplayImplMacOSX::GetScaleFactor() const
 {
     return wxGetScaleFactor(m_id);
+}
+
+wxSize wxDisplayImplMacOSX::GetRawPPI() const
+{
+    auto const sizeInMM = CGDisplayScreenSize(m_id);
+
+    // Don't use manifestly invalid values.
+    if ( sizeInMM.width <= 0 && sizeInMM.height <= 0 )
+        return wxDisplay::GetStdPPI();
+
+    const wxRect geometry = GetGeometry();
+    const double ppiX = geometry.width * 25.4 / sizeInMM.width;
+    const double ppiY = geometry.height * 25.4 / sizeInMM.height;
+
+    return wxSize(wxRound(ppiX), wxRound(ppiY));
 }
 
 static int wxOSXCGDisplayModeGetBitsPerPixel( CGDisplayModeRef theValue )

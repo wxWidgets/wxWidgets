@@ -167,6 +167,16 @@ wxSize wxDisplay::GetPPI() const
     return m_impl->GetPPI();
 }
 
+wxSize wxDisplay::GetRawPPI() const
+{
+    wxCHECK_MSG( IsOk(), wxSize(), wxT("invalid wxDisplay object") );
+
+    if ( !m_impl->IsConnected() )
+        return wxSize();
+
+    return m_impl->GetRawPPI();
+}
+
 double wxDisplay::GetScaleFactor() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
