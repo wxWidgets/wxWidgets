@@ -1211,6 +1211,12 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
     return (void *)(LONG_PTR)::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)data);
 }
 
+// Helper function to get the non-truncated face name from an HFONT
+WXDLLIMPEXP_CORE wxString GetMSWFaceNameFromHFONT(HFONT hFont);
+
+// Helper function to known if the facename might be truncated or not
+WXDLLIMPEXP_CORE bool IsFullMSWFaceName(wxString facename);
+
 #endif // wxUSE_GUI && __WXMSW__
 
 #endif // _WX_PRIVATE_H_

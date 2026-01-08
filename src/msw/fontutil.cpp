@@ -32,6 +32,7 @@
 #include "wx/encinfo.h"
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
+#include "wx/scopeguard.h"
 
 // ============================================================================
 // implementation
@@ -278,3 +279,49 @@ wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 }
 
 #endif // WXWIN_COMPATIBILITY_3_0
+
+// ----------------------------------------------------------------------------
+// Helper function to get the actual face name from an HFONT
+// ----------------------------------------------------------------------------
+
+wxString GetMSWFaceNameFromHFONT(HFONT hFont)
+{
+    ScreenHDC hdc;
+    SelectInHDC selectFont(hdc, hFont);
+
+    UINT otmSize = GetOutlineTextMetrics(hdc, 0, nullptr);
+    if ( !otmSize )
+    {
+        wxLogLastError("GetOutlineTextMetrics(nullptr)");
+        return wxString();
+    }
+
+    OUTLINETEXTMETRIC * const
+        otm = static_cast<OUTLINETEXTMETRIC *>(malloc(otmSize));
+    wxON_BLOCK_EXIT1( free, otm );
+
+    otm->otmSize = otmSize;
+    if ( !GetOutlineTextMetrics(hdc, otmSize, otm) )
+    {
+        wxLogLastError("GetOutlineTextMetrics()");
+        return wxString();
+    }
+
+    // in spite of its type, the otmpFamilyName field of OUTLINETEXTMETRIC
+    // gives an offset in _bytes_ of the face (not family!) name from the
+    // struct start while the name itself is an array of TCHARs
+    //
+    // FWIW otmpFaceName contains the same thing as otmpFamilyName followed
+    // by a possible " Italic" or " Bold" or something else suffix
+    return reinterpret_cast<wxChar *>(otm) +
+                wxPtrToUInt(otm->otmpFamilyName)/sizeof(wxChar);
+}
+
+// ----------------------------------------------------------------------------
+// Helper function to known if the facename might be truncated or not.
+// ----------------------------------------------------------------------------
+
+bool IsFullMSWFaceName(wxString facename)
+{
+    return facename.size() == (LF_FACESIZE - 1);
+}

@@ -115,7 +115,7 @@ public:
     wxString GetFaceName() const
     {
         wxString facename = m_nativeFontInfo.GetFaceName();
-        if ( facename.empty() )
+        if ( facename.empty() || IsFullMSWFaceName(facename) )
         {
             facename = GetMSWFaceName();
             if ( !facename.empty() )
@@ -271,35 +271,7 @@ protected:
     // use just the family for example)
     wxString GetMSWFaceName() const
     {
-        ScreenHDC hdc;
-        SelectInHDC selectFont(hdc, (HFONT)GetHFONT());
-
-        UINT otmSize = GetOutlineTextMetrics(hdc, 0, nullptr);
-        if ( !otmSize )
-        {
-            wxLogLastError("GetOutlineTextMetrics(nullptr)");
-            return wxString();
-        }
-
-        OUTLINETEXTMETRIC * const
-            otm = static_cast<OUTLINETEXTMETRIC *>(malloc(otmSize));
-        wxON_BLOCK_EXIT1( free, otm );
-
-        otm->otmSize = otmSize;
-        if ( !GetOutlineTextMetrics(hdc, otmSize, otm) )
-        {
-            wxLogLastError("GetOutlineTextMetrics()");
-            return wxString();
-        }
-
-        // in spite of its type, the otmpFamilyName field of OUTLINETEXTMETRIC
-        // gives an offset in _bytes_ of the face (not family!) name from the
-        // struct start while the name itself is an array of TCHARs
-        //
-        // FWIW otmpFaceName contains the same thing as otmpFamilyName followed
-        // by a possible " Italic" or " Bold" or something else suffix
-        return reinterpret_cast<wxChar *>(otm) +
-                    wxPtrToUInt(otm->otmpFamilyName)/sizeof(wxChar);
+        return GetMSWFaceNameFromHFONT((HFONT)GetHFONT());
     }
 
     // are we using m_nativeFontInfo.lf.lfHeight for point size or pixel size?
