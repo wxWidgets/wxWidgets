@@ -24,6 +24,8 @@
 #include "wx/uri.h"
 #include "wx/wfstream.h"
 
+#include "wx/private/make_unique.h"
+
 #include <memory>
 #include <unordered_map>
 
@@ -221,6 +223,54 @@ protected:
             REQUIRE( insecure.ToInt(&flags) );
 
             GetRequest().MakeInsecure(flags);
+        }
+
+        wxString debug;
+        if ( wxGetEnv("WX_TEST_WEBREQUEST_DEBUG", &debug ) )
+        {
+            class DebugLogger : public wxWebRequestDebugLogger
+            {
+            public:
+                virtual void OnInfo(const wxString& info) override
+                {
+                    wxFprintf(stderr, "// %s\n", info);
+                }
+
+                virtual void OnRequestSent(const wxString& line) override
+                {
+                    wxFprintf(stderr, "=> %s\n", line);
+                }
+
+                virtual void OnResponseReceived(const wxString& line) override
+                {
+                    wxFprintf(stderr, "<= %s\n", line);
+                }
+
+                virtual void OnHeaderSent(const wxString& name, const wxString& value) override
+                {
+                    wxFprintf(stderr, "-> %s: %s\n", name, value);
+                }
+
+                virtual void OnHeaderReceived(const wxString& name, const wxString& value) override
+                {
+                    wxFprintf(stderr, "<- %s: %s\n", name, value);
+                }
+
+                virtual void OnDataSent(const void* WXUNUSED(data), size_t size) override
+                {
+                    wxFprintf(stderr, "-> data (%zu bytes)\n", size);
+                }
+
+                virtual void OnDataReceived(const void* WXUNUSED(data), size_t size) override
+                {
+                    wxFprintf(stderr, "<- data (%zu bytes)\n", size);
+                }
+            };
+
+            if ( debug == "1" )
+                GetSession().SetDebugLogger(std::make_unique<DebugLogger>());
+            else
+                WARN("Unknown WX_TEST_WEBREQUEST_DEBUG value: " << debug);
         }
     }
 
