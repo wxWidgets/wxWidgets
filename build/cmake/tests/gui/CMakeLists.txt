@@ -124,7 +124,6 @@ set(TEST_GUI_SRC
     testprec.h
     testableframe.h
     asserthelper.h
-    testdate.h
     testfile.h
     testimage.h
     controls/bookctrlbasetest.h

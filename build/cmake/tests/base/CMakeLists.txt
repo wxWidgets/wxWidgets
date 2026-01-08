@@ -95,7 +95,6 @@ set(TEST_SRC
 
     testprec.h
     testableframe.h
-    testdate.h
     testfile.h
     archive/archivetest.h
     streams/bstream.h

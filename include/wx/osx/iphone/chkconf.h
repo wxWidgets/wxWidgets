@@ -11,6 +11,18 @@
 #ifndef _WX_OSX_IPHONE_CHKCONF_H_
 #define _WX_OSX_IPHONE_CHKCONF_H_
 
+#if wxUSE_MIMETYPE
+#undef wxUSE_MIMETYPE
+#define wxUSE_MIMETYPE 0
+#endif
+
+#if wxUSE_SECRETSTORE
+    #undef wxUSE_SECRETSTORE
+    #define wxUSE_SECRETSTORE 0
+#endif
+
+#if wxUSE_GUI
+
 /*
  * text rendering system
  */
@@ -27,11 +39,6 @@
 /*
  * turning off capabilities that don't work under iphone yet
  */
-
-#if wxUSE_MIMETYPE
-#undef wxUSE_MIMETYPE
-#define wxUSE_MIMETYPE 0
-#endif
 
 #if wxUSE_MDI
 #undef wxUSE_MDI
@@ -355,15 +362,12 @@
 #define wxUSE_WEBVIEW 0
 #endif
 
-#if wxUSE_SECRETSTORE
-    #undef wxUSE_SECRETSTORE
-    #define wxUSE_SECRETSTORE 0
-#endif
-
 // IconRef datatype does not exist on iOS
 
 #undef wxOSX_USE_ICONREF
 #define wxOSX_USE_ICONREF 0
+
+#endif // wxUSE_GUI
 
 #endif
     /* _WX_OSX_IPHONE_CHKCONF_H_ */

@@ -21,7 +21,7 @@ class wxFDIODispatcher;
 class wxWakeUpPipeMT;
 
 class WXDLLIMPEXP_BASE wxConsoleEventLoop
-#ifdef __WXOSX__
+#ifdef __DARWIN__
 : public wxCFEventLoop
 #else
 : public wxEventLoopManual

@@ -439,8 +439,18 @@ function(wx_set_target_properties target_name)
         target_link_libraries(${target_name}
             PUBLIC ${wxTOOLKIT_LIBRARIES})
     endif()
-    target_compile_definitions(${target_name}
-        PUBLIC ${wxTOOLKIT_DEFINITIONS})
+
+    if(wxTARGET_IS_BASE)
+        # Currently base libraries still use toolkit definitions internally.
+        # This is wrong and should, ideally, be fixed, but for now keep
+        # defining them. However we don't need to define this for the targets
+        # using the base library.
+        target_compile_definitions(${target_name}
+            PRIVATE ${wxTOOLKIT_DEFINITIONS})
+    else()
+        target_compile_definitions(${target_name}
+            PUBLIC ${wxTOOLKIT_DEFINITIONS})
+    endif()
 
     if(wxBUILD_SHARED)
         string(TOUPPER ${target_name_short} target_name_upper)
