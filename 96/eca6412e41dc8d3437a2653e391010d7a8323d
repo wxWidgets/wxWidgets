@@ -1,0 +1,1 @@
+wxAll (GUI): Provide safer API for detecting closing wxTipWindow (Bill Su, #26070).
