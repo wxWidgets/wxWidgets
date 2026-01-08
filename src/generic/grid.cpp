@@ -6225,14 +6225,16 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
         {
             int height = m_rowHeights[i];
 
-            // Skip hidden rows.
-            if ( height <= 0 )
-                continue;
-
+            // Note that even hidden rows heights must be scaled to ensure that
+            // they appear in the expected size if they are shown again.
             height = event.ScaleY(height);
-            total += height;
 
             m_rowHeights[i] = height;
+
+            // But don't count hidden rows for the total height.
+            if ( height > 0 )
+                total += height;
+
             m_rowBottoms[i] = total;
         }
     }
@@ -6249,13 +6251,13 @@ void wxGrid::OnDPIChanged(wxDPIChangedEvent& event)
         {
             int width = m_colWidths[i];
 
-            if ( width <= 0 )
-                continue;
-
             width = event.ScaleX(width);
-            total += width;
 
             m_colWidths[i] = width;
+
+            if ( width > 0 )
+                total += width;
+
             m_colRights[i] = total;
 
             if ( colHeader )
