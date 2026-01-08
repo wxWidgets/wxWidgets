@@ -255,6 +255,7 @@ Changes in behaviour which may result in build errors
 wxMSW:
 
 - Don't use first image for wxListCtrl items without images (#26062).
+- Handle font names longer than 31 characters (moi15moi, #25333).
 
 wxOSX:
 
