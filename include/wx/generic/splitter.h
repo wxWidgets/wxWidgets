@@ -186,6 +186,8 @@ public:
     // minimum pane size is zero.
     virtual void OnDoubleClickSash(int x, int y);
 
+    bool AcceptsFocus() const override { return false; }
+
 ////////////////////////////////////////////////////////////////////////////
 // Implementation
 
