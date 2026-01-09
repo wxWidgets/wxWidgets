@@ -34,7 +34,7 @@ public:
     //
     // Note that this is not a wxWeakRef<> because this is set to nullptr when
     // wxTipWindow is closed, which may be "long" before wxTipWindow is
-    // destroyed, bug wxWeakRef<> is set to nullptr on object destruction
+    // destroyed, but wxWeakRef<> is set to nullptr on object destruction
     class WXDLLIMPEXP_CORE Ref
     {
     public:

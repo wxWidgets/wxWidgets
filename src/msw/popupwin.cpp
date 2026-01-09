@@ -22,6 +22,7 @@
 #if wxUSE_POPUPWIN
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
 #endif //WX_PRECOMP
 
 #include "wx/popupwin.h"
@@ -238,14 +239,17 @@ wxPopupTransientWindow::MSWHandleMessage(WXLRESULT *result,
         case WM_ACTIVATE:
             if ( wParam == WA_INACTIVE )
             {
-                // We need to dismiss this window, however doing it directly
-                // from here seems to confuse ::ShowWindow(), which ends up
-                // calling this handler, and may result in losing activation
-                // entirely, so postpone it slightly.
-                //
-                // Also note that the active window hasn't changed yet, so we
-                // postpone calling it until DismissOnDeactivate() is executed.
-                CallAfter(&wxPopupTransientWindow::DismissOnDeactivate);
+                if (!wxTheApp->IsScheduledForDestruction(this))
+                {
+                    // We need to dismiss this window, however doing it directly
+                    // from here seems to confuse ::ShowWindow(), which ends up
+                    // calling this handler, and may result in losing activation
+                    // entirely, so postpone it slightly.
+                    //
+                    // Also note that the active window hasn't changed yet, so we
+                    // postpone calling it until DismissOnDeactivate() is executed.
+                    CallAfter(&wxPopupTransientWindow::DismissOnDeactivate);
+                }
             }
             break;
     }
