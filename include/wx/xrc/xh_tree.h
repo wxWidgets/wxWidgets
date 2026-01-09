@@ -22,6 +22,10 @@ public:
     wxTreeCtrlXmlHandler();
     virtual wxObject *DoCreateResource() wxOVERRIDE;
     virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+
+private: // Bricsys added
+    wxObject* HandleTreeCtrl();
+    wxObject* HandleGenericCtrl();
 };
 
 #endif // wxUSE_XRC && wxUSE_TREECTRL

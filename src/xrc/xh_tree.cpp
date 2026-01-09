@@ -15,6 +15,7 @@
 
 #include "wx/xrc/xh_tree.h"
 #include "wx/treectrl.h"
+#include "wx/generic/treectlg.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTreeCtrlXmlHandler, wxXmlResourceHandler);
 
@@ -42,17 +43,34 @@ wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler()
 
 wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
 {
+    if (m_class == "wxTreeCtrl") // Bricsys changed
+    {
+        return HandleTreeCtrl();
+    }
+    else if (m_class == "wxGenericTreeCtrl") // Bricsys added
+    {
+        return HandleGenericCtrl();
+    }
+    return NULL;
+}
+
+bool wxTreeCtrlXmlHandler::CanHandle(wxXmlNode *node)
+{
+    return IsOfClass(node, wxT("wxTreeCtrl"))
+        || IsOfClass(node, wxT("wxGenericTreeCtrl")); // Bricsys added
+}
+
+wxObject* wxTreeCtrlXmlHandler::HandleTreeCtrl() // Bricsys added
+{
     XRC_MAKE_INSTANCE(tree, wxTreeCtrl)
 
     tree->Create(m_parentAsWindow,
-                GetID(),
-                GetPosition(), GetSize(),
-                GetStyle(wxT("style"), wxTR_DEFAULT_STYLE),
-                wxDefaultValidator,
-                GetName());
+                GetID(), GetPosition(), GetSize(),
+                GetStyle("style", wxTR_DEFAULT_STYLE),
+                wxDefaultValidator, GetName());
 
     wxImageList *imagelist = GetImageList();
-    if ( imagelist )
+    if (imagelist)
         tree->AssignImageList(imagelist);
 
     SetupWindow(tree);
@@ -60,9 +78,22 @@ wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
     return tree;
 }
 
-bool wxTreeCtrlXmlHandler::CanHandle(wxXmlNode *node)
+wxObject* wxTreeCtrlXmlHandler::HandleGenericCtrl() // Bricsys added
 {
-    return IsOfClass(node, wxT("wxTreeCtrl"));
+    XRC_MAKE_INSTANCE(tree, wxGenericTreeCtrl)
+
+    tree->Create(m_parentAsWindow,
+                GetID(), GetPosition(), GetSize(),
+                GetStyle("style", wxTR_DEFAULT_STYLE),
+                wxDefaultValidator, GetName());
+
+    wxImageList *imagelist = GetImageList();
+    if (imagelist)
+        tree->AssignImageList(imagelist);
+
+    SetupWindow(tree);
+
+    return tree;
 }
 
 #endif // wxUSE_XRC && wxUSE_TREECTRL

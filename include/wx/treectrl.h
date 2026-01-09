@@ -449,6 +449,18 @@ private:
 // include the platform-dependent wxTreeCtrl class
 // ----------------------------------------------------------------------------
 
+#if 1 // Bricsys change: always include wxGenericTreeCtrl
+
+// NOTE: wxHAS_GENERIC_TREECTRL can best be interpreted as "does NOT have a native tree control";
+// it is true on all platforms except Windows and in such case, wxTreeCtrl and wxGenericTreeCtrl are one and the same
+
+#include "wx/generic/treectlg.h"
+#if defined(__WXMSW__)
+    #include "wx/msw/treectrl.h"
+#endif
+
+#else
+
 #ifdef wxHAS_GENERIC_TREECTRL
     #include "wx/generic/treectlg.h"
 #elif defined(__WXMSW__)
@@ -458,6 +470,8 @@ private:
 #else
     #error "unknown native wxTreeCtrl implementation"
 #endif
+
+#endif // Bricsys change
 
 #endif // wxUSE_TREECTRL
 
