@@ -249,23 +249,28 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         wxASSERT(state == GTK_STATE_ACTIVE);
         stateFlag = GTK_STATE_FLAG_ACTIVE;
     }
+
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
-    gtk_style_context_save(sc);
     GdkRGBA *fc, *bc;
-    wxNativeFontInfo info;
-    gtk_style_context_set_state(sc, stateFlag);
-    gtk_style_context_get(sc, stateFlag,
-        "color", &fc, "background-color", &bc,
-        GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
-    gtk_style_context_restore(sc);
-    attr.colFg = wxColour(*fc);
-    attr.colBg = wxColour(*bc);
-    attr.font = wxFont(info);
-    gdk_rgba_free(fc);
-    gdk_rgba_free(bc);
+    if(gtk_widget_get_realized(widget))
+    {
+        gtk_style_context_save(sc);
+        wxNativeFontInfo info;
+        gtk_style_context_set_state(sc, stateFlag);
+        gtk_style_context_get(sc, stateFlag,
+            "color", &fc, "background-color", &bc,
+            GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
+        gtk_style_context_restore(sc);
+        attr.colFg = wxColour(*fc);
+        attr.colBg = wxColour(*bc);
+        attr.font = wxFont(info);
+        gdk_rgba_free(fc);
+        gdk_rgba_free(bc);
+    }
 
     // Go up the parent chain for a background color
-    while (attr.colBg.Alpha() == 0 && (widget = gtk_widget_get_parent(widget)))
+    while ( (!attr.colBg.IsOk() || attr.colBg.Alpha() == 0) &&
+        (widget = gtk_widget_get_parent(widget)))
     {
         sc = gtk_widget_get_style_context(widget);
         gtk_style_context_save(sc);
