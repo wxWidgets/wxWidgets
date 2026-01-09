@@ -27,6 +27,7 @@
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
 #include "wx/splitter.h"
+#include "wx/treectrl.h"
 #include "wx/time.h"
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
@@ -566,7 +567,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 }
 
 void
-wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
+wxRendererMac::DrawItemSelectionRect(wxWindow * win,
                                      wxDC& dc,
                                      const wxRect& rect,
                                      int flags)
@@ -603,6 +604,14 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
 
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
+    if (win->IsKindOf(wxCLASSINFO(wxTreeCtrl)))
+    {
+        if (!win->HasFlag(wxTR_MULTIPLE))
+        {
+            dc.DrawRoundedRectangle( rect, 8 );
+            return;
+        }
+    }
     dc.DrawRectangle( rect );
 }
 
