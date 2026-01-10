@@ -34,6 +34,9 @@ bool wxCheckBox::Create(wxWindow *parent,
     m_labelOrig = m_label = label ;
 
     WXValidateStyle( &style );
+
+    SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+
     SetPeer(wxWidgetImpl::CreateCheckBox( this, parent, id, label, pos, size, style, GetExtraStyle() )) ;
 
     MacPostControlCreate(pos, size) ;

@@ -39,6 +39,8 @@ bool wxStaticText::Create( wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
         return false;
 
+    SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+
     SetPeer(wxWidgetImpl::CreateStaticText( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
