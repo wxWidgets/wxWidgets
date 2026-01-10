@@ -331,6 +331,14 @@ wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& s
 wxGCC_WARNING_SUPPRESS(cast-qual)
 wxGCC_WARNING_SUPPRESS(double-promotion)
 
+// Workaround for GCC < 5 which puts isnan() in std:: namespace only when
+// <cmath> is included (which happens via wx headers above), while nanosvg
+// expects it in the global namespace.
+#if defined(__GNUC__) && __GNUC__ < 5 && !defined(isnan)
+    #include <cmath>
+    using std::isnan;
+#endif
+
 #if !wxUSE_NANOSVG_EXTERNAL || defined(wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL)
     #define NANOSVG_IMPLEMENTATION
     #define NANOSVGRAST_IMPLEMENTATION
