@@ -152,6 +152,27 @@ public:
     // returns 0 if no scrollbars are there.
     int GetScrollLines( int orient ) const;
 
+    // wxWidgets <= 3.3.1 autoscrolled exactly when the (captured) mouse cursor
+    // was outside the entire window.  Starting with wxWidgets 3.3.2, the
+    // region where the mouse cursor triggers autoscrolling is configurable.
+    // If the inner scroll zone is default, then the autoscroll region is
+    // relative to the WINDOW rect, and has width of size outer scroll zone.
+    // If the outer scroll zone width is default, then it extends infinitely
+    // outward from the WINDOW rect, and the behavior is the same as
+    // wxWidgets 3.3.1.  If the inner scroll zone is non-default, then the
+    // autoscroll region is relative to the CLIENT rect since that avoids
+    // requiring the user to figure out how the width of scroll region
+    // interacts with the scrollbar.
+    void SetInnerScrollZone(wxCoord innerZone);
+    void SetOuterScrollZone(wxCoord outerZone);
+
+    // Check whether clientPt triggers autoscrolling in each direction: return
+    // true if it does and fill the corresponing output parameter with the
+    // event type to generate.
+    bool AutoscrollTest(wxPoint clientPt,
+                        wxEventType& evtHorzScroll,
+                        wxEventType& evtVertScroll) const;
+
     // Set the x, y scrolling increments.
     void SetScrollRate( int xstep, int ystep );
 
@@ -263,8 +284,10 @@ public:
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
     void HandleOnSize(wxSizeEvent& event);
-    void HandleOnMouseEnter(wxMouseEvent& event);
-    void HandleOnMouseLeave(wxMouseEvent& event);
+    void OnMotion(wxMouseEvent& event);
+    void OnLeftDown(wxMouseEvent& event);
+    void OnLeaveAutoScrollRegion();
+    void OnEnterAutoScrollRegion();
 #if wxUSE_MOUSEWHEEL
     void HandleOnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
@@ -344,6 +367,10 @@ protected:
         return true;
     }
 
+
+    wxCoord               m_innerScrollZone = wxDefaultCoord;
+    wxCoord               m_outerScrollZone = wxDefaultCoord;
+    bool                  m_inAutoScrollRegion = false;
 
     double                m_scaleX;
     double                m_scaleY;
