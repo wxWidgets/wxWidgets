@@ -669,7 +669,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <sys-lib>$(LIB_JPEG)</sys-lib>
         <sys-lib>$(LIB_PNG)</sys-lib>
         <sys-lib>$(LIB_WEBP)</sys-lib>
-        <sys-lib>$(LIB_LUNASVG_IF_MONO)</sys-lib>
+        <sys-lib>$(LIB_LUNASVG)</sys-lib>
         <ldlibs>$(LIB_GTK)</ldlibs>
         <ldlibs>$(EXTRALIBS_FOR_GUI)</ldlibs>
     </template>
@@ -683,9 +683,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     </set>
     <set var="LIB_LEXILLA_IF_MONO">
         <if cond="MONOLITHIC=='1' and USE_STC=='1'">$(LIB_LEXILLA)</if>
-    </set>
-    <set var="LIB_LUNASVG_IF_MONO">
-        <if cond="MONOLITHIC=='1' and USE_LUNASVG=='1'">$(LIB_LUNASVG)</if>
     </set>
     <template id="wx_append_base" template_append="wx_append_base_nomono">
         <!-- Always link against the full wx library in monolithic build and
