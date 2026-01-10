@@ -90,26 +90,6 @@ private:
 // private functions
 // ----------------------------------------------------------------------------
 
-
-// Helper function to get the non-truncated face name from a LOGFONT.
-static wxString GetMSWFaceNameFromLogFont(const LOGFONT* lf)
-{
-    if ( !lf )
-    {
-        wxLogLastError("LOGFONT is NULL");
-        return wxString("");
-    }
-
-    AutoHFONT hFont(*lf);
-    if ( !hFont )
-    {
-        wxLogLastError("CreateFontIndirect");
-        return lf->lfFaceName;
-    }
-
-    return GetMSWFaceNameFromHFONT(hFont);
-}
-
 int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
                                   DWORD dwStyle, LPARAM lParam);
 
@@ -176,12 +156,20 @@ bool wxFontEnumeratorHelper::OnFont(const LPLOGFONT lf,
                                     const LPTEXTMETRIC tm) const
 {
     wxString facename = lf->lfFaceName;
-    if ( facename.empty() || IsFullMSWFaceName(facename) )
+    if ( facename.empty() || wxIsFaceNamePossiblyTruncated(facename) )
     {
-        wxString nonTruncatedFacename = GetMSWFaceNameFromLogFont(lf);
-        if ( !nonTruncatedFacename.empty() )
+        AutoHFONT hFont(*lf);
+        if ( !hFont )
         {
-            facename = nonTruncatedFacename;
+            wxLogLastError("CreateFontIndirect");
+        }
+        else
+        {
+            const wxString fullname = wxGetMSWFaceNameFromHFONT(hFont);
+            if ( !fullname.empty() )
+            {
+                facename = fullname;
+            }
         }
     }
 
