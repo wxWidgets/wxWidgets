@@ -31,8 +31,6 @@ bool wxRadioButton::Create( wxWindow *parent,
 
     m_labelOrig = m_label = label;
 
-    SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
-
     SetPeer(wxWidgetImpl::CreateRadioButton( this, parent, id, label, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
