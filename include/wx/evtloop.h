@@ -229,6 +229,8 @@ private:
 
 #if defined(__WINDOWS__) || defined(__WXDFB__) || (defined(__UNIX__) && !defined(__DARWIN__))
 
+#define wxHAS_EVENTLOOP_MANUAL
+
 // this class can be used to implement a standard event loop logic using
 // Pending() and Dispatch()
 //
