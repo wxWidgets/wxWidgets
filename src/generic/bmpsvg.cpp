@@ -19,6 +19,10 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+// This is required by NanoSVG headers. Include it before any wx headers to
+// avoid potential conflicts (see comments in nanosvg implementation section).
+#include <stdio.h>
+
 #if defined(wxHAS_SVG) && wxUSE_LUNASVG
     #if ( !wxCHECK_CXX_STD(17) )
         #error wxUSE_LUNASVG requires C++17 or later
@@ -316,9 +320,6 @@ wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& s
 // headers, notably wx/unichar.h which defines global operator==() overloads
 // for wxUniChar that confuse OpenVMS C++ compiler and break compilation of
 // these headers with errors about ambiguous operator==(char,enum).
-
-// This is required by NanoSVG headers, but not included by them.
-#include <stdio.h>
 
 // Disable some warnings inside NanoSVG code that we're not interested in.
 #ifdef __VISUALC__
