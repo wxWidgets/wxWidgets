@@ -50,6 +50,12 @@ protected :
 #endif // wxUSE_MARKUP && wxOSX_USE_COCOA
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText);
+    
+    void DoUpdateBackground();
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+private:
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif

@@ -19,11 +19,16 @@
     #include "wx/dc.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
+    #include "wx/statbox.h"
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
 
 #include <stdio.h>
+
+wxBEGIN_EVENT_TABLE(wxStaticText, wxStaticTextBase)
+    EVT_SYS_COLOUR_CHANGED( wxStaticText::OnSysColourChanged )
+wxEND_EVENT_TABLE()
 
 
 bool wxStaticText::Create( wxWindow *parent,
@@ -52,7 +57,31 @@ bool wxStaticText::Create( wxWindow *parent,
         SetInitialSize(size);
     }
 
+    DoUpdateBackground();
+
     return true;
+}
+
+void wxStaticText::DoUpdateBackground()
+{
+#if wxOSX_USE_COCOA_OR_CARBON
+    if ((GetParent() != nullptr) && GetParent()->IsKindOf(wxCLASSINFO(wxStaticBox)))
+    {
+        if (wxSystemSettings::GetAppearance().IsDark())
+        {
+            SetBackgroundColour( wxColour( 37, 37, 37 ) );
+        }
+        else
+        {
+            SetBackgroundColour( wxColour( 247, 247, 247 ) );
+        }
+    }
+#endif
+}
+
+void wxStaticText::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+{
+    DoUpdateBackground();
 }
 
 void wxStaticText::SetLabel(const wxString& label)
