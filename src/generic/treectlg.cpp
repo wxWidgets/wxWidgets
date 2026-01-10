@@ -2562,12 +2562,20 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int total_h = GetLineHeight(item);
     bool drawItemBackground = false,
-         hasBgColour = false;
+         hasBgColour = false,
+         drawRounded = false;
 
     if ( item->IsSelected() )
     {
         dc.SetBrush(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush);
         drawItemBackground = true;
+
+        if (!HasFlag(wxTR_MULTIPLE))
+        {
+            // Allow macOS renderer to draw a rounded rect, but only
+            // when no horizontal scrolling is needed
+            drawRounded = GetClientSize().x >= GetVirtualSize().x;
+        }
     }
     else
     {
@@ -2605,7 +2613,8 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                 flags |= wxCONTROL_FOCUSED;
             if ((item == m_current) && (m_hasFocus))
                 flags |= wxCONTROL_CURRENT;
-
+            if (drawRounded)
+                flags |= wxRENDER_SELECTION_SINGLE_ROUND;
             wxRendererNative::Get().
                 DrawItemSelectionRect(this, dc, rect, flags);
         }
@@ -2630,6 +2639,8 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
                 flags |= wxCONTROL_FOCUSED;
             if ((item == m_current) && (m_hasFocus))
                 flags |= wxCONTROL_CURRENT;
+            if (drawRounded)
+                flags |= wxRENDER_SELECTION_SINGLE_ROUND;
             wxRendererNative::Get().
                 DrawItemSelectionRect(this, dc, rect, flags);
         }

@@ -604,15 +604,14 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
 
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
-    if (win->IsKindOf(wxCLASSINFO(wxTreeCtrl)))
+    if ((flags & wxRENDER_SELECTION_SINGLE_ROUND) != 0)
     {
-        if (!win->HasFlag(wxTR_MULTIPLE))
-        {
-            dc.DrawRoundedRectangle( rect, 8 );
-            return;
-        }
+        dc.DrawRoundedRectangle( rect, 8 );
+    } 
+    else
+    {
+        dc.DrawRectangle( rect );
     }
-    dc.DrawRectangle( rect );
 }
 
 

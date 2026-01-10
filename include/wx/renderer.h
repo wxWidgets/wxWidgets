@@ -77,6 +77,16 @@ enum
     wxCONTROL_DIRTY      = 0x80000000
 };
 
+// control state flags for different selection rectangle (on e.g. macOS)
+enum
+{
+    wxRENDER_SELECTION_SINGLE_ROUND  = 0x00001000,  // single round selection
+    wxRENDER_SELECTION_FIRST_ROUND   = 0x00002000,  // top of multiple round selection
+    wxRENDER_SELECTION_MIDDLE_ROUND  = 0x00004000,  // mid of multiple round selection
+    wxRENDER_SELECTION_LAST_ROUND    = 0x00008000,  // bottom of multiple round selection
+    wxRENDER_SELECTION_MASK          = 0x0000F000,  // bottom of multiple round selection
+};
+
 // title bar buttons supported by DrawTitleBarBitmap()
 //
 // NB: they have the same values as wxTOPLEVEL_BUTTON_XXX constants in
