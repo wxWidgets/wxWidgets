@@ -602,12 +602,52 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
     }
     wxBrush selBrush( col );
 
+    // macOS NSTableView has whitespace left and right of the first and last
+    // data columns and only draws the border where the actual columns begins.
+    // wxWidgets generic controls don't do this, so add a bit of distance to
+    // the border
+    int distanceFromBorder = 8; 
+
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
     if ((flags & wxCONTROL_SELECTION_ROUND) != 0)
     {
         dc.DrawRoundedRectangle( rect, 8 );
-    } 
+    }
+    else
+    if ((flags & wxCONTROL_ITEM_FIRST) != 0)
+    {
+        dc.DrawRoundedRectangle( rect, 8 );
+        wxRect bottomrect = rect;
+        bottomrect.y = bottomrect.y + bottomrect.height-8;
+        bottomrect.height = 8;
+        dc.DrawRectangle( bottomrect );
+    }
+    else
+    if ((flags & wxCONTROL_ITEM_LAST) != 0)
+    {
+        wxRect toprect = rect;
+        toprect.height = 8;
+        dc.DrawRectangle( toprect );
+        dc.DrawRoundedRectangle( rect, 8 );
+        if (rect.width > distanceFromBorder*2)
+        {
+            wxColour lineColour = col.ChangeLightness( ((flags & wxCONTROL_FOCUSED) != 0) ? 125 : 95 );
+            dc.SetPen( wxPen( lineColour ));
+            dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );
+        }
+    }
+    else
+    if ((flags & wxCONTROL_ITEM_MIDDLE) != 0)
+    {
+        dc.DrawRectangle( rect );
+        if (rect.width > distanceFromBorder*2)
+        {
+            wxColour lineColour = col.ChangeLightness( ((flags & wxCONTROL_FOCUSED) != 0) ? 125 : 95 );
+            dc.SetPen( wxPen( lineColour ));
+            dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );
+        }
+    }
     else
     {
         dc.DrawRectangle( rect );
