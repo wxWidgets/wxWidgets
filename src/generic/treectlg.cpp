@@ -2614,7 +2614,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             if ((item == m_current) && (m_hasFocus))
                 flags |= wxCONTROL_CURRENT;
             if (drawRounded)
-                flags |= wxRENDER_SELECTION_SINGLE_ROUND;
+                flags |= wxCONTROL_SELECTION_ROUND;
             wxRendererNative::Get().
                 DrawItemSelectionRect(this, dc, rect, flags);
         }
@@ -2640,7 +2640,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             if ((item == m_current) && (m_hasFocus))
                 flags |= wxCONTROL_CURRENT;
             if (drawRounded)
-                flags |= wxRENDER_SELECTION_SINGLE_ROUND;
+                flags |= wxCONTROL_SELECTION_ROUND;
             wxRendererNative::Get().
                 DrawItemSelectionRect(this, dc, rect, flags);
         }

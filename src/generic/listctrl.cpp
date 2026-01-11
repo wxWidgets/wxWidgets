@@ -690,6 +690,9 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
             flags |= wxCONTROL_FOCUSED;
         if (current)
            flags |= wxCONTROL_CURRENT;
+        if (listctrl->HasFlag(wxLC_SINGLE_SEL)) {
+            flags |= wxCONTROL_SELECTION_ROUND;
+        }
         wxRendererNative::Get().
             DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
     }

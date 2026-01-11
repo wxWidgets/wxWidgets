@@ -604,7 +604,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
 
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
-    if ((flags & wxRENDER_SELECTION_SINGLE_ROUND) != 0)
+    if ((flags & wxCONTROL_SELECTION_ROUND) != 0)
     {
         dc.DrawRoundedRectangle( rect, 8 );
     } 

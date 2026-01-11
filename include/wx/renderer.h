@@ -74,17 +74,16 @@ enum
 
     // this is a pseudo flag not used directly by wxRenderer but rather by some
     // controls internally
-    wxCONTROL_DIRTY      = 0x80000000
-};
+    wxCONTROL_DIRTY      = 0x80000000,
 
-// control state flags for different selection rectangle (on e.g. macOS)
-enum
-{
-    wxRENDER_SELECTION_SINGLE_ROUND  = 0x00001000,  // single round selection
-    wxRENDER_SELECTION_FIRST_ROUND   = 0x00002000,  // top of multiple round selection
-    wxRENDER_SELECTION_MIDDLE_ROUND  = 0x00004000,  // mid of multiple round selection
-    wxRENDER_SELECTION_LAST_ROUND    = 0x00008000,  // bottom of multiple round selection
-    wxRENDER_SELECTION_MASK          = 0x0000F000,  // bottom of multiple round selection
+    // used to indicate a round selection on e.g. macOS
+    wxCONTROL_SELECTION_ROUND  = 0x40000000,
+
+    // used to indicate a sub item within e.g. selections or header controls parts
+    wxCONTROL_ITEM_FIRST       = wxCONTROL_SPECIAL,
+    wxCONTROL_ITEM_MIDDLE      = 0x20000000,
+    wxCONTROL_ITEM_LAST        = wxCONTROL_DIRTY,
+    wxCONTROL_ITEM_MASK        = wxCONTROL_ITEM_FIRST | wxCONTROL_ITEM_MIDDLE | wxCONTROL_ITEM_LAST
 };
 
 // title bar buttons supported by DrawTitleBarBitmap()
