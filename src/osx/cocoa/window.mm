@@ -28,6 +28,8 @@
 #include "wx/private/bmpbndl.h"
 
 #include "wx/evtloop.h"
+#include "wx/panel.h"
+#include "wx/spinctrl.h"
 
 #if wxUSE_CARET
     #include "wx/caret.h"
@@ -175,6 +177,12 @@ void wxWidgetCocoaImpl::ApplyScrollViewBorderType()
     [static_cast<NSScrollView*>(m_osxView) setBorderType:borderType];
 }
 
+
+@interface wxNSViewWithDrawing : NSView
+{
+}
+
+@end // wxNSViewWithDrawing
 
 @interface wxNSView : NSView
 {
@@ -908,7 +916,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     }
 }
 
-@implementation wxNSView
+@implementation wxNSViewWithDrawing
 
 + (void)initialize
 {
@@ -917,6 +925,28 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+#if wxOSX_USE_NATIVE_FLIPPED
+- (BOOL)isFlipped
+{
+    return YES;
+}
+#endif
+
+
+@end // wxNSViewWithDrawing
+
+@implementation wxNSView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -4346,9 +4376,23 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     long WXUNUSED(style), long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSView* v = [[wxNSView alloc] initWithFrame:r];
 
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
+    wxWidgetCocoaImpl* c = nullptr;
+
+    //  Avoid macOS 26 Tahoe triggers legacy rendering with
+    //  brown background
+    if (wxpeer->IsKindOf(wxCLASSINFO(wxPanel)) 
+      || wxpeer->IsKindOf(wxCLASSINFO(wxSpinCtrl))
+      || wxpeer->IsKindOf(wxCLASSINFO(wxSpinCtrlDouble)))
+    {
+        wxNSView* v = [[wxNSView alloc] initWithFrame:r];
+        c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
+    }
+    else
+    {
+        wxNSViewWithDrawing* v = [[wxNSViewWithDrawing alloc] initWithFrame:r];
+        c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
+    }
     return c;
 }
 

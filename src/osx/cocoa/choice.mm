@@ -34,7 +34,7 @@
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 

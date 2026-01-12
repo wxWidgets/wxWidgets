@@ -99,7 +99,7 @@
         else
 #endif
         {
-            wxOSXCocoaClassAddWXMethods(self);
+            wxOSXCocoaClassAddWXMethods(self, wxOSXSKIP_DRAW);
         }
     }
 }
