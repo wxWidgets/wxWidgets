@@ -3093,6 +3093,7 @@ set(AUI_CMN_SRC
     src/aui/auibook.cpp
     src/aui/auibar.cpp
     src/aui/tabmdi.cpp
+    src/aui/tabdocmdi.cpp
     src/aui/tabart.cpp
     src/xrc/xh_aui.cpp
     src/xrc/xh_auitoolb.cpp
@@ -3105,6 +3106,7 @@ set(AUI_CMN_HDR
     wx/aui/auibook.h
     wx/aui/auibar.h
     wx/aui/tabmdi.h
+    wx/aui/tabdocmdi.h
     wx/aui/aui.h
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
