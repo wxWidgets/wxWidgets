@@ -634,8 +634,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
             dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );
         }
     }
-    else
-    if ((flags & wxCONTROL_ITEM_MIDDLE) != 0)
+    else if ((flags & wxCONTROL_ITEM_MIDDLE) != 0)
     {
         dc.DrawRectangle( rect );
         if (rect.width > distanceFromBorder*2)
