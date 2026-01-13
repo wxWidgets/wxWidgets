@@ -614,8 +614,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
     {
         dc.DrawRoundedRectangle( rect, 8 );
     }
-    else
-    if ((flags & wxCONTROL_ITEM_FIRST) != 0)
+    else if ((flags & wxCONTROL_ITEM_FIRST) != 0)
     {
         dc.DrawRoundedRectangle( rect, 8 );
         wxRect bottomrect = rect;
