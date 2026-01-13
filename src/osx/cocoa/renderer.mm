@@ -607,28 +607,33 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
     // the border
     constexpr int distanceFromBorder = 8; 
 
+    // the radius of the rounded rectanlge
+    constexpr int radius = 8; 
+
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
-    if ((flags & wxCONTROL_SELECTION_ROUND) != 0)
+    if ((flags & wxCONTROL_SELECTION_GROUP) != 0)
     {
-        dc.DrawRoundedRectangle( rect, 8 );
+        dc.DrawRoundedRectangle( rect, radius );
     }
     else if ((flags & wxCONTROL_ITEM_FIRST) != 0)
     {
-        dc.DrawRoundedRectangle( rect, 8 );
+        dc.DrawRoundedRectangle( rect, radius );
         wxRect bottomrect = rect;
-        bottomrect.y = bottomrect.y + bottomrect.height-8;
-        bottomrect.height = 8;
+        bottomrect.y = bottomrect.y + bottomrect.height-radius;
+        bottomrect.height = radius;
         dc.DrawRectangle( bottomrect );
     }
     else if ((flags & wxCONTROL_ITEM_LAST) != 0)
     {
         wxRect toprect = rect;
-        toprect.height = 8;
+        toprect.height = radius;
         dc.DrawRectangle( toprect );
-        dc.DrawRoundedRectangle( rect, 8 );
+        dc.DrawRoundedRectangle( rect, radius );
         if (rect.width > distanceFromBorder*2)
         {
+            // wxColour::ChangeLightness( 125 ) actually adds grey to the colour.
+            // It should be just lighter.
             wxColour lineColour = col.ChangeLightness( ((flags & wxCONTROL_FOCUSED) != 0) ? 125 : 95 );
             dc.SetPen( wxPen( lineColour ));
             dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );
@@ -639,6 +644,8 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
         dc.DrawRectangle( rect );
         if (rect.width > distanceFromBorder*2)
         {
+            // wxColour::ChangeLightness( 125 ) actually adds grey to the colour.
+            // It should be just lighter.
             wxColour lineColour = col.ChangeLightness( ((flags & wxCONTROL_FOCUSED) != 0) ? 125 : 95 );
             dc.SetPen( wxPen( lineColour ));
             dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );

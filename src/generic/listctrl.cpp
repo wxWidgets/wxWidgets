@@ -691,7 +691,8 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
         if (current)
            flags |= wxCONTROL_CURRENT;
         if (listctrl->HasFlag(wxLC_SINGLE_SEL)) {
-            flags |= wxCONTROL_SELECTION_ROUND;
+            // TODO: extend this later to selecting groups of items
+            flags |= wxCONTROL_SELECTION_GROUP;
         }
         wxRendererNative::Get().
             DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
