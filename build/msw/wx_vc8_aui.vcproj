@@ -1101,6 +1101,10 @@
 				RelativePath="..\..\include\wx\xrc\xh_auitoolb.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\aui\tabdocmdi.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -1149,6 +1153,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_auitoolb.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\aui\tabdocmdi.cpp"
 				>
 			</File>
 		</Filter>
