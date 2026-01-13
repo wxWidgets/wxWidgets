@@ -27,7 +27,6 @@
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
 #include "wx/splitter.h"
-#include "wx/treectrl.h"
 #include "wx/time.h"
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
