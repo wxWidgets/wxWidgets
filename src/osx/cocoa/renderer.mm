@@ -622,8 +622,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
         bottomrect.height = 8;
         dc.DrawRectangle( bottomrect );
     }
-    else
-    if ((flags & wxCONTROL_ITEM_LAST) != 0)
+    else if ((flags & wxCONTROL_ITEM_LAST) != 0)
     {
         wxRect toprect = rect;
         toprect.height = 8;
