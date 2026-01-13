@@ -68,6 +68,8 @@ public:
     int GetThumbLength() const override;
     void SetTick(int tickPos) override;
 
+    virtual bool HasTransparentBackground() override { return true; }
+
     void Command(wxCommandEvent& event) override;
     // osx specific event handling common for all osx-ports
 
