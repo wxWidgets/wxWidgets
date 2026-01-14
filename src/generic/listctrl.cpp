@@ -693,8 +693,8 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
            flags |= wxCONTROL_CURRENT;
         wxListMainWindow *mainWindow = listctrl->m_mainWin;
 
-        if (listctrl->HasFlag(wxLC_SINGLE_SEL) || (listctrl->GetItemCount() < 2) || 
-            !listctrl->HasFlag(wxLC_REPORT) ) 
+        if (listctrl->HasFlag(wxLC_SINGLE_SEL) || (listctrl->GetItemCount() < 2) ||
+            !listctrl->HasFlag(wxLC_REPORT) )
         {
             if (mainWindow->GetClientSize().x >= mainWindow->GetVirtualSize().x)
             {

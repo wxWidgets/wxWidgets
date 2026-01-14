@@ -605,10 +605,10 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
     // data columns and only draws the border where the actual columns begins.
     // wxWidgets generic controls don't do this, so add a bit of distance to
     // the border
-    constexpr int distanceFromBorder = 8; 
+    constexpr int distanceFromBorder = 8;
 
     // the radius of the rounded rectanlge
-    constexpr int radius = 8; 
+    constexpr int radius = 8;
 
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
