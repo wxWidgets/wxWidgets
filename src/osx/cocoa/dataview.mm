@@ -1549,7 +1549,7 @@ outlineView:(NSOutlineView*)outlineView
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods(self, wxOSXSKIP_DND);  // |wxOSXSKIP_DRAW as well?
+        wxOSXCocoaClassAddWXMethods(self, wxOSXSKIP_DND_AND_DRAW );
     }
 }
 
