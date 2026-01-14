@@ -261,6 +261,7 @@ wxOSX:
 
 - Fix wxChoice default size under macOS 26 Tahoe (#26058).
 - Improve wxRichTextCtrl handling of cursor keys (Lee Ockert, #26064).
+- Show applications launched from keyboard under macOS 26 (#26095).
 
 
 3.2.9: (released 2025-12-12)
