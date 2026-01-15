@@ -1021,6 +1021,16 @@ WXDLLIMPEXP_CORE wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
 WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
 WXDLLIMPEXP_CORE wxFontEncoding wxGetFontEncFromCharSet(int charset);
 
+// Helper function to check if the facename might be truncated: if it is,
+// wxGetMSWFaceNameFromHFONT() should be used to get the full name.
+inline bool wxIsFaceNamePossiblyTruncated(const wxString& facename)
+{
+    return facename.size() == LF_FACESIZE - 1;
+}
+
+// Get full face name (i.e. possibly longer than LF_FACESIZE) from an HFONT.
+wxString wxGetMSWFaceNameFromHFONT(HFONT hFont);
+
 inline void wxSetWindowFont(HWND hwnd, const wxFont& font)
 {
     ::SendMessage(hwnd, WM_SETFONT,

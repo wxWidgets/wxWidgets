@@ -252,9 +252,16 @@ Changes in behaviour which may result in build errors
 3.2.10: (released 2026-??-??)
 -----------------------------
 
+wxMSW:
+
+- Don't use first image for wxListCtrl items without images (#26062).
+- Handle font names longer than 31 characters (moi15moi, #25333).
+
 wxOSX:
 
 - Fix wxChoice default size under macOS 26 Tahoe (#26058).
+- Improve wxRichTextCtrl handling of cursor keys (Lee Ockert, #26064).
+- Show applications launched from keyboard under macOS 26 (#26095).
 
 
 3.2.9: (released 2025-12-12)
