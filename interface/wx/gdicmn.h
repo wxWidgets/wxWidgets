@@ -702,13 +702,31 @@ public:
 
         Notice that since v3.1.2 the behaviour of this constructor has changed
         to round the floating point values of @a pt components, if you want to
-        truncate them instead you need to do it manually, e.g.
-        @code
-            wxRealPoint rp = ...;
-            wxPoint p(static_cast<int>(rp.x), static_cast<int>(rp.y));
-        @endcode
+        truncate them instead, please use wxPoint::Truncate().
     */
     wxPoint(const wxRealPoint& pt);
+
+    /**
+        Creates a wxPoint by rounding the coordinates of the given
+        wxRealPoint.
+
+        This is equivalent to using the constructor taking wxRealPoint but is
+        more explicit about the fact that rounding is performed.
+
+        @since 3.3.2
+    */
+    static wxPoint Round(const wxRealPoint& pt);
+
+    /**
+        Creates a wxPoint by truncating the coordinates of the given
+        wxRealPoint.
+
+        This is similar to Round() but instead of rounding the coordinates,
+        they are simply truncated to integers.
+
+        @since 3.3.2
+    */
+    static wxPoint Truncate(const wxRealPoint& pt);
 
     /**
         @name Miscellaneous operators
