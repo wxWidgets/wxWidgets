@@ -368,7 +368,21 @@ wxWindowQt::~wxWindowQt()
 
     DestroyChildren(); // This also destroys scrollbars
 
-    delete m_qtWindow;
+    auto* const p = m_qtWindow->parentWidget();
+
+    if ( p && p->isVisible() && m_qtWindow->testAttribute(Qt::WA_PendingResizeEvent) )
+    {
+        // To prevent a potential use-after-delete error, m_qtWindow should not be deleted
+        // until after the parent window's QShowEvent handler has fully completed. IOW,
+        // this occurs when a child window is destroyed while the parent is in the middle
+        // of showing its children in the QShowEvent handler.
+
+        m_qtWindow->deleteLater();
+    }
+    else
+    {
+        delete m_qtWindow;
+    }
 }
 
 
