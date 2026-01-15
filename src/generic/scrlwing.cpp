@@ -113,39 +113,13 @@ void wxAutoScrollTimer::Notify()
     else // we still capture the mouse, continue generating events
     {
         // where is the mouse?
-        wxEventType horizontalEvent = wxEVT_NULL,
-                    verticalEvent = wxEVT_NULL;
-        wxSize size = m_win->GetClientSize();
         // client coords
         wxPoint pt = m_win->ScreenToClient(wxGetMousePosition());
 
-        // can window can be scrolled in this direction?
-        if ( m_win->HasScrollbar(wxHORIZONTAL) )
-        {
-            if ( pt.x < 0 )
-            {
-                horizontalEvent = wxEVT_SCROLLWIN_LINEUP;
-            }
-            else if ( pt.x >= size.x )
-            {
-                horizontalEvent = wxEVT_SCROLLWIN_LINEDOWN;
-            }
-        }
-
-        // can window can be scrolled in this direction?
-        if ( m_win->HasScrollbar(wxVERTICAL) )
-        {
-            if ( pt.y < 0 )
-            {
-                verticalEvent = wxEVT_SCROLLWIN_LINEUP;
-            }
-            else if ( pt.y >= size.y )
-            {
-                verticalEvent = wxEVT_SCROLLWIN_LINEDOWN;
-            }
-        }
-
-        // back inside m_wnd, so stop auto-scroll
+        auto events = m_scrollHelper->AutoscrollTest(pt);
+        wxEventType horizontalEvent = events.first,
+                    verticalEvent = events.second;
+        // no event needed, so stop auto-scroll
         if ( horizontalEvent == wxEVT_NULL &&
              verticalEvent == wxEVT_NULL )
         {
@@ -208,6 +182,17 @@ void wxAutoScrollTimer::Notify()
 bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
     wxEventType evType = event.GetEventType();
+
+    // always process these mouse events ourselves, even if the user code handles
+    // them as well, as we need to autoscroll
+    if ( evType == wxEVT_LEFT_DOWN )
+    {
+        m_scrollHelper->OnLeftDown((wxMouseEvent&)event);
+    }
+    else if ( evType == wxEVT_MOTION )
+    {
+        m_scrollHelper->OnMotion((wxMouseEvent&)event);
+    }
 
     // Pass it on to the real handler: notice that we must not call
     // ProcessEvent() on this object itself as it wouldn't pass it to the next
@@ -286,14 +271,6 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         }
     }
 
-    if ( evType == wxEVT_ENTER_WINDOW )
-    {
-        m_scrollHelper->HandleOnMouseEnter((wxMouseEvent &)event);
-    }
-    else if ( evType == wxEVT_LEAVE_WINDOW )
-    {
-        m_scrollHelper->HandleOnMouseLeave((wxMouseEvent &)event);
-    }
 #if wxUSE_MOUSEWHEEL
     // Use GTK's own scroll wheel handling in GtkScrolledWindow
 #ifndef __WXGTK__
@@ -734,6 +711,93 @@ void wxScrollHelperBase::DoPrepareReadOnlyDC(wxReadOnlyDC& dc)
     dc.SetUserScale( m_scaleX, m_scaleY );
 }
 
+// wxWidgets <= 3.3.1 autoscrolled exactly when the (captured) mouse cursor
+// was outside the entire window.  Starting with wxWidgets 3.3.2, the
+// region where the mouse cursor triggers autoscrolling is configurable.
+// If the inner scroll zone is default, then the autoscroll region is
+// relative to the WINDOW rect, and has width of size outer scroll zone.
+// If the outer scroll zone width is default, then it extends infinitely
+// outward from the WINDOW rect, and the behavior is the same as
+// wxWidgets 3.3.1.  If the inner scroll zone is non-default, then the
+// autoscroll region is relative to the CLIENT rect since that avoids
+// requiring the user to figure out how the width of scroll region
+// interacts with the scrollbar.
+void wxScrollHelperBase::SetInnerScrollZone(wxCoord innerZone)
+{
+    wxCHECK_RET( innerZone == wxDefaultCoord || innerZone >= 0,
+            "arg should be non-negative or wxDefaultCoord");
+    m_innerScrollZone = innerZone;
+}
+
+void wxScrollHelperBase::SetOuterScrollZone(wxCoord outerZone)
+{
+    wxCHECK_RET( outerZone == wxDefaultCoord || outerZone >= 0,
+            "arg should be non-negative or wxDefaultCoord");
+    m_outerScrollZone = outerZone;
+}
+
+// check whether clientPt triggers autoscrolling in each direction
+std::pair<wxEventType /*horz*/,
+          wxEventType /*vert*/> wxScrollHelperBase::AutoscrollTest(wxPoint clientPt) const
+{
+    // is mouse in autoscroll region?
+    wxRect inner, outer;
+    if ( m_innerScrollZone == wxDefaultCoord )
+    {
+        inner = m_win->GetRect();
+        if ( m_outerScrollZone != wxDefaultCoord )
+        {
+            outer = m_win->GetRect().Inflate(m_outerScrollZone);
+        }
+    }
+    else
+    {
+        inner = m_win->GetClientRect().Deflate(m_innerScrollZone);
+        if ( m_outerScrollZone != wxDefaultCoord )
+        {
+            outer = m_win->GetClientRect().Inflate(m_outerScrollZone);
+        }
+    }
+
+    bool inScrollRegion = !inner.Contains(clientPt) &&
+                          (outer == wxRect() || outer.Contains(clientPt));
+    if ( !inScrollRegion )
+    {
+        return std::make_pair(wxEVT_NULL, wxEVT_NULL);
+    }
+
+    wxEventType horizontalEvent = wxEVT_NULL,
+                verticalEvent = wxEVT_NULL;
+
+    // can window can be scrolled in this direction?
+    if ( m_win->HasScrollbar(wxHORIZONTAL) )
+    {
+        if ( clientPt.x < inner.GetLeft() )
+        {
+            horizontalEvent = wxEVT_SCROLLWIN_LINEUP;
+        }
+        else if (clientPt.x >= inner.GetRight() )
+        {
+            horizontalEvent = wxEVT_SCROLLWIN_LINEDOWN;
+        }
+    }
+
+    // can window can be scrolled in this direction?
+    if ( m_win->HasScrollbar(wxVERTICAL) )
+    {
+        if ( clientPt.y < inner.GetTop() )
+        {
+            verticalEvent = wxEVT_SCROLLWIN_LINEUP;
+        }
+        else if ( clientPt.y >= inner.GetBottom() )
+        {
+            verticalEvent = wxEVT_SCROLLWIN_LINEDOWN;
+        }
+    }
+
+    return std::make_pair(horizontalEvent, verticalEvent);
+}
+
 void wxScrollHelperBase::SetScrollRate( int xstep, int ystep )
 {
     int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
@@ -1012,32 +1076,62 @@ void wxScrollHelperBase::StopAutoScrolling()
 #endif
 }
 
-void wxScrollHelperBase::HandleOnMouseEnter(wxMouseEvent& event)
-{
-    StopAutoScrolling();
-
-    event.Skip();
-}
-
-void wxScrollHelperBase::HandleOnMouseLeave(wxMouseEvent& event)
+void wxScrollHelperBase::OnMotion(wxMouseEvent& event)
 {
     // don't prevent the usual processing of the event from taking place
     event.Skip();
 
-    // when a captured mouse leave a scrolled window we start generate
+    // if not dragging, no autoscroll
+    if ( wxWindow::GetCapture() != m_targetWindow )
+    {
+        return;
+    }
+
+    auto events = AutoscrollTest(event.GetPosition());
+    bool inNonScrollRegion = events.first == wxEVT_NULL &&
+                             events.second == wxEVT_NULL;
+    // process change of state
+    if ( inNonScrollRegion != m_inNonScrollRegion )
+    {
+        m_inNonScrollRegion = inNonScrollRegion;
+        if ( m_inNonScrollRegion )
+        {
+            OnEnterNonScrollRegion();
+        }
+        else
+        {
+            OnLeaveNonScrollRegion();
+        }
+    }
+}
+
+void wxScrollHelperBase::OnLeftDown(wxMouseEvent& event)
+{
+    // don't prevent the usual processing of the event from taking place
+    event.Skip();
+
+    // potential for new autoscroll, so reinitialize
+    m_inNonScrollRegion = true;
+}
+
+void wxScrollHelperBase::OnEnterNonScrollRegion()
+{
+    StopAutoScrolling();
+}
+
+void wxScrollHelperBase::OnLeaveNonScrollRegion()
+{
+    // when a captured mouse enters the scroll region we start generate
     // scrolling events to allow, for example, extending selection beyond the
     // visible area in some controls
-    if ( wxWindow::GetCapture() == m_targetWindow )
-    {
 #if wxUSE_TIMER
-        delete m_timerAutoScroll;
-        m_timerAutoScroll = new wxAutoScrollTimer
-                                (
-                                    m_targetWindow, this
-                                );
-        m_timerAutoScroll->Start(50); // FIXME: make configurable
+    delete m_timerAutoScroll;
+    m_timerAutoScroll = new wxAutoScrollTimer
+                            (
+                                m_targetWindow, this
+                            );
+    m_timerAutoScroll->Start(50); // FIXME: make configurable
 #endif
-    }
 }
 
 #if wxUSE_MOUSEWHEEL
