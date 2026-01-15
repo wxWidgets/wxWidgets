@@ -700,14 +700,12 @@ public:
         Converts the given wxRealPoint (with floating point coordinates) to a
         wxPoint instance.
 
-        Notice that this truncates the floating point values of @a pt
-        components, if you want to round them instead you need to do it
-        manually, e.g.
+        Notice that since v3.1.2 the behaviour of this constructor has changed
+        to round the floating point values of @a pt components, if you want to
+        truncate them instead you need to do it manually, e.g.
         @code
-            #include <wx/math.h>    // for wxRound()
-
             wxRealPoint rp = ...;
-            wxPoint p(wxRound(rp.x), wxRound(rp.y));
+            wxPoint p(static_cast<int>(rp.x), static_cast<int>(rp.y));
         @endcode
     */
     wxPoint(const wxRealPoint& pt);
