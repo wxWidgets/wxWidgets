@@ -76,7 +76,7 @@ void wxBell()
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
     wxUnusedVar(notification);
-    
+
     // we must make sure, that there still is an event on the event queue
     // otherwise stopping the event queue will not advance, because quitting only
     // gets processed AFTER the handling of the current event
