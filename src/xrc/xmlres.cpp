@@ -3250,14 +3250,4 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxXmlResourceModule, wxModule);
 
-
-// When wxXml is loaded dynamically after the application is already running
-// then the built-in module system won't pick this one up.  Add it manually.
-void wxXmlInitResourceModule()
-{
-    wxModule* module = new wxXmlResourceModule;
-    wxModule::RegisterModule(module);
-    wxModule::InitializeModules();
-}
-
 #endif // wxUSE_XRC

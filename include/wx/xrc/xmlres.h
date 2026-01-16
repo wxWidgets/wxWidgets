@@ -695,8 +695,10 @@ public:
        variable->Hide();
 
 
-// FIXME -- remove this $%^#$%#$@# as soon as Ron checks his changes in!!
-WXDLLIMPEXP_XRC void wxXmlInitResourceModule();
+// This function didn't do anything useful and is now preserved just to avoid
+// breaking compilation of the code using it.
+wxDEPRECATED_MSG("Simply remove the calls to this function from your code")
+inline void wxXmlInitResourceModule() { }
 
 
 // This class is used to create instances of XRC "object" nodes with "subclass"
