@@ -709,9 +709,6 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
                             (listctrl->GetItemState( item-1, wxLIST_STATE_SELECTED) == 0));
                 bool isBottom = ((item == listctrl->GetItemCount()-1) ||
                                 (listctrl->GetItemState( item+1, wxLIST_STATE_SELECTED) == 0));
-                bool isMiddle = ((item != 0) && (item != listctrl->GetItemCount()-1) &&
-                                (listctrl->GetItemState( item-1, wxLIST_STATE_SELECTED) != 0) &&
-                                (listctrl->GetItemState( item+1, wxLIST_STATE_SELECTED) != 0) );
                 if (isTop && isBottom)
                 {
                     flags |= wxCONTROL_SELECTION_GROUP;
@@ -724,7 +721,7 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
                 {
                     flags |= wxCONTROL_ITEM_LAST;
                 }
-                else if (isMiddle)
+                else
                 {
                     flags |= wxCONTROL_ITEM_MIDDLE;
                 }
@@ -1928,14 +1925,16 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight, SendEvent sen
     return changed;
 }
 
-void wxListMainWindow::RefreshLine( size_t line )
-{
 #ifdef __WXOSX__
+void wxListMainWindow::RefreshLine( size_t WXUNUSED(line) )
+{
     // A change in the selection of a row can influence
     // the look of the selection of another row so we
     // always need to refresh() the whole window
     Refresh();
 #else
+void wxListMainWindow::RefreshLine( size_t line )
+{
     if ( InReportView() )
     {
         size_t visibleFrom, visibleTo;
@@ -1952,14 +1951,16 @@ void wxListMainWindow::RefreshLine( size_t line )
 #endif
 }
 
-void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
-{
 #ifdef __WXOSX__
+void wxListMainWindow::RefreshLines( size_t WXUNUSED(lineFrom), size_t WXUNUSED(lineTo) )
+{
     // A change in the selection of a row can influence
     // the look of the selection of another row so we
     // always need to refresh() the whole window
     Refresh();
 #else
+void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
+{
     // we suppose that they are ordered by caller
     wxASSERT_MSG( lineFrom <= lineTo, wxT("indices in disorder") );
 
@@ -2004,12 +2005,6 @@ void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
 
 void wxListMainWindow::RefreshAfter( size_t lineFrom )
 {
-#ifdef __WXOSX__
-    // A change in the selection of a row can influence
-    // the look of the selection of another row so we
-    // always need to refresh() the whole window
-    Refresh();
-#else
     if ( InReportView() )
     {
         // Note that we don't compare lineFrom with the last visible line
@@ -2022,6 +2017,11 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
 
         if ( lineFrom < visibleFrom )
             lineFrom = visibleFrom;
+#ifdef __WXOSX__
+        // Deleting a line can change the look of the selection of the 
+        // line above on macOS
+        if (lineFrom) lineFrom--;
+#endif
 
         wxRect rect;
         rect.x = 0;
@@ -2041,17 +2041,10 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
         // TODO: how to do it more efficiently?
         m_dirty = true;
     }
-#endif
 }
 
 void wxListMainWindow::RefreshSelected()
 {
-#ifdef __WXOSX__
-    // A change in the selection of a row can influence
-    // the look of the selection of another row so we
-    // always need to refresh() the whole window
-    Refresh();
-#else
     if ( IsEmpty() )
         return;
 
@@ -2075,7 +2068,6 @@ void wxListMainWindow::RefreshSelected()
         if ( line != m_current && IsHighlighted(line) )
             RefreshLine(line);
     }
-#endif
 }
 
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
