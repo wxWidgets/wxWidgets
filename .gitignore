@@ -422,3 +422,6 @@
 /utils/wxrc/wxrc_vc[789].sln
 
 /3rdparty/webview2
+
+/build_bsys
+/install_bsys
