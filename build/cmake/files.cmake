@@ -1494,6 +1494,7 @@ set(GTK_HDR
     wx/gtk/activityindicator.h
     wx/gtk/hyperlink.h
     wx/gtk/srchctrl.h
+    wx/trackpadstate.h
 )
 
 set(GTK2_HDR
@@ -2483,6 +2484,7 @@ set(OSX_SHARED_HDR
     wx/osx/appprogress.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/trackpadstate.h
 )
 
 set(OSX_COCOA_SRC
