@@ -19,6 +19,21 @@
 
 #include "wx/math.h"
 
+TEST_CASE("wxPoint::Create", "[point]")
+{
+    const wxRealPoint rp(1.7, 2.3);
+
+    wxPoint p(rp);
+    CHECK( p.x == 2 );
+    CHECK( p.y == 2 );
+
+    CHECK( wxPoint::Round(rp) == p );
+
+    p = wxPoint::Truncate(rp);
+    CHECK( p.x == 1 );
+    CHECK( p.y == 2 );
+}
+
 TEST_CASE("wxPoint::Operators", "[point]")
 {
     wxPoint p1(1,2);
