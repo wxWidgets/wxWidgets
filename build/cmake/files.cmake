@@ -141,9 +141,10 @@ set(BASE_OSX_HDR
     wx/osx/chkconf.h
     wx/osx/cocoa/chkconf.h
     wx/osx/iphone/chkconf.h
-    wx/osx/fswatcher_fsevents.h
     ${BASE_COREFOUNDATION_HDR}
     ${BASE_UNIX_AND_DARWIN_HDR}
+    wx/osx/fswatcher_fsevents.h
+    wx/osx/evtloopsrc.h
 )
 
 set(BASE_AND_GUI_OSX_COCOA_SRC
@@ -2066,7 +2067,6 @@ set(OSX_SHARED_HDR
     wx/osx/dirdlg.h
     wx/osx/dnd.h
     wx/osx/evtloop.h
-    wx/osx/evtloopsrc.h
     wx/osx/filedlg.h
     wx/osx/font.h
     wx/osx/fontdlg.h
