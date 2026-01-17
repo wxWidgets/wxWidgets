@@ -965,6 +965,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/wrapcdlg.h \
 	wx/msw/wrapwin.h \
 	wx/msw/fswatcher.h \
+	wx/osx/chkconf.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2641,6 +2642,7 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_PLATFORM_HDR = wx/aui/tabartgtk.h
 @COND_TOOLKIT_MSW@AUI_PLATFORM_HDR = wx/aui/tabartmsw.h wx/aui/barartmsw.h
 COND_PLATFORM_MACOSX_1_BASE_PLATFORM_HDR =  \
+	wx/osx/chkconf.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -3215,7 +3217,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/button.h \
 	wx/osx/checkbox.h \
 	wx/osx/checklst.h \
-	wx/osx/chkconf.h \
 	wx/osx/choice.h \
 	wx/osx/clipbrd.h \
 	wx/osx/colordlg.h \
@@ -3320,7 +3321,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/button.h \
 	wx/osx/checkbox.h \
 	wx/osx/checklst.h \
-	wx/osx/chkconf.h \
 	wx/osx/choice.h \
 	wx/osx/clipbrd.h \
 	wx/osx/colordlg.h \

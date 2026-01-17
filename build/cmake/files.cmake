@@ -138,6 +138,9 @@ set(BASE_OSX_SRC
 )
 
 set(BASE_OSX_HDR
+    wx/osx/chkconf.h
+    wx/osx/cocoa/chkconf.h
+    wx/osx/iphone/chkconf.h
     wx/osx/fswatcher_fsevents.h
     ${BASE_COREFOUNDATION_HDR}
     ${BASE_UNIX_AND_DARWIN_HDR}
@@ -2044,7 +2047,6 @@ set(OSX_SHARED_HDR
     wx/osx/button.h
     wx/osx/checkbox.h
     wx/osx/checklst.h
-    wx/osx/chkconf.h
     wx/osx/choice.h
     wx/osx/clipbrd.h
     wx/osx/colordlg.h
@@ -2187,7 +2189,6 @@ set(OSX_COCOA_SRC
 )
 
 set(OSX_COCOA_HDR
-    wx/osx/cocoa/chkconf.h
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
     wx/generic/region.h
@@ -2236,7 +2237,6 @@ set(OSX_IPHONE_SRC
 )
 
 set(OSX_IPHONE_HDR
-    wx/osx/iphone/chkconf.h
     wx/osx/iphone/private.h
     wx/generic/region.h
     wx/osx/sound.h

@@ -161,6 +161,9 @@ BASE_OSX_SRC =
     src/osx/fswatcher_fsevents.cpp
 
 BASE_OSX_HDR =
+    wx/osx/chkconf.h
+    wx/osx/cocoa/chkconf.h
+    wx/osx/iphone/chkconf.h
     $(BASE_UNIX_AND_DARWIN_HDR)
     $(BASE_COREFOUNDATION_HDR)
     wx/osx/fswatcher_fsevents.h
@@ -2043,7 +2046,6 @@ OSX_SHARED_HDR =
     wx/osx/button.h
     wx/osx/checkbox.h
     wx/osx/checklst.h
-    wx/osx/chkconf.h
     wx/osx/choice.h
     wx/osx/clipbrd.h
     wx/osx/colordlg.h
@@ -2187,7 +2189,6 @@ OSX_COCOA_SRC =
 OSX_COCOA_HDR =
     wx/generic/region.h
     wx/osx/activityindicator.h
-    wx/osx/cocoa/chkconf.h
     wx/osx/cocoa/dataview.h
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
@@ -2235,7 +2236,6 @@ OSX_IPHONE_SRC =
 
 OSX_IPHONE_HDR =
     wx/generic/region.h
-    wx/osx/iphone/chkconf.h
     wx/osx/iphone/private.h
     wx/osx/sound.h
 
