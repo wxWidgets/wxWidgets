@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxDisplay::GetRawPPI() (#26082).
