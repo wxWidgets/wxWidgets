@@ -275,7 +275,7 @@ public:
     }
 
     // draw the line on the given DC in icon/list mode
-    void Draw( wxDC *dc, bool current );
+    void Draw( wxDC *dc, bool current, long line  );
 
     // the same in report mode: it needs more parameters as we don't store
     // everything in the item in report mode
@@ -284,7 +284,8 @@ public:
                            const wxRect& rectHL,
                            bool highlighted,
                            bool current,
-                           bool checked );
+                           bool checked,
+                           long line );
 
 private:
     // set the line to contain num items (only can be > 1 in report mode)
@@ -298,7 +299,8 @@ private:
     void ApplyAttributes(wxDC *dc,
                          const wxRect& rectHL,
                          bool highlighted,
-                         bool current);
+                         bool current,
+                         long line );
 
     // draw the text on the DC with the correct justification; also add an
     // ellipsis if the text is too large to fit in the current width

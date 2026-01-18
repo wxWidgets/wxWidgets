@@ -636,11 +636,12 @@ void wxListLineData::SetAttr(wxItemAttr *attr)
 void wxListLineData::ApplyAttributes(wxDC *dc,
                                      const wxRect& rectHL,
                                      bool highlighted,
-                                     bool current)
+                                     bool current,
+                                     long item )
 {
     const wxItemAttr * const attr = GetAttr();
 
-    wxWindow * const listctrl = m_owner->GetParent();
+    wxListCtrl * const listctrl = (wxListCtrl* const) m_owner->GetParent();
 
     const bool hasFocus = listctrl->HasFocus();
 
@@ -690,6 +691,42 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
             flags |= wxCONTROL_FOCUSED;
         if (current)
            flags |= wxCONTROL_CURRENT;
+        wxListMainWindow *mainWindow = listctrl->m_mainWin;
+
+        if (listctrl->HasFlag(wxLC_SINGLE_SEL) || (listctrl->GetItemCount() < 2) ||
+            !listctrl->HasFlag(wxLC_REPORT) )
+        {
+            if (mainWindow->GetClientSize().x >= mainWindow->GetVirtualSize().x)
+            {
+                flags |= wxCONTROL_SELECTION_GROUP;
+            }
+        }
+        else
+        {
+            if (mainWindow->GetClientSize().x >= mainWindow->GetVirtualSize().x)
+            {
+                bool isTop = ((item == 0) ||
+                            (listctrl->GetItemState( item-1, wxLIST_STATE_SELECTED) == 0));
+                bool isBottom = ((item == listctrl->GetItemCount()-1) ||
+                                (listctrl->GetItemState( item+1, wxLIST_STATE_SELECTED) == 0));
+                if (isTop && isBottom)
+                {
+                    flags |= wxCONTROL_SELECTION_GROUP;
+                }
+                else if (isTop)
+                {
+                    flags |= wxCONTROL_ITEM_FIRST;
+                }
+                else if (isBottom)
+                {
+                    flags |= wxCONTROL_ITEM_LAST;
+                }
+                else
+                {
+                    flags |= wxCONTROL_ITEM_MIDDLE;
+                }
+            }
+        }
         wxRendererNative::Get().
             DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
     }
@@ -711,11 +748,11 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
 #endif
 }
 
-void wxListLineData::Draw(wxDC *dc, bool current)
+void wxListLineData::Draw(wxDC *dc, bool current, long line )
 {
     wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
-    ApplyAttributes(dc, m_gi->m_rectHighlight, IsHighlighted(), current);
+    ApplyAttributes(dc, m_gi->m_rectHighlight, IsHighlighted(), current, line );
 
     wxListItemData* const item = &m_items[0];
     if (item->HasImage())
@@ -741,7 +778,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
                                        const wxRect& rectHL,
                                        bool highlighted,
                                        bool current,
-                                       bool checked )
+                                       bool checked,
+                                       long line )
 {
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
@@ -749,7 +787,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 
     // Note: GetSubItemRect() needs to be modified if the layout here changes.
 
-    ApplyAttributes(dc, rectHL, highlighted, current);
+    ApplyAttributes(dc, rectHL, highlighted, current, line );
 
     wxCoord x = rect.x;
     wxCoord yMid = rect.y + rect.height/2;
@@ -1887,6 +1925,14 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight, SendEvent sen
     return changed;
 }
 
+#ifdef __WXOSX__
+void wxListMainWindow::RefreshLine( size_t WXUNUSED(line) )
+{
+    // A change in the selection of a row can influence
+    // the look of the selection of another row so we
+    // always need to refresh() the whole window
+    Refresh();
+#else
 void wxListMainWindow::RefreshLine( size_t line )
 {
     if ( InReportView() )
@@ -1902,8 +1948,17 @@ void wxListMainWindow::RefreshLine( size_t line )
 
     GetListCtrl()->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
     RefreshRect( rect );
+#endif
 }
 
+#ifdef __WXOSX__
+void wxListMainWindow::RefreshLines( size_t WXUNUSED(lineFrom), size_t WXUNUSED(lineTo) )
+{
+    // A change in the selection of a row can influence
+    // the look of the selection of another row so we
+    // always need to refresh() the whole window
+    Refresh();
+#else
 void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
 {
     // we suppose that they are ordered by caller
@@ -1945,6 +2000,7 @@ void wxListMainWindow::RefreshLines( size_t lineFrom, size_t lineTo )
             RefreshLine(line);
         }
     }
+#endif
 }
 
 void wxListMainWindow::RefreshAfter( size_t lineFrom )
@@ -1961,6 +2017,11 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
 
         if ( lineFrom < visibleFrom )
             lineFrom = visibleFrom;
+#ifdef __WXOSX__
+        // Deleting a line can change the look of the selection of the 
+        // line above on macOS
+        if (lineFrom) lineFrom--;
+#endif
 
         wxRect rect;
         rect.x = 0;
@@ -2111,7 +2172,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                              GetLineHighlightRect(line),
                                              IsHighlighted(line),
                                              line == m_current,
-                                             IsItemChecked(line) );
+                                             IsItemChecked(line),
+                                             line );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2176,7 +2238,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         size_t count = GetItemCount();
         for ( size_t i = 0; i < count; i++ )
         {
-            GetLine(i)->Draw( &dc, i == m_current );
+            GetLine(i)->Draw( &dc, i == m_current, i );
         }
     }
 

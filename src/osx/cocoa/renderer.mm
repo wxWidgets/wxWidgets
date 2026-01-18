@@ -566,7 +566,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 }
 
 void
-wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
+wxRendererMac::DrawItemSelectionRect(wxWindow * win,
                                      wxDC& dc,
                                      const wxRect& rect,
                                      int flags)
@@ -601,9 +601,60 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
     }
     wxBrush selBrush( col );
 
+    // macOS NSTableView has whitespace left and right of the first and last
+    // data columns and only draws the border where the actual columns begins.
+    // wxWidgets generic controls don't do this, so add a bit of distance to
+    // the border
+    constexpr int distanceFromBorder = 8;
+
+    // the radius of the rounded rectanlge
+    constexpr int radius = 8;
+
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
-    dc.DrawRectangle( rect );
+    if ((flags & wxCONTROL_SELECTION_GROUP) != 0)
+    {
+        dc.DrawRoundedRectangle( rect, radius );
+    }
+    else if ((flags & wxCONTROL_ITEM_FIRST) != 0)
+    {
+        dc.DrawRoundedRectangle( rect, radius );
+        wxRect bottomrect = rect;
+        bottomrect.y = bottomrect.y + bottomrect.height-radius;
+        bottomrect.height = radius;
+        dc.DrawRectangle( bottomrect );
+    }
+    else if ((flags & wxCONTROL_ITEM_LAST) != 0)
+    {
+        wxRect toprect = rect;
+        toprect.height = radius;
+        dc.DrawRectangle( toprect );
+        dc.DrawRoundedRectangle( rect, radius );
+        if (rect.width > distanceFromBorder*2)
+        {
+            // wxColour::ChangeLightness( 125 ) actually adds grey to the colour.
+            // It should be just lighter.
+            wxColour lineColour = col.ChangeLightness( ((flags & wxCONTROL_FOCUSED) != 0) ? 125 : 95 );
+            dc.SetPen( wxPen( lineColour ));
+            dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );
+        }
+    }
+    else if ((flags & wxCONTROL_ITEM_MIDDLE) != 0)
+    {
+        dc.DrawRectangle( rect );
+        if (rect.width > distanceFromBorder*2)
+        {
+            // wxColour::ChangeLightness( 125 ) actually adds grey to the colour.
+            // It should be just lighter.
+            wxColour lineColour = col.ChangeLightness( ((flags & wxCONTROL_FOCUSED) != 0) ? 125 : 95 );
+            dc.SetPen( wxPen( lineColour ));
+            dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );
+        }
+    }
+    else
+    {
+        dc.DrawRectangle( rect );
+    }
 }
 
 
