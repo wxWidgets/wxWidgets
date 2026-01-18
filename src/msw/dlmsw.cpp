@@ -33,6 +33,12 @@
     #pragma comment(lib, "version")
 #endif
 
+
+//bricsys change merged on wxwidgets upgrade
+#if defined(_DEBUG)
+std::vector<HMODULE>* wxDynamicLibrary::s_notFreedDlls = 0;
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -188,6 +194,13 @@ wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 /* static */
 void wxDynamicLibrary::Unload(wxDllType handle)
 {
+    //bricsys change merged on wxwidgets upgrade
+    #if defined(_DEBUG)
+        if(s_notFreedDlls)
+            s_notFreedDlls->push_back(handle);
+        else
+    #endif
+
     if ( !::FreeLibrary(handle) )
     {
         wxLogLastError(wxT("FreeLibrary"));
