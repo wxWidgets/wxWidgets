@@ -18,6 +18,11 @@
 #include "wx/string.h"
 #include "wx/dynarray.h"
 
+//bricsys change merged on wxwidgets upgrade
+#if defined(_DEBUG) && defined(_WIN32)
+#include <vector>
+#endif
+
 class WXDLLIMPEXP_FWD_BASE wxDynamicLibraryDetailsCreator;
 
 // ----------------------------------------------------------------------------
@@ -367,6 +372,14 @@ protected:
     // no copy ctor/assignment operators (or we'd try to unload the library
     // twice)
     wxDECLARE_NO_COPY_CLASS(wxDynamicLibrary);
+
+//bricsys change merged on wxwidgets upgrade
+#if defined(_DEBUG) && defined(_WIN32)
+public:
+    static void dontFreeLibrary(std::vector<HMODULE>* notFreedDlls) { s_notFreedDlls = notFreedDlls; }
+private:
+    static std::vector<HMODULE>* s_notFreedDlls;
+#endif // defined(_DEBUG) && defined(_WIN32)
 };
 
 #ifdef __WINDOWS__
