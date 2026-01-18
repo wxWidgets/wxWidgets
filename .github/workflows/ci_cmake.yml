@@ -79,6 +79,12 @@ jobs:
             cmake_samples: ALL
             cmake_tests: OFF
             cmake_build_toolkit: osx_cocoa
+          - name: macOS latest wxGTK 3 Unix Makefiles
+            runner: macos-latest
+            cmake_generator: Unix Makefiles
+            cmake_samples: SOME
+            cmake_tests: OFF
+            cmake_build_toolkit: gtk3
           - name: macOS 14 wxIOS
             runner: macos-14
             cmake_generator: Xcode
@@ -150,6 +156,14 @@ jobs:
           msystem: mingw64
           update: true
           install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
+
+      - name: Set up Homebrew
+        if: ${{ runner.os == 'macOS' && matrix.cmake_build_toolkit == 'gtk3' }}
+        uses: Homebrew/actions/setup-homebrew@main
+
+      - name: Install Homebrew packages
+        if: ${{ runner.os == 'macOS' && matrix.cmake_build_toolkit == 'gtk3' }}
+        run: brew install pkgconf gtk+3
 
       - name: Install Qt
         if: matrix.cmake_build_toolkit == 'qt'

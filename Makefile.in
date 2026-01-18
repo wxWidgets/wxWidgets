@@ -993,6 +993,9 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/wrapcdlg.h \
 	wx/msw/wrapwin.h \
 	wx/msw/fswatcher.h \
+	wx/osx/chkconf.h \
+	wx/osx/cocoa/chkconf.h \
+	wx/osx/iphone/chkconf.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -1019,6 +1022,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/stackwalk.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/osx/fswatcher_fsevents.h \
+	wx/osx/evtloopsrc.h \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
 	wx/protocol/ftp.h \
@@ -2683,6 +2687,9 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_PLATFORM_HDR = wx/aui/tabartgtk.h
 @COND_TOOLKIT_MSW@AUI_PLATFORM_HDR = wx/aui/tabartmsw.h wx/aui/barartmsw.h
 COND_PLATFORM_MACOSX_1_BASE_PLATFORM_HDR =  \
+	wx/osx/chkconf.h \
+	wx/osx/cocoa/chkconf.h \
+	wx/osx/iphone/chkconf.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2708,7 +2715,8 @@ COND_PLATFORM_MACOSX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/pipe.h \
 	wx/unix/stackwalk.h \
 	wx/unix/fswatcher_kqueue.h \
-	wx/osx/fswatcher_fsevents.h
+	wx/osx/fswatcher_fsevents.h \
+	wx/osx/evtloopsrc.h
 @COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_MACOSX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/fswatcher_inotify.h \
@@ -3257,7 +3265,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/button.h \
 	wx/osx/checkbox.h \
 	wx/osx/checklst.h \
-	wx/osx/chkconf.h \
 	wx/osx/choice.h \
 	wx/osx/clipbrd.h \
 	wx/osx/colordlg.h \
@@ -3277,7 +3284,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/dirdlg.h \
 	wx/osx/dnd.h \
 	wx/osx/evtloop.h \
-	wx/osx/evtloopsrc.h \
 	wx/osx/filedlg.h \
 	wx/osx/font.h \
 	wx/osx/fontdlg.h \
@@ -3336,7 +3342,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/appprogress.h \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
-	wx/osx/cocoa/chkconf.h \
 	wx/osx/cocoa/evtloop.h \
 	wx/osx/cocoa/private.h \
 	wx/generic/region.h \
@@ -3362,7 +3367,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/button.h \
 	wx/osx/checkbox.h \
 	wx/osx/checklst.h \
-	wx/osx/chkconf.h \
 	wx/osx/choice.h \
 	wx/osx/clipbrd.h \
 	wx/osx/colordlg.h \
@@ -3382,7 +3386,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/dirdlg.h \
 	wx/osx/dnd.h \
 	wx/osx/evtloop.h \
-	wx/osx/evtloopsrc.h \
 	wx/osx/filedlg.h \
 	wx/osx/font.h \
 	wx/osx/fontdlg.h \
@@ -3441,7 +3444,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/appprogress.h \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
-	wx/osx/iphone/chkconf.h \
 	wx/osx/iphone/private.h \
 	wx/generic/region.h \
 	wx/osx/sound.h
