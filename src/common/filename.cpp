@@ -2059,6 +2059,15 @@ void wxFileName::RemoveDir(size_t pos)
     m_dirs.RemoveAt(pos);
 }
 
+// bricsys change: added method
+#ifdef _WIN32
+bool wxFileName::UNCPath() const
+{
+    return IsUNCPath(GetPath());
+}
+#endif _WIN32
+// end bricsys change
+
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
