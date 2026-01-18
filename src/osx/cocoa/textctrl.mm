@@ -227,7 +227,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -365,7 +365,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -475,7 +475,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -594,7 +594,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
     }
 }
 
@@ -1906,6 +1906,10 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         wxNSTextFieldControl* t = new wxNSTextFieldControl( wxpeer, wxpeer, v );
         c = t;
 
+/*
+        Setting NO_BORDER on macOS 26 Tahoe triggers legacy rendering with
+        brown background
+
         if ( (style & wxNO_BORDER) || (style & wxSIMPLE_BORDER) )
         {
             // under 10.7 the textcontrol can draw its own focus
@@ -1915,6 +1919,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
             [v setBordered:NO];
         }
         else
+*/
         {
             // use native border
             c->SetNeedsFrame(false);

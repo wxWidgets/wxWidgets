@@ -40,7 +40,7 @@ extern void wxOSX_controlAction(NSView* self, SEL _cmd, id sender);
     if (!initialized)
     {
         initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW );
         for ( int i = 1 ; i <= maxAlternateActions ; i++ )
         {
             class_addMethod(self, NSSelectorFromString([NSString stringWithFormat: alternateActionsSelector, i]), (IMP) wxOSX_controlAction, "v@:@" );

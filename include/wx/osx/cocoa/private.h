@@ -515,7 +515,8 @@ public:
     enum wxOSXSkipOverrides {
         wxOSXSKIP_NONE = 0x0,
         wxOSXSKIP_DRAW = 0x1,
-        wxOSXSKIP_DND = 0x2
+        wxOSXSKIP_DND = 0x2,
+        wxOSXSKIP_DND_AND_DRAW = wxOSXSKIP_DND|wxOSXSKIP_DRAW,
     };
 
     void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags = wxOSXSKIP_NONE);
