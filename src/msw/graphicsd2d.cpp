@@ -757,7 +757,12 @@ public:
 
         DoAcquireResource();
 
-        wxCHECK_RESOURCE_HOLDER_POST();
+        // do NOT use wxCHECK_RESOURCE_HOLDER_POST
+        // here since DoAcquireResource may have failed
+        // for "legitimate" reasons (e.g. region too large)
+        // that should be handled in user code once we return.
+        // It should not cause an assertion fail here.
+        //wxCHECK_RESOURCE_HOLDER_POST();
     }
 
     void ReleaseResource() override
@@ -3759,11 +3764,17 @@ protected:
         wxCHECK_RET( status != ERROR, wxS("Error retrieving DC dimensions") );
 
         hr = renderTarget->BindDC(m_hdc, &r);
-        wxCHECK_HRESULT_RET(hr);
-        renderTarget->SetTransform(
-                       D2D1::Matrix3x2F::Translation(-r.left, -r.top));
 
-        m_nativeResource = renderTarget;
+        // BindDC may fail with E_INVALIDARG if the given RECT is too large.
+        // It is better to let the user code handle this condition than
+        // to produce an assertion error here.
+        if (SUCCEEDED(hr))
+        {
+            renderTarget->SetTransform(
+                D2D1::Matrix3x2F::Translation(-r.left, -r.top));
+
+            m_nativeResource = renderTarget;
+        }
     }
 
 private:
@@ -4174,19 +4185,24 @@ void wxD2DContext::Init()
 
 wxD2DContext::~wxD2DContext()
 {
+    ID2D1RenderTarget* target = GetRenderTarget();
+
     // Remove all layers from the stack of layers.
     while ( !m_layers.empty() )
     {
         LayerData ld = m_layers.top();
         m_layers.pop();
 
-        GetRenderTarget()->PopLayer();
+        if (target != nullptr) target->PopLayer();
         ld.layer.reset();
         ld.geometry.reset();
     }
 
-    HRESULT result = GetRenderTarget()->EndDraw();
-    wxCHECK_HRESULT_RET(result);
+    if (target != nullptr)
+    {
+        HRESULT result = GetRenderTarget()->EndDraw();
+        wxCHECK_HRESULT_RET(result);
+    }
 
     ReleaseResources();
 }
@@ -4805,18 +4821,22 @@ void wxD2DContext::EnsureInitialized()
     if (!m_renderTargetHolder->IsResourceAcquired())
     {
         m_cachedRenderTarget = m_renderTargetHolder->GetD2DResource();
-        GetRenderTarget()->GetTransform(&m_initTransform);
-        m_initTransform = m_initTransform * m_inheritedTransform;
-        wxASSERT(m_initTransform.IsInvertible());
-        m_initTransformInv = m_initTransform;
-        if ( !m_initTransformInv.Invert() )
+        ID2D1RenderTarget* target = GetRenderTarget();
+        if (target != nullptr )
         {
-            m_initTransformInv = D2D1::Matrix3x2F::Identity();
+            target->GetTransform(&m_initTransform);
+            m_initTransform = m_initTransform * m_inheritedTransform;
+            wxASSERT(m_initTransform.IsInvertible());
+            m_initTransformInv = m_initTransform;
+            if ( !m_initTransformInv.Invert() )
+            {
+                m_initTransformInv = D2D1::Matrix3x2F::Identity();
+            }
+            target->SetTransform(&m_initTransform);
+            target->SetAntialiasMode(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+            target->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_DEFAULT);
+            target->BeginDraw();
         }
-        GetRenderTarget()->SetTransform(&m_initTransform);
-        GetRenderTarget()->SetAntialiasMode(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
-        GetRenderTarget()->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_DEFAULT);
-        GetRenderTarget()->BeginDraw();
     }
     else
     {
@@ -5169,7 +5189,13 @@ wxD2DRenderer::~wxD2DRenderer()
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxWindowDC& dc)
 {
-    return new wxD2DContext(this, m_direct2dFactory, dc);
+    wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, dc);
+    if( d2d->GetContext()==nullptr )
+    {
+        delete d2d;
+        d2d = nullptr;
+    }
+    return d2d;
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
@@ -5179,7 +5205,14 @@ wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
 
     wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, dc,
                             bmp.HasAlpha() ? D2D1_ALPHA_MODE_PREMULTIPLIED : D2D1_ALPHA_MODE_IGNORE);
-    d2d->SetContentScaleFactor(dc.GetContentScaleFactor());
+    if (d2d->GetContext() != nullptr)
+      d2d->SetContentScaleFactor(dc.GetContentScaleFactor());
+    else
+    {
+        delete d2d;
+        d2d = nullptr;
+    }
+
     return d2d;
 }
 
@@ -5201,22 +5234,46 @@ wxGraphicsContext* wxD2DRenderer::CreateContext(const wxEnhMetaFileDC& WXUNUSED(
 
 wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeContext(void* nativeContext)
 {
-    return new wxD2DContext(this, m_direct2dFactory, nativeContext);
+    wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, nativeContext);
+    if (d2d->GetContext()==nullptr)
+    {
+        delete d2d;
+        d2d = nullptr;
+    }
+    return d2d;
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeWindow(void* window)
 {
-    return new wxD2DContext(this, m_direct2dFactory, (HWND)window);
+    wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, (HWND)window);
+    if (d2d->GetContext() == nullptr)
+    {
+        delete d2d;
+        d2d = nullptr;
+    }
+    return d2d;
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeHDC(WXHDC dc)
 {
-    return new wxD2DContext(this, m_direct2dFactory, (HDC)dc);
+    wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, (HDC)dc);
+    if (d2d->GetContext() == nullptr)
+    {
+        delete d2d;
+        d2d = nullptr;
+    }
+    return d2d;
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(wxWindow* window)
 {
-    return new wxD2DContext(this, m_direct2dFactory, (HWND)window->GetHWND(), window);
+    wxD2DContext* d2d = new wxD2DContext(this, m_direct2dFactory, (HWND)window->GetHWND(), window);
+    if (d2d->GetContext() == nullptr)
+    {
+        delete d2d;
+        d2d = nullptr;
+    }
+    return d2d;
 }
 
 #if wxUSE_IMAGE
