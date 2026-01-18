@@ -523,6 +523,11 @@ public:
     wxString GetVolume() const                  { return m_volume; }
     bool HasVolume() const                      { return !m_volume.empty(); }
 
+#ifdef _WIN32
+    // bricsys extension - used in bricscad under ifdef _WIN32
+    bool UNCPath() const;
+#endif
+
     // full name is the file name + extension (but without the path)
     void SetFullName(const wxString& fullname);
     wxString GetFullName() const;
