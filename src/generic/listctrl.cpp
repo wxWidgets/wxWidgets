@@ -2018,7 +2018,7 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
         if ( lineFrom < visibleFrom )
             lineFrom = visibleFrom;
 #ifdef __WXOSX__
-        // Deleting a line can change the look of the selection of the 
+        // Deleting a line can change the look of the selection of the
         // line above on macOS
         if (lineFrom) lineFrom--;
 #endif
