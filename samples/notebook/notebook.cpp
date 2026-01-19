@@ -63,7 +63,7 @@ bool MyApp::OnInit()
 
 wxPanel *CreateUserCreatedPage(wxBookCtrlBase *parent)
 {
-    wxPanel *panel = new wxPanel(parent);
+    wxPanel *panel = new wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTRANSPARENT_WINDOW);
 
 #if wxUSE_HELP
     panel->SetHelpText("Panel with a Button");
@@ -77,7 +77,7 @@ wxPanel *CreateUserCreatedPage(wxBookCtrlBase *parent)
 
 wxPanel *CreateRadioButtonsPage(wxBookCtrlBase *parent)
 {
-    wxPanel *panel = new wxPanel(parent);
+    wxPanel *panel = new wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTRANSPARENT_WINDOW);
 
 #if wxUSE_HELP
     panel->SetHelpText("Panel with some Radio Buttons");
@@ -108,7 +108,7 @@ wxPanel *CreateRadioButtonsPage(wxBookCtrlBase *parent)
 
 wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
 {
-    wxPanel *panel = new wxPanel(parent);
+    wxPanel *panel = new wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTRANSPARENT_WINDOW);
 
 #if wxUSE_HELP
     panel->SetHelpText("An empty panel");
@@ -138,7 +138,7 @@ wxWindow *CreateFullPageText(wxBookCtrlBase *parent)
 
 wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
 {
-    wxPanel *panel = new wxPanel(parent);
+    wxPanel *panel = new wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTRANSPARENT_WINDOW);
 
 #if wxUSE_HELP
     panel->SetHelpText("Maroon panel");
@@ -405,7 +405,7 @@ MyFrame::MyFrame()
     m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_WARNING, wxART_OTHER, imageSize));
     m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_ERROR, wxART_OTHER, imageSize));
 
-    m_panel = new wxPanel(this);
+    m_panel = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize, wxTRANSPARENT_WINDOW );
 
 #if USE_LOG
     m_text = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString,

@@ -4373,16 +4373,16 @@ void wxWidgetCocoaImpl::ClipsToBounds(bool clip)
 
 wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(parent),
     wxWindowID WXUNUSED(id), const wxPoint& pos, const wxSize& size,
-    long WXUNUSED(style), long WXUNUSED(extraStyle))
+    long style, long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
 
     wxWidgetCocoaImpl* c = nullptr;
 
-    //  Avoid macOS 26 Tahoe triggers legacy rendering with
-    //  brown background
+    //  Avoid macOS 26 Tahoe triggers legacy rendering with brown background
     if (wxpeer->IsKindOf(wxCLASSINFO(wxSpinCtrl))
-      || wxpeer->IsKindOf(wxCLASSINFO(wxSpinCtrlDouble)))
+      || wxpeer->IsKindOf(wxCLASSINFO(wxSpinCtrlDouble)) 
+      || ((style & wxTRANSPARENT_WINDOW) != 0))
     {
         wxNSView* v = [[wxNSView alloc] initWithFrame:r];
         c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
@@ -4391,20 +4391,6 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     {
         wxNSViewWithDrawing* v = [[wxNSViewWithDrawing alloc] initWithFrame:r];
         c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
-
-        // This overrides user background colour and does not try to
-        // query the background colour, so it is wrong.
-        if (wxSystemSettings::GetAppearance().IsDark())
-            wxpeer->SetBackgroundColour( wxColour( 42, 48, 50 ) );
-        else
-            wxpeer->SetBackgroundColour( wxColour(247,247,247) );
-
-        wxpeer->Bind( wxEVT_SYS_COLOUR_CHANGED, [wxpeer] (wxSysColourChangedEvent&) {
-            if (wxSystemSettings::GetAppearance().IsDark())
-                wxpeer->SetBackgroundColour( wxColour( 42, 48, 50 ) );
-            else
-                wxpeer->SetBackgroundColour( wxColour(247,247,247) );
-        });
     }
     return c;
 }

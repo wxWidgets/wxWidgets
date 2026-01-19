@@ -123,6 +123,15 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             sysColor = [NSColor controlColor];
         break;
     case wxSYS_COLOUR_LISTBOX:
+        if ( WX_IS_MACOS_AVAILABLE(26, 0) )
+        {
+            // macOS Tahoe does not have single value anymore but
+            // these are used for opaque backgrounds
+            if (wxSystemSettings::GetAppearance().IsDark())
+                return wxColour( 42, 48, 50 );
+            else
+                return wxColour(247,247,247);
+        } 
         sysColor = [NSColor controlBackgroundColor];
         break;
     case wxSYS_COLOUR_BTNSHADOW:

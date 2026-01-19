@@ -1445,8 +1445,8 @@ wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 /*  for subwindows/controls */
 #define wxCLIP_SIBLINGS         0x20000000
 
-/* This style is obsolete and doesn't do anything. */
-#define wxTRANSPARENT_WINDOW    0
+/* This style is re-used for semi-transparent backgrounds. */
+#define wxTRANSPARENT_WINDOW    0x00100000
 
 /*  Add this style to a panel to get tab traversal working outside of dialogs */
 /*  (on by default for wxPanel, wxDialog, wxScrolledWindow) */
