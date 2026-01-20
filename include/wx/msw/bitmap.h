@@ -207,6 +207,9 @@ public:
     bool InitFromHBITMAP(WXHBITMAP bmp, int width, int height, int depth);
     void ResetHBITMAP() { InitFromHBITMAP(NULL, 0, 0, 0); }
 
+    // Bricsys addition; see http://trac.wxwidgets.org/ticket/15706
+    WXHANDLE Detach() { WXHANDLE h = GetHBITMAP(); ResetHBITMAP(); return h; }
+
     void SetSelectedInto(wxDC *dc);
     wxDC *GetSelectedInto() const;
 
