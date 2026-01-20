@@ -184,6 +184,22 @@ void wxWidgetCocoaImpl::ApplyScrollViewBorderType()
 
 @end // wxNSViewWithDrawing
 
+@interface wxNSViewWithDrawing(TextInput) <NSTextInputClient>
+
+- (void)insertText:(id)aString replacementRange:(NSRange)replacementRange;
+- (void)doCommandBySelector:(SEL)aSelector;
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange;
+- (void)unmarkText;
+- (NSRange)selectedRange;
+- (NSRange)markedRange;
+- (BOOL)hasMarkedText;
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange;
+- (NSArray*)validAttributesForMarkedText;
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange;
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint;
+
+@end
+
 @interface wxNSView : NSView
 {
 }
@@ -1011,6 +1027,81 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
 #endif
 
 @end // wxNSView
+
+
+// Not very elegant to have the same - almost empty - interface for 
+// wxNSViewWithDrawing and wxNSView, but we don't get any wxCHAR_EVENTs
+// otherwise
+
+@implementation wxNSViewWithDrawing(TextInput)
+
+void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
+
+- (void)doCommandBySelector:(SEL)aSelector
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl)
+        impl->doCommandBySelector(aSelector, self, _cmd);
+}
+
+- (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
+{
+    wxUnusedVar(replacementRange);
+    wxOSX_insertText(self, @selector(insertText:), aString);
+}
+
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
+{
+    wxUnusedVar(aString);
+    wxUnusedVar(selectedRange);
+    wxUnusedVar(replacementRange);
+}
+
+- (void)unmarkText
+{
+}
+
+- (NSRange)selectedRange
+{
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (NSRange)markedRange
+{
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (BOOL)hasMarkedText
+{
+    return NO;
+}
+
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+{
+    wxUnusedVar(aRange);
+    wxUnusedVar(actualRange);
+    return nil;
+}
+
+- (NSArray*)validAttributesForMarkedText
+{
+    return nil;
+}
+
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+{
+    wxUnusedVar(aRange);
+    wxUnusedVar(actualRange);
+    return NSMakeRect(0, 0, 0, 0);
+}
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
+{
+    wxUnusedVar(aPoint);
+    return NSNotFound;
+}
+
+@end // wxNSViewWithDrawing(TextInput)
+
 
 // We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
 // Currently, only insertText:(replacementRange:) is
