@@ -2295,6 +2295,29 @@ wxString wxAuiNotebook::GetPageToolTip(size_t page_idx) const
     return page_info.tooltip;
 }
 
+// Bricsys added
+void wxAuiNotebook::SetPageClientObject(size_t page_idx, std::shared_ptr<wxClientData> data)
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return;
+
+    // update our own tab catalog
+    wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    page_info.m_clientData = data;
+}
+
+wxClientData* wxAuiNotebook::GetPageClientObject(size_t page_idx) const
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return nullptr;
+
+    // update our own tab catalog
+    const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    return page_info.m_clientData.get();
+}
+
+// end Bricsys added
+
 bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmapBundle& bitmap)
 {
     if (page_idx >= m_tabs.GetPageCount())

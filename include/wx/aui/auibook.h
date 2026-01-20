@@ -26,6 +26,8 @@
 #include "wx/bookctrl.h"
 #include "wx/containr.h"
 
+// Bricsys added: shared_ptr<>
+#include <memory>
 
 class wxAuiNotebook;
 
@@ -98,6 +100,8 @@ public:
     wxRect rect;          // tab's hit rectangle
     bool active;          // true if the page is currently active
     bool hover;           // true if mouse hovering over tab
+    // Bricsys change: add means to store cient data per page
+    std::shared_ptr<wxClientData> m_clientData;
 };
 
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton
@@ -377,6 +381,11 @@ public:
 
     bool SetPageToolTip(size_t page, const wxString& text);
     wxString GetPageToolTip(size_t pageIdx) const;
+
+    // Bricsys added: add means to set page client data
+    void SetPageClientObject(size_t page, std::shared_ptr<wxClientData> data);
+    wxClientData* GetPageClientObject(size_t pageIdx) const;
+    // end Bricsys added
 
     bool SetPageBitmap(size_t page, const wxBitmapBundle& bitmap);
     wxBitmap GetPageBitmap(size_t pageIdx) const;
