@@ -108,6 +108,11 @@ wxPostScriptPrintNativeData::~wxPostScriptPrintNativeData()
 {
 }
 
+bool wxPostScriptPrintNativeData::Initialize( wxPrintData &/*data*/, const wxString &/*printerName*/ )
+{
+    return false;
+}
+
 bool wxPostScriptPrintNativeData::TransferTo( wxPrintData &WXUNUSED(data) )
 {
     return true;

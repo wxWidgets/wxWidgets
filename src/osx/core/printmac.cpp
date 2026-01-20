@@ -407,6 +407,11 @@ void wxOSXPrintData::TransferResolutionTo( wxPrintData &data )
     }
 }
 
+bool wxOSXPrintData::Initialize( wxPrintData &/*data*/, const wxString &/*printerName*/ )
+{
+    return false;
+}
+
 bool wxOSXPrintData::TransferTo( wxPrintData &data )
 {
 #if wxOSX_USE_COCOA

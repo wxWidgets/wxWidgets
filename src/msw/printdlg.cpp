@@ -229,21 +229,22 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
     //// Orientation
     if (devMode->dmFields & DM_ORIENTATION)
         data.SetOrientation( (wxPrintOrientation)devMode->dmOrientation );
+    else
+        data.SetOrientation( DMORIENT_PORTRAIT );
 
     //// Collation
     if (devMode->dmFields & DM_COLLATE)
-    {
-        if (devMode->dmCollate == DMCOLLATE_TRUE)
-            data.SetCollate( true );
-        else
-            data.SetCollate( false );
-    }
+        data.SetCollate( devMode->dmCollate == DMCOLLATE_TRUE );
+    else
+        data.SetCollate( false );
 
     //// Number of copies
     if (devMode->dmFields & DM_COPIES)
-        data.SetNoCopies( devMode->dmCopies );
+        data.SetNoCopies( std::max<short>(1, devMode->dmCopies) );
+    else
+        data.SetNoCopies( 1 );
 
-    //// Bin
+    //// Default source
     if (devMode->dmFields & DM_DEFAULTSOURCE) {
         switch (devMode->dmDefaultSource) {
             case DMBIN_ONLYONE        : data.SetBin(wxPRINTBIN_ONLYONE       ); break;
@@ -268,24 +269,34 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
     } else {
         data.SetBin(wxPRINTBIN_DEFAULT);
     }
+
+    // Media type
     if (devMode->dmFields & DM_MEDIATYPE)
     {
         wxASSERT( (int)devMode->dmMediaType != wxPRINTMEDIA_DEFAULT );
         data.SetMedia(devMode->dmMediaType);
     }
+    else
+        data.SetMedia(wxPRINTMEDIA_DEFAULT);
+
     //// Printer name
-    if (devMode->dmDeviceName[0] != 0)
-        // This syntax fixes a crash when using VS 7.1
-        data.SetPrinterName( wxString(devMode->dmDeviceName, CCHDEVICENAME) );
+    // Bricsys change: store full 'printer name' separately because DEVMODE structure
+    // truncates it to 32 characters
+    if( m_printerName.IsEmpty() )
+    {
+        if (devMode->dmDeviceName[0] != 0)
+        {
+            // This syntax fixes a crash when using VS 7.1
+            wxString printerName( devMode->dmDeviceName, CCHDEVICENAME );
+            data.SetPrinterName( printerName.c_str() );
+        }
+    }
+    else
+        data.SetPrinterName( m_printerName );
 
     //// Colour
     if (devMode->dmFields & DM_COLOR)
-    {
-        if (devMode->dmColor == DMCOLOR_COLOR)
-            data.SetColour( true );
-        else
-            data.SetColour( false );
-    }
+        data.SetColour( devMode->dmColor == DMCOLOR_COLOR );
     else
         data.SetColour( true );
 
@@ -296,8 +307,12 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
     // dmPaperSize >= DMPAPER_USER wouldn't be in wxWin's database, this
     // code wouldn't set m_paperSize correctly.
 
+    // Bricsys change: try to set both paper size and paper width/height even if according flags are not set,
+    // because some (bad) drivers use the settings regardless of flags,
+    // and if (good) driver relies on flags, it will just ignore the settings
+
     bool foundPaperSize = false;
-    if ((devMode->dmFields & DM_PAPERSIZE) && (devMode->dmPaperSize < DMPAPER_USER))
+    if (devMode->dmPaperSize < DMPAPER_USER)
     {
         if (wxThePrintPaperDatabase)
         {
@@ -322,24 +337,11 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
         }
     }
 
-    if (!foundPaperSize) {
-        if ((devMode->dmFields & DM_PAPERWIDTH) && (devMode->dmFields & DM_PAPERLENGTH))
-        {
-            // DEVMODE is in tenths of a millimeter
-            data.SetPaperSize( wxSize(devMode->dmPaperWidth / 10, devMode->dmPaperLength / 10) );
-            data.SetPaperId( wxPAPER_NONE );
-            m_customWindowsPaperId = devMode->dmPaperSize;
-        }
-        else
-        {
-            // Often will reach this for non-standard paper sizes (sizes which
-            // wouldn't be in wxWidget's paper database). Setting
-            // m_customWindowsPaperId to devMode->dmPaperSize should be enough
-            // to get this paper size working.
-            data.SetPaperSize( wxSize(0,0) );
-            data.SetPaperId( wxPAPER_NONE );
-            m_customWindowsPaperId = devMode->dmPaperSize;
-        }
+    if (!foundPaperSize)
+    {
+        data.SetPaperSize( wxSize(devMode->dmPaperWidth / 10, devMode->dmPaperLength / 10) );
+        data.SetPaperId( wxPAPER_NONE );
+        m_customWindowsPaperId = devMode->dmPaperSize;
     }
 
     //// Duplex
@@ -379,8 +381,9 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
         }
     }
     else
-        data.SetQuality( wxPRINT_QUALITY_HIGH );
+        data.SetQuality( wxPRINT_QUALITY_DEFAULT );
 
+    //// Driver extra
     if (devMode->dmDriverExtra > 0)
         data.SetPrivData( (char *)devMode+devMode->dmSize, devMode->dmDriverExtra );
     else
@@ -408,6 +411,12 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
     }
 
     return true;
+}
+
+// Bricsys added: r478
+bool wxWindowsPrintNativeData::Initialize( wxPrintData &/*data*/, const wxString &/*printerName*/ )
+{
+    return false;
 }
 
 void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, WinPrinter* printer)
@@ -580,6 +589,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 
         //// Orientation
         devMode->dmOrientation = (short)data.GetOrientation();
+        devMode->dmFields |= DM_ORIENTATION;
 
         //// Collation
         devMode->dmCollate = (data.GetCollate() ? DMCOLLATE_TRUE : DMCOLLATE_FALSE);
@@ -590,13 +600,15 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         devMode->dmFields |= DM_COPIES;
 
         //// Printer name
-        wxString name = data.GetPrinterName();
-        if (!name.empty())
+        // Bricsys change: store full 'printer name' separately because DEVMODE structure
+        // truncates it to 32 characters
+        m_printerName = data.GetPrinterName();
+        if (!m_printerName.empty())
         {
             // NB: the cast is needed in the ANSI build, strangely enough
             //     dmDeviceName is BYTE[] and not char[] there
             wxStrlcpy(reinterpret_cast<wxChar *>(devMode->dmDeviceName),
-                      name.t_str(),
+                      m_printerName.t_str(),
                       WXSIZEOF(devMode->dmDeviceName));
         }
 
@@ -620,40 +632,26 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
             paperType = wxThePrintPaperDatabase->FindPaperType(paperId);
         }
 
+		// Bricsys change: let's keep DM_PAPERSIZE, DM_PAPERWIDTH and DM_PAPERLENGTH flags in states
+        // as they come from the driver and set dmPaperSize, dmPaperWidth and dmPaperLength fields;
+        // this will satisfy both (good) drivers following normal flags/fields behavior and (bad) ones
+        // that interpret these data in unusual ways
+
         if ( paperType )
         {
             devMode->dmPaperSize = (short)paperType->GetPlatformId();
-            devMode->dmFields |= DM_PAPERSIZE;
+            devMode->dmPaperWidth = ((short)paperType->GetWidth());
+            devMode->dmPaperLength = ((short)paperType->GetHeight());
         }
         else // custom (or no) paper size
         {
+            devMode->dmPaperSize = m_customWindowsPaperId;
             const wxSize paperSize = data.GetPaperSize();
-            if ( paperSize != wxDefaultSize )
-            {
-                // Fall back on specifying the paper size explicitly
-                if(m_customWindowsPaperId != 0)
-                    devMode->dmPaperSize = m_customWindowsPaperId;
-                else
-                    devMode->dmPaperSize = DMPAPER_USER;
-                devMode->dmPaperWidth = (short)(paperSize.x * 10);
-                devMode->dmPaperLength = (short)(paperSize.y * 10);
-                devMode->dmFields |= DM_PAPERWIDTH;
-                devMode->dmFields |= DM_PAPERLENGTH;
-
-                // A printer driver may or may not also want DM_PAPERSIZE to
-                // be specified. Also, if the printer driver doesn't implement the DMPAPER_USER
-                // size, then this won't work, and even if you found the correct id by
-                // enumerating the driver's paper sizes, it probably won't change the actual size,
-                // it'll just select that custom paper type with its own current setting.
-                // For a discussion on this, see http://www.codeguru.com/forum/showthread.php?threadid=458617
-                // Although m_customWindowsPaperId is intended to work around this, it's
-                // unclear how it can help you set the custom paper size programmatically.
-            }
-            //else: neither paper type nor size specified, don't fill DEVMODE
-            //      at all so that the system defaults are used
-        }
-
-        //// Duplex
+            devMode->dmPaperWidth = (short)(paperSize.x * 10);
+            devMode->dmPaperLength = (short)(paperSize.y * 10);
+		}
+		
+		//// Duplex
         short duplex;
         switch (data.GetDuplex())
         {
@@ -672,37 +670,36 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         devMode->dmFields |= DM_DUPLEX;
 
         //// Quality
-
-        short quality;
-        switch (data.GetQuality())
+        if (data.GetQuality() != wxPRINT_QUALITY_DEFAULT)
         {
-            case wxPRINT_QUALITY_MEDIUM:
-                quality = DMRES_MEDIUM;
-                break;
-            case wxPRINT_QUALITY_LOW:
-                quality = DMRES_LOW;
-                break;
-            case wxPRINT_QUALITY_DRAFT:
-                quality = DMRES_DRAFT;
-                break;
-            case wxPRINT_QUALITY_HIGH:
-                quality = DMRES_HIGH;
-                break;
-            default:
-                quality = (short)data.GetQuality();
-                devMode->dmYResolution = quality;
-                devMode->dmFields |= DM_YRESOLUTION;
-                break;
+            short quality;
+            switch (data.GetQuality())
+            {
+                case wxPRINT_QUALITY_MEDIUM:
+                    quality = DMRES_MEDIUM;
+                    break;
+                case wxPRINT_QUALITY_LOW:
+                    quality = DMRES_LOW;
+                    break;
+                case wxPRINT_QUALITY_DRAFT:
+                    quality = DMRES_DRAFT;
+                    break;
+                case wxPRINT_QUALITY_HIGH:
+                    quality = DMRES_HIGH;
+                    break;
+                default:
+                    quality = (short)data.GetQuality();
+                    devMode->dmYResolution = quality;
+                    devMode->dmFields |= DM_YRESOLUTION;
+                    break;
+            }
+            devMode->dmPrintQuality = quality;
+            devMode->dmFields |= DM_PRINTQUALITY;
         }
-        devMode->dmPrintQuality = quality;
-        devMode->dmFields |= DM_PRINTQUALITY;
+        else
+            devMode->dmFields &= ~DM_PRINTQUALITY;
 
-        if (data.GetPrivDataLen() > 0)
-        {
-            memcpy( (char *)devMode+devMode->dmSize, data.GetPrivData(), data.GetPrivDataLen() );
-            devMode->dmDriverExtra = (WXWORD)data.GetPrivDataLen();
-        }
-
+        //// Default source
         if (data.GetBin() != wxPRINTBIN_DEFAULT)
         {
             switch (data.GetBin())
@@ -728,10 +725,25 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 
             devMode->dmFields |= DM_DEFAULTSOURCE;
         }
+        else
+            // printer default
+            devMode->dmFields &= ~DM_DEFAULTSOURCE;
+
+        //// Media type
         if (data.GetMedia() != wxPRINTMEDIA_DEFAULT)
         {
             devMode->dmMediaType = data.GetMedia();
             devMode->dmFields |= DM_MEDIATYPE;
+        }
+        else
+            // printer default
+            devMode->dmFields &= ~DM_MEDIATYPE;
+
+        //// Driver extra
+        if (data.GetPrivDataLen() > 0)
+        {
+            memcpy( (char *)devMode+devMode->dmSize, data.GetPrivData(), data.GetPrivDataLen() );
+            devMode->dmDriverExtra = (WXWORD)data.GetPrivDataLen();
         }
 
         if( printer )

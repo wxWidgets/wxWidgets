@@ -182,6 +182,9 @@ public:
     wxGtkPrintNativeData();
     virtual ~wxGtkPrintNativeData();
 
+   // Bricsys added: r478
+   virtual bool Initialize( wxPrintData &data, const wxString &printerName = wxEmptyString );
+
     virtual bool TransferTo( wxPrintData &data ) wxOVERRIDE;
     virtual bool TransferFrom( const wxPrintData &data ) wxOVERRIDE;
 
