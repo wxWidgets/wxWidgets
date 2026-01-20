@@ -119,6 +119,10 @@ public:
     virtual int GetCharHeight() const wxOVERRIDE;
     virtual int GetCharWidth() const wxOVERRIDE;
 
+// ----- BEGIN Bricsys change
+    virtual int GetCharWidthByExtents() const;
+// ----- END Bricsys change
+
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true, [[maybe_unused]] int lineSize=1 ) wxOVERRIDE;
     virtual void SetScrollPos( int orient, int pos, bool refresh = true ) wxOVERRIDE;

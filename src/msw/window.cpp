@@ -2314,6 +2314,18 @@ int wxWindowMSW::GetCharWidth() const
 #endif
 }
 
+// ----- BEGIN Bricsys change
+// for font "MS Shell Dlg 2" - tmAveCharWidth=5, but tmMaxCharWidth=23 !
+// better to use true text extents for a wide character, as it is done on other platforms;
+// Linux/Mac also use "g" to determine an average width
+int wxWindowMSW::GetCharWidthByExtents() const
+{
+    int width = wxGetTextMetrics(this).tmAveCharWidth + 1;
+    this->DoGetTextExtent("g", &width, NULL, NULL, NULL, NULL);
+    return width;
+}
+// ----- END Bricsys change
+
 void wxWindowMSW::DoGetTextExtent(const wxString& string,
                                   int *x, int *y,
                                   int *descent,
