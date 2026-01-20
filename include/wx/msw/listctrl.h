@@ -111,6 +111,9 @@ public:
     // Set the control colours
     bool SetForegroundColour(const wxColour& col) wxOVERRIDE;
     bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
+	// Bricsys change, #15291 (for theming)
+    wxColour GetRuleColour() const wxOVERRIDE;
+    // end Bricsys change
 
     // Header attributes
     virtual bool SetHeaderAttr(const wxItemAttr& attr) wxOVERRIDE;
