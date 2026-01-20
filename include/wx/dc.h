@@ -412,6 +412,9 @@ public:
 
 #if wxUSE_PALETTE
     virtual void SetPalette(const wxPalette& palette) = 0;
+#if 1  // BS_CHANGES_ENABLED #50632
+    virtual const wxPalette& GetPalette() const { return m_palette; }
+#endif
 #endif // wxUSE_PALETTE
 
     // inherit the DC attributes (font and colours) from the given window
@@ -948,6 +951,10 @@ public:
 #if wxUSE_PALETTE
     void SetPalette(const wxPalette& palette)
         { m_pimpl->SetPalette(palette); }
+#if 1  // BS_CHANGES_ENABLED #50632
+    const wxPalette& GetPalette() const
+        { return m_pimpl->GetPalette(); }
+#endif
 #endif // wxUSE_PALETTE
 
     // logical functions
@@ -1694,3 +1701,4 @@ private:
 
 
 #endif // _WX_DC_H_BASE_
+
