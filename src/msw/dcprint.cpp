@@ -198,30 +198,58 @@ bool wxPrinterDCImpl::StartDoc(const wxString& message)
     if (!m_hDC)
         return false;
 
+    // Bricsys change: improve error and print job status reporting
+#if 0
     if ( ::StartDoc(GetHdc(), &docinfo) <= 0 )
     {
         wxLogLastError(wxT("StartDoc"));
         return false;
     }
+#else
+    m_printJobId = ::StartDoc(GetHdc(), &docinfo);
+    if(m_printJobId <= 0)
+    {
+        wxLogSysError(_("::StartDoc failed!"));
+        return false;
+    }
+#endif
 
     return true;
 }
 
 void wxPrinterDCImpl::EndDoc()
 {
+// Bricsys change: improve error reporting
+#if 0
     if (m_hDC) ::EndDoc((HDC) m_hDC);
+#else
+    if(m_hDC && ::EndDoc((HDC)m_hDC) <= 0)
+        wxLogSysError(_("::EndDoc failed!"));
+#endif
 }
 
 void wxPrinterDCImpl::StartPage()
 {
+// Bricsys change: improve error reporting
+#if 0
     if (m_hDC)
         ::StartPage((HDC) m_hDC);
+#else
+    if(m_hDC && ::StartPage((HDC)m_hDC) <= 0)
+        wxLogSysError(_("::StartPage failed!"));
+#endif
 }
 
 void wxPrinterDCImpl::EndPage()
 {
+// Bricsys change: improve error reporting
+#if 0
     if (m_hDC)
         ::EndPage((HDC) m_hDC);
+#else
+    if(m_hDC && ::EndPage((HDC)m_hDC) <= 0)
+        wxLogSysError(_("::EndPage failed!"));
+#endif
 }
 
 
@@ -350,7 +378,12 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
                 );
     if ( !hDC )
     {
+// Bricsys change: improve error reporting
+#if 0
         wxLogLastError(wxT("CreateDC(printer)"));
+#else
+        wxLogSysError(_("::CreateDC failed!"));
+#endif
     }
 
     return (WXHDC) hDC;

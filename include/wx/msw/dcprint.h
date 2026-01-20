@@ -35,6 +35,12 @@ public:
     virtual void EndPage() wxOVERRIDE;
 
     virtual wxRect GetPaperRect() const wxOVERRIDE;
+ 
+    // Bricsys change: for print job status reporting
+#if 1
+    const wxString& printerName() const { return m_printData.GetPrinterName(); }
+    int printJobId() const { return m_printJobId; }
+#endif
 
     virtual wxSize FromDIP(const wxSize& sz) const wxOVERRIDE;
 
@@ -62,6 +68,11 @@ protected:
     wxPrintData m_printData;
 
 private:
+    // Bricsys change: for print job status reporting
+#if 1
+    int m_printJobId;
+#endif
+
     wxDECLARE_CLASS(wxPrinterDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxPrinterDCImpl);
 };
