@@ -23,6 +23,9 @@ public:
                             wxOSXPrintData();
     virtual                 ~wxOSXPrintData();
 
+    // bricsys added
+    virtual bool            Initialize( wxPrintData &/*data*/, const wxString &/*printerName*/ );
+
     virtual bool            TransferTo( wxPrintData &data ) wxOVERRIDE;
     virtual bool            TransferFrom( const wxPrintData &data ) wxOVERRIDE;
 

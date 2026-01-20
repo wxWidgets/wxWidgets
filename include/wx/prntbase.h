@@ -162,6 +162,9 @@ public:
     wxPrintNativeDataBase();
     virtual ~wxPrintNativeDataBase() {}
 
+    // Bricsys added: r478
+    virtual bool Initialize( wxPrintData &data, const wxString &printerName = wxEmptyString ) = 0;
+
     virtual bool TransferTo( wxPrintData &data ) = 0;
     virtual bool TransferFrom( const wxPrintData &data ) = 0;
 #ifdef __WXOSX__
