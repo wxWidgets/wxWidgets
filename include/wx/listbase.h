@@ -439,6 +439,11 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
 
+    // Bricsys change, #15291 (for theming)
+    virtual void SetRuleColour(const wxColour& colour) { m_ruleColour = colour; }
+    virtual wxColour GetRuleColour() const { return m_ruleColour; };
+    // end Bricsys change
+
     virtual void ExtendRulesAndAlternateColour(bool WXUNUSED(extend) = true) { }
 
     // Header attributes support: only implemented in wxMSW currently.
@@ -500,6 +505,8 @@ protected:
 
     // return the attribute for the given item and column (may return NULL if none)
     virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
+
+    wxColour   m_ruleColour;  // Bricsys change, #15291 (for theming)};
 
 private:
     wxWithImages m_imagesNormal,

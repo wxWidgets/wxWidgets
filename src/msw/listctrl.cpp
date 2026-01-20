@@ -643,6 +643,17 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
     return true;
 }
 
+// Bricsys change, #15291 (for theming)
+wxColour wxListCtrl::GetRuleColour() const
+{
+    if (m_ruleColour.IsOk() && HasFlag(wxLC_REPORT))
+        return m_ruleColour;
+    else
+        return wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
+}
+// end Bricsys change
+
+
 bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
 {
     // We need to propagate the change of the font to the native header window
@@ -3307,7 +3318,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
 
-    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+    wxPen pen(GetRuleColour()); // Bricsys change, #15291 (for theming)
     dc.SetPen(pen);
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
