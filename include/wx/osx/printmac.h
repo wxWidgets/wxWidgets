@@ -27,7 +27,8 @@ public:
 
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
-                       bool prompt = true) wxOVERRIDE;
+                       bool prompt = true,
+                       bool batchmode = false) wxOVERRIDE;
     virtual wxDC* PrintDialog(wxWindow *parent) wxOVERRIDE;
     virtual bool Setup(wxWindow *parent) wxOVERRIDE;
 

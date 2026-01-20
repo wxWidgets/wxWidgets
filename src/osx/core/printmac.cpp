@@ -547,7 +547,7 @@ wxMacPrinter::~wxMacPrinter()
 {
 }
 
-bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
+bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt, bool /*batchMode bricsys addition, to be implemented if need for batchmode arises*/)
 {
     sm_abortIt = false;
     sm_abortWindow = NULL;
