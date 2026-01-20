@@ -107,6 +107,9 @@ public:
         m_maxAccelWidth = -1;
     }
 
+    // Bricsys added: we need to make context menu owner-drawn always so menmonics work (Issue #2109)
+    void SetOwnerDrawn( bool ownerdrawn ){ m_ownerDrawn = ownerdrawn; }
+
 private:
     void CalculateMaxAccelWidth();
 
