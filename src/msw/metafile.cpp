@@ -41,6 +41,7 @@
 // ----------------------------------------------------------------------------
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxMetafile, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxMetafileDCImpl, wxMSWDCImpl);
 wxIMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC);
 
 // ============================================================================
@@ -98,29 +99,32 @@ wxGDIRefData *wxMetafile::CreateGDIRefData() const
 
 wxGDIRefData *wxMetafile::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxMetafileRefData(*static_cast<const wxMetafileRefData *>(data));
+    const wxMetafileRefData *mfData = static_cast<const wxMetafileRefData *>(data);
+    wxMetafileRefData *newData = new wxMetafileRefData();
+    newData->m_metafile = mfData->m_metafile;
+    newData->m_windowsMappingMode = mfData->m_windowsMappingMode;
+    newData->m_width = mfData->m_width;
+    newData->m_height = mfData->m_height;
+    return newData;
 }
 
-bool wxMetafile::SetClipboard(int width, int height)
+bool wxMetafile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
 {
-#if !wxUSE_CLIPBOARD
-    return false;
-#else
-    if (!m_refData)
+#if wxUSE_DRAG_AND_DROP && wxUSE_CLIPBOARD
+    if ( !m_refData )
         return false;
 
-    bool alreadyOpen = wxClipboardOpen();
-    if (!alreadyOpen)
-    {
-        wxOpenClipboard();
-        if (!wxEmptyClipboard())
-            return false;
-    }
-    bool success = wxSetClipboardData(wxDF_METAFILE, this, width,height);
-    if (!alreadyOpen)
-        wxCloseClipboard();
+    wxClipboard * const clipboard = wxClipboard::Get();
+    if ( !clipboard->Open() )
+        return false;
 
+    wxMetafileDataObject *data = new wxMetafileDataObject(*this);
+    bool success = clipboard->SetData(data);
+
+    clipboard->Close();
     return success;
+#else
+    return false;
 #endif
 }
 

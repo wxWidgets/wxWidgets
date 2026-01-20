@@ -14,6 +14,11 @@
 #include "wx/dc.h"
 #include "wx/gdiobj.h"
 
+// Add this include for wxMSWDCImpl
+#if wxUSE_WIN_METAFILES_ALWAYS
+    #include "wx/msw/dc.h"
+#endif
+
 #if wxUSE_DATAOBJ
     #include "wx/dataobj.h"
 #endif
