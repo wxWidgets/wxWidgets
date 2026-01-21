@@ -22,6 +22,9 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 // by setting this to 0 (in the future this should be removed completely)
 #define wxUSE_DEFERRED_SIZING 1
 
+// the value that extends the window hack for qt transient popup
+extern WXDLLIMPEXP_CORE const WXLRESULT qtTransientPopupResult;
+
 // ---------------------------------------------------------------------------
 // wxWindow declaration for MSW
 // ---------------------------------------------------------------------------
