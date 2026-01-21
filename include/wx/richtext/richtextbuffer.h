@@ -4766,6 +4766,9 @@ public:
 
 private:
     bool DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, wxString& str, wxCoord& x, wxCoord& y, bool selected);
+#ifdef __WXMAC__
+    bool DrawTabbedStringWithPartialSelection(wxDC& dc, const wxRichTextAttr& attr, const wxRect& rect, wxString& str, wxCoord& x, wxCoord& y, int selStart, int selEnd);
+#endif
 
 protected:
     wxString    m_text;
