@@ -132,6 +132,9 @@
 // global variables
 // ---------------------------------------------------------------------------
 
+// it prevents to deactivate the application main window when open qt transient popups
+const WXLRESULT qtTransientPopupResult = -1898989605;
+
 #if wxUSE_MENUS_NATIVE
 extern wxMenu *wxCurrentPopupMenu;
 #endif
@@ -3767,14 +3770,23 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             // draw the window as active seems to be the only way of achieving
             // this (thanks to Barmak Shemirani for suggesting it at
             // https://stackoverflow.com/a/52808753/15275).
-            if ( !wParam &&
-                    wxCurrentPopupWindow &&
-                        wxCurrentPopupWindow->MSWGetOwner() == this )
-            {
-                rc.result = MSWDefWindowProc(message, TRUE, lParam);
-                processed = true;
-            }
-            break;
+        {
+#if 1 // BS_CHANGES_ENABLED
+            if (!wParam &&
+                (wxCurrentPopupWindow &&
+                 wxCurrentPopupWindow->MSWGetOwner() == this || *result == qtTransientPopupResult))
+#else
+            if (!wParam &&
+                wxCurrentPopupWindow &&
+                wxCurrentPopupWindow->MSWGetOwner() == this)
+#endif
+
+             {
+                 rc.result = MSWDefWindowProc(message, TRUE, lParam);
+                 processed = true;
+             }
+             break;
+        }
 #endif
 
 #if wxUSE_UXTHEME
