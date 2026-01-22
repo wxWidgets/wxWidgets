@@ -4457,6 +4457,12 @@ void wxWidgetCocoaImpl::ClipsToBounds(bool clip)
     m_osxView.clipsToBounds = clip;
 }
 
+void wxWidgetCocoaImpl::PaintHandlerAdded()
+{
+    if (!IsUserPane()) return;
+    NSView * view =  (NSView*) m_osxView;
+    object_setClass( view, [wxNSViewWithDrawing class] );
+}
 
 //
 // Factory methods
@@ -4472,15 +4478,23 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
 
     //  Avoid macOS 26 Tahoe triggers legacy rendering with brown background
     if (wxpeer->IsKindOf(wxCLASSINFO(wxSpinCtrl))
-      || wxpeer->IsKindOf(wxCLASSINFO(wxSpinCtrlDouble)) 
-      || ((style & wxTRANSPARENT_WINDOW) != 0))
+      || wxpeer->IsKindOf(wxCLASSINFO(wxSpinCtrlDouble)))
     {
         wxNSView* v = [[wxNSView alloc] initWithFrame:r];
         c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
     }
     else
     {
-        wxNSViewWithDrawing* v = [[wxNSViewWithDrawing alloc] initWithFrame:r];
+        // Create wxNSView without overriding drawRect
+        NSView* v = nullptr;
+        if (wxpeer->HasHandleForEventType(wxEVT_PAINT))
+            v = [[wxNSViewWithDrawing alloc] initWithFrame:r];
+        else
+            v = [[wxNSView alloc] initWithFrame:r];
+
+        // We can change that later on the fly to wxNSViewWithDrawing incl drawRect
+        // object_setClass( v, [wxNSViewWithDrawing class] );
+
         c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
     }
     return c;

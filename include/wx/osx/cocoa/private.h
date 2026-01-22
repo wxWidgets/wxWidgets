@@ -234,6 +234,8 @@ public :
 
     virtual void                ApplyScrollViewBorderType() override;
 
+    virtual void                PaintHandlerAdded() override;
+
 protected:
     WXWidget m_osxView;
     WXWidget m_osxClipView;

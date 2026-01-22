@@ -151,6 +151,13 @@ public:
     // event handlers
     // --------------
 
+    // override this to catch binding to wxEVT_PAINT
+    virtual void DoBind(int winid,
+                   int lastId,
+                   wxEventType eventType,
+                   wxEventFunctor *func,
+                   wxObject* userData = nullptr) override;
+
     void OnMouseEvent( wxMouseEvent &event );
 
     void MacOnScroll( wxScrollEvent&event );

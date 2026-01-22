@@ -397,6 +397,9 @@ public :
     // should be called to enable appropriate borders for native controls with scrollview superviews
     virtual void        ApplyScrollViewBorderType() { }
 
+    // Give the peer a change to override NSView's drawRect
+    virtual void        PaintHandlerAdded() {}
+
     // Mechanism used to keep track of whether a change should send an event
     // Do SendEvents(false) when starting actions that would trigger programmatic events
     // and SendEvents(true) at the end of the block.

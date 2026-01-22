@@ -3670,6 +3670,9 @@ public:
     // and call self->ProcessEvent() if a match was found.
     bool HandleEvent(wxEvent& event, wxEvtHandler *self);
 
+    // Search for handler of e.g. wxEVT_PAINT
+    bool HasHandleForEventType(wxEventType eventType);
+
     // Clear table
     void Clear();
 
@@ -3724,6 +3727,8 @@ public:
     void Unlink();
     bool IsUnlinked() const;
 
+    // Search for handler of e.g. wxEVT_PAINT
+    bool HasHandleForEventType(wxEventType eventType);
 
     // Global event filters
     // --------------------
@@ -4040,8 +4045,8 @@ public:
     void OnSinkDestroyed( wxEvtHandler *sink );
 
 
-private:
-    void DoBind(int winid,
+protected:
+    virtual void DoBind(int winid,
                    int lastId,
                    wxEventType eventType,
                    wxEventFunctor *func,
@@ -4053,6 +4058,7 @@ private:
                       const wxEventFunctor& func,
                       wxObject *userData = nullptr);
 
+private:
     static const wxEventTableEntry sm_eventTableEntries[];
 
 protected:
