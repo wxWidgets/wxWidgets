@@ -248,6 +248,9 @@
     <ClCompile Include="controls\spinctrltest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="controls\statbmptest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\styledtextctrltest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -227,6 +227,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_slidertest.obj \
 	$(OBJS)\test_gui_spinctrldbltest.obj \
 	$(OBJS)\test_gui_spinctrltest.obj \
+	$(OBJS)\test_gui_statbmptest.obj \
 	$(OBJS)\test_gui_styledtextctrltest.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
 	$(OBJS)\test_gui_textentrytest.obj \
@@ -1383,6 +1384,9 @@ $(OBJS)\test_gui_spinctrldbltest.obj: .\controls\spinctrldbltest.cpp
 
 $(OBJS)\test_gui_spinctrltest.obj: .\controls\spinctrltest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\spinctrltest.cpp
+
+$(OBJS)\test_gui_statbmptest.obj: .\controls\statbmptest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\statbmptest.cpp
 
 $(OBJS)\test_gui_styledtextctrltest.obj: .\controls\styledtextctrltest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\styledtextctrltest.cpp
