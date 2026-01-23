@@ -3229,6 +3229,8 @@ set(STC_CMN_SRC
 set(STC_CMN_HDR
     wx/stc/stc.h
     wx/xrc/xh_styledtextctrl.h
+    wx/bricsys/LexLispShared.hxx
+    wx/bricsys/LexLisp.hxx
 )
 
 set(STC_OSX_COCOA_SRC

@@ -30,7 +30,10 @@ using namespace Scintilla;
 
 #if 1  // Bricsys change : adjusted for AutoLISP syntax
 
-#include "wx/bricsys/LexLisp.hxx"
+#define wxSTC_LEX_AUTOMATIC 1000 // defined in stc/stc.h, but we can't include it in Scintilla
+#define SCLEX_DCL  ((int)(wxSTC_LEX_AUTOMATIC - 1)) /* last before SCLEX_AUTOMATIC */
+
+#include "wx/bricsys/LexLispShared.hxx"
 #include "Catalogue.h"
 
 // AutoLISP : Colourise + Fold
@@ -585,7 +588,7 @@ static bool parseDialog(Accessor &styler, unsigned int pos, unsigned int lengthD
     for (; pos < lengthDoc; ++pos)
     {
         ch = styler.SafeGetCharAt(pos);
-        if (wxIsgraph(ch))
+        if (isgraph(ch))
             break;
     }
 
@@ -605,7 +608,7 @@ static bool parseDialog(Accessor &styler, unsigned int pos, unsigned int lengthD
 
     // check next character after 'dialog'
     ch = styler.SafeGetCharAt(++pos);
-    if (!wxIsspace(ch) && (ch != wxT('{')))
+    if (!isspacechar(ch) && (ch != L'{'))
         return false;
 
     return true;
