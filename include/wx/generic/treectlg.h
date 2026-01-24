@@ -355,7 +355,7 @@ protected:
 
     virtual wxSize DoGetBestSize() const override;
     virtual int DoGetBestClientWidth(int height) const override;
-    
+
 private:
     void OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     {

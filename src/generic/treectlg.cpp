@@ -4207,7 +4207,7 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
     size.x = (size.x / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
     size.y = (size.y / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
 
-    // add the border 
+    // add the border
     const wxSize& borderSize = GetWindowBorderSize();
     size.x += borderSize.x;
     size.y += borderSize.y;
@@ -4216,7 +4216,7 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
 }
 
 int wxGenericTreeCtrl::DoGetBestClientWidth(int height) const
-{ 
+{
     // make sure all positions are calculated as normally this only done during
     // idle time but we need them for base class DoGetBestSize() to return the
     // correct result
@@ -4233,7 +4233,7 @@ int wxGenericTreeCtrl::DoGetBestClientWidth(int height) const
     size.x = (size.x / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
     size.y = (size.y / PIXELS_PER_UNIT) * PIXELS_PER_UNIT;
 
-    if (height < size.y) 
+    if (height < size.y)
     {
         // Add space for vertical scrollbar
         return size.x + wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
