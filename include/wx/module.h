@@ -54,6 +54,10 @@ public:
 
     static void UnregisterModule(wxModule *module);
 
+    // Initialize the module with the given type information if it's not
+    // already initialized. This is for internal use only currently.
+    static void AddModuleIfNecessary(const wxClassInfo *classInfo);
+
 protected:
     static wxModuleList ms_modules;
 
