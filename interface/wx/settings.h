@@ -125,6 +125,18 @@ enum wxSystemColour
      */
     wxSYS_COLOUR_GRIDLINES,
 
+    /**
+        Background colour of a selected item in a wxListBox etc. and such
+        either identical or close to the main accent or theme colour of
+        the operating system.
+
+        On macOS, this maps to `[NSColor selectedContentBackgroundColor]`,
+        on other platforms it is the same as ::wxSYS_COLOUR_HIGHLIGHT.
+
+        @since 3.3.2
+     */
+    wxSYS_COLOUR_LISTBOXHIGHLIGHT,
+
     // synonyms:
 
     wxSYS_COLOUR_BACKGROUND = wxSYS_COLOUR_DESKTOP,

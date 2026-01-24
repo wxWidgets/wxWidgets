@@ -70,6 +70,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             color = pal.color(QPalette::Light);
             break;
 
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHT:
         case wxSYS_COLOUR_HIGHLIGHT:
             color = pal.highlight().color();
             break;
