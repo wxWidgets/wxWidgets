@@ -16,7 +16,7 @@
 
 #include "wx/ribbon/control.h"
 #include "wx/ribbon/panel.h"
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 
 class wxRibbonBar;
 class wxRibbonPageScrollButton;
@@ -29,7 +29,7 @@ public:
     wxRibbonPage(wxRibbonBar* parent,
                  wxWindowID id = wxID_ANY,
                  const wxString& label = wxEmptyString,
-                 const wxBitmap& icon = wxNullBitmap,
+                 const wxBitmapBundle& icon = wxBitmapBundle(),
                  long style = 0);
 
     virtual ~wxRibbonPage();
@@ -37,12 +37,13 @@ public:
     bool Create(wxRibbonBar* parent,
                 wxWindowID id = wxID_ANY,
                 const wxString& label = wxEmptyString,
-                const wxBitmap& icon = wxNullBitmap,
+                const wxBitmapBundle& icon = wxBitmapBundle(),
                 long style = 0);
 
     void SetArtProvider(wxRibbonArtProvider* art) override;
 
-    wxBitmap& GetIcon() {return m_icon;}
+    wxBitmap GetIcon() {return m_icon.GetBitmapFor(this);}
+    const wxBitmapBundle& GetIconBundle() const {return m_icon;}
     virtual wxSize GetMinSize() const override;
     void SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height);
     void AdjustRectToIncludeScrollButtons(wxRect* rect) const;
@@ -75,17 +76,18 @@ protected:
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnSize(wxSizeEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
 
     bool ExpandPanels(wxOrientation direction, int maximum_amount);
     bool CollapsePanels(wxOrientation direction, int minimum_amount);
     bool ShowScrollButtons();
     void HideScrollButtons();
 
-    void CommonInit(const wxString& label, const wxBitmap& icon);
+    void CommonInit(const wxString& label, const wxBitmapBundle& icon);
     void PopulateSizeCalcArray(wxSize (wxWindow::*get_size)(void) const);
 
     wxArrayRibbonControl m_collapse_stack;
-    wxBitmap m_icon;
+    wxBitmapBundle m_icon;
     wxSize m_old_size;
     // NB: Scroll button windows are siblings rather than children (to get correct clipping of children)
     wxRibbonPageScrollButton* m_scroll_left_btn = nullptr;
