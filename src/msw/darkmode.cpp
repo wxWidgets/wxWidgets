@@ -338,6 +338,7 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
             return wxColour(0x626262);
 
         case wxSYS_COLOUR_HIGHLIGHT:
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHT:
         case wxSYS_COLOUR_MENUHILIGHT:
             return wxColour(0x9e5315);
 
