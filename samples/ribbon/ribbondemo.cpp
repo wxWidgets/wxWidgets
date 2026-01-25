@@ -23,6 +23,7 @@
 #include "wx/dcbuffer.h"
 #include "wx/colordlg.h"
 #include "wx/artprov.h"
+#include "wx/bmpbndl.h"
 #include "wx/combobox.h"
 #include "wx/tglbtn.h"
 #include "wx/wrapsizer.h"
@@ -149,6 +150,7 @@ public:
     void OnRibbonBarHelpClicked(wxRibbonBarEvent& evt);
 
     void OnSizeEvent(wxSizeEvent& evt);
+    void OnDPIChanged(wxDPIChangedEvent& evt);
 
     void OnExtButton(wxRibbonPanelEvent& evt);
 
@@ -260,30 +262,204 @@ EVT_RIBBONBUTTONBAR_CLICKED(ID_CHANGE_LABEL, MyFrame::OnChangeLabel)
 EVT_RIBBONBAR_TOGGLED(wxID_ANY, MyFrame::OnRibbonBarToggled)
 EVT_RIBBONBAR_HELP_CLICK(wxID_ANY, MyFrame::OnRibbonBarHelpClicked)
 EVT_SIZE(MyFrame::OnSizeEvent)
+EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
-#include "align_center.xpm"
-#include "align_left.xpm"
-#include "align_right.xpm"
-#include "aui_style.xpm"
-#include "auto_crop_selection.xpm"
-#include "auto_crop_selection_small.xpm"
-#include "circle.xpm"
-#include "circle_small.xpm"
-#include "colours.xpm"
-#include "cross.xpm"
-#include "empty.xpm"
-#include "expand_selection_v.xpm"
-#include "expand_selection_h.xpm"
-#include "eye.xpm"
-#include "hexagon.xpm"
-#include "msw_style.xpm"
-#include "position_left_small.xpm"
-#include "position_top_small.xpm"
-#include "ribbon.xpm"
-#include "selection_panel.xpm"
-#include "square.xpm"
-#include "triangle.xpm"
+// ----------------------------------------------------------------------------
+// SVG icon data for ribbon-specific icons.
+// Each icon uses a 32x32 viewBox for clean scaling at any display size.
+// The MakeSvgBundle() helper guarantees a valid (non-empty) bundle is always
+// returned, falling back to wxArtProvider when SVG support is unavailable.
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// -- Shape icons -----------------------------------------------------------
+
+static const char circle_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<circle cx='16' cy='16' r='12' fill='#4488CC' stroke='#2D6699' stroke-width='1.5'/>"
+    "</svg>";
+
+static const char cross_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<path d='M13 4h6v9h9v6h-9v9h-6v-9H4v-6h9z' fill='#CC4444'/>"
+    "</svg>";
+
+static const char triangle_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<polygon points='16,3 29,28 3,28' fill='#44AA44' stroke='#2D7A2D' stroke-width='1.5'/>"
+    "</svg>";
+
+static const char square_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='4' y='4' width='24' height='24' rx='1' fill='#CC8844' stroke='#996633'"
+    " stroke-width='1.5'/>"
+    "</svg>";
+
+static const char hexagon_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<polygon points='16,2 28,9 28,23 16,30 4,23 4,9' fill='#8844CC' stroke='#663399'"
+    " stroke-width='1.5'/>"
+    "</svg>";
+
+// -- Alignment icons -------------------------------------------------------
+
+static const char align_left_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='4' width='28' height='3' rx='1' fill='#555'/>"
+    "<rect x='2' y='11' width='18' height='3' rx='1' fill='#555'/>"
+    "<rect x='2' y='18' width='24' height='3' rx='1' fill='#555'/>"
+    "<rect x='2' y='25' width='14' height='3' rx='1' fill='#555'/>"
+    "</svg>";
+
+static const char align_center_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='4' width='28' height='3' rx='1' fill='#555'/>"
+    "<rect x='7' y='11' width='18' height='3' rx='1' fill='#555'/>"
+    "<rect x='4' y='18' width='24' height='3' rx='1' fill='#555'/>"
+    "<rect x='9' y='25' width='14' height='3' rx='1' fill='#555'/>"
+    "</svg>";
+
+static const char align_right_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='4' width='28' height='3' rx='1' fill='#555'/>"
+    "<rect x='12' y='11' width='18' height='3' rx='1' fill='#555'/>"
+    "<rect x='6' y='18' width='24' height='3' rx='1' fill='#555'/>"
+    "<rect x='16' y='25' width='14' height='3' rx='1' fill='#555'/>"
+    "</svg>";
+
+// -- Selection icons -------------------------------------------------------
+
+static const char expand_selection_v_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<path d='M16 2l6 8h-4v12h4l-6 8-6-8h4V10h-4z' fill='#4488CC'/>"
+    "</svg>";
+
+static const char expand_selection_h_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<path d='M2 16l8-6v4h12v-4l8 6-8 6v-4H10v4z' fill='#4488CC'/>"
+    "</svg>";
+
+static const char auto_crop_selection_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='8' y='8' width='16' height='16' fill='none' stroke='#999'"
+    " stroke-width='1' stroke-dasharray='3,2'/>"
+    "<path d='M2 16l6-4v3h3v2H8v3z' fill='#CC6644'/>"
+    "<path d='M30 16l-6-4v3h-3v2h3v3z' fill='#CC6644'/>"
+    "<path d='M16 2l-4 6h3v3h2V8h3z' fill='#CC6644'/>"
+    "<path d='M16 30l-4-6h3v-3h2v3h3z' fill='#CC6644'/>"
+    "</svg>";
+
+static const char selection_panel_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='4' y='4' width='24' height='24' fill='none' stroke='#888'"
+    " stroke-width='1' stroke-dasharray='3,2'/>"
+    "<line x1='16' y1='8' x2='16' y2='24' stroke='#CC4444' stroke-width='1.5'/>"
+    "<line x1='8' y1='16' x2='24' y2='16' stroke='#CC4444' stroke-width='1.5'/>"
+    "</svg>";
+
+// -- Position icons --------------------------------------------------------
+
+static const char position_left_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='2' width='4' height='28' fill='#4488CC'/>"
+    "<rect x='8' y='2' width='22' height='28' fill='none' stroke='#999' stroke-width='1'/>"
+    "<path d='M22 16l-6-4v8z' fill='#4488CC'/>"
+    "</svg>";
+
+static const char position_top_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='2' width='28' height='4' fill='#4488CC'/>"
+    "<rect x='2' y='8' width='28' height='22' fill='none' stroke='#999' stroke-width='1'/>"
+    "<path d='M16 22l-4-6h8z' fill='#4488CC'/>"
+    "</svg>";
+
+// -- Art provider style icons ----------------------------------------------
+
+static const char aui_style_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='2' width='28' height='28' rx='3' fill='#E8E8E8' stroke='#888'"
+    " stroke-width='1'/>"
+    "<rect x='2' y='2' width='28' height='7' rx='3' fill='#6688AA'/>"
+    "<rect x='4' y='12' width='10' height='14' fill='#B0C4D8'/>"
+    "<rect x='18' y='12' width='10' height='14' fill='#B0C4D8'/>"
+    "</svg>";
+
+static const char msw_style_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='2' width='28' height='28' rx='1' fill='#F0F0F0' stroke='#0078D7'"
+    " stroke-width='1.5'/>"
+    "<rect x='2' y='2' width='28' height='7' rx='1' fill='#0078D7'/>"
+    "<rect x='5' y='12' width='22' height='3' fill='#CCE4F7'/>"
+    "<rect x='5' y='18' width='22' height='3' fill='#CCE4F7'/>"
+    "<rect x='5' y='24' width='22' height='3' fill='#CCE4F7'/>"
+    "</svg>";
+
+static const char msw_flat_style_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='2' width='28' height='28' fill='#F5F5F5' stroke='#999' stroke-width='1'/>"
+    "<rect x='2' y='2' width='28' height='6' fill='#999'/>"
+    "<rect x='5' y='12' width='22' height='2' fill='#BBB'/>"
+    "<rect x='5' y='18' width='22' height='2' fill='#BBB'/>"
+    "<rect x='5' y='24' width='22' height='2' fill='#BBB'/>"
+    "</svg>";
+
+// -- Miscellaneous icons ---------------------------------------------------
+
+static const char ribbon_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='2' y='4' width='28' height='8' rx='2' fill='#4488CC'/>"
+    "<rect x='2' y='12' width='28' height='16' rx='1' fill='#E0E8F0' stroke='#4488CC'"
+    " stroke-width='0.5'/>"
+    "<rect x='4' y='14' width='8' height='4' rx='1' fill='#4488CC' opacity='0.6'/>"
+    "<rect x='14' y='14' width='8' height='4' rx='1' fill='#4488CC' opacity='0.6'/>"
+    "<rect x='4' y='20' width='6' height='4' rx='1' fill='#4488CC' opacity='0.4'/>"
+    "<rect x='12' y='20' width='6' height='4' rx='1' fill='#4488CC' opacity='0.4'/>"
+    "<rect x='20' y='20' width='6' height='4' rx='1' fill='#4488CC' opacity='0.4'/>"
+    "</svg>";
+
+static const char eye_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<path d='M16 8C8 8 2 16 2 16s6 8 14 8 14-8 14-8-6-8-14-8z' fill='none' stroke='#555'"
+    " stroke-width='2'/>"
+    "<circle cx='16' cy='16' r='5' fill='#4488CC'/>"
+    "<circle cx='16' cy='16' r='2' fill='#222'/>"
+    "</svg>";
+
+static const char empty_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<rect x='6' y='2' width='20' height='28' rx='2' fill='#F8F8F8' stroke='#999'"
+    " stroke-width='1'/>"
+    "<path d='M10 8h12M10 13h12M10 18h8' stroke='#DDD' stroke-width='1'/>"
+    "</svg>";
+
+static const char colours_svg[] =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
+    "<circle cx='12' cy='10' r='6' fill='#FF4444' opacity='0.8'/>"
+    "<circle cx='20' cy='10' r='6' fill='#44CC44' opacity='0.8'/>"
+    "<circle cx='16' cy='18' r='6' fill='#4444FF' opacity='0.8'/>"
+    "</svg>";
+
+// Helper to create a bitmap bundle from embedded SVG data. When wxHAS_SVG is
+// available, the SVG is rasterized at any requested size for DPI-aware display.
+// Falls back to wxArtProvider to guarantee the returned bundle is never empty,
+// which prevents wxASSERT failures in AddTool/AddButton.
+wxBitmapBundle MakeSvgBundle(const char* svg_data, const wxSize& size,
+                              const wxArtID& fallback = wxART_QUESTION)
+{
+#ifdef wxHAS_SVG
+    wxBitmapBundle bundle = wxBitmapBundle::FromSVG(svg_data, size);
+    if ( bundle.IsOk() )
+        return bundle;
+#else
+    (void)svg_data;
+#endif // wxHAS_SVG
+    return wxArtProvider::GetBitmapBundle(fallback, wxART_OTHER, size);
+}
+
+} // anonymous namespace
 
 MyFrame::MyFrame()
     : wxFrame(nullptr, wxID_ANY, "wxRibbon Sample Application", wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
@@ -295,16 +471,25 @@ MyFrame::MyFrame()
                                 | wxRIBBON_BAR_SHOW_HELP_BUTTON
                                 );
 
+    // Reusable bitmap bundles for the generic ribbon and empty-page icons.
+    const wxBitmapBundle ribbon_small = MakeSvgBundle(ribbon_svg, wxSize(16, 16));
+    const wxBitmapBundle ribbon_large = MakeSvgBundle(ribbon_svg, wxSize(32, 32));
+    const wxBitmapBundle empty_small = MakeSvgBundle(empty_svg, wxSize(16, 16));
+
     {
-        wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, "Examples", ribbon_xpm);
+        wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, "Examples",
+            ribbon_small);
         wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, "Toolbar",
-                                            wxNullBitmap, wxDefaultPosition, wxDefaultSize,
+                                            wxBitmapBundle(), wxDefaultPosition, wxDefaultSize,
                                             wxRIBBON_PANEL_NO_AUTO_MINIMISE |
                                             wxRIBBON_PANEL_EXT_BUTTON);
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
-        toolbar->AddToggleTool(wxID_JUSTIFY_LEFT, align_left_xpm);
-        toolbar->AddToggleTool(wxID_JUSTIFY_CENTER , align_center_xpm);
-        toolbar->AddToggleTool(wxID_JUSTIFY_RIGHT, align_right_xpm);
+        toolbar->AddToggleTool(wxID_JUSTIFY_LEFT,
+            MakeSvgBundle(align_left_svg, wxSize(16, 16)));
+        toolbar->AddToggleTool(wxID_JUSTIFY_CENTER,
+            MakeSvgBundle(align_center_svg, wxSize(16, 16)));
+        toolbar->AddToggleTool(wxID_JUSTIFY_RIGHT,
+            MakeSvgBundle(align_right_svg, wxSize(16, 16)));
         toolbar->AddSeparator();
         toolbar->AddHybridTool(wxID_NEW, wxArtProvider::GetBitmap(wxART_NEW, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddTool(wxID_OPEN, wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, wxSize(16, 15)), "Open something");
@@ -320,9 +505,11 @@ MyFrame::MyFrame()
         toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddSeparator();
-        toolbar->AddHybridTool(ID_POSITION_LEFT, position_left_xpm,
+        toolbar->AddHybridTool(ID_POSITION_LEFT,
+                                MakeSvgBundle(position_left_svg, wxSize(16, 16)),
                                 "Align ribbonbar vertically\non the left\nfor demonstration purposes");
-        toolbar->AddHybridTool(ID_POSITION_TOP, position_top_xpm,
+        toolbar->AddHybridTool(ID_POSITION_TOP,
+                                MakeSvgBundle(position_top_svg, wxSize(16, 16)),
                                 "Align the ribbonbar horizontally\nat the top\nfor demonstration purposes");
         toolbar->AddSeparator();
         wxRibbonToolBarToolBase* print_tool;
@@ -340,25 +527,36 @@ MyFrame::MyFrame()
             wxLogError("wxRibbonToolBar::GetToolByPos(size_t) is broken");
         }
 
-        wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, "Selection", wxBitmap(selection_panel_xpm));
+        wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, "Selection",
+            MakeSvgBundle(selection_panel_svg, wxSize(16, 16)));
         wxRibbonButtonBar *selection = new wxRibbonButtonBar(selection_panel);
-        selection->AddButton(ID_SELECTION_EXPAND_V, "Expand Vertically", wxBitmap(expand_selection_v_xpm),
-                                "This is a tooltip for Expand Vertically\ndemonstrating a tooltip");
-        selection->AddButton(ID_SELECTION_EXPAND_H, "Expand Horizontally", wxBitmap(expand_selection_h_xpm), wxEmptyString);
-        selection->AddButton(ID_SELECTION_CONTRACT, "Contract", wxBitmap(auto_crop_selection_xpm), wxBitmap(auto_crop_selection_small_xpm));
+        selection->AddButton(ID_SELECTION_EXPAND_V, "Expand Vertically",
+            MakeSvgBundle(expand_selection_v_svg, wxSize(32, 32)),
+            "This is a tooltip for Expand Vertically\ndemonstrating a tooltip");
+        selection->AddButton(ID_SELECTION_EXPAND_H, "Expand Horizontally",
+            MakeSvgBundle(expand_selection_h_svg, wxSize(32, 32)), wxEmptyString);
+        wxBitmapBundle crop_bundle = MakeSvgBundle(auto_crop_selection_svg, wxSize(32, 32));
+        selection->AddButton(ID_SELECTION_CONTRACT, "Contract",
+            crop_bundle, crop_bundle);
 
-        wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, "Shapes", wxBitmap(circle_small_xpm));
+        wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, "Shapes",
+            MakeSvgBundle(circle_svg, wxSize(16, 16)));
         wxRibbonButtonBar *shapes = new wxRibbonButtonBar(shapes_panel);
-        shapes->AddButton(ID_CIRCLE, "Circle", wxBitmap(circle_xpm), wxBitmap(circle_small_xpm),
-                            wxNullBitmap, wxNullBitmap, wxRIBBON_BUTTON_NORMAL,
+        wxBitmapBundle circle_bundle = MakeSvgBundle(circle_svg, wxSize(32, 32));
+        shapes->AddButton(ID_CIRCLE, "Circle", circle_bundle, circle_bundle,
+                            wxBitmapBundle(), wxBitmapBundle(), wxRIBBON_BUTTON_NORMAL,
                             "This is a tooltip for the circle button\ndemonstrating another tooltip");
-        shapes->AddButton(ID_CROSS, "Cross", wxBitmap(cross_xpm), wxEmptyString);
-        shapes->AddHybridButton(ID_TRIANGLE, "Triangle", wxBitmap(triangle_xpm));
-        shapes->AddButton(ID_SQUARE, "Square", wxBitmap(square_xpm), wxEmptyString);
-        shapes->AddDropdownButton(ID_POLYGON, "Other Polygon", wxBitmap(hexagon_xpm), wxEmptyString);
+        shapes->AddButton(ID_CROSS, "Cross",
+            MakeSvgBundle(cross_svg, wxSize(32, 32)), wxEmptyString);
+        shapes->AddHybridButton(ID_TRIANGLE, "Triangle",
+            MakeSvgBundle(triangle_svg, wxSize(32, 32)));
+        shapes->AddButton(ID_SQUARE, "Square",
+            MakeSvgBundle(square_svg, wxSize(32, 32)), wxEmptyString);
+        shapes->AddDropdownButton(ID_POLYGON, "Other Polygon",
+            MakeSvgBundle(hexagon_svg, wxSize(32, 32)), wxEmptyString);
 
         wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, "Panel with Sizer",
-                                                    wxNullBitmap, wxDefaultPosition, wxDefaultSize,
+                                                    wxBitmapBundle(), wxDefaultPosition, wxDefaultSize,
                                                     wxRIBBON_PANEL_DEFAULT_STYLE);
 
         wxArrayString as;
@@ -380,8 +578,8 @@ MyFrame::MyFrame()
         sizer_panelcombo2->SetMinSize(wxSize(150, -1));
 
         wxRibbonButtonBar* bar = new wxRibbonButtonBar(sizer_panel, wxID_ANY);
-        bar->AddButton(ID_BUTTON_XX, "xx", ribbon_xpm);
-        bar->AddButton(ID_BUTTON_XY, "xy", ribbon_xpm);
+        bar->AddButton(ID_BUTTON_XX, "xx", ribbon_large);
+        bar->AddButton(ID_BUTTON_XY, "xy", ribbon_large);
         // This prevents ribbon buttons in panels with sizer from collapsing.
         bar->SetButtonMinSizeClass(ID_BUTTON_XX, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
         bar->SetButtonMinSizeClass(ID_BUTTON_XY, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
@@ -399,113 +597,126 @@ MyFrame::MyFrame()
         wxFont label_font(wxFontInfo(8).Light());
         m_bitmap_creation_dc.SetFont(label_font);
 
-        wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, "Appearance", eye_xpm);
+        wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, "Appearance",
+            MakeSvgBundle(eye_svg, wxSize(16, 16)));
         m_ribbon->GetArtProvider()->GetColourScheme(&m_default_primary,
             &m_default_secondary, &m_default_tertiary);
         wxRibbonPanel *provider_panel = new wxRibbonPanel(scheme, wxID_ANY,
-            "Art", wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+            "Art", wxBitmapBundle(), wxDefaultPosition, wxDefaultSize,
+            wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         wxRibbonButtonBar *provider_bar = new wxRibbonButtonBar(provider_panel, wxID_ANY);
         provider_bar->AddButton(ID_DEFAULT_PROVIDER, "Default Provider",
             wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(32, 32)));
-        provider_bar->AddButton(ID_AUI_PROVIDER, "AUI Provider", aui_style_xpm);
-        provider_bar->AddButton(ID_MSW_PROVIDER, "MSW Provider", msw_style_xpm);
-        provider_bar->AddButton(ID_MSW_FLAT_PROVIDER, "MSW Flat Provider", msw_style_xpm);
+        provider_bar->AddButton(ID_AUI_PROVIDER, "AUI Provider",
+            MakeSvgBundle(aui_style_svg, wxSize(32, 32)));
+        provider_bar->AddButton(ID_MSW_PROVIDER, "MSW Provider",
+            MakeSvgBundle(msw_style_svg, wxSize(32, 32)));
+        provider_bar->AddButton(ID_MSW_FLAT_PROVIDER, "MSW Flat Provider",
+            MakeSvgBundle(msw_flat_style_svg, wxSize(32, 32)));
         wxRibbonPanel *primary_panel = new wxRibbonPanel(scheme, wxID_ANY,
-            "Primary Colour", colours_xpm);
+            "Primary Colour", MakeSvgBundle(colours_svg, wxSize(16, 16)));
         m_primary_gallery = PopulateColoursPanel(primary_panel,
             m_default_primary, ID_PRIMARY_COLOUR);
         wxRibbonPanel *secondary_panel = new wxRibbonPanel(scheme, wxID_ANY,
-            "Secondary Colour", colours_xpm);
+            "Secondary Colour", MakeSvgBundle(colours_svg, wxSize(16, 16)));
         m_secondary_gallery = PopulateColoursPanel(secondary_panel,
             m_default_secondary, ID_SECONDARY_COLOUR);
     }
     {
-        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "UI Updated", ribbon_xpm);
-        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, "Enable/Disable", ribbon_xpm);
+        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "UI Updated",
+            ribbon_small);
+        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, "Enable/Disable",
+            ribbon_small);
         wxRibbonButtonBar *bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_DISABLED, "Disabled", ribbon_xpm);
-        bar->AddButton(ID_ENABLE,   "Enable", ribbon_xpm);
-        bar->AddButton(ID_DISABLE,  "Disable", ribbon_xpm);
-        bar->AddButton(ID_UI_ENABLE_UPDATED, "Enable UI updated", ribbon_xpm);
+        bar->AddButton(ID_DISABLED, "Disabled", ribbon_large);
+        bar->AddButton(ID_ENABLE,   "Enable", ribbon_large);
+        bar->AddButton(ID_DISABLE,  "Disable", ribbon_large);
+        bar->AddButton(ID_UI_ENABLE_UPDATED, "Enable UI updated", ribbon_large);
         bar->EnableButton(ID_DISABLED, false);
         m_bEnabled = true;
 
-        panel = new wxRibbonPanel(page, wxID_ANY, "Toggle", ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Toggle", ribbon_small);
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_CHECK, "Toggle", ribbon_xpm);
-        bar->AddToggleButton(ID_UI_CHECK_UPDATED, "Toggled UI updated", ribbon_xpm);
+        bar->AddButton(ID_CHECK, "Toggle", ribbon_large);
+        bar->AddToggleButton(ID_UI_CHECK_UPDATED, "Toggled UI updated", ribbon_large);
         m_bChecked = true;
 
-        panel = new wxRibbonPanel(page, wxID_ANY, "Change text", ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Change text", ribbon_small);
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_CHANGE_TEXT1, "One", ribbon_xpm);
-        bar->AddButton(ID_CHANGE_TEXT2, "Two", ribbon_xpm);
-        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, "Zero", ribbon_xpm);
+        bar->AddButton(ID_CHANGE_TEXT1, "One", ribbon_large);
+        bar->AddButton(ID_CHANGE_TEXT2, "Two", ribbon_large);
+        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, "Zero", ribbon_large);
 
         //Also set the general disabled text colour:
         wxRibbonArtProvider* artProvider = m_ribbon->GetArtProvider();
         wxColour tColour = artProvider->GetColor(wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR);
         artProvider->SetColor(wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR, tColour.MakeDisabled());
     }
-    new wxRibbonPage(m_ribbon, wxID_ANY, "Empty Page", empty_xpm);
+    new wxRibbonPage(m_ribbon, wxID_ANY, "Empty Page", empty_small);
     {
-        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "Another Page", empty_xpm);
-        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, "Page manipulation", ribbon_xpm);
+        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "Another Page",
+            empty_small);
+        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, "Page manipulation",
+            ribbon_small);
         wxRibbonButtonBar *bar = new wxRibbonButtonBar(panel, wxID_ANY);
         bar->AddButton(ID_REMOVE_PAGE, "Remove", wxArtProvider::GetBitmap(wxART_DELETE, wxART_OTHER, wxSize(24, 24)));
-        bar->AddButton(ID_HIDE_PAGES, "Hide Pages", ribbon_xpm);
-        bar->AddButton(ID_SHOW_PAGES, "Show Pages", ribbon_xpm);
+        bar->AddButton(ID_HIDE_PAGES, "Hide Pages", ribbon_large);
+        bar->AddButton(ID_SHOW_PAGES, "Show Pages", ribbon_large);
 
-        panel = new wxRibbonPanel(page, wxID_ANY, "Button bar manipulation", ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Button bar manipulation",
+            ribbon_small);
         wxRibbonButtonBar* button_bar = new wxRibbonButtonBar(panel, wxID_ANY);
         button_bar->AddButton(ID_PLUS_MINUS, "+/-",
             wxArtProvider::GetBitmap(wxART_PLUS, wxART_OTHER, wxSize(24, 24)));
         m_plus_minus_state = false;
-        button_bar->AddButton(ID_CHANGE_LABEL, "short", ribbon_xpm);
+        button_bar->AddButton(ID_CHANGE_LABEL, "short", ribbon_large);
         button_bar->SetButtonTextMinWidth(ID_CHANGE_LABEL, "some long text");
         m_change_label_state = false;
 
-        panel = new wxRibbonPanel(page, wxID_ANY, "Always medium buttons", ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Always medium buttons",
+            ribbon_small);
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_SMALL_BUTTON_1, "Button 1", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_1, "Button 1", ribbon_large);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_1, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_2, "Button 2", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_2, "Button 2", ribbon_large);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_2, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_3, "Button 3", ribbon_xpm);
-        bar->AddButton(ID_SMALL_BUTTON_4, "Button 4", ribbon_xpm);
-        bar->AddButton(ID_SMALL_BUTTON_5, "Button 5", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_3, "Button 3", ribbon_large);
+        bar->AddButton(ID_SMALL_BUTTON_4, "Button 4", ribbon_large);
+        bar->AddButton(ID_SMALL_BUTTON_5, "Button 5", ribbon_large);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_5, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_6, "Button 6", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_6, "Button 6", ribbon_large);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_6, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
     }
-    new wxRibbonPage(m_ribbon, wxID_ANY, "Highlight Page", empty_xpm);
+    new wxRibbonPage(m_ribbon, wxID_ANY, "Highlight Page", empty_small);
     m_ribbon->AddPageHighlight(m_ribbon->GetPageCount()-1);
 
     {
-        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "Advanced", empty_xpm);
-        wxRibbonPanel* panel = new wxRibbonPanel(page, wxID_ANY, "Button bar manipulation", ribbon_xpm);
+        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "Advanced",
+            empty_small);
+        wxRibbonPanel* panel = new wxRibbonPanel(page, wxID_ANY, "Button bar manipulation",
+            ribbon_small);
         wxRibbonButtonBar* button_bar = new wxRibbonButtonBar(panel, wxID_ANY);
         button_bar->AddButton(ID_PLUS_MINUS, "+/-",
             wxArtProvider::GetBitmap(wxART_PLUS, wxART_OTHER, wxSize(24, 24)));
         m_plus_minus_state = false;
-        button_bar->AddButton(ID_CHANGE_LABEL, "short", ribbon_xpm);
+        button_bar->AddButton(ID_CHANGE_LABEL, "short", ribbon_large);
         button_bar->SetButtonTextMinWidth(ID_CHANGE_LABEL, "some long text");
         m_change_label_state = false;
 
-        panel = new wxRibbonPanel(page, wxID_ANY, "Always medium buttons", ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Always medium buttons",
+            ribbon_small);
         wxRibbonButtonBar* bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_SMALL_BUTTON_1, "Button 1", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_1, "Button 1", ribbon_large);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_1, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_2, "Button 2", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_2, "Button 2", ribbon_large);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_2, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_3, "Button 3", ribbon_xpm);
-        bar->AddButton(ID_SMALL_BUTTON_4, "Button 4", ribbon_xpm);
-        bar->AddButton(ID_SMALL_BUTTON_5, "Button 5", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_3, "Button 3", ribbon_large);
+        bar->AddButton(ID_SMALL_BUTTON_4, "Button 4", ribbon_large);
+        bar->AddButton(ID_SMALL_BUTTON_5, "Button 5", ribbon_large);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_5, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_6, "Button 6", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_6, "Button 6", ribbon_large);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_6, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
     }
-
     m_ribbon->Realize();
 
     m_logwindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
@@ -1169,6 +1380,21 @@ void MyFrame::OnRibbonBarToggled(wxRibbonBarEvent& WXUNUSED(evt))
 void MyFrame::OnRibbonBarHelpClicked(wxRibbonBarEvent& WXUNUSED(evt))
 {
     AddText("Ribbon bar help clicked");
+}
+
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& evt)
+{
+    const wxSize oldDPI = evt.GetOldDPI();
+    const wxSize newDPI = evt.GetNewDPI();
+
+    AddText(wxString::Format(
+        "DPI changed from %d x %d to %d x %d (scale: %.0f%% -> %.0f%%)",
+        oldDPI.x, oldDPI.y,
+        newDPI.x, newDPI.y,
+        oldDPI.x * 100.0 / 96.0,
+        newDPI.x * 100.0 / 96.0));
+
+    evt.Skip();
 }
 
 // This shows how to hide ribbon dynamically if there is not enough space.
