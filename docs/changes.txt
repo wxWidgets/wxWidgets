@@ -255,6 +255,10 @@ Changes in behaviour which may result in build errors
 3.2.10: (released 2026-??-??)
 -----------------------------
 
+All (GUI):
+
+- Fix stc.h with wxNO_IMPLICIT_WXSTRING_ENCODING (reid-p, arch1t3cht, #25047).
+
 wxMSW:
 
 - Don't use first image for wxListCtrl items without images (#26062).
