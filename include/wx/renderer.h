@@ -77,13 +77,12 @@ enum
     wxCONTROL_DIRTY      = 0x80000000,
 
     // used to indicate a round selection on e.g. macOS
-    wxCONTROL_SELECTION_GROUP  = 0x10000000,
+    wxCONTROL_SELECTION_GROUP  = 0x20000000,
 
     // used to indicate a sub item within e.g. selections or header controls parts
-    wxCONTROL_ITEM_FIRST       = 0x20000000,
-    wxCONTROL_ITEM_MIDDLE      = 0x40000000,
+    wxCONTROL_ITEM_FIRST       = 0x40000000,
     wxCONTROL_ITEM_LAST        = wxCONTROL_DIRTY,
-    wxCONTROL_ITEM_MASK        = wxCONTROL_ITEM_FIRST | wxCONTROL_ITEM_MIDDLE | wxCONTROL_ITEM_LAST
+    // wxCONTROL_ITEM_MIDDLE   = !wxCONTROL_ITEM_FIRST && !wxCONTROL_ITEM_LAST,
 };
 
 // title bar buttons supported by DrawTitleBarBitmap()

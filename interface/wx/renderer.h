@@ -62,7 +62,14 @@ enum
     wxCONTROL_CHECKABLE  = 0x00000080,
 
     /** (Check) undetermined state. */
-    wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE
+    wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE,
+
+    /** Indicated that the control might display a group selection across several lines */
+    wxCONTROL_SELECTION_GROUP  = 0x20000000,
+
+    /** For group selections indicates the position in the group */
+    wxCONTROL_ITEM_FIRST       = 0x40000000,
+    wxCONTROL_ITEM_LAST        = 0x80000000,
 };
 
 /**

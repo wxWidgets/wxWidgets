@@ -696,10 +696,7 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
         if (listctrl->HasFlag(wxLC_SINGLE_SEL) || (listctrl->GetItemCount() < 2) ||
             !listctrl->HasFlag(wxLC_REPORT) )
         {
-            if (mainWindow->GetClientSize().x >= mainWindow->GetVirtualSize().x)
-            {
-                flags |= wxCONTROL_SELECTION_GROUP;
-            }
+            flags |= wxCONTROL_SELECTION_GROUP | wxCONTROL_ITEM_FIRST | wxCONTROL_ITEM_LAST;
         }
         else
         {
@@ -709,22 +706,11 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
                             (listctrl->GetItemState( item-1, wxLIST_STATE_SELECTED) == 0));
                 bool isBottom = ((item == listctrl->GetItemCount()-1) ||
                                 (listctrl->GetItemState( item+1, wxLIST_STATE_SELECTED) == 0));
-                if (isTop && isBottom)
-                {
-                    flags |= wxCONTROL_SELECTION_GROUP;
-                }
-                else if (isTop)
-                {
+                flags |= wxCONTROL_SELECTION_GROUP;
+                if (isTop)
                     flags |= wxCONTROL_ITEM_FIRST;
-                }
-                else if (isBottom)
-                {
+                if (isBottom)
                     flags |= wxCONTROL_ITEM_LAST;
-                }
-                else
-                {
-                    flags |= wxCONTROL_ITEM_MIDDLE;
-                }
             }
         }
         wxRendererNative::Get().

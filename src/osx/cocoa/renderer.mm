@@ -27,6 +27,7 @@
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
 #include "wx/splitter.h"
+#include "wx/scrolwin.h"
 #include "wx/time.h"
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
@@ -612,7 +613,24 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
 
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
-    if ((flags & wxCONTROL_SELECTION_GROUP) != 0)
+
+    bool useRounded = (flags & wxCONTROL_SELECTION_GROUP) != 0;
+    if (useRounded)
+    {
+        if (win->IsKindOf(wxCLASSINFO(wxScrolledWindow)))
+        {
+            wxScrolledWindow* scrollwindow = (wxScrolledWindow*) win;
+            useRounded = scrollwindow->GetClientSize().x >= scrollwindow->GetVirtualSize().x;
+        }
+    }
+
+    if (!useRounded)
+    {
+        dc.DrawRectangle( rect );
+        return;
+    }
+
+    if (((flags & wxCONTROL_ITEM_FIRST) != 0) && ((flags & wxCONTROL_ITEM_LAST) != 0))
     {
         dc.DrawRoundedRectangle( rect, radius );
     }
@@ -639,7 +657,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
             dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );
         }
     }
-    else if ((flags & wxCONTROL_ITEM_MIDDLE) != 0)
+    else
     {
         dc.DrawRectangle( rect );
         if (rect.width > distanceFromBorder*2)
@@ -650,10 +668,6 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
             dc.SetPen( wxPen( lineColour ));
             dc.DrawLine( rect.x + distanceFromBorder, rect.y, rect.x + rect.width - distanceFromBorder, rect.y );
         }
-    }
-    else
-    {
-        dc.DrawRectangle( rect );
     }
 }
 
