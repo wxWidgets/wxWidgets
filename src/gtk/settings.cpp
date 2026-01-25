@@ -774,7 +774,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_WINDOWFRAME:
         sc.AddButton().Bg(color);
         break;
-    case wxSYS_COLOUR_LISTBOXHIGHLIGHT:
     case wxSYS_COLOUR_HIGHLIGHT:
         sc.AddTextview("text", "selection");
         sc.Bg(color, GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
@@ -846,6 +845,9 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
         sc.AddTreeview().Fg(color, GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
+        break;
+    case wxSYS_COLOUR_LISTBOXHIGHLIGHT:
+        sc.AddTreeview().Bg(color, GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
         break;
     case wxSYS_COLOUR_LISTBOXTEXT:
         sc.AddTreeview().Fg(color);
