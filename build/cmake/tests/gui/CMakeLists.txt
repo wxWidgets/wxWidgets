@@ -70,6 +70,7 @@ set(TEST_GUI_SRC
     controls/slidertest.cpp
     controls/spinctrldbltest.cpp
     controls/spinctrltest.cpp
+    controls/statbmptest.cpp
     controls/styledtextctrltest.cpp
     controls/textctrltest.cpp
     controls/textentrytest.cpp
