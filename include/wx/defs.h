@@ -1446,7 +1446,7 @@ wxALLOW_COMBINING_ENUMS(wxSizerFlagBits, wxStretch)
 #define wxCLIP_SIBLINGS         0x20000000
 
 /* Obsolete */
-#define wxTRANSPARENT_WINDOW    0x00000000
+#define wxTRANSPARENT_WINDOW    0x00100000
 
 /*  Add this style to a panel to get tab traversal working outside of dialogs */
 /*  (on by default for wxPanel, wxDialog, wxScrolledWindow) */

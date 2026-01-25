@@ -4468,6 +4468,22 @@ void wxWidgetCocoaImpl::PaintHandlerAdded()
 // Factory methods
 //
 
+
+@interface wxNSVisualEffectView : NSVisualEffectView
+
+@end
+
+@implementation wxNSVisualEffectView
+
+- (BOOL)isFlipped
+{
+    return YES;
+}
+
+@end
+
+
+
 wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(parent),
     wxWindowID WXUNUSED(id), const wxPoint& pos, const wxSize& size,
     long style, long WXUNUSED(extraStyle))
@@ -4490,10 +4506,33 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
         if (wxpeer->HasHandleForEventType(wxEVT_PAINT))
             v = [[wxNSViewWithDrawing alloc] initWithFrame:r];
         else
-            v = [[wxNSView alloc] initWithFrame:r];
+        {
+            if (wxpeer->HasFlag(wxTRANSPARENT_WINDOW))
+            {
+                wxNSVisualEffectView *visualEffectView = [[wxNSVisualEffectView alloc] initWithFrame:r];
 
-        // We can change that later on the fly to wxNSViewWithDrawing incl drawRect
-        // object_setClass( v, [wxNSViewWithDrawing class] );
+                visualEffectView.blendingMode = NSVisualEffectBlendingModeBehindWindow;
+                visualEffectView.material = NSVisualEffectMaterialSidebar;
+                visualEffectView.state = NSVisualEffectStateActive;
+                visualEffectView.wantsLayer = YES;
+                visualEffectView.layer.cornerRadius = 10.0;
+
+                visualEffectView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+
+                wxNSView *wxnsview = [[wxNSView alloc] initWithFrame:r];
+                [visualEffectView addSubview:wxnsview];
+
+                v = visualEffectView;
+            }
+            else
+            {            
+                v = [[wxNSView alloc] initWithFrame:r];
+                // We can change that later on the fly to wxNSViewWithDrawing incl drawRect
+                // object_setClass( v, [wxNSViewWithDrawing class] );
+            }
+
+        }
+
 
         c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
     }
