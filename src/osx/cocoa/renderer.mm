@@ -27,7 +27,6 @@
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
 #include "wx/splitter.h"
-#include "wx/scrolwin.h"
 #include "wx/time.h"
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
@@ -614,15 +613,10 @@ wxRendererMac::DrawItemSelectionRect(wxWindow * win,
     wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
     wxDCBrushChanger setBrush(dc, selBrush);
 
-    bool useRounded = (flags & wxCONTROL_SELECTION_GROUP) != 0;
-    if (useRounded)
-    {
-        if (win->IsKindOf(wxCLASSINFO(wxScrolledWindow)))
-        {
-            wxScrolledWindow* scrollwindow = (wxScrolledWindow*) win;
-            useRounded = scrollwindow->GetClientSize().x >= scrollwindow->GetVirtualSize().x;
-        }
-    }
+    // macOS only uses round rectangles when the entire item fits
+    // horizontally into the window (i.e. no horizontal scrollbar)
+    bool useRounded = ((flags & wxCONTROL_SELECTION_GROUP) != 0) &&
+                        (win->GetClientSize().x >= win->GetVirtualSize().x);
 
     if (!useRounded)
     {
