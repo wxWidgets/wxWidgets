@@ -134,7 +134,7 @@ private:
 #include "wx/msw/private/metrics.h"
 
 #endif // wxUSE_OWNER_DRAWN
-#include <wx/msw/private/darkmode.h>
+#include "wx/msw/private/darkmode.h"
 
 // ----------------------------------------------------------------------------
 // dynamic classes implementation
@@ -973,7 +973,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             }
 
             hTheme.DrawBackground(hdc, rcSelection, MENU_POPUPITEM, state);
-            // we need also to draw menu arrow if the menu item at popup menu and has subMenu for dark mode.
+            // we need also to draw menu arrow of sub-menus in dark mode
             if (wxMSWDarkMode::IsActive() && GetSubMenu())
             {
                 int glyphState = (stat & wxODDisabled) ? MSM_DISABLED : MSM_NORMAL;
