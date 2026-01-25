@@ -964,6 +964,10 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             color = wxColor(ButtonStyle()->bg[GTK_STATE_SELECTED]);
             break;
 
+        case wxSYS_COLOUR_LISTBOXHIGHLIGHT:
+            color = wxColor(ListStyle()->bg[GTK_STATE_SELECTED]);
+            break;
+
         case wxSYS_COLOUR_LISTBOX:
             color = wxColor(ListStyle()->base[GTK_STATE_NORMAL]);
             break;
