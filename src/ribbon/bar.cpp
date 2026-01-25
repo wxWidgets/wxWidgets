@@ -969,20 +969,20 @@ void wxRibbonBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
     // Recalculate tab sizes for new DPI
     RecalculateTabSizes();
-    
+
     // Realize all pages to update their layouts
     size_t page_count = m_pages.GetCount();
     for(size_t i = 0; i < page_count; ++i)
     {
         m_pages.Item(i).page->Realize();
     }
-    
+
     // Reposition current page
     if(m_current_page != wxNOT_FOUND)
     {
         RepositionPage(m_pages.Item(m_current_page).page);
     }
-    
+
     Refresh();
     event.Skip();
 }

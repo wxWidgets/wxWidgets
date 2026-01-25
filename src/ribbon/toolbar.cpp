@@ -789,7 +789,7 @@ bool wxRibbonToolBar::Realize()
         {
             wxRibbonToolBarToolBase* tool = group->tools.Item(t);
             tool->size = m_art->GetToolSize(temp_dc, this,
-                tool->bitmap.GetDefaultSize(), tool->kind, t == 0,
+                tool->bitmap.GetPreferredLogicalSizeFor(this), tool->kind, t == 0,
                 t == (tool_count - 1), &tool->dropdown);
             if(t == 0)
                 tool->state |= wxRIBBON_TOOLBAR_TOOL_FIRST;
