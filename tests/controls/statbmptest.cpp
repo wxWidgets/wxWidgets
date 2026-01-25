@@ -18,9 +18,9 @@
 
 #include "wx/dcmemory.h"
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
     #include "wx/msw/private/resource_usage.h"
-#endif // __WINDOWS__
+#endif // __WXMSW__
 
 static void TestStaticBitmap(wxWindow* window, double scale)
 {
@@ -60,7 +60,7 @@ TEST_CASE("wxStaticBitmap::Set", "[wxStaticBitmap][bitmap]")
     TestStaticBitmap(window, window->GetDPIScaleFactor());
 }
 
-#ifdef __WINDOWS__
+#ifdef __WXMSW__
 
 TEST_CASE("wxStaticBitmap::ResourceLeak", "[wxStaticBitmap]")
 {
@@ -84,6 +84,6 @@ TEST_CASE("wxStaticBitmap::ResourceLeak", "[wxStaticBitmap]")
     CHECK( usageAfter.numGDI == usageBefore.numGDI );
 }
 
-#endif // __WINDOWS__
+#endif // __WXMSW__
 
 #endif // wxUSE_STATBMP

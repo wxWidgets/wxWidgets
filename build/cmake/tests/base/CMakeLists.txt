@@ -16,6 +16,7 @@ set(TEST_SRC
     arrays/arrays.cpp
     base64/base64.cpp
     cmdline/cmdlinetest.cpp
+    config/config.cpp
     config/fileconf.cpp
     config/regconf.cpp
     datetime/datetimetest.cpp
@@ -92,6 +93,7 @@ set(TEST_SRC
     weakref/evtconnection.cpp
     weakref/weakref.cpp
     xlocale/xlocale.cpp
+    xml/xmltest.cpp
 
     testprec.h
     testableframe.h
