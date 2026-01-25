@@ -80,10 +80,13 @@ public:
     }
 
     virtual bool IsOk() const = 0;
+    virtual wxSize GetSVGSize() const = 0;
     virtual wxBitmap DoRasterize(const wxSize& size) = 0;
 
     virtual wxSize GetDefaultSize() const override
     {
+        if ( m_sizeDef.IsEmpty() )
+            return GetSVGSize();
         return m_sizeDef;
     }
 
@@ -150,6 +153,13 @@ public:
     virtual bool IsOk() const override
     {
         return m_svgDocument != nullptr;
+    }
+
+    virtual wxSize GetSVGSize() const override
+    {
+        if ( IsOk() )
+            return wxSize(m_svgDocument->width(), m_svgDocument->height());
+        return wxDefaultSize;
     }
 
     virtual wxBitmap DoRasterize(const wxSize& size) override
@@ -306,6 +316,13 @@ public:
         // the data is not SVG at all, e.g. without this check creating a bundle
         // from any random file with FromSVGFile() would "work".
         return m_svgImage && m_svgImage->width != 0 && m_svgImage->height != 0 && m_svgImage->shapes;
+    }
+
+    virtual wxSize GetSVGSize() const override
+    {
+        if ( IsOk() )
+            return wxSize(m_svgImage->width, m_svgImage->height);
+        return wxDefaultSize;
     }
 
     virtual wxBitmap DoRasterize(const wxSize& size) override

@@ -285,8 +285,8 @@ public:
             extra parameter explicitly specifying the length of the input data,
             @e must be used.
         @param sizeDef The default size to return from GetDefaultSize() for
-            this bundle. As SVG images usually don't have any natural
-            default size, it should be provided when creating the bundle.
+            this bundle. If an empty wxSize or wxDefaultSize is provided,
+            the size of the SVG will be the default size.
 
         @note Converting text objects to path objects will allow them to be
             rasterized as expected. This can be done in an SVG editor such as
@@ -322,7 +322,8 @@ public:
         @param path Path to the SVG file. Notice that it should a local file,
             not an URL.
         @param sizeDef The default size to return from GetDefaultSize() for
-            this bundle.
+            this bundle. If an empty wxSize or wxDefaultSize is provided,
+            the size of the SVG will be the default size.
      */
     static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
 
@@ -335,7 +336,8 @@ public:
             On MacOS, it must be a file with an extension "svg" placed in
             the "Resources" subdirectory of the application bundle.
         @param sizeDef The default size to return from GetDefaultSize() for
-            this bundle.
+            this bundle. If an empty wxSize or wxDefaultSize is provided,
+            the size of the SVG will be the default size.
 
         @see FromResources(), FromSVGFile()
      */
