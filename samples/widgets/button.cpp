@@ -130,8 +130,7 @@ protected:
                *m_chkUseMarkup,
 #endif // wxUSE_MARKUP
                *m_chkDefault,
-               *m_chkUseBitmapClass,
-               *m_chkDisable;
+               *m_chkUseBitmapClass;
 
     // more checkboxes for wxBitmapButton only
     wxCheckBox *m_chkUsePressed,
@@ -222,7 +221,6 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
 #endif // wxUSE_MARKUP
     m_chkDefault =
     m_chkUseBitmapClass =
-    m_chkDisable =
     m_chkUsePressed =
     m_chkUseFocused =
     m_chkUseCurrent =
@@ -267,8 +265,6 @@ void ButtonWidgetsPage::CreateContent()
     m_chkUseBitmapClass = CreateCheckBoxAndAddToSizer(sizerLeft,
         "Use wxBitmapButton", wxID_ANY, sizerLeftBox);
     m_chkUseBitmapClass->SetValue(true);
-
-    m_chkDisable = CreateCheckBoxAndAddToSizer(sizerLeft, "Disable", wxID_ANY, sizerLeftBox);
 
     sizerLeft->AddSpacer(5);
 
@@ -410,7 +406,6 @@ void ButtonWidgetsPage::Reset()
     m_chkUseMarkup->SetValue(false);
 #endif // wxUSE_MARKUP
     m_chkUseBitmapClass->SetValue(true);
-    m_chkDisable->SetValue(false);
 
     m_chkUsePressed->SetValue(true);
     m_chkUseFocused->SetValue(true);
@@ -609,8 +604,6 @@ void ButtonWidgetsPage::CreateButton()
 
     if ( m_chkDefault->GetValue() )
         m_button->SetDefault();
-
-    m_button->Enable(!m_chkDisable->IsChecked());
 
     m_sizerButton->AddStretchSpacer();
     m_sizerButton->Add(m_button, wxSizerFlags().Centre().Border());
