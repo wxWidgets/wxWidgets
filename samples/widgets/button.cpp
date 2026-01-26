@@ -511,7 +511,8 @@ void ButtonWidgetsPage::CreateButton()
         }
         else
         {
-          bbtn = new wxButton(this, ButtonPage_Button);
+          bbtn = new wxButton(this, ButtonPage_Button, wxEmptyString,
+                              wxDefaultPosition, wxDefaultSize, flags);
           bbtn->SetBitmapLabel(CreateBitmap(wxART_INFORMATION));
         }
         bbtn->SetBitmapMargins((wxCoord)m_imageMarginH, (wxCoord)m_imageMarginV);
