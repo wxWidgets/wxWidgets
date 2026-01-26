@@ -134,6 +134,7 @@
     @style{wxFRAME_EX_METAL}
            On macOS, frames with this style will be shown with a metallic
            look. This is an extra style.
+           Note that this is deprecated after macOS 10.12.
     @endExtraStyleTable
 
     @beginEventEmissionTable
