@@ -112,7 +112,7 @@ protected:
     void CreateButton();
 
     // helper function: create a bitmap bundle for wxBitmapButton
-    wxBitmapBundle CreateBitmap(const wxString& label, const wxArtID& type);
+    wxBitmapBundle CreateBitmap(const wxArtID& type);
 
 
     // the controls
@@ -506,24 +506,24 @@ void ButtonWidgetsPage::CreateButton()
         if ( m_chkUseBitmapClass->GetValue() )
         {
           bbtn = new wxBitmapButton(this, ButtonPage_Button,
-                                    CreateBitmap("normal", wxART_INFORMATION),
+                                    CreateBitmap(wxART_INFORMATION),
                                     wxDefaultPosition, wxDefaultSize, flags);
         }
         else
         {
           bbtn = new wxButton(this, ButtonPage_Button);
-          bbtn->SetBitmapLabel(CreateBitmap("normal", wxART_INFORMATION));
+          bbtn->SetBitmapLabel(CreateBitmap(wxART_INFORMATION));
         }
         bbtn->SetBitmapMargins((wxCoord)m_imageMarginH, (wxCoord)m_imageMarginV);
 
         if ( m_chkUsePressed->GetValue() )
-            bbtn->SetBitmapPressed(CreateBitmap("pushed", wxART_HELP));
+            bbtn->SetBitmapPressed(CreateBitmap(wxART_HELP));
         if ( m_chkUseFocused->GetValue() )
-            bbtn->SetBitmapFocus(CreateBitmap("focused", wxART_ERROR));
+            bbtn->SetBitmapFocus(CreateBitmap(wxART_ERROR));
         if ( m_chkUseCurrent->GetValue() )
-            bbtn->SetBitmapCurrent(CreateBitmap("hover", wxART_WARNING));
+            bbtn->SetBitmapCurrent(CreateBitmap(wxART_WARNING));
         if ( m_chkUseDisabled->GetValue() )
-            bbtn->SetBitmapDisabled(CreateBitmap("disabled", wxART_MISSING_IMAGE));
+            bbtn->SetBitmapDisabled(CreateBitmap(wxART_MISSING_IMAGE));
         m_button = bbtn;
 #if wxUSE_COMMANDLINKBUTTON
         m_cmdLnkButton = nullptr;
@@ -692,20 +692,7 @@ void ButtonWidgetsPage::OnButton(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 
 wxBitmapBundle
-ButtonWidgetsPage::CreateBitmap(const wxString& label, const wxArtID& type)
+ButtonWidgetsPage::CreateBitmap(const wxArtID& type)
 {
-    wxBitmap bmp(FromDIP(wxSize(180, 70))); // shouldn't hardcode but it's simpler like this
-    wxMemoryDC dc;
-    dc.SelectObject(bmp);
-    dc.SetFont(GetFont());
-    dc.SetBackground(*wxCYAN_BRUSH);
-    dc.Clear();
-    dc.SetTextForeground(*wxBLACK);
-    dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + "\n"
-                    "(" + label + " state)",
-                 wxArtProvider::GetBitmap(type),
-                 wxRect(10, 10, bmp.GetWidth() - 20, bmp.GetHeight() - 20),
-                 wxALIGN_CENTRE);
-
-    return bmp;
+    return wxArtProvider::GetBitmapBundle(type, wxART_BUTTON);
 }
