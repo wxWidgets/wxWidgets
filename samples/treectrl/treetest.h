@@ -71,7 +71,7 @@ public:
         TreeCtrlIcon_FolderOpened
     };
 
-    MyTreeCtrl() { m_alternateImages = false; m_alternateStates = false; }
+    MyTreeCtrl() = default;
     MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                const wxPoint& pos, const wxSize& size,
                long style);
@@ -163,10 +163,10 @@ private:
     void LogEvent(const wxString& name, const wxTreeEvent& event);
 
     int          m_imageSize;               // current size of images
-    bool         m_reverseSort;             // flag for OnCompareItems
+    bool m_reverseSort = false;             // flag for OnCompareItems
     wxTreeItemId m_draggedItem;             // item being dragged right now
-    bool         m_alternateImages;
-    bool         m_alternateStates;
+    bool         m_alternateImages = false;
+    bool         m_alternateStates = false;
 
     // NB: due to an ugly wxMSW hack you _must_ use wxDECLARE_DYNAMIC_CLASS();
     //     if you want your overloaded OnCompareItems() to be called.

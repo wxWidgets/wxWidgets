@@ -213,7 +213,7 @@ bool MyApp::OnInit()
 // My frame constructor
 MyFrame::MyFrame()
        : wxFrame(nullptr, wxID_ANY, "wxTreeCtrl test",
-                 wxDefaultPosition, FromDIP(wxSize(450, 600), nullptr)),
+                 wxDefaultPosition, FromDIP(wxSize(450, 600), nullptr))
 {
     // This reduces flicker effects - even better would be to define
     // OnEraseBackground to do nothing. When the tree control's scrollbars are
@@ -947,12 +947,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl);
 MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        const wxPoint& pos, const wxSize& size,
                        long style)
-          : wxTreeCtrl(parent, id, pos, size, style),
-            m_alternateImages(false),
-            m_alternateStates(false)
+          : wxTreeCtrl(parent, id, pos, size, style)
 {
-    m_reverseSort = false;
-
     CreateImages(16);
     CreateStateImages();
 
