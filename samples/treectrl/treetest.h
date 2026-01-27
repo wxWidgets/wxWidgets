@@ -72,10 +72,11 @@ class MyTreeCtrl : public wxTreeCtrl
 {
 public:
     MyTreeCtrl() = default;
-    MyTreeCtrl(wxWindow *parent, const wxWindowID id,
-               const wxPoint& pos, const wxSize& size,
-               long style);
-    virtual ~MyTreeCtrl(){}
+    bool Create(wxWindow *parent, const wxWindowID id,
+                const wxPoint& pos, const wxSize& size,
+                long style);
+
+    virtual ~MyTreeCtrl();
 
     void OnBeginDrag(wxTreeEvent& event);
     void OnBeginRDrag(wxTreeEvent& event);
@@ -173,7 +174,6 @@ private:
     //     OTOH, if you don't want it you may omit the next line - this will
     //     make default (alphabetical) sorting much faster under wxMSW.
     wxDECLARE_DYNAMIC_CLASS(MyTreeCtrl);
-    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type

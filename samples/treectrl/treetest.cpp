@@ -150,45 +150,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 wxEND_EVENT_TABLE()
 
-#if USE_GENERIC_TREECTRL
-wxBEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
-#else
-wxBEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
-#endif
-    EVT_TREE_BEGIN_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginDrag)
-    EVT_TREE_BEGIN_RDRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginRDrag)
-    EVT_TREE_END_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnEndDrag)
-    EVT_TREE_BEGIN_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnBeginLabelEdit)
-    EVT_TREE_END_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnEndLabelEdit)
-    EVT_TREE_DELETE_ITEM(TreeTest_Ctrl, MyTreeCtrl::OnDeleteItem)
-#if 0       // there are so many of those that logging them causes flicker
-    EVT_TREE_GET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnGetInfo)
-#endif
-    EVT_TREE_SET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnSetInfo)
-    EVT_TREE_ITEM_EXPANDED(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanded)
-    EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanding)
-    EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsed)
-    EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsing)
-
-    EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
-    EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
-    EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnTreeKeyDown)
-    EVT_TREE_ITEM_ACTIVATED(TreeTest_Ctrl, MyTreeCtrl::OnItemActivated)
-    EVT_TREE_STATE_IMAGE_CLICK(TreeTest_Ctrl, MyTreeCtrl::OnItemStateClick)
-
-    // so many different ways to handle right mouse button clicks...
-    EVT_CONTEXT_MENU(MyTreeCtrl::OnContextMenu)
-    // EVT_TREE_ITEM_MENU is the preferred event for creating context menus
-    // on a tree control, because it includes the point of the click or item,
-    // meaning that no additional placement calculations are required.
-    EVT_TREE_ITEM_MENU(TreeTest_Ctrl, MyTreeCtrl::OnItemMenu)
-    EVT_TREE_ITEM_RIGHT_CLICK(TreeTest_Ctrl, MyTreeCtrl::OnItemRClick)
-
-    EVT_RIGHT_DOWN(MyTreeCtrl::OnRMouseDown)
-    EVT_RIGHT_UP(MyTreeCtrl::OnRMouseUp)
-    EVT_RIGHT_DCLICK(MyTreeCtrl::OnRMouseDClick)
-wxEND_EVENT_TABLE()
-
 wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
@@ -394,9 +355,10 @@ void MyFrame::CreateTreeWithDefStyle()
 
 void MyFrame::CreateTree(long style)
 {
-    m_treeCtrl = new MyTreeCtrl(m_panel, TreeTest_Ctrl,
-                                wxDefaultPosition, wxDefaultSize,
-                                style);
+    m_treeCtrl = new MyTreeCtrl;
+    m_treeCtrl->Create(m_panel, TreeTest_Ctrl,
+                       wxDefaultPosition, wxDefaultSize,
+                       style);
 
     GetMenuBar()->Enable(TreeTest_SelectRoot, !(style & wxTR_HIDE_ROOT));
 
@@ -944,16 +906,63 @@ wxIMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxGenericTreeCtrl);
 wxIMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl);
 #endif
 
-MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
-                       const wxPoint& pos, const wxSize& size,
-                       long style)
-          : wxTreeCtrl(parent, id, pos, size, style)
+bool
+MyTreeCtrl::Create(wxWindow *parent, const wxWindowID id,
+                   const wxPoint& pos, const wxSize& size,
+                   long style)
 {
+    if ( !wxTreeCtrl::Create(parent, id, pos, size, style) )
+        return false;
+
     CreateImages(16);
     CreateStateImages();
 
     // Add some items to the tree
     AddTestItemsToTree(NUM_CHILDREN_PER_LEVEL, NUM_LEVELS);
+
+    // Bind the event handlers.
+    Bind(wxEVT_TREE_BEGIN_DRAG, &MyTreeCtrl::OnBeginDrag, this);
+    Bind(wxEVT_TREE_BEGIN_DRAG, &MyTreeCtrl::OnBeginRDrag, this);
+    Bind(wxEVT_TREE_END_DRAG, &MyTreeCtrl::OnEndDrag, this);
+    Bind(wxEVT_TREE_BEGIN_LABEL_EDIT, &MyTreeCtrl::OnBeginLabelEdit, this);
+    Bind(wxEVT_TREE_END_LABEL_EDIT, &MyTreeCtrl::OnEndLabelEdit, this);
+    Bind(wxEVT_TREE_DELETE_ITEM, &MyTreeCtrl::OnDeleteItem, this);
+
+#if 0       // there are so many of those that logging them causes flicker
+    Bind(wxEVT_TREE_GET_INFO, &MyTreeCtrl::OnGetInfo, this);
+#endif
+    Bind(wxEVT_TREE_SET_INFO, &MyTreeCtrl::OnSetInfo, this);
+    Bind(wxEVT_TREE_ITEM_EXPANDED, &MyTreeCtrl::OnItemExpanded, this);
+    Bind(wxEVT_TREE_ITEM_EXPANDING, &MyTreeCtrl::OnItemExpanding, this);
+    Bind(wxEVT_TREE_ITEM_COLLAPSED, &MyTreeCtrl::OnItemCollapsed, this);
+    Bind(wxEVT_TREE_ITEM_COLLAPSING, &MyTreeCtrl::OnItemCollapsing, this);
+
+    Bind(wxEVT_TREE_SEL_CHANGED, &MyTreeCtrl::OnSelChanged, this);
+    Bind(wxEVT_TREE_SEL_CHANGING, &MyTreeCtrl::OnSelChanging, this);
+    Bind(wxEVT_TREE_KEY_DOWN, &MyTreeCtrl::OnTreeKeyDown, this);
+    Bind(wxEVT_TREE_ITEM_ACTIVATED, &MyTreeCtrl::OnItemActivated, this);
+    Bind(wxEVT_TREE_STATE_IMAGE_CLICK, &MyTreeCtrl::OnItemStateClick, this);
+
+    // so many different ways to handle right mouse button clicks...
+    Bind(wxEVT_CONTEXT_MENU, &MyTreeCtrl::OnContextMenu, this);
+    // wxEVT_TREE_ITEM_MENU is the preferred event for creating context menus
+    // on a tree control, because it includes the point of the click or item,
+    // meaning that no additional placement calculations are required.
+    Bind(wxEVT_TREE_ITEM_MENU, &MyTreeCtrl::OnItemMenu, this);
+    Bind(wxEVT_TREE_ITEM_RIGHT_CLICK, &MyTreeCtrl::OnItemRClick, this);
+
+    Bind(wxEVT_RIGHT_DOWN, &MyTreeCtrl::OnRMouseDown, this);
+    Bind(wxEVT_RIGHT_UP, &MyTreeCtrl::OnRMouseUp, this);
+    Bind(wxEVT_RIGHT_DCLICK, &MyTreeCtrl::OnRMouseDClick, this);
+
+    return true;
+}
+
+template <class TreeCtrlBase>
+MyTreeCtrl<TreeCtrlBase>::~MyTreeCtrl()
+{
+    // Avoid messages about items being deleted during destruction.
+    this->Unbind(wxEVT_TREE_DELETE_ITEM, &MyTreeCtrl::OnDeleteItem, this);
 }
 
 namespace
