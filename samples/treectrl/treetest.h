@@ -7,23 +7,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// This can be defined to 1 to force using wxGenericTreeCtrl even on the
-// platforms where the native controls would normally be used (wxMSW and wxQt).
-#define USE_GENERIC_TREECTRL 0
+// If native control is available, allow to also use the generic one for
+// testing.
+#ifndef wxHAS_GENERIC_TREECTRL
+    #include "wx/generic/treectlg.h"
 
-#if USE_GENERIC_TREECTRL
-#include "wx/generic/treectlg.h"
-#ifndef wxTreeCtrl
-#define wxTreeCtrl wxGenericTreeCtrl
-#define sm_classwxTreeCtrl sm_classwxGenericTreeCtrl
-#endif
-#endif
-
-// This one is defined if we're actually using the generic control, either
-// because it was explicitly requested above or because there is no other one
-// on this platform anyhow.
-#if USE_GENERIC_TREECTRL || (!defined(__WXMSW__) && !defined(__WXQT__))
-    #define HAS_GENERIC_TREECTRL
+    #define wxUSE_ALT_GENERIC_TREECTRL 1
+#else
+    #define wxUSE_ALT_GENERIC_TREECTRL 0
 #endif
 
 // Define a new application type
@@ -52,7 +43,7 @@ class MyTreeItemData : public wxTreeItemData
 public:
     MyTreeItemData(const wxString& desc) : m_desc(desc) { }
 
-    void ShowInfo(wxTreeCtrl *tree);
+    void ShowInfo(wxTreeCtrlBase *tree);
     wxString const& GetDesc() const { return m_desc; }
 
 private:
@@ -68,7 +59,58 @@ enum
     TreeCtrlIcon_FolderOpened
 };
 
-class MyTreeCtrl : public wxTreeCtrl
+// This interface defines some helper functions that are used by the sample to
+// perform operations on the tree control without knowing its exact type
+// (native or generic).
+//
+// It's not a pure interface as it also contains some data members, but this is
+// just done for convenience to allow implementing some trivial functions
+// directly in it. Its meaning is still that it defines the interface used by
+// MyFrame to manipulate the tree control.
+class MyTreeCtrlInterface
+{
+public:
+    virtual ~MyTreeCtrlInterface() = default;
+
+    virtual void CreateImages(int size) = 0;
+    virtual void CreateStateImages() = 0;
+
+    // This one can be only used with wxGenericTreeCtrl currently, so it takes
+    // it as argument.
+    void CreateButtonsImageList(wxGenericTreeCtrl* treectrl, int size);
+
+    virtual void AddTestItemsToTree(size_t numChildren, size_t depth) = 0;
+
+    int ImageSize() const { return m_imageSize; }
+
+    void SetAlternateImages(bool show) { m_alternateImages = show; }
+    bool AlternateImages() const { return m_alternateImages; }
+
+    void SetAlternateStates(bool show) { m_alternateStates = show; }
+    bool AlternateStates() const { return m_alternateStates; }
+
+    virtual void ResetBrokenStateImages() = 0;
+    virtual void DoToggleIcon(const wxTreeItemId& item) = 0;
+    virtual void DoToggleState(const wxTreeItemId& item) = 0;
+    virtual wxTreeItemId GetLastTreeITem() const = 0;
+    virtual void GetItemsRecursively(const wxTreeItemId& idParent,
+                                     wxTreeItemIdValue cookie = nullptr) = 0;
+    virtual void DoSortChildren(const wxTreeItemId& item, bool reverse) = 0;
+
+protected:
+    int          m_imageSize;               // current size of images
+    bool         m_alternateImages = false;
+    bool         m_alternateStates = false;
+};
+
+// This template can be instantiated for either wxTreeCtrl or wxGenericTreeCtrl.
+//
+// Please note that this class is a template just for idiosyncratic reasons in
+// this sample, you wouldn't write your real code in this way and would either
+// just use wxTreeCtrl or wxGenericTreeCtrl directly or use composition instead
+// of inheritance. In other words, do not follow this example in your code.
+template <class TreeCtrlBase>
+class MyTreeCtrl : public TreeCtrlBase, public MyTreeCtrlInterface
 {
 public:
     MyTreeCtrl() = default;
@@ -103,42 +145,33 @@ public:
     void OnRMouseUp(wxMouseEvent& event);
     void OnRMouseDClick(wxMouseEvent& event);
 
-    wxTreeItemId GetLastTreeITem() const;
+    wxTreeItemId GetLastTreeITem() const override;
     void GetItemsRecursively(const wxTreeItemId& idParent,
-                             wxTreeItemIdValue cookie = nullptr);
+                             wxTreeItemIdValue cookie = nullptr) override;
 
     // This function behaves differently depending on the value of size:
     //  - If it's -1, it turns off the use of images entirely.
     //  - If it's 0, it reuses the last used size.
     //  - If it's strictly positive, it creates icons in this size.
-    void CreateImages(int size);
+    void CreateImages(int size) override;
 
-    void CreateButtonsImageList(int size = 11);
-    void CreateStateImages();
+    void CreateStateImages() override;
 
-    void AddTestItemsToTree(size_t numChildren, size_t depth);
+    void AddTestItemsToTree(size_t numChildren, size_t depth) override;
 
-    void DoSortChildren(const wxTreeItemId& item, bool reverse = false)
-        { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
+    void DoSortChildren(const wxTreeItemId& item, bool reverse) override
+        { m_reverseSort = reverse; TreeCtrlBase::SortChildren(item); }
 
-    void DoToggleIcon(const wxTreeItemId& item);
-    void DoToggleState(const wxTreeItemId& item);
+    void DoToggleIcon(const wxTreeItemId& item) override;
+    void DoToggleState(const wxTreeItemId& item) override;
 
     void ShowMenu(wxTreeItemId id, const wxPoint& pt);
 
-    int ImageSize(void) const { return m_imageSize; }
-
-    void SetAlternateImages(bool show) { m_alternateImages = show; }
-    bool AlternateImages() const { return m_alternateImages; }
-
-    void SetAlternateStates(bool show) { m_alternateStates = show; }
-    bool AlternateStates() const { return m_alternateStates; }
-
-    void ResetBrokenStateImages()
+    void ResetBrokenStateImages() override
     {
-        const size_t count = GetStateImageList()->GetImageCount();
+        const size_t count = this->GetStateImageList()->GetImageCount();
         int state = count > 0 ? count - 1 : wxTREE_ITEMSTATE_NONE;
-        DoResetBrokenStateImages(GetRootItem(), nullptr, state);
+        DoResetBrokenStateImages(this->GetRootItem(), nullptr, state);
     }
 
 protected:
@@ -148,7 +181,7 @@ protected:
     bool IsTestItem(const wxTreeItemId& item)
     {
         // the test item is the first child folder
-        return GetItemParent(item) == GetRootItem() && !GetPrevSibling(item);
+        return this->GetItemParent(item) == this->GetRootItem() && !this->GetPrevSibling(item);
     }
 
 private:
@@ -163,11 +196,8 @@ private:
 
     void LogEvent(const wxString& name, const wxTreeEvent& event);
 
-    int          m_imageSize;               // current size of images
     bool m_reverseSort = false;             // flag for OnCompareItems
     wxTreeItemId m_draggedItem;             // item being dragged right now
-    bool         m_alternateImages = false;
-    bool         m_alternateStates = false;
 
     // NB: due to an ugly wxMSW hack you _must_ use wxDECLARE_DYNAMIC_CLASS();
     //     if you want your overloaded OnCompareItems() to be called.
@@ -205,6 +235,10 @@ public:
         { TogStyle(event.GetId(), wxTR_ROW_LINES); }
     void OnTogFullHighlight(wxCommandEvent& event)
         { TogStyle(event.GetId(), wxTR_FULL_ROW_HIGHLIGHT); }
+
+#if wxUSE_ALT_GENERIC_TREECTRL
+    void OnUseGeneric(wxCommandEvent& event);
+#endif // wxUSE_ALT_GENERIC_TREECTRL
 
     void OnResetStyle(wxCommandEvent& WXUNUSED(event))
         { CreateTreeWithDefStyle(); }
@@ -266,23 +300,23 @@ public:
     void OnToggleState(wxCommandEvent& event);
 
     void OnShowFirstVisible(wxCommandEvent& WXUNUSED(event))
-        { DoShowFirstOrLast(&wxTreeCtrl::GetFirstVisibleItem, "first visible"); }
+        { DoShowFirstOrLast(&wxTreeCtrlBase::GetFirstVisibleItem, "first visible"); }
 #ifdef wxHAS_LAST_VISIBLE // we don't have it currently but may add later
     void OnShowLastVisible(wxCommandEvent& WXUNUSED(event))
-        { DoShowFirstOrLast(&wxTreeCtrl::GetLastVisibleItem, "last visible"); }
+        { DoShowFirstOrLast(&wxTreeCtrlBase::GetLastVisibleItem, "last visible"); }
 #endif // wxHAS_LAST_VISIBLE
 
     void OnShowNextVisible(wxCommandEvent& WXUNUSED(event))
-        { DoShowRelativeItem(&wxTreeCtrl::GetNextVisible, "next visible"); }
+        { DoShowRelativeItem(&wxTreeCtrlBase::GetNextVisible, "next visible"); }
     void OnShowPrevVisible(wxCommandEvent& WXUNUSED(event))
-        { DoShowRelativeItem(&wxTreeCtrl::GetPrevVisible, "previous visible"); }
+        { DoShowRelativeItem(&wxTreeCtrlBase::GetPrevVisible, "previous visible"); }
 
     void OnShowParent(wxCommandEvent& WXUNUSED(event))
-        { DoShowRelativeItem(&wxTreeCtrl::GetItemParent, "parent"); }
+        { DoShowRelativeItem(&wxTreeCtrlBase::GetItemParent, "parent"); }
     void OnShowPrevSibling(wxCommandEvent& WXUNUSED(event))
-        { DoShowRelativeItem(&wxTreeCtrl::GetPrevSibling, "previous sibling"); }
+        { DoShowRelativeItem(&wxTreeCtrlBase::GetPrevSibling, "previous sibling"); }
     void OnShowNextSibling(wxCommandEvent& WXUNUSED(event))
-        { DoShowRelativeItem(&wxTreeCtrl::GetNextSibling, "next sibling"); }
+        { DoShowRelativeItem(&wxTreeCtrlBase::GetNextSibling, "next sibling"); }
 
     void OnScrollTo(wxCommandEvent& event);
     void OnSelectLast(wxCommandEvent& event);
@@ -301,15 +335,16 @@ private:
     void CreateTree(long style);
 
     // common parts of OnShowFirst/LastVisible() and OnShowNext/PrevVisible()
-    typedef wxTreeItemId (wxTreeCtrl::*TreeFunc0_t)() const;
+    typedef wxTreeItemId (wxTreeCtrlBase::*TreeFunc0_t)() const;
     void DoShowFirstOrLast(TreeFunc0_t pfn, const wxString& label);
 
-    typedef wxTreeItemId (wxTreeCtrl::*TreeFunc1_t)(const wxTreeItemId&) const;
+    typedef wxTreeItemId (wxTreeCtrlBase::*TreeFunc1_t)(const wxTreeItemId&) const;
     void DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label);
 
 
     wxPanel *m_panel = nullptr;
-    MyTreeCtrl *m_treeCtrl = nullptr;
+    wxTreeCtrlBase *m_treeCtrl = nullptr;
+    MyTreeCtrlInterface *m_treeCtrlIface = nullptr;
 #if wxUSE_LOG
     wxTextCtrl *m_textCtrl = nullptr;
 #endif // wxUSE_LOG
@@ -335,6 +370,9 @@ enum
     TreeTest_TogFullHighlight,
     TreeTest_SetFgColour,
     TreeTest_SetBgColour,
+#if wxUSE_ALT_GENERIC_TREECTRL
+    TreeTest_UseGeneric,
+#endif // wxUSE_ALT_GENERIC_TREECTRL
     TreeTest_ResetStyle,
     TreeTest_Highlight,
     TreeTest_Dump,
