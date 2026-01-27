@@ -34,6 +34,7 @@ wxBEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)
     EVT_PAINT(wxStatusBarMac::OnPaint)
 wxEND_EVENT_TABLE()
 
+static wxColor s_bgActive, s_bgInactive, s_separator;
 
 wxStatusBarMac::wxStatusBarMac(wxWindow *parent,
         wxWindowID id,
@@ -85,13 +86,13 @@ void wxStatusBarMac::InitColours()
             m_textInactive = wxColour(0x59, 0x5F, 0x60);
             // native separator uses hairline black plus some shading,
             // this approximates it well visually:
-            m_separator = wxColour(0x18, 0x18, 0x18);
+            s_separator = wxColour(0x18, 0x18, 0x18);
         }
         else
         {
             m_textActive = wxColour(0x80, 0x80, 0x80);
             m_textInactive = wxColour(0xB8, 0xB8, 0xB8);
-            m_separator = wxColour(0xD9, 0xD9, 0xD9);
+            s_separator = wxColour(0xD9, 0xD9, 0xD9);
         }
     }
     else
@@ -103,19 +104,19 @@ void wxStatusBarMac::InitColours()
         {
             m_textActive = wxColour(0xB1, 0xB2, 0xB2);
             m_textInactive = wxColour(0x68, 0x69, 0x6A);
-            m_bgActive = wxColour(0x35, 0x36, 0x36);
-            m_bgInactive = wxColour(0x27, 0x28, 0x29);
+            s_bgActive = wxColour(0x35, 0x36, 0x36);
+            s_bgInactive = wxColour(0x27, 0x28, 0x29);
             // native separator uses hairline black plus some shading,
             // this approximates it well visually:
-            m_separator = wxColour(0x18, 0x18, 0x18);
+            s_separator = wxColour(0x18, 0x18, 0x18);
         }
         else
         {
             m_textActive = wxColour(0x73, 0x74, 0x74);
             m_textInactive = wxColour(0xA5, 0xA6, 0xA6);
-            m_bgActive = wxColour(0xF3, 0xF3, 0xF3);
-            m_bgInactive = wxColour(0xE6, 0xE6, 0xE6);
-            m_separator = wxColour(0xCC, 0xCC, 0xCC);
+            s_bgActive = wxColour(0xF3, 0xF3, 0xF3);
+            s_bgInactive = wxColour(0xE6, 0xE6, 0xE6);
+            s_separator = wxColour(0xCC, 0xCC, 0xCC);
         }
     }
     else
@@ -178,7 +179,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         // we _do_ need to paint the background on Big Sur up to Tahoe
         // to match Finder's appearance:
-        dc.SetBackground(tlw == keyWindow ? m_bgActive : m_bgInactive);
+        dc.SetBackground(tlw == keyWindow ? s_bgActive : s_bgInactive);
         dc.Clear();
     }
     // else: background is rendered by OS, it is part of NSWindow border
@@ -188,7 +189,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
     // Draw horizontal separator above the status bar:
     if ( WX_IS_MACOS_AVAILABLE(11, 0) )
     {
-        dc.SetPen(m_separator);
+        dc.SetPen(s_separator);
         dc.DrawLine(0, 0, GetSize().x, 0);
     }
 #endif
